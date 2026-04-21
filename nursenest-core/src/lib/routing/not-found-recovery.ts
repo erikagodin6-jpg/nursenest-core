@@ -4,14 +4,16 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { loadPathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
-import {
-  buildNotFoundRecoveryModel,
-  resolveNotFoundRouteContext,
-  type NotFoundRecoveryModel,
-} from "@/lib/routing/not-found-route-context";
+import type { NotFoundRecoveryModel } from "@/lib/routing/not-found-route-context";
+import { buildNotFoundRecoveryModel, resolveNotFoundRouteContext } from "@/lib/routing/not-found-route-context";
 
-export type { NotFoundRecoveryCta, NotFoundRouteKind, NotFoundRouteContext, NotFoundRecoveryModel };
-export { buildNotFoundRecoveryModel, resolveNotFoundRouteContext } from "@/lib/routing/not-found-route-context";
+export { buildNotFoundRecoveryModel, resolveNotFoundRouteContext };
+export type {
+  NotFoundRecoveryCta,
+  NotFoundRecoveryModel,
+  NotFoundRouteContext,
+  NotFoundRouteKind,
+} from "@/lib/routing/not-found-route-context";
 
 export async function loadNotFoundRecovery(): Promise<NotFoundRecoveryModel> {
   const headerList = await headers();

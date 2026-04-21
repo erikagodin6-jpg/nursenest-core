@@ -10,8 +10,8 @@ import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 
 describe("exam hub marketing route safety", () => {
-  it("resolves canonical US RN NCLEX hub and builds non-throwing hub artifacts", () => {
-    const pathway = resolveExamPathwaySafe("us", "rn", "nclex-rn", { pathname: "/us/rn/nclex-rn" });
+  it("resolves canonical US RN NCLEX hub and builds non-throwing hub artifacts", async () => {
+    const pathway = await resolveExamPathwaySafe("us", "rn", "nclex-rn", { pathname: "/us/rn/nclex-rn" });
     assert.ok(pathway);
     assert.equal(pathway.id, "us-rn-nclex-rn");
     assert.equal(buildExamPathwayPath(pathway), "/us/rn/nclex-rn");
@@ -22,9 +22,9 @@ describe("exam hub marketing route safety", () => {
     assert.ok(schemaItems.length >= 2);
   });
 
-  it("returns null for invalid region/tier/exam combinations (no throw)", () => {
-    assert.equal(resolveExamPathwaySafe("us", "rn", "not-a-real-exam", { pathname: "/us/rn/not-a-real-exam" }), null);
-    assert.equal(resolveExamPathwaySafe("us", "zz", "nclex-rn", { pathname: "/us/zz/nclex-rn" }), null);
-    assert.equal(resolveExamPathwaySafe("france", "rn", "nclex-rn", { pathname: "/france/rn/nclex-rn" }), null);
+  it("returns null for invalid region/tier/exam combinations (no throw)", async () => {
+    assert.equal(await resolveExamPathwaySafe("us", "rn", "not-a-real-exam", { pathname: "/us/rn/not-a-real-exam" }), null);
+    assert.equal(await resolveExamPathwaySafe("us", "zz", "nclex-rn", { pathname: "/us/zz/nclex-rn" }), null);
+    assert.equal(await resolveExamPathwaySafe("france", "rn", "nclex-rn", { pathname: "/france/rn/nclex-rn" }), null);
   });
 });

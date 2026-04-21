@@ -67,7 +67,8 @@ export async function GET(req: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    const pathways = listPathwaysCompatibleWithSubscription(gate.entitlement).map((p) => ({
+    const compatibleForGet = await listPathwaysCompatibleWithSubscription(gate.entitlement);
+    const pathways = compatibleForGet.map((p) => ({
       id: p.id,
       label: p.displayName,
       shortLabel: p.shortName || p.displayName,
@@ -149,7 +150,7 @@ export async function PATCH(req: Request) {
       if (trimmed.length === 0) {
         targetExamPathwayId = null;
       } else {
-        const allowed = new Set(listPathwaysCompatibleWithSubscription(gate.entitlement).map((p) => p.id));
+        const allowed = new Set((await listPathwaysCompatibleWithSubscription(gate.entitlement)).map((p) => p.id));
         if (!allowed.has(trimmed)) {
           return NextResponse.json({ error: "Pathway not available for your subscription and region." }, { status: 400 });
         }
@@ -226,7 +227,8 @@ export async function PATCH(req: Request) {
       },
     });
 
-    const pathways = listPathwaysCompatibleWithSubscription(gate.entitlement).map((p) => ({
+    const compatibleForPatch = await listPathwaysCompatibleWithSubscription(gate.entitlement);
+    const pathways = compatibleForPatch.map((p) => ({
       id: p.id,
       label: p.displayName,
       shortLabel: p.shortName || p.displayName,

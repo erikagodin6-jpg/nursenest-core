@@ -16,7 +16,7 @@ import { withRetry } from "@/lib/resilience/with-retry";
 import type { CountryCode, TierCode } from "@prisma/client";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
-import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
+import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
 import { allowRuntimeMinimalQuestionBankSeed } from "@/lib/jobs/runtime-heavy-work-policy";
 import { acquireQuestionFullModeSlot, releaseQuestionFullModeSlot } from "@/lib/questions/full-mode-concurrency";

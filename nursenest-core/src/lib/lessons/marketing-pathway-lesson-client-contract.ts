@@ -49,6 +49,8 @@ export type MarketingPathwayLessonActionsClientProps = {
   userId: string;
   canMarkComplete: boolean;
   initialProgress?: PathwayLessonProgressStatus;
+  /** Server-computed from pathway catalog rules (CAT adaptive start eligibility). */
+  catAdaptiveAvailable: boolean;
 };
 
 /** Pre/post quiz payloads only — not full lesson sections. */

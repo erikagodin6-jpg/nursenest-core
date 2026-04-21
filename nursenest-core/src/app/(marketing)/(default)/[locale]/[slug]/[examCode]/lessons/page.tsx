@@ -60,7 +60,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const page = Math.max(1, Number(sp.page ?? "1") || 1);
   return safeGenerateMetadata(
     async () => {
-      const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
+      const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
       if (!pathway) return {};
       const path = buildExamPathwayPath(pathway, "lessons");
       const canonical = absoluteUrl(path);
@@ -83,7 +83,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
   const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
-  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
+  const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) notFound();
 
   const base = marketingPathwayLessonsIndexPath(pathway);

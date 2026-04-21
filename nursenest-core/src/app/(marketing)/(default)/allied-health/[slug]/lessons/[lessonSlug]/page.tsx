@@ -14,6 +14,7 @@ import {
   getPathwayOrThrow,
   isAlliedHeroExamPrepSlug,
 } from "@/lib/allied/allied-professions-registry";
+import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import {
   canViewFullPathwayLesson,
   getPathwayLessonPreviewKind,
@@ -463,6 +464,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
           userId={userId}
           canMarkComplete={fullAccess}
           initialProgress={lessonProgress}
+          catAdaptiveAvailable={pathwayAllowsCatAdaptiveStart(pathway)}
         />
       </PathwayLessonAssessmentExperience>
 

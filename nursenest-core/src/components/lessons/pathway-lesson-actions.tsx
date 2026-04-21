@@ -14,8 +14,6 @@ import {
   buildAppPracticeTestsHubHref,
   practiceTestsWeakFocusHref,
 } from "@/lib/learner/study-loop-recommendations";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
 import type { MarketingPathwayLessonActionsClientProps } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
 
 /** Ids + flags only — no lesson bodies (contract: `marketing-pathway-lesson-client-contract.ts`). */
@@ -27,6 +25,7 @@ export function PathwayLessonActions({
   userId,
   canMarkComplete,
   initialProgress = "not_started",
+  catAdaptiveAvailable,
 }: MarketingPathwayLessonActionsClientProps) {
   const { t } = useMarketingI18n();
   const [progress, setProgress] = useState<PathwayLessonProgressStatus>(initialProgress);
@@ -97,8 +96,7 @@ export function PathwayLessonActions({
   const qbHref = `/app/questions?pathwayId=${encodeURIComponent(pathwayId)}${topicCodeParam}${topicLabelParam}&preset=topic_drill`;
   const catWeakHref = practiceTestsWeakFocusHref(pathwayId);
   const practiceTestsHubHref = buildAppPracticeTestsHubHref(pathwayId);
-  const pathway = getExamPathwayById(pathwayId);
-  const showCatCta = pathway ? pathwayAllowsCatAdaptiveStart(pathway) : false;
+  const showCatCta = catAdaptiveAvailable;
   const flashcardsHref = topicCode?.trim()
     ? `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}&topicCode=${encodeURIComponent(topicCode.trim())}`
     : `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}`;

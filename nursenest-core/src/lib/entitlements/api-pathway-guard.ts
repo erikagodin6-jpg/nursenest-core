@@ -1,7 +1,7 @@
 import "server-only";
 
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
+import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 
 /**

@@ -36,6 +36,8 @@ export type PersonalProfilePayload = {
   regionTierLocked: boolean;
   lockReason: "subscription_plan" | null;
   pathwayOptions: PathwayPickOption[];
+  /** Display for `targetExamPathwayId` when not in `pathwayOptions` (server-resolved, no client catalog). */
+  targetExamPathwayLabel: string | null;
   entitlementVerifyFailed: boolean;
   subscriberAccess: boolean;
 };
@@ -85,12 +87,24 @@ export async function loadPersonalProfilePayload(
       : { hasAccess: false, reason: "no_access", tier: user.tier, country: user.country, alliedCareer: null };
   const pathwayTierCountry =
     !regionTierLocked && pathwayPreview ? pathwayPreview : { country: user.country, tier: user.tier };
-  const pathwayOptions = listPathwayPicksForProfile(
+  const pathwayOptions = await listPathwayPicksForProfile(
     scopeForPathways,
     pathwayTierCountry.tier,
     pathwayTierCountry.country,
     subscriberAccess,
   );
+
+  const targetId = user.targetExamPathwayId?.trim() ?? null;
+  let targetExamPathwayLabel: string | null = null;
+  if (targetId) {
+    const hit = pathwayOptions.find((o) => o.id === targetId);
+    if (hit) targetExamPathwayLabel = hit.label;
+    else {
+      const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-pathways-catalog");
+      const p = getExamPathwayById(targetId);
+      targetExamPathwayLabel = p ? (p.shortName || p.displayName) : targetId;
+    }
+  }
 
   return {
     name: user.name,
@@ -111,6 +125,7 @@ export async function loadPersonalProfilePayload(
     regionTierLocked,
     lockReason: regionTierLocked ? "subscription_plan" : null,
     pathwayOptions,
+    targetExamPathwayLabel,
     entitlementVerifyFailed: entitlement === "error",
     subscriberAccess,
   };

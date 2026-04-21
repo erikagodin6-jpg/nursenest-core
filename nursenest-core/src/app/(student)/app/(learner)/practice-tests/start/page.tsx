@@ -5,9 +5,11 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { listPathwaysCompatibleWithSubscription, pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements";
+import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { getPathwayLessonsPage } from "@/lib/lessons/pathway-lesson-loader";
+import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -65,7 +67,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
     );
   }
 
-  const compatiblePathways = listPathwaysCompatibleWithSubscription(entitlement);
+  const compatiblePathways = await listPathwaysCompatibleWithSubscription(entitlement);
   const catEligiblePathways = compatiblePathways.filter(pathwayAllowsCatAdaptiveStart);
   const waitlistOnlyPathways = compatiblePathways.filter((p) => !pathwayAllowsCatAdaptiveStart(p));
   /** When several CAT-eligible tracks exist, require an explicit choice (URL or dropdown) — no silent default. */
@@ -80,7 +82,21 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
     id: p.id,
     label: `${p.shortName} — ${p.displayName}`,
     examFamily: String(p.examFamily),
+    examCodeLabel: p.shortName.trim(),
   }));
+  const pathwayShellById: Record<string, PracticeTestPathwayClientShell> = Object.fromEntries(
+    catEligiblePathways.map((p) => {
+      const shell: PracticeTestPathwayClientShell = {
+        id: p.id,
+        countrySlug: p.countrySlug,
+        roleTrack: p.roleTrack,
+        examCode: p.examCode,
+        shortName: p.shortName,
+        examFamily: p.examFamily,
+      };
+      return [p.id, shell] as const;
+    }),
+  );
   const lessonsByPathway = Object.fromEntries(
     await Promise.all(
       catEligiblePathways.map(async (pathway) => {
@@ -132,6 +148,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
         <PathwayCatSessionStartClient
           initialPathwayId={initialPathwayId}
           pathwayOptions={pathwayOptions}
+          pathwayShellById={pathwayShellById}
           fallbackLessonsByPathway={lessonsByPathway}
         />
       </div>

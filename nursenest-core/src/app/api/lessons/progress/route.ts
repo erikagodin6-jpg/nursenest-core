@@ -66,7 +66,7 @@ export async function POST(req: Request) {
       });
       return notSubscribedResponse();
     }
-    if (!appPathwayLessonVisibleToSubscriber(gate.entitlement, pw, learnerPath)) {
+    if (!(await appPathwayLessonVisibleToSubscriber(gate.entitlement, pw, learnerPath))) {
       safeServerLog("api_lessons_progress", "denied_out_of_scope_pathway_lesson", {
         lessonIdPrefix: lessonId.slice(0, 8),
         tier: String(gate.entitlement.tier ?? ""),

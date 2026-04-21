@@ -5,7 +5,6 @@ import Link from "next/link";
 import { GraduationCap } from "lucide-react";
 import type { PracticeTestPathwayOption } from "@/lib/practice-tests/types";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
-import { catPathwayRegionalExamLine, tryCatPathwayFromId } from "@/lib/exam-pathways/cat-pathway-labels";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
@@ -103,9 +102,7 @@ export function CatAmbiguityPathwayPicker({
 
       <ul className="mt-3 flex list-none flex-col gap-2" role="list">
         {catEligibleOptions.map((option) => {
-          const pathwayDef = tryCatPathwayFromId(option.id);
-          // Prefer "US RN · NCLEX-RN" from the registry; fall back to server-provided label.
-          const displayLabel = pathwayDef ? catPathwayRegionalExamLine(pathwayDef) : option.label;
+          const displayLabel = option.regionalExamLine?.trim() || option.label;
           const href = appPathwayCatSessionStartPath(option.id);
           return (
             <li key={option.id}>

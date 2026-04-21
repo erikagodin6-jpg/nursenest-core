@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import type { PathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
 
 export type NpQuestionsHubBoardLinkContext = PathwayMarketingHubLinkContext;

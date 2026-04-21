@@ -31,12 +31,12 @@ export function subscriptionLocksProfileRegionAndTier(sub: {
  * For subscribers, options are derived from the same rules as `listPathwaysCompatibleWithSubscription`
  * but using the **profile** tier/country so validation stays correct when those fields are editable.
  */
-export function listPathwayPicksForProfile(
+export async function listPathwayPicksForProfile(
   entitlement: AccessScope,
   profileTier: TierCode,
   profileCountry: CountryCode,
   subscriberAccess: boolean,
-): PathwayPickOption[] {
+): Promise<PathwayPickOption[]> {
   if (subscriberAccess && entitlement.hasAccess) {
     const scope: AccessScope =
       accessScopeIsStaffLearnerEntitlementBypass(entitlement)
@@ -54,7 +54,8 @@ export function listPathwayPicksForProfile(
             country: profileCountry,
             alliedCareer: entitlement.alliedCareer ?? null,
           };
-    return listPathwaysCompatibleWithSubscription(scope).map((p) => ({
+    const rows = await listPathwaysCompatibleWithSubscription(scope);
+    return rows.map((p) => ({
       id: p.id,
       label: p.shortName || p.displayName,
     }));

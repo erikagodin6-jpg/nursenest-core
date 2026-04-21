@@ -1,5 +1,3 @@
-import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 export type PathwayReadinessType = "CAT" | "SIMULATION";
 export type PathwayReadinessMode = "production_ready" | "beta" | "mini_adaptive" | "simulation";
 
@@ -136,7 +134,7 @@ const PATHWAY_READINESS_OVERRIDES: Record<string, Omit<PathwayReadinessConfig, "
   },
 };
 
-export function readinessConfigForPathway(pathway: Pick<ExamPathwayDefinition, "id" | "shortName" | "roleTrack">): PathwayReadinessConfig {
+export function readinessConfigForPathway(pathway: { id: string; shortName: string; roleTrack: string }): PathwayReadinessConfig {
   const override = PATHWAY_READINESS_OVERRIDES[pathway.id];
   const questionRangeLabel = (base: Omit<PathwayReadinessConfig, "label" | "questionRange" | "timeEstimate">): string => {
     if (base.engineType === "CAT") {
@@ -180,9 +178,10 @@ export function readinessConfigForPathway(pathway: Pick<ExamPathwayDefinition, "
   });
 }
 
-export function readinessConfigForPathwayId(pathwayId: string | null | undefined): PathwayReadinessConfig | null {
+export async function readinessConfigForPathwayId(pathwayId: string | null | undefined): Promise<PathwayReadinessConfig | null> {
   const id = pathwayId?.trim();
   if (!id) return null;
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const pathway = getExamPathwayById(id);
   if (!pathway) return null;
   return readinessConfigForPathway(pathway);

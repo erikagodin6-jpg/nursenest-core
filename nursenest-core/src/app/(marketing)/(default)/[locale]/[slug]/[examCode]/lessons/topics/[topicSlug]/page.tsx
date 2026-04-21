@@ -130,7 +130,7 @@ export async function generateMetadata({ params }: Pick<Props, "params">): Promi
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/topics/${topicSlug}`;
   return safeGenerateMetadata(
     async () => {
-      const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
+      const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
       if (!pathway) return {};
       const canonicalPath = marketingPathwayLessonTopicClusterPath(pathway, topicSlug);
       const canonical = absoluteUrl(canonicalPath);
@@ -209,7 +209,7 @@ export default async function PathwayLessonTopicClusterPage({ params, searchPara
   const { locale: countrySlug, slug: roleTrack, examCode, topicSlug } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/topics/${topicSlug}`;
   const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
-  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
+  const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) notFound();
 
   const base = marketingPathwayLessonsIndexPath(pathway);

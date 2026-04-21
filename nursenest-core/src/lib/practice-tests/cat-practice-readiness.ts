@@ -1,9 +1,8 @@
 import { validatePracticeCatPool } from "@/lib/exams/cat-engine";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
   pathwayAllowsCatAdaptiveStart,
   subscriptionCoversPathwayBase,
-} from "@/lib/exam-pathways/pathway-entitlements";
+} from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { CAT_MIN_COMPLETE_POOL, fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
@@ -32,6 +31,7 @@ export async function assessCatPracticeReadinessForPathway(
     };
   }
 
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const pathway = getExamPathwayById(trimmed);
   if (!pathway) {
     return {
@@ -59,7 +59,7 @@ export async function assessCatPracticeReadinessForPathway(
     };
   }
 
-  const readinessConfig = readinessConfigForPathwayId(trimmed);
+  const readinessConfig = await readinessConfigForPathwayId(trimmed);
   const poolInput: PickQuestionsInput = {
     questionCount: readinessConfig?.maxQuestions ?? 75,
     topicNames: [],

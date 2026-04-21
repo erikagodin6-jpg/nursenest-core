@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
+import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-pathways-catalog";
 
 const COUNTRIES = [
   { value: "ALL", label: "All countries" },

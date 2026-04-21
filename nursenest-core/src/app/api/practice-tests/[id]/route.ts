@@ -15,7 +15,12 @@ import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
  */
 import { buildLinearCommitFeedback } from "@/lib/practice-tests/build-linear-commit-feedback";
 import { getLinearCommittedQuestionIds, mergeLinearCommittedQuestionId } from "@/lib/practice-tests/practice-linear-engine";
-import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import type {
+  PracticeTestConfigJson,
+  PracticeTestPathwayClientShell,
+  PracticeTestResultsJson,
+} from "@/lib/practice-tests/types";
 
 export const dynamic = "force-dynamic";
 
@@ -58,6 +63,21 @@ function asIdList(raw: unknown): string[] {
 
 function toJsonObject(value: unknown): object {
   return JSON.parse(JSON.stringify(value ?? {})) as object;
+}
+
+function pathwaySurfaceFromConfig(cfg: PracticeTestConfigJson): PracticeTestPathwayClientShell | null {
+  const pid = cfg.pathwayId?.trim();
+  if (!pid) return null;
+  const p = getExamPathwayById(pid);
+  if (!p) return null;
+  return {
+    id: p.id,
+    countrySlug: p.countrySlug,
+    roleTrack: p.roleTrack,
+    examCode: p.examCode,
+    shortName: p.shortName,
+    examFamily: p.examFamily,
+  };
 }
 
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
@@ -156,6 +176,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     title: row.title,
     status: row.status,
     config: cfg,
+    pathwaySurface: pathwaySurfaceFromConfig(cfg),
     timedMode: row.timedMode,
     timeLimitSec: row.timeLimitSec,
     elapsedMs: row.elapsedMs,

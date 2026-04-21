@@ -1,6 +1,6 @@
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements";
+import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements-policy";
 
 /** Why the learner sees a preview-only pathway lesson (marketing page). */
 export type PathwayLessonPreviewKind =

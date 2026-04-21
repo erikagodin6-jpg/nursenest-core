@@ -7,11 +7,9 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import {
-  defaultPracticeTestPathwayId,
-  listPathwaysCompatibleWithSubscription,
-  pathwayAllowsCatAdaptiveStart,
-} from "@/lib/exam-pathways/pathway-entitlements";
+import { catPathwayExamCodeLabel, catPathwayRegionalExamLine } from "@/lib/exam-pathways/cat-pathway-labels";
+import { defaultPracticeTestPathwayId, listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
@@ -59,11 +57,11 @@ export default async function PracticeTestsPage() {
     );
   }
 
-  const compatiblePathways = listPathwaysCompatibleWithSubscription(entitlement);
+  const compatiblePathways = await listPathwaysCompatibleWithSubscription(entitlement);
   const learnerPathRow = userId
     ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
     : null;
-  const defaultPathwayId = defaultPracticeTestPathwayId(
+  const defaultPathwayId = await defaultPracticeTestPathwayId(
     compatiblePathways,
     learnerPathRow?.learnerPath,
     entitlement.country,
@@ -72,6 +70,7 @@ export default async function PracticeTestsPage() {
     id: p.id,
     label: `${p.shortName} — ${p.displayName}`,
     examFamily: p.examFamily,
+    examCodeLabel: p.shortName.trim(),
   }));
   const catEligiblePathwayIds = compatiblePathways.filter(pathwayAllowsCatAdaptiveStart).map((p) => p.id);
   const catHref = resolveStudyLoopCatHref({

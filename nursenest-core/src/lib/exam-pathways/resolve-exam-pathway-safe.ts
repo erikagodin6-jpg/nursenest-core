@@ -10,8 +10,6 @@ export type PathwayResolutionLogContext = {
 /**
  * Single safe entry for marketing exam URL → pathway. Never throws; logs resolution failures.
  * Returns `null` when the segment triple does not resolve (caller should `notFound()`).
- *
- * Loads `exam-product-registry` lazily so this module does not statically depend on the full registry bundle.
  */
 export async function resolveExamPathwaySafe(
   countrySlug: string,

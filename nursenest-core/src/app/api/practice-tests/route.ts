@@ -8,10 +8,8 @@ import { enforcePracticeTestsListProtection } from "@/lib/http/api-protection";
 import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
-import {
-  listPathwaysCompatibleWithSubscription,
-  pathwayAllowsCatAdaptiveStart,
-} from "@/lib/exam-pathways/pathway-entitlements";
+import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { assessCatPracticeReadinessForPathway } from "@/lib/practice-tests/cat-practice-readiness";
 import {
   resolveCatPostExamTimedLimitSec,
@@ -235,7 +233,7 @@ export async function POST(req: Request) {
         selectionMode: d.selectionMode,
       });
     }
-    const compatible = listPathwaysCompatibleWithSubscription(gate.entitlement);
+    const compatible = await listPathwaysCompatibleWithSubscription(gate.entitlement);
     const catEligible = compatible.filter(pathwayAllowsCatAdaptiveStart);
     const resolvedPathway = resolveCatPathwayIdForCatPost(d.pathwayId, catEligible);
     if (!resolvedPathway.ok) {
@@ -340,7 +338,7 @@ export async function POST(req: Request) {
     }
     const basis = resolveCatSelectionBasisForPost(d.catPresentationMode, d.catSelectionBasis);
     const simPathway = getExamPathwayById(pathwayIdForCat) ?? null;
-    const readinessConfig = readinessConfigForPathwayId(pathwayIdForCat);
+    const readinessConfig = await readinessConfigForPathwayId(pathwayIdForCat);
     const pathwayCap =
       d.catPresentationMode === "exam_simulation" && simPathway?.examFamily !== ExamFamily.NP
         ? 145

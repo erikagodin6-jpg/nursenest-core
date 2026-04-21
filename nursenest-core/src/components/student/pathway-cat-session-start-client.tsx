@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { PracticeTestPathwayOption } from "@/lib/practice-tests/types";
+import type { PracticeTestPathwayClientShell, PracticeTestPathwayOption } from "@/lib/practice-tests/types";
 import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { publicCopyForReadinessConfig, readinessConfigForPathway } from "@/lib/exam-pathways/pathway-readiness-config";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { CatPracticeReadinessResult } from "@/lib/practice-tests/cat-practice-readiness";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import { ExamPreExamCustomizeModal } from "@/components/exam/exam-study-theme-modal";
@@ -21,10 +20,13 @@ import {
 export function PathwayCatSessionStartClient({
   initialPathwayId,
   pathwayOptions,
+  pathwayShellById,
   fallbackLessonsByPathway,
 }: {
   initialPathwayId: string | null;
   pathwayOptions: PracticeTestPathwayOption[];
+  /** Server-resolved pathway rows for labels + links (avoids importing the exam catalog in this client bundle). */
+  pathwayShellById: Record<string, PracticeTestPathwayClientShell>;
   fallbackLessonsByPathway?: Record<string, Array<{ slug: string; title: string }>>;
 }) {
   const isDev = process.env.NODE_ENV !== "production";
@@ -45,7 +47,10 @@ export function PathwayCatSessionStartClient({
   const [readinessRefreshToken, setReadinessRefreshToken] = useState(0);
   const [customizeOpen, setCustomizeOpen] = useState(false);
 
-  const pathwayMeta = useMemo(() => (normalizedPathwayId ? getExamPathwayById(normalizedPathwayId) : undefined), [normalizedPathwayId]);
+  const pathwayMeta = useMemo(
+    () => (normalizedPathwayId ? pathwayShellById[normalizedPathwayId] : undefined),
+    [normalizedPathwayId, pathwayShellById],
+  );
   const catShort = pathwayMeta ? catPathwayShortCatLabel(pathwayMeta) : null;
   const catLine = pathwayMeta ? catPathwayRegionalExamLine(pathwayMeta) : null;
   const readinessConfig = useMemo(

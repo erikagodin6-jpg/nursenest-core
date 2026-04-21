@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/${lessonSlug}`;
   return safeGenerateMetadata(
     async () => {
-      const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, {
+      const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, {
         pathname,
       });
       const lesson = pathway
@@ -93,7 +93,7 @@ export default async function PathwayLessonDetailPage({ params }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode, lessonSlug } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/${lessonSlug}`;
   return withCrawlSurfacePageRender("marketing.pathway_lesson", pathname, async () => {
-    const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
+    const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
     if (!pathway) notFound();
 
     return (

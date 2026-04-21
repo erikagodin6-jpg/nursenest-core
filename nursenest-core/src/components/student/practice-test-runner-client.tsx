@@ -16,6 +16,7 @@ import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import type {
   CatStudyFeedbackPayload,
   PracticeTestConfigJson,
+  PracticeTestPathwayClientShell,
   PracticeTestResultsJson,
 } from "@/lib/practice-tests/types";
 import { CatLiveTransparencyStrip } from "@/components/student/cat-live-transparency-strip";
@@ -50,7 +51,6 @@ import type { AnswerOptionState } from "@/components/study/cat-question-card";
 import { RationalePanel } from "@/components/study/cat-rationale-panel";
 import { ResultsSummary } from "@/components/study/cat-results-summary";
 import type { StudySettings } from "@/lib/learner/study-settings";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 import { captureClientException } from "@/lib/runtime/client-observability";
 import { PracticeTestRunPageSkeleton } from "@/components/skeletons/hub-page-skeleton";
@@ -74,9 +74,7 @@ function parseOptions(raw: unknown): string[] {
 
 type ExamChromeVariant = "nclex" | "rex" | "np" | "default";
 
-function examChromeVariantForPathway(pathwayId: string | null | undefined): ExamChromeVariant {
-  if (!pathwayId) return "default";
-  const pathway = getExamPathwayById(pathwayId);
+function examChromeVariantFromSurface(pathway: PracticeTestPathwayClientShell | null): ExamChromeVariant {
   if (!pathway) return "default";
   if (pathway.roleTrack === "np") return "np";
   if (pathway.examCode === "rex-pn") return "rex";
@@ -93,6 +91,7 @@ export function PracticeTestRunnerClient({
   protectionFlags,
   studySettings,
   isEntitled = true,
+  initialPathwaySurface = null,
 }: {
   testId: string;
   userId: string;
@@ -106,6 +105,8 @@ export function PracticeTestRunnerClient({
    * fully functional — wire `false` for free/trial accounts at the page level.
    */
   isEntitled?: boolean;
+  /** Server snapshot from stored test config so chrome can render before hydrate returns pathwaySurface. */
+  initialPathwaySurface?: PracticeTestPathwayClientShell | null;
 }) {
   const [phase, setPhase] = useState<"loading" | "ready" | "error">("loading");
   const { t } = useMarketingI18n();
@@ -132,6 +133,7 @@ export function PracticeTestRunnerClient({
   const [sessionStartMs, setSessionStartMs] = useState<number | null>(null);
   const [savedElapsedMs, setSavedElapsedMs] = useState<number | null>(null);
   const [testConfig, setTestConfig] = useState<PracticeTestConfigJson | null>(null);
+  const [pathwaySurface, setPathwaySurface] = useState<PracticeTestPathwayClientShell | null>(() => initialPathwaySurface ?? null);
   const [catMode, setCatMode] = useState(false);
   const [adaptiveTheta, setAdaptiveTheta] = useState<number | null>(null);
   const [adaptiveSe, setAdaptiveSe] = useState<number | null>(null);
@@ -218,6 +220,7 @@ export function PracticeTestRunnerClient({
         elapsedMs?: number | null;
         startedAt?: string;
         config?: PracticeTestConfigJson;
+        pathwaySurface?: PracticeTestPathwayClientShell | null;
         catMode?: boolean;
         adaptiveState?: unknown;
       };
@@ -242,7 +245,15 @@ export function PracticeTestRunnerClient({
       setTimeLimitSec(data.timeLimitSec ?? null);
       setSavedElapsedMs(typeof data.elapsedMs === "number" ? data.elapsedMs : null);
       setSessionStartMs(data.startedAt ? new Date(data.startedAt).getTime() : Date.now());
-      setTestConfig(data.config ?? null);
+      const nextCfg = data.config ?? null;
+      setTestConfig(nextCfg);
+      setPathwaySurface((prev) => {
+        if (data.pathwaySurface) return data.pathwaySurface;
+        const pid = nextCfg?.pathwayId?.trim();
+        if (pid && prev?.id === pid) return prev;
+        if (pid && initialPathwaySurface?.id === pid) return initialPathwaySurface;
+        return null;
+      });
       setCatMode(Boolean(data.catMode));
       setTeachingReviewItems(null);
       const ast = data.adaptiveState;
@@ -296,11 +307,15 @@ export function PracticeTestRunnerClient({
       setError(message);
       setPhase("error");
     }
-  }, [testId]);
+  }, [testId, initialPathwaySurface]);
 
   useEffect(() => {
     void load();
   }, [load]);
+
+  useEffect(() => {
+    setPathwaySurface(initialPathwaySurface ?? null);
+  }, [testId, initialPathwaySurface]);
 
   useEffect(() => {
     if (phase !== "ready" || status !== "IN_PROGRESS") return;
@@ -437,13 +452,12 @@ export function PracticeTestRunnerClient({
   const qid = questionIds[idx];
   const current = qid ? questionCache[qid] : undefined;
   const total = questionIds.length;
-  const pathway = testConfig?.pathwayId ? getExamPathwayById(testConfig.pathwayId) : null;
   const examName =
-    pathway?.shortName ??
+    pathwaySurface?.shortName ??
     (typeof current?.exam === "string" && current.exam.trim().length > 0
       ? current.exam.trim()
       : tx("learner.practiceTests.run.defaultExamName", "Practice Exam"));
-  const chromeVariant = examChromeVariantForPathway(testConfig?.pathwayId ?? null);
+  const chromeVariant = examChromeVariantFromSurface(pathwaySurface);
   const chromeClass = `nn-exam-variant--${chromeVariant}`;
   const examSimulation = testConfig?.catPresentationMode === "exam_simulation";
   const catFeedbackStudy = Boolean(catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study");

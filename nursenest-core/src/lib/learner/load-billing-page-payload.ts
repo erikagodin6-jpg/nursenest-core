@@ -176,7 +176,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
   const hasAccess = entitlement !== "error" && entitlement.hasAccess;
   const pathwayLabels =
     entitlement !== "error" && entitlement.hasAccess
-      ? listPathwaysCompatibleWithSubscription(entitlement).map((p) => p.shortName || p.displayName)
+      ? (await listPathwaysCompatibleWithSubscription(entitlement)).map((p) => p.shortName || p.displayName)
       : [];
 
   let stripeRenewal = await loadStripeRenewalSnapshot(subscription?.stripeSubscriptionId);

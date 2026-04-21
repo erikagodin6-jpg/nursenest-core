@@ -39,7 +39,7 @@ async function findNextPathwayLessonInAppOrder(
   entitlement: AccessScope,
   learnerPath: string | null,
 ): Promise<{ id: string; title: string } | null> {
-  const baseWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
+  const baseWhere = await pathwayLessonsAppListWhere(entitlement, learnerPath);
   const rows = await prisma.pathwayLesson.findMany({
     where: { AND: [baseWhere, { pathwayId, structuralPublicComplete: true }] },
     orderBy: [{ sortOrder: "asc" }, { id: "asc" }],

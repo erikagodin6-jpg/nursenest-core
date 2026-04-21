@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const catPath = `${pathname}/cat`;
   return safeGenerateMetadata(
     async () => {
-      const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname: catPath });
+      const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname: catPath });
       if (!pathway) {
         return { robots: { index: false, follow: true } };
       }
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PathwayCatEntryPage({ params }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
-  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname: `${pathname}/cat` });
+  const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname: `${pathname}/cat` });
   if (!pathway) notFound();
 
   const { questionSnapshot } = await loadMarketingExamHubOptionalBlocks(pathway, {

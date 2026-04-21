@@ -7,6 +7,7 @@ import {
 } from "@/lib/durability/durability-flags";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { catPathwayExamCodeLabel, catPathwayRegionalExamLine } from "@/lib/exam-pathways/cat-pathway-labels";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { syntheticPathwayLessonId } from "@/lib/lessons/pathway-lesson-progress";
@@ -222,6 +223,9 @@ export type PathwayStudySummariesRow = {
   pathwayId: string;
   label: string;
   shortLabel: string;
+  /** Precomputed for dashboard/CAT chrome without client-side catalog imports. */
+  catPathwayExamLabel: string;
+  catPathwayRegionalExamLine: string;
   lessonsTotal: number;
   lessonsCompleted: number;
   lessonsInProgress: number;
@@ -231,12 +235,12 @@ export type PathwayStudySummariesRow = {
  * Pathway completion table from **already-loaded** capped inventory + progress (e.g. pathway bundle).
  * Avoids an extra `pathwayLesson.groupBy` round-trip when totals can be derived from the same rows used for progress keys.
  */
-export function buildPathwayStudySummariesFromLessonInventory(
+export async function buildPathwayStudySummariesFromLessonInventory(
   entitlement: AccessScope,
   lessonRows: PathwayLessonDashboardRow[],
   pathwayProgress: { lessonId: string; completed: boolean }[],
-): PathwayStudySummariesRow[] {
-  const pathways = listPathwaysCompatibleWithSubscription(entitlement);
+): Promise<PathwayStudySummariesRow[]> {
+  const pathways = await listPathwaysCompatibleWithSubscription(entitlement);
   if (pathways.length === 0) return [];
 
   const totalsByPathway = new Map<string, number>();
@@ -260,6 +264,8 @@ export function buildPathwayStudySummariesFromLessonInventory(
     pathwayId: p.id,
     label: p.displayName,
     shortLabel: p.shortName || p.displayName,
+    catPathwayExamLabel: catPathwayExamCodeLabel(p),
+    catPathwayRegionalExamLine: catPathwayRegionalExamLine(p),
     lessonsTotal: totalsByPathway.get(p.id) ?? 0,
     lessonsCompleted: progressByPathway.get(p.id)?.completed ?? 0,
     lessonsInProgress: progressByPathway.get(p.id)?.inProgress ?? 0,
@@ -324,7 +330,7 @@ export async function loadLearnerDashboardCore(
   const learnerPath = user?.learnerPath ?? null;
 
   const lessonWhere = lessonAccessWhere(entitlement);
-  const pathwayWhere = pathwayLessonsAppListWhere(entitlement, learnerPath);
+  const pathwayWhere = await pathwayLessonsAppListWhere(entitlement, learnerPath);
 
   let visibleLessonScope = preload?.visibleLessonScope;
   let pathwayRowsForScope = preload?.pathwayRowsForScope ?? preload?.visibleLessonScope?.pathwayLessonRows;
@@ -589,7 +595,7 @@ export async function loadPathwayLessonProgressBundle(
   });
   durationMsUser = Math.round(performance.now() - tUser);
 
-  const pathwayWhere = pathwayLessonsAppListWhere(entitlement, user?.learnerPath ?? null);
+  const pathwayWhere = await pathwayLessonsAppListWhere(entitlement, user?.learnerPath ?? null);
 
   let durationMsInventory = 0;
   const tInv = performance.now();
@@ -739,12 +745,12 @@ export async function loadPathwayStudySummaries(
 ): Promise<PathwayStudySummariesRow[]> {
   if (!entitlement.hasAccess || !isDatabaseUrlConfigured()) return [];
 
-  const pathways = listPathwaysCompatibleWithSubscription(entitlement);
+  const pathways = await listPathwaysCompatibleWithSubscription(entitlement);
   if (pathways.length === 0) return [];
 
   if (preload?.lessonRows?.length && preload.pathwayProgress) {
     const t0 = performance.now();
-    const rows = buildPathwayStudySummariesFromLessonInventory(
+    const rows = await buildPathwayStudySummariesFromLessonInventory(
       entitlement,
       preload.lessonRows,
       preload.pathwayProgress,
@@ -773,7 +779,7 @@ export async function loadPathwayStudySummaries(
         pathwayLessonRows: preload?.lessonRows?.map((r) => ({ pathwayId: r.pathwayId, slug: r.slug })),
       }),
   );
-  const baseWhere = pathwayLessonsAppListWhere(entitlement, scopeForSummaries.learnerPath);
+  const baseWhere = await pathwayLessonsAppListWhere(entitlement, scopeForSummaries.learnerPath);
 
   const [counts, allPathwayProgress] = await timedLearnerCatalogPhase(
     "pathway_study_summaries_parallel",
@@ -824,6 +830,8 @@ export async function loadPathwayStudySummaries(
     pathwayId: p.id,
     label: p.displayName,
     shortLabel: p.shortName || p.displayName,
+    catPathwayExamLabel: catPathwayExamCodeLabel(p),
+    catPathwayRegionalExamLine: catPathwayRegionalExamLine(p),
     lessonsTotal: totalsByPathway.get(p.id) ?? 0,
     lessonsCompleted: progressByPathway.get(p.id)?.completed ?? 0,
     lessonsInProgress: progressByPathway.get(p.id)?.inProgress ?? 0,

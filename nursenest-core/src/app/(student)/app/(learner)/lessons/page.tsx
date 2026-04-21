@@ -198,7 +198,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     { scope: "page_lessons", label: "learner_path" },
   );
   const learnerPath = learnerPathRow?.learnerPath ?? null;
-  const visiblePathwayIds = visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+  const visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
   const catHref = resolveStudyLoopCatHref({
     authState: "signed_in",
     pathwayId: pathwayIdFilter ?? learnerPath,
@@ -263,7 +263,7 @@ export default async function LessonsPage({ searchParams }: Props) {
       };
     }
 
-    const pathwayWhere = pathwayLessonsAppListWhereWithTopicFilter(entitlement, learnerPath, {
+    const pathwayWhere = await pathwayLessonsAppListWhereWithTopicFilter(entitlement, learnerPath, {
       topic: topicFilter,
       topicSlug: topicSlugFilter,
       pathwayId: pathwayIdFilter,

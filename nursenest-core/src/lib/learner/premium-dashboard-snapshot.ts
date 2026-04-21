@@ -27,6 +27,8 @@ export type PathwayProgressRow = {
   pathwayId: string;
   label: string;
   shortLabel: string;
+  catPathwayExamLabel: string;
+  catPathwayRegionalExamLine: string;
   lessonsCompleted: number;
   lessonsTotal: number;
   /** Rows with completed=false (opened / in progress, not finished). */

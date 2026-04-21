@@ -6,7 +6,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   pathwayAllowsCatAdaptiveStart,
   subscriptionCoversPathwayBase,
-} from "@/lib/exam-pathways/pathway-entitlements";
+} from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
 import { answerMatches } from "@/lib/exams/score-session-answers";
 import {
@@ -264,7 +264,7 @@ export async function createCatPracticeTestPayload(
     };
   }
 
-  const pathwayReadiness = readinessConfigForPathwayId(pathway?.id ?? input.pathwayId ?? null);
+  const pathwayReadiness = await readinessConfigForPathwayId(pathway?.id ?? input.pathwayId ?? null);
 
   const effectiveBasis: CatSelectionBasis = sim ? "random" : catBasis;
 

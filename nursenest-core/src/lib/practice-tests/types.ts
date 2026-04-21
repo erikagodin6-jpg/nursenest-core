@@ -1,4 +1,5 @@
 import type { CatExamReport, CatPresentationMode } from "@/lib/exams/cat-types";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { CatResultsCoachSnapshot } from "@/lib/practice-tests/cat-results-coach";
 
 export type { CatPresentationMode };
@@ -43,7 +44,22 @@ export type PracticeTestPathwayOption = {
   id: string;
   label: string;
   examFamily: string;
+  /**
+   * Mirrors {@link catPathwayExamCodeLabel} / `shortName` so hub UI can disambiguate CAT tracks
+   * without importing the exam catalog client-side.
+   */
+  examCodeLabel: string;
+  /** Server-computed regional disambiguation line for CAT ambiguity UI. */
+  regionalExamLine?: string;
 };
+
+/**
+ * Minimal pathway fields for learner chrome (CAT start, practice run) without the full catalog.
+ */
+export type PracticeTestPathwayClientShell = Pick<
+  ExamPathwayDefinition,
+  "id" | "countrySlug" | "roleTrack" | "examCode" | "shortName" | "examFamily"
+>;
 
 /** Pool basis when `selectionMode === "cat"` (how items are filtered before adaptive selection). */
 export type CatSelectionBasis = "random" | "targeted" | "weak";

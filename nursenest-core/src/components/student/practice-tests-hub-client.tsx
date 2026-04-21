@@ -11,10 +11,8 @@ import type {
   PracticeTestPathwayOption,
   PracticeTestSelectionMode,
 } from "@/lib/practice-tests/types";
-import { catPathwayExamCodeLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import { CatAmbiguityPathwayPicker } from "@/components/student/cat-ambiguity-pathway-picker";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import {
   catEligiblePathwayOptions,
   hubCatStartBlocked,
@@ -103,8 +101,9 @@ export function PracticeTestsHubClient({
   const selectedPathway =
     pathwayOptionsForSelect.find((p) => p.id === pathwayId) ?? pathwayOptions.find((p) => p.id === pathwayId);
   const isNpPathway = selectedPathway?.examFamily === "NP";
-  const selectedPathwayDef = pathwayId.trim() ? getExamPathwayById(pathwayId.trim()) : undefined;
-  const selectedExamLabel = selectedPathwayDef ? catPathwayExamCodeLabel(selectedPathwayDef) : null;
+  const selectedExamLabel = selectedPathway?.examCodeLabel?.trim()
+    ? selectedPathway.examCodeLabel.trim()
+    : null;
   const selectedExamContext = useMemo(
     () => buildGlobalExamContext(pathwayId.trim() || defaultPathwayId || null, "en"),
     [defaultPathwayId, pathwayId],

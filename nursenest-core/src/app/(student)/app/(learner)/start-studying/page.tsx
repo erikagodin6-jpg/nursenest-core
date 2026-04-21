@@ -7,7 +7,7 @@ import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveDefaultPathwayIdForOnboarding } from "@/lib/onboarding/resolve-default-pathway-for-onboarding";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";

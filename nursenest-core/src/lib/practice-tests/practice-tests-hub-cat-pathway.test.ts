@@ -9,7 +9,7 @@ import {
 } from "@/lib/practice-tests/practice-tests-hub-cat-pathway";
 
 function opt(id: string): PracticeTestPathwayOption {
-  return { id, label: id, examFamily: "NCLEX_RN" };
+  return { id, label: id, examFamily: "NCLEX_RN", examCodeLabel: id };
 }
 
 test("catEligiblePathwayOptions filters by id list", () => {

@@ -1,5 +1,5 @@
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import {
   appCatWeakFocusPath,
   appPathwayCatSessionStartPath,

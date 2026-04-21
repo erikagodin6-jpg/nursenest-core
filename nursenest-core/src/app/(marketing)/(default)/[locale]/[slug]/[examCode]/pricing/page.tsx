@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pricingPath = `${pathname}/pricing`;
   return safeGenerateMetadata(
     async () => {
-      const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname: pricingPath });
+      const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname: pricingPath });
       if (!pathway) return {};
       const canonicalPath = buildExamPathwayPath(pathway, "pricing");
       const canonical = absoluteUrl(canonicalPath);
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ExamPathwayPricingPage({ params }: Props) {
   const { locale, slug, examCode } = await params;
-  const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname: `/${locale}/${slug}/${examCode}/pricing` });
+  const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname: `/${locale}/${slug}/${examCode}/pricing` });
   if (!pathway) notFound();
 
   const { crumbs, schemaItems } = pathwayPricingBreadcrumbs(pathway);

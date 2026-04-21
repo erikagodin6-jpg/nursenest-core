@@ -11,7 +11,7 @@ import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { postLoginMarketingHomePath } from "@/lib/auth/post-login-resume-path";
 import {
   BROWSE_LESSONS_HREF,
-  buildNotFoundRecoverySuggestions,
+  buildNotFoundAppOnlyRecoverySuggestions,
   mergeNotFoundRecoveryLinks,
   NOT_FOUND_RECOVERY_CAP,
   type NotFoundRecoveryLink,
@@ -30,9 +30,15 @@ function recoveryButtonClass(): string {
 export function NotFoundClient({
   isAuthenticated,
   resumeStudying,
+  notFoundPathnameSnapshot,
+  registryRecoveryLinks,
 }: {
   isAuthenticated: boolean;
   resumeStudying: NotFoundResumeStudying | null;
+  /** Pathname used when server computed {@link registryRecoveryLinks} (proxy headers). */
+  notFoundPathnameSnapshot: string;
+  /** Marketing pathway + `/app/*` hints computed on the server (registry-backed). */
+  registryRecoveryLinks: NotFoundRecoveryLink[];
 }) {
   const pathname = usePathname() ?? "/";
   const { locale } = useMarketingI18n();
@@ -42,7 +48,10 @@ export function NotFoundClient({
     [locale],
   );
 
-  const smart = useMemo(() => buildNotFoundRecoverySuggestions(pathname), [pathname]);
+  const smart = useMemo(() => {
+    if (pathname === notFoundPathnameSnapshot) return registryRecoveryLinks;
+    return buildNotFoundAppOnlyRecoverySuggestions(pathname);
+  }, [pathname, notFoundPathnameSnapshot, registryRecoveryLinks]);
 
   const recoveryLinks = useMemo(() => {
     const base: NotFoundRecoveryLink[] = [];

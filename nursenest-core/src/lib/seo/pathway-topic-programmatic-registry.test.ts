@@ -15,7 +15,7 @@ function parseProgrammaticPath(path: string): { country: string; roleTrack: stri
   return { country, roleTrack, examCode, seoSlug };
 }
 
-test("every emitted pathway-topic programmatic path round-trips through route truth", () => {
+test("every emitted pathway-topic programmatic path round-trips through route truth", async () => {
   const paths = collectPathwayTopicProgrammaticPublicPaths();
   assert.ok(paths.length > 0);
 
@@ -24,7 +24,7 @@ test("every emitted pathway-topic programmatic path round-trips through route tr
     assert.ok(parsed, `expected 4 path segments for ${path}`);
     if (!parsed) continue;
 
-    const pathway = resolveExamPathwaySafe(parsed.country, parsed.roleTrack, parsed.examCode, { pathname: path });
+    const pathway = await resolveExamPathwaySafe(parsed.country, parsed.roleTrack, parsed.examCode, { pathname: path });
     assert.ok(pathway, `expected pathway to resolve for ${path}`);
     if (!pathway) continue;
 

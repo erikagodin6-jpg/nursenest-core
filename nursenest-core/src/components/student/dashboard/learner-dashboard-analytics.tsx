@@ -1,5 +1,3 @@
-import { catPathwayExamCodeLabel, catPathwayRegionalExamLine } from "@/lib/exam-pathways/cat-pathway-labels";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { resolvePreferredCatPathwayId } from "@/lib/exam-pathways/pathway-cat-flow";
 import { resolveStudyLoopCatDestination } from "@/lib/exam-pathways/study-loop-cat-routing";
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
@@ -39,8 +37,8 @@ function catQuickFromSnapshot(snapshot: PremiumDashboardSnapshot): {
       catPathwayLine: null,
     };
   }
-  const pw = getExamPathwayById(preferred);
-  if (!pw) {
+  const row = snapshot.pathways.find((p) => p.pathwayId === preferred);
+  if (!row) {
     return {
       catStartHref: destination.href,
       catDestinationKind: destination.kind === "app_start" ? "app_start" : "generic_chooser",
@@ -51,8 +49,8 @@ function catQuickFromSnapshot(snapshot: PremiumDashboardSnapshot): {
   return {
     catStartHref: destination.href,
     catDestinationKind: destination.kind === "app_start" ? "app_start" : "generic_chooser",
-    catPathwayLabel: catPathwayExamCodeLabel(pw),
-    catPathwayLine: catPathwayRegionalExamLine(pw),
+    catPathwayLabel: row.catPathwayExamLabel,
+    catPathwayLine: row.catPathwayRegionalExamLine,
   };
 }
 

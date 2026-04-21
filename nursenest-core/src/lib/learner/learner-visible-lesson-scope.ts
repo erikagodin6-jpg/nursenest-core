@@ -207,7 +207,7 @@ export async function buildVisibleLessonScopeForLearner(
   const pathwayLessonRows =
     options?.pathwayLessonRows ??
     (await prisma.pathwayLesson.findMany({
-      where: pathwayLessonsAppListWhere(entitlement, learnerPath),
+      where: await pathwayLessonsAppListWhere(entitlement, learnerPath),
       select: { pathwayId: true, slug: true },
       take: PATHWAY_CATALOG_LIST_HARD_CAP,
     }));

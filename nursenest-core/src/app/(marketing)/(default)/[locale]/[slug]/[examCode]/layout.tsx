@@ -24,7 +24,7 @@ type Props = {
 export default async function ExamPathwayLayout({ children, params }: Props) {
   const { locale, slug, examCode } = await params;
   const pathname = `/${locale}/${slug}/${examCode}`;
-  const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
+  const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (!pathway || pathway.status === "hidden") {
     notFound();
   }

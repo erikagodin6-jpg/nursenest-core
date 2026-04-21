@@ -30,7 +30,7 @@ type Props = { params: Promise<{ locale: string; slug: string; examCode: string 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug, examCode } = await params;
   const pathname = `/${locale}/${slug}/${examCode}`;
-  const pathwayPre = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
+  const pathwayPre = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   const rnHubRedirect = rnNclexExamHubOverviewRedirectTarget(pathwayPre);
   if (rnHubRedirect) permanentRedirect(rnHubRedirect);
   return safeGenerateMetadata(async () => {
@@ -69,7 +69,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ExamPathwayOverviewPage({ params }: Props) {
   const { locale, slug, examCode } = await params;
   const pathname = `/${locale}/${slug}/${examCode}`;
-  const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname });
+  const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   const rnHubRedirect = rnNclexExamHubOverviewRedirectTarget(pathway);
   if (rnHubRedirect) permanentRedirect(rnHubRedirect);
   if (!pathway) notFound();

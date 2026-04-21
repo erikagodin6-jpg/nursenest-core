@@ -94,13 +94,13 @@ describe("marketing route integrity", () => {
     }
   });
 
-  it("resolveExamPathwaySafe rejects unsupported triples while keeping canonical hubs resolvable", () => {
+  it("resolveExamPathwaySafe rejects unsupported triples while keeping canonical hubs resolvable", async () => {
     assert.equal(
-      resolveExamPathwaySafe("us", "rpn", "rex-pn", { pathname: "/us/rpn/rex-pn" }),
+      await resolveExamPathwaySafe("us", "rpn", "rex-pn", { pathname: "/us/rpn/rex-pn" }),
       null,
     );
 
-    const canadaPn = resolveExamPathwaySafe("canada", "rpn", "rex-pn", {
+    const canadaPn = await resolveExamPathwaySafe("canada", "rpn", "rex-pn", {
       pathname: "/canada/rpn/rex-pn",
     });
     assert.ok(canadaPn);

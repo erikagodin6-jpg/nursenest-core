@@ -143,7 +143,7 @@ export async function PATCH(req: Request) {
     const nextCountry = body.country ?? user.country;
     const nextTier = body.tier ?? user.tier;
 
-    const pathwayOptions = listPathwayPicksForProfile(entitlement, nextTier, nextCountry, subscriberAccess);
+    const pathwayOptions = await listPathwayPicksForProfile(entitlement, nextTier, nextCountry, subscriberAccess);
     const nextLearnerPath =
       body.learnerPath !== undefined ? (body.learnerPath === null ? null : body.learnerPath.trim()) : undefined;
     const effectiveLearnerPath = nextLearnerPath !== undefined ? nextLearnerPath : user.learnerPath;

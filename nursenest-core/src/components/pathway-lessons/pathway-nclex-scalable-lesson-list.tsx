@@ -13,7 +13,7 @@ import {
 } from "@/lib/lessons/nclex-pn-us-lesson-enrichment";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 /** Above this count per Client Needs section, show a compact link list first and tuck rich previews behind a disclosure. */

@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}/${exam}`;
   return safeGenerateMetadata(
     async () => {
-      const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
+      const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
       if (!pathway) return {};
       const row = getPathwayTopicProgrammaticRow(pathway.id, exam);
       if (!row) return {};
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PathwayTopicProgrammaticPage({ params }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode, exam } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}/${exam}`;
-  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
+  const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) notFound();
   const row = getPathwayTopicProgrammaticRow(pathway.id, exam);
   if (!row) notFound();

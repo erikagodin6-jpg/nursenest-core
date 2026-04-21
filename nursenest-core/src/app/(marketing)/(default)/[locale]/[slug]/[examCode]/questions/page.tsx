@@ -60,7 +60,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const topicSlugParam = sp.topicSlug?.trim().toLowerCase() ?? "";
   return safeGenerateMetadata(
     async () => {
-      const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname: questionsPath });
+      const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname: questionsPath });
       if (!pathway) return {};
       const canonicalPath = buildExamPathwayPath(pathway, "questions");
       const canonical = absoluteUrl(canonicalPath);
@@ -89,7 +89,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const sp = searchParams ? await searchParams : {};
   const topicFilter = sp.topic?.trim() ?? "";
   const topicSlugFromUrl = sp.topicSlug?.trim().toLowerCase() ?? "";
-  const pathway = resolveExamPathwaySafe(locale, slug, examCode, { pathname: `${pathname}/questions` });
+  const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname: `${pathname}/questions` });
   if (!pathway) notFound();
 
   const { questionSnapshot, pathwayLessonCount } = await loadMarketingExamHubOptionalBlocks(pathway, {

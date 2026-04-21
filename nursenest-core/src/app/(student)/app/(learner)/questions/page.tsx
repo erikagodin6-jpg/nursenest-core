@@ -44,7 +44,7 @@ export default async function QuestionBankPage() {
   let pathwayCountryByPathwayId: Record<string, string> = {};
   if (userId && entitlement.hasAccess && isDatabaseUrlConfigured()) {
     try {
-      const compatible = listPathwaysCompatibleWithSubscription(entitlement);
+      const compatible = await listPathwaysCompatibleWithSubscription(entitlement);
       pathwayOptions = compatible.map((p) => ({ id: p.id, label: p.shortName }));
       for (const p of compatible) {
         pathwayExamKeysByPathwayId[p.id] = [...p.contentExamKeys];

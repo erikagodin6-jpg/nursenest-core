@@ -37,7 +37,7 @@ export async function resolveTopicRemediationLinks(
 
   let lessonHref = "/app/lessons";
   if (code) {
-    const pathwayScope = pathwayLessonsAppListWhere(entitlement, learnerPath);
+    const pathwayScope = await pathwayLessonsAppListWhere(entitlement, learnerPath);
     const contentScope = lessonAccessWhere(entitlement);
 
     const [pathwayLessonRows, contentLesson] = await Promise.all([

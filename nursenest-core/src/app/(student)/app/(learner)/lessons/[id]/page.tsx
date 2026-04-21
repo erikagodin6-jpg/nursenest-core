@@ -33,7 +33,6 @@ import { LessonContinueStudyNextBlock } from "@/components/student/lesson-contin
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { loadLessonContinueStudyNext } from "@/lib/learner/lesson-context-study-next";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { contentTierForPathwayLessonRender } from "@/lib/lessons/global-lesson-architecture";
 import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
 import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
@@ -209,6 +208,8 @@ export default async function LessonDetailPage({ params }: Props) {
     learnerPath = lpRow?.learnerPath ?? null;
   }
 
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-pathways-catalog");
+
   const marketingLocale = await getMarketingLocaleForDefaultRoute();
 
   const resolved = await withDatabaseFallback(async () => {
@@ -238,7 +239,7 @@ export default async function LessonDetailPage({ params }: Props) {
 
     const pwRow = await prisma.pathwayLesson.findUnique({ where: { id } });
     if (pwRow) {
-      if (!appPathwayLessonVisibleToSubscriber(entitlement, pwRow, learnerPath)) {
+      if (!(await appPathwayLessonVisibleToSubscriber(entitlement, pwRow, learnerPath))) {
         return { kind: "out_of_plan" as const };
       }
       const record = await getPathwayLesson(pwRow.pathwayId, pwRow.slug, marketingLocale);

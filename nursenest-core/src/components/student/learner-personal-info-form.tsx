@@ -6,8 +6,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { CountryCode, TierCode } from "@prisma/client";
 import type { PersonalProfilePayload } from "@/lib/learner/load-personal-profile";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-
 const TIERS: TierCode[] = [TierCode.PRE_NURSING, TierCode.NEW_GRAD, TierCode.RPN, TierCode.LVN_LPN, TierCode.RN, TierCode.NP, TierCode.ALLIED];
 const COUNTRIES: CountryCode[] = [CountryCode.CA, CountryCode.US];
 
@@ -20,14 +18,6 @@ const TIER_I18N_KEY: Record<TierCode, string> = {
   [TierCode.NP]: "learner.personalPage.tierNP",
   [TierCode.ALLIED]: "learner.personalPage.tierALLIED",
 };
-
-function pathwayLabelFromId(id: string | null, options: PersonalProfilePayload["pathwayOptions"]): string | null {
-  if (!id?.trim()) return null;
-  const hit = options.find((o) => o.id === id.trim());
-  if (hit) return hit.label;
-  const p = getExamPathwayById(id.trim());
-  return p ? p.shortName || p.displayName : id;
-}
 
 type ServerRegionSnapshot = Pick<PersonalProfilePayload, "country" | "tier" | "pathwayOptions">;
 
@@ -173,7 +163,10 @@ export function LearnerPersonalInfoForm({
   }
 
   const examDateYmd = initial.examDate ? initial.examDate.slice(0, 10) : null;
-  const targetLabel = pathwayLabelFromId(initial.targetExamPathwayId, pathwayOptions);
+  const targetLabel =
+    pathwayOptions.find((o) => o.id === (initial.targetExamPathwayId ?? "").trim())?.label ??
+    initial.targetExamPathwayLabel ??
+    (initial.targetExamPathwayId?.trim() || null);
 
   return (
     <div className="space-y-8">

@@ -327,17 +327,17 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
 
   if (skipHeavy) {
     const tCore = performance.now();
-    const pathwaySummariesTimed = (() => {
+    const pathwaySummariesTimed = (async () => {
       const tPath = performance.now();
-      const rows = buildPathwayStudySummariesFromLessonInventory(
+      const rows = await buildPathwayStudySummariesFromLessonInventory(
         entitlement,
         bundle.pathwayLessonRows,
         bundle.pathwayProgressScoped,
       );
-      return Promise.resolve({
+      return {
         rows,
         durationMs: Math.round(performance.now() - tPath),
-      });
+      };
     })();
     const [core, pathwaySummaryResult] = await Promise.all([
       loadLearnerDashboardCore(userId, entitlement, {
@@ -457,12 +457,10 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
   }
   const [qById, pathwayRaw] = await Promise.all([
     loadBatchedBankGradingQuestionMap(allSessionIds, entitlement),
-    Promise.resolve(
-      buildPathwayStudySummariesFromLessonInventory(
-        entitlement,
-        bundle.pathwayLessonRows,
-        bundle.pathwayProgressScoped,
-      ),
+    buildPathwayStudySummariesFromLessonInventory(
+      entitlement,
+      bundle.pathwayLessonRows,
+      bundle.pathwayProgressScoped,
     ),
   ]);
 
@@ -521,7 +519,7 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
   const durationMsDashboardAndPathways = Math.round(performance.now() - tDashPath);
   if (!dash) return null;
 
-  const pathwayOptions = listPathwaysCompatibleWithSubscription(entitlement);
+  const pathwayOptions = await listPathwaysCompatibleWithSubscription(entitlement);
   const pathwayLabelById = new Map(pathwayOptions.map((p) => [p.id, p.shortName || p.displayName]));
 
   /** Same SESSION_LIMIT window as tier + recent list — avoids mismatch with dashboard sessionGrading (8). */

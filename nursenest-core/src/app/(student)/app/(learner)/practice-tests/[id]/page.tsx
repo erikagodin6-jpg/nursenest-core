@@ -13,6 +13,9 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
+import { prisma } from "@/lib/db";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -53,6 +56,32 @@ export default async function PracticeTestRunPage({ params }: Props) {
   const userLabel = maskUserLabelForWatermark(email, userId || "unknown");
   const studySettings = await loadStudySettings(userId);
 
+  let initialPathwaySurface: PracticeTestPathwayClientShell | null = null;
+  if (userId && id.length >= 8) {
+    const row = await prisma.practiceTest.findFirst({
+      where: { id, userId },
+      select: { config: true },
+    });
+    const raw = row?.config;
+    const pathwayId =
+      raw && typeof raw === "object" && !Array.isArray(raw) && typeof (raw as Record<string, unknown>).pathwayId === "string"
+        ? String((raw as Record<string, unknown>).pathwayId).trim()
+        : "";
+    if (pathwayId) {
+      const p = getExamPathwayById(pathwayId);
+      if (p) {
+        initialPathwaySurface = {
+          id: p.id,
+          countrySlug: p.countrySlug,
+          roleTrack: p.roleTrack,
+          examCode: p.examCode,
+          shortName: p.shortName,
+          examFamily: p.examFamily,
+        };
+      }
+    }
+  }
+
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
     return (
@@ -81,6 +110,7 @@ export default async function PracticeTestRunPage({ params }: Props) {
           userLabel={userLabel}
           protectionFlags={protectionFlags}
           studySettings={studySettings}
+          initialPathwaySurface={initialPathwaySurface}
         />
       </ExamSessionErrorBoundary>
     </div>

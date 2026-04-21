@@ -25,8 +25,8 @@ import {
   catPathwayRegionalExamLine,
   catPathwayRegionRoleLabel,
   catPathwayExamCodeLabel,
-  tryCatPathwayFromId,
 } from "@/lib/exam-pathways/cat-pathway-labels";
+import { tryCatPathwayFromId } from "@/lib/exam-pathways/cat-pathway-from-id";
 
 function stub(id: string): ExamPathwayDefinition {
   return { id } as ExamPathwayDefinition;

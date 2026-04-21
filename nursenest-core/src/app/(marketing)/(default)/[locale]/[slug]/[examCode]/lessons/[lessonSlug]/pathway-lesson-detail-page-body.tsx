@@ -14,6 +14,7 @@ import { PathwayLessonProgressTracker } from "@/components/lessons/pathway-lesso
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
 import {
@@ -447,6 +448,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
             userId={userId}
             canMarkComplete={fullAccess}
             initialProgress={lessonProgress}
+            catAdaptiveAvailable={pathwayAllowsCatAdaptiveStart(pathway)}
           />
         </PathwayLessonAssessmentExperience>
           </div>

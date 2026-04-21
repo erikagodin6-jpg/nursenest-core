@@ -5,7 +5,7 @@ import { ExamFamily } from "@prisma/client";
 import { ArrowRight, ClipboardList } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { catPathwayExamCodeLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";

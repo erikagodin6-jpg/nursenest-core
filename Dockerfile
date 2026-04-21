@@ -27,6 +27,7 @@ COPY nursenest-core/package.json nursenest-core/package-lock.json ./nursenest-co
 
 WORKDIR /app/nursenest-core
 ENV NODE_ENV=development
+ENV HUSKY=0
 RUN npm ci --no-fund --no-audit
 
 WORKDIR /app
