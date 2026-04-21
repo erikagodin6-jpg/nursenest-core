@@ -13,6 +13,19 @@ execFileSync(process.execPath, [marketingSurfaceScript], {
   stdio: "inherit",
 });
 
+const homeGlobalRegionsContractTest = path.join(
+  packageRoot,
+  "src",
+  "lib",
+  "marketing",
+  "home-global-regions-i18n-alignment.contract.test.ts",
+);
+console.log("[build-prechecks] running home-global-regions i18n alignment contract test");
+execFileSync(process.execPath, ["--import", "tsx", "--test", homeGlobalRegionsContractTest], {
+  cwd: packageRoot,
+  stdio: "inherit",
+});
+
 if (skipPrebuild) {
   console.log("[build-prechecks] skipping heavy i18n merge audits (SKIP_I18N_PREBUILD=1)");
   process.exit(0);

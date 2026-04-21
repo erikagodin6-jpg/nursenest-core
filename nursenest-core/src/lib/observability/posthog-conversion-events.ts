@@ -29,6 +29,11 @@ export const PH = {
   marketingHomeSampleContentClick: "marketing_home_sample_content_click",
   marketingHomeFinalCta: "marketing_home_final_cta",
   marketingHomePreviewSignupHint: "marketing_home_preview_signup_hint",
+  /**
+   * Marketing header / drawer: user chose a global region (cookie + optional hub redirect).
+   * Props: `global_region_slug`, `market_support_tier`, `destination_kind`, `marketing_locale`.
+   */
+  marketingHeaderGlobalRegionSelected: "marketing_header_global_region_selected",
   marketingPathGatewayPrimaryCta: "marketing_path_gateway_primary_cta",
   marketingPathGatewayLinkClick: "marketing_path_gateway_link_click",
   marketingPathwayHubCta: "marketing_pathway_hub_cta",

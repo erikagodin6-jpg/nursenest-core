@@ -77,6 +77,7 @@ describe("enforceApiRateLimit path classification", () => {
   it("splits auth kinds for per-route buckets", () => {
     assert.equal(authRouteKind("/api/auth/signin"), "signin");
     assert.equal(authRouteKind("/api/auth/signin/credentials"), "signin");
+    assert.equal(authRouteKind("/api/auth/callback/credentials"), "credentials_callback");
     assert.equal(authRouteKind("/api/auth/callback/google"), "callback");
     assert.equal(authRouteKind("/api/auth/forgot-password"), "forgot");
     assert.equal(authRouteKind("/api/auth/reset-password"), "reset");

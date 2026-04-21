@@ -101,7 +101,12 @@ export const API_SIGNUP_PER_IP_RATE_LIMIT = {
 const AUTH_KIND_LIMITS: Record<string, { windowMs: number; max: number }> = {
   /** Sign-in page + provider links — allow refreshes / RSC without locking humans out. */
   signin: { windowMs: 60_000, max: 18 },
-  /** Credentials + OAuth callbacks — shared IPs (schools, offices) need headroom. */
+  /**
+   * Credential POST (`/api/auth/callback/credentials`) — isolated from generic OAuth callbacks so
+   * shared egress / CI does not exhaust the same bucket as Google/GitHub returns.
+   */
+  credentials_callback: { windowMs: 60_000, max: 72 },
+  /** OAuth + non-credential callbacks — shared IPs (schools, offices) need headroom. */
   callback: { windowMs: 60_000, max: 48 },
   csrf: { windowMs: 60_000, max: 96 },
   forgot: { windowMs: 60_000, max: 8 },
@@ -146,6 +151,60 @@ type RedisFixedWindowClient = Pick<RedisJsonClient, "incr" | "expire">;
 
 function fixedWindowTtlSeconds(windowMs: number): number {
   return Math.max(1, Math.ceil(windowMs / 1000));
+}
+
+/** Brute-force throttle inside `authorize` — burst per IP + stricter per (IP + login identifier hash). */
+const CREDENTIALS_LOGIN_BURST_WINDOW_MS = 60_000;
+const CREDENTIALS_LOGIN_COMBO_WINDOW_MS = 60_000;
+
+function credentialsLoginBurstMax(): number {
+  if (process.env.NODE_ENV !== "production") return 120;
+  return 48;
+}
+
+function credentialsLoginComboMax(): number {
+  if (process.env.NODE_ENV !== "production") return 24;
+  return 10;
+}
+
+export function credentialsLoginBurstRedisKey(ipKey: string): string {
+  return `ratelimit:auth:credentials_login:burst:ip:${ipKey}`;
+}
+
+export function credentialsLoginComboRedisKey(ipKey: string, acctHash: string): string {
+  return `ratelimit:auth:credentials_login:combo:ip:${ipKey}:acct:${acctHash}`;
+}
+
+/**
+ * Fixed-window limits for credential `authorize` (Redis). Returns false when either bucket is exhausted.
+ */
+export async function assertCredentialsLoginRateLimits(
+  ipKey: string,
+  acctHash: string,
+): Promise<{ ok: boolean }> {
+  const burst = await checkRedisFixedWindowLimit(credentialsLoginBurstRedisKey(ipKey), {
+    windowMs: CREDENTIALS_LOGIN_BURST_WINDOW_MS,
+    max: credentialsLoginBurstMax(),
+  });
+  if (!burst.ok) return { ok: false };
+  const combo = await checkRedisFixedWindowLimit(credentialsLoginComboRedisKey(ipKey, acctHash), {
+    windowMs: CREDENTIALS_LOGIN_COMBO_WINDOW_MS,
+    max: credentialsLoginComboMax(),
+  });
+  return { ok: combo.ok };
+}
+
+/** After a successful password check — clears windows so the same user is not punished on next navigation. */
+export async function resetCredentialsLoginRateLimitKeys(ipKey: string, acctHash: string): Promise<void> {
+  const redis = getRedisClient();
+  if (!redis) return;
+  try {
+    await Promise.all([redis.del(credentialsLoginBurstRedisKey(ipKey)), redis.del(credentialsLoginComboRedisKey(ipKey, acctHash))]);
+  } catch (error) {
+    safeServerLog("security", "credentials_login_rl_reset_failed", {
+      detail: error instanceof Error ? error.message.slice(0, 160) : "unknown",
+    });
+  }
 }
 
 export async function checkRedisFixedWindowLimit(
@@ -212,6 +271,7 @@ export function authRouteKind(pathname: string): string {
   if (pathname.includes("/forgot-password")) return "forgot";
   if (pathname.includes("/reset-password")) return "reset";
   if (pathname.includes("/change-password")) return "change";
+  if (pathname.includes("/callback/credentials")) return "credentials_callback";
   if (pathname.includes("/signin")) return "signin";
   if (pathname.includes("/callback")) return "callback";
   if (pathname.includes("/csrf")) return "csrf";
@@ -479,6 +539,14 @@ async function enforceDedicatedAdminBlogBatchRateLimit(
   return null;
 }
 
+/** Auth.js strict proxy caps: avoid halving in dev/preview so shared IPs and tests are not false-positive blocked. */
+function effectiveAuthStrictMax(base: number): number {
+  if (process.env.NODE_ENV !== "production") return base;
+  const ve = process.env.VERCEL_ENV?.trim();
+  if (ve === "preview" || ve === "development") return Math.max(base, Math.ceil(base * 1.2));
+  return tightenPublicCap(base);
+}
+
 /**
  * Returns a 429 response when over limit; otherwise `null` (caller continues).
  */
@@ -620,7 +688,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
     const key = `ratelimit:auth:${kind}:ip:${ipKey}`;
     const { ok } = await checkRateLimitUnified(key, {
       windowMs: limits.windowMs,
-      max: tightenPublicCap(limits.max),
+      max: effectiveAuthStrictMax(limits.max),
     });
     if (!ok) {
       safeServerLog("security", "rate_limit_exceeded", {

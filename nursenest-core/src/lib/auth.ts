@@ -40,7 +40,10 @@ import { logAuthIncidentLine } from "@/lib/auth/auth-incident-log";
 import { recordCredentialsLoginFailure } from "@/lib/observability/production-signal-metrics";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
-import { checkRedisFixedWindowLimit } from "@/lib/server/rate-limit";
+import {
+  assertCredentialsLoginRateLimits,
+  resetCredentialsLoginRateLimitKeys,
+} from "@/lib/server/rate-limit";
 
 if (process.env.NODE_ENV === "production") {
   const hasSecret = Boolean(
@@ -154,6 +157,13 @@ function rejectCredentialsWithDiagnosticCode(code: string): never {
   throw err;
 }
 
+/** Always throws so clients can distinguish rate limits from bad passwords (prod included). */
+function rejectCredentialsRateLimited(): never {
+  const err = new CredentialsSignin();
+  err.code = "rate_limit_exceeded";
+  throw err;
+}
+
 /** Prefer diagnostic redirect codes when enabled; otherwise preserve legacy `return null` behavior. */
 function rejectCredentialsOrNull(code: string): null {
   if (authCredentialDiagnosticCodesEnabled()) {
@@ -236,43 +246,6 @@ export const authConfig: NextAuthConfig = {
         const ip = clientIpFromRequest(request);
         const ipKey = rateLimitClientPartition(request, ip);
 
-        const rl = await checkRedisFixedWindowLimit(`ratelimit:auth:credentials_login:ip:${ipKey}`, {
-          windowMs: 60_000,
-          max: 72,
-        });
-        if (!rl.ok) {
-          safeServerLog("auth", "login_rate_limited", { ip: ip.slice(0, 64) });
-          captureAuthWarningSentry("login_rate_limited", {
-            level: "warning",
-            tags: { flow: "auth", kind: "rate_limit" },
-          });
-          logAuthIncidentLine({
-            event: "credentials_login",
-            outcome: "failure",
-            requestReachedAuthorize: true,
-            enteredEmailRaw,
-            enteredEmailSanitized,
-            enteredEmailLower,
-            enteredEmailNormalized,
-            lookupStrategyTried: [],
-            exactEmailUserCount: 0,
-            normalizedEmailUserCount: 0,
-            trimmedEmailUserCount: 0,
-            usernameMatchCount: 0,
-            matchedUserId: null,
-            matchedUserEmail: null,
-            matchedUserNormalizedEmail: null,
-            hasPasswordHash: false,
-            accountLockedOut: false,
-            passwordCompareOk: false,
-            sessionIssued: false,
-            finalFailureReason: "unknown_auth_failure",
-            ip: ip.slice(0, 64),
-          });
-          recordCredentialsLoginFailure("rate_limited", request);
-          return rejectCredentialsOrNull("rate_limited");
-        }
-
         const password = String(credentials.password ?? "");
         const idHash = enteredEmailLower ? hashLoginIdentifierForLog(enteredEmailLower) : "";
         const authMode = isEmailLikeIdentifier(enteredEmailLower) ? "email" : "username";
@@ -309,6 +282,42 @@ export const authConfig: NextAuthConfig = {
           });
           recordCredentialsLoginFailure("missing_fields", request);
           return rejectCredentialsOrNull("missing_credentials");
+        }
+
+        const rl = await assertCredentialsLoginRateLimits(ipKey, idHash);
+        if (!rl.ok) {
+          safeServerLog("auth", "login_rate_limited", { ip: ip.slice(0, 64), idHashPresent: Boolean(idHash) });
+          captureAuthWarningSentry("login_rate_limited", {
+            level: "warning",
+            tags: { flow: "auth", kind: "rate_limit" },
+          });
+          logAuthIncidentLine({
+            event: "credentials_login",
+            outcome: "failure",
+            requestReachedAuthorize: true,
+            enteredEmailRaw,
+            enteredEmailSanitized,
+            enteredEmailLower,
+            enteredEmailNormalized,
+            lookupStrategyTried: [],
+            exactEmailUserCount: 0,
+            normalizedEmailUserCount: 0,
+            trimmedEmailUserCount: 0,
+            usernameMatchCount: 0,
+            matchedUserId: null,
+            matchedUserEmail: null,
+            matchedUserNormalizedEmail: null,
+            hasPasswordHash: false,
+            accountLockedOut: false,
+            passwordCompareOk: false,
+            sessionIssued: false,
+            finalFailureReason: "unknown_auth_failure",
+            ip: ip.slice(0, 64),
+            idHash,
+            authMode,
+          });
+          recordCredentialsLoginFailure("rate_limited", request);
+          rejectCredentialsRateLimited();
         }
 
         const lockStatus = await isLoginLocked(lockKey);
@@ -712,6 +721,7 @@ export const authConfig: NextAuthConfig = {
         }
 
         await clearLoginFailures(lockKey);
+        await resetCredentialsLoginRateLimitKeys(ipKey, idHash);
 
         prisma.user.update({
           where: { id: user.id },

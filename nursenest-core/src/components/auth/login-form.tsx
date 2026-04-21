@@ -68,7 +68,11 @@ export function LoginForm({
     if (!isRateLimited) return;
     urlRateLimitBannerRef.current = true;
     setError(t("pages.login.errorRateLimited"));
-    setErrorHelp(null);
+    const retryRaw = searchParams.get("retryAfterSec");
+    const retrySec = retryRaw != null ? Number.parseInt(retryRaw, 10) : Number.NaN;
+    setErrorHelp(
+      Number.isFinite(retrySec) && retrySec > 0 ? t("pages.login.errorRateLimitedRetryHint", { seconds: retrySec }) : null,
+    );
     const sp = new URLSearchParams(searchParams.toString());
     sp.delete("error");
     sp.delete("code");
@@ -153,7 +157,23 @@ export function LoginForm({
           setErrorHelp(g || null);
         } else if (outcome === "rate_limited") {
           setError(t("pages.login.errorRateLimited"));
-          setErrorHelp(null);
+          let retryHint: string | null = null;
+          const r = result as { url?: string; retryAfterSec?: unknown } | undefined;
+          if (typeof r?.retryAfterSec === "number" && Number.isFinite(r.retryAfterSec) && r.retryAfterSec > 0) {
+            retryHint = t("pages.login.errorRateLimitedRetryHint", { seconds: Math.ceil(r.retryAfterSec) });
+          } else if (typeof r?.url === "string") {
+            try {
+              const u = new URL(r.url, window.location.origin);
+              const s = u.searchParams.get("retryAfterSec");
+              const n = s != null ? Number.parseInt(s, 10) : Number.NaN;
+              if (Number.isFinite(n) && n > 0) {
+                retryHint = t("pages.login.errorRateLimitedRetryHint", { seconds: n });
+              }
+            } catch {
+              /* ignore malformed url */
+            }
+          }
+          setErrorHelp(retryHint);
         } else {
           setError(t("pages.login.errorGeneric"));
           setErrorHelp(null);

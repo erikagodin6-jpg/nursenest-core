@@ -23,7 +23,7 @@ export { MARKET_READINESS } from "./market-readiness-data";
 
 import { MARKET_READINESS } from "./market-readiness-data";
 import type { MarketReadinessConfig } from "./market-readiness-data";
-import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
+import { GLOBAL_REGION_SLUGS, REGION_CONFIG, type GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { getExamHubForGlobalRegion } from "@/lib/marketing/global-region-exam-hubs";
 import { evaluateGlobalRegionLaunchReadiness } from "./country-exam-launch-readiness";
 
@@ -60,6 +60,23 @@ export function isGlobalRegionListedInCountrySwitcher(region: GlobalRegionSlug):
   if (!m?.seoEnabled) return false;
   if (m.supportTier === "planned") return false;
   return getExamHubForGlobalRegion(region) != null;
+}
+
+/**
+ * Canonical ordered list for marketing / onboarding country UIs (same filter as {@link isGlobalRegionListedInCountrySwitcher}).
+ * Order matches `getRegionGroups` / `getCountryChoices` (context-routing): US, Canada, then international A–Z by display name.
+ */
+export function listGlobalRegionsListedInCountrySwitcher(): GlobalRegionSlug[] {
+  const listed = (GLOBAL_REGION_SLUGS as readonly GlobalRegionSlug[]).filter((slug) =>
+    isGlobalRegionListedInCountrySwitcher(slug),
+  );
+  const rank = (slug: GlobalRegionSlug) => (slug === "us" ? 0 : slug === "canada" ? 1 : 2);
+  listed.sort((a, b) => {
+    const d = rank(a) - rank(b);
+    if (d !== 0) return d;
+    return REGION_CONFIG[a].displayName.localeCompare(REGION_CONFIG[b].displayName, "en", { sensitivity: "base" });
+  });
+  return listed;
 }
 
 /** Default when a legacy cookie/path points at a non-selectable market — keeps dropdown selection valid. */

@@ -100,7 +100,7 @@ export function evaluateContextSwitch(
       marketSupport: "partial",
       protectedContentAction: "limited_market",
       contextMessage:
-        "Exam prep for this region is not offered in the app yet. Switch to United States or Canada in your profile to use the full library.",
+        "This region has a public hub and growing materials, but interactive prep, subscriptions, and checkout are still focused on United States and Canada pathways. Switch to US or Canada in your profile for the full app experience.",
       showReturnHome: entitlement.hasActiveSubscription,
       homeRegion,
     };
@@ -115,7 +115,7 @@ export function evaluateContextSwitch(
     contextMessage:
       market.supportTier === "planned"
         ? "This market is not available in the app yet. Use United States or Canada for full exam prep."
-        : "Exam prep accounts for this region are not available in the app yet. Use United States or Canada for the full experience.",
+        : "This regional guide is not a full product launch. Interactive study, subscriptions, and Stripe checkout are available for United States and Canada today—switch there for the complete experience.",
     showReturnHome: entitlement.hasActiveSubscription,
     homeRegion,
   };

@@ -38,6 +38,7 @@ const REQUIRED_PAGE_KEYS = [
   "pages.home.howItWorks.subtitle",
   "pages.home.globalRegions.title",
   "pages.home.globalRegions.subtitle",
+  "pages.home.globalRegions.expansionFootnote",
   "pages.home.metaTitleCA",
   "pages.home.metaDescriptionCA",
   /** Non-empty i18n for pricing loading state (deploy sentinels reject stuck English “Loading pricing…”). */
@@ -49,6 +50,8 @@ const REQUIRED_PAGE_KEYS = [
   "pages.pricing.error.trackTemporarilyUnavailable",
   "pages.pricing.checkout.unavailableBody",
   "pages.pricing.plan.rowDataIncomplete",
+  /** Pricing page when global region has no regional Stripe scope (partial / marketing hubs). */
+  "pages.pricing.globalContext.northAmericaStripeScope",
 ];
 
 const REQUIRED_NAV_KEYS = ["footer.emailBannerTitle", "footer.emailBannerSubtitle"];

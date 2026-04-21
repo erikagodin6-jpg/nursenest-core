@@ -26,9 +26,20 @@ import {
   type ProfessionOption,
   type ExamOption,
 } from "@/lib/navigation/context-switch-helpers";
-import { isGlobalRegionListedInCountrySwitcher } from "@/lib/navigation/market-readiness";
+import { getMarketReadiness, isGlobalRegionListedInCountrySwitcher } from "@/lib/navigation/market-readiness";
 
 // ── Country Selector ─────────────────────────────────────────────────────────
+
+function countryRowSupportCaption(
+  t: (key: string) => string,
+  slug: GlobalRegionSlug,
+): string | null {
+  if (slug === "us" || slug === "canada") return null;
+  const tier = getMarketReadiness(slug).supportTier;
+  if (tier === "partial") return t("nav.regionSupportPartialHub");
+  if (tier === "marketing" || tier === "planned") return t("nav.regionSupportMarketingHub");
+  return null;
+}
 
 type CountrySelectorProps = {
   currentRegion: GlobalRegionSlug;
@@ -130,6 +141,14 @@ export function CountrySelector({
                   <span className="text-sm leading-none">{r.flag}</span>
                   <div className="min-w-0 flex-1">
                     <span className="block truncate">{r.displayName}</span>
+                    {(() => {
+                      const cap = countryRowSupportCaption(t, r.slug);
+                      return cap ? (
+                        <span className="mt-0.5 block line-clamp-2 text-[10px] font-normal leading-snug text-[var(--theme-muted-text)]">
+                          {cap}
+                        </span>
+                      ) : null;
+                    })()}
                   </div>
                   {isActive && <Check className="h-3.5 w-3.5 shrink-0 text-[var(--text-accent)]" aria-hidden />}
                 </button>

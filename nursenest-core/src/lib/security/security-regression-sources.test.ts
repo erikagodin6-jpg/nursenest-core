@@ -13,9 +13,10 @@ const here = dirname(fileURLToPath(import.meta.url));
 const nursenestCoreRoot = join(here, "..", "..", "..");
 
 describe("security regression (source contracts)", () => {
-  it("credentials authorize uses per-IP rate limit and progressive lockout key", () => {
+  it("credentials authorize uses burst+combo Redis limits and progressive lockout key", () => {
     const auth = readFileSync(join(nursenestCoreRoot, "src", "lib", "auth.ts"), "utf8");
-    assert.match(auth, /checkRateLimitUnified\(`login:\$\{ip\}`/);
+    assert.match(auth, /assertCredentialsLoginRateLimits/);
+    assert.match(auth, /resetCredentialsLoginRateLimitKeys/);
     assert.match(auth, /login-lock:/);
     assert.match(auth, /isLoginLocked\(/);
   });

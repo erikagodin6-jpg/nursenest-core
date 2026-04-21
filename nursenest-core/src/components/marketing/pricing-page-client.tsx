@@ -12,6 +12,8 @@ import { trackProductEvent } from "@/lib/observability/product-analytics";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
+import { useClientGlobalRegionCookie } from "@/lib/region/use-client-global-region";
+import { canShowPricing } from "@/lib/navigation/market-readiness";
 import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { LEGAL_POLICY_BUNDLE_VERSION } from "@/lib/legal/legal-config";
 import {
@@ -266,6 +268,7 @@ export function PricingPageClient({
   const tRef = useRef(t);
   tRef.current = t;
   const { region } = useNursenestRegion();
+  const globalMarketSlug = useClientGlobalRegionCookie();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { status: authStatus } = useSession();
@@ -383,6 +386,11 @@ export function PricingPageClient({
   );
 
   const showPricingGrid = plansLoaded && loadError === null && !trackDataGap;
+
+  const showNorthAmericaStripeScopeNote = useMemo(() => {
+    if (!globalMarketSlug) return false;
+    return !canShowPricing(globalMarketSlug);
+  }, [globalMarketSlug]);
 
   const tryQuestionsHref = localize(rnQuestions(region));
   const termsHref = localize("/terms");
@@ -606,6 +614,15 @@ export function PricingPageClient({
         trialFinePrint={TRIAL_FINE_PRINT_COPY}
         pricesShownLine={pricingCurrencyLine}
       />
+
+      {showNorthAmericaStripeScopeNote ? (
+        <div
+          className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_08%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]"
+          role="status"
+        >
+          <p>{t("pages.pricing.globalContext.northAmericaStripeScope")}</p>
+        </div>
+      ) : null}
 
       {/* ── Section 2: Trust + Value Strip ── */}
       <div className="flex flex-col items-center gap-4 text-center">
