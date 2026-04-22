@@ -155,6 +155,8 @@ export function AdminBlogGenerateClient() {
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
+  const SLUG_CASE_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (busy) return;
@@ -166,6 +168,26 @@ export function AdminBlogGenerateClient() {
     if (enableBatch && parsedTopics.length === 0) {
       setErr("Add at least one non-empty topic line for batch mode.");
       return;
+    }
+    if (!enableBatch && topic.trim().length < 3) {
+      setErr("Topic must be at least 3 characters (after trimming spaces).");
+      return;
+    }
+    const slugNorm = slug.trim().toLowerCase();
+    if (!enableBatch && slugNorm.length > 0 && !SLUG_CASE_PATTERN.test(slugNorm)) {
+      setErr(
+        "Optional slug must be slug-case: lowercase letters and numbers, separated by single hyphens (e.g. fluid-balance-nclex). Remove spaces and underscores.",
+      );
+      return;
+    }
+    let parsedSourceRecords: unknown = undefined;
+    if (sourceRecordsJson.trim()) {
+      try {
+        parsedSourceRecords = JSON.parse(sourceRecordsJson) as unknown;
+      } catch {
+        setErr("Structured sources JSON is invalid. Fix JSON syntax or clear the field.");
+        return;
+      }
     }
     setBusy(true);
     setMsg(null);
@@ -185,7 +207,7 @@ export function AdminBlogGenerateClient() {
           ...(useNdjsonBatch ? { Accept: "application/x-ndjson" } : {}),
         },
         body: JSON.stringify({
-          topic: enableBatch ? undefined : topic,
+          topic: enableBatch ? undefined : topic.trim(),
           topics: enableBatch ? parsedTopics : undefined,
           keywords: keywords || undefined,
           exam,
@@ -197,8 +219,8 @@ export function AdminBlogGenerateClient() {
           keywordCluster: keywordCluster || undefined,
           includeImage,
           includeAiImage,
-          sourceRecords: sourceRecordsJson.trim() ? JSON.parse(sourceRecordsJson) : undefined,
-          slug: slug.trim() || undefined,
+          sourceRecords: parsedSourceRecords,
+          slug: slugNorm || undefined,
           publishNow,
         }),
       });
@@ -251,7 +273,12 @@ export function AdminBlogGenerateClient() {
         setErr("Every topic in this batch failed; see failure lines in the summary above.");
       }
     } catch (e) {
-      setErr(e instanceof Error ? e.message : String(e));
+      const raw = e instanceof Error ? e.message : String(e);
+      setErr(
+        raw.includes("did not match the expected pattern")
+          ? "Request blocked by browser validation. If you set an optional slug, use slug-case (lowercase-kebab). Otherwise clear the slug field and try again."
+          : raw,
+      );
     } finally {
       setBusy(false);
       setBatchStatus(null);
@@ -259,7 +286,7 @@ export function AdminBlogGenerateClient() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-6">
+    <form noValidate onSubmit={onSubmit} className="space-y-4 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-6">
       <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Single-post AI draft</h2>
       <p className="text-sm text-muted-foreground">
         Requires <code className="rounded bg-muted px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and{" "}

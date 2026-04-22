@@ -9,7 +9,7 @@
   "us-lpn-nclex-pn": { "lessons": 175, "questions": 380 },
   "us-rn-nclex-rn": { "lessons": 200, "questions": 480 },
   "us-rn-new-grad-transition": { "lessons": 40, "questions": 120 },
-  "us-np-fnp": { "lessons": 120, "questions": 280 },
+  "us-np-fnp": { "lessons": 91, "questions": 280 },
   "us-np-agpcnp": { "lessons": 110, "questions": 260 },
   "us-np-pmhnp": { "lessons": 105, "questions": 250 },
   "us-np-whnp": { "lessons": 100, "questions": 240 },

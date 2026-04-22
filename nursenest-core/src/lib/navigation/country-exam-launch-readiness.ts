@@ -7,6 +7,7 @@
  * @see PATHWAY_LAUNCH_APPROVED — human sign-off for `published`.
  */
 
+import { ExamFamily } from "@prisma/client";
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { REGION_CONFIG } from "@/lib/i18n/global-regions";
 import type { CountrySlug } from "@/lib/exam-pathways/types";
@@ -51,16 +52,26 @@ export const PATHWAY_LAUNCH_APPROVED: ReadonlySet<string> = new Set([
   "us-np-pmhnp",
   "us-np-whnp",
   "us-np-pnp-pc",
+  /** Canadian NP hub (marketing tier surface + waitlist; content grows on snapshot). */
+  "ca-np-cnple",
   /** New grad transition lessons (NEW_GRAD tier). */
   "us-rn-new-grad-transition",
   /** Allied parallel hubs. */
   "us-allied-core",
   "ca-allied-core",
-  /** Not listed until `status: "active"` + snapshot thresholds: `ca-np-cnple`. */
 ]);
 
 /** When an expansion region clears market + hub checks, add it here to allow `published` (rare). */
 export const GLOBAL_REGION_EXPANSION_PUBLISHED: ReadonlySet<GlobalRegionSlug> = new Set([]);
+
+/** Canadian CNPLE hub: marketing shell + waitlist before full lesson/question scale (see snapshot). */
+const CA_NP_CNPLE_PATHWAY_ID = "ca-np-cnple";
+
+/**
+ * NP marketing hubs ship with a lower committed-lesson floor than RN/PN (pathway catalogs are smaller per track).
+ * Still requires a real lesson inventory for US NP tracks; CNPLE waitlist shell is exempt via {@link CA_NP_CNPLE_PATHWAY_ID}.
+ */
+const NP_PUBLIC_LESSON_FLOOR = 85;
 
 const STATUS_RANK: Record<LaunchReadinessStatus, number> = {
   draft: 0,
@@ -156,20 +167,28 @@ export function evaluatePathwayLaunchReadiness(
     detail: labelOk ? undefined : "Titles too short or contain placeholder language",
   });
 
-  const lessonsOk = lessons >= MIN_PATHWAY_LESSONS_SCALE_TARGET;
+  const isCaNpCnpleWaitlistShell = pathway.id === CA_NP_CNPLE_PATHWAY_ID;
+  const isNpFamily = pathway.examFamily === ExamFamily.NP;
+  const minLessonsRequired = isCaNpCnpleWaitlistShell
+    ? 0
+    : isNpFamily
+      ? NP_PUBLIC_LESSON_FLOOR
+      : MIN_PATHWAY_LESSONS_SCALE_TARGET;
+  const lessonsOk = lessons >= minLessonsRequired;
   checks.push({
     code: "min_lessons",
-    label: `At least ${MIN_PATHWAY_LESSONS_SCALE_TARGET} lessons (effective)`,
+    label: `At least ${minLessonsRequired} lessons (effective)`,
     pass: lessonsOk,
-    detail: lessonsOk ? undefined : `Have ${lessons}; target ${MIN_PATHWAY_LESSONS_SCALE_TARGET}+`,
+    detail: lessonsOk ? undefined : `Have ${lessons}; target ${minLessonsRequired}+`,
   });
 
-  const questionsOk = questions >= MIN_PATHWAY_QUESTIONS_PUBLISH;
+  const minQuestionsRequired = isCaNpCnpleWaitlistShell ? 0 : MIN_PATHWAY_QUESTIONS_PUBLISH;
+  const questionsOk = questions >= minQuestionsRequired;
   checks.push({
     code: "min_questions",
-    label: `At least ${MIN_PATHWAY_QUESTIONS_PUBLISH} published questions matched to pathway`,
+    label: `At least ${minQuestionsRequired} published questions matched to pathway`,
     pass: questionsOk,
-    detail: questionsOk ? undefined : `Have ${questions}; target ${MIN_PATHWAY_QUESTIONS_PUBLISH}+`,
+    detail: questionsOk ? undefined : `Have ${questions}; target ${minQuestionsRequired}+`,
   });
 
   const inNav = listPublicExamPathways().some((p) => p.id === pathway.id);
@@ -188,7 +207,7 @@ export function evaluatePathwayLaunchReadiness(
     detail: seoClean ? undefined : "SEO title or description matches placeholder heuristics",
   });
 
-  const nonEmpty = lessons >= 1 && questions >= 1;
+  const nonEmpty = isCaNpCnpleWaitlistShell || (lessons >= 1 && questions >= 1);
   checks.push({
     code: "inventory_non_empty",
     label: "Non-empty lesson & question inventory",
@@ -232,14 +251,15 @@ export function evaluatePathwayLaunchReadiness(
     detail: locOk ? undefined : "Region market config incomplete",
   });
 
+  const softRouteOk =
+    (pathway.status === "active" || pathway.status === "upcoming") && pathway.acquisitionMode !== "info_only";
   checks.push({
     code: "soft_route_sanity",
     label: "Deep link / soft-404 audit (manual)",
-    pass: pathway.status === "active" && pathway.acquisitionMode !== "info_only",
-    detail:
-      pathway.status === "active"
-        ? "Use crawl / Playwright for full verification"
-        : "Non-active pathways need route audit before launch",
+    pass: softRouteOk,
+    detail: softRouteOk
+      ? "Use crawl / Playwright for full verification"
+      : "Hidden or info-only pathways need route audit before launch",
   });
 
   const automatedPass = checks.every((c) => c.pass);

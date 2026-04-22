@@ -59,3 +59,29 @@ test("rejects empty payload", () => {
   const parsed = blogGenerateByTopicRequestSchema.safeParse({});
   assert.equal(parsed.success, false);
 });
+
+test("accepts sourceRecords with empty url string (treated as omitted)", () => {
+  const parsed = blogGenerateByTopicRequestSchema.safeParse({
+    topic: "one two thr",
+    exam: "nclex-rn",
+    template: "TOPIC_EXPLAINED",
+    sourceRecords: [{ title: "CDC", url: "" }],
+  });
+  assert.equal(parsed.success, true);
+  if (parsed.success) {
+    assert.equal(parsed.data.sourceRecords?.[0]?.url, undefined);
+  }
+});
+
+test("normalizes slug trim and lowercase before regex", () => {
+  const parsed = blogGenerateByTopicRequestSchema.safeParse({
+    topic: "one two thr",
+    exam: "nclex-rn",
+    template: "TOPIC_EXPLAINED",
+    slug: "  Fluid-Balance-Nclex  ",
+  });
+  assert.equal(parsed.success, true);
+  if (parsed.success) {
+    assert.equal(parsed.data.slug, "fluid-balance-nclex");
+  }
+});

@@ -25,7 +25,8 @@ export const blogSimpleAiDraftBodySchema = z.object({
       title: z.string().optional(),
       source: z.string().optional(),
       publisher: z.string().optional(),
-      url: z.string().url().optional(),
+      /** Empty string is common from hand-edited JSON; treat like “no URL” instead of failing `url()`. */
+      url: z.union([z.string().url(), z.literal("")]).optional().transform((v) => (v === "" ? undefined : v)),
       doi: z.string().optional(),
       authority: z
         .enum([
@@ -40,12 +41,12 @@ export const blogSimpleAiDraftBodySchema = z.object({
         .optional(),
     }),
   ).optional(),
-  slug: z
-    .string()
-    .min(3)
-    .max(180)
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
-    .optional(),
+  slug: z.preprocess((v) => {
+    if (v === undefined || v === null) return undefined;
+    if (typeof v !== "string") return v;
+    const t = v.trim().toLowerCase();
+    return t === "" ? undefined : t;
+  }, z.string().min(3).max(180).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional()),
   allowDuplicateCanonicalTopic: z.boolean().optional(),
   /** Admin trigger default: publish immediately (PUBLISHED). */
   publishNow: z.boolean().optional(),
