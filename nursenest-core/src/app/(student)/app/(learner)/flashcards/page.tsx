@@ -92,7 +92,11 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   return (
     <Suspense fallback={<div className="mx-auto max-w-3xl px-4 py-8 text-sm">{t("learner.loading.flashcards")}</div>}>
-      <FlashcardsHubClient pathwayOptions={pathwayOptions} practiceQuestionsHref={practiceQuestionsHref} />
+      <FlashcardsHubClient
+        pathwayOptions={pathwayOptions}
+        practiceQuestionsHref={practiceQuestionsHref}
+        defaultScopedPathwayId={pathwayResolution?.state === "scoped" ? pathwayResolution.defaultPathwayId : null}
+      />
     </Suspense>
   );
 }

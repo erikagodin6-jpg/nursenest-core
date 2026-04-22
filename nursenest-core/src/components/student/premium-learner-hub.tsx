@@ -122,6 +122,16 @@ export function PremiumLearnerHub({
     lessonContinuations,
   } = snapshot;
 
+  const weakAreaFlashcardsHref = (() => {
+    const lp = snapshot.learnerPath?.trim();
+    if (lp) return `/app/flashcards/weak-areas?pathwayId=${encodeURIComponent(lp)}`;
+    if (pathways.length === 1) {
+      const id = pathways[0]?.pathwayId?.trim();
+      if (id) return `/app/flashcards/weak-areas?pathwayId=${encodeURIComponent(id)}`;
+    }
+    return "/app/flashcards/weak-areas";
+  })();
+
   const momentumSection =
     momentumMessages.length > 0 ? (
       <ul className={compactIntro ? "space-y-2" : "relative mt-5 space-y-2 border-t border-[var(--semantic-border-soft)] pt-4"}>
@@ -250,7 +260,7 @@ export function PremiumLearnerHub({
               All decks
             </Link>
             <Link
-              href="/app/flashcards/weak-areas"
+              href={weakAreaFlashcardsHref}
               className="inline-flex rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-foreground"
             >
               Study priority review

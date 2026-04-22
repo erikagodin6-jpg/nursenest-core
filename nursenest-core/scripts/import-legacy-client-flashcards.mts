@@ -18,6 +18,7 @@ import {
 } from "@prisma/client";
 
 import { IMPORT_FLASHCARD_TX_BATCH } from "../src/lib/content-pipeline/import-safeguards";
+import { validateFlashcardCreationGuardrails } from "../src/lib/flashcards/flashcard-creation-guardrails";
 import { extractLegacyFlashcardExports, legacyFrontBack } from "./legacy/legacy-flashcard-ts-extract.mts";
 
 import { assertLiveImportPreconditions } from "./lib/import-live-guards.mts";
@@ -125,6 +126,7 @@ export async function runLegacyClientFlashcardImport(opts: LegacyFlashcardImport
       deckSlug: string;
       cardCount: number;
       upserted?: number;
+      guardrailSkipped?: number;
       error?: string;
     } = { file: fname, deckSlug, cardCount: allCards.length };
 
@@ -175,8 +177,23 @@ export async function runLegacyClientFlashcardImport(opts: LegacyFlashcardImport
           if (take <= 0) break;
           const slice = allCards.slice(i, i + take);
 
+          const accepted = slice.filter((row) => {
+            const { front, back } = legacyFrontBack(row);
+            const g = validateFlashcardCreationGuardrails({ tier, front, back, exam: null });
+            if (!g.ok) {
+              fileReport.guardrailSkipped = (fileReport.guardrailSkipped ?? 0) + 1;
+              return false;
+            }
+            return true;
+          });
+          if (!accepted.length) {
+            totalCards += take;
+            i += take;
+            continue;
+          }
+
           await prisma.$transaction(
-            slice.map((row, idx) => {
+            accepted.map((row, idx) => {
               const { front, back } = legacyFrontBack(row);
               const sourceKey = `legacy_ts:${base}:${row.id}`.slice(0, 200);
               const positionInDeck = pos + idx;
@@ -204,8 +221,8 @@ export async function runLegacyClientFlashcardImport(opts: LegacyFlashcardImport
             }),
           );
 
-          pos += take;
-          upserted += take;
+          pos += accepted.length;
+          upserted += accepted.length;
           totalCards += take;
           i += take;
 

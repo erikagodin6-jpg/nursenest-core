@@ -18,19 +18,19 @@ export type FlashcardCreationGuardrailInput = {
 
 /** Arterial blood gas and related advanced interpretation (disallowed on PRE_NURSING). */
 const PRE_NURSING_ABG = new RegExp(
-  String.raw`\b(?:abg|arterial\s+blood\s+gas|pao2|paco2|hco3)\b|base\s+excess|oxygenation\s+and\s+ventilation\s+status`,
+  String.raw`\b(?:abg|vbg|arterial\s+blood\s+gas|venous\s+blood\s+gas|pao2|paco2|pa\s*o2|pa\s*co2|hco3|bicarb(?:onate)?\s+on\s+abg)\b|base\s+excess|oxygenation\s+and\s+ventilation\s+status|acid[-\s]?base\s+(?:balance|status|disturbance)\s+(?:on|from|per)\s+(?:the\s+)?(?:abg|blood\s+gas|arterial)`,
   "i",
 );
 
 /** Lab-value interpretation stems typical of clinical lab items, not foundational pre-nursing. */
 const PRE_NURSING_LAB_INTERP = new RegExp(
-  String.raw`interpret\s+(?:the|this|these)\s+following\s+(?:lab|labs|results|values|findings)|interpret\s+(?:the|these|following)\s+(?:lab|labs|results|values|findings)|lab\s+values\s+(?:indicate|show|reveal|suggest)|reference\s+range|critical\s+(?:lab|value|result)|which\s+lab\s+(?:result|value|finding)`,
+  String.raw`interpret\s+(?:the|this|these)\s+following\s+(?:lab|labs|results|values|findings)|interpret\s+(?:the|these|following)\s+(?:lab|labs|results|values|findings)|lab\s+values\s+(?:indicate|show|reveal|suggest)|reference\s+range|critical\s+(?:lab|value|result)|which\s+lab\s+(?:result|value|finding)|which\s+finding\s+(?:on|from)\s+(?:the\s+)?(?:lab|labs|chemistry|cbc)|troponin\s+(?:level|trend|elevation|interpret)|lactate\s+(?:clearance|interpret)|anion\s+gap\s+(?:interpret|calculation)|\b(?:cbc|bmp|cmp|lfts?)\b.*\b(?:interpret|indicates|suggests)\b`,
   "i",
 );
 
 /** Disease-specific / mechanistic pathophysiology depth (disallowed on PRE_NURSING). */
 const PRE_NURSING_PATHOPHYS = new RegExp(
-  String.raw`\bpathophysiolog(?:y|ic)\b|disease[-\s]specific\s+pathophys|cellular\s+(?:dysfunction|mechanism)|inflammatory\s+cascade|tissue\s+(?:injury|damage)\s+leads|ischemia[-\s]reperfusion|receptor[-\s]mediated\s+signaling`,
+  String.raw`\bpathophysiolog(?:y|ic)\b|pathogenesis\s+of|disease[-\s]specific\s+pathophys|disease[-\s]specific\s+mechanisms|cellular\s+(?:dysfunction|mechanism)|inflammatory\s+cascade|tissue\s+(?:injury|damage)\s+leads|ischemia[-\s]reperfusion|receptor[-\s]mediated\s+signaling|organ[-\s]level\s+pathophys`,
   "i",
 );
 
@@ -46,6 +46,12 @@ const CLINICAL_SCENARIO = new RegExp(
 
 const RATIONALE_MARKERS = new RegExp(
   String.raw`\b(?:because|rationale|therefore|due\s+to|indicates\s+that|helps\s+(?:prevent|avoid)|supports\s+the|avoids|reduces\s+risk)\b`,
+  "i",
+);
+
+/** Exam correct-option rationale: explicit connectors and/or common teaching phrasing (not keyword-stuffed stems). */
+const EXAM_RATIONALE_TEACHING = new RegExp(
+  String.raw`${RATIONALE_MARKERS.source}|\b(?:risk|priority|prioritize|unsafe|urgent|deteriorat|compromise|threat|assess\s+first|highest\s+risk|lower\s+priority|acute\s+change)\b`,
   "i",
 );
 
@@ -106,6 +112,14 @@ function rnNpExamSatisfies(exam: FlashcardCreationGuardrailExamSlice): { ok: tru
       error: "RN/NP flashcards must include a substantive correct rationale (at least ~50 characters teaching the decision).",
     };
   }
+  if (!EXAM_RATIONALE_TEACHING.test(exam.rationaleCorrect)) {
+    return {
+      ok: false,
+      code: "flashcard_guardrail_rn_np_rationale_markers",
+      error:
+        "RN/NP exam-style cards must include teaching rationale language in the correct-option explanation (e.g. because, therefore, risk/priority framing, or why the option is safest or most urgent).",
+    };
+  }
   const shortDistractor = exam.rationaleIncorrect.find((d) => d.rationale.trim().length < 24);
   if (shortDistractor) {
     return {
@@ -150,8 +164,8 @@ function rnNpLegacySatisfies(front: string, back: string): { ok: true } | { ok: 
 }
 
 /**
- * Server-side content gates for flashcard **creation** (admin API, promote, etc.).
- * Complements tier/pathway query filters — invalid combinations are rejected before insert.
+ * Server-side content gates for flashcard **creation** (admin API, promote, AI drafts, sync/import scripts).
+ * Complements tier/pathway query filters — invalid combinations are rejected before insert, not only hidden in lists.
  */
 export function validateFlashcardCreationGuardrails(
   input: FlashcardCreationGuardrailInput,
@@ -164,7 +178,8 @@ export function validateFlashcardCreationGuardrails(
     return { ok: true };
   }
 
-  if (input.tier === "RN" || input.tier === "NP" || input.tier === "NEW_GRAD") {
+  /** Licensed RN/NP exam prep — requires clinical reasoning + teaching rationale (not query filters alone). */
+  if (input.tier === "RN" || input.tier === "NP") {
     if (input.exam) {
       const e = rnNpExamSatisfies(input.exam);
       if (!e.ok) return e;

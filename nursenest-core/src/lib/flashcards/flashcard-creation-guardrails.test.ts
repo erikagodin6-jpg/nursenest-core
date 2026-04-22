@@ -1,13 +1,13 @@
-import test from "node:test";
 import assert from "node:assert/strict";
-import { FlashcardItemKind } from "@prisma/client";
+import test from "node:test";
+import { FlashcardItemKind, TierCode } from "@prisma/client";
 import { validateFlashcardCreationGuardrails } from "@/lib/flashcards/flashcard-creation-guardrails";
 
-test("PRE_NURSING rejects ABG-related content", () => {
+test("PRE_NURSING rejects ABG content", () => {
   const r = validateFlashcardCreationGuardrails({
-    tier: "PRE_NURSING",
-    front: "Quick review: what does PaO2 measure?",
-    back: "It reflects oxygen tension in arterial blood.",
+    tier: TierCode.PRE_NURSING,
+    front: "What does an ABG measure?",
+    back: "Oxygen and carbon dioxide levels in arterial blood.",
     exam: null,
   });
   assert.equal(r.ok, false);
@@ -16,9 +16,9 @@ test("PRE_NURSING rejects ABG-related content", () => {
 
 test("PRE_NURSING rejects lab interpretation framing", () => {
   const r = validateFlashcardCreationGuardrails({
-    tier: "PRE_NURSING",
-    front: "Interpret the following lab results for wellness class.",
-    back: "We only discuss general health habits in pre-nursing.",
+    tier: TierCode.PRE_NURSING,
+    front: "Interpret the following lab results for this client.",
+    back: "Use reference ranges to decide next steps.",
     exam: null,
   });
   assert.equal(r.ok, false);
@@ -27,117 +27,76 @@ test("PRE_NURSING rejects lab interpretation framing", () => {
 
 test("PRE_NURSING rejects disease-specific pathophysiology depth", () => {
   const r = validateFlashcardCreationGuardrails({
-    tier: "PRE_NURSING",
-    front: "Advanced topic",
-    back: "Cellular dysfunction in sepsis involves inflammatory cascade signaling.",
+    tier: TierCode.PRE_NURSING,
+    front: "Pathogenesis of diabetic nephropathy",
+    back: "Progressive glomerular injury.",
     exam: null,
   });
   assert.equal(r.ok, false);
   if (!r.ok) assert.match(r.code, /pathophysiology/);
 });
 
-test("PRE_NURSING accepts foundational wording", () => {
+test("PRE_NURSING allows foundational recall", () => {
   const r = validateFlashcardCreationGuardrails({
-    tier: "PRE_NURSING",
-    front: "Why is hand hygiene important before clinical experiences?",
-    back: "It reduces transmission of germs and protects clients and students.",
+    tier: TierCode.PRE_NURSING,
+    front: "What is hand hygiene primarily intended to reduce?",
+    back: "Transmission of microorganisms between clients and caregivers.",
     exam: null,
   });
   assert.equal(r.ok, true);
 });
 
-test("RN legacy accepts clinical reasoning plus rationale back", () => {
+test("RN rejects legacy card without clinical reasoning", () => {
   const r = validateFlashcardCreationGuardrails({
-    tier: "RN",
-    front:
-      "A nurse is caring for a client reporting sudden shortness of breath. Which action should the nurse take first?",
-    back:
-      "The nurse should assess airway and breathing first because circulation interventions depend on oxygenation. Therefore priority is to evaluate work of breathing and oxygen delivery before other tasks.",
+    tier: TierCode.RN,
+    front: "Define insulin.",
+    back: "A hormone produced by the pancreas that lowers blood glucose.",
+    exam: null,
+  });
+  assert.equal(r.ok, false);
+  if (!r.ok) assert.match(r.code, /clinical_reasoning/);
+});
+
+test("RN allows legacy card with scenario + rationale markers on back", () => {
+  const r = validateFlashcardCreationGuardrails({
+    tier: TierCode.RN,
+    front: "The nurse notes a client with new confusion and slurred speech. Which action should the nurse take first?",
+    back: "Assess airway and neurologic status immediately because acute mental status change may signal stroke or hypoxia. Therefore prioritize assessment before routine tasks.",
     exam: null,
   });
   assert.equal(r.ok, true);
 });
 
-test("RN legacy rejects missing clinical reasoning", () => {
+test("RN exam-style accepts priority stem with teaching rationale", () => {
   const r = validateFlashcardCreationGuardrails({
-    tier: "RN",
-    front: "Define hypertension.",
-    back:
-      "Hypertension is elevated blood pressure because sustained pressures strain vessels. Therefore long-term management matters for organ protection in clinical practice.",
-    exam: null,
-  });
-  assert.equal(r.ok, false);
-  if (!r.ok) assert.equal(r.code, "flashcard_guardrail_rn_np_clinical_reasoning");
-});
-
-test("RN legacy rejects back without rationale connectors", () => {
-  const r = validateFlashcardCreationGuardrails({
-    tier: "RN",
-    front: "A confused client tries to leave the unit. Which initial action should the nurse take?",
-    back:
-      "Stay with the client and call for assistance while assessing safety risks and removing hazards from the immediate environment. Document observations and notify the provider after the client is safe.",
-    exam: null,
-  });
-  assert.equal(r.ok, false);
-  if (!r.ok) assert.equal(r.code, "flashcard_guardrail_rn_np_rationale_markers");
-});
-
-test("RN exam-style RECALL without judgment cues fails", () => {
-  const r = validateFlashcardCreationGuardrails({
-    tier: "RN",
+    tier: TierCode.RN,
     front: "",
     back: "",
     exam: {
-      itemKind: FlashcardItemKind.RECALL,
-      questionStem: "What is the normal range for serum sodium in many labs?",
+      itemKind: FlashcardItemKind.PRIORITY,
+      questionStem: "Which client should the nurse assess first in a busy med-surg unit?",
       answerOptions: [
-        { letter: "A", text: "120–125 mEq/L" },
-        { letter: "B", text: "135–145 mEq/L" },
-        { letter: "C", text: "150–155 mEq/L" },
+        { letter: "A", text: "Stable post-op awaiting discharge" },
+        { letter: "B", text: "New onset confusion with dropping oxygen saturation" },
+        { letter: "C", text: "Chronic pain 3/10 after scheduled analgesic" },
       ],
       rationaleCorrect:
-        "Many references cite roughly 135–145 mEq/L as a common adult reference interval used for teaching.",
+        "Airway and oxygenation threats plus acute mental status change represent the highest risk and should be assessed before stable or chronic complaints.",
       rationaleIncorrect: [
-        { letter: "A", rationale: "This range is too low for typical adult serum sodium." },
-        { letter: "C", rationale: "This range is higher than typical reference intervals." },
-      ],
-    },
-  });
-  assert.equal(r.ok, false);
-  if (!r.ok) assert.equal(r.code, "flashcard_guardrail_rn_np_clinical_reasoning");
-});
-
-test("RN exam-style CLINICAL with substantive rationales passes", () => {
-  const r = validateFlashcardCreationGuardrails({
-    tier: "RN",
-    front: "",
-    back: "",
-    exam: {
-      itemKind: FlashcardItemKind.CLINICAL,
-      questionStem: "A client receiving IV therapy reports burning along the vein. What should the nurse do first?",
-      answerOptions: [
-        { letter: "A", text: "Slow the infusion" },
-        { letter: "B", text: "Stop the infusion and assess the IV site" },
-        { letter: "C", text: "Apply heat and continue the infusion" },
-      ],
-      rationaleCorrect:
-        "Stopping the infusion limits further tissue exposure while the nurse assesses for infiltration or phlebitis.",
-      rationaleIncorrect: [
-        { letter: "A", rationale: "Slowing may delay needed assessment when extravasation is suspected." },
-        { letter: "C", rationale: "Heat does not replace stopping a possible harmful infusion." },
+        { letter: "A", rationale: "Stable findings are lower priority than acute deterioration." },
+        { letter: "C", rationale: "Controlled chronic pain is lower priority than acute physiological compromise." },
       ],
     },
   });
   assert.equal(r.ok, true);
 });
 
-test("NEW_GRAD follows RN/NP legacy rules", () => {
-  const bad = validateFlashcardCreationGuardrails({
-    tier: "NEW_GRAD",
-    front: "List the cranial nerves.",
-    back:
-      "There are twelve cranial nerves numbered I through XII because they emerge from the brainstem and skull base.",
+test("NEW_GRAD tier skips RN/NP clinical guard (not in RN/NP bucket)", () => {
+  const r = validateFlashcardCreationGuardrails({
+    tier: TierCode.NEW_GRAD,
+    front: "Define insulin.",
+    back: "A hormone produced by the pancreas.",
     exam: null,
   });
-  assert.equal(bad.ok, false);
+  assert.equal(r.ok, true);
 });

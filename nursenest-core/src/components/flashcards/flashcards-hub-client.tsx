@@ -69,10 +69,17 @@ const controlClass =
 export function FlashcardsHubClient({
   pathwayOptions = [],
   practiceQuestionsHref,
+  defaultScopedPathwayId = null,
 }: {
   pathwayOptions?: { id: string; label: string }[];
   /** Server-resolved tier-scoped question bank entry; URL `pathwayId` overrides when present. */
   practiceQuestionsHref: string;
+  /**
+   * When the hub URL has no `pathwayId` but the subscriber resolves to a single scoped track
+   * (learnerPath, single compatible pathway, or explicit URL match handled server-side), use
+   * this for weak-area deep links — same contract as practice questions href.
+   */
+  defaultScopedPathwayId?: string | null;
 }) {
   const { t } = useMarketingI18n();
   const router = useRouter();
@@ -80,11 +87,13 @@ export function FlashcardsHubClient({
 
   // Derive filters from URL
   const pathwayId = urlParams.get("pathwayId") ?? "";
+  const effectivePathwayIdForStudyLinks =
+    pathwayId.trim().length > 0 ? pathwayId.trim() : (defaultScopedPathwayId ?? "").trim();
   const quickQuestionBankHref =
     pathwayId.trim().length > 0 ? pathwayHubAppQuestionsHref(pathwayId.trim()) : practiceQuestionsHref;
   const weakAreasStudyHref =
-    pathwayId.trim().length > 0
-      ? `/app/flashcards/weak-areas?pathwayId=${encodeURIComponent(pathwayId.trim())}`
+    effectivePathwayIdForStudyLinks.length > 0
+      ? `/app/flashcards/weak-areas?pathwayId=${encodeURIComponent(effectivePathwayIdForStudyLinks)}`
       : "/app/flashcards/weak-areas";
   const topicCodeFromUrl = urlParams.get("topicCode") ?? "";
   const examFamily = urlParams.get("examFamily") ?? "";

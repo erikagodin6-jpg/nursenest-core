@@ -14,6 +14,7 @@ import {
   validateNormalizedFlashcard,
 } from "@/lib/content/ai-draft-validation";
 import { prisma } from "@/lib/db";
+import { validateFlashcardCreationGuardrails } from "@/lib/flashcards/flashcard-creation-guardrails";
 
 const bodySchema = z.object({
   topic: z.string().trim().min(1).max(500),
@@ -126,6 +127,14 @@ export async function POST(req: Request) {
       }
 
       const v = validateNormalizedFlashcard(norm.value);
+      const guard = validateFlashcardCreationGuardrails({
+        tier: tierCode,
+        front: norm.value.front,
+        back: norm.value.back,
+        exam: null,
+      });
+      const mergedErrors = [...v.errors, ...(guard.ok ? [] : [guard.error])];
+      const mergedOk = v.ok && guard.ok;
       const draft = await prisma.generatedFlashcardDraft.create({
         data: {
           jobId: job.id,
@@ -133,7 +142,13 @@ export async function POST(req: Request) {
           batchId,
           payloadJson,
           normalizedJson: norm.value as object,
-          validationJson: { ok: v.ok, errors: v.errors, warnings: v.warnings, duplicateRisk: false },
+          validationJson: {
+            ok: mergedOk,
+            errors: mergedErrors,
+            warnings: v.warnings,
+            duplicateRisk: false,
+            ...(guard.ok ? {} : { guardrailCode: guard.code }),
+          },
           reviewStatus: DraftReviewStatus.PENDING_REVIEW,
           frontPreview: norm.value.front.slice(0, 200),
           lessonId: lessonId ?? null,

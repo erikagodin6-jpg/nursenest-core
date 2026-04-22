@@ -5,7 +5,6 @@ import type { CountryCode, TierCode } from "@prisma/client";
 import { ChevronDown, ChevronUp, Heart, Pause, Play, Repeat, Stethoscope, Volume2, VolumeX, Wind } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Slider } from "@/components/ui/slider";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import type { PathwayEmbeddedSoundLibraryId } from "@/lib/lessons/pathway-lesson-types";
 import { CARDIAC_SOUND_RECORDS, type CardiacSoundCategory, type CardiacSoundRecord } from "@/lib/lessons/cardiac-sounds-library-data";
@@ -344,7 +343,16 @@ function SoundStudyCard({
           ) : (
             <Volume2 className="h-3.5 w-3.5 text-[var(--theme-muted-text)]" />
           )}
-          <Slider value={[volume]} min={0} max={1} step={0.05} onValueChange={handleVolumeChange} className="w-16" />
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.05}
+            value={volume}
+            onChange={(e) => handleVolumeChange([Number(e.target.value)])}
+            aria-label="Volume"
+            className="w-16 accent-[var(--semantic-brand)]"
+          />
         </div>
       </div>
     </div>

@@ -34,6 +34,7 @@ import {
   generateCardsFromExamQuestions,
   type GeneratedFlashcardInput,
 } from "../src/lib/flashcards/flashcard-generation";
+import { validateFlashcardCreationGuardrails } from "../src/lib/flashcards/flashcard-creation-guardrails";
 import { prisma } from "./lib/prisma-script-client";
 
 // ── Argument parsing ──────────────────────────────────────────────────────────
@@ -198,6 +199,7 @@ async function main() {
 
   let decksUpserted = 0;
   let cardsUpserted = 0;
+  let guardrailSkipped = 0;
 
   // Step 4: upsert decks, categories, and cards
   for (const [key, cards] of grouped) {
@@ -205,8 +207,27 @@ async function main() {
     const tierCode = mapTierCode(rawTier);
     const bs = rawBodySystem ?? "general";
 
+    const cardsToStore = cards.filter((input) => {
+      const g = validateFlashcardCreationGuardrails({
+        tier: tierCode,
+        front: input.front,
+        back: input.back,
+        exam: null,
+      });
+      if (!g.ok) {
+        guardrailSkipped += 1;
+        console.warn(`[sync-question-flashcards] guardrail skip ${input.contentKey} (${g.code}): ${g.error}`);
+        return false;
+      }
+      return true;
+    });
+    if (cardsToStore.length === 0) {
+      console.warn(`[sync-question-flashcards] deck key ${key}: all cards failed guardrails; skipping deck write`);
+      continue;
+    }
+
     // Resolve exam family and country from first card's source question
-    const firstMeta = questionMeta.get(cards[0].sourceId);
+    const firstMeta = questionMeta.get(cardsToStore[0]!.sourceId);
     const examFamilyVal = mapExamFamily(firstMeta?.exam ?? null);
     const countryCodeVal = mapCountryCode(rawCountry ?? firstMeta?.countryCode ?? null);
 
@@ -225,10 +246,10 @@ async function main() {
         examFamily: examFamilyVal,
         visibility: deckVisibility,
         status: deckStatus,
-        cardCount: cards.length,
+        cardCount: cardsToStore.length,
       },
       update: {
-        cardCount: cards.length,
+        cardCount: cardsToStore.length,
         // When --publish is passed, promote existing DRAFT decks to published
         ...(publish ? { status: deckStatus, visibility: deckVisibility } : {}),
         updatedAt: new Date(),
@@ -282,8 +303,8 @@ async function main() {
 
     // Upsert each Flashcard
     const cardStatus = publish ? ContentStatus.PUBLISHED : ContentStatus.DRAFT;
-    for (let i = 0; i < cards.length; i++) {
-      const input = cards[i];
+    for (let i = 0; i < cardsToStore.length; i++) {
+      const input = cardsToStore[i]!;
       await prisma.flashcard.upsert({
         where: { sourceKey: input.contentKey },
         create: {
@@ -313,6 +334,9 @@ async function main() {
   console.log(`\n  ✓ ${decksUpserted} deck(s) upserted`);
   console.log(`  ✓ FlashcardTag(s) upserted: one per body system + one per unique topic per deck`);
   console.log(`  ✓ ${cardsUpserted} card(s) upserted`);
+  if (guardrailSkipped > 0) {
+    console.log(`  ⚠ ${guardrailSkipped} card input(s) skipped by creation guardrails (tier-specific content rules).`);
+  }
   if (publish) {
     console.log(`\nSync complete. Decks + cards are PUBLISHED + PUBLIC_PREVIEW.`);
     console.log(`Topic pages live at /flashcards/{bodySystem} — e.g. /flashcards/cardiovascular\n`);
