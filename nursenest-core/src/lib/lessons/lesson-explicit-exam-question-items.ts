@@ -6,6 +6,7 @@ import { withDatabaseFallback } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { ExamQuestionMcqRow, LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
+import { subscriberMayResolveExplicitExamQuestionRows } from "@/lib/lessons/lesson-explicit-exam-question-access-pure";
 import type { ExplicitQuestionIdDrop } from "@/lib/lessons/lesson-explicit-exam-question-drops";
 import {
   type BareIdResolution,
@@ -114,7 +115,7 @@ export async function loadLessonBankQuizItemsByExamIds(args: {
     if (uniq.length >= MAX_IDS) break;
   }
 
-  if (!args.entitlement.hasAccess) {
+  if (!subscriberMayResolveExplicitExamQuestionRows(args.entitlement)) {
     return {
       items: [],
       diagnostics: {

@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { MarketingPricingPage } from "@/components/marketing/marketing-pricing-page";
-import { FaqJsonLd } from "@/components/seo/faq-json-ld";
-import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
-import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
-import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-marketing-route-shard-bundles";
+import { Suspense } from "react";
+import {
+  PricingDeferredSeoLocalized,
+  PricingMarketingPlansRscLocalized,
+} from "@/components/marketing/pricing-page-rsc-parts";
 import { loadMarketingMetadataMessages } from "@/lib/marketing-i18n/load-marketing-metadata-messages";
-import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
-import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
+import { serializeMarketingPageSearchParams } from "@/lib/marketing/serialize-marketing-search-params";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
-import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
-type Props = { params: Promise<{ locale: string }> };
+type Props = {
+  params: Promise<{ locale: string }>;
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
 
 const PRICING_META_KEYS = ["pages.pricing.title", "pages.pricing.description"] as const;
 
@@ -38,73 +38,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   );
 }
 
-export default async function LocalizedPricingPage({ params }: Props) {
+/** `params` + `searchParams` only — shards + JSON-LD stream in the deferred branch after plans. */
+export default async function LocalizedPricingPage({ params, searchParams }: Props) {
   const { locale } = await params;
-  const raw = marketingPricingBreadcrumbs();
-  const messages = await loadMarketingLayoutShardsOverlay(locale);
-  const { crumbs, schemaItems } = localizeBreadcrumbResolution(raw, messages);
-  const pricingFaqJsonLd = [
-    {
-      question: messages["pages.pricing.regionFaq.usCanadaQuestion"],
-      answer: messages["pages.pricing.regionFaq.usCanadaAnswer"],
-    },
-    {
-      question: messages["pages.pricing.regionFaq.correctExamQuestion"],
-      answer: messages["pages.pricing.regionFaq.correctExamAnswer"],
-    },
-    {
-      question: messages["pages.pricing.regionFaq.switchCountryQuestion"],
-      answer: messages["pages.pricing.regionFaq.switchCountryAnswer"],
-    },
-    {
-      question: messages["pages.pricing.reliabilityFaq.siteCrashQuestion"],
-      answer: messages["pages.pricing.reliabilityFaq.siteCrashAnswer"],
-    },
-    {
-      question: messages["pages.pricing.reliabilityFaq.slowExperienceQuestion"],
-      answer: messages["pages.pricing.reliabilityFaq.slowExperienceAnswer"],
-    },
-    {
-      question: messages["pages.pricing.reliabilityFaq.studyReliabilityQuestion"],
-      answer: messages["pages.pricing.reliabilityFaq.studyReliabilityAnswer"],
-    },
-    {
-      question: messages["pages.pricing.learnerFaq.passGuaranteeQuestion"],
-      answer: messages["pages.pricing.learnerFaq.passGuaranteeAnswer"],
-    },
-    {
-      question: messages["pages.pricing.learnerFaq.startingBehindQuestion"],
-      answer: messages["pages.pricing.learnerFaq.startingBehindAnswer"],
-    },
-    {
-      question: messages["pages.pricing.learnerFaq.tryBeforePayQuestion"],
-      answer: messages["pages.pricing.learnerFaq.tryBeforePayAnswer"],
-    },
-    {
-      question: messages["pages.pricing.learnerFaq.examRealismQuestion"],
-      answer: messages["pages.pricing.learnerFaq.examRealismAnswer"],
-    },
-    {
-      question: messages["pages.pricing.learnerFaq.refundRemorseQuestion"],
-      answer: messages["pages.pricing.learnerFaq.refundRemorseAnswer"],
-    },
-  ];
+  const resolvedSearch = searchParams ? await searchParams : {};
+  const initialSearchParamsString = serializeMarketingPageSearchParams(resolvedSearch);
+
   return (
     <>
-      <WebPageJsonLd
-        {...buildMarketingWebPageJsonLdProps({
-          locale,
-          enPath: "/pricing",
-          title: messages["pages.pricing.title"],
-          description: messages["pages.pricing.description"],
-        })}
-      />
-      <BreadcrumbJsonLd items={schemaItems} />
-      <FaqJsonLd items={pricingFaqJsonLd} />
-      <div className="mx-auto max-w-6xl px-4 pb-1 pt-1 sm:px-6 sm:pb-2 sm:pt-2 lg:px-8">
-        <BreadcrumbTrail items={crumbs} />
-      </div>
-      <MarketingPricingPage locale={locale} />
+      <Suspense fallback={null}>
+        <PricingMarketingPlansRscLocalized
+          locale={locale}
+          initialSearchParamsString={initialSearchParamsString}
+        />
+      </Suspense>
+      <Suspense fallback={null}>
+        <PricingDeferredSeoLocalized locale={locale} />
+      </Suspense>
     </>
   );
 }

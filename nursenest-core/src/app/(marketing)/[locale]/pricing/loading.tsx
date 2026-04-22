@@ -1,6 +1,4 @@
-import { PricingPageSkeleton } from "@/components/skeletons/hub-page-skeleton";
-
-/** Next.js loading UI for `/{locale}/pricing`. */
+/** See `(default)/pricing/loading.tsx` — avoid double skeleton while plans stream from RSC. */
 export default function LocalizedPricingLoading() {
-  return <PricingPageSkeleton />;
+  return null;
 }

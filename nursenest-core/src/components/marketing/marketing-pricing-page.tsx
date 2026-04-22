@@ -1,9 +1,7 @@
-import { Suspense } from "react";
 import type { TierCode } from "@prisma/client";
 import { cookies } from "next/headers";
 import { PricingPageClient } from "@/components/marketing/pricing-page-client";
 import { PricingPageErrorBoundary } from "@/components/marketing/pricing-page-error-boundary";
-import { PricingPageSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { pricingTierToNarrativeSlug } from "@/lib/conversion/pricing-catalog";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
@@ -18,18 +16,49 @@ import {
   buildPricingOptionsPayload,
   getCachedPricingOptionsPayload,
 } from "@/lib/pricing/pricing-options-cached-payload";
+import type { PricingOptionsPayload } from "@/lib/pricing/pricing-options-payload-types";
 import { validatePricingOptionsPayload } from "@/lib/pricing/pricing-options-payload-validate";
 import { STRIPE_BILLED_NURSING_TIERS } from "@/lib/pricing/display-catalog";
 
-async function loadPricingOptionsForMarketingPage() {
-  try {
-    return await getCachedPricingOptionsPayload();
-  } catch {
-    return buildPricingOptionsPayload();
-  }
+function pricingPayloadHasRenderablePlans(p: PricingOptionsPayload): boolean {
+  const plans = p.plans;
+  const allied = p.alliedPlans;
+  return (
+    (Array.isArray(plans) && plans.length > 0) || (Array.isArray(allied) && allied.length > 0)
+  );
 }
 
-export async function MarketingPricingPage({ locale }: { locale: string }) {
+async function loadPricingOptionsForMarketingPage(): Promise<PricingOptionsPayload> {
+  let payload: PricingOptionsPayload;
+  try {
+    payload = await getCachedPricingOptionsPayload();
+  } catch {
+    payload = buildPricingOptionsPayload();
+  }
+  const fallback = buildPricingOptionsPayload();
+  const check = validatePricingOptionsPayload(payload);
+  if (!check.ok) {
+    safeServerLog("billing", "marketing_pricing_page_payload_invalid_using_fallback", {
+      errors: check.errors.join("|").slice(0, 900),
+      warnings: check.warnings.join("|").slice(0, 400),
+    });
+    return pricingPayloadHasRenderablePlans(fallback) ? fallback : payload;
+  }
+  if (!pricingPayloadHasRenderablePlans(payload)) {
+    safeServerLog("billing", "marketing_pricing_page_payload_empty_using_fallback", {});
+    return pricingPayloadHasRenderablePlans(fallback) ? fallback : payload;
+  }
+  return payload;
+}
+
+export async function MarketingPricingPage({
+  locale,
+  initialSearchParamsString = "",
+}: {
+  locale: string;
+  /** Serialized query string from the page RSC (`searchParams`) so the client tree avoids `useSearchParams()`. */
+  initialSearchParamsString?: string;
+}) {
   const jar = await cookies();
   const serverCheckoutRegionSlugs = collectAuthoritativeCheckoutGlobalRegionSlugs({
     globalRegionCookieRaw: jar.get(GLOBAL_REGION_COOKIE)?.value,
@@ -53,7 +82,7 @@ export async function MarketingPricingPage({ locale }: { locale: string }) {
   const initialPricingOptions = await loadPricingOptionsForMarketingPage();
   const payloadCheck = validatePricingOptionsPayload(initialPricingOptions);
   if (!payloadCheck.ok) {
-    safeServerLog("billing", "marketing_pricing_page_payload_invalid", {
+    safeServerLog("billing", "marketing_pricing_page_payload_invalid_after_fallback", {
       errors: payloadCheck.errors.join("|").slice(0, 900),
       warnings: payloadCheck.warnings.join("|").slice(0, 400),
     });
@@ -74,21 +103,15 @@ export async function MarketingPricingPage({ locale }: { locale: string }) {
 
   return (
     <PricingPageErrorBoundary>
-      {/**
-       * `PricingPageClient` uses `useSearchParams()` (checkout cancel query, post-login checkout intent).
-       * Next.js requires a Suspense boundary so the route can stream without CSR bailout / subtree errors
-       * that previously surfaced as “pricing never loads” under the pricing error boundary.
-       */}
-      <Suspense fallback={<PricingPageSkeleton />}>
-        <PricingPageClient
-          heading={heading}
-          intro={intro}
-          heroSub={heroSub}
-          serverCheckoutRegionSlugs={serverCheckoutRegionSlugs}
-          serverTierSubheads={serverTierSubheads}
-          initialPricingOptions={initialPricingOptions}
-        />
-      </Suspense>
+      <PricingPageClient
+        heading={heading}
+        intro={intro}
+        heroSub={heroSub}
+        serverCheckoutRegionSlugs={serverCheckoutRegionSlugs}
+        serverTierSubheads={serverTierSubheads}
+        initialPricingOptions={initialPricingOptions}
+        initialSearchParamsString={initialSearchParamsString}
+      />
     </PricingPageErrorBoundary>
   );
 }

@@ -33,6 +33,28 @@ const BLOG_SCHEDULER_PLACEHOLDER_BODY =
 const BLOG_SCHEDULER_PLACEHOLDER_EXCERPT =
   "Draft excerpt from the blog scheduler—open the control panel and replace before publishing or scheduling.";
 
+type BlogCreateErrorJson = {
+  error?: string;
+  code?: string;
+  existingSlug?: string;
+  details?: { fieldErrors?: Record<string, string[] | undefined>; formErrors?: string[] };
+};
+
+function formatCreateBlogErrorMessage(j: BlogCreateErrorJson, status: number): string {
+  if (j.code === "duplicate_slug") return "That slug is already in use—pick another.";
+  if (j.code === "duplicate_topic_intent" && j.existingSlug) {
+    return `A post already covers this topic (slug: ${j.existingSlug}). Change title/keyword or open the existing post.`;
+  }
+  if (status === 400 && j.details?.fieldErrors) {
+    const parts = Object.entries(j.details.fieldErrors)
+      .flatMap(([key, msgs]) => (Array.isArray(msgs) ? msgs.map((m) => `${key}: ${m}`) : []))
+      .slice(0, 5);
+    if (parts.length) return `${j.error ?? "Invalid payload"} — ${parts.join("; ")}`;
+  }
+  if (j.error) return j.error;
+  return `Could not create post (${status})`;
+}
+
 function statusChip(status: BlogPostStatus) {
   if (status === BlogPostStatus.PUBLISHED) return "bg-emerald-100 text-emerald-900";
   if (status === BlogPostStatus.SCHEDULED) return "bg-amber-100 text-amber-900";
@@ -139,12 +161,8 @@ export function AdminBlogSchedulerPanel({
       if (!res.ok) {
         let msg = `Could not create post (${res.status})`;
         try {
-          const j = (await res.json()) as { error?: string; code?: string; existingSlug?: string; details?: unknown };
-          if (j.error) msg = j.error;
-          if (j.code === "duplicate_slug") msg = "That slug is already in use—pick another.";
-          if (j.code === "duplicate_topic_intent" && j.existingSlug) {
-            msg = `A post already covers this topic (slug: ${j.existingSlug}). Change title/keyword or open the existing post.`;
-          }
+          const j = (await res.json()) as BlogCreateErrorJson;
+          msg = formatCreateBlogErrorMessage(j, res.status);
         } catch {
           /* ignore */
         }
@@ -239,6 +257,10 @@ export function AdminBlogSchedulerPanel({
           Create {newPost.publishAt ? "scheduled" : "draft"} post
         </button>
       </div>
+      <p className="mt-2 text-xs text-muted-foreground">
+        Slug (kebab-case) and title are required. Excerpt and body are optional—short placeholders are sent when empty so
+        the draft meets API limits; replace them in the control panel before publishing.
+      </p>
 
       <div className="mt-4 flex items-center gap-2 text-sm">
         <label htmlFor="blog-status-filter" className="text-muted-foreground">
@@ -378,8 +400,23 @@ export function AdminBlogSchedulerPanel({
                       className="rounded border border-border px-2 py-1 text-left hover:border-primary/40 disabled:opacity-60"
                       onClick={async () => {
                         setBusyId(p.id);
+                        setActionError(null);
                         try {
-                          await fetch(`/api/admin/blog/${p.id}/image-generate`, { method: "POST", credentials: "include" });
+                          const res = await fetch(`/api/admin/blog/${p.id}/image-generate`, {
+                            method: "POST",
+                            credentials: "include",
+                          });
+                          if (!res.ok) {
+                            let msg = `Image queue failed (${res.status})`;
+                            try {
+                              const j = (await res.json()) as { error?: string };
+                              if (j.error) msg = j.error;
+                            } catch {
+                              /* ignore */
+                            }
+                            setActionError(msg);
+                            return;
+                          }
                           router.refresh();
                         } finally {
                           setBusyId(null);

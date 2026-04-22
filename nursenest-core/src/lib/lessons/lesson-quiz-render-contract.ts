@@ -2,7 +2,9 @@ import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 import type { LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
 
 /**
- * Shape required by `PathwayLessonQuizSet` / `LessonAssessmentQuiz` mini-quiz shells:
+ * Shape required by `PathwayLessonQuizSet` and `LessonAssessmentQuiz` mini-quiz shells
+ * (`nursenest-core/src/components/lessons/pathway-lesson-quiz-set.tsx`,
+ * `nursenest-core/src/components/lessons/lesson-assessment-quiz.tsx`):
  * - `question` non-empty string (stem)
  * - `options` length ≥ 2, all string labels
  * - `correct` integer index into `options`

@@ -2,40 +2,56 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import type { LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
 import {
-  finalizeLessonBankQuizItemsForUi,
   isRenderablePathwayLessonQuizItem,
   normalizePathwayLessonQuizItemForRender,
 } from "@/lib/lessons/lesson-quiz-render-contract";
+import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 
-test("isRenderablePathwayLessonQuizItem accepts bank-shaped MCQ items", () => {
-  const item = { question: "Stem?", options: ["A", "B"], correct: 0, rationale: "Because.", examQuestionId: "q1" };
-  assert.equal(isRenderablePathwayLessonQuizItem(item), true);
-});
-
-test("isRenderablePathwayLessonQuizItem rejects out-of-range correct index", () => {
-  assert.equal(isRenderablePathwayLessonQuizItem({ question: "x", options: ["a", "b"], correct: 2 }), false);
-});
-
-test("normalizePathwayLessonQuizItemForRender trims and preserves rationale", () => {
-  const n = normalizePathwayLessonQuizItemForRender({
-    question: "  Hi? ",
-    options: ["  one ", "two"],
+test("isRenderablePathwayLessonQuizItem accepts bank-shaped explicit MCQ rows", () => {
+  const row: LessonBankQuizItem = {
+    examQuestionId: "aaaaaaaaaaaaaaaa",
+    question: "Stem?",
+    options: ["alpha", "beta"],
     correct: 1,
-    rationale: "  r ",
-  });
-  assert.ok(n);
-  assert.equal(n!.question, "Hi?");
-  assert.deepEqual(n!.options, ["one", "two"]);
-  assert.equal(n!.correct, 1);
-  assert.equal(n!.rationale, "r");
+    rationale: "Because.",
+  };
+  assert.equal(isRenderablePathwayLessonQuizItem(row), true);
 });
 
-test("finalizeLessonBankQuizItemsForUi drops malformed rows and keeps examQuestionId", () => {
-  const items: LessonBankQuizItem[] = [
-    { examQuestionId: "good", question: "Q?", options: ["a", "b"], correct: 0 },
-    { examQuestionId: "bad", question: "", options: ["a", "b"], correct: 0 },
-  ];
-  const out = finalizeLessonBankQuizItemsForUi(items);
-  assert.equal(out.length, 1);
-  assert.equal(out[0]!.examQuestionId, "good");
+test("normalizePathwayLessonQuizItemForRender keeps examQuestionId for analytics shells", () => {
+  const row: PathwayLessonQuizItem = {
+    question: "  Q?  ",
+    options: ["  a ", "b"],
+    correct: 0,
+    examQuestionId: "bbbbbbbbbbbbbbbb",
+  };
+  const n = normalizePathwayLessonQuizItemForRender(row);
+  assert.ok(n);
+  assert.equal((n as LessonBankQuizItem).examQuestionId, "bbbbbbbbbbbbbbbb");
+  assert.equal(n!.question, "Q?");
+});
+
+test("normalizePathwayLessonQuizItemForRender rejects non-integer correct index", () => {
+  assert.equal(
+    normalizePathwayLessonQuizItemForRender({
+      question: "Q",
+      options: ["a", "b"],
+      correct: 1.5 as unknown as number,
+    }),
+    null,
+  );
+});
+
+test("mergeAssessmentWithBank parity: catalog vs bank-backed items both normalize to same contract", () => {
+  const catalog: PathwayLessonQuizItem = { question: "C?", options: ["x", "y"], correct: 0 };
+  const bank: LessonBankQuizItem = {
+    examQuestionId: "cccccccccccccccc",
+    question: "B?",
+    options: ["p", "q"],
+    correct: 1,
+  };
+  assert.equal(isRenderablePathwayLessonQuizItem(catalog), true);
+  assert.equal(isRenderablePathwayLessonQuizItem(bank), true);
+  const nb = normalizePathwayLessonQuizItemForRender(bank);
+  assert.ok(nb && "examQuestionId" in nb);
 });

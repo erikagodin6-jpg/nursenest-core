@@ -2,8 +2,8 @@
 
 import type { TierCode } from "@prisma/client";
 import Link from "next/link";
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Check } from "lucide-react";
 import { buildTierPricingNarrative } from "@/lib/conversion/pricing-catalog";
@@ -240,8 +240,8 @@ function PricingPlansStatusPanel({
   );
 }
 
-function CheckoutCancelledNotice() {
-  const sp = useSearchParams();
+function CheckoutCancelledNotice({ searchQuery }: { searchQuery: string }) {
+  const sp = useMemo(() => new URLSearchParams(searchQuery), [searchQuery]);
   const [dismissed, setDismissed] = useState(false);
   if (dismissed || sp.get("checkout") !== "cancelled") return null;
   return (
@@ -264,6 +264,7 @@ export function PricingPageClient({
   serverCheckoutRegionSlugs = [],
   serverTierSubheads = {},
   initialPricingOptions,
+  initialSearchParamsString = "",
 }: {
   heading: string;
   intro: string;
@@ -277,6 +278,8 @@ export function PricingPageClient({
    * by a second client fetch (rate limits, CDN, or transient `/api` failures).
    */
   initialPricingOptions: PricingOptionsPayload;
+  /** From RSC `searchParams` — avoids `useSearchParams()` (CSR bailout + full-page Suspense skeleton on `/pricing`). */
+  initialSearchParamsString?: string;
 }) {
   const hasServerCatalogRef = useRef(marketingPricingPayloadHasRenderablePlans(initialPricingOptions));
   const [segment, setSegment] = useState<Segment>("rn");
@@ -324,14 +327,13 @@ export function PricingPageClient({
   }, [globalMarketSlug, serverCheckoutRegionSlugs, region]);
 
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const { status: authStatus } = useSession();
 
   const heroTrialFooter = useMemo(() => {
     if (trialDays <= 0) {
       return { sub: t("pages.pricing.checkout.recurringShort"), fine: "" as const };
     }
-    return { sub: TRIAL_SECONDARY_COPY, fine: TRIAL_FINE_PRINT_COPY as const };
+    return { sub: TRIAL_SECONDARY_COPY, fine: TRIAL_FINE_PRINT_COPY };
   }, [trialDays, t]);
 
   const pricingCurrencyLine = useMemo(
@@ -355,6 +357,11 @@ export function PricingPageClient({
   const localize = useCallback((href: string) => withMarketingLocale(locale, href), [locale]);
 
   useEffect(() => {
+    if (hasServerCatalogRef.current) {
+      setPlansLoaded(true);
+      return;
+    }
+
     let cancelled = false;
     const hadRenderableServerCatalog = hasServerCatalogRef.current;
 
@@ -497,7 +504,11 @@ export function PricingPageClient({
   /** Guest → `/login?callbackUrl=…` with checkout intent on the pricing URL (same contract as {@link requestCheckout}). */
   const redirectGuestToLoginForCheckout = useCallback(
     (duration: BillingDuration) => {
-      const callbackParams = new URLSearchParams(searchParams.toString());
+      const qs =
+        typeof window !== "undefined" && window.location.search.length > 1
+          ? window.location.search.slice(1)
+          : initialSearchParamsString;
+      const callbackParams = new URLSearchParams(qs);
       callbackParams.set("checkoutIntent", "1");
       callbackParams.set("checkoutTier", tier);
       callbackParams.set("checkoutDuration", duration);
@@ -507,7 +518,7 @@ export function PricingPageClient({
       const loginPath = localize("/login");
       window.location.assign(`${loginPath}?callbackUrl=${encodeURIComponent(callbackPath)}`);
     },
-    [isAllied, localize, pathname, searchParams, selectedAlliedCareer, tier],
+    [isAllied, localize, pathname, initialSearchParamsString, selectedAlliedCareer, tier],
   );
 
   const startCheckout = useCallback(
@@ -733,15 +744,16 @@ export function PricingPageClient({
 
   useEffect(() => {
     if (checkoutIntentHandled || authStatus !== "authenticated") return;
-    if (searchParams.get("checkoutIntent") !== "1") return;
+    const sp = new URLSearchParams(initialSearchParamsString);
+    if (sp.get("checkoutIntent") !== "1") return;
 
-    const checkoutTier = searchParams.get("checkoutTier");
-    const checkoutDuration = searchParams.get("checkoutDuration");
+    const checkoutTier = sp.get("checkoutTier");
+    const checkoutDuration = sp.get("checkoutDuration");
     if (!checkoutTier || !checkoutDuration) return;
 
     if (checkoutTier === "PRE_NURSING") {
       setCheckoutIntentHandled(true);
-      const cleanParamsEarly = new URLSearchParams(searchParams.toString());
+      const cleanParamsEarly = new URLSearchParams(sp.toString());
       cleanParamsEarly.delete("checkoutIntent");
       cleanParamsEarly.delete("checkoutTier");
       cleanParamsEarly.delete("checkoutDuration");
@@ -763,7 +775,7 @@ export function PricingPageClient({
     const durationCode = checkoutDuration as BillingDuration;
     setSegment(tierToSegment(tierCode, region === "US"));
     if (tierCode === "ALLIED") {
-      const checkoutAlliedCareer = searchParams.get("checkoutAlliedCareer");
+      const checkoutAlliedCareer = sp.get("checkoutAlliedCareer");
       if (checkoutAlliedCareer && ALLIED_CAREER_KEYS.includes(checkoutAlliedCareer as AlliedCareerKey)) {
         setSelectedAlliedCareer(checkoutAlliedCareer as AlliedCareerKey);
       }
@@ -772,14 +784,14 @@ export function PricingPageClient({
     setShowConsentPrompt(true);
     setCheckoutIntentHandled(true);
 
-    const cleanParams = new URLSearchParams(searchParams.toString());
+    const cleanParams = new URLSearchParams(sp.toString());
     cleanParams.delete("checkoutIntent");
     cleanParams.delete("checkoutTier");
     cleanParams.delete("checkoutDuration");
     cleanParams.delete("checkoutAlliedCareer");
     const cleanUrl = cleanParams.size > 0 ? `${pathname}?${cleanParams.toString()}` : pathname;
     window.history.replaceState({}, "", cleanUrl);
-  }, [authStatus, checkoutIntentHandled, localize, pathname, region, searchParams]);
+  }, [authStatus, checkoutIntentHandled, initialSearchParamsString, localize, pathname, region]);
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-12 nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0 md:gap-16">
@@ -893,9 +905,7 @@ export function PricingPageClient({
           </div>
         )}
 
-        <Suspense fallback={null}>
-          <CheckoutCancelledNotice />
-        </Suspense>
+        <CheckoutCancelledNotice searchQuery={initialSearchParamsString} />
 
         {!plansLoaded && !loadError ? <PricingPlanGridSkeleton /> : null}
 
