@@ -97,17 +97,37 @@ async function loadHomePageMarketingMessagesSafe(budgetMs: number, label: string
   try {
     const m = await safeAwait(loadHomePageMarketingMessagesForRequest(), label, budgetMs);
     if (m != null && Object.keys(m).length > 0) return m;
+    layoutStderrTrace("marketing_home", "homepage_i18n_async_empty_or_partial", {
+      label,
+      key_count: m == null ? -1 : Object.keys(m).length,
+    });
     try {
-      return loadMarketingMessageShardsSync(STATIC_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
-    } catch {
-      return {};
+      const sync = loadMarketingMessageShardsSync(STATIC_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
+      if (Object.keys(sync).length > 0) return sync;
+      layoutStderrTrace("marketing_home", "homepage_i18n_sync_also_empty", { label });
+    } catch (syncErr) {
+      layoutStderrTrace("marketing_home", "homepage_i18n_sync_throw", {
+        label,
+        error: syncErr instanceof Error ? syncErr.message : String(syncErr),
+      });
     }
-  } catch {
+    return {};
+  } catch (asyncErr) {
+    layoutStderrTrace("marketing_home", "homepage_i18n_async_throw", {
+      label,
+      error: asyncErr instanceof Error ? asyncErr.message : String(asyncErr),
+    });
     try {
-      return loadMarketingMessageShardsSync(STATIC_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
-    } catch {
-      return {};
+      const sync = loadMarketingMessageShardsSync(STATIC_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
+      if (Object.keys(sync).length > 0) return sync;
+      layoutStderrTrace("marketing_home", "homepage_i18n_sync_empty_after_async_error", { label });
+    } catch (syncErr) {
+      layoutStderrTrace("marketing_home", "homepage_i18n_sync_throw_after_async_error", {
+        label,
+        error: syncErr instanceof Error ? syncErr.message : String(syncErr),
+      });
     }
+    return {};
   }
 }
 

@@ -19,6 +19,8 @@ const caRn = getExamPathwayById("ca-rn-nclex-rn");
 assert.ok(caRn, "fixture pathway ca-rn-nclex-rn");
 const usPn = getExamPathwayById("us-lpn-nclex-pn");
 assert.ok(usPn, "fixture pathway us-lpn-nclex-pn");
+const caRpn = getExamPathwayById("ca-rpn-rex-pn");
+assert.ok(caRpn, "fixture pathway ca-rpn-rex-pn");
 
 test("overview: Home → Country → Role → Pathway hub; Canada links to exams/canada", () => {
   const { crumbs, schemaItems } = pathwayOverviewBreadcrumbs(caRn!);
@@ -45,6 +47,24 @@ test("US PN lesson: United States country crumb links to practice-exams", () => 
   const { crumbs } = pathwayLessonDetailBreadcrumbs(usPn!, "topic-a", "Lesson A");
   assert.equal(crumbs[1]?.name, "United States");
   assert.equal(crumbs[1]?.href, "/practice-exams");
+});
+
+test("Canada REx-PN and US NCLEX-PN: role crumb href uses marketing /pn segment (not internal rpn/lpn)", () => {
+  const { crumbs: caCrumbs, schemaItems: caSchema } = pathwayOverviewBreadcrumbs(caRpn!);
+  assert.equal(caCrumbs[2]?.name, "RPN");
+  assert.equal(caCrumbs[2]?.href, "/canada/pn");
+  assert.equal(caSchema[2]?.item, toAbsoluteSiteUrl("/canada/pn"));
+
+  const { crumbs: usCrumbs, schemaItems: usSchema } = pathwayOverviewBreadcrumbs(usPn!);
+  assert.equal(usCrumbs[2]?.name, "LPN / LVN");
+  assert.equal(usCrumbs[2]?.href, "/us/pn");
+  assert.equal(usSchema[2]?.item, toAbsoluteSiteUrl("/us/pn"));
+});
+
+test("REx-PN overview trail does not surface the global exam-lessons index label as the hub", () => {
+  const { crumbs } = pathwayOverviewBreadcrumbs(caRpn!);
+  assert.equal(crumbs.some((c) => c.name === "Lessons by exam pathway"), false);
+  assert.equal(crumbs[3]?.name.includes("REx"), true);
 });
 
 test("lessons hub, topic cluster, questions hub, cat, pricing share the same country + role crumbs", () => {

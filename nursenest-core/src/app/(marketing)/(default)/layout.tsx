@@ -21,6 +21,7 @@ import { CheckoutGlobalRegionContextPathStamp } from "@/components/marketing/che
 import { MarketingHeaderGlobalRegionServerBridge } from "@/lib/region/marketing-header-global-region-server-bridge";
 import { readOptionalGlobalRegionSlugFromCookie } from "@/lib/region/read-optional-global-region-cookie.server";
 import { resolveDefaultLayoutMarketingExamRegion } from "@/lib/marketing/resolve-default-layout-marketing-exam-region";
+import { detectedIpCountryFromHeaders } from "@/lib/region/detected-ip-country.server";
 import { safeAwait } from "@/lib/async/safe-await";
 import { homePerfFinalForGetRoot, homePerfLogForGetRoot } from "@/lib/observability/home-perf-trace";
 import {
@@ -35,6 +36,7 @@ import { loadRenderTrace } from "@/lib/observability/deferred-render-trace";
 import { getStaffSession } from "@/lib/auth/staff-session";
 import { MarketingPublicContentEditProvider } from "@/components/marketing/marketing-public-content-edit-provider";
 import { loadMarketingPublicContentOverridesForLocale } from "@/lib/marketing/load-marketing-public-content-overrides";
+import type { CountryCode } from "@/lib/marketing/countries/types";
 
 /** Layout reads `headers()` (pathname probe + staff chrome); avoid wasted static-generation attempts during `next build`. */
 export const dynamic = "force-dynamic";
@@ -60,12 +62,15 @@ function marketingDefaultLayoutStaticShellForHome({
   serverRegion,
   trustClientPersistedRegion,
   serverGlobalRegion,
+  marketingCountry,
 }: {
   children: React.ReactNode;
   serverRegion: MarketingRegionToggle;
   trustClientPersistedRegion: boolean;
   /** Server `nn_global_region` (or null) so client hooks match SSR under static `/` shell. */
   serverGlobalRegion: GlobalRegionSlug | null;
+  /** Must match {@link getEffectiveMarketingCountry} for the same cookies/IP — never hardcode Canada. */
+  marketingCountry: CountryCode;
 }) {
   const shellMessages = mergeMinimalMarketingLayoutShellMessages({});
   return (
@@ -76,7 +81,7 @@ function marketingDefaultLayoutStaticShellForHome({
       fallbackMessages={undefined}
     >
       <NursenestRegionRoot serverRegion={serverRegion} trustClientPersistedRegion={trustClientPersistedRegion}>
-        <MarketingCountryChromeProvider country="canada">
+        <MarketingCountryChromeProvider country={marketingCountry}>
           <MarketingFeedbackShell>
             <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegion}>
               <CheckoutGlobalRegionContextPathStamp />
@@ -121,13 +126,28 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
           });
         }
         const staticShellRegionCookie = await readOptionalMarketingRegionToggleForCountry();
-        const staticShellServerRegion: MarketingRegionToggle = staticShellRegionCookie ?? "CA";
         const staticShellGlobalRegion = await readOptionalGlobalRegionSlugFromCookie();
+        let staticShellDetectedIp: string | null = null;
+        try {
+          staticShellDetectedIp = detectedIpCountryFromHeaders(await headers());
+        } catch {
+          staticShellDetectedIp = null;
+        }
+        const staticShellServerRegion: MarketingRegionToggle = resolveDefaultLayoutMarketingExamRegion({
+          marketingRegionCookie: staticShellRegionCookie,
+          globalRegionSlug: staticShellGlobalRegion,
+          detectedIpCountry: staticShellDetectedIp,
+        });
+        const staticShellMarketingCountry = getEffectiveMarketingCountry(
+          hpEarly || "/",
+          staticShellRegionCookie ?? staticShellServerRegion,
+        );
         return marketingDefaultLayoutStaticShellForHome({
           children,
           serverRegion: staticShellServerRegion,
           trustClientPersistedRegion: staticShellRegionCookie !== undefined,
           serverGlobalRegion: staticShellGlobalRegion,
+          marketingCountry: staticShellMarketingCountry,
         });
       }
     } catch {
@@ -274,8 +294,11 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       }
 
       let marketingRequestPath = "/";
+      let detectedIpCountry: string | null = null;
       try {
-        marketingRequestPath = (await headers()).get("x-nn-request-pathname")?.trim() ?? "/";
+        const headerList = await headers();
+        marketingRequestPath = headerList.get("x-nn-request-pathname")?.trim() ?? "/";
+        detectedIpCountry = detectedIpCountryFromHeaders(headerList);
       } catch {
         marketingRequestPath = "/";
       }
@@ -288,6 +311,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       const serverRegion: MarketingRegionToggle = resolveDefaultLayoutMarketingExamRegion({
         marketingRegionCookie,
         globalRegionSlug: serverGlobalRegionCookie,
+        detectedIpCountry,
       });
       const trustClientPersistedRegion = marketingRegionCookie !== undefined;
       const marketingCountry = getEffectiveMarketingCountry(
@@ -341,6 +365,10 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       void homePerfFinalForGetRoot("failure", { error_phase: "layout" }).catch(() => {
         /* perf */
       });
+      layoutStderrTrace("marketing_layout", "marketing_default_layout_failsafe_enter", {
+        route: "shared-marketing-default",
+        error: e instanceof Error ? e.message : String(e),
+      });
       runtime?.captureSentryRuntimeSoftError?.({
         scope: "marketing_layout",
         event: "marketing_layout_fatal_soft_shell",
@@ -350,7 +378,27 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         meta: { locale: DEFAULT_MARKETING_LOCALE },
       });
       const shellMessages = mergeMinimalMarketingLayoutShellMessages({});
-      const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
+      let failsafeGlobalRegion: GlobalRegionSlug | null = null;
+      let failsafeServerRegion: MarketingRegionToggle = "CA";
+      let failsafeMarketingCountry: CountryCode = "canada";
+      try {
+        const headerList = await headers();
+        const pathname = headerList.get("x-nn-request-pathname")?.trim() ?? "/";
+        failsafeGlobalRegion = await readOptionalGlobalRegionSlugFromCookie();
+        const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
+        const detectedIpCountry = detectedIpCountryFromHeaders(headerList);
+        failsafeServerRegion = resolveDefaultLayoutMarketingExamRegion({
+          marketingRegionCookie,
+          globalRegionSlug: failsafeGlobalRegion,
+          detectedIpCountry,
+        });
+        failsafeMarketingCountry = getEffectiveMarketingCountry(
+          pathname,
+          marketingRegionCookie ?? failsafeServerRegion,
+        );
+      } catch {
+        /* headers/cookies unavailable — Canada-first matches resolveMarketingExamRegionToggle default */
+      }
       return (
         <MarketingI18nProvider
           key={DEFAULT_MARKETING_LOCALE}
@@ -358,10 +406,10 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
           messages={shellMessages}
           fallbackMessages={undefined}
         >
-          <NursenestRegionRoot serverRegion={"CA"} trustClientPersistedRegion={false}>
-            <MarketingCountryChromeProvider country="canada">
+          <NursenestRegionRoot serverRegion={failsafeServerRegion} trustClientPersistedRegion={false}>
+            <MarketingCountryChromeProvider country={failsafeMarketingCountry}>
               <MarketingFeedbackShell>
-                <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegionCookie}>
+                <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={failsafeGlobalRegion}>
                   <CheckoutGlobalRegionContextPathStamp />
                   <MarketingDefaultLayoutChromeFailsafeShell>
                     <PageTransitionShell>{children}</PageTransitionShell>

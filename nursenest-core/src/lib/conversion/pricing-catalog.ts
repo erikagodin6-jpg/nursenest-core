@@ -16,7 +16,10 @@ export type TierPricingNarrative = {
 
 type MarketingT = (key: string, params?: Record<string, string | number | undefined>) => string;
 
-function tierToNarrativeSlug(tier: TierCode): "prenursing" | "newgrad" | "rpn" | "lvn_lpn" | "rn" | "np" | "allied" {
+/** Maps Prisma tier codes to `pages.pricing.narrative.<slug>.*` i18n prefixes (marketing pricing). */
+export function pricingTierToNarrativeSlug(
+  tier: TierCode,
+): "prenursing" | "newgrad" | "rpn" | "lvn_lpn" | "rn" | "np" | "allied" {
   if (tier === "PRE_NURSING") return "prenursing";
   if (tier === "NEW_GRAD") return "newgrad";
   if (tier === "RPN") return "rpn";
@@ -30,7 +33,7 @@ function tierToNarrativeSlug(tier: TierCode): "prenursing" | "newgrad" | "rpn" |
  * Pricing page narratives — copy lives in marketing i18n (`pages.pricing.narrative.*`).
  */
 export function buildTierPricingNarrative(t: MarketingT, tier: TierCode): TierPricingNarrative {
-  const slug = tierToNarrativeSlug(tier);
+  const slug = pricingTierToNarrativeSlug(tier);
   const prefix = `pages.pricing.narrative.${slug}`;
   const variant = getConversionVariant();
 

@@ -26,6 +26,13 @@ type BlogRow = {
   updatedAt: string;
 };
 
+/** Matches `POST /api/admin/blog` create schema (`body` min 20, `excerpt` min 10). Scheduler has no body field. */
+const BLOG_SCHEDULER_PLACEHOLDER_BODY =
+  "<p>Draft placeholder from the blog scheduler. Replace with full article HTML before publishing.</p>";
+
+const BLOG_SCHEDULER_PLACEHOLDER_EXCERPT =
+  "Draft excerpt from the blog scheduler—open the control panel and replace before publishing or scheduling.";
+
 function statusChip(status: BlogPostStatus) {
   if (status === BlogPostStatus.PUBLISHED) return "bg-emerald-100 text-emerald-900";
   if (status === BlogPostStatus.SCHEDULED) return "bg-amber-100 text-amber-900";
@@ -61,6 +68,8 @@ export function AdminBlogSchedulerPanel({
   const [statusFilter, setStatusFilter] = useState<"ALL" | BlogPostStatus>("ALL");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [createBusy, setCreateBusy] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
   const [newPost, setNewPost] = useState({
     slug: "",
     title: "",
@@ -78,13 +87,28 @@ export function AdminBlogSchedulerPanel({
 
   async function patchPost(id: string, payload: Record<string, unknown>) {
     setBusyId(id);
+    setActionError(null);
     try {
-      await fetch(`/api/admin/blog/${id}`, {
+      const res = await fetch(`/api/admin/blog/${id}`, {
         method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+      if (!res.ok) {
+        let msg = `Request failed (${res.status})`;
+        try {
+          const j = (await res.json()) as { error?: string; reasons?: string[]; prePublish?: { blocking?: { message: string }[] } };
+          if (j.error) msg = j.error;
+          if (Array.isArray(j.reasons) && j.reasons.length) msg = `${msg}: ${j.reasons.slice(0, 5).join("; ")}`;
+          else if (j.prePublish?.blocking?.length)
+            msg = `${msg}: ${j.prePublish.blocking.map((b) => b.message).slice(0, 5).join("; ")}`;
+        } catch {
+          /* ignore */
+        }
+        setActionError(msg);
+        return;
+      }
       router.refresh();
     } finally {
       setBusyId(null);
@@ -93,23 +117,40 @@ export function AdminBlogSchedulerPanel({
 
   async function createPost() {
     setCreateBusy(true);
+    setCreateError(null);
     try {
+      const excerptTrim = newPost.excerpt.trim();
       const payload = {
         slug: newPost.slug.trim(),
         title: newPost.title.trim(),
-        excerpt: newPost.excerpt.trim(),
-        body: newPost.body.trim() || "Draft body",
+        excerpt: excerptTrim || BLOG_SCHEDULER_PLACEHOLDER_EXCERPT,
+        body: newPost.body.trim() || BLOG_SCHEDULER_PLACEHOLDER_BODY,
         exam: newPost.exam.trim() || null,
         category: newPost.category.trim() || null,
         publishAt: newPost.publishAt ? new Date(newPost.publishAt).toISOString() : null,
         postStatus: newPost.publishAt ? "SCHEDULED" : "DRAFT",
       };
-      await fetch("/api/admin/blog", {
+      const res = await fetch("/api/admin/blog", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+      if (!res.ok) {
+        let msg = `Could not create post (${res.status})`;
+        try {
+          const j = (await res.json()) as { error?: string; code?: string; existingSlug?: string; details?: unknown };
+          if (j.error) msg = j.error;
+          if (j.code === "duplicate_slug") msg = "That slug is already in use—pick another.";
+          if (j.code === "duplicate_topic_intent" && j.existingSlug) {
+            msg = `A post already covers this topic (slug: ${j.existingSlug}). Change title/keyword or open the existing post.`;
+          }
+        } catch {
+          /* ignore */
+        }
+        setCreateError(msg);
+        return;
+      }
       setNewPost({ slug: "", title: "", excerpt: "", body: "", exam: "", category: "", publishAt: "" });
       router.refresh();
     } finally {
@@ -140,6 +181,17 @@ export function AdminBlogSchedulerPanel({
         Next scheduled publish:{" "}
         {nextScheduledAt ? new Date(nextScheduledAt).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" }) : "none"}
       </p>
+
+      {createError ? (
+        <p className="mt-3 rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive" role="alert">
+          {createError}
+        </p>
+      ) : null}
+      {actionError ? (
+        <p className="mt-3 rounded-md border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-950 dark:text-amber-100" role="alert">
+          {actionError}
+        </p>
+      ) : null}
 
       <div className="mt-4 grid gap-2 md:grid-cols-6">
         <input

@@ -256,9 +256,15 @@ export type PathwayLessonRecord = {
   seoTitle: string;
   seoDescription: string;
   sections: PathwayLessonSection[];
-  /** Bank-backed pre-check: stable `ExamQuestion.id` values only (no inline stems). */
+  /**
+   * Bank-backed pre-check: stable `ExamQuestion.id` values only (no inline stems).
+   * Authoring: run lists through `sanitizeQuestionIdArray` in `pathway-lesson-catalog-sync` before persisting.
+   */
   preTestQuestionIds?: string[];
-  /** Bank-backed post-check: stable `ExamQuestion.id` values only (no inline stems). */
+  /**
+   * Bank-backed post-check: stable `ExamQuestion.id` values only (no inline stems).
+   * Authoring: same sanitization as `preTestQuestionIds`.
+   */
   postTestQuestionIds?: string[];
   /** @deprecated Prefer {@link preTestQuestionIds}. */
   preTest?: PathwayLessonQuizItem[];

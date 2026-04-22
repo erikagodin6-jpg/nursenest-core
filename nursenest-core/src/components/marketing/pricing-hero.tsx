@@ -28,7 +28,7 @@ export function PricingHero({
   return (
     <section
       data-testid="pricing-marketing-hero"
-      className="nn-gradient-safe relative overflow-hidden rounded-3xl px-6 pt-10 pb-12 text-center sm:px-14 sm:pt-12 sm:pb-16"
+      className="nn-gradient-safe relative overflow-hidden rounded-3xl px-6 pt-14 pb-10 text-center sm:px-14 sm:pt-10 sm:pb-14"
       style={{
         background: `
           linear-gradient(
@@ -53,7 +53,7 @@ export function PricingHero({
 
       <div className="relative mx-auto max-w-2xl">
         <p
-          className="mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider"
+          className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider"
           style={{
             background: "color-mix(in srgb, var(--theme-primary) 10%, var(--semantic-surface))",
             border: "1px solid color-mix(in srgb, var(--theme-primary) 22%, var(--semantic-border-soft))",
@@ -83,7 +83,7 @@ export function PricingHero({
           {pricesShownLine}
         </p>
 
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
           <Link href={primaryCtaHref} className={MARKETING_PRIMARY_CTA_CLASS}>
             {ctaLabel}
           </Link>
@@ -95,7 +95,9 @@ export function PricingHero({
         {!compactFooter ? (
           <>
             <p className="mt-3 text-xs text-muted-foreground">{trialSubtext}</p>
-            <p className="mt-1 text-[11px] text-muted-foreground">{trialFinePrint}</p>
+            {trialFinePrint.trim().length > 0 ? (
+              <p className="mt-1 text-[11px] text-muted-foreground">{trialFinePrint}</p>
+            ) : null}
           </>
         ) : null}
       </div>

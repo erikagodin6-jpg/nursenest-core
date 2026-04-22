@@ -23,10 +23,11 @@ export function AdminAiGenerationBanner({ gate }: { gate: AdminAiGenerationGate 
       </p>
       <p className="mt-1 text-xs opacity-90">{gate.summaryLine}</p>
       <p className="mt-2 text-xs opacity-90">
-        Generation actions are disabled until{" "}
+        Live OpenAI-backed admin tools (blog, lessons, exam questions, flashcards, batch processors) stay disabled until{" "}
         <code className="rounded bg-black/10 px-1 dark:bg-white/10">AI_ADMIN_GENERATION_ENABLED=true</code> and{" "}
         <code className="rounded bg-black/10 px-1 dark:bg-white/10">AI_INTEGRATIONS_OPENAI_API_KEY</code> (or{" "}
-        <code className="rounded bg-black/10 px-1 dark:bg-white/10">OPENAI_API_KEY</code>) are set.
+        <code className="rounded bg-black/10 px-1 dark:bg-white/10">OPENAI_API_KEY</code>) are set. Slot preview and
+        precomputed localized imports may still work without this gate.
       </p>
     </div>
   );

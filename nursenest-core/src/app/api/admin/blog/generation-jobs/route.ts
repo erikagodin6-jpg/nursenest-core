@@ -1,6 +1,7 @@
 import { BlogPostTemplate } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import {
   assertRnTopicMapShellRowCount,
   assertTopicsWithinBatchLimit,
@@ -108,6 +109,9 @@ export async function POST(req: Request) {
       job,
     });
   }
+
+  const aiBlock = adminAiGenerationHttpBlock();
+  if (aiBlock) return aiBlock;
 
   const { topics, droppedShortLines } = parseDraftBatchTopicLines(d.topicsText);
   if (topics.length === 0) {

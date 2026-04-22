@@ -46,7 +46,12 @@ function MarketingMainI18nShardsStreamingFallback({
       locale === DEFAULT_MARKETING_LOCALE
         ? undefined
         : loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
-  } catch {
+  } catch (e) {
+    layoutStderrTrace("marketing_main_shards", "marketing_main_shards_sync_pages_failed", {
+      route: "shared-marketing-main",
+      locale,
+      error: e instanceof Error ? e.message.slice(0, 240) : String(e).slice(0, 240),
+    });
     primary = {};
     fallback =
       locale === DEFAULT_MARKETING_LOCALE
@@ -54,7 +59,12 @@ function MarketingMainI18nShardsStreamingFallback({
         : (() => {
             try {
               return loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
-            } catch {
+            } catch (inner) {
+              layoutStderrTrace("marketing_main_shards", "marketing_main_shards_sync_en_fallback_failed", {
+                route: "shared-marketing-main",
+                locale,
+                error: inner instanceof Error ? inner.message.slice(0, 240) : String(inner).slice(0, 240),
+              });
               return {};
             }
           })();

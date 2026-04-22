@@ -18,8 +18,9 @@ import {
 import { mergeMinimalMarketingLayoutShellMessages } from "@/lib/marketing-i18n/minimal-marketing-layout-shell-fallback";
 import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-main-error-boundary";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
-import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
+import { resolveMarketingExamRegionToggle } from "@/lib/marketing/resolve-default-layout-marketing-exam-region";
+import { detectedIpCountryFromHeaders } from "@/lib/region/detected-ip-country.server";
 import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 import { CheckoutGlobalRegionContextPathStamp } from "@/components/marketing/checkout-global-region-context-path-stamp";
@@ -43,13 +44,10 @@ export default async function MarketingLocaleLayout({
   const { locale } = await params;
   if (!isCoreHostedNonDefaultLocale(locale)) notFound();
 
-  let serverRegion: MarketingRegionToggle = "US";
   let messages: Record<string, string> = {};
   let fallbackMessages: Record<string, string> | undefined = undefined;
 
   try {
-    /** Cookie sync: `cookies().set` is not allowed in RSC; {@link MarketingLocaleUrlSync} calls the server action. */
-    serverRegion = (await getMarketingRegionFromCookies()) as MarketingRegionToggle;
     const payload = await getMarketingLocaleLayoutChromePayload(locale);
     messages = payload.messages;
     fallbackMessages = payload.fallbackMessages;
@@ -97,17 +95,25 @@ export default async function MarketingLocaleLayout({
   }
 
   let marketingRequestPath = "/";
+  let detectedIpCountry: string | null = null;
   try {
-    marketingRequestPath = (await headers()).get("x-nn-request-pathname")?.trim() ?? "/";
+    const headerList = await headers();
+    marketingRequestPath = headerList.get("x-nn-request-pathname")?.trim() ?? "/";
+    detectedIpCountry = detectedIpCountryFromHeaders(headerList);
   } catch {
     marketingRequestPath = "/";
   }
   const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
   const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
+  const examRegionToggle = resolveMarketingExamRegionToggle({
+    marketingRegionCookie,
+    globalRegionSlug: serverGlobalRegionCookie,
+    detectedIpCountry,
+  });
   /** When only `nn_global_region` is set to us|canada, keep chrome country aligned with exam region. */
   const marketingCountryToggle: MarketingRegionToggle =
     marketingRegionCookie ??
-    (serverGlobalRegionCookie === "us" ? "US" : serverGlobalRegionCookie === "canada" ? "CA" : serverRegion);
+    (serverGlobalRegionCookie === "us" ? "US" : serverGlobalRegionCookie === "canada" ? "CA" : examRegionToggle);
   const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingCountryToggle);
   const [publicContentOverrides, staffSession] = await Promise.all([
     loadMarketingPublicContentOverridesForLocale(locale).catch(() => ({} as Record<string, string>)),
@@ -117,7 +123,10 @@ export default async function MarketingLocaleLayout({
   return (
     <MarketingI18nProvider key={locale} locale={locale} messages={messages} fallbackMessages={fallbackMessages}>
       <MarketingPublicContentEditProvider isStaff={Boolean(staffSession)}>
-        <NursenestRegionRoot serverRegion={serverRegion}>
+        <NursenestRegionRoot
+          serverRegion={examRegionToggle}
+          trustClientPersistedRegion={marketingRegionCookie !== undefined}
+        >
           <MarketingCountryChromeProvider country={marketingCountry}>
             <MarketingLocaleUrlSync locale={locale} />
             <OrganizationJsonLd />

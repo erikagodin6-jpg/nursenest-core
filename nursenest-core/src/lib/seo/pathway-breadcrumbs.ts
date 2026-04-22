@@ -1,5 +1,5 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { buildExamPathwayPath, marketingHubRoleSegment } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { RN_NCLEX_EXAM_HUB_OVERVIEW_REDIRECT, isRnNclexMarketingPathwayId } from "@/lib/exam-pathways/rn-nclex-public-hub-policy";
 import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { HUB } from "@/lib/navigation/canonical-destinations";
@@ -79,7 +79,7 @@ function examPathwaySurfacePrefix(
 } {
   const hubOverviewHref = pathwayHubOverviewCrumbHref(pathway, opts?.hubBasePath);
   const countrySlug = pathway.countrySlug;
-  const rolePath = `/${countrySlug}/${pathway.roleTrack}`;
+  const rolePath = `/${countrySlug}/${marketingHubRoleSegment(pathway)}`;
   const examName = pathwayRegionAwareExamName(pathway);
   const countryName = countryLabelFromSlug(countrySlug);
   const roleLabel = formatRoleTrackLabel(pathway.roleTrack, countrySlug);

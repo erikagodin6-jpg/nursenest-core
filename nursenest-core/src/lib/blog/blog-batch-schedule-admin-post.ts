@@ -12,6 +12,7 @@ import {
   refreshBlogBatchScheduleStats,
   slotIntervalMs,
 } from "@/lib/blog/blog-batch-schedule";
+import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { prisma } from "@/lib/db";
 import type { GlobalLocaleCode } from "@/lib/i18n/global-regions";
 import { GLOBAL_LOCALE_CODES } from "@/lib/i18n/global-regions";
@@ -60,6 +61,11 @@ export async function handleBlogBatchScheduleAdminPost(
     return NextResponse.json({ error: "Invalid body", details: parsed.error.flatten() }, { status: 400 });
   }
   const d = parsed.data;
+
+  if (mode === "save") {
+    const aiBlock = adminAiGenerationHttpBlock();
+    if (aiBlock) return aiBlock;
+  }
 
   if (mode === "save" && d.dryRun) {
     return NextResponse.json(

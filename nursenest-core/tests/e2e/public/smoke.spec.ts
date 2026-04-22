@@ -141,6 +141,48 @@ test.describe("Public smoke (core routes)", () => {
   test("homepage loads", async ({ page }, testInfo) => {
     await visitPublicPage(page, testInfo, "/", "homepage", async (p) => {
       await expect(p.getByRole("link", { name: /NurseNest home/i })).toBeVisible();
+      await expect(p.locator('[data-nn-home-safe-mode="1"]')).toHaveCount(0);
+      await expect(p.getByText(/content unavailable right now\. please refresh the page\./i)).toHaveCount(0);
+    });
+  });
+
+  test.describe("Homepage market from edge IP header", () => {
+    test("header shows United States when x-vercel-ip-country is US (no cookies)", async ({ page }, testInfo) => {
+      await page.context().clearCookies();
+      await page.context().setExtraHTTPHeaders({ "x-vercel-ip-country": "US" });
+      const o = attachPageObservers(page, { profile: "public" });
+      try {
+        await gotoExpect2xx(page, "/");
+        await expectPublicShell(page);
+        await expectNoObvious404(page);
+        await expect(
+          page.locator(HEADER_CHROME).getByRole("button", { name: /Select country:\s*United States/i }).first(),
+        ).toBeVisible({ timeout: 60_000 });
+        await expect(page.locator('[data-nn-home-safe-mode="1"]')).toHaveCount(0);
+        await recordAndAssertCleanObservers(o, testInfo, "homepage-ip-us", page);
+      } finally {
+        o.dispose();
+        await page.context().setExtraHTTPHeaders({});
+      }
+    });
+
+    test("header shows Canada when x-vercel-ip-country is CA (no cookies)", async ({ page }, testInfo) => {
+      await page.context().clearCookies();
+      await page.context().setExtraHTTPHeaders({ "x-vercel-ip-country": "CA" });
+      const o = attachPageObservers(page, { profile: "public" });
+      try {
+        await gotoExpect2xx(page, "/");
+        await expectPublicShell(page);
+        await expectNoObvious404(page);
+        await expect(
+          page.locator(HEADER_CHROME).getByRole("button", { name: /Select country:\s*Canada/i }).first(),
+        ).toBeVisible({ timeout: 60_000 });
+        await expect(page.locator('[data-nn-home-safe-mode="1"]')).toHaveCount(0);
+        await recordAndAssertCleanObservers(o, testInfo, "homepage-ip-ca", page);
+      } finally {
+        o.dispose();
+        await page.context().setExtraHTTPHeaders({});
+      }
     });
   });
 

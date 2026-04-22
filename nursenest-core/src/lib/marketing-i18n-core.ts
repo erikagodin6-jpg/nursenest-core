@@ -5,6 +5,10 @@ import {
 
 export type MarketingMessages = Record<string, string>;
 
+/** Returned in production when a `pages.*` key is missing or `t()` throws — must not appear in shipped `en` JSON. */
+export const MARKETING_PRODUCTION_MISSING_PAGE_KEY_PLACEHOLDER =
+  "Content unavailable right now. Please refresh the page.";
+
 /** Known keys are generated in {@link marketing-message-keys.generated.ts}; dynamic keys use `string`. */
 export type { MarketingMessageKey } from "@/lib/i18n/marketing-message-keys.generated";
 
@@ -96,7 +100,7 @@ export function formatMarketingMessage(
        * recovery line for page copy keys (dev keeps humanized text for faster iteration).
        */
       if (process.env.NODE_ENV === "production" && safeKey.startsWith("pages.")) {
-        return "Content unavailable right now. Please refresh the page.";
+        return MARKETING_PRODUCTION_MISSING_PAGE_KEY_PLACEHOLDER;
       }
       return humanizedKeyFallback(safeKey);
     }
@@ -117,7 +121,7 @@ export function formatMarketingMessage(
     try {
       const sk = safeKey || "message";
       if (process.env.NODE_ENV === "production" && sk.startsWith("pages.")) {
-        return "Content unavailable right now. Please refresh the page.";
+        return MARKETING_PRODUCTION_MISSING_PAGE_KEY_PLACEHOLDER;
       }
       return humanizedKeyFallback(sk);
     } catch {

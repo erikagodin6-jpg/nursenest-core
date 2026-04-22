@@ -9,8 +9,10 @@ import { runProductionEnvGuard } from "@/lib/env/production-env-guard";
 import { logStartupContext } from "@/lib/env/server-env";
 import { logHighMemory } from "@/lib/observability/perf-log-core";
 import { logMemoryPressureSample } from "@/lib/observability/perf-log-host-memory";
+import { getAdminAiGenerationGate, warnAdminAiGenerationMisconfigurationIfNeeded } from "@/lib/ai/admin-ai-policy";
 import { assertPinnedAuthBasePath } from "@/lib/auth/auth-base-path";
 import { importSentryNextjs } from "@/lib/observability/sentry-nextjs-dynamic";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { isSentryServerRuntimeEnabled } from "@/lib/observability/sentry-flags";
 
 async function captureSentryProcessException(
@@ -37,6 +39,19 @@ export async function registerNodeInstrumentation(): Promise<void> {
     `[nursenest-core] instrumentation: nodejs runtime registered PORT=${process.env.PORT ?? "(unset)"}`,
   );
   assertPinnedAuthBasePath();
+  {
+    const aiGate = getAdminAiGenerationGate();
+    warnAdminAiGenerationMisconfigurationIfNeeded(aiGate);
+    if (!aiGate.runnable) {
+      safeServerLog("admin_ai_generation", "boot_gate_inactive", {
+        mode: aiGate.mode,
+        flagEnabled: aiGate.flagEnabled,
+        openAiKeyPresent: aiGate.openAiKeyPresent,
+      });
+    } else {
+      safeServerLog("admin_ai_generation", "boot_gate_active", { mode: aiGate.mode });
+    }
+  }
   void import("@/lib/observability/http-access-log-hook").then((m) => {
     m.installHttpAccessLogHook();
   });

@@ -26,6 +26,52 @@ execFileSync(process.execPath, ["--import", "tsx", "--test", homeGlobalRegionsCo
   stdio: "inherit",
 });
 
+const marketingLayoutWebRegionTest = path.join(
+  packageRoot,
+  "src",
+  "lib",
+  "marketing",
+  "marketing-default-layout-web-region.contract.test.ts",
+);
+console.log("[build-prechecks] running marketing-default-layout web region contract test");
+execFileSync(process.execPath, ["--import", "tsx", "--test", marketingLayoutWebRegionTest], {
+  cwd: packageRoot,
+  stdio: "inherit",
+});
+
+const detectedIpCountryTest = path.join(
+  packageRoot,
+  "src",
+  "lib",
+  "region",
+  "detected-ip-country.test.ts",
+);
+console.log("[build-prechecks] running detected-ip-country unit test");
+execFileSync(process.execPath, ["--import", "tsx", "--test", detectedIpCountryTest], {
+  cwd: packageRoot,
+  stdio: "inherit",
+});
+
+const verifyPricingPayload = path.join(packageRoot, "scripts", "verify-pricing-payload.ts");
+console.log("[build-prechecks] running verify-pricing-payload.ts");
+execFileSync(process.execPath, ["--import", "tsx", verifyPricingPayload], {
+  cwd: packageRoot,
+  stdio: "inherit",
+});
+
+const pricingPayloadValidateTest = path.join(
+  packageRoot,
+  "src",
+  "lib",
+  "pricing",
+  "pricing-options-payload-validate.test.ts",
+);
+console.log("[build-prechecks] running pricing-options-payload-validate.test.ts");
+execFileSync(process.execPath, ["--import", "tsx", "--test", pricingPayloadValidateTest], {
+  cwd: packageRoot,
+  stdio: "inherit",
+});
+
 if (skipPrebuild) {
   console.log("[build-prechecks] skipping heavy i18n merge audits (SKIP_I18N_PREBUILD=1)");
   process.exit(0);

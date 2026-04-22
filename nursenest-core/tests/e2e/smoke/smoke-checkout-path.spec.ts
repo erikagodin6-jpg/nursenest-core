@@ -24,6 +24,10 @@ test.describe("Smoke — pricing / checkout path", () => {
       await expect(page.getByRole("heading", { name: /choose your plan/i })).toBeVisible({ timeout: 90_000 });
 
       await expect(
+        page.getByText(/content unavailable right now\. please refresh the page\./i),
+      ).toHaveCount(0);
+
+      await expect(
         page.getByRole("button", { name: /Continue to checkout|Coming Soon/i }).first(),
       ).toBeVisible({ timeout: 90_000 });
 

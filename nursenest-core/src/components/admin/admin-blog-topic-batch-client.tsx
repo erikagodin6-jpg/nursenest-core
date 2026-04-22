@@ -53,6 +53,7 @@ export function AdminBlogTopicBatchClient({
 }: {
   initialSchedules: ScheduleListRow[];
 }) {
+  const aiGate = useAdminAiGenerationGate();
   const [schedules, setSchedules] = useState(initialSchedules);
   const [topicsText, setTopicsText] = useState("");
   const [cadencePerDay, setCadencePerDay] = useState("1");
@@ -159,7 +160,10 @@ export function AdminBlogTopicBatchClient({
       });
       const data = await res.json();
       if (!res.ok) {
-        setMessage(res.status === 429 ? formatAdminRateLimitMessageFromJson(data) : (data.error ?? "Save failed"));
+        const errBody = data as { error?: string; hint?: string };
+        setMessage(
+          res.status === 429 ? formatAdminRateLimitMessageFromJson(data) : (errBody.error ?? errBody.hint ?? "Save failed"),
+        );
         return;
       }
       setMessage(`Saved schedule ${data.schedule?.id}. Dropped duplicate lines in paste: ${data.droppedDuplicateLines ?? 0}.`);
@@ -206,9 +210,9 @@ export function AdminBlogTopicBatchClient({
       const res = await fetch("/api/admin/blog/batch-schedule/run", { method: "POST", credentials: "include" });
       const data = await res.json();
       if (!res.ok) {
-        setMessage(
-          res.status === 429 ? formatAdminRateLimitMessageFromJson(data) : (data.errors?.[0] ?? "Run failed"),
-        );
+        const errBody = data as { errors?: string[]; error?: string; hint?: string };
+        const fallback = errBody.errors?.[0] ?? errBody.error ?? errBody.hint ?? "Run failed";
+        setMessage(res.status === 429 ? formatAdminRateLimitMessageFromJson(data) : fallback);
         return;
       }
       setMessage(
@@ -398,10 +402,10 @@ export function AdminBlogTopicBatchClient({
             <Button type="button" variant="secondary" disabled={loading} onClick={dryRun}>
               Preview slots
             </Button>
-            <Button type="button" disabled={loading} onClick={createSchedule}>
+            <Button type="button" disabled={loading || !aiGate.runnable} onClick={createSchedule}>
               Save batch schedule
             </Button>
-            <Button type="button" variant="outline" disabled={runLoading} onClick={runProcessor}>
+            <Button type="button" variant="outline" disabled={runLoading || !aiGate.runnable} onClick={runProcessor}>
               {runLoading ? "Running…" : "Run processor now"}
             </Button>
           </div>

@@ -67,10 +67,13 @@ import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
 import { LessonNavButtons } from "@/components/lessons/lesson-nav-buttons";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import {
+  buildLessonStudyLoopBankPackFromPreloadedExplicitItems,
+  explicitLessonStudyLoopCombinedSanitizedIds,
   LESSON_STUDY_LOOP_MIN_QUESTIONS,
   loadLessonStudyLoopBankPack,
-  loadLessonStudyLoopBankPackFromExplicitIds,
+  shouldUseExplicitLessonStudyLoopPack,
 } from "@/lib/lessons/load-lesson-study-loop-bank-pack";
+import { loadLessonBankQuizItemsByExamIdsWithDiagnostics } from "@/lib/lessons/lesson-explicit-exam-question-items";
 import { PathwayLessonStudyLoopOrchestrator } from "@/components/lessons/pathway-lesson-study-loop-orchestrator";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 import {
@@ -80,7 +83,10 @@ import {
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
-import { resolvePathwayLessonBankAssessments } from "@/lib/lessons/lesson-bank-assessment-selection";
+import {
+  resolvePathwayLessonBankAssessments,
+  type ExplicitLessonBankQuizCombinedLoad,
+} from "@/lib/lessons/lesson-bank-assessment-selection";
 import { PathwayLessonInteractiveModules } from "@/components/lessons/pathway-lesson-interactive-modules";
 import { getLessonInteractiveModules } from "@/lib/lessons/lesson-interactive-modules";
 
@@ -413,46 +419,68 @@ export default async function LessonDetailPage({ params }: Props) {
     const pathwayId = resolvedLesson.pathwayId;
     const pathway = getExamPathwayById(pathwayId);
     const examFraming = getLearnerExamFraming(pathwayId);
-    const explicitLoopIdCount =
-      (record.preTestQuestionIds?.length ?? 0) + (record.postTestQuestionIds?.length ?? 0);
-    const useExplicitStudyLoopPack =
-      Boolean(userId) &&
-      Boolean(pathway) &&
-      studySettings.lessonStudyLoopEnabled &&
-      studySettings.enablePrePostQuizzes &&
-      explicitLoopIdCount >= LESSON_STUDY_LOOP_MIN_QUESTIONS;
+    const combinedExplicitIds = explicitLessonStudyLoopCombinedSanitizedIds(
+      record.preTestQuestionIds,
+      record.postTestQuestionIds,
+    );
+    let explicitCombinedLoad: ExplicitLessonBankQuizCombinedLoad | undefined;
+    if (pathway && entitlement.hasAccess && combinedExplicitIds.length > 0) {
+      const resolved = await loadLessonBankQuizItemsByExamIdsWithDiagnostics({
+        entitlement,
+        countryCode: pathway.countryCode,
+        ids: combinedExplicitIds,
+        logContext: { pathwayId, lessonSlug: record.slug, side: "study_loop_combined" },
+      });
+      explicitCombinedLoad = {
+        items: resolved.items,
+        diagnostics: resolved.diagnostics,
+      };
+    }
 
-    const bankLoopPackPromise = useExplicitStudyLoopPack
-      ? loadLessonStudyLoopBankPackFromExplicitIds({
-          entitlement,
-          pathway: pathway!,
-          preTestQuestionIds: record.preTestQuestionIds,
-          postTestQuestionIds: record.postTestQuestionIds,
-          lessonKey: `${pathwayId}:${record.slug}`,
-        })
-      : userId &&
-          pathway &&
-          studySettings.lessonStudyLoopEnabled &&
-          studySettings.enablePrePostQuizzes
-        ? loadLessonStudyLoopBankPack({
-            pathway,
-            lessonTitle: record.title,
-            lessonTopic: record.topic,
-            lessonTopicSlug: record.topicSlug,
-            bodySystem: record.bodySystem,
-            lessonSlug: record.slug,
-            lessonKey: `${pathwayId}:${record.slug}`,
-          })
-        : Promise.resolve({
-            items: [],
-            questionIds: [],
-            poolCount: 0,
-            targetRequested: 0,
-          });
+    const useExplicitStudyLoopPack = shouldUseExplicitLessonStudyLoopPack({
+      hasUserId: Boolean(userId),
+      hasPathway: Boolean(pathway),
+      lessonStudyLoopEnabled: studySettings.lessonStudyLoopEnabled,
+      enablePrePostQuizzes: studySettings.enablePrePostQuizzes,
+      resolvedCombinedExplicitItemCount: explicitCombinedLoad?.items.length ?? 0,
+    });
+
+    const bankLoopPackPromise =
+      useExplicitStudyLoopPack && explicitCombinedLoad
+        ? Promise.resolve(
+            buildLessonStudyLoopBankPackFromPreloadedExplicitItems({
+              preloadedItems: explicitCombinedLoad.items,
+              lessonKey: `${pathwayId}:${record.slug}`,
+            }),
+          )
+        : userId &&
+            pathway &&
+            studySettings.lessonStudyLoopEnabled &&
+            studySettings.enablePrePostQuizzes
+          ? loadLessonStudyLoopBankPack({
+              pathway,
+              lessonTitle: record.title,
+              lessonTopic: record.topic,
+              lessonTopicSlug: record.topicSlug,
+              bodySystem: record.bodySystem,
+              lessonSlug: record.slug,
+              lessonKey: `${pathwayId}:${record.slug}`,
+            })
+          : Promise.resolve({
+              items: [],
+              questionIds: [],
+              poolCount: 0,
+              targetRequested: 0,
+            });
 
     const bankAssessmentsPromise =
       pathway != null
-        ? resolvePathwayLessonBankAssessments(pathway, record, entitlement)
+        ? resolvePathwayLessonBankAssessments(
+            pathway,
+            record,
+            entitlement,
+            explicitCombinedLoad ? { explicitCombinedLoad } : undefined,
+          )
         : Promise.resolve({ preTest: [], postTest: [] });
 
     const [relatedQuestionStems, relatedLessonsRaw, initialProgress, pathwayStudySnap, bankLoopPack, bankAssessments] =
@@ -649,7 +677,7 @@ export default async function LessonDetailPage({ params }: Props) {
               <div className="mt-6 max-w-5xl">
                 <PathwayLessonInteractiveModules
                   modules={pathwayInteractiveModules}
-                  viewerTier={lessonViewerTier}
+                  viewerTier={contentTierForPathwayLessonRender(pathway, tier)}
                   countryCode={pathway.countryCode}
                 />
               </div>

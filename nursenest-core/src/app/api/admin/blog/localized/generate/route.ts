@@ -3,7 +3,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
-import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { logLocalizedGenerationRun } from "@/lib/admin/blog-content-automation-log";
 
 const localizedModel = () =>
@@ -37,11 +37,10 @@ const generateSchema = z.object({
 /**
  * POST /api/admin/blog/localized/generate
  *
- * Two modes:
- * 1. With `precomputedAiOutput`: skips AI call, runs post-processing + persistence only.
- * 2. Without: runs AI adaptation internally and persists the localized variant.
- *
- * Set `promptOnly=true` to return prompts without making an AI call.
+ * Modes:
+ * 1. `precomputedAiOutput`: post-process + persist (no live LLM; allowed when admin AI gate is off).
+ * 2. `promptOnly=true`: returns built prompts only (no keys required).
+ * 3. Default: OpenAI adaptation — requires `AI_ADMIN_GENERATION_ENABLED=true` and OpenAI API key (same gate as other admin generators).
  */
 export async function POST(req: NextRequest) {
   const gate = await requireAdmin(req);
@@ -243,23 +242,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ article: created, mode: "created" }, { status: 201 });
   }
 
-  const keyCheck = assertOpenAiKeyConfigured();
-  if (!keyCheck.ok) {
-    await logLocalizedGenerationRun({
-      createdById: gate.admin.userId,
-      canonicalArticleId: d.canonicalArticleId,
-      locale: d.targetLocale,
-      region: d.targetRegion,
-      status: "FAILED",
-      summary: "localized generation unavailable",
-      error: keyCheck.message,
-    });
-    return NextResponse.json({ error: keyCheck.message }, { status: 503 });
-  }
-
-  // Mode 2: prompt preview only (no AI call)
   const systemPrompt = buildAdaptationSystemPrompt(brief);
   const userPrompt = buildAdaptationUserPrompt(brief);
+
+  // Prompt preview only (no AI call, no OpenAI key required)
   if (d.promptOnly) {
     await logLocalizedGenerationRun({
       createdById: gate.admin.userId,
@@ -278,7 +264,10 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  // Mode 3: run AI adaptation and persist immediately
+  const aiBlock = adminAiGenerationHttpBlock();
+  if (aiBlock) return aiBlock;
+
+  // Live OpenAI adaptation and persist
   let generatedOutput: LocalizedBlogAiOutput;
   try {
     console.info("[localized_blog_generate] start_ai", {

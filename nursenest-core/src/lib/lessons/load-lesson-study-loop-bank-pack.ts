@@ -12,37 +12,17 @@ import {
 import { examRowToLessonBankItem, type LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { loadLessonBankQuizItemsByExamIds } from "@/lib/lessons/lesson-explicit-exam-question-items";
-import { sanitizeQuestionIdArray } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import {
+  explicitLessonStudyLoopCombinedSanitizedIds,
+  LESSON_STUDY_LOOP_MIN_QUESTIONS,
+} from "@/lib/lessons/load-lesson-study-loop-gate";
 
-/** Minimum bank questions to activate the guided study loop (graceful degrade below target count). */
-export const LESSON_STUDY_LOOP_MIN_QUESTIONS = 5;
-
-/** Pure gate for learner lesson page: explicit id pack vs topic-discovery bank pack. */
-export function shouldUseExplicitLessonStudyLoopPack(opts: {
-  hasUserId: boolean;
-  hasPathway: boolean;
-  lessonStudyLoopEnabled: boolean;
-  enablePrePostQuizzes: boolean;
-  explicitCombinedSanitizedIdCount: number;
-}): boolean {
-  return (
-    opts.hasUserId &&
-    opts.hasPathway &&
-    opts.lessonStudyLoopEnabled &&
-    opts.enablePostPostQuizzes &&
-    opts.explicitCombinedSanitizedIdCount >= LESSON_STUDY_LOOP_MIN_QUESTIONS
-  );
-}
-
-/** Deduped count of sanitized pre+post exam question ids (study loop activation threshold). */
-export function explicitLessonStudyLoopCombinedIdCount(
-  preTestQuestionIds?: string[],
-  postTestQuestionIds?: string[],
-): number {
-  const preSan = sanitizeQuestionIdArray(preTestQuestionIds) ?? [];
-  const postSan = sanitizeQuestionIdArray(postTestQuestionIds) ?? [];
-  return new Set([...preSan, ...postSan]).size;
-}
+export {
+  explicitLessonStudyLoopCombinedIdCount,
+  explicitLessonStudyLoopCombinedSanitizedIds,
+  LESSON_STUDY_LOOP_MIN_QUESTIONS,
+  shouldUseExplicitLessonStudyLoopPack,
+} from "@/lib/lessons/load-lesson-study-loop-gate";
 export const LESSON_STUDY_LOOP_TARGET_DEFAULT = 12;
 export const LESSON_STUDY_LOOP_TARGET_MAX = 20;
 
@@ -202,34 +182,18 @@ export async function loadLessonStudyLoopBankPack(args: {
 }
 
 /**
- * Study loop pack from explicit lesson `ExamQuestion` ids (no topic discovery pool).
+ * Build study-loop pack from already-resolved explicit bank items (avoids a second DB read).
  */
-export async function loadLessonStudyLoopBankPackFromExplicitIds(args: {
-  entitlement: AccessScope;
-  pathway: ExamPathwayDefinition;
-  preTestQuestionIds?: string[];
-  postTestQuestionIds?: string[];
+export function buildLessonStudyLoopBankPackFromPreloadedExplicitItems(args: {
+  preloadedItems: LessonBankQuizItem[];
   lessonKey: string;
   targetCount?: number;
-}): Promise<LessonStudyLoopBankPack> {
+}): LessonStudyLoopBankPack {
   const target = Math.min(
     LESSON_STUDY_LOOP_TARGET_MAX,
     Math.max(LESSON_STUDY_LOOP_MIN_QUESTIONS, args.targetCount ?? LESSON_STUDY_LOOP_TARGET_DEFAULT),
   );
-  const preSan = sanitizeQuestionIdArray(args.preTestQuestionIds) ?? [];
-  const postSan = sanitizeQuestionIdArray(args.postTestQuestionIds) ?? [];
-  const combined = [...new Set([...preSan, ...postSan])];
-
-  if (combined.length < LESSON_STUDY_LOOP_MIN_QUESTIONS || !args.entitlement.hasAccess) {
-    return { items: [], questionIds: [], poolCount: combined.length, targetRequested: target };
-  }
-
-  const flat = await loadLessonBankQuizItemsByExamIds({
-    entitlement: args.entitlement,
-    countryCode: args.pathway.countryCode,
-    ids: combined,
-  });
-  const enriched: EnrichedItem[] = flat.map((it) => ({ ...it, _difficulty: null }));
+  const enriched: EnrichedItem[] = args.preloadedItems.map((it) => ({ ...it, _difficulty: null }));
   const poolCount = enriched.length;
   if (poolCount < LESSON_STUDY_LOOP_MIN_QUESTIONS) {
     return { items: [], questionIds: [], poolCount, targetRequested: target };
@@ -243,4 +207,47 @@ export async function loadLessonStudyLoopBankPackFromExplicitIds(args: {
     poolCount,
     targetRequested: effectiveTarget,
   };
+}
+
+/**
+ * Study loop pack from explicit lesson `ExamQuestion` ids (no topic discovery pool).
+ * Pass `preloadedItems` when the caller already ran {@link loadLessonBankQuizItemsByExamIds} for the combined id list.
+ */
+export async function loadLessonStudyLoopBankPackFromExplicitIds(args: {
+  entitlement: AccessScope;
+  pathway: ExamPathwayDefinition;
+  preTestQuestionIds?: string[];
+  postTestQuestionIds?: string[];
+  lessonKey: string;
+  targetCount?: number;
+  preloadedItems?: LessonBankQuizItem[];
+}): Promise<LessonStudyLoopBankPack> {
+  const target = Math.min(
+    LESSON_STUDY_LOOP_TARGET_MAX,
+    Math.max(LESSON_STUDY_LOOP_MIN_QUESTIONS, args.targetCount ?? LESSON_STUDY_LOOP_TARGET_DEFAULT),
+  );
+  const combined = explicitLessonStudyLoopCombinedSanitizedIds(args.preTestQuestionIds, args.postTestQuestionIds);
+
+  if (combined.length < LESSON_STUDY_LOOP_MIN_QUESTIONS || !args.entitlement.hasAccess) {
+    return { items: [], questionIds: [], poolCount: combined.length, targetRequested: target };
+  }
+
+  if (args.preloadedItems?.length) {
+    return buildLessonStudyLoopBankPackFromPreloadedExplicitItems({
+      preloadedItems: args.preloadedItems,
+      lessonKey: args.lessonKey,
+      targetCount: args.targetCount,
+    });
+  }
+
+  const flat = await loadLessonBankQuizItemsByExamIds({
+    entitlement: args.entitlement,
+    countryCode: args.pathway.countryCode,
+    ids: combined,
+  });
+  return buildLessonStudyLoopBankPackFromPreloadedExplicitItems({
+    preloadedItems: flat.items,
+    lessonKey: args.lessonKey,
+    targetCount: args.targetCount,
+  });
 }

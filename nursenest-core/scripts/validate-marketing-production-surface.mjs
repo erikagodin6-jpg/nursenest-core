@@ -65,6 +65,13 @@ const REQUIRED_PAGE_KEYS = [
   "pages.pricing.checkout.northAmericaBillingSubcopy",
   "pages.pricing.checkout.continueToSecureCheckout",
   "pages.pricing.checkout.continueToNorthAmericaCheckout",
+  /** Paid-plan primary CTA + recurring disclosure (pricing page hardening). */
+  "pages.pricing.conversion.ctaSubscribe",
+  "pages.pricing.checkout.recurringShort",
+  /** Plan-heading narrative must exist for core tiers (RSC `resolveMarketingCopy` + client `t()`). */
+  "pages.pricing.narrative.rn.subhead",
+  "pages.pricing.narrative.rpn.subhead",
+  "pages.pricing.narrative.lvn_lpn.subhead",
 ];
 
 const REQUIRED_NAV_KEYS = ["footer.emailBannerTitle", "footer.emailBannerSubtitle"];
@@ -73,6 +80,8 @@ const REQUIRED_BRAND_KEYS = ["brand.nurseNest", "brand.homeAriaLabel"];
 
 /** Substrings that must never appear in production-facing values (case-insensitive). */
 const FORBIDDEN_SUBSTRINGS = [
+  /** Production missing-key sentinel from `marketing-i18n-core` — must never ship as authored EN copy. */
+  "content unavailable right now. please refresh the page.",
   "lorem ipsum",
   "<<stub",
   "tbd —",

@@ -262,6 +262,7 @@ export function PricingPageClient({
   intro,
   heroSub,
   serverCheckoutRegionSlugs = [],
+  serverTierSubheads = {},
   initialPricingOptions,
 }: {
   heading: string;
@@ -269,6 +270,8 @@ export function PricingPageClient({
   heroSub: string;
   /** Server union of `nn_global_region` + signed explicit checkout context (HttpOnly); keeps pricing gate aligned with POST checkout. */
   serverCheckoutRegionSlugs?: readonly GlobalRegionSlug[];
+  /** RSC `resolveMarketingCopy` subheads per tier — avoids production `t()` missing-key placeholder under the plan heading. */
+  serverTierSubheads?: Partial<Record<TierCode, string>>;
   /**
    * Same payload as `GET /api/pricing/options`, built during RSC render so the grid is not blocked
    * by a second client fetch (rate limits, CDN, or transient `/api` failures).
@@ -324,7 +327,13 @@ export function PricingPageClient({
   const searchParams = useSearchParams();
   const { status: authStatus } = useSession();
 
-  const trialSubtext = TRIAL_SECONDARY_COPY;
+  const heroTrialFooter = useMemo(() => {
+    if (trialDays <= 0) {
+      return { sub: t("pages.pricing.checkout.recurringShort"), fine: "" as const };
+    }
+    return { sub: TRIAL_SECONDARY_COPY, fine: TRIAL_FINE_PRINT_COPY as const };
+  }, [trialDays, t]);
+
   const pricingCurrencyLine = useMemo(
     () =>
       region === "US"
@@ -347,48 +356,56 @@ export function PricingPageClient({
 
   useEffect(() => {
     let cancelled = false;
+    const hadRenderableServerCatalog = hasServerCatalogRef.current;
+
+    const applyPayload = (data: PricingOptionsPayload): boolean => {
+      const plans = data.plans;
+      const allied = data.alliedPlans;
+      if (!Array.isArray(plans) || !Array.isArray(allied)) return false;
+      if (plans.length === 0 && allied.length === 0) return false;
+      setLoadError(null);
+      setNursingPlans(plans as NursingPlanRow[]);
+      setAlliedPlans(allied as AlliedPlanRow[]);
+      if (typeof data.trialDays === "number") setTrialDays(data.trialDays);
+      return true;
+    };
+
     (async () => {
       try {
-        /** Deduped fetch avoids duplicate requests (e.g. StrictMode) hammering the pricing RL bucket. */
-        const data = await fetchPricingOptionsPayloadDeduped();
-        const plans = data.plans;
-        const allied = data.alliedPlans;
-        if (!Array.isArray(plans) || !Array.isArray(allied)) {
-          if (!cancelled) {
-            if (!hasServerCatalogRef.current) {
-              setNursingPlans([]);
-              setAlliedPlans([]);
-              setLoadError(tRef.current("pages.pricing.error.pricingTemporarilyUnavailable"));
-            }
-            setPlansLoaded(true);
+        /** Deduped fetch — must not replace a valid SSR catalog with empty/error (rate limits, transient API). */
+        const raw = await fetchPricingOptionsPayloadDeduped();
+        if (cancelled) return;
+        const data = raw as PricingOptionsPayload;
+        const ok = applyPayload(data);
+        if (!ok) {
+          if (!hadRenderableServerCatalog && !hasServerCatalogRef.current) {
+            setNursingPlans([]);
+            setAlliedPlans([]);
+            setLoadError(tRef.current("pages.pricing.error.pricingTemporarilyUnavailable"));
+          } else if (hadRenderableServerCatalog) {
+            console.warn(
+              JSON.stringify({
+                scope: "marketing_pricing",
+                event: "pricing_options_refresh_empty_kept_ssr",
+              }),
+            );
           }
-          return;
         }
-        if (plans.length === 0 && allied.length === 0) {
-          if (!cancelled) {
-            if (!hasServerCatalogRef.current) {
-              setNursingPlans([]);
-              setAlliedPlans([]);
-              setLoadError(tRef.current("pages.pricing.error.pricingTemporarilyUnavailable"));
-            }
-            setPlansLoaded(true);
-          }
-          return;
+      } catch (e) {
+        if (cancelled) return;
+        if (!hadRenderableServerCatalog && !hasServerCatalogRef.current) {
+          setLoadError(tRef.current("pages.pricing.error.loadPlans"));
+        } else {
+          console.warn(
+            JSON.stringify({
+              scope: "marketing_pricing",
+              event: "pricing_options_refresh_failed_kept_ssr",
+              message: (e instanceof Error ? e.message : String(e)).slice(0, 240),
+            }),
+          );
         }
-        if (!cancelled) {
-          setLoadError(null);
-          setNursingPlans(plans as NursingPlanRow[]);
-          setAlliedPlans(allied as AlliedPlanRow[]);
-          if (typeof data.trialDays === "number") setTrialDays(data.trialDays);
-          setPlansLoaded(true);
-        }
-      } catch {
-        if (!cancelled) {
-          if (!hasServerCatalogRef.current) {
-            setLoadError(tRef.current("pages.pricing.error.loadPlans"));
-          }
-          setPlansLoaded(true);
-        }
+      } finally {
+        if (!cancelled) setPlansLoaded(true);
       }
     })();
     return () => {
@@ -397,18 +414,25 @@ export function PricingPageClient({
   }, []);
 
   const isUS = region === "US";
+  /** Narrow to label helpers' union — matches {@link NursenestRegionRoot} server resolution. */
+  const examLabelCountry: "US" | "CA" = region === "US" ? "US" : "CA";
   const segmentLabels: Record<Segment, string> = useMemo(
     () => ({
       newgrad: "New Grad",
       rn: "RN / NCLEX-RN",
-      pn: `${getNursingRoleLabel({ country: region, role: "PN" })} / ${getExamLabel({ country: region, role: "PN" })}`,
+      pn: `${getNursingRoleLabel({ country: examLabelCountry, role: "PN" })} / ${getExamLabel({ country: examLabelCountry, role: "PN" })}`,
       np: "NP",
       allied: "Allied Health",
     }),
-    [region],
+    [examLabelCountry],
   );
   const tier = segmentToTier(segment, isUS);
-  const narrative = buildTierPricingNarrative(t, tier);
+  const narrative = useMemo(() => {
+    const built = buildTierPricingNarrative(t, tier);
+    const serverSub = serverTierSubheads[tier]?.trim();
+    if (serverSub) return { ...built, subhead: serverSub };
+    return built;
+  }, [t, tier, serverTierSubheads]);
   const isAllied = segment === "allied";
   const isFreeNursingPricingTrack = !isAllied && isFreeStripeBillingNursingTier(tier);
 
@@ -764,8 +788,8 @@ export function PricingPageClient({
       <PricingHero
         studySystemHref={localize("/how-it-works")}
         ctaLabel={heroCtaLabel}
-        trialSubtext={trialSubtext}
-        trialFinePrint={TRIAL_FINE_PRINT_COPY}
+        trialSubtext={heroTrialFooter.sub}
+        trialFinePrint={heroTrialFooter.fine}
         pricesShownLine={pricingCurrencyLine}
       />
 
@@ -792,7 +816,10 @@ export function PricingPageClient({
       ) : null}
 
       {/* ── Plan selector + pricing cards (surfaced early) ── */}
-      <section aria-labelledby="pricing-plans-heading" className="space-y-12">
+      <section
+        aria-labelledby="pricing-plans-heading"
+        className="scroll-mt-20 space-y-10 md:scroll-mt-24 md:space-y-12"
+      >
         <div className="text-center">
           <h2 id="pricing-plans-heading" className="nn-marketing-h2">
             Choose Your Plan
@@ -996,16 +1023,24 @@ export function PricingPageClient({
                             {t("pages.pricing.checkout.northAmericaBillingSubcopy")}
                           </p>
                         ) : null}
-                        <p
-                          className={`${pricingCheckoutSoftGate ? "mt-2" : "mt-3"} text-center text-xs leading-snug ${
-                            isPop ? "font-semibold text-[var(--semantic-info)]" : "text-muted-foreground"
-                          }`}
-                        >
-                          {TRIAL_SECONDARY_COPY}
-                        </p>
-                        <p className="mt-1 text-center text-[11px] leading-snug text-muted-foreground">
-                          {TRIAL_FINE_PRINT_COPY}
-                        </p>
+                        {!pricingCheckoutSoftGate && trialDays > 0 ? (
+                          <>
+                            <p
+                              className={`mt-3 text-center text-xs leading-snug ${
+                                isPop ? "font-semibold text-[var(--semantic-info)]" : "text-muted-foreground"
+                              }`}
+                            >
+                              {TRIAL_SECONDARY_COPY}
+                            </p>
+                            <p className="mt-1 text-center text-[11px] leading-snug text-muted-foreground">
+                              {TRIAL_FINE_PRINT_COPY}
+                            </p>
+                          </>
+                        ) : !pricingCheckoutSoftGate ? (
+                          <p className="mt-3 text-center text-xs leading-snug text-muted-foreground">
+                            {t("pages.pricing.checkout.recurringShort")}
+                          </p>
+                        ) : null}
                       </>
                     ) : (
                       <p className="mt-3 text-center text-xs leading-snug text-muted-foreground">
@@ -1175,12 +1210,14 @@ export function PricingPageClient({
             Or Try Free Questions First
           </Link>
         </div>
-        <p className="mt-3 text-xs text-muted-foreground">
-          {TRIAL_SECONDARY_COPY}
-        </p>
-        <p className="mt-1 text-[11px] text-muted-foreground">
-          {TRIAL_FINE_PRINT_COPY}
-        </p>
+        {trialDays > 0 ? (
+          <>
+            <p className="mt-3 text-xs text-muted-foreground">{TRIAL_SECONDARY_COPY}</p>
+            <p className="mt-1 text-[11px] text-muted-foreground">{TRIAL_FINE_PRINT_COPY}</p>
+          </>
+        ) : (
+          <p className="mt-3 text-xs text-muted-foreground">{t("pages.pricing.checkout.recurringShort")}</p>
+        )}
       </div>
     </main>
   );

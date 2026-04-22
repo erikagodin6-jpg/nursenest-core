@@ -13,16 +13,18 @@ import {
 } from "@/lib/lessons/lesson-question-cross-links";
 import type { PathwayLessonQuizItem, PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { loadLessonBankQuizItemsByExamIds } from "@/lib/lessons/lesson-explicit-exam-question-items";
-import { sanitizeQuestionIdArray } from "@/lib/lessons/pathway-lesson-catalog-sync";
-
-/** Prefer non-empty explicit bank-backed lists; otherwise use merged catalog+bank results. */
-export function preferExplicitAssessmentSide(
-  explicit: PathwayLessonQuizItem[] | null | undefined,
-  merged: PathwayLessonQuizItem[],
-): PathwayLessonQuizItem[] {
-  return explicit && explicit.length > 0 ? explicit : merged;
-}
+import {
+  loadLessonBankQuizItemsByExamIdsWithDiagnostics,
+  type LessonExplicitExamQuestionLoadDiagnostics,
+} from "@/lib/lessons/lesson-explicit-exam-question-items";
+import type { ExplicitExamQuestionIdLoadDiagnostics, ExplicitIdDropReason } from "@/lib/lessons/lesson-explicit-exam-question-resolution-pipeline";
+import { sanitizeQuestionIdArrayWithDiagnostics } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import { preferExplicitAssessmentSide } from "@/lib/lessons/lesson-assessment-explicit-pure";
+import {
+  isExplicitQuestionIdsDebugLoggingEnabled,
+  logExplicitExamQuestionLoadOutcome,
+} from "@/lib/lessons/lesson-explicit-exam-question-observability";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /** Pre-test size band (practice: rationale after each in UI). */
 export const LESSON_ASSESSMENT_PRE_MIN = 3;
@@ -183,35 +185,173 @@ export function splitBankPrePost(
   return { preBank, postBank };
 }
 
+function orderedExplicitItemsForConfiguredIds(
+  configuredIds: string[],
+  itemsByExamId: ReadonlyMap<string, LessonBankQuizItem>,
+): LessonBankQuizItem[] {
+  const out: LessonBankQuizItem[] = [];
+  for (const id of configuredIds) {
+    const it = itemsByExamId.get(id);
+    if (it) out.push(it);
+  }
+  return out;
+}
+
+function lessonExplicitDiagnosticsToCore(d: LessonExplicitExamQuestionLoadDiagnostics): ExplicitExamQuestionIdLoadDiagnostics {
+  return {
+    orderedUniqRequestedIds: d.requestedOrderedIds,
+    resolvedExamQuestionIds: d.resolvedIds,
+    dropped: d.drops.map((x) => ({
+      id: x.id,
+      reason: (x.reason === "finalize_drop" ? "finalize_rejected" : x.reason) as ExplicitIdDropReason,
+    })),
+    zeroResolvedWithSubscriberAccess: d.requestedOrderedIds.length > 0 && d.resolvedIds.length === 0,
+  };
+}
+
+function logExplicitAssessmentZeroResolve(params: {
+  pathwayId: string;
+  lessonSlug: string;
+  side: "pre" | "post";
+  configuredIds: string[];
+  diagnostics?: LessonExplicitExamQuestionLoadDiagnostics;
+}): void {
+  const core: ExplicitExamQuestionIdLoadDiagnostics = params.diagnostics
+    ? lessonExplicitDiagnosticsToCore(params.diagnostics)
+    : {
+        orderedUniqRequestedIds: params.configuredIds,
+        resolvedExamQuestionIds: [],
+        dropped: [],
+        zeroResolvedWithSubscriberAccess: params.configuredIds.length > 0,
+      };
+  logExplicitExamQuestionLoadOutcome({
+    scope: "lesson_explicit_exam_ids",
+    pathwayId: params.pathwayId,
+    lessonSlug: params.lessonSlug,
+    phase: params.side,
+    hadConfiguredUniqIds: params.configuredIds.length > 0,
+    hadSubscriberAccess: true,
+    diagnostics: core,
+    fallbackSurface: "assessment_merge",
+  });
+  if (isExplicitQuestionIdsDebugLoggingEnabled() && params.diagnostics) {
+    safeServerLog("lesson_explicit_exam_ids", "assessment_explicit_zero_resolve_verbose", {
+      pathwayId: params.pathwayId,
+      lessonSlug: params.lessonSlug,
+      side: params.side,
+      drops: params.diagnostics.drops.length,
+    });
+  }
+}
+
+export type ExplicitLessonBankQuizCombinedLoad = {
+  items: LessonBankQuizItem[];
+  diagnostics: LessonExplicitExamQuestionLoadDiagnostics;
+};
+
 /**
  * Resolve pre/post lesson quizzes: catalog when present, padded from the pathway question bank.
  * Returns empty arrays when the bank cannot satisfy minimums (caller hides sections).
+ *
+ * Pass `explicitCombinedLoad` when the caller already resolved pre+post ids in one combined fetch
+ * (avoids duplicate DB reads on hot learner paths).
  */
 export async function resolvePathwayLessonBankAssessments(
   pathway: ExamPathwayDefinition,
   lesson: PathwayLessonRecord,
   access?: AccessScope | null,
+  options?: { explicitCombinedLoad?: ExplicitLessonBankQuizCombinedLoad },
 ): Promise<{ preTest: PathwayLessonQuizItem[]; postTest: PathwayLessonQuizItem[] }> {
-  const preIds = sanitizeQuestionIdArray(lesson.preTestQuestionIds) ?? [];
-  const postIds = sanitizeQuestionIdArray(lesson.postTestQuestionIds) ?? [];
+  const preSan = sanitizeQuestionIdArrayWithDiagnostics(lesson.preTestQuestionIds);
+  const postSan = sanitizeQuestionIdArrayWithDiagnostics(lesson.postTestQuestionIds);
+  const preIds = preSan.ids ?? [];
+  const postIds = postSan.ids ?? [];
+  const hadConfiguredPreRaw =
+    Array.isArray(lesson.preTestQuestionIds) &&
+    lesson.preTestQuestionIds.some((x) => typeof x === "string" && x.trim().length > 0);
+  const hadConfiguredPostRaw =
+    Array.isArray(lesson.postTestQuestionIds) &&
+    lesson.postTestQuestionIds.some((x) => typeof x === "string" && x.trim().length > 0);
+
   let explicitPre: PathwayLessonQuizItem[] | null = null;
   let explicitPost: PathwayLessonQuizItem[] | null = null;
   if (access?.hasAccess) {
-    if (preIds.length) {
-      const loaded = await loadLessonBankQuizItemsByExamIds({
-        entitlement: access,
-        countryCode: pathway.countryCode,
-        ids: preIds,
+    if (hadConfiguredPreRaw && !preIds.length) {
+      safeServerLog("lesson_explicit_exam_ids", "explicit_exam_question_ids_all_sanitized_away", {
+        phase: "pre",
+        pathwayId: pathway.id,
+        lessonSlug: lesson.slug,
+        sanitizeDropped: preSan.dropped.length,
       });
-      if (loaded.length) explicitPre = loaded;
     }
-    if (postIds.length) {
-      const loaded = await loadLessonBankQuizItemsByExamIds({
-        entitlement: access,
-        countryCode: pathway.countryCode,
-        ids: postIds,
+    if (hadConfiguredPostRaw && !postIds.length) {
+      safeServerLog("lesson_explicit_exam_ids", "explicit_exam_question_ids_all_sanitized_away", {
+        phase: "post",
+        pathwayId: pathway.id,
+        lessonSlug: lesson.slug,
+        sanitizeDropped: postSan.dropped.length,
       });
-      if (loaded.length) explicitPost = loaded;
+    }
+    if (options?.explicitCombinedLoad) {
+      const byId = new Map(options.explicitCombinedLoad.items.map((x) => [x.examQuestionId, x]));
+      if (preIds.length) {
+        const ordered = orderedExplicitItemsForConfiguredIds(preIds, byId);
+        if (ordered.length) explicitPre = ordered;
+        else logExplicitAssessmentZeroResolve({
+          pathwayId: pathway.id,
+          lessonSlug: lesson.slug,
+          side: "pre",
+          configuredIds: preIds,
+          diagnostics: options.explicitCombinedLoad.diagnostics,
+        });
+      }
+      if (postIds.length) {
+        const ordered = orderedExplicitItemsForConfiguredIds(postIds, byId);
+        if (ordered.length) explicitPost = ordered;
+        else
+          logExplicitAssessmentZeroResolve({
+            pathwayId: pathway.id,
+            lessonSlug: lesson.slug,
+            side: "post",
+            configuredIds: postIds,
+            diagnostics: options.explicitCombinedLoad.diagnostics,
+          });
+      }
+    } else {
+      if (preIds.length) {
+        const { items: loaded, diagnostics } = await loadLessonBankQuizItemsByExamIdsWithDiagnostics({
+          entitlement: access,
+          countryCode: pathway.countryCode,
+          ids: preIds,
+          logContext: { pathwayId: pathway.id, lessonSlug: lesson.slug, side: "pre" },
+        });
+        if (loaded.length) explicitPre = loaded;
+        else
+          logExplicitAssessmentZeroResolve({
+            pathwayId: pathway.id,
+            lessonSlug: lesson.slug,
+            side: "pre",
+            configuredIds: preIds,
+            diagnostics,
+          });
+      }
+      if (postIds.length) {
+        const { items: loaded, diagnostics } = await loadLessonBankQuizItemsByExamIdsWithDiagnostics({
+          entitlement: access,
+          countryCode: pathway.countryCode,
+          ids: postIds,
+          logContext: { pathwayId: pathway.id, lessonSlug: lesson.slug, side: "post" },
+        });
+        if (loaded.length) explicitPost = loaded;
+        else
+          logExplicitAssessmentZeroResolve({
+            pathwayId: pathway.id,
+            lessonSlug: lesson.slug,
+            side: "post",
+            configuredIds: postIds,
+            diagnostics,
+          });
+      }
     }
   }
 

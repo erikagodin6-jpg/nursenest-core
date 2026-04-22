@@ -562,6 +562,14 @@ function ensureCatalogLessonSeoDescriptionWordFloor(seoDescription: string, titl
 
 const MAX_QUESTION_IDS = 40;
 
+/**
+ * Normalizes `preTestQuestionIds` / `postTestQuestionIds` from catalog JSON, DB v2 payloads, or admin tooling:
+ * string ids only, trim, length 8–80, dedupe preserving first-seen order, cap 40.
+ * Server resolution (`loadLessonBankQuizItemsByExamIds`) still enforces entitlement + region + MCQ mapping.
+ *
+ * Persist boundary: any code path that writes these fields to durable lesson records should pass raw
+ * authoring input through this helper (or {@link sanitizeQuestionIdArrayWithDiagnostics}) before save.
+ */
 export function sanitizeQuestionIdArray(raw: unknown): string[] | undefined {
   if (!Array.isArray(raw)) return undefined;
   const out: string[] = [];
@@ -575,6 +583,69 @@ export function sanitizeQuestionIdArray(raw: unknown): string[] | undefined {
     if (out.length >= MAX_QUESTION_IDS) break;
   }
   return out.length ? out : undefined;
+}
+
+export type SanitizeQuestionIdDropReason = "malformed" | "duplicate" | "cap";
+
+/**
+ * Same rules as {@link sanitizeQuestionIdArray}, plus counts for internal diagnostics (never learner-facing).
+ * `dropped` entries use `position` (0-based index in the input array) instead of raw strings.
+ */
+export function sanitizeQuestionIdArrayWithDiagnostics(raw: unknown): {
+  ids: string[] | undefined;
+  dropped: Array<{ position: number; reason: SanitizeQuestionIdDropReason }>;
+} {
+  const dropped: Array<{ position: number; reason: SanitizeQuestionIdDropReason }> = [];
+  if (!Array.isArray(raw)) {
+    return { ids: undefined, dropped };
+  }
+  const out: string[] = [];
+  const seen = new Set<string>();
+  raw.forEach((x, position) => {
+    if (typeof x !== "string") {
+      dropped.push({ position, reason: "malformed" });
+      return;
+    }
+    const id = x.trim();
+    if (id.length < 8 || id.length > 80) {
+      dropped.push({ position, reason: "malformed" });
+      return;
+    }
+    if (seen.has(id)) {
+      dropped.push({ position, reason: "duplicate" });
+      return;
+    }
+    if (out.length >= MAX_QUESTION_IDS) {
+      dropped.push({ position, reason: "cap" });
+      return;
+    }
+    seen.add(id);
+    out.push(id);
+  });
+  return { ids: out.length ? out : undefined, dropped };
+}
+
+/**
+ * When authoring supplies a non-empty `preTestQuestionIds` / `postTestQuestionIds` array but
+ * {@link sanitizeQuestionIdArray} removes every entry, emit a dev / `NN_DEBUG_EXPLICIT_QUESTION_IDS`
+ * warning so bad catalog input is easier to spot (never shown to learners).
+ */
+function warnIfExamQuestionIdFieldSanitizedToEmpty(opts: {
+  pathwayId?: string;
+  lessonSlug: string;
+  field: "preTestQuestionIds" | "postTestQuestionIds";
+  raw: unknown;
+}): void {
+  if (!Array.isArray(opts.raw) || opts.raw.length === 0) return;
+  const sanitized = sanitizeQuestionIdArray(opts.raw);
+  if (sanitized && sanitized.length > 0) return;
+  const enabled =
+    process.env.NODE_ENV !== "production" || process.env.NN_DEBUG_EXPLICIT_QUESTION_IDS === "true";
+  if (!enabled) return;
+  // eslint-disable-next-line no-console -- authoring-only diagnostic; not learner-facing
+  console.warn(
+    `[pathway-lesson-catalog] ${opts.field} became empty after sanitize (check authoring). slug=${opts.lessonSlug} pathway=${opts.pathwayId ?? ""} rawEntries=${opts.raw.length}`,
+  );
 }
 
 export function sanitizeQuizItems(raw: unknown): PathwayLessonQuizItem[] | undefined {
@@ -639,8 +710,23 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
   const preview = Math.max(1, Math.min(base.previewSectionCount, maxPreview || 1));
   const preTest = sanitizeQuizItems((raw as { preTest?: unknown }).preTest);
   const postTest = sanitizeQuizItems((raw as { postTest?: unknown }).postTest);
-  const preTestQuestionIds = sanitizeQuestionIdArray((raw as { preTestQuestionIds?: unknown }).preTestQuestionIds);
-  const postTestQuestionIds = sanitizeQuestionIdArray((raw as { postTestQuestionIds?: unknown }).postTestQuestionIds);
+  const lessonSlugForAuthoring = typeof raw.slug === "string" ? raw.slug : "";
+  const rawPreTestQuestionIds = (raw as { preTestQuestionIds?: unknown }).preTestQuestionIds;
+  const rawPostTestQuestionIds = (raw as { postTestQuestionIds?: unknown }).postTestQuestionIds;
+  warnIfExamQuestionIdFieldSanitizedToEmpty({
+    pathwayId,
+    lessonSlug: lessonSlugForAuthoring,
+    field: "preTestQuestionIds",
+    raw: rawPreTestQuestionIds,
+  });
+  warnIfExamQuestionIdFieldSanitizedToEmpty({
+    pathwayId,
+    lessonSlug: lessonSlugForAuthoring,
+    field: "postTestQuestionIds",
+    raw: rawPostTestQuestionIds,
+  });
+  const preTestQuestionIds = sanitizeQuestionIdArray(rawPreTestQuestionIds);
+  const postTestQuestionIds = sanitizeQuestionIdArray(rawPostTestQuestionIds);
 
   const withQuizzes: PathwayLessonRecord = {
     ...base,

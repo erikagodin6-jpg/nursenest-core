@@ -63,6 +63,14 @@ test("adminAiGenerationHttpBlock returns 403 JSON when disabled", () => {
   });
 });
 
+test("adminAiGenerationHttpBlock returns 503 when misconfigured (flag on, no key)", () => {
+  withEnv({ AI_ADMIN_GENERATION_ENABLED: "true", OPENAI_API_KEY: undefined, AI_INTEGRATIONS_OPENAI_API_KEY: undefined }, () => {
+    const res = adminAiGenerationHttpBlock();
+    assert.ok(res);
+    assert.equal(res.status, 503);
+  });
+});
+
 test("adminAiGenerationHttpBlock returns null when runnable", () => {
   withEnv({ AI_ADMIN_GENERATION_ENABLED: "true", OPENAI_API_KEY: "sk-test" }, () => {
     assert.equal(adminAiGenerationHttpBlock(), null);
