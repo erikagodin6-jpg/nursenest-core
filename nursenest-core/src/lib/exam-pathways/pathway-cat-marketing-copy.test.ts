@@ -40,6 +40,20 @@ describe("pathway CAT marketing copy", () => {
     const d = pathwayCatMetadataDescription(pathway, pc);
     assert.match(d, /CAT/i);
   });
+
+  it("readiness public copy titles do not use the legacy “Readiness Exam” product label", () => {
+    for (const id of ["us-rn-nclex-rn", "us-np-fnp", "ca-allied-core"] as const) {
+      const pathway = getExamPathwayById(id);
+      assert.ok(pathway, id);
+      const rc = readinessConfigForPathway(pathway);
+      const pc = publicCopyForReadinessConfig(rc);
+      assert.doesNotMatch(
+        pc.title,
+        /readiness exam/i,
+        `title for ${id} should not read as a separate “readiness exam” product`,
+      );
+    }
+  });
 });
 
 describe("marketing CAT route source (static string regression)", () => {
@@ -50,5 +64,27 @@ describe("marketing CAT route source (static string regression)", () => {
     );
     assert.ok(!src.includes("Unlock Readiness Exam"), "removed misleading readiness upsell CTA");
     assert.ok(!src.includes("Readiness exam locked"), "removed readiness lock headline");
+  });
+});
+
+describe("CAT eligibility server module (static regression)", () => {
+  it("keeps staff/admin entitlement bypass before subscription tier checks", () => {
+    const src = readFileSync(join(__dirname, "cat-eligibility.ts"), "utf8");
+    assert.ok(
+      src.includes("accessScopeIsStaffLearnerEntitlementBypass(entitlement)"),
+      "staff bypass must stay server-side for CAT marketing + app gates",
+    );
+  });
+});
+
+describe("marketing questions hub CAT entry (static regression)", () => {
+  it("does not hardcode the old “CAT Readiness Exam” pathway card copy", () => {
+    const src = readFileSync(
+      join(__dirname, "../../app/(marketing)/(default)/[locale]/[slug]/[examCode]/questions/page.tsx"),
+      "utf8",
+    );
+    assert.ok(!src.includes("CAT Readiness Exam"));
+    assert.ok(!src.includes("Open CAT readiness"));
+    assert.ok(src.includes("catPathwayShortCatLabel"), "pathway-aware CAT labels should drive the hub cards");
   });
 });

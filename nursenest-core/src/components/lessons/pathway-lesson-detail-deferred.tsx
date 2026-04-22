@@ -1,7 +1,8 @@
-import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
+import { LessonTopicPracticeSection } from "@/components/lessons/lesson-topic-practice-section";
 import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
 import { PathwayLessonWayfinding } from "@/components/lessons/pathway-lesson-wayfinding";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { loadPathwayLessonDeferredPracticeBundle } from "@/lib/lessons/pathway-lesson-deferred-practice-data";
 import type { PathwayLessonDeferredServerSnapshot } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
 
@@ -17,11 +18,17 @@ export async function PathwayLessonDetailDeferred({
   lesson,
   lessonsBasePath,
   contentLocale,
+  bankEntitlement,
+  fullQuizAccess,
+  userId,
 }: {
   pathway: ExamPathwayDefinition;
   lesson: PathwayLessonDeferredServerSnapshot;
   lessonsBasePath: string;
   contentLocale: string;
+  bankEntitlement: AccessScope | null;
+  fullQuizAccess: boolean;
+  userId: string;
 }) {
   const bundle = await loadPathwayLessonDeferredPracticeBundle(pathway.id, contentLocale, lesson);
   const relatedQuestionStems = bundle?.relatedQuestionStems ?? [];
@@ -38,11 +45,15 @@ export async function PathwayLessonDetailDeferred({
         relatedLessonRefs={lesson.relatedLessonRefs}
       />
       <div className="xl:hidden">
-        <PathwayLessonRelatedQuestions
+        <LessonTopicPracticeSection
           pathway={pathway}
           lessonTopic={lesson.topic}
           topicSlug={lesson.topicSlug}
-          items={relatedQuestionStems}
+          lessonSlug={lesson.slug}
+          relatedQuestionStems={relatedQuestionStems}
+          bankEntitlement={bankEntitlement}
+          fullQuizAccess={fullQuizAccess}
+          userId={userId}
         />
       </div>
       <PathwayLessonStudyLoopCta
@@ -63,19 +74,29 @@ export async function PathwayLessonDeferredRelatedRail({
   pathway,
   lesson,
   contentLocale,
+  bankEntitlement,
+  fullQuizAccess,
+  userId,
 }: {
   pathway: ExamPathwayDefinition;
   lesson: PathwayLessonDeferredServerSnapshot;
   contentLocale: string;
+  bankEntitlement: AccessScope | null;
+  fullQuizAccess: boolean;
+  userId: string;
 }) {
   const bundle = await loadPathwayLessonDeferredPracticeBundle(pathway.id, contentLocale, lesson);
   if (!bundle) return null;
   return (
-    <PathwayLessonRelatedQuestions
+    <LessonTopicPracticeSection
       pathway={pathway}
       lessonTopic={lesson.topic}
       topicSlug={lesson.topicSlug}
-      items={bundle.relatedQuestionStems}
+      lessonSlug={lesson.slug}
+      relatedQuestionStems={bundle.relatedQuestionStems}
+      bankEntitlement={bankEntitlement}
+      fullQuizAccess={fullQuizAccess}
+      userId={userId}
       compact
     />
   );

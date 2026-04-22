@@ -10,7 +10,8 @@ import {
   logReferenceGate,
 } from "@/lib/admin/blog-content-automation-log";
 import { coerceBlogSourceRows } from "@/lib/blog/apa7";
-import { blogControlPanelPlanSchema, type BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
+import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
+import { safeParseBlogControlPanelPlan } from "@/lib/blog/blog-control-panel-plan-normalize";
 import { persistControlPanelDraft } from "@/lib/blog/blog-control-panel-generation";
 import { annotateBlogInternalLinkRowsWithVerification } from "@/lib/blog/blog-internal-link-verify";
 import { normalizePlanSuggestedLessonRows } from "@/lib/blog/blog-internal-lesson-links";
@@ -56,16 +57,20 @@ export async function POST(req: Request) {
   }
   const d = parsed.data;
 
-  const planParsed = blogControlPanelPlanSchema.safeParse(d.plan);
+  const planParsed = safeParseBlogControlPanelPlan(d.plan);
   if (!planParsed.success) {
     await logControlPanelPersistFailure({
       topic: d.topic,
       code: "INVALID_PLAN",
-      message: "Plan JSON failed schema validation",
+      message: planParsed.normalizeError ?? "Plan JSON failed schema validation",
       createdById: gate.admin.userId,
     });
     return NextResponse.json(
-      { error: "Invalid plan", details: planParsed.error.flatten() },
+      {
+        error: "Invalid plan",
+        normalizeError: planParsed.normalizeError,
+        details: planParsed.zodError?.flatten() ?? { formErrors: [], fieldErrors: {} },
+      },
       { status: 400 },
     );
   }

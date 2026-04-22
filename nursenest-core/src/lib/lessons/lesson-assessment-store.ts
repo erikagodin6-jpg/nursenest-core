@@ -2,7 +2,7 @@
  * Lesson pre/post assessment persistence.
  *
  * Scores are stored as PracticeTest rows with a discriminant config field
- * (`mode: "lesson_pre" | "lesson_post"`) so no schema migration is required.
+ * (`mode: "lesson_pre" | "lesson_post" | "lesson_topic_quiz"`) so no schema migration is required.
  * Results are read back to compute the improvement delta and support retakes.
  *
  * Adaptive engine: after a post-assessment, topic outcomes are written to
@@ -115,6 +115,71 @@ export async function recordLessonAssessment(args: {
     }
     // Fire-and-forget — don't block the API response on stats update
     recordTopicOutcomesSequential(userId, outcomes).catch(() => undefined);
+  }
+
+  return row.id;
+}
+
+type LessonTopicQuizConfig = {
+  mode: "lesson_topic_quiz";
+  lessonId: string;
+  pathwayId: string;
+  topic: string;
+};
+
+/**
+ * Persist a completed lesson-linked topic quiz (bottom-of-lesson bank MCQs).
+ * Writes `UserTopicStat` signals from the learner's per-question outcomes (same engine as post-test).
+ */
+export async function recordLessonTopicLinkedQuiz(args: {
+  userId: string;
+  lessonId: string;
+  pathwayId: string;
+  topic: string;
+  score: number;
+  total: number;
+  questionIds: string[];
+  outcomes: { correct: boolean }[];
+}): Promise<string> {
+  const { userId, lessonId, pathwayId, topic, score, total, questionIds, outcomes } = args;
+  if (total < 1) throw new Error("total must be at least 1");
+  if (outcomes.length !== total) throw new Error("outcomes length must match total");
+  const clampedScore = Math.min(score, total);
+  const accuracyPct = Math.round((clampedScore / total) * 100);
+  const completedAt = new Date().toISOString();
+
+  const config: LessonTopicQuizConfig = {
+    mode: "lesson_topic_quiz",
+    lessonId,
+    pathwayId,
+    topic,
+  };
+
+  const results: LessonAssessmentResults = {
+    score: clampedScore,
+    total,
+    accuracyPct,
+    completedAt,
+  };
+
+  const row = await prisma.practiceTest.create({
+    data: {
+      userId,
+      config: config as object,
+      questionIds,
+      answers: {},
+      status: PracticeTestStatus.COMPLETED,
+      results: results as object,
+      completedAt: new Date(),
+    },
+    select: { id: true },
+  });
+  await invalidateLearnerPrivateReadCache(userId);
+
+  if (topic) {
+    const normalizedTopic = normalizeTopicKey(topic);
+    const topicOutcomes = outcomes.map((o) => ({ topic: normalizedTopic, correct: o.correct }));
+    recordTopicOutcomesSequential(userId, topicOutcomes).catch(() => undefined);
   }
 
   return row.id;

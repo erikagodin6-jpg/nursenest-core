@@ -62,7 +62,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-progress";
 import { PathwayLessonAssessmentExperience } from "@/components/lessons/pathway-lesson-assessment-experience";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
-import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
+import { LessonTopicPracticeSection } from "@/components/lessons/lesson-topic-practice-section";
 import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
 import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -501,11 +501,15 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         .
       </p>
 
-      <PathwayLessonRelatedQuestions
+      <LessonTopicPracticeSection
         pathway={pathway}
         lessonTopic={lesson.topic}
         topicSlug={lesson.topicSlug}
-        items={relatedQuestionStems}
+        lessonSlug={lesson.slug}
+        relatedQuestionStems={relatedQuestionStems}
+        bankEntitlement={bankEntitlement}
+        fullQuizAccess={fullAccess}
+        userId={userId}
       />
 
       <PathwayLessonStudyLoopCta

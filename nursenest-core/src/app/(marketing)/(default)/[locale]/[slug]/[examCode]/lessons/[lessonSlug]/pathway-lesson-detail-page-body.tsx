@@ -372,6 +372,9 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
                     pathway={pathway}
                     lesson={toPathwayLessonDeferredServerSnapshot(lesson)}
                     contentLocale={lessonContentLocale}
+                    bankEntitlement={bankEntitlement}
+                    fullQuizAccess={fullAccess}
+                    userId={userId}
                   />
                 </Suspense>
               }
@@ -494,6 +497,9 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
             lesson={toPathwayLessonDeferredServerSnapshot(lesson)}
             lessonsBasePath={base}
             contentLocale={lessonContentLocale}
+            bankEntitlement={bankEntitlement}
+            fullQuizAccess={fullAccess}
+            userId={userId}
           />
         </Suspense>
 

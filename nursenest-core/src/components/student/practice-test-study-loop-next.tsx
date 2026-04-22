@@ -77,8 +77,8 @@ function buildStudySteps(args: {
     }
     steps.push({
       step: steps.length + 1,
-      label: "Retake readiness exam",
-      description: "After focused study, rerun the CAT to measure real progress.",
+      label: "Retake adaptive CAT",
+      description: "After focused study, rerun the adaptive session to measure real progress.",
       href: retestHref,
     });
     return steps;
@@ -117,8 +117,8 @@ function buildStudySteps(args: {
     }
     steps.push({
       step: steps.length + 1,
-      label: "Retake readiness exam",
-      description: "Run another CAT after this study block to confirm your trend.",
+      label: "Retake adaptive CAT",
+      description: "Run another adaptive session after this study block to confirm your trend.",
       href: retestHref,
     });
     return steps;
@@ -171,7 +171,12 @@ function buildStudySteps(args: {
   if (lessonPrimaryReady) {
     steps.push({ step: 2, label: "Review lessons", description: "Lesson content is ready for topic review.", href: lessonsHref });
   }
-  steps.push({ step: steps.length + 1, label: "Retake readiness exam", description: "Run another CAT to track your progress.", href: retestHref });
+  steps.push({
+    step: steps.length + 1,
+    label: "Retake adaptive CAT",
+    description: "Run another adaptive session to track your progress.",
+    href: retestHref,
+  });
   return steps;
 }
 

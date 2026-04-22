@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
-import { blogControlPanelPlanSchema } from "@/lib/blog/blog-control-panel-schema";
+import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
+import { safeParseBlogControlPanelPlan } from "@/lib/blog/blog-control-panel-plan-normalize";
 import { regenerateControlPanelSection } from "@/lib/blog/blog-control-panel-generation";
 import { annotateBlogInternalLinkRowsWithVerification } from "@/lib/blog/blog-internal-link-verify";
 import { normalizePlanSuggestedLessonRows } from "@/lib/blog/blog-internal-lesson-links";
@@ -31,7 +32,7 @@ const bodySchema = z.object({
   keywords: z.string().max(500).optional(),
   currentTitle: z.string().max(220).optional(),
   currentBody: z.string().max(500_000).optional(),
-  currentPlan: blogControlPanelPlanSchema.optional(),
+  currentPlan: z.unknown().optional(),
 });
 
 export async function POST(req: Request) {
@@ -47,7 +48,23 @@ export async function POST(req: Request) {
   }
   const d = parsed.data;
 
-  if (d.section === "article_html" && !d.currentPlan) {
+  let currentPlan: BlogControlPanelPlan | undefined;
+  if (d.currentPlan !== undefined) {
+    const pr = safeParseBlogControlPanelPlan(d.currentPlan);
+    if (!pr.success) {
+      return NextResponse.json(
+        {
+          error: "Invalid currentPlan",
+          normalizeError: pr.normalizeError,
+          details: pr.zodError?.flatten() ?? { formErrors: [], fieldErrors: {} },
+        },
+        { status: 400 },
+      );
+    }
+    currentPlan = pr.data;
+  }
+
+  if (d.section === "article_html" && !currentPlan) {
     return NextResponse.json({ error: "currentPlan required for article_html" }, { status: 400 });
   }
 
@@ -62,7 +79,7 @@ export async function POST(req: Request) {
       funnelStage: d.funnelStage,
       tone: d.tone ?? "professional",
       keywords: d.keywords,
-      currentPlan: d.currentPlan,
+      currentPlan,
       currentBody: d.currentBody,
       currentTitle: d.currentTitle,
     });

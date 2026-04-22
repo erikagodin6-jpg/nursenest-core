@@ -25,6 +25,7 @@ import {
   listTopicClusters,
 } from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
+import { catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { pathwayQuestionsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
@@ -178,6 +179,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const examName = pathwayRegionAwareExamName(pathway);
   const lessonsHref = marketingPathwayLessonsIndexPath(pathway);
   const catHref = buildExamPathwayPath(pathway, "cat");
+  const catShortLabel = catPathwayShortCatLabel(pathway);
   const questionsHubPath = buildExamPathwayPath(pathway, "questions");
 
   const appQuestionsScoped = isTopicNarrowed
@@ -240,7 +242,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
             variant="questions"
             primaryCta={{ label: "Start available topics", href: lessonsHref }}
             secondaryCtas={[
-              { label: "Try CAT exam", href: catHref },
+              { label: `Open ${catShortLabel}`, href: catHref },
               { label: "Create account", href: "/signup", variant: "ghost" },
             ]}
           />
@@ -270,9 +272,10 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
             },
             {
               icon: LineChart,
-              title: "Ready for the real test? Take CAT Readiness Exam",
-              description: "Adaptive exam flow that adjusts to your performance like real testing.",
-              cta: "Open CAT readiness",
+              title: `Ready for adaptive practice? Run ${catShortLabel}`,
+              description:
+                "Computerized adaptive testing: item difficulty responds to each answer, similar to high-stakes exam delivery.",
+              cta: `Open ${catShortLabel}`,
               href: catHref,
               accent: "purple",
             },
@@ -374,15 +377,15 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
 
       {!isTopicNarrowed ? (
         <section className="mt-6 rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-success)_24%,var(--semantic-border-soft))] bg-[var(--semantic-panel-positive)] p-5">
-          <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">CAT Readiness Exam</h2>
+          <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{catShortLabel}</h2>
           <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
-            Adaptive exam mode that changes difficulty based on your performance, similar to real exam behavior.
+            Full adaptive session: one question at a time, timed delivery, and difficulty that tracks how you perform.
           </p>
           <a
             href={catHref}
             className="mt-3 inline-flex min-h-[40px] items-center justify-center rounded-full bg-[var(--semantic-success)] px-5 py-2 text-sm font-semibold text-[var(--semantic-success-contrast)] hover:opacity-90"
           >
-            Open CAT readiness
+            {`Open ${catShortLabel}`}
           </a>
         </section>
       ) : null}

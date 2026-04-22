@@ -37,7 +37,8 @@ import { contentTierForPathwayLessonRender } from "@/lib/lessons/global-lesson-a
 import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
 import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
-import { PathwayLessonRelatedQuestions } from "@/components/lessons/pathway-lesson-related-questions";
+import { LessonTopicPracticeSection } from "@/components/lessons/lesson-topic-practice-section";
+import { loadLessonTopicLinkedQuizItems } from "@/lib/lessons/load-lesson-topic-linked-quiz-items";
 import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
 import { PathwayLessonPracticeBridge } from "@/components/lessons/pathway-lesson-practice-bridge";
 import { buildAppQuestionBankTopicDrillHref } from "@/components/lessons/pathway-lesson-link-practice";
@@ -586,6 +587,17 @@ export default async function LessonDetailPage({ params }: Props) {
       stemPreviewByQuestionId[stem.id] = stem.stemPreview;
     }
 
+    let topicLinkedQuizPreload: Awaited<ReturnType<typeof loadLessonTopicLinkedQuizItems>>["items"] = [];
+    if (pathway && entitlement.hasAccess && relatedQuestionStems.length > 0) {
+      const topicQuizRes = await loadLessonTopicLinkedQuizItems({
+        entitlement,
+        countryCode: pathway.countryCode,
+        stemIds: relatedQuestionStems.map((s) => s.id),
+        logContext: { pathwayId, lessonSlug: record.slug },
+      });
+      topicLinkedQuizPreload = topicQuizRes.items;
+    }
+
     const alliedExamTakeawaysLabel =
       pathway?.examFamily === ExamFamily.ALLIED && entitlement.alliedCareer
         ? getAlliedProfessionByProfessionKey(entitlement.alliedCareer)?.h1
@@ -730,12 +742,17 @@ export default async function LessonDetailPage({ params }: Props) {
         )}
         <LessonContinueStudyNextBlock bundle={pathwayContinue} />
         {pathway ? (
-          <PathwayLessonRelatedQuestions
+          <LessonTopicPracticeSection
             pathway={pathway}
             lessonTopic={record.topic}
             topicSlug={record.topicSlug}
-            items={relatedQuestionStems}
+            lessonSlug={record.slug}
+            relatedQuestionStems={relatedQuestionStems}
+            bankEntitlement={entitlement}
+            fullQuizAccess={entitlement.hasAccess}
+            userId={userId}
             appLinksMode="direct"
+            preloadedQuizItems={topicLinkedQuizPreload}
           />
         ) : null}
         {pathway ? (

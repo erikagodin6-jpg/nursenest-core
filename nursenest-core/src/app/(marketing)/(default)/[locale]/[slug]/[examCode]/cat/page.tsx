@@ -16,6 +16,7 @@ import {
   pathwayCatLandingTitle,
   pathwayCatMetadataDescription,
 } from "@/lib/exam-pathways/pathway-cat-marketing-copy";
+import { catHowItWorksBulletItems } from "@/lib/exam-pathways/pathway-cat-how-it-works";
 import { publicCopyForReadinessConfig, readinessConfigForPathway } from "@/lib/exam-pathways/pathway-readiness-config";
 import { HUB, loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
@@ -129,30 +130,7 @@ export default async function PathwayCatEntryPage({ params }: Props) {
   const publicCopy = publicCopyForReadinessConfig(readinessConfig);
   const landingTitle = pathwayCatLandingTitle(pathway);
   const landingSubtitle = pathwayCatLandingSubtitle(pathway, publicCopy);
-  const howItWorksItems =
-    publicCopy.effectiveMode === "production_ready" && readinessConfig.engineType === "CAT"
-      ? [
-          "Each answer updates the estimate of your ability (θ).",
-          "Item difficulty adapts so the exam targets your level efficiently.",
-          "Stopping rules mirror exam-style precision rules when enough evidence is gathered.",
-        ]
-      : publicCopy.effectiveMode === "mini_adaptive"
-        ? [
-            "A shorter adaptive run for progress checks between full-length sessions.",
-            "Difficulty still responds to performance, with a smaller item budget.",
-            "Use results to spot weak categories before a full CAT attempt.",
-          ]
-        : publicCopy.effectiveMode === "simulation"
-          ? [
-              "Scenario-style progression with timed pacing.",
-              "High-yield topics weighted for this pathway.",
-              "Results highlight follow-up in lessons and the question bank.",
-            ]
-          : [
-              "Adaptive scoring calibrates to your current performance.",
-              "Works alongside lessons and targeted question practice.",
-              "Coverage expands as the pathway bank grows.",
-            ];
+  const howItWorksItems = catHowItWorksBulletItems(publicCopy, readinessConfig);
   const isCatAvailable =
     assessment.marketingPrimaryCta === "open_app_cat" || assessment.marketingPrimaryCta === "sign_in_to_cat";
   const lockedReasonCopy =

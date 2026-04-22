@@ -196,8 +196,9 @@ export function publicCopyForReadinessConfig(config: PathwayReadinessConfig): Pa
   if (effectiveMode === "production_ready" && config.engineType === "CAT") {
     return {
       effectiveMode,
-      title: `${config.label} Readiness Exam`,
-      subtitle: "Exam-style CAT simulation aligned to pathway rules and passing threshold.",
+      /** Product-facing name for CAT surfaces — not “readiness exam” (reserved for report-card / readiness analytics). */
+      title: `${config.label} CAT`,
+      subtitle: "Exam-style computerized adaptive testing aligned to pathway rules and a practice passing band.",
       strongSimulationClaim: true,
       betaLabel: null,
       experienceLabel: "Full exam-style adaptive flow with no backtracking.",
@@ -206,8 +207,8 @@ export function publicCopyForReadinessConfig(config: PathwayReadinessConfig): Pa
   if (effectiveMode === "mini_adaptive" && config.engineType === "CAT") {
     return {
       effectiveMode,
-      title: `${config.label} Mini Adaptive Assessment`,
-      subtitle: "Short adaptive assessment for progress checks. This is not a full exam simulation.",
+      title: `${config.label} short adaptive CAT`,
+      subtitle: "Shorter adaptive run for progress checks — not a full-length exam simulation.",
       strongSimulationClaim: false,
       betaLabel: null,
       experienceLabel: "Short adaptive practice flow calibrated to pathway topics.",
@@ -216,17 +217,17 @@ export function publicCopyForReadinessConfig(config: PathwayReadinessConfig): Pa
   if (effectiveMode === "simulation") {
     return {
       effectiveMode,
-      title: `${config.label} Readiness Simulation`,
-      subtitle: "Structured readiness simulation focused on exam-relevant scenarios.",
+      title: `${config.label} adaptive simulation`,
+      subtitle: "Structured adaptive simulation focused on exam-relevant scenarios for this pathway.",
       strongSimulationClaim: false,
       betaLabel: null,
-      experienceLabel: "Scenario-based readiness simulation with timed progression.",
+      experienceLabel: "Scenario-based adaptive simulation with timed progression.",
     };
   }
   return {
     effectiveMode: "beta",
-    title: `${config.label} Adaptive Practice Assessment`,
-    subtitle: "Beta adaptive readiness check. Use with lessons and question practice before high-stakes testing.",
+    title: `${config.label} adaptive CAT (beta)`,
+    subtitle: "Beta adaptive session. Pair with lessons and question practice before high-stakes testing.",
     strongSimulationClaim: false,
     betaLabel: "Beta",
     experienceLabel: "Adaptive practice flow in active beta.",

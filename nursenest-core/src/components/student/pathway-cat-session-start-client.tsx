@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { PracticeTestPathwayClientShell, PracticeTestPathwayOption } from "@/lib/practice-tests/types";
 import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { pathwayCatLandingTitle } from "@/lib/exam-pathways/pathway-cat-marketing-copy";
+import { catHowItWorksBulletItems } from "@/lib/exam-pathways/pathway-cat-how-it-works";
 import { publicCopyForReadinessConfig, readinessConfigForPathway } from "@/lib/exam-pathways/pathway-readiness-config";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
@@ -289,6 +290,29 @@ export function PathwayCatSessionStartClient({
           We need your pathway before starting CAT so the adaptive pool matches the right exam.
         </p>
       ) : null}
+
+      {publicCopy && readinessConfig ? (
+        <section
+          className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-4 text-sm shadow-[var(--semantic-shadow-soft)]"
+          aria-labelledby="cat-how-it-works-heading"
+        >
+          <h3 id="cat-how-it-works-heading" className="font-semibold text-[var(--theme-heading-text)]">
+            How this CAT session works
+          </h3>
+          <ul className="mt-2 list-inside list-disc space-y-1.5 text-[var(--theme-body-text)]">
+            {catHowItWorksBulletItems(publicCopy, readinessConfig).map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      <p className="text-xs text-[var(--semantic-text-secondary)]">
+        <Link href="/app/practice-tests" className="font-semibold text-primary underline underline-offset-2">
+          Practice tests hub
+        </Link>{" "}
+        — resume an in-progress session or open results from a recent run.
+      </p>
 
       {readinessLoading ? (
         <p className="text-sm text-muted-foreground">

@@ -90,9 +90,9 @@ export default async function PracticeTestsPage() {
         <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.subtitle.subscriber")}</p>
         <p className="mt-3 text-sm text-[var(--semantic-text-secondary)]">
           <Link href="/app/practice-tests/cat-insights" className="font-semibold text-primary underline">
-            CAT readiness dashboard
+            CAT confidence dashboard
           </Link>{" "}
-          — pass outlook trends across your completed adaptive sessions.
+          — trends across your completed adaptive sessions.
         </p>
       </div>
       <LearnerStudyQuickLinksCard t={t} id="practice-tests-study-quick-links" catHref={catHref} />

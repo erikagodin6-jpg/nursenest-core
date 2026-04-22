@@ -18,11 +18,8 @@ import {
   partitionCitationsForBlog,
 } from "@/lib/blog/blog-citation-safety";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import {
-  blogControlPanelPlanSchema,
-  blogLessonLinkRowSchema,
-  type BlogControlPanelPlan,
-} from "@/lib/blog/blog-control-panel-schema";
+import { blogLessonLinkRowSchema, type BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
+import { safeParseBlogControlPanelPlan } from "@/lib/blog/blog-control-panel-plan-normalize";
 import {
   getBlogInternalLinkPathHintsForPrompt,
   lessonRowsToRelatedPaths,
@@ -159,9 +156,10 @@ export async function fetchControlPanelPlan(input: ControlPanelGenerateInput): P
     throw new Error("Model returned invalid JSON for the editorial plan");
   }
 
-  const plan = blogControlPanelPlanSchema.safeParse(parsed);
+  const plan = safeParseBlogControlPanelPlan(parsed);
   if (!plan.success) {
-    throw new Error(`Plan JSON failed validation: ${plan.error.message}`);
+    const detail = plan.normalizeError ?? plan.zodError?.message ?? "unknown";
+    throw new Error(`Plan JSON failed validation: ${detail}`);
   }
   return plan.data;
 }
