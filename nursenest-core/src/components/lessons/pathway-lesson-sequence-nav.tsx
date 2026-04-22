@@ -6,62 +6,76 @@ export type PathwayLessonAdjacentHrefs = {
   next: { href: string; title: string } | null;
 };
 
+const navLinkClass =
+  "inline-flex min-h-[2.75rem] w-full flex-col items-stretch justify-center gap-0.5 rounded-xl border px-3 py-2 text-left text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] sm:min-h-11 sm:px-4 border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand)_12%)] bg-[color-mix(in_srgb,var(--bg-card)_94%,var(--semantic-panel-muted)_6%)] text-[var(--theme-heading-text)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--bg-card)_88%,var(--semantic-panel-positive)_12%)]";
+
+const navLinkClassEnd =
+  "inline-flex min-h-[2.75rem] w-full flex-col items-stretch justify-center gap-0.5 rounded-xl border px-3 py-2 text-right text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] sm:min-h-11 sm:px-4 border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand)_12%)] bg-[color-mix(in_srgb,var(--bg-card)_94%,var(--semantic-panel-muted)_6%)] text-[var(--theme-heading-text)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--bg-card)_88%,var(--semantic-panel-positive)_12%)]";
+
+const navDisabledClass =
+  "inline-flex min-h-[2.75rem] w-full cursor-not-allowed flex-col justify-center rounded-xl border px-3 py-2 text-left text-sm font-semibold opacity-60 sm:min-h-11 sm:px-4 border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--theme-muted-surface)_55%,var(--bg-card))] text-[var(--theme-muted-text)]";
+
+const navDisabledClassEnd =
+  "inline-flex min-h-[2.75rem] w-full cursor-not-allowed flex-col justify-center rounded-xl border px-3 py-2 text-right text-sm font-semibold opacity-60 sm:min-h-11 sm:px-4 border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--theme-muted-surface)_55%,var(--bg-card))] text-[var(--theme-muted-text)]";
+
+const titleLineClass = "block max-w-full truncate text-xs font-normal text-[var(--theme-muted-text)]";
+
 /**
- * Classic NurseNest lesson chrome: horizontal prev / next strip (see `client/src/pages/lesson-detail.tsx`
- * ~`nav-prev-next`). Theme tokens only — no hardcoded grays.
+ * Pathway lesson sequence: previous / next in hub order (`sort_order`, then slug).
+ * Renders both controls; missing neighbor shows as disabled (first/last lesson in pathway).
  */
 export function PathwayLessonSequenceNavBar({
   adjacent,
   className = "",
+  previousLessonLabel = "Previous lesson",
+  nextLessonLabel = "Next lesson",
 }: {
   adjacent: PathwayLessonAdjacentHrefs;
-  /** Extra classes on the wrapper (e.g. `hidden md:grid` when a sticky mobile bar is present). */
   className?: string;
+  previousLessonLabel?: string;
+  nextLessonLabel?: string;
 }) {
   const { prev, next } = adjacent;
   if (!prev && !next) return null;
 
   return (
     <nav
-      className={`grid min-h-[2.25rem] grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] items-center gap-x-2 border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-brand)_8%)] pb-3 ${className}`.trim()}
+      className={`grid grid-cols-1 gap-2 border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-brand)_8%)] pb-3 sm:grid-cols-2 ${className}`.trim()}
       aria-label="Previous and next lesson in this pathway"
     >
-      <div className="min-w-0 overflow-hidden">
+      <div className="min-w-0">
         {prev ? (
-          <Link
-            href={prev.href}
-            className="group inline-flex max-w-full items-center gap-1.5 text-sm text-[var(--theme-muted-text)] transition-colors hover:text-primary"
-          >
-            <ChevronLeft className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:-translate-x-0.5" aria-hidden />
-            <span className="hidden min-w-0 truncate sm:inline" title={prev.title}>
-              {prev.title}
+          <Link href={prev.href} className={`group ${navLinkClass}`} title={prev.title}>
+            <span className="inline-flex items-center gap-1.5">
+              <ChevronLeft className="h-4 w-4 shrink-0 transition-transform group-hover:-translate-x-0.5" aria-hidden />
+              <span>{previousLessonLabel}</span>
             </span>
-            <span className="sm:hidden">Previous</span>
+            <span className={titleLineClass}>{prev.title}</span>
           </Link>
         ) : (
-          <span className="select-none text-sm text-transparent" aria-hidden>
-            —
+          <span className={navDisabledClass} aria-disabled="true">
+            <span className="inline-flex items-center gap-1.5">
+              <ChevronLeft className="h-4 w-4 shrink-0 opacity-50" aria-hidden />
+              <span>{previousLessonLabel}</span>
+            </span>
           </span>
         )}
       </div>
-      <div aria-hidden className="text-center text-[var(--theme-separator)]">
-        ·
-      </div>
-      <div className="flex min-w-0 justify-end overflow-hidden">
+      <div className="min-w-0">
         {next ? (
-          <Link
-            href={next.href}
-            className="group inline-flex max-w-full items-center gap-1.5 text-sm text-[var(--theme-muted-text)] transition-colors hover:text-primary"
-          >
-            <span className="hidden min-w-0 truncate sm:inline" title={next.title}>
-              {next.title}
+          <Link href={next.href} className={`group ${navLinkClassEnd}`} title={next.title}>
+            <span className="inline-flex items-center justify-end gap-1.5">
+              <span>{nextLessonLabel}</span>
+              <ChevronRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden />
             </span>
-            <span className="sm:hidden">Next</span>
-            <ChevronRight className="h-3.5 w-3.5 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden />
+            <span className={`${titleLineClass} text-right`}>{next.title}</span>
           </Link>
         ) : (
-          <span className="select-none text-sm text-transparent" aria-hidden>
-            —
+          <span className={navDisabledClassEnd} aria-disabled="true">
+            <span className="inline-flex items-center justify-end gap-1.5">
+              <span>{nextLessonLabel}</span>
+              <ChevronRight className="h-4 w-4 shrink-0 opacity-50" aria-hidden />
+            </span>
           </span>
         )}
       </div>

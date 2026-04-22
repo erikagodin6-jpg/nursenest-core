@@ -13,6 +13,11 @@ import {
   resolveBuilderCategoryId,
 } from "@/lib/flashcards/flashcard-builder-taxonomy";
 import { serializeFlashcardForCustomSession } from "@/lib/flashcards/flashcard-study-serialize";
+import {
+  filterCardsByProgressFlags,
+  parseCustomSessionSourceKind,
+  prismaWhereForSourceKind,
+} from "@/lib/flashcards/custom-session-card-filters";
 
 type StudyMode = "term_to_definition" | "definition_to_term" | "mixed";
 
@@ -77,16 +82,24 @@ export async function GET(req: NextRequest) {
   const savedOnly = sp.get("savedOnly") === "1";
   const notesOnly = sp.get("notesOnly") === "1";
   const revisitOnly = sp.get("revisitOnly") === "1";
+  const notStudiedOnly = sp.get("notStudiedOnly") === "1";
+  const recentStudiedOnly = sp.get("recentStudiedOnly") === "1";
+  const recentDaysRaw = Number(sp.get("recentDays") ?? "7");
+  const recentDays =
+    Number.isFinite(recentDaysRaw) && recentDaysRaw > 0 ? Math.min(90, Math.floor(recentDaysRaw)) : 7;
   const shuffle = sp.get("shuffle") === "1";
   const mode = parseStudyMode(sp.get("mode"));
   const limit = parseCardLimit(sp.get("cardLimit"));
   const includeCards = sp.get("includeCards") === "1";
+  const sourceKind = parseCustomSessionSourceKind(sp.get("sourceKind"));
 
   const pathwayOpts = flashcardPathwayAccessOptionsFromPathwayId(pathwayId);
   const accessWhere = flashcardAccessWhere(entitlement, pathwayOpts);
   const clauses: Prisma.FlashcardWhereInput[] = [{ status: ContentStatus.PUBLISHED }, accessWhere];
   if (topicCode) clauses.push({ category: { topicCode } });
   if (lessonId) clauses.push({ lessonId });
+  const sourceClause = prismaWhereForSourceKind(sourceKind);
+  if (sourceClause) clauses.push(sourceClause);
   const where: Prisma.FlashcardWhereInput = { AND: clauses };
 
   const cards = await prisma.flashcard.findMany({
@@ -129,14 +142,15 @@ export async function GET(req: NextRequest) {
     scoped = scoped.filter((c) => selected.has(c.builderCategoryId));
   }
 
-  if (weakOnly || incorrectOnly) {
+  const needsProgress = weakOnly || incorrectOnly || notStudiedOnly || recentStudiedOnly;
+  if (needsProgress) {
     const scopedIds = scoped.map((c) => c.id);
     const progress = await prisma.flashcardProgress.findMany({
       where: {
         userId,
         flashcardId: { in: scopedIds },
       },
-      select: { flashcardId: true, lastQuality: true, repetitions: true },
+      select: { flashcardId: true, lastQuality: true, repetitions: true, lastReviewedAt: true },
       take: takeForIdIn(scopedIds, 5000),
     });
     const map = new Map(progress.map((p) => [p.flashcardId, p]));
@@ -150,6 +164,14 @@ export async function GET(req: NextRequest) {
       scoped = scoped.filter((c) => {
         const p = map.get(c.id);
         return Boolean(p && (p.lastQuality ?? 3) <= 1);
+      });
+    }
+    if (notStudiedOnly || recentStudiedOnly) {
+      scoped = filterCardsByProgressFlags(scoped, map, {
+        notStudiedOnly,
+        recentStudiedOnly,
+        recentWindowMs: recentDays * 86_400_000,
+        nowMs: Date.now(),
       });
     }
   }
@@ -198,6 +220,10 @@ export async function GET(req: NextRequest) {
       savedOnly,
       notesOnly,
       revisitOnly,
+      notStudiedOnly,
+      recentStudiedOnly,
+      recentDays,
+      sourceKind,
       cardLimit: sp.get("cardLimit") ?? "20",
     },
     categoryOptions: applyCountsToBuilderCategories(pathwayId, categoryCounts),

@@ -8,9 +8,17 @@ import {
   sortAndFilterLessonsForPathwayContext,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
 
+/** Neighbor in pathway lesson order (`sort_order`, catalog, or DB). */
+export type PathwayLessonAdjacentNeighbor = {
+  slug: string;
+  title: string;
+  /** Set when resolved from `pathway_lessons` — used for `/app/lessons/:id`. */
+  id?: string | null;
+};
+
 export type PathwayLessonAdjacentSlugs = {
-  prev: { slug: string; title: string } | null;
-  next: { slug: string; title: string } | null;
+  prev: PathwayLessonAdjacentNeighbor | null;
+  next: PathwayLessonAdjacentNeighbor | null;
 };
 
 function pathwayLessonAdjacentFromOrderedSlugs(
@@ -22,6 +30,47 @@ function pathwayLessonAdjacentFromOrderedSlugs(
   const prev = idx > 0 ? { slug: ordered[idx - 1].slug, title: ordered[idx - 1].title } : null;
   const next = idx < ordered.length - 1 ? { slug: ordered[idx + 1].slug, title: ordered[idx + 1].title } : null;
   return { prev, next };
+}
+
+async function attachPathwayLessonIdsToAdjacent(
+  pathwayId: string,
+  locale: string,
+  adjacent: PathwayLessonAdjacentSlugs,
+): Promise<PathwayLessonAdjacentSlugs> {
+  const slugs = new Set<string>();
+  if (adjacent.prev && !adjacent.prev.id) slugs.add(adjacent.prev.slug);
+  if (adjacent.next && !adjacent.next.id) slugs.add(adjacent.next.slug);
+  if (slugs.size === 0 || !isDatabaseUrlConfigured()) return adjacent;
+  try {
+    const rows = await prisma.pathwayLesson.findMany({
+      where: {
+        pathwayId,
+        locale,
+        status: ContentStatus.PUBLISHED,
+        slug: { in: [...slugs] },
+      },
+      select: { id: true, slug: true, title: true },
+    });
+    const bySlug = new Map(rows.map((r) => [r.slug, r]));
+    return {
+      prev: adjacent.prev
+        ? {
+            slug: adjacent.prev.slug,
+            title: bySlug.get(adjacent.prev.slug)?.title ?? adjacent.prev.title,
+            id: adjacent.prev.id ?? bySlug.get(adjacent.prev.slug)?.id ?? null,
+          }
+        : null,
+      next: adjacent.next
+        ? {
+            slug: adjacent.next.slug,
+            title: bySlug.get(adjacent.next.slug)?.title ?? adjacent.next.title,
+            id: adjacent.next.id ?? bySlug.get(adjacent.next.slug)?.id ?? null,
+          }
+        : null,
+    };
+  } catch {
+    return adjacent;
+  }
 }
 
 /**
@@ -52,7 +101,11 @@ export async function loadPathwayLessonAdjacent(
   locale: string,
 ): Promise<PathwayLessonAdjacentSlugs> {
   if (!isDatabaseUrlConfigured()) {
-    return loadPathwayLessonAdjacentFromCatalog(pathwayId, lessonSlug);
+    return attachPathwayLessonIdsToAdjacent(
+      pathwayId,
+      locale,
+      loadPathwayLessonAdjacentFromCatalog(pathwayId, lessonSlug),
+    );
   }
   try {
     const current = await prisma.pathwayLesson.findFirst({
@@ -60,7 +113,11 @@ export async function loadPathwayLessonAdjacent(
       select: { sortOrder: true },
     });
     if (!current) {
-      return loadPathwayLessonAdjacentFromCatalog(pathwayId, lessonSlug);
+      return attachPathwayLessonIdsToAdjacent(
+        pathwayId,
+        locale,
+        loadPathwayLessonAdjacentFromCatalog(pathwayId, lessonSlug),
+      );
     }
 
     const [prev, next] = await Promise.all([
@@ -75,7 +132,7 @@ export async function loadPathwayLessonAdjacent(
           ],
         },
         orderBy: [{ sortOrder: "desc" }, { slug: "desc" }],
-        select: { slug: true, title: true },
+        select: { id: true, slug: true, title: true },
       }),
       prisma.pathwayLesson.findFirst({
         where: {
@@ -88,16 +145,20 @@ export async function loadPathwayLessonAdjacent(
           ],
         },
         orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
-        select: { slug: true, title: true },
+        select: { id: true, slug: true, title: true },
       }),
     ]);
 
     return {
-      prev: prev ? { slug: prev.slug, title: prev.title } : null,
-      next: next ? { slug: next.slug, title: next.title } : null,
+      prev: prev ? { slug: prev.slug, title: prev.title, id: prev.id } : null,
+      next: next ? { slug: next.slug, title: next.title, id: next.id } : null,
     };
   } catch {
-    return loadPathwayLessonAdjacentFromCatalog(pathwayId, lessonSlug);
+    return attachPathwayLessonIdsToAdjacent(
+      pathwayId,
+      locale,
+      loadPathwayLessonAdjacentFromCatalog(pathwayId, lessonSlug),
+    );
   }
 }
 
@@ -106,11 +167,23 @@ export function mapPathwayLessonAdjacentToHrefs(
   adjacent: PathwayLessonAdjacentSlugs,
   resolveDetailHref: (slug: string) => string | null,
 ): PathwayLessonAdjacentHrefs {
-  const mapOne = (row: { slug: string; title: string } | null) => {
+  const mapOne = (row: PathwayLessonAdjacentNeighbor | null) => {
     if (!row) return null;
     const href = resolveDetailHref(row.slug);
     if (!href) return null;
     return { href, title: row.title };
+  };
+  return {
+    prev: mapOne(adjacent.prev),
+    next: mapOne(adjacent.next),
+  };
+}
+
+/** Prev/next for signed-in app shell (`/app/lessons/:id`). Requires DB `id` on neighbors. */
+export function mapPathwayLessonAdjacentToAppHrefs(adjacent: PathwayLessonAdjacentSlugs): PathwayLessonAdjacentHrefs {
+  const mapOne = (row: PathwayLessonAdjacentNeighbor | null) => {
+    if (!row?.id) return null;
+    return { href: `/app/lessons/${row.id}`, title: row.title };
   };
   return {
     prev: mapOne(adjacent.prev),

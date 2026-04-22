@@ -5,6 +5,7 @@ import {
 } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import { CAT_MIN_COMPLETE_POOL, fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
@@ -56,6 +57,14 @@ export async function assessCatPracticeReadinessForPathway(
       code: PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_entitled,
       message:
         "Your plan does not include this pathway. Pick a track that matches your subscription and region, or review options under Account → Billing.",
+    };
+  }
+
+  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
+    return {
+      ok: true,
+      availableQuestions: CAT_MIN_COMPLETE_POOL,
+      requiredQuestions: CAT_MIN_COMPLETE_POOL,
     };
   }
 

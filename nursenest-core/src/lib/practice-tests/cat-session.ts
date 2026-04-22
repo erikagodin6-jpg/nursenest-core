@@ -2,6 +2,7 @@ import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   pathwayAllowsCatAdaptiveStart,
@@ -296,15 +297,24 @@ export async function createCatPracticeTestPayload(
   };
 
   const pool = await fetchCatPracticePool(userId, entitlement, poolInput);
-  const v = sim
+  let v = sim
     ? validateCatQuestionPool(pool, { minPoolSize: bounds.min })
     : validatePracticeCatPool(pool);
+  if (
+    !v.ok &&
+    accessScopeIsStaffLearnerEntitlementBypass(entitlement) &&
+    !sim &&
+    pool.length >= 8
+  ) {
+    /** Staff QA: allow starting CAT when the learner minimum pool checks fail but the engine minimum (8) is met. */
+    v = { ok: true };
+  }
   if (!v.ok) {
     return {
       ok: false,
       code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid,
       message:
-        "This readiness exam is not ready to launch for your pathway yet. Continue with targeted questions and lessons, then try again.",
+        "This CAT session is not ready to launch for your pathway yet. Continue with targeted questions and lessons, then try again.",
     };
   }
 

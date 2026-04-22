@@ -8,6 +8,7 @@ import {
   subscriptionCoversPathwayBase,
 } from "@/lib/exam-pathways/pathway-entitlements";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { PathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { assessCatPracticeReadinessForPathway } from "@/lib/practice-tests/cat-practice-readiness";
 import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
@@ -217,6 +218,24 @@ export async function assessCatEligibilityForSubscriberAndPathway(input: Subscri
   const block = pathwayWaitlistOrUpcomingBlock(pathway);
   if (block) return block;
 
+  /** Staff / student-ops: bypass subscription tier + adaptive-pool preflight for QA (pathway rollout gates still apply). */
+  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
+    const cat = catPathwayShortCatLabel(pathway);
+    return {
+      eligible: true,
+      reason: "ok",
+      nextAction: "start_cat_app",
+      marketingPrimaryCta: "open_app_cat",
+      safeUserMessage: `Staff access: start ${cat} in-app for QA (subscription pool checks skipped).`,
+      pathway,
+      pathwayId: pathway.id,
+      marketingCatPath,
+      appCatStartPath: appPathwayCatSessionStartPath(pathway.id),
+      logCode: "CAT_OK",
+      debugDetail: "staff_learner_bypass",
+    };
+  }
+
   if (!subscriptionCoversPathwayBase(entitlement, pathway)) {
     const line = catPathwayRegionalExamLine(pathway);
     return {
@@ -237,8 +256,8 @@ export async function assessCatEligibilityForSubscriberAndPathway(input: Subscri
   if (!readiness.ok) {
     const poolTooSmall = readiness.code === "cat_pool_invalid";
     const safeUserMessage = poolTooSmall
-      ? "This readiness exam is still being calibrated for your pathway. Continue with targeted questions and lessons, then try again."
-      : "We could not start the readiness exam right now. Use pathway questions first, then retry.";
+      ? "This CAT session is still being calibrated for your pathway. Continue with targeted questions and lessons, then try again."
+      : "We could not start CAT right now. Use pathway questions first, then retry.";
     return {
       eligible: false,
       reason: poolTooSmall ? "insufficient_cat_pool" : "internal_error",

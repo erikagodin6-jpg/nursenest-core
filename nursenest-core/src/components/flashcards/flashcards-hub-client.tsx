@@ -47,6 +47,10 @@ type BuilderSummary = {
   savedOnly?: boolean;
   notesOnly?: boolean;
   revisitOnly?: boolean;
+  notStudiedOnly?: boolean;
+  recentStudiedOnly?: boolean;
+  recentDays?: number;
+  sourceKind?: string;
   cardLimit: string;
 };
 
@@ -141,6 +145,11 @@ export function FlashcardsHubClient({
   const [savedOnly, setSavedOnly] = useState(false);
   const [notesOnly, setNotesOnly] = useState(false);
   const [revisitOnly, setRevisitOnly] = useState(false);
+  const [notStudiedOnly, setNotStudiedOnly] = useState(false);
+  const [recentStudiedOnly, setRecentStudiedOnly] = useState(false);
+  const [sourceKind, setSourceKind] = useState<"all" | "lesson" | "question" | "deck">("all");
+  const [categorySearch, setCategorySearch] = useState("");
+  const [prefsHydrated, setPrefsHydrated] = useState(false);
   const [savedStats, setSavedStats] = useState({ starred: 0, saved: 0, noted: 0, confusing: 0 });
   const [builderSummary, setBuilderSummary] = useState<BuilderSummary | null>(null);
   const [previewCards, setPreviewCards] = useState<Array<{ id: string; front: string; topic?: string | null }>>([]);
@@ -271,6 +280,11 @@ export function FlashcardsHubClient({
 
   const totalDue = (dueSummary?.dueToday ?? 0) + (dueSummary?.overdue ?? 0);
   const isNpPathwayFilter = filters.pathwayId.includes("-np-");
+  const filteredBuilderCategories = builderCategories.filter((c) =>
+    categorySearch.trim()
+      ? `${c.title} ${c.id}`.toLowerCase().includes(categorySearch.trim().toLowerCase())
+      : true,
+  );
   const modeLabel: Record<BuilderMode, string> = {
     term_to_definition: "Active Recall",
     definition_to_term: "Reverse Recall",
@@ -280,6 +294,67 @@ export function FlashcardsHubClient({
   useEffect(() => {
     setSavedStats(countSavedStudyItems());
   }, [starredOnly, savedOnly, notesOnly, revisitOnly]);
+
+  useEffect(() => {
+    if (prefsHydrated) return;
+    try {
+      const raw = typeof window !== "undefined" ? window.localStorage.getItem("nn.flashcards.builder.v1") : null;
+      if (!raw) {
+        setPrefsHydrated(true);
+        return;
+      }
+      const j = JSON.parse(raw) as Record<string, unknown>;
+      if (typeof j.cardLimit === "string") setCardLimit(j.cardLimit);
+      if (j.studyMode === "term_to_definition" || j.studyMode === "definition_to_term" || j.studyMode === "mixed") {
+        setStudyMode(j.studyMode);
+      }
+      if (typeof j.shuffleOn === "boolean") setShuffleOn(j.shuffleOn);
+      if (typeof j.weakOnly === "boolean") setWeakOnly(j.weakOnly);
+      if (typeof j.incorrectOnly === "boolean") setIncorrectOnly(j.incorrectOnly);
+      if (typeof j.notStudiedOnly === "boolean") setNotStudiedOnly(j.notStudiedOnly);
+      if (typeof j.recentStudiedOnly === "boolean") setRecentStudiedOnly(j.recentStudiedOnly);
+      if (j.sourceKind === "all" || j.sourceKind === "lesson" || j.sourceKind === "question" || j.sourceKind === "deck") {
+        setSourceKind(j.sourceKind);
+      }
+      if (Array.isArray(j.selectedCategoryIds)) {
+        setSelectedCategoryIds(j.selectedCategoryIds.filter((x): x is string => typeof x === "string"));
+      }
+    } catch {
+      /* ignore */
+    }
+    setPrefsHydrated(true);
+  }, [prefsHydrated]);
+
+  useEffect(() => {
+    if (!prefsHydrated || typeof window === "undefined") return;
+    const payload = {
+      cardLimit,
+      studyMode,
+      shuffleOn,
+      weakOnly,
+      incorrectOnly,
+      notStudiedOnly,
+      recentStudiedOnly,
+      sourceKind,
+      selectedCategoryIds,
+    };
+    try {
+      window.localStorage.setItem("nn.flashcards.builder.v1", JSON.stringify(payload));
+    } catch {
+      /* ignore */
+    }
+  }, [
+    prefsHydrated,
+    cardLimit,
+    studyMode,
+    shuffleOn,
+    weakOnly,
+    incorrectOnly,
+    notStudiedOnly,
+    recentStudiedOnly,
+    sourceKind,
+    selectedCategoryIds,
+  ]);
 
   const runBuilderSummary = useCallback(async () => {
     setBuilderLoading(true);
@@ -294,6 +369,9 @@ export function FlashcardsHubClient({
       if (shuffleOn) params.set("shuffle", "1");
       if (weakOnly) params.set("weakOnly", "1");
       if (incorrectOnly) params.set("incorrectOnly", "1");
+      if (notStudiedOnly) params.set("notStudiedOnly", "1");
+      if (recentStudiedOnly) params.set("recentStudiedOnly", "1");
+      if (sourceKind !== "all") params.set("sourceKind", sourceKind);
       const res = await fetch(`/api/flashcards/custom-session?${params.toString()}`, { credentials: "include" });
       const json = (await res.json()) as {
         summary?: BuilderSummary;
@@ -311,7 +389,19 @@ export function FlashcardsHubClient({
     } finally {
       setBuilderLoading(false);
     }
-  }, [filters.pathwayId, filters.topicCode, selectedCategoryIds, cardLimit, studyMode, shuffleOn, weakOnly, incorrectOnly]);
+  }, [
+    filters.pathwayId,
+    filters.topicCode,
+    selectedCategoryIds,
+    cardLimit,
+    studyMode,
+    shuffleOn,
+    weakOnly,
+    incorrectOnly,
+    notStudiedOnly,
+    recentStudiedOnly,
+    sourceKind,
+  ]);
 
   useEffect(() => {
     void runBuilderSummary();
@@ -332,6 +422,9 @@ export function FlashcardsHubClient({
   if (shuffleOn) builderParams.set("shuffle", "1");
   if (weakOnly) builderParams.set("weakOnly", "1");
   if (incorrectOnly) builderParams.set("incorrectOnly", "1");
+  if (notStudiedOnly) builderParams.set("notStudiedOnly", "1");
+  if (recentStudiedOnly) builderParams.set("recentStudiedOnly", "1");
+  if (sourceKind !== "all") builderParams.set("sourceKind", sourceKind);
   if (starredOnly) builderParams.set("starredOnly", "1");
   if (savedOnly) builderParams.set("savedOnly", "1");
   if (notesOnly) builderParams.set("notesOnly", "1");
@@ -353,9 +446,9 @@ export function FlashcardsHubClient({
   };
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8">
+    <div className="mx-auto flex max-w-5xl flex-col px-4 py-8">
       {/* Page header */}
-      <div className="mb-8">
+      <div className="order-0 mb-8">
         <h1 className="text-3xl font-bold tracking-tight" style={{ color: "var(--theme-heading-text)" }}>
           {t("learner.flashcards.hub.title")}
         </h1>
@@ -393,9 +486,9 @@ export function FlashcardsHubClient({
         </div>
       </div>
 
-      {/* Retention overview first (legacy test-bank: stats → configure → start) */}
+      {/* Retention overview — ordered after study builder */}
       {(dueSummary || stats) ? (
-        <section className="mb-8 space-y-4" aria-label={t("learner.flashcards.hub.masteryOverview")}>
+        <section className="order-2 mb-8 space-y-4" aria-label={t("learner.flashcards.hub.masteryOverview")}>
           <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-text-secondary)]">
             {t("learner.flashcards.hub.masteryOverview")}
           </p>
@@ -460,8 +553,8 @@ export function FlashcardsHubClient({
         </section>
       ) : null}
 
-      {/* Custom session — primary study setup (legacy IA: configure → act) */}
-      <section id="study-session" className="mb-10 rounded-2xl border-2 p-6 sm:p-7" style={panelShellStyle}>
+      {/* Custom session — primary study setup (builder first) */}
+      <section id="study-session" className="order-1 mb-10 rounded-2xl border-2 p-6 sm:p-7" style={panelShellStyle}>
         <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-brand)]">{t("learner.flashcards.hub.studySessionEyebrow")}</p>
         <h2 className="mt-1 text-xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-2xl">
           {t("learner.flashcards.hub.customStudyTitle")}
@@ -512,15 +605,54 @@ export function FlashcardsHubClient({
               />
               Shuffle cards
             </label>
+            <label className={fieldLabelClass}>
+              Card source
+              <select
+                className={controlClass}
+                value={sourceKind}
+                onChange={(e) => setSourceKind(e.target.value as typeof sourceKind)}
+              >
+                <option value="all">All sources</option>
+                <option value="lesson">Lesson-linked</option>
+                <option value="question">Question-derived</option>
+                <option value="deck">Deck / curated</option>
+              </select>
+            </label>
           </div>
 
           <div className="lg:col-span-7">
-            <p className={fieldLabelClass}>{t("learner.flashcards.hub.bodySystemsHeading")}</p>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+              <p className={fieldLabelClass}>{t("learner.flashcards.hub.bodySystemsHeading")}</p>
+              <div className="flex flex-wrap gap-2">
+                <input
+                  type="search"
+                  value={categorySearch}
+                  onChange={(e) => setCategorySearch(e.target.value)}
+                  placeholder="Search systems…"
+                  className="min-w-[10rem] flex-1 rounded-xl border-2 border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-3 py-2 text-xs font-medium text-[var(--semantic-text-primary)]"
+                  aria-label="Filter body systems"
+                />
+                <button
+                  type="button"
+                  className="rounded-full border-2 border-[var(--semantic-border-soft)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))]"
+                  onClick={() => setSelectedCategoryIds(filteredBuilderCategories.map((c) => c.id))}
+                >
+                  Select all
+                </button>
+                <button
+                  type="button"
+                  className="rounded-full border-2 border-[var(--semantic-border-soft)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] hover:border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))]"
+                  onClick={() => setSelectedCategoryIds([])}
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
             <div className="mt-2 flex min-h-[4.5rem] flex-wrap gap-2 rounded-xl border-2 border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] p-3">
               {builderCategories.length === 0 && !builderLoading ? (
                 <p className="text-sm text-[var(--semantic-text-muted)]">Select a pathway to load topics.</p>
               ) : null}
-              {builderCategories.map((category) => {
+              {filteredBuilderCategories.map((category) => {
                 const selected = selectedCategoryIds.includes(category.id);
                 return (
                   <button
@@ -571,6 +703,14 @@ export function FlashcardsHubClient({
             <label className="flex items-center gap-2.5 text-sm font-medium text-[var(--semantic-text-primary)]">
               <input type="checkbox" className="size-4 rounded border-[var(--semantic-border-soft)]" checked={incorrectOnly} onChange={(e) => setIncorrectOnly(e.target.checked)} />
               Previously incorrect
+            </label>
+            <label className="flex items-center gap-2.5 text-sm font-medium text-[var(--semantic-text-primary)]">
+              <input type="checkbox" className="size-4 rounded border-[var(--semantic-border-soft)]" checked={notStudiedOnly} onChange={(e) => setNotStudiedOnly(e.target.checked)} />
+              Not yet studied
+            </label>
+            <label className="flex items-center gap-2.5 text-sm font-medium text-[var(--semantic-text-primary)]">
+              <input type="checkbox" className="size-4 rounded border-[var(--semantic-border-soft)]" checked={recentStudiedOnly} onChange={(e) => setRecentStudiedOnly(e.target.checked)} />
+              Recently studied (7d)
             </label>
             <label className="flex items-center gap-2.5 text-sm font-medium text-[var(--semantic-text-primary)]">
               <input type="checkbox" className="size-4 rounded border-[var(--semantic-border-soft)]" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} />
@@ -666,61 +806,73 @@ export function FlashcardsHubClient({
         ) : null}
       </section>
 
-      {/* Deck library */}
-      <div id="deck-library" className="scroll-mt-8">
-        <h2 className="text-lg font-bold text-[var(--semantic-text-primary)] sm:text-xl">{t("learner.flashcards.hub.deckLibraryHeading")}</h2>
-        <p className="mt-2 max-w-3xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.flashcards.hub.deckLibraryIntro")}</p>
-      </div>
+      {/* Deck library — collapsed by default so learners configure study first */}
+      <details id="deck-library" className="order-3 scroll-mt-8 group">
+        <summary className="cursor-pointer list-none rounded-2xl border-2 border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-4 py-3 text-[var(--semantic-text-primary)] shadow-sm marker:content-none [&::-webkit-details-marker]:hidden">
+          <span className="flex items-center justify-between gap-2">
+            <span>
+              <span className="text-lg font-bold sm:text-xl">{t("learner.flashcards.hub.deckLibraryHeading")}</span>
+              <span className="ml-2 text-xs font-semibold text-[var(--semantic-text-muted)] group-open:hidden">(expand)</span>
+            </span>
+            <span aria-hidden className="text-[var(--semantic-text-muted)] transition group-open:rotate-180">
+              ▾
+            </span>
+          </span>
+        </summary>
+        <div className="mt-4">
+          <p className="max-w-3xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.flashcards.hub.deckLibraryIntro")}</p>
 
-      <div className="mb-8 mt-5 rounded-2xl border-2 p-5 sm:p-6" style={panelShellStyle}>
-        <FlashcardFilters value={filters} onChange={applyFilters} pathwayOptions={pathwayOptions} tagList={tagList} />
-      </div>
+          <div className="mb-8 mt-5 rounded-2xl border-2 p-5 sm:p-6" style={panelShellStyle}>
+            <FlashcardFilters value={filters} onChange={applyFilters} pathwayOptions={pathwayOptions} tagList={tagList} />
+          </div>
 
-      {error ? <p className="mb-6 text-sm font-medium text-[var(--semantic-danger)]">{error}</p> : null}
+          {error ? <p className="mb-6 text-sm font-medium text-[var(--semantic-danger)]">{error}</p> : null}
 
-      <FlashcardDeckGrid
-        decks={visibleDecks}
-        loading={loading}
-        emptyMessage={
-          filters.source
-            ? `No ${filters.source} decks found. Try a different filter.`
-            : isNpPathwayFilter
-              ? "Flashcard coverage for this NP pathway is in progress. Use Question Bank and Lessons while decks are being populated."
-              : `${t("learner.flashcards.hub.emptyPrefix")} ${t("learner.flashcards.hub.emptyLink")}.`
-        }
-      />
+          <FlashcardDeckGrid
+            decks={visibleDecks}
+            loading={loading}
+            emptyMessage={
+              filters.source
+                ? `No ${filters.source} decks found. Try a different filter.`
+                : isNpPathwayFilter
+                  ? "Flashcard coverage for this NP pathway is in progress. Use Question Bank and Lessons while decks are being populated."
+                  : `${t("learner.flashcards.hub.emptyPrefix")} ${t("learner.flashcards.hub.emptyLink")}.`
+            }
+          />
 
-      {totalPages > 1 && !loading ? (
-        <nav className="mt-10 flex items-center justify-between text-sm" aria-label={t("learner.flashcards.hub.paginationAria")}>
-          <button
-            type="button"
-            disabled={page <= 1 || loading}
-            className="font-semibold text-[var(--semantic-brand)] disabled:opacity-40"
-            onClick={() => {
-              const qs = new URLSearchParams(urlParams.toString());
-              qs.set("page", String(page - 1));
-              router.push(`/app/flashcards?${qs.toString()}`);
-            }}
-          >
-            {t("learner.flashcards.hub.previous")}
-          </button>
-          <span className="font-medium text-[var(--semantic-text-secondary)]">{t("learner.flashcards.hub.pageOf", { page, total: totalPages })}</span>
-          <button
-            type="button"
-            disabled={page >= totalPages || loading}
-            className="font-semibold text-[var(--semantic-brand)] disabled:opacity-40"
-            onClick={() => {
-              const qs = new URLSearchParams(urlParams.toString());
-              qs.set("page", String(page + 1));
-              router.push(`/app/flashcards?${qs.toString()}`);
-            }}
-          >
-            {t("learner.flashcards.hub.next")}
-          </button>
-        </nav>
-      ) : null}
+          {totalPages > 1 && !loading ? (
+            <nav className="mt-10 flex items-center justify-between text-sm" aria-label={t("learner.flashcards.hub.paginationAria")}>
+              <button
+                type="button"
+                disabled={page <= 1 || loading}
+                className="font-semibold text-[var(--semantic-brand)] disabled:opacity-40"
+                onClick={() => {
+                  const qs = new URLSearchParams(urlParams.toString());
+                  qs.set("page", String(page - 1));
+                  router.push(`/app/flashcards?${qs.toString()}`);
+                }}
+              >
+                {t("learner.flashcards.hub.previous")}
+              </button>
+              <span className="font-medium text-[var(--semantic-text-secondary)]">{t("learner.flashcards.hub.pageOf", { page, total: totalPages })}</span>
+              <button
+                type="button"
+                disabled={page >= totalPages || loading}
+                className="font-semibold text-[var(--semantic-brand)] disabled:opacity-40"
+                onClick={() => {
+                  const qs = new URLSearchParams(urlParams.toString());
+                  qs.set("page", String(page + 1));
+                  router.push(`/app/flashcards?${qs.toString()}`);
+                }}
+              >
+                {t("learner.flashcards.hub.next")}
+              </button>
+            </nav>
+          ) : null}
+        </div>
+      </details>
 
-      <div className="mt-10 flex flex-wrap gap-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] pt-8">
+      <div className="order-4 mt-10 flex flex-wrap gap-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,transparent)] pt-8">
         <Link
           href={quickQuestionBankHref}
           className="rounded-full border-2 border-[var(--semantic-border-soft)] px-4 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))]"
