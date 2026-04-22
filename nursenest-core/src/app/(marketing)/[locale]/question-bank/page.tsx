@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-marketing-route-shard-bundles";
-import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
+import { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-metadata-strict";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { parseMarketingRegionCookieValue } from "@/lib/region/marketing-region-cookie";
@@ -29,13 +29,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const marketingRegion = parseMarketingRegionCookieValue(undefined) as MarketingRegionToggle;
       const messages = await loadMarketingLayoutShardsOverlay(locale);
       const metaSfx = marketingRegion === "US" ? "US" : "CA";
-      const title = resolveMarketingCopy(
+      const title = getRequiredPublicMetadataLine(
         messages,
         `pages.publicQuestionBank.metaTitle${metaSfx}`,
         undefined,
         defaultQuestionBankMetaTitle(marketingRegion),
       );
-      const description = resolveMarketingCopy(
+      const description = getRequiredPublicMetadataLine(
         messages,
         `pages.publicQuestionBank.metaDescription${metaSfx}`,
         undefined,
@@ -59,13 +59,13 @@ export default async function LocalizedQuestionBankPage({ params }: Props) {
   const marketingRegion = (await getMarketingRegionFromCookies()) as MarketingRegionToggle;
   const messages = await loadMarketingLayoutShardsOverlay(locale);
   const metaSfx = marketingRegion === "US" ? "US" : "CA";
-  const title = resolveMarketingCopy(
+  const title = getRequiredPublicMetadataLine(
     messages,
     `pages.publicQuestionBank.metaTitle${metaSfx}`,
     undefined,
     defaultQuestionBankMetaTitle(marketingRegion),
   );
-  const description = resolveMarketingCopy(
+  const description = getRequiredPublicMetadataLine(
     messages,
     `pages.publicQuestionBank.metaDescription${metaSfx}`,
     undefined,

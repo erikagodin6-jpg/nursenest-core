@@ -18,7 +18,7 @@ const pathway = {
   status: "live",
 } as ExamPathwayDefinition;
 
-test("PathwayLessonDetailHeader: no reserved md+ action column when trailing is absent", () => {
+test("PathwayLessonDetailHeader: no lg flex split when trailing is absent", () => {
   const html = renderToStaticMarkup(
     <PathwayLessonDetailHeader
       pathway={pathway}
@@ -28,10 +28,10 @@ test("PathwayLessonDetailHeader: no reserved md+ action column when trailing is 
       bodySystem="Cardiovascular"
     />,
   );
-  assert.equal(html.includes("md:grid-cols-[minmax(0,1fr)_minmax(11rem,13.75rem)]"), false);
+  assert.equal(html.includes("lg:flex"), false);
 });
 
-test("PathwayLessonDetailHeader: two-column grid when trailing is present", () => {
+test("PathwayLessonDetailHeader: lg flex split when trailing is present", () => {
   const html = renderToStaticMarkup(
     <PathwayLessonDetailHeader
       pathway={pathway}
@@ -42,5 +42,5 @@ test("PathwayLessonDetailHeader: two-column grid when trailing is present", () =
       trailing={<span data-testid="trail">badge</span>}
     />,
   );
-  assert.equal(html.includes("md:grid-cols-[minmax(0,1fr)_minmax(11rem,13.75rem)]"), true);
+  assert.equal(html.includes("lg:flex"), true);
 });

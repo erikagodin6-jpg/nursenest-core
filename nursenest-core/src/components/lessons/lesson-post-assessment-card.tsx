@@ -17,6 +17,7 @@
  */
 
 import { useMemo, useRef, useState } from "react";
+import { CheckCircle2, ClipboardCheck, Lock, TrendingDown, TrendingUp } from "lucide-react";
 import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 import type { LessonAssessmentScore } from "@/lib/lessons/lesson-assessment-store";
 import { QuizScoreSummary } from "@/components/lessons/lesson-assessment-quiz";
@@ -57,20 +58,20 @@ function ImprovementDelta({
     ? "You held your ground — the lesson reinforced what you already knew."
     : `The lesson covered challenging material. Reviewing the weak topics will close the ${Math.abs(delta)} pp gap.`;
 
-  const icon = isGain ? "↑" : isSame ? "→" : "↓";
+  const Icon = isGain ? TrendingUp : isSame ? CheckCircle2 : TrendingDown;
 
   return (
     <div
-      className="flex flex-col gap-3 rounded-xl p-4"
-      style={{ background: bg, border: `1px solid color-mix(in srgb, ${color} 22%, transparent)` }}
+      className="flex flex-col gap-3 rounded-lg border p-3.5"
+      style={{ background: bg, borderColor: `color-mix(in srgb, ${color} 22%, var(--semantic-border-soft))` }}
     >
       <div className="flex items-center gap-3">
         <span
-          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-lg font-bold"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md"
           style={{ background: color, color: "#fff" }}
           aria-hidden="true"
         >
-          {icon}
+          <Icon className="h-5 w-5" strokeWidth={2} />
         </span>
         <div>
           <p className="text-sm font-semibold" style={{ color }}>
@@ -121,30 +122,19 @@ function ImprovementDelta({
 
 function PostAssessmentLocked() {
   return (
-    <div
-      className="rounded-2xl border px-5 py-4"
-      style={{
-        background: "color-mix(in srgb, var(--semantic-brand) 5%, var(--semantic-surface))",
-        borderColor: "var(--semantic-border-soft)",
-      }}
-    >
-      <div className="flex items-center gap-3">
+    <div className="nn-lesson-quiz-module px-4 py-3.5 sm:px-5 sm:py-4">
+      <div className="flex items-start gap-3">
         <span
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm"
-          style={{
-            background: "color-mix(in srgb, var(--semantic-brand) 15%, var(--semantic-surface))",
-            color: "var(--semantic-brand)",
-          }}
+          className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,var(--bg-card))] text-[var(--semantic-text-muted)]"
           aria-hidden="true"
         >
-          🔒
+          <Lock className="h-4 w-4" strokeWidth={2} />
         </span>
         <div>
-          <p className="text-sm font-semibold" style={{ color: "var(--theme-heading-text)" }}>
-            Post-lesson retention check
-          </p>
-          <p className="mt-0.5 text-xs leading-5" style={{ color: "var(--theme-muted-text)" }}>
-            Finish reading the lesson to unlock your retention quiz and see your improvement.
+          <p className="nn-lesson-module-eyebrow">After the lesson</p>
+          <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Retention check locked</p>
+          <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+            Mark the lesson studied or finish reading; the reinforcement block unlocks so you can prove retention.
           </p>
         </div>
       </div>
@@ -170,45 +160,25 @@ function PostAssessmentIdleCard({
     : null;
 
   return (
-    <div
-      className="rounded-2xl border p-5 sm:p-6"
-      style={{
-        background: "color-mix(in srgb, var(--semantic-success) 6%, var(--semantic-surface))",
-        borderColor: "color-mix(in srgb, var(--semantic-success) 25%, var(--semantic-border-soft))",
-      }}
-    >
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div className="nn-lesson-quiz-module p-4 sm:p-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-start gap-3">
           <span
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-base"
-            style={{
-              background: "color-mix(in srgb, var(--semantic-success) 15%, var(--semantic-surface))",
-              color: "var(--semantic-success)",
-            }}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] text-[var(--semantic-success)]"
             aria-hidden="true"
           >
-            ✅
+            <ClipboardCheck className="h-5 w-5" strokeWidth={1.75} />
           </span>
           <div>
-            <p
-              className="text-xs font-semibold uppercase tracking-[0.15em]"
-              style={{ color: "var(--semantic-success)" }}
-            >
-              Lesson complete
-            </p>
-            <h3
-              className="mt-1 text-base font-semibold leading-snug"
-              style={{ color: "var(--theme-heading-text)" }}
-            >
-              Check what you retained
+            <p className="nn-lesson-module-eyebrow text-[var(--semantic-success)]">Reinforcement</p>
+            <h3 className="mt-0.5 text-base font-semibold leading-snug text-[var(--theme-heading-text)]">
+              Prove retention
             </h3>
-            <p className="mt-1.5 max-w-md text-sm leading-6" style={{ color: "var(--theme-muted-text)" }}>
+            <p className="mt-1.5 max-w-prose text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
               {retakeNote ?? (
                 <>
-                  {itemCount} questions · same concepts, fresh phrasing ·{" "}
-                  {preScore
-                    ? "your improvement vs the diagnostic will be shown"
-                    : "takes ~" + Math.ceil(itemCount * 0.75) + " minutes"}
+                  {itemCount} questions · active recall after reading
+                  {preScore ? " · delta vs readiness check shown when done" : " · ~" + Math.ceil(itemCount * 0.75) + " min"}
                 </>
               )}
             </p>
@@ -216,30 +186,25 @@ function PostAssessmentIdleCard({
         </div>
         {priorPostScore ? (
           <div
-            className="flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold"
+            className="flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-semibold tabular-nums text-[var(--semantic-success)]"
             style={{
-              background: "color-mix(in srgb, var(--semantic-success) 12%, var(--semantic-surface))",
-              color: "var(--semantic-success)",
-              border: "1px solid color-mix(in srgb, var(--semantic-success) 25%, transparent)",
+              background: "color-mix(in srgb, var(--semantic-success) 8%, transparent)",
+              borderColor: "color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft))",
             }}
           >
-            <span aria-hidden="true">📈</span>
-            Best: {priorPostScore.accuracyPct}%
+            Best {priorPostScore.accuracyPct}%
           </div>
         ) : null}
       </div>
 
-      <div className="mt-5">
+      <div className="mt-4">
         <button
           type="button"
           onClick={onStart}
-          className="rounded-full px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90 active:scale-[0.98]"
-          style={{
-            background: "var(--semantic-success)",
-            color: "#fff",
-          }}
+          className="inline-flex min-h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--semantic-success)] focus-visible:ring-offset-2"
+          style={{ background: "var(--semantic-success)" }}
         >
-          Start retention check →
+          Start retention check
         </button>
       </div>
     </div>
@@ -260,24 +225,19 @@ function PostAssessmentRunningCard({
   onComplete: (score: number, total: number) => void;
 }) {
   return (
-    <div
-      className="rounded-2xl border p-5 sm:p-6"
-      style={{
-        background: "color-mix(in srgb, var(--semantic-success) 5%, var(--semantic-surface))",
-        borderColor: "color-mix(in srgb, var(--semantic-success) 25%, var(--semantic-border-soft))",
-      }}
-    >
-      <div className="mb-5 flex items-center gap-2">
+    <div className="nn-lesson-quiz-module p-4 sm:p-5">
+      <div className="mb-4 flex flex-wrap items-center gap-2 border-b border-[var(--semantic-border-soft)] pb-3">
         <span
-          className="flex h-7 w-7 items-center justify-center rounded-full text-sm"
-          style={{ background: "var(--semantic-success)", color: "#fff" }}
+          className="flex h-8 w-8 items-center justify-center rounded-md text-white"
+          style={{ background: "var(--semantic-success)" }}
           aria-hidden="true"
         >
-          ✅
+          <ClipboardCheck className="h-4 w-4" strokeWidth={2} />
         </span>
-        <p className="text-sm font-semibold" style={{ color: "var(--semantic-success)" }}>
-          Retention check
-        </p>
+        <div>
+          <p className="nn-lesson-module-eyebrow text-[var(--semantic-success)]">Retention</p>
+          <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Work items; reveal rationale per mode</p>
+        </div>
       </div>
       <PathwayLessonQuizSet
         key={`learner-post-${itemsResetKey(items)}-${postMode}`}
@@ -320,24 +280,16 @@ function PostAssessmentCompleteCard({
       : "The lesson introduced challenging material. A second read and topic drills will help cement it.";
 
   return (
-    <div
-      className="rounded-2xl border p-5 sm:p-6"
-      style={{
-        background: "color-mix(in srgb, var(--semantic-success) 6%, var(--semantic-surface))",
-        borderColor: "color-mix(in srgb, var(--semantic-success) 25%, var(--semantic-border-soft))",
-      }}
-    >
+    <div className="nn-lesson-quiz-module p-4 sm:p-5">
       <div className="flex items-center gap-2">
         <span
-          className="flex h-7 w-7 items-center justify-center rounded-full text-sm"
-          style={{ background: "var(--semantic-success)", color: "#fff" }}
+          className="flex h-8 w-8 items-center justify-center rounded-md text-sm text-white"
+          style={{ background: "var(--semantic-success)" }}
           aria-hidden="true"
         >
-          ✓
+          <CheckCircle2 className="h-4 w-4" strokeWidth={2} />
         </span>
-        <p className="text-sm font-semibold" style={{ color: "var(--semantic-success)" }}>
-          Retention check complete
-        </p>
+        <p className="text-sm font-semibold text-[var(--semantic-success)]">Retention captured</p>
       </div>
 
       {showScoreSummary ? (
@@ -357,24 +309,11 @@ function PostAssessmentCompleteCard({
         </p>
       )}
 
-      {/* Adaptive engine note */}
-      <p
-        className="mt-4 rounded-lg px-4 py-2.5 text-xs leading-5"
-        style={{
-          background: "color-mix(in srgb, var(--semantic-brand) 6%, var(--semantic-surface))",
-          color: "var(--semantic-text-secondary)",
-          border: "1px solid var(--semantic-border-soft)",
-        }}
-      >
-        <span className="font-semibold" style={{ color: "var(--theme-heading-text)" }}>
-          Adaptive engine updated.{" "}
-        </span>
-        Your study plan and topic stats for{" "}
-        <span className="font-medium" style={{ color: "var(--theme-heading-text)" }}>
-          {topic || "this topic"}
-        </span>{" "}
-        have been refreshed based on your results.
-      </p>
+      <aside className="mt-4 rounded-md border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--bg-card))] px-3 py-2.5 text-xs leading-relaxed text-[var(--semantic-text-secondary)]">
+        <span className="font-semibold text-[var(--theme-heading-text)]">Study signals updated · </span>
+        Topic stats for <span className="font-medium text-[var(--theme-heading-text)]">{topic || "this topic"}</span> reflect
+        this run (same adaptive engine as the bank).
+      </aside>
     </div>
   );
 }

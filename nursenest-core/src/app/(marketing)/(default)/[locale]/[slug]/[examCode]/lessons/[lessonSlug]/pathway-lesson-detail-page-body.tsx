@@ -44,7 +44,7 @@ import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
 import { LessonAudioCard } from "@/components/lessons/lesson-audio-card";
 import { LessonSectionAudioButton } from "@/components/lessons/lesson-section-audio-button";
-import { pathwayLessonPublicDetailPath } from "@/lib/lessons/pathway-lesson-types";
+import { pathwayLessonPublicDetailPath, type PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 import { LessonCheckpointCard } from "@/components/lessons/lesson-checkpoint-card";
 import { LessonRecallProvider } from "@/components/lessons/lesson-recall-context";
 import { LessonRecallToggle } from "@/components/lessons/lesson-recall-toggle";
@@ -68,10 +68,7 @@ import { MarketingPathwayLessonDetailViewBeacon } from "@/components/observabili
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { DEFAULT_STUDY_SETTINGS } from "@/lib/learner/study-settings";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
-import {
-  pathwayLessonSectionPrefersWideColumn,
-  shouldRenderPathwayLessonSection,
-} from "@/lib/lessons/lesson-section-page-layout";
+import { shouldRenderPathwayLessonSection } from "@/lib/lessons/lesson-section-page-layout";
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
@@ -170,7 +167,10 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
     loadPathwayLessonAdjacent(pathway.id, lesson.slug, lessonContentLocale),
     getPathwayLessonContentDates(pathway.id, lesson.slug, lessonContentLocale),
   ]);
-  const bankAssessments = bankAssessmentsRes.status === "fulfilled" ? bankAssessmentsRes.value : [];
+  const bankAssessments: { preTest: PathwayLessonQuizItem[]; postTest: PathwayLessonQuizItem[] } =
+    bankAssessmentsRes.status === "fulfilled"
+      ? bankAssessmentsRes.value
+      : { preTest: [], postTest: [] };
   const adjacentSlugs = adjacentSlugsRes.status === "fulfilled" ? adjacentSlugsRes.value : { prev: null, next: null };
   const lessonAdjacentHrefs = mapPathwayLessonAdjacentToHrefs(adjacentSlugs, (slug) =>
     pathwayLessonPublicDetailPath(pathway, slug),
@@ -239,10 +239,31 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
 
   const pathwayInteractiveModules = getLessonInteractiveModules(lesson);
 
+  const hasLessonAssessments =
+    bankAssessments.preTest.length > 0 || bankAssessments.postTest.length > 0;
+  const topicCodeQ = lesson.topicSlug?.trim() ? `&topicCode=${encodeURIComponent(lesson.topicSlug.trim())}` : "";
+  const topicLabelQ = lesson.topic?.trim() ? `&topic=${encodeURIComponent(lesson.topic.trim())}` : "";
+  const headerPracticeHref = `/app/questions?pathwayId=${encodeURIComponent(pathway.id)}${topicCodeQ}${topicLabelQ}&preset=topic_drill`;
+  const headerFlashHref = lesson.topicSlug?.trim()
+    ? `/app/flashcards?pathwayId=${encodeURIComponent(pathway.id)}&topicCode=${encodeURIComponent(lesson.topicSlug.trim())}`
+    : `/app/flashcards?pathwayId=${encodeURIComponent(pathway.id)}`;
+  const lessonStudyQuickLinks = fullAccess
+    ? {
+        practiceHref: headerPracticeHref,
+        flashcardsHref: headerFlashHref,
+        practiceLabel: t("learner.studyLoop.practiceThisTopicCta"),
+        flashcardsLabel: t("learner.studyLoop.sameTopicFlashcards"),
+      }
+    : null;
+  const lessonAssessmentFlowHint =
+    fullAccess && studySettings.enablePrePostQuizzes && hasLessonAssessments
+      ? "Readiness check → core lesson → reinforcement quiz after you mark this lesson studied."
+      : null;
+
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
+    <div className="mx-auto max-w-6xl px-4 pb-4 pt-0 sm:px-6 sm:pb-5 lg:px-8">
       <div
-        className={`nn-lesson-page-shell px-3 py-3 sm:px-6 sm:py-5${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
+        className={`nn-lesson-page-shell px-3 py-2 sm:px-5 sm:py-4${hasLessonSequence ? " pb-20 sm:pb-4" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
       >
         <MarketingPathwayLessonDetailViewBeacon
           pathway={pathway}
@@ -263,7 +284,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           dateModified={contentDates?.dateModified ?? null}
         />
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
-        <PathwayLessonSequenceNavBar adjacent={lessonAdjacentHrefs} className="mb-4" />
+        <PathwayLessonSequenceNavBar adjacent={lessonAdjacentHrefs} className="mb-2 mt-1" />
         <PathwayLessonProgressTracker
           pathwayId={pathway.id}
           lessonSlug={lesson.slug}
@@ -276,6 +297,8 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           lessonTitle={displayLessonTitle}
           lessonTopic={lesson.topic}
           bodySystem={lesson.bodySystem}
+          studyQuickLinks={lessonStudyQuickLinks}
+          assessmentFlowHint={lessonAssessmentFlowHint}
           metaChips={
             <PathwayLessonRecordChips lesson={pickPathwayLessonMarketingRecordChipsSource(lesson)} omitTopic />
           }
@@ -356,9 +379,9 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           )
         ) : null}
 
-        <div className="mt-4 flex flex-col gap-6 xl:grid xl:grid-cols-[minmax(0,1fr)_17.5rem] xl:items-start xl:gap-8 2xl:gap-10">
+        <div className="mt-3 flex flex-col gap-5 xl:grid xl:grid-cols-[minmax(0,1fr)_16.25rem] xl:items-start xl:gap-x-8 xl:gap-y-0 2xl:gap-x-10">
           <aside
-            className="shrink-0 space-y-4 xl:sticky xl:top-24 xl:order-2 xl:col-start-2 xl:w-full xl:self-start xl:max-h-[calc(100vh-5.5rem)] xl:overflow-y-auto xl:overscroll-contain xl:pr-1"
+            className="shrink-0 space-y-3 xl:sticky xl:top-24 xl:order-2 xl:col-start-2 xl:w-full xl:self-start xl:max-h-[calc(100vh-5.5rem)] xl:overflow-y-auto xl:overscroll-contain xl:pl-1"
             aria-label="Lesson quick review"
           >
             <PathwayLessonStudyRail
@@ -382,6 +405,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           </aside>
 
           <div className="min-w-0 xl:order-1 xl:col-start-1 xl:row-start-1">
+        <div className="nn-lesson-page-reading">
         {matchedLessonImage.url ? (
           <LessonClinicalImageCard
             url={matchedLessonImage.url}
@@ -407,22 +431,18 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           sectionAnchors={displaySections.map((s) => ({ id: s.id, label: s.heading }))}
         >
           <LessonRecallProvider>
-            <div className="mt-5 sm:mt-6">
-              <div className="mx-auto mb-2 flex max-w-5xl justify-end px-0">
+            <div className="mt-4 sm:mt-5">
+              <div className="mb-2 flex justify-end">
                 <LessonRecallToggle />
               </div>
-              <article className="mx-auto grid max-w-5xl grid-cols-1 gap-5 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
+              <article className="space-y-2 sm:space-y-3">
                 {displaySections.map((section) => {
-                  const wide = pathwayLessonSectionPrefersWideColumn(section.kind, {
-                    hasCheckpointQuestions: Boolean(section.checkpointQuestions?.length),
-                  });
                   return (
                     <LessonSectionCard
                       key={section.id}
                       id={section.id}
                       heading={section.heading}
                       kind={section.kind}
-                      className={wide ? "md:col-span-2" : undefined}
                     >
                       {section.audioUrl ? (
                         <LessonSectionAudioButton
@@ -456,7 +476,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
               </article>
             </div>
             {pathwayInteractiveModules.length > 0 ? (
-              <div className="mx-auto mt-6 max-w-5xl">
+              <div className="mt-6">
                 <PathwayLessonInteractiveModules
                   modules={pathwayInteractiveModules}
                   viewerTier={lessonContentTier}
@@ -465,29 +485,30 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
               </div>
             ) : null}
             {fullAccess && lessonHasExamTakeaways(lesson.studyTakeaways) ? (
-              <div className="mx-auto mt-6 max-w-5xl">
+              <div className="mt-6">
                 <ExamTakeawaysBlock pathway={pathway} items={lesson.studyTakeaways} position="bottom" />
               </div>
             ) : null}
           </LessonRecallProvider>
 
           {lockedSections.length > 0 ? (
-            <div className="mx-auto mt-5 max-w-5xl">
+            <div className="mt-5">
               <PathwayLessonLockedSectionsPreview sections={lockedSections} postAuthReturnPath={pathname} />
             </div>
           ) : null}
-
-          <PathwayLessonActions
-            pathwayId={pathway.id}
-            lessonSlug={lesson.slug}
-            topicCode={lesson.topicSlug}
-            topicLabel={lesson.topic}
-            userId={userId}
-            canMarkComplete={fullAccess}
-            initialProgress={lessonProgress}
-            catAdaptiveAvailable={pathwayAllowsCatAdaptiveStart(pathway)}
-          />
         </PathwayLessonAssessmentExperience>
+
+        <PathwayLessonActions
+          pathwayId={pathway.id}
+          lessonSlug={lesson.slug}
+          topicCode={lesson.topicSlug}
+          topicLabel={lesson.topic}
+          userId={userId}
+          canMarkComplete={fullAccess}
+          initialProgress={lessonProgress}
+          catAdaptiveAvailable={pathwayAllowsCatAdaptiveStart(pathway)}
+        />
+        </div>
           </div>
         </div>
 

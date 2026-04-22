@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { isCoreHostedNonDefaultLocale, DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
-import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
+import { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-metadata-strict";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import {
@@ -28,13 +28,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const m = await loadMarketingMessages(locale);
       const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
       const metaSfx = marketingRegion === "US" ? "US" : "CA";
-      const title = resolveMarketingCopy(
+      const title = getRequiredPublicMetadataLine(
         m,
         `pages.publicLessons.metaTitle${metaSfx}`,
         en,
         defaultPublicLessonsMetaTitle(marketingRegion),
       );
-      const description = resolveMarketingCopy(
+      const description = getRequiredPublicMetadataLine(
         m,
         `pages.publicLessons.metaDescription${metaSfx}`,
         en,
@@ -59,13 +59,13 @@ export default async function LocalizedLessonsPage({ params }: Props) {
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   const metaSfx = marketingRegion === "US" ? "US" : "CA";
-  const title = resolveMarketingCopy(
+  const title = getRequiredPublicMetadataLine(
     m,
     `pages.publicLessons.metaTitle${metaSfx}`,
     en,
     defaultPublicLessonsMetaTitle(marketingRegion),
   );
-  const description = resolveMarketingCopy(
+  const description = getRequiredPublicMetadataLine(
     m,
     `pages.publicLessons.metaDescription${metaSfx}`,
     en,

@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { MARKETING_PUBLIC_CONTENT_EDITABLE_KEYS } from "@/lib/marketing/marketing-public-content-policy";
 import { logMarketingPublicContentOverrideLoadFailure } from "@/lib/marketing/marketing-public-content-observability";
+import { normalizeResolvedMarketingLeaf } from "@/lib/marketing-i18n/marketing-message-value-policy";
 
 const ALLOWLIST_KEYS = Object.keys(MARKETING_PUBLIC_CONTENT_EDITABLE_KEYS) as string[];
 
@@ -28,7 +29,9 @@ async function loadMarketingPublicContentOverridesImpl(locale: string): Promise<
       select: { messageKey: true, value: true },
     });
     for (const r of rows) {
-      out[r.messageKey] = r.value;
+      const normalized = normalizeResolvedMarketingLeaf(r.value, r.messageKey);
+      if (normalized === undefined) continue;
+      out[r.messageKey] = normalized;
     }
   } catch (e) {
     logMarketingPublicContentOverrideLoadFailure({

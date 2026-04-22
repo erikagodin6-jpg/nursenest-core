@@ -10,15 +10,17 @@ export function LearnerKickerHeading({
   intro,
   id,
 }: {
-  kicker: string;
+  /** Omit, empty, or whitespace-only values hide the kicker row (no placeholder chrome). */
+  kicker?: string;
   title: ReactNode;
   intro?: ReactNode;
   /** Optional `id` for the heading element (e.g. `aria-labelledby`). */
   id?: string;
 }) {
+  const kickerLine = typeof kicker === "string" && kicker.trim().length > 0 ? kicker : null;
   return (
     <header className="nn-ls-section-head max-w-3xl">
-      <p className="nn-ls-kicker">{kicker}</p>
+      {kickerLine ? <p className="nn-ls-kicker">{kickerLine}</p> : null}
       <h2 id={id} className="nn-ls-title">
         {title}
       </h2>

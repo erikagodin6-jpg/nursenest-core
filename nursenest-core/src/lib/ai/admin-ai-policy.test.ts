@@ -56,7 +56,10 @@ test("getAdminAiGenerationGate: disabled when flag off", () => {
     assert.equal(g.mode, "disabled");
     assert.equal(g.runnable, false);
     assert.equal(g.diagnostics.aiAdminGenerationFlagClass, "unset");
-    assert.equal(g.summaryLine, "AI generation disabled: flag off");
+    assert.equal(
+      g.summaryLine,
+      "AI generation disabled: generation flag is unset (AI_ADMIN_GENERATION_ENABLED is not defined on this server process).",
+    );
   });
 });
 
@@ -65,7 +68,10 @@ test("getAdminAiGenerationGate: disabled when flag unrecognized", () => {
     const g = getAdminAiGenerationGate();
     assert.equal(g.mode, "disabled");
     assert.equal(g.diagnostics.aiAdminGenerationFlagClass, "unrecognized");
-    assert.equal(g.summaryLine, "AI generation disabled: flag off");
+    assert.equal(
+      g.summaryLine,
+      "AI generation disabled: generation flag is not a recognized truthy value (use true, 1, yes, or on; trim whitespace).",
+    );
   });
 });
 
@@ -74,7 +80,10 @@ test("getAdminAiGenerationGate: misconfigured when flag on but no key", () => {
     const g = getAdminAiGenerationGate();
     assert.equal(g.mode, "misconfigured");
     assert.equal(g.runnable, false);
-    assert.equal(g.summaryLine, "AI generation disabled: missing API key");
+    assert.equal(
+      g.summaryLine,
+      "AI generation disabled: no OpenAI API key configured (set AI_INTEGRATIONS_OPENAI_API_KEY or OPENAI_API_KEY on this server process).",
+    );
   });
 });
 

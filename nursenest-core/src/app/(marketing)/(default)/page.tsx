@@ -19,7 +19,8 @@ import {
 import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
-import { resolveMarketingCopy, type MarketingMessages } from "@/lib/marketing-i18n-core";
+import { type MarketingMessages } from "@/lib/marketing-i18n-core";
+import { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-metadata-strict";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { ExamSelectorGateLazy } from "@/components/onboarding/exam-selector-gate-lazy";
@@ -174,8 +175,13 @@ export async function generateMetadata(): Promise<Metadata> {
           elapsed_ms: nnHomeDiagNowMs() - tDiag,
           message_key_count: Object.keys(m).length,
         });
-        const title = resolveMarketingCopy(m, "pages.home.metaTitleCA", m, defaultHomeMetaTitle(STATIC_REGION));
-        const description = resolveMarketingCopy(
+        const title = getRequiredPublicMetadataLine(
+          m,
+          "pages.home.metaTitleCA",
+          m,
+          defaultHomeMetaTitle(STATIC_REGION),
+        );
+        const description = getRequiredPublicMetadataLine(
           m,
           "pages.home.metaDescriptionCA",
           m,
@@ -316,8 +322,13 @@ export default async function HomePage() {
           optionalDbSkipped: skipOptionalDbReads,
         });
 
-        const title = resolveMarketingCopy(m, "pages.home.metaTitleCA", m, defaultHomeMetaTitle(STATIC_REGION));
-        const description = resolveMarketingCopy(
+        const title = getRequiredPublicMetadataLine(
+          m,
+          "pages.home.metaTitleCA",
+          m,
+          defaultHomeMetaTitle(STATIC_REGION),
+        );
+        const description = getRequiredPublicMetadataLine(
           m,
           "pages.home.metaDescriptionCA",
           m,

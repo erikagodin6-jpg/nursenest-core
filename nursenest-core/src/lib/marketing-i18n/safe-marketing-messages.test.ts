@@ -43,14 +43,13 @@ describe("formatMarketingMessage hardened", () => {
     assert.equal(s, "123");
   });
 
-  it("falls back when value is an object", () => {
+  it("returns empty string when leaf is a non-coercible object (never humanized placeholders)", () => {
     const prev = process.env.NODE_ENV;
     Object.assign(process.env, { NODE_ENV: "development" });
     try {
       const bad = { k: { o: 1 } } as MarketingMessages;
       const s = formatMarketingMessage(bad, "k", undefined, undefined);
-      assert.ok(s.length > 0);
-      assert.ok(!s.includes("object"));
+      assert.equal(s, "");
     } finally {
       Object.assign(process.env, { NODE_ENV: prev });
     }
@@ -68,11 +67,11 @@ describe("formatMarketingMessage hardened", () => {
     }
   });
 
-  it("in development, missing key whose humanized tail is a forbidden token throws", () => {
+  it("in development, missing keys return empty string (no Title/Lead-style humanized tails)", () => {
     const prev = process.env.NODE_ENV;
     Object.assign(process.env, { NODE_ENV: "development" });
     try {
-      assert.throws(() => formatMarketingMessage({}, "x.y.title", undefined, undefined), /\[marketing\]/);
+      assert.equal(formatMarketingMessage({}, "x.y.title", undefined, undefined), "");
     } finally {
       Object.assign(process.env, { NODE_ENV: prev });
     }

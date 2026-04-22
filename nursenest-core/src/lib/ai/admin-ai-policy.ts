@@ -4,8 +4,9 @@
  * - `AI_ADMIN_GENERATION_ENABLED` — truthy when set to true/1/yes/on (case-insensitive, trimmed).
  * - `AI_INTEGRATIONS_OPENAI_API_KEY` or `OPENAI_API_KEY` — required when enabled.
  *
- * Env reads are centralized in `@/lib/env/runtime-env`. **This module is the only gate** for
- * enabled / misconfigured / disabled decisions (`getAdminAiGenerationGate`).
+ * Env reads are centralized in `@/lib/env/runtime-env` (fresh `process.env` each evaluation — no
+ * stale module cache). **This module is the only gate** for enabled / misconfigured / disabled
+ * decisions (`getAdminAiGenerationGate`).
  */
 import { NextResponse } from "next/server";
 import { parseBooleanEnv } from "@/lib/env/parse-boolean-env";
@@ -13,6 +14,7 @@ import {
   getAdminAiOpenAiRuntimeSnapshot,
   isAdminAiEnabled as isAdminAiEnabledFromRuntime,
 } from "@/lib/env/runtime-env";
+import { validateRuntimeEnvOrThrow } from "@/lib/env/runtime-env-guard";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type AdminAiGenerationMode = "enabled" | "disabled" | "misconfigured";
@@ -41,7 +43,23 @@ export type AdminAiGenerationGate = {
 };
 
 let loggedMisconfiguration = false;
-let loggedGateEnvSnapshot = false;
+let loggedVerboseGateSnapshot = false;
+
+/** Opt-in: set `NN_ADMIN_AI_GATE_DIAGNOSTIC_LOG=1` for one extra redacted snapshot on first gate evaluation (often duplicates boot). */
+function maybeLogVerboseAdminAiGateSnapshotOnce(gate: AdminAiGenerationGate): void {
+  if (loggedVerboseGateSnapshot) return;
+  if (!parseBooleanEnv(process.env["NN_ADMIN_AI_GATE_DIAGNOSTIC_LOG"])) return;
+  loggedVerboseGateSnapshot = true;
+  safeServerLog("admin_ai_generation", "env_gate_snapshot_verbose", {
+    AI_ADMIN_GENERATION_ENABLED_present: gate.diagnostics.aiAdminGenerationEnvPresent,
+    AI_ADMIN_GENERATION_ENABLED_flag_class: gate.diagnostics.aiAdminGenerationFlagClass,
+    AI_ADMIN_GENERATION_ENABLED_normalized: gate.diagnostics.adminAiGenerationFlagNormalized,
+    AI_INTEGRATIONS_OPENAI_API_KEY_present: gate.diagnostics.aiIntegrationsOpenAiKeyPresent,
+    OPENAI_API_KEY_present: gate.diagnostics.legacyOpenAiKeyPresent,
+    final_gate_runnable: gate.runnable,
+    final_gate_mode: gate.mode,
+  });
+}
 
 function classifyAdminGenerationFlag(raw: string | undefined): AdminAiGenerationFlagClass {
   if (raw === undefined) return "unset";
@@ -53,25 +71,23 @@ function classifyAdminGenerationFlag(raw: string | undefined): AdminAiGeneration
   return "unrecognized";
 }
 
-function disabledSummaryLine(): string {
-  return "AI generation disabled: flag off";
+function disabledFlagSummaryLine(flagClass: AdminAiGenerationFlagClass): string {
+  switch (flagClass) {
+    case "unset":
+      return "AI generation disabled: generation flag is unset (AI_ADMIN_GENERATION_ENABLED is not defined on this server process).";
+    case "empty":
+      return "AI generation disabled: generation flag is empty (AI_ADMIN_GENERATION_ENABLED is blank after trim).";
+    case "disabled_explicit":
+      return "AI generation disabled: generation flag is explicitly off (false, 0, no, or off).";
+    case "unrecognized":
+      return "AI generation disabled: generation flag is not a recognized truthy value (use true, 1, yes, or on; trim whitespace).";
+    default:
+      return "AI generation disabled: generation flag is off.";
+  }
 }
 
-function logAdminAiGenerationEnvSnapshotOnce(gate: AdminAiGenerationGate): void {
-  if (loggedGateEnvSnapshot) return;
-  loggedGateEnvSnapshot = true;
-  const wantLog =
-    process.env.NODE_ENV === "production" || parseBooleanEnv(process.env.NN_ADMIN_AI_GATE_DIAGNOSTIC_LOG);
-  if (!wantLog) return;
-  safeServerLog("admin_ai_generation", "env_gate_snapshot", {
-    ai_admin_generation_env_present: gate.diagnostics.aiAdminGenerationEnvPresent,
-    ai_admin_generation_flag_class: gate.diagnostics.aiAdminGenerationFlagClass,
-    ai_admin_generation_flag_normalized: gate.diagnostics.adminAiGenerationFlagNormalized,
-    ai_integrations_openai_key_present: gate.diagnostics.aiIntegrationsOpenAiKeyPresent,
-    legacy_openai_key_present: gate.diagnostics.legacyOpenAiKeyPresent,
-    final_gate_mode: gate.mode,
-    final_runnable: gate.runnable,
-  });
+function misconfiguredSummaryLine(): string {
+  return "AI generation disabled: no OpenAI API key configured (set AI_INTEGRATIONS_OPENAI_API_KEY or OPENAI_API_KEY on this server process).";
 }
 
 export function isAdminAiGenerationEnabled(): boolean {
@@ -80,9 +96,10 @@ export function isAdminAiGenerationEnabled(): boolean {
 
 /**
  * Full runtime gate: flag + key. Use for UI and for `adminAiGenerationHttpBlock`.
- * Evaluated at **call time** — reads the centralized runtime env snapshot (refreshed only after process / test reset).
+ * Evaluated at **call time** — reads live `process.env` via `@/lib/env/runtime-env` on each call.
  */
 export function getAdminAiGenerationGate(): AdminAiGenerationGate {
+  validateRuntimeEnvOrThrow();
   const snap = getAdminAiOpenAiRuntimeSnapshot();
   const rawFlag = snap.rawAiAdminGenerationEnabled;
   const flagClass = classifyAdminGenerationFlag(rawFlag);
@@ -105,7 +122,7 @@ export function getAdminAiGenerationGate(): AdminAiGenerationGate {
       runnable: false,
       flagEnabled: false,
       openAiKeyPresent,
-      summaryLine: disabledSummaryLine(),
+      summaryLine: disabledFlagSummaryLine(flagClass),
       diagnostics,
     };
   } else if (!openAiKeyPresent) {
@@ -114,7 +131,7 @@ export function getAdminAiGenerationGate(): AdminAiGenerationGate {
       runnable: false,
       flagEnabled: true,
       openAiKeyPresent: false,
-      summaryLine: "AI generation disabled: missing API key",
+      summaryLine: misconfiguredSummaryLine(),
       diagnostics,
     };
   } else {
@@ -128,7 +145,7 @@ export function getAdminAiGenerationGate(): AdminAiGenerationGate {
     };
   }
 
-  logAdminAiGenerationEnvSnapshotOnce(gate);
+  maybeLogVerboseAdminAiGateSnapshotOnce(gate);
   return gate;
 }
 

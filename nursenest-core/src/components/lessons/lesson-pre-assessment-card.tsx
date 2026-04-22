@@ -14,6 +14,7 @@
  */
 
 import { useRef, useState } from "react";
+import { Brain, Sparkles } from "lucide-react";
 import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 import type { LessonAssessmentScore } from "@/lib/lessons/lesson-assessment-store";
 import { QuizScoreSummary } from "@/components/lessons/lesson-assessment-quiz";
@@ -33,88 +34,64 @@ function DiagnosticIdleCard({
   onSkip: () => void;
 }) {
   return (
-    <div
-      className="rounded-2xl border p-5 sm:p-6"
-      style={{
-        background: "color-mix(in srgb, var(--semantic-info) 6%, var(--semantic-surface))",
-        borderColor: "color-mix(in srgb, var(--semantic-info) 25%, var(--semantic-border-soft))",
-      }}
-    >
+    <div className="nn-lesson-quiz-module p-4 sm:p-5">
       {/* Header row */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-start gap-3">
-          {/* Icon */}
           <span
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-base"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
             style={{
-              background: "color-mix(in srgb, var(--semantic-info) 15%, var(--semantic-surface))",
+              background: "color-mix(in srgb, var(--semantic-info) 12%, var(--semantic-surface))",
               color: "var(--semantic-info)",
+              border: "1px solid color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft))",
             }}
             aria-hidden="true"
           >
-            🧠
+            <Brain className="h-5 w-5" strokeWidth={1.75} />
           </span>
           <div>
-            <p
-              className="text-xs font-semibold uppercase tracking-[0.15em]"
-              style={{ color: "var(--semantic-info)" }}
-            >
-              Pre-lesson diagnostic
-            </p>
-            <h3
-              className="mt-1 text-base font-semibold leading-snug"
-              style={{ color: "var(--theme-heading-text)" }}
-            >
-              Start with a quick diagnostic
+            <p className="nn-lesson-module-eyebrow text-[var(--semantic-info)]">Before you read</p>
+            <h3 className="mt-1 text-base font-semibold leading-snug text-[var(--theme-heading-text)]">
+              Quick readiness check
             </h3>
-            <p className="mt-1.5 max-w-md text-sm leading-6" style={{ color: "var(--theme-muted-text)" }}>
-              {itemCount} questions · establishes your baseline before you read
+            <p className="mt-1.5 max-w-prose text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+              {itemCount} questions · primes prior knowledge and shows baseline
               {priorScore
-                ? " · you have a previous score — take it again to see if you've improved"
-                : " · takes ~" + Math.ceil(itemCount * 0.75) + " minutes"}
+                ? " · prior run scored " + priorScore.accuracyPct + "% — retake to measure growth"
+                : " · about " + Math.ceil(itemCount * 0.75) + " min"}
             </p>
           </div>
         </div>
 
-        {/* Prior score chip */}
         {priorScore ? (
           <div
-            className="flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold"
+            className="flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-semibold tabular-nums text-[var(--semantic-info)]"
             style={{
-              background: "color-mix(in srgb, var(--semantic-info) 12%, var(--semantic-surface))",
-              color: "var(--semantic-info)",
-              border: "1px solid color-mix(in srgb, var(--semantic-info) 25%, transparent)",
+              background: "color-mix(in srgb, var(--semantic-info) 8%, transparent)",
+              borderColor: "color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft))",
             }}
           >
-            <span aria-hidden="true">📊</span>
-            Previous: {priorScore.accuracyPct}%
+            <Sparkles className="h-3.5 w-3.5" aria-hidden />
+            Last: {priorScore.accuracyPct}%
           </div>
         ) : null}
       </div>
 
-      {/* Actions */}
-      <div className="mt-5 flex flex-wrap items-center gap-3">
+      <div className="mt-4 flex flex-wrap items-center gap-2">
         <button
           type="button"
           onClick={onStart}
-          className="rounded-full px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90 active:scale-[0.98]"
-          style={{
-            background: "var(--semantic-info)",
-            color: "#fff",
-          }}
+          className="inline-flex min-h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--semantic-info)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] active:scale-[0.99]"
+          style={{ background: "var(--semantic-info)" }}
         >
-          Start diagnostic →
+          Start readiness check
         </button>
         <button
           type="button"
           onClick={onSkip}
-          className="rounded-full px-5 py-2.5 text-sm font-medium transition-colors"
-          style={{
-            color: "var(--semantic-text-secondary)",
-            border: "1px solid var(--semantic-border-soft)",
-          }}
+          className="inline-flex min-h-10 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] bg-transparent px-4 py-2 text-sm font-medium text-[var(--semantic-text-secondary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--semantic-border-soft)] focus-visible:ring-offset-2"
         >
-          Skip — go straight to lesson
+          Skip to lesson
         </button>
       </div>
     </div>
@@ -131,30 +108,19 @@ function DiagnosticRunningCard({
   onComplete: (score: number, total: number) => void;
 }) {
   return (
-    <div
-      className="rounded-2xl border p-5 sm:p-6"
-      style={{
-        background: "color-mix(in srgb, var(--semantic-info) 5%, var(--semantic-surface))",
-        borderColor: "color-mix(in srgb, var(--semantic-info) 25%, var(--semantic-border-soft))",
-      }}
-    >
-      <div className="mb-5 flex items-center gap-2">
+    <div className="nn-lesson-quiz-module p-4 sm:p-5">
+      <div className="mb-4 flex flex-wrap items-center gap-2 border-b border-[var(--semantic-border-soft)] pb-3">
         <span
-          className="flex h-7 w-7 items-center justify-center rounded-full text-sm"
-          style={{
-            background: "var(--semantic-info)",
-            color: "#fff",
-          }}
+          className="flex h-8 w-8 items-center justify-center rounded-md text-white"
+          style={{ background: "var(--semantic-info)" }}
           aria-hidden="true"
         >
-          🧠
+          <Brain className="h-4 w-4" strokeWidth={2} />
         </span>
-        <p
-          className="text-sm font-semibold"
-          style={{ color: "var(--semantic-info)" }}
-        >
-          Pre-lesson diagnostic
-        </p>
+        <div>
+          <p className="nn-lesson-module-eyebrow text-[var(--semantic-info)]">Readiness check</p>
+          <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Answer each item, review rationale, continue</p>
+        </div>
       </div>
       <PathwayLessonQuizSet
         key={`learner-pre-${itemsResetKey(items)}`}
@@ -195,24 +161,16 @@ function DiagnosticCompleteCard({
       : "Fresh ground to cover — the lesson will build your understanding from the foundation up.";
 
   return (
-    <div
-      className="rounded-2xl border p-5 sm:p-6"
-      style={{
-        background: "color-mix(in srgb, var(--semantic-success) 6%, var(--semantic-surface))",
-        borderColor: "color-mix(in srgb, var(--semantic-success) 25%, var(--semantic-border-soft))",
-      }}
-    >
+    <div className="nn-lesson-quiz-module p-4 sm:p-5">
       <div className="flex items-center gap-2">
         <span
-          className="flex h-7 w-7 items-center justify-center rounded-full text-sm"
-          style={{ background: "var(--semantic-success)", color: "#fff" }}
+          className="flex h-8 w-8 items-center justify-center rounded-md text-sm text-white"
+          style={{ background: "var(--semantic-success)" }}
           aria-hidden="true"
         >
           ✓
         </span>
-        <p className="text-sm font-semibold" style={{ color: "var(--semantic-success)" }}>
-          Diagnostic complete
-        </p>
+        <p className="text-sm font-semibold text-[var(--semantic-success)]">Baseline captured</p>
       </div>
 
       {showScoreSummary ? (
@@ -221,21 +179,16 @@ function DiagnosticCompleteCard({
         </div>
       ) : null}
 
-      <p className="mt-3 text-sm leading-6" style={{ color: "var(--theme-muted-text)" }}>
-        {message}
-      </p>
+      <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{message}</p>
 
-      <div className="mt-5">
+      <div className="mt-4">
         <button
           type="button"
           onClick={onContinue}
-          className="rounded-full px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90 active:scale-[0.98]"
-          style={{
-            background: "var(--role-cta, var(--semantic-brand))",
-            color: "var(--role-cta-foreground, #fff)",
-          }}
+          className="inline-flex min-h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-[var(--role-cta-foreground,#fff)] shadow-sm transition hover:opacity-92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--semantic-brand)] focus-visible:ring-offset-2"
+          style={{ background: "var(--role-cta, var(--semantic-brand))" }}
         >
-          Begin lesson →
+          Continue to lesson
         </button>
       </div>
     </div>

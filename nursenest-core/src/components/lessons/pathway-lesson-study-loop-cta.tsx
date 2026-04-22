@@ -28,6 +28,8 @@ export function PathwayLessonStudyLoopCta({
   relatedLessons,
   currentSlug,
   catAuthState = "public",
+  /** Calmer chrome for in-app learner lesson (vs marketing lesson detail). */
+  visualVariant = "marketing",
 }: {
   pathway: ExamPathwayDefinition;
   lessonsBasePath: string;
@@ -36,6 +38,7 @@ export function PathwayLessonStudyLoopCta({
   relatedLessons: RelatedRow[];
   currentSlug: string;
   catAuthState?: StudyLoopCatAuthState;
+  visualVariant?: "marketing" | "learner";
 }) {
   const { effectiveLabel, hasTopicFilter } = normalizeLessonTopicContext(topicLabel, topicSlug);
   const practice = lessonStudyLoopPracticeHrefs(pathway, topicLabel, topicSlug);
@@ -45,79 +48,71 @@ export function PathwayLessonStudyLoopCta({
   const catShort = catPathwayShortCatLabel(pathway);
 
   const filtered = relatedLessons.filter((r) => r.slug !== currentSlug).slice(0, RELATED_PREVIEW);
+  const learner = visualVariant === "learner";
 
   return (
     <section
-      className="nn-study-loop-outer relative mx-auto mt-10 max-w-5xl overflow-hidden rounded-xl p-4 sm:p-6"
+      className={`relative mx-auto max-w-5xl overflow-hidden p-4 sm:p-5 ${
+        learner
+          ? "nn-lesson-study-loop--learner mt-6"
+          : "nn-study-loop-outer mt-8 rounded-lg border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--theme-page-bg)_97%,var(--semantic-panel-positive)_3%)] sm:mt-10"
+      }`}
       aria-labelledby="lesson-study-loop-heading"
       data-nn-qa-study-loop="true"
     >
-      <div
-        className="pointer-events-none absolute -right-10 -top-14 h-40 w-40 rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_8%,transparent)] blur-3xl"
-        aria-hidden
-      />
       <div className="relative">
-        <p className="nn-marketing-label nn-marketing-label--accent">After this lesson</p>
+        <p className="nn-lesson-module-eyebrow">After this lesson</p>
         <h2
           id="lesson-study-loop-heading"
-          className="mt-1.5 text-balance text-lg font-semibold tracking-tight text-[var(--theme-heading-text)]"
+          className="mt-1 text-balance text-base font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-lg"
         >
-          Your next step on {pathway.shortName}
+          Keep momentum
         </h2>
-        <p className="nn-marketing-body-sm mt-2 max-w-2xl text-[var(--theme-muted-text)]">
+        <p className="mt-1.5 max-w-2xl text-xs leading-relaxed text-[var(--theme-muted-text)] sm:text-sm">
           {hasTopicFilter ? (
             <>
-              Stay on{" "}
-              <span className="font-medium text-[var(--theme-heading-text)]">
-                {effectiveLabel || pathway.shortName}
-              </span>
-              —questions and lessons stay exam-scoped so you are not mixing tracks.
+              Stay on <span className="font-medium text-[var(--theme-heading-text)]">{effectiveLabel || "this topic"}</span>
+              —everything below stays on the same exam track.
             </>
           ) : (
-            <>
-              This lesson does not carry a topic cluster tag yet. Use the full pathway bank and lesson hub—the scope is still
-              locked to {pathway.shortName}.
-            </>
+            <>Topic tag not set on this lesson yet; hubs below still respect pathway scope.</>
           )}
         </p>
 
-        {/* Primary column = solid nn-study-card; siblings stay wash so practice leads the loop (hierarchy). */}
-        <div className="mt-8 grid gap-5 sm:gap-6 lg:grid-cols-3">
-          {/* Practice */}
-          <div className="nn-study-card flex flex-col p-5 sm:p-6">
+        <div className="mt-5 grid gap-4 sm:gap-5 lg:grid-cols-3">
+          <div className="flex flex-col rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand)_12%)] bg-[var(--bg-card)] p-4 shadow-sm sm:p-5">
             <div className="flex items-center gap-2 text-[var(--theme-heading-text)]">
-              <ClipboardList className="h-5 w-5 shrink-0 text-primary" aria-hidden />
-              <h3 className="text-base font-semibold tracking-tight">Practice this topic</h3>
+              <ClipboardList className="h-4 w-4 shrink-0 text-[var(--semantic-brand)]" aria-hidden />
+              <h3 className="text-sm font-semibold tracking-tight sm:text-base">Practice this topic</h3>
             </div>
-            <p className="nn-marketing-body-sm mt-3 text-[var(--theme-muted-text)]">
+            <p className="mt-2 text-xs leading-relaxed text-[var(--theme-muted-text)] sm:text-sm">
               {hasTopicFilter
-                ? "Open the bank filtered to this topic, then sign in to run items with the same pathway context."
-                : "Open the pathway question hub—every item stays inside this exam’s scope."}
+                ? "Topic-filtered bank, then sign in for full items in this pathway."
+                : "Pathway question hub—exam-scoped items only."}
             </p>
-            <div className="mt-4 flex flex-col gap-2">
+            <div className="mt-3 flex flex-col gap-2">
               <Link
                 href={practice.app}
-                className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
+                className="inline-flex min-h-10 items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
               >
-                Start practice (sign in)
+                {catAuthState === "signed_in" ? "Open topic drill" : "Start practice (sign in)"}
               </Link>
               <Link
                 href={practice.marketing}
-                className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-4 py-2.5"
+                className="inline-flex min-h-10 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] px-3 py-2 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:bg-[var(--theme-muted-surface)]/40"
               >
                 Question hub{hasTopicFilter ? " · filtered" : ""}
               </Link>
             </div>
           </div>
 
-          {/* Related lessons */}
-          <div className="nn-study-card nn-study-card--wash flex flex-col p-5 sm:p-6">
+          <div className="flex flex-col rounded-lg border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--bg-card)_96%,var(--semantic-panel-cool)_4%)] p-4 sm:p-5">
             <div className="flex items-center gap-2 text-[var(--theme-heading-text)]">
-              <BookOpen className="h-5 w-5 shrink-0 text-primary" aria-hidden />
-              <h3 className="text-base font-semibold tracking-tight">Review related lessons</h3>
+              <BookOpen className="h-4 w-4 shrink-0 text-[var(--semantic-info)]" aria-hidden />
+              <h3 className="text-sm font-semibold tracking-tight sm:text-base">Related lessons</h3>
             </div>
             {filtered.length > 0 ? (
-              <ul className="mt-3 space-y-2">
+              <ul className="mt-2 space-y-1">
                 {filtered.map((r, relIdx) => {
                   const href = pathwayLessonMarketingDetailHref(lessonsBasePath, r.slug);
                   if (!href) return null;
@@ -126,7 +121,7 @@ export function PathwayLessonStudyLoopCta({
                       <Link
                         href={href}
                         data-nn-qa-related-lesson={relIdx === 0 ? "true" : undefined}
-                        className="block min-h-11 rounded-xl border border-transparent px-2 py-2.5 text-sm font-semibold text-primary transition hover:border-primary/25 hover:bg-[var(--theme-muted-surface)]/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+                        className="block min-h-9 rounded-md px-1.5 py-1.5 text-sm font-medium text-[var(--semantic-brand)] transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)]"
                       >
                         {r.title}
                       </Link>
@@ -135,38 +130,35 @@ export function PathwayLessonStudyLoopCta({
                 })}
               </ul>
             ) : (
-              <p className="nn-marketing-body-sm mt-3 text-[var(--theme-muted-text)]">
-                No sibling lessons indexed for this cluster yet. Browse the topic or full hub for more reading.
+              <p className="mt-2 text-xs text-[var(--theme-muted-text)] sm:text-sm">
+                No indexed siblings yet—use the topic or lesson hub.
               </p>
             )}
             <Link
               href={relatedHub}
-              className="nn-study-pill-secondary nn-study-pill-secondary--accent mt-4 inline-flex min-h-11 w-full items-center justify-center px-4 py-2.5 text-sm font-semibold text-primary"
+              className="mt-auto inline-flex min-h-10 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] px-3 py-2 text-sm font-semibold text-primary transition hover:border-primary/30 hover:bg-[var(--theme-muted-surface)]/30"
             >
               {hasTopicFilter ? "All lessons in this topic" : "Back to lesson hub"}
             </Link>
           </div>
 
-          {/* CAT */}
-          <div className="nn-study-card nn-study-card--wash flex flex-col p-5 sm:p-6">
-            <p className="nn-marketing-label nn-marketing-label--accent text-[11px] font-semibold uppercase tracking-wide text-primary">
-              {catLine}
-            </p>
-            <div className="mt-2 flex items-center gap-2 text-[var(--theme-heading-text)]">
-              <LineChart className="h-5 w-5 shrink-0 text-primary" aria-hidden />
-              <h3 className="text-base font-semibold tracking-tight">{catShort}</h3>
+          <div className="flex flex-col rounded-lg border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--bg-card)_96%,var(--semantic-panel-warm)_4%)] p-4 sm:p-5">
+            <p className="nn-lesson-module-eyebrow text-[var(--semantic-chart-2)]">{catLine}</p>
+            <div className="mt-1 flex items-center gap-2 text-[var(--theme-heading-text)]">
+              <LineChart className="h-4 w-4 shrink-0 text-[var(--semantic-chart-2)]" aria-hidden />
+              <h3 className="text-sm font-semibold tracking-tight sm:text-base">{catShort}</h3>
             </div>
-            <p className="nn-marketing-body-sm mt-3 text-[var(--theme-muted-text)]">
+            <p className="mt-2 text-xs leading-relaxed text-[var(--theme-muted-text)] sm:text-sm">
               {cat.primaryKind === "app_start"
-                ? `Start ${catShort} directly in the app for ${pathway.shortName}.`
-                : `Open the public landing for ${catShort} to see how sessions work, then sign in when you are ready.`}
+                ? `Run ${catShort} in the app when you want adaptive pressure.`
+                : `Preview how ${catShort} sessions work, then sign in from the app.`}
             </p>
-            <div className="mt-4 flex flex-col gap-2">
+            <div className="mt-3 flex flex-col gap-2">
               <TrackedStudyLoopCatLink
                 href={cat.primaryHref}
                 sourceSurface="lesson_study_loop_primary"
                 pathwayId={pathway.id}
-                className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
+                className="inline-flex min-h-10 items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
               >
                 {cat.primaryKind === "app_start" ? `Start ${catShort}` : `View ${catShort} landing`}
               </TrackedStudyLoopCatLink>
@@ -175,13 +167,13 @@ export function PathwayLessonStudyLoopCta({
                   href={cat.secondaryHref}
                   sourceSurface="lesson_study_loop_secondary"
                   pathwayId={pathway.id}
-                  className="nn-study-pill-secondary inline-flex min-h-11 items-center justify-center px-4 py-2.5"
+                  className="inline-flex min-h-10 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] px-3 py-2 text-sm font-semibold text-[var(--theme-heading-text)]"
                 >
                   Start {catShort}
                 </TrackedStudyLoopCatLink>
               ) : (
-                <p className="text-xs text-[var(--theme-muted-text)]">
-                  Timed practice exams are available from your exam hub if adaptive CAT is not enabled for this track yet.
+                <p className="text-[11px] text-[var(--theme-muted-text)]">
+                  Timed mocks also live on your exam hub when CAT is not enabled for this track.
                 </p>
               )}
             </div>

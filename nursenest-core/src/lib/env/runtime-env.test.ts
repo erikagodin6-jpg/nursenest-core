@@ -79,3 +79,11 @@ test("runtime env: valid config snapshot", () => {
     assert.equal(s.aiIntegrationsOpenAiKeyPresent, false);
   });
 });
+
+test("runtime env: each snapshot read reflects current process.env (no module cache)", () => {
+  withEnv({ AI_ADMIN_GENERATION_ENABLED: "false" }, () => {
+    assert.equal(getAdminAiOpenAiRuntimeSnapshot().adminAiGenerationFlagParsed, false);
+    process.env.AI_ADMIN_GENERATION_ENABLED = "true";
+    assert.equal(getAdminAiOpenAiRuntimeSnapshot().adminAiGenerationFlagParsed, true);
+  });
+});

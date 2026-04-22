@@ -2879,20 +2879,81 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   border-top: 3px solid color-mix(in srgb, var(--theme-primary) 72%, white);
 }
 
-/* Pathway lesson: restrained title scale (avoids global marketing hero --text-section sizing). */
+/* Pathway lesson: editorial title scale — stronger hierarchy, comfortable long reads. */
 .nn-lesson-page-title {
-  font-size: clamp(1.12rem, 1.65vw, 1.5rem);
+  font-size: clamp(1.5rem, 2.4vw, 2.0625rem);
   font-weight: 600;
-  letter-spacing: -0.018em;
-  line-height: 1.22;
+  letter-spacing: -0.028em;
+  line-height: 1.18;
   color: var(--theme-heading-text, var(--palette-heading));
 }
 
+/* Centered reading column for pathway lesson article + quizzes (720–780px target). */
+.nn-lesson-page-reading {
+  width: 100%;
+  max-width: min(48.75rem, 100%);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(0.75rem, 2vw, 1.25rem);
+  padding-right: clamp(0.75rem, 2vw, 1.25rem);
+}
+
+/* Premium embedded assessment modules (pre/post) — distinct from article prose. */
+.nn-lesson-quiz-module {
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-brand) 12%);
+  background: color-mix(in srgb, var(--bg-card, var(--semantic-surface)) 94%, var(--semantic-panel-cool) 6%);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
+}
+
+.nn-lesson-module-eyebrow {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--semantic-text-secondary);
+}
+
+/* Flat editorial sections — less card clutter for core teaching blocks. */
+.nn-lesson-section-card.nn-lesson-section-card--editorial {
+  --lsc-surface: transparent;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--semantic-border-soft);
+  border-radius: 0;
+  border-left: none;
+  box-shadow: none;
+  padding: 1.25rem 0 1.35rem;
+  scroll-margin-top: 5rem;
+}
+
+.nn-lesson-section-card.nn-lesson-section-card--editorial:hover {
+  box-shadow: none;
+  border-color: var(--semantic-border-soft);
+  border-bottom-color: color-mix(in srgb, var(--lsc-color) 22%, var(--semantic-border-soft));
+}
+
+.nn-lesson-section-eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--semantic-text-secondary);
+}
+
+/* High-yield / exam-lens callouts — one intentional surface per lesson, not every block. */
+.nn-lesson-section-card.nn-lesson-section-card--callout {
+  border-radius: 0.75rem;
+  border-left-width: 4px;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 75%, transparent);
+}
+
 .nn-lesson-section-heading {
-  font-size: clamp(1.02rem, 0.35vw + 0.95rem, 1.15rem);
-  font-weight: 500;
-  letter-spacing: -0.012em;
-  line-height: 1.42;
+  font-size: clamp(1.125rem, 0.55vw + 1rem, 1.35rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.28;
 }
 
 .nn-lesson-support-card {
@@ -3059,19 +3120,19 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
  */
 .nn-lesson-content.nn-lesson-prose,
 .nn-lesson-prose {
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 400;
-  line-height: 1.68;
-  letter-spacing: -0.003em;
+  line-height: 1.62;
+  letter-spacing: -0.006em;
   color: var(--theme-body-text, var(--semantic-text-primary, var(--palette-text)));
-  max-width: min(65ch, 100%);
+  max-width: min(62ch, 100%);
 }
 
 @media (min-width: 768px) {
   .nn-lesson-content.nn-lesson-prose,
   .nn-lesson-prose {
-    font-size: 0.9375rem;
-    line-height: 1.72;
+    font-size: 1rem;
+    line-height: 1.6;
   }
 }
 
@@ -3306,6 +3367,111 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
 .nn-lesson-page-header {
   padding-bottom: 2rem;
   border-bottom: 2px solid color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle));
+}
+
+/* ── Learner app pathway lesson (/app/lessons/[id]) — editorial column + calmer chrome ── */
+.nn-lesson-page--learner-app {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 35%, var(--theme-page-bg) 65%);
+}
+
+.nn-lesson-page--learner-app .nn-lesson-editorial-rail {
+  width: 100%;
+  max-width: min(48rem, 100%);
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 3vw, 1.5rem);
+}
+
+.nn-lesson-page--learner-app .nn-lesson-page-header {
+  padding-bottom: 0.875rem;
+  margin-bottom: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--theme-primary) 12%);
+}
+
+.nn-lesson-page--learner-app .nn-lesson-layout {
+  margin-top: 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .nn-lesson-page--learner-app .nn-lesson-layout {
+    margin-top: 1.5rem;
+  }
+}
+
+.nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--editorial {
+  padding-top: 1rem;
+  padding-bottom: 1.1rem;
+  scroll-margin-top: 4.5rem;
+}
+
+.nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout {
+  border-radius: 0.625rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--lsc-color) 12%);
+  border-left-width: 3px;
+  border-left-color: color-mix(in srgb, var(--lsc-color) 48%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--lsc-soft) 14%, var(--bg-card, var(--theme-card-bg)) 86%);
+  box-shadow: none;
+  padding: 1rem 1rem 1.15rem 1.05rem;
+  scroll-margin-top: 4.5rem;
+}
+
+.nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout:hover {
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--lsc-color) 22%);
+}
+
+.nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout[data-lsc-role="review"]:not(.nn-lesson-section-card--tier-callout),
+.nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout[data-lsc-role="application"],
+.nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout[data-lsc-role="danger"] {
+  background: color-mix(in srgb, var(--semantic-panel-positive) 12%, var(--bg-card) 88%);
+}
+
+.nn-lesson-section-card.nn-lesson-section-card--tier-callout,
+.nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--tier-callout {
+  border-left-color: color-mix(in srgb, var(--semantic-info) 52%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 16%, var(--bg-card) 84%);
+}
+
+.nn-lesson-page--learner-app .nn-lesson-section-chip {
+  background: color-mix(in srgb, var(--lsc-color) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 14%, var(--semantic-border-soft));
+}
+
+.nn-lesson-page--learner-app .nn-lesson-section-card .nn-lesson-section-heading,
+.nn-lesson-page--learner-app .nn-lesson-section-heading {
+  margin-top: 0.35rem;
+  font-size: clamp(1.0625rem, 2.4vw, 1.3125rem);
+  font-weight: 600;
+  letter-spacing: -0.022em;
+  line-height: 1.28;
+}
+
+.nn-lesson-page--learner-app .nn-lesson-content.nn-lesson-prose,
+.nn-lesson-page--learner-app .nn-lesson-prose {
+  max-width: min(52ch, 100%);
+  font-size: 0.9375rem;
+  line-height: 1.62;
+}
+
+@media (min-width: 768px) {
+  .nn-lesson-page--learner-app .nn-lesson-content.nn-lesson-prose,
+  .nn-lesson-page--learner-app .nn-lesson-prose {
+    font-size: 0.96875rem;
+    line-height: 1.64;
+  }
+}
+
+.nn-lesson-page--learner-app .nn-lesson-section-nav {
+  border-radius: 0.625rem;
+  padding: 0.875rem 0.75rem;
+  box-shadow: none;
+  border-top-width: 2px;
+}
+
+.nn-lesson-study-loop--learner {
+  border-radius: 0.625rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 94%, var(--semantic-brand) 6%);
+  background: color-mix(in srgb, var(--bg-card) 96%, var(--semantic-panel-muted) 4%);
+  box-shadow: none;
 }
 
 .nn-lesson-layout {
@@ -9119,7 +9285,7 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   border: 1px solid var(--semantic-border-soft);
   background: color-mix(in srgb, var(--semantic-panel-cool) 12%, var(--semantic-surface));
   font-size: 0.8125rem;
-  font-weight: 650;
+  font-weight: 600;
   color: var(--semantic-text-primary);
   text-decoration: none;
   text-align: center;

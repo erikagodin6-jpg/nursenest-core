@@ -1,5 +1,6 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
-import { CheckCircle, Clock, BookOpen, Zap, GraduationCap } from "lucide-react";
+import { CheckCircle, Clock, BookMarked } from "lucide-react";
 import type { PathwayLessonExamRelevance, PathwayLessonAudienceTier } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 
@@ -7,13 +8,19 @@ type Props = {
   title: string;
   topic: string;
   bodySystem?: string | null;
-  topicSlug?: string | null;
-  pathwayId?: string | null;
+  /** Short pathway label, e.g. "NCLEX-RN" */
+  pathwayShortName?: string | null;
   examFramingLabel?: string | null;
   sectionCount: number;
   examRelevance?: PathwayLessonExamRelevance | null;
   audienceTiers?: PathwayLessonAudienceTier[] | null;
   progress: PathwayLessonProgressStatus;
+  /** Optional pathway breadcrumb row (e.g. `BreadcrumbTrail`) */
+  breadcrumbSlot?: ReactNode;
+  /** One-line study intent under the title */
+  purposeLine?: string | null;
+  /** e.g. "Readiness check (4) · Retention (3)" */
+  assessmentHint?: string | null;
 };
 
 const AUDIENCE_LABEL: Record<PathwayLessonAudienceTier, string> = {
@@ -22,68 +29,40 @@ const AUDIENCE_LABEL: Record<PathwayLessonAudienceTier, string> = {
   np: "NP",
 };
 
-function ProgressBadge({ progress }: { progress: PathwayLessonProgressStatus }) {
+function relevancePhrase(relevance: PathwayLessonExamRelevance): string {
+  if (relevance === "high_yield") return "High-yield exam focus";
+  if (relevance === "specialty") return "Specialty depth";
+  return "Core pathway topic";
+}
+
+function ProgressPill({ progress }: { progress: PathwayLessonProgressStatus }) {
   if (progress === "completed") {
     return (
       <span
-        className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold"
+        className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide"
         style={{
-          background: "color-mix(in srgb, var(--semantic-success) 12%, var(--bg-card))",
+          background: "color-mix(in srgb, var(--semantic-success) 10%, transparent)",
           color: "var(--semantic-success)",
           border: "1px solid color-mix(in srgb, var(--semantic-success) 22%, transparent)",
         }}
       >
         <CheckCircle className="h-3 w-3" aria-hidden="true" />
-        Completed
+        Done
       </span>
     );
   }
   if (progress === "in_progress") {
     return (
       <span
-        className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold"
+        className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide"
         style={{
-          background: "color-mix(in srgb, var(--semantic-warning) 12%, var(--bg-card))",
-          color: "color-mix(in srgb, var(--semantic-warning) 80%, var(--semantic-text-primary))",
+          background: "color-mix(in srgb, var(--semantic-warning) 10%, transparent)",
+          color: "color-mix(in srgb, var(--semantic-warning) 82%, var(--semantic-text-primary))",
           border: "1px solid color-mix(in srgb, var(--semantic-warning) 22%, transparent)",
         }}
       >
         <Clock className="h-3 w-3" aria-hidden="true" />
-        In Progress
-      </span>
-    );
-  }
-  return null;
-}
-
-function ExamRelevanceBadge({ relevance }: { relevance: PathwayLessonExamRelevance }) {
-  if (relevance === "high_yield") {
-    return (
-      <span
-        className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold"
-        style={{
-          background: "color-mix(in srgb, var(--semantic-warning) 14%, var(--bg-card))",
-          color: "color-mix(in srgb, var(--semantic-warning) 85%, var(--semantic-text-primary))",
-          border: "1px solid color-mix(in srgb, var(--semantic-warning) 28%, transparent)",
-        }}
-      >
-        <Zap className="h-3 w-3" aria-hidden="true" />
-        High Yield
-      </span>
-    );
-  }
-  if (relevance === "specialty") {
-    return (
-      <span
-        className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold"
-        style={{
-          background: "color-mix(in srgb, var(--semantic-chart-5) 12%, var(--bg-card))",
-          color: "color-mix(in srgb, var(--semantic-chart-5) 80%, var(--semantic-text-primary))",
-          border: "1px solid color-mix(in srgb, var(--semantic-chart-5) 22%, transparent)",
-        }}
-      >
-        <GraduationCap className="h-3 w-3" aria-hidden="true" />
-        Specialty
+        In progress
       </span>
     );
   }
@@ -91,122 +70,95 @@ function ExamRelevanceBadge({ relevance }: { relevance: PathwayLessonExamRelevan
 }
 
 /**
- * Premium compact lesson page header.
- * Shows breadcrumb, metadata badges, title, and progress indicator.
- * Does NOT show seoDescription — that's for crawlers, not learners.
+ * Learner pathway lesson — compact hero: context, title, purpose, quiet metadata.
  */
 export function LessonPageHeader({
   title,
   topic,
   bodySystem,
-  pathwayId: _pathwayId,
+  pathwayShortName,
   examFramingLabel,
   sectionCount,
   examRelevance,
   audienceTiers,
   progress,
+  breadcrumbSlot,
+  purposeLine,
+  assessmentHint,
 }: Props) {
+  const pathwayLine = pathwayShortName?.trim() || examFramingLabel?.trim() || null;
+  const audience =
+    audienceTiers && audienceTiers.length > 0
+      ? audienceTiers.map((t) => AUDIENCE_LABEL[t] ?? t.toUpperCase()).join(" · ")
+      : null;
+  const bodyLabel = bodySystem ? bodySystem.replace(/_/g, " ") : null;
+
   return (
     <header className="nn-lesson-page-header">
-      {/* Breadcrumb */}
-      <nav aria-label="Lesson navigation" className="flex items-center gap-1.5 text-xs">
-        <Link
-          href="/app/lessons"
-          className="font-medium transition-colors hover:underline"
-          style={{ color: "var(--semantic-text-muted)" }}
-        >
-          All Lessons
-        </Link>
-        {topic ? (
-          <>
-            <span style={{ color: "var(--semantic-border-soft)" }} aria-hidden="true">
-              /
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+        <div className="min-w-0 flex-1">
+          {breadcrumbSlot ? <div className="mb-1.5 min-w-0">{breadcrumbSlot}</div> : null}
+          <nav aria-label="Lesson context" className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
+            <Link
+              href="/app/lessons"
+              className="text-[var(--semantic-text-secondary)] transition-colors hover:text-[var(--semantic-text-primary)] hover:underline"
+            >
+              Lessons
+            </Link>
+            {pathwayLine ? (
+              <>
+                <span aria-hidden className="text-[var(--semantic-border-soft)]">
+                  /
+                </span>
+                <span className="max-w-[14rem] truncate sm:max-w-none">{pathwayLine}</span>
+              </>
+            ) : null}
+            {topic ? (
+              <>
+                <span aria-hidden className="text-[var(--semantic-border-soft)]">
+                  /
+                </span>
+                <span className="max-w-[18rem] truncate text-[var(--semantic-text-secondary)] sm:max-w-none">{topic}</span>
+              </>
+            ) : null}
+          </nav>
+
+          <h1
+            className="mt-2.5 text-balance font-semibold tracking-tight text-[var(--semantic-text-primary)]"
+            style={{
+              fontSize: "clamp(1.5rem, 1.25rem + 1.1vw, 2rem)",
+              lineHeight: 1.2,
+            }}
+          >
+            {title}
+          </h1>
+
+          {purposeLine ? (
+            <p className="mt-2 max-w-[52ch] text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
+              {purposeLine}
+            </p>
+          ) : null}
+
+          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[0.8125rem] text-[var(--semantic-text-muted)]">
+            {examRelevance ? (
+              <span className="inline-flex items-center gap-1 font-medium text-[var(--semantic-text-secondary)]">
+                <BookMarked className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+                {relevancePhrase(examRelevance)}
+              </span>
+            ) : null}
+            {bodyLabel ? <span className="capitalize">{bodyLabel}</span> : null}
+            {audience ? <span>{audience}</span> : null}
+            <span className="tabular-nums">
+              {sectionCount} section{sectionCount !== 1 ? "s" : ""}
             </span>
-            <span className="font-medium" style={{ color: "var(--semantic-text-secondary)" }}>
-              {topic}
-            </span>
-          </>
-        ) : null}
-      </nav>
-
-      {/* Badge row */}
-      <div className="mt-3 flex flex-wrap items-center gap-2">
-        {/* Topic badge */}
-        <span
-          className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold"
-          style={{
-            background: "color-mix(in srgb, var(--semantic-brand) 10%, var(--bg-card))",
-            color: "var(--semantic-brand)",
-            border: "1px solid color-mix(in srgb, var(--semantic-brand) 20%, transparent)",
-          }}
-        >
-          <BookOpen className="h-3 w-3" aria-hidden="true" />
-          {topic}
-        </span>
-
-        {/* Body system badge */}
-        {bodySystem ? (
-          <span
-            className="inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium capitalize"
-            style={{
-              background: "color-mix(in srgb, var(--semantic-info) 10%, var(--bg-card))",
-              color: "var(--semantic-info)",
-              border: "1px solid color-mix(in srgb, var(--semantic-info) 20%, transparent)",
-            }}
-          >
-            {bodySystem.replace(/_/g, " ")}
-          </span>
-        ) : null}
-
-        {/* Exam alignment label */}
-        {examFramingLabel ? (
-          <span
-            className="rounded-md px-2 py-0.5 text-xs font-medium"
-            style={{
-              background: "var(--semantic-surface)",
-              color: "var(--semantic-text-muted)",
-              border: "1px solid var(--semantic-border-soft)",
-            }}
-          >
-            {examFramingLabel}
-          </span>
-        ) : null}
-
-        {/* Audience tiers */}
-        {audienceTiers && audienceTiers.length > 0 ? (
-          <span
-            className="rounded-md px-2 py-0.5 text-xs font-medium"
-            style={{
-              background: "var(--semantic-surface)",
-              color: "var(--semantic-text-muted)",
-              border: "1px solid var(--semantic-border-soft)",
-            }}
-          >
-            {audienceTiers.map((t) => AUDIENCE_LABEL[t] ?? t.toUpperCase()).join(" · ")}
-          </span>
-        ) : null}
-
-        {/* Exam relevance */}
-        {examRelevance ? <ExamRelevanceBadge relevance={examRelevance} /> : null}
-      </div>
-
-      {/* Title */}
-      <h1
-        className="mt-4 text-2xl font-bold leading-tight tracking-tight sm:text-3xl"
-        style={{ color: "var(--semantic-text-primary)" }}
-      >
-        {title}
-      </h1>
-
-      {/* Meta row */}
-      <div className="mt-3 flex flex-wrap items-center gap-3">
-        <span
-          className="text-xs font-medium"
-          style={{ color: "var(--semantic-text-muted)" }}
-        >
-          {sectionCount} section{sectionCount !== 1 ? "s" : ""}
-        </span>
-        <ProgressBadge progress={progress} />
+            {assessmentHint ? (
+              <span className="font-medium text-[var(--semantic-info)]">{assessmentHint}</span>
+            ) : null}
+          </div>
+        </div>
+        <div className="shrink-0 pt-0.5 sm:pt-1">
+          <ProgressPill progress={progress} />
+        </div>
       </div>
     </header>
   );

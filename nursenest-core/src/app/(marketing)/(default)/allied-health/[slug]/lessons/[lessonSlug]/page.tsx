@@ -53,6 +53,7 @@ import {
 import {
   mergeRelatedLessonDisplayList,
   pathwayLessonHasRenderableHubSlug,
+  type PathwayLessonQuizItem,
 } from "@/lib/lessons/pathway-lesson-types";
 import { PathwayLessonProgressBadgeLive } from "@/components/lessons/pathway-lesson-progress-badge-live";
 import { PathwayLessonProgressTracker } from "@/components/lessons/pathway-lesson-progress-tracker";
@@ -78,10 +79,7 @@ import { LessonKeyRecallChip } from "@/components/lessons/lesson-key-recall-chip
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { DEFAULT_STUDY_SETTINGS } from "@/lib/learner/study-settings";
 import { cleanLessonTitleForDisplay, compactPathwayLabel } from "@/lib/lessons/lesson-title-presentation";
-import {
-  pathwayLessonSectionPrefersWideColumn,
-  shouldRenderPathwayLessonSection,
-} from "@/lib/lessons/lesson-section-page-layout";
+import { shouldRenderPathwayLessonSection } from "@/lib/lessons/lesson-section-page-layout";
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
@@ -211,7 +209,10 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
     }),
     getPathwayLessonContentDates(pathway.id, lesson.slug, lessonContentLocale),
   ]);
-  const bankAssessments = bankAssessmentsRes.status === "fulfilled" ? bankAssessmentsRes.value : [];
+  const bankAssessments: { preTest: PathwayLessonQuizItem[]; postTest: PathwayLessonQuizItem[] } =
+    bankAssessmentsRes.status === "fulfilled"
+      ? bankAssessmentsRes.value
+      : { preTest: [], postTest: [] };
   const lessonMeasurementSystem = getMeasurementSystemForCountry(pathway.countryCode);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
   const previewLesson = fullAccess ? lesson : { ...lesson, sections: visible, preTest: undefined, postTest: undefined };
@@ -400,6 +401,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
         <LessonAudioCard audioUrl={lesson.audioUrl} lessonTitle={displayLessonTitle} />
       ) : null}
 
+      <div className="nn-lesson-page-reading">
       <PathwayLessonAssessmentExperience
         userId={userId}
         pathwayId={pathway.id}
@@ -415,18 +417,14 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
           <div className="mb-2 flex justify-end">
             <LessonRecallToggle />
           </div>
-          <article className="mt-4 grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
+          <article className="mt-4 space-y-2 sm:space-y-3">
             {displaySections.map((section) => {
-              const wide = pathwayLessonSectionPrefersWideColumn(section.kind, {
-                hasCheckpointQuestions: Boolean(section.checkpointQuestions?.length),
-              });
               return (
               <LessonSectionCard
                 key={section.id}
                 id={section.id}
                 heading={section.heading}
                 kind={section.kind}
-                className={wide ? "md:col-span-2" : undefined}
               >
                 {section.audioUrl ? (
                   <LessonSectionAudioButton
@@ -476,18 +474,19 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
             postAuthReturnPath={`/allied-health/${slug}/lessons/${lessonSlug}`}
           />
         ) : null}
-
-        <PathwayLessonActions
-          pathwayId={pathway.id}
-          lessonSlug={lesson.slug}
-          topicCode={lesson.topicSlug}
-          topicLabel={lesson.topic}
-          userId={userId}
-          canMarkComplete={fullAccess}
-          initialProgress={lessonProgress}
-          catAdaptiveAvailable={pathwayAllowsCatAdaptiveStart(pathway)}
-        />
       </PathwayLessonAssessmentExperience>
+
+      <PathwayLessonActions
+        pathwayId={pathway.id}
+        lessonSlug={lesson.slug}
+        topicCode={lesson.topicSlug}
+        topicLabel={lesson.topic}
+        userId={userId}
+        canMarkComplete={fullAccess}
+        initialProgress={lessonProgress}
+        catAdaptiveAvailable={pathwayAllowsCatAdaptiveStart(pathway)}
+      />
+      </div>
 
       <p className="mt-6 text-sm text-muted">
         Also see:{" "}

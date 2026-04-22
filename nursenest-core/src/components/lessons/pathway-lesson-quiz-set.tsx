@@ -68,8 +68,6 @@ export function PathwayLessonQuizSet({
       ? list.reduce((acc, q, i) => (answers[i] === q.correct ? acc + 1 : acc), 0)
       : null;
 
-  const onQuestion = total === 0 ? 0 : answeredCount === total ? total : answeredCount + 1;
-
   useEffect(() => {
     finishedSentRef.current = false;
   }, [list, variant, postMode]);
@@ -90,30 +88,49 @@ export function PathwayLessonQuizSet({
     return examRevealed;
   }
 
+  const progressPct = total > 0 ? Math.round((answeredCount / total) * 100) : 0;
+
   return (
-    <section className={`border-b border-[var(--semantic-border-soft)] pb-8 last:border-b-0 last:pb-0 ${className}`.trim()}>
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h2 className="text-base font-medium text-[var(--theme-heading-text)] sm:text-lg">{title}</h2>
+    <section className={`border-b border-[var(--semantic-border-soft)] pb-6 last:border-b-0 last:pb-0 ${className}`.trim()}>
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+        <div className="min-w-0">
+          <h2 className="text-base font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-[1.0625rem]">
+            {title}
+          </h2>
           {subtitle ? (
-            <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-[var(--semantic-text-secondary)]">
+            <p className="mt-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
               {subtitle}
             </p>
           ) : null}
         </div>
         <div
-          className="inline-flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium tabular-nums"
+          className="inline-flex shrink-0 items-center gap-2 rounded-md border px-2.5 py-1 text-[0.7rem] font-semibold tabular-nums text-[var(--semantic-text-secondary)]"
           style={{
             borderColor: "var(--semantic-border-soft)",
-            background: "color-mix(in srgb, var(--semantic-chart-2) 10%, var(--semantic-surface))",
-            color: "var(--semantic-chart-2)",
+            background: "color-mix(in srgb, var(--semantic-chart-2) 8%, var(--semantic-surface))",
           }}
           aria-live="polite"
         >
-          {onQuestion}/{total}
+          <span className="text-[var(--semantic-chart-2)]" aria-hidden>
+            {answeredCount}/{total}
+          </span>
+          <span className="text-[var(--semantic-text-muted)]">answered</span>
         </div>
       </div>
-      <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+      <div
+        className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-[color-mix(in_srgb,var(--semantic-border-soft)_88%,transparent)]"
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={progressPct}
+        aria-label="Questions completed"
+      >
+        <div
+          className="h-full rounded-full bg-[var(--semantic-chart-2)] transition-[width] duration-300 ease-out"
+          style={{ width: `${progressPct}%` }}
+        />
+      </div>
+      <p className="mt-2.5 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
         {!fullAccess
           ? "Work through each question. Highlights and rationales unlock with full lesson access."
           : variant === "pre"
@@ -125,7 +142,7 @@ export function PathwayLessonQuizSet({
 
       {variant === "post" && fullAccess ? (
         <div
-          className="mt-4 inline-flex rounded-full border p-0.5"
+          className="mt-3 inline-flex rounded-md border p-0.5"
           style={{ borderColor: "var(--semantic-border-soft)" }}
           role="tablist"
           aria-label="Post-test mode"
@@ -135,7 +152,7 @@ export function PathwayLessonQuizSet({
             role="tab"
             aria-selected={postMode === "practice"}
             onClick={() => onPostModeChange?.("practice")}
-            className="min-h-9 rounded-full px-4 py-2 text-xs font-medium transition"
+            className="min-h-9 rounded-md px-3.5 py-2 text-xs font-semibold transition"
             style={{
               background: postMode === "practice" ? "var(--semantic-surface)" : "transparent",
               color: postMode === "practice" ? "var(--theme-heading-text)" : "var(--semantic-text-secondary)",
@@ -149,7 +166,7 @@ export function PathwayLessonQuizSet({
             role="tab"
             aria-selected={postMode === "exam"}
             onClick={() => onPostModeChange?.("exam")}
-            className="min-h-9 rounded-full px-4 py-2 text-xs font-medium transition"
+            className="min-h-9 rounded-md px-3.5 py-2 text-xs font-semibold transition"
             style={{
               background: postMode === "exam" ? "var(--semantic-surface)" : "transparent",
               color: postMode === "exam" ? "var(--theme-heading-text)" : "var(--semantic-text-secondary)",
@@ -161,35 +178,34 @@ export function PathwayLessonQuizSet({
         </div>
       ) : null}
 
-      <ol className="mt-5 list-none space-y-7 pl-0">
+      <ol className="mt-5 list-none space-y-6 pl-0">
         {list.map((q, i) => {
           const picked = answers[i];
           const showGrading = shouldShowGrading(i);
           const isCorrect = showGrading && picked === q.correct;
           return (
             <li key={i}>
-              <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 sm:p-5">
-                <p className="text-[0.9375rem] font-normal leading-relaxed text-[var(--theme-heading-text)]">
-                  <span className="mr-2 text-[var(--semantic-text-secondary)]">{i + 1}.</span>
+              <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_94%,var(--semantic-brand)_6%)] bg-[var(--bg-card)] p-4 sm:p-[1.125rem]">
+                <p className="text-[0.9375rem] font-medium leading-snug text-[var(--theme-heading-text)]">
+                  <span className="mr-2 font-semibold tabular-nums text-[var(--semantic-text-muted)]">Q{i + 1}</span>
                   {q.question}
                 </p>
-                <fieldset className="mt-3 space-y-2 border-0 p-0">
+                <fieldset className="mt-3.5 space-y-2 border-0 p-0">
                   {q.options.map((opt, j) => {
                     const selected = answers[i] === j;
                     let rowClass =
-                      "flex items-baseline gap-2.5 rounded-lg px-3 py-2 text-[0.9rem] leading-relaxed transition-colors text-[var(--theme-body-text)]";
+                      "flex min-h-11 cursor-pointer items-start gap-3 rounded-md border border-transparent px-3 py-2.5 text-[0.9rem] leading-relaxed text-[var(--theme-body-text)] transition-colors hover:border-[color-mix(in_srgb,var(--semantic-border-soft)_80%,var(--semantic-brand)_20%)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_25%,transparent)] has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--semantic-brand)] has-[:focus-visible]:ring-offset-2";
                     if (showGrading) {
                       if (j === q.correct) {
                         rowClass =
-                          "flex items-baseline gap-2.5 rounded-lg px-3 py-2 text-[0.9rem] leading-relaxed font-medium";
-                        rowClass +=
-                          " bg-[color-mix(in_srgb,var(--semantic-success)_14%,var(--semantic-surface))] text-[var(--semantic-success-contrast)]";
+                          "flex min-h-11 items-start gap-3 rounded-md border px-3 py-2.5 text-[0.9rem] leading-relaxed font-medium border-[color-mix(in_srgb,var(--semantic-success)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_12%,var(--semantic-surface))] text-[var(--semantic-text-primary)]";
                       } else if (selected && j !== q.correct) {
                         rowClass =
-                          "flex items-baseline gap-2.5 rounded-lg px-3 py-2 text-[0.9rem] leading-relaxed font-medium";
-                        rowClass +=
-                          " bg-[color-mix(in_srgb,var(--semantic-danger)_12%,var(--semantic-surface))] text-[var(--semantic-danger-contrast)]";
+                          "flex min-h-11 items-start gap-3 rounded-md border px-3 py-2.5 text-[0.9rem] leading-relaxed font-medium border-[color-mix(in_srgb,var(--semantic-danger)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] text-[var(--semantic-text-primary)]";
                       }
+                    } else if (selected) {
+                      rowClass +=
+                        " border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))]";
                     }
                     return (
                       <label key={j} className={rowClass}>
@@ -199,7 +215,7 @@ export function PathwayLessonQuizSet({
                           value={String(j)}
                           checked={selected}
                           onChange={() => setAnswers((prev) => ({ ...prev, [i]: j }))}
-                          className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--semantic-brand)]"
+                          className="mt-1 h-4 w-4 shrink-0 accent-[var(--semantic-brand)]"
                         />
                         <span
                           className={`shrink-0 rounded-md px-1.5 py-0.5 text-[0.7rem] font-semibold uppercase tracking-wider ${
@@ -226,14 +242,18 @@ export function PathwayLessonQuizSet({
               </div>
               {showGrading && q.rationale ? (
                 <div
-                  className="nn-lesson-rationale mt-3 rounded-xl border border-[var(--semantic-border-soft)] p-4"
+                  className={`nn-lesson-rationale mt-3 rounded-lg border p-3.5 sm:p-4 ${
+                    isCorrect
+                      ? "border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))]"
+                      : "border-[color-mix(in_srgb,var(--semantic-warning)_30%,var(--semantic-border-soft))]"
+                  }`}
                   style={{
                     background: isCorrect
-                      ? "color-mix(in srgb, var(--semantic-panel-positive) 35%, var(--semantic-surface))"
-                      : "color-mix(in srgb, var(--semantic-panel-warm) 28%, var(--semantic-surface))",
+                      ? "color-mix(in srgb, var(--semantic-panel-positive) 38%, var(--semantic-surface))"
+                      : "color-mix(in srgb, var(--semantic-panel-warm) 26%, var(--semantic-surface))",
                   }}
                 >
-                  <p className="nn-lesson-rationale__label">Rationale</p>
+                  <p className="nn-lesson-rationale__label">{isCorrect ? "Why this is correct" : "Key teaching point"}</p>
                   <p className="nn-lesson-rationale__body">{q.rationale}</p>
                 </div>
               ) : null}
@@ -243,22 +263,18 @@ export function PathwayLessonQuizSet({
       </ol>
 
       {variant === "post" && fullAccess && postMode === "exam" && allAnswered && !examRevealed ? (
-        <div className="mt-6">
+        <div className="mt-5">
           <button
             type="button"
             onClick={() => setExamRevealed(true)}
-            className="rounded-xl border px-5 py-2.5 text-sm font-medium text-[var(--theme-heading-text)]"
-            style={{
-              borderColor: "var(--semantic-border-soft)",
-              background: "color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-surface))",
-            }}
+            className="inline-flex min-h-10 items-center justify-center rounded-md bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground shadow-sm transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--role-cta-shadow)] focus-visible:ring-offset-2"
           >
             Show results
           </button>
         </div>
       ) : null}
 
-      <div className="mt-5 flex flex-wrap items-center gap-3">
+      <div className="mt-4 flex flex-wrap items-center gap-2 border-t border-[var(--semantic-border-soft)] pt-3">
         {!fullAccess ? (
           <p className="text-xs text-[var(--semantic-warning-contrast)]">
             {answeredCount}/{total} answered · full access unlocks answer highlights and rationales.

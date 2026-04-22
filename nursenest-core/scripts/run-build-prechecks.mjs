@@ -33,6 +33,32 @@ execFileSync(process.execPath, ["--import", "tsx", "--test", marketingPublicShar
   stdio: "inherit",
 });
 
+const marketingMetadataStrictTest = path.join(
+  packageRoot,
+  "src",
+  "lib",
+  "marketing-i18n",
+  "marketing-metadata-strict.test.ts",
+);
+console.log("[build-prechecks] running marketing-metadata-strict contract test");
+execFileSync(process.execPath, ["--import", "tsx", "--test", marketingMetadataStrictTest], {
+  cwd: packageRoot,
+  stdio: "inherit",
+});
+
+const publicMarketingCopyHardeningTest = path.join(
+  packageRoot,
+  "src",
+  "lib",
+  "marketing-i18n",
+  "public-marketing-copy-hardening.contract.test.tsx",
+);
+console.log("[build-prechecks] running public-marketing-copy-hardening contract test");
+execFileSync(process.execPath, ["--import", "tsx", "--test", publicMarketingCopyHardeningTest], {
+  cwd: packageRoot,
+  stdio: "inherit",
+});
+
 const homeGlobalRegionsContractTest = path.join(
   packageRoot,
   "src",

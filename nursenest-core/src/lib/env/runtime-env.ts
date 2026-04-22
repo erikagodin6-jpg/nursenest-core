@@ -1,7 +1,12 @@
 /**
- * Centralized reads for admin AI + OpenAI API key env (single snapshot per process).
+ * Centralized reads for admin AI + OpenAI API key env.
  * All `AI_ADMIN_GENERATION_ENABLED` / `AI_INTEGRATIONS_OPENAI_API_KEY` / `OPENAI_API_KEY`
  * access for server logic should go through this module — not scattered `process.env` reads.
+ *
+ * **No module-level cache:** values are read from `process.env` on every call so the gate
+ * always matches the current runtime environment (DigitalOcean/Vercel inject vars at process
+ * start; a stale snapshot would otherwise stick until restart). Bracket `process.env[key]`
+ * avoids bundler static replacement of `process.env.FOO` for unknown keys.
  */
 import { parseBooleanEnv } from "@/lib/env/parse-boolean-env";
 
@@ -18,12 +23,16 @@ export type AdminAiOpenAiRuntimeSnapshot = {
   legacyOpenAiKeyPresent: boolean;
 };
 
-let cachedSnapshot: AdminAiOpenAiRuntimeSnapshot | null = null;
+function readAdminAiEnvString(key: string): string | undefined {
+  return process.env[key];
+}
 
 function buildAdminAiOpenAiRuntimeSnapshot(): AdminAiOpenAiRuntimeSnapshot {
-  const rawAiAdminGenerationEnabled = process.env.AI_ADMIN_GENERATION_ENABLED;
-  const integrations = process.env.AI_INTEGRATIONS_OPENAI_API_KEY?.trim() || null;
-  const legacy = process.env.OPENAI_API_KEY?.trim() || null;
+  const rawAiAdminGenerationEnabled = readAdminAiEnvString("AI_ADMIN_GENERATION_ENABLED");
+  const integrationsRaw = readAdminAiEnvString("AI_INTEGRATIONS_OPENAI_API_KEY");
+  const legacyRaw = readAdminAiEnvString("OPENAI_API_KEY");
+  const integrations = integrationsRaw?.trim() || null;
+  const legacy = legacyRaw?.trim() || null;
   const aiIntegrationsOpenAiKeyPresent = Boolean(integrations);
   const legacyOpenAiKeyPresent = Boolean(legacy);
   return {
@@ -36,15 +45,14 @@ function buildAdminAiOpenAiRuntimeSnapshot(): AdminAiOpenAiRuntimeSnapshot {
   };
 }
 
-/** Single read path; safe to call from any server module. */
+/** Reads current `process.env` every call (no cross-request cache). */
 export function getAdminAiOpenAiRuntimeSnapshot(): AdminAiOpenAiRuntimeSnapshot {
-  if (!cachedSnapshot) cachedSnapshot = buildAdminAiOpenAiRuntimeSnapshot();
-  return cachedSnapshot;
+  return buildAdminAiOpenAiRuntimeSnapshot();
 }
 
-/** @internal Tests that mutate `process.env` must reset the cache. */
+/** @internal No-op at runtime (reads are always fresh); kept so tests that reset stay valid. */
 export function resetRuntimeEnvSnapshotForTests(): void {
-  cachedSnapshot = null;
+  /* intentionally empty — was used to clear a removed module-level cache */
 }
 
 export function isAdminAiEnabled(): boolean {

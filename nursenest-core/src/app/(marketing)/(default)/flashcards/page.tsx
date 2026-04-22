@@ -9,7 +9,8 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
-import { formatMarketingMessage, resolveMarketingCopy } from "@/lib/marketing-i18n-core";
+import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
+import { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-metadata-strict";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import {
   defaultFlashcardsMetaDescription,
@@ -27,13 +28,13 @@ export async function generateMetadata(): Promise<Metadata> {
       const m = await loadMarketingMessages(locale);
       const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
       const metaSfx = marketingRegion === "US" ? "US" : "CA";
-      const title = resolveMarketingCopy(
+      const title = getRequiredPublicMetadataLine(
         m,
         `pages.publicFlashcardsHub.metaTitle${metaSfx}`,
         en,
         defaultFlashcardsMetaTitle(marketingRegion),
       );
-      const description = resolveMarketingCopy(
+      const description = getRequiredPublicMetadataLine(
         m,
         `pages.publicFlashcardsHub.metaDescription${metaSfx}`,
         en,

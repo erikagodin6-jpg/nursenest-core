@@ -6,6 +6,7 @@ import {
   warnIfStripeLiveKeyOutsideProduction,
 } from "@/lib/env/central-env-validation";
 import { runProductionEnvGuard } from "@/lib/env/production-env-guard";
+import { logRuntimeEnvSnapshot, validateRuntimeEnvOrThrow } from "@/lib/env/runtime-env-guard";
 import { logStartupContext } from "@/lib/env/server-env";
 import { logHighMemory } from "@/lib/observability/perf-log-core";
 import { logMemoryPressureSample } from "@/lib/observability/perf-log-host-memory";
@@ -35,6 +36,8 @@ export async function registerNodeInstrumentation(): Promise<void> {
   logDatabaseEnvOnce();
   validateProductionDatabaseEnv();
   runProductionEnvGuard();
+  logRuntimeEnvSnapshot();
+  validateRuntimeEnvOrThrow();
   console.error(
     `[nursenest-core] instrumentation: nodejs runtime registered PORT=${process.env.PORT ?? "(unset)"}`,
   );
@@ -42,20 +45,36 @@ export async function registerNodeInstrumentation(): Promise<void> {
   {
     const aiGate = getAdminAiGenerationGate();
     warnAdminAiGenerationMisconfigurationIfNeeded(aiGate);
+    /** Redacted boot line — no secret values; confirms runtime env visibility for admin AI gate. */
     console.error(
-      `[nursenest-core] boot admin_ai env: flag_normalized=${String(aiGate.diagnostics.adminAiGenerationFlagNormalized)} flag_class=${aiGate.diagnostics.aiAdminGenerationFlagClass} openai_key_integrations=${String(aiGate.diagnostics.aiIntegrationsOpenAiKeyPresent)} openai_key_legacy=${String(aiGate.diagnostics.legacyOpenAiKeyPresent)} mode=${aiGate.mode}`,
+      `[nursenest-core] boot admin_ai_gate ` +
+        `AI_ADMIN_GENERATION_ENABLED_present=${String(aiGate.diagnostics.aiAdminGenerationEnvPresent)} ` +
+        `AI_ADMIN_GENERATION_ENABLED_flag_class=${aiGate.diagnostics.aiAdminGenerationFlagClass} ` +
+        `AI_ADMIN_GENERATION_ENABLED_normalized=${String(aiGate.diagnostics.adminAiGenerationFlagNormalized)} ` +
+        `AI_INTEGRATIONS_OPENAI_API_KEY_present=${String(aiGate.diagnostics.aiIntegrationsOpenAiKeyPresent)} ` +
+        `OPENAI_API_KEY_present=${String(aiGate.diagnostics.legacyOpenAiKeyPresent)} ` +
+        `final_gate_runnable=${String(aiGate.runnable)} ` +
+        `final_gate_mode=${aiGate.mode}`,
     );
     if (!aiGate.runnable) {
       safeServerLog("admin_ai_generation", "boot_gate_inactive", {
-        mode: aiGate.mode,
-        flagEnabled: aiGate.flagEnabled,
-        openAiKeyPresent: aiGate.openAiKeyPresent,
-        ...aiGate.diagnostics,
+        AI_ADMIN_GENERATION_ENABLED_present: aiGate.diagnostics.aiAdminGenerationEnvPresent,
+        AI_ADMIN_GENERATION_ENABLED_flag_class: aiGate.diagnostics.aiAdminGenerationFlagClass,
+        AI_ADMIN_GENERATION_ENABLED_normalized: aiGate.diagnostics.adminAiGenerationFlagNormalized,
+        AI_INTEGRATIONS_OPENAI_API_KEY_present: aiGate.diagnostics.aiIntegrationsOpenAiKeyPresent,
+        OPENAI_API_KEY_present: aiGate.diagnostics.legacyOpenAiKeyPresent,
+        final_gate_runnable: aiGate.runnable,
+        final_gate_mode: aiGate.mode,
       });
     } else {
       safeServerLog("admin_ai_generation", "boot_gate_active", {
-        mode: aiGate.mode,
-        ...aiGate.diagnostics,
+        AI_ADMIN_GENERATION_ENABLED_present: aiGate.diagnostics.aiAdminGenerationEnvPresent,
+        AI_ADMIN_GENERATION_ENABLED_flag_class: aiGate.diagnostics.aiAdminGenerationFlagClass,
+        AI_ADMIN_GENERATION_ENABLED_normalized: aiGate.diagnostics.adminAiGenerationFlagNormalized,
+        AI_INTEGRATIONS_OPENAI_API_KEY_present: aiGate.diagnostics.aiIntegrationsOpenAiKeyPresent,
+        OPENAI_API_KEY_present: aiGate.diagnostics.legacyOpenAiKeyPresent,
+        final_gate_runnable: aiGate.runnable,
+        final_gate_mode: aiGate.mode,
       });
     }
   }

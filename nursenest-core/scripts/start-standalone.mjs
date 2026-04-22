@@ -22,6 +22,7 @@ import { fileURLToPath } from "node:url";
 import { verifyStandaloneArtifact } from "./verify-standalone-artifact.mjs";
 import { normalizeBootstrapProbePathname } from "./standalone-bootstrap-probe-pathname.mjs";
 import { resolveBootstrapStartupMode } from "./resolve-bootstrap-mode.mjs";
+import { logRuntimeEnvSnapshot, validateRuntimeEnvOrThrow } from "./runtime-env-guard-bootstrap.mjs";
 
 const bootAt = Date.now();
 const pkgRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -34,6 +35,9 @@ try {
   console.error(`[nursenest-core] FATAL: ${message}`);
   process.exit(1);
 }
+
+logRuntimeEnvSnapshot();
+validateRuntimeEnvOrThrow();
 
 if (process.env.NODE_ENV !== "production") {
   process.env.NODE_ENV = "production";

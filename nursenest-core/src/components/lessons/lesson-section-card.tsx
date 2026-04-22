@@ -15,14 +15,26 @@ import {
 import type { PathwayLessonSectionKind } from "@/lib/lessons/pathway-lesson-types";
 import { getLessonSectionTheme } from "@/lib/ui/lesson-section-theme";
 
+function lessonSectionSurface(kind: PathwayLessonSectionKind | undefined | null): "editorial" | "callout" {
+  if (!kind) return "editorial";
+  const callout: PathwayLessonSectionKind[] = [
+    "clinical_pearls",
+    "red_flags",
+    "takeaways",
+    "exam_tips",
+    "exam_focus",
+    "exam_relevance",
+    "clinical_scenario",
+    "tier_specific_relevance",
+  ];
+  return callout.includes(kind) ? "callout" : "editorial";
+}
+
 /**
  * Reusable semantic study card for pathway lesson sections.
  *
  * Color is driven by `kind` → role → CSS custom properties on `.nn-lesson-section-card[data-lsc-role]`.
- * The same kind always renders the same color family across all lessons, all pages.
- *
- * Chip label ("Signs & Symptoms", "Nursing Care", etc.) is auto-derived from the kind mapping
- * in `lib/ui/lesson-section-theme.ts`. Override via `chipLabel` if needed for a specific section.
+ * Editorial sections use a flat, continuous-reading surface; high-yield kinds use a subtle callout frame.
  */
 export function LessonSectionCard({
   id,
@@ -43,6 +55,8 @@ export function LessonSectionCard({
 }) {
   const { chipLabel: derivedChipLabel, dataRole, role } = getLessonSectionTheme(kind);
   const chipLabel = chipLabelOverride ?? derivedChipLabel;
+  const surface = lessonSectionSurface(kind);
+  const tierCrosswalk = kind === "tier_specific_relevance";
   const ROLE_ICON = {
     info: Lightbulb,
     warning: AlertTriangle,
@@ -61,18 +75,29 @@ export function LessonSectionCard({
   return (
     <section
       id={id}
-      className={["nn-lesson-section-card scroll-mt-24", className].filter(Boolean).join(" ")}
+      className={[
+        "nn-lesson-section-card scroll-mt-24",
+        surface === "editorial" ? "nn-lesson-section-card--editorial" : "nn-lesson-section-card--callout",
+        tierCrosswalk ? "nn-lesson-section-card--tier-callout" : "",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
       data-lsc-role={dataRole}
       aria-label={heading?.trim() || "Lesson section"}
     >
-      <span className="nn-lesson-section-chip inline-flex items-center gap-1.5" aria-hidden="true">
-        <ChipIcon className="nn-icon-sm" aria-hidden="true" />
-        {chipLabel}
-      </span>
-      <h2 className="nn-lesson-section-heading mt-2.5 text-[var(--theme-heading-text)]">
+      {surface === "callout" ? (
+        <span className="nn-lesson-section-chip inline-flex items-center gap-1.5" aria-hidden="true">
+          <ChipIcon className="nn-icon-sm" aria-hidden="true" />
+          {chipLabel}
+        </span>
+      ) : (
+        <p className="nn-lesson-section-eyebrow">{chipLabel}</p>
+      )}
+      <h2 className="nn-lesson-section-heading mt-2 text-[var(--theme-heading-text)]">
         {heading?.trim() || "Section"}
       </h2>
-      <div className="mt-5">{children}</div>
+      <div className={surface === "callout" ? "mt-4" : "mt-3.5"}>{children}</div>
     </section>
   );
 }

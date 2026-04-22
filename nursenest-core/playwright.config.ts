@@ -49,6 +49,11 @@ function localDevWebServer() {
     timeout: 420_000,
     env: {
       RUN_HEAVY_BUILD_TASKS: "false",
+      /**
+       * Local/E2E `next dev` often omits production AI keys; runtime guard defaults to `strict`.
+       * Keep Playwright's dev server bootable unless a suite explicitly forces strict validation.
+       */
+      NN_ENV_VALIDATION_MODE: process.env.NN_ENV_VALIDATION_MODE?.trim() || "warn",
       NEXTAUTH_SECRET: secret,
       /** Client session fetch uses absolute origin; unset values cause ClientFetchError in Playwright. */
       AUTH_URL: origin.origin,
@@ -113,7 +118,7 @@ const e2eWebServer = localDevWebServer();
 export default defineConfig({
   ...(e2eWebServer ? { webServer: e2eWebServer } : {}),
   testDir: ".",
-  testMatch: ["tests/e2e/**/*.spec.ts"],
+  testMatch: ["tests/e2e/**/*.spec.ts", "tests/marketing/**/*.spec.ts", "tests/env/**/*.spec.ts"],
   // Exclude Next build output (would duplicate every spec under `.next/standalone/.../tests/e2e/`).
   testIgnore: [
     /^\.next[\\/]/,

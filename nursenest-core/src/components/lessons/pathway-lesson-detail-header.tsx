@@ -13,8 +13,17 @@ type Props = {
   bodySystem: string;
   /** Right column: progress badge live, etc. */
   trailing?: ReactNode;
-  /** Exam alignment chips (relevance, tier, geography) — below the eyebrow row. */
+  /** Exam alignment chips (relevance, tier, geography) — compact row below title. */
   metaChips?: ReactNode;
+  /** Optional app links (same targets as bottom actions) — shown as quiet secondary row. */
+  studyQuickLinks?: {
+    practiceHref: string;
+    flashcardsHref: string;
+    practiceLabel: ReactNode;
+    flashcardsLabel: ReactNode;
+  } | null;
+  /** One line when pre/post assessments exist (set by parent). */
+  assessmentFlowHint?: string | null;
 };
 
 /**
@@ -31,47 +40,16 @@ export function PathwayLessonDetailHeaderSkeleton({ pathway }: { pathway: ExamPa
       data-nn-exam-short={examName}
       aria-busy="true"
       aria-label={`${compactExamName}, ${place} — loading lesson`}
-      className="nn-gradient-safe relative overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-gradient-to-br from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-page-bg))] px-4 py-3 shadow-[var(--shadow-card)] sm:px-5 sm:py-4"
+      className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-brand)_8%)] bg-[color-mix(in_srgb,var(--theme-page-bg)_98%,var(--semantic-panel-muted)_2%)] px-4 py-3 sm:px-5 sm:py-4"
     >
-      <div
-        className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_7%,transparent)] blur-3xl"
-        aria-hidden
-      />
-      <div className="relative">
-        <div
-          className="flex max-w-full flex-wrap items-center gap-x-2.5 gap-y-1.5 rounded-xl border border-[color-mix(in_srgb,var(--theme-primary)_12%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_4.5%,var(--bg-card))] px-3 py-2.5 text-sm shadow-[var(--shadow-card)]"
-          role="group"
-          aria-label={`${compactExamName}, ${place}`}
-        >
-          <span className="font-medium text-[var(--theme-heading-text)]">{compactExamName}</span>
-          <span aria-hidden className="text-[var(--theme-muted-text)]">
-            ·
-          </span>
-          <span className="text-[var(--theme-body-text)]">{place}</span>
-          <span aria-hidden className="text-[var(--theme-muted-text)]">
-            ·
-          </span>
-          <span className="inline-block h-3 w-24 rounded bg-[color-mix(in_srgb,var(--theme-muted-text)_35%,transparent)]" aria-hidden />
-        </div>
-        <div className="mt-3 grid grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(11rem,13.75rem)] md:gap-x-6">
-          <div className="min-w-0 space-y-3">
-            <div className="nn-skeleton mt-1 h-8 w-[min(100%,28rem)] rounded-lg" />
-            <div className="nn-skeleton h-4 w-full max-w-prose rounded-md" />
-            <div className="nn-skeleton h-4 w-[88%] max-w-prose rounded-md" />
-          </div>
-          <div className="hidden min-h-[2.75rem] w-full md:block md:justify-self-end">
-            <div className="nn-skeleton h-10 w-full rounded-lg" />
-          </div>
-        </div>
-        <div className="mt-3 border-t border-[color-mix(in_srgb,var(--border-subtle)_88%,var(--theme-primary))] pt-3">
-          <div className="nn-skeleton inline-block h-10 min-w-[8rem] rounded-lg" aria-hidden />
-        </div>
-      </div>
+      <div className="nn-skeleton mb-2 h-3 w-48 rounded" />
+      <div className="nn-skeleton h-8 w-[min(100%,24rem)] rounded-lg" />
+      <div className="nn-skeleton mt-2 h-3 w-40 rounded" />
     </header>
   );
 }
 
-/** Pathway lesson detail — title band, exam context, back link to hub (marketing). */
+/** Pathway lesson detail — compact hero: hub wayfinding, title, topic, optional study links (marketing). */
 export function PathwayLessonDetailHeader({
   pathway,
   lessonsBasePath,
@@ -80,6 +58,8 @@ export function PathwayLessonDetailHeader({
   bodySystem,
   trailing,
   metaChips,
+  studyQuickLinks,
+  assessmentFlowHint,
 }: Props) {
   const place = pathwayCountryLabel(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
@@ -91,65 +71,71 @@ export function PathwayLessonDetailHeader({
     <header
       data-nn-pathway-id={pathway.id}
       data-nn-exam-short={examName}
-      className="nn-gradient-safe relative overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] bg-gradient-to-br from-[var(--nn-presentation-wash)] via-[var(--theme-page-bg)] to-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-page-bg))] px-4 py-3 shadow-[var(--shadow-card)] sm:px-5 sm:py-4"
+      className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand)_10%)] bg-[color-mix(in_srgb,var(--theme-page-bg)_97%,var(--semantic-panel-cool)_3%)] px-4 py-3 sm:px-5 sm:py-4"
     >
-      {/*
-        Layout mirrors legacy `client/src/pages/lesson-detail.tsx` title + ~220px action column:
-        main study context left, progress / CTAs right on md+.
-      */}
-      <div
-        className="pointer-events-none absolute -right-10 -top-12 h-36 w-36 rounded-full bg-[color-mix(in_srgb,var(--theme-primary)_7%,transparent)] blur-3xl"
-        aria-hidden
-      />
-      <div className="relative">
-        {/* Exam-first trust band: shortName + country before topic so REx-PN / NCLEX-PN identity reads clearly (hierarchy). */}
-        <div
-          className="flex max-w-full flex-wrap items-center gap-x-2.5 gap-y-1.5 rounded-xl border border-[color-mix(in_srgb,var(--theme-primary)_12%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--theme-primary)_4.5%,var(--bg-card))] px-3 py-2.5 text-sm shadow-[var(--shadow-card)]"
-          role="group"
-          aria-label={`${compactExamName}, ${place}, ${bodySystem}`}
+      <nav aria-label="Lesson location" className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[11px] font-medium text-[var(--theme-muted-text)] sm:text-xs">
+        <Link
+          href={lessonsBasePath}
+          className="text-[var(--semantic-brand)] underline-offset-2 hover:text-[var(--theme-heading-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
         >
-          <span className="font-medium text-[var(--theme-heading-text)]">{compactExamName}</span>
-          <span aria-hidden className="text-[var(--theme-muted-text)]">
-            ·
-          </span>
-          <span className="text-[var(--theme-body-text)]">{place}</span>
-          <span aria-hidden className="text-[var(--theme-muted-text)]">
-            ·
-          </span>
-          <span className="text-[var(--theme-muted-text)]">{bodySystem}</span>
-        </div>
-        {metaChips ? <div className="mt-3 flex flex-wrap gap-1.5">{metaChips}</div> : null}
-        <div
-          className={
-            hasTrailing
-              ? "mt-3 grid grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(11rem,13.75rem)] md:gap-x-6"
-              : "mt-3 grid grid-cols-1 items-start gap-4"
-          }
-        >
-          <div className="min-w-0">
-            <h1 className="nn-lesson-page-title mt-1 text-balance">
-              {lessonTitle}
-            </h1>
-            <p className="mt-2 max-w-prose text-sm leading-relaxed text-[var(--theme-body-text)]">
-              <span className="font-medium text-[var(--theme-heading-text)]">{lessonTopic}</span>
-              <span aria-hidden className="mx-2 text-[var(--theme-muted-text)]">
-                ·
-              </span>
-              Focused lesson content with practice questions and exam-style drills linked below.
+          Lesson hub
+        </Link>
+        <span aria-hidden className="text-[var(--semantic-border-soft)]">
+          /
+        </span>
+        <span>{place}</span>
+        {bodySystem?.trim() ? (
+          <>
+            <span aria-hidden className="text-[var(--semantic-border-soft)]">
+              ·
+            </span>
+            <span className="text-[var(--theme-body-text)]">{bodySystem.trim()}</span>
+          </>
+        ) : null}
+        <span className="sr-only"> ({compactExamName})</span>
+      </nav>
+
+      <div className={`mt-2.5 ${hasTrailing ? "lg:flex lg:items-start lg:justify-between lg:gap-6" : ""}`}>
+        <div className="min-w-0 flex-1">
+          <h1 className="nn-lesson-page-title text-balance">{lessonTitle}</h1>
+          <p className="mt-1.5 text-sm font-medium leading-snug text-[var(--theme-heading-text)] sm:text-[0.9375rem]">
+            {lessonTopic}
+          </p>
+          {assessmentFlowHint ? (
+            <p className="mt-2 max-w-prose text-xs leading-relaxed text-[var(--theme-muted-text)] sm:text-sm">
+              {assessmentFlowHint}
             </p>
-          </div>
-          {trailing ? (
-            <div className="flex w-full flex-col gap-2 md:items-stretch md:justify-self-end md:pt-0.5">{trailing}</div>
+          ) : null}
+          {metaChips ? <div className="mt-3 flex flex-wrap gap-1.5">{metaChips}</div> : null}
+          {studyQuickLinks ? (
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Link
+                href={studyQuickLinks.practiceHref}
+                data-nn-pathway-id={pathway.id}
+                className="inline-flex min-h-10 items-center justify-center rounded-md bg-[var(--semantic-brand)] px-3.5 py-2 text-xs font-semibold text-[var(--text-on-dark)] shadow-sm transition hover:opacity-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:text-sm"
+              >
+                {studyQuickLinks.practiceLabel}
+              </Link>
+              <Link
+                href={studyQuickLinks.flashcardsHref}
+                data-nn-pathway-id={pathway.id}
+                className="inline-flex min-h-10 items-center justify-center rounded-md border border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,var(--semantic-brand)_15%)] bg-[color-mix(in_srgb,var(--theme-page-bg)_92%,var(--semantic-surface)_8%)] px-3.5 py-2 text-xs font-semibold text-[var(--theme-heading-text)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--theme-page-bg))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:text-sm"
+              >
+                {studyQuickLinks.flashcardsLabel}
+              </Link>
+            </div>
           ) : null}
         </div>
-        <div className="mt-3 border-t border-[color-mix(in_srgb,var(--border-subtle)_88%,var(--theme-primary))] pt-3">
-          <Link
-            href={lessonsBasePath}
-            className="nn-study-pill-secondary inline-flex min-h-10 items-center justify-center px-4 py-2 text-sm font-medium text-primary"
-          >
-            ← All lessons
-          </Link>
-        </div>
+        {trailing ? <div className="mt-3 flex shrink-0 flex-col gap-2 lg:mt-0 lg:items-end lg:pt-0.5">{trailing}</div> : null}
+      </div>
+
+      <div className="mt-3 border-t border-[var(--semantic-border-soft)] pt-2.5">
+        <Link
+          href={lessonsBasePath}
+          className="text-xs font-medium text-[var(--semantic-brand)] underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:text-sm"
+        >
+          ← All lessons
+        </Link>
       </div>
     </header>
   );

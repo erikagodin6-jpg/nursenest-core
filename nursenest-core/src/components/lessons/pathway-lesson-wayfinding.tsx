@@ -103,31 +103,31 @@ export function PathwayLessonWayfinding({
 
   return (
     <nav
-      className="nn-lesson-wayfinding mx-auto mt-8 max-w-5xl rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_96%,var(--semantic-brand)_4%)] bg-[color-mix(in_srgb,var(--bg-card)_97%,var(--semantic-panel-muted)_3%)] px-4 py-4 sm:px-5 sm:py-5"
+      className="nn-lesson-wayfinding mx-auto mt-6 max-w-5xl rounded-lg border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--bg-card)_98%,var(--semantic-panel-muted)_2%)] px-3 py-3 sm:mt-8 sm:px-4 sm:py-4"
       aria-labelledby="lesson-wayfinding-heading"
     >
-      <h2 id="lesson-wayfinding-heading" className="text-base font-medium tracking-tight text-[var(--theme-heading-text)]">
-        Continue studying on NurseNest
+      <h2 id="lesson-wayfinding-heading" className="text-sm font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-base">
+        Study support
       </h2>
-      <p className="mt-1 max-w-prose text-xs leading-relaxed text-[var(--theme-muted-text)] sm:text-sm">
-        Pathway-scoped links—stay inside {pathway.shortName} while you move between lessons, questions, and tools.
+      <p className="mt-0.5 max-w-prose text-xs leading-relaxed text-[var(--theme-muted-text)]">
+        Same exam pathway—lessons, bank, and tools stay scoped.
       </p>
 
-      <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+      <ul className="mt-3 grid gap-1.5 sm:grid-cols-2">
         {coreLinks.map((item) => {
           const Icon = item.icon;
           return (
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="flex min-h-[3.25rem] gap-3 rounded-lg border border-transparent px-2 py-2 transition hover:border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,var(--semantic-brand)_15%)] hover:bg-[color-mix(in_srgb,var(--bg-card)_90%,var(--theme-muted-surface)_10%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)]"
+                className="flex min-h-[3rem] gap-2.5 rounded-md border border-transparent px-2 py-1.5 transition hover:border-[color-mix(in_srgb,var(--semantic-border-soft)_80%,var(--semantic-brand)_20%)] hover:bg-[color-mix(in_srgb,var(--theme-page-bg)_92%,var(--semantic-panel-cool)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)]"
               >
-                <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--bg-card))] text-[var(--semantic-brand)]" aria-hidden>
-                  <Icon className="h-4 w-4" strokeWidth={1.75} />
+                <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-[color-mix(in_srgb,var(--semantic-brand)_7%,var(--bg-card))] text-[var(--semantic-brand)]" aria-hidden>
+                  <Icon className="h-3.5 w-3.5" strokeWidth={1.75} />
                 </span>
                 <span className="min-w-0">
                   <span className="block text-sm font-medium text-[var(--theme-heading-text)]">{item.label}</span>
-                  <span className="mt-0.5 block text-xs leading-snug text-[var(--theme-muted-text)]">{item.description}</span>
+                  <span className="mt-0.5 block text-[11px] leading-snug text-[var(--theme-muted-text)] sm:text-xs">{item.description}</span>
                 </span>
               </Link>
             </li>
@@ -136,16 +136,14 @@ export function PathwayLessonWayfinding({
       </ul>
 
       {curated.length > 0 ? (
-        <div className="mt-5 border-t border-[var(--semantic-border-soft)] pt-4">
-          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-[var(--theme-muted-text)]">
-            Suggested related lessons
-          </p>
-          <ul className="mt-2 space-y-1.5">
+        <div className="mt-4 border-t border-[var(--semantic-border-soft)] pt-3">
+          <p className="nn-lesson-module-eyebrow">Related reads</p>
+          <ul className="mt-2 space-y-1">
             {curated.map((c) => (
               <li key={c.href}>
                 <Link
                   href={c.href}
-                  className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--semantic-brand)] hover:underline focus-visible:outline-none focus-visible:underline"
+                  className="inline-flex min-h-9 items-center gap-1.5 rounded-md px-1 py-1 text-sm font-medium text-[var(--semantic-brand)] hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,transparent)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)]"
                 >
                   {c.title}
                   <span aria-hidden className="text-[var(--theme-muted-text)]">
@@ -155,10 +153,6 @@ export function PathwayLessonWayfinding({
               </li>
             ))}
           </ul>
-          <p className="mt-2 text-[0.7rem] leading-relaxed text-[var(--theme-muted-text)]">
-            Pulled from this lesson’s related-lesson map when authors provide links—additional topic matches appear in “Your
-            next step” below.
-          </p>
         </div>
       ) : null}
     </nav>

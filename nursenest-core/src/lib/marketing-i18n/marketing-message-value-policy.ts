@@ -1,7 +1,8 @@
 /**
  * Central rules for **authored** marketing message leaves and **runtime** resolution.
  *
- * - **Missing keys**: see {@link missingMarketingCopyFallback} / {@link formatMarketingMessage} in `marketing-i18n-core.ts`.
+ * - **Missing keys**: {@link missingMarketingCopyFallback} is always empty — public UI must use
+ *   `getRequiredPublicMessage` (see `marketing-i18n-core.ts`) / build gates for required copy, never humanized key tails.
  * - **Mirror stubs**: template values that echo the key (e.g. `pages.foo.title` → `Title`, `foo.title2` → `Title`,
  *   `report.descriptionLabel` → `Description`).
  * - **Shouty template tokens**: explicit `LABEL`, `TITLE`, … — not generic ALL_CAPS (avoids blocking real acronyms).
@@ -51,6 +52,7 @@ export const MARKETING_FORBIDDEN_WHOLE_VALUE_CI = new Set(
     "kicker",
     "subtitle",
     "cta",
+    "button",
     "value1",
     "value2",
     "value3",
@@ -76,6 +78,7 @@ const FORBIDDEN_SHOUTY_TEMPLATE_TOKENS = new Set([
   "INTRO",
   "LEAD",
   "CTA",
+  "BUTTON",
   "STUB",
   "TODO",
   "TBD",
@@ -119,8 +122,22 @@ export function isForbiddenAuthoredMarketingLeafValue(value: string): boolean {
   return false;
 }
 
+/**
+ * True when the **whole** trimmed value is a known design-system / Storybook singleton that must
+ * never ship as authored copy (any casing). Used by {@link normalizeResolvedMarketingLeaf}.
+ */
+export function isForbiddenPublicSingletonSurfaceCopy(value: string): boolean {
+  const t = value.trim();
+  if (!t) return false;
+  return PUBLIC_OUTPUT_GUARD_WHOLE_CI.has(t.toLowerCase()) || isForbiddenShoutyTemplateToken(t);
+}
+
 export function isForbiddenPublicMarketingEntry(messageKey: string, value: string): boolean {
-  return isForbiddenAuthoredMarketingLeafValue(value) || isKeyContentMirrorStub(messageKey, value);
+  return (
+    isForbiddenAuthoredMarketingLeafValue(value) ||
+    isKeyContentMirrorStub(messageKey, value) ||
+    isForbiddenPublicSingletonSurfaceCopy(value)
+  );
 }
 
 /** Dev-only humanized tail — mirrors `scripts/validate-marketing-production-surface.mjs`. */
@@ -132,9 +149,13 @@ export function humanizedMarketingKeyFallback(key: string): string {
   return s.length > 80 ? `${s.slice(0, 77)}…` : s;
 }
 
-export function missingMarketingCopyFallback(key: string): string {
-  if (process.env.NODE_ENV === "production") return "";
-  return humanizedMarketingKeyFallback(key);
+/**
+ * Deliberately always empty: humanized key tails (`*.title` → `Title`) leaked to public pages in dev
+ * and confused deploy debugging. Use {@link humanizedMarketingKeyFallback} only in offline tooling,
+ * and {@link getRequiredPublicMessage} / CI for required strings.
+ */
+export function missingMarketingCopyFallback(_key: string): string {
+  return "";
 }
 
 function logPlaceholderScrub(debugCtx: string, sample: string): void {
@@ -170,12 +191,16 @@ export function assertNoPublicPlaceholderCopy(s: string, debugCtx: string): stri
   return s;
 }
 
+/** Alias for {@link assertNoPublicPlaceholderCopy} — use at public/marketing text boundaries. */
+export const assertNoPlaceholder = assertNoPublicPlaceholderCopy;
+
 export function normalizeResolvedMarketingLeaf(raw: string | undefined, messageKey?: string): string | undefined {
   if (raw === undefined) return undefined;
   const t = raw.trim();
   if (!t) return undefined;
   if (messageKey && isKeyContentMirrorStub(messageKey, raw)) return undefined;
   if (isForbiddenAuthoredMarketingLeafValue(t)) return undefined;
+  if (isForbiddenPublicSingletonSurfaceCopy(t)) return undefined;
   return raw;
 }
 

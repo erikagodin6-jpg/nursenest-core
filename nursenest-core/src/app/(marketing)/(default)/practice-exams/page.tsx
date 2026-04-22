@@ -4,7 +4,7 @@ import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
-import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
+import { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-metadata-strict";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { parseMarketingRegionCookieValue } from "@/lib/region/marketing-region-cookie";
@@ -27,13 +27,13 @@ export async function generateMetadata(): Promise<Metadata> {
       const m = await loadMarketingMessages(locale);
       const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
       const metaSfx = marketingRegion === "US" ? "US" : "CA";
-      const title = resolveMarketingCopy(
+      const title = getRequiredPublicMetadataLine(
         m,
         `pages.publicPracticeExams.metaTitle${metaSfx}`,
         en,
         defaultPracticeExamsMetaTitle(marketingRegion),
       );
-      const description = resolveMarketingCopy(
+      const description = getRequiredPublicMetadataLine(
         m,
         `pages.publicPracticeExams.metaDescription${metaSfx}`,
         en,
@@ -57,13 +57,13 @@ export default async function PracticeExamsHubPage() {
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   const metaSfx = marketingRegion === "US" ? "US" : "CA";
-  const title = resolveMarketingCopy(
+  const title = getRequiredPublicMetadataLine(
     m,
     `pages.publicPracticeExams.metaTitle${metaSfx}`,
     en,
     defaultPracticeExamsMetaTitle(marketingRegion),
   );
-  const description = resolveMarketingCopy(
+  const description = getRequiredPublicMetadataLine(
     m,
     `pages.publicPracticeExams.metaDescription${metaSfx}`,
     en,

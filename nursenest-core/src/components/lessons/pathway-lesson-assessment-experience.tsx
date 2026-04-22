@@ -66,20 +66,20 @@ export function PathwayLessonAssessmentExperience({
   const postTestReady = progress === "completed";
   const statusCopy = useMemo(() => {
     if (!enabled) {
-      return "Pre/post lesson tests are off, so this lesson opens straight into the content.";
+      return "Lesson checks are off — you are reading without the readiness and reinforcement blocks.";
     }
     if (hasPre && hasPost) {
       return postTestReady
-        ? "Pre-test ran before the lesson; your post-test is ready below."
-        : "Pre-test runs first, then the lesson. Complete the lesson to unlock the post-test.";
+        ? "Reinforcement is open at the bottom of the lesson when you are ready."
+        : "Finish reading, then mark studied to unlock reinforcement.";
     }
-    if (hasPre) return "Pre-test runs before the lesson content.";
+    if (hasPre) return "Readiness runs first; then continue through the lesson.";
     if (hasPost) {
       return postTestReady
-        ? "Post-test is active below."
-        : "Post-test unlocks after you complete the lesson.";
+        ? "Reinforcement is open below."
+        : "Mark studied after reading to unlock reinforcement.";
     }
-    return "No lesson tests are attached to this lesson yet.";
+    return "No lesson checks are attached yet.";
   }, [enabled, hasPost, hasPre, postTestReady]);
 
   if (!hasAnyAssessments) {
@@ -87,19 +87,16 @@ export function PathwayLessonAssessmentExperience({
   }
 
   return (
-    <div className="space-y-6">
-      <section className="mx-auto max-w-5xl rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand)_10%)] bg-[color-mix(in_srgb,var(--theme-page-bg)_94%,var(--semantic-panel-warm)_6%)] p-4 shadow-[var(--shadow-card)] sm:p-5">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--semantic-text-secondary)]">
-              Lesson checks
-            </p>
-            <h2 className="mt-1.5 text-lg font-semibold text-[var(--theme-heading-text)]">Pre/post lesson tests</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--theme-muted-text)]">{statusCopy}</p>
+    <div className="space-y-4">
+      <section className="rounded-lg border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--theme-page-bg)_96%,var(--semantic-panel-muted)_4%)] px-3 py-2.5 sm:px-4 sm:py-3">
+        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div className="min-w-0">
+            <p className="nn-lesson-module-eyebrow">Lesson checks</p>
+            <p className="mt-1 text-xs leading-relaxed text-[var(--theme-muted-text)] sm:text-sm">{statusCopy}</p>
           </div>
           {assessmentsEnabled ? (
             <div
-              className="inline-flex rounded-full border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] p-1"
+              className="inline-flex shrink-0 rounded-md border border-[var(--semantic-border-soft)] bg-[var(--theme-page-bg)] p-0.5"
               role="tablist"
               aria-label="Lesson assessments"
             >
@@ -116,13 +113,13 @@ export function PathwayLessonAssessmentExperience({
                   writeLearnerStudyDefaults(effectiveUserId, next);
                   setEnabled(true);
                 }}
-                className={`min-h-11 rounded-full px-4 py-2 text-sm font-semibold transition ${
+                className={`min-h-9 rounded-[0.375rem] px-3 py-1.5 text-xs font-semibold transition sm:min-h-10 sm:px-3.5 sm:text-sm ${
                   enabled
                     ? "bg-[var(--semantic-surface)] text-[var(--theme-heading-text)] shadow-[var(--semantic-shadow-soft)]"
                     : "text-[var(--theme-muted-text)] hover:text-[var(--theme-heading-text)]"
                 }`}
               >
-                Tests On
+                On
               </button>
               <button
                 type="button"
@@ -137,18 +134,18 @@ export function PathwayLessonAssessmentExperience({
                   writeLearnerStudyDefaults(effectiveUserId, next);
                   setEnabled(false);
                 }}
-                className={`min-h-11 rounded-full px-4 py-2 text-sm font-semibold transition ${
+                className={`min-h-9 rounded-[0.375rem] px-3 py-1.5 text-xs font-semibold transition sm:min-h-10 sm:px-3.5 sm:text-sm ${
                   !enabled
                     ? "bg-[var(--semantic-surface)] text-[var(--theme-heading-text)] shadow-[var(--semantic-shadow-soft)]"
                     : "text-[var(--theme-muted-text)] hover:text-[var(--theme-heading-text)]"
                 }`}
               >
-                Tests Off
+                Off
               </button>
             </div>
           ) : (
-            <p className="max-w-sm text-sm leading-6 text-[var(--theme-muted-text)]">
-              Pre/post lesson quizzes are off in your study settings.
+            <p className="max-w-sm text-xs leading-relaxed text-[var(--theme-muted-text)] sm:text-sm">
+              Lesson checks are disabled in study settings.
             </p>
           )}
         </div>

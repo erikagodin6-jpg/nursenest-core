@@ -126,6 +126,7 @@ const FORBIDDEN_EXACT = new Set([
   "answer",
   "placeholder",
   "todo",
+  "button",
 ]);
 
 /** Value is a leaked flat i18n key path (never show raw keys as copy). */

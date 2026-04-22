@@ -40,7 +40,8 @@ import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/less
 import { LessonTopicPracticeSection } from "@/components/lessons/lesson-topic-practice-section";
 import { loadLessonTopicLinkedQuizItems } from "@/lib/lessons/load-lesson-topic-linked-quiz-items";
 import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
-import { PathwayLessonPracticeBridge } from "@/components/lessons/pathway-lesson-practice-bridge";
+import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
+import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { buildAppQuestionBankTopicDrillHref } from "@/components/lessons/pathway-lesson-link-practice";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { buildAppPracticeTestsHubHref } from "@/lib/learner/study-loop-recommendations";
@@ -77,10 +78,7 @@ import {
 import { loadLessonBankQuizItemsByExamIdsWithDiagnostics } from "@/lib/lessons/lesson-explicit-exam-question-items";
 import { PathwayLessonStudyLoopOrchestrator } from "@/components/lessons/pathway-lesson-study-loop-orchestrator";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
-import {
-  pathwayLessonSectionPrefersWideColumn,
-  shouldRenderPathwayLessonSection,
-} from "@/lib/lessons/lesson-section-page-layout";
+import { shouldRenderPathwayLessonSection } from "@/lib/lessons/lesson-section-page-layout";
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
@@ -605,20 +603,38 @@ export default async function LessonDetailPage({ params }: Props) {
 
     const pathwayInteractiveModules = pathway ? getLessonInteractiveModules(record) : [];
 
+    const hasCatalogPre =
+      Boolean(pathway) &&
+      studySettings.enablePrePostQuizzes &&
+      !studyLoopBankActive &&
+      Boolean(bankAssessments.preTest?.length);
+    const hasCatalogPost =
+      Boolean(pathway) &&
+      studySettings.enablePrePostQuizzes &&
+      !studyLoopBankActive &&
+      Boolean(bankAssessments.postTest?.length);
+    const assessmentHintParts: string[] = [];
+    if (hasCatalogPre) assessmentHintParts.push(`Readiness ${bankAssessments.preTest!.length}`);
+    if (hasCatalogPost) assessmentHintParts.push(`Retention ${bankAssessments.postTest!.length}`);
+    const assessmentHint = assessmentHintParts.length > 0 ? assessmentHintParts.join(" · ") : null;
+
+    const purposeLine = (() => {
+      const tpc = record.topic?.trim();
+      const pn = pathway?.shortName?.trim() ?? "your pathway";
+      if (record.examRelevance === "high_yield" && tpc) {
+        return `High-yield ${tpc} — structured for ${pn} so you read once, recall often, and drill in the same exam frame.`;
+      }
+      if (record.examRelevance === "specialty" && tpc) {
+        return `${tpc} with specialty lens for ${pn}; use the flow below to preview, learn, then prove retention.`;
+      }
+      if (tpc) {
+        return `Build confident, exam-scoped command of ${tpc} on ${pn} — read the spine, then lock it in with checks and drills.`;
+      }
+      return `Study this lesson in your ${pn} context — checks and drills stay on the same exam track.`;
+    })();
+
     const pathwayLessonMainColumn = (
       <>
-        {pathway ? (
-          <div className="min-h-9 mb-3">
-            <BreadcrumbTrail
-              items={localizeBreadcrumbCrumbs(
-                learnerPathwayLessonBreadcrumbs(pathway, displayTitle),
-                messages,
-                fallbackMessages,
-              )}
-            />
-          </div>
-        ) : null}
-        {/* Top nav: back link */}
         <LessonNavButtons
           position="top"
           backHref="/app/lessons"
@@ -651,25 +667,22 @@ export default async function LessonDetailPage({ params }: Props) {
             topic={record.topic}
             sourceLabel={displayTitle}
             qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
+            compactSubscriberBanner
           >
             {pathway && record.memoryAnchor ? (
               <div className="mb-5">
                 <PathwayLessonMemoryAnchorStrip text={record.memoryAnchor} />
               </div>
             ) : null}
-            <article className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
+            <article className="flex flex-col gap-7 md:gap-8">
               {displaySections.length > 0 ? (
                 displaySections.map((section) => {
-                  const wide = pathwayLessonSectionPrefersWideColumn(section.kind ?? null, {
-                    hasCheckpointQuestions: Boolean(section.checkpointQuestions?.length),
-                  });
                   return (
                     <LessonSectionCard
                       key={section.id}
                       id={section.id}
                       heading={section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
                       kind={section.kind ?? null}
-                      className={wide ? "md:col-span-2" : undefined}
                     >
                       <PathwayLessonSectionContent
                         text={typeof section.body === "string" ? section.body : ""}
@@ -764,31 +777,24 @@ export default async function LessonDetailPage({ params }: Props) {
             relatedLessons={relatedLessonsDisplay}
             currentSlug={record.slug}
             catAuthState="signed_in"
+            visualVariant="learner"
           />
         ) : null}
-        <div
-          className="mt-10 flex flex-wrap gap-3 border-t pt-6"
-          style={{ borderColor: "var(--border-subtle)" }}
-        >
+        <div className="mt-8 flex flex-wrap gap-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand)_10%)] pt-5">
           <Link
             href={
               pathway
                 ? buildAppQuestionBankTopicDrillHref(pathway, record.topic, record.topicSlug ?? undefined)
                 : "/app/questions"
             }
-            className="inline-flex items-center rounded-xl px-5 py-2.5 text-sm font-semibold transition-opacity hover:opacity-90"
-            style={{ background: "var(--semantic-brand)", color: "#fff" }}
+            className="inline-flex min-h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-92"
+            style={{ background: "var(--semantic-brand)" }}
           >
             {t("learner.lessons.detail.ctaQuestionBank")}
           </Link>
           <Link
             href={buildAppPracticeTestsHubHref(pathwayId)}
-            className="inline-flex items-center rounded-xl border px-5 py-2.5 text-sm font-semibold transition-colors hover:opacity-80"
-            style={{
-              borderColor: "var(--border-subtle)",
-              color: "var(--semantic-text-secondary)",
-              background: "var(--bg-card)",
-            }}
+            className="inline-flex min-h-10 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,var(--bg-card))]"
           >
             {t("learner.lessons.detail.ctaPathwayPracticeTests")}
           </Link>
@@ -797,63 +803,73 @@ export default async function LessonDetailPage({ params }: Props) {
     );
 
     return (
-      <div className="nn-lesson-page">
-        {/* ── Premium lesson header ──────────────────────────────────────── */}
-        <LessonPageHeader
-          title={displayTitle}
-          topic={record.topic}
-          bodySystem={record.bodySystem}
-          topicSlug={record.topicSlug}
-          pathwayId={pathwayId}
-          examFramingLabel={examFramingLabel}
-          sectionCount={displaySections.length > 0 ? displaySections.length : 1}
-          examRelevance={record.examRelevance ?? null}
-          audienceTiers={record.audienceTiers ?? null}
-          progress={initialProgress}
-        />
-
-        {pathway ? (
-          <PathwayLessonPracticeBridge pathway={pathway} topic={record.topic} topicSlug={record.topicSlug} t={t} />
-        ) : null}
-
-        {pathway && lessonHasExamTakeaways(record.studyTakeaways) ? (
-          <div className="mt-5 max-w-5xl">
-            <ExamTakeawaysBlock
-              pathway={pathway}
-              items={record.studyTakeaways}
-              position="top"
-              alliedProfessionLabel={alliedExamTakeawaysLabel}
+      <div className="nn-lesson-page nn-lesson-page--learner-app">
+        <div className="nn-lesson-editorial-rail">
+          <LessonPageHeader
+            title={displayTitle}
+            topic={record.topic}
+            bodySystem={record.bodySystem}
+            pathwayShortName={pathway?.shortName ?? null}
+            examFramingLabel={examFramingLabel}
+            sectionCount={displaySections.length > 0 ? displaySections.length : 1}
+            examRelevance={record.examRelevance ?? null}
+            audienceTiers={record.audienceTiers ?? null}
+            progress={initialProgress}
+            breadcrumbSlot={
+              pathway ? (
+                <BreadcrumbTrail
+                  items={localizeBreadcrumbCrumbs(
+                    learnerPathwayLessonBreadcrumbs(pathway, displayTitle),
+                    messages,
+                    fallbackMessages,
+                  )}
+                />
+              ) : null
+            }
+            purposeLine={purposeLine}
+            assessmentHint={assessmentHint}
+          />
+          {pathway ? (
+            <PathwayLessonActions
+              pathwayId={pathway.id}
+              lessonSlug={record.slug}
+              topicCode={record.topicSlug}
+              topicLabel={record.topic}
+              userId={userId}
+              canMarkComplete={entitlement.hasAccess}
+              initialProgress={initialProgress}
+              catAdaptiveAvailable={pathwayAllowsCatAdaptiveStart(pathway)}
+              embedded
             />
-          </div>
-        ) : null}
+          ) : null}
+        </div>
 
-        {/* ── Two-column layout: article + sticky sidebar ────────────────── */}
-        <div className="nn-lesson-layout mt-8">
-          {/* ── Main article column ─────────────────────────────────────── */}
+        <div className="nn-lesson-layout">
           <div className="nn-lesson-main min-w-0">
-            {studyLoopBankActive ? (
-              <PathwayLessonStudyLoopOrchestrator
-                userId={userId}
-                lessonId={id}
-                pathwayId={pathwayId}
-                lessonSlug={record.slug}
-                topic={record.topic}
-                shuffleSeed={`${pathwayId}:${record.slug}`}
-                bankItems={bankLoopPack.items}
-                questionIds={bankLoopPack.questionIds}
-                poolCount={bankLoopPack.poolCount}
-                initialProgress={initialProgress}
-                defaultLoopEnabled={studySettings.lessonStudyLoopEnabled}
-                stemPreviewByQuestionId={stemPreviewByQuestionId}
-              >
-                {pathwayLessonMainColumn}
-              </PathwayLessonStudyLoopOrchestrator>
-            ) : (
-              pathwayLessonMainColumn
-            )}
+            <div className="nn-lesson-editorial-rail">
+              {studyLoopBankActive ? (
+                <PathwayLessonStudyLoopOrchestrator
+                  userId={userId}
+                  lessonId={id}
+                  pathwayId={pathwayId}
+                  lessonSlug={record.slug}
+                  topic={record.topic}
+                  shuffleSeed={`${pathwayId}:${record.slug}`}
+                  bankItems={bankLoopPack.items}
+                  questionIds={bankLoopPack.questionIds}
+                  poolCount={bankLoopPack.poolCount}
+                  initialProgress={initialProgress}
+                  defaultLoopEnabled={studySettings.lessonStudyLoopEnabled}
+                  stemPreviewByQuestionId={stemPreviewByQuestionId}
+                >
+                  {pathwayLessonMainColumn}
+                </PathwayLessonStudyLoopOrchestrator>
+              ) : (
+                pathwayLessonMainColumn
+              )}
+            </div>
           </div>
 
-          {/* ── Sticky section nav sidebar (desktop only) ─────────────── */}
           <LessonSectionNav sections={navSections} />
         </div>
       </div>

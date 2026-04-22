@@ -54,7 +54,7 @@ export function LessonNavButtons({
   if (position === "top") {
     if (!showSequence) {
       return (
-        <div className="mb-7">
+        <div className="mb-3">
           <Link
             href={backHref}
             className="inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors hover:opacity-80"
@@ -71,7 +71,7 @@ export function LessonNavButtons({
       );
     }
     return (
-      <div className="mb-7 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-stretch">
+      <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-stretch">
         <div className="grid grid-cols-2 gap-2 sm:flex-1 sm:max-w-md">
           {prevLesson ? (
             <Link href={prevLesson.href} className={`group ${topLink}`} title={prevLesson.title}>

@@ -56,20 +56,20 @@ function AssessmentToggle({
 
   return (
     <div
-      className="flex flex-col gap-3 rounded-xl border px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+      className="nn-lesson-assessment-toggle flex flex-col gap-2.5 rounded-lg border px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between"
       style={{
-        background: "color-mix(in srgb, var(--semantic-brand) 4%, var(--theme-page-bg))",
-        borderColor: "var(--semantic-border-soft)",
+        background: "color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--bg-card))",
+        borderColor: "color-mix(in srgb, var(--semantic-border-soft) 92%, var(--semantic-info) 8%)",
       }}
     >
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-2">
         <span
-          className="flex h-6 w-6 items-center justify-center rounded-full text-xs"
+          className="flex h-6 w-6 items-center justify-center rounded-md text-[0.65rem] font-bold"
           style={{
             background: enabled
-              ? "color-mix(in srgb, var(--semantic-brand) 20%, var(--semantic-surface))"
+              ? "color-mix(in srgb, var(--semantic-info) 18%, var(--semantic-surface))"
               : "var(--semantic-surface)",
-            color: enabled ? "var(--semantic-brand)" : "var(--semantic-text-secondary)",
+            color: enabled ? "var(--semantic-info)" : "var(--semantic-text-secondary)",
             border: "1px solid var(--semantic-border-soft)",
           }}
           aria-hidden="true"
@@ -77,24 +77,18 @@ function AssessmentToggle({
           {enabled ? "✓" : "○"}
         </span>
         <div>
-          <span
-            className="text-xs font-semibold"
-            style={{ color: "var(--theme-heading-text)" }}
-          >
+          <span className="text-[0.7rem] font-semibold uppercase tracking-wide" style={{ color: "var(--theme-heading-text)" }}>
             {label}
           </span>
-          <span
-            className="ml-2 text-xs"
-            style={{ color: "var(--semantic-text-secondary)" }}
-          >
-            {enabled ? "active" : "off — lesson opens directly"}
+          <span className="ml-2 text-[0.7rem]" style={{ color: "var(--semantic-text-secondary)" }}>
+            {enabled ? "On — guided flow" : "Off — open lesson directly"}
           </span>
         </div>
       </div>
 
       {/* Toggle pill */}
       <div
-        className="inline-flex shrink-0 rounded-full border p-0.5"
+        className="inline-flex shrink-0 rounded-md border p-0.5"
         style={{ borderColor: "var(--semantic-border-soft)" }}
         role="tablist"
         aria-label="Lesson assessment setting"
@@ -104,7 +98,7 @@ function AssessmentToggle({
           role="tab"
           aria-selected={enabled}
           onClick={() => onChange(true)}
-          className="min-h-8 rounded-full px-3 py-1 text-xs font-semibold transition"
+          className="min-h-8 rounded-md px-3 py-1 text-xs font-semibold transition"
           style={{
             background: enabled
               ? "var(--semantic-surface)"
@@ -122,7 +116,7 @@ function AssessmentToggle({
           role="tab"
           aria-selected={!enabled}
           onClick={() => onChange(false)}
-          className="min-h-8 rounded-full px-3 py-1 text-xs font-semibold transition"
+          className="min-h-8 rounded-md px-3 py-1 text-xs font-semibold transition"
           style={{
             background: !enabled
               ? "var(--semantic-surface)"
@@ -225,10 +219,16 @@ export function LessonAssessmentFlow({
   // so the pre score is available for the delta even before a round-trip.
   const [sessionPreScore, setSessionPreScore] = useState<{ score: number; total: number } | null>(null);
 
-  // ── Read localStorage toggle ───────────────────────────────────────────────
+  // ── Sync enabled flag when study settings change (avoid sync setState in effect body). ──
   useEffect(() => {
     if (!hasAnyAssessments) return;
-    setEnabled(assessmentsEnabled);
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (!cancelled) setEnabled(assessmentsEnabled);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [assessmentsEnabled, effectiveUserId, hasAnyAssessments]);
 
   // ── Fetch prior scores ─────────────────────────────────────────────────────
@@ -291,7 +291,7 @@ export function LessonAssessmentFlow({
     : priorScores?.pre ?? null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* ── Assessment toggle ────────────────────────────────────────────── */}
       {assessmentsEnabled ? (
         <AssessmentToggle

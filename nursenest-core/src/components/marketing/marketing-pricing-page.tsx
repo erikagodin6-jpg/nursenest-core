@@ -4,7 +4,14 @@ import { PricingPageClient } from "@/components/marketing/pricing-page-client";
 import { PricingPageErrorBoundary } from "@/components/marketing/pricing-page-error-boundary";
 import { pricingTierToNarrativeSlug } from "@/lib/conversion/pricing-catalog";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
-import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
+import { getOptionalPublicMessage } from "@/lib/marketing-i18n-core";
+import { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-metadata-strict";
+import {
+  MARKETING_PRICING_CONVERSION_H1_FALLBACK,
+  MARKETING_PRICING_CONVERSION_LEAD_FALLBACK,
+  MARKETING_PRICING_CONVERSION_TRUST_LINE_FALLBACK,
+  MARKETING_PRICING_TIER_SUBHEAD_FALLBACK,
+} from "@/lib/marketing-i18n/marketing-safe-fallbacks";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { GLOBAL_REGION_COOKIE } from "@/lib/region/global-region-cookie";
@@ -66,19 +73,18 @@ export async function MarketingPricingPage({
   });
   const m = await loadMarketingMessages(locale);
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const heading = resolveMarketingCopy(m, "pages.pricing.conversion.h1", en, "Plans by exam pathway");
-  const intro = resolveMarketingCopy(
+  const heading = getRequiredPublicMetadataLine(
     m,
-    "pages.pricing.conversion.trustLine",
+    "pages.pricing.conversion.h1",
     en,
-    "Prices in CAD or USD for your selected region. No surprise charges at checkout.",
+    MARKETING_PRICING_CONVERSION_H1_FALLBACK,
   );
-  const heroSub = resolveMarketingCopy(
-    m,
-    "pages.pricing.conversion.lead",
-    en,
-    "Choose your exam track, country, and billing term. Totals are shown before you pay; longer terms usually lower your effective monthly cost.",
-  );
+  const intro =
+    getOptionalPublicMessage(m, "pages.pricing.conversion.trustLine", { fallbackMessages: en }).trim() ||
+    MARKETING_PRICING_CONVERSION_TRUST_LINE_FALLBACK;
+  const heroSub =
+    getOptionalPublicMessage(m, "pages.pricing.conversion.lead", { fallbackMessages: en }).trim() ||
+    MARKETING_PRICING_CONVERSION_LEAD_FALLBACK;
   const initialPricingOptions = await loadPricingOptionsForMarketingPage();
   const payloadCheck = validatePricingOptionsPayload(initialPricingOptions);
   if (!payloadCheck.ok) {
@@ -93,11 +99,11 @@ export async function MarketingPricingPage({
   const serverTierSubheads: Partial<Record<TierCode, string>> = {};
   for (const tier of subheadTiers) {
     const slug = pricingTierToNarrativeSlug(tier);
-    serverTierSubheads[tier] = resolveMarketingCopy(
+    serverTierSubheads[tier] = getRequiredPublicMetadataLine(
       m,
       `pages.pricing.narrative.${slug}.subhead`,
       en,
-      "Pick a billing cadence that fits your study plan and exam date.",
+      MARKETING_PRICING_TIER_SUBHEAD_FALLBACK,
     );
   }
 

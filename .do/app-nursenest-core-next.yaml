@@ -150,5 +150,20 @@ services:
       - key: AUTH_URL
         scope: RUN_TIME
         type: GENERAL
+      # --- Runtime AI admin gate + env guard (`src/lib/env/runtime-env-guard.ts`, `scripts/start-standalone.mjs`) ---
+      # `AI_ADMIN_GENERATION_ENABLED` must be non-empty at runtime (use `false` / `0` / `off` to disable generation).
+      # At least one of the OpenAI key envs must be set (SECRET). Staging may set `NN_ENV_VALIDATION_MODE=warn` or `off`.
+      - key: AI_ADMIN_GENERATION_ENABLED
+        scope: RUN_TIME
+        type: GENERAL
+      - key: AI_INTEGRATIONS_OPENAI_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: OPENAI_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: NN_ENV_VALIDATION_MODE
+        scope: RUN_TIME
+        type: GENERAL
       # Cron HTTP: set CRON_SECRET (SECRET) and call POST /api/cron/blog-batch-schedule, /api/cron/jobs, /api/cron/stripe-reconcile
       # from a Scheduled Job or external scheduler (see nursenest-core/docs/cron-pipelines.md). Optional: STRIPE_RECONCILE_CRON_APPLY=true.

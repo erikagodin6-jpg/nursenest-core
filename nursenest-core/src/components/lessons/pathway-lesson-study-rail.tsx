@@ -28,7 +28,7 @@ function RailSection({ title, subtitle, accent, children }: SectionProps) {
 
   return (
     <section
-      className="rounded-xl border p-3.5 sm:p-4"
+      className="rounded-lg border p-3 sm:p-3.5"
       style={{ borderColor: border, background: bg }}
     >
       <h2 className="text-sm font-semibold tracking-tight text-[var(--theme-heading-text)]">{title}</h2>
@@ -87,7 +87,7 @@ export function PathwayLessonStudyRail({
       {summary.length > 0 ? (
         <RailSection
           title="Quick clinical summary"
-          subtitle="Skim before diving into the full lesson — same facts, tighter bullets."
+          subtitle="Skim before the full read."
           accent="success"
         >
           <BulletList lines={summary} />
@@ -96,8 +96,8 @@ export function PathwayLessonStudyRail({
 
       {focus.length > 0 ? (
         <RailSection
-          title="Exam focus (high-yield)"
-          subtitle="How this topic tends to show up and what to prioritize."
+          title="Exam focus"
+          subtitle="How this topic usually tests."
           accent="info"
         >
           <BulletList lines={focus} />
@@ -107,7 +107,7 @@ export function PathwayLessonStudyRail({
       {traps.length > 0 ? (
         <RailSection
           title="Common mistakes"
-          subtitle="Typical distractors and unsafe pivots to watch for."
+          subtitle="Traps to sidestep."
           accent="warning"
         >
           <BulletList lines={traps} />

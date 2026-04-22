@@ -53,6 +53,10 @@ function logI18nStructured(
   }
 }
 
+/**
+ * Resolves a flat marketing key with optional `{{param}}` interpolation.
+ * Missing keys resolve to an empty string (never humanized key tails like `Title`).
+ */
 export function formatMarketingMessage(
   messages: MarketingMessages,
   key: string,

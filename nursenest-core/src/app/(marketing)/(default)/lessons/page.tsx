@@ -18,7 +18,8 @@ import {
   MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
   MARKETING_PAGE_BODY_MESSAGE_SHARDS,
 } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
-import { formatMarketingMessage, resolveMarketingCopy } from "@/lib/marketing-i18n-core";
+import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
+import { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-metadata-strict";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
@@ -59,13 +60,13 @@ export async function generateMetadata(): Promise<Metadata> {
         en = loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
       }
       const metaSfx = marketingRegion === "US" ? "US" : "CA";
-      const title = resolveMarketingCopy(
+      const title = getRequiredPublicMetadataLine(
         m,
         `pages.publicLessons.metaTitle${metaSfx}`,
         en,
         defaultPublicLessonsMetaTitle(marketingRegion),
       );
-      const description = resolveMarketingCopy(
+      const description = getRequiredPublicMetadataLine(
         m,
         `pages.publicLessons.metaDescription${metaSfx}`,
         en,
@@ -103,13 +104,13 @@ export default async function PublicLessonsLandingPage() {
   const h1Key = marketingRegion === "US" ? "pages.publicLessons.h1US" : "pages.publicLessons.h1CA";
   const introKey = marketingRegion === "US" ? "pages.publicLessons.introUS" : "pages.publicLessons.introCA";
   const metaSfx = marketingRegion === "US" ? "US" : "CA";
-  const title = resolveMarketingCopy(
+  const title = getRequiredPublicMetadataLine(
     m,
     `pages.publicLessons.metaTitle${metaSfx}`,
     en,
     defaultPublicLessonsMetaTitle(marketingRegion),
   );
-  const description = resolveMarketingCopy(
+  const description = getRequiredPublicMetadataLine(
     m,
     `pages.publicLessons.metaDescription${metaSfx}`,
     en,

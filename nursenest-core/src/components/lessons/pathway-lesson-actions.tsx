@@ -104,77 +104,90 @@ export function PathwayLessonActions({
   const saving = pending !== "idle";
 
   return (
-    <div className="mt-10 space-y-4 border-t border-[color-mix(in_srgb,var(--border-subtle)_88%,var(--theme-primary))] pt-8">
-      {/* Primary CTA stays role-cta; secondary actions use nn-study-pill-* (globals) for consistent hover/focus/touch. */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-      <Link
-        href={qbHref}
-        data-testid="pathway-lesson-cta-practice-topic"
-        data-nn-pathway-id={pathwayId}
-        className="inline-flex min-h-11 justify-center rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)] transition hover:brightness-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--role-cta-shadow)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)]"
-      >
-        {t("learner.studyLoop.practiceThisTopicCta")}
-      </Link>
-      <Link
-        href={flashcardsHref}
-        data-testid="pathway-lesson-cta-flashcards"
-        data-nn-pathway-id={pathwayId}
-        className="nn-study-pill-secondary"
-      >
-        {t("learner.studyLoop.sameTopicFlashcards")}
-      </Link>
-      {showCatCta ? (
+    <section
+      className="mt-8 border-t border-[var(--semantic-border-soft)] pt-6"
+      aria-label="Continue studying"
+    >
+      <p className="nn-lesson-module-eyebrow">After this lesson</p>
+      <p className="mt-1 max-w-prose text-sm text-[var(--theme-muted-text)]">
+        Strongest moves first: drill this topic, then branch into cards or adaptive sets.
+      </p>
+
+      <div className="mt-4 flex flex-col gap-3">
         <Link
-          href={catWeakHref}
-          data-testid="pathway-lesson-cta-cat-practice"
+          href={qbHref}
+          data-testid="pathway-lesson-cta-practice-topic"
           data-nn-pathway-id={pathwayId}
-          className="nn-study-pill-secondary nn-study-pill-secondary--accent"
+          className="inline-flex min-h-11 w-full items-center justify-center rounded-md bg-[var(--semantic-brand)] px-4 py-2.5 text-center text-sm font-semibold text-[var(--text-on-dark)] shadow-sm transition hover:opacity-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:w-auto sm:min-w-[12rem]"
         >
-          {t("learner.studyLoop.catFromLesson")}
+          {t("learner.studyLoop.practiceThisTopicCta")}
         </Link>
-      ) : null}
-      <Link
-        href={practiceTestsHubHref}
-        data-testid="pathway-lesson-cta-practice-tests-hub"
-        className="nn-study-pill-secondary"
-      >
-        {t("learner.studyLoop.practiceTestsHubPathway")}
-      </Link>
-      {!userId ? (
-        <p className="text-sm text-muted">
-          <Link href="/login" className="nn-marketing-body-sm font-semibold text-primary underline">
-            {t("learner.studyLoop.signIn")}
-          </Link>{" "}
-          {t("learner.studyLoop.signInProgressHint")}
-        </p>
-      ) : canMarkComplete ? (
-        <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-2">
-          {progress === "completed" ? (
-            <button
-              type="button"
-              disabled={saving}
-              onClick={() => void markUncomplete()}
-              className="nn-study-pill-secondary min-h-11 px-4 disabled:opacity-60"
+
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-2">
+          <Link
+            href={flashcardsHref}
+            data-testid="pathway-lesson-cta-flashcards"
+            data-nn-pathway-id={pathwayId}
+            className="inline-flex min-h-10 flex-1 items-center justify-center rounded-md border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand)_12%)] bg-[color-mix(in_srgb,var(--theme-page-bg)_94%,var(--semantic-surface)_6%)] px-3 py-2 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:min-w-[10rem] sm:flex-none"
+          >
+            {t("learner.studyLoop.sameTopicFlashcards")}
+          </Link>
+          {showCatCta ? (
+            <Link
+              href={catWeakHref}
+              data-testid="pathway-lesson-cta-cat-practice"
+              data-nn-pathway-id={pathwayId}
+              className="inline-flex min-h-10 flex-1 items-center justify-center rounded-md border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-chart-2)_12%)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_10%,var(--theme-page-bg))] px-3 py-2 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:border-[color-mix(in_srgb,var(--semantic-chart-2)_35%,var(--semantic-border-soft))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-chart-2)_35%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:min-w-[10rem] sm:flex-none"
             >
-              <SuccessLeaf show size={18} />
-              {pending === "uncomplete" ? t("learner.studyLoop.markStudiedUndoSaving") : t("learner.studyLoop.markStudiedUndo")}
-            </button>
-          ) : (
-            <button
-              type="button"
-              disabled={saving}
-              onClick={() => void markComplete()}
-              className="nn-study-pill-secondary min-h-11 px-4 disabled:opacity-60"
-            >
-              {pending === "complete" ? t("learner.studyLoop.markStudiedSaving") : t("learner.studyLoop.markStudied")}
-            </button>
-          )}
-          {error ? <span className="text-xs text-amber-800">{t("learner.studyLoop.markStudiedError")}</span> : null}
+              {t("learner.studyLoop.catFromLesson")}
+            </Link>
+          ) : null}
+          <Link
+            href={practiceTestsHubHref}
+            data-testid="pathway-lesson-cta-practice-tests-hub"
+            className="inline-flex min-h-10 flex-1 items-center justify-center rounded-md px-3 py-2 text-sm font-medium text-[var(--semantic-brand)] underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:flex-none"
+          >
+            {t("learner.studyLoop.practiceTestsHubPathway")}
+          </Link>
         </div>
-      ) : (
-        <p className="text-sm text-muted">{t("learner.studyLoop.subscribePathwayHint")}</p>
-      )}
+
+        {!userId ? (
+          <p className="text-sm text-muted">
+            <Link href="/login" className="nn-marketing-body-sm font-semibold text-primary underline">
+              {t("learner.studyLoop.signIn")}
+            </Link>{" "}
+            {t("learner.studyLoop.signInProgressHint")}
+          </p>
+        ) : canMarkComplete ? (
+          <div className="mt-1 flex flex-col gap-1 border-t border-dashed border-[var(--semantic-border-soft)] pt-4 sm:flex-row sm:items-center sm:gap-3">
+            {progress === "completed" ? (
+              <button
+                type="button"
+                disabled={saving}
+                onClick={() => void markUncomplete()}
+                className="inline-flex min-h-9 items-center justify-center self-start rounded-md px-2 text-sm font-medium text-[var(--theme-muted-text)] underline-offset-2 transition hover:text-[var(--theme-heading-text)] hover:underline disabled:opacity-60"
+              >
+                <SuccessLeaf show size={16} />
+                <span className="ml-1.5">
+                  {pending === "uncomplete" ? t("learner.studyLoop.markStudiedUndoSaving") : t("learner.studyLoop.markStudiedUndo")}
+                </span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                disabled={saving}
+                onClick={() => void markComplete()}
+                className="inline-flex min-h-9 items-center justify-center self-start rounded-md border border-[var(--semantic-border-soft)] bg-transparent px-3 py-1.5 text-sm font-medium text-[var(--theme-muted-text)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_25%,var(--semantic-border-soft))] hover:text-[var(--theme-heading-text)] disabled:opacity-60"
+              >
+                {pending === "complete" ? t("learner.studyLoop.markStudiedSaving") : t("learner.studyLoop.markStudied")}
+              </button>
+            )}
+            {error ? <span className="text-xs text-amber-800">{t("learner.studyLoop.markStudiedError")}</span> : null}
+          </div>
+        ) : (
+          <p className="text-sm text-muted">{t("learner.studyLoop.subscribePathwayHint")}</p>
+        )}
       </div>
-    </div>
+    </section>
   );
 }

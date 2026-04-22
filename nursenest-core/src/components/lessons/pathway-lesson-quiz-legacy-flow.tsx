@@ -298,7 +298,7 @@ function QuizReport({
           {testType === "pretest" ? "Retake pre-test" : "Retake post-test"}
         </Button>
         {testType === "pretest" ? (
-          <p className="text-sm text-[var(--theme-muted-text)]">Or switch to the Clinical content tab to keep reading.</p>
+          <p className="text-sm text-[var(--theme-muted-text)]">Scroll up to continue the lesson whenever you are ready.</p>
         ) : null}
       </div>
     </div>
@@ -410,38 +410,37 @@ export function PathwayLessonQuizLegacyFlow({
 
   if (!started) {
     return (
-      <section className={cn("border-b border-[var(--semantic-border-soft)] pb-8", className)}>
-        <div className="mb-6">
-          <h2 className="text-base font-medium text-[var(--theme-heading-text)] sm:text-lg">{title}</h2>
-          {subtitle ? (
-            <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-[var(--semantic-text-secondary)]">{subtitle}</p>
-          ) : null}
-        </div>
-        <div className="space-y-6 py-8 text-center">
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))]">
-            {variant === "pre" ? (
-              <BarChart3 className="h-10 w-10 text-[var(--semantic-brand)]" aria-hidden />
-            ) : (
-              <TrendingUp className="h-10 w-10 text-[var(--semantic-brand)]" aria-hidden />
-            )}
+      <section className={cn("border-b border-[var(--semantic-border-soft)] pb-6 last:border-b-0 last:pb-0", className)}>
+        <div className="flex flex-col gap-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:py-5">
+          <div className="flex min-w-0 flex-1 items-start gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_80%,var(--semantic-brand)_20%)] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] sm:h-14 sm:w-14">
+              {variant === "pre" ? (
+                <BarChart3 className="h-6 w-6 text-[var(--semantic-brand)] sm:h-7 sm:w-7" aria-hidden />
+              ) : (
+                <TrendingUp className="h-6 w-6 text-[var(--semantic-brand)] sm:h-7 sm:w-7" aria-hidden />
+              )}
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-lg font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-xl" data-testid={`text-${testType}-title`}>
+                {variant === "pre" ? "Baseline check" : "Retention check"}
+              </h3>
+              <p className="mt-1.5 max-w-prose text-sm leading-relaxed text-[var(--theme-muted-text)]">
+                {variant === "pre"
+                  ? "Prime prior knowledge before you read—quick, low stakes. Your result pairs with the reinforcement pass when you finish."
+                  : "Close the loop on what you just studied—short, focused, and built for active recall."}
+              </p>
+              <p className="mt-2 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--semantic-text-secondary)]">
+                {total} question{total === 1 ? "" : "s"}
+              </p>
+            </div>
           </div>
-          <h3 className="text-2xl font-bold text-[var(--theme-heading-text)]" data-testid={`text-${testType}-title`}>
-            {variant === "pre" ? "Pre-test: baseline assessment" : "Post-test: knowledge check"}
-          </h3>
-          <p className="mx-auto max-w-md text-[var(--theme-muted-text)]">
-            {variant === "pre"
-              ? "Take this test before studying the lesson to assess baseline knowledge. Your score can be compared with your post-test."
-              : "After studying the lesson, confirm retention. Your score is compared with your pre-test when available."}
-          </p>
-          <p className="text-sm text-[var(--semantic-text-secondary)]">{total} questions</p>
           <Button
             type="button"
-            size="lg"
-            className="h-14 rounded-full px-12 text-lg"
+            className="h-11 shrink-0 rounded-md px-6 text-sm font-semibold sm:h-12 sm:self-center sm:px-8 sm:text-[0.9375rem]"
             onClick={() => setStarted(true)}
             data-testid={`button-start-${testType}`}
           >
-            {variant === "pre" ? "Start pre-test" : "Start post-test"}
+            {variant === "pre" ? "Begin readiness" : "Begin reinforcement"}
           </Button>
         </div>
       </section>
@@ -503,11 +502,14 @@ export function PathwayLessonQuizLegacyFlow({
           <Progress value={progressPercent} variant="accent" className="h-2" />
         </div>
 
-        <h3 className="text-2xl font-bold text-[var(--theme-heading-text)]" data-testid={`text-${testType}-question`}>
+        <h3
+          className="text-lg font-semibold leading-snug tracking-tight text-[var(--theme-heading-text)] sm:text-xl"
+          data-testid={`text-${testType}-question`}
+        >
           {q.question}
         </h3>
 
-        <div className="grid gap-4">
+        <div className="grid gap-3 sm:gap-3.5">
           {q.options.map((option, i) => {
             const isCorrect = i === q.correct;
             const isSelected = selectedAnswer === i;

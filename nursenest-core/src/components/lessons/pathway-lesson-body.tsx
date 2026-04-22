@@ -129,7 +129,7 @@ function PathwayLessonExamFocusInlineBlocks({
   }
   if (blocks.length === 0) return null;
   return (
-    <div className="space-y-4 rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand)_10%)] bg-[color-mix(in_srgb,var(--bg-card)_94%,var(--semantic-brand-soft)_6%)] p-3.5">
+    <div className="space-y-3 rounded-md border border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-info)_8%)] bg-[color-mix(in_srgb,var(--bg-card)_96%,var(--semantic-panel-cool)_4%)] p-3 sm:p-3.5">
       {blocks.map((b) => (
         <div key={b.title}>
           <h3 className="text-[0.7rem] font-medium uppercase tracking-[0.12em] text-[var(--theme-muted-text)]">

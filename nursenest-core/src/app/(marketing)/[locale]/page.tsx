@@ -11,7 +11,7 @@ import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
 import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-marketing-route-shard-bundles";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
-import { resolveMarketingCopy } from "@/lib/marketing-i18n-core";
+import { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-metadata-strict";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -38,13 +38,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const marketingRegion = await getMarketingRegionFromCookies();
       const m = await loadMarketingLayoutShardsOverlay(locale);
       const metaSfx = marketingRegion === "US" ? "US" : "CA";
-      const title = resolveMarketingCopy(
+      const title = getRequiredPublicMetadataLine(
         m,
         `pages.home.metaTitle${metaSfx}`,
         undefined,
         defaultHomeMetaTitle(marketingRegion),
       );
-      const description = resolveMarketingCopy(
+      const description = getRequiredPublicMetadataLine(
         m,
         `pages.home.metaDescription${metaSfx}`,
         undefined,
@@ -87,13 +87,13 @@ export default async function LocalizedHomePage({ params }: Props) {
     totalLessons: homeStatsRaw.totalLessons,
   };
   const metaSfx = marketingRegion === "US" ? "US" : "CA";
-  const title = resolveMarketingCopy(
+  const title = getRequiredPublicMetadataLine(
     messages,
     `pages.home.metaTitle${metaSfx}`,
     undefined,
     defaultHomeMetaTitle(marketingRegion),
   );
-  const description = resolveMarketingCopy(
+  const description = getRequiredPublicMetadataLine(
     messages,
     `pages.home.metaDescription${metaSfx}`,
     undefined,

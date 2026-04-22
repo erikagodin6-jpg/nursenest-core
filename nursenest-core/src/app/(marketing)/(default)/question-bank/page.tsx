@@ -17,7 +17,8 @@ import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destin
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-marketing-route-shard-bundles";
-import { formatMarketingMessage, resolveMarketingCopy } from "@/lib/marketing-i18n-core";
+import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
+import { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-metadata-strict";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
@@ -111,13 +112,13 @@ export async function generateMetadata(): Promise<Metadata> {
       const marketingRegion = parseMarketingRegionCookieValue(undefined) as MarketingRegionToggle;
       const messages = await loadMarketingLayoutShardsOverlay(locale);
       const metaSfx = marketingRegion === "US" ? "US" : "CA";
-      const title = resolveMarketingCopy(
+      const title = getRequiredPublicMetadataLine(
         messages,
         `pages.publicQuestionBank.metaTitle${metaSfx}`,
         undefined,
         defaultQuestionBankMetaTitle(marketingRegion),
       );
-      const description = resolveMarketingCopy(
+      const description = getRequiredPublicMetadataLine(
         messages,
         `pages.publicQuestionBank.metaDescription${metaSfx}`,
         undefined,
@@ -142,13 +143,13 @@ export default async function QuestionBankHubPage() {
   const t = (key: string, params?: Record<string, string | number>) =>
     formatMarketingMessage(messages, key, params, undefined, { locale });
   const metaSfx = marketingRegion === "US" ? "US" : "CA";
-  const title = resolveMarketingCopy(
+  const title = getRequiredPublicMetadataLine(
     messages,
     `pages.publicQuestionBank.metaTitle${metaSfx}`,
     undefined,
     defaultQuestionBankMetaTitle(marketingRegion),
   );
-  const description = resolveMarketingCopy(
+  const description = getRequiredPublicMetadataLine(
     messages,
     `pages.publicQuestionBank.metaDescription${metaSfx}`,
     undefined,

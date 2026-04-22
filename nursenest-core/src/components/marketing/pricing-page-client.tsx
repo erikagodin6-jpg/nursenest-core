@@ -271,7 +271,7 @@ export function PricingPageClient({
   heroSub: string;
   /** Server union of `nn_global_region` + signed explicit checkout context (HttpOnly); keeps pricing gate aligned with POST checkout. */
   serverCheckoutRegionSlugs?: readonly GlobalRegionSlug[];
-  /** RSC `resolveMarketingCopy` subheads per tier — avoids production `t()` missing-key placeholder under the plan heading. */
+  /** RSC-resolved tier subheads (`getRequiredPublicMetadataLine`) — avoids client `t()` missing-key gaps under plan headings. */
   serverTierSubheads?: Partial<Record<TierCode, string>>;
   /**
    * Same payload as `GET /api/pricing/options`, built during RSC render so the grid is not blocked

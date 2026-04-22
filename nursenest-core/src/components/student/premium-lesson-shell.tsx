@@ -18,6 +18,8 @@ type Props = {
   sourceLabel: string;
   /** Optional server-rendered notice (e.g. thin lesson quality). */
   qualityNotice?: ReactNode;
+  /** Single-line premium notice for dense lesson layouts. */
+  compactSubscriberBanner?: boolean;
   children: ReactNode;
 };
 
@@ -31,12 +33,17 @@ export function PremiumLessonShell({
   topic,
   sourceLabel,
   qualityNotice,
+  compactSubscriberBanner = false,
   children,
 }: Props) {
   return (
-    <div className="space-y-5">
+    <div className={compactSubscriberBanner ? "space-y-3" : "space-y-5"}>
       <p
-        className="flex items-start gap-2.5 rounded-xl border px-4 py-3 text-xs font-medium leading-relaxed"
+        className={
+          compactSubscriberBanner
+            ? "flex items-center gap-2 rounded-md border px-3 py-2 text-[0.7rem] font-medium leading-snug"
+            : "flex items-start gap-2.5 rounded-xl border px-4 py-3 text-xs font-medium leading-relaxed"
+        }
         style={{
           background: "color-mix(in srgb, var(--semantic-brand) 5%, var(--bg-card))",
           borderColor: "color-mix(in srgb, var(--semantic-brand) 14%, var(--border-subtle))",
@@ -44,11 +51,13 @@ export function PremiumLessonShell({
         }}
       >
         <LockKeyhole
-          className="mt-0.5 h-3.5 w-3.5 shrink-0"
+          className={compactSubscriberBanner ? "h-3 w-3 shrink-0" : "mt-0.5 h-3.5 w-3.5 shrink-0"}
           style={{ color: "var(--semantic-brand)" }}
           aria-hidden="true"
         />
-        Premium subscriber content. Notes are printable; copying is deterred but not DRM-locked.
+        {compactSubscriberBanner
+          ? "Subscriber lesson — notes printable; copy deterrence active."
+          : "Premium subscriber content. Notes are printable; copying is deterred but not DRM-locked."}
       </p>
       {qualityNotice}
       <ProtectedPremiumContent
