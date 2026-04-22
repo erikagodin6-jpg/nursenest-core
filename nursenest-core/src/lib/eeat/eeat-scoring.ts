@@ -46,6 +46,8 @@ export function countInternalLinksInText(text: string): number {
 
 export type LessonLike = {
   sections?: { kind?: string; body?: string; checkpointQuestions?: unknown[] }[];
+  preTestQuestionIds?: unknown[];
+  postTestQuestionIds?: unknown[];
   preTest?: unknown[];
   postTest?: unknown[];
   relatedLessonRefs?: { slug: string }[];
@@ -66,6 +68,8 @@ export function sectionCompletenessFraction(lesson: LessonLike): number {
     if (s.kind) kinds.add(s.kind);
   }
   const hasCheckpoint =
+    Boolean(lesson.preTestQuestionIds?.length) ||
+    Boolean(lesson.postTestQuestionIds?.length) ||
     Boolean(lesson.preTest?.length) ||
     Boolean(lesson.postTest?.length) ||
     (lesson.sections ?? []).some((s) => (s.checkpointQuestions?.length ?? 0) > 0);

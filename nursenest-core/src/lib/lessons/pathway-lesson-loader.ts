@@ -71,6 +71,7 @@ import {
   normalizeLesson,
   normalizePathwayLessonInput,
   pathwayLessonRowToInput,
+  sanitizeQuestionIdArray,
   sanitizeQuizItems,
   sortAndFilterLessonsForPathwayContext,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
@@ -82,6 +83,7 @@ export {
   normalizeLesson,
   normalizePathwayLessonInput,
   pathwayLessonRowToInput,
+  sanitizeQuestionIdArray,
   sanitizeQuizItems,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
 

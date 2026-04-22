@@ -204,10 +204,10 @@ test.describe("Stripe test-mode subscriber journey (opt-in)", () => {
       // 6 — Start checkout (consent modal + redirect to Stripe)
       if (steps.pricing === "pass") {
         try {
-          const trialCta = page.getByRole("button", { name: /Start your 3-day free trial/i }).first();
-          await expect(trialCta).toBeVisible({ timeout: 60_000 });
-          await expect(trialCta).toBeEnabled({ timeout: 60_000 });
-          await trialCta.click();
+          const checkoutCta = page.getByRole("button", { name: /Continue to checkout/i }).first();
+          await expect(checkoutCta).toBeVisible({ timeout: 60_000 });
+          await expect(checkoutCta).toBeEnabled({ timeout: 60_000 });
+          await checkoutCta.click();
           const consentHeading = page.getByRole("heading", { name: /confirm before checkout/i });
           if (await consentHeading.isVisible({ timeout: 8000 }).catch(() => false)) {
             await page.getByRole("checkbox").first().check();

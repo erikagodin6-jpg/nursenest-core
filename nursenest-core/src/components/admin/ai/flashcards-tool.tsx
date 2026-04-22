@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
 
 export function FlashcardsTool() {
+  const aiGate = useAdminAiGenerationGate();
   const [topic, setTopic] = useState("");
   const [quantity, setQuantity] = useState(5);
   const [tier, setTier] = useState("rn");
@@ -140,7 +142,7 @@ export function FlashcardsTool() {
       <button
         type="button"
         className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
-        disabled={loading || !topic.trim()}
+        disabled={loading || !topic.trim() || !aiGate.runnable}
         onClick={() => void run()}
       >
         {loading ? "Generating…" : "Generate drafts"}

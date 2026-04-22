@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useState } from "react";
+import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
 import type { QuestionBatchItem, QuestionBatchResultSummaryV1 } from "@/lib/ai/admin-ai-question-batch";
 
 function statusBadge(status: QuestionBatchItem["status"]) {
@@ -25,6 +26,7 @@ function statusBadge(status: QuestionBatchItem["status"]) {
 }
 
 export function ExamQuestionsBatchClient() {
+  const aiGate = useAdminAiGenerationGate();
   const [topicsRaw, setTopicsRaw] = useState("");
   const [tier, setTier] = useState("rn");
   const [pathway, setPathway] = useState("");
@@ -293,7 +295,8 @@ export function ExamQuestionsBatchClient() {
         </label>
         <button
           type="submit"
-          className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          disabled={!aiGate.runnable}
+          className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
         >
           Create batch queue
         </button>
@@ -327,7 +330,7 @@ export function ExamQuestionsBatchClient() {
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
-                disabled={running}
+                disabled={running || !aiGate.runnable}
                 className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
                 onClick={() => void runSteps()}
               >

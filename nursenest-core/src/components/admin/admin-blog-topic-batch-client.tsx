@@ -5,6 +5,7 @@ import type { BlogBatchPublishMode, BlogBatchScheduleStatus, BlogPostTemplate } 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
+import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
 
 type ScheduleListRow = {
   id: string;

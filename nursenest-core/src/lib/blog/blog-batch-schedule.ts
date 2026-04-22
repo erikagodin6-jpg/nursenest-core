@@ -9,8 +9,7 @@ import {
 import { normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { generateBlogPost } from "@/lib/blog/generate-blog-ai-draft";
 import { runBlogBatchLocalizedFollowup } from "@/lib/blog/blog-batch-localized-followup";
-import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
-import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { getAdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -472,12 +471,14 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
     }
   }
 
-  const aiEnabled = isAdminAiGenerationEnabled();
-  const keyCheck = assertOpenAiKeyConfigured();
-  if (!aiEnabled || !keyCheck.ok) {
-    const hint = !keyCheck.ok ? keyCheck.message : "AI_ADMIN_GENERATION_ENABLED=false";
-    safeServerLog("blog_batch_schedule", "skipped_ai_disabled", { aiEnabled, keyOk: keyCheck.ok });
-    return { processedItems: 0, schedulesTouched: [], errors: [hint] };
+  const aiGate = getAdminAiGenerationGate();
+  if (!aiGate.runnable) {
+    safeServerLog("blog_batch_schedule", "skipped_ai_disabled", {
+      mode: aiGate.mode,
+      flagEnabled: aiGate.flagEnabled,
+      openAiKeyPresent: aiGate.openAiKeyPresent,
+    });
+    return { processedItems: 0, schedulesTouched: [], errors: [aiGate.summaryLine] };
   }
 
   const due = await prisma.blogBatchScheduleItem.findMany({

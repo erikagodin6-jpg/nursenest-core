@@ -12,7 +12,7 @@ import {
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
+import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { blogPrimaryStudyCta } from "@/lib/blog/blog-study-cta";
@@ -36,6 +36,10 @@ export async function POST(req: Request, { params }: Props) {
     return NextResponse.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
   }
   const d = parsed.data;
+  if (d.mode === "generate") {
+    const aiBlock = adminAiGenerationHttpBlock();
+    if (aiBlock) return aiBlock;
+  }
   const campaign = await prisma.blogCampaign.findUnique({ where: { id } });
   if (!campaign) return NextResponse.json({ error: "Campaign not found" }, { status: 404 });
 
@@ -48,7 +52,6 @@ export async function POST(req: Request, { params }: Props) {
     return NextResponse.json({ ok: true, processed: 0, message: "No queued items remaining." });
   }
 
-  const aiEnabled = isAdminAiGenerationEnabled();
   const out: Array<{ itemId: string; status: string; slug?: string; error?: string }> = [];
   for (const item of items) {
     try {
@@ -90,7 +93,7 @@ export async function POST(req: Request, { params }: Props) {
       }
 
       let body = `<p>${title}</p><p>Draft generated from campaign queue item ${item.ordinal}.</p>`;
-      if (d.mode === "generate" && aiEnabled) {
+      if (d.mode === "generate") {
         const prompt = `Write SEO-ready HTML for nursing exam prep. Topic: ${item.plannedKeyword ?? campaign.keywordCluster}. Template: ${template}. Intent: ${intent}. Include practical advice, FAQs, and key takeaways.`;
         const ai = await openAiChatCompletion({
           messages: [{ role: "system", content: "Return HTML only with h2/h3/p/ul/li tags." }, { role: "user", content: prompt }],

@@ -9,10 +9,9 @@ import {
   payloadRecordFromNormalized,
   type RegenerateSection,
 } from "@/lib/ai/admin-ai-question-pipeline";
-import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
+import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { checkAdminAiGenerateLimit } from "@/lib/ai/admin-rate-limit";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
-import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import {
   normalizeAiQuestionItem,
   validateNormalizedQuestion,
@@ -38,15 +37,8 @@ export async function POST(req: Request, ctx: Props) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
-  if (!isAdminAiGenerationEnabled()) {
-    return NextResponse.json(
-      { error: "Admin AI generation is disabled. Set AI_ADMIN_GENERATION_ENABLED=true." },
-      { status: 403 },
-    );
-  }
-
-  const keyCheck = assertOpenAiKeyConfigured();
-  if (!keyCheck.ok) return NextResponse.json({ error: keyCheck.message }, { status: 503 });
+  const aiBlock = adminAiGenerationHttpBlock();
+  if (aiBlock) return aiBlock;
 
   const rl = await checkAdminAiGenerateLimit(gate.admin.userId);
   if (!rl.ok) {

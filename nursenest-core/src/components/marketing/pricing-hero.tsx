@@ -3,7 +3,7 @@ import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/li
 
 export function PricingHero({
   studySystemHref,
-  ctaLabel = "Start your 3-day free trial",
+  ctaLabel = "Continue to checkout",
   trialSubtext = "No charge today. Cancel anytime before your trial ends.",
   trialFinePrint = "Billing begins automatically after 3 days unless cancelled.",
   pricesShownLine = "All prices are shown in Canadian dollars.",
@@ -28,7 +28,7 @@ export function PricingHero({
   return (
     <section
       data-testid="pricing-marketing-hero"
-      className="nn-gradient-safe relative overflow-hidden rounded-3xl px-6 pt-14 pb-16 text-center sm:px-14 sm:pt-16 sm:pb-20"
+      className="nn-gradient-safe relative overflow-hidden rounded-3xl px-6 pt-10 pb-12 text-center sm:px-14 sm:pt-12 sm:pb-16"
       style={{
         background: `
           linear-gradient(

@@ -11,8 +11,8 @@ import {
   type QuestionBatchResultSummaryV1,
   type QuestionBatchSettings,
 } from "@/lib/ai/admin-ai-question-batch";
-import { assertOpenAiKeyConfigured, getOpenAiChatModel } from "@/lib/ai/openai-env";
-import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
+import { getOpenAiChatModel } from "@/lib/ai/openai-env";
+import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { prisma } from "@/lib/db";
 import {
   batchControlSchema,
@@ -51,14 +51,8 @@ export async function POST(req: Request) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
-  if (!isAdminAiGenerationEnabled()) {
-    return NextResponse.json(
-      { error: "Admin AI generation is disabled. Set AI_ADMIN_GENERATION_ENABLED=true." },
-      { status: 403 },
-    );
-  }
-  const keyCheck = assertOpenAiKeyConfigured();
-  if (!keyCheck.ok) return NextResponse.json({ error: keyCheck.message }, { status: 503 });
+  const aiBlock = adminAiGenerationHttpBlock();
+  if (aiBlock) return aiBlock;
 
   const parsed = bodySchema.safeParse(await req.json().catch(() => ({})));
   if (!parsed.success) {

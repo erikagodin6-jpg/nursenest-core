@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
+import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
 import type {
   AdminLessonBatchJobSnapshot,
   LessonBatchDerivedSummary,
@@ -53,6 +54,7 @@ function isRunDisabled(job: AdminLessonBatchJobSnapshot | null, derived: LessonB
 }
 
 export function AdminLessonBatchGeneratorClient() {
+  const aiGate = useAdminAiGenerationGate();
   const [topicsRaw, setTopicsRaw] = useState("");
   const [pathway, setPathway] = useState<(typeof PATHWAYS)[number]>("NCLEX-RN");
   const [country, setCountry] = useState<"CA" | "US">("US");
@@ -361,7 +363,8 @@ export function AdminLessonBatchGeneratorClient() {
 
         <button
           type="submit"
-          className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          disabled={!aiGate.runnable}
+          className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
         >
           Create batch queue
         </button>
@@ -414,7 +417,7 @@ export function AdminLessonBatchGeneratorClient() {
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
-                disabled={running || runDisabled}
+                disabled={running || runDisabled || !aiGate.runnable}
                 className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
                 onClick={() => void runSteps()}
                 title={runDisabled ? "Batch is finished or canceled" : undefined}

@@ -16,6 +16,7 @@ import {
   DRAFT_BATCH_MAX_TOPICS,
 } from "@/lib/blog/blog-draft-generation-batch-constants";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
+import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
 
 function newIdempotencyKey(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
@@ -166,6 +167,7 @@ function statusBadge(status: BlogDraftGenerationBatchItemStatus | BlogDraftGener
 }
 
 export function AdminBlogDraftBatchClient() {
+  const aiGate = useAdminAiGenerationGate();
   const [topicsText, setTopicsText] = useState("");
   const [exam, setExam] = useState(ADMIN_BLOG_TARGET_EXAM_OPTIONS[0].value);
   const [country, setCountry] = useState<"US" | "CA" | "unspecified">("unspecified");
@@ -525,7 +527,7 @@ export function AdminBlogDraftBatchClient() {
         </div>
         <button
           type="submit"
-          disabled={busy}
+          disabled={busy || !aiGate.runnable}
           className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
         >
           {busy ? "Working…" : "Create server job"}
@@ -573,7 +575,7 @@ export function AdminBlogDraftBatchClient() {
               </label>
               <button
                 type="button"
-                disabled={busy || pendingCount === 0}
+                disabled={busy || pendingCount === 0 || !aiGate.runnable}
                 className="rounded-full border border-border px-4 py-2 text-sm font-semibold disabled:opacity-50"
                 onClick={() => void onProcess(processChunk)}
               >

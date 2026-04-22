@@ -7,8 +7,7 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { blogSimpleAiDraftBodySchema } from "@/lib/admin/blog-simple-ai-draft-schema";
 import { logSimpleAiDraftRun } from "@/lib/admin/blog-content-automation-log";
-import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
-import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { processDraftGenerationBatchItems } from "@/lib/blog/blog-draft-generation-batch";
 import { generateBlogPost } from "@/lib/blog/generate-blog-ai-draft";
 import { prisma } from "@/lib/db";
@@ -48,6 +47,9 @@ export async function POST(req: Request, ctx: RouteContext) {
         { status: 400 },
       );
     }
+    const aiBlockBatch = adminAiGenerationHttpBlock();
+    if (aiBlockBatch) return aiBlockBatch;
+
     await prisma.blogDraftGenerationBatchItem.update({
       where: { id: item.id },
       data: { status: BlogDraftGenerationBatchItemStatus.PENDING, error: null },
@@ -60,16 +62,8 @@ export async function POST(req: Request, ctx: RouteContext) {
     logRow.category === ContentAutomationLogCategory.BLOG_AI_SIMPLE &&
     logRow.status === ContentAutomationLogStatus.FAILED
   ) {
-    if (!isAdminAiGenerationEnabled()) {
-      return NextResponse.json(
-        { error: "AI admin generation disabled", hint: "Set AI_ADMIN_GENERATION_ENABLED=true" },
-        { status: 403 },
-      );
-    }
-    const keyCheck = assertOpenAiKeyConfigured();
-    if (!keyCheck.ok) {
-      return NextResponse.json({ error: keyCheck.message }, { status: 503 });
-    }
+    const aiBlock = adminAiGenerationHttpBlock();
+    if (aiBlock) return aiBlock;
 
     const meta = logRow.metadata as { retryPayload?: unknown } | null;
     const parsed = blogSimpleAiDraftBodySchema.safeParse(meta?.retryPayload);

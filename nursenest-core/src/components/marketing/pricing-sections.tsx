@@ -802,12 +802,13 @@ export function PricingCTA({ plansHref }: { plansHref: string }) {
       <FadeUp>
         <h2 className="nn-marketing-h2 mb-3">Start Studying Smarter Today</h2>
         <p className="nn-marketing-body-sm mx-auto mb-8 max-w-lg text-muted-foreground">
-          Start your 3-day free trial
+          Choose a plan above, then continue to secure checkout. Eligible plans may still include a short trial at
+          checkout.
         </p>
       </FadeUp>
       <div className="flex flex-wrap items-center justify-center gap-3">
         <Link href={plansHref} className={MARKETING_PRIMARY_CTA_CLASS}>
-          Start your 3-day free trial
+          Continue to checkout
         </Link>
         <Link href="#pricing-plans-heading" className={MARKETING_SECONDARY_CTA_CLASS}>
           View Plans

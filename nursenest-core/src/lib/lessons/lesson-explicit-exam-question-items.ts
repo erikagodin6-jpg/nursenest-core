@@ -5,7 +5,8 @@ import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
-import { examRowToLessonBankItem, type LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
+import { buildLessonBankQuizItemsFromOrderedExamRows, type LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
+import { finalizeLessonBankQuizItemsForUi } from "@/lib/lessons/lesson-quiz-render-contract";
 
 const MAX_IDS = 40;
 
@@ -64,13 +65,7 @@ export async function loadLessonBankQuizItemsByExamIds(args: {
     [] as ExamRow[],
   );
 
-  const byId = new Map(rows.map((r) => [r.id, r]));
-  const out: LessonBankQuizItem[] = [];
-  for (const id of uniq) {
-    const r = byId.get(id);
-    if (!r) continue;
-    const item = examRowToLessonBankItem(r);
-    if (item) out.push(item);
-  }
-  return out;
+  const byId = new Map<string, ExamRow>(rows.map((r) => [r.id, r]));
+  const built = buildLessonBankQuizItemsFromOrderedExamRows(uniq, byId);
+  return finalizeLessonBankQuizItemsForUi(built);
 }

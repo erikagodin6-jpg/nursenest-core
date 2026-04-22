@@ -146,7 +146,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
   const { lesson, fullAccess, scope, entitlementError } = routeResolution;
   const examName = pathwayRegionAwareExamName(pathway);
   const [bankAssessmentsRes, adjacentSlugsRes, contentDatesRes] = await Promise.allSettled([
-    resolvePathwayLessonBankAssessments(pathway, lesson),
+    resolvePathwayLessonBankAssessments(pathway, lesson, entitlement === "error" ? null : entitlement),
     loadPathwayLessonAdjacent(pathway.id, lesson.slug, lessonContentLocale),
     getPathwayLessonContentDates(pathway.id, lesson.slug, lessonContentLocale),
   ]);

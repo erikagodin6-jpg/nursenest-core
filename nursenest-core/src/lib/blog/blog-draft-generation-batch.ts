@@ -7,8 +7,7 @@ import {
   BlogPostTemplate,
 } from "@prisma/client";
 import { generateAutomatedBlogPost } from "@/lib/blog/blog-automation-engine";
-import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
-import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { getAdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
 import { logDraftBatchItemRun } from "@/lib/admin/blog-content-automation-log";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { prisma } from "@/lib/db";
@@ -302,11 +301,9 @@ export async function processDraftGenerationBatchItems(
     return processRnTopicMapShellBatchItems(batchId, limit);
   }
 
-  const aiEnabled = isAdminAiGenerationEnabled();
-  const keyCheck = assertOpenAiKeyConfigured();
-  if (!aiEnabled || !keyCheck.ok) {
-    const hint = !keyCheck.ok ? keyCheck.message : "AI_ADMIN_GENERATION_ENABLED=false";
-    return { processed: 0, results: [], errors: [hint] };
+  const aiGate = getAdminAiGenerationGate();
+  if (!aiGate.runnable) {
+    return { processed: 0, results: [], errors: [aiGate.summaryLine] };
   }
 
   const safeLimit = Math.max(1, Math.min(DRAFT_BATCH_MAX_ITEMS_PER_PROCESS, limit));

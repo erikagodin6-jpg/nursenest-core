@@ -24,7 +24,7 @@ test.describe("Smoke — pricing / checkout path", () => {
       await expect(page.getByRole("heading", { name: /choose your plan/i })).toBeVisible({ timeout: 90_000 });
 
       await expect(
-        page.getByRole("button", { name: /Start your 3-day free trial|Coming Soon/i }).first(),
+        page.getByRole("button", { name: /Continue to checkout|Coming Soon/i }).first(),
       ).toBeVisible({ timeout: 90_000 });
 
       const serious = seriousPublicSmokeConsoleErrors(observers.consoleErrors);

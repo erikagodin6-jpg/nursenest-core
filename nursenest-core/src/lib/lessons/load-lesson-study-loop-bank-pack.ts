@@ -12,9 +12,37 @@ import {
 import { examRowToLessonBankItem, type LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { loadLessonBankQuizItemsByExamIds } from "@/lib/lessons/lesson-explicit-exam-question-items";
+import { sanitizeQuestionIdArray } from "@/lib/lessons/pathway-lesson-catalog-sync";
 
 /** Minimum bank questions to activate the guided study loop (graceful degrade below target count). */
 export const LESSON_STUDY_LOOP_MIN_QUESTIONS = 5;
+
+/** Pure gate for learner lesson page: explicit id pack vs topic-discovery bank pack. */
+export function shouldUseExplicitLessonStudyLoopPack(opts: {
+  hasUserId: boolean;
+  hasPathway: boolean;
+  lessonStudyLoopEnabled: boolean;
+  enablePrePostQuizzes: boolean;
+  explicitCombinedSanitizedIdCount: number;
+}): boolean {
+  return (
+    opts.hasUserId &&
+    opts.hasPathway &&
+    opts.lessonStudyLoopEnabled &&
+    opts.enablePostPostQuizzes &&
+    opts.explicitCombinedSanitizedIdCount >= LESSON_STUDY_LOOP_MIN_QUESTIONS
+  );
+}
+
+/** Deduped count of sanitized pre+post exam question ids (study loop activation threshold). */
+export function explicitLessonStudyLoopCombinedIdCount(
+  preTestQuestionIds?: string[],
+  postTestQuestionIds?: string[],
+): number {
+  const preSan = sanitizeQuestionIdArray(preTestQuestionIds) ?? [];
+  const postSan = sanitizeQuestionIdArray(postTestQuestionIds) ?? [];
+  return new Set([...preSan, ...postSan]).size;
+}
 export const LESSON_STUDY_LOOP_TARGET_DEFAULT = 12;
 export const LESSON_STUDY_LOOP_TARGET_MAX = 20;
 
@@ -188,9 +216,9 @@ export async function loadLessonStudyLoopBankPackFromExplicitIds(args: {
     LESSON_STUDY_LOOP_TARGET_MAX,
     Math.max(LESSON_STUDY_LOOP_MIN_QUESTIONS, args.targetCount ?? LESSON_STUDY_LOOP_TARGET_DEFAULT),
   );
-  const combined = [
-    ...new Set([...(args.preTestQuestionIds ?? []), ...(args.postTestQuestionIds ?? [])].map((x) => x.trim()).filter(Boolean)),
-  ].slice(0, 40);
+  const preSan = sanitizeQuestionIdArray(args.preTestQuestionIds) ?? [];
+  const postSan = sanitizeQuestionIdArray(args.postTestQuestionIds) ?? [];
+  const combined = [...new Set([...preSan, ...postSan])];
 
   if (combined.length < LESSON_STUDY_LOOP_MIN_QUESTIONS || !args.entitlement.hasAccess) {
     return { items: [], questionIds: [], poolCount: combined.length, targetRequested: target };

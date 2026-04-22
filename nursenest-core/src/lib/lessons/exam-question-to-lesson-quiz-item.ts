@@ -51,14 +51,16 @@ export function resolveMcqCorrectIndex(
   return null;
 }
 
-export function examRowToLessonBankItem(row: {
+export type ExamQuestionMcqRow = {
   id: string;
   stem: string;
   options: Prisma.JsonValue | null;
   correctAnswer: Prisma.JsonValue | null;
   questionType: string;
   rationale: string | null;
-}): LessonBankQuizItem | null {
+};
+
+export function examRowToLessonBankItem(row: ExamQuestionMcqRow): LessonBankQuizItem | null {
   const options = parseOptionsArray(row.options);
   const correct = resolveMcqCorrectIndex(row.options, row.correctAnswer, row.questionType);
   if (correct == null) return null;
@@ -69,4 +71,22 @@ export function examRowToLessonBankItem(row: {
     correct,
     rationale: row.rationale?.trim() || undefined,
   };
+}
+
+/**
+ * Map already-fetched exam rows into lesson quiz items following `orderedIds` (stable lesson authoring order).
+ * Skips unknown ids, inaccessible rows (not in map), and non-MCQ / unmapped rows.
+ */
+export function buildLessonBankQuizItemsFromOrderedExamRows(
+  orderedIds: readonly string[],
+  rowsById: ReadonlyMap<string, ExamQuestionMcqRow>,
+): LessonBankQuizItem[] {
+  const out: LessonBankQuizItem[] = [];
+  for (const id of orderedIds) {
+    const row = rowsById.get(id);
+    if (!row) continue;
+    const item = examRowToLessonBankItem(row);
+    if (item) out.push(item);
+  }
+  return out;
 }

@@ -177,7 +177,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
 
   const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPath);
   const [bankAssessmentsRes, adjacentSlugsRes, relatedQuestionStemsRes, contentDatesRes] = await Promise.allSettled([
-    resolvePathwayLessonBankAssessments(pathway, lesson),
+    resolvePathwayLessonBankAssessments(pathway, lesson, entitlement === "error" ? null : entitlement),
     loadPathwayLessonAdjacent(pathway.id, lesson.slug, lessonContentLocale),
     loadRelatedExamQuestionStemsForPathwayLesson({
       pathway,

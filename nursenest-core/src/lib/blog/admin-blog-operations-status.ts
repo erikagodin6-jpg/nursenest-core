@@ -1,6 +1,5 @@
 import { ContentAutomationLogCategory, ContentAutomationLogStatus } from "@prisma/client";
-import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
-import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { getAdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
 import { BLOG_AUTOMATION_LOG_JOB_TYPES } from "@/lib/admin/blog-content-automation-log";
 import { canUseStaticBlogFallback } from "@/lib/blog/safe-blog-queries";
 import { prisma } from "@/lib/db";
@@ -55,8 +54,8 @@ export type AdminBlogOperationsStatus = {
 };
 
 export async function getAdminBlogOperationsStatus(): Promise<AdminBlogOperationsStatus> {
-  const key = assertOpenAiKeyConfigured();
-  const translationGenerationAvailable = isAdminAiGenerationEnabled() && key.ok;
+  const aiGate = getAdminAiGenerationGate();
+  const translationGenerationAvailable = aiGate.runnable;
 
   const [canonicalBlogPostCount, localizedVariantCount, staticFallbackEnabled, lastGenerationAttempt, lastGenerationSuccess, lastGenerationFailure, lastWeakUpgradeRun] =
     await Promise.all([

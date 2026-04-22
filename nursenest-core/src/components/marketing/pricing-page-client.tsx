@@ -158,7 +158,6 @@ const DURATION_MICROCOPY: Record<BillingDuration, string> = {
   yearly: "Best value for long-term prep",
 };
 
-const TRIAL_PRIMARY_COPY = "Start your 3-day free trial";
 const TRIAL_SECONDARY_COPY = "No charge today. Cancel anytime before your trial ends.";
 const TRIAL_FINE_PRINT_COPY = "Billing begins automatically after 3 days unless cancelled.";
 
@@ -456,13 +455,15 @@ export function PricingPageClient({
     setNaPathwayAcknowledged(false);
   }, [authoritativeRegionKey]);
 
-  const heroCtaLabel = useMemo(
+  const paidPlanPrimaryCtaLabel = useMemo(
     () =>
       pricingCheckoutSoftGate
         ? t("pages.pricing.checkout.ctaJoinNorthAmericaPathways")
-        : TRIAL_PRIMARY_COPY,
+        : t("pages.pricing.conversion.ctaSubscribe"),
     [pricingCheckoutSoftGate, t],
   );
+
+  const heroCtaLabel = paidPlanPrimaryCtaLabel;
 
   const tryQuestionsHref = localize(rnQuestions(region));
   const termsHref = localize("/terms");
@@ -757,7 +758,7 @@ export function PricingPageClient({
   }, [authStatus, checkoutIntentHandled, localize, pathname, region, searchParams]);
 
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-col gap-20 nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0 md:gap-24">
+    <main className="mx-auto flex w-full max-w-6xl flex-col gap-12 nn-marketing-x pb-[var(--nn-rhythm-page-y)] pt-0 md:gap-16">
 
       {/* ── Section 1: Hero ── */}
       <PricingHero
@@ -790,25 +791,7 @@ export function PricingPageClient({
         </div>
       ) : null}
 
-      {/* ── Section 2: Trust + Value Strip ── */}
-      <div className="flex flex-col items-center gap-4 text-center">
-        <BrandTrustInline variant="pricing" className="justify-center" />
-        <ValuePropsStrip />
-      </div>
-
-      {/* ── Section 2b: Value breakdown, included vs not, payment safety, objections ── */}
-      <PricingConversionClarity />
-
-      {/* ── Section 2c: US / Canada & exam scope FAQ ── */}
-      <PricingRegionFaq />
-
-      {/* ── Section 2d: Stability, performance, study continuity ── */}
-      <PricingReliabilityFaq />
-
-      {/* ── Section 2e: Pass anxiety, try-before-pay, refund honesty ── */}
-      <PricingLearnerFaq />
-
-      {/* ── Section 3: Plan Selector + Section 4: Pricing Cards ── */}
+      {/* ── Plan selector + pricing cards (surfaced early) ── */}
       <section aria-labelledby="pricing-plans-heading" className="space-y-12">
         <div className="text-center">
           <h2 id="pricing-plans-heading" className="nn-marketing-h2">
@@ -1004,11 +987,7 @@ export function PricingPageClient({
                       onClick={() => requestCheckout(duration)}
                       className={`${isHighlighted ? MARKETING_PRIMARY_CTA_CLASS : MARKETING_SECONDARY_CTA_CLASS} mt-6 w-full justify-center disabled:pointer-events-none disabled:opacity-50`}
                     >
-                      {row.checkoutAvailable
-                        ? pricingCheckoutSoftGate
-                          ? t("pages.pricing.checkout.ctaJoinNorthAmericaPathways")
-                          : TRIAL_PRIMARY_COPY
-                        : t("pages.pricing.checkout.comingSoon")}
+                      {row.checkoutAvailable ? paidPlanPrimaryCtaLabel : t("pages.pricing.checkout.comingSoon")}
                     </button>
                     {row.checkoutAvailable ? (
                       <>
@@ -1151,6 +1130,20 @@ export function PricingPageClient({
         </div>
       </section>
 
+      {/* ── Trust + value + FAQs (after plans) ── */}
+      <div className="flex flex-col items-center gap-4 text-center">
+        <BrandTrustInline variant="pricing" className="justify-center" />
+        <ValuePropsStrip />
+      </div>
+
+      <PricingConversionClarity />
+
+      <PricingRegionFaq />
+
+      <PricingReliabilityFaq />
+
+      <PricingLearnerFaq />
+
       {/* ── Section 5 (comparison) ── */}
       <FeatureComparisonTable />
 
@@ -1176,7 +1169,7 @@ export function PricingPageClient({
       <div className="text-center">
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Link href="#pricing-plans-heading" className={MARKETING_PRIMARY_CTA_CLASS}>
-            {TRIAL_PRIMARY_COPY}
+            {paidPlanPrimaryCtaLabel}
           </Link>
           <Link href={tryQuestionsHref} className={MARKETING_TERTIARY_LINK_CLASS}>
             Or Try Free Questions First

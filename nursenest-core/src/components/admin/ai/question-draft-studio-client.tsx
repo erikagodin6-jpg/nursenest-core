@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
 
 type ValidationJson = {
   ok?: boolean;
@@ -40,6 +41,7 @@ const SECTIONS = [
 type SectionId = (typeof SECTIONS)[number]["id"];
 
 export function QuestionDraftStudioClient({ draftId }: { draftId: string }) {
+  const aiGate = useAdminAiGenerationGate();
   const [draft, setDraft] = useState<DraftPayload | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [busySection, setBusySection] = useState<SectionId | null>(null);
@@ -183,7 +185,7 @@ export function QuestionDraftStudioClient({ draftId }: { draftId: string }) {
             <button
               key={s.id}
               type="button"
-              disabled={busySection !== null || reviewBusy || draft.reviewStatus === "PROMOTED"}
+              disabled={busySection !== null || reviewBusy || draft.reviewStatus === "PROMOTED" || !aiGate.runnable}
               className="rounded-md border border-border bg-background px-2 py-1 text-xs font-medium disabled:opacity-50"
               onClick={() => void regenerate(s.id)}
             >

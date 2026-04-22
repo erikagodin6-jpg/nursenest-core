@@ -21,6 +21,7 @@ import {
   parseInternalLinkPlanJson,
 } from "@/lib/blog/blog-image-workflow";
 import { parseBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
+import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
 
 /** Mirrors API `prePublish` payload (avoid importing server validation module in client). */
 type PrePublishIssueClient = {
@@ -210,6 +211,7 @@ export function AdminBlogControlPanelClient({
     return res.status === 429 ? formatAdminRateLimitMessageFromJson(body) : fallback;
   }
 
+  const aiGate = useAdminAiGenerationGate();
   const [topic, setTopic] = useState("");
   const [exam, setExam] = useState(ADMIN_BLOG_TARGET_EXAM_OPTIONS[0].value);
   const [country, setCountry] = useState<"US" | "CA" | "unspecified">("unspecified");
@@ -381,7 +383,7 @@ export function AdminBlogControlPanelClient({
     void refreshPrePublishValidation(postId);
   }, [postId, refreshPrePublishValidation]);
 
-  const formDisabled = genState === "generating" || Boolean(sectionBusy);
+  const formDisabled = genState === "generating" || Boolean(sectionBusy) || !aiGate.runnable;
 
   function parseSourceRecordsForSubmit(): unknown[] | null {
     try {
@@ -1752,7 +1754,7 @@ export function AdminBlogControlPanelClient({
               actions={
                 <button
                   type="button"
-                  disabled={Boolean(sectionBusy)}
+                  disabled={Boolean(sectionBusy) || !aiGate.runnable}
                   onClick={() => void runRegenerate("title_options")}
                   className="text-xs font-semibold text-primary underline disabled:opacity-50"
                 >
@@ -1785,7 +1787,7 @@ export function AdminBlogControlPanelClient({
               actions={
                 <button
                   type="button"
-                  disabled={Boolean(sectionBusy)}
+                  disabled={Boolean(sectionBusy) || !aiGate.runnable}
                   onClick={() => void runRegenerate("meta")}
                   className="text-xs font-semibold text-primary underline disabled:opacity-50"
                 >
@@ -1870,7 +1872,7 @@ export function AdminBlogControlPanelClient({
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
-                  disabled={Boolean(sectionBusy)}
+                  disabled={Boolean(sectionBusy) || !aiGate.runnable}
                   onClick={() => void runRegenerate("outline")}
                   className="text-xs font-semibold text-primary underline disabled:opacity-50"
                 >
@@ -1919,7 +1921,7 @@ export function AdminBlogControlPanelClient({
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
-                  disabled={Boolean(sectionBusy)}
+                  disabled={Boolean(sectionBusy) || !aiGate.runnable}
                   onClick={() => void runRegenerate("article_html")}
                   className="text-xs font-semibold text-primary underline disabled:opacity-50"
                 >
@@ -1959,7 +1961,7 @@ export function AdminBlogControlPanelClient({
                 ) : null}
                 <button
                   type="button"
-                  disabled={Boolean(sectionBusy)}
+                  disabled={Boolean(sectionBusy) || !aiGate.runnable}
                   onClick={() => void runRegenerate("image_placements")}
                   className="text-xs font-semibold text-primary underline disabled:opacity-50"
                 >
@@ -2165,7 +2167,7 @@ export function AdminBlogControlPanelClient({
             actions={
               <button
                 type="button"
-                disabled={Boolean(sectionBusy)}
+                disabled={Boolean(sectionBusy) || !aiGate.runnable}
                 onClick={() => void runRegenerate("faqs")}
                 className="text-xs font-semibold text-primary underline disabled:opacity-50"
               >
@@ -2218,7 +2220,7 @@ export function AdminBlogControlPanelClient({
             actions={
               <button
                 type="button"
-                disabled={Boolean(sectionBusy)}
+                disabled={Boolean(sectionBusy) || !aiGate.runnable}
                 onClick={() => void runRegenerate("internal_links")}
                 className="text-xs font-semibold text-primary underline disabled:opacity-50"
               >
@@ -2373,7 +2375,7 @@ export function AdminBlogControlPanelClient({
             actions={
               <button
                 type="button"
-                disabled={Boolean(sectionBusy)}
+                disabled={Boolean(sectionBusy) || !aiGate.runnable}
                 onClick={() => void runRegenerate("apa_sources")}
                 className="text-xs font-semibold text-primary underline disabled:opacity-50"
               >

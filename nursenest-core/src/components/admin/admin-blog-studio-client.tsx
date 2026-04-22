@@ -7,6 +7,7 @@ import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 import { parseBlogSeoBundle } from "@/lib/blog/blog-seo-automation";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
+import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
 
 const templates = Object.values(BlogPostTemplate);
 
@@ -57,6 +58,7 @@ function PackageSection({
 }
 
 export function AdminBlogStudioClient() {
+  const aiGate = useAdminAiGenerationGate();
   const [topic, setTopic] = useState("");
   const [exam, setExam] = useState(ADMIN_BLOG_TARGET_EXAM_OPTIONS[0].value);
   const [country, setCountry] = useState<"US" | "CA" | "unspecified">("unspecified");
@@ -363,7 +365,7 @@ export function AdminBlogStudioClient() {
         <div className="lg:col-span-2">
           <button
             type="submit"
-            disabled={busy}
+            disabled={busy || !aiGate.runnable}
             className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
             {busy ? "Generating…" : "Generate article package"}

@@ -11,7 +11,8 @@ import {
 } from "@/lib/admin/system-status-derive";
 import { buildOperationalSummaryFromChecks } from "@/lib/admin/system-status-operational-summary";
 import type { SystemCheckId, SystemCheckResult, SystemStatusPayload } from "@/lib/admin/system-status-types";
-import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
+import { getAdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
+import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import { STALE_GENERATING_MS } from "@/lib/lessons/admin-ai-lesson-batch";
 import { boundedSelectOne, checkDatabaseReadiness } from "@/lib/db/prisma-readiness";
 import { prisma } from "@/lib/db";
@@ -390,7 +391,7 @@ async function probeConfigSanity(): Promise<SystemCheckResult> {
     const authSecret =
       Boolean(process.env.AUTH_SECRET?.trim()) || Boolean(process.env.NEXTAUTH_SECRET?.trim());
     const authUrlPresent = Boolean(process.env.AUTH_URL?.trim() || process.env.NEXTAUTH_URL?.trim());
-    const openaiKeyPresent = Boolean(process.env.AI_INTEGRATIONS_OPENAI_API_KEY?.trim());
+    const openaiKeyPresent = assertOpenAiKeyConfigured().ok;
     const stripeSecretPresent = Boolean(process.env.STRIPE_SECRET_KEY?.trim());
     const stripeWebhookPresent = Boolean(process.env.STRIPE_WEBHOOK_SECRET?.trim());
     const spacesCredsPresent =
@@ -407,7 +408,7 @@ async function probeConfigSanity(): Promise<SystemCheckResult> {
       safeServerLog("admin_system_status", "auth_init_threw", { preview: msg.slice(0, 160) });
     }
 
-    const adminAi = isAdminAiGenerationEnabled();
+    const aiGate = getAdminAiGenerationGate();
     const rows = eachStripePriceMatrixRow();
     const missingPrices = listMissingStripePriceEnvKeys();
 
@@ -433,7 +434,9 @@ async function probeConfigSanity(): Promise<SystemCheckResult> {
       spacesBucketPresent,
       spacesRegionPresent,
       sessionHandlerLoadable: sessionLoadable,
-      adminAiGenerationEnabled: adminAi,
+      adminAiGenerationEnabled: aiGate.flagEnabled,
+      adminAiGenerationRunnable: aiGate.runnable,
+      adminAiGenerationMode: aiGate.mode,
       stripePriceCellsConfigured: rows.filter((r) => r.priceId).length,
       stripePriceCellsTotal: rows.length,
       stripeMissingPriceEnvCount: missingPrices.length,
@@ -453,13 +456,13 @@ async function probeConfigSanity(): Promise<SystemCheckResult> {
   if (prod && !value.authSecretPresent) {
     return checkBase("configSanity", "Auth & config sanity", ms, "failed", "AUTH_SECRET / NEXTAUTH_SECRET missing in production.", value);
   }
-  if (value.adminAiGenerationEnabled && !value.openaiIntegrationKeyPresent) {
+  if (value.adminAiGenerationMode === "misconfigured") {
     return checkBase(
       "configSanity",
       "Auth & config sanity",
       ms,
       "failed",
-      "AI_ADMIN_GENERATION_ENABLED but OpenAI integration key is not set.",
+      "AI_ADMIN_GENERATION_ENABLED but OpenAI API key is not set (AI_INTEGRATIONS_OPENAI_API_KEY or OPENAI_API_KEY).",
       value,
     );
   }

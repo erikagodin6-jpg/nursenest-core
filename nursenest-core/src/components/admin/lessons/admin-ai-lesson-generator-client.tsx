@@ -8,6 +8,7 @@ import {
   pickLessonDraftIdFromBatchSummary,
   runLessonAiBatchSteps,
 } from "@/lib/admin/admin-lesson-ai-queue";
+import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
 import type { AdminAiGeneratedLesson } from "@/lib/lessons/admin-ai-lesson-schema";
 import type { AdminAiLessonDraftNormalized } from "@/lib/lessons/admin-ai-lesson-schema";
 import type { LessonBatchResultSummaryV1 } from "@/lib/lessons/admin-ai-lesson-batch";
@@ -36,6 +37,7 @@ const LESSON_TYPES = [
 ] as const;
 
 export function AdminAiLessonGeneratorClient() {
+  const aiGate = useAdminAiGenerationGate();
   const searchParams = useSearchParams();
   const draftFromUrl = searchParams.get("draft");
 
@@ -299,7 +301,7 @@ export function AdminAiLessonGeneratorClient() {
 
         <button
           type="submit"
-          disabled={busy}
+          disabled={busy || !aiGate.runnable}
           className="rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground disabled:opacity-50"
         >
           {busy ? "Running async steps…" : "Generate structured draft"}
@@ -337,7 +339,7 @@ export function AdminAiLessonGeneratorClient() {
               </div>
               <button
                 type="button"
-                disabled={!draftId || Boolean(sectionBusy)}
+                disabled={!draftId || Boolean(sectionBusy) || !aiGate.runnable}
                 className="rounded-lg border border-border px-2 py-1 text-xs font-semibold hover:bg-muted/60 disabled:opacity-40"
                 onClick={() => void regen({ section: "title_slug_summary" })}
               >
@@ -352,7 +354,7 @@ export function AdminAiLessonGeneratorClient() {
               <h3 className="font-semibold text-[var(--theme-heading-text)]">Pathway-aware intro</h3>
               <button
                 type="button"
-                disabled={!draftId || Boolean(sectionBusy)}
+                disabled={!draftId || Boolean(sectionBusy) || !aiGate.runnable}
                 className="rounded-lg border border-border px-2 py-1 text-xs font-semibold hover:bg-muted/60 disabled:opacity-40"
                 onClick={() => void regen({ section: "intro" })}
               >
@@ -368,7 +370,7 @@ export function AdminAiLessonGeneratorClient() {
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
-              disabled={!draftId || Boolean(sectionBusy)}
+              disabled={!draftId || Boolean(sectionBusy) || !aiGate.runnable}
               className="rounded-lg border border-primary/40 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary disabled:opacity-40"
               onClick={() => void regen({ section: "structured_body_all" })}
             >
@@ -382,7 +384,7 @@ export function AdminAiLessonGeneratorClient() {
                 <h3 className="font-semibold text-[var(--theme-heading-text)]">{block.sectionTitle}</h3>
                 <button
                   type="button"
-                  disabled={!draftId || Boolean(sectionBusy)}
+                  disabled={!draftId || Boolean(sectionBusy) || !aiGate.runnable}
                   className="rounded-lg border border-border px-2 py-1 text-xs font-semibold hover:bg-muted/60 disabled:opacity-40"
                   onClick={() => void regen({ section: "structured_body", bodyIndex: i })}
                 >
@@ -409,7 +411,7 @@ export function AdminAiLessonGeneratorClient() {
                   <h3 className="text-sm font-semibold">{label}</h3>
                   <button
                     type="button"
-                    disabled={!draftId || Boolean(sectionBusy)}
+                    disabled={!draftId || Boolean(sectionBusy) || !aiGate.runnable}
                     className="text-xs font-semibold text-primary underline disabled:opacity-40"
                     onClick={() => void regen({ section: key })}
                   >
@@ -430,7 +432,7 @@ export function AdminAiLessonGeneratorClient() {
               <h3 className="font-semibold text-[var(--theme-heading-text)]">Internal link suggestions</h3>
               <button
                 type="button"
-                disabled={!draftId || Boolean(sectionBusy)}
+                disabled={!draftId || Boolean(sectionBusy) || !aiGate.runnable}
                 className="rounded-lg border border-border px-2 py-1 text-xs font-semibold hover:bg-muted/60 disabled:opacity-40"
                 onClick={() => void regen({ section: "internal_links" })}
               >
@@ -453,7 +455,7 @@ export function AdminAiLessonGeneratorClient() {
               <h3 className="font-semibold text-[var(--theme-heading-text)]">End-of-lesson CTAs</h3>
               <button
                 type="button"
-                disabled={!draftId || Boolean(sectionBusy)}
+                disabled={!draftId || Boolean(sectionBusy) || !aiGate.runnable}
                 className="rounded-lg border border-border px-2 py-1 text-xs font-semibold hover:bg-muted/60 disabled:opacity-40"
                 onClick={() => void regen({ section: "ctas" })}
               >
@@ -475,7 +477,7 @@ export function AdminAiLessonGeneratorClient() {
               <h3 className="font-semibold text-[var(--theme-heading-text)]">Metadata</h3>
               <button
                 type="button"
-                disabled={!draftId || Boolean(sectionBusy)}
+                disabled={!draftId || Boolean(sectionBusy) || !aiGate.runnable}
                 className="rounded-lg border border-border px-2 py-1 text-xs font-semibold hover:bg-muted/60 disabled:opacity-40"
                 onClick={() => void regen({ section: "metadata" })}
               >

@@ -639,10 +639,14 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
   const preview = Math.max(1, Math.min(base.previewSectionCount, maxPreview || 1));
   const preTest = sanitizeQuizItems((raw as { preTest?: unknown }).preTest);
   const postTest = sanitizeQuizItems((raw as { postTest?: unknown }).postTest);
+  const preTestQuestionIds = sanitizeQuestionIdArray((raw as { preTestQuestionIds?: unknown }).preTestQuestionIds);
+  const postTestQuestionIds = sanitizeQuestionIdArray((raw as { postTestQuestionIds?: unknown }).postTestQuestionIds);
 
   const withQuizzes: PathwayLessonRecord = {
     ...base,
     previewSectionCount: preview,
+    ...(preTestQuestionIds ? { preTestQuestionIds } : {}),
+    ...(postTestQuestionIds ? { postTestQuestionIds } : {}),
     ...(preTest ? { preTest } : {}),
     ...(postTest ? { postTest } : {}),
   };
@@ -722,6 +726,8 @@ export const NN_LESSON_DB_PAYLOAD_V2 = "nnLessonPayloadV2" as const;
  */
 export function unwrapPathwayLessonDbSections(sections: unknown): {
   sectionList: unknown;
+  preTestQuestionIds?: string[];
+  postTestQuestionIds?: string[];
   preTest?: PathwayLessonQuizItem[];
   postTest?: PathwayLessonQuizItem[];
 } {
@@ -730,8 +736,12 @@ export function unwrapPathwayLessonDbSections(sections: unknown): {
     if (o[NN_LESSON_DB_PAYLOAD_V2] === true && Array.isArray(o.sections)) {
       const pre = sanitizeQuizItems(o.preTest);
       const post = sanitizeQuizItems(o.postTest);
+      const preTestQuestionIds = sanitizeQuestionIdArray(o.preTestQuestionIds);
+      const postTestQuestionIds = sanitizeQuestionIdArray(o.postTestQuestionIds);
       return {
         sectionList: o.sections,
+        ...(preTestQuestionIds ? { preTestQuestionIds } : {}),
+        ...(postTestQuestionIds ? { postTestQuestionIds } : {}),
         ...(pre ? { preTest: pre } : {}),
         ...(post ? { postTest: post } : {}),
       };
@@ -771,6 +781,8 @@ export function pathwayLessonRowToInput(row: {
     ...(Array.isArray(row.countries) ? { countries: row.countries as PathwayLessonRuntimeCountry[] } : {}),
     ...(typeof row.priority === "string" ? { priority: row.priority as PathwayLessonPriority } : {}),
     ...(Array.isArray(row.examMeta) ? { examMeta: row.examMeta as PathwayLessonExamMeta[] } : {}),
+    ...(unwrapped.preTestQuestionIds ? { preTestQuestionIds: unwrapped.preTestQuestionIds } : {}),
+    ...(unwrapped.postTestQuestionIds ? { postTestQuestionIds: unwrapped.postTestQuestionIds } : {}),
     ...(unwrapped.preTest ? { preTest: unwrapped.preTest } : {}),
     ...(unwrapped.postTest ? { postTest: unwrapped.postTest } : {}),
   } as LessonInput;

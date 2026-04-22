@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
 import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN } from "@/lib/admin/blog-generate-ai-constants";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
@@ -132,6 +133,7 @@ const templates: BlogPostTemplate[] = [
 ];
 
 export function AdminBlogGenerateClient() {
+  const aiGate = useAdminAiGenerationGate();
   const [topic, setTopic] = useState("");
   const [topicsBatch, setTopicsBatch] = useState("");
   const [enableBatch, setEnableBatch] = useState(false);
@@ -396,7 +398,7 @@ export function AdminBlogGenerateClient() {
       </div>
       <button
         type="submit"
-        disabled={busy}
+        disabled={busy || !aiGate.runnable}
         className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
       >
         {busy ? (enableBatch ? "Running batch…" : "Generating…") : "Generate blog post"}
