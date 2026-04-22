@@ -80,8 +80,8 @@ import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
 import { resolvePathwayLessonBankAssessments } from "@/lib/lessons/lesson-bank-assessment-selection";
-import { PathwayEmbeddedSoundLibraries } from "@/components/lessons/pathway-lesson-sound-libraries-ui";
-import { resolvePathwayLessonSoundLibraries } from "@/lib/lessons/pathway-lesson-sound-libraries";
+import { PathwayLessonInteractiveModules } from "@/components/lessons/pathway-lesson-interactive-modules";
+import { getLessonInteractiveModules } from "@/lib/lessons/lesson-interactive-modules";
 
 function LessonBody({
   content,
@@ -537,7 +537,7 @@ export default async function LessonDetailPage({ params }: Props) {
         ? getAlliedProfessionByProfessionKey(entitlement.alliedCareer)?.h1
         : undefined;
 
-    const pathwayEmbeddedSoundLibraries = pathway ? resolvePathwayLessonSoundLibraries(record) : [];
+    const pathwayInteractiveModules = pathway ? getLessonInteractiveModules(record) : [];
 
     const pathwayLessonMainColumn = (
       <>
@@ -588,15 +588,6 @@ export default async function LessonDetailPage({ params }: Props) {
                 <PathwayLessonMemoryAnchorStrip text={record.memoryAnchor} />
               </div>
             ) : null}
-            {pathway && pathwayEmbeddedSoundLibraries.length > 0 ? (
-              <div className="mb-6">
-                <PathwayEmbeddedSoundLibraries
-                  libraries={pathwayEmbeddedSoundLibraries}
-                  viewerTier={lessonViewerTier}
-                  countryCode={pathway.countryCode}
-                />
-              </div>
-            ) : null}
             <article className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
               {displaySections.length > 0 ? (
                 displaySections.map((section) => {
@@ -635,6 +626,15 @@ export default async function LessonDetailPage({ params }: Props) {
                 })
               ) : null}
             </article>
+            {pathway && pathwayInteractiveModules.length > 0 ? (
+              <div className="mt-6 max-w-5xl">
+                <PathwayLessonInteractiveModules
+                  modules={pathwayInteractiveModules}
+                  viewerTier={lessonViewerTier}
+                  countryCode={pathway.countryCode}
+                />
+              </div>
+            ) : null}
             {pathway && record.studyCommonTraps && record.studyCommonTraps.length > 0 ? (
               <div className="mt-6 max-w-5xl">
                 <PathwayLessonCommonTrapsStrip items={record.studyCommonTraps} />

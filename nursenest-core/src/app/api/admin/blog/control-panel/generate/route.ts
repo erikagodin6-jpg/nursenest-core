@@ -9,8 +9,7 @@ import {
   logPipelinePersistSkipped,
   logReferenceGate,
 } from "@/lib/admin/blog-content-automation-log";
-import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
-import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { coerceBlogSourceRows } from "@/lib/blog/apa7";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
@@ -46,16 +45,8 @@ export async function POST(req: Request) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
-  if (!isAdminAiGenerationEnabled()) {
-    return NextResponse.json(
-      { error: "AI admin generation disabled", hint: "Set AI_ADMIN_GENERATION_ENABLED=true" },
-      { status: 403 },
-    );
-  }
-  const keyCheck = assertOpenAiKeyConfigured();
-  if (!keyCheck.ok) {
-    return NextResponse.json({ error: keyCheck.message }, { status: 503 });
-  }
+  const aiBlock = adminAiGenerationHttpBlock();
+  if (aiBlock) return aiBlock;
 
   const parsed = bodySchema.safeParse(await req.json());
   if (!parsed.success) {

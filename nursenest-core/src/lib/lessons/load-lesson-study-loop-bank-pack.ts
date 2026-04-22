@@ -10,6 +10,8 @@ import {
   RELATED_EXAM_QUESTIONS_CAP,
 } from "@/lib/lessons/lesson-question-cross-links";
 import { examRowToLessonBankItem, type LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { loadLessonBankQuizItemsByExamIds } from "@/lib/lessons/lesson-explicit-exam-question-items";
 
 /** Minimum bank questions to activate the guided study loop (graceful degrade below target count). */
 export const LESSON_STUDY_LOOP_MIN_QUESTIONS = 5;
@@ -161,6 +163,50 @@ export async function loadLessonStudyLoopBankPack(args: {
   }
 
   const sorted = stableSortRows(args.lessonKey, mapped);
+  const effectiveTarget = Math.min(target, sorted.length);
+  const items = pickBalanced(sorted, effectiveTarget);
+  return {
+    items,
+    questionIds: items.map((i) => i.examQuestionId),
+    poolCount,
+    targetRequested: effectiveTarget,
+  };
+}
+
+/**
+ * Study loop pack from explicit lesson `ExamQuestion` ids (no topic discovery pool).
+ */
+export async function loadLessonStudyLoopBankPackFromExplicitIds(args: {
+  entitlement: AccessScope;
+  pathway: ExamPathwayDefinition;
+  preTestQuestionIds?: string[];
+  postTestQuestionIds?: string[];
+  lessonKey: string;
+  targetCount?: number;
+}): Promise<LessonStudyLoopBankPack> {
+  const target = Math.min(
+    LESSON_STUDY_LOOP_TARGET_MAX,
+    Math.max(LESSON_STUDY_LOOP_MIN_QUESTIONS, args.targetCount ?? LESSON_STUDY_LOOP_TARGET_DEFAULT),
+  );
+  const combined = [
+    ...new Set([...(args.preTestQuestionIds ?? []), ...(args.postTestQuestionIds ?? [])].map((x) => x.trim()).filter(Boolean)),
+  ].slice(0, 40);
+
+  if (combined.length < LESSON_STUDY_LOOP_MIN_QUESTIONS || !args.entitlement.hasAccess) {
+    return { items: [], questionIds: [], poolCount: combined.length, targetRequested: target };
+  }
+
+  const flat = await loadLessonBankQuizItemsByExamIds({
+    entitlement: args.entitlement,
+    countryCode: args.pathway.countryCode,
+    ids: combined,
+  });
+  const enriched: EnrichedItem[] = flat.map((it) => ({ ...it, _difficulty: null }));
+  const poolCount = enriched.length;
+  if (poolCount < LESSON_STUDY_LOOP_MIN_QUESTIONS) {
+    return { items: [], questionIds: [], poolCount, targetRequested: target };
+  }
+  const sorted = stableSortRows(args.lessonKey, enriched);
   const effectiveTarget = Math.min(target, sorted.length);
   const items = pickBalanced(sorted, effectiveTarget);
   return {

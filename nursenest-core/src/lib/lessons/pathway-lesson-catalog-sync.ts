@@ -4,6 +4,7 @@
  * Catalog-backed and still heavy enough to keep out of shared layouts, homepage chrome, and nav/header paths.
  */
 import { inferExamAudienceFromPathwayId } from "@/lib/lessons/exam-complete-lesson-template";
+import { buildLessonInteractiveModules } from "@/lib/lessons/lesson-interactive-modules";
 import { deriveLessonHighYieldStudyFields } from "@/lib/lessons/lesson-high-yield-study-fields";
 import { resolveLessonContextForPathwayId } from "@/lib/lessons/lesson-region-exam";
 import {
@@ -56,6 +57,8 @@ type CatalogShape = {
         seoTitle: string;
         seoDescription: string;
         sections: PathwayLessonRecord["sections"];
+        preTestQuestionIds?: string[];
+        postTestQuestionIds?: string[];
         preTest?: PathwayLessonQuizItem[];
         postTest?: PathwayLessonQuizItem[];
         premiumOmittedSections?: PathwayLessonOmittedPremiumSection[];
@@ -557,6 +560,23 @@ function ensureCatalogLessonSeoDescriptionWordFloor(seoDescription: string, titl
   return t.length > 0 ? `${t} ${pad}`.trim() : pad.trim();
 }
 
+const MAX_QUESTION_IDS = 40;
+
+export function sanitizeQuestionIdArray(raw: unknown): string[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const x of raw) {
+    if (typeof x !== "string") continue;
+    const id = x.trim();
+    if (id.length < 8 || id.length > 80 || seen.has(id)) continue;
+    seen.add(id);
+    out.push(id);
+    if (out.length >= MAX_QUESTION_IDS) break;
+  }
+  return out.length ? out : undefined;
+}
+
 export function sanitizeQuizItems(raw: unknown): PathwayLessonQuizItem[] | undefined {
   if (!Array.isArray(raw)) return undefined;
   const out: PathwayLessonQuizItem[] = [];
@@ -639,9 +659,11 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
   };
 
   const structuralQuality = evaluatePathwayLessonStructuralGate(withStudyStrips);
+  const interactiveModules = buildLessonInteractiveModules(withStudyStrips);
   return {
     ...withStudyStrips,
     structuralQuality,
+    interactiveModules,
     ...(usePremium ? { premiumValidation: validatePathwayLessonPremium(withStudyStrips) } : {}),
   };
 }

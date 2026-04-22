@@ -95,6 +95,8 @@ export function PracticeAnswerOptionRow({
   );
 }
 
+export type PracticeQuestionCardMode = "practice" | "lesson" | "flashcard" | "exam" | "cat";
+
 /**
  * PracticeQuestionCard — left-column card containing the question stem,
  * answer options, and the nav bar (spec §4).
@@ -105,6 +107,7 @@ export function PracticeQuestionCard({
   subtopic,
   difficultyLabel,
   optionsLabel,
+  mode = "practice",
   children,
 }: {
   stem: string;
@@ -112,11 +115,13 @@ export function PracticeQuestionCard({
   subtopic?: string | null;
   difficultyLabel?: string | null;
   optionsLabel?: string;
+  /** Surface hint for analytics/tests; default preserves existing layout/classes. */
+  mode?: PracticeQuestionCardMode;
   children: ReactNode;
 }) {
   const hasMeta = Boolean(topic ?? subtopic ?? difficultyLabel);
   return (
-    <div className="nn-practice-q-card">
+    <div className="nn-practice-q-card" data-question-surface={mode}>
       {hasMeta ? (
         <div className="nn-practice-q-card__meta">
           {topic ? (

@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
-import { assertOpenAiKeyConfigured, getOpenAiChatModel } from "@/lib/ai/openai-env";
+import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
+import { getOpenAiChatModel } from "@/lib/ai/openai-env";
 import {
   ADMIN_LESSON_BATCH_TOOL,
   lessonBatchTopicKey,
@@ -51,14 +51,8 @@ export async function POST(req: Request) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
-  if (!isAdminAiGenerationEnabled()) {
-    return NextResponse.json(
-      { error: "Admin AI generation disabled", hint: "Set AI_ADMIN_GENERATION_ENABLED=true" },
-      { status: 403 },
-    );
-  }
-  const keyCheck = assertOpenAiKeyConfigured();
-  if (!keyCheck.ok) return NextResponse.json({ error: keyCheck.message }, { status: 503 });
+  const aiBlock = adminAiGenerationHttpBlock();
+  if (aiBlock) return aiBlock;
 
   const parsed = bodySchema.safeParse(await req.json().catch(() => ({})));
   if (!parsed.success) {

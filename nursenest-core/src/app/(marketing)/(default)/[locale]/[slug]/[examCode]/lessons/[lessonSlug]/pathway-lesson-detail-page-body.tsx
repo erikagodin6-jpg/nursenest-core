@@ -80,8 +80,8 @@ import {
 } from "@/lib/lessons/pathway-lesson-adjacent";
 import { PathwayLessonSequenceNavBar } from "@/components/lessons/pathway-lesson-sequence-nav";
 import { PathwayLessonStickySequenceNav } from "@/components/lessons/pathway-lesson-sticky-sequence-nav";
-import { PathwayEmbeddedSoundLibraries } from "@/components/lessons/pathway-lesson-sound-libraries-ui";
-import { resolvePathwayLessonSoundLibraries } from "@/lib/lessons/pathway-lesson-sound-libraries";
+import { PathwayLessonInteractiveModules } from "@/components/lessons/pathway-lesson-interactive-modules";
+import { getLessonInteractiveModules } from "@/lib/lessons/lesson-interactive-modules";
 import {
   pickPathwayLessonMarketingRecordChipsSource,
   toPathwayLessonDeferredServerSnapshot,
@@ -217,7 +217,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
     .filter((s) => shouldRenderPathwayLessonSection(s.kind))
     .filter((s) => !omitHighYieldIds.has(s.id));
 
-  const embeddedSoundLibraries = resolvePathwayLessonSoundLibraries(lesson);
+  const pathwayInteractiveModules = getLessonInteractiveModules(lesson);
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
@@ -371,14 +371,6 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           <LessonAudioCard audioUrl={lesson.audioUrl} lessonTitle={displayLessonTitle} />
         ) : null}
 
-        {embeddedSoundLibraries.length > 0 ? (
-          <PathwayEmbeddedSoundLibraries
-            libraries={embeddedSoundLibraries}
-            viewerTier={lessonContentTier}
-            countryCode={pathway.countryCode}
-          />
-        ) : null}
-
         <PathwayLessonAssessmentExperience
           userId={userId}
           pathwayId={pathway.id}
@@ -439,6 +431,15 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
                 })}
               </article>
             </div>
+            {pathwayInteractiveModules.length > 0 ? (
+              <div className="mx-auto mt-6 max-w-5xl">
+                <PathwayLessonInteractiveModules
+                  modules={pathwayInteractiveModules}
+                  viewerTier={lessonContentTier}
+                  countryCode={pathway.countryCode}
+                />
+              </div>
+            ) : null}
             {fullAccess && lessonHasExamTakeaways(lesson.studyTakeaways) ? (
               <div className="mx-auto mt-6 max-w-5xl">
                 <ExamTakeawaysBlock pathway={pathway} items={lesson.studyTakeaways} position="bottom" />

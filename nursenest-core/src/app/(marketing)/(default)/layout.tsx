@@ -20,6 +20,7 @@ import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { CheckoutGlobalRegionContextPathStamp } from "@/components/marketing/checkout-global-region-context-path-stamp";
 import { MarketingHeaderGlobalRegionServerBridge } from "@/lib/region/marketing-header-global-region-server-bridge";
 import { readOptionalGlobalRegionSlugFromCookie } from "@/lib/region/read-optional-global-region-cookie.server";
+import { resolveDefaultLayoutMarketingExamRegion } from "@/lib/marketing/resolve-default-layout-marketing-exam-region";
 import { safeAwait } from "@/lib/async/safe-await";
 import { homePerfFinalForGetRoot, homePerfLogForGetRoot } from "@/lib/observability/home-perf-trace";
 import {
@@ -279,11 +280,20 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         marketingRequestPath = "/";
       }
       const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
-      /** Canada-first on unprefixed marketing: no cookie means CA, not US (see `readOptionalMarketingRegionToggleForCountry`). */
-      const serverRegion: MarketingRegionToggle = marketingRegionCookie ?? "CA";
-      const trustClientPersistedRegion = marketingRegionCookie !== undefined;
-      const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingRegionCookie);
       const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
+      /**
+       * Align US/CA exam labels, currency hints, and checkout defaults with `nn_global_region=us|canada`
+       * when the legacy marketing cookie is absent (header already treats global as authoritative there).
+       */
+      const serverRegion: MarketingRegionToggle = resolveDefaultLayoutMarketingExamRegion({
+        marketingRegionCookie,
+        globalRegionSlug: serverGlobalRegionCookie,
+      });
+      const trustClientPersistedRegion = marketingRegionCookie !== undefined;
+      const marketingCountry = getEffectiveMarketingCountry(
+        marketingRequestPath,
+        marketingRegionCookie ?? serverRegion,
+      );
       const [publicContentOverrides, staffSession] = await Promise.all([
         loadMarketingPublicContentOverridesForLocale(resolvedLocale).catch(() => ({} as Record<string, string>)),
         getStaffSession().catch(() => null),

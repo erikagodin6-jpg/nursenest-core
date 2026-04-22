@@ -178,6 +178,8 @@ export function stripPathwayLessonToHubListShape(full: PathwayLessonRecord): Pat
     ...(full.priority ? { priority: full.priority } : {}),
     ...(full.examMeta?.length ? { examMeta: full.examMeta } : {}),
     ...(full.activeExamMeta ? { activeExamMeta: full.activeExamMeta } : {}),
+    ...(full.preTestQuestionIds?.length ? { preTestQuestionIds: full.preTestQuestionIds } : {}),
+    ...(full.postTestQuestionIds?.length ? { postTestQuestionIds: full.postTestQuestionIds } : {}),
     ...(full.preTest ? { preTest: full.preTest } : {}),
     ...(full.postTest ? { postTest: full.postTest } : {}),
     ...(full.premiumValidation ? { premiumValidation: full.premiumValidation } : {}),

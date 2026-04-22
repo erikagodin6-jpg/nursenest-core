@@ -103,8 +103,12 @@ export default async function MarketingLocaleLayout({
     marketingRequestPath = "/";
   }
   const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
-  const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingRegionCookie);
   const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
+  /** When only `nn_global_region` is set to us|canada, keep chrome country aligned with exam region. */
+  const marketingCountryToggle: MarketingRegionToggle =
+    marketingRegionCookie ??
+    (serverGlobalRegionCookie === "us" ? "US" : serverGlobalRegionCookie === "canada" ? "CA" : serverRegion);
+  const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingCountryToggle);
   const [publicContentOverrides, staffSession] = await Promise.all([
     loadMarketingPublicContentOverridesForLocale(locale).catch(() => ({} as Record<string, string>)),
     getStaffSession().catch(() => null),

@@ -1000,6 +1000,8 @@ model Flashcard {
   /// * Format: "{sourceType}:{sourceId}" — e.g. "exam_q:abc123", "lesson:cardio-basics:intro:0"
   /// * Null for manually authored cards. Unique so sync scripts can upsert without duplicating.
   sourceKey       String?             @unique(map: "flashcards_source_key_key") @map("source_key")
+  /// * Optional link to canonical `ExamQuestion` (question-bank consolidation). When set, prefer bank fetch + unified grading.
+  examQuestionId  String?             @map("exam_question_id") @db.VarChar(64)
   /// * When set with JSON fields, card is studied as a mini NCLEX item (stem + A–D + rationales).
   examItemKind       FlashcardItemKind? @map("exam_item_kind")
   questionStem       String?            @map("question_stem")
@@ -1017,6 +1019,7 @@ model Flashcard {
   @@index([deckId, positionInDeck])
   @@index([deckId, status])
   @@index([lessonId])
+  @@index([examQuestionId])
 }
 
 model FlashcardProgress {

@@ -1,3 +1,4 @@
+import type { CountryCode, TierCode } from "@prisma/client";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingLessonDetailHref, marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
 import type { RecallPrompt, CheckpointQuestion, KeyRecallFact } from "@/lib/lessons/lesson-recall-types";
@@ -12,6 +13,52 @@ export type { RecallPrompt, CheckpointQuestion, KeyRecallFact };
 
 /** Embedded interactive sound libraries on catalog / DB pathway lessons. */
 export type PathwayEmbeddedSoundLibraryId = "cardiac_sounds" | "respiratory_sounds";
+
+/** Authoring taxonomy for where the interactive block sits in the lesson spine (not sound Normal/Adventitious). */
+export type LessonInteractiveModuleCategory =
+  | "Assessment"
+  | "Pathophysiology"
+  | "Intervention"
+  | "Education"
+  | "Other";
+
+/**
+ * Normalized item for sound-library modules — hydrated from canonical registry data in
+ * {@link buildLessonInteractiveModules}; catalog should not hand-author large blobs here.
+ */
+export type LessonInteractiveSoundLibraryItem = {
+  id: string;
+  name: string;
+  /** Normal / Adventitious / voice (respiratory) or cardiac category slug from registry. */
+  category: string;
+  description: string;
+  timing: string;
+  pitch: string;
+  clinicalSignificance: string;
+  commonCauses: string[];
+  audioUrl?: string | null;
+  auscultationSite: string;
+  waveformType: string;
+  allowedTiers?: TierCode[];
+  countryNotes?: Partial<Record<CountryCode, string>>;
+  clinicalPearl?: string;
+  miniQuestion?: { question: string; options: string[]; correctIndex: number; rationale: string };
+  /** Optional linkage to bank questions (future integration; not rendered yet). */
+  examQuestionIds?: string[];
+};
+
+/** One embedded sound library block (respiratory or cardiac) with structured items. */
+export type LessonInteractiveSoundLibraryModule = {
+  id: string;
+  type: "sound-library";
+  soundLibrary: PathwayEmbeddedSoundLibraryId;
+  system: string;
+  category: LessonInteractiveModuleCategory;
+  items: LessonInteractiveSoundLibraryItem[];
+};
+
+/** Discriminated union for lesson-embedded interactives (expand with lab/ECG later). */
+export type LessonInteractiveModule = LessonInteractiveSoundLibraryModule;
 
 /** Structured “exam focus” block for pathway lessons (how tested, traps, prioritization). */
 export type PathwayLessonExamFocus = {
@@ -164,7 +211,10 @@ export type PathwayLessonSection = {
   audioUrl?: string | null;
 };
 
-/** Inline pre/post checks for pathway lessons (catalog or DB JSON). */
+/**
+ * @deprecated Inline lesson quizzes are being removed — use {@link PathwayLessonRecord.preTestQuestionIds}
+ * / {@link PathwayLessonRecord.postTestQuestionIds} and fetch via `POST /api/exam-questions/by-ids`.
+ */
 export type PathwayLessonQuizItem = {
   question: string;
   options: string[];
@@ -206,7 +256,13 @@ export type PathwayLessonRecord = {
   seoTitle: string;
   seoDescription: string;
   sections: PathwayLessonSection[];
+  /** Bank-backed pre-check: stable `ExamQuestion.id` values only (no inline stems). */
+  preTestQuestionIds?: string[];
+  /** Bank-backed post-check: stable `ExamQuestion.id` values only (no inline stems). */
+  postTestQuestionIds?: string[];
+  /** @deprecated Prefer {@link preTestQuestionIds}. */
   preTest?: PathwayLessonQuizItem[];
+  /** @deprecated Prefer {@link postTestQuestionIds}. */
   postTest?: PathwayLessonQuizItem[];
   localeMeta?: PathwayLessonLocaleMeta;
   /** Scoped gold premium lessons: documented omissions (e.g. labs not applicable). */
@@ -250,6 +306,11 @@ export type PathwayLessonRecord = {
    * When absent, a conservative heuristic may still attach libraries for tightly matched topics.
    */
   embeddedSoundLibraries?: PathwayEmbeddedSoundLibraryId[];
+  /**
+   * Structured interactive inserts (sound libraries today). Populated in `normalizeLesson`.
+   * Lesson pages render this array once (after section articles, before reinforcement strips).
+   */
+  interactiveModules?: LessonInteractiveModule[];
 };
 
 /** Hub cards must not link with empty or whitespace slugs (defensive; DB/catalog should always set slug). */

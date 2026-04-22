@@ -6,9 +6,8 @@ import { ChevronDown, ChevronUp, Heart, Pause, Play, Repeat, Stethoscope, Volume
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import type { PathwayEmbeddedSoundLibraryId } from "@/lib/lessons/pathway-lesson-types";
-import { CARDIAC_SOUND_RECORDS, type CardiacSoundCategory, type CardiacSoundRecord } from "@/lib/lessons/cardiac-sounds-library-data";
-import { RESPIRATORY_SOUND_RECORDS, type RespiratorySoundRecord } from "@/lib/lessons/respiratory-sounds-library-data";
+import type { LessonInteractiveSoundLibraryItem, LessonInteractiveSoundLibraryModule } from "@/lib/lessons/pathway-lesson-types";
+import type { CardiacSoundCategory } from "@/lib/lessons/cardiac-sounds-library-data";
 import { lessonSoundCountryNote, lessonSoundItemVisibleForTier } from "@/lib/lessons/lesson-sound-library-scope";
 import {
   scheduleCardiacWaveform,
@@ -35,25 +34,22 @@ type BaseSound = {
   miniQuestion?: { question: string; options: string[]; correctIndex: number; rationale: string };
 };
 
-function recordToBase(
-  r: RespiratorySoundRecord | CardiacSoundRecord,
-  countryCode: CountryCode,
-): BaseSound {
-  const cn = lessonSoundCountryNote(r.countryNotes, countryCode);
+function moduleItemToBase(item: LessonInteractiveSoundLibraryItem, countryCode: CountryCode): BaseSound {
+  const cn = lessonSoundCountryNote(item.countryNotes, countryCode);
   return {
-    id: r.id,
-    name: r.name,
-    timing: r.timing,
-    pitchLine: r.pitchQuality,
-    description: r.description,
-    auscultationSite: r.auscultationSite,
-    clinicalSignificance: r.clinicalSignificance,
-    commonCauses: r.commonCauses,
-    audioSrc: "audioSrc" in r ? r.audioSrc : undefined,
-    waveformType: r.waveformType,
+    id: item.id,
+    name: item.name,
+    timing: item.timing,
+    pitchLine: item.pitch,
+    description: item.description,
+    auscultationSite: item.auscultationSite,
+    clinicalSignificance: item.clinicalSignificance,
+    commonCauses: item.commonCauses,
+    audioSrc: item.audioUrl ?? undefined,
+    waveformType: item.waveformType,
     countryNote: cn,
-    clinicalPearl: r.clinicalPearl,
-    miniQuestion: r.miniQuestion,
+    clinicalPearl: item.clinicalPearl,
+    miniQuestion: item.miniQuestion,
   };
 }
 
@@ -359,14 +355,22 @@ function SoundStudyCard({
   );
 }
 
-function RespiratorySoundsLibraryInner({ viewerTier, countryCode }: { viewerTier: TierCode; countryCode: CountryCode }) {
+function RespiratorySoundsLibraryInner({
+  structuredItems,
+  viewerTier,
+  countryCode,
+}: {
+  structuredItems: LessonInteractiveSoundLibraryItem[];
+  viewerTier: TierCode;
+  countryCode: CountryCode;
+}) {
   const { t } = useMarketingI18n();
   const [expanded, setExpanded] = useState(true);
   const [filter, setFilter] = useState<"all" | "normal" | "adventitious">("all");
 
   const items = useMemo(() => {
-    return RESPIRATORY_SOUND_RECORDS.filter((r) => lessonSoundItemVisibleForTier(r, viewerTier));
-  }, [viewerTier]);
+    return structuredItems.filter((r) => lessonSoundItemVisibleForTier({ allowedTiers: r.allowedTiers }, viewerTier));
+  }, [structuredItems, viewerTier]);
 
   const filtered = useMemo(() => {
     if (filter === "all") return items;
@@ -411,7 +415,7 @@ function RespiratorySoundsLibraryInner({ viewerTier, countryCode }: { viewerTier
               {filtered.map((r) => (
                 <SoundStudyCard
                   key={r.id}
-                  sound={recordToBase(r, countryCode)}
+                  sound={moduleItemToBase(r, countryCode)}
                   kind="respiratory"
                   category={r.category}
                   timingLabel={t("components.respiratorySoundsLibrary.timing")}
@@ -432,14 +436,22 @@ function RespiratorySoundsLibraryInner({ viewerTier, countryCode }: { viewerTier
   );
 }
 
-function CardiacSoundsLibraryInner({ viewerTier, countryCode }: { viewerTier: TierCode; countryCode: CountryCode }) {
+function CardiacSoundsLibraryInner({
+  structuredItems,
+  viewerTier,
+  countryCode,
+}: {
+  structuredItems: LessonInteractiveSoundLibraryItem[];
+  viewerTier: TierCode;
+  countryCode: CountryCode;
+}) {
   const { t } = useMarketingI18n();
   const [expanded, setExpanded] = useState(true);
   const [filter, setFilter] = useState<"all" | CardiacSoundCategory>("all");
 
   const items = useMemo(() => {
-    return CARDIAC_SOUND_RECORDS.filter((r) => lessonSoundItemVisibleForTier(r, viewerTier));
-  }, [viewerTier]);
+    return structuredItems.filter((r) => lessonSoundItemVisibleForTier({ allowedTiers: r.allowedTiers }, viewerTier));
+  }, [structuredItems, viewerTier]);
 
   const filtered = useMemo(() => {
     if (filter === "all") return items;
@@ -483,7 +495,7 @@ function CardiacSoundsLibraryInner({ viewerTier, countryCode }: { viewerTier: Ti
               {filtered.map((r) => (
                 <SoundStudyCard
                   key={r.id}
-                  sound={recordToBase(r, countryCode)}
+                  sound={moduleItemToBase(r, countryCode)}
                   kind="cardiac"
                   category={r.category}
                   timingLabel={t("components.cardiacSoundsLibrary.timing")}
@@ -504,21 +516,40 @@ function CardiacSoundsLibraryInner({ viewerTier, countryCode }: { viewerTier: Ti
   );
 }
 
+/**
+ * Renders structured sound-library modules (items hydrated at normalize time).
+ * Callers should pass `modules` from `lesson.interactiveModules` (sound-library entries only).
+ */
 export function PathwayEmbeddedSoundLibraries(props: {
-  libraries: PathwayEmbeddedSoundLibraryId[];
+  modules: LessonInteractiveSoundLibraryModule[];
   viewerTier: TierCode;
   countryCode: CountryCode;
 }) {
-  const { libraries, viewerTier, countryCode } = props;
-  if (!libraries.length) return null;
+  const { modules, viewerTier, countryCode } = props;
+  if (!modules.length) return null;
   return (
     <section
       className="mx-auto mt-6 max-w-5xl space-y-6"
       aria-label="Embedded lesson sound libraries"
       data-testid="section-pathway-embedded-sound-libraries"
     >
-      {libraries.includes("cardiac_sounds") ? <CardiacSoundsLibraryInner viewerTier={viewerTier} countryCode={countryCode} /> : null}
-      {libraries.includes("respiratory_sounds") ? <RespiratorySoundsLibraryInner viewerTier={viewerTier} countryCode={countryCode} /> : null}
+      {modules.map((mod) =>
+        mod.soundLibrary === "cardiac_sounds" ? (
+          <CardiacSoundsLibraryInner
+            key={mod.id}
+            structuredItems={mod.items}
+            viewerTier={viewerTier}
+            countryCode={countryCode}
+          />
+        ) : (
+          <RespiratorySoundsLibraryInner
+            key={mod.id}
+            structuredItems={mod.items}
+            viewerTier={viewerTier}
+            countryCode={countryCode}
+          />
+        ),
+      )}
     </section>
   );
 }

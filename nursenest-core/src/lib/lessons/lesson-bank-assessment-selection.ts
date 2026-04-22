@@ -12,6 +12,8 @@ import {
   RELATED_EXAM_QUESTIONS_CAP,
 } from "@/lib/lessons/lesson-question-cross-links";
 import type { PathwayLessonQuizItem, PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { loadLessonBankQuizItemsByExamIds } from "@/lib/lessons/lesson-explicit-exam-question-items";
 
 /** Pre-test size band (practice: rationale after each in UI). */
 export const LESSON_ASSESSMENT_PRE_MIN = 3;
@@ -179,18 +181,50 @@ export function splitBankPrePost(
 export async function resolvePathwayLessonBankAssessments(
   pathway: ExamPathwayDefinition,
   lesson: PathwayLessonRecord,
+  access?: AccessScope | null,
 ): Promise<{ preTest: PathwayLessonQuizItem[]; postTest: PathwayLessonQuizItem[] }> {
+  const preIds = lesson.preTestQuestionIds?.filter((x) => typeof x === "string" && x.trim().length > 0) ?? [];
+  const postIds = lesson.postTestQuestionIds?.filter((x) => typeof x === "string" && x.trim().length > 0) ?? [];
+  let explicitPre: PathwayLessonQuizItem[] | null = null;
+  let explicitPost: PathwayLessonQuizItem[] | null = null;
+  if (access?.hasAccess) {
+    if (preIds.length) {
+      const loaded = await loadLessonBankQuizItemsByExamIds({
+        entitlement: access,
+        countryCode: pathway.countryCode,
+        ids: preIds,
+      });
+      if (loaded.length) explicitPre = loaded;
+    }
+    if (postIds.length) {
+      const loaded = await loadLessonBankQuizItemsByExamIds({
+        entitlement: access,
+        countryCode: pathway.countryCode,
+        ids: postIds,
+      });
+      if (loaded.length) explicitPost = loaded;
+    }
+  }
+
   const lessonKey = `${pathway.id}:${lesson.slug}`;
   const pool = await loadLessonBankAssessmentItems(pathway, lesson);
   if (pool.length === 0) {
     return {
-      preTest: mergeAssessmentWithBank(lesson.preTest, [], LESSON_ASSESSMENT_PRE_MIN, LESSON_ASSESSMENT_PRE_MAX),
-      postTest: mergeAssessmentWithBank(lesson.postTest, [], LESSON_ASSESSMENT_POST_MIN, LESSON_ASSESSMENT_POST_MAX),
+      preTest:
+        explicitPre ??
+        mergeAssessmentWithBank(lesson.preTest, [], LESSON_ASSESSMENT_PRE_MIN, LESSON_ASSESSMENT_PRE_MAX),
+      postTest:
+        explicitPost ??
+        mergeAssessmentWithBank(lesson.postTest, [], LESSON_ASSESSMENT_POST_MIN, LESSON_ASSESSMENT_POST_MAX),
     };
   }
 
   const { preBank, postBank } = splitBankPrePost(lessonKey, pool);
-  const preTest = mergeAssessmentWithBank(lesson.preTest, preBank, LESSON_ASSESSMENT_PRE_MIN, LESSON_ASSESSMENT_PRE_MAX);
-  const postTest = mergeAssessmentWithBank(lesson.postTest, postBank, LESSON_ASSESSMENT_POST_MIN, LESSON_ASSESSMENT_POST_MAX);
+  const preTest =
+    explicitPre ??
+    mergeAssessmentWithBank(lesson.preTest, preBank, LESSON_ASSESSMENT_PRE_MIN, LESSON_ASSESSMENT_PRE_MAX);
+  const postTest =
+    explicitPost ??
+    mergeAssessmentWithBank(lesson.postTest, postBank, LESSON_ASSESSMENT_POST_MIN, LESSON_ASSESSMENT_POST_MAX);
   return { preTest, postTest };
 }

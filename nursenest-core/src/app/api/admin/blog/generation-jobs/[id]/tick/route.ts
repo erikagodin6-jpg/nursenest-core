@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
-import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { processDraftGenerationBatchItems } from "@/lib/blog/blog-draft-generation-batch";
 import { DRAFT_BATCH_MAX_ITEMS_PER_PROCESS } from "@/lib/blog/blog-draft-generation-batch-constants";
 import { isRnTopicMapShellGenerationBatch } from "@/lib/blog/blog-topic-map-shell-batch-constants";
@@ -35,16 +34,8 @@ export async function POST(req: Request, ctx: RouteContext) {
 
   const shellJob = isRnTopicMapShellGenerationBatch(batch);
   if (!shellJob) {
-    if (!isAdminAiGenerationEnabled()) {
-      return NextResponse.json(
-        { error: "AI admin generation disabled", hint: "Set AI_ADMIN_GENERATION_ENABLED=true" },
-        { status: 403 },
-      );
-    }
-    const keyCheck = assertOpenAiKeyConfigured();
-    if (!keyCheck.ok) {
-      return NextResponse.json({ error: keyCheck.message }, { status: 503 });
-    }
+    const aiBlock = adminAiGenerationHttpBlock();
+    if (aiBlock) return aiBlock;
   }
 
   if (!batch.backgroundProcessing) {

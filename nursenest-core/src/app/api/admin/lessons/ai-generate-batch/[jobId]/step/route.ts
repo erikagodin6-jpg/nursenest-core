@@ -11,9 +11,8 @@ import {
   mergeBatchControl,
 } from "@/lib/ai/controlled-ai-batch";
 import { batchProgressLogDetail, lessonBatchProgress } from "@/lib/ai/content-generation-pipeline";
-import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
+import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { checkAdminAiGenerateLimit } from "@/lib/ai/admin-rate-limit";
-import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
 import {
   ADMIN_LESSON_BATCH_TOOL,
   loadLessonBatchSummaryWithHydration,
@@ -39,14 +38,8 @@ export async function POST(req: Request, ctx: Props) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
-  if (!isAdminAiGenerationEnabled()) {
-    return NextResponse.json(
-      { error: "Admin AI generation disabled", hint: "Set AI_ADMIN_GENERATION_ENABLED=true" },
-      { status: 403 },
-    );
-  }
-  const keyCheck = assertOpenAiKeyConfigured();
-  if (!keyCheck.ok) return NextResponse.json({ error: keyCheck.message }, { status: 503 });
+  const aiBlock = adminAiGenerationHttpBlock();
+  if (aiBlock) return aiBlock;
 
   const rl = await checkAdminAiGenerateLimit(gate.admin.userId);
   if (!rl.ok) {

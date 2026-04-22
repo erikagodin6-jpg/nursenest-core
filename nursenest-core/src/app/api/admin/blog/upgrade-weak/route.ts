@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate, BlogPostStatus } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
-import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { logWeakUpgradeRun } from "@/lib/admin/blog-content-automation-log";
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
 import { countWordsFromHtml } from "@/lib/blog/blog-word-count";
@@ -27,16 +26,8 @@ export async function POST(req: Request) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
-  if (!isAdminAiGenerationEnabled()) {
-    return NextResponse.json(
-      { error: "AI admin generation disabled", hint: "Set AI_ADMIN_GENERATION_ENABLED=true" },
-      { status: 403 },
-    );
-  }
-  const keyCheck = assertOpenAiKeyConfigured();
-  if (!keyCheck.ok) {
-    return NextResponse.json({ error: keyCheck.message }, { status: 503 });
-  }
+  const aiBlock = adminAiGenerationHttpBlock();
+  if (aiBlock) return aiBlock;
 
   const parsed = requestSchema.safeParse(await req.json().catch(() => ({})));
   if (!parsed.success) {

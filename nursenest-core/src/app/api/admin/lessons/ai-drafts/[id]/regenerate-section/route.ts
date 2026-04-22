@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import { assertOpenAiKeyConfigured, getOpenAiChatModel } from "@/lib/ai/openai-env";
-import { isAdminAiGenerationEnabled } from "@/lib/ai/admin-ai-policy";
+import { getOpenAiChatModel } from "@/lib/ai/openai-env";
+import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { checkAdminAiGenerateLimit } from "@/lib/ai/admin-rate-limit";
 import { adminAiLessonRegenerateSectionSchema } from "@/lib/lessons/admin-ai-lesson-schema";
 import type { AdminAiLessonDraftNormalized } from "@/lib/lessons/admin-ai-lesson-schema";
@@ -20,14 +20,8 @@ export async function POST(req: Request, ctx: RouteContext) {
   if (!gate.ok) return gate.response;
   const { id } = await ctx.params;
 
-  if (!isAdminAiGenerationEnabled()) {
-    return NextResponse.json(
-      { error: "Admin AI generation disabled", hint: "Set AI_ADMIN_GENERATION_ENABLED=true" },
-      { status: 403 },
-    );
-  }
-  const keyCheck = assertOpenAiKeyConfigured();
-  if (!keyCheck.ok) return NextResponse.json({ error: keyCheck.message }, { status: 503 });
+  const aiBlock = adminAiGenerationHttpBlock();
+  if (aiBlock) return aiBlock;
 
   const rl = await checkAdminAiGenerateLimit(gate.admin.userId);
   if (!rl.ok) {
