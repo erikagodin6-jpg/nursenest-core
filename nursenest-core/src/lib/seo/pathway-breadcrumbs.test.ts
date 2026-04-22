@@ -31,7 +31,7 @@ test("overview: Home → Country → Role → Pathway hub; Canada links to exams
   assert.equal(crumbs[2]?.href, "/canada/rn");
   assert.equal(crumbs[3]?.href, undefined);
   assert.equal(schemaItems[1]?.item, toAbsoluteSiteUrl("/exams/canada"));
-  assert.equal(schemaItems[3]?.item, toAbsoluteSiteUrl("/lessons"));
+  assert.equal(schemaItems[3]?.item, toAbsoluteSiteUrl(buildExamPathwayPath(caRn!)));
 });
 
 test("lesson detail: schema last item is lesson URL", () => {

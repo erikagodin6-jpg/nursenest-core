@@ -5,7 +5,10 @@ import {
 
 export type MarketingMessages = Record<string, string>;
 
-/** Returned in production when a `pages.*` key is missing or `t()` throws — must not appear in shipped `en` JSON. */
+/**
+ * Legacy sentinel string — kept so build gates / greps stay stable. {@link formatMarketingMessage}
+ * no longer returns this for missing keys (it implied a global outage on marketing pages including `/`).
+ */
 export const MARKETING_PRODUCTION_MISSING_PAGE_KEY_PLACEHOLDER =
   "Content unavailable right now. Please refresh the page.";
 
@@ -94,14 +97,6 @@ export function formatMarketingMessage(
       logI18nStructured("marketing_message_key_missing", safeKey, locale, {
         hadFallbackMap: Boolean(fallbackMessages),
       });
-      /**
-       * Missing `pages.*` strings used to surface as humanized tail segments ("Title", "Lead", …)
-       * when bundles failed to load — that reads like unfinished UI. In production, prefer an explicit
-       * recovery line for page copy keys (dev keeps humanized text for faster iteration).
-       */
-      if (process.env.NODE_ENV === "production" && safeKey.startsWith("pages.")) {
-        return MARKETING_PRODUCTION_MISSING_PAGE_KEY_PLACEHOLDER;
-      }
       return humanizedKeyFallback(safeKey);
     }
 
@@ -120,9 +115,6 @@ export function formatMarketingMessage(
     });
     try {
       const sk = safeKey || "message";
-      if (process.env.NODE_ENV === "production" && sk.startsWith("pages.")) {
-        return MARKETING_PRODUCTION_MISSING_PAGE_KEY_PLACEHOLDER;
-      }
       return humanizedKeyFallback(sk);
     } catch {
       return "NurseNest";

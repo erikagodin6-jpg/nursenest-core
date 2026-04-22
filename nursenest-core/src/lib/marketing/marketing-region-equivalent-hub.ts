@@ -4,7 +4,6 @@ import {
   getExamPathwayById,
   resolveExamPathwayFromMarketingHubSegment,
 } from "@/lib/exam-pathways/exam-product-registry";
-import { RN_NCLEX_EXAM_HUB_OVERVIEW_REDIRECT, isRnNclexMarketingPathwayId } from "@/lib/exam-pathways/rn-nclex-public-hub-policy";
 import { isExamPathwayCountrySlug } from "@/lib/i18n/exam-hub-path";
 
 /**
@@ -44,9 +43,6 @@ export function equivalentExamHubUrlAfterRegionToggle(pathname: string, nextRegi
 
   const pathway = resolveExamPathwayFromMarketingHubSegment(country, role, examSeg);
   if (!pathway) return null;
-  if (isRnNclexMarketingPathwayId(pathway.id) && parts.length === 3) {
-    return RN_NCLEX_EXAM_HUB_OVERVIEW_REDIRECT;
-  }
   const peerId = CROSS_BORDER_PEER[pathway.id];
   if (!peerId) return null;
   const peer = getExamPathwayById(peerId);

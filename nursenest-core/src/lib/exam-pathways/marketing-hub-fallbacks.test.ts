@@ -44,13 +44,17 @@ describe("formatMarketingMessage missing keys", () => {
     const i18nDir = path.join(process.cwd(), "..", "client", "public", "i18n");
     const english = JSON.parse(readFileSync(path.join(i18nDir, "en.json"), "utf8")) as Record<string, string>;
     const french = JSON.parse(readFileSync(path.join(i18nDir, "fr.json"), "utf8")) as Record<string, string>;
+    // Force primary misses so we assert fallback behavior even when `fr.json` later adds these keys.
+    const primaryMissingNav = { ...french };
+    delete primaryMissingNav["nav.getStarted"];
+    delete primaryMissingNav["nav.pathwayHubsAria"];
 
     assert.equal(
-      formatMarketingMessage(french, "nav.getStarted", undefined, english),
+      formatMarketingMessage(primaryMissingNav, "nav.getStarted", undefined, english),
       "Get Started",
     );
     assert.equal(
-      formatMarketingMessage(french, "nav.pathwayHubsAria", undefined, english),
+      formatMarketingMessage(primaryMissingNav, "nav.pathwayHubsAria", undefined, english),
       "Pathway exam hubs",
     );
   });

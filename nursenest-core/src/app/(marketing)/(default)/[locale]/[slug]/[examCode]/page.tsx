@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, permanentRedirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { NursingTierHubPage } from "@/components/marketing/nursing-tier-hub-page";
@@ -11,7 +11,6 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
-import { rnNclexExamHubOverviewRedirectTarget } from "@/lib/exam-pathways/rn-nclex-public-hub-policy";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { loadPathwayHubResumePayload, type PathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
@@ -31,8 +30,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug, examCode } = await params;
   const pathname = `/${locale}/${slug}/${examCode}`;
   const pathwayPre = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
-  const rnHubRedirect = rnNclexExamHubOverviewRedirectTarget(pathwayPre);
-  if (rnHubRedirect) permanentRedirect(rnHubRedirect);
   return safeGenerateMetadata(async () => {
     const pathway = pathwayPre;
     if (!pathway) return {};
@@ -70,8 +67,6 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   const { locale, slug, examCode } = await params;
   const pathname = `/${locale}/${slug}/${examCode}`;
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
-  const rnHubRedirect = rnNclexExamHubOverviewRedirectTarget(pathway);
-  if (rnHubRedirect) permanentRedirect(rnHubRedirect);
   if (!pathway) notFound();
 
   let hubResume: PathwayHubResumePayload | null = null;

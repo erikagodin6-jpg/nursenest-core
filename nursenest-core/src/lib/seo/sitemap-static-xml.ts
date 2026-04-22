@@ -28,7 +28,6 @@ import { getPreNursingOverlaySlugsForLocale } from "@/lib/i18n/pre-nursing-conte
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programmatic-slug-redirects";
 import { LEGACY_PROGRAMMATIC_SLUGS_WITH_HUB_REDIRECT } from "@/lib/marketing/canonical-pathway-hubs";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
-import { isRnNclexMarketingPathwayId } from "@/lib/exam-pathways/rn-nclex-public-hub-policy";
 import { listNpPracticeTestSegmentPaths } from "@/lib/exam-pathways/np-practice-test-segments";
 import { PATHWAY_LESSON_SITEMAP_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -99,9 +98,7 @@ export async function collectExamPathwayUrls(origin: string): Promise<string[]> 
   const { listPublishedExamPathwaysForPublicSite } = await import("@/lib/navigation/country-exam-launch-readiness");
   const urls: string[] = [];
   for (const p of listPublishedExamPathwaysForPublicSite()) {
-    if (!isRnNclexMarketingPathwayId(p.id)) {
-      urls.push(`${o}${buildExamPathwayPath(p)}`);
-    }
+    urls.push(`${o}${buildExamPathwayPath(p)}`);
     urls.push(`${o}${buildExamPathwayPath(p, "pricing")}`);
     urls.push(`${o}${buildExamPathwayPath(p, "questions")}`);
   }

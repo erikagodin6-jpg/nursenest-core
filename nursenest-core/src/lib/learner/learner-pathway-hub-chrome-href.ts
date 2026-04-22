@@ -1,16 +1,11 @@
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { isRnNclexMarketingPathwayId } from "@/lib/exam-pathways/rn-nclex-public-hub-policy";
-import { CANONICAL_LEARNER_ROUTES } from "@/lib/navigation/learner-primary-nav";
 
 /**
- * Learner shell “pathway pill” href: marketing exam hubs are not primary for RN NCLEX — use `/app/lessons`.
+ * Learner shell “pathway pill” href: public marketing exam hub root for the pathway.
  * Uses pure {@link buildExamPathwayPath} — no exam registry import at module scope.
  */
 export function learnerPathwayHubChromeHref(pathway: ExamPathwayDefinition): string {
-  if (isRnNclexMarketingPathwayId(pathway.id)) {
-    return `${CANONICAL_LEARNER_ROUTES.lessons}?pathwayId=${encodeURIComponent(pathway.id)}`;
-  }
   return buildExamPathwayPath(pathway);
 }
 
@@ -23,7 +18,7 @@ export async function learnerPathwayHubChromeHrefForTierFallback(tier: string): 
   const t = tier.toUpperCase();
   if (t === "RN") {
     const p = getExamPathwayById("us-rn-nclex-rn");
-    return p ? learnerPathwayHubChromeHref(p) : `${CANONICAL_LEARNER_ROUTES.lessons}?pathwayId=us-rn-nclex-rn`;
+    return p ? learnerPathwayHubChromeHref(p) : "/us/rn/nclex-rn";
   }
   if (t === "RPN") {
     const p = getExamPathwayById("ca-rpn-rex-pn");
