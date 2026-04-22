@@ -18,5 +18,6 @@ export async function GET(req: Request) {
     flagEnabled: g.flagEnabled,
     openAiKeyPresent: g.openAiKeyPresent,
     summaryLine: g.summaryLine,
+    diagnostics: g.diagnostics,
   });
 }

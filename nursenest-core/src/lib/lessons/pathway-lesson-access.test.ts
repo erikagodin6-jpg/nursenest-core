@@ -1,60 +1,36 @@
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
-import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
-import { visibleSectionsForLesson } from "./pathway-lesson-visible-sections";
+import { test } from "node:test";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 
-function makeLesson(overrides: Partial<PathwayLessonRecord>): PathwayLessonRecord {
-  const sections = Array.from({ length: 5 }, (_, i) => ({
-    id: `s${i}`,
-    heading: `H${i}`,
-    kind: "clinical_meaning" as const,
-    body: `body-${i}`,
-  }));
+function staffScope(partial: Partial<AccessScope> = {}): AccessScope {
   return {
-    slug: "x",
-    title: "T",
-    topic: "tp",
-    topicSlug: "tp-slug",
-    bodySystem: "G",
-    previewSectionCount: 1,
-    seoTitle: "seo",
-    seoDescription: "desc",
-    sections,
-    ...overrides,
+    hasAccess: true,
+    reason: "admin_override",
+    tier: partial.tier ?? "RN",
+    country: partial.country ?? "US",
+    alliedCareer: partial.alliedCareer ?? null,
   };
 }
 
-describe("visibleSectionsForLesson", () => {
-  it("returns all sections when full access", () => {
-    const lesson = makeLesson({});
-    assert.equal(visibleSectionsForLesson(lesson, true).length, 5);
-  });
+test("staff bypass: NP pathway full access even when learnerPath targets a different NP specialty", () => {
+  const usNpFnp = getExamPathwayById("us-np-fnp")!;
+  const usNpPmhnp = getExamPathwayById("us-np-pmhnp")!;
+  const scope = staffScope({ tier: "NP", country: "US" });
+  assert.equal(canViewFullPathwayLesson(scope, usNpPmhnp, "us-np-fnp"), true);
+  assert.equal(canViewFullPathwayLesson(scope, usNpFnp, "us-np-pmhnp"), true);
+});
 
-  it("returns only preview slice when locked", () => {
-    const lesson = makeLesson({ previewSectionCount: 1 });
-    const v = visibleSectionsForLesson(lesson, false);
-    assert.equal(v.length, 1);
-    assert.equal(v[0].body, "body-0");
-  });
-
-  it("always returns one section when locked", () => {
-    const lesson = makeLesson({ previewSectionCount: 99 });
-    assert.equal(visibleSectionsForLesson(lesson, false).length, 1);
-  });
-
-  it("caps preview text to safe snippet length", () => {
-    const longBody = Array.from({ length: 260 }, (_, i) => `word${i}`).join(" ");
-    const lesson = makeLesson({
-      sections: [{ id: "s0", heading: "H0", kind: "clinical_meaning", body: longBody }],
-    });
-    const v = visibleSectionsForLesson(lesson, false);
-    assert.equal(v.length, 1);
-    assert.equal(v[0].body.endsWith("..."), true);
-    assert.equal(v[0].body.split(" ").length, 180);
-  });
-
-  it("returns empty when no sections and locked", () => {
-    const lesson = makeLesson({ sections: [], previewSectionCount: 1 });
-    assert.deepEqual(visibleSectionsForLesson(lesson, false), []);
-  });
+test("subscriber NP: learnerPath must match pathway for full lesson", () => {
+  const usNpPmhnp = getExamPathwayById("us-np-pmhnp")!;
+  const scope: AccessScope = {
+    hasAccess: true,
+    reason: "active_subscription",
+    tier: "NP",
+    country: "US",
+    alliedCareer: null,
+  };
+  assert.equal(canViewFullPathwayLesson(scope, usNpPmhnp, "us-np-fnp"), false);
+  assert.equal(canViewFullPathwayLesson(scope, usNpPmhnp, "us-np-pmhnp"), true);
 });

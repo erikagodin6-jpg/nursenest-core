@@ -14,12 +14,11 @@ export { pathwayAllowsCatAdaptiveStart, subscriptionCoversPathwayBase } from "./
 export async function listPathwaysCompatibleWithSubscription(scope: AccessScope): Promise<ExamPathwayDefinition[]> {
   const { EXAM_PATHWAYS } = await import("@/lib/exam-pathways/exam-pathways-catalog");
   if (!scope.hasAccess || scope.reason === "no_access") return [];
+  if (accessScopeIsStaffLearnerEntitlementBypass(scope)) {
+    return EXAM_PATHWAYS.filter((p) => p.status !== "hidden");
+  }
   const tier = scope.tier as TierCode | null;
   const country = scope.country as CountryCode | null;
-  if (accessScopeIsStaffLearnerEntitlementBypass(scope)) {
-    if (!country) return EXAM_PATHWAYS.filter((p) => p.status !== "hidden");
-    return EXAM_PATHWAYS.filter((p) => p.status !== "hidden" && p.countryCode === country);
-  }
   if (!tier || !country) return [];
   const allowedTiers = accessibleTiersForUserTier(tier);
   return EXAM_PATHWAYS.filter(

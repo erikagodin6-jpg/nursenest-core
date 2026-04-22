@@ -25,9 +25,9 @@ export function subscriptionCoversPathwayBase(scope: AccessScope, pathway: ExamP
   if (pathway.status === "hidden") return false;
   const tier = scope.tier as TierCode | null;
   const country = scope.country as CountryCode | null;
+  /** Staff/admin: inspect any visible pathway worldwide (tier/country profile must not shrink the catalog). */
   if (accessScopeIsStaffLearnerEntitlementBypass(scope)) {
-    if (!country) return true;
-    return pathway.countryCode === country;
+    return true;
   }
   if (!tier || !country) return false;
   if (country !== pathway.countryCode) return false;

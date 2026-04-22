@@ -109,6 +109,14 @@ const FORBIDDEN_SUBSTRINGS = [
 
 /** Whole-value stubs (trimmed, lowercased). */
 const FORBIDDEN_EXACT = new Set([
+  "title",
+  "lead",
+  "kicker",
+  "label",
+  "description",
+  "subtitle",
+  "cta",
+  "text",
   "heading",
   "eyebrow",
   "intro",
@@ -133,7 +141,7 @@ function looksLikeLeakedKeyPath(v) {
   );
 }
 
-/** Mirrors `humanizedKeyFallback` in `src/lib/marketing-i18n-core.ts` (used when a key is missing). */
+/** Mirrors dev-only humanized tail helper in `src/lib/marketing-i18n/marketing-message-value-policy.ts`. */
 function humanizedKeyFallback(key) {
   const tail = key.includes(".") ? (key.split(".").pop() ?? key) : key;
   const words = tail.replace(/([A-Z])/g, " $1").replace(/[-_]/g, " ").trim();
@@ -281,8 +289,14 @@ function main() {
     stdio: "inherit",
   });
 
+  const shardPlaceholderScript = path.join(pkgRoot, "scripts", "validate-marketing-en-shard-placeholder-leakage.mts");
+  execFileSync(process.execPath, ["--import", "tsx", shardPlaceholderScript], {
+    cwd: pkgRoot,
+    stdio: "inherit",
+  });
+
   console.log(
-    "[validate-marketing-production-surface] OK — en pages/nav homepage + pricing conversion clarity + shell checks + merged chrome/hero shape passed.",
+    "[validate-marketing-production-surface] OK — en pages/nav homepage + pricing conversion clarity + shell checks + merged chrome/hero shape + en shard placeholder scan passed.",
   );
 }
 

@@ -1479,7 +1479,7 @@ export function AdminBlogControlPanelClient({
           <AdminBlogDraftEditorShell
             navItems={[
               { id: "draft-publish", label: "Publish & URL" },
-              { id: "draft-title", label: "Title" },
+              { id: "draft-title", label: "Headline" },
               { id: "draft-seo", label: "Meta & SEO" },
               { id: "draft-outline", label: "Outline" },
               { id: "draft-body", label: "Article body" },
@@ -1749,7 +1749,7 @@ export function AdminBlogControlPanelClient({
             <div className="grid gap-4 lg:grid-cols-2">
             <DraftSectionCard
               id="draft-title"
-              title="Title"
+              title="Post headline"
               description="Pick a generated option or type your own on-page headline."
               actions={
                 <button

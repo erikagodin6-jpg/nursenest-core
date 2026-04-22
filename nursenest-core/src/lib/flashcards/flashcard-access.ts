@@ -40,9 +40,7 @@ export function userCanAccessDeckForStudy(
   }
   if (!entitlement.hasAccess) return false;
   if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
-    const c = entitlement.country as CountryCode | null;
-    if (!c) return true;
-    return deck.country === c;
+    return true;
   }
   const country = entitlement.country as CountryCode | null;
   const tier = entitlement.tier as TierCode | null;
@@ -74,20 +72,12 @@ export function prismaDeckListWhere(args: {
   }
 
   if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
-    const country = entitlement.country as CountryCode | null;
-    const or: Prisma.FlashcardDeckWhereInput[] = [
-      { status: PUBLISHED, visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW },
-    ];
-    if (!country) {
-      or.push({ status: PUBLISHED, visibility: { not: FlashcardDeckVisibility.HIDDEN } });
-    } else {
-      or.push({
-        status: PUBLISHED,
-        visibility: FlashcardDeckVisibility.SUBSCRIBER,
-        country,
-      });
-    }
-    return { OR: or };
+    return {
+      OR: [
+        { status: PUBLISHED, visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW },
+        { status: PUBLISHED, visibility: { not: FlashcardDeckVisibility.HIDDEN } },
+      ],
+    };
   }
 
   const country = entitlement.country as CountryCode | null;

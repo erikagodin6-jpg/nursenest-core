@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { PathwayLessonDetailPageLoadingFallback } from "@/components/lessons/pathway-lesson-detail-loading-fallback";
 import { pathwayLessonPublicDetailPath } from "@/lib/lessons/pathway-lesson-types";
 import { loadPathwayLessonSeoMetaWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
-import { resolveMarketingPathwayLessonRouteResolution } from "@/lib/lessons/pathway-lesson-route-access";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";

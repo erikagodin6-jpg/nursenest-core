@@ -6,6 +6,9 @@ import { LessonSectionCard } from "@/components/lessons/lesson-section-card";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { getStaffSession } from "@/lib/auth/staff-session";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { alliedLessonMatchesProfessionFilter } from "@/lib/allied/allied-lesson-access";
 import {
@@ -16,8 +19,8 @@ import {
 } from "@/lib/allied/allied-professions-registry";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import {
-  canViewFullPathwayLesson,
   getPathwayLessonPreviewKind,
+  hasFullMarketingPathwayLessonAccess,
   visibleSectionsForLesson,
 } from "@/lib/lessons/pathway-lesson-access";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
@@ -30,7 +33,6 @@ import {
 } from "@/lib/lessons/pathway-lesson-loader";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
-import { EeatContentAttribution } from "@/components/seo/eeat-content-attribution";
 import { PathwayLessonMedicalEducationJsonLd } from "@/components/seo/seo-json-ld";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
@@ -152,7 +154,15 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   if (!lesson.structuralQuality?.publicComplete) notFound();
   if (!alliedLessonMatchesProfessionFilter(lesson, prof.topicSlugsIn)) notFound();
 
-  const userId = "";
+  const [sessionRes, staffRes] = await Promise.allSettled([
+    getProtectedRouteSession("marketing.allied_health_lesson_detail"),
+    getStaffSession(),
+  ]);
+  const session = sessionRes.status === "fulfilled" ? sessionRes.value : null;
+  const userIdRaw = (session?.user as { id?: string } | undefined)?.id;
+  const userId = typeof userIdRaw === "string" ? userIdRaw.trim() : "";
+  const staffFullLessonAccess = staffRes.status === "fulfilled" && Boolean(staffRes.value);
+
   const [entitlementRes, studySettingsRes, learnerPathRes] = await Promise.allSettled([
     resolveEntitlementForPage(userId),
     loadStudySettings(userId),
@@ -175,9 +185,21 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       ? { hasAccess: false, reason: "no_access" as const, tier: null, country: null, alliedCareer: null }
       : entitlement;
 
-  const fullAccess = canViewFullPathwayLesson(scope, pathway, learnerPath);
+  const fullAccess = hasFullMarketingPathwayLessonAccess(scope, pathway, learnerPath, staffFullLessonAccess);
+  const bankEntitlement: AccessScope | null =
+    entitlement !== "error"
+      ? entitlement
+      : staffFullLessonAccess
+        ? {
+            hasAccess: true,
+            reason: "admin_override",
+            tier: null,
+            country: pathway.countryCode,
+            alliedCareer: null,
+          }
+        : null;
   const [bankAssessmentsRes, adjacentSlugsRes, relatedQuestionStemsRes, contentDatesRes] = await Promise.allSettled([
-    resolvePathwayLessonBankAssessments(pathway, lesson, entitlement === "error" ? null : entitlement),
+    resolvePathwayLessonBankAssessments(pathway, lesson, bankEntitlement),
     loadPathwayLessonAdjacent(pathway.id, lesson.slug, lessonContentLocale),
     loadRelatedExamQuestionStemsForPathwayLesson({
       pathway,
@@ -317,7 +339,6 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       <div className="mt-4 space-y-2">
         <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
         <PathwayLessonQuickReview quickReviewLines={quickReviewBullets} />
-        <EeatContentAttribution variant="lesson" />
       </div>
       {lesson.memoryAnchor ? (
         <div className="mt-4">

@@ -1,4 +1,9 @@
 import {
+  assertNoPublicPlaceholderCopy,
+  missingMarketingCopyFallback,
+  normalizeResolvedMarketingLeaf,
+} from "@/lib/marketing-i18n/marketing-message-value-policy";
+import {
   coerceFlatMessageValue,
   safeMessageKey,
 } from "@/lib/marketing-i18n/safe-marketing-messages";
@@ -22,18 +27,6 @@ export type FormatMarketingMessageOptions = {
   /** BCP 47 / app locale code for structured logs. */
   locale?: string;
 };
-
-/**
- * Resolves copy for a flat key. When `fallbackMessages` is provided, missing keys in the primary
- * bundle resolve from fallback before the humanized placeholder (never raw key paths in UI).
- */
-function humanizedKeyFallback(key: string): string {
-  const tail = key.includes(".") ? (key.split(".").pop() ?? key) : key;
-  const words = tail.replace(/([A-Z])/g, " $1").replace(/[-_]/g, " ").trim();
-  if (!words) return "NurseNest";
-  const t = words.charAt(0).toUpperCase() + words.slice(1);
-  return t.length > 80 ? `${t.slice(0, 77)}…` : t;
-}
 
 function lookupFlatMessage(messages: MarketingMessages | undefined, key: string): string | undefined {
   if (!messages) return undefined;
@@ -93,11 +86,23 @@ export function formatMarketingMessage(
       );
     }
 
+    const normalizedLeaf = normalizeResolvedMarketingLeaf(rawResolved, safeKey);
+    if (rawResolved !== undefined && normalizedLeaf === undefined) {
+      logI18nStructured("marketing_message_placeholder_value", safeKey, locale, {
+        hadFallbackMap: Boolean(fallbackMessages),
+        sample: String(rawResolved).slice(0, 80),
+      });
+    }
+    rawResolved = normalizedLeaf;
+
     if (rawResolved === undefined) {
       logI18nStructured("marketing_message_key_missing", safeKey, locale, {
         hadFallbackMap: Boolean(fallbackMessages),
       });
-      return humanizedKeyFallback(safeKey);
+      return assertNoPublicPlaceholderCopy(
+        missingMarketingCopyFallback(safeKey),
+        `missing:${safeKey}`,
+      );
     }
 
     let s: string = rawResolved;
@@ -107,17 +112,23 @@ export function formatMarketingMessage(
         s = s.split(`{{${k}}}`).join(String(val));
       }
     }
-    return s;
+    return assertNoPublicPlaceholderCopy(s, `resolved:${safeKey}`);
   } catch (e) {
+    if (e instanceof Error && e.message.includes("[marketing]")) {
+      throw e;
+    }
     logI18nStructured("marketing_message_runtime_error", safeKey || "(unknown)", locale, {
       hadFallbackMap: Boolean(fallbackMessages),
       errorName: e instanceof Error ? e.name.slice(0, 80) : "non_error",
     });
     try {
       const sk = safeKey || "message";
-      return humanizedKeyFallback(sk);
-    } catch {
-      return "NurseNest";
+      return assertNoPublicPlaceholderCopy(missingMarketingCopyFallback(sk), `catch:${sk}`);
+    } catch (inner) {
+      if (inner instanceof Error && inner.message.includes("[marketing]")) {
+        throw inner;
+      }
+      return process.env.NODE_ENV === "production" ? "" : "NurseNest";
     }
   }
 }
@@ -132,13 +143,70 @@ export function resolveMarketingCopy(
   fallbackMessages: MarketingMessages | undefined,
   ultimateFallback: string,
 ): string {
+  const sk = safeMessageKey(key);
+  const origin = sk ? `resolve:${sk}` : "resolve:invalid-key";
   try {
-    const sk = safeMessageKey(key);
-    if (!sk) return ultimateFallback;
+    if (!sk) return assertNoPublicPlaceholderCopy(ultimateFallback, origin);
     const raw = lookupFlatMessage(messages, sk) ?? lookupFlatMessage(fallbackMessages, sk);
-    if (raw !== undefined) return raw;
+    const normalized = normalizeResolvedMarketingLeaf(raw, sk);
+    const out = normalized !== undefined ? normalized : ultimateFallback;
+    return assertNoPublicPlaceholderCopy(out, origin);
   } catch {
-    /* fall through */
+    return assertNoPublicPlaceholderCopy(ultimateFallback, `${origin}:catch`);
   }
-  return ultimateFallback;
+}
+
+/**
+ * Required public marketing string: throws when the resolved leaf is missing or a forbidden placeholder.
+ * Prefer in server loaders / build gates — not in hot client paths without try/catch.
+ */
+export function getRequiredMarketingMessage(
+  messages: MarketingMessages,
+  key: string,
+  fallbackMessages?: MarketingMessages,
+): string {
+  const sk = safeMessageKey(key);
+  if (!sk) throw new Error(`[marketing-i18n] getRequiredMarketingMessage: empty key`);
+  const raw = lookupFlatMessage(messages, sk) ?? lookupFlatMessage(fallbackMessages, sk);
+  const normalized = normalizeResolvedMarketingLeaf(raw, sk);
+  if (normalized === undefined) {
+    throw new Error(`[marketing-i18n] getRequiredMarketingMessage: missing or forbidden value for key "${sk}"`);
+  }
+  return assertNoPublicPlaceholderCopy(normalized, `required:${sk}`);
+}
+
+/**
+ * Same contract as {@link getRequiredMarketingMessage} — explicit name for public/marketing surfaces
+ * where copy must never be placeholder/stub text.
+ */
+export const getRequiredPublicMessage = getRequiredMarketingMessage;
+
+/** Optional copy: never returns forbidden placeholders; uses `fallback` when missing or unsafe. */
+export function getOptionalMarketingMessage(
+  messages: MarketingMessages,
+  key: string,
+  opts: { fallbackMessages?: MarketingMessages; fallback: string },
+): string {
+  const sk = safeMessageKey(key);
+  if (!sk) return assertNoPublicPlaceholderCopy(opts.fallback, "optional:empty-key");
+  const raw = lookupFlatMessage(messages, sk) ?? lookupFlatMessage(opts.fallbackMessages, sk);
+  const normalized = normalizeResolvedMarketingLeaf(raw, sk);
+  const chosen = normalized ?? opts.fallback;
+  return assertNoPublicPlaceholderCopy(chosen, `optional:${sk}`);
+}
+
+/**
+ * Optional public UI copy: resolved value or empty string — never placeholder tokens, never humanized key tails.
+ */
+export function getOptionalPublicMessage(
+  messages: MarketingMessages,
+  key: string,
+  opts?: { fallbackMessages?: MarketingMessages },
+): string {
+  const sk = safeMessageKey(key);
+  if (!sk) return "";
+  const raw = lookupFlatMessage(messages, sk) ?? lookupFlatMessage(opts?.fallbackMessages, sk);
+  const normalized = normalizeResolvedMarketingLeaf(raw, sk);
+  if (normalized === undefined) return "";
+  return assertNoPublicPlaceholderCopy(normalized, `optional-public:${sk}`);
 }

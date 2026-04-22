@@ -9,7 +9,7 @@
  */
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
+import { hasFullMarketingPathwayLessonAccess } from "@/lib/lessons/pathway-lesson-access";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 
 export type MarketingPathwayLessonRouteResolution =
@@ -55,6 +55,8 @@ export function resolveMarketingPathwayLessonRouteResolution(input: {
   userId: string;
   entitlement: AccessScope | "error";
   learnerPathResolved: string | null;
+  /** DB-backed staff/admin: full marketing lesson body without subscription; also covers entitlement read failures. */
+  staffFullLessonAccess?: boolean;
 }): MarketingPathwayLessonRouteResolution {
   if (!input.pathway) return { kind: "not_found", reason: "invalid_pathway" };
   if (input.lessonLoadFailed) return { kind: "not_found", reason: "lesson_load_failed" };
@@ -67,7 +69,12 @@ export function resolveMarketingPathwayLessonRouteResolution(input: {
   const scope: AccessScope =
     input.entitlement === "error" ? syntheticScopeForEntitlementError() : input.entitlement;
 
-  const fullAccess = canViewFullPathwayLesson(scope, input.pathway, input.learnerPathResolved);
+  const fullAccess = hasFullMarketingPathwayLessonAccess(
+    scope,
+    input.pathway,
+    input.learnerPathResolved,
+    Boolean(input.staffFullLessonAccess),
+  );
 
   return {
     kind: "ready",

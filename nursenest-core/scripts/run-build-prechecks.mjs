@@ -13,6 +13,26 @@ execFileSync(process.execPath, [marketingSurfaceScript], {
   stdio: "inherit",
 });
 
+const marketingNoUnsafeDefaults = path.join(packageRoot, "scripts", "validate-marketing-no-unsafe-default-props.mjs");
+console.log("[build-prechecks] running validate-marketing-no-unsafe-default-props.mjs (always)");
+execFileSync(process.execPath, [marketingNoUnsafeDefaults], {
+  cwd: packageRoot,
+  stdio: "inherit",
+});
+
+const marketingPublicShardCoverageTest = path.join(
+  packageRoot,
+  "src",
+  "lib",
+  "marketing-i18n",
+  "marketing-public-layout-shard-coverage.test.ts",
+);
+console.log("[build-prechecks] running marketing-public-layout-shard-coverage contract test");
+execFileSync(process.execPath, ["--import", "tsx", "--test", marketingPublicShardCoverageTest], {
+  cwd: packageRoot,
+  stdio: "inherit",
+});
+
 const homeGlobalRegionsContractTest = path.join(
   packageRoot,
   "src",

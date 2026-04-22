@@ -48,11 +48,7 @@ function lessonPublishedWhere(): Prisma.ContentItemWhereInput {
 export function lessonAccessWhere(entitlement: AccessScope): Prisma.ContentItemWhereInput {
   if (!entitlement.hasAccess) return { id: { in: [] } };
   if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
-    const country = entitlement.country as CountryCode | null;
-    if (!country) return lessonPublishedWhere();
-    return {
-      AND: [lessonPublishedWhere(), { OR: regionScopeOrForCountry(country) }],
-    };
+    return lessonPublishedWhere();
   }
   const country = entitlement.country as CountryCode | null;
   const tier = entitlement.tier as TierCode | null;
@@ -155,12 +151,7 @@ export function publicMarketingFlashcardDeckWhere(): Prisma.FlashcardDeckWhereIn
 export function questionAccessWhere(entitlement: AccessScope): Prisma.ExamQuestionWhereInput {
   if (!entitlement.hasAccess) return { id: { in: [] } };
   if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
-    const country = entitlement.country as CountryCode | null;
-    if (!country) return { status: { in: [...DB_PUBLISHED_VARIANTS] } };
-    return {
-      status: { in: [...DB_PUBLISHED_VARIANTS] },
-      OR: examQuestionRegionOr(country),
-    };
+    return { status: { in: [...DB_PUBLISHED_VARIANTS] } };
   }
   const country = entitlement.country as CountryCode | null;
   const tier = entitlement.tier as TierCode | null;
@@ -203,10 +194,8 @@ export function flashcardAccessWhere(
   pathway?: FlashcardPathwayAccessOptions | null,
 ): Prisma.FlashcardWhereInput {
   if (!entitlement.hasAccess) return { id: { in: [] } };
-  if (entitlement.reason === "admin_override") {
-    const country = entitlement.country as CountryCode | null;
-    const base: Prisma.FlashcardWhereInput =
-      !country ? { status: ContentStatus.PUBLISHED } : { status: ContentStatus.PUBLISHED, country };
+  if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
+    const base: Prisma.FlashcardWhereInput = { status: ContentStatus.PUBLISHED };
     if (!pathway?.deckPathwayId && !pathway?.tierIntersectWith?.length && !pathway?.includePreNursingFoundation) {
       return base;
     }
@@ -265,8 +254,7 @@ export function userCanAccessExam(
   const country = entitlement.country as CountryCode | null;
   const tier = entitlement.tier as TierCode | null;
   if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
-    if (!country) return true;
-    return exam.country === country;
+    return true;
   }
   if (!country || !tier) return false;
   if (exam.country !== country) return false;

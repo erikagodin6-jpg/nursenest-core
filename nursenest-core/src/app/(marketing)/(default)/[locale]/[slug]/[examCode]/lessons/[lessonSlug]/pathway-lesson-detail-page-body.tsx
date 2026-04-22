@@ -27,7 +27,9 @@ import { normalizePathwayLessonLocale } from "@/lib/lessons/pathway-lesson-local
 import { loadPathwayLessonWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { prisma } from "@/lib/db";
-import { EeatContentAttribution } from "@/components/seo/eeat-content-attribution";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { getStaffSession } from "@/lib/auth/staff-session";
+import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { PathwayLessonMedicalEducationJsonLd } from "@/components/seo/seo-json-ld";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { pathwayLessonDetailBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
@@ -107,14 +109,19 @@ export type PathwayLessonDetailPageBodyProps = {
 export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlug }: PathwayLessonDetailPageBodyProps) {
   const lessonContentLocale = DEFAULT_MARKETING_LOCALE;
 
-  const [lessonResult] = await Promise.allSettled([
+  const [lessonResult, sessionRes, staffRes] = await Promise.allSettled([
     loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, lessonContentLocale),
+    getProtectedRouteSession("marketing.pathway_lesson_detail"),
+    getStaffSession(),
   ]);
   const loadedLesson =
     lessonResult.status === "fulfilled" ? lessonResult.value : undefined;
   const lessonLoadFailed = lessonResult.status === "rejected";
 
-  const userId = "";
+  const session = sessionRes.status === "fulfilled" ? sessionRes.value : null;
+  const userIdRaw = (session?.user as { id?: string } | undefined)?.id;
+  const userId = typeof userIdRaw === "string" ? userIdRaw.trim() : "";
+  const staffFullLessonAccess = staffRes.status === "fulfilled" && Boolean(staffRes.value);
 
   const [studySettingsRes, entRes, lpRes] = await Promise.allSettled([
     loadStudySettings(userId),
@@ -140,13 +147,26 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
     userId,
     entitlement,
     learnerPathResolved,
+    staffFullLessonAccess,
   });
   if (routeResolution.kind === "not_found") notFound();
 
   const { lesson, fullAccess, scope, entitlementError } = routeResolution;
   const examName = pathwayRegionAwareExamName(pathway);
+  const bankEntitlement: AccessScope | null =
+    entitlement !== "error"
+      ? entitlement
+      : staffFullLessonAccess
+        ? {
+            hasAccess: true,
+            reason: "admin_override",
+            tier: null,
+            country: pathway.countryCode,
+            alliedCareer: null,
+          }
+        : null;
   const [bankAssessmentsRes, adjacentSlugsRes, contentDatesRes] = await Promise.allSettled([
-    resolvePathwayLessonBankAssessments(pathway, lesson, entitlement === "error" ? null : entitlement),
+    resolvePathwayLessonBankAssessments(pathway, lesson, bankEntitlement),
     loadPathwayLessonAdjacent(pathway.id, lesson.slug, lessonContentLocale),
     getPathwayLessonContentDates(pathway.id, lesson.slug, lessonContentLocale),
   ]);
@@ -275,11 +295,12 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
             <ExamTakeawaysBlock pathway={pathway} items={lesson.studyTakeaways} position="top" />
           </div>
         ) : null}
-        <div className="mt-4 space-y-2">
-          {fullAccess ? <PremiumLessonPublishNotice validation={lesson.premiumValidation} /> : null}
-          {fullAccess ? <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} /> : null}
-          <EeatContentAttribution variant="lesson" />
-        </div>
+        {fullAccess ? (
+          <div className="mt-4 space-y-2">
+            <PremiumLessonPublishNotice validation={lesson.premiumValidation} />
+            <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
+          </div>
+        ) : null}
         {fullAccess && lesson.memoryAnchor ? (
           <div className="mt-4 max-w-5xl">
             <PathwayLessonMemoryAnchorStrip text={lesson.memoryAnchor} />

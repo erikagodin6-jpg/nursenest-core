@@ -28,13 +28,13 @@ describe("marketing hub degraded defaults", () => {
 });
 
 describe("formatMarketingMessage missing keys", () => {
-  it("returns humanized fallback in production mode for missing keys", () => {
+  it("returns empty string in production for missing keys (no humanized / CSS-uppercased placeholders)", () => {
     const prev = process.env.NODE_ENV;
     Object.assign(process.env, { NODE_ENV: "production" });
     try {
       const s = formatMarketingMessage({}, "nav.examStrip.rn", undefined, undefined);
       assert.ok(!s.startsWith("[missing:"));
-      assert.ok(s.length > 0);
+      assert.equal(s, "");
     } finally {
       Object.assign(process.env, { NODE_ENV: prev });
     }

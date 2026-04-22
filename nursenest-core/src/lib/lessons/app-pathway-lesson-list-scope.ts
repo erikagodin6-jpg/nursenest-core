@@ -35,15 +35,6 @@ export async function pathwayLessonsAppListWhere(
   ];
 
   if (accessScopeIsStaffLearnerEntitlementBypass(scope)) {
-    const country = scope.country as CountryCode | null;
-    const tier = scope.tier as TierCode | null;
-    if (country) {
-      base.push({ OR: [{ countryCode: null }, { countryCode: country }] });
-    }
-    if (tier) {
-      const allowed = prismaTierCodesForProfileTier(tier);
-      base.push({ OR: [{ tierCode: null }, { tierCode: { in: allowed } }] });
-    }
     return { AND: base };
   }
 
@@ -102,15 +93,12 @@ export async function appPathwayLessonVisibleToSubscriber(
   const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const pathway = getExamPathwayById(row.pathwayId);
   if (!pathway) return false;
-  if (!canViewFullPathwayLesson(scope, pathway, learnerPath)) return false;
 
   if (accessScopeIsStaffLearnerEntitlementBypass(scope)) {
-    const country = scope.country as CountryCode | null;
-    const tier = scope.tier as TierCode | null;
-    if (row.countryCode && country && row.countryCode !== country) return false;
-    if (row.tierCode && tier && !prismaTierCodesForProfileTier(tier).includes(row.tierCode)) return false;
-    return true;
+    return canViewFullPathwayLesson(scope, pathway, learnerPath);
   }
+
+  if (!canViewFullPathwayLesson(scope, pathway, learnerPath)) return false;
 
   const country = scope.country as CountryCode | null;
   const tier = scope.tier as TierCode | null;

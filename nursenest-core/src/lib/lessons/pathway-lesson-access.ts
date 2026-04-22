@@ -1,4 +1,5 @@
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements-policy";
 
@@ -40,10 +41,24 @@ export function canViewFullPathwayLesson(
   learnerPath: string | null | undefined,
 ): boolean {
   if (!subscriptionCoversPathwayBase(scope, pathway)) return false;
+  if (accessScopeIsStaffLearnerEntitlementBypass(scope)) return true;
   if (pathway.roleTrack !== "np") return true;
   const lp = learnerPath?.trim();
   if (!lp) return true;
   return lp === pathway.id;
+}
+
+/**
+ * Marketing pathway lesson detail: subscription/trial access **or** DB-backed staff/admin bypass.
+ * Keep in sync with {@link resolveMarketingPathwayLessonRouteResolution}.
+ */
+export function hasFullMarketingPathwayLessonAccess(
+  scope: AccessScope,
+  pathway: ExamPathwayDefinition,
+  learnerPath: string | null | undefined,
+  staffFullLessonAccess: boolean,
+): boolean {
+  return canViewFullPathwayLesson(scope, pathway, learnerPath) || staffFullLessonAccess;
 }
 
 export { sanitizePaywallPreviewSection, visibleSectionsForLesson } from "@/lib/lessons/pathway-lesson-visible-sections";

@@ -84,6 +84,7 @@ export function PathwayLessonDetailHeader({
   const place = pathwayCountryLabel(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
   const compactExamName = compactPathwayLabel(examName);
+  const hasTrailing = Boolean(trailing);
   validateLearnerCopyForExamContext(pathway, lessonTitle, "lesson_header");
 
   return (
@@ -118,7 +119,13 @@ export function PathwayLessonDetailHeader({
           <span className="text-[var(--theme-muted-text)]">{bodySystem}</span>
         </div>
         {metaChips ? <div className="mt-3 flex flex-wrap gap-1.5">{metaChips}</div> : null}
-        <div className="mt-3 grid grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(11rem,13.75rem)] md:gap-x-6">
+        <div
+          className={
+            hasTrailing
+              ? "mt-3 grid grid-cols-1 items-start gap-4 md:grid-cols-[minmax(0,1fr)_minmax(11rem,13.75rem)] md:gap-x-6"
+              : "mt-3 grid grid-cols-1 items-start gap-4"
+          }
+        >
           <div className="min-w-0">
             <h1 className="nn-lesson-page-title mt-1 text-balance">
               {lessonTitle}

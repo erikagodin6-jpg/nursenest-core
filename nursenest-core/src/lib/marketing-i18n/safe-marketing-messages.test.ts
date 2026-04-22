@@ -44,10 +44,16 @@ describe("formatMarketingMessage hardened", () => {
   });
 
   it("falls back when value is an object", () => {
-    const bad = { k: { o: 1 } } as MarketingMessages;
-    const s = formatMarketingMessage(bad, "k", undefined, undefined);
-    assert.ok(s.length > 0);
-    assert.ok(!s.includes("object"));
+    const prev = process.env.NODE_ENV;
+    Object.assign(process.env, { NODE_ENV: "development" });
+    try {
+      const bad = { k: { o: 1 } } as MarketingMessages;
+      const s = formatMarketingMessage(bad, "k", undefined, undefined);
+      assert.ok(s.length > 0);
+      assert.ok(!s.includes("object"));
+    } finally {
+      Object.assign(process.env, { NODE_ENV: prev });
+    }
   });
 
   it("in production, missing pages.home.* never returns the outage placeholder", () => {
@@ -56,19 +62,51 @@ describe("formatMarketingMessage hardened", () => {
     try {
       const s = formatMarketingMessage({}, "pages.home.hero.intentionallyMissingKey", undefined, undefined);
       assert.notEqual(s, MARKETING_PRODUCTION_MISSING_PAGE_KEY_PLACEHOLDER);
-      assert.ok(s.length > 0);
+      assert.equal(s, "");
     } finally {
       Object.assign(process.env, { NODE_ENV: prev });
     }
   });
 
-  it("in production, missing pages.pricing.* also avoids the outage placeholder (humanized fallback)", () => {
+  it("in development, missing key whose humanized tail is a forbidden token throws", () => {
+    const prev = process.env.NODE_ENV;
+    Object.assign(process.env, { NODE_ENV: "development" });
+    try {
+      assert.throws(() => formatMarketingMessage({}, "x.y.title", undefined, undefined), /\[marketing\]/);
+    } finally {
+      Object.assign(process.env, { NODE_ENV: prev });
+    }
+  });
+
+  it("in production, missing pages.pricing.* returns empty string (no humanized key tails)", () => {
     const prev = process.env.NODE_ENV;
     Object.assign(process.env, { NODE_ENV: "production" });
     try {
       const s = formatMarketingMessage({}, "pages.pricing.intentionallyMissingKey", undefined, undefined);
       assert.notEqual(s, MARKETING_PRODUCTION_MISSING_PAGE_KEY_PLACEHOLDER);
-      assert.equal(s, "Intentionally Missing Key");
+      assert.equal(s, "");
+    } finally {
+      Object.assign(process.env, { NODE_ENV: prev });
+    }
+  });
+
+  it("in production, authored mirror-stub leaves never render (e.g. title key with value Title)", () => {
+    const prev = process.env.NODE_ENV;
+    Object.assign(process.env, { NODE_ENV: "production" });
+    try {
+      const bundle = { "pages.shop.title": "Title" } as MarketingMessages;
+      assert.equal(formatMarketingMessage(bundle, "pages.shop.title", undefined, undefined), "");
+    } finally {
+      Object.assign(process.env, { NODE_ENV: prev });
+    }
+  });
+
+  it("in production, shouty template tokens like LABEL never render", () => {
+    const prev = process.env.NODE_ENV;
+    Object.assign(process.env, { NODE_ENV: "production" });
+    try {
+      const bundle = { "nav.somePill": "LABEL" } as MarketingMessages;
+      assert.equal(formatMarketingMessage(bundle, "nav.somePill", undefined, undefined), "");
     } finally {
       Object.assign(process.env, { NODE_ENV: prev });
     }

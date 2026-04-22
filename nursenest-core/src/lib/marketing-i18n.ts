@@ -1,5 +1,9 @@
 export {
   formatMarketingMessage,
+  getOptionalMarketingMessage,
+  getOptionalPublicMessage,
+  getRequiredMarketingMessage,
+  getRequiredPublicMessage,
   type MarketingMessageKey,
   type MarketingMessages,
 } from "@/lib/marketing-i18n-core";

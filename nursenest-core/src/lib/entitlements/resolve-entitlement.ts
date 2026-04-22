@@ -12,6 +12,9 @@ export type { AccessScope };
  *
  * Staff roles (ADMIN, SUPER_ADMIN, …) receive full learner access via {@link getUserAccess}
  * (`reason: admin_override`) — centralized in one place, not subscription emulation.
+ *
+ * For diagnostics and naming clarity, see {@link resolveEducationalContentAccessForUser} and
+ * {@link hasFullEducationalContentAccess} in `./resolve-educational-content-access`.
  */
 export async function resolveEntitlement(userId: string): Promise<AccessScope> {
   return accessScopeFromUserAccess(await getUserAccess(userId));

@@ -9,9 +9,11 @@ import { fileURLToPath } from "node:url";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { MARKETING_CHROME_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import {
+  MARKETING_HERO_NAV_CRITICAL_KEYS,
   validateMarketingHeroNavCriticalKeys,
   type MarketingHeroNavCriticalKeyResult,
 } from "@/lib/marketing/marketing-hero-nav-critical-keys";
+import { assertKeysLoadedByDefaultPublicMarketingLayout } from "@/lib/marketing-i18n/marketing-public-layout-shard-coverage";
 
 /** Every `pages.home.hero.*` string used by {@link HomeConversionHero} (canonical `en`). */
 export const MARKETING_PAGES_HOME_HERO_REQUIRED_KEYS = [
@@ -76,6 +78,15 @@ export type MarketingChromeBuildValidationResult = {
  */
 export function validateEnglishMarketingChromeBuildGate(): MarketingChromeBuildValidationResult {
   const errors: string[] = [];
+  try {
+    assertKeysLoadedByDefaultPublicMarketingLayout(MARKETING_HERO_NAV_CRITICAL_KEYS, "chrome-build-gate/hero-nav");
+    assertKeysLoadedByDefaultPublicMarketingLayout(
+      MARKETING_PAGES_HOME_HERO_REQUIRED_KEYS,
+      "chrome-build-gate/home-hero",
+    );
+  } catch (e) {
+    errors.push(e instanceof Error ? e.message : String(e));
+  }
   const merged = loadEnglishMarketingChromeShardMerge();
   const heroNav = validateMarketingHeroNavCriticalKeys(merged);
   if (!heroNav.ok) {

@@ -42,14 +42,21 @@ export async function registerNodeInstrumentation(): Promise<void> {
   {
     const aiGate = getAdminAiGenerationGate();
     warnAdminAiGenerationMisconfigurationIfNeeded(aiGate);
+    console.error(
+      `[nursenest-core] boot admin_ai env: flag_normalized=${String(aiGate.diagnostics.adminAiGenerationFlagNormalized)} flag_class=${aiGate.diagnostics.aiAdminGenerationFlagClass} openai_key_integrations=${String(aiGate.diagnostics.aiIntegrationsOpenAiKeyPresent)} openai_key_legacy=${String(aiGate.diagnostics.legacyOpenAiKeyPresent)} mode=${aiGate.mode}`,
+    );
     if (!aiGate.runnable) {
       safeServerLog("admin_ai_generation", "boot_gate_inactive", {
         mode: aiGate.mode,
         flagEnabled: aiGate.flagEnabled,
         openAiKeyPresent: aiGate.openAiKeyPresent,
+        ...aiGate.diagnostics,
       });
     } else {
-      safeServerLog("admin_ai_generation", "boot_gate_active", { mode: aiGate.mode });
+      safeServerLog("admin_ai_generation", "boot_gate_active", {
+        mode: aiGate.mode,
+        ...aiGate.diagnostics,
+      });
     }
   }
   void import("@/lib/observability/http-access-log-hook").then((m) => {

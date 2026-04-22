@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { listPathwaysCompatibleWithSubscription } from "./pathway-entitlements";
 import { subscriptionCoversPathwayBase } from "./pathway-entitlements-policy";
 
 function scope(
@@ -67,9 +68,9 @@ describe("subscriptionCoversPathwayBase", () => {
     assert.equal(subscriptionCoversPathwayBase(s, usRn), true);
   });
 
-  it("admin override does not cross country for pathway access", () => {
+  it("admin override may cross country for internal staff catalog access", () => {
     const s = scope({ hasAccess: true, reason: "admin_override", tier: "NP", country: "CA" });
-    assert.equal(subscriptionCoversPathwayBase(s, usRn), false);
+    assert.equal(subscriptionCoversPathwayBase(s, usRn), true);
     assert.equal(subscriptionCoversPathwayBase(s, caRn), true);
   });
 
@@ -87,5 +88,15 @@ describe("subscriptionCoversPathwayBase", () => {
     const usNp = getExamPathwayById("us-np-fnp")!;
     const s = scope({ hasAccess: true, reason: "active_subscription", tier: "RN", country: "US" });
     assert.equal(subscriptionCoversPathwayBase(s, usNp), false);
+  });
+});
+
+describe("listPathwaysCompatibleWithSubscription", () => {
+  it("staff entitlement lists every non-hidden pathway regardless of profile country", async () => {
+    const s = scope({ hasAccess: true, reason: "admin_override", tier: "RPN", country: "CA" });
+    const list = await listPathwaysCompatibleWithSubscription(s);
+    const usRn = getExamPathwayById("us-rn-nclex-rn");
+    assert.ok(usRn);
+    assert.ok(list.some((p) => p.id === usRn!.id));
   });
 });
