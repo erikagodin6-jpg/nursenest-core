@@ -48,12 +48,17 @@ export function logExplicitExamQuestionLoadOutcome(opts: {
   const c = countByReason(opts.diagnostics.dropped);
 
   if (zero) {
+    const idPreview = opts.diagnostics.orderedUniqRequestedIds
+      .slice(0, 3)
+      .map(idPrefix)
+      .join("|");
     safeServerLog(opts.scope, "explicit_exam_question_ids_zero_resolved_fallback", {
       phase: opts.phase,
       pathwayId: opts.pathwayId ?? "",
       lessonSlug: opts.lessonSlug ?? "",
       fallback: opts.fallbackSurface,
       requestedUniq: opts.diagnostics.orderedUniqRequestedIds.length,
+      idPreview: idPreview || "(none)",
       droppedTotal: opts.diagnostics.dropped.length,
       d_missing: c.missing ?? 0,
       d_inaccessible: c.inaccessible ?? 0,

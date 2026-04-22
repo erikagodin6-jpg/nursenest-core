@@ -53,3 +53,16 @@ export function finalizeLessonBankQuizItemsForUi(items: LessonBankQuizItem[]): L
   }
   return out;
 }
+
+/**
+ * Final UI boundary for lesson mini-quizzes: catalog rows and explicit bank rows share one contract.
+ * Drops malformed rows silently (same rules as server assembly + {@link finalizeLessonBankQuizItemsForUi}).
+ */
+export function finalizePathwayLessonQuizItemsForUi(items: PathwayLessonQuizItem[]): PathwayLessonQuizItem[] {
+  const out: PathwayLessonQuizItem[] = [];
+  for (const it of items) {
+    const n = normalizePathwayLessonQuizItemForRender(it);
+    if (n) out.push(n);
+  }
+  return out;
+}

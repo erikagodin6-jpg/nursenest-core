@@ -228,16 +228,29 @@ export async function loadLessonStudyLoopBankPackFromExplicitIds(args: {
   );
   const combined = explicitLessonStudyLoopCombinedSanitizedIds(args.preTestQuestionIds, args.postTestQuestionIds);
 
-  if (combined.length < LESSON_STUDY_LOOP_MIN_QUESTIONS || !args.entitlement.hasAccess) {
+  if (!args.entitlement.hasAccess) {
     return { items: [], questionIds: [], poolCount: combined.length, targetRequested: target };
   }
 
+  /** Gate on resolved renderable rows when preloaded — raw configured id count can exceed accessible MCQs. */
   if (args.preloadedItems?.length) {
+    if (args.preloadedItems.length < LESSON_STUDY_LOOP_MIN_QUESTIONS) {
+      return {
+        items: [],
+        questionIds: [],
+        poolCount: args.preloadedItems.length,
+        targetRequested: target,
+      };
+    }
     return buildLessonStudyLoopBankPackFromPreloadedExplicitItems({
       preloadedItems: args.preloadedItems,
       lessonKey: args.lessonKey,
       targetCount: args.targetCount,
     });
+  }
+
+  if (combined.length < LESSON_STUDY_LOOP_MIN_QUESTIONS) {
+    return { items: [], questionIds: [], poolCount: combined.length, targetRequested: target };
   }
 
   const flat = await loadLessonBankQuizItemsByExamIds({

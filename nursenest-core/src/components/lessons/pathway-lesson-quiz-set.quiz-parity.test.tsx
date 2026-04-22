@@ -33,4 +33,16 @@ describe("PathwayLessonQuizSet explicit vs catalog parity", () => {
     assert.match(htmlCatalog, /list-none/);
     assert.match(htmlBank, /list-none/);
   });
+
+  it("drops malformed items at the UI boundary without throwing", () => {
+    const mixed: PathwayLessonQuizItem[] = [
+      { question: "", options: ["a", "b"], correct: 0 },
+      { question: "Valid?", options: ["x", "y"], correct: 1 },
+    ];
+    const html = renderToStaticMarkup(
+      <PathwayLessonQuizSet variant="pre" title="Pre" items={mixed} fullAccess subtitle="S" />,
+    );
+    assert.match(html, /Valid\?/);
+    assert.doesNotMatch(html, /^\s*$/); // still renders shell
+  });
 });

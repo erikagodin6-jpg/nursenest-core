@@ -13,6 +13,7 @@
  */
 
 import { useId, useMemo, useRef, useState } from "react";
+import { finalizePathwayLessonQuizItemsForUi } from "@/lib/lessons/lesson-quiz-render-contract";
 import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 
 // ─── Option letters ────────────────────────────────────────────────────────────
@@ -364,13 +365,14 @@ export function LessonAssessmentQuiz({
   autoCompleteOnSubmit?: boolean;
 }) {
   const visibleItems = useMemo(() => {
-    if (!items.length) return [];
-    if (items.length <= MAX_VISIBLE_QUIZ_ITEMS) {
-      return shuffleSeed ? seededShuffle(items, `quiz:${shuffleSeed}:${items.length}`) : items;
+    const finalized = finalizePathwayLessonQuizItemsForUi(items);
+    if (!finalized.length) return [];
+    if (finalized.length <= MAX_VISIBLE_QUIZ_ITEMS) {
+      return shuffleSeed ? seededShuffle(finalized, `quiz:${shuffleSeed}:${finalized.length}`) : finalized;
     }
     const shuffled = shuffleSeed
-      ? seededShuffle(items, `quiz:${shuffleSeed}:${items.length}`)
-      : seededShuffle(items, `quiz:fallback:${items.length}:${items[0]?.question ?? ""}`);
+      ? seededShuffle(finalized, `quiz:${shuffleSeed}:${finalized.length}`)
+      : seededShuffle(finalized, `quiz:fallback:${finalized.length}:${finalized[0]?.question ?? ""}`);
     return shuffled.slice(0, MAX_VISIBLE_QUIZ_ITEMS);
   }, [items, shuffleSeed]);
 

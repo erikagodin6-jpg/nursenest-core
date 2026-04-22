@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import type { LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
 import {
+  finalizePathwayLessonQuizItemsForUi,
   isRenderablePathwayLessonQuizItem,
   normalizePathwayLessonQuizItemForRender,
 } from "@/lib/lessons/lesson-quiz-render-contract";
@@ -40,6 +41,21 @@ test("normalizePathwayLessonQuizItemForRender rejects non-integer correct index"
     }),
     null,
   );
+});
+
+test("finalizePathwayLessonQuizItemsForUi drops malformed and keeps catalog + bank-backed rows", () => {
+  const goodCatalog: PathwayLessonQuizItem = { question: "C?", options: ["x", "y"], correct: 0 };
+  const bad: PathwayLessonQuizItem = { question: " ", options: ["a", "b"], correct: 0 };
+  const bank: LessonBankQuizItem = {
+    examQuestionId: "dddddddddddddddd",
+    question: "B?",
+    options: ["p", "q"],
+    correct: 1,
+  };
+  const out = finalizePathwayLessonQuizItemsForUi([bad, goodCatalog, bank]);
+  assert.equal(out.length, 2);
+  assert.equal(out[0]?.question, "C?");
+  assert.equal((out[1] as LessonBankQuizItem).examQuestionId, "dddddddddddddddd");
 });
 
 test("mergeAssessmentWithBank parity: catalog vs bank-backed items both normalize to same contract", () => {

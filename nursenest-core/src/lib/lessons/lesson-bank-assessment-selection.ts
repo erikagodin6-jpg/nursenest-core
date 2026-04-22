@@ -18,16 +18,9 @@ import {
 } from "@/lib/lessons/lesson-explicit-exam-question-items";
 import type { ExplicitExamQuestionIdLoadDiagnostics, ExplicitIdDropReason } from "@/lib/lessons/lesson-explicit-exam-question-resolution-pipeline";
 import { sanitizeQuestionIdArrayWithDiagnostics } from "@/lib/lessons/pathway-lesson-catalog-sync";
-import {
-  isExplicitQuestionIdsDebugLoggingEnabled,
-  logExplicitExamQuestionLoadOutcome,
-} from "@/lib/lessons/lesson-explicit-exam-question-observability";
+import { logExplicitExamQuestionLoadOutcome } from "@/lib/lessons/lesson-explicit-exam-question-observability";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
-  LESSON_ASSESSMENT_POST_MAX,
-  LESSON_ASSESSMENT_POST_MIN,
-  LESSON_ASSESSMENT_PRE_MAX,
-  LESSON_ASSESSMENT_PRE_MIN,
   assemblePathwayLessonBankAssessmentsFromParts,
   orderedExplicitLessonBankItemsForConfiguredIds,
 } from "@/lib/lessons/lesson-bank-assessment-assembly-pure";
@@ -166,14 +159,6 @@ function logExplicitAssessmentZeroResolve(params: {
     diagnostics: core,
     fallbackSurface: "assessment_merge",
   });
-  if (isExplicitQuestionIdsDebugLoggingEnabled() && params.diagnostics) {
-    safeServerLog("lesson_explicit_exam_ids", "assessment_explicit_zero_resolve_verbose", {
-      pathwayId: params.pathwayId,
-      lessonSlug: params.lessonSlug,
-      side: params.side,
-      drops: params.diagnostics.drops.length,
-    });
-  }
 }
 
 export type ExplicitLessonBankQuizCombinedLoad = {

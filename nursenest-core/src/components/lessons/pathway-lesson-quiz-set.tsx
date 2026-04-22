@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
+import { finalizePathwayLessonQuizItemsForUi } from "@/lib/lessons/lesson-quiz-render-contract";
 import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 
 const OPTION_LETTERS = ["A", "B", "C", "D", "E", "F"];
@@ -10,8 +11,9 @@ type QuizVariant = "pre" | "post";
 
 /** Stable key so parents can remount when the question list or mode changes (resets local UI state). */
 export function itemsResetKey(items: PathwayLessonQuizItem[] | undefined): string {
-  if (!items?.length) return "0";
-  return items
+  const finalized = finalizePathwayLessonQuizItemsForUi(items ?? []);
+  if (!finalized.length) return "0";
+  return finalized
     .map((q) =>
       "examQuestionId" in q && typeof (q as { examQuestionId?: string }).examQuestionId === "string"
         ? (q as { examQuestionId: string }).examQuestionId
@@ -50,7 +52,7 @@ export function PathwayLessonQuizSet({
   const [examRevealed, setExamRevealed] = useState(false);
   const finishedSentRef = useRef(false);
 
-  const list = useMemo(() => items ?? [], [items]);
+  const list = useMemo(() => finalizePathwayLessonQuizItemsForUi(items ?? []), [items]);
   const total = list.length;
   const answeredCount = useMemo(
     () => list.reduce((acc, _q, i) => (typeof answers[i] === "number" ? acc + 1 : acc), 0),
