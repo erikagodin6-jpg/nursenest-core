@@ -356,7 +356,7 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
             Exam simulations · this pathway
           </Link>
           <span aria-hidden>·</span>
-          <Link href="/flashcards" className="font-semibold text-primary">
+          <Link href={pathwayHubAppFlashcardsHref(pathway.id)} className="font-semibold text-primary">
             Flashcards
           </Link>
         </div>

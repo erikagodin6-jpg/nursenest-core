@@ -109,12 +109,42 @@ describe("resolveMarketingAuthRedirectTarget", () => {
     );
   });
 
+  it("rejects tier-scoped app callback when pathwayId is not a safe slug (no silent substitute)", () => {
+    const sp = new URLSearchParams();
+    sp.set("callbackUrl", "/app/flashcards?pathwayId=../../admin");
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/");
+    sp.set("callbackUrl", "/app/questions?pathwayId=bad");
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/");
+  });
+
   it("honors marketing pathway hub callbacks (country prefix preserved)", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/canada/rn/nclex-rn/questions");
     assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/canada/rn/nclex-rn/questions");
     sp.set("callbackUrl", "/us/pn/nclex-pn/cat");
     assert.equal(resolveMarketingAuthRedirectTarget("/signup", sp, "en"), "/us/pn/nclex-pn/cat");
+  });
+
+  it("preserves Canadian marketing lesson hub and does not rewrite to US", () => {
+    const sp = new URLSearchParams();
+    sp.set("callbackUrl", "/canada/rn/nclex-rn/lessons");
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/canada/rn/nclex-rn/lessons");
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en").startsWith("/us/"), false);
+  });
+
+  it("preserves locale-prefixed Canadian pathway URLs (tier + country + UI language)", () => {
+    const sp = new URLSearchParams();
+    sp.set("callbackUrl", "/fr/canada/pn/rex-pn/questions");
+    assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "fr"), "/fr/canada/pn/rex-pn/questions");
+  });
+
+  it("honors tier-scoped app callback with Canada pathway id (country encoded in pathwayId)", () => {
+    const sp = new URLSearchParams();
+    sp.set("callbackUrl", "/app/questions?pathwayId=ca-rn-nclex-rn");
+    assert.equal(
+      resolveMarketingAuthRedirectTarget("/signup", sp, "en"),
+      "/app/questions?pathwayId=ca-rn-nclex-rn",
+    );
   });
 
   it("sends blocked auth pages to marketing home when callback is bare /app", () => {

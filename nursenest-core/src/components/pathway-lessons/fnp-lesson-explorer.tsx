@@ -8,7 +8,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
-import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 import {
   type FnpClinicalDomain,
@@ -411,7 +411,7 @@ function FnpLessonCard({
           </Link>
         ) : null}
         <Link
-          href="/flashcards"
+          href={loginWithCallback(pathwayHubAppFlashcardsHref(pathway.id))}
           className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
         >
           Flashcards

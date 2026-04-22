@@ -441,10 +441,15 @@ export function buildAdaptiveRecommendations(args: {
       kind: "mock",
     });
   }
+  const weakFlashcardsHref = args.preferredPathwayId?.trim()
+    ? `/app/flashcards/weak-areas?pathwayId=${encodeURIComponent(args.preferredPathwayId.trim())}`
+    : "/app/flashcards";
   secondaryCandidates.push({
     title: "Weak-topic flashcards",
-    href: "/app/flashcards/weak-areas",
-    reason: "Ties missed bank concepts to short spaced-repetition reps.",
+    href: weakFlashcardsHref,
+    reason: args.preferredPathwayId?.trim()
+      ? "Ties missed bank concepts to short spaced-repetition reps on your selected exam track."
+      : "Open Flashcards to pick your exam track, then run weak-area cards so they stay pathway-scoped.",
     kind: "review",
   });
 

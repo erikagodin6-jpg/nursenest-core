@@ -10,6 +10,9 @@ export type { RecallPrompt, CheckpointQuestion, KeyRecallFact };
  * (see {@link resolveTierBlocksForViewer}).
  */
 
+/** Embedded interactive sound libraries on catalog / DB pathway lessons. */
+export type PathwayEmbeddedSoundLibraryId = "cardiac_sounds" | "respiratory_sounds";
+
 /** Structured “exam focus” block for pathway lessons (how tested, traps, prioritization). */
 export type PathwayLessonExamFocus = {
   howTested?: string;
@@ -242,6 +245,11 @@ export type PathwayLessonRecord = {
   memoryAnchor?: string;
   /** Section ids skipped in the article when takeaways bullets were hoisted to strips. */
   omitHighYieldSectionIds?: string[];
+  /**
+   * Optional embedded interactive modules (sound libraries) rendered with the lesson body.
+   * When absent, a conservative heuristic may still attach libraries for tightly matched topics.
+   */
+  embeddedSoundLibraries?: PathwayEmbeddedSoundLibraryId[];
 };
 
 /** Hub cards must not link with empty or whitespace slugs (defensive; DB/catalog should always set slug). */

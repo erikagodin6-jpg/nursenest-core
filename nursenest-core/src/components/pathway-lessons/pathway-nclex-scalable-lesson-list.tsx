@@ -11,7 +11,7 @@ import {
   nclexPnLessonExamPreview,
   type NclexPnLessonPreviewFraming,
 } from "@/lib/lessons/nclex-pn-us-lesson-enrichment";
-import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
@@ -118,7 +118,7 @@ export function PathwayNclexScalableLessonSection({
           <Link href={pathwayHubAppQuestionsHref(pathwayId, l.topic)} className="text-sm font-semibold text-primary">
             Practice questions →
           </Link>
-          <Link href="/flashcards" className="text-sm font-semibold text-muted hover:text-primary">
+          <Link href={pathwayHubAppFlashcardsHref(pathwayId)} className="text-sm font-semibold text-muted hover:text-primary">
             Flashcards →
           </Link>
           {catHubHref ? (

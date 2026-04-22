@@ -12,6 +12,24 @@ export type ExamMicroQuestionPayload = {
 
 const LETTER_RE = /^[A-D]$/;
 
+/**
+ * Definition / acronym trivia (not mini NCLEX-style judgment items).
+ * Used on write validation and when parsing DB rows so trivial items do not use the exam stack.
+ */
+export function isTrivialDefinitionOnlyStem(stem: string): boolean {
+  const t = stem.trim();
+  if (t.length < 6) return true;
+  const trivialPatterns: RegExp[] = [
+    /\bwhat\s+does\s+[A-Z0-9]{1,12}\s+stand\s+for\b/i,
+    /\bwhat\s+is\s+the\s+(meaning|definition|abbreviation)\s+of\s+[A-Z0-9]{1,12}\b/i,
+    /\bdefine\s+(the\s+)?[A-Z]{2,12}\b/i,
+    /\bwhat\s+is\s+[A-Z]{2,12}\s*\??\s*$/i,
+    /\bspell\s+out\s+[A-Z]{2,12}\b/i,
+    /\bfull\s+form\s+of\s+[A-Z]{2,12}\b/i,
+  ];
+  return trivialPatterns.some((p) => p.test(t));
+}
+
 function normLetter(raw: string | null | undefined): string | null {
   if (raw == null) return null;
   const s = String(raw).trim().toUpperCase();
@@ -124,6 +142,13 @@ export function validateExamMicroQuestionInput(input: {
       ok: false,
       error:
         "Exam-style cards require: questionStem (≥8 chars), 3–4 answerOptions {letter,text}, correctAnswer A–D matching an option, rationaleCorrect (≥8 chars), and rationaleIncorrect entries for every distractor letter with rationale (≥4 chars each).",
+    };
+  }
+  if (isTrivialDefinitionOnlyStem(input.questionStem)) {
+    return {
+      ok: false,
+      error:
+        "Exam-style stems must be clinical judgment items (priority, assessment, intervention), not acronym or definition trivia (e.g. “What does X stand for?”).",
     };
   }
   return { ok: true, payload: parsed };

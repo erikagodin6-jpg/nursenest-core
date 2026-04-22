@@ -6,7 +6,7 @@ import {
   resolveSubscribedQuestionBankPathways,
 } from "@/lib/learner/tier-scoped-study-routes";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
-import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { buildLearnerPrimaryNavItems } from "@/lib/navigation/learner-primary-nav";
 
 const RN = "us-rn-nclex-rn";
@@ -135,6 +135,15 @@ describe("parseTierScopedAppStudyCallbackPath", () => {
     assert.equal(parseTierScopedAppStudyCallbackPath("/app/questions"), null);
   });
 
+  it("rejects /app/flashcards without pathwayId", () => {
+    assert.equal(parseTierScopedAppStudyCallbackPath("/app/flashcards"), null);
+  });
+
+  it("rejects pathwayId that fails slug validation", () => {
+    assert.equal(parseTierScopedAppStudyCallbackPath("/app/flashcards?pathwayId=bad"), null);
+    assert.equal(parseTierScopedAppStudyCallbackPath("/app/questions?pathwayId=RN"), null);
+  });
+
   it("rejects generic /app/dashboard", () => {
     assert.equal(parseTierScopedAppStudyCallbackPath("/app"), null);
     assert.equal(parseTierScopedAppStudyCallbackPath("/app/account"), null);
@@ -144,6 +153,10 @@ describe("parseTierScopedAppStudyCallbackPath", () => {
 describe("tier-scoped app hrefs", () => {
   it("RN hub practice href carries pathwayId only", () => {
     assert.match(pathwayHubAppQuestionsHref(RN), /^\/app\/questions\?pathwayId=us-rn-nclex-rn$/);
+  });
+
+  it("RN hub flashcards href carries pathwayId only", () => {
+    assert.match(pathwayHubAppFlashcardsHref(RN), /^\/app\/flashcards\?pathwayId=us-rn-nclex-rn$/);
   });
 
   it("RN hub CAT start href carries pathwayId only", () => {

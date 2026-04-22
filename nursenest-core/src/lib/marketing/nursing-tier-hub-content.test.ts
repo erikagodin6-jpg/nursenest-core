@@ -58,4 +58,21 @@ describe("buildNursingTierHubContent", () => {
     assert.equal(content.actions[0]?.href, "/us/np/fnp/lessons");
     assert.match(content.includedNote, /Family NP/i);
   });
+
+  it("Canadian RN hub copy names Canada (not US) and keeps /canada/ routes on cards", () => {
+    const pathway = getExamPathwayById("ca-rn-nclex-rn");
+    assert.ok(pathway);
+    const content = buildNursingTierHubContent(pathway);
+    assert.match(content.description, /Canada/);
+    assert.equal(content.description.includes("United States"), false);
+    assert.deepEqual(
+      content.actions.map((a) => a.href),
+      [
+        "/canada/rn/nclex-rn/lessons",
+        "/app/flashcards?pathwayId=ca-rn-nclex-rn",
+        "/canada/rn/nclex-rn/questions",
+        "/canada/rn/nclex-rn/cat",
+      ],
+    );
+  });
 });

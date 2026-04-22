@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ContentStatus, FlashcardItemKind, type Prisma } from "@prisma/client";
+import { ContentStatus, FlashcardItemKind, type Prisma, type TierCode } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
@@ -9,12 +9,13 @@ import {
   validateExamMicroQuestionInput,
   type ExamMicroQuestionPayload,
 } from "@/lib/flashcards/flashcard-exam-style";
+import { validateFlashcardCreationGuardrails } from "@/lib/flashcards/flashcard-creation-guardrails";
 
 const createSchema = z.object({
   front: z.string().min(4),
   back: z.string().min(4),
   country: z.enum(["CA", "US"]),
-  tier: z.enum(["RPN", "LVN_LPN", "RN", "NP", "ALLIED"]),
+  tier: z.enum(["RPN", "LVN_LPN", "RN", "NP", "ALLIED", "PRE_NURSING", "NEW_GRAD"]),
   categoryId: z.string().min(3),
   status: z.nativeEnum(ContentStatus).default(ContentStatus.DRAFT),
   examFamily: z.enum(["NCLEX_RN", "NCLEX_PN", "REX_PN", "NP", "ALLIED", "GENERIC"]).optional(),
@@ -122,8 +123,14 @@ export async function POST(req: Request) {
   }
 
   if (parsed.data.status === ContentStatus.PUBLISHED) {
-    if (!examTouched && (parsed.data.front.trim().length < 4 || parsed.data.back.trim().length < 4)) {
-      return NextResponse.json({ error: "Front/back too short to publish" }, { status: 400 });
+    if (!examPayload) {
+      return NextResponse.json(
+        {
+          error:
+            "Published flashcards must include a complete exam-style micro-question: examItemKind, questionStem, answerOptions (3–4), correctAnswer, rationaleCorrect, and rationaleIncorrect for each distractor. Definition-only or legacy front/back cards cannot be published.",
+        },
+        { status: 400 },
+      );
     }
   }
 
@@ -148,6 +155,25 @@ export async function POST(req: Request) {
 
   const front = examPayload ? examPayload.questionStem : restCard.front;
   const back = examPayload ? correctAnswerLine(examPayload) : restCard.back;
+
+  const examSlice = examPayload
+    ? {
+        itemKind: examPayload.itemKind,
+        questionStem: examPayload.questionStem,
+        answerOptions: examPayload.answerOptions,
+        rationaleCorrect: examPayload.rationaleCorrect,
+        rationaleIncorrect: examPayload.rationaleIncorrect,
+      }
+    : null;
+  const guard = validateFlashcardCreationGuardrails({
+    tier: parsed.data.tier as TierCode,
+    front,
+    back,
+    exam: examSlice,
+  });
+  if (!guard.ok) {
+    return NextResponse.json({ error: guard.error, code: guard.code }, { status: 400 });
+  }
 
   const examCreateData = examPayload
     ? {

@@ -88,11 +88,13 @@ function weakQbankRec(w: WeakTopicRow): StudyNextRecommendation {
   };
 }
 
-function weakFlashcardsRec(w: WeakTopicRow): StudyNextRecommendation {
+function weakFlashcardsRec(w: WeakTopicRow, pathwayId: string): StudyNextRecommendation {
   const r = reasonForWeakTopic(w);
+  const qs = new URLSearchParams();
+  qs.set("pathwayId", pathwayId);
   return {
     type: "weak_topic_flashcards",
-    href: "/app/flashcards/weak-areas",
+    href: `/app/flashcards/weak-areas?${qs.toString()}`,
     title: "Weak-area flashcards",
     reasonCode: r.code,
     reasonShort: `${r.short} Cards are filtered to your weak topics.`,
@@ -160,8 +162,9 @@ export function recommendNextActions(
   if (w) {
     priority.push(weakQbankRec(w));
   }
-  if (w && snapshot.hasWeakTopicFlashcards) {
-    priority.push(weakFlashcardsRec(w));
+  const weakFcPathway = defaultPathwayIdForRecs(snapshot);
+  if (w && snapshot.hasWeakTopicFlashcards && weakFcPathway) {
+    priority.push(weakFlashcardsRec(w, weakFcPathway));
   }
   priority.push(retestWeakPoolRec(snapshot));
   priority.push(mixedWeakBankRec());

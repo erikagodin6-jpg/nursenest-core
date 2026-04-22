@@ -1,9 +1,14 @@
-import { ContentStatus, type Prisma } from "@prisma/client";
+import { ContentStatus, type Prisma, TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { getWeakTopicTargetsForPractice, loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
-import { confidenceFromSignal, type RecommendationConfidence } from "@/lib/learner/topic-linking";
+import type { RecommendationConfidence } from "@/lib/learner/topic-linking";
+import {
+  resolveSubscribedQuestionBankPathways,
+  type ResolvedQuestionBankPathways,
+} from "@/lib/learner/tier-scoped-study-routes";
 import { shuffleIdsStableSeed } from "@/lib/flashcards/study-queue";
 import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
 
@@ -23,18 +28,71 @@ export type WeakFlashcardRow = {
   confidence: RecommendationConfidence;
 };
 
+const PRE_NURSING_PATHWAY_SENTINEL = "pre-nursing" as const;
+
+/**
+ * Resolves a single exam track for weak-area flashcards — same ladder as practice questions / custom-session:
+ * URL `pathwayId` wins when entitled, else `User.learnerPath` when it matches a compatible pathway, else a sole
+ * compatible pathway. No silent cross-tier pool when multiple pathways are entitled but none is selected.
+ */
+export async function resolveSubscriberWeakQueuePathwayId(
+  userId: string,
+  entitlement: AccessScope,
+  requestedPathwayId: string | null | undefined,
+): Promise<
+  | { ok: true; pathwayId: string; resolution: Extract<ResolvedQuestionBankPathways, { state: "scoped" }> }
+  | { ok: false; resolution: Exclude<ResolvedQuestionBankPathways, { state: "scoped" }> }
+> {
+  const compatibleDefs = await listPathwaysCompatibleWithSubscription(entitlement);
+  const compatible = compatibleDefs.map((p) => ({ id: p.id, shortName: p.shortName }));
+  const u = await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } });
+  const learnerPath = u?.learnerPath?.trim() ?? null;
+
+  const resolution = resolveSubscribedQuestionBankPathways({
+    requestedPathwayId: requestedPathwayId?.trim() || null,
+    compatible,
+    learnerPath,
+  });
+
+  if (resolution.state === "scoped") {
+    return { ok: true, pathwayId: resolution.defaultPathwayId, resolution };
+  }
+
+  if (resolution.state === "invalid_requested") {
+    return { ok: false, resolution };
+  }
+
+  /** Pre-nursing subscribers are not on EXAM_PATHWAYS; lock weak flashcards to the foundational sentinel. */
+  if (entitlement.tier === TierCode.PRE_NURSING) {
+    const scoped: Extract<ResolvedQuestionBankPathways, { state: "scoped" }> = {
+      state: "scoped",
+      defaultPathwayId: PRE_NURSING_PATHWAY_SENTINEL,
+      pathwayOptions: [{ id: PRE_NURSING_PATHWAY_SENTINEL, shortName: "Pre-Nursing" }],
+    };
+    return { ok: true, pathwayId: PRE_NURSING_PATHWAY_SENTINEL, resolution: scoped };
+  }
+
+  return { ok: false, resolution };
+}
+
 /**
  * Pulls published cards in-scope for the learner whose category label overlaps weak topics from practice stats.
  *
- * @param pathwayId - Same semantics as custom-study: passed to {@link flashcardPathwayAccessOptionsFromPathwayId}
+ * @param pathwayId - Required non-empty: passed to {@link flashcardPathwayAccessOptionsFromPathwayId}
  *   and then {@link flashcardAccessWhere} so tier/country/deck pathway gates match the learner's selected exam path
- *   (intersection cap — no broader tier expansion beyond the pathway ladder).
+ *   (intersection cap — no broader tier expansion beyond the pathway ladder). Callers must resolve via
+ *   {@link resolveSubscriberWeakQueuePathwayId} first — do not pass null to widen the pool.
  */
 export async function loadWeakAreaFlashcardsForUser(
   userId: string,
   entitlement: AccessScope,
   pathwayId: string | null = null,
 ): Promise<{ weakTopics: string[]; topicCodes: string[]; cards: WeakFlashcardRow[] }> {
+  const scopedPathwayId = pathwayId?.trim() ?? "";
+  if (!scopedPathwayId) {
+    return { weakTopics: [], topicCodes: [], cards: [] };
+  }
+
   const perf = await loadUnifiedTopicPerformance(userId, entitlement, MAX_WEAK_TOPIC_TERMS);
   const topics = perf.weakTopics.map((w) => w.topic.trim()).filter((t) => t.length > 1);
   const targets = await getWeakTopicTargetsForPractice(userId, entitlement, MAX_WEAK_TOPIC_TERMS);
@@ -49,7 +107,7 @@ export async function loadWeakAreaFlashcardsForUser(
   const confidenceByCode = new Map(targets.map((t) => [t.topicCode, t.confidence]));
   const or: Prisma.FlashcardWhereInput[] = topicCodes.map((code) => ({ category: { topicCode: code } }));
 
-  const pathwayOpts = flashcardPathwayAccessOptionsFromPathwayId(pathwayId);
+  const pathwayOpts = flashcardPathwayAccessOptionsFromPathwayId(scopedPathwayId);
   const accessWhere = flashcardAccessWhere(entitlement, pathwayOpts);
 
   const rows = await prisma.flashcard.findMany({

@@ -11,3 +11,10 @@ export function pathwayHubAppQuestionsHref(pathwayId: string, topic?: string): s
   if (topic && topic.trim()) q.set("topic", topic.trim());
   return `/app/questions?${q.toString()}`;
 }
+
+/** Tier-scoped learner flashcards hub — mirrors {@link pathwayHubAppQuestionsHref} query shape. */
+export function pathwayHubAppFlashcardsHref(pathwayId: string): string {
+  const q = new URLSearchParams();
+  q.set("pathwayId", pathwayId);
+  return `/app/flashcards?${q.toString()}`;
+}

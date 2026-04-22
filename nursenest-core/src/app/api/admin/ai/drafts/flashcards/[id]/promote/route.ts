@@ -1,9 +1,10 @@
-import { ContentStatus, DraftReviewStatus } from "@prisma/client";
+import { ContentStatus, DraftReviewStatus, type TierCode } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import type { NormalizedFlashcardDraft } from "@/lib/content/ai-draft-validation";
 import { prisma } from "@/lib/db";
+import { validateFlashcardCreationGuardrails } from "@/lib/flashcards/flashcard-creation-guardrails";
 
 const bodySchema = z.object({
   categoryId: z.string().min(5).optional(),
@@ -46,6 +47,16 @@ export async function POST(req: Request, ctx: Props) {
   const n = draft.normalizedJson as unknown as NormalizedFlashcardDraft;
 
   const deckId = parsed.data.deckId;
+
+  const guard = validateFlashcardCreationGuardrails({
+    tier: draft.tier as TierCode,
+    front: n.front,
+    back: n.back,
+    exam: null,
+  });
+  if (!guard.ok) {
+    return NextResponse.json({ error: guard.error, code: guard.code }, { status: 400 });
+  }
 
   const fc = await prisma.$transaction(async (tx) => {
     const nextPos = deckId

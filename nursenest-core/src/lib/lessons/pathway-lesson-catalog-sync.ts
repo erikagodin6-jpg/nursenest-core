@@ -15,6 +15,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-premium";
 import { PATHWAY_CATALOG_LIST_HARD_CAP } from "@/lib/lessons/pathway-lesson-scale";
 import {
+  type PathwayEmbeddedSoundLibraryId,
   type PathwayLessonAudienceTier,
   type PathwayLessonClinicalPriority,
   type PathwayLessonCountryScope,
@@ -33,6 +34,7 @@ import {
   type PathwayLessonSectionKind,
   type PathwayLessonYieldLevel,
 } from "@/lib/lessons/pathway-lesson-types";
+import { sanitizeEmbeddedSoundLibraries } from "@/lib/lessons/pathway-lesson-sound-libraries";
 import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
@@ -68,6 +70,7 @@ type CatalogShape = {
         countries?: PathwayLessonRuntimeCountry[];
         priority?: PathwayLessonPriority;
         examMeta?: PathwayLessonExamMeta[];
+        embeddedSoundLibraries?: PathwayEmbeddedSoundLibraryId[];
       }>;
     }
   >;
@@ -592,6 +595,9 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
 
   const system = typeof raw.system === "string" && raw.system.trim().length > 0 ? raw.system.trim() : "";
   const bodySystem = typeof raw.bodySystem === "string" ? raw.bodySystem : "";
+  const embeddedSoundLibraries = sanitizeEmbeddedSoundLibraries(
+    (raw as { embeddedSoundLibraries?: unknown }).embeddedSoundLibraries,
+  );
   const base: PathwayLessonRecord = {
     slug: raw.slug,
     title,
@@ -605,6 +611,7 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
     sections: expanded,
     ...(premiumOmitted?.length ? { premiumOmittedSections: premiumOmitted } : {}),
     ...(relatedLessonRefs?.length ? { relatedLessonRefs } : {}),
+    ...(embeddedSoundLibraries?.length ? { embeddedSoundLibraries } : {}),
     ...mergeLessonAudienceMetadata(raw, pathwayId),
   };
 

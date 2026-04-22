@@ -1,7 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { FlashcardItemKind } from "@prisma/client";
-import { parseExamMicroQuestionFromDbFields, validateExamMicroQuestionInput } from "@/lib/flashcards/flashcard-exam-style";
+import {
+  isTrivialDefinitionOnlyStem,
+  parseExamMicroQuestionFromDbFields,
+  validateExamMicroQuestionInput,
+} from "@/lib/flashcards/flashcard-exam-style";
 
 test("parseExamMicroQuestionFromDbFields accepts a valid 4-option card", () => {
   const payload = parseExamMicroQuestionFromDbFields({
@@ -59,4 +63,38 @@ test("validateExamMicroQuestionInput mirrors parser", () => {
     ],
   });
   assert.equal(v.ok, true);
+});
+
+test("isTrivialDefinitionOnlyStem flags acronym / definition stems", () => {
+  assert.equal(isTrivialDefinitionOnlyStem("What does ABG stand for?"), true);
+  assert.equal(isTrivialDefinitionOnlyStem("Define COPD."), true);
+  assert.equal(isTrivialDefinitionOnlyStem("What is MI?"), true);
+  assert.equal(
+    isTrivialDefinitionOnlyStem(
+      "A nurse is caring for a client receiving IV potassium chloride. Which action should the nurse take first if the client reports burning at the IV site?",
+    ),
+    false,
+  );
+});
+
+test("validateExamMicroQuestionInput rejects trivial acronym stems even with valid options", () => {
+  const v = validateExamMicroQuestionInput({
+    examItemKind: FlashcardItemKind.RECALL,
+    questionStem: "What does ABG stand for?",
+    answerOptions: [
+      { letter: "A", text: "Arterial blood gas" },
+      { letter: "B", text: "Airway breathing guide" },
+      { letter: "C", text: "Automatic blood glucose" },
+      { letter: "D", text: "Acid–base gradient" },
+    ],
+    correctAnswer: "A",
+    rationaleCorrect: "ABG commonly refers to arterial blood gas analysis in clinical documentation and care planning.",
+    rationaleIncorrect: [
+      { letter: "B", rationale: "This expansion is not the standard nursing meaning of ABG." },
+      { letter: "C", rationale: "ABG is not used for blood glucose monitoring in this sense." },
+      { letter: "D", rationale: "This is not a recognized meaning of the ABG abbreviation." },
+    ],
+  });
+  assert.equal(v.ok, false);
+  if (!v.ok) assert.match(v.error, /acronym|definition trivia/i);
 });

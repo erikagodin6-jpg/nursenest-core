@@ -80,6 +80,8 @@ import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
 import { resolvePathwayLessonBankAssessments } from "@/lib/lessons/lesson-bank-assessment-selection";
+import { PathwayEmbeddedSoundLibraries } from "@/components/lessons/pathway-lesson-sound-libraries-ui";
+import { resolvePathwayLessonSoundLibraries } from "@/lib/lessons/pathway-lesson-sound-libraries";
 
 function LessonBody({
   content,
@@ -535,6 +537,8 @@ export default async function LessonDetailPage({ params }: Props) {
         ? getAlliedProfessionByProfessionKey(entitlement.alliedCareer)?.h1
         : undefined;
 
+    const pathwayEmbeddedSoundLibraries = pathway ? resolvePathwayLessonSoundLibraries(record) : [];
+
     const pathwayLessonMainColumn = (
       <>
         {pathway ? (
@@ -582,6 +586,15 @@ export default async function LessonDetailPage({ params }: Props) {
             {pathway && record.memoryAnchor ? (
               <div className="mb-5">
                 <PathwayLessonMemoryAnchorStrip text={record.memoryAnchor} />
+              </div>
+            ) : null}
+            {pathway && pathwayEmbeddedSoundLibraries.length > 0 ? (
+              <div className="mb-6">
+                <PathwayEmbeddedSoundLibraries
+                  libraries={pathwayEmbeddedSoundLibraries}
+                  viewerTier={lessonViewerTier}
+                  countryCode={pathway.countryCode}
+                />
               </div>
             ) : null}
             <article className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
