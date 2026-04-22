@@ -8,7 +8,7 @@ test.describe("CAT pathway pre-click clarity (marketing)", () => {
   test("US NCLEX-RN CAT entry names the exam on the marketing surface", async ({ page, context }) => {
     await context.addCookies([{ name: MARKETING_REGION_COOKIE, value: "US", url: baseURL }]);
     await page.goto(`${baseURL}/us/rn/nclex-rn/cat`, { waitUntil: "domcontentloaded" });
-    await expect(page.getByRole("heading", { name: /Readiness Exam/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /NCLEX-RN CAT/i })).toBeVisible();
     await expect(page.getByRole("link", { name: /NCLEX-RN overview/i })).toBeVisible();
   });
 

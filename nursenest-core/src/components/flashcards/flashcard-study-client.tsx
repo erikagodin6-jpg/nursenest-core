@@ -332,7 +332,7 @@ export function FlashcardStudyClient({
             key={`${deckRef}-${sessionMountKey}-${resetToken}`}
             cards={activeCards}
             loading={loading}
-            layout="card"
+            layout="split"
             sessionMode={studyMode === "test" ? "test" : "learn"}
             initialCardIndex={resumeInitial.index}
             initialRevealed={resumeInitial.revealed}

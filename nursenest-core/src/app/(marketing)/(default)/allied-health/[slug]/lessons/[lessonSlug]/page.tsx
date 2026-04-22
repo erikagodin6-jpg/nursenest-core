@@ -235,7 +235,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
   const lessonAdjacentHrefs = mapPathwayLessonAdjacentToHrefs(adjacentSlugs, (slug) =>
     alliedHealthLessonDetailPath(prof.professionKey, slug),
   );
-  const hasLessonSequence = Boolean(lessonAdjacentHrefs.prev || lessonAdjacentHrefs.next);
+  const hasLessonSequence = Boolean(adjacentSlugs.prev || adjacentSlugs.next);
 
   let related: Awaited<ReturnType<typeof getRelatedPathwayLessons>> = [];
   try {
@@ -302,7 +302,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
       <div className="mb-4">
         <BreadcrumbTrail items={crumbs} />
       </div>
-      <PathwayLessonSequenceNavBar adjacent={lessonAdjacentHrefs} className="mb-4 hidden md:grid" />
+      <PathwayLessonSequenceNavBar adjacent={lessonAdjacentHrefs} className="mb-4" />
       <PathwayLessonProgressTracker
         pathwayId={pathway.id}
         lessonSlug={lesson.slug}

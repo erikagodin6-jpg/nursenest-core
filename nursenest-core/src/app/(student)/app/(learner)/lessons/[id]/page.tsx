@@ -89,6 +89,7 @@ import {
 } from "@/lib/lessons/lesson-bank-assessment-selection";
 import { PathwayLessonInteractiveModules } from "@/components/lessons/pathway-lesson-interactive-modules";
 import { getLessonInteractiveModules } from "@/lib/lessons/lesson-interactive-modules";
+import { loadPathwayLessonAdjacent, mapPathwayLessonAdjacentToAppHrefs } from "@/lib/lessons/pathway-lesson-adjacent";
 
 function LessonBody({
   content,
@@ -483,7 +484,17 @@ export default async function LessonDetailPage({ params }: Props) {
           )
         : Promise.resolve({ preTest: [], postTest: [] });
 
-    const [relatedQuestionStems, relatedLessonsRaw, initialProgress, pathwayStudySnap, bankLoopPack, bankAssessments] =
+    const pathwayLessonLocale =
+      record.localeMeta?.contentLocale?.trim() ||
+      record.localeMeta?.requestedContentLocale?.trim() ||
+      marketingLocale;
+
+    const pathwayAdjacentPromise = loadPathwayLessonAdjacent(pathwayId, record.slug, pathwayLessonLocale).catch(() => ({
+      prev: null,
+      next: null,
+    }));
+
+    const [relatedQuestionStems, relatedLessonsRaw, initialProgress, pathwayStudySnap, bankLoopPack, bankAssessments, pathwayAdjacentSlugs] =
       await Promise.all([
         pathway != null
           ? loadRelatedExamQuestionStemsForPathwayLesson({
@@ -513,6 +524,7 @@ export default async function LessonDetailPage({ params }: Props) {
           : Promise.resolve(null),
         bankLoopPackPromise,
         bankAssessmentsPromise,
+        pathwayAdjacentPromise,
       ]);
     const studyNextHint =
       Boolean(
@@ -544,18 +556,13 @@ export default async function LessonDetailPage({ params }: Props) {
         pathwayContinue = null;
       }
     }
-    // Derive next lesson for navigation (prefer adaptive continue, fall back to first related)
-    const nextLessonNav = (() => {
-      if (pathwayContinue?.primary) {
-        return { title: pathwayContinue.primary.title, href: pathwayContinue.primary.href };
-      }
-      const first = relatedLessonsDisplay[0];
-      if (first && pathway) {
-        const base = marketingPathwayLessonsIndexPath(pathway);
-        return { title: first.title, href: `${base}/${first.slug}` };
-      }
-      return null;
-    })();
+    const pathwayAdjacentApp = mapPathwayLessonAdjacentToAppHrefs(pathwayAdjacentSlugs);
+    const pathwayPrevApp = pathwayAdjacentApp.prev
+      ? { title: pathwayAdjacentApp.prev.title, href: pathwayAdjacentApp.prev.href }
+      : null;
+    const pathwayNextApp = pathwayAdjacentApp.next
+      ? { title: pathwayAdjacentApp.next.title, href: pathwayAdjacentApp.next.href }
+      : null;
 
     const examFramingLabel =
       examFraming.region !== "unknown" ? examFraming.examIdentityLabel : null;
@@ -604,7 +611,10 @@ export default async function LessonDetailPage({ params }: Props) {
           position="top"
           backHref="/app/lessons"
           backLabel={t("learner.lessons.detail.allLessons")}
-          nextLesson={null}
+          prevLesson={pathwayPrevApp}
+          nextLesson={pathwayNextApp}
+          previousLessonLabel={t("learner.lessons.detail.previousLesson")}
+          nextLessonLabel={t("learner.lessons.detail.nextLesson")}
         />
 
         <LessonAssessmentFlow
@@ -704,7 +714,10 @@ export default async function LessonDetailPage({ params }: Props) {
           position="bottom"
           backHref="/app/lessons"
           backLabel={t("learner.lessons.detail.allLessons")}
-          nextLesson={nextLessonNav}
+          prevLesson={pathwayPrevApp}
+          nextLesson={pathwayNextApp}
+          previousLessonLabel={t("learner.lessons.detail.previousLesson")}
+          nextLessonLabel={t("learner.lessons.detail.nextLesson")}
         />
 
         {isStudyCoachEnabled() && (

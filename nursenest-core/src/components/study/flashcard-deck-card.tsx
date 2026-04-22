@@ -219,7 +219,7 @@ export function FlashcardDeckCard({ deck }: { deck: DeckCardRow }) {
         ) : (
           <div className="flex flex-wrap items-center justify-end gap-2">
             <Link
-              href={`/app/flashcards/${deck.slug}?mode=learn`}
+              href={`/app/flashcards/${deck.slug}?start=1&mode=learn`}
               className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold transition"
               style={{
                 background: `color-mix(in srgb, ${accentVar} 18%, var(--bg-card, #fff))`,
@@ -230,7 +230,7 @@ export function FlashcardDeckCard({ deck }: { deck: DeckCardRow }) {
               Learn
             </Link>
             <Link
-              href={`/app/flashcards/${deck.slug}?mode=test`}
+              href={`/app/flashcards/${deck.slug}?start=1&mode=test`}
               className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold transition"
               style={{
                 background:

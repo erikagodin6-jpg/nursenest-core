@@ -175,7 +175,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
   const lessonAdjacentHrefs = mapPathwayLessonAdjacentToHrefs(adjacentSlugs, (slug) =>
     pathwayLessonPublicDetailPath(pathway, slug),
   );
-  const hasLessonSequence = Boolean(lessonAdjacentHrefs.prev || lessonAdjacentHrefs.next);
+  const hasLessonSequence = Boolean(adjacentSlugs.prev || adjacentSlugs.next);
   const visible = visibleSectionsForLesson(lesson, fullAccess);
   const visibleForRender = fullAccess ? visible : visible.map(sanitizePaywallPreviewSection);
   const previewLesson =
@@ -263,7 +263,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           dateModified={contentDates?.dateModified ?? null}
         />
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
-        <PathwayLessonSequenceNavBar adjacent={lessonAdjacentHrefs} className="mb-4 hidden md:grid" />
+        <PathwayLessonSequenceNavBar adjacent={lessonAdjacentHrefs} className="mb-4" />
         <PathwayLessonProgressTracker
           pathwayId={pathway.id}
           lessonSlug={lesson.slug}

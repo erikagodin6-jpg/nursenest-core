@@ -122,6 +122,29 @@ export function LessonNavButtons({
     );
   }
 
+  if (!showSequence) {
+    return (
+      <nav
+        className="mt-12 flex flex-wrap items-center justify-between gap-3 border-t pt-7"
+        style={{ borderColor: "color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle))" }}
+        aria-label="Lesson navigation"
+      >
+        <Link
+          href={backHref}
+          className="inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-semibold transition-colors hover:opacity-80"
+          style={{
+            borderColor: "var(--border-subtle)",
+            color: "var(--semantic-text-secondary)",
+            background: "var(--bg-card)",
+          }}
+        >
+          <ArrowLeft className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+          {backLabel}
+        </Link>
+      </nav>
+    );
+  }
+
   return (
     <nav
       className="mt-12 flex flex-col gap-3 border-t pt-7 sm:flex-row sm:flex-wrap sm:items-stretch sm:justify-between"

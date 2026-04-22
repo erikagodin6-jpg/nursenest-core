@@ -1,4 +1,4 @@
-import { FlashcardStudyClient } from "@/components/flashcards/flashcard-study-client";
+import { FlashcardDeckStudyShell } from "@/components/flashcards/flashcard-deck-study-shell";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
@@ -8,13 +8,14 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 
 type Props = {
   params: Promise<{ deckRef: string }>;
-  searchParams: Promise<{ shuffle?: string; mode?: string }>;
+  searchParams: Promise<{ shuffle?: string; mode?: string; start?: string }>;
 };
 
 export default async function FlashcardDeckStudyPage({ params, searchParams }: Props) {
   const { deckRef } = await params;
   const sp = await searchParams;
   const studyMode = sp.mode === "test" ? "test" : "learn";
+  const startImmediately = sp.start === "1";
   const session = await getProtectedRouteSession("(student).app.(learner).flashcards.[deckRef]");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
@@ -36,13 +37,14 @@ export default async function FlashcardDeckStudyPage({ params, searchParams }: P
   }
 
   return (
-    <FlashcardStudyClient
+    <FlashcardDeckStudyShell
       deckRef={deckRef}
       userId={userId}
       userLabel={userLabel}
       protectionFlags={protectionFlags}
       shuffleInitially={sp.shuffle === "1"}
       studyMode={studyMode}
+      startImmediately={startImmediately}
     />
   );
 }

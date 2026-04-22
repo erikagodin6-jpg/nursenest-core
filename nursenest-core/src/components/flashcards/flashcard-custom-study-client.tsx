@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
+import { ExamSessionShell } from "@/components/exam/exam-session-shell";
 import { cardMatchesStudyFilters, hasActiveStudyFilters } from "@/lib/flashcards/study-session-persistence";
 import { formatTitleCase } from "@/lib/format/text-case";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
@@ -23,6 +24,9 @@ type SessionPayload = {
     savedOnly?: boolean;
     notesOnly?: boolean;
     revisitOnly?: boolean;
+    notStudiedOnly?: boolean;
+    recentStudiedOnly?: boolean;
+    sourceKind?: string;
   };
   categoryOptions: Array<{ id: string; title: string; count: number }>;
   cards: Array<{
@@ -55,6 +59,24 @@ export function FlashcardCustomStudyClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [payload, setPayload] = useState<SessionPayload | null>(null);
+  const [reviewError, setReviewError] = useState<string | null>(null);
+
+  const onRate = useCallback(async (cardId: string, rating: "incorrect" | "unsure" | "known") => {
+    if (!cardId) return;
+    setReviewError(null);
+    try {
+      const res = await fetch(`/api/flashcards/cards/${encodeURIComponent(cardId)}/review`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rating }),
+      });
+      const data = (await res.json()) as { error?: string };
+      if (!res.ok) throw new Error(data.error ?? "Unable to save review");
+    } catch (e) {
+      setReviewError(e instanceof Error ? e.message : "Unable to save review");
+    }
+  }, []);
 
   const query = useMemo(() => {
     if (typeof window === "undefined") return "";
@@ -168,21 +190,27 @@ export function FlashcardCustomStudyClient() {
         ) : null}
       </div>
 
-      <ActiveStudySession
-        cards={activeCards}
-        sessionMeta={{
-          requestedCount: Number.isFinite(cardLimit) ? cardLimit : activeCards.length,
-          returnedCount: activeCards.length,
-          totalAvailable: payload.summary.matchingCards,
-          hasMore: payload.summary.matchingCards > activeCards.length,
-        }}
-        header={{
-          sessionTitle: "Custom Active Study Session",
-          modeLabel: MODE_LABEL[payload.summary.mode],
-          categoriesLabel: selectedTitles.join(", ") || "All Categories",
-          exitHref: "/app/flashcards",
-        }}
-      />
+      {reviewError ? <p className="mb-3 text-sm text-[var(--semantic-danger)]">{reviewError}</p> : null}
+
+      <ExamSessionShell neutralPalette immersive className="overflow-visible shadow-md">
+        <ActiveStudySession
+          cards={activeCards}
+          onRate={onRate}
+          sessionMeta={{
+            requestedCount: Number.isFinite(cardLimit) ? cardLimit : activeCards.length,
+            returnedCount: activeCards.length,
+            totalAvailable: payload.summary.matchingCards,
+            hasMore: payload.summary.matchingCards > activeCards.length,
+          }}
+          layout="split"
+          header={{
+            sessionTitle: "Custom Active Study Session",
+            modeLabel: MODE_LABEL[payload.summary.mode],
+            categoriesLabel: selectedTitles.join(", ") || "All Categories",
+            exitHref: "/app/flashcards",
+          }}
+        />
+      </ExamSessionShell>
 
       <div className="mt-6">
         <Link href="/app/flashcards" className="text-sm font-semibold text-primary">

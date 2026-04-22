@@ -63,7 +63,7 @@ export function PathwayCatSessionStartClient({
     () => (readinessConfig ? publicCopyForReadinessConfig(readinessConfig) : null),
     [readinessConfig],
   );
-  const examTitle = publicCopy?.title ?? (pathwayMeta ? catShort : "Exam pathway");
+  const examTitle = pathwayMeta ? pathwayCatLandingTitle(pathwayMeta) : "CAT session";
   const fallbackLessons = normalizedPathwayId ? (fallbackLessonsByPathway?.[normalizedPathwayId] ?? []) : [];
   const lessonsHubHref = pathwayMeta ? buildExamPathwayPath(pathwayMeta, "lessons") : "/app/lessons";
   const uiState = resolveCatStartUiState({
@@ -163,7 +163,7 @@ export function PathwayCatSessionStartClient({
       const timedMode = true;
       const timeLimitSec = (readinessConfig?.timeLimitMinutes ?? 300) * 60;
       const payload = {
-        title: publicCopy?.title ?? `${pathwayMeta?.shortName ?? "Pathway"} Readiness Exam`,
+        title: pathwayMeta ? pathwayCatLandingTitle(pathwayMeta) : "CAT session",
         questionCount,
         topicNames: [],
         difficultyMin: null,
@@ -397,7 +397,7 @@ export function PathwayCatSessionStartClient({
           className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
           onClick={() => setCustomizeOpen(true)}
         >
-          {creating ? "Starting…" : readinessLoading ? "Checking…" : "Start Readiness Exam"}
+          {creating ? "Starting…" : readinessLoading ? "Checking…" : "Start CAT session"}
         </button>
         {!readinessLoading && readinessCode === "readiness_fetch_failed" ? (
           <button
