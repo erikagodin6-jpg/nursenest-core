@@ -53,7 +53,7 @@ import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-p
 import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-continuation";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { isDatabaseUrlConfigured, type HubDbFailureCategory } from "@/lib/db/safe-database";
 import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study-mode-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
@@ -76,6 +76,8 @@ type RnLessonsHubActualCountsPayload = {
   afterPathwayContextCount: number | null;
   afterDedupeCount: number | null;
   renderableAllCount: number;
+  /** Rows after {@link prepareLessonsForHubCurriculum} (library dedupe + organize + href filter). */
+  afterPrepareCount: number | null;
   afterVerifyCount: number | null;
   finalRenderedCardCount: number | null;
   total: number;
@@ -88,11 +90,35 @@ function hubDiagFinite(n: number | undefined): number | null {
   return typeof n === "number" && Number.isFinite(n) ? n : null;
 }
 
+function marketingLessonsHubLoadErrorDetail(
+  lessonsPageLoad: { reason: string; timedOut: boolean; detail?: string; dbFailureCategory?: HubDbFailureCategory },
+): string {
+  if (lessonsPageLoad.reason === "invalid_payload") {
+    return "Load error: invalid response from the lesson service.";
+  }
+  const cat = lessonsPageLoad.dbFailureCategory;
+  if (cat === "db_missing_url") return "Database is not configured for this deployment (missing DATABASE_URL).";
+  if (cat === "db_auth_failure") {
+    return "Database authentication failed (check DATABASE_URL user/password and pooler credentials).";
+  }
+  if (cat === "db_timeout" || lessonsPageLoad.timedOut) {
+    return "The database request timed out or was cancelled. Try again in a moment.";
+  }
+  if (cat === "db_unreachable") return "We could not reach the database server. Try again shortly.";
+  if (cat === "db_query_shape_failure") return "Internal query error while loading lessons. Our team has been notified via logs.";
+  if (cat === "db_error") return "A database error occurred while loading lessons.";
+  return "The lesson list request failed before completion.";
+}
+
 function logRnLessonsHubActualCounts(
   routePathname: string,
   payload: RnLessonsHubActualCountsPayload,
   extra?: Record<string, string | number | boolean | undefined>,
 ): void {
+  const forceCanadaRnNclexHub =
+    routePathname === RN_CANADA_NCLEX_LESSONS_HUB_PATH;
+  /** Canada RN NCLEX hub: always emit ops grep line + structured log. Else: opt-in via `RN_LESSONS_HUB_DIAGNOSTICS=1`. */
+  if (!forceCanadaRnNclexHub && process.env.RN_LESSONS_HUB_DIAGNOSTICS !== "1") return;
   /** Required label for ops grep; body duplicates structured fields for copy/paste. */
   console.error("RN_LESSONS_HUB_ACTUAL_COUNTS", JSON.stringify({ routePathname, ...payload }));
   safeServerLog("pathway_lessons", "RN_LESSONS_HUB_ACTUAL_COUNTS", {
@@ -266,6 +292,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         afterPathwayContextCount: hubDiagFinite(ldEarly?.afterPathwayContextCount),
         afterDedupeCount: hubDiagFinite(ldEarly?.afterDedupeCount),
         renderableAllCount: raEarly.length,
+        afterPrepareCount: null,
         afterVerifyCount: null,
         finalRenderedCardCount: null,
         total: pageResult.total,
@@ -367,6 +394,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           afterPathwayContextCount: hubDiagFinite(errLd?.afterPathwayContextCount),
           afterDedupeCount: hubDiagFinite(errLd?.afterDedupeCount),
           renderableAllCount: errRenderable.length,
+          afterPrepareCount: null,
           afterVerifyCount: null,
           finalRenderedCardCount: null,
           total: pageResult.total,
@@ -404,15 +432,11 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         crumbs={crumbs}
         schemaItems={schemaItems}
         surfaceChips={lessonHubSurfaceChips}
-        errorTitle={"We're having trouble loading lessons"}
-        errorBody={"This isn't your fault. Something went wrong on our side."}
-        errorDetail={
-          lessonsPageLoad.reason === "invalid_payload"
-            ? "Load error: invalid response from the lesson service."
-            : lessonsPageLoad.timedOut
-              ? "The database request timed out or was cancelled."
-              : "The lesson list request failed before completion."
+        errorTitle={"Lessons temporarily unavailable"}
+        errorBody={
+          "We could not load the lesson library from our database right now. Your progress is safe — please retry in a moment."
         }
+        errorDetail={marketingLessonsHubLoadErrorDetail(lessonsPageLoad)}
         retryHref={`${base}${hubQuerySuffix}`}
         secondaryHref={overviewHref}
         secondaryLabel="Back to exam overview"
@@ -505,6 +529,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         afterPathwayContextCount: hubDiagFinite(ld?.afterPathwayContextCount),
         afterDedupeCount: hubDiagFinite(ld?.afterDedupeCount),
         renderableAllCount: renderableAllIn.length,
+        afterPrepareCount: hubCurriculumPrepared.length,
         afterVerifyCount: hubCurriculumLessons.length,
         finalRenderedCardCount: finalRenderedVisibleLessonLinkCount,
         total: pageResult.total,
@@ -654,6 +679,33 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   );
 
   if (pageResult.total === 0) {
+    if (isRnCanadaNclexLessonsHub && lessonsPageLoad.status === "ok") {
+      const zr = pageResult.renderableAll ?? pageResult.items;
+      const zd = pageResult.loadDiagnostics;
+      logRnLessonsHubActualCounts(
+        RN_CANADA_NCLEX_LESSONS_HUB_PATH,
+        {
+          rawDbCount: hubDiagFinite(zd?.rawDbCount),
+          afterSlugNormalizeCount: hubDiagFinite(zd?.afterSlugNormalizeCount),
+          afterPathwayContextCount: hubDiagFinite(zd?.afterPathwayContextCount),
+          afterDedupeCount: hubDiagFinite(zd?.afterDedupeCount),
+          renderableAllCount: zr.length,
+          afterPrepareCount: null,
+          afterVerifyCount: null,
+          finalRenderedCardCount: null,
+          total: pageResult.total,
+          snapshotUsed: lessonsHubSnapshotDiagnostics.snapshotUsed,
+          verifyCallsCount: null,
+          topDropReasons: [],
+        },
+        {
+          pathway_id: pathway.id,
+          phase: "zero_total_ok",
+          hub_aggregates_ms: hubAggregatesDurationMs,
+          lessons_page_source: lessonsPageLoad.sourceUsed,
+        },
+      );
+    }
     return (
       <LessonsPageShell
         title={pageTitle}

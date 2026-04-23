@@ -39,6 +39,11 @@ test("US RN hub keeps CA-only stamps symmetrically", () => {
   assert.equal(out.length, 1);
 });
 
+test("US RN new-grad transition hub does not apply NCLEX-RN US/CA peer stamps (country-strict)", () => {
+  const out = sortAndFilterLessonsForPathwayContext("us-rn-new-grad-transition", [rnLesson("ng-ca-only", ["CA"])]);
+  assert.equal(out.length, 0);
+});
+
 test("Non-NCLEX-RN pathways do not apply the US/CA peer stamp (RPN / Rex stays region-scoped)", () => {
   const rex: PathwayLessonRecord = {
     slug: "rex-only-us",

@@ -18,6 +18,8 @@ import { sitemapXmlResponse } from "@/lib/seo/sitemap-xml-http";
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+/** Large merged urlsets (pathway lessons + locales + blog) can exceed default platform limits. */
+export const maxDuration = 120;
 
 /** Log when generation crosses this — sitemap work includes optional Prisma (blog + pathway URLs). */
 const SITEMAP_SLOW_MS = 1500;
@@ -41,6 +43,10 @@ export async function GET(req: Request) {
     const xml = await buildSingleSitemapXmlSafe();
     const ms = Date.now() - t0;
     const approxLen = typeof xml === "string" ? xml.length : 0;
+    safeServerLog("seo", "sitemap_xml_request_complete", {
+      durationMs: String(ms),
+      approxLen: String(approxLen),
+    });
     if (ms > SITEMAP_SLOW_MS) {
       logCrawlSurfaceEvent({
         routeType: "marketing.sitemap_xml",

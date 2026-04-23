@@ -6,6 +6,7 @@ import "../../../scripts/stub-server-only.cjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { loadPathwayLessonsHubPageWithTelemetry } from "@/lib/exam-pathways/marketing-hub-lessons-page-fetch";
+import { HubLessonsListDatabaseError } from "@/lib/lessons/hub-lessons-database-error";
 import type { PathwayLessonsPageResult } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 
@@ -92,6 +93,29 @@ test("failed lessons page fetch returns error state (not ok-with-empty inventory
   }
   assert.equal(pageResult.total, 0);
   assert.equal(pageResult.items.length, 0);
+});
+
+test("hub database auth failure surfaces error with dbFailureCategory", async () => {
+  const mockFetch = async () => {
+    throw new HubLessonsListDatabaseError({
+      category: "db_auth_failure",
+      message: "FATAL: password authentication failed for user",
+    });
+  };
+
+  const { pageResult, lessonsPageLoad } = await loadPathwayLessonsHubPageWithTelemetry(
+    ctx.pathwayId,
+    args,
+    ctx,
+    mockFetch,
+  );
+
+  assert.equal(lessonsPageLoad.status, "error");
+  if (lessonsPageLoad.status === "error") {
+    assert.equal(lessonsPageLoad.reason, "fetch_failed");
+    assert.equal(lessonsPageLoad.dbFailureCategory, "db_auth_failure");
+  }
+  assert.equal(pageResult.total, 0);
 });
 
 test("primary failure with snapshot where total disagrees with renderableAll is rejected (no fake full library)", async () => {

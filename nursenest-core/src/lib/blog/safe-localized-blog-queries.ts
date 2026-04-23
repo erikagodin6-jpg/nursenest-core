@@ -18,7 +18,7 @@ import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regio
 import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
 
 const LOCALIZED_BLOG_PUBLIC_QUERY_TIMEOUT_MS = 1000;
-const LOCALIZED_BLOG_SITEMAP_TIMEOUT_MS = 800;
+const LOCALIZED_BLOG_SITEMAP_TIMEOUT_MS = 20_000;
 
 async function withLocalizedBlogFallback<T>(run: () => Promise<T>, fallback: T, label: string, timeoutMs = LOCALIZED_BLOG_PUBLIC_QUERY_TIMEOUT_MS): Promise<T> {
   return withDatabaseFallbackTimeout(run, fallback, timeoutMs, {

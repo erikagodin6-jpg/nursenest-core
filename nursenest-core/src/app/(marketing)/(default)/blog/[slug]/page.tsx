@@ -9,11 +9,8 @@ import {
   parseInternalLinkPlanJson,
   stripBrokenOrEmptyImagesFromHtml,
 } from "@/lib/blog/blog-image-workflow";
-import {
-  getBlogPostMetaBySlug,
-  getPublishedBlogPostBySlug,
-  isBlogPostMetaVisible,
-} from "@/lib/blog/safe-blog-queries";
+import { isBlogPostMarketingMetaVisible } from "@/lib/blog/blog-visibility";
+import { getBlogPostMetaBySlug, getPublishedBlogPostBySlug } from "@/lib/blog/safe-blog-queries";
 import { EeatContentAttribution } from "@/components/seo/eeat-content-attribution";
 import {
   BlogFaqPageJsonLd,
@@ -64,10 +61,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const pathname = `/blog/${slug}`;
   return safeGenerateMetadata(
     async () => {
-      const visible = await isBlogPostMetaVisible(slug);
-      if (!visible) return {};
       const post = await getBlogPostMetaBySlug(slug);
       if (!post) return {};
+      if (
+        !isBlogPostMarketingMetaVisible({
+          postStatus: post.postStatus,
+          publishAt: post.publishAt,
+          scheduledAt: post.scheduledAt,
+        })
+      ) {
+        return {};
+      }
       const seo = parseInternalLinkPlanJson(post.internalLinkPlan).seo;
       const title = blogBrowserTitleForPublicPost({
         seoTitle: post.seoTitle,

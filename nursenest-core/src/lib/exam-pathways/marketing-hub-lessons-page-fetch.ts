@@ -2,9 +2,11 @@ import { emptyPathwayLessonsPageResult } from "@/lib/exam-pathways/marketing-hub
 import type { MarketingHubDataLoadContext } from "@/lib/exam-pathways/marketing-hub-data-context";
 import type { LoadPathwayLessonsHubPageArgs } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import { getPathwayLessonsPageFresh, type PathwayLessonsPageResult } from "@/lib/lessons/pathway-lesson-loader";
+import { classifyHubDbFailure, type HubDbFailureCategory } from "@/lib/db/safe-database";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { logContractLoadDiagnostics } from "@/lib/loading/critical-load-outcome";
+import { HubLessonsListDatabaseError } from "@/lib/lessons/hub-lessons-database-error";
 import { readPathwayLessonsHubPageSnapshot } from "@/lib/study-content-failover/pathway-lessons-hub-snapshot-read";
 import { snapshotAgeMs as computeSnapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
 import type { StudyDataSourceUsed, StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failover/study-published-snapshot-types";
@@ -88,7 +90,15 @@ export type PathwayLessonsHubPageLoadState =
       fetchDurationMs: number;
       timedOut: boolean;
       detail?: string;
+      /** Present when `reason === "fetch_failed"` — maps to ops categories (`db_auth_failure`, etc.). */
+      dbFailureCategory?: HubDbFailureCategory;
     };
+
+function hubLessonsDbFailureCategory(primaryError: unknown): HubDbFailureCategory | undefined {
+  if (!primaryError) return undefined;
+  if (primaryError instanceof HubLessonsListDatabaseError) return primaryError.category;
+  return classifyHubDbFailure(primaryError);
+}
 
 function logLessonsHubOk(
   ctx: MarketingHubDataLoadContext,
@@ -283,6 +293,7 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
     const message = primaryError instanceof Error ? primaryError.message : String(primaryError);
     const timedOut = /timeout|ETIMEDOUT|hub_optional_task_timeout/i.test(message);
     logHubLessonsPageFailed(ctx, primaryError);
+    const dbFailureCategory = hubLessonsDbFailureCategory(primaryError);
     safeServerLog("exam_pathway_hub", "lessons_hub_page_fetch", {
       event: "lessons_hub_page_fetch",
       outcome: "error",
@@ -297,6 +308,7 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
       response_total: 0,
       error_message: message.slice(0, 500),
       source_used: "primary",
+      ...(dbFailureCategory ? { db_failure_category: dbFailureCategory } : {}),
     });
     recordRouteRenderFallback({
       fallbackType: "hub_lessons_page_load_failed",
@@ -329,6 +341,7 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
         fetchDurationMs,
         timedOut,
         detail: message.slice(0, 500),
+        ...(dbFailureCategory ? { dbFailureCategory } : {}),
       },
       snapshotDiagnostics,
     };

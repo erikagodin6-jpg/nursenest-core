@@ -35,6 +35,12 @@ export type DatabaseTimeoutLogContext = {
 
 export type DatabaseFallbackKind = "db_timeout" | "db_unreachable" | "db_auth_failure" | "db_error";
 
+/** Superset for ops scripts + lessons hub (missing URL and Prisma invocation shape). */
+export type HubDbFailureCategory =
+  | DatabaseFallbackKind
+  | "db_missing_url"
+  | "db_query_shape_failure";
+
 function errorMessage(e: unknown): string {
   return e instanceof Error ? e.message : String(e);
 }
@@ -68,6 +74,16 @@ export function classifyDatabaseFallbackKind(e: unknown): DatabaseFallbackKind {
   }
 
   return "db_error";
+}
+
+/**
+ * Classify DB/connectivity failures for **lessons hub** and `db:connectivity-check` (includes URL + Prisma shape).
+ */
+export function classifyHubDbFailure(e: unknown): HubDbFailureCategory {
+  if (!isDatabaseUrlConfigured()) return "db_missing_url";
+  const msg = errorMessage(e);
+  if (/Invalid `prisma\.|Invalid `PrismaClient/i.test(msg)) return "db_query_shape_failure";
+  return classifyDatabaseFallbackKind(e);
 }
 
 export async function withDatabaseFallbackTimeout<T>(

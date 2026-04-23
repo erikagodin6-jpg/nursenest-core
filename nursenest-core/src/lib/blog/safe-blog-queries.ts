@@ -2,7 +2,8 @@ import type { BlogPost, Prisma } from "@prisma/client";
 import { BlogPostStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
-import { blogLiveWhere, blogPostIsLive } from "@/lib/blog/blog-visibility";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { blogLiveWhere, blogPostIsLive, isBlogPostMarketingMetaVisible } from "@/lib/blog/blog-visibility";
 import {
   getStaticBlogPost,
   listStaticBlogPostsForIndex,
@@ -13,9 +14,13 @@ import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
 /** @deprecated Use `isDatabaseUrlConfigured` from `@/lib/db/safe-database`. */
 export const isBlogDatabaseConfigured = isDatabaseUrlConfigured;
 
-/** Cold-start / pooled Prisma can exceed 1s; empty lists are worse than a slightly slower hub read. */
-const BLOG_PUBLIC_QUERY_TIMEOUT_MS = 2800;
-const BLOG_SITEMAP_QUERY_TIMEOUT_MS = 800;
+/**
+ * Cold-start / pooled Prisma can be slow; empty `/blog` after a transient timeout is worse than
+ * waiting longer on list/detail reads (bounded by `take` / pagination).
+ */
+const BLOG_PUBLIC_QUERY_TIMEOUT_MS = 12_000;
+/** Batched slug walk for sitemap — one outer budget for many small `findMany` pages. */
+const BLOG_SITEMAP_SLUG_LIST_TIMEOUT_MS = 35_000;
 
 async function withBlogTimeoutFallback<T>(
   run: () => Promise<T>,
@@ -74,8 +79,8 @@ export async function canUseStaticBlogFallback(): Promise<boolean> {
   const probe = await withBlogTimeoutFallback(
     async () => ({ ok: true as const, liveCount: await prisma.blogPost.count({ where: blogLiveWhere(now) }) }),
     { ok: false as const },
+    "blog_static_fallback_probe",
     BLOG_PUBLIC_QUERY_TIMEOUT_MS,
-    { scope: "blog", label: "blog_static_fallback_probe" },
   );
   if (!probe.ok) return false;
   return probe.liveCount === 0;
@@ -100,8 +105,54 @@ type BlogQueryScope = {
   allowSourceLocaleFallback?: boolean;
 };
 
-/** Default page size for `/blog` and `/blog/tag/*` lists (bounded memory per request). */
-export const BLOG_LIST_PAGE_SIZE = 24;
+/**
+ * Default page size for `/blog` and `/blog/tag/*` lists.
+ * Uses {@link API_LIST_PAGE_SIZE_HARD_MAX} as ceiling (defense-in-depth for list APIs).
+ */
+export const BLOG_LIST_PAGE_SIZE = 50;
+
+/** Opt-in: set `BLOG_INDEX_DIAGNOSTICS=1` in production to log index health (counts + slugs) on each `/blog` data load. */
+async function logBlogIndexDiagnosticsIfEnabled(args: {
+  posts: BlogIndexPost[];
+  totalMatchingLiveFilter: number;
+  page: number;
+  pageSize: number;
+  usedStaticFallback: boolean;
+  scope?: BlogQueryScope;
+}): Promise<void> {
+  if (process.env.BLOG_INDEX_DIAGNOSTICS !== "1") return;
+  const statusesBreakdownPageSlice = args.posts.reduce<Record<string, number>>((acc, p) => {
+    acc[p.postStatus] = (acc[p.postStatus] ?? 0) + 1;
+    return acc;
+  }, {});
+  type StatusAgg = { postStatus: BlogPostStatus; _count: { _all: number } };
+  const dbAllStatuses = await withBlogTimeoutFallback<StatusAgg[]>(
+    () => prisma.blogPost.groupBy({ by: ["postStatus"], _count: { _all: true } }),
+    [],
+    "blog_index_diag_groupby_all",
+  );
+  const statusesBreakdownDbAll = Object.fromEntries(dbAllStatuses.map((r) => [r.postStatus, r._count._all])) as Record<
+    string,
+    number
+  >;
+  const liveRowCount = await withBlogTimeoutFallback(
+    () => prisma.blogPost.count({ where: blogLiveWhere(new Date()) }),
+    -1,
+    "blog_index_diag_live_total",
+  );
+  safeServerLog("blog", "BLOG_INDEX_DIAGNOSTICS", {
+    totalPostsReturned: args.posts.length,
+    totalMatchingLiveFilter: args.totalMatchingLiveFilter,
+    liveRowCountUnderBlogLiveWhere: liveRowCount,
+    statusesBreakdownPageSlice,
+    statusesBreakdownDbAll,
+    first20Slugs: args.posts.slice(0, 20).map((p) => p.slug),
+    page: args.page,
+    pageSize: args.pageSize,
+    usedStaticFallback: args.usedStaticFallback ? "1" : "0",
+    scoped: Boolean(args.scope?.locale || args.scope?.careerSlug || args.scope?.exam),
+  });
+}
 
 export async function countPublishedBlogPosts(): Promise<number> {
   if (shouldSkipBlogDbForProductionBuild()) {
@@ -124,7 +175,16 @@ export async function getPublishedBlogPostsPage(
   const safePage = Math.max(1, page);
   const safeSize = Math.min(API_LIST_PAGE_SIZE_HARD_MAX, Math.max(1, Math.floor(pageSize)));
   if (shouldSkipBlogDbForProductionBuild()) {
-    return blogIndexPostsFromStaticCorpusOnly(safePage, safeSize);
+    const built = blogIndexPostsFromStaticCorpusOnly(safePage, safeSize);
+    await logBlogIndexDiagnosticsIfEnabled({
+      posts: built.posts,
+      totalMatchingLiveFilter: built.total,
+      page: built.page,
+      pageSize: built.pageSize,
+      usedStaticFallback: true,
+      scope,
+    });
+    return built;
   }
   const includeTotal = options?.includeTotal !== false;
   const now = new Date();
@@ -142,7 +202,8 @@ export async function getPublishedBlogPostsPage(
       () =>
         prisma.blogPost.findMany({
           where,
-          orderBy: { createdAt: "desc" },
+          /** Newest activity first; slug tie-breaker keeps order stable (e.g. pathophysiology series). */
+          orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }, { slug: "asc" }],
           select: indexSelect,
           skip: (safePage - 1) * safeSize,
           take: safeSize,
@@ -174,7 +235,7 @@ export async function getPublishedBlogPostsPage(
         () =>
           prisma.blogPost.findMany({
             where: sourceWhere,
-            orderBy: { createdAt: "desc" },
+            orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }, { slug: "asc" }],
             select: indexSelect,
             skip: (safePage - 1) * safeSize,
             take: safeSize,
@@ -186,11 +247,55 @@ export async function getPublishedBlogPostsPage(
         ? withBlogTimeoutFallback(() => prisma.blogPost.count({ where: sourceWhere }), 0, "blog_posts_page.source_total")
         : Promise.resolve(0),
     ]);
+    if (process.env.BLOG_INDEX_COUNTS === "1") {
+      safeServerLog("seo", "BLOG_INDEX_COUNTS", {
+        scope: "getPublishedBlogPostsPage_locale_fallback",
+        page: String(safePage),
+        pageSize: String(safeSize),
+        returnedRows: String(sourcePosts.length),
+        totalCount: String(sourceTotal),
+        firstTenSlugs: sourcePosts
+          .slice(0, 10)
+          .map((p) => p.slug)
+          .join(","),
+        usedStaticFallback: "0",
+      });
+    }
+    await logBlogIndexDiagnosticsIfEnabled({
+      posts: sourcePosts,
+      totalMatchingLiveFilter: sourceTotal,
+      page: safePage,
+      pageSize: safeSize,
+      usedStaticFallback: false,
+      scope,
+    });
     return { posts: sourcePosts, total: sourceTotal, page: safePage, pageSize: safeSize };
   }
   /** Never replace a successful DB page with static when this request already saw live inventory. */
   const fallbackAllowed = await canUseStaticBlogFallback();
   if (!fallbackAllowed || dbTotal > 0 || dbPosts.length > 0) {
+    if (process.env.BLOG_INDEX_COUNTS === "1") {
+      safeServerLog("seo", "BLOG_INDEX_COUNTS", {
+        scope: "getPublishedBlogPostsPage",
+        page: String(safePage),
+        pageSize: String(safeSize),
+        returnedRows: String(dbPosts.length),
+        totalCount: String(dbTotal),
+        firstTenSlugs: dbPosts
+          .slice(0, 10)
+          .map((p) => p.slug)
+          .join(","),
+        usedStaticFallback: "0",
+      });
+    }
+    await logBlogIndexDiagnosticsIfEnabled({
+      posts: dbPosts,
+      totalMatchingLiveFilter: dbTotal,
+      page: safePage,
+      pageSize: safeSize,
+      usedStaticFallback: false,
+      scope,
+    });
     return { posts: dbPosts, total: dbTotal, page: safePage, pageSize: safeSize };
   }
   const all = listStaticBlogPostsForIndex().map((p) => ({
@@ -205,6 +310,28 @@ export async function getPublishedBlogPostsPage(
   const total = all.length;
   const posts = all.slice((safePage - 1) * safeSize, (safePage - 1) * safeSize + safeSize);
   if (total === 0) return { posts: dbPosts, total: dbTotal, page: safePage, pageSize: safeSize };
+  if (process.env.BLOG_INDEX_COUNTS === "1") {
+    safeServerLog("seo", "BLOG_INDEX_COUNTS", {
+      scope: "getPublishedBlogPostsPage",
+      page: String(safePage),
+      pageSize: String(safeSize),
+      returnedRows: String(posts.length),
+      totalCount: String(total),
+      firstTenSlugs: posts
+        .slice(0, 10)
+        .map((p) => p.slug)
+        .join(","),
+      usedStaticFallback: "1",
+    });
+  }
+  await logBlogIndexDiagnosticsIfEnabled({
+    posts,
+    totalMatchingLiveFilter: total,
+    page: safePage,
+    pageSize: safeSize,
+    usedStaticFallback: true,
+    scope,
+  });
   return { posts, total, page: safePage, pageSize: safeSize };
 }
 
@@ -374,14 +501,11 @@ export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope
 export async function isBlogPostMetaVisible(slug: string, scope?: BlogQueryScope): Promise<boolean> {
   const meta = await getBlogPostMetaBySlug(slug, scope);
   if (!meta) return false;
-  if (
-    meta.postStatus === BlogPostStatus.DRAFT ||
-    meta.postStatus === BlogPostStatus.NEEDS_REVIEW ||
-    meta.postStatus === BlogPostStatus.FAILED
-  ) {
-    return false;
-  }
-  return blogPostIsLive({ postStatus: meta.postStatus, publishAt: meta.publishAt, scheduledAt: meta.scheduledAt });
+  return isBlogPostMarketingMetaVisible({
+    postStatus: meta.postStatus,
+    publishAt: meta.publishAt,
+    scheduledAt: meta.scheduledAt,
+  });
 }
 
 export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQueryScope): Promise<BlogPost | null> {
@@ -463,7 +587,7 @@ export async function getPublishedBlogPostsByTagPage(
       () =>
         prisma.blogPost.findMany({
           where,
-          orderBy: { createdAt: "desc" },
+          orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }, { slug: "asc" }],
           select: tagListSelect,
           skip: (safePage - 1) * safeSize,
           take: safeSize,
@@ -478,35 +602,67 @@ export async function getPublishedBlogPostsByTagPage(
 
 /** Sitemap helpers: hard cap per sitemap spec (~50k URLs); split indexes if you exceed this. */
 const SITEMAP_BLOG_ROW_CAP = 50_000;
+const SITEMAP_BLOG_SLUG_PAGE_SIZE = 2_000;
 
 export async function getSitemapPublishedBlogSlugs(): Promise<{ slug: string; updatedAt: Date }[]> {
   const now = new Date();
   return withBlogTimeoutFallback(
-    () =>
-      prisma.blogPost.findMany({
-        where: blogLiveWhere(now),
-        select: { slug: true, updatedAt: true },
-        orderBy: { slug: "asc" },
-        take: SITEMAP_BLOG_ROW_CAP,
-      }),
+    async () => {
+      const out: { slug: string; updatedAt: Date }[] = [];
+      let cursor: { slug: string } | undefined;
+      for (;;) {
+        const page = await prisma.blogPost.findMany({
+          where: blogLiveWhere(now),
+          select: { slug: true, updatedAt: true },
+          orderBy: { slug: "asc" },
+          take: SITEMAP_BLOG_SLUG_PAGE_SIZE,
+          ...(cursor ? { cursor, skip: 1 } : {}),
+        });
+        if (page.length === 0) break;
+        for (const r of page) {
+          const s = r.slug?.trim();
+          if (s) out.push({ slug: s, updatedAt: r.updatedAt });
+        }
+        if (out.length >= SITEMAP_BLOG_ROW_CAP) break;
+        if (page.length < SITEMAP_BLOG_SLUG_PAGE_SIZE) break;
+        const last = page[page.length - 1];
+        if (!last?.slug) break;
+        cursor = { slug: last.slug };
+      }
+      return out.slice(0, SITEMAP_BLOG_ROW_CAP);
+    },
     [],
-    "blog_sitemap.slugs",
-    BLOG_SITEMAP_QUERY_TIMEOUT_MS,
+    "blog_sitemap.slugs_batched",
+    BLOG_SITEMAP_SLUG_LIST_TIMEOUT_MS,
   );
 }
 
 export async function getSitemapBlogTagRows(): Promise<{ tags: string[] }[]> {
   const now = new Date();
   return withBlogTimeoutFallback(
-    () =>
-      prisma.blogPost.findMany({
-        where: blogLiveWhere(now),
-        select: { tags: true },
-        orderBy: { slug: "asc" },
-        take: SITEMAP_BLOG_ROW_CAP,
-      }),
+    async () => {
+      const out: { tags: string[] }[] = [];
+      let cursor: { slug: string } | undefined;
+      for (;;) {
+        const page = await prisma.blogPost.findMany({
+          where: blogLiveWhere(now),
+          select: { tags: true, slug: true },
+          orderBy: { slug: "asc" },
+          take: SITEMAP_BLOG_SLUG_PAGE_SIZE,
+          ...(cursor ? { cursor, skip: 1 } : {}),
+        });
+        if (page.length === 0) break;
+        out.push(...page.map((r) => ({ tags: r.tags })));
+        if (out.length >= SITEMAP_BLOG_ROW_CAP) break;
+        if (page.length < SITEMAP_BLOG_SLUG_PAGE_SIZE) break;
+        const last = page[page.length - 1];
+        if (!last?.slug) break;
+        cursor = { slug: last.slug };
+      }
+      return out.slice(0, SITEMAP_BLOG_ROW_CAP);
+    },
     [],
-    "blog_sitemap.tags",
-    BLOG_SITEMAP_QUERY_TIMEOUT_MS,
+    "blog_sitemap.tags_batched",
+    BLOG_SITEMAP_SLUG_LIST_TIMEOUT_MS,
   );
 }

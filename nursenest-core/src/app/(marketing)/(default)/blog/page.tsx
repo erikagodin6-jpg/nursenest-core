@@ -45,8 +45,11 @@ export async function generateMetadata(): Promise<Metadata> {
   );
 }
 
-/** ISR: list is bounded (page size); cache publicly for one hour and revalidate in the background. */
-export const revalidate = 3600;
+/**
+ * ISR backup window. On-demand revalidation runs on publish/approve/cron; keep this shorter so a missed
+ * `revalidatePath` does not hide new posts for a full hour.
+ */
+export const revalidate = 180;
 
 type Props = { searchParams: Promise<{ page?: string }> };
 

@@ -153,7 +153,10 @@ export function collectPreNursingSeoUrls(origin: string): string[] {
 }
 
 /** Pathway lesson hubs, topic clusters, and lesson detail pages (DB-first loader). */
-export async function collectPathwayLessonSeoUrls(origin: string): Promise<string[]> {
+export async function collectPathwayLessonSeoUrls(
+  origin: string,
+  opts?: { deadlineEpochMs?: number },
+): Promise<string[]> {
   const o = normalizeOrigin(origin);
   if (shouldSkipDbBackedSitemapUrlsForBuild()) {
     safeServerLog("seo", "sitemap_pathway_urls_skipped_for_build", {
@@ -186,6 +189,14 @@ export async function collectPathwayLessonSeoUrls(origin: string): Promise<strin
   const pathwayIds = await listPathwayIdsWithLessons();
   const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-pathways-catalog");
   for (const pid of pathwayIds) {
+    if (opts?.deadlineEpochMs != null && Date.now() > opts.deadlineEpochMs) {
+      safeServerLog("seo", "sitemap_pathway_lesson_deadline_stop", {
+        phase: "pathway_iter",
+        urlsSoFar: String(urls.length),
+      });
+      logSeoEmittedUrlBatch("sitemap_pathway_lesson_urls", urls);
+      return urls;
+    }
     if (!isPathwayPublishedForPublicSite(pid)) continue;
     const p = getExamPathwayById(pid);
     if (!p || p.status === "hidden") continue;
@@ -202,6 +213,15 @@ export async function collectPathwayLessonSeoUrls(origin: string): Promise<strin
     }
     let skip = 0;
     for (;;) {
+      if (opts?.deadlineEpochMs != null && Date.now() > opts.deadlineEpochMs) {
+        safeServerLog("seo", "sitemap_pathway_lesson_deadline_stop", {
+          phase: "lesson_slug_batch",
+          pathwayId: String(pid),
+          urlsSoFar: String(urls.length),
+        });
+        logSeoEmittedUrlBatch("sitemap_pathway_lesson_urls", urls);
+        return urls;
+      }
       const batch = await listPathwayLessonSlugBatch(pid, skip, PATHWAY_LESSON_SITEMAP_BATCH, PATHWAY_LESSON_SITEMAP_LOCALE, {
         restrictToPublicMarketingSurface: true,
       });
@@ -354,7 +374,9 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     ...listPublishedExpansionExamMarketingPaths().map((p) => add(p)),
     ...regionalTopicPaths.map((p) => add(p)),
   ];
-  const lessonUrls = await collectPathwayLessonSeoUrls(o);
+  /** Keep `/sitemap.xml` under platform timeouts: pathway lesson enumeration can be huge. */
+  const pathwayLessonDeadlineMs = Date.now() + 24_000;
+  const lessonUrls = await collectPathwayLessonSeoUrls(o, { deadlineEpochMs: pathwayLessonDeadlineMs });
   const pathwayTopicUrls = await collectPathwayTopicProgrammaticUrls(o);
   const [examHubUrls, npPracticeHubUrls, contentBackedStudyHubUrls] = await Promise.all([
     collectExamPathwayUrls(o),

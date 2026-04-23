@@ -21,6 +21,21 @@ export function blogPostIsLive(
   return false;
 }
 
+/** True when list/metadata should treat the row as public (draft-like statuses excluded; live gate). */
+export function isBlogPostMarketingMetaVisible(
+  meta: { postStatus: BlogPostStatus; publishAt: Date | null; scheduledAt: Date | null },
+  now: Date = new Date(),
+): boolean {
+  if (
+    meta.postStatus === BlogPostStatus.DRAFT ||
+    meta.postStatus === BlogPostStatus.NEEDS_REVIEW ||
+    meta.postStatus === BlogPostStatus.FAILED
+  ) {
+    return false;
+  }
+  return blogPostIsLive(meta, now);
+}
+
 /** Prisma filter for list/count/sitemap/tag queries. */
 export function blogLiveWhere(now: Date = new Date()): Prisma.BlogPostWhereInput {
   return {

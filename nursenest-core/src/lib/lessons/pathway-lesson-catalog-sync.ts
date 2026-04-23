@@ -541,17 +541,22 @@ function npHubContextMatchesLegacyNursingExamTags(
 /**
  * NCLEX-RN items are often authored with a single US or CA stamp even when `pathway_id` already scopes the row
  * to the sibling North American hub — treat mutually visible US/CA/GLOBAL-only tags as pathway-safe for RN.
- * (Do not extend to PN/Rex: jurisdictional PN exams stay region-scoped.)
+ *
+ * **Restricted to canonical RN NCLEX-RN pathway ids** (`*-rn-nclex-rn`): do not relax country matching for
+ * PN/Rex-PN, NP, new-grad transition, or other hubs that still need strict stamps.
  */
 function nclexRnNorthAmericaPeerCountryAllow(
+  pathwayId: string,
   context: { exam: PathwayLessonRuntimeExam; country: PathwayLessonRuntimeCountry },
   countries: PathwayLessonRuntimeCountry[],
 ): boolean {
+  if (!pathwayId.includes("-rn-nclex-rn")) return false;
   if (context.exam !== "NCLEX_RN" || countries.length === 0) return false;
   return countries.every((c) => c === "US" || c === "CA" || c === "GLOBAL");
 }
 
 function matchesLessonContext(
+  pathwayId: string,
   lesson: PathwayLessonRecord,
   context: { exam: PathwayLessonRuntimeExam; country: PathwayLessonRuntimeCountry },
 ): boolean {
@@ -576,7 +581,7 @@ function matchesLessonContext(
     countries.length === 0 ||
     countries.includes(context.country) ||
     countries.includes("GLOBAL") ||
-    nclexRnNorthAmericaPeerCountryAllow(context, countries);
+    nclexRnNorthAmericaPeerCountryAllow(pathwayId, context, countries);
   return examMatch && countryMatch;
 }
 
@@ -592,7 +597,8 @@ export function summarizePathwayContextPipelineDrops(
   for (const l of dropped) {
     let r = "unknown";
     if (!pathwayLessonEligibleForPublicMarketingSurface(l)) r = "not_public_complete";
-    else if (!matchesLessonContext(l, resolveLessonContextForPathwayId(pathwayId))) r = "exam_country_context_mismatch";
+    else if (!matchesLessonContext(pathwayId, l, resolveLessonContextForPathwayId(pathwayId)))
+      r = "exam_country_context_mismatch";
     reasons[r] = (reasons[r] ?? 0) + 1;
   }
   return { droppedTotal: dropped.length, reasons };
@@ -631,7 +637,7 @@ export function countMarketingPathwayContextFilterStages(
 ): { afterPublicComplete: number; afterCountryContext: number } {
   const context = resolveLessonContextForPathwayId(pathwayId);
   const afterPublic = lessons.filter((lesson) => pathwayLessonEligibleForPublicMarketingSurface(lesson));
-  const afterCountry = afterPublic.filter((lesson) => matchesLessonContext(lesson, context));
+  const afterCountry = afterPublic.filter((lesson) => matchesLessonContext(pathwayId, lesson, context));
   return { afterPublicComplete: afterPublic.length, afterCountryContext: afterCountry.length };
 }
 
@@ -642,7 +648,7 @@ export function sortAndFilterLessonsForPathwayContext(
   const context = resolveLessonContextForPathwayId(pathwayId);
   return lessons
     .filter((lesson) => pathwayLessonEligibleForPublicMarketingSurface(lesson))
-    .filter((lesson) => matchesLessonContext(lesson, context))
+    .filter((lesson) => matchesLessonContext(pathwayId, lesson, context))
     .map((lesson) => ({ ...lesson, activeExamMeta: examMetaForContext(lesson, context) }))
     .sort((a, b) => {
       const yieldDelta = pathwayLessonYieldWeight(a.activeExamMeta?.yieldLevel) - pathwayLessonYieldWeight(b.activeExamMeta?.yieldLevel);
@@ -664,7 +670,7 @@ export function pathwayLessonMatchesMarketingPathwayContext(
   lesson: PathwayLessonRecord,
 ): boolean {
   const context = resolveLessonContextForPathwayId(pathwayId);
-  return matchesLessonContext(lesson, context);
+  return matchesLessonContext(pathwayId, lesson, context);
 }
 
 /**

@@ -266,6 +266,7 @@
     "i18n:sync-nursing-tier-parity": "node scripts/sync-nursing-tier-parity-all-locales.mjs",
     "i18n:sync-hero-nav": "node scripts/sync-marketing-hero-nav-i18n.mjs",
     "db:preflight": "tsx scripts/db-preflight.mts",
+    "db:connectivity-check": "tsx scripts/db/db-connectivity-check.mts",
     "db:status": "tsx scripts/run-prisma-with-env.mts migrate status",
     "db:generate": "tsx scripts/run-prisma-with-env.mts generate",
     "db:deploy": "tsx scripts/run-prisma-with-env.mts migrate deploy",

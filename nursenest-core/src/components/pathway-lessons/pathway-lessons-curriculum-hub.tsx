@@ -16,8 +16,8 @@ import { dedupePathwayLessonsForLibrary } from "@/lib/lessons/pathway-lesson-ded
 import { organizeHubLessonsForPresentation } from "@/lib/lessons/pathway-lesson-hub-organize";
 
 /**
- * Single pipeline for hub chrome + curriculum grid: library dedupe (id/slug), clinical organize
- * (slug + concept + canonical titles), then drop rows that cannot build a marketing detail href.
+ * Single pipeline for hub chrome + curriculum grid: library dedupe (id/slug), hub organize
+ * (**slug-only**; concept merge disabled + guarded), then drop rows that cannot build a marketing detail href.
  * Professional-practice corpus suppression is **not** applied here — hub list rows are hub-stripped
  * (`sections: []`) so that guard diverged from full-lesson marketing detail; {@link verifyMarketingHubLessonRowsResolve}
  * already re-checks the hydrated document with the same gates as the public lesson detail route.
@@ -35,6 +35,7 @@ export function prepareLessonsForHubCurriculum(
   /** Slug-only organization: never merge different public slugs that share a topic/title pattern (hub card count bug). */
   const organized = organizeHubLessonsForPresentation(dedupedSafeLessons, args.pathwayId, {
     mergeNearDuplicateTitles: false,
+    marketingLessonsHubInvocation: true,
   });
   return organized.filter((l) => pathwayLessonMarketingDetailHref(args.lessonsBasePath, l.slug) != null);
 }

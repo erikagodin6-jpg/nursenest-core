@@ -28,6 +28,7 @@ import {
   type PrePublishPatch,
   validateBlogPrePublish,
 } from "@/lib/blog/blog-pre-publish-validation";
+import { blogPostIsLive } from "@/lib/blog/blog-visibility";
 import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -141,6 +142,7 @@ const adminBlogPostSelect = {
   sourceReliabilityScore: true,
   category: true,
   adminPublishLog: true,
+  scheduledAt: true,
 } as const;
 
 type Props = { params: Promise<{ id: string }> };
@@ -250,6 +252,8 @@ export async function PATCH(req: Request, { params }: Props) {
     select: {
       ...blogPrePublishValidationSelect,
       adminPublishLog: true,
+      publishAt: true,
+      scheduledAt: true,
     },
   });
   if (!current) return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
@@ -563,14 +567,40 @@ export async function PATCH(req: Request, { params }: Props) {
     });
   }
 
+  /**
+   * ISR: `/blog` uses `revalidate` (see marketing blog index). Approving or toggling public visibility
+   * must bust cache immediately — previously only publish/schedule/unpublish revalidated, so
+   * bulk APPROVED posts stayed invisible until the hourly window.
+   */
   const revalidateActions = new Set([
     "publish_now",
     "schedule",
     "unpublish",
     "revert_to_draft",
     "mark_failed",
+    "approve",
+    "reject_review",
+    "submit_for_review",
   ]);
-  if (d.action && revalidateActions.has(d.action)) {
+  const actionTriggersRevalidate = Boolean(d.action && revalidateActions.has(d.action));
+  const wasPublicLive = blogPostIsLive(
+    { postStatus: current.postStatus, publishAt: current.publishAt, scheduledAt: current.scheduledAt },
+    now,
+  );
+  const nowPublicLive = blogPostIsLive(
+    { postStatus: updated.postStatus, publishAt: updated.publishAt, scheduledAt: updated.scheduledAt },
+    now,
+  );
+  const visibilityChanged = wasPublicLive !== nowPublicLive;
+  const publishAtChanged =
+    (current.publishAt?.getTime() ?? null) !== (updated.publishAt?.getTime() ?? null) ||
+    (current.scheduledAt?.getTime() ?? null) !== (updated.scheduledAt?.getTime() ?? null);
+  const shouldRevalidateSurfaces =
+    actionTriggersRevalidate ||
+    visibilityChanged ||
+    (publishAtChanged && (updated.postStatus === BlogPostStatus.SCHEDULED || current.postStatus === BlogPostStatus.SCHEDULED));
+
+  if (shouldRevalidateSurfaces) {
     try {
       revalidateBlogPublishingSurfaces({
         slug: updated.slug,

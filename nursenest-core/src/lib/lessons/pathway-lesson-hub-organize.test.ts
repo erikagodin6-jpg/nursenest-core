@@ -77,17 +77,58 @@ describe("pathway-lesson-hub-organize", () => {
     assert.equal(out[0]!.slug, "fluid-balance-b");
   });
 
-  it("keeps twenty unique slugs sharing the same body system (no taxonomy-based collapse)", () => {
+  it("keeps 20 distinct slugs with same body system and near-identical titles (slug-only hub inventory)", () => {
+    const sharedTitle = "Volume overload in heart failure — NCLEX-RN";
     const rows = Array.from({ length: 20 }, (_, i) =>
       row({
-        slug: `cardio-lesson-${i}`,
-        title: `Cardiovascular topic ${i}`,
-        topicSlug: "cardiovascular",
+        slug: `hf-volume-proof-${i}`,
+        title: sharedTitle,
+        seoTitle: sharedTitle,
+        topicSlug: "fluid-balance",
         bodySystem: "cardiovascular",
         system: "cardiovascular",
       }),
     );
-    const out = organizeHubLessonsForPresentation(rows, "ca-rn-nclex-rn");
+    const out = organizeHubLessonsForPresentation(rows, "ca-rn-nclex-rn", { mergeNearDuplicateTitles: false });
+    assert.equal(
+      out.length,
+      20,
+      "organizeHubLessonsForPresentation must not merge different slugs on title/concept when mergeNearDuplicateTitles is false",
+    );
+  });
+
+  it("without marketingLessonsHubInvocation, mergeNearDuplicateTitles still collapses same concept across slugs", () => {
+    const sharedTitle = "Volume overload in heart failure — NCLEX-RN";
+    const rows = Array.from({ length: 20 }, (_, i) =>
+      row({
+        slug: `hf-legacy-collapse-${i}`,
+        title: sharedTitle,
+        seoTitle: sharedTitle,
+        topicSlug: "fluid-balance",
+        bodySystem: "cardiovascular",
+        system: "cardiovascular",
+      }),
+    );
+    const out = organizeHubLessonsForPresentation(rows, "ca-rn-nclex-rn", { mergeNearDuplicateTitles: true });
+    assert.equal(out.length, 1);
+  });
+
+  it("marketing hub invocation keeps 20 rows even if mergeNearDuplicateTitles is mistakenly true", () => {
+    const sharedTitle = "Volume overload in heart failure — NCLEX-RN";
+    const rows = Array.from({ length: 20 }, (_, i) =>
+      row({
+        slug: `hf-guard-${i}`,
+        title: sharedTitle,
+        seoTitle: sharedTitle,
+        topicSlug: "fluid-balance",
+        bodySystem: "cardiovascular",
+        system: "cardiovascular",
+      }),
+    );
+    const out = organizeHubLessonsForPresentation(rows, "ca-rn-nclex-rn", {
+      mergeNearDuplicateTitles: true,
+      marketingLessonsHubInvocation: true,
+    });
     assert.equal(out.length, 20);
   });
 

@@ -35,6 +35,7 @@ import {
  * (see `public-url-validator`, `sitemap-marketing-exclusions`, `language-readiness`).
  */
 export async function buildSingleSitemapXmlSafe(): Promise<string> {
+  const buildStarted = Date.now();
   try {
     const origin = normalizeOrigin(resolveSitemapOrigin());
     const allStatic = new Set<string>();
@@ -89,8 +90,11 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
         pushStatic(url);
       }
 
-      for (const locale of getSitemapIncludedLocales()) {
-        for (const url of await collectLocaleMarketingUrls(origin, locale)) {
+      const localeBatches = await Promise.all(
+        getSitemapIncludedLocales().map(async (locale) => collectLocaleMarketingUrls(origin, locale)),
+      );
+      for (const batch of localeBatches) {
+        for (const url of batch) {
           pushStatic(url);
         }
       }
@@ -154,6 +158,11 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
       mergedTotal: String(merged.length),
       dbBackedEntriesSkipped: skipDbBackedEntries ? "1" : "0",
       buildSafeMode: reduceForBuildSafeMode ? "1" : "0",
+    });
+    safeServerLog("seo", "sitemap_build_complete", {
+      durationMs: String(Date.now() - buildStarted),
+      mergedTotal: String(merged.length),
+      blogLocCount: String(blogEntries.size),
     });
 
     if (isSeoHttpValidationEnabled()) {

@@ -11,7 +11,9 @@
  */
 import { prisma } from "@/lib/db";
 import { PRISMA_ID_IN_CHUNK_SIZE, takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
-import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
+import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
+import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
+import { HubLessonsListDatabaseError } from "@/lib/lessons/hub-lessons-database-error";
 import type { PathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
 import { applyPathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
 import { fetchPublishedPathwayLessonOverlayMapSafe } from "@/lib/i18n/educational-translation-db";
@@ -299,6 +301,47 @@ async function dbCall<T>(
 }
 
 /**
+ * Hub inventory queries must **not** swallow auth/timeout errors as empty lists — callers surface a retryable error.
+ */
+async function lessonHubDbQueryOrThrow<T>(label: string, run: () => Promise<T>): Promise<T> {
+  if (!isDatabaseUrlConfigured()) {
+    throw new HubLessonsListDatabaseError({
+      category: "db_missing_url",
+      label,
+      message: "DATABASE_URL is not configured",
+    });
+  }
+  if (isRuntimeSafeMode()) {
+    throw new HubLessonsListDatabaseError({
+      category: "db_error",
+      label,
+      message: "runtime_safe_mode_blocked_database",
+    });
+  }
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      run(),
+      new Promise<T>((_, reject) => {
+        timer = setTimeout(() => reject(new Error("database_timeout")), PATHWAY_LESSON_DB_TIMEOUT_MS);
+      }),
+    ]);
+  } catch (e) {
+    throw HubLessonsListDatabaseError.fromCaughtUnknown(e, label);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
+async function assertPublishedLessonInventoryDbReachable(pathwayId: string): Promise<number> {
+  return lessonHubDbQueryOrThrow("pathway_published_lesson_count_all_locales", () =>
+    prisma.pathwayLesson.count({
+      where: { pathwayId, status: ContentStatus.PUBLISHED },
+    }),
+  );
+}
+
+/**
  * Per-request memo: marketing hub verify loads hundreds of slugs; published lesson overlays are
  * locale-wide (not per slug). Without memoization each verify call re-hit the overlay query and
  * amplified timeouts → `detail_loader_miss` for most rows while the hub list still looked healthy.
@@ -388,19 +431,19 @@ async function countPublishedDbLessonsAllLocales(pathwayId: string): Promise<num
 }
 
 /**
- * Same count as {@link countPublishedDbLessonsAllLocales} but with timeout detection.
- * When unavailable, caller can fail closed instead of silently surfacing catalog subset.
+ * Same count as {@link countPublishedDbLessonsAllLocales} but swallows hub-level DB errors so
+ * admin/reporting paths can degrade to catalog length. **Marketing hub list** uses
+ * {@link assertPublishedLessonInventoryDbReachable} instead so auth failures are not shown as “0 lessons”.
  */
 async function countPublishedDbLessonsAllLocalesWithHealth(
   pathwayId: string,
 ): Promise<{ count: number; unavailable: boolean }> {
-  const sentinel = -1;
-  const n = await dbCall(
-    () => prisma.pathwayLesson.count({ where: { pathwayId, status: ContentStatus.PUBLISHED } }),
-    sentinel,
-  );
-  if (n === sentinel) return { count: 0, unavailable: true };
-  return { count: n, unavailable: false };
+  try {
+    const n = await assertPublishedLessonInventoryDbReachable(pathwayId);
+    return { count: n, unavailable: false };
+  } catch {
+    return { count: 0, unavailable: true };
+  }
 }
 
 /**
@@ -415,14 +458,12 @@ const effectiveLocaleForPathwayLessonDbRows = cache(async function effectiveLoca
   requestedRaw: string,
 ): Promise<string> {
   const requested = normalizePathwayLessonLocale(requestedRaw);
-  const rows = await dbCall(
-    () =>
-      prisma.pathwayLesson.groupBy({
-        by: ["locale"],
-        where: { pathwayId, status: ContentStatus.PUBLISHED },
-        _count: { _all: true },
-      }),
-    [],
+  const rows = await lessonHubDbQueryOrThrow("pathway_lesson_locale_groupby", () =>
+    prisma.pathwayLesson.groupBy({
+      by: ["locale"],
+      where: { pathwayId, status: ContentStatus.PUBLISHED },
+      _count: { _all: true },
+    }),
   );
   if (rows.length === 0) return PATHWAY_LESSON_CANONICAL_DB_LOCALE;
   const effective = pickPathwayLessonListWarehouseLocale({
@@ -630,26 +671,20 @@ async function resolveMarketingHubRenderableLessonList(
   const qRaw = normalizePathwayHubSearchQuery(listOptions?.q);
   const qLower = qRaw ? qRaw.toLowerCase() : "";
 
-  const dbPresence = await countPublishedDbLessonsAllLocalesWithHealth(pathwayId);
-  if (dbPresence.unavailable) {
+  let publishedCrossLocaleCount: number;
+  try {
+    publishedCrossLocaleCount = await assertPublishedLessonInventoryDbReachable(pathwayId);
+  } catch (e) {
+    const err = HubLessonsListDatabaseError.fromCaughtUnknown(e, "pathway_published_lesson_count_all_locales");
     safeServerLog("pathway_lessons", "hub_list_db_unavailable_fail_closed", {
       pathwayId,
       hubSearch: qRaw ? "1" : "0",
+      db_failure_category: err.category,
     });
-    return {
-      renderableAll: [],
-      locale: {
-        requested,
-        effective: requested,
-        usedEnglishFallback: false,
-        catalogEnglishOnlySource: false,
-      },
-      runtimeSource: "none",
-      diagnostics: { runtimeSource: "none" },
-    };
+    throw err;
   }
 
-  const dbAny = dbPresence.count > 0;
+  const dbAny = publishedCrossLocaleCount > 0;
   if (dbAny) {
     const tDbQuery0 = performance.now();
     const effective = await effectiveLocaleForPathwayLessonDbRows(pathwayId, requested);
@@ -698,7 +733,7 @@ async function resolveMarketingHubRenderableLessonList(
     safeServerLog("pathway_lessons", "hub_list_pipeline_stages", {
       pathwayId,
       runtime: "database",
-      db_published_all_locales: String(dbPresence.count),
+      db_published_all_locales: String(publishedCrossLocaleCount),
       effective_list_locale: effective,
       gold_injected: String(goldsFiltered.length),
       sql_db_published_effective_locale: String(sqlDbOnly),
@@ -754,7 +789,7 @@ async function resolveMarketingHubRenderableLessonList(
       runtimeSource: "database",
       diagnostics: {
         runtimeSource: "database",
-        rawDbCount: dbPresence.count,
+        rawDbCount: publishedCrossLocaleCount,
         afterDbWhereCount: sqlDbOnly,
         sqlDbPublishedApprox: sqlDbOnly,
         rawMergedInputCount: rawInputs.length,
@@ -812,7 +847,7 @@ async function resolveMarketingHubRenderableLessonList(
   safeServerLog("pathway_lessons", "hub_list_pipeline_stages", {
     pathwayId,
     runtime: "catalog",
-    db_published_all_locales: String(dbPresence.count),
+    db_published_all_locales: String(publishedCrossLocaleCount),
     catalog_raw: String(allRaw.length),
     after_topic_filter: String(filteredRaw.length),
     after_safe_slug: String(afterSafeSlugCat.length),
@@ -841,7 +876,7 @@ async function resolveMarketingHubRenderableLessonList(
     runtimeSource: renderableAll.length > 0 ? "catalog" : "none",
     diagnostics: {
       runtimeSource: renderableAll.length > 0 ? "catalog" : "none",
-      rawDbCount: dbPresence.count,
+      rawDbCount: publishedCrossLocaleCount,
       rawCatalogCount: allRaw.length,
       afterDbWhereCount: undefined,
       catalogRawFilteredApprox: filteredRaw.length,

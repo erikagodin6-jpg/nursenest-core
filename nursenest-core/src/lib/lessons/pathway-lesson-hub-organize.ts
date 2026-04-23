@@ -21,7 +21,7 @@ import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentat
 import { normalizeLessonTitleForDedupe } from "@/lib/lessons/pathway-lesson-dedupe";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 /** Higher = preferred when choosing one row per slug or per concept. */
 export function hubLessonPresentationRank(lesson: PathwayLessonRecord): number {
@@ -78,6 +78,12 @@ export type OrganizeHubLessonsOptions = {
    * otherwise hundreds of RN lessons can incorrectly collapse to a single card.
    */
   mergeNearDuplicateTitles?: boolean;
+  /**
+   * Set only from {@link prepareLessonsForHubCurriculum}. When true, concept merge is **never** applied: if
+   * `mergeNearDuplicateTitles` is mistakenly true, we log, force slug-only behavior, and in production forward
+   * to Sentry so this cannot silently regress.
+   */
+  marketingLessonsHubInvocation?: boolean;
 };
 
 /**
@@ -90,7 +96,23 @@ export function organizeHubLessonsForPresentation(
   options?: OrganizeHubLessonsOptions,
 ): PathwayLessonRecord[] {
   const before = lessons.length;
-  const mergeConcepts = Boolean(options?.mergeNearDuplicateTitles);
+  let mergeConcepts = Boolean(options?.mergeNearDuplicateTitles);
+  if (options?.marketingLessonsHubInvocation === true && mergeConcepts) {
+    safeServerLog("pathway_lessons", "hub_organize_forbidden_concept_merge_error", {
+      pathway_id: pathwayId ?? "",
+      forced_merge_near_duplicate_titles_false: "1",
+      surface: "marketing_lessons_hub",
+    });
+    if (process.env.NODE_ENV === "production") {
+      safeServerLogCritical(
+        "pathway_lessons",
+        "hub_organize_forbidden_concept_merge_production",
+        { pathway_id: pathwayId ?? "", surface: "marketing_lessons_hub" },
+        new Error("mergeNearDuplicateTitles must not run for marketing lessons hub"),
+      );
+    }
+    mergeConcepts = false;
+  }
 
   const bySlug = new Map<string, PathwayLessonRecord>();
   for (const l of lessons) {
