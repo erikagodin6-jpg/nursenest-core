@@ -5979,7 +5979,7 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
  * Tuned for readable line length and calm vertical rhythm (UWorld-serious, cleaner).
  */
 .nn-cat-exam-chrome .nn-cat-exam-col {
-  max-width: min(42rem, 100%);
+  max-width: min(48.75rem, 100%);
   margin: 0 auto;
   padding: 1rem 0 0.75rem;
 }
@@ -5987,9 +5987,11 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 /* CAT exam chrome: shell that wraps top bar + progress + question column */
 .nn-cat-exam-chrome {
   min-height: 0;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 28%, var(--semantic-surface));
 }
 
 .nn-cat-exam-topbar {
+  min-height: 3.5rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   padding-left: max(0.75rem, env(safe-area-inset-left));
@@ -6323,7 +6325,7 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   }
 }
 
-@media (min-width: 1100px) and (max-height: 900px) {
+@media (min-width: 1024px) and (max-height: 900px) {
   .nn-practice-session {
     height: calc(100dvh - 88px);
   }
@@ -7194,8 +7196,8 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   --nn-exam-accent: color-mix(in srgb, var(--semantic-text-primary) 82%, var(--semantic-info));
 }
 
-/* On desktop: fill remaining viewport so page itself does not scroll */
-@media (min-width: 1100px) {
+/* On desktop: fill remaining viewport so page itself does not scroll (1024px+ covers small laptops). */
+@media (min-width: 1024px) {
   .nn-practice-session {
     height: calc(100dvh - 120px); /* header ~64px + layout rhythm + gap */
     display: flex;

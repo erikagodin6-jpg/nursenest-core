@@ -27,7 +27,7 @@ export const CAT_START_TARGET_DIFFICULTY = 3;
 
 /**
  * Minimum scored items before confidence-based early stop (theta + SE) may fire.
- * Enforced in `cat-engine` `shouldStopAfterAnswer` alongside session `min` (e.g. NCLEX 75).
+ * Enforced in `cat-engine` `shouldStopAfterAnswer` alongside session `min` (e.g. NCLEX 85).
  */
 export const CAT_MIN_ANSWERED_FOR_CONFIDENCE_STOP = 16;
 

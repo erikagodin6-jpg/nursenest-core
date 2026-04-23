@@ -1156,6 +1156,20 @@ async function getPathwayLessonWithDataCache(
 /** Dedupes metadata + page lesson fetches in the same request. */
 export const getPathwayLesson = cache(getPathwayLessonWithDataCache);
 
+/**
+ * Uncached lesson read for **marketing hub row integrity** (`verifyMarketingHubLessonRowsResolve`).
+ * Hub lists use {@link getPathwayLessonsPageFresh} (no `unstable_cache`); verifying against cached
+ * {@link getPathwayLesson} can incorrectly empty the hub right after a publish when the list already
+ * reflects `publicComplete` but the per-slug cache entry is still stale.
+ */
+export async function getPathwayLessonForMarketingHubVerify(
+  pathwayId: string,
+  slug: string,
+  marketingLocale?: string,
+): Promise<PathwayLessonRecord | undefined> {
+  return getPathwayLessonImpl(pathwayId, slug, marketingLocale);
+}
+
 export type PathwayLessonSeoMeta = {
   slug: string;
   seoTitle: string;

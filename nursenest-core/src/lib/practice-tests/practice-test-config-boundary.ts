@@ -75,6 +75,31 @@ function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
   const cast = o.catAdaptiveSessionType;
   if (cast === "cat" || cast === "practice") out.catAdaptiveSessionType = cast;
   if (o.disableOptionShuffle === true) out.disableOptionShuffle = true;
+  const salt = o.sessionPickSalt;
+  if (typeof salt === "string" && salt.trim().length >= 8) {
+    out.sessionPickSalt = salt.trim().slice(0, 128);
+  }
+  for (const key of ["catMinQuestions", "catMaxQuestions"] as const) {
+    const n = o[key];
+    if (typeof n === "number" && Number.isFinite(n)) {
+      out[key] = Math.max(1, Math.min(500, Math.floor(n)));
+    }
+  }
+  const basis = o.catSelectionBasis;
+  if (basis === "random" || basis === "targeted" || basis === "weak" || basis === "missed") {
+    out.catSelectionBasis = basis;
+  }
+  const pm = o.catPresentationMode;
+  if (pm === "practice" || pm === "exam_simulation") out.catPresentationMode = pm;
+  const fm = o.catExamFeedbackMode;
+  if (fm === "study" || fm === "test") out.catExamFeedbackMode = fm;
+  const pt = o.catPassingThreshold;
+  if (typeof pt === "number" && Number.isFinite(pt)) {
+    out.catPassingThreshold = Math.max(-3, Math.min(3, pt));
+  }
+  const examCfg = o.catExamConfigId;
+  if (examCfg === null) out.catExamConfigId = null;
+  else if (typeof examCfg === "string" && examCfg.length > 0) out.catExamConfigId = examCfg.slice(0, 120);
   return out;
 }
 

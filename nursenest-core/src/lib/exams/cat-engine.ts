@@ -26,6 +26,7 @@ import { buildCatBlueprintAdminDiagnostics } from "@/lib/exams/cat-blueprint-map
 import { getExamConfig } from "@/lib/exams/exam-config";
 import {
   CAT_STATE_VERSION,
+  CAT_STATE_VERSION_LEGACY,
   type CatAdaptiveState,
   type CatAnswerResult,
   type CatBlueprintDiagnostics,
@@ -134,8 +135,12 @@ export function createInitialAdaptiveState(): CatAdaptiveState {
 export function parseAdaptiveState(raw: unknown): CatAdaptiveState | null {
   if (!raw || typeof raw !== "object") return null;
   const o = raw as Partial<CatAdaptiveState>;
-  if (o.v !== CAT_STATE_VERSION) return null;
+  /** Legacy v1 rows must keep parsing so CAT advance does not reset theta/results mid-session. */
+  if (o.v !== CAT_STATE_VERSION && o.v !== CAT_STATE_VERSION_LEGACY) return null;
   if (typeof o.theta !== "number" || typeof o.targetDifficulty !== "number") return null;
+  const fixedOrder = Array.isArray((o as { catFixedItemOrder?: unknown }).catFixedItemOrder)
+    ? ((o as { catFixedItemOrder: unknown[] }).catFixedItemOrder as unknown[]).filter((x): x is string => typeof x === "string")
+    : undefined;
   return {
     v: CAT_STATE_VERSION,
     theta: o.theta,
@@ -152,6 +157,7 @@ export function parseAdaptiveState(raw: unknown): CatAdaptiveState | null {
     catPresentationMode: o.catPresentationMode,
     catStudyAwaitingContinue: o.catStudyAwaitingContinue === true,
     catBlueprintDiagnostics: coerceCatBlueprintDiagnostics(o.catBlueprintDiagnostics),
+    ...(fixedOrder && fixedOrder.length > 0 ? { catFixedItemOrder: fixedOrder } : {}),
   };
 }
 
@@ -176,24 +182,39 @@ export function coerceCatBlueprintDiagnostics(raw: unknown): CatBlueprintDiagnos
 
 /** After each scored item, append result and update theta / SE. */
 export function appendScoredResult(state: CatAdaptiveState, result: CatAnswerResult): CatAdaptiveState {
+  const nBefore = state.results.length;
   const d = clampDifficulty(result.difficulty);
   const diffFromCenter = (d - 3) / 2;
-  // P3: replace with item-parameter-driven IRT update when discrimination + difficulty (b) are stored per item.
-  const step = 0.18 * (result.correct ? 1 : -1) * (1 - 0.15 * Math.abs(diffFromCenter));
-  let theta = state.theta + step;
-  theta = Math.min(3, Math.max(-3, theta));
+  const pass = state.passingThreshold ?? 0;
+  const nearCut = Math.abs(state.theta - pass) < 0.28;
 
-  /** Next-item difficulty target: larger steps after hard wins / easy misses (exam-like progression). */
+  /** Calibration (0–9) → stabilization (10–25) → near-threshold precision (26+). */
+  const phase: "calibration" | "stabilization" | "precision" =
+    nBefore < 10 ? "calibration" : nBefore < 26 ? "stabilization" : "precision";
+
+  const baseMult = result.correct ? 1 : -1;
+  const rawStep =
+    (phase === "calibration" ? 0.12 : phase === "stabilization" ? 0.095 : 0.078) *
+    baseMult *
+    (1 - 0.12 * Math.abs(diffFromCenter));
+  const cap = phase === "calibration" ? 0.13 : phase === "stabilization" ? 0.1 : nearCut ? 0.085 : 0.09;
+  const step = Math.max(-cap, Math.min(cap, rawStep));
+  let theta = Math.min(3, Math.max(-3, state.theta + step));
+
   let target = state.targetDifficulty;
+  const bigJump = phase === "calibration";
   if (result.correct) {
-    target = Math.min(5, target + (d >= 4 ? 2 : 1));
+    const inc = bigJump ? (d >= 4 ? 2 : 1) : 1;
+    target = Math.min(5, target + inc);
   } else {
-    target = Math.max(1, target - (d <= 2 ? 2 : 1));
+    const dec = bigJump ? (d <= 2 ? 2 : 1) : 1;
+    target = Math.max(1, target - dec);
   }
   target = clampDifficulty(target);
 
-  const n = state.results.length + 1;
-  const se = Math.min(1.2, 2.0 / Math.sqrt(Math.max(1, n)));
+  const n = nBefore + 1;
+  const seShrink = nearCut && phase !== "calibration" ? 2.32 : 2.12;
+  const se = Math.min(1.14, seShrink / Math.sqrt(Math.max(1, n)));
 
   const info =
     typeof result.itemInformation === "number" && Number.isFinite(result.itemInformation)
@@ -317,6 +338,14 @@ export type CatSelectOptions = {
   sessionPickSalt?: string;
 };
 
+/** Session-scored next-item selection: phases + information + jitter (see CAT spec). */
+export type CatSelectContext = {
+  theta: number;
+  se: number;
+  answeredBeforePick: number;
+  passingThreshold: number;
+};
+
 /**
  * Blueprint-style: prefer under-served blueprint categories; match difficulty band; no repeats.
  */
@@ -327,6 +356,7 @@ export function selectNextQuestion(
   deliveredCountsByCategory: Map<string, number>,
   lastCategoryKey?: string | null,
   options?: CatSelectOptions,
+  selectContext?: CatSelectContext,
 ): { selected: CatPoolRow | null; fallback: boolean; detail?: string } {
   const unused = pool.filter((p) => !usedIds.has(p.id));
   if (unused.length === 0) {
@@ -352,7 +382,27 @@ export function selectNextQuestion(
       balanceTerm = delivered * 3;
     }
     const sameCategoryPenalty = lastCategoryKey && cat === lastCategoryKey ? 24 : 0;
-    const score = band(row.difficulty) * 12 + balanceTerm + sameCategoryPenalty - boost;
+    let score = band(row.difficulty) * 12 + balanceTerm + sameCategoryPenalty - boost;
+
+    if (selectContext) {
+      const n = selectContext.answeredBeforePick;
+      const phase: "calibration" | "stabilization" | "precision" =
+        n < 10 ? "calibration" : n < 25 ? "stabilization" : "precision";
+      const bandWeight = phase === "calibration" ? 9.5 : phase === "stabilization" ? 11.5 : 13.2;
+      const diffBand = band(row.difficulty);
+      const info = 1 / (1 + diffBand * 0.42);
+      const nearCut = Math.abs(selectContext.theta - selectContext.passingThreshold) < 0.28;
+      const disc = 1 + 0.22 * Math.abs(row.difficulty - 3);
+      const infoBoost = nearCut ? -0.38 * disc * info : -0.24 * info;
+      const salt = options?.sessionPickSalt?.trim();
+      const jitter =
+        salt && salt.length >= 4
+          ? ((hashSeedToUint32(`${salt}:sel:${row.id}:${n}`) / 2 ** 32) - 0.5) * 0.09
+          : 0;
+      const bucketRepeat = Math.abs(row.difficulty - td) < 0.51 ? 0.35 : 0;
+      score = diffBand * bandWeight + balanceTerm + sameCategoryPenalty - boost + infoBoost + jitter + bucketRepeat;
+    }
+
     return { row, score };
   });
 
@@ -366,7 +416,8 @@ export function selectNextQuestion(
     return a.row.id.localeCompare(b.row.id);
   });
   const best = scored[0]?.score ?? 0;
-  const top = scored.filter((s) => s.score <= best + 0.5).map((s) => s.row);
+  const tieSlack = selectContext ? 0.65 : 0.5;
+  const top = scored.filter((s) => s.score <= best + tieSlack).map((s) => s.row);
   const pick = top.length ? hashPickStable(top, `${saltPrefix}${usedIds.size}:${td}`) : unused[0]!;
 
   const bandMatch = band(pick.difficulty) <= 1;
@@ -392,6 +443,12 @@ export type CatStopBounds = {
    * (e.g. 75) already satisfy this; practice modes with a low `min` still require this floor.
    */
   minAnsweredForConfidenceStop?: number;
+  /**
+   * - `fixed_full_length`: NP-style boards — only stop at `max` (no CI / streak early exit).
+   * - `adaptive_exam_ci`: NCLEX-style exam simulation — 95% CI vs passing threshold after `min`, plus max.
+   * - `adaptive_practice`: shorter practice CAT — legacy streak + theta/SE heuristics after `min`.
+   */
+  terminationMode?: "fixed_full_length" | "adaptive_exam_ci" | "adaptive_practice";
 };
 
 export function shouldStopAfterAnswer(
@@ -402,16 +459,31 @@ export function shouldStopAfterAnswer(
   const minQ = bounds?.min ?? CAT_MIN_QUESTIONS;
   /** Use pathway/session bounds (e.g. NCLEX 85–145). Do not cap below configured max — that broke full-length exam simulation. */
   const maxQ = bounds?.max ?? CAT_MAX_QUESTIONS;
+  const mode = bounds?.terminationMode ?? "adaptive_practice";
+  const passingThreshold = bounds?.passingThreshold ?? 0;
+
+  if (nAnswered >= maxQ) return "max_length";
+
+  if (mode === "fixed_full_length") {
+    return null;
+  }
+
+  /** Exam boards require a minimum run length; never allow CI or streak stops before this floor. */
+  if (nAnswered < minQ) return null;
+
+  if (mode === "adaptive_exam_ci") {
+    const ciLow = state.theta - 1.96 * state.se;
+    const ciHigh = state.theta + 1.96 * state.se;
+    if (ciLow > passingThreshold) return "confidence_pass";
+    if (ciHigh < passingThreshold) return "confidence_fail";
+    return null;
+  }
+
   const minForConfidence =
     bounds?.minAnsweredForConfidenceStop ?? CAT_MIN_ANSWERED_FOR_CONFIDENCE_STOP;
-  const passingThreshold = bounds?.passingThreshold ?? 0;
   const earlyStopMargin = Math.max(0.18, bounds?.earlyStopMargin ?? 0.32);
   const passCutoff = passingThreshold + earlyStopMargin;
   const failCutoff = passingThreshold - earlyStopMargin;
-
-  if (nAnswered >= maxQ) return "max_length";
-  /** Exam boards require a minimum run length; never allow “streak” or confidence stops before this floor. */
-  if (nAnswered < minQ) return null;
 
   if (nAnswered >= 8) {
     const lastFive = state.results.slice(-5);

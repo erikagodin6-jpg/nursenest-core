@@ -92,9 +92,12 @@ function trendInterpretation(
 export function ProgressTrendCard({
   trendPoints,
   readiness,
+  trendLoadFailed = false,
 }: {
   trendPoints: TrendPoint[];
   readiness: CoachPageData["readiness"];
+  /** When true, empty `trendPoints` means the load failed — not “no history yet”. */
+  trendLoadFailed?: boolean;
 }) {
   const BAND_ACCENT: Record<CoachPageData["readiness"]["band"], string> = {
     insufficient_data: "var(--semantic-text-muted)",
@@ -185,7 +188,11 @@ export function ProgressTrendCard({
           borderColor: `color-mix(in srgb, ${accent} 15%, transparent)`,
         }}
       >
-        {hasData ? trendInterpretation(delta, readiness.band) : "Complete more CAT sessions to see your readiness trend over time."}
+        {trendLoadFailed
+          ? "We couldn’t load your readiness trend. Refresh the page or try again in a moment."
+          : hasData
+            ? trendInterpretation(delta, readiness.band)
+            : "Complete more CAT sessions to see your readiness trend over time."}
       </p>
     </div>
   );

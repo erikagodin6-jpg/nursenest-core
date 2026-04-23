@@ -2,6 +2,8 @@ import "server-only";
 
 import { BlogPostStatus, type PrismaClient } from "@prisma/client";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { evaluatePublicMarketingLessonCrossLinkIntegrity } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
 import { pathwayLessonPublicDetailPath } from "@/lib/lessons/pathway-lesson-types";
 import type { SeoContentDomain, SeoTier } from "@/lib/seo/seo-taxonomy-align";
 import { TAXONOMY } from "@/lib/taxonomy/taxonomy";
@@ -49,13 +51,16 @@ export async function resolveRelatedInternalLinks(
 
   const pathway = input.pathwayId ? getExamPathwayById(input.pathwayId) : undefined;
   if (pathway && input.locale) {
+    const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
     const lessons = await prisma.pathwayLesson.findMany({
-      where: { pathwayId: input.pathwayId, locale: input.locale, bodySystem: cat },
+      where: { pathwayId: pathway.id, locale: input.locale, bodySystem: cat },
       orderBy: { updatedAt: "desc" },
       take: 2,
       select: { slug: true, title: true, topic: true },
     });
     for (const l of lessons) {
+      const ev = await evaluatePublicMarketingLessonCrossLinkIntegrity(pathway, l.slug, lessonContentLocale);
+      if (!ev.ok) continue;
       const anchor = (l.title || l.topic).trim().slice(0, 90) || l.slug;
       const href = pathwayLessonPublicDetailPath(pathway, l.slug);
       if (href) out.push({ anchor, href, kind: "lesson" });

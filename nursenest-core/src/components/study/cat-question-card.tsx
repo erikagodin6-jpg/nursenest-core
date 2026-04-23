@@ -20,6 +20,12 @@ export function QuestionCard({
    */
   footerSlot,
   examStackedLayout = false,
+  /** When true with `examStackedLayout`, scroll body only — footer lives outside the card (fixed bar). */
+  examDetachedFooter = false,
+  /** CAT exam: single uppercase category line (replaces topic/subtopic/difficulty row). */
+  examCategoryLabel?: string | null;
+  /** CAT exam: e.g. flag control aligned top-right of the item header row. */
+  examHeaderRightSlot?: ReactNode;
   /** Bumps footer remeasure when the item body changes (stem/options) without `footerSlot` identity changing. */
   examLayoutMeasureKey,
 }: {
@@ -31,17 +37,29 @@ export function QuestionCard({
   children: ReactNode;
   footerSlot?: ReactNode;
   examStackedLayout?: boolean;
+  examDetachedFooter?: boolean;
+  examCategoryLabel?: string | null;
+  examHeaderRightSlot?: ReactNode;
   examLayoutMeasureKey?: string | null;
 }) {
   const hasMeta = topic ?? subtopic ?? difficultyLabel;
+  const examHead =
+    examCategoryLabel != null && examCategoryLabel.trim().length > 0 ? (
+      <div className="nn-cat-exam-item-head mb-3 flex items-start justify-between gap-3">
+        <p className="nn-cat-exam-category-label m-0">{examCategoryLabel.trim().toUpperCase()}</p>
+        {examHeaderRightSlot ? <div className="nn-cat-exam-item-head__actions shrink-0">{examHeaderRightSlot}</div> : null}
+      </div>
+    ) : null;
 
-  const meta = hasMeta ? (
-    <div className="nn-cat-topic-meta">
-      {topic ? <span className="nn-cat-topic-meta__name">{topic}</span> : null}
-      {subtopic ? <span>· {subtopic}</span> : null}
-      {difficultyLabel ? <span>· {difficultyLabel}</span> : null}
-    </div>
-  ) : null;
+  const meta =
+    examHead ??
+    (hasMeta ? (
+      <div className="nn-cat-topic-meta">
+        {topic ? <span className="nn-cat-topic-meta__name">{topic}</span> : null}
+        {subtopic ? <span>· {subtopic}</span> : null}
+        {difficultyLabel ? <span>· {difficultyLabel}</span> : null}
+      </div>
+    ) : null);
 
   const stemBlock = (
     <p className="nn-cat-question-stem">
@@ -87,13 +105,15 @@ export function QuestionCard({
           return;
         }
         setExamFooterMeasured(true);
-        setExamScrollPadBottomPx((prev) => (prev === h ? prev : h));
+        /** Keep a floor so short footers / late measure never clip last options on laptop viewports. */
+        const padded = Math.max(h, 104);
+        setExamScrollPadBottomPx((prev) => (prev === padded ? prev : padded));
       });
     });
   }, []);
 
   useLayoutEffect(() => {
-    if (!examStackedLayout || !footerSlot) return;
+    if (!examStackedLayout || !footerSlot || examDetachedFooter) return;
     let cancelled = false;
     const isCancelled = () => cancelled;
     const safeMeasure = () => measureExamFooter(isCancelled);
@@ -133,13 +153,28 @@ export function QuestionCard({
     };
     // footerSlot omitted: unstable ReactNode identity; ResizeObserver covers footer content/height changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [examStackedLayout, measureExamFooter, examLayoutMeasureKey, stem]);
+  }, [examStackedLayout, examDetachedFooter, measureExamFooter, examLayoutMeasureKey, stem]);
 
   useLayoutEffect(() => {
-    if (examStackedLayout && footerSlot) return;
+    if ((examStackedLayout && footerSlot) || examDetachedFooter) return;
     setExamScrollPadBottomPx(0);
     setExamFooterMeasured(false);
-  }, [examStackedLayout, footerSlot]);
+  }, [examStackedLayout, examDetachedFooter, footerSlot]);
+
+  if (examStackedLayout && examDetachedFooter) {
+    return (
+      <div className="nn-cat-question-card nn-cat-question-card--exam-stack nn-cat-question-card--exam-detached flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-[var(--semantic-surface)]">
+        <div
+          id="nn-cat-exam-scroll-region"
+          className="nn-cat-question-card__exam-scroll nn-cat-question-card__exam-scroll--detached min-h-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pb-6 pt-4 sm:px-6 sm:pb-8 sm:pt-5"
+        >
+          {meta}
+          {stemBlock}
+          {children}
+        </div>
+      </div>
+    );
+  }
 
   if (examStackedLayout && footerSlot) {
     return (

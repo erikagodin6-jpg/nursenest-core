@@ -35,6 +35,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 // ── Feature components (server) ───────────────────────────────────────────────
 import { MyExamPlanHero } from "@/components/study/my-exam-plan-hero";
@@ -232,7 +233,17 @@ export default async function ExamPlanPage() {
     (paceForecast.state === "ahead" || paceForecast.state === "on_pace");
 
   // Trend data — loaded server-side (lightweight: last 8 practice tests)
-  const trendPoints = await loadExamPlanTrendAction().catch(() => []);
+  let trendPoints: Awaited<ReturnType<typeof loadExamPlanTrendAction>> = [];
+  let trendLoadFailed = false;
+  try {
+    trendPoints = await loadExamPlanTrendAction();
+  } catch (err) {
+    trendLoadFailed = true;
+    const message = err instanceof Error ? err.message : String(err);
+    safeServerLog("exam_plan", "trend_load_failed", {
+      detail: message.slice(0, 300),
+    });
+  }
 
   return (
     <div className="space-y-10 pb-16">
@@ -343,7 +354,7 @@ export default async function ExamPlanPage() {
       </section>
 
       {/* 9 & 10. Lazy sections (trend + notes) ───────────────────────────── */}
-      <ExamPlanLazyClient readiness={readiness} initialTrendPoints={trendPoints} />
+      <ExamPlanLazyClient readiness={readiness} initialTrendPoints={trendPoints} trendLoadFailed={trendLoadFailed} />
 
       {/* Plan regenerate control */}
       <PlanRegenerateControl />

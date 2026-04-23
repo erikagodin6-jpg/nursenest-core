@@ -18,6 +18,11 @@ import { isPriorityWinner, resolveInteractionPriority } from "@/lib/student/inte
 export type QuickActionGuided = {
   continueLesson?: { title: string; href: string } | null;
   hasWeakAreas?: boolean;
+  /**
+   * Preferred pathway for weak-area **flashcard** deep links (dashboard card must not send learners to
+   * unrelated surfaces like `#dashboard-weak-areas` or the question bank).
+   */
+  weakAreasFlashcardsHref?: string | null;
   /** A completed mock/practice item in the recent window. */
   hasRecentCompletion?: boolean;
   /** Pathway-specific CAT start href (e.g. `/app/practice-tests/cat-launch?pathwayId=us-rn-nclex-rn`). Falls back to generic start page. */
@@ -78,7 +83,9 @@ export function QuickActionPanel({
   const emphasizeCat = isPriorityWinner(emphasisPriority, "review_recent");
   const resumeHref = guided?.continueLesson?.href ?? "/app/lessons";
   const resumeTitle = guided?.continueLesson?.title ?? null;
-  const weakHref = hasWeakAreas ? "#dashboard-weak-areas" : "/app/questions";
+  const weakHref = hasWeakAreas
+    ? (guided?.weakAreasFlashcardsHref?.trim() || "/app/flashcards/weak-areas")
+    : "/app/questions";
   const catStartHref = guided?.catStartHref?.trim() || "/app/practice-tests/start";
   const catScoped =
     guided?.catDestinationKind === "app_start" && Boolean(guided?.catPathwayLabel?.trim() && guided?.catPathwayLine?.trim());

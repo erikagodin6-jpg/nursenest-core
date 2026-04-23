@@ -10,6 +10,8 @@ import {
 } from "@/lib/flashcards/flashcard-custom-session-response";
 import { countSavedStudyItems, getStudyItemIdsMatchingFilters } from "@/lib/flashcards/study-session-persistence";
 import { LearnerCtaLink } from "@/components/learner-ui/learner-cta-link";
+import { weakAreaFlashcardsHref } from "@/lib/learner/weak-area-flashcards-href";
+import { reduceFlashcardsHubKpiSettled } from "@/lib/flashcards/flashcards-hub-kpi-load";
 
 const CUSTOM_SESSION_FETCH_TIMEOUT_MS = 25_000;
 
@@ -115,6 +117,8 @@ export function FlashcardsHubClient({
   const [stats, setStats] = useState<Stats | null>(null);
   const [dueSummary, setDueSummary] = useState<DueSummary | null>(null);
   const [metaLoading, setMetaLoading] = useState(true);
+  /** Distinguishes “no stats yet” from “both KPI fetches failed”. */
+  const [kpiLoadError, setKpiLoadError] = useState<"none" | "partial" | "fatal">("none");
 
   const [builderCategories, setBuilderCategories] = useState<BuilderCategory[]>([]);
   /** Empty = all body systems included (no category filter on the API). Non-empty = explicit subset. */
@@ -143,18 +147,25 @@ export function FlashcardsHubClient({
   useEffect(() => {
     void (async () => {
       setMetaLoading(true);
+      setKpiLoadError("none");
       try {
-        const [sRes, dueRes] = await Promise.all([
-          fetch("/api/flashcards/stats", { credentials: "include" }).catch(() => null),
-          fetch("/api/flashcards/due-summary", { credentials: "include" }).catch(() => null),
-        ]);
-        if (sRes?.ok) setStats(await sRes.json());
-        else setStats(null);
-        if (dueRes?.ok) setDueSummary((await dueRes.json()) as DueSummary);
-        else setDueSummary(null);
+        const statsP = fetch("/api/flashcards/stats", { credentials: "include" }).then(async (r) => {
+          if (!r.ok) throw new Error(`stats_http_${r.status}`);
+          return (await r.json()) as Stats;
+        });
+        const dueP = fetch("/api/flashcards/due-summary", { credentials: "include" }).then(async (r) => {
+          if (!r.ok) throw new Error(`due_http_${r.status}`);
+          return (await r.json()) as DueSummary;
+        });
+        const [sr, dr] = await Promise.allSettled([statsP, dueP]);
+        const merged = reduceFlashcardsHubKpiSettled(sr, dr);
+        setStats(merged.stats);
+        setDueSummary(merged.dueSummary);
+        setKpiLoadError(merged.loadError);
       } catch {
         setStats(null);
         setDueSummary(null);
+        setKpiLoadError("fatal");
       } finally {
         setMetaLoading(false);
       }
@@ -349,10 +360,7 @@ export function FlashcardsHubClient({
     };
   }, [sessionQueryKey, scopedPathwayId, t, refetchNonce]);
 
-  const weakAreasStudyHref =
-    scopedPathwayId.length > 0
-      ? `/app/flashcards/weak-areas?pathwayId=${encodeURIComponent(scopedPathwayId)}`
-      : "/app/flashcards/weak-areas";
+  const weakAreasStudyHref = weakAreaFlashcardsHref(scopedPathwayId);
 
   const totalDue = (dueSummary?.dueToday ?? 0) + (dueSummary?.overdue ?? 0);
   const showWeakShortcut = totalDue > 0 || (dueSummary?.learning ?? 0) > 0;
@@ -450,8 +458,32 @@ export function FlashcardsHubClient({
         </div>
       </header>
 
-      {!metaLoading && (dueSummary || stats) ? (
+      {!metaLoading && kpiLoadError === "fatal" ? (
+        <section
+          className="rounded-xl border border-[var(--semantic-danger)]/50 bg-[color-mix(in_srgb,var(--semantic-danger)_10%,transparent)] px-4 py-4 text-sm text-lv-text-primary"
+          role="alert"
+        >
+          <p className="font-semibold">Could not load flashcard stats</p>
+          <p className="mt-2 text-lv-text-secondary">
+            Check your connection and try again. This page will not show placeholder zeros while data is unavailable.
+          </p>
+          <button
+            type="button"
+            className="mt-3 inline-flex min-h-10 items-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground"
+            onClick={() => window.location.reload()}
+          >
+            Retry
+          </button>
+        </section>
+      ) : null}
+
+      {!metaLoading && kpiLoadError !== "fatal" && (dueSummary || stats || kpiLoadError === "partial") ? (
         <section className="space-y-3" aria-label={t("learner.flashcards.hub.masteryOverview")}>
+          {kpiLoadError === "partial" ? (
+            <p className="text-xs font-medium text-[var(--semantic-warning)]" role="status">
+              Some flashcard stats could not be loaded; figures below may be incomplete until you refresh.
+            </p>
+          ) : null}
           <p className="text-xs font-medium tracking-wide text-lv-text-secondary">{t("learner.flashcards.hub.masteryOverview")}</p>
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="lv-kpi-tile">

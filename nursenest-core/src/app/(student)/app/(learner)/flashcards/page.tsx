@@ -10,6 +10,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { resolveSubscribedQuestionBankPathways, type ResolvedQuestionBankPathways } from "@/lib/learner/tier-scoped-study-routes";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 type PageProps = { searchParams: Promise<{ pathwayId?: string | string[] }> };
 
@@ -66,8 +67,22 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
       if (entitlement.tier === TierCode.PRE_NURSING) {
         pathwayOptions = [{ id: "pre-nursing", label: "Pre-Nursing" }, ...pathwayOptions];
       }
-    } catch {
-      pathwayOptions = [];
+    } catch (e) {
+      safeServerLog("learner_flashcards", "pathway_bootstrap_failed", {
+        user_id: userId.slice(0, 8),
+        outcome: "error",
+        error_message: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      });
+      return (
+        <div className="mx-auto max-w-3xl px-4 py-8">
+          <ContentEmptyState
+            variant="generic"
+            headline="Could not load flashcard tracks"
+            body="We hit an error while loading your subscription pathways. Retry in a moment — this is not an empty library."
+            primaryCta={{ label: "Retry", href: "/app/flashcards" }}
+          />
+        </div>
+      );
     }
   }
 

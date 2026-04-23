@@ -108,6 +108,11 @@ export type CatAdaptiveState = {
   catStudyAwaitingContinue?: boolean;
   /** Blueprint pool + running session distribution (exam + practice when mapping exists). */
   catBlueprintDiagnostics?: CatBlueprintDiagnostics;
+  /**
+   * Exam-simulation NP fixed-length runs: full shuffled item order (session-seeded), delivered linearly.
+   * No adaptive next-item selection while this is set.
+   */
+  catFixedItemOrder?: string[];
 };
 
 export type CatExamReport = {

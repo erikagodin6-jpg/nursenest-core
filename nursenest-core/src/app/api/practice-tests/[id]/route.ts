@@ -43,6 +43,7 @@ import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-trans
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { practiceTestRouteDeps } from "./route-deps";
+import { normalizePracticeTestQuestionIds } from "@/lib/practice-tests/practice-test-question-ids";
 
 const previewSelect = {
   id: true,
@@ -58,8 +59,7 @@ const previewSelect = {
 } as const;
 
 function asIdList(raw: unknown): string[] {
-  if (!Array.isArray(raw)) return [];
-  return raw.filter((x): x is string => typeof x === "string" && x.length > 4);
+  return normalizePracticeTestQuestionIds(raw);
 }
 
 function toJsonObject(value: unknown): object {
@@ -400,6 +400,15 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     if (adv.kind === "error") {
       return NextResponse.json({ error: adv.message }, { status: 400 });
     }
+
+    safeServerLog("cat_runner", "cat_advance_patch", {
+      event: "cat_advance_patch",
+      practiceTestId: id.slice(0, 16),
+      kind: adv.kind,
+      ...(adv.kind === "continue"
+        ? { cursorIndex: adv.cursorIndex, questionCount: adv.questionIds.length }
+        : {}),
+    });
 
     if (adv.kind === "study_reveal") {
       await practiceTestRouteDeps.updatePracticeTest({

@@ -23,9 +23,10 @@ import type { TrendPoint } from "@/components/study/progress-trend-card";
 type Props = {
   readiness: CoachPageData["readiness"];
   initialTrendPoints?: TrendPoint[];
+  trendLoadFailed?: boolean;
 };
 
-export function ExamPlanLazyClient({ readiness, initialTrendPoints = [] }: Props) {
+export function ExamPlanLazyClient({ readiness, initialTrendPoints = [], trendLoadFailed = false }: Props) {
   const loadNotes = useCallback(() => loadExamPlanNotesAction(), []);
 
   return (
@@ -39,7 +40,7 @@ export function ExamPlanLazyClient({ readiness, initialTrendPoints = [] }: Props
         >
           Your Recent Progress
         </h2>
-        <ProgressTrendCard trendPoints={initialTrendPoints} readiness={readiness} />
+        <ProgressTrendCard trendPoints={initialTrendPoints} readiness={readiness} trendLoadFailed={trendLoadFailed} />
       </section>
 
       {/* Saved for Review */}

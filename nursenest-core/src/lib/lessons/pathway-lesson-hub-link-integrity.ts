@@ -1,31 +1,53 @@
 /**
  * Marketing lessons hub — guarantees every linked lesson matches the **same server contract** as
- * the lesson detail route (`getPathwayLesson` + marketing surface gates), not only list-row metadata.
+ * the marketing lesson detail route (`resolveMarketingPathwayLessonRouteResolution` inputs), not only list-row metadata.
  *
- * Runs **after** {@link prepareLessonsForHubCurriculum}. A slug is kept only when the hydrated lesson:
- * - loads without error and is {@link pathwayLessonEligibleForPublicMarketingSurface}
- * - passes {@link pathwayLessonMatchesMarketingPathwayContext} (exam/country alignment with the hub pathway)
- * - is not dropped by {@link shouldSuppressProfessionalPracticeHubLesson} (professional bucket + clinical corpus guard)
- * - is not `REVIEW_REQUIRED` under {@link classifyPathwayLessonRecordForHub} (taxonomy write can still persist review rows)
+ * Runs **after** {@link prepareLessonsForHubCurriculum}. A slug is kept only when a **fresh**
+ * {@link getPathwayLessonForMarketingHubVerify} load (no `unstable_cache` lag vs the hub list) yields a lesson that:
+ * - is {@link pathwayLessonEligibleForPublicMarketingSurface} (same `publicComplete` gate as detail)
+ * - passes {@link pathwayLessonMatchesMarketingPathwayContext} (same exam/country gate as the hub list pipeline)
  *
- * List rows can diverge from detail hydration (DB drift, overlays, locale, incomplete rows, or pathway
- * metadata skew). This pass closes that gap so taxonomy + routing + hub rendering stay one integrity surface.
+ * Intentionally **does not** re-apply professional-practice corpus suppression or `REVIEW_REQUIRED` hub taxonomy —
+ * those are not part of marketing detail `not_found` resolution and caused silent “0 lessons” when list rows
+ * (metadata / thin hub shape) disagreed with full-document checks.
+ *
+ * List rows can still diverge on slug/overlay drift; this pass closes **hydration + publicComplete + pathway context** only.
+ *
+ * **Resolver parity:** {@link pathwayLessonEligibleForPublicMarketingSurface} is the same `publicComplete` gate as
+ * {@link resolveMarketingPathwayLessonRouteResolution} (detail returns `not_found` / `lesson_not_public_complete` when
+ * this would be false). Do not add stricter hub-only filters than the detail route uses.
  */
 
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import type {
+  HubMarketingLessonDetailFailureReason,
+  MarketingHubLessonVerifyDiagnostics,
+} from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
 import { pathwayLessonMatchesMarketingPathwayContext } from "@/lib/lessons/pathway-lesson-catalog-sync";
-import { getPathwayLesson } from "@/lib/lessons/pathway-lesson-loader";
+import { getPathwayLessonForMarketingHubVerify } from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { classifyPathwayLessonRecordForHub } from "@/lib/taxonomy/classifier";
-import { shouldSuppressProfessionalPracticeHubLesson } from "@/lib/taxonomy/nursing-taxonomy-validation";
-import { REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
 
 const DEFAULT_DETAIL_VERIFY_CONCURRENCY = 8;
 
-async function mapWithConcurrency<T, R>(
+export type ResolveMarketingLessonDetailFn = (
+  pathwayId: string,
+  slug: string,
+  lessonContentLocale: string,
+) => Promise<PathwayLessonRecord | undefined>;
+
+export type { MarketingHubLessonVerifyDiagnostics } from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
+
+function tallyReason(
+  map: Partial<Record<HubMarketingLessonDetailFailureReason, number>>,
+  reason: HubMarketingLessonDetailFailureReason,
+): void {
+  map[reason] = (map[reason] ?? 0) + 1;
+}
+
+export async function mapWithConcurrency<T, R>(
   items: readonly T[],
   limit: number,
   fn: (item: T) => Promise<R>,
@@ -40,101 +62,119 @@ async function mapWithConcurrency<T, R>(
 
 export type HubLessonDetailExcluded = {
   slug: string;
-  reason:
-    | "missing_slug"
-    | "detail_loader_miss"
-    | "detail_not_public_complete"
-    | "pathway_context_mismatch"
-    | "professional_hub_corpus_guard"
-    | "taxonomy_review_required";
+  reason: HubMarketingLessonDetailFailureReason;
 };
 
 /**
- * Drops hub rows that fail any gate in the module docblock (detail load, public-complete surface,
- * pathway exam/country match, professional hub guard, hub taxonomy leaf).
+ * Single-slug **same contract** as {@link verifyMarketingHubLessonRowsResolve} — fresh detail load,
+ * {@link pathwayLessonEligibleForPublicMarketingSurface}, pathway exam/country context (matches marketing detail gates).
  */
+export async function evaluatePublicMarketingLessonCrossLinkIntegrity(
+  pathway: Pick<ExamPathwayDefinition, "id">,
+  rawSlug: string,
+  lessonContentLocale: string,
+  resolveLessonDetail: ResolveMarketingLessonDetailFn = getPathwayLessonForMarketingHubVerify,
+): Promise<
+  | { ok: true; lesson: PathwayLessonRecord }
+  | { ok: false; reason: HubMarketingLessonDetailFailureReason; slug: string }
+> {
+  const slug = typeof rawSlug === "string" ? rawSlug.trim() : "";
+  if (!pathwayLessonHasRenderableHubSlug({ slug })) {
+    return { ok: false, reason: "missing_slug", slug: String(rawSlug ?? "") };
+  }
+  let loaded: PathwayLessonRecord | undefined;
+  try {
+    loaded = await resolveLessonDetail(pathway.id, slug, lessonContentLocale);
+  } catch {
+    safeServerLog("pathway_lessons", "hub_lesson_detail_verify_loader_error", {
+      pathway_id: pathway.id,
+      slug: slug.slice(0, 200),
+    });
+    return { ok: false, reason: "detail_loader_miss", slug };
+  }
+  if (!loaded) {
+    return { ok: false, reason: "detail_loader_miss", slug };
+  }
+  if (!pathwayLessonEligibleForPublicMarketingSurface(loaded)) {
+    safeServerLog("pathway_lessons", "hub_lesson_detail_verify_not_public_complete", {
+      pathway_id: pathway.id,
+      slug: slug.slice(0, 200),
+    });
+    return { ok: false, reason: "detail_not_public_complete", slug };
+  }
+  if (!pathwayLessonMatchesMarketingPathwayContext(pathway.id, loaded)) {
+    safeServerLog("pathway_lessons", "hub_lesson_detail_verify_pathway_context_mismatch", {
+      pathway_id: pathway.id,
+      slug: slug.slice(0, 200),
+    });
+    return { ok: false, reason: "pathway_context_mismatch", slug };
+  }
+  return { ok: true, lesson: loaded };
+}
+
+/**
+ * Drops hub rows that fail fresh detail hydration, `publicComplete`, or pathway exam/country alignment
+ * (see module docblock — aligned with marketing lesson detail, not stricter hub-only taxonomy layers).
+ */
+export class HubVerifyPreparedPositiveZeroKeptError extends Error {
+  readonly pathwayId: string;
+  readonly lessonContentLocale: string;
+  readonly preparedCount: number;
+  readonly reasonsJson: string;
+
+  constructor(pathwayId: string, lessonContentLocale: string, preparedCount: number, reasonsJson: string) {
+    super(
+      `[pathway_lessons] hub verify pipeline invariant: preparedCount=${preparedCount} verifyKeptCount=0 (list vs detail contract drift or loader failure). pathway=${pathwayId} locale=${lessonContentLocale} reasons=${reasonsJson}`,
+    );
+    this.name = "HubVerifyPreparedPositiveZeroKeptError";
+    this.pathwayId = pathwayId;
+    this.lessonContentLocale = lessonContentLocale;
+    this.preparedCount = preparedCount;
+    this.reasonsJson = reasonsJson;
+  }
+}
+
 export async function verifyMarketingHubLessonRowsResolve(
   pathway: Pick<ExamPathwayDefinition, "id">,
   lessons: readonly PathwayLessonRecord[],
   lessonContentLocale: string,
-  options?: { concurrency?: number },
+  options?: {
+    concurrency?: number;
+    resolveLessonDetail?: ResolveMarketingLessonDetailFn;
+    /** Unit tests that assert `kept.length === 0` must set true. Production hub must omit (throws on drift). */
+    skipZeroKeptPipelineInvariant?: boolean;
+  },
 ): Promise<{
   kept: PathwayLessonRecord[];
   excluded: HubLessonDetailExcluded[];
+  diagnostics: MarketingHubLessonVerifyDiagnostics;
 }> {
   const concurrency = Math.max(1, Math.min(24, options?.concurrency ?? DEFAULT_DETAIL_VERIFY_CONCURRENCY));
+  const resolveLessonDetail = options?.resolveLessonDetail ?? getPathwayLessonForMarketingHubVerify;
 
   const safe = lessons.filter((l) => pathwayLessonHasRenderableHubSlug(l));
   const uniqueSlugs = [...new Set(safe.map((l) => l.slug.trim()))];
 
   const pairs = await mapWithConcurrency(uniqueSlugs, concurrency, async (slug) => {
-    let loaded: PathwayLessonRecord | undefined;
-    let threw = false;
-    try {
-      loaded = await getPathwayLesson(pathway.id, slug, lessonContentLocale);
-    } catch {
-      threw = true;
-    }
-    return { slug, lesson: loaded, threw };
+    const ev = await evaluatePublicMarketingLessonCrossLinkIntegrity(
+      pathway,
+      slug,
+      lessonContentLocale,
+      resolveLessonDetail,
+    );
+    return { slug, ev };
   });
 
-  const bySlug = new Map<string, PathwayLessonRecord | undefined>();
   const verifyExcluded: HubLessonDetailExcluded[] = [];
+  const okSlugSet = new Set<string>();
 
   for (const p of pairs) {
-    bySlug.set(p.slug, p.lesson);
-    if (p.threw) {
-      verifyExcluded.push({ slug: p.slug, reason: "detail_loader_miss" });
-      safeServerLog("pathway_lessons", "hub_lesson_detail_verify_loader_error", {
-        pathway_id: pathway.id,
-        slug: p.slug.slice(0, 200),
-      });
-      continue;
-    }
-    if (!p.lesson) {
-      verifyExcluded.push({ slug: p.slug, reason: "detail_loader_miss" });
-      continue;
-    }
-    if (!pathwayLessonEligibleForPublicMarketingSurface(p.lesson)) {
-      verifyExcluded.push({ slug: p.slug, reason: "detail_not_public_complete" });
-      safeServerLog("pathway_lessons", "hub_lesson_detail_verify_not_public_complete", {
-        pathway_id: pathway.id,
-        slug: p.slug.slice(0, 200),
-      });
-      continue;
-    }
-    if (!pathwayLessonMatchesMarketingPathwayContext(pathway.id, p.lesson)) {
-      verifyExcluded.push({ slug: p.slug, reason: "pathway_context_mismatch" });
-      safeServerLog("pathway_lessons", "hub_lesson_detail_verify_pathway_context_mismatch", {
-        pathway_id: pathway.id,
-        slug: p.slug.slice(0, 200),
-      });
-      continue;
-    }
-    if (shouldSuppressProfessionalPracticeHubLesson(p.lesson)) {
-      verifyExcluded.push({ slug: p.slug, reason: "professional_hub_corpus_guard" });
-      continue;
-    }
-    if (classifyPathwayLessonRecordForHub(p.lesson).categoryId === REVIEW_REQUIRED) {
-      verifyExcluded.push({ slug: p.slug, reason: "taxonomy_review_required" });
-      safeServerLog("pathway_lessons", "hub_lesson_detail_verify_taxonomy_review_required", {
-        pathway_id: pathway.id,
-        slug: p.slug.slice(0, 200),
-      });
-      continue;
+    if (p.ev.ok) {
+      okSlugSet.add(p.slug);
+    } else {
+      verifyExcluded.push({ slug: p.ev.slug, reason: p.ev.reason });
     }
   }
-
-  const eligibleSlugs = new Set(
-    uniqueSlugs.filter((s) => {
-      const loaded = bySlug.get(s);
-      if (!loaded || !pathwayLessonEligibleForPublicMarketingSurface(loaded)) return false;
-      if (!pathwayLessonMatchesMarketingPathwayContext(pathway.id, loaded)) return false;
-      if (shouldSuppressProfessionalPracticeHubLesson(loaded)) return false;
-      if (classifyPathwayLessonRecordForHub(loaded).categoryId === REVIEW_REQUIRED) return false;
-      return true;
-    }),
-  );
 
   const kept: PathwayLessonRecord[] = [];
   const excluded: HubLessonDetailExcluded[] = [...verifyExcluded];
@@ -145,28 +185,86 @@ export async function verifyMarketingHubLessonRowsResolve(
       continue;
     }
     const slug = lesson.slug.trim();
-    if (eligibleSlugs.has(slug)) {
+    if (okSlugSet.has(slug)) {
       kept.push(lesson);
     }
   }
 
+  const excludedByReason: Partial<Record<HubMarketingLessonDetailFailureReason, number>> = {};
+  for (const e of verifyExcluded) {
+    tallyReason(excludedByReason, e.reason);
+  }
+  for (const lesson of lessons) {
+    if (!pathwayLessonHasRenderableHubSlug(lesson)) {
+      tallyReason(excludedByReason, "missing_slug");
+    }
+  }
+
+  const diagnostics: MarketingHubLessonVerifyDiagnostics = {
+    pathwayId: pathway.id,
+    lessonContentLocale,
+    incomingPreparedRowCount: lessons.length,
+    uniqueSlugCount: uniqueSlugs.length,
+    keptRowCount: kept.length,
+    droppedRowCount: Math.max(0, lessons.length - kept.length),
+    excludedUniqueSlugCount: verifyExcluded.length,
+    excludedByReason,
+  };
+
   if (lessons.length > 0) {
     safeServerLog("pathway_lessons", "hub_lesson_detail_verify_counts", {
       pathway_id: pathway.id,
-      incoming: String(lessons.length),
-      kept: String(kept.length),
-      excluded_unique: String(verifyExcluded.length),
+      lesson_content_locale: lessonContentLocale,
+      /** Same as `incoming_rows` — explicit name for dashboards. */
+      prepared_count: String(lessons.length),
+      /** Same as `kept_rows` — explicit name for dashboards. */
+      verify_kept_count: String(kept.length),
+      incoming_rows: String(lessons.length),
+      unique_slugs: String(uniqueSlugs.length),
+      kept_rows: String(kept.length),
+      excluded_unique_slugs: String(verifyExcluded.length),
+      reasons_json: JSON.stringify(excludedByReason),
     });
   }
   if (verifyExcluded.length > 0) {
     safeServerLog("pathway_lessons", "hub_lesson_detail_verify_exclusions_sample", {
       pathway_id: pathway.id,
+      lesson_content_locale: lessonContentLocale,
       sample: verifyExcluded
         .slice(0, 12)
         .map((e) => `${e.slug}:${e.reason}`)
         .join("|"),
     });
   }
+  if (lessons.length > 0 && kept.length === 0) {
+    safeServerLog("pathway_lessons", "hub_verify_pipeline_zero_kept", {
+      pathway_id: pathway.id,
+      lesson_content_locale: lessonContentLocale,
+      prepared_count: String(lessons.length),
+      verify_kept_count: "0",
+      incoming_rows: String(lessons.length),
+      unique_slugs: String(uniqueSlugs.length),
+      reasons_json: JSON.stringify(excludedByReason),
+      outcome: "pipeline_break",
+    });
+  }
 
-  return { kept, excluded };
+  const reasonsJson = JSON.stringify(excludedByReason);
+  if (
+    !options?.skipZeroKeptPipelineInvariant &&
+    lessons.length > 0 &&
+    kept.length === 0
+  ) {
+    safeServerLog("pathway_lessons", "hub_verify_prepared_positive_zero_kept_critical", {
+      pathway_id: pathway.id,
+      lesson_content_locale: lessonContentLocale,
+      prepared_count: String(lessons.length),
+      verify_kept_count: "0",
+      reasons_json: reasonsJson.slice(0, 2000),
+      outcome: "critical_invariant_violation",
+    });
+    throw new HubVerifyPreparedPositiveZeroKeptError(pathway.id, lessonContentLocale, lessons.length, reasonsJson);
+  }
+
+  return { kept, excluded, diagnostics };
 }

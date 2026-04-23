@@ -56,4 +56,25 @@ describe("parsePracticeTestConfigAtBoundary", () => {
     const c = parsePracticeTestConfigAtBoundary(null, { surface: "test" });
     assert.deepEqual(c.selectionMode, DEFAULT_SAFE_PRACTICE_TEST_CONFIG.selectionMode);
   });
+
+  it("preserves sessionPickSalt and CAT bounds when zod parse fails", () => {
+    const salt = "bbbbbbbb-bbbb-4bbb-bbbb-bbbbbbbbbbbb";
+    const c = parsePracticeTestConfigAtBoundary(
+      {
+        selectionMode: "cat",
+        pathwayId: "us-rn-nclex-rn",
+        questionCount: Number.NaN,
+        sessionPickSalt: salt,
+        catMinQuestions: 60,
+        catMaxQuestions: 120,
+        catExamFeedbackMode: "test",
+      } as unknown as PracticeTestConfigJson,
+      { surface: "test" },
+    );
+    assert.equal(c.sessionPickSalt, salt);
+    assert.equal(c.catMinQuestions, 60);
+    assert.equal(c.catMaxQuestions, 120);
+    assert.equal(c.catExamFeedbackMode, "test");
+    assert.equal(c.selectionMode, "cat");
+  });
 });

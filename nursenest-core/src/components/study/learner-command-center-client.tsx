@@ -5,29 +5,10 @@ import type { ReactNode } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { ArrowRight, BookMarked, BookOpen, ClipboardList, Layers, Search, Sparkles, Target } from "lucide-react";
 import type { StudyNextRecommendation } from "@/lib/learner/study-next-types";
-import type { LearnerStudyNextBlockModel } from "@/lib/learner/load-learner-study-next-block";
+import type { CommandCenterApiPayload } from "@/lib/learner/command-center-api-types";
+import { isCommandCenterReviewOk } from "@/lib/learner/command-center-api-types";
 
-type NoteRow = {
-  id: string;
-  scope: string;
-  contextId: string;
-  title: string | null;
-  snippet: string;
-  topic: string | null;
-  updatedAt: string;
-  href: string;
-  scopeLabel: string;
-  kind: "note" | "bookmark" | "rationale";
-};
-
-type Payload = {
-  studyNext: LearnerStudyNextBlockModel | null;
-  weakTopics: Array<{ topic: string; missRate: number; href: string }>;
-  notes: NoteRow[];
-  mistakes: Array<{ id: string; topic: string | null; stemSnippet: string; lastMissedAt: string; href: string }>;
-  review: { href: string; overdue: number; dueToday: number; highRisk: number; total: number; message: string };
-  plannedLessons: Array<{ title: string; href: string }>;
-};
+type Payload = CommandCenterApiPayload;
 
 type Hit =
   | { kind: "note"; id: string; title: string; sub: string; href: string; meta: string }
@@ -96,9 +77,10 @@ export function LearnerCommandCenterClient() {
     setPhase("loading");
     try {
       const res = await fetch("/api/learner/command-center");
-      const data = (await res.json()) as Payload & { error?: string };
-      if (!res.ok) throw new Error(data.error ?? "Failed to load");
-      setPayload(data);
+      const data = (await res.json()) as (Payload & { error?: string }) | { error?: string };
+      if (!res.ok) throw new Error("error" in data && data.error ? data.error : "Failed to load");
+      if (!("review" in data) || data.review === undefined) throw new Error("Invalid command center payload");
+      setPayload(data as Payload);
       setPhase("ready");
     } catch {
       setPhase("error");
@@ -116,7 +98,10 @@ export function LearnerCommandCenterClient() {
     return all.filter((h) => matches(query, h.title, h.sub, h.meta));
   }, [payload, query]);
 
-  const dueUrgent = payload ? payload.review.overdue + payload.review.dueToday + payload.review.highRisk : 0;
+  const dueUrgent =
+    payload && isCommandCenterReviewOk(payload.review)
+      ? payload.review.overdue + payload.review.dueToday + payload.review.highRisk
+      : null;
 
   if (phase === "loading" || !payload) {
     return (
@@ -159,9 +144,30 @@ export function LearnerCommandCenterClient() {
   }
 
   const sn = payload.studyNext;
+  const segmentIssues = payload.segmentLoadFailures;
+  const hasSegmentIssues = Boolean(segmentIssues && Object.keys(segmentIssues).length > 0);
 
   return (
     <div className="space-y-8">
+      {hasSegmentIssues ? (
+        <div
+          role="status"
+          className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-primary)]"
+        >
+          <p className="font-semibold">Part of your study hub did not load.</p>
+          <p className="mt-1 text-[var(--semantic-text-secondary)]">
+            Empty sections below may mean a temporary load error — not that you have no activity. Retry, or open Notes,
+            Review, and Questions from the main nav.
+          </p>
+          <button
+            type="button"
+            className="mt-3 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-1.5 text-xs font-bold text-[var(--semantic-brand)]"
+            onClick={() => void load()}
+          >
+            Retry
+          </button>
+        </div>
+      ) : null}
       {/* Hero + search */}
       <section
         className="relative overflow-hidden rounded-3xl border border-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-border-soft))] px-5 py-8 sm:px-8"
@@ -263,7 +269,7 @@ export function LearnerCommandCenterClient() {
               icon={<Layers className="h-5 w-5" />}
               title="Due reviews"
               body={
-                dueUrgent > 0
+                dueUrgent !== null && dueUrgent > 0
                   ? `${dueUrgent} high-priority item${dueUrgent === 1 ? "" : "s"} in your queue.`
                   : payload.review.message
               }

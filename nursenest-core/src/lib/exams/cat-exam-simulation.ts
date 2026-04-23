@@ -8,6 +8,8 @@ import {
 import type { CatPresentationMode } from "@/lib/exams/cat-types";
 import {
   AANP_NP_US_EXAM_CONFIG,
+  ANCC_NP_US_EXAM_CONFIG,
+  NCLEX_PN_US_EXAM_CONFIG,
   NCLEX_RN_CA_EXAM_CONFIG,
   NCLEX_RN_US_EXAM_CONFIG,
   type ExamConfig,
@@ -67,20 +69,32 @@ export function logCatBlueprintPoolReady(params: {
   );
 }
 
-export function examSimulationConfigForPathway(pathway: ExamPathwayDefinition | null): ExamConfig {
+export type ExamSimulationNpBoard = "AANP" | "ANCC";
+
+export function examSimulationConfigForPathway(
+  pathway: ExamPathwayDefinition | null,
+  opts?: { npBoard?: ExamSimulationNpBoard },
+): ExamConfig {
   if (pathway?.examFamily === ExamFamily.NP) {
-    return AANP_NP_US_EXAM_CONFIG;
+    return opts?.npBoard === "ANCC" ? ANCC_NP_US_EXAM_CONFIG : AANP_NP_US_EXAM_CONFIG;
+  }
+  if (pathway?.examFamily === ExamFamily.NCLEX_PN) {
+    return NCLEX_PN_US_EXAM_CONFIG;
   }
   if (pathway?.countryCode === CountryCode.CA) return NCLEX_RN_CA_EXAM_CONFIG;
   return NCLEX_RN_US_EXAM_CONFIG;
 }
 
 /**
- * Exam simulation CAT: NCLEX-RN (US/CA) or NP tracks (AANP-style blueprint). Unset pathway defaults to NCLEX-RN US.
+ * Exam simulation CAT: NCLEX-RN/PN (US/CA) or NP tracks (fixed-length AANP/ANCC blueprint). Unset pathway defaults to NCLEX-RN US.
  */
 export function pathwaySupportsCatExamSimulation(pathway: ExamPathwayDefinition | null): boolean {
   if (!pathway) return true;
-  return pathway.examFamily === ExamFamily.NCLEX_RN || pathway.examFamily === ExamFamily.NP;
+  return (
+    pathway.examFamily === ExamFamily.NCLEX_RN ||
+    pathway.examFamily === ExamFamily.NCLEX_PN ||
+    pathway.examFamily === ExamFamily.NP
+  );
 }
 
 /** @deprecated Use `pathwaySupportsCatExamSimulation` */

@@ -8,8 +8,13 @@ import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { buildLessonPath } from "@/lib/lessons/lesson-routes";
 import { PATHWAY_LESSON_CANONICAL_DB_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
+import {
+  evaluatePublicMarketingLessonCrossLinkIntegrity,
+  mapWithConcurrency,
+} from "@/lib/lessons/pathway-lesson-hub-link-integrity";
 import {
   getProgrammaticQuestionTopicDefinition,
   type ProgrammaticQuestionTopicDefinition,
@@ -148,6 +153,7 @@ export async function loadProgrammaticQuestionTopicQuestions(
 async function loadRelatedLessonsUncached(def: ProgrammaticQuestionTopicDefinition): Promise<RelatedLessonLink[]> {
   if (!def.relatedLessons?.length) return [];
 
+  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
   const links: RelatedLessonLink[] = [];
   for (const spec of def.relatedLessons) {
     const lessonPathway = getExamPathwayById(spec.pathwayId);
@@ -178,7 +184,12 @@ async function loadRelatedLessonsUncached(def: ProgrammaticQuestionTopicDefiniti
       [],
       `related_lessons:${spec.pathwayId}`,
     );
-    for (const r of rows) {
+    const verified = await mapWithConcurrency(rows, 5, async (r) => {
+      const ev = await evaluatePublicMarketingLessonCrossLinkIntegrity(lessonPathway, r.slug, lessonContentLocale);
+      return { r, ev };
+    });
+    for (const { r, ev } of verified) {
+      if (!ev.ok) continue;
       const href = buildLessonPath({
         locale: lessonPathway.countrySlug,
         roleTrack: lessonPathway.roleTrack,

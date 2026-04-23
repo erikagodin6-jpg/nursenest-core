@@ -43,10 +43,10 @@ describe("exam_sim_disabled contract", () => {
 });
 
 describe("pathwaySupportsCatExamSimulation", () => {
-  it("rejects NCLEX-PN (exam sim limited to RN/NP families)", () => {
+  it("allows NCLEX-PN for exam simulation (same engine family as RN)", () => {
     const pn = getExamPathwayById("us-lpn-nclex-pn");
     assert.ok(pn, "catalog must include LPN pathway id");
-    assert.equal(pathwaySupportsCatExamSimulation(pn), false);
+    assert.equal(pathwaySupportsCatExamSimulation(pn), true);
   });
 
   it("allows null pathway (server defaults NCLEX-RN US pool)", () => {

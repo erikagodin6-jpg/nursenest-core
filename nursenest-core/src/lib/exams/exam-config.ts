@@ -28,15 +28,14 @@ export type ExamConfig = {
 };
 
 /**
- * US NCLEX-RN — official administration uses variable length (typically 85 scored as operational minimum
- * in many descriptions; product uses 75–145 as the configured simulation band; tune via env on cat-config if needed).
+ * US NCLEX-RN (NGN) — operational minimum 85 scored items; variable length up to max.
  */
 export const NCLEX_RN_US_EXAM_CONFIG: ExamConfig = {
   id: "nclex-rn-us",
   country: "US",
   exam: "RN",
   type: "NCLEX",
-  minQuestions: 75,
+  minQuestions: 85,
   maxQuestions: 145,
   passingLogic: "adaptive",
   examSimulationTimeLimitSec: 5 * 60 * 60,
@@ -71,19 +70,31 @@ export const NCLEX_RN_CA_EXAM_CONFIG: ExamConfig = {
   country: "CA",
 };
 
+/** US NCLEX-PN (NGN) — same length band as RN for NurseNest simulation. */
+export const NCLEX_PN_US_EXAM_CONFIG: ExamConfig = {
+  id: "nclex-pn-us",
+  country: "US",
+  exam: "PN",
+  type: "NCLEX",
+  minQuestions: 85,
+  maxQuestions: 145,
+  passingLogic: "adaptive",
+  examSimulationTimeLimitSec: 5 * 60 * 60,
+  categories: [...NCLEX_RN_US_EXAM_CONFIG.categories],
+};
+
 /**
- * AANP-style NP readiness simulation (US). Live AANP exams are not CAT-adaptive; this uses the same
- * NurseNest CAT engine with a four-domain blueprint for study. Tag NP items with these category ids in
- * `exam_questions.nclex_client_needs_category` (column name is legacy; values are blueprint ids).
+ * AANP-style NP board prep (US): **fixed 150-item** linear-length simulation in NurseNest (not live AANP CAT).
+ * Tag NP items with these blueprint ids in `exam_questions.nclex_client_needs_category`.
  */
 export const AANP_NP_US_EXAM_CONFIG: ExamConfig = {
   id: "aanp-np-us",
   country: "US",
   exam: "NP",
   type: "CUSTOM",
-  minQuestions: 75,
+  minQuestions: 150,
   maxQuestions: 150,
-  passingLogic: "adaptive",
+  passingLogic: "fixed",
   examSimulationTimeLimitSec: 3 * 60 * 60,
   categories: [
     {
@@ -107,6 +118,19 @@ export const AANP_NP_US_EXAM_CONFIG: ExamConfig = {
       weightHint: 0.18,
     },
   ],
+};
+
+/** ANCC-style NP board prep (US): **fixed 175-item** session; same blueprint axes as AANP for pool tagging. */
+export const ANCC_NP_US_EXAM_CONFIG: ExamConfig = {
+  id: "ancc-np-us",
+  country: "US",
+  exam: "NP",
+  type: "CUSTOM",
+  minQuestions: 175,
+  maxQuestions: 175,
+  passingLogic: "fixed",
+  examSimulationTimeLimitSec: 4 * 60 * 60,
+  categories: [...AANP_NP_US_EXAM_CONFIG.categories],
 };
 
 /** Stable ids for NCLEX-RN client-needs major categories (pool tagging). */
@@ -133,7 +157,9 @@ export function blueprintTagSourceForCategoryKey(
 const BY_ID: Record<string, ExamConfig> = {
   [NCLEX_RN_US_EXAM_CONFIG.id]: NCLEX_RN_US_EXAM_CONFIG,
   [NCLEX_RN_CA_EXAM_CONFIG.id]: NCLEX_RN_CA_EXAM_CONFIG,
+  [NCLEX_PN_US_EXAM_CONFIG.id]: NCLEX_PN_US_EXAM_CONFIG,
   [AANP_NP_US_EXAM_CONFIG.id]: AANP_NP_US_EXAM_CONFIG,
+  [ANCC_NP_US_EXAM_CONFIG.id]: ANCC_NP_US_EXAM_CONFIG,
 };
 
 export function getExamConfig(id: string): ExamConfig | null {

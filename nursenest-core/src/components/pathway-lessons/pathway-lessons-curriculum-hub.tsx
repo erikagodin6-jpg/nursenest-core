@@ -10,14 +10,17 @@ import {
 } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
+import type { MarketingHubLessonVerifyDiagnostics } from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { dedupePathwayLessonsForLibrary } from "@/lib/lessons/pathway-lesson-dedupe";
 import { organizeHubLessonsForPresentation } from "@/lib/lessons/pathway-lesson-hub-organize";
-import { filterLessonsForProfessionalPracticeHubGuard } from "@/lib/taxonomy/nursing-taxonomy-validation";
 
 /**
  * Single pipeline for hub chrome + curriculum grid: library dedupe (id/slug), clinical organize
- * (slug + concept + canonical titles), taxonomy guard, then drop rows that cannot build a marketing
- * detail href (so counts and {@link LessonSystemCard} rows never diverge).
+ * (slug + concept + canonical titles), then drop rows that cannot build a marketing detail href.
+ * Professional-practice corpus suppression is **not** applied here — hub list rows are hub-stripped
+ * (`sections: []`) so that guard diverged from full-lesson marketing detail; {@link verifyMarketingHubLessonRowsResolve}
+ * already re-checks the hydrated document with the same gates as the public lesson detail route.
  */
 export function prepareLessonsForHubCurriculum(
   lessons: PathwayLessonRecord[],
@@ -30,8 +33,7 @@ export function prepareLessonsForHubCurriculum(
     devLog: false,
   }).items;
   const organized = organizeHubLessonsForPresentation(dedupedSafeLessons, args.pathwayId);
-  const hubGuardLessons = filterLessonsForProfessionalPracticeHubGuard(organized);
-  return hubGuardLessons.filter((l) => pathwayLessonMarketingDetailHref(args.lessonsBasePath, l.slug) != null);
+  return organized.filter((l) => pathwayLessonMarketingDetailHref(args.lessonsBasePath, l.slug) != null);
 }
 
 type Props = {
@@ -46,6 +48,8 @@ type Props = {
   progressMap?: Record<string, PathwayLessonProgressStatus>;
   canShowProgressMap?: boolean;
   showLockedState?: boolean;
+  /** When the list pipeline had rows but post-verify inventory is empty, surface explicit diagnostics (never vague “no lessons yet”). */
+  hubVerifyDiagnostics?: MarketingHubLessonVerifyDiagnostics | null;
 };
 
 export function PathwayLessonsCurriculumHub({
@@ -55,6 +59,7 @@ export function PathwayLessonsCurriculumHub({
   pathwayId,
   progressMap = {},
   canShowProgressMap = false,
+  hubVerifyDiagnostics = null,
 }: Props) {
   const hubLessons =
     preparedLessons ?? prepareLessonsForHubCurriculum(lessons, { pathwayId, lessonsBasePath });
@@ -63,6 +68,20 @@ export function PathwayLessonsCurriculumHub({
   if (sections.length === 0) {
     const thinInventoryCopy = emptyStateCopy.thinInventory();
     const hadIncoming = lessons.some(pathwayLessonHasRenderableHubSlug);
+    const preparedCount = hubVerifyDiagnostics?.incomingPreparedRowCount ?? 0;
+    const verifyPipelineDroppedAll =
+      Boolean(hubVerifyDiagnostics) && preparedCount > 0 && (hubVerifyDiagnostics?.keptRowCount ?? 0) === 0;
+    const diagSummary =
+      verifyPipelineDroppedAll && hubVerifyDiagnostics
+        ? `Lesson list had ${preparedCount} prepared row(s) but detail verification dropped every slug (locale ${hubVerifyDiagnostics.lessonContentLocale}). Drop reasons: ${JSON.stringify(hubVerifyDiagnostics.excludedByReason)}.`
+        : null;
+    if (process.env.NODE_ENV !== "production" && verifyPipelineDroppedAll && hubVerifyDiagnostics) {
+      safeServerLog("pathway_lessons", "hub_verify_pipeline_zero_grid_dev", {
+        pathway_id: hubVerifyDiagnostics.pathwayId,
+        lesson_content_locale: hubVerifyDiagnostics.lessonContentLocale,
+        reasons_json: JSON.stringify(hubVerifyDiagnostics.excludedByReason),
+      });
+    }
     return (
       <PremiumEmptyState
         data-nn-empty="curriculum-hub-empty"
@@ -71,9 +90,11 @@ export function PathwayLessonsCurriculumHub({
         visualLayout="stack"
         headline={thinInventoryCopy.headline}
         body={
-          hadIncoming
-            ? "Some rows are temporarily hidden while taxonomy checks finish, or filters removed them from this grid. Use Browse lessons to open the full library."
-            : "No lessons are available in this pathway yet. The curriculum hub will expand here as more indexed sections go live."
+          verifyPipelineDroppedAll && diagSummary
+            ? diagSummary
+            : hadIncoming
+              ? "Some rows were removed because they could not be matched to a live public lesson for this pathway (stale slug, incomplete publish, or pathway metadata mismatch). Open Browse lessons to retry the full library."
+              : "No lessons are available in this pathway yet. The curriculum hub will expand here as more indexed sections go live."
         }
         hint={thinInventoryCopy.hint}
         primaryCta={{ label: "Browse lessons", href: lessonsBasePath, variant: "primary" }}

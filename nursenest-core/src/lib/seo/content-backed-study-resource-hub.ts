@@ -7,6 +7,11 @@ import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-q
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { clusterPageMeetsIndexabilityThreshold } from "@/lib/seo/programmatic-seo-engine/cluster-gates";
 import { normalizeBodySystemUrlKey } from "@/lib/seo/content-backed-study-resource-hub-slug";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import {
+  evaluatePublicMarketingLessonCrossLinkIntegrity,
+  mapWithConcurrency,
+} from "@/lib/lessons/pathway-lesson-hub-link-integrity";
 import { PATHWAY_LESSON_CANONICAL_DB_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 
 /** Minimum structural-complete lessons sharing a body system before a hub is eligible. */
@@ -84,6 +89,7 @@ export async function loadContentBackedStudyResourceHubPayload(
   bodyKey: string,
 ): Promise<ContentBackedStudyResourceHubPayload | null> {
   if (!isDatabaseUrlConfigured()) return null;
+  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
   const bk = bodyKey.trim().toLowerCase();
   if (bk.length < 2) return null;
 
@@ -137,11 +143,19 @@ export async function loadContentBackedStudyResourceHubPayload(
 
   if (!indexable) return null;
 
+  const verifiedLessons = await mapWithConcurrency(lessons, 6, async (l) => {
+    const ev = await evaluatePublicMarketingLessonCrossLinkIntegrity(pathway, l.slug, lessonContentLocale);
+    return { l, ev };
+  });
+  const lessonsOut = verifiedLessons
+    .filter((x) => x.ev.ok)
+    .map((x) => ({ slug: x.l.slug, title: x.l.title, topic: x.l.topic }));
+
   return {
     bodyKey: bk,
     bodySystemLabel,
     pathway,
-    lessons: lessons.map((l) => ({ slug: l.slug, title: l.title, topic: l.topic })),
+    lessons: lessonsOut,
     questionCount,
     flashcardDecks: flashcardDecks.map((d) => ({ slug: d.slug, title: d.title })),
     introPlainText,

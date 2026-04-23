@@ -12,9 +12,9 @@
  * - Next-item difficulty target `targetDifficulty = 3` (medium on the 1–5 bank scale).
  *
  * **After each scored answer** — `appendScoredResult`:
- * - `theta` nudges up on correct, down on incorrect (scaled slightly by item difficulty vs center).
- * - `targetDifficulty`: correct → +1 or +2 (larger step after a hard win); incorrect → −1 or −2 (larger after an easy miss).
- * - `se` shrinks as `2/sqrt(n)` (simple precision proxy).
+ * - `theta` nudges up/down with **capped** steps; early items allow slightly larger target-difficulty moves, then smooth ±1 progression.
+ * - `targetDifficulty`: calibration allows ±2 on hard wins / easy misses; later phases use ±1 to avoid jumpy runs.
+ * - `se` shrinks with `~2.1/sqrt(n)` (precision proxy), a bit faster when `theta` sits near the passing cutoff.
  * - Append `results[]` with `questionId`, `correct`, `categoryKey`, `difficulty` (question history + audit).
  * - Append `difficultyHistory[]` for the delivered item difficulty.
  *
@@ -22,13 +22,13 @@
  * - Candidates = pool minus `usedIds` (no repeats in-session).
  * - Score each unused row: distance to `targetDifficulty`, blueprint balance (deficit vs expected mix),
  *   minus optional boosts (weak areas, session misses, high-yield tilt in practice).
+ * - With `CatSelectContext`, adds information-value bias near the cutoff, session-seeded jitter, and anti-repeat buckets.
  * - Prefer closest difficulty band; relax band if needed.
  *
- * **Stop** — `shouldStopAfterAnswer`:
- * - Always stop at `max` questions (fixed length cap).
- * - Never apply streak or confidence-based early stop before the pathway `min` (board-style floor).
- * - After `min` and ≥ `CAT_MIN_ANSWERED_FOR_CONFIDENCE_STOP` items, optional early stop when
- *   `se` is tight and `theta` clears pass/fail bands (confidence threshold).
+ * **Stop** — `shouldStopAfterAnswer` (`CatStopBounds.terminationMode`):
+ * - `fixed_full_length` (NP exam sim): only `max_length` — no CI or streak early exit.
+ * - `adaptive_exam_ci` (NCLEX exam sim): after `min`, stop when **95% CI** (`theta ± 1.96·SE`) is entirely above or below `passingThreshold`; always at `max`.
+ * - `adaptive_practice`: legacy streak + theta/SE bands after `min` and confidence floor.
  *
  * Exam simulation keeps blueprint weights dominant; practice CAT adds weak + high-yield boosts only.
  */

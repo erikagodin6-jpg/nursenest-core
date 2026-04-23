@@ -2,7 +2,7 @@
 /**
  * Release audit: full marketing hub inventory (`renderableAll` from page 1 hub fetch) after
  * {@link prepareLessonsForHubCurriculum} must pass {@link verifyMarketingHubLessonRowsResolve}
- * — same invariant as the lessons hub page (detail load, pathway context, professional guard, no REVIEW_REQUIRED hub bucket).
+ * — same invariant as the lessons hub page (fresh detail load, `publicComplete`, pathway exam/country context).
  *
  * Requires DATABASE_URL when pathways use DB-backed lists. Uses default marketing content locale `en`
  * unless AUDIT_MARKETING_LESSON_LOCALE is set (BCP-47 / marketing locale code).
@@ -19,7 +19,10 @@ import { prepareLessonsForHubCurriculum } from "@/components/pathway-lessons/pat
 import { listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
-import { verifyMarketingHubLessonRowsResolve } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
+import {
+  HubVerifyPreparedPositiveZeroKeptError,
+  verifyMarketingHubLessonRowsResolve,
+} from "@/lib/lessons/pathway-lesson-hub-link-integrity";
 import {
   getPathwayLessonsPageFresh,
   PATHWAY_HUB_PAGE_SIZE_MAX,
@@ -36,7 +39,24 @@ async function auditPathway(pathway: ExamPathwayDefinition): Promise<Failure | n
   const pageResult = await getPathwayLessonsPageFresh(pathway.id, 1, PATHWAY_HUB_PAGE_SIZE_MAX, locale, undefined);
   const raw = (pageResult.renderableAll ?? pageResult.items).filter(pathwayLessonHasRenderableHubSlug);
   const prepared = prepareLessonsForHubCurriculum(raw, { pathwayId: pathway.id, lessonsBasePath: base });
-  const { kept, excluded } = await verifyMarketingHubLessonRowsResolve(pathway, prepared, locale);
+  let kept: { length: number };
+  let excluded: { length: number };
+  try {
+    const r = await verifyMarketingHubLessonRowsResolve(pathway, prepared, locale);
+    kept = r.kept;
+    excluded = r.excluded;
+  } catch (e) {
+    if (e instanceof HubVerifyPreparedPositiveZeroKeptError) {
+      return {
+        pathwayId: pathway.id,
+        page: 1,
+        prepared: e.preparedCount,
+        kept: 0,
+        excluded: -1,
+      };
+    }
+    throw e;
+  }
   if (kept.length !== prepared.length) {
     const sample = excluded
       .slice(0, 24)

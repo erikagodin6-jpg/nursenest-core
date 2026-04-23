@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { ExamFamily } from "@prisma/client";
 import { describe, it } from "node:test";
 import {
   isHardBlockingReadinessCode,
@@ -12,25 +13,25 @@ describe("resolveReadinessStartQuestionCount", () => {
     const count = resolveReadinessStartQuestionCount({
       configuredMaxQuestions: 150,
       catPresentationMode: "exam_simulation",
-      examFamily: "NCLEX_RN",
+      examFamily: ExamFamily.NCLEX_RN,
     });
     assert.equal(count, 145);
   });
 
-  it("keeps NP exam simulation at 150", () => {
+  it("allows NP exam simulation up to 175 when configured", () => {
     const count = resolveReadinessStartQuestionCount({
-      configuredMaxQuestions: 150,
+      configuredMaxQuestions: 175,
       catPresentationMode: "exam_simulation",
-      examFamily: "NP",
+      examFamily: ExamFamily.NP,
     });
-    assert.equal(count, 150);
+    assert.equal(count, 175);
   });
 
   it("enforces minimum CAT input cap of 10", () => {
     const count = resolveReadinessStartQuestionCount({
       configuredMaxQuestions: 3,
       catPresentationMode: "exam_simulation",
-      examFamily: "NCLEX_RN",
+      examFamily: ExamFamily.NCLEX_RN,
     });
     assert.equal(count, 10);
   });
@@ -39,7 +40,7 @@ describe("resolveReadinessStartQuestionCount", () => {
     const count = resolveReadinessStartQuestionCount({
       configuredMaxQuestions: 999,
       catPresentationMode: "exam_simulation",
-      examFamily: "NCLEX_PN",
+      examFamily: ExamFamily.NCLEX_PN,
     });
     assert.equal(count, 145);
   });

@@ -63,7 +63,7 @@ const PATHWAY_READINESS_OVERRIDES: Record<string, Omit<PathwayReadinessConfig, "
   "ca-np-cnple": {
     engineType: "CAT",
     mode: "beta",
-    minQuestions: 75,
+    minQuestions: 150,
     maxQuestions: 150,
     timeLimitMinutes: 240,
     passingThreshold: 0.1,

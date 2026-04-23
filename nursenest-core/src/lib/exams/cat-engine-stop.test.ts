@@ -4,7 +4,12 @@ import { appendScoredResult, createInitialAdaptiveState, shouldStopAfterAnswer, 
 import type { CatAnswerResult } from "@/lib/exams/cat-types";
 
 describe("shouldStopAfterAnswer", () => {
-  const bounds: CatStopBounds = { min: 85, max: 145, passingThreshold: 0.12 };
+  const bounds: CatStopBounds = {
+    min: 85,
+    max: 145,
+    passingThreshold: 0.12,
+    terminationMode: "adaptive_exam_ci",
+  };
 
   it("does not cap max questions at 15 when pathway bounds are larger", () => {
     let state = createInitialAdaptiveState();
@@ -54,5 +59,52 @@ describe("shouldStopAfterAnswer", () => {
       state = appendScoredResult(state, r);
     }
     assert.equal(shouldStopAfterAnswer(state, 145, bounds), "max_length");
+  });
+
+  it("adaptive_exam_ci uses 95% CI vs threshold (manual state)", () => {
+    const b: CatStopBounds = {
+      min: 85,
+      max: 145,
+      passingThreshold: 0,
+      terminationMode: "adaptive_exam_ci",
+    };
+    const hi = { ...createInitialAdaptiveState(), theta: 0.55, se: 0.08, results: Array.from({ length: 90 }, (_, i) => ({
+      questionId: `q${i}`,
+      correct: true,
+      categoryKey: "k",
+      difficulty: 3,
+      blueprintMappingSource: "fallback" as const,
+    })) };
+    assert.equal(shouldStopAfterAnswer(hi, 90, b), "confidence_pass");
+    const lo = { ...createInitialAdaptiveState(), theta: -0.55, se: 0.08, results: hi.results };
+    assert.equal(shouldStopAfterAnswer(lo, 90, b), "confidence_fail");
+  });
+
+  it("NP fixed-length stops only at max (no CI early exit)", () => {
+    const b: CatStopBounds = {
+      min: 150,
+      max: 150,
+      passingThreshold: 0,
+      terminationMode: "fixed_full_length",
+    };
+    let state = createInitialAdaptiveState();
+    for (let i = 0; i < 149; i++) {
+      state = appendScoredResult(state, {
+        questionId: `q${i}`,
+        correct: i % 2 === 0,
+        categoryKey: "k",
+        difficulty: 3,
+        blueprintMappingSource: "fallback",
+      });
+      assert.equal(shouldStopAfterAnswer(state, state.results.length, b), null, `no early stop at n=${i + 1}`);
+    }
+    state = appendScoredResult(state, {
+      questionId: "q149",
+      correct: true,
+      categoryKey: "k",
+      difficulty: 3,
+      blueprintMappingSource: "fallback",
+    });
+    assert.equal(shouldStopAfterAnswer(state, 150, b), "max_length");
   });
 });

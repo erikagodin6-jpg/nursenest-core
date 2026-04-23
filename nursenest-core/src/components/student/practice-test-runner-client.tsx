@@ -43,6 +43,7 @@ import {
   buildCatAdvancePatchBody,
 } from "@/lib/practice-tests/cat-advance-contract";
 import { PracticeSessionLayout } from "@/components/study/practice-session-layout";
+import { normalizePracticeTestQuestionIds } from "@/lib/practice-tests/practice-test-question-ids";
 import {
   PracticeQuestionCard,
   PracticeAnswerOptionRow,
@@ -72,6 +73,8 @@ import {
   buildExamOptionDisplayOrder,
   shouldDisableOptionShuffleMcq,
 } from "@/lib/practice-tests/exam-option-display-order";
+import { stripRedundantMcqLetterPrefix } from "@/lib/questions/strip-mcq-option-letter-prefix";
+import { ChevronLeft, ChevronRight, Flag, LayoutGrid, Send, Shield } from "lucide-react";
 
 type QRow = {
   id: string;
@@ -198,6 +201,8 @@ export function PracticeTestRunnerClient({
   /** Confidence ratings per question: Map<questionId, ConfidenceLevel>. Client-only, not persisted. */
   const [confidence, setConfidence] = useState<Record<string, ConfidenceLevel>>({});
   const autoSubmitRef = useRef(false);
+  /** Ensures timed auto-submit only fires after a real countdown (avoids mount-time `remainingSec === 0` completing CAT). */
+  const timedCountdownEverPositiveRef = useRef(false);
   const submitInFlightRef = useRef(false);
   const catAdvanceInFlightRef = useRef(false);
   const catAdvanceLatestRef = useRef<() => Promise<void>>(async () => {});
@@ -247,9 +252,10 @@ export function PracticeTestRunnerClient({
   );
 
   const load = useCallback(async () => {
-    setPhase("loading");
-    setError(null);
-    autoSubmitRef.current = false;
+      setPhase("loading");
+      setError(null);
+      autoSubmitRef.current = false;
+      timedCountdownEverPositiveRef.current = false;
     try {
       const res = await fetchWithRetry(`/api/practice-tests/${testId}?hydrate=minimal`, undefined, {
         attempts: 3,
@@ -276,8 +282,8 @@ export function PracticeTestRunnerClient({
       if (!res.ok) throw new Error(data.error ?? "Could not load test.");
       const ids =
         Array.isArray(data.questionIds) && data.questionIds.length > 0
-          ? data.questionIds.filter((x): x is string => typeof x === "string" && x.length > 4)
-          : (data.questions ?? []).map((q) => q.id).filter((x): x is string => typeof x === "string" && x.length > 4);
+          ? normalizePracticeTestQuestionIds(data.questionIds)
+          : normalizePracticeTestQuestionIds((data.questions ?? []).map((q) => q.id));
       setQuestionIds(ids);
       if ((data.questions?.length ?? 0) > 0) {
         const seed: Record<string, QRow> = {};
@@ -422,6 +428,7 @@ export function PracticeTestRunnerClient({
     const t = window.setInterval(() => {
       setRemainingSec((r) => {
         if (r == null || r <= 0) return 0;
+        if (r > 0) timedCountdownEverPositiveRef.current = true;
         return r - 1;
       });
     }, 1000);
@@ -450,6 +457,11 @@ export function PracticeTestRunnerClient({
       setSaving(true);
       try {
         const cfg = testConfig;
+        if (cfg?.selectionMode === "cat" && !fromTimer) {
+          submitInFlightRef.current = false;
+          setSaving(false);
+          return;
+        }
         const linear = cfg && cfg.selectionMode !== "cat" && cfg.linearDeliveryMode;
         if (linear && questionIds.length > 0) {
           const missing = questionIds.filter((id) => !linearCommittedIds.includes(id));
@@ -496,6 +508,7 @@ export function PracticeTestRunnerClient({
 
   useEffect(() => {
     if (remainingSec !== 0 || status !== "IN_PROGRESS" || !timedMode) return;
+    if (!timedCountdownEverPositiveRef.current) return;
     void submitTest(true);
   }, [remainingSec, status, timedMode, submitTest]);
 

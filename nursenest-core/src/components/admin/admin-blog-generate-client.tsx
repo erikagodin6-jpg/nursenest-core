@@ -6,11 +6,16 @@ import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/clien
 import { ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN } from "@/lib/admin/blog-generate-ai-constants";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
+import {
+  formatBlogGenerateAiFlattenedErrors,
+  type BlogGenerateAiValidationFlatten,
+} from "@/lib/admin/blog-generate-ai-client-errors";
 import type { BlogAutomationSeoReadiness } from "@/lib/blog/blog-automation-engine";
 import { blogSlugCustomValidityMessage, liveNormalizeBlogSlugInputValue } from "@/lib/blog/blog-optional-slug";
 
 type GenerateAiJsonBody = {
   ok?: boolean;
+  details?: { formErrors?: string[]; fieldErrors?: Record<string, string[] | undefined> };
   summary?: { created: number; skipped: number; failed: number; requested?: number };
   results?: Array<
     | {
@@ -229,6 +234,16 @@ export function AdminBlogGenerateClient() {
         const json = (await res.json()) as GenerateAiJsonBody;
         if (res.status === 429) {
           setErr(formatAdminRateLimitMessageFromJson(json));
+          return;
+        }
+        if (res.status === 400 && json.details && typeof json.details === "object") {
+          const flat = json.details as BlogGenerateAiValidationFlatten;
+          setErr(
+            formatBlogGenerateAiFlattenedErrors({
+              formErrors: Array.isArray(flat.formErrors) ? flat.formErrors : [],
+              fieldErrors: flat.fieldErrors && typeof flat.fieldErrors === "object" ? flat.fieldErrors : {},
+            }),
+          );
           return;
         }
         setErr(json.error ?? "Request failed");

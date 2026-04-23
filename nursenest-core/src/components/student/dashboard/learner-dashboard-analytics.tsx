@@ -1,5 +1,6 @@
 import { resolvePreferredCatPathwayId } from "@/lib/exam-pathways/pathway-cat-flow";
 import { resolveStudyLoopCatDestination } from "@/lib/exam-pathways/study-loop-cat-routing";
+import { weakAreaFlashcardsHref } from "@/lib/learner/weak-area-flashcards-href";
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { MasteryLegend } from "@/components/student/product/mastery-legend";
@@ -84,6 +85,10 @@ export function LearnerDashboardAnalytics({
       : "";
 
   const catQuick = catQuickFromSnapshot(snapshot);
+  const preferredPathwayForWeak = resolvePreferredCatPathwayId(
+    snapshot.learnerPath,
+    snapshot.pathways.map((p) => p.pathwayId),
+  );
 
   return (
     <div className="space-y-6" aria-label={t("learner.dashboard.insight.regionLabel")}>
@@ -94,6 +99,7 @@ export function LearnerDashboardAnalytics({
         guided={{
           continueLesson,
           hasWeakAreas: weakAreas.length > 0,
+          weakAreasFlashcardsHref: weakAreaFlashcardsHref(preferredPathwayForWeak),
           hasRecentCompletion,
           catStartHref: catQuick.catStartHref,
           catDestinationKind: catQuick.catDestinationKind,
@@ -127,7 +133,7 @@ export function LearnerDashboardAnalytics({
             weakAreas={weakAreas}
             t={t}
             maxRows={MAX_WEAK}
-            pathwayId={resolvePreferredCatPathwayId(snapshot.learnerPath, snapshot.pathways.map((p) => p.pathwayId))}
+            pathwayId={preferredPathwayForWeak}
           />
           <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 shadow-sm">
             <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">{t("learner.dashboard.masteryKey.title")}</p>

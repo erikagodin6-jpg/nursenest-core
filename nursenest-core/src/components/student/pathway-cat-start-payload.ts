@@ -1,4 +1,11 @@
+import { ExamFamily } from "@prisma/client";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { publicCopyForReadinessConfig, readinessConfigForPathway } from "@/lib/exam-pathways/pathway-readiness-config";
+import {
+  examSimulationConfigForPathway,
+  examSimulationTimeLimitSecForConfig,
+  nclexRnSimulationBoundsFromConfig,
+} from "@/lib/exams/cat-exam-simulation";
 import type { CatPresentationMode, PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
 import type { CatPracticeReadinessResult } from "@/lib/practice-tests/cat-practice-readiness";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
@@ -12,10 +19,11 @@ type ResolveReadinessStartQuestionCountInput = {
 export function resolveReadinessStartQuestionCount(
   input: ResolveReadinessStartQuestionCountInput,
 ): number {
-  const bounded = Math.max(10, Math.min(150, input.configuredMaxQuestions));
-  if (input.catPresentationMode !== "exam_simulation") return bounded;
-  if (input.examFamily === "NP") return bounded;
-  return Math.min(145, bounded);
+  if (input.catPresentationMode !== "exam_simulation") {
+    return Math.max(10, Math.min(150, input.configuredMaxQuestions));
+  }
+  const cap = input.examFamily === ExamFamily.NP ? 175 : 145;
+  return Math.max(10, Math.min(cap, input.configuredMaxQuestions));
 }
 
 export function isHardBlockingReadinessCode(code: string | null | undefined): boolean {
@@ -45,10 +53,16 @@ export function buildCatExamSimulationCreatePayload(pathwayMeta: PracticeTestPat
   timedMode: boolean;
   timeLimitSec: number;
 } {
+  const pathwayFull = getExamPathwayById(pathwayMeta.id);
+  const examCfg = examSimulationConfigForPathway(
+    pathwayFull,
+    pathwayFull?.examFamily === ExamFamily.NP ? { npBoard: "AANP" } : undefined,
+  );
+  const simMax = nclexRnSimulationBoundsFromConfig(examCfg).max;
   const readinessConfig = readinessConfigForPathway(pathwayMeta);
   const publicCopy = publicCopyForReadinessConfig(readinessConfig);
   const questionCount = resolveReadinessStartQuestionCount({
-    configuredMaxQuestions: readinessConfig.maxQuestions,
+    configuredMaxQuestions: simMax,
     catPresentationMode: "exam_simulation",
     examFamily: pathwayMeta.examFamily,
   });
@@ -64,7 +78,7 @@ export function buildCatExamSimulationCreatePayload(pathwayMeta: PracticeTestPat
     catExamFeedbackMode: "test",
     pathwayId: pathwayMeta.id,
     timedMode: true,
-    timeLimitSec: readinessConfig.timeLimitMinutes * 60,
+    timeLimitSec: examSimulationTimeLimitSecForConfig(examCfg),
   };
 }
 

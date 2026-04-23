@@ -9,6 +9,10 @@ import { enforcePracticeTestsListProtection } from "@/lib/http/api-protection";
 import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
+import {
+  examSimulationConfigForPathway,
+  nclexRnSimulationBoundsFromConfig,
+} from "@/lib/exams/cat-exam-simulation";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { assessCatPracticeReadinessForPathway } from "@/lib/practice-tests/cat-practice-readiness";
@@ -55,7 +59,7 @@ const createSchema = z
     selectionMode: z.enum(["random", "targeted", "weak", "missed", "cat"]),
     /** Pool strategy when `selectionMode` is `cat`. */
     catSelectionBasis: z.enum(["random", "targeted", "weak", "missed"]).optional(),
-    /** Exam simulation uses pathway-specific bounds (NCLEX-RN 75–145, AANP-style NP 75–150) and blueprint balancing. */
+    /** Exam simulation uses exam-config bounds (NCLEX 85–145, NP fixed 150/175) and blueprint balancing. */
     catPresentationMode: z.enum(["practice", "exam_simulation"]).optional().default("practice"),
     /**
      * CAT only: Study Mode (rationales after each item) vs Test Mode (rationales after completion).
@@ -64,6 +68,8 @@ const createSchema = z
     catExamFeedbackMode: z.enum(["study", "test"]).optional().default("test"),
     /** `practice` = guided fixed-length shuffle on the same CAT pool; `cat` = strict adaptive. */
     catAdaptiveSessionType: z.enum(["cat", "practice"]).optional().default("cat"),
+    /** Exam simulation NP only: AANP-length (150) vs ANCC-length (175). Ignored for non-NP pathways. */
+    catNpExamBoard: z.enum(["AANP", "ANCC"]).optional(),
     pathwayId: z.union([z.string().min(2).max(80), z.null()]).optional(),
     timedMode: z.boolean(),
     /** Timed exam simulation: up to 5h NCLEX default or 3h AANP-style NP when pathway is NP (overridable). */
@@ -77,8 +83,8 @@ const createSchema = z
     message: "CAT maximum question cap is 200.",
     path: ["questionCount"],
   })
-  .refine((d) => d.selectionMode !== "cat" || d.catPresentationMode !== "exam_simulation" || d.questionCount <= 150, {
-    message: "Exam simulation maximum is 150.",
+  .refine((d) => d.selectionMode !== "cat" || d.catPresentationMode !== "exam_simulation" || d.questionCount <= 175, {
+    message: "Exam simulation maximum is 175 (ANCC NP full-length).",
     path: ["questionCount"],
   })
   .refine((d) => d.selectionMode !== "cat" || d.questionCount >= 10, {
@@ -362,23 +368,28 @@ export async function POST(req: Request) {
     const simPathway = getExamPathwayById(pathwayIdForCat) ?? null;
     const readinessConfig = await readinessConfigForPathwayId(pathwayIdForCat);
     const pathwayCap =
-      d.catPresentationMode === "exam_simulation" && simPathway?.examFamily !== ExamFamily.NP
-        ? 145
+      d.catPresentationMode === "exam_simulation" && simPathway
+        ? nclexRnSimulationBoundsFromConfig(
+            examSimulationConfigForPathway(
+              simPathway,
+              simPathway.examFamily === ExamFamily.NP
+                ? { npBoard: d.catNpExamBoard === "ANCC" ? "ANCC" : "AANP" }
+                : undefined,
+            ),
+          ).max
         : 150;
     if (d.questionCount > pathwayCap) {
       return NextResponse.json(
         {
-          error:
-            pathwayCap === 145
-              ? "RN/RPN readiness exam simulation allows up to 145 questions."
-              : "NP readiness exam simulation allows up to 150 questions.",
+          error: `This exam simulation allows up to ${pathwayCap} questions for the selected pathway.`,
           code: PRACTICE_TEST_CAT_CREATE_CODE.cat_invalid_question_count,
         },
         { status: 400 },
       );
     }
     const configuredCount = readinessConfig?.maxQuestions ?? d.questionCount;
-    const enforcedQuestionCount = Math.min(configuredCount, pathwayCap);
+    const enforcedQuestionCount =
+      d.catPresentationMode === "exam_simulation" ? pathwayCap : Math.min(configuredCount, pathwayCap);
     const enforcedTimedMode =
       readinessConfig?.mode === "production_ready" || readinessConfig?.mode === "simulation"
         ? true
@@ -444,6 +455,7 @@ export async function POST(req: Request) {
           d.catPresentationMode,
           catExamFeedbackModeForCreate,
           adaptiveSessionType,
+          d.catNpExamBoard === "ANCC" ? "ANCC" : "AANP",
         );
         if (!cat.ok) {
           return { kind: "reject" as const, cat };

@@ -11,6 +11,11 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { pathwayLessonPublicDetailPath } from "@/lib/lessons/pathway-lesson-types";
+import {
+  evaluatePublicMarketingLessonCrossLinkIntegrity,
+  mapWithConcurrency,
+} from "@/lib/lessons/pathway-lesson-hub-link-integrity";
+import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { PATHWAY_LESSON_CANONICAL_DB_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 import { primaryTaxonomyLeafForBlogPost } from "@/lib/seo/programmatic-seo-engine/blog-taxonomy";
 import { isTaxonomyLeafForSeo } from "@/lib/seo/seo-taxonomy-align";
@@ -28,6 +33,7 @@ import {
   tokenOverlapTitle,
 } from "@/lib/linking/automatic-internal-links-scoring";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 
 const MARKETING_BUILD_PHASE = "phase-production-build";
 
@@ -38,7 +44,10 @@ function shouldSkipBlogDbForAutoLinks(): boolean {
   return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE;
 }
 
-function pathwayIdForBlogPost(post: { exam: string | null | undefined; countryTarget: import("@prisma/client").CountryCode | null | undefined }): string | null {
+export function pathwayIdForBlogPost(post: {
+  exam: string | null | undefined;
+  countryTarget: import("@prisma/client").CountryCode | null | undefined;
+}): string | null {
   const country = blogCountryFromPrismaTarget(post.countryTarget);
   const region = marketingRegionToggleForCat(country);
   const offering = blogOfferingForCat(post.exam);
@@ -110,17 +119,33 @@ function mergeResolvedForSurface(
   };
 }
 
-/** Prefer editorially curated lesson URLs from the blog row when present. */
-function manualLessonCandidatesFromBlog(
+/**
+ * Prefer editorially curated lesson URLs from the blog row when present.
+ * Same-pathway lesson detail prefix only — verified with {@link evaluatePublicMarketingLessonCrossLinkIntegrity}.
+ */
+async function manualLessonCandidatesFromBlog(
   relatedLessonPaths: readonly string[] | undefined,
   pathway: ExamPathwayDefinition | null,
-): LinkCandidate[] {
+  lessonContentLocale: string,
+): Promise<LinkCandidate[]> {
   if (!relatedLessonPaths?.length || !pathway) return [];
+  const base = marketingPathwayLessonsIndexPath(pathway);
   const out: LinkCandidate[] = [];
   for (const raw of relatedLessonPaths.slice(0, 6)) {
     const href = raw.trim();
     if (!href.startsWith("/")) continue;
-    const tail = href.split("/").filter(Boolean).pop() ?? "lesson";
+    if (!href.startsWith(`${base}/`)) continue;
+    const rawSeg = href.slice(base.length + 1).split("?")[0]?.trim() ?? "";
+    let slug = rawSeg;
+    try {
+      slug = decodeURIComponent(rawSeg).trim();
+    } catch {
+      slug = rawSeg.trim();
+    }
+    if (!slug) continue;
+    const ev = await evaluatePublicMarketingLessonCrossLinkIntegrity(pathway, slug, lessonContentLocale);
+    if (!ev.ok) continue;
+    const tail = slug.split("/").filter(Boolean).pop() ?? slug;
     const label = tail.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
     out.push({
       kind: "lesson",
@@ -283,6 +308,7 @@ export async function resolveAutomaticRelatedBundleForBlogPost(
   opts?: { excludeHrefs?: string[] },
 ): Promise<ResolvedLinks> {
   const locale = (post.locale ?? "en").trim() || "en";
+  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
   const pathwayId = pathwayIdForBlogPost(post);
   const pathway = pathwayId ? getExamPathwayById(pathwayId) : undefined;
   const leaf = primaryTaxonomyLeafForBlogPost(post);
@@ -346,7 +372,12 @@ export async function resolveAutomaticRelatedBundleForBlogPost(
         slugHints,
         category: post.category,
       });
-      for (const row of lessonRows) {
+      const verifiedRows = await mapWithConcurrency(lessonRows, 8, async (row) => {
+        const ev = await evaluatePublicMarketingLessonCrossLinkIntegrity(pathway, row.slug, lessonContentLocale);
+        return { row, ev };
+      });
+      for (const { row, ev } of verifiedRows) {
+        if (!ev.ok) continue;
         const sameTopic = slugHints.includes(row.topicSlug);
         const sameBody =
           Boolean(post.category?.trim()) && row.bodySystem.toLowerCase() === post.category!.trim().toLowerCase();
@@ -397,7 +428,7 @@ export async function resolveAutomaticRelatedBundleForBlogPost(
   }
 
   const dbFlashFiltered = dbFlash.filter((c) => c.strength !== "weak");
-  const manualLessons = manualLessonCandidatesFromBlog(post.relatedLessonPaths, pathway ?? null);
+  const manualLessons = await manualLessonCandidatesFromBlog(post.relatedLessonPaths, pathway ?? null, lessonContentLocale);
   const hubExtras = pathway ? pathwayHubCandidates(pathway) : [];
 
   return mergeResolvedForSurface("blog", {
@@ -425,6 +456,7 @@ export async function resolveAutomaticRelatedBundleForPathwayLesson(input: {
   includeLessonBucket?: boolean;
 }): Promise<ResolvedLinks> {
   const { pathway, lesson, locale } = input;
+  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
   const includeLesson = input.includeLessonBucket !== false;
   const topicKey = normalizeTopicKey(lesson.topicSlug) ?? normalizeTopicKey(lesson.topic) ?? lesson.topicSlug;
   const excludeHref = pathwayLessonPublicDetailPath(pathway, lesson.slug);
@@ -451,7 +483,12 @@ export async function resolveAutomaticRelatedBundleForPathwayLesson(input: {
       slugHints: [lesson.topicSlug, ...slugHintsFromTags([lesson.topic])],
       category: lesson.bodySystem,
     });
-    for (const row of siblings) {
+    const verifiedSiblings = await mapWithConcurrency(siblings, 8, async (row) => {
+      const ev = await evaluatePublicMarketingLessonCrossLinkIntegrity(pathway, row.slug, lessonContentLocale);
+      return { row, ev };
+    });
+    for (const { row, ev } of verifiedSiblings) {
+      if (!ev.ok) continue;
       const sameTopic = row.topicSlug === lesson.topicSlug;
       const sameBody = row.bodySystem === lesson.bodySystem;
       const titleTok = tokenOverlapTitle(lesson.title, row.title);
