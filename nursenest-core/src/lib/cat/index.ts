@@ -136,12 +136,15 @@ export {
   listNpCatSessions,
   loadNpCatAnalysis,
   loadNpCatSession,
+  loadNpCatSessionDetailed,
   saveNpCatSession,
 } from "./session-persistence";
 
 export type {
   NpCatAdaptiveState,
   NpCatSessionConfig,
+  NpCatSessionLoadDetailed,
+  NpCatSessionLoadFailureReason,
 } from "./session-persistence";
 
 // ─── Answer History ───────────────────────────────────────────────────────────

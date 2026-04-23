@@ -20,6 +20,14 @@ export type ContractCacheMode = "fresh" | "cached" | "mixed" | "unknown";
  * Structured contract diagnostics for critical loaders (server-only).
  * Prefer this over ad hoc `console` strings so timeouts vs true-empty stay separable in logs.
  */
+export type CriticalLoadFinalOutcome =
+  | "ok"
+  | "degraded_snapshot"
+  | "empty"
+  | "error"
+  | "timeout"
+  | "invariant_violation";
+
 export function logContractLoadDiagnostics(fields: {
   operation: string;
   duration_ms: number;
@@ -29,16 +37,29 @@ export function logContractLoadDiagnostics(fields: {
   country?: string;
   locale?: string;
   feature?: string;
+  /** Legacy coarse outcome (kept for log continuity). */
   outcome: "ok" | "empty" | "error" | "timeout";
+  /** Finer product outcome: distinguishes live ok vs degraded snapshot vs invariant violations. */
+  final_outcome?: CriticalLoadFinalOutcome;
+  feature_surface?: string;
+  live_outcome?: "ok" | "error" | "timeout" | "invalid_payload" | "unknown";
+  snapshot_used?: "true" | "false";
+  snapshot_age_ms?: string;
   prepared_count?: number;
   kept_count?: number;
   error_class?: string;
   error_message?: string;
   destination_href?: string;
+  /**
+   * True only when a last-known-good snapshot was intentionally used after live load failed.
+   * Distinct from DB driver "fallback_used" logs elsewhere.
+   */
+  fallback_used?: "true" | "false";
 }): void {
+  const fallback_used = fields.fallback_used ?? "false";
   safeServerLog("platform_contract", "critical_load_diagnostics", {
     ...fields,
-    fallback_used: "false",
+    fallback_used,
   });
 }
 

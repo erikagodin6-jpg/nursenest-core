@@ -43,8 +43,14 @@ export async function readStudyPublishedSnapshotFile<TPayload>(
 ): Promise<StudyPublishedSnapshotEnvelope<TPayload> | null> {
   const base = snapshotBaseDir();
   if (!base) return null;
-  const filePath = path.join(base, ...relativePathSegments);
-  if (!filePath.startsWith(path.resolve(base))) {
+  for (const seg of relativePathSegments) {
+    if (typeof seg !== "string" || seg.length === 0 || seg.includes("..") || path.isAbsolute(seg)) {
+      return null;
+    }
+  }
+  const resolvedBase = path.resolve(base);
+  const filePath = path.resolve(resolvedBase, ...relativePathSegments);
+  if (!filePath.startsWith(resolvedBase + path.sep) && filePath !== resolvedBase) {
     return null;
   }
   try {

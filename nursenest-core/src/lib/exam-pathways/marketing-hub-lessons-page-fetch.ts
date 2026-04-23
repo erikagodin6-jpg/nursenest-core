@@ -1,8 +1,16 @@
 import { emptyPathwayLessonsPageResult } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import type { MarketingHubDataLoadContext } from "@/lib/exam-pathways/marketing-hub-data-context";
+import type { LoadPathwayLessonsHubPageArgs } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import { getPathwayLessonsPageFresh, type PathwayLessonsPageResult } from "@/lib/lessons/pathway-lesson-loader";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { logContractLoadDiagnostics } from "@/lib/loading/critical-load-outcome";
+import { readPathwayLessonsHubPageSnapshot } from "@/lib/study-content-failover/pathway-lessons-hub-snapshot-read";
+import { snapshotAgeMs as computeSnapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
+import type { StudyDataSourceUsed } from "@/lib/study-content-failover/study-published-snapshot-types";
+import type { StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failover/study-published-snapshot-types";
+
+export type { LoadPathwayLessonsHubPageArgs } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 
 function logHubLessonsPageFailed(ctx: MarketingHubDataLoadContext, err: unknown): void {
   const message = err instanceof Error ? err.message : String(err);
@@ -30,12 +38,23 @@ function logHubLessonsPageFailed(ctx: MarketingHubDataLoadContext, err: unknown)
   }
 }
 
+function coercePathwayLessonsPageResult(raw: unknown): PathwayLessonsPageResult | null {
+  if (!raw || typeof raw !== "object") return null;
+  const o = raw as Record<string, unknown>;
+  if (!Array.isArray(o.items) || typeof o.total !== "number") return null;
+  return raw as PathwayLessonsPageResult;
+}
+
 export type PathwayLessonsHubPageLoadState =
   | {
       status: "ok";
       fetchDurationMs: number;
       responseItemCount: number;
       responseTotal: number;
+      sourceUsed: StudyDataSourceUsed;
+      failoverReason?: string;
+      snapshotVersion?: string;
+      snapshotAgeMs?: number;
     }
   | {
       status: "error";
@@ -45,103 +64,177 @@ export type PathwayLessonsHubPageLoadState =
       detail?: string;
     };
 
-export type LoadPathwayLessonsHubPageArgs = {
-  pageRequested: number;
-  pageSizeRequested: number;
-  lessonContentLocale: string;
-  listOpts: { q?: string; topicSlugsIn?: string[] } | undefined;
-};
+function logLessonsHubOk(
+  ctx: MarketingHubDataLoadContext,
+  args: {
+    fetchDurationMs: number;
+    itemsLen: number;
+    total: number;
+    sourceUsed: StudyDataSourceUsed;
+    failoverReason?: string;
+    snapshotVersion?: string;
+    snapshotAgeMs?: number;
+  },
+): void {
+  safeServerLog("exam_pathway_hub", "lessons_hub_page_fetch", {
+    event: "lessons_hub_page_fetch",
+    outcome: "ok",
+    pathway_id: ctx.pathwayId,
+    exam_code: ctx.examCode,
+    country: ctx.country,
+    pathname: ctx.pathname,
+    duration_ms: Math.round(args.fetchDurationMs),
+    timed_out: "0",
+    response_item_count: args.itemsLen,
+    response_total: args.total,
+    source_used: args.sourceUsed,
+    ...(args.failoverReason ? { failover_reason: args.failoverReason.slice(0, 200) } : {}),
+    ...(args.snapshotVersion ? { snapshot_version: args.snapshotVersion.slice(0, 120) } : {}),
+    ...(args.snapshotAgeMs !== undefined && args.snapshotAgeMs >= 0
+      ? { snapshot_age_ms: String(Math.round(args.snapshotAgeMs)) }
+      : {}),
+  });
+}
 
 /**
  * Critical-path lessons hub list: **no Promise.race timeouts**, no silent “empty inventory”.
- * Failures return {@link PathwayLessonsHubPageLoadState} `status: "error"` with timing metadata.
- *
- * `fetchImpl` is only for tests; production passes {@link getPathwayLessonsPageFresh}.
+ * When `STUDY_PUBLISHED_SNAPSHOT_DIR` is set and a matching export exists, primary DB failures fall back
+ * to the synchronized snapshot (same normalized {@link PathwayLessonsPageResult} contract).
  */
 export async function loadPathwayLessonsHubPageWithTelemetry(
   pathwayId: string,
   args: LoadPathwayLessonsHubPageArgs,
   ctx: MarketingHubDataLoadContext,
   fetchImpl: typeof getPathwayLessonsPageFresh = getPathwayLessonsPageFresh,
+  deps?: {
+    readHubSnapshot?: (
+      pid: string,
+      a: LoadPathwayLessonsHubPageArgs,
+    ) => Promise<StudyPublishedSnapshotEnvelope<PathwayLessonsPageResult> | null>;
+  },
 ): Promise<{
   pageResult: PathwayLessonsPageResult;
   lessonsPageLoad: PathwayLessonsHubPageLoadState;
 }> {
   const { pageRequested, pageSizeRequested, lessonContentLocale, listOpts } = args;
+  const readHubSnapshot = deps?.readHubSnapshot ?? readPathwayLessonsHubPageSnapshot;
   const t0 = performance.now();
-  try {
-    const raw = await fetchImpl(pathwayId, pageRequested, pageSizeRequested, lessonContentLocale, listOpts);
+
+  const returnSecondary = (
+    pageResult: PathwayLessonsPageResult,
+    envelope: StudyPublishedSnapshotEnvelope<PathwayLessonsPageResult>,
+    failoverReason: string,
+  ) => {
     const fetchDurationMs = performance.now() - t0;
-    const items = raw && typeof raw === "object" && Array.isArray((raw as PathwayLessonsPageResult).items)
-      ? (raw as PathwayLessonsPageResult).items
-      : [];
-    const total =
-      raw && typeof raw === "object" && typeof (raw as PathwayLessonsPageResult).total === "number"
-        ? (raw as PathwayLessonsPageResult).total
-        : items.length;
-
-    if (raw && typeof raw === "object" && "items" in raw && "total" in raw) {
-      const pageResult = raw as PathwayLessonsPageResult;
-      safeServerLog("exam_pathway_hub", "lessons_hub_page_fetch", {
-        event: "lessons_hub_page_fetch",
-        outcome: "ok",
-        pathway_id: ctx.pathwayId,
-        exam_code: ctx.examCode,
-        country: ctx.country,
-        pathname: ctx.pathname,
-        duration_ms: Math.round(fetchDurationMs),
-        timed_out: "0",
-        response_item_count: items.length,
-        response_total: total,
-      });
-      return {
-        pageResult,
-        lessonsPageLoad: {
-          status: "ok",
-          fetchDurationMs,
-          responseItemCount: items.length,
-          responseTotal: total,
-        },
-      };
-    }
-
-    const err = new Error("invalid_lessons_page_payload_shape");
-    logHubLessonsPageFailed(ctx, err);
-    safeServerLog("exam_pathway_hub", "lessons_hub_page_fetch", {
-      event: "lessons_hub_page_fetch",
-      outcome: "error",
-      reason: "invalid_payload",
+    const items = pageResult.items;
+    const age = computeSnapshotAgeMs(envelope.capturedAt);
+    logLessonsHubOk(ctx, {
+      fetchDurationMs,
+      itemsLen: items.length,
+      total: pageResult.total,
+      sourceUsed: "secondary",
+      failoverReason,
+      snapshotVersion: envelope.version,
+      snapshotAgeMs: age,
+    });
+    safeServerLog("exam_pathway_hub", "study_content_failover", {
+      event: "study_content_failover",
+      surface: "pathway_lessons_hub",
       pathway_id: ctx.pathwayId,
       exam_code: ctx.examCode,
       country: ctx.country,
-      pathname: ctx.pathname,
-      duration_ms: Math.round(fetchDurationMs),
-      timed_out: "0",
-      response_item_count: 0,
-      response_total: 0,
+      source_used: "secondary",
+      failover_reason: failoverReason.slice(0, 240),
+      snapshot_version: envelope.version.slice(0, 120),
+      snapshot_age_ms: String(Math.round(age)),
+      snapshot_used: "true",
+      final_outcome: "degraded_snapshot",
+      fallback_used: "true",
     });
-    recordRouteRenderFallback({
-      fallbackType: "hub_lessons_page_load_failed",
-      pathname: ctx.pathname,
-      pathwayId: ctx.pathwayId,
-      examCode: ctx.examCode,
+    logContractLoadDiagnostics({
+      operation: "lessons_hub_page_fetch",
+      duration_ms: Math.round(fetchDurationMs),
+      pathway_id: ctx.pathwayId,
+      exam_code: ctx.examCode,
       country: ctx.country,
+      locale: ctx.locale,
+      feature: "pathway_lessons_hub",
+      feature_surface: "marketing_lessons_hub",
+      outcome: "ok",
+      final_outcome: "degraded_snapshot",
+      live_outcome: primaryError ? "error" : "invalid_payload",
+      snapshot_used: "true",
+      snapshot_age_ms: String(Math.round(age)),
+      fallback_used: "true",
     });
     return {
-      pageResult: emptyPathwayLessonsPageResult(pageRequested, pageSizeRequested),
+      pageResult,
       lessonsPageLoad: {
-        status: "error",
-        reason: "invalid_payload",
+        status: "ok",
         fetchDurationMs,
-        timedOut: false,
-        detail: "invalid_lessons_page_payload_shape",
+        responseItemCount: items.length,
+        responseTotal: pageResult.total,
+        sourceUsed: "secondary",
+        failoverReason,
+        snapshotVersion: envelope.version,
+        snapshotAgeMs: age >= 0 ? age : undefined,
       },
     };
-  } catch (reason) {
+  };
+
+  let primaryError: unknown | null = null;
+  let rawPrimary: unknown = null;
+  try {
+    rawPrimary = await fetchImpl(pathwayId, pageRequested, pageSizeRequested, lessonContentLocale, listOpts);
+  } catch (e) {
+    primaryError = e;
+  }
+
+  const primaryCoerced = coercePathwayLessonsPageResult(rawPrimary);
+  const fetchDurationMsPrimary = performance.now() - t0;
+
+  if (primaryCoerced && !primaryError) {
+    logLessonsHubOk(ctx, {
+      fetchDurationMs: fetchDurationMsPrimary,
+      itemsLen: primaryCoerced.items.length,
+      total: primaryCoerced.total,
+      sourceUsed: "primary",
+    });
+    return {
+      pageResult: primaryCoerced,
+      lessonsPageLoad: {
+        status: "ok",
+        fetchDurationMs: fetchDurationMsPrimary,
+        responseItemCount: primaryCoerced.items.length,
+        responseTotal: primaryCoerced.total,
+        sourceUsed: "primary",
+      },
+    };
+  }
+
+  const failoverReason =
+    primaryError != null
+      ? `primary_throw:${primaryError instanceof Error ? primaryError.message.slice(0, 160) : String(primaryError).slice(0, 160)}`
+      : "primary_invalid_payload";
+
+  const snap = await readHubSnapshot(pathwayId, args);
+  if (snap) {
+    const fromSnap = coercePathwayLessonsPageResult(snap.payload);
+    if (fromSnap) {
+      if (primaryError) {
+        logHubLessonsPageFailed(ctx, primaryError);
+      } else {
+        logHubLessonsPageFailed(ctx, new Error("invalid_lessons_page_payload_shape"));
+      }
+      return returnSecondary(fromSnap, snap, failoverReason);
+    }
+  }
+
+  if (primaryError) {
     const fetchDurationMs = performance.now() - t0;
-    const message = reason instanceof Error ? reason.message : String(reason);
+    const message = primaryError instanceof Error ? primaryError.message : String(primaryError);
     const timedOut = /timeout|ETIMEDOUT|hub_optional_task_timeout/i.test(message);
-    logHubLessonsPageFailed(ctx, reason);
+    logHubLessonsPageFailed(ctx, primaryError);
     safeServerLog("exam_pathway_hub", "lessons_hub_page_fetch", {
       event: "lessons_hub_page_fetch",
       outcome: "error",
@@ -155,6 +248,7 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
       response_item_count: 0,
       response_total: 0,
       error_message: message.slice(0, 500),
+      source_used: "primary",
     });
     recordRouteRenderFallback({
       fallbackType: "hub_lessons_page_load_failed",
@@ -162,6 +256,22 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
       pathwayId: ctx.pathwayId,
       examCode: ctx.examCode,
       country: ctx.country,
+    });
+    logContractLoadDiagnostics({
+      operation: "lessons_hub_page_fetch",
+      duration_ms: Math.round(fetchDurationMs),
+      pathway_id: ctx.pathwayId,
+      exam_code: ctx.examCode,
+      country: ctx.country,
+      locale: ctx.locale,
+      feature: "pathway_lessons_hub",
+      feature_surface: "marketing_lessons_hub",
+      outcome: timedOut ? "timeout" : "error",
+      final_outcome: timedOut ? "timeout" : "error",
+      live_outcome: "error",
+      snapshot_used: "false",
+      fallback_used: "false",
+      error_message: message.slice(0, 500),
     });
     return {
       pageResult: emptyPathwayLessonsPageResult(pageRequested, pageSizeRequested),
@@ -174,4 +284,54 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
       },
     };
   }
+
+  const fetchDurationMs = performance.now() - t0;
+  logHubLessonsPageFailed(ctx, new Error("invalid_lessons_page_payload_shape"));
+  safeServerLog("exam_pathway_hub", "lessons_hub_page_fetch", {
+    event: "lessons_hub_page_fetch",
+    outcome: "error",
+    reason: "invalid_payload",
+    pathway_id: ctx.pathwayId,
+    exam_code: ctx.examCode,
+    country: ctx.country,
+    pathname: ctx.pathname,
+    duration_ms: Math.round(fetchDurationMs),
+    timed_out: "0",
+    response_item_count: 0,
+    response_total: 0,
+    source_used: "primary",
+  });
+  recordRouteRenderFallback({
+    fallbackType: "hub_lessons_page_load_failed",
+    pathname: ctx.pathname,
+    pathwayId: ctx.pathwayId,
+    examCode: ctx.examCode,
+    country: ctx.country,
+  });
+  logContractLoadDiagnostics({
+    operation: "lessons_hub_page_fetch",
+    duration_ms: Math.round(fetchDurationMs),
+    pathway_id: ctx.pathwayId,
+    exam_code: ctx.examCode,
+    country: ctx.country,
+    locale: ctx.locale,
+    feature: "pathway_lessons_hub",
+    feature_surface: "marketing_lessons_hub",
+    outcome: "error",
+    final_outcome: "error",
+    live_outcome: "invalid_payload",
+    snapshot_used: "false",
+    fallback_used: "false",
+    error_message: "invalid_lessons_page_payload_shape",
+  });
+  return {
+    pageResult: emptyPathwayLessonsPageResult(pageRequested, pageSizeRequested),
+    lessonsPageLoad: {
+      status: "error",
+      reason: "invalid_payload",
+      fetchDurationMs,
+      timedOut: false,
+      detail: "invalid_lessons_page_payload_shape",
+    },
+  };
 }

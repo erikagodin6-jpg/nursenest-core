@@ -1,9 +1,11 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { MarketingHubDataLoadContext } from "@/lib/exam-pathways/marketing-hub-data-context";
+import type { LoadPathwayLessonsHubPageArgs } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import {
   loadPathwayLessonsHubPageWithTelemetry,
   type PathwayLessonsHubPageLoadState,
 } from "@/lib/exam-pathways/marketing-hub-lessons-page-fetch";
+import type { StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failover/study-published-snapshot-types";
 import {
   EMPTY_QUESTION_SNAPSHOT,
   ZERO_LESSON_COUNT,
@@ -172,7 +174,13 @@ export async function loadPathwayLessonsHubAggregates(
     includeTopics?: boolean;
   },
   ctx: MarketingHubDataLoadContext,
-  deps?: { fetchLessonsPageFresh?: typeof getPathwayLessonsPageFresh },
+  deps?: {
+    fetchLessonsPageFresh?: typeof getPathwayLessonsPageFresh;
+    readHubLessonsSnapshot?: (
+      pathwayId: string,
+      args: LoadPathwayLessonsHubPageArgs,
+    ) => Promise<StudyPublishedSnapshotEnvelope<PathwayLessonsPageResult> | null>;
+  },
 ): Promise<PathwayLessonsHubAggregates> {
   const {
     pageRequested,
@@ -191,6 +199,7 @@ export async function loadPathwayLessonsHubAggregates(
     { pageRequested, pageSizeRequested, lessonContentLocale, listOpts },
     ctx,
     fetchLessons,
+    deps?.readHubLessonsSnapshot ? { readHubSnapshot: deps.readHubLessonsSnapshot } : undefined,
   );
   const lessonsPageLoadRejected = lessonsPageLoad.status === "error";
 

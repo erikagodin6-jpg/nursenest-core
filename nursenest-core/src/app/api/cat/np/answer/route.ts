@@ -45,7 +45,7 @@ import {
 } from "@/lib/cat/cat-engine";
 import {
   completeNpCatSession,
-  loadNpCatSession,
+  loadNpCatSessionDetailed,
   saveNpCatSession,
 } from "@/lib/cat/session-persistence";
 import { analyseSession } from "@/lib/cat/session-analyzer";
@@ -81,10 +81,19 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   // ── Load session state ───────────────────────────────────────────────────
 
-  const loaded = await loadNpCatSession(prisma, practiceTestId, userId);
-  if (!loaded) {
+  const loaded = await loadNpCatSessionDetailed(prisma, practiceTestId, userId);
+  if (!loaded.ok) {
+    if (loaded.reason === "corrupt_adaptive_state") {
+      return NextResponse.json(
+        {
+          error: "Stored CAT session is unreadable. Start a fresh session from practice tests.",
+          code: "cat_session_corrupt_start_fresh",
+        },
+        { status: 409 },
+      );
+    }
     return NextResponse.json(
-      { error: "Session not found or already completed" },
+      { error: "Session not found or already completed", code: loaded.reason },
       { status: 404 },
     );
   }

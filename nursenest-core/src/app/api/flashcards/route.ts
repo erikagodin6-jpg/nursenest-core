@@ -22,6 +22,8 @@ import {
   parseListPage,
 } from "@/lib/api/api-pagination-limits";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { readFlashcardsSubscriberListSnapshot } from "@/lib/study-content-failover/flashcards-list-snapshot-read";
+import { snapshotAgeMs as computeSnapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
 
 /** Keep numeric literal — Next segment config must be statically analyzable (see `API_ROUTE_MAX_DURATION_LIST_HEAVY_SEC`). */
 export const maxDuration = 60;
@@ -139,11 +141,61 @@ export async function GET(req: NextRequest) {
       pageCount,
       flashcards: localized,
       mode: "subscriber" as const,
+      source_used: "primary" as const,
     };
     logLargeApiResponse("/api/flashcards", estimateJsonUtf8Bytes(body));
     return NextResponse.json(body);
   } catch (e) {
     safeServerLogCritical("api_flashcards", "find_failed", { page }, e);
+    const snap = await readFlashcardsSubscriberListSnapshot({
+      tier: String(gate.entitlement.tier ?? "unknown"),
+      country: String(gate.entitlement.country ?? "unknown"),
+      locale: educationalLocale,
+    });
+    if (
+      snap &&
+      snap.payload.page === page &&
+      snap.payload.pageSize === pageSize &&
+      Array.isArray(snap.payload.flashcards)
+    ) {
+      const age = computeSnapshotAgeMs(snap.capturedAt);
+      const localized = snap.payload.flashcards.map((c) => {
+        const loc = applyFlashcardCardOverlay(
+          { id: c.id, front: c.front, back: c.back },
+          educationalLocale,
+          flashcardBundle,
+        );
+        return {
+          ...c,
+          front: loc.front,
+          back: loc.back,
+          ...(loc.explanation ? { explanation: loc.explanation } : {}),
+        };
+      });
+      const body = {
+        page: snap.payload.page,
+        pageSize: snap.payload.pageSize,
+        total: snap.payload.total,
+        pageCount: snap.payload.pageCount,
+        flashcards: localized,
+        mode: "subscriber" as const,
+        source_used: "secondary" as const,
+        failover_reason: "primary_db_failed",
+        snapshot_version: snap.version,
+        snapshot_age_ms: age,
+      };
+      safeServerLog("api_flashcards", "study_content_failover", {
+        event: "study_content_failover",
+        surface: "flashcards_subscriber_list",
+        source_used: "secondary",
+        failover_reason: "primary_db_failed",
+        snapshot_version: snap.version.slice(0, 120),
+        snapshot_age_ms: String(Math.round(age)),
+        user_id_prefix: gate.userId.slice(0, 8),
+      });
+      logLargeApiResponse("/api/flashcards", estimateJsonUtf8Bytes(body));
+      return NextResponse.json(body);
+    }
     return NextResponse.json({ error: "Unable to load flashcards" }, { status: 503 });
   }
   });

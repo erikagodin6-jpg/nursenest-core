@@ -5990,6 +5990,37 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   background: color-mix(in srgb, var(--semantic-panel-muted) 28%, var(--semantic-surface));
 }
 
+/* UWorld-style board: tinted top/bottom bars, white item well */
+.nn-cat-exam-board-top,
+.nn-cat-exam-board-footer {
+  background: color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-surface));
+}
+
+.nn-cat-exam-board-frame {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 14%, var(--semantic-surface));
+}
+
+.nn-cat-exam-content-well {
+  background: var(--semantic-surface);
+}
+
+.nn-cat-exam-board-progress {
+  background: color-mix(in srgb, var(--semantic-panel-muted) 55%, var(--semantic-surface));
+}
+
+.nn-cat-exam-category-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  line-height: 1.35;
+  color: var(--semantic-text-muted);
+  text-transform: uppercase;
+}
+
+.nn-cat-exam-navigator-dialog::backdrop {
+  background: color-mix(in srgb, var(--semantic-text-primary) 35%, transparent);
+}
+
 .nn-cat-exam-topbar {
   min-height: 3.5rem;
   padding-top: 0.5rem;

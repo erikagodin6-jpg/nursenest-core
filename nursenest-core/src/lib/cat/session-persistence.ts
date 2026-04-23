@@ -30,6 +30,7 @@ import type { PrismaClient } from "@prisma/client";
 import type { AnswerRecord, CatSessionState, SessionAnalysis } from "./types";
 import { emptyPerformanceProfile } from "./performance-tracker";
 import { readinessBand } from "./readiness-scorer";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 // ─── Compact snapshot ─────────────────────────────────────────────────────────
 
@@ -248,6 +249,63 @@ export async function createNpCatSession(
   return record.id;
 }
 
+export type NpCatSessionLoadFailureReason =
+  | "not_found"
+  | "completed"
+  | "corrupt_adaptive_state"
+  | "invalid_config";
+
+export type NpCatSessionLoadDetailed =
+  | { ok: true; state: CatSessionState; config: NpCatSessionConfig }
+  | { ok: false; reason: NpCatSessionLoadFailureReason; detail?: string };
+
+function npCatAdaptiveCorruptionDetail(raw: unknown): string {
+  if (raw == null) return "missing_adaptive_state";
+  if (typeof raw !== "object") return "non_object_adaptive_state";
+  const v = (raw as Record<string, unknown>)["_v"];
+  if (v !== 1) return `unexpected_state_version:${String(v)}`;
+  return "deserialize_failed";
+}
+
+/**
+ * Load an in-progress NP CAT session with explicit failure reasons (no silent resume from corrupt rows).
+ */
+export async function loadNpCatSessionDetailed(
+  prisma: PrismaClient,
+  practiceTestId: string,
+  userId: string,
+): Promise<NpCatSessionLoadDetailed> {
+  const record = await prisma.practiceTest.findFirst({
+    where: { id: practiceTestId, userId },
+    select: { adaptiveState: true, config: true, status: true },
+  });
+
+  if (!record) return { ok: false, reason: "not_found" };
+  if (record.status === "COMPLETED") return { ok: false, reason: "completed" };
+
+  const state = deserialise(record.adaptiveState);
+  if (!state) {
+    const detail = npCatAdaptiveCorruptionDetail(record.adaptiveState);
+    safeServerLog("cat_np", "cat_session_adaptive_state_corrupt", {
+      practice_test_id: practiceTestId.slice(0, 24),
+      user_id_prefix: userId.slice(0, 8),
+      detail: detail.slice(0, 200),
+    });
+    return { ok: false, reason: "corrupt_adaptive_state", detail };
+  }
+
+  const config = record.config as unknown as NpCatSessionConfig | null;
+  if (!config || config.kind !== "np-cat") {
+    return {
+      ok: false,
+      reason: "invalid_config",
+      detail: !config ? "missing_config" : `unexpected_config_kind:${String((config as { kind?: string }).kind)}`,
+    };
+  }
+
+  return { ok: true, state, config };
+}
+
 /**
  * Load an in-progress NP CAT session from the DB.
  * Returns null when:
@@ -255,28 +313,16 @@ export async function createNpCatSession(
  *   - session is already COMPLETED
  *   - adaptiveState is missing or corrupt (_v mismatch)
  *   - config.kind is not "np-cat"
+ *
+ * Prefer {@link loadNpCatSessionDetailed} when callers must distinguish corrupt state from missing sessions.
  */
 export async function loadNpCatSession(
   prisma: PrismaClient,
   practiceTestId: string,
   userId: string,
 ): Promise<{ state: CatSessionState; config: NpCatSessionConfig } | null> {
-  const record = await prisma.practiceTest.findFirst({
-    where: { id: practiceTestId, userId },
-    select: { adaptiveState: true, config: true, status: true },
-  });
-
-  // Guard: missing or already completed
-  if (!record) return null;
-  if (record.status === "COMPLETED") return null;
-
-  const state = deserialise(record.adaptiveState);
-  if (!state) return null;
-
-  const config = record.config as unknown as NpCatSessionConfig | null;
-  if (!config || config.kind !== "np-cat") return null;
-
-  return { state, config };
+  const r = await loadNpCatSessionDetailed(prisma, practiceTestId, userId);
+  return r.ok ? { state: r.state, config: r.config } : null;
 }
 
 /**

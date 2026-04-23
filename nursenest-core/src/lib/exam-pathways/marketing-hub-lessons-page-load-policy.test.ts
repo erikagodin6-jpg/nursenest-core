@@ -63,6 +63,7 @@ test("slow lessons page fetch (>1s) still resolves ok with real payload (no sile
 
   assert.equal(lessonsPageLoad.status, "ok");
   if (lessonsPageLoad.status === "ok") {
+    assert.equal(lessonsPageLoad.sourceUsed, "primary");
     assert.ok(lessonsPageLoad.fetchDurationMs >= 1000, "duration should reflect slow path");
     assert.equal(lessonsPageLoad.responseTotal, 3);
     assert.equal(lessonsPageLoad.responseItemCount, 1);
@@ -110,6 +111,7 @@ test("fast successful empty page is ok (real zero inventory)", async () => {
 
   assert.equal(lessonsPageLoad.status, "ok");
   if (lessonsPageLoad.status === "ok") {
+    assert.equal(lessonsPageLoad.sourceUsed, "primary");
     assert.ok(lessonsPageLoad.fetchDurationMs < 500, "fast path");
     assert.equal(lessonsPageLoad.responseTotal, 0);
   }
