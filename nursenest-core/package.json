@@ -251,7 +251,7 @@
     "i18n:nav-parity-audit": "node scripts/nav-i18n-parity.mjs audit",
     "i18n:nav-parity-fill": "node scripts/nav-i18n-parity.mjs fill",
     "i18n:nav-parity-verify": "node scripts/nav-i18n-parity.mjs verify",
-    "i18n:validate-nav": "node ../scripts/validate-nav-i18n.mjs",
+    "i18n:validate-nav": "npx tsx scripts/validate-production-chrome-all-locales.mts",
     "i18n:sync-audited-to-marketing-en": "node scripts/sync-audited-keys-into-marketing-en.mjs",
     "i18n:fill-marketing-nav-footer-overlays": "node scripts/fill-marketing-nav-footer-overlays.mjs",
     "i18n:import:content": "tsx scripts/import-educational-translation-overlays.ts",

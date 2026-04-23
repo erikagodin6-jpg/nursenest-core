@@ -8,8 +8,8 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getAllProgrammaticSlugs } from "../nursenest-core/src/lib/seo/programmatic-registry";
-import { MARKETING_LOCALE_CODES } from "../nursenest-core/src/lib/i18n/marketing-locale-policy";
+import programmaticRegistryModule from "../nursenest-core/src/lib/seo/programmatic-registry";
+import marketingLocalePolicyModule from "../nursenest-core/src/lib/i18n/marketing-locale-policy";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,6 +19,12 @@ const ROOT = fs.existsSync(path.join(REPO_ROOT, "nursenest-core", "src", "app"))
   ? path.join(REPO_ROOT, "nursenest-core")
   : REPO_ROOT;
 const APP_DIR = path.join(ROOT, "src", "app");
+const getAllProgrammaticSlugs = (
+  programmaticRegistryModule as { getAllProgrammaticSlugs: () => readonly string[] }
+).getAllProgrammaticSlugs;
+const MARKETING_LOCALE_CODES = (
+  marketingLocalePolicyModule as { MARKETING_LOCALE_CODES: readonly string[] }
+).MARKETING_LOCALE_CODES;
 
 type SegToken =
   | { kind: "static"; value: string }
