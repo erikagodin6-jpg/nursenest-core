@@ -257,7 +257,7 @@ export function ProtectedPremiumContent({
   const ts = new Date().toISOString().slice(0, 19).replace("T", " ");
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className}`} data-nn-protected-premium-root="">
       <div
         ref={rootRef}
         className={`nn-protected-premium-surface relative overflow-hidden rounded-xl ${flags.copyDeterrence ? "select-none" : ""} ${flags.hideProtectedOnPrint ? "print:hidden" : ""}`}
@@ -285,7 +285,9 @@ export function ProtectedPremiumContent({
             </div>
           </div>
         ) : null}
-        <div className="relative z-[2]">{children}</div>
+        <div className="relative z-[2]" data-nn-protected-premium-main="">
+          {children}
+        </div>
       </div>
       {toast ? (
         <div

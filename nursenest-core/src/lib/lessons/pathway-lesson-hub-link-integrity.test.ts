@@ -2,10 +2,7 @@
 import "../../../scripts/stub-server-only.cjs";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import {
-  HubVerifyPreparedPositiveZeroKeptError,
-  verifyMarketingHubLessonRowsResolve,
-} from "@/lib/lessons/pathway-lesson-hub-link-integrity";
+import { verifyMarketingHubLessonRowsResolve } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 
 function hubRow(slug: string, title = "Lesson title"): PathwayLessonRecord {
@@ -28,6 +25,30 @@ function hubRow(slug: string, title = "Lesson title"): PathwayLessonRecord {
 }
 
 describe("verifyMarketingHubLessonRowsResolve", () => {
+  it("hydrates each slug using the hub row localeMeta.contentLocale when present", async () => {
+    const calls: Array<{ slug: string; loc: string }> = [];
+    const resolveLessonDetail = async (pathwayId: string, slug: string, loc: string) => {
+      calls.push({ slug, loc });
+      if (pathwayId !== "ca-rn-nclex-rn") return undefined;
+      if (loc === "fr") return hubRow(slug);
+      return undefined;
+    };
+    const rowFr: PathwayLessonRecord = {
+      ...hubRow("lesson-fr"),
+      localeMeta: {
+        requestedContentLocale: "en",
+        contentLocale: "fr",
+        usedLocaleFallback: true,
+        isCatalogEnglishSource: false,
+      },
+    };
+    const { kept } = await verifyMarketingHubLessonRowsResolve({ id: "ca-rn-nclex-rn" }, [rowFr], "en", {
+      resolveLessonDetail,
+    });
+    assert.equal(kept.length, 1);
+    assert.deepEqual(calls, [{ slug: "lesson-fr", loc: "fr" }]);
+  });
+
   it("keeps valid rows and drops only unresolvable slugs (mixed inventory)", async () => {
     const resolveLessonDetail = async (pathwayId: string, slug: string) => {
       if (pathwayId !== "ca-rn-nclex-rn") return undefined;
@@ -43,6 +64,9 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
     assert.equal(kept.length, 2);
     assert.equal(diagnostics.keptRowCount, 2);
     assert.equal(diagnostics.incomingPreparedRowCount, 3);
+    assert.ok(Array.isArray(diagnostics.exclusionReasonsRanked));
+    assert.equal(diagnostics.exclusionReasonsRanked?.[0]?.reason, "detail_loader_miss");
+    assert.equal(diagnostics.exclusionReasonsRanked?.[0]?.count, 1);
   });
 
   it("does not zero the hub when one slug fails among several", async () => {
@@ -85,13 +109,16 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
     assert.equal(kept.length, 0);
   });
 
-  it("throws HubVerifyPreparedPositiveZeroKeptError when all rows drop and invariant is not skipped", async () => {
+  it("returns empty kept without throwing when every slug fails (recoverable inventory shrink)", async () => {
     const resolveLessonDetail = async () => undefined;
-    await assert.rejects(
-      verifyMarketingHubLessonRowsResolve({ id: "ca-rn-nclex-rn" }, [hubRow("a")], "en", {
-        resolveLessonDetail,
-      }),
-      (err: unknown) => err instanceof HubVerifyPreparedPositiveZeroKeptError,
+    const { kept, diagnostics } = await verifyMarketingHubLessonRowsResolve(
+      { id: "ca-rn-nclex-rn" },
+      [hubRow("a")],
+      "en",
+      { resolveLessonDetail },
     );
+    assert.equal(kept.length, 0);
+    assert.equal(diagnostics.keptRowCount, 0);
+    assert.ok((diagnostics.excludedByReason.detail_loader_miss ?? 0) >= 1);
   });
 });

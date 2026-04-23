@@ -22,6 +22,11 @@ export type MarketingHubLessonVerifyDiagnostics = {
   /** Count of **unique slugs** failing detail resolution. */
   excludedUniqueSlugCount: number;
   excludedByReason: Partial<Record<HubMarketingLessonDetailFailureReason, number>>;
+  /**
+   * Same data as `excludedByReason`, sorted by descending count for structured logs / dashboards.
+   * Present whenever verify ran with at least one incoming row.
+   */
+  exclusionReasonsRanked?: Array<{ reason: HubMarketingLessonDetailFailureReason; count: number }>;
 };
 
 export type PublicMarketingLessonCrossLinkExclusionReason =

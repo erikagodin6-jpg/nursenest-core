@@ -447,103 +447,116 @@ export function FlashcardsHubClient({
 
   const isNpPathway = scopedPathwayId.includes("-np-");
 
+  const sessionSummaryLine = [
+    `${cardLimit} cards`,
+    selectedBodyIds.length === 0 || (allBodyIds.length > 0 && selectedBodyIds.length >= allBodyIds.length)
+      ? "all body systems"
+      : `${selectedBodyIds.length} ${selectedBodyIds.length === 1 ? "system" : "systems"}`,
+    filterCount > 0 ? `${filterCount} filter${filterCount === 1 ? "" : "s"}` : null,
+    shuffleOn ? "shuffle on" : "shuffle off",
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
   return (
-    <div className="lv-page-scope mx-auto flex min-h-[60vh] max-w-xl flex-col gap-10 px-4 py-8 sm:max-w-2xl sm:py-10">
+    <div className="lv-page-scope mx-auto flex max-w-3xl flex-col gap-5 px-4 py-6 sm:py-8">
       {pathwayBootstrapSource === "secondary" ? (
         <div className="max-w-prose" data-nn-flashcards-pathway-bootstrap-source="secondary">
           <LearnerStudyLiveSyncBanner />
         </div>
       ) : null}
-      <header className="space-y-3">
+
+      <header className="space-y-2">
         <h1 className="text-2xl font-semibold tracking-tight text-lv-text-primary sm:text-3xl">
           {t("learner.flashcards.hub.title")}
         </h1>
         <p className="max-w-prose text-sm leading-relaxed text-lv-text-secondary">{t("learner.flashcards.hub.subtitle")}</p>
-        <div className="pt-1">
-          <LearnerCtaLink href={weakAreasStudyHref} variant="primary" className="min-h-11 px-5">
-            {t("learner.flashcards.hub.weakAreasCta")}
-          </LearnerCtaLink>
-        </div>
       </header>
 
       {!metaLoading && kpiLoadError === "fatal" ? (
-        <section
-          className="rounded-xl border border-[var(--semantic-danger)]/50 bg-[color-mix(in_srgb,var(--semantic-danger)_10%,transparent)] px-4 py-4 text-sm text-lv-text-primary"
+        <div
+          className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-[var(--semantic-danger)]/40 bg-[color-mix(in_srgb,var(--semantic-danger)_8%,transparent)] px-3 py-2 text-xs text-lv-text-primary"
           role="alert"
         >
-          <p className="font-semibold">Could not load flashcard stats</p>
-          <p className="mt-2 text-lv-text-secondary">
-            Check your connection and try again. This page will not show placeholder zeros while data is unavailable.
-          </p>
+          <span>Could not load flashcard stats.</span>
           <button
             type="button"
-            className="mt-3 inline-flex min-h-10 items-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground"
+            className="shrink-0 rounded-full border border-lv-border-soft bg-lv-bg-surface px-3 py-1.5 text-xs font-semibold text-lv-text-primary hover:bg-lv-bg-surface-alt"
             onClick={() => window.location.reload()}
           >
             Retry
           </button>
-        </section>
+        </div>
       ) : null}
 
       {!metaLoading && kpiLoadError !== "fatal" && (dueSummary || stats || kpiLoadError === "partial") ? (
-        <section className="space-y-3" aria-label={t("learner.flashcards.hub.masteryOverview")}>
-          {kpiLoadError === "partial" ? (
-            <p className="text-xs font-medium text-[var(--semantic-warning)]" role="status">
-              Some flashcard stats could not be loaded; figures below may be incomplete until you refresh.
-            </p>
-          ) : null}
-          <p className="text-xs font-medium tracking-wide text-lv-text-secondary">{t("learner.flashcards.hub.masteryOverview")}</p>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="lv-kpi-tile">
-              <p className="text-xs text-lv-text-secondary">{t("learner.flashcards.hub.kpiDueToday")}</p>
-              <p className="mt-1 text-2xl font-semibold tabular-nums text-[var(--semantic-info)]">{dueSummary != null ? dueSummary.dueToday : "—"}</p>
-            </div>
-            <div className="lv-kpi-tile">
-              <p className="text-xs text-lv-text-secondary">{t("learner.flashcards.hub.kpiOverdue")}</p>
-              <p
-                className={`mt-1 text-2xl font-semibold tabular-nums ${
-                  dueSummary != null && dueSummary.overdue > 0 ? "text-[var(--semantic-danger)]" : ""
-                }`}
-              >
-                {dueSummary != null ? dueSummary.overdue : "—"}
+        <details className="rounded-xl border border-lv-border-soft bg-lv-bg-surface/60 [&_summary]:list-none [&_summary::-webkit-details-marker]:hidden">
+          <summary className="cursor-pointer px-3 py-2.5 text-sm font-medium text-lv-text-primary hover:bg-lv-primary-50/30">
+            {t("learner.flashcards.hub.masteryOverview")}
+            <span className="ml-2 text-xs font-normal text-lv-text-secondary">(optional)</span>
+          </summary>
+          <div className="space-y-3 border-t border-lv-border-soft px-3 pb-3 pt-2" aria-label={t("learner.flashcards.hub.masteryOverview")}>
+            {kpiLoadError === "partial" ? (
+              <p className="text-xs font-medium text-[var(--semantic-warning)]" role="status">
+                Some flashcard stats could not be loaded; figures below may be incomplete until you refresh.
               </p>
-            </div>
-            <div className="lv-kpi-tile">
-              <p className="text-xs text-lv-text-secondary">{t("learner.flashcards.hub.kpiStreak")}</p>
-              <p className="mt-1 text-2xl font-semibold tabular-nums text-[var(--semantic-chart-3)]">{stats != null ? stats.currentStreak : "—"}</p>
-              {stats != null ? (
-                <p className="mt-1 text-xs text-lv-text-secondary">
-                  {t("learner.flashcards.hub.kpiBest")}: <span className="font-medium tabular-nums">{stats.longestStreak}</span>
+            ) : null}
+            <div className="grid gap-2 sm:grid-cols-2">
+              <div className="lv-kpi-tile py-3">
+                <p className="text-xs text-lv-text-secondary">{t("learner.flashcards.hub.kpiDueToday")}</p>
+                <p className="mt-0.5 text-lg font-semibold tabular-nums text-[var(--semantic-info)]">
+                  {dueSummary != null ? dueSummary.dueToday : "—"}
                 </p>
-              ) : null}
+              </div>
+              <div className="lv-kpi-tile py-3">
+                <p className="text-xs text-lv-text-secondary">{t("learner.flashcards.hub.kpiOverdue")}</p>
+                <p
+                  className={`mt-0.5 text-lg font-semibold tabular-nums ${
+                    dueSummary != null && dueSummary.overdue > 0 ? "text-[var(--semantic-danger)]" : ""
+                  }`}
+                >
+                  {dueSummary != null ? dueSummary.overdue : "—"}
+                </p>
+              </div>
+              <div className="lv-kpi-tile py-3">
+                <p className="text-xs text-lv-text-secondary">{t("learner.flashcards.hub.kpiStreak")}</p>
+                <p className="mt-0.5 text-lg font-semibold tabular-nums text-[var(--semantic-chart-3)]">
+                  {stats != null ? stats.currentStreak : "—"}
+                </p>
+                {stats != null ? (
+                  <p className="mt-0.5 text-[11px] text-lv-text-secondary">
+                    {t("learner.flashcards.hub.kpiBest")}: <span className="font-medium tabular-nums">{stats.longestStreak}</span>
+                  </p>
+                ) : null}
+              </div>
+              <div className="lv-kpi-tile py-3">
+                <p className="text-xs text-lv-text-secondary">{t("learner.flashcards.hub.kpiReviewed")}</p>
+                <p className="mt-0.5 text-lg font-semibold tabular-nums">{stats != null ? stats.cardsReviewedTotal : "—"}</p>
+              </div>
             </div>
-            <div className="lv-kpi-tile">
-              <p className="text-xs text-lv-text-secondary">{t("learner.flashcards.hub.kpiReviewed")}</p>
-              <p className="mt-1 text-2xl font-semibold tabular-nums">{stats != null ? stats.cardsReviewedTotal : "—"}</p>
-            </div>
+            {totalDue > 0 ? (
+              <Link href={weakAreasStudyHref} className="block rounded-lg border border-lv-border-soft px-3 py-2 text-center text-sm font-medium text-lv-text-primary hover:bg-lv-primary-50/40">
+                Review {totalDue} due now →
+              </Link>
+            ) : null}
           </div>
-          {totalDue > 0 ? (
-            <Link href={weakAreasStudyHref} className="lv-cta-banner lv-cta-banner--brand-tint">
-              Review {totalDue} due now →
-            </Link>
-          ) : null}
-        </section>
+        </details>
       ) : null}
 
-      <section id="study-session" className="lv-flash-shell space-y-8" aria-labelledby="custom-study-heading">
-        <div className="space-y-2">
-          <p className="text-xs font-medium tracking-wide text-lv-primary-500">{pathwayDisplayName}</p>
-          <h2 id="custom-study-heading" className="text-xl font-semibold tracking-tight text-lv-text-primary sm:text-2xl">
-            {t("learner.flashcards.hub.customStudyTitle")}
-          </h2>
-          <p className="text-sm leading-relaxed text-lv-text-secondary">
-            Build a focused flashcard session for this pathway.
-          </p>
+      <section id="study-session" className="lv-flash-shell space-y-4" aria-labelledby="flashcards-launcher-heading">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <div>
+            <h2 id="flashcards-launcher-heading" className="text-lg font-semibold tracking-tight text-lv-text-primary sm:text-xl">
+              {t("learner.flashcards.hub.bodySystemsHeading")}
+            </h2>
+            <p className="text-xs font-medium text-lv-primary-500">{pathwayDisplayName}</p>
+          </div>
+          {bodyAreasSummary ? <p className="text-xs text-lv-text-secondary">{bodyAreasSummary}</p> : null}
         </div>
 
-        <div className="space-y-3">
-          <p className="text-sm font-medium text-lv-text-primary">Session size</p>
-          <div className="flex flex-wrap gap-2" role="group" aria-label="Number of cards">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs font-medium text-lv-text-secondary">Cards</span>
+          <div className="flex flex-wrap gap-1.5" role="group" aria-label="Number of cards">
             {CARD_COUNTS.map((n) => {
               const on = cardLimit === n;
               return (
@@ -562,15 +575,23 @@ export function FlashcardsHubClient({
           </div>
         </div>
 
-        <div className="space-y-4">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-sm font-medium text-lv-text-primary">{t("learner.flashcards.hub.bodySystemsHeading")}</p>
-              {bodyAreasSummary ? <p className="mt-1 text-xs text-lv-text-secondary">{bodyAreasSummary}</p> : null}
-            </div>
+        <div className="space-y-3">
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+            <label className="min-w-0 flex-1 text-xs font-medium text-lv-text-secondary">
+              Search body systems
+              <input
+                type="search"
+                value={categorySearch}
+                onChange={(e) => setCategorySearch(e.target.value)}
+                placeholder="Find a body system…"
+                autoComplete="off"
+                disabled={!bodySystemsPickerEnabled}
+                className="mt-1 w-full min-h-10 rounded-lv-lg border border-lv-border-soft bg-lv-bg-surface px-3 py-2 text-sm text-lv-text-primary shadow-lv-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lv-primary-300 disabled:cursor-not-allowed disabled:opacity-40"
+              />
+            </label>
             <div className="flex flex-wrap gap-2">
               {showWeakShortcut ? (
-                <button type="button" onClick={applyWeakShortcut} className="lv-chip-warn">
+                <button type="button" onClick={applyWeakShortcut} className="lv-chip-warn text-xs">
                   Focus due cards
                 </button>
               ) : null}
@@ -578,7 +599,7 @@ export function FlashcardsHubClient({
                 type="button"
                 onClick={selectAllSystems}
                 disabled={!bodySystemsPickerEnabled}
-                className="lv-cta-quiet lv-cta-quiet--emphasis disabled:pointer-events-none disabled:opacity-40"
+                className="lv-cta-quiet lv-cta-quiet--emphasis text-xs disabled:pointer-events-none disabled:opacity-40"
               >
                 Select all
               </button>
@@ -586,211 +607,203 @@ export function FlashcardsHubClient({
                 type="button"
                 onClick={clearSystemsAndSearch}
                 disabled={!bodySystemsPickerEnabled}
-                className="lv-cta-quiet disabled:pointer-events-none disabled:opacity-40"
+                className="lv-cta-quiet text-xs disabled:pointer-events-none disabled:opacity-40"
               >
-                Clear
+                Clear all
               </button>
             </div>
           </div>
-          <label className="block text-xs font-medium text-lv-text-secondary">
-            Search areas
-            <input
-              type="search"
-              value={categorySearch}
-              onChange={(e) => setCategorySearch(e.target.value)}
-              placeholder="Find a body system…"
-              autoComplete="off"
-              disabled={!bodySystemsPickerEnabled}
-              className="mt-1.5 w-full min-h-11 rounded-lv-lg border border-lv-border-soft bg-lv-bg-surface px-3 py-2.5 text-sm text-lv-text-primary shadow-lv-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lv-primary-300 disabled:cursor-not-allowed disabled:opacity-40"
-            />
-          </label>
-          <div className="lv-panel lv-panel--border-muted flex min-h-20 flex-col gap-3 p-3 sm:p-4">
+
+          <div className="lv-panel lv-panel--border-muted p-3 sm:p-4">
             {customSessionLoading && bodySystemsOutcome === "pending" ? (
               <p className="text-sm text-lv-text-secondary">{t("learner.flashcards.hub.bodySystemsLoading")}</p>
             ) : null}
             {customSessionLoading && bodySystemsOutcome === "populated" ? (
-              <p className="text-xs text-lv-text-secondary">{t("learner.flashcards.hub.bodySystemsRefreshing")}</p>
+              <p className="mb-2 text-xs text-lv-text-secondary">{t("learner.flashcards.hub.bodySystemsRefreshing")}</p>
             ) : null}
             {!customSessionLoading && bodySystemsOutcome === "empty" ? (
               <div className="space-y-2">
                 <p className="text-sm leading-relaxed text-lv-text-secondary">{t("learner.flashcards.hub.bodySystemsEmpty")}</p>
                 <div className="flex flex-wrap gap-2">
-                  <Link href="/app/questions" className="lv-btn-secondary min-h-10 px-4 py-2 text-sm">
+                  <Link href="/app/questions" className="lv-btn-secondary min-h-9 px-3 py-1.5 text-xs">
                     {t("learner.flashcards.hub.bodySystemsEmptyCtaQuestions")}
                   </Link>
-                  <Link href="/app/lessons" className="lv-btn-secondary min-h-10 px-4 py-2 text-sm">
+                  <Link href="/app/lessons" className="lv-btn-secondary min-h-9 px-3 py-1.5 text-xs">
                     {t("learner.flashcards.hub.bodySystemsEmptyCtaLessons")}
                   </Link>
-                  <LearnerCtaLink href={weakAreasStudyHref} variant="secondary" className="min-h-10 px-4 py-2 text-sm">
+                  <LearnerCtaLink href={weakAreasStudyHref} variant="secondary" className="min-h-9 px-3 py-1.5 text-xs">
                     {t("learner.flashcards.hub.weakAreasCta")}
                   </LearnerCtaLink>
                 </div>
               </div>
             ) : null}
             {!customSessionLoading && bodySystemsOutcome === "error" ? (
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm text-[var(--semantic-danger)]">{builderError ?? t("learner.flashcards.hub.bodySystemsError")}</p>
+              <div className="flex flex-wrap items-center gap-2 rounded-md border-l-2 border-[var(--semantic-danger)] bg-[color-mix(in_srgb,var(--semantic-danger)_6%,transparent)] px-2.5 py-2">
+                <p className="min-w-0 flex-1 text-xs text-lv-text-primary">
+                  <span className="font-medium text-[var(--semantic-danger)]">Could not load areas.</span>{" "}
+                  <span className="text-lv-text-secondary">{builderError ?? t("learner.flashcards.hub.bodySystemsError")}</span>
+                </p>
                 <button
                   type="button"
-                  className="lv-btn-secondary min-h-10 shrink-0 px-4 py-2 text-sm font-medium"
+                  className="shrink-0 rounded-full border border-lv-border-soft bg-lv-bg-surface px-3 py-1 text-xs font-semibold text-lv-text-primary hover:bg-lv-bg-surface-alt"
                   onClick={() => setRefetchNonce((n) => n + 1)}
                 >
                   {t("learner.flashcards.hub.bodySystemsRetry")}
                 </button>
               </div>
             ) : null}
-            {filteredCategories.map((category) => {
-              const selected = chipSelected(category.id);
-              return (
-                <button
-                  key={category.id}
-                  type="button"
-                  disabled={!bodySystemsPickerEnabled}
-                  onClick={() => toggleBodySystem(category.id)}
-                  data-selected={selected ? "true" : "false"}
-                  className="lv-chip lv-chip--stack disabled:pointer-events-none disabled:opacity-40"
-                >
-                  <span className="block">{formatTitleCase(category.title)}</span>
-                  {category.count > 0 ? (
-                    <span className="mt-0.5 block text-xs tabular-nums text-lv-text-secondary">{category.count} cards</span>
-                  ) : null}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="lv-panel space-y-4 p-5">
-          <div>
-            <p className="text-sm font-medium text-lv-text-primary">{t("learner.flashcards.hub.reviewFiltersHeading")}</p>
-            <p className="mt-1 text-xs leading-relaxed text-lv-text-secondary">Focus your session using progress and review markers.</p>
-          </div>
-          <div className="flex flex-col gap-3">
-            <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lv-md border border-transparent px-1 py-1 hover:bg-lv-primary-50/40">
-              <input type="checkbox" className="size-5 shrink-0 rounded border-lv-border-soft" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
-              <span className="text-sm font-medium text-lv-text-primary">Weak areas only</span>
-            </label>
-            <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lv-md border border-transparent px-1 py-1 hover:bg-lv-primary-50/40">
-              <input
-                type="checkbox"
-                className="size-5 shrink-0 rounded border-lv-border-soft"
-                checked={incorrectOnly}
-                onChange={(e) => setIncorrectOnly(e.target.checked)}
-              />
-              <span className="text-sm font-medium text-lv-text-primary">Previously incorrect</span>
-            </label>
-            <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lv-md border border-transparent px-1 py-1 hover:bg-lv-primary-50/40">
-              <input
-                type="checkbox"
-                className="size-5 shrink-0 rounded border-lv-border-soft"
-                checked={notStudiedOnly}
-                onChange={(e) => setNotStudiedOnly(e.target.checked)}
-              />
-              <span className="text-sm font-medium text-lv-text-primary">Not yet studied</span>
-            </label>
-            <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lv-md border border-transparent px-1 py-1 hover:bg-lv-primary-50/40">
-              <input
-                type="checkbox"
-                className="size-5 shrink-0 rounded border-lv-border-soft"
-                checked={starredOnly}
-                onChange={(e) => setStarredOnly(e.target.checked)}
-              />
-              <span className="text-sm font-medium text-lv-text-primary">Starred{savedStats.starred > 0 ? ` (${savedStats.starred})` : ""}</span>
-            </label>
-            <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lv-md border border-transparent px-1 py-1 hover:bg-lv-primary-50/40">
-              <input
-                type="checkbox"
-                className="size-5 shrink-0 rounded border-lv-border-soft"
-                checked={revisitOnly}
-                onChange={(e) => setRevisitOnly(e.target.checked)}
-              />
-              <span className="text-sm font-medium text-lv-text-primary">Marked for revisit{savedStats.confusing > 0 ? ` (${savedStats.confusing})` : ""}</span>
-            </label>
-          </div>
-        </div>
-
-        <div className="lv-panel flex min-h-[52px] items-center justify-between gap-4 px-4 py-3">
-          <div>
-            <p className="text-sm font-medium text-lv-text-primary">Shuffle</p>
-            <p className="text-xs text-lv-text-secondary">Mix card order in this session</p>
-          </div>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={shuffleOn}
-            data-on={shuffleOn ? "true" : "false"}
-            onClick={() => setShuffleOn((s) => !s)}
-            className="lv-toggle"
-          >
-            <span className="lv-toggle-thumb" data-on={shuffleOn ? "true" : "false"} aria-hidden />
-          </button>
-        </div>
-
-        <div className="lv-panel lv-panel--tint-info p-5">
-          <p className="text-xs font-medium tracking-wide text-lv-text-secondary">Session summary</p>
-          <ul className="mt-3 space-y-2 text-sm text-lv-text-secondary">
-            <li>
-              <span className="font-medium text-lv-text-primary">{cardLimit} cards</span>
-            </li>
-            <li>
-              {selectedBodyIds.length === 0 || (allBodyIds.length > 0 && selectedBodyIds.length >= allBodyIds.length)
-                ? "All body systems included"
-                : `${selectedBodyIds.length} body systems selected`}
-            </li>
-            <li>
-              {filterCount === 0 ? "No review filters" : filterCount === 1 ? "1 filter applied" : `${filterCount} filters applied`}
-            </li>
-            <li>Shuffle {shuffleOn ? "on" : "off"}</li>
-            {builderSummary ? (
-              <li>
-                <span className="font-medium text-lv-text-primary">{builderSummary.matchingCards}</span> cards
-                match filters; <span className="font-medium text-lv-text-primary">{builderSummary.returnedCards}</span> available for this session cap
-              </li>
+            {filteredCategories.length > 0 ? (
+              <div className="mt-2 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {filteredCategories.map((category) => {
+                  const selected = chipSelected(category.id);
+                  return (
+                    <button
+                      key={category.id}
+                      type="button"
+                      disabled={!bodySystemsPickerEnabled}
+                      onClick={() => toggleBodySystem(category.id)}
+                      data-selected={selected ? "true" : "false"}
+                      className="lv-chip lv-chip--stack text-left disabled:pointer-events-none disabled:opacity-40"
+                    >
+                      <span className="block text-sm">{formatTitleCase(category.title)}</span>
+                      {category.count > 0 ? (
+                        <span className="mt-0.5 block text-xs tabular-nums text-lv-text-secondary">{category.count} cards</span>
+                      ) : null}
+                    </button>
+                  );
+                })}
+              </div>
             ) : null}
-          </ul>
+          </div>
         </div>
 
-        <div className="sticky bottom-0 -mx-2 flex flex-col gap-3 border-t border-lv-border-soft bg-lv-bg-base/95 px-2 pb-2 pt-4 backdrop-blur-sm sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:backdrop-blur-0">
-          <LearnerCtaLink href={startHref} variant="primary" className="min-h-12 w-full px-6 sm:w-auto">
-            {t("learner.flashcards.hub.startStudying")}
-          </LearnerCtaLink>
-          <button
-            type="button"
-            onClick={() => void previewCustomCards()}
-            className="lv-btn-secondary min-h-12 w-full px-6 sm:w-auto"
-          >
-            {t("learner.flashcards.hub.previewCards")}
-          </button>
+        <div className="flex flex-col gap-2 border-t border-lv-border-soft pt-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+          <div className="min-w-0 space-y-1">
+            <LearnerCtaLink href={startHref} variant="primary" className="min-h-11 w-full px-6 sm:w-auto sm:min-w-[12rem]">
+              {t("learner.flashcards.hub.startStudying")}
+            </LearnerCtaLink>
+            <p className="text-xs text-lv-text-secondary">{sessionSummaryLine}</p>
+            {builderSummary ? (
+              <p className="text-[11px] text-lv-text-secondary">
+                <span className="font-medium text-lv-text-primary tabular-nums">{builderSummary.matchingCards}</span> match filters ·{" "}
+                <span className="font-medium text-lv-text-primary tabular-nums">{builderSummary.returnedCards}</span> available for this cap
+              </p>
+            ) : null}
+          </div>
+          <Link href={weakAreasStudyHref} className="text-center text-xs font-medium text-lv-primary-500 underline-offset-2 hover:underline sm:text-left">
+            {t("learner.flashcards.hub.weakAreasCta")}
+          </Link>
         </div>
 
         {customSessionLoading ? <p className="text-xs text-lv-text-secondary">Updating session…</p> : null}
         {builderError && bodySystemsOutcome !== "error" ? (
-          <p className="text-sm text-[var(--semantic-danger)]">{builderError}</p>
+          <p className="text-xs text-[var(--semantic-danger)]">{builderError}</p>
         ) : null}
 
-        {previewCards.length > 0 ? (
-          <div className="lv-panel p-4">
-            <p className="mb-3 text-xs font-medium tracking-wide text-lv-text-secondary">Preview</p>
-            <ul className="space-y-2 text-sm">
-              {previewCards.map((card) => (
-                <li key={card.id} className="rounded-lv-md border border-lv-border-soft bg-lv-bg-surface-alt/50 p-3">
-                  <p className="font-medium text-lv-text-primary">{card.front}</p>
-                  {card.topic ? <p className="mt-1 text-xs text-lv-text-secondary">{card.topic}</p> : null}
-                </li>
-              ))}
-            </ul>
+        <details className="rounded-xl border border-lv-border-soft bg-lv-bg-surface/50 [&_summary]:list-none [&_summary::-webkit-details-marker]:hidden">
+          <summary className="cursor-pointer px-3 py-2.5 text-sm font-medium text-lv-text-primary hover:bg-lv-primary-50/30">
+            Advanced filters
+            {filterCount > 0 || !shuffleOn ? (
+              <span className="ml-2 rounded-full bg-lv-primary-100 px-2 py-0.5 text-xs font-normal text-lv-text-primary">
+                {filterCount + (!shuffleOn ? 1 : 0)} active
+              </span>
+            ) : null}
+          </summary>
+          <div className="space-y-4 border-t border-lv-border-soft px-3 pb-3 pt-3">
+            <div>
+              <p className="text-xs font-medium text-lv-text-secondary">{t("learner.flashcards.hub.reviewFiltersHeading")}</p>
+              <div className="mt-2 flex flex-col gap-2">
+                <label className="flex min-h-10 cursor-pointer items-center gap-2 rounded-lv-md px-1 py-0.5 hover:bg-lv-primary-50/40">
+                  <input type="checkbox" className="size-4 shrink-0 rounded border-lv-border-soft" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
+                  <span className="text-sm text-lv-text-primary">Weak areas only</span>
+                </label>
+                <label className="flex min-h-10 cursor-pointer items-center gap-2 rounded-lv-md px-1 py-0.5 hover:bg-lv-primary-50/40">
+                  <input
+                    type="checkbox"
+                    className="size-4 shrink-0 rounded border-lv-border-soft"
+                    checked={incorrectOnly}
+                    onChange={(e) => setIncorrectOnly(e.target.checked)}
+                  />
+                  <span className="text-sm text-lv-text-primary">Previously incorrect</span>
+                </label>
+                <label className="flex min-h-10 cursor-pointer items-center gap-2 rounded-lv-md px-1 py-0.5 hover:bg-lv-primary-50/40">
+                  <input
+                    type="checkbox"
+                    className="size-4 shrink-0 rounded border-lv-border-soft"
+                    checked={notStudiedOnly}
+                    onChange={(e) => setNotStudiedOnly(e.target.checked)}
+                  />
+                  <span className="text-sm text-lv-text-primary">Not yet studied</span>
+                </label>
+                <label className="flex min-h-10 cursor-pointer items-center gap-2 rounded-lv-md px-1 py-0.5 hover:bg-lv-primary-50/40">
+                  <input
+                    type="checkbox"
+                    className="size-4 shrink-0 rounded border-lv-border-soft"
+                    checked={starredOnly}
+                    onChange={(e) => setStarredOnly(e.target.checked)}
+                  />
+                  <span className="text-sm text-lv-text-primary">Starred{savedStats.starred > 0 ? ` (${savedStats.starred})` : ""}</span>
+                </label>
+                <label className="flex min-h-10 cursor-pointer items-center gap-2 rounded-lv-md px-1 py-0.5 hover:bg-lv-primary-50/40">
+                  <input
+                    type="checkbox"
+                    className="size-4 shrink-0 rounded border-lv-border-soft"
+                    checked={revisitOnly}
+                    onChange={(e) => setRevisitOnly(e.target.checked)}
+                  />
+                  <span className="text-sm text-lv-text-primary">Marked for revisit{savedStats.confusing > 0 ? ` (${savedStats.confusing})` : ""}</span>
+                </label>
+              </div>
+            </div>
+            <div className="flex min-h-10 items-center justify-between gap-3 rounded-lv-md border border-lv-border-soft px-3 py-2">
+              <div>
+                <p className="text-sm font-medium text-lv-text-primary">Shuffle</p>
+                <p className="text-xs text-lv-text-secondary">Mix card order (on by default)</p>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={shuffleOn}
+                data-on={shuffleOn ? "true" : "false"}
+                onClick={() => setShuffleOn((s) => !s)}
+                className="lv-toggle"
+              >
+                <span className="lv-toggle-thumb" data-on={shuffleOn ? "true" : "false"} aria-hidden />
+              </button>
+            </div>
+            <button type="button" onClick={() => void previewCustomCards()} className="lv-btn-secondary min-h-10 w-full px-4 text-sm sm:w-auto">
+              {t("learner.flashcards.hub.previewCards")}
+            </button>
+            {previewCards.length > 0 ? (
+              <div className="rounded-lv-md border border-lv-border-soft p-3">
+                <p className="mb-2 text-xs font-medium text-lv-text-secondary">Preview</p>
+                <ul className="space-y-2 text-sm">
+                  {previewCards.map((card) => (
+                    <li key={card.id} className="rounded-lv-md border border-lv-border-soft bg-lv-bg-surface-alt/50 p-2.5">
+                      <p className="font-medium text-lv-text-primary">{card.front}</p>
+                      {card.topic ? <p className="mt-0.5 text-xs text-lv-text-secondary">{card.topic}</p> : null}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
           </div>
-        ) : null}
+        </details>
       </section>
 
-      <footer className="flex flex-wrap gap-2 border-t border-lv-border-soft pt-8">
-        <Link href="/lessons" className="lv-btn-secondary min-h-11 px-4 py-2.5 text-sm">
-          {t("learner.flashcards.hub.bottomExamLessons")}
-        </Link>
-        <Link href="/app/review" className="lv-btn-secondary min-h-11 px-4 py-2.5 text-sm">
-          Spaced review queue
-        </Link>
-      </footer>
+      <details className="rounded-lg border border-dashed border-lv-border-soft [&_summary]:list-none [&_summary::-webkit-details-marker]:hidden">
+        <summary className="cursor-pointer py-2 text-xs font-medium text-lv-text-secondary hover:text-lv-text-primary">
+          Other study actions
+        </summary>
+        <div className="flex flex-wrap gap-2 pb-2">
+          <Link href="/app/lessons" className="lv-btn-secondary min-h-9 px-3 py-1.5 text-xs">
+            {t("learner.flashcards.hub.bottomExamLessons")}
+          </Link>
+          <Link href="/app/review" className="lv-btn-secondary min-h-9 px-3 py-1.5 text-xs">
+            Spaced review queue
+          </Link>
+        </div>
+      </details>
 
       {isNpPathway ? (
         <p className="text-center text-xs text-lv-text-secondary">

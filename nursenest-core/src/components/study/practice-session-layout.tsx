@@ -3,8 +3,10 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 /**
  * PracticeSessionLayout — outer viewport-height container for the practice session.
  *
- * On desktop (≥1024px): takes up `calc(100dvh - 120px)`, preventing the main
- * page from scrolling. Inner columns scroll independently via overflow-y: auto.
+ * On desktop (≥1024px): usually `calc(100dvh - 120px)` so the page does not scroll.
+ * Focused `/app/practice-tests/:id` (`html[data-learner-exam-chrome="hidden"]`) uses flex fill from
+ * `.nn-learner-exam-focus-column` instead — see `globals.css` + `LearnerExamChromeGate`.
+ * Inner columns scroll independently via overflow-y: auto.
  *
  * On mobile: normal flow; vertical scrolling allowed as per spec §11.
  */

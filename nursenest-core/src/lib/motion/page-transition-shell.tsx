@@ -81,7 +81,7 @@ function isStrategySessionPath(pathname: string): boolean {
  * Learner shell: skip transitions on active study / exam-style flows.
  */
 export function learnerShellShouldDisablePageTransition(pathname: string): boolean {
-  if (pathname === "/app/questions") return true;
+  if (pathname === "/app/questions" || pathname === "/app/questions/bank") return true;
   if (pathname.startsWith("/app/baseline-assessment")) return true;
   if (isPracticeTestRunnerPath(pathname)) return true;
   if (isStrategySessionPath(pathname)) return true;

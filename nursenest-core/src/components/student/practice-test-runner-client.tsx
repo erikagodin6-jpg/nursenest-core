@@ -673,6 +673,10 @@ export function PracticeTestRunnerClient({
   const isLinearEngine = Boolean(!catMode && linearDelivery);
   const linearAllowReviewNavigation = testConfig?.linearAllowReviewNavigation === true;
   const linearIsExamShell = isLinearEngine && linearDelivery === "exam";
+  /** Linear practice with per-item rationale: reuse CAT exam shell chrome (header/progress/density) without exam-only rationale deferral. */
+  const linearCatShellPresentation =
+    linearIsExamShell ||
+    (isLinearEngine && linearDelivery === "practice" && linearRationaleVisibility === "after_each");
   const linearEngineUiKind = resolveLinearEngineRunnerUiKind({
     catMode,
     linearDeliveryMode: linearDelivery,
@@ -2616,7 +2620,7 @@ export function PracticeTestRunnerClient({
 
   const formatLinearOptionText = (i: number, canonical: string) => {
     const rawT = optsOrderDisplay[i] ?? canonical;
-    return linearIsExamShell ? stripRedundantMcqLetterPrefix(rawT) : rawT;
+    return linearCatShellPresentation ? stripRedundantMcqLetterPrefix(rawT) : rawT;
   };
 
   const linearCatOptions =
@@ -2633,7 +2637,7 @@ export function PracticeTestRunnerClient({
       >
         {optsCanonical.map((canonical, i) => {
           const selected = mcqAnswerSelectsCanonical(raw, canonical);
-          const rowText = linearIsExamShell
+          const rowText = linearCatShellPresentation
             ? stripRedundantMcqLetterPrefix(optsDisplay[i] ?? canonical)
             : optsDisplay[i] ?? canonical;
           return (
@@ -2756,7 +2760,7 @@ export function PracticeTestRunnerClient({
           <ConfidenceSelector
             questionId={current.id}
             value={confidence[current.id] ?? null}
-            neutral={linearIsExamShell}
+            neutral={linearCatShellPresentation}
             onChange={setConfidenceForQuestion}
           />
         </div>
@@ -2823,6 +2827,7 @@ export function PracticeTestRunnerClient({
       difficultyLabel={null}
       examStackedLayout
       examDetachedFooter
+      examStemScrollPartition={linearCatShellPresentation && !clinicalImageSrcLinear}
       examCategoryLabel={linearExamCategoryLine}
       examHeaderRightSlot={linearExamFlagSlot}
       examLayoutMeasureKey={`${current.id}:${optsOrderCanonical.join("|")}`}
@@ -2832,14 +2837,16 @@ export function PracticeTestRunnerClient({
   );
 
   const linearBoardFooter = (
-    <footer className="nn-cat-exam-board-footer flex shrink-0 flex-col border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))]">
+    <footer
+      className={`nn-cat-exam-board-footer flex shrink-0 flex-col border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))]${linearCatShellPresentation ? " nn-cat-exam-board-footer--adaptive" : ""}`}
+    >
       <div className="mx-auto flex w-full max-w-[48.75rem] items-center justify-between gap-3 px-3 py-2.5 sm:px-4">
         <button
           type="button"
-          disabled={controlsBusy || !canLinearReviewPrev}
+          disabled={controlsBusy || linearCatShellPresentation || !canLinearReviewPrev}
           className="inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] disabled:opacity-40"
           title={
-            linearIsExamShell
+            linearCatShellPresentation
               ? tx(
                   "learner.practiceTests.run.catExamNoPrevious",
                   "Previous item is not available during this exam.",
@@ -2911,16 +2918,18 @@ export function PracticeTestRunnerClient({
     >
       <PracticeSessionLayout
         className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}
-        {...(linearIsExamShell ? { "data-cat-exam-root": true } : {})}
+        {...(linearCatShellPresentation ? { "data-cat-exam-root": true } : {})}
       >
         <ExamSessionShell
           neutralPalette
           immersive
-          className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none nn-cat-exam-chrome"
+          className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none nn-cat-exam-chrome${linearCatShellPresentation ? " nn-cat-adaptive-exam-session" : ""}`}
         >
-          <header className="nn-cat-exam-board-top flex min-h-[3.5rem] shrink-0 items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] px-3 py-2 sm:px-4">
+          <header
+            className={`nn-cat-exam-board-top flex shrink-0 items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] px-3 py-2 sm:px-4${linearCatShellPresentation ? " nn-cat-exam-board-top--adaptive py-1.5 sm:py-2" : " min-h-[3.5rem]"}`}
+          >
             <p className="nn-cat-exam-board-top__progress m-0 text-sm font-semibold leading-snug text-[var(--semantic-text-secondary)]">
-              {linearIsExamShell
+              {linearCatShellPresentation
                 ? tx("learner.practiceTests.run.itemInProgress", "Item {n} in Progress", { n: String(idx + 1) })
                 : `${tx("learner.practiceTests.run.question", "Question")} ${idx + 1} ${tx("learner.practiceTests.run.of", "of")} ${total}`}
             </p>
@@ -2939,11 +2948,11 @@ export function PracticeTestRunnerClient({
             </div>
           </header>
           <ExamProgressBar
-            className={`nn-cat-exam-board-progress shrink-0${linearIsExamShell ? " nn-exam-progress--cat-exam-adaptive" : ""}`}
+            className={`nn-cat-exam-board-progress shrink-0${linearCatShellPresentation ? " nn-exam-progress--cat-exam-adaptive" : ""}`}
             current={idx + 1}
             total={Math.max(total, 1)}
-            variant={linearIsExamShell ? "adaptive_item" : "fixed_session"}
-            adaptiveMaxItems={linearIsExamShell ? null : undefined}
+            variant={linearCatShellPresentation ? "adaptive_item" : "fixed_session"}
+            adaptiveMaxItems={linearCatShellPresentation ? null : undefined}
             sessionLabel={modeLabel}
           />
           {sessionRecoveryBanner}

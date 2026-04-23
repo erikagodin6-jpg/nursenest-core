@@ -39,10 +39,7 @@ import {
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import type { MarketingHubLessonVerifyDiagnostics } from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
-import {
-  HubVerifyPreparedPositiveZeroKeptError,
-  verifyMarketingHubLessonRowsResolve,
-} from "@/lib/lessons/pathway-lesson-hub-link-integrity";
+import { verifyMarketingHubLessonRowsResolve } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { pathwayLessonsHubBreadcrumbs, pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -325,119 +322,68 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   }
 
   /** Slug-safe rows from the same loader result used for pagination (`items` / `renderableAll`). */
-  const rawHubLessonRows = (pageResult.renderableAll ?? pageResult.items).filter(pathwayLessonHasRenderableHubSlug);
+  const renderableAllIn = pageResult.renderableAll ?? pageResult.items;
+  const rawHubLessonRows = renderableAllIn.filter(pathwayLessonHasRenderableHubSlug);
   /** Dedupe + taxonomy guard + linkable href — must match curriculum grid and toolbar count. */
   const hubCurriculumPrepared = prepareLessonsForHubCurriculum(rawHubLessonRows, {
     pathwayId: pathway.id,
     lessonsBasePath: base,
   });
   /** Drop any row that does not hydrate to a marketing-public-complete lesson (same contract as lesson detail). */
-  let hubCurriculumLessons: PathwayLessonRecord[];
-  let hubVerifyDiagnostics: MarketingHubLessonVerifyDiagnostics;
-  try {
-    const vr = await verifyMarketingHubLessonRowsResolve(pathway, hubCurriculumPrepared, lessonContentLocale);
-    hubCurriculumLessons = vr.kept;
-    hubVerifyDiagnostics = vr.diagnostics;
-  } catch (e) {
-    if (e instanceof HubVerifyPreparedPositiveZeroKeptError) {
-      safeServerLog("pathway_lessons", "marketing_hub_verify_invariant_error_surface", {
-        pathway: pathway.id,
-        pathway_id: pathway.id,
-        country_slug: countrySlug,
-        role_track: roleTrack,
-        exam_code: examCode,
-        lesson_content_locale: lessonContentLocale,
-        prepared_count: String(e.preparedCount),
-        verify_kept_count: "0",
-        reasons_json: e.reasonsJson.slice(0, 1500),
-        outcome: "invariant_violation",
-        fallback_used: "false",
-        feature_surface: "marketing_lessons_hub",
-      });
-      const topicClusterFallbackLabel = topicSlugNorm ? topicSlugNorm.replace(/-/g, " ") : null;
-      const { crumbs: invCrumbs, schemaItems: invSchema } =
-        topicSlugNorm && topicClusterFallbackLabel
-          ? pathwayTopicClusterBreadcrumbs(pathway, topicSlugNorm, topicClusterFallbackLabel)
-          : pathwayLessonsHubBreadcrumbs(pathway);
-      const invExamName = pathwayRegionAwareExamName(pathway);
-      const invPageTitle = "Lessons";
-      const invHeaderDescription =
-        alliedProfessionResolved && !topicSlugNorm
-          ? `Browse ${alliedProfessionResolved.h1} lessons for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`
-          : topicClusterFallbackLabel != null
-            ? `Lessons in “${topicClusterFallbackLabel}” for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`
-            : `Browse lessons by clinical area for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`;
-      const invOverviewHref = marketingExamHubBasePath(pathway);
-      const invQuestionsHref = buildExamPathwayPath(pathway, "questions");
-      const invCatHref = buildExamPathwayPath(pathway, "cat");
-      const invCanStartCat =
-        !questionSnapshotLoadRejected &&
-        questionSnapshot.status === "ok" &&
-        questionSnapshot.adaptiveEligibleCount >= CAT_MIN_COMPLETE_POOL;
-      const invLessonHubSurfaceChips = [
-        { label: "Practice questions", href: invQuestionsHref },
-        {
-          label: questionSnapshotLoadRejected
-            ? "Adaptive CAT — status unavailable"
-            : invCanStartCat
-              ? "Adaptive CAT"
-              : "Adaptive CAT unavailable",
-          href: invCatHref,
-        },
-        { label: "Flashcards", href: HUB.flashcards },
-        { label: "Practice exams", href: HUB.practiceExams },
-        { label: "Exam overview", href: invOverviewHref },
-      ];
-      const invCanadaHref =
-        pathway.countrySlug === "canada"
-          ? `${base}${hubQuerySuffix}`
-          : `${equivalentExamHubUrlAfterRegionToggle(base, "CA") ?? base}${hubQuerySuffix}`;
-      const invUsHref =
-        pathway.countrySlug === "us"
-          ? `${base}${hubQuerySuffix}`
-          : `${equivalentExamHubUrlAfterRegionToggle(base, "US") ?? base}${hubQuerySuffix}`;
-      const invToolbar = (
-        <LessonsToolbar
-          searchBasePath={base}
-          initialQuery={qEffective ?? undefined}
-          preservedTopicSlug={topicSlugNorm ?? undefined}
-          preservedAlliedProfession={alliedProfessionKey || undefined}
-          countryOptions={[
-            { label: "Canada", href: invCanadaHref, active: pathway.countrySlug === "canada" },
-            { label: "US", href: invUsHref, active: pathway.countrySlug === "us" },
-          ]}
-        />
-      );
-      return (
-        <MarketingLessonsHubRetryableErrorShell
-          title={invPageTitle}
-          subtitle={invHeaderDescription}
-          toolbar={invToolbar}
-          backLabel={`${invExamName} overview`}
-          backHref={invOverviewHref}
-          crumbs={invCrumbs}
-          schemaItems={invSchema}
-          surfaceChips={invLessonHubSurfaceChips}
-          errorTitle={"We're having trouble loading lessons"}
-          errorBody={"This isn't your fault. Something went wrong on our side."}
-          retryHref={`${base}${hubQuerySuffix}`}
-          secondaryHref={invOverviewHref}
-          secondaryLabel="Back to exam overview"
-          supportHref={`/${countrySlug}/contact`}
-          supportLabel="Contact support"
-        />
-      );
-    }
-    throw e;
+  const vr = await verifyMarketingHubLessonRowsResolve(pathway, hubCurriculumPrepared, lessonContentLocale);
+  const hubCurriculumLessons = vr.kept;
+  const hubVerifyDiagnostics = vr.diagnostics;
+  if (hubCurriculumPrepared.length > 0 && hubCurriculumLessons.length === 0) {
+    safeServerLog("pathway_lessons", "marketing_hub_verify_all_rows_excluded_soft", {
+      pathway_id: pathway.id,
+      country_slug: countrySlug,
+      role_track: roleTrack,
+      exam_code: examCode,
+      lesson_content_locale: lessonContentLocale,
+      prepared_count: String(hubCurriculumPrepared.length),
+      verify_kept_count: "0",
+      reasons_json: JSON.stringify(hubVerifyDiagnostics.excludedByReason ?? {}),
+      outcome: "verify_excluded_all_rows",
+      feature_surface: "marketing_lessons_hub",
+    });
   }
+  /**
+   * Pagination slice for nav + rare pathways above {@link PATHWAY_HUB_PAGE_SIZE_MAX}. The curriculum grid must render
+   * the **full** verified inventory (metadata-only cards), not only the first page slice — otherwise hubs show ~72
+   * lessons while the badge reports hundreds.
+   */
+  const effectiveHubPageSize = Math.min(
+    PATHWAY_HUB_PAGE_SIZE_MAX,
+    Math.max(pageSizeRequested, hubCurriculumLessons.length, 1),
+  );
+  const hubVerifiedPage = sliceNormalizedHubLessons(hubCurriculumLessons, pageRequested, effectiveHubPageSize);
+  const lessonsForCurriculumHub =
+    hubCurriculumLessons.length <= PATHWAY_HUB_PAGE_SIZE_MAX ? hubCurriculumLessons : hubVerifiedPage.items;
   safeServerLog("pathway_lessons", "marketing_hub_pipeline_snapshot", {
     pathway_id: pathway.id,
     country_slug: countrySlug,
     role_track: roleTrack,
     exam_code: examCode,
     lesson_content_locale: lessonContentLocale,
+    list_locale_requested: pageResult.locale?.requested ?? "",
+    list_locale_effective: pageResult.locale?.effective ?? "",
+    list_locale_used_fallback: pageResult.locale?.usedEnglishFallback ? "1" : "0",
     /** From {@link getPathwayLessonsPageFresh} — same contract as pagination `total` before hub-only prepare/verify. */
     loader_renderable_total: String(pageResult.total),
+    loader_renderable_all_len: String(renderableAllIn.length),
+    loader_page_items_len: String(pageResult.items.length),
+    /** Stage 1: slug-safe rows from loader (pathway/locale scoped upstream in {@link resolveMarketingHubRenderableLessonList}). */
+    stage_1_raw_slug_safe_rows: String(rawHubLessonRows.length),
+    /** Stage 2: after {@link prepareLessonsForHubCurriculum} (dedupe, organize, href-safe). */
+    stage_2_after_prepare: String(hubCurriculumPrepared.length),
+    /** Stage 3: unique slugs sent to detail verify. */
+    stage_3_verify_unique_slugs: String(hubVerifyDiagnostics.uniqueSlugCount),
+    /** Stage 4: rows kept after verify (hydration + publicComplete + pathway context). */
+    stage_4_after_verify_kept: String(hubCurriculumLessons.length),
+    /** Stage 5: rows rendered in the curriculum grid (full verified set when under cap). */
+    stage_5_curriculum_grid_rows: String(lessonsForCurriculumHub.length),
+    effective_hub_page_size: String(effectiveHubPageSize),
+    raw_after_slug_filter: String(rawHubLessonRows.length),
     raw_list_rows: String(rawHubLessonRows.length),
     after_prepare: String(hubCurriculumPrepared.length),
     after_verify_kept: String(hubCurriculumLessons.length),
@@ -445,10 +391,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     lessons_page_task_rejected: lessonsPageLoadRejected ? "1" : "0",
     question_snapshot_rejected: questionSnapshotLoadRejected ? "1" : "0",
     verify_drop_reasons_json: JSON.stringify(hubVerifyDiagnostics.excludedByReason ?? {}),
+    verify_exclusion_ranked_json: JSON.stringify(hubVerifyDiagnostics.exclusionReasonsRanked ?? []),
   });
   const hubListCountForChrome = hubCurriculumLessons.length;
-  /** Pagination + grid use the same verified ordering as {@link sliceNormalizedHubLessons} (not pre-verify totals). */
-  const hubVerifiedPage = sliceNormalizedHubLessons(hubCurriculumLessons, pageRequested, pageSizeRequested);
   if (hubVerifiedPage.total > 0 && pageRequested !== hubVerifiedPage.page) {
     const qs = new URLSearchParams();
     if (hubVerifiedPage.page > 1) qs.set("page", String(hubVerifiedPage.page));
@@ -459,7 +404,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     redirect(query ? `${base}?${query}` : base);
   }
   const hubPageLessons = hubVerifiedPage.items;
-  const lessonsOnPageForPagination = hubPageLessons.length;
+  const lessonsOnPageForPagination = lessonsForCurriculumHub.length;
 
   let topicClusterLabel: string | null = null;
   if (topicSlugNorm) {
@@ -607,10 +552,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
   const canShowResume =
     Boolean(userId) && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
-  const canShowProgressMap = canShowResume && hubPageLessons.length > 0;
+  const canShowProgressMap = canShowResume && lessonsForCurriculumHub.length > 0;
 
   if (canShowResume) {
-    const hubSlugs = canShowProgressMap ? hubPageLessons.map((l) => l.slug).filter(Boolean) : [];
+    const hubSlugs = canShowProgressMap ? lessonsForCurriculumHub.map((l) => l.slug).filter(Boolean) : [];
     const { progressMap: map } = await loadPathwayHubSubscriberData(
       userId,
       scope,
@@ -665,7 +610,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         </div>
         <PathwayLessonsCurriculumHub
           lessons={rawHubLessonRows}
-          preparedLessons={hubPageLessons}
+          preparedLessons={lessonsForCurriculumHub}
           lessonsBasePath={base}
           pathwayId={pathway.id}
           progressMap={progressMap}

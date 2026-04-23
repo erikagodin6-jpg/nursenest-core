@@ -2969,6 +2969,82 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   display: none !important;
 }
 
+/* Live practice-test session: strip default learner shell rhythm so CAT/exam fits the viewport. */
+html[data-learner-exam-chrome="hidden"] .nn-learner-app {
+  padding-top: max(0.35rem, env(safe-area-inset-top, 0px));
+  padding-bottom: max(0.35rem, calc(0.35rem + env(safe-area-inset-bottom, 0px)));
+}
+
+@media (min-width: 768px) {
+  html[data-learner-exam-chrome="hidden"] .nn-learner-app {
+    padding-top: 0.45rem;
+    padding-bottom: 0.5rem;
+  }
+}
+
+/* Focused `/app/practice-tests/:id` (lg+): flex column fills viewport under minimal nav — avoids document scroll. */
+@media (min-width: 1024px) {
+  html[data-learner-exam-chrome="hidden"] .nn-learner-exam-focus-body .nn-learner-app {
+    flex: 1 1 0%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  html[data-learner-exam-chrome="hidden"] .nn-learner-app > main#nn-learner-main,
+  html[data-learner-exam-chrome="hidden"] .nn-learner-app > main[data-nn-learner-main] {
+    flex: 1 1 0%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Page root (practice test run) → error boundary children → protected shell */
+  html[data-learner-exam-chrome="hidden"] main#nn-learner-main > div:first-child {
+    flex: 1 1 0%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  html[data-learner-exam-chrome="hidden"] main#nn-learner-main > div:first-child > [data-nn-protected-premium-root] {
+    flex: 1 1 0%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  html[data-learner-exam-chrome="hidden"] main#nn-learner-main .nn-protected-premium-surface {
+    flex: 1 1 0%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  html[data-learner-exam-chrome="hidden"] main#nn-learner-main .nn-protected-premium-surface [data-nn-protected-premium-main] {
+    flex: 1 1 0%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  /*
+   * Critical: do NOT use `calc(100dvh - …)` here — minimal nav already sits above this subtree.
+   * Fill the flex-allocated column instead so `scrollHeight` stays within `innerHeight`.
+   */
+  html[data-learner-exam-chrome="hidden"] main#nn-learner-main .nn-practice-session {
+    flex: 1 1 0%;
+    min-height: 0;
+    height: auto !important;
+    max-height: none;
+  }
+}
+
 /*
  * Study flow cards (pathway hubs, lessons, bank panels): one radius + shadow recipe.
  * Prefer over ad-hoc `border-2 shadow-sm` stacks.
@@ -6595,11 +6671,9 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
     padding-right: 16px;
   }
 
-  /* Strict adaptive CAT exam: reclaim a bit more chrome than generic exam board (linear unchanged). */
-  .nn-practice-session:has(.nn-cat-adaptive-exam-session) {
-    height: calc(100dvh - 48px);
-    padding-left: 12px;
-    padding-right: 12px;
+  html[data-learner-exam-chrome="hidden"] .nn-practice-session:has(.nn-cat-adaptive-exam-session) {
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 
@@ -6656,8 +6730,88 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   border-top-width: 1px;
 }
 
+/* Laptop+ adaptive CAT: exam-tight density for all viewport heights (not only max-height: 900px). */
+@media (min-width: 1024px) {
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-board-top--adaptive {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
+
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session footer.nn-cat-exam-board-footer--adaptive > div {
+    padding-top: 0.2rem !important;
+    padding-bottom: 0.2rem !important;
+  }
+
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-exam-progress.nn-exam-progress--cat-exam-adaptive {
+    padding-top: 0.12rem !important;
+    padding-bottom: 0.12rem !important;
+  }
+
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-exam-progress--cat-exam-adaptive > div:first-child {
+    margin-bottom: 0.06rem;
+  }
+
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-exam-progress--cat-exam-adaptive .nn-marketing-caption {
+    margin-bottom: 0.1rem !important;
+  }
+
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-col {
+    padding-top: 0;
+    padding-bottom: 0.05rem;
+  }
+
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-question-card.nn-cat-question-card--exam-stack {
+    padding: 0.35rem 0.45rem 0;
+    border-radius: 0.7rem;
+  }
+
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-item-head {
+    margin-bottom: 0.2rem;
+  }
+
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-timing-alert {
+    margin-bottom: 0.35rem;
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+  }
+
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-stem-scroll .nn-cat-question-stem {
+    margin-bottom: 0.25rem;
+    line-height: 1.42;
+  }
+
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-post-stem .nn-cat-options-label {
+    margin-bottom: 0.15rem;
+  }
+
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-post-stem .nn-cat-opt-list {
+    gap: 0.28rem;
+  }
+
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-post-stem .nn-cat-opt {
+    min-height: 2.28rem;
+    padding: 0.32rem 0.48rem;
+  }
+
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-post-stem .nn-cat-opt__letter {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.625rem;
+  }
+
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-post-stem .nn-cat-opt__text {
+    line-height: 1.38;
+  }
+}
+
 .nn-cat-question-card__exam-scroll--partitioned {
   touch-action: pan-y;
+}
+
+/* Partitioned adaptive stem: content-height + cap so long stems scroll (avoids former flex-1 dead gap). */
+.nn-cat-question-card__exam-scroll--partitioned .nn-cat-exam-stem-scroll {
+  flex: 0 1 auto;
+  max-height: min(40dvh, calc(100dvh - 13.5rem));
 }
 
 @media (max-height: 900px) {

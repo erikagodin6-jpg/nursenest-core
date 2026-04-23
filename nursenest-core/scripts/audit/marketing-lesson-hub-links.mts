@@ -19,10 +19,7 @@ import { prepareLessonsForHubCurriculum } from "@/components/pathway-lessons/pat
 import { listPublicExamPathways } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
-import {
-  HubVerifyPreparedPositiveZeroKeptError,
-  verifyMarketingHubLessonRowsResolve,
-} from "@/lib/lessons/pathway-lesson-hub-link-integrity";
+import { verifyMarketingHubLessonRowsResolve } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
 import {
   getPathwayLessonsPageFresh,
   PATHWAY_HUB_PAGE_SIZE_MAX,
@@ -39,24 +36,9 @@ async function auditPathway(pathway: ExamPathwayDefinition): Promise<Failure | n
   const pageResult = await getPathwayLessonsPageFresh(pathway.id, 1, PATHWAY_HUB_PAGE_SIZE_MAX, locale, undefined);
   const raw = (pageResult.renderableAll ?? pageResult.items).filter(pathwayLessonHasRenderableHubSlug);
   const prepared = prepareLessonsForHubCurriculum(raw, { pathwayId: pathway.id, lessonsBasePath: base });
-  let kept: { length: number };
-  let excluded: { length: number };
-  try {
-    const r = await verifyMarketingHubLessonRowsResolve(pathway, prepared, locale);
-    kept = r.kept;
-    excluded = r.excluded;
-  } catch (e) {
-    if (e instanceof HubVerifyPreparedPositiveZeroKeptError) {
-      return {
-        pathwayId: pathway.id,
-        page: 1,
-        prepared: e.preparedCount,
-        kept: 0,
-        excluded: -1,
-      };
-    }
-    throw e;
-  }
+  const r = await verifyMarketingHubLessonRowsResolve(pathway, prepared, locale);
+  const kept = r.kept;
+  const excluded = r.excluded;
   if (kept.length !== prepared.length) {
     const sample = excluded
       .slice(0, 24)

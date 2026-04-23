@@ -13,6 +13,10 @@
  *
  * List rows can still diverge on slug/overlay drift; this pass closes **hydration + publicComplete + pathway context** only.
  *
+ * **Per-row locale:** Hub rows carry {@link PathwayLessonRecord.localeMeta}`.contentLocale` (warehouse shard used when
+ * the list row was built). Verify passes that into {@link getPathwayLessonForMarketingHubVerify} so hydration matches
+ * the list SQL/catalog merge even when the page-level marketing locale cookie differs.
+ *
  * **Resolver parity:** {@link pathwayLessonEligibleForPublicMarketingSurface} is the same `publicComplete` gate as
  * {@link resolveMarketingPathwayLessonRouteResolution} (detail returns `not_found` / `lesson_not_public_complete` when
  * this would be false). Do not add stricter hub-only filters than the detail route uses.
@@ -24,6 +28,7 @@ import type {
   MarketingHubLessonVerifyDiagnostics,
 } from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
 import { pathwayLessonMatchesMarketingPathwayContext } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import { normalizePathwayLessonLocale } from "@/lib/lessons/pathway-lesson-locale";
 import { getPathwayLessonForMarketingHubVerify } from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
@@ -68,6 +73,9 @@ export type HubLessonDetailExcluded = {
 /**
  * Single-slug **same contract** as {@link verifyMarketingHubLessonRowsResolve} — fresh detail load,
  * {@link pathwayLessonEligibleForPublicMarketingSurface}, pathway exam/country context (matches marketing detail gates).
+ *
+ * @param lessonContentLocale Preferred locale for {@link getPathwayLessonForMarketingHubVerify} — use hub row
+ * `localeMeta.contentLocale` when verifying list rows so it matches the list pipeline warehouse.
  */
 export async function evaluatePublicMarketingLessonCrossLinkIntegrity(
   pathway: Pick<ExamPathwayDefinition, "id">,
@@ -113,8 +121,9 @@ export async function evaluatePublicMarketingLessonCrossLinkIntegrity(
 }
 
 /**
- * Drops hub rows that fail fresh detail hydration, `publicComplete`, or pathway exam/country alignment
- * (see module docblock — aligned with marketing lesson detail, not stricter hub-only taxonomy layers).
+ * Historical error type when verify dropped every prepared row. {@link verifyMarketingHubLessonRowsResolve}
+ * now returns an empty `kept` array and structured diagnostics instead of throwing — this class remains exported
+ * so older tooling / docs references keep resolving.
  */
 export class HubVerifyPreparedPositiveZeroKeptError extends Error {
   readonly pathwayId: string;
@@ -141,7 +150,7 @@ export async function verifyMarketingHubLessonRowsResolve(
   options?: {
     concurrency?: number;
     resolveLessonDetail?: ResolveMarketingLessonDetailFn;
-    /** Unit tests that assert `kept.length === 0` must set true. Production hub must omit (throws on drift). */
+    /** When true, zero-kept critical log uses `all_rows_excluded_tests` outcome (unit tests). */
     skipZeroKeptPipelineInvariant?: boolean;
   },
 ): Promise<{
@@ -153,13 +162,22 @@ export async function verifyMarketingHubLessonRowsResolve(
   const resolveLessonDetail = options?.resolveLessonDetail ?? getPathwayLessonForMarketingHubVerify;
 
   const safe = lessons.filter((l) => pathwayLessonHasRenderableHubSlug(l));
+  /** First-seen slug → DB/catalog `contentLocale` from the hub list row (must match detail hydration). */
+  const slugToListDetailLocale = new Map<string, string>();
+  for (const l of safe) {
+    const s = l.slug.trim();
+    if (slugToListDetailLocale.has(s)) continue;
+    const raw = l.localeMeta?.contentLocale?.trim();
+    if (raw) slugToListDetailLocale.set(s, normalizePathwayLessonLocale(raw));
+  }
   const uniqueSlugs = [...new Set(safe.map((l) => l.slug.trim()))];
 
   const pairs = await mapWithConcurrency(uniqueSlugs, concurrency, async (slug) => {
+    const detailLocale = slugToListDetailLocale.get(slug) ?? lessonContentLocale;
     const ev = await evaluatePublicMarketingLessonCrossLinkIntegrity(
       pathway,
       slug,
-      lessonContentLocale,
+      detailLocale,
       resolveLessonDetail,
     );
     return { slug, ev };
@@ -200,6 +218,30 @@ export async function verifyMarketingHubLessonRowsResolve(
     }
   }
 
+  const slugFailureReason = new Map<string, HubMarketingLessonDetailFailureReason>();
+  for (const e of verifyExcluded) {
+    slugFailureReason.set(e.slug.trim(), e.reason);
+  }
+
+  const exclusionReasonsRanked: Array<{ reason: HubMarketingLessonDetailFailureReason; count: number }> = [
+    ...Object.entries(excludedByReason),
+  ]
+    .map(([reason, count]) => ({ reason: reason as HubMarketingLessonDetailFailureReason, count: count ?? 0 }))
+    .filter((x) => x.count > 0)
+    .sort((a, b) => b.count - a.count || a.reason.localeCompare(b.reason));
+
+  const rowLevelExcludedByReason: Partial<Record<HubMarketingLessonDetailFailureReason, number>> = {};
+  for (const lesson of lessons) {
+    if (!pathwayLessonHasRenderableHubSlug(lesson)) {
+      tallyReason(rowLevelExcludedByReason, "missing_slug");
+      continue;
+    }
+    const s = lesson.slug.trim();
+    if (okSlugSet.has(s)) continue;
+    const r = slugFailureReason.get(s) ?? "detail_loader_miss";
+    tallyReason(rowLevelExcludedByReason, r);
+  }
+
   const diagnostics: MarketingHubLessonVerifyDiagnostics = {
     pathwayId: pathway.id,
     lessonContentLocale,
@@ -209,6 +251,7 @@ export async function verifyMarketingHubLessonRowsResolve(
     droppedRowCount: Math.max(0, lessons.length - kept.length),
     excludedUniqueSlugCount: verifyExcluded.length,
     excludedByReason,
+    exclusionReasonsRanked: lessons.length > 0 ? exclusionReasonsRanked : undefined,
   };
 
   if (lessons.length > 0) {
@@ -224,6 +267,8 @@ export async function verifyMarketingHubLessonRowsResolve(
       kept_rows: String(kept.length),
       excluded_unique_slugs: String(verifyExcluded.length),
       reasons_json: JSON.stringify(excludedByReason),
+      row_level_drop_reasons_json: JSON.stringify(rowLevelExcludedByReason),
+      exclusion_reasons_ranked_json: JSON.stringify(exclusionReasonsRanked),
     });
   }
   if (verifyExcluded.length > 0) {
@@ -250,20 +295,15 @@ export async function verifyMarketingHubLessonRowsResolve(
   }
 
   const reasonsJson = JSON.stringify(excludedByReason);
-  if (
-    !options?.skipZeroKeptPipelineInvariant &&
-    lessons.length > 0 &&
-    kept.length === 0
-  ) {
+  if (lessons.length > 0 && kept.length === 0) {
     safeServerLog("pathway_lessons", "hub_verify_prepared_positive_zero_kept_critical", {
       pathway_id: pathway.id,
       lesson_content_locale: lessonContentLocale,
       prepared_count: String(lessons.length),
       verify_kept_count: "0",
       reasons_json: reasonsJson.slice(0, 2000),
-      outcome: "critical_invariant_violation",
+      outcome: options?.skipZeroKeptPipelineInvariant ? "all_rows_excluded_tests" : "all_rows_excluded_soft_return",
     });
-    throw new HubVerifyPreparedPositiveZeroKeptError(pathway.id, lessonContentLocale, lessons.length, reasonsJson);
   }
 
   return { kept, excluded, diagnostics };

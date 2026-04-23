@@ -19,10 +19,11 @@ import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions"
 test.describe("CAT exam — compact viewport layout", () => {
   test("scroll region has usable height; footer does not cover last option; single anchored footer", async ({
     page,
-  }) => {
+  }, testInfo) => {
     const obs = attachPageObservers(page, { profile: "app" });
     try {
-      await page.setViewportSize({ width: 1280, height: 680 });
+      /** Standard laptop-ish viewport (CAT density contract). */
+      await page.setViewportSize({ width: 1366, height: 768 });
 
       await page.goto(
         `/app/practice-tests?cat=1&pathwayId=${encodeURIComponent(PAID_E2E_DEFAULT_PATHWAY_ID)}`,
@@ -91,6 +92,22 @@ test.describe("CAT exam — compact viewport layout", () => {
       }
 
       expect(metrics.anchoredFooterCount, "single exam footer (anchored card or adaptive board bar)").toBe(1);
+
+      const docScroll = await page.evaluate(() => {
+        const el = document.documentElement;
+        const sh = el.scrollHeight;
+        const ih = window.innerHeight;
+        return { scrollHeight: sh, innerHeight: ih, delta: sh - ih };
+      });
+      expect(
+        docScroll.delta,
+        `document should not exceed viewport (scrollHeight=${docScroll.scrollHeight} innerHeight=${docScroll.innerHeight})`,
+      ).toBeLessThanOrEqual(1);
+
+      await page.screenshot({
+        path: testInfo.outputPath("cat-exam-compact-after.png"),
+        fullPage: true,
+      });
 
       const serious = obs.consoleErrors.filter(
         (x) => !/cookie|Content Security Policy|third-party|analytics/i.test(x),

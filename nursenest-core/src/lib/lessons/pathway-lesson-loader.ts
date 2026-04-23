@@ -286,6 +286,15 @@ async function dbCall<T>(run: () => Promise<T>, fallback: T): Promise<T> {
   });
 }
 
+/**
+ * Per-request memo: marketing hub verify loads hundreds of slugs; published lesson overlays are
+ * locale-wide (not per slug). Without memoization each verify call re-hit the overlay query and
+ * amplified timeouts → `detail_loader_miss` for most rows while the hub list still looked healthy.
+ */
+const fetchPublishedLessonOverlaysForMarketingLocale = cache(async (normalizedLocale: string) =>
+  fetchPublishedPathwayLessonOverlayMapSafe(normalizedLocale),
+);
+
 async function scopedGoldSlugPublishedInDb(pathwayId: string, locale: string, slug: string): Promise<boolean> {
   const n = await dbCall(
     () =>
@@ -322,8 +331,11 @@ async function listMissingScopedGoldHubRows(
   return out;
 }
 
-/** Any published row for pathway (any locale). */
-async function pathwayHasPublishedDbLessons(pathwayId: string): Promise<boolean> {
+/**
+ * Any published row for pathway (any locale).
+ * Request-memoized — {@link getPathwayLessonImpl} consults this for every slug during hub verify.
+ */
+const pathwayHasPublishedDbLessons = cache(async function pathwayHasPublishedDbLessons(pathwayId: string): Promise<boolean> {
   const row = await dbCall(
     () =>
       prisma.pathwayLesson.findFirst({
@@ -333,7 +345,7 @@ async function pathwayHasPublishedDbLessons(pathwayId: string): Promise<boolean>
     null,
   );
   return !!row;
-}
+});
 
 
 /** Total published rows for pathway across locales (audit / metrics). */
@@ -361,10 +373,16 @@ async function countPublishedDbLessonsAllLocalesWithHealth(
 }
 
 /**
- * One `groupBy` per hub/topic list: pick the dominant `pathway_lessons.locale` warehouse for SQL filters.
+ * One `groupBy` per pathway + requested locale: pick the dominant `pathway_lessons.locale` warehouse.
  * See {@link pickPathwayLessonListWarehouseLocale} — avoids a stray `en` shard hiding a large non-English corpus.
+ *
+ * **Request-memoized:** hub list and per-slug marketing verify both call this; without memoization a
+ * full-hub verify issued hundreds of identical `groupBy` queries and starved Prisma time budgets.
  */
-async function effectiveLocaleForPathwayLessonDbRows(pathwayId: string, requestedRaw: string): Promise<string> {
+const effectiveLocaleForPathwayLessonDbRows = cache(async function effectiveLocaleForPathwayLessonDbRows(
+  pathwayId: string,
+  requestedRaw: string,
+): Promise<string> {
   const requested = normalizePathwayLessonLocale(requestedRaw);
   const rows = await dbCall(
     () =>
@@ -394,7 +412,7 @@ async function effectiveLocaleForPathwayLessonDbRows(pathwayId: string, requeste
     });
   }
   return effective;
-}
+});
 
 const PATHWAY_LESSON_HUB_LIST_SELECT = {
   slug: true,
@@ -542,7 +560,7 @@ async function resolveMarketingHubRenderableLessonList(
   };
 }> {
   const requested = normalizePathwayLessonLocale(marketingLocale);
-  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
+  const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(requested);
   const topicSlugsIn = listOptions?.topicSlugsIn;
   const qRaw = normalizePathwayHubSearchQuery(listOptions?.q);
   const qLower = qRaw ? qRaw.toLowerCase() : "";
@@ -818,7 +836,7 @@ async function getLessonsForTopicPageImpl(
   const ps = clampPageSize(pageSize);
   const p = Math.min(clampPage(page), maxSafeOffsetPage(ps));
   const requested = normalizePathwayLessonLocale(marketingLocale);
-  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
+  const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(requested);
 
   const dbHas = await pathwayHasPublishedDbLessons(pathwayId);
   if (dbHas) {
@@ -1084,7 +1102,7 @@ async function getPathwayLessonImpl(
   marketingLocale?: string,
 ): Promise<PathwayLessonRecord | undefined> {
   const overlayLocale = normalizePathwayLessonLocale(marketingLocale);
-  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(overlayLocale);
+  const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(overlayLocale);
   const catalogLessons = getCatalogLessonsRaw(pathwayId);
   const catalogHitForSlug = catalogLessons.find((l) => l.slug === slug);
 
@@ -1175,7 +1193,70 @@ async function getPathwayLessonImpl(
     }
   }
 
+  /**
+   * Hub SQL lists scan the dominant `pathway_lessons.locale` warehouse from
+   * {@link effectiveLocaleForPathwayLessonDbRows} — which can differ from {@link PATHWAY_LESSON_CANONICAL_DB_LOCALE}
+   * even when the learner marketing preference is EN. Without this pass, `findUnique(pathwayId, slug, en)` misses
+   * rows that only exist under the warehouse locale and hub verify collapses the grid while the list still shows them.
+   */
   const dbHasAny = await pathwayHasPublishedDbLessons(pathwayId);
+  if (dbHasAny) {
+    const attemptedDbLocales = new Set<string>([PATHWAY_LESSON_CANONICAL_DB_LOCALE]);
+    if (overlayLocale !== PATHWAY_LESSON_CANONICAL_DB_LOCALE) {
+      attemptedDbLocales.add(overlayLocale);
+    }
+    const effectiveWarehouse = await effectiveLocaleForPathwayLessonDbRows(pathwayId, overlayLocale);
+    if (!attemptedDbLocales.has(effectiveWarehouse)) {
+      const rowWh = await dbCall(
+        () =>
+          prisma.pathwayLesson.findUnique({
+            where: {
+              pathwayId_slug_locale: {
+                pathwayId,
+                slug,
+                locale: effectiveWarehouse,
+              },
+            },
+          }),
+        null,
+      );
+      if (rowWh && rowWh.status === ContentStatus.PUBLISHED) {
+        const fromWh = applyOverlayAndStructural(
+          withLocaleMeta(
+            normalizeLesson(pathwayLessonRowToInput(rowWh), pathwayId),
+            lessonLocaleMeta(
+              marketingLocale,
+              effectiveWarehouse,
+              normalizePathwayLessonLocale(marketingLocale) !== effectiveWarehouse,
+              false,
+            ),
+          ),
+          marketingLocale,
+          pathwayId,
+          lessonDbOverlays,
+        );
+        if (pathwayLessonEligibleForPublicMarketingSurface(fromWh)) {
+          safeServerLog("pathway_lessons", "lesson_detail_effective_warehouse_row", {
+            pathwayId,
+            slug: slug.slice(0, 160),
+            effective_warehouse: effectiveWarehouse,
+            marketing_locale_pref: overlayLocale,
+          });
+          return fromWh;
+        }
+        const fromCatalogEff = tryCatalogPublicComplete();
+        if (fromCatalogEff) {
+          safeServerLog("pathway_lessons", "lesson_detail_catalog_fallback_after_effective_warehouse_incomplete", {
+            pathwayId,
+            slug: slug.slice(0, 160),
+            effective_warehouse: effectiveWarehouse,
+          });
+          return fromCatalogEff;
+        }
+      }
+    }
+  }
+
   if (!catalogHitForSlug) return undefined;
   const fromCatalogOnly = applyOverlayAndStructural(
     withLocaleMeta(
@@ -1418,7 +1499,7 @@ export async function getPublishedPathwayLessonRecordById(
     }
     return undefined;
   }
-  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(
+  const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(
     normalizePathwayLessonLocale(marketingLocale),
   );
   const lesson = applyOverlayAndStructural(
@@ -1443,7 +1524,7 @@ async function getRelatedPathwayLessonsImpl(
 ): Promise<PathwayLessonRecord[]> {
   const cap = Math.min(24, Math.max(1, Math.floor(limit)));
   const requested = normalizePathwayLessonLocale(marketingLocale);
-  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
+  const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(requested);
   const slugWhere: Prisma.PathwayLessonWhereInput =
     excludeSlug === RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL ? {} : { slug: { not: excludeSlug } };
 
@@ -1729,7 +1810,7 @@ export async function listPathwayLessonSlugBatch(
     });
   }
 
-  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(loc);
+  const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(loc);
 
   if (dbHas) {
     const rows = await dbCall(

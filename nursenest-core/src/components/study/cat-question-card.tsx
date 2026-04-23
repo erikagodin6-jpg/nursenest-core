@@ -51,7 +51,7 @@ export function QuestionCard({
   const hasMeta = topic ?? subtopic ?? difficultyLabel;
   const examHead =
     examCategoryLabel != null && examCategoryLabel.trim().length > 0 ? (
-      <div className="nn-cat-exam-item-head mb-3 flex items-start justify-between gap-3">
+      <div className="nn-cat-exam-item-head mb-2 flex items-start justify-between gap-3">
         <p className="nn-cat-exam-category-label m-0">{examCategoryLabel.trim().toUpperCase()}</p>
         {examHeaderRightSlot ? <div className="nn-cat-exam-item-head__actions shrink-0">{examHeaderRightSlot}</div> : null}
       </div>
@@ -173,13 +173,13 @@ export function QuestionCard({
         <div className="nn-cat-question-card nn-cat-question-card--exam-stack nn-cat-question-card--exam-detached flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-[var(--semantic-surface)]">
           <div
             id="nn-cat-exam-scroll-region"
-            className="nn-cat-question-card__exam-scroll nn-cat-question-card__exam-scroll--detached nn-cat-question-card__exam-scroll--partitioned flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden px-3 pb-3 pt-3 sm:px-5 sm:pb-4 sm:pt-4"
+            className="nn-cat-question-card__exam-scroll nn-cat-question-card__exam-scroll--detached nn-cat-question-card__exam-scroll--partitioned flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden px-2.5 pb-2 pt-2 sm:px-4 sm:pb-2 sm:pt-2.5"
           >
             {meta}
-            <div className="nn-cat-exam-stem-scroll min-h-0 min-w-0 flex-1 overflow-y-auto overflow-x-hidden overscroll-y-contain">
+            <div className="nn-cat-exam-stem-scroll min-h-0 min-w-0 shrink-0 overflow-y-auto overflow-x-hidden overscroll-y-contain">
               {stemBlock}
             </div>
-            <div className="nn-cat-exam-post-stem shrink-0 pt-2 sm:pt-2.5">{children}</div>
+            <div className="nn-cat-exam-post-stem shrink-0 pt-1 sm:pt-1.5">{children}</div>
           </div>
         </div>
       );

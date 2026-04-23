@@ -36,23 +36,32 @@ export function LearnerExamChromeGate({ children }: { children: React.ReactNode 
     return () => document.documentElement.removeAttribute("data-learner-exam-chrome");
   }, [examFocus]);
 
+  if (!examFocus) {
+    return <>{children}</>;
+  }
+
+  /**
+   * Laptop+: lock the focused practice-test column to the dynamic viewport so inner
+   * `nn-practice-session` can use flex-1 instead of fragile `calc(100dvh - …)` totals
+   * (minimal nav + shell padding + page wrappers must not exceed one viewport height).
+   */
   return (
-    <>
-      {examFocus ? (
-        <div className="nn-exam-minimal-nav sticky top-0 z-50 mb-4 flex flex-wrap items-center justify-between gap-2 border-b border-border border-l-[3px] border-l-primary/25 bg-card/95 px-3 py-2.5 text-xs text-muted-foreground backdrop-blur-sm">
-          <span className="font-semibold tracking-tight text-foreground">Focused session</span>
-          <span className="hidden max-w-xl sm:inline sm:text-[11px] sm:leading-snug sm:text-muted-foreground">
-            Distractions reduced. Not an official exam interface. Practice only.
-          </span>
-          <Link
-            href="/app"
-            className="shrink-0 rounded-md border border-border bg-background px-3 py-1.5 text-[11px] font-semibold text-foreground shadow-sm hover:bg-muted"
-          >
-            Exit
-          </Link>
-        </div>
-      ) : null}
-      {children}
-    </>
+    <div className="nn-learner-exam-focus-column flex min-h-0 flex-col lg:h-[100dvh] lg:max-h-[100dvh] lg:overflow-hidden">
+      <div className="nn-exam-minimal-nav z-50 shrink-0 flex flex-wrap items-center justify-between gap-2 border-b border-border border-l-[3px] border-l-primary/25 bg-card/95 px-3 py-1.5 text-xs text-muted-foreground backdrop-blur-sm lg:sticky lg:top-0">
+        <span className="font-semibold tracking-tight text-foreground">Focused session</span>
+        <span className="hidden max-w-xl sm:inline sm:text-[11px] sm:leading-snug sm:text-muted-foreground">
+          Distractions reduced. Not an official exam interface. Practice only.
+        </span>
+        <Link
+          href="/app"
+          className="shrink-0 rounded-md border border-border bg-background px-3 py-1.5 text-[11px] font-semibold text-foreground shadow-sm hover:bg-muted"
+        >
+          Exit
+        </Link>
+      </div>
+      <div className="nn-learner-exam-focus-body min-h-0 flex flex-1 flex-col lg:min-h-0 lg:flex-1 lg:overflow-hidden">
+        {children}
+      </div>
+    </div>
   );
 }

@@ -102,7 +102,7 @@ export default async function PracticeTestRunPage({ params }: Props) {
   }
 
   return (
-    <div className="pt-2 md:pt-4">
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden lg:min-h-0">
       <ExamSessionErrorBoundary surface="practice_test">
         <PracticeTestRunnerClient
           testId={id}

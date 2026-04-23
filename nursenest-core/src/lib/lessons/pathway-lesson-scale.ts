@@ -16,15 +16,17 @@ export const MIN_PATHWAY_LESSONS_SCALE_TARGET = 150;
 /** Upper planning horizon — architecture (pagination + bounded selects) supports this without loading full sets. */
 export const PATHWAY_LESSONS_SCALE_CEILING = 500;
 
-/** Default rows per marketing pathway hub page (tunable; keep ≤ max for predictable memory). */
+/** Absolute safety cap: catalog pathways with more lessons are truncated for list/hub pagination math. */
+export const PATHWAY_CATALOG_LIST_HARD_CAP = 2_000;
+
+/** Default rows per marketing pathway hub page (URL `pageSize` default; curriculum hub can show full verified set). */
 export const PATHWAY_HUB_PAGE_SIZE_DEFAULT = 72;
 /**
- * Upper bound for a single hub request — raised to match the architecture scale ceiling so the
- * lessons hub can render all hub-metadata rows in a single page (no full lesson bodies are loaded).
- * Hub-list rows are metadata-only (no section bodies); loading up to 500 is safe.
- * Deep pagination is still supported when a pathway eventually exceeds this count.
+ * Upper bound for marketing hub pagination slices + single-request metadata lists.
+ * Hub cards are metadata-only (`sections: []`); align with {@link PATHWAY_CATALOG_LIST_HARD_CAP} so RN-scale
+ * libraries (hundreds of lessons) fit one request without truncating the curriculum grid to a single page slice.
  */
-export const PATHWAY_HUB_PAGE_SIZE_MAX = PATHWAY_LESSONS_SCALE_CEILING; // 500
+export const PATHWAY_HUB_PAGE_SIZE_MAX = PATHWAY_CATALOG_LIST_HARD_CAP;
 
 /** Subscriber app `/app/lessons` default page size when `limit` is omitted (max 50 via {@link parseLessonLibraryLimit}). */
 export const LEARNER_APP_LESSONS_PAGE_SIZE_DEFAULT = 20;
@@ -33,9 +35,6 @@ export const LEARNER_APP_LESSONS_PAGE_SIZE = LEARNER_APP_LESSONS_PAGE_SIZE_DEFAU
 
 /** When hub has more pages than this, show First/Last links (see pathway-lesson-pagination). */
 export const PATHWAY_HUB_PAGINATION_SHOW_ENDLINKS_MIN_PAGES = 3;
-
-/** Absolute safety cap: catalog pathways with more lessons are truncated for list/hub pagination math. */
-export const PATHWAY_CATALOG_LIST_HARD_CAP = 2_000;
 
 /**
  * Max raw `pathway_lessons` rows scanned when building subscriber `/app/lessons` from a Prisma filter.

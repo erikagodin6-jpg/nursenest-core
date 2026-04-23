@@ -93,7 +93,7 @@ const freeAuthEnabled = Boolean(
 
 /** Full paid-user slice (must stay aligned with `chromium` testIgnore below). */
 const CHROMIUM_PAID_SPEC_MATCH =
-  /paid-user-(00-fast-sanity|dashboard-shell-first|dashboard-fail-soft|dashboard-multi-fail-soft|degraded-mode|data-load|performance|stress|db-stability-burst|db-connection-burst|env-bootstrap-order|login-flow|login-reliability|journey|entitlements|navigation-paths|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke|duplicate-heavy-requests|prisma-client-singleton|prisma-query-bounds|accessibility)\.spec\.ts$|site-paid-access-contract\.spec\.ts$|paid-subscriber-audit\.spec\.ts$|production-i18n-bundle\.spec\.ts$/;
+  /paid-user-(00-fast-sanity|dashboard-shell-first|dashboard-fail-soft|dashboard-multi-fail-soft|degraded-mode|data-load|performance|stress|db-stability-burst|db-connection-burst|env-bootstrap-order|login-flow|login-reliability|journey|entitlements|navigation-paths|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke|cat-focused-viewport|duplicate-heavy-requests|prisma-client-singleton|prisma-query-bounds|accessibility)\.spec\.ts$|site-paid-access-contract\.spec\.ts$|paid-subscriber-audit\.spec\.ts$|production-i18n-bundle\.spec\.ts$/;
 
 const freeProjects = freeAuthEnabled
   ? [
@@ -173,7 +173,7 @@ export default defineConfig({
       // Project-level testIgnore replaces the root list — keep `.next` + build dirs here too.
         testIgnore: [
         /lesson-flows\.mobile\.spec\.ts$/,
-        /paid-user-(00-fast-sanity|dashboard-shell-first|dashboard-fail-soft|dashboard-multi-fail-soft|degraded-mode|data-load|performance|stress|db-stability-burst|db-connection-burst|env-bootstrap-order|login-flow|login-reliability|journey|entitlements|navigation-paths|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke|duplicate-heavy-requests|prisma-client-singleton|prisma-query-bounds|accessibility)\.spec\.ts$/,
+        /paid-user-(00-fast-sanity|dashboard-shell-first|dashboard-fail-soft|dashboard-multi-fail-soft|degraded-mode|data-load|performance|stress|db-stability-burst|db-connection-burst|env-bootstrap-order|login-flow|login-reliability|journey|entitlements|navigation-paths|navigation|i18n|api-health|session-persistence|key-pages-performance|visual-regression|adaptive-question-flow|mobile|cat-smoke|cat-focused-viewport|duplicate-heavy-requests|prisma-client-singleton|prisma-query-bounds|accessibility)\.spec\.ts$/,
         /site-paid-access-contract\.spec\.ts$/,
         /paid-subscriber-audit\.spec\.ts$/,
         /** Only `chromium-paid` should run this placeholder (or it duplicates when creds are missing). */
