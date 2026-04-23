@@ -260,20 +260,8 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
 
   const hasLessonAssessments =
     bankAssessments.preTest.length > 0 || bankAssessments.postTest.length > 0;
-  const topicCodeQ = lesson.topicSlug?.trim() ? `&topicCode=${encodeURIComponent(lesson.topicSlug.trim())}` : "";
-  const topicLabelQ = lesson.topic?.trim() ? `&topic=${encodeURIComponent(lesson.topic.trim())}` : "";
-  const headerPracticeHref = `/app/questions?pathwayId=${encodeURIComponent(pathway.id)}${topicCodeQ}${topicLabelQ}&preset=topic_drill`;
-  const headerFlashHref = lesson.topicSlug?.trim()
-    ? `/app/flashcards?pathwayId=${encodeURIComponent(pathway.id)}&topicCode=${encodeURIComponent(lesson.topicSlug.trim())}`
-    : `/app/flashcards?pathwayId=${encodeURIComponent(pathway.id)}`;
-  const lessonStudyQuickLinks = fullAccess
-    ? {
-        practiceHref: headerPracticeHref,
-        flashcardsHref: headerFlashHref,
-        practiceLabel: t("learner.studyLoop.practiceThisTopicCta"),
-        flashcardsLabel: t("learner.studyLoop.sameTopicFlashcards"),
-      }
-    : null;
+  /* Header quick links duplicate bottom `PathwayLessonActions` + in-article next steps; omit to reduce CTA repetition. */
+  const lessonStudyQuickLinks = null;
   const lessonAssessmentFlowHint =
     fullAccess && studySettings.enablePrePostQuizzes && hasLessonAssessments
       ? "Readiness check → core lesson → reinforcement quiz after you mark this lesson studied."
@@ -468,6 +456,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
                       heading={surfaceHeading}
                       kind={section.kind}
                       editorialRhythmIndex={editorialRhythmIndexBySectionId.get(section.id)}
+                      tierRelevanceLearnerSection={section.kind === "tier_specific_relevance"}
                     >
                       {section.audioUrl ? (
                         <LessonSectionAudioButton

@@ -8,6 +8,17 @@
  * primitive API in `learner-surface-primitives.css`.
  */
 
+/* Sparse panel — pathway lesson empty / figures-only lead (token-driven, no inline styles) */
+.lv-lesson-sparse-panel {
+  border-radius: var(--lv-radius-lg);
+  border: 1px solid color-mix(in srgb, var(--lv-border-soft) 82%, var(--lv-accent-300) 18%);
+  background: color-mix(in srgb, var(--lv-bg-surface-alt) 55%, var(--lv-bg-surface));
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.625;
+  color: var(--lv-text-secondary);
+}
+
 /* --- Section (one tone per section) --- */
 
 .lv-section {
@@ -507,37 +518,13 @@
   gap: 0.25rem;
 }
 
-.lv-wayfinding__related-link {
-  display: inline-flex;
-  min-height: 2.25rem;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.25rem 0.35rem;
-  border-radius: var(--lv-radius-md);
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--lv-primary-500);
-  text-decoration: none;
-  transition:
-    background var(--lv-motion) var(--lv-motion-ease),
-    color var(--lv-motion) var(--lv-motion-ease);
+/* Tier relevance: prose measure when section shell is `.lv-section` (pathway marketing lesson detail). */
+.lv-section[data-lsc-kind="tier_specific_relevance"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--tier {
+  max-width: min(64ch, 100%);
 }
 
-.lv-wayfinding__related-link:hover {
-  background: color-mix(in srgb, var(--lv-primary-50) 55%, var(--lv-bg-surface));
-  text-decoration: underline;
-}
-
-.lv-wayfinding__related-link:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 2px var(--lv-bg-base),
-    0 0 0 4px color-mix(in srgb, var(--lv-primary-500) 28%, transparent);
-}
-
-.lv-wayfinding__related-chevron {
-  font-size: 0.875rem;
-  color: var(--lv-text-secondary);
+.lv-wayfinding__related .lv-list-row {
+  width: 100%;
 }
 
 /* --- Flashcards hub --- */

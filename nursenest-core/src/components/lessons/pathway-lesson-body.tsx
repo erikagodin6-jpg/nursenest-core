@@ -102,17 +102,7 @@ function pathwayLessonExamFocusHasStructured(examFocus?: PathwayLessonExamFocus 
 }
 
 function LearnerSparsePanel({ children }: { children: ReactNode }) {
-  return (
-    <div
-      className="rounded-lg border px-3 py-2.5 text-sm leading-relaxed text-[var(--theme-body-text)]"
-      style={{
-        borderColor: "color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft))",
-        background: "color-mix(in srgb, var(--semantic-panel-cool) 35%, var(--bg-card))",
-      }}
-    >
-      {children}
-    </div>
-  );
+  return <div className="lv-lesson-sparse-panel">{children}</div>;
 }
 
 function PathwayLessonExamFocusInlineBlocks({

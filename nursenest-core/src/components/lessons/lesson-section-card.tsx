@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import type { PathwayLessonSectionKind } from "@/lib/lessons/pathway-lesson-types";
 import { getLessonSectionTheme } from "@/lib/ui/lesson-section-theme";
+import { LearnerSectionContainer } from "@/components/learner-ui/learner-section-container";
 
 export function lessonSectionSurface(kind: PathwayLessonSectionKind | undefined | null): "editorial" | "callout" {
   if (!kind) return "editorial";
@@ -44,6 +45,7 @@ export function LessonSectionCard({
   className,
   /** Zero-based count among editorial-only sections for alternating soft bands. */
   editorialRhythmIndex,
+  tierRelevanceLearnerSection = false,
   children,
 }: {
   id: string;
@@ -54,6 +56,11 @@ export function LessonSectionCard({
   /** Grid column span etc. — parent controls responsive layout. */
   className?: string;
   editorialRhythmIndex?: number;
+  /**
+   * Pathway marketing lesson detail only: tier-specific relevance uses `LearnerSectionContainer`
+   * instead of stacked `nn-lesson-section-card--callout` framing.
+   */
+  tierRelevanceLearnerSection?: boolean;
   children: ReactNode;
 }) {
   const { chipLabel: derivedChipLabel, dataRole, role } = getLessonSectionTheme(kind);
@@ -81,6 +88,36 @@ export function LessonSectionCard({
   } as const;
   const ChipIcon = ROLE_ICON[role];
 
+  const chipRow =
+    surface === "callout" ? (
+      <span className="nn-lesson-section-chip inline-flex items-center gap-1.5" aria-hidden="true">
+        <ChipIcon className="nn-icon-sm" aria-hidden="true" />
+        {chipLabel}
+      </span>
+    ) : (
+      <p className="nn-lesson-section-eyebrow">{chipLabel}</p>
+    );
+  const headingId = `${id}-heading`;
+  const bodyGap = surface === "callout" ? "mt-4" : "mt-3.5";
+
+  if (tierRelevanceLearnerSection && tierCrosswalk) {
+    return (
+      <LearnerSectionContainer
+        id={id}
+        variant="tint-primary"
+        aria-labelledby={headingId}
+        lessonSectionDataset={{ kind: kind ?? undefined, role: dataRole }}
+        className={["scroll-mt-24 mb-0", className].filter(Boolean).join(" ")}
+      >
+        {chipRow}
+        <h2 id={headingId} className="nn-lesson-section-heading mt-2 text-[var(--theme-heading-text)]">
+          {heading?.trim() || "Section"}
+        </h2>
+        <div className={bodyGap}>{children}</div>
+      </LearnerSectionContainer>
+    );
+  }
+
   return (
     <section
       id={id}
@@ -97,18 +134,11 @@ export function LessonSectionCard({
       data-lsc-kind={kind ?? undefined}
       aria-label={heading?.trim() || "Lesson section"}
     >
-      {surface === "callout" ? (
-        <span className="nn-lesson-section-chip inline-flex items-center gap-1.5" aria-hidden="true">
-          <ChipIcon className="nn-icon-sm" aria-hidden="true" />
-          {chipLabel}
-        </span>
-      ) : (
-        <p className="nn-lesson-section-eyebrow">{chipLabel}</p>
-      )}
+      {chipRow}
       <h2 className="nn-lesson-section-heading mt-2 text-[var(--theme-heading-text)]">
         {heading?.trim() || "Section"}
       </h2>
-      <div className={surface === "callout" ? "mt-4" : "mt-3.5"}>{children}</div>
+      <div className={bodyGap}>{children}</div>
     </section>
   );
 }

@@ -510,7 +510,11 @@ export function PracticeTestRunnerClient({
   const catExamLeakWarnedRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (typeof document === "undefined" || isExamStyle) return;
+    if (typeof document === "undefined") return;
+    if (isExamStyle) {
+      catExamLeakWarnedRef.current = null;
+      return;
+    }
     if (!catMode || status !== "IN_PROGRESS" || !current) return;
     const leak =
       document.querySelector(".nn-cat-question-card--exam-stack") ??

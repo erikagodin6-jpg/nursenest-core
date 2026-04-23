@@ -17,6 +17,7 @@ export function LearnerSectionContainer({
   "aria-labelledby": ariaLabelledBy,
   variant,
   className = "",
+  lessonSectionDataset,
   children,
 }: {
   id?: string;
@@ -24,6 +25,8 @@ export function LearnerSectionContainer({
   /** Omit for default surface; otherwise one tint per section. */
   variant?: LearnerSectionVariant;
   className?: string;
+  /** Optional lesson section markers for token-scoped CSS (e.g. pathway tier crosswalk). */
+  lessonSectionDataset?: { kind?: string | null; role?: string | null };
   children: ReactNode;
 }) {
   return (
@@ -32,6 +35,8 @@ export function LearnerSectionContainer({
       aria-labelledby={ariaLabelledBy}
       className={`lv-section ${className}`.trim()}
       {...(variant ? { "data-tone": TONE_BY_VARIANT[variant] } : {})}
+      {...(lessonSectionDataset?.kind ? { "data-lsc-kind": lessonSectionDataset.kind } : {})}
+      {...(lessonSectionDataset?.role ? { "data-lsc-role": lessonSectionDataset.role } : {})}
     >
       {children}
     </section>

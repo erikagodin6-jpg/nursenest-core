@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ClipboardList, Layers, LineChart, Library } from "lucide-react";
+import { BookOpen, ClipboardList, Layers, LineChart, Library } from "lucide-react";
+import { LearnerListRowLink } from "@/components/learner-ui/learner-list-row";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
@@ -89,12 +90,11 @@ export function PathwayLessonWayfinding({
           <ul className="lv-wayfinding__related-list">
             {curated.map((c) => (
               <li key={c.href}>
-                <Link href={c.href} className="lv-wayfinding__related-link">
-                  {c.title}
-                  <span aria-hidden className="lv-wayfinding__related-chevron">
-                    →
-                  </span>
-                </Link>
+                <LearnerListRowLink
+                  href={c.href}
+                  icon={<BookOpen className="h-4 w-4" strokeWidth={1.75} aria-hidden />}
+                  label={c.title}
+                />
               </li>
             ))}
           </ul>

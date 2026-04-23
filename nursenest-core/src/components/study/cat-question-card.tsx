@@ -49,6 +49,8 @@ export function QuestionCard({
   );
 
   const footerRef = useRef<HTMLDivElement | null>(null);
+  const measureOuterRafRef = useRef<number | null>(null);
+  const measureInnerRafRef = useRef<number | null>(null);
   const [examScrollPadBottomPx, setExamScrollPadBottomPx] = useState(0);
   /** True once we have a real footer box height — keeps first-paint fallback from overriding a good measure. */
   const [examFooterMeasured, setExamFooterMeasured] = useState(false);
@@ -56,15 +58,31 @@ export function QuestionCard({
   const measureExamFooter = useCallback((isCancelled: () => boolean) => {
     const el = footerRef.current;
     if (!el || isCancelled()) return;
-    /* Double rAF: stabilize after font swap / orientation / subgrid layout (common mobile exam cases). */
-    requestAnimationFrame(() => {
+    /* Coalesce ResizeObserver + resize bursts; double rAF stabilizes after layout/font/orientation. */
+    if (measureOuterRafRef.current != null) {
+      cancelAnimationFrame(measureOuterRafRef.current);
+    }
+    if (measureInnerRafRef.current != null) {
+      cancelAnimationFrame(measureInnerRafRef.current);
+    }
+    measureOuterRafRef.current = requestAnimationFrame(() => {
+      measureOuterRafRef.current = null;
       if (isCancelled()) return;
-      requestAnimationFrame(() => {
+      measureInnerRafRef.current = requestAnimationFrame(() => {
+        measureInnerRafRef.current = null;
         if (isCancelled()) return;
         const el2 = footerRef.current;
-        if (!el2) return;
+        if (!el2) {
+          setExamFooterMeasured(false);
+          setExamScrollPadBottomPx(0);
+          return;
+        }
         const h = Math.ceil(el2.getBoundingClientRect().height);
-        if (h <= 0) return;
+        if (h <= 0) {
+          setExamFooterMeasured(false);
+          setExamScrollPadBottomPx(0);
+          return;
+        }
         setExamFooterMeasured(true);
         setExamScrollPadBottomPx((prev) => (prev === h ? prev : h));
       });
@@ -88,12 +106,24 @@ export function QuestionCard({
     window.addEventListener("resize", safeMeasure);
     window.addEventListener("orientationchange", safeMeasure);
     if (typeof document !== "undefined" && document.fonts?.ready) {
-      void document.fonts.ready.then(() => {
-        if (!cancelled) safeMeasure();
-      });
+      void document.fonts.ready
+        .then(() => {
+          if (!cancelled) safeMeasure();
+        })
+        .catch(() => {
+          /* Optional API; RO + resize still measure */
+        });
     }
     return () => {
       cancelled = true;
+      if (measureOuterRafRef.current != null) {
+        cancelAnimationFrame(measureOuterRafRef.current);
+        measureOuterRafRef.current = null;
+      }
+      if (measureInnerRafRef.current != null) {
+        cancelAnimationFrame(measureInnerRafRef.current);
+        measureInnerRafRef.current = null;
+      }
       ro?.disconnect();
       window.removeEventListener("resize", safeMeasure);
       window.removeEventListener("orientationchange", safeMeasure);
