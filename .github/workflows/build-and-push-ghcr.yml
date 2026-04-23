@@ -51,6 +51,7 @@ jobs:
             config
             migrations
             backup-system
+            tools/i18n/source/**
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
