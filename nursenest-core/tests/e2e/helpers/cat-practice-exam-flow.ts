@@ -1,5 +1,27 @@
 import { expect, type Page } from "@playwright/test";
 
+/** Pre-exam customize sheet (theme + begin) mounts above the practice builder on many flows. */
+const EXAM_CUSTOMIZE_BEGIN = '[data-testid="button-exam-customize-begin"]';
+
+/**
+ * After `[data-nn-qa-practice-hub-start-test]`, either the pre-exam customize modal appears
+ * (click `button-exam-customize-begin`) or the legacy inline **Begin exam** button is used alone.
+ */
+export async function clickBeginExamAfterPracticeHubStart(page: Page): Promise<void> {
+  const customizeBegin = page.locator(EXAM_CUSTOMIZE_BEGIN);
+  try {
+    await customizeBegin.waitFor({ state: "visible", timeout: 15_000 });
+    await expect(customizeBegin).toBeEnabled({ timeout: 60_000 });
+    await customizeBegin.click();
+    return;
+  } catch {
+    /* no pre-exam customize sheet in this build */
+  }
+  const inlineBegin = page.getByRole("button", { name: /^Begin exam$/i });
+  await expect(inlineBegin).toBeVisible({ timeout: 15_000 });
+  await inlineBegin.click();
+}
+
 /**
  * One CAT **exam / test mode** item: select → Submit & Continue → advance (`data-nn-qa-cat-exam-advance`).
  * Primary advance CTA uses the same “Submit & Continue” label as the initial submit control.

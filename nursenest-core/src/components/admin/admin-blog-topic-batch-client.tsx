@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
 import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
+import { dateToDatetimeLocalInputValue } from "@/lib/datetime/datetime-local-input";
 
 type ScheduleListRow = {
   id: string;
@@ -57,11 +58,7 @@ export function AdminBlogTopicBatchClient({
   const [schedules, setSchedules] = useState(initialSchedules);
   const [topicsText, setTopicsText] = useState("");
   const [cadencePerDay, setCadencePerDay] = useState("1");
-  const [startAtLocal, setStartAtLocal] = useState(() => {
-    const d = new Date();
-    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-    return d.toISOString().slice(0, 16);
-  });
+  const [startAtLocal, setStartAtLocal] = useState(() => dateToDatetimeLocalInputValue(new Date()));
   const [exam, setExam] = useState("NCLEX-RN");
   const [country, setCountry] = useState("unspecified");
   const [template, setTemplate] = useState<BlogPostTemplate>("TOPIC_EXPLAINED");

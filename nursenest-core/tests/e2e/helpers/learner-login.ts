@@ -103,8 +103,8 @@ export async function loginWithCredentials(
 
   try {
     await page.goto(loginHref, { waitUntil: "domcontentloaded" });
-    await page.locator("#login-identifier").waitFor({ state: "visible", timeout: 25_000 });
-    await page.locator("#login-password").waitFor({ state: "visible", timeout: 25_000 });
+    await page.locator("#login-identifier").first().waitFor({ state: "visible", timeout: 25_000 });
+    await page.locator("#login-password").first().waitFor({ state: "visible", timeout: 25_000 });
   } catch (e) {
     const diag = await describeAuthFailureSurface(page).catch(() => "");
     const phase0: RnFullContentLoginPhase0Meta = {
@@ -125,12 +125,13 @@ export async function loginWithCredentials(
     );
   }
 
-  await page.locator("#login-identifier").fill(email);
-  await page.locator("#login-password").fill(password);
+  await page.locator("#login-identifier").first().fill(email);
+  await page.locator("#login-password").first().fill(password);
 
   const submit = page
     .locator("form")
     .filter({ has: page.locator("#login-identifier") })
+    .first()
     .locator('button[type="submit"]')
     .first();
 

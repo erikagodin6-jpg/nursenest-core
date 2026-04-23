@@ -3,8 +3,13 @@
  * footer from overlapping the last option (regression guard for measured scroll padding).
  *
  * Paid E2E credentials required (same harness as cat-exam-mode-contract).
+ *
+ * `--project=chromium` does not load `storageState` by default; reuse paid session file when
+ * present (e.g. after `npx playwright test tests/e2e/setup/auth.setup.ts --project=setup-paid-auth`).
  */
+import { existsSync, readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
+import { PAID_USER_AUTH_FILE } from "../helpers/auth-state-paths";
 import {
   PAID_E2E_DEFAULT_PATHWAY_ID,
   buildPaidFailureSnapshot,
@@ -15,6 +20,30 @@ import {
 import { attachPageObservers } from "../helpers/attach-observers";
 import { logObserverFailureSummary } from "../helpers/log-observer-failure-summary";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
+
+function paidStorageMatchesBaseUrl(): boolean {
+  if (!existsSync(PAID_USER_AUTH_FILE)) return false;
+  try {
+    const baseRaw = (process.env.BASE_URL ?? "http://localhost:3000").trim().replace(/\/$/, "");
+    const baseHost = new URL(baseRaw).host;
+    const j = JSON.parse(readFileSync(PAID_USER_AUTH_FILE, "utf8")) as {
+      origins?: Array<{ origin?: string }>;
+    };
+    return (j.origins ?? []).some((o) => {
+      try {
+        return new URL(String(o.origin ?? "")).host === baseHost;
+      } catch {
+        return false;
+      }
+    });
+  } catch {
+    return false;
+  }
+}
+
+if (paidStorageMatchesBaseUrl()) {
+  test.use({ storageState: PAID_USER_AUTH_FILE });
+}
 
 test.describe("CAT exam — compact viewport layout", () => {
   test("scroll region has usable height; footer does not cover last option; single anchored footer", async ({
@@ -93,15 +122,45 @@ test.describe("CAT exam — compact viewport layout", () => {
 
       expect(metrics.anchoredFooterCount, "single exam footer (anchored card or adaptive board bar)").toBe(1);
 
-      const docScroll = await page.evaluate(() => {
-        const el = document.documentElement;
-        const sh = el.scrollHeight;
+      const docAndLayout = await page.evaluate(() => {
+        const rootEl = document.documentElement;
+        const sh = rootEl.scrollHeight;
         const ih = window.innerHeight;
-        return { scrollHeight: sh, innerHeight: ih, delta: sh - ih };
+        const br = (node: Element | null) =>
+          node instanceof HTMLElement ? node.getBoundingClientRect() : null;
+        const pick = (label: string, r: DOMRect | null) =>
+          r
+            ? {
+                label,
+                top: Math.round(r.top * 10) / 10,
+                bottom: Math.round(r.bottom * 10) / 10,
+                height: Math.round(r.height * 10) / 10,
+              }
+            : { label, top: null as number | null, bottom: null as number | null, height: null as number | null };
+        const mainEl =
+          document.querySelector("#nn-learner-main") ?? document.querySelector("main[data-nn-learner-main]");
+        return {
+          scrollHeight: sh,
+          innerHeight: ih,
+          delta: sh - ih,
+          rects: [
+            pick("nn-learner-exam-focus-column", br(document.querySelector(".nn-learner-exam-focus-column"))),
+            pick("nn-learner-app", br(document.querySelector(".nn-learner-app"))),
+            pick("nn-learner-main", br(mainEl)),
+            pick("nn-practice-session", br(document.querySelector(".nn-practice-session"))),
+            pick("nn-cat-adaptive-exam-session", br(document.querySelector(".nn-cat-adaptive-exam-session"))),
+          ],
+        };
       });
+
+      if (docAndLayout.delta > 1) {
+        // eslint-disable-next-line no-console -- Playwright diagnostic for viewport overflow
+        console.error("[cat-exam-compact-viewport] document overflow", JSON.stringify(docAndLayout, null, 2));
+      }
+
       expect(
-        docScroll.delta,
-        `document should not exceed viewport (scrollHeight=${docScroll.scrollHeight} innerHeight=${docScroll.innerHeight})`,
+        docAndLayout.delta,
+        `document should not exceed viewport (scrollHeight=${docAndLayout.scrollHeight} innerHeight=${docAndLayout.innerHeight})\n${JSON.stringify(docAndLayout.rects, null, 2)}`,
       ).toBeLessThanOrEqual(1);
 
       await page.screenshot({

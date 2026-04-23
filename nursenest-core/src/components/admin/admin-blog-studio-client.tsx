@@ -350,7 +350,7 @@ export function AdminBlogStudioClient() {
         </p>
       </div>
 
-      <form onSubmit={onGenerate} className="grid gap-6 rounded-2xl border border-border/80 bg-[var(--theme-card-bg)] p-6 lg:grid-cols-2">
+      <form noValidate onSubmit={onGenerate} className="grid gap-6 rounded-2xl border border-border/80 bg-[var(--theme-card-bg)] p-6 lg:grid-cols-2">
         <div className="space-y-4 lg:col-span-2">
           <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">1. Brief</h2>
         </div>
@@ -494,6 +494,7 @@ export function AdminBlogStudioClient() {
         <div className="lg:col-span-2">
           <button
             type="submit"
+            formNoValidate
             disabled={busy || !aiGate.runnable}
             className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >

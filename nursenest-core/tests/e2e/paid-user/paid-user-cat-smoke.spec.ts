@@ -15,7 +15,10 @@ import {
 import { attachPageObservers } from "../helpers/attach-observers";
 import { logObserverFailureSummary } from "../helpers/log-observer-failure-summary";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
-import { answerOneCatExamItem } from "../helpers/cat-practice-exam-flow";
+import {
+  answerOneCatExamItem,
+  clickBeginExamAfterPracticeHubStart,
+} from "../helpers/cat-practice-exam-flow";
 
 async function answerOneCatItem(page: Page) {
   await answerOneCatExamItem(page);
@@ -33,10 +36,9 @@ test.describe("Paid user — CAT smoke", () => {
       await expectNoSubscriptionPaywall(page, "CAT hub");
       await expect(page.locator("[data-nn-qa-practice-hub-start-test]")).toBeVisible({ timeout: 60_000 });
       await page.locator("[data-nn-qa-practice-hub-start-test]").click();
-      await expect(page.getByRole("button", { name: /^Begin exam$/i })).toBeVisible({ timeout: 15_000 });
-      await page.getByRole("button", { name: /^Begin exam$/i }).click();
+      await clickBeginExamAfterPracticeHubStart(page);
       await page.waitForURL(/\/app\/practice-tests\/[a-zA-Z0-9_-]+/, { timeout: 120_000 });
-      await expect(page.locator(".nn-cat-question-stem, .nn-marketing-body-sm").first()).toBeVisible({
+      await expect(page.locator(".nn-cat-question-stem").first()).toBeVisible({
         timeout: 120_000,
       });
       for (let i = 0; i < 3; i++) {

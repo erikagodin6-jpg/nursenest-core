@@ -208,9 +208,36 @@ export async function PATCH(req: Request, { params }: Props) {
   if (!gate.ok) return gate.response;
 
   const { id } = await params;
-  const parsed = patchSchema.safeParse(await req.json());
+  let rawBody: unknown;
+  try {
+    rawBody = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
+  if (process.env.NODE_ENV !== "production") {
+    const keys =
+      rawBody && typeof rawBody === "object" && !Array.isArray(rawBody)
+        ? Object.keys(rawBody as Record<string, unknown>)
+        : [];
+    console.info("[admin-blog PATCH] incoming keys", keys);
+  }
+  const parsed = patchSchema.safeParse(rawBody);
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
+    if (process.env.NODE_ENV !== "production") {
+      console.warn("[admin-blog PATCH] zod failed", parsed.error.flatten(), parsed.error.issues);
+    }
+    return NextResponse.json(
+      {
+        error: "Invalid payload",
+        details: parsed.error.flatten(),
+        validationIssues: parsed.error.issues.map((i) => ({
+          path: i.path.join("."),
+          message: i.message,
+          code: i.code,
+        })),
+      },
+      { status: 400 },
+    );
   }
   const d = parsed.data;
 

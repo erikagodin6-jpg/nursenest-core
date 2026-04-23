@@ -8,6 +8,7 @@ import {
   PAID_E2E_DEFAULT_PATHWAY_ID,
   waitForAuthenticatedLearnerShell,
 } from "../helpers/paid-learner-shell";
+import { clickBeginExamAfterPracticeHubStart } from "../helpers/cat-practice-exam-flow";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
 import fs from "node:fs";
 import path from "node:path";
@@ -28,11 +29,10 @@ test.describe("Paid user — CAT focused viewport proof", () => {
     await expectNoSubscriptionPaywall(page, "CAT hub");
     await expect(page.locator("[data-nn-qa-practice-hub-start-test]")).toBeVisible({ timeout: 60_000 });
     await page.locator("[data-nn-qa-practice-hub-start-test]").click();
-    await expect(page.getByRole("button", { name: /^Begin exam$/i })).toBeVisible({ timeout: 15_000 });
-    await page.getByRole("button", { name: /^Begin exam$/i }).click();
+    await clickBeginExamAfterPracticeHubStart(page);
     await page.waitForURL(/\/app\/practice-tests\/[a-zA-Z0-9_-]+/, { timeout: 120_000 });
 
-    await expect(page.locator(".nn-cat-question-stem, .nn-marketing-body-sm").first()).toBeVisible({
+    await expect(page.locator(".nn-cat-question-stem").first()).toBeVisible({
       timeout: 120_000,
     });
     await expect(page.locator("ul.nn-cat-opt-list").first()).toBeVisible({ timeout: 120_000 });
@@ -48,13 +48,17 @@ test.describe("Paid user — CAT focused viewport proof", () => {
       const rOpt = firstOpt?.getBoundingClientRect();
       const deadGapPx = rStem && rOpt ? Math.max(0, rOpt.top - rStem.bottom) : null;
 
+      const optCount = document.querySelectorAll("ul.nn-cat-opt-list .nn-cat-opt").length;
+
       return {
         innerHeight: window.innerHeight,
         scrollHeight: root.scrollHeight,
         clientHeight: root.clientHeight,
+        scrollY: window.scrollY,
         examChromeHidden: html.getAttribute("data-learner-exam-chrome") === "hidden",
         timedModeOn: Boolean(document.querySelector(".nn-cat-exam-timing-alert")),
         deadGapPx,
+        catMcqOptionCount: optCount,
         fits: root.scrollHeight <= window.innerHeight + 1,
       };
     });
@@ -73,5 +77,8 @@ test.describe("Paid user — CAT focused viewport proof", () => {
       proof.deadGapPx == null || proof.deadGapPx <= 48,
       `unexpected dead vertical gap between stem and first option: ${proof.deadGapPx}px`,
     ).toBe(true);
+
+    expect(Math.abs(proof.scrollY), `expected no window scroll, scrollY=${proof.scrollY}`).toBeLessThanOrEqual(1);
+    expect(proof.catMcqOptionCount, "expected at least 4 CAT options on screen for MCQ proof").toBeGreaterThanOrEqual(4);
   });
 });

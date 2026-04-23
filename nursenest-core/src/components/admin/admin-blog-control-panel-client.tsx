@@ -43,6 +43,7 @@ import { AdminBlogHtmlPreview } from "@/components/admin/blog/admin-blog-html-pr
 import { AdminMediaPickerDialog } from "@/components/admin/media/admin-media-picker-dialog";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
 import { blogSlugCustomValidityMessage, liveNormalizeBlogSlugInputValue } from "@/lib/blog/blog-optional-slug";
+import { iso8601ToDatetimeLocalInputValue } from "@/lib/datetime/datetime-local-input";
 
 /** Same-origin admin blog + media upload require session cookies (avoid ip_unauth RL buckets). */
 const ADMIN_BLOG_COOKIE_FETCH: Pick<RequestInit, "credentials" | "cache"> = { credentials: "include", cache: "no-store" };
@@ -212,6 +213,20 @@ export function AdminBlogControlPanelClient({
       fallback;
     const code = typeof o.code === "string" ? o.code.trim() : "";
     let out = code && !line.toLowerCase().includes(code.toLowerCase()) ? `[${code}] ${line}` : line;
+    if (Array.isArray(o.validationIssues) && o.validationIssues.length > 0) {
+      const issueLines = o.validationIssues
+        .map((x) => {
+          if (!x || typeof x !== "object") return null;
+          const r = x as Record<string, unknown>;
+          const path = typeof r.path === "string" && r.path.length > 0 ? r.path : "(root)";
+          const msg = typeof r.message === "string" ? r.message : "";
+          return msg ? `${path}: ${msg}` : null;
+        })
+        .filter((s): s is string => Boolean(s));
+      if (issueLines.length) {
+        out = `${issueLines.slice(0, 6).join(" · ")}\n${out}`;
+      }
+    }
     if ("details" in o && o.details != null) {
       try {
         const d = typeof o.details === "string" ? o.details : JSON.stringify(o.details);
@@ -315,18 +330,10 @@ export function AdminBlogControlPanelClient({
     if (p.keywordCluster) setKeywordCluster(p.keywordCluster);
     setKeywords((p.tags ?? []).join(", "));
     setSlugDraft(p.slug);
-    setPublishAtLocal(datetimeLocalFromIso(p.publishAt));
+    setPublishAtLocal(iso8601ToDatetimeLocalInputValue(p.publishAt));
     setOutlineJsonErr(null);
     setOutlineEditorOpen(false);
   }, []);
-
-  function datetimeLocalFromIso(iso: string | null | undefined): string {
-    if (!iso) return "";
-    const d = new Date(iso);
-    if (Number.isNaN(d.getTime())) return "";
-    const pad = (n: number) => String(n).padStart(2, "0");
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  }
 
   const citationReview = useMemo(() => {
     if (!post?.sourcesJson) return null;
@@ -702,35 +709,46 @@ export function AdminBlogControlPanelClient({
           ...(seoBundle ? { seo: seoBundle } : {}),
         }
       : undefined;
+    const patchBody = {
+      ...slugPatch,
+      title,
+      excerpt,
+      body,
+      seoTitle: seoTitle || null,
+      seoDescription: seoDescription || null,
+      apaReferences,
+      coverImage: coverImageUrl.trim() || null,
+      coverImageAlt: coverImageAltInput.trim() || null,
+      coverImageCaption: coverImageCaptionInput.trim() || null,
+      coverImagePrompt: coverImagePromptInput.trim() || null,
+      outlineJson: plan?.outline ?? undefined,
+      faqBlock,
+      internalLinkPlan,
+      titleAlternates: plan?.titleOptions.slice(1) ?? undefined,
+      keyTakeaways: plan?.keyTakeaways ?? undefined,
+      relatedLessonPaths: plan ? lessonRowsToRelatedPaths(plan.suggestedInternalLessons, country) : undefined,
+      schemaSummary: seoBundle ? buildSchemaSummaryPayload(seoBundle) : undefined,
+      metaTitleVariant: seoTitle || null,
+      metaDescriptionVariant: seoDescription || null,
+      featuredSnippet: plan?.featuredSnippetHint ?? null,
+      keyQuestions: plan?.faqs.map((f) => f.q) ?? undefined,
+    };
+    if (process.env.NODE_ENV !== "production") {
+      console.info("[admin-blog saveDraft] PATCH keys", Object.keys(patchBody));
+      console.info("[admin-blog saveDraft] PATCH snapshot", {
+        title: patchBody.title,
+        slug: patchBody.slug,
+        coverImage: patchBody.coverImage,
+        excerptLen: patchBody.excerpt.length,
+        bodyLen: patchBody.body.length,
+      });
+    }
     try {
       const res = await fetch(`/api/admin/blog/${postId}`, {
         ...ADMIN_BLOG_COOKIE_FETCH,
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...slugPatch,
-          title,
-          excerpt,
-          body,
-          seoTitle: seoTitle || null,
-          seoDescription: seoDescription || null,
-          apaReferences,
-          coverImage: coverImageUrl.trim() || null,
-          coverImageAlt: coverImageAltInput.trim() || null,
-          coverImageCaption: coverImageCaptionInput.trim() || null,
-          coverImagePrompt: coverImagePromptInput.trim() || null,
-          outlineJson: plan?.outline ?? undefined,
-          faqBlock,
-          internalLinkPlan,
-          titleAlternates: plan?.titleOptions.slice(1) ?? undefined,
-          keyTakeaways: plan?.keyTakeaways ?? undefined,
-          relatedLessonPaths: plan ? lessonRowsToRelatedPaths(plan.suggestedInternalLessons, country) : undefined,
-          schemaSummary: seoBundle ? buildSchemaSummaryPayload(seoBundle) : undefined,
-          metaTitleVariant: seoTitle || null,
-          metaDescriptionVariant: seoDescription || null,
-          featuredSnippet: plan?.featuredSnippetHint ?? null,
-          keyQuestions: plan?.faqs.map((f) => f.q) ?? undefined,
-        }),
+        body: JSON.stringify(patchBody),
       });
       const json = (await res.json()) as { error?: string; post?: AdminPostPayload };
       if (!res.ok) {
@@ -1244,7 +1262,11 @@ export function AdminBlogControlPanelClient({
         ) : null}
       </div>
 
-      <form onSubmit={onGenerate} className="space-y-4 rounded-2xl border border-border/80 bg-[var(--theme-card-bg)] p-6 shadow-sm">
+      <form
+        noValidate
+        onSubmit={onGenerate}
+        className="space-y-4 rounded-2xl border border-border/80 bg-[var(--theme-card-bg)] p-6 shadow-sm"
+      >
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">1. Brief</h2>
         <p className="text-sm text-muted-foreground">
           Two-step AI: editorial JSON plan (titles, SEO, outline, links, FAQs, images, APA stubs) then full HTML draft. Requires{" "}
@@ -1429,6 +1451,7 @@ export function AdminBlogControlPanelClient({
         </div>
         <button
           type="submit"
+          formNoValidate
           disabled={formDisabled}
           className="rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
         >

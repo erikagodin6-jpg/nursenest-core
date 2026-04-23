@@ -56,7 +56,7 @@ export function AdminBlogGeminiDraftClient() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-6">
+    <form noValidate onSubmit={onSubmit} className="space-y-4 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-6">
       <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Gemini draft generator (Phase 1)</h2>
       <p className="text-sm text-muted-foreground">
         Admin-only, single-post generation. Saves draft only. No auto-publish, no auto-translation.
@@ -128,6 +128,7 @@ export function AdminBlogGeminiDraftClient() {
 
       <button
         type="submit"
+        formNoValidate
         disabled={busy}
         className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
       >

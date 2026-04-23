@@ -13,7 +13,10 @@ import {
 import { learnerAppMainLandmark, waitForAuthenticatedLearnerShell } from "./paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "./paid-surface-assertions";
 import { dismissFlashcardResumeIfPresent } from "./paid-user-suite";
-import { answerOneCatExamItem } from "./cat-practice-exam-flow";
+import {
+  answerOneCatExamItem,
+  clickBeginExamAfterPracticeHubStart,
+} from "./cat-practice-exam-flow";
 
 const MAIN_MIN_CHARS = 80;
 const LESSON_SAMPLE_MAX = 8;
@@ -208,11 +211,10 @@ export async function pathwayCatSurface(args: {
 
   await expect(page.locator(CAT_START)).toBeVisible({ timeout: 60_000 });
   await page.locator(CAT_START).click();
-  await expect(page.getByRole("button", { name: /^Begin exam$/i })).toBeVisible({ timeout: 15_000 });
-  await page.getByRole("button", { name: /^Begin exam$/i }).click();
+  await clickBeginExamAfterPracticeHubStart(page);
   await page.waitForURL(/\/app\/practice-tests\/[a-zA-Z0-9_-]+/, { timeout: 120_000 });
 
-  await expect(page.locator(".nn-cat-question-stem, .nn-marketing-body-sm").first()).toBeVisible({
+  await expect(page.locator(".nn-cat-question-stem").first()).toBeVisible({
     timeout: 120_000,
   });
 

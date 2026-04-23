@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { blogSlugCustomValidityMessage, liveNormalizeBlogSlugInputValue } from "@/lib/blog/blog-optional-slug";
+import { iso8601ToDatetimeLocalInputValue } from "@/lib/datetime/datetime-local-input";
 
 type BlogRow = {
   id: string;
@@ -328,7 +329,7 @@ export function AdminBlogSchedulerPanel({
                 <td className="px-2 py-2">
                   <input
                     type="datetime-local"
-                    defaultValue={p.publishAt ? new Date(p.publishAt).toISOString().slice(0, 16) : ""}
+                    defaultValue={iso8601ToDatetimeLocalInputValue(p.publishAt)}
                     className="rounded-md border border-border px-1.5 py-1"
                     onBlur={(e) => {
                       const value = e.currentTarget.value;
