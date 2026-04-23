@@ -13,7 +13,8 @@ import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
 /** @deprecated Use `isDatabaseUrlConfigured` from `@/lib/db/safe-database`. */
 export const isBlogDatabaseConfigured = isDatabaseUrlConfigured;
 
-const BLOG_PUBLIC_QUERY_TIMEOUT_MS = 1000;
+/** Cold-start / pooled Prisma can exceed 1s; empty lists are worse than a slightly slower hub read. */
+const BLOG_PUBLIC_QUERY_TIMEOUT_MS = 2800;
 const BLOG_SITEMAP_QUERY_TIMEOUT_MS = 800;
 
 async function withBlogTimeoutFallback<T>(
@@ -60,11 +61,24 @@ function blogIndexPostsFromStaticCorpusOnly(
   return { posts, total, page: safePage, pageSize: safeSize };
 }
 
+/**
+ * True when the bundled static corpus may back `/blog` lists and slug metadata because Postgres has
+ * **no live posts** (same {@link blogLiveWhere} contract as public lists). On probe timeout/error we
+ * return false so a slow DB cannot be mistaken for an empty library (which would hide hundreds of rows).
+ */
 export async function canUseStaticBlogFallback(): Promise<boolean> {
   if (listStaticBlogPostsForIndex().length === 0) return false;
   if (shouldSkipBlogDbForProductionBuild()) return true;
-  const totalRows = await withBlogTimeoutFallback(() => prisma.blogPost.count(), 0, "blog_static_fallback_probe");
-  return totalRows === 0;
+  if (!isDatabaseUrlConfigured()) return true;
+  const now = new Date();
+  const probe = await withBlogTimeoutFallback(
+    async () => ({ ok: true as const, liveCount: await prisma.blogPost.count({ where: blogLiveWhere(now) }) }),
+    { ok: false as const },
+    BLOG_PUBLIC_QUERY_TIMEOUT_MS,
+    { scope: "blog", label: "blog_static_fallback_probe" },
+  );
+  if (!probe.ok) return false;
+  return probe.liveCount === 0;
 }
 
 const indexSelect = {
@@ -174,8 +188,9 @@ export async function getPublishedBlogPostsPage(
     ]);
     return { posts: sourcePosts, total: sourceTotal, page: safePage, pageSize: safeSize };
   }
+  /** Never replace a successful DB page with static when this request already saw live inventory. */
   const fallbackAllowed = await canUseStaticBlogFallback();
-  if (!fallbackAllowed) {
+  if (!fallbackAllowed || dbTotal > 0 || dbPosts.length > 0) {
     return { posts: dbPosts, total: dbTotal, page: safePage, pageSize: safeSize };
   }
   const all = listStaticBlogPostsForIndex().map((p) => ({

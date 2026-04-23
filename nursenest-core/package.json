@@ -63,6 +63,8 @@
     "seo:validate-http-sitemap": "tsx scripts/validate-seo-http-sitemap.mts",
     "audit:navigation-inventory": "tsx scripts/audit/navigation-inventory.mts",
     "audit:blog-quality": "tsx scripts/audit-blog-quality.ts",
+    "blog:import-pathophysiology-seeds": "tsx scripts/blog/import-pathophysiology-nursing-blog-seeds.mts",
+    "blog:import-pathophysiology-seeds:dry-run": "tsx scripts/blog/import-pathophysiology-nursing-blog-seeds.mts --dry-run",
     "blog:import-uk-licensure-seeds": "tsx scripts/blog/import-uk-licensure-blog-seeds.mts",
     "blog:import-philippines-nle-seeds": "tsx scripts/blog/import-philippines-nle-blog-seeds.mts",
     "blog:validate-philippines-nle-seeds": "tsx scripts/blog/validate-philippines-nle-blog-seeds.mts",

@@ -70,15 +70,26 @@ function firstIndexBySlug(order: readonly PathwayLessonRecord[], slug: string): 
   return i < 0 ? Number.MAX_SAFE_INTEGER : i;
 }
 
+export type OrganizeHubLessonsOptions = {
+  /**
+   * When true, different slugs that share the same topic + normalized display title collapse to one row
+   * (legacy “near duplicate” hub cleanup). **Default false** — marketing curriculum must keep one card per slug;
+   * otherwise hundreds of RN lessons can incorrectly collapse to a single card.
+   */
+  mergeNearDuplicateTitles?: boolean;
+};
+
 /**
- * Dedupe by slug, then by topic+normalized learner title, then normalize `title` for display.
+ * Dedupe by slug, optionally by topic+normalized learner title, then normalize `title` for display.
  * Preserves relative order of first appearance in `lessons` among survivors.
  */
 export function organizeHubLessonsForPresentation(
   lessons: readonly PathwayLessonRecord[],
   pathwayId?: string,
+  options?: OrganizeHubLessonsOptions,
 ): PathwayLessonRecord[] {
   const before = lessons.length;
+  const mergeConcepts = Boolean(options?.mergeNearDuplicateTitles);
 
   const bySlug = new Map<string, PathwayLessonRecord>();
   for (const l of lessons) {
@@ -89,18 +100,22 @@ export function organizeHubLessonsForPresentation(
   }
   const slugPass = [...bySlug.values()];
 
-  const byConcept = new Map<string, PathwayLessonRecord>();
-  const noConceptKey: PathwayLessonRecord[] = [];
-  for (const l of slugPass) {
-    const ck = hubConceptKey(l);
-    if (!ck) {
-      noConceptKey.push(l);
-      continue;
+  const merged = (() => {
+    if (!mergeConcepts) return slugPass;
+    const byConcept = new Map<string, PathwayLessonRecord>();
+    const noConceptKey: PathwayLessonRecord[] = [];
+    for (const l of slugPass) {
+      const ck = hubConceptKey(l);
+      if (!ck) {
+        noConceptKey.push(l);
+        continue;
+      }
+      const prev = byConcept.get(ck);
+      byConcept.set(ck, prev ? pickBetterHubLesson(prev, l) : l);
     }
-    const prev = byConcept.get(ck);
-    byConcept.set(ck, prev ? pickBetterHubLesson(prev, l) : l);
-  }
-  const merged = [...byConcept.values(), ...noConceptKey];
+    return [...byConcept.values(), ...noConceptKey];
+  })();
+
   merged.sort((a, b) => {
     const ia = firstIndexBySlug(lessons, a.slug);
     const ib = firstIndexBySlug(lessons, b.slug);
@@ -120,6 +135,7 @@ export function organizeHubLessonsForPresentation(
       before: String(before),
       after: String(out.length),
       dropped: String(before - out.length),
+      merge_near_duplicate_titles: mergeConcepts ? "1" : "0",
     });
   }
 

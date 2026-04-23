@@ -25,6 +25,24 @@ function hubRow(slug: string, title = "Lesson title"): PathwayLessonRecord {
 }
 
 describe("verifyMarketingHubLessonRowsResolve", () => {
+  it("uses listWarehouseLocale for hydration when row omits localeMeta.contentLocale", async () => {
+    const calls: Array<{ slug: string; loc: string }> = [];
+    const resolveLessonDetail = async (pathwayId: string, slug: string, loc: string) => {
+      calls.push({ slug, loc });
+      if (pathwayId !== "ca-rn-nclex-rn") return undefined;
+      if (loc === "fr") return hubRow(slug);
+      return undefined;
+    };
+    const rowNoMeta = hubRow("lesson-wh");
+    delete (rowNoMeta as { localeMeta?: unknown }).localeMeta;
+    const { kept } = await verifyMarketingHubLessonRowsResolve({ id: "ca-rn-nclex-rn" }, [rowNoMeta], "en", {
+      resolveLessonDetail,
+      listWarehouseLocale: "fr-CA",
+    });
+    assert.equal(kept.length, 1);
+    assert.deepEqual(calls, [{ slug: "lesson-wh", loc: "fr" }]);
+  });
+
   it("hydrates each slug using the hub row localeMeta.contentLocale when present", async () => {
     const calls: Array<{ slug: string; loc: string }> = [];
     const resolveLessonDetail = async (pathwayId: string, slug: string, loc: string) => {
@@ -67,6 +85,23 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
     assert.ok(Array.isArray(diagnostics.exclusionReasonsRanked));
     assert.equal(diagnostics.exclusionReasonsRanked?.[0]?.reason, "detail_loader_miss");
     assert.equal(diagnostics.exclusionReasonsRanked?.[0]?.count, 1);
+  });
+
+  it("calls resolveLessonDetail once per unique slug (duplicate rows do not multiply verify work)", async () => {
+    let slugResolveCalls = 0;
+    const resolveLessonDetail = async (pathwayId: string, slug: string) => {
+      if (pathwayId !== "ca-rn-nclex-rn") return undefined;
+      slugResolveCalls += 1;
+      return hubRow(slug);
+    };
+    const { kept } = await verifyMarketingHubLessonRowsResolve(
+      { id: "ca-rn-nclex-rn" },
+      [hubRow("dup"), hubRow("dup"), hubRow("other")],
+      "en",
+      { resolveLessonDetail },
+    );
+    assert.equal(kept.length, 3);
+    assert.equal(slugResolveCalls, 2);
   });
 
   it("does not zero the hub when one slug fails among several", async () => {

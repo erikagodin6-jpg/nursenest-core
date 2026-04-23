@@ -32,7 +32,10 @@ export function prepareLessonsForHubCurriculum(
     source: `curriculum_hub_prepare:${args.pathwayId ?? "unknown"}`,
     devLog: false,
   }).items;
-  const organized = organizeHubLessonsForPresentation(dedupedSafeLessons, args.pathwayId);
+  /** Slug-only organization: never merge different public slugs that share a topic/title pattern (hub card count bug). */
+  const organized = organizeHubLessonsForPresentation(dedupedSafeLessons, args.pathwayId, {
+    mergeNearDuplicateTitles: false,
+  });
   return organized.filter((l) => pathwayLessonMarketingDetailHref(args.lessonsBasePath, l.slug) != null);
 }
 

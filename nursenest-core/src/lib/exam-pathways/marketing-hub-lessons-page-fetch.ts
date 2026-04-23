@@ -11,6 +11,15 @@ import type { StudyDataSourceUsed, StudyPublishedSnapshotEnvelope } from "@/lib/
 
 export type { LoadPathwayLessonsHubPageArgs } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 
+/** Snapshot read outcome for Canada RN hub diagnostics (`RN_LESSONS_HUB_ACTUAL_COUNTS`). */
+export type LessonsHubSnapshotDiagnostics = {
+  snapshotAttempted: boolean;
+  snapshotUsed: boolean;
+  snapshotRejected: boolean;
+  snapshotRejectReason: string | null;
+  snapshotReadDurationMs: number | null;
+};
+
 function logHubLessonsPageFailed(ctx: MarketingHubDataLoadContext, err: unknown): void {
   const message = err instanceof Error ? err.message : String(err);
   const isTimeout = /timeout|ETIMEDOUT|hub_optional_task_timeout/i.test(message);
@@ -132,16 +141,25 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
 ): Promise<{
   pageResult: PathwayLessonsPageResult;
   lessonsPageLoad: PathwayLessonsHubPageLoadState;
+  snapshotDiagnostics: LessonsHubSnapshotDiagnostics;
 }> {
   const { pageRequested, pageSizeRequested, lessonContentLocale, listOpts } = args;
   const readHubSnapshot = deps?.readHubSnapshot ?? readPathwayLessonsHubPageSnapshot;
   const t0 = performance.now();
+  const snapshotDiagnostics: LessonsHubSnapshotDiagnostics = {
+    snapshotAttempted: false,
+    snapshotUsed: false,
+    snapshotRejected: false,
+    snapshotRejectReason: null,
+    snapshotReadDurationMs: null,
+  };
 
   const returnSecondary = (
     pageResult: PathwayLessonsPageResult,
     envelope: StudyPublishedSnapshotEnvelope<PathwayLessonsPageResult>,
     failoverReason: string,
   ) => {
+    snapshotDiagnostics.snapshotUsed = true;
     const fetchDurationMs = performance.now() - t0;
     const items = pageResult.items;
     const age = computeSnapshotAgeMs(envelope.capturedAt);
@@ -196,6 +214,7 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
         snapshotVersion: envelope.version,
         snapshotAgeMs: age >= 0 ? age : undefined,
       },
+      snapshotDiagnostics,
     };
   };
 
@@ -226,6 +245,7 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
         responseTotal: primaryCoerced.total,
         sourceUsed: "primary",
       },
+      snapshotDiagnostics,
     };
   }
 
@@ -234,7 +254,10 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
       ? `primary_throw:${primaryError instanceof Error ? primaryError.message.slice(0, 160) : String(primaryError).slice(0, 160)}`
       : "primary_invalid_payload";
 
+  const tSnapRead = performance.now();
   const snap = await readHubSnapshot(pathwayId, args);
+  snapshotDiagnostics.snapshotReadDurationMs = Math.round(performance.now() - tSnapRead);
+  snapshotDiagnostics.snapshotAttempted = true;
   if (snap) {
     const fromSnap = coercePathwayLessonsPageResult(snap.payload);
     if (fromSnap) {
@@ -245,6 +268,14 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
       }
       return returnSecondary(fromSnap, snap, failoverReason);
     }
+    snapshotDiagnostics.snapshotRejected = true;
+    snapshotDiagnostics.snapshotRejectReason = "snapshot_coerce_failed_or_total_renderable_mismatch";
+    safeServerLog("exam_pathway_hub", "lessons_hub_snapshot_rejected", {
+      event: "lessons_hub_snapshot_rejected",
+      pathway_id: ctx.pathwayId,
+      pathname: ctx.pathname,
+      reason: snapshotDiagnostics.snapshotRejectReason,
+    });
   }
 
   if (primaryError) {
@@ -299,6 +330,7 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
         timedOut,
         detail: message.slice(0, 500),
       },
+      snapshotDiagnostics,
     };
   }
 
@@ -350,5 +382,6 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
       timedOut: false,
       detail: "invalid_lessons_page_payload_shape",
     },
+    snapshotDiagnostics,
   };
 }

@@ -624,6 +624,17 @@ function lessonPriorityWeight(priority: PathwayLessonPriority | undefined): numb
   return 2;
 }
 
+/** Stage counts for hub list diagnostics — same filters as {@link sortAndFilterLessonsForPathwayContext}, pre-sort. */
+export function countMarketingPathwayContextFilterStages(
+  pathwayId: string,
+  lessons: readonly PathwayLessonRecord[],
+): { afterPublicComplete: number; afterCountryContext: number } {
+  const context = resolveLessonContextForPathwayId(pathwayId);
+  const afterPublic = lessons.filter((lesson) => pathwayLessonEligibleForPublicMarketingSurface(lesson));
+  const afterCountry = afterPublic.filter((lesson) => matchesLessonContext(lesson, context));
+  return { afterPublicComplete: afterPublic.length, afterCountryContext: afterCountry.length };
+}
+
 export function sortAndFilterLessonsForPathwayContext(
   pathwayId: string,
   lessons: PathwayLessonRecord[],

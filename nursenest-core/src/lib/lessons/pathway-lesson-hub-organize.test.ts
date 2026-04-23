@@ -42,7 +42,7 @@ describe("pathway-lesson-hub-organize", () => {
     assert.equal(out[0]!.examRelevance, "high_yield");
   });
 
-  it("dedupes different slugs with same topic + normalized learner title", () => {
+  it("keeps different slugs by default even when topic + normalized learner title match (hub inventory)", () => {
     const a = row({
       slug: "fluid-balance-a",
       title: "Fluid balance — NCLEX-RN US",
@@ -56,8 +56,39 @@ describe("pathway-lesson-hub-organize", () => {
       examRelevance: "high_yield",
     });
     const out = organizeHubLessonsForPresentation([a, b], "us-rn-nclex-rn");
+    assert.equal(out.length, 2);
+  });
+
+  it("mergeNearDuplicateTitles collapses near-duplicate titles across slugs when explicitly enabled", () => {
+    const a = row({
+      slug: "fluid-balance-a",
+      title: "Fluid balance — NCLEX-RN US",
+      topicSlug: "fluid-balance",
+      examRelevance: "core",
+    });
+    const b = row({
+      slug: "fluid-balance-b",
+      title: "Fluid balance (NCLEX-RN)",
+      topicSlug: "fluid-balance",
+      examRelevance: "high_yield",
+    });
+    const out = organizeHubLessonsForPresentation([a, b], "us-rn-nclex-rn", { mergeNearDuplicateTitles: true });
     assert.equal(out.length, 1);
     assert.equal(out[0]!.slug, "fluid-balance-b");
+  });
+
+  it("keeps twenty unique slugs sharing the same body system (no taxonomy-based collapse)", () => {
+    const rows = Array.from({ length: 20 }, (_, i) =>
+      row({
+        slug: `cardio-lesson-${i}`,
+        title: `Cardiovascular topic ${i}`,
+        topicSlug: "cardiovascular",
+        bodySystem: "cardiovascular",
+        system: "cardiovascular",
+      }),
+    );
+    const out = organizeHubLessonsForPresentation(rows, "ca-rn-nclex-rn");
+    assert.equal(out.length, 20);
   });
 
   it("ranks high_yield above specialty for tie-breaking input order", () => {

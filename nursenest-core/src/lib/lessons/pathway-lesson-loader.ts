@@ -78,6 +78,7 @@ import {
   sanitizeQuestionIdArray,
   sanitizeQuizItems,
   pathwayLessonMatchesMarketingPathwayContext,
+  countMarketingPathwayContextFilterStages,
   sortAndFilterLessonsForPathwayContext,
   summarizePathwayContextPipelineDrops,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
@@ -534,19 +535,38 @@ export type PathwayLessonListLocaleInfo = {
 /** Stage counts for marketing lessons hub debugging (optional; populated by {@link getPathwayLessonsPageFresh}). */
 export type PathwayLessonsHubLoadDiagnostics = {
   runtimeSource?: "database" | "catalog" | "none";
-  /** Published rows in dominant list locale (DB path) or undefined in catalog path. */
+  /** Published `pathway_lessons` rows for pathway (any locale), from DB presence probe. */
   rawDbCount?: number;
-  /** Alias of {@link rawDbCount} retained for log field parity with older diagnostics. */
+  /** Raw catalog lessons for pathway before topic/search filter (catalog runtime only). */
+  rawCatalogCount?: number;
+  /** `COUNT` matching hub list SQL filters in the effective list locale (DB path). */
+  afterDbWhereCount?: number;
+  /** Alias of {@link afterDbWhereCount} for older logs. */
   sqlDbPublishedApprox?: number;
   rawMergedInputCount?: number;
+  /** Rows after overlay + structural + marketing strip, before safe-slug filter. */
+  afterHubNormalizedCount?: number;
   afterSlugNormalizeCount?: number;
+  /** Same length as post-sort list — equals `afterCountryContextCount` when no sort removes rows. */
   afterPathwayContextCount?: number;
+  /** After `publicComplete` gate only (pre exam/country match). */
+  afterPublicCompleteCount?: number;
+  /** After exam/country context match (same filter set as {@link sortAndFilterLessonsForPathwayContext}). */
+  afterCountryContextCount?: number;
   afterDedupeCount?: number;
   catalogRawFilteredApprox?: number;
   truncatedDbScan?: boolean;
   goldInjectedCount?: number;
   resolveDurationMs?: number;
   sliceDurationMs?: number;
+  /** Sub-phase timings inside {@link resolveMarketingHubRenderableLessonList} (ms, best-effort). */
+  timingsMs?: {
+    dbQuery?: number | null;
+    catalogLoad?: number | null;
+    normalization?: number | null;
+    contextFilter?: number | null;
+    dedupe?: number | null;
+  };
 };
 
 export type PathwayLessonsPageResult = {
@@ -631,6 +651,7 @@ async function resolveMarketingHubRenderableLessonList(
 
   const dbAny = dbPresence.count > 0;
   if (dbAny) {
+    const tDbQuery0 = performance.now();
     const effective = await effectiveLocaleForPathwayLessonDbRows(pathwayId, requested);
     const missingGolds = await listMissingScopedGoldHubRows(pathwayId, effective, topicSlugsIn);
     const goldsFiltered = qRaw ? missingGolds.filter((row) => lessonInputMatchesHubSearch(row, qLower)) : missingGolds;
@@ -642,9 +663,11 @@ async function resolveMarketingHubRenderableLessonList(
       qRaw,
       PATHWAY_CATALOG_LIST_HARD_CAP,
     );
+    const dbQueryMs = Math.round(performance.now() - tDbQuery0);
     const truncatedDbScan = sqlDbOnly > dbChunked.length;
     const rawInputs = [...goldsFiltered, ...dbChunked];
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
+    const tNorm0 = performance.now();
     const hubNormalized = rawInputs.map((row) =>
       stripPathwayLessonToHubListShape(
         applyOverlayAndStructural(
@@ -655,15 +678,21 @@ async function resolveMarketingHubRenderableLessonList(
         ),
       ),
     );
+    const normalizationMs = Math.round(performance.now() - tNorm0);
     const afterSafeSlug = filterHubListItemsForSafeSlugs(hubNormalized, pathwayId);
+    const tCtx0 = performance.now();
+    const ctxStages = countMarketingPathwayContextFilterStages(pathwayId, afterSafeSlug);
     const afterPathwayContext = sortAndFilterLessonsForPathwayContext(pathwayId, afterSafeSlug);
+    const contextFilterMs = Math.round(performance.now() - tCtx0);
     const contextDropSummary = summarizePathwayContextPipelineDrops(pathwayId, afterSafeSlug, afterPathwayContext);
     logHubListPipelineDropSamples(pathwayId, afterSafeSlug, afterPathwayContext, 24);
+    const tDedupe0 = performance.now();
     const deduped = dedupePathwayLessonsForLibrary(afterPathwayContext, {
       pathwayIdHint: pathwayId,
       source: `hub_page:${pathwayId}:db`,
       devLog: true,
     });
+    const dedupeMs = Math.round(performance.now() - tDedupe0);
     const renderableAll = deduped.items;
 
     safeServerLog("pathway_lessons", "hub_list_pipeline_stages", {
@@ -725,21 +754,34 @@ async function resolveMarketingHubRenderableLessonList(
       runtimeSource: "database",
       diagnostics: {
         runtimeSource: "database",
-        rawDbCount: sqlDbOnly,
+        rawDbCount: dbPresence.count,
+        afterDbWhereCount: sqlDbOnly,
         sqlDbPublishedApprox: sqlDbOnly,
         rawMergedInputCount: rawInputs.length,
+        afterHubNormalizedCount: hubNormalized.length,
         afterSlugNormalizeCount: afterSafeSlug.length,
+        afterPublicCompleteCount: ctxStages.afterPublicComplete,
+        afterCountryContextCount: ctxStages.afterCountryContext,
         afterPathwayContextCount: afterPathwayContext.length,
         afterDedupeCount: renderableAll.length,
         truncatedDbScan,
         goldInjectedCount: goldsFiltered.length,
+        timingsMs: {
+          dbQuery: dbQueryMs,
+          normalization: normalizationMs,
+          contextFilter: contextFilterMs,
+          dedupe: dedupeMs,
+          catalogLoad: null,
+        },
       },
     };
   }
 
+  const tCat0 = performance.now();
   const allRaw = filterCatalogLessonsByTopicSlugs(getCatalogLessonsRaw(pathwayId), topicSlugsIn);
   const filteredRaw = qRaw ? allRaw.filter((row) => lessonInputMatchesHubSearch(row, qLower)) : allRaw;
   const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
+  const tNormCat0 = performance.now();
   const hydratedCatalog = filteredRaw.map((row) =>
     stripPathwayLessonToHubListShape(
       applyOverlayAndStructural(
@@ -750,15 +792,22 @@ async function resolveMarketingHubRenderableLessonList(
       ),
     ),
   );
+  const normalizationCatMs = Math.round(performance.now() - tNormCat0);
   const afterSafeSlugCat = filterHubListItemsForSafeSlugs(hydratedCatalog, pathwayId);
+  const tCtxCat0 = performance.now();
+  const ctxStagesCat = countMarketingPathwayContextFilterStages(pathwayId, afterSafeSlugCat);
   const afterContextCat = sortAndFilterLessonsForPathwayContext(pathwayId, afterSafeSlugCat);
+  const contextFilterCatMs = Math.round(performance.now() - tCtxCat0);
   const contextDropSummaryCat = summarizePathwayContextPipelineDrops(pathwayId, afterSafeSlugCat, afterContextCat);
   logHubListPipelineDropSamples(pathwayId, afterSafeSlugCat, afterContextCat, 24);
+  const tDedupeCat0 = performance.now();
   const renderableAll = dedupePathwayLessonsForLibrary(afterContextCat, {
     pathwayIdHint: pathwayId,
     source: `hub_page:${pathwayId}:catalog`,
     devLog: true,
   }).items;
+  const dedupeCatMs = Math.round(performance.now() - tDedupeCat0);
+  const catalogLoadMs = Math.round(performance.now() - tCat0);
 
   safeServerLog("pathway_lessons", "hub_list_pipeline_stages", {
     pathwayId,
@@ -792,11 +841,24 @@ async function resolveMarketingHubRenderableLessonList(
     runtimeSource: renderableAll.length > 0 ? "catalog" : "none",
     diagnostics: {
       runtimeSource: renderableAll.length > 0 ? "catalog" : "none",
+      rawDbCount: dbPresence.count,
+      rawCatalogCount: allRaw.length,
+      afterDbWhereCount: undefined,
       catalogRawFilteredApprox: filteredRaw.length,
       rawMergedInputCount: filteredRaw.length,
+      afterHubNormalizedCount: hydratedCatalog.length,
       afterSlugNormalizeCount: afterSafeSlugCat.length,
+      afterPublicCompleteCount: ctxStagesCat.afterPublicComplete,
+      afterCountryContextCount: ctxStagesCat.afterCountryContext,
       afterPathwayContextCount: afterContextCat.length,
       afterDedupeCount: renderableAll.length,
+      timingsMs: {
+        dbQuery: null,
+        catalogLoad: catalogLoadMs,
+        normalization: normalizationCatMs,
+        contextFilter: contextFilterCatMs,
+        dedupe: dedupeCatMs,
+      },
     },
   };
 }

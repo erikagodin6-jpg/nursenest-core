@@ -261,6 +261,7 @@ export async function verifyMarketingHubLessonRowsResolve(
     keptRowCount: kept.length,
     droppedRowCount: Math.max(0, lessons.length - kept.length),
     excludedUniqueSlugCount: verifyExcluded.length,
+    verifyResolverCallCount: uniqueSlugs.length,
     excludedByReason,
     exclusionReasonsRanked: lessons.length > 0 ? exclusionReasonsRanked : undefined,
   };

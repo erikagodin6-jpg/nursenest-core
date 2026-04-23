@@ -3,6 +3,7 @@ import type { MarketingHubDataLoadContext } from "@/lib/exam-pathways/marketing-
 import type { LoadPathwayLessonsHubPageArgs } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import {
   loadPathwayLessonsHubPageWithTelemetry,
+  type LessonsHubSnapshotDiagnostics,
   type PathwayLessonsHubPageLoadState,
 } from "@/lib/exam-pathways/marketing-hub-lessons-page-fetch";
 import type { StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failover/study-published-snapshot-types";
