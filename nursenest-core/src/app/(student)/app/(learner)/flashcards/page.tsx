@@ -9,11 +9,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
-import {
-  hrefForResolvedQuestionBankEntry,
-  resolveSubscribedQuestionBankPathways,
-  type ResolvedQuestionBankPathways,
-} from "@/lib/learner/tier-scoped-study-routes";
+import { resolveSubscribedQuestionBankPathways, type ResolvedQuestionBankPathways } from "@/lib/learner/tier-scoped-study-routes";
 
 type PageProps = { searchParams: Promise<{ pathwayId?: string | string[] }> };
 
@@ -48,7 +44,6 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
     );
   }
 
-  let practiceQuestionsHref = "/app/questions";
   let pathwayOptions: { id: string; label: string }[] = [];
   let pathwayResolution: ResolvedQuestionBankPathways | null = null;
 
@@ -66,7 +61,6 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
         learnerPath: lp,
       });
       pathwayResolution = resolved;
-      practiceQuestionsHref = hrefForResolvedQuestionBankEntry(resolved);
 
       pathwayOptions = compatible.map((p) => ({ id: p.id, label: p.displayName ?? p.shortName }));
       if (entitlement.tier === TierCode.PRE_NURSING) {
@@ -120,12 +114,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   return (
     <Suspense fallback={<div className="mx-auto max-w-3xl px-4 py-8 text-sm">{t("learner.loading.flashcards")}</div>}>
-      <FlashcardsHubClient
-        scopedPathwayId={scopedPathwayId}
-        pathwayDisplayName={pathwayDisplayName}
-        pathwayOptions={pathwayOptions}
-        practiceQuestionsHref={practiceQuestionsHref}
-      />
+      <FlashcardsHubClient scopedPathwayId={scopedPathwayId} pathwayDisplayName={pathwayDisplayName} />
     </Suspense>
   );
 }

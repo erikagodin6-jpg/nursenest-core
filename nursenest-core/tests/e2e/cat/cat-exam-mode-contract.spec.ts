@@ -35,7 +35,7 @@ test.describe("CAT exam mode — runner contract", () => {
 
       await expect(page.locator("[data-cat-exam-root]")).toBeVisible({ timeout: 120_000 });
       await expect(page.locator(".nn-question-session-rationale")).toHaveCount(0);
-      await expect(page.getByText(/Show live calibration/i)).toHaveCount(0);
+      await expect(page.locator("[data-nn-qa-cat-live-transparency]")).toHaveCount(0);
 
       const submit = page.getByRole("button", { name: /^Submit answer$/i });
       await expect(submit).toBeDisabled();

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -18,5 +19,9 @@ export default async function FlashcardCustomPage() {
       </div>
     );
   }
-  return <FlashcardCustomStudyClient />;
+  return (
+    <Suspense fallback={<div className="mx-auto max-w-3xl px-4 py-10 text-sm text-muted-foreground">Loading session…</div>}>
+      <FlashcardCustomStudyClient />
+    </Suspense>
+  );
 }

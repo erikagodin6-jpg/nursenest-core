@@ -222,9 +222,6 @@ const TIER_RELEVANCE_PAD = `- Re-read vitals and trajectory before you eliminate
 - Name the assessment or activation step you will not skip.
 - Prefer the move that closes the safety loop within the stem’s orders.`;
 
-const CLINICAL_PEARLS_PAD = `**Second-pass discipline**  
-If an option feels compassionate but ignores abnormal vitals, a new deficit, or worsening work of breathing, it is usually wrong. Re-scan the stem for **trend language**, **new orders**, and **line or device clues** before you submit.`;
-
 /**
  * Premium validation requires a substantive meta summary; short variant blurbs from gold JSON often sit at ~10–11 words.
  */

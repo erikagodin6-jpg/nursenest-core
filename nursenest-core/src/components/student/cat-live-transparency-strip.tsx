@@ -38,7 +38,10 @@ export function CatLiveTransparencyStrip({
   const lastD = tail.length ? tail[tail.length - 1] : null;
 
   return (
-    <div className="rounded-xl border border-border/70 bg-muted/30 px-3 py-2 text-xs">
+    <div
+      className="rounded-xl border border-border/70 bg-muted/30 px-3 py-2 text-xs"
+      data-nn-qa-cat-live-transparency
+    >
       <label className="flex cursor-pointer items-center gap-2 font-medium text-foreground">
         <input
           type="checkbox"

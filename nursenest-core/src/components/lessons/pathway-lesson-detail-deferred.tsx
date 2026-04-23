@@ -6,7 +6,7 @@ import { loadPathwayLessonDeferredPracticeBundle } from "@/lib/lessons/pathway-l
 import type { PathwayLessonDeferredServerSnapshot } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
 
 /**
- * Secondary lesson-detail payload: related questions + study-loop CTAs.
+ * Secondary lesson-detail payload: related questions + compact topic practice (mobile lane).
  * Render inside `<Suspense>` so the main article shell can stream first under load.
  *
  * **`lesson` is a server-only snapshot without `sections[]`** — built via `toPathwayLessonDeferredServerSnapshot`

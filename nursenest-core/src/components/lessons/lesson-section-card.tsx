@@ -15,7 +15,7 @@ import {
 import type { PathwayLessonSectionKind } from "@/lib/lessons/pathway-lesson-types";
 import { getLessonSectionTheme } from "@/lib/ui/lesson-section-theme";
 
-function lessonSectionSurface(kind: PathwayLessonSectionKind | undefined | null): "editorial" | "callout" {
+export function lessonSectionSurface(kind: PathwayLessonSectionKind | undefined | null): "editorial" | "callout" {
   if (!kind) return "editorial";
   const callout: PathwayLessonSectionKind[] = [
     "clinical_pearls",
@@ -42,6 +42,8 @@ export function LessonSectionCard({
   kind,
   chipLabel: chipLabelOverride,
   className,
+  /** Zero-based count among editorial-only sections for alternating soft bands. */
+  editorialRhythmIndex,
   children,
 }: {
   id: string;
@@ -51,12 +53,19 @@ export function LessonSectionCard({
   chipLabel?: string;
   /** Grid column span etc. — parent controls responsive layout. */
   className?: string;
+  editorialRhythmIndex?: number;
   children: ReactNode;
 }) {
   const { chipLabel: derivedChipLabel, dataRole, role } = getLessonSectionTheme(kind);
   const chipLabel = chipLabelOverride ?? derivedChipLabel;
   const surface = lessonSectionSurface(kind);
   const tierCrosswalk = kind === "tier_specific_relevance";
+  const rhythmClass =
+    surface === "editorial" && typeof editorialRhythmIndex === "number"
+      ? editorialRhythmIndex % 2 === 0
+        ? "nn-lesson-section-card--rhythm-a"
+        : "nn-lesson-section-card--rhythm-b"
+      : "";
   const ROLE_ICON = {
     info: Lightbulb,
     warning: AlertTriangle,
@@ -79,6 +88,7 @@ export function LessonSectionCard({
         "nn-lesson-section-card scroll-mt-24",
         surface === "editorial" ? "nn-lesson-section-card--editorial" : "nn-lesson-section-card--callout",
         tierCrosswalk ? "nn-lesson-section-card--tier-callout" : "",
+        rhythmClass,
         className,
       ]
         .filter(Boolean)

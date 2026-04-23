@@ -41,20 +41,9 @@ import { LessonTopicPracticeSection } from "@/components/lessons/lesson-topic-pr
 import { loadLessonTopicLinkedQuizItems } from "@/lib/lessons/load-lesson-topic-linked-quiz-items";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
-import {
-  buildAppQuestionBankTopicDrillHref,
-  lessonStudyLoopRelatedLessonsHubHref,
-} from "@/components/lessons/pathway-lesson-link-practice";
+import { buildAppQuestionBankTopicDrillHref } from "@/components/lessons/pathway-lesson-link-practice";
 import { PathwayLessonNextStepsCards } from "@/components/lessons/pathway-lesson-next-steps-cards";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
-import {
-  getRelatedPathwayLessons,
-  RELATED_PATHWAY_LESSONS_LIMIT,
-} from "@/lib/lessons/pathway-lesson-loader";
-import {
-  mergeRelatedLessonDisplayList,
-  pathwayLessonHasRenderableHubSlug,
-} from "@/lib/lessons/pathway-lesson-types";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import {
   pathwayLessonPremiumSectionBodyText,
@@ -499,7 +488,7 @@ export default async function LessonDetailPage({ params }: Props) {
       next: null,
     }));
 
-    const [relatedQuestionStems, relatedLessonsRaw, initialProgress, pathwayStudySnap, bankLoopPack, bankAssessments, pathwayAdjacentSlugs] =
+    const [relatedQuestionStems, initialProgress, pathwayStudySnap, bankLoopPack, bankAssessments, pathwayAdjacentSlugs] =
       await Promise.all([
         pathway != null
           ? loadRelatedExamQuestionStemsForPathwayLesson({
@@ -510,16 +499,6 @@ export default async function LessonDetailPage({ params }: Props) {
               lessonTopicSlug: record.topicSlug,
               bodySystem: record.bodySystem,
             })
-          : Promise.resolve([]),
-        pathway != null
-          ? getRelatedPathwayLessons(
-              pathway.id,
-              record.topicSlug,
-              record.slug,
-              RELATED_PATHWAY_LESSONS_LIMIT,
-              record.localeMeta?.contentLocale ?? record.localeMeta?.requestedContentLocale,
-              record.bodySystem,
-            )
           : Promise.resolve([]),
         userId
           ? loadPathwayLessonProgressForSlug(userId, pathwayId, record.slug).catch(() => "not_started" as const)
@@ -538,11 +517,6 @@ export default async function LessonDetailPage({ params }: Props) {
           lessonTopicMatchesTopPriority(record.topicSlug, pathwayStudySnap),
       );
     const pathwayCoachExcerpt = buildPathwayLessonCoachExcerpt(displaySections);
-    const relatedLessonsDisplay = mergeRelatedLessonDisplayList(
-      record.relatedLessonRefs,
-      relatedLessonsRaw.filter(pathwayLessonHasRenderableHubSlug),
-      RELATED_PATHWAY_LESSONS_LIMIT,
-    );
     const pathwayQuality = classifyPathwayLesson(record);
     const tier = entitlement.tier as TierCode | null;
     const lessonViewerTier =

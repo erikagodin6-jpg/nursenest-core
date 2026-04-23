@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
 import { ExamSessionShell } from "@/components/exam/exam-session-shell";
 import { cardMatchesStudyFilters, hasActiveStudyFilters } from "@/lib/flashcards/study-session-persistence";
@@ -56,6 +57,7 @@ function parseCardLimitValue(value: string): number {
 }
 
 export function FlashcardCustomStudyClient() {
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [payload, setPayload] = useState<SessionPayload | null>(null);
@@ -78,20 +80,14 @@ export function FlashcardCustomStudyClient() {
     }
   }, []);
 
-  const query = useMemo(() => {
-    if (typeof window === "undefined") return "";
-    return window.location.search;
-  }, []);
+  const queryString = searchParams.toString();
 
-  const localFilters = useMemo(() => {
-    const params = new URLSearchParams(query);
-    return {
-      starredOnly: params.get("starredOnly") === "1",
-      savedOnly: params.get("savedOnly") === "1",
-      notesOnly: params.get("notesOnly") === "1",
-      confusingOnly: params.get("revisitOnly") === "1",
-    };
-  }, [query]);
+  const localFilters = {
+    starredOnly: searchParams.get("starredOnly") === "1",
+    savedOnly: searchParams.get("savedOnly") === "1",
+    notesOnly: searchParams.get("notesOnly") === "1",
+    confusingOnly: searchParams.get("revisitOnly") === "1",
+  };
 
   useEffect(() => {
     let active = true;
@@ -99,10 +95,16 @@ export function FlashcardCustomStudyClient() {
       setLoading(true);
       setError(null);
       try {
-        const params = new URLSearchParams(query);
+        const params = new URLSearchParams(queryString);
         params.set("includeCards", "1");
-        if (hasActiveStudyFilters(localFilters)) {
-          params.set("cardLimit", "all");
+        const lf = {
+          starredOnly: params.get("starredOnly") === "1",
+          savedOnly: params.get("savedOnly") === "1",
+          notesOnly: params.get("notesOnly") === "1",
+          confusingOnly: params.get("revisitOnly") === "1",
+        };
+        if (hasActiveStudyFilters(lf)) {
+          params.set("cardLimit", "500");
         }
         const res = await fetch(`/api/flashcards/custom-session?${params.toString()}`, { credentials: "include" });
         const json = (await res.json()) as SessionPayload & { error?: string };
@@ -117,7 +119,7 @@ export function FlashcardCustomStudyClient() {
     return () => {
       active = false;
     };
-  }, [query, localFilters]);
+  }, [queryString]);
 
   if (loading) {
     return <div className="mx-auto max-w-3xl px-4 py-10 text-sm text-[var(--theme-muted-text)]">Building your custom flashcard session…</div>;
