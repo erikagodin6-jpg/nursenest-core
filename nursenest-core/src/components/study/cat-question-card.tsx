@@ -20,6 +20,8 @@ export function QuestionCard({
    */
   footerSlot,
   examStackedLayout = false,
+  /** Bumps footer remeasure when the item body changes (stem/options) without `footerSlot` identity changing. */
+  examLayoutMeasureKey,
 }: {
   stem: string;
   topic?: string | null;
@@ -29,6 +31,7 @@ export function QuestionCard({
   children: ReactNode;
   footerSlot?: ReactNode;
   examStackedLayout?: boolean;
+  examLayoutMeasureKey?: string | null;
 }) {
   const hasMeta = topic ?? subtopic ?? difficultyLabel;
 
@@ -130,7 +133,7 @@ export function QuestionCard({
     };
     // footerSlot omitted: unstable ReactNode identity; ResizeObserver covers footer content/height changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [examStackedLayout, measureExamFooter]);
+  }, [examStackedLayout, measureExamFooter, examLayoutMeasureKey, stem]);
 
   useLayoutEffect(() => {
     if (examStackedLayout && footerSlot) return;
@@ -147,12 +150,11 @@ export function QuestionCard({
           style={{
             /*
              * Match footer border-box height (footer uses padding-bottom: calc(16px + env(safe-area-inset-bottom))).
-             * Pre-measure fallback only until first positive measure — then px-only so it cannot fight measured height.
+             * Default bottom pad lives in globals.css until measured — then px overrides for a tight scroll gap.
              */
-            paddingBottom:
-              examFooterMeasured && examScrollPadBottomPx > 0
-                ? `${examScrollPadBottomPx}px`
-                : "calc(5.5rem + env(safe-area-inset-bottom, 0px))",
+            ...(examFooterMeasured && examScrollPadBottomPx > 0
+              ? { paddingBottom: `${examScrollPadBottomPx}px` }
+              : {}),
           }}
         >
           {meta}

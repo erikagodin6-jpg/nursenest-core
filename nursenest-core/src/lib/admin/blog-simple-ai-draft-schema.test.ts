@@ -73,7 +73,7 @@ test("accepts sourceRecords with empty url string (treated as omitted)", () => {
   }
 });
 
-test("normalizes slug trim and lowercase before regex", () => {
+test("accepts slug with leading/trailing spaces (trim only; server normalizes case)", () => {
   const parsed = blogGenerateByTopicRequestSchema.safeParse({
     topic: "one two thr",
     exam: "nclex-rn",
@@ -82,6 +82,19 @@ test("normalizes slug trim and lowercase before regex", () => {
   });
   assert.equal(parsed.success, true);
   if (parsed.success) {
-    assert.equal(parsed.data.slug, "fluid-balance-nclex");
+    assert.equal(parsed.data.slug, "Fluid-Balance-Nclex");
+  }
+});
+
+test("treats empty slug as omitted", () => {
+  const parsed = blogGenerateByTopicRequestSchema.safeParse({
+    topic: "one two thr",
+    exam: "nclex-rn",
+    template: "TOPIC_EXPLAINED",
+    slug: "   ",
+  });
+  assert.equal(parsed.success, true);
+  if (parsed.success) {
+    assert.equal(parsed.data.slug, undefined);
   }
 });

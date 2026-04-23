@@ -32,12 +32,10 @@ const bodySchema = z.object({
   includeAiImage: z.boolean().optional(),
   sourceRecords: z.array(z.unknown()).max(30).optional(),
   allowInsufficientCitations: z.boolean().optional(),
-  fixedSlug: z
-    .string()
-    .min(3)
-    .max(180)
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
-    .optional(),
+  fixedSlug: z.preprocess(
+    (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
+    z.string().max(500).optional(),
+  ),
 });
 
 /**

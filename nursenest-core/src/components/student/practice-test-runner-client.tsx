@@ -30,6 +30,7 @@ import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teachi
 import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
 import {
   assertCatExamPhaseTransition,
+  catExamCanChangeAnswer,
   catExamCanLockAnswer,
   catExamCanRequestCatAdvance,
   catExamCatAdvanceResponseIsStale,
@@ -67,6 +68,10 @@ import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 import { captureClientException } from "@/lib/runtime/client-observability";
 import { PracticeTestRunPageSkeleton } from "@/components/skeletons/hub-page-skeleton";
 import { LearnerStudyCard } from "@/components/learner-ui/learner-study-card";
+import {
+  buildExamOptionDisplayOrder,
+  shouldDisableOptionShuffleMcq,
+} from "@/lib/practice-tests/exam-option-display-order";
 
 type QRow = {
   id: string;
@@ -74,6 +79,7 @@ type QRow = {
   questionType: string;
   options: unknown;
   displayOptions?: string[] | null;
+  tags?: string[] | null;
   topic?: string | null;
   subtopic?: string | null;
   difficulty?: number | null;
@@ -592,6 +598,50 @@ export function PracticeTestRunnerClient({
   const committedCount = linearCommittedIds.length;
   const committedAnsweredPct = total > 0 ? Math.round((committedCount / total) * 100) : 0;
 
+  const qTags = useMemo(() => {
+    const t = current?.tags;
+    return Array.isArray(t) ? t : [];
+  }, [current?.tags]);
+
+  const allowMcqOptionShuffle =
+    !isSata &&
+    (isExamStyle || (!catMode && testConfig?.linearDeliveryMode === "exam"));
+
+  const optsOrderCanonical = useMemo(() => {
+    if (optsCanonical.length <= 1) return optsCanonical;
+    if (!allowMcqOptionShuffle) return optsCanonical;
+    const texts = optsCanonical.map((k, i) => String(optsDisplay[i] ?? k));
+    if (
+      shouldDisableOptionShuffleMcq({
+        questionType: current?.questionType,
+        tags: qTags,
+        optionTexts: texts,
+      })
+    ) {
+      return optsCanonical;
+    }
+    const sessionKey = testConfig?.sessionPickSalt ?? testId;
+    return buildExamOptionDisplayOrder({
+      sessionKey,
+      questionId: current?.id ?? "",
+      canonicalKeys: optsCanonical,
+    });
+  }, [
+    allowMcqOptionShuffle,
+    optsCanonical,
+    optsDisplay,
+    current?.id,
+    current?.questionType,
+    testId,
+    testConfig?.sessionPickSalt,
+    qTags,
+  ]);
+
+  const optsOrderDisplay = useMemo(() => {
+    const mapCanonToDisplay = new Map(optsCanonical.map((k, i) => [k, optsDisplay[i] ?? k]));
+    return optsOrderCanonical.map((k) => mapCanonToDisplay.get(k) ?? k);
+  }, [optsCanonical, optsDisplay, optsOrderCanonical]);
+
   const hasMeaningfulAnswer = (qid: string): boolean => {
     const v = answersRef.current[qid];
     if (v === undefined || v === null) return false;
@@ -1047,24 +1097,24 @@ export function PracticeTestRunnerClient({
         return true;
       };
       const letterIndex = (() => {
-        if (optsCanonical.length === 0) return null;
+        if (optsOrderCanonical.length === 0) return null;
         const k = e.key.length === 1 ? e.key.toUpperCase() : "";
         if (!k || k < "A" || k > "Z") return null;
         const i = k.charCodeAt(0) - "A".charCodeAt(0);
-        return i >= 0 && i < optsCanonical.length ? i : null;
+        return i >= 0 && i < optsOrderCanonical.length ? i : null;
       })();
       const digitIndex = (() => {
-        if (optsCanonical.length === 0) return null;
+        if (optsOrderCanonical.length === 0) return null;
         const d = e.key;
         if (d < "1" || d > "9") return null;
         const i = Number.parseInt(d, 10) - 1;
-        return i >= 0 && i < optsCanonical.length ? i : null;
+        return i >= 0 && i < optsOrderCanonical.length ? i : null;
       })();
       if (letterIndex != null || digitIndex != null) {
         if (!catExamCanChangeAnswer(catExamUiPhaseRef.current)) return;
         if (saving || qLoading || catAdvanceInFlightRef.current) return;
         const i = letterIndex ?? digitIndex!;
-        const canonical = optsCanonical[i];
+        const canonical = optsOrderCanonical[i];
         if (!canonical) return;
         if (isSata) {
           const prior = answersRef.current[current.id];
@@ -1110,7 +1160,7 @@ export function PracticeTestRunnerClient({
     phase,
     current,
     current?.id,
-    optsCanonical,
+    optsOrderCanonical,
     isSata,
     saving,
     qLoading,
@@ -1622,7 +1672,7 @@ export function PracticeTestRunnerClient({
   const sessionPct = total > 0 ? Math.min(100, Math.max(0, ((idx + 1) / total) * 100)) : 0;
 
   const optionDisplayMap = Object.fromEntries(
-    optsCanonical.map((k, i) => [k, optsDisplay[i] ?? k]),
+    optsOrderCanonical.map((k, i) => [k, optsOrderDisplay[i] ?? k]),
   );
 
   // ══════════════════════════════════════════════════════════════════════════
@@ -1721,11 +1771,11 @@ export function PracticeTestRunnerClient({
               : tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")
           }
         >
-          {optsCanonical.map((canonical, i) => (
+          {optsOrderCanonical.map((canonical, i) => (
             <li key={canonical}>
               <AnswerOptionRow
                 letter={LETTERS[i] ?? String(i + 1)}
-                text={optsDisplay[i] ?? canonical}
+                text={optsOrderDisplay[i] ?? canonical}
                 state={catOptState(canonical)}
                 disabled={optionsInteractionLocked}
                 onClick={() => setAnswerForCurrent(canonical)}
@@ -1928,6 +1978,7 @@ export function PracticeTestRunnerClient({
                             : null
                       }
                       examStackedLayout={isExamStyle}
+                      examLayoutMeasureKey={isExamStyle ? `${current.id}:${optsOrderCanonical.join("|")}` : undefined}
                       footerSlot={isExamStyle ? catExamNavFooter : undefined}
                     >
                       {isExamStyle ? (
@@ -1999,8 +2050,8 @@ export function PracticeTestRunnerClient({
                       feedback={
                         rationalePanelMode === "feedback" ? catStudyFeedback ?? undefined : undefined
                       }
-                      optionKeys={optsCanonical}
-                      optionTexts={optsDisplay}
+                      optionKeys={optsOrderCanonical}
+                      optionTexts={optsOrderDisplay}
                     />
                   </aside>
                 ) : null}
@@ -2085,11 +2136,11 @@ export function PracticeTestRunnerClient({
         role="radiogroup"
         aria-label="Answer choices"
       >
-        {optsCanonical.map((canonical, i) => (
+        {optsOrderCanonical.map((canonical, i) => (
           <li key={canonical}>
             <PracticeAnswerOptionRow
               index={i}
-              text={optsDisplay[i] ?? canonical}
+              text={optsOrderDisplay[i] ?? canonical}
               state={practiceOptState(canonical)}
               disabled={optIsLocked}
               onClick={() => setAnswerForCurrent(canonical)}
@@ -2277,7 +2328,7 @@ export function PracticeTestRunnerClient({
                 status={rationaleFullStatus}
                 correctKeys={linearFeedback?.correctKeys}
                 optionDisplayMap={optionDisplayMap}
-                allOptionKeys={optsCanonical}
+                allOptionKeys={optsOrderCanonical}
                 correctAnswerExplanation={linearFeedback?.correctAnswerExplanation}
                 rationale={linearFeedback?.rationale}
                 distractorRationalesMap={linearFeedback?.distractorRationalesMap}

@@ -53,4 +53,26 @@ describe("normalizeBlogControlPanelGenerateRequestBody", () => {
     if (!r.ok) return;
     assert.equal(r.data.template, BlogPostTemplate.TOPIC_EXPLAINED);
   });
+
+  it("returns INVALID_SLUG for unusable fixedSlug", () => {
+    const r = normalizeBlogControlPanelGenerateRequestBody({
+      topic: "Enough length here for topic xx",
+      exam: "NCLEX",
+      fixedSlug: "###",
+    });
+    assert.equal(r.ok, false);
+    if (r.ok) return;
+    assert.equal(r.code, "INVALID_SLUG");
+  });
+
+  it("normalizes fixedSlug to kebab-case", () => {
+    const r = normalizeBlogControlPanelGenerateRequestBody({
+      topic: "Enough length here for topic xx",
+      exam: "NCLEX",
+      fixedSlug: "  Hello World  ",
+    });
+    assert.equal(r.ok, true);
+    if (!r.ok) return;
+    assert.equal(r.data.fixedSlug, "hello-world");
+  });
 });

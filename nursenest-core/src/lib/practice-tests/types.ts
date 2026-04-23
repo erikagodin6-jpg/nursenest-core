@@ -108,6 +108,11 @@ export type PracticeTestConfigJson = {
   catExamFeedbackMode?: CatExamFeedbackMode;
   /** Blueprint used for weights + diagnostics (e.g. nclex-rn-us). */
   catExamConfigId?: string | null;
+  /**
+   * Opaque per-session randomness (hex) for CAT tie-breaks, option display shuffle, and
+   * linear pool ordering — persisted on `PracticeTest.config`.
+   */
+  sessionPickSalt?: string;
 };
 
 export type PracticeTestResultsJson = {

@@ -18,7 +18,7 @@ describe("QuestionCard (CAT)", () => {
     assert.match(html, /nn-cat-question-card--exam-stack/);
     assert.match(html, /id="nn-cat-exam-scroll-region"/);
     assert.match(html, /nn-cat-question-card__exam-footer--anchored/);
-    assert.match(html, /padding-bottom:calc\(5\.5rem \+ env\(safe-area-inset-bottom, 0px\)\)/);
+    assert.match(html, /nn-cat-question-card__exam-scroll/);
   });
 
   it("study layout does not use exam-only stack classes", () => {

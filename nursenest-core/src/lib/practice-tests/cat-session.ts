@@ -1,4 +1,5 @@
 import type { Prisma } from "@prisma/client";
+import { randomBytes } from "node:crypto";
 import { prisma } from "@/lib/db";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -53,6 +54,10 @@ import { configFromInput, type PickQuestionsInput } from "@/lib/practice-tests/p
 import { computePracticeTestResults } from "@/lib/practice-tests/score-practice-test";
 import { buildCatStudyFeedback } from "@/lib/practice-tests/build-cat-study-feedback";
 import { buildMinimalCatStudyFeedbackPayload } from "@/lib/practice-tests/cat-practice-fallbacks";
+import {
+  filterPoolRemovingRecentQuestions,
+  recentPracticeQuestionIdsForPathway,
+} from "@/lib/practice-tests/recent-practice-question-ids";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
 import type {
@@ -290,13 +295,22 @@ export async function createCatPracticeTestPayload(
     ? { min: pathwayReadiness.minQuestions, max: pathwayReadiness.maxQuestions }
     : fallbackBounds;
 
+  const sessionPickSalt = randomBytes(18).toString("hex");
   const poolInput: PickQuestionsInput = {
     ...input,
     questionCount: bounds.max,
     selectionMode: effectiveBasis,
+    sessionPickSalt,
   };
 
   const pool = await fetchCatPracticePool(userId, entitlement, poolInput);
+  const pathwayIdForRecent = requestedPathwayId ?? input.pathwayId ?? null;
+  const recentPack = await recentPracticeQuestionIdsForPathway({
+    userId,
+    pathwayId: pathwayIdForRecent,
+  });
+  const recentFiltered = filterPoolRemovingRecentQuestions(pool, recentPack.ids);
+  const poolForSelection = recentFiltered.pool;
   let v = sim
     ? validateCatQuestionPool(pool, { minPoolSize: bounds.min })
     : validatePracticeCatPool(pool);
@@ -340,11 +354,19 @@ export async function createCatPracticeTestPayload(
     mergeCatBoosts(catBoostFromWeakPriorities(weakPlan.priorityByCanonical), sessionMissBoost(state)),
     catHighYieldPracticeBoost(),
   );
-  const selectOpts: CatSelectOptions = sim
-    ? { blueprintWeights }
-    : mergeBlueprintIntoBoost(practiceBoost, blueprintWeights);
+  const selectOpts: CatSelectOptions = {
+    ...(sim ? { blueprintWeights } : mergeBlueprintIntoBoost(practiceBoost, blueprintWeights)),
+    sessionPickSalt,
+  };
 
-  const first = selectNextQuestion(pool, new Set(), state.targetDifficulty, delivered, null, selectOpts);
+  const first = selectNextQuestion(
+    poolForSelection,
+    new Set(),
+    state.targetDifficulty,
+    delivered,
+    null,
+    selectOpts,
+  );
   if (!first.selected) {
     return {
       ok: false,
@@ -354,6 +376,22 @@ export async function createCatPracticeTestPayload(
   }
 
   const catExamFeedbackMode: CatExamFeedbackMode = sim ? "test" : examFeedbackMode;
+
+  if (process.env.NODE_ENV !== "production") {
+    safeServerLog("practice_test", "cat_session_create_debug", {
+      event: "cat_session_create_debug",
+      userIdPrefix: userId.slice(0, 8),
+      pathwayId: pathwayIdForRecent ?? undefined,
+      poolSize: pool.length,
+      poolForSelectionSize: poolForSelection.length,
+      recentSessionsScanned: recentPack.sessionsScanned,
+      recentIdCount: recentPack.ids.size,
+      recentExclusionApplied: recentFiltered.applied,
+      recentExclusionSkip: recentFiltered.skipReason,
+      firstQuestionIdPrefix: first.selected.id.slice(0, 12),
+      sessionPickSaltPrefix: sessionPickSalt.slice(0, 12),
+    });
+  }
 
   const config: PracticeTestConfigJson = {
     ...configFromInput(poolInput, timedMode, timeLimitSec),
@@ -369,6 +407,7 @@ export async function createCatPracticeTestPayload(
     catPresentationMode: presentationMode,
     catExamFeedbackMode,
     catExamConfigId: examCfg.id,
+    sessionPickSalt,
   };
 
   return {
@@ -435,9 +474,12 @@ async function catPoolAndSelectOpts(
     mergeCatBoosts(weakBoost, sessionMissBoost(state)),
     sim ? {} : catHighYieldPracticeBoost(),
   );
-  const selectOpts: CatSelectOptions = sim
-    ? { blueprintWeights }
-    : mergeBlueprintIntoBoost(practiceBoost, blueprintWeights);
+  const selectOpts: CatSelectOptions = {
+    ...(sim ? { blueprintWeights } : mergeBlueprintIntoBoost(practiceBoost, blueprintWeights)),
+    ...(typeof config.sessionPickSalt === "string" && config.sessionPickSalt.length >= 8
+      ? { sessionPickSalt: config.sessionPickSalt }
+      : {}),
+  };
   const basis = config.catSelectionBasis ?? "random";
   const pickInput: PickQuestionsInput = {
     questionCount: bounds.max,
@@ -446,10 +488,18 @@ async function catPoolAndSelectOpts(
     difficultyMax: config.difficultyMax ?? null,
     selectionMode: basis,
     pathwayId: config.pathwayId ?? null,
+    ...(typeof config.sessionPickSalt === "string" && config.sessionPickSalt.length >= 8
+      ? { sessionPickSalt: config.sessionPickSalt }
+      : {}),
   };
   const pool = await fetchCatPracticePool(userId, entitlement, pickInput);
+  const recentPack = await recentPracticeQuestionIdsForPathway({
+    userId,
+    pathwayId: config.pathwayId ?? null,
+  });
+  const { pool: poolForSelection } = filterPoolRemovingRecentQuestions(pool, recentPack.ids);
   return {
-    pool,
+    pool: poolForSelection,
     selectOpts,
     bounds,
     presentationMode: config.catPresentationMode ?? "practice",

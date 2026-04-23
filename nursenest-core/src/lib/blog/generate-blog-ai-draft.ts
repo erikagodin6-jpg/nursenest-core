@@ -17,6 +17,12 @@ import { blogPrimaryStudyCta } from "@/lib/blog/blog-study-cta";
 import { buildOutline, detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
 import { prisma } from "@/lib/db";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
+import {
+  BlogInvalidSlugError,
+  ensureUniqueBlogPostSlug,
+  generateBlogSlugBaseFromExamTopic,
+  parseOptionalBlogSlug,
+} from "@/lib/blog/blog-optional-slug";
 
 export type GenerateBlogAiDraftInput = {
   topic: string;
@@ -83,26 +89,20 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
 
   const titleFn = BLOG_TEMPLATE_TITLE_PATTERNS[d.template];
   const title = titleFn({ exam: d.exam, topic: d.topic });
-  const slug =
-    d.slug ??
-    (await (async () => {
-      const base = `${d.exam}-${d.topic}`
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-|-$/g, "")
-        .slice(0, 100);
-      let candidate = base;
-      let n = 0;
-      while (await prisma.blogPost.findUnique({ where: { slug: candidate }, select: { id: true } })) {
-        n += 1;
-        candidate = `${base}-${n}`.slice(0, 120);
-      }
-      return candidate;
-    })());
 
-  const dupBySlug = await prisma.blogPost.findUnique({ where: { slug }, select: { id: true } });
-  if (dupBySlug) {
-    return { ok: true, skipped: true, reason: "duplicate_slug", slug };
+  let slug: string;
+  try {
+    const explicit = parseOptionalBlogSlug(d.slug ?? "");
+    const base = explicit ?? generateBlogSlugBaseFromExamTopic(d.exam, d.topic, 100);
+    if (!explicit) {
+      console.info("[blog] slug auto-generated", { title, topic: d.topic, exam: d.exam });
+    }
+    slug = await ensureUniqueBlogPostSlug(base);
+  } catch (e) {
+    if (BlogInvalidSlugError.is(e)) {
+      return { ok: false, error: e.message };
+    }
+    throw e;
   }
   if (!d.allowDuplicateCanonicalTopic) {
     const dupByTopic = normalizedTopic

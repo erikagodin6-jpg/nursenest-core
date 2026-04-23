@@ -45,6 +45,14 @@ import { blogPrimaryStudyCta, marketingStudyHubsForBlogExam } from "@/lib/blog/b
 import { detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
 import { prisma } from "@/lib/db";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import {
+  BlogInvalidSlugError,
+  BLOG_SLUG_FORMAT_RE,
+  cleanBlogSlugInput,
+  ensureUniqueBlogPostSlug,
+  generateBlogSlugBaseFromExamTopic,
+  parseOptionalBlogSlug,
+} from "@/lib/blog/blog-optional-slug";
 
 export type ControlPanelGenerateInput = {
   topic: string;
@@ -97,29 +105,10 @@ function extractJsonObject(raw: string): unknown {
   return JSON.parse(t) as unknown;
 }
 
-async function uniqueSlug(base: string): Promise<string> {
-  let candidate = base.slice(0, 120);
-  let n = 0;
-  while (await prisma.blogPost.findUnique({ where: { slug: candidate }, select: { id: true } })) {
-    n += 1;
-    candidate = `${base}-${n}`.slice(0, 120);
-  }
-  return candidate;
-}
-
 function sanitizeSlugInput(s: string, exam: string, topic: string): string {
-  const fromAi = s
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 100);
-  if (fromAi.length >= 3) return fromAi;
-  const fallback = `${exam}-${topic}`
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 100);
-  return fallback || "blog-draft";
+  const fromAi = cleanBlogSlugInput(s).slice(0, 100);
+  if (fromAi.length >= 3 && BLOG_SLUG_FORMAT_RE.test(fromAi)) return fromAi;
+  return generateBlogSlugBaseFromExamTopic(exam, topic, 100) || "blog-draft";
 }
 
 function appendRequiredStudyLinksBlock(params: {
@@ -280,8 +269,20 @@ export async function persistControlPanelDraft(
 ): Promise<ControlPanelPersistResult> {
   const normalizedTopic = normalizeBlogTopicKey(input.targetKeyword ?? input.topic);
   const pageTitle = (plan.h1 || plan.titleOptions[0] || input.topic).slice(0, 220);
-  const slugBase = sanitizeSlugInput(input.fixedSlug ?? plan.recommendedSlug, input.exam, input.topic);
-  const slug = await uniqueSlug(slugBase);
+  let slugBase: string;
+  try {
+    if (input.fixedSlug?.trim()) {
+      slugBase = parseOptionalBlogSlug(input.fixedSlug)!;
+    } else {
+      slugBase = sanitizeSlugInput(plan.recommendedSlug, input.exam, input.topic);
+    }
+  } catch (e) {
+    if (BlogInvalidSlugError.is(e)) {
+      return { ok: false, error: e.message };
+    }
+    throw e;
+  }
+  const slug = await ensureUniqueBlogPostSlug(slugBase);
 
   if (normalizedTopic) {
     const dupTopic = await findExistingBlogByCanonicalIntent({ exam: input.exam, normalizedTopic });

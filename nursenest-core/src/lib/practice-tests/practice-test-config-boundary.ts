@@ -53,6 +53,7 @@ const practiceTestConfigSchema = z.object({
   catPresentationMode: catPresentationZ.optional(),
   catExamFeedbackMode: catFeedbackZ.optional(),
   catExamConfigId: z.union([z.null(), z.string()]).optional(),
+  sessionPickSalt: z.string().min(8).max(128).optional(),
 });
 
 function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {

@@ -1,4 +1,5 @@
 import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
+import { BlogInvalidSlugError, parseOptionalBlogSlug } from "@/lib/blog/blog-optional-slug";
 
 function isPlainObject(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v);
@@ -68,11 +69,21 @@ export function normalizeBlogControlPanelGenerateRequestBody(raw: unknown):
   }
 
   if ("fixedSlug" in o) {
-    const r = toScalarString(o.fixedSlug, "fixedSlug", 180);
+    const r = toScalarString(o.fixedSlug, "fixedSlug", 500);
     if (!r.ok) return { ok: false, code: "FIELD_TYPE", path: "fixedSlug", message: r.message };
-    const s = r.value.trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-|-$/g, "");
-    if (s.length >= 3) o.fixedSlug = s.slice(0, 180);
-    else delete o.fixedSlug;
+    const raw = r.value.trim();
+    if (!raw) {
+      delete o.fixedSlug;
+    } else {
+      try {
+        o.fixedSlug = parseOptionalBlogSlug(raw)!;
+      } catch (e) {
+        if (BlogInvalidSlugError.is(e)) {
+          return { ok: false, code: "INVALID_SLUG", path: "fixedSlug", message: e.message };
+        }
+        throw e;
+      }
+    }
   }
 
   if (o.template === undefined || o.template === null) {

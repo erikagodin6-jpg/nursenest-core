@@ -59,7 +59,7 @@ import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-scale";
-import { emptyPathwayLessonsPageResult } from "@/lib/exam-pathways/marketing-hub-fallbacks";
+import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
 import { dedupePathwayLessonsForLibrary } from "@/lib/lessons/pathway-lesson-dedupe";
 import { PATHWAY_LESSON_DB_TIMEOUT_MS } from "@/lib/lessons/pathway-lesson-loader-config";
 import type { LessonInput } from "@/lib/lessons/pathway-lesson-catalog-sync";
@@ -471,6 +471,187 @@ export type PathwayLessonsPageResult = {
   locale?: PathwayLessonListLocaleInfo;
 };
 
+const HUB_FULL_SCAN_CHUNK = 400;
+
+/** Loads published hub-list rows in bounded chunks until exhausted or `maxRows` (same filters as pagination). */
+async function loadPublishedLessonInputsAllChunked(
+  pathwayId: string,
+  locale: string,
+  topicSlugsIn: string[] | undefined,
+  hubSearch: string | undefined,
+  maxRows: number,
+): Promise<LessonInput[]> {
+  if (topicSlugsIn && topicSlugsIn.length === 0) return [];
+  const out: LessonInput[] = [];
+  let skip = 0;
+  while (out.length < maxRows) {
+    const take = Math.min(HUB_FULL_SCAN_CHUNK, maxRows - out.length);
+    const part = await loadPublishedLessonRowsPage(pathwayId, locale, skip, take, topicSlugsIn, hubSearch, true);
+    if (part.length === 0) break;
+    out.push(...part);
+    skip += part.length;
+    if (part.length < take) break;
+  }
+  return out;
+}
+
+/**
+ * Full marketing hub lesson list after the same normalization as hub cards:
+ * overlay, structural gate, marketing-surface filter, pathway exam/country context, safe slugs, dedupe.
+ * Pagination slices from this array so `total` and rendered rows cannot disagree.
+ */
+async function resolveMarketingHubRenderableLessonList(
+  pathwayId: string,
+  marketingLocale: string | undefined,
+  listOptions?: { topicSlugsIn?: string[]; q?: string },
+): Promise<{
+  renderableAll: PathwayLessonRecord[];
+  locale: PathwayLessonListLocaleInfo;
+  runtimeSource: "database" | "catalog" | "none";
+  diagnostics: {
+    sqlDbPublishedApprox?: number;
+    catalogRawFilteredApprox?: number;
+    truncatedDbScan?: boolean;
+    goldInjectedCount?: number;
+  };
+}> {
+  const requested = normalizePathwayLessonLocale(marketingLocale);
+  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
+  const topicSlugsIn = listOptions?.topicSlugsIn;
+  const qRaw = normalizePathwayHubSearchQuery(listOptions?.q);
+  const qLower = qRaw ? qRaw.toLowerCase() : "";
+
+  const dbPresence = await countPublishedDbLessonsAllLocalesWithHealth(pathwayId);
+  if (dbPresence.unavailable) {
+    safeServerLog("pathway_lessons", "hub_list_db_unavailable_fail_closed", {
+      pathwayId,
+      hubSearch: qRaw ? "1" : "0",
+    });
+    return {
+      renderableAll: [],
+      locale: {
+        requested,
+        effective: requested,
+        usedEnglishFallback: false,
+        catalogEnglishOnlySource: false,
+      },
+      runtimeSource: "none",
+      diagnostics: {},
+    };
+  }
+
+  const dbAny = dbPresence.count > 0;
+  if (dbAny) {
+    const effective = await effectiveLocaleForPathwayLessonDbRows(pathwayId, requested);
+    const missingGolds = await listMissingScopedGoldHubRows(pathwayId, effective, topicSlugsIn);
+    const goldsFiltered = qRaw ? missingGolds.filter((row) => lessonInputMatchesHubSearch(row, qLower)) : missingGolds;
+    const sqlDbOnly = await countPublishedLessonRows(pathwayId, effective, topicSlugsIn, qRaw);
+    const dbChunked = await loadPublishedLessonInputsAllChunked(
+      pathwayId,
+      effective,
+      topicSlugsIn,
+      qRaw,
+      PATHWAY_CATALOG_LIST_HARD_CAP,
+    );
+    const truncatedDbScan = sqlDbOnly > dbChunked.length;
+    const rawInputs = [...goldsFiltered, ...dbChunked];
+    const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
+    const renderableAll = dedupePathwayLessonsForLibrary(
+      sortAndFilterLessonsForPathwayContext(
+        pathwayId,
+        filterHubListItemsForSafeSlugs(
+          rawInputs.map((row) =>
+            stripPathwayLessonToHubListShape(
+              applyOverlayAndStructural(
+                withLocaleMeta(normalizeLesson(row, pathwayId), meta),
+                marketingLocale,
+                pathwayId,
+                lessonDbOverlays,
+              ),
+            ),
+          ),
+          pathwayId,
+        ),
+      ),
+      { pathwayIdHint: pathwayId, source: `hub_page:${pathwayId}:db`, devLog: true },
+    ).items;
+
+    if (process.env.NODE_ENV !== "production" && sqlDbOnly + goldsFiltered.length > 0 && renderableAll.length === 0) {
+      safeServerLog("pathway_lessons", "hub_marketing_all_db_candidates_filtered_out", {
+        pathwayId,
+        sql_db_only: sqlDbOnly,
+        gold_injected: goldsFiltered.length,
+      });
+    }
+    if (truncatedDbScan) {
+      safeServerLog("pathway_lessons", "hub_list_renderable_truncated_to_cap", {
+        pathwayId,
+        cap: PATHWAY_CATALOG_LIST_HARD_CAP,
+        sql_db_only: sqlDbOnly,
+        scanned_db_rows: dbChunked.length,
+      });
+    }
+
+    return {
+      renderableAll,
+      locale: {
+        requested,
+        effective,
+        usedEnglishFallback: requested !== effective,
+        catalogEnglishOnlySource: false,
+      },
+      runtimeSource: "database",
+      diagnostics: {
+        sqlDbPublishedApprox: sqlDbOnly,
+        truncatedDbScan,
+        goldInjectedCount: goldsFiltered.length,
+      },
+    };
+  }
+
+  const allRaw = filterCatalogLessonsByTopicSlugs(getCatalogLessonsRaw(pathwayId), topicSlugsIn);
+  const filteredRaw = qRaw ? allRaw.filter((row) => lessonInputMatchesHubSearch(row, qLower)) : allRaw;
+  const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
+  const renderableAll = dedupePathwayLessonsForLibrary(
+    sortAndFilterLessonsForPathwayContext(
+      pathwayId,
+      filterHubListItemsForSafeSlugs(
+        filteredRaw.map((row) =>
+          stripPathwayLessonToHubListShape(
+            applyOverlayAndStructural(
+              withLocaleMeta(normalizeLesson(row, pathwayId), catMeta),
+              marketingLocale,
+              pathwayId,
+              lessonDbOverlays,
+            ),
+          ),
+        ),
+        pathwayId,
+      ),
+    ),
+    { pathwayIdHint: pathwayId, source: `hub_page:${pathwayId}:catalog`, devLog: true },
+  ).items;
+
+  if (process.env.NODE_ENV !== "production" && filteredRaw.length > 0 && renderableAll.length === 0) {
+    safeServerLog("pathway_lessons", "hub_marketing_catalog_all_filtered_out", {
+      pathwayId,
+      catalog_raw_filtered: filteredRaw.length,
+    });
+  }
+
+  return {
+    renderableAll,
+    locale: {
+      requested,
+      effective: "en",
+      usedEnglishFallback: requested !== "en",
+      catalogEnglishOnlySource: true,
+    },
+    runtimeSource: renderableAll.length > 0 ? "catalog" : "none",
+    diagnostics: { catalogRawFilteredApprox: filteredRaw.length },
+  };
+}
+
 function clampPageSize(pageSize: number): number {
   return Math.min(PATHWAY_HUB_PAGE_SIZE_MAX, Math.max(1, Math.floor(pageSize)));
 }
@@ -488,149 +669,39 @@ async function getPathwayLessonsPageImpl(
 ): Promise<PathwayLessonsPageResult> {
   const ps = clampPageSize(pageSize);
   const p = Math.min(clampPage(page), maxSafeOffsetPage(ps));
-  const requested = normalizePathwayLessonLocale(marketingLocale);
-  const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(requested);
-  const topicSlugsIn = listOptions?.topicSlugsIn;
   const qRaw = normalizePathwayHubSearchQuery(listOptions?.q);
-  const qLower = qRaw ? qRaw.toLowerCase() : "";
-
-  const dbPresence = await countPublishedDbLessonsAllLocalesWithHealth(pathwayId);
-  if (dbPresence.unavailable) {
-    safeServerLog("pathway_lessons", "hub_list_db_unavailable_fail_closed", {
-      pathwayId,
-      page: p,
-      pageSize: ps,
-      hubSearch: qRaw ? "1" : "0",
-    });
-    return {
-      ...emptyPathwayLessonsPageResult(p, ps),
-      locale: {
-        requested,
-        effective: requested,
-        usedEnglishFallback: false,
-        catalogEnglishOnlySource: false,
-      },
-    };
-  }
-  const dbAny = dbPresence.count > 0;
-  if (dbAny) {
-    const t0 = performance.now();
-    const effective = await effectiveLocaleForPathwayLessonDbRows(pathwayId, requested);
-    const missingGolds = await listMissingScopedGoldHubRows(pathwayId, effective, topicSlugsIn);
-    const goldsFiltered = qRaw ? missingGolds.filter((row) => lessonInputMatchesHubSearch(row, qLower)) : missingGolds;
-    const dbTotal = await countPublishedLessonRows(pathwayId, effective, topicSlugsIn, qRaw);
-    const total = goldsFiltered.length + dbTotal;
-    const pageCount = Math.max(1, Math.ceil(total / ps));
-    const safePage = Math.min(p, pageCount);
-    const skip = (safePage - 1) * ps;
-
-    const takeGold = Math.max(0, Math.min(ps, goldsFiltered.length - skip));
-    const goldStart = Math.min(skip, goldsFiltered.length);
-    const goldPageRows = takeGold > 0 ? goldsFiltered.slice(goldStart, goldStart + takeGold) : [];
-
-    const dbSkip = skip >= goldsFiltered.length ? skip - goldsFiltered.length : 0;
-    const dbTake = Math.max(0, ps - goldPageRows.length);
-    const dbRows =
-      dbTake > 0
-        ? await loadPublishedLessonRowsPage(pathwayId, effective, dbSkip, dbTake, topicSlugsIn, qRaw, true)
-        : [];
-    const raw = [...goldPageRows, ...dbRows];
-    const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
-    const contextItems = sortAndFilterLessonsForPathwayContext(
-      pathwayId,
-      filterHubListItemsForSafeSlugs(
-        raw.map((row) =>
-          stripPathwayLessonToHubListShape(
-            applyOverlayAndStructural(
-              withLocaleMeta(normalizeLesson(row, pathwayId), meta),
-              marketingLocale,
-              pathwayId,
-              lessonDbOverlays,
-            ),
-          ),
-        ),
-        pathwayId,
-      ),
-    );
-    const durationMs = Math.round(performance.now() - t0);
-    safeServerLog("pathway_lessons", "hub_list_db_timing", {
-      pathwayId,
-      pathwayLessonRuntimeSource: "database",
-      durationMs,
-      page: safePage,
-      pageSize: ps,
-      total,
-      hubSearch: qRaw ? "1" : "0",
-    });
-    const deduped = dedupePathwayLessonsForLibrary(contextItems, {
-      pathwayIdHint: pathwayId,
-      source: `hub_page:${pathwayId}:db`,
-      devLog: true,
-    });
-    return {
-      items: deduped.items,
-      total,
-      page: safePage,
-      pageSize: ps,
-      pageCount,
-      locale: {
-        requested,
-        effective,
-        usedEnglishFallback: requested !== effective,
-        catalogEnglishOnlySource: false,
-      },
-    };
-  }
-
-  const allRaw = filterCatalogLessonsByTopicSlugs(getCatalogLessonsRaw(pathwayId), topicSlugsIn);
-  const filteredRaw = qRaw ? allRaw.filter((row) => lessonInputMatchesHubSearch(row, qLower)) : allRaw;
-  const total = filteredRaw.length;
-  const pageCount = Math.max(1, Math.ceil(total / ps));
-  const safePage = Math.min(p, pageCount);
-  const skip = (safePage - 1) * ps;
-  const pageRows = filteredRaw.slice(skip, skip + ps);
-  const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
-  safeServerLog("pathway_lessons", "hub_list_source", {
+  const t0 = performance.now();
+  const resolved = await resolveMarketingHubRenderableLessonList(pathwayId, marketingLocale, listOptions);
+  const slice = sliceNormalizedHubLessons(resolved.renderableAll, p, ps);
+  const durationMs = Math.round(performance.now() - t0);
+  const diag = resolved.diagnostics;
+  safeServerLog("pathway_lessons", "hub_list_resolved", {
     pathwayId,
-    pathwayLessonRuntimeSource: total > 0 ? "catalog" : "none",
-    total,
-    page: safePage,
-    pageSize: ps,
+    pathwayLessonRuntimeSource: resolved.runtimeSource,
+    durationMs,
+    page: slice.page,
+    pageSize: slice.pageSize,
+    renderable_total: slice.total,
     hubSearch: qRaw ? "1" : "0",
+    sql_db_approx: diag.sqlDbPublishedApprox ?? 0,
+    catalog_raw_filtered: diag.catalogRawFilteredApprox ?? 0,
+    gold_injected: diag.goldInjectedCount ?? 0,
+    truncated_db_scan: diag.truncatedDbScan ? 1 : 0,
   });
-  const contextItems = sortAndFilterLessonsForPathwayContext(
-    pathwayId,
-    filterHubListItemsForSafeSlugs(
-      pageRows.map((row) =>
-        stripPathwayLessonToHubListShape(
-          applyOverlayAndStructural(
-            withLocaleMeta(normalizeLesson(row, pathwayId), catMeta),
-            marketingLocale,
-            pathwayId,
-            lessonDbOverlays,
-          ),
-        ),
-      ),
+  if (process.env.NODE_ENV !== "production" && slice.total > 0 && slice.items.length === 0 && slice.page === 1) {
+    safeServerLog("pathway_lessons", "hub_invariant_first_page_empty", {
       pathwayId,
-    ),
-  );
-  const dedupedCatalog = dedupePathwayLessonsForLibrary(contextItems, {
-    pathwayIdHint: pathwayId,
-    source: `hub_page:${pathwayId}:catalog`,
-    devLog: true,
-  });
+      renderable_total: slice.total,
+      page: slice.page,
+    });
+  }
   return {
-    items: dedupedCatalog.items,
-    total,
-    page: safePage,
-    pageSize: ps,
-    pageCount,
-    locale: {
-      requested,
-      effective: "en",
-      usedEnglishFallback: requested !== "en",
-      catalogEnglishOnlySource: true,
-    },
+    items: slice.items,
+    total: slice.total,
+    page: slice.page,
+    pageSize: slice.pageSize,
+    pageCount: slice.pageCount,
+    locale: resolved.locale,
   };
 }
 
@@ -1622,19 +1693,12 @@ export async function countPathwayLessonsDbOnly(pathwayId: string): Promise<numb
 
 /**
  * Public-facing pathway lesson total for hubs/libraries.
- * Matches fresh loader inclusion semantics: published DB rows + scoped-gold hub rows not yet in DB.
+ * Uses the same normalized marketing-hub pipeline as {@link getPathwayLessonsPage} (renderable lessons only).
  */
 export async function countPathwayLessonsPublic(
   pathwayId: string,
   marketingLocale?: string,
 ): Promise<number> {
-  const dbState = await countPublishedDbLessonsAllLocalesWithHealth(pathwayId);
-  if (dbState.unavailable) return 0;
-  if (dbState.count <= 0) return getCatalogLessonsRaw(pathwayId).length;
-
-  const requested = normalizePathwayLessonLocale(marketingLocale);
-  const effective = await effectiveLocaleForPathwayLessonDbRows(pathwayId, requested);
-  const dbTotal = await countPublishedLessonRows(pathwayId, effective);
-  const missingGolds = await listMissingScopedGoldHubRows(pathwayId, effective);
-  return dbTotal + missingGolds.length;
+  const { renderableAll } = await resolveMarketingHubRenderableLessonList(pathwayId, marketingLocale, undefined);
+  return renderableAll.length;
 }

@@ -7,6 +7,11 @@ import type {
   PracticeTestSelectionMode,
 } from "@/lib/practice-tests/types";
 import { fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
+import {
+  filterPoolRemovingRecentQuestions,
+  recentPracticeQuestionIdsForPathway,
+} from "@/lib/practice-tests/recent-practice-question-ids";
+import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 
 /** Linear pool selection — CAT uses {@link createCatPracticeTestPayload} instead. */
 export type LinearPoolSelectionMode = Exclude<PracticeTestSelectionMode, "cat">;
@@ -30,13 +35,27 @@ export type PickQuestionsInput = {
   difficultyMax: number | null;
   selectionMode: LinearPoolSelectionMode;
   pathwayId: string | null;
+  /** When set, shuffles the eligible pool deterministically (stable across retries for the same session). */
+  sessionPickSalt?: string;
+};
+
+export type LinearPracticeSessionPickDebug = {
+  poolSize: number;
+  poolAfterRecentSize: number;
+  recentSessionsScanned: number;
+  recentIdCount: number;
+  recentExclusionApplied: boolean;
+  recentExclusionSkip?: string;
 };
 
 export async function pickPracticeQuestionIds(
   userId: string,
   entitlement: AccessScope,
   input: PickQuestionsInput,
-): Promise<{ ok: true; ids: string[] } | { ok: false; message: string }> {
+): Promise<
+  | { ok: true; ids: string[]; linearSessionCreateDebug: LinearPracticeSessionPickDebug }
+  | { ok: false; message: string }
+> {
   const n = Math.min(PRACTICE_TEST_MAX_Q, Math.max(PRACTICE_TEST_MIN_Q, Math.floor(input.questionCount)));
 
   if (input.selectionMode === "targeted" && input.topicNames.length === 0) {
@@ -63,8 +82,31 @@ export async function pickPracticeQuestionIds(
     };
   }
 
-  const ids = shuffle(pool.map((p) => p.id)).slice(0, n);
-  return { ok: true, ids };
+  const pathwayIdForRecent = input.pathwayId?.trim() ? input.pathwayId.trim() : null;
+  const recentPack = await recentPracticeQuestionIdsForPathway({
+    userId,
+    pathwayId: pathwayIdForRecent,
+  });
+  const recentFiltered = filterPoolRemovingRecentQuestions(pool, recentPack.ids, n);
+
+  const poolIds = recentFiltered.pool.map((p) => p.id);
+  const salt = input.sessionPickSalt?.trim();
+  const ids = (salt && salt.length >= 8
+    ? shuffleSeeded(poolIds, `${salt}:linear-pool`)
+    : shuffle(poolIds)
+  ).slice(0, n);
+  return {
+    ok: true,
+    ids,
+    linearSessionCreateDebug: {
+      poolSize: pool.length,
+      poolAfterRecentSize: recentFiltered.pool.length,
+      recentSessionsScanned: recentPack.sessionsScanned,
+      recentIdCount: recentPack.ids.size,
+      recentExclusionApplied: recentFiltered.applied,
+      recentExclusionSkip: recentFiltered.skipReason,
+    },
+  };
 }
 
 export function configFromInput(

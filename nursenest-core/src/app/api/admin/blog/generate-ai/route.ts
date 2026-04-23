@@ -17,6 +17,7 @@ import {
   type AutomationResult,
   type BlogAutomationSeoReadiness,
 } from "@/lib/blog/blog-automation-engine";
+import { BlogInvalidSlugError, parseOptionalBlogSlug } from "@/lib/blog/blog-optional-slug";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
@@ -317,7 +318,17 @@ export async function POST(req: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
   }
-  const d = parsed.data;
+  const dRaw = parsed.data;
+  let slugResolved: string | undefined;
+  try {
+    slugResolved = parseOptionalBlogSlug(dRaw.slug) ?? undefined;
+  } catch (e) {
+    if (BlogInvalidSlugError.is(e)) {
+      return NextResponse.json({ error: e.message, code: "INVALID_SLUG" }, { status: 400 });
+    }
+    throw e;
+  }
+  const d = { ...dRaw, slug: slugResolved };
   const rawTopics =
     d.topics && d.topics.length > 0 ? d.topics : d.topic ? [d.topic] : [];
   const topics = normalizeUniqueTopics(rawTopics, ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN);

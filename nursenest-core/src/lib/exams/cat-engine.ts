@@ -309,6 +309,11 @@ export type CatSelectOptions = {
    * Rows without a mapping keep legacy deficit balancing on `blueprintKeyForPoolRow`.
    */
   blueprintWeights?: Record<string, number>;
+  /**
+   * Per-session opaque salt so tie-break picks among equally-scored candidates differ across
+   * sessions while staying deterministic for a given session (CAT validity / replay).
+   */
+  sessionPickSalt?: string;
 };
 
 /**
@@ -353,14 +358,15 @@ export function selectNextQuestion(
   scored.sort((a, b) => a.score - b.score || a.row.id.localeCompare(b.row.id));
   const best = scored[0]?.score ?? 0;
   const top = scored.filter((s) => s.score <= best + 0.5).map((s) => s.row);
-  const pick = top.length ? hashPickStable(top, `${usedIds.size}:${td}`) : unused[0]!;
+  const saltPrefix = options?.sessionPickSalt ? `${options.sessionPickSalt}:` : "";
+  const pick = top.length ? hashPickStable(top, `${saltPrefix}${usedIds.size}:${td}`) : unused[0]!;
 
   const bandMatch = band(pick.difficulty) <= 1;
   if (bandMatch) return { selected: pick, fallback: false };
 
   const close = unused.filter((r) => band(r.difficulty) <= 1);
   if (close.length) {
-    const p2 = hashPickStable(close, `${usedIds.size}:close`);
+    const p2 = hashPickStable(close, `${saltPrefix}${usedIds.size}:close`);
     return { selected: p2, fallback: true, detail: "difficulty_band_relaxed" };
   }
 

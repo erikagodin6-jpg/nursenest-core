@@ -1,3 +1,4 @@
+import { randomInt } from "node:crypto";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
@@ -9,6 +10,7 @@ import type { CatPoolRow } from "@/lib/exams/cat-engine";
 import { getWeakTopicNamesForPractice } from "@/lib/learner/topic-performance";
 import { difficultyWhere } from "@/lib/practice-tests/practice-pool-shared";
 import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
+import { seededIndexInRange, shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 
 const MAX_POOL = 4000;
 export const CAT_MIN_COMPLETE_POOL = 30;
@@ -106,6 +108,18 @@ export async function fetchCatPracticePool(
 
   const where: Prisma.ExamQuestionWhereInput = { AND: parts };
 
+  const total = await prisma.examQuestion.count({ where });
+  const takeN = Math.min(MAX_POOL, Math.max(1, total));
+  let skip = 0;
+  if (total > takeN) {
+    const span = total - takeN + 1;
+    const salt = input.sessionPickSalt?.trim();
+    skip =
+      salt && salt.length >= 8
+        ? seededIndexInRange(`${salt}:pool-window-v1`, span)
+        : randomInt(0, span);
+  }
+
   const rows = await prisma.examQuestion.findMany({
     where,
     select: {
@@ -121,12 +135,16 @@ export async function fetchCatPracticePool(
       nclexClientNeedsSubcategory: true,
     },
     orderBy: { id: "asc" },
-    take: MAX_POOL,
+    skip,
+    take: takeN,
   });
 
   const completeRows = rows.filter((r) => isCompleteCatQuestionRow(r));
+  const salt = input.sessionPickSalt?.trim();
+  const ordered =
+    salt && salt.length >= 8 ? shuffleSeeded(completeRows, `${salt}:cat-pool-row-order-v1`) : completeRows;
 
-  return completeRows.map((r) => ({
+  return ordered.map((r) => ({
     id: r.id,
     difficulty: typeof r.difficulty === "number" && Number.isFinite(r.difficulty) ? Math.round(r.difficulty) : 3,
     bodySystem: r.bodySystem,

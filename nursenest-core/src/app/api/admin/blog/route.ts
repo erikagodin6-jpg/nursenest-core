@@ -9,6 +9,12 @@ import {
 } from "@/lib/blog/blog-admin-library-query";
 import { parseBoundedPageSize } from "@/lib/api/api-pagination-limits";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
+import {
+  BlogInvalidSlugError,
+  ensureUniqueBlogPostSlug,
+  generateBlogSlugBaseFromTitle,
+  parseOptionalBlogSlug,
+} from "@/lib/blog/blog-optional-slug";
 import { prisma } from "@/lib/db";
 
 const adminBlogListSelect = {
@@ -41,7 +47,12 @@ const adminBlogListSelect = {
 } as const;
 
 const createSchema = z.object({
-  slug: z.string().min(3).max(180).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  slug: z.preprocess((v) => {
+    if (v === undefined || v === null) return undefined;
+    if (typeof v !== "string") return v;
+    const t = v.trim();
+    return t === "" ? undefined : t;
+  }, z.string().max(500).optional()),
   title: z.string().min(3).max(220),
   excerpt: z.string().min(10).max(500),
   body: z.string().min(20),
@@ -180,9 +191,19 @@ export async function POST(req: Request) {
   }
   const d = parsed.data;
 
-  const dupSlug = await prisma.blogPost.findUnique({ where: { slug: d.slug }, select: { id: true } });
-  if (dupSlug) {
-    return NextResponse.json({ error: "Slug already exists", code: "duplicate_slug" }, { status: 409 });
+  let finalSlug: string;
+  try {
+    const explicit = parseOptionalBlogSlug(d.slug ?? "");
+    const base = explicit ?? generateBlogSlugBaseFromTitle(d.title);
+    if (!explicit) {
+      console.info("[blog] slug auto-generated", { title: d.title });
+    }
+    finalSlug = await ensureUniqueBlogPostSlug(base);
+  } catch (e) {
+    if (BlogInvalidSlugError.is(e)) {
+      return NextResponse.json({ error: e.message, code: "INVALID_SLUG" }, { status: 400 });
+    }
+    throw e;
   }
 
   const topicSource = [d.targetKeyword, d.keywordCluster, d.title].find((x) => x && String(x).trim()) ?? "";
@@ -206,7 +227,7 @@ export async function POST(req: Request) {
 
   const post = await prisma.blogPost.create({
     data: {
-      slug: d.slug,
+      slug: finalSlug,
       title: d.title,
       excerpt: d.excerpt,
       body: d.body,

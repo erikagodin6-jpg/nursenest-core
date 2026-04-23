@@ -42,6 +42,7 @@ import { AdminBlogDraftEditorShell, DraftSectionCard } from "@/components/admin/
 import { AdminBlogHtmlPreview } from "@/components/admin/blog/admin-blog-html-preview";
 import { AdminMediaPickerDialog } from "@/components/admin/media/admin-media-picker-dialog";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
+import { blogSlugCustomValidityMessage, liveNormalizeBlogSlugInputValue } from "@/lib/blog/blog-optional-slug";
 
 /** Same-origin admin blog + media upload require session cookies (avoid ip_unauth RL buckets). */
 const ADMIN_BLOG_COOKIE_FETCH: Pick<RequestInit, "credentials" | "cache"> = { credentials: "include", cache: "no-store" };
@@ -139,12 +140,7 @@ function controlPanelPostStatusChipClass(status: string) {
 }
 
 function normalizeAdminBlogSlug(raw: string): string | null {
-  const s = raw
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 120);
+  const s = liveNormalizeBlogSlugInputValue(raw).replace(/^-|-$/g, "").slice(0, 120);
   if (s.length < 3 || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s)) return null;
   return s;
 }
@@ -246,6 +242,8 @@ export function AdminBlogControlPanelClient({
   const [includeImage, setIncludeImage] = useState(true);
   const [includeAiImage, setIncludeAiImage] = useState(false);
   const [fixedSlug, setFixedSlug] = useState("");
+  const fixedGenSlugInputRef = useRef<HTMLInputElement | null>(null);
+  const slugDraftInputRef = useRef<HTMLInputElement | null>(null);
   const [sourceRecordsJsonText, setSourceRecordsJsonText] = useState("[]\n");
   const [allowInsufficientCitations, setAllowInsufficientCitations] = useState(false);
   const [citationRecoveryMode, setCitationRecoveryMode] = useState(false);
@@ -1379,13 +1377,20 @@ export function AdminBlogControlPanelClient({
             </select>
           </label>
           <label className="block space-y-1 sm:col-span-2">
-            <span className="text-xs font-medium text-muted-foreground">Optional fixed slug (kebab-case)</span>
+            <span className="text-xs font-medium text-muted-foreground">
+              Optional fixed slug (leave blank to auto-generate). Use lowercase letters and hyphens only.
+            </span>
             <input
+              ref={fixedGenSlugInputRef}
               className="w-full rounded-lg border border-border px-3 py-2 font-mono text-sm"
               value={fixedSlug}
-              onChange={(e) => setFixedSlug(e.target.value)}
+              onChange={(e) => {
+                const normalized = liveNormalizeBlogSlugInputValue(e.target.value);
+                setFixedSlug(normalized);
+                fixedGenSlugInputRef.current?.setCustomValidity(blogSlugCustomValidityMessage(normalized));
+              }}
               disabled={formDisabled}
-              placeholder="auto from AI + uniqueness if empty"
+              placeholder="leave blank to auto-generate"
             />
           </label>
           <label className="flex items-center gap-2 text-sm sm:col-span-2">
@@ -1647,9 +1652,14 @@ export function AdminBlogControlPanelClient({
                     <label className="block space-y-1">
                       <span className="text-xs text-muted-foreground">URL slug</span>
                       <input
+                        ref={slugDraftInputRef}
                         className="w-full rounded-md border border-border px-3 py-2 font-mono text-sm"
                         value={slugDraft}
-                        onChange={(e) => setSlugDraft(e.target.value)}
+                        onChange={(e) => {
+                          const normalized = liveNormalizeBlogSlugInputValue(e.target.value);
+                          setSlugDraft(normalized);
+                          slugDraftInputRef.current?.setCustomValidity(blogSlugCustomValidityMessage(normalized));
+                        }}
                         spellCheck={false}
                       />
                     </label>

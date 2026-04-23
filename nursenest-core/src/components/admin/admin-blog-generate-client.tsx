@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
 import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN } from "@/lib/admin/blog-generate-ai-constants";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
 import type { BlogAutomationSeoReadiness } from "@/lib/blog/blog-automation-engine";
+import { blogSlugCustomValidityMessage, liveNormalizeBlogSlugInputValue } from "@/lib/blog/blog-optional-slug";
 
 type GenerateAiJsonBody = {
   ok?: boolean;
@@ -150,12 +151,11 @@ export function AdminBlogGenerateClient() {
   const [includeAiImage, setIncludeAiImage] = useState(false);
   const [sourceRecordsJson, setSourceRecordsJson] = useState("");
   const [slug, setSlug] = useState("");
+  const slugInputRef = useRef<HTMLInputElement | null>(null);
   const [busy, setBusy] = useState(false);
   const [batchStatus, setBatchStatus] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
-
-  const SLUG_CASE_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -173,12 +173,13 @@ export function AdminBlogGenerateClient() {
       setErr("Topic must be at least 3 characters (after trimming spaces).");
       return;
     }
-    const slugNorm = slug.trim().toLowerCase();
-    if (!enableBatch && slugNorm.length > 0 && !SLUG_CASE_PATTERN.test(slugNorm)) {
-      setErr(
-        "Optional slug must be slug-case: lowercase letters and numbers, separated by single hyphens (e.g. fluid-balance-nclex). Remove spaces and underscores.",
-      );
-      return;
+    const slugNorm = slug.trim();
+    if (!enableBatch && slugNorm.length > 0) {
+      const cv = blogSlugCustomValidityMessage(slugNorm);
+      if (cv) {
+        setErr(cv);
+        return;
+      }
     }
     let parsedSourceRecords: unknown = undefined;
     if (sourceRecordsJson.trim()) {
@@ -220,7 +221,7 @@ export function AdminBlogGenerateClient() {
           includeImage,
           includeAiImage,
           sourceRecords: parsedSourceRecords,
-          slug: slugNorm || undefined,
+          slug: slugNorm.length > 0 ? slugNorm : undefined,
           publishNow,
         }),
       });
@@ -274,11 +275,7 @@ export function AdminBlogGenerateClient() {
       }
     } catch (e) {
       const raw = e instanceof Error ? e.message : String(e);
-      setErr(
-        raw.includes("did not match the expected pattern")
-          ? "Request blocked by browser validation. If you set an optional slug, use slug-case (lowercase-kebab). Otherwise clear the slug field and try again."
-          : raw,
-      );
+      setErr(raw);
     } finally {
       setBusy(false);
       setBatchStatus(null);
@@ -409,13 +406,21 @@ export function AdminBlogGenerateClient() {
           </select>
         </label>
         <label className="block space-y-1 sm:col-span-2">
-          <span className="text-xs font-medium text-muted-foreground">Optional slug (slug-case)</span>
+          <span className="text-xs font-medium text-muted-foreground">
+            Optional slug (leave blank to auto-generate). Use lowercase letters and hyphens only.
+          </span>
           <input
+            ref={slugInputRef}
             className="w-full rounded-md border border-border px-3 py-2 font-mono text-sm"
+            name="blog_optional_slug"
             value={slug}
-            onChange={(e) => setSlug(e.target.value)}
+            onChange={(e) => {
+              const normalized = liveNormalizeBlogSlugInputValue(e.target.value);
+              setSlug(normalized);
+              slugInputRef.current?.setCustomValidity(blogSlugCustomValidityMessage(normalized));
+            }}
             disabled={enableBatch}
-            placeholder="auto if empty"
+            placeholder="leave blank to auto-generate"
           />
         </label>
         <label className="flex items-center gap-2 text-sm sm:col-span-2">

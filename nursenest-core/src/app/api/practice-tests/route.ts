@@ -1,3 +1,4 @@
+import { randomBytes } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { ExamFamily, PracticeTestStatus, Prisma } from "@prisma/client";
@@ -493,22 +494,26 @@ export async function POST(req: Request) {
     d.linearRationaleVisibility ??
     (linearMode === "exam" ? "end_of_exam" : "after_each");
   const resolvedLinearMode = linearRationaleVisibility === "after_each" ? "practice" : "exam";
-  const config = configFromInput(
-    {
-      questionCount: d.questionCount,
-      topicNames,
-      difficultyMin,
-      difficultyMax,
-      selectionMode: d.selectionMode,
-      pathwayId: d.pathwayId?.trim() || null,
-    },
-    d.timedMode,
-    timeLimitSec,
-    {
-      linearDeliveryMode: linearMode ?? resolvedLinearMode,
-      linearRationaleVisibility,
-    },
-  );
+  const sessionPickSalt = randomBytes(18).toString("hex");
+  const config: PracticeTestConfigJson = {
+    ...configFromInput(
+      {
+        questionCount: d.questionCount,
+        topicNames,
+        difficultyMin,
+        difficultyMax,
+        selectionMode: d.selectionMode,
+        pathwayId: d.pathwayId?.trim() || null,
+      },
+      d.timedMode,
+      timeLimitSec,
+      {
+        linearDeliveryMode: linearMode ?? resolvedLinearMode,
+        linearRationaleVisibility,
+      },
+    ),
+    sessionPickSalt,
+  };
 
   const requestedLinearFingerprint = linearConfigFingerprint(config);
   const existingLinearInProgress = await prisma.practiceTest.findMany({
@@ -539,10 +544,24 @@ export async function POST(req: Request) {
     difficultyMax,
     selectionMode: d.selectionMode,
     pathwayId: d.pathwayId?.trim() || null,
+    sessionPickSalt,
   });
 
   if (!picked.ok) {
     return NextResponse.json({ error: picked.message, code: "pool_too_small" }, { status: 400 });
+  }
+
+  if (isDev) {
+    safeServerLog("practice_tests", "linear_session_create_debug", {
+      event: "linear_session_create_debug",
+      userIdPrefix: gate.userId.slice(0, 8),
+      pathwayId: d.pathwayId?.trim() || undefined,
+      selectionMode: d.selectionMode,
+      questionCount: d.questionCount,
+      sessionPickSaltPrefix: sessionPickSalt.slice(0, 12),
+      ...picked.linearSessionCreateDebug,
+      selectedQuestionIdsCount: picked.ids.length,
+    });
   }
 
   const row = await prisma.practiceTest.create({

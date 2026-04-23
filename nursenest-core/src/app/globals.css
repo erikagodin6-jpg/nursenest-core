@@ -5917,6 +5917,14 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   overscroll-behavior-y: contain;
   /* Vertical pan only: avoids accidental horizontal gesture capture on narrow exam layouts */
   touch-action: pan-y;
+  /* Reserve space for the anchored footer until JS measures its box (then inline px overrides). */
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+
+@media (max-height: 900px) {
+  .nn-cat-question-card--exam-stack .nn-cat-question-card__exam-scroll {
+    padding-bottom: calc(3.35rem + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -6109,6 +6117,109 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 .nn-cat-question-card--exam-stack .nn-btn-primary {
   min-height: 2.75rem;
   min-width: min(100%, 9.5rem);
+}
+
+/* CAT / practice exam chrome — tighter vertical rhythm on laptop-height viewports only */
+@media (max-height: 900px) {
+  .nn-cat-exam-chrome .nn-cat-exam-col {
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .nn-cat-exam-topbar {
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .nn-cat-exam-chrome .nn-exam-progress--cat-exam-adaptive {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+  }
+
+  .nn-cat-exam-chrome .nn-exam-progress--cat-exam-adaptive > div:first-child {
+    margin-bottom: 0.22rem;
+  }
+
+  .nn-cat-question-card.nn-cat-question-card--exam-stack {
+    padding: 0.75rem 0.7rem 0;
+  }
+
+  @media (min-width: 640px) {
+    .nn-cat-question-card.nn-cat-question-card--exam-stack {
+      padding: 0.875rem 0.95rem 0;
+    }
+  }
+
+  .nn-cat-question-card--exam-stack .nn-cat-question-stem,
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-question-stem {
+    margin-bottom: 0.55rem;
+    line-height: 1.52;
+  }
+
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt-list,
+  .nn-cat-question-card--exam-stack .nn-cat-opt-list {
+    gap: 0.45rem;
+  }
+
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt,
+  .nn-cat-question-card--exam-stack .nn-cat-opt {
+    min-height: 2.75rem;
+    padding: 0.65rem 0.75rem;
+  }
+
+  .nn-cat-question-card--exam-stack .nn-cat-question-card__exam-footer--anchored {
+    padding-top: 0.55rem;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .nn-cat-question-card--exam-stack .nn-cat-options-label {
+    margin-bottom: 0.35rem;
+  }
+}
+
+/* Extra-compact exam stack only on very short viewports (still readable; fonts unchanged) */
+@media (max-height: 768px) {
+  .nn-cat-exam-chrome .nn-cat-exam-col {
+    padding-top: 0.15rem;
+    padding-bottom: 0.2rem;
+  }
+
+  .nn-cat-exam-chrome .nn-exam-progress--cat-exam-adaptive {
+    padding-top: 0.22rem;
+    padding-bottom: 0.22rem;
+  }
+
+  .nn-cat-question-card.nn-cat-question-card--exam-stack {
+    padding: 0.65rem 0.65rem 0;
+  }
+
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt-list,
+  .nn-cat-question-card--exam-stack .nn-cat-opt-list {
+    gap: 0.38rem;
+  }
+
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt,
+  .nn-cat-question-card--exam-stack .nn-cat-opt {
+    min-height: 2.65rem;
+    padding: 0.55rem 0.65rem;
+  }
+
+  .nn-cat-question-card--exam-stack .nn-cat-question-card__exam-scroll {
+    padding-bottom: calc(3.1rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (min-width: 1100px) and (max-height: 900px) {
+  .nn-practice-session {
+    height: calc(100dvh - 88px);
+  }
+
+  /* Exam chrome: reclaim vertical space for stem + four options on laptop-height viewports */
+  .nn-practice-session:has(.nn-cat-exam-chrome) {
+    height: calc(100dvh - 62px);
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }
 
 .nn-cat-question-card {

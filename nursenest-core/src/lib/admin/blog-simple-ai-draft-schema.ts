@@ -41,12 +41,13 @@ export const blogSimpleAiDraftBodySchema = z.object({
         .optional(),
     }),
   ).optional(),
+  /** Raw optional slug; server normalizes / validates via `parseOptionalBlogSlug`. */
   slug: z.preprocess((v) => {
     if (v === undefined || v === null) return undefined;
     if (typeof v !== "string") return v;
-    const t = v.trim().toLowerCase();
+    const t = v.trim();
     return t === "" ? undefined : t;
-  }, z.string().min(3).max(180).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).optional()),
+  }, z.string().max(500).optional()),
   allowDuplicateCanonicalTopic: z.boolean().optional(),
   /** Admin trigger default: publish immediately (PUBLISHED). */
   publishNow: z.boolean().optional(),

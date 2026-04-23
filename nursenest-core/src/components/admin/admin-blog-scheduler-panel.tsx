@@ -2,8 +2,9 @@
 
 import { BlogPostStatus } from "@prisma/client";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { blogSlugCustomValidityMessage, liveNormalizeBlogSlugInputValue } from "@/lib/blog/blog-optional-slug";
 
 type BlogRow = {
   id: string;
@@ -101,6 +102,7 @@ export function AdminBlogSchedulerPanel({
     category: "",
     publishAt: "",
   });
+  const schedulerSlugInputRef = useRef<HTMLInputElement | null>(null);
 
   const posts = useMemo(
     () => initialPosts.filter((p) => (statusFilter === "ALL" ? true : p.postStatus === statusFilter)),
@@ -142,8 +144,9 @@ export function AdminBlogSchedulerPanel({
     setCreateError(null);
     try {
       const excerptTrim = newPost.excerpt.trim();
+      const slugTrim = newPost.slug.trim();
       const payload = {
-        slug: newPost.slug.trim(),
+        ...(slugTrim.length > 0 ? { slug: slugTrim } : {}),
         title: newPost.title.trim(),
         excerpt: excerptTrim || BLOG_SCHEDULER_PLACEHOLDER_EXCERPT,
         body: newPost.body.trim() || BLOG_SCHEDULER_PLACEHOLDER_BODY,
@@ -213,10 +216,15 @@ export function AdminBlogSchedulerPanel({
 
       <div className="mt-4 grid gap-2 md:grid-cols-6">
         <input
+          ref={schedulerSlugInputRef}
           className="rounded-md border border-border px-2 py-1 text-sm"
-          placeholder="slug"
+          placeholder="slug (optional)"
           value={newPost.slug}
-          onChange={(e) => setNewPost((s) => ({ ...s, slug: e.target.value }))}
+          onChange={(e) => {
+            const normalized = liveNormalizeBlogSlugInputValue(e.target.value);
+            setNewPost((s) => ({ ...s, slug: normalized }));
+            schedulerSlugInputRef.current?.setCustomValidity(blogSlugCustomValidityMessage(normalized));
+          }}
         />
         <input
           className="rounded-md border border-border px-2 py-1 text-sm md:col-span-2"

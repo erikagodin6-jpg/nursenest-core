@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import Link from "next/link";
 import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
@@ -8,6 +8,7 @@ import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema"
 import { parseBlogSeoBundle } from "@/lib/blog/blog-seo-automation";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
 import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
+import { blogSlugCustomValidityMessage, liveNormalizeBlogSlugInputValue } from "@/lib/blog/blog-optional-slug";
 
 const templates = Object.values(BlogPostTemplate);
 
@@ -72,6 +73,7 @@ export function AdminBlogStudioClient() {
   const [includeImage, setIncludeImage] = useState(true);
   const [includeAiImage, setIncludeAiImage] = useState(false);
   const [fixedSlug, setFixedSlug] = useState("");
+  const fixedSlugInputRef = useRef<HTMLInputElement | null>(null);
   const [sourceRecordsJson, setSourceRecordsJson] = useState("[]");
   const [allowInsufficientCitations, setAllowInsufficientCitations] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -342,12 +344,19 @@ export function AdminBlogStudioClient() {
           <input className="w-full rounded-lg border border-border px-3 py-2 text-sm" value={keywordCluster} onChange={(e) => setKeywordCluster(e.target.value)} />
         </label>
         <label className="block space-y-1 lg:col-span-2">
-          <span className="text-xs font-medium text-muted-foreground">Optional slug (kebab-case)</span>
+          <span className="text-xs font-medium text-muted-foreground">
+            Optional slug (leave blank to auto-generate). Use lowercase letters and hyphens only.
+          </span>
           <input
+            ref={fixedSlugInputRef}
             className="w-full rounded-lg border border-border px-3 py-2 text-sm font-mono text-xs"
             value={fixedSlug}
-            onChange={(e) => setFixedSlug(e.target.value)}
-            placeholder="auto if empty"
+            onChange={(e) => {
+              const normalized = liveNormalizeBlogSlugInputValue(e.target.value);
+              setFixedSlug(normalized);
+              fixedSlugInputRef.current?.setCustomValidity(blogSlugCustomValidityMessage(normalized));
+            }}
+            placeholder="leave blank to auto-generate"
           />
         </label>
         <label className="flex items-center gap-2 text-sm lg:col-span-2">
