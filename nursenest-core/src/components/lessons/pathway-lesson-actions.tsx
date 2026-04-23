@@ -10,10 +10,9 @@ import {
 } from "@/lib/lessons/pathway-lesson-progress-events";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { SuccessLeaf } from "@/components/ui/success-leaf";
-import {
-  buildAppPracticeTestsHubHref,
-  practiceTestsWeakFocusHref,
-} from "@/lib/learner/study-loop-recommendations";
+import { practiceTestsWeakFocusHref } from "@/lib/learner/study-loop-recommendations";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import type { MarketingPathwayLessonActionsClientProps } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
 
 /** Ids + flags only — no lesson bodies (contract: `marketing-pathway-lesson-client-contract.ts`). */
@@ -26,6 +25,7 @@ export function PathwayLessonActions({
   canMarkComplete,
   initialProgress = "not_started",
   catAdaptiveAvailable,
+  allLessonsHrefOverride,
 }: MarketingPathwayLessonActionsClientProps) {
   const { t } = useMarketingI18n();
   const [progress, setProgress] = useState<PathwayLessonProgressStatus>(initialProgress);
@@ -95,8 +95,11 @@ export function PathwayLessonActions({
   const topicLabelParam = topicLabel?.trim() ? `&topic=${encodeURIComponent(topicLabel.trim())}` : "";
   const qbHref = `/app/questions?pathwayId=${encodeURIComponent(pathwayId)}${topicCodeParam}${topicLabelParam}&preset=topic_drill`;
   const catWeakHref = practiceTestsWeakFocusHref(pathwayId);
-  const practiceTestsHubHref = buildAppPracticeTestsHubHref(pathwayId);
   const showCatCta = catAdaptiveAvailable;
+  const pathwayDef = getExamPathwayById(pathwayId);
+  const allLessonsHref =
+    allLessonsHrefOverride?.trim() ||
+    (pathwayDef ? marketingPathwayLessonsIndexPath(pathwayDef) : "/lessons");
   const flashcardsHref = topicCode?.trim()
     ? `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}&topicCode=${encodeURIComponent(topicCode.trim())}`
     : `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}`;
@@ -108,12 +111,9 @@ export function PathwayLessonActions({
       className="mt-8 border-t border-[var(--semantic-border-soft)] pt-6"
       aria-label="Continue studying"
     >
-      <p className="nn-lesson-module-eyebrow">After this lesson</p>
-      <p className="mt-1 max-w-prose text-sm text-[var(--theme-muted-text)]">
-        Strongest moves first: drill this topic, then branch into cards or adaptive sets.
-      </p>
+      <p className="nn-lesson-module-eyebrow">{t("learner.lessons.detail.studyActionsEyebrow")}</p>
 
-      <div className="mt-4 flex flex-col gap-3">
+      <div className="mt-3 flex flex-col gap-3">
         <Link
           href={qbHref}
           data-testid="pathway-lesson-cta-practice-topic"
@@ -143,11 +143,11 @@ export function PathwayLessonActions({
             </Link>
           ) : null}
           <Link
-            href={practiceTestsHubHref}
-            data-testid="pathway-lesson-cta-practice-tests-hub"
-            className="inline-flex min-h-10 flex-1 items-center justify-center rounded-md px-3 py-2 text-sm font-medium text-[var(--semantic-brand)] underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:flex-none"
+            href={allLessonsHref}
+            data-testid="pathway-lesson-cta-all-lessons"
+            className="inline-flex min-h-10 flex-1 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--theme-page-bg)_94%,var(--semantic-surface)_6%)] px-3 py-2 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:min-w-[10rem] sm:flex-none"
           >
-            {t("learner.studyLoop.practiceTestsHubPathway")}
+            {t("learner.lessons.detail.allLessons")}
           </Link>
         </div>
 

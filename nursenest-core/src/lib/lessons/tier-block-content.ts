@@ -77,11 +77,44 @@ export function tierBlockVisibleToViewer(block: TierBlockDepth, viewer: TierCode
   return viewerContentDepth(viewer) >= depthRank(block);
 }
 
+/** Primary TierBlock lane for a learner — used for strict single-tier unwrap (no cross-lane leakage). */
+export function viewerPrimaryTierBlockDepth(viewer: TierCode): TierBlockDepth {
+  switch (viewer) {
+    case "NP":
+      return "NP";
+    case "RN":
+      return "RN";
+    case "RPN":
+    case "LVN_LPN":
+    case "ALLIED":
+    default:
+      return "PN";
+  }
+}
+
+/** PN/RN/NP blocks only when they match the viewer lane; `ALL` always passes. */
+export function tierBlockVisibleToViewerStrict(block: TierBlockDepth, viewer: TierCode): boolean {
+  if (block === "ALL") return true;
+  return block === viewerPrimaryTierBlockDepth(viewer);
+}
+
+export type TierBlockResolveMode = "ladder" | "strict_single";
+
+function tierBlockVisibleForMode(block: TierBlockDepth, viewer: TierCode, mode: TierBlockResolveMode): boolean {
+  return mode === "strict_single" ? tierBlockVisibleToViewerStrict(block, viewer) : tierBlockVisibleToViewer(block, viewer);
+}
+
 /**
  * Remove `<TierBlock>` wrappers and drop blocks the viewer should not see.
  * When `viewerTier` is null/undefined, unwraps all blocks (everyone sees all inner content — legacy-safe).
+ *
+ * `strict_single` keeps only `ALL` + the viewer's primary PN/RN/NP lane (for tier relevance sections).
  */
-export function resolveTierBlocksForViewer(text: string, viewerTier: TierCode | null | undefined): string {
+export function resolveTierBlocksForViewer(
+  text: string,
+  viewerTier: TierCode | null | undefined,
+  mode: TierBlockResolveMode = "ladder",
+): string {
   const src = typeof text === "string" ? text : "";
   const lower = src.toLowerCase();
   if (!lower.includes("<tierblock")) return src;
@@ -111,7 +144,7 @@ export function resolveTierBlocksForViewer(text: string, viewerTier: TierCode | 
     }
     const inner = src.slice(openEnd + 1, closeIdx);
     const blockTier = tierAttrFromOpen(attrs);
-    if (viewerTier == null || tierBlockVisibleToViewer(blockTier, viewerTier)) {
+    if (viewerTier == null || tierBlockVisibleForMode(blockTier, viewerTier, mode)) {
       out += inner;
     }
     i = closeIdx + closeLower.length;

@@ -79,10 +79,13 @@ export function pathwayLessonResolvedParagraphs(
     viewerTier?: TierCode | null;
     measurementSystem?: MeasurementSystem | null;
     measurementDual?: boolean;
+    /** When `tier_specific_relevance`, TierBlocks unwrap in strict single-lane mode (no PN/RN/NP cross-leak). */
+    sectionKind?: PathwayLessonSectionKind | null;
   },
 ): string[] {
   const raw = typeof text === "string" ? text : "";
-  let safe = resolveTierBlocksForViewer(raw, opts?.viewerTier);
+  const tierMode = opts?.sectionKind === "tier_specific_relevance" ? "strict_single" : "ladder";
+  let safe = resolveTierBlocksForViewer(raw, opts?.viewerTier, tierMode);
   if (opts?.measurementSystem != null) {
     safe = resolveMeasurementTokens(safe, opts.measurementSystem, { dual: opts.measurementDual === true });
   }
@@ -264,6 +267,7 @@ export function PathwayLessonBody({
     viewerTier,
     measurementSystem,
     measurementDual,
+    sectionKind,
   });
   if (paragraphs.length === 0) {
     return null;
@@ -363,6 +367,7 @@ export function PathwayLessonSectionContent({
     viewerTier,
     measurementSystem,
     measurementDual,
+    sectionKind,
   });
   const hasFigures = Boolean(figures && figures.length > 0);
   const hasExamBlocks = pathwayLessonExamFocusHasStructured(examFocus);

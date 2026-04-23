@@ -29,8 +29,10 @@ import { PracticeTestStudyLoopNext } from "@/components/student/practice-test-st
 import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teaching-review";
 import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
 import {
+  catExamAdvancePrimaryIntentFromSessionShape,
   catExamCanLockAnswer,
   catExamCanRequestCatAdvance,
+  catExamCatAdvanceResponseIsStale,
   catExamFooterPrimaryBusy,
   catExamOptionsInteractionLocked,
   type CatExamUiPhase,
@@ -125,6 +127,7 @@ export function PracticeTestRunnerClient({
   );
   const [error, setError] = useState<string | null>(null);
   const [questionIds, setQuestionIds] = useState<string[]>([]);
+  const questionIdsRef = useRef<string[]>([]);
   const [questionCache, setQuestionCache] = useState<Record<string, QRow>>({});
   const [qLoading, setQLoading] = useState(false);
   const cacheRef = useRef<Record<string, QRow>>({});
@@ -187,6 +190,7 @@ export function PracticeTestRunnerClient({
   const submitInFlightRef = useRef(false);
   const catAdvanceInFlightRef = useRef(false);
   const catAdvanceLatestRef = useRef<() => Promise<void>>(async () => {});
+  const setAnswerForCurrentRef = useRef<(next: unknown) => void>(() => {});
   const linearCommitInFlightRef = useRef(false);
   const abandonInFlightRef = useRef(false);
   const navInFlightRef = useRef(false);
@@ -203,6 +207,18 @@ export function PracticeTestRunnerClient({
   useEffect(() => {
     idxRef.current = idx;
   }, [idx]);
+
+  useEffect(() => {
+    questionIdsRef.current = questionIds;
+  }, [questionIds]);
+
+  const runnerMountedRef = useRef(true);
+  useEffect(() => {
+    runnerMountedRef.current = true;
+    return () => {
+      runnerMountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     catExamUiPhaseRef.current = catExamUiPhase;
@@ -642,6 +658,8 @@ export function PracticeTestRunnerClient({
     void persistSave(nextAnswers, idx);
   }
 
+  setAnswerForCurrentRef.current = setAnswerForCurrent;
+
   async function submitLinearCommit() {
     if (linearCommitInFlightRef.current || submitInFlightRef.current) return;
     if (!current || !isLinearEngine || currentCommitted) return;
@@ -756,7 +774,14 @@ export function PracticeTestRunnerClient({
         throw new Error("Could not read the server response for this step.");
       }
       if (!res.ok) throw new Error(data.error ?? "Could not advance.");
-      if (idxRef.current !== advanceIdx) {
+      if (
+        catExamCatAdvanceResponseIsStale({
+          advanceIdx,
+          advanceQuestionId,
+          currentIdx: idxRef.current,
+          currentQuestionId: questionIdsRef.current[idxRef.current],
+        })
+      ) {
         logSessionEvent("submit_cat_advance_stale_ignored", { advanceIdx, advanceQuestionId });
         if (examStyle) {
           catExamUiPhaseRef.current = "submitted_locked";
@@ -764,12 +789,19 @@ export function PracticeTestRunnerClient({
         }
         return;
       }
+      if (!runnerMountedRef.current) return;
       if (data.catStudyReveal) {
         await load();
+        if (!runnerMountedRef.current) return;
         logSessionEvent("submit_cat_advance_reveal", { idx: advanceIdx, questionId: advanceQuestionId });
         return;
       }
       if (data.catCompleted && data.results) {
+        if (!runnerMountedRef.current) return;
+        if (examStyle) {
+          catExamUiPhaseRef.current = "completed";
+          setCatExamUiPhase("completed");
+        }
         setSavedElapsedMs(elapsedMs ?? null);
         setResults(data.results);
         if (data.studyFeedback && catFeedbackStudy) {
@@ -782,6 +814,7 @@ export function PracticeTestRunnerClient({
       if (data.catAdvanced) {
         setCatStudyFeedback(null);
         await load();
+        if (!runnerMountedRef.current) return;
         logSessionEvent("submit_cat_advance_next", { idx: advanceIdx, questionId: advanceQuestionId });
         return;
       }
@@ -864,6 +897,7 @@ export function PracticeTestRunnerClient({
         if (!interactive) e.preventDefault();
       }
       const gate = () => {
+        if (e.repeat) return false;
         const now = Date.now();
         if (now - catExamPrimaryActionGateMsRef.current < 420) return false;
         catExamPrimaryActionGateMsRef.current = now;
@@ -893,14 +927,18 @@ export function PracticeTestRunnerClient({
           const prior = answersRef.current[current.id];
           const prev = Array.isArray(prior) ? [...prior] : [];
           const has = prev.includes(canonical);
-          setAnswerForCurrent(has ? prev.filter((x) => x !== canonical) : [...prev, canonical]);
+          setAnswerForCurrentRef.current(has ? prev.filter((x) => x !== canonical) : [...prev, canonical]);
         } else {
-          setAnswerForCurrent(canonical);
+          setAnswerForCurrentRef.current(canonical);
         }
         e.preventDefault();
         return;
       }
       if (e.key !== "Enter") return;
+      if (e.repeat) {
+        e.preventDefault();
+        return;
+      }
       if (!gate()) {
         e.preventDefault();
         return;
@@ -1566,6 +1604,16 @@ export function PracticeTestRunnerClient({
     const catMaxQ = testConfig?.catMaxQuestions ?? null;
     const catMinQ = testConfig?.catMinQuestions ?? null;
     const examPrimaryBusy = catExamFooterPrimaryBusy(catExamUiPhase, controlsBusy);
+    const catExamAdvanceIntent = catExamAdvancePrimaryIntentFromSessionShape({
+      deliveredQuestionCount: total,
+      catMaxQuestions: catMaxQ,
+    });
+    const catExamAdvancePrimaryLabel =
+      catExamUiPhase === "advancing" || saving
+        ? tx("learner.practiceTests.run.working", "Working...")
+        : catExamAdvanceIntent === "finish_session"
+          ? tx("learner.practiceTests.run.submitAndFinish", "Submit & finish")
+          : tx("learner.practiceTests.run.nextQuestion", "Next question");
 
     const catExamNavFooter = (
       <div className="nn-cat-question-nav nn-question-nav-actions">
@@ -1604,33 +1652,12 @@ export function PracticeTestRunnerClient({
             >
               {tx("learner.practiceTests.run.submitAnswer", "Submit answer")}
             </button>
-          ) : idx < total - 1 ? (
-            <button
-              type="button"
-              ref={catExamAdvanceButtonRef}
-              data-nn-qa-cat-exam-next
-              aria-busy={catExamUiPhase === "advancing"}
-              disabled={
-                examPrimaryBusy ||
-                catExamUiPhase !== "submitted_locked" ||
-                !hasMeaningfulAnswer(current.id)
-              }
-              className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
-              onClick={() => {
-                if (!catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) return;
-                if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
-                void catAdvance();
-              }}
-            >
-              {catExamUiPhase === "advancing" || saving
-                ? tx("learner.practiceTests.run.working", "Working...")
-                : tx("learner.practiceTests.run.nextQuestion", "Next question")}
-            </button>
           ) : (
             <button
               type="button"
               ref={catExamAdvanceButtonRef}
-              data-nn-qa-cat-exam-submit-finish
+              data-nn-qa-cat-exam-advance
+              data-nn-qa-cat-exam-advance-intent={catExamAdvanceIntent}
               aria-busy={catExamUiPhase === "advancing"}
               disabled={
                 examPrimaryBusy ||
@@ -1644,9 +1671,7 @@ export function PracticeTestRunnerClient({
                 void catAdvance();
               }}
             >
-              {catExamUiPhase === "advancing" || saving
-                ? tx("learner.practiceTests.run.working", "Working...")
-                : tx("learner.practiceTests.run.submitAndFinish", "Submit & finish")}
+              {catExamAdvancePrimaryLabel}
             </button>
           )
         ) : rationalePanelMode === "feedback" ? null : (
@@ -1671,8 +1696,13 @@ export function PracticeTestRunnerClient({
         telemetrySurface="practice_test"
       >
         <PracticeSessionLayout className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}>
-          <ExamSessionShell neutralPalette immersive className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none">
+          <ExamSessionShell
+            neutralPalette
+            immersive
+            className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none${isExamStyle ? " nn-cat-exam-chrome" : ""}`}
+          >
             <ExamSessionTopBar
+              className={isExamStyle ? "nn-cat-exam-topbar" : ""}
               left={
                 <div className="space-y-1">
                   <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
@@ -1680,16 +1710,6 @@ export function PracticeTestRunnerClient({
                       <>
                         {tx("learner.practiceTests.run.item", "Item")}{" "}
                         <span className="tabular-nums">{idx + 1}</span>
-                        {catMaxQ != null && catMaxQ > 0 ? (
-                          <span className="font-normal normal-case text-[var(--semantic-text-muted)]">
-                            {" "}
-                            (
-                            {tx("learner.practiceTests.run.adaptiveUpToHint", "up to {max} items", {
-                              max: String(catMaxQ),
-                            })}
-                            )
-                          </span>
-                        ) : null}
                       </>
                     ) : (
                       <>
@@ -1707,13 +1727,13 @@ export function PracticeTestRunnerClient({
               }
               center={
                 isExamStyle ? (
-                  <span className="nn-marketing-caption max-w-[20rem] text-center font-semibold leading-snug text-[var(--semantic-text-muted)]">
+                  <span className="nn-marketing-caption max-w-[min(100%,22rem)] text-center font-semibold leading-snug text-[var(--semantic-text-muted)]">
                     {catMinQ != null && catMaxQ != null && catMinQ > 0 && catMaxQ > 0
                       ? tx("learner.practiceTests.run.catLengthBoundsExam", "Minimum {min} · Maximum {max}", {
                           min: String(catMinQ),
                           max: String(catMaxQ),
                         })
-                      : tx("learner.practiceTests.run.catAdaptiveSession", "Adaptive session")}
+                      : tx("learner.practiceTests.run.adaptiveExamShort", "Adaptive exam")}
                   </span>
                 ) : (
                   <span className="nn-marketing-caption font-semibold tabular-nums text-[var(--semantic-text-muted)]">
@@ -1730,6 +1750,7 @@ export function PracticeTestRunnerClient({
             />
             {isExamStyle ? (
               <ExamProgressBar
+                className="nn-exam-progress--cat-exam-adaptive"
                 current={idx + 1}
                 total={Math.max(total, 1)}
                 variant="adaptive_item"
@@ -1761,10 +1782,14 @@ export function PracticeTestRunnerClient({
                   >
                     <QuestionCard
                       stem={current.stem ?? ""}
-                      topic={current.topic}
-                      subtopic={current.subtopic}
+                      topic={isExamStyle ? null : current.topic}
+                      subtopic={isExamStyle ? null : current.subtopic}
                       difficultyLabel={
-                        current.difficulty != null ? difficultyBandLabel(current.difficulty) : null
+                        isExamStyle
+                          ? null
+                          : current.difficulty != null
+                            ? difficultyBandLabel(current.difficulty)
+                            : null
                       }
                       examStackedLayout={isExamStyle}
                       footerSlot={isExamStyle ? catExamNavFooter : undefined}
@@ -1778,7 +1803,12 @@ export function PracticeTestRunnerClient({
                               )
                             : catExamUiPhase === "advancing"
                               ? tx("learner.practiceTests.run.catExamAdvancingLive", "Saving your response…")
-                              : "\u00a0"}
+                              : catExamUiPhase === "completed"
+                                ? tx(
+                                    "learner.practiceTests.run.catExamCompletedLive",
+                                    "Exam complete. Preparing your results.",
+                                  )
+                                : "\u00a0"}
                         </p>
                       ) : null}
                       {timedMode && timeLimitSec != null ? (

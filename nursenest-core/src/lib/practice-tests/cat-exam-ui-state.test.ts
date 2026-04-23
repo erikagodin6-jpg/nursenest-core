@@ -1,16 +1,18 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  catExamAdvancePrimaryIntentFromSessionShape,
   catExamCanChangeAnswer,
   catExamCanLockAnswer,
   catExamCanRequestCatAdvance,
+  catExamCatAdvanceResponseIsStale,
   catExamFooterPrimaryBusy,
   catExamOptionsInteractionLocked,
   type CatExamUiPhase,
 } from "./cat-exam-ui-state";
 
 function phases(): CatExamUiPhase[] {
-  return ["answering", "submitted_locked", "advancing"];
+  return ["answering", "submitted_locked", "advancing", "completed"];
 }
 
 describe("cat-exam-ui-state", () => {
@@ -24,6 +26,7 @@ describe("cat-exam-ui-state", () => {
     assert.equal(catExamCanChangeAnswer("answering"), true);
     assert.equal(catExamCanChangeAnswer("submitted_locked"), false);
     assert.equal(catExamCanChangeAnswer("advancing"), false);
+    assert.equal(catExamCanChangeAnswer("completed"), false);
   });
 
   it("allows lock only from answering with an answer", () => {
@@ -37,6 +40,7 @@ describe("cat-exam-ui-state", () => {
     assert.equal(catExamCanRequestCatAdvance("answering"), false);
     assert.equal(catExamCanRequestCatAdvance("submitted_locked"), true);
     assert.equal(catExamCanRequestCatAdvance("advancing"), false);
+    assert.equal(catExamCanRequestCatAdvance("completed"), false);
   });
 
   it("marks footer primary busy when controls busy or advancing", () => {
@@ -44,5 +48,55 @@ describe("cat-exam-ui-state", () => {
     assert.equal(catExamFooterPrimaryBusy("answering", true), true);
     assert.equal(catExamFooterPrimaryBusy("submitted_locked", true), true);
     assert.equal(catExamFooterPrimaryBusy("advancing", false), true);
+    assert.equal(catExamFooterPrimaryBusy("completed", false), true);
+  });
+
+  it("advance primary intent: at or past max delivered → finish hint", () => {
+    assert.equal(
+      catExamAdvancePrimaryIntentFromSessionShape({ deliveredQuestionCount: 10, catMaxQuestions: 150 }),
+      "next_item",
+    );
+    assert.equal(
+      catExamAdvancePrimaryIntentFromSessionShape({ deliveredQuestionCount: 150, catMaxQuestions: 150 }),
+      "finish_session",
+    );
+    assert.equal(
+      catExamAdvancePrimaryIntentFromSessionShape({ deliveredQuestionCount: 151, catMaxQuestions: 150 }),
+      "finish_session",
+    );
+    assert.equal(
+      catExamAdvancePrimaryIntentFromSessionShape({ deliveredQuestionCount: 3, catMaxQuestions: null }),
+      "next_item",
+    );
+  });
+
+  it("cat advance stale guard matches idx + question id", () => {
+    assert.equal(
+      catExamCatAdvanceResponseIsStale({
+        advanceIdx: 0,
+        advanceQuestionId: "q1",
+        currentIdx: 0,
+        currentQuestionId: "q1",
+      }),
+      false,
+    );
+    assert.equal(
+      catExamCatAdvanceResponseIsStale({
+        advanceIdx: 0,
+        advanceQuestionId: "q1",
+        currentIdx: 1,
+        currentQuestionId: "q2",
+      }),
+      true,
+    );
+    assert.equal(
+      catExamCatAdvanceResponseIsStale({
+        advanceIdx: 0,
+        advanceQuestionId: "q1",
+        currentIdx: 0,
+        currentQuestionId: "q2",
+      }),
+      true,
+    );
   });
 });

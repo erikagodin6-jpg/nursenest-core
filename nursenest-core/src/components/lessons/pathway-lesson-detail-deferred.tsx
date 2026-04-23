@@ -1,5 +1,4 @@
 import { LessonTopicPracticeSection } from "@/components/lessons/lesson-topic-practice-section";
-import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
 import { PathwayLessonWayfinding } from "@/components/lessons/pathway-lesson-wayfinding";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -32,7 +31,6 @@ export async function PathwayLessonDetailDeferred({
 }) {
   const bundle = await loadPathwayLessonDeferredPracticeBundle(pathway.id, contentLocale, lesson);
   const relatedQuestionStems = bundle?.relatedQuestionStems ?? [];
-  const relatedDisplay = bundle?.relatedDisplay ?? [];
 
   return (
     <>
@@ -56,15 +54,6 @@ export async function PathwayLessonDetailDeferred({
           userId={userId}
         />
       </div>
-      <PathwayLessonStudyLoopCta
-        pathway={pathway}
-        lessonsBasePath={lessonsBasePath}
-        topicLabel={lesson.topic}
-        topicSlug={lesson.topicSlug}
-        relatedLessons={relatedDisplay}
-        currentSlug={lesson.slug}
-        catAuthState="public"
-      />
     </>
   );
 }

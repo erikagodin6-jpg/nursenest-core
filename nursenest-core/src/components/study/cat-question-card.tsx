@@ -56,7 +56,7 @@ export function QuestionCard({
           {stemBlock}
           {children}
         </div>
-        <div className="nn-cat-question-card__exam-footer shrink-0 border-t border-[var(--semantic-border-soft)] pt-3">
+        <div className="nn-cat-question-card__exam-footer nn-cat-question-card__exam-footer--anchored shrink-0 border-t border-[var(--semantic-border-soft)]">
           {footerSlot}
         </div>
       </div>

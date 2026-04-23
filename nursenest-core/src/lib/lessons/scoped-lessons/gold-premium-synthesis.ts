@@ -2,6 +2,8 @@
  * Builds 11-section premium pathway lessons from legacy five-block gold content + shared core.
  * Keeps clinical substance in one place while meeting premium structure and word-count targets.
  */
+import { canonicalTierRelevanceMarkdown } from "@/lib/lessons/canonical-pathway-lesson-sections";
+import type { PathwayLicenseBand } from "@/lib/lessons/pathway-lesson-license-band";
 import { PREMIUM_MIN_WORDS, PREMIUM_SECTION_HEADINGS } from "@/lib/lessons/pathway-lesson-premium";
 import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
 import type {
@@ -65,124 +67,56 @@ function ensureTierRelevanceWordCount(body: string): string {
   return ensureMinimumWords(body, PREMIUM_MIN_WORDS.tier_specific_relevance, TIER_RELEVANCE_PAD);
 }
 
+function tierGeoToLicenseBand(geo: GoldTierGeo): PathwayLicenseBand {
+  if (geo.endsWith("np")) return "np";
+  if (geo === "us_pn" || geo === "ca_rpn") return "pn";
+  return "rn";
+}
+
 function tierRelevanceBlock(tierGeo: GoldTierGeo): string {
-  switch (tierGeo) {
-    case "us_pn":
-      return `**RN (registered nurse) items** often give you **assignment authority**, **care plan changes**, **IV push scope where licensed**, and **leadership in rapid response**—the stem expects you to **coordinate**, **prioritize multiple patients**, and **interpret trends** that change orders.
-
-**PN/LVN (US)** items emphasize **stable execution within orders**, **timely reporting**, **reinforcement of teaching**, and **safe delegation awareness**—avoid answers that **silently expand scope** (independent titration, diagnosing beyond assessment data, or delaying escalation).
-
-**NP (US)** items add **diagnostic reasoning**, **risk stratification**, **prescribing and follow-up planning** when the vignette is ambulatory or protocol-driven—choose **site-of-care** and **cannot-miss** pathways over reassurance when red flags appear.
-
-**How to use this triad**  
-Read the stem’s **role line first**. Then eliminate options that belong to a **different license level** than the item tests, even if the clinical topic is the same.`;
-    case "ca_rpn":
-      return `**RN (Canada)** items assume **collaborative acute care**, **independent nursing judgment within standards**, and **clear documentation** when client status changes—expect **metric labs** and **interprofessional** language.
-
-**RPN (Canada)** items align with **college standards** and **employer policy**: strong **assessment and reporting**, **ordered interventions**, and **safe scope**—avoid **prescriptive authority** or **RN-only triage** unless the stem explicitly authorizes a protocol.
-
-**NP (Canada)** where tested mirrors **advanced assessment**, **diagnosis-related reasoning**, and **treatment planning** within the item’s specialty frame.
-
-**Study tip**  
-When a stem names a role, treat **scope errors** as high-probability distractors—especially around **medication changes**, **diagnostic interpretation**, and **discharge decisions**.`;
-    case "us_rn":
-      return `**RN (US)** items reward **synthesis**: linking vitals, labs, and history to **risk**, then choosing **assessment or intervention** that matches **unstable versus stable** presentations.
-
-**PN/LVN** work is often shown as **supportive**—your RN answer should still **respect** what PNs do, but the item usually tests **RN leadership**, **teaching**, **care coordination**, and **priority decisions**.
-
-**NP** items are distinct on **NP pathways**; when you are on an RN hub, do not import **prescriptive** actions unless the stem places you in that role.
-
-**Exam habit**  
-After reading the stem, say aloud: **who am I here?** Then lock scope before you eliminate options.`;
-    case "ca_rn":
-      return `**RN (Canada)** items emphasize **clinical judgment** with **Canadian context** (metric units, interprofessional roles, and college-aligned language) while testing the **same prioritization spine** as US boards.
-
-**RPN** items (on PN pathways) stress **safe scope**, **timely collaboration**, and **objective reporting**—choose **escalation** over **silent fixes** when findings exceed stable monitoring.
-
-**NP** reasoning appears on **NP pathways**; keep **RN hub** answers within **RN authority** unless the item explicitly shifts role.
-
-**Crosswalk**  
-When you see **mmol/L**, **kPa**, or Canadian facility labels, the **judgment pattern** still prioritizes **life threats**, **acute change**, and **safe sequencing**.`;
-    case "us_np":
-      return `**NP items** test **ambulatory and acute decision-making**: **cannot-miss** presentations, **risk scores when appropriate**, **shared decision-making**, and **clear safety netting**—not “reassuring” through red flags.
-
-**RN-level care** still matters as background: you should **recognize** when **inpatient escalation** beats **outpatient watchful waiting**.
-
-**PN/LVN scope** is rarely the tested operator in NP items; avoid **delegating diagnostic responsibility** to roles the stem does not assign.
-
-**Practical filter**  
-If two answers are “nice,” pick the one that **closes risk fastest** with **appropriate site-of-care** and **follow-up that is specific**.
-
-**Documentation and medicolegal tone**  
-NP stems still reward **objective reasoning**: what you ruled out, what you monitored, and what you told the client to do if things worsen—examiners embed **silent deterioration** and **ambiguous consent** as distractors.`;
-    case "ca_np":
-      return `**Canadian NP items** pair **primary-care reasoning** with **provincial college standards**, **interprofessional collaboration**, and **metric labs** when the vignette is set in Canada.
-
-**Judgment spine**  
-You still win with **cannot-miss** recognition, **appropriate site-of-care**, **documentation that shows reasoning**, and **follow-up that is specific**—the same NP discipline as US items, with Canadian labels on roles and units.
-
-**Scope and collaboration**  
-When the stem names a physician, RN, or allied partner, choose answers that **respect who initiates what** under the scenario’s policy—avoid **silent prescribing** or **delayed escalation** when red flags appear.
-
-**Exam habit**  
-Translate unfamiliar facility titles into **risk**: who is unstable, what data are missing, and what you would not postpone.`;
-    default:
-      return "";
-  }
+  const core = canonicalTierRelevanceMarkdown(tierGeoToLicenseBand(tierGeo));
+  const habit = [
+    "- **Exam execution checklist**",
+    "- Read the role line and the primary instability before you touch options.",
+    "- Name one assessment that proves or disproves the main risk.",
+    "- Pick the action that closes the safety loop within your scope.",
+  ].join("\n");
+  return ensureTierRelevanceWordCount(`${core}\n${habit}`);
 }
 
 function countryNotesBlock(tierGeo: GoldTierGeo): string {
   switch (tierGeo) {
     case "ca_rpn":
     case "ca_rn":
-      return `**Canada-specific emphasis**  
-Stems may show **SI labs** and Canadian care settings. **Provincial colleges** and **employer policy** still define what each role may initiate independently—items reward **safe collaboration** and **timely RN/NP/physician contact** when status changes.
-
-**Terminology**  
-Expect **RPN** language for practical nursing and **RN** for registered nursing; exam writers often embed **metric vitals** and **interprofessional** cues that mirror practice documents, not US state boards.
-
-**Exam habit**  
-When units or titles look unfamiliar, translate them into **risk and scope**: who must be notified, what must be reassessed, and what cannot wait—Canadian stems use the same **prioritization spine** as US items with different labels on the vitals line.`;
     case "ca_np":
-      return `**Canada — NP emphasis**  
-Items may reference **provincial NP standards**, **collaborative practice agreements**, and **SI units** (mmol/L, kPa) while testing the same **diagnostic discipline** as US NP preparation: clear **problem definition**, **differential that fits the data**, **plan with follow-up**, and **documentation** another clinician could follow.
-
-**Interprofessional cues**  
-When the vignette names **physician partners**, **pharmacists**, or **hospital transfer**, choose answers that **close the safety loop** without exceeding the **role line** described in the stem.
-
-**Metric comfort**  
-If a lab value looks different from US textbooks, convert mentally to **risk category** (e.g., glucose extremes, sodium disorders, anemia severity) before you eliminate options—writers often test whether you recognize **danger thresholds**, not whether you memorized one unit system.`;
+      return "Canadian stems use SI units and Canadian facility labels; prioritization stays the same—life threats, acute change, safe sequencing, and timely escalation when status changes.";
     case "us_pn":
+      return "US practical-nurse items stay order-driven: execute, monitor, report, and escalate when findings exceed stable parameters.";
     case "us_rn":
+      return "US RN items reward judgment within standards: prioritize trajectory, communicate clearly, and escalate when instability thresholds are crossed.";
     case "us_np":
-      return `**United States emphasis**  
-Items reference **state-dependent scope** through the **stem’s role** and **order context**. Prefer **protocol/order-driven** actions for practical nurses, **independent nursing judgment** within standards for RNs, and **advanced-practice** reasoning for NPs when applicable. Facility policy and standing orders still appear as the “rules of the game” inside the vignette.
-
-**Exam vocabulary**  
-**LVN/LPN**, **RN**, and **NP** labels are deliberate; mismatched actions (for example, prescribing as an LPN) are classic distractors.
-
-**Study angle**  
-When a US item feels “unfair,” it is often testing whether you **respect scope** and **escalate** instead of improvising. Choose answers that **protect the client** and **match the license** named in the stem, even when another action would be appropriate for a different role.`;
+      return "US NP items reward diagnostic discipline, site-of-care choices, and specific follow-up—close risk instead of reassuring through red flags.";
     default:
       return "";
   }
 }
 
 function relatedNextStepsBody(input: GoldPremiumSynthesisInput): string {
-  const lines: string[] = [
-    "Use this lesson as a hub: connect the pathophysiology and traps below to **timed question practice** and **topic-scoped review** so the pattern sticks under pressure.",
-    `- Browse the full **[FNP lesson hub](/us/np/fnp/lessons)** for adjacent topics and integrated review cards.`,
-    `- Cross-train prioritization with **[Differential reasoning in primary care](LESSON:fnp-differential-primary-care)**—it pairs with almost every ambulatory vignette.`,
-  ];
-  for (const slug of input.relatedSlugs.slice(0, 6)) {
+  const lines: string[] = [];
+  for (const slug of input.relatedSlugs.slice(0, 8)) {
     const title = input.relatedTitlesBySlug?.[slug] ?? slug.replace(/-/g, " ");
-    lines.push(`- Deepen with **[${title}](LESSON:${slug})** when that topic appears in the same stem family.`);
+    lines.push(`- **[${title}](LESSON:${slug})**`);
   }
-  lines.push(
-    `- Return to your **[FNP lessons index](/us/np/fnp/lessons)** and run a **question bank** session on the same topic tag to consolidate elimination habits for **${input.examLabel}**.`,
-    `- Pair with **flashcards** on the matching concept cluster so vocabulary (labs, medications, escalation phrases) is automatic on exam day.`,
-  );
-  return lines.join("\n\n");
+  const pad = [
+    "- **[NurseNest lessons index](/lessons)**",
+    "- **[Question bank hub](/question-bank)**",
+    "- **[Study tools](/tools)**",
+  ];
+  for (const p of pad) {
+    if (lines.length >= 3) break;
+    lines.push(p);
+  }
+  return lines.join("\n");
 }
 
 function nursingBlock(input: GoldPremiumSynthesisInput): string {
@@ -284,8 +218,9 @@ function ensureMinimumWords(body: string, min: number, padMarkdown: string): str
   return t;
 }
 
-const TIER_RELEVANCE_PAD = `**Exam execution habit**  
-Before you lock an answer, name the **primary instability**, the **assessment that proves or disproves it**, and the **communication or activation step** you would not skip. Boards reward **trajectory thinking** and **closed-loop teamwork**—not the longest comfort list—when vitals, perfusion, oxygenation, or mentation are shifting.`;
+const TIER_RELEVANCE_PAD = `- Re-read vitals and trajectory before you eliminate an option.
+- Name the assessment or activation step you will not skip.
+- Prefer the move that closes the safety loop within the stem’s orders.`;
 
 const CLINICAL_PEARLS_PAD = `**Second-pass discipline**  
 If an option feels compassionate but ignores abnormal vitals, a new deficit, or worsening work of breathing, it is usually wrong. Re-scan the stem for **trend language**, **new orders**, and **line or device clues** before you submit.`;

@@ -43,7 +43,7 @@ describe("exam-complete lesson template", () => {
   it("authoring checklist includes all steps", () => {
     const text = examCompleteAuthoringChecklistText();
     assert.ok(text.includes("1. Introduction"));
-    assert.ok(text.includes("11. Related Lessons / Next Steps"));
+    assert.ok(text.includes("11. Next steps"));
   });
 });
 

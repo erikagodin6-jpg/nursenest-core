@@ -5719,42 +5719,239 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 
 /*
  * nn-cat-exam-col — single-column centered wrapper for CAT EXAM mode.
- *
- * Used when isExamStyle = catMode && !catFeedbackStudy.
- * No right rationale panel — the question takes the full centered width.
- * Matches real NCLEX exam experience: one question, nothing else visible.
- *
- * Spec §1: "CAT exam mode = minimal, exam-like, single-column"
+ * Tuned for readable line length and calm vertical rhythm (UWorld-serious, cleaner).
  */
 .nn-cat-exam-col {
-  max-width: 780px;
+  max-width: min(42rem, 100%);
   margin: 0 auto;
-  padding: 24px 0 40px;
+  padding: 1rem 0 0.75rem;
 }
 
-/* CAT test (non-study): single-column shell + slightly denser stem/options */
-.nn-cat-session.nn-cat-session--exam-single .nn-cat-question-stem {
-  font-size: clamp(15.5px, 1.12vw, 16px);
-  line-height: 1.55;
-  margin-bottom: 1rem;
+/* CAT exam chrome: shell that wraps top bar + progress + question column */
+.nn-cat-exam-chrome {
+  min-height: 0;
 }
 
-.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt__text {
-  font-size: clamp(14.5px, 1vw, 15px);
-  line-height: 1.45;
+.nn-cat-exam-topbar {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: max(0.75rem, env(safe-area-inset-left));
+  padding-right: max(0.75rem, env(safe-area-inset-right));
 }
 
-.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt {
-  padding: 12px 14px;
+@media (min-width: 640px) {
+  .nn-cat-exam-topbar {
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
 
-.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt-list {
-  gap: 10px;
+/* Adaptive progress strip — subtle, not gamified */
+.nn-exam-progress--cat-exam-adaptive {
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
+  padding-left: max(0.75rem, env(safe-area-inset-left));
+  padding-right: max(0.75rem, env(safe-area-inset-right));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 82%, var(--semantic-surface));
+}
+
+.nn-exam-progress--cat-exam-adaptive > div:first-child {
+  margin-bottom: 0.35rem;
+}
+
+.nn-exam-progress--cat-exam-adaptive .nn-marketing-caption {
+  font-size: 0.625rem;
+  letter-spacing: 0.055em;
+}
+
+.nn-cat-exam-chrome .nn-exam-progress--cat-exam-adaptive .nn-progress-fill-reveal {
+  transition: width 0.32s ease-out;
+}
+
+.nn-cat-question-card--exam-stack .nn-cat-question-card__exam-scroll {
+  overscroll-behavior-y: contain;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-cat-question-card--exam-stack .nn-cat-question-card__exam-scroll {
+    scroll-behavior: auto;
+  }
+
+  .nn-cat-exam-chrome .nn-exam-progress--cat-exam-adaptive .nn-progress-fill-reveal {
+    transition: none;
+  }
+}
+
+/* Single-column session: safe horizontal inset, no dead split gutter */
+.nn-cat-session.nn-cat-session--exam-single {
+  isolation: isolate;
+}
+
+.nn-question-session.nn-question-session--single {
+  padding-left: max(0.5rem, env(safe-area-inset-left));
+  padding-right: max(0.5rem, env(safe-area-inset-right));
+}
+
+@media (min-width: 640px) {
+  .nn-question-session.nn-question-session--single {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
 }
 
 .nn-cat-session.nn-cat-session--exam-single .nn-cat-exam-col {
-  padding-top: 12px;
-  padding-bottom: 16px;
+  padding-top: 0.25rem;
+  padding-bottom: 0.5rem;
+}
+
+@media (max-width: 639px) {
+  .nn-cat-exam-col {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* Exam stack card: flatter, denser than study CAT card — scroll body + anchored footer */
+.nn-cat-question-card.nn-cat-question-card--exam-stack {
+  padding: 1rem 0.875rem 0;
+  border-radius: 1rem;
+  box-shadow: none;
+}
+
+@media (min-width: 640px) {
+  .nn-cat-question-card.nn-cat-question-card--exam-stack {
+    padding: 1.125rem 1.125rem 0;
+  }
+}
+
+.nn-cat-question-card--exam-stack .nn-cat-question-stem,
+.nn-cat-session.nn-cat-session--exam-single .nn-cat-question-stem {
+  font-size: clamp(1rem, 2.9vw, 1.0625rem);
+  line-height: 1.58;
+  letter-spacing: -0.008em;
+  font-weight: 400;
+  color: var(--semantic-text-primary);
+  max-width: 100%;
+  margin-bottom: 0.875rem;
+}
+
+@media (min-width: 768px) {
+  .nn-cat-question-card--exam-stack .nn-cat-question-stem,
+  .nn-cat-session.nn-cat-session--exam-single .nn-cat-question-stem {
+    max-width: 66ch;
+  }
+}
+
+.nn-cat-question-card--exam-stack .nn-cat-topic-meta {
+  margin-bottom: 0.5rem;
+  font-size: 0.6875rem;
+  color: var(--semantic-text-muted);
+}
+
+.nn-cat-question-card--exam-stack .nn-cat-exam-timing-alert {
+  margin-bottom: 0.75rem;
+}
+
+.nn-cat-question-card--exam-stack .nn-cat-options-label {
+  margin-bottom: 0.5rem;
+  font-size: 0.625rem;
+  letter-spacing: 0.065em;
+}
+
+.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt__text,
+.nn-cat-question-card--exam-stack .nn-cat-opt__text {
+  font-size: clamp(0.875rem, 2.4vw, 0.9375rem);
+  line-height: 1.5;
+}
+
+.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt-list,
+.nn-cat-question-card--exam-stack .nn-cat-opt-list {
+  gap: 0.625rem;
+}
+
+.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt,
+.nn-cat-question-card--exam-stack .nn-cat-opt {
+  min-height: 3rem;
+  padding: 0.8125rem 0.875rem;
+  border-radius: 0.625rem;
+  transition:
+    border-color 0.14s ease,
+    background-color 0.14s ease,
+    box-shadow 0.14s ease;
+}
+
+.nn-cat-question-card--exam-stack .nn-cat-opt--interactive:hover:not(:disabled) {
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--semantic-text-primary) 5%, transparent);
+}
+
+.nn-cat-question-card--exam-stack .nn-cat-opt--selected,
+.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--selected {
+  border-color: color-mix(in srgb, var(--nn-exam-accent) 40%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-exam-accent) 4%, var(--bg-card));
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--nn-exam-accent) 11%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--nn-exam-accent) 9%, transparent);
+}
+
+.nn-cat-question-card--exam-stack .nn-cat-opt--dim,
+.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--dim {
+  opacity: 0.78;
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-text-muted));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 32%, var(--bg-card));
+}
+
+.nn-cat-question-card--exam-stack .nn-cat-opt:disabled {
+  opacity: 0.9;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-surface));
+  color: var(--semantic-text-secondary);
+}
+
+.nn-cat-question-card--exam-stack .nn-cat-opt__letter {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.6875rem;
+}
+
+.nn-cat-question-card--exam-stack .nn-cat-opt--interactive:focus-visible,
+.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--interactive:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--semantic-surface),
+    0 0 0 4px color-mix(in srgb, var(--nn-exam-accent) 38%, transparent);
+}
+
+/* Pinned action slab: safe-area, stable separation from scroll body */
+.nn-cat-question-card__exam-footer--anchored {
+  padding-top: 0.75rem;
+  padding-bottom: max(0.625rem, env(safe-area-inset-bottom));
+  padding-left: max(0.125rem, env(safe-area-inset-left));
+  padding-right: max(0.125rem, env(safe-area-inset-right));
+  background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
+}
+
+.nn-cat-question-card--exam-stack .nn-cat-question-nav {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+  row-gap: 0.5rem;
+}
+
+@media (max-width: 767px) {
+  /* Exam stack footer is the anchor — disable generic sticky nav overlap from study layouts */
+  .nn-cat-question-card--exam-stack .nn-cat-question-nav {
+    position: static;
+    margin: 0;
+    padding: 0;
+    background: transparent !important;
+    backdrop-filter: none !important;
+  }
+}
+
+.nn-cat-question-card--exam-stack .nn-btn-primary {
+  min-height: 2.75rem;
+  min-width: min(100%, 9.5rem);
 }
 
 .nn-cat-question-card {

@@ -37,8 +37,9 @@ function parseCardLimit(value: string | null): number {
 
 function parseStudyMode(value: string | null): StudyMode {
   if (value === "definition_to_term") return value;
+  if (value === "term_to_definition") return value;
   if (value === "mixed") return value;
-  return "term_to_definition";
+  return "mixed";
 }
 
 function shuffled<T>(rows: T[], seed: string): T[] {
@@ -179,7 +180,10 @@ export async function GET(req: NextRequest) {
   const persistenceFiltersActive = starredOnly || savedOnly || notesOnly || revisitOnly;
   if (persistenceFiltersActive) {
     const allowedIds = new Set(stateIds);
-    scoped = allowedIds.size > 0 ? scoped.filter((c) => allowedIds.has(c.id)) : [];
+    if (allowedIds.size > 0) {
+      scoped = scoped.filter((c) => allowedIds.has(c.id));
+    }
+    /* When no stateIds were sent (e.g. no starred cards yet), do not zero the session — ignore persistence narrowing. */
   }
 
   const selectedRows = shuffle ? shuffled(scoped, `${userId}:${selectedCategories.join(",")}:${mode}`) : scoped;

@@ -1,8 +1,8 @@
 import { expect, type Page } from "@playwright/test";
 
 /**
- * One CAT **exam / test mode** item: select → Submit answer → Next (or Submit & finish on last buffer item).
- * Matches `PracticeTestRunnerClient` explicit exam UX (`catExamFeedbackMode !== "study"`).
+ * One CAT **exam / test mode** item: select → Submit answer → advance (`data-nn-qa-cat-exam-advance`).
+ * Primary label is “Next question” until the configured max item count is reached (then “Submit & finish” as a hint).
  */
 export async function answerOneCatExamItem(page: Page): Promise<void> {
   const list = page.locator("ul.nn-cat-opt-list").first();
@@ -21,7 +21,7 @@ export async function answerOneCatExamItem(page: Page): Promise<void> {
   await expect(submit).toBeEnabled({ timeout: 30_000 });
   await submit.click();
 
-  const advance = page.getByRole("button", { name: /Next question|Submit & finish/ });
+  const advance = page.locator("[data-nn-qa-cat-exam-advance]");
   await expect(advance).toBeEnabled({ timeout: 30_000 });
   await advance.click();
   await page.waitForLoadState("networkidle", { timeout: 30_000 }).catch(() => {});

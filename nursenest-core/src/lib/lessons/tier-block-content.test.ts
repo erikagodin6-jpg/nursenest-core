@@ -18,6 +18,16 @@ describe("tier-block-content", () => {
     assert.equal(resolveTierBlocksForViewer(src, "NP"), "pn");
   });
 
+  it("strict_single RN viewer keeps only RN lane", () => {
+    const src = `<TierBlock tier="PN">p</TierBlock><TierBlock tier="RN">r</TierBlock>`;
+    assert.equal(resolveTierBlocksForViewer(src, "RN", "strict_single"), "r");
+  });
+
+  it("strict_single NP viewer keeps only NP lane", () => {
+    const src = `<TierBlock tier="PN">p</TierBlock><TierBlock tier="NP">n</TierBlock>`;
+    assert.equal(resolveTierBlocksForViewer(src, "NP", "strict_single"), "n");
+  });
+
   it("ALL always visible to PN", () => {
     assert.equal(tierBlockVisibleToViewer("ALL", "RPN"), true);
   });

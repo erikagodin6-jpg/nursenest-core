@@ -35,11 +35,11 @@ const AUTHOR_PROMPTS: Record<PathwayLessonPremiumSectionKind, string> = {
   clinical_pearls: "High-yield traps, discriminators, and “if you see X, think Y.”",
   client_education: "Teaching points, safety, discharge / follow-up instructions.",
   tier_specific_relevance:
-    "RN: depth, prioritization, patho links. PN/RPN: scope-safe actions and escalation. NP: diagnostic/management and referral (when pathway includes NP).",
+    "4–5 bullets only: clinical judgment, prioritization, escalation, and scope for this pathway’s license level—no other roles (or `[not applicable]`).",
   country_specific_notes:
-    "US vs Canada: units, scope language, NCLEX vs REx-PN emphasis when it changes the answer (or `[not applicable]`).",
+    "Canada: one or two lines on SI units and labels (or `[not applicable]`). US: stem-driven scope only when it changes the answer.",
   related_next_steps:
-    "3–8 internal study links using `[label](LESSON:slug)` or `[label](/path)` plus relatedLessonRefs metadata.",
+    "Keep internal `[label](LESSON:slug)` links for catalog validation, but pages render the compact Next steps cards.",
 };
 
 export type ExamCompleteTemplateStep = {

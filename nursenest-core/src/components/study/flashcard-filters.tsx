@@ -34,6 +34,8 @@ type FlashcardFiltersProps = {
   onChange: (next: Partial<FlashcardFiltersValue>) => void;
   pathwayOptions?: PathwayOption[];
   tagList?: TagRow[];
+  /** When true, pathway is fixed by the parent (e.g. tier-scoped flashcards hub) — no pathway dropdown. */
+  hidePathway?: boolean;
 };
 
 const EXAM_FAMILIES = ["NCLEX_RN", "NCLEX_PN", "REX_PN", "AANP", "GENERIC"] as const;
@@ -90,6 +92,7 @@ export function FlashcardFilters({
   onChange,
   pathwayOptions = [],
   tagList = [],
+  hidePathway = false,
 }: FlashcardFiltersProps) {
   return (
     <div className="flex flex-col gap-4">
@@ -110,7 +113,7 @@ export function FlashcardFilters({
 
       {/* Selectors row */}
       <div className="grid gap-3 sm:grid-cols-3">
-        {pathwayOptions.length > 0 ? (
+        {!hidePathway && pathwayOptions.length > 0 ? (
           <div>
             <label className="block text-[11px] font-bold uppercase tracking-wider text-[var(--semantic-text-secondary)]">
               Pathway

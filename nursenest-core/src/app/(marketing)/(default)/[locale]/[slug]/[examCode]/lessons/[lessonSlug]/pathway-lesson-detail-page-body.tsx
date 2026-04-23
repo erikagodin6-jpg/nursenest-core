@@ -3,6 +3,11 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ExamFamily, type TierCode } from "@prisma/client";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
+import { PathwayLessonNextStepsCards } from "@/components/lessons/pathway-lesson-next-steps-cards";
+import {
+  pathwayMarketingQuestionBankTopicHref,
+  lessonStudyLoopRelatedLessonsHubHref,
+} from "@/components/lessons/pathway-lesson-link-practice";
 import { LessonSectionCard } from "@/components/lessons/lesson-section-card";
 import { contentTierForPathwayLessonRender } from "@/lib/lessons/global-lesson-architecture";
 import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-system";
@@ -16,6 +21,9 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
+import { pathwayLessonPremiumSectionBodyText, pathwayLessonSectionSurfaceHeading } from "@/lib/lessons/pathway-lesson-section-surface";
+import { pathwayHubAppFlashcardsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
 import {
   getPathwayLessonPreviewKind,
@@ -428,40 +436,62 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           postTest={fullAccess ? bankAssessments.postTest : undefined}
           fullAccess={fullAccess}
           assessmentsEnabled={studySettings.enablePrePostQuizzes}
-          sectionAnchors={displaySections.map((s) => ({ id: s.id, label: s.heading }))}
+          sectionAnchors={displaySections.map((s) => ({
+            id: s.id,
+            label: pathwayLessonSectionSurfaceHeading(s, pathway.countryCode, t),
+          }))}
         >
           <LessonRecallProvider>
             <div className="mt-4 sm:mt-5">
               <div className="mb-2 flex justify-end">
                 <LessonRecallToggle />
               </div>
-              <article className="space-y-2 sm:space-y-3">
+              <article className="space-y-6 sm:space-y-8">
                 {displaySections.map((section) => {
+                  const surfaceHeading = pathwayLessonSectionSurfaceHeading(section, pathway.countryCode, t);
+                  const sectionBody = pathwayLessonPremiumSectionBodyText(section, pathway.id, pathway.countryCode);
                   return (
                     <LessonSectionCard
                       key={section.id}
                       id={section.id}
-                      heading={section.heading}
+                      heading={surfaceHeading}
                       kind={section.kind}
                     >
                       {section.audioUrl ? (
                         <LessonSectionAudioButton
                           audioUrl={section.audioUrl}
                           sectionId={section.id}
-                          sectionHeading={section.heading}
+                          sectionHeading={surfaceHeading}
                         />
                       ) : null}
-                      <PathwayLessonSectionContent
-                        text={typeof section.body === "string" ? section.body : ""}
-                        figures={section.figures}
-                        examFocus={section.examFocus}
-                        lessonWikiBasePath={base}
-                        viewerTier={lessonContentTier}
-                        measurementSystem={lessonMeasurementSystem}
-                        sectionKind={section.kind ?? null}
-                        emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
-                        figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
-                      />
+                      {section.kind === "related_next_steps" ? (
+                        <PathwayLessonNextStepsCards
+                          practiceHref={pathwayMarketingQuestionBankTopicHref(
+                            pathway,
+                            lesson.topic,
+                            lesson.topicSlug?.trim() || undefined,
+                          )}
+                          lessonsHref={lessonStudyLoopRelatedLessonsHubHref(base, lesson.topicSlug)}
+                          flashcardsHref={loginWithCallback(
+                            pathwayHubAppFlashcardsHref(pathway.id, lesson.topicSlug),
+                          )}
+                          practiceLabel={t("learner.studyLoop.practiceThisTopicCta")}
+                          lessonsLabel={t("learner.lessons.detail.nextStepsReviewLessons")}
+                          flashcardsLabel={t("learner.studyLoop.sameTopicFlashcards")}
+                        />
+                      ) : (
+                        <PathwayLessonSectionContent
+                          text={sectionBody}
+                          figures={section.figures}
+                          examFocus={section.examFocus}
+                          lessonWikiBasePath={base}
+                          viewerTier={lessonContentTier}
+                          measurementSystem={lessonMeasurementSystem}
+                          sectionKind={section.kind ?? null}
+                          emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
+                          figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
+                        />
+                      )}
                       {section.keyRecallFacts?.length ? (
                         <LessonKeyRecallChip facts={section.keyRecallFacts} />
                       ) : null}

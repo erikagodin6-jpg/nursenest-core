@@ -39,12 +39,14 @@ import { getLearnerExamFraming } from "@/lib/learner/learner-exam-framing";
 import { loadRelatedExamQuestionStemsForPathwayLesson } from "@/lib/lessons/lesson-question-cross-links";
 import { LessonTopicPracticeSection } from "@/components/lessons/lesson-topic-practice-section";
 import { loadLessonTopicLinkedQuizItems } from "@/lib/lessons/load-lesson-topic-linked-quiz-items";
-import { PathwayLessonStudyLoopCta } from "@/components/lessons/pathway-lesson-study-loop-cta";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
-import { buildAppQuestionBankTopicDrillHref } from "@/components/lessons/pathway-lesson-link-practice";
-import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
-import { buildAppPracticeTestsHubHref } from "@/lib/learner/study-loop-recommendations";
+import {
+  buildAppQuestionBankTopicDrillHref,
+  lessonStudyLoopRelatedLessonsHubHref,
+} from "@/components/lessons/pathway-lesson-link-practice";
+import { PathwayLessonNextStepsCards } from "@/components/lessons/pathway-lesson-next-steps-cards";
+import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import {
   getRelatedPathwayLessons,
   RELATED_PATHWAY_LESSONS_LIMIT,
@@ -54,6 +56,10 @@ import {
   pathwayLessonHasRenderableHubSlug,
 } from "@/lib/lessons/pathway-lesson-types";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
+import {
+  pathwayLessonPremiumSectionBodyText,
+  pathwayLessonSectionSurfaceHeading,
+} from "@/lib/lessons/pathway-lesson-section-surface";
 import { CoachLessonHelper } from "@/components/study/coach-lesson-helper";
 import { isStudyCoachEnabled } from "@/lib/ai/learner-ai-policy";
 import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
@@ -569,7 +575,7 @@ export default async function LessonDetailPage({ params }: Props) {
     // Nav sections for quick-jump (aligned with rendered article sections)
     const navSections = displaySections.map((s) => ({
       id: s.id,
-      heading: s.heading?.trim() ?? "",
+      heading: pathwayLessonSectionSurfaceHeading(s, pathway?.countryCode, t),
       kind: s.kind ?? null,
     }));
 
@@ -674,31 +680,54 @@ export default async function LessonDetailPage({ params }: Props) {
                 <PathwayLessonMemoryAnchorStrip text={record.memoryAnchor} />
               </div>
             ) : null}
-            <article className="flex flex-col gap-7 md:gap-8">
+            <article className="flex flex-col gap-8 md:gap-10">
               {displaySections.length > 0 ? (
                 displaySections.map((section) => {
+                  const surfaceHeading = pathwayLessonSectionSurfaceHeading(section, pathway?.countryCode, t);
+                  const sectionBody =
+                    pathway != null
+                      ? pathwayLessonPremiumSectionBodyText(section, pathway.id, pathway.countryCode)
+                      : typeof section.body === "string"
+                        ? section.body
+                        : "";
                   return (
                     <LessonSectionCard
                       key={section.id}
                       id={section.id}
-                      heading={section.heading?.trim() || t("learner.lessons.detail.sectionFallback")}
+                      heading={surfaceHeading}
                       kind={section.kind ?? null}
                     >
-                      <PathwayLessonSectionContent
-                        text={typeof section.body === "string" ? section.body : ""}
-                        figures={section.figures}
-                        examFocus={section.examFocus}
-                        viewerTier={lessonViewerTier}
-                        measurementSystem={lessonMeasurementSystem ?? undefined}
-                        sectionKind={section.kind ?? null}
-                        emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
-                        figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
-                      />
+                      {section.kind === "related_next_steps" && pathway ? (
+                        <PathwayLessonNextStepsCards
+                          practiceHref={buildAppQuestionBankTopicDrillHref(
+                            pathway,
+                            record.topic,
+                            record.topicSlug ?? undefined,
+                          )}
+                          lessonsHref={`/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`}
+                          flashcardsHref={pathwayHubAppFlashcardsHref(pathway.id, record.topicSlug)}
+                          practiceLabel={t("learner.studyLoop.practiceThisTopicCta")}
+                          lessonsLabel={t("learner.lessons.detail.nextStepsReviewLessons")}
+                          flashcardsLabel={t("learner.studyLoop.sameTopicFlashcards")}
+                        />
+                      ) : (
+                        <PathwayLessonSectionContent
+                          text={sectionBody}
+                          figures={section.figures}
+                          examFocus={section.examFocus}
+                          lessonWikiBasePath={pathway ? marketingPathwayLessonsIndexPath(pathway) : null}
+                          viewerTier={lessonViewerTier}
+                          measurementSystem={lessonMeasurementSystem ?? undefined}
+                          sectionKind={section.kind ?? null}
+                          emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
+                          figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
+                        />
+                      )}
                       {userId ? (
                         <LessonSectionNoteInline
                           userId={userId}
                           sectionId={section.id}
-                          sectionHeading={section.heading?.trim() ?? ""}
+                          sectionHeading={surfaceHeading}
                           scope="PATHWAY_LESSON"
                           pathwayId={pathwayId}
                           topic={record.topic}
@@ -769,37 +798,6 @@ export default async function LessonDetailPage({ params }: Props) {
             preloadedQuizItems={topicLinkedQuizPreload}
           />
         ) : null}
-        {pathway ? (
-          <PathwayLessonStudyLoopCta
-            pathway={pathway}
-            lessonsBasePath={marketingPathwayLessonsIndexPath(pathway)}
-            topicLabel={record.topic}
-            topicSlug={record.topicSlug}
-            relatedLessons={relatedLessonsDisplay}
-            currentSlug={record.slug}
-            catAuthState="signed_in"
-            visualVariant="learner"
-          />
-        ) : null}
-        <div className="mt-8 flex flex-wrap gap-2 border-t border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand)_10%)] pt-5">
-          <Link
-            href={
-              pathway
-                ? buildAppQuestionBankTopicDrillHref(pathway, record.topic, record.topicSlug ?? undefined)
-                : "/app/questions"
-            }
-            className="inline-flex min-h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-92"
-            style={{ background: "var(--semantic-brand)" }}
-          >
-            {t("learner.lessons.detail.ctaQuestionBank")}
-          </Link>
-          <Link
-            href={buildAppPracticeTestsHubHref(pathwayId)}
-            className="inline-flex min-h-10 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)] transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_35%,var(--bg-card))]"
-          >
-            {t("learner.lessons.detail.ctaPathwayPracticeTests")}
-          </Link>
-        </div>
       </>
     );
 
@@ -840,7 +838,7 @@ export default async function LessonDetailPage({ params }: Props) {
               canMarkComplete={entitlement.hasAccess}
               initialProgress={initialProgress}
               catAdaptiveAvailable={pathwayAllowsCatAdaptiveStart(pathway)}
-              embedded
+              allLessonsHrefOverride={`/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`}
             />
           ) : null}
         </div>

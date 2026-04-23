@@ -38,13 +38,18 @@ export function ExamSessionTopBar({
   left,
   center,
   right,
+  /** Optional — e.g. CAT exam mode compact chrome (`nn-cat-exam-topbar`). */
+  className = "",
 }: {
   left?: ReactNode;
   center?: ReactNode;
   right?: ReactNode;
+  className?: string;
 }) {
   return (
-    <div className="border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3">
+    <div
+      className={`border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 ${className}`.trim()}
+    >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="nn-marketing-body-sm min-w-0 flex-1 leading-snug text-[var(--theme-body-text)]">{left}</div>
         {center ? (
@@ -93,6 +98,8 @@ export function ExamProgressBar({
   variant = "fixed_session",
   sessionLabel,
   adaptiveMaxItems,
+  /** Optional — e.g. CAT adaptive exam strip (`nn-exam-progress--cat-exam-adaptive`). */
+  className = "",
 }: {
   current: number;
   total: number;
@@ -103,6 +110,7 @@ export function ExamProgressBar({
   sessionLabel?: string;
   /** Soft upper bound for fill + a11y when `variant === "adaptive_item"` (e.g. config catMaxQuestions). */
   adaptiveMaxItems?: number | null;
+  className?: string;
 }) {
   const isAdaptive = variant === "adaptive_item";
   const denom =
@@ -121,7 +129,9 @@ export function ExamProgressBar({
         ? `${leftLabel}: item ${current} (session length is not fixed).`
         : `Session progress ${current} of ${total}`;
   return (
-    <div className="nn-exam-progress border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-2.5">
+    <div
+      className={`nn-exam-progress border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-2.5 ${className}`.trim()}
+    >
       <div className="nn-marketing-caption mb-1.5 flex justify-between gap-3 font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
         <span>{leftLabel}</span>
         <div className="flex items-center gap-2 shrink-0">
@@ -157,7 +167,7 @@ export function ExamProgressBar({
         aria-label={ariaAdaptive}
       >
         <div
-          className="nn-progress-fill-semantic-readiness nn-progress-fill-reveal transition-[width] duration-500 ease-out"
+          className="nn-progress-fill-semantic-readiness nn-progress-fill-reveal motion-reduce:transition-none transition-[width] duration-500 ease-out"
           style={{ width: `${pct}%` }}
         />
       </div>

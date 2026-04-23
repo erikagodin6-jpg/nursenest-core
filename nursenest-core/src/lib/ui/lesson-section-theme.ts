@@ -112,7 +112,7 @@ const KIND_CHIP_LABEL_OVERRIDES: Partial<Record<PathwayLessonSectionKind, string
   exam_relevance: "Exam Relevance",
   exam_tips: "Exam Tips",
   exam_focus: "Exam Focus",
-  tier_specific_relevance: "Tier Notes",
+  tier_specific_relevance: "Exam focus",
   country_specific_notes: "Regional Notes",
 };
 

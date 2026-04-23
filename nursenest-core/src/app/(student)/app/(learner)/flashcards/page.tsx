@@ -90,12 +90,41 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
     );
   }
 
+  if (pathwayResolution?.state === "no_pathway_context") {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-8">
+        <ContentEmptyState
+          variant="generic"
+          headline={t("learner.flashcards.page.noPathwayHeadline", "Choose your exam track")}
+          body={t(
+            "learner.flashcards.page.noPathwayBody",
+            "Select a pathway in Study preferences so flashcards stay aligned with your subscription.",
+          )}
+          primaryCta={{ label: t("learner.flashcards.page.studyPreferencesCta", "Study preferences"), href: "/app/account/study-preferences" }}
+        />
+      </div>
+    );
+  }
+
+  if (pathwayResolution?.state !== "scoped") {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-8 text-sm text-[var(--theme-muted-text)]">
+        {t("learner.entitlement.flashcardsShort")}
+      </div>
+    );
+  }
+
+  const scopedPathwayId = pathwayResolution.defaultPathwayId;
+  const pathwayDisplayName =
+    pathwayOptions.find((p) => p.id === scopedPathwayId)?.label ?? pathwayResolution.pathwayOptions[0]?.shortName ?? scopedPathwayId;
+
   return (
     <Suspense fallback={<div className="mx-auto max-w-3xl px-4 py-8 text-sm">{t("learner.loading.flashcards")}</div>}>
       <FlashcardsHubClient
+        scopedPathwayId={scopedPathwayId}
+        pathwayDisplayName={pathwayDisplayName}
         pathwayOptions={pathwayOptions}
         practiceQuestionsHref={practiceQuestionsHref}
-        defaultScopedPathwayId={pathwayResolution?.state === "scoped" ? pathwayResolution.defaultPathwayId : null}
       />
     </Suspense>
   );

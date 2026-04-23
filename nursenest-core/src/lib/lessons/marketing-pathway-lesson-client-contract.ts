@@ -51,6 +51,8 @@ export type MarketingPathwayLessonActionsClientProps = {
   initialProgress?: PathwayLessonProgressStatus;
   /** Server-computed from pathway catalog rules (CAT adaptive start eligibility). */
   catAdaptiveAvailable: boolean;
+  /** Learner app should pass `/app/lessons?pathwayId=…`; marketing omits for public lesson hub. */
+  allLessonsHrefOverride?: string | null;
 };
 
 /** Pre/post quiz payloads only — not full lesson sections. */

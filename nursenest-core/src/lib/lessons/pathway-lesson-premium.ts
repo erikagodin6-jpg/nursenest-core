@@ -43,9 +43,9 @@ export const PREMIUM_SECTION_HEADINGS: Record<PathwayLessonPremiumSectionKind, s
   nursing_assessment_interventions: "Nursing Assessment and Interventions",
   clinical_pearls: "Clinical Pearls",
   client_education: "Client Education",
-  tier_specific_relevance: "Tier-Specific Relevance",
+  tier_specific_relevance: "Your exam focus",
   country_specific_notes: "Country-Specific Notes",
-  related_next_steps: "Related Lessons / Next Steps",
+  related_next_steps: "Next steps",
 };
 
 /** Minimum word counts (plain text) per section when present. */
@@ -228,7 +228,7 @@ export function validatePathwayLessonPremium(
 
   if (!omittedKinds.has("related_next_steps") && internalLinkCount < 3) {
     issues.push(
-      "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in Related Lessons / Next Steps).",
+      "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).",
     );
   }
   if (internalLinkCount > 8) {
