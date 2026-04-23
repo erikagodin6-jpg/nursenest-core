@@ -1,8 +1,9 @@
 /**
- * Legacy admin server-action envelope used by feedback triage (`useFormState` + `nn_fb_op` dispatcher).
- * Prefer {@link AdminMutationResult} / {@link AdminDataResult} for new surfaces.
+ * Compatibility shim for server actions using the historical admin action envelope
+ * (`useFormState` + feedback triage). Prefer {@link AdminMutationResult} from `./admin-data-result` for new code.
  */
-export type { AdminDataResult } from "@/lib/admin/admin-data-result";
+export type { AdminDataResult } from "./admin-data-result";
+import { adminMutationFailure } from "./admin-data-result";
 
 export type AdminActionResult =
   | { ok: true }
@@ -13,5 +14,5 @@ export function adminActionSuccess(): AdminActionResult {
 }
 
 export function adminActionFailure(code: string, message: string): AdminActionResult {
-  return { ok: false, code, message };
+  return adminMutationFailure(code, message);
 }
