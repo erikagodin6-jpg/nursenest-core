@@ -79,6 +79,7 @@ import {
   sanitizeQuizItems,
   pathwayLessonMatchesMarketingPathwayContext,
   sortAndFilterLessonsForPathwayContext,
+  summarizePathwayContextPipelineDrops,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
 
 export {
@@ -641,6 +642,7 @@ async function resolveMarketingHubRenderableLessonList(
     );
     const afterSafeSlug = filterHubListItemsForSafeSlugs(hubNormalized, pathwayId);
     const afterPathwayContext = sortAndFilterLessonsForPathwayContext(pathwayId, afterSafeSlug);
+    const contextDropSummary = summarizePathwayContextPipelineDrops(pathwayId, afterSafeSlug, afterPathwayContext);
     logHubListPipelineDropSamples(pathwayId, afterSafeSlug, afterPathwayContext, 24);
     const deduped = dedupePathwayLessonsForLibrary(afterPathwayContext, {
       pathwayIdHint: pathwayId,
@@ -664,6 +666,8 @@ async function resolveMarketingHubRenderableLessonList(
       after_dedupe: String(renderableAll.length),
       duplicate_drops: String(deduped.duplicateCount),
       hub_search: qRaw ? "1" : "0",
+      context_filter_dropped_total: String(contextDropSummary.droppedTotal),
+      context_filter_drop_reasons_json: JSON.stringify(contextDropSummary.reasons),
     });
 
     if (sqlDbOnly >= 25 && renderableAll.length < Math.max(5, Math.floor(sqlDbOnly * 0.15))) {
@@ -727,6 +731,7 @@ async function resolveMarketingHubRenderableLessonList(
   );
   const afterSafeSlugCat = filterHubListItemsForSafeSlugs(hydratedCatalog, pathwayId);
   const afterContextCat = sortAndFilterLessonsForPathwayContext(pathwayId, afterSafeSlugCat);
+  const contextDropSummaryCat = summarizePathwayContextPipelineDrops(pathwayId, afterSafeSlugCat, afterContextCat);
   logHubListPipelineDropSamples(pathwayId, afterSafeSlugCat, afterContextCat, 24);
   const renderableAll = dedupePathwayLessonsForLibrary(afterContextCat, {
     pathwayIdHint: pathwayId,
@@ -744,6 +749,8 @@ async function resolveMarketingHubRenderableLessonList(
     after_context_and_public_complete: String(afterContextCat.length),
     after_dedupe: String(renderableAll.length),
     hub_search: qRaw ? "1" : "0",
+    context_filter_dropped_total: String(contextDropSummaryCat.droppedTotal),
+    context_filter_drop_reasons_json: JSON.stringify(contextDropSummaryCat.reasons),
   });
 
   if (process.env.NODE_ENV !== "production" && filteredRaw.length > 0 && renderableAll.length === 0) {

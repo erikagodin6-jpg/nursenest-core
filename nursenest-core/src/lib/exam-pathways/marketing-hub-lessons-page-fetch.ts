@@ -41,7 +41,15 @@ function coercePathwayLessonsPageResult(raw: unknown): PathwayLessonsPageResult 
   if (!raw || typeof raw !== "object") return null;
   const o = raw as Record<string, unknown>;
   if (!Array.isArray(o.items) || typeof o.total !== "number") return null;
-  return raw as PathwayLessonsPageResult;
+  const items = o.items as PathwayLessonsPageResult["items"];
+  const total = o.total as number;
+  const ra = o.renderableAll;
+  if (Array.isArray(ra)) {
+    return raw as PathwayLessonsPageResult;
+  }
+  /** Without `renderableAll`, a paginated `items` slice cannot back the curriculum grid (must reject). */
+  if (total > items.length) return null;
+  return { ...(raw as PathwayLessonsPageResult), renderableAll: items };
 }
 
 export type PathwayLessonsHubPageLoadState =

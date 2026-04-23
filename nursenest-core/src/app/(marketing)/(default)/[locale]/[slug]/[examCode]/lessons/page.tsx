@@ -34,8 +34,10 @@ import {
   pathwayRegionAwareExamName,
 } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
+import { buildPathwayLessonSystemSections } from "@/lib/lessons/pathway-lesson-body-system-groups";
 import {
   pathwayLessonHasRenderableHubSlug,
+  pathwayLessonMarketingDetailHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import type { MarketingHubLessonVerifyDiagnostics } from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
@@ -359,8 +361,18 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const hubVerifiedPage = sliceNormalizedHubLessons(hubCurriculumLessons, pageRequested, effectiveHubPageSize);
   const lessonsForCurriculumHub =
     hubCurriculumLessons.length <= PATHWAY_HUB_PAGE_SIZE_MAX ? hubCurriculumLessons : hubVerifiedPage.items;
+  const hubSectionModel = buildPathwayLessonSystemSections(lessonsForCurriculumHub, pathway.id);
+  const stage6SectionModelLessonRows = hubSectionModel.reduce((n, s) => n + s.lessons.length, 0);
+  const stage6LinkableLessonRows = hubSectionModel.reduce(
+    (n, s) =>
+      n + s.lessons.filter((l) => pathwayLessonMarketingDetailHref(base, l.slug) != null).length,
+    0,
+  );
   safeServerLog("pathway_lessons", "marketing_hub_pipeline_snapshot", {
     pathway_id: pathway.id,
+    route_pathname: `${pathname}/lessons`,
+    hub_page: String(pageRequested),
+    hub_page_size: String(pageSizeRequested),
     country_slug: countrySlug,
     role_track: roleTrack,
     exam_code: examCode,
@@ -382,6 +394,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     stage_4_after_verify_kept: String(hubCurriculumLessons.length),
     /** Stage 5: rows rendered in the curriculum grid (full verified set when under cap). */
     stage_5_curriculum_grid_rows: String(lessonsForCurriculumHub.length),
+    /** Stage 6: body-system section model (after orphan-bucket merge) — should match stage 5 for verified rows. */
+    stage_6_section_model_lesson_rows: String(stage6SectionModelLessonRows),
+    stage_6_linkable_lesson_rows: String(stage6LinkableLessonRows),
     effective_hub_page_size: String(effectiveHubPageSize),
     raw_after_slug_filter: String(rawHubLessonRows.length),
     raw_list_rows: String(rawHubLessonRows.length),

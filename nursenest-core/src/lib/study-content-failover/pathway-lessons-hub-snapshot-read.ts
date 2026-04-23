@@ -8,7 +8,13 @@ import type { StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failove
 function isPathwayLessonsPageResult(raw: unknown): raw is PathwayLessonsPageResult {
   if (!raw || typeof raw !== "object") return false;
   const o = raw as Record<string, unknown>;
-  return Array.isArray(o.items) && typeof o.total === "number";
+  if (!Array.isArray(o.items) || typeof o.total !== "number") return false;
+  const items = o.items as unknown[];
+  const total = o.total as number;
+  const ra = o.renderableAll;
+  if (Array.isArray(ra)) return true;
+  /** Legacy snapshots may omit `renderableAll` only when `items` already represents the full list. */
+  return total <= items.length;
 }
 
 /**

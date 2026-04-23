@@ -43,13 +43,33 @@ test("normalizes lesson system values: taxonomy ids resolve exactly; empty uses 
 
 test("buildPathwayLessonSystemSections preserves config order and only emits non-empty buckets", () => {
   const sections = buildPathwayLessonSystemSections([
-    lesson({ slug: "maternal-1", title: "Postpartum hemorrhage", system: "maternal" }),
-    lesson({ slug: "fund-1", title: "Pressure injury prevention", system: "fundamentals" }),
-    lesson({ slug: "infect-1", title: "Hand hygiene", system: "fundamentals" }),
-    lesson({ slug: "cardio-1", title: "Heart failure", system: "cardiovascular" }),
-    lesson({ slug: "resp-1", title: "Asthma", system: "respiratory" }),
-    lesson({ slug: "neuro-1", title: "Stroke", system: "neurological" }),
-    lesson({ slug: "med-1", title: "Insulin safety", system: "medication safety" }),
+    lesson({
+      slug: "maternal-1",
+      title: "Postpartum hemorrhage",
+      bodySystem: "reproductive_obstetrics",
+      system: "reproductive_obstetrics",
+    }),
+    lesson({
+      slug: "fund-1",
+      title: "Pressure injury prevention",
+      bodySystem: "gastrointestinal",
+      system: "gastrointestinal",
+    }),
+    lesson({
+      slug: "infect-1",
+      title: "Hand hygiene",
+      bodySystem: "immune_infectious",
+      system: "immune_infectious",
+    }),
+    lesson({ slug: "cardio-1", title: "Heart failure", bodySystem: "cardiovascular", system: "cardiovascular" }),
+    lesson({ slug: "resp-1", title: "Asthma", bodySystem: "respiratory", system: "respiratory" }),
+    lesson({ slug: "neuro-1", title: "Stroke", bodySystem: "neurological", system: "neurological" }),
+    lesson({
+      slug: "med-1",
+      title: "Insulin safety",
+      bodySystem: "patient_safety_quality",
+      system: "patient_safety_quality",
+    }),
   ]);
 
   assert.deepEqual(
@@ -59,15 +79,15 @@ test("buildPathwayLessonSystemSections preserves config order and only emits non
       "Respiratory",
       "Neurology",
       "Gastrointestinal",
-      "Integumentary",
+      "Immune / Infectious",
       "Reproductive / OB",
       "Patient safety & quality",
     ],
   );
   assert.deepEqual(
     sections.flatMap((section) => section.lessons.map((entry) => entry.slug)),
-    ["cardio-1", "resp-1", "neuro-1", "infect-1", "fund-1", "maternal-1", "med-1"],
-  );
+    ["cardio-1", "resp-1", "neuro-1", "fund-1", "infect-1", "maternal-1", "med-1"],
+    );
 });
 
 test("PATHWAY_LESSON_SYSTEM_ORDER matches flattened pathway learning categories", () => {
@@ -93,4 +113,17 @@ test("classifies lessons into separate buckets when bodySystem is an explicit ta
       ["cns_drugs", ["cns-pharm"]],
     ],
   );
+});
+
+test("lessons missing optional bodySystem/system stay in the review sentinel bucket instead of disappearing", () => {
+  const sections = buildPathwayLessonSystemSections(
+    [
+      lesson({ slug: "missing-sys-a", title: "Lesson A", bodySystem: "", system: "" }),
+      lesson({ slug: "missing-sys-b", title: "Lesson B", bodySystem: undefined, system: undefined }),
+    ],
+    "ca-rn-nclex-rn",
+  );
+  const rr = sections.find((s) => s.id === REVIEW_REQUIRED);
+  assert.ok(rr, "expected REVIEW_REQUIRED section");
+  assert.equal(rr!.lessons.length, 2);
 });

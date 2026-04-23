@@ -3,6 +3,7 @@ import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
 import { classifyNursingContent, classifyPathwayLessonRecordForHub } from "@/lib/taxonomy/classifier";
 import { allTaxonomyLeaves, REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /** Exact taxonomy leaf ids (and space/kebab variants) resolve before substring keyword scoring — avoids false hits (e.g. "neurological" contains "intestinal"). */
 const TAXONOMY_LEAF_ID_SET = new Set<string>(allTaxonomyLeaves());
@@ -118,12 +119,36 @@ export function buildPathwayLessonSystemSections(
 ): PathwayLessonSystemSection[] {
   const grouped = new Map<string, PathwayLessonRecord[]>();
   const config = learningConfigForPathwayId(pathwayId ?? null);
+  const configIds = new Set<string>();
+  for (const c of config.categories) {
+    configIds.add(c.id);
+    for (const s of c.subcategories ?? []) configIds.add(s.id);
+  }
 
   for (const lesson of lessons) {
     const label = classifyLessonForHub(lesson, pathwayId);
     const bucket = grouped.get(label) ?? [];
     bucket.push(lesson);
     grouped.set(label, bucket);
+  }
+
+  const orphanKeys = [...grouped.keys()].filter((k) => !configIds.has(k));
+  if (orphanKeys.length > 0) {
+    const counts = Object.fromEntries(orphanKeys.map((k) => [k, grouped.get(k)?.length ?? 0]));
+    safeServerLog("pathway_lessons", "hub_curriculum_orphan_taxonomy_buckets", {
+      pathway_id: pathwayId ?? "",
+      orphan_bucket_count: String(orphanKeys.length),
+      orphan_bucket_counts_json: JSON.stringify(counts),
+    });
+    const reviewBucket = grouped.get(REVIEW_REQUIRED) ?? [];
+    const mergedReview = [...reviewBucket];
+    for (const k of orphanKeys) {
+      mergedReview.push(...(grouped.get(k) ?? []));
+    }
+    grouped.set(REVIEW_REQUIRED, mergedReview);
+    for (const k of orphanKeys) {
+      if (k !== REVIEW_REQUIRED) grouped.delete(k);
+    }
   }
 
   return config.categories.flatMap((category) => {

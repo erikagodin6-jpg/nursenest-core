@@ -46,10 +46,11 @@ test("slow lessons page fetch (>1s) still resolves ok with real payload (no sile
     await new Promise((r) => setTimeout(r, 1100));
     const page: PathwayLessonsPageResult = {
       items: [item],
-      total: 3,
+      total: 1,
       page: 1,
       pageSize: 24,
       pageCount: 1,
+      renderableAll: [item],
     };
     return page;
   };
@@ -65,10 +66,10 @@ test("slow lessons page fetch (>1s) still resolves ok with real payload (no sile
   if (lessonsPageLoad.status === "ok") {
     assert.equal(lessonsPageLoad.sourceUsed, "primary");
     assert.ok(lessonsPageLoad.fetchDurationMs >= 1000, "duration should reflect slow path");
-    assert.equal(lessonsPageLoad.responseTotal, 3);
+    assert.equal(lessonsPageLoad.responseTotal, 1);
     assert.equal(lessonsPageLoad.responseItemCount, 1);
   }
-  assert.equal(pageResult.total, 3);
+  assert.equal(pageResult.total, 1);
   assert.equal(pageResult.items.length, 1);
 });
 
@@ -213,4 +214,42 @@ test("Canada NP (CNPLE) pathway accepts a well-formed primary lessons payload (n
   assert.equal(lessonsPageLoad.status, "ok");
   assert.equal(pageResult.total, 2);
   assert.equal(pageResult.items.length, 1);
+});
+
+test("primary payload missing renderableAll while total exceeds items is invalid (no silent curriculum shrink)", async () => {
+  const row = {
+    slug: "bad-contract-lesson",
+    title: "Bad contract lesson",
+    topic: "Topic",
+    topicSlug: "infection",
+    bodySystem: "cardiovascular",
+    system: "cardiovascular",
+    previewSectionCount: 1,
+    seoTitle: "Bad contract lesson",
+    seoDescription: "Desc",
+    sections: [],
+    structuralQuality: { publicComplete: true },
+    exams: [],
+    countries: [],
+  } as PathwayLessonRecord;
+  const badPage = {
+    items: [row],
+    total: 50,
+    page: 1,
+    pageSize: 24,
+    pageCount: 3,
+  };
+
+  const { pageResult, lessonsPageLoad } = await loadPathwayLessonsHubPageWithTelemetry(
+    ctx.pathwayId,
+    args,
+    ctx,
+    async () => badPage as PathwayLessonsPageResult,
+  );
+
+  assert.equal(lessonsPageLoad.status, "error");
+  if (lessonsPageLoad.status === "error") {
+    assert.equal(lessonsPageLoad.reason, "invalid_payload");
+  }
+  assert.equal(pageResult.total, 0);
 });

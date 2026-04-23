@@ -538,6 +538,19 @@ function npHubContextMatchesLegacyNursingExamTags(
   return metaAllows && examsAllow;
 }
 
+/**
+ * NCLEX-RN items are often authored with a single US or CA stamp even when `pathway_id` already scopes the row
+ * to the sibling North American hub — treat mutually visible US/CA/GLOBAL-only tags as pathway-safe for RN.
+ * (Do not extend to PN/Rex: jurisdictional PN exams stay region-scoped.)
+ */
+function nclexRnNorthAmericaPeerCountryAllow(
+  context: { exam: PathwayLessonRuntimeExam; country: PathwayLessonRuntimeCountry },
+  countries: PathwayLessonRuntimeCountry[],
+): boolean {
+  if (context.exam !== "NCLEX_RN" || countries.length === 0) return false;
+  return countries.every((c) => c === "US" || c === "CA" || c === "GLOBAL");
+}
+
 function matchesLessonContext(
   lesson: PathwayLessonRecord,
   context: { exam: PathwayLessonRuntimeExam; country: PathwayLessonRuntimeCountry },
@@ -559,8 +572,30 @@ function matchesLessonContext(
         exams.includes(context.exam) ||
         (exams.includes("NCLEX") && (context.exam === "NCLEX_PN" || context.exam === "NCLEX_RN")))) ||
     npHubContextMatchesLegacyNursingExamTags(context, exams, examMeta);
-  const countryMatch = countries.length === 0 || countries.includes(context.country) || countries.includes("GLOBAL");
+  const countryMatch =
+    countries.length === 0 ||
+    countries.includes(context.country) ||
+    countries.includes("GLOBAL") ||
+    nclexRnNorthAmericaPeerCountryAllow(context, countries);
   return examMatch && countryMatch;
+}
+
+/** Aggregated drop reasons when {@link sortAndFilterLessonsForPathwayContext} removes rows (hub diagnostics). */
+export function summarizePathwayContextPipelineDrops(
+  pathwayId: string,
+  before: readonly PathwayLessonRecord[],
+  after: readonly PathwayLessonRecord[],
+): { droppedTotal: number; reasons: Record<string, number> } {
+  const kept = new Set(after.map((l) => l.slug.trim()));
+  const dropped = before.filter((l) => !kept.has(l.slug.trim()));
+  const reasons: Record<string, number> = {};
+  for (const l of dropped) {
+    let r = "unknown";
+    if (!pathwayLessonEligibleForPublicMarketingSurface(l)) r = "not_public_complete";
+    else if (!matchesLessonContext(l, resolveLessonContextForPathwayId(pathwayId))) r = "exam_country_context_mismatch";
+    reasons[r] = (reasons[r] ?? 0) + 1;
+  }
+  return { droppedTotal: dropped.length, reasons };
 }
 
 function examMetaForContext(
