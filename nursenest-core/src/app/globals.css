@@ -2,7 +2,8 @@
 @import "./theme-palettes.css";
 @import "./color-roles.css";
 @import "./semantic-status-tokens.css";
-@import "./learner-design-system.css";
+@import "../../styles/tokens.css";
+@import "../../styles/learner-ds.css";
 @import "./learner-surface-primitives.css";
 
 html,
@@ -770,6 +771,30 @@ html[data-theme="storm-slate"] {
   --color-semantic-chart-3: var(--semantic-chart-3);
   --color-semantic-chart-4: var(--semantic-chart-4);
   --color-semantic-chart-5: var(--semantic-chart-5);
+
+  /* Learner pastel system (`styles/tokens.css`) — Tailwind utilities: bg-lv-bg-base, text-lv-text-primary, … */
+  --color-lv-bg-base: var(--lv-bg-base);
+  --color-lv-bg-surface: var(--lv-bg-surface);
+  --color-lv-bg-surface-alt: var(--lv-bg-surface-alt);
+  --color-lv-primary-50: var(--lv-primary-50);
+  --color-lv-primary-100: var(--lv-primary-100);
+  --color-lv-primary-300: var(--lv-primary-300);
+  --color-lv-primary-500: var(--lv-primary-500);
+  --color-lv-secondary-100: var(--lv-secondary-100);
+  --color-lv-secondary-300: var(--lv-secondary-300);
+  --color-lv-accent-100: var(--lv-accent-100);
+  --color-lv-accent-300: var(--lv-accent-300);
+  --color-lv-text-primary: var(--lv-text-primary);
+  --color-lv-text-secondary: var(--lv-text-secondary);
+  --color-lv-border-soft: var(--lv-border-soft);
+  --color-lv-on-primary: var(--lv-on-primary);
+
+  --radius-lv-sm: var(--lv-radius-sm);
+  --radius-lv-md: var(--lv-radius-md);
+  --radius-lv-lg: var(--lv-radius-lg);
+
+  --shadow-lv-soft: var(--lv-shadow-soft);
+  --shadow-lv-medium: var(--lv-shadow-medium);
 }
 
 @layer utilities {
@@ -3766,321 +3791,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   }
 }
 
-/* Next steps: primary column emphasis + secondaries (md+). */
-.nn-lesson-next-steps {
-  display: grid;
-  gap: 0.75rem;
-  margin-top: 0.875rem;
-}
-
-@media (min-width: 640px) {
-  .nn-lesson-next-steps {
-    grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
-    grid-auto-rows: minmax(0, 1fr);
-    align-items: stretch;
-  }
-
-  .nn-lesson-next-steps__link--primary {
-    grid-column: 1;
-    grid-row: 1 / span 2;
-    min-height: 7.5rem;
-  }
-
-  .nn-lesson-next-steps__link--secondary:nth-child(2) {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .nn-lesson-next-steps__link--secondary:nth-child(3) {
-    grid-column: 2;
-    grid-row: 2;
-  }
-}
-
-.nn-lesson-next-steps__link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 3.35rem;
-  padding: 0.85rem 0.9rem;
-  border-radius: 1rem;
-  text-align: center;
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.45;
-  color: var(--theme-heading-text);
-  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-brand) 18%);
-  background: color-mix(in srgb, var(--bg-card) 92%, var(--semantic-panel-muted) 8%);
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 72%, transparent);
-  transition:
-    border-color 0.18s ease,
-    background 0.18s ease,
-    box-shadow 0.18s ease,
-    transform 0.18s ease;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .nn-lesson-next-steps__link:hover {
-    border-color: color-mix(in srgb, var(--semantic-border-soft) 65%, var(--semantic-brand) 35%);
-    box-shadow:
-      0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 55%, transparent),
-      0 8px 26px color-mix(in srgb, var(--semantic-brand) 7%, transparent);
-  }
-}
-
-.nn-lesson-next-steps__link:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 2px var(--theme-page-bg, var(--bg-page)),
-    0 0 0 4px color-mix(in srgb, var(--semantic-brand) 38%, transparent);
-}
-
-.nn-lesson-next-steps__link--primary {
-  border-color: color-mix(in srgb, var(--semantic-brand) 26%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-brand) 11%, var(--bg-card) 89%);
-  box-shadow:
-    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 65%, transparent),
-    0 12px 36px color-mix(in srgb, var(--semantic-brand) 9%, transparent);
-  font-size: 0.9375rem;
-}
-
-.nn-lesson-next-steps__link--secondary {
-  border-color: color-mix(in srgb, var(--semantic-info) 14%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-panel-cool) 14%, var(--bg-card) 86%);
-}
-
-.nn-lesson-next-steps__link--secondary.nn-lesson-next-steps__link--warm {
-  border-color: color-mix(in srgb, var(--semantic-chart-2, var(--semantic-warning)) 16%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-panel-warm) 12%, var(--bg-card) 88%);
-}
-
-.nn-lesson-next-steps__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.125rem;
-  height: 2.125rem;
-  margin-bottom: 0.45rem;
-  border-radius: 0.625rem;
-  background: color-mix(in srgb, var(--theme-page-bg, var(--bg-page)) 55%, transparent);
-  color: color-mix(in srgb, var(--semantic-text-secondary) 35%, var(--theme-heading-text) 65%);
-}
-
-.nn-lesson-next-steps__link--primary .nn-lesson-next-steps__icon {
-  background: color-mix(in srgb, var(--semantic-brand) 12%, var(--theme-page-bg, var(--bg-page)) 88%);
-  color: color-mix(in srgb, var(--semantic-brand) 72%, var(--theme-heading-text) 28%);
-}
-
-/* Study actions panel — focal primary + ghost secondaries */
-.nn-lesson-study-actions {
-  margin-top: clamp(1.65rem, 3vw, 2.1rem);
-  padding: 1.2rem 1.05rem 1.25rem;
-  border-radius: 1.125rem;
-  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-brand) 12%);
-  background: color-mix(in srgb, var(--semantic-panel-muted) 8%, var(--bg-card) 92%);
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 70%, transparent);
-}
-
-.nn-lesson-study-actions__row-primary {
-  margin-top: 0.75rem;
-}
-
-.nn-lesson-study-actions__row-secondary {
-  margin-top: 0.65rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-@media (min-width: 640px) {
-  .nn-lesson-study-actions__row-secondary {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-}
-
-.nn-lesson-study-actions__cta-primary {
-  display: inline-flex;
-  width: 100%;
-  min-height: 2.875rem;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.65rem 1.1rem;
-  border-radius: 0.875rem;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  text-decoration: none;
-  color: var(--text-on-dark, var(--semantic-text-on-brand));
-  background: color-mix(in srgb, var(--semantic-brand) 88%, var(--semantic-text-primary) 12%);
-  border: 1px solid color-mix(in srgb, var(--semantic-brand) 42%, var(--semantic-border-soft));
-  box-shadow:
-    0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 55%, transparent),
-    0 14px 38px color-mix(in srgb, var(--semantic-brand) 14%, transparent);
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    opacity 0.18s ease;
-}
-
-.nn-lesson-study-actions__cta-primary:hover {
-  opacity: 0.97;
-}
-
-.nn-lesson-study-actions__cta-primary:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 2px var(--theme-page-bg, var(--bg-page)),
-    0 0 0 4px color-mix(in srgb, var(--semantic-brand) 40%, transparent);
-}
-
-.nn-lesson-study-actions__cta-ghost {
-  display: inline-flex;
-  flex: 1 1 auto;
-  min-height: 2.5rem;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  padding: 0.5rem 0.85rem;
-  border-radius: 0.875rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-decoration: none;
-  color: var(--theme-heading-text);
-  background: color-mix(in srgb, var(--theme-page-bg, var(--bg-page)) 94%, var(--semantic-surface) 6%);
-  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 92%, var(--semantic-brand) 8%);
-  transition:
-    border-color 0.18s ease,
-    background 0.18s ease,
-    box-shadow 0.18s ease;
-}
-
-.nn-lesson-study-actions__cta-ghost:hover {
-  border-color: color-mix(in srgb, var(--semantic-border-soft) 72%, var(--semantic-brand) 28%);
-  background: color-mix(in srgb, var(--semantic-panel-cool) 8%, var(--theme-page-bg, var(--bg-page)) 92%);
-}
-
-.nn-lesson-study-actions__cta-ghost:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 2px var(--theme-page-bg, var(--bg-page)),
-    0 0 0 4px color-mix(in srgb, var(--semantic-brand) 32%, transparent);
-}
-
-.nn-lesson-study-actions__cta-ghost--cool {
-  border-color: color-mix(in srgb, var(--semantic-border-soft) 90%, var(--semantic-chart-2) 10%);
-}
-
-.nn-lesson-study-actions__cta-ghost--cool:hover {
-  background: color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--theme-page-bg, var(--bg-page)) 90%);
-  border-color: color-mix(in srgb, var(--semantic-chart-2) 24%, var(--semantic-border-soft));
-}
-
-.nn-lesson-study-actions__icon {
-  flex-shrink: 0;
-  opacity: 0.88;
-}
-
-.nn-lesson-study-actions__meta {
-  margin-top: 0.85rem;
-  padding-top: 0.85rem;
-  border-top: 1px dashed color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-brand) 12%);
-}
-
-/* Wayfinding — soft shell, scan-friendly rows */
-.nn-lesson-wayfinding {
-  border-radius: 1.125rem;
-  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 90%, var(--semantic-brand) 10%);
-  background: color-mix(in srgb, var(--bg-card) 96%, var(--semantic-panel-muted) 4%);
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 72%, transparent);
-  padding: 1rem 0.95rem 1.1rem;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease;
-}
-
-@media (min-width: 640px) {
-  .nn-lesson-wayfinding {
-    padding: 1.15rem 1.1rem 1.25rem;
-  }
-}
-
-.nn-lesson-wayfinding:hover {
-  border-color: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-info) 22%);
-}
-
-.nn-lesson-wayfinding__title {
-  margin: 0;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 1.35;
-  color: var(--theme-heading-text);
-}
-
-.nn-lesson-wayfinding__list {
-  margin: 0.85rem 0 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: 0.45rem;
-}
-
-@media (min-width: 640px) {
-  .nn-lesson-wayfinding__list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem;
-  }
-}
-
-.nn-lesson-wayfinding__link {
-  display: flex;
-  min-height: 2.75rem;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.45rem 0.55rem;
-  border-radius: 0.875rem;
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.35;
-  color: var(--theme-heading-text);
-  border: 1px solid transparent;
-  transition:
-    border-color 0.18s ease,
-    background 0.18s ease;
-}
-
-.nn-lesson-wayfinding__link:hover {
-  border-color: color-mix(in srgb, var(--semantic-border-soft) 75%, var(--semantic-brand) 25%);
-  background: color-mix(in srgb, var(--semantic-panel-cool) 8%, var(--theme-page-bg, var(--bg-page)) 92%);
-}
-
-.nn-lesson-wayfinding__link:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 2px var(--theme-page-bg, var(--bg-page)),
-    0 0 0 4px color-mix(in srgb, var(--semantic-brand) 32%, transparent);
-}
-
-.nn-lesson-wayfinding__icon-wrap {
-  display: inline-flex;
-  flex-shrink: 0;
-  width: 2rem;
-  height: 2rem;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0.625rem;
-  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--bg-card));
-  color: color-mix(in srgb, var(--semantic-brand) 75%, var(--semantic-text-muted) 25%);
-}
-
-.nn-lesson-wayfinding__related {
-  margin-top: 0.85rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid color-mix(in srgb, var(--semantic-border-soft) 92%, transparent);
-}
+/* Lesson next steps, post-lesson actions, wayfinding → `styles/learner-ds.css` (.lv-action-grid, .lv-lesson-actions, .lv-wayfinding) */
 
 html[data-theme="dark-clinical"] .nn-lesson-article-flow::before,
 html[data-theme="dark-academia"] .nn-lesson-article-flow::before,
@@ -6153,7 +5864,7 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
  * nn-cat-exam-col — single-column centered wrapper for CAT EXAM mode.
  * Tuned for readable line length and calm vertical rhythm (UWorld-serious, cleaner).
  */
-.nn-cat-exam-col {
+.nn-cat-exam-chrome .nn-cat-exam-col {
   max-width: min(42rem, 100%);
   margin: 0 auto;
   padding: 1rem 0 0.75rem;
@@ -6180,8 +5891,8 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   }
 }
 
-/* Adaptive progress strip — subtle, not gamified */
-.nn-exam-progress--cat-exam-adaptive {
+/* Adaptive progress strip — subtle, not gamified (CAT exam chrome only) */
+.nn-cat-exam-chrome .nn-exam-progress--cat-exam-adaptive {
   padding-top: 0.45rem;
   padding-bottom: 0.45rem;
   padding-left: max(0.75rem, env(safe-area-inset-left));
@@ -6189,11 +5900,11 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   background: color-mix(in srgb, var(--semantic-panel-muted) 82%, var(--semantic-surface));
 }
 
-.nn-exam-progress--cat-exam-adaptive > div:first-child {
+.nn-cat-exam-chrome .nn-exam-progress--cat-exam-adaptive > div:first-child {
   margin-bottom: 0.35rem;
 }
 
-.nn-exam-progress--cat-exam-adaptive .nn-marketing-caption {
+.nn-cat-exam-chrome .nn-exam-progress--cat-exam-adaptive .nn-marketing-caption {
   font-size: 0.625rem;
   letter-spacing: 0.055em;
 }
@@ -6204,6 +5915,8 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 
 .nn-cat-question-card--exam-stack .nn-cat-question-card__exam-scroll {
   overscroll-behavior-y: contain;
+  /* Vertical pan only: avoids accidental horizontal gesture capture on narrow exam layouts */
+  touch-action: pan-y;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -6217,7 +5930,7 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 }
 
 /* Single-column session: safe horizontal inset, no dead split gutter */
-.nn-cat-session.nn-cat-session--exam-single {
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single {
   isolation: isolate;
 }
 
@@ -6233,13 +5946,13 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   }
 }
 
-.nn-cat-session.nn-cat-session--exam-single .nn-cat-exam-col {
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-exam-col {
   padding-top: 0.25rem;
   padding-bottom: 0.5rem;
 }
 
 @media (max-width: 639px) {
-  .nn-cat-exam-col {
+  .nn-cat-exam-chrome .nn-cat-exam-col {
     padding-left: 0;
     padding-right: 0;
   }
@@ -6259,7 +5972,7 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 }
 
 .nn-cat-question-card--exam-stack .nn-cat-question-stem,
-.nn-cat-session.nn-cat-session--exam-single .nn-cat-question-stem {
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-question-stem {
   font-size: clamp(1rem, 2.9vw, 1.0625rem);
   line-height: 1.58;
   letter-spacing: -0.008em;
@@ -6271,7 +5984,7 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 
 @media (min-width: 768px) {
   .nn-cat-question-card--exam-stack .nn-cat-question-stem,
-  .nn-cat-session.nn-cat-session--exam-single .nn-cat-question-stem {
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-question-stem {
     max-width: 66ch;
   }
 }
@@ -6292,18 +6005,18 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   letter-spacing: 0.065em;
 }
 
-.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt__text,
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt__text,
 .nn-cat-question-card--exam-stack .nn-cat-opt__text {
   font-size: clamp(0.875rem, 2.4vw, 0.9375rem);
   line-height: 1.5;
 }
 
-.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt-list,
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt-list,
 .nn-cat-question-card--exam-stack .nn-cat-opt-list {
   gap: 0.625rem;
 }
 
-.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt,
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt,
 .nn-cat-question-card--exam-stack .nn-cat-opt {
   min-height: 3rem;
   padding: 0.8125rem 0.875rem;
@@ -6319,24 +6032,37 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 }
 
 .nn-cat-question-card--exam-stack .nn-cat-opt--selected,
-.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--selected {
-  border-color: color-mix(in srgb, var(--nn-exam-accent) 40%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--nn-exam-accent) 4%, var(--bg-card));
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--selected {
+  border-width: 2px;
+  border-color: color-mix(in srgb, var(--nn-exam-accent) 52%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-exam-accent) 8%, var(--bg-card));
   box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--nn-exam-accent) 11%, transparent),
-    0 0 0 1px color-mix(in srgb, var(--nn-exam-accent) 9%, transparent);
+    inset 0 0 0 1px color-mix(in srgb, var(--nn-exam-accent) 14%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--nn-exam-accent) 12%, transparent);
+}
+
+.nn-cat-question-card--exam-stack .nn-cat-opt--selected .nn-cat-opt__text,
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--selected .nn-cat-opt__text {
+  font-weight: 600;
 }
 
 .nn-cat-question-card--exam-stack .nn-cat-opt--dim,
-.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--dim {
-  opacity: 0.78;
-  border-color: color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-text-muted));
-  background: color-mix(in srgb, var(--semantic-panel-muted) 32%, var(--bg-card));
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--dim {
+  opacity: 1;
+  font-weight: 400;
+  color: var(--semantic-text-secondary);
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 78%, var(--semantic-text-muted));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 24%, var(--bg-card));
 }
 
-.nn-cat-question-card--exam-stack .nn-cat-opt:disabled {
-  opacity: 0.9;
-  background: color-mix(in srgb, var(--semantic-panel-muted) 40%, var(--semantic-surface));
+.nn-cat-question-card--exam-stack .nn-cat-opt:disabled,
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+  border-style: dashed;
+  border-width: 2px;
+  font-style: italic;
+  background: color-mix(in srgb, var(--semantic-panel-muted) 48%, var(--semantic-surface));
   color: var(--semantic-text-secondary);
 }
 
@@ -6347,38 +6073,37 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 }
 
 .nn-cat-question-card--exam-stack .nn-cat-opt--interactive:focus-visible,
-.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--interactive:focus-visible {
+.nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt--interactive:focus-visible {
   outline: none;
   box-shadow:
     0 0 0 2px var(--semantic-surface),
     0 0 0 4px color-mix(in srgb, var(--nn-exam-accent) 38%, transparent);
 }
 
-/* Pinned action slab: safe-area, stable separation from scroll body */
-.nn-cat-question-card__exam-footer--anchored {
+/* Pinned action slab: safe-area, stable separation from scroll body (CAT exam stack only) */
+.nn-cat-question-card--exam-stack .nn-cat-question-card__exam-footer--anchored {
   padding-top: 0.75rem;
-  padding-bottom: max(0.625rem, env(safe-area-inset-bottom));
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   padding-left: max(0.125rem, env(safe-area-inset-left));
   padding-right: max(0.125rem, env(safe-area-inset-right));
   background: color-mix(in srgb, var(--semantic-surface) 94%, var(--semantic-panel-muted));
 }
 
+/* Exam stack: only the anchored footer may use sticky layering; kill study CAT mobile sticky nav */
 .nn-cat-question-card--exam-stack .nn-cat-question-nav {
   margin-top: 0;
   padding-top: 0;
   border-top: none;
   row-gap: 0.5rem;
-}
-
-@media (max-width: 767px) {
-  /* Exam stack footer is the anchor — disable generic sticky nav overlap from study layouts */
-  .nn-cat-question-card--exam-stack .nn-cat-question-nav {
-    position: static;
-    margin: 0;
-    padding: 0;
-    background: transparent !important;
-    backdrop-filter: none !important;
-  }
+  position: static !important;
+  bottom: auto !important;
+  top: auto !important;
+  z-index: auto !important;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+  padding-bottom: 0 !important;
+  background: transparent !important;
+  backdrop-filter: none !important;
 }
 
 .nn-cat-question-card--exam-stack .nn-btn-primary {

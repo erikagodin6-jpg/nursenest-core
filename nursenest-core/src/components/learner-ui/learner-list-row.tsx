@@ -18,13 +18,13 @@ export function LearnerListRowLink({
   meta?: ReactNode;
 }) {
   return (
-    <Link {...props} className={`nn-ls-ds-list-row ${className}`.trim()}>
-      <span className="nn-ls-ds-list-row__icon" aria-hidden>
+    <Link {...props} className={`lv-list-row ${className}`.trim()}>
+      <span className="lv-list-row__icon" aria-hidden>
         {icon}
       </span>
       <span className="min-w-0 flex-1">
-        <span className="nn-ls-ds-list-row__label">{label}</span>
-        {meta ? <div className="nn-ls-ds-list-row__meta">{meta}</div> : null}
+        <span className="lv-list-row__label">{label}</span>
+        {meta ? <div className="lv-list-row__meta">{meta}</div> : null}
       </span>
     </Link>
   );

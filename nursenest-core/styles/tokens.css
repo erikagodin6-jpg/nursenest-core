@@ -28,6 +28,11 @@
 
   --lv-border-soft: #e3e8eb;
 
+  --lv-on-primary: #ffffff;
+  --lv-warning-soft: #fffbeb;
+  --lv-warning-text: #b45309;
+  --lv-warning-border: #f59e0b;
+
   --lv-radius-sm: 8px;
   --lv-radius-md: 12px;
   --lv-radius-lg: 16px;
@@ -69,4 +74,8 @@ html[data-theme="storm-slate"] {
 
   --lv-shadow-soft: 0 2px 10px rgba(0, 0, 0, 0.28);
   --lv-shadow-medium: 0 6px 22px rgba(0, 0, 0, 0.35);
+
+  --lv-warning-soft: color-mix(in srgb, #fbbf24 14%, var(--lv-bg-surface));
+  --lv-warning-text: #fde68a;
+  --lv-warning-border: #fbbf24;
 }

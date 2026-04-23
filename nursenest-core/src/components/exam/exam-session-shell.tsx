@@ -76,7 +76,7 @@ export function ExamSessionProgressStrip({ pct }: { pct: number }) {
       aria-label={`Progress ${Math.round(w)} percent`}
     >
       <div
-        className="h-full nn-progress-fill-semantic-readiness transition-[width] duration-500 ease-out"
+        className="h-full nn-progress-fill-semantic-readiness motion-reduce:transition-none transition-[width] duration-500 ease-out"
         style={{ width: `${w}%` }}
       />
     </div>

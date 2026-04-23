@@ -62,21 +62,18 @@ export function PathwayLessonWayfinding({
   }
 
   return (
-    <nav
-      className="nn-lesson-wayfinding mx-auto mt-6 max-w-5xl sm:mt-8"
-      aria-labelledby="lesson-wayfinding-heading"
-    >
-      <h2 id="lesson-wayfinding-heading" className="nn-lesson-wayfinding__title">
+    <nav className="lv-wayfinding mx-auto mt-6 max-w-5xl sm:mt-8" aria-labelledby="lesson-wayfinding-heading">
+      <h2 id="lesson-wayfinding-heading" className="lv-wayfinding__title">
         Study support
       </h2>
 
-      <ul className="nn-lesson-wayfinding__list">
+      <ul className="lv-wayfinding__list">
         {coreLinks.map((item) => {
           const Icon = item.icon;
           return (
             <li key={item.href}>
-              <Link href={item.href} className="nn-lesson-wayfinding__link">
-                <span className="nn-lesson-wayfinding__icon-wrap" aria-hidden>
+              <Link href={item.href} className="lv-wayfinding__link">
+                <span className="lv-wayfinding__icon-wrap" aria-hidden>
                   <Icon className="h-4 w-4" strokeWidth={1.75} />
                 </span>
                 {item.label}
@@ -87,17 +84,14 @@ export function PathwayLessonWayfinding({
       </ul>
 
       {curated.length > 0 ? (
-        <div className="nn-lesson-wayfinding__related">
+        <div className="lv-wayfinding__related">
           <p className="nn-lesson-module-eyebrow">Related reads</p>
-          <ul className="mt-2 space-y-1">
+          <ul className="lv-wayfinding__related-list">
             {curated.map((c) => (
               <li key={c.href}>
-                <Link
-                  href={c.href}
-                  className="inline-flex min-h-9 items-center gap-1.5 rounded-md px-1 py-1 text-sm font-medium text-[var(--semantic-brand)] transition-colors duration-150 hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,transparent)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)]"
-                >
+                <Link href={c.href} className="lv-wayfinding__related-link">
                   {c.title}
-                  <span aria-hidden className="text-[var(--theme-muted-text)]">
+                  <span aria-hidden className="lv-wayfinding__related-chevron">
                     →
                   </span>
                 </Link>

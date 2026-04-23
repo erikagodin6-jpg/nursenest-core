@@ -15,7 +15,7 @@ export function LearnerCtaLink({
   variant?: "primary" | "secondary";
   children: ReactNode;
 }) {
-  const cls = variant === "primary" ? "nn-ls-ds-cta-primary" : "nn-ls-ds-cta-secondary";
+  const cls = variant === "primary" ? "lv-btn-primary" : "lv-btn-secondary";
   return (
     <Link {...props} className={`${cls} ${className}`.trim()}>
       {children}

@@ -26,6 +26,7 @@ import {
   syncUserFromStripePriceId,
 } from "@/lib/stripe/sync-user-from-stripe-subscription";
 import { pastDueSinceForStatusTransition } from "@/lib/stripe/subscription-past-due-since";
+import { scheduleOwnerPaidSubscriptionCheckoutNotificationsIfEligible } from "@/lib/stripe/subscription-owner-notify";
 
 type LifecycleData = ReturnType<typeof billingLifecycleFields>;
 
@@ -226,10 +227,11 @@ export async function applyStripeWebhookEvent(
 
       let lifecycle: LifecycleData = { cancelAtPeriodEnd: false };
       let stripeSubStatus: Stripe.Subscription.Status | null = null;
+      let stripeSubscription: Stripe.Subscription | null = null;
       try {
-        const stripeSub = await stripe.subscriptions.retrieve(subId);
-        lifecycle = billingLifecycleFields(stripeSub);
-        stripeSubStatus = stripeSub.status;
+        stripeSubscription = await stripe.subscriptions.retrieve(subId);
+        lifecycle = billingLifecycleFields(stripeSubscription);
+        stripeSubStatus = stripeSubscription.status;
       } catch {
         safeServerLog("stripe_webhook", "lifecycle_fetch_failed_checkout", {
           eventIdPrefix,
@@ -405,6 +407,23 @@ export async function applyStripeWebhookEvent(
         });
       }
       await syncUserFromCheckoutSessionMetadata(userId, session.metadata ?? undefined);
+
+      scheduleOwnerPaidSubscriptionCheckoutNotificationsIfEligible({
+        stripe,
+        event,
+        session,
+        userId,
+        subscriptionId: subId,
+        customerId,
+        stripeSubscription,
+        stripeSubStatus,
+        statusForDb,
+        planTier: plan?.tier,
+        planTierLabel: plan?.tier != null ? String(plan.tier) : null,
+        planCountryLabel: plan?.country != null ? String(plan.country) : null,
+        billingRegionSlug: billingRegionMeta,
+        correlation,
+      });
     }
     productEvent("stripe_webhook_ok", { eventType: event.type });
     return;

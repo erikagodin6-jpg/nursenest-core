@@ -108,29 +108,29 @@ export function PathwayLessonActions({
   const saving = pending !== "idle";
 
   return (
-    <section className="nn-lesson-study-actions" aria-label="Continue studying">
+    <section className="lv-lesson-actions" aria-label="Continue studying">
       <p className="nn-lesson-module-eyebrow">{t("learner.lessons.detail.studyActionsEyebrow")}</p>
 
-      <div className="nn-lesson-study-actions__row-primary">
+      <div className="lv-lesson-actions__primary">
         <Link
           href={qbHref}
           data-testid="pathway-lesson-cta-practice-topic"
           data-nn-pathway-id={pathwayId}
-          className="nn-lesson-study-actions__cta-primary sm:w-auto sm:min-w-[12rem]"
+          className="lv-btn-primary w-full sm:w-auto sm:min-w-48"
         >
-          <ClipboardList className="nn-lesson-study-actions__icon h-4 w-4 shrink-0" aria-hidden />
+          <ClipboardList className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
           {t("learner.studyLoop.practiceThisTopicCta")}
         </Link>
       </div>
 
-      <div className="nn-lesson-study-actions__row-secondary">
+      <div className="lv-lesson-actions__secondary">
         <Link
           href={flashcardsHref}
           data-testid="pathway-lesson-cta-flashcards"
           data-nn-pathway-id={pathwayId}
-          className="nn-lesson-study-actions__cta-ghost sm:min-w-[10rem] sm:flex-none"
+          className="lv-btn-secondary flex-1 sm:min-w-40 sm:flex-none"
         >
-          <Layers className="nn-lesson-study-actions__icon h-4 w-4 shrink-0" aria-hidden />
+          <Layers className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
           {t("learner.studyLoop.sameTopicFlashcards")}
         </Link>
         {showCatCta ? (
@@ -138,37 +138,33 @@ export function PathwayLessonActions({
             href={catWeakHref}
             data-testid="pathway-lesson-cta-cat-practice"
             data-nn-pathway-id={pathwayId}
-            className="nn-lesson-study-actions__cta-ghost nn-lesson-study-actions__cta-ghost--cool sm:min-w-[10rem] sm:flex-none"
+            className="lv-btn-secondary lv-lesson-actions__btn--cool flex-1 sm:min-w-40 sm:flex-none"
           >
-            <LineChart className="nn-lesson-study-actions__icon h-4 w-4 shrink-0" aria-hidden />
+            <LineChart className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
             {t("learner.studyLoop.catFromLesson")}
           </Link>
         ) : null}
-        <Link
-          href={allLessonsHref}
-          data-testid="pathway-lesson-cta-all-lessons"
-          className="nn-lesson-study-actions__cta-ghost sm:min-w-[10rem] sm:flex-none"
-        >
-          <Library className="nn-lesson-study-actions__icon h-4 w-4 shrink-0" aria-hidden />
+        <Link href={allLessonsHref} data-testid="pathway-lesson-cta-all-lessons" className="lv-btn-secondary flex-1 sm:min-w-40 sm:flex-none">
+          <Library className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
           {t("learner.lessons.detail.allLessons")}
         </Link>
       </div>
 
       {!userId ? (
-        <p className="mt-3 text-sm text-muted">
-          <Link href="/login" className="nn-marketing-body-sm font-semibold text-primary underline">
+        <p className="mt-3 text-sm text-lv-text-secondary">
+          <Link href="/login" className="nn-marketing-body-sm font-semibold text-lv-primary-500 underline">
             {t("learner.studyLoop.signIn")}
           </Link>{" "}
           {t("learner.studyLoop.signInProgressHint")}
         </p>
       ) : canMarkComplete ? (
-        <div className="nn-lesson-study-actions__meta flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
+        <div className="lv-lesson-actions__meta flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
             {progress === "completed" ? (
               <button
                 type="button"
                 disabled={saving}
                 onClick={() => void markUncomplete()}
-                className="inline-flex min-h-9 items-center justify-center self-start rounded-md px-2 text-sm font-medium text-[var(--theme-muted-text)] underline-offset-2 transition hover:text-[var(--theme-heading-text)] hover:underline disabled:opacity-60"
+                className="lv-lesson-actions__meta-btn"
               >
                 <SuccessLeaf show size={16} />
                 <span className="ml-1.5">
@@ -176,19 +172,14 @@ export function PathwayLessonActions({
                 </span>
               </button>
             ) : (
-              <button
-                type="button"
-                disabled={saving}
-                onClick={() => void markComplete()}
-                className="inline-flex min-h-9 items-center justify-center self-start rounded-md border border-[var(--semantic-border-soft)] bg-transparent px-3 py-1.5 text-sm font-medium text-[var(--theme-muted-text)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_25%,var(--semantic-border-soft))] hover:text-[var(--theme-heading-text)] disabled:opacity-60"
-              >
+              <button type="button" disabled={saving} onClick={() => void markComplete()} className="lv-lesson-actions__meta-btn lv-lesson-actions__meta-btn--outline">
                 {pending === "complete" ? t("learner.studyLoop.markStudiedSaving") : t("learner.studyLoop.markStudied")}
               </button>
             )}
-            {error ? <span className="text-xs text-amber-800">{t("learner.studyLoop.markStudiedError")}</span> : null}
+            {error ? <span className="lv-lesson-actions__meta-error">{t("learner.studyLoop.markStudiedError")}</span> : null}
           </div>
         ) : (
-          <p className="mt-3 text-sm text-muted">{t("learner.studyLoop.subscribePathwayHint")}</p>
+          <p className="mt-3 text-sm text-lv-text-secondary">{t("learner.studyLoop.subscribePathwayHint")}</p>
         )}
     </section>
   );

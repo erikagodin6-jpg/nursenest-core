@@ -43,7 +43,7 @@ const eslintConfig = defineConfig([
         {
           selector: "JSXAttribute[name.name='style']",
           message:
-            "Prefer learner design tokens (`learner-design-system.css`, `nn-ls-ds-*`, `nn-ls-*`) over inline styles so themes stay consistent.",
+            "Prefer learner design tokens (`styles/tokens.css`, `styles/learner-ds.css`, `lv-*`, `nn-ls-*`) over inline styles so themes stay consistent.",
         },
       ],
     },

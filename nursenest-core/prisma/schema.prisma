@@ -354,6 +354,12 @@ model StripeWebhookEvent {
   createdAt DateTime @default(now())
 }
 
+/// * Dedupes internal owner alerts for paid subscription checkout (`checkout.session.completed`) — one row per Stripe `evt_…`.
+model StripeOwnerPaidSubscriptionNotify {
+  id        String   @id
+  createdAt DateTime @default(now())
+}
+
 model Category {
   id                       String                    @id @default(cuid())
   name                     String

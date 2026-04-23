@@ -66,6 +66,7 @@ import type { StudySettings } from "@/lib/learner/study-settings";
 import { fetchWithRetry } from "@/lib/runtime/fetch-with-retry";
 import { captureClientException } from "@/lib/runtime/client-observability";
 import { PracticeTestRunPageSkeleton } from "@/components/skeletons/hub-page-skeleton";
+import { LearnerStudyCard } from "@/components/learner-ui/learner-study-card";
 
 type QRow = {
   id: string;
@@ -506,6 +507,29 @@ export function PracticeTestRunnerClient({
   // isExamStyle — CAT test mode: single-column exam shell; explicit submit then lock then next.
   // CAT study mode uses split layout; rationale panel unlocks after submit (see explanation flow).
   const isExamStyle = catMode && !catFeedbackStudy;
+  const catExamLeakWarnedRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (typeof document === "undefined" || isExamStyle) return;
+    if (!catMode || status !== "IN_PROGRESS" || !current) return;
+    const leak =
+      document.querySelector(".nn-cat-question-card--exam-stack") ??
+      document.querySelector(".nn-cat-session.nn-cat-session--exam-single");
+    if (!leak) {
+      catExamLeakWarnedRef.current = null;
+      return;
+    }
+    const sig = `${leak.tagName}:${leak.className}`;
+    if (catExamLeakWarnedRef.current === sig) return;
+    catExamLeakWarnedRef.current = sig;
+    console.warn(
+      "[CAT UI] Exam-only layout classes present while isExamStyle=false (possible mode leakage).",
+      leak,
+    );
+    /* Re-run when question changes; avoid `current` object identity to prevent noisy effect churn. */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isExamStyle, catMode, status, current?.id]);
+
   const catStudyLocked =
     catFeedbackStudy && Boolean(catStudyFeedback && current && catStudyFeedback.questionId === current.id);
   const aanpNpExamSim = examSimulation && testConfig?.catExamConfigId === "aanp-np-us";
@@ -1113,33 +1137,32 @@ export function PracticeTestRunnerClient({
     Boolean(error) &&
     !qLoading;
   const sessionRecoveryBanner = sessionRecoverable ? (
-    <div
-      role="alert"
-      className="mb-4 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-primary)] shadow-sm"
-    >
-      <p className="font-semibold text-[var(--semantic-text-primary)]">
-        {tx("learner.practiceTests.run.sessionIssueTitle", "We could not sync that step")}
-      </p>
-      <p className="mt-1 text-[var(--semantic-text-secondary)]">{error}</p>
-      <div className="mt-3 flex flex-wrap gap-2">
-        <button
-          type="button"
-          className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
-          onClick={() => {
-            setError(null);
-            void load();
-          }}
-        >
-          {tx("learner.practiceTests.run.sessionTryAgain", "Try again")}
-        </button>
-        <button
-          type="button"
-          className="rounded-full border border-transparent px-4 py-2 text-xs font-semibold text-[var(--semantic-text-muted)] underline-offset-2 hover:underline"
-          onClick={() => setError(null)}
-        >
-          {tx("learner.practiceTests.run.sessionDismiss", "Dismiss")}
-        </button>
-      </div>
+    <div role="alert">
+      <LearnerStudyCard className="mb-4 border-[color-mix(in_srgb,var(--semantic-warning)_38%,var(--lv-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_10%,var(--lv-bg-surface))] text-sm text-[var(--semantic-text-primary)] shadow-sm">
+        <p className="font-semibold text-[var(--semantic-text-primary)]">
+          {tx("learner.practiceTests.run.sessionIssueTitle", "We could not sync that step")}
+        </p>
+        <p className="mt-1 text-[var(--semantic-text-secondary)]">{error}</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button
+            type="button"
+            className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
+            onClick={() => {
+              setError(null);
+              void load();
+            }}
+          >
+            {tx("learner.practiceTests.run.sessionTryAgain", "Try again")}
+          </button>
+          <button
+            type="button"
+            className="rounded-full border border-transparent px-4 py-2 text-xs font-semibold text-[var(--semantic-text-muted)] underline-offset-2 hover:underline"
+            onClick={() => setError(null)}
+          >
+            {tx("learner.practiceTests.run.sessionDismiss", "Dismiss")}
+          </button>
+        </div>
+      </LearnerStudyCard>
     </div>
   ) : null;
 

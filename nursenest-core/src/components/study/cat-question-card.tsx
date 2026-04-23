@@ -1,4 +1,7 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 /**
  * QuestionCard — left card in the CAT session layout.
@@ -45,18 +48,91 @@ export function QuestionCard({
     </p>
   );
 
+  const footerRef = useRef<HTMLDivElement | null>(null);
+  const [examScrollPadBottomPx, setExamScrollPadBottomPx] = useState(0);
+  /** True once we have a real footer box height — keeps first-paint fallback from overriding a good measure. */
+  const [examFooterMeasured, setExamFooterMeasured] = useState(false);
+
+  const measureExamFooter = useCallback((isCancelled: () => boolean) => {
+    const el = footerRef.current;
+    if (!el || isCancelled()) return;
+    /* Double rAF: stabilize after font swap / orientation / subgrid layout (common mobile exam cases). */
+    requestAnimationFrame(() => {
+      if (isCancelled()) return;
+      requestAnimationFrame(() => {
+        if (isCancelled()) return;
+        const el2 = footerRef.current;
+        if (!el2) return;
+        const h = Math.ceil(el2.getBoundingClientRect().height);
+        if (h <= 0) return;
+        setExamFooterMeasured(true);
+        setExamScrollPadBottomPx((prev) => (prev === h ? prev : h));
+      });
+    });
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!examStackedLayout || !footerSlot) return;
+    let cancelled = false;
+    const isCancelled = () => cancelled;
+    const safeMeasure = () => measureExamFooter(isCancelled);
+    safeMeasure();
+    const el = footerRef.current;
+    const ro =
+      typeof ResizeObserver !== "undefined" && el
+        ? new ResizeObserver(() => {
+            safeMeasure();
+          })
+        : null;
+    ro?.observe(el as Element);
+    window.addEventListener("resize", safeMeasure);
+    window.addEventListener("orientationchange", safeMeasure);
+    if (typeof document !== "undefined" && document.fonts?.ready) {
+      void document.fonts.ready.then(() => {
+        if (!cancelled) safeMeasure();
+      });
+    }
+    return () => {
+      cancelled = true;
+      ro?.disconnect();
+      window.removeEventListener("resize", safeMeasure);
+      window.removeEventListener("orientationchange", safeMeasure);
+    };
+    // footerSlot omitted: unstable ReactNode identity; ResizeObserver covers footer content/height changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [examStackedLayout, measureExamFooter]);
+
+  useLayoutEffect(() => {
+    if (examStackedLayout && footerSlot) return;
+    setExamScrollPadBottomPx(0);
+    setExamFooterMeasured(false);
+  }, [examStackedLayout, footerSlot]);
+
   if (examStackedLayout && footerSlot) {
     return (
       <div className="nn-cat-question-card nn-cat-question-card--exam-stack flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
         <div
           id="nn-cat-exam-scroll-region"
           className="nn-cat-question-card__exam-scroll min-h-0 flex-1 overflow-y-auto overflow-x-hidden"
+          style={{
+            /*
+             * Match footer border-box height (footer uses padding-bottom: calc(16px + env(safe-area-inset-bottom))).
+             * Pre-measure fallback only until first positive measure — then px-only so it cannot fight measured height.
+             */
+            paddingBottom:
+              examFooterMeasured && examScrollPadBottomPx > 0
+                ? `${examScrollPadBottomPx}px`
+                : "calc(5.5rem + env(safe-area-inset-bottom, 0px))",
+          }}
         >
           {meta}
           {stemBlock}
           {children}
         </div>
-        <div className="nn-cat-question-card__exam-footer nn-cat-question-card__exam-footer--anchored shrink-0 border-t border-[var(--semantic-border-soft)]">
+        <div
+          ref={footerRef}
+          className="nn-cat-question-card__exam-footer nn-cat-question-card__exam-footer--anchored shrink-0 border-t border-[var(--semantic-border-soft)]"
+        >
           {footerSlot}
         </div>
       </div>
