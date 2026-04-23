@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { ExamFamily, Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth";
@@ -55,6 +56,7 @@ import {
 } from "@/lib/questions/exam-question-access-sql";
 import { getWeakTopicTargetsForPractice } from "@/lib/learner/topic-performance";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
+import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 
 export const dynamic = "force-dynamic";
 
@@ -384,8 +386,7 @@ export async function GET(req: NextRequest) {
               take: Math.min(160, Math.max(48, effectivePageSize * 12)),
             }),
           );
-          const shuffled = [...pool].sort(() => Math.random() - 0.5).slice(0, effectivePageSize);
-          questions = shuffled;
+          questions = shuffleSeeded(pool, `${randomUUID()}:question-bank-random-page`).slice(0, effectivePageSize);
         } else {
           const accessSql = examQuestionAccessWhereSql(gate.entitlement);
           const pathSql = pathwayExamKeysSql(pathway);

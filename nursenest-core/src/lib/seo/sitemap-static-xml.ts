@@ -156,6 +156,7 @@ export async function collectPathwayLessonSeoUrls(origin: string): Promise<strin
     listPathwayLessonSlugBatch,
     listTopicClustersForSitemap,
   } = await import("@/lib/lessons/pathway-lesson-loader");
+  const { marketingPathwayLessonTopicClusterPath } = await import("@/lib/lessons/lesson-routes");
   const pathwayIds = await listPathwayIdsWithLessons();
   const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-pathways-catalog");
   for (const pid of pathwayIds) {
@@ -168,7 +169,7 @@ export async function collectPathwayLessonSeoUrls(origin: string): Promise<strin
     }
     const topics = await listTopicClustersForSitemap(pid);
     for (const t of topics) {
-      if (!push(`${o}${buildExamPathwayPath(p, `lessons/topics/${t.topicSlug}`)}`)) {
+      if (!push(`${o}${marketingPathwayLessonTopicClusterPath(p, t.topicSlug)}`)) {
         safeServerLog("seo", "sitemap_pathway_derived_cap", { cap: MAX_PATHWAY_DERIVED_SITEMAP_URLS, phase: "topic" });
         return urls;
       }

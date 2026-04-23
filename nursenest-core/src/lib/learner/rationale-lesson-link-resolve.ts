@@ -21,6 +21,7 @@ import { pathwayRationaleContextFromId } from "@/lib/learner/lesson-question-rat
 import type { RationaleLessonLinkKind } from "@/lib/learner/lesson-question-rationale/types";
 import { deriveTopicCode } from "@/lib/learner/topic-linking";
 import { pickTopicClusterSlugForPathway } from "@/lib/lessons/lesson-topic-cluster-registry";
+import { marketingPathwayLessonTopicClusterPath } from "@/lib/lessons/lesson-routes";
 import { listTopicClusters } from "@/lib/lessons/pathway-lesson-loader";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
 import { SCOPED_GOLD_PROVIDERS } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
@@ -104,7 +105,7 @@ async function resolveSlugHrefBatch(
 function topicHubFallback(pathwayId: string, topicSlug: string, titleLabel?: string): RationaleLessonLinkResolved | null {
   const pathway = getExamPathwayById(pathwayId);
   if (!pathway) return null;
-  const href = buildExamPathwayPath(pathway, `lessons/topics/${topicSlug}`);
+  const href = marketingPathwayLessonTopicClusterPath(pathway, topicSlug);
   return {
     kind: "topic_hub",
     slug: `topic:${topicSlug}`,

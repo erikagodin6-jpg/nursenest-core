@@ -29,11 +29,23 @@ import {
   normalizeCountryForBlogSeo,
   normalizeExamForBlogSeo,
 } from "@/lib/blog/blog-generate-seo";
+import { classifyStrings } from "@/lib/taxonomy/classifier";
+import { REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
+import {
+  assertSeoSafeToCreateBlog,
+  ensureUniqueTaxonomyTerminalSlug,
+  SeoDuplicateBlockedError,
+} from "@/lib/seo/seo-duplicate-guard";
+import { generateSeo, assertRequiredSeoFieldsPresent } from "@/lib/seo/seo-generator";
+import {
+  mapExamStringToSeoTier,
+  seoDomainForTaxonomyCategory,
+  type SeoContentDomain,
+} from "@/lib/seo/seo-taxonomy-align";
 import {
   buildSeoBundleForSimpleAiDraft,
   clampSerpDescription,
   clampSerpTitle,
-  deriveBlogCategoryForPersist,
   normalizeBlogTagsForStorage,
 } from "@/lib/blog/blog-seo-package";
 import { buildSchemaSummaryPayload } from "@/lib/blog/blog-seo-automation";
@@ -106,6 +118,59 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
   const countryTargetResolved =
     d.countryTarget ??
     (d.country === "CA" ? CountryCode.CA : d.country === "US" ? CountryCode.US : null);
+
+  const classified = classifyStrings({
+    title: templateTitle,
+    content: `${d.topic}\n${d.keywords ?? ""}\n${d.keywordCluster ?? ""}`,
+  });
+  let taxonomyCategory = classified.category;
+  if (taxonomyCategory === REVIEW_REQUIRED) {
+    taxonomyCategory = "study_strategy";
+  }
+  const seoDomain: SeoContentDomain = seoDomainForTaxonomyCategory(taxonomyCategory);
+  const tier = mapExamStringToSeoTier(d.exam);
+  const kwList = d.keywords
+    ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean)
+    : [d.targetKeyword ?? d.topic].filter(Boolean);
+  const taxonomySeo = generateSeo({
+    title: templateTitle,
+    category: taxonomyCategory,
+    domain: seoDomain,
+    keywords: kwList,
+    tier,
+  });
+  assertRequiredSeoFieldsPresent({
+    slug: taxonomySeo.slug,
+    metaTitle: taxonomySeo.metaTitle,
+    metaDescription: taxonomySeo.metaDescription,
+    breadcrumb: taxonomySeo.breadcrumb,
+  });
+
+  let slug: string;
+  try {
+    const explicit = parseOptionalBlogSlug(d.slug ?? "");
+    const base = explicit ?? taxonomySeo.slug;
+    if (!explicit) {
+      console.info("[blog] slug auto-generated", { base, topic: d.topic, exam: d.exam });
+    }
+    slug = explicit ? await ensureUniqueBlogPostSlug(base) : await ensureUniqueTaxonomyTerminalSlug(prisma, base);
+  } catch (e) {
+    if (BlogInvalidSlugError.is(e)) {
+      return { ok: false, error: e.message };
+    }
+    throw e;
+  }
+
+  try {
+    await assertSeoSafeToCreateBlog(prisma, { slug, metaTitle: taxonomySeo.metaTitle, h1: taxonomySeo.h1 });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    if (e instanceof SeoDuplicateBlockedError) {
+      return { ok: false, error: msg };
+    }
+    throw e;
+  }
+
   const autoSeo = generateBlogSEO({
     title: templateTitle,
     topic: d.topic,
@@ -113,24 +178,9 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
     country: normalizeCountryForBlogSeo(countryTargetResolved),
     existingSlug: slug,
   });
-  const title = autoSeo.h1.slice(0, 220);
-  const seoTitle = clampSerpTitle(autoSeo.seoTitle, 70).slice(0, 200);
-  const seoDescription = clampSerpDescription(autoSeo.metaDescription, 120, 155).slice(0, 500);
-
-  let slug: string;
-  try {
-    const explicit = parseOptionalBlogSlug(d.slug ?? "");
-    const base = explicit ?? generateBlogSlugBaseFromExamTopic(d.exam, d.topic, 100);
-    if (!explicit) {
-      console.info("[blog] slug auto-generated", { title, topic: d.topic, exam: d.exam });
-    }
-    slug = await ensureUniqueBlogPostSlug(base);
-  } catch (e) {
-    if (BlogInvalidSlugError.is(e)) {
-      return { ok: false, error: e.message };
-    }
-    throw e;
-  }
+  const title = taxonomySeo.h1.slice(0, 220);
+  const seoTitle = clampSerpTitle(taxonomySeo.metaTitle, 70).slice(0, 200);
+  const seoDescription = clampSerpDescription(taxonomySeo.metaDescription, 120, 155).slice(0, 500);
   if (!d.allowDuplicateCanonicalTopic) {
     const dupByTopic = normalizedTopic
       ? await findExistingBlogByCanonicalIntent({ exam: d.exam, normalizedTopic })
@@ -259,10 +309,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
     [d.exam, primaryKw],
     12,
   );
-  const categoryAssigned = deriveBlogCategoryForPersist({
-    keywordCluster: d.keywordCluster ?? null,
-    template: d.template,
-  });
+  const categoryAssigned = taxonomyCategory;
   const seoBundle = buildSeoBundleForSimpleAiDraft({
     slug,
     h1: title,
@@ -345,10 +392,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
         metaDescriptionVariant: seoDescription,
         tags,
         outlineJson: outline,
-        keyQuestions: [
-          `What matters most about ${d.topic} on ${d.exam}?`,
-          `What mistakes should students avoid for ${d.topic}?`,
-        ],
+        keyQuestions: taxonomySeo.faq.map((f) => f.q).slice(0, 8),
         keywordPlan: [
           primaryKw,
           ...(d.keywords ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 8) : []),

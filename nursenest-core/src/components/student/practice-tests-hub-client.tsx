@@ -113,7 +113,10 @@ export function PracticeTestsHubClient({
   );
   const hasInProgressActivity = list.some((row) => row.status === "IN_PROGRESS");
   const hasRecentCompletion = list.some((row) => row.status === "COMPLETED" && isWithinRecentWindow(row.completedAt, nowMs));
-  const hasWeakFocus = selectionMode === "weak" || (selectionMode === "cat" && catSelectionBasis === "weak");
+  const hasWeakFocus =
+    selectionMode === "weak" ||
+    selectionMode === "missed" ||
+    (selectionMode === "cat" && (catSelectionBasis === "weak" || catSelectionBasis === "missed"));
   const hubPriority = resolveInteractionPriority({
     hasResume: hasInProgressActivity,
     hasWeakFocus,
@@ -186,14 +189,25 @@ export function PracticeTestsHubClient({
       setLinearDeliveryMode("practice");
       setLinearRationaleVisibility("after_each");
     }
-    if (searchParams.get("focus") !== "weak") return;
-    setSelectionMode((prev) => {
-      if (prev === "cat") {
-        setCatSelectionBasis("weak");
-        return prev;
-      }
-      return "weak";
-    });
+    const focus = searchParams.get("focus");
+    if (focus === "weak") {
+      setSelectionMode((prev) => {
+        if (prev === "cat") {
+          setCatSelectionBasis("weak");
+          return prev;
+        }
+        return "weak";
+      });
+    }
+    if (focus === "missed") {
+      setSelectionMode((prev) => {
+        if (prev === "cat") {
+          setCatSelectionBasis("missed");
+          return prev;
+        }
+        return "missed";
+      });
+    }
   }, [searchParams, pathwayOptions]);
 
   useEffect(() => {
@@ -251,7 +265,14 @@ export function PracticeTestsHubClient({
       const linearPayload = buildPracticeExamStartPayload({
         title: title.trim() || null,
         questionCount,
-        selectionMode: selectionMode === "targeted" ? "targeted" : selectionMode === "weak" ? "weak" : "random",
+        selectionMode:
+          selectionMode === "targeted"
+            ? "targeted"
+            : selectionMode === "weak"
+              ? "weak"
+              : selectionMode === "missed"
+                ? "missed"
+                : "random",
         topicNames: topicPicks,
         pathwayId: pathwayId.trim() || null,
         timedMode,
@@ -437,6 +458,7 @@ export function PracticeTestsHubClient({
                 ["random", t("learner.practiceTests.hub.selection.random")],
                 ["targeted", t("learner.practiceTests.hub.selection.targeted")],
                 ["weak", t("learner.practiceTests.hub.selection.weak")],
+                ["missed", t("learner.practiceTests.hub.selection.missed")],
                 ["cat", t("learner.practiceTests.hub.selection.cat")],
               ] as const
             ).map(([v, label]) => (
@@ -464,13 +486,15 @@ export function PracticeTestsHubClient({
               ? t("learner.practiceTests.hub.selectionHelp.targeted")
               : selectionMode === "weak"
                 ? t("learner.practiceTests.hub.selectionHelp.weak")
-                : selectionMode === "cat"
-                  ? catPresentationMode === "exam_simulation"
-                    ? isNpPathway
-                      ? t("learner.practiceTests.hub.selectionHelp.cat.examSim.np")
-                      : t("learner.practiceTests.hub.selectionHelp.cat.examSim.rn")
-                    : t("learner.practiceTests.hub.selectionHelp.cat.practice")
-                  : t("learner.practiceTests.hub.selectionHelp.linear")}
+                : selectionMode === "missed"
+                  ? t("learner.practiceTests.hub.selectionHelp.missed")
+                  : selectionMode === "cat"
+                    ? catPresentationMode === "exam_simulation"
+                      ? isNpPathway
+                        ? t("learner.practiceTests.hub.selectionHelp.cat.examSim.np")
+                        : t("learner.practiceTests.hub.selectionHelp.cat.examSim.rn")
+                      : t("learner.practiceTests.hub.selectionHelp.cat.practice")
+                    : t("learner.practiceTests.hub.selectionHelp.linear")}
           </p>
         </div>
 
@@ -617,6 +641,7 @@ export function PracticeTestsHubClient({
                   ["random", t("learner.practiceTests.hub.poolBroadMix")],
                   ["targeted", t("learner.practiceTests.hub.poolFiltered")],
                   ["weak", t("learner.practiceTests.hub.poolWeakFirst")],
+                  ["missed", t("learner.practiceTests.hub.poolMissedReview")],
                 ] as const
               ).map(([v, label]) => (
                 <button
@@ -666,7 +691,10 @@ export function PracticeTestsHubClient({
           </div>
         ) : null}
 
-        {(selectionMode === "random" || selectionMode === "targeted" || selectionMode === "cat") && (
+        {(selectionMode === "random" ||
+          selectionMode === "targeted" ||
+          selectionMode === "missed" ||
+          selectionMode === "cat") && (
           <div className="mt-4 space-y-2">
             <span className="text-sm text-muted-foreground">{t("learner.practiceTests.hub.topicsLabel")}</span>
             <div className="flex flex-wrap gap-2">
@@ -826,9 +854,11 @@ export function PracticeTestsHubClient({
                     ? t("learner.practiceTests.hub.selection.targeted")
                     : row.selectionMode === "weak"
                       ? t("learner.practiceTests.hub.selection.weak")
-                      : row.selectionMode === "cat"
-                        ? t("learner.practiceTests.hub.selection.cat")
-                        : row.selectionMode ?? t("learner.practiceTests.hub.notApplicable");
+                      : row.selectionMode === "missed"
+                        ? t("learner.practiceTests.hub.selection.missed")
+                        : row.selectionMode === "cat"
+                          ? t("learner.practiceTests.hub.selection.cat")
+                          : row.selectionMode ?? t("learner.practiceTests.hub.notApplicable");
               const timedPart = row.timedMode
                 ? `${t("learner.practiceTests.hub.rowTimed")}${row.timeLimitSec ? ` ${Math.round(row.timeLimitSec / 60)} min` : ""}`
                 : t("learner.practiceTests.hub.rowUntimed");

@@ -394,6 +394,12 @@ export function PathwayCatSessionStartClient({
               again.
             </p>
           ) : null}
+          {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_missed_items_empty ? (
+            <p className="mt-2 text-[var(--semantic-text-secondary)]">
+              Tip: finish a graded practice session with at least one incorrect answer, or switch <strong>Pool basis</strong> to{" "}
+              <strong>Balanced pool</strong>, then try missed-pool mode again.
+            </p>
+          ) : null}
         </div>
       ) : null}
 

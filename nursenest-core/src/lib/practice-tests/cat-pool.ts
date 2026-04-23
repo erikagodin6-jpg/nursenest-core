@@ -7,6 +7,7 @@ import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entit
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { CatPoolRow } from "@/lib/exams/cat-engine";
+import { loadMissedQuestionIdsForPoolFilter } from "@/lib/learner/study-question-signals";
 import { getWeakTopicNamesForPractice } from "@/lib/learner/topic-performance";
 import { difficultyWhere } from "@/lib/practice-tests/practice-pool-shared";
 import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
@@ -102,6 +103,12 @@ export async function fetchCatPracticePool(
     if (names.length > 0) {
       parts.push({ topic: { in: names } });
     }
+  } else if (input.selectionMode === "missed") {
+    const missedIds = await loadMissedQuestionIdsForPoolFilter(userId, 200);
+    if (missedIds.length === 0) {
+      return [];
+    }
+    parts.push({ id: { in: missedIds } });
   } else if (input.topicNames.length > 0) {
     parts.push({ OR: input.topicNames.map((t) => ({ topic: t })) });
   }

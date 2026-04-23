@@ -5,8 +5,8 @@ globs: nursenest-core/src/lib/taxonomy/**/*.ts,nursenest-core/src/lib/pathways/p
 
 # Nursing taxonomy (non‑negotiable)
 
-- **Single source of truth**: `nursenest-core/src/lib/taxonomy/nursing-taxonomy-classifier.ts` — rule-based only (regex / keyword dictionaries). **Do not** add embeddings, vector similarity, or LLM calls to assign `domain` / `categoryId`.
+- **Single source of truth**: `nursenest-core/src/lib/taxonomy/taxonomy.ts` (leaf ids) + `keyword-map.ts` + `classifier.ts` — keyword hits only. **Do not** add embeddings, vector similarity, or LLM calls to assign `domain` / `category`.
 - **Hub grouping** uses `classifyPathwayLessonRecordForHub` (title + topic + sections corpus), not ad hoc string concat in UI.
 - **Legacy entry point** `classifyLearningTopic` in `pathway-learning-structure.ts` delegates to `classifyNursingContent` — keep it thin; extend rules in the taxonomy module only.
 - **Writes**: admin batch import (`content-pipeline/batch`) runs `validatePathwayLessonTaxonomyBeforeWrite`. Do not bypass without an explicit product decision and tests.
-- **Ambiguous content** maps to `taxonomy-review-required` — never silently default to Professional Practice for “unknown” clinical-ish copy.
+- **Ambiguous content** maps to `REVIEW_REQUIRED` with domain `REVIEW_PENDING` — never silently default to Professional Practice for “unknown” clinical-ish copy.

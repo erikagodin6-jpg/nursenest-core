@@ -9,6 +9,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { marketingLessonsTopicClusterPath } from "@/lib/lessons/lesson-routes";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 import {
   type FnpClinicalDomain,
@@ -302,7 +303,7 @@ function FnpLessonCard({
   const topicHubSlug = l.topicSlug?.trim();
   const topicHubHref =
     topicHubSlug && !topicHubSlug.startsWith("_")
-      ? `${lessonsBasePath}/topics/${encodeURIComponent(topicHubSlug)}`
+      ? marketingLessonsTopicClusterPath(lessonsBasePath, topicHubSlug)
       : null;
   const gridCols = topicHubHref ? "sm:grid-cols-2 lg:grid-cols-3" : "sm:grid-cols-2";
 

@@ -9,9 +9,14 @@ import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
-import { marketingPathwayLessonsIndexPath, marketingExamHubBasePath } from "@/lib/lessons/lesson-routes";
+import {
+  marketingPathwayLessonsIndexPath,
+  marketingExamHubBasePath,
+  normalizeMarketingLessonsHubTopicSlug,
+} from "@/lib/lessons/lesson-routes";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import {
+  listTopicClustersForPublicNavigation,
   normalizePathwayHubSearchQuery,
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   PATHWAY_HUB_PAGE_SIZE_MAX,
@@ -21,10 +26,12 @@ import {
   pathwayCountryLabel,
   pathwayLessonHubMetaDescription,
   pathwayLessonHubMetaTitle,
+  pathwayLessonTopicClusterMetaDescription,
+  pathwayLessonTopicClusterMetaTitle,
   pathwayRegionAwareExamName,
 } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
-import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { pathwayLessonsHubBreadcrumbs, pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
@@ -48,7 +55,7 @@ export const maxDuration = 60;
 
 type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string }>;
-  searchParams: Promise<{ q?: string; page?: string; pageSize?: string }>;
+  searchParams: Promise<{ q?: string; page?: string; pageSize?: string; topicSlug?: string }>;
 };
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
@@ -57,21 +64,42 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   const hubPath = `${pathname}/lessons`;
   const sp = await searchParams;
   const q = normalizePathwayHubSearchQuery(sp.q);
+  const topicSlugNorm = normalizeMarketingLessonsHubTopicSlug(
+    typeof sp.topicSlug === "string" ? sp.topicSlug : undefined,
+  );
   const page = Math.max(1, Number(sp.page ?? "1") || 1);
   return safeGenerateMetadata(
     async () => {
       const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
       if (!pathway) return {};
-      const path = buildExamPathwayPath(pathway, "lessons");
-      const canonical = absoluteUrl(path);
-      const canonicalWithPage = page > 1 ? `${canonical}?page=${page}` : canonical;
-      const title = pathwayLessonHubMetaTitle(pathway);
-      const description = pathwayLessonHubMetaDescription(pathway);
+      const pathOnly = buildExamPathwayPath(pathway, "lessons");
+      const qs = new URLSearchParams();
+      if (topicSlugNorm) qs.set("topicSlug", topicSlugNorm);
+      if (q) qs.set("q", q);
+      if (page > 1) qs.set("page", String(page));
+      const pathWithQuery = qs.toString() ? `${pathOnly}?${qs.toString()}` : pathOnly;
+      const canonical = absoluteUrl(pathWithQuery);
+
+      let title = pathwayLessonHubMetaTitle(pathway);
+      let description = pathwayLessonHubMetaDescription(pathway);
+      if (topicSlugNorm) {
+        const loc = await getMarketingLocaleForDefaultRoute();
+        try {
+          const topicClusters = await listTopicClustersForPublicNavigation(pathway.id, loc);
+          const label =
+            topicClusters.find((t) => t.topicSlug === topicSlugNorm)?.label ?? topicSlugNorm.replace(/-/g, " ");
+          title = pathwayLessonTopicClusterMetaTitle(pathway, label);
+          description = pathwayLessonTopicClusterMetaDescription(pathway, label);
+        } catch {
+          /* keep hub defaults */
+        }
+      }
+
       return {
         title,
         description,
-        alternates: { canonical: canonicalWithPage },
-        openGraph: { title, description, url: canonicalWithPage, type: "website" },
+        alternates: { canonical },
+        openGraph: { title, description, url: canonical, type: "website" },
         ...(q ? { robots: { index: false, follow: true } } : {}),
       };
     },
@@ -93,7 +121,17 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const pageSizeRequested = Math.min(PATHWAY_HUB_PAGE_SIZE_MAX, Math.max(8, Math.floor(rawSize)));
   /** Same normalization as hub list SQL/catalog filters (min length, trim) — avoids listOpts vs loader mismatch. */
   const qEffective = normalizePathwayHubSearchQuery(sp.q);
-  const listOpts = qEffective ? { q: qEffective } : undefined;
+  const topicSlugNorm = normalizeMarketingLessonsHubTopicSlug(
+    typeof sp.topicSlug === "string" ? sp.topicSlug : undefined,
+  );
+  const listOpts =
+    qEffective && topicSlugNorm
+      ? { q: qEffective, topicSlugsIn: [topicSlugNorm] }
+      : qEffective
+        ? { q: qEffective }
+        : topicSlugNorm
+          ? { topicSlugsIn: [topicSlugNorm] }
+          : undefined;
 
   const { pageResult, questionSnapshot } = await loadPathwayLessonsHubAggregates(
     pathway,
@@ -121,6 +159,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     const qs = new URLSearchParams();
     if (pageResult.page > 1) qs.set("page", String(pageResult.page));
     if (qEffective) qs.set("q", qEffective);
+    if (topicSlugNorm) qs.set("topicSlug", topicSlugNorm);
     const query = qs.toString();
     redirect(query ? `${base}?${query}` : base);
   }
@@ -129,10 +168,28 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const hubRenderableLessonRows = (pageResult.renderableAll ?? pageResult.items).filter(pathwayLessonHasRenderableHubSlug);
   const hubListCountForChrome =
     pageResult.renderableAll != null ? pageResult.total : hubRenderableLessonRows.length;
-  const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
+
+  let topicClusterLabel: string | null = null;
+  if (topicSlugNorm) {
+    try {
+      const topicClusters = await listTopicClustersForPublicNavigation(pathway.id, lessonContentLocale);
+      topicClusterLabel =
+        topicClusters.find((t) => t.topicSlug === topicSlugNorm)?.label ?? topicSlugNorm.replace(/-/g, " ");
+    } catch {
+      topicClusterLabel = topicSlugNorm.replace(/-/g, " ");
+    }
+  }
+
+  const { crumbs, schemaItems } =
+    topicClusterLabel && topicSlugNorm
+      ? pathwayTopicClusterBreadcrumbs(pathway, topicSlugNorm, topicClusterLabel)
+      : pathwayLessonsHubBreadcrumbs(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
   const pageTitle = "Lessons";
-  const headerDescription = `Browse lessons by clinical area for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`;
+  const headerDescription =
+    topicClusterLabel != null
+      ? `Lessons in “${topicClusterLabel}” for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`
+      : `Browse lessons by clinical area for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`;
 
   const overviewHref = marketingExamHubBasePath(pathway);
   const questionsHref = buildExamPathwayPath(pathway, "questions");
@@ -147,7 +204,13 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     { label: "Exam overview", href: overviewHref },
   ];
 
-  const querySuffix = qEffective ? `?q=${encodeURIComponent(qEffective)}` : "";
+  const querySuffix = (() => {
+    const qs = new URLSearchParams();
+    if (qEffective) qs.set("q", qEffective);
+    if (topicSlugNorm) qs.set("topicSlug", topicSlugNorm);
+    const s = qs.toString();
+    return s ? `?${s}` : "";
+  })();
   const canadaHref =
     pathway.countrySlug === "canada"
       ? `${base}${querySuffix}`
@@ -161,6 +224,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     <LessonsToolbar
       searchBasePath={base}
       initialQuery={qEffective ?? undefined}
+      preservedTopicSlug={topicSlugNorm ?? undefined}
       totalCount={hubListCountForChrome}
       countryOptions={[
         { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
@@ -181,13 +245,26 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
         <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
-            {qEffective ? `No lessons match "${qEffective}".` : "No lessons available yet for this topic."}
+            {qEffective
+              ? `No lessons match "${qEffective}".`
+              : topicSlugNorm
+                ? "No lessons match this topic filter yet."
+                : "No lessons available yet for this pathway."}
           </p>
           <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
             {qEffective
               ? "Try a broader search or clear the search to view the full lesson library."
-              : "Explore available study surfaces below while this lesson set is finalized."}
+              : topicSlugNorm
+                ? "Clear the topic filter to browse the full lesson library, or explore questions and adaptive practice below."
+                : "Explore available study surfaces below while this lesson set is finalized."}
           </p>
+          {topicSlugNorm && !qEffective ? (
+            <p className="mt-3 text-sm">
+              <Link href={base} className="font-semibold text-primary hover:underline">
+                View all lessons in this pathway
+              </Link>
+            </p>
+          ) : null}
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
               href={buildExamPathwayPath(pathway, "questions")}
@@ -290,6 +367,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         total={pageResult.total}
         pageSize={pageResult.pageSize}
         hubSearch={qEffective}
+        topicSlug={topicSlugNorm ?? undefined}
       />
 
       <section className="mt-10">

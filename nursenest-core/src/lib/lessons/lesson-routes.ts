@@ -48,6 +48,21 @@ function usableMarketingLessonSlug(slug: string | null | undefined): slug is str
 }
 
 /**
+ * Normalizes the `[lessonSlug]` route param (percent-encoded bookmarks, copy/paste).
+ * Next usually delivers a decoded segment; this stays safe if a slug is still encoded once.
+ */
+export function marketingLessonSlugFromRouteParam(raw: string | null | undefined): string {
+  if (typeof raw !== "string") return "";
+  const trimmed = raw.trim();
+  if (!trimmed) return "";
+  try {
+    return decodeURIComponent(trimmed).trim();
+  } catch {
+    return trimmed;
+  }
+}
+
+/**
  * `{lessonsIndexPath}/{slug}` with encoding — null when the slug cannot be linked.
  * Prefer {@link marketingPathwayLessonDetailPath} when you have a resolved pathway.
  */
@@ -72,16 +87,43 @@ export function marketingPathwayLessonsIndexPath(
 }
 
 /**
- * Canonical marketing lesson detail URL: `/{locale}/{role}/{examCode}/lessons/{lessonSlug}`.
- * - `locale` is the pathway country segment (`us` / `canada`), not BCP-47 UI language.
- * - `roleTrack` is the internal role id; {@link buildExamPathwayPath} maps LPN/RPN → `pn` in the URL.
+ * Normalized topic slug for `?topicSlug=` on the pathway lessons hub, or null when unusable.
+ * Keeps hub filters aligned with DB/catalog topicSlug values (lowercase, bounded length).
  */
-export function buildLessonPath(input: {
-  locale: string;
-  roleTrack: string;
-  examCode: string;
-  lessonSlug: string | null | undefined;
-}): string | null {
+export function normalizeMarketingLessonsHubTopicSlug(raw: string | null | undefined): string | null {
+  const t = (raw ?? "").trim().toLowerCase();
+  if (t.length < 1 || t.length > 160) return null;
+  if (!/^[a-z0-9][a-z0-9_-]*$/.test(t)) return null;
+  return t;
+}
+
+export type BuildLessonPathInput =
+  | {
+      /** Pathway country URL segment (`us` / `canada`), not BCP-47 UI language. */
+      locale: string;
+      /** Internal role id; {@link buildExamPathwayPath} maps LPN/RPN → `pn` in the URL. */
+      roleTrack: string;
+      examCode: string;
+      lessonSlug: string | null | undefined;
+    }
+  | {
+      pathway: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">;
+      lessonSlug: string | null | undefined;
+    };
+
+/**
+ * Canonical marketing lesson detail URL: `/{locale}/{role}/{examCode}/lessons/{lessonSlug}`.
+ * Prefer the `{ pathway, lessonSlug }` overload so links stay aligned with {@link ExamPathwayDefinition}.
+ */
+export function buildLessonPath(input: BuildLessonPathInput): string | null {
+  if ("pathway" in input) {
+    return buildLessonPath({
+      locale: input.pathway.countrySlug,
+      roleTrack: input.pathway.roleTrack,
+      examCode: input.pathway.examCode,
+      lessonSlug: input.lessonSlug,
+    });
+  }
   const slug = typeof input.lessonSlug === "string" ? input.lessonSlug.trim() : "";
   if (!slug) return null;
   const countrySlug = typeof input.locale === "string" ? input.locale.trim().toLowerCase() : "";
@@ -96,21 +138,21 @@ export function marketingPathwayLessonDetailPath(
   pathway: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">,
   lessonSlug: string | null | undefined,
 ): string | null {
-  return buildLessonPath({
-    locale: pathway.countrySlug,
-    roleTrack: pathway.roleTrack,
-    examCode: pathway.examCode,
-    lessonSlug,
-  });
+  return buildLessonPath({ pathway, lessonSlug });
 }
 
-/** Paginated topic cluster under a pathway lessons hub. */
+/**
+ * Topic-scoped view of the pathway lessons hub (same page as the main index, `?topicSlug=` filter).
+ * Legacy `/lessons/topics/{slug}` URLs permanently redirect here.
+ */
 export function marketingPathwayLessonTopicClusterPath(
   pathway: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">,
   topicSlug: string,
 ): string {
-  const ts = topicSlug.trim();
-  return buildExamPathwayPath(pathway, `lessons/topics/${encodeURIComponent(ts)}`);
+  const ts = normalizeMarketingLessonsHubTopicSlug(topicSlug);
+  const base = marketingPathwayLessonsIndexPath(pathway);
+  if (!ts) return base;
+  return `${base}?topicSlug=${encodeURIComponent(ts)}`;
 }
 
 /**
@@ -119,9 +161,9 @@ export function marketingPathwayLessonTopicClusterPath(
  */
 export function marketingLessonsTopicClusterPath(lessonsIndexPath: string, topicSlug: string | null | undefined): string {
   const hub = lessonsIndexPath.replace(/\/$/, "");
-  const slug = (topicSlug ?? "").trim();
-  if (!slug) return hub;
-  return `${hub}/topics/${encodeURIComponent(slug)}`;
+  const ts = normalizeMarketingLessonsHubTopicSlug(topicSlug ?? undefined);
+  if (!ts) return hub;
+  return `${hub}?topicSlug=${encodeURIComponent(ts)}`;
 }
 
 /** `/allied-health/{professionKey}/lessons` */

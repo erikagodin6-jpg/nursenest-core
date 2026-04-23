@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { marketingPathwayLessonTopicClusterPath } from "@/lib/lessons/lesson-routes";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 function truncateMeta(s: string, max: number): string {
@@ -30,7 +31,7 @@ export function pathwayTopicClusterMetadata(
   topicLabel: string,
   topicSlug: string,
 ): Metadata {
-  const path = buildExamPathwayPath(pathway, `lessons/topics/${topicSlug}`);
+  const path = marketingPathwayLessonTopicClusterPath(pathway, topicSlug);
   const canonical = absoluteUrl(path);
   const title = `${topicLabel} · ${pathway.shortName} lessons | NurseNest`;
   const description = truncateMeta(

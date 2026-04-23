@@ -4,6 +4,7 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 import { PathwayTopicClusterGroupedNav } from "@/components/pathway-lessons/pathway-topic-cluster-grouped-nav";
+import { marketingLessonsTopicClusterPath } from "@/lib/lessons/lesson-routes";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import {
@@ -177,7 +178,7 @@ export function PathwayLessonsGroupedHub({
               <div className="flex flex-wrap gap-2">
                 {group.topicSlug && !group.topicSlug.startsWith("_") ? (
                   <Link
-                    href={`${lessonsBasePath}/topics/${encodeURIComponent(group.topicSlug)}`}
+                    href={marketingLessonsTopicClusterPath(lessonsBasePath, group.topicSlug)}
                     className="inline-flex min-h-11 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
                   >
                     Topic index

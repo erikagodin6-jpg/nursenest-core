@@ -167,7 +167,7 @@ export async function loadPathwayLessonsHubAggregates(
     pageRequested: number;
     pageSizeRequested: number;
     lessonContentLocale: string;
-    listOpts: { q?: string } | undefined;
+    listOpts: { q?: string; topicSlugsIn?: string[] } | undefined;
     qEffective: string;
     skipLaunchBundle: boolean;
     includeLessonCount?: boolean;

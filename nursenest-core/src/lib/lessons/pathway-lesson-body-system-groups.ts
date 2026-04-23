@@ -1,7 +1,8 @@
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
-import { classifyNursingContent, classifyPathwayLessonRecordForHub } from "@/lib/taxonomy/nursing-taxonomy-classifier";
+import { classifyNursingContent, classifyPathwayLessonRecordForHub } from "@/lib/taxonomy/classifier";
+import { REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
 
 export type PathwayLessonSystemLabel = string;
 export const PATHWAY_LESSON_SYSTEM_ORDER: string[] = (() => {
@@ -45,7 +46,7 @@ export function normalizePathwayLessonSystemLabel(
   system: string | null | undefined,
 ): PathwayLessonSystemLabel {
   const normalizedSystem = normalizeText(system);
-  if (!normalizedSystem) return "professional-practice-ethics";
+  if (!normalizedSystem) return REVIEW_REQUIRED;
   const classified = classifyNursingContent({ title: normalizedSystem });
   return classified.categoryId as PathwayLessonSystemLabel;
 }

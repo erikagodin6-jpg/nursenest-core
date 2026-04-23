@@ -2,54 +2,26 @@ import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
   buildPathwayLessonTaxonomyCorpus,
+  classifyPathwayLessonRecord,
   classifyPathwayLessonRecordForHub,
   contentSignalsClinicalDomain,
-  type NursingTaxonomyClassification,
-} from "@/lib/taxonomy/nursing-taxonomy-classifier";
+  type ClassificationResult,
+} from "@/lib/taxonomy/classifier";
+import { validateClassification } from "@/lib/taxonomy/validate";
+import { REVIEW_REQUIRED, TAXONOMY } from "@/lib/taxonomy/taxonomy";
 
-const PROFESSIONAL_HUB = "professional-practice-ethics" as const;
+const PROFESSIONAL_CATEGORY_IDS = new Set<string>(TAXONOMY.PROFESSIONAL_PRACTICE);
 
-const CLINICAL_CATEGORY_IDS = new Set<string>([
-  "cardiovascular",
-  "respiratory",
-  "neurology",
-  "endocrine",
-  "renal-genitourinary",
-  "gastrointestinal",
-  "hematology-oncology",
-  "immune-infectious",
-  "musculoskeletal",
-  "dermatology",
-  "mental-health",
-  "pharmacology",
-  "reproductive-ob-gyn",
-  "pediatrics",
-  "fundamentals",
-  "taxonomy-review-required",
+const NON_PROFESSIONAL_HUB_IDS = new Set<string>([
+  ...TAXONOMY.CLINICAL,
+  ...TAXONOMY.PHARMACOLOGY,
+  ...TAXONOMY.EXAM_META,
+  REVIEW_REQUIRED,
 ]);
 
+/** True when `id` is any hub bucket outside professional practice (clinical, pharm, exam meta, review). */
 export function isClinicalHubCategoryId(id: string): boolean {
-  return CLINICAL_CATEGORY_IDS.has(id);
-}
-
-export function validateNursingTaxonomyClassification(
-  c: NursingTaxonomyClassification,
-): { ok: true } | { ok: false; code: string; message: string } {
-  if (c.domain === "clinical" && c.categoryId === PROFESSIONAL_HUB) {
-    return {
-      ok: false,
-      code: "clinical_domain_professional_category",
-      message: "Clinical domain cannot map to professional practice hub.",
-    };
-  }
-  if (c.domain === "professional" && c.categoryId !== PROFESSIONAL_HUB) {
-    return {
-      ok: false,
-      code: "professional_domain_non_professional_category",
-      message: "Professional domain must use the professional practice hub category.",
-    };
-  }
-  return { ok: true };
+  return NON_PROFESSIONAL_HUB_IDS.has(id);
 }
 
 export type PathwayLessonTaxonomyWriteInput = Pick<
@@ -59,28 +31,25 @@ export type PathwayLessonTaxonomyWriteInput = Pick<
 
 /**
  * Validates a pathway lesson payload before DB insert/update.
- * Returns structured violations for API 422 responses.
+ * On success, callers should persist `classification.category` as `bodySystem` when applying deterministic taxonomy.
  */
 export function validatePathwayLessonTaxonomyBeforeWrite(
   row: PathwayLessonTaxonomyWriteInput,
-): { ok: true; classification: NursingTaxonomyClassification } | { ok: false; violations: string[]; classification: NursingTaxonomyClassification } {
-  const classification = classifyPathwayLessonRecordForHub(row);
-  const structural = validateNursingTaxonomyClassification(classification);
+): { ok: true; classification: ClassificationResult } | { ok: false; violations: string[]; classification: ClassificationResult } {
+  const classification = classifyPathwayLessonRecord(row);
   const violations: string[] = [];
-  if (!structural.ok) {
-    violations.push(`${structural.code}: ${structural.message}`);
-  }
-  if (!(row.bodySystem ?? "").trim()) {
-    violations.push("body_system_required");
+  try {
+    validateClassification(classification);
+  } catch (e) {
+    violations.push(e instanceof Error ? e.message : String(e));
   }
   if (violations.length > 0) {
     safeServerLog("taxonomy", "pathway_lesson_write_validation_failed", {
       event: "pathway_lesson_write_validation_failed",
       title: row.title.slice(0, 200),
       body_system: (row.bodySystem ?? "").slice(0, 120),
-      rule_hint: classification.ruleHint,
       domain: classification.domain,
-      category_id: classification.categoryId,
+      category: classification.category,
       violations: violations.join("|").slice(0, 500),
     });
     return { ok: false, violations, classification };
@@ -89,13 +58,13 @@ export function validatePathwayLessonTaxonomyBeforeWrite(
 }
 
 /**
- * Server hub guardrail: authoring surfaces “professional” while the lesson corpus clearly contains
- * clinical disease / physiology signals — hide the row and log (stale mis-tagged inventory).
+ * Server hub guardrail: a lesson is bucketed under **professional practice** while the corpus still hits
+ * **clinical** keyword evidence — hide the row and log (stale or mis-tagged inventory).
  */
 export function shouldSuppressProfessionalPracticeHubLesson(lesson: PathwayLessonRecord): boolean {
   const corpus = buildPathwayLessonTaxonomyCorpus(lesson);
   const hubId = classifyPathwayLessonRecordForHub(lesson).categoryId;
-  if (hubId !== PROFESSIONAL_HUB) return false;
+  if (!PROFESSIONAL_CATEGORY_IDS.has(hubId)) return false;
   if (!contentSignalsClinicalDomain(corpus)) return false;
   safeServerLog("taxonomy", "professional_hub_clinical_corpus_guard", {
     event: "professional_hub_clinical_corpus_guard",

@@ -177,8 +177,12 @@ export async function loadLessonStudyLoopBankPack(args: {
   }
 
   const sorted = stableSortRows(args.lessonKey, mapped);
-  const effectiveTarget = Math.min(target, sorted.length);
-  const items = pickBalanced(sorted, effectiveTarget);
+  const diversified =
+    args.compositionEntropy && args.compositionEntropy.length >= 8
+      ? shuffleSeeded([...sorted], `${args.compositionEntropy}:lesson-loop-compose-v1`)
+      : sorted;
+  const effectiveTarget = Math.min(target, diversified.length);
+  const items = pickBalanced(diversified, effectiveTarget);
   return {
     items,
     questionIds: items.map((i) => i.examQuestionId),
@@ -194,6 +198,7 @@ export function buildLessonStudyLoopBankPackFromPreloadedExplicitItems(args: {
   preloadedItems: LessonBankQuizItem[];
   lessonKey: string;
   targetCount?: number;
+  compositionEntropy?: string;
 }): LessonStudyLoopBankPack {
   const target = Math.min(
     LESSON_STUDY_LOOP_TARGET_MAX,
@@ -205,8 +210,12 @@ export function buildLessonStudyLoopBankPackFromPreloadedExplicitItems(args: {
     return { items: [], questionIds: [], poolCount, targetRequested: target };
   }
   const sorted = stableSortRows(args.lessonKey, enriched);
-  const effectiveTarget = Math.min(target, sorted.length);
-  const items = pickBalanced(sorted, effectiveTarget);
+  const diversified =
+    args.compositionEntropy && args.compositionEntropy.length >= 8
+      ? shuffleSeeded([...sorted], `${args.compositionEntropy}:lesson-loop-compose-v1`)
+      : sorted;
+  const effectiveTarget = Math.min(target, diversified.length);
+  const items = pickBalanced(diversified, effectiveTarget);
   return {
     items,
     questionIds: items.map((i) => i.examQuestionId),
@@ -227,6 +236,7 @@ export async function loadLessonStudyLoopBankPackFromExplicitIds(args: {
   lessonKey: string;
   targetCount?: number;
   preloadedItems?: LessonBankQuizItem[];
+  compositionEntropy?: string;
 }): Promise<LessonStudyLoopBankPack> {
   const target = Math.min(
     LESSON_STUDY_LOOP_TARGET_MAX,
@@ -252,6 +262,7 @@ export async function loadLessonStudyLoopBankPackFromExplicitIds(args: {
       preloadedItems: args.preloadedItems,
       lessonKey: args.lessonKey,
       targetCount: args.targetCount,
+      compositionEntropy: args.compositionEntropy,
     });
   }
 
@@ -268,5 +279,6 @@ export async function loadLessonStudyLoopBankPackFromExplicitIds(args: {
     preloadedItems: flat.items,
     lessonKey: args.lessonKey,
     targetCount: args.targetCount,
+    compositionEntropy: args.compositionEntropy,
   });
 }

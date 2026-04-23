@@ -145,7 +145,7 @@ export function PathwayLessonPracticeTopicCta({
   lessonsBasePath: string;
 }) {
   const topicHubHref = topicSlug?.trim()
-    ? `${lessonsBasePath.replace(/\/$/, "")}/topics/${encodeURIComponent(topicSlug.trim())}`
+    ? marketingLessonsTopicClusterPath(lessonsBasePath, topicSlug.trim())
     : lessonsBasePath;
 
   return (

@@ -45,6 +45,7 @@ import {
   nclexBlueprintWeightMap,
   NCLEX_RN_US_EXAM_CONFIG,
 } from "@/lib/exams/exam-config";
+import { loadMissedQuestionSignals } from "@/lib/learner/study-question-signals";
 import { loadWeakTopicPracticePlan } from "@/lib/learner/topic-performance";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
@@ -294,6 +295,18 @@ export async function createCatPracticeTestPayload(
     };
   }
 
+  if (!sim && effectiveBasis === "missed") {
+    const missed = await loadMissedQuestionSignals(userId);
+    if (missed.size === 0) {
+      return {
+        ok: false,
+        code: PRACTICE_TEST_CAT_CREATE_CODE.cat_missed_items_empty,
+        message:
+          "No missed questions found yet. Finish a graded practice session with incorrect answers, then try missed-pool adaptive mode again.",
+      };
+    }
+  }
+
   const examCfg = examSimulationConfigForPathway(pathway);
   const fallbackBounds = sim ? nclexRnSimulationBoundsFromConfig(examCfg) : practiceCatBounds(input.questionCount);
   const bounds = pathwayReadiness
@@ -392,7 +405,7 @@ export async function createCatPracticeTestPayload(
         catAdaptiveSessionType: "practice",
         guidedRunLength: runLength,
         sessionSeed: sessionPickSalt,
-        selectedQuestionIds: questionIds,
+        selectedQuestionIds: questionIds.join(","),
       });
     }
 
@@ -452,7 +465,7 @@ export async function createCatPracticeTestPayload(
       recentExclusionApplied: recentFiltered.applied,
       recentExclusionSkip: recentFiltered.skipReason,
       sessionSeed: sessionPickSalt,
-      selectedQuestionIds: [first.selected.id],
+      selectedQuestionIds: first.selected.id,
       catAdaptiveSessionType: sessionTypeResolved,
     });
   }

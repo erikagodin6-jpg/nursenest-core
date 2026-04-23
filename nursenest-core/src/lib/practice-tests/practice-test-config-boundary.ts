@@ -18,10 +18,10 @@ export const DEFAULT_SAFE_PRACTICE_TEST_CONFIG: PracticeTestConfigJson = {
   timeLimitSec: null,
 };
 
-const selectionModeZ = z.enum(["random", "targeted", "weak", "cat"]);
+const selectionModeZ = z.enum(["random", "targeted", "weak", "missed", "cat"]);
 const linearDeliveryZ = z.enum(["practice", "exam"]);
 const linearRationaleVisibilityZ = z.enum(["after_each", "end_of_exam"]);
-const catSelectionBasisZ = z.enum(["random", "targeted", "weak"]);
+const catSelectionBasisZ = z.enum(["random", "targeted", "weak", "missed"]);
 const catPresentationZ = z.enum(["practice", "exam_simulation"]);
 const catFeedbackZ = z.enum(["study", "test"]);
 const catAdaptiveSessionTypeZ = z.enum(["cat", "practice"]);
@@ -64,7 +64,7 @@ function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
   const o = raw as Record<string, unknown>;
   const out: Partial<PracticeTestConfigJson> = {};
   const sm = o.selectionMode;
-  if (sm === "random" || sm === "targeted" || sm === "weak" || sm === "cat") {
+  if (sm === "random" || sm === "targeted" || sm === "weak" || sm === "missed" || sm === "cat") {
     out.selectionMode = sm;
   }
   if (typeof o.pathwayId === "string" && o.pathwayId.length > 0) out.pathwayId = o.pathwayId;

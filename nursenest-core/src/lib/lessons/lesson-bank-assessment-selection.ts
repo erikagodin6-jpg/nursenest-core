@@ -22,7 +22,13 @@ import { logExplicitExamQuestionLoadOutcome } from "@/lib/lessons/lesson-explici
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
   assemblePathwayLessonBankAssessmentsFromParts,
+  LESSON_ASSESSMENT_POST_MAX,
+  LESSON_ASSESSMENT_POST_MIN,
+  LESSON_ASSESSMENT_PRE_MAX,
+  LESSON_ASSESSMENT_PRE_MIN,
+  mergeAssessmentWithBank,
   orderedExplicitLessonBankItemsForConfiguredIds,
+  splitBankPrePost,
 } from "@/lib/lessons/lesson-bank-assessment-assembly-pure";
 
 export {
@@ -34,7 +40,7 @@ export {
   splitBankPrePost,
   orderedExplicitLessonBankItemsForConfiguredIds,
   assemblePathwayLessonBankAssessmentsFromParts,
-} from "@/lib/lessons/lesson-bank-assessment-assembly-pure";
+};
 
 /** Extra rows to pull when merging topic match + fallback general pool. */
 const FETCH_CAP = 80;

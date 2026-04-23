@@ -52,9 +52,9 @@ const createSchema = z
     topicNames: z.array(z.string().min(1).max(200)).max(30).optional().default([]),
     difficultyMin: z.union([z.number().int().min(1).max(5), z.null()]).optional(),
     difficultyMax: z.union([z.number().int().min(1).max(5), z.null()]).optional(),
-    selectionMode: z.enum(["random", "targeted", "weak", "cat"]),
+    selectionMode: z.enum(["random", "targeted", "weak", "missed", "cat"]),
     /** Pool strategy when `selectionMode` is `cat`. */
-    catSelectionBasis: z.enum(["random", "targeted", "weak"]).optional(),
+    catSelectionBasis: z.enum(["random", "targeted", "weak", "missed"]).optional(),
     /** Exam simulation uses pathway-specific bounds (NCLEX-RN 75–145, AANP-style NP 75–150) and blueprint balancing. */
     catPresentationMode: z.enum(["practice", "exam_simulation"]).optional().default("practice"),
     /**
@@ -589,7 +589,7 @@ export async function POST(req: Request) {
       selectionMode: d.selectionMode,
       questionCount: d.questionCount,
       sessionSeed: sessionPickSalt,
-      selectedQuestionIds: picked.ids,
+      selectedQuestionIds: picked.ids.join(","),
       ...picked.linearSessionCreateDebug,
     });
   }

@@ -8,7 +8,7 @@ export const TOPIC_CLUSTER_PROGRAMMATIC_INTRO_TARGET_MAX = 500;
  * Deterministic, crawlable long-form intro for marketing topic lesson clusters.
  * Complements per-lesson detail pages: this targets “{topic} + {exam} + lessons” head terms.
  *
- * URL shape in-app: `/{countrySlug}/{roleTrack}/{examCode}/lessons/topics/{topicSlug}`
+ * URL shape: `/{countrySlug}/{roleTrack}/{examCode}/lessons?topicSlug={topicSlug}` (legacy `/lessons/topics/…` 301s here).
  * (countrySlug acts as the marketing region segment; `topicSlug` is the stable slug.)
  */
 export function buildPathwayLessonTopicProgrammaticIntroParagraphs(

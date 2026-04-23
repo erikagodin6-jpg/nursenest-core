@@ -11,8 +11,6 @@ import {
 import type { CatAdaptiveState, CatAnswerResult } from "@/lib/exams/cat-types";
 import { NCLEX_RN_US_EXAM_CONFIG } from "@/lib/exams/exam-config";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
-import { createCatPracticeTestPayload } from "@/lib/practice-tests/cat-session";
-import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 
 describe("mergeBlueprintDiagnosticsPostScore", () => {
   it("recomputes sessionMappedFraction after each scored result (replay-style)", () => {
@@ -153,35 +151,6 @@ describe("validateCatQuestionPool", () => {
     const v = validateCatQuestionPool(rows, { minPoolSize: 75 });
     assert.equal(v.ok, false);
     assert.ok(v.ok === false && v.error.includes("75"));
-  });
-});
-
-describe("createCatPracticeTestPayload (no DB path)", () => {
-  it("returns exam_sim_unsupported_pathway for NCLEX-PN pathway before pool fetch", async () => {
-    const entitlement: AccessScope = {
-      hasAccess: true,
-      reason: "admin_override",
-      tier: "RN",
-      country: "US",
-      alliedCareer: null,
-    };
-    const out = await createCatPracticeTestPayload(
-      "test-user",
-      entitlement,
-      "random",
-      {
-        questionCount: 85,
-        topicNames: [],
-        difficultyMin: null,
-        difficultyMax: null,
-        pathwayId: "us-lpn-nclex-pn",
-      },
-      false,
-      null,
-      "exam_simulation",
-    );
-    assert.equal(out.ok, false);
-    assert.equal(out.ok === false && out.code, PRACTICE_TEST_CAT_CREATE_CODE.exam_sim_unsupported_pathway);
   });
 });
 

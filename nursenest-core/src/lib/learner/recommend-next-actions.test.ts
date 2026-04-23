@@ -14,6 +14,7 @@ function baseSnapshot(over: Partial<LearnerStudySnapshot>): LearnerStudySnapshot
     pathwayNext: null,
     weakTopicPathwayLesson: null,
     hasWeakTopicFlashcards: false,
+    hasMissedPracticeQuestions: false,
     weakTopicCodes: [],
     ...over,
   };
@@ -67,6 +68,25 @@ describe("recommendNextActions", () => {
     const r = recommendNextActions(snap);
     assert.equal(r[0]?.type, "weak_topic_lesson");
     assert.equal(r[0]?.href, "/app/lessons/b");
+  });
+
+  it("includes missed linear practice when learner has misses and a pathway id", () => {
+    const snap = baseSnapshot({
+      hasMissedPracticeQuestions: true,
+      pathwayNext: {
+        title: "Unit 2",
+        href: "/app/lessons/x",
+        pathwayId: "nclex-rn-us",
+        slug: "unit-2",
+        engagedInPathway: false,
+        stalled: false,
+      },
+    });
+    const r = recommendNextActions(snap, { maxTotal: 5 });
+    const missed = r.find((x) => x.type === "missed_review_session");
+    assert.ok(missed);
+    assert.ok(missed!.href.includes("focus=missed"));
+    assert.ok(missed!.href.includes("pathwayId=nclex-rn-us"));
   });
 
   it("falls back to practice weak pool then question bank weak mode when no weak topic", () => {

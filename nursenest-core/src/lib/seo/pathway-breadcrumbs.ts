@@ -143,7 +143,7 @@ export function pathwayTopicClusterBreadcrumbs(
   const hub = opts?.hubBasePath;
   const p = examPathwaySurfacePrefix(pathway, opts);
   const lessonsPath = pathwayHubChildPath(pathway, hub, "lessons");
-  const topicPath = pathwayHubChildPath(pathway, hub, `lessons/topics/${topicSlug}`);
+  const topicPath = `${pathwayHubChildPath(pathway, hub, "lessons")}?topicSlug=${encodeURIComponent(topicSlug.trim().toLowerCase())}`;
   const crumbs: BreadcrumbCrumb[] = [
     HOME,
     p.countryCrumb(true),

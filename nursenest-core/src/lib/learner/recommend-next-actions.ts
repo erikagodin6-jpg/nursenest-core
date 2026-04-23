@@ -138,8 +138,25 @@ function mixedWeakBankRec(): StudyNextRecommendation {
   };
 }
 
+function missedLinearPracticeRec(snapshot: LearnerStudySnapshot): StudyNextRecommendation | null {
+  if (!snapshot.hasMissedPracticeQuestions) return null;
+  const pid = defaultPathwayIdForRecs(snapshot);
+  if (!pid) return null;
+  const qs = new URLSearchParams();
+  qs.set("pathwayId", pid);
+  qs.set("focus", "missed");
+  return {
+    type: "missed_review_session",
+    href: `/app/practice-tests?${qs.toString()}`,
+    title: "Linear practice (missed items)",
+    reasonCode: "missed_items_review",
+    reasonShort: "Rebuilds a session from your recent incorrects on completed tests, with fresh ordering.",
+    confidence: "medium",
+  };
+}
+
 /**
- * Deterministic ordering: continue (when mid-pathway) → weak lesson → weak qbank → flashcards → retest → mixed weak bank.
+ * Deterministic ordering: continue (when mid-pathway) → weak lesson → weak qbank → flashcards → missed linear → retest → mixed weak bank.
  * Max `maxTotal` items (default 3). Dedupes by `href`.
  */
 export function recommendNextActions(
@@ -166,6 +183,7 @@ export function recommendNextActions(
   if (w && snapshot.hasWeakTopicFlashcards && weakFcPathway) {
     priority.push(weakFlashcardsRec(w, weakFcPathway));
   }
+  priority.push(missedLinearPracticeRec(snapshot));
   priority.push(retestWeakPoolRec(snapshot));
   priority.push(mixedWeakBankRec());
 

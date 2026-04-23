@@ -1,5 +1,5 @@
+import { randomUUID } from "node:crypto";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { ExamFamily, LearnerNoteScope, type TierCode } from "@prisma/client";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
@@ -62,6 +62,7 @@ import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson
 import { LessonPageHeader } from "@/components/lessons/lesson-page-header";
 import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
 import { LessonNavButtons } from "@/components/lessons/lesson-nav-buttons";
+import { AppLessonUnavailable } from "@/components/student/app-lesson-unavailable";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import {
   buildLessonStudyLoopBankPackFromPreloadedExplicitItems,
@@ -248,7 +249,8 @@ export default async function LessonDetailPage({ params }: Props) {
         return { kind: "out_of_plan" as const };
       }
       const record = await getPathwayLesson(pwRow.pathwayId, pwRow.slug, marketingLocale);
-      if (!record || !record.structuralQuality?.publicComplete) return { kind: "not_found" as const };
+      /** Hub lists DB rows; detail must still open when catalog/DB editorial gate lags (`publicComplete`). */
+      if (!record) return { kind: "not_found" as const };
       return { kind: "pathway_ok" as const, record, pathwayId: pwRow.pathwayId };
     }
 
@@ -422,6 +424,7 @@ export default async function LessonDetailPage({ params }: Props) {
       }
     }
     const pathwayId = resolvedLesson.pathwayId;
+    const lessonStudyLoopCompositionEntropy = randomUUID();
     const pathway = getExamPathwayById(pathwayId);
     const examFraming = getLearnerExamFraming(pathwayId);
     const combinedExplicitIds = explicitLessonStudyLoopCombinedSanitizedIds(
@@ -456,6 +459,7 @@ export default async function LessonDetailPage({ params }: Props) {
             buildLessonStudyLoopBankPackFromPreloadedExplicitItems({
               preloadedItems: explicitCombinedLoad.items,
               lessonKey: `${pathwayId}:${record.slug}`,
+              compositionEntropy: lessonStudyLoopCompositionEntropy,
             }),
           )
         : userId &&
@@ -470,6 +474,7 @@ export default async function LessonDetailPage({ params }: Props) {
               bodySystem: record.bodySystem,
               lessonSlug: record.slug,
               lessonKey: `${pathwayId}:${record.slug}`,
+              compositionEntropy: lessonStudyLoopCompositionEntropy,
             })
           : Promise.resolve({
               items: [],

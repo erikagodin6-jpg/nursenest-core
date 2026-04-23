@@ -5,12 +5,20 @@ import { CountrySwitcher, type CountrySwitcherOption } from "@/components/pathwa
 type Props = {
   searchBasePath: string;
   initialQuery?: string;
+  /** Preserved on GET search (pathway lessons hub topic filter). */
+  preservedTopicSlug?: string;
   countryOptions?: CountrySwitcherOption[];
   /** Optional total lesson count shown as a result indicator. */
   totalCount?: number;
 };
 
-export function LessonsToolbar({ searchBasePath, initialQuery, countryOptions, totalCount }: Props) {
+export function LessonsToolbar({
+  searchBasePath,
+  initialQuery,
+  preservedTopicSlug,
+  countryOptions,
+  totalCount,
+}: Props) {
   return (
     <div className="mt-4 flex flex-col gap-3 rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3 sm:p-4">
       <div
@@ -22,6 +30,7 @@ export function LessonsToolbar({ searchBasePath, initialQuery, countryOptions, t
           action={searchBasePath}
           className={`flex w-full flex-col gap-2 sm:flex-row ${countryOptions ? "lg:max-w-[32rem]" : ""}`}
         >
+          {preservedTopicSlug ? <input type="hidden" name="topicSlug" value={preservedTopicSlug} /> : null}
           <label htmlFor="lessons-toolbar-q" className="sr-only">
             Search lessons
           </label>
@@ -50,7 +59,11 @@ export function LessonsToolbar({ searchBasePath, initialQuery, countryOptions, t
             </button>
             {initialQuery ? (
               <Link
-                href={searchBasePath}
+                href={
+                  preservedTopicSlug
+                    ? `${searchBasePath.replace(/\/$/, "")}?topicSlug=${encodeURIComponent(preservedTopicSlug)}`
+                    : searchBasePath
+                }
                 className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:bg-[var(--semantic-panel-cool)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
               >
                 Clear

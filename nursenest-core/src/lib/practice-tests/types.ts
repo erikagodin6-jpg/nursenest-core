@@ -44,7 +44,7 @@ export type CatStudyFeedbackPayload = {
   layers?: CatStudyFeedbackLayers;
 };
 
-export type PracticeTestSelectionMode = "random" | "targeted" | "weak" | "cat";
+export type PracticeTestSelectionMode = "random" | "targeted" | "weak" | "missed" | "cat";
 
 /** Serialized pathway row for the practice-test builder (server → client). */
 export type PracticeTestPathwayOption = {
@@ -69,7 +69,7 @@ export type PracticeTestPathwayClientShell = Pick<
 >;
 
 /** Pool basis when `selectionMode === "cat"` (how items are filtered before adaptive selection). */
-export type CatSelectionBasis = "random" | "targeted" | "weak";
+export type CatSelectionBasis = "random" | "targeted" | "weak" | "missed";
 export type CatEngineType = "CAT" | "SIMULATION";
 export type CatEngineMode = "production_ready" | "beta" | "mini_adaptive" | "simulation" | "unavailable";
 

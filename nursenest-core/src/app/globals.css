@@ -2313,14 +2313,14 @@ html[data-theme] .nn-marketing-trust-strip {
     color-mix(in srgb, var(--semantic-panel-cool) 32%, var(--bg-card)) 52%,
     color-mix(in srgb, var(--semantic-panel-muted) 22%, var(--bg-card)) 100%
   );
-  box-shadow: var(--shadow-card, var(--elevation-rest));
+  box-shadow: var(--shadow-elevated, var(--elevation-overlay));
 }
 
-/* Practice / CAT hub — cool top rail on primary builder card (clinical / structured cue) */
+/* Practice / CAT hub — cool inset top rail on builder card (works alongside warning border states) */
 [data-nn-learner-area="practice-tests"] > section.nn-card:first-of-type {
-  border-top-width: 3px;
-  border-top-style: solid;
-  border-top-color: color-mix(in srgb, var(--semantic-info) 42%, var(--border-subtle));
+  box-shadow:
+    var(--shadow-card, var(--elevation-rest)),
+    inset 0 3px 0 0 color-mix(in srgb, var(--semantic-info) 34%, transparent);
 }
 
 /* Pathway lesson system accordion cards — per-system accent top stroke + soft lift */

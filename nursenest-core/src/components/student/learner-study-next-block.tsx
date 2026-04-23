@@ -15,6 +15,7 @@ function ctaForRecommendationType(type: StudyNextRecommendationType, t: LearnerM
       return t("studyNext.cta.continue");
     case "weak_topic_qbank":
     case "weak_topic_flashcards":
+    case "missed_review_session":
       return t("studyNext.cta.practiceNow");
     case "retest_topic":
       return t("studyNext.cta.reviewNow");

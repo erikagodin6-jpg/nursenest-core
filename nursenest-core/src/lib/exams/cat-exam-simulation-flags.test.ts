@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
-import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";
+import { isCatExamSimulationFeatureEnabled, pathwaySupportsCatExamSimulation } from "@/lib/exams/cat-exam-simulation";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 
 const saved = {
@@ -38,5 +39,17 @@ describe("isCatExamSimulationFeatureEnabled", () => {
 describe("exam_sim_disabled contract", () => {
   it("matches POST /api/practice-tests 403 code", () => {
     assert.equal(PRACTICE_TEST_CAT_CREATE_CODE.exam_sim_disabled, "exam_sim_disabled");
+  });
+});
+
+describe("pathwaySupportsCatExamSimulation", () => {
+  it("rejects NCLEX-PN (exam sim limited to RN/NP families)", () => {
+    const pn = getExamPathwayById("us-lpn-nclex-pn");
+    assert.ok(pn, "catalog must include LPN pathway id");
+    assert.equal(pathwaySupportsCatExamSimulation(pn), false);
+  });
+
+  it("allows null pathway (server defaults NCLEX-RN US pool)", () => {
+    assert.equal(pathwaySupportsCatExamSimulation(null), true);
   });
 });

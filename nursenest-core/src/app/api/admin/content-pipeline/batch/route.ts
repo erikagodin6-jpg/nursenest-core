@@ -3,6 +3,9 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { runContentBatch, batchToPrismaInputs } from "@/lib/content-pipeline/batch-generator";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import { generateSeo, assertRequiredSeoFieldsPresent } from "@/lib/seo/seo-generator";
+import { assertSeoSafeToCreatePathwayLesson } from "@/lib/seo/seo-duplicate-guard";
+import { mapExamStringToSeoTier, seoDomainForTaxonomyCategory } from "@/lib/seo/seo-taxonomy-align";
 import { validatePathwayLessonTaxonomyBeforeWrite } from "@/lib/taxonomy/nursing-taxonomy-validation";
 import type { ContentBatchInput } from "@/lib/content-pipeline/types";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -94,11 +97,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   // ── Optional immediate DB import ─────────────────────────────────────────
   if (parsed.data.importNow) {
     const { prisma } = await import("@/lib/db");
-    const { lessons, questions } = batchToPrismaInputs(batchOutput);
+    const { lessons: lessonRows, questions } = batchToPrismaInputs(batchOutput);
     let importStats: Record<string, number> = {};
 
     const taxonomyViolations: { slug: string; violations: string[] }[] = [];
-    for (const row of lessons) {
+    const seoViolations: { slug: string; message: string }[] = [];
+    const lessonsReady: typeof lessonRows = [];
+    for (const row of lessonRows) {
       const v = validatePathwayLessonTaxonomyBeforeWrite({
         title: row.title,
         topic: row.topic,
@@ -110,13 +115,52 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       });
       if (!v.ok) {
         taxonomyViolations.push({ slug: row.slug, violations: v.violations });
+        continue;
       }
+      const bodySystem = v.classification.category;
+      const tier = mapExamStringToSeoTier(parsed.data.exam);
+      const domain = seoDomainForTaxonomyCategory(bodySystem);
+      const seo = generateSeo({
+        title: row.title,
+        category: bodySystem,
+        domain,
+        tier,
+        keywords: [row.topic, row.topicSlug.replace(/-/g, " ")],
+      });
+      try {
+        assertRequiredSeoFieldsPresent({
+          slug: row.slug,
+          metaTitle: seo.metaTitle,
+          metaDescription: seo.metaDescription,
+          breadcrumb: seo.breadcrumb,
+        });
+        await assertSeoSafeToCreatePathwayLesson(prisma, {
+          pathwayId: row.pathwayId,
+          locale: row.locale,
+          slug: row.slug,
+          metaTitle: seo.metaTitle,
+          h1: seo.h1,
+        });
+      } catch (e) {
+        seoViolations.push({
+          slug: row.slug,
+          message: e instanceof Error ? e.message : String(e),
+        });
+        continue;
+      }
+      lessonsReady.push({
+        ...row,
+        bodySystem,
+        seoTitle: seo.metaTitle.slice(0, 200),
+        seoDescription: seo.metaDescription.slice(0, 500),
+      });
     }
-    if (taxonomyViolations.length > 0) {
+    if (taxonomyViolations.length > 0 || seoViolations.length > 0) {
       return NextResponse.json(
         {
-          error: "Taxonomy validation failed",
+          error: "Taxonomy or SEO validation failed",
           taxonomyViolations,
+          seoViolations,
           stats: batchOutput.stats,
           generatedAt: batchOutput.generatedAt,
         },
@@ -126,8 +170,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     try {
       const [lessonResult, questionResult] = await Promise.all([
-        lessons.length > 0
-          ? prisma.pathwayLesson.createMany({ data: lessons as never[], skipDuplicates: true })
+        lessonsReady.length > 0
+          ? prisma.pathwayLesson.createMany({ data: lessonsReady as never[], skipDuplicates: true })
           : Promise.resolve({ count: 0 }),
         questions.length > 0
           ? prisma.examQuestion.createMany({ data: questions as never[], skipDuplicates: true })

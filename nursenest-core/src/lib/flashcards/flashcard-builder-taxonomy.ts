@@ -1,10 +1,13 @@
 import { classifyLearningTopic, learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
+import { REVIEW_REQUIRED, TAXONOMY } from "@/lib/taxonomy/taxonomy";
+
+const EXAM_META_IDS = new Set<string>(TAXONOMY.EXAM_META);
 
 const OVERRIDES: Array<{ pattern: RegExp; categoryId: string }> = [
   { pattern: /\babg\b|arterial blood gas|oxygenation|ventilation/i, categoryId: "respiratory" },
-  { pattern: /\bbph\b|benign prostatic hyperplasia|prostat/i, categoryId: "renal-genitourinary" },
+  { pattern: /\bbph\b|benign prostatic hyperplasia|prostat/i, categoryId: "renal_genitourinary" },
   { pattern: /calcium|magnesium|electrolyte|sodium|potassium/i, categoryId: "endocrine" },
-  { pattern: /male reproductive|reproductive tract|ob-gyn|pregnan|postpartum|gyne/i, categoryId: "reproductive-ob-gyn" },
+  { pattern: /male reproductive|reproductive tract|ob-gyn|pregnan|postpartum|gyne/i, categoryId: "reproductive_obstetrics" },
 ];
 
 const SYSTEM_KEYWORDS =
@@ -14,13 +17,13 @@ const FUNDAMENTALS_ALLOWED =
   /safety|infection control|hand hygiene|aseptic|sterile|ppe|isolation|prioritiz|delegat|communication|documentation|foundational|basic assessment|vital signs|therapeutic communication/i;
 
 const CATEGORY_BLOCKERS: Array<{ pattern: RegExp; categoryId: string }> = [
-  { pattern: /burn|skin graft|pressure injury|wound|cellulitis|rash|dermat|lesion|melanoma|basal cell|squamous cell/i, categoryId: "dermatology" },
+  { pattern: /burn|skin graft|pressure injury|wound|cellulitis|rash|dermat|lesion|melanoma|basal cell|squamous cell/i, categoryId: "integumentary" },
   { pattern: /heart failure|acs|arrhythm|mi\b|stemi|cardio|coronary|shock|hemodynamic|perfusion/i, categoryId: "cardiovascular" },
   { pattern: /copd|asthma|abg|oxygen|ventilat|pulmonary|pneumonia|respir|hypox|ecmo/i, categoryId: "respiratory" },
   { pattern: /dka|hhs|thyroid|adrenal|pituitary|endocrine|diabet|electrolyte|magnesium|calcium|potassium|sodium/i, categoryId: "endocrine" },
-  { pattern: /stroke|seizure|icp|tbi|delirium|neurolog/i, categoryId: "neurology" },
-  { pattern: /\bbph\b|prostat|renal|kidney|dialysis|aki|ckd|urinar|uti|gu\b/i, categoryId: "renal-genitourinary" },
-  { pattern: /sepsis|infect|immune|antibiotic|antimicrobial/i, categoryId: "immune-infectious" },
+  { pattern: /stroke|seizure|icp|tbi|delirium|neurolog/i, categoryId: "neurological" },
+  { pattern: /\bbph\b|prostat|renal|kidney|dialysis|aki|ckd|urinar|uti|gu\b/i, categoryId: "renal_genitourinary" },
+  { pattern: /sepsis|infect|immune|antibiotic|antimicrobial/i, categoryId: "immune_infectious" },
 ];
 
 export type BuilderCategoryOption = {
@@ -46,9 +49,9 @@ export function resolveBuilderCategoryId(input: {
     if (blocker.pattern.test(text)) return blocker.categoryId;
   }
   const classified = classifyLearningTopic(text, input.pathwayId);
-  // Guardrail: if a clearly system-specific topic was misrouted, keep it out of Fundamentals.
-  if (classified.categoryId === "fundamentals" && (SYSTEM_KEYWORDS.test(text) || !FUNDAMENTALS_ALLOWED.test(text))) {
-    return "professional-practice-ethics";
+  // Do not park clearly system-specific topics under exam-meta buckets.
+  if (EXAM_META_IDS.has(classified.categoryId) && SYSTEM_KEYWORDS.test(text) && !FUNDAMENTALS_ALLOWED.test(text)) {
+    return REVIEW_REQUIRED;
   }
   return classified.categoryId;
 }

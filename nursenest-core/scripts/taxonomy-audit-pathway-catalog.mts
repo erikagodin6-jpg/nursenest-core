@@ -9,7 +9,7 @@
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { classifyNursingContent, classifyPathwayLessonRecordForHub } from "@/lib/taxonomy/nursing-taxonomy-classifier";
+import { classifyNursingContent, classifyPathwayLessonRecordForHub } from "@/lib/taxonomy/classifier";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 
 type CatalogLesson = Pick<

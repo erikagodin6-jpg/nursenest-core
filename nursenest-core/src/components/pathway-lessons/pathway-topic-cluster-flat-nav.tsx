@@ -3,6 +3,7 @@
  * Current marketing hubs use PathwayTopicClusterGroupedNav; import this module when a flat index is explicitly desired.
  */
 import Link from "next/link";
+import { marketingLessonsTopicClusterPath } from "@/lib/lessons/lesson-routes";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 
 /** Beyond this, chips collapse behind a disclosure to avoid giant scroll walls on mobile. */
@@ -28,7 +29,7 @@ export function PathwayTopicClusterFlatNav({ lessonsBasePath, topicClusters, pat
   const chip = (t: TopicCluster) => (
     <li key={t.topicSlug}>
       <Link
-        href={`${lessonsBasePath}/topics/${t.topicSlug}`}
+        href={marketingLessonsTopicClusterPath(lessonsBasePath, t.topicSlug)}
         className="inline-flex rounded-full border border-border bg-[var(--theme-muted-surface)] px-3 py-1.5 text-sm font-medium hover:border-primary/40"
       >
         {t.label} ({t.count})

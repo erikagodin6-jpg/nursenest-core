@@ -1,4 +1,6 @@
+import { randomUUID } from "node:crypto";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import { loadMissedQuestionSignals } from "@/lib/learner/study-question-signals";
 import { loadWeakTopicPracticePlan } from "@/lib/learner/topic-performance";
 import type {
   LinearDeliveryMode,
@@ -9,26 +11,22 @@ import type {
 import { fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
 import {
   filterPoolRemovingRecentQuestions,
+  questionLastExposureStartedAtMsForPathway,
   recentPracticeQuestionIdsForPathway,
 } from "@/lib/practice-tests/recent-practice-question-ids";
-import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
+import {
+  linearSessionPickOrder,
+  PRACTICE_TEST_MAX_Q,
+  PRACTICE_TEST_MIN_Q,
+} from "@/lib/practice-tests/linear-session-pick-order";
+import { buildPrioritizedLinearPickBand } from "@/lib/study/learner-study-prioritizer";
 import { practiceRecentSessionLookback, STUDY_DIVERSITY_PRACTICE_RECENT_MIN_REMAINING_DEFAULT } from "@/lib/study/study-diversity-config";
 import { logStudyDiversity } from "@/lib/study/study-diversity-log";
 
 /** Linear pool selection — CAT uses {@link createCatPracticeTestPayload} instead. */
 export type LinearPoolSelectionMode = Exclude<PracticeTestSelectionMode, "cat">;
 
-export const PRACTICE_TEST_MIN_Q = 5;
-export const PRACTICE_TEST_MAX_Q = 100;
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j]!, a[i]!];
-  }
-  return a;
-}
+export { linearSessionPickOrder, PRACTICE_TEST_MAX_Q, PRACTICE_TEST_MIN_Q };
 
 export type PickQuestionsInput = {
   questionCount: number;
@@ -64,15 +62,25 @@ export async function pickPracticeQuestionIds(
     return { ok: false, message: "Targeted mode requires at least one topic." };
   }
 
-  if (input.selectionMode === "weak") {
-    const plan = await loadWeakTopicPracticePlan(userId, entitlement, 16);
-    if (plan.priorityByCanonical.size === 0) {
-      return {
-        ok: false,
-        message:
-          "No weak areas yet. Answer graded questions, finish a mock, or complete a practice test. Then try weak mode again.",
-      };
-    }
+  const missedSignals = await loadMissedQuestionSignals(userId);
+  if (input.selectionMode === "missed" && missedSignals.size === 0) {
+    return {
+      ok: false,
+      message:
+        "No missed questions found yet. Complete a graded practice session with incorrect answers, then try missed mode again.",
+    };
+  }
+
+  const weakPlanForPrioritize =
+    input.selectionMode === "missed"
+      ? { dbTopicNames: [] as string[], priorityByCanonical: new Map<string, number>() }
+      : await loadWeakTopicPracticePlan(userId, entitlement, 16);
+  if (input.selectionMode === "weak" && weakPlanForPrioritize.priorityByCanonical.size === 0) {
+    return {
+      ok: false,
+      message:
+        "No weak areas yet. Answer graded questions, finish a mock, or complete a practice test. Then try weak mode again.",
+    };
   }
 
   // Linear practice now reuses the same pathway-safe, rationale-complete CAT pool gates.
@@ -96,19 +104,38 @@ export async function pickPracticeQuestionIds(
   );
   const recentFiltered = filterPoolRemovingRecentQuestions(pool, recentPack.ids, minRemain);
 
-  const poolIds = recentFiltered.pool.map((p) => p.id);
-  const salt = input.sessionPickSalt?.trim();
-  const ids = (salt && salt.length >= 8
-    ? shuffleSeeded(poolIds, `${salt}:linear-pool`)
-    : shuffle(poolIds)
-  ).slice(0, n);
+  const saltTrim = input.sessionPickSalt?.trim();
+  const pickSalt = saltTrim && saltTrim.length >= 8 ? saltTrim : randomUUID();
+
+  const lastExposureMs = pathwayIdForRecent
+    ? await questionLastExposureStartedAtMsForPathway({
+        userId,
+        pathwayId: pathwayIdForRecent,
+        sessionLookback: practiceRecentSessionLookback(input.selectionMode),
+      })
+    : new Map<string, number>();
+
+  const bandIds = buildPrioritizedLinearPickBand({
+    rows: recentFiltered.pool,
+    mode: input.selectionMode,
+    questionCount: n,
+    sessionPickSalt: pickSalt,
+    weakPriorityByCanonical: weakPlanForPrioritize.priorityByCanonical,
+    missedSignals,
+    lastExposureStartedAtMs: lastExposureMs,
+    recentSessionQuestionIds: recentPack.ids,
+    nowMs: Date.now(),
+  });
+
+  const ids = linearSessionPickOrder(bandIds, n, input.sessionPickSalt);
   logStudyDiversity("linear_pick", {
     poolSize: pool.length,
     poolAfterRecent: recentFiltered.pool.length,
     recentApplied: recentFiltered.applied ? 1 : 0,
     selectionMode: input.selectionMode,
     questionCount: n,
-    hasSalt: salt && salt.length >= 8 ? 1 : 0,
+    hasSalt: saltTrim && saltTrim.length >= 8 ? 1 : 0,
+    prioritizedBand: bandIds.length,
   });
   return {
     ok: true,

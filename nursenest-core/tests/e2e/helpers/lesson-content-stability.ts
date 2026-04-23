@@ -107,7 +107,7 @@ export async function captureStabilityShot(
   return rel;
 }
 
-/** Lesson detail paths under a hub (excludes /lessons/topics/… and bare /lessons). */
+/** Lesson detail paths under a hub (excludes topic query variants and bare /lessons). */
 export async function collectLessonDetailPathsFromHub(page: Page, origin: string): Promise<string[]> {
   return page.evaluate((o) => {
     const lib = document.querySelector("#pathway-lesson-library");

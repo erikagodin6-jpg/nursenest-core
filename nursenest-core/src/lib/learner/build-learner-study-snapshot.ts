@@ -1,5 +1,6 @@
 import { ContentStatus, TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -34,6 +35,8 @@ export type LearnerStudySnapshot = {
   weakTopicPathwayLesson: { title: string; href: string; pathwayId: string } | null;
   /** At least one published in-scope flashcard exists for a weak-topic code. */
   hasWeakTopicFlashcards: boolean;
+  /** Recent completed practice tests include at least one incorrect question id. */
+  hasMissedPracticeQuestions: boolean;
   /** Topic codes derived from weak rows (for flashcard OR match). */
   weakTopicCodes: string[];
 };
@@ -49,6 +52,20 @@ function weakTopicCodesFromRows(weak: WeakTopicRow[], max = 6): string[] {
     if (out.length >= max) break;
   }
   return out;
+}
+
+async function learnerHasMissedQuestionInRecentTests(userId: string): Promise<boolean> {
+  const rows = await prisma.practiceTest.findMany({
+    where: { userId, status: "COMPLETED" },
+    orderBy: { completedAt: "desc" },
+    take: 12,
+    select: { results: true },
+  });
+  for (const r of rows) {
+    const inc = (r.results as PracticeTestResultsJson | null)?.incorrectQuestionIds;
+    if (Array.isArray(inc) && inc.some((x) => typeof x === "string" && x.length > 4)) return true;
+  }
+  return false;
 }
 
 async function hasFlashcardsForTopicCodes(
@@ -113,6 +130,7 @@ export async function buildLearnerStudySnapshot(
       pathwayNext: null,
       weakTopicPathwayLesson: null,
       hasWeakTopicFlashcards: false,
+      hasMissedPracticeQuestions: false,
       weakTopicCodes: [],
     };
   }
@@ -164,8 +182,10 @@ export async function buildLearnerStudySnapshot(
       : null;
 
   const weakTopicCodes = weakTopicCodesFromRows(weakTopics);
-  const hasWeakTopicFlashcards =
-    weakTopicCodes.length > 0 ? await hasFlashcardsForTopicCodes(entitlement, weakTopicCodes) : false;
+  const [hasWeakTopicFlashcards, hasMissedPracticeQuestions] = await Promise.all([
+    weakTopicCodes.length > 0 ? hasFlashcardsForTopicCodes(entitlement, weakTopicCodes) : Promise.resolve(false),
+    learnerHasMissedQuestionInRecentTests(userId),
+  ]);
 
   return {
     weakTopics,
@@ -177,6 +197,7 @@ export async function buildLearnerStudySnapshot(
     pathwayNext,
     weakTopicPathwayLesson,
     hasWeakTopicFlashcards,
+    hasMissedPracticeQuestions,
     weakTopicCodes,
   };
 }

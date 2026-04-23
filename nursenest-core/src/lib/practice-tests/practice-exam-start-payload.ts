@@ -2,7 +2,7 @@ import type { LinearDeliveryMode, LinearRationaleVisibility } from "@/lib/practi
 
 export type PracticeExamSessionMode = "tutor" | "exam";
 export type PracticeExamRationaleVisibilityMode = "immediate" | "review";
-export type PracticeExamSelectionMode = "random" | "targeted" | "weak";
+export type PracticeExamSelectionMode = "random" | "targeted" | "weak" | "missed";
 
 export type BuildPracticeExamStartPayloadInput = {
   title?: string | null;

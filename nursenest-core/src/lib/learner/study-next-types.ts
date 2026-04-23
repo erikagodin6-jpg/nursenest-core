@@ -7,14 +7,16 @@ export type StudyNextReasonCode =
   | "weak_topic_low_confidence"
   | "review_due"
   | "practice_retest_weak_pool"
-  | "insufficient_signals_mixed_bank";
+  | "insufficient_signals_mixed_bank"
+  | "missed_items_review";
 
 export type StudyNextRecommendationType =
   | "continue_pathway_lesson"
   | "weak_topic_lesson"
   | "weak_topic_qbank"
   | "weak_topic_flashcards"
-  | "retest_topic";
+  | "retest_topic"
+  | "missed_review_session";
 
 export type StudyNextConfidence = "high" | "medium" | "low";
 

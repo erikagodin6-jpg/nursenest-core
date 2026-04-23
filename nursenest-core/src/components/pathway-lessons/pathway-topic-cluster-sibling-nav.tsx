@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
+import { marketingLessonsTopicClusterPath } from "@/lib/lessons/lesson-routes";
 
 type Props = {
   lessonsBasePath: string;
@@ -26,8 +27,6 @@ export function PathwayTopicClusterSiblingNav({
 
   if (siblings.length === 0) return null;
 
-  const base = lessonsBasePath.replace(/\/$/, "");
-
   return (
     <nav aria-label="Other topic clusters in this pathway" className="nn-study-card nn-study-card--wash p-4 sm:p-5">
       <p className="text-xs font-semibold uppercase tracking-wide text-primary">Explore other topics</p>
@@ -38,7 +37,7 @@ export function PathwayTopicClusterSiblingNav({
         {siblings.map((t) => (
           <li key={t.topicSlug}>
             <Link
-              href={`${base}/topics/${encodeURIComponent(t.topicSlug)}`}
+              href={marketingLessonsTopicClusterPath(lessonsBasePath, t.topicSlug)}
               className="nn-chip inline-flex items-center px-3 py-1.5 text-sm font-medium hover:border-primary/40"
             >
               {t.label}

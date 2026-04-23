@@ -11,7 +11,7 @@
  * | Route shape | Canonical |
  * |-------------|-----------|
  * | `/{country}/np/{alias}` (overview) | **Self** — the keyword URL is the indexable landing. |
- * | `…/lessons`, `…/lessons/{slug}`, `…/lessons/topics/{topic}`, `…/questions`, `…/pricing` | **Core pathway URL** — `buildExamPathwayPath(pathway, …)` so Google consolidates depth on one URL tree. |
+ * | `…/lessons`, `…/lessons?topicSlug=…`, `…/lessons/{slug}`, `…/questions`, `…/pricing` | **Core pathway URL** — `buildExamPathwayPath(pathway, …)` so Google consolidates depth on one URL tree. |
  *
  * Users may still browse under the alias path for session continuity (pagination, lesson links); metadata
  * identity stays on the core pathway for subpages.

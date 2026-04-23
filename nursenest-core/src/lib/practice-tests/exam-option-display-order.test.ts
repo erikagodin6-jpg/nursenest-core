@@ -42,6 +42,14 @@ describe("exam-option-display-order", () => {
     );
     assert.equal(
       shouldDisableOptionShuffleMcq({
+        questionType: "SELECT_ALL_THAT_APPLY",
+        tags: [],
+        optionTexts: ["x", "y"],
+      }),
+      true,
+    );
+    assert.equal(
+      shouldDisableOptionShuffleMcq({
         questionType: "MCQ",
         tags: ["disable_option_shuffle"],
         optionTexts: ["x", "y"],
@@ -51,8 +59,43 @@ describe("exam-option-display-order", () => {
     assert.equal(
       shouldDisableOptionShuffleMcq({
         questionType: "MCQ",
+        tags: ["NO_OPTION_SHUFFLE"],
+        optionTexts: ["x", "y"],
+      }),
+      true,
+    );
+    assert.equal(
+      shouldDisableOptionShuffleMcq({
+        questionType: "MCQ",
         tags: [],
         optionTexts: ["All of the above", "Other"],
+      }),
+      true,
+    );
+    assert.equal(
+      shouldDisableOptionShuffleMcq({
+        questionType: "MCQ",
+        tags: [],
+        optionTexts: ["NONE OF THE ABOVE", "A"],
+      }),
+      true,
+    );
+    assert.equal(
+      shouldDisableOptionShuffleMcq({
+        questionType: "MCQ",
+        tags: [],
+        optionTexts: ["Plain stem A", "Plain stem B", "Plain stem C"],
+      }),
+      false,
+    );
+  });
+
+  it("shouldDisableOptionShuffleMcq catches both A and B order variants", () => {
+    assert.equal(
+      shouldDisableOptionShuffleMcq({
+        questionType: "MCQ",
+        tags: [],
+        optionTexts: ["Both B and A apply"],
       }),
       true,
     );

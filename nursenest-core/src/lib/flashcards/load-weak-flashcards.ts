@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { ContentStatus, type Prisma, TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
@@ -9,7 +10,7 @@ import {
   resolveSubscribedQuestionBankPathways,
   type ResolvedQuestionBankPathways,
 } from "@/lib/learner/tier-scoped-study-routes";
-import { shuffleIdsStableSeed } from "@/lib/flashcards/study-queue";
+import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
 
 const MAX_WEAK_TOPIC_TERMS = 8;
@@ -130,12 +131,10 @@ export async function loadWeakAreaFlashcardsForUser(
     take: FETCH_CAP,
   });
 
-  const shuffled = shuffleIdsStableSeed(rows.map((r) => r.id));
-  const byId = new Map(rows.map((r) => [r.id, r]));
+  const shuffledRows = shuffleSeeded(rows, `${randomUUID()}:weak-flashcards`);
   const cards: WeakFlashcardRow[] = [];
-  for (const id of shuffled) {
-    const c = byId.get(id);
-    if (!c?.deck?.slug) continue;
+  for (const c of shuffledRows) {
+    if (!c.deck?.slug) continue;
     cards.push({
       id: c.id,
       front: c.front,

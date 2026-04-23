@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 import { groupTopicClustersForNavigation } from "@/lib/lessons/lesson-topic-cluster-registry";
+import { marketingLessonsTopicClusterPath } from "@/lib/lessons/lesson-routes";
 
 type Props = {
   lessonsBasePath: string;
@@ -10,7 +11,7 @@ type Props = {
 
 const chip = (lessonsBasePath: string, t: TopicCluster) => (
   <li key={t.topicSlug}>
-    <Link href={`${lessonsBasePath}/topics/${t.topicSlug}`} className="nn-chip px-3 py-1.5 text-sm font-medium hover:border-primary/40">
+    <Link href={marketingLessonsTopicClusterPath(lessonsBasePath, t.topicSlug)} className="nn-chip px-3 py-1.5 text-sm font-medium hover:border-primary/40">
       {t.label} ({t.count})
     </Link>
   </li>

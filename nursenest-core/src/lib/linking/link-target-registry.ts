@@ -9,7 +9,7 @@
  * - Flashcard hrefs use /flashcards/{topicSlug} when a deck exists.
  * - Question hrefs are pathway-scoped where possible; shared /question-bank as fallback.
  * - Lesson hrefs use marketingPathwayLessonDetailPath helpers.
- * - Topic hubs use /lessons/topics/{topicSlug} under each pathway.
+ * - Topic-scoped lesson lists use /lessons?topicSlug={slug} on each pathway lessons hub.
  * - A registry miss (unrecognized topic) is safe — the resolver returns empty results.
  * - Additional targets can be registered at runtime via registerLinkTargets().
  *

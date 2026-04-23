@@ -61,6 +61,40 @@ export async function recentPracticeQuestionIdsForPathway(params: {
   return { ids: new Set(uniq), sessionsScanned };
 }
 
+/**
+ * For each question id, the `startedAt` of the most recent practice/CAT session (same pathway)
+ * whose `questionIds` included that id. Used to prefer less-recently exposed items in general study.
+ */
+export async function questionLastExposureStartedAtMsForPathway(params: {
+  userId: string;
+  pathwayId: string;
+  sessionLookback?: number;
+}): Promise<Map<string, number>> {
+  const sessionLookback = params.sessionLookback ?? STUDY_DIVERSITY_PRACTICE_RECENT_SESSION_LOOKBACK_DEFAULT;
+  const pathwayId = params.pathwayId.trim();
+  if (!pathwayId) return new Map();
+
+  const rows = await prisma.practiceTest.findMany({
+    where: { userId: params.userId },
+    orderBy: { startedAt: "desc" },
+    take: Math.min(80, sessionLookback * 6),
+    select: { config: true, questionIds: true, startedAt: true },
+  });
+
+  const out = new Map<string, number>();
+  let sessionsScanned = 0;
+  for (const r of rows) {
+    if (pathwayIdFromConfigJson(r.config) !== pathwayId) continue;
+    sessionsScanned += 1;
+    if (sessionsScanned > sessionLookback) break;
+    const t = r.startedAt.getTime();
+    for (const id of asIdList(r.questionIds)) {
+      if (!out.has(id)) out.set(id, t);
+    }
+  }
+  return out;
+}
+
 /** Narrow the pool by excluding recent ids when enough items remain; otherwise keep the full pool. */
 export function filterPoolRemovingRecentQuestions<T extends { id: string }>(
   pool: T[],

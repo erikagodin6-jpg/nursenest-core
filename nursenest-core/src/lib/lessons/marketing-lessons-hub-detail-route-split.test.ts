@@ -29,9 +29,11 @@ describe("marketing lessons hub vs lesson detail routing", () => {
     assert.ok(!src.includes("pathway-lesson-detail-page-body"));
   });
 
-  it("hub passes listOpts derived from normalized q only (matches pathway lesson loader)", () => {
+  it("hub passes listOpts from normalized q and optional topicSlug (matches pathway lesson loader)", () => {
     const src = readFileSync(marketingHubLessonsPage, "utf8");
-    assert.ok(src.includes("const listOpts = qEffective ? { q: qEffective } : undefined"));
+    assert.match(src, /const listOpts\s*=/);
+    assert.ok(src.includes("topicSlugsIn"));
+    assert.ok(src.includes("qEffective"));
     assert.ok(!src.includes("sp.q.trim().length > 0 ? { q: sp.q }"));
   });
 

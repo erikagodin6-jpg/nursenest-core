@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { PathwayLessonDetailPageLoadingFallback } from "@/components/lessons/pathway-lesson-detail-loading-fallback";
 import { pathwayLessonPublicDetailPath } from "@/lib/lessons/pathway-lesson-types";
+import { marketingLessonSlugFromRouteParam } from "@/lib/lessons/lesson-routes";
 import { loadPathwayLessonSeoMetaWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -31,8 +32,9 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale: countrySlug, slug: roleTrack, examCode, lessonSlug } = await params;
-  const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/${lessonSlug}`;
+  const { locale: countrySlug, slug: roleTrack, examCode, lessonSlug: lessonSlugRaw } = await params;
+  const lessonSlug = marketingLessonSlugFromRouteParam(lessonSlugRaw) || lessonSlugRaw;
+  const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/${lessonSlugRaw}`;
   return safeGenerateMetadata(
     async () => {
       const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, {
@@ -89,8 +91,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  * route never shows `lessons/loading.tsx` hub skeleton (which lacked `header[data-nn-pathway-id]`).
  */
 export default async function PathwayLessonDetailPage({ params }: Props) {
-  const { locale: countrySlug, slug: roleTrack, examCode, lessonSlug } = await params;
-  const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/${lessonSlug}`;
+  const { locale: countrySlug, slug: roleTrack, examCode, lessonSlug: lessonSlugRaw } = await params;
+  const lessonSlug = marketingLessonSlugFromRouteParam(lessonSlugRaw) || lessonSlugRaw;
+  const pathname = `/${countrySlug}/${roleTrack}/${examCode}/lessons/${lessonSlugRaw}`;
   return withCrawlSurfacePageRender("marketing.pathway_lesson", pathname, async () => {
     const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
     if (!pathway) notFound();
