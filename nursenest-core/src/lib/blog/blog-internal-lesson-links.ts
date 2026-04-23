@@ -138,7 +138,7 @@ export function getBlogInternalLinkPathHintsForPrompt(exam: string, country: "US
   lines.push(
     "Do not link to /app/*, /api/*, or external domains.",
     "Include a mix where relevant: 1–2 lesson detail URLs (only if confident path matches a real lesson slug pattern), lessons hub, question bank hub, flashcards hub, /practice-exams, and optional programmatic practice landing for the exam.",
-    "linkKind: lesson | lessons_hub | question_bank | topic_cluster | practice_exams | practice_programmatic | general",
+    "linkKind: lesson | lessons_hub | question_bank | topic_cluster | practice_exams | practice_programmatic | flashcards_hub | adaptive_cat | study_plan | general",
     "Max 12 suggestions total.",
   );
   return lines.join("\n");

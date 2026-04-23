@@ -235,8 +235,24 @@ export default async function LearnerShellLayout({ children }: { children: React
                 serverDegraded={isDegradedMode()}
                 serverCoreEmergency={isCoreOnlyEmergencyMode()}
               />
+              {entitlement !== "error" &&
+              entitlement.hasAccess &&
+              entitlement.reason === "admin_override" &&
+              !qaPayload &&
+              !entitlement.adminLearnerQaSimulation ? (
+                <div
+                  role="region"
+                  aria-label="Staff access override"
+                  className="mb-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-info)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_14%,var(--semantic-surface))] px-3 py-2 text-sm text-[var(--semantic-text-primary)] shadow-sm sm:px-4"
+                >
+                  <p className="m-0 font-semibold leading-snug">
+                    Staff access override: you have full learner access from your staff role. This is not a paid
+                    subscription and is separate from simulated learner QA.
+                  </p>
+                </div>
+              ) : null}
               {qaPayload ? <AdminLearnerQaBanner title={bannerTitleForPayload(qaPayload)} /> : null}
-              {!skipNonCritical ? <LearnerAppSectionAnalytics /> : null}
+              {!skipNonCritical && !qaPayload ? <LearnerAppSectionAnalytics /> : null}
               <div className="nn-learner-exam-chrome-target nn-learner-shell-sticky sticky top-0 z-50 mb-[var(--nn-rhythm-tight-y)] bg-[var(--semantic-bg-base)] pt-1">
                 <div className="flex flex-col gap-2">
                   <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 shadow-sm sm:px-4 sm:py-2.5">

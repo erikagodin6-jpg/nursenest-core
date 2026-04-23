@@ -6,8 +6,10 @@ import "../../../../../scripts/stub-server-only.cjs";
 import assert from "node:assert/strict";
 import { afterEach, describe, it, mock } from "node:test";
 import { PracticeTestStatus } from "@prisma/client";
+import { createInitialAdaptiveState } from "@/lib/exams/cat-engine";
 import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
-import { PATCH } from "@/app/api/practice-tests/[id]/route";
+import { NextRequest } from "next/server";
+import { GET, PATCH } from "@/app/api/practice-tests/[id]/route";
 import { practiceTestRouteDeps } from "@/app/api/practice-tests/[id]/route-deps";
 import type { SubscriberSessionOk } from "@/lib/entitlements/require-subscriber-session";
 const gate: SubscriberSessionOk = {
@@ -50,6 +52,7 @@ const catConfig = {
   timedMode: true,
   timeLimitSec: 3600,
   catExamFeedbackMode: "test" as const,
+  sessionPickSalt: "aaaaaaaaaaaa",
 };
 
 const catResults: PracticeTestResultsJson = {
@@ -60,7 +63,7 @@ const catResults: PracticeTestResultsJson = {
     Pharmacology: { correct: 2, total: 4 },
   },
   weakAreas: ["Pharmacology"],
-  incorrectQuestionIds: [Q1, Q2],
+  incorrectQuestionIds: [Q1],
   estimatedAbility: 0.32,
   abilityStdError: 0.58,
   readinessLabel: "Building confidence",
@@ -126,6 +129,93 @@ afterEach(() => {
   mock.restoreAll();
 });
 
+describe("GET /api/practice-tests/[id] contractStrict", () => {
+  it("returns 409 with sessionContractError JSON when the row fails hydrate contract", async () => {
+    mock.method(practiceTestRouteDeps, "requireSubscriberSession", async () => gate);
+    mock.method(practiceTestRouteDeps, "enforcePracticeTestDetailProtection", () => null);
+    mock.method(practiceTestRouteDeps, "setSentryServerContext", () => {});
+    mock.method(practiceTestRouteDeps, "parsePracticeTestConfigAtBoundary", () => ({
+      questionCount: 10,
+      topicNames: [],
+      difficultyMin: null,
+      difficultyMax: null,
+      selectionMode: "random" as const,
+      pathwayId: "us-rn-nclex-rn",
+      timedMode: false,
+      sessionPickSalt: "aaaaaaaaaaaa",
+      linearDeliveryMode: "exam" as const,
+      linearRationaleVisibility: "end_of_exam" as const,
+      linearAllowReviewNavigation: false,
+    }));
+    mock.method(practiceTestRouteDeps, "findPracticeTest", async () => ({
+      id: "test_12345678",
+      userId: gate.userId,
+      title: "Exam",
+      status: PracticeTestStatus.IN_PROGRESS,
+      questionIds: [Q1],
+      answers: {},
+      cursorIndex: 0,
+      elapsedMs: null,
+      config: {},
+      adaptiveState: { theta: 1 },
+      startedAt: new Date("2026-01-01T00:00:00.000Z"),
+      completedAt: null,
+      timedMode: false,
+      timeLimitSec: null,
+      results: null,
+    }));
+
+    const req = new NextRequest("http://localhost/api/practice-tests/test_12345678?contractStrict=1");
+    const res = await GET(req, { params: Promise.resolve({ id: "test_12345678" }) });
+    assert.equal(res.status, 409);
+    const data = (await res.json()) as { code?: string; sessionContractError?: { code: string } };
+    assert.equal(data.code, "linear_engine_resume_missing_linear_engine");
+    assert.equal(data.sessionContractError?.code, "linear_engine_resume_missing_linear_engine");
+  });
+});
+
+describe("PATCH /api/practice-tests/[id] session contract preflight", () => {
+  it("returns 409 when the persisted row fails hydrate contract (cannot PATCH into a broken session)", async () => {
+    const update = mock.fn(async () => ({}));
+    mock.method(practiceTestRouteDeps, "requireSubscriberSession", async () => gate);
+    mock.method(practiceTestRouteDeps, "enforcePracticeTestMutationProtection", () => null);
+    mock.method(practiceTestRouteDeps, "setSentryServerContext", () => {});
+    mock.method(practiceTestRouteDeps, "parsePracticeTestConfigAtBoundary", () => ({
+      questionCount: 10,
+      topicNames: [],
+      difficultyMin: null,
+      difficultyMax: null,
+      selectionMode: "random" as const,
+      pathwayId: "us-rn-nclex-rn",
+      timedMode: false,
+      sessionPickSalt: "aaaaaaaaaaaa",
+      linearDeliveryMode: "exam" as const,
+      linearRationaleVisibility: "end_of_exam" as const,
+      linearAllowReviewNavigation: false,
+    }));
+    mock.method(practiceTestRouteDeps, "findPracticeTest", async () => ({
+      id: "test_12345678",
+      userId: gate.userId,
+      status: PracticeTestStatus.IN_PROGRESS,
+      questionIds: [Q1],
+      answers: {},
+      cursorIndex: 0,
+      elapsedMs: null,
+      config: {},
+      adaptiveState: { theta: 1 },
+    }));
+    mock.method(practiceTestRouteDeps, "updatePracticeTest", update);
+
+    const res = await PATCH(makeRequest({ action: "save", answers: {}, cursorIndex: 0 }) as never, {
+      params: Promise.resolve({ id: "test_12345678" }),
+    });
+    assert.equal(res.status, 409);
+    const data = (await res.json()) as { code?: string; sessionContractError?: { code: string } };
+    assert.equal(data.code, "linear_engine_resume_missing_linear_engine");
+    assert.equal(update.mock.callCount(), 0);
+  });
+});
+
 describe("PATCH /api/practice-tests/[id] study launch surface", () => {
   it("rejects save when Referer is the flashcards study surface", async () => {
     mock.method(practiceTestRouteDeps, "requireSubscriberSession", async () => gate);
@@ -161,7 +251,7 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
       cursorIndex: 0,
       elapsedMs: null,
       config: {},
-      adaptiveState: {},
+      adaptiveState: createInitialAdaptiveState(),
     }));
     mock.method(practiceTestRouteDeps, "updatePracticeTest", update);
     mock.method(practiceTestRouteDeps, "advanceCatPracticeTest", async () => ({
@@ -209,7 +299,7 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
       cursorIndex: 1,
       elapsedMs: null,
       config: {},
-      adaptiveState: {},
+      adaptiveState: createInitialAdaptiveState(),
     }));
     mock.method(practiceTestRouteDeps, "updatePracticeTest", update);
     mock.method(practiceTestRouteDeps, "finalizeCatPracticeTest", async () => ({
@@ -255,7 +345,7 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
       cursorIndex: 0,
       elapsedMs: null,
       config: {},
-      adaptiveState: {},
+      adaptiveState: createInitialAdaptiveState(),
     }));
 
     const res = await PATCH(makeRequest({ action: "complete", answers: { [Q1]: "A" }, cursorIndex: 0 }) as never, {

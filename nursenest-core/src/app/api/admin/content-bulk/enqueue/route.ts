@@ -7,6 +7,7 @@ import { BLOG_BULK_CHUNK_SIZE } from "@/lib/admin/content-bulk/blog-bulk-schema"
 import { resolveBlogBulkTargets } from "@/lib/admin/content-bulk/resolve-blog-bulk-ids";
 import { enqueueJob } from "@/lib/jobs/enqueue";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { parseAdminJsonMutationIntent, stripAdminMutationControlFields } from "@/lib/admin/admin-mutation-intent";
 
 export const dynamic = "force-dynamic";
 
@@ -27,9 +28,18 @@ export async function POST(req: Request) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
-  const parsed = bodySchema.safeParse(await req.json().catch(() => null));
+  const raw = await req.json().catch(() => null);
+  const intent = parseAdminJsonMutationIntent(raw);
+  if (intent instanceof NextResponse) return intent;
+
+  const stripped = stripAdminMutationControlFields((raw ?? {}) as Record<string, unknown>);
+  const parsed = bodySchema.safeParse(stripped);
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid body", details: parsed.error.flatten() }, { status: 400 });
+    safeServerLog("content_bulk", "enqueue_invalid_body", {});
+    return NextResponse.json(
+      { ok: false, code: "content_bulk_invalid_body", error: "Invalid body", details: parsed.error.flatten() },
+      { status: 400 },
+    );
   }
 
   const body = parsed.data;
@@ -37,6 +47,16 @@ export async function POST(req: Request) {
   const createdById = gate.admin.userId;
 
   if (body.scope === "utility") {
+    if (intent.dryRun) {
+      safeServerLog("content_bulk", "enqueue_utility_dry_run", { kind: body.utility.kind, correlationId });
+      return NextResponse.json({
+        ok: true,
+        dryRun: true,
+        scope: "utility",
+        kind: body.utility.kind,
+        preview: "Would enqueue one utility job (no queue write in dry run).",
+      });
+    }
     if (body.utility.kind === "sitemap_revalidate") {
       const job = await enqueueJob("content.bulk.sitemap_revalidate", {
         correlationId,
@@ -66,10 +86,32 @@ export async function POST(req: Request) {
   const rows = await resolveBlogBulkTargets(filters);
   const ids = rows.map((r) => r.id);
   if (ids.length === 0) {
-    return NextResponse.json({ ok: false, error: "No posts matched filters." }, { status: 400 });
+    return NextResponse.json(
+      { ok: false, code: "content_bulk_no_posts", error: "No posts matched filters." },
+      { status: 400 },
+    );
   }
 
   const chunks = chunkArray(ids, BLOG_BULK_CHUNK_SIZE).filter((c) => c.length > 0);
+
+  if (intent.dryRun) {
+    safeServerLog("content_bulk", "enqueue_blog_dry_run", {
+      operation,
+      posts: ids.length,
+      chunks: chunks.length,
+      correlationId,
+    });
+    return NextResponse.json({
+      ok: true,
+      dryRun: true,
+      correlationId,
+      operation,
+      postsMatched: ids.length,
+      chunkCount: chunks.length,
+      preview: "Would enqueue blog chunk jobs (no queue write in dry run).",
+    });
+  }
+
   const jobs = [];
   let chunkIndex = 0;
   for (const postIds of chunks) {

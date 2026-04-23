@@ -186,7 +186,7 @@ export function bannerTitleForPayload(p: AdminLearnerQaPayloadV1): string {
         ? ` · Allied: ${(p.alliedCareer ?? "paramedic").replace(/_/g, " ")}`
         : "";
   const plan = p.planVariant ? ` · Plan: ${p.planVariant}` : "";
-  return `Admin QA: viewing as ${trackLabel} learner${np}${plan} · ${life} · ${p.country}`;
+  return `You are viewing a simulated learner — ${trackLabel}${np}${plan} · ${life} · ${p.country}`;
 }
 
 function hmacHex(secret: string, message: string): string {

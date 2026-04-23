@@ -33,7 +33,7 @@ export async function updateUserFeedbackReportStatus(_prev: AdminMutationResult,
       hasId: Boolean(id),
       statusRaw: statusRaw.slice(0, 32),
     });
-    return { ok: false, code: "feedback_invalid_input", error: "Missing report id or invalid status." };
+    return { ok: false, code: "feedback_invalid_input", message: "Missing report id or invalid status." };
   }
   try {
     await prisma.userFeedbackReport.update({
@@ -43,14 +43,14 @@ export async function updateUserFeedbackReportStatus(_prev: AdminMutationResult,
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
       safeServerLog("admin_feedback", "update_status_not_found", { reportIdPrefix: id.slice(0, 8) });
-      return { ok: false, code: "feedback_not_found", error: "Report was not found or was removed." };
+      return { ok: false, code: "feedback_not_found", message: "Report was not found or was removed." };
     }
     const msg = e instanceof Error ? e.message : "Database update failed";
     safeServerLog("admin_feedback", "update_status_failed", {
       reportIdPrefix: id.slice(0, 8),
       detail: msg.slice(0, 180),
     });
-    return { ok: false, code: "feedback_db_error", error: "Could not update status. Try again." };
+    return { ok: false, code: "feedback_db_error", message: "Could not update status. Try again." };
   }
   safeServerLog("admin_feedback", "update_status_ok", { reportIdPrefix: id.slice(0, 8), status: statusRaw });
   revalidateFeedbackInbox();
@@ -62,7 +62,7 @@ export async function setUserFeedbackReportStatus(reportId: string, status: User
   await requireAdmin();
   if (!isStatus(status)) {
     safeServerLog("admin_feedback", "set_status_invalid", { status });
-    return { ok: false, code: "feedback_invalid_status", error: "Invalid status." };
+    return { ok: false, code: "feedback_invalid_status", message: "Invalid status." };
   }
   try {
     await prisma.userFeedbackReport.update({
@@ -71,11 +71,11 @@ export async function setUserFeedbackReportStatus(reportId: string, status: User
     });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
-      return { ok: false, code: "feedback_not_found", error: "Report was not found or was removed." };
+      return { ok: false, code: "feedback_not_found", message: "Report was not found or was removed." };
     }
     const msg = e instanceof Error ? e.message : "Database update failed";
     safeServerLog("admin_feedback", "set_status_failed", { reportIdPrefix: reportId.slice(0, 8), detail: msg.slice(0, 180) });
-    return { ok: false, code: "feedback_db_error", error: "Could not update status. Try again." };
+    return { ok: false, code: "feedback_db_error", message: "Could not update status. Try again." };
   }
   safeServerLog("admin_feedback", "set_status_ok", { reportIdPrefix: reportId.slice(0, 8), status });
   revalidateFeedbackInbox();
@@ -88,7 +88,7 @@ export async function saveUserFeedbackInternalNotes(_prev: AdminMutationResult, 
   const raw = String(formData.get("internalNotes") ?? "");
   if (!id) {
     safeServerLog("admin_feedback", "save_notes_invalid", { reason: "missing_report_id" });
-    return { ok: false, code: "feedback_missing_report", error: "Missing report id." };
+    return { ok: false, code: "feedback_missing_report", message: "Missing report id." };
   }
   const internalNotes = raw.length > INTERNAL_NOTES_MAX ? raw.slice(0, INTERNAL_NOTES_MAX) : raw;
   try {
@@ -98,11 +98,11 @@ export async function saveUserFeedbackInternalNotes(_prev: AdminMutationResult, 
     });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
-      return { ok: false, code: "feedback_not_found", error: "Report was not found or was removed." };
+      return { ok: false, code: "feedback_not_found", message: "Report was not found or was removed." };
     }
     const msg = e instanceof Error ? e.message : "Database update failed";
     safeServerLog("admin_feedback", "save_notes_failed", { reportIdPrefix: id.slice(0, 8), detail: msg.slice(0, 180) });
-    return { ok: false, code: "feedback_db_error", error: "Could not save notes. Try again." };
+    return { ok: false, code: "feedback_db_error", message: "Could not save notes. Try again." };
   }
   safeServerLog("admin_feedback", "save_notes_ok", { reportIdPrefix: id.slice(0, 8) });
   revalidateFeedbackInbox();
@@ -119,7 +119,7 @@ export async function linkUserFeedbackDuplicate(_prev: AdminMutationResult, form
       hasPrimary: Boolean(primaryId),
       same: id === primaryId,
     });
-    return { ok: false, code: "feedback_invalid_duplicate", error: "Enter a different primary report id." };
+    return { ok: false, code: "feedback_invalid_duplicate", message: "Enter a different primary report id." };
   }
 
   const [row, primary] = await Promise.all([
@@ -131,11 +131,11 @@ export async function linkUserFeedbackDuplicate(_prev: AdminMutationResult, form
       reportIdPrefix: id.slice(0, 8),
       primaryPrefix: primaryId.slice(0, 8),
     });
-    return { ok: false, error: "Report or primary id not found." };
+    return { ok: false, code: "feedback_link_not_found", message: "Report or primary id not found." };
   }
   if (primary.duplicateOfId === id) {
     safeServerLog("admin_feedback", "link_duplicate_cycle", { reportIdPrefix: id.slice(0, 8) });
-    return { ok: false, error: "Cannot link: would create a duplicate cycle." };
+    return { ok: false, code: "feedback_link_cycle", message: "Cannot link: would create a duplicate cycle." };
   }
 
   try {
@@ -144,9 +144,12 @@ export async function linkUserFeedbackDuplicate(_prev: AdminMutationResult, form
       data: { duplicateOfId: primaryId },
     });
   } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
+      return { ok: false, code: "feedback_not_found", message: "Report was not found or was removed." };
+    }
     const msg = e instanceof Error ? e.message : "Database update failed";
     safeServerLog("admin_feedback", "link_duplicate_failed", { detail: msg.slice(0, 180) });
-    return { ok: false, error: msg };
+    return { ok: false, code: "feedback_db_error", message: "Could not link duplicate. Try again." };
   }
   safeServerLog("admin_feedback", "link_duplicate_ok", { reportIdPrefix: id.slice(0, 8), primaryPrefix: primaryId.slice(0, 8) });
   revalidateFeedbackInbox();
@@ -158,7 +161,7 @@ export async function clearUserFeedbackDuplicate(_prev: AdminMutationResult, for
   const id = String(formData.get("reportId") ?? "").trim();
   if (!id) {
     safeServerLog("admin_feedback", "clear_duplicate_invalid", { reason: "missing_report_id" });
-    return { ok: false, error: "Missing report id." };
+    return { ok: false, code: "feedback_missing_report", message: "Missing report id." };
   }
   try {
     await prisma.userFeedbackReport.update({
@@ -166,9 +169,12 @@ export async function clearUserFeedbackDuplicate(_prev: AdminMutationResult, for
       data: { duplicateOfId: null },
     });
   } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
+      return { ok: false, code: "feedback_not_found", message: "Report was not found or was removed." };
+    }
     const msg = e instanceof Error ? e.message : "Database update failed";
     safeServerLog("admin_feedback", "clear_duplicate_failed", { reportIdPrefix: id.slice(0, 8), detail: msg.slice(0, 180) });
-    return { ok: false, error: msg };
+    return { ok: false, code: "feedback_db_error", message: "Could not unlink duplicate. Try again." };
   }
   safeServerLog("admin_feedback", "clear_duplicate_ok", { reportIdPrefix: id.slice(0, 8) });
   revalidateFeedbackInbox();
@@ -176,7 +182,7 @@ export async function clearUserFeedbackDuplicate(_prev: AdminMutationResult, for
 }
 
 function mutationToAction(r: AdminMutationResult): AdminActionResult {
-  return r.ok ? adminActionSuccess() : adminActionFailure("feedback_mutation_failed", r.error);
+  return r.ok ? adminActionSuccess() : adminActionFailure(r.code, r.message);
 }
 
 /**

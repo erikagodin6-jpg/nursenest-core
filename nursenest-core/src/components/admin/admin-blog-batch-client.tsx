@@ -146,7 +146,7 @@ export function AdminBlogBatchClient() {
         credentials: "include",
         cache: "no-store",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ limit: DRAFT_BATCH_MAX_ITEMS_PER_PROCESS }),
+        body: JSON.stringify({ confirm: true, limit: DRAFT_BATCH_MAX_ITEMS_PER_PROCESS }),
       });
       const json = (await res.json()) as { ok?: boolean; error?: string; job?: GenerationJobApiPayload };
       if (!res.ok) {

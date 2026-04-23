@@ -42,7 +42,10 @@ import {
   assertCatAdvanceResponseShape,
   buildCatAdvancePatchBody,
 } from "@/lib/practice-tests/cat-advance-contract";
-import { assessCatPracticeHydrateInvariants } from "@/lib/practice-tests/cat-session-surface-invariants";
+import {
+  assessPracticeTestSessionHydrateContract,
+  hydratePayloadHasBlockingSessionContractError,
+} from "@/lib/practice-tests/practice-session-contract";
 import { resolveLinearEngineRunnerUiKind } from "@/lib/practice-tests/linear-runner-session-mode";
 import { PracticeSessionLayout } from "@/components/study/practice-session-layout";
 import { normalizePracticeTestQuestionIds } from "@/lib/practice-tests/practice-test-question-ids";
@@ -289,14 +292,22 @@ export function PracticeTestRunnerClient({
         pathwaySurface?: PracticeTestPathwayClientShell | null;
         catMode?: boolean;
         adaptiveState?: unknown;
+        sessionContractError?: { code: string; message: string };
       };
+      if (hydratePayloadHasBlockingSessionContractError(data)) {
+        const e = data.sessionContractError!;
+        logSessionEvent("session_contract_error", { code: e.code });
+        setError(e.message.trim());
+        setPhase("error");
+        return;
+      }
       if (!res.ok) throw new Error(data.error ?? "Could not load test.");
       const ids =
         Array.isArray(data.questionIds) && data.questionIds.length > 0
           ? normalizePracticeTestQuestionIds(data.questionIds)
           : normalizePracticeTestQuestionIds((data.questions ?? []).map((q) => q.id));
       setQuestionIds(ids);
-      const hydrateInv = assessCatPracticeHydrateInvariants({
+      const hydrateInv = assessPracticeTestSessionHydrateContract({
         catMode: Boolean(data.catMode),
         status: data.status ?? "IN_PROGRESS",
         questionIds: ids,
@@ -306,8 +317,8 @@ export function PracticeTestRunnerClient({
         results: data.results,
       });
       if (!hydrateInv.ok) {
-        logSessionEvent("cat_hydrate_invariant_block", { code: hydrateInv.code });
-        setError(hydrateInv.message);
+        logSessionEvent("cat_hydrate_invariant_block", { code: hydrateInv.violation.code });
+        setError(hydrateInv.violation.message);
         setPhase("error");
         return;
       }

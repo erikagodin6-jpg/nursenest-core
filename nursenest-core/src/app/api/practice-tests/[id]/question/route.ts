@@ -14,6 +14,11 @@ import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale
 import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
+import {
+  assessPracticeTestSessionHydrateContract,
+  sessionContractErrorJsonBody,
+} from "@/lib/practice-tests/practice-session-contract";
 
 export const dynamic = "force-dynamic";
 
@@ -77,7 +82,14 @@ export async function GET(req: NextRequest, ctx: { params: Promise<unknown> }) {
     const row = await withRetry(() =>
       prisma.practiceTest.findFirst({
         where: { id, userId: gate.userId },
-        select: { questionIds: true, status: true },
+        select: {
+          questionIds: true,
+          status: true,
+          cursorIndex: true,
+          config: true,
+          adaptiveState: true,
+          results: true,
+        },
       }),
     );
 
@@ -85,12 +97,34 @@ export async function GET(req: NextRequest, ctx: { params: Promise<unknown> }) {
       return NextResponse.json({ error: "Test not in progress" }, { status: 404 });
     }
 
+    const cfg = parsePracticeTestConfigAtBoundary(row.config, {
+      practiceTestId: id,
+      surface: "practice_test_question_api_get",
+    });
     let ids = asIdList(row.questionIds);
     if (ids.length === 0) {
       return NextResponse.json({ error: "No questions in session" }, { status: 404 });
     }
     if (index >= ids.length) {
       return NextResponse.json({ error: "index out of range" }, { status: 400 });
+    }
+
+    const qContract = assessPracticeTestSessionHydrateContract({
+      catMode: cfg.selectionMode === "cat",
+      status: row.status,
+      questionIds: ids,
+      cursorIndex: row.cursorIndex,
+      adaptiveState: row.adaptiveState ?? null,
+      config: cfg,
+      results: row.results,
+    });
+    if (!qContract.ok) {
+      safeServerLog("practice_tests", "practice_test_question_contract_violation", {
+        event: "practice_test_question_contract_violation",
+        practiceTestId: id.slice(0, 16),
+        code: qContract.violation.code,
+      });
+      return NextResponse.json(sessionContractErrorJsonBody(qContract.violation), { status: 409 });
     }
 
     const qid = ids[index]!;

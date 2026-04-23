@@ -93,7 +93,7 @@ ${params.bodyPreview.slice(0, 2800)}
 ${hints}
 
 Return a single JSON object only:
-{ "suggestedInternalLessons": [ { "label": string, "suggestedPath": string, "rationale"?: string, "linkKind"?: "lesson"|"lessons_hub"|"question_bank"|"topic_cluster"|"practice_exams"|"practice_programmatic"|"general" } ] }
+{ "suggestedInternalLessons": [ { "label": string, "suggestedPath": string, "rationale"?: string, "linkKind"?: "lesson"|"lessons_hub"|"question_bank"|"topic_cluster"|"practice_exams"|"practice_programmatic"|"flashcards_hub"|"adaptive_cat"|"study_plan"|"general" } ] }
 
 Hard rules:
 - Every suggestedPath must be root-relative, allowed on the public marketing site, and must match the pathway patterns in the hints.

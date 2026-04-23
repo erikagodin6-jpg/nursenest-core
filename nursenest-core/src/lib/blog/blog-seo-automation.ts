@@ -155,7 +155,10 @@ export function buildPersistedSeoBundle(
   const focus = fromPlan.length ? fromPlan : fromTags.length ? fromTags : [plan.metaTitle.trim().slice(0, 80)];
 
   const primaryKeywordRaw =
-    plan.seoFocusKeywords?.map((k) => k.trim()).find((k) => k.length >= 2) ?? focus[0] ?? plan.metaTitle.trim();
+    plan.primaryKeyword?.trim() ||
+    plan.seoFocusKeywords?.map((k) => k.trim()).find((k) => k.length >= 2) ||
+    focus[0] ||
+    plan.metaTitle.trim();
   const primaryKeyword = primaryKeywordRaw.slice(0, 160) || null;
   const secondaryKeywords = focus
     .filter((k) => k && (!primaryKeyword || k.toLowerCase() !== primaryKeyword.toLowerCase()))
@@ -165,6 +168,12 @@ export function buildPersistedSeoBundle(
   const ogDesc = plan.openGraphDescription?.trim() ? plan.openGraphDescription.trim().slice(0, 320) : null;
   const metaTitle = plan.metaTitle.trim().slice(0, 200);
   const metaDesc = plan.metaDescription.trim().slice(0, 500);
+  const twTitle = plan.twitterCardTitle?.trim()
+    ? plan.twitterCardTitle.trim().slice(0, 120)
+    : (ogTitle ?? metaTitle).slice(0, 120);
+  const twDesc = plan.twitterCardDescription?.trim()
+    ? plan.twitterCardDescription.trim().slice(0, 320)
+    : (ogDesc ?? metaDesc).slice(0, 320);
 
   return {
     version: BLOG_SEO_BUNDLE_VERSION,
@@ -173,8 +182,8 @@ export function buildPersistedSeoBundle(
     openGraphTitle: ogTitle,
     openGraphDescription: ogDesc,
     openGraphImageUrl: null,
-    twitterTitle: (ogTitle ?? metaTitle).slice(0, 120),
-    twitterDescription: (ogDesc ?? metaDesc).slice(0, 320),
+    twitterTitle: twTitle,
+    twitterDescription: twDesc,
     suggestedExcerpt: plan.suggestedExcerpt.trim().slice(0, 500),
     emitFaqSchema: plan.faqs.length >= 1,
     focusKeywords: focus.filter(Boolean).slice(0, 12),
@@ -191,12 +200,19 @@ export function buildPersistedSeoBundle(
 export type BlogSchemaSummaryExtra = {
   /** Editorial suggestions — implementation may emit JSON-LD after validation. */
   schemaOpportunities?: Array<{ type: string; rationale: string }>;
+  searchIntent?: string | null;
+  /** Draft JSON-LD shape hints for engineering (not auto-injected). */
+  schemaNotes?: {
+    article?: Record<string, unknown>;
+    breadcrumb?: Record<string, unknown>;
+    faq?: Record<string, unknown>;
+  };
 };
 
 /** `schemaSummary` JSON for legacy readers + sitemap-style hints (version bumps when fields added). */
 export function buildSchemaSummaryPayload(seo: BlogSeoBundle, extra?: BlogSchemaSummaryExtra): string {
   return JSON.stringify({
-    version: 4,
+    version: 5,
     type: "BlogPosting",
     breadcrumbs: seo.normalizedBreadcrumbs,
     canonicalPath: seo.canonicalPath,
@@ -207,7 +223,12 @@ export function buildSchemaSummaryPayload(seo: BlogSeoBundle, extra?: BlogSchema
     openGraphImageUrl: seo.openGraphImageUrl ?? null,
     twitterTitle: seo.twitterTitle ?? null,
     twitterDescription: seo.twitterDescription ?? null,
+    ...(extra?.searchIntent?.trim() ? { searchIntent: extra.searchIntent.trim().slice(0, 120) } : {}),
     ...(extra?.schemaOpportunities?.length ? { schemaOpportunities: extra.schemaOpportunities } : {}),
+    ...(extra?.schemaNotes &&
+    (extra.schemaNotes.article || extra.schemaNotes.breadcrumb || extra.schemaNotes.faq)
+      ? { schemaNotes: extra.schemaNotes }
+      : {}),
   });
 }
 

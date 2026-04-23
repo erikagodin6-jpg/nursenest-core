@@ -30,7 +30,7 @@ export function AdminFeedbackStatusForm({ reportId, status }: { reportId: string
     <div className="space-y-2">
       {state.ok ? null : (
         <p className="text-sm text-[var(--semantic-danger)]" role="alert">
-          {state.error}
+          {state.message}
         </p>
       )}
       <form action={formAction} className="inline-flex items-center gap-2">

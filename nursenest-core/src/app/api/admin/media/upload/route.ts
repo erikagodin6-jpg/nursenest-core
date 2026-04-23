@@ -40,6 +40,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Missing file field" }, { status: 400 });
   }
 
+  const confirmIntent = form.get("confirmIntent");
+  if (confirmIntent !== "admin-media-upload-confirm") {
+    return NextResponse.json(
+      {
+        error:
+          "Upload requires confirmIntent form field set to the documented value (UI sends this to prevent accidental scripted uploads).",
+        code: "admin_media_upload_intent_required",
+      },
+      { status: 400 },
+    );
+  }
+
   const kind = parseUploadKind(form.get("kind"));
   const altTextRaw = form.get("altText");
   const altText = typeof altTextRaw === "string" ? altTextRaw.trim().slice(0, 2000) : "";

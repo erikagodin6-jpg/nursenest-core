@@ -33,6 +33,10 @@ async function postSimulate(body: Record<string, unknown>) {
   });
 }
 
+function withIntent(body: Record<string, unknown>, mode: "execute" | "preview") {
+  return mode === "preview" ? { ...body, dryRun: true } : { ...body, confirm: true };
+}
+
 export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearnerQaPublicState | null }) {
   const router = useRouter();
   const [track, setTrack] = useState<Track>("RN");
@@ -43,10 +47,12 @@ export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearn
   const [planVariant, setPlanVariant] = useState<PlanV | "">("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [previewHint, setPreviewHint] = useState<string | null>(null);
   const [active, setActive] = useState<AdminLearnerQaPublicState | null>(initialState);
 
   useEffect(() => {
     setActive(initialState);
+    setPreviewHint(null);
   }, [initialState]);
 
   function buildBody(): Record<string, unknown> {
@@ -57,14 +63,25 @@ export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearn
     return b;
   }
 
-  async function applySimulate(opts?: { goToApp?: boolean }) {
+  async function applySimulate(opts?: { goToApp?: boolean; preview?: boolean }) {
     setErr(null);
+    setPreviewHint(null);
     setBusy(true);
     try {
-      const res = await postSimulate(buildBody());
-      const j = (await res.json()) as { ok?: boolean; state?: AdminLearnerQaPublicState; error?: string; hint?: string };
+      const res = await postSimulate(withIntent(buildBody(), opts?.preview ? "preview" : "execute"));
+      const j = (await res.json()) as {
+        ok?: boolean;
+        dryRun?: boolean;
+        state?: AdminLearnerQaPublicState;
+        error?: string;
+        hint?: string;
+      };
       if (!res.ok) {
         setErr(j.hint ? `${j.error ?? "Failed"} — ${j.hint}` : (j.error ?? `HTTP ${res.status}`));
+        return;
+      }
+      if (opts?.preview) {
+        setPreviewHint(j.state?.bannerTitle ? `Preview only (no cookie): ${j.state.bannerTitle}` : "Preview only — no cookie written.");
         return;
       }
       if (j.state) setActive(j.state);
@@ -81,7 +98,13 @@ export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearn
     setErr(null);
     setBusy(true);
     try {
-      const res = await fetch("/api/admin/learner-qa/clear", { method: "POST", credentials: "include", cache: "no-store" });
+      const res = await fetch("/api/admin/learner-qa/clear", {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ confirm: true }),
+      });
       if (!res.ok) {
         setErr("Could not clear QA mode");
         return;
@@ -110,6 +133,7 @@ export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearn
     if (p.alliedCareer) setAlliedCareer(p.alliedCareer);
     setPlanVariant(p.planVariant ?? "");
     setErr(null);
+    setPreviewHint(null);
     setBusy(true);
     try {
       const body: Record<string, unknown> = {
@@ -120,7 +144,7 @@ export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearn
       if (p.track === "NP" && p.npSpecialty) body.npSpecialty = p.npSpecialty;
       if (p.track === "ALLIED" && p.alliedCareer) body.alliedCareer = p.alliedCareer;
       if (p.planVariant) body.planVariant = p.planVariant;
-      const res = await postSimulate(body);
+      const res = await postSimulate(withIntent(body, "execute"));
       const j = (await res.json()) as { ok?: boolean; state?: AdminLearnerQaPublicState; error?: string; hint?: string };
       if (!res.ok) {
         setErr(j.hint ? `${j.error ?? "Failed"} — ${j.hint}` : (j.error ?? `HTTP ${res.status}`));
@@ -181,6 +205,11 @@ export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearn
 
       <div className="rounded-2xl border border-border/80 bg-[var(--theme-card-bg)] p-6 shadow-sm">
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Simulation</h2>
+        {previewHint ? (
+          <p className="mt-2 text-sm text-[var(--semantic-info)]" role="status">
+            {previewHint}
+          </p>
+        ) : null}
         {err ? <p className="mt-2 text-sm text-rose-700">{err}</p> : null}
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <label className="block text-sm">
@@ -270,6 +299,14 @@ export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearn
           </label>
         </div>
         <div className="mt-6 flex flex-wrap gap-2">
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => void applySimulate({ preview: true })}
+            className="rounded-lg border border-dashed border-border bg-muted/20 px-4 py-2 text-sm font-semibold text-muted-foreground hover:bg-muted/40 disabled:opacity-50"
+          >
+            {busy ? "…" : "Preview (no cookie write)"}
+          </button>
           <button
             type="button"
             disabled={busy}

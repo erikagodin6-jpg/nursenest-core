@@ -32,6 +32,10 @@ import { captureLearnerProductEvent } from "@/lib/observability/learner-product-
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { validatePracticeExamPostLaunchRequest } from "@/lib/learner/study-product-route-contract";
+import {
+  assessPracticeTestSessionHydrateContract,
+  normalizeLinearPracticeCreateContract,
+} from "@/lib/practice-tests/practice-session-contract";
 
 export const dynamic = "force-dynamic";
 
@@ -498,6 +502,30 @@ export async function POST(req: Request) {
         if (!cat.ok) {
           return { kind: "reject" as const, cat };
         }
+        const preContract = assessPracticeTestSessionHydrateContract({
+          catMode: true,
+          status: "IN_PROGRESS",
+          questionIds: cat.questionIds,
+          cursorIndex: 0,
+          adaptiveState: cat.adaptiveState,
+          config: cat.config,
+        });
+        if (!preContract.ok) {
+          safeServerLog("practice_tests", "cat_create_contract_precheck_failed", {
+            event: "cat_create_contract_precheck_failed",
+            code: preContract.violation.code,
+            pathwayIdPrefix: pathwayIdForCat.length > 14 ? `${pathwayIdForCat.slice(0, 14)}…` : pathwayIdForCat,
+            userIdPrefix: gate.userId.slice(0, 8),
+          });
+          return {
+            kind: "reject" as const,
+            cat: {
+              ok: false as const,
+              message: preContract.violation.message,
+              code: preContract.violation.code,
+            },
+          };
+        }
         const row = await tx.practiceTest.create({
           data: {
             userId: gate.userId,
@@ -569,11 +597,11 @@ export async function POST(req: Request) {
     );
   }
 
-  const linearMode = d.linearDeliveryMode;
-  const linearRationaleVisibility =
-    d.linearRationaleVisibility ??
-    (linearMode === "exam" ? "end_of_exam" : "after_each");
-  const resolvedLinearMode = linearRationaleVisibility === "after_each" ? "practice" : "exam";
+  const normalizedLinear = normalizeLinearPracticeCreateContract({
+    linearDeliveryMode: d.linearDeliveryMode ?? null,
+    linearRationaleVisibility: d.linearRationaleVisibility ?? null,
+    linearAllowReviewNavigation: d.linearAllowReviewNavigation,
+  });
   const sessionPickSalt = randomUUID();
   const config: PracticeTestConfigJson = {
     ...configFromInput(
@@ -588,9 +616,9 @@ export async function POST(req: Request) {
       d.timedMode,
       timeLimitSec,
       {
-        linearDeliveryMode: linearMode ?? resolvedLinearMode,
-        linearRationaleVisibility,
-        linearAllowReviewNavigation: d.linearAllowReviewNavigation === true,
+        linearDeliveryMode: normalizedLinear.linearDeliveryMode,
+        linearRationaleVisibility: normalizedLinear.linearRationaleVisibility,
+        ...(normalizedLinear.linearAllowReviewNavigation ? { linearAllowReviewNavigation: true as const } : {}),
       },
     ),
     sessionPickSalt,
@@ -630,6 +658,29 @@ export async function POST(req: Request) {
 
   if (!picked.ok) {
     return NextResponse.json({ error: picked.message, code: "pool_too_small" }, { status: 400 });
+  }
+
+  const linearCreateAdaptiveStub = config.linearDeliveryMode
+    ? { linearEngine: { committedQuestionIds: [] as string[] } }
+    : {};
+  const linearCreateContract = assessPracticeTestSessionHydrateContract({
+    catMode: false,
+    status: "IN_PROGRESS",
+    questionIds: picked.ids,
+    cursorIndex: 0,
+    adaptiveState: linearCreateAdaptiveStub,
+    config,
+  });
+  if (!linearCreateContract.ok) {
+    safeServerLog("practice_tests", "linear_create_contract_precheck_failed", {
+      event: "linear_create_contract_precheck_failed",
+      code: linearCreateContract.violation.code,
+      userIdPrefix: gate.userId.slice(0, 8),
+    });
+    return NextResponse.json(
+      { error: linearCreateContract.violation.message, code: linearCreateContract.violation.code, retryable: false },
+      { status: 400 },
+    );
   }
 
   if (isDev) {

@@ -358,7 +358,7 @@ export function AdminBlogDraftBatchClient() {
         credentials: "include",
         cache: "no-store",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ limit: safeLimit }),
+        body: JSON.stringify({ confirm: true, limit: safeLimit }),
       });
       const json = (await res.json()) as {
         ok?: boolean;

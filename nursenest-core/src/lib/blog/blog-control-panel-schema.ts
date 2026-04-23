@@ -31,6 +31,9 @@ export const blogLessonLinkRowSchema = z.object({
       "topic_cluster",
       "practice_exams",
       "practice_programmatic",
+      "flashcards_hub",
+      "adaptive_cat",
+      "study_plan",
       "general",
     ])
     .optional(),
@@ -126,6 +129,54 @@ const blogControlPanelPlanBase = z.object({
     )
     .max(24)
     .default([]),
+  /** Primary SERP phrase for audits; merged into seoFocusKeywords in transform when distinct. */
+  primaryKeyword: z.string().min(2).max(160).optional(),
+  /** Supporting phrases; merged into seoFocusKeywords after primary. */
+  secondaryKeywordPhrases: z.array(z.string().min(2).max(80)).max(12).optional(),
+  searchIntent: z.string().min(2).max(120).optional(),
+  /** Twitter card copy when different from OG/meta (else persist falls back to meta). */
+  twitterCardTitle: z.string().min(2).max(120).optional(),
+  twitterCardDescription: z.string().min(2).max(280).optional(),
+  /** Structured internal-link targets beyond lesson rows (CAT, flashcards, hubs, related blog). */
+  recommendedInternalLinks: z
+    .array(
+      z.object({
+        targetType: z.string().min(2).max(48),
+        suggestedPath: z.string().min(2).max(500),
+        anchorText: z.string().min(2).max(160),
+        reason: z.string().max(400).optional(),
+        needsReview: z.boolean().optional(),
+      }),
+    )
+    .max(16)
+    .default([]),
+  /** Unverified retrieval / editorial candidates — never treated as APA 7 without admin verification. */
+  sourceCandidates: z
+    .array(
+      z.object({
+        title: z.string().min(3).max(400),
+        url: z.string().max(2000).optional(),
+        sourceType: z.string().max(80).optional(),
+        notes: z.string().max(500).optional(),
+      }),
+    )
+    .max(16)
+    .default([]),
+  /**
+   * Direct answer + orientation for the query (long-form pathophysiology contract).
+   * Distinct from list-card `suggestedExcerpt` when you want a deeper intro block for editors.
+   */
+  articleSummary: z.string().min(80).max(2000).optional(),
+  /** Internal-only notes for medical/SEO editors (not published). */
+  editorialNotes: z.array(z.string().min(1).max(500)).max(20).default([]),
+  needsReviewFlags: z.array(z.string().min(2).max(80)).max(24).default([]),
+  schemaNotes: z
+    .object({
+      article: z.record(z.string(), z.unknown()).optional(),
+      breadcrumb: z.record(z.string(), z.unknown()).optional(),
+      faq: z.record(z.string(), z.unknown()).optional(),
+    })
+    .optional(),
 });
 
 /**
@@ -140,6 +191,19 @@ export const blogControlPanelPlanSchema = blogControlPanelPlanBase.transform((d)
     id: row.id?.trim() || lessonLinkStableId(row, i),
     reviewStatus: row.reviewStatus ?? "active",
   }));
+  const seoFocusKeywordsMerged = (() => {
+    const out: string[] = [];
+    const push = (s: string) => {
+      const t = s.trim();
+      if (t.length < 2) return;
+      if (!out.some((k) => k.toLowerCase() === t.toLowerCase())) out.push(t.slice(0, 80));
+    };
+    const pk = d.primaryKeyword?.trim();
+    if (pk) push(pk);
+    for (const k of d.seoFocusKeywords ?? []) push(k);
+    for (const k of d.secondaryKeywordPhrases ?? []) push(k);
+    return out.length ? out.slice(0, 12) : d.seoFocusKeywords;
+  })();
   const suggestedExcerpt = (() => {
     const raw = d.suggestedExcerpt?.trim();
     if (raw && raw.length >= 80) return raw.slice(0, 360);
@@ -156,6 +220,7 @@ export const blogControlPanelPlanSchema = blogControlPanelPlanBase.transform((d)
     ...d,
     h1,
     suggestedInternalLessons,
+    seoFocusKeywords: seoFocusKeywordsMerged ?? d.seoFocusKeywords,
     suggestedExcerpt,
     openGraphTitle,
     openGraphDescription,

@@ -18,6 +18,10 @@
  * CAT exam board shell as linear engine runs (`QuestionCard` + detached footer).
  * Migrating those rows to engine-backed delivery is **not** automatic without a config default on read
  * or a **data backfill** that sets `linearDeliveryMode` + rationale flags to match each row’s intent.
+ *
+ * **Resume contract:** `practice-session-contract.ts` rejects `linearAllowReviewNavigation` without
+ * `linearDeliveryMode` (`legacy_linear_review_nav_unsafe`) so the API does not resume an ambiguous
+ * review-nav shape on top of legacy free navigation.
  */
 
 import type { LinearDeliveryMode } from "@/lib/practice-tests/types";

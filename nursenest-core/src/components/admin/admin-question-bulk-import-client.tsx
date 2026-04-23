@@ -52,7 +52,7 @@ export function AdminQuestionBulkImportClient() {
         body: JSON.stringify({
           items,
           dryRun,
-          ...(dryRun ? {} : { applySecret: applySecret.trim() || undefined }),
+          ...(dryRun ? {} : { confirm: true, applySecret: applySecret.trim() || undefined }),
         }),
       });
       const data = (await res.json()) as { error?: string; hint?: string } & typeof result;
@@ -87,7 +87,8 @@ export function AdminQuestionBulkImportClient() {
         </p>
         <p className="mt-2">
           <strong>Validate</strong> is always safe. <strong>Apply</strong> inserts <strong>DRAFT</strong> rows only — super-admin +{" "}
-          <code className="rounded bg-muted px-1">NN_ADMIN_QUESTION_BULK_IMPORT_SECRET</code> env + matching secret field.
+          <code className="rounded bg-muted px-1">NN_ADMIN_QUESTION_BULK_IMPORT_SECRET</code> env + matching secret field +{" "}
+          <code className="rounded bg-muted px-1">confirm: true</code> in the JSON body (same intent pattern as other admin mutations).
         </p>
       </div>
 

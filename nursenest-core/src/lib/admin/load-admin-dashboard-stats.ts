@@ -1,6 +1,7 @@
 import { ContentStatus, SubscriptionStatus, UserRole } from "@prisma/client";
 import { DB_PUBLISHED } from "@/lib/entitlements/content-access-scope";
 import { prisma } from "@/lib/db";
+import { subscriptionWhereRealUserMetrics, userWhereRealMetrics } from "@/lib/admin/admin-metrics-exclude-demo-users";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 
@@ -68,13 +69,20 @@ export type AdminDashboardStats = {
 };
 
 async function dailyActiveUsersCount(since: Date): Promise<number> {
+  /** Exclude demo QA accounts from admin “active learners” signal (same as recent lists). */
   const rows = await prisma.$queryRaw<[{ n: bigint }]>`
     SELECT COUNT(*)::bigint AS n FROM (
-      SELECT "userId" FROM "ExamAttempt" WHERE "createdAt" >= ${since}
+      SELECT ea."userId" FROM "ExamAttempt" ea
+      INNER JOIN "User" u ON u.id = ea."userId"
+      WHERE ea."createdAt" >= ${since} AND u."is_demo_user" = false
       UNION
-      SELECT "userId" FROM "ExamSession" WHERE "updatedAt" >= ${since}
+      SELECT es."userId" FROM "ExamSession" es
+      INNER JOIN "User" u2 ON u2.id = es."userId"
+      WHERE es."updatedAt" >= ${since} AND u2."is_demo_user" = false
       UNION
-      SELECT "userId" FROM "Progress" WHERE "updatedAt" >= ${since}
+      SELECT p."userId" FROM "Progress" p
+      INNER JOIN "User" u3 ON u3.id = p."userId"
+      WHERE p."updatedAt" >= ${since} AND u3."is_demo_user" = false
     ) AS active
   `;
   return Number(rows[0]?.n ?? 0);
@@ -93,20 +101,22 @@ export async function loadAdminDashboardStats(): Promise<AdminDashboardStats | n
 
   inFlightStats = (async () => {
     try {
-      const users = await prisma.user.count();
-      const learners = await prisma.user.count({ where: { role: UserRole.LEARNER } });
+      const users = await prisma.user.count({ where: userWhereRealMetrics() });
+      const learners = await prisma.user.count({ where: userWhereRealMetrics({ role: UserRole.LEARNER }) });
       const activePayingSubscriptions = await prisma.subscription.count({
-        where: { status: { in: [SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE] } },
+        where: subscriptionWhereRealUserMetrics({
+          status: { in: [SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE] },
+        }),
       });
       const questionsPublished = await prisma.examQuestion.count({ where: { status: DB_PUBLISHED } });
       const appLessonsPublished = await prisma.contentItem.count({ where: { type: "lesson", status: DB_PUBLISHED } });
       const pathwayLessonsPublished = await prisma.pathwayLesson.count({ where: { status: ContentStatus.PUBLISHED } });
       const flashcardsPublished = await prisma.flashcard.count({ where: { status: ContentStatus.PUBLISHED } });
       const learnersEverSubscribed = await prisma.user.count({
-        where: {
+        where: userWhereRealMetrics({
           role: UserRole.LEARNER,
           subscriptions: { some: {} },
-        },
+        }),
       });
       const examGroups = await prisma.examQuestion.groupBy({
         by: ["exam"],
@@ -123,6 +133,7 @@ export async function loadAdminDashboardStats(): Promise<AdminDashboardStats | n
         return 0;
       });
       const recentUsers = await prisma.user.findMany({
+        where: userWhereRealMetrics(),
         orderBy: { updatedAt: "desc" },
         take: LIST_LIMIT,
         select: {
@@ -135,7 +146,7 @@ export async function loadAdminDashboardStats(): Promise<AdminDashboardStats | n
         },
       });
       const recentSignups = await prisma.user.findMany({
-        where: { role: UserRole.LEARNER },
+        where: userWhereRealMetrics({ role: UserRole.LEARNER }),
         orderBy: { createdAt: "desc" },
         take: LIST_LIMIT,
         select: {
@@ -146,6 +157,7 @@ export async function loadAdminDashboardStats(): Promise<AdminDashboardStats | n
         },
       });
       const recentPurchases = await prisma.subscription.findMany({
+        where: subscriptionWhereRealUserMetrics(),
         orderBy: { createdAt: "desc" },
         take: LIST_LIMIT,
         select: {

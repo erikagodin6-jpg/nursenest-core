@@ -124,6 +124,7 @@ export function AdminMediaLibraryClient() {
       const fd = new FormData();
       fd.append("file", file);
       fd.append("kind", kind);
+      fd.append("confirmIntent", "admin-media-upload-confirm");
       const res = await fetch("/api/admin/media/upload", { method: "POST", body: fd });
       const j = (await res.json()) as { error?: string };
       if (!res.ok) {
@@ -176,7 +177,7 @@ export function AdminMediaLibraryClient() {
       const res = await fetch("/api/admin/media/batch-scan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids: data.items.map((r) => r.id) }),
+        body: JSON.stringify({ confirm: true, ids: data.items.map((r) => r.id) }),
       });
       const j = (await res.json()) as { error?: string };
       if (!res.ok) {

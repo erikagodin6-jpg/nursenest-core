@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { parseAdminJsonMutationIntent, stripAdminMutationControlFields } from "@/lib/admin/admin-mutation-intent";
 import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { DRAFT_BATCH_MAX_ITEMS_PER_PROCESS } from "@/lib/blog/blog-draft-generation-batch-constants";
 import { processDraftGenerationBatchItems } from "@/lib/blog/blog-draft-generation-batch";
@@ -22,13 +23,26 @@ export async function POST(req: Request, ctx: RouteContext) {
   if (aiBlock) return aiBlock;
 
   const { id } = await ctx.params;
-  let limit = 4;
+  let raw: unknown = {};
   try {
-    const raw = await req.json();
-    const parsed = bodySchema.safeParse(raw);
-    if (parsed.success && parsed.data.limit != null) limit = parsed.data.limit;
+    raw = await req.json();
   } catch {
-    /* empty body */
+    raw = {};
+  }
+  const intent = parseAdminJsonMutationIntent(raw);
+  if (intent instanceof NextResponse) return intent;
+
+  const stripped = stripAdminMutationControlFields((raw ?? {}) as Record<string, unknown>);
+  const parsed = bodySchema.safeParse(stripped);
+  let limit = 4;
+  if (parsed.success && parsed.data.limit != null) limit = parsed.data.limit;
+
+  if (intent.dryRun) {
+    return NextResponse.json({
+      ok: true,
+      dryRun: true,
+      preview: `Would process up to ${limit} pending item(s) for batch ${id.slice(0, 8)}…`,
+    });
   }
 
   const out = await processDraftGenerationBatchItems(id, limit);

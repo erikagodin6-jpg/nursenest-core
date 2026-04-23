@@ -1,4 +1,5 @@
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { parseAdminJsonMutationIntent, stripAdminMutationControlFields } from "@/lib/admin/admin-mutation-intent";
 import { prisma } from "@/lib/db";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { scanMediaUsage } from "@/lib/media/scan-media-usage";
@@ -16,15 +17,33 @@ export async function POST(req: Request) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid JSON", code: "admin_media_batch_scan_invalid_json" },
+      { status: 400 },
+    );
   }
 
-  const ids = (body as { ids?: unknown })?.ids;
+  const intent = parseAdminJsonMutationIntent(body);
+  if (intent instanceof NextResponse) return intent;
+
+  const stripped = stripAdminMutationControlFields((body ?? {}) as Record<string, unknown>);
+  const ids = stripped.ids as unknown;
   if (!Array.isArray(ids) || !ids.every((x) => typeof x === "string")) {
-    return NextResponse.json({ error: "ids must be string[]" }, { status: 400 });
+    return NextResponse.json(
+      { error: "ids must be string[]", code: "admin_media_batch_scan_invalid_ids" },
+      { status: 400 },
+    );
   }
 
   const slice = ids.slice(0, MAX_BATCH);
+  if (intent.dryRun) {
+    return NextResponse.json({
+      ok: true,
+      dryRun: true,
+      preview: { wouldScanCount: slice.length, maxBatch: MAX_BATCH },
+    });
+  }
+
   const rows = await prisma.mediaAsset.findMany({
     where: { id: { in: slice } },
     select: { id: true, publicUrl: true, storageKey: true },

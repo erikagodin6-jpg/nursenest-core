@@ -20,7 +20,10 @@ function arrayJoinForPlanField(fieldPath: string): "\n" | ", " {
     p.includes("metadescription") ||
     p.includes("opengraphdescription") ||
     p.includes("featuredsnippethint") ||
-    p.includes("suggestedexcerpt")
+    p.includes("suggestedexcerpt") ||
+    p.includes("recommendedinternallinks") ||
+    p.includes("sourcecandidates") ||
+    p.includes("twittercarddescription")
   ) {
     return "\n";
   }
@@ -126,6 +129,9 @@ export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, 
     "keyTakeaways",
     "apaSourceStubs",
     "internalAnchorOpportunities",
+    "recommendedInternalLinks",
+    "sourceCandidates",
+    "needsReviewFlags",
   ] as const) {
     if (out[k] === null || out[k] === undefined) {
       out[k] = [];
@@ -147,6 +153,10 @@ export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, 
     "openGraphTitle",
     "openGraphDescription",
     "canonicalPath",
+    "primaryKeyword",
+    "searchIntent",
+    "twitterCardTitle",
+    "twitterCardDescription",
   ]) {
     normScalar(k);
   }
@@ -285,6 +295,60 @@ export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, 
     out.seoFocusKeywords = out.seoFocusKeywords.map((x: unknown, i: number) =>
       normalizePlanString(x, `seoFocusKeywords[${i}]`),
     );
+  }
+
+  if (out.secondaryKeywordPhrases !== undefined && Array.isArray(out.secondaryKeywordPhrases)) {
+    out.secondaryKeywordPhrases = out.secondaryKeywordPhrases.map((x: unknown, i: number) =>
+      normalizePlanString(x, `secondaryKeywordPhrases[${i}]`),
+    );
+  }
+
+  if (out.needsReviewFlags !== undefined && Array.isArray(out.needsReviewFlags)) {
+    out.needsReviewFlags = out.needsReviewFlags.map((x: unknown, i: number) =>
+      normalizePlanString(x, `needsReviewFlags[${i}]`),
+    );
+  }
+
+  if (out.recommendedInternalLinks !== undefined) {
+    let rows = out.recommendedInternalLinks;
+    if (!Array.isArray(rows)) {
+      if (isPlainObject(rows)) rows = [rows];
+      else throw new Error(`[blog-plan-normalize] recommendedInternalLinks must be array or object`);
+    }
+    out.recommendedInternalLinks = rows.map((row: unknown, i: number) => {
+      if (!isPlainObject(row)) throw new Error(`[blog-plan-normalize] recommendedInternalLinks[${i}] must be object`);
+      const r: Record<string, unknown> = { ...row };
+      r.targetType = normalizePlanString(r.targetType, `recommendedInternalLinks[${i}].targetType`);
+      r.suggestedPath = normalizePlanString(r.suggestedPath, `recommendedInternalLinks[${i}].suggestedPath`);
+      r.anchorText = normalizePlanString(r.anchorText, `recommendedInternalLinks[${i}].anchorText`);
+      if (r.reason !== undefined) {
+        r.reason = normalizePlanString(r.reason, `recommendedInternalLinks[${i}].reason`);
+      }
+      return r;
+    });
+  }
+
+  if (out.sourceCandidates !== undefined) {
+    let rows = out.sourceCandidates;
+    if (!Array.isArray(rows)) {
+      if (isPlainObject(rows)) rows = [rows];
+      else throw new Error(`[blog-plan-normalize] sourceCandidates must be array or object`);
+    }
+    out.sourceCandidates = rows.map((row: unknown, i: number) => {
+      if (!isPlainObject(row)) throw new Error(`[blog-plan-normalize] sourceCandidates[${i}] must be object`);
+      const r: Record<string, unknown> = { ...row };
+      r.title = normalizePlanString(r.title, `sourceCandidates[${i}].title`);
+      if (r.url !== undefined && r.url !== null) {
+        r.url = normalizePlanString(r.url, `sourceCandidates[${i}].url`);
+      }
+      if (r.sourceType !== undefined) {
+        r.sourceType = normalizePlanString(r.sourceType, `sourceCandidates[${i}].sourceType`);
+      }
+      if (r.notes !== undefined) {
+        r.notes = normalizePlanString(r.notes, `sourceCandidates[${i}].notes`);
+      }
+      return r;
+    });
   }
 
   if (out.schemaOpportunities !== undefined && Array.isArray(out.schemaOpportunities)) {

@@ -27,7 +27,7 @@
  * | Article body | `body` (HTML text) |
  * | Internal link suggestions | `internalLinkPlan` (JSON: lessons + imagePlacements + attachments + **`seo` bundle**), `relatedLessonPaths` |
  * | FAQ section | `faqBlock` (`{ items: {q,a}[] }`), `keyQuestions` |
- * | SEO bundle (canonical, OG/Twitter, excerpt, crumbs, FAQ schema flag, keywords, image alts) | `internalLinkPlan.seo` from `blog-seo-automation.ts` + `schemaSummary` (JSON v2 summary for tooling) |
+ * | SEO bundle (canonical, OG/Twitter, excerpt, crumbs, FAQ schema flag, keywords, image alts) | `internalLinkPlan.seo` from `blog-seo-automation.ts` + `schemaSummary` (JSON summary; version bumps in `blog-seo-automation`) |
  * | Related live blog links + anchor opportunities | `internalLinkPlan.publishingPackage` (`blog-publishing-package.ts`) |
  * | List excerpt / cards | `excerpt` (prefers AI `suggestedExcerpt` when strong) |
  * | Image prompts / placements | `internalLinkPlan.imagePlacements`, `coverImagePrompt`, `coverImageAlt`, `imageStatus` |
@@ -50,7 +50,13 @@ import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema"
 import { annotateBlogInternalLinkRowsWithVerification } from "@/lib/blog/blog-internal-link-verify";
 import { normalizePlanSuggestedLessonRows } from "@/lib/blog/blog-internal-lesson-links";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
+import { validateLongFormNursingPlanContract } from "@/lib/blog/blog-longform-nursing-contract";
+import {
+  enforceLongFormBodyQuality,
+  mergeUniqueNeedsReviewFlags,
+} from "@/lib/blog/blog-longform-body-enforcement";
 
+/** Soft floor on raw HTML size before word counting (word count is authoritative; see {@link BLOG_ARTICLE_MIN_WORDS}). */
 export const BLOG_ARTICLE_MIN_BODY_CHARS = 450;
 
 export type BlogArticlePipelineStage = "plan" | "body" | "persist" | "citations";
@@ -110,6 +116,16 @@ export async function runBlogArticleGenerationPipeline(
       ...plan,
       suggestedInternalLessons: verifiedLessons as BlogControlPanelPlan["suggestedInternalLessons"],
     };
+    const longCheck = validateLongFormNursingPlanContract(plan, { template: input.template, intent: input.intent });
+    if (!longCheck.ok) {
+      return {
+        ok: false,
+        stage: "plan",
+        error: longCheck.issues.join(" "),
+        code: "PLAN_LONGFORM_CONTRACT",
+        details: { issues: longCheck.issues },
+      };
+    }
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     if (BlogControlPanelPlanError.is(e)) {
@@ -149,6 +165,27 @@ export async function runBlogArticleGenerationPipeline(
       plan,
       bodyHtml,
     };
+  }
+
+  const longformBody = enforceLongFormBodyQuality({
+    plan,
+    bodyHtml,
+    template: input.template,
+    intent: input.intent,
+  });
+  if (!longformBody.ok) {
+    return {
+      ok: false,
+      stage: "body",
+      error: longformBody.errors.join(" "),
+      plan,
+      bodyHtml,
+      code: "BODY_LONGFORM_ENFORCEMENT",
+      details: { ...longformBody.details, errors: longformBody.errors },
+    };
+  }
+  if (longformBody.flags.length > 0) {
+    plan = mergeUniqueNeedsReviewFlags(plan, longformBody.flags);
   }
 
   if (!persist) {

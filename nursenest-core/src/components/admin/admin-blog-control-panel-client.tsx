@@ -1142,6 +1142,7 @@ export function AdminBlogControlPanelClient({
     const fd = new FormData();
     fd.append("file", file);
     fd.append("kind", "image");
+    fd.append("confirmIntent", "admin-media-upload-confirm");
     const res = await fetch("/api/admin/media/upload", { ...ADMIN_BLOG_COOKIE_FETCH, method: "POST", body: fd });
     const j = (await res.json()) as { publicUrl?: string; error?: string; asset?: { publicUrl?: string } };
     if (!res.ok) {

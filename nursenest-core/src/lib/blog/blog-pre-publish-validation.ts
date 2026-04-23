@@ -1,4 +1,11 @@
-import type { BlogImageStatus, BlogPostStatus, CountryCode, Prisma } from "@prisma/client";
+import type {
+  BlogImageStatus,
+  BlogPostStatus,
+  BlogPostTemplate,
+  CountryCode,
+  Prisma,
+} from "@prisma/client";
+import { collectBlogGeneratedDraftQualityIssues } from "@/lib/blog/blog-generated-draft-quality";
 import { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-generation-pipeline";
 import { generateBlogSEOFromPostRow } from "@/lib/blog/blog-generate-seo";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
@@ -31,7 +38,15 @@ export type PrePublishCheckId =
   | "schema_summary_json"
   | "meta_title_duplicate_h1"
   | "meta_description_substance"
-  | "taxonomy_classifier";
+  | "taxonomy_classifier"
+  | "content_nursing_implications"
+  | "content_clinical_mechanism"
+  | "primary_keyword"
+  | "internal_link_recommendations"
+  | "schema_summary_opportunities"
+  | "schema_contract_notes"
+  | "faq_content_when_required"
+  | "apa_verification_gating";
 
 export type PrePublishSeverity = "block" | "warn";
 
@@ -78,6 +93,9 @@ export type BlogPostPrePublishRow = {
   imageStatus: BlogImageStatus;
   countryTarget: CountryCode | null;
   postStatus: BlogPostStatus;
+  postTemplate: BlogPostTemplate | null;
+  targetKeyword: string | null;
+  medicalRiskFlags: string[];
 };
 
 /** Prisma select shared by PATCH + GET pre-publish validation. */
@@ -108,6 +126,9 @@ export const blogPrePublishValidationSelect = {
   imageStatus: true,
   countryTarget: true,
   postStatus: true,
+  postTemplate: true,
+  targetKeyword: true,
+  medicalRiskFlags: true,
 } as const;
 
 export type BlogPostPrePublishPayload = Prisma.BlogPostGetPayload<{ select: typeof blogPrePublishValidationSelect }>;
@@ -137,6 +158,9 @@ export type PrePublishPatch = {
   coverImagePrompt?: string | null;
   imageStatus?: BlogImageStatus;
   countryTarget?: CountryCode | null;
+  postTemplate?: BlogPostTemplate | null;
+  targetKeyword?: string | null;
+  medicalRiskFlags?: string[];
 };
 
 export function mergeBlogPostForPrePublishPatch(
@@ -178,6 +202,9 @@ export function mergeBlogPostForPrePublishPatch(
     imageStatus: patch.imageStatus !== undefined ? patch.imageStatus : current.imageStatus,
     countryTarget: patch.countryTarget !== undefined ? patch.countryTarget : current.countryTarget,
     postStatus: current.postStatus,
+    postTemplate: patch.postTemplate !== undefined ? patch.postTemplate : current.postTemplate,
+    targetKeyword: patch.targetKeyword !== undefined ? patch.targetKeyword : current.targetKeyword,
+    medicalRiskFlags: patch.medicalRiskFlags !== undefined ? patch.medicalRiskFlags : current.medicalRiskFlags,
   };
 }
 
@@ -516,6 +543,26 @@ export async function validateBlogPrePublish(
       severity: "warn",
       message: "FAQ structured data is enabled but fewer than 2 FAQ items are stored.",
       fix: "Add FAQs in the FAQ section or disable FAQ schema in the SEO bundle / schemaSummary.",
+    });
+  }
+
+  for (const q of collectBlogGeneratedDraftQualityIssues({
+    body: row.body,
+    targetKeyword: row.targetKeyword,
+    postTemplate: row.postTemplate,
+    internalLinkPlan: row.internalLinkPlan,
+    faqBlock: row.faqBlock,
+    schemaSummary: row.schemaSummary,
+    sourcesJson: row.sourcesJson,
+    apaReferences: row.apaReferences,
+    medicalRiskFlags: row.medicalRiskFlags,
+    requiresReferences: row.requiresReferences,
+  })) {
+    push(issues, {
+      id: q.id,
+      severity: q.severity,
+      message: q.message,
+      fix: q.fix,
     });
   }
 

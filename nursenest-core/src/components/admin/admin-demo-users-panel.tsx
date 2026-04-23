@@ -42,6 +42,13 @@ export function AdminDemoUsersPanel({
 
   const onCreate = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (
+      !window.confirm(
+        "Create a new demo learner? Demo accounts are QA-only (reserved email domain, no real billing) and are excluded from admin dashboard aggregates.",
+      )
+    ) {
+      return;
+    }
     setError(null);
     setLastCreated(null);
     setBusy(true);
@@ -52,13 +59,14 @@ export function AdminDemoUsersPanel({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          confirm: true,
           pathwayId,
           lessonCompletionPercent: pct === "" ? undefined : Number(pct),
           readinessScoreTarget: readiness === "" ? undefined : Number(readiness),
         }),
       });
       const body = await res.json().catch(() => ({}));
-      if (!res.ok) {
+      if (!res.ok || body.ok === false) {
         setError(typeof body.error === "string" ? body.error : "Create failed");
         return;
       }
@@ -76,9 +84,13 @@ export function AdminDemoUsersPanel({
     setError(null);
     setBusy(true);
     try {
-      const res = await fetch(`/api/admin/demo-users?userId=${encodeURIComponent(userId)}`, { method: "DELETE" });
+      const res = await fetch("/api/admin/demo-users", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ confirm: true, userId }),
+      });
       if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
+        const body = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
         setError(typeof body.error === "string" ? body.error : "Delete failed");
         return;
       }

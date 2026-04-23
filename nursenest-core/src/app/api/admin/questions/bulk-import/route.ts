@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { parseAdminJsonMutationIntent } from "@/lib/admin/admin-mutation-intent";
 import {
   applyQuestionBankBulkImport,
   QUESTION_BANK_BULK_IMPORT_MAX_ITEMS,
@@ -30,22 +31,33 @@ export async function POST(req: NextRequest) {
   if (!gate.ok) return gate.response;
 
   if (!isDatabaseUrlConfigured() || isRuntimeSafeMode()) {
-    return NextResponse.json({ error: "Database unavailable or safe mode" }, { status: 503 });
+    return NextResponse.json(
+      { error: "Database unavailable or safe mode", code: "bulk_import_unavailable" },
+      { status: 503 },
+    );
   }
 
   let json: unknown;
   try {
     json = await req.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+    return NextResponse.json({ error: "Invalid JSON", code: "bulk_import_invalid_json" }, { status: 400 });
   }
 
   const parsed = bodySchema.safeParse(json);
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid body", details: parsed.error.flatten() }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid body", code: "bulk_import_invalid_body", details: parsed.error.flatten() },
+      { status: 400 },
+    );
   }
 
   const { items, dryRun, applySecret } = parsed.data;
+
+  if (!dryRun) {
+    const intent = parseAdminJsonMutationIntent(json);
+    if (intent instanceof NextResponse) return intent;
+  }
 
   if (dryRun) {
     const report = await runQuestionBankBulkImportReport(items);

@@ -154,4 +154,38 @@ describe("assessCatPracticeHydrateInvariants", () => {
     assert.equal(r.ok, false);
     if (!r.ok) assert.equal(r.code, "linear_engine_in_progress_no_questions");
   });
+
+  it("rejects linear engine in progress when sessionPickSalt is missing or too short", () => {
+    const r = assessCatPracticeHydrateInvariants({
+      catMode: false,
+      status: "IN_PROGRESS",
+      questionIds: ["q123456789012"],
+      config: {
+        questionCount: 10,
+        topicNames: [],
+        difficultyMin: null,
+        difficultyMax: null,
+        selectionMode: "random",
+        pathwayId: "us-rn-nclex-rn",
+        timedMode: false,
+        sessionPickSalt: "short",
+        linearDeliveryMode: "practice",
+      },
+    });
+    assert.equal(r.ok, false);
+    if (!r.ok) assert.equal(r.code, "linear_engine_session_pick_salt_missing");
+  });
+
+  it("rejects CAT in progress with malformed adaptive state even when cursor and salt are valid", () => {
+    const r = assessCatPracticeHydrateInvariants({
+      catMode: true,
+      status: "IN_PROGRESS",
+      questionIds: ["q123456789012"],
+      adaptiveState: { notCatEngine: true },
+      config: catCfg(),
+      cursorIndex: 0,
+    });
+    assert.equal(r.ok, false);
+    if (!r.ok) assert.equal(r.code, "cat_adaptive_state_corrupt");
+  });
 });

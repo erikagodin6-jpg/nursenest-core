@@ -6,6 +6,7 @@ import { CountryCode, Prisma, UserRole } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
+import { userWhereRealMetrics } from "@/lib/admin/admin-metrics-exclude-demo-users";
 
 export type UserAnalyticsSubscriptionFilter =
   | "all"
@@ -247,10 +248,12 @@ export async function loadAdminUserAnalytics(
     "“Active” is inferred from lesson progress, exam attempts, exam sessions, or practice tests in the selected window — there is no separate login/session table.",
     "Pathway and country filters use the learner’s current profile. Historical pathway changes are not tracked.",
     "Subscription breakdown uses a single primary status per user (priority: ACTIVE → GRACE → PAST_DUE → CANCELLED → none).",
+    "Demo QA accounts (`User.isDemoUser`) are excluded from all learner aggregates on this page.",
   ];
 
   const subFrag = subscriptionSqlFragment(q.subscription);
   const geoFrag = countryPathwaySql(q);
+  const excludeDemoSql = Prisma.sql`AND u."is_demo_user" = false`;
 
   let users = 0;
   let activeUsers = 0;
@@ -270,7 +273,7 @@ export async function loadAdminUserAnalytics(
     const [userRow] = await prisma.$queryRaw<[{ n: bigint }]>`
       SELECT COUNT(*)::bigint AS n
       FROM "User" u
-      WHERE u.role = 'LEARNER' ${subFrag} ${geoFrag}
+      WHERE u.role = 'LEARNER' ${subFrag} ${geoFrag} ${excludeDemoSql}
     `;
     users = Number(userRow?.n ?? 0);
 
@@ -290,7 +293,7 @@ export async function loadAdminUserAnalytics(
         WHERE pt."updatedAt" >= ${q.from} AND pt."updatedAt" <= ${q.to}
       ) a
       INNER JOIN "User" u ON u.id = a.uid
-      WHERE u.role = 'LEARNER' ${subFrag} ${geoFrag}
+      WHERE u.role = 'LEARNER' ${subFrag} ${geoFrag} ${excludeDemoSql}
     `;
     activeUsers = Number(activeRow?.n ?? 0);
 
@@ -310,7 +313,7 @@ export async function loadAdminUserAnalytics(
             'NONE'
           ) AS primary_state
         FROM "User" u
-        WHERE u.role = 'LEARNER' ${subFrag} ${geoFrag}
+        WHERE u.role = 'LEARNER' ${subFrag} ${geoFrag} ${excludeDemoSql}
       )
       SELECT primary_state AS st, COUNT(*)::bigint AS n
       FROM prim
@@ -324,7 +327,7 @@ export async function loadAdminUserAnalytics(
       FROM "User" u
       WHERE u.role = 'LEARNER'
         AND u."createdAt" >= ${q.from} AND u."createdAt" <= ${q.to}
-        ${subFrag} ${geoFrag}
+        ${subFrag} ${geoFrag} ${excludeDemoSql}
       GROUP BY 1
       ORDER BY 1 ASC
     `;
@@ -337,7 +340,7 @@ export async function loadAdminUserAnalytics(
       const distRows = await prisma.$queryRaw<Array<{ pid: string | null; n: bigint }>>`
         SELECT u."targetExamPathwayId" AS pid, COUNT(*)::bigint AS n
         FROM "User" u
-        WHERE u.role = 'LEARNER' ${subFrag} ${countryPathwaySql({ ...q, pathway: "ALL" })}
+        WHERE u.role = 'LEARNER' ${subFrag} ${countryPathwaySql({ ...q, pathway: "ALL" })} ${excludeDemoSql}
         GROUP BY u."targetExamPathwayId"
         ORDER BY n DESC
         LIMIT 24
@@ -363,7 +366,7 @@ export async function loadAdminUserAnalytics(
       WITH base AS (
         SELECT u.id, u."targetExamPathwayId" AS pid
         FROM "User" u
-        WHERE u.role = 'LEARNER' ${subFrag} ${geoFrag}
+        WHERE u.role = 'LEARNER' ${subFrag} ${geoFrag} ${excludeDemoSql}
       ),
       act AS (
         SELECT DISTINCT b.id
@@ -426,7 +429,7 @@ export async function loadAdminUserAnalytics(
       INNER JOIN "User" u ON u.id = p."userId"
       WHERE u.role = 'LEARNER'
         AND p."updatedAt" >= ${q.from} AND p."updatedAt" <= ${q.to}
-        ${subFrag} ${geoFrag}
+        ${subFrag} ${geoFrag} ${excludeDemoSql}
       GROUP BY p."lessonId"
       ORDER BY n DESC
       LIMIT 15
@@ -462,7 +465,7 @@ export async function loadAdminUserAnalytics(
           WHERE pt."updatedAt" >= ${q.from} AND pt."updatedAt" <= ${q.to}
         ) a
         INNER JOIN "User" u ON u.id = a.uid
-        WHERE u.role = 'LEARNER' ${subFrag} ${geoFrag}
+        WHERE u.role = 'LEARNER' ${subFrag} ${geoFrag} ${excludeDemoSql}
       ),
       touches AS (
         SELECT p."userId", COUNT(*)::bigint AS c
@@ -482,16 +485,16 @@ export async function loadAdminUserAnalytics(
         (SELECT COUNT(*)::bigint FROM "ExamAttempt" e
           INNER JOIN "User" u ON u.id = e."userId"
           WHERE e."createdAt" >= ${q.from} AND e."createdAt" <= ${q.to}
-          AND u.role = 'LEARNER' ${subFrag} ${geoFrag}) AS attempts,
+          AND u.role = 'LEARNER' ${subFrag} ${geoFrag} ${excludeDemoSql}) AS attempts,
         (SELECT COUNT(*)::bigint FROM "ExamSession" s
           INNER JOIN "User" u ON u.id = s."userId"
           WHERE s."updatedAt" >= ${q.from} AND s."updatedAt" <= ${q.to}
-          AND u.role = 'LEARNER' ${subFrag} ${geoFrag}) AS sessions,
+          AND u.role = 'LEARNER' ${subFrag} ${geoFrag} ${excludeDemoSql}) AS sessions,
         (SELECT COUNT(*)::bigint FROM "ExamSession" s
           INNER JOIN "User" u ON u.id = s."userId"
           WHERE s."updatedAt" >= ${q.from} AND s."updatedAt" <= ${q.to}
           AND s.adaptive_state IS NOT NULL
-          AND u.role = 'LEARNER' ${subFrag} ${geoFrag}) AS cat
+          AND u.role = 'LEARNER' ${subFrag} ${geoFrag} ${excludeDemoSql}) AS cat
     `;
     examAttemptsInRange = Number(examAgg?.attempts ?? 0);
     examSessionsInRange = Number(examAgg?.sessions ?? 0);
@@ -504,7 +507,7 @@ export async function loadAdminUserAnalytics(
       FROM "practice_tests" pt
       INNER JOIN "User" u ON u.id = pt."userId"
       WHERE pt."updatedAt" >= ${q.from} AND pt."updatedAt" <= ${q.to}
-        AND u.role = 'LEARNER' ${subFrag} ${geoFrag}
+        AND u.role = 'LEARNER' ${subFrag} ${geoFrag} ${excludeDemoSql}
     `;
     practiceTestsCompletedInRange = Number(ptAgg?.done ?? 0);
     practiceTestsAdaptiveCompletedInRange = Number(ptAgg?.ad ?? 0);
@@ -533,7 +536,7 @@ export async function loadAdminUserAnalytics(
           : Prisma.sql`AND NOT EXISTS (SELECT 1 FROM "Subscription" s WHERE s."userId" = u.id AND s.status IN ('ACTIVE', 'GRACE'))`;
         const [uc] = await prisma.$queryRaw<[{ n: bigint }]>`
           SELECT COUNT(*)::bigint AS n FROM "User" u
-          WHERE u.role = 'LEARNER' ${paidFrag} ${geoOnly}
+          WHERE u.role = 'LEARNER' ${paidFrag} ${geoOnly} ${excludeDemoSql}
         `;
         const [ac] = await prisma.$queryRaw<[{ n: bigint }]>`
           SELECT COUNT(DISTINCT x.uid)::bigint AS n FROM (
@@ -550,13 +553,13 @@ export async function loadAdminUserAnalytics(
             WHERE pt."updatedAt" >= ${q.from} AND pt."updatedAt" <= ${q.to}
           ) x
           INNER JOIN "User" u ON u.id = x.uid
-          WHERE u.role = 'LEARNER' ${paidFrag} ${geoOnly}
+          WHERE u.role = 'LEARNER' ${paidFrag} ${geoOnly} ${excludeDemoSql}
         `;
         const [ea] = await prisma.$queryRaw<[{ n: bigint }]>`
           SELECT COUNT(*)::bigint AS n FROM "ExamAttempt" e
           INNER JOIN "User" u ON u.id = e."userId"
           WHERE e."createdAt" >= ${q.from} AND e."createdAt" <= ${q.to}
-            AND u.role = 'LEARNER' ${paidFrag} ${geoOnly}
+            AND u.role = 'LEARNER' ${paidFrag} ${geoOnly} ${excludeDemoSql}
         `;
         const [prTouch] = await prisma.$queryRaw<[{ total: bigint; nu: bigint }]>`
           WITH touches AS (
@@ -564,7 +567,7 @@ export async function loadAdminUserAnalytics(
             FROM "Progress" p
             INNER JOIN "User" u ON u.id = p."userId"
             WHERE p."updatedAt" >= ${q.from} AND p."updatedAt" <= ${q.to}
-              AND u.role = 'LEARNER' ${paidFrag} ${geoOnly}
+              AND u.role = 'LEARNER' ${paidFrag} ${geoOnly} ${excludeDemoSql}
             GROUP BY p."userId"
           )
           SELECT COALESCE(SUM(c), 0)::bigint AS total, COUNT(*)::bigint AS nu FROM touches
@@ -614,7 +617,7 @@ export async function loadAdminUserAnalytics(
       WITH base AS (
         SELECT u.id, u."createdAt" AS ca
         FROM "User" u
-        WHERE u.role = 'LEARNER' ${subFrag} ${geoFrag}
+        WHERE u.role = 'LEARNER' ${subFrag} ${geoFrag} ${excludeDemoSql}
           AND u."createdAt" >= (date_trunc('week', NOW() AT TIME ZONE 'UTC') - INTERVAL '8 weeks')
       ),
       cohorts AS (
@@ -705,7 +708,7 @@ export async function loadAdminUserAnalytics(
   let pathwaysForSelect: string[] = [];
   try {
     const distinctPathways = await prisma.user.findMany({
-      where: { role: UserRole.LEARNER, targetExamPathwayId: { not: null } },
+      where: userWhereRealMetrics({ role: UserRole.LEARNER, targetExamPathwayId: { not: null } }),
       select: { targetExamPathwayId: true },
       distinct: ["targetExamPathwayId"],
     });

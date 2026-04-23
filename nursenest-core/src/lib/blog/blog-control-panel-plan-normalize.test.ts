@@ -107,4 +107,22 @@ describe("safeParseBlogControlPanelPlan", () => {
       assert.deepEqual(r.data.outline[0]?.h3, ["single h3 string value"]);
     }
   });
+
+  it("coerces recommendedInternalLinks from a single object to array", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      recommendedInternalLinks: {
+        targetType: "flashcards_hub",
+        suggestedPath: "/flashcards",
+        anchorText: "Flashcards",
+        reason: "Review",
+      },
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.equal(r.data.recommendedInternalLinks.length, 1);
+      assert.equal(r.data.recommendedInternalLinks[0]?.targetType, "flashcards_hub");
+    }
+  });
 });

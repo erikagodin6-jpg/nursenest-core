@@ -45,7 +45,10 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { validatePracticeExamPostLaunchRequest } from "@/lib/learner/study-product-route-contract";
 import { practiceTestRouteDeps } from "./route-deps";
 import { normalizePracticeTestQuestionIds } from "@/lib/practice-tests/practice-test-question-ids";
-import { assessPracticeTestSessionHydrateContract } from "@/lib/practice-tests/practice-session-contract";
+import {
+  assessPracticeTestSessionHydrateContract,
+  sessionContractErrorJsonBody,
+} from "@/lib/practice-tests/practice-session-contract";
 
 const previewSelect = {
   id: true,
@@ -66,6 +69,25 @@ function asIdList(raw: unknown): string[] {
 
 function toJsonObject(value: unknown): object {
   return JSON.parse(JSON.stringify(value ?? {})) as object;
+}
+
+function practicePatchSessionContract(args: {
+  cfg: PracticeTestConfigJson;
+  rowStatus: string;
+  questionIds: string[];
+  cursorIndex: number;
+  adaptiveState: unknown;
+  results?: unknown;
+}) {
+  return assessPracticeTestSessionHydrateContract({
+    catMode: args.cfg.selectionMode === "cat",
+    status: args.rowStatus,
+    questionIds: args.questionIds,
+    cursorIndex: args.cursorIndex,
+    adaptiveState: args.adaptiveState,
+    config: args.cfg,
+    results: args.results,
+  });
 }
 
 function pathwaySurfaceFromConfig(cfg: PracticeTestConfigJson): PracticeTestPathwayClientShell | null {
@@ -123,18 +145,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
 
   const teachingReviewRequested = req.nextUrl.searchParams.get("teachingReview") === "1";
   const hydrateFull = req.nextUrl.searchParams.get("hydrate") === "full";
-
-  let teachingReview: Awaited<ReturnType<typeof buildPracticeTestTeachingReview>> | null = null;
-  if (teachingReviewRequested && row.status === PracticeTestStatus.COMPLETED) {
-    teachingReview = await buildPracticeTestTeachingReview(ids, answers, gate.entitlement);
-  }
-
-  const educationalLocale = getMarketingLocaleFromRequestCookie(req);
-  const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
-
-  const base = questionAccessWhere(gate.entitlement);
-  const ID_CHUNK = 200;
-  let questions: Array<Record<string, unknown>> = [];
+  const contractStrict = req.nextUrl.searchParams.get("contractStrict") === "1";
 
   const sessionContract = assessPracticeTestSessionHydrateContract({
     catMode: cfg.selectionMode === "cat",
@@ -151,7 +162,22 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
       practiceTestId: id.slice(0, 16),
       code: sessionContract.violation.code,
     });
+    if (contractStrict) {
+      return NextResponse.json(sessionContractErrorJsonBody(sessionContract.violation), { status: 409 });
+    }
   }
+
+  let teachingReview: Awaited<ReturnType<typeof buildPracticeTestTeachingReview>> | null = null;
+  if (teachingReviewRequested && row.status === PracticeTestStatus.COMPLETED) {
+    teachingReview = await buildPracticeTestTeachingReview(ids, answers, gate.entitlement);
+  }
+
+  const educationalLocale = getMarketingLocaleFromRequestCookie(req);
+  const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
+
+  const base = questionAccessWhere(gate.entitlement);
+  const ID_CHUNK = 200;
+  let questions: Array<Record<string, unknown>> = [];
 
   if (!teachingReviewRequested && hydrateFull && ids.length > 0) {
     const qs = await withRetry(async () => {
@@ -211,6 +237,7 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     completedAt: row.completedAt?.toISOString() ?? null,
     adaptiveState: row.adaptiveState ?? null,
     catMode: cfg.selectionMode === "cat",
+    ...(sessionContract.ok ? {} : { sessionContractError: sessionContract.violation }),
     ...(teachingReview ? { teachingReview } : {}),
     ...(teachingReviewRequested && row.status !== PracticeTestStatus.COMPLETED
       ? { teachingReviewUnavailable: true as const }
@@ -324,6 +351,24 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   });
   const invalidateHeavyReads = async () => invalidateLearnerPrivateReadCache(gate.userId);
 
+  const prePatchContract = practicePatchSessionContract({
+    cfg,
+    rowStatus: row.status,
+    questionIds: ids,
+    cursorIndex,
+    adaptiveState: row.adaptiveState ?? null,
+    results: row.results,
+  });
+  if (!prePatchContract.ok && parsed.data.action !== "abandon") {
+    safeServerLog("practice_tests", "patch_blocked_session_contract", {
+      event: "patch_blocked_session_contract",
+      practiceTestId: id.slice(0, 16),
+      action: parsed.data.action,
+      code: prePatchContract.violation.code,
+    });
+    return NextResponse.json(sessionContractErrorJsonBody(prePatchContract.violation), { status: 409 });
+  }
+
   if (parsed.data.action === "save") {
     await practiceTestRouteDeps.updatePracticeTest({
       where: { id },
@@ -374,6 +419,22 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     );
     if (!feedback) {
       return NextResponse.json({ error: "Question not available" }, { status: 404 });
+    }
+    const postLinearCommit = practicePatchSessionContract({
+      cfg,
+      rowStatus: row.status,
+      questionIds: ids,
+      cursorIndex,
+      adaptiveState: nextAdaptive,
+      results: row.results,
+    });
+    if (!postLinearCommit.ok) {
+      safeServerLog("practice_tests", "patch_blocked_post_linear_commit_contract", {
+        event: "patch_blocked_post_linear_commit_contract",
+        practiceTestId: id.slice(0, 16),
+        code: postLinearCommit.violation.code,
+      });
+      return NextResponse.json(sessionContractErrorJsonBody(postLinearCommit.violation), { status: 409 });
     }
     await practiceTestRouteDeps.updatePracticeTest({
       where: { id },
@@ -452,6 +513,17 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
     });
 
     if (adv.kind === "study_reveal") {
+      const postReveal = practicePatchSessionContract({
+        cfg,
+        rowStatus: row.status,
+        questionIds: ids,
+        cursorIndex,
+        adaptiveState: adv.adaptiveState,
+        results: row.results,
+      });
+      if (!postReveal.ok) {
+        return NextResponse.json(sessionContractErrorJsonBody(postReveal.violation), { status: 409 });
+      }
       await practiceTestRouteDeps.updatePracticeTest({
         where: { id },
         data: {
@@ -487,6 +559,17 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
           practiceTestId: id.slice(0, 16),
           reason: error instanceof Error ? error.message : "unknown",
         });
+      }
+      const postCatDone = practicePatchSessionContract({
+        cfg,
+        rowStatus: PracticeTestStatus.COMPLETED,
+        questionIds: ids,
+        cursorIndex,
+        adaptiveState: adv.adaptiveState,
+        results: resultsFinal,
+      });
+      if (!postCatDone.ok) {
+        return NextResponse.json(sessionContractErrorJsonBody(postCatDone.violation), { status: 409 });
       }
       await practiceTestRouteDeps.updatePracticeTest({
         where: { id },
@@ -527,6 +610,17 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       });
     }
 
+    const postCatContinue = practicePatchSessionContract({
+      cfg,
+      rowStatus: row.status,
+      questionIds: adv.questionIds,
+      cursorIndex: adv.cursorIndex,
+      adaptiveState: adv.adaptiveState,
+      results: row.results,
+    });
+    if (!postCatContinue.ok) {
+      return NextResponse.json(sessionContractErrorJsonBody(postCatContinue.violation), { status: 409 });
+    }
     await practiceTestRouteDeps.updatePracticeTest({
       where: { id },
       data: {
@@ -614,6 +708,17 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
             reason: error instanceof Error ? error.message : "unknown",
           });
         }
+        const postManualCatComplete = practicePatchSessionContract({
+          cfg,
+          rowStatus: PracticeTestStatus.COMPLETED,
+          questionIds: ids,
+          cursorIndex,
+          adaptiveState: fin.adaptiveState,
+          results: resultsFinal,
+        });
+        if (!postManualCatComplete.ok) {
+          return NextResponse.json(sessionContractErrorJsonBody(postManualCatComplete.violation), { status: 409 });
+        }
         await practiceTestRouteDeps.updatePracticeTest({
           where: { id },
           data: {
@@ -659,6 +764,17 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
 
     const results = await practiceTestRouteDeps.computePracticeTestResults(ids, merged, gate.entitlement);
 
+    const postLinearComplete = practicePatchSessionContract({
+      cfg,
+      rowStatus: PracticeTestStatus.COMPLETED,
+      questionIds: ids,
+      cursorIndex,
+      adaptiveState: row.adaptiveState ?? null,
+      results,
+    });
+    if (!postLinearComplete.ok) {
+      return NextResponse.json(sessionContractErrorJsonBody(postLinearComplete.violation), { status: 409 });
+    }
     await practiceTestRouteDeps.updatePracticeTest({
       where: { id },
       data: {

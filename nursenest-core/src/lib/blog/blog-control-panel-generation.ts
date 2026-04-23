@@ -48,6 +48,10 @@ import {
 import type { BlogImageSlotAttachment } from "@/lib/blog/blog-image-workflow";
 import { seedBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
 import { findRelatedPublishedBlogPosts } from "@/lib/blog/blog-related-published-posts";
+import {
+  isLongFormPathophysiologyProfile,
+  validateLongFormNursingPlanContract,
+} from "@/lib/blog/blog-longform-nursing-contract";
 import { mergePublishingPackageIntoLinkPlanJson } from "@/lib/blog/blog-publishing-package";
 import { blogPrimaryStudyCta, marketingStudyHubsForBlogExam } from "@/lib/blog/blog-study-cta";
 import { detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
@@ -87,7 +91,7 @@ export type ControlPanelGenerateInput = {
 
 /** Thrown when the structured editorial plan cannot be parsed or validated (with machine codes for clients). */
 export class BlogControlPanelPlanError extends Error {
-  readonly code: "PLAN_INVALID_JSON" | "PLAN_NORMALIZE" | "PLAN_ZOD";
+  readonly code: "PLAN_INVALID_JSON" | "PLAN_NORMALIZE" | "PLAN_ZOD" | "PLAN_LONGFORM_CONTRACT";
 
   readonly details: unknown;
 
@@ -148,7 +152,7 @@ export function appendRequiredStudyLinksBlock(params: {
 }
 
 export async function fetchControlPanelPlan(input: ControlPanelGenerateInput): Promise<BlogControlPanelPlan> {
-  const system = buildStructuredPlanSystemPrompt();
+  const system = buildStructuredPlanSystemPrompt({ template: input.template, intent: input.intent });
   const user = `${buildStructuredPlanUserPrompt({
     topic: input.topic,
     exam: input.exam,
@@ -216,7 +220,7 @@ export async function fetchControlPanelBodyHtml(params: {
   selectedTitle?: string;
 }): Promise<string> {
   const pageH1 = params.selectedTitle?.trim() || params.plan.h1;
-  const system = buildArticleBodySystemPrompt();
+  const system = buildArticleBodySystemPrompt({ template: params.template, intent: params.intent });
   const user = buildArticleBodyUserPrompt({
     plan: params.plan,
     topic: params.topic,
@@ -236,11 +240,11 @@ export async function fetchControlPanelBodyHtml(params: {
       { role: "user", content: user },
     ],
     temperature: 0.42,
-    maxTokens: 6000,
+    maxTokens: 8192,
   });
 
   const bodyHtml = response.content.trim();
-  if (bodyHtml.length < 400) {
+  if (bodyHtml.length < 1800) {
     throw new Error("Model returned too little HTML for the article body");
   }
   return bodyHtml;
@@ -378,11 +382,36 @@ export async function persistControlPanelDraft(
     ...seoBundle,
     openGraphTitle: (seoBundle.openGraphTitle ?? seoTitleStored).slice(0, 120),
     openGraphDescription: (seoBundle.openGraphDescription ?? seoDescriptionStored).slice(0, 200),
-    twitterTitle: seoTitleStored.slice(0, 120),
-    twitterDescription: seoDescriptionStored.slice(0, 200),
+    twitterTitle: (seoBundle.twitterTitle ?? plan.twitterCardTitle?.trim() ?? seoTitleStored).slice(0, 120),
+    twitterDescription: (seoBundle.twitterDescription ?? plan.twitterCardDescription?.trim() ?? seoDescriptionStored).slice(
+      0,
+      320,
+    ),
   };
+  const needsReviewMerged = [
+    ...(plan.needsReviewFlags ?? []),
+    ...(isLongFormPathophysiologyProfile({ template: input.template, intent: input.intent }) &&
+    partition.verified.length === 0
+      ? ["apa_source_review_required"]
+      : []),
+  ];
+  const needsReviewFlagsUnique = [...new Set(needsReviewMerged.map((s) => s.trim()).filter(Boolean))].slice(0, 32);
+
+  const generationContractV1: Record<string, unknown> = {
+    version: 1,
+    primaryKeyword: plan.primaryKeyword?.trim() || null,
+    searchIntent: plan.searchIntent?.trim() || null,
+    recommendedInternalLinks: plan.recommendedInternalLinks ?? [],
+    sourceCandidates: plan.sourceCandidates ?? [],
+    needsReviewFlags: needsReviewFlagsUnique,
+    schemaNotes: plan.schemaNotes ?? null,
+    articleSummary: plan.articleSummary?.trim().slice(0, 2000) || null,
+    editorialNotes: plan.editorialNotes ?? [],
+  };
+
   const internalLinkPlanBase: Record<string, unknown> = {
     lessons: plan.suggestedInternalLessons,
+    generationContractV1,
     imagePlacements: plan.imagePlacements,
     imageAttachments: [] as BlogImageSlotAttachment[],
     seo: seoBundle,
@@ -395,6 +424,11 @@ export async function persistControlPanelDraft(
   });
 
   const hasAiCitationStubs = partition.excluded.some((e) => e.provenance === "ai_suggested");
+  const medicalRiskFlagsForPersist = [...riskFlags];
+  const needsApaSourceReviewFlag = hasAiCitationStubs || partition.verified.length === 0;
+  if (needsApaSourceReviewFlag && !medicalRiskFlagsForPersist.includes("apa_source_review_required")) {
+    medicalRiskFlagsForPersist.push("apa_source_review_required");
+  }
   const workflowStatusBase =
     !plan.metaDescription || !pageTitle
       ? BlogWorkflowStatus.NEEDS_METADATA
@@ -474,6 +508,8 @@ export async function persistControlPanelDraft(
             try {
               return buildSchemaSummaryPayload(seoBundle, {
                 schemaOpportunities: plan.schemaOpportunities,
+                searchIntent: plan.searchIntent?.trim() || null,
+                schemaNotes: plan.schemaNotes,
               });
             } catch (e) {
               const msg = e instanceof Error ? e.message : String(e);
@@ -489,7 +525,7 @@ export async function persistControlPanelDraft(
           apaReferences,
           requiresReferences: Boolean(riskFlags.length > 0 || hasAiCitationStubs || partition.excluded.length > 0),
           sourceReliabilityScore: partition.verified.length ? sourceCheck.reliabilityScore : 0,
-          medicalRiskFlags: riskFlags,
+          medicalRiskFlags: medicalRiskFlagsForPersist,
           imageStatus: input.includeImage ? (input.includeAiImage ? BlogImageStatus.REQUESTED : BlogImageStatus.NONE) : BlogImageStatus.NONE,
           coverImagePrompt,
           coverImageAlt,
@@ -637,12 +673,16 @@ Keys:
 - optional seoFocusKeywords: string[] length 3-8 (exam + specific clinical terms).
 Current: metaTitle=${JSON.stringify(params.currentPlan?.metaTitle ?? "")}, metaDescription=${JSON.stringify((params.currentPlan?.metaDescription ?? "").slice(0, 160))}`,
 
-    outline: `Return {"outline": same shape as before: array of {h2, h3?, bullets?} } with 4-6 sections for template ${params.template}, topic ${params.topic}, exam ${params.exam}.
+    outline: `Return {"outline": same shape as before: array of {h2, h3?, bullets?} } with ${
+      isLongFormPathophysiologyProfile({ template: params.template, intent: params.intent }) ? "6-10" : "4-6"
+    } sections for template ${params.template}, topic ${params.topic}, exam ${params.exam}.
 Current outline for reference: ${JSON.stringify(params.currentPlan?.outline ?? [])}`,
 
-    faqs: `Return {"faqs": array of {q,a} } with 4-6 new exam-prep FAQs for topic "${params.topic}" (${params.exam}).`,
+    faqs: `Return {"faqs": array of {q,a} } with ${
+      isLongFormPathophysiologyProfile({ template: params.template, intent: params.intent }) ? "4-8" : "4-6"
+    } new exam-prep FAQs for topic "${params.topic}" (${params.exam}).`,
 
-    internal_links: `Return {"suggestedInternalLessons": array of { label, suggestedPath, rationale?, optional linkKind ("lesson"|"lessons_hub"|"question_bank"|"topic_cluster"|"practice_exams"|"practice_programmatic"|"general") } } — 5-12 **strictly relevant** destinations: lessons, question bank hub, /practice-exams, programmatic practice when applicable, topic clusters. No filler. Match audience country (/us/... vs /canada/...).
+    internal_links: `Return {"suggestedInternalLessons": array of { label, suggestedPath, rationale?, optional linkKind ("lesson"|"lessons_hub"|"question_bank"|"topic_cluster"|"practice_exams"|"practice_programmatic"|"flashcards_hub"|"adaptive_cat"|"study_plan"|"general") } } — 5-12 **strictly relevant** destinations: lessons, question bank hub, flashcards hub, /practice-exams, adaptive/CAT marketing paths when applicable, topic clusters. No filler. Match audience country (/us/... vs /canada/...).
 
 ${getBlogInternalLinkPathHintsForPrompt(params.exam, params.country)}`,
 

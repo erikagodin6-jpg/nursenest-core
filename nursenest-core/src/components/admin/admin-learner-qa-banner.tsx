@@ -26,6 +26,8 @@ export function AdminLearnerQaBanner({ title }: { title: string }) {
         method: "POST",
         credentials: "include",
         cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ confirm: true }),
       });
       if (!res.ok) {
         const j = (await res.json().catch(() => ({}))) as { error?: string };
@@ -43,7 +45,7 @@ export function AdminLearnerQaBanner({ title }: { title: string }) {
   return (
     <div
       role="region"
-      aria-label="Admin learner QA mode"
+      aria-label="Simulated learner QA mode (not production subscription)"
       className="mb-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_12%,var(--semantic-surface))] px-3 py-2 text-sm text-[var(--semantic-text-primary)] shadow-sm sm:px-4"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">

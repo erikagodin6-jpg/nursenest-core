@@ -133,6 +133,10 @@ export function reconstructBlogControlPanelPlanFromPost(row: {
     internalAnchorOpportunities: pkg?.internalAnchorOpportunities?.length
       ? pkg.internalAnchorOpportunities
       : [],
+    recommendedInternalLinks: [],
+    sourceCandidates: [],
+    needsReviewFlags: [],
+    editorialNotes: [],
   };
 }
 

@@ -84,7 +84,13 @@ describe("admin learner QA — API + proxy contracts (static)", () => {
       join(nursenestCoreRoot, "src", "app", "api", "admin", "learner-qa", "simulate", "route.ts"),
       "utf8",
     );
+    assert.match(sim, /parseAdminJsonMutationIntent/);
     assert.match(sim, /sub:\s*gate\.admin\.userId/);
+    const clear = readFileSync(
+      join(nursenestCoreRoot, "src", "app", "api", "admin", "learner-qa", "clear", "route.ts"),
+      "utf8",
+    );
+    assert.match(clear, /parseAdminJsonMutationIntent/);
     assert.doesNotMatch(sim, /sub:\s*parsed\.data\.(userId|sub)\b/);
     assert.doesNotMatch(sim, /sub:\s*d\.(userId|sub)\b/);
     assert.doesNotMatch(sim, /searchParams|nextUrl\.searchParams/);

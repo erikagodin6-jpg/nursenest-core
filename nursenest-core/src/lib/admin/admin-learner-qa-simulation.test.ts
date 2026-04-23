@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { CountryCode } from "@prisma/client";
 import {
+  bannerTitleForPayload,
   billingRegionSlugForQaCountry,
   buildUserAccessForAdminLearnerQa,
   learnerQaChromeTierFallbackString,
@@ -188,5 +189,19 @@ describe("buildUserAccessForAdminLearnerQa", () => {
     assert.equal(out!.npSpecialty, "PMHNP");
     assert.equal(out!.planVariant, "monthly");
     delete process.env.ADMIN_LEARNER_QA_SECRET;
+  });
+});
+
+describe("bannerTitleForPayload", () => {
+  it("labels simulated learner state explicitly (not a real subscription)", () => {
+    const title = bannerTitleForPayload({
+      v: 1,
+      sub: "u1",
+      exp: 9e15,
+      track: "RN",
+      lifecycle: "paid_active",
+      country: "US",
+    });
+    assert.match(title, /Simulated learner \(QA cookie\)/);
   });
 });

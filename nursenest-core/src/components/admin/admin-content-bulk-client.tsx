@@ -138,6 +138,7 @@ export function AdminContentBulkClient() {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          confirm: true,
           scope: "blog",
           blog: {
             operation,
@@ -167,7 +168,11 @@ export function AdminContentBulkClient() {
       const body =
         mode === "preview"
           ? { scope: "utility", utility: { kind } }
-          : { scope: "utility", utility: { kind, confirmation: "CONFIRM_BULK_WRITE" as const } };
+          : {
+              confirm: true,
+              scope: "utility",
+              utility: { kind, confirmation: "CONFIRM_BULK_WRITE" as const },
+            };
       const res = await fetch(path, {
         method: "POST",
         credentials: "include",

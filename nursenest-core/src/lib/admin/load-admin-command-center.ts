@@ -11,6 +11,7 @@ import {
   UserRole,
 } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { subscriptionWhereRealUserMetrics, userWhereRealMetrics } from "@/lib/admin/admin-metrics-exclude-demo-users";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 import { loadAdminDashboardStats, type AdminDashboardStats } from "@/lib/admin/load-admin-dashboard-stats";
@@ -201,10 +202,10 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
       nextSched,
       questionDiag,
     ] = await Promise.all([
-      prisma.user.count(),
-      prisma.user.count({ where: { role: UserRole.LEARNER } }),
+      prisma.user.count({ where: userWhereRealMetrics() }),
+      prisma.user.count({ where: userWhereRealMetrics({ role: UserRole.LEARNER }) }),
       prisma.user.count({
-        where: {
+        where: userWhereRealMetrics({
           role: {
             in: [
               UserRole.ADMIN,
@@ -213,22 +214,52 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
               UserRole.SUPPORT_ADMIN,
             ],
           },
-        },
+        }),
       }),
-      prisma.user.count({ where: { createdAt: { gte: todayStart } } }),
-      prisma.user.count({ where: { createdAt: { gte: weekAgo } } }),
-      prisma.user.count({ where: { createdAt: { gte: monthAgo } } }),
-      prisma.user.count({ where: { trialStatus: "ACTIVE" } }),
-      prisma.user.count({ where: { role: UserRole.LEARNER, onboardingCompletedAt: null } }),
-      prisma.user.groupBy({ by: ["country"], _count: { _all: true } }),
-      prisma.user.groupBy({ by: ["tier"], _count: { _all: true } }),
-      prisma.user.groupBy({ by: ["role"], _count: { _all: true } }),
-      prisma.subscription.count({ where: { status: SubscriptionStatus.ACTIVE } }),
-      prisma.subscription.count({ where: { status: SubscriptionStatus.GRACE } }),
-      prisma.subscription.count({ where: { status: SubscriptionStatus.CANCELLED } }),
-      prisma.subscription.count({ where: { status: SubscriptionStatus.PAST_DUE } }),
-      prisma.subscription.groupBy({ by: ["planTier"], _count: { _all: true } }),
-      prisma.subscription.groupBy({ by: ["planCountry"], _count: { _all: true } }),
+      prisma.user.count({ where: userWhereRealMetrics({ createdAt: { gte: todayStart } }) }),
+      prisma.user.count({ where: userWhereRealMetrics({ createdAt: { gte: weekAgo } }) }),
+      prisma.user.count({ where: userWhereRealMetrics({ createdAt: { gte: monthAgo } }) }),
+      prisma.user.count({ where: userWhereRealMetrics({ trialStatus: "ACTIVE" }) }),
+      prisma.user.count({
+        where: userWhereRealMetrics({ role: UserRole.LEARNER, onboardingCompletedAt: null }),
+      }),
+      prisma.user.groupBy({
+        by: ["country"],
+        where: userWhereRealMetrics(),
+        _count: { _all: true },
+      }),
+      prisma.user.groupBy({
+        by: ["tier"],
+        where: userWhereRealMetrics(),
+        _count: { _all: true },
+      }),
+      prisma.user.groupBy({
+        by: ["role"],
+        where: userWhereRealMetrics(),
+        _count: { _all: true },
+      }),
+      prisma.subscription.count({
+        where: subscriptionWhereRealUserMetrics({ status: SubscriptionStatus.ACTIVE }),
+      }),
+      prisma.subscription.count({
+        where: subscriptionWhereRealUserMetrics({ status: SubscriptionStatus.GRACE }),
+      }),
+      prisma.subscription.count({
+        where: subscriptionWhereRealUserMetrics({ status: SubscriptionStatus.CANCELLED }),
+      }),
+      prisma.subscription.count({
+        where: subscriptionWhereRealUserMetrics({ status: SubscriptionStatus.PAST_DUE }),
+      }),
+      prisma.subscription.groupBy({
+        by: ["planTier"],
+        where: subscriptionWhereRealUserMetrics(),
+        _count: { _all: true },
+      }),
+      prisma.subscription.groupBy({
+        by: ["planCountry"],
+        where: subscriptionWhereRealUserMetrics(),
+        _count: { _all: true },
+      }),
       diagnosticsCounts
         ? Promise.resolve(diagnosticsCounts.lessonsContentItemsAll)
         : prisma.contentItem.count({ where: { type: "lesson" } }),
@@ -259,15 +290,26 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
       diagnosticsCounts
         ? Promise.resolve(diagnosticsCounts.flashcardsPublished)
         : prisma.flashcard.count({ where: { status: ContentStatus.PUBLISHED } }),
-      prisma.practiceTest.count(),
-      prisma.examAttempt.count({ where: { createdAt: { gte: weekAgo } } }),
-      prisma.examSession.count({ where: { updatedAt: { gte: weekAgo } } }),
+      prisma.practiceTest.count({ where: { user: { isDemoUser: false } } }),
+      prisma.examAttempt.count({
+        where: { createdAt: { gte: weekAgo }, user: { isDemoUser: false } },
+      }),
+      prisma.examSession.count({
+        where: { updatedAt: { gte: weekAgo }, user: { isDemoUser: false } },
+      }),
       prisma.$queryRaw<[{ n: bigint }]>`
-        SELECT COUNT(*)::bigint AS n FROM "ExamSession"
-        WHERE "updatedAt" >= ${weekAgo} AND "adaptive_state" IS NOT NULL
+        SELECT COUNT(*)::bigint AS n FROM "ExamSession" es
+        INNER JOIN "User" u ON u.id = es."userId"
+        WHERE es."updatedAt" >= ${weekAgo}
+          AND es."adaptive_state" IS NOT NULL
+          AND u."is_demo_user" = false
       `.then((r) => Number(r[0]?.n ?? 0)),
       prisma.practiceTest.count({
-        where: { status: PracticeTestStatus.COMPLETED, completedAt: { gte: weekAgo } },
+        where: {
+          status: PracticeTestStatus.COMPLETED,
+          completedAt: { gte: weekAgo },
+          user: { isDemoUser: false },
+        },
       }),
       prisma.blogPost.count({
         where: {
@@ -304,14 +346,15 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
     const signupsRaw = await prisma.$queryRaw<Array<{ d: Date; c: bigint }>>`
       SELECT date_trunc('day', "createdAt") AS d, COUNT(*)::bigint AS c
       FROM "User"
-      WHERE "createdAt" >= ${chartSince}
+      WHERE "createdAt" >= ${chartSince} AND "is_demo_user" = false
       GROUP BY 1
       ORDER BY 1 ASC
     `;
     const subsRaw = await prisma.$queryRaw<Array<{ d: Date; c: bigint }>>`
-      SELECT date_trunc('day', "createdAt") AS d, COUNT(*)::bigint AS c
-      FROM "Subscription"
-      WHERE "createdAt" >= ${chartSince}
+      SELECT date_trunc('day', s."createdAt") AS d, COUNT(*)::bigint AS c
+      FROM "Subscription" s
+      INNER JOIN "User" u ON u.id = s."userId"
+      WHERE s."createdAt" >= ${chartSince} AND u."is_demo_user" = false
       GROUP BY 1
       ORDER BY 1 ASC
     `;

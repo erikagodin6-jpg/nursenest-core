@@ -6,6 +6,8 @@ import path from "path";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { parseAdminJsonMutationIntent, stripAdminMutationControlFields } from "@/lib/admin/admin-mutation-intent";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { loadAdminDashboardStats } from "@/lib/admin/load-admin-dashboard-stats";
 import { promoteScheduledBlogPosts } from "@/lib/blog/blog-publish-scheduler";
 import { countMissedBlogPostBacklog, recoverMissedBlogPostsBatch } from "@/lib/blog/blog-recover-missed-posts";
@@ -64,10 +66,32 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Forbidden", code: "admin_super_only" }, { status: 403 });
   }
 
-  const parsed = schema.safeParse(await req.json());
-  if (!parsed.success) return NextResponse.json({ error: "Invalid action" }, { status: 400 });
+  const raw = await req.json().catch(() => null);
+  const intent = parseAdminJsonMutationIntent(raw);
+  if (intent instanceof NextResponse) return intent;
+
+  const stripped = stripAdminMutationControlFields((raw ?? {}) as Record<string, unknown>);
+  const parsed = schema.safeParse(stripped);
+  if (!parsed.success) {
+    safeServerLog("admin_ops_run", "invalid_body", {});
+    return NextResponse.json(
+      { ok: false, code: "admin_ops_invalid_body", error: "Invalid action" },
+      { status: 400 },
+    );
+  }
 
   const action = parsed.data.action;
+
+  if (intent.dryRun) {
+    safeServerLog("admin_ops_run", "dry_run", { action });
+    return NextResponse.json({
+      ok: true,
+      dryRun: true,
+      action,
+      preview: `Would execute super-admin op "${action}" (no writes in dry run).`,
+    });
+  }
+
   try {
     if (action === "run_blog_publish_scheduler") {
       const result = await promoteScheduledBlogPosts();
@@ -118,10 +142,15 @@ export async function POST(req: Request) {
       ]);
       return NextResponse.json({ ok: true, action, result: { qaSnapshot, coverage } });
     }
-    return NextResponse.json({ ok: false, error: "Unknown action" }, { status: 400 });
-  } catch (e) {
     return NextResponse.json(
-      { ok: false, action, error: e instanceof Error ? e.message : String(e) },
+      { ok: false, code: "admin_ops_unknown_action", error: "Unknown action" },
+      { status: 400 },
+    );
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    safeServerLog("admin_ops_run", "handler_error", { action, detail: msg.slice(0, 240) });
+    return NextResponse.json(
+      { ok: false, code: "admin_ops_handler_error", action, error: msg },
       { status: 500 },
     );
   }

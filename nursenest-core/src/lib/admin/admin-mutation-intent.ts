@@ -12,6 +12,7 @@ export function parseAdminJsonMutationIntent(body: unknown): AdminJsonMutationIn
     return NextResponse.json(
       {
         ok: false,
+        code: "admin_mutation_intent_required",
         error: "JSON body required with { confirm: true } to execute or { dryRun: true } for preview-only.",
       },
       { status: 400 },
@@ -25,6 +26,7 @@ export function parseAdminJsonMutationIntent(body: unknown): AdminJsonMutationIn
   return NextResponse.json(
     {
       ok: false,
+      code: "admin_mutation_intent_required",
       error: "Mutation requires { confirm: true } to execute or { dryRun: true } for preview-only.",
     },
     { status: 400 },
@@ -33,7 +35,8 @@ export function parseAdminJsonMutationIntent(body: unknown): AdminJsonMutationIn
 
 /** Strip control keys before passing the rest to a route-specific zod schema. */
 export function stripAdminMutationControlFields<T extends Record<string, unknown>>(body: T): Omit<T, "confirm" | "dryRun"> {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- strip control keys only
-  const { confirm, dryRun, ...rest } = body;
+  const { confirm: _confirm, dryRun: _dryRun, ...rest } = body;
+  void _confirm;
+  void _dryRun;
   return rest as Omit<T, "confirm" | "dryRun">;
 }

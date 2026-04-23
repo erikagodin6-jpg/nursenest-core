@@ -267,7 +267,12 @@ export function AdminBlogGenerateClient() {
           );
           return;
         }
-        if (json.code === "ADMIN_AI_DISABLED" || json.code === "ADMIN_AI_MISCONFIGURED") {
+        if (
+          json.code === "ADMIN_AI_DISABLED" ||
+          json.code === "ADMIN_AI_MISCONFIGURED" ||
+          res.status === 403 ||
+          res.status === 503
+        ) {
           setErr(formatAdminBlogGenerateAiBlockedError(json));
           return;
         }

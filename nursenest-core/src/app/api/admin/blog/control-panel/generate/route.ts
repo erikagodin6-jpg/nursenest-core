@@ -169,6 +169,7 @@ export async function POST(req: Request) {
         message: pipelineResult.error,
         createdById: gate.admin.userId,
       });
+      const status = pipelineResult.code === "PLAN_LONGFORM_CONTRACT" ? 422 : 502;
       return NextResponse.json(
         {
           error: "plan_generation_failed",
@@ -176,7 +177,7 @@ export async function POST(req: Request) {
           message: pipelineResult.error,
           details: pipelineResult.details ?? null,
         },
-        { status: 502 },
+        { status },
       );
     }
     if (pipelineResult.stage === "body") {
@@ -187,16 +188,17 @@ export async function POST(req: Request) {
         createdById: gate.admin.userId,
         metadata: { hasPlan: Boolean(pipelineResult.plan) },
       });
+      const bodyStatus = pipelineResult.code === "BODY_LONGFORM_ENFORCEMENT" ? 422 : 502;
       return NextResponse.json(
         {
           error: "body_generation_failed",
-          code: "body_generation_failed",
+          code: pipelineResult.code ?? "body_generation_failed",
           message: pipelineResult.error,
           details: pipelineResult.details ?? null,
           plan: pipelineResult.plan,
           hint: "Plan may be usable; retry body from the control panel.",
         },
-        { status: 502 },
+        { status: bodyStatus },
       );
     }
     if (pipelineResult.stage === "citations") {
