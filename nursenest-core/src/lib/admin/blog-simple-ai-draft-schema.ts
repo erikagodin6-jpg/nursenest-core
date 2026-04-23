@@ -25,8 +25,35 @@ export const blogSimpleAiDraftBodySchema = z.object({
       title: z.string().optional(),
       source: z.string().optional(),
       publisher: z.string().optional(),
-      /** Empty string is common from hand-edited JSON; treat like “no URL” instead of failing `url()`. */
-      url: z.union([z.string().url(), z.literal("")]).optional().transform((v) => (v === "" ? undefined : v)),
+      /**
+       * Hand-pasted JSON often has placeholders or partial URLs; strict `z.string().url()` surfaces as
+       * opaque validation errors in admin. Accept empty/omit, otherwise require a parseable http(s) URL.
+       */
+      url: z
+        .preprocess((v) => {
+          if (v === undefined || v === null) return undefined;
+          if (typeof v !== "string") return undefined;
+          const t = v.trim();
+          return t === "" ? undefined : t;
+        }, z.union([z.undefined(), z.string().max(2048)]))
+        .superRefine((val, ctx) => {
+          if (val === undefined) return;
+          try {
+            const u = new URL(val);
+            if (u.protocol !== "http:" && u.protocol !== "https:") {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Structured sources: each url must start with http:// or https:// (or omit url).",
+              });
+            }
+          } catch {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message:
+                "Structured sources: url must be a full valid link (e.g. https://cdc.gov/…) or remove the url field. Clear the JSON box if you are not using sources.",
+            });
+          }
+        }),
       doi: z.string().optional(),
       authority: z
         .enum([

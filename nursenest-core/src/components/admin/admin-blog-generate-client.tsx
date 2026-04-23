@@ -11,7 +11,11 @@ import {
   type BlogGenerateAiValidationFlatten,
 } from "@/lib/admin/blog-generate-ai-client-errors";
 import type { BlogAutomationSeoReadiness } from "@/lib/blog/blog-automation-engine";
-import { blogSlugCustomValidityMessage, liveNormalizeBlogSlugInputValue } from "@/lib/blog/blog-optional-slug";
+import {
+  blogSlugCustomValidityMessage,
+  cleanBlogSlugInput,
+  liveNormalizeBlogSlugInputValue,
+} from "@/lib/blog/blog-optional-slug";
 
 type GenerateAiJsonBody = {
   ok?: boolean;
@@ -165,11 +169,21 @@ export function AdminBlogGenerateClient() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (busy) return;
-    const parsedTopics = topicsBatch
+    const topicLines = topicsBatch
       .split(/\r?\n/)
       .map((s) => s.trim())
-      .filter(Boolean)
-      .slice(0, ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN);
+      .filter(Boolean);
+    const shortTopicLines = topicLines.filter((s) => s.length < 3);
+    if (enableBatch && shortTopicLines.length > 0) {
+      setErr(
+        `Each batch topic line must be at least 3 characters (API validation). Short line(s): ${shortTopicLines
+          .slice(0, 5)
+          .map((s) => JSON.stringify(s))
+          .join(", ")}${shortTopicLines.length > 5 ? "…" : ""}`,
+      );
+      return;
+    }
+    const parsedTopics = topicLines.slice(0, ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN);
     if (enableBatch && parsedTopics.length === 0) {
       setErr("Add at least one non-empty topic line for batch mode.");
       return;
@@ -179,13 +193,15 @@ export function AdminBlogGenerateClient() {
       return;
     }
     const slugNorm = slug.trim();
-    if (!enableBatch && slugNorm.length > 0) {
-      const cv = blogSlugCustomValidityMessage(slugNorm);
+    const slugCleaned = slugNorm.length > 0 ? cleanBlogSlugInput(slugNorm) : "";
+    if (!enableBatch && slugCleaned.length > 0) {
+      const cv = blogSlugCustomValidityMessage(slugCleaned);
       if (cv) {
         setErr(cv);
         return;
       }
     }
+    slugInputRef.current?.setCustomValidity("");
     let parsedSourceRecords: unknown = undefined;
     if (sourceRecordsJson.trim()) {
       try {
@@ -226,7 +242,8 @@ export function AdminBlogGenerateClient() {
           includeImage,
           includeAiImage,
           sourceRecords: parsedSourceRecords,
-          slug: slugNorm.length > 0 ? slugNorm : undefined,
+          // Batch runs one slug per generated post — never send a stale single-post slug from the disabled field.
+          slug: enableBatch ? undefined : slugCleaned.length > 0 ? slugCleaned : undefined,
           publishNow,
         }),
       });
@@ -307,7 +324,18 @@ export function AdminBlogGenerateClient() {
       </p>
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="flex items-center gap-2 text-sm sm:col-span-2">
-          <input type="checkbox" checked={enableBatch} onChange={(e) => setEnableBatch(e.target.checked)} />
+          <input
+            type="checkbox"
+            checked={enableBatch}
+            onChange={(e) => {
+              const on = e.target.checked;
+              setEnableBatch(on);
+              if (on) {
+                setSlug("");
+                slugInputRef.current?.setCustomValidity("");
+              }
+            }}
+          />
           Batch mode (up to {ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN} topics per run, one POST)
         </label>
         <label className="block space-y-1">
@@ -426,6 +454,9 @@ export function AdminBlogGenerateClient() {
           </span>
           <input
             ref={slugInputRef}
+            type="text"
+            inputMode="text"
+            autoComplete="off"
             className="w-full rounded-md border border-border px-3 py-2 font-mono text-sm"
             name="blog_optional_slug"
             value={slug}

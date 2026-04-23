@@ -31,7 +31,33 @@ describe("Practice test runner — CAT shell contract", () => {
     assert.equal(src.includes("AnswerOptionRow"), true);
   });
 
+  it("wires CAT + linear SATA rows through the same state helpers as single-select (no pre-reveal collapse)", () => {
+    const catStateMatches = src.match(/state=\{catOptState\(canonical\)\}/g) ?? [];
+    assert.equal(
+      catStateMatches.length,
+      2,
+      "CAT MCQ and CAT SATA must both pass catOptState(canonical) into AnswerOptionRow",
+    );
+    const linearStateMatches = src.match(/state=\{linearOptState\(canonical\)\}/g) ?? [];
+    assert.equal(
+      linearStateMatches.length,
+      2,
+      "Linear MCQ and linear SATA must both pass linearOptState(canonical) into AnswerOptionRow",
+    );
+  });
+
   it("does not reintroduce PracticeQuestionCard in the legacy branch", () => {
     assert.equal(src.includes("PracticeQuestionCard"), false);
+  });
+
+  it("keeps legacy + linear runner branches off the old split study grid (CAT study split stays earlier in file only)", () => {
+    const legacyStart = src.indexOf("if (!catMode && !isLinearEngine)");
+    const linearStart = src.indexOf("// LINEAR PRACTICE / EXAM");
+    assert.ok(legacyStart > 0 && linearStart > legacyStart, "expected legacy block before linear block");
+    const legacySlice = src.slice(legacyStart, linearStart);
+    assert.equal(legacySlice.includes("nn-question-session"), false);
+
+    const tailFromLinear = src.slice(linearStart);
+    assert.equal(tailFromLinear.includes("nn-question-session"), false);
   });
 });

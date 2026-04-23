@@ -5,6 +5,7 @@
 
 import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
 import { parseAdaptiveState } from "@/lib/exams/cat-engine";
+import { isValidPracticeTestTerminalResultsPayload } from "@/lib/practice-tests/cat-advance-contract";
 
 export type CatHydrateInvariantResult =
   | { ok: true }
@@ -13,7 +14,10 @@ export type CatHydrateInvariantResult =
       code:
         | "cat_in_progress_no_questions"
         | "cat_adaptive_state_corrupt"
-        | "cat_config_session_pick_salt_missing";
+        | "cat_config_session_pick_salt_missing"
+        | "cat_in_progress_cursor_invalid"
+        | "cat_completed_terminal_invalid"
+        | "linear_engine_in_progress_no_questions";
       message: string;
     };
 
@@ -30,7 +34,26 @@ export function assessCatPracticeHydrateInvariants(input: {
   questionIds: string[];
   adaptiveState?: unknown;
   config?: PracticeTestConfigJson | null;
+  /** Server cursor; when missing, callers should pass the same default they apply before rendering (usually 0). */
+  cursorIndex?: number;
+  /** Raw results from GET — used only to reject fake terminal COMPLETED payloads for CAT. */
+  results?: unknown;
 }): CatHydrateInvariantResult {
+  const cfg = input.config ?? null;
+  const cursor =
+    typeof input.cursorIndex === "number" && Number.isInteger(input.cursorIndex) ? input.cursorIndex : 0;
+
+  if (input.catMode && input.status === "COMPLETED") {
+    if (input.questionIds.length === 0 || !isValidPracticeTestTerminalResultsPayload(input.results)) {
+      return {
+        ok: false,
+        code: "cat_completed_terminal_invalid",
+        message:
+          "This adaptive session is marked complete but the score summary is missing or unreadable. We will not show results from this snapshot — return to Practice tests or retry load, or contact support.",
+      };
+    }
+  }
+
   if (input.catMode && input.status === "IN_PROGRESS" && input.questionIds.length === 0) {
     return {
       ok: false,
@@ -40,8 +63,30 @@ export function assessCatPracticeHydrateInvariants(input: {
     };
   }
 
+  if (
+    !input.catMode &&
+    cfg?.selectionMode !== "cat" &&
+    Boolean(cfg?.linearDeliveryMode) &&
+    input.status === "IN_PROGRESS" &&
+    input.questionIds.length === 0
+  ) {
+    return {
+      ok: false,
+      code: "linear_engine_in_progress_no_questions",
+      message:
+        "This linear exam session has no questions on load. Return to Practice tests and start a new session — we will not treat this as a finished exam.",
+    };
+  }
+
   if (input.catMode && input.status === "IN_PROGRESS" && input.questionIds.length > 0) {
-    const cfg = input.config ?? null;
+    if (cursor < 0 || cursor >= input.questionIds.length) {
+      return {
+        ok: false,
+        code: "cat_in_progress_cursor_invalid",
+        message:
+          "The server cursor does not match this adaptive session’s question list. Stay on this screen and retry load, or return to Practice tests — we will not guess which item is current.",
+      };
+    }
     if (!saltLooksValid(cfg?.sessionPickSalt)) {
       return {
         ok: false,

@@ -88,4 +88,70 @@ describe("assessCatPracticeHydrateInvariants", () => {
     });
     assert.equal(r.ok, true);
   });
+
+  it("rejects CAT completed with invalid results payload (no fake terminal)", () => {
+    const r = assessCatPracticeHydrateInvariants({
+      catMode: true,
+      status: "COMPLETED",
+      questionIds: ["q123456789012"],
+      adaptiveState: createInitialAdaptiveState(),
+      config: catCfg(),
+      results: { scoreCorrect: 0, scoreTotal: 0 },
+    });
+    assert.equal(r.ok, false);
+    if (!r.ok) assert.equal(r.code, "cat_completed_terminal_invalid");
+  });
+
+  it("rejects CAT completed with zero question ids even if results look populated", () => {
+    const r = assessCatPracticeHydrateInvariants({
+      catMode: true,
+      status: "COMPLETED",
+      questionIds: [],
+      adaptiveState: createInitialAdaptiveState(),
+      config: catCfg(),
+      results: {
+        scoreCorrect: 5,
+        scoreTotal: 10,
+        accuracyPct: 50,
+        byTopic: {},
+        weakAreas: [],
+      },
+    });
+    assert.equal(r.ok, false);
+    if (!r.ok) assert.equal(r.code, "cat_completed_terminal_invalid");
+  });
+
+  it("rejects CAT in progress when cursor is out of range", () => {
+    const r = assessCatPracticeHydrateInvariants({
+      catMode: true,
+      status: "IN_PROGRESS",
+      questionIds: ["q123456789012"],
+      adaptiveState: createInitialAdaptiveState(),
+      config: catCfg(),
+      cursorIndex: 3,
+    });
+    assert.equal(r.ok, false);
+    if (!r.ok) assert.equal(r.code, "cat_in_progress_cursor_invalid");
+  });
+
+  it("rejects linear engine in progress with zero question ids", () => {
+    const r = assessCatPracticeHydrateInvariants({
+      catMode: false,
+      status: "IN_PROGRESS",
+      questionIds: [],
+      config: {
+        questionCount: 10,
+        topicNames: [],
+        difficultyMin: null,
+        difficultyMax: null,
+        selectionMode: "random",
+        pathwayId: "us-rn-nclex-rn",
+        timedMode: false,
+        sessionPickSalt: validSalt,
+        linearDeliveryMode: "exam",
+      },
+    });
+    assert.equal(r.ok, false);
+    if (!r.ok) assert.equal(r.code, "linear_engine_in_progress_no_questions");
+  });
 });

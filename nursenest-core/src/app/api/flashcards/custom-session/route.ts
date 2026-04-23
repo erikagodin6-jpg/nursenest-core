@@ -1,11 +1,9 @@
 import { randomUUID } from "node:crypto";
-import { ContentStatus, type CountryCode, type Prisma, type TierCode } from "@prisma/client";
+import { ContentStatus, type Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
-import { prismaTierCodesForProfileTier } from "@/lib/entitlements/accessible-tiers";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
-import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
@@ -133,25 +131,9 @@ export async function GET(req: NextRequest) {
       take: 5000,
     });
 
-  let queryRelaxation: FlashcardCustomSessionQueryRelaxation = "none";
-  let cards = await fetchFlashcardRows(flashcardAccessWhere(entitlement, pathwayOpts));
-  const staffBypass = accessScopeIsStaffLearnerEntitlementBypass(entitlement);
-
-  if (cards.length === 0 && !staffBypass && pathwayOpts) {
-    cards = await fetchFlashcardRows(flashcardAccessWhere(entitlement, null));
-    if (cards.length > 0) queryRelaxation = "dropped_pathway_scope";
-  }
-  if (cards.length === 0 && !staffBypass) {
-    const country = entitlement.country as CountryCode | null;
-    const tier = entitlement.tier as TierCode | null;
-    if (country && tier) {
-      cards = await fetchFlashcardRows({
-        status: ContentStatus.PUBLISHED,
-        tier: { in: prismaTierCodesForProfileTier(tier) },
-      });
-      if (cards.length > 0) queryRelaxation = "dropped_country_match";
-    }
-  }
+  /** Strict scope only: no silent widening when pathway or entitlement filters yield zero rows. */
+  const queryRelaxation: FlashcardCustomSessionQueryRelaxation = "none";
+  const cards = await fetchFlashcardRows(flashcardAccessWhere(entitlement, pathwayOpts));
 
   const topicIdsForLog =
     selectedCategories.length > 0

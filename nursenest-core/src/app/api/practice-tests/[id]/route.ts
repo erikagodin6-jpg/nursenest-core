@@ -524,6 +524,21 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   }
 
   if (parsed.data.action === "complete") {
+    if (ids.length === 0) {
+      safeServerLog("cat_runner", "practice_test_complete_blocked_empty_session", {
+        event: "practice_test_complete_blocked_empty_session",
+        practiceTestId: id.slice(0, 16),
+        selectionMode: cfg.selectionMode,
+      });
+      return NextResponse.json(
+        {
+          error: "Cannot complete a session with no questions.",
+          code: "complete_no_questions",
+          retryable: false,
+        },
+        { status: 400 },
+      );
+    }
     const answeredForComplete = ids.filter((qid) => merged[qid] !== undefined).length;
     if (answeredForComplete === 0) {
       safeServerLog("cat_runner", "practice_test_complete_blocked_no_answers", {

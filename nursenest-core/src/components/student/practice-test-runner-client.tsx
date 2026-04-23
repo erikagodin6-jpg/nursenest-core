@@ -301,6 +301,8 @@ export function PracticeTestRunnerClient({
         questionIds: ids,
         adaptiveState: data.adaptiveState,
         config: data.config ?? null,
+        cursorIndex: typeof data.cursorIndex === "number" ? data.cursorIndex : 0,
+        results: data.results,
       });
       if (!hydrateInv.ok) {
         logSessionEvent("cat_hydrate_invariant_block", { code: hydrateInv.code });
@@ -1835,21 +1837,12 @@ export function PracticeTestRunnerClient({
         >
           {optsCanonical.map((canonical, i) => {
             const selected = mcqAnswerSelectsCanonical(raw, canonical);
-            const optState = catOptState(canonical);
             return (
               <li key={canonical}>
                 <AnswerOptionRow
                   letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
                   text={formatCatOptionText(i, canonical)}
-                  state={
-                    optionsInteractionLocked
-                      ? optState === "selected"
-                        ? "selected"
-                        : optState
-                      : selected
-                        ? "selected"
-                        : "default"
-                  }
+                  state={catOptState(canonical)}
                   disabled={optionsInteractionLocked}
                   isCheckbox
                   checked={selected}
@@ -2314,6 +2307,11 @@ export function PracticeTestRunnerClient({
   /**
    * Legacy linear sessions (no `linearDeliveryMode` on stored config): free navigation with the same
    * CAT exam board shell as linear engine runs (`QuestionCard` + detached footer).
+   *
+   * **Deprecation / migration:** Older rows omit `linearDeliveryMode`, `linearAllowReviewNavigation`,
+   * and linear-engine committed state in `adaptiveState`. Inferring exam vs tutor or review rules at
+   * read time risks wrong rationale exposure or navigation, so this branch remains until sessions are
+   * backfilled or naturally aged out; new launches should always persist the linear engine contract.
    */
   if (!catMode && !isLinearEngine) {
     function legacyCatOptState(canonical: string): AnswerOptionState {
@@ -2623,7 +2621,6 @@ export function PracticeTestRunnerClient({
       >
         {optsCanonical.map((canonical, i) => {
           const selected = mcqAnswerSelectsCanonical(raw, canonical);
-          const st = linearOptState(canonical);
           const rowText = linearIsExamShell
             ? stripRedundantMcqLetterPrefix(optsDisplay[i] ?? canonical)
             : optsDisplay[i] ?? canonical;
@@ -2632,15 +2629,7 @@ export function PracticeTestRunnerClient({
               <AnswerOptionRow
                 letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
                 text={rowText}
-                state={
-                  optionsInteractionLocked
-                    ? st === "selected"
-                      ? "selected"
-                      : st
-                    : selected
-                      ? "selected"
-                      : "default"
-                }
+                state={linearOptState(canonical)}
                 disabled={optionsInteractionLocked}
                 isCheckbox
                 checked={selected}

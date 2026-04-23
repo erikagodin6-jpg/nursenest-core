@@ -268,6 +268,44 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
   });
 });
 
+describe("PATCH /api/practice-tests/[id] complete empty session", () => {
+  it("rejects complete when the session has zero question ids", async () => {
+    mock.method(practiceTestRouteDeps, "requireSubscriberSession", async () => gate);
+    mock.method(practiceTestRouteDeps, "enforcePracticeTestMutationProtection", () => null);
+    mock.method(practiceTestRouteDeps, "setSentryServerContext", () => {});
+    mock.method(practiceTestRouteDeps, "parsePracticeTestConfigAtBoundary", () => ({
+      questionCount: 10,
+      topicNames: [],
+      difficultyMin: null,
+      difficultyMax: null,
+      selectionMode: "random" as const,
+      pathwayId: "us-rn-nclex-rn",
+      timedMode: false,
+      timeLimitSec: null,
+    }));
+    mock.method(practiceTestRouteDeps, "findPracticeTest", async () => ({
+      id: "test_12345678",
+      userId: gate.userId,
+      status: PracticeTestStatus.IN_PROGRESS,
+      questionIds: [],
+      answers: {},
+      cursorIndex: 0,
+      elapsedMs: null,
+      config: {},
+      adaptiveState: {},
+    }));
+
+    const res = await PATCH(
+      makeRequest({ action: "complete", answers: {}, cursorIndex: 0 }) as never,
+      { params: Promise.resolve({ id: "test_12345678" }) },
+    );
+    const data = (await res.json()) as { code?: string };
+
+    assert.equal(res.status, 400);
+    assert.equal(data.code, "complete_no_questions");
+  });
+});
+
 describe("PATCH /api/practice-tests/[id] cursor safety", () => {
   it("clamps out-of-range cursorIndex before persistence", async () => {
     const update = mock.fn(async () => ({}));

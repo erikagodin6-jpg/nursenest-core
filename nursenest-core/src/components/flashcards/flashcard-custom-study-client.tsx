@@ -107,8 +107,13 @@ export function FlashcardCustomStudyClient() {
           params.set("cardLimit", "500");
         }
         const res = await fetch(`/api/flashcards/custom-session?${params.toString()}`, { credentials: "include" });
-        const json = (await res.json()) as SessionPayload & { error?: string };
-        if (!res.ok) throw new Error(json.error ?? "Unable to load custom session");
+        const json = (await res.json()) as SessionPayload & { error?: string; code?: string };
+        if (!res.ok) {
+          const detail =
+            typeof json.code === "string" && json.code.length > 0 ? `${json.error ?? "Request failed"} (${json.code})` : (json.error ?? "Unable to load custom session");
+          throw new Error(detail);
+        }
+        if (json.ok === false) throw new Error(json.error ?? "Unable to load custom session");
         if (active) setPayload(json);
       } catch (e) {
         if (active) setError(e instanceof Error ? e.message : "Unable to load custom session");
@@ -193,6 +198,19 @@ export function FlashcardCustomStudyClient() {
       </div>
 
       {reviewError ? <p className="mb-3 text-sm text-[var(--semantic-danger)]">{reviewError}</p> : null}
+
+      {payload.summary.matchingCards === 0 && activeCards.length === 0 ? (
+        <div
+          role="status"
+          className="mb-6 rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,var(--semantic-surface))] p-6 text-sm text-[var(--semantic-text-secondary)]"
+        >
+          <p className="m-0 font-semibold text-[var(--semantic-text-primary)]">No cards in this session</p>
+          <p className="mt-2">
+            Your filters and pathway scope returned zero matching flashcards. This is a valid empty result — widen
+            categories, adjust filters, or return to the builder.
+          </p>
+        </div>
+      ) : null}
 
       <ExamSessionShell neutralPalette immersive className="overflow-visible shadow-md">
         <ActiveStudySession
