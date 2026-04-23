@@ -1,0 +1,144 @@
+#!/usr/bin/env npx tsx
+/**
+ * Promote control-panel AI drafts to PUBLISHED when they pass the same pre-publish checks as the live generator.
+ *
+ * Default: dry-run (prints only). With `--apply`, updates rows that pass validation.
+ *
+ * Criteria (strict):
+ * - `postStatus` is DRAFT
+ * - `adminPublishLog` contains `draft_created` + message mentioning "control panel" (same seed as control panel pipeline)
+ *
+ * Usage (from nursenest-core/):
+ *   npx tsx scripts/blog/blog-promote-control-panel-drafts.mts --limit 50
+ *   npx tsx scripts/blog/blog-promote-control-panel-drafts.mts --limit 20 --apply
+ */
+import { BlogPostStatus, BlogWorkflowStatus, PrismaClient } from "@prisma/client";
+
+import "../../src/lib/db/env-bootstrap";
+import { appendBlogAdminPublishLog } from "../../src/lib/blog/blog-admin-publish-log";
+import {
+  blogPrePublishValidationSelect,
+  validateBlogPrePublish,
+} from "../../src/lib/blog/blog-pre-publish-validation";
+
+function isControlPanelAiDraftLog(adminPublishLog: unknown): boolean {
+  if (!Array.isArray(adminPublishLog)) return false;
+  for (const e of adminPublishLog) {
+    if (!e || typeof e !== "object") continue;
+    const r = e as Record<string, unknown>;
+    if (r.event === "draft_created" && typeof r.message === "string" && r.message.includes("control panel")) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function parseArgs(argv: string[]): { limit: number; apply: boolean } {
+  let limit = 50;
+  let apply = false;
+  for (let i = 2; i < argv.length; i++) {
+    if (argv[i] === "--limit" && argv[i + 1]) {
+      limit = Math.max(1, Math.min(500, parseInt(argv[i + 1]!, 10) || 50));
+      i++;
+    } else if (argv[i] === "--apply") {
+      apply = true;
+    }
+  }
+  return { limit, apply };
+}
+
+async function main(): Promise<void> {
+  const { limit, apply } = parseArgs(process.argv);
+
+  if (!process.env.DATABASE_URL?.trim()) {
+    console.error("DATABASE_URL is not set.");
+    process.exit(1);
+  }
+
+  const prisma = new PrismaClient();
+
+  try {
+    const candidates = await prisma.blogPost.findMany({
+      where: { postStatus: BlogPostStatus.DRAFT },
+      orderBy: { createdAt: "desc" },
+      take: 2000,
+      select: { id: true, slug: true, title: true, adminPublishLog: true, postStatus: true },
+    });
+
+    const filtered = candidates.filter((c) => isControlPanelAiDraftLog(c.adminPublishLog)).slice(0, limit);
+
+    console.log(
+      JSON.stringify(
+        {
+          mode: apply ? "apply" : "dry-run",
+          scannedDrafts: candidates.length,
+          candidateCap: limit,
+          candidates: filtered.map((c) => ({ id: c.id, slug: c.slug, title: c.title.slice(0, 100) })),
+        },
+        null,
+        2,
+      ),
+    );
+
+    const results: { id: string; slug: string; action: "would_publish" | "published" | "skipped"; reason?: string }[] = [];
+
+    for (const c of filtered) {
+      const row = await prisma.blogPost.findUnique({
+        where: { id: c.id },
+        select: blogPrePublishValidationSelect,
+      });
+      if (!row) {
+        results.push({ id: c.id, slug: c.slug, action: "skipped", reason: "row_missing" });
+        continue;
+      }
+      const pre = await validateBlogPrePublish(row, c.id);
+      if (!pre.okToPublish) {
+        results.push({
+          id: c.id,
+          slug: c.slug,
+          action: "skipped",
+          reason: `pre_publish: ${pre.blocking.map((b) => b.message).join("; ")}`,
+        });
+        continue;
+      }
+
+      if (!apply) {
+        results.push({ id: c.id, slug: c.slug, action: "would_publish" });
+        continue;
+      }
+
+      const publishedNow = new Date();
+      const logRow = await prisma.blogPost.findUnique({
+        where: { id: c.id },
+        select: { adminPublishLog: true },
+      });
+      await prisma.blogPost.update({
+        where: { id: c.id },
+        data: {
+          postStatus: BlogPostStatus.PUBLISHED,
+          publishAt: publishedNow,
+          workflowStatus: BlogWorkflowStatus.PUBLISHED,
+          adminPublishLog: appendBlogAdminPublishLog(logRow?.adminPublishLog, {
+            level: "info",
+            event: "published_backfill_script",
+            message: "Promoted from DRAFT via blog-promote-control-panel-drafts.mts (pre-publish passed).",
+            detail: { publishAt: publishedNow.toISOString() },
+          }),
+        },
+      });
+      results.push({ id: c.id, slug: c.slug, action: "published" });
+    }
+
+    console.log(JSON.stringify({ results }, null, 2));
+    if (!apply) {
+      console.log("\nDry-run only. Re-run with --apply to perform updates.");
+    }
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

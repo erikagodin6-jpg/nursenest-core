@@ -113,9 +113,11 @@ export async function getPublishedBlogPostsPage(
     return blogIndexPostsFromStaticCorpusOnly(safePage, safeSize);
   }
   const includeTotal = options?.includeTotal !== false;
+  const now = new Date();
+  /** Align with tag list / sitemap / {@link blogPostIsLive} — include due SCHEDULED rows, not only PUBLISHED. */
   const where = {
     AND: [
-      { postStatus: BlogPostStatus.PUBLISHED },
+      blogLiveWhere(now),
       scope?.locale ? { locale: scope.locale } : {},
       scope?.careerSlug ? { careerSlug: scope.careerSlug } : {},
       scope?.exam ? { exam: scope.exam } : {},
@@ -147,7 +149,7 @@ export async function getPublishedBlogPostsPage(
     const sourceLocale = scope.sourceLocale ?? "en";
     const sourceWhere = {
       AND: [
-        { postStatus: BlogPostStatus.PUBLISHED },
+        blogLiveWhere(now),
         { locale: sourceLocale },
         scope.careerSlug ? { careerSlug: scope.careerSlug } : {},
         scope.exam ? { exam: scope.exam } : {},

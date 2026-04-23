@@ -86,6 +86,7 @@ export function AdminBlogStudioClient() {
   const fixedSlugInputRef = useRef<HTMLInputElement | null>(null);
   const [sourceRecordsJson, setSourceRecordsJson] = useState("[]");
   const [allowInsufficientCitations, setAllowInsufficientCitations] = useState(false);
+  const [publishToLiveBlog, setPublishToLiveBlog] = useState(true);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<string[]>([]);
@@ -142,14 +143,18 @@ export function AdminBlogStudioClient() {
           fixedSlug: fixedSlug.trim() || undefined,
           sourceRecords,
           allowInsufficientCitations: allowInsufficientCitations || undefined,
+          publishImmediately: publishToLiveBlog,
         }),
       });
       const json = (await res.json()) as {
         ok?: boolean;
         error?: string;
         message?: string;
+        code?: string;
         plan?: BlogControlPanelPlan;
+        bodyHtml?: string;
         post?: PostPayload;
+        draftPost?: { id: string } | null;
         warnings?: string[];
         hint?: string;
         existingSlug?: string;
@@ -158,8 +163,28 @@ export function AdminBlogStudioClient() {
         setErr(json.hint ?? `Duplicate topic — see ${json.existingSlug ?? "existing post"}.`);
         return;
       }
-      if (res.status === 422) {
+      if (res.status === 422 && (json.error === "insufficient_citations" || json.code === "INSUFFICIENT_CITATIONS")) {
         setErr(json.message ?? json.error ?? "Citation gate blocked save. Add verified sources or allow override.");
+        if (json.plan) setPlan(json.plan);
+        return;
+      }
+      if (res.status === 422 && (json.error === "pre_publish_blocked" || json.code === "PRE_PUBLISH_BLOCKED")) {
+        const draftId = json.draftPost?.id;
+        if (draftId) {
+          const g = await fetch(`/api/admin/blog/${draftId}`, { method: "GET", credentials: "include", cache: "no-store" });
+          const gj = (await g.json()) as { post?: PostPayload };
+          if (g.ok && gj.post) setPost(gj.post);
+        }
+        if (json.plan) setPlan(json.plan);
+        setErr(
+          json.hint ??
+            json.message ??
+            "Pre-publish blocked: draft saved. Fix issues in the editor and publish from the post, or disable “Publish to live blog”.",
+        );
+        return;
+      }
+      if (res.status === 422) {
+        setErr(json.message ?? json.error ?? "Request blocked (422). Check plan or citations.");
         if (json.plan) setPlan(json.plan);
         return;
       }
@@ -491,6 +516,10 @@ export function AdminBlogStudioClient() {
           <input type="checkbox" checked={allowInsufficientCitations} onChange={(e) => setAllowInsufficientCitations(e.target.checked)} />
           Allow save without verified citations (high-risk topics — not recommended)
         </label>
+        <label className="flex items-center gap-2 text-sm lg:col-span-2">
+          <input type="checkbox" checked={publishToLiveBlog} onChange={(e) => setPublishToLiveBlog(e.target.checked)} />
+          Publish to live blog after generation (pre-publish checks; off = draft only)
+        </label>
         <div className="lg:col-span-2">
           <button
             type="submit"
@@ -498,7 +527,7 @@ export function AdminBlogStudioClient() {
             disabled={busy || !aiGate.runnable}
             className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
           >
-            {busy ? "Generating…" : "Generate article package"}
+            {busy ? "Generating…" : publishToLiveBlog ? "Generate and publish to /blog" : "Generate draft only"}
           </button>
         </div>
         {err ? <p className="lg:col-span-2 text-sm text-rose-700">{err}</p> : null}

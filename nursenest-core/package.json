@@ -75,6 +75,8 @@
     "blog:materialize-china-korea-content": "tsx scripts/blog/materialize-china-korea-blog-content.mts",
     "blog:validate-china-korea-content": "tsx scripts/blog/validate-china-korea-blog-content.mts",
     "blog:validate-regional-manifests": "tsx scripts/blog/validate-regional-blog-manifests.mts",
+    "blog:visibility-diagnostics": "tsx scripts/blog/blog-visibility-diagnostics.mts",
+    "blog:promote-control-panel-drafts": "tsx scripts/blog/blog-promote-control-panel-drafts.mts",
     "blog:manifest-japan-200": "tsx scripts/blog/generate-japan-nursing-manifest.mts",
     "blog:manifest-germany-200": "tsx scripts/blog/generate-germany-nursing-manifest.mts",
     "blog:manifest-france-200": "tsx scripts/blog/generate-france-nursing-manifest.mts",

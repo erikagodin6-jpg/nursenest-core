@@ -46,7 +46,12 @@ import {
   buildStructuredPlanUserPrompt,
 } from "@/lib/blog/blog-article-pipeline-prompts";
 import type { BlogImageSlotAttachment } from "@/lib/blog/blog-image-workflow";
-import { seedBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
+import { appendBlogAdminPublishLog, seedBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
+import {
+  blogPrePublishValidationSelect,
+  validateBlogPrePublish,
+  type PrePublishValidationResult,
+} from "@/lib/blog/blog-pre-publish-validation";
 import { findRelatedPublishedBlogPosts } from "@/lib/blog/blog-related-published-posts";
 import {
   isLongFormPathophysiologyProfile,
@@ -87,6 +92,12 @@ export type ControlPanelGenerateInput = {
    * Default false: {@link evaluateCitationGate} blocks persist.
    */
   allowInsufficientCitations?: boolean;
+  /**
+   * When true, after the draft transaction commits, load the row and run {@link validateBlogPrePublish};
+   * on success set `PUBLISHED`, `publishAt` now, and `workflowStatus` published.
+   * On validation failure the draft row remains `DRAFT` and the API returns `PRE_PUBLISH_BLOCKED` (422).
+   */
+  publishImmediately?: boolean;
 };
 
 /** Thrown when the structured editorial plan cannot be parsed or validated (with machine codes for clients). */
@@ -272,7 +283,15 @@ export type ControlPanelPersistResult =
       normalizedTopic?: string;
       slug?: string;
     }
-  | { ok: false; error: string; code?: "INSUFFICIENT_CITATIONS"; riskFlags?: string[] };
+  | {
+      ok: false;
+      error: string;
+      code?: "INSUFFICIENT_CITATIONS" | "PRE_PUBLISH_BLOCKED";
+      riskFlags?: string[];
+      prePublish?: PrePublishValidationResult;
+      /** Present when `PRE_PUBLISH_BLOCKED`: draft row was committed; publish step skipped. */
+      post?: { id: string; slug: string; title: string; postStatus: BlogPostStatus; updatedAt: Date };
+    };
 
 export async function persistControlPanelDraft(
   input: ControlPanelGenerateInput,
@@ -563,7 +582,14 @@ export async function persistControlPanelDraft(
         data: { internalLinkPlan: enrichedPlan as unknown as Prisma.InputJsonValue },
       });
 
-      return created;
+      const out = await tx.blogPost.findUnique({
+        where: { id: created.id },
+        select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
+      });
+      if (!out) {
+        throw new Error("persist_missing_row_after_commit");
+      }
+      return out;
     });
 
     const warnings = [
@@ -583,6 +609,53 @@ export async function persistControlPanelDraft(
         : []),
       ...(thinWarning ? [thinWarning] : []),
     ];
+
+    if (input.publishImmediately) {
+      const forPre = await prisma.blogPost.findUnique({
+        where: { id: post.id },
+        select: blogPrePublishValidationSelect,
+      });
+      if (!forPre) {
+        return { ok: false, error: "Post row missing for immediate publish validation" };
+      }
+      const pre = await validateBlogPrePublish(forPre, post.id);
+      if (!pre.okToPublish) {
+        return {
+          ok: false,
+          code: "PRE_PUBLISH_BLOCKED",
+          error: pre.blocking.map((b) => b.message).join("; "),
+          prePublish: pre,
+          post,
+        };
+      }
+      const publishedNow = new Date();
+      const logRow = await prisma.blogPost.findUnique({
+        where: { id: post.id },
+        select: { adminPublishLog: true },
+      });
+      await prisma.blogPost.update({
+        where: { id: post.id },
+        data: {
+          postStatus: BlogPostStatus.PUBLISHED,
+          publishAt: publishedNow,
+          workflowStatus: BlogWorkflowStatus.PUBLISHED,
+          adminPublishLog: appendBlogAdminPublishLog(logRow?.adminPublishLog, {
+            level: "info",
+            event: "published_immediate_control_panel",
+            message: "Published immediately after generation (pre-publish checks passed).",
+            detail: { publishAt: publishedNow.toISOString() },
+          }),
+        },
+      });
+      const published = await prisma.blogPost.findUnique({
+        where: { id: post.id },
+        select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
+      });
+      if (!published) {
+        return { ok: false, error: "Post missing after immediate publish update" };
+      }
+      return { ok: true, skipped: false, post: published, plan, warnings };
+    }
 
     return { ok: true, skipped: false, post, plan, warnings };
   } catch (e) {

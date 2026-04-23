@@ -148,6 +148,13 @@ export function normalizeBlogControlPanelGenerateRequestBody(raw: unknown):
       o.allowInsufficientCitations = o.allowInsufficientCitations !== 0;
     }
   }
+  if (o.publishImmediately !== undefined && typeof o.publishImmediately !== "boolean") {
+    if (o.publishImmediately === "true" || o.publishImmediately === 1) o.publishImmediately = true;
+    else if (o.publishImmediately === "false" || o.publishImmediately === 0) o.publishImmediately = false;
+    else if (typeof o.publishImmediately === "string") {
+      o.publishImmediately = o.publishImmediately.toLowerCase() === "true";
+    }
+  }
 
   if (o.sourceRecords !== undefined) {
     if (!Array.isArray(o.sourceRecords)) {

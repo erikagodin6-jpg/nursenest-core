@@ -6,7 +6,7 @@
  *    audience titles, H1, slug, SEO title & meta, excerpt, outline, internal link ideas, internal anchor opportunities,
  *    FAQs, breadcrumbs, schema opportunities, image prompts/placements, APA stubs, key takeaways.
  * 2. **Long-form body** — Second completion: HTML only (H2+), pathway/country-aware, anti-filler rules. For the long-form profile, {@link enforceLongFormBodyQuality} then checks outline H2 coverage, main-body word depth before FAQ, embedded `recommendedInternalLinks`, FAQ/total balance, and breadcrumb href sanity (errors block persist; flags merge into `plan.needsReviewFlags`).
- * 3. **Persist (optional)** — {@link persistControlPanelDraft} writes a `DRAFT` {@link BlogPost} for later editing (PATCH) and publish.
+ * 3. **Persist (optional)** — {@link persistControlPanelDraft} writes a `BlogPost` (default `DRAFT`; with `publishImmediately`, promotes to `PUBLISHED` when pre-publish validation passes).
  * 4. **Publishing package (same transaction)** — After insert, refreshes `internalLinkPlan.publishingPackage.relatedBlogPosts`
  *    from **live** posts (tag overlap) so related links stay current; anchor opportunities come from the plan JSON.
  *
@@ -34,7 +34,7 @@
  * | APA 7 lines | `apaReferences` (string[]), `sourcesJson` |
  * | Alternate titles | `titleAlternates` |
  * | Pathway / country | `exam`, `countryTarget`, `targetKeyword`, `keywordCluster` |
- * | Editorial state | `workflowStatus`, `postStatus` (DRAFT), `medicalRiskFlags`, etc. |
+ * | Editorial state | `workflowStatus`, `postStatus` (usually DRAFT until publish / immediate publish), `medicalRiskFlags`, etc. |
  *
  * Editing: admin `PATCH /api/admin/blog/[id]` and control panel UI update these fields without re-running the pipeline.
  */
@@ -204,6 +204,20 @@ export async function runBlogArticleGenerationPipeline(
           bodyHtml,
           code: persistResult.code,
           riskFlags: persistResult.riskFlags,
+        };
+      }
+      if (persistResult.code === "PRE_PUBLISH_BLOCKED") {
+        return {
+          ok: false,
+          stage: "persist",
+          error: persistResult.error,
+          plan,
+          bodyHtml,
+          code: persistResult.code,
+          details: {
+            prePublish: persistResult.prePublish ?? null,
+            draftPost: persistResult.post ?? null,
+          },
         };
       }
       return { ok: false, stage: "persist", error: persistResult.error, plan, bodyHtml };

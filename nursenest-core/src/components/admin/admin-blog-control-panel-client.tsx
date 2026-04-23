@@ -261,6 +261,8 @@ export function AdminBlogControlPanelClient({
   const slugDraftInputRef = useRef<HTMLInputElement | null>(null);
   const [sourceRecordsJsonText, setSourceRecordsJsonText] = useState("[]\n");
   const [allowInsufficientCitations, setAllowInsufficientCitations] = useState(false);
+  /** When true, API runs pre-publish validation after save and sets PUBLISHED so `/blog` lists the post. */
+  const [publishToLiveBlog, setPublishToLiveBlog] = useState(true);
   const [citationRecoveryMode, setCitationRecoveryMode] = useState(false);
 
   const [genState, setGenState] = useState<GenState>("idle");
@@ -486,6 +488,7 @@ export function AdminBlogControlPanelClient({
           fixedSlug: fixedSlug.trim() || undefined,
           sourceRecords: recordsCheck.length ? recordsCheck : undefined,
           allowInsufficientCitations: allowInsufficientCitations || undefined,
+          publishImmediately: publishToLiveBlog,
         }),
       });
       let json: {
@@ -498,6 +501,7 @@ export function AdminBlogControlPanelClient({
         bodyHtml?: string;
         post?: AdminPostPayload | null;
         postId?: string;
+        draftPost?: { id: string; slug?: string } | null;
         warnings?: string[];
         skipped?: boolean;
         reason?: string;
@@ -543,6 +547,39 @@ export function AdminBlogControlPanelClient({
           formatAdminApiError(
             json,
             `${json.message ?? "Citation support insufficient for this topic."}${flagStr} Add verified sources (HTTPS URL or valid DOI + title + year) or use “Allow save without verified citations”, then Persist draft.`,
+          ),
+        );
+        return;
+      }
+
+      if (res.status === 422 && (json.error === "pre_publish_blocked" || json.code === "PRE_PUBLISH_BLOCKED")) {
+        setGenState("failed");
+        if (json.plan) {
+          setPlan(json.plan);
+          setImageAttachments((prev) => mergeAttachmentRowsForPlan(json.plan!, prev));
+        }
+        if (typeof json.bodyHtml === "string") {
+          setBody(json.bodyHtml);
+          const plain = json.bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);
+          setExcerpt(plain.length >= 10 ? plain : "");
+        }
+        const draftId =
+          json.draftPost && typeof json.draftPost === "object" && "id" in json.draftPost
+            ? String((json.draftPost as { id: unknown }).id)
+            : null;
+        if (draftId) {
+          const g = await fetch(`/api/admin/blog/${draftId}`, ADMIN_BLOG_COOKIE_FETCH);
+          const gj = (await g.json()) as { post?: AdminPostPayload };
+          if (g.ok && gj.post) {
+            hydrateFromPost(gj.post);
+            if (json.plan) setPlan(json.plan);
+          }
+        }
+        setGenError(
+          formatAdminApiError(
+            json,
+            json.hint ??
+              `${json.message ?? "Pre-publish checks blocked going live."} Draft is saved — fix issues and use Publish now, or turn off “Publish to live blog” to keep drafts only.`,
           ),
         );
         return;
@@ -1448,6 +1485,15 @@ export function AdminBlogControlPanelClient({
             />
             Allow save without verified citations on high-sensitivity topics (use only when intentionally editorial)
           </label>
+          <label className="flex items-center gap-2 text-sm sm:col-span-2">
+            <input
+              type="checkbox"
+              checked={publishToLiveBlog}
+              onChange={(e) => setPublishToLiveBlog(e.target.checked)}
+              disabled={formDisabled}
+            />
+            Publish to live blog after generation (runs pre-publish checks; uncheck to save draft only)
+          </label>
         </div>
         <button
           type="submit"
@@ -1455,7 +1501,11 @@ export function AdminBlogControlPanelClient({
           disabled={formDisabled}
           className="rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
         >
-          {genState === "generating" ? "Running plan + article…" : "Generate publish-ready draft"}
+          {genState === "generating"
+            ? "Running plan + article…"
+            : publishToLiveBlog
+              ? "Generate and publish to /blog"
+              : "Generate draft only"}
         </button>
         {genError ? <p className="text-sm text-rose-700 dark:text-rose-300">{genError}</p> : null}
       </form>

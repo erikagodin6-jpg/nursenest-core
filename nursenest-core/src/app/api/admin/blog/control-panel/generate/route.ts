@@ -1,4 +1,4 @@
-import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
+import { BlogFunnelStage, BlogPostIntent, BlogPostStatus, BlogPostTemplate } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
@@ -15,6 +15,7 @@ import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
 import { normalizeBlogControlPanelGenerateRequestBody } from "@/lib/blog/blog-admin-control-panel-generate-body";
 import { prisma } from "@/lib/db";
+import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const bodySchema = z.object({
@@ -32,6 +33,8 @@ const bodySchema = z.object({
   includeAiImage: z.boolean().optional(),
   sourceRecords: z.array(z.unknown()).max(30).optional(),
   allowInsufficientCitations: z.boolean().optional(),
+  /** When true (recommended from control panel), run pre-publish validation after save and set PUBLISHED so `/blog` lists the post. */
+  publishImmediately: z.boolean().optional(),
   fixedSlug: z.preprocess(
     (v) => (typeof v === "string" && v.trim() === "" ? undefined : v),
     z.string().max(500).optional(),
@@ -39,7 +42,8 @@ const bodySchema = z.object({
 });
 
 /**
- * Full control-panel pipeline: structured editorial JSON plan → HTML article → persisted DRAFT BlogPost.
+ * Full control-panel pipeline: structured editorial JSON plan → HTML article → persisted `BlogPost`.
+ * When `publishImmediately` is true and pre-publish checks pass, the row is set live for `/blog`.
  */
 export async function POST(req: Request) {
   const gate = await requireAdmin(req);
@@ -158,6 +162,7 @@ export async function POST(req: Request) {
     sourceRecordsJson: d.sourceRecords?.length ? coerceBlogSourceRows(d.sourceRecords) : undefined,
     fixedSlug: d.fixedSlug,
     allowInsufficientCitations: d.allowInsufficientCitations,
+    publishImmediately: d.publishImmediately === true,
   };
 
   const pipelineResult = await runBlogArticleGenerationPipeline(input, { persist: true });
@@ -219,6 +224,34 @@ export async function POST(req: Request) {
           plan: pipelineResult.plan,
           bodyHtml: pipelineResult.bodyHtml,
           hint: "Add admin-verified source JSON (HTTPS URL or valid DOI + title + year) and use Persist draft, or enable override in the control panel.",
+        },
+        { status: 422 },
+      );
+    }
+    if (pipelineResult.stage === "persist" && pipelineResult.code === "PRE_PUBLISH_BLOCKED") {
+      await logControlPanelPipelineFailure({
+        topic: d.topic,
+        stage: "persist",
+        message: pipelineResult.error,
+        createdById: gate.admin.userId,
+        metadata: { code: "PRE_PUBLISH_BLOCKED" },
+      });
+      return NextResponse.json(
+        {
+          error: "pre_publish_blocked",
+          code: "PRE_PUBLISH_BLOCKED",
+          message: pipelineResult.error,
+          details: pipelineResult.details ?? null,
+          draftPost:
+            pipelineResult.details &&
+            typeof pipelineResult.details === "object" &&
+            pipelineResult.details !== null &&
+            "draftPost" in pipelineResult.details
+              ? (pipelineResult.details as { draftPost?: unknown }).draftPost
+              : null,
+          plan: pipelineResult.plan,
+          bodyHtml: pipelineResult.bodyHtml,
+          hint: "Draft was saved. Fix blocking issues in the admin editor, then publish from the post detail — or disable “Publish to live blog” to keep drafts only.",
         },
         { status: 422 },
       );
@@ -285,6 +318,17 @@ export async function POST(req: Request) {
     plan: pipelineResult.plan,
     createdById: gate.admin.userId,
   });
+
+  if (result.post.postStatus === BlogPostStatus.PUBLISHED) {
+    try {
+      revalidateBlogPublishingSurfaces();
+    } catch (e) {
+      safeServerLog("admin", "blog_control_panel_generate_revalidate_failed", {
+        message: e instanceof Error ? e.message : String(e),
+        slug: result.post.slug,
+      });
+    }
+  }
 
   const full = await prisma.blogPost.findUnique({
     where: { id: result.post.id },
