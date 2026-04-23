@@ -3,17 +3,10 @@
 import { ArrowRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, type ReactNode } from "react";
-import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
+import { useIsMobile } from "@/lib/ui/use-is-mobile";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
-import { HomeSampleQuestionPreview } from "@/components/marketing/home-sample-question-preview";
-import { HomeGlobalRegionsSection } from "@/components/marketing/home-global-regions-section";
-import { HomeTrustFearsSection } from "@/components/marketing/home-trust-fears-section";
 import { HomeTrustStripSection } from "@/components/marketing/home-trust-strip-section";
-import { HomeHowItWorksSection } from "@/components/marketing/home-how-it-works-section";
-import { HomePlatformPreviewSection } from "@/components/marketing/home-platform-preview-section";
-import { HomeTrustProofSection } from "@/components/marketing/home-trust-proof-section";
-import { HomeObjectionFaqSection } from "@/components/marketing/home-objection-faq-section";
 import { HomeFinalStudyCta } from "@/components/marketing/home-final-study-cta";
 import { FunnelHomepageViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -24,22 +17,87 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
 
-const HomeHeroScreenshotSection = dynamic(
+/** Desktop-only: avoids loading below-the-fold homepage chunks on narrow viewports. */
+const HomeHeroScreenshotSectionLazy = dynamic(
   () => import("@/components/marketing/home-hero-screenshot-section").then((m) => m.HomeHeroScreenshotSection),
   {
+    ssr: false,
     loading: () => (
       <div
         className="border-b border-[var(--header-nav-border)] bg-[var(--page-bg)] pt-[var(--nn-rhythm-mobile-section-y)] md:pt-[var(--nn-rhythm-shell-y)]"
         aria-hidden
       >
         <div className="nn-section-shell pb-[var(--nn-rhythm-shell-y)]">
-          {/* Reserve the compact 4:3 product-card footprint to avoid CLS while the chunk loads. */}
           <div className="mx-auto aspect-[4/3] w-full max-w-2xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--semantic-panel-muted)]" />
         </div>
       </div>
     ),
   },
 );
+
+const HomeHowItWorksSectionLazy = dynamic(
+  () => import("@/components/marketing/home-how-it-works-section").then((m) => m.HomeHowItWorksSection),
+  { ssr: false, loading: () => <HomeMobileHeavyLoadingReserve minHeight="18rem" /> },
+);
+
+const HomeSampleQuestionPreviewLazy = dynamic(
+  () => import("@/components/marketing/home-sample-question-preview").then((m) => m.HomeSampleQuestionPreview),
+  { ssr: false, loading: () => <HomeMobileHeavyLoadingReserve minHeight="16rem" /> },
+);
+
+const HomeGlobalRegionsSectionLazy = dynamic(
+  () => import("@/components/marketing/home-global-regions-section").then((m) => m.HomeGlobalRegionsSection),
+  { ssr: false, loading: () => <HomeMobileHeavyLoadingReserve minHeight="20rem" /> },
+);
+
+const HomeTrustFearsSectionLazy = dynamic(
+  () => import("@/components/marketing/home-trust-fears-section").then((m) => m.HomeTrustFearsSection),
+  { ssr: false, loading: () => <HomeMobileHeavyLoadingReserve minHeight="14rem" /> },
+);
+
+const HomePlatformPreviewSectionLazy = dynamic(
+  () => import("@/components/marketing/home-platform-preview-section").then((m) => m.HomePlatformPreviewSection),
+  { ssr: false, loading: () => <HomeMobileHeavyLoadingReserve minHeight="22rem" /> },
+);
+
+const HomeTrustProofSectionLazy = dynamic(
+  () => import("@/components/marketing/home-trust-proof-section").then((m) => m.HomeTrustProofSection),
+  { ssr: false, loading: () => <HomeMobileHeavyLoadingReserve minHeight="18rem" /> },
+);
+
+const HomeObjectionFaqSectionLazy = dynamic(
+  () => import("@/components/marketing/home-objection-faq-section").then((m) => m.HomeObjectionFaqSection),
+  { ssr: false, loading: () => <HomeMobileHeavyLoadingReserve minHeight="16rem" /> },
+);
+
+function HomeMobileHeavyLoadingReserve({ minHeight }: { minHeight: string }) {
+  return (
+    <div
+      className="border-b border-[var(--header-nav-border)] bg-[var(--page-bg)] px-4 py-[var(--nn-rhythm-mobile-section-y)] sm:px-6 md:py-[var(--nn-rhythm-shell-y)]"
+      aria-hidden
+    >
+      <div
+        className="mx-auto max-w-5xl rounded-2xl border border-[var(--border-subtle)] bg-[var(--semantic-panel-muted)]"
+        style={{ minHeight }}
+      />
+    </div>
+  );
+}
+
+/** Static shell on mobile: reserves vertical space without running heavy section JS. */
+function HomeMobileHeavyStaticReserve({ minHeight }: { minHeight: string }) {
+  return (
+    <div
+      className="border-b border-[var(--border-subtle)] bg-[var(--page-bg)] px-4 py-[var(--nn-rhythm-mobile-section-y)] sm:px-6"
+      aria-hidden
+    >
+      <div
+        className="mx-auto max-w-5xl rounded-2xl border border-dashed border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_70%,transparent)]"
+        style={{ minHeight }}
+      />
+    </div>
+  );
+}
 
 export type HomeRestoredClientProps = {
   homeMarketingStats: HomeMarketingStats;
@@ -53,9 +111,9 @@ export type HomeRestoredClientProps = {
  * Homepage flow: hero → product carousel → how it works (value) → proof stack (sample, regions, trust)
  * → platform preview + differentiation → hub strip → pathways → objection FAQ → final CTA.
  *
- * Stats are passed from the server (initial paint may use a memory snapshot or silent placeholders,
- * then a deferred server segment can replace with fresh DB-backed values).
- * When optional stats are unavailable, the downstream sections already degrade to copy-only fallback states.
+ * Below-the-fold heavy sections use `next/dynamic` with `ssr: false` and render only when
+ * {@link useIsMobile} is false, so narrow viewports skip loading those chunks. Desktop layout
+ * and SSR path for those sections stay the same from the visitor’s perspective at ≥769px.
  */
 export default function HomeRestoredClient({
   homeMarketingStats,
@@ -65,7 +123,7 @@ export default function HomeRestoredClient({
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const marketingRegion = region === "US" ? "US" : "CA";
-  const marketingMobile = useMarketingMobilePerfIsMobile() === true;
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -117,7 +175,7 @@ export default function HomeRestoredClient({
   return (
     <div
       className={
-        marketingMobile
+        isMobile
           ? "font-sans flex w-full min-h-0 flex-1 flex-col overflow-x-hidden bg-[var(--page-bg)]"
           : "font-sans md:animate-page-enter flex w-full min-h-0 flex-1 flex-col overflow-x-hidden bg-[var(--page-bg)]"
       }
@@ -126,26 +184,54 @@ export default function HomeRestoredClient({
       <div className="min-h-0 flex-1 overflow-x-hidden">
         {/* 1. HERO */}
         <HomeConversionHero questionCount={questionCount} lessonCount={lessonCount} />
-        {/* 2. Product carousel — visual proof directly after hero */}
-        <HomeHeroScreenshotSection />
-        {/* 3. How it works — explains the value behind what the carousel shows */}
-        <HomeHowItWorksSection />
-        {/* 4. Proof — sample item + rationale */}
-        <HomeSampleQuestionPreview />
-        {/* 5. Global regions — licensing hubs beyond core markets */}
-        <HomeGlobalRegionsSection visibleCardIds={publishedGlobalRegionCardIds} />
-        {/* 6. Trust — credibility + freshness */}
+        {/* 2. Product carousel — desktop client chunk; mobile static reserve */}
+        {isMobile ? (
+          <HomeMobileHeavyStaticReserve minHeight="min(42vw, 18rem)" />
+        ) : (
+          <HomeHeroScreenshotSectionLazy />
+        )}
+        {/* 3. How it works */}
+        {isMobile ? (
+          <HomeMobileHeavyStaticReserve minHeight="18rem" />
+        ) : (
+          <HomeHowItWorksSectionLazy />
+        )}
+        {/* 4. Sample question */}
+        {isMobile ? (
+          <HomeMobileHeavyStaticReserve minHeight="16rem" />
+        ) : (
+          <HomeSampleQuestionPreviewLazy />
+        )}
+        {/* 5. Global regions */}
+        {isMobile ? (
+          <HomeMobileHeavyStaticReserve minHeight="20rem" />
+        ) : (
+          <HomeGlobalRegionsSectionLazy visibleCardIds={publishedGlobalRegionCardIds} />
+        )}
+        {/* 6. Trust strip — lighter; keep synced for both */}
         <HomeTrustStripSection
           lessonCount={lessonCount}
           questionCount={questionCount}
           registeredLearners={registeredLearners}
         />
-        {/* 7. Short reassurance */}
-        <HomeTrustFearsSection questionCount={questionCount} registeredLearners={registeredLearners} />
-        {/* 8. Deeper product proof + differentiation (before pathway choice) */}
-        <HomePlatformPreviewSection />
-        <HomeTrustProofSection />
-        {/* 9. Global hub strip — bridges proof to pathway choice */}
+        {/* 7. Trust fears */}
+        {isMobile ? (
+          <HomeMobileHeavyStaticReserve minHeight="14rem" />
+        ) : (
+          <HomeTrustFearsSectionLazy questionCount={questionCount} registeredLearners={registeredLearners} />
+        )}
+        {/* 8. Platform preview + proof */}
+        {isMobile ? (
+          <HomeMobileHeavyStaticReserve minHeight="22rem" />
+        ) : (
+          <HomePlatformPreviewSectionLazy />
+        )}
+        {isMobile ? (
+          <HomeMobileHeavyStaticReserve minHeight="18rem" />
+        ) : (
+          <HomeTrustProofSectionLazy />
+        )}
+        {/* 9. Global hub strip */}
         {introAfterHero}
         {/* 10. Pathways — RN / PN / NP / Allied */}
         <section
@@ -192,7 +278,11 @@ export default function HomeRestoredClient({
           </div>
         </section>
         {/* 11. Objection FAQ */}
-        <HomeObjectionFaqSection />
+        {marketingMobile ? (
+          <HomeMobileHeavyStaticReserve minHeight="16rem" />
+        ) : (
+          <HomeObjectionFaqSectionLazy />
+        )}
         {/* 12. Final CTA */}
         <HomeFinalStudyCta />
       </div>

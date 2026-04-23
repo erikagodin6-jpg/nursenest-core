@@ -34,6 +34,7 @@ import {
   mergeBlogFaqItemsForPublicPage,
 } from "@/lib/blog/blog-public-seo-helpers";
 import { blogCountryFromPrismaTarget } from "@/lib/blog/blog-study-cta";
+import { resolveBlogOgImageAbsolute } from "@/lib/blog/blog-seo-automation";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ slug: string; postSlug: string }> };
@@ -88,6 +89,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       });
       const description = (meta.seoDescription?.trim() || auto.metaDescription).slice(0, 155);
       const canonical = absoluteUrl(`/allied-health/${slug}/blog/${postSlug}`);
+      const seo = parseInternalLinkPlanJson(meta.internalLinkPlan).seo;
+      const ogImage = resolveBlogOgImageAbsolute(seo, meta.coverImage);
       return {
         title,
         description,
@@ -98,11 +101,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           description,
           url: canonical,
           type: "article",
+          ...(ogImage ? { images: [{ url: ogImage }] } : {}),
         },
         twitter: {
           card: "summary_large_image",
           title,
           description,
+          ...(ogImage ? { images: [ogImage] } : {}),
         },
       };
     },

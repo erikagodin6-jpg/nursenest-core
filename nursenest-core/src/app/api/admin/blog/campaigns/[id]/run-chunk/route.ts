@@ -8,12 +8,22 @@ import {
   BlogPostTemplate,
   BlogWorkflowStatus,
   CountryCode,
+  Prisma,
 } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
+import { buildSchemaSummaryPayload } from "@/lib/blog/blog-seo-automation";
+import {
+  buildSeoBundleForSimpleAiDraft,
+  clampSerpDescription,
+  clampSerpTitle,
+  mergeOpenGraphImageIntoSeoBundle,
+  normalizeBlogTagsForStorage,
+} from "@/lib/blog/blog-seo-package";
+import { generateBlogSEOFromPostRow } from "@/lib/blog/blog-generate-seo";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { blogPrimaryStudyCta } from "@/lib/blog/blog-study-cta";
 import { buildOutline, detectRiskFlags, slugify, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
@@ -103,6 +113,33 @@ export async function POST(req: Request, { params }: Props) {
         body = ai.content.trim();
       }
       const excerpt = body.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 420);
+      const pk = (item.plannedKeyword ?? campaign.keywordCluster ?? "").trim();
+      const tags = normalizeBlogTagsForStorage(pk ? [pk] : [], [campaign.keywordCluster].filter(Boolean) as string[]);
+      const excerptFinal = (excerpt || title).trim().slice(0, 500);
+      const auto = generateBlogSEOFromPostRow({
+        title,
+        slug,
+        category: campaign.keywordCluster ?? null,
+        tags,
+        exam: campaign.targetExam ?? null,
+        countryTarget: campaign.countryTarget ?? null,
+      });
+      const seoTitleDb = clampSerpTitle(auto.seoTitle, 70);
+      const seoDescDb = clampSerpDescription(auto.metaDescription, 120, 155);
+      const primaryKw = (pk || title).trim().slice(0, 160);
+      const seoBundle = mergeOpenGraphImageIntoSeoBundle(
+        buildSeoBundleForSimpleAiDraft({
+          slug,
+          h1: title.slice(0, 220),
+          seoTitle: seoTitleDb,
+          seoDescription: seoDescDb,
+          excerpt: excerptFinal,
+          tags,
+          primaryKeyword: primaryKw,
+          emitFaqSchema: false,
+        }),
+        null,
+      );
       const countryCtx =
         campaign.countryTarget === CountryCode.CA ? "CA" : campaign.countryTarget === CountryCode.US ? "US" : "unspecified";
       const cta = blogPrimaryStudyCta({
@@ -124,6 +161,7 @@ export async function POST(req: Request, { params }: Props) {
           body,
           exam: campaign.targetExam ?? null,
           category: campaign.keywordCluster,
+          tags,
           postTemplate: template,
           intent,
           funnelStage: funnel,
@@ -132,8 +170,17 @@ export async function POST(req: Request, { params }: Props) {
           countryTarget: campaign.countryTarget ?? null,
           postStatus: publishAt ? BlogPostStatus.SCHEDULED : BlogPostStatus.DRAFT,
           publishAt,
-          seoTitle: title.slice(0, 200),
-          seoDescription: excerpt.slice(0, 280),
+          seoTitle: seoTitleDb,
+          seoDescription: seoDescDb,
+          metaTitleVariant: seoTitleDb,
+          metaDescriptionVariant: seoDescDb,
+          internalLinkPlan: {
+            lessons: [],
+            imagePlacements: [],
+            imageAttachments: [],
+            seo: seoBundle,
+          } as Prisma.InputJsonValue,
+          schemaSummary: buildSchemaSummaryPayload(seoBundle),
           workflowStatus: risks.length > 0 ? BlogWorkflowStatus.NEEDS_MEDICAL_REVIEW : BlogWorkflowStatus.GENERATED,
           outlineJson: buildOutline({ title, targetKeyword: item.plannedKeyword ?? campaign.keywordCluster, intent, template }),
           ctaType: cta.type,

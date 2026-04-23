@@ -16,6 +16,7 @@ import {
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { StaggerGroup, StaggerItem } from "@/lib/motion";
 import { buildHomepageHeroSlidesAtIndices } from "@/config/home-hero-carousel";
+import { useIsMobile } from "@/lib/ui/use-is-mobile";
 
 /** 0-based slide index → `screenshot9.png` (study modes / platform chrome—reads as real product UI). */
 const HOME_HERO_ABOVE_FOLD_STILL_INDEX = 8 as const;
@@ -25,10 +26,97 @@ function formatStat(n: number, locale: string): string {
   return n.toLocaleString(locale.replace(/_/g, "-"));
 }
 
-/**
- * Homepage hero: left column (headline, scannable copy, CTAs) + right column (product still).
- */
-export function HomeConversionHero({
+function HomeConversionHeroMobile({
+  questionCount = 0,
+  lessonCount = 0,
+}: {
+  questionCount?: number;
+  lessonCount?: number;
+}) {
+  const { locale, t } = useMarketingI18n();
+  const { region } = useNursenestRegion();
+  const loc = (path: string) => withMarketingLocale(locale, path);
+  const q = formatStat(questionCount, locale);
+  const lessons = formatStat(lessonCount, locale);
+
+  return (
+    <section
+      className="hero mobile-hero border-b border-[var(--header-nav-border)] bg-[var(--page-bg)]"
+      data-testid="hero-section"
+      aria-labelledby="home-conversion-hero-heading"
+    >
+      <div className="nn-section-shell py-[var(--nn-rhythm-mobile-section-y)] md:py-[var(--nn-rhythm-shell-y)]">
+        <h1
+          id="home-conversion-hero-heading"
+          className="nn-marketing-h1 max-w-[22rem] text-balance break-words text-[var(--palette-heading)] sm:max-w-2xl"
+          data-testid="text-hero-heading"
+        >
+          {formatTitleCase(t("pages.home.hero.headline"), locale)}
+        </h1>
+        <p
+          className="nn-marketing-body mt-3 max-w-lg text-pretty leading-relaxed text-[var(--palette-text-muted)]"
+          data-testid="text-hero-subheading"
+        >
+          {formatSentenceCase(t("pages.home.hero.subheading"), locale)}
+        </p>
+        <div className="cta-group mt-6 flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-stretch">
+          <MarketingTrackedLink
+            href={loc(HUB.questionBank)}
+            event={PH.marketingHomeHeroPrimaryCta}
+            eventProps={{
+              region,
+              marketing_region: region,
+              marketing_locale: locale,
+              destination: "question_bank",
+              surface: "hero_primary",
+              exam_tier_band: "undifferentiated_cta",
+            }}
+            className={`${MARKETING_PRIMARY_CTA_CLASS} rounded-xl shadow-[var(--shadow-card)]`}
+            data-testid="button-hero-start-practice-questions"
+          >
+            {formatTitleCase(t("pages.home.hero.primaryCta"), locale)}
+            <ArrowRight className="h-5 w-5 shrink-0" aria-hidden />
+          </MarketingTrackedLink>
+          <MarketingTrackedLink
+            href={loc(HUB.examLessons)}
+            event={PH.marketingHomeHeroSecondaryCta}
+            eventProps={{
+              region,
+              marketing_region: region,
+              marketing_locale: locale,
+              destination: "lessons",
+              surface: "hero_browse_lessons",
+              exam_tier_band: "undifferentiated_cta",
+            }}
+            className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-xl border border-[var(--border-subtle)] shadow-sm`}
+            data-testid="button-hero-browse-lessons"
+          >
+            {formatTitleCase(t("pages.home.hero.secondaryCta"), locale)}
+          </MarketingTrackedLink>
+        </div>
+        <p className="nn-marketing-caption mt-3 max-w-md text-pretty text-[var(--palette-text-muted)]">
+          {formatSentenceCase(t("pages.home.hero.ctaSupportingLine"), locale)}
+        </p>
+        <p
+          className="nn-marketing-caption mt-4 max-w-xl text-pretty text-[var(--palette-text-muted)]"
+          data-testid="text-hero-live-stats"
+        >
+          {!q && !lessons
+            ? formatSentenceCase(t("pages.home.hero.statsFallback"), locale)
+            : [q ? t("pages.home.hero.statQuestions", { count: q }) : null, lessons ? t("pages.home.hero.statLessons", { count: lessons }) : null, formatSentenceCase(t("pages.home.hero.statUpdates"), locale)]
+                .filter((line): line is string => Boolean(line))
+                .join(" · ")}
+        </p>
+        <p className="nn-marketing-caption mt-3 flex max-w-xl items-start gap-2 text-pretty text-[var(--palette-text-muted)]">
+          <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+          {formatSentenceCase(t("pages.home.hero.noCreditCard"), locale)}
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function HomeConversionHeroDesktop({
   questionCount = 0,
   lessonCount = 0,
 }: {
@@ -257,4 +345,15 @@ export function HomeConversionHero({
       </div>
     </section>
   );
+}
+
+/**
+ * Homepage hero: full marketing layout on desktop; lightweight copy + CTAs on narrow viewports (LCP).
+ */
+export function HomeConversionHero(props: { questionCount?: number; lessonCount?: number }) {
+  const isMobile = useIsMobile();
+  if (isMobile) {
+    return <HomeConversionHeroMobile {...props} />;
+  }
+  return <HomeConversionHeroDesktop {...props} />;
 }

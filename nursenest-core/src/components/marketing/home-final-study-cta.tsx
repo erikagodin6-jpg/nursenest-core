@@ -10,16 +10,87 @@ import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-l
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import { useIsMobile } from "@/lib/ui/use-is-mobile";
 
 /**
  * Closing conversion block — same value prop as hero; primary Practice, secondary Lessons.
  */
 export function HomeFinalStudyCta() {
+  const isMobile = useIsMobile();
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const loc = (path: string) => withMarketingLocale(locale, path);
 
   const trustKeys = ["pages.home.finalCta.trust0", "pages.home.finalCta.trust1", "pages.home.finalCta.trust2"] as const;
+
+  if (isMobile) {
+    return (
+      <section
+        className="simple-stack nn-section-block border-t border-[var(--header-nav-border)] bg-[var(--hero-branded-wash)]"
+        aria-labelledby="home-final-cta-heading"
+        data-testid="section-final-study-cta"
+      >
+        <div className="nn-section-shell flex flex-col gap-4 px-4 py-10 sm:px-6">
+          <p
+            className="nn-marketing-caption text-center font-bold uppercase tracking-widest"
+            style={{
+              color:
+                "color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 78%, var(--theme-heading-text))",
+            }}
+          >
+            {formatEyebrow(t("pages.home.finalCta.eyebrow"), locale)}
+          </p>
+          <h2 id="home-final-cta-heading" className="nn-marketing-h2 text-balance text-center">
+            {formatTitleCase(t("pages.home.finalCta.headline"), locale)}
+          </h2>
+          <p className="nn-marketing-body-sm text-center text-pretty leading-relaxed text-[var(--theme-muted-text)]">
+            {formatSentenceCase(t("pages.home.finalCta.subheading"), locale)}
+          </p>
+          <ul className="flex flex-col gap-2">
+            {trustKeys.map((key) => (
+              <li key={key} className="flex items-center gap-2 text-xs font-medium text-[var(--theme-muted-text)]">
+                <CheckCircle className="h-3.5 w-3.5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+                {formatSentenceCase(t(key), locale)}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-2 flex flex-col gap-3">
+            <MarketingTrackedLink
+              href={loc(HUB.questionBank)}
+              event={PH.marketingHomeFinalCta}
+              eventProps={{ choice: "question_bank", region, surface: "final" }}
+              className={`${MARKETING_PRIMARY_CTA_CLASS} rounded-xl shadow-[var(--shadow-card)]`}
+              data-testid="button-final-start-practice"
+            >
+              <span className="whitespace-nowrap">{formatTitleCase(t("pages.home.hero.primaryCta"), locale)}</span>
+              <ArrowRight className="ml-2 h-5 w-5 shrink-0" aria-hidden />
+            </MarketingTrackedLink>
+            <MarketingTrackedLink
+              href={loc(HUB.examLessons)}
+              event={PH.marketingHomeFinalCta}
+              eventProps={{ choice: "lessons", region, surface: "final" }}
+              className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-xl border border-[var(--border-subtle)]`}
+              data-testid="button-final-browse-lessons"
+            >
+              {formatTitleCase(t("pages.home.hero.secondaryCta"), locale)}
+            </MarketingTrackedLink>
+          </div>
+          <p className="nn-marketing-caption text-center text-pretty text-[var(--theme-muted-text)]">
+            {formatSentenceCase(t("pages.home.finalCta.pricingLead"), locale)}{" "}
+            <MarketingTrackedLink
+              href={loc(HUB.pricing)}
+              event={PH.marketingHomeFinalCta}
+              eventProps={{ choice: "pricing", region, surface: "final" }}
+              className="font-semibold text-[var(--text-accent)] underline decoration-[color-mix(in_srgb,var(--text-accent)_45%,transparent)] underline-offset-4"
+            >
+              {formatTitleCase(t("pages.home.finalCta.pricingLink"), locale)}
+            </MarketingTrackedLink>
+            {formatSentenceCase(t("pages.home.finalCta.pricingTail"), locale)}
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section

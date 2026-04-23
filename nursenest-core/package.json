@@ -113,6 +113,7 @@
     "audit:lesson-route-enforcement": "tsx scripts/audit/run-lesson-route-enforcement-audit.mts",
     "audit:blog-corpus": "tsx scripts/audit/run-blog-corpus-audit.mts",
     "audit:blog-prisma-export": "tsx scripts/audit/run-blog-prisma-readonly-export.mts",
+    "audit:blog:seo": "tsx scripts/audit/run-blog-seo-readonly-audit.mts",
     "audit:blog-live-corpus-reconcile": "tsx scripts/audit/reconcile-blog-live-corpus.mts",
     "audit:blog-live-corpus": "npm run audit:blog-prisma-export && npm run audit:blog-live-corpus-reconcile",
     "audit:lesson-fix-batch-1-impact": "tsx scripts/audit/measure-lesson-fix-batch-1-impact.mts",

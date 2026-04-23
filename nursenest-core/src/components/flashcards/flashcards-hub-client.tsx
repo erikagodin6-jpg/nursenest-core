@@ -1,11 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatTitleCase } from "@/lib/format/text-case";
+import {
+  flashcardBodySystemsUiOutcomeFromParsed,
+  parseFlashcardCustomSessionResponse,
+} from "@/lib/flashcards/flashcard-custom-session-response";
 import { countSavedStudyItems, getStudyItemIdsMatchingFilters } from "@/lib/flashcards/study-session-persistence";
 import { LearnerCtaLink } from "@/components/learner-ui/learner-cta-link";
+
+const CUSTOM_SESSION_FETCH_TIMEOUT_MS = 25_000;
+
+type BodySystemsOutcome = "pending" | "populated" | "empty" | "error";
 
 type BuilderCategory = { id: string; title: string; description?: string; count: number };
 type BuilderMode = "term_to_definition" | "definition_to_term" | "mixed";
@@ -122,8 +130,12 @@ export function FlashcardsHubClient({
   const [savedStats, setSavedStats] = useState({ starred: 0, saved: 0, noted: 0, confusing: 0 });
   const [builderSummary, setBuilderSummary] = useState<BuilderSummary | null>(null);
   const [previewCards, setPreviewCards] = useState<Array<{ id: string; front: string; topic?: string | null }>>([]);
-  const [builderLoading, setBuilderLoading] = useState(false);
+  /** True while GET /api/flashcards/custom-session is in flight (initial or refetch). */
+  const [customSessionLoading, setCustomSessionLoading] = useState(false);
   const [builderError, setBuilderError] = useState<string | null>(null);
+  /** Terminal UX for the body-systems strip (never stays `pending` after a completed fetch). */
+  const [bodySystemsOutcome, setBodySystemsOutcome] = useState<BodySystemsOutcome>("pending");
+  const [refetchNonce, setRefetchNonce] = useState(0);
 
   const allBodyIds = useMemo(() => builderCategories.map((c) => c.id), [builderCategories]);
 
@@ -247,32 +259,94 @@ export function FlashcardsHubClient({
     ],
   );
 
-  const runBuilderSummary = useCallback(async () => {
-    setBuilderLoading(true);
-    setBuilderError(null);
-    try {
-      const params = new URLSearchParams(sessionParams.toString());
-      const res = await fetch(`/api/flashcards/custom-session?${params.toString()}`, { credentials: "include" });
-      const json = (await res.json()) as {
-        summary?: BuilderSummary;
-        categoryOptions?: BuilderCategory[];
-        error?: string;
-      };
-      if (!res.ok) throw new Error(json.error ?? "Unable to build custom session.");
-      if (json.summary) setBuilderSummary(json.summary);
-      setBuilderCategories(json.categoryOptions ?? []);
-    } catch (e) {
-      setBuilderError(e instanceof Error ? e.message : "Unable to build custom session.");
-      setBuilderSummary(null);
-      setBuilderCategories([]);
-    } finally {
-      setBuilderLoading(false);
-    }
-  }, [sessionParams]);
+  const sessionQueryKey = useMemo(() => sessionParams.toString(), [sessionParams]);
 
   useEffect(() => {
-    void runBuilderSummary();
-  }, [runBuilderSummary]);
+    const pathwayTrim = scopedPathwayId?.trim() ?? "";
+    if (!pathwayTrim) {
+      setCustomSessionLoading(false);
+      setBuilderSummary(null);
+      setBuilderCategories([]);
+      setBuilderError(t("learner.flashcards.hub.bodySystemsMissingPathway"));
+      setBodySystemsOutcome("error");
+      return;
+    }
+
+    let active = true;
+    const ac = new AbortController();
+    const timeoutId = window.setTimeout(() => ac.abort(), CUSTOM_SESSION_FETCH_TIMEOUT_MS);
+
+    setCustomSessionLoading(true);
+    setBuilderError(null);
+
+    const url = `/api/flashcards/custom-session?${sessionParams.toString()}`;
+    if (process.env.NODE_ENV !== "production") {
+      console.debug("[nn-flashcards-hub] custom-session fetch", {
+        pathwayId: pathwayTrim,
+        url,
+        queryKey: sessionQueryKey.slice(0, 160),
+      });
+    }
+
+    void (async () => {
+      try {
+        const res = await fetch(url, { credentials: "include", signal: ac.signal });
+        const text = await res.text();
+        let json: unknown;
+        try {
+          json = text ? JSON.parse(text) : null;
+        } catch {
+          json = null;
+        }
+        if (!active) return;
+
+        const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
+        if (process.env.NODE_ENV !== "production") {
+          console.debug("[nn-flashcards-hub] custom-session response", {
+            pathwayId: pathwayTrim,
+            status: res.status,
+            ok: parsed.ok,
+            categoryCount: parsed.ok ? parsed.categoryOptions.length : null,
+            outcome: parsed.ok ? (parsed.categoryOptions.length ? "populated" : "empty") : "error",
+          });
+        }
+
+        if (!active) return;
+
+        if (!parsed.ok) {
+          setBuilderSummary(null);
+          setBuilderCategories([]);
+          setBuilderError(parsed.message);
+          setBodySystemsOutcome(flashcardBodySystemsUiOutcomeFromParsed(parsed));
+          return;
+        }
+
+        const cats = parsed.categoryOptions;
+        setBuilderCategories(cats);
+        setBuilderSummary(parsed.summary as BuilderSummary | null);
+        setBuilderError(null);
+        setBodySystemsOutcome(flashcardBodySystemsUiOutcomeFromParsed(parsed));
+      } catch (e) {
+        if (!active) return;
+        const aborted = e instanceof DOMException && e.name === "AbortError";
+        setBuilderSummary(null);
+        setBuilderCategories([]);
+        setBuilderError(
+          aborted ? t("learner.flashcards.hub.bodySystemsTimeout") : e instanceof Error ? e.message : t("learner.flashcards.hub.bodySystemsError"),
+        );
+        setBodySystemsOutcome("error");
+      } finally {
+        window.clearTimeout(timeoutId);
+        if (active) setCustomSessionLoading(false);
+      }
+    })();
+
+    return () => {
+      active = false;
+      ac.abort();
+      window.clearTimeout(timeoutId);
+    };
+  }, [sessionQueryKey, scopedPathwayId, t, refetchNonce]);
 
   const weakAreasStudyHref =
     scopedPathwayId.length > 0
@@ -318,11 +392,13 @@ export function FlashcardsHubClient({
   };
 
   const bodyAreasSummary =
-    builderCategories.length === 0
+    bodySystemsOutcome !== "populated" || builderCategories.length === 0
       ? null
       : selectedBodyIds.length === 0
         ? `All ${builderCategories.length} areas`
         : `${selectedBodyIds.length} of ${builderCategories.length} areas`;
+
+  const bodySystemsPickerEnabled = bodySystemsOutcome === "populated" && !customSessionLoading;
 
   useEffect(() => {
     if (builderCategories.length === 0) return;
@@ -457,10 +533,20 @@ export function FlashcardsHubClient({
                   Focus due cards
                 </button>
               ) : null}
-              <button type="button" onClick={selectAllSystems} className="lv-cta-quiet lv-cta-quiet--emphasis">
+              <button
+                type="button"
+                onClick={selectAllSystems}
+                disabled={!bodySystemsPickerEnabled}
+                className="lv-cta-quiet lv-cta-quiet--emphasis disabled:pointer-events-none disabled:opacity-40"
+              >
                 Select all
               </button>
-              <button type="button" onClick={clearSystemsAndSearch} className="lv-cta-quiet">
+              <button
+                type="button"
+                onClick={clearSystemsAndSearch}
+                disabled={!bodySystemsPickerEnabled}
+                className="lv-cta-quiet disabled:pointer-events-none disabled:opacity-40"
+              >
                 Clear
               </button>
             </div>
@@ -473,17 +559,41 @@ export function FlashcardsHubClient({
               onChange={(e) => setCategorySearch(e.target.value)}
               placeholder="Find a body system…"
               autoComplete="off"
-              className="mt-1.5 w-full min-h-11 rounded-lv-lg border border-lv-border-soft bg-lv-bg-surface px-3 py-2.5 text-sm text-lv-text-primary shadow-lv-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lv-primary-300"
+              disabled={!bodySystemsPickerEnabled}
+              className="mt-1.5 w-full min-h-11 rounded-lv-lg border border-lv-border-soft bg-lv-bg-surface px-3 py-2.5 text-sm text-lv-text-primary shadow-lv-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lv-primary-300 disabled:cursor-not-allowed disabled:opacity-40"
             />
           </label>
-          <div className="lv-panel lv-panel--border-muted flex min-h-20 flex-wrap gap-2 p-3 sm:p-4">
-            {builderLoading && builderCategories.length === 0 ? (
-              <p className="text-sm text-lv-text-secondary">Loading areas…</p>
+          <div className="lv-panel lv-panel--border-muted flex min-h-20 flex-col gap-3 p-3 sm:p-4">
+            {customSessionLoading && bodySystemsOutcome === "pending" ? (
+              <p className="text-sm text-lv-text-secondary">{t("learner.flashcards.hub.bodySystemsLoading")}</p>
             ) : null}
-            {!builderLoading && builderCategories.length === 0 ? (
-              <p className="text-sm leading-relaxed text-lv-text-secondary">
-                All topics in this pathway are included. You can start whenever you are ready.
-              </p>
+            {customSessionLoading && bodySystemsOutcome === "populated" ? (
+              <p className="text-xs text-lv-text-secondary">{t("learner.flashcards.hub.bodySystemsRefreshing")}</p>
+            ) : null}
+            {!customSessionLoading && bodySystemsOutcome === "empty" ? (
+              <div className="space-y-2">
+                <p className="text-sm leading-relaxed text-lv-text-secondary">{t("learner.flashcards.hub.bodySystemsEmpty")}</p>
+                <div className="flex flex-wrap gap-2">
+                  <Link href="/app/lessons" className="lv-btn-secondary min-h-10 px-4 py-2 text-sm">
+                    {t("learner.flashcards.hub.bodySystemsEmptyCtaLessons")}
+                  </Link>
+                  <LearnerCtaLink href={weakAreasStudyHref} variant="secondary" className="min-h-10 px-4 py-2 text-sm">
+                    {t("learner.flashcards.hub.weakAreasCta")}
+                  </LearnerCtaLink>
+                </div>
+              </div>
+            ) : null}
+            {!customSessionLoading && bodySystemsOutcome === "error" ? (
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-sm text-[var(--semantic-danger)]">{builderError ?? t("learner.flashcards.hub.bodySystemsError")}</p>
+                <button
+                  type="button"
+                  className="lv-btn-secondary min-h-10 shrink-0 px-4 py-2 text-sm font-medium"
+                  onClick={() => setRefetchNonce((n) => n + 1)}
+                >
+                  {t("learner.flashcards.hub.bodySystemsRetry")}
+                </button>
+              </div>
             ) : null}
             {filteredCategories.map((category) => {
               const selected = chipSelected(category.id);
@@ -491,9 +601,10 @@ export function FlashcardsHubClient({
                 <button
                   key={category.id}
                   type="button"
+                  disabled={!bodySystemsPickerEnabled}
                   onClick={() => toggleBodySystem(category.id)}
                   data-selected={selected ? "true" : "false"}
-                  className="lv-chip lv-chip--stack"
+                  className="lv-chip lv-chip--stack disabled:pointer-events-none disabled:opacity-40"
                 >
                   <span className="block">{formatTitleCase(category.title)}</span>
                   {category.count > 0 ? (
@@ -608,8 +719,10 @@ export function FlashcardsHubClient({
           </button>
         </div>
 
-        {builderLoading ? <p className="text-xs text-lv-text-secondary">Updating session…</p> : null}
-        {builderError ? <p className="text-sm text-[var(--semantic-danger)]">{builderError}</p> : null}
+        {customSessionLoading ? <p className="text-xs text-lv-text-secondary">Updating session…</p> : null}
+        {builderError && bodySystemsOutcome !== "error" ? (
+          <p className="text-sm text-[var(--semantic-danger)]">{builderError}</p>
+        ) : null}
 
         {previewCards.length > 0 ? (
           <div className="lv-panel p-4">

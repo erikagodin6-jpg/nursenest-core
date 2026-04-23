@@ -20,7 +20,12 @@ import {
   BlogPostingJsonLd,
 } from "@/components/seo/seo-json-ld";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
-import { blogSchemaKeywords, resolveOpenGraphCopy, resolvePublicCanonicalUrl } from "@/lib/blog/blog-seo-automation";
+import {
+  blogSchemaKeywords,
+  resolveBlogOgImageAbsolute,
+  resolveOpenGraphCopy,
+  resolvePublicCanonicalUrl,
+} from "@/lib/blog/blog-seo-automation";
 import { withCrawlSurfacePageRender } from "@/lib/observability/crawl-surface-observability";
 import {
   blogBrowserTitleForPublicPost,
@@ -79,6 +84,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const description = (post.seoDescription?.trim() || autoMeta.metaDescription).slice(0, 155);
       const og = resolveOpenGraphCopy(seo, title, description);
       const canonical = resolvePublicCanonicalUrl(slug, seo);
+      const ogImage = resolveBlogOgImageAbsolute(seo, post.coverImage);
       return {
         title,
         description,
@@ -89,11 +95,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           description: og.description,
           url: canonical,
           type: "article",
+          ...(ogImage ? { images: [{ url: ogImage }] } : {}),
         },
         twitter: {
           card: "summary_large_image",
           title: og.title,
           description: og.description,
+          ...(ogImage ? { images: [ogImage] } : {}),
         },
       };
     },

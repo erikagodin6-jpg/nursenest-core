@@ -33,6 +33,16 @@ export type ParsedCustomSessionFailure = {
   message: string;
 };
 
+export type FlashcardBodySystemsUiOutcome = "populated" | "empty" | "error";
+
+/** Maps a parsed API payload to the hub body-systems strip outcome (never `pending`). */
+export function flashcardBodySystemsUiOutcomeFromParsed(
+  parsed: ParsedCustomSessionSuccess | ParsedCustomSessionFailure,
+): FlashcardBodySystemsUiOutcome {
+  if (!parsed.ok) return "error";
+  return parsed.categoryOptions.length > 0 ? "populated" : "empty";
+}
+
 /**
  * Validates GET /api/flashcards/custom-session JSON so the hub never treats
  * malformed payloads as an infinite load or a false "all topics" empty.

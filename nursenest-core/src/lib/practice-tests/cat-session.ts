@@ -1,5 +1,5 @@
 import type { Prisma } from "@prisma/client";
-import { randomBytes } from "node:crypto";
+import { randomUUID } from "node:crypto";
 import { prisma } from "@/lib/db";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -59,6 +59,9 @@ import {
   recentPracticeQuestionIdsForPathway,
 } from "@/lib/practice-tests/recent-practice-question-ids";
 import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
+
+/** Seeded shuffle namespace for guided fixed-length runs (tests import this to stay aligned). */
+export const GUIDED_PRACTICE_ORDER_SEED_SUFFIX = ":guided-practice-order-v1";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
 import type {
@@ -298,7 +301,7 @@ export async function createCatPracticeTestPayload(
     ? { min: pathwayReadiness.minQuestions, max: pathwayReadiness.maxQuestions }
     : fallbackBounds;
 
-  const sessionPickSalt = randomBytes(18).toString("hex");
+  const sessionPickSalt = randomUUID();
   const poolInput: PickQuestionsInput = {
     ...input,
     questionCount: bounds.max,
@@ -311,6 +314,8 @@ export async function createCatPracticeTestPayload(
   const recentPack = await recentPracticeQuestionIdsForPathway({
     userId,
     pathwayId: pathwayIdForRecent,
+    sessionLookback: 20,
+    maxIds: 120,
   });
   const recentFiltered = filterPoolRemovingRecentQuestions(pool, recentPack.ids);
   const poolForSelection = recentFiltered.pool;
@@ -366,8 +371,9 @@ export async function createCatPracticeTestPayload(
   const guidedPractice = !sim && sessionTypeResolved === "practice";
 
   if (guidedPractice) {
+    const candidatePoolSize = poolForSelection.length;
     const poolIds = poolForSelection.map((r) => r.id);
-    const shuffled = shuffleSeeded(poolIds, `${sessionPickSalt}:guided-practice-order-v1`);
+    const shuffled = shuffleSeeded([...poolIds], `${sessionPickSalt}:guided-practice-order-v1`);
     const runLength = Math.min(Math.max(10, input.questionCount), shuffled.length);
     const questionIds = shuffled.slice(0, runLength);
     const guidedPickInput: PickQuestionsInput = { ...poolInput, questionCount: runLength };
@@ -379,14 +385,15 @@ export async function createCatPracticeTestPayload(
         userIdPrefix: userId.slice(0, 8),
         pathwayId: pathwayIdForRecent ?? undefined,
         poolSize: pool.length,
-        poolForSelectionSize: poolForSelection.length,
+        candidatePoolSize,
         recentSessionsScanned: recentPack.sessionsScanned,
         recentIdCount: recentPack.ids.size,
         recentExclusionApplied: recentFiltered.applied,
         recentExclusionSkip: recentFiltered.skipReason,
         catAdaptiveSessionType: "practice",
         guidedRunLength: runLength,
-        sessionPickSaltPrefix: sessionPickSalt.slice(0, 12),
+        sessionSeed: sessionPickSalt,
+        selectedQuestionIds: questionIds,
       });
     }
 
@@ -440,13 +447,13 @@ export async function createCatPracticeTestPayload(
       userIdPrefix: userId.slice(0, 8),
       pathwayId: pathwayIdForRecent ?? undefined,
       poolSize: pool.length,
-      poolForSelectionSize: poolForSelection.length,
+      candidatePoolSize: poolForSelection.length,
       recentSessionsScanned: recentPack.sessionsScanned,
       recentIdCount: recentPack.ids.size,
       recentExclusionApplied: recentFiltered.applied,
       recentExclusionSkip: recentFiltered.skipReason,
-      firstQuestionIdPrefix: first.selected.id.slice(0, 12),
-      sessionPickSaltPrefix: sessionPickSalt.slice(0, 12),
+      sessionSeed: sessionPickSalt,
+      selectedQuestionIds: [first.selected.id],
       catAdaptiveSessionType: sessionTypeResolved,
     });
   }

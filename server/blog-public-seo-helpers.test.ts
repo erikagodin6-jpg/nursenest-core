@@ -9,6 +9,10 @@ import {
   stripBlogPipeBrand,
 } from "@/lib/blog/blog-public-seo-helpers";
 import { blogCountryFromRegionSlug } from "@/lib/blog/blog-study-cta";
+import {
+  approximatePlainTextFromHtmlForAudit,
+  countWordsFromHtmlApproximate,
+} from "@/lib/blog/blog-word-count";
 
 describe("blog-public-seo-helpers", () => {
   it("stripBlogPipeBrand removes trailing NurseNest suffix", () => {
@@ -79,5 +83,11 @@ describe("blog-public-seo-helpers", () => {
   it("blogCountryFromRegionSlug maps canada and us", () => {
     expect(blogCountryFromRegionSlug("canada")).toBe("CA");
     expect(blogCountryFromRegionSlug("us")).toBe("US");
+  });
+
+  it("approximatePlainTextFromHtmlForAudit strips script/style and tags", () => {
+    const html = `<style>.x{}</style><script>bad()</script><p>Hello <b>world</b></p>`;
+    expect(approximatePlainTextFromHtmlForAudit(html)).toBe("Hello world");
+    expect(countWordsFromHtmlApproximate(html)).toBe(2);
   });
 });

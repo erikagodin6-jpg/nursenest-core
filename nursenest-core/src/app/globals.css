@@ -11624,4 +11624,19 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   .nn-marketing-surface .nn-mobile-hero-stats-reserve {
     min-height: 3.25rem;
   }
+
+  /*
+   * Mobile motion throttle (≤768px, marketing shell only): strip CSS animations and
+   * transitions (keyframes, transform tweens, hover/transition chains, scroll-driven
+   * class flips that animate). Scoped to `.nn-marketing-surface` so learner `/app` and
+   * viewports ≥769px are unchanged. Add class `nn-allow-motion-mobile` on `.nn-marketing-surface`
+   * to restore motion for a subtree experiment (rare).
+   */
+  .nn-marketing-surface:not(.nn-allow-motion-mobile),
+  .nn-marketing-surface:not(.nn-allow-motion-mobile) *,
+  .nn-marketing-surface:not(.nn-allow-motion-mobile) *::before,
+  .nn-marketing-surface:not(.nn-allow-motion-mobile) *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

@@ -5,7 +5,11 @@ import Link from "next/link";
 import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
-import { parseBlogSeoBundle } from "@/lib/blog/blog-seo-automation";
+import {
+  parseBlogSeoBundle,
+  resolveBlogOgImageAbsolute,
+  resolvePublicCanonicalUrl,
+} from "@/lib/blog/blog-seo-automation";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
 import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
 import { blogSlugCustomValidityMessage, liveNormalizeBlogSlugInputValue } from "@/lib/blog/blog-optional-slug";
@@ -20,6 +24,11 @@ type PostPayload = {
   body: string;
   seoTitle: string | null;
   seoDescription: string | null;
+  category?: string | null;
+  tags?: string[];
+  exam?: string | null;
+  countryTarget?: string | null;
+  coverImage?: string | null;
   outlineJson: unknown;
   faqBlock: unknown;
   internalLinkPlan: unknown;
@@ -83,6 +92,8 @@ export function AdminBlogStudioClient() {
   const [post, setPost] = useState<PostPayload | null>(null);
   const [prePub, setPrePub] = useState<{ okToPublish: boolean; blocking: unknown[]; warnings: unknown[] } | null>(null);
   const [prePubErr, setPrePubErr] = useState<string | null>(null);
+  const [seoRegenBusy, setSeoRegenBusy] = useState<null | "refresh" | "overwrite">(null);
+  const [seoRegenErr, setSeoRegenErr] = useState<string | null>(null);
 
   const resetResult = useCallback(() => {
     setPlan(null);
@@ -181,6 +192,51 @@ export function AdminBlogStudioClient() {
     }
   }
 
+  async function runRegenerateSeo(mode: "refresh" | "overwrite") {
+    if (!post?.id) return;
+    setSeoRegenErr(null);
+    setSeoRegenBusy(mode);
+    try {
+      const res = await fetch(`/api/admin/blog/${post.id}/seo/regenerate`, {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ overwrite: mode === "overwrite" }),
+      });
+      const json = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        post?: Partial<PostPayload> & { id: string };
+      };
+      if (!res.ok || !json.ok || !json.post) {
+        setSeoRegenErr(json.error ?? `SEO regenerate failed (${res.status})`);
+        return;
+      }
+      setPost((prev) =>
+        prev
+          ? {
+              ...prev,
+              ...json.post,
+              body: prev.body,
+              outlineJson: prev.outlineJson,
+              faqBlock: prev.faqBlock,
+              apaReferences: prev.apaReferences,
+              postStatus: prev.postStatus,
+              workflowStatus: prev.workflowStatus,
+              medicalRiskFlags: prev.medicalRiskFlags,
+              coverImagePrompt: prev.coverImagePrompt,
+              coverImageAlt: prev.coverImageAlt,
+            }
+          : prev,
+      );
+    } catch (e) {
+      setSeoRegenErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setSeoRegenBusy(null);
+    }
+  }
+
   async function runPrePublishCheck() {
     if (!post?.id) return;
     setPrePubErr(null);
@@ -207,6 +263,9 @@ export function AdminBlogStudioClient() {
   const seo = post?.internalLinkPlan
     ? parseBlogSeoBundle((post.internalLinkPlan as { seo?: unknown }).seo)
     : null;
+
+  const canonicalPreview = post ? resolvePublicCanonicalUrl(post.slug, seo) : "";
+  const ogImagePreview = post ? resolveBlogOgImageAbsolute(seo, post.coverImage ?? null) : undefined;
 
   type SchemaSummaryJson = {
     version?: number;
@@ -449,6 +508,75 @@ export function AdminBlogStudioClient() {
               ) : null}
             </div>
           ) : null}
+
+          <div className="rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-4 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-border/50 pb-2">
+              <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">SERP & social preview</h3>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  disabled={Boolean(seoRegenBusy)}
+                  onClick={() => void runRegenerateSeo("refresh")}
+                  className="rounded-lg border border-border bg-muted/30 px-3 py-1.5 text-xs font-semibold hover:bg-muted/50 disabled:opacity-50"
+                >
+                  {seoRegenBusy === "refresh" ? "…" : "Regenerate SEO bundle"}
+                </button>
+                <button
+                  type="button"
+                  disabled={Boolean(seoRegenBusy)}
+                  onClick={() => void runRegenerateSeo("overwrite")}
+                  className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-950 dark:text-amber-50 disabled:opacity-50"
+                  title="Also replaces stored meta title and meta description columns using deterministic SEO."
+                >
+                  {seoRegenBusy === "overwrite" ? "…" : "Regenerate SEO + meta columns"}
+                </button>
+              </div>
+            </div>
+            {seoRegenErr ? <p className="mt-2 text-sm text-rose-700">{seoRegenErr}</p> : null}
+            <dl className="mt-3 grid gap-2 text-xs text-muted-foreground sm:grid-cols-2">
+              <div>
+                <dt className="font-medium text-foreground">Slug</dt>
+                <dd>
+                  <code className="text-foreground">{post.slug}</code>
+                </dd>
+              </div>
+              <div>
+                <dt className="font-medium text-foreground">Canonical</dt>
+                <dd className="break-all text-foreground">{canonicalPreview || "—"}</dd>
+              </div>
+              <div>
+                <dt className="font-medium text-foreground">Meta title</dt>
+                <dd className="text-foreground">{post.seoTitle ?? "—"}</dd>
+              </div>
+              <div>
+                <dt className="font-medium text-foreground">Meta description</dt>
+                <dd className="text-foreground">{post.seoDescription ?? "—"}</dd>
+              </div>
+              <div>
+                <dt className="font-medium text-foreground">H1</dt>
+                <dd className="text-foreground">{post.title}</dd>
+              </div>
+              <div>
+                <dt className="font-medium text-foreground">OG / Twitter image</dt>
+                <dd className="break-all text-foreground">{ogImagePreview ?? "—"}</dd>
+              </div>
+              <div className="sm:col-span-2">
+                <dt className="font-medium text-foreground">Breadcrumb trail</dt>
+                <dd className="text-foreground">
+                  {seo?.normalizedBreadcrumbs?.length
+                    ? seo.normalizedBreadcrumbs.map((b) => b.label).join(" › ")
+                    : "—"}
+                </dd>
+              </div>
+              <div className="sm:col-span-2">
+                <dt className="font-medium text-foreground">Open Graph (stored bundle)</dt>
+                <dd className="text-foreground">
+                  <span className="block">og:title — {seo?.openGraphTitle ?? post.seoTitle ?? post.title}</span>
+                  <span className="block">og:description — {seo?.openGraphDescription ?? post.seoDescription ?? post.excerpt}</span>
+                </dd>
+              </div>
+            </dl>
+          </div>
 
           <div className="grid gap-4 lg:grid-cols-2">
             <PackageSection title="SEO title (meta)" review>

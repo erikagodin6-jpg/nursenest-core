@@ -137,6 +137,7 @@ export function PracticeTestsHubClient({
       );
     } else if (prev === "cat" && selectionMode !== "cat") {
       setPathwayId(pathwayIdWhenLeavingCatMode(defaultPathwayId, pathwayOptions));
+      setCatAdaptiveSessionType("cat");
     }
     prevSelectionModeRef.current = selectionMode;
   }, [selectionMode, catOptions, defaultPathwayId, pathwayOptions, searchParams]);

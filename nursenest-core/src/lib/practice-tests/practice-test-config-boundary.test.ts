@@ -26,6 +26,22 @@ describe("parsePracticeTestConfigAtBoundary", () => {
     assert.equal(c.catExamFeedbackMode, "study");
   });
 
+  it("preserves catAdaptiveSessionType when valid", () => {
+    const c = parsePracticeTestConfigAtBoundary(
+      { selectionMode: "cat", questionCount: 20, catAdaptiveSessionType: "practice" },
+      { surface: "test" },
+    );
+    assert.equal(c.catAdaptiveSessionType, "practice");
+  });
+
+  it("preserves disableOptionShuffle when true", () => {
+    const c = parsePracticeTestConfigAtBoundary(
+      { selectionMode: "cat", questionCount: 10, disableOptionShuffle: true },
+      { surface: "test" },
+    );
+    assert.equal(c.disableOptionShuffle, true);
+  });
+
   it("coerces empty pathwayId and fills defaults for garbage input", () => {
     const c = parsePracticeTestConfigAtBoundary(
       { pathwayId: "", selectionMode: "cat", questionCount: 12 },

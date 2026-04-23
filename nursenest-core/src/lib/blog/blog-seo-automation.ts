@@ -228,6 +228,29 @@ export function resolveOpenGraphCopy(
 }
 
 /**
+ * Absolute `og:image` / `twitter:image` URL from bundle or post cover.
+ * Accepts https URLs or site-root-relative paths (e.g. `/cdn/...`).
+ */
+export function resolveBlogOgImageAbsolute(
+  seo: BlogSeoBundle | null,
+  coverImage: string | null | undefined,
+): string | undefined {
+  const raw = (seo?.openGraphImageUrl ?? coverImage)?.trim();
+  if (!raw) return undefined;
+  if (/^https:\/\//i.test(raw)) {
+    try {
+      const u = new URL(raw);
+      if (u.protocol === "https:" && u.hostname.includes(".")) return raw.slice(0, 2000);
+    } catch {
+      return undefined;
+    }
+    return undefined;
+  }
+  if (raw.startsWith("/")) return absoluteUrl(raw);
+  return undefined;
+}
+
+/**
  * Visible crumbs: use stored trail when valid; JSON-LD stays the standard blog post chain
  * (Home → Blog → article) per `blogPostBreadcrumbsWithOptionalCategory` policy.
  */

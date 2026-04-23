@@ -292,6 +292,7 @@ export async function POST(req: Request) {
       title: true,
       excerpt: true,
       body: true,
+      category: true,
       exam: true,
       postStatus: true,
       seoTitle: true,

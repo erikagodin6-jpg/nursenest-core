@@ -125,21 +125,32 @@ export function mergeOpenGraphImageIntoSeoBundle(
   return { ...bundle, openGraphImageUrl: u.slice(0, 2000) };
 }
 
+export type RebuildSeoBundleFromStoredBlogPostOptions = {
+  /**
+   * When true, ignore stored `seoTitle` / `seoDescription` and rebuild meta strings from
+   * deterministic `generateBlogSEOFromPostRow` output (explicit “regenerate meta” flows).
+   */
+  ignoreStoredMeta?: boolean;
+};
+
 /** Recompute persisted {@link BlogSeoBundle} from current row fields (deterministic; no full article regen). */
-export function rebuildSeoBundleFromStoredBlogPost(row: {
-  slug: string;
-  title: string;
-  excerpt: string;
-  seoTitle: string | null;
-  seoDescription: string | null;
-  tags: string[];
-  category: string | null;
-  exam: string | null;
-  countryTarget: CountryCode | null;
-  coverImage: string | null;
-  targetKeyword: string | null;
-  faqItemCount: number;
-}): BlogSeoBundle {
+export function rebuildSeoBundleFromStoredBlogPost(
+  row: {
+    slug: string;
+    title: string;
+    excerpt: string;
+    seoTitle: string | null;
+    seoDescription: string | null;
+    tags: string[];
+    category: string | null;
+    exam: string | null;
+    countryTarget: CountryCode | null;
+    coverImage: string | null;
+    targetKeyword: string | null;
+    faqItemCount: number;
+  },
+  options?: RebuildSeoBundleFromStoredBlogPostOptions,
+): BlogSeoBundle {
   const auto = generateBlogSEOFromPostRow({
     title: row.title,
     slug: row.slug,
@@ -149,8 +160,15 @@ export function rebuildSeoBundleFromStoredBlogPost(row: {
     countryTarget: row.countryTarget,
   });
   const primary = (row.targetKeyword?.trim() || row.title).trim().slice(0, 160);
-  const seoTitle = clampSerpTitle(row.seoTitle?.trim() || auto.seoTitle, 70);
-  const seoDesc = clampSerpDescription(row.seoDescription?.trim() || auto.metaDescription, 120, 155);
+  const seoTitle = clampSerpTitle(
+    options?.ignoreStoredMeta ? auto.seoTitle : row.seoTitle?.trim() || auto.seoTitle,
+    70,
+  );
+  const seoDesc = clampSerpDescription(
+    options?.ignoreStoredMeta ? auto.metaDescription : row.seoDescription?.trim() || auto.metaDescription,
+    120,
+    155,
+  );
   const focus = normalizeBlogTagsForStorage(row.tags, [primary]);
   const base = buildSeoBundleForSimpleAiDraft({
     slug: row.slug,

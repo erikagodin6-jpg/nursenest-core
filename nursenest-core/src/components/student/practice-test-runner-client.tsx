@@ -604,8 +604,9 @@ export function PracticeTestRunnerClient({
   }, [current?.tags]);
 
   const allowMcqOptionShuffle =
+    !Boolean(testConfig?.disableOptionShuffle) &&
     !isSata &&
-    (isExamStyle || (!catMode && testConfig?.linearDeliveryMode === "exam"));
+    (catFeedbackStudy || isExamStyle || (!catMode && testConfig?.linearDeliveryMode === "exam"));
 
   const optsOrderCanonical = useMemo(() => {
     if (optsCanonical.length <= 1) return optsCanonical;
@@ -634,6 +635,7 @@ export function PracticeTestRunnerClient({
     current?.questionType,
     testId,
     testConfig?.sessionPickSalt,
+    testConfig?.disableOptionShuffle,
     qTags,
   ]);
 

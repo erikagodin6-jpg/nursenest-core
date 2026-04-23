@@ -56,6 +56,7 @@ const practiceTestConfigSchema = z.object({
   catAdaptiveSessionType: catAdaptiveSessionTypeZ.optional(),
   catExamConfigId: z.union([z.null(), z.string()]).optional(),
   sessionPickSalt: z.string().min(8).max(128).optional(),
+  disableOptionShuffle: z.boolean().optional(),
 });
 
 function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
@@ -73,6 +74,7 @@ function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
   }
   const cast = o.catAdaptiveSessionType;
   if (cast === "cat" || cast === "practice") out.catAdaptiveSessionType = cast;
+  if (o.disableOptionShuffle === true) out.disableOptionShuffle = true;
   return out;
 }
 

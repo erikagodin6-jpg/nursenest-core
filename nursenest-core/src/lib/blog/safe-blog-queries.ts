@@ -205,6 +205,7 @@ const metaSelect = {
   category: true,
   exam: true,
   countryTarget: true,
+  coverImage: true,
 } satisfies Prisma.BlogPostSelect;
 
 export type BlogPostMeta = Prisma.BlogPostGetPayload<{ select: typeof metaSelect }>;
@@ -309,6 +310,7 @@ export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope
       category: s.category ?? null,
       exam: null,
       countryTarget: null,
+      coverImage: null,
     };
   }
   const db = await resolveScopedBlogPostBySlug(slug, scope);
@@ -327,6 +329,7 @@ export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope
       category: db.category,
       exam: db.exam,
       countryTarget: db.countryTarget,
+      coverImage: db.coverImage,
     };
   }
   if (!(await canUseStaticBlogFallback())) return null;
@@ -346,6 +349,7 @@ export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope
     category: s.category ?? null,
     exam: null,
     countryTarget: null,
+    coverImage: null,
   };
 }
 

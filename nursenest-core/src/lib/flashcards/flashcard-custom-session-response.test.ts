@@ -1,6 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { parseFlashcardCustomSessionResponse } from "@/lib/flashcards/flashcard-custom-session-response";
+import {
+  flashcardBodySystemsUiOutcomeFromParsed,
+  parseFlashcardCustomSessionResponse,
+} from "@/lib/flashcards/flashcard-custom-session-response";
 
 test("parseFlashcardCustomSessionResponse: success with categories", () => {
   const r = parseFlashcardCustomSessionResponse(true, {
@@ -57,4 +60,20 @@ test("parseFlashcardCustomSessionResponse: skips malformed category rows", () =>
   if (!r.ok) return;
   assert.equal(r.categoryOptions.length, 1);
   assert.equal(r.categoryOptions[0]!.id, "gi");
+});
+
+test("flashcardBodySystemsUiOutcomeFromParsed: populated vs empty vs error", () => {
+  assert.equal(
+    flashcardBodySystemsUiOutcomeFromParsed({ ok: true, summary: null, categoryOptions: [{ id: "a", title: "A", count: 1 }] }),
+    "populated",
+  );
+  assert.equal(flashcardBodySystemsUiOutcomeFromParsed({ ok: true, summary: null, categoryOptions: [] }), "empty");
+  assert.equal(flashcardBodySystemsUiOutcomeFromParsed({ ok: false, message: "x" }), "error");
+});
+
+test("successful empty categoryOptions maps to empty outcome (not ambiguous loading)", () => {
+  const ok = parseFlashcardCustomSessionResponse(true, { ok: true, categoryOptions: [], summary: {} });
+  assert.equal(ok.ok, true);
+  if (!ok.ok) return;
+  assert.equal(flashcardBodySystemsUiOutcomeFromParsed(ok), "empty");
 });

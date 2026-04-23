@@ -1,4 +1,4 @@
-import { randomBytes } from "node:crypto";
+import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { ExamFamily, PracticeTestStatus, Prisma } from "@prisma/client";
@@ -524,7 +524,7 @@ export async function POST(req: Request) {
     d.linearRationaleVisibility ??
     (linearMode === "exam" ? "end_of_exam" : "after_each");
   const resolvedLinearMode = linearRationaleVisibility === "after_each" ? "practice" : "exam";
-  const sessionPickSalt = randomBytes(18).toString("hex");
+  const sessionPickSalt = randomUUID();
   const config: PracticeTestConfigJson = {
     ...configFromInput(
       {
@@ -588,9 +588,9 @@ export async function POST(req: Request) {
       pathwayId: d.pathwayId?.trim() || undefined,
       selectionMode: d.selectionMode,
       questionCount: d.questionCount,
-      sessionPickSaltPrefix: sessionPickSalt.slice(0, 12),
+      sessionSeed: sessionPickSalt,
+      selectedQuestionIds: picked.ids,
       ...picked.linearSessionCreateDebug,
-      selectedQuestionIdsCount: picked.ids.length,
     });
   }
 

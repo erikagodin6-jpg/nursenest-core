@@ -5,6 +5,7 @@ import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { FadeUp } from "@/lib/motion";
+import { useIsMobile } from "@/lib/ui/use-is-mobile";
 
 type Props = {
   lessonCount: number;
@@ -21,6 +22,7 @@ function formatCount(n: number, locale: string): string {
  * Credibility + product-trait pills after the sample question (hero already shows live counts).
  */
 export function HomeTrustStripSection({ lessonCount, questionCount, registeredLearners }: Props) {
+  const isMobile = useIsMobile();
   const { locale, t } = useMarketingI18n();
   const lessons = formatCount(lessonCount, locale);
   const questions = formatCount(questionCount, locale);
@@ -42,6 +44,49 @@ export function HomeTrustStripSection({ lessonCount, questionCount, registeredLe
     },
     { icon: Sparkles, label: t("pages.home.trustStrip.updatedNclex"), iconClass: "text-[var(--semantic-chart-3)]" },
   ] as const;
+
+  if (isMobile) {
+    return (
+      <section
+        className="simple-stack nn-section-enter border-b border-[var(--border-subtle)] py-8"
+        style={{ background: "var(--accent-surface-a)" }}
+        aria-labelledby="home-trust-strip-heading"
+        data-testid="section-home-trust-strip"
+      >
+        <div className="nn-section-shell flex flex-col gap-4">
+          <h2
+            id="home-trust-strip-heading"
+            className="nn-marketing-h2 text-balance text-center text-[var(--palette-heading)]"
+          >
+            {formatTitleCase(t("pages.home.trustStrip.heading"), locale)}
+          </h2>
+          <p className="nn-marketing-body text-center text-pretty leading-relaxed text-[var(--palette-text-muted)]">
+            {formatSentenceCase(t("pages.home.trustStrip.subheading"), locale)}
+          </p>
+          <BrandTrustInline variant="prep" className="justify-center text-center" />
+          {learners ? (
+            <p className="nn-marketing-caption text-center text-[var(--palette-text-muted)]">
+              {formatSentenceCase(t("pages.home.trustStrip.learnersLine", { count: learners }), locale)}
+            </p>
+          ) : null}
+          <ul className="flex flex-col gap-2">
+            {pills.map((pill) => {
+              const Icon = pill.icon;
+              return (
+                <li
+                  key={pill.label}
+                  className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--pill-border))] bg-[var(--pill-bg)] px-3.5 py-1.5 text-sm font-semibold text-[var(--pill-fg)]"
+                >
+                  <Icon className={`h-4 w-4 shrink-0 ${pill.iconClass}`} aria-hidden />
+                  {formatEyebrow(pill.label, locale)}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section

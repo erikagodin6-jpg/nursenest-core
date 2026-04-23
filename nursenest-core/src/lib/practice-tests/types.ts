@@ -118,10 +118,14 @@ export type PracticeTestConfigJson = {
   /** Blueprint used for weights + diagnostics (e.g. nclex-rn-us). */
   catExamConfigId?: string | null;
   /**
-   * Opaque per-session randomness (hex) for CAT tie-breaks, option display shuffle, and
-   * linear pool ordering — persisted on `PracticeTest.config`.
+   * Per-session opaque seed (v4 UUID from `randomUUID()` on create) for CAT tie-breaks, pool window,
+   * option display shuffle, and linear pool ordering — persisted on `PracticeTest.config`.
    */
   sessionPickSalt?: string;
+  /**
+   * When true, MCQ options stay in canonical DB order (per-question `disable_option_shuffle` tags still apply).
+   */
+  disableOptionShuffle?: boolean;
 };
 
 export type PracticeTestResultsJson = {
