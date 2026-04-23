@@ -12,7 +12,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
  * Shown when the API returns `cat_pathway_ambiguous` — the user's subscription has more than
  * one CAT-eligible pathway and the client did not (or could not) pass a `pathwayId`.
  *
- * Renders one CTA per eligible pathway linking to `/app/practice-tests/start?pathwayId=<id>`.
+ * Renders one CTA per eligible pathway linking to `/app/practice-tests/cat-launch?pathwayId=<id>`.
  * Never auto-selects a pathway or falls back to the generic hub.
  *
  * Each option label shows full country + tier + exam copy (e.g. "US RN · NCLEX-RN") so

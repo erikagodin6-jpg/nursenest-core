@@ -8,8 +8,8 @@ import {
 
 test("appPathwayCatSessionStartPath always encodes pathwayId for CAT start", () => {
   const href = appPathwayCatSessionStartPath("us-rn-nclex-rn");
-  assert.ok(href.startsWith("/app/practice-tests/start?"));
-  const q = new URLSearchParams(href.slice("/app/practice-tests/start?".length));
+  assert.ok(href.startsWith("/app/practice-tests/cat-launch?"));
+  const q = new URLSearchParams(href.slice("/app/practice-tests/cat-launch?".length));
   assert.equal(q.get("pathwayId"), "us-rn-nclex-rn");
 });
 
@@ -28,7 +28,7 @@ test("resolveStudySurfaceCatHref scopes CAT start when the pathway is unambiguou
     resolveStudySurfaceCatHref({
       availablePathwayIds: ["us-rn-nclex-rn"],
     }),
-    "/app/practice-tests/start?pathwayId=us-rn-nclex-rn",
+    "/app/practice-tests/cat-launch?pathwayId=us-rn-nclex-rn",
   );
 });
 

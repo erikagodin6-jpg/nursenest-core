@@ -6,7 +6,7 @@
  *   - **Exactly one CAT-eligible pathway** for the subscription → that id is used (unambiguous).
  *   - **Zero** → {@link PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_required} (no pool / no track).
  *   - **Two or more** → {@link PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous} — client must send
- *     `pathwayId` or the user must use a pathway-scoped launcher (e.g. `/app/practice-tests/start?pathwayId=…`).
+ *     `pathwayId` or the user must use a pathway-scoped launcher (e.g. `/app/practice-tests/cat-launch?pathwayId=…`).
  *
  * Intentionally **no** “first eligible pathway” fallback when multiple CAT tracks exist — avoids silent
  * mismatches (e.g. RN vs NP) when integrations omit metadata.

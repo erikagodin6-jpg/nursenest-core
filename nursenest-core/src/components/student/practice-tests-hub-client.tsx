@@ -806,7 +806,7 @@ export function PracticeTestsHubClient({
               headline={emptyStateCopy.noHistoryYet({ area: "saved tests" }).headline}
               body="You haven’t saved any practice exams yet. Start a new exam and your in-progress sessions and recent scores will show up here."
               hint={emptyStateCopy.noHistoryYet({ area: "saved tests" }).body}
-              primaryCta={{ label: "Build Practice Exam", href: "/app/practice-tests/start", variant: "primary" }}
+              primaryCta={{ label: "Build Practice Exam", href: "/app/practice-tests", variant: "primary" }}
             />
           </div>
         ) : (

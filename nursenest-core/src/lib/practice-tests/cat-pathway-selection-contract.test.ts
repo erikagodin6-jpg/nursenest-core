@@ -6,7 +6,7 @@
  *  2. Generic multi-pathway surface — ambiguous without pathwayId → structured 400.
  *  3. Single-pathway subscription — unambiguous auto-resolution.
  *  4. No CAT-eligible pathways → required error.
- *  5. Ambiguity picker: one URL per eligible pathway, targeting start page.
+ *  5. Ambiguity picker: one URL per eligible pathway, targeting direct CAT launch.
  *  6. Labels: catPathwayRegionalExamLine includes country + role + exam code.
  *  7. URL helper encodes pathwayId correctly.
  *  8. data-nn-qa attributes: each picker option has the correct qa attr key.
@@ -135,17 +135,17 @@ describe("ambiguity picker URLs: each eligible pathway gets a scoped start link"
     const rn = appPathwayCatSessionStartPath("us-rn-nclex-rn");
     const np = appPathwayCatSessionStartPath("us-np-fnp");
     assert.notEqual(rn, np, "each pathway must produce a distinct URL");
-    const qRn = new URLSearchParams(rn.slice("/app/practice-tests/start?".length));
-    const qNp = new URLSearchParams(np.slice("/app/practice-tests/start?".length));
+    const qRn = new URLSearchParams(rn.slice("/app/practice-tests/cat-launch?".length));
+    const qNp = new URLSearchParams(np.slice("/app/practice-tests/cat-launch?".length));
     assert.equal(qRn.get("pathwayId"), "us-rn-nclex-rn");
     assert.equal(qNp.get("pathwayId"), "us-np-fnp");
   });
 
-  it("each pathway URL targets /app/practice-tests/start, not the generic hub", () => {
+  it("each pathway URL targets /app/practice-tests/cat-launch, not the generic hub", () => {
     const ids = ["us-rn-nclex-rn", "ca-rn-nclex-rn", "us-np-fnp", "ca-np-cnple"];
     for (const id of ids) {
       const url = appPathwayCatSessionStartPath(id);
-      assert.ok(url.startsWith("/app/practice-tests/start?"), `${id}: must target /app/practice-tests/start`);
+      assert.ok(url.startsWith("/app/practice-tests/cat-launch?"), `${id}: must target /app/practice-tests/cat-launch`);
       assert.ok(!url.startsWith("/app/practice-tests?"), `${id}: must NOT target the generic hub`);
     }
   });
@@ -229,7 +229,7 @@ describe("ambiguity picker: data-nn-qa-cat-ambiguity-option mirrors pathwayId", 
     const pathwayIds = ["us-rn-nclex-rn", "ca-rn-nclex-rn", "us-np-fnp", "ca-np-cnple"];
     for (const id of pathwayIds) {
       const url = appPathwayCatSessionStartPath(id);
-      const q = new URLSearchParams(url.slice("/app/practice-tests/start?".length));
+      const q = new URLSearchParams(url.slice("/app/practice-tests/cat-launch?".length));
       // The data-nn-qa-cat-ambiguity-option value must equal the pathwayId in the href.
       assert.equal(
         q.get("pathwayId"),
@@ -260,7 +260,7 @@ describe("ambiguity picker: empty catEligibleOptions contract", () => {
   it("appPathwayCatSessionStartPath still encodes correctly for edge-case IDs", () => {
     // Even unusual IDs must encode correctly so the picker fallback link works.
     const url = appPathwayCatSessionStartPath("some-unexpected-id");
-    const q = new URLSearchParams(url.slice("/app/practice-tests/start?".length));
+    const q = new URLSearchParams(url.slice("/app/practice-tests/cat-launch?".length));
     assert.equal(q.get("pathwayId"), "some-unexpected-id");
     assert.ok(!url.startsWith("/app/practice-tests?"), "must not target generic hub");
   });
@@ -271,20 +271,20 @@ describe("ambiguity picker: empty catEligibleOptions contract", () => {
 describe("appPathwayCatSessionStartPath: pathway-scoped CAT start URL", () => {
   it("produces a URL with the pathwayId query param", () => {
     const url = appPathwayCatSessionStartPath("us-rn-nclex-rn");
-    assert.ok(url.startsWith("/app/practice-tests/start?"), "must target the dedicated start page");
-    const q = new URLSearchParams(url.slice("/app/practice-tests/start?".length));
+    assert.ok(url.startsWith("/app/practice-tests/cat-launch?"), "must target direct CAT launch");
+    const q = new URLSearchParams(url.slice("/app/practice-tests/cat-launch?".length));
     assert.equal(q.get("pathwayId"), "us-rn-nclex-rn");
   });
 
   it("trims the pathwayId in the URL", () => {
     const url = appPathwayCatSessionStartPath("  us-np-fnp  ");
-    const q = new URLSearchParams(url.slice("/app/practice-tests/start?".length));
+    const q = new URLSearchParams(url.slice("/app/practice-tests/cat-launch?".length));
     assert.equal(q.get("pathwayId"), "us-np-fnp");
   });
 
-  it("does NOT fall back to the generic practice hub — always targets /app/practice-tests/start", () => {
+  it("does NOT fall back to the generic practice hub — always targets cat-launch", () => {
     const url = appPathwayCatSessionStartPath("ca-rn-nclex-rn");
     assert.ok(!url.includes("/app/practice-tests?"), "must not point to the hub with query params only");
-    assert.ok(url.includes("/app/practice-tests/start"), "must always target the dedicated start page");
+    assert.ok(url.includes("/app/practice-tests/cat-launch"), "must always target direct CAT launch");
   });
 });

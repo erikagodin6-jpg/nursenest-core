@@ -1,5 +1,5 @@
 /**
- * Tier-scoped routing for Practice Questions (`/app/questions`), CAT start (`/app/practice-tests/start`),
+ * Tier-scoped routing for Practice Questions (`/app/questions`), CAT start (`/app/practice-tests/cat-launch` / `start`),
  * and Flashcards (`/app/flashcards`) when `pathwayId` is present.
  * Prevents silent fallbacks to another exam track when a pathway is already known from URL or profile.
  */
@@ -76,6 +76,7 @@ export function parseTierScopedAppStudyCallbackPath(raw: string | null): string 
     if (
       u.pathname !== "/app/questions" &&
       u.pathname !== "/app/practice-tests/start" &&
+      u.pathname !== "/app/practice-tests/cat-launch" &&
       u.pathname !== "/app/flashcards"
     ) {
       return null;

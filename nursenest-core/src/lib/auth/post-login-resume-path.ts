@@ -25,7 +25,7 @@ function isBlockedResumeStrippedPath(strippedPathname: string): boolean {
  * - Honors explicit same-origin `callbackUrl` except generic `/app` and most `/app/*` learner-shell paths,
  *   which are ignored when resolving from the query so arbitrary deep links cannot be injected via URL alone.
  * - **Exception:** tier-scoped study entry points `/app/questions?pathwayId=…`,
- *   `/app/practice-tests/start?pathwayId=…`, and `/app/flashcards?pathwayId=…` are honored when
+ *   `/app/practice-tests/start?pathwayId=…`, `/app/practice-tests/cat-launch?pathwayId=…`, and `/app/flashcards?pathwayId=…` are honored when
  *   `pathwayId` matches a safe slug pattern,
  *   so marketing sign-in can return to the same exam track the learner chose on a hub.
  * - **Default (no valid `callbackUrl`):** localized marketing homepage (`/`, `/fr`, …). This avoids

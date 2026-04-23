@@ -100,6 +100,15 @@ describe("resolveMarketingAuthRedirectTarget", () => {
     );
   });
 
+  it("honors tier-scoped /app/practice-tests/cat-launch?pathwayId=… callback after login", () => {
+    const sp = new URLSearchParams();
+    sp.set("callbackUrl", "/app/practice-tests/cat-launch?pathwayId=us-lpn-nclex-pn");
+    assert.equal(
+      resolveMarketingAuthRedirectTarget("/login", sp, "en"),
+      "/app/practice-tests/cat-launch?pathwayId=us-lpn-nclex-pn",
+    );
+  });
+
   it("honors tier-scoped /app/flashcards?pathwayId=… callback after login", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/app/flashcards?pathwayId=ca-rn-nclex-rn");

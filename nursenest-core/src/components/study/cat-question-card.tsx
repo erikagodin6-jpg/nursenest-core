@@ -48,7 +48,10 @@ export function QuestionCard({
   if (examStackedLayout && footerSlot) {
     return (
       <div className="nn-cat-question-card nn-cat-question-card--exam-stack flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
-        <div className="nn-cat-question-card__exam-scroll min-h-0 flex-1 overflow-y-auto overflow-x-hidden">
+        <div
+          id="nn-cat-exam-scroll-region"
+          className="nn-cat-question-card__exam-scroll min-h-0 flex-1 overflow-y-auto overflow-x-hidden"
+        >
           {meta}
           {stemBlock}
           {children}

@@ -186,6 +186,7 @@ export function PracticeTestRunnerClient({
   const autoSubmitRef = useRef(false);
   const submitInFlightRef = useRef(false);
   const catAdvanceInFlightRef = useRef(false);
+  const catAdvanceLatestRef = useRef<() => Promise<void>>(async () => {});
   const linearCommitInFlightRef = useRef(false);
   const abandonInFlightRef = useRef(false);
   const navInFlightRef = useRef(false);
@@ -546,6 +547,16 @@ export function PracticeTestRunnerClient({
     return true;
   };
 
+  const lockCatExamAnswer = useCallback(() => {
+    if (!isExamStyle || !current) return;
+    if (!catExamCanLockAnswer(catExamUiPhaseRef.current, hasMeaningfulAnswer(current.id))) return;
+    catExamUiPhaseRef.current = "submitted_locked";
+    setCatExamUiPhase("submitted_locked");
+    queueMicrotask(() => {
+      catExamAdvanceButtonRef.current?.focus();
+    });
+  }, [isExamStyle, current]);
+
   function setConfidenceForQuestion(qid: string, level: ConfidenceLevel) {
     setConfidence((c) => ({ ...c, [qid]: level }));
   }
@@ -797,6 +808,8 @@ export function PracticeTestRunnerClient({
     }
   }
 
+  catAdvanceLatestRef.current = catAdvance;
+
   async function goNext() {
     if (saving || navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
     if (catMode) {
@@ -847,7 +860,8 @@ export function PracticeTestRunnerClient({
       }
       const root = target?.closest?.("[data-cat-exam-root]");
       if (e.key === " " && root) {
-        e.preventDefault();
+        const interactive = target?.closest?.("button,label.nn-cat-opt,a[href],[role='menuitem']");
+        if (!interactive) e.preventDefault();
       }
       const gate = () => {
         const now = Date.now();
@@ -902,7 +916,7 @@ export function PracticeTestRunnerClient({
       if (phaseNow === "submitted_locked") {
         if (saving || qLoading || catAdvanceInFlightRef.current) return;
         catExamKeyboardAdvanceRef.current = true;
-        void catAdvance();
+        void catAdvanceLatestRef.current();
         e.preventDefault();
       }
     };
@@ -919,6 +933,7 @@ export function PracticeTestRunnerClient({
     isSata,
     saving,
     qLoading,
+    lockCatExamAnswer,
   ]);
 
   useEffect(() => {
@@ -1444,7 +1459,7 @@ export function PracticeTestRunnerClient({
         if (isSelected) return "incorrect";
         return "dim";
       }
-      if (isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase) && !isSata) {
+      if (isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase)) {
         if (isSelected) return "selected";
         return "dim";
       }
@@ -1469,10 +1484,17 @@ export function PracticeTestRunnerClient({
         <ul
           className="nn-cat-opt-list"
           role="group"
-          aria-label={tx(
-            "learner.practiceTests.run.answerChoicesSataAria",
-            "Answer choices (select all that apply)",
-          )}
+          aria-label={
+            isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase)
+              ? tx(
+                  "learner.practiceTests.run.answerChoicesSataLockedAria",
+                  "Answer choices (select all that apply) — response submitted; use Next when ready",
+                )
+              : tx(
+                  "learner.practiceTests.run.answerChoicesSataAria",
+                  "Answer choices (select all that apply)",
+                )
+          }
         >
           {optsCanonical.map((canonical, i) => {
             const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
@@ -1510,7 +1532,14 @@ export function PracticeTestRunnerClient({
         <ul
           className="nn-cat-opt-list"
           role="radiogroup"
-          aria-label={tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")}
+          aria-label={
+            isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase)
+              ? tx(
+                  "learner.practiceTests.run.answerChoicesLockedAria",
+                  "Answer choices — response submitted; use Next when ready",
+                )
+              : tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")
+          }
         >
           {optsCanonical.map((canonical, i) => (
             <li key={canonical}>
@@ -1536,23 +1565,14 @@ export function PracticeTestRunnerClient({
 
     const catMaxQ = testConfig?.catMaxQuestions ?? null;
     const catMinQ = testConfig?.catMinQuestions ?? null;
-
-    const lockCatExamAnswer = () => {
-      if (!isExamStyle || !current) return;
-      if (!catExamCanLockAnswer(catExamUiPhaseRef.current, hasMeaningfulAnswer(current.id))) return;
-      catExamUiPhaseRef.current = "submitted_locked";
-      setCatExamUiPhase("submitted_locked");
-      queueMicrotask(() => {
-        catExamAdvanceButtonRef.current?.focus();
-      });
-    };
+    const examPrimaryBusy = catExamFooterPrimaryBusy(catExamUiPhase, controlsBusy);
 
     const catExamNavFooter = (
       <div className="nn-cat-question-nav nn-question-nav-actions">
         <button
           type="button"
           aria-pressed={Boolean(flagged[current.id])}
-          disabled={controlsBusy}
+          disabled={examPrimaryBusy}
           className={`nn-cat-question-nav__flag inline-flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-semibold transition ${
             flagged[current.id]
               ? "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]"
@@ -1567,17 +1587,18 @@ export function PracticeTestRunnerClient({
         </button>
         <button
           type="button"
-          disabled={controlsBusy}
+          disabled={examPrimaryBusy}
           className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
           onClick={() => void abandon()}
         >
           {tx("learner.practiceTests.run.endSession", "End session")}
         </button>
         {isExamStyle ? (
-          !catExamAnswerSubmitted ? (
+          catExamUiPhase === "answering" ? (
             <button
               type="button"
-              disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
+              data-nn-qa-cat-exam-submit-answer
+              disabled={examPrimaryBusy || !hasMeaningfulAnswer(current.id)}
               className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
               onClick={lockCatExamAnswer}
             >
@@ -1586,22 +1607,44 @@ export function PracticeTestRunnerClient({
           ) : idx < total - 1 ? (
             <button
               type="button"
-              disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
+              ref={catExamAdvanceButtonRef}
+              data-nn-qa-cat-exam-next
+              aria-busy={catExamUiPhase === "advancing"}
+              disabled={
+                examPrimaryBusy ||
+                catExamUiPhase !== "submitted_locked" ||
+                !hasMeaningfulAnswer(current.id)
+              }
               className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
-              onClick={() => void catAdvance()}
+              onClick={() => {
+                if (!catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) return;
+                if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
+                void catAdvance();
+              }}
             >
-              {saving
+              {catExamUiPhase === "advancing" || saving
                 ? tx("learner.practiceTests.run.working", "Working...")
                 : tx("learner.practiceTests.run.nextQuestion", "Next question")}
             </button>
           ) : (
             <button
               type="button"
-              disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
+              ref={catExamAdvanceButtonRef}
+              data-nn-qa-cat-exam-submit-finish
+              aria-busy={catExamUiPhase === "advancing"}
+              disabled={
+                examPrimaryBusy ||
+                catExamUiPhase !== "submitted_locked" ||
+                !hasMeaningfulAnswer(current.id)
+              }
               className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
-              onClick={() => void catAdvance()}
+              onClick={() => {
+                if (!catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) return;
+                if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
+                void catAdvance();
+              }}
             >
-              {saving
+              {catExamUiPhase === "advancing" || saving
                 ? tx("learner.practiceTests.run.working", "Working...")
                 : tx("learner.practiceTests.run.submitAndFinish", "Submit & finish")}
             </button>
@@ -1664,9 +1707,9 @@ export function PracticeTestRunnerClient({
               }
               center={
                 isExamStyle ? (
-                  <span className="nn-marketing-caption max-w-[18rem] text-center font-semibold leading-snug text-[var(--semantic-text-muted)]">
+                  <span className="nn-marketing-caption max-w-[20rem] text-center font-semibold leading-snug text-[var(--semantic-text-muted)]">
                     {catMinQ != null && catMaxQ != null && catMinQ > 0 && catMaxQ > 0
-                      ? tx("learner.practiceTests.run.catLengthBounds", "{min}–{max} items", {
+                      ? tx("learner.practiceTests.run.catLengthBoundsExam", "Minimum {min} · Maximum {max}", {
                           min: String(catMinQ),
                           max: String(catMaxQ),
                         })
@@ -1714,6 +1757,7 @@ export function PracticeTestRunnerClient({
                     className={
                       isExamStyle ? "nn-cat-exam-col flex min-h-0 min-w-0 flex-1 flex-col" : "min-h-0 min-w-0"
                     }
+                    data-cat-exam-root={isExamStyle ? "" : undefined}
                   >
                     <QuestionCard
                       stem={current.stem ?? ""}
@@ -1725,6 +1769,18 @@ export function PracticeTestRunnerClient({
                       examStackedLayout={isExamStyle}
                       footerSlot={isExamStyle ? catExamNavFooter : undefined}
                     >
+                      {isExamStyle ? (
+                        <p className="sr-only" aria-live="polite" aria-atomic="true">
+                          {catExamUiPhase === "submitted_locked"
+                            ? tx(
+                                "learner.practiceTests.run.catExamLockedLive",
+                                "Answer submitted. Your selection is locked until you go to the next item.",
+                              )
+                            : catExamUiPhase === "advancing"
+                              ? tx("learner.practiceTests.run.catExamAdvancingLive", "Saving your response…")
+                              : "\u00a0"}
+                        </p>
+                      ) : null}
                       {timedMode && timeLimitSec != null ? (
                         <div className="nn-cat-exam-timing-alert mb-5" role="alert">
                           {tx(

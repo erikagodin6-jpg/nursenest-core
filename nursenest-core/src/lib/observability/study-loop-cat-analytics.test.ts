@@ -5,13 +5,21 @@ import { buildStudyLoopCatClickProps } from "@/lib/observability/study-loop-cat-
 describe("study-loop-cat-analytics", () => {
   it("classifies pathway-scoped app starts", () => {
     const props = buildStudyLoopCatClickProps({
-      href: "/app/practice-tests/start?pathwayId=us-rn-nclex-rn",
+      href: "/app/practice-tests/cat-launch?pathwayId=us-rn-nclex-rn",
       sourceSurface: "study_quick_links",
     });
 
     assert.equal(props.cat_entry_type, "pathway_scoped_start");
     assert.equal(props.cat_entry_surface, "app");
     assert.equal(props.pathway_id, "us-rn-nclex-rn");
+  });
+
+  it("still classifies legacy start URLs with pathwayId", () => {
+    const props = buildStudyLoopCatClickProps({
+      href: "/app/practice-tests/start?pathwayId=us-rn-nclex-rn",
+      sourceSurface: "study_quick_links",
+    });
+    assert.equal(props.cat_entry_type, "pathway_scoped_start");
   });
 
   it("classifies weak-focus app CAT links", () => {

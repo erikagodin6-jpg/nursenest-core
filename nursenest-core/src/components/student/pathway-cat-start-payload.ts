@@ -1,4 +1,5 @@
-import type { CatPresentationMode } from "@/lib/practice-tests/types";
+import { publicCopyForReadinessConfig, readinessConfigForPathway } from "@/lib/exam-pathways/pathway-readiness-config";
+import type { CatPresentationMode, PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
 import type { CatPracticeReadinessResult } from "@/lib/practice-tests/cat-practice-readiness";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 
@@ -27,6 +28,44 @@ export function isHardBlockingReadinessCode(code: string | null | undefined): bo
 export function normalizePathwaySelection(pathwayId: string | null | undefined): string {
   const value = typeof pathwayId === "string" ? pathwayId.trim() : "";
   return value;
+}
+
+/** Shared POST body for pathway CAT exam simulation (used by setup page and direct launch). */
+export function buildCatExamSimulationCreatePayload(pathwayMeta: PracticeTestPathwayClientShell): {
+  title: string;
+  questionCount: number;
+  topicNames: string[];
+  difficultyMin: null;
+  difficultyMax: null;
+  selectionMode: "cat";
+  catSelectionBasis: "random";
+  catPresentationMode: "exam_simulation";
+  catExamFeedbackMode: "test";
+  pathwayId: string;
+  timedMode: boolean;
+  timeLimitSec: number;
+} {
+  const readinessConfig = readinessConfigForPathway(pathwayMeta);
+  const publicCopy = publicCopyForReadinessConfig(readinessConfig);
+  const questionCount = resolveReadinessStartQuestionCount({
+    configuredMaxQuestions: readinessConfig.maxQuestions,
+    catPresentationMode: "exam_simulation",
+    examFamily: pathwayMeta.examFamily,
+  });
+  return {
+    title: publicCopy.title,
+    questionCount,
+    topicNames: [],
+    difficultyMin: null,
+    difficultyMax: null,
+    selectionMode: "cat",
+    catSelectionBasis: "random",
+    catPresentationMode: "exam_simulation",
+    catExamFeedbackMode: "test",
+    pathwayId: pathwayMeta.id,
+    timedMode: true,
+    timeLimitSec: readinessConfig.timeLimitMinutes * 60,
+  };
 }
 
 export function resolveCatStartUiState(input: {

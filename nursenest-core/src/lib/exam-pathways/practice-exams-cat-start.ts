@@ -4,7 +4,7 @@
  * Exam hub routes (`/us/...`, `/canada/...`) are not prefixed with UI locale per {@link withMarketingLocale}
  * policy — use {@link buildExamPathwayPath} directly for CAT landings.
  *
- * In-app session start remains {@link appPathwayCatSessionStartPath} (`/app/practice-tests/start?pathwayId=…`).
+ * In-app session start: {@link appPathwayCatSessionStartPath} (`/app/practice-tests/cat-launch?pathwayId=…`) — direct exam shell.
  */
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";

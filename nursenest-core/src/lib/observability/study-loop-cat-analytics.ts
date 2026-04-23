@@ -35,6 +35,9 @@ function searchParamsFromHref(href: string): URLSearchParams {
 function entryTypeForHref(href: string): StudyLoopCatEntryType {
   const pathname = pathnameFromHref(href);
   const searchParams = searchParamsFromHref(href);
+  if (pathname === "/app/practice-tests/cat-launch") {
+    return searchParams.get("pathwayId") ? "pathway_scoped_start" : "pathway_chooser";
+  }
   if (pathname === "/app/practice-tests/start") {
     return searchParams.get("pathwayId") ? "pathway_scoped_start" : "pathway_chooser";
   }

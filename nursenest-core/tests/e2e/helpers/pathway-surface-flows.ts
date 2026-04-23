@@ -13,27 +13,14 @@ import {
 import { learnerAppMainLandmark, waitForAuthenticatedLearnerShell } from "./paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "./paid-surface-assertions";
 import { dismissFlashcardResumeIfPresent } from "./paid-user-suite";
+import { answerOneCatExamItem } from "./cat-practice-exam-flow";
 
 const MAIN_MIN_CHARS = 80;
 const LESSON_SAMPLE_MAX = 8;
 const CAT_START = "[data-nn-qa-practice-hub-start-test]";
 
 export async function answerOneCatItem(page: Page): Promise<void> {
-  const list = page.locator("ul.nn-cat-opt-list").first();
-  await expect(list).toBeVisible({ timeout: 120_000 });
-  const mcBtn = list.locator("button.nn-cat-opt");
-  const sataLabel = list.locator("label.nn-cat-opt");
-  if ((await mcBtn.count()) > 0) {
-    await mcBtn.first().click();
-  } else if ((await sataLabel.count()) > 0) {
-    await sataLabel.first().click();
-  } else {
-    throw new Error("No CAT answer options found (expected MC or SATA controls).");
-  }
-  const next = page.getByRole("button", { name: /Next question|Submit & finish/ });
-  await expect(next).toBeEnabled({ timeout: 30_000 });
-  await next.click();
-  await page.waitForLoadState("networkidle", { timeout: 30_000 }).catch(() => {});
+  await answerOneCatExamItem(page);
 }
 
 export function assertCleanObservers(observers: PageObservers, label: string): void {

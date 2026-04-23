@@ -15,25 +15,10 @@ import {
 import { attachPageObservers } from "../helpers/attach-observers";
 import { logObserverFailureSummary } from "../helpers/log-observer-failure-summary";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
+import { answerOneCatExamItem } from "../helpers/cat-practice-exam-flow";
 
 async function answerOneCatItem(page: Page) {
-  const list = page.locator("ul.nn-cat-opt-list").first();
-  await expect(list).toBeVisible({ timeout: 120_000 });
-
-  const mcBtn = list.locator("button.nn-cat-opt");
-  const sataLabel = list.locator("label.nn-cat-opt");
-  if ((await mcBtn.count()) > 0) {
-    await mcBtn.first().click();
-  } else if ((await sataLabel.count()) > 0) {
-    await sataLabel.first().click();
-  } else {
-    throw new Error("No CAT answer options found (expected MC or SATA controls).");
-  }
-
-  const next = page.getByRole("button", { name: /Next question|Submit & finish/ });
-  await expect(next).toBeEnabled({ timeout: 30_000 });
-  await next.click();
-  await page.waitForLoadState("networkidle", { timeout: 30_000 }).catch(() => {});
+  await answerOneCatExamItem(page);
 }
 
 test.describe("Paid user — CAT smoke", () => {

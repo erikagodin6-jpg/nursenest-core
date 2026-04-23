@@ -126,6 +126,11 @@ describe("parseTierScopedAppStudyCallbackPath", () => {
     assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
   });
 
+  it("allows /app/practice-tests/cat-launch with pathwayId", () => {
+    const u = `/app/practice-tests/cat-launch?pathwayId=${encodeURIComponent(PN)}`;
+    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
+  });
+
   it("allows /app/flashcards with pathwayId", () => {
     const u = `/app/flashcards?pathwayId=${encodeURIComponent(RN)}`;
     assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
@@ -160,7 +165,7 @@ describe("tier-scoped app hrefs", () => {
   });
 
   it("RN hub CAT start href carries pathwayId only", () => {
-    assert.match(appPathwayCatSessionStartPath(RN), /^\/app\/practice-tests\/start\?pathwayId=us-rn-nclex-rn$/);
+    assert.match(appPathwayCatSessionStartPath(RN), /^\/app\/practice-tests\/cat-launch\?pathwayId=us-rn-nclex-rn$/);
   });
 
   it("learner nav practice + CAT stay on same pathwayId when shell provides it", () => {

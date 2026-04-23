@@ -24,6 +24,7 @@
  */
 import { expect, test, type Page } from "@playwright/test";
 import { attachPageObservers } from "../helpers/attach-observers";
+import { answerOneCatExamItem } from "../helpers/cat-practice-exam-flow";
 import { assertSafeSubscriberJourneyBaseUrl } from "../helpers/e2e-safety-guards";
 import { LESSON_HUB_CARD_LINKS } from "../helpers/paid-content-discovery";
 import { isLearnerNavInternalHref, loginWithCredentials } from "../helpers/learner-login";
@@ -80,21 +81,7 @@ async function dismissFlashcardResumeIfPresent(page: Page) {
 }
 
 async function answerOneCatItem(page: Page) {
-  const list = page.locator("ul.nn-cat-opt-list").first();
-  await expect(list).toBeVisible({ timeout: 120_000 });
-  const mcBtn = list.locator("button.nn-cat-opt");
-  const sataLabel = list.locator("label.nn-cat-opt");
-  if ((await mcBtn.count()) > 0) {
-    await mcBtn.first().click();
-  } else if ((await sataLabel.count()) > 0) {
-    await sataLabel.first().click();
-  } else {
-    throw new Error("No CAT answer options found.");
-  }
-  const next = page.getByRole("button", { name: /Next question|Submit & finish/ });
-  await expect(next).toBeEnabled({ timeout: 30_000 });
-  await next.click();
-  await page.waitForLoadState("networkidle", { timeout: 30_000 }).catch(() => {});
+  await answerOneCatExamItem(page);
 }
 
 test.describe("Stripe test-mode subscriber journey (opt-in)", () => {

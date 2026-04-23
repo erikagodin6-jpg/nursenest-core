@@ -10,9 +10,10 @@ export type ResolveStudySurfaceCatHrefArgs = {
   preferWeakFocus?: boolean;
 };
 
+/** Pathway-scoped CAT entry: `/app/practice-tests/cat-launch` verifies readiness and starts the exam shell immediately. */
 export function appPathwayCatSessionStartPath(pathwayId: string): string {
   const q = new URLSearchParams({ pathwayId: pathwayId.trim() });
-  return `/app/practice-tests/start?${q.toString()}`;
+  return `/app/practice-tests/cat-launch?${q.toString()}`;
 }
 
 export function resolvePreferredCatPathwayId(

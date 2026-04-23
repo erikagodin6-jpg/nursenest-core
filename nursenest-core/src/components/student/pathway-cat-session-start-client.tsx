@@ -16,13 +16,12 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import type { CatPracticeReadinessResult } from "@/lib/practice-tests/cat-practice-readiness";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
-import { ExamPreExamCustomizeModal } from "@/components/exam/exam-study-theme-modal";
 import { CatAmbiguityPathwayPicker } from "@/components/student/cat-ambiguity-pathway-picker";
 import {
+  buildCatExamSimulationCreatePayload,
   isHardBlockingReadinessCode,
   normalizePathwaySelection,
   resolveCatStartUiState,
-  resolveReadinessStartQuestionCount,
 } from "@/components/student/pathway-cat-start-payload";
 
 function sectionShell(children: ReactNode, className = "") {
@@ -63,7 +62,6 @@ export function PathwayCatSessionStartClient({
   const [readinessLoading, setReadinessLoading] = useState(false);
   const [readiness, setReadiness] = useState<CatPracticeReadinessResult | null>(null);
   const [readinessRefreshToken, setReadinessRefreshToken] = useState(0);
-  const [customizeOpen, setCustomizeOpen] = useState(false);
 
   const pathwayMeta = useMemo(
     () => (normalizedPathwayId ? pathwayShellById[normalizedPathwayId] : undefined),
@@ -178,41 +176,20 @@ export function PathwayCatSessionStartClient({
   }, [needsPathwayChoice, normalizedPathwayId]);
 
   const start = useCallback(async () => {
-    if (!normalizedPathwayId) return;
+    if (!normalizedPathwayId || !pathwayMeta) return;
     setCreating(true);
     setError(null);
     setErrorCode(null);
     try {
-      const catPresentationMode = "exam_simulation";
-      const questionCount = resolveReadinessStartQuestionCount({
-        configuredMaxQuestions: readinessConfig?.maxQuestions ?? 150,
-        catPresentationMode,
-        examFamily: pathwayMeta?.examFamily,
-      });
-      const timedMode = true;
-      const timeLimitSec = (readinessConfig?.timeLimitMinutes ?? 300) * 60;
-      const payload = {
-        title: publicCopy?.title ?? (pathwayMeta ? catPathwayRegionalExamLine(pathwayMeta) : "Adaptive exam simulation"),
-        questionCount,
-        topicNames: [],
-        difficultyMin: null,
-        difficultyMax: null,
-        selectionMode: "cat" as const,
-        catSelectionBasis: "random" as const,
-        catPresentationMode,
-        catExamFeedbackMode: "test" as const,
-        pathwayId: normalizedPathwayId,
-        timedMode,
-        timeLimitSec,
-      };
+      const payload = buildCatExamSimulationCreatePayload(pathwayMeta);
       if (isDev) {
         console.info("[CAT start] attempt", {
           pathwayId,
           normalizedPathwayId,
-          questionCount,
-          catPresentationMode,
-          examFamily: pathwayMeta?.examFamily ?? null,
-          timeLimitSec,
+          questionCount: payload.questionCount,
+          catPresentationMode: payload.catPresentationMode,
+          examFamily: pathwayMeta.examFamily ?? null,
+          timeLimitSec: payload.timeLimitSec,
         });
       }
       const res = await fetch("/api/practice-tests", {
@@ -245,7 +222,7 @@ export function PathwayCatSessionStartClient({
     } finally {
       setCreating(false);
     }
-  }, [normalizedPathwayId, pathwayId, pathwayMeta?.examFamily, readinessConfig, publicCopy?.title, isDev]);
+  }, [normalizedPathwayId, pathwayId, pathwayMeta, isDev]);
 
   if (pathwayOptions.length === 0) {
     return (
@@ -510,8 +487,8 @@ export function PathwayCatSessionStartClient({
         <div className="p-5 sm:p-6">
           <h2 className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-xl">Start exam simulation</h2>
           <p className="mt-1 max-w-xl text-sm text-[var(--semantic-text-secondary)]">
-            You will choose interface contrast in the next step, then enter the timed exam shell. Rationales stay off until the
-            session completes (exam feedback mode).
+            Starts the timed exam shell immediately after verification. Rationales stay off until the session completes (exam
+            feedback mode). Exam interface theme follows your last in-exam choice or the app default.
           </p>
           <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             <button
@@ -520,7 +497,7 @@ export function PathwayCatSessionStartClient({
               disabled={creating || uiState.startDisabled || isHardBlockingReadinessCode(readinessCode)}
               className="inline-flex min-h-11 min-w-[200px] items-center justify-center rounded-md px-6 text-sm font-semibold text-[var(--role-cta-foreground,var(--theme-primary-foreground))] shadow-sm transition hover:opacity-[0.94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)] disabled:cursor-not-allowed disabled:opacity-45"
               style={{ background: "var(--role-cta, var(--semantic-text-primary))" }}
-              onClick={() => setCustomizeOpen(true)}
+              onClick={() => void start()}
             >
               {creating ? "Starting…" : readinessLoading ? "Checking pool…" : "Start exam simulation"}
             </button>
@@ -592,15 +569,6 @@ export function PathwayCatSessionStartClient({
         NurseNest adaptive engine · pathway-isolated content · timed exam simulation mode
       </footer>
 
-      <ExamPreExamCustomizeModal
-        open={customizeOpen}
-        onClose={() => setCustomizeOpen(false)}
-        onBegin={() => {
-          setCustomizeOpen(false);
-          void start();
-        }}
-        starting={creating}
-      />
     </div>
   );
 }

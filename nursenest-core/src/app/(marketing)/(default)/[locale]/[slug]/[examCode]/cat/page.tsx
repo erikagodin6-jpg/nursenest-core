@@ -249,7 +249,7 @@ export default async function PathwayCatEntryPage({ params }: Props) {
                 }
                 className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
               >
-                {assessment.marketingPrimaryCta === "sign_in_to_cat" ? `Sign in to start ${catShort}` : `Start ${catShort}`}
+                {assessment.marketingPrimaryCta === "sign_in_to_cat" ? "Sign in to start exam simulation" : "Start exam simulation"}
               </Link>
               <Link
                 href={questionsHref}

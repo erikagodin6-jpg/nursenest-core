@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { PathwayCatSessionStartClient } from "@/components/student/pathway-cat-session-start-client";
 import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
@@ -25,12 +26,14 @@ export async function generateMetadata(): Promise<Metadata> {
   );
 }
 
-type Props = { searchParams: Promise<{ pathwayId?: string }> };
+type Props = { searchParams: Promise<{ pathwayId?: string; review?: string }> };
 
 export default async function PathwayCatStartPage({ searchParams }: Props) {
   const { t } = await getLearnerMarketingBundle();
   const sp = await searchParams;
   const requestedPathwayId = typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 2 ? sp.pathwayId.trim() : null;
+  /** When set, show the full briefing UI (avoids redirect loop from cat-launch error “Full setup” link). */
+  const forceFullSetup = sp.review === "1" || sp.review === "true";
 
   const session = await getProtectedRouteSession("(student).app.(learner).practice-tests.start");
   const userId = (session?.user as { id?: string })?.id ?? "";
@@ -107,6 +110,11 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
       : catEligiblePathways.length === 1
         ? catEligiblePathways[0]!.id
         : null;
+
+  /** Pathway is known → go straight to session bridge unless learner explicitly opened the full briefing. */
+  if (initialPathwayId && !forceFullSetup) {
+    redirect(`/app/practice-tests/cat-launch?pathwayId=${encodeURIComponent(initialPathwayId)}`);
+  }
 
   const pathwayOptions = catEligiblePathways.map((p) => ({
     id: p.id,
