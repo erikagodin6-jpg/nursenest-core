@@ -31,6 +31,10 @@ import {
   validateCatQuestionPool,
   validatePracticeCatPool,
 } from "@/lib/exams/cat-engine";
+/**
+ * Active adaptive sessions must never be “repaired” from stale published snapshots — see
+ * `src/lib/practice-tests/cat-active-session-snapshot-policy.ts`.
+ */
 import { catHighYieldPracticeBoost } from "@/lib/exams/cat-adaptive-policy";
 import { logCatBlueprintSessionMappingQualityFromReport } from "@/lib/exams/cat-blueprint-mapping-quality";
 import {

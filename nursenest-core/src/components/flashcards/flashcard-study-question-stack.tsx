@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckCircle2, BookOpen, Lightbulb } from "lucide-react";
-import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
+import { BookOpen, CheckCircle2, Lightbulb, X } from "lucide-react";
+import { FlashcardRichContent, flashcardTextMayContainMarkup } from "@/components/flashcards/flashcard-rich-content";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
+import { stripRedundantMcqLetterPrefix } from "@/lib/questions/strip-mcq-option-letter-prefix";
 
 /** One-line teaching blurb for “why wrong” rows (competitor-style scan). */
 export function firstTeachingLine(raw: string): string {
@@ -13,6 +14,191 @@ export function firstTeachingLine(raw: string): string {
   const m = firstLine.match(/^.{1,200}?[.!?](?=\s|$)/);
   const sentence = (m?.[0] ?? firstLine).trim();
   return sentence.length > 160 ? `${sentence.slice(0, 157)}…` : sentence;
+}
+
+/** When the stem is HTML, pull the first illustration to the clinical reference column and trim it from the stem. */
+export function splitPromptLeadingImage(prompt: string): { stem: string; imageSrc: string | null } {
+  if (!flashcardTextMayContainMarkup(prompt)) return { stem: prompt, imageSrc: null };
+  const imgRe = /<img\b[^>]*\bsrc\s*=\s*["']([^"']+)["'][^>]*\/?>/i;
+  const m = prompt.match(imgRe);
+  if (!m || m.index === undefined) return { stem: prompt, imageSrc: null };
+  const imageSrc = m[1]?.trim() || null;
+  if (!imageSrc) return { stem: prompt, imageSrc: null };
+  const before = prompt.slice(0, m.index);
+  const after = prompt.slice(m.index + m[0].length);
+  const without = `${before}${after}`.replace(/<p>\s*<\/p>/gi, "").trim();
+  const textOnly = without.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+  if (textOnly.length < 8) return { stem: prompt, imageSrc };
+  return { stem: without, imageSrc };
+}
+
+export function flashcardExamMcqOptionClass(args: {
+  letter: string;
+  exam: ExamMicroQuestionPayload;
+  revealed: boolean;
+  pickedLetter: string | null;
+  tutorMode: boolean;
+  interactive: boolean;
+}): string {
+  const { letter, exam, revealed, pickedLetter, tutorMode, interactive } = args;
+  const base =
+    "flex w-full min-h-[52px] items-center gap-3 rounded-xl border px-3 py-2.5 text-left text-sm leading-snug text-[var(--semantic-text-primary)] transition";
+  if (!revealed) {
+    if (interactive) {
+      return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_38%,var(--semantic-surface))]`;
+    }
+    return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-text-primary))] bg-[var(--semantic-surface)]`;
+  }
+  if (!tutorMode) {
+    const isCorrect = letter === exam.correctLetter;
+    if (isCorrect) {
+      return `${base} border-[color-mix(in_srgb,var(--semantic-success)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_11%,var(--semantic-surface))] shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--semantic-success)_22%,transparent)]`;
+    }
+    return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_95%,var(--semantic-text-primary))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_42%,var(--semantic-surface))] opacity-[0.78]`;
+  }
+  const isCorrect = letter === exam.correctLetter;
+  const wasPicked = pickedLetter === letter;
+  if (isCorrect) {
+    return `${base} border-[color-mix(in_srgb,var(--semantic-success)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_11%,var(--semantic-surface))] shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--semantic-success)_22%,transparent)]`;
+  }
+  if (wasPicked) {
+    return `${base} border-[color-mix(in_srgb,var(--semantic-danger)_50%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))]`;
+  }
+  return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_95%,var(--semantic-text-primary))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_42%,var(--semantic-surface))] opacity-[0.78]`;
+}
+
+function optionLetterCircleClass(args: {
+  letter: string;
+  exam: ExamMicroQuestionPayload;
+  revealed: boolean;
+  pickedLetter: string | null;
+  tutorMode: boolean;
+  interactive: boolean;
+}): string {
+  const { letter, exam, revealed, pickedLetter, tutorMode, interactive } = args;
+  const base =
+    "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold tabular-nums transition";
+  if (!revealed) {
+    if (interactive) {
+      return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)]`;
+    }
+    return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)]`;
+  }
+  if (!tutorMode) {
+    const isCorrect = letter === exam.correctLetter;
+    if (isCorrect) {
+      return `${base} border-[color-mix(in_srgb,var(--semantic-success)_55%,transparent)] bg-[var(--semantic-success)] text-[var(--semantic-surface)]`;
+    }
+    return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] text-[var(--semantic-text-muted)]`;
+  }
+  const isCorrect = letter === exam.correctLetter;
+  const wasPicked = pickedLetter === letter;
+  if (isCorrect) {
+    return `${base} border-[color-mix(in_srgb,var(--semantic-success)_55%,transparent)] bg-[var(--semantic-success)] text-[var(--semantic-surface)]`;
+  }
+  if (wasPicked) {
+    return `${base} border-[color-mix(in_srgb,var(--semantic-danger)_50%,transparent)] bg-[color-mix(in_srgb,var(--semantic-danger)_12%,var(--semantic-surface))] text-[var(--semantic-danger)]`;
+  }
+  return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] text-[var(--semantic-text-muted)]`;
+}
+
+export type FlashcardExamMcqAnswerListProps = {
+  exam: ExamMicroQuestionPayload;
+  revealed: boolean;
+  pickedLetter: string | null;
+  tutorMcq: boolean;
+  answerChoicesHeading: string;
+  revealHint?: string | null;
+  onPickLetter?: (letter: string) => void;
+};
+
+/**
+ * Shared A–D row list for exam-style flashcards (card + split layouts).
+ */
+export function FlashcardExamMcqAnswerList({
+  exam,
+  revealed,
+  pickedLetter,
+  tutorMcq,
+  answerChoicesHeading,
+  revealHint,
+  onPickLetter,
+}: FlashcardExamMcqAnswerListProps) {
+  return (
+    <div className="mt-3 space-y-2">
+      <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
+        {answerChoicesHeading}
+      </p>
+      <ul className="space-y-2" aria-label={answerChoicesHeading}>
+        {exam.answerOptions.map((o) => {
+          const interactive = tutorMcq && !revealed && Boolean(onPickLetter);
+          const showCorrectMark = revealed && o.letter === exam.correctLetter;
+          const row = (
+            <>
+              <span
+                className={optionLetterCircleClass({
+                  letter: o.letter,
+                  exam,
+                  revealed,
+                  pickedLetter,
+                  tutorMode: tutorMcq,
+                  interactive,
+                })}
+                aria-hidden
+              >
+                {o.letter}
+              </span>
+              <FlashcardRichContent
+                text={stripRedundantMcqLetterPrefix(o.text)}
+                className="min-w-0 flex-1 text-[var(--semantic-text-primary)] [&_p]:mb-1 [&_p:last-child]:mb-0"
+              />
+              {showCorrectMark ? (
+                <CheckCircle2 className="h-5 w-5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+              ) : (
+                <span className="h-5 w-5 shrink-0" aria-hidden />
+              )}
+            </>
+          );
+          return (
+            <li key={o.letter} className="list-none">
+              {interactive ? (
+                <button
+                  type="button"
+                  onClick={() => onPickLetter?.(o.letter)}
+                  className={flashcardExamMcqOptionClass({
+                    letter: o.letter,
+                    exam,
+                    revealed,
+                    pickedLetter,
+                    tutorMode: tutorMcq,
+                    interactive: true,
+                  })}
+                >
+                  {row}
+                </button>
+              ) : (
+                <div
+                  className={flashcardExamMcqOptionClass({
+                    letter: o.letter,
+                    exam,
+                    revealed,
+                    pickedLetter,
+                    tutorMode: tutorMcq,
+                    interactive: false,
+                  })}
+                >
+                  {row}
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      {tutorMcq && !revealed && revealHint ? (
+        <p className="text-xs text-[var(--semantic-text-muted)]">{revealHint}</p>
+      ) : null}
+    </div>
+  );
 }
 
 export type FlashcardStudyQuestionStackProps = {
@@ -43,43 +229,17 @@ export type FlashcardStudyQuestionStackProps = {
     distractorAnalysisHeading: string;
     /** Suppress empty-state pearl text in the takeaway block */
     emptyPearlMessage: string;
+    clinicalReferenceHeading: string;
+    rationaleReviewHeading: string;
+    whyCorrectHeading: string;
+    whyIncorrectHeading: string;
+    clinicalReferenceEmpty: string;
   };
 };
 
-export function flashcardExamMcqOptionClass(args: {
-  letter: string;
-  exam: ExamMicroQuestionPayload;
-  revealed: boolean;
-  pickedLetter: string | null;
-  tutorMode: boolean;
-  interactive: boolean;
-}): string {
-  const { letter, exam, revealed, pickedLetter, tutorMode, interactive } = args;
-  const base =
-    "w-full rounded-xl border px-3 py-2 text-left text-sm leading-snug text-[var(--semantic-text-primary)] transition";
-  if (!revealed) {
-    if (interactive) {
-      return `${base} border-[color-mix(in_srgb,var(--semantic-chart-2)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_42%,var(--semantic-surface))] hover:bg-[color-mix(in_srgb,var(--semantic-info)_12%,var(--semantic-surface))] min-h-[44px]`;
-    }
-    return `${base} border-[color-mix(in_srgb,var(--semantic-chart-2)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_42%,var(--semantic-surface))]`;
-  }
-  if (!tutorMode) {
-    return `${base} border-[color-mix(in_srgb,var(--semantic-chart-2)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_42%,var(--semantic-surface))] opacity-90`;
-  }
-  const isCorrect = letter === exam.correctLetter;
-  const wasPicked = pickedLetter === letter;
-  if (isCorrect) {
-    return `${base} border-[color-mix(in_srgb,var(--semantic-success)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_14%,var(--semantic-surface))] ring-1 ring-[color-mix(in_srgb,var(--semantic-success)_35%,transparent)]`;
-  }
-  if (wasPicked) {
-    return `${base} border-[color-mix(in_srgb,var(--semantic-danger)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_12%,var(--semantic-surface))] ring-1 ring-[color-mix(in_srgb,var(--semantic-danger)_30%,transparent)]`;
-  }
-  return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_80%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] opacity-[0.72]`;
-}
-
 /**
- * Question-bank-style stack: stem (with optional embedded images) → reveal → answer → rationale beneath.
- * Calm, scannable, long-session typography — matches `.nn-question-stem-card` / rationale panels.
+ * Question-bank-style stack: stem (with optional embedded images) → reveal → answer → rationale.
+ * Exam-style cards use a fixed two-column board: question + options (left), clinical reference + rationale (right).
  */
 export function FlashcardStudyQuestionStack({
   sessionModeLabel,
@@ -98,6 +258,7 @@ export function FlashcardStudyQuestionStack({
   const exam = examMicroQuestion;
   const tutorMcq = Boolean(exam && (mcqInteractionMode ?? "tutor_select") === "tutor_select");
   const [pickedLetter, setPickedLetter] = useState<string | null>(null);
+  const examBoard = Boolean(exam);
 
   useEffect(() => {
     setPickedLetter(null);
@@ -110,118 +271,211 @@ export function FlashcardStudyQuestionStack({
   const showTakeaway =
     !exp && pearlTrim.length > 0 && (!missing || pearlTrim !== missing);
 
+  const { stem: stemForQuestion, imageSrc: clinicalImageSrc } = examBoard
+    ? splitPromptLeadingImage(prompt)
+    : { stem: prompt, imageSrc: null as string | null };
+
   function commitPick(letter: string) {
     if (revealed || !exam || !tutorMcq) return;
     setPickedLetter(letter);
     onReveal();
   }
 
-  return (
-    <div className="w-full min-w-0 max-w-2xl space-y-3">
-      <div className="nn-question-stem-card text-left">
-        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-          <span className="nn-marketing-caption font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
-            {sessionModeLabel}
-          </span>
+  const correctOptionText = exam
+    ? stripRedundantMcqLetterPrefix(exam.answerOptions.find((o) => o.letter === exam.correctLetter)?.text ?? "")
+    : "";
+
+  const questionCard = (
+    <div
+      className={`rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] p-5 shadow-sm sm:p-6 ${examBoard ? "min-h-0 min-w-0" : ""}`}
+    >
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <span className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
+          {sessionModeLabel}
+        </span>
+      </div>
+      {topicLine ? (
+        <p className="mb-2 text-xs font-medium text-[var(--semantic-text-secondary)]">{topicLine}</p>
+      ) : null}
+      {itemKindCaption ? (
+        <p className="mb-3 inline-flex max-w-full rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_34%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+          {itemKindCaption}
+        </p>
+      ) : null}
+      <div className="nn-question-stem-wrap text-base font-semibold leading-snug text-[var(--semantic-text-primary)] sm:text-[1.05rem]">
+        <FlashcardRichContent text={stemForQuestion} />
+      </div>
+
+      {exam ? (
+        <FlashcardExamMcqAnswerList
+          exam={exam}
+          revealed={revealed}
+          pickedLetter={pickedLetter}
+          tutorMcq={tutorMcq}
+          answerChoicesHeading={labels.answerChoicesHeading}
+          revealHint={labels.revealHint}
+          onPickLetter={(letter) => commitPick(letter)}
+        />
+      ) : null}
+
+      {!revealed && (!exam || !tutorMcq) ? (
+        <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-xs text-[var(--semantic-text-muted)]">{labels.revealHint}</p>
+          <button
+            type="button"
+            onClick={onReveal}
+            className="inline-flex min-h-[44px] min-w-[min(100%,12rem)] shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-5 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))]"
+          >
+            {labels.revealCta}
+          </button>
         </div>
-        {topicLine ? (
-          <p className="mb-2 text-xs font-medium text-[var(--semantic-text-secondary)]">{topicLine}</p>
-        ) : null}
-        {itemKindCaption ? (
-          <p className="mb-2 inline-flex max-w-full rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_34%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
-            {itemKindCaption}
+      ) : null}
+    </div>
+  );
+
+  const rationaleColumn =
+    examBoard ? (
+      <aside className="flex min-h-0 min-w-0 flex-col gap-4">
+        <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] p-4 shadow-sm sm:p-5">
+          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-[var(--semantic-text-muted)]">
+            {labels.clinicalReferenceHeading}
           </p>
-        ) : null}
-        <div className="nn-question-stem-wrap">
-          <FlashcardRichContent text={prompt} />
+          <div className="mt-4 flex min-h-[12rem] items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-text-primary))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_28%,var(--semantic-surface))] p-4">
+            {clinicalImageSrc ? (
+              // eslint-disable-next-line @next/next/no-img-element -- flashcard stems may reference CDN URLs from trusted content
+              <img
+                src={clinicalImageSrc}
+                alt=""
+                className="max-h-[min(42vh,22rem)] w-auto max-w-full object-contain"
+              />
+            ) : (
+              <p className="max-w-xs text-center text-xs leading-relaxed text-[var(--semantic-text-muted)]">
+                {labels.clinicalReferenceEmpty}
+              </p>
+            )}
+          </div>
         </div>
 
-        {exam ? (
-          <div className="mt-3 space-y-2">
-            <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">
-              {labels.answerChoicesHeading}
-            </p>
-            <ul className="space-y-1.5" aria-label={labels.answerChoicesHeading}>
-              {exam.answerOptions.map((o) => {
-                const interactive = tutorMcq && !revealed;
-                return (
-                  <li key={o.letter} className="list-none">
-                    {interactive ? (
-                      <button
-                        type="button"
-                        onClick={() => commitPick(o.letter)}
-                        className={flashcardExamMcqOptionClass({
-                          letter: o.letter,
-                          exam,
-                          revealed,
-                          pickedLetter,
-                          tutorMode: tutorMcq,
-                          interactive: true,
-                        })}
-                      >
-                        <div className="flex gap-2">
-                          <span className="shrink-0 font-mono text-xs font-bold text-[var(--semantic-chart-2)]">
-                            {o.letter}.
-                          </span>
-                          <FlashcardRichContent
-                            text={o.text}
-                            className="min-w-0 flex-1 [&_p]:mb-1 [&_p:last-child]:mb-0"
-                          />
-                        </div>
-                      </button>
+        {revealed ? (
+          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] p-4 shadow-sm sm:p-5">
+            <div className="mb-4 flex items-center gap-2 border-b border-[var(--semantic-border-soft)] pb-3">
+              <BookOpen className="h-4 w-4 shrink-0 text-[var(--semantic-brand)]" aria-hidden />
+              <h2 className="text-sm font-semibold text-[var(--semantic-brand)]">{labels.rationaleReviewHeading}</h2>
+            </div>
+
+            <section
+              className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] p-3 sm:p-4"
+              aria-labelledby="fc-answer-heading"
+            >
+              <div className="mb-2 flex items-center gap-2" id="fc-answer-heading">
+                <CheckCircle2 className="h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
+                <h3 className="text-[0.6875rem] font-bold uppercase tracking-[0.1em] text-[var(--semantic-text-muted)]">
+                  {labels.answerHeading}
+                </h3>
+              </div>
+              <div className="text-sm font-medium leading-relaxed text-[var(--semantic-text-primary)]">
+                {exam && correctOptionText ? (
+                  <>
+                    <span className="font-bold text-[var(--semantic-success)]">{exam.correctLetter}.</span>{" "}
+                    {flashcardTextMayContainMarkup(correctOptionText) ? (
+                      <FlashcardRichContent text={correctOptionText} className="inline-block align-top" />
                     ) : (
-                      <div
-                        className={flashcardExamMcqOptionClass({
-                          letter: o.letter,
-                          exam,
-                          revealed,
-                          pickedLetter,
-                          tutorMode: tutorMcq,
-                          interactive: false,
-                        })}
-                      >
-                        <div className="flex gap-2">
-                          <span className="shrink-0 font-mono text-xs font-bold text-[var(--semantic-chart-2)]">
-                            {o.letter}.
-                          </span>
-                          <FlashcardRichContent
-                            text={o.text}
-                            className="min-w-0 flex-1 [&_p]:mb-1 [&_p:last-child]:mb-0"
-                          />
-                        </div>
-                      </div>
+                      <span>{correctOptionText}</span>
                     )}
-                  </li>
-                );
-              })}
-            </ul>
-            {tutorMcq && !revealed ? (
-              <p className="text-xs text-[var(--semantic-text-muted)]">{labels.revealHint}</p>
+                  </>
+                ) : (
+                  <FlashcardRichContent text={answer} />
+                )}
+              </div>
+            </section>
+
+            {exp ? (
+              <section
+                className="mt-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_32%,var(--semantic-surface))] p-3 sm:p-4"
+                aria-labelledby="fc-why-correct-heading"
+              >
+                <p
+                  className="mb-2 flex items-center gap-2 text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]"
+                  id="fc-why-correct-heading"
+                >
+                  <Lightbulb className="h-4 w-4 shrink-0 text-[var(--semantic-warning)]" aria-hidden />
+                  {labels.whyCorrectHeading}
+                </p>
+                <FlashcardRichContent
+                  text={exp}
+                  className="!text-[var(--semantic-text-primary)] text-sm leading-relaxed [&_p]:mb-2 [&_p:last-child]:mb-0"
+                />
+              </section>
+            ) : null}
+
+            {exam && revealed ? (
+              <section
+                className="mt-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-text-primary))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_30%,var(--semantic-surface))] p-3 sm:p-4"
+                aria-labelledby="fc-distractor-heading"
+              >
+                <h3
+                  className="mb-2 flex items-center gap-2 text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]"
+                  id="fc-distractor-heading"
+                >
+                  <X className="h-4 w-4 shrink-0 text-[var(--semantic-danger)]" aria-hidden />
+                  {labels.whyIncorrectHeading}
+                </h3>
+                <ul className="space-y-2.5">
+                  {exam.rationaleIncorrect.map((row) => (
+                    <li key={row.letter} className="flex gap-2 text-sm leading-relaxed text-[var(--semantic-text-primary)]">
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--semantic-danger)_16%,var(--semantic-surface))] text-[11px] font-bold text-[var(--semantic-danger)]">
+                        {row.letter}
+                      </span>
+                      <span className="min-w-0 flex-1">{firstTeachingLine(row.rationale)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+
+            {showTakeaway ? (
+              <section
+                className="mt-3 rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_40%,var(--semantic-surface))] p-3 sm:p-4"
+                aria-labelledby="fc-pearl-heading"
+              >
+                <div className="mb-1.5 flex items-center gap-2" id="fc-pearl-heading">
+                  <Lightbulb className="h-4 w-4 shrink-0 text-[var(--semantic-warning)]" aria-hidden />
+                  <h3 className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">
+                    {labels.takeawayHeading}
+                  </h3>
+                </div>
+                <p className="text-sm leading-relaxed text-[var(--semantic-text-primary)] whitespace-pre-wrap">{pearlTrim}</p>
+              </section>
             ) : null}
           </div>
-        ) : null}
-
-        {!revealed && (!exam || !tutorMcq) ? (
-          <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs text-[var(--semantic-text-muted)]">{labels.revealHint}</p>
-            <button
-              type="button"
-              onClick={onReveal}
-              className="inline-flex min-h-[44px] min-w-[min(100%,12rem)] shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-5 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] shadow-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-brand)_14%,var(--semantic-surface))]"
-            >
-              {labels.revealCta}
-            </button>
+        ) : (
+          <div className="rounded-2xl border border-dashed border-[color-mix(in_srgb,var(--semantic-border-soft)_95%,var(--semantic-text-primary))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_18%,var(--semantic-surface))] p-5 text-center text-sm text-[var(--semantic-text-muted)]">
+            {labels.revealHint}
           </div>
-        ) : null}
+        )}
+      </aside>
+    ) : null;
+
+  if (examBoard) {
+    return (
+      <div className="nn-flashcard-exam-board grid w-full min-w-0 gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,380px)] xl:gap-6">
+        <div className="min-w-0">{questionCard}</div>
+        {rationaleColumn}
       </div>
+    );
+  }
+
+  return (
+    <div className="w-full min-w-0 max-w-2xl space-y-3">
+      {questionCard}
 
       {revealed ? (
         <div className="space-y-3">
           <section
             className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_9%,var(--semantic-surface))] p-3 sm:p-4"
-            aria-labelledby="fc-answer-heading"
+            aria-labelledby="fc-answer-heading-legacy"
           >
-            <div className="mb-1.5 flex items-center gap-2" id="fc-answer-heading">
+            <div className="mb-1.5 flex items-center gap-2" id="fc-answer-heading-legacy">
               <CheckCircle2 className="h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
               <h3 className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">
                 {labels.answerHeading}
@@ -231,11 +485,8 @@ export function FlashcardStudyQuestionStack({
           </section>
 
           {exp ? (
-            <section
-              className="nn-rationale-key-point"
-              aria-labelledby="fc-rationale-heading"
-            >
-              <p className="nn-rationale-key-point__label" id="fc-rationale-heading">
+            <section className="nn-rationale-key-point" aria-labelledby="fc-rationale-heading-legacy">
+              <p className="nn-rationale-key-point__label" id="fc-rationale-heading-legacy">
                 <BookOpen className="nn-rationale-key-point__icon text-[var(--semantic-info)]" aria-hidden />
                 {labels.rationaleHeading}
               </p>
@@ -246,41 +497,12 @@ export function FlashcardStudyQuestionStack({
             </section>
           ) : null}
 
-          {exam && revealed ? (
-            <section
-              className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_35%,var(--semantic-surface))] p-3 sm:p-4"
-              aria-labelledby="fc-distractor-heading"
-            >
-              <h3
-                className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]"
-                id="fc-distractor-heading"
-              >
-                {labels.distractorAnalysisHeading}
-              </h3>
-              <ul className="mt-2 space-y-2">
-                {exam.rationaleIncorrect.map((row) => (
-                  <li
-                    key={row.letter}
-                    className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-3 py-2 text-sm leading-relaxed text-[var(--semantic-text-primary)]"
-                  >
-                    <div className="flex gap-2">
-                      <span className="shrink-0 font-mono text-xs font-bold text-[var(--semantic-danger)]">
-                        {row.letter}.
-                      </span>
-                      <span className="min-w-0 flex-1">{firstTeachingLine(row.rationale)}</span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          ) : null}
-
           {showTakeaway ? (
             <section
               className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_40%,var(--semantic-surface))] p-3 sm:p-4"
-              aria-labelledby="fc-pearl-heading"
+              aria-labelledby="fc-pearl-heading-legacy"
             >
-              <div className="mb-1.5 flex items-center gap-2" id="fc-pearl-heading">
+              <div className="mb-1.5 flex items-center gap-2" id="fc-pearl-heading-legacy">
                 <Lightbulb className="h-4 w-4 shrink-0 text-[var(--semantic-warning)]" aria-hidden />
                 <h3 className="text-[0.6875rem] font-bold uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">
                   {labels.takeawayHeading}

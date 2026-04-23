@@ -39,6 +39,14 @@ import {
   paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver,
 } from "@/lib/lessons/app-lessons-hub-row-renderability";
 import { pickAppLessonsHubListSource } from "@/lib/lessons/app-lessons-hub-list-source";
+import { ContentEmptyState } from "@/components/ui/content-empty-state";
+import {
+  appLessonsHubListOptsForSnapshot,
+  lessonsListBlockFromPathwayHubSnapshot,
+} from "@/lib/lessons/app-lessons-hub-published-snapshot-fallback";
+import { readPathwayLessonsHubPageSnapshot } from "@/lib/study-content-failover/pathway-lessons-hub-snapshot-read";
+import { snapshotAgeMs as publishedSnapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
+import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 
 type AppLessonListRow = {
   id: string;
@@ -385,29 +393,79 @@ export default async function LessonsPage({ searchParams }: Props) {
     };
   }, null, LESSONS_PAGE_DB_TIMEOUT_MS, { scope: "page_lessons", label: "lesson_list_block" });
 
+  let lessonsHubInventorySource: "primary" | "degraded_snapshot" = "primary";
+
   let lessonsBlock: LessonsListBlock;
   if (lessonsBlockFromDb !== null) {
     lessonsBlock = lessonsBlockFromDb;
   } else {
-    safeServerLog("page_lessons", "lesson_list_db_unavailable_fallback_legacy", {});
-    const legacy = await paginateLegacyContentMapLessonsForAppSubscriberHubMatchingDetailResolver(
-      entitlement,
-      pageRequested,
-      limitParsed,
+    safeServerLog("page_lessons", "app_lessons_hub_primary_db_timeout", {
+      pathway_id: pathwayIdFilter ?? "",
+      learner_path: learnerPath ?? "",
+    });
+    const pathwayForSnap = (pathwayIdFilter?.trim() || learnerPath?.trim() || visiblePathwayIds[0] || "").trim() || null;
+    const listOptsSnap = appLessonsHubListOptsForSnapshot({
       qEffective,
-    );
-    const rows: AppLessonListRow[] = legacy.rows.map((r) => ({
-      id: r.id,
-      title: r.title,
-      summary: r.summary,
-    }));
-    lessonsBlock = {
-      source: "legacy_content_map",
-      total: legacy.total,
-      page: legacy.page,
-      pageCount: legacy.pageCount,
-      rows,
-    };
+      topicSlugFilter,
+    });
+    const snap = pathwayForSnap
+      ? await readPathwayLessonsHubPageSnapshot(pathwayForSnap, {
+          pageRequested,
+          pageSizeRequested: limitParsed,
+          lessonContentLocale: marketingLocale,
+          listOpts: listOptsSnap,
+        })
+      : null;
+    const fromSnap = snap && pathwayForSnap ? lessonsListBlockFromPathwayHubSnapshot(pathwayForSnap, snap) : null;
+    if (fromSnap && snap) {
+      lessonsHubInventorySource = "degraded_snapshot";
+      const age = publishedSnapshotAgeMs(snap.capturedAt);
+      safeServerLog("page_lessons", "critical_study_load_diagnostics", {
+        event: "critical_study_load_diagnostics",
+        operation: "app_lessons_hub_list",
+        feature_surface: "learner_app_lessons",
+        live_outcome: "timeout",
+        snapshot_used: "true",
+        snapshot_age_ms: String(Math.round(age >= 0 ? age : -1)),
+        final_outcome: fromSnap.total === 0 ? "empty" : "degraded_snapshot",
+        fallback_used: "true",
+        pathway_id: pathwayForSnap,
+        locale: marketingLocale,
+        exam: entitlement !== "error" ? String(entitlement.country ?? "") : "",
+        snapshot_version: snap.version.slice(0, 120),
+      });
+      lessonsBlock = {
+        source: "pathway_lessons",
+        total: fromSnap.total,
+        page: fromSnap.page,
+        pageCount: fromSnap.pageCount,
+        rows: fromSnap.rows,
+      };
+    } else {
+      safeServerLog("page_lessons", "critical_study_load_diagnostics", {
+        event: "critical_study_load_diagnostics",
+        operation: "app_lessons_hub_list",
+        feature_surface: "learner_app_lessons",
+        live_outcome: "timeout",
+        snapshot_used: "false",
+        final_outcome: "error",
+        fallback_used: "false",
+        pathway_id: pathwayForSnap ?? "",
+        locale: marketingLocale,
+        exam: entitlement !== "error" ? String(entitlement.country ?? "") : "",
+      });
+      return (
+        <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
+          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.title")}</h1>
+          <ContentEmptyState
+            variant="generic"
+            headline="Could not load your lesson list"
+            body="The live lesson catalog timed out and no last-synced snapshot is available for this view. This is not an empty library — please retry."
+            primaryCta={{ label: "Retry", href: "/app/lessons" }}
+          />
+        </div>
+      );
+    }
   }
 
   if (rawPage !== lessonsBlock.page) {
@@ -484,6 +542,7 @@ export default async function LessonsPage({ searchParams }: Props) {
         </h1>
         <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.lessons.list.subscriberIntro")}</p>
       </div>
+      {lessonsHubInventorySource === "degraded_snapshot" ? <LearnerStudyLiveSyncBanner /> : null}
       {(topicFilter || topicSlugFilter) && lessonsBlock.source === "pathway_lessons" ? (
         <div className="nn-card border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-4 text-sm text-[var(--semantic-text-secondary)]">
           <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.topicFilterTitle")}</p>

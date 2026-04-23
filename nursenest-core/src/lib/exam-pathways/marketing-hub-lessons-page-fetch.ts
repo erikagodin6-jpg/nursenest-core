@@ -7,8 +7,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { logContractLoadDiagnostics } from "@/lib/loading/critical-load-outcome";
 import { readPathwayLessonsHubPageSnapshot } from "@/lib/study-content-failover/pathway-lessons-hub-snapshot-read";
 import { snapshotAgeMs as computeSnapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
-import type { StudyDataSourceUsed } from "@/lib/study-content-failover/study-published-snapshot-types";
-import type { StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failover/study-published-snapshot-types";
+import type { StudyDataSourceUsed, StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failover/study-published-snapshot-types";
 
 export type { LoadPathwayLessonsHubPageArgs } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 

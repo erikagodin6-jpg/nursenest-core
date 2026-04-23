@@ -93,6 +93,60 @@ test("failed lessons page fetch returns error state (not ok-with-empty inventory
   assert.equal(pageResult.items.length, 0);
 });
 
+test("primary failure with valid snapshot returns ok + secondary (degraded inventory)", async () => {
+  const item = {
+    slug: "snap-lesson",
+    title: "Snap",
+    topic: "Topic",
+    topicSlug: "infection",
+    bodySystem: "cardiovascular",
+    system: "cardiovascular",
+    previewSectionCount: 1,
+    seoTitle: "Snap",
+    seoDescription: "D",
+    sections: [],
+    structuralQuality: { publicComplete: true },
+    exams: [],
+    countries: [],
+  } as PathwayLessonRecord;
+
+  const snapPayload: PathwayLessonsPageResult = {
+    items: [item],
+    total: 1,
+    page: 1,
+    pageSize: 24,
+    pageCount: 1,
+  };
+
+  const mockFetch = async () => {
+    throw new Error("database_timeout");
+  };
+
+  const { pageResult, lessonsPageLoad } = await loadPathwayLessonsHubPageWithTelemetry(
+    ctx.pathwayId,
+    args,
+    ctx,
+    mockFetch,
+    {
+      readHubSnapshot: async () => ({
+        schema: "nursenest.study_snapshot.v1",
+        surface: "pathway_lessons_hub",
+        version: "test-snap-v1",
+        capturedAt: new Date().toISOString(),
+        payload: snapPayload,
+      }),
+    },
+  );
+
+  assert.equal(lessonsPageLoad.status, "ok");
+  if (lessonsPageLoad.status === "ok") {
+    assert.equal(lessonsPageLoad.sourceUsed, "secondary");
+    assert.equal(lessonsPageLoad.responseTotal, 1);
+  }
+  assert.equal(pageResult.total, 1);
+  assert.equal(pageResult.items.length, 1);
+});
+
 test("fast successful empty page is ok (real zero inventory)", async () => {
   const mockFetch = async (): Promise<PathwayLessonsPageResult> => ({
     items: [],

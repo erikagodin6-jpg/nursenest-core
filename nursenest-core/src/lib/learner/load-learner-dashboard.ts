@@ -30,6 +30,7 @@ import {
 } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { logLearnerStudyLoadDiagnostics, type LearnerStudyLoadOutcome } from "@/lib/learner/learner-study-load-diagnostics";
 import { PATHWAY_LESSON_METADATA_LIST_SELECT } from "@/lib/lessons/pathway-lesson-metadata-select";
 import {
   buildVisibleLessonScopeForLearner,
@@ -115,6 +116,15 @@ export type LearnerDashboardModel = {
   readiness: ReadinessResult;
   /** Recent completed exam-session grading (tier-scoped); reused by premium snapshot. */
   sessionGrading: SessionGradingAggregate;
+  /**
+   * When false, {@link sessionGrading} numeric fields are not trustworthy (load failed).
+   * UI and copy must not treat zeros as real “no activity”.
+   */
+  sessionGradingReliable: boolean;
+  /**
+   * When false, weak/strong/trends/topicPerformance failed — empty arrays do **not** mean “no weak areas”.
+   */
+  topicPerformanceReliable: boolean;
 };
 
 /**
@@ -229,6 +239,12 @@ export type PathwayStudySummariesRow = {
   lessonsTotal: number;
   lessonsCompleted: number;
   lessonsInProgress: number;
+};
+
+export type PathwayStudySummariesLoadResult = {
+  rows: PathwayStudySummariesRow[];
+  status: "ok" | "error";
+  reason?: string;
 };
 
 /**
@@ -436,6 +452,7 @@ export async function loadLearnerDashboardAnalytics(
   topicTrends: TopicTrendRow[];
   topicPerformance: TopicPerformanceSnapshot | null;
   recommendedQuizTopic: string | null;
+  loadFailed: boolean;
 }> {
   const t0 = performance.now();
   let weakTopics: WeakTopicRow[] = [];
@@ -443,6 +460,7 @@ export async function loadLearnerDashboardAnalytics(
   let topicTrends: TopicTrendRow[] = [];
   let topicPerformance: TopicPerformanceSnapshot | null = null;
   let recommendedQuizTopic: string | null = null;
+  let loadFailed = false;
   try {
     const perf = await loadUnifiedTopicPerformance(userId, entitlement, 8);
     topicPerformance = perf;
@@ -450,17 +468,23 @@ export async function loadLearnerDashboardAnalytics(
     strongTopics = perf.strongTopics;
     topicTrends = perf.trends;
     recommendedQuizTopic = perf.recommendedQuizTopic ?? perf.weakTopics[0]?.topic ?? null;
-  } catch {
+  } catch (e) {
+    loadFailed = true;
     safeServerLog("learner_dashboard_perf", "dashboard_analytics_failed", {
       userIdPrefix: userId.slice(0, 8),
       durationMs: Math.round(performance.now() - t0),
       ...getLearnerDurabilityObservabilityFields(),
     });
-    weakTopics = [];
-    strongTopics = [];
-    topicTrends = [];
-    topicPerformance = null;
-    recommendedQuizTopic = null;
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadLearnerDashboardAnalytics",
+      feature_surface: "learner_dashboard",
+      duration_ms: Math.round(performance.now() - t0),
+      outcome: "error",
+      segment: "topic_performance",
+      user_id_prefix: userId.slice(0, 8),
+      reason: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      fallback_used: "false",
+    });
   }
 
   if (user?.tier === TierCode.ALLIED && user.alliedProfessionKey) {
@@ -483,10 +507,11 @@ export async function loadLearnerDashboardAnalytics(
     userIdPrefix: userId.slice(0, 8),
     durationMs: Math.round(performance.now() - t0),
     weakTopicCount: weakTopics.length,
+    analytics_failed: loadFailed ? "1" : "0",
     ...getLearnerDurabilityObservabilityFields(),
   });
 
-  return { weakTopics, strongTopics, topicTrends, topicPerformance, recommendedQuizTopic };
+  return { weakTopics, strongTopics, topicTrends, topicPerformance, recommendedQuizTopic, loadFailed };
 }
 
 /**
@@ -496,10 +521,10 @@ export async function loadLearnerDashboardPracticeDetails(
   userId: string,
   entitlement: AccessScope,
   preload?: SessionGradingAggregate | null,
-): Promise<SessionGradingAggregate> {
+): Promise<{ aggregate: SessionGradingAggregate; loadFailed: boolean }> {
   const t0 = performance.now();
   if (preload) {
-    return preload;
+    return { aggregate: preload, loadFailed: false };
   }
   try {
     const practiceAgg = await loadSessionGradingAggregate(userId, entitlement, 8);
@@ -509,8 +534,8 @@ export async function loadLearnerDashboardPracticeDetails(
       sessionGradingFromPreload: false,
       ...getLearnerDurabilityObservabilityFields(),
     });
-    return practiceAgg;
-  } catch {
+    return { aggregate: practiceAgg, loadFailed: false };
+  } catch (e) {
     safeServerLog("learner_dashboard_perf", "dashboard_practice_grading_complete", {
       userIdPrefix: userId.slice(0, 8),
       durationMs: Math.round(performance.now() - t0),
@@ -518,7 +543,18 @@ export async function loadLearnerDashboardPracticeDetails(
       failed: true,
       ...getLearnerDurabilityObservabilityFields(),
     });
-    return { correct: 0, total: 0, sessionCount: 0 };
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadLearnerDashboardPracticeDetails",
+      feature_surface: "learner_dashboard",
+      duration_ms: Math.round(performance.now() - t0),
+      outcome: "error",
+      segment: "session_grading",
+      user_id_prefix: userId.slice(0, 8),
+      reason: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      fallback_used: "false",
+    });
+    /** Placeholder only when load failed — never interpret as real zeros; use `loadFailed`. */
+    return { aggregate: { correct: 0, total: 0, sessionCount: 0 }, loadFailed: true };
   }
 }
 
@@ -667,6 +703,8 @@ export async function loadLearnerDashboard(
   let topicPerformance: TopicPerformanceSnapshot | null = null;
   let recommendedQuizTopic: string | null = null;
   let practiceAgg: SessionGradingAggregate = { correct: 0, total: 0, sessionCount: 0 };
+  let topicPerformanceReliable = true;
+  let sessionGradingReliable = true;
 
   if (!skipHeavy) {
     const [analytics, grading] = await Promise.all([
@@ -681,9 +719,17 @@ export async function loadLearnerDashboard(
     topicTrends = analytics.topicTrends;
     topicPerformance = analytics.topicPerformance;
     recommendedQuizTopic = analytics.recommendedQuizTopic;
-    practiceAgg = grading;
-  } else if (preload?.sessionGradingPreload) {
-    practiceAgg = preload.sessionGradingPreload;
+    topicPerformanceReliable = !analytics.loadFailed;
+    practiceAgg = grading.aggregate;
+    sessionGradingReliable = !grading.loadFailed;
+  } else {
+    topicPerformanceReliable = false;
+    if (preload?.sessionGradingPreload) {
+      practiceAgg = preload.sessionGradingPreload;
+      sessionGradingReliable = true;
+    } else {
+      sessionGradingReliable = false;
+    }
   }
 
   const readiness = computeReadiness({
@@ -694,6 +740,8 @@ export async function loadLearnerDashboard(
     lessonsCompleted: core.lessonsCompleted,
     lessonsAvailable: core.lessonsAvailable,
     scope: core.scope,
+    practiceSignalReliable: sessionGradingReliable,
+    topicPerformanceSignalReliable: topicPerformanceReliable,
   });
 
   const durationMsTotal = Math.round(performance.now() - tDashboard);
@@ -734,6 +782,8 @@ export async function loadLearnerDashboard(
     recommendedQuizTopic,
     readiness,
     sessionGrading: practiceAgg,
+    sessionGradingReliable,
+    topicPerformanceReliable,
   };
 }
 
@@ -742,98 +792,128 @@ export async function loadPathwayStudySummaries(
   userId: string,
   entitlement: AccessScope,
   preload?: PathwayStudySummariesPreload | null,
-): Promise<PathwayStudySummariesRow[]> {
-  if (!entitlement.hasAccess || !isDatabaseUrlConfigured()) return [];
+): Promise<PathwayStudySummariesLoadResult> {
+  if (!entitlement.hasAccess || !isDatabaseUrlConfigured()) {
+    return { rows: [], status: "error", reason: "no_access_or_db_unset" };
+  }
 
   const pathways = await listPathwaysCompatibleWithSubscription(entitlement);
-  if (pathways.length === 0) return [];
+  if (pathways.length === 0) {
+    return { rows: [], status: "ok" };
+  }
 
   if (preload?.lessonRows?.length && preload.pathwayProgress) {
     const t0 = performance.now();
-    const rows = await buildPathwayStudySummariesFromLessonInventory(
-      entitlement,
-      preload.lessonRows,
-      preload.pathwayProgress,
-    );
-    safeServerLog("learner_dashboard_perf", "pathway_study_summaries_inventory_only", {
-      userIdPrefix: userId.slice(0, 8),
-      pathwayCount: rows.length,
-      lessonInventoryRows: preload.lessonRows.length,
-      durationMs: Math.round(performance.now() - t0),
-      ...getLearnerDurabilityObservabilityFields(),
-    });
-    return rows;
+    try {
+      const rows = await buildPathwayStudySummariesFromLessonInventory(
+        entitlement,
+        preload.lessonRows,
+        preload.pathwayProgress,
+      );
+      safeServerLog("learner_dashboard_perf", "pathway_study_summaries_inventory_only", {
+        userIdPrefix: userId.slice(0, 8),
+        pathwayCount: rows.length,
+        lessonInventoryRows: preload.lessonRows.length,
+        durationMs: Math.round(performance.now() - t0),
+        ...getLearnerDurabilityObservabilityFields(),
+      });
+      return { rows, status: "ok" };
+    } catch (e) {
+      logLearnerStudyLoadDiagnostics({
+        operation: "loadPathwayStudySummaries",
+        feature_surface: "pathway_study_summaries",
+        duration_ms: Math.round(performance.now() - t0),
+        outcome: "error",
+        segment: "inventory_fast_path",
+        user_id_prefix: userId.slice(0, 8),
+        reason: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+        fallback_used: "false",
+      });
+      return { rows: [], status: "error", reason: "inventory_fast_path_failed" };
+    }
   }
 
   const usedLearnerPathPreload = preload?.learnerPath !== undefined;
-  const scopeForSummaries = await timedLearnerCatalogPhase(
-    "pathway_study_summaries_scope",
-    {
-      userIdPrefix: userId.slice(0, 8),
-      usedLearnerPathPreload,
-      usedLessonRowsPreload: Boolean(preload?.lessonRows),
-    },
-    () =>
-      buildVisibleLessonScopeForLearner(userId, entitlement, {
-        learnerPath: preload?.learnerPath,
-        pathwayLessonRows: preload?.lessonRows?.map((r) => ({ pathwayId: r.pathwayId, slug: r.slug })),
-      }),
-  );
-  const baseWhere = await pathwayLessonsAppListWhere(entitlement, scopeForSummaries.learnerPath);
+  const tPath = performance.now();
+  try {
+    const scopeForSummaries = await timedLearnerCatalogPhase(
+      "pathway_study_summaries_scope",
+      {
+        userIdPrefix: userId.slice(0, 8),
+        usedLearnerPathPreload,
+        usedLessonRowsPreload: Boolean(preload?.lessonRows),
+      },
+      () =>
+        buildVisibleLessonScopeForLearner(userId, entitlement, {
+          learnerPath: preload?.learnerPath,
+          pathwayLessonRows: preload?.lessonRows?.map((r) => ({ pathwayId: r.pathwayId, slug: r.slug })),
+        }),
+    );
+    const baseWhere = await pathwayLessonsAppListWhere(entitlement, scopeForSummaries.learnerPath);
 
-  const [counts, allPathwayProgress] = await timedLearnerCatalogPhase(
-    "pathway_study_summaries_parallel",
-    {
-      userIdPrefix: userId.slice(0, 8),
-      usedLearnerPathPreload,
-      fromBundleProgress: Boolean(preload?.lessonRows && preload?.pathwayProgress),
-    },
-    () =>
-      Promise.all([
-        prisma.pathwayLesson
-          .groupBy({
+    const [counts, allPathwayProgress] = await timedLearnerCatalogPhase(
+      "pathway_study_summaries_parallel",
+      {
+        userIdPrefix: userId.slice(0, 8),
+        usedLearnerPathPreload,
+        fromBundleProgress: Boolean(preload?.lessonRows && preload?.pathwayProgress),
+      },
+      () =>
+        Promise.all([
+          prisma.pathwayLesson.groupBy({
             by: ["pathwayId"],
             where: baseWhere,
             _count: { _all: true },
-          })
-          .catch(() => [] as { pathwayId: string; _count: { _all: number } }[]),
-        (async (): Promise<{ lessonId: string; completed: boolean }[]> => {
-          if (preload?.lessonRows && preload.pathwayProgress) {
-            return preload.pathwayProgress;
-          }
-          safeServerLog("learner_dashboard", "pathway_study_summaries_progress_keys", {
-            slugRows: scopeForSummaries.pathwayLessonRows.length,
-            fromPreloadLessonRows: Boolean(preload?.lessonRows),
-          });
-          return fetchProgressForPathwayLessonRows(userId, scopeForSummaries.pathwayLessonRows).catch(
-            () => [] as { lessonId: string; completed: boolean }[],
-          );
-        })(),
-      ])
-  );
+          }),
+          (async (): Promise<{ lessonId: string; completed: boolean }[]> => {
+            if (preload?.lessonRows && preload.pathwayProgress) {
+              return preload.pathwayProgress;
+            }
+            safeServerLog("learner_dashboard", "pathway_study_summaries_progress_keys", {
+              slugRows: scopeForSummaries.pathwayLessonRows.length,
+              fromPreloadLessonRows: Boolean(preload?.lessonRows),
+            });
+            return fetchProgressForPathwayLessonRows(userId, scopeForSummaries.pathwayLessonRows);
+          })(),
+        ]),
+    );
 
-  const totalsByPathway = new Map(counts.map((c) => [c.pathwayId, c._count._all]));
+    const totalsByPathway = new Map(counts.map((c) => [c.pathwayId, c._count._all]));
 
-  const progressByPathway = new Map<string, { completed: number; inProgress: number }>();
-  for (const r of allPathwayProgress) {
-    const rest = r.lessonId.slice("pathway:".length);
-    const colonIdx = rest.indexOf(":");
-    if (colonIdx < 0) continue;
-    const pid = rest.slice(0, colonIdx);
-    if (!progressByPathway.has(pid)) progressByPathway.set(pid, { completed: 0, inProgress: 0 });
-    const entry = progressByPathway.get(pid)!;
-    if (r.completed) entry.completed++;
-    else entry.inProgress++;
+    const progressByPathway = new Map<string, { completed: number; inProgress: number }>();
+    for (const r of allPathwayProgress) {
+      const rest = r.lessonId.slice("pathway:".length);
+      const colonIdx = rest.indexOf(":");
+      if (colonIdx < 0) continue;
+      const pid = rest.slice(0, colonIdx);
+      if (!progressByPathway.has(pid)) progressByPathway.set(pid, { completed: 0, inProgress: 0 });
+      const entry = progressByPathway.get(pid)!;
+      if (r.completed) entry.completed++;
+      else entry.inProgress++;
+    }
+
+    const rows = pathways.map((p) => ({
+      pathwayId: p.id,
+      label: p.displayName,
+      shortLabel: p.shortName || p.displayName,
+      catPathwayExamLabel: catPathwayExamCodeLabel(p),
+      catPathwayRegionalExamLine: catPathwayRegionalExamLine(p),
+      lessonsTotal: totalsByPathway.get(p.id) ?? 0,
+      lessonsCompleted: progressByPathway.get(p.id)?.completed ?? 0,
+      lessonsInProgress: progressByPathway.get(p.id)?.inProgress ?? 0,
+    }));
+    return { rows, status: "ok" };
+  } catch (e) {
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadPathwayStudySummaries",
+      feature_surface: "pathway_study_summaries",
+      duration_ms: Math.round(performance.now() - tPath),
+      outcome: "error",
+      segment: "db_path",
+      user_id_prefix: userId.slice(0, 8),
+      reason: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      fallback_used: "false",
+    });
+    return { rows: [], status: "error", reason: "pathway_study_summaries_db_failed" };
   }
-
-  return pathways.map((p) => ({
-    pathwayId: p.id,
-    label: p.displayName,
-    shortLabel: p.shortName || p.displayName,
-    catPathwayExamLabel: catPathwayExamCodeLabel(p),
-    catPathwayRegionalExamLine: catPathwayRegionalExamLine(p),
-    lessonsTotal: totalsByPathway.get(p.id) ?? 0,
-    lessonsCompleted: progressByPathway.get(p.id)?.completed ?? 0,
-    lessonsInProgress: progressByPathway.get(p.id)?.inProgress ?? 0,
-  }));
 }

@@ -58,6 +58,7 @@ import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { MarketingLessonsHubRetryableErrorShell } from "@/components/pathway-lessons/marketing-lessons-hub-retryable-error-shell";
+import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
@@ -633,6 +634,11 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     >
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
+      {lessonsPageLoad.status === "ok" && lessonsPageLoad.sourceUsed === "secondary" ? (
+        <div className="mt-3">
+          <LearnerStudyLiveSyncBanner />
+        </div>
+      ) : null}
       {questionSnapshotLoadRejected ? (
         <div
           className="mt-3 rounded-xl border border-[var(--semantic-warning)]/40 bg-[color-mix(in_srgb,var(--semantic-warning)_12%,transparent)] px-4 py-3 text-sm text-[var(--theme-heading-text)]"

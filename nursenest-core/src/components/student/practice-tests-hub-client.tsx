@@ -146,6 +146,7 @@ export function PracticeTestsHubClient({
   }, [selectionMode, catOptions, defaultPathwayId, pathwayOptions, searchParams]);
 
   const loadList = useCallback(async () => {
+    setLoading(true);
     setError(null);
     try {
       const res = await fetch("/api/practice-tests");
@@ -831,6 +832,25 @@ export function PracticeTestsHubClient({
         {historyPriorityMessage ? <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">{historyPriorityMessage}</p> : null}
         {loading ? (
           <p className="mt-4 text-sm text-muted-foreground">{t("learner.practiceTests.hub.loading")}</p>
+        ) : error ? (
+          <div
+            className="mt-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,transparent)] p-4 text-sm text-[var(--semantic-text-secondary)]"
+            role="alert"
+            data-nn-practice-tests-history-load-error="1"
+          >
+            <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.practiceTests.hub.error.loadTests")}</p>
+            <p className="mt-2">{error}</p>
+            <button
+              type="button"
+              className="mt-3 inline-flex min-h-10 items-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground"
+              onClick={() => {
+                setLoading(true);
+                void loadList();
+              }}
+            >
+              Retry
+            </button>
+          </div>
         ) : list.length === 0 ? (
           <div className="mt-4">
             <PremiumEmptyState

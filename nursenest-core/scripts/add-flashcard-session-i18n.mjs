@@ -47,6 +47,12 @@ const NEW_KEYS = {
   "learner.flashcards.session.ratingSubUnsure": "Almost there",
   "learner.flashcards.session.ratingSubKnown": "Got it",
   "learner.flashcards.session.correctAnswerHeading": "Correct answer",
+  "learner.flashcards.session.clinicalReferenceHeading": "Clinical reference",
+  "learner.flashcards.session.rationaleReviewHeading": "Rationale & review",
+  "learner.flashcards.session.whyCorrectHeading": "Why this is correct",
+  "learner.flashcards.session.whyIncorrectHeading": "Why other options are incorrect",
+  "learner.flashcards.session.clinicalReferenceEmpty":
+    "No reference illustration for this item. Reference images appear here when included in the question stem.",
   "learner.flashcards.session.rationaleBlockHeading": "Rationale",
   "learner.flashcards.session.keyTakeawayHeading": "Key takeaway",
   "learner.flashcards.session.topicGeneral": "General",

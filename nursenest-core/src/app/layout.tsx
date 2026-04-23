@@ -42,6 +42,7 @@ export const metadata: Metadata = {
     "NurseNest offers Canada-first, globally relevant nursing and allied health exam prep with practice questions, clinical lessons, flashcards, and mock exams for RN, RPN, NP, NCLEX, and more.",
   icons: {
     icon: [
+      { url: "/logos/arctic-frost-leaf.svg", type: "image/svg+xml" },
       { url: "/favicon.ico", sizes: "any" },
       { url: "/icon.png", type: "image/png", sizes: "512x512" },
     ],

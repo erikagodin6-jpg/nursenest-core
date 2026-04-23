@@ -86,15 +86,24 @@ export async function GET(req: NextRequest) {
   const flashcardBundle = await resolveMergedFlashcardEducationalBundle(educationalLocale);
 
   if (!isDatabaseUrlConfigured()) {
-    return NextResponse.json({
-      page,
-      pageSize,
-      total: 0,
-      pageCount: 1,
-      flashcards: [],
-      mode: "subscriber" as const,
-      degraded: true,
+    safeServerLog("api_flashcards", "critical_study_load_diagnostics", {
+      event: "critical_study_load_diagnostics",
+      operation: "GET /api/flashcards",
+      feature_surface: "flashcards_subscriber_list",
+      live_outcome: "error",
+      snapshot_used: "false",
+      final_outcome: "error",
+      fallback_used: "false",
+      error_message: "database_url_unset",
     });
+    return NextResponse.json(
+      {
+        error: "Study content is temporarily unavailable (database not configured in this environment).",
+        code: "db_unavailable",
+        retryable: true,
+      },
+      { status: 503 },
+    );
   }
 
   try {
@@ -194,9 +203,31 @@ export async function GET(req: NextRequest) {
         user_id_prefix: gate.userId.slice(0, 8),
       });
       logLargeApiResponse("/api/flashcards", estimateJsonUtf8Bytes(body));
+      safeServerLog("api_flashcards", "critical_study_load_diagnostics", {
+        event: "critical_study_load_diagnostics",
+        operation: "GET /api/flashcards",
+        feature_surface: "flashcards_subscriber_list",
+        live_outcome: "error",
+        snapshot_used: "true",
+        final_outcome: "degraded_snapshot",
+        fallback_used: "true",
+        snapshot_age_ms: String(Math.round(age)),
+      });
       return NextResponse.json(body);
     }
-    return NextResponse.json({ error: "Unable to load flashcards" }, { status: 503 });
+    safeServerLog("api_flashcards", "critical_study_load_diagnostics", {
+      event: "critical_study_load_diagnostics",
+      operation: "GET /api/flashcards",
+      feature_surface: "flashcards_subscriber_list",
+      live_outcome: "error",
+      snapshot_used: "false",
+      final_outcome: "error",
+      fallback_used: "false",
+    });
+    return NextResponse.json(
+      { error: "Unable to load flashcards", code: "primary_and_snapshot_failed", retryable: true },
+      { status: 503 },
+    );
   }
   });
 }

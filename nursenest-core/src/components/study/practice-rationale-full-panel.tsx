@@ -5,7 +5,8 @@ import { BookOpen } from "lucide-react";
 import type { ReactNode } from "react";
 import { ConfidenceChip, type ConfidenceLevel } from "./confidence-selector";
 
-function RationaleFullFrame({ children }: { children: ReactNode }) {
+/** Shared scroll frame for linear practice and CAT study rationale columns. */
+export function RationaleFullFrame({ children }: { children: ReactNode }) {
   return (
     <div className="nn-practice-rationale-full">
       <div className="nn-practice-rationale-full__scroll">{children}</div>
@@ -15,7 +16,7 @@ function RationaleFullFrame({ children }: { children: ReactNode }) {
 
 // ── PracticeRationaleSection ───────────────────────────────────────────────
 
-type SectionVariant = "success" | "info" | "error" | "muted" | "takeaway";
+type SectionVariant = "success" | "info" | "error" | "muted" | "takeaway" | "pearl";
 
 /**
  * PracticeRationaleSection — styled content block within the rationale panel.
@@ -26,14 +27,26 @@ export function PracticeRationaleSection({
   variant,
   label,
   children,
+  icon,
 }: {
   variant: SectionVariant;
   label: string;
   children: ReactNode;
+  /** Optional leading icon (e.g. lightbulb, ban) before the uppercase label. */
+  icon?: ReactNode;
 }) {
   return (
     <div className={`nn-practice-rsection nn-practice-rsection--${variant}`}>
-      <p className="nn-practice-rsection__label">{label}</p>
+      <p className="nn-practice-rsection__label">
+        {icon ? (
+          <span className="inline-flex items-center gap-1.5">
+            {icon}
+            {label}
+          </span>
+        ) : (
+          label
+        )}
+      </p>
       <div className="nn-practice-rsection__body">{children}</div>
     </div>
   );
@@ -51,14 +64,19 @@ export function PracticeIncorrectOptionRow({
   index,
   optionText,
   explanation,
+  optionTextTone = "secondary",
 }: {
   index: number;
   optionText: string;
   explanation?: string | null;
+  /** `danger` tints option labels red (UWorld-style distractor review). */
+  optionTextTone?: "secondary" | "danger";
 }) {
   const letter = LETTERS[index] ?? String(index + 1);
   return (
-    <div className="nn-practice-incorrect-opt-row">
+    <div
+      className={`nn-practice-incorrect-opt-row${optionTextTone === "danger" ? " nn-practice-incorrect-opt-row--danger-label" : ""}`}
+    >
       <span className="nn-practice-incorrect-opt-row__letter" aria-hidden="true">
         {letter}
       </span>
