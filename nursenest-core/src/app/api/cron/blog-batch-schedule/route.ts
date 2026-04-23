@@ -53,7 +53,7 @@ export async function POST(req: Request) {
       processDueBlogBatchScheduleItems(),
       promoteScheduledBlogPosts(),
     ]);
-    revalidateBlogPublishingSurfaces();
+    revalidateBlogPublishingSurfaces({ promotedSlugs: promoted.promotedSlugs });
     safeServerLog("cron", "blog_batch_schedule_complete", {
       durationMs: Date.now() - started,
       promoted: promoted.count,

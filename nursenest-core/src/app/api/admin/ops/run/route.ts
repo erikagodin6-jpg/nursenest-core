@@ -95,7 +95,7 @@ export async function POST(req: Request) {
   try {
     if (action === "run_blog_publish_scheduler") {
       const result = await promoteScheduledBlogPosts();
-      revalidateBlogPublishingSurfaces();
+      revalidateBlogPublishingSurfaces({ promotedSlugs: result.promotedSlugs });
       return NextResponse.json({ ok: true, action, result });
     }
     if (action === "recover_missed_blog_posts_batch") {

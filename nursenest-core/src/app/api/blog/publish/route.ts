@@ -1,7 +1,7 @@
-import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { verifyBlogPublishSchemaColumns } from "@/lib/blog/blog-publish-db-guard";
 import { promoteScheduledBlogPosts } from "@/lib/blog/blog-publish-scheduler";
+import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
 
 /**
  * Lightweight publish endpoint for external schedulers.
@@ -31,9 +31,7 @@ export async function POST(req: Request) {
   }
 
   const result = await promoteScheduledBlogPosts();
-  revalidatePath("/blog");
-  revalidatePath("/blog", "layout");
-  revalidatePath("/sitemap.xml");
+  revalidateBlogPublishingSurfaces({ promotedSlugs: result.promotedSlugs });
 
   return NextResponse.json({
     ok: true,

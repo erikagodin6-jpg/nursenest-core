@@ -29,3 +29,46 @@ test("SCHEDULED post with publishAt in the future is not live", () => {
     false,
   );
 });
+
+test("PUBLISHED is always live (publishAt irrelevant)", () => {
+  const now = new Date("2026-06-15T12:00:00Z");
+  assert.equal(
+    blogPostIsLive(
+      {
+        postStatus: BlogPostStatus.PUBLISHED,
+        publishAt: new Date("2099-01-01T00:00:00Z"),
+        scheduledAt: null,
+      },
+      now,
+    ),
+    true,
+  );
+});
+
+test("DRAFT, NEEDS_REVIEW, APPROVED, FAILED are never live", () => {
+  const now = new Date("2026-06-15T12:00:00Z");
+  const past = new Date("2020-01-01T00:00:00Z");
+  for (const postStatus of [
+    BlogPostStatus.DRAFT,
+    BlogPostStatus.NEEDS_REVIEW,
+    BlogPostStatus.APPROVED,
+    BlogPostStatus.FAILED,
+  ]) {
+    assert.equal(blogPostIsLive({ postStatus, publishAt: past, scheduledAt: null }, now), false);
+  }
+});
+
+test("SCHEDULED uses scheduledAt when publishAt is null and time has passed", () => {
+  const now = new Date("2026-06-15T12:00:00Z");
+  assert.equal(
+    blogPostIsLive(
+      {
+        postStatus: BlogPostStatus.SCHEDULED,
+        publishAt: null,
+        scheduledAt: new Date("2026-06-01T12:00:00Z"),
+      },
+      now,
+    ),
+    true,
+  );
+});

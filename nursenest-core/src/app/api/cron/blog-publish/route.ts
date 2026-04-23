@@ -28,7 +28,7 @@ export async function POST(req: Request) {
   }
 
   const result = await promoteScheduledBlogPosts();
-  revalidateBlogPublishingSurfaces();
+  revalidateBlogPublishingSurfaces({ promotedSlugs: result.promotedSlugs });
   return NextResponse.json({
     ok: true,
     promoted: result.count,

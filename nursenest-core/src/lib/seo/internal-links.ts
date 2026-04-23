@@ -1,6 +1,7 @@
 import "server-only";
 
-import { BlogPostStatus, type PrismaClient } from "@prisma/client";
+import { type PrismaClient } from "@prisma/client";
+import { blogLiveWhere } from "@/lib/blog/blog-visibility";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { evaluatePublicMarketingLessonCrossLinkIntegrity } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
@@ -33,11 +34,14 @@ export async function resolveRelatedInternalLinks(
   const limit = Math.min(Math.max(input.limit ?? 5, 3), 8);
   const out: ResolvedInternalLink[] = [];
   const cat = input.category;
+  const now = new Date();
 
   const blogRows = await prisma.blogPost.findMany({
     where: {
-      OR: [{ category: cat }, { tags: { has: cat } }],
-      postStatus: { in: [BlogPostStatus.PUBLISHED, BlogPostStatus.SCHEDULED] },
+      AND: [
+        blogLiveWhere(now),
+        { OR: [{ category: cat }, { tags: { has: cat } }] },
+      ],
     },
     orderBy: { updatedAt: "desc" },
     take: 3,
@@ -70,7 +74,7 @@ export async function resolveRelatedInternalLinks(
   if (input.domain === "CLINICAL" && out.length < limit) {
     const pharmCats = [...TAXONOMY.PHARMACOLOGY];
     const pharm = await prisma.blogPost.findMany({
-      where: { category: { in: pharmCats } },
+      where: { AND: [blogLiveWhere(now), { category: { in: pharmCats } }] },
       orderBy: { updatedAt: "desc" },
       take: 1,
       select: { slug: true, title: true, seoTitle: true },

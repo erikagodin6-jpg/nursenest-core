@@ -1,8 +1,8 @@
-import { revalidatePath } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { processDueBlogBatchScheduleItems } from "@/lib/blog/blog-batch-schedule";
+import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
 
 /**
  * Process due batch schedule items once (admin manual run). Same logic as cron.
@@ -15,7 +15,6 @@ export async function POST(req: NextRequest) {
   if (aiBlock) return aiBlock;
 
   const result = await processDueBlogBatchScheduleItems();
-  revalidatePath("/blog");
-  revalidatePath("/blog", "layout");
+  revalidateBlogPublishingSurfaces();
   return NextResponse.json({ ok: true, ...result });
 }
