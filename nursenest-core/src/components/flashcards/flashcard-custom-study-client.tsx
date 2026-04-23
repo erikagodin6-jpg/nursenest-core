@@ -70,7 +70,7 @@ export function FlashcardCustomStudyClient() {
       const res = await fetch(`/api/flashcards/cards/${encodeURIComponent(cardId)}/review`, {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-nn-study-launch-surface": "flashcards" },
         body: JSON.stringify({ rating }),
       });
       const data = (await res.json()) as { error?: string };

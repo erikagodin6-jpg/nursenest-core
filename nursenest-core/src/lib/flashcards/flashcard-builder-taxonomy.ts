@@ -66,17 +66,41 @@ export function builderCategoryOptionsForPathway(pathwayId: string | null | unde
   }));
 }
 
+function humanizeUnknownBuilderCategoryId(id: string): string {
+  if (id === REVIEW_REQUIRED) return "Review required";
+  return id
+    .split("_")
+    .map((w) => (w.length ? w.charAt(0).toUpperCase() + w.slice(1) : ""))
+    .join(" ");
+}
+
+/**
+ * Merges classifier counts into the pathway's builder category list. Counts whose ids are absent from
+ * the static config (stale taxonomy keys, deck-specific labels, etc.) still surface so
+ * `GET /api/flashcards/custom-session` never returns cards with an empty `categoryOptions` solely due to id skew.
+ */
 export function applyCountsToBuilderCategories(
   pathwayId: string | null | undefined,
   counts: Record<string, number>,
 ): BuilderCategoryOption[] {
   const categories = builderCategoryOptionsForPathway(pathwayId);
-  return categories
-    .map((c) => ({ ...c, count: counts[c.id] ?? 0 }))
-    .filter((c) => c.count > 0);
+  const baseIds = new Set(categories.map((c) => c.id));
+  const merged = categories.map((c) => ({ ...c, count: counts[c.id] ?? 0 }));
+
+  const extras: BuilderCategoryOption[] = [];
+  for (const [id, count] of Object.entries(counts)) {
+    if (!id || count <= 0 || baseIds.has(id)) continue;
+    extras.push({
+      id,
+      title: humanizeUnknownBuilderCategoryId(id),
+      count,
+    });
+  }
+  extras.sort((a, b) => a.title.localeCompare(b.title));
+  return [...merged, ...extras].filter((c) => c.count > 0);
 }
 
 export function builderCategoryTitleForId(pathwayId: string | null | undefined, categoryId: string): string {
   const categories = builderCategoryOptionsForPathway(pathwayId);
-  return categories.find((c) => c.id === categoryId)?.title ?? "General";
+  return categories.find((c) => c.id === categoryId)?.title ?? humanizeUnknownBuilderCategoryId(categoryId);
 }

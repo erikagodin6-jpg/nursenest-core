@@ -21,6 +21,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { logLearnerStudyLoadDiagnostics } from "@/lib/learner/learner-study-load-diagnostics";
 import { loadAnalyticsSummary } from "@/lib/study/analytics-data";
+import { analyticsResolvedData } from "@/lib/study/analytics-load-result";
 import { getReadinessBand } from "@/components/study/cat-readiness-hero";
 import type { ReadinessBand } from "@/components/study/cat-readiness-hero";
 
@@ -447,6 +448,9 @@ export async function loadGuidedStudyPayload(userId: string): Promise<GuidedStud
       fallback_used: "false",
     });
   }
+  if (summary != null && summary.kind === "error") {
+    reliability.analyticsSummary = false;
+  }
 
   const topicStats = topicStatsResult.status === "fulfilled" ? topicStatsResult.value : [];
   if (topicStatsResult.status === "rejected") {
@@ -529,11 +533,12 @@ export async function loadGuidedStudyPayload(userId: string): Promise<GuidedStud
     : [];
 
   // ── Compute signals ───────────────────────────────────────────────────────
-  const readinessScore = summary?.latestReadinessScore ?? null;
+  const summaryData = summary ? analyticsResolvedData(summary) : null;
+  const readinessScore = summaryData?.latestReadinessScore ?? null;
   const readinessBand =
     readinessScore !== null ? getReadinessBand(readinessScore) : null;
-  const overallAccuracyPct = summary?.overallAccuracyPct ?? null;
-  const streakDays = summary?.streakDays ?? 0;
+  const overallAccuracyPct = summaryData?.overallAccuracyPct ?? null;
+  const streakDays = summaryData?.streakDays ?? 0;
 
   const criticalLoadFailed = !reliability.topicStats && !reliability.analyticsSummary;
 
@@ -541,7 +546,7 @@ export async function loadGuidedStudyPayload(userId: string): Promise<GuidedStud
   const hasEnoughData =
     !criticalLoadFailed &&
     ((reliability.topicStats && rawAreas.length > 0) ||
-      (reliability.analyticsSummary && (summary?.totalQuestionsAnswered ?? 0) >= 5));
+      (reliability.analyticsSummary && (summaryData?.totalQuestionsAnswered ?? 0) >= 5));
 
   // ── Build recommendation plan ─────────────────────────────────────────────
   const nextStep = deriveNextStep(

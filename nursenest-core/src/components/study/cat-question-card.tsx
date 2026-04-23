@@ -271,14 +271,17 @@ export function AnswerOptionRow({
           onChange={(e) => onChange?.(e.target.checked)}
           className="sr-only"
         />
-        <span className="nn-cat-opt__letter" aria-hidden="true">
-          {letter}
-        </span>
+        <span className="nn-cat-opt__letter">{letter}</span>
         <span
           className={`nn-cat-opt__control ${checked || state === "correct" ? "nn-cat-opt__control--checked" : ""}`}
           aria-hidden="true"
         />
         <span className="nn-cat-opt__text">{text}</span>
+        {state === "correct" ? (
+          <span className="sr-only">Correct answer.</span>
+        ) : state === "incorrect" ? (
+          <span className="sr-only">Incorrect.</span>
+        ) : null}
         {state === "correct" ? (
           <CheckCircle2 className="h-5 w-5 shrink-0 text-[var(--nn-exam-accent)]" aria-hidden />
         ) : state === "incorrect" ? (
@@ -296,14 +299,17 @@ export function AnswerOptionRow({
       className={`nn-cat-opt ${stateClass} ${interactiveClass}`}
       aria-pressed={state === "selected"}
     >
-      <span className="nn-cat-opt__letter" aria-hidden="true">
-        {letter}
-      </span>
+      <span className="nn-cat-opt__letter">{letter}</span>
       <span
         className={`nn-cat-opt__control ${state === "selected" || state === "correct" ? "nn-cat-opt__control--checked" : ""}`}
         aria-hidden="true"
       />
       <span className="nn-cat-opt__text">{text}</span>
+      {state === "correct" ? (
+        <span className="sr-only">Correct answer.</span>
+      ) : state === "incorrect" ? (
+        <span className="sr-only">Incorrect.</span>
+      ) : null}
       {state === "correct" ? (
         <CheckCircle2 className="h-5 w-5 shrink-0 text-[var(--nn-exam-accent)]" aria-hidden />
       ) : state === "incorrect" ? (

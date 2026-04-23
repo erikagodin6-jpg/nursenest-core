@@ -16,6 +16,8 @@ export type BuildPracticeExamStartPayloadInput = {
   difficultyMax?: number | null;
   sessionMode: PracticeExamSessionMode;
   rationaleVisibilityMode: PracticeExamRationaleVisibilityMode;
+  /** Tutor-style linear only: allow Previous to committed earlier items after submit. */
+  linearAllowReviewNavigation?: boolean;
 };
 
 function toLinearDeliveryMode(
@@ -46,6 +48,8 @@ export function buildPracticeExamStartPayload(input: BuildPracticeExamStartPaylo
   const questionCount = Math.max(5, Math.min(100, Math.floor(input.questionCount)));
   const topicNames = normalizeTopicNames(input.topicNames);
   const linearDeliveryMode = toLinearDeliveryMode(input.sessionMode, input.rationaleVisibilityMode);
+  const linearAllowReviewNavigation =
+    linearDeliveryMode === "practice" && input.linearAllowReviewNavigation === true;
   return {
     title: input.title?.trim() || undefined,
     questionCount,
@@ -60,5 +64,6 @@ export function buildPracticeExamStartPayload(input: BuildPracticeExamStartPaylo
     linearRationaleVisibility: toLinearRationaleVisibility(
       linearDeliveryMode === "practice" ? "immediate" : "review",
     ),
+    ...(linearAllowReviewNavigation ? { linearAllowReviewNavigation: true as const } : {}),
   };
 }

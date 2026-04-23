@@ -343,7 +343,23 @@ function mergeLessonAudienceMetadata(
   const countryScope = explicit.countryScope ?? inferred.countryScope;
   const priority = explicit.priority ?? "medium";
   const exams = explicit.exams?.length ? explicit.exams : [context.exam];
-  const countries = explicit.countries?.length ? explicit.countries : [context.country];
+  /**
+   * Hub + detail filtering use {@link matchesLessonContext} against the pathway implied by `pathwayId`.
+   * Rows are always published under a concrete `pathwayId`; that membership is the authoritative scope.
+   * Legacy imports often stamp `countries: ["US"]` on shared NCLEX bodies attached to `ca-*` pathways,
+   * which would incorrectly hide them on Canada hubs. Union the pathway's implied country whenever
+   * metadata is region-specific but not explicitly global. (Explicit `GLOBAL` remains worldwide-only.)
+   */
+  let countries: PathwayLessonRuntimeCountry[];
+  if (!explicit.countries?.length) {
+    countries = [context.country];
+  } else {
+    const unique = new Set<PathwayLessonRuntimeCountry>(explicit.countries);
+    if (!unique.has("GLOBAL")) {
+      unique.add(context.country);
+    }
+    countries = [...unique];
+  }
   const examMeta = explicit.examMeta?.length
     ? explicit.examMeta
     : [

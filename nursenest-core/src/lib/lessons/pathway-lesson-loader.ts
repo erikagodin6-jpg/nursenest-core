@@ -19,6 +19,7 @@ import {
   normalizePathwayLessonLocale,
   PATHWAY_LESSON_CANONICAL_DB_LOCALE,
   PATHWAY_LESSON_SITEMAP_LOCALE,
+  pickPathwayLessonListWarehouseLocale,
 } from "@/lib/lessons/pathway-lesson-locale";
 import { filterTopicClustersForPublicNavigationByTopicPageTotal } from "@/lib/lessons/pathway-topic-sitemap-filter";
 import { evaluatePathwayLessonStructuralGate } from "@/lib/lessons/pathway-lesson-premium";
@@ -73,6 +74,7 @@ import {
   pathwayLessonRowToInput,
   sanitizeQuestionIdArray,
   sanitizeQuizItems,
+  pathwayLessonMatchesMarketingPathwayContext,
   sortAndFilterLessonsForPathwayContext,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
 
@@ -202,6 +204,29 @@ function filterHubListItemsForSafeSlugs(items: PathwayLessonRecord[], pathwayId:
     });
   }
   return out;
+}
+
+function logHubListPipelineDropSamples(
+  pathwayId: string,
+  afterSafeSlug: PathwayLessonRecord[],
+  afterContext: PathwayLessonRecord[],
+  limit: number,
+): void {
+  if (process.env.NN_PATHWAY_HUB_PIPELINE_DROP_LOG !== "1") return;
+  const kept = new Set(afterContext.map((l) => l.slug));
+  const dropped = afterSafeSlug.filter((l) => !kept.has(l.slug));
+  if (dropped.length === 0) return;
+  const samples = dropped.slice(0, limit).map((l) => {
+    let reason = "unknown";
+    if (!pathwayLessonEligibleForPublicMarketingSurface(l)) reason = "not_public_complete";
+    else if (!pathwayLessonMatchesMarketingPathwayContext(pathwayId, l)) reason = "exam_country_context_mismatch";
+    return { slug: String(l.slug ?? "").slice(0, 120), reason };
+  });
+  safeServerLog("pathway_lessons", "hub_list_pipeline_drop_sample", {
+    pathwayId,
+    dropped_total: String(dropped.length),
+    sample_json: JSON.stringify(samples),
+  });
 }
 
 /** First N lesson titles from the static catalog (public marketing previews). Empty when catalog has no rows for the pathway. */
@@ -336,10 +361,10 @@ async function countPublishedDbLessonsAllLocalesWithHealth(
 }
 
 /**
- * Pick which `locale` key to query for list/topic pages — one `groupBy` per request.
- * Prefers requested locale when present, else English, else first available.
+ * One `groupBy` per hub/topic list: pick the dominant `pathway_lessons.locale` warehouse for SQL filters.
+ * See {@link pickPathwayLessonListWarehouseLocale} — avoids a stray `en` shard hiding a large non-English corpus.
  */
-async function resolveEffectiveListLocale(pathwayId: string, requestedRaw: string): Promise<string> {
+async function effectiveLocaleForPathwayLessonDbRows(pathwayId: string, requestedRaw: string): Promise<string> {
   const requested = normalizePathwayLessonLocale(requestedRaw);
   const rows = await dbCall(
     () =>
@@ -350,29 +375,25 @@ async function resolveEffectiveListLocale(pathwayId: string, requestedRaw: strin
       }),
     [],
   );
-  if (rows.length === 0) return requested;
-  const available = new Set(rows.map((r) => r.locale));
-  if (available.has(requested)) return requested;
-  if (requested !== "en" && available.has("en")) return "en";
-  const sorted = [...available].sort((a, b) => a.localeCompare(b));
-  return sorted[0] ?? "en";
-}
-
-/**
- * Prefer {@link PATHWAY_LESSON_CANONICAL_DB_LOCALE} rows when the pathway has any published English lessons;
- * otherwise fall back to {@link resolveEffectiveListLocale} (legacy pathways with non-English-only rows).
- */
-async function effectiveLocaleForPathwayLessonDbRows(pathwayId: string, requestedRaw: string): Promise<string> {
-  const requested = normalizePathwayLessonLocale(requestedRaw);
-  const enCount = await dbCall(
-    () =>
-      prisma.pathwayLesson.count({
-        where: { pathwayId, status: ContentStatus.PUBLISHED, locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE },
-      }),
-    0,
-  );
-  if (enCount > 0) return PATHWAY_LESSON_CANONICAL_DB_LOCALE;
-  return resolveEffectiveListLocale(pathwayId, requested);
+  if (rows.length === 0) return PATHWAY_LESSON_CANONICAL_DB_LOCALE;
+  const effective = pickPathwayLessonListWarehouseLocale({
+    localeCounts: rows.map((r) => ({ locale: r.locale, count: r._count._all })),
+    requestedLocale: requested,
+  });
+  if (rows.length > 1 || effective !== requested) {
+    const funnel = [...rows]
+      .sort((a, b) => b._count._all - a._count._all)
+      .slice(0, 12)
+      .map((r) => `${r.locale}:${r._count._all}`)
+      .join("|");
+    safeServerLog("pathway_lessons", "hub_list_db_locale_pick", {
+      pathwayId,
+      requested,
+      effective,
+      funnel,
+    });
+  }
+  return effective;
 }
 
 const PATHWAY_LESSON_HUB_LIST_SELECT = {
@@ -561,25 +582,55 @@ async function resolveMarketingHubRenderableLessonList(
     const truncatedDbScan = sqlDbOnly > dbChunked.length;
     const rawInputs = [...goldsFiltered, ...dbChunked];
     const meta = lessonLocaleMeta(marketingLocale, effective, requested !== effective, false);
-    const renderableAll = dedupePathwayLessonsForLibrary(
-      sortAndFilterLessonsForPathwayContext(
-        pathwayId,
-        filterHubListItemsForSafeSlugs(
-          rawInputs.map((row) =>
-            stripPathwayLessonToHubListShape(
-              applyOverlayAndStructural(
-                withLocaleMeta(normalizeLesson(row, pathwayId), meta),
-                marketingLocale,
-                pathwayId,
-                lessonDbOverlays,
-              ),
-            ),
-          ),
+    const hubNormalized = rawInputs.map((row) =>
+      stripPathwayLessonToHubListShape(
+        applyOverlayAndStructural(
+          withLocaleMeta(normalizeLesson(row, pathwayId), meta),
+          marketingLocale,
           pathwayId,
+          lessonDbOverlays,
         ),
       ),
-      { pathwayIdHint: pathwayId, source: `hub_page:${pathwayId}:db`, devLog: true },
-    ).items;
+    );
+    const afterSafeSlug = filterHubListItemsForSafeSlugs(hubNormalized, pathwayId);
+    const afterPathwayContext = sortAndFilterLessonsForPathwayContext(pathwayId, afterSafeSlug);
+    logHubListPipelineDropSamples(pathwayId, afterSafeSlug, afterPathwayContext, 24);
+    const deduped = dedupePathwayLessonsForLibrary(afterPathwayContext, {
+      pathwayIdHint: pathwayId,
+      source: `hub_page:${pathwayId}:db`,
+      devLog: true,
+    });
+    const renderableAll = deduped.items;
+
+    safeServerLog("pathway_lessons", "hub_list_pipeline_stages", {
+      pathwayId,
+      runtime: "database",
+      db_published_all_locales: String(dbPresence.count),
+      effective_list_locale: effective,
+      gold_injected: String(goldsFiltered.length),
+      sql_db_published_effective_locale: String(sqlDbOnly),
+      db_chunk_scanned: String(dbChunked.length),
+      after_initial_merge: String(rawInputs.length),
+      after_normalization: String(hubNormalized.length),
+      after_safe_slug: String(afterSafeSlug.length),
+      after_context_and_public_complete: String(afterPathwayContext.length),
+      after_dedupe: String(renderableAll.length),
+      duplicate_drops: String(deduped.duplicateCount),
+      hub_search: qRaw ? "1" : "0",
+    });
+
+    if (sqlDbOnly >= 25 && renderableAll.length < Math.max(5, Math.floor(sqlDbOnly * 0.15))) {
+      safeServerLog("pathway_lessons", "hub_inventory_pipeline_shrink", {
+        pathwayId,
+        golds: goldsFiltered.length,
+        db_chunked: dbChunked.length,
+        normalized: hubNormalized.length,
+        after_safe_slug: afterSafeSlug.length,
+        after_pathway_context: afterPathwayContext.length,
+        after_dedupe: renderableAll.length,
+        duplicate_drops: deduped.duplicateCount,
+      });
+    }
 
     if (process.env.NODE_ENV !== "production" && sqlDbOnly + goldsFiltered.length > 0 && renderableAll.length === 0) {
       safeServerLog("pathway_lessons", "hub_marketing_all_db_candidates_filtered_out", {
@@ -617,25 +668,36 @@ async function resolveMarketingHubRenderableLessonList(
   const allRaw = filterCatalogLessonsByTopicSlugs(getCatalogLessonsRaw(pathwayId), topicSlugsIn);
   const filteredRaw = qRaw ? allRaw.filter((row) => lessonInputMatchesHubSearch(row, qLower)) : allRaw;
   const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
-  const renderableAll = dedupePathwayLessonsForLibrary(
-    sortAndFilterLessonsForPathwayContext(
-      pathwayId,
-      filterHubListItemsForSafeSlugs(
-        filteredRaw.map((row) =>
-          stripPathwayLessonToHubListShape(
-            applyOverlayAndStructural(
-              withLocaleMeta(normalizeLesson(row, pathwayId), catMeta),
-              marketingLocale,
-              pathwayId,
-              lessonDbOverlays,
-            ),
-          ),
-        ),
+  const hydratedCatalog = filteredRaw.map((row) =>
+    stripPathwayLessonToHubListShape(
+      applyOverlayAndStructural(
+        withLocaleMeta(normalizeLesson(row, pathwayId), catMeta),
+        marketingLocale,
         pathwayId,
+        lessonDbOverlays,
       ),
     ),
-    { pathwayIdHint: pathwayId, source: `hub_page:${pathwayId}:catalog`, devLog: true },
-  ).items;
+  );
+  const afterSafeSlugCat = filterHubListItemsForSafeSlugs(hydratedCatalog, pathwayId);
+  const afterContextCat = sortAndFilterLessonsForPathwayContext(pathwayId, afterSafeSlugCat);
+  logHubListPipelineDropSamples(pathwayId, afterSafeSlugCat, afterContextCat, 24);
+  const renderableAll = dedupePathwayLessonsForLibrary(afterContextCat, {
+    pathwayIdHint: pathwayId,
+    source: `hub_page:${pathwayId}:catalog`,
+    devLog: true,
+  }).items;
+
+  safeServerLog("pathway_lessons", "hub_list_pipeline_stages", {
+    pathwayId,
+    runtime: "catalog",
+    db_published_all_locales: String(dbPresence.count),
+    catalog_raw: String(allRaw.length),
+    after_topic_filter: String(filteredRaw.length),
+    after_safe_slug: String(afterSafeSlugCat.length),
+    after_context_and_public_complete: String(afterContextCat.length),
+    after_dedupe: String(renderableAll.length),
+    hub_search: qRaw ? "1" : "0",
+  });
 
   if (process.env.NODE_ENV !== "production" && filteredRaw.length > 0 && renderableAll.length === 0) {
     safeServerLog("pathway_lessons", "hub_marketing_catalog_all_filtered_out", {

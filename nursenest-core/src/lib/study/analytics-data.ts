@@ -455,7 +455,7 @@ export async function loadAnalyticsSummary(userId: string): Promise<AnalyticsLoa
       withRetry(() =>
         prisma.practiceTest.findFirst({
           where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-          orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
+          orderBy: { completedAt: "desc" },
           select: { id: true, results: true, elapsedMs: true },
         }),
       ),

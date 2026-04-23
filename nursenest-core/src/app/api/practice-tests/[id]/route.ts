@@ -42,6 +42,7 @@ import { mergeQuestionApiPayload } from "@/lib/i18n/educational-content-overlay"
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale-cookie";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { validatePracticeExamPostLaunchRequest } from "@/lib/learner/study-product-route-contract";
 import { practiceTestRouteDeps } from "./route-deps";
 import { normalizePracticeTestQuestionIds } from "@/lib/practice-tests/practice-test-question-ids";
 
@@ -215,6 +216,28 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
 
   const mutateLimited = await practiceTestRouteDeps.enforcePracticeTestMutationProtection(req, gate.userId);
   if (mutateLimited) return mutateLimited;
+
+  const launchCheck = validatePracticeExamPostLaunchRequest(req);
+  if (!launchCheck.ok) {
+    safeServerLog("practice_tests", "study_launch_route_contract_violation", {
+      event: "study_launch_route_contract_violation",
+      feature_surface: "practice_exams_resume",
+      outcome: "rejected_invalid_route",
+      expected: launchCheck.expected,
+      received: launchCheck.received,
+      userIdPrefix: gate.userId.slice(0, 8),
+    });
+    return NextResponse.json(
+      {
+        error: launchCheck.error,
+        expected: launchCheck.expected,
+        received: launchCheck.received,
+        reason: launchCheck.reason,
+        retryable: false,
+      },
+      { status: 403 },
+    );
+  }
 
   const { id } = await ctx.params;
   if (!id || id.length < 8) {

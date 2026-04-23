@@ -41,7 +41,26 @@ describe("cat-advance-contract", () => {
     );
     assert.doesNotThrow(() => assertCatAdvanceResponseShape({ ok: true, catAdvanced: true }));
     assert.throws(() => assertCatAdvanceResponseShape({ ok: true, catCompleted: true }));
-    assert.doesNotThrow(() => assertCatAdvanceResponseShape({ ok: true, catCompleted: true, results: { x: 1 } }));
+    assert.throws(() =>
+      assertCatAdvanceResponseShape({
+        ok: true,
+        catCompleted: true,
+        results: { x: 1 },
+      }),
+    );
+    assert.doesNotThrow(() =>
+      assertCatAdvanceResponseShape({
+        ok: true,
+        catCompleted: true,
+        results: {
+          scoreCorrect: 1,
+          scoreTotal: 2,
+          accuracyPct: 50,
+          byTopic: {},
+          weakAreas: [],
+        },
+      }),
+    );
     assert.doesNotThrow(() => assertCatAdvanceResponseShape({ ok: true, catStudyReveal: true }));
   });
 });

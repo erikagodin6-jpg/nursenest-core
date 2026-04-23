@@ -175,7 +175,7 @@ export function FlashcardStudyClient({
       const res = await fetch(`/api/flashcards/decks/${encodeURIComponent(deckRef)}/review`, {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-nn-study-launch-surface": "flashcards" },
         body: JSON.stringify({ flashcardId: cardId, rating }),
       });
       const data = await res.json();

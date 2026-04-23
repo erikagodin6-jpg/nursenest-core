@@ -44,3 +44,37 @@ export function defaultPathwayLessonContentLocaleForExamHubRoute(): string {
 
 /** Canonical lesson URLs in sitemap use one primary locale until hreflang expansion is modeled. */
 export const PATHWAY_LESSON_SITEMAP_LOCALE = "en";
+
+/**
+ * Chooses which `pathway_lessons.locale` warehouse the hub list SQL should scan.
+ *
+ * - If the viewer-requested locale has published rows, use it (verbatim DB listing for that shard).
+ * - Otherwise pick the **dominant** published locale by row count. When counts tie, prefer
+ *   {@link PATHWAY_LESSON_CANONICAL_DB_LOCALE} so the English + overlay pipeline remains the default.
+ *
+ * This prevents a **tiny accidental `en` shard** (for example a single stray import row) from hiding
+ * the real corpus when most lessons were keyed under another locale by mistake — a common cause of
+ * “hundreds in DB, one on the hub” mismatches.
+ */
+export function pickPathwayLessonListWarehouseLocale(input: {
+  localeCounts: Array<{ locale: string; count: number }>;
+  requestedLocale: string | undefined;
+}): string {
+  const requested = normalizePathwayLessonLocale(input.requestedLocale);
+  const merged = new Map<string, number>();
+  for (const row of input.localeCounts) {
+    const loc = typeof row.locale === "string" ? row.locale.trim() : "";
+    if (!loc) continue;
+    merged.set(loc, (merged.get(loc) ?? 0) + Math.max(0, row.count));
+  }
+  if (merged.size === 0) return PATHWAY_LESSON_CANONICAL_DB_LOCALE;
+  if ((merged.get(requested) ?? 0) > 0) return requested;
+
+  const sorted = [...merged.entries()].sort((a, b) => {
+    if (b[1] !== a[1]) return b[1] - a[1];
+    if (a[0] === PATHWAY_LESSON_CANONICAL_DB_LOCALE && b[0] !== PATHWAY_LESSON_CANONICAL_DB_LOCALE) return -1;
+    if (b[0] === PATHWAY_LESSON_CANONICAL_DB_LOCALE && a[0] !== PATHWAY_LESSON_CANONICAL_DB_LOCALE) return 1;
+    return a[0].localeCompare(b[0]);
+  });
+  return sorted[0]![0];
+}

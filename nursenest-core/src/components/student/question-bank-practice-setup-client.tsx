@@ -119,7 +119,10 @@ export function QuestionBankPracticeSetupClient({ pathwayId }: { pathwayId: stri
 
       const res = await fetch("/api/practice-tests", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-nn-study-launch-surface": "practice_exams",
+        },
         body: JSON.stringify(payload),
       });
       const data = (await res.json()) as { id?: string; error?: string };

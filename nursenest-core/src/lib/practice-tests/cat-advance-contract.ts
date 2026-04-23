@@ -76,6 +76,25 @@ export type CatAdvanceSuccessResponse = {
 };
 
 /**
+ * Minimal shape check so the client never treats `{}` or partial JSON as a real terminal handoff.
+ * Server remains authoritative; this blocks obviously fake completions.
+ */
+export function isValidPracticeTestTerminalResultsPayload(results: unknown): boolean {
+  if (!results || typeof results !== "object" || Array.isArray(results)) return false;
+  const o = results as Record<string, unknown>;
+  const scoreCorrect = o.scoreCorrect;
+  const scoreTotal = o.scoreTotal;
+  const accuracyPct = o.accuracyPct;
+  if (typeof scoreCorrect !== "number" || !Number.isFinite(scoreCorrect) || scoreCorrect < 0) return false;
+  if (typeof scoreTotal !== "number" || !Number.isFinite(scoreTotal) || scoreTotal < 1) return false;
+  if (typeof accuracyPct !== "number" || !Number.isFinite(accuracyPct)) return false;
+  if (scoreCorrect > scoreTotal) return false;
+  if (typeof o.byTopic !== "object" || o.byTopic === null || Array.isArray(o.byTopic)) return false;
+  if (!Array.isArray(o.weakAreas)) return false;
+  return true;
+}
+
+/**
  * After HTTP 2xx, exactly one terminal branch flag must be set so the runner can branch without heuristics.
  */
 export function assertCatAdvanceResponseShape(data: CatAdvanceSuccessResponse): void {
@@ -90,5 +109,8 @@ export function assertCatAdvanceResponseShape(data: CatAdvanceSuccessResponse): 
   }
   if (done && (data.results === undefined || data.results === null)) {
     throw new Error("cat_advance: catCompleted requires results payload.");
+  }
+  if (done && !isValidPracticeTestTerminalResultsPayload(data.results)) {
+    throw new Error("cat_advance: catCompleted results payload is missing required scored fields.");
   }
 }

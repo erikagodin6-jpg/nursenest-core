@@ -87,7 +87,7 @@ export function FlashcardWeakStudyClient({
       const res = await fetch(`/api/flashcards/decks/${encodeURIComponent(card.deckSlug)}/review`, {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-nn-study-launch-surface": "flashcards" },
         body: JSON.stringify({ flashcardId: card.id, rating }),
       });
       const data = await res.json();

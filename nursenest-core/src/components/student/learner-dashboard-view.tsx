@@ -32,7 +32,8 @@ function dashboardCoreHasDegradedSegment(
     !c.lessonsAvailable ||
     !c.lessonsCompleted ||
     !c.questionsInMocksLast14d ||
-    !c.recentMocks
+    !c.recentMocks ||
+    !c.continueLessonHref
   );
 }
 
@@ -301,6 +302,11 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
               Your lesson plan scope could not be loaded, so we cannot show an in-progress lesson here. Refresh to try
               again.
             </p>
+          ) : !data.coreReliability.continueLessonHref ? (
+            <p className="mt-4 text-sm text-muted-foreground">
+              We detected an in-progress lesson, but could not build a safe resume link. Refresh the page, or open your
+              lessons list and continue from there.
+            </p>
           ) : (
             <p className="mt-4 text-sm text-muted-foreground">
               No in-progress lesson. Start one from your list or try a quick question block.
@@ -339,7 +345,9 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
                     ? `Finish “${data.continueLesson.title.slice(0, 48)}${data.continueLesson.title.length > 48 ? "…" : ""}”.`
                     : !data.coreReliability.visibleLessonScope
                       ? "Lesson scope did not load — refresh, then pick up from your lessons list."
-                      : "Open a lesson in your tier and mark a section complete."}
+                      : !data.coreReliability.continueLessonHref
+                        ? "We could not build a resume link for an in-progress lesson — refresh or open your lessons list."
+                        : "Open a lesson in your tier and mark a section complete."}
                 </p>
               </div>
             </li>

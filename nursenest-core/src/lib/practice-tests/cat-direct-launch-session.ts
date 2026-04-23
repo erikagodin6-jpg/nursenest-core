@@ -43,7 +43,10 @@ export function runCatDirectLaunchSessionOnce(
       const payload = buildCatExamSimulationCreatePayload(pathwayShell);
       const res = await fetchImpl("/api/practice-tests", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-nn-study-launch-surface": "practice_exams",
+        },
         body: JSON.stringify(payload),
       });
       const data = (await res.json()) as { id?: string; error?: string; code?: string };

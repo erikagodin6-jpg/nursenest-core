@@ -1,20 +1,128 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { mcqAnswerSelectsCanonical } from "@/lib/practice-tests/practice-mcq-selection";
+import { computePracticeMcqOptionRowState } from "@/lib/practice-tests/practice-mcq-selection";
 
-describe("mcqAnswerSelectsCanonical", () => {
-  it("returns false for empty / nullish", () => {
-    assert.equal(mcqAnswerSelectsCanonical(undefined, "a"), false);
-    assert.equal(mcqAnswerSelectsCanonical(null, "a"), false);
+describe("computePracticeMcqOptionRowState (linear / legacy parity)", () => {
+  it("does not reveal correctness before feedback (selection only)", () => {
+    const st = computePracticeMcqOptionRowState({
+      answer: "A",
+      canonical: "A",
+      linearEngineActive: true,
+      currentCommitted: true,
+      rationaleVisibility: "after_each",
+      feedback: undefined,
+    });
+    assert.equal(st, "selected");
   });
 
-  it("matches single-select string", () => {
-    assert.equal(mcqAnswerSelectsCanonical("B", "B"), true);
-    assert.equal(mcqAnswerSelectsCanonical("B", "A"), false);
+  it("after_each + feedback: correct keys only after commit (matches CAT-style reveal)", () => {
+    assert.equal(
+      computePracticeMcqOptionRowState({
+        answer: "A",
+        canonical: "B",
+        linearEngineActive: true,
+        currentCommitted: true,
+        rationaleVisibility: "after_each",
+        feedback: { correctKeys: ["B"] },
+      }),
+      "correct",
+    );
+    assert.equal(
+      computePracticeMcqOptionRowState({
+        answer: "A",
+        canonical: "C",
+        linearEngineActive: true,
+        currentCommitted: true,
+        rationaleVisibility: "after_each",
+        feedback: { correctKeys: ["B"] },
+      }),
+      "dim",
+    );
+    assert.equal(
+      computePracticeMcqOptionRowState({
+        answer: "B",
+        canonical: "B",
+        linearEngineActive: true,
+        currentCommitted: true,
+        rationaleVisibility: "after_each",
+        feedback: { correctKeys: ["B"] },
+      }),
+      "correct",
+    );
+    assert.equal(
+      computePracticeMcqOptionRowState({
+        answer: "A",
+        canonical: "A",
+        linearEngineActive: true,
+        currentCommitted: true,
+        rationaleVisibility: "after_each",
+        feedback: { correctKeys: ["B"] },
+      }),
+      "incorrect",
+    );
   });
 
-  it("matches SATA array membership", () => {
-    assert.equal(mcqAnswerSelectsCanonical(["A", "C"], "A"), true);
-    assert.equal(mcqAnswerSelectsCanonical(["A", "C"], "B"), false);
+  it("end_of_exam: hides correctness; selected vs dim only", () => {
+    assert.equal(
+      computePracticeMcqOptionRowState({
+        answer: "A",
+        canonical: "A",
+        linearEngineActive: true,
+        currentCommitted: true,
+        rationaleVisibility: "end_of_exam",
+        feedback: { correctKeys: ["B"] },
+      }),
+      "selected",
+    );
+    assert.equal(
+      computePracticeMcqOptionRowState({
+        answer: "A",
+        canonical: "B",
+        linearEngineActive: true,
+        currentCommitted: true,
+        rationaleVisibility: "end_of_exam",
+        feedback: { correctKeys: ["B"] },
+      }),
+      "dim",
+    );
+  });
+
+  it("SATA: incorrect only when selected and not in correctKeys", () => {
+    assert.equal(
+      computePracticeMcqOptionRowState({
+        answer: ["A", "B"],
+        canonical: "A",
+        linearEngineActive: true,
+        currentCommitted: true,
+        rationaleVisibility: "after_each",
+        feedback: { correctKeys: ["B", "C"] },
+      }),
+      "incorrect",
+    );
+    assert.equal(
+      computePracticeMcqOptionRowState({
+        answer: ["A", "B"],
+        canonical: "B",
+        linearEngineActive: true,
+        currentCommitted: true,
+        rationaleVisibility: "after_each",
+        feedback: { correctKeys: ["B", "C"] },
+      }),
+      "correct",
+    );
+  });
+
+  it("legacy (no linear engine): never shows correct/incorrect from this helper", () => {
+    assert.equal(
+      computePracticeMcqOptionRowState({
+        answer: "X",
+        canonical: "X",
+        linearEngineActive: false,
+        currentCommitted: true,
+        rationaleVisibility: "after_each",
+        feedback: { correctKeys: ["Y"] },
+      }),
+      "selected",
+    );
   });
 });

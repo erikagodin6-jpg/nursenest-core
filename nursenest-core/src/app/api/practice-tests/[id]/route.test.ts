@@ -111,16 +111,35 @@ const catCoach = {
   multiSessionGuidance: "Compare several CAT runs over time.",
 };
 
-function makeRequest(body: Record<string, unknown>) {
+function makeRequest(body: Record<string, unknown>, referer = "http://localhost/app/practice-tests") {
   return new Request("http://localhost/api/practice-tests/test_12345678", {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(referer ? { Referer: referer } : {}),
+    },
     body: JSON.stringify(body),
   });
 }
 
 afterEach(() => {
   mock.restoreAll();
+});
+
+describe("PATCH /api/practice-tests/[id] study launch surface", () => {
+  it("rejects save when Referer is the flashcards study surface", async () => {
+    mock.method(practiceTestRouteDeps, "requireSubscriberSession", async () => gate);
+    mock.method(practiceTestRouteDeps, "enforcePracticeTestMutationProtection", () => null);
+    mock.method(practiceTestRouteDeps, "setSentryServerContext", () => {});
+
+    const res = await PATCH(
+      makeRequest({ action: "save", answers: {}, cursorIndex: 0 }, "http://localhost/app/flashcards") as never,
+      { params: Promise.resolve({ id: "test_12345678" }) },
+    );
+    assert.equal(res.status, 403);
+    const data = (await res.json()) as { error?: string };
+    assert.equal(data.error, "INVALID_SURFACE");
+  });
 });
 
 describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {

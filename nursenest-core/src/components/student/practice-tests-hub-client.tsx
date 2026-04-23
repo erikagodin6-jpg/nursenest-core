@@ -92,6 +92,7 @@ export function PracticeTestsHubClient({
   const [timeLimitMin, setTimeLimitMin] = useState(45);
   const [linearDeliveryMode, setLinearDeliveryMode] = useState<"practice" | "exam">("practice");
   const [linearRationaleVisibility, setLinearRationaleVisibility] = useState<"after_each" | "end_of_exam">("after_each");
+  const [linearAllowReviewNavigation, setLinearAllowReviewNavigation] = useState(false);
   const [pathwayId, setPathwayId] = useState(
     () => defaultPathwayId ?? pathwayOptions[0]?.id ?? "",
   );
@@ -292,6 +293,7 @@ export function PracticeTestsHubClient({
         difficultyMax: difficultyMax === "" ? null : difficultyMax,
         sessionMode: linearDeliveryMode === "exam" ? "exam" : "tutor",
         rationaleVisibilityMode: linearRationaleVisibility === "after_each" ? "immediate" : "review",
+        linearAllowReviewNavigation: linearDeliveryMode === "practice" ? linearAllowReviewNavigation : false,
       });
       const payload =
         selectionMode === "cat"
@@ -540,6 +542,7 @@ export function PracticeTestsHubClient({
                 onClick={() => {
                   setLinearDeliveryMode("exam");
                   setLinearRationaleVisibility("end_of_exam");
+                  setLinearAllowReviewNavigation(false);
                 }}
                 data-active={linearDeliveryMode === "exam"}
                 className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
@@ -566,6 +569,7 @@ export function PracticeTestsHubClient({
                   onClick={() => {
                     setLinearRationaleVisibility("end_of_exam");
                     setLinearDeliveryMode("exam");
+                    setLinearAllowReviewNavigation(false);
                   }}
                   data-active={linearRationaleVisibility === "end_of_exam"}
                   className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
@@ -574,6 +578,23 @@ export function PracticeTestsHubClient({
                 </button>
               </div>
             </div>
+            {linearDeliveryMode === "practice" ? (
+              <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-3 text-sm text-foreground shadow-sm">
+                <input
+                  type="checkbox"
+                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-border"
+                  checked={linearAllowReviewNavigation}
+                  onChange={(e) => setLinearAllowReviewNavigation(e.target.checked)}
+                  data-nn-qa-practice-hub-linear-allow-review-nav
+                />
+                <span>
+                  <span className="font-medium">{t("learner.practiceTests.hub.linearAllowReviewNavLabel")}</span>
+                  <span className="mt-1 block text-xs text-muted-foreground">
+                    {t("learner.practiceTests.hub.linearAllowReviewNavHelp")}
+                  </span>
+                </span>
+              </label>
+            ) : null}
             <p className="mt-2 text-xs text-muted-foreground">{t("learner.practiceTests.hub.sessionModeHelp")}</p>
           </div>
         ) : null}

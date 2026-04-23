@@ -301,6 +301,11 @@ export type LearnerDashboardCoreReliability = {
   lessonsCompleted: boolean;
   questionsInMocksLast14d: boolean;
   recentMocks: boolean;
+  /**
+   * When false, the learner had an in-progress lesson row but we could not resolve a safe resume href
+   * (or resolution threw). {@link LearnerDashboardCoreModel.continueLesson} may be null despite real in-app progress.
+   */
+  continueLessonHref: boolean;
 };
 
 /**
@@ -553,15 +558,7 @@ export async function loadLearnerDashboardCore(
   const lessonsAvailableReliable = contentCountReliable && pathwayCountReliable;
   const lessonsAvailable = lessonsAvailableReliable ? contentLessonTotal + pathwayLessonPublishedCount : 0;
 
-  const coreReliability: LearnerDashboardCoreReliability = {
-    userProfile: userProfileReliable,
-    visibleLessonScope: visibleLessonScopeReliable,
-    lessonsAvailable: lessonsAvailableReliable,
-    lessonsCompleted: lessonsCompletedReliable,
-    questionsInMocksLast14d: exam14dReliable,
-    recentMocks: recentMocksReliable,
-  };
-
+  let continueLessonHrefReliable = true;
   let continueLesson: ContinueLesson | null = null;
   if (incompleteProgress?.lessonId) {
     try {
@@ -570,10 +567,32 @@ export async function loadLearnerDashboardCore(
         entitlement,
         learnerPath,
       });
-    } catch {
+      if (!continueLesson) {
+        continueLessonHrefReliable = false;
+        logSegmentFailure(
+          "continue_lesson_href_unresolved",
+          "resolveLessonRefFromProgressId_returned_null",
+        );
+      }
+    } catch (e) {
       continueLesson = null;
+      continueLessonHrefReliable = false;
+      logSegmentFailure(
+        "continue_lesson_href_resolution",
+        e instanceof Error ? e.message : String(e),
+      );
     }
   }
+
+  const coreReliability: LearnerDashboardCoreReliability = {
+    userProfile: userProfileReliable,
+    visibleLessonScope: visibleLessonScopeReliable,
+    lessonsAvailable: lessonsAvailableReliable,
+    lessonsCompleted: lessonsCompletedReliable,
+    questionsInMocksLast14d: exam14dReliable,
+    recentMocks: recentMocksReliable,
+    continueLessonHref: continueLessonHrefReliable,
+  };
 
   const durationMsTotal = Math.round(performance.now() - t0);
   safeServerLog("learner_dashboard_perf", "dashboard_core_complete", {
@@ -594,6 +613,7 @@ export async function loadLearnerDashboardCore(
     core_lessons_completed_ok: lessonsCompletedReliable ? "1" : "0",
     core_exam14d_ok: exam14dReliable ? "1" : "0",
     core_recent_mocks_ok: recentMocksReliable ? "1" : "0",
+    core_continue_lesson_href_ok: continueLessonHrefReliable ? "1" : "0",
     ...getLearnerDurabilityObservabilityFields(),
   });
 
@@ -944,6 +964,7 @@ export async function loadLearnerDashboard(
     core_lessons_completed_ok: core.coreReliability.lessonsCompleted ? "1" : "0",
     core_exam14d_ok: core.coreReliability.questionsInMocksLast14d ? "1" : "0",
     core_recent_mocks_ok: core.coreReliability.recentMocks ? "1" : "0",
+    core_continue_lesson_href_ok: core.coreReliability.continueLessonHref ? "1" : "0",
     ...getLearnerDurabilityObservabilityFields(),
   });
 

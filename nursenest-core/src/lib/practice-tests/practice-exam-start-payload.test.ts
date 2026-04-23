@@ -27,6 +27,30 @@ describe("buildPracticeExamStartPayload", () => {
     assert.equal(payload.difficultyMax, 4);
   });
 
+  it("includes linearAllowReviewNavigation only for practice delivery when requested", () => {
+    const withNav = buildPracticeExamStartPayload({
+      questionCount: 10,
+      selectionMode: "random",
+      timedMode: false,
+      sessionMode: "tutor",
+      rationaleVisibilityMode: "immediate",
+      linearAllowReviewNavigation: true,
+    });
+    assert.equal(withNav.linearDeliveryMode, "practice");
+    assert.equal((withNav as { linearAllowReviewNavigation?: boolean }).linearAllowReviewNavigation, true);
+
+    const examNoNav = buildPracticeExamStartPayload({
+      questionCount: 10,
+      selectionMode: "random",
+      timedMode: false,
+      sessionMode: "exam",
+      rationaleVisibilityMode: "review",
+      linearAllowReviewNavigation: true,
+    });
+    assert.equal(examNoNav.linearDeliveryMode, "exam");
+    assert.equal((examNoNav as { linearAllowReviewNavigation?: boolean }).linearAllowReviewNavigation, undefined);
+  });
+
   it("maps exam mode to exam delivery with end-of-exam rationale visibility", () => {
     const payload = buildPracticeExamStartPayload({
       questionCount: 40,
