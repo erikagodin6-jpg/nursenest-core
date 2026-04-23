@@ -1945,16 +1945,19 @@ export function PracticeTestRunnerClient({
         flags={protectionFlags}
         telemetrySurface="practice_test"
       >
-        <PracticeSessionLayout className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}>
+        <PracticeSessionLayout
+          className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}
+          {...(isExamStyle ? { "data-cat-exam-root": true } : {})}
+        >
           <ExamSessionShell
             neutralPalette
             immersive
-            className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none${isExamStyle ? " nn-cat-exam-chrome" : ""}`}
+            className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none${isExamStyle ? " nn-cat-exam-chrome nn-cat-adaptive-exam-session" : ""}`}
           >
             {isExamStyle ? (
               <>
-                <header className="nn-cat-exam-board-top flex min-h-[3.5rem] shrink-0 items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] px-3 py-2 sm:px-4">
-                  <p className="nn-cat-exam-board-top__progress m-0 text-sm font-semibold leading-snug text-[var(--semantic-text-secondary)]">
+                <header className="nn-cat-exam-board-top nn-cat-exam-board-top--adaptive flex shrink-0 items-center justify-between gap-2 border-b border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] px-3 py-1.5 sm:gap-3 sm:px-4 sm:py-2">
+                  <p className="nn-cat-exam-board-top__progress m-0 text-xs font-semibold leading-snug text-[var(--semantic-text-secondary)] sm:text-sm">
                     {tx("learner.practiceTests.run.itemInProgress", "Item {n} in Progress", { n: String(idx + 1) })}
                   </p>
                   <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
@@ -2039,6 +2042,7 @@ export function PracticeTestRunnerClient({
                         difficultyLabel={null}
                         examStackedLayout
                         examDetachedFooter
+                        examStemScrollPartition
                         examCategoryLabel={catExamCategoryLine}
                         examHeaderRightSlot={
                           <button
@@ -2087,7 +2091,7 @@ export function PracticeTestRunnerClient({
                                 : "\u00a0"}
                         </p>
                         {timedMode && timeLimitSec != null ? (
-                          <div className="nn-cat-exam-timing-alert mb-4" role="alert">
+                          <div className="nn-cat-exam-timing-alert mb-2 sm:mb-3" role="alert">
                             {tx(
                               "learner.practiceTests.run.timedAutoEnd",
                               "Timed session: the exam may end automatically when time expires.",
@@ -2105,8 +2109,11 @@ export function PracticeTestRunnerClient({
                       </QuestionCard>
                     )}
                   </div>
-                  <footer className="nn-cat-exam-board-footer flex shrink-0 flex-col border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))]">
-                    <div className="mx-auto flex w-full max-w-[48.75rem] items-center justify-between gap-3 px-3 py-2.5 sm:px-4">
+                  <footer
+                    data-nn-qa-cat-adaptive-exam-footer
+                    className="nn-cat-exam-board-footer nn-cat-exam-board-footer--adaptive flex shrink-0 flex-col border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))]"
+                  >
+                    <div className="mx-auto flex w-full max-w-[48.75rem] items-center justify-between gap-2 px-3 py-1.5 sm:gap-3 sm:px-4 sm:py-2">
                       <button
                         type="button"
                         disabled
@@ -2305,8 +2312,8 @@ export function PracticeTestRunnerClient({
   }
 
   /**
-   * Legacy linear sessions (no `linearDeliveryMode` on stored config): free navigation and
-   * `PracticeQuestionCard` layout. See `linear-runner-session-mode.ts` module comment for migration notes.
+   * Legacy linear sessions (no `linearDeliveryMode` on stored config): free navigation with the same
+   * CAT exam board shell as linear engine runs (`QuestionCard` + detached footer).
    */
   if (!catMode && !isLinearEngine) {
     function legacyCatOptState(canonical: string): AnswerOptionState {
@@ -2940,40 +2947,9 @@ export function PracticeTestRunnerClient({
           <div
             className={`nn-cat-exam-board-frame nn-cat-session flex min-h-0 flex-1 flex-col overflow-hidden ${chromeClass} nn-cat-session--exam-single`}
           >
-            {linearShowRationaleAside && linearRightColumnPhase ? (
-              <div className="nn-flashcard-exam-board nn-practice-test-linear-board grid min-h-0 min-w-0 flex-1 gap-4 overflow-hidden px-3 py-3 sm:px-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,380px)] xl:gap-6">
-                <div className="min-h-0 min-w-0 overflow-x-hidden overflow-y-auto">
-                  <div className="nn-cat-exam-content-well nn-cat-exam-col mx-auto flex min-h-0 w-full max-w-[48.75rem] flex-col pb-2 pt-1">
-                    {linearTutorQuestionCard}
-                  </div>
-                </div>
-                <PracticeTestLinearRightColumn
-                  phase={linearRightColumnPhase}
-                  clinicalImageSrc={clinicalImageSrcLinear}
-                  labels={linearRightColumnLabels}
-                  rationaleSlot={
-                    <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] p-4 shadow-sm sm:p-5">
-                      <PracticeRationaleFullPanel
-                        status={rationaleFullStatus}
-                        correctKeys={linearFeedback?.correctKeys}
-                        optionDisplayMap={optionDisplayMap}
-                        allOptionKeys={optsOrderCanonical}
-                        correctAnswerExplanation={linearFeedback?.correctAnswerExplanation}
-                        rationale={linearFeedback?.rationale}
-                        distractorRationalesMap={linearFeedback?.distractorRationalesMap}
-                        keyTakeaway={linearFeedback?.keyTakeaway}
-                        relatedLessons={linearFeedback?.relatedLessons ?? []}
-                        confidenceLevel={confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null}
-                      />
-                    </div>
-                  }
-                />
-              </div>
-            ) : (
-              <div className="nn-cat-exam-content-well nn-cat-exam-col mx-auto flex min-h-0 w-full max-w-[48.75rem] flex-1 flex-col overflow-hidden">
-                {linearExamQuestionCard}
-              </div>
-            )}
+            <div className="nn-cat-exam-content-well nn-cat-exam-col mx-auto flex min-h-0 w-full max-w-[48.75rem] flex-1 flex-col overflow-hidden">
+              {linearExamQuestionCard}
+            </div>
             {linearBoardFooter}
           </div>
         </ExamSessionShell>

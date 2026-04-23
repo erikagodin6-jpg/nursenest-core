@@ -436,6 +436,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     role_track: roleTrack,
     exam_code: examCode,
     lesson_content_locale: lessonContentLocale,
+    /** From {@link getPathwayLessonsPageFresh} — same contract as pagination `total` before hub-only prepare/verify. */
+    loader_renderable_total: String(pageResult.total),
     raw_list_rows: String(rawHubLessonRows.length),
     after_prepare: String(hubCurriculumPrepared.length),
     after_verify_kept: String(hubCurriculumLessons.length),

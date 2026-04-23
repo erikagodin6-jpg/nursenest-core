@@ -51,7 +51,9 @@ test.describe("CAT exam — compact viewport layout", () => {
       const metrics = await page.evaluate(() => {
         const root = document.querySelector("[data-cat-exam-root]");
         const scrollEl = document.getElementById("nn-cat-exam-scroll-region");
-        const footer = document.querySelector(".nn-cat-question-card__exam-footer--anchored");
+        const footer =
+          document.querySelector(".nn-cat-question-card__exam-footer--anchored") ??
+          document.querySelector("[data-nn-qa-cat-adaptive-exam-footer]");
         const opts = scrollEl?.querySelectorAll("button.nn-cat-opt, label.nn-cat-opt") ?? [];
         const last = opts[opts.length - 1] as HTMLElement | undefined;
         if (!scrollEl || !footer || !last) {
@@ -60,14 +62,15 @@ test.describe("CAT exam — compact viewport layout", () => {
         const sr = scrollEl.getBoundingClientRect();
         const fr = footer.getBoundingClientRect();
         const lr = last.getBoundingClientRect();
-        const fixedFooters = root?.querySelectorAll(".nn-cat-question-card__exam-footer--anchored") ?? [];
+        const anchored = root?.querySelectorAll(".nn-cat-question-card__exam-footer--anchored") ?? [];
+        const board = root?.querySelectorAll("[data-nn-qa-cat-adaptive-exam-footer]") ?? [];
         return {
           ok: true as const,
           scrollClientH: scrollEl.clientHeight,
           gapFooterMinusLastOpt: fr.top - lr.bottom,
           stemTop: scrollEl.querySelector(".nn-cat-question-stem")?.getBoundingClientRect().top ?? null,
           scrollTop: sr.top,
-          anchoredFooterCount: fixedFooters.length,
+          anchoredFooterCount: anchored.length + board.length,
         };
       });
 
@@ -87,7 +90,7 @@ test.describe("CAT exam — compact viewport layout", () => {
         ).toBeLessThan(80);
       }
 
-      expect(metrics.anchoredFooterCount, "single exam footer anchor per card").toBe(1);
+      expect(metrics.anchoredFooterCount, "single exam footer (anchored card or adaptive board bar)").toBe(1);
 
       const serious = obs.consoleErrors.filter(
         (x) => !/cookie|Content Security Policy|third-party|analytics/i.test(x),

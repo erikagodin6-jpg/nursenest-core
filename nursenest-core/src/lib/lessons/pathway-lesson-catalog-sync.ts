@@ -233,6 +233,19 @@ function sanitizeExamRelevance(raw: unknown): PathwayLessonExamRelevance | undef
 
 function sanitizeRuntimeExam(raw: unknown): PathwayLessonRuntimeExam | undefined {
   if (raw === "REX_PN" || raw === "NCLEX_PN" || raw === "NCLEX_RN" || raw === "NP" || raw === "ALLIED" || raw === "NCLEX") return raw;
+  if (typeof raw === "string") {
+    const compact = raw.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+    /** Authoring / DB strings outside the strict runtime union — normalize to `NP` for filtering + overlays. */
+    if (
+      compact === "CNPLE" ||
+      compact === "CANNP" ||
+      compact === "FNP" ||
+      compact === "AGPCNP" ||
+      compact === "PMHNP"
+    ) {
+      return "NP";
+    }
+  }
   return undefined;
 }
 
@@ -501,6 +514,30 @@ function defaultBodyFor(kind: PathwayLessonSectionKind): string {
       return "";
   }
 }
+function isNursingCoreRuntimeExam(exam: PathwayLessonRuntimeExam): boolean {
+  return exam === "NCLEX" || exam === "NCLEX_RN" || exam === "NCLEX_PN";
+}
+
+/**
+ * NP marketing hubs (`*-np-*`) often ship lessons authored with NCLEX-RN/PN tags only; `pathway_id` is the
+ * canonical publish scope — treat core nursing exam tags as compatible with NP **only** when the hub context is NP.
+ */
+function npHubContextMatchesLegacyNursingExamTags(
+  context: { exam: PathwayLessonRuntimeExam; country: PathwayLessonRuntimeCountry },
+  exams: PathwayLessonRuntimeExam[],
+  examMeta: PathwayLessonExamMeta[],
+): boolean {
+  if (context.exam !== "NP") return false;
+  const metaAllows =
+    examMeta.length === 0 ||
+    examMeta.some((e) => e.exam === "NP" || isNursingCoreRuntimeExam(e.exam));
+  const examsAllow =
+    exams.length === 0 ||
+    exams.includes("NP") ||
+    exams.some((e) => isNursingCoreRuntimeExam(e));
+  return metaAllows && examsAllow;
+}
+
 function matchesLessonContext(
   lesson: PathwayLessonRecord,
   context: { exam: PathwayLessonRuntimeExam; country: PathwayLessonRuntimeCountry },
@@ -513,13 +550,15 @@ function matchesLessonContext(
     examMeta.some(
       (entry) =>
         entry.exam === context.exam ||
-        (entry.exam === "NCLEX" && (context.exam === "NCLEX_PN" || context.exam === "NCLEX_RN")),
+        (entry.exam === "NCLEX" && (context.exam === "NCLEX_PN" || context.exam === "NCLEX_RN")) ||
+        (context.exam === "NP" && isNursingCoreRuntimeExam(entry.exam)),
     );
   const examMatch =
-    examMetaMatch &&
-    (exams.length === 0 ||
-      exams.includes(context.exam) ||
-      (exams.includes("NCLEX") && (context.exam === "NCLEX_PN" || context.exam === "NCLEX_RN")));
+    (examMetaMatch &&
+      (exams.length === 0 ||
+        exams.includes(context.exam) ||
+        (exams.includes("NCLEX") && (context.exam === "NCLEX_PN" || context.exam === "NCLEX_RN")))) ||
+    npHubContextMatchesLegacyNursingExamTags(context, exams, examMeta);
   const countryMatch = countries.length === 0 || countries.includes(context.country) || countries.includes("GLOBAL");
   return examMatch && countryMatch;
 }
@@ -534,6 +573,12 @@ function examMetaForContext(
   if (context.exam === "NCLEX_PN" || context.exam === "NCLEX_RN") {
     const generic = examMeta.find((entry) => entry.exam === "NCLEX");
     if (generic) return generic;
+  }
+  if (context.exam === "NP") {
+    const np = examMeta.find((entry) => entry.exam === "NP");
+    if (np) return np;
+    const nursing = examMeta.find((entry) => isNursingCoreRuntimeExam(entry.exam));
+    if (nursing) return { ...nursing, exam: "NP" };
   }
   return undefined;
 }

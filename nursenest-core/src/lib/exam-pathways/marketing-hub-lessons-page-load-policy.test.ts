@@ -171,3 +171,46 @@ test("fast successful empty page is ok (real zero inventory)", async () => {
   }
   assert.equal(pageResult.total, 0);
 });
+
+test("Canada NP (CNPLE) pathway accepts a well-formed primary lessons payload (no invalid_payload)", async () => {
+  const npCtx = {
+    pathname: "/canada/np/cnple/lessons",
+    locale: "canada",
+    country: "canada",
+    examCode: "cnple",
+    pathwayId: "ca-np-cnple",
+    roleTrack: "np",
+  } as const;
+  const row = {
+    slug: "np-contract-lesson",
+    title: "NP contract lesson",
+    topic: "Topic",
+    topicSlug: "primary-care",
+    bodySystem: "cardiovascular",
+    system: "cardiovascular",
+    previewSectionCount: 1,
+    seoTitle: "NP contract lesson",
+    seoDescription: "Desc",
+    sections: [],
+    structuralQuality: { publicComplete: true },
+    exams: [],
+    countries: [],
+  } as PathwayLessonRecord;
+  const page: PathwayLessonsPageResult = {
+    items: [row],
+    total: 2,
+    page: 1,
+    pageSize: 24,
+    pageCount: 1,
+    renderableAll: [row, { ...row, slug: "np-contract-lesson-b" }],
+  };
+  const { pageResult, lessonsPageLoad } = await loadPathwayLessonsHubPageWithTelemetry(
+    "ca-np-cnple",
+    args,
+    npCtx,
+    async () => page,
+  );
+  assert.equal(lessonsPageLoad.status, "ok");
+  assert.equal(pageResult.total, 2);
+  assert.equal(pageResult.items.length, 1);
+});

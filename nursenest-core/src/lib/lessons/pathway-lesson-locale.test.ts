@@ -45,7 +45,20 @@ describe("pickPathwayLessonListWarehouseLocale", () => {
     );
   });
 
-  it("breaks ties toward canonical English", () => {
+  it("when marketing requests en but another locale clearly holds the corpus, list that locale", () => {
+    assert.equal(
+      pickPathwayLessonListWarehouseLocale({
+        localeCounts: [
+          { locale: "en", count: 50 },
+          { locale: "fr", count: 200 },
+        ],
+        requestedLocale: "en",
+      }),
+      "fr",
+    );
+  });
+
+  it("breaks ties toward canonical English when the viewer has no locale preference", () => {
     assert.equal(
       pickPathwayLessonListWarehouseLocale({
         localeCounts: [

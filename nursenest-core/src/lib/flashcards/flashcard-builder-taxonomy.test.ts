@@ -13,7 +13,7 @@ describe("applyCountsToBuilderCategories", () => {
     assert.ok(ids.has("legacy_orphan_topic_key"));
     const orphan = opts.find((o) => o.id === "legacy_orphan_topic_key");
     assert.equal(orphan?.count, 5);
-    assert.match(orphan?.title ?? "", /Legacy/);
+    assert.equal(orphan?.title, "Legacy Orphan Topic Key");
   });
 
   it("returns empty array when there are no positive counts", () => {

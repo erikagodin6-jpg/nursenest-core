@@ -48,13 +48,12 @@ export const PATHWAY_LESSON_SITEMAP_LOCALE = "en";
 /**
  * Chooses which `pathway_lessons.locale` warehouse the hub list SQL should scan.
  *
- * - If the viewer-requested locale has published rows, use it (verbatim DB listing for that shard).
- * - Otherwise pick the **dominant** published locale by row count. When counts tie, prefer
- *   {@link PATHWAY_LESSON_CANONICAL_DB_LOCALE} so the English + overlay pipeline remains the default.
- *
- * This prevents a **tiny accidental `en` shard** (for example a single stray import row) from hiding
- * the real corpus when most lessons were keyed under another locale by mistake — a common cause of
- * “hundreds in DB, one on the hub” mismatches.
+ * - If the viewer-requested locale is the **dominant** published shard, use it.
+ * - If the viewer requests canonical English but English is only a tiny shard while another locale
+ *   holds the bulk corpus, prefer that dominant locale (fixes “800 rows in DB, 1 on the hub” when a
+ *   stray `en` row forced SQL onto an almost-empty warehouse).
+ * - Otherwise prefer requested locale when it has rows; if it has none, fall back to the dominant locale
+ *   (ties broken toward {@link PATHWAY_LESSON_CANONICAL_DB_LOCALE}).
  */
 export function pickPathwayLessonListWarehouseLocale(input: {
   localeCounts: Array<{ locale: string; count: number }>;
@@ -68,13 +67,41 @@ export function pickPathwayLessonListWarehouseLocale(input: {
     merged.set(loc, (merged.get(loc) ?? 0) + Math.max(0, row.count));
   }
   if (merged.size === 0) return PATHWAY_LESSON_CANONICAL_DB_LOCALE;
-  if ((merged.get(requested) ?? 0) > 0) return requested;
 
-  const sorted = [...merged.entries()].sort((a, b) => {
+  const dominantEntry = [...merged.entries()].sort((a, b) => {
     if (b[1] !== a[1]) return b[1] - a[1];
     if (a[0] === PATHWAY_LESSON_CANONICAL_DB_LOCALE && b[0] !== PATHWAY_LESSON_CANONICAL_DB_LOCALE) return -1;
     if (b[0] === PATHWAY_LESSON_CANONICAL_DB_LOCALE && a[0] !== PATHWAY_LESSON_CANONICAL_DB_LOCALE) return 1;
     return a[0].localeCompare(b[0]);
-  });
-  return sorted[0]![0];
+  })[0]!;
+  const dominantLocale = dominantEntry[0];
+  const dominantCount = dominantEntry[1];
+  const requestedCount = merged.get(requested) ?? 0;
+
+  if (requestedCount > 0 && requested === dominantLocale) {
+    return requested;
+  }
+
+  /**
+   * Legacy hub bug: `pathway_lessons.locale` listing always used `en` whenever **any** English row existed,
+   * so a single stray `en` import could force SQL to `locale=en` and hide hundreds of rows keyed elsewhere.
+   * When the viewer is on the canonical English marketing code but the **dominant** warehouse is another
+   * locale by a wide margin, list from that dominant shard instead — i18n overlays still apply for display.
+   */
+  const REPOSITORY_SKEW_RATIO = 3;
+  if (
+    requested === PATHWAY_LESSON_CANONICAL_DB_LOCALE &&
+    requestedCount > 0 &&
+    dominantLocale !== PATHWAY_LESSON_CANONICAL_DB_LOCALE &&
+    dominantCount > requestedCount * REPOSITORY_SKEW_RATIO &&
+    dominantCount - requestedCount >= 10
+  ) {
+    return dominantLocale;
+  }
+
+  if (requestedCount > 0) {
+    return requested;
+  }
+
+  return dominantLocale;
 }

@@ -6594,6 +6594,84 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
     padding-left: 16px;
     padding-right: 16px;
   }
+
+  /* Strict adaptive CAT exam: reclaim a bit more chrome than generic exam board (linear unchanged). */
+  .nn-practice-session:has(.nn-cat-adaptive-exam-session) {
+    height: calc(100dvh - 48px);
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+/*
+ * Adaptive CAT exam session only (`nn-cat-adaptive-exam-session` on ExamSessionShell).
+ * Tighter vertical rhythm + stem-only scroll partition — does not apply to linear / legacy board chrome.
+ */
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-exam-progress--cat-exam-adaptive {
+  padding-top: 0.28rem;
+  padding-bottom: 0.28rem;
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-exam-progress--cat-exam-adaptive > div:first-child {
+  margin-bottom: 0.16rem;
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-col {
+  padding-top: 0.1rem;
+  padding-bottom: 0.2rem;
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-item-head {
+  margin-bottom: 0.35rem;
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-timing-alert {
+  margin-bottom: 0.45rem;
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-stem-scroll .nn-cat-question-stem {
+  margin-bottom: 0.45rem;
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-post-stem .nn-cat-options-label {
+  margin-bottom: 0.3rem;
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-post-stem .nn-cat-opt-list {
+  gap: 0.4rem;
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-post-stem .nn-cat-opt {
+  min-height: 2.5rem;
+  padding: 0.48rem 0.62rem;
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-post-stem .nn-cat-opt__letter {
+  width: 1.625rem;
+  height: 1.625rem;
+  font-size: 0.625rem;
+}
+
+.nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-board-footer--adaptive {
+  border-top-width: 1px;
+}
+
+.nn-cat-question-card__exam-scroll--partitioned {
+  touch-action: pan-y;
+}
+
+@media (max-height: 900px) {
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-post-stem .nn-cat-opt {
+    min-height: 2.4rem;
+    padding: 0.42rem 0.55rem;
+  }
+}
+
+@media (max-height: 720px) {
+  .nn-cat-exam-chrome.nn-cat-adaptive-exam-session .nn-cat-exam-board-top--adaptive {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
 }
 
 .nn-cat-question-card {
