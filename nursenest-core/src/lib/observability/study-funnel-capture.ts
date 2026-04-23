@@ -1,5 +1,6 @@
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
+import { skipLearnerBusinessAnalyticsForAccessScope } from "@/lib/observability/admin-learner-qa-analytics";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
@@ -32,6 +33,7 @@ export function captureStudyProgressFunnelAfterUpsert(
   scope: AccessScope,
   before: StudyFunnelBeforeSnapshot,
 ): void {
+  if (skipLearnerBusinessAnalyticsForAccessScope(scope)) return;
   void (async () => {
     try {
       const totalAfter = await prisma.progress.count({ where: { userId } });

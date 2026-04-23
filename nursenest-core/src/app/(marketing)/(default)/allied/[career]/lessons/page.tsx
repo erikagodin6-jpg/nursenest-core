@@ -3,7 +3,7 @@ import { resolveAlliedProfessionFromRouteSlug } from "@/lib/allied/allied-profes
 import { alliedHealthLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 
 /**
- * /allied/[career]/lessons → redirects to the canonical allied-health lessons route.
+ * /allied/[career]/lessons → redirects to the canonical allied pathway lessons hub (`…/allied/allied-health/lessons?alliedProfession=…`).
  * Keeps the new /allied/[career]/ URL namespace working without duplicating lesson content.
  */
 export const dynamic = "force-dynamic";

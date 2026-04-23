@@ -60,9 +60,11 @@ export const KEYWORD_MAP: Record<string, readonly string[]> = {
   ],
   gastrointestinal: ["liver", "bowel", "gi", "pancreas", "hepat", "intestinal", "crohn", "colitis", "cirrhosis"],
   hematology_oncology: ["anemia", "cancer", "leukemia", "lymphoma", "chemo", "oncolog", "sickle", "thrombocyt"],
-  musculoskeletal: ["bone", "fracture", "joint", "orthop", "arthritis", "spine", "rheumat", "mobility"],
+  musculoskeletal: ["anatomy", "physiology", "bone", "fracture", "joint", "orthop", "arthritis", "spine", "rheumat", "mobility"],
   integumentary: ["skin", "wound", "ulcer", "dermat", "rash", "pressure injury", "cellulitis", "burn"],
   immune_infectious: [
+    "symptom",
+    "symptoms",
     "infection",
     "sepsis",
     "immune",
@@ -85,7 +87,7 @@ export const KEYWORD_MAP: Record<string, readonly string[]> = {
   documentation: ["charting", "documentation", "record", "ehr", "emar"],
   communication: ["communication", "therapeutic", "handoff", "sbar"],
   scope_of_practice: ["scope", "responsibility", "nurse practice act"],
-  delegation_supervision: ["delegate", "assignment", "supervision"],
+  delegation_supervision: ["delegate", "delegation", "assignment", "supervision"],
   leadership_management: ["leadership", "management"],
   patient_safety_quality: ["safety", "quality", "risk", "root cause", "near miss"],
 
@@ -93,7 +95,7 @@ export const KEYWORD_MAP: Record<string, readonly string[]> = {
   cns_drugs: ["benzodiazep", "opioid", "antidepress", "antipsych", "anticonvuls"],
   endocrine_drugs: ["metformin", "sulfonylurea", "glp-1", "insulin lispro", "levothyroxine"],
   anti_infectives: ["vancomycin", "penicillin", "cephalosporin", "macrolide", "antifungal"],
-  pain_sedation: ["analgesic", "sedation", "anxiolytic", "nsaid", "acetaminophen"],
+  pain_sedation: ["medication", "medications", "analgesic", "sedation", "anxiolytic", "nsaid", "acetaminophen"],
 
   test_taking: ["test taking", "elimination", "priority question", "nclex strategy"],
   study_strategy: ["study plan", "pomodoro", "spaced repetition", "active recall"],

@@ -1,6 +1,10 @@
 import { BlogImageStatus, JobStatus } from "@prisma/client";
+import { z } from "zod";
 import { stemHash } from "@/lib/content/stem-hash";
 import { CronAdvisoryLock } from "@/lib/cron/cron-advisory-lock";
+import { executeBlogBulkChunk } from "@/lib/admin/content-bulk/execute-blog-bulk-chunk";
+import { blogBulkChunkPayloadSchema } from "@/lib/admin/content-bulk/blog-bulk-schema";
+import { runSitemapRevalidateBulkJob } from "@/lib/admin/content-bulk/run-sitemap-revalidate-job";
 import { prisma } from "@/lib/db";
 import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -80,6 +84,25 @@ async function handleJob(type: string, payload: unknown): Promise<void> {
         const hash = stemHash(r.stem);
         await prisma.examQuestion.update({ where: { id: r.id }, data: { stemHash: hash } });
       }
+      return;
+    }
+    case "content.bulk.blog_chunk": {
+      const parsed = blogBulkChunkPayloadSchema.safeParse(payload);
+      if (!parsed.success) {
+        throw new Error(`Invalid content.bulk.blog_chunk payload: ${parsed.error.message}`);
+      }
+      const result = await executeBlogBulkChunk(parsed.data);
+      if (result.failed > 0 && result.ok === 0 && result.skipped === 0) {
+        throw new Error(`Bulk chunk all failed: ${result.errors.slice(0, 4).join("; ")}`);
+      }
+      return;
+    }
+    case "content.bulk.sitemap_revalidate": {
+      const p = z
+        .object({ correlationId: z.string().min(8), createdById: z.string().min(1) })
+        .safeParse(payload);
+      if (!p.success) throw new Error("Invalid content.bulk.sitemap_revalidate payload");
+      await runSitemapRevalidateBulkJob(p.data);
       return;
     }
     case "blog.image.generate_featured": {

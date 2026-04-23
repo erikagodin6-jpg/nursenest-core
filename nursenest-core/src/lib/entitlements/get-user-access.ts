@@ -424,5 +424,6 @@ export function accessScopeFromUserAccess(ua: UserAccess): AccessScope {
     tier: ua.allowedProfession.tier,
     country: ua.allowedRegion.country,
     alliedCareer: ua.allowedProfession.alliedCareer,
+    ...(ua.adminLearnerQaSimulation === true ? { adminLearnerQaSimulation: true as const } : {}),
   };
 }

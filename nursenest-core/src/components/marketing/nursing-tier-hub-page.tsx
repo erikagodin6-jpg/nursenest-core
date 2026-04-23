@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useCallback } from "react";
 import { Activity, BookOpen, ClipboardList, Target } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -14,6 +15,8 @@ import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-ana
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { pathwayAnalyticsDimensions, trackProductEvent } from "@/lib/observability/product-analytics";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { selectMarketingTierHubContextualCta } from "@/lib/conversion/select-marketing-tier-hub-contextual-cta";
+import { MarketingTierHubContextualCta } from "@/components/conversion/marketing-tier-hub-contextual-cta";
 
 const ACTION_ICON: Record<NursingTierHubActionId, LucideIcon> = {
   lessons: BookOpen,
@@ -58,6 +61,8 @@ export function NursingTierHubPage({
   content,
   npSeoAliasSegment,
   hubResume,
+  viewerSignedIn = false,
+  viewerHasPathwayLessonAccess = false,
 }: {
   pathway: ExamPathwayDefinition;
   hubPath: string;
@@ -65,16 +70,38 @@ export function NursingTierHubPage({
   npSeoAliasSegment?: string;
   /** Subscriber-only: when present with a lesson target, shows a compact “continue” row under the four cards. */
   hubResume?: PathwayHubResumePayload | null;
+  viewerSignedIn?: boolean;
+  viewerHasPathwayLessonAccess?: boolean;
 }) {
   const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
   const actionsById = new Map(content.actions.map((action) => [action.id, action]));
   const orderedActions = ACTION_ORDER.map((actionId) => actionsById.get(actionId)).filter(
     (action): action is NonNullable<typeof action> => Boolean(action),
   );
+  const practiceQuestionsHref =
+    actionsById.get("practice_questions")?.href ?? buildExamPathwayPath(pathway, "questions");
+  const contextualDecision = selectMarketingTierHubContextualCta({
+    pathway,
+    viewerSignedIn: Boolean(viewerSignedIn),
+    viewerHasPathwayLessonAccess: Boolean(viewerHasPathwayLessonAccess),
+    practiceQuestionsHref,
+  });
   const resumeLesson = hubResume?.lastTouched ?? hubResume?.nextRecommended ?? null;
   const resumeLessonIsLastTouched = Boolean(hubResume?.lastTouched && resumeLesson === hubResume.lastTouched);
   const resumeLessonCompleted = resumeLessonIsLastTouched ? Boolean(hubResume?.lastTouched?.completed) : false;
   const questionsAppHref = `/app/questions?pathwayId=${encodeURIComponent(pathway.id)}`;
+  const trackResume = useCallback(
+    (destination: "resume_lesson" | "resume_questions") => {
+      const base = { ...linkCtx, ...pathwayAnalyticsDimensions(pathway) };
+      trackProductEvent(PH.conversionCtaClick, {
+        ...base,
+        surface: "tier_hub_resume_strip",
+        contextual_variant: "continue_where_you_left_off",
+        destination_kind: destination,
+      });
+    },
+    [linkCtx, pathway],
+  );
   /** Same headline pattern for RN, PN, NP (from {@link buildNursingTierHubContent}). */
   const title = content.title;
   const geographyLabel = pathway.countrySlug === "canada" ? "Canada" : "United States";
@@ -110,6 +137,13 @@ export function NursingTierHubPage({
             ) : null}
           </div>
         </div>
+        {contextualDecision ? (
+          <MarketingTierHubContextualCta
+            pathway={pathway}
+            decision={contextualDecision}
+            npSeoAliasSegment={npSeoAliasSegment}
+          />
+        ) : null}
         <ul className="mt-4 grid list-none gap-4 p-0 sm:grid-cols-2 lg:grid-cols-4">
           {orderedActions.map((action) => {
             const Icon = ACTION_ICON[action.id];
@@ -155,14 +189,22 @@ export function NursingTierHubPage({
         <div className="mt-4 rounded-lg border border-[var(--border-subtle)] px-3 py-3 sm:px-4">
           <p className="text-xs font-medium text-[var(--theme-muted-text)]">Continue where you left off</p>
           <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2 text-sm">
-            <Link href={resumeLesson.href} className="font-medium text-primary hover:underline">
+            <Link
+              href={resumeLesson.href}
+              className="font-medium text-primary hover:underline"
+              onClick={() => trackResume("resume_lesson")}
+            >
               <span className="block">Resume lesson</span>
               <span className="mt-0.5 block text-xs font-normal text-[var(--theme-muted-text)]">
                 {resumeLesson.title}
                 {resumeLessonCompleted ? " · completed" : ""}
               </span>
             </Link>
-            <Link href={questionsAppHref} className="font-medium text-primary hover:underline">
+            <Link
+              href={questionsAppHref}
+              className="font-medium text-primary hover:underline"
+              onClick={() => trackResume("resume_questions")}
+            >
               Resume questions
             </Link>
           </div>

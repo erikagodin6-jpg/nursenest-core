@@ -14,6 +14,7 @@ import {
   tierCodeToExamDbTier,
 } from "@/lib/prisma/exam-question-maps";
 import { ADMIN_API_LIST_PAGE, parseBoundedPageSize, parseListPage } from "@/lib/api/api-pagination-limits";
+import { examQuestionTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
 
 export const dynamic = "force-dynamic";
 
@@ -153,6 +154,33 @@ export async function POST(req: Request) {
   const cat = await prisma.category.findUnique({ where: { id: data.categoryId } });
   const topic = [cat?.name, data.topicTag].filter(Boolean).join(" · ") || cat?.slug;
 
+  const taxonomy = examQuestionTaxonomyFromCorpus({
+    stem: data.stem,
+    rationale: data.rationale,
+    topic: topic ?? null,
+    subtopic: data.systemTag ?? null,
+    tags: data.tags ?? [],
+  });
+  if (taxonomy.violations.length > 0) {
+    return NextResponse.json(
+      { error: "Taxonomy classification invalid", violations: taxonomy.violations, code: "taxonomy_invalid" },
+      { status: 422 },
+    );
+  }
+  if (data.status === ContentStatus.PUBLISHED && !taxonomy.publishable) {
+    return NextResponse.json(
+      {
+        error: "Publish blocked — taxonomy needs a resolved clinical/professional category",
+        code: "taxonomy_publish_blocked",
+        classification: {
+          domain: taxonomy.classification.domain,
+          category: taxonomy.classification.category,
+        },
+      },
+      { status: 422 },
+    );
+  }
+
   const question = await prisma.examQuestion.create({
     data: {
       stem: data.stem,
@@ -171,6 +199,7 @@ export async function POST(req: Request) {
       careerType: "nursing",
       regionScope: "BOTH",
       stemHash: hash,
+      bodySystem: taxonomy.bodySystem,
     },
   });
 

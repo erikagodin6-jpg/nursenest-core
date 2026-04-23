@@ -1,7 +1,12 @@
+"use client";
+
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowRight, BookOpen, Target, Layers, Brain, Play } from "lucide-react";
 import type { NextBestAction } from "@/lib/learner/next-best-action";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-t";
+import { PH } from "@/lib/observability/posthog-conversion-events";
+import { trackProductEvent } from "@/lib/observability/product-analytics";
 
 function displayNextAction(action: NextBestAction, t: LearnerMarketingT): {
   title: string;
@@ -20,7 +25,7 @@ function displayNextAction(action: NextBestAction, t: LearnerMarketingT): {
   };
 }
 
-const KIND_ICONS: Record<string, React.ReactNode> = {
+const KIND_ICONS: Record<string, ReactNode> = {
   lesson: <BookOpen className="h-6 w-6" />,
   quiz: <Target className="h-6 w-6" />,
   mock: <Layers className="h-6 w-6" />,
@@ -49,6 +54,13 @@ export function PrimaryActionCard({
     <Link
       href={action.href}
       className="nn-primary-action-card group"
+      onClick={() => {
+        trackProductEvent(PH.conversionCtaClick, {
+          surface: "dashboard_primary_next_action",
+          contextual_variant: action.kind,
+          href_kind: action.href.startsWith("/app/") ? "app" : "other",
+        });
+      }}
     >
       <div className="flex items-center gap-4 sm:gap-5">
         <div className="nn-primary-action-card__icon">

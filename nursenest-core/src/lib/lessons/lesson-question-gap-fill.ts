@@ -5,6 +5,7 @@
  * Does not invent stems. One exam_question row is assigned to at most one lesson per plan.
  */
 import { prisma } from "@/lib/db";
+import { examQuestionTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
 import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import {
   countRelatedExamQuestionsForPathwayLesson,
@@ -137,12 +138,28 @@ export async function applyLessonGapSalvagePlan(items: LessonGapSalvageItem[]): 
 
   for (const it of items) {
     try {
+      const q = await prisma.examQuestion.findUnique({
+        where: { id: it.examQuestionId },
+        select: { stem: true, rationale: true },
+      });
+      if (!q) {
+        failures.push({ id: it.examQuestionId, message: "Question not found" });
+        continue;
+      }
+      const taxonomy = examQuestionTaxonomyFromCorpus({
+        stem: q.stem,
+        rationale: q.rationale,
+        topic: it.setTopic,
+        subtopic: it.setSubtopic,
+        tags: it.mergeTags,
+      });
       await prisma.examQuestion.update({
         where: { id: it.examQuestionId },
         data: {
           topic: it.setTopic,
           subtopic: it.setSubtopic,
           tags: it.mergeTags,
+          bodySystem: taxonomy.bodySystem,
         },
       });
       applied += 1;

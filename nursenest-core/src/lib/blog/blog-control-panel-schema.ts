@@ -112,6 +112,20 @@ const blogControlPanelPlanBase = z.object({
     )
     .max(8)
     .optional(),
+  /**
+   * Suggested in-body anchor opportunities (review before linking). Paths must be real marketing routes.
+   */
+  internalAnchorOpportunities: z
+    .array(
+      z.object({
+        phrase: z.string().min(2).max(200),
+        suggestedAnchorText: z.string().min(2).max(120),
+        targetSuggestedPath: z.string().min(2).max(500),
+        rationale: z.string().max(300).optional(),
+      }),
+    )
+    .max(24)
+    .default([]),
 });
 
 /**

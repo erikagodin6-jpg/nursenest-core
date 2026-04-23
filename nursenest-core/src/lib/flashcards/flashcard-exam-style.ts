@@ -1,4 +1,5 @@
 import type { FlashcardItemKind, Prisma } from "@prisma/client";
+import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 
 /** Client + API shape for NCLEX-style micro-questions on flashcards. */
 export type ExamMicroQuestionPayload = {
@@ -118,6 +119,36 @@ export function correctAnswerLine(exam: ExamMicroQuestionPayload): string {
   const hit = exam.answerOptions.find((o) => o.letter === exam.correctLetter);
   const label = hit ? `${exam.correctLetter}) ${hit.text}` : exam.correctLetter;
   return `Correct: ${label}`;
+}
+
+/**
+ * Deterministic per-session shuffle of A–D rows so the keyed letter stays aligned with rationales.
+ * Uses stable lexical ordering before shuffling so identical DB rows still vary by `seed`.
+ */
+export function shuffleExamMicroQuestionOrder(exam: ExamMicroQuestionPayload, seed: string): ExamMicroQuestionPayload {
+  if (exam.answerOptions.length <= 1) return exam;
+  const base = [...exam.answerOptions].sort((a, b) => a.letter.localeCompare(b.letter));
+  const shuffled = shuffleSeeded(base, `${seed}:exam_micro`);
+  const oldToNew = new Map<string, string>();
+  shuffled.forEach((opt, idx) => {
+    oldToNew.set(opt.letter, String.fromCharCode("A".charCodeAt(0) + idx));
+  });
+  const newOptions = shuffled.map((opt, idx) => ({
+    letter: String.fromCharCode("A".charCodeAt(0) + idx),
+    text: opt.text,
+  }));
+  const newCorrect = oldToNew.get(exam.correctLetter);
+  if (!newCorrect) return exam;
+  const rationaleIncorrect = exam.rationaleIncorrect.map((row) => ({
+    letter: oldToNew.get(row.letter) ?? row.letter,
+    rationale: row.rationale,
+  }));
+  return {
+    ...exam,
+    answerOptions: newOptions,
+    correctLetter: newCorrect,
+    rationaleIncorrect,
+  };
 }
 
 /** Zod/admin: validate raw JSON + strings before persist. */

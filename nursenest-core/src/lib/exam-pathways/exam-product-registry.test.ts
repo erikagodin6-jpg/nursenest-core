@@ -35,7 +35,9 @@ describe("exam-product-registry marketing hub resolution", () => {
     assert.equal(p.id, "us-np-pnp-pc");
   });
 
-  it("returns undefined for unknown routes", () => {
-    assert.equal(resolveExamPathwayFromMarketingHubSegment("us", "pn", "nclex-pn"), undefined);
+  it("resolves US NCLEX-PN when the marketing URL uses the shared pn hub segment", () => {
+    const p = resolveExamPathwayFromMarketingHubSegment("us", "pn", "nclex-pn");
+    assert.ok(p);
+    assert.equal(p.id, "us-lpn-nclex-pn");
   });
 });

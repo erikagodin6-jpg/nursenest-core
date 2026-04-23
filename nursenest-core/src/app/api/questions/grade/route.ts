@@ -17,6 +17,7 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { mergeQuestionOverlayForGradeResponse } from "@/lib/i18n/educational-content-overlay";
 import { resolveMergedQuestionOverlayBundle } from "@/lib/i18n/educational-translation-db";
 import { resolveRationaleLessonLinksForQuestion } from "@/lib/learner/rationale-lesson-link-resolve";
+import { skipLearnerBusinessAnalyticsForAccessScope } from "@/lib/observability/admin-learner-qa-analytics";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { incrementBankQuestionsGradedToday } from "@/lib/learner/increment-bank-questions-graded-today";
@@ -188,7 +189,7 @@ export async function POST(req: Request) {
     void incrementBankQuestionsGradedToday(gate.userId);
 
     /** ~5% sample for PostHog volume/accuracy trends — no question id, no stem content. */
-    if (Math.random() < 0.05) {
+    if (Math.random() < 0.05 && !skipLearnerBusinessAnalyticsForAccessScope(gate.entitlement)) {
       void captureServerEvent(analyticsDistinctId(gate.userId), PH.learnerQuestionGradedSample, {
         is_correct: correct,
       });

@@ -47,6 +47,8 @@ import {
 } from "@/lib/blog/blog-article-pipeline-prompts";
 import type { BlogImageSlotAttachment } from "@/lib/blog/blog-image-workflow";
 import { seedBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
+import { findRelatedPublishedBlogPosts } from "@/lib/blog/blog-related-published-posts";
+import { mergePublishingPackageIntoLinkPlanJson } from "@/lib/blog/blog-publishing-package";
 import { blogPrimaryStudyCta, marketingStudyHubsForBlogExam } from "@/lib/blog/blog-study-cta";
 import { detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
 import { prisma } from "@/lib/db";
@@ -117,7 +119,7 @@ function sanitizeSlugInput(s: string, exam: string, topic: string): string {
   return generateBlogSlugBaseFromExamTopic(exam, topic, 100) || "blog-draft";
 }
 
-function appendRequiredStudyLinksBlock(params: {
+export function appendRequiredStudyLinksBlock(params: {
   bodyHtml: string;
   exam: string;
   country: "US" | "CA" | "unspecified";
@@ -379,12 +381,18 @@ export async function persistControlPanelDraft(
     twitterTitle: seoTitleStored.slice(0, 120),
     twitterDescription: seoDescriptionStored.slice(0, 200),
   };
-  const internalLinkPlan = {
+  const internalLinkPlanBase: Record<string, unknown> = {
     lessons: plan.suggestedInternalLessons,
     imagePlacements: plan.imagePlacements,
     imageAttachments: [] as BlogImageSlotAttachment[],
     seo: seoBundle,
   };
+  const internalLinkPlanInitial = mergePublishingPackageIntoLinkPlanJson(internalLinkPlanBase, {
+    version: 1,
+    updatedAt: new Date().toISOString(),
+    internalAnchorOpportunities: plan.internalAnchorOpportunities ?? [],
+    relatedBlogPosts: [],
+  });
 
   const hasAiCitationStubs = partition.excluded.some((e) => e.provenance === "ai_suggested");
   const workflowStatusBase =
@@ -423,77 +431,103 @@ export async function persistControlPanelDraft(
   }
 
   try {
-    const post = await prisma.blogPost.create({
-      data: {
-        slug,
-        title: pageTitle,
-        excerpt: excerpt.length >= 10 ? excerpt : `${pageTitle.slice(0, 200)}. Draft excerpt; edit before publish.`,
-        body: bodyWithRequiredLinks,
-        exam: input.exam,
-        category: categoryAssigned,
-        targetKeyword: (
-          (seoBundle.primaryKeyword && seoBundle.primaryKeyword.trim()) ||
-          normalizedTopic ||
-          (input.targetKeyword ?? input.topic)
-        )
-          .toString()
-          .slice(0, 200),
-        keywordCluster: input.keywordCluster ?? null,
-        countryTarget,
-        intent: input.intent,
-        funnelStage: input.funnelStage,
-        postTemplate: input.template,
-        postStatus: BlogPostStatus.DRAFT,
-        publishAt: null,
-        seoTitle: seoTitleStored,
-        seoDescription: seoDescriptionStored,
-        metaTitleVariant: seoTitleStored,
-        metaDescriptionVariant: seoDescriptionStored,
-        tags: tagsForSeo,
-        outlineJson: plan.outline as unknown as Prisma.InputJsonValue,
-        keyQuestions: plan.faqs.slice(0, 6).map((f) => f.q),
-        keywordPlan: [
-          input.targetKeyword ?? input.topic,
-          ...(input.keywords ? input.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 8) : []),
-        ].filter(Boolean),
-        titleAlternates: plan.titleOptions.filter((t) => t !== pageTitle).slice(0, 6),
-        keyTakeaways: plan.keyTakeaways,
-        faqBlock: faqBlock as unknown as Prisma.InputJsonValue,
-        internalLinkPlan: internalLinkPlan as unknown as Prisma.InputJsonValue,
-        relatedLessonPaths: relatedPaths,
-        schemaSummary: (() => {
-          try {
-            return buildSchemaSummaryPayload(seoBundle, {
-              schemaOpportunities: plan.schemaOpportunities,
-            });
-          } catch (e) {
-            const msg = e instanceof Error ? e.message : String(e);
-            console.error(`[blog-persist] buildSchemaSummaryPayload failed; using summary without extras: ${msg}`);
-            return buildSchemaSummaryPayload(seoBundle, {});
-          }
-        })(),
-        ctaType: cta.type,
-        ctaText: cta.text,
-        ctaHref: cta.href,
-        workflowStatus: workflowStatusBase,
-        sourcesJson: citationEnvelope as unknown as Prisma.InputJsonValue,
-        apaReferences,
-        requiresReferences: Boolean(riskFlags.length > 0 || hasAiCitationStubs || partition.excluded.length > 0),
-        sourceReliabilityScore: partition.verified.length ? sourceCheck.reliabilityScore : 0,
-        medicalRiskFlags: riskFlags,
-        imageStatus: input.includeImage ? (input.includeAiImage ? BlogImageStatus.REQUESTED : BlogImageStatus.NONE) : BlogImageStatus.NONE,
-        coverImagePrompt,
-        coverImageAlt,
-        coverImageCaption,
-        featuredSnippet: plan.featuredSnippetHint?.slice(0, 2000) ?? null,
-        shortSummary: plan.suggestedExcerpt.trim().slice(0, 220) || excerpt.slice(0, 220),
-        socialCaption: `${pageTitle.slice(0, 120)}. ${(plan.suggestedExcerpt.trim().slice(0, 100) || excerpt.slice(0, 100))}…`,
-        promoBlurb: cta.text,
-        updateNeeded: Boolean(thinWarning),
-        rankingNote: thinWarning ?? null,
-        adminPublishLog: seedBlogAdminPublishLog("draft_created", "AI draft created and saved as DRAFT (control panel)."),
-      },
-      select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
+    const post = await prisma.$transaction(async (tx) => {
+      const created = await tx.blogPost.create({
+        data: {
+          slug,
+          title: pageTitle,
+          excerpt: excerpt.length >= 10 ? excerpt : `${pageTitle.slice(0, 200)}. Draft excerpt; edit before publish.`,
+          body: bodyWithRequiredLinks,
+          exam: input.exam,
+          category: categoryAssigned,
+          targetKeyword: (
+            (seoBundle.primaryKeyword && seoBundle.primaryKeyword.trim()) ||
+            normalizedTopic ||
+            (input.targetKeyword ?? input.topic)
+          )
+            .toString()
+            .slice(0, 200),
+          keywordCluster: input.keywordCluster ?? null,
+          countryTarget,
+          intent: input.intent,
+          funnelStage: input.funnelStage,
+          postTemplate: input.template,
+          postStatus: BlogPostStatus.DRAFT,
+          publishAt: null,
+          seoTitle: seoTitleStored,
+          seoDescription: seoDescriptionStored,
+          metaTitleVariant: seoTitleStored,
+          metaDescriptionVariant: seoDescriptionStored,
+          tags: tagsForSeo,
+          outlineJson: plan.outline as unknown as Prisma.InputJsonValue,
+          keyQuestions: plan.faqs.slice(0, 6).map((f) => f.q),
+          keywordPlan: [
+            input.targetKeyword ?? input.topic,
+            ...(input.keywords ? input.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 8) : []),
+          ].filter(Boolean),
+          titleAlternates: plan.titleOptions.filter((t) => t !== pageTitle).slice(0, 6),
+          keyTakeaways: plan.keyTakeaways,
+          faqBlock: faqBlock as unknown as Prisma.InputJsonValue,
+          internalLinkPlan: internalLinkPlanInitial as unknown as Prisma.InputJsonValue,
+          relatedLessonPaths: relatedPaths,
+          schemaSummary: (() => {
+            try {
+              return buildSchemaSummaryPayload(seoBundle, {
+                schemaOpportunities: plan.schemaOpportunities,
+              });
+            } catch (e) {
+              const msg = e instanceof Error ? e.message : String(e);
+              console.error(`[blog-persist] buildSchemaSummaryPayload failed; using summary without extras: ${msg}`);
+              return buildSchemaSummaryPayload(seoBundle, {});
+            }
+          })(),
+          ctaType: cta.type,
+          ctaText: cta.text,
+          ctaHref: cta.href,
+          workflowStatus: workflowStatusBase,
+          sourcesJson: citationEnvelope as unknown as Prisma.InputJsonValue,
+          apaReferences,
+          requiresReferences: Boolean(riskFlags.length > 0 || hasAiCitationStubs || partition.excluded.length > 0),
+          sourceReliabilityScore: partition.verified.length ? sourceCheck.reliabilityScore : 0,
+          medicalRiskFlags: riskFlags,
+          imageStatus: input.includeImage ? (input.includeAiImage ? BlogImageStatus.REQUESTED : BlogImageStatus.NONE) : BlogImageStatus.NONE,
+          coverImagePrompt,
+          coverImageAlt,
+          coverImageCaption,
+          featuredSnippet: plan.featuredSnippetHint?.slice(0, 2000) ?? null,
+          shortSummary: plan.suggestedExcerpt.trim().slice(0, 220) || excerpt.slice(0, 220),
+          socialCaption: `${pageTitle.slice(0, 120)}. ${(plan.suggestedExcerpt.trim().slice(0, 100) || excerpt.slice(0, 100))}…`,
+          promoBlurb: cta.text,
+          updateNeeded: Boolean(thinWarning),
+          rankingNote: thinWarning ?? null,
+          adminPublishLog: seedBlogAdminPublishLog("draft_created", "AI draft created and saved as DRAFT (control panel)."),
+        },
+        select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
+      });
+
+      const relatedBlogPosts = await findRelatedPublishedBlogPosts(
+        {
+          excludeId: created.id,
+          tags: tagsForSeo,
+          targetKeyword: input.targetKeyword ?? input.topic,
+          exam: input.exam,
+        },
+        tx,
+      );
+
+      const enrichedPlan = mergePublishingPackageIntoLinkPlanJson(internalLinkPlanBase, {
+        version: 1,
+        updatedAt: new Date().toISOString(),
+        internalAnchorOpportunities: plan.internalAnchorOpportunities ?? [],
+        relatedBlogPosts,
+      });
+
+      await tx.blogPost.update({
+        where: { id: created.id },
+        data: { internalLinkPlan: enrichedPlan as unknown as Prisma.InputJsonValue },
+      });
+
+      return created;
     });
 
     const warnings = [

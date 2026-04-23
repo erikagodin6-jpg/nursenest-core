@@ -3,6 +3,7 @@ import { truncateForPreview } from "@/lib/flashcards/flashcard-access";
 import {
   correctAnswerLine,
   parseExamMicroQuestionFromDbFields,
+  shuffleExamMicroQuestionOrder,
   type ExamMicroQuestionPayload,
 } from "@/lib/flashcards/flashcard-exam-style";
 import { applyFlashcardCardOverlay } from "@/lib/i18n/educational-content-overlay";
@@ -44,9 +45,14 @@ export function serializeFlashcardForDeckStudy(
     educationalLocale: string;
     flashcardBundle: FlashcardEducationalBundle | undefined;
     fullBackAvailable: boolean;
+    /** When set, shuffles MCQ option order deterministically for this study batch. */
+    examOptionShuffleSalt?: string | null;
   },
 ): FlashcardStudyApiCard {
-  const exam = parseExamMicroQuestionFromDbFields(card);
+  let exam = parseExamMicroQuestionFromDbFields(card);
+  if (exam && opts.examOptionShuffleSalt?.trim()) {
+    exam = shuffleExamMicroQuestionOrder(exam, `${opts.examOptionShuffleSalt.trim()}:${card.id}`);
+  }
   const loc = applyFlashcardCardOverlay(
     { id: card.id, front: card.front, back: card.back },
     opts.educationalLocale,
@@ -84,9 +90,14 @@ export function serializeFlashcardForCustomSession(
     swapFrontBack: boolean;
     topic: string;
     pathwayId: string | null;
+    /** Per-request salt so option positions vary each session while staying reproducible with a fixed salt. */
+    examOptionShuffleSalt?: string | null;
   },
 ): Omit<FlashcardStudyApiCard, "fullBackAvailable"> & { rawTopic: string } {
-  const exam = parseExamMicroQuestionFromDbFields(card);
+  let exam = parseExamMicroQuestionFromDbFields(card);
+  if (exam && opts.examOptionShuffleSalt?.trim()) {
+    exam = shuffleExamMicroQuestionOrder(exam, `${opts.examOptionShuffleSalt.trim()}:${card.id}`);
+  }
   let front = opts.swapFrontBack ? card.back : card.front;
   let back = opts.swapFrontBack ? card.front : card.back;
   if (exam) {

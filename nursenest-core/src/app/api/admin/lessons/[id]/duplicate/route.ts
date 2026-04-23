@@ -5,6 +5,7 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
 import { bodyStringFromContentJson, bodyStringToContentJson } from "@/lib/prisma/content-item-body";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
+import { contentItemLessonTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +27,20 @@ export async function POST(req: Request, ctx: RouteContext) {
   const title = src.title.trim().endsWith("(copy)") ? src.title : `${src.title} (copy)`;
 
   const bodyStr = bodyStringFromContentJson(src.content);
+  const taxonomy = contentItemLessonTaxonomyFromCorpus({
+    title,
+    summary: src.summary,
+    body: bodyStr,
+    tags: [...src.tags],
+    categoryHint: src.category,
+    systemHint: src.bodySystem,
+  });
+  if (taxonomy.violations.length > 0) {
+    return NextResponse.json(
+      { error: "Taxonomy classification invalid", violations: taxonomy.violations, code: "taxonomy_invalid" },
+      { status: 422 },
+    );
+  }
   const created = await prisma.contentItem.create({
     data: {
       title,
@@ -38,7 +53,7 @@ export async function POST(req: Request, ctx: RouteContext) {
       regionScope: src.regionScope ?? "BOTH",
       tags: [...src.tags],
       category: src.category,
-      bodySystem: src.bodySystem,
+      bodySystem: taxonomy.bodySystem,
       seoTitle: src.seoTitle,
       seoDescription: src.seoDescription,
       seoKeywords: [...src.seoKeywords],

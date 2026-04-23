@@ -38,6 +38,7 @@ Required keys (exact names):
 - keyTakeaways: 3-5 bullets with specific clinical or test-taking substance
 - optional featuredSnippetHint: <=300 chars
 - optional schemaOpportunities: array of { "type", "rationale" } — suggest 1-4 JSON-LD types that could apply **if** metadata is validated (BlogPosting is default on public pages; add FAQPage only when FAQs are substantive; BreadcrumbList when crumb trail is stable; HowTo only if steps are explicit and safe). Rationale must be one sentence — no fabricated review scores or ratings.
+- internalAnchorOpportunities: { "phrase", "suggestedAnchorText", "targetSuggestedPath", optional "rationale" }[] — 4-12 editorial suggestions for **future** in-body links. "phrase" is a short literal readers would see in prose; "targetSuggestedPath" must be a real NurseNest marketing path (e.g. /blog/..., /us/rn/.../lessons/..., /questions, /practice-exams) — never /app/ or /api/. Prefer destinations already listed or strongly implied by suggestedInternalLessons.
 
 ${ANTI_FILLER}
 

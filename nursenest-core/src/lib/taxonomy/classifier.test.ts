@@ -1,9 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import {
-  classifyNursingContent,
-  classifyPathwayLessonRecordForHub,
-} from "@/lib/taxonomy/classifier";
+import { classifyNursingContent, classifyPathwayLessonRecordForHub, classifyStrings } from "@/lib/taxonomy/classifier";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 
 describe("taxonomy classifier", () => {
@@ -36,5 +33,15 @@ describe("taxonomy classifier", () => {
     const r = classifyPathwayLessonRecordForHub(lesson);
     assert.equal(r.domain, "CLINICAL");
     assert.ok(r.categoryId === "immune_infectious" || r.categoryId === "cardiovascular");
+  });
+
+  it("does not treat short renal token `uti` as a hit inside unrelated words (e.g. therapeutic)", () => {
+    const r = classifyStrings({
+      title: "SBAR therapeutic handoff",
+      placementStrictUnique: true,
+    });
+    assert.equal(r.scores.renal_genitourinary ?? 0, 0);
+    assert.equal(r.domain, "PROFESSIONAL_PRACTICE");
+    assert.equal(r.category, "communication");
   });
 });

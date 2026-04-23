@@ -6,6 +6,7 @@ import { emitMonitoringRecord } from "@/lib/observability/observability-record";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { sentryCount, sentryDistribution } from "@/lib/observability/sentry-metrics";
+import { trafficSourceFromRequest } from "@/lib/observability/traffic-source-constants";
 
 /** Alert when an API route exceeds this duration (ms). Tunable via env. */
 export function slowApiThresholdMs(): number {
@@ -56,6 +57,7 @@ export function recordApiRouteTelemetry(opts: ApiRouteTelemetryOpts): void {
   const timeoutMs = routeTimeoutLogMs();
   const method = req.method;
   const degraded = durationMs >= slowMs;
+  const trafficSource = trafficSourceFromRequest(req);
 
   let routePath = route;
   try {
@@ -72,6 +74,7 @@ export function recordApiRouteTelemetry(opts: ApiRouteTelemetryOpts): void {
     httpStatus,
     flow,
     degraded,
+    trafficSource,
   });
 
   /** Distinct event for log routers / alerts (slow handler, not necessarily platform timeout). */
@@ -83,6 +86,7 @@ export function recordApiRouteTelemetry(opts: ApiRouteTelemetryOpts): void {
       durationMs,
       httpStatus,
       flow,
+      trafficSource,
       errorClass: "slow_handler",
       message: `duration ${durationMs}ms >= slow threshold ${slowMs}ms`,
     });
@@ -97,6 +101,7 @@ export function recordApiRouteTelemetry(opts: ApiRouteTelemetryOpts): void {
       httpStatus,
       flow,
       degraded,
+      trafficSource,
       errorClass: "http_5xx",
       message: `handler returned ${httpStatus}`,
     });
@@ -110,6 +115,7 @@ export function recordApiRouteTelemetry(opts: ApiRouteTelemetryOpts): void {
       durationMs,
       httpStatus,
       flow,
+      trafficSource,
       degraded: true,
       errorClass: "handler_duration_exceeded",
       message: `duration ${durationMs}ms >= ${timeoutMs}ms`,
@@ -125,19 +131,22 @@ export function recordApiRouteTelemetry(opts: ApiRouteTelemetryOpts): void {
     httpStatus,
     durationMs,
     flow,
+    meta: { traffic_source: trafficSource },
   });
 
   sentryDistribution("api.route.duration_ms", durationMs, {
     route: route.replace(/\/[a-f0-9-]{36}/gi, "/:id").slice(0, 120),
     flow,
+    traffic_source: trafficSource,
   });
   sentryCount("api.route.count", 1, {
     status_bucket: httpStatus >= 500 ? "5xx" : httpStatus >= 400 ? "4xx" : "2xx",
     flow,
+    traffic_source: trafficSource,
   });
 
   if (durationMs >= slowMs) {
-    sentryCount("api.route.slow", 1, { flow });
+    sentryCount("api.route.slow", 1, { flow, traffic_source: trafficSource });
     safeServerLog("api_perf", "slow_route", {
       route,
       durationMs,
@@ -154,6 +163,7 @@ export function recordApiRouteTelemetry(opts: ApiRouteTelemetryOpts): void {
       httpStatus,
       durationMs,
       flow,
+      meta: { traffic_source: trafficSource },
     });
   }
 
@@ -161,12 +171,12 @@ export function recordApiRouteTelemetry(opts: ApiRouteTelemetryOpts): void {
     safeServerLogCritical(
       "api",
       "http_5xx",
-      { route, httpStatus, durationMs, correlation: correlationId ?? "", flow },
+      { route, httpStatus, durationMs, correlation: correlationId ?? "", flow, trafficSource },
       undefined,
-      { flow, route: route.slice(0, 80) },
+      { flow, route: route.slice(0, 80), traffic_source: trafficSource },
     );
   } else if (httpStatus === 429) {
-    sentryCount("api.route.rate_limited", 1, { flow });
+    sentryCount("api.route.rate_limited", 1, { flow, traffic_source: trafficSource });
     safeServerLog("api", "http_429", { route, durationMs, correlation: correlationId ?? "", flow });
   } else if (httpStatus >= 400 && httpStatus < 500) {
     safeServerLog("api", "http_4xx", {

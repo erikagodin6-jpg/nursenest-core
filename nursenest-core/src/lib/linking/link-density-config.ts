@@ -58,7 +58,8 @@ export const DENSITY_CONFIG: Record<LinkSurface, SurfaceDensityConfig> = {
     flashcard: { min: 0, max: 1 },
     question:  { min: 1, max: 2 },
     blog:      { min: 0, max: 1 },
-    cat:       { min: 0, max: 0 },
+    /** One pathway-scoped CAT landing is enough; avoids zero-output when registry has no CAT targets. */
+    cat:       { min: 0, max: 1 },
     hub:       { min: 0, max: 0 },
     totalMax: 4,
   },
@@ -76,9 +77,9 @@ export const DENSITY_CONFIG: Record<LinkSurface, SurfaceDensityConfig> = {
     flashcard: { min: 0, max: 1 },
     question:  { min: 0, max: 0 },
     blog:      { min: 0, max: 0 }, // no blog links from question pages — stay focused
-    cat:       { min: 0, max: 0 },
+    cat:       { min: 0, max: 1 },
     hub:       { min: 0, max: 0 },
-    totalMax: 2,
+    totalMax: 3,
   },
   cat_result: {
     lesson:    { min: 0, max: 3 },

@@ -6,6 +6,7 @@ import { coerceBlogSourceRows, validateSources } from "@/lib/blog/apa7";
 import { parseInternalLinkPlanJson } from "@/lib/blog/blog-image-workflow";
 import { parseMarketingLessonDetailPath } from "@/lib/blog/blog-internal-link-verify";
 import { prisma } from "@/lib/db";
+import { classifyBlogCorpus, collectClassificationViolations, isPublishBlockedByTaxonomy } from "@/lib/taxonomy/content-write-taxonomy";
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -29,7 +30,8 @@ export type PrePublishCheckId =
   | "faq_schema"
   | "schema_summary_json"
   | "meta_title_duplicate_h1"
-  | "meta_description_substance";
+  | "meta_description_substance"
+  | "taxonomy_classifier";
 
 export type PrePublishSeverity = "block" | "warn";
 
@@ -339,6 +341,30 @@ export async function validateBlogPrePublish(
       severity: "block",
       message: `Article body is too short for publish (${bodyWords} words; minimum ${BLOG_ARTICLE_MIN_WORDS}).`,
       fix: "Expand the article body or regenerate with the long-form blog generator until it meets the word minimum.",
+    });
+  }
+
+  const blogTax = classifyBlogCorpus({
+    title: row.title,
+    body: row.body,
+    category: row.category,
+    tags: row.tags,
+  });
+  const taxonomyViolations = collectClassificationViolations(blogTax);
+  if (taxonomyViolations.length > 0) {
+    push(issues, {
+      id: "taxonomy_classifier",
+      severity: "block",
+      message: `Taxonomy classifier validation failed: ${taxonomyViolations[0]}`,
+      fix: "Ensure title/body/tags align with the nursing taxonomy keyword model, then save draft again.",
+    });
+  } else if (isPublishBlockedByTaxonomy(blogTax)) {
+    push(issues, {
+      id: "taxonomy_classifier",
+      severity: "block",
+      message:
+        "Taxonomy is ambiguous or insufficient for publish (classifier returned REVIEW_REQUIRED / review-pending domain).",
+      fix: "Add clearer clinical, pharmacology, professional-practice, or exam-strategy language before publishing.",
     });
   }
 

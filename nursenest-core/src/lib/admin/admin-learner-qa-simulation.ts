@@ -76,6 +76,11 @@ function tierForTrack(track: AdminLearnerQaTrack): TierCode {
   }
 }
 
+/** Tier string for shell chrome fallbacks when pathway metadata is missing (matches JWT tier codes). */
+export function learnerQaChromeTierFallbackString(track: AdminLearnerQaTrack): string {
+  return String(tierForTrack(track));
+}
+
 function countryCodeFromQa(country: "US" | "CA"): CountryCode {
   return country === "CA" ? CountryCode.CA : CountryCode.US;
 }
@@ -412,5 +417,6 @@ export function buildUserAccessForAdminLearnerQa(payload: AdminLearnerQaPayloadV
       status: planStatus,
       expiresAt,
     },
+    adminLearnerQaSimulation: true,
   };
 }

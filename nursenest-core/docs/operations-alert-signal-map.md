@@ -10,8 +10,12 @@
 
 | Metric | Attributes | Typical alert | `ALERT_THRESHOLDS` key |
 |--------|------------|---------------|-------------------------|
-| `api.route.count` | `status_bucket`, `flow` | 5xx spike | `api.fiveXxSpikeCount5m`, `api.fiveXxElevatedCount5m` |
-| `api.route.slow` | `flow` | Slow route burst | (pair with `NN_SLOW_API_ROUTE_MS`) |
+| `api.route.count` | `status_bucket`, `flow`, **`traffic_source`** (`customer` \| `synthetic` \| `admin_learner_qa`) | 5xx spike — **filter `traffic_source:customer`** for learner SLOs | `api.fiveXxSpikeCount5m`, `api.fiveXxElevatedCount5m` |
+| `api.route.duration_ms` | `route`, `flow`, **`traffic_source`** | Tail latency; exclude synthetic in customer dashboards | — |
+| `api.route.slow` | `flow`, **`traffic_source`** | Slow route burst | (pair with `NN_SLOW_API_ROUTE_MS`) |
+| `synthetic.probe.duration_ms` | `check`, `surface`, `traffic_source`, `ok` | Cron probe latency regression | `synthetic.slowHtmlProbeMs`, `synthetic.slowApiProbeMs`, `synthetic.slowPostProbeMs` |
+| `synthetic.check.slow` | `check`, `surface` | Single probe exceeded slow threshold | (pair with `synthetic.probe.duration_ms`) |
+| `synthetic.check.failed` | `check`, `traffic_source` | Uptime / surface failure | `synthetic.criticalFailedChecksPerRun` |
 | `auth.login.failure` | `bucket` | Spike; filter `db_error` / `system_error` | `auth.failureSpikeCount5m`, `auth.dbOrSystemFailureCount5m` |
 | `billing.checkout.failure` | `reason` | Revenue | (see checkout route + `recordCheckoutFailure`) |
 | `billing.webhook.failure` | `phase` | Integrity | `billing.webhookFailureCount15m` |
@@ -21,7 +25,7 @@
 | `health.ready.failure` | `kind` | DB down | — |
 | `marketing.paywall.proof_neutral` | `surface` | Stats degraded | `marketing.proofNeutralSpikeCount15m` |
 | `resilience.auto_degraded.engaged` | `reason` | Tier-2 skips | `resilience.autoDegradedEngagements15m` |
-| `api.route.rate_limited` | `flow` | Abuse / storm | `rateLimit.elevated429Count5m` |
+| `api.route.rate_limited` | `flow`, **`traffic_source`** | Abuse / storm | `rateLimit.elevated429Count5m` |
 
 ---
 

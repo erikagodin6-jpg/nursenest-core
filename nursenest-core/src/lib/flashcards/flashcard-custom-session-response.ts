@@ -24,6 +24,8 @@ export type FlashcardCustomSessionSummary = {
   cardLimit: string;
   /** When the API widened access filters to return cards (debug / transparency). */
   queryRelaxation?: FlashcardCustomSessionQueryRelaxation;
+  /** Opaque per-response salt used for MCQ option shuffle (and echoed for client debugging). */
+  sessionShuffleSalt?: string;
 };
 
 export type ParsedCustomSessionSuccess = {
@@ -125,6 +127,7 @@ export function parseFlashcardCustomSessionResponse(
         s.queryRelaxation === "none"
           ? s.queryRelaxation
           : undefined,
+      sessionShuffleSalt: typeof s.sessionShuffleSalt === "string" ? s.sessionShuffleSalt : undefined,
     };
   }
 

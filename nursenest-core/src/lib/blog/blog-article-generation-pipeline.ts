@@ -3,10 +3,18 @@
  *
  * ## Stages
  * 1. **Structured plan** — One JSON completion validated by {@link blogControlPanelPlanSchema}:
- *    audience titles, H1, slug, SEO title & meta, outline, internal link ideas, FAQs, breadcrumbs,
- *    image prompts/placements, APA stubs, key takeaways.
+ *    audience titles, H1, slug, SEO title & meta, excerpt, outline, internal link ideas, internal anchor opportunities,
+ *    FAQs, breadcrumbs, schema opportunities, image prompts/placements, APA stubs, key takeaways.
  * 2. **Long-form body** — Second completion: HTML only (H2+), pathway/country-aware, anti-filler rules.
  * 3. **Persist (optional)** — {@link persistControlPanelDraft} writes a `DRAFT` {@link BlogPost} for later editing (PATCH) and publish.
+ * 4. **Publishing package (same transaction)** — After insert, refreshes `internalLinkPlan.publishingPackage.relatedBlogPosts`
+ *    from **live** posts (tag overlap) so related links stay current; anchor opportunities come from the plan JSON.
+ *
+ * **Post-save SEO refresh** (separate admin action): `POST /api/admin/blog/[id]/seo/regenerate` rebuilds the JSON SEO bundle
+ * and related blog rows without touching the HTML body unless `overwrite: true` (then SERP columns refresh from deterministic SEO).
+ *
+ * **Body-only refresh** (separate admin action): `POST /api/admin/blog/[id]/body/regenerate` re-runs the HTML pass from the
+ * stored outline + FAQ + link plan (legacy rows without a valid outline return 422).
  *
  * ## Storage mapping (`BlogPost`)
  * | Pipeline output | Where it lives |
@@ -19,7 +27,8 @@
  * | Article body | `body` (HTML text) |
  * | Internal link suggestions | `internalLinkPlan` (JSON: lessons + imagePlacements + attachments + **`seo` bundle**), `relatedLessonPaths` |
  * | FAQ section | `faqBlock` (`{ items: {q,a}[] }`), `keyQuestions` |
- * | SEO bundle (canonical, OG, excerpt, crumbs, FAQ schema flag, keywords, image alts) | `internalLinkPlan.seo` from `blog-seo-automation.ts` + `schemaSummary` (JSON v2 summary for tooling) |
+ * | SEO bundle (canonical, OG/Twitter, excerpt, crumbs, FAQ schema flag, keywords, image alts) | `internalLinkPlan.seo` from `blog-seo-automation.ts` + `schemaSummary` (JSON v2 summary for tooling) |
+ * | Related live blog links + anchor opportunities | `internalLinkPlan.publishingPackage` (`blog-publishing-package.ts`) |
  * | List excerpt / cards | `excerpt` (prefers AI `suggestedExcerpt` when strong) |
  * | Image prompts / placements | `internalLinkPlan.imagePlacements`, `coverImagePrompt`, `coverImageAlt`, `imageStatus` |
  * | APA 7 lines | `apaReferences` (string[]), `sourcesJson` |

@@ -2,7 +2,27 @@ import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
 import { classifyNursingContent, classifyPathwayLessonRecordForHub } from "@/lib/taxonomy/classifier";
-import { REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
+import { allTaxonomyLeaves, REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
+
+/** Exact taxonomy leaf ids (and space/kebab variants) resolve before substring keyword scoring — avoids false hits (e.g. "neurological" contains "intestinal"). */
+const TAXONOMY_LEAF_ID_SET = new Set<string>(allTaxonomyLeaves());
+
+function resolveTaxonomyLeafFromSystemString(normalizedLower: string): string | null {
+  if (TAXONOMY_LEAF_ID_SET.has(normalizedLower)) return normalizedLower;
+  const underscored = normalizedLower.replace(/[\s/-]+/g, "_");
+  if (TAXONOMY_LEAF_ID_SET.has(underscored)) return underscored;
+  return null;
+}
+
+function knownHubCategoryIds(pathwayId?: string | null): Set<string> {
+  const cfg = learningConfigForPathwayId(pathwayId ?? null);
+  const ids = new Set<string>();
+  for (const c of cfg.categories) {
+    ids.add(c.id);
+    for (const s of c.subcategories ?? []) ids.add(s.id);
+  }
+  return ids;
+}
 
 export type PathwayLessonSystemLabel = string;
 export const PATHWAY_LESSON_SYSTEM_ORDER: string[] = (() => {
@@ -47,6 +67,8 @@ export function normalizePathwayLessonSystemLabel(
 ): PathwayLessonSystemLabel {
   const normalizedSystem = normalizeText(system);
   if (!normalizedSystem) return REVIEW_REQUIRED;
+  const direct = resolveTaxonomyLeafFromSystemString(normalizedSystem);
+  if (direct) return direct as PathwayLessonSystemLabel;
   const classified = classifyNursingContent({ title: normalizedSystem });
   return classified.categoryId as PathwayLessonSystemLabel;
 }
@@ -67,15 +89,26 @@ function lessonPriorityScore(lesson: PathwayLessonRecord): number {
 }
 
 /**
- * Full lesson-level classifier: uses the explicit `system` field first, then `bodySystem`,
- * then falls back to title/topic/topicSlug keyword matching. This correctly handles
- * catalog lessons where `system` is absent or set to a broad value like "General".
+ * Full lesson-level classifier: when `bodySystem` / `system` map cleanly into a **known** hub bucket,
+ * prefer that for clinical grouping; otherwise fall back to full-record keyword classification.
+ * Reduces “review required” noise when editorial `bodySystem` is already aligned to the fixed grid.
  */
 export function classifyLessonForHub(
   lesson: PathwayLessonRecord,
   pathwayId?: string | null,
 ): PathwayLessonSystemLabel {
-  void pathwayId;
+  const known = knownHubCategoryIds(pathwayId);
+  const tryLabel = (raw: string | null | undefined): PathwayLessonSystemLabel | null => {
+    const t = raw?.trim();
+    if (!t) return null;
+    const mapped = normalizePathwayLessonSystemLabel(t);
+    if (mapped !== REVIEW_REQUIRED && known.has(mapped)) return mapped;
+    return null;
+  };
+  const fromBody = tryLabel(lesson.bodySystem);
+  if (fromBody) return fromBody;
+  const fromSystem = tryLabel(lesson.system);
+  if (fromSystem) return fromSystem;
   return classifyPathwayLessonRecordForHub(lesson).categoryId as PathwayLessonSystemLabel;
 }
 

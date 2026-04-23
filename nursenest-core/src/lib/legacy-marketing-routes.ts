@@ -1,5 +1,7 @@
+import { resolveAlliedProfessionFromRouteSlug } from "@/lib/allied/allied-professions-registry";
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 import { marketingPublicSiteOrigin } from "@/lib/marketing/marketing-public-site-origin";
+import { alliedHealthLessonDetailPath, alliedHealthLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import { isProgrammaticSeoSlug } from "@/lib/seo/programmatic-registry-slugs";
 
 /**
@@ -8,6 +10,29 @@ import { isProgrammaticSeoSlug } from "@/lib/seo/programmatic-registry-slugs";
  */
 
 let legacyMarketingExactRoutes: Record<string, string> | null = null;
+
+/**
+ * Legacy allied lesson hub/detail under `/allied-health/{slug}/lessons` → canonical pathway URLs
+ * (see `canonical-lessons-hubs.ts`).
+ */
+function mapAlliedHealthLessonsLegacyHref(href: string): string | null {
+  const m = href.match(/^\/allied-health\/([^/]+)\/lessons(?:\/([^/]+))?$/);
+  if (!m) return null;
+  const slug = decodeURIComponent(m[1]!);
+  const prof = resolveAlliedProfessionFromRouteSlug(slug);
+  if (!prof) return null;
+  const lessonSeg = m[2];
+  if (lessonSeg) {
+    return alliedHealthLessonDetailPath(prof.professionKey, decodeURIComponent(lessonSeg));
+  }
+  return alliedHealthLessonsIndexPath(prof.professionKey);
+}
+
+/** `/{country}/{role}/{exam}/…` marketing exam surfaces stay on Core (not rewritten to legacy public host). */
+function isMarketingExamHubScopedPath(mapped: string): boolean {
+  const pathOnly = mapped.split("?")[0] ?? mapped;
+  return /^\/(us|canada)\/(pn|rpn|lpn|rn|np|allied)\/[^/]+/.test(pathOnly);
+}
 
 /** Large legacy path table — built on first `mapLegacyMarketingHref` / `resolveMarketingHref` use (not at module init). */
 function legacyMarketingExactRoutesTable(): Record<string, string> {
@@ -85,6 +110,8 @@ export function isCoreAlliedMarketingPath(href: string): boolean {
 }
 
 export function mapLegacyMarketingHref(href: string): string {
+  const alliedLessons = mapAlliedHealthLessonsLegacyHref(href);
+  if (alliedLessons) return alliedLessons;
   if (isCoreAlliedMarketingPath(href)) return href;
   /** Monolith storefront only; Core allied marketing is handled above. */
   if (href.startsWith("/shop")) {
@@ -135,7 +162,8 @@ export function resolveMarketingHref(href: string): string {
     mapped === "/forgot-password" ||
     mapped === "/reset-password" ||
     mapped === "/" ||
-    isCoreAlliedMarketingPath(mapped)
+    isCoreAlliedMarketingPath(mapped) ||
+    isMarketingExamHubScopedPath(mapped)
   ) {
     return mapped;
   }

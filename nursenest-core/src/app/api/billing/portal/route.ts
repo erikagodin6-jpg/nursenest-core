@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { serverLearnerPosthogDisabledForVerifiedQaUser } from "@/lib/observability/admin-learner-qa-analytics";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { publicAppOriginForBilling } from "@/lib/env/public-app-origin";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
@@ -61,9 +62,11 @@ export async function POST() {
       customer: customerId,
       return_url: `${appUrl}/app/account/billing?portal=return`,
     });
-    void captureServerEvent(analyticsDistinctId(userId), "billing_portal_session_created", {
-      source: "billing_page",
-    });
+    if (!(await serverLearnerPosthogDisabledForVerifiedQaUser(userId))) {
+      void captureServerEvent(analyticsDistinctId(userId), "billing_portal_session_created", {
+        source: "billing_page",
+      });
+    }
     return NextResponse.json({ url: portal.url });
   } catch (e) {
     safeServerLogCritical("billing_portal", "billing_portal_create_failed", { userIdPrefix: userId.slice(0, 8) }, e);

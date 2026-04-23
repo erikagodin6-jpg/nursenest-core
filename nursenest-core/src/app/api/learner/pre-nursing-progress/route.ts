@@ -13,6 +13,7 @@ import {
 import { nextPreNursingModuleSlug, preNursingCompletionFraction } from "@/lib/pre-nursing/pre-nursing-adaptive";
 import { HARD_CAP_FIND_MANY } from "@/lib/api/safe-query-take";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { serverLearnerPosthogDisabledForVerifiedQaUser } from "@/lib/observability/admin-learner-qa-analytics";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
@@ -129,7 +130,8 @@ export async function POST(req: Request) {
     });
     const completedCount = rows.length;
     const totalModules = PRE_NURSING_MODULE_REGISTRY.length;
-    if (parsedBody.completed) {
+    const skipPh = await serverLearnerPosthogDisabledForVerifiedQaUser(userId);
+    if (parsedBody.completed && !skipPh) {
       await captureServerEvent(analyticsDistinctId(userId), PH.preNursingModuleCompleted, {
         source_surface: "progress_api",
         module_slug: parsedBody.slug,
@@ -139,7 +141,7 @@ export async function POST(req: Request) {
         modules_total: totalModules,
       });
     }
-    if (parsedBody.completed && completedCount >= totalModules) {
+    if (parsedBody.completed && completedCount >= totalModules && !skipPh) {
       await captureServerEvent(analyticsDistinctId(userId), PH.preNursingAllModulesCompleted, {
         source_surface: "progress_api",
         signed_in: true,

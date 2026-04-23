@@ -16,6 +16,11 @@ export type AccessScope = {
   country: CountryCode | null;
   /** When tier is ALLIED, the specific career line the user purchased. */
   alliedCareer: AlliedCareerKey | null;
+  /**
+   * True when this scope was derived from a **verified** signed admin learner QA cookie for the same user id
+   * (`nn_admin_learner_qa`, verified in `getUserAccess`). Server-trusted; use to skip learner business analytics.
+   */
+  adminLearnerQaSimulation?: boolean;
 };
 
 /** Normalized subscription lifecycle for product UI and server gates. */
@@ -60,4 +65,9 @@ export type UserAccess = {
     role: UserRole;
     credentialVersion: number;
   };
+  /**
+   * True when admin learner QA overlay is active (signed cookie verified server-side in `getUserAccess`).
+   * Mirrors `AccessScope.adminLearnerQaSimulation`; omitted for normal subscribers.
+   */
+  adminLearnerQaSimulation?: boolean;
 };

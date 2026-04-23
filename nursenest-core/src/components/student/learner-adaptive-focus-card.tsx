@@ -3,6 +3,7 @@ import { Compass } from "lucide-react";
 import type { LearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { recommendNextActions } from "@/lib/learner/recommend-next-actions";
+import type { StudyNextRecommendation } from "@/lib/learner/study-next-types";
 
 function sourceLabelKey(source: LearnerStudySnapshot["topicPerformanceSource"]): string {
   switch (source) {
@@ -17,10 +18,18 @@ function sourceLabelKey(source: LearnerStudySnapshot["topicPerformanceSource"]):
 
 /**
  * Dashboard: weak areas, trajectory, and deterministic next steps from the same snapshot as Study Next.
+ * When `studyNextRecs` is provided (e.g. smart layer with suppression), uses it; otherwise falls back to base ranking.
  */
-export async function LearnerAdaptiveFocusCard({ snapshot }: { snapshot: LearnerStudySnapshot }) {
+export async function LearnerAdaptiveFocusCard({
+  snapshot,
+  studyNextRecs,
+}: {
+  snapshot: LearnerStudySnapshot;
+  studyNextRecs?: StudyNextRecommendation[] | null;
+}) {
   const { t } = await getLearnerMarketingBundle();
-  const recs = recommendNextActions(snapshot, { maxTotal: 2 });
+  const recs =
+    studyNextRecs && studyNextRecs.length > 0 ? studyNextRecs : recommendNextActions(snapshot, { maxTotal: 2 });
   const weakShow = snapshot.weakTopics.slice(0, 5);
   const trend = snapshot.topicTrends[0] ?? null;
   const strong = snapshot.strongTopicsHighlight[0] ?? null;

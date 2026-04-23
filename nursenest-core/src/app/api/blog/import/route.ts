@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { verifyBlogPublishSchemaColumns } from "@/lib/blog/blog-publish-db-guard";
 import { prisma } from "@/lib/db";
+import { classifyBlogCorpus, collectClassificationViolations, isPublishBlockedByTaxonomy } from "@/lib/taxonomy/content-write-taxonomy";
 
 const rowSchema = z.object({
   slug: z.string().min(3).max(180).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
@@ -68,6 +69,7 @@ export async function POST(req: Request) {
   let created = 0;
   let updated = 0;
   let skippedPublished = 0;
+  let taxonomyHeldAsDraft = 0;
   const skipped: Array<{ slug: string; reason: string }> = [];
 
   for (const row of parsed.data.posts) {
@@ -82,14 +84,37 @@ export async function POST(req: Request) {
       continue;
     }
 
-    const postStatus = mapStatus(row);
+    let postStatus = mapStatus(row);
     const scheduledAt = row.scheduledAt ? new Date(row.scheduledAt) : null;
-    const publishAt =
+    let publishAt: Date | null =
       row.publishedAt != null
         ? new Date(row.publishedAt)
         : scheduledAt != null && postStatus !== BlogPostStatus.DRAFT
           ? scheduledAt
           : null;
+
+    const blogTax = classifyBlogCorpus({
+      title: row.title,
+      body: row.body,
+      category: row.category ?? null,
+      tags: row.tags ?? [],
+    });
+    const taxonomyViolations = collectClassificationViolations(blogTax);
+    if (taxonomyViolations.length > 0) {
+      skipped.push({ slug: row.slug, reason: `taxonomy_invalid:${taxonomyViolations[0]?.slice(0, 120)}` });
+      continue;
+    }
+    let workflowStatus: BlogWorkflowStatus =
+      postStatus === BlogPostStatus.PUBLISHED ? BlogWorkflowStatus.PUBLISHED : BlogWorkflowStatus.GENERATED;
+    if (
+      (postStatus === BlogPostStatus.PUBLISHED || postStatus === BlogPostStatus.SCHEDULED) &&
+      isPublishBlockedByTaxonomy(blogTax)
+    ) {
+      postStatus = BlogPostStatus.DRAFT;
+      publishAt = null;
+      workflowStatus = BlogWorkflowStatus.GENERATED;
+      taxonomyHeldAsDraft += 1;
+    }
 
     if (dryRun) {
       if (existing) updated += 1;
@@ -101,13 +126,13 @@ export async function POST(req: Request) {
       title: row.title,
       excerpt: row.excerpt,
       body: row.body,
-      category: row.category ?? null,
+      category: blogTax.category,
       exam: row.exam ?? null,
       tags: row.tags ?? [],
       postStatus,
       scheduledAt,
       publishAt,
-      workflowStatus: postStatus === BlogPostStatus.PUBLISHED ? BlogWorkflowStatus.PUBLISHED : BlogWorkflowStatus.GENERATED,
+      workflowStatus,
     };
 
     if (existing) {
@@ -133,6 +158,7 @@ export async function POST(req: Request) {
     created,
     updated,
     skippedPublished,
+    taxonomyHeldAsDraft,
     skipped,
   });
 }

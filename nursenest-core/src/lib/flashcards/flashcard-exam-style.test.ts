@@ -4,6 +4,7 @@ import { FlashcardItemKind } from "@prisma/client";
 import {
   isTrivialDefinitionOnlyStem,
   parseExamMicroQuestionFromDbFields,
+  shuffleExamMicroQuestionOrder,
   validateExamMicroQuestionInput,
 } from "@/lib/flashcards/flashcard-exam-style";
 
@@ -97,4 +98,60 @@ test("validateExamMicroQuestionInput rejects trivial acronym stems even with val
   });
   assert.equal(v.ok, false);
   if (!v.ok) assert.match(v.error, /acronym|definition trivia/i);
+});
+
+test("shuffleExamMicroQuestionOrder keeps correct answer aligned with rationales", () => {
+  const base = parseExamMicroQuestionFromDbFields({
+    examItemKind: FlashcardItemKind.CLINICAL,
+    questionStem: "A nurse is caring for a client receiving IV potassium chloride. Which action should the nurse take first if the client reports burning at the IV site?",
+    answerOptions: [
+      { letter: "A", text: "Slow the infusion rate" },
+      { letter: "B", text: "Stop the infusion and assess the site" },
+      { letter: "C", text: "Apply a warm compress and continue" },
+      { letter: "D", text: "Flush the line with normal saline" },
+    ],
+    correctAnswer: "B",
+    rationaleCorrect: "Stopping the infusion and assessing the site is the priority safety action before other interventions.",
+    rationaleIncorrect: [
+      { letter: "A", rationale: "Slowing the rate delays removal of a possible irritant when infiltration is suspected." },
+      { letter: "C", rationale: "Warm compresses do not replace assessment and may mask worsening injury." },
+      { letter: "D", rationale: "Flushing can worsen tissue exposure if infiltration is present." },
+    ],
+  });
+  assert.ok(base);
+  const shuffled = shuffleExamMicroQuestionOrder(base!, "session-salt-1");
+  const correctText = shuffled.answerOptions.find((o) => o.letter === shuffled.correctLetter)?.text;
+  assert.equal(correctText, "Stop the infusion and assess the site");
+  const letters = new Set(shuffled.answerOptions.map((o) => o.letter));
+  assert.equal(letters.size, 4);
+  for (const row of shuffled.rationaleIncorrect) {
+    const opt = shuffled.answerOptions.find((o) => o.letter === row.letter);
+    assert.ok(opt);
+  }
+});
+
+test("shuffleExamMicroQuestionOrder varies order by seed", () => {
+  const base = parseExamMicroQuestionFromDbFields({
+    examItemKind: FlashcardItemKind.CLINICAL,
+    questionStem: "A nurse is caring for a client receiving IV potassium chloride. Which action should the nurse take first if the client reports burning at the IV site?",
+    answerOptions: [
+      { letter: "A", text: "Slow the infusion rate" },
+      { letter: "B", text: "Stop the infusion and assess the site" },
+      { letter: "C", text: "Apply a warm compress and continue" },
+      { letter: "D", text: "Flush the line with normal saline" },
+    ],
+    correctAnswer: "B",
+    rationaleCorrect: "Stopping the infusion and assessing the site is the priority safety action before other interventions.",
+    rationaleIncorrect: [
+      { letter: "A", rationale: "Slowing the rate delays removal of a possible irritant when infiltration is suspected." },
+      { letter: "C", rationale: "Warm compresses do not replace assessment and may mask worsening injury." },
+      { letter: "D", rationale: "Flushing can worsen tissue exposure if infiltration is present." },
+    ],
+  });
+  assert.ok(base);
+  const a = shuffleExamMicroQuestionOrder(base!, "seed-a");
+  const b = shuffleExamMicroQuestionOrder(base!, "seed-b");
+  const orderA = a.answerOptions.map((o) => o.text).join("|");
+  const orderB = b.answerOptions.map((o) => o.text).join("|");
+  assert.notEqual(orderA, orderB);
 });

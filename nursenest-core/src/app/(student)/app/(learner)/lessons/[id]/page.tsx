@@ -11,7 +11,7 @@ import { logBlockedAccess, logEntitlementMismatch } from "@/lib/entitlements/ent
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
-import { appPathwayLessonVisibleToSubscriber } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import { resolveAppSubscriberPathwayLessonForDetail } from "@/lib/lessons/app-subscriber-lesson-detail-resolve";
 import { visibleSectionsForLesson } from "@/lib/lessons/pathway-lesson-access";
 import { filterLearnerPresentablePathwaySections } from "@/lib/lessons/lesson-section-presentability";
 import {
@@ -24,7 +24,6 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { localizeBreadcrumbCrumbs } from "@/lib/seo/breadcrumb-i18n";
 import { learnerPathwayLessonBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
-import { getPathwayLesson } from "@/lib/lessons/pathway-lesson-loader";
 import { LegacyMonolithLessonBody } from "@/components/lessons/legacy-monolith-lesson-body";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
 import { classifyContentItemLesson, classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
@@ -245,13 +244,19 @@ export default async function LessonDetailPage({ params }: Props) {
 
     const pwRow = await prisma.pathwayLesson.findUnique({ where: { id } });
     if (pwRow) {
-      if (!(await appPathwayLessonVisibleToSubscriber(entitlement, pwRow, learnerPath))) {
-        return { kind: "out_of_plan" as const };
-      }
-      const record = await getPathwayLesson(pwRow.pathwayId, pwRow.slug, marketingLocale);
-      /** Hub lists DB rows; detail must still open when catalog/DB editorial gate lags (`publicComplete`). */
-      if (!record) return { kind: "not_found" as const };
-      return { kind: "pathway_ok" as const, record, pathwayId: pwRow.pathwayId };
+      const pathwayResolution = await resolveAppSubscriberPathwayLessonForDetail({
+        entitlement,
+        learnerPath,
+        marketingLocale,
+        pwRow,
+      });
+      if (pathwayResolution.kind === "out_of_plan") return { kind: "out_of_plan" as const };
+      if (pathwayResolution.kind === "not_found") return { kind: "not_found" as const };
+      return {
+        kind: "pathway_ok" as const,
+        record: pathwayResolution.record,
+        pathwayId: pathwayResolution.pathwayId,
+      };
     }
 
     const legacyLesson = await getLegacyContentMapLessonById(id);
@@ -276,8 +281,11 @@ export default async function LessonDetailPage({ params }: Props) {
   }
 
   if (resolvedLesson.kind === "not_found") {
-    safeServerLog("page_lesson_detail", "lesson_not_found", { id });
-    notFound();
+    safeServerLog("page_lesson_detail", "app_lesson_unavailable", {
+      id,
+      reason: "lesson_not_found_or_incomplete_load",
+    });
+    return <AppLessonUnavailable t={t} />;
   }
 
   if (resolvedLesson.kind === "out_of_plan") {
@@ -398,20 +406,22 @@ export default async function LessonDetailPage({ params }: Props) {
       visibleRaw.filter((s) => shouldRenderPathwayLessonSection(s.kind)),
     );
     if (visible.length === 0) {
-      safeServerLog("page_lesson_detail", "pathway_lesson_no_presentable_sections", {
+      safeServerLog("page_lesson_detail", "app_lesson_unavailable", {
         id,
         slug: record.slug,
+        reason: "pathway_lesson_no_presentable_sections",
       });
-      notFound();
+      return <AppLessonUnavailable t={t} />;
     }
     const omitHy = new Set(record.omitHighYieldSectionIds ?? []);
     const displaySections = visible.filter((s) => !omitHy.has(s.id));
     if (displaySections.length === 0) {
-      safeServerLog("page_lesson_detail", "pathway_lesson_no_sections_after_hy_omit", {
+      safeServerLog("page_lesson_detail", "app_lesson_unavailable", {
         id,
         slug: record.slug,
+        reason: "pathway_lesson_no_sections_after_hy_omit",
       });
-      notFound();
+      return <AppLessonUnavailable t={t} />;
     }
     const editorialRhythmIndexBySectionId = new Map<string, number>();
     {
@@ -689,6 +699,8 @@ export default async function LessonDetailPage({ params }: Props) {
                     >
                       {section.kind === "related_next_steps" && pathway ? (
                         <PathwayLessonNextStepsCards
+                          pathwayId={pathway.id}
+                          analyticsSurface="app_lesson"
                           practiceHref={buildAppQuestionBankTopicDrillHref(
                             pathway,
                             record.topic,

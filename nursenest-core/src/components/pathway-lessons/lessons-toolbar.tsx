@@ -7,6 +7,8 @@ type Props = {
   initialQuery?: string;
   /** Preserved on GET search (pathway lessons hub topic filter). */
   preservedTopicSlug?: string;
+  /** Preserved on allied pathway hub (`?alliedProfession=`). */
+  preservedAlliedProfession?: string;
   countryOptions?: CountrySwitcherOption[];
   /** Optional total lesson count shown as a result indicator. */
   totalCount?: number;
@@ -16,6 +18,7 @@ export function LessonsToolbar({
   searchBasePath,
   initialQuery,
   preservedTopicSlug,
+  preservedAlliedProfession,
   countryOptions,
   totalCount,
 }: Props) {
@@ -31,6 +34,9 @@ export function LessonsToolbar({
           className={`flex w-full flex-col gap-2 sm:flex-row ${countryOptions ? "lg:max-w-[32rem]" : ""}`}
         >
           {preservedTopicSlug ? <input type="hidden" name="topicSlug" value={preservedTopicSlug} /> : null}
+          {preservedAlliedProfession ? (
+            <input type="hidden" name="alliedProfession" value={preservedAlliedProfession} />
+          ) : null}
           <label htmlFor="lessons-toolbar-q" className="sr-only">
             Search lessons
           </label>
@@ -59,11 +65,13 @@ export function LessonsToolbar({
             </button>
             {initialQuery ? (
               <Link
-                href={
-                  preservedTopicSlug
-                    ? `${searchBasePath.replace(/\/$/, "")}?topicSlug=${encodeURIComponent(preservedTopicSlug)}`
-                    : searchBasePath
-                }
+                href={(() => {
+                  const qs = new URLSearchParams();
+                  if (preservedTopicSlug) qs.set("topicSlug", preservedTopicSlug);
+                  if (preservedAlliedProfession) qs.set("alliedProfession", preservedAlliedProfession);
+                  const s = qs.toString();
+                  return s ? `${searchBasePath.replace(/\/$/, "")}?${s}` : searchBasePath;
+                })()}
                 className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:bg-[var(--semantic-panel-cool)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
               >
                 Clear

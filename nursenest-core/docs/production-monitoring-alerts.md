@@ -6,7 +6,7 @@ This app emits **Sentry Metrics** (when `SENTRY_ENABLED=true`), **structured JSO
 
 | Area | What to use | Implementation |
 | --- | --- | --- |
-| **5xx & slow HTTP** | Sentry: `api.route.count` (attribute `status_bucket`: `5xx` / `4xx` / `2xx`), `api.route.slow`, `api.route.duration_ms`; structured: `scope=api`, `event=request_completed` | Routes that call `recordApiRouteTelemetry` / `runWithApiTelemetry` (`api-route-telemetry.ts`). |
+| **5xx & slow HTTP** | Sentry: `api.route.count` (`status_bucket`, `flow`, **`traffic_source`**: `customer` \| `synthetic` \| `admin_learner_qa`), `api.route.slow`, `api.route.duration_ms`; structured: `scope=api`, `event=request_completed`, `meta.traffic_source` | Routes that call `recordApiRouteTelemetry` / `runWithApiTelemetry` (`api-route-telemetry.ts`). **Customer SLO dashboards:** filter `traffic_source:customer` so cron probes and admin QA do not skew error-rate alerts. |
 | **Slow responses** | Same as above; Node hook logs `http.slow_request` for `/api/*` when **> 1000 ms** (`http-access-log-hook.ts`). Threshold for route telemetry: `NN_SLOW_API_ROUTE_MS` (default 8000). | |
 | **DB errors** | Sentry: `db.client.error` (`bucket`: `connection`, `timeout`, `unique`, …); structured: `scope=db`, `event=prisma_client_error` | Prisma extension in `src/lib/db.ts`. |
 | **DB slow queries** | Sentry: `db.query.slow` (`severity`: `warn` \| `critical`), `db.query.duration_ms`; structured: `scope=db`, `event=slow_query` | `logSlowPrismaQuery` / `production-signal-metrics.ts` (warn > 500 ms, critical > 1000 ms). |
@@ -15,6 +15,8 @@ This app emits **Sentry Metrics** (when `SENTRY_ENABLED=true`), **structured JSO
 | **Entitlement resolve failures** | Sentry: `entitlement.resolve.failure` (`surface`: `page` \| `api_questions_id`); structured: `event=entitlement_resolve_failed`, `scope=entitlement` `event=resolve_failed` | `recordEntitlementResolveFailureSignal` in `production-signal-metrics.ts`; thrown `getUserAccess` path. |
 | **Readiness / DB down** | Sentry: `health.ready.failure` (`kind=database`); structured: `scope=health`, `event=ready_database_unavailable` | `GET /api/health/ready` when DB check fails (`health/ready/route.ts`). |
 | **Unhandled errors** | Sentry Issues + performance traces | `@sentry/nextjs` (`sentry.server.config.ts`, `instrumentation.ts`). |
+
+**Internal synthetic cron:** `GET|POST /api/cron/monitoring-synthetic` (Vercel Cron in `vercel.json`, `CRON_SECRET`) probes marketing + billing surfaces with `x-nn-traffic-source: synthetic` and emits `synthetic.check.failed`, `synthetic.probe.duration_ms`, `synthetic.check.slow`. See `docs/alerting-runbooks.md`.
 
 **Uptime / “site down”** is not asserted inside the app process: use an **external synthetic check** (Sentry Crons/Uptime, Better Stack, Pingdom, etc.) against:
 

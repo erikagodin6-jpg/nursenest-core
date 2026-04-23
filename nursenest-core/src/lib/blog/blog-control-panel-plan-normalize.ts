@@ -125,6 +125,7 @@ export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, 
     "imagePlacements",
     "keyTakeaways",
     "apaSourceStubs",
+    "internalAnchorOpportunities",
   ] as const) {
     if (out[k] === null || out[k] === undefined) {
       out[k] = [];
@@ -292,6 +293,31 @@ export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, 
       const r: Record<string, unknown> = { ...row };
       if (r.rationale !== undefined) {
         r.rationale = normalizePlanString(r.rationale, `schemaOpportunities[${i}].rationale`);
+      }
+      return r;
+    });
+  }
+
+  if (out.internalAnchorOpportunities !== undefined) {
+    let rows = out.internalAnchorOpportunities;
+    if (!Array.isArray(rows)) {
+      if (isPlainObject(rows)) rows = [rows];
+      else throw new Error(`[blog-plan-normalize] internalAnchorOpportunities must be array or object`);
+    }
+    out.internalAnchorOpportunities = rows.map((row: unknown, i: number) => {
+      if (!isPlainObject(row)) throw new Error(`[blog-plan-normalize] internalAnchorOpportunities[${i}] must be object`);
+      const r: Record<string, unknown> = { ...row };
+      r.phrase = normalizePlanString(r.phrase, `internalAnchorOpportunities[${i}].phrase`);
+      r.suggestedAnchorText = normalizePlanString(
+        r.suggestedAnchorText,
+        `internalAnchorOpportunities[${i}].suggestedAnchorText`,
+      );
+      r.targetSuggestedPath = normalizePlanString(
+        r.targetSuggestedPath,
+        `internalAnchorOpportunities[${i}].targetSuggestedPath`,
+      );
+      if (r.rationale !== undefined) {
+        r.rationale = normalizePlanString(r.rationale, `internalAnchorOpportunities[${i}].rationale`);
       }
       return r;
     });

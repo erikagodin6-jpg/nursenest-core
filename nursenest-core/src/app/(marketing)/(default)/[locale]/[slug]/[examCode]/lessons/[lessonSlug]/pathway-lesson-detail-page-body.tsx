@@ -42,6 +42,7 @@ import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { pathwayLessonDetailBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { getPathwayLessonContentDates } from "@/lib/seo/pathway-lesson-content-dates";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
+import { AutomaticRelatedContentForPublic } from "@/components/linking/automatic-related-content-for-public";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
 import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
@@ -93,7 +94,7 @@ import {
   pickPathwayLessonMarketingRecordChipsSource,
   toPathwayLessonDeferredServerSnapshot,
 } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
-import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import { loadMarketingMessageShardsSync } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { LEARNER_APP_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
@@ -113,7 +114,8 @@ export type PathwayLessonDetailPageBodyProps = {
 };
 
 export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlug }: PathwayLessonDetailPageBodyProps) {
-  const lessonContentLocale = DEFAULT_MARKETING_LOCALE;
+  /** Match lessons hub + {@link verifyMarketingHubLessonRowsResolve} (marketing locale cookie / preference). */
+  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
 
   if (!lessonSlug.trim()) {
     safeServerLog("pathway_lesson_detail", "marketing_lesson_missing_slug", {
@@ -256,11 +258,11 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
     topicSlug: lesson.topicSlug,
   });
   const requestedNorm = normalizePathwayLessonLocale(lessonContentLocale);
-  const marketingUiLocale = DEFAULT_MARKETING_LOCALE;
-  const marketingMessages = loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, LEARNER_APP_MESSAGE_SHARDS);
+  const marketingUiLocale = lessonContentLocale;
+  const marketingMessages = loadMarketingMessageShardsSync(marketingUiLocale, LEARNER_APP_MESSAGE_SHARDS);
   const t = (key: string, params?: Record<string, string | number | undefined>) =>
     formatMarketingMessage(marketingMessages, key, params, marketingMessages, {
-      locale: DEFAULT_MARKETING_LOCALE,
+      locale: marketingUiLocale,
     });
   const showLocaleFallbackNotice = Boolean(
     lesson.localeMeta &&
@@ -495,6 +497,8 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
                       ) : null}
                       {section.kind === "related_next_steps" ? (
                         <PathwayLessonNextStepsCards
+                          pathwayId={pathway.id}
+                          analyticsSurface="marketing_lesson"
                           practiceHref={pathwayMarketingQuestionBankTopicHref(
                             pathway,
                             lesson.topic,
@@ -606,6 +610,18 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           </Link>
         </p>
 
+        <AutomaticRelatedContentForPublic
+          surface="lesson"
+          pathway={pathway}
+          lesson={{
+            slug: lesson.slug,
+            title: lesson.title,
+            topic: lesson.topic,
+            topicSlug: lesson.topicSlug,
+            bodySystem: lesson.bodySystem,
+          }}
+          locale={lessonContentLocale}
+        />
         <MarketingStudyCrossLinks className="mt-12" />
         {hasLessonSequence ? <PathwayLessonStickySequenceNav adjacent={lessonAdjacentHrefs} /> : null}
       </div>

@@ -14,7 +14,11 @@ import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-tr
 import { ExamSessionProgressStrip } from "@/components/exam/exam-session-shell";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
-import { FlashcardStudyQuestionStack } from "@/components/flashcards/flashcard-study-question-stack";
+import {
+  firstTeachingLine,
+  FlashcardStudyQuestionStack,
+  flashcardExamMcqOptionClass,
+} from "@/components/flashcards/flashcard-study-question-stack";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 
 export type ActiveStudyCard = {
@@ -154,6 +158,8 @@ export function ActiveStudySession({
   const [reviewedIds, setReviewedIds] = useState<Record<string, true>>({});
   const [ratingStats, setRatingStats] = useState({ known: 0, unsure: 0, incorrect: 0 });
   const [elapsedSec, setElapsedSec] = useState(0);
+  /** Split-layout MCQ tutor: letter user tapped before rationale unlocks. */
+  const [splitMcqPick, setSplitMcqPick] = useState<string | null>(null);
 
   useEffect(() => {
     setSessionCards(toInternalQueue(dedupedCards));
@@ -166,6 +172,7 @@ export function ActiveStudySession({
     setReviewedIds({});
     setRatingStats({ known: 0, unsure: 0, incorrect: 0 });
     setElapsedSec(0);
+    setSplitMcqPick(null);
   }, [dedupedCards, initialCardIndex, initialRevealed]);
 
   useEffect(() => {
@@ -182,6 +189,11 @@ export function ActiveStudySession({
     `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 
   const current = sessionCards[index] ?? null;
+
+  useEffect(() => {
+    setSplitMcqPick(null);
+  }, [current?.id]);
+
   const sessionCount = Math.max(
     1,
     typeof sessionMeta?.returnedCount === "number" ? sessionMeta.returnedCount : sessionCards.length,
@@ -881,19 +893,67 @@ export function ActiveStudySession({
               <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--theme-muted-text)]">
                 {t("learner.flashcards.session.answerChoicesHeading")}
               </p>
-              <ul className="space-y-2" aria-label={t("learner.flashcards.session.answerChoicesHeading")}>
-                {current.examMicroQuestion.answerOptions.map((o) => (
-                  <li
-                    key={o.letter}
-                    className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-2)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_42%,var(--semantic-surface))] px-3 py-2.5 text-sm leading-snug text-[var(--semantic-text-primary)]"
-                  >
-                    <div className="flex gap-2">
-                      <span className="shrink-0 font-mono text-xs font-bold text-[var(--semantic-chart-2)]">{o.letter}.</span>
-                      <FlashcardRichContent text={o.text} className="min-w-0 flex-1 [&_p]:mb-1 [&_p:last-child]:mb-0" />
-                    </div>
-                  </li>
-                ))}
+              <ul className="space-y-1.5" aria-label={t("learner.flashcards.session.answerChoicesHeading")}>
+                {current.examMicroQuestion.answerOptions.map((o) => {
+                  const exam = current.examMicroQuestion!;
+                  const interactive = !revealed;
+                  return (
+                    <li key={o.letter} className="list-none">
+                      {interactive ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSplitMcqPick(o.letter);
+                            setRevealed(true);
+                          }}
+                          className={flashcardExamMcqOptionClass({
+                            letter: o.letter,
+                            exam,
+                            revealed,
+                            pickedLetter: splitMcqPick,
+                            tutorMode: true,
+                            interactive: true,
+                          })}
+                        >
+                          <div className="flex gap-2">
+                            <span className="shrink-0 font-mono text-xs font-bold text-[var(--semantic-chart-2)]">
+                              {o.letter}.
+                            </span>
+                            <FlashcardRichContent
+                              text={o.text}
+                              className="min-w-0 flex-1 [&_p]:mb-1 [&_p:last-child]:mb-0"
+                            />
+                          </div>
+                        </button>
+                      ) : (
+                        <div
+                          className={flashcardExamMcqOptionClass({
+                            letter: o.letter,
+                            exam,
+                            revealed,
+                            pickedLetter: splitMcqPick,
+                            tutorMode: true,
+                            interactive: false,
+                          })}
+                        >
+                          <div className="flex gap-2">
+                            <span className="shrink-0 font-mono text-xs font-bold text-[var(--semantic-chart-2)]">
+                              {o.letter}.
+                            </span>
+                            <FlashcardRichContent
+                              text={o.text}
+                              className="min-w-0 flex-1 [&_p]:mb-1 [&_p:last-child]:mb-0"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
+              {!revealed ? (
+                <p className="text-xs text-[var(--semantic-text-muted)]">{t("learner.flashcards.session.revealHint")}</p>
+              ) : null}
             </div>
           ) : null}
           {current.topic || current.subtopic ? (
@@ -903,7 +963,7 @@ export function ActiveStudySession({
             </p>
           ) : null}
 
-          {!revealed ? (
+          {!revealed && !current.examMicroQuestion ? (
             <button
               type="button"
               onClick={() => setRevealed(true)}
@@ -911,7 +971,7 @@ export function ActiveStudySession({
             >
               {t("learner.flashcards.session.flipCardCta")}
             </button>
-          ) : (
+          ) : revealed ? (
             <div className="mt-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                 {t("learner.flashcards.session.correctAnswerLabel")}
@@ -920,7 +980,7 @@ export function ActiveStudySession({
                 <FlashcardRichContent text={current.answer} />
               </div>
             </div>
-          )}
+          ) : null}
 
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <button
@@ -981,7 +1041,11 @@ export function ActiveStudySession({
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                     {t("learner.flashcards.session.rationaleStepWhyCorrect")}
                   </h3>
-                  {current.explanation?.trim() ? (
+                  {current.examMicroQuestion?.rationaleCorrect?.trim() ? (
+                    <div className="mt-1 text-[var(--theme-heading-text)]">
+                      <FlashcardRichContent text={current.examMicroQuestion.rationaleCorrect} />
+                    </div>
+                  ) : current.explanation?.trim() ? (
                     <div className="mt-1 text-[var(--theme-heading-text)]">
                       <FlashcardRichContent text={current.explanation} />
                     </div>
@@ -995,7 +1059,15 @@ export function ActiveStudySession({
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
                     {t("learner.flashcards.session.rationaleStepWhyWrong")}
                   </h3>
-                  {current.distractors && current.distractors.length > 0 ? (
+                  {current.examMicroQuestion ? (
+                    <ul className="mt-1 space-y-1 text-[var(--theme-heading-text)]">
+                      {current.examMicroQuestion.rationaleIncorrect.map((row) => (
+                        <li key={row.letter}>
+                          <span className="font-semibold">{row.letter}:</span> {firstTeachingLine(row.rationale)}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : current.distractors && current.distractors.length > 0 ? (
                     <ul className="mt-1 space-y-1 text-[var(--theme-heading-text)]">
                       {current.distractors.map((d) => (
                         <li key={d.option}>

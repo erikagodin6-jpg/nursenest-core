@@ -24,6 +24,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
 import { isRegionalMarketingUrlPublished } from "@/lib/marketing/published-regional-marketing-urls";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { AutomaticRelatedContentForPublic } from "@/components/linking/automatic-related-content-for-public";
 
 export const dynamicParams = true;
 export const revalidate = 86_400;
@@ -252,6 +253,12 @@ export default async function ProgrammaticQuestionTopicPage({ params, searchPara
             </ul>
           </section>
         ) : null}
+
+        <AutomaticRelatedContentForPublic
+          surface="programmatic_question"
+          def={{ slug: def.slug, primaryPathwayId: def.primaryPathwayId }}
+          locale={locale}
+        />
 
         {relatedTopicLinks.length > 0 ? (
           <section className="mt-10" aria-labelledby="related-topics-heading">

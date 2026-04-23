@@ -549,6 +549,18 @@ export function sortAndFilterLessonsForPathwayContext(
 }
 
 /**
+ * Same exam/country gate as {@link sortAndFilterLessonsForPathwayContext} — run on **hydrated**
+ * detail rows so hub links cannot diverge when list metadata and `getPathwayLesson` payloads disagree.
+ */
+export function pathwayLessonMatchesMarketingPathwayContext(
+  pathwayId: string,
+  lesson: PathwayLessonRecord,
+): boolean {
+  const context = resolveLessonContextForPathwayId(pathwayId);
+  return matchesLessonContext(lesson, context);
+}
+
+/**
  * Catalog JSON sometimes ships short seoDescription strings that still describe the lesson but fall
  * below the structural gate’s ~12-word floor. Pad deterministically from title — no new editorial claims.
  */

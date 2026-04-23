@@ -7,6 +7,7 @@ import { assertExamQuestionContextForPublish } from "@/lib/content-quality/exam-
 import { prisma } from "@/lib/db";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
+import { examQuestionTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
 
 export const dynamic = "force-dynamic";
 
@@ -42,26 +43,51 @@ export async function POST(req: Request) {
   }
 
   if (body.action === "set_status") {
-    if (body.status === ContentStatus.PUBLISHED) {
-      const rows = await prisma.examQuestion.findMany({
-        where: { id: { in: body.ids } },
-        select: {
-          id: true,
-          stem: true,
-          rationale: true,
-          questionType: true,
-          options: true,
-          correctAnswer: true,
-          correctAnswerExplanation: true,
-          clinicalReasoning: true,
-          keyTakeaway: true,
-          tier: true,
-          exam: true,
-          countryCode: true,
-        },
+    const rows = await prisma.examQuestion.findMany({
+      where: { id: { in: body.ids } },
+      select: {
+        id: true,
+        stem: true,
+        rationale: true,
+        topic: true,
+        subtopic: true,
+        tags: true,
+        questionType: true,
+        options: true,
+        correctAnswer: true,
+        correctAnswerExplanation: true,
+        clinicalReasoning: true,
+        keyTakeaway: true,
+        tier: true,
+        exam: true,
+        countryCode: true,
+      },
+      take: takeForIdIn(body.ids, 500),
+    });
+    const blocked: { id: string; reasons: string[] }[] = [];
+    let updated = 0;
+    for (const row of rows) {
+      const taxonomy = examQuestionTaxonomyFromCorpus({
+        stem: row.stem,
+        rationale: row.rationale,
+        topic: row.topic,
+        subtopic: row.subtopic,
+        tags: row.tags ?? [],
       });
-      const blocked: { id: string; reasons: string[] }[] = [];
-      for (const row of rows) {
+      if (taxonomy.violations.length > 0) {
+        blocked.push({ id: row.id, reasons: taxonomy.violations });
+        continue;
+      }
+      if (body.status === ContentStatus.PUBLISHED && !taxonomy.publishable) {
+        blocked.push({
+          id: row.id,
+          reasons: [
+            `taxonomy_publish_blocked: domain=${taxonomy.classification.domain} category=${taxonomy.classification.category}`,
+          ],
+        });
+        continue;
+      }
+      if (body.status === ContentStatus.PUBLISHED) {
         try {
           assertExamQuestionContextForPublish({
             tier: row.tier,
@@ -88,24 +114,34 @@ export async function POST(req: Request) {
           },
           { acknowledgeBelowQualityBar: false },
         );
-        if (!gov.ok) blocked.push({ id: row.id, reasons: gov.reasons });
+        if (!gov.ok) {
+          blocked.push({ id: row.id, reasons: gov.reasons });
+          continue;
+        }
       }
-      if (blocked.length > 0) {
-        return NextResponse.json(
-          {
-            error: "Bulk publish blocked: some rows fail editorial policy",
-            blocked,
-            hint: "Fix rationales or publish individually with acknowledgeBelowQualityBar.",
-          },
-          { status: 422 },
-        );
-      }
+      await prisma.examQuestion.update({
+        where: { id: row.id },
+        data: { status: contentStatusToDb(body.status), bodySystem: taxonomy.bodySystem },
+      });
+      updated += 1;
     }
-    const res = await prisma.examQuestion.updateMany({
-      where: { id: { in: body.ids } },
-      data: { status: contentStatusToDb(body.status) },
-    });
-    return NextResponse.json({ updated: res.count });
+    if (blocked.length > 0) {
+      return NextResponse.json(
+        {
+          error:
+            body.status === ContentStatus.PUBLISHED
+              ? "Bulk publish blocked: some rows fail editorial policy or taxonomy gate"
+              : "Bulk status blocked: some rows have invalid taxonomy classification",
+          blocked,
+          hint:
+            body.status === ContentStatus.PUBLISHED
+              ? "Fix rationales or publish individually with acknowledgeBelowQualityBar; resolve ambiguous taxonomy corpora."
+              : "Fix stems/tags so taxonomy validates, then retry.",
+        },
+        { status: 422 },
+      );
+    }
+    return NextResponse.json({ updated });
   }
 
   const rows = await prisma.examQuestion.findMany({

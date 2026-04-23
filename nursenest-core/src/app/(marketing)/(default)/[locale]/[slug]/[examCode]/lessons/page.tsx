@@ -21,7 +21,10 @@ import {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-loader";
-import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
+import {
+  PathwayLessonsCurriculumHub,
+  prepareLessonsForHubCurriculum,
+} from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import {
   pathwayCountryLabel,
   pathwayLessonHubMetaDescription,
@@ -30,7 +33,9 @@ import {
   pathwayLessonTopicClusterMetaTitle,
   pathwayRegionAwareExamName,
 } from "@/lib/lessons/pathway-lesson-hub-seo";
+import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
+import { verifyMarketingHubLessonRowsResolve } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
 import { pathwayLessonsHubBreadcrumbs, pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -46,6 +51,11 @@ import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
+import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
+import {
+  ALLIED_PROFESSION_QUERY_PARAM,
+  isAlliedMarketingCorePathwayId,
+} from "@/lib/lessons/canonical-lessons-hubs";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -55,7 +65,13 @@ export const maxDuration = 60;
 
 type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string }>;
-  searchParams: Promise<{ q?: string; page?: string; pageSize?: string; topicSlug?: string }>;
+  searchParams: Promise<{
+    q?: string;
+    page?: string;
+    pageSize?: string;
+    topicSlug?: string;
+    alliedProfession?: string;
+  }>;
 };
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
@@ -77,6 +93,11 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
       if (topicSlugNorm) qs.set("topicSlug", topicSlugNorm);
       if (q) qs.set("q", q);
       if (page > 1) qs.set("page", String(page));
+      const apRaw = typeof sp.alliedProfession === "string" ? sp.alliedProfession.trim().toLowerCase() : "";
+      if (apRaw && isAlliedMarketingCorePathwayId(pathway.id)) {
+        const ap = getAlliedProfessionByProfessionKey(apRaw);
+        if (ap) qs.set(ALLIED_PROFESSION_QUERY_PARAM, ap.professionKey);
+      }
       const pathWithQuery = qs.toString() ? `${pathOnly}?${qs.toString()}` : pathOnly;
       const canonical = absoluteUrl(pathWithQuery);
 
@@ -124,14 +145,30 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const topicSlugNorm = normalizeMarketingLessonsHubTopicSlug(
     typeof sp.topicSlug === "string" ? sp.topicSlug : undefined,
   );
-  const listOpts =
-    qEffective && topicSlugNorm
-      ? { q: qEffective, topicSlugsIn: [topicSlugNorm] }
-      : qEffective
-        ? { q: qEffective }
-        : topicSlugNorm
-          ? { topicSlugsIn: [topicSlugNorm] }
-          : undefined;
+  const rawAlliedProf =
+    typeof sp.alliedProfession === "string" ? sp.alliedProfession.trim().toLowerCase() : "";
+  const alliedProfessionResolved =
+    isAlliedMarketingCorePathwayId(pathway.id) && rawAlliedProf
+      ? getAlliedProfessionByProfessionKey(rawAlliedProf)
+      : null;
+  const alliedProfessionKey = alliedProfessionResolved?.professionKey ?? "";
+
+  let listOpts: { q?: string; topicSlugsIn?: string[] } | undefined;
+  const alliedTopics = alliedProfessionResolved?.topicSlugsIn;
+  if (alliedTopics && alliedTopics.length > 0) {
+    const narrowed =
+      topicSlugNorm && alliedTopics.includes(topicSlugNorm) ? [topicSlugNorm] : alliedTopics;
+    listOpts = qEffective ? { q: qEffective, topicSlugsIn: narrowed } : { topicSlugsIn: narrowed };
+  } else {
+    listOpts =
+      qEffective && topicSlugNorm
+        ? { q: qEffective, topicSlugsIn: [topicSlugNorm] }
+        : qEffective
+          ? { q: qEffective }
+          : topicSlugNorm
+            ? { topicSlugsIn: [topicSlugNorm] }
+            : undefined;
+  }
 
   const { pageResult, questionSnapshot } = await loadPathwayLessonsHubAggregates(
     pathway,
@@ -160,14 +197,38 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     if (pageResult.page > 1) qs.set("page", String(pageResult.page));
     if (qEffective) qs.set("q", qEffective);
     if (topicSlugNorm) qs.set("topicSlug", topicSlugNorm);
+    if (alliedProfessionKey) qs.set(ALLIED_PROFESSION_QUERY_PARAM, alliedProfessionKey);
     const query = qs.toString();
     redirect(query ? `${base}?${query}` : base);
   }
 
-  /** Single hub dataset: full normalized list for grouping; falls back to current page only if aggregates failed. */
-  const hubRenderableLessonRows = (pageResult.renderableAll ?? pageResult.items).filter(pathwayLessonHasRenderableHubSlug);
-  const hubListCountForChrome =
-    pageResult.renderableAll != null ? pageResult.total : hubRenderableLessonRows.length;
+  /** Slug-safe rows from the same loader result used for pagination (`items` / `renderableAll`). */
+  const rawHubLessonRows = (pageResult.renderableAll ?? pageResult.items).filter(pathwayLessonHasRenderableHubSlug);
+  /** Dedupe + taxonomy guard + linkable href — must match curriculum grid and toolbar count. */
+  const hubCurriculumPrepared = prepareLessonsForHubCurriculum(rawHubLessonRows, {
+    pathwayId: pathway.id,
+    lessonsBasePath: base,
+  });
+  /** Drop any row that does not hydrate to a marketing-public-complete lesson (same contract as lesson detail). */
+  const { kept: hubCurriculumLessons } = await verifyMarketingHubLessonRowsResolve(
+    pathway,
+    hubCurriculumPrepared,
+    lessonContentLocale,
+  );
+  const hubListCountForChrome = hubCurriculumLessons.length;
+  /** Pagination + grid use the same verified ordering as {@link sliceNormalizedHubLessons} (not pre-verify totals). */
+  const hubVerifiedPage = sliceNormalizedHubLessons(hubCurriculumLessons, pageRequested, pageSizeRequested);
+  if (hubVerifiedPage.total > 0 && pageRequested !== hubVerifiedPage.page) {
+    const qs = new URLSearchParams();
+    if (hubVerifiedPage.page > 1) qs.set("page", String(hubVerifiedPage.page));
+    if (qEffective) qs.set("q", qEffective);
+    if (topicSlugNorm) qs.set("topicSlug", topicSlugNorm);
+    if (alliedProfessionKey) qs.set(ALLIED_PROFESSION_QUERY_PARAM, alliedProfessionKey);
+    const query = qs.toString();
+    redirect(query ? `${base}?${query}` : base);
+  }
+  const hubPageLessons = hubVerifiedPage.items;
+  const lessonsOnPageForPagination = hubPageLessons.length;
 
   let topicClusterLabel: string | null = null;
   if (topicSlugNorm) {
@@ -187,9 +248,11 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const examName = pathwayRegionAwareExamName(pathway);
   const pageTitle = "Lessons";
   const headerDescription =
-    topicClusterLabel != null
-      ? `Lessons in “${topicClusterLabel}” for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`
-      : `Browse lessons by clinical area for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`;
+    alliedProfessionResolved && !topicSlugNorm
+      ? `Browse ${alliedProfessionResolved.h1} lessons for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`
+      : topicClusterLabel != null
+        ? `Lessons in “${topicClusterLabel}” for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`
+        : `Browse lessons by clinical area for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`;
 
   const overviewHref = marketingExamHubBasePath(pathway);
   const questionsHref = buildExamPathwayPath(pathway, "questions");
@@ -208,6 +271,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     const qs = new URLSearchParams();
     if (qEffective) qs.set("q", qEffective);
     if (topicSlugNorm) qs.set("topicSlug", topicSlugNorm);
+    if (alliedProfessionKey) qs.set(ALLIED_PROFESSION_QUERY_PARAM, alliedProfessionKey);
     const s = qs.toString();
     return s ? `?${s}` : "";
   })();
@@ -225,6 +289,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       searchBasePath={base}
       initialQuery={qEffective ?? undefined}
       preservedTopicSlug={topicSlugNorm ?? undefined}
+      preservedAlliedProfession={alliedProfessionKey || undefined}
       totalCount={hubListCountForChrome}
       countryOptions={[
         { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
@@ -309,10 +374,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
   const canShowResume =
     Boolean(userId) && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
-  const canShowProgressMap = canShowResume && hubRenderableLessonRows.length > 0;
+  const canShowProgressMap = canShowResume && hubPageLessons.length > 0;
 
   if (canShowResume) {
-    const hubSlugs = canShowProgressMap ? hubRenderableLessonRows.map((l) => l.slug).filter(Boolean) : [];
+    const hubSlugs = canShowProgressMap ? hubPageLessons.map((l) => l.slug).filter(Boolean) : [];
     const { progressMap: map } = await loadPathwayHubSubscriberData(
       userId,
       scope,
@@ -352,7 +417,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           </span>
         </div>
         <PathwayLessonsCurriculumHub
-          lessons={hubRenderableLessonRows}
+          lessons={rawHubLessonRows}
+          preparedLessons={hubPageLessons}
           lessonsBasePath={base}
           pathwayId={pathway.id}
           progressMap={progressMap}
@@ -362,12 +428,14 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       </section>
       <PathwayLessonPagination
         basePath={base}
-        page={pageResult.page}
-        pageCount={pageResult.pageCount}
-        total={pageResult.total}
-        pageSize={pageResult.pageSize}
+        page={hubVerifiedPage.page}
+        pageCount={hubVerifiedPage.pageCount}
+        total={hubVerifiedPage.total}
+        pageSize={hubVerifiedPage.pageSize}
         hubSearch={qEffective}
         topicSlug={topicSlugNorm ?? undefined}
+        alliedProfession={alliedProfessionKey || undefined}
+        lessonsOnPage={lessonsOnPageForPagination}
       />
 
       <section className="mt-10">

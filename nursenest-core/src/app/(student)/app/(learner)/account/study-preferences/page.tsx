@@ -54,11 +54,13 @@ export default async function AccountStudyPreferencesPage() {
   }
 
   let defaultPathwayLabel: string | null = null;
+  let emailEngagementOptOut = false;
   try {
     const u = await prisma.user.findUnique({
       where: { id: userId },
-      select: { learnerPath: true },
+      select: { learnerPath: true, emailEngagementOptOut: true },
     });
+    emailEngagementOptOut = Boolean(u?.emailEngagementOptOut);
     const lp = u?.learnerPath?.trim();
     if (lp) {
       const p = getExamPathwayById(lp);
@@ -98,6 +100,7 @@ export default async function AccountStudyPreferencesPage() {
         defaultPathwayLabel={defaultPathwayLabel}
         showExamPlanForm={showExamPlan}
         initialStudySettings={studySettings}
+        initialEmailEngagementOptOut={emailEngagementOptOut}
         t={t}
       />
 

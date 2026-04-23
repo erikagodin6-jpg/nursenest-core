@@ -39,12 +39,28 @@ function normalizeCorpus(parts: (string | null | undefined)[]): string {
     .trim();
 }
 
+function escapeRegexKeyword(keyword: string): string {
+  return keyword.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
+}
+
+/**
+ * Phrases (spaces) stay substring-based; short tokens use `\\b…\\b` so `uti` does not match inside `therapeutic`.
+ */
+function keywordMatchesHaystack(haystack: string, rawKeyword: string): boolean {
+  const kw = rawKeyword.toLowerCase();
+  if (kw.includes(" ")) return haystack.includes(kw);
+  if (kw.length <= 3) {
+    return new RegExp(`\\b${escapeRegexKeyword(kw)}\\b`).test(haystack);
+  }
+  return haystack.includes(kw);
+}
+
 function scoreKeywords(haystack: string): Record<string, number> {
   const scores: Record<string, number> = {};
   for (const [cat, words] of Object.entries(KEYWORD_MAP)) {
     let n = 0;
     for (const w of words) {
-      if (haystack.includes(w.toLowerCase())) n += 1;
+      if (keywordMatchesHaystack(haystack, w)) n += 1;
     }
     if (n > 0) scores[cat] = n;
   }
@@ -63,6 +79,21 @@ function bestInGroup(scores: Record<string, number>, group: Set<string>): { id: 
   return best;
 }
 
+/**
+ * Top leaf within `group` only when exactly one leaf ties for the maximum positive score.
+ * Otherwise `null` (ambiguous or no signal) — used for placement-safe classification.
+ */
+function uniqueBestInGroupOrReview(scores: Record<string, number>, group: Set<string>): { id: string; score: number } | null {
+  let bestScore = 0;
+  for (const id of group) {
+    bestScore = Math.max(bestScore, scores[id] ?? 0);
+  }
+  if (bestScore <= 0) return null;
+  const winners = [...group].filter((id) => (scores[id] ?? 0) === bestScore);
+  if (winners.length !== 1) return null;
+  return { id: winners[0]!, score: bestScore };
+}
+
 function sumGroup(scores: Record<string, number>, group: Set<string>): number {
   let t = 0;
   for (const id of group) t += scores[id] ?? 0;
@@ -77,10 +108,16 @@ export function classifyStrings(input: {
   content?: string | null;
   keywords?: readonly string[] | null;
   tierOverlay?: ContentTierOverlay | null;
+  /**
+   * When true, never pick a leaf when multiple taxonomy leaves in the winning domain tie for the same top score
+   * (returns {@link REVIEW_REQUIRED} instead of lexicographic tie-break).
+   */
+  placementStrictUnique?: boolean;
 }): ClassificationResult {
   const haystack = normalizeCorpus([input.title, input.content, ...(input.keywords ?? [])]);
   const scores = scoreKeywords(haystack);
   const tierOverlay = input.tierOverlay ?? DEFAULT_CONTENT_TIER_OVERLAY;
+  const strictUnique = input.placementStrictUnique === true;
 
   if (!haystack) {
     return {
@@ -92,10 +129,10 @@ export function classifyStrings(input: {
     };
   }
 
-  const clinicalBest = bestInGroup(scores, CLINICAL_SET);
-  const profBest = bestInGroup(scores, PROFESSIONAL_SET);
-  const pharmBest = bestInGroup(scores, PHARM_SET);
-  const examBest = bestInGroup(scores, EXAM_SET);
+  const clinicalBest = strictUnique ? uniqueBestInGroupOrReview(scores, CLINICAL_SET) : bestInGroup(scores, CLINICAL_SET);
+  const profBest = strictUnique ? uniqueBestInGroupOrReview(scores, PROFESSIONAL_SET) : bestInGroup(scores, PROFESSIONAL_SET);
+  const pharmBest = strictUnique ? uniqueBestInGroupOrReview(scores, PHARM_SET) : bestInGroup(scores, PHARM_SET);
+  const examBest = strictUnique ? uniqueBestInGroupOrReview(scores, EXAM_SET) : bestInGroup(scores, EXAM_SET);
 
   const clinicalSum = sumGroup(scores, CLINICAL_SET);
   const profSum = sumGroup(scores, PROFESSIONAL_SET);

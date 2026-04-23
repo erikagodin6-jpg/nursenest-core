@@ -90,6 +90,7 @@ const GROUPS: NavGroup[] = [
     items: [
       { href: "/admin/hub/publishing", label: "Publishing hub", icon: Megaphone },
       { href: "/admin/blog/studio", label: "Article studio", icon: Sparkles },
+      { href: "/admin/content-bulk", label: "Bulk automation", icon: Workflow },
       { href: "/admin/blog", label: "Blog posts", icon: FileText },
       { href: "/admin/blog/control-panel", label: "Blog AI panel", icon: Wand2 },
       { href: "/admin/blog/generate", label: "Blog generator", icon: Sparkles },

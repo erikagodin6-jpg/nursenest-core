@@ -11,6 +11,7 @@ import {
   type PostTestRemediationInputRow,
   type PostTestStudyNextBundle,
 } from "@/lib/learner/adaptive-recommendations";
+import { findNextPathwayLessonSameBodySystem } from "@/lib/learner/pathway-body-system-next-lesson";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { formatTopicLabelForDisplay, normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { resolveTopicRemediationLinks } from "@/lib/learner/topic-remediation-links";
@@ -63,6 +64,7 @@ export async function loadLessonContinueStudyNext(
   if (!userId || !entitlement.hasAccess || !isDatabaseUrlConfigured()) return null;
 
   let nextPathwayLesson: { id: string; title: string } | null = null;
+  let sameBodySystemLesson: { id: string; title: string } | null = null;
   let anchorNorm: string;
   let topicCode: string | null;
 
@@ -70,6 +72,22 @@ export async function loadLessonContinueStudyNext(
     anchorNorm = normalizeTopicKey(ctx.topicSlug);
     topicCode = ctx.topicSlug.trim() || null;
     nextPathwayLesson = await findNextPathwayLessonInAppOrder(ctx.pathwayId, ctx.lessonId, entitlement, learnerPath);
+    const [pathwayListWhere, currentMeta] = await Promise.all([
+      pathwayLessonsAppListWhere(entitlement, learnerPath),
+      prisma.pathwayLesson.findUnique({
+        where: { id: ctx.lessonId },
+        select: { bodySystem: true },
+      }),
+    ]);
+    const bs = currentMeta?.bodySystem?.trim();
+    if (bs && bs.length >= 2) {
+      sameBodySystemLesson = await findNextPathwayLessonSameBodySystem({
+        pathwayWhere: pathwayListWhere,
+        pathwayId: ctx.pathwayId,
+        currentLessonId: ctx.lessonId,
+        bodySystem: bs,
+      });
+    }
   } else {
     anchorNorm = ctx.anchorNorm;
     topicCode = ctx.topicCode;
@@ -111,6 +129,7 @@ export async function loadLessonContinueStudyNext(
   return recommendNextActionsForLessonContinue({
     currentLessonId: ctx.lessonId,
     nextPathwayLesson,
+    sameBodySystemLesson: ctx.variant === "pathway" ? sameBodySystemLesson : null,
     weakRows: enriched,
   });
 }

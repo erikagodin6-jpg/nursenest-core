@@ -3,11 +3,17 @@ import { prisma } from "@/lib/db";
 
 export const EMAIL_KIND = {
   welcome: "welcome",
+  welcomeFollowup3d: "welcome_followup_3d",
+  welcomeFollowup7d: "welcome_followup_7d",
   firstExam: "first_exam",
   weakArea: "weak_area",
+  /** Cron-driven weak-topic nudge (distinct cooldown from post-mock `weak_area`). */
+  weakAreaStudyNudge: "weak_area_study_nudge",
   inactiveNudge: "inactive_nudge",
   progressDigest: "progress_digest",
   studyPlanNudge: "study_plan_nudge",
+  milestoneLessons: "milestone_lessons",
+  newContentRoundup: "new_content_roundup",
 } as const;
 
 export type EmailKind = (typeof EMAIL_KIND)[keyof typeof EMAIL_KIND];

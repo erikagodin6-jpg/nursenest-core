@@ -7,6 +7,11 @@ export function setAdminLearnerQaClientAnalyticsSuppress(value: boolean): void {
   adminLearnerQaSessionSuppress = value;
 }
 
+/** Read-only — used by tests and diagnostics; true while learner shell runs verified QA simulation. */
+export function isAdminLearnerQaClientAnalyticsSuppressed(): boolean {
+  return adminLearnerQaSessionSuppress;
+}
+
 let initialized = false;
 let posthogModulePromise: Promise<typeof import("posthog-js").default> | null = null;
 let posthogClient: typeof import("posthog-js").default | null = null;

@@ -42,7 +42,7 @@ export const PRENURSING_ALLIED_COVERAGE_MANIFEST = {
   },
 
   marketingOnly: {
-    routes: "Pattern `/allied-health/{professionKey}/lessons` — profession-specific **marketing** hubs; not a substitute for `/app/lessons?pathwayId=us-allied-core` entitlement checks.",
+    routes: "Legacy `/allied-health/{professionKey}/lessons` 301s to canonical `/{us|canada}/allied/allied-health/lessons?alliedProfession=`; not a substitute for `/app/lessons?pathwayId=us-allied-core` entitlement checks.",
   },
 
   intentionalNonGoals: [

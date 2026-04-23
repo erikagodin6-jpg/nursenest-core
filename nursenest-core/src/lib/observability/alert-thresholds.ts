@@ -9,6 +9,14 @@ export const ALERT_THRESHOLDS = {
   synthetic: {
     /** Any single probe failing is CRITICAL for that surface (homepage/login/checkout path). */
     criticalFailedChecksPerRun: 1,
+    /** Per-probe fetch timeout (ms) — keep under cron `maxDuration`. */
+    probeTimeoutMs: 12_000,
+    /** HTML marketing pages — alert when p95 or single sample exceeds (pair with `synthetic.probe.duration_ms` `{ surface: html }`). */
+    slowHtmlProbeMs: 12_000,
+    /** JSON/API GET probes (`/api/*`). */
+    slowApiProbeMs: 6000,
+    /** POST billing probes (checkout + webhook smoke). */
+    slowPostProbeMs: 8000,
   },
 
   /** `api.route.count` with `status_bucket:5xx` — rolling window in Sentry (e.g. 5 min). */

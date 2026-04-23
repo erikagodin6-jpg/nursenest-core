@@ -5,7 +5,7 @@ import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-sna
 import { buildCountdownCopy } from "@/lib/learner/exam-timeline";
 import { loadTodayGoalProgress, TODAY_GOAL_CREDIT_TARGET } from "@/lib/learner/load-today-goal-progress";
 import { loadStudyStreakDays } from "@/lib/learner/premium-dashboard-snapshot";
-import { recommendNextActions } from "@/lib/learner/recommend-next-actions";
+import { buildSmartStudyNextRecommendations } from "@/lib/learner/smart-study-next-engine";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import type { StudyNextRecommendation } from "@/lib/learner/study-next-types";
 
@@ -59,7 +59,9 @@ export async function loadLearnerStudyNextBlock(
   const snapshot = await buildLearnerStudySnapshot(userId, entitlement, user.learnerPath);
   if (!snapshot) return null;
 
-  const actions = recommendNextActions(snapshot, { maxTotal: 3 });
+  const actions = await buildSmartStudyNextRecommendations(userId, snapshot, {
+    maxTotal: 3,
+  });
   if (actions.length === 0) return null;
 
   const countdown = buildCountdownCopy({

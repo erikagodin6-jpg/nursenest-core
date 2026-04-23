@@ -29,6 +29,7 @@ import {
   validateBlogPrePublish,
 } from "@/lib/blog/blog-pre-publish-validation";
 import { prisma } from "@/lib/db";
+import { classifyBlogCorpus, collectClassificationViolations } from "@/lib/taxonomy/content-write-taxonomy";
 
 const slugSchema = z
   .string()
@@ -163,6 +164,9 @@ function partialPrePublishFromPatch(d: z.infer<typeof patchSchema>): Partial<Pre
   if (d.coverImageCaption !== undefined) p.coverImageCaption = d.coverImageCaption;
   if (d.coverImagePrompt !== undefined) p.coverImagePrompt = d.coverImagePrompt;
   if (d.imageStatus !== undefined) p.imageStatus = d.imageStatus;
+  if (d.exam !== undefined) p.exam = d.exam;
+  if (d.category !== undefined) p.category = d.category;
+  if (d.tags !== undefined) p.tags = d.tags;
   return p;
 }
 
@@ -420,6 +424,40 @@ export async function PATCH(req: Request, { params }: Props) {
         ? d.workflowStatus
         : undefined;
 
+  const taxonomyTouch =
+    d.title !== undefined || d.body !== undefined || d.tags !== undefined || d.category !== undefined;
+  let categoryForUpdate: string | null | undefined;
+  if (taxonomyTouch) {
+    const mergedTitle = d.title ?? current.title;
+    const mergedBody = bodyForUpdate ?? current.body;
+    const mergedTags = d.tags ?? current.tags;
+    const mergedCategory = d.category !== undefined ? d.category : current.category;
+    const blogTax = classifyBlogCorpus({
+      title: mergedTitle,
+      body: mergedBody,
+      category: mergedCategory,
+      tags: mergedTags,
+    });
+    const viol = collectClassificationViolations(blogTax);
+    if (viol.length > 0) {
+      return NextResponse.json(
+        { error: "Taxonomy classifier rejected merged content", violations: viol, code: "taxonomy_invalid" },
+        { status: 422 },
+      );
+    }
+    if (d.category !== undefined && d.category !== null && d.category !== blogTax.category) {
+      return NextResponse.json(
+        {
+          error: "category does not match classifier output",
+          code: "taxonomy_override_mismatch",
+          expected: blogTax.category,
+        },
+        { status: 422 },
+      );
+    }
+    categoryForUpdate = blogTax.category;
+  }
+
   const updated = await prisma.blogPost.update({
     where,
     data: {
@@ -432,7 +470,7 @@ export async function PATCH(req: Request, { params }: Props) {
       ...(d.excerpt !== undefined ? { excerpt: d.excerpt } : {}),
       ...(bodyForUpdate !== undefined ? { body: bodyForUpdate } : {}),
       ...(d.exam !== undefined ? { exam: d.exam } : {}),
-      ...(d.category !== undefined ? { category: d.category } : {}),
+      ...(categoryForUpdate !== undefined ? { category: categoryForUpdate } : {}),
       ...(d.tags !== undefined ? { tags: d.tags } : {}),
       ...(d.seoTitle !== undefined ? { seoTitle: d.seoTitle } : {}),
       ...(d.seoDescription !== undefined ? { seoDescription: d.seoDescription } : {}),

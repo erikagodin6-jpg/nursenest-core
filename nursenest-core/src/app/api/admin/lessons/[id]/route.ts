@@ -8,6 +8,7 @@ import { prisma } from "@/lib/db";
 import { bodyStringFromContentJson, bodyStringToContentJson } from "@/lib/prisma/content-item-body";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import { tierCodeToContentItemTier } from "@/lib/prisma/exam-question-maps";
+import { contentItemLessonTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
 
 export const dynamic = "force-dynamic";
 
@@ -101,6 +102,30 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   };
 
   const nextStatus = d.status ? contentStatusToDb(d.status) : existing.status;
+
+  let category = existing.category;
+  if (d.categoryId) {
+    const cat = await prisma.category.findUnique({ where: { id: d.categoryId } });
+    category = cat?.name ?? cat?.slug ?? category;
+  }
+
+  const mergedTags = d.tags ?? existing.tags ?? [];
+  const taxonomy = contentItemLessonTaxonomyFromCorpus({
+    title: merged.title,
+    summary: merged.summary,
+    body: merged.body,
+    tags: mergedTags,
+    topicHint: d.topicTag ?? undefined,
+    systemHint: d.systemTag ?? undefined,
+    categoryHint: category ?? null,
+  });
+  if (taxonomy.violations.length > 0) {
+    return NextResponse.json(
+      { error: "Taxonomy classification invalid", violations: taxonomy.violations, code: "taxonomy_invalid" },
+      { status: 422 },
+    );
+  }
+
   let lessonGov: ReturnType<typeof governContentItemLessonPublish> | null = null;
   if (d.status === ContentStatus.PUBLISHED) {
     lessonGov = governContentItemLessonPublish(
@@ -113,12 +138,19 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
         { status: 422 },
       );
     }
-  }
-
-  let category = existing.category;
-  if (d.categoryId) {
-    const cat = await prisma.category.findUnique({ where: { id: d.categoryId } });
-    category = cat?.name ?? cat?.slug ?? category;
+    if (!taxonomy.publishable) {
+      return NextResponse.json(
+        {
+          error: "Publish blocked — taxonomy needs a resolved category for this lesson",
+          code: "taxonomy_publish_blocked",
+          classification: {
+            domain: taxonomy.classification.domain,
+            category: taxonomy.classification.category,
+          },
+        },
+        { status: 422 },
+      );
+    }
   }
 
   const lesson = await prisma.contentItem.update({
@@ -133,7 +165,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       regionScope: d.country ? (d.country === "CA" ? "CA_ONLY" : "US_ONLY") : undefined,
       tags: d.tags,
       category: category ?? undefined,
-      bodySystem: d.systemTag ?? d.topicTag ?? undefined,
+      bodySystem: taxonomy.bodySystem,
       ...(d.versionKey !== undefined ? { versionKey: d.versionKey } : {}),
     },
   });

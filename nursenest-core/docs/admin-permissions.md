@@ -43,6 +43,7 @@ There is **no separate finance role** in the schema today; billing-heavy surface
 | `/api/admin/analytics/*` | Mixed; subscription routes forbidden for `content` |
 | `/api/admin/ai/*` | Generation — not in support allowlist → support **denied** |
 | `/api/admin/blog/*` | Content tier |
+| `/api/admin/content-bulk/*` | Content tier; support tier (preview/enqueue for ops) |
 | `/api/admin/export/*` | **Super only** |
 | `/api/admin/flashcards/*`, `/api/admin/lessons/*`, `/api/admin/questions/*` | Content-tier heavy |
 | `/api/admin/ops/*` | **Super only** (+ handler check on `ops/run`) |

@@ -18,6 +18,8 @@
  *     (typical when standalone is missing `.next/static` and the app returns HTML for asset URLs)
  *   VERIFY_MARKETING_SENTINELS=1 — GET `/`, `/pricing`, `/login`, `/lessons` (HTML); fail on placeholder pricing copy,
  *     obvious stub strings, duplicate public headers, or missing `<html lang="en"` (default marketing root).
+ *   VERIFY_LEARNER_SMOKE_SURFACES=1 — Tier 5: high-traffic learner marketing + billing entry probes (synthetic header);
+ *     paths kept in sync with `src/lib/observability/synthetic-monitored-paths.ts` + `monitoring-synthetic` cron.
  *
  * Output is grouped into tiers (per BASE_URL / ORIGIN_BASE_URL):
  *   Tier 1 — platform liveness + routing readiness (/healthz, /readyz)
@@ -49,6 +51,8 @@ const wantNextStatic =
   process.env.VERIFY_NEXT_STATIC === "1" || process.env.VERIFY_NEXT_STATIC === "true";
 const wantMarketingSentinels =
   process.env.VERIFY_MARKETING_SENTINELS === "1" || process.env.VERIFY_MARKETING_SENTINELS === "true";
+const wantLearnerSmokeSurfaces =
+  process.env.VERIFY_LEARNER_SMOKE_SURFACES === "1" || process.env.VERIFY_LEARNER_SMOKE_SURFACES === "true";
 
 const tier1Paths = ["/healthz", "/readyz"];
 const tier3Paths = ["/api/health"];
@@ -110,6 +114,19 @@ async function getHome(base) {
 /** Core marketing HTML + primary US RN exam hub (SSR path that must stay non-fatal under DB noise). */
 const MARKETING_SENTINEL_PATHS = ["/", "/pricing", "/login", "/lessons"];
 
+/** @see ../src/lib/observability/synthetic-monitored-paths.ts — duplicate paths for plain Node (no TS import). */
+const LEARNER_SMOKE_HTML_PATHS = [
+  "/us/rn/nclex-rn/lessons/respiratory-assessment-ngn",
+  "/us/rn/nclex-rn/cat",
+  "/flashcards",
+];
+
+const SYNTHETIC_HEADERS = {
+  accept: "text/html,*/*;q=0.8",
+  "x-nn-traffic-source": "synthetic",
+  "user-agent": "NurseNest-DeployHealthSmoke/1.0",
+};
+
 const MARKETING_SENTINEL_FORBIDDEN = [
   "Loading pricing...",
   "Loading pricing…",
@@ -170,7 +187,80 @@ async function verifyMarketingSentinels(base) {
   return { ok: true, detail: "marketing HTML sentinels OK for /, /pricing, /login, /lessons" };
 }
 
-/** @typedef {{ base: string, tier1Failed: boolean, tier2State: "skip" | "pass" | "fail", tier2bState: "skip" | "pass" | "fail", tier3Failed: boolean, tier4State: "skip" | "pass" | "fail" }} TierSummary */
+/**
+ * @param {string} base
+ * @returns {Promise<{ ok: boolean; detail: string }>}
+ */
+async function verifyLearnerSmokeSurfaces(base) {
+  for (const p of LEARNER_SMOKE_HTML_PATHS) {
+    const url = `${base}${p}`;
+    const ac = new AbortController();
+    const t = setTimeout(() => ac.abort(), homeTimeoutMs);
+    try {
+      const res = await fetch(url, {
+        method: "GET",
+        redirect: "follow",
+        signal: ac.signal,
+        headers: SYNTHETIC_HEADERS,
+      });
+      if (!res.ok || res.status >= 400) {
+        return { ok: false, detail: `${p} → HTTP ${res.status}` };
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      return { ok: false, detail: `${p}: ${msg}` };
+    } finally {
+      clearTimeout(t);
+    }
+  }
+
+  const ac2 = new AbortController();
+  const t2 = setTimeout(() => ac2.abort(), timeoutMs);
+  try {
+    const res = await fetch(`${base}/api/lessons?limit=1`, {
+      method: "GET",
+      redirect: "manual",
+      signal: ac2.signal,
+      headers: { ...SYNTHETIC_HEADERS, accept: "application/json" },
+    });
+    if (res.status !== 401) {
+      return { ok: false, detail: `/api/lessons (unauthenticated) expected 401, got ${res.status}` };
+    }
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return { ok: false, detail: `/api/lessons: ${msg}` };
+  } finally {
+    clearTimeout(t2);
+  }
+
+  const ac3 = new AbortController();
+  const t3 = setTimeout(() => ac3.abort(), timeoutMs);
+  try {
+    const res = await fetch(`${base}/api/subscriptions/checkout`, {
+      method: "POST",
+      redirect: "manual",
+      signal: ac3.signal,
+      headers: {
+        ...SYNTHETIC_HEADERS,
+        accept: "application/json",
+        "content-type": "application/json",
+      },
+      body: "{}",
+    });
+    if (res.status !== 401) {
+      return { ok: false, detail: `POST /api/subscriptions/checkout expected 401, got ${res.status}` };
+    }
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return { ok: false, detail: `checkout POST: ${msg}` };
+  } finally {
+    clearTimeout(t3);
+  }
+
+  return { ok: true, detail: "learner smoke surfaces OK (HTML + lesson gate + checkout 401)" };
+}
+
+/** @typedef {{ base: string, tier1Failed: boolean, tier2State: "skip" | "pass" | "fail", tier2bState: "skip" | "pass" | "fail", tier3Failed: boolean, tier4State: "skip" | "pass" | "fail", tier5State: "skip" | "pass" | "fail" }} TierSummary */
 
 /** @type {TierSummary[]} */
 const summaries = [];
@@ -253,6 +343,7 @@ for (const base of bases) {
     tier2bState: "skip",
     tier3Failed: false,
     tier4State: "skip",
+    tier5State: "skip",
   };
 
   console.log(`\n${"=".repeat(72)}\n  Base: ${base}\n${"=".repeat(72)}`);
@@ -375,6 +466,30 @@ for (const base of bases) {
     console.log("\n[Tier 4] Marketing HTML sentinels — skipped (set VERIFY_MARKETING_SENTINELS=1)");
   }
 
+  if (wantLearnerSmokeSurfaces) {
+    summary.tier5State = "fail";
+    console.log("\n[Tier 5] Learner marketing + billing smoke (synthetic header)");
+    try {
+      const r = await verifyLearnerSmokeSurfaces(base);
+      if (r.ok) {
+        console.log(`OK [Tier 5] ${r.detail}`);
+        summary.tier5State = "pass";
+      } else {
+        anyFailed = true;
+        console.error(`FAIL [Tier 5] ${r.detail}`);
+        console.error(`verify-deploy-health: Tier 5 FAILED — ${r.detail}`);
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      anyFailed = true;
+      summary.tier5State = "fail";
+      console.error(`FAIL [Tier 5]: ${msg}`);
+      console.error(`verify-deploy-health: Tier 5 FAILED — ${msg}`);
+    }
+  } else {
+    console.log("\n[Tier 5] Learner smoke surfaces — skipped (set VERIFY_LEARNER_SMOKE_SURFACES=1)");
+  }
+
   summaries.push(summary);
 }
 
@@ -390,7 +505,11 @@ if (anyFailed) {
     const t3 = s.tier3Failed ? "FAIL" : "OK";
     const t4 =
       s.tier4State === "skip" ? "SKIP" : s.tier4State === "pass" ? "OK" : "FAIL";
-    console.error(`  ${s.base} → Tier 1: ${t1} | Tier 1b: ${t2b} | Tier 2: ${t2} | Tier 3: ${t3} | Tier 4: ${t4}`);
+    const t5 =
+      s.tier5State === "skip" ? "SKIP" : s.tier5State === "pass" ? "OK" : "FAIL";
+    console.error(
+      `  ${s.base} → Tier 1: ${t1} | Tier 1b: ${t2b} | Tier 2: ${t2} | Tier 3: ${t3} | Tier 4: ${t4} | Tier 5: ${t5}`,
+    );
   }
 
   for (const s of summaries) {

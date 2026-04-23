@@ -31,10 +31,11 @@ export const ALLIED_HUB_CATEGORY_ORDER: AlliedHubCategoryId[] = ["therapy", "lab
 /**
  * Allied marketing + lesson routing.
  * - Hero URLs: `/allied-health/{segment}` where `segment` ends with `-exam-prep`
- * - Lesson lists + detail: `/allied-health/{professionKey}/lessons` and `.../lessons/[slug]`
+ * - Canonical lesson list + detail: pathway `/{country}/allied/allied-health/lessons` (optional `?alliedProfession=`)
+ *   and `…/lessons/{slug}`. Legacy `/allied-health/{key}/lessons` 301 to the pathway hub.
  */
 export type AlliedProfessionMarketing = {
-  /** Short key for lesson routes, e.g. `paramedic` → `/allied-health/paramedic/lessons` */
+  /** Short key for allied profession filters (`?alliedProfession=` on the canonical pathway lessons hub). */
   professionKey: string;
   /** Hero segment, e.g. `paramedic-exam-prep` → `/allied-health/paramedic-exam-prep` */
   segment: string;

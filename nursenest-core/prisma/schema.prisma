@@ -101,6 +101,8 @@ model User {
   lessonStudyLoopEnabled        Boolean?                    @map("lesson_study_loop_enabled")
   /// * Demo QA accounts: admin-only creation, no real billing (guards checkout/trial).
   isDemoUser                    Boolean                     @default(false) @map("is_demo_user")
+  /// * When true, learner engagement / retention marketing emails are suppressed (account still receives security mail).
+  emailEngagementOptOut         Boolean                     @default(false) @map("email_engagement_opt_out")
   aiGenerationJobs              AiGenerationJob[]           @relation("AiJobCreatedBy")
   baselineAssessmentAttempts    BaselineAssessmentAttempt[]
   blogBatchSchedules            BlogBatchSchedule[]

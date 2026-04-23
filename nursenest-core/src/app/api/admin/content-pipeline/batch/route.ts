@@ -7,6 +7,7 @@ import { generateSeo, assertRequiredSeoFieldsPresent } from "@/lib/seo/seo-gener
 import { assertSeoSafeToCreatePathwayLesson } from "@/lib/seo/seo-duplicate-guard";
 import { mapExamStringToSeoTier, seoDomainForTaxonomyCategory } from "@/lib/seo/seo-taxonomy-align";
 import { validatePathwayLessonTaxonomyBeforeWrite } from "@/lib/taxonomy/nursing-taxonomy-validation";
+import { examQuestionTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
 import type { ContentBatchInput } from "@/lib/content-pipeline/types";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
@@ -97,7 +98,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   // ── Optional immediate DB import ─────────────────────────────────────────
   if (parsed.data.importNow) {
     const { prisma } = await import("@/lib/db");
-    const { lessons: lessonRows, questions } = batchToPrismaInputs(batchOutput);
+    const { lessons: lessonRows, questions: questionsRaw } = batchToPrismaInputs(batchOutput);
+    const questions = questionsRaw.map((q) => {
+      const tax = examQuestionTaxonomyFromCorpus({
+        stem: q.stem,
+        rationale: q.rationale,
+        topic: q.topic,
+        subtopic: q.topicSlug,
+        tags: q.tags ?? [],
+      });
+      return { ...q, bodySystem: tax.bodySystem };
+    });
     let importStats: Record<string, number> = {};
 
     const taxonomyViolations: { slug: string; violations: string[] }[] = [];

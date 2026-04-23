@@ -33,6 +33,9 @@ import {
 } from "@/lib/lessons/pathway-lesson-progress";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { freemiumLessonsExhausted, freemiumQuestionsExhausted } from "@/lib/conversion/freemium-gates";
+import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver } from "@/lib/lessons/app-subscriber-lesson-detail-resolve";
+import { pickAppLessonsHubListSource } from "@/lib/lessons/app-lessons-hub-list-source";
 
 type AppLessonListRow = {
   id: string;
@@ -200,6 +203,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     { scope: "page_lessons", label: "learner_path" },
   );
   const learnerPath = learnerPathRow?.learnerPath ?? null;
+  const marketingLocale = await getMarketingLocaleForDefaultRoute();
   const visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
   const catHref = resolveStudyLoopCatHref({
     authState: "signed_in",
@@ -240,31 +244,6 @@ export default async function LessonsPage({ searchParams }: Props) {
         : contentWhere;
     const contentTotal = await prisma.contentItem.count({ where: contentScopedWhere });
 
-    // Route scoped pathway lessons first whenever pathway-specific filters are active.
-    if (contentTotal > 0 && !pathwayIdFilter) {
-      const pageCount = Math.max(1, Math.ceil(contentTotal / limitParsed) || 1);
-      const safePage = Math.min(pageRequested, pageCount);
-      const rowsRaw = await prisma.contentItem.findMany({
-        where: contentScopedWhere,
-        select: { id: true, title: true, summary: true },
-        orderBy: { updatedAt: "desc" },
-        skip: (safePage - 1) * limitParsed,
-        take: limitParsed,
-      });
-      const rows: AppLessonListRow[] = rowsRaw.map((r) => ({
-        id: r.id,
-        title: r.title,
-        summary: r.summary ?? null,
-      }));
-      return {
-        source: "content_items" as const,
-        total: contentTotal,
-        page: safePage,
-        pageCount,
-        rows,
-      };
-    }
-
     const pathwayWhere = await pathwayLessonsAppListWhereWithTopicFilter(entitlement, learnerPath, {
       topic: topicFilter,
       topicSlug: topicSlugFilter,
@@ -294,31 +273,41 @@ export default async function LessonsPage({ searchParams }: Props) {
       select: { id: true },
     });
 
-    if (pathwaySample) {
-      const pathwayTotal = await prisma.pathwayLesson.count({ where: pathwayWhereWithSafety });
+    const listSource = pickAppLessonsHubListSource({
+      pathwaySampleExists: Boolean(pathwaySample),
+      contentTotal,
+      pathwayIdFilter,
+    });
+
+    if (listSource === "pathway_lessons") {
+      let paginated = await paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver({
+        where: pathwayWhereWithSafety,
+        page: pageRequested,
+        pageSize: limitParsed,
+        entitlement,
+        learnerPath,
+        marketingLocale,
+      });
+      const pathwayTotal = paginated.totalResolvable;
       const pageCount = Math.max(1, Math.ceil(pathwayTotal / limitParsed) || 1);
       const safePage = Math.min(pageRequested, pageCount);
-      const pathwayRows = await prisma.pathwayLesson.findMany({
-        where: pathwayWhereWithSafety,
-        select: {
-          id: true,
-          title: true,
-          seoDescription: true,
-          topic: true,
-          bodySystem: true,
-          slug: true,
-          pathwayId: true,
-          updatedAt: true,
-          topicSlug: true,
-          previewSectionCount: true,
-          seoTitle: true,
-          locale: true,
-        },
-        orderBy: { updatedAt: "desc" },
-        skip: (safePage - 1) * limitParsed,
-        take: limitParsed,
-      });
-      const rows: AppLessonListRow[] = pathwayRows.map((r) => ({
+      if (paginated.rows.length === 0 && pathwayTotal > 0 && safePage !== pageRequested) {
+        paginated = await paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver({
+          where: pathwayWhereWithSafety,
+          page: safePage,
+          pageSize: limitParsed,
+          entitlement,
+          learnerPath,
+          marketingLocale,
+        });
+      }
+      if (paginated.scanCapped) {
+        safeServerLog("page_lessons", "app_lessons_hub_pathway_total_may_be_truncated", {
+          dbRowsScanned: String(paginated.dbRowsScanned),
+          resolvableTotal: String(pathwayTotal),
+        });
+      }
+      const rows: AppLessonListRow[] = paginated.rows.map((r) => ({
         id: r.id,
         title: r.title,
         summary: pathwayLessonCardSummary(r),
@@ -329,6 +318,30 @@ export default async function LessonsPage({ searchParams }: Props) {
       return {
         source: "pathway_lessons" as const,
         total: pathwayTotal,
+        page: safePage,
+        pageCount,
+        rows,
+      };
+    }
+
+    if (listSource === "content_items") {
+      const pageCount = Math.max(1, Math.ceil(contentTotal / limitParsed) || 1);
+      const safePage = Math.min(pageRequested, pageCount);
+      const rowsRaw = await prisma.contentItem.findMany({
+        where: contentScopedWhere,
+        select: { id: true, title: true, summary: true },
+        orderBy: { updatedAt: "desc" },
+        skip: (safePage - 1) * limitParsed,
+        take: limitParsed,
+      });
+      const rows: AppLessonListRow[] = rowsRaw.map((r) => ({
+        id: r.id,
+        title: r.title,
+        summary: r.summary ?? null,
+      }));
+      return {
+        source: "content_items" as const,
+        total: contentTotal,
         page: safePage,
         pageCount,
         rows,
@@ -535,6 +548,7 @@ export default async function LessonsPage({ searchParams }: Props) {
         pageCount={lessonsBlock.pageCount}
         total={lessonsHub.catalogMatchTotal}
         pageSize={limitParsed}
+        lessonsOnPage={resolvedRenderableLessons.length}
         topic={topicFilter ?? undefined}
         topicSlug={topicSlugFilter ?? undefined}
         pathwayId={pathwayIdFilter ?? undefined}

@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { ContentStatus, type CountryCode, type Prisma, type TierCode } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
@@ -231,7 +232,11 @@ export async function GET(req: NextRequest) {
     /* When no stateIds were sent (e.g. no starred cards yet), do not zero the session — ignore persistence narrowing. */
   }
 
-  const selectedRows = shuffle ? shuffled(scoped, `${userId}:${selectedCategories.join(",")}:${mode}`) : scoped;
+  const sessionShuffleSalt = sp.get("sessionSeed")?.trim() || randomUUID();
+  const orderingSeed = shuffle
+    ? sp.get("sessionSeed")?.trim() || `${userId}:${sessionShuffleSalt}:${selectedCategories.join(",")}:${mode}`
+    : `${sessionShuffleSalt}:ordered`;
+  const selectedRows = shuffle ? shuffled(scoped, orderingSeed) : scoped;
   const limited = selectedRows.slice(0, limit);
   const plannedCount = limited.length;
 
@@ -246,6 +251,7 @@ export async function GET(req: NextRequest) {
           swapFrontBack: swap,
           topic,
           pathwayId: card.deck?.pathwayId ?? pathwayId,
+          examOptionShuffleSalt: sessionShuffleSalt,
         });
         return serialized;
       })
@@ -275,6 +281,7 @@ export async function GET(req: NextRequest) {
       sourceKind,
       cardLimit: sp.get("cardLimit") ?? "20",
       queryRelaxation,
+      sessionShuffleSalt,
     },
     categoryOptions: applyCountsToBuilderCategories(pathwayId, categoryCounts),
     cards: cardsForSession,

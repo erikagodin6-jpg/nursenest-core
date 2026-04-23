@@ -99,13 +99,14 @@ export function getNextBestAction(
     };
   }
 
-  // 3. Weak topic practice
+  // 3. Weak topic practice (pathway-scoped lesson drill when available — avoids generic /app/questions mismatch)
   const topWeak = studySnap?.topWeak;
   if (topWeak) {
+    const href = studySnap?.weakTopicPathwayLesson?.href ?? "/app/questions";
     return {
       title: `Strengthen ${topWeak.topic}`,
       subtitle: "Practice questions on your weakest topic",
-      href: "/app/questions",
+      href,
       kind: "quiz",
       reasoning: `Your accuracy in ${topWeak.topic} needs work`,
       i18n: {

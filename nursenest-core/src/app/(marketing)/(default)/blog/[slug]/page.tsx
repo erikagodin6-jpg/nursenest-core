@@ -46,6 +46,11 @@ import {
 } from "@/lib/blog/blog-generate-seo";
 import { blogCountryFromPrismaTarget } from "@/lib/blog/blog-study-cta";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { mergePublicBlogMetaDescription } from "@/lib/seo/programmatic-seo-engine/blog-public-metadata";
+import { buildProgrammaticBlogContinuationLinks } from "@/lib/seo/programmatic-seo-engine/server-blog-continuation";
+import { ProgrammaticSeoContinuationSection } from "@/components/seo/programmatic-seo-continuation-section";
+import { AutomaticRelatedContentForPublic } from "@/components/linking/automatic-related-content-for-public";
+import { prisma } from "@/lib/db";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -81,7 +86,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         exam: post.exam ?? null,
         countryTarget: post.countryTarget ?? null,
       });
-      const description = (post.seoDescription?.trim() || autoMeta.metaDescription).slice(0, 155);
+      const description = mergePublicBlogMetaDescription(post.seoDescription, autoMeta.metaDescription).description;
       const og = resolveOpenGraphCopy(seo, title, description);
       const canonical = resolvePublicCanonicalUrl(slug, seo);
       const ogImage = resolveBlogOgImageAbsolute(seo, post.coverImage);
@@ -130,6 +135,7 @@ export default async function BlogPostPage({ params }: Props) {
         exam: post.exam ?? null,
         countryTarget: post.countryTarget ?? null,
       });
+      const mergedPublicDescription = mergePublicBlogMetaDescription(post.seoDescription, auto.metaDescription);
       const h1Text = blogH1ForPublicPost({
         seoTitle: post.seoTitle,
         title: post.title,
@@ -192,6 +198,13 @@ export default async function BlogPostPage({ params }: Props) {
           maxTotalAutoLinks: 14,
         }),
       );
+      const continuationLinks = await buildProgrammaticBlogContinuationLinks(prisma, {
+        slug,
+        category: post.category,
+        tags: post.tags,
+        exam: post.exam,
+        countryTarget: post.countryTarget,
+      });
       const framingHtml = blogExamFramingHtml({
         keywordStem,
         examGeo: geo.examGeo,
@@ -205,7 +218,7 @@ export default async function BlogPostPage({ params }: Props) {
           <BlogPostingJsonLd
             slug={slug}
             title={browserTitle}
-            description={(post.seoDescription?.trim() || auto.metaDescription).slice(0, 320)}
+            description={mergedPublicDescription.description.slice(0, 320)}
             datePublished={publishedAt.toISOString()}
             dateModified={post.updatedAt.toISOString()}
             coverImage={post.coverImage ?? null}
@@ -343,6 +356,21 @@ export default async function BlogPostPage({ params }: Props) {
               </dl>
             </section>
           ) : null}
+          <AutomaticRelatedContentForPublic
+            surface="blog"
+            post={{
+              slug: post.slug,
+              title: post.title,
+              tags: post.tags,
+              category: post.category,
+              exam: post.exam,
+              countryTarget: post.countryTarget,
+              locale: post.locale,
+              relatedLessonPaths: post.relatedLessonPaths,
+            }}
+            excludeHrefs={continuationLinks.map((l) => l.href)}
+          />
+          <ProgrammaticSeoContinuationSection links={continuationLinks} />
           <BlogPostDistributionFooter
             exam={post.exam}
             countryTarget={post.countryTarget}

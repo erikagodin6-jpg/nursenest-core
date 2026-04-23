@@ -588,7 +588,11 @@ export function buildSimulatedAdaptiveRecommendationsForConversionPreview(): Ada
 
 // ─── Post-test remediation (Study Next engine, post_test profile) ───
 
-export type PostTestStudyNextActionKind = "weak_topic_lesson" | "weak_topic_qbank" | "next_pathway_lesson";
+export type PostTestStudyNextActionKind =
+  | "weak_topic_lesson"
+  | "weak_topic_qbank"
+  | "next_pathway_lesson"
+  | "same_body_system_lesson";
 
 export type PostTestStudyNextAction = {
   title: string;
@@ -657,6 +661,8 @@ export function recommendNextActions(rows: PostTestRemediationInputRow[]): PostT
 export type LessonContinueNextArgs = {
   currentLessonId: string;
   nextPathwayLesson: { id: string; title: string } | null;
+  /** Next pathway lesson in catalog order with the same `bodySystem` (deduped vs sequential next). */
+  sameBodySystemLesson?: { id: string; title: string } | null;
   weakRows: PostTestRemediationInputRow[];
 };
 
@@ -668,13 +674,30 @@ export function recommendNextActionsForLessonContinue(args: LessonContinueNextAr
   const currentLessonHref = `/app/lessons/${args.currentLessonId}`;
   const candidates: PostTestStudyNextAction[] = [];
 
-  if (args.nextPathwayLesson && args.nextPathwayLesson.id !== args.currentLessonId) {
+  const seqNext =
+    args.nextPathwayLesson && args.nextPathwayLesson.id !== args.currentLessonId ? args.nextPathwayLesson : null;
+  const seqHref = seqNext ? `/app/lessons/${seqNext.id}` : null;
+
+  if (seqNext) {
     candidates.push({
       kind: "next_pathway_lesson",
-      href: `/app/lessons/${args.nextPathwayLesson.id}`,
-      title: `Next lesson: ${args.nextPathwayLesson.title}`,
+      href: `/app/lessons/${seqNext.id}`,
+      title: `Next lesson: ${seqNext.title}`,
       reason: "Continue your pathway in order.",
     });
+  }
+
+  const sameBody = args.sameBodySystemLesson;
+  if (sameBody && sameBody.id !== args.currentLessonId) {
+    const sameHref = `/app/lessons/${sameBody.id}`;
+    if (sameHref !== seqHref) {
+      candidates.push({
+        kind: "same_body_system_lesson",
+        href: sameHref,
+        title: `Same body system: ${sameBody.title}`,
+        reason: "Stay in the same body system while you move forward on your pathway.",
+      });
+    }
   }
 
   for (const r of args.weakRows) {

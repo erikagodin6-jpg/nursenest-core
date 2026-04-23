@@ -60,6 +60,7 @@ import {
   bannerTitleForPayload,
   getVerifiedAdminLearnerQaSimulation,
   learnerPathwayNavFromQaPayload,
+  learnerQaChromeTierFallbackString,
   learnerQaUserBarOverlayFromPayload,
 } from "@/lib/admin/admin-learner-qa-simulation";
 import { AdminLearnerQaBanner } from "@/components/admin/admin-learner-qa-banner";
@@ -128,7 +129,9 @@ export default async function LearnerShellLayout({ children }: { children: React
   let { pathwayHubHref, examsLabel, pathwayContextBar } = pathwayNav;
 
   if (!pathwayHubHref) {
-    const tier = ((session?.user as { tier?: string | null })?.tier ?? "").toUpperCase();
+    const tier = (
+      qaPayload ? learnerQaChromeTierFallbackString(qaPayload.track) : (session?.user as { tier?: string | null })?.tier ?? ""
+    ).toUpperCase();
     const tierHub = await learnerPathwayHubChromeHrefForTierFallback(tier);
     if (tierHub) {
       pathwayHubHref = tierHub;
@@ -143,7 +146,9 @@ export default async function LearnerShellLayout({ children }: { children: React
       if (p) pathwayContextBar = formatPathwayContextBar(p);
     }
     if (!pathwayContextBar && pathwayHubHref) {
-      const tier = ((session?.user as { tier?: string | null })?.tier ?? "").toUpperCase();
+      const tier = (
+        qaPayload ? learnerQaChromeTierFallbackString(qaPayload.track) : (session?.user as { tier?: string | null })?.tier ?? ""
+      ).toUpperCase();
       const fallbackPathwayId =
         tier === "RN"
           ? "us-rn-nclex-rn"

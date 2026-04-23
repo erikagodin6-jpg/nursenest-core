@@ -15,12 +15,17 @@
 
 import Link from "next/link";
 import { resolveLinks } from "@/lib/linking/link-resolver";
-import type { LinkContext, LinkCandidate, LinkTargetKind } from "@/lib/linking/internal-link-types";
+import type { LinkContext, LinkCandidate, LinkTargetKind, ResolvedLinks } from "@/lib/linking/internal-link-types";
 
 // ── Props ─────────────────────────────────────────────────────────────────────
 
 type Props = {
   context: LinkContext;
+  /**
+   * When set, skips {@link resolveLinks} and renders from this merged/automatic bundle.
+   * Still applies per-section quality filters (strong/moderate preferred).
+   */
+  resolvedLinks?: ResolvedLinks;
   /**
    * Override which kinds to show and in what order.
    * Default per surface:
@@ -138,8 +143,8 @@ function CompactLinkList({ candidates }: { candidates: LinkCandidate[] }) {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export function RelatedContentBlock({ context, showKinds, heading, compact = false }: Props) {
-  const resolved = resolveLinks(context);
+export function RelatedContentBlock({ context, resolvedLinks: resolvedLinksOverride, showKinds, heading, compact = false }: Props) {
+  const resolved = resolvedLinksOverride ?? resolveLinks(context);
 
   const kindsToShow: LinkTargetKind[] =
     showKinds ?? DEFAULT_KINDS_FOR_SURFACE[context.surface] ?? ["lesson", "question"];
@@ -200,8 +205,14 @@ export function RelatedContentBlock({ context, showKinds, heading, compact = fal
  * Inline "what to study next" strip for bottom of blog posts.
  * Shows a compact set of action-oriented links.
  */
-export function BlogStudyNextStrip({ context }: { context: LinkContext }) {
-  const resolved = resolveLinks({ ...context, surface: "blog" });
+export function BlogStudyNextStrip({
+  context,
+  resolvedLinks: resolvedOverride,
+}: {
+  context: LinkContext;
+  resolvedLinks?: ResolvedLinks;
+}) {
+  const resolved = resolvedOverride ?? resolveLinks({ ...context, surface: "blog" });
 
   // Only show items that are clinically relevant matches — not body-system guesses
   const topLesson    = qualifiedCandidates(resolved.lessons)[0];

@@ -16,6 +16,7 @@ import {
   parseOptionalBlogSlug,
 } from "@/lib/blog/blog-optional-slug";
 import { prisma } from "@/lib/db";
+import { classifyBlogCorpus, collectClassificationViolations, isPublishBlockedByTaxonomy } from "@/lib/taxonomy/content-write-taxonomy";
 
 const adminBlogListSelect = {
   id: true,
@@ -206,6 +207,40 @@ export async function POST(req: Request) {
     throw e;
   }
 
+  const blogTax = classifyBlogCorpus({
+    title: d.title,
+    body: d.body,
+    category: d.category ?? null,
+    tags: d.tags ?? [],
+  });
+  const taxViol = collectClassificationViolations(blogTax);
+  if (taxViol.length > 0) {
+    return NextResponse.json(
+      { error: "Taxonomy classifier rejected content", violations: taxViol, code: "taxonomy_invalid" },
+      { status: 422 },
+    );
+  }
+  const resolvedPostStatus = d.postStatus ?? (d.publishAt ? BlogPostStatus.SCHEDULED : BlogPostStatus.DRAFT);
+  if (
+    (resolvedPostStatus === BlogPostStatus.PUBLISHED || resolvedPostStatus === BlogPostStatus.SCHEDULED) &&
+    isPublishBlockedByTaxonomy(blogTax)
+  ) {
+    return NextResponse.json(
+      { error: "Publish/schedule blocked — taxonomy corpus is ambiguous", code: "taxonomy_publish_blocked" },
+      { status: 422 },
+    );
+  }
+  if (d.category != null && d.category !== blogTax.category) {
+    return NextResponse.json(
+      {
+        error: "category does not match classifier output",
+        code: "taxonomy_override_mismatch",
+        expected: blogTax.category,
+      },
+      { status: 422 },
+    );
+  }
+
   const topicSource = [d.targetKeyword, d.keywordCluster, d.title].find((x) => x && String(x).trim()) ?? "";
   const topicKey = normalizeBlogTopicKey(String(topicSource));
   if (topicKey.length >= 3) {
@@ -232,7 +267,7 @@ export async function POST(req: Request) {
       excerpt: d.excerpt,
       body: d.body,
       exam: d.exam ?? null,
-      category: d.category ?? null,
+      category: blogTax.category,
       tags: d.tags ?? [],
       seoTitle: d.seoTitle ?? null,
       seoDescription: d.seoDescription ?? null,
@@ -248,7 +283,7 @@ export async function POST(req: Request) {
       imageStatus: d.imageStatus ?? BlogImageStatus.NONE,
       apaReferences: d.apaReferences ?? [],
       requiresReferences: d.requiresReferences ?? false,
-      postStatus: d.postStatus ?? (d.publishAt ? BlogPostStatus.SCHEDULED : BlogPostStatus.DRAFT),
+      postStatus: resolvedPostStatus,
       publishAt: d.publishAt ? new Date(d.publishAt) : null,
     },
     select: { id: true, slug: true, postStatus: true, publishAt: true, updatedAt: true },

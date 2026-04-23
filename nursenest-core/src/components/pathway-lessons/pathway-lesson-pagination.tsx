@@ -8,11 +8,18 @@ type Props = {
   pageCount: number;
   total: number;
   pageSize: number;
+  /**
+   * When set, the "Showing from–to" range reflects how many rows actually rendered on this page
+   * (avoids e.g. "25–30" when the list is empty due to prepare/guard drift).
+   */
+  lessonsOnPage?: number;
   /** Preserved on prev/next (e.g. hub search). */
   hubSearch?: string;
   /** App lessons list: preserve topic filters. */
   topic?: string;
   topicSlug?: string;
+  /** Allied pathway hub: preserve profession filter. */
+  alliedProfession?: string;
   /** App lessons: pathway filter. */
   pathwayId?: string;
   /** App lessons: page size (`limit` query); omit when equal to default. */
@@ -26,6 +33,7 @@ function hubQuery(
   hubSearch: string | undefined,
   topic: string | undefined,
   topicSlug: string | undefined,
+  alliedProfession: string | undefined,
   pathwayId: string | undefined,
   limit: number | undefined,
   q: string | undefined,
@@ -38,6 +46,8 @@ function hubQuery(
   const ts = topicSlug?.trim().toLowerCase();
   if (ts) qs.set("topicSlug", ts);
   else if (topic?.trim()) qs.set("topic", topic.trim());
+  const ap = alliedProfession?.trim().toLowerCase();
+  if (ap) qs.set("alliedProfession", ap);
   if (pathwayId?.trim()) qs.set("pathwayId", pathwayId.trim());
   if (limit != null && limit !== defaultLimit) qs.set("limit", String(limit));
   const s = qs.toString();
@@ -73,18 +83,34 @@ export function PathwayLessonPagination({
   pageCount,
   total,
   pageSize,
+  lessonsOnPage,
   hubSearch,
   topic,
   topicSlug,
+  alliedProfession,
   pathwayId,
   limit,
   q,
 }: Props) {
   const defaultLimit = LEARNER_APP_LESSONS_PAGE_SIZE_DEFAULT;
   const href = (p: number) =>
-    `${basePath}${hubQuery(p, hubSearch, topic, topicSlug, pathwayId, limit, q, defaultLimit)}`;
-  const from = total === 0 ? 0 : (page - 1) * pageSize + 1;
-  const to = Math.min(page * pageSize, total);
+    `${basePath}${hubQuery(p, hubSearch, topic, topicSlug, alliedProfession, pathwayId, limit, q, defaultLimit)}`;
+  const nominalFrom = total === 0 ? 0 : (page - 1) * pageSize + 1;
+  const nominalTo = Math.min(page * pageSize, total);
+  const from =
+    lessonsOnPage != null && lessonsOnPage >= 0
+      ? lessonsOnPage === 0 || total === 0
+        ? 0
+        : nominalFrom
+      : total === 0
+        ? 0
+        : nominalFrom;
+  const to =
+    lessonsOnPage != null && lessonsOnPage >= 0
+      ? lessonsOnPage === 0 || total === 0
+        ? 0
+        : Math.min(nominalFrom + lessonsOnPage - 1, nominalTo)
+      : nominalTo;
   const pages = visiblePageNumbers(page, pageCount);
 
   if (pageCount <= 1) return null;
@@ -95,9 +121,18 @@ export function PathwayLessonPagination({
       aria-label="Lesson list pages"
     >
       <p className="text-[var(--theme-muted-text)]">
-        Showing <span className="font-medium text-[var(--theme-heading-text)]">{from}</span>–
-        <span className="font-medium text-[var(--theme-heading-text)]">{to}</span> of{" "}
-        <span className="font-medium text-[var(--theme-heading-text)]">{total}</span> lessons
+        {from === 0 && to === 0 && total > 0 ? (
+          <>
+            No lessons on this page (showing{" "}
+            <span className="font-medium text-[var(--theme-heading-text)]">{total}</span> total in this list).
+          </>
+        ) : (
+          <>
+            Showing <span className="font-medium text-[var(--theme-heading-text)]">{from}</span>–
+            <span className="font-medium text-[var(--theme-heading-text)]">{to}</span> of{" "}
+            <span className="font-medium text-[var(--theme-heading-text)]">{total}</span> lessons
+          </>
+        )}
       </p>
       <div className="flex flex-wrap items-center gap-2">
         {page > 1 ? (

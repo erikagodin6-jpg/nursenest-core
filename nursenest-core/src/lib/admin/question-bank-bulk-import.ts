@@ -1,6 +1,7 @@
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 import { stemHash } from "@/lib/content/stem-hash";
+import { examQuestionTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
 import { prisma } from "@/lib/db";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import {
@@ -178,6 +179,17 @@ export async function applyQuestionBankBulkImport(
       const topic = [cat?.name, data.topicTag].filter(Boolean).join(" · ") || cat?.slug;
       const hash = stemHash(data.stem);
 
+      const taxonomy = examQuestionTaxonomyFromCorpus({
+        stem: data.stem,
+        rationale: data.rationale,
+        topic: topic ?? null,
+        subtopic: data.systemTag ?? null,
+        tags: data.tags ?? [],
+      });
+      if (taxonomy.violations.length > 0) {
+        continue;
+      }
+
       const again = await tx.examQuestion.findFirst({ where: { stemHash: hash }, select: { id: true } });
       if (again) {
         r.existingQuestionId = again.id;
@@ -202,6 +214,7 @@ export async function applyQuestionBankBulkImport(
           careerType: "nursing",
           regionScope: "BOTH",
           stemHash: hash,
+          bodySystem: taxonomy.bodySystem,
         },
       });
       created += 1;

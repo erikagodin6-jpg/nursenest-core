@@ -11,6 +11,7 @@ import type {
 function ctaForRecommendationType(type: StudyNextRecommendationType, t: LearnerMarketingT): string {
   switch (type) {
     case "continue_pathway_lesson":
+    case "same_body_system_lesson":
     case "weak_topic_lesson":
       return t("studyNext.cta.continue");
     case "weak_topic_qbank":

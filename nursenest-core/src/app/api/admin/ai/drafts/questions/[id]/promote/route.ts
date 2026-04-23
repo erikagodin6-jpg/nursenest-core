@@ -14,6 +14,7 @@ import {
   examFamilyToExamColumn,
   tierCodeToExamDbTier,
 } from "@/lib/prisma/exam-question-maps";
+import { examQuestionTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
 
 const bodySchema = z.object({
   categoryId: z.string().min(5).optional(),
@@ -87,6 +88,19 @@ export async function POST(req: Request, ctx: Props) {
 
   const hash = stemHash(n.stem);
   const topic = [cat.name, n.topicTag].filter(Boolean).join(" · ") || cat.slug;
+  const taxonomy = examQuestionTaxonomyFromCorpus({
+    stem: n.stem,
+    rationale: n.rationale,
+    topic,
+    subtopic: n.topicTag ?? null,
+    tags: draftTags,
+  });
+  if (taxonomy.violations.length > 0) {
+    return NextResponse.json(
+      { error: "Taxonomy classification invalid", violations: taxonomy.violations, code: "taxonomy_invalid" },
+      { status: 422 },
+    );
+  }
   try {
     assertExamQuestionContextForPublish({
       tier: tierCodeToExamDbTier(draft.tier),
@@ -114,6 +128,7 @@ export async function POST(req: Request, ctx: Props) {
       regionScope: "BOTH",
       stemHash: hash,
       tags: draftTags,
+      bodySystem: taxonomy.bodySystem,
       ...(difficultyInt !== undefined ? { difficulty: difficultyInt } : {}),
       ...(distractorRationales ? { distractorRationales } : {}),
     },

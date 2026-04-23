@@ -10,6 +10,8 @@ import { ReadinessLockedCard } from "@/components/student/dashboard/readiness-sc
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
+import { buildSmartStudyNextRecommendations } from "@/lib/learner/smart-study-next-engine";
+import type { StudyNextRecommendation } from "@/lib/learner/study-next-types";
 import { prisma } from "@/lib/db";
 import {
   buildContinueLearningItems,
@@ -155,6 +157,10 @@ async function LearnerDashboardHeavyContent({
   const studySettings = await loadStudySettings(userId);
   const skipNonCriticalHome = shouldSkipNonCriticalLearnerWork();
   const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
+  /** Prefer DB-resolved entitlement (includes admin learner QA overlay) over JWT tier for chrome copy. */
+  const tierForDashboardCopy =
+    entitlement.tier != null ? String(entitlement.tier) : session?.user?.tier ?? null;
+  const alliedKeyForDashboardCopy = entitlement.alliedCareer ?? userAlliedProfessionKey;
 
   try {
     const snap = await loadPremiumDashboardSnapshot(userId, entitlement);
@@ -182,6 +188,10 @@ async function LearnerDashboardHeavyContent({
     const progressFeedbackLine = studySnap?.topicTrends.find((r) => r.momentum === "improving")?.summary ?? null;
     if (snapshot) {
       const premiumSnapshot = snapshot;
+      let adaptiveStudyNextRecs: StudyNextRecommendation[] | undefined;
+      if (studySnap) {
+        adaptiveStudyNextRecs = await buildSmartStudyNextRecommendations(userId, studySnap, { maxTotal: 2 });
+      }
       const resume =
         premiumSnapshot.continueLesson ??
         (premiumSnapshot.lessonContinuations[0]
@@ -236,9 +246,9 @@ async function LearnerDashboardHeavyContent({
         premiumSnapshot.studyStreakDays === 0;
 
       const identity = resolveDashboardIdentity({
-        tier: session?.user?.tier,
+        tier: tierForDashboardCopy,
         learnerPathId: userLearnerPath,
-        alliedProfessionKey: userAlliedProfessionKey,
+        alliedProfessionKey: alliedKeyForDashboardCopy,
       });
 
       const coachSummary =
@@ -259,7 +269,7 @@ async function LearnerDashboardHeavyContent({
           crumbs={crumbs}
           t={t}
           locale={locale}
-          examsNavLabel={examsNavLabelFromLearnerContext(getExamPathwayById, userLearnerPath, session?.user?.tier)}
+          examsNavLabel={examsNavLabelFromLearnerContext(getExamPathwayById, userLearnerPath, tierForDashboardCopy)}
           identity={identity}
           entitlement={entitlement}
           heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
@@ -285,6 +295,7 @@ async function LearnerDashboardHeavyContent({
           showCoach={isStudyCoachEnabled()}
           coachSummary={coachSummary}
           studySettings={studySettings}
+          adaptiveStudyNextRecs={adaptiveStudyNextRecs}
           priorityEyebrowKey={
             isNewLearnerPriority
               ? "learner.studyHome.sectionPriorityEyebrowNew"
@@ -299,16 +310,16 @@ async function LearnerDashboardHeavyContent({
   }
 
   const identityFallback = resolveDashboardIdentity({
-    tier: session?.user?.tier,
+    tier: tierForDashboardCopy,
     learnerPathId: userLearnerPath,
-    alliedProfessionKey: userAlliedProfessionKey,
+    alliedProfessionKey: alliedKeyForDashboardCopy,
   });
   return (
     <LearnerStudyHomeDurabilityMinimal
       crumbs={crumbs}
       t={t}
       locale={locale}
-      examsNavLabel={examsNavLabelFromLearnerContext(getExamPathwayById, userLearnerPath, session?.user?.tier)}
+      examsNavLabel={examsNavLabelFromLearnerContext(getExamPathwayById, userLearnerPath, tierForDashboardCopy)}
       identity={identityFallback}
       heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
       pathwayId={userLearnerPath}
@@ -377,14 +388,22 @@ async function LearnerDashboardDeferredContent({
     // DB errors: continue to dashboard rather than blocking
   }
 
+  const tierForDashboardCopy =
+    entitlement !== "error" && entitlement.tier != null
+      ? String(entitlement.tier)
+      : session?.user?.tier ?? null;
+  const alliedKeyForDashboardCopy =
+    entitlement !== "error" && entitlement.alliedCareer != null
+      ? String(entitlement.alliedCareer)
+      : userAlliedProfessionKey;
   const identity = resolveDashboardIdentity({
-    tier: session?.user?.tier,
+    tier: tierForDashboardCopy,
     learnerPathId: userLearnerPath,
-    alliedProfessionKey: userAlliedProfessionKey,
+    alliedProfessionKey: alliedKeyForDashboardCopy,
   });
   const heroHeading = userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title");
   const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
-  const examsNavLabel = examsNavLabelFromLearnerContext(getExamPathwayById, userLearnerPath, session?.user?.tier);
+  const examsNavLabel = examsNavLabelFromLearnerContext(getExamPathwayById, userLearnerPath, tierForDashboardCopy);
 
   if (entitlement === "error") {
     return (

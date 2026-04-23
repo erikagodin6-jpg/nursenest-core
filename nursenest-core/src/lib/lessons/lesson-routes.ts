@@ -5,8 +5,10 @@
  * `ExamPathwayDefinition` and Next.js marketing segments (`[locale]` = countrySlug, `[slug]` = roleTrack).
  */
 
+import { getAlliedProfessionByProfessionKey, getPathwayOrThrow } from "@/lib/allied/allied-professions-registry";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { ALLIED_PROFESSION_QUERY_PARAM } from "@/lib/lessons/canonical-lessons-hubs";
 
 /** Marketing landing that lists all exam pathway lesson hubs. */
 export const PUBLIC_MARKETING_EXAM_LESSONS_HUB_PATH = "/lessons" as const;
@@ -166,14 +168,34 @@ export function marketingLessonsTopicClusterPath(lessonsIndexPath: string, topic
   return `${hub}?topicSlug=${encodeURIComponent(ts)}`;
 }
 
-/** `/allied-health/{professionKey}/lessons` */
+/**
+ * Canonical allied **lessons hub** URL — always the single country pathway lessons index with profession filter:
+ * `/{country}/allied/allied-health/lessons?alliedProfession=…`
+ * (Legacy `/allied-health/{key}/lessons` routes 301 here.)
+ */
 export function alliedHealthLessonsIndexPath(professionKey: string): string {
-  return `${ALLIED_HEALTH_ROOT}/${encodeURIComponent(professionKey.trim())}/lessons`;
+  const k = professionKey.trim();
+  const prof = getAlliedProfessionByProfessionKey(k);
+  const pathway = prof ? getPathwayOrThrow(prof.pathwayId) : undefined;
+  if (!prof || !pathway) {
+    return `${ALLIED_HEALTH_ROOT}/${encodeURIComponent(k)}/lessons`;
+  }
+  const qs = new URLSearchParams();
+  qs.set(ALLIED_PROFESSION_QUERY_PARAM, prof.professionKey);
+  return `${buildExamPathwayPath(pathway, "lessons")}?${qs.toString()}`;
 }
 
-/** `/allied-health/{professionKey}/lessons/{lessonSlug}` */
+/** Canonical allied lesson detail — same as other pathways: pathway lessons detail (no duplicate hub layer). */
 export function alliedHealthLessonDetailPath(professionKey: string, lessonSlug: string): string {
-  return `${alliedHealthLessonsIndexPath(professionKey)}/${encodeURIComponent(lessonSlug.trim())}`;
+  const k = professionKey.trim();
+  const slug = lessonSlug.trim();
+  const prof = getAlliedProfessionByProfessionKey(k);
+  const pathway = prof ? getPathwayOrThrow(prof.pathwayId) : undefined;
+  if (!prof || !pathway) {
+    return `${ALLIED_HEALTH_ROOT}/${encodeURIComponent(k)}/lessons/${encodeURIComponent(slug)}`;
+  }
+  const detail = marketingPathwayLessonDetailPath(pathway, slug);
+  return detail ?? `${ALLIED_HEALTH_ROOT}/${encodeURIComponent(k)}/lessons/${encodeURIComponent(slug)}`;
 }
 
 /** `/app/lessons/{id}` */

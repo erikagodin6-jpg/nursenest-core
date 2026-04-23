@@ -92,6 +92,32 @@ export async function collectPathwayTopicProgrammaticUrls(origin: string): Promi
   return collectPathwayTopicProgrammaticPublicPaths().map((p) => `${o}${p}`);
 }
 
+/**
+ * Data-backed body-system study hubs (`…/study-resources/{bodyKey}`) — only URLs that pass lesson + bank + intro gates.
+ * Bounded by {@link MAX_CONTENT_BACKED_STUDY_RESOURCE_SITEMAP_URLS} inside the loader module.
+ */
+export async function collectContentBackedStudyResourceHubUrls(origin: string): Promise<string[]> {
+  const o = normalizeOrigin(origin);
+  if (shouldSkipDbBackedSitemapUrlsForBuild()) return [];
+  const { listPublishedExamPathwaysForPublicSite } = await import("@/lib/navigation/country-exam-launch-readiness");
+  const { listContentBackedStudyResourceHubSitemapRows, MAX_CONTENT_BACKED_STUDY_RESOURCE_SITEMAP_URLS } = await import(
+    "@/lib/seo/content-backed-study-resource-hub"
+  );
+  const urls: string[] = [];
+  for (const pathway of listPublishedExamPathwaysForPublicSite()) {
+    const rows = await listContentBackedStudyResourceHubSitemapRows(pathway);
+    for (const r of rows) {
+      if (urls.length >= MAX_CONTENT_BACKED_STUDY_RESOURCE_SITEMAP_URLS) {
+        logSeoEmittedUrlBatch("sitemap_content_backed_study_resources", urls);
+        return urls;
+      }
+      urls.push(`${o}${buildExamPathwayPath(r.pathway, `study-resources/${r.bodyKey}`)}`);
+    }
+  }
+  logSeoEmittedUrlBatch("sitemap_content_backed_study_resources", urls);
+  return urls;
+}
+
 /** Exam hub URLs: /{country}/{role}/{exam} + pricing + questions landing */
 export async function collectExamPathwayUrls(origin: string): Promise<string[]> {
   const o = normalizeOrigin(origin);
@@ -330,12 +356,17 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
   ];
   const lessonUrls = await collectPathwayLessonSeoUrls(o);
   const pathwayTopicUrls = await collectPathwayTopicProgrammaticUrls(o);
-  const [examHubUrls, npPracticeHubUrls] = await Promise.all([collectExamPathwayUrls(o), collectNpPracticeTestHubUrls(o)]);
+  const [examHubUrls, npPracticeHubUrls, contentBackedStudyHubUrls] = await Promise.all([
+    collectExamPathwayUrls(o),
+    collectNpPracticeTestHubUrls(o),
+    collectContentBackedStudyResourceHubUrls(o),
+  ]);
   return [
     ...expandedBase,
     ...examHubUrls,
     ...npPracticeHubUrls,
     ...pathwayTopicUrls,
+    ...contentBackedStudyHubUrls,
     ...collectAlliedMarketingUrls(o),
     ...collectPreNursingSeoUrls(o),
     ...lessonUrls,

@@ -70,9 +70,12 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   if (!pathway) notFound();
 
   let hubResume: PathwayHubResumePayload | null = null;
+  let viewerSignedIn = false;
+  let viewerHasPathwayLessonAccess = false;
   try {
     const session = await getOptionalPublicSession({ pathname, surface: "marketing.exam_hub" });
     const userId = (session?.user as { id?: string } | undefined)?.id ?? "";
+    viewerSignedIn = Boolean(userId);
     if (userId && isDatabaseUrlConfigured()) {
       const entitlement = await resolveEntitlementForPage(userId);
       if (entitlement !== "error" && entitlement.hasAccess) {
@@ -83,7 +86,8 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
         } catch {
           learnerPath = null;
         }
-        if (canViewFullPathwayLesson(entitlement, pathway, learnerPath)) {
+        viewerHasPathwayLessonAccess = canViewFullPathwayLesson(entitlement, pathway, learnerPath);
+        if (viewerHasPathwayLessonAccess) {
           const lessonsBasePath = buildExamPathwayPath(pathway, "lessons");
           const resume = await loadPathwayHubResumePayload(
             userId,
@@ -100,6 +104,8 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
     }
   } catch {
     hubResume = null;
+    viewerSignedIn = false;
+    viewerHasPathwayLessonAccess = false;
   }
 
   return withCrawlSurfacePageRender("marketing.exam_hub", pathname, async () => {
@@ -124,6 +130,8 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
           content={content}
           npSeoAliasSegment={npPracticeSeo ? examCode : undefined}
           hubResume={hubResume}
+          viewerSignedIn={viewerSignedIn}
+          viewerHasPathwayLessonAccess={viewerHasPathwayLessonAccess}
         />
         <section className="mt-8 border-t border-[var(--border-subtle)] pt-6">
           <div className="nn-card border border-[color-mix(in_srgb,var(--semantic-info)_16%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--semantic-info)_4.5%,var(--theme-card-bg))] p-4 sm:p-5">

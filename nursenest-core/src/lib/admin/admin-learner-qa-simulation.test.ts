@@ -4,10 +4,19 @@ import { CountryCode } from "@prisma/client";
 import {
   billingRegionSlugForQaCountry,
   buildUserAccessForAdminLearnerQa,
+  learnerQaChromeTierFallbackString,
   pathwayIdForQaTrack,
   signAdminLearnerQaCookieValue,
   verifyAdminLearnerQaCookieValue,
 } from "@/lib/admin/admin-learner-qa-simulation";
+
+describe("learnerQaChromeTierFallbackString", () => {
+  it("matches Prisma tier codes for shell chrome fallbacks", () => {
+    assert.equal(learnerQaChromeTierFallbackString("RN"), "RN");
+    assert.equal(learnerQaChromeTierFallbackString("NP"), "NP");
+    assert.equal(learnerQaChromeTierFallbackString("NEW_GRAD"), "NEW_GRAD");
+  });
+});
 
 describe("admin learner QA cookie", () => {
   it("rejects tampered HMAC", () => {
@@ -23,7 +32,8 @@ describe("admin learner QA cookie", () => {
     const good = signAdminLearnerQaCookieValue(payload);
     assert.ok(good);
     const [body, sig] = good!.split(".");
-    const badSig = sig.length > 0 ? `${sig.slice(0, -1)}0` : "00";
+    // Flip one hex digit can accidentally match if the authentic signature already ends with that digit.
+    const badSig = "0".repeat(sig.length || 64);
     assert.equal(verifyAdminLearnerQaCookieValue(`${body}.${badSig}`, "user-a"), null);
     delete process.env.ADMIN_LEARNER_QA_SECRET;
   });
@@ -40,6 +50,21 @@ describe("admin learner QA cookie", () => {
     };
     const v = signAdminLearnerQaCookieValue(payload);
     assert.equal(verifyAdminLearnerQaCookieValue(v ?? "", "user-b"), null);
+    delete process.env.ADMIN_LEARNER_QA_SECRET;
+  });
+
+  it("rejects expired payload", () => {
+    process.env.ADMIN_LEARNER_QA_SECRET = "test-secret-at-least-16";
+    const payload = {
+      v: 1 as const,
+      sub: "user-a",
+      exp: Math.floor(Date.now() / 1000) - 10,
+      track: "RN" as const,
+      lifecycle: "paid_active" as const,
+      country: "US" as const,
+    };
+    const v = signAdminLearnerQaCookieValue(payload);
+    assert.equal(verifyAdminLearnerQaCookieValue(v ?? "", "user-a"), null);
     delete process.env.ADMIN_LEARNER_QA_SECRET;
   });
 });

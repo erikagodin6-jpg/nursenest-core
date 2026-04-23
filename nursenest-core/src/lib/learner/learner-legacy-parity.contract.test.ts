@@ -9,6 +9,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, it } from "node:test";
 import { mapLegacyMarketingHref, resolveMarketingHref } from "@/lib/legacy-marketing-routes";
+import { alliedHealthLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(here, "..", "..");
@@ -36,7 +37,10 @@ describe("legacy marketing href map — learner-adjacent paths stay on Core or e
 
   it("keeps allied health vertical on Core", () => {
     assert.equal(resolveMarketingHref("/allied-health"), "/allied-health");
-    assert.equal(resolveMarketingHref("/allied-health/paramedic/lessons"), "/allied-health/paramedic/lessons");
+    assert.equal(
+      resolveMarketingHref("/allied-health/paramedic/lessons"),
+      alliedHealthLessonsIndexPath("paramedic"),
+    );
   });
 });
 

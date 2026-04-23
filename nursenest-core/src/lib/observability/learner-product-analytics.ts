@@ -1,5 +1,6 @@
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { buildGlobalExamContext, examContextAnalyticsProps } from "@/lib/exam-context";
+import { skipLearnerBusinessAnalyticsForAccessScope } from "@/lib/observability/admin-learner-qa-analytics";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { CAT_RESULTS_COACH_FALLBACK_HEADLINE } from "@/lib/practice-tests/cat-results-coach";
@@ -15,6 +16,7 @@ export function captureLearnerProductEvent(
   event: string,
   props: Record<string, string | number | boolean | undefined> = {},
 ): void {
+  if (skipLearnerBusinessAnalyticsForAccessScope(entitlement)) return;
   void captureServerEvent(analyticsDistinctId(userId), event, {
     actor: "authenticated",
     ...props,

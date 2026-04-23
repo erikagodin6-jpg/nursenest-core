@@ -36,3 +36,9 @@ export const PATHWAY_HUB_PAGINATION_SHOW_ENDLINKS_MIN_PAGES = 3;
 
 /** Absolute safety cap: catalog pathways with more lessons are truncated for list/hub pagination math. */
 export const PATHWAY_CATALOG_LIST_HARD_CAP = 2_000;
+
+/**
+ * Max raw `pathway_lessons` rows scanned when building subscriber `/app/lessons` from a Prisma filter.
+ * Rows must pass the same {@link getPathwayLesson} contract as `/app/lessons/[id]`; the scan stays bounded.
+ */
+export const PATHWAY_APP_SUBSCRIBER_HUB_DETAIL_RESOLVER_SCAN_CAP = 8_000;

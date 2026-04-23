@@ -13,12 +13,14 @@ import {
   writeLearnerStudyDefaults,
   type LearnerStudyDefaultsV1,
 } from "@/lib/student/learner-study-defaults";
+import { LearnerEmailEngagementPrefs } from "@/components/student/learner-email-engagement-prefs";
 
 export function LearnerStudySettingsHub({
   userId,
   defaultPathwayLabel,
   showExamPlanForm,
   initialStudySettings,
+  initialEmailEngagementOptOut,
   t,
 }: {
   userId: string;
@@ -26,6 +28,8 @@ export function LearnerStudySettingsHub({
   defaultPathwayLabel: string | null;
   showExamPlanForm: boolean;
   initialStudySettings: StudySettings;
+  /** When true, learner has opted out of retention / study nudge emails. */
+  initialEmailEngagementOptOut: boolean;
   t: LearnerMarketingT;
 }) {
   const [bank, setBank] = useState<LearnerStudyDefaultsV1["questionBank"]>(() => defaultLearnerStudyDefaults().questionBank);
@@ -83,6 +87,16 @@ export function LearnerStudySettingsHub({
 
   return (
     <div className="space-y-8">
+      <section className="overflow-hidden rounded-2xl border border-border/60 bg-[var(--bg-card)] shadow-sm">
+        <div className="border-b border-border/60 bg-gradient-to-r from-[color-mix(in_srgb,var(--semantic-info)_10%,transparent)] to-transparent px-5 py-4">
+          <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.emailEngagement.sectionTitle")}</h2>
+          <p className="mt-1 text-xs text-muted-foreground">{t("learner.emailEngagement.sectionSub")}</p>
+        </div>
+        <div className="p-5">
+          <LearnerEmailEngagementPrefs initialOptOut={initialEmailEngagementOptOut} t={t} />
+        </div>
+      </section>
+
       <section className="overflow-hidden rounded-2xl border border-border/60 bg-[var(--bg-card)] shadow-sm">
         <div className="border-b border-border/60 bg-gradient-to-r from-primary/[0.06] to-transparent px-5 py-4">
           <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.studySettings.section.appearance")}</h2>

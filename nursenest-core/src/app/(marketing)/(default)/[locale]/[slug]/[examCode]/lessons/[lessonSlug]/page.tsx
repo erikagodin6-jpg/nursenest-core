@@ -7,6 +7,7 @@ import { marketingLessonSlugFromRouteParam } from "@/lib/lessons/lesson-routes";
 import { loadPathwayLessonSeoMetaWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { mergePathwayLessonPublicMetadata } from "@/lib/seo/programmatic-seo-engine/lesson-public-metadata";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { withCrawlSurfacePageRender } from "@/lib/observability/crawl-surface-observability";
 import { PathwayLessonDetailPageBody } from "./pathway-lesson-detail-page-body";
@@ -50,34 +51,36 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const path = pathwayLessonPublicDetailPath(pathway, lesson.slug);
       if (!path) return {};
       const canonical = absoluteUrl(path);
-      const keywords = [
-        pathway.shortName,
-        pathway.displayName,
-        lesson.topic,
-        lesson.bodySystem,
-        "nurse practitioner",
-        pathway.countrySlug === "canada" ? "Canada NP" : "NP exam",
-        "clinical reasoning",
-      ]
-        .filter(Boolean)
-        .join(", ");
+      const merged = mergePathwayLessonPublicMetadata({
+        pathway,
+        lesson: {
+          title: lesson.seoTitle.trim() || lesson.topic,
+          topic: lesson.topic,
+          bodySystem: lesson.bodySystem,
+          seoTitle: lesson.seoTitle,
+          seoDescription: lesson.seoDescription,
+        },
+      });
+      const twDesc =
+        merged.description.description.length > 160
+          ? `${merged.description.description.slice(0, 157)}…`
+          : merged.description.description;
       return {
-        title: lesson.seoTitle,
-        description: lesson.seoDescription,
-        keywords: keywords.split(", ").slice(0, 24),
+        title: merged.title.title,
+        description: merged.description.description,
+        keywords: merged.keywords,
         alternates: { canonical },
         openGraph: {
-          title: lesson.seoTitle,
-          description: lesson.seoDescription,
+          title: merged.title.title,
+          description: merged.description.description,
           url: canonical,
           type: "article",
           siteName: "NurseNest",
         },
         twitter: {
           card: "summary_large_image",
-          title: lesson.seoTitle,
-          description:
-            lesson.seoDescription.length > 160 ? `${lesson.seoDescription.slice(0, 157)}…` : lesson.seoDescription,
+          title: merged.title.title,
+          description: twDesc,
         },
         robots: { index: true, follow: true },
       };

@@ -15,12 +15,14 @@ test("parseFlashcardCustomSessionResponse: preserves queryRelaxation on summary"
       selectedCategories: [],
       mode: "mixed",
       queryRelaxation: "dropped_pathway_scope",
+      sessionShuffleSalt: "opaque-salt",
     },
     categoryOptions: [{ id: "a", title: "A", count: 1 }],
   });
   assert.equal(r.ok, true);
   if (!r.ok) return;
   assert.equal(r.summary?.queryRelaxation, "dropped_pathway_scope");
+  assert.equal(r.summary?.sessionShuffleSalt, "opaque-salt");
 });
 
 test("parseFlashcardCustomSessionResponse: success with categories", () => {

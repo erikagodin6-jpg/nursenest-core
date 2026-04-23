@@ -31,16 +31,18 @@ describe("marketing lessons hub vs lesson detail routing", () => {
 
   it("hub passes listOpts from normalized q and optional topicSlug (matches pathway lesson loader)", () => {
     const src = readFileSync(marketingHubLessonsPage, "utf8");
-    assert.match(src, /const listOpts\s*=/);
+    assert.match(src, /let listOpts/);
     assert.ok(src.includes("topicSlugsIn"));
     assert.ok(src.includes("qEffective"));
     assert.ok(!src.includes("sp.q.trim().length > 0 ? { q: sp.q }"));
   });
 
-  it("hub wires curriculum hub from hubRenderableLessonRows (single dataset)", () => {
+  it("hub wires curriculum hub from verified prepared rows (single dataset)", () => {
     const src = readFileSync(marketingHubLessonsPage, "utf8");
-    assert.match(src, /const hubRenderableLessonRows =/);
-    assert.match(src, /lessons=\{hubRenderableLessonRows\}/);
+    assert.match(src, /verifyMarketingHubLessonRowsResolve/);
+    assert.match(src, /const rawHubLessonRows =/);
+    assert.match(src, /sliceNormalizedHubLessons/);
+    assert.match(src, /preparedLessons=\{hubPageLessons\}/);
   });
 
   it("lesson detail route uses redesigned detail body, not curriculum hub", () => {
@@ -56,5 +58,11 @@ describe("marketing lessons hub vs lesson detail routing", () => {
     const bodySrc = readFileSync(marketingLessonDetailBody, "utf8");
     assert.ok(!bodySrc.includes("pathway-lessons-curriculum-hub"));
     assert.ok(!bodySrc.includes("PathwayLessonsCurriculumHub"));
+  });
+
+  it("lesson detail body uses marketing locale preference (matches lessons hub loaders)", () => {
+    const bodySrc = readFileSync(marketingLessonDetailBody, "utf8");
+    assert.match(bodySrc, /getMarketingLocaleForDefaultRoute/);
+    assert.ok(!bodySrc.match(/const lessonContentLocale = DEFAULT_MARKETING_LOCALE/));
   });
 });

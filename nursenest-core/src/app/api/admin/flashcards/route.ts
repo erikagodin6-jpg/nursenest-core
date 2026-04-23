@@ -10,6 +10,12 @@ import {
   type ExamMicroQuestionPayload,
 } from "@/lib/flashcards/flashcard-exam-style";
 import { validateFlashcardCreationGuardrails } from "@/lib/flashcards/flashcard-creation-guardrails";
+import {
+  classifyFlashcardCorpus,
+  collectClassificationViolations,
+  isPublishBlockedByTaxonomy,
+  resolveFlashcardCategoryIdFromClassification,
+} from "@/lib/taxonomy/content-write-taxonomy";
 
 const createSchema = z.object({
   front: z.string().min(4),
@@ -175,6 +181,50 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: guard.error, code: guard.code }, { status: 400 });
   }
 
+  const extraCorpus = examPayload
+    ? [
+        examPayload.rationaleCorrect,
+        ...examPayload.rationaleIncorrect.map((r) => r.rationale),
+        ...examPayload.answerOptions.map((o) => o.text),
+      ].join("\n")
+    : null;
+  const flashClassification = classifyFlashcardCorpus({ front, back, extra: extraCorpus });
+  const flashViolations = collectClassificationViolations(flashClassification);
+  if (flashViolations.length > 0) {
+    return NextResponse.json(
+      { error: "Taxonomy classification invalid", violations: flashViolations, code: "taxonomy_invalid" },
+      { status: 422 },
+    );
+  }
+  if (parsed.data.status === ContentStatus.PUBLISHED && isPublishBlockedByTaxonomy(flashClassification)) {
+    return NextResponse.json(
+      {
+        error: "Publish blocked — taxonomy could not resolve a publishable category for this card",
+        code: "taxonomy_publish_blocked",
+        classification: {
+          domain: flashClassification.domain,
+          category: flashClassification.category,
+        },
+      },
+      { status: 422 },
+    );
+  }
+
+  const resolvedCategory = await resolveFlashcardCategoryIdFromClassification(prisma, flashClassification);
+  if (!resolvedCategory.ok) {
+    return NextResponse.json({ error: resolvedCategory.error, code: "taxonomy_invalid" }, { status: 422 });
+  }
+  if (parsed.data.categoryId !== resolvedCategory.categoryId) {
+    return NextResponse.json(
+      {
+        error: "categoryId does not match taxonomy classifier output",
+        code: "taxonomy_override_mismatch",
+        expectedCategoryId: resolvedCategory.categoryId,
+      },
+      { status: 422 },
+    );
+  }
+
   const examCreateData = examPayload
     ? {
         examItemKind: examPayload.itemKind,
@@ -196,6 +246,7 @@ export async function POST(req: Request) {
     const created = await tx.flashcard.create({
       data: {
         ...restCard,
+        categoryId: resolvedCategory.categoryId,
         front,
         back,
         ...examCreateData,

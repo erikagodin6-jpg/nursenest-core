@@ -236,6 +236,36 @@ export function pathwayQuestionsHubBreadcrumbs(
   return { crumbs, schemaItems };
 }
 
+/** Body-system study resource hub (`…/study-resources/{bodyKey}`) — data-backed SEO surface. */
+export function pathwayStudyResourcesBodyBreadcrumbs(
+  pathway: ExamPathwayDefinition,
+  bodyDisplayLabel: string,
+  bodyKey: string,
+  opts?: PathwayMarketingHubBreadcrumbOpts,
+): {
+  crumbs: BreadcrumbCrumb[];
+  schemaItems: BreadcrumbSchemaItem[];
+} {
+  const hub = opts?.hubBasePath;
+  const p = examPathwaySurfacePrefix(pathway, opts);
+  const selfPath = pathwayHubChildPath(pathway, hub, `study-resources/${bodyKey.replace(/^\/+|\/+$/g, "")}`);
+  const crumbs: BreadcrumbCrumb[] = [
+    HOME,
+    p.countryCrumb(true),
+    p.roleCrumb(true),
+    p.hubCrumb(true),
+    { name: bodyDisplayLabel, href: undefined },
+  ];
+  const schemaItems: BreadcrumbSchemaItem[] = [
+    HOME_ITEM,
+    p.countrySchema(),
+    p.roleSchema(),
+    p.hubSchema(),
+    { name: bodyDisplayLabel, item: toAbsoluteSiteUrl(selfPath) },
+  ];
+  return { crumbs, schemaItems };
+}
+
 /** Marketing CAT / adaptive practice entry for a pathway (`…/cat`). */
 export function pathwayCatPracticeBreadcrumbs(
   pathway: ExamPathwayDefinition,

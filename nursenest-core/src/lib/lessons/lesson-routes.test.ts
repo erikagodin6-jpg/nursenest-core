@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { buildLessonPath, marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
+import {
+  buildLessonPath,
+  marketingLessonSlugFromRouteParam,
+  marketingPathwayLessonDetailPath,
+} from "@/lib/lessons/lesson-routes";
 
 describe("buildLessonPath", () => {
   it("builds /{country}/{role}/{exam}/lessons/{slug} with URL-safe slug encoding", () => {
@@ -61,5 +65,16 @@ describe("buildLessonPath", () => {
         lessonSlug: "sepsis",
       }),
     );
+  });
+
+  it("buildLessonPath accepts a pathway object (single canonical builder entry point)", () => {
+    const pathway = { countrySlug: "canada", roleTrack: "rn", examCode: "nclex-rn" };
+    assert.equal(buildLessonPath({ pathway, lessonSlug: "fluid-balance" }), "/canada/rn/nclex-rn/lessons/fluid-balance");
+  });
+});
+
+describe("marketingLessonSlugFromRouteParam", () => {
+  it("decodes a once-encoded slug segment", () => {
+    assert.equal(marketingLessonSlugFromRouteParam("fluid%20overload"), "fluid overload");
   });
 });

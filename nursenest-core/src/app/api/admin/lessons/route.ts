@@ -14,6 +14,7 @@ import { bodyStringToContentJson } from "@/lib/prisma/content-item-body";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import { tierCodeToContentItemTier } from "@/lib/prisma/exam-question-maps";
 import { ADMIN_API_LIST_PAGE, parseBoundedPageSize, parseListPage } from "@/lib/api/api-pagination-limits";
+import { contentItemLessonTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
 
 export const dynamic = "force-dynamic";
 
@@ -189,6 +190,36 @@ export async function POST(req: Request) {
   }
 
   const cat = await prisma.category.findUnique({ where: { id: data.categoryId } });
+  const categoryLabel = cat?.name ?? cat?.slug ?? null;
+  const taxonomy = contentItemLessonTaxonomyFromCorpus({
+    title: data.title,
+    summary: data.summary,
+    body: data.body,
+    tags: data.tags ?? [],
+    topicHint: data.topicTag ?? null,
+    systemHint: data.systemTag ?? null,
+    categoryHint: categoryLabel,
+  });
+  if (taxonomy.violations.length > 0) {
+    return NextResponse.json(
+      { error: "Taxonomy classification invalid", violations: taxonomy.violations, code: "taxonomy_invalid" },
+      { status: 422 },
+    );
+  }
+  if (data.status === ContentStatus.PUBLISHED && !taxonomy.publishable) {
+    return NextResponse.json(
+      {
+        error: "Publish blocked — taxonomy needs a resolved category for this lesson",
+        code: "taxonomy_publish_blocked",
+        classification: {
+          domain: taxonomy.classification.domain,
+          category: taxonomy.classification.category,
+        },
+      },
+      { status: 422 },
+    );
+  }
+
   const lesson = await prisma.contentItem.create({
     data: {
       title: data.title,
@@ -200,8 +231,8 @@ export async function POST(req: Request) {
       status: contentStatusToDb(data.status),
       regionScope: data.country === "CA" ? "CA_ONLY" : "US_ONLY",
       tags: data.tags ?? [],
-      category: cat?.name ?? cat?.slug,
-      bodySystem: data.systemTag ?? data.topicTag,
+      category: categoryLabel ?? undefined,
+      bodySystem: taxonomy.bodySystem,
       versionKey: data.versionKey ?? undefined,
     },
   });

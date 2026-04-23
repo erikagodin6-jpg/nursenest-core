@@ -10,6 +10,7 @@ import {
   resolveBlogOgImageAbsolute,
   resolvePublicCanonicalUrl,
 } from "@/lib/blog/blog-seo-automation";
+import { parsePublishingPackage } from "@/lib/blog/blog-publishing-package";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
 import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
 import { blogSlugCustomValidityMessage, liveNormalizeBlogSlugInputValue } from "@/lib/blog/blog-optional-slug";
@@ -94,6 +95,8 @@ export function AdminBlogStudioClient() {
   const [prePubErr, setPrePubErr] = useState<string | null>(null);
   const [seoRegenBusy, setSeoRegenBusy] = useState<null | "refresh" | "overwrite">(null);
   const [seoRegenErr, setSeoRegenErr] = useState<string | null>(null);
+  const [bodyRegenBusy, setBodyRegenBusy] = useState(false);
+  const [bodyRegenErr, setBodyRegenErr] = useState<string | null>(null);
 
   const resetResult = useCallback(() => {
     setPlan(null);
@@ -192,6 +195,50 @@ export function AdminBlogStudioClient() {
     }
   }
 
+  async function runRegenerateBody() {
+    if (!post?.id) return;
+    if (
+      !window.confirm(
+        "Regenerate the article HTML from the stored outline and FAQs? This replaces the body in the database (SEO fields are unchanged unless you run SEO actions separately).",
+      )
+    ) {
+      return;
+    }
+    setBodyRegenErr(null);
+    setBodyRegenBusy(true);
+    try {
+      const res = await fetch(`/api/admin/blog/${post.id}/body/regenerate`, {
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      const json = (await res.json()) as {
+        ok?: boolean;
+        error?: string;
+        message?: string;
+        post?: Partial<PostPayload> & { id: string; body?: string };
+      };
+      if (!res.ok || !json.ok || !json.post) {
+        setBodyRegenErr(json.message ?? json.error ?? `Body regenerate failed (${res.status})`);
+        return;
+      }
+      setPost((prev) =>
+        prev
+          ? {
+              ...prev,
+              body: json.post?.body ?? prev.body,
+            }
+          : prev,
+      );
+    } catch (e) {
+      setBodyRegenErr(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBodyRegenBusy(false);
+    }
+  }
+
   async function runRegenerateSeo(mode: "refresh" | "overwrite") {
     if (!post?.id) return;
     setSeoRegenErr(null);
@@ -266,6 +313,11 @@ export function AdminBlogStudioClient() {
 
   const canonicalPreview = post ? resolvePublicCanonicalUrl(post.slug, seo) : "";
   const ogImagePreview = post ? resolveBlogOgImageAbsolute(seo, post.coverImage ?? null) : undefined;
+
+  const publishingPkg =
+    post?.internalLinkPlan && typeof post.internalLinkPlan === "object"
+      ? parsePublishingPackage((post.internalLinkPlan as Record<string, unknown>).publishingPackage)
+      : null;
 
   type SchemaSummaryJson = {
     version?: number;
@@ -515,15 +567,25 @@ export function AdminBlogStudioClient() {
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
-                  disabled={Boolean(seoRegenBusy)}
+                  disabled={Boolean(seoRegenBusy) || bodyRegenBusy}
+                  onClick={() => void runRegenerateBody()}
+                  className="rounded-lg border border-sky-500/40 bg-sky-500/10 px-3 py-1.5 text-xs font-semibold text-sky-950 dark:text-sky-50 disabled:opacity-50"
+                  title="Re-runs the long-form HTML pass from outline + FAQs. Does not change meta title/description columns."
+                >
+                  {bodyRegenBusy ? "…" : "Regenerate article body"}
+                </button>
+                <button
+                  type="button"
+                  disabled={Boolean(seoRegenBusy) || bodyRegenBusy}
                   onClick={() => void runRegenerateSeo("refresh")}
                   className="rounded-lg border border-border bg-muted/30 px-3 py-1.5 text-xs font-semibold hover:bg-muted/50 disabled:opacity-50"
+                  title="Rebuilds JSON SEO bundle (canonical, OG/Twitter, breadcrumbs) from current fields. Keeps stored meta title/description unless they are empty."
                 >
                   {seoRegenBusy === "refresh" ? "…" : "Regenerate SEO bundle"}
                 </button>
                 <button
                   type="button"
-                  disabled={Boolean(seoRegenBusy)}
+                  disabled={Boolean(seoRegenBusy) || bodyRegenBusy}
                   onClick={() => void runRegenerateSeo("overwrite")}
                   className="rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-1.5 text-xs font-semibold text-amber-950 dark:text-amber-50 disabled:opacity-50"
                   title="Also replaces stored meta title and meta description columns using deterministic SEO."
@@ -532,7 +594,12 @@ export function AdminBlogStudioClient() {
                 </button>
               </div>
             </div>
+            {bodyRegenErr ? <p className="mt-2 text-sm text-rose-700">{bodyRegenErr}</p> : null}
             {seoRegenErr ? <p className="mt-2 text-sm text-rose-700">{seoRegenErr}</p> : null}
+            <p className="mt-2 text-[11px] text-muted-foreground">
+              SEO refresh updates the persisted bundle and live related-blog suggestions; it does not rewrite HTML. Use{" "}
+              <strong className="text-foreground">Regenerate article body</strong> only when you intend to replace the draft HTML.
+            </p>
             <dl className="mt-3 grid gap-2 text-xs text-muted-foreground sm:grid-cols-2">
               <div>
                 <dt className="font-medium text-foreground">Slug</dt>
@@ -634,6 +701,38 @@ export function AdminBlogStudioClient() {
               <pre className="max-h-56 overflow-auto whitespace-pre-wrap rounded-lg bg-muted/30 p-3 text-xs">
                 {JSON.stringify((post.internalLinkPlan as { lessons?: unknown })?.lessons ?? [], null, 2)}
               </pre>
+            </PackageSection>
+            <PackageSection title="Related blog posts (live index)" review className="lg:col-span-2">
+              {publishingPkg?.relatedBlogPosts?.length ? (
+                <ul className="space-y-2 text-foreground">
+                  {publishingPkg.relatedBlogPosts.map((r) => (
+                    <li key={r.slug}>
+                      <Link href={`/blog/${r.slug}`} className="font-semibold text-primary underline" target="_blank" rel="noreferrer">
+                        {r.title}
+                      </Link>
+                      <span className="text-muted-foreground"> — </span>
+                      <code className="text-xs">{r.slug}</code>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs">None yet — run &quot;Regenerate SEO bundle&quot; after publish peers exist, or generate a new draft after this feature ships.</p>
+              )}
+            </PackageSection>
+            <PackageSection title="Internal anchor opportunities" review className="lg:col-span-2">
+              {publishingPkg?.internalAnchorOpportunities?.length ? (
+                <ul className="space-y-3">
+                  {publishingPkg.internalAnchorOpportunities.map((a, i) => (
+                    <li key={`${a.phrase}-${i}`} className="text-foreground">
+                      <strong>{a.suggestedAnchorText}</strong> for phrase &quot;{a.phrase}&quot; →{" "}
+                      <code className="text-xs">{a.targetSuggestedPath}</code>
+                      {a.rationale ? <p className="mt-1 text-xs text-muted-foreground">{a.rationale}</p> : null}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-xs">Planner did not emit anchor rows — older drafts may lack this block.</p>
+              )}
             </PackageSection>
             <PackageSection title="Image recommendations & placement" review className="lg:col-span-2">
               <pre className="max-h-48 overflow-auto whitespace-pre-wrap rounded-lg bg-muted/30 p-3 text-xs">

@@ -51,6 +51,8 @@ export type StructuredLogFields = {
   entitlementState?: string;
   httpStatus?: number;
   flow?: "billing" | "auth" | "content" | "public" | "admin" | "cron" | "webhook" | "other";
+  /** Synthetic cron / probes vs admin QA simulation vs real learners — for metric and log drain filters. */
+  trafficSource?: "customer" | "synthetic" | "admin_learner_qa";
 };
 
 /** Strip obvious emails from free-text messages for drains. */
@@ -86,6 +88,7 @@ export function emitStructuredLog(
     meta: {
       schema: STRUCTURED_LOG_SCHEMA,
       method: fields.method,
+      trafficSource: fields.trafficSource,
       userRole: fields.userRole,
       userState: fields.userState,
       country: fields.country,

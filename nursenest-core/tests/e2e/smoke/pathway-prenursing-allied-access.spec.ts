@@ -394,10 +394,11 @@ test.describe("Secondary: allied profession marketing lesson hubs", () => {
       }
 
       for (const professionKey of ALLIED_LEARNER_PROFESSION_KEYS) {
-        await test.step(`marketing /allied-health/${professionKey}/lessons`, async () => {
+        await test.step(`marketing allied lessons (legacy → canonical pathway hub)`, async () => {
           await page.goto(`/allied-health/${encodeURIComponent(professionKey)}/lessons`, {
             waitUntil: "domcontentloaded",
           });
+          await expect(page).toHaveURL(/\/(us|canada)\/allied\/allied-health\/lessons/);
           const main = page.locator("main").first();
           await expect(main).toBeVisible({ timeout: 60_000 });
           const text = await main.innerText().catch(() => "");

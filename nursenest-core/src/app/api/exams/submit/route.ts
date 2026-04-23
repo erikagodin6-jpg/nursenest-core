@@ -20,6 +20,7 @@ import { productEvent } from "@/lib/observability/product-events";
 import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import type { PostTestStudyNextBundle } from "@/lib/learner/adaptive-recommendations";
+import { fireExamRetentionEmails } from "@/lib/retention/retention-email";
 
 export const dynamic = "force-dynamic";
 
@@ -245,6 +246,7 @@ export async function POST(req: Request) {
           }
         }
         await invalidateLearnerPrivateReadCache(gate.userId);
+        fireExamRetentionEmails(gate.userId, score, total);
         return NextResponse.json({ attempt: result.attempt, review: prefetchReview, studyNext });
       }
     } catch (e) {
@@ -270,6 +272,7 @@ export async function POST(req: Request) {
       graded_on_server: false,
     });
     await invalidateLearnerPrivateReadCache(gate.userId);
+    fireExamRetentionEmails(gate.userId, score, total);
     return NextResponse.json({ attempt });
   } catch (e) {
     safeServerLogCritical("api_exams_submit", "attempt_create_failed", {}, e);

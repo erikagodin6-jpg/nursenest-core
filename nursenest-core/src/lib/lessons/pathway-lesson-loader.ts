@@ -1023,6 +1023,22 @@ async function getPathwayLessonImpl(
 ): Promise<PathwayLessonRecord | undefined> {
   const overlayLocale = normalizePathwayLessonLocale(marketingLocale);
   const lessonDbOverlays = await fetchPublishedPathwayLessonOverlayMapSafe(overlayLocale);
+  const catalogLessons = getCatalogLessonsRaw(pathwayId);
+  const catalogHitForSlug = catalogLessons.find((l) => l.slug === slug);
+
+  const tryCatalogPublicComplete = (): PathwayLessonRecord | undefined => {
+    if (!catalogHitForSlug) return undefined;
+    const fromCatalog = applyOverlayAndStructural(
+      withLocaleMeta(
+        normalizeLesson(catalogHitForSlug, pathwayId),
+        lessonLocaleMeta(marketingLocale, PATHWAY_LESSON_CANONICAL_DB_LOCALE, overlayLocale !== "en", true),
+      ),
+      marketingLocale,
+      pathwayId,
+      lessonDbOverlays,
+    );
+    return pathwayLessonEligibleForPublicMarketingSurface(fromCatalog) ? fromCatalog : undefined;
+  };
 
   const rowEn = await dbCall(
     () =>
@@ -1051,26 +1067,15 @@ async function getPathwayLessonImpl(
     if (pathwayLessonEligibleForPublicMarketingSurface(fromDb)) {
       return fromDb;
     }
-    const catalogHit = getCatalogLessonsRaw(pathwayId).find((l) => l.slug === slug);
-    if (catalogHit) {
-      const fromCatalog = applyOverlayAndStructural(
-        withLocaleMeta(
-          normalizeLesson(catalogHit, pathwayId),
-          lessonLocaleMeta(marketingLocale, PATHWAY_LESSON_CANONICAL_DB_LOCALE, overlayLocale !== "en", true),
-        ),
-        marketingLocale,
+    const fromCatalogEn = tryCatalogPublicComplete();
+    if (fromCatalogEn) {
+      safeServerLog("pathway_lessons", "lesson_detail_catalog_fallback_after_db_incomplete", {
         pathwayId,
-        lessonDbOverlays,
-      );
-      if (pathwayLessonEligibleForPublicMarketingSurface(fromCatalog)) {
-        safeServerLog("pathway_lessons", "lesson_detail_catalog_fallback_after_db_incomplete", {
-          pathwayId,
-          slug,
-        });
-        return fromCatalog;
-      }
+        slug,
+      });
+      return fromCatalogEn;
     }
-    return fromDb;
+    /** Do not return incomplete EN rows — marketing detail + hub integrity require `publicComplete`. */
   }
 
   if (overlayLocale !== PATHWAY_LESSON_CANONICAL_DB_LOCALE) {
@@ -1084,7 +1089,7 @@ async function getPathwayLessonImpl(
       null,
     );
     if (rowRequested && rowRequested.status === ContentStatus.PUBLISHED) {
-      return applyOverlayAndStructural(
+      const fromLocaleRow = applyOverlayAndStructural(
         withLocaleMeta(
           normalizeLesson(pathwayLessonRowToInput(rowRequested), pathwayId),
           lessonLocaleMeta(marketingLocale, overlayLocale, false, false),
@@ -1093,12 +1098,36 @@ async function getPathwayLessonImpl(
         pathwayId,
         lessonDbOverlays,
       );
+      if (pathwayLessonEligibleForPublicMarketingSurface(fromLocaleRow)) {
+        return fromLocaleRow;
+      }
+      const fromCatalogAfterLocale = tryCatalogPublicComplete();
+      if (fromCatalogAfterLocale) {
+        safeServerLog("pathway_lessons", "lesson_detail_catalog_fallback_after_locale_row_incomplete", {
+          pathwayId,
+          slug,
+          overlayLocale,
+        });
+        return fromCatalogAfterLocale;
+      }
     }
   }
 
   const dbHasAny = await pathwayHasPublishedDbLessons(pathwayId);
-  const hit = getCatalogLessonsRaw(pathwayId).find((l) => l.slug === slug);
-  if (!hit) return undefined;
+  if (!catalogHitForSlug) return undefined;
+  const fromCatalogOnly = applyOverlayAndStructural(
+    withLocaleMeta(
+      normalizeLesson(catalogHitForSlug, pathwayId),
+      lessonLocaleMeta(marketingLocale, PATHWAY_LESSON_CANONICAL_DB_LOCALE, overlayLocale !== "en", true),
+    ),
+    marketingLocale,
+    pathwayId,
+    lessonDbOverlays,
+  );
+  if (!pathwayLessonEligibleForPublicMarketingSurface(fromCatalogOnly)) {
+    safeServerLog("pathway_lessons", "lesson_detail_catalog_only_incomplete", { pathwayId, slug });
+    return undefined;
+  }
   if (dbHasAny) {
     safeServerLog("pathway_lessons", "lesson_detail_catalog_supplement", {
       pathwayId,
@@ -1106,15 +1135,7 @@ async function getPathwayLessonImpl(
       pathwayLessonRuntimeSource: "database",
     });
   }
-  return applyOverlayAndStructural(
-    withLocaleMeta(
-      normalizeLesson(hit, pathwayId),
-      lessonLocaleMeta(marketingLocale, PATHWAY_LESSON_CANONICAL_DB_LOCALE, overlayLocale !== "en", true),
-    ),
-    marketingLocale,
-    pathwayId,
-    lessonDbOverlays,
-  );
+  return fromCatalogOnly;
 }
 
 async function getPathwayLessonWithDataCache(

@@ -13,6 +13,7 @@ import {
   examFamilyToExamColumn,
   tierCodeToExamDbTier,
 } from "@/lib/prisma/exam-question-maps";
+import { examQuestionTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
 
 export const dynamic = "force-dynamic";
 
@@ -114,6 +115,38 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     topic = d.topicTag ?? existing.topic;
   }
 
+  const mergedStem = d.stem ?? existing.stem;
+  const mergedRationale = d.rationale ?? existing.rationale ?? "";
+  const mergedSubtopic = d.systemTag !== undefined ? d.systemTag : existing.subtopic;
+  const mergedTags = d.tags ?? existing.tags ?? [];
+
+  const taxonomy = examQuestionTaxonomyFromCorpus({
+    stem: mergedStem,
+    rationale: mergedRationale,
+    topic: topic ?? null,
+    subtopic: mergedSubtopic ?? null,
+    tags: mergedTags,
+  });
+  if (taxonomy.violations.length > 0) {
+    return NextResponse.json(
+      { error: "Taxonomy classification invalid", violations: taxonomy.violations, code: "taxonomy_invalid" },
+      { status: 422 },
+    );
+  }
+  if (d.status === ContentStatus.PUBLISHED && !taxonomy.publishable) {
+    return NextResponse.json(
+      {
+        error: "Publish blocked — taxonomy needs a resolved clinical/professional category",
+        code: "taxonomy_publish_blocked",
+        classification: {
+          domain: taxonomy.classification.domain,
+          category: taxonomy.classification.category,
+        },
+      },
+      { status: 422 },
+    );
+  }
+
   const question = await prisma.examQuestion.update({
     where: { id },
     data: {
@@ -130,6 +163,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       topic: topic ?? undefined,
       subtopic: d.systemTag ?? undefined,
       tags: d.tags,
+      bodySystem: taxonomy.bodySystem,
       ...(d.stem !== undefined ? { stemHash: stemHash(d.stem) } : {}),
     },
   });

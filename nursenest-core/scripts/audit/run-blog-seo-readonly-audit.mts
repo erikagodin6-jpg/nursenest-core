@@ -10,13 +10,13 @@
  * Rows are sorted by `priorityScore` (desc), then `id`. Trailing columns: `priorityScore`,
  * `priorityTier` (P1–P4), `fixFirstReason` (deterministic label). Summary counts on stderr include P1–P4.
  *
- * Uses the same title/H1/FAQ merge/study-anchor helpers as public blog routes.
+ * Uses the same title/H1/FAQ merge/study-anchor helpers as public blog routes, plus programmatic SEO
+ * guardrails (`mergePublicBlogMetaDescription`, weak meta/title flags, merged description duplicates).
  */
 import "../../src/lib/db/env-bootstrap";
 import fs from "node:fs";
 import path from "node:path";
-import type { CountryCode } from "@prisma/client";
-import { LocalizedBlogStatus, Prisma } from "@prisma/client";
+import { CountryCode, LocalizedBlogStatus, Prisma } from "@prisma/client";
 import { prisma } from "../../src/lib/db";
 import { isDatabaseUrlConfigured } from "../../src/lib/db/safe-database";
 import { blogLiveWhere } from "../../src/lib/blog/blog-visibility";
@@ -34,6 +34,14 @@ import {
 import { blogCountryFromPrismaTarget, blogCountryFromRegionSlug } from "../../src/lib/blog/blog-study-cta";
 import { localizedBlogPath } from "../../src/lib/blog/blog-slug-localized";
 import { countWordsFromHtmlApproximate } from "../../src/lib/blog/blog-word-count";
+import { generateBlogSEOFromPostRow } from "../../src/lib/blog/blog-generate-seo";
+import { mergePublicBlogMetaDescription } from "../../src/lib/seo/programmatic-seo-engine/blog-public-metadata";
+import {
+  isShoutyOrSpammyTitle,
+  isWeakMetaDescription,
+  isWeakSeoTitle,
+  metaDescriptionLooksLikeKeywordSoup,
+} from "../../src/lib/seo/programmatic-seo-engine/guardrails";
 import { MARKETING_SITE_ORIGIN } from "../../src/lib/seo/site-origin";
 import type { GlobalLocaleCode, GlobalRegionSlug } from "../../src/lib/i18n/global-regions";
 
@@ -70,6 +78,12 @@ type AuditRow = {
   missingSeoTitleFlag: boolean;
   duplicateComputedBrowserTitleCandidate: boolean;
   duplicateH1Candidate: boolean;
+  weakMergedMetaDescriptionFlag: boolean;
+  weakSeoTitleCandidateFlag: boolean;
+  duplicateMergedMetaDescriptionCandidate: boolean;
+  metaDescriptionKeywordSoupFlag: boolean;
+  orphanedContentRiskFlag: boolean;
+  mergedPublicMetaDescription: string;
   notes: string;
   priorityScore: number;
   priorityTier: string;
@@ -107,6 +121,12 @@ const CSV_COLUMNS: (keyof AuditRow)[] = [
   "missingSeoTitleFlag",
   "duplicateComputedBrowserTitleCandidate",
   "duplicateH1Candidate",
+  "weakMergedMetaDescriptionFlag",
+  "weakSeoTitleCandidateFlag",
+  "duplicateMergedMetaDescriptionCandidate",
+  "metaDescriptionKeywordSoupFlag",
+  "orphanedContentRiskFlag",
+  "mergedPublicMetaDescription",
   "notes",
   "priorityScore",
   "priorityTier",
@@ -140,6 +160,11 @@ function computePriority(row: AuditRow, nowMs: number): Pick<AuditRow, "priority
   if (row.missingSeoTitleFlag) s += 25;
   if (row.duplicateComputedBrowserTitleCandidate) s += 20;
   if (row.duplicateH1Candidate) s += 15;
+  if (row.duplicateMergedMetaDescriptionCandidate) s += 12;
+  if (row.weakMergedMetaDescriptionFlag) s += 10;
+  if (row.weakSeoTitleCandidateFlag) s += 8;
+  if (row.orphanedContentRiskFlag) s += 7;
+  if (row.metaDescriptionKeywordSoupFlag) s += 4;
   if (!row.hasFaqSchemaEligible) s += 10;
   if (!row.hasStudyAnchorStripEligible) s += 10;
   if (missingExamMapping(row)) s += 10;
@@ -155,6 +180,11 @@ function computePriority(row: AuditRow, nowMs: number): Pick<AuditRow, "priority
   else if (row.thinContentFlag && row.duplicateComputedBrowserTitleCandidate) fixFirstReason = "thin + duplicate title";
   else if (row.duplicateComputedBrowserTitleCandidate && row.duplicateH1Candidate) fixFirstReason = "duplicate metadata cluster";
   else if (row.duplicateComputedBrowserTitleCandidate) fixFirstReason = "duplicate browser title";
+  else if (row.duplicateMergedMetaDescriptionCandidate) fixFirstReason = "duplicate meta description cluster";
+  else if (row.weakMergedMetaDescriptionFlag && row.weakSeoTitleCandidateFlag) fixFirstReason = "weak title + weak meta";
+  else if (row.weakMergedMetaDescriptionFlag) fixFirstReason = "weak merged meta description";
+  else if (row.weakSeoTitleCandidateFlag) fixFirstReason = "weak seoTitle candidate";
+  else if (row.orphanedContentRiskFlag) fixFirstReason = "orphaned content risk";
   else if (row.duplicateH1Candidate) fixFirstReason = "duplicate H1";
   else if (!row.hasFaqSchemaEligible && !row.hasStudyAnchorStripEligible) fixFirstReason = "missing FAQ + anchors";
   else if (missingExamMapping(row) || missingCountryGeo(row)) fixFirstReason = "weak exam/geo context";
@@ -287,6 +317,9 @@ async function main(): Promise<void> {
     exam: true,
     countryTarget: true,
     careerSlug: true,
+    category: true,
+    tags: true,
+    seoDescription: true,
     body: true,
     internalLinkPlan: true,
     faqBlock: true,
@@ -347,6 +380,22 @@ async function main(): Promise<void> {
     });
     const computedH1 = blogH1ForPublicPost({ seoTitle: p.seoTitle, title: p.title });
 
+    const autoSeo = generateBlogSEOFromPostRow({
+      title: p.title,
+      slug: p.slug,
+      category: p.category ?? null,
+      tags: p.tags ?? [],
+      exam: p.exam ?? null,
+      countryTarget: p.countryTarget ?? null,
+    });
+    const mergedMetaDescription = mergePublicBlogMetaDescription(p.seoDescription, autoSeo.metaDescription).description;
+    const weakMergedMetaDescriptionFlag = isWeakMetaDescription(mergedMetaDescription);
+    const metaDescriptionKeywordSoupFlag = metaDescriptionLooksLikeKeywordSoup(mergedMetaDescription);
+    const weakSeoTitleCandidateFlag =
+      isWeakSeoTitle(p.seoTitle, 10) ||
+      isShoutyOrSpammyTitle(p.seoTitle) ||
+      isShoutyOrSpammyTitle(computedBrowserTitle);
+
     const defaultRow: AuditRow = {
       id: p.id,
       slug: p.slug,
@@ -378,6 +427,13 @@ async function main(): Promise<void> {
       missingSeoTitleFlag,
       duplicateComputedBrowserTitleCandidate: false,
       duplicateH1Candidate: false,
+      weakMergedMetaDescriptionFlag,
+      weakSeoTitleCandidateFlag,
+      duplicateMergedMetaDescriptionCandidate: false,
+      metaDescriptionKeywordSoupFlag,
+      orphanedContentRiskFlag:
+        thinContentFlag && weakMergedMetaDescriptionFlag && !study.hasStudyAnchorStripEligible,
+      mergedPublicMetaDescription: mergedMetaDescription,
       notes: buildNotes(baseNotes),
       priorityScore: 0,
       priorityTier: "P4",
@@ -408,6 +464,7 @@ async function main(): Promise<void> {
     exam: true,
     localizedTitle: true,
     localizedMetaTitle: true,
+    localizedMetaDescription: true,
     localizedBody: true,
     publishedAt: true,
     scheduledAt: true,
@@ -480,6 +537,30 @@ async function main(): Promise<void> {
       : blogCountryFromRegionSlug(region) === "US" ? "US"
       : "";
 
+    const countryForSeo =
+      blogCountryFromRegionSlug(region) === "CA" ? CountryCode.CA
+      : blogCountryFromRegionSlug(region) === "US" ? CountryCode.US
+      : null;
+
+    const autoSeoLoc = generateBlogSEOFromPostRow(
+      {
+        title: L.localizedTitle,
+        slug: L.localizedSlug,
+        category: profession,
+        tags: [],
+        exam: examForPath,
+        countryTarget: countryForSeo,
+      },
+      { canonicalPath: relPath },
+    );
+    const mergedMetaDescription = mergePublicBlogMetaDescription(L.localizedMetaDescription, autoSeoLoc.metaDescription).description;
+    const weakMergedMetaDescriptionFlag = isWeakMetaDescription(mergedMetaDescription);
+    const metaDescriptionKeywordSoupFlag = metaDescriptionLooksLikeKeywordSoup(mergedMetaDescription);
+    const weakSeoTitleCandidateFlag =
+      isWeakSeoTitle(L.localizedMetaTitle, 10) ||
+      isShoutyOrSpammyTitle(L.localizedMetaTitle) ||
+      isShoutyOrSpammyTitle(computedBrowserTitle);
+
     const baseNotes: string[] = [];
     if (!examSeg) baseNotes.push("missing exam on LocalizedBlogArticle (used nclex-rn for URL/helpers)");
     if (!L.profession?.trim()) baseNotes.push("missing profession (used nursing for path)");
@@ -519,6 +600,13 @@ async function main(): Promise<void> {
       missingSeoTitleFlag,
       duplicateComputedBrowserTitleCandidate: false,
       duplicateH1Candidate: false,
+      weakMergedMetaDescriptionFlag,
+      weakSeoTitleCandidateFlag,
+      duplicateMergedMetaDescriptionCandidate: false,
+      metaDescriptionKeywordSoupFlag,
+      orphanedContentRiskFlag:
+        thinContentFlag && weakMergedMetaDescriptionFlag && !study.hasStudyAnchorStripEligible,
+      mergedPublicMetaDescription: mergedMetaDescription,
       notes: buildNotes(baseNotes),
       priorityScore: 0,
       priorityTier: "P4",
@@ -552,6 +640,21 @@ async function main(): Promise<void> {
     if (extra.length) r.notes = buildNotes([r.notes, ...extra].filter(Boolean));
   }
 
+  const metaKeyCounts = new Map<string, number>();
+  for (const r of rows) {
+    const mk = normalizeForDuplicateKey(r.mergedPublicMetaDescription);
+    if (!mk) continue;
+    metaKeyCounts.set(mk, (metaKeyCounts.get(mk) ?? 0) + 1);
+  }
+  let dupMeta = 0;
+  for (const r of rows) {
+    const mk = normalizeForDuplicateKey(r.mergedPublicMetaDescription);
+    const metaDup = mk.length > 0 && (metaKeyCounts.get(mk) ?? 0) > 1;
+    r.duplicateMergedMetaDescriptionCandidate = metaDup;
+    if (metaDup) dupMeta += 1;
+    if (metaDup) r.notes = buildNotes([r.notes, "duplicate merged meta description"].filter(Boolean));
+  }
+
   const nowMs = now.getTime();
   for (const r of rows) {
     const p = computePriority(r, nowMs);
@@ -578,6 +681,7 @@ async function main(): Promise<void> {
   console.error(`audit:blog:seo — missing seoTitle / localizedMetaTitle: ${missingSeo}`);
   console.error(`audit:blog:seo — duplicate computedBrowserTitle candidates (rows flagged): ${dupTitle}`);
   console.error(`audit:blog:seo — duplicate H1 candidates (rows flagged): ${dupH1}`);
+  console.error(`audit:blog:seo — duplicate merged meta description candidates (rows flagged): ${dupMeta}`);
 
   const payload = json ? JSON.stringify(rows, null, 2) : `${CSV_COLUMNS.join(",")}\n${rows.map(rowToCsvLine).join("\n")}\n`;
 

@@ -75,6 +75,18 @@ describe("rebuildSeoBundleFromStoredBlogPost", () => {
     assert.notEqual(b.openGraphTitle, "Custom meta title");
     assert.ok((b.openGraphTitle ?? "").length >= 3);
   });
+
+  it("fills OG title from deterministic SEO when stored SERP fields are empty", () => {
+    const row = {
+      ...baseRow,
+      seoTitle: null,
+      seoDescription: null,
+    };
+    const b = rebuildSeoBundleFromStoredBlogPost(row);
+    assert.ok((b.openGraphTitle ?? "").trim().length >= 8);
+    assert.ok((b.openGraphDescription ?? "").trim().length >= 40);
+    assert.notEqual(b.openGraphTitle, "Custom meta title");
+  });
 });
 
 describe("resolveBlogOgImageAbsolute", () => {

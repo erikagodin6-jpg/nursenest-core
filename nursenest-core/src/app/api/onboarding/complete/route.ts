@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { serverLearnerPosthogDisabledForVerifiedQaUser } from "@/lib/observability/admin-learner-qa-analytics";
 import { captureServerEvent } from "@/lib/observability/posthog-server";
 import { analyticsDistinctId } from "@/lib/observability/posthog-distinct-id";
 import { resolveDefaultPathwayIdForOnboarding } from "@/lib/onboarding/resolve-default-pathway-for-onboarding";
@@ -54,12 +55,14 @@ export async function POST(req: Request) {
       },
     });
 
-    captureServerEvent(analyticsDistinctId(userId), "onboarding_completed", {
-      exam_goal: examGoal ?? "none",
-      has_exam_date: examDate !== null,
-      study_style: studyStyle ?? "none",
-      pathway_id: pathwayId ?? "none",
-    });
+    if (!(await serverLearnerPosthogDisabledForVerifiedQaUser(userId))) {
+      captureServerEvent(analyticsDistinctId(userId), "onboarding_completed", {
+        exam_goal: examGoal ?? "none",
+        has_exam_date: examDate !== null,
+        study_style: studyStyle ?? "none",
+        pathway_id: pathwayId ?? "none",
+      });
+    }
 
     return NextResponse.json({ ok: true, pathwayId });
   } catch {

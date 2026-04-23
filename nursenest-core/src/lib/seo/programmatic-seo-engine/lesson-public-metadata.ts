@@ -2,6 +2,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import {
   clampMetaDescription,
+  isShoutyOrSpammyTitle,
   isWeakMetaDescription,
   isWeakSeoTitle,
 } from "@/lib/seo/programmatic-seo-engine/guardrails";
@@ -95,9 +96,9 @@ export function mergePathwayLessonPublicMetadata(args: {
   });
 
   const title =
-    !isWeakSeoTitle(manualTitle, 12) && manualTitle.length <= 70
-      ? { title: manualTitle, source: "manual" as const }
-      : { title: autoTitle.slice(0, 72), source: "auto" as const };
+    !isWeakSeoTitle(manualTitle, 8) && !isShoutyOrSpammyTitle(manualTitle)
+      ? { title: manualTitle.slice(0, 110), source: "manual" as const }
+      : { title: autoTitle.slice(0, 110), source: "auto" as const };
 
   const description: ProgrammaticDescriptionMerge = !isWeakMetaDescription(manualDesc)
     ? { description: clampMetaDescription(manualDesc), source: "manual" }

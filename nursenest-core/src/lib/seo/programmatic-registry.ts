@@ -17,6 +17,8 @@
  * - AI-assisted drafts should be validated with `npm run validate:programmatic-seo` before merge.
  * - Per-question marketing URLs at huge scale belong in a separate, data-backed system (exam items + allowlists),
  *   not copy-pasted templates — see product architecture docs.
+ * - Pathway body-system hubs (`/{country}/{role}/{exam}/study-resources/{bodyKey}`) are **inventory gated**
+ *   (lesson + bank counts + {@link clusterPageMeetsIndexabilityThreshold}) in `content-backed-study-resource-hub.ts`.
  *
  * **Public URLs:** `/{slug}` (rewritten to `/seo/[slug]`). Localized: `/{locale}/{slug}`. Canonical + hreflang via
  * `buildProgrammaticMetadata`. JSON-LD: `ProgrammaticPageJsonLd` (LearningResource + optional FAQPage).

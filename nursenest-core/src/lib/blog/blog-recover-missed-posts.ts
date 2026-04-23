@@ -1,5 +1,6 @@
 import { BlogCampaignItemStatus, BlogPostStatus, BlogWorkflowStatus, type Prisma } from "@prisma/client";
 import { appendBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
+import { blogPrePublishValidationSelect, validateBlogPrePublish } from "@/lib/blog/blog-pre-publish-validation";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
@@ -104,6 +105,24 @@ export async function recoverMissedBlogPostsBatch(
   const slugs: string[] = [];
 
   for (const row of targets) {
+    const preRow = await prisma.blogPost.findUnique({
+      where: { id: row.id },
+      select: blogPrePublishValidationSelect,
+    });
+    if (!preRow) continue;
+    const prePublish = await validateBlogPrePublish(preRow, row.id);
+    if (!prePublish.okToPublish) {
+      const blockedLog = appendBlogAdminPublishLog(row.adminPublishLog ?? [], {
+        level: "error",
+        event: "missed_publish_blocked_pre_publish",
+        message: "Missed-publish recovery skipped — pre-publish validation failed (includes taxonomy gate).",
+        detail: { blocking: prePublish.blocking.slice(0, 12) },
+      });
+      await prisma.blogPost
+        .update({ where: { id: row.id }, data: { adminPublishLog: blockedLog } })
+        .catch(() => undefined);
+      continue;
+    }
     const log = appendBlogAdminPublishLog(row.adminPublishLog ?? [], {
       level: "info",
       event: "missed_publish_recovered",

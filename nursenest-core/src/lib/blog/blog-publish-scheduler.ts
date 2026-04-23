@@ -1,5 +1,6 @@
 import { BlogCampaignItemStatus, BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
 import { appendBlogAdminPublishLog, parseBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
+import { blogPrePublishValidationSelect, validateBlogPrePublish } from "@/lib/blog/blog-pre-publish-validation";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -67,6 +68,44 @@ export async function promoteScheduledBlogPosts(now: Date = new Date()): Promise
 
       const canonicalPublishAt = c.publishAt ?? c.scheduledAt ?? now;
       try {
+        const preRow = await prisma.blogPost.findUnique({
+          where: { id: c.id },
+          select: blogPrePublishValidationSelect,
+        });
+        if (!preRow) {
+          failures.push({
+            id: c.id,
+            slug: c.slug,
+            attempt: priorFailures + 1,
+            error: "post_missing_for_pre_publish",
+            exhausted: false,
+          });
+          continue;
+        }
+        const prePublish = await validateBlogPrePublish(preRow, c.id);
+        if (!prePublish.okToPublish) {
+          const errorText = prePublish.blocking.map((b) => b.message).join("; ");
+          failures.push({
+            id: c.id,
+            slug: c.slug,
+            attempt: priorFailures + 1,
+            error: errorText.slice(0, 500),
+            exhausted: false,
+          });
+          const blockedLog = appendBlogAdminPublishLog(c.adminPublishLog, {
+            level: "error",
+            event: "auto_publish_blocked_pre_publish",
+            message: "Scheduled auto-publish skipped — pre-publish validation failed (includes taxonomy gate).",
+            detail: { blocking: prePublish.blocking.slice(0, 12) },
+          });
+          await prisma.blogPost
+            .update({
+              where: { id: c.id },
+              data: { adminPublishLog: blockedLog },
+            })
+            .catch(() => undefined);
+          continue;
+        }
         const nextLog = appendBlogAdminPublishLog(c.adminPublishLog, {
           level: "info",
           event: "auto_published",
@@ -154,7 +193,7 @@ export async function recoverOverdueBlogPosts(
         postStatus: { in: [BlogPostStatus.SCHEDULED, BlogPostStatus.DRAFT, BlogPostStatus.APPROVED] },
         OR: [{ publishAt: { lte: now } }, { scheduledAt: { lte: now } }],
       },
-      select: { id: true, publishAt: true, scheduledAt: true },
+      select: { id: true, publishAt: true, scheduledAt: true, adminPublishLog: true },
       orderBy: [{ publishAt: "asc" }, { scheduledAt: "asc" }, { updatedAt: "asc" }],
       take: safeLimit,
     });
@@ -164,6 +203,24 @@ export async function recoverOverdueBlogPosts(
     const ids: string[] = [];
     for (const row of rows) {
       const publishAt = row.publishAt ?? row.scheduledAt ?? now;
+      const preRow = await prisma.blogPost.findUnique({
+        where: { id: row.id },
+        select: blogPrePublishValidationSelect,
+      });
+      if (!preRow) continue;
+      const prePublish = await validateBlogPrePublish(preRow, row.id);
+      if (!prePublish.okToPublish) {
+        const blockedLog = appendBlogAdminPublishLog(row.adminPublishLog, {
+          level: "error",
+          event: "recover_publish_blocked_pre_publish",
+          message: "Recover-overdue skipped — pre-publish validation failed (includes taxonomy gate).",
+          detail: { blocking: prePublish.blocking.slice(0, 12) },
+        });
+        await prisma.blogPost
+          .update({ where: { id: row.id }, data: { adminPublishLog: blockedLog } })
+          .catch(() => undefined);
+        continue;
+      }
       const res = await prisma.blogPost.updateMany({
         where: { id: row.id, postStatus: { in: [BlogPostStatus.SCHEDULED, BlogPostStatus.DRAFT, BlogPostStatus.APPROVED] } },
         data: {

@@ -13,6 +13,7 @@ import { ADMIN_AI_LESSON_GENERATOR_TOOL } from "@/lib/lessons/admin-ai-lesson-pi
 import { prisma } from "@/lib/db";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import { tierCodeToContentItemTier } from "@/lib/prisma/exam-question-maps";
+import { contentItemLessonTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
 
 export const dynamic = "force-dynamic";
 
@@ -67,6 +68,23 @@ export async function POST(req: Request, ctx: RouteContext) {
     return NextResponse.json({ error: "Lesson body too short after assembly" }, { status: 400 });
   }
 
+  const promoteTags = [...lesson.metadata.suggestedTags, `ai-lesson:${inputs.lessonType}`].slice(0, 40);
+  const taxonomy = contentItemLessonTaxonomyFromCorpus({
+    title: lesson.title.slice(0, 220),
+    summary: lesson.shortDescription.slice(0, 2000),
+    body: bodyPlain,
+    tags: promoteTags,
+    topicHint: lesson.metadata.suggestedBodySystem ?? null,
+    systemHint: inputs.topicDomain.slice(0, 120),
+    categoryHint: cat.name ?? cat.slug,
+  });
+  if (taxonomy.violations.length > 0) {
+    return NextResponse.json(
+      { error: "Taxonomy classification invalid", violations: taxonomy.violations, code: "taxonomy_invalid" },
+      { status: 422 },
+    );
+  }
+
   const lessonRow = await prisma.contentItem.create({
     data: {
       title: lesson.title.slice(0, 220),
@@ -77,9 +95,9 @@ export async function POST(req: Request, ctx: RouteContext) {
       tier: tierCodeToContentItemTier(tierCode),
       status: contentStatusToDb(ContentStatus.DRAFT),
       regionScope,
-      tags: [...lesson.metadata.suggestedTags, `ai-lesson:${inputs.lessonType}`].slice(0, 40),
+      tags: promoteTags,
       category: cat.name ?? cat.slug,
-      bodySystem: lesson.metadata.suggestedBodySystem ?? inputs.topicDomain.slice(0, 120),
+      bodySystem: taxonomy.bodySystem,
       versionKey: `ai-draft:${id}`,
     },
   });

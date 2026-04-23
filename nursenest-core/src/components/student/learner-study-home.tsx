@@ -34,6 +34,7 @@ import type { TopicTrendRow } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import type { DashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
+import type { StudyNextRecommendation } from "@/lib/learner/study-next-types";
 import type { CoachDashboardSummary } from "@/lib/coach/study-coach-types";
 import type { StudySettings } from "@/lib/learner/study-settings";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
@@ -131,6 +132,8 @@ export type LearnerStudyHomeProps = {
   showShell?: boolean;
   /** Server entitlement — drives plan line + billing visibility in the user-panel band. */
   entitlement: AccessScope;
+  /** Smart study-next row (suppression-aware); when empty/omitted the adaptive card uses base ranking. */
+  adaptiveStudyNextRecs?: StudyNextRecommendation[] | null;
 };
 
 export function LearnerStudyHome({
@@ -165,6 +168,7 @@ export function LearnerStudyHome({
   priorityEyebrowKey = "learner.studyHome.sectionPriorityEyebrow",
   showShell = true,
   entitlement,
+  adaptiveStudyNextRecs,
 }: LearnerStudyHomeProps) {
   const trends = studySnap?.topicTrends ?? [];
   const strongHighlight = studySnap?.strongTopicsHighlight ?? [];
@@ -362,7 +366,9 @@ export function LearnerStudyHome({
         <div className="nn-dash-momentum-grid">
           <div className="nn-dash-momentum-grid__main">
             <RecentGainsBlock trends={trends} strongTopics={strongHighlight} t={t} />
-            {showAdaptivePlan && studySnap ? <LearnerAdaptiveFocusCard snapshot={studySnap} /> : null}
+            {showAdaptivePlan && studySnap ? (
+              <LearnerAdaptiveFocusCard snapshot={studySnap} studyNextRecs={adaptiveStudyNextRecs ?? undefined} />
+            ) : null}
           </div>
           <div className="nn-dash-momentum-grid__aside">
             {showCoach && coachSummary ? (

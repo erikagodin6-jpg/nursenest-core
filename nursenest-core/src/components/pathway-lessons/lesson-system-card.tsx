@@ -34,7 +34,8 @@ import type {
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 
-const LESSON_SYSTEM_PREVIEW = 12;
+/** Hub preview: keep sections scannable; full library via “View all”. */
+const LESSON_SYSTEM_PREVIEW = 10;
 
 type SystemVisual = {
   icon: LucideIcon;
@@ -98,14 +99,19 @@ export function LessonSystemCard({
   const visual = SYSTEM_VISUALS[section.systemLabel] ?? { icon: Activity, accentVar: "--semantic-brand" };
   const Icon = visual.icon;
   const systemStyle = { "--nn-system-accent": `var(${visual.accentVar})` } as CSSProperties;
+  /** Rows that actually render a link — counts and progress must match visible cards, not raw section length. */
+  const linkableLessons = section.lessons.filter(
+    (lesson) => pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug) != null,
+  );
+  const displayCount = linkableLessons.length;
   const completedCount = showProgress
-    ? section.lessons.filter((lesson) => progressMap[lesson.slug] === "completed").length
+    ? linkableLessons.filter((lesson) => progressMap[lesson.slug] === "completed").length
     : 0;
   const inProgressCount = showProgress
-    ? section.lessons.filter((lesson) => progressMap[lesson.slug] === "in_progress").length
+    ? linkableLessons.filter((lesson) => progressMap[lesson.slug] === "in_progress").length
     : 0;
-  const previewLessons = section.lessons.slice(0, LESSON_SYSTEM_PREVIEW);
-  const hiddenLessonCount = Math.max(0, section.lessons.length - previewLessons.length);
+  const previewLessons = linkableLessons.slice(0, LESSON_SYSTEM_PREVIEW);
+  const hiddenLessonCount = Math.max(0, linkableLessons.length - previewLessons.length);
 
   return (
     <section
@@ -129,22 +135,24 @@ export function LessonSystemCard({
             <span className="shrink-0 text-xs font-semibold text-[var(--theme-muted-text)]">
               {showProgress ? (
                 <>
-                  {completedCount} of {section.count} completed
+                  {completedCount} of {displayCount} completed
                 </>
               ) : (
-                <>{section.count} lessons</>
+                <>
+                  {displayCount} lesson{displayCount === 1 ? "" : "s"}
+                </>
               )}
             </span>
           </div>
           <CategoryProgressBar
             completedCount={completedCount}
             inProgressCount={inProgressCount}
-            totalCount={section.count}
+            totalCount={Math.max(displayCount, 1)}
           />
         </div>
       </div>
 
-      <div className="mt-3.5 space-y-1">
+      <div className="mt-3.5 min-h-[4.5rem] space-y-1">
         {previewLessons.map((lesson) => {
           const href = pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
           if (!href) return null;
@@ -167,7 +175,7 @@ export function LessonSystemCard({
               href={`${lessonsBasePath}#pathway-lesson-library`}
               className="inline-flex text-xs font-semibold text-primary underline-offset-2 hover:underline"
             >
-              View all {section.count} lessons in library
+              View all {displayCount} lessons in library
             </Link>
           </div>
         ) : null}

@@ -17,8 +17,10 @@ import {
   STUDY_PATH_KINDS,
 } from "@/lib/learner/structured-study-path";
 import { loadPremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
+import { buildPersonalizedWeakAreaStudyPlan } from "@/lib/learner/personalized-weak-area-study-plan";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import { PersonalizedWeakAreaStudyPlanPanel } from "@/components/student/personalized-weak-area-study-plan-panel";
 
 const KIND_LOOKUP = new Set<string>(STUDY_PATH_KINDS);
 
@@ -50,6 +52,7 @@ export default async function StudyPlanPage({ searchParams }: Props) {
 
   let adaptive = null;
   let insightSnapshot = null;
+  let weakPlan: Awaited<ReturnType<typeof buildPersonalizedWeakAreaStudyPlan>> = null;
   let structuredPath: Awaited<ReturnType<typeof loadStructuredStudyPathForSubscriber>> | null = null;
   let inferredStudyKind = inferStudyPathKindFromLearnerProfile({});
   let studyKindFromQuery: (typeof STUDY_PATH_KINDS)[number] | null = null;
@@ -70,6 +73,15 @@ export default async function StudyPlanPage({ searchParams }: Props) {
           },
         }),
       ]);
+      if (topicPerf) {
+        weakPlan = await buildPersonalizedWeakAreaStudyPlan({
+          userId,
+          entitlement,
+          learnerPath: userExam?.learnerPath ?? null,
+          topicPerformance: topicPerf,
+        });
+      }
+
       if (premiumSnapshot && topicPerf) {
         insightSnapshot = premiumSnapshot.insights;
         adaptive = buildAdaptiveRecommendations({
@@ -114,6 +126,7 @@ export default async function StudyPlanPage({ searchParams }: Props) {
     } catch {
       adaptive = null;
       structuredPath = null;
+      weakPlan = null;
     }
   }
 
@@ -137,6 +150,8 @@ export default async function StudyPlanPage({ searchParams }: Props) {
       ) : null}
 
       {adaptive ? <AdaptiveStudyOverview adaptive={adaptive} showHeading userId={userId} /> : null}
+
+      {weakPlan ? <PersonalizedWeakAreaStudyPlanPanel plan={weakPlan} t={t} /> : null}
 
       {insightSnapshot ? <LearnerInsightEnginePanel insights={insightSnapshot} /> : null}
 
