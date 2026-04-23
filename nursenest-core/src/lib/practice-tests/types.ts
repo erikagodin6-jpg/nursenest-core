@@ -12,6 +12,13 @@ export type { CatResultsCoachSnapshot } from "@/lib/practice-tests/cat-results-c
  */
 export type CatExamFeedbackMode = "study" | "test";
 
+/**
+ * When `selectionMode === "cat"`: strict adaptive CAT vs guided practice on the same CAT pool + filters.
+ * - `cat`: adaptive length, atomic advance on latest item only, test/study feedback per `catExamFeedbackMode`.
+ * `practice`: fixed-length seeded shuffle, rationales after each item, advance allowed on any item index.
+ */
+export type CatAdaptiveSessionType = "cat" | "practice";
+
 /** Sections built from DB rationale fields (CAT Study Mode). */
 export type CatStudyFeedbackSection = { heading: string; body: string };
 
@@ -106,6 +113,8 @@ export type PracticeTestConfigJson = {
    * Exam simulation coerces to `test` on the server.
    */
   catExamFeedbackMode?: CatExamFeedbackMode;
+  /** Strict adaptive vs guided practice (same pool build as CAT). */
+  catAdaptiveSessionType?: CatAdaptiveSessionType;
   /** Blueprint used for weights + diagnostics (e.g. nclex-rn-us). */
   catExamConfigId?: string | null;
   /**

@@ -34,6 +34,12 @@ import {
   buildSchemaSummaryPayload,
 } from "@/lib/blog/blog-seo-automation";
 import {
+  clampSerpDescription,
+  clampSerpTitle,
+  deriveBlogCategoryForPersist,
+  normalizeBlogTagsForStorage,
+} from "@/lib/blog/blog-seo-package";
+import {
   buildArticleBodySystemPrompt,
   buildArticleBodyUserPrompt,
   buildStructuredPlanSystemPrompt,
@@ -345,9 +351,15 @@ export async function persistControlPanelDraft(
   const countryTarget: CountryCode | null =
     input.country === "US" ? CountryCode.US : input.country === "CA" ? CountryCode.CA : null;
 
-  const tagsForSeo = input.keywords
-    ? input.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 12)
-    : [];
+  const tagsForSeo = normalizeBlogTagsForStorage(
+    input.keywords ? input.keywords.split(",").map((s) => s.trim()).filter(Boolean) : [],
+    plan.seoFocusKeywords ?? [],
+    12,
+  );
+  const categoryAssigned = deriveBlogCategoryForPersist({
+    keywordCluster: input.keywordCluster,
+    template: input.template,
+  });
 
   const faqBlock = { items: plan.faqs };
   let seoBundle;
@@ -358,6 +370,15 @@ export async function persistControlPanelDraft(
     console.error(`[blog-persist] buildPersistedSeoBundle failed; using minimal SEO bundle: ${msg}`);
     seoBundle = buildMinimalSeoBundleFallback(plan, slug, tagsForSeo);
   }
+  const seoTitleStored = clampSerpTitle(plan.metaTitle, 70).slice(0, 200);
+  const seoDescriptionStored = clampSerpDescription(plan.metaDescription, 120, 155).slice(0, 500);
+  seoBundle = {
+    ...seoBundle,
+    openGraphTitle: (seoBundle.openGraphTitle ?? seoTitleStored).slice(0, 120),
+    openGraphDescription: (seoBundle.openGraphDescription ?? seoDescriptionStored).slice(0, 200),
+    twitterTitle: seoTitleStored.slice(0, 120),
+    twitterDescription: seoDescriptionStored.slice(0, 200),
+  };
   const internalLinkPlan = {
     lessons: plan.suggestedInternalLessons,
     imagePlacements: plan.imagePlacements,
@@ -409,7 +430,14 @@ export async function persistControlPanelDraft(
         excerpt: excerpt.length >= 10 ? excerpt : `${pageTitle.slice(0, 200)}. Draft excerpt; edit before publish.`,
         body: bodyWithRequiredLinks,
         exam: input.exam,
-        targetKeyword: normalizedTopic || (input.targetKeyword ?? input.topic).slice(0, 200),
+        category: categoryAssigned,
+        targetKeyword: (
+          (seoBundle.primaryKeyword && seoBundle.primaryKeyword.trim()) ||
+          normalizedTopic ||
+          (input.targetKeyword ?? input.topic)
+        )
+          .toString()
+          .slice(0, 200),
         keywordCluster: input.keywordCluster ?? null,
         countryTarget,
         intent: input.intent,
@@ -417,10 +445,10 @@ export async function persistControlPanelDraft(
         postTemplate: input.template,
         postStatus: BlogPostStatus.DRAFT,
         publishAt: null,
-        seoTitle: plan.metaTitle.slice(0, 200),
-        seoDescription: plan.metaDescription.slice(0, 500),
-        metaTitleVariant: plan.metaTitle.slice(0, 200),
-        metaDescriptionVariant: plan.metaDescription.slice(0, 500),
+        seoTitle: seoTitleStored,
+        seoDescription: seoDescriptionStored,
+        metaTitleVariant: seoTitleStored,
+        metaDescriptionVariant: seoDescriptionStored,
         tags: tagsForSeo,
         outlineJson: plan.outline as unknown as Prisma.InputJsonValue,
         keyQuestions: plan.faqs.slice(0, 6).map((f) => f.q),

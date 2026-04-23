@@ -75,7 +75,7 @@ export function HomeConversionHero({
 
   return (
     <section
-      className="nn-gradient-safe nn-hero-branded nn-hero-branded--ambient-depth relative overflow-x-hidden border-b border-[var(--header-nav-border)]"
+      className="hero nn-gradient-safe nn-hero-branded nn-hero-branded--ambient-depth relative overflow-x-hidden border-b border-[var(--header-nav-border)]"
       data-testid="hero-section"
       aria-labelledby="home-conversion-hero-heading"
     >
@@ -193,7 +193,7 @@ export function HomeConversionHero({
               </StaggerItem>
               <StaggerItem variant="softReveal" timing="hero">
                 <p
-                  className="nn-marketing-caption flex max-w-xl flex-wrap items-baseline gap-x-1.5 gap-y-1 text-balance text-[var(--palette-text-muted)]"
+                  className="nn-mobile-hero-stats-reserve nn-marketing-caption flex max-w-xl flex-wrap items-baseline gap-x-1.5 gap-y-1 text-balance text-[var(--palette-text-muted)]"
                   data-testid="text-hero-live-stats"
                 >
                   {statsSegments.map((node, i) => (
@@ -223,13 +223,15 @@ export function HomeConversionHero({
 
             <div className="min-w-0 lg:col-span-5 lg:self-center xl:col-span-6">
               <figure
-                className="mx-auto w-full max-w-md rounded-2xl border border-[var(--border-subtle)] bg-[var(--semantic-panel-muted)] p-2 shadow-[var(--shadow-card)] lg:mx-0 lg:max-w-none lg:sticky lg:top-24"
+                className="card mx-auto w-full max-w-md rounded-2xl border border-[var(--border-subtle)] bg-[var(--semantic-panel-muted)] p-2 shadow-[var(--shadow-card)] lg:mx-0 lg:max-w-none lg:sticky lg:top-24"
                 aria-label={heroDesktopPreview.alt}
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-[var(--page-bg)]">
                   <Image
                     src={heroDesktopPreview.publicUrl}
                     alt={heroDesktopPreview.alt}
+                    width={1200}
+                    height={900}
                     fill
                     sizes="(min-width: 1024px) 42vw, 100vw"
                     className="object-cover object-top"

@@ -89,10 +89,11 @@ export default async function PracticeTestsPage() {
         <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.practiceTests.title")}</h1>
         <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.subtitle.subscriber")}</p>
         <p className="mt-3 text-sm text-[var(--semantic-text-secondary)]">
+          {t("learner.practiceTests.pageHero.catInsightsLead")}{" "}
           <Link href="/app/practice-tests/cat-insights" className="font-semibold text-primary underline">
-            CAT confidence dashboard
-          </Link>{" "}
-          — trends across your completed adaptive sessions.
+            {t("learner.practiceTests.pageHero.catInsightsLink")}
+          </Link>
+          .
         </p>
       </div>
       <LearnerStudyQuickLinksCard t={t} id="practice-tests-study-quick-links" catHref={catHref} />

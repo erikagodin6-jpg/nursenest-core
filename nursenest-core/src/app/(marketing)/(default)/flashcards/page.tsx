@@ -93,7 +93,7 @@ export default async function PublicFlashcardsHubPage() {
           <div className="min-w-0">
             <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-[var(--pill-border)] bg-[var(--pill-bg)] px-3 py-1 text-xs font-semibold text-[var(--pill-fg)]">
               <BookOpen className="h-3 w-3" aria-hidden />
-              Flashcard Library
+              {t("pages.publicFlashcardsHub.heroPill")}
             </div>
             <h1 className="text-2xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl">
               {t("pages.publicFlashcardsHub.h1")}

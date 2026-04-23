@@ -465,7 +465,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
         </div>
         <div className="nn-section-shell flex flex-col overflow-visible">
           {/* ── Mobile brand row ── */}
-          <div className="nn-header-mobile-only-flex min-h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] pt-[env(safe-area-inset-top,0px)] sm:gap-4">
+          <div className="top-bar nn-header-mobile-only-flex min-h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] pt-[env(safe-area-inset-top,0px)] sm:gap-4">
             <div className="flex min-w-0 shrink items-center gap-2 overflow-hidden">
               <Link
                 href={localizeHref("/")}
@@ -618,7 +618,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
 
             <nav
               aria-label={t("nav.marketingExplore")}
-              className="flex min-w-0 flex-1 flex-wrap items-center justify-center gap-0.5 px-2 sm:px-3 xl:gap-1"
+              className="nav flex min-w-0 flex-1 flex-wrap items-center justify-center gap-0.5 px-2 sm:px-3 xl:gap-1"
             >
               {marketingMoreLinks.map((item) => (
                 <Link

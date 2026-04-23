@@ -77,8 +77,8 @@ export function defaultPublicLessonsMetaTitle(region: MarketingRegionToggle): st
 
 export function defaultPublicLessonsMetaDescription(region: MarketingRegionToggle): string {
   return region === "US"
-    ? "Browse pathway-scoped clinical lessons for US nursing exams: NCLEX-RN, NCLEX-PN (LPN / LVN), and NP tracks. Previews are public; full depth unlocks with a matching plan."
-    : "Browse pathway-scoped clinical lessons for Canadian nursing exams: NCLEX-RN, REx-PN (RPN), and NP tracks. Previews are public; full depth unlocks with a matching plan.";
+    ? "Practice NCLEX-RN, NCLEX-PN, and NP lessons with exam-style reasoning for the US. Built for nursing candidates; previews are public and full depth unlocks with a plan."
+    : "Practice NCLEX-RN, REx-PN, and NP lessons with exam-style reasoning for Canada. Built for Canadian nurses; previews are public and full depth unlocks with a plan.";
 }
 
 export function defaultQuestionBankMetaTitle(region: MarketingRegionToggle): string {
@@ -89,8 +89,8 @@ export function defaultQuestionBankMetaTitle(region: MarketingRegionToggle): str
 
 export function defaultQuestionBankMetaDescription(region: MarketingRegionToggle): string {
   return region === "US"
-    ? "Public overview of the NurseNest nursing question bank: NCLEX-RN, NCLEX-PN (LPN / LVN), NP, and allied tracks for the United States. Sign up to practice in the app."
-    : "Public overview of the NurseNest nursing question bank: NCLEX-RN, REx-PN (RPN), NP, and allied tracks for Canada. Sign up to practice in the app.";
+    ? "Practice NCLEX-RN and NCLEX-PN questions with rationales and adaptive tests. Built for US nursing candidates; sign in for full banks and saved history."
+    : "Practice NCLEX-RN and REx-PN questions with rationales and adaptive tests. Built for Canadian nurses; sign in for full banks and saved history.";
 }
 
 export function defaultPracticeExamsMetaTitle(region: MarketingRegionToggle): string {
@@ -101,8 +101,8 @@ export function defaultPracticeExamsMetaTitle(region: MarketingRegionToggle): st
 
 export function defaultPracticeExamsMetaDescription(region: MarketingRegionToggle): string {
   return region === "US"
-    ? "Timed practice exams for US nursing candidates (NCLEX-RN, NCLEX-PN / LPN / LVN, NP). Create an account to launch mocks in the app."
-    : "Timed practice exams for Canadian nursing candidates (NCLEX-RN, REx-PN / RPN, NP). Create an account to launch mocks in the app.";
+    ? "Practice adaptive NCLEX-RN and NCLEX-PN mock exams with realistic pacing. Built for US nursing candidates; create an account to launch full mocks in the app."
+    : "Practice adaptive NCLEX-RN and REx-PN mock exams with realistic pacing. Built for Canadian nurses; create an account to launch full mocks in the app.";
 }
 
 export function defaultFlashcardsMetaTitle(region: MarketingRegionToggle): string {
@@ -113,8 +113,8 @@ export function defaultFlashcardsMetaTitle(region: MarketingRegionToggle): strin
 
 export function defaultFlashcardsMetaDescription(region: MarketingRegionToggle): string {
   return region === "US"
-    ? "Topic-organized nursing flashcards for NCLEX-RN and NCLEX-PN (LPN / LVN), plus clinical review. Sample cards here; full study inside NurseNest."
-    : "Topic-organized nursing flashcards for NCLEX-RN and REx-PN (RPN), plus clinical review. Sample cards here; full study inside NurseNest.";
+    ? "Practice NCLEX-RN and NCLEX-PN recall with topic flashcards and clinical review. Built for US nursing candidates; sample cards here, full decks in NurseNest."
+    : "Practice NCLEX-RN and REx-PN recall with topic flashcards and clinical review. Built for Canadian nurses; sample cards here, full decks in NurseNest.";
 }
 
 export function defaultHomeMetaTitle(region: MarketingRegionToggle): string {

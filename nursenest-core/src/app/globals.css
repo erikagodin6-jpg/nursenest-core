@@ -11589,3 +11589,39 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   line-height: 1.55;
   color: var(--semantic-text-muted);
 }
+
+/*
+ * Mobile CLS (≤768px): marketing + public chrome only.
+ * - Do not blanket-style Next/Image `fill` imgs (`sizes` set) — would fight absolute fill layout.
+ * - Typed `attr()` for aspect-ratio is progressive enhancement (ignored where unsupported).
+ */
+@media (max-width: 768px) {
+  .nn-marketing-surface img[width][height]:not([sizes]):not([data-nn-header-logo]),
+  .nn-marketing-surface video[width][height] {
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: attr(width number) / attr(height number);
+    width: 100%;
+  }
+
+  .nn-marketing-surface .hero,
+  .nn-marketing-surface .card {
+    min-height: 120px;
+  }
+
+  /* Header leaf slot: keep a stable box without forcing the 120px marketing hero floor onto chrome */
+  .nn-marketing-surface header .logo-container {
+    min-height: 46px;
+    min-width: 46px;
+  }
+
+  .nn-marketing-surface .nav,
+  .nn-marketing-surface .top-bar {
+    min-height: 56px;
+  }
+
+  /* Live hero stats: reserve two lines when counts hydrate in */
+  .nn-marketing-surface .nn-mobile-hero-stats-reserve {
+    min-height: 3.25rem;
+  }
+}

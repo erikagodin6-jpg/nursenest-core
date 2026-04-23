@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import type { HomeHeroSlide } from "@/config/home-hero-carousel";
 import {
@@ -63,7 +64,13 @@ const sectionFrameChromeClass =
 const defaultFrameChromeClass =
   "rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] shadow-sm";
 
-export function MarketingHeroCarousel({
+/** Next/Image `fill` intrinsic hint — aligns with frame aspects (16/10 vs 4/3). */
+function marketingHeroFillDimensions(mediaFrame: "default" | "hero" | "section"): { w: number; h: number } {
+  if (mediaFrame === "section") return { w: 1200, h: 900 };
+  return { w: 1600, h: 1000 };
+}
+
+function MarketingHeroCarouselInteractive({
   slides,
   onMediaUnavailable,
   mediaFrame = "default",
@@ -74,6 +81,7 @@ export function MarketingHeroCarousel({
   captionOverlay = false,
   onActiveSlideAnalytics,
 }: MarketingHeroCarouselProps) {
+  const fillHint = marketingHeroFillDimensions(mediaFrame);
   const { t } = useMarketingI18n();
   const reducedMotion = useReducedMotion();
   const [current, setCurrent] = useState(0);
@@ -245,6 +253,8 @@ export function MarketingHeroCarousel({
           <Image
             src={MARKETING_HERO_LOCAL_FALLBACK}
             alt=""
+            width={fillHint.w}
+            height={fillHint.h}
             fill
             unoptimized
             className={`pointer-events-none object-contain ${slideImageBgClass}`}
@@ -310,6 +320,8 @@ export function MarketingHeroCarousel({
               key={`${slide.objectKey}-${index}-${tier}`}
               src={src}
               alt={slide.alt}
+              width={fillHint.w}
+              height={fillHint.h}
               fill
               sizes={carouselSizes}
               quality={photoQuality}
@@ -430,4 +442,188 @@ export function MarketingHeroCarousel({
       ) : null}
     </div>
   );
+}
+
+/** First slide only: no autoplay, idle hydration, dots, or cross-slide state. */
+function MarketingHeroCarouselMobileLite({
+  slides,
+  onMediaUnavailable,
+  mediaFrame = "default",
+  className,
+  testIdPrefix = "hero-carousel",
+  imgTestIdPrefix = "hero",
+  captionOverlay = false,
+  onActiveSlideAnalytics,
+}: MarketingHeroCarouselProps) {
+  const fillHint = marketingHeroFillDimensions(mediaFrame);
+  const { t } = useMarketingI18n();
+  const [tier, setTier] = useState(0);
+  const [heroFallback, setHeroFallback] = useState(false);
+  const slide0 = slides[0];
+
+  useEffect(() => {
+    if (!slide0 || heroFallback || !onActiveSlideAnalytics) return;
+    onActiveSlideAnalytics(slide0);
+  }, [heroFallback, onActiveSlideAnalytics, slide0]);
+
+  if (slides.length === 0) {
+    return (
+      <div
+        className="mx-auto max-w-md rounded-xl border border-dashed border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-5 text-center text-sm leading-relaxed text-muted-foreground"
+        data-testid={`${testIdPrefix}-empty`}
+      >
+        {t("components.homeConversionSections.platformCarouselEmpty")}
+      </div>
+    );
+  }
+
+  const captionTestId = testIdPrefix === "hero-carousel" ? "hero-carousel-caption" : `${testIdPrefix}-caption`;
+  const fallbackWrapperTestId = testIdPrefix === "hero-carousel" ? "hero-carousel-fallback" : `${testIdPrefix}-fallback`;
+
+  const frameShell =
+    mediaFrame === "hero"
+      ? heroMediaFrameClass
+      : mediaFrame === "section"
+        ? sectionMediaFrameClass
+        : "relative aspect-[16/10] w-full max-h-[min(15rem,42vh)] min-h-[9rem] sm:min-h-[9.5rem]";
+  const carouselSizes =
+    mediaFrame === "hero"
+      ? MARKETING_HERO_LCP_SIZES
+      : mediaFrame === "section"
+        ? MARKETING_HOME_SCREENSHOT_SECTION_SIZES
+        : MARKETING_CAROUSEL_SIZES;
+  const photoQuality =
+    mediaFrame === "hero"
+      ? MARKETING_PHOTO_QUALITY_HERO
+      : mediaFrame === "section"
+        ? MARKETING_PHOTO_QUALITY_HOME_SCREENSHOT_SECTION
+        : MARKETING_PHOTO_QUALITY;
+  const isBelowFoldSection = mediaFrame === "section";
+  const shouldOverlayCaption = captionOverlay && !isBelowFoldSection;
+  const frameChromeClass = isBelowFoldSection ? sectionFrameChromeClass : defaultFrameChromeClass;
+  const slideImageBgClass = isBelowFoldSection ? "bg-[var(--page-bg)]" : "bg-[var(--theme-muted-surface)]";
+
+  if (heroFallback) {
+    return (
+      <div className="relative w-full min-w-0" data-testid={fallbackWrapperTestId}>
+        <div className={`${frameShell} overflow-hidden ${frameChromeClass}`}>
+          <Image
+            src={MARKETING_HERO_LOCAL_FALLBACK}
+            alt=""
+            width={fillHint.w}
+            height={fillHint.h}
+            fill
+            unoptimized
+            className={`pointer-events-none object-contain ${slideImageBgClass}`}
+            sizes={carouselSizes}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  const chain = getMarketingHeroImageUrlChain({
+    objectKey: slide0.objectKey,
+    publicCdnUrl: slide0.publicUrl,
+  });
+  const tierClamped = Math.min(tier, chain.length - 1);
+  const src = chain[tierClamped];
+  const lcp = mediaFrame === "hero";
+
+  return (
+    <div className={`relative flex min-h-0 w-full min-w-0 flex-col ${className ?? ""}`} data-testid={testIdPrefix}>
+      <div className={`${frameShell} relative overflow-hidden ${frameChromeClass}`}>
+        <Image
+          key={`${slide0.objectKey}-m-${tierClamped}`}
+          src={src}
+          alt={slide0.alt}
+          width={fillHint.w}
+          height={fillHint.h}
+          fill
+          sizes={carouselSizes}
+          quality={photoQuality}
+          priority={lcp}
+          loading={isBelowFoldSection ? "lazy" : undefined}
+          fetchPriority={isBelowFoldSection ? "low" : undefined}
+          unoptimized={marketingImageShouldUnoptimize(src)}
+          className={`pointer-events-none object-contain ${slideImageBgClass}`}
+          data-testid={`img-${imgTestIdPrefix}-slide-0`}
+          referrerPolicy="no-referrer"
+          onError={() => {
+            if (tierClamped < chain.length - 1) {
+              setTier((v) => v + 1);
+              return;
+            }
+            setHeroFallback(true);
+            onMediaUnavailable?.();
+          }}
+        />
+        {shouldOverlayCaption ? (
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 z-10"
+            data-testid={captionTestId}
+            aria-hidden
+          >
+            <div className="bg-gradient-to-t from-[color-mix(in_srgb,var(--palette-heading)_55%,transparent)] via-[color-mix(in_srgb,var(--palette-heading)_22%,transparent)] to-transparent px-3 pb-2.5 pt-7 sm:px-4 sm:pb-3 sm:pt-9">
+              {slide0.label ? (
+                <p className="mb-1 line-clamp-1 text-left text-[10px] font-semibold uppercase leading-tight tracking-wide text-[color-mix(in_srgb,var(--text-on-accent)_88%,transparent)] sm:text-[11px]">
+                  {slide0.label}
+                </p>
+              ) : null}
+              <p className="line-clamp-4 text-left text-sm font-semibold leading-snug text-[var(--text-on-accent)] text-balance break-words drop-shadow-sm sm:text-base">
+                {slide0.title}
+              </p>
+              <p className="mt-0.5 line-clamp-3 text-left text-xs leading-snug text-[color-mix(in_srgb,var(--text-on-accent)_92%,transparent)] text-balance break-words sm:line-clamp-4 sm:text-sm">
+                {slide0.caption}
+              </p>
+            </div>
+          </div>
+        ) : null}
+      </div>
+      {!shouldOverlayCaption ? (
+        <div
+          className={`px-0 text-left ${isBelowFoldSection ? "mt-2 space-y-1.5" : "mt-2 space-y-1"}`}
+          data-testid={captionTestId}
+        >
+          {slide0.label ? (
+            <p
+              className={
+                isBelowFoldSection
+                  ? "nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--palette-text-muted)]"
+                  : "nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]"
+              }
+            >
+              {slide0.label}
+            </p>
+          ) : null}
+          <p
+            className={
+              isBelowFoldSection
+                ? "text-balance break-words text-base font-semibold leading-snug text-[var(--palette-heading)] sm:text-lg"
+                : "nn-marketing-h4 text-balance break-words"
+            }
+          >
+            {slide0.title}
+          </p>
+          <p
+            className={
+              isBelowFoldSection
+                ? "max-w-xl text-pretty text-sm leading-relaxed text-[var(--palette-text-muted)] sm:max-w-2xl"
+                : "nn-marketing-caption text-balance break-words text-[var(--theme-body-text)]"
+            }
+          >
+            {slide0.caption}
+          </p>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+export function MarketingHeroCarousel(props: MarketingHeroCarouselProps) {
+  const marketingMobile = useMarketingMobilePerfIsMobile();
+  if (marketingMobile === true) {
+    return <MarketingHeroCarouselMobileLite {...props} />;
+  }
+  return <MarketingHeroCarouselInteractive {...props} />;
 }

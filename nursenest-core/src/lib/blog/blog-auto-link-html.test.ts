@@ -21,6 +21,6 @@ test("applyAutoLinksToHtml does not inject app-only study plan links", () => {
     maxTotalAutoLinks: 3,
   });
 
-  assert.match(linked, /href="\/us\/rn\/nclex-rn\/lessons"/);
+  assert.match(linked, /href="\/lessons"/);
   assert.doesNotMatch(linked, /href="\/app\/study-plan"/);
 });

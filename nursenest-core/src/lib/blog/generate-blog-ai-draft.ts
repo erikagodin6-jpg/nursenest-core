@@ -5,6 +5,7 @@ import {
   BlogPostStatus,
   BlogPostTemplate,
   BlogWorkflowStatus,
+  CountryCode,
   Prisma,
 } from "@prisma/client";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
@@ -23,6 +24,19 @@ import {
   generateBlogSlugBaseFromExamTopic,
   parseOptionalBlogSlug,
 } from "@/lib/blog/blog-optional-slug";
+import {
+  generateBlogSEO,
+  normalizeCountryForBlogSeo,
+  normalizeExamForBlogSeo,
+} from "@/lib/blog/blog-generate-seo";
+import {
+  buildSeoBundleForSimpleAiDraft,
+  clampSerpDescription,
+  clampSerpTitle,
+  deriveBlogCategoryForPersist,
+  normalizeBlogTagsForStorage,
+} from "@/lib/blog/blog-seo-package";
+import { buildSchemaSummaryPayload } from "@/lib/blog/blog-seo-automation";
 
 export type GenerateBlogAiDraftInput = {
   topic: string;
@@ -88,7 +102,20 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
   const now = new Date();
 
   const titleFn = BLOG_TEMPLATE_TITLE_PATTERNS[d.template];
-  const title = titleFn({ exam: d.exam, topic: d.topic });
+  const templateTitle = titleFn({ exam: d.exam, topic: d.topic });
+  const countryTargetResolved =
+    d.countryTarget ??
+    (d.country === "CA" ? CountryCode.CA : d.country === "US" ? CountryCode.US : null);
+  const autoSeo = generateBlogSEO({
+    title: templateTitle,
+    topic: d.topic,
+    exam: normalizeExamForBlogSeo(d.exam),
+    country: normalizeCountryForBlogSeo(countryTargetResolved),
+    existingSlug: slug,
+  });
+  const title = autoSeo.h1.slice(0, 220);
+  const seoTitle = clampSerpTitle(autoSeo.seoTitle, 70).slice(0, 200);
+  const seoDescription = clampSerpDescription(autoSeo.metaDescription, 120, 155).slice(0, 500);
 
   let slug: string;
   try {
@@ -221,12 +248,31 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
     return { ok: false, error: `Article body too short (${wordCount} words; minimum ${BLOG_ARTICLE_MIN_WORDS}).` };
   }
 
-  const excerpt = bodyWithStudy.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);
-  const seoDescription = excerpt.slice(0, 320);
+  let excerpt = bodyWithStudy.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);
+  if (excerpt.length < 80) {
+    excerpt = `${autoSeo.intro} ${excerpt}`.replace(/\s+/g, " ").trim().slice(0, 480);
+  }
+  const primaryKw = (d.targetKeyword ?? d.topic).trim().slice(0, 160);
   const fallbackTopicTag = normalizeBlogTopicKey(d.targetKeyword ?? d.topic)?.replace(/-/g, " ") ?? d.topic;
-  const tags = d.keywords
-    ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 12)
-    : [d.exam, fallbackTopicTag].map((s) => s.trim()).filter(Boolean).slice(0, 12);
+  const tags = normalizeBlogTagsForStorage(
+    d.keywords ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean) : [d.exam, fallbackTopicTag],
+    [d.exam, primaryKw],
+    12,
+  );
+  const categoryAssigned = deriveBlogCategoryForPersist({
+    keywordCluster: d.keywordCluster ?? null,
+    template: d.template,
+  });
+  const seoBundle = buildSeoBundleForSimpleAiDraft({
+    slug,
+    h1: title,
+    seoTitle,
+    seoDescription,
+    excerpt: excerpt.slice(0, 500),
+    tags,
+    primaryKeyword: primaryKw,
+    emitFaqSchema: false,
+  });
   const sources = (d.sourceRecords ?? []) as BlogSourceRecord[];
   const apaReferences = buildApa7References(sources);
   const sourceCheck = validateSources(sources);
@@ -284,34 +330,37 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
         excerpt: excerpt.length >= 10 ? excerpt : `${title.slice(0, 200)}. Draft excerpt; edit before publish.`,
         body: bodyWithStudy,
         exam: d.exam,
-        targetKeyword: normalizedTopic || (d.targetKeyword ?? d.topic),
+        targetKeyword: primaryKw || normalizedTopic || (d.targetKeyword ?? d.topic),
         keywordCluster: d.keywordCluster ?? null,
-        countryTarget: d.countryTarget ?? null,
+        category: categoryAssigned,
+        countryTarget: countryTargetResolved,
         intent: d.intent ?? BlogPostIntent.EXAM_PREP,
         funnelStage: d.funnelStage ?? BlogFunnelStage.CONSIDERATION,
         postTemplate: d.template,
         postStatus,
         publishAt,
-        seoTitle: title.slice(0, 200),
+        seoTitle,
         seoDescription,
+        metaTitleVariant: seoTitle,
+        metaDescriptionVariant: seoDescription,
         tags,
         outlineJson: outline,
         keyQuestions: [
           `What matters most about ${d.topic} on ${d.exam}?`,
           `What mistakes should students avoid for ${d.topic}?`,
         ],
-        keywordPlan: [d.targetKeyword ?? d.topic, ...(d.keywords ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 8) : [])],
-        ...(studyRows.length > 0
-          ? {
-              relatedLessonPaths: studyRelatedPaths,
-              internalLinkPlan: {
-                lessons: studyRows,
-                imagePlacements: [],
-                imageAttachments: [],
-                seo: null,
-              } as Prisma.InputJsonValue,
-            }
-          : {}),
+        keywordPlan: [
+          primaryKw,
+          ...(d.keywords ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 8) : []),
+        ].filter(Boolean),
+        relatedLessonPaths: studyRelatedPaths,
+        internalLinkPlan: {
+          lessons: studyRows,
+          imagePlacements: [],
+          imageAttachments: [],
+          seo: seoBundle,
+        } as Prisma.InputJsonValue,
+        schemaSummary: buildSchemaSummaryPayload(seoBundle, {}),
         ctaType: cta.type,
         ctaText: cta.text,
         ctaHref: cta.href,

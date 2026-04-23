@@ -320,7 +320,8 @@ export function PracticeTestRunnerClient({
       setCatFinalStudyFeedback(null);
       const catStudyAwaiting =
         Boolean(data.catMode) &&
-        (data.config?.catExamFeedbackMode ?? "test") === "study" &&
+        ((data.config?.catAdaptiveSessionType ?? "cat") === "practice" ||
+          (data.config?.catExamFeedbackMode ?? "test") === "study") &&
         astObj?.catStudyAwaitingContinue === true;
       if (catStudyAwaiting && data.status === "IN_PROGRESS") {
         void (async () => {
@@ -509,7 +510,10 @@ export function PracticeTestRunnerClient({
   const chromeVariant = examChromeVariantFromSurface(pathwaySurface);
   const chromeClass = `nn-exam-variant--${chromeVariant}`;
   const examSimulation = testConfig?.catPresentationMode === "exam_simulation";
-  const catFeedbackStudy = Boolean(catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study");
+  const guidedPracticeCat = Boolean(catMode && (testConfig?.catAdaptiveSessionType ?? "cat") === "practice");
+  const catFeedbackStudy = Boolean(
+    guidedPracticeCat || (catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study"),
+  );
   // isExamStyle — CAT test mode: single-column exam shell; explicit submit then lock then next.
   // CAT study mode uses split layout; rationale panel unlocks after submit (see explanation flow).
   const isExamStyle = catMode && !catFeedbackStudy;
@@ -565,20 +569,16 @@ export function PracticeTestRunnerClient({
   }, [current, catStudyFeedback]);
 
   useEffect(() => {
-    if (!catMode) return;
-    const feedbackStudy = (testConfig?.catExamFeedbackMode ?? "test") === "study";
-    if (!feedbackStudy) {
+    if (!catMode || !catFeedbackStudy) {
       /* CAT exam (test) mode: UI phases are advanced only via lock / cat_advance / completion — not qid. */
       return;
     }
     catExamUiPhaseRef.current = "answering";
     setCatExamUiPhase("answering");
-  }, [qid, catMode, testConfig?.catExamFeedbackMode]);
+  }, [qid, catMode, catFeedbackStudy]);
 
   useEffect(() => {
-    const feedbackStudy =
-      catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study";
-    const examStyle = catMode && !feedbackStudy;
+    const examStyle = catMode && !catFeedbackStudy;
     if (!examStyle || status !== "IN_PROGRESS") return;
     const onLeave = (e: BeforeUnloadEvent) => {
       e.preventDefault();
@@ -586,7 +586,7 @@ export function PracticeTestRunnerClient({
     };
     window.addEventListener("beforeunload", onLeave);
     return () => window.removeEventListener("beforeunload", onLeave);
-  }, [catMode, testConfig?.catExamFeedbackMode, status]);
+  }, [catMode, catFeedbackStudy, status]);
 
   const linearDelivery = testConfig?.linearDeliveryMode;
   const linearRationaleVisibility =
@@ -748,7 +748,12 @@ export function PracticeTestRunnerClient({
   function setAnswerForCurrent(next: unknown) {
     if (!current) return;
     if (submitInFlightRef.current || catAdvanceInFlightRef.current || linearCommitInFlightRef.current) return;
-    if (catMode && (testConfig?.catExamFeedbackMode ?? "test") !== "study" && !catExamCanChangeAnswer(catExamUiPhaseRef.current)) {
+    if (
+      catMode &&
+      (testConfig?.catExamFeedbackMode ?? "test") !== "study" &&
+      (testConfig?.catAdaptiveSessionType ?? "cat") !== "practice" &&
+      !catExamCanChangeAnswer(catExamUiPhaseRef.current)
+    ) {
       return;
     }
     if (isLinearEngine && committedSet.has(current.id)) return;
@@ -831,7 +836,10 @@ export function PracticeTestRunnerClient({
     if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
     if (!current || !hasMeaningfulAnswer(current.id)) return;
 
-    const feedbackStudy = catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study";
+    const feedbackStudy =
+      catMode &&
+      ((testConfig?.catAdaptiveSessionType ?? "cat") === "practice" ||
+        (testConfig?.catExamFeedbackMode ?? "test") === "study");
     const examStyle = catMode && !feedbackStudy;
     if (examStyle && !catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) {
       return;
@@ -1035,10 +1043,11 @@ export function PracticeTestRunnerClient({
   async function goNext() {
     if (saving || navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
     if (catMode) {
-      const feedbackStudy = (testConfig?.catExamFeedbackMode ?? "test") === "study";
+      const guided = (testConfig?.catAdaptiveSessionType ?? "cat") === "practice";
+      const feedbackStudy = guided || (testConfig?.catExamFeedbackMode ?? "test") === "study";
       if (feedbackStudy) {
-        /* Study-mode CAT may still expose linear-style navigation for delivered items only. */
-        if (idx < total - 1) return;
+        /* Strict adaptive CAT: next only from the latest delivered item. Guided practice can advance from any index. */
+        if (!guided && idx < total - 1) return;
         await catAdvance();
         return;
       }
@@ -1285,7 +1294,7 @@ export function PracticeTestRunnerClient({
               Review before your summary
             </h2>
             <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">
-              Study Mode: here is the last explanation before your results.
+              {tx("learner.practiceTests.run.catFinalReviewLead", "Here is the last rationale before your summary.")}
             </p>
             <div className="mt-6">
               <CatStudyFeedbackPanel
@@ -1659,14 +1668,14 @@ export function PracticeTestRunnerClient({
     : catMode
       ? examSimulation
         ? aanpNpExamSim
-          ? tx("learner.practiceTests.run.npSimulationMode", "NP simulation · AANP-style")
-          : tx("learner.practiceTests.run.nclexSimulationMode", "NCLEX simulation · CAT")
-        : catFeedbackStudy
-          ? tx("learner.practiceTests.run.catStudyMode", "CAT · Study Mode")
-          : pathwaySurface?.shortName
-            ? `${pathwaySurface.shortName} · ${tx("learner.practiceTests.run.adaptiveExamShort", "Adaptive exam")}`
-            : tx("learner.practiceTests.run.catTestMode", "CAT · Test Mode")
-      : tx("learner.practiceTests.run.practiceMode", "Practice test");
+          ? tx("learner.practiceTests.run.npSimulationMode", "NP adaptive simulation · AANP-style")
+          : tx("learner.practiceTests.run.nclexSimulationMode", "NCLEX-style adaptive simulation")
+        : guidedPracticeCat
+          ? tx("learner.practiceTests.run.practiceTestGuidedCat", "Practice Test")
+          : catFeedbackStudy
+            ? tx("learner.practiceTests.run.catStudyMode", "Adaptive Test · rationales each item")
+            : tx("learner.practiceTests.run.catTestMode", "Adaptive Test · board-style run")
+      : tx("learner.practiceTests.run.practiceMode", "Practice Test");
   const controlsBusy = saving || qLoading;
 
   const sessionPct = total > 0 ? Math.min(100, Math.max(0, ((idx + 1) / total) * 100)) : 0;
@@ -1941,11 +1950,7 @@ export function PracticeTestRunnerClient({
                 total={Math.max(total, 1)}
                 variant="adaptive_item"
                 adaptiveMaxItems={catMaxQ}
-                sessionLabel={
-                  pathwaySurface?.shortName
-                    ? `${pathwaySurface.shortName} · ${tx("learner.practiceTests.run.adaptiveSessionShort", "Adaptive")}`
-                    : undefined
-                }
+                sessionLabel={tx("learner.practiceTests.run.adaptiveSessionShort", "Adaptive Test")}
               />
             ) : (
               <ExamProgressBar current={idx + 1} total={total} />

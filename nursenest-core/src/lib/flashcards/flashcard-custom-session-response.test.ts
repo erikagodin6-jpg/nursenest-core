@@ -1,0 +1,60 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { parseFlashcardCustomSessionResponse } from "@/lib/flashcards/flashcard-custom-session-response";
+
+test("parseFlashcardCustomSessionResponse: success with categories", () => {
+  const r = parseFlashcardCustomSessionResponse(true, {
+    ok: true,
+    summary: { pathwayId: "us-rn-nclex", matchingCards: 10, returnedCards: 5, selectedCategories: [], mode: "mixed" },
+    categoryOptions: [
+      { id: "cardiovascular", title: "Cardiovascular", count: 3 },
+      { id: "respiratory", title: "Respiratory", count: 2 },
+    ],
+  });
+  assert.equal(r.ok, true);
+  if (!r.ok) return;
+  assert.equal(r.categoryOptions.length, 2);
+  assert.equal(r.categoryOptions[0]!.id, "cardiovascular");
+  assert.ok(r.summary);
+});
+
+test("parseFlashcardCustomSessionResponse: success with zero categories is valid empty", () => {
+  const r = parseFlashcardCustomSessionResponse(true, {
+    ok: true,
+    summary: { pathwayId: "x", matchingCards: 0, returnedCards: 0, selectedCategories: [], mode: "mixed" },
+    categoryOptions: [],
+  });
+  assert.equal(r.ok, true);
+  if (!r.ok) return;
+  assert.equal(r.categoryOptions.length, 0);
+});
+
+test("parseFlashcardCustomSessionResponse: HTTP error uses error string", () => {
+  const r = parseFlashcardCustomSessionResponse(false, { error: "Subscription required" });
+  assert.equal(r.ok, false);
+  if (r.ok) return;
+  assert.equal(r.message, "Subscription required");
+});
+
+test("parseFlashcardCustomSessionResponse: non-array categoryOptions is shape error", () => {
+  const r = parseFlashcardCustomSessionResponse(true, { ok: true, categoryOptions: {} });
+  assert.equal(r.ok, false);
+  if (r.ok) return;
+  assert.equal(r.message, "Invalid response shape");
+});
+
+test("parseFlashcardCustomSessionResponse: null body is invalid", () => {
+  const r = parseFlashcardCustomSessionResponse(true, null);
+  assert.equal(r.ok, false);
+});
+
+test("parseFlashcardCustomSessionResponse: skips malformed category rows", () => {
+  const r = parseFlashcardCustomSessionResponse(true, {
+    ok: true,
+    categoryOptions: [{ id: "", title: "x", count: 1 }, { id: "gi", title: "GI", count: 4 }, null, "bad"],
+  });
+  assert.equal(r.ok, true);
+  if (!r.ok) return;
+  assert.equal(r.categoryOptions.length, 1);
+  assert.equal(r.categoryOptions[0]!.id, "gi");
+});

@@ -18,7 +18,7 @@ export function HeaderBrandLockup() {
 
   return (
     <span className="relative inline-flex items-center gap-1.5 overflow-visible align-middle leading-none">
-      <span className="relative z-[20] inline-flex h-[46px] w-[46px] shrink-0 items-center justify-center sm:h-[50px] sm:w-[50px] lg:h-[54px] lg:w-[54px]">
+      <span className="logo-container relative z-[20] inline-flex h-[46px] w-[46px] shrink-0 items-center justify-center sm:h-[50px] sm:w-[50px] lg:h-[54px] lg:w-[54px]">
         {showLeafRaster ? (
           <img
             src={leafUrl ?? ""}
@@ -26,6 +26,7 @@ export function HeaderBrandLockup() {
             draggable={false}
             width={128}
             height={128}
+            data-nn-header-logo
             className="block h-full w-full max-h-full max-w-full bg-transparent object-contain object-center"
             onError={() => setLeafLoadFailed(true)}
           />

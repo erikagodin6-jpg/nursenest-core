@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { PathwayLessonsCurriculumHub } from "./pathway-lessons-curriculum-hub";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
@@ -29,6 +30,22 @@ function lesson(overrides: Partial<PathwayLessonRecord>): PathwayLessonRecord {
 }
 
 describe("PathwayLessonsCurriculumHub", () => {
+  it("renders browseable system-section cards (clinical grouping model)", () => {
+    const cardio = lesson({ slug: "c-1", title: "Heart failure exacerbation", system: "cardiovascular", bodySystem: "cardiovascular" });
+    const resp = lesson({
+      slug: "r-1",
+      title: "Asthma exacerbation and oxygen therapy",
+      system: "respiratory",
+      bodySystem: "respiratory",
+    });
+    const html = renderToStaticMarkup(
+      <PathwayLessonsCurriculumHub lessons={[cardio, resp]} lessonsBasePath="/us/rn/nclex-rn/lessons" pathwayId="us-rn-nclex-rn" />,
+    );
+    assert.match(html, /id="cardiovascular"/);
+    assert.match(html, /id="respiratory"/);
+    assert.match(html, /grid grid-cols-1 gap-4/);
+  });
+
   it("renders a compact board card with progress and wrapped lesson titles", () => {
     const lessons = Array.from({ length: 6 }, (_, index) =>
       lesson({
@@ -54,5 +71,12 @@ describe("PathwayLessonsCurriculumHub", () => {
     assert.match(html, /2\/6/);
     assert.match(html, /Category progress/i);
     assert.match(html, /line-clamp-3/);
+  });
+
+  it("empty hub uses curriculum hub empty marker, not lesson detail loading shell", () => {
+    const html = renderToStaticMarkup(<PathwayLessonsCurriculumHub lessons={[]} lessonsBasePath="/us/rn/nclex-rn/lessons" />);
+    assert.match(html, /curriculum-hub-empty/);
+    assert.ok(!html.includes("PathwayLessonDetailPageLoadingFallback"));
+    assert.ok(!html.includes("pathway-lesson-detail-loading"));
   });
 });

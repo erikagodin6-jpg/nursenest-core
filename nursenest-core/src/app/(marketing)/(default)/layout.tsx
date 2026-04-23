@@ -13,7 +13,7 @@ import { mergeMinimalMarketingLayoutShellMessages } from "@/lib/marketing-i18n/m
 import { getMarketingDefaultLayoutChromeMessages } from "@/lib/marketing-i18n/marketing-layout-chrome-messages.server";
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
-import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
+import { MarketingMobileMotionShell } from "@/lib/ui/marketing-mobile-motion-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 import { MarketingDefaultLayoutChromeFailsafeShell } from "@/components/marketing/marketing-default-layout-chrome-failsafe";
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
@@ -86,7 +86,7 @@ function marketingDefaultLayoutStaticShellForHome({
             <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegion}>
               <CheckoutGlobalRegionContextPathStamp />
               <MarketingDefaultLayoutChromeFailsafeShell>
-                <PageTransitionShell>{children}</PageTransitionShell>
+                <MarketingMobileMotionShell>{children}</MarketingMobileMotionShell>
               </MarketingDefaultLayoutChromeFailsafeShell>
             </MarketingHeaderGlobalRegionServerBridge>
           </MarketingFeedbackShell>
@@ -346,10 +346,10 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                             locale={resolvedLocale}
                             publicContentOverrides={publicContentOverrides}
                           >
-                            <PageTransitionShell>{children}</PageTransitionShell>
+                            <MarketingMobileMotionShell>{children}</MarketingMobileMotionShell>
                           </MarketingMainI18nShards>
                         ) : (
-                          <PageTransitionShell>{children}</PageTransitionShell>
+                          <MarketingMobileMotionShell>{children}</MarketingMobileMotionShell>
                         )}
                       </main>
                       <SiteFooter serverHasStaffSession={staffSession != null} />
@@ -412,7 +412,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                 <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={failsafeGlobalRegion}>
                   <CheckoutGlobalRegionContextPathStamp />
                   <MarketingDefaultLayoutChromeFailsafeShell>
-                    <PageTransitionShell>{children}</PageTransitionShell>
+                    <MarketingMobileMotionShell>{children}</MarketingMobileMotionShell>
                   </MarketingDefaultLayoutChromeFailsafeShell>
                 </MarketingHeaderGlobalRegionServerBridge>
               </MarketingFeedbackShell>

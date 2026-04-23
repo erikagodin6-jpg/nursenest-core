@@ -30,9 +30,14 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
 
-/** Serialize CAT exam_simulation creates per learner + pathway + presentation mode (reduces duplicate rows under parallel POSTs). */
-function catSessionAdvisoryLockKey(userId: string, pathwayId: string, presentationMode: string): bigint {
-  const s = `${userId}\0${pathwayId}\0${presentationMode}`;
+/** Serialize CAT creates per learner + pathway + presentation + adaptive session flavor (reduces duplicate rows under parallel POSTs). */
+function catSessionAdvisoryLockKey(
+  userId: string,
+  pathwayId: string,
+  presentationMode: string,
+  adaptiveSessionType: string = "cat",
+): bigint {
+  const s = `${userId}\0${pathwayId}\0${presentationMode}\0${adaptiveSessionType}`;
   let h = 0n;
   for (let i = 0; i < s.length; i++) {
     h = (h * 131n + BigInt(s.charCodeAt(i))) & ((1n << 62n) - 1n);
@@ -57,6 +62,8 @@ const createSchema = z
      * Ignored for non-CAT; exam simulation coerces to Test Mode on the server.
      */
     catExamFeedbackMode: z.enum(["study", "test"]).optional().default("test"),
+    /** `practice` = guided fixed-length shuffle on the same CAT pool; `cat` = strict adaptive. */
+    catAdaptiveSessionType: z.enum(["cat", "practice"]).optional().default("cat"),
     pathwayId: z.union([z.string().min(2).max(80), z.null()]).optional(),
     timedMode: z.boolean(),
     /** Timed exam simulation: up to 5h NCLEX default or 3h AANP-style NP when pathway is NP (overridable). */
@@ -81,6 +88,10 @@ const createSchema = z
   .refine((d) => d.catPresentationMode !== "exam_simulation" || d.selectionMode === "cat", {
     message: "Exam simulation requires adaptive (CAT) mode.",
     path: ["catPresentationMode"],
+  })
+  .refine((d) => d.catAdaptiveSessionType !== "practice" || d.catPresentationMode !== "exam_simulation", {
+    message: "Guided practice cannot use exam simulation.",
+    path: ["catAdaptiveSessionType"],
   })
   .refine((d) => d.selectionMode === "cat" || d.questionCount <= 100, {
     message: "Linear practice tests support up to 100 questions.",
@@ -379,11 +390,23 @@ export async function POST(req: Request) {
       catPresentationMode: d.catPresentationMode,
       pathway: simPathway,
     });
-    const lockKey = catSessionAdvisoryLockKey(gate.userId, pathwayIdForCat, d.catPresentationMode);
+    const adaptiveSessionType = d.catPresentationMode === "exam_simulation" ? "cat" : d.catAdaptiveSessionType;
+    const catExamFeedbackModeForCreate =
+      adaptiveSessionType === "practice"
+        ? "study"
+        : d.catPresentationMode === "practice"
+          ? d.catExamFeedbackMode
+          : "test";
+    const lockKey = catSessionAdvisoryLockKey(
+      gate.userId,
+      pathwayIdForCat,
+      d.catPresentationMode,
+      adaptiveSessionType,
+    );
     const txOutcome = await prisma.$transaction(
       async (tx) => {
         await tx.$executeRaw(Prisma.sql`SELECT pg_advisory_xact_lock(${lockKey})`);
-        const existingInProgress = await tx.practiceTest.findFirst({
+        const candidates = await tx.practiceTest.findMany({
           where: {
             userId: gate.userId,
             status: PracticeTestStatus.IN_PROGRESS,
@@ -393,8 +416,14 @@ export async function POST(req: Request) {
               { config: { path: ["catPresentationMode"], equals: d.catPresentationMode } },
             ],
           },
-          select: { id: true },
+          select: { id: true, config: true },
           orderBy: { updatedAt: "desc" },
+          take: 12,
+        });
+        const existingInProgress = candidates.find((c) => {
+          const cfg = c.config as { catAdaptiveSessionType?: string } | null;
+          const st = cfg?.catAdaptiveSessionType === "practice" ? "practice" : "cat";
+          return st === adaptiveSessionType;
         });
         if (existingInProgress) {
           return { kind: "resume" as const, id: existingInProgress.id };
@@ -413,7 +442,8 @@ export async function POST(req: Request) {
           enforcedTimedMode,
           examTimedLimit,
           d.catPresentationMode,
-          d.catExamFeedbackMode,
+          catExamFeedbackModeForCreate,
+          adaptiveSessionType,
         );
         if (!cat.ok) {
           return { kind: "reject" as const, cat };

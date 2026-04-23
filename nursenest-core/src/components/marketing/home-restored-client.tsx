@@ -3,6 +3,7 @@
 import { ArrowRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, type ReactNode } from "react";
+import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
 import { HomeSampleQuestionPreview } from "@/components/marketing/home-sample-question-preview";
@@ -64,6 +65,7 @@ export default function HomeRestoredClient({
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const marketingRegion = region === "US" ? "US" : "CA";
+  const marketingMobile = useMarketingMobilePerfIsMobile() === true;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -113,7 +115,13 @@ export default function HomeRestoredClient({
   }, [locale, region, t]);
 
   return (
-    <div className="font-sans md:animate-page-enter flex w-full min-h-0 flex-1 flex-col overflow-x-hidden bg-[var(--page-bg)]">
+    <div
+      className={
+        marketingMobile
+          ? "font-sans flex w-full min-h-0 flex-1 flex-col overflow-x-hidden bg-[var(--page-bg)]"
+          : "font-sans md:animate-page-enter flex w-full min-h-0 flex-1 flex-col overflow-x-hidden bg-[var(--page-bg)]"
+      }
+    >
       <FunnelHomepageViewBeacon marketingRegion={marketingRegion} marketingLocale={locale} />
       <div className="min-h-0 flex-1 overflow-x-hidden">
         {/* 1. HERO */}

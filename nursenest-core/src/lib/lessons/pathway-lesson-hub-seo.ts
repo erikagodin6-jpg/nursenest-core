@@ -31,26 +31,25 @@ export function pathwayRegionAwareExamName(pathway: ExamPathwayDefinition): stri
 
 /**
  * Tier + exam + country-aware headline for pathway lesson hubs (H1 + SEO alignment).
- * Uses shortName so US vs Canada RN (both “NCLEX-RN”) stay distinct.
+ * Primary exam keyword first, then lesson intent + country (matches `<title>` stem).
  */
 export function pathwayLessonHubH1(pathway: ExamPathwayDefinition): string {
   const place = pathwayCountryLabel(pathway);
-  const sn = pathway.shortName;
   const examName = pathwayRegionAwareExamName(pathway);
   const country = pathway.countrySlug === "canada" ? "CA" : "US";
   switch (pathway.roleTrack) {
     case "rn":
-      return `NCLEX-RN clinical lessons · ${place} · ${sn}`;
+      return `${examName} clinical lessons for ${place}`;
     case "lpn":
-      return `${examName} (${getNursingRoleLabel({ country, role: "PN" })}) clinical lessons · ${place} · ${sn}`;
+      return `${examName} (${getNursingRoleLabel({ country, role: "PN" })}) clinical lessons for ${place}`;
     case "rpn":
-      return `${examName} (${getNursingRoleLabel({ country, role: "PN" })}) clinical lessons · ${place} · ${sn}`;
+      return `${examName} (${getNursingRoleLabel({ country, role: "PN" })}) clinical lessons for ${place}`;
     case "np":
-      return `${examName} exam review lessons · ${place} · ${sn}`;
+      return `${examName} exam prep lessons for ${place}`;
     case "allied":
-      return `Allied health exam prep lessons · ${place} · ${sn}`;
+      return `Allied health exam prep lessons for ${place}`;
     default:
-      return `Clinical lessons · ${pathway.displayName}`;
+      return `Clinical lessons for ${pathway.displayName}`;
   }
 }
 
@@ -59,9 +58,11 @@ export function pathwayLessonHubMetaTitle(pathway: ExamPathwayDefinition): strin
 }
 
 export function pathwayLessonHubMetaDescription(pathway: ExamPathwayDefinition): string {
-  const place = pathway.countrySlug === "canada" ? "Canada" : "the United States";
-  const exam = pathway.displayName;
-  return `Clinical lessons for ${exam} (${place}): exam-style reasoning, safety focus, and pathway-matched practice. Preview on the web; full lesson depth unlocks with a plan that includes this track.`;
+  const examName = pathwayRegionAwareExamName(pathway);
+  if (pathway.countrySlug === "canada") {
+    return `Practice ${examName} reasoning with guided clinical lessons, topic drills, and links to pathway questions and adaptive tests. Built for Canadian nurses.`;
+  }
+  return `Practice ${examName} reasoning with guided clinical lessons, topic drills, and pathway-matched question practice. Built for US nursing candidates.`;
 }
 
 export function pathwayLessonTopicClusterMetaTitle(pathway: ExamPathwayDefinition, topicLabel: string): string {

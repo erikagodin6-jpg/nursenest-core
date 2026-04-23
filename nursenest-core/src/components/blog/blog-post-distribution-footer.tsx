@@ -25,6 +25,29 @@ export function BlogPostDistributionFooter({
 }: Props) {
   const practiceHub = defaultPracticeHubForExam(exam ?? null, countryTarget ?? null);
   const studyHubs = marketingStudyHubsForBlogExam(exam ?? "", blogCountryFromPrismaTarget(countryTarget));
+  const catHub = studyHubs.pathwayCatHub ?? studyHubs.practiceExamsHub;
+  const flashHub = studyHubs.flashcardsHub;
+  const examUpper = (exam ?? "").trim().toUpperCase();
+  const practiceAnchor =
+    examUpper.includes("REX") || examUpper.includes("REX-PN")
+      ? "practice REx-PN questions"
+      : examUpper.includes("CNPLE") || (examUpper.includes("NP") && blogCountryFromPrismaTarget(countryTarget) === "CA")
+        ? "practice NP exam questions"
+        : examUpper.includes("NCLEX-RN") || examUpper.includes("NCLEX RN")
+          ? "practice NCLEX-RN questions"
+          : "practice nursing exam questions";
+  const adaptiveAnchor =
+    examUpper.includes("REX") || examUpper.includes("REX-PN")
+      ? "adaptive REx-PN test"
+      : examUpper.includes("CNPLE") || (examUpper.includes("NP") && blogCountryFromPrismaTarget(countryTarget) === "CA")
+        ? "adaptive NP prep test"
+        : "adaptive NCLEX test";
+  const flashAnchor =
+    examUpper.includes("REX") || examUpper.includes("REX-PN")
+      ? "REx-PN flashcards"
+      : examUpper.includes("NCLEX-RN") || examUpper.includes("NCLEX RN")
+        ? "NCLEX flashcards"
+        : "nursing flashcards";
   const lessons = relatedLessonPaths
     .filter(Boolean)
     .filter(isPlausibleMarketingLessonDetailPath)
@@ -56,6 +79,26 @@ export function BlogPostDistributionFooter({
             ? "This post is tied to bank items you can practice after sign-in. Rationales and full analytics stay in the app (not on the public blog)."
             : "Drill exam-style questions in the public practice hub, then sign in to track progress and read full rationales."}
         </p>
+        <nav aria-label="Exam prep shortcuts" className="mt-3 text-sm">
+          <p className="font-medium text-[var(--theme-heading-text)]">Prep shortcuts</p>
+          <ul className="mt-2 list-inside list-disc space-y-1 text-[var(--theme-body-text)]">
+            <li>
+              <BlogDistributionAnalyticsLink href={practiceHub} linkKind="practice_hub" className="font-semibold text-primary hover:underline">
+                {practiceAnchor}
+              </BlogDistributionAnalyticsLink>
+            </li>
+            <li>
+              <BlogDistributionAnalyticsLink href={catHub} linkKind="practice_exams_hub" className="font-semibold text-primary hover:underline">
+                {adaptiveAnchor}
+              </BlogDistributionAnalyticsLink>
+            </li>
+            <li>
+              <BlogDistributionAnalyticsLink href={flashHub} linkKind="flashcards_hub" className="font-semibold text-primary hover:underline">
+                {flashAnchor}
+              </BlogDistributionAnalyticsLink>
+            </li>
+          </ul>
+        </nav>
         <div className="mt-3 flex flex-wrap gap-2">
           <BlogDistributionAnalyticsLink
             href={practiceHub}
@@ -65,7 +108,7 @@ export function BlogPostDistributionFooter({
             Practice questions (public hub)
           </BlogDistributionAnalyticsLink>
           <BlogDistributionAnalyticsLink
-            href={studyHubs.practiceExamsHub}
+            href={catHub}
             linkKind="practice_exams_hub"
             className="inline-flex rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-muted/80"
           >

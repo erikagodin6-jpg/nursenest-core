@@ -76,6 +76,7 @@ function FooterLeafWatermark() {
         alt=""
         width={420}
         height={420}
+        sizes="420px"
         unoptimized
         className="max-h-[min(48vw,18rem)] w-auto opacity-[0.055] grayscale sm:max-h-[min(40vw,20rem)] sm:opacity-[0.065]"
         draggable={false}

@@ -1,6 +1,28 @@
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
+/**
+ * SERP-aligned hub headline (H1): primary exam keyword + country, without the brand suffix.
+ * Kept in sync with pathway `seoTitle` patterns in `exam-pathways-data-*`.
+ */
+export function nursingTierMarketingHeadline(pathway: ExamPathwayDefinition): string {
+  const { countrySlug, examCode, shortName, roleTrack } = pathway;
+  if (countrySlug === "canada") {
+    if (examCode === "rex-pn") return `${shortName} practice questions for Canada`;
+    if (examCode === "nclex-rn") return `${shortName} practice questions for Canada`;
+    if (examCode === "cnple") return "NP exam prep for Canada";
+    if (examCode === "allied-health") return "Allied health exam prep for Canada";
+  }
+  if (countrySlug === "us") {
+    if (examCode === "nclex-pn") return `${shortName} practice questions for the US`;
+    if (examCode === "nclex-rn") return `${shortName} practice questions for the US`;
+    if (roleTrack === "np") return `${shortName} NP exam prep for the US`;
+    if (examCode === "allied-health") return "Allied health exam prep for the US";
+  }
+  const stripped = pathway.seoTitle.replace(/\s*\|\s*NurseNest\s*$/i, "").trim();
+  return stripped.length > 0 ? stripped : `${shortName} exam prep`;
+}
+
 export type NursingTierHubActionId = "lessons" | "flashcards" | "practice_questions" | "exams";
 
 export type NursingTierHubAction = {
@@ -61,12 +83,13 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
   const audienceLabel = audienceLabelFor(pathway);
   const examLabel = examLabelFor(pathway);
   const countryLabel = countryLabelFor(pathway);
+  const title = nursingTierMarketingHeadline(pathway);
 
   return {
     audienceLabel,
     examLabel,
-    title: `${audienceLabel} learning and exam prep`,
-    intro: "Choose how you want to study today.",
+    title,
+    intro: `${examLabel} prep for ${countryLabel}: choose lessons, flashcards, practice questions, or adaptive CAT-style exams next.`,
     description: `This area contains ${examLabel} learning and exam-prep resources for ${audienceLabel} learners in ${countryLabel}.`,
     includedNote: `Included for this tier: ${examLabel} study resources, pathway-specific lessons, exam-style practice, and CAT readiness work for ${audienceLabel} learners in ${countryLabel}.`,
     startHere: "Start with Lessons, then move into Practice Questions and Exams as your confidence grows.",

@@ -24,6 +24,7 @@ const linearRationaleVisibilityZ = z.enum(["after_each", "end_of_exam"]);
 const catSelectionBasisZ = z.enum(["random", "targeted", "weak"]);
 const catPresentationZ = z.enum(["practice", "exam_simulation"]);
 const catFeedbackZ = z.enum(["study", "test"]);
+const catAdaptiveSessionTypeZ = z.enum(["cat", "practice"]);
 const catEngineTypeZ = z.enum(["CAT", "SIMULATION"]);
 const catEngineModeZ = z.enum(["production_ready", "beta", "mini_adaptive", "simulation", "unavailable"]);
 
@@ -52,6 +53,7 @@ const practiceTestConfigSchema = z.object({
   catWeakPriorityByCanonical: z.record(z.coerce.number()).optional(),
   catPresentationMode: catPresentationZ.optional(),
   catExamFeedbackMode: catFeedbackZ.optional(),
+  catAdaptiveSessionType: catAdaptiveSessionTypeZ.optional(),
   catExamConfigId: z.union([z.null(), z.string()]).optional(),
   sessionPickSalt: z.string().min(8).max(128).optional(),
 });
@@ -69,6 +71,8 @@ function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
   if (typeof o.questionCount === "number" && Number.isFinite(o.questionCount)) {
     out.questionCount = Math.max(1, Math.min(500, Math.floor(o.questionCount)));
   }
+  const cast = o.catAdaptiveSessionType;
+  if (cast === "cat" || cast === "practice") out.catAdaptiveSessionType = cast;
   return out;
 }
 

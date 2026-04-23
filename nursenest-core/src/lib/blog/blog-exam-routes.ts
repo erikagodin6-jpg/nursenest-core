@@ -7,7 +7,8 @@ import { CountryCode } from "@prisma/client";
 import { blogCountryFromPrismaTarget, marketingStudyHubsForBlogExam } from "@/lib/blog/blog-study-cta";
 
 export function defaultPracticeHubForExam(exam: string | null | undefined, countryTarget?: CountryCode | null): string {
-  return marketingStudyHubsForBlogExam(exam ?? "", blogCountryFromPrismaTarget(countryTarget)).questionBankHub;
+  const hubs = marketingStudyHubsForBlogExam(exam ?? "", blogCountryFromPrismaTarget(countryTarget));
+  return hubs.pathwayQuestionsHub ?? hubs.questionBankHub;
 }
 
 export function defaultLessonsHubForExam(exam: string | null | undefined, countryTarget?: CountryCode | null): string {

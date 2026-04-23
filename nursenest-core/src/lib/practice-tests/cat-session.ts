@@ -58,9 +58,11 @@ import {
   filterPoolRemovingRecentQuestions,
   recentPracticeQuestionIdsForPathway,
 } from "@/lib/practice-tests/recent-practice-question-ids";
+import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
 import type {
+  CatAdaptiveSessionType,
   CatExamFeedbackMode,
   CatSelectionBasis,
   PracticeTestConfigJson,
@@ -216,6 +218,7 @@ export async function createCatPracticeTestPayload(
   presentationMode: CatPresentationMode = "practice",
   /** UI-only: instant rationales vs end-only for practice CAT. Coerced to `test` when `presentationMode` is exam simulation. */
   examFeedbackMode: CatExamFeedbackMode = "test",
+  adaptiveSessionType: CatAdaptiveSessionType = "cat",
 ): Promise<
   | {
       ok: true;
@@ -359,6 +362,60 @@ export async function createCatPracticeTestPayload(
     sessionPickSalt,
   };
 
+  const sessionTypeResolved: CatAdaptiveSessionType = sim ? "cat" : adaptiveSessionType;
+  const guidedPractice = !sim && sessionTypeResolved === "practice";
+
+  if (guidedPractice) {
+    const poolIds = poolForSelection.map((r) => r.id);
+    const shuffled = shuffleSeeded(poolIds, `${sessionPickSalt}:guided-practice-order-v1`);
+    const runLength = Math.min(Math.max(10, input.questionCount), shuffled.length);
+    const questionIds = shuffled.slice(0, runLength);
+    const guidedPickInput: PickQuestionsInput = { ...poolInput, questionCount: runLength };
+    const catExamFeedbackMode: CatExamFeedbackMode = "study";
+
+    if (process.env.NODE_ENV !== "production") {
+      safeServerLog("practice_test", "cat_session_create_debug", {
+        event: "cat_session_create_debug",
+        userIdPrefix: userId.slice(0, 8),
+        pathwayId: pathwayIdForRecent ?? undefined,
+        poolSize: pool.length,
+        poolForSelectionSize: poolForSelection.length,
+        recentSessionsScanned: recentPack.sessionsScanned,
+        recentIdCount: recentPack.ids.size,
+        recentExclusionApplied: recentFiltered.applied,
+        recentExclusionSkip: recentFiltered.skipReason,
+        catAdaptiveSessionType: "practice",
+        guidedRunLength: runLength,
+        sessionPickSaltPrefix: sessionPickSalt.slice(0, 12),
+      });
+    }
+
+    const config: PracticeTestConfigJson = {
+      ...configFromInput(guidedPickInput, timedMode, timeLimitSec),
+      selectionMode: "cat",
+      catSelectionBasis: effectiveBasis,
+      catMinQuestions: runLength,
+      catMaxQuestions: runLength,
+      catPassingThreshold: pathwayReadiness?.passingThreshold ?? 0,
+      catEngineType: pathwayReadiness?.engineType ?? "CAT",
+      catEngineMode: pathwayReadiness?.mode ?? "production_ready",
+      catWeakCategories,
+      catWeakPriorityByCanonical,
+      catPresentationMode: presentationMode,
+      catExamFeedbackMode,
+      catAdaptiveSessionType: "practice",
+      catExamConfigId: examCfg.id,
+      sessionPickSalt,
+    };
+
+    return {
+      ok: true,
+      questionIds,
+      adaptiveState: state,
+      config,
+    };
+  }
+
   const first = selectNextQuestion(
     poolForSelection,
     new Set(),
@@ -390,6 +447,7 @@ export async function createCatPracticeTestPayload(
       recentExclusionSkip: recentFiltered.skipReason,
       firstQuestionIdPrefix: first.selected.id.slice(0, 12),
       sessionPickSaltPrefix: sessionPickSalt.slice(0, 12),
+      catAdaptiveSessionType: sessionTypeResolved,
     });
   }
 
@@ -406,6 +464,7 @@ export async function createCatPracticeTestPayload(
     catWeakPriorityByCanonical,
     catPresentationMode: presentationMode,
     catExamFeedbackMode,
+    catAdaptiveSessionType: sessionTypeResolved,
     catExamConfigId: examCfg.id,
     sessionPickSalt,
   };
@@ -568,6 +627,138 @@ async function catAfterScoredStep(params: {
   };
 }
 
+async function completeGuidedCatSession(params: {
+  ids: string[];
+  state: CatAdaptiveState;
+  mergedAnswers: Record<string, unknown>;
+  config: PracticeTestConfigJson;
+  userId: string;
+  entitlement: AccessScope;
+}): Promise<Extract<AdvanceCatPracticeTestResult, { kind: "completed" }>> {
+  const { ids, state, mergedAnswers, config, userId, entitlement } = params;
+  const presentationMode = config.catPresentationMode ?? "practice";
+  const report = buildCatReport(state);
+  logCatBlueprintSessionMappingQualityFromReport(report, {
+    userId,
+    presentationMode,
+  });
+  const baseResults = await computePracticeTestResults(ids, mergedAnswers, entitlement);
+  return {
+    kind: "completed",
+    results: enrichWithCat(baseResults, report, presentationMode),
+    adaptiveState: state,
+  };
+}
+
+/**
+ * Guided practice on the CAT pool: full `questionIds` up front, seeded shuffle at create time,
+ * per-item rationales (study-style), `cat_advance` allowed at any valid cursor index.
+ */
+async function advanceGuidedCatPracticeTest(params: {
+  questionIds: string[];
+  adaptiveState: unknown;
+  mergedAnswers: Record<string, unknown>;
+  cursorIndex: number;
+  config: PracticeTestConfigJson;
+  userId: string;
+  entitlement: AccessScope;
+}): Promise<AdvanceCatPracticeTestResult> {
+  const ids = params.questionIds;
+  const cursor = params.cursorIndex;
+  if (ids.length === 0) return { kind: "error", message: "No questions in session." };
+  if (cursor < 0 || cursor >= ids.length) {
+    return { kind: "error", message: "Invalid question position." };
+  }
+
+  const currentId = ids[cursor];
+  if (currentId == null) return { kind: "error", message: "Invalid cursor." };
+  const userAns = params.mergedAnswers[currentId];
+  if (userAns === undefined) return { kind: "error", message: "Answer the current question before continuing." };
+
+  let state = parseAdaptiveState(params.adaptiveState) ?? createInitialAdaptiveState();
+  state = {
+    ...state,
+    passingThreshold:
+      typeof state.passingThreshold === "number"
+        ? state.passingThreshold
+        : (params.config.catPassingThreshold ?? 0),
+  };
+
+  if (state.catStudyAwaitingContinue === true) {
+    const last = state.results[state.results.length - 1];
+    if (!last || last.questionId !== currentId) {
+      safeServerLog("cat_runner", "cat_resume_state_invalid", {
+        event: "cat_resume_state_invalid",
+        mode: "guided_practice",
+        current_question: currentId.slice(0, 16),
+        last_recorded: last?.questionId?.slice(0, 16),
+      });
+      return { kind: "error", message: "Study step state was out of sync. Refresh and try again." };
+    }
+    state = { ...state, catStudyAwaitingContinue: false };
+    if (cursor >= ids.length - 1) {
+      return completeGuidedCatSession({
+        ids,
+        state,
+        mergedAnswers: params.mergedAnswers,
+        config: params.config,
+        userId: params.userId,
+        entitlement: params.entitlement,
+      });
+    }
+    return {
+      kind: "continue",
+      questionIds: ids,
+      cursorIndex: cursor + 1,
+      adaptiveState: state,
+    };
+  }
+
+  if (state.results.some((r) => r.questionId === currentId)) {
+    return { kind: "error", message: "This step was already recorded. Refresh if the UI looks stale." };
+  }
+
+  const base = questionAccessWhere(params.entitlement);
+  const q = await prisma.examQuestion.findFirst({
+    where: { AND: [{ id: currentId }, base] },
+    select: {
+      id: true,
+      questionType: true,
+      correctAnswer: true,
+      difficulty: true,
+      bodySystem: true,
+      topic: true,
+      nclexClientNeedsCategory: true,
+      nclexClientNeedsSubcategory: true,
+    },
+  });
+  if (!q) return { kind: "error", message: "Question not available for your plan." };
+
+  const { result } = await scoreOne(q, userAns);
+  state = appendScoredResult(state, result);
+  state = patchBlueprintSessionDiagnostics(state);
+
+  let studyFeedback = await buildCatStudyFeedback(
+    currentId,
+    userAns,
+    params.entitlement,
+    params.config.pathwayId ?? null,
+  );
+  if (!studyFeedback) {
+    safeServerLog("cat_runner", "cat_study_feedback_build_failed", {
+      event: "cat_study_feedback_build_failed",
+      phase: "guided_practice",
+    });
+    studyFeedback = buildMinimalCatStudyFeedbackPayload({
+      questionId: currentId,
+      isCorrect: result.correct,
+      correctKeys: [],
+    });
+  }
+  state = { ...state, catStudyAwaitingContinue: true };
+  return { kind: "study_reveal", studyFeedback, adaptiveState: state };
+}
+
 export async function advanceCatPracticeTest(params: {
   questionIds: string[];
   adaptiveState: unknown;
@@ -577,6 +768,10 @@ export async function advanceCatPracticeTest(params: {
   userId: string;
   entitlement: AccessScope;
 }): Promise<AdvanceCatPracticeTestResult> {
+  if ((params.config.catAdaptiveSessionType ?? "cat") === "practice") {
+    return advanceGuidedCatPracticeTest(params);
+  }
+
   const ids = params.questionIds;
   const cursor = params.cursorIndex;
   if (ids.length === 0) return { kind: "error", message: "No questions in session." };

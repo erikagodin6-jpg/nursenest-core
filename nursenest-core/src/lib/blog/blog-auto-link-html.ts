@@ -1,7 +1,7 @@
 import type { CountryCode } from "@prisma/client";
 import { isAllowedBlogInternalHref } from "@/lib/blog/blog-internal-lesson-links";
 import { blogCountryFromPrismaTarget, marketingStudyHubsForBlogExam } from "@/lib/blog/blog-study-cta";
-import { defaultPracticeHubForExam, toolPathForSlug } from "./blog-exam-routes";
+import { toolPathForSlug } from "./blog-exam-routes";
 
 export type BlogAutoLinkContext = {
   exam?: string | null;
@@ -22,12 +22,11 @@ function escapeRegex(s: string): string {
 /** Build phrase → link rules from post context (longest phrases first to avoid partial matches). */
 export function buildAutoLinkRules(ctx: BlogAutoLinkContext): LinkRule[] {
   const rules: LinkRule[] = [];
-  const hub = defaultPracticeHubForExam(ctx.exam ?? null, ctx.countryTarget ?? null);
-  const catHub = marketingStudyHubsForBlogExam(ctx.exam ?? "", blogCountryFromPrismaTarget(ctx.countryTarget)).practiceExamsHub;
-  const lessonsHub = marketingStudyHubsForBlogExam(
-    ctx.exam ?? "",
-    blogCountryFromPrismaTarget(ctx.countryTarget),
-  ).lessonsHub;
+  const hubs = marketingStudyHubsForBlogExam(ctx.exam ?? "", blogCountryFromPrismaTarget(ctx.countryTarget));
+  const questionsHub = hubs.pathwayQuestionsHub ?? hubs.questionBankHub;
+  const catHub = hubs.pathwayCatHub ?? hubs.practiceExamsHub;
+  const lessonsHub = hubs.lessonsHub;
+  const flashcardsHub = hubs.flashcardsHub;
 
   for (const raw of ctx.relatedLessonPaths ?? []) {
     const path = raw.trim();
@@ -54,9 +53,13 @@ export function buildAutoLinkRules(ctx: BlogAutoLinkContext): LinkRule[] {
   }
 
   rules.push(
+    { pattern: /\b(practice NCLEX-RN questions|practice NCLEX questions)\b/gi, href: questionsHub },
+    { pattern: /\b(practice REx-PN questions|practice REX-PN questions)\b/gi, href: questionsHub },
+    { pattern: /\b(adaptive NCLEX test|adaptive NCLEX exam)\b/gi, href: catHub },
+    { pattern: /\b(NCLEX flashcards|REx-PN flashcards)\b/gi, href: flashcardsHub },
     { pattern: /\b(NCLEX)\b/g, href: "/lessons" },
-    { pattern: /\b(practice questions)\b/gi, href: hub },
-    { pattern: /\b(question bank)\b/gi, href: hub },
+    { pattern: /\b(practice questions)\b/gi, href: questionsHub },
+    { pattern: /\b(question bank)\b/gi, href: questionsHub },
     { pattern: /\b(CAT exam|adaptive practice exam|computerized adaptive test)\b/gi, href: catHub },
     { pattern: /\b(practice exam)\b/gi, href: catHub },
     // Keep auto-linked study-plan phrases on crawlable marketing hubs, not disallowed app routes.

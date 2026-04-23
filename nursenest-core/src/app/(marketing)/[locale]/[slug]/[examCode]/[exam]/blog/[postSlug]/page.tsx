@@ -21,6 +21,19 @@ import { REGION_CONFIG } from "@/lib/i18n/global-regions";
 import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { isGlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
+import { BlogStudyAnchorStrip } from "@/components/blog/blog-study-anchor-strip";
+import {
+  blogBrowserTitleForLocalizedEnPost,
+  blogExamFramingHtml,
+  blogExamGeoParts,
+  blogH1ForPublicPost,
+  blogKeywordStemFromTitles,
+  blogSeoLeadSentence,
+  blogStudyAnchorTargetsForLocalizedRegion,
+  mergeBlogFaqItemsForPublicPage,
+} from "@/lib/blog/blog-public-seo-helpers";
+import { blogCountryFromRegionSlug } from "@/lib/blog/blog-study-cta";
+import { BlogFaqPageJsonLd } from "@/components/seo/seo-json-ld";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 // See src/lib/blog/localized-blog-route-params.ts for why slug/examCode are overloaded here.
@@ -73,15 +86,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         variants: hreflangVariants,
       });
 
+      const enTitle = blogBrowserTitleForLocalizedEnPost({
+        localizedMetaTitle: post.localizedMetaTitle,
+        localizedTitle: post.localizedTitle,
+        regionSlug: region,
+        exam,
+        locale,
+      });
+      const pageTitle = enTitle ?? seo.title;
+
       return {
-        title: seo.title,
+        title: pageTitle,
         description: seo.description,
+        robots: { index: true, follow: true },
         alternates: {
           canonical: seo.canonicalUrl,
           languages: Object.fromEntries(seo.hreflangEntries.map((h) => [h.locale, h.href])),
         },
         openGraph: {
-          title: seo.ogTitle,
+          title: enTitle ?? seo.ogTitle,
           description: seo.ogDescription,
           url: seo.ogUrl,
           type: "article",
@@ -137,13 +160,59 @@ export default async function LocalizedBlogPostPage({ params }: Props) {
 
   const bodyHtml = stripBrokenOrEmptyImagesFromHtml(post.localizedBody);
   const blogListHref = buildLocalizedBlogHref({ locale, region, profession, exam });
+  const geo = blogExamGeoParts(exam, blogCountryFromRegionSlug(region));
+  const keywordStem = blogKeywordStemFromTitles(post.localizedMetaTitle, post.localizedTitle);
+  const h1Text =
+    locale === "en" ?
+      blogH1ForPublicPost({ seoTitle: post.localizedMetaTitle, title: post.localizedTitle })
+    : post.localizedTitle;
+  const enBrowserTitle = blogBrowserTitleForLocalizedEnPost({
+    localizedMetaTitle: post.localizedMetaTitle,
+    localizedTitle: post.localizedTitle,
+    regionSlug: region,
+    exam,
+    locale,
+  });
+  const articleJsonLd = {
+    ...seo.jsonLdArticle,
+    ...(enBrowserTitle ? { headline: enBrowserTitle } : {}),
+  };
+  const leadSentence =
+    locale === "en" ?
+      blogSeoLeadSentence({
+        keywordStem,
+        examPlain: geo.examPlain,
+        countryWord: geo.countryWord,
+      })
+    : null;
+  const framingHtml =
+    locale === "en" ?
+      blogExamFramingHtml({
+        keywordStem,
+        examGeo: geo.examGeo,
+        examPlain: geo.examPlain,
+        bodyHtml: post.localizedBody,
+      })
+    : null;
+  const mergedFaqItems = mergeBlogFaqItemsForPublicPage([], {
+    keywordStem,
+    examPlain: geo.examPlain,
+    countryWord: geo.countryWord,
+  });
+  const emitFaqJsonLd = mergedFaqItems.length >= 3;
+  const studyAnchors = blogStudyAnchorTargetsForLocalizedRegion({ exam, regionSlug: region });
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(seo.jsonLdArticle) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
+      {emitFaqJsonLd ? (
+        <BlogFaqPageJsonLd
+          items={mergedFaqItems.map((f) => ({ question: f.q, answer: f.a }))}
+        />
+      ) : null}
 
       <BreadcrumbJsonLd items={seo.breadcrumbs.map((b) => ({ name: b.label, item: b.href }))} />
 
@@ -155,13 +224,22 @@ export default async function LocalizedBlogPostPage({ params }: Props) {
         ← Blog
       </Link>
 
+      <BlogStudyAnchorStrip
+        {...studyAnchors}
+        className="mt-6"
+        labelledById="localized-blog-study-top"
+      />
+
       <header className="mt-6 space-y-2">
         <p className="text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">
           {regionName} · {exam.toUpperCase()}
         </p>
         <h1 className="text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)]">
-          {post.localizedTitle}
+          {h1Text}
         </h1>
+        {leadSentence ? (
+          <p className="text-base leading-relaxed text-[var(--theme-muted-text)]">{leadSentence}</p>
+        ) : null}
         {post.publishedAt ? (
           <p className="text-sm text-[var(--theme-muted-text)]">
             {post.publishedAt.toISOString().slice(0, 10)}
@@ -169,9 +247,44 @@ export default async function LocalizedBlogPostPage({ params }: Props) {
         ) : null}
       </header>
 
+      {framingHtml ? (
+        <div
+          className="mt-8 max-w-none"
+          dangerouslySetInnerHTML={{ __html: framingHtml }}
+        />
+      ) : null}
+
       <div
         className="prose prose-neutral mt-8 max-w-none dark:prose-invert [&_a]:text-primary [&_h2]:text-[var(--theme-heading-text)] [&_h3]:text-[var(--theme-heading-text)]"
         dangerouslySetInnerHTML={{ __html: bodyHtml }}
+      />
+
+      {emitFaqJsonLd ? (
+        <section
+          className="mt-10 rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-6 not-prose"
+          aria-labelledby="localized-blog-faq-heading"
+        >
+          <h2
+            id="localized-blog-faq-heading"
+            className="text-lg font-semibold text-[var(--theme-heading-text)]"
+          >
+            Frequently asked questions
+          </h2>
+          <dl className="mt-4 space-y-5">
+            {mergedFaqItems.map((f) => (
+              <div key={f.q.slice(0, 120)}>
+                <dt className="font-medium text-[var(--theme-heading-text)]">{f.q}</dt>
+                <dd className="mt-1 text-sm leading-relaxed text-[var(--theme-muted-text)]">{f.a}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      ) : null}
+
+      <BlogStudyAnchorStrip
+        {...studyAnchors}
+        className="mt-10"
+        labelledById="localized-blog-study-bottom"
       />
 
       {post.ctaText && post.ctaHref ? (

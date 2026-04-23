@@ -21,7 +21,7 @@ import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { resolveMarketingExamRegionToggle } from "@/lib/marketing/resolve-default-layout-marketing-exam-region";
 import { detectedIpCountryFromHeaders } from "@/lib/region/detected-ip-country.server";
-import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
+import { MarketingMobileMotionShell } from "@/lib/ui/marketing-mobile-motion-shell";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 import { CheckoutGlobalRegionContextPathStamp } from "@/components/marketing/checkout-global-region-context-path-stamp";
 import { MarketingHeaderGlobalRegionServerBridge } from "@/lib/region/marketing-header-global-region-server-bridge";
@@ -139,7 +139,7 @@ export default async function MarketingLocaleLayout({
                   <main className="flex-1">
                     <MarketingMainI18nShards locale={locale} publicContentOverrides={publicContentOverrides}>
                       <MarketingMainErrorBoundary name="marketing_locale_main">
-                        <PageTransitionShell>{children}</PageTransitionShell>
+                        <MarketingMobileMotionShell>{children}</MarketingMobileMotionShell>
                       </MarketingMainErrorBoundary>
                     </MarketingMainI18nShards>
                   </main>

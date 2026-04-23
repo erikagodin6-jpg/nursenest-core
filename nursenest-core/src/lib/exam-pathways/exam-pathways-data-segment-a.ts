@@ -16,9 +16,9 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
     shortName: "REx-PN",
     stripeTier: TierCode.RPN,
     contentExamKeys: ["NCLEX-PN", "REx-PN", "REX-PN"],
-    seoTitle: "REx-PN Exam Prep | Canada PN | NurseNest",
+    seoTitle: "REx-PN practice questions for Canada | NurseNest",
     seoDescription:
-      "Canada practical nurse exam prep: REx-PN practice questions, lessons, and timed sets scoped for Canadian PN candidates.",
+      "Practice REx-PN questions with realistic items, rationales, and adaptive tests. Built for Canadian nurses.",
     status: "active",
     acquisitionMode: "subscribe",
   },
@@ -35,9 +35,9 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
     shortName: "NCLEX-RN",
     stripeTier: TierCode.RN,
     contentExamKeys: ["NCLEX-RN", "NCLEX_RN"],
-    seoTitle: "NCLEX-RN Canada | RN Exam Prep | NurseNest",
+    seoTitle: "NCLEX-RN practice questions for Canada | NurseNest",
     seoDescription:
-      "RN licensure prep for Canadian candidates: NCLEX-RN-style practice, clinical reasoning, and mock exams aligned to your registration context.",
+      "Practice NCLEX-RN questions with rationales and adaptive tests. Built for Canadian nurses.",
     status: "active",
     acquisitionMode: "subscribe",
   },
@@ -55,9 +55,9 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
     stripeTier: TierCode.NP,
     contentExamKeys: ["NP", "CNPLE", "CAN-NP"],
     boardLabel: "Canadian NP licensure pathway",
-    seoTitle: "Canadian NP Exam Prep | NurseNest",
+    seoTitle: "NP exam prep for Canada | NurseNest",
     seoDescription:
-      "NurseNest supports Canadian NP preparation with pathway-scoped content. National licensure integration is evolving—this hub stays current as requirements finalize.",
+      "Practice NP exam prep with case-style questions, rationales, and adaptive review. Built for Canadian nurses (CNPLE-aligned pathway).",
     status: "upcoming",
     acquisitionMode: "waitlist",
     internalNotes:

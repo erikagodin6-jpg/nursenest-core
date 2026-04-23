@@ -128,12 +128,12 @@ export const NAV_BY_COUNTRY: Record<CountryCode, CountryNavConfig> = {
 };
 
 export const CANADA_HOMEPAGE: CountryHomepageContent = {
-  headline: "Canada-first nursing exam prep",
+  headline: "NCLEX-RN & REx-PN prep for Canada",
   subheadline:
-    "Prepare for REx-PN, NCLEX-RN, and nursing pathways in Canada with lessons, flashcards, practice questions, and CAT exams.",
+    "Practice NCLEX-RN and REx-PN questions with rationales, lessons, flashcards, and adaptive CAT-style tests. Built for Canadian nurses.",
   brandLine: "Country-specific nursing exam prep, with exclusive REx-PN support in Canada.",
   primaryCta: { label: "Start REx-PN prep", href: "/canada/pn/rex-pn" },
-  secondaryCta: { label: "Explore Canada pathways", href: "/canada/rn" },
+  secondaryCta: { label: "Browse Canada RN & PN prep", href: "/canada/rn" },
   pathwayCards: [
     { title: "REx-PN", href: "/canada/pn/rex-pn", description: "Practical nurse entry exam for Canada." },
     { title: "NCLEX-RN", href: "/lessons", description: "Registered nurse licensing aligned to Canadian regulators." },

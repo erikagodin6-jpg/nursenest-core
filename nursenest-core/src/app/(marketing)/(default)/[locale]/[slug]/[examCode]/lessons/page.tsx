@@ -34,7 +34,6 @@ import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-conti
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study-mode-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
@@ -126,13 +125,6 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   }
 
   const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
-  if (process.env.NODE_ENV !== "production" && pageResult.total > 0 && lessons.length === 0) {
-    safeServerLog("pathway_lessons", "lessons_hub_page_slug_filter_contradiction", {
-      pathwayId: pathway.id,
-      page_total: pageResult.total,
-      items_len: pageResult.items.length,
-    });
-  }
   const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
   const pageTitle = "Lessons";

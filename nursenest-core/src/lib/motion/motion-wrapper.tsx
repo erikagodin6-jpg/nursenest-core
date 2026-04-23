@@ -1,9 +1,11 @@
 "use client";
 
 import { type HTMLMotionProps, motion } from "framer-motion";
-import { type ReactNode, type Ref, forwardRef } from "react";
+import { type ComponentPropsWithoutRef, type ReactNode, type Ref, forwardRef } from "react";
+import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
 import { useReducedMotion } from "./use-reduced-motion";
 import { pickTransition, pickVariants } from "./reduced-motion";
+import { stripMotionDomProps } from "./strip-motion-dom-props";
 import {
   fadeInVariants,
   fadeUpVariants,
@@ -23,12 +25,32 @@ interface RevealProps extends Omit<HTMLMotionProps<"div">, "variants"> {
   className?: string;
 }
 
+function marketingPlainDivProps(rest: Record<string, unknown>): ComponentPropsWithoutRef<"div"> {
+  return stripMotionDomProps(rest) as ComponentPropsWithoutRef<"div">;
+}
+
+function marketingPlainOlProps(rest: Record<string, unknown>): ComponentPropsWithoutRef<"ol"> {
+  return stripMotionDomProps(rest) as ComponentPropsWithoutRef<"ol">;
+}
+
+function marketingPlainLiProps(rest: Record<string, unknown>): ComponentPropsWithoutRef<"li"> {
+  return stripMotionDomProps(rest) as ComponentPropsWithoutRef<"li">;
+}
+
 /**
  * Fade-up reveal — opacity + light vertical travel (token clamped).
  */
 export const FadeUp = forwardRef<HTMLDivElement, RevealProps>(
   ({ children, whenInView = true, viewMargin = "-40px", once = true, ...rest }, ref) => {
     const reduced = useReducedMotion();
+    const marketingPlain = useMarketingMobilePerfIsMobile() === true;
+    if (marketingPlain) {
+      return (
+        <div ref={ref} {...marketingPlainDivProps(rest as unknown as Record<string, unknown>)}>
+          {children}
+        </div>
+      );
+    }
     return (
       <motion.div
         ref={ref}
@@ -53,6 +75,14 @@ FadeUp.displayName = "FadeUp";
 export const SoftReveal = forwardRef<HTMLDivElement, RevealProps>(
   ({ children, whenInView = true, viewMargin = "-32px", once = true, ...rest }, ref) => {
     const reduced = useReducedMotion();
+    const marketingPlain = useMarketingMobilePerfIsMobile() === true;
+    if (marketingPlain) {
+      return (
+        <div ref={ref} {...marketingPlainDivProps(rest as unknown as Record<string, unknown>)}>
+          {children}
+        </div>
+      );
+    }
     return (
       <motion.div
         ref={ref}
@@ -74,6 +104,14 @@ SoftReveal.displayName = "SoftReveal";
 export const Fade = forwardRef<HTMLDivElement, RevealProps>(
   ({ children, whenInView = true, viewMargin = "-40px", once = true, ...rest }, ref) => {
     const reduced = useReducedMotion();
+    const marketingPlain = useMarketingMobilePerfIsMobile() === true;
+    if (marketingPlain) {
+      return (
+        <div ref={ref} {...marketingPlainDivProps(rest as unknown as Record<string, unknown>)}>
+          {children}
+        </div>
+      );
+    }
     return (
       <motion.div
         ref={ref}
@@ -100,6 +138,14 @@ export interface ScaleInProps extends RevealProps {
 export const ScaleIn = forwardRef<HTMLDivElement, ScaleInProps>(
   ({ children, whenInView = true, viewMargin = "-40px", once = true, timing = "default", ...rest }, ref) => {
     const reduced = useReducedMotion();
+    const marketingPlain = useMarketingMobilePerfIsMobile() === true;
+    if (marketingPlain) {
+      return (
+        <div ref={ref} {...marketingPlainDivProps(rest as unknown as Record<string, unknown>)}>
+          {children}
+        </div>
+      );
+    }
     const t = timing === "hero" ? transitionHeroReveal : transitionNormal;
     return (
       <motion.div
@@ -128,6 +174,21 @@ interface StaggerProps extends RevealProps {
 export const StaggerGroup = forwardRef<HTMLDivElement | HTMLOListElement, StaggerProps>(
   ({ children, staggerMs = 50, whenInView = true, viewMargin = "-40px", once = true, as = "div", ...rest }, ref) => {
     const reduced = useReducedMotion();
+    const marketingPlain = useMarketingMobilePerfIsMobile() === true;
+    if (marketingPlain) {
+      if (as === "ol") {
+        return (
+          <ol ref={ref as Ref<HTMLOListElement>} {...marketingPlainOlProps(rest as unknown as Record<string, unknown>)}>
+            {children}
+          </ol>
+        );
+      }
+      return (
+        <div ref={ref as Ref<HTMLDivElement>} {...marketingPlainDivProps(rest as unknown as Record<string, unknown>)}>
+          {children}
+        </div>
+      );
+    }
     if (as === "ol") {
       return (
         <motion.ol
@@ -173,6 +234,21 @@ export const StaggerItem = forwardRef<
   }
 >(({ children, variant = "fadeUp", timing = "default", as = "div", ...rest }, ref) => {
   const reduced = useReducedMotion();
+  const marketingPlain = useMarketingMobilePerfIsMobile() === true;
+  if (marketingPlain) {
+    if (as === "li") {
+      return (
+        <li ref={ref as Ref<HTMLLIElement>} {...marketingPlainLiProps(rest as unknown as Record<string, unknown>)}>
+          {children as ReactNode}
+        </li>
+      );
+    }
+    return (
+      <div ref={ref as Ref<HTMLDivElement>} {...marketingPlainDivProps(rest as unknown as Record<string, unknown>)}>
+        {children as ReactNode}
+      </div>
+    );
+  }
   const full = variant === "softReveal" ? softRevealVariants : fadeUpVariants;
   const tr = timing === "hero" ? transitionHeroReveal : transitionNormal;
   if (as === "li") {

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BlogStudyAnchorStrip } from "@/components/blog/blog-study-anchor-strip";
 import { BlogPostDistributionFooter } from "@/components/blog/blog-post-distribution-footer";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { applyAutoLinksToHtml } from "@/lib/blog/blog-auto-link-html";
@@ -19,14 +20,26 @@ import {
   BlogPostingJsonLd,
 } from "@/components/seo/seo-json-ld";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
-import {
-  blogDisplayCrumbsFromSeo,
-  blogPostSchemaItemsForPublic,
-  blogSchemaKeywords,
-  resolveOpenGraphCopy,
-  resolvePublicCanonicalUrl,
-} from "@/lib/blog/blog-seo-automation";
+import { blogSchemaKeywords, resolveOpenGraphCopy, resolvePublicCanonicalUrl } from "@/lib/blog/blog-seo-automation";
 import { withCrawlSurfacePageRender } from "@/lib/observability/crawl-surface-observability";
+import {
+  blogBrowserTitleForPublicPost,
+  blogExamFramingHtml,
+  blogExamGeoParts,
+  blogH1ForPublicPost,
+  blogKeywordStemFromTitles,
+  blogStudyAnchorTargets,
+  mergeBlogFaqItemsForPublicPage,
+} from "@/lib/blog/blog-public-seo-helpers";
+import {
+  autoBreadcrumbsToCrumbs,
+  autoBreadcrumbsToSchemaItems,
+  generateBlogSEOFromPostRow,
+  mergeFaqForSchema,
+  normalizeExamForBlogSeo,
+  studyLinkAnchorsForExam,
+} from "@/lib/blog/blog-generate-seo";
+import { blogCountryFromPrismaTarget } from "@/lib/blog/blog-study-cta";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -46,22 +59,41 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       const post = await getBlogPostMetaBySlug(slug);
       if (!post) return {};
       const seo = parseInternalLinkPlanJson(post.internalLinkPlan).seo;
-      const title = post.seoTitle?.trim() || post.title;
-      const description = (post.seoDescription?.trim() || post.excerpt).slice(
-        0,
-        160,
-      );
+      const title = blogBrowserTitleForPublicPost({
+        seoTitle: post.seoTitle,
+        title: post.title,
+        exam: post.exam,
+        countryTarget: post.countryTarget,
+        slug,
+        category: post.category,
+        tags: post.tags,
+      });
+      const autoMeta = generateBlogSEOFromPostRow({
+        title: post.title,
+        slug,
+        category: post.category ?? null,
+        tags: post.tags,
+        exam: post.exam ?? null,
+        countryTarget: post.countryTarget ?? null,
+      });
+      const description = (post.seoDescription?.trim() || autoMeta.metaDescription).slice(0, 155);
       const og = resolveOpenGraphCopy(seo, title, description);
       const canonical = resolvePublicCanonicalUrl(slug, seo);
       return {
         title,
         description,
+        robots: { index: true, follow: true },
         alternates: { canonical },
         openGraph: {
           title: og.title,
           description: og.description,
           url: canonical,
           type: "article",
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: og.title,
+          description: og.description,
         },
       };
     },
@@ -80,19 +112,44 @@ export default async function BlogPostPage({ params }: Props) {
       if (!post) notFound();
 
       const seo = parseInternalLinkPlanJson(post.internalLinkPlan).seo;
-      const crumbs = blogDisplayCrumbsFromSeo(
-        seo,
-        post.title,
+      const geo = blogExamGeoParts(post.exam, blogCountryFromPrismaTarget(post.countryTarget));
+      const keywordStem = blogKeywordStemFromTitles(post.seoTitle, post.title);
+      const auto = generateBlogSEOFromPostRow({
+        title: post.title,
         slug,
-        post.category,
-      );
-      const schemaItems = blogPostSchemaItemsForPublic(
-        post.title,
+        category: post.category ?? null,
+        tags: post.tags,
+        exam: post.exam ?? null,
+        countryTarget: post.countryTarget ?? null,
+      });
+      const h1Text = blogH1ForPublicPost({
+        seoTitle: post.seoTitle,
+        title: post.title,
         slug,
-        post.category,
-      );
+        category: post.category ?? null,
+        tags: post.tags,
+        exam: post.exam ?? null,
+        countryTarget: post.countryTarget ?? null,
+      });
+      const browserTitle = blogBrowserTitleForPublicPost({
+        seoTitle: post.seoTitle,
+        title: post.title,
+        exam: post.exam,
+        countryTarget: post.countryTarget,
+        slug,
+        category: post.category ?? null,
+        tags: post.tags,
+      });
+      const leadSentence = auto.intro;
+      const crumbs = autoBreadcrumbsToCrumbs(auto.breadcrumbs);
+      const schemaItems = autoBreadcrumbsToSchemaItems(auto.breadcrumbs);
+      const studyAnchors = blogStudyAnchorTargets({
+        exam: post.exam,
+        countryTarget: post.countryTarget,
+      });
+      const studyAnchorsText = studyLinkAnchorsForExam(normalizeExamForBlogSeo(post.exam));
 
-      const faqItems =
+      const faqItemsRaw =
         post.faqBlock &&
         typeof post.faqBlock === "object" &&
         "items" in post.faqBlock
@@ -101,8 +158,20 @@ export default async function BlogPostPage({ params }: Props) {
               []
             ).filter((x) => x.q?.trim() && x.a?.trim())
           : [];
+      const mergedFaqForSchema = mergeFaqForSchema(
+        mergeBlogFaqItemsForPublicPage(
+          faqItemsRaw.map((x) => ({ q: x.q.trim(), a: x.a.trim() })),
+          {
+            keywordStem,
+            examPlain: geo.examPlain,
+            countryWord: geo.countryWord,
+          },
+        ).map((x) => ({ q: x.q, a: x.a })),
+        auto.faq,
+      );
+      const mergedFaqItems = mergedFaqForSchema.map((x) => ({ q: x.question, a: x.answer }));
       const emitFaqJsonLd =
-        faqItems.length >= 2 &&
+        mergedFaqItems.length >= 3 &&
         (seo === null ? true : seo.emitFaqSchema !== false);
 
       const publishedAt = post.publishAt ?? post.createdAt;
@@ -115,18 +184,20 @@ export default async function BlogPostPage({ params }: Props) {
           maxTotalAutoLinks: 14,
         }),
       );
-
+      const framingHtml = blogExamFramingHtml({
+        keywordStem,
+        examGeo: geo.examGeo,
+        examPlain: geo.examPlain,
+        bodyHtml: post.body,
+      });
       const schemaKeywords = blogSchemaKeywords(seo, post.tags);
 
       return (
         <article className="mx-auto max-w-3xl px-4 py-12">
           <BlogPostingJsonLd
             slug={slug}
-            title={post.seoTitle?.trim() || post.title}
-            description={(post.seoDescription?.trim() || post.excerpt).slice(
-              0,
-              320,
-            )}
+            title={browserTitle}
+            description={(post.seoDescription?.trim() || auto.metaDescription).slice(0, 320)}
             datePublished={publishedAt.toISOString()}
             dateModified={post.updatedAt.toISOString()}
             coverImage={post.coverImage ?? null}
@@ -149,7 +220,7 @@ export default async function BlogPostPage({ params }: Props) {
           />
           {emitFaqJsonLd ? (
             <BlogFaqPageJsonLd
-              items={faqItems.map((f) => ({ question: f.q, answer: f.a }))}
+              items={mergedFaqItems.map((f) => ({ question: f.q, answer: f.a }))}
             />
           ) : null}
           <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
@@ -159,6 +230,14 @@ export default async function BlogPostPage({ params }: Props) {
           >
             ← Blog
           </Link>
+          <BlogStudyAnchorStrip
+            {...studyAnchors}
+            practiceAnchorText={studyAnchorsText.practice}
+            adaptiveAnchorText={studyAnchorsText.adaptive}
+            flashcardsAnchorText={studyAnchorsText.flashcards}
+            className="mt-6"
+            labelledById="blog-study-links-top"
+          />
           <header className="mt-6 space-y-2">
             {post.category ? (
               <p className="text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">
@@ -171,8 +250,9 @@ export default async function BlogPostPage({ params }: Props) {
               </p>
             ) : null}
             <h1 className="text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)]">
-              {post.title}
+              {h1Text}
             </h1>
+            <p className="text-base leading-relaxed text-[var(--theme-muted-text)]">{leadSentence}</p>
             <p className="text-sm text-[var(--theme-muted-text)]">
               {publishedAt.toISOString().slice(0, 10)}
             </p>
@@ -224,10 +304,37 @@ export default async function BlogPostPage({ params }: Props) {
               }
             />
           </div>
+          {framingHtml ? (
+            <div
+              className="mt-8 max-w-none"
+              dangerouslySetInnerHTML={{ __html: framingHtml }}
+            />
+          ) : null}
           <div
             className="prose prose-neutral mt-8 max-w-none dark:prose-invert [&_a]:text-primary [&_h2]:text-[var(--theme-heading-text)] [&_h3]:text-[var(--theme-heading-text)]"
             dangerouslySetInnerHTML={{ __html: bodyHtml }}
           />
+          {emitFaqJsonLd ? (
+            <section
+              className="mt-10 rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-6 not-prose"
+              aria-labelledby="blog-faq-heading"
+            >
+              <h2
+                id="blog-faq-heading"
+                className="text-lg font-semibold text-[var(--theme-heading-text)]"
+              >
+                Frequently asked questions
+              </h2>
+              <dl className="mt-4 space-y-5">
+                {mergedFaqItems.map((f) => (
+                  <div key={f.q.slice(0, 120)}>
+                    <dt className="font-medium text-[var(--theme-heading-text)]">{f.q}</dt>
+                    <dd className="mt-1 text-sm leading-relaxed text-[var(--theme-muted-text)]">{f.a}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          ) : null}
           <BlogPostDistributionFooter
             exam={post.exam}
             countryTarget={post.countryTarget}
@@ -266,6 +373,14 @@ export default async function BlogPostPage({ params }: Props) {
               ))}
             </footer>
           ) : null}
+          <BlogStudyAnchorStrip
+            {...studyAnchors}
+            practiceAnchorText={studyAnchorsText.practice}
+            adaptiveAnchorText={studyAnchorsText.adaptive}
+            flashcardsAnchorText={studyAnchorsText.flashcards}
+            className="mt-10"
+            labelledById="blog-study-links-bottom"
+          />
           <MarketingStudyCrossLinks className="mt-12" />
         </article>
       );

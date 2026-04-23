@@ -24,9 +24,17 @@ export const blogSeoBundleSchema = z.object({
   canonicalPath: z.string().max(220).nullable().optional(),
   openGraphTitle: z.string().max(120).nullable().optional(),
   openGraphDescription: z.string().max(320).nullable().optional(),
+  /** Absolute https URL for og:image / twitter:image when cover art is not yet attached. */
+  openGraphImageUrl: z.string().max(2000).nullable().optional(),
+  twitterTitle: z.string().max(120).nullable().optional(),
+  twitterDescription: z.string().max(320).nullable().optional(),
   suggestedExcerpt: z.string().min(1).max(500),
   emitFaqSchema: z.boolean(),
   focusKeywords: z.array(z.string().min(1).max(80)).max(12),
+  /** Primary SERP / editorial keyword phrase (persisted for audits and admin QA). */
+  primaryKeyword: z.string().max(160).nullable().optional(),
+  /** Supporting phrases (normalized, deduped at persist time). */
+  secondaryKeywords: z.array(z.string().min(1).max(80)).max(10).optional(),
   heroImageAlt: z.string().max(240).nullable().optional(),
   imageAlts: z
     .array(
@@ -63,6 +71,7 @@ export function sanitizeCanonicalPath(slug: string, raw: string | null | undefin
 /**
  * Ensures Home → Blog → … → article with safe internal hrefs; fixes article title + path.
  */
+/** Exported for {@link blog-seo-package} and other callers that assemble bundles without a full control-panel plan. */
 export function normalizeBlogBreadcrumbsForStorage(
   slug: string,
   pageTitle: string,
@@ -122,9 +131,14 @@ export function buildMinimalSeoBundleFallback(plan: BlogControlPanelPlan, slug: 
     canonicalPath: null,
     openGraphTitle: null,
     openGraphDescription: null,
+    openGraphImageUrl: null,
+    twitterTitle: mt.slice(0, 120),
+    twitterDescription: safeExcerpt.slice(0, 320),
     suggestedExcerpt: safeExcerpt,
     emitFaqSchema: false,
     focusKeywords: focus.length ? focus : ["draft"],
+    primaryKeyword: mt.slice(0, 160),
+    secondaryKeywords: focus.length > 1 ? focus.slice(1, 9) : undefined,
     heroImageAlt: null,
     imageAlts: [],
   };
@@ -140,17 +154,32 @@ export function buildPersistedSeoBundle(
   const fromTags = tags.map((t) => t.trim()).filter(Boolean).slice(0, 8);
   const focus = fromPlan.length ? fromPlan : fromTags.length ? fromTags : [plan.metaTitle.trim().slice(0, 80)];
 
+  const primaryKeywordRaw =
+    plan.seoFocusKeywords?.map((k) => k.trim()).find((k) => k.length >= 2) ?? focus[0] ?? plan.metaTitle.trim();
+  const primaryKeyword = primaryKeywordRaw.slice(0, 160) || null;
+  const secondaryKeywords = focus
+    .filter((k) => k && (!primaryKeyword || k.toLowerCase() !== primaryKeyword.toLowerCase()))
+    .slice(0, 8);
+
+  const ogTitle = plan.openGraphTitle?.trim() ? plan.openGraphTitle.trim().slice(0, 120) : null;
+  const ogDesc = plan.openGraphDescription?.trim() ? plan.openGraphDescription.trim().slice(0, 320) : null;
+  const metaTitle = plan.metaTitle.trim().slice(0, 200);
+  const metaDesc = plan.metaDescription.trim().slice(0, 500);
+
   return {
     version: BLOG_SEO_BUNDLE_VERSION,
     normalizedBreadcrumbs,
     canonicalPath: sanitizeCanonicalPath(slug, plan.canonicalPath ?? null),
-    openGraphTitle: plan.openGraphTitle?.trim() ? plan.openGraphTitle.trim().slice(0, 120) : null,
-    openGraphDescription: plan.openGraphDescription?.trim()
-      ? plan.openGraphDescription.trim().slice(0, 320)
-      : null,
+    openGraphTitle: ogTitle,
+    openGraphDescription: ogDesc,
+    openGraphImageUrl: null,
+    twitterTitle: (ogTitle ?? metaTitle).slice(0, 120),
+    twitterDescription: (ogDesc ?? metaDesc).slice(0, 320),
     suggestedExcerpt: plan.suggestedExcerpt.trim().slice(0, 500),
-    emitFaqSchema: plan.faqs.length >= 2,
+    emitFaqSchema: plan.faqs.length >= 1,
     focusKeywords: focus.filter(Boolean).slice(0, 12),
+    primaryKeyword,
+    secondaryKeywords: secondaryKeywords.length ? secondaryKeywords : undefined,
     heroImageAlt: plan.imagePlacements[0]?.altIdea?.trim().slice(0, 240) ?? null,
     imageAlts: plan.imagePlacements.map((p, i) => ({
       slotKey: (p.slotKey ?? defaultSlotKey(i)).slice(0, 48),
@@ -167,12 +196,17 @@ export type BlogSchemaSummaryExtra = {
 /** `schemaSummary` JSON for legacy readers + sitemap-style hints (version bumps when fields added). */
 export function buildSchemaSummaryPayload(seo: BlogSeoBundle, extra?: BlogSchemaSummaryExtra): string {
   return JSON.stringify({
-    version: 3,
+    version: 4,
     type: "BlogPosting",
     breadcrumbs: seo.normalizedBreadcrumbs,
     canonicalPath: seo.canonicalPath,
     emitFaqSchema: seo.emitFaqSchema,
     focusKeywords: seo.focusKeywords,
+    primaryKeyword: seo.primaryKeyword ?? null,
+    secondaryKeywords: seo.secondaryKeywords ?? [],
+    openGraphImageUrl: seo.openGraphImageUrl ?? null,
+    twitterTitle: seo.twitterTitle ?? null,
+    twitterDescription: seo.twitterDescription ?? null,
     ...(extra?.schemaOpportunities?.length ? { schemaOpportunities: extra.schemaOpportunities } : {}),
   });
 }

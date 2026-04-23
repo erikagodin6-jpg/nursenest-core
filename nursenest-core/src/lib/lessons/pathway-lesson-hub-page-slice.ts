@@ -1,6 +1,6 @@
 import { maxSafeOffsetPage } from "@/lib/api/api-pagination-limits";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
-import { PATHWAY_HUB_PAGE_SIZE_DEFAULT, PATHWAY_HUB_PAGE_SIZE_MAX } from "@/lib/lessons/pathway-lesson-scale";
+import { PATHWAY_HUB_PAGE_SIZE_MAX } from "@/lib/lessons/pathway-lesson-scale";
 
 export type HubRenderablePageSlice = {
   items: PathwayLessonRecord[];

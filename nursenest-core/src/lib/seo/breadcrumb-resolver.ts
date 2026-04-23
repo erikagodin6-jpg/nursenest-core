@@ -162,7 +162,7 @@ export function appShellBreadcrumbs(
     case "exams":
       return [HOME, { name: "Practice Exams", href: undefined }];
     case "practice-tests":
-      return [HOME, { name: "Practice Tests", href: undefined }];
+      return [HOME, { name: "Practice Test", href: undefined }];
     default:
       return [HOME];
   }

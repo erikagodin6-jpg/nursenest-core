@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { type ReactNode } from "react";
+import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
 import { BRAND_MOTION, BRAND_MOTION_DISTANCE_PX, EASE_LUXURY } from "./tokens";
 import { useReducedMotion } from "./use-reduced-motion";
 import { usePreviousPathname } from "./use-previous-pathname";
@@ -31,9 +32,13 @@ export function PageTransitionShell({
   const pathname = usePathname() ?? "";
   const reduced = useReducedMotion();
   const previousPathname = usePreviousPathname(pathname);
+  const marketingMobileNarrow = useMarketingMobilePerfIsMobile() === true;
 
   const excluded =
-    disabled || reduced || (shouldDisableTransition?.(pathname) ?? false);
+    disabled ||
+    reduced ||
+    marketingMobileNarrow ||
+    (shouldDisableTransition?.(pathname) ?? false);
 
   const shouldAnimateEnter =
     !excluded &&

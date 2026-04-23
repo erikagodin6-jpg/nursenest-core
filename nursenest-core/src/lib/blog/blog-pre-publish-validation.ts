@@ -1,5 +1,6 @@
 import type { BlogImageStatus, BlogPostStatus, CountryCode, Prisma } from "@prisma/client";
 import { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-generation-pipeline";
+import { generateBlogSEOFromPostRow } from "@/lib/blog/blog-generate-seo";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import { coerceBlogSourceRows, validateSources } from "@/lib/blog/apa7";
 import { parseInternalLinkPlanJson } from "@/lib/blog/blog-image-workflow";
@@ -54,6 +55,9 @@ export type BlogPostPrePublishRow = {
   title: string;
   excerpt: string;
   body: string;
+  exam: string | null;
+  category: string | null;
+  tags: string[];
   seoTitle: string | null;
   seoDescription: string | null;
   metaTitleVariant: string | null;
@@ -81,6 +85,9 @@ export const blogPrePublishValidationSelect = {
   title: true,
   excerpt: true,
   body: true,
+  exam: true,
+  category: true,
+  tags: true,
   seoTitle: true,
   seoDescription: true,
   metaTitleVariant: true,
@@ -108,6 +115,9 @@ export type PrePublishPatch = {
   title?: string;
   excerpt?: string;
   body?: string;
+  exam?: string | null;
+  category?: string | null;
+  tags?: string[];
   seoTitle?: string | null;
   seoDescription?: string | null;
   metaTitleVariant?: string | null;
@@ -137,6 +147,9 @@ export function mergeBlogPostForPrePublishPatch(
     title: patch.title !== undefined ? patch.title : current.title,
     excerpt: patch.excerpt !== undefined ? patch.excerpt : current.excerpt,
     body: patch.body !== undefined ? patch.body : current.body,
+    exam: patch.exam !== undefined ? patch.exam : current.exam,
+    category: patch.category !== undefined ? patch.category : current.category,
+    tags: patch.tags !== undefined ? patch.tags : current.tags,
     seoTitle: patch.seoTitle !== undefined ? patch.seoTitle : current.seoTitle,
     seoDescription: patch.seoDescription !== undefined ? patch.seoDescription : current.seoDescription,
     metaTitleVariant: patch.metaTitleVariant !== undefined ? patch.metaTitleVariant : current.metaTitleVariant,
@@ -173,14 +186,6 @@ function push(
   issues.push(row);
 }
 
-function effectiveMetaTitle(row: BlogPostPrePublishRow): string {
-  return (row.seoTitle ?? row.metaTitleVariant ?? "").trim();
-}
-
-function effectiveMetaDescription(row: BlogPostPrePublishRow): string {
-  return (row.seoDescription ?? row.metaDescriptionVariant ?? "").trim();
-}
-
 function faqItemCount(faqBlock: Prisma.JsonValue): number {
   if (!faqBlock || typeof faqBlock !== "object") return 0;
   const items = (faqBlock as { items?: unknown }).items;
@@ -211,6 +216,15 @@ export async function validateBlogPrePublish(
   postId: string,
 ): Promise<PrePublishValidationResult> {
   const issues: PrePublishIssue[] = [];
+
+  const autoSeo = generateBlogSEOFromPostRow({
+    title: row.title,
+    slug: row.slug,
+    category: row.category,
+    tags: row.tags,
+    exam: row.exam,
+    countryTarget: row.countryTarget,
+  });
 
   const title = row.title.trim();
   if (title.length < 3) {
@@ -245,7 +259,8 @@ export async function validateBlogPrePublish(
     }
   }
 
-  const metaTitle = effectiveMetaTitle(row);
+  const manualMetaTitle = (row.seoTitle ?? row.metaTitleVariant ?? "").trim();
+  const metaTitle = manualMetaTitle.length >= 3 ? manualMetaTitle : autoSeo.seoTitle;
   if (metaTitle.length < 3) {
     push(issues, {
       id: "meta_title",
@@ -253,7 +268,11 @@ export async function validateBlogPrePublish(
       message: "Meta / SEO title is empty.",
       fix: "Fill Meta title in the Meta & SEO section (or meta title variant).",
     });
-  } else if (title.length >= 3 && metaTitle.toLowerCase() === title.toLowerCase()) {
+  } else if (
+    title.length >= 3 &&
+    metaTitle.toLowerCase() === title.toLowerCase() &&
+    Boolean(row.seoTitle?.trim() || row.metaTitleVariant?.trim())
+  ) {
     push(issues, {
       id: "meta_title_duplicate_h1",
       severity: "warn",
@@ -262,7 +281,8 @@ export async function validateBlogPrePublish(
     });
   }
 
-  const metaDesc = effectiveMetaDescription(row);
+  const manualMetaDesc = (row.seoDescription ?? row.metaDescriptionVariant ?? "").trim();
+  const metaDesc = manualMetaDesc.length >= 50 ? manualMetaDesc : autoSeo.metaDescription;
   if (metaDesc.length < 50) {
     push(issues, {
       id: "meta_description",

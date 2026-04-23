@@ -29,12 +29,13 @@ export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {
       return {
-        title: "Clinical education blog | NurseNest",
+        title: "Nursing exam prep blog for Canada | NurseNest",
         description:
-          "Evidence-based nursing articles on clinical reasoning, pharmacology, lab interpretation, and exam preparation.",
+          "Practice-focused NCLEX-RN, REx-PN, and NP articles for Canada: clinical reasoning, pharmacology, and exam strategy. Built for Canadian nurses.",
+        robots: { index: true, follow: true },
         alternates: { canonical: absoluteUrl("/blog") },
         openGraph: {
-          title: "Clinical education blog | NurseNest",
+          title: "Nursing exam prep blog for Canada | NurseNest",
           url: absoluteUrl("/blog"),
           type: "website",
         },
@@ -67,12 +68,12 @@ export default async function BlogIndexPage({ searchParams }: Props) {
           as="h1"
           className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]"
           contentKey="inline.marketing.blog.index.h1"
-          defaultText="Clinical education blog"
+          defaultText="Nursing exam prep blog for Canada"
           preloaded={blogInlinePreloaded}
         />
         <EditableRichText
           contentKey="inline.marketing.blog.index.lead"
-          defaultHtml="<p>Scholarly articles for nursing and allied health exam preparation.</p>"
+          defaultHtml="<p>NCLEX-RN, REx-PN, and NP strategy for Canada: practice-focused articles with rationales and exam context.</p>"
           className="mt-2 text-[var(--theme-muted-text)] [&_p]:m-0"
           preloaded={blogInlinePreloaded}
         />

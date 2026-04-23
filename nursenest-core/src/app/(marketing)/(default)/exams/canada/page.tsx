@@ -16,10 +16,14 @@ import { robotsForRegionalMarketingHub } from "@/lib/seo/expansion-hub-robots";
 
 const PATH = "/exams/canada";
 
-const PAGE_TITLE = "Nursing and Allied Health Licensing Exams in Canada (2026 Complete Guide)";
+/** `<title>` / Open Graph — primary keywords first, ~60 chars with brand */
+const PAGE_TITLE = "NCLEX-RN, REx-PN & NP exams for Canada | NurseNest";
+
+/** Visible H1 — matches title keywords, written for humans (no brand suffix). */
+const PAGE_H1 = "NCLEX-RN, REx-PN & NP exam prep for Canada";
 
 const PAGE_DESCRIPTION =
-  "Authoritative guide to Canadian nursing exams (REx-PN, NCLEX-RN, NP), allied health certification (MLT, MRT, pharmacy technician, OT, RT, paramedicine), NNAS and English tests, plus a clear pathway from education to registration. Links to NurseNest lessons, question banks, and study tools.";
+  "Practice NCLEX-RN, REx-PN, and NP nursing exams for Canada with realistic questions, rationales, lessons, and adaptive CAT-style tests. Built for Canadian nurses.";
 
 const FAQ_ITEMS = [
   {
@@ -100,7 +104,7 @@ export default function CanadaLicensingExamsPage() {
 
   return (
     <>
-      <WebPageJsonLd
+        <WebPageJsonLd
         {...buildMarketingWebPageJsonLdProps({
           locale: DEFAULT_MARKETING_LOCALE,
           enPath: PATH,
@@ -116,7 +120,7 @@ export default function CanadaLicensingExamsPage() {
 
         <article className="nn-marketing-body">
           <p className="nn-marketing-eyebrow text-[var(--semantic-text-muted)]">Updated for 2026</p>
-          <h1 className="nn-marketing-h1 mt-2 text-balance">{PAGE_TITLE}</h1>
+          <h1 className="nn-marketing-h1 mt-2 text-balance">{PAGE_H1}</h1>
           <p className="nn-marketing-lead mt-4 text-[var(--theme-muted-text)]">
             If you are planning Canadian registration in nursing or allied health, you need a map: which exam is national,
             which steps are provincial, and where internationally educated applicants fit. This guide gives you that map,

@@ -64,7 +64,9 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   }
 
   const cfg = parsePracticeTestConfigAtBoundary(row.config, { practiceTestId: id, surface: "cat_study_review_get" });
-  if (cfg.selectionMode !== "cat" || (cfg.catExamFeedbackMode ?? "test") !== "study") {
+  const studyLike =
+    (cfg.catAdaptiveSessionType ?? "cat") === "practice" || (cfg.catExamFeedbackMode ?? "test") === "study";
+  if (cfg.selectionMode !== "cat" || !studyLike) {
     return NextResponse.json({ error: "Not a CAT Study Mode session" }, { status: 400 });
   }
 

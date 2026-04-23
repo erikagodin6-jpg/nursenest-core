@@ -15,6 +15,17 @@ import {
 
 const METADATA_SLOW_MS = 2000;
 
+/** Blog marketing routes stay indexable even when `locale` tier would otherwise emit `noindex`. */
+const BLOG_ROUTE_GROUPS_FORCE_INDEX_FOLLOW = new Set([
+  "marketing.default.blog",
+  "marketing.default.blog.slug",
+  "marketing.default.blog.tag",
+  "marketing.locale.localized_blog.index",
+  "marketing.locale.localized_blog.slug",
+  "marketing.default.allied_health.slug.blog",
+  "marketing.default.allied_health.slug.blog.post",
+]);
+
 /** Marketing copy / strict metadata failures must surface in development (not replaced by generic site fallback). */
 export function isStrictPublicMarketingMetadataGenerationError(e: unknown): boolean {
   if (!(e instanceof Error)) return false;
@@ -123,6 +134,20 @@ export async function safeGenerateMetadata(
       const robotsOverride = localeRobotsOverride(ctx.locale);
       if (robotsOverride) {
         result = { ...normalized, robots: robotsOverride };
+      }
+    }
+    if (ctx.routeGroup && BLOG_ROUTE_GROUPS_FORCE_INDEX_FOLLOW.has(ctx.routeGroup)) {
+      const r = result.robots;
+      const explicitNoIndex =
+        typeof r === "object" &&
+        r !== null &&
+        "index" in r &&
+        (r as { index?: boolean }).index === false;
+      if (!explicitNoIndex) {
+        result = {
+          ...result,
+          robots: { index: true, follow: true },
+        };
       }
     }
     if (durationMs >= METADATA_SLOW_MS && ctx.routeGroup) {

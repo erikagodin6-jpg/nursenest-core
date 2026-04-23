@@ -136,7 +136,9 @@ export function MarketingHeaderUtilityStrip({
   const shellJustify = leading ? "justify-between" : "justify-end";
 
   return (
-    <div className={`relative z-[25] w-full ${variant === "dark-bar" ? "nn-header-utility-dark" : "nn-header-utility"}`}>
+    <div
+      className={`top-bar relative z-[25] w-full ${variant === "dark-bar" ? "nn-header-utility-dark" : "nn-header-utility"}`}
+    >
       <div
         className={`nn-section-shell flex items-center gap-2 lg:gap-2.5 ${shellJustify} ${
           variant === "dark-bar"
