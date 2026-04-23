@@ -182,9 +182,12 @@ export function GuidedStudyStack({ steps }: { steps: GuidedStudyStep[] }) {
 export function GuidedReviewLaterCard({
   count,
   topics,
+  reviewLaterReliable = true,
 }: {
   count: number;
   topics: string[];
+  /** When false, do not present “no pending reviews” as a real empty queue. */
+  reviewLaterReliable?: boolean;
 }) {
   return (
     <section aria-label="Review later">
@@ -223,11 +226,17 @@ export function GuidedReviewLaterCard({
 
           <div className="space-y-1">
             <p className="text-sm font-semibold" style={{ color: "var(--semantic-text-primary)" }}>
-              {count > 0
-                ? `${count} topic${count > 1 ? "s" : ""} queued for review`
-                : "No pending reviews"}
+              {!reviewLaterReliable
+                ? "Review queue could not be loaded"
+                : count > 0
+                  ? `${count} topic${count > 1 ? "s" : ""} queued for review`
+                  : "No pending reviews"}
             </p>
-            {topics.length > 0 ? (
+            {!reviewLaterReliable ? (
+              <p className="text-xs" style={{ color: "var(--semantic-text-muted)" }}>
+                Retry in a moment — a count of zero here does not mean you are caught up.
+              </p>
+            ) : topics.length > 0 ? (
               <div className="flex flex-wrap gap-1.5">
                 {topics.map((t) => (
                   <span
@@ -252,7 +261,7 @@ export function GuidedReviewLaterCard({
         </div>
 
         <Link
-          href="/app/review"
+          href={reviewLaterReliable ? "/app/review" : "/app/guided"}
           className="shrink-0 self-start rounded-full px-4 py-2 text-xs font-bold transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 sm:self-center"
           style={{
             background: "color-mix(in srgb, var(--semantic-info) 12%, var(--semantic-surface))",
@@ -260,7 +269,7 @@ export function GuidedReviewLaterCard({
             color: "var(--semantic-info)",
           }}
         >
-          {count > 0 ? "Open review queue" : "View queue"}
+          {!reviewLaterReliable ? "Retry" : count > 0 ? "Open review queue" : "View queue"}
         </Link>
       </div>
     </section>

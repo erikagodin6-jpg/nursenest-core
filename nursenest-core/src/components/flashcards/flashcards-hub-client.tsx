@@ -12,6 +12,7 @@ import { countSavedStudyItems, getStudyItemIdsMatchingFilters } from "@/lib/flas
 import { LearnerCtaLink } from "@/components/learner-ui/learner-cta-link";
 import { weakAreaFlashcardsHref } from "@/lib/learner/weak-area-flashcards-href";
 import { reduceFlashcardsHubKpiSettled } from "@/lib/flashcards/flashcards-hub-kpi-load";
+import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 
 const CUSTOM_SESSION_FETCH_TIMEOUT_MS = 25_000;
 
@@ -108,9 +109,11 @@ function buildCustomSessionParams(opts: {
 export function FlashcardsHubClient({
   scopedPathwayId,
   pathwayDisplayName,
+  pathwayBootstrapSource = "primary",
 }: {
   scopedPathwayId: string;
   pathwayDisplayName: string;
+  pathwayBootstrapSource?: "primary" | "secondary";
 }) {
   const { t } = useMarketingI18n();
 
@@ -446,6 +449,11 @@ export function FlashcardsHubClient({
 
   return (
     <div className="lv-page-scope mx-auto flex min-h-[60vh] max-w-xl flex-col gap-10 px-4 py-8 sm:max-w-2xl sm:py-10">
+      {pathwayBootstrapSource === "secondary" ? (
+        <div className="max-w-prose" data-nn-flashcards-pathway-bootstrap-source="secondary">
+          <LearnerStudyLiveSyncBanner />
+        </div>
+      ) : null}
       <header className="space-y-3">
         <h1 className="text-2xl font-semibold tracking-tight text-lv-text-primary sm:text-3xl">
           {t("learner.flashcards.hub.title")}

@@ -8,10 +8,11 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { prisma } from "@/lib/db";
 import { loadAnalyticsPagePayload } from "@/lib/study/analytics-data";
-import { AnalyticsHero } from "@/components/study/analytics-hero";
-import { AnalyticsSummaryCards } from "@/components/study/analytics-summary-cards";
+import { AnalyticsPerformanceReport } from "@/components/study/analytics-performance-report";
 import { AnalyticsDetailClient } from "./analytics-detail-client";
+import { loadMoreTrendData } from "./actions";
 import {
   BROWSE_LESSONS_CTA,
   OPEN_STUDY_HUB_CTA,
@@ -92,8 +93,13 @@ export default async function AccountAnalyticsPage() {
     );
   }
 
-  // Load summary + trend window — fast initial queries
-  const payload = await loadAnalyticsPagePayload(userId);
+  const [payload, profile] = await Promise.all([
+    loadAnalyticsPagePayload(userId),
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: { name: true, examDate: true, examFocus: true, learnerPath: true, tier: true },
+    }),
+  ]);
   const {
     summary,
     trendWindow,
@@ -102,7 +108,25 @@ export default async function AccountAnalyticsPage() {
     initialTopicRows,
     questionTypeRows,
     confidenceScatterPoints,
+    supplemental,
+    dailyActivity,
   } = payload;
+
+  const displayName =
+    (profile?.name ?? (session?.user as { name?: string } | undefined)?.name)?.trim() || "Learner";
+  const credentialLine = (() => {
+    const parts = [profile?.examFocus?.trim(), profile?.learnerPath?.trim()].filter(Boolean) as string[];
+    if (parts.length > 0) return parts.join(" · ");
+    return profile?.tier ? `${profile.tier.replace(/_/g, " ")} · NCLEX-style prep` : "RN / NCLEX-style prep";
+  })();
+  const targetExamLine =
+    profile?.examDate != null
+      ? `Target exam: ${profile.examDate.toLocaleDateString(undefined, {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })}.`
+      : null;
 
   const noAnalyticsYet =
     summary.totalQuestionsAnswered === 0 &&
@@ -138,19 +162,18 @@ export default async function AccountAnalyticsPage() {
         />
       ) : (
         <>
-          <AnalyticsHero
-            latestReadinessScore={summary.latestReadinessScore}
-            latestReadinessBand={summary.latestReadinessBand}
-            streakDays={summary.streakDays}
-            studySessionCount={summary.studySessionCount}
-            catSessionCount={summary.catSessionCount}
-          />
-          <AnalyticsSummaryCards
-            totalQuestionsAnswered={summary.totalQuestionsAnswered}
-            overallAccuracyPct={summary.overallAccuracyPct}
-            streakDays={summary.streakDays}
-            latestReadinessScore={summary.latestReadinessScore}
-            topicRows={initialTopicRows}
+          <AnalyticsPerformanceReport
+            displayName={displayName}
+            credentialLine={credentialLine}
+            targetExamLine={targetExamLine}
+            summary={summary}
+            supplemental={supplemental}
+            dailyActivity={dailyActivity}
+            initialTrendPoints={trendWindow}
+            hasMorTrend={hasMorTrend}
+            trendCursor={trendCursor}
+            initialTopicRows={initialTopicRows}
+            onLoadMoreTrend={loadMoreTrendData}
           />
         </>
       )}
@@ -162,9 +185,6 @@ export default async function AccountAnalyticsPage() {
       */}
       <AnalyticsDetailClient
         summary={summary}
-        initialTrendPoints={trendWindow}
-        hasMorTrend={hasMorTrend}
-        trendCursor={trendCursor}
         questionTypeRows={questionTypeRows}
         initialTopicRows={initialTopicRows}
         confidenceScatterPoints={confidenceScatterPoints}

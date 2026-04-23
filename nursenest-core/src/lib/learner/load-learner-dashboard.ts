@@ -125,6 +125,8 @@ export type LearnerDashboardModel = {
    * When false, weak/strong/trends/topicPerformance failed — empty arrays do **not** mean “no weak areas”.
    */
   topicPerformanceReliable: boolean;
+  /** From {@link loadLearnerDashboardCore} — lesson pool counts, 14d mock volume, recent mock cards. */
+  coreReliability: LearnerDashboardCoreReliability;
 };
 
 /**
@@ -289,6 +291,19 @@ export async function buildPathwayStudySummariesFromLessonInventory(
 }
 
 /**
+ * Per-segment trust for {@link loadLearnerDashboardCore}.
+ * When a flag is false, matching numeric fields must not be read as real learner state.
+ */
+export type LearnerDashboardCoreReliability = {
+  userProfile: boolean;
+  visibleLessonScope: boolean;
+  lessonsAvailable: boolean;
+  lessonsCompleted: boolean;
+  questionsInMocksLast14d: boolean;
+  recentMocks: boolean;
+};
+
+/**
  * Lowest-cost dashboard slice: counts, continue-lesson, recent mock cards — no topic perf and no bank grading aggregate.
  * See module header “Dashboard load graph”.
  */
@@ -304,6 +319,7 @@ export type LearnerDashboardCoreModel = {
   continueLesson: ContinueLesson | null;
   coreParallelBatchMs: number;
   exam14dAggregateMs: number;
+  coreReliability: LearnerDashboardCoreReliability;
 };
 
 export async function loadLearnerDashboardCore(
@@ -322,6 +338,86 @@ export async function loadLearnerDashboardCore(
   const country = String(entitlement.country ?? "");
 
   const exam14dWindowStart = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000);
+
+  const userPromise =
+    preload?.userProfile !== undefined
+      ? Promise.resolve(preload.userProfile)
+      : prisma.user.findUnique({
+          where: { id: userId },
+          select: { learnerPath: true, tier: true, alliedProfessionKey: true },
+        });
+
+  let user: Awaited<typeof userPromise> = null;
+  let userProfileReliable = false;
+  try {
+    user = await userPromise;
+    userProfileReliable = true;
+  } catch (e) {
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadLearnerDashboardCore",
+      feature_surface: "learner_dashboard",
+      duration_ms: Math.round(performance.now() - t0),
+      outcome: "error",
+      segment: "user_profile",
+      user_id_prefix: userId.slice(0, 8),
+      reason: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
+
+  const learnerPath = user?.learnerPath ?? null;
+  const lessonWhere = lessonAccessWhere(entitlement);
+
+  let visibleLessonScope: VisibleLessonScope;
+  let pathwayRowsForScope = preload?.pathwayRowsForScope ?? preload?.visibleLessonScope?.pathwayLessonRows;
+  let visibleLessonScopeReliable = false;
+  try {
+    if (preload?.visibleLessonScope) {
+      visibleLessonScope = preload.visibleLessonScope;
+    } else {
+      visibleLessonScope = await buildVisibleLessonScopeForLearner(userId, entitlement, {
+        learnerPath,
+        pathwayLessonRows: pathwayRowsForScope,
+      });
+    }
+    if (!pathwayRowsForScope || pathwayRowsForScope.length === 0) {
+      pathwayRowsForScope = visibleLessonScope.pathwayLessonRows;
+    }
+    visibleLessonScopeReliable = true;
+  } catch (e) {
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadLearnerDashboardCore",
+      feature_surface: "learner_dashboard",
+      duration_ms: Math.round(performance.now() - t0),
+      outcome: "error",
+      segment: "visible_lesson_scope",
+      user_id_prefix: userId.slice(0, 8),
+      reason: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      fallback_used: "false",
+    });
+    visibleLessonScope = {
+      lessonIds: [],
+      contentTruncated: false,
+      learnerPath,
+      pathwayLessonRows: pathwayRowsForScope ?? [],
+    };
+  }
+
+  const contentLessonTotalPromise = prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } });
+
+  const pathwayPublishedCountPromise = (async () => {
+    const pathwayWhere = await pathwayLessonsAppListWhere(entitlement, learnerPath);
+    return prisma.pathwayLesson.count({ where: pathwayWhere });
+  })();
+
+  const scopedLessonsPromise = visibleLessonScopeReliable
+    ? countScopedLessonsCompleted(userId, entitlement, visibleLessonScope, pathwayRowsForScope ?? [])
+    : Promise.reject(new Error("visible_lesson_scope_unavailable"));
+
+  const incompleteProgressPromise = visibleLessonScopeReliable
+    ? findLatestIncompleteProgressLessonId(userId, visibleLessonScope.lessonIds)
+    : Promise.reject(new Error("visible_lesson_scope_unavailable"));
+
   const exam14dTimed = (async () => {
     const t = performance.now();
     const sum = await prisma.examAttempt.aggregate({
@@ -334,24 +430,6 @@ export async function loadLearnerDashboardCore(
     return { sum, durationMs: Math.round(performance.now() - t) };
   })();
 
-  const userPromise =
-    preload?.userProfile !== undefined
-      ? Promise.resolve(preload.userProfile)
-      : prisma.user.findUnique({
-          where: { id: userId },
-          select: { learnerPath: true, tier: true, alliedProfessionKey: true },
-        });
-
-  const user = await userPromise;
-  const learnerPath = user?.learnerPath ?? null;
-
-  const lessonWhere = lessonAccessWhere(entitlement);
-  const pathwayWhere = await pathwayLessonsAppListWhere(entitlement, learnerPath);
-
-  let visibleLessonScope = preload?.visibleLessonScope;
-  let pathwayRowsForScope = preload?.pathwayRowsForScope ?? preload?.visibleLessonScope?.pathwayLessonRows;
-  const contentLessonTotalPromise = prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } });
-  const pathwayLessonPublishedCountPromise = prisma.pathwayLesson.count({ where: pathwayWhere });
   const recentMocksPromise =
     preload?.recentMocksPreload !== undefined
       ? Promise.resolve(preload.recentMocksPreload.slice(0, 5))
@@ -370,33 +448,119 @@ export async function loadLearnerDashboardCore(
           })
           .then((raw) => mapExamAttemptRowsToRecentMocks(raw));
 
-  if (!visibleLessonScope) {
-    visibleLessonScope = await buildVisibleLessonScopeForLearner(userId, entitlement, {
-      learnerPath,
-      pathwayLessonRows: pathwayRowsForScope,
+  const tParallel = performance.now();
+  const settled = await Promise.allSettled([
+    contentLessonTotalPromise,
+    pathwayPublishedCountPromise,
+    scopedLessonsPromise,
+    incompleteProgressPromise,
+    exam14dTimed,
+    recentMocksPromise,
+  ]);
+  const coreParallelBatchMs = Math.round(performance.now() - tParallel);
+
+  const logSegmentFailure = (segment: string, reason: string) => {
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadLearnerDashboardCore",
+      feature_surface: "learner_dashboard",
+      duration_ms: Math.round(performance.now() - t0),
+      outcome: "error",
+      segment,
+      user_id_prefix: userId.slice(0, 8),
+      reason: reason.slice(0, 400),
+      fallback_used: "false",
     });
-    pathwayRowsForScope = visibleLessonScope.pathwayLessonRows;
-  } else if (!pathwayRowsForScope || pathwayRowsForScope.length === 0) {
-    pathwayRowsForScope = visibleLessonScope.pathwayLessonRows;
+  };
+
+  let contentLessonTotal = 0;
+  let contentCountReliable = false;
+  if (settled[0].status === "fulfilled") {
+    contentLessonTotal = settled[0].value;
+    contentCountReliable = true;
+  } else {
+    const r = settled[0].reason;
+    logSegmentFailure(
+      "content_lesson_total",
+      r instanceof Error ? r.message : String(r),
+    );
   }
 
-  const tParallel = performance.now();
-  const [contentLessonTotal, pathwayLessonPublishedCount, lessonsCompleted, incompleteProgress, exam14dPacked, recentMocks] =
-    await Promise.all([
-      contentLessonTotalPromise,
-      pathwayLessonPublishedCountPromise,
-      countScopedLessonsCompleted(userId, entitlement, visibleLessonScope, pathwayRowsForScope ?? []),
-      findLatestIncompleteProgressLessonId(userId, visibleLessonScope.lessonIds),
-      exam14dTimed,
-      recentMocksPromise,
-    ]);
-  const coreParallelBatchMs = Math.round(performance.now() - tParallel);
-  const exam14dAggregateMs = exam14dPacked.durationMs;
-  const exam14dSum = exam14dPacked.sum;
+  let pathwayLessonPublishedCount = 0;
+  let pathwayCountReliable = false;
+  if (settled[1].status === "fulfilled") {
+    pathwayLessonPublishedCount = settled[1].value;
+    pathwayCountReliable = true;
+  } else {
+    const r = settled[1].reason;
+    logSegmentFailure(
+      "pathway_lesson_published_count",
+      r instanceof Error ? r.message : String(r),
+    );
+  }
 
-  const lessonsAvailable = contentLessonTotal + pathwayLessonPublishedCount;
+  let lessonsCompleted = 0;
+  let lessonsCompletedReliable = false;
+  if (settled[2].status === "fulfilled") {
+    lessonsCompleted = settled[2].value;
+    lessonsCompletedReliable = true;
+  } else {
+    const r = settled[2].reason;
+    logSegmentFailure(
+      "scoped_lessons_completed",
+      r instanceof Error ? r.message : String(r),
+    );
+  }
 
-  const questionsInMocksLast14d = exam14dSum._sum.total ?? 0;
+  let incompleteProgress: Awaited<ReturnType<typeof findLatestIncompleteProgressLessonId>> = null;
+  if (settled[3].status === "fulfilled") {
+    incompleteProgress = settled[3].value;
+  } else {
+    const r = settled[3].reason;
+    logSegmentFailure(
+      "incomplete_lesson_progress",
+      r instanceof Error ? r.message : String(r),
+    );
+  }
+
+  let exam14dAggregateMs = 0;
+  let questionsInMocksLast14d = 0;
+  let exam14dReliable = false;
+  if (settled[4].status === "fulfilled") {
+    exam14dAggregateMs = settled[4].value.durationMs;
+    questionsInMocksLast14d = settled[4].value.sum._sum.total ?? 0;
+    exam14dReliable = true;
+  } else {
+    const r = settled[4].reason;
+    logSegmentFailure(
+      "exam_attempt_14d_aggregate",
+      r instanceof Error ? r.message : String(r),
+    );
+  }
+
+  let recentMocks: RecentMock[] = [];
+  let recentMocksReliable = false;
+  if (settled[5].status === "fulfilled") {
+    recentMocks = settled[5].value;
+    recentMocksReliable = true;
+  } else {
+    const r = settled[5].reason;
+    logSegmentFailure(
+      "recent_mock_attempts",
+      r instanceof Error ? r.message : String(r),
+    );
+  }
+
+  const lessonsAvailableReliable = contentCountReliable && pathwayCountReliable;
+  const lessonsAvailable = lessonsAvailableReliable ? contentLessonTotal + pathwayLessonPublishedCount : 0;
+
+  const coreReliability: LearnerDashboardCoreReliability = {
+    userProfile: userProfileReliable,
+    visibleLessonScope: visibleLessonScopeReliable,
+    lessonsAvailable: lessonsAvailableReliable,
+    lessonsCompleted: lessonsCompletedReliable,
+    questionsInMocksLast14d: exam14dReliable,
+    recentMocks: recentMocksReliable,
+  };
 
   let continueLesson: ContinueLesson | null = null;
   if (incompleteProgress?.lessonId) {
@@ -424,6 +588,12 @@ export async function loadLearnerDashboardCore(
     pathwayMetadataRowCount: preload?.pathwayMetadataRowCount ?? 0,
     pathwayProgressRowCount: preload?.pathwayProgressRowCount ?? 0,
     pathwaySectionsJsonLoaded: false,
+    core_user_profile_ok: userProfileReliable ? "1" : "0",
+    core_visible_scope_ok: visibleLessonScopeReliable ? "1" : "0",
+    core_lessons_available_ok: lessonsAvailableReliable ? "1" : "0",
+    core_lessons_completed_ok: lessonsCompletedReliable ? "1" : "0",
+    core_exam14d_ok: exam14dReliable ? "1" : "0",
+    core_recent_mocks_ok: recentMocksReliable ? "1" : "0",
     ...getLearnerDurabilityObservabilityFields(),
   });
 
@@ -439,6 +609,7 @@ export async function loadLearnerDashboardCore(
     continueLesson,
     coreParallelBatchMs,
     exam14dAggregateMs,
+    coreReliability,
   };
 }
 
@@ -742,6 +913,9 @@ export async function loadLearnerDashboard(
     scope: core.scope,
     practiceSignalReliable: sessionGradingReliable,
     topicPerformanceSignalReliable: topicPerformanceReliable,
+    lessonCompletionSignalReliable:
+      core.coreReliability.lessonsAvailable && core.coreReliability.lessonsCompleted,
+    mockHistorySignalReliable: core.coreReliability.recentMocks,
   });
 
   const durationMsTotal = Math.round(performance.now() - tDashboard);
@@ -764,6 +938,12 @@ export async function loadLearnerDashboard(
     recentMocksFromPreload: preload?.recentMocksPreload !== undefined,
     sessionGradingFromPreload: Boolean(preload?.sessionGradingPreload),
     optionalAggregatesSkipped: skipHeavy,
+    core_user_profile_ok: core.coreReliability.userProfile ? "1" : "0",
+    core_visible_scope_ok: core.coreReliability.visibleLessonScope ? "1" : "0",
+    core_lessons_available_ok: core.coreReliability.lessonsAvailable ? "1" : "0",
+    core_lessons_completed_ok: core.coreReliability.lessonsCompleted ? "1" : "0",
+    core_exam14d_ok: core.coreReliability.questionsInMocksLast14d ? "1" : "0",
+    core_recent_mocks_ok: core.coreReliability.recentMocks ? "1" : "0",
     ...getLearnerDurabilityObservabilityFields(),
   });
 
@@ -784,6 +964,7 @@ export async function loadLearnerDashboard(
     sessionGrading: practiceAgg,
     sessionGradingReliable,
     topicPerformanceReliable,
+    coreReliability: core.coreReliability,
   };
 }
 

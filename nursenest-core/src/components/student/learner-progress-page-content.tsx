@@ -24,6 +24,12 @@ function trackTitle(key: PathwayProgressTrackKey, t: LearnerMarketingT): string 
   }
 }
 
+function unreliableHint(active: boolean): string | undefined {
+  return active
+    ? "This number could not be verified right now — it may not reflect your real activity. Refresh to retry."
+    : undefined;
+}
+
 export function LearnerProgressPageContent({
   data,
   t,
@@ -33,7 +39,11 @@ export function LearnerProgressPageContent({
   t: LearnerMarketingT;
   localeTag: string;
 }) {
-  const { lessonsPool, pathways, questionBank, exams, continueLesson } = data;
+  const { lessonsPool, pathways, questionBank, exams, continueLesson, segmentReliability } = data;
+  const poolUnreliable =
+    !segmentReliability.contentLessonInventoryCount ||
+    !segmentReliability.pathwaySummaries ||
+    !segmentReliability.scopedLessonProgress;
   const lessonPoolPct =
     lessonsPool.available > 0 ? Math.round((lessonsPool.completed / lessonsPool.available) * 100) : 0;
 
@@ -68,16 +78,30 @@ export function LearnerProgressPageContent({
         actionLabel={t("learner.progressPage.lessonsCta")}
       >
         <ResponsiveStatRow>
-          <StatBlock label={t("learner.progressPage.lessonsCompleted")} value={lessonsPool.completed} />
-          <StatBlock label={t("learner.progressPage.lessonsInProgress")} value={lessonsPool.inProgress} />
-          <StatBlock label={t("learner.progressPage.lessonsNotStarted")} value={lessonsPool.notStarted} />
+          <StatBlock
+            label={t("learner.progressPage.lessonsCompleted")}
+            value={poolUnreliable ? "—" : lessonsPool.completed}
+            hint={unreliableHint(poolUnreliable)}
+          />
+          <StatBlock
+            label={t("learner.progressPage.lessonsInProgress")}
+            value={poolUnreliable ? "—" : lessonsPool.inProgress}
+            hint={unreliableHint(poolUnreliable)}
+          />
+          <StatBlock
+            label={t("learner.progressPage.lessonsNotStarted")}
+            value={poolUnreliable ? "—" : lessonsPool.notStarted}
+            hint={unreliableHint(poolUnreliable)}
+          />
         </ResponsiveStatRow>
         <p className="mt-4 text-xs text-muted-foreground">
-          {t("learner.progressPage.lessonsPoolNote", {
-            available: String(lessonsPool.available),
-          })}
+          {poolUnreliable
+            ? "Lesson pool totals are temporarily unavailable."
+            : t("learner.progressPage.lessonsPoolNote", {
+                available: String(lessonsPool.available),
+              })}
         </p>
-        {lessonsPool.available > 0 ? (
+        {!poolUnreliable && lessonsPool.available > 0 ? (
           <div className="mt-4">
             <div className="mb-1 flex justify-between text-xs text-muted-foreground">
               <span>{t("learner.progressPage.overallCompletion")}</span>
@@ -95,7 +119,11 @@ export function LearnerProgressPageContent({
             <p className="text-xs text-muted-foreground">{t("learner.progressPage.pathwaysSub")}</p>
           </div>
         </div>
-        {pathways.length === 0 ? (
+        {!segmentReliability.pathwaySummaries ? (
+          <p className="rounded-xl border border-dashed border-border/70 bg-muted/10 p-4 text-sm text-muted-foreground">
+            {t("learner.degraded.sectionFallbackBody")}
+          </p>
+        ) : pathways.length === 0 ? (
           <p className="rounded-xl border border-dashed border-border/70 bg-muted/10 p-4 text-sm text-muted-foreground">
             {t("learner.progressPage.pathwaysEmpty")}
           </p>
@@ -129,18 +157,36 @@ export function LearnerProgressPageContent({
         <ResponsiveStatRow>
           <StatBlock
             label={t("learner.progressPage.questionsAttempted")}
-            value={questionBank.ledgerAttempted}
-            hint={t("learner.progressPage.questionsLedgerHint")}
+            value={
+              segmentReliability.topicLedgerAggregate ? questionBank.ledgerAttempted : "—"
+            }
+            hint={
+              !segmentReliability.topicLedgerAggregate
+                ? unreliableHint(true)
+                : t("learner.progressPage.questionsLedgerHint")
+            }
           />
           <StatBlock
             label={t("learner.progressPage.questionsAccuracy")}
-            value={questionBank.ledgerAccuracyPct != null ? `${questionBank.ledgerAccuracyPct}%` : "—"}
-            hint={t("learner.progressPage.questionsAccuracyHint")}
+            value={
+              segmentReliability.topicLedgerAggregate && questionBank.ledgerAccuracyPct != null
+                ? `${questionBank.ledgerAccuracyPct}%`
+                : "—"
+            }
+            hint={
+              !segmentReliability.topicLedgerAggregate
+                ? unreliableHint(true)
+                : t("learner.progressPage.questionsAccuracyHint")
+            }
           />
           <StatBlock
             label={t("learner.progressPage.topicsPracticed")}
-            value={questionBank.topicsPracticed}
-            hint={t("learner.progressPage.topicsPracticedHint")}
+            value={segmentReliability.topicLedgerTopicCount ? questionBank.topicsPracticed : "—"}
+            hint={
+              !segmentReliability.topicLedgerTopicCount
+                ? unreliableHint(true)
+                : t("learner.progressPage.topicsPracticedHint")
+            }
           />
         </ResponsiveStatRow>
         <div className="mt-4">
@@ -148,16 +194,18 @@ export function LearnerProgressPageContent({
             {t("learner.progressPage.recentSessionsLabel")}
           </p>
           <p className="text-xs text-muted-foreground">
-            {questionBank.recentGraded.total > 0
-              ? t("learner.progressPage.recentSessionsHint", {
-                  correct: String(questionBank.recentGraded.correct),
-                  total: String(questionBank.recentGraded.total),
-                  pct:
-                    questionBank.recentGraded.accuracyPct != null
-                      ? String(questionBank.recentGraded.accuracyPct)
-                      : "—",
-                })
-              : t("learner.progressPage.recentSessionsEmpty")}
+            {!segmentReliability.recentGradedSessions
+              ? "Recent scored session totals could not be loaded. This is not the same as having no practice history."
+              : questionBank.recentGraded.total > 0
+                ? t("learner.progressPage.recentSessionsHint", {
+                    correct: String(questionBank.recentGraded.correct),
+                    total: String(questionBank.recentGraded.total),
+                    pct:
+                      questionBank.recentGraded.accuracyPct != null
+                        ? String(questionBank.recentGraded.accuracyPct)
+                        : "—",
+                  })
+                : t("learner.progressPage.recentSessionsEmpty")}
           </p>
         </div>
       </ProgressCardShell>
@@ -173,10 +221,15 @@ export function LearnerProgressPageContent({
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 className="text-sm font-semibold text-foreground">{t("learner.progressPage.practiceTestsBlock")}</h3>
               <span className="rounded-full bg-primary/12 px-2 py-0.5 text-xs font-semibold tabular-nums text-primary">
-                {exams.completedPracticeTests} {t("learner.progressPage.sessionsDone")}
+                {segmentReliability.practiceTestHistory ? exams.completedPracticeTests : "—"}{" "}
+                {t("learner.progressPage.sessionsDone")}
               </span>
             </div>
-            {exams.recentPracticeTests.length > 0 ? (
+            {!segmentReliability.practiceTestHistory ? (
+              <p className="mt-3 text-sm text-muted-foreground">
+                Practice test history could not be loaded. Refresh to retry — this is not the same as having taken no tests.
+              </p>
+            ) : exams.recentPracticeTests.length > 0 ? (
               <ul className="mt-3 divide-y divide-border/50">
                 {exams.recentPracticeTests.map((row) => (
                   <li key={row.id} className="flex flex-wrap items-center justify-between gap-2 py-2.5 text-sm first:pt-0">
@@ -203,7 +256,11 @@ export function LearnerProgressPageContent({
                 {t("learner.progressPage.examsCtaMocks")}
               </Link>
             </div>
-            {exams.recentMocks.length > 0 ? (
+            {!segmentReliability.examMockHistory ? (
+              <p className="mt-3 text-sm text-muted-foreground">
+                Recent mock exams could not be loaded. Retry shortly — an empty list here does not mean you have not taken mocks.
+              </p>
+            ) : exams.recentMocks.length > 0 ? (
               <ul className="mt-3 divide-y divide-border/50">
                 {exams.recentMocks.map((m) => (
                   <li key={m.id} className="flex flex-wrap items-center justify-between gap-2 py-2.5 text-sm first:pt-0">

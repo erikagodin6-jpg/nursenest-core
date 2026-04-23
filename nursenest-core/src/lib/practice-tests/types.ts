@@ -95,6 +95,11 @@ export type PracticeTestConfigJson = {
   linearDeliveryMode?: LinearDeliveryMode;
   /** Linear sessions: rationale timing policy. */
   linearRationaleVisibility?: LinearRationaleVisibility;
+  /**
+   * Tutor-style linear (`practice` + `after_each`): allow Previous to revisit committed items with full
+   * rationales (review navigation). Default false — forward-only until explicitly enabled.
+   */
+  linearAllowReviewNavigation?: boolean;
   /** When mode is CAT: which pool strategy to use for tier-scoped draws. */
   catSelectionBasis?: CatSelectionBasis;
   catMinQuestions?: number;

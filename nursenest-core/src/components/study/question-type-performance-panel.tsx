@@ -18,11 +18,9 @@ export function QuestionTypePerformancePanel({ rows }: { rows: QuestionTypeRow[]
           boxShadow: "0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 80%, transparent)",
         }}
       >
-        <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">
-          Performance by question type
-        </h2>
+        <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">Question type performance</h2>
         <p className="mt-2 text-sm text-[var(--semantic-text-muted)]">
-          Complete more graded practice sessions to see how you perform on each question format.
+          Accuracy and volume by item format — complete more graded sessions to fill this in.
         </p>
       </section>
     );
@@ -38,9 +36,7 @@ export function QuestionTypePerformancePanel({ rows }: { rows: QuestionTypeRow[]
       }}
     >
       <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">
-          Performance by question type
-        </h2>
+        <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">Question type performance</h2>
         <span className="text-xs text-[var(--semantic-text-muted)]">
           {rows.length} format{rows.length !== 1 ? "s" : ""} with enough data
         </span>
@@ -59,7 +55,7 @@ export function QuestionTypePerformancePanel({ rows }: { rows: QuestionTypeRow[]
                   {formatSentenceCase(row.questionType.replace(/_/g, " "))}
                 </p>
                 <p className="text-xs tabular-nums text-[var(--semantic-text-muted)]">
-                  {row.correctCount}/{total} correct · {row.accuracyPct}%
+                  {total} {total === 1 ? "try" : "tries"} · {row.accuracyPct}%
                 </p>
               </div>
               <div className="nn-progress-track-semantic nn-progress-track-semantic--md mt-2">

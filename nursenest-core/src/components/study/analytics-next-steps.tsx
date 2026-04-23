@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Sparkles } from "lucide-react";
 import type { ConfidencePatternSummary, AnalyticsSummary } from "@/lib/study/analytics-data";
 
 type RecKind = "risk" | "build" | "measure" | "consistency" | "progress";
@@ -38,12 +39,15 @@ export function AnalyticsNextSteps({
         <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-muted)]">
           Recommendations
         </p>
-        <h2 className="mt-1 text-lg font-bold text-[var(--semantic-text-primary)]">Next best actions</h2>
+        <h2 className="mt-1 flex flex-wrap items-center gap-2 text-lg font-bold text-[var(--semantic-text-primary)]">
+          <Sparkles className="h-5 w-5 text-[var(--semantic-brand)]" aria-hidden />
+          Next best actions
+        </h2>
         <p className="mt-1 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
-          Prioritized from your latest performance and confidence signals — tap through in order when time is tight.
+          Personalized recommendations from your adaptive performance and confidence patterns.
         </p>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
         {steps.map((step, i) => (
           <NextStepCard key={i} step={step} index={i} />
         ))}
@@ -69,6 +73,7 @@ const KIND_SURFACE: Record<RecKind, string> = {
 };
 
 function NextStepCard({ step, index }: { step: NextStep; index: number }) {
+  const footer = footerForKind(step.kind);
   return (
     <div
       className="flex flex-col justify-between gap-4 rounded-2xl p-5 shadow-sm"
@@ -98,7 +103,7 @@ function NextStepCard({ step, index }: { step: NextStep; index: number }) {
         <p className="text-sm font-bold text-[var(--semantic-text-primary)]">{step.title}</p>
         <p className="text-xs leading-relaxed text-[var(--semantic-text-secondary)]">{step.body}</p>
       </div>
-      <div>
+      <div className="flex flex-col gap-3">
         <Link
           href={step.href}
           className={`${
@@ -107,9 +112,29 @@ function NextStepCard({ step, index }: { step: NextStep; index: number }) {
         >
           {step.cta}
         </Link>
+        <p className="flex items-center gap-2 text-[0.65rem] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+          <span className="h-2 w-2 rounded-full" style={{ background: footer.dot }} aria-hidden />
+          <span style={{ color: footer.text }}>{footer.label}</span>
+        </p>
       </div>
     </div>
   );
+}
+
+function footerForKind(kind: RecKind): { label: string; dot: string; text: string } {
+  switch (kind) {
+    case "risk":
+      return { label: "High priority", dot: "var(--semantic-danger)", text: "var(--semantic-danger)" };
+    case "measure":
+      return { label: "Moderate priority", dot: "var(--semantic-warning)", text: "var(--semantic-text-secondary)" };
+    case "build":
+      return { label: "Reinforce", dot: "var(--semantic-info)", text: "var(--semantic-info-contrast, var(--semantic-info))" };
+    case "consistency":
+      return { label: "Habit", dot: "var(--semantic-chart-2)", text: "var(--semantic-text-secondary)" };
+    case "progress":
+    default:
+      return { label: "Quick win", dot: "var(--semantic-success)", text: "var(--semantic-success)" };
+  }
 }
 
 const SURFACES = [

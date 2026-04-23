@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 /**
  * PracticeSessionLayout — outer viewport-height container for the practice session.
@@ -11,11 +11,13 @@ import type { ReactNode } from "react";
 export function PracticeSessionLayout({
   children,
   className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return <div className={`nn-practice-session ${className ?? ""}`.trim()}>{children}</div>;
+  ...rest
+}: { children: ReactNode; className?: string } & Omit<ComponentPropsWithoutRef<"div">, "className" | "children">) {
+  return (
+    <div className={`nn-practice-session ${className ?? ""}`.trim()} {...rest}>
+      {children}
+    </div>
+  );
 }
 
 /**

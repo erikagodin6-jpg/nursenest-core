@@ -106,6 +106,31 @@ export type ConfidenceScatterPoint = {
   y: number;
 };
 
+/** One calendar day (UTC) of graded practice volume for the study-activity heatmap. */
+export type DailyActivityCell = {
+  dateKey: string;
+  questionsAnswered: number;
+};
+
+/** Extra bounded metrics for the analytics “performance report” hero. */
+export type AnalyticsDbSupplemental = {
+  flashcardsReviewedTotal: number;
+  /** Sum of completed session elapsed time over the last 90 days (practice tests). */
+  studyHoursApprox: number | null;
+  /** From recent completed practice tests with timing + results. */
+  avgMsPerQuestion: number | null;
+};
+
+export type AnalyticsSupplementalMetrics = AnalyticsDbSupplemental & {
+  /**
+   * Rough composite from readiness + accuracy for dashboard display only.
+   * Not a clinical or licensing prediction.
+   */
+  passProbabilityEstimate: number | null;
+  /** 0–10 display derived from latest readiness when available. */
+  adaptiveDifficultyDisplay: number | null;
+};
+
 export type AnalyticsPagePayload = {
   summary: AnalyticsSummary;
   /** Initial trend window — last 10 CATs. */
@@ -120,6 +145,8 @@ export type AnalyticsPagePayload = {
   questionTypeRows: QuestionTypeRow[];
   /** Points for confidence vs. performance scatter (recent graded attempts). */
   confidenceScatterPoints: ConfidenceScatterPoint[];
+  supplemental: AnalyticsSupplementalMetrics;
+  dailyActivity: DailyActivityCell[];
 };
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -174,6 +201,152 @@ function logAnalyticsFailure(event: string, userId: string): void {
   safeServerLog("learner_analytics", event, {
     userIdPrefix: userId.slice(0, 8),
   });
+}
+
+function utcDateKey(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+
+function emptyDailyActivity(days: number): DailyActivityCell[] {
+  const end = new Date();
+  const out: DailyActivityCell[] = [];
+  for (let i = 0; i < days; i++) {
+    const d = new Date(end);
+    d.setUTCDate(d.getUTCDate() - (days - 1 - i));
+    out.push({ dateKey: utcDateKey(d), questionsAnswered: 0 });
+  }
+  return out;
+}
+
+/**
+ * Questions answered per UTC day from recent ExamAttempt rows (bounded).
+ */
+export async function loadDailyQuestionActivity(
+  userId: string,
+  days = 28,
+): Promise<DailyActivityCell[]> {
+  if (!userId || !isDatabaseUrlConfigured()) return emptyDailyActivity(days);
+
+  try {
+    const end = new Date();
+    const start = new Date(end);
+    start.setUTCDate(start.getUTCDate() - days);
+
+    const attempts = await withRetry(() =>
+      prisma.examAttempt.findMany({
+        where: { userId, createdAt: { gte: start } },
+        orderBy: { createdAt: "desc" },
+        take: 200,
+        select: { createdAt: true, results: true },
+      }),
+    );
+
+    const tally = new Map<string, number>();
+    for (const cell of emptyDailyActivity(days)) {
+      tally.set(cell.dateKey, 0);
+    }
+
+    for (const a of attempts) {
+      const key = utcDateKey(a.createdAt);
+      if (!tally.has(key)) continue;
+      const n = parseAttemptResults(a.results).length;
+      tally.set(key, (tally.get(key) ?? 0) + n);
+    }
+
+    return [...tally.entries()]
+      .sort(([x], [y]) => x.localeCompare(y))
+      .map(([dateKey, questionsAnswered]) => ({ dateKey, questionsAnswered }));
+  } catch {
+    logAnalyticsFailure("daily_activity_block_failed", userId);
+    return emptyDailyActivity(days);
+  }
+}
+
+export async function loadAnalyticsDbSupplemental(userId: string): Promise<AnalyticsDbSupplemental> {
+  const empty: AnalyticsDbSupplemental = {
+    flashcardsReviewedTotal: 0,
+    studyHoursApprox: null,
+    avgMsPerQuestion: null,
+  };
+  if (!userId || !isDatabaseUrlConfigured()) return empty;
+
+  try {
+    const since90 = new Date();
+    since90.setDate(since90.getDate() - 90);
+
+    const [stats, sumElapsed, recentSessions] = await Promise.all([
+      withRetry(() =>
+        prisma.flashcardUserStats.findUnique({
+          where: { userId },
+          select: { cardsReviewedTotal: true },
+        }),
+      ),
+      withRetry(() =>
+        prisma.practiceTest.aggregate({
+          where: {
+            userId,
+            status: PracticeTestStatus.COMPLETED,
+            elapsedMs: { not: null },
+            completedAt: { gte: since90 },
+          },
+          _sum: { elapsedMs: true },
+        }),
+      ),
+      withRetry(() =>
+        prisma.practiceTest.findMany({
+          where: { userId, status: PracticeTestStatus.COMPLETED, elapsedMs: { not: null } },
+          orderBy: { completedAt: "desc" },
+          take: 12,
+          select: { elapsedMs: true, results: true },
+        }),
+      ),
+    ]);
+
+    let totalMs = 0;
+    let totalQs = 0;
+    for (const s of recentSessions) {
+      const ms = s.elapsedMs ?? 0;
+      if (ms <= 0) continue;
+      totalMs += ms;
+      const r = s.results as Record<string, unknown> | null;
+      const qCount =
+        typeof r?.scoreTotal === "number"
+          ? r.scoreTotal
+          : Array.isArray(r?.items)
+            ? (r.items as unknown[]).length
+            : 0;
+      if (qCount > 0) totalQs += qCount;
+    }
+
+    const sumMs = sumElapsed._sum.elapsedMs;
+    return {
+      flashcardsReviewedTotal: stats?.cardsReviewedTotal ?? 0,
+      studyHoursApprox:
+        sumMs != null && sumMs > 0 ? Math.round((sumMs / 3600000) * 10) / 10 : null,
+      avgMsPerQuestion: totalQs > 0 ? Math.round(totalMs / totalQs) : null,
+    };
+  } catch {
+    logAnalyticsFailure("db_supplemental_block_failed", userId);
+    return empty;
+  }
+}
+
+function derivePassProbabilityEstimate(summary: AnalyticsSummary): number | null {
+  const r = summary.latestReadinessScore;
+  const a = summary.overallAccuracyPct;
+  if (r != null && a != null) {
+    return Math.min(96, Math.max(45, Math.round(0.45 * r + 0.4 * a + 8)));
+  }
+  if (r != null) return Math.min(92, Math.max(45, Math.round(0.82 * r + 6)));
+  if (a != null && summary.totalQuestionsAnswered >= 20) {
+    return Math.min(88, Math.max(45, Math.round(0.65 * a + 20)));
+  }
+  return null;
+}
+
+function deriveAdaptiveDifficultyDisplay(summary: AnalyticsSummary): number | null {
+  if (summary.latestReadinessScore == null) return null;
+  return Math.round((summary.latestReadinessScore / 100) * 100) / 10;
 }
 
 // ── Data loaders ──────────────────────────────────────────────────────────────
@@ -678,14 +851,29 @@ export async function loadQuestionTypeBreakdown(
 export async function loadAnalyticsPagePayload(
   userId: string,
 ): Promise<AnalyticsPagePayload> {
-  const [summary, trendResult, initialTopicRows, questionTypeRows, confidenceScatterPoints] =
-    await Promise.all([
-      loadAnalyticsSummary(userId),
-      loadReadinessTrend(userId, 10),
-      loadTopicBreakdown(userId, 15),
-      loadQuestionTypeBreakdown(userId, 40),
-      loadConfidenceScatterPoints(userId, 25, 160),
-    ]);
+  const [
+    summary,
+    trendResult,
+    initialTopicRows,
+    questionTypeRows,
+    confidenceScatterPoints,
+    dbSupplemental,
+    dailyActivity,
+  ] = await Promise.all([
+    loadAnalyticsSummary(userId),
+    loadReadinessTrend(userId, 10),
+    loadTopicBreakdown(userId, 15),
+    loadQuestionTypeBreakdown(userId, 40),
+    loadConfidenceScatterPoints(userId, 25, 160),
+    loadAnalyticsDbSupplemental(userId),
+    loadDailyQuestionActivity(userId, 28),
+  ]);
+
+  const supplemental: AnalyticsSupplementalMetrics = {
+    ...dbSupplemental,
+    passProbabilityEstimate: derivePassProbabilityEstimate(summary),
+    adaptiveDifficultyDisplay: deriveAdaptiveDifficultyDisplay(summary),
+  };
 
   return {
     summary,
@@ -695,5 +883,7 @@ export async function loadAnalyticsPagePayload(
     initialTopicRows,
     questionTypeRows,
     confidenceScatterPoints,
+    supplemental,
+    dailyActivity,
   };
 }

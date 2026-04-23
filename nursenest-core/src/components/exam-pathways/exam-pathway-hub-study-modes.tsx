@@ -143,6 +143,7 @@ export function ExamPathwayHubPrimaryStudyCards({
       key: "questions",
       icon: ClipboardList,
       variant: "featured",
+      extraClass: "nn-exam-hub-study-card--questions",
       ctaVariant: "primary",
       surface: "primary_card_questions",
       destination_type: "marketing_questions",

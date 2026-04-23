@@ -44,12 +44,15 @@ import {
 } from "@/lib/practice-tests/cat-advance-contract";
 import { PracticeSessionLayout } from "@/components/study/practice-session-layout";
 import { normalizePracticeTestQuestionIds } from "@/lib/practice-tests/practice-test-question-ids";
+import { PracticeRationaleFullPanel } from "@/components/study/practice-rationale-full-panel";
+import { PracticeTestLinearRightColumn } from "@/components/study/practice-test-linear-right-column";
+import { splitPromptLeadingImage } from "@/components/flashcards/flashcard-study-question-stack";
+import { resolvePracticeLinearRightColumnPhase } from "@/lib/practice-tests/practice-linear-right-column-phase";
 import {
   PracticeQuestionCard,
   PracticeAnswerOptionRow,
 } from "@/components/study/practice-question-card";
 import type { PracticeOptionState } from "@/components/study/practice-question-card";
-import { PracticeRationaleFullPanel } from "@/components/study/practice-rationale-full-panel";
 import {
   ConfidenceSelector,
   type ConfidenceLevel,
@@ -105,6 +108,8 @@ function examChromeVariantFromSurface(pathway: PracticeTestPathwayClientShell | 
 }
 
 const MAX_PRACTICE_QUESTION_CACHE = 32;
+
+const MCQ_OPTION_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
 export function PracticeTestRunnerClient({
   testId,
@@ -606,11 +611,12 @@ export function PracticeTestRunnerClient({
   const linearRationaleVisibility =
     testConfig?.linearRationaleVisibility ?? (linearDelivery === "exam" ? "end_of_exam" : "after_each");
   const isLinearEngine = Boolean(!catMode && linearDelivery);
+  const linearAllowReviewNavigation = testConfig?.linearAllowReviewNavigation === true;
+  const linearIsExamShell = isLinearEngine && linearDelivery === "exam";
   const committedSet = useMemo(() => new Set(linearCommittedIds), [linearCommittedIds]);
   const currentCommitted = Boolean(current && committedSet.has(current.id));
   const linearFeedback = current ? linearPracticeFeedback[current.id] : undefined;
   const committedCount = linearCommittedIds.length;
-  const committedAnsweredPct = total > 0 ? Math.round((committedCount / total) * 100) : 0;
 
   const qTags = useMemo(() => {
     const t = current?.tags;
@@ -1086,7 +1092,23 @@ export function PracticeTestRunnerClient({
 
   async function goPrev() {
     if (saving || navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
-    if (catMode || isLinearEngine) return;
+    if (catMode) return;
+    if (isLinearEngine) {
+      if (!linearAllowReviewNavigation || linearIsExamShell) return;
+      if (idx <= 0) return;
+      const prevId = questionIds[idx - 1];
+      if (!prevId || !committedSet.has(prevId)) return;
+      navInFlightRef.current = true;
+      logSessionEvent("navigation_prev", { from: idx, to: idx - 1 });
+      const nextIdx = idx - 1;
+      setIdx(nextIdx);
+      try {
+        await persistSave(answersRef.current, nextIdx);
+      } finally {
+        navInFlightRef.current = false;
+      }
+      return;
+    }
     if (idx <= 0) return;
     navInFlightRef.current = true;
     logSessionEvent("navigation_prev", { from: idx, to: idx - 1 });
@@ -2159,15 +2181,230 @@ export function PracticeTestRunnerClient({
     );
   }
 
+  // Legacy linear sessions (no `linearDeliveryMode`): free navigation + practice option chrome — not CAT exam shell.
+  if (!catMode && !isLinearEngine) {
+    function legacyPracticeOptState(canonical: string): PracticeOptionState {
+      const isSelected = raw === canonical || (Array.isArray(raw) && raw.includes(canonical));
+      return isSelected ? "selected" : "default";
+    }
+
+    const legacyPracticeOptionRows =
+      optsCanonical.length === 0 ? (
+        <p className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-muted)]">
+          {tx(
+            "learner.practiceTests.run.noAnswerChoices",
+            "No answer choices were returned for this item. Use Retry, reload the test, or contact support if this persists.",
+          )}
+        </p>
+      ) : isSata ? (
+        <ul className="nn-practice-opt-list" role="group" aria-label="Answer choices (select all that apply)">
+          {optsCanonical.map((canonical, i) => {
+            const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
+            return (
+              <li key={canonical}>
+                <PracticeAnswerOptionRow
+                  index={i}
+                  text={optsDisplay[i] ?? canonical}
+                  state={legacyPracticeOptState(canonical)}
+                  disabled={false}
+                  isCheckbox
+                  checked={selected}
+                  onChange={(checked) => {
+                    const prior = answersRef.current[current.id];
+                    const prev = Array.isArray(prior) ? [...prior] : [];
+                    setAnswerForCurrent(
+                      checked ? [...prev, canonical] : prev.filter((x) => x !== canonical),
+                    );
+                  }}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <ul className="nn-practice-opt-list" role="radiogroup" aria-label="Answer choices">
+          {optsOrderCanonical.map((canonical, i) => (
+            <li key={canonical}>
+              <PracticeAnswerOptionRow
+                index={i}
+                text={optsOrderDisplay[i] ?? canonical}
+                state={legacyPracticeOptState(canonical)}
+                disabled={false}
+                onClick={() => setAnswerForCurrent(canonical)}
+              />
+            </li>
+          ))}
+        </ul>
+      );
+
+    return (
+      <ProtectedPremiumContent
+        userLabel={userLabel}
+        flags={protectionFlags}
+        telemetrySurface="practice_test"
+      >
+        <PracticeSessionLayout className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}>
+          <ExamSessionShell neutralPalette immersive className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none">
+            <ExamSessionTopBar
+              left={
+                <div className="space-y-1">
+                  <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
+                    {tx("learner.practiceTests.run.question", "Question")} {idx + 1}{" "}
+                    {tx("learner.practiceTests.run.of", "of")} {total}
+                  </p>
+                  {examName ? (
+                    <p className="line-clamp-2 nn-marketing-body-sm font-medium text-[var(--theme-heading-text)]">
+                      {examName}
+                    </p>
+                  ) : null}
+                </div>
+              }
+              center={
+                <span className="nn-marketing-caption text-[var(--semantic-text-muted)]">{modeLabel}</span>
+              }
+              right={
+                <div className="flex flex-wrap items-center justify-end gap-2">
+                  <ExamSessionThemeTrigger variant="pill" />
+                  <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+                </div>
+              }
+            />
+            <ExamProgressBar current={idx + 1} total={total} />
+            {sessionRecoveryBanner}
+            <div className="nn-question-session nn-question-session--split min-h-0 flex-1 overflow-hidden !px-0 sm:!px-0">
+              <div className="nn-question-session-primary min-h-0 overflow-y-auto">
+                <PracticeQuestionCard
+                  stem={
+                    typeof current.stem === "string" && current.stem.trim().length > 0
+                      ? current.stem
+                      : tx(
+                          "learner.practiceTests.run.questionUnavailable",
+                          "Question text is unavailable. Try reloading this item.",
+                        )
+                  }
+                  topic={current.topic}
+                  subtopic={current.subtopic}
+                  difficultyLabel={
+                    current.difficulty != null ? difficultyBandLabel(current.difficulty) : null
+                  }
+                  optionsLabel={
+                    isSata
+                      ? tx("learner.practiceTests.run.selectAllThatApply", "Select all that apply")
+                      : tx("learner.practiceTests.run.selectBestAnswer", "Select the best answer")
+                  }
+                >
+                  {timedMode && timeLimitSec != null ? (
+                    <p className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-3 py-2 text-xs font-medium text-[var(--semantic-warning-contrast)]">
+                      {tx(
+                        "learner.practiceTests.run.timedAutoEnd",
+                        "Timed session: the exam may end automatically when time expires.",
+                      )}
+                    </p>
+                  ) : null}
+                  {timedMode ? (
+                    <div className="flex justify-end">
+                      <ExamTimerReadout remainingSec={remainingSec} />
+                    </div>
+                  ) : null}
+                  {legacyPracticeOptionRows}
+                  {confidenceTrackingEnabled ? (
+                    <ConfidenceSelector
+                      questionId={current.id}
+                      value={confidence[current.id] ?? null}
+                      onChange={setConfidenceForQuestion}
+                    />
+                  ) : (
+                    <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
+                      {tx(
+                        "learner.practiceTests.run.confidenceTrackingOff",
+                        "Confidence tracking is off in your study settings for this session.",
+                      )}
+                    </div>
+                  )}
+                  <div className="nn-practice-q-nav nn-question-nav-actions">
+                    <button
+                      type="button"
+                      aria-pressed={Boolean(flagged[current.id])}
+                      className={`inline-flex min-h-[2.5rem] shrink-0 items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
+                        flagged[current.id]
+                          ? "border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] bg-[var(--surface-emphasis,color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface)))] text-[var(--semantic-text-primary)]"
+                          : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--surface-soft-a,var(--semantic-panel-muted))]"
+                      }`}
+                      onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
+                    >
+                      {flagged[current.id]
+                        ? tx("learner.practiceTests.run.marked", "Marked")
+                        : tx("learner.practiceTests.run.flag", "Flag")}
+                    </button>
+                    <div className="nn-practice-q-nav__spacer" />
+                    <button
+                      type="button"
+                      disabled={idx === 0 || controlsBusy}
+                      className="nn-btn-secondary min-h-[2.5rem] rounded-lg px-4 text-sm font-semibold disabled:opacity-40"
+                      onClick={() => void goPrev()}
+                    >
+                      {tx("learner.practiceTests.run.previous", "Previous")}
+                    </button>
+                    {idx < total - 1 ? (
+                      <button
+                        type="button"
+                        disabled={controlsBusy}
+                        className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
+                        onClick={() => void goNext()}
+                      >
+                        {tx("learner.practiceTests.run.nextQuestionPractice", "Next Question")}
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled={controlsBusy}
+                        className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
+                        onClick={() => void submitTest()}
+                      >
+                        {saving
+                          ? tx("learner.practiceTests.run.submitting", "Submitting...")
+                          : tx("learner.practiceTests.run.finish", "Finish")}
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      disabled={controlsBusy}
+                      className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
+                      onClick={() => void abandon()}
+                    >
+                      {tx("learner.practiceTests.run.abandon", "Abandon")}
+                    </button>
+                  </div>
+                </PracticeQuestionCard>
+              </div>
+              <aside className="nn-question-session-rationale flex min-h-0 flex-col">
+                <PracticeRationaleFullPanel
+                  status="waiting"
+                  correctKeys={undefined}
+                  optionDisplayMap={optionDisplayMap}
+                  allOptionKeys={optsOrderCanonical}
+                  correctAnswerExplanation={undefined}
+                  rationale={undefined}
+                  distractorRationalesMap={undefined}
+                  keyTakeaway={undefined}
+                  relatedLessons={[]}
+                  confidenceLevel={confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null}
+                />
+              </aside>
+            </div>
+          </ExamSessionShell>
+        </PracticeSessionLayout>
+      </ProtectedPremiumContent>
+    );
+  }
+
   // ══════════════════════════════════════════════════════════════════════════
-  // LINEAR PRACTICE / EXAM MODE — spec-driven viewport-height 2-col layout
-  // 60/40 grid · no page scroll on desktop · all rationale shown at once
+  // LINEAR PRACTICE / EXAM — CAT exam chrome + shared MCQ renderer (AnswerOptionRow).
+  // Tutor: rationale column. Exam: no rationale until post-submit review surfaces.
   // ══════════════════════════════════════════════════════════════════════════
 
-  // Per-option state for the new circular-badge answer rows
-  function practiceOptState(canonical: string): PracticeOptionState {
-    const isSelected =
-      raw === canonical || (Array.isArray(raw) && raw.includes(canonical));
+  function linearOptState(canonical: string): AnswerOptionState {
+    const isSelected = raw === canonical || (Array.isArray(raw) && raw.includes(canonical));
     if (
       isLinearEngine &&
       currentCommitted &&
@@ -2186,8 +2423,19 @@ export function PracticeTestRunnerClient({
   }
 
   const optIsLocked = isLinearEngine && currentCommitted;
+  const optionsInteractionLocked = optIsLocked;
 
-  const practiceOptionRows =
+  const linearExamCategoryLine =
+    [current.topic, current.subtopic].find((s) => typeof s === "string" && s.trim().length > 0)?.trim() ??
+    (qTags.find((t) => typeof t === "string" && t.trim().length > 0) as string | undefined)?.trim() ??
+    null;
+
+  const formatLinearOptionText = (i: number, canonical: string) => {
+    const rawT = optsOrderDisplay[i] ?? canonical;
+    return linearIsExamShell ? stripRedundantMcqLetterPrefix(rawT) : rawT;
+  };
+
+  const linearCatOptions =
     optsCanonical.length === 0 ? (
       <p className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-muted)]">
         {tx(
@@ -2197,28 +2445,41 @@ export function PracticeTestRunnerClient({
       </p>
     ) : isSata ? (
       <ul
-        className="nn-practice-opt-list"
+        className="nn-cat-opt-list"
         role="group"
-        aria-label="Answer choices (select all that apply)"
+        aria-label={tx(
+          "learner.practiceTests.run.answerChoicesSataAria",
+          "Answer choices (select all that apply)",
+        )}
       >
         {optsCanonical.map((canonical, i) => {
           const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
+          const st = linearOptState(canonical);
+          const rowText = linearIsExamShell
+            ? stripRedundantMcqLetterPrefix(optsDisplay[i] ?? canonical)
+            : optsDisplay[i] ?? canonical;
           return (
             <li key={canonical}>
-              <PracticeAnswerOptionRow
-                index={i}
-                text={optsDisplay[i] ?? canonical}
-                state={practiceOptState(canonical)}
-                disabled={optIsLocked}
+              <AnswerOptionRow
+                letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
+                text={rowText}
+                state={
+                  optionsInteractionLocked
+                    ? st === "selected"
+                      ? "selected"
+                      : st
+                    : selected
+                      ? "selected"
+                      : "default"
+                }
+                disabled={optionsInteractionLocked}
                 isCheckbox
                 checked={selected}
                 onChange={(checked) => {
                   const prior = answersRef.current[current.id];
                   const prev = Array.isArray(prior) ? [...prior] : [];
                   setAnswerForCurrent(
-                    checked
-                      ? [...prev, canonical]
-                      : prev.filter((x) => x !== canonical),
+                    checked ? [...prev, canonical] : prev.filter((x) => x !== canonical),
                   );
                 }}
               />
@@ -2228,17 +2489,17 @@ export function PracticeTestRunnerClient({
       </ul>
     ) : (
       <ul
-        className="nn-practice-opt-list"
+        className="nn-cat-opt-list"
         role="radiogroup"
-        aria-label="Answer choices"
+        aria-label={tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")}
       >
         {optsOrderCanonical.map((canonical, i) => (
           <li key={canonical}>
-            <PracticeAnswerOptionRow
-              index={i}
-              text={optsOrderDisplay[i] ?? canonical}
-              state={practiceOptState(canonical)}
-              disabled={optIsLocked}
+            <AnswerOptionRow
+              letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
+              text={formatLinearOptionText(i, canonical)}
+              state={linearOptState(canonical)}
+              disabled={optionsInteractionLocked}
               onClick={() => setAnswerForCurrent(canonical)}
             />
           </li>
@@ -2255,10 +2516,226 @@ export function PracticeTestRunnerClient({
         ? "exam_locked"
         : "waiting";
 
-  const topBarRightLabel =
-    isLinearEngine && committedCount > 0
-      ? `${committedAnsweredPct}% ${tx("learner.practiceTests.run.complete", "complete")}`
-      : modeLabel;
+  const linearShowRationaleAside = isLinearEngine && !linearIsExamShell;
+  const linearRightColumnPhase = resolvePracticeLinearRightColumnPhase({
+    linearIsExamShell,
+    hasRationalePayload: Boolean(linearFeedback),
+    currentCommitted,
+    rationaleAfterEach: linearRationaleVisibility === "after_each",
+  });
+  const canLinearReviewPrev =
+    linearAllowReviewNavigation &&
+    !linearIsExamShell &&
+    idx > 0 &&
+    Boolean(questionIds[idx - 1] && committedSet.has(questionIds[idx - 1]!));
+
+  const linearAdvancePrimaryLabel = controlsBusy
+    ? tx("learner.practiceTests.run.working", "Working...")
+    : tx("learner.practiceTests.run.nextItem", "Next");
+
+  const linearQuestionStem =
+    typeof current.stem === "string" && current.stem.trim().length > 0
+      ? current.stem
+      : tx(
+          "learner.practiceTests.run.questionUnavailable",
+          "Question text is unavailable. Try reloading this item.",
+        );
+
+  const rawStemTrimmed =
+    typeof current.stem === "string" && current.stem.trim().length > 0 ? current.stem.trim() : "";
+  const linearStemClinicalSplit =
+    linearShowRationaleAside && rawStemTrimmed ? splitPromptLeadingImage(rawStemTrimmed) : null;
+  const stemForLinearTutorWell =
+    linearStemClinicalSplit && linearStemClinicalSplit.stem.trim().length > 0
+      ? linearStemClinicalSplit.stem
+      : linearQuestionStem;
+  const clinicalImageSrcLinear =
+    linearStemClinicalSplit?.imageSrc && linearStemClinicalSplit.imageSrc.trim().length > 0
+      ? linearStemClinicalSplit.imageSrc.trim()
+      : null;
+
+  const linearRightColumnLabels = {
+    clinicalReferenceHeading: tx(
+      "learner.flashcards.session.clinicalReferenceHeading",
+      "Clinical reference",
+    ),
+    clinicalReferenceEmpty: tx(
+      "learner.flashcards.session.clinicalReferenceEmpty",
+      "No figure is attached to this item. Use the question stem and choices on the left.",
+    ),
+    tutorHintBeforeSubmit: tx(
+      "learner.practiceTests.run.tutorRightColumnBeforeSubmit",
+      "Submit your answer to unlock the full rationale — correct answer, why it is correct, and why each distractor is wrong.",
+    ),
+  };
+
+  const linearQuestionCardInner = (
+    <>
+      {timedMode && timeLimitSec != null ? (
+        <div className="nn-cat-exam-timing-alert mb-4" role="alert">
+          {tx(
+            "learner.practiceTests.run.timedAutoEnd",
+            "Timed session: the exam may end automatically when time expires.",
+          )}
+        </div>
+      ) : null}
+      <p className="nn-cat-options-label">
+        {isSata
+          ? tx("learner.practiceTests.run.selectAllThatApply", "Select all that apply")
+          : tx("learner.practiceTests.run.selectBestAnswer", "Select the best answer")}
+      </p>
+      {linearCatOptions}
+      {confidenceTrackingEnabled ? (
+        <div className="mt-4">
+          <ConfidenceSelector
+            questionId={current.id}
+            value={confidence[current.id] ?? null}
+            neutral={linearIsExamShell}
+            onChange={setConfidenceForQuestion}
+          />
+        </div>
+      ) : (
+        <div className="mt-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
+          {tx(
+            "learner.practiceTests.run.confidenceTrackingOff",
+            "Confidence tracking is off in your study settings for this session.",
+          )}
+        </div>
+      )}
+    </>
+  );
+
+  const linearExamFlagSlot = (
+    <button
+      type="button"
+      aria-pressed={Boolean(flagged[current.id])}
+      disabled={controlsBusy}
+      title={
+        flagged[current.id]
+          ? tx("learner.practiceTests.run.unflagForReview", "Remove flag")
+          : tx("learner.practiceTests.run.flagForReview", "Flag for review")
+      }
+      className={`rounded-md p-2 transition ${
+        flagged[current.id]
+          ? "text-[var(--semantic-brand)]"
+          : "text-[var(--semantic-text-muted)] hover:bg-[color-mix(in_srgb,var(--semantic-text-primary)_6%,var(--semantic-surface))]"
+      }`}
+      onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
+    >
+      {flagged[current.id] ? (
+        <Flag className="h-4 w-4 fill-current text-[var(--semantic-brand)]" aria-hidden />
+      ) : (
+        <Flag className="h-4 w-4 text-[var(--semantic-text-muted)]" strokeWidth={1.75} aria-hidden />
+      )}
+      <span className="sr-only">
+        {flagged[current.id]
+          ? tx("learner.practiceTests.run.flagged", "Flagged")
+          : tx("learner.practiceTests.run.flag", "Flag")}
+      </span>
+    </button>
+  );
+
+  const linearExamQuestionCard = (
+    <QuestionCard
+      stem={linearQuestionStem}
+      topic={null}
+      subtopic={null}
+      difficultyLabel={null}
+      examStackedLayout
+      examDetachedFooter
+      examCategoryLabel={linearExamCategoryLine}
+      examHeaderRightSlot={linearExamFlagSlot}
+      examLayoutMeasureKey={`${current.id}:${optsOrderCanonical.join("|")}`}
+    >
+      {linearQuestionCardInner}
+    </QuestionCard>
+  );
+
+  const linearTutorQuestionCard = (
+    <QuestionCard
+      stem={stemForLinearTutorWell}
+      topic={null}
+      subtopic={null}
+      difficultyLabel={null}
+      examStackedLayout={false}
+      examCategoryLabel={linearExamCategoryLine}
+      examHeaderRightSlot={linearExamFlagSlot}
+    >
+      {linearQuestionCardInner}
+    </QuestionCard>
+  );
+
+  const linearBoardFooter = (
+    <footer className="nn-cat-exam-board-footer flex shrink-0 flex-col border-t border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))]">
+      <div className="mx-auto flex w-full max-w-[48.75rem] items-center justify-between gap-3 px-3 py-2.5 sm:px-4">
+        <button
+          type="button"
+          disabled={controlsBusy || !canLinearReviewPrev}
+          className="inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] disabled:opacity-40"
+          title={
+            linearIsExamShell
+              ? tx(
+                  "learner.practiceTests.run.catExamNoPrevious",
+                  "Previous item is not available during this exam.",
+                )
+              : !linearAllowReviewNavigation
+                ? tx(
+                    "learner.practiceTests.run.linearReviewNavOff",
+                    "Turn on review navigation for this test to revisit earlier items.",
+                  )
+                : undefined
+          }
+          onClick={() => void goPrev()}
+        >
+          <ChevronLeft className="h-4 w-4" aria-hidden />
+          {tx("learner.practiceTests.run.previous", "Previous")}
+        </button>
+        <p className="m-0 text-center text-xs font-medium tabular-nums text-[var(--semantic-text-muted)] sm:text-sm">
+          {tx("learner.practiceTests.run.catExamAnsweredProgress", "{answered} of {total} answered", {
+            answered: String(Math.min(committedCount, total)),
+            total: String(Math.max(total, 1)),
+          })}
+        </p>
+        <div className="min-w-[5.5rem] text-right">
+          {!currentCommitted ? (
+            <button
+              type="button"
+              disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
+              className="inline-flex items-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40"
+              onClick={() => void submitLinearCommit()}
+            >
+              {saving
+                ? tx("learner.practiceTests.run.submitting", "Submitting...")
+                : tx("learner.practiceTests.run.submit", "Submit")}
+              <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
+            </button>
+          ) : idx < total - 1 ? (
+            <button
+              type="button"
+              disabled={controlsBusy}
+              className="inline-flex items-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40"
+              onClick={() => void goNext()}
+            >
+              {linearAdvancePrimaryLabel}
+              <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
+            </button>
+          ) : (
+            <button
+              type="button"
+              disabled={controlsBusy}
+              className="inline-flex items-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40"
+              onClick={() => void submitTest()}
+            >
+              {saving
+                ? tx("learner.practiceTests.run.submitting", "Submitting...")
+                : tx("learner.practiceTests.run.finish", "Finish")}
+              <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
+            </button>
+          )}
+        </div>
+      </div>
+    </footer>
+  );
 
   return (
     <ProtectedPremiumContent
@@ -2266,173 +2743,82 @@ export function PracticeTestRunnerClient({
       flags={protectionFlags}
       telemetrySurface="practice_test"
     >
-      <PracticeSessionLayout className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}>
-        <ExamSessionShell neutralPalette immersive className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none">
-          <ExamSessionTopBar
-            left={
-              <div className="space-y-1">
-                <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                  {tx("learner.practiceTests.run.question", "Question")} {idx + 1}{" "}
-                  {tx("learner.practiceTests.run.of", "of")} {total}
-                </p>
-                {examName ? (
-                  <p className="line-clamp-2 nn-marketing-body-sm font-medium text-[var(--theme-heading-text)]">
-                    {examName}
-                  </p>
-                ) : null}
-              </div>
-            }
-            center={
-              <span className="nn-marketing-caption text-[var(--semantic-text-muted)]">{topBarRightLabel}</span>
-            }
-            right={
-              <div className="flex flex-wrap items-center justify-end gap-2">
-                <ExamSessionThemeTrigger variant="pill" />
-                <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
-              </div>
-            }
-          />
-          <ExamProgressBar current={idx + 1} total={total} />
-          {sessionRecoveryBanner}
-          <div className="nn-question-session nn-question-session--split min-h-0 flex-1 overflow-hidden !px-0 sm:!px-0">
-            <div className="nn-question-session-primary min-h-0 overflow-y-auto">
-            <PracticeQuestionCard
-              stem={
-                typeof current.stem === "string" && current.stem.trim().length > 0
-                  ? current.stem
-                  : tx(
-                    "learner.practiceTests.run.questionUnavailable",
-                    "Question text is unavailable. Try reloading this item.",
-                  )
-              }
-              topic={current.topic}
-              subtopic={current.subtopic}
-              difficultyLabel={
-                current.difficulty != null
-                  ? difficultyBandLabel(current.difficulty)
-                  : null
-              }
-              optionsLabel={isSata
-                ? tx("learner.practiceTests.run.selectAllThatApply", "Select all that apply")
-                : tx("learner.practiceTests.run.selectBestAnswer", "Select the best answer")}
-            >
-              {timedMode && timeLimitSec != null ? (
-                <p className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-3 py-2 text-xs font-medium text-[var(--semantic-warning-contrast)]">
-                  {tx(
-                    "learner.practiceTests.run.timedAutoEnd",
-                    "Timed session: the exam may end automatically when time expires.",
-                  )}
-                </p>
-              ) : null}
-              {timedMode ? (
-                <div className="flex justify-end">
-                  <ExamTimerReadout remainingSec={remainingSec} />
-                </div>
-              ) : null}
-              {practiceOptionRows}
-
-              {/* Confidence selector — practice mode: full semantic palette */}
-              {confidenceTrackingEnabled ? (
-                <ConfidenceSelector
-                  questionId={current.id}
-                  value={confidence[current.id] ?? null}
-                  onChange={setConfidenceForQuestion}
-                />
-              ) : (
-                <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]">
-                  {tx(
-                    "learner.practiceTests.run.confidenceTrackingOff",
-                    "Confidence tracking is off in your study settings for this session.",
-                  )}
-                </div>
-              )}
-
-              <div className="nn-practice-q-nav nn-question-nav-actions">
-                <button
-                  type="button"
-                  aria-pressed={Boolean(flagged[current.id])}
-                  className={`inline-flex min-h-[2.5rem] shrink-0 items-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
-                    flagged[current.id]
-                      ? "border-[color-mix(in_srgb,var(--semantic-brand)_26%,var(--semantic-border-soft))] bg-[var(--surface-emphasis,color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface)))] text-[var(--semantic-text-primary)]"
-                      : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--surface-soft-a,var(--semantic-panel-muted))]"
-                  }`}
-                  onClick={() =>
-                    setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))
-                  }
-                >
-                  {flagged[current.id]
-                    ? tx("learner.practiceTests.run.marked", "Marked")
-                    : tx("learner.practiceTests.run.flag", "Flag")}
-                </button>
-                <div className="nn-practice-q-nav__spacer" />
-                {!isLinearEngine ? (
-                  <button
-                    type="button"
-                    disabled={idx === 0 || controlsBusy}
-                    className="nn-btn-secondary min-h-[2.5rem] rounded-lg px-4 text-sm font-semibold disabled:opacity-40"
-                    onClick={() => void goPrev()}
-                  >
-                    {tx("learner.practiceTests.run.previous", "Previous")}
-                  </button>
-                ) : null}
-                {isLinearEngine && !currentCommitted ? (
-                  <button
-                    type="button"
-                    disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
-                    className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
-                    onClick={() => void submitLinearCommit()}
-                  >
-                    {saving
-                      ? tx("learner.practiceTests.run.submitting", "Submitting...")
-                      : tx("learner.practiceTests.run.submitAnswer", "Submit answer")}
-                  </button>
-                ) : null}
-                {idx < total - 1 ? (
-                  <button
-                    type="button"
-                    disabled={controlsBusy || (isLinearEngine && !currentCommitted)}
-                    className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
-                    onClick={() => void goNext()}
-                  >
-                    {tx("learner.practiceTests.run.nextQuestionPractice", "Next Question")}
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    disabled={controlsBusy || (isLinearEngine && !currentCommitted)}
-                    className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
-                    onClick={() => void submitTest()}
-                  >
-                    {saving
-                      ? tx("learner.practiceTests.run.submitting", "Submitting...")
-                      : tx("learner.practiceTests.run.finish", "Finish")}
-                  </button>
-                )}
-                <button
-                  type="button"
-                  disabled={controlsBusy}
-                  className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
-                  onClick={() => void abandon()}
-                >
-                  {tx("learner.practiceTests.run.abandon", "Abandon")}
-                </button>
-              </div>
-            </PracticeQuestionCard>
+      <PracticeSessionLayout
+        className={`flex min-h-0 flex-1 flex-col ${chromeClass}`}
+        {...(linearIsExamShell ? { "data-cat-exam-root": true } : {})}
+      >
+        <ExamSessionShell
+          neutralPalette
+          immersive
+          className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none nn-cat-exam-chrome"
+        >
+          <header className="nn-cat-exam-board-top flex min-h-[3.5rem] shrink-0 items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] px-3 py-2 sm:px-4">
+            <p className="nn-cat-exam-board-top__progress m-0 text-sm font-semibold leading-snug text-[var(--semantic-text-secondary)]">
+              {linearIsExamShell
+                ? tx("learner.practiceTests.run.itemInProgress", "Item {n} in Progress", { n: String(idx + 1) })
+                : `${tx("learner.practiceTests.run.question", "Question")} ${idx + 1} ${tx("learner.practiceTests.run.of", "of")} ${total}`}
+            </p>
+            <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+              <ExamSessionThemeTrigger variant="pill" />
+              <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+              <button
+                type="button"
+                disabled={controlsBusy}
+                className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] disabled:opacity-40"
+                onClick={() => void abandon()}
+              >
+                <Send className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+                {tx("learner.practiceTests.run.endExam", "End")}
+              </button>
             </div>
-            <aside className="nn-question-session-rationale flex min-h-0 flex-col">
-              <PracticeRationaleFullPanel
-                status={rationaleFullStatus}
-                correctKeys={linearFeedback?.correctKeys}
-                optionDisplayMap={optionDisplayMap}
-                allOptionKeys={optsOrderCanonical}
-                correctAnswerExplanation={linearFeedback?.correctAnswerExplanation}
-                rationale={linearFeedback?.rationale}
-                distractorRationalesMap={linearFeedback?.distractorRationalesMap}
-                keyTakeaway={linearFeedback?.keyTakeaway}
-                relatedLessons={linearFeedback?.relatedLessons ?? []}
-                confidenceLevel={confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null}
-              />
-            </aside>
+          </header>
+          <ExamProgressBar
+            className="nn-exam-progress--cat-exam-adaptive nn-cat-exam-board-progress shrink-0"
+            current={idx + 1}
+            total={Math.max(total, 1)}
+            variant="adaptive_item"
+            adaptiveMaxItems={null}
+            sessionLabel={modeLabel}
+          />
+          {sessionRecoveryBanner}
+          <div
+            className={`nn-cat-exam-board-frame nn-cat-session flex min-h-0 flex-1 flex-col overflow-hidden ${chromeClass} nn-cat-session--exam-single`}
+          >
+            {linearShowRationaleAside && linearRightColumnPhase ? (
+              <div className="nn-flashcard-exam-board nn-practice-test-linear-board grid min-h-0 min-w-0 flex-1 gap-4 overflow-hidden px-3 py-3 sm:px-4 lg:grid-cols-[minmax(0,1fr)_minmax(280px,380px)] xl:gap-6">
+                <div className="min-h-0 min-w-0 overflow-x-hidden overflow-y-auto">
+                  <div className="nn-cat-exam-content-well nn-cat-exam-col mx-auto flex min-h-0 w-full max-w-[48.75rem] flex-col pb-2 pt-1">
+                    {linearTutorQuestionCard}
+                  </div>
+                </div>
+                <PracticeTestLinearRightColumn
+                  phase={linearRightColumnPhase}
+                  clinicalImageSrc={clinicalImageSrcLinear}
+                  labels={linearRightColumnLabels}
+                  rationaleSlot={
+                    <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] p-4 shadow-sm sm:p-5">
+                      <PracticeRationaleFullPanel
+                        status={rationaleFullStatus}
+                        correctKeys={linearFeedback?.correctKeys}
+                        optionDisplayMap={optionDisplayMap}
+                        allOptionKeys={optsOrderCanonical}
+                        correctAnswerExplanation={linearFeedback?.correctAnswerExplanation}
+                        rationale={linearFeedback?.rationale}
+                        distractorRationalesMap={linearFeedback?.distractorRationalesMap}
+                        keyTakeaway={linearFeedback?.keyTakeaway}
+                        relatedLessons={linearFeedback?.relatedLessons ?? []}
+                        confidenceLevel={confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null}
+                      />
+                    </div>
+                  }
+                />
+              </div>
+            ) : (
+              <div className="nn-cat-exam-content-well nn-cat-exam-col mx-auto flex min-h-0 w-full max-w-[48.75rem] flex-1 flex-col overflow-hidden">
+                {linearExamQuestionCard}
+              </div>
+            )}
+            {linearBoardFooter}
           </div>
         </ExamSessionShell>
       </PracticeSessionLayout>

@@ -38,6 +38,16 @@ export async function registerNodeInstrumentation(): Promise<void> {
   runProductionEnvGuard();
   logRuntimeEnvSnapshot();
   validateRuntimeEnvOrThrow();
+  try {
+    const { logStudyPublishedSnapshotStartupDiagnostics } = await import(
+      "@/lib/study-content-failover/study-snapshot-runtime-diagnostics",
+    );
+    await logStudyPublishedSnapshotStartupDiagnostics();
+  } catch (e) {
+    safeServerLog("study_failover", "study_snapshot_boot_diagnostics_failed", {
+      error_message: e instanceof Error ? e.message.slice(0, 240) : String(e).slice(0, 240),
+    });
+  }
   console.error(
     `[nursenest-core] instrumentation: nodejs runtime registered PORT=${process.env.PORT ?? "(unset)"}`,
   );

@@ -32,7 +32,10 @@ export const metadata: Metadata = {
 export default function PreNursingLandingPage() {
   return (
     <div className="nn-marketing-surface">
-      <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+      <div
+        className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8"
+        data-nn-nursing-tier-hub="surface"
+      >
         <PreNursingSurfaceAnalytics surface="hub" />
         <WebPageJsonLd
           title={title}
@@ -53,6 +56,7 @@ export default function PreNursingLandingPage() {
               <StudyCard
                 surface="hub"
                 variant="featured"
+                className="nn-exam-hub-study-card--lessons"
                 href="/pre-nursing/lessons"
                 title="Lessons"
                 description="Review concepts by topic."
@@ -64,6 +68,7 @@ export default function PreNursingLandingPage() {
               <StudyCard
                 surface="hub"
                 variant="featured"
+                className="nn-exam-hub-study-card--flashcards"
                 href="/flashcards"
                 title="Flashcards"
                 description="Strengthen recall quickly."
@@ -75,6 +80,7 @@ export default function PreNursingLandingPage() {
               <StudyCard
                 surface="hub"
                 variant="featured"
+                className="nn-exam-hub-study-card--practice"
                 href="/question-bank"
                 title="Practice"
                 description="Drill by topic or weakness."
@@ -86,6 +92,7 @@ export default function PreNursingLandingPage() {
               <StudyCard
                 surface="hub"
                 variant="featured"
+                className="nn-exam-hub-study-card--cat"
                 href="/pre-nursing/mini-cat"
                 title="Exams"
                 description="Take longer exam-style sessions."

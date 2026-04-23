@@ -155,7 +155,11 @@ export function configFromInput(
   input: PickQuestionsInput,
   timedMode: boolean,
   timeLimitSec: number | null,
-  extras?: { linearDeliveryMode?: LinearDeliveryMode; linearRationaleVisibility?: LinearRationaleVisibility },
+  extras?: {
+    linearDeliveryMode?: LinearDeliveryMode;
+    linearRationaleVisibility?: LinearRationaleVisibility;
+    linearAllowReviewNavigation?: boolean;
+  },
 ): PracticeTestConfigJson {
   return {
     questionCount: input.questionCount,
@@ -168,5 +172,6 @@ export function configFromInput(
     timeLimitSec,
     ...(extras?.linearDeliveryMode ? { linearDeliveryMode: extras.linearDeliveryMode } : {}),
     ...(extras?.linearRationaleVisibility ? { linearRationaleVisibility: extras.linearRationaleVisibility } : {}),
+    ...(extras?.linearAllowReviewNavigation === true ? { linearAllowReviewNavigation: true } : {}),
   };
 }

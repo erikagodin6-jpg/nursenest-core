@@ -76,8 +76,13 @@ function resolveSignalProfile(scope?: { tier?: string; country?: string }): Read
 }
 
 /** We only emit a numeric score if at least one strong signal exists. */
-function hasMinimumSignal(practiceTotal: number, mocks: ReadinessMockInput[], profile: ReadinessSignalProfile): boolean {
-  const mockUsable = mocks.filter((m) => m.total >= MIN_QUESTIONS_PER_MOCK);
+function hasMinimumSignal(
+  practiceTotal: number,
+  mocks: ReadinessMockInput[],
+  profile: ReadinessSignalProfile,
+  mockHistoryReliable: boolean,
+): boolean {
+  const mockUsable = mockHistoryReliable ? mocks.filter((m) => m.total >= MIN_QUESTIONS_PER_MOCK) : [];
   return practiceTotal >= profile.minPracticeItems || mockUsable.length >= profile.minMockAttempts;
 }
 
@@ -139,6 +144,16 @@ export function computeReadiness(args: {
    * readiness omits the topic factor (0 max) instead of awarding full topic credit.
    */
   topicPerformanceSignalReliable?: boolean;
+  /**
+   * When false, lesson completion vs pool must not be read as real zeros —
+   * readiness omits the lesson factor (0 max) instead of implying “no lessons done”.
+   */
+  lessonCompletionSignalReliable?: boolean;
+  /**
+   * When false, {@link recentMocks} must not be used for scoring or minimum-signal thresholds
+   * (empty list does not mean “no mocks taken”).
+   */
+  mockHistorySignalReliable?: boolean;
 }): ReadinessResult {
   const {
     practiceCorrect,
@@ -150,6 +165,8 @@ export function computeReadiness(args: {
     scope,
     practiceSignalReliable = true,
     topicPerformanceSignalReliable = true,
+    lessonCompletionSignalReliable = true,
+    mockHistorySignalReliable = true,
   } = args;
   const signalProfile = resolveSignalProfile(scope);
   const calibratedPreview = signalProfile.minPracticeItems > MIN_PRACTICE_ITEMS;
@@ -161,20 +178,24 @@ export function computeReadiness(args: {
       a.topic.localeCompare(b.topic),
   );
 
-  const usableMocks = recentMocks.filter((m) => m.total >= MIN_QUESTIONS_PER_MOCK).slice(0, 3);
+  const usableMocks = mockHistorySignalReliable
+    ? recentMocks.filter((m) => m.total >= MIN_QUESTIONS_PER_MOCK).slice(0, 3)
+    : [];
 
   const practiceTotalForSignals = practiceSignalReliable ? practiceTotal : 0;
 
-  if (!hasMinimumSignal(practiceTotalForSignals, recentMocks, signalProfile)) {
+  if (!hasMinimumSignal(practiceTotalForSignals, recentMocks, signalProfile, mockHistorySignalReliable)) {
     return {
       score: null,
       band: "insufficient_data",
       confidence: "low",
       trend: null,
       summary:
-        calibratedPreview
-          ? `Answer at least ${signalProfile.minPracticeItems} practice questions or complete ${signalProfile.minMockAttempts} practice exam(s) so we can calculate your readiness.`
-          : "Answer at least 15 practice questions or complete one practice exam so we can calculate your readiness score.",
+        !mockHistorySignalReliable && practiceTotalForSignals < signalProfile.minPracticeItems
+          ? "We could not load your recent practice exam history, and practice volume is still below the threshold. Refresh to retry — we will not guess a readiness score from incomplete signals."
+          : calibratedPreview
+            ? `Answer at least ${signalProfile.minPracticeItems} practice questions or complete ${signalProfile.minMockAttempts} practice exam(s) so we can calculate your readiness.`
+            : "Answer at least 15 practice questions or complete one practice exam so we can calculate your readiness score.",
       factors: [],
       whatToImprove: [
         "Start a practice session or take a practice exam.",
@@ -228,7 +249,16 @@ export function computeReadiness(args: {
   /** Mock performance (0–30) */
   let mockPoints = 0;
   let mockMax = 0;
-  if (usableMocks.length >= signalProfile.minMockAttempts) {
+  if (!mockHistorySignalReliable) {
+    factors.push({
+      id: "mock_performance",
+      label: "Practice Exams",
+      points: 0,
+      maxPoints: 0,
+      detail:
+        "Recent practice exam attempts could not be loaded. Refresh to retry — this factor is hidden until history is available.",
+    });
+  } else if (usableMocks.length >= signalProfile.minMockAttempts) {
     mockMax = 30;
     const avgPct =
       usableMocks.reduce((s, m) => s + (m.total > 0 ? (m.score / m.total) * 100 : 0), 0) / usableMocks.length;
@@ -299,7 +329,16 @@ export function computeReadiness(args: {
   /** Lesson completion (0–15) */
   let lessonMax = 0;
   let lessonPoints = 0;
-  if (lessonsAvailable > 0) {
+  if (!lessonCompletionSignalReliable) {
+    factors.push({
+      id: "lesson_completion",
+      label: "Lesson Progress",
+      points: 0,
+      maxPoints: 0,
+      detail:
+        "Lesson completion in your plan pool could not be loaded. Refresh to retry — this factor is hidden until counts are available.",
+    });
+  } else if (lessonsAvailable > 0) {
     lessonMax = 15;
     lessonPoints = Math.round(15 * clamp01(lessonsCompleted / lessonsAvailable));
     factors.push({
@@ -323,19 +362,23 @@ export function computeReadiness(args: {
   const possible = practiceMax + mockMax + topicMax + lessonMax;
   const score = possible > 0 ? Math.round((earned / possible) * 100) : 0;
   let band = bandFromScore(score);
-  const spread = mockPercentStdDev(recentMocks);
+  const spread = mockHistorySignalReliable ? mockPercentStdDev(recentMocks) : null;
   if (spread != null && spread > 18 && band === "ready") {
     band = "near_ready";
   }
 
-  let confidence = confidenceLevel(practiceTotalForSignals, usableMocks.length, signalProfile);
+  let confidence = confidenceLevel(
+    practiceTotalForSignals,
+    mockHistorySignalReliable ? usableMocks.length : 0,
+    signalProfile,
+  );
   if (spread != null && spread > 18 && confidence === "high") {
     confidence = "medium";
   }
 
   // Trend: derived from mock progression when 2+ mocks exist
   let trend: ReadinessTrend | null = null;
-  if (usableMocks.length >= 2) {
+  if (mockHistorySignalReliable && usableMocks.length >= 2) {
     const latestPct = usableMocks[0]!.total > 0 ? (usableMocks[0]!.score / usableMocks[0]!.total) * 100 : 0;
     const priorPct = usableMocks[1]!.total > 0 ? (usableMocks[1]!.score / usableMocks[1]!.total) * 100 : 0;
     const delta = latestPct - priorPct;
@@ -364,7 +407,11 @@ export function computeReadiness(args: {
   ) {
     whatToImprove.push("Review explanations on missed questions before adding more practice.");
   }
-  if (usableMocks.length && usableMocks.reduce((s, m) => s + m.score / m.total, 0) / usableMocks.length < 0.65) {
+  if (
+    mockHistorySignalReliable &&
+    usableMocks.length &&
+    usableMocks.reduce((s, m) => s + m.score / m.total, 0) / usableMocks.length < 0.65
+  ) {
     whatToImprove.push("Focus on shorter topic drills before taking full-length exams.");
   }
   if (topicPerformanceSignalReliable && weakTopics.length) {
@@ -375,7 +422,11 @@ export function computeReadiness(args: {
         .join(", ")}.`,
     );
   }
-  if (lessonsAvailable > 0 && lessonsCompleted / lessonsAvailable < 0.3) {
+  if (
+    lessonCompletionSignalReliable &&
+    lessonsAvailable > 0 &&
+    lessonsCompleted / lessonsAvailable < 0.3
+  ) {
     whatToImprove.push("Continue working through lessons to strengthen your foundation.");
   }
   if (whatToImprove.length === 0) {

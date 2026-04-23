@@ -35,7 +35,7 @@ export async function loadStudyPlannerContext(
     pathwayLessonRows: bundle.pathwayLessonRows,
   });
 
-  const [dashboard, pathways] = await Promise.all([
+  const [dashboard, pathwaySummaries] = await Promise.all([
     loadLearnerDashboard(userId, entitlement, {
       source: "loadStudyPlannerContext",
       userProfile: bundle.user,
@@ -53,7 +53,7 @@ export async function loadStudyPlannerContext(
 
   return {
     dashboard,
-    pathwaySummaries: pathways,
+    pathwaySummaries,
     dailyStudyMinutes: bundle.user.dailyStudyMinutes,
     examFocus: bundle.user.examFocus,
     studyGoal: bundle.user.studyGoal,

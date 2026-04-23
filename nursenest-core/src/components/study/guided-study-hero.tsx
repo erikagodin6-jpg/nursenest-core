@@ -16,7 +16,7 @@
 import Link from "next/link";
 import { BAND_LABELS, BAND_HELPER, ReadinessBandBadge } from "./cat-readiness-hero";
 import type { ReadinessBand } from "./cat-readiness-hero";
-import type { GuidedStudyStep } from "@/lib/study/guided-study-data";
+import type { GuidedStudySignalsReliability, GuidedStudyStep } from "@/lib/study/guided-study-data";
 
 // ── Greeting copy ─────────────────────────────────────────────────────────────
 
@@ -102,6 +102,8 @@ export type GuidedStudyHeroProps = {
   dailyStudyMinutes: number | null;
   nextStep: GuidedStudyStep;
   hasEnoughData: boolean;
+  criticalLoadFailed?: boolean;
+  signalsReliability?: GuidedStudySignalsReliability;
 };
 
 export function GuidedStudyHero({
@@ -114,13 +116,16 @@ export function GuidedStudyHero({
   dailyStudyMinutes,
   nextStep,
   hasEnoughData,
+  criticalLoadFailed = false,
+  signalsReliability,
 }: GuidedStudyHeroProps) {
-  const { headline, subtext } = deriveGreeting(
-    readinessBand,
-    streakDays,
-    examFocus,
-    hasEnoughData,
-  );
+  const greeting = deriveGreeting(readinessBand, streakDays, examFocus, hasEnoughData);
+  const headline = criticalLoadFailed ? "We couldn’t load your study signals" : greeting.headline;
+  const subtext = criticalLoadFailed
+    ? "Refresh to retry. What you see here is not an accurate picture of your progress until data loads."
+    : greeting.subtext;
+
+  const analyticsOk = signalsReliability?.analyticsSummary !== false;
 
   return (
     <div
@@ -154,7 +159,7 @@ export function GuidedStudyHero({
           </div>
 
           {/* Readiness score row */}
-          {readinessScore !== null && readinessBand !== null && (
+          {analyticsOk && readinessScore !== null && readinessBand !== null && (
             <div className="flex items-center gap-3">
               <span
                 className="text-4xl font-extrabold tabular-nums"
@@ -180,14 +185,14 @@ export function GuidedStudyHero({
             border: "1px solid var(--semantic-border-soft)",
           }}
         >
-          {overallAccuracyPct !== null && (
+          {analyticsOk && overallAccuracyPct !== null && (
             <StatPill
               label="Accuracy"
               value={`${overallAccuracyPct}%`}
               color="var(--semantic-brand)"
             />
           )}
-          {streakDays > 0 && (
+          {analyticsOk && streakDays > 0 && (
             <StatPill
               label="Day streak"
               value={`${streakDays}d`}

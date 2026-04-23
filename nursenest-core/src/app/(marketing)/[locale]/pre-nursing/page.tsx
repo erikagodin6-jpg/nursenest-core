@@ -62,7 +62,10 @@ export default async function LocalizedPreNursingPage({ params }: Props) {
 
   return (
     <div className="nn-marketing-surface">
-      <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+      <div
+        className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8"
+        data-nn-nursing-tier-hub="surface"
+      >
         <PreNursingSurfaceAnalytics surface="hub" />
         <WebPageJsonLd
           title={pageTitle}
@@ -83,6 +86,7 @@ export default async function LocalizedPreNursingPage({ params }: Props) {
               <StudyCard
                 surface="hub"
                 variant="featured"
+                className="nn-exam-hub-study-card--lessons"
                 href={l("/pre-nursing/lessons")}
                 icon={BookOpen}
                 title="Lessons"
@@ -95,6 +99,7 @@ export default async function LocalizedPreNursingPage({ params }: Props) {
               <StudyCard
                 surface="hub"
                 variant="featured"
+                className="nn-exam-hub-study-card--flashcards"
                 href={l("/flashcards")}
                 icon={Layers}
                 title="Flashcards"
@@ -107,6 +112,7 @@ export default async function LocalizedPreNursingPage({ params }: Props) {
               <StudyCard
                 surface="hub"
                 variant="featured"
+                className="nn-exam-hub-study-card--practice"
                 href={l("/question-bank")}
                 icon={Target}
                 title="Practice"
@@ -119,6 +125,7 @@ export default async function LocalizedPreNursingPage({ params }: Props) {
               <StudyCard
                 surface="hub"
                 variant="featured"
+                className="nn-exam-hub-study-card--cat"
                 href={l("/pre-nursing/mini-cat")}
                 icon={Activity}
                 title="Exams"

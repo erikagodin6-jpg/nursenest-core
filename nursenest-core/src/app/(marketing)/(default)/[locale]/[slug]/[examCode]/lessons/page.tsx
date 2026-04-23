@@ -277,7 +277,6 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         initialQuery={qEffective ?? undefined}
         preservedTopicSlug={topicSlugNorm ?? undefined}
         preservedAlliedProfession={alliedProfessionKey || undefined}
-        totalCount={0}
         countryOptions={[
           { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
           { label: "US", href: usHref, active: pathway.countrySlug === "us" },
@@ -307,8 +306,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         crumbs={crumbs}
         schemaItems={schemaItems}
         surfaceChips={lessonHubSurfaceChips}
-        errorTitle="We&apos;re having trouble loading lessons."
-        errorBody="This isn&apos;t your fault. The lesson list did not finish loading — this is not an empty library. Please try again."
+        errorTitle={"We're having trouble loading lessons"}
+        errorBody={"This isn't your fault. Something went wrong on our side."}
         errorDetail={
           lessonsPageLoad.reason === "invalid_payload"
             ? "Load error: invalid response from the lesson service."
@@ -319,6 +318,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         retryHref={`${base}${hubQuerySuffix}`}
         secondaryHref={overviewHref}
         secondaryLabel="Back to exam overview"
+        supportHref={`/${countrySlug}/contact`}
+        supportLabel="Contact support"
       />
     );
   }
@@ -340,6 +341,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   } catch (e) {
     if (e instanceof HubVerifyPreparedPositiveZeroKeptError) {
       safeServerLog("pathway_lessons", "marketing_hub_verify_invariant_error_surface", {
+        pathway: pathway.id,
         pathway_id: pathway.id,
         country_slug: countrySlug,
         role_track: roleTrack,
@@ -400,7 +402,6 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           initialQuery={qEffective ?? undefined}
           preservedTopicSlug={topicSlugNorm ?? undefined}
           preservedAlliedProfession={alliedProfessionKey || undefined}
-          totalCount={0}
           countryOptions={[
             { label: "Canada", href: invCanadaHref, active: pathway.countrySlug === "canada" },
             { label: "US", href: invUsHref, active: pathway.countrySlug === "us" },
@@ -417,12 +418,13 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           crumbs={invCrumbs}
           schemaItems={invSchema}
           surfaceChips={invLessonHubSurfaceChips}
-          errorTitle="We&apos;re having trouble loading lessons."
-          errorBody="This isn&apos;t your fault. Please try again. The list could not be confirmed against our lesson checks — this is not the same as having no lessons."
-          errorDetail={`Technical detail (for support): prepared_count=${e.preparedCount}, verify_kept_count=0.`}
+          errorTitle={"We're having trouble loading lessons"}
+          errorBody={"This isn't your fault. Something went wrong on our side."}
           retryHref={`${base}${hubQuerySuffix}`}
           secondaryHref={invOverviewHref}
           secondaryLabel="Back to exam overview"
+          supportHref={`/${countrySlug}/contact`}
+          supportLabel="Contact support"
         />
       );
     }

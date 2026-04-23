@@ -13,8 +13,8 @@ import {
   buildPathwayStudySummariesFromLessonInventory,
   loadPathwayLessonProgressBundle,
   loadPathwayStudySummaries,
+  type PathwayStudySummariesRow,
 } from "@/lib/learner/load-learner-dashboard";
-import type { PathwayStudySummariesRow } from "@/lib/learner/load-learner-dashboard";
 import {
   buildVisibleLessonScopeForLearner,
   countProgressInProgressForLessonIds,
@@ -24,7 +24,7 @@ import {
 import type { RecentMock } from "@/lib/learner/load-learner-dashboard";
 import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
 import type { LearnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
-import { learnerAggregateDegradedState, mergeLearnerAggregateDegraded } from "@/lib/learner/aggregate-loader-degraded-state";
+import { learnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
 import { logLearnerStudyLoadDiagnostics } from "@/lib/learner/learner-study-load-diagnostics";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { loadSessionGradingAggregate } from "@/lib/learner/session-grading-aggregate";

@@ -19,6 +19,7 @@ import "server-only";
 
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { logLearnerStudyLoadDiagnostics } from "@/lib/learner/learner-study-load-diagnostics";
 import { loadAnalyticsSummary } from "@/lib/study/analytics-data";
 import { getReadinessBand } from "@/components/study/cat-readiness-hero";
 import type { ReadinessBand } from "@/components/study/cat-readiness-hero";
@@ -54,6 +55,13 @@ export type GuidedRetestRec = {
   urgency: "ready" | "soon" | "not_yet";
 };
 
+export type GuidedStudySignalsReliability = {
+  topicStats: boolean;
+  analyticsSummary: boolean;
+  reviewLaterCount: boolean;
+  userPreferences: boolean;
+};
+
 export type GuidedStudyPayload = {
   // ── Hero signals ────────────────────────────────────────────────────────
   readinessScore: number | null;
@@ -83,6 +91,13 @@ export type GuidedStudyPayload = {
   weakAreas: GuidedWeakArea[];
   /** false if user has < 5 total question attempts — show onboarding-friendly copy. */
   hasEnoughData: boolean;
+  /**
+   * When any critical segment failed, UI must not treat empty counts or null readiness as “caught up” or “new user”.
+   * Prefer {@link GuidedStudySignalsReliability} per dimension for partial failure.
+   */
+  signalsReliability: GuidedStudySignalsReliability;
+  /** Both topic stats and analytics failed — recommendations cannot be trusted; show retry, not baseline empty. */
+  criticalLoadFailed: boolean;
 };
 
 // ── Recommendation helpers ────────────────────────────────────────────────────
@@ -111,7 +126,18 @@ function deriveNextStep(
   reviewCount: number,
   readinessBand: ReadinessBand | null,
   hasEnoughData: boolean,
+  criticalLoadFailed: boolean,
 ): GuidedStudyStep {
+  if (criticalLoadFailed) {
+    return {
+      kind: "baseline",
+      title: "We couldn’t refresh your study signals",
+      why: "Your personalized plan is paused until practice data loads. This is not the same as having nothing to study.",
+      ctaLabel: "Retry",
+      href: "/app/guided",
+      urgency: "high",
+    };
+  }
   if (!hasEnoughData) {
     return {
       kind: "baseline",
@@ -280,7 +306,17 @@ function buildRetestRec(
   band: ReadinessBand | null,
   accuracyPct: number | null,
   hasEnoughData: boolean,
+  criticalLoadFailed: boolean,
 ): GuidedRetestRec {
+  if (criticalLoadFailed) {
+    return {
+      band: null,
+      message: "We could not load your readiness band. Refresh to retry — this is not a recommendation to wait.",
+      ctaLabel: "Refresh guided study",
+      href: "/app/guided",
+      urgency: "not_yet",
+    };
+  }
   if (!hasEnoughData || band === null) {
     return {
       band: null,
@@ -339,9 +375,17 @@ export async function loadGuidedStudyPayload(userId: string): Promise<GuidedStud
     return buildEmptyPayload();
   }
 
-  // ── Bounded parallel DB loads ─────────────────────────────────────────────
-  const [summary, topicStats, user, reviewLaterCount] = await Promise.all([
-    loadAnalyticsSummary(userId).catch(() => null),
+  const t0 = performance.now();
+  const reliability: GuidedStudySignalsReliability = {
+    topicStats: true,
+    analyticsSummary: true,
+    reviewLaterCount: true,
+    userPreferences: true,
+  };
+
+  // ── Bounded parallel DB loads (no catch-to-empty — failures are explicit) ─
+  const [summaryResult, topicStatsResult, userResult, reviewLaterResult] = await Promise.allSettled([
+    loadAnalyticsSummary(userId),
     prisma.userTopicStat.findMany({
       where: { userId, lastAttemptAt: { not: null } },
       orderBy: [{ wrongStreak: "desc" }, { wrongCount: "desc" }],
@@ -353,15 +397,89 @@ export async function loadGuidedStudyPayload(userId: string): Promise<GuidedStud
         wrongStreak: true,
         lastWrongAt: true,
       },
-    }).catch(() => []),
+    }),
     prisma.user.findUnique({
       where: { id: userId },
       select: { examFocus: true, studyGoal: true, dailyStudyMinutes: true },
-    }).catch(() => null),
+    }),
     prisma.userTopicStat.count({
       where: { userId, wrongStreak: { gt: 0 } },
-    }).catch(() => 0),
+    }),
   ]);
+
+  const summary = summaryResult.status === "fulfilled" ? summaryResult.value : null;
+  if (summaryResult.status === "rejected") {
+    reliability.analyticsSummary = false;
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadGuidedStudyPayload",
+      feature_surface: "guided_study",
+      duration_ms: Math.round(performance.now() - t0),
+      outcome: "error",
+      segment: "analytics_summary",
+      user_id_prefix: userId.slice(0, 8),
+      reason:
+        summaryResult.reason instanceof Error
+          ? summaryResult.reason.message.slice(0, 400)
+          : String(summaryResult.reason).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
+
+  const topicStats = topicStatsResult.status === "fulfilled" ? topicStatsResult.value : [];
+  if (topicStatsResult.status === "rejected") {
+    reliability.topicStats = false;
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadGuidedStudyPayload",
+      feature_surface: "guided_study",
+      duration_ms: Math.round(performance.now() - t0),
+      outcome: "error",
+      segment: "user_topic_stat_top",
+      user_id_prefix: userId.slice(0, 8),
+      reason:
+        topicStatsResult.reason instanceof Error
+          ? topicStatsResult.reason.message.slice(0, 400)
+          : String(topicStatsResult.reason).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
+
+  const user = userResult.status === "fulfilled" ? userResult.value : null;
+  if (userResult.status === "rejected") {
+    reliability.userPreferences = false;
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadGuidedStudyPayload",
+      feature_surface: "guided_study",
+      duration_ms: Math.round(performance.now() - t0),
+      outcome: "degraded",
+      segment: "user_preferences",
+      user_id_prefix: userId.slice(0, 8),
+      reason:
+        userResult.reason instanceof Error
+          ? userResult.reason.message.slice(0, 400)
+          : String(userResult.reason).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
+
+  let reviewLaterCount = 0;
+  if (reviewLaterResult.status === "fulfilled") {
+    reviewLaterCount = reviewLaterResult.value;
+  } else {
+    reliability.reviewLaterCount = false;
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadGuidedStudyPayload",
+      feature_surface: "guided_study",
+      duration_ms: Math.round(performance.now() - t0),
+      outcome: "error",
+      segment: "review_later_count",
+      user_id_prefix: userId.slice(0, 8),
+      reason:
+        reviewLaterResult.reason instanceof Error
+          ? reviewLaterResult.reason.message.slice(0, 400)
+          : String(reviewLaterResult.reason).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
 
   // ── Derive weak areas from UserTopicStat ──────────────────────────────────
   const rawAreas: GuidedWeakArea[] = topicStats
@@ -392,19 +510,34 @@ export async function loadGuidedStudyPayload(userId: string): Promise<GuidedStud
   const overallAccuracyPct = summary?.overallAccuracyPct ?? null;
   const streakDays = summary?.streakDays ?? 0;
 
-  // "Enough data" = at least one topic with ≥ 3 attempts
-  const hasEnoughData = rawAreas.length > 0 || (summary?.totalQuestionsAnswered ?? 0) >= 5;
+  const criticalLoadFailed = !reliability.topicStats && !reliability.analyticsSummary;
+
+  // "Enough data" only when the underlying signals actually loaded
+  const hasEnoughData =
+    !criticalLoadFailed &&
+    ((reliability.topicStats && rawAreas.length > 0) ||
+      (reliability.analyticsSummary && (summary?.totalQuestionsAnswered ?? 0) >= 5));
 
   // ── Build recommendation plan ─────────────────────────────────────────────
-  const nextStep = deriveNextStep(rawAreas, reviewLaterCount, readinessBand, hasEnoughData);
+  const nextStep = deriveNextStep(rawAreas, reviewLaterCount, readinessBand, hasEnoughData, criticalLoadFailed);
   const studyStack = buildStudyStack(
     nextStep,
     rawAreas,
-    reviewLaterCount,
+    reliability.reviewLaterCount ? reviewLaterCount : 0,
     readinessBand,
     hasEnoughData,
   );
-  const retestRec = buildRetestRec(readinessBand, overallAccuracyPct, hasEnoughData);
+  const retestRec = buildRetestRec(readinessBand, overallAccuracyPct, hasEnoughData, criticalLoadFailed);
+
+  logLearnerStudyLoadDiagnostics({
+    operation: "loadGuidedStudyPayload",
+    feature_surface: "guided_study",
+    duration_ms: Math.round(performance.now() - t0),
+    outcome: criticalLoadFailed ? "error" : Object.values(reliability).every(Boolean) ? "ok" : "degraded",
+    user_id_prefix: userId.slice(0, 8),
+    final_outcome: criticalLoadFailed ? "error" : "ok",
+    fallback_used: "false",
+  });
 
   return {
     readinessScore,
@@ -419,14 +552,22 @@ export async function loadGuidedStudyPayload(userId: string): Promise<GuidedStud
     reviewLaterCount,
     reviewLaterTopics,
     retestRec,
-    weakAreas: rawAreas,
+    weakAreas: reliability.topicStats ? rawAreas : [],
     hasEnoughData,
+    signalsReliability: reliability,
+    criticalLoadFailed,
   };
 }
 
 // ── Empty payload (DB unavailable / new user) ─────────────────────────────────
 
 function buildEmptyPayload(): GuidedStudyPayload {
+  const deadSignals: GuidedStudySignalsReliability = {
+    topicStats: false,
+    analyticsSummary: false,
+    reviewLaterCount: false,
+    userPreferences: false,
+  };
   return {
     readinessScore: null,
     readinessBand: null,
@@ -455,5 +596,7 @@ function buildEmptyPayload(): GuidedStudyPayload {
     },
     weakAreas: [],
     hasEnoughData: false,
+    signalsReliability: deadSignals,
+    criticalLoadFailed: true,
   };
 }

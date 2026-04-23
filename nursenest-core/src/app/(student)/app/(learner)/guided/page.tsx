@@ -9,6 +9,7 @@ import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlemen
 import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { loadGuidedStudyPayload } from "@/lib/study/guided-study-data";
+import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { GuidedStudyHero } from "@/components/study/guided-study-hero";
 import { GuidedNextStepCard } from "@/components/study/guided-next-step-card";
 import {
@@ -100,9 +101,16 @@ export default async function GuidedStudyPage() {
   // ── Load recommendation payload (server-side, bounded queries) ───────────────
   const payload = await loadGuidedStudyPayload(userId);
 
+  const partialDegraded =
+    !payload.criticalLoadFailed && Object.values(payload.signalsReliability).some((v) => !v);
+
   return (
     <div className="space-y-8">
       <BreadcrumbTrail items={crumbs} />
+
+      {payload.criticalLoadFailed || partialDegraded ? (
+        <LearnerSilentSectionDegradedFallback surfaceName="guided-study" />
+      ) : null}
 
       {/* 1. Hero — surface-emphasis */}
       <GuidedStudyHero
@@ -115,6 +123,8 @@ export default async function GuidedStudyPage() {
         dailyStudyMinutes={payload.dailyStudyMinutes}
         nextStep={payload.nextStep}
         hasEnoughData={payload.hasEnoughData}
+        criticalLoadFailed={payload.criticalLoadFailed}
+        signalsReliability={payload.signalsReliability}
       />
 
       {/* 2. Today's best next step — surface-soft-c / -a / -b (by urgency) */}
@@ -129,6 +139,7 @@ export default async function GuidedStudyPage() {
       <GuidedReviewLaterCard
         count={payload.reviewLaterCount}
         topics={payload.reviewLaterTopics}
+        reviewLaterReliable={payload.signalsReliability.reviewLaterCount}
       />
 
       {/* 5. Retest recommendation — soft accent keyed to band */}

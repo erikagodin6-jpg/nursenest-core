@@ -365,6 +365,11 @@ async function loadReportCardDataUncached(userId: string, entitlement: AccessSco
       lessonsCompleted: core.lessonsCompleted,
       lessonsAvailable: core.lessonsAvailable,
       scope: core.scope,
+      practiceSignalReliable: false,
+      topicPerformanceSignalReliable: false,
+      lessonCompletionSignalReliable:
+        core.coreReliability.lessonsAvailable && core.coreReliability.lessonsCompleted,
+      mockHistorySignalReliable: core.coreReliability.recentMocks,
     });
 
     const pathways: PathwayLessonSummary[] = pathwayRaw.map((p) => ({

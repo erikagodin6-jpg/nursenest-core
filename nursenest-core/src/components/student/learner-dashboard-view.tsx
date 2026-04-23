@@ -23,10 +23,28 @@ function pctLine(current: number, total: number): string {
   return `${Math.min(100, Math.round((current / total) * 100))}%`;
 }
 
+function dashboardCoreHasDegradedSegment(
+  c: LearnerDashboardModel["coreReliability"],
+): boolean {
+  return (
+    !c.userProfile ||
+    !c.visibleLessonScope ||
+    !c.lessonsAvailable ||
+    !c.lessonsCompleted ||
+    !c.questionsInMocksLast14d ||
+    !c.recentMocks
+  );
+}
+
 export async function LearnerDashboardView({ data }: { data: LearnerDashboardModel }) {
   const { t } = await getLearnerMarketingBundle();
-  const lessonPct = pctLine(data.lessonsCompleted, data.lessonsAvailable);
+  const coreOk =
+    data.coreReliability.lessonsAvailable &&
+    data.coreReliability.lessonsCompleted &&
+    data.lessonsAvailable > 0;
+  const lessonPct = coreOk ? pctLine(data.lessonsCompleted, data.lessonsAvailable) : "N/A";
   const topWeak = data.weakTopics.slice(0, 3);
+  const coreDegraded = dashboardCoreHasDegradedSegment(data.coreReliability);
   const r = data.readiness;
   const weakestFactors = [...r.factors]
     .filter((f) => f.maxPoints > 0)
@@ -50,6 +68,19 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
           </p>
         </div>
       </header>
+
+      {coreDegraded ? (
+        <div
+          role="status"
+          className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-warning),var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning),transparent_92%)] px-4 py-3 text-sm text-[var(--theme-body-text)]"
+        >
+          <p className="font-semibold text-[var(--theme-heading-text)]">Some study metrics could not be loaded</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Refresh the page to retry. Numbers below may be hidden where the load failed so we do not show a false “0”
+            or empty state.
+          </p>
+        </div>
+      ) : null}
 
       <section className="nn-card p-6">
         <div className="flex flex-wrap items-start justify-between gap-4">
@@ -182,11 +213,17 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Lessons</p>
               <p className="mt-2 text-3xl font-bold tabular-nums text-[var(--theme-heading-text)]">
-                {data.lessonsCompleted}
-                <span className="text-lg font-semibold text-muted-foreground">
-                  {" "}
-                  / {data.lessonsAvailable || "N/A"}
-                </span>
+                {data.coreReliability.lessonsCompleted && data.coreReliability.lessonsAvailable ? (
+                  <>
+                    {data.lessonsCompleted}
+                    <span className="text-lg font-semibold text-muted-foreground">
+                      {" "}
+                      / {data.lessonsAvailable || "N/A"}
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-2xl font-semibold text-muted-foreground">Unavailable</span>
+                )}
               </p>
               <p className="mt-1 text-xs text-muted-foreground">Completed in your plan pool</p>
             </div>
@@ -195,7 +232,12 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
           <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted">
             <div
               className="h-full rounded-full bg-role-success transition-[width]"
-              style={{ width: data.lessonsAvailable > 0 ? `${Math.min(100, (data.lessonsCompleted / data.lessonsAvailable) * 100)}%` : "0%" }}
+              style={{
+                width:
+                  coreOk && data.lessonsAvailable > 0
+                    ? `${Math.min(100, (data.lessonsCompleted / data.lessonsAvailable) * 100)}%`
+                    : "0%",
+              }}
             />
           </div>
           <p className="mt-2 text-xs font-medium text-primary">{lessonPct} of current pool completed</p>

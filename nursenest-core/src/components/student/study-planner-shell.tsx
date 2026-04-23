@@ -8,6 +8,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import type { StudyPlannerContext } from "@/lib/learner/load-study-planner-context";
+import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
 import { readinessBandLabel } from "@/lib/learner/readiness-score";
 import { remediationTopicDrillHref, remediationWeakModeTestHref } from "@/lib/learner/remediation-links";
 import { StudyPlanToolGateway } from "@/components/student/study-plan-tool-gateway";
@@ -19,11 +20,14 @@ function pctDone(done: number, total: number): number {
 
 export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
   const d = ctx.dashboard;
-  const weak = d?.weakTopics?.slice(0, 4) ?? [];
-  const declineTrend = d?.topicTrends?.find((t) => t.momentum === "declining");
+  const pathwayRows = ctx.pathwaySummaries.rows;
+  const pathwayLoadFailed = ctx.pathwaySummaries.status !== "ok";
+  const weak = d?.topicPerformanceReliable === false ? [] : (d?.weakTopics?.slice(0, 4) ?? []);
+  const declineTrend =
+    d?.topicPerformanceReliable === false ? undefined : d?.topicTrends?.find((t) => t.momentum === "declining");
   const topPath =
-    ctx.pathways.length > 0
-      ? [...ctx.pathways].sort(
+    pathwayRows.length > 0
+      ? [...pathwayRows].sort(
           (a, b) => pctDone(a.lessonsCompleted, a.lessonsTotal) - pctDone(b.lessonsCompleted, b.lessonsTotal),
         )[0]
       : null;
@@ -33,19 +37,26 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
   const readiness = d?.readiness;
 
   const todaySteps = [
-    declineTrend
-      ? `Stabilize “${declineTrend.topic}” first. Recent misses cluster here; use rationales, then 10–15 questions.`
-      : weak[0]
-        ? `Drill “${weak[0].topic}” in the question bank (15–20 min).`
-        : `Open the question bank and run a 20-item block aligned to ${focus}.`,
-    topPath
-      ? `Advance “${topPath.shortLabel}”: ${topPath.lessonsCompleted}/${topPath.lessonsTotal} lessons in your plan.`
-      : `Work one lesson module in your tier (30–45 min).`,
+    pathwayLoadFailed
+      ? "Pathway lesson totals are temporarily unavailable — open Lessons from the nav and continue your track; retry this planner after refresh."
+      : declineTrend
+        ? `Stabilize “${declineTrend.topic}” first. Recent misses cluster here; use rationales, then 10–15 questions.`
+        : weak[0]
+          ? `Drill “${weak[0].topic}” in the question bank (15–20 min).`
+          : `Open the question bank and run a 20-item block aligned to ${focus}.`,
+    pathwayLoadFailed
+      ? "When pathway totals load again, we’ll line up the next lesson module for your tier (30–45 min)."
+      : topPath
+        ? `Advance “${topPath.shortLabel}”: ${topPath.lessonsCompleted}/${topPath.lessonsTotal} lessons in your plan.`
+        : `Work one lesson module in your tier (30–45 min).`,
     `Review rationales on misses. Aim for ${minutes} minutes total study today.`,
   ];
 
   return (
     <div className="space-y-10">
+      {(pathwayLoadFailed || d?.topicPerformanceReliable === false) && (
+        <LearnerSilentSectionDegradedFallback surfaceName="study-planner" />
+      )}
       <header className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.1] via-[var(--theme-card-bg)] to-[var(--theme-page-bg)] p-6 sm:p-8">
         <div className="pointer-events-none absolute -left-16 bottom-0 h-40 w-40 rounded-full bg-primary/10 blur-3xl" aria-hidden />
         <div className="relative">
@@ -122,7 +133,7 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
           </div>
           <p className="mt-1 text-xs text-muted-foreground">Completed vs available in your plan.</p>
           <ul className="mt-4 space-y-3">
-            {ctx.pathways.map((p) => {
+            {pathwayRows.map((p) => {
               const pct = pctDone(p.lessonsCompleted, p.lessonsTotal);
               const remaining = Math.max(0, p.lessonsTotal - p.lessonsCompleted);
               return (
@@ -141,7 +152,11 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
               );
             })}
           </ul>
-          {ctx.pathways.length === 0 ? (
+          {pathwayLoadFailed ? (
+            <p className="mt-4 text-sm text-muted-foreground">
+              We could not load pathway lesson totals. Refresh the page — an empty list here does not mean your plan has no pathways.
+            </p>
+          ) : pathwayRows.length === 0 ? (
             <p className="mt-4 text-sm text-muted-foreground">No pathway lessons match your current plan.</p>
           ) : null}
         </section>
@@ -152,7 +167,11 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
             <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Priority review queue</h2>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">From recent mock performance (scoped questions only).</p>
-          {weak.length > 0 ? (
+          {d?.topicPerformanceReliable === false ? (
+            <p className="mt-4 text-sm text-muted-foreground">
+              Weak-topic recommendations are unavailable until topic performance reloads. This is not the same as having no weak areas.
+            </p>
+          ) : weak.length > 0 ? (
             <ul className="mt-4 space-y-2">
               {weak.map((w) => (
                 <li key={w.topic} className="flex items-center justify-between gap-2 text-sm">

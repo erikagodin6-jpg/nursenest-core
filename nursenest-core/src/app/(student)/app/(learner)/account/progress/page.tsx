@@ -93,7 +93,7 @@ export default async function AccountProgressPage() {
   }
 
   const payload = await loadProgressPagePayload(userId, entitlement);
-  if (!payload || payload.degraded?.active) {
+  if (!payload) {
     return (
       <div className="space-y-6">
         <BreadcrumbTrail items={crumbs} />
@@ -102,7 +102,7 @@ export default async function AccountProgressPage() {
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.progress.intro")}</p>
         </div>
         <LearnerSilentSectionDegradedFallback surfaceName="progress-page" />
-        <LearnerAccountCrossLinks variant="progress" t={t} continueLesson={payload?.continueLesson ?? null} />
+        <LearnerAccountCrossLinks variant="progress" t={t} continueLesson={null} />
       </div>
     );
   }
@@ -114,6 +114,7 @@ export default async function AccountProgressPage() {
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.progress.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.progress.intro")}</p>
       </div>
+      {payload.degraded?.active ? <LearnerSilentSectionDegradedFallback surfaceName="progress-page" /> : null}
       <LearnerProgressPageContent data={payload} t={t} localeTag={localeTag} />
 
       <LearnerAccountCrossLinks variant="progress" t={t} continueLesson={payload.continueLesson} />

@@ -77,6 +77,7 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/api/admin/billing/stripe-reconcile",
   "/api/admin/stats",
   "/api/admin/system-status",
+  "/api/admin/study-published-snapshots",
   "/api/admin/users",
   "/api/admin/cat-blueprint-sessions",
   "/api/admin/qa",

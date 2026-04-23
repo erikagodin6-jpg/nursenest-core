@@ -30,7 +30,7 @@ import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examContextAnalyticsProps } from "@/lib/exam-context/global-exam-context";
 import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
 
@@ -78,6 +78,7 @@ const createSchema = z
     linearDeliveryMode: z.enum(["practice", "exam"]).optional(),
     /** Linear sessions: rationale timing controls (mirrors tutor vs exam behavior). */
     linearRationaleVisibility: z.enum(["after_each", "end_of_exam"]).optional(),
+    linearAllowReviewNavigation: z.boolean().optional(),
   })
   .refine((d) => d.selectionMode !== "cat" || d.catPresentationMode !== "practice" || d.questionCount <= 200, {
     message: "CAT maximum question cap is 200.",
@@ -118,6 +119,7 @@ function linearConfigFingerprint(config: PracticeTestConfigJson) {
     linearRationaleVisibility:
       config.linearRationaleVisibility ??
       ((config.linearDeliveryMode ?? "practice") === "exam" ? "end_of_exam" : "after_each"),
+    linearAllowReviewNavigation: config.linearAllowReviewNavigation === true,
   });
 }
 
@@ -131,25 +133,38 @@ export async function GET(req: NextRequest) {
 
   setSentryServerContext({ route: "/api/practice-tests", feature: SERVER_FEATURE.practiceTest, userId: gate.userId });
 
-  const rows = await prisma.practiceTest.findMany({
-    where: { userId: gate.userId },
-    orderBy: { updatedAt: "desc" },
-    take: 40,
-    select: {
-      id: true,
-      title: true,
-      status: true,
-      config: true,
-      questionIds: true,
-      timedMode: true,
-      timeLimitSec: true,
-      elapsedMs: true,
-      startedAt: true,
-      completedAt: true,
-      results: true,
-      updatedAt: true,
-    },
-  });
+  let rows;
+  try {
+    rows = await prisma.practiceTest.findMany({
+      where: { userId: gate.userId },
+      orderBy: { updatedAt: "desc" },
+      take: 40,
+      select: {
+        id: true,
+        title: true,
+        status: true,
+        config: true,
+        questionIds: true,
+        timedMode: true,
+        timeLimitSec: true,
+        elapsedMs: true,
+        startedAt: true,
+        completedAt: true,
+        results: true,
+        updatedAt: true,
+      },
+    });
+  } catch (e) {
+    safeServerLogCritical("api_practice_tests", "list_find_failed", { userIdPrefix: gate.userId.slice(0, 8) }, e);
+    return NextResponse.json(
+      {
+        error: "Unable to load your practice tests right now. Please retry.",
+        code: "primary_db_failed",
+        retryable: true,
+      },
+      { status: 503 },
+    );
+  }
 
   const list = rows.map((r) => {
     const ids = Array.isArray(r.questionIds) ? r.questionIds.filter((x): x is string => typeof x === "string") : [];
@@ -177,7 +192,7 @@ export async function GET(req: NextRequest) {
     };
   });
 
-  return NextResponse.json({ tests: list });
+  return NextResponse.json({ tests: list, source_used: "primary" as const });
   });
 }
 
@@ -552,6 +567,7 @@ export async function POST(req: Request) {
       {
         linearDeliveryMode: linearMode ?? resolvedLinearMode,
         linearRationaleVisibility,
+        linearAllowReviewNavigation: d.linearAllowReviewNavigation === true,
       },
     ),
     sessionPickSalt,

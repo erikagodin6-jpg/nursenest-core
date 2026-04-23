@@ -30,7 +30,10 @@ export function ConfidenceVsPerformancePanel({
       }}
     >
       <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">Confidence vs. performance</h2>
+        <div>
+          <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">Confidence vs. performance</h2>
+          <p className="mt-0.5 text-xs text-[var(--semantic-text-muted)]">Mastery quadrant analysis</p>
+        </div>
         {hasPatterns && loaded ? (
           <span className="text-xs text-[var(--semantic-text-muted)]">
             {patterns.totalRated.toLocaleString()} rated · {patterns.sessionsAnalyzed} session

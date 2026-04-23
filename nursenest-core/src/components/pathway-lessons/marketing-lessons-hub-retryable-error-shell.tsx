@@ -23,6 +23,9 @@ export type MarketingLessonsHubRetryableErrorShellProps = {
   retryLabel?: string;
   secondaryHref: string;
   secondaryLabel: string;
+  /** Optional support / contact link (tertiary). */
+  supportHref?: string;
+  supportLabel?: string;
 };
 
 /**
@@ -46,17 +49,22 @@ export function MarketingLessonsHubRetryableErrorShell(props: MarketingLessonsHu
     retryLabel = "Retry",
     secondaryHref,
     secondaryLabel,
+    supportHref,
+    supportLabel = "Contact support",
   } = props;
 
   return (
     <LessonsPageShell title={title} subtitle={subtitle} toolbar={toolbar} backLink={{ label: backLabel, href: backHref }}>
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <LessonHubSurfaceChips links={surfaceChips} />
-      <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+      <div
+        className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5"
+        data-testid="marketing-hub-load-error"
+      >
         <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{errorTitle}</p>
         <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{errorBody}</p>
         {errorDetail ? <p className="mt-3 text-xs text-[var(--theme-muted-text)]">{errorDetail}</p> : null}
-        <div className="mt-4 flex flex-wrap gap-3">
+        <div className="mt-4 flex flex-wrap items-center gap-3">
           <Link
             href={retryHref}
             className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
@@ -69,6 +77,14 @@ export function MarketingLessonsHubRetryableErrorShell(props: MarketingLessonsHu
           >
             {secondaryLabel}
           </Link>
+          {supportHref ? (
+            <Link
+              href={supportHref}
+              className="inline-flex min-h-[44px] items-center justify-center rounded-full px-2 text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline"
+            >
+              {supportLabel}
+            </Link>
+          ) : null}
         </div>
       </div>
     </LessonsPageShell>

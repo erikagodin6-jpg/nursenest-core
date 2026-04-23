@@ -29,6 +29,8 @@ const ACTION_ORDER: NursingTierHubActionId[] = ["lessons", "flashcards", "practi
 
 const ACTION_CLASS: Partial<Record<NursingTierHubActionId, string>> = {
   lessons: "nn-exam-hub-study-card--lessons",
+  flashcards: "nn-exam-hub-study-card--flashcards",
+  practice_questions: "nn-exam-hub-study-card--practice",
   exams: "nn-exam-hub-study-card--cat",
 };
 

@@ -27,9 +27,22 @@ type Props = {
     hasMore: boolean;
     cursor: string | null;
   }>;
+  /** Override default section heading. */
+  title?: string;
+  subtitle?: string;
+  /** Extra classes on the outer section (e.g. h-full, border-0). */
+  className?: string;
 };
 
-export function ReadinessTrendPanel({ initialPoints, hasMore: initialHasMore, cursor: initialCursor, onLoadMore }: Props) {
+export function ReadinessTrendPanel({
+  initialPoints,
+  hasMore: initialHasMore,
+  cursor: initialCursor,
+  onLoadMore,
+  title = "Readiness evolution",
+  subtitle = "Based on CAT readiness scores over time",
+  className = "",
+}: Props) {
   const [points, setPoints] = useState<ReadinessTrendPoint[]>(initialPoints);
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [cursor, setCursor] = useState<string | null>(initialCursor);
@@ -54,7 +67,7 @@ export function ReadinessTrendPanel({ initialPoints, hasMore: initialHasMore, cu
 
   return (
     <section
-      className="rounded-2xl border p-5 sm:p-6"
+      className={`rounded-2xl border p-5 sm:p-6 ${className}`.trim()}
       style={{
         background: "var(--surface-soft-b, var(--semantic-panel-cool))",
         borderColor: "color-mix(in srgb, var(--semantic-brand) 20%, var(--semantic-border-soft))",
@@ -62,10 +75,8 @@ export function ReadinessTrendPanel({ initialPoints, hasMore: initialHasMore, cu
     >
       <div className="mb-5 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
         <div>
-          <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">Readiness Evolution</h2>
-          <p className="mt-0.5 text-xs text-[var(--semantic-text-muted)]">
-            Based on CAT readiness scores over time
-          </p>
+          <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">{title}</h2>
+          <p className="mt-0.5 text-xs text-[var(--semantic-text-muted)]">{subtitle}</p>
         </div>
         {hasData && delta !== null && (
           <DeltaBadge delta={delta} sessionCount={points.length} />
@@ -309,7 +320,7 @@ function DeltaBadge({ delta, sessionCount }: { delta: number; sessionCount: numb
       style={{ background: bg, color, border: `1px solid ${color}20` }}
     >
       {positive ? "+" : ""}
-      {delta}% over {sessionCount} session{sessionCount !== 1 ? "s" : ""}
+      {delta} pts · {sessionCount} session{sessionCount !== 1 ? "s" : ""}
     </div>
   );
 }

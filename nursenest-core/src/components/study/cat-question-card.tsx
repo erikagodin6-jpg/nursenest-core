@@ -4,6 +4,29 @@ import type { ReactNode } from "react";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 
+export type CatQuestionCardProps = {
+  stem: string;
+  topic?: string | null;
+  subtopic?: string | null;
+  difficultyLabel?: string | null;
+  /** Answer options list + nav bar — passed as children to keep layout separate from logic. */
+  children: ReactNode;
+  /**
+   * When set with `examStackedLayout`, renders children in a scroll region and pins the footer
+   * (e.g. submit / next) for viewport-height CAT exam shells.
+   */
+  footerSlot?: ReactNode;
+  examStackedLayout?: boolean;
+  /** When true with `examStackedLayout`, scroll body only — footer lives outside the card (fixed bar). */
+  examDetachedFooter?: boolean;
+  /** CAT exam: single uppercase category line (replaces topic/subtopic/difficulty row). */
+  examCategoryLabel?: string | null;
+  /** CAT exam: e.g. flag control aligned top-right of the item header row. */
+  examHeaderRightSlot?: ReactNode;
+  /** Bumps footer remeasure when the item body changes (stem/options) without `footerSlot` identity changing. */
+  examLayoutMeasureKey?: string | null;
+};
+
 /**
  * QuestionCard — left card in the CAT session layout.
  * Contains topic metadata (optional), question stem, and answer options (via children).
@@ -15,34 +38,13 @@ export function QuestionCard({
   subtopic,
   difficultyLabel,
   children,
-  /**
-   * When set with `examStackedLayout`, renders children in a scroll region and pins the footer
-   * (e.g. submit / next) for viewport-height CAT exam shells.
-   */
   footerSlot,
   examStackedLayout = false,
-  /** When true with `examStackedLayout`, scroll body only — footer lives outside the card (fixed bar). */
   examDetachedFooter = false,
-  /** CAT exam: single uppercase category line (replaces topic/subtopic/difficulty row). */
-  examCategoryLabel?: string | null;
-  /** CAT exam: e.g. flag control aligned top-right of the item header row. */
-  examHeaderRightSlot?: ReactNode;
-  /** Bumps footer remeasure when the item body changes (stem/options) without `footerSlot` identity changing. */
+  examCategoryLabel,
+  examHeaderRightSlot,
   examLayoutMeasureKey,
-}: {
-  stem: string;
-  topic?: string | null;
-  subtopic?: string | null;
-  difficultyLabel?: string | null;
-  /** Answer options list + nav bar — passed as children to keep layout separate from logic. */
-  children: ReactNode;
-  footerSlot?: ReactNode;
-  examStackedLayout?: boolean;
-  examDetachedFooter?: boolean;
-  examCategoryLabel?: string | null;
-  examHeaderRightSlot?: ReactNode;
-  examLayoutMeasureKey?: string | null;
-}) {
+}: CatQuestionCardProps) {
   const hasMeta = topic ?? subtopic ?? difficultyLabel;
   const examHead =
     examCategoryLabel != null && examCategoryLabel.trim().length > 0 ? (

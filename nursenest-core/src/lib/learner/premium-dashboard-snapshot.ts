@@ -327,7 +327,11 @@ async function loadPremiumDashboardSnapshotUncached(
     });
 
     const lessonPct =
-      dash.lessonsAvailable > 0 ? Math.round((dash.lessonsCompleted / dash.lessonsAvailable) * 100) : 0;
+      dash.coreReliability.lessonsAvailable &&
+      dash.coreReliability.lessonsCompleted &&
+      dash.lessonsAvailable > 0
+        ? Math.round((dash.lessonsCompleted / dash.lessonsAvailable) * 100)
+        : 0;
 
     const agg = dash.sessionGrading;
     const practice: PracticePerformanceSummary = {
@@ -348,10 +352,28 @@ async function loadPremiumDashboardSnapshotUncached(
 
     const headline = examReadyHeadline(dash.readiness);
 
-    /** Full-table counts are expensive at scale; in degraded mode use recent mock list length only. */
-    const mockCount = skipOptional
-      ? dash.recentMocks.length
-      : await prisma.examAttempt.count({ where: { userId } }).catch(() => dash.recentMocks.length);
+    /** Full-table counts are expensive at scale; in durability-skip mode use bounded recent list when that segment loaded. */
+    let mockCount = 0;
+    if (skipOptional) {
+      mockCount = dash.coreReliability.recentMocks ? dash.recentMocks.length : 0;
+    } else {
+      const tMockCount = performance.now();
+      try {
+        mockCount = await prisma.examAttempt.count({ where: { userId } });
+      } catch (e) {
+        logLearnerStudyLoadDiagnostics({
+          operation: "loadPremiumDashboardSnapshot",
+          feature_surface: "premium_dashboard",
+          duration_ms: Math.round(performance.now() - tMockCount),
+          outcome: "error",
+          segment: "exam_attempt_total_count",
+          user_id_prefix: userId.slice(0, 8),
+          reason: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+          fallback_used: "false",
+        });
+        mockCount = 0;
+      }
+    }
 
     const milestones = milestoneLines({
       pathways,
@@ -436,8 +458,8 @@ async function loadPremiumDashboardSnapshotUncached(
         examDate: bundle.user.examDate ?? null,
         examDatePlanType: bundle.user.examDatePlanType ?? null,
       },
-      degraded: mergeLearnerAggregateDegraded(
-        skipOptional
+      degraded: (() => {
+        const durabilityDegraded = skipOptional
           ? learnerAggregateDegradedState("durability_degraded", [
               "study_streak",
               "strong_topic",
@@ -445,9 +467,23 @@ async function loadPremiumDashboardSnapshotUncached(
               "flashcards",
               "insights",
             ])
-          : undefined,
-        pathwayDegraded,
-      ),
+          : undefined;
+        const corePanels: string[] = [];
+        if (!dash.coreReliability.userProfile) corePanels.push("dashboard_user_profile");
+        if (!dash.coreReliability.visibleLessonScope) corePanels.push("dashboard_visible_lesson_scope");
+        if (!dash.coreReliability.lessonsAvailable) corePanels.push("dashboard_lesson_pool_totals");
+        if (!dash.coreReliability.lessonsCompleted) corePanels.push("dashboard_lesson_completion");
+        if (!dash.coreReliability.questionsInMocksLast14d) corePanels.push("dashboard_mock_questions_14d");
+        if (!dash.coreReliability.recentMocks) corePanels.push("dashboard_recent_mocks");
+        const coreDegraded =
+          corePanels.length > 0
+            ? learnerAggregateDegradedState("temporarily_unavailable", corePanels)
+            : undefined;
+        return mergeLearnerAggregateDegraded(
+          mergeLearnerAggregateDegraded(durabilityDegraded, pathwayDegraded),
+          coreDegraded,
+        );
+      })(),
     };
   } catch {
     safeServerLog("learner_dashboard", "premium_snapshot_load_failed", {

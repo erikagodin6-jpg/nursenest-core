@@ -43,6 +43,7 @@ const practiceTestConfigSchema = z.object({
   timeLimitSec: z.union([z.null(), z.coerce.number().int().min(0).max(48 * 60 * 60)]).default(null),
   linearDeliveryMode: linearDeliveryZ.optional(),
   linearRationaleVisibility: linearRationaleVisibilityZ.optional(),
+  linearAllowReviewNavigation: z.boolean().optional(),
   catSelectionBasis: catSelectionBasisZ.optional(),
   catMinQuestions: z.coerce.number().int().min(1).max(500).optional(),
   catMaxQuestions: z.coerce.number().int().min(1).max(500).optional(),
@@ -75,6 +76,7 @@ function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
   const cast = o.catAdaptiveSessionType;
   if (cast === "cat" || cast === "practice") out.catAdaptiveSessionType = cast;
   if (o.disableOptionShuffle === true) out.disableOptionShuffle = true;
+  if (o.linearAllowReviewNavigation === true) out.linearAllowReviewNavigation = true;
   const salt = o.sessionPickSalt;
   if (typeof salt === "string" && salt.trim().length >= 8) {
     out.sessionPickSalt = salt.trim().slice(0, 128);

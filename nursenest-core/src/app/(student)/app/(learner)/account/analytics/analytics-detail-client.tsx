@@ -18,19 +18,16 @@ import {
   loadConfidencePatternsAction,
   loadTimeMetricsAction,
   loadTopicBreakdownAction,
-  loadMoreTrendData,
 } from "./actions";
 import { TimeAnalysisPanel } from "@/components/study/time-analysis-panel";
-import { ConfidencePatternsPanel } from "@/components/study/confidence-patterns-panel";
 import { AnalyticsNextSteps } from "@/components/study/analytics-next-steps";
-import { ReadinessTrendPanel } from "@/components/study/readiness-trend-panel";
 import { QuestionTypePerformancePanel } from "@/components/study/question-type-performance-panel";
 import { ConfidenceVsPerformancePanel } from "@/components/study/confidence-vs-performance-panel";
+import { CategoryMasterySection } from "@/components/study/category-mastery-section";
 import type {
   ConfidencePatternSummary,
   TimeMetrics,
   TopicRow,
-  ReadinessTrendPoint,
   AnalyticsSummary,
   QuestionTypeRow,
   ConfidenceScatterPoint,
@@ -38,9 +35,6 @@ import type {
 
 type Props = {
   summary: AnalyticsSummary;
-  initialTrendPoints: ReadinessTrendPoint[];
-  hasMorTrend: boolean;
-  trendCursor: string | null;
   questionTypeRows: QuestionTypeRow[];
   /** Server-loaded topic stats — shown until lazy panels refresh. */
   initialTopicRows: TopicRow[];
@@ -75,9 +69,6 @@ const EMPTY_TIME: TimeMetrics = {
 
 export function AnalyticsDetailClient({
   summary,
-  initialTrendPoints,
-  hasMorTrend,
-  trendCursor,
   questionTypeRows,
   initialTopicRows,
   confidenceScatterPoints,
@@ -112,7 +103,8 @@ export function AnalyticsDetailClient({
 
   return (
     <div className="space-y-6">
-      {/* Legacy two-up row: question-type performance + confidence scatter / cognitive summary */}
+      <CategoryMasterySection topics={detail.topics} />
+
       <div className="grid items-stretch gap-4 lg:grid-cols-2">
         <QuestionTypePerformancePanel rows={questionTypeRows} />
         <ConfidenceVsPerformancePanel
@@ -122,30 +114,11 @@ export function AnalyticsDetailClient({
         />
       </div>
 
-      {/* Readiness trend — client for "Load more" interactivity */}
-      <ReadinessTrendPanel
-        initialPoints={initialTrendPoints}
-        hasMore={hasMorTrend}
-        cursor={trendCursor}
-        onLoadMore={loadMoreTrendData}
-      />
-
       {/* Time analysis — loads after mount */}
       {!detail.loaded ? (
         <AnalyticsPanelSkeleton title="Time Analysis" />
       ) : (
         <TimeAnalysisPanel metrics={timeMetrics} />
-      )}
-
-      {/* Confidence patterns + topics — loads after mount */}
-      {!detail.loaded ? (
-        <AnalyticsPanelSkeleton title="Confidence Patterns" />
-      ) : (
-        <ConfidencePatternsPanel
-          patterns={patterns}
-          topics={detail.topics}
-          showCognitiveSection={false}
-        />
       )}
 
       {/* Next steps — rendered immediately with server-loaded summary + lazy patterns */}
