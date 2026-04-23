@@ -11,15 +11,15 @@ import { BlogPostStatus, PrismaClient } from "@prisma/client";
 import "../../src/lib/db/env-bootstrap";
 import { blogLiveWhere, blogPostIsLive } from "../../src/lib/blog/blog-visibility";
 
-function parseArgs(argv: string[]): { sampleExcluded: number } {
-  let sampleExcluded = 12;
+function parseArgs(argv: string[]): { excludedSampleLimit: number } {
+  let excludedSampleLimit = 12;
   for (let i = 2; i < argv.length; i++) {
     if (argv[i] === "--sample-excluded" && argv[i + 1]) {
-      sampleExcluded = Math.max(0, Math.min(200, parseInt(argv[i + 1]!, 10) || 0));
+      excludedSampleLimit = Math.max(0, Math.min(200, parseInt(argv[i + 1]!, 10) || 0));
       i++;
     }
   }
-  return { sampleExcluded };
+  return { excludedSampleLimit };
 }
 
 function exclusionReason(row: {
@@ -55,7 +55,7 @@ function isControlPanelAiDraftLog(adminPublishLog: unknown): boolean {
 }
 
 async function main(): Promise<void> {
-  const { sampleExcluded } = parseArgs(process.argv);
+  const { excludedSampleLimit } = parseArgs(process.argv);
 
   if (!process.env.DATABASE_URL?.trim()) {
     console.error("DATABASE_URL is not set.");
@@ -98,7 +98,7 @@ async function main(): Promise<void> {
     const excludedRows = await prisma.blogPost.findMany({
       where: { NOT: liveWhere },
       orderBy: { updatedAt: "desc" },
-      take: sampleExcluded,
+      take: excludedSampleLimit,
       select: {
         id: true,
         slug: true,
@@ -112,7 +112,7 @@ async function main(): Promise<void> {
       },
     });
 
-    const sampleExcluded = excludedRows.map((r) => ({
+    const excludedSamples = excludedRows.map((r) => ({
       id: r.id,
       slug: r.slug,
       title: r.title.slice(0, 120),
@@ -147,7 +147,7 @@ async function main(): Promise<void> {
             controlPanelStyleDraftsAmongRecentDrafts: controlPanelStyleDraftsInRecent,
           },
           livePrismaWhere: liveWhere,
-          sampleExcluded,
+          excludedSamples,
         },
         null,
         2,

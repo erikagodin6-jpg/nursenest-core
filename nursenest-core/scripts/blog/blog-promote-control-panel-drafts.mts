@@ -107,6 +107,15 @@ async function main(): Promise<void> {
         continue;
       }
 
+      const stillDraft = await prisma.blogPost.findUnique({
+        where: { id: c.id },
+        select: { postStatus: true },
+      });
+      if (stillDraft?.postStatus !== BlogPostStatus.DRAFT) {
+        results.push({ id: c.id, slug: c.slug, action: "skipped", reason: "no_longer_draft" });
+        continue;
+      }
+
       const publishedNow = new Date();
       const logRow = await prisma.blogPost.findUnique({
         where: { id: c.id },
@@ -132,6 +141,10 @@ async function main(): Promise<void> {
     console.log(JSON.stringify({ results }, null, 2));
     if (!apply) {
       console.log("\nDry-run only. Re-run with --apply to perform updates.");
+    } else if (results.some((r) => r.action === "published")) {
+      console.log(
+        "\nNote: production /blog may be ISR-cached (e.g. revalidate=3600). After bulk publish, trigger on-demand revalidation or wait for TTL.",
+      );
     }
   } finally {
     await prisma.$disconnect();

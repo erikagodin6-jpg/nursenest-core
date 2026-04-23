@@ -384,7 +384,6 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
     if (!s) return null;
     return publishedBlogPostFromStaticRecord(s);
   }
-  if (row.postStatus !== BlogPostStatus.PUBLISHED) return null;
   if (
     scope?.careerSlug &&
     row.careerSlug &&
@@ -392,6 +391,7 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
   ) {
     return null;
   }
+  /** Align with {@link blogLiveWhere} on index/tag routes: live SCHEDULED rows, not only PUBLISHED. */
   if (!blogPostIsLive({ postStatus: row.postStatus, publishAt: row.publishAt, scheduledAt: row.scheduledAt }, now)) return null;
   return row;
 }

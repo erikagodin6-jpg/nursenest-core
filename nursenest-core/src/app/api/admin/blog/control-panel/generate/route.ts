@@ -74,7 +74,9 @@ export async function POST(req: Request) {
           return o;
         })()
       : rawJson;
-  safeServerLog("admin", "blog_control_panel_generate_request", { payload: payloadForLog });
+  safeServerLog("admin", "blog_control_panel_generate_request", {
+    payloadJson: JSON.stringify(payloadForLog).slice(0, 12_000),
+  });
 
   const norm = normalizeBlogControlPanelGenerateRequestBody(rawJson);
   if (!norm.ok) {
@@ -110,7 +112,9 @@ export async function POST(req: Request) {
       code: i.code,
       message: i.message,
     }));
-    safeServerLog("admin", "blog_control_panel_generate_validation_failed", { issues });
+    safeServerLog("admin", "blog_control_panel_generate_validation_failed", {
+      issuesJson: JSON.stringify(issues).slice(0, 8000),
+    });
     return NextResponse.json(
       {
         error: "Invalid payload after normalization",
