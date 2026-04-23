@@ -5,8 +5,43 @@
  *
  * `completed` is set only while the runner is still mounted and the server has returned
  * `catCompleted` (brief handoff before results layout replaces the question shell).
+ *
+ * Next vs finish is **never** inferred from `idx` / `total` on the client. After each
+ * successful `cat_advance`, branch strictly on `catAdvanced` | `catCompleted` | `catStudyReveal`.
  */
 export type CatExamUiPhase = "answering" | "submitted_locked" | "advancing" | "completed";
+
+/** Legal explicit transitions (excluding no-op `from === to`). */
+const LEGAL_CAT_EXAM_UI_TRANSITIONS: Record<CatExamUiPhase, readonly CatExamUiPhase[]> = {
+  answering: ["submitted_locked"],
+  submitted_locked: ["advancing", "answering"],
+  advancing: ["answering", "completed", "submitted_locked"],
+  completed: [],
+};
+
+export class CatExamIllegalPhaseTransitionError extends Error {
+  readonly phase_from: CatExamUiPhase;
+  readonly phase_to: CatExamUiPhase;
+
+  constructor(from: CatExamUiPhase, to: CatExamUiPhase) {
+    super(`Illegal CAT exam UI phase transition: ${from} → ${to}`);
+    this.name = "CatExamIllegalPhaseTransitionError";
+    this.phase_from = from;
+    this.phase_to = to;
+  }
+}
+
+/**
+ * Enforces the FSM. Call only when `from !== to`.
+ * @throws CatExamIllegalPhaseTransitionError when the edge is not allowed.
+ */
+export function assertCatExamPhaseTransition(from: CatExamUiPhase, to: CatExamUiPhase): void {
+  if (from === to) return;
+  const allowed = LEGAL_CAT_EXAM_UI_TRANSITIONS[from];
+  if (!allowed.includes(to)) {
+    throw new CatExamIllegalPhaseTransitionError(from, to);
+  }
+}
 
 export function catExamOptionsInteractionLocked(phase: CatExamUiPhase): boolean {
   return phase !== "answering";
@@ -27,24 +62,6 @@ export function catExamCanRequestCatAdvance(phase: CatExamUiPhase): boolean {
 
 export function catExamFooterPrimaryBusy(phase: CatExamUiPhase, controlsBusy: boolean): boolean {
   return controlsBusy || phase === "advancing" || phase === "completed";
-}
-
-/**
- * CAT adaptive sessions keep the cursor on the **last delivered** question (`cursor === ids.length - 1`).
- * UI must not use `idx < total - 1` to choose between “next” vs “finish” — that branch is always false.
- * Instead, use configured max length as a conservative hint for the **final buffer item** label only;
- * the server still decides completion on `cat_advance`.
- */
-export type CatExamAdvancePrimaryIntent = "next_item" | "finish_session";
-
-export function catExamAdvancePrimaryIntentFromSessionShape(args: {
-  /** `questionIds.length` while on the live item (always `idx + 1` in valid CAT runs). */
-  deliveredQuestionCount: number;
-  catMaxQuestions: number | null | undefined;
-}): CatExamAdvancePrimaryIntent {
-  const max = args.catMaxQuestions;
-  if (max != null && max > 0 && args.deliveredQuestionCount >= max) return "finish_session";
-  return "next_item";
 }
 
 /** True if a PATCH response should be ignored (navigation, item change, or unmount). */

@@ -32,6 +32,7 @@
 
 import type { ControlPanelGenerateInput, ControlPanelPersistResult } from "@/lib/blog/blog-control-panel-generation";
 import {
+  BlogControlPanelPlanError,
   fetchControlPanelBodyHtml,
   fetchControlPanelPlan,
   persistControlPanelDraft,
@@ -62,8 +63,10 @@ export type BlogArticlePipelineFailure = {
   /** Set when plan succeeded but a later stage failed (e.g. retry body only). */
   plan?: BlogControlPanelPlan;
   bodyHtml?: string;
-  /** Citation gate blocked persistence (high-risk topic without verified admin sources). */
-  code?: "INSUFFICIENT_CITATIONS";
+  /** Machine-oriented code (citation gate, plan JSON phases, etc.). */
+  code?: string;
+  /** Structured validation issues or debug payloads for admin UI. */
+  details?: unknown;
   riskFlags?: string[];
 };
 
@@ -100,6 +103,9 @@ export async function runBlogArticleGenerationPipeline(
     };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
+    if (BlogControlPanelPlanError.is(e)) {
+      return { ok: false, stage: "plan", error: msg, code: e.code, details: e.details };
+    }
     return { ok: false, stage: "plan", error: msg };
   }
 

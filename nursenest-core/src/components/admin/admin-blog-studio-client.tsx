@@ -148,11 +148,20 @@ export function AdminBlogStudioClient() {
         return;
       }
       if (!res.ok) {
-        setErr(
+        const base =
           res.status === 429
             ? formatAdminRateLimitMessageFromJson(json)
-            : (json.message ?? json.error ?? "Generation failed"),
-        );
+            : (json.message ?? json.error ?? `Generation failed (HTTP ${res.status})`);
+        let detail = "";
+        if ("details" in json && json.details != null) {
+          try {
+            detail =
+              typeof json.details === "string" ? json.details : JSON.stringify(json.details as unknown);
+          } catch {
+            detail = "";
+          }
+        }
+        setErr(detail && !base.includes(detail.slice(0, 80)) ? `${base}\n${detail}` : base);
         if (json.plan) setPlan(json.plan);
         return;
       }

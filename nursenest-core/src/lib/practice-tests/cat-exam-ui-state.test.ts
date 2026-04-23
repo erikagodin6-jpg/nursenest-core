@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
-  catExamAdvancePrimaryIntentFromSessionShape,
+  assertCatExamPhaseTransition,
+  CatExamIllegalPhaseTransitionError,
   catExamCanChangeAnswer,
   catExamCanLockAnswer,
   catExamCanRequestCatAdvance,
@@ -51,23 +52,28 @@ describe("cat-exam-ui-state", () => {
     assert.equal(catExamFooterPrimaryBusy("completed", false), true);
   });
 
-  it("advance primary intent: at or past max delivered → finish hint", () => {
-    assert.equal(
-      catExamAdvancePrimaryIntentFromSessionShape({ deliveredQuestionCount: 10, catMaxQuestions: 150 }),
-      "next_item",
+  it("assertCatExamPhaseTransition allows the CAT exam FSM edges", () => {
+    assert.doesNotThrow(() => assertCatExamPhaseTransition("answering", "submitted_locked"));
+    assert.doesNotThrow(() => assertCatExamPhaseTransition("submitted_locked", "advancing"));
+    assert.doesNotThrow(() => assertCatExamPhaseTransition("advancing", "answering"));
+    assert.doesNotThrow(() => assertCatExamPhaseTransition("advancing", "completed"));
+    assert.doesNotThrow(() => assertCatExamPhaseTransition("advancing", "submitted_locked"));
+    assert.doesNotThrow(() => assertCatExamPhaseTransition("submitted_locked", "answering"));
+  });
+
+  it("assertCatExamPhaseTransition rejects illegal edges", () => {
+    assert.throws(
+      () => assertCatExamPhaseTransition("answering", "advancing"),
+      (e) => e instanceof CatExamIllegalPhaseTransitionError,
     );
-    assert.equal(
-      catExamAdvancePrimaryIntentFromSessionShape({ deliveredQuestionCount: 150, catMaxQuestions: 150 }),
-      "finish_session",
+    assert.throws(
+      () => assertCatExamPhaseTransition("completed", "answering"),
+      (e) => e instanceof CatExamIllegalPhaseTransitionError,
     );
-    assert.equal(
-      catExamAdvancePrimaryIntentFromSessionShape({ deliveredQuestionCount: 151, catMaxQuestions: 150 }),
-      "finish_session",
-    );
-    assert.equal(
-      catExamAdvancePrimaryIntentFromSessionShape({ deliveredQuestionCount: 3, catMaxQuestions: null }),
-      "next_item",
-    );
+  });
+
+  it("assertCatExamPhaseTransition allows no-op same phase", () => {
+    assert.doesNotThrow(() => assertCatExamPhaseTransition("answering", "answering"));
   });
 
   it("cat advance stale guard matches idx + question id", () => {

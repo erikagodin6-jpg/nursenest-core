@@ -13,7 +13,9 @@ import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { coerceBlogSourceRows } from "@/lib/blog/apa7";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
+import { normalizeBlogControlPanelGenerateRequestBody } from "@/lib/blog/blog-admin-control-panel-generate-body";
 import { prisma } from "@/lib/db";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const bodySchema = z.object({
   topic: z.string().min(3).max(200),
@@ -48,9 +50,73 @@ export async function POST(req: Request) {
   const aiBlock = adminAiGenerationHttpBlock();
   if (aiBlock) return aiBlock;
 
-  const parsed = bodySchema.safeParse(await req.json());
+  let rawJson: unknown;
+  try {
+    rawJson = await req.json();
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    safeServerLog("admin", "blog_control_panel_generate_json_invalid", { message: msg });
+    return NextResponse.json(
+      { error: "Invalid JSON body", code: "INVALID_JSON", details: { message: msg } },
+      { status: 400 },
+    );
+  }
+
+  const payloadForLog =
+    rawJson && typeof rawJson === "object" && !Array.isArray(rawJson)
+      ? (() => {
+          const o = { ...(rawJson as Record<string, unknown>) };
+          if (Array.isArray(o.sourceRecords)) {
+            o.sourceRecords = { kind: "array", length: o.sourceRecords.length } as unknown;
+          }
+          return o;
+        })()
+      : rawJson;
+  safeServerLog("admin", "blog_control_panel_generate_request", { payload: payloadForLog });
+
+  const norm = normalizeBlogControlPanelGenerateRequestBody(rawJson);
+  if (!norm.ok) {
+    safeServerLog("admin", "blog_control_panel_generate_body_normalize_failed", {
+      code: norm.code,
+      path: norm.path,
+      message: norm.message,
+    });
+    return NextResponse.json(
+      {
+        error: norm.message,
+        code: norm.code,
+        details: norm.path ? { path: norm.path } : undefined,
+      },
+      { status: 400 },
+    );
+  }
+
+  let parsed;
+  try {
+    parsed = bodySchema.safeParse(norm.data);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    safeServerLog("admin", "blog_control_panel_generate_zod_exception", { message: msg });
+    return NextResponse.json(
+      { error: "Request validation failed unexpectedly", code: "VALIDATION_EXCEPTION", details: { message: msg } },
+      { status: 500 },
+    );
+  }
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
+    const issues = parsed.error.issues.map((i) => ({
+      path: i.path.length ? i.path.join(".") : "(root)",
+      code: i.code,
+      message: i.message,
+    }));
+    safeServerLog("admin", "blog_control_panel_generate_validation_failed", { issues });
+    return NextResponse.json(
+      {
+        error: "Invalid payload after normalization",
+        code: "VALIDATION_FAILED",
+        details: { issues },
+      },
+      { status: 400 },
+    );
   }
   const d = parsed.data;
 
@@ -67,6 +133,8 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           error: "duplicate_topic",
+          code: "duplicate_topic",
+          message: "A draft or published post already targets this topic intent.",
           existingSlug: dup.slug,
           normalizedTopic,
           hint: "Open the existing post or change topic / primary keyword.",
@@ -103,7 +171,15 @@ export async function POST(req: Request) {
         message: pipelineResult.error,
         createdById: gate.admin.userId,
       });
-      return NextResponse.json({ error: "plan_generation_failed", message: pipelineResult.error }, { status: 502 });
+      return NextResponse.json(
+        {
+          error: "plan_generation_failed",
+          code: pipelineResult.code ?? "plan_generation_failed",
+          message: pipelineResult.error,
+          details: pipelineResult.details ?? null,
+        },
+        { status: 502 },
+      );
     }
     if (pipelineResult.stage === "body") {
       await logControlPanelPipelineFailure({
@@ -116,7 +192,9 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           error: "body_generation_failed",
+          code: "body_generation_failed",
           message: pipelineResult.error,
+          details: pipelineResult.details ?? null,
           plan: pipelineResult.plan,
           hint: "Plan may be usable; retry body from the control panel.",
         },
@@ -134,8 +212,9 @@ export async function POST(req: Request) {
       return NextResponse.json(
         {
           error: "insufficient_citations",
-          code: pipelineResult.code,
+          code: pipelineResult.code ?? "INSUFFICIENT_CITATIONS",
           message: pipelineResult.error,
+          details: pipelineResult.details ?? { riskFlags: pipelineResult.riskFlags ?? [] },
           riskFlags: pipelineResult.riskFlags ?? [],
           plan: pipelineResult.plan,
           bodyHtml: pipelineResult.bodyHtml,
@@ -151,7 +230,14 @@ export async function POST(req: Request) {
       createdById: gate.admin.userId,
     });
     return NextResponse.json(
-      { error: "persist_failed", message: pipelineResult.error, plan: pipelineResult.plan, bodyHtml: pipelineResult.bodyHtml },
+      {
+        error: "persist_failed",
+        code: "persist_failed",
+        message: pipelineResult.error,
+        details: pipelineResult.details ?? null,
+        plan: pipelineResult.plan,
+        bodyHtml: pipelineResult.bodyHtml,
+      },
       { status: 500 },
     );
   }
@@ -186,7 +272,10 @@ export async function POST(req: Request) {
       message: "Pipeline returned no persist result",
       createdById: gate.admin.userId,
     });
-    return NextResponse.json({ error: "persist_missing" }, { status: 500 });
+    return NextResponse.json(
+      { error: "persist_missing", code: "persist_missing", message: "Pipeline returned no persist result" },
+      { status: 500 },
+    );
   }
 
   await logControlPanelPipelineSuccess({

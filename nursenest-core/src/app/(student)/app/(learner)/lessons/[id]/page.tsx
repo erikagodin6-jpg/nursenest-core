@@ -57,7 +57,7 @@ import { buildPathwayLessonCoachExcerpt } from "@/lib/coach/build-pathway-lesson
 import { loadPathwayLessonProgressForSlug } from "@/lib/lessons/pathway-lesson-progress";
 import { LessonAssessmentFlow } from "@/components/lessons/lesson-assessment-flow";
 import { LessonSectionNoteInline } from "@/components/lessons/lesson-section-note-inline";
-import { LessonSectionCard } from "@/components/lessons/lesson-section-card";
+import { LessonSectionCard, lessonSectionSurface } from "@/components/lessons/lesson-section-card";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
 import { LessonPageHeader } from "@/components/lessons/lesson-page-header";
 import { LessonSectionNav } from "@/components/lessons/lesson-section-nav";
@@ -411,6 +411,16 @@ export default async function LessonDetailPage({ params }: Props) {
       });
       notFound();
     }
+    const editorialRhythmIndexBySectionId = new Map<string, number>();
+    {
+      let editorialRhythmCounter = 0;
+      for (const s of displaySections) {
+        if (lessonSectionSurface(s.kind) === "editorial") {
+          editorialRhythmIndexBySectionId.set(s.id, editorialRhythmCounter);
+          editorialRhythmCounter += 1;
+        }
+      }
+    }
     const pathwayId = resolvedLesson.pathwayId;
     const pathway = getExamPathwayById(pathwayId);
     const examFraming = getLearnerExamFraming(pathwayId);
@@ -654,7 +664,7 @@ export default async function LessonDetailPage({ params }: Props) {
                 <PathwayLessonMemoryAnchorStrip text={record.memoryAnchor} />
               </div>
             ) : null}
-            <article className="flex flex-col gap-8 md:gap-10">
+            <article className="nn-lesson-article-flow">
               {displaySections.length > 0 ? (
                 displaySections.map((section) => {
                   const surfaceHeading = pathwayLessonSectionSurfaceHeading(section, pathway?.countryCode, t);
@@ -670,6 +680,7 @@ export default async function LessonDetailPage({ params }: Props) {
                       id={section.id}
                       heading={surfaceHeading}
                       kind={section.kind ?? null}
+                      editorialRhythmIndex={editorialRhythmIndexBySectionId.get(section.id)}
                     >
                       {section.kind === "related_next_steps" && pathway ? (
                         <PathwayLessonNextStepsCards

@@ -328,11 +328,21 @@ export function FlashcardsHubClient({
     setWeakOnly(true);
   };
 
-  const selectedCountLabel = () => {
-    if (builderCategories.length === 0) return null;
-    if (selectedBodyIds.length === 0) return `All ${builderCategories.length} areas`;
-    return `${selectedBodyIds.length} of ${builderCategories.length} areas`;
-  };
+  const bodyAreasSummary =
+    builderCategories.length === 0
+      ? null
+      : selectedBodyIds.length === 0
+        ? `All ${builderCategories.length} areas`
+        : `${selectedBodyIds.length} of ${builderCategories.length} areas`;
+
+  useEffect(() => {
+    if (builderCategories.length === 0) return;
+    const valid = new Set(builderCategories.map((c) => c.id));
+    setSelectedBodyIds((prev) => {
+      const next = prev.filter((id) => valid.has(id));
+      return next.length === prev.length ? prev : next;
+    });
+  }, [builderCategories]);
 
   const filterCount =
     (weakOnly ? 1 : 0) +
@@ -376,7 +386,7 @@ export function FlashcardsHubClient({
             className="inline-flex min-h-[44px] items-center justify-center rounded-2xl px-5 py-2.5 text-sm font-semibold shadow-sm transition hover:opacity-95"
             style={{
               background: "var(--role-cta, var(--semantic-brand))",
-              color: "var(--role-cta-foreground, var(--semantic-text-on-brand, #fff))",
+              color: "var(--role-cta-foreground, var(--semantic-text-on-brand))",
             }}
           >
             {t("learner.flashcards.hub.weakAreasCta")}
@@ -440,9 +450,11 @@ export function FlashcardsHubClient({
         <div className="space-y-2">
           <p className="text-xs font-medium tracking-wide text-[var(--semantic-brand)]">{pathwayDisplayName}</p>
           <h2 id="custom-study-heading" className="text-xl font-semibold tracking-tight sm:text-2xl">
-            Custom study session
+            {t("learner.flashcards.hub.customStudyTitle")}
           </h2>
-          <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">Build a focused flashcard session for this pathway.</p>
+          <p className="text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            Build a focused flashcard session for this pathway.
+          </p>
         </div>
 
         <div className="space-y-3">
@@ -482,9 +494,7 @@ export function FlashcardsHubClient({
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-medium text-[var(--semantic-text-primary)]">{t("learner.flashcards.hub.bodySystemsHeading")}</p>
-              {selectedCountLabel() ? (
-                <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">{selectedCountLabel()}</p>
-              ) : null}
+              {bodyAreasSummary ? <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">{bodyAreasSummary}</p> : null}
             </div>
             <div className="flex flex-wrap gap-2">
               {showWeakShortcut ? (
@@ -497,7 +507,7 @@ export function FlashcardsHubClient({
                     background: "color-mix(in srgb, var(--semantic-warning) 10%, var(--theme-card-bg))",
                   }}
                 >
-                  Recommended: due and learning
+                  Focus due cards
                 </button>
               ) : null}
               <button
@@ -667,7 +677,7 @@ export function FlashcardsHubClient({
             className="inline-flex min-h-[48px] w-full items-center justify-center rounded-2xl px-6 text-sm font-semibold shadow-md transition hover:opacity-95 sm:w-auto"
             style={{
               background: "var(--role-cta, var(--semantic-brand))",
-              color: "var(--role-cta-foreground, var(--semantic-text-on-brand, #fff))",
+              color: "var(--role-cta-foreground, var(--semantic-text-on-brand))",
             }}
           >
             {t("learner.flashcards.hub.startStudying")}

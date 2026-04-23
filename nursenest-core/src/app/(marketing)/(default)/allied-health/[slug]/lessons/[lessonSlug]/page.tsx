@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { PathwayLessonBody } from "@/components/lessons/pathway-lesson-body";
-import { LessonSectionCard } from "@/components/lessons/lesson-section-card";
+import { LessonSectionCard, lessonSectionSurface } from "@/components/lessons/lesson-section-card";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
 import { PathwayLessonPreviewBanner } from "@/components/lessons/pathway-lesson-preview-banner";
@@ -288,6 +288,17 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
     .filter((s) => shouldRenderPathwayLessonSection(s.kind))
     .filter((s) => !omitHighYieldIds.has(s.id));
 
+  const editorialRhythmIndexBySectionId = new Map<string, number>();
+  {
+    let editorialRhythmCounter = 0;
+    for (const s of displaySections) {
+      if (lessonSectionSurface(s.kind) === "editorial") {
+        editorialRhythmIndexBySectionId.set(s.id, editorialRhythmCounter);
+        editorialRhythmCounter += 1;
+      }
+    }
+  }
+
   return (
     <div
       className={`nn-marketing-surface mx-auto max-w-5xl px-4 py-5 sm:py-7${hasLessonSequence ? " pb-20 sm:pb-7" : ""}`}
@@ -417,7 +428,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
           <div className="mb-2 flex justify-end">
             <LessonRecallToggle />
           </div>
-          <article className="mt-4 space-y-2 sm:space-y-3">
+          <article className="nn-lesson-article-flow mt-4">
             {displaySections.map((section) => {
               return (
               <LessonSectionCard
@@ -425,6 +436,7 @@ export default async function AlliedHealthSlugLessonDetailPage({ params }: Props
                 id={section.id}
                 heading={section.heading}
                 kind={section.kind}
+                editorialRhythmIndex={editorialRhythmIndexBySectionId.get(section.id)}
               >
                 {section.audioUrl ? (
                   <LessonSectionAudioButton

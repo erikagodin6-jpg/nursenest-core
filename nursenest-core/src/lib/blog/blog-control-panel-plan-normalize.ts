@@ -1,4 +1,4 @@
-import type { ZodError } from "zod";
+import type { ZodError, ZodIssue } from "zod";
 import { blogControlPanelPlanSchema, type BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 
 function isPlainObject(v: unknown): v is Record<string, unknown> {
@@ -80,6 +80,15 @@ function previewValue(at: unknown): string {
   } catch {
     return String(at).slice(0, 200);
   }
+}
+
+/** Compact Zod issues for API responses and admin UI. */
+export function formatZodIssuesForApi(err: ZodError): Array<{ path: string; code: string; message: string }> {
+  return err.issues.map((iss: ZodIssue) => ({
+    path: iss.path.length ? iss.path.map(String).join(".") : "(root)",
+    code: iss.code,
+    message: iss.message,
+  }));
 }
 
 /** Structured stderr when {@link blogControlPanelPlanSchema} rejects after normalization. */

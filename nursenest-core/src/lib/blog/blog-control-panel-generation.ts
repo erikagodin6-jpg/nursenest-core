@@ -19,13 +19,20 @@ import {
 } from "@/lib/blog/blog-citation-safety";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { blogLessonLinkRowSchema, type BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
-import { safeParseBlogControlPanelPlan } from "@/lib/blog/blog-control-panel-plan-normalize";
+import {
+  formatZodIssuesForApi,
+  safeParseBlogControlPanelPlan,
+} from "@/lib/blog/blog-control-panel-plan-normalize";
 import {
   getBlogInternalLinkPathHintsForPrompt,
   lessonRowsToRelatedPaths,
   normalizePlanSuggestedLessonRows,
 } from "@/lib/blog/blog-internal-lesson-links";
-import { buildPersistedSeoBundle, buildSchemaSummaryPayload } from "@/lib/blog/blog-seo-automation";
+import {
+  buildMinimalSeoBundleFallback,
+  buildPersistedSeoBundle,
+  buildSchemaSummaryPayload,
+} from "@/lib/blog/blog-seo-automation";
 import {
   buildArticleBodySystemPrompt,
   buildArticleBodyUserPrompt,
@@ -61,6 +68,24 @@ export type ControlPanelGenerateInput = {
    */
   allowInsufficientCitations?: boolean;
 };
+
+/** Thrown when the structured editorial plan cannot be parsed or validated (with machine codes for clients). */
+export class BlogControlPanelPlanError extends Error {
+  readonly code: "PLAN_INVALID_JSON" | "PLAN_NORMALIZE" | "PLAN_ZOD";
+
+  readonly details: unknown;
+
+  constructor(code: BlogControlPanelPlanError["code"], message: string, details?: unknown) {
+    super(message);
+    this.name = "BlogControlPanelPlanError";
+    this.code = code;
+    this.details = details;
+  }
+
+  static is(e: unknown): e is BlogControlPanelPlanError {
+    return e instanceof BlogControlPanelPlanError;
+  }
+}
 
 function extractJsonObject(raw: string): unknown {
   let t = raw.trim();
@@ -152,14 +177,30 @@ export async function fetchControlPanelPlan(input: ControlPanelGenerateInput): P
   let parsed: unknown;
   try {
     parsed = extractJsonObject(res.content);
-  } catch {
-    throw new Error("Model returned invalid JSON for the editorial plan");
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    throw new BlogControlPanelPlanError(
+      "PLAN_INVALID_JSON",
+      `Model returned invalid JSON for the editorial plan: ${msg}`,
+      { preview: res.content.slice(0, 1600) },
+    );
   }
 
   const plan = safeParseBlogControlPanelPlan(parsed);
   if (!plan.success) {
-    const detail = plan.normalizeError ?? plan.zodError?.message ?? "unknown";
-    throw new Error(`Plan JSON failed validation: ${detail}`);
+    if (plan.normalizeError) {
+      throw new BlogControlPanelPlanError("PLAN_NORMALIZE", plan.normalizeError, {
+        normalizeError: plan.normalizeError,
+      });
+    }
+    if (plan.zodError) {
+      throw new BlogControlPanelPlanError(
+        "PLAN_ZOD",
+        "Editorial plan JSON failed schema validation after coercion.",
+        { issues: formatZodIssuesForApi(plan.zodError) },
+      );
+    }
+    throw new BlogControlPanelPlanError("PLAN_ZOD", "Editorial plan validation failed for an unknown reason.", null);
   }
   return plan.data;
 }
@@ -308,7 +349,14 @@ export async function persistControlPanelDraft(
     : [];
 
   const faqBlock = { items: plan.faqs };
-  const seoBundle = buildPersistedSeoBundle(plan, slug, tagsForSeo);
+  let seoBundle;
+  try {
+    seoBundle = buildPersistedSeoBundle(plan, slug, tagsForSeo);
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error(`[blog-persist] buildPersistedSeoBundle failed; using minimal SEO bundle: ${msg}`);
+    seoBundle = buildMinimalSeoBundleFallback(plan, slug, tagsForSeo);
+  }
   const internalLinkPlan = {
     lessons: plan.suggestedInternalLessons,
     imagePlacements: plan.imagePlacements,
@@ -327,6 +375,30 @@ export async function persistControlPanelDraft(
           : hasAiCitationStubs
             ? BlogWorkflowStatus.NEEDS_SOURCE_REVIEW
             : BlogWorkflowStatus.GENERATED;
+
+  const heroSlot = plan.imagePlacements?.[0];
+  let coverImagePrompt: string | null = null;
+  let coverImageAlt: string | null = null;
+  let coverImageCaption: string | null = null;
+  try {
+    const genericHero = `Educational nursing blog hero about ${input.topic}.`.slice(0, 2000);
+    coverImagePrompt =
+      input.includeAiImage && heroSlot
+        ? String(heroSlot.promptIdea ?? "").trim().slice(0, 2000) || genericHero
+        : input.includeImage
+          ? String(heroSlot?.promptIdea ?? "").trim().slice(0, 2000) || genericHero
+          : null;
+    coverImageAlt = heroSlot?.altIdea != null ? String(heroSlot.altIdea).trim().slice(0, 240) : null;
+    coverImageCaption = heroSlot?.captionIdea != null ? String(heroSlot.captionIdea).trim().slice(0, 300) : null;
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error(`[blog-persist] featured image metadata assembly failed; continuing with safe fallbacks: ${msg}`);
+    coverImagePrompt = input.includeImage
+      ? `Educational nursing blog hero about ${input.topic}.`.slice(0, 2000)
+      : null;
+    coverImageAlt = null;
+    coverImageCaption = null;
+  }
 
   try {
     const post = await prisma.blogPost.create({
@@ -360,9 +432,17 @@ export async function persistControlPanelDraft(
         faqBlock: faqBlock as unknown as Prisma.InputJsonValue,
         internalLinkPlan: internalLinkPlan as unknown as Prisma.InputJsonValue,
         relatedLessonPaths: relatedPaths,
-        schemaSummary: buildSchemaSummaryPayload(seoBundle, {
-          schemaOpportunities: plan.schemaOpportunities,
-        }),
+        schemaSummary: (() => {
+          try {
+            return buildSchemaSummaryPayload(seoBundle, {
+              schemaOpportunities: plan.schemaOpportunities,
+            });
+          } catch (e) {
+            const msg = e instanceof Error ? e.message : String(e);
+            console.error(`[blog-persist] buildSchemaSummaryPayload failed; using summary without extras: ${msg}`);
+            return buildSchemaSummaryPayload(seoBundle, {});
+          }
+        })(),
         ctaType: cta.type,
         ctaText: cta.text,
         ctaHref: cta.href,
@@ -373,14 +453,9 @@ export async function persistControlPanelDraft(
         sourceReliabilityScore: partition.verified.length ? sourceCheck.reliabilityScore : 0,
         medicalRiskFlags: riskFlags,
         imageStatus: input.includeImage ? (input.includeAiImage ? BlogImageStatus.REQUESTED : BlogImageStatus.NONE) : BlogImageStatus.NONE,
-        coverImagePrompt:
-          input.includeAiImage && plan.imagePlacements[0]
-            ? plan.imagePlacements[0].promptIdea.slice(0, 2000)
-            : input.includeImage
-              ? plan.imagePlacements[0]?.promptIdea?.slice(0, 2000) ?? `Educational nursing blog hero about ${input.topic}.`
-              : null,
-        coverImageAlt: plan.imagePlacements[0]?.altIdea?.slice(0, 240) ?? null,
-        coverImageCaption: plan.imagePlacements[0]?.captionIdea?.slice(0, 300) ?? null,
+        coverImagePrompt,
+        coverImageAlt,
+        coverImageCaption,
         featuredSnippet: plan.featuredSnippetHint?.slice(0, 2000) ?? null,
         shortSummary: plan.suggestedExcerpt.trim().slice(0, 220) || excerpt.slice(0, 220),
         socialCaption: `${pageTitle.slice(0, 120)}. ${(plan.suggestedExcerpt.trim().slice(0, 100) || excerpt.slice(0, 100))}…`,

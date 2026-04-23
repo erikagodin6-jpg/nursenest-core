@@ -102,6 +102,34 @@ export function normalizeBlogBreadcrumbsForStorage(
   return [...filtered.slice(0, -1), { label: safeTitle.slice(0, 80), href: postPath }];
 }
 
+/**
+ * Minimal valid SEO bundle when {@link buildPersistedSeoBundle} throws (malformed plan fields, etc.).
+ * Keeps blog draft persistence from failing on secondary SEO assembly.
+ */
+export function buildMinimalSeoBundleFallback(plan: BlogControlPanelPlan, slug: string, tags: string[]): BlogSeoBundle {
+  const pageTitle = (plan.h1?.trim() || plan.titleOptions?.[0]?.trim() || "Article").slice(0, 200) || "Article";
+  const excerpt =
+    plan.suggestedExcerpt?.trim()?.slice(0, 500) ||
+    plan.metaDescription?.trim()?.slice(0, 500) ||
+    `${pageTitle.slice(0, 200)}.`;
+  const safeExcerpt = excerpt.trim().length >= 1 ? excerpt.trim().slice(0, 500) : "Draft article excerpt.";
+  const fromTags = tags.map((t) => t.trim()).filter(Boolean).slice(0, 12);
+  const mt = plan.metaTitle?.trim() ? plan.metaTitle.trim().slice(0, 80) : pageTitle.slice(0, 80);
+  const focus = (fromTags.length ? fromTags : [mt]).filter(Boolean).slice(0, 12);
+  return {
+    version: BLOG_SEO_BUNDLE_VERSION,
+    normalizedBreadcrumbs: normalizeBlogBreadcrumbsForStorage(slug, pageTitle, []),
+    canonicalPath: null,
+    openGraphTitle: null,
+    openGraphDescription: null,
+    suggestedExcerpt: safeExcerpt,
+    emitFaqSchema: false,
+    focusKeywords: focus.length ? focus : ["draft"],
+    heroImageAlt: null,
+    imageAlts: [],
+  };
+}
+
 export function buildPersistedSeoBundle(
   plan: BlogControlPanelPlan,
   slug: string,

@@ -35,14 +35,38 @@ export function AdminBlogBatchClient() {
 
   const loadJob = useCallback(async (id: string) => {
     const res = await fetch(`/api/admin/blog/generation-jobs/${id}`, { credentials: "include", cache: "no-store" });
-    const json = (await res.json()) as { ok?: boolean; job?: GenerationJobApiPayload; error?: string };
+    let json: {
+      ok?: boolean;
+      job?: GenerationJobApiPayload;
+      error?: string;
+      message?: string;
+      code?: string;
+      details?: unknown;
+    };
+    try {
+      json = (await res.json()) as typeof json;
+    } catch {
+      setErr(`Could not read job response (HTTP ${res.status}).`);
+      return;
+    }
     if (!res.ok || !json.job) {
+      const fromBody =
+        (typeof json.message === "string" && json.message.trim()) ||
+        (typeof json.error === "string" && json.error.trim()) ||
+        "";
+      let detail = "";
+      if (json.details != null) {
+        try {
+          detail = typeof json.details === "string" ? json.details : JSON.stringify(json.details);
+        } catch {
+          detail = "";
+        }
+      }
+      const combined = [fromBody, detail].filter(Boolean).join(detail ? "\n" : "");
       setErr(
         res.status === 429
           ? formatAdminRateLimitMessageFromJson(json)
-          : typeof json.error === "string"
-            ? json.error
-            : "Load failed",
+          : combined.trim() || `Request failed (HTTP ${res.status}).`,
       );
       return;
     }

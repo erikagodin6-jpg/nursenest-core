@@ -29,7 +29,7 @@ import { PracticeTestStudyLoopNext } from "@/components/student/practice-test-st
 import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teaching-review";
 import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
 import {
-  catExamAdvancePrimaryIntentFromSessionShape,
+  assertCatExamPhaseTransition,
   catExamCanLockAnswer,
   catExamCanRequestCatAdvance,
   catExamCatAdvanceResponseIsStale,
@@ -37,6 +37,10 @@ import {
   catExamOptionsInteractionLocked,
   type CatExamUiPhase,
 } from "@/lib/practice-tests/cat-exam-ui-state";
+import {
+  assertCatAdvanceResponseShape,
+  buildCatAdvancePatchBody,
+} from "@/lib/practice-tests/cat-advance-contract";
 import { PracticeSessionLayout } from "@/components/study/practice-session-layout";
 import {
   PracticeQuestionCard,
@@ -503,8 +507,7 @@ export function PracticeTestRunnerClient({
   // CAT study mode uses split layout; rationale panel unlocks after submit (see explanation flow).
   const isExamStyle = catMode && !catFeedbackStudy;
   const catStudyLocked =
-    catFeedbackStudy &&
-    Boolean(catStudyFeedback && current && catStudyFeedback.questionId === current.id && idx === total - 1);
+    catFeedbackStudy && Boolean(catStudyFeedback && current && catStudyFeedback.questionId === current.id);
   const aanpNpExamSim = examSimulation && testConfig?.catExamConfigId === "aanp-np-us";
   const optsCanonical = useMemo(() => (current ? parseOptions(current.options) : []), [current]);
   const optsDisplay = useMemo(() => {
@@ -528,9 +531,15 @@ export function PracticeTestRunnerClient({
   }, [current, catStudyFeedback]);
 
   useEffect(() => {
+    if (!catMode) return;
+    const feedbackStudy = (testConfig?.catExamFeedbackMode ?? "test") === "study";
+    if (!feedbackStudy) {
+      /* CAT exam (test) mode: UI phases are advanced only via lock / cat_advance / completion — not qid. */
+      return;
+    }
     catExamUiPhaseRef.current = "answering";
     setCatExamUiPhase("answering");
-  }, [qid]);
+  }, [qid, catMode, testConfig?.catExamFeedbackMode]);
 
   useEffect(() => {
     const feedbackStudy =
@@ -566,12 +575,25 @@ export function PracticeTestRunnerClient({
   const lockCatExamAnswer = useCallback(() => {
     if (!isExamStyle || !current) return;
     if (!catExamCanLockAnswer(catExamUiPhaseRef.current, hasMeaningfulAnswer(current.id))) return;
+    const from = catExamUiPhaseRef.current;
+    try {
+      assertCatExamPhaseTransition(from, "submitted_locked");
+    } catch (e) {
+      logSessionEvent("cat_exam_phase_transition_rejected", {
+        phase_from: from,
+        phase_to: "submitted_locked",
+        reason: "lock_answer",
+        message: e instanceof Error ? e.message : String(e),
+      });
+      return;
+    }
     catExamUiPhaseRef.current = "submitted_locked";
     setCatExamUiPhase("submitted_locked");
+    logSessionEvent("cat_exam_phase_transition", { phase_from: from, phase_to: "submitted_locked", reason: "lock_answer" });
     queueMicrotask(() => {
       catExamAdvanceButtonRef.current?.focus();
     });
-  }, [isExamStyle, current]);
+  }, [isExamStyle, current, logSessionEvent]);
 
   function setConfidenceForQuestion(qid: string, level: ConfidenceLevel) {
     setConfidence((c) => ({ ...c, [qid]: level }));
@@ -742,23 +764,43 @@ export function PracticeTestRunnerClient({
 
     catAdvanceInFlightRef.current = true;
     if (examStyle) {
+      const fromPhase = catExamUiPhaseRef.current;
+      try {
+        assertCatExamPhaseTransition(fromPhase, "advancing");
+      } catch (e) {
+        logSessionEvent("cat_exam_phase_transition_rejected", {
+          phase_from: fromPhase,
+          phase_to: "advancing",
+          reason: "cat_advance_start",
+          message: e instanceof Error ? e.message : String(e),
+        });
+        catAdvanceInFlightRef.current = false;
+        return;
+      }
       catExamUiPhaseRef.current = "advancing";
       setCatExamUiPhase("advancing");
+      logSessionEvent("cat_exam_phase_transition", {
+        phase_from: fromPhase,
+        phase_to: "advancing",
+        reason: "cat_advance_start",
+      });
     }
     logSessionEvent("submit_cat_advance_start", { idx, questionId: advanceQuestionId });
     setSaving(true);
     try {
       const elapsedMs =
         sessionStartMs != null ? Math.max(0, Date.now() - sessionStartMs) : undefined;
+      const patchBody = buildCatAdvancePatchBody({
+        testId,
+        answers: answersRef.current,
+        cursorIndex: advanceIdx,
+        examQuestionId: advanceQuestionId,
+        ...(elapsedMs !== undefined ? { elapsedMs } : {}),
+      });
       const res = await fetch(`/api/practice-tests/${testId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "cat_advance",
-          answers: answersRef.current,
-          cursorIndex: advanceIdx,
-          ...(elapsedMs !== undefined ? { elapsedMs } : {}),
-        }),
+        body: JSON.stringify(patchBody),
       });
       let data: {
         results?: PracticeTestResultsJson;
@@ -774,6 +816,7 @@ export function PracticeTestRunnerClient({
         throw new Error("Could not read the server response for this step.");
       }
       if (!res.ok) throw new Error(data.error ?? "Could not advance.");
+      assertCatAdvanceResponseShape(data);
       if (
         catExamCatAdvanceResponseIsStale({
           advanceIdx,
@@ -784,8 +827,24 @@ export function PracticeTestRunnerClient({
       ) {
         logSessionEvent("submit_cat_advance_stale_ignored", { advanceIdx, advanceQuestionId });
         if (examStyle) {
+          const fromPhase = catExamUiPhaseRef.current;
+          try {
+            assertCatExamPhaseTransition(fromPhase, "submitted_locked");
+          } catch (e) {
+            logSessionEvent("cat_exam_phase_transition_rejected", {
+              phase_from: fromPhase,
+              phase_to: "submitted_locked",
+              reason: "cat_advance_stale_rollback",
+              message: e instanceof Error ? e.message : String(e),
+            });
+          }
           catExamUiPhaseRef.current = "submitted_locked";
           setCatExamUiPhase("submitted_locked");
+          logSessionEvent("cat_exam_phase_transition", {
+            phase_from: fromPhase,
+            phase_to: "submitted_locked",
+            reason: "cat_advance_stale_rollback",
+          });
         }
         return;
       }
@@ -799,8 +858,24 @@ export function PracticeTestRunnerClient({
       if (data.catCompleted && data.results) {
         if (!runnerMountedRef.current) return;
         if (examStyle) {
+          const fromPhase = catExamUiPhaseRef.current;
+          try {
+            assertCatExamPhaseTransition(fromPhase, "completed");
+          } catch (e) {
+            logSessionEvent("cat_exam_phase_transition_rejected", {
+              phase_from: fromPhase,
+              phase_to: "completed",
+              reason: "cat_completed",
+              message: e instanceof Error ? e.message : String(e),
+            });
+          }
           catExamUiPhaseRef.current = "completed";
           setCatExamUiPhase("completed");
+          logSessionEvent("cat_exam_phase_transition", {
+            phase_from: fromPhase,
+            phase_to: "completed",
+            reason: "cat_completed",
+          });
         }
         setSavedElapsedMs(elapsedMs ?? null);
         setResults(data.results);
@@ -815,6 +890,26 @@ export function PracticeTestRunnerClient({
         setCatStudyFeedback(null);
         await load();
         if (!runnerMountedRef.current) return;
+        if (examStyle) {
+          const fromPhase = catExamUiPhaseRef.current;
+          try {
+            assertCatExamPhaseTransition(fromPhase, "answering");
+          } catch (e) {
+            logSessionEvent("cat_exam_phase_transition_forced", {
+              phase_from: fromPhase,
+              phase_to: "answering",
+              reason: "cat_advanced_ok",
+              message: e instanceof Error ? e.message : String(e),
+            });
+          }
+          catExamUiPhaseRef.current = "answering";
+          setCatExamUiPhase("answering");
+          logSessionEvent("cat_exam_phase_transition", {
+            phase_from: fromPhase,
+            phase_to: "answering",
+            reason: "cat_advanced_ok",
+          });
+        }
         logSessionEvent("submit_cat_advance_next", { idx: advanceIdx, questionId: advanceQuestionId });
         return;
       }
@@ -826,8 +921,24 @@ export function PracticeTestRunnerClient({
       );
     } catch (e) {
       if (examStyle) {
+        const fromPhase = catExamUiPhaseRef.current;
+        try {
+          assertCatExamPhaseTransition(fromPhase, "submitted_locked");
+        } catch (err) {
+          logSessionEvent("cat_exam_phase_transition_rejected", {
+            phase_from: fromPhase,
+            phase_to: "submitted_locked",
+            reason: "cat_advance_error_rollback",
+            message: err instanceof Error ? err.message : String(err),
+          });
+        }
         catExamUiPhaseRef.current = "submitted_locked";
         setCatExamUiPhase("submitted_locked");
+        logSessionEvent("cat_exam_phase_transition", {
+          phase_from: fromPhase,
+          phase_to: "submitted_locked",
+          reason: "cat_advance_error_rollback",
+        });
       }
       setError(e instanceof Error ? e.message : "Advance failed");
       logSessionEvent("submit_cat_advance_failed", {
@@ -846,11 +957,9 @@ export function PracticeTestRunnerClient({
   async function goNext() {
     if (saving || navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
     if (catMode) {
-      if (idx >= total - 1) {
-        const examStyle = (testConfig?.catExamFeedbackMode ?? "test") !== "study";
-        if (catMode && examStyle && !catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) return;
-        await catAdvance();
-      }
+      const examStyle = (testConfig?.catExamFeedbackMode ?? "test") !== "study";
+      if (catMode && examStyle && !catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) return;
+      await catAdvance();
       return;
     }
     if (isLinearEngine && qid && !committedSet.has(qid)) return;
@@ -1604,16 +1713,10 @@ export function PracticeTestRunnerClient({
     const catMaxQ = testConfig?.catMaxQuestions ?? null;
     const catMinQ = testConfig?.catMinQuestions ?? null;
     const examPrimaryBusy = catExamFooterPrimaryBusy(catExamUiPhase, controlsBusy);
-    const catExamAdvanceIntent = catExamAdvancePrimaryIntentFromSessionShape({
-      deliveredQuestionCount: total,
-      catMaxQuestions: catMaxQ,
-    });
     const catExamAdvancePrimaryLabel =
       catExamUiPhase === "advancing" || saving
         ? tx("learner.practiceTests.run.working", "Working...")
-        : catExamAdvanceIntent === "finish_session"
-          ? tx("learner.practiceTests.run.submitAndFinish", "Submit & finish")
-          : tx("learner.practiceTests.run.nextQuestion", "Next question");
+        : tx("learner.practiceTests.run.nextQuestion", "Next question");
 
     const catExamNavFooter = (
       <div className="nn-cat-question-nav nn-question-nav-actions">
@@ -1657,7 +1760,7 @@ export function PracticeTestRunnerClient({
               type="button"
               ref={catExamAdvanceButtonRef}
               data-nn-qa-cat-exam-advance
-              data-nn-qa-cat-exam-advance-intent={catExamAdvanceIntent}
+              data-nn-qa-cat-exam-advance-intent="server_driven"
               aria-busy={catExamUiPhase === "advancing"}
               disabled={
                 examPrimaryBusy ||

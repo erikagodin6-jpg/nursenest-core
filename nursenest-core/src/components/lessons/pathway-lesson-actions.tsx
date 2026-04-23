@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { ClipboardList, Layers, Library, LineChart } from "lucide-react";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import {
   emitPathwayLessonProgress,
@@ -107,59 +108,61 @@ export function PathwayLessonActions({
   const saving = pending !== "idle";
 
   return (
-    <section
-      className="mt-8 border-t border-[var(--semantic-border-soft)] pt-6"
-      aria-label="Continue studying"
-    >
+    <section className="nn-lesson-study-actions" aria-label="Continue studying">
       <p className="nn-lesson-module-eyebrow">{t("learner.lessons.detail.studyActionsEyebrow")}</p>
 
-      <div className="mt-3 flex flex-col gap-3">
+      <div className="nn-lesson-study-actions__row-primary">
         <Link
           href={qbHref}
           data-testid="pathway-lesson-cta-practice-topic"
           data-nn-pathway-id={pathwayId}
-          className="inline-flex min-h-11 w-full items-center justify-center rounded-md bg-[var(--semantic-brand)] px-4 py-2.5 text-center text-sm font-semibold text-[var(--text-on-dark)] shadow-sm transition hover:opacity-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_45%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:w-auto sm:min-w-[12rem]"
+          className="nn-lesson-study-actions__cta-primary sm:w-auto sm:min-w-[12rem]"
         >
+          <ClipboardList className="nn-lesson-study-actions__icon h-4 w-4 shrink-0" aria-hidden />
           {t("learner.studyLoop.practiceThisTopicCta")}
         </Link>
+      </div>
 
-        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-2">
+      <div className="nn-lesson-study-actions__row-secondary">
+        <Link
+          href={flashcardsHref}
+          data-testid="pathway-lesson-cta-flashcards"
+          data-nn-pathway-id={pathwayId}
+          className="nn-lesson-study-actions__cta-ghost sm:min-w-[10rem] sm:flex-none"
+        >
+          <Layers className="nn-lesson-study-actions__icon h-4 w-4 shrink-0" aria-hidden />
+          {t("learner.studyLoop.sameTopicFlashcards")}
+        </Link>
+        {showCatCta ? (
           <Link
-            href={flashcardsHref}
-            data-testid="pathway-lesson-cta-flashcards"
+            href={catWeakHref}
+            data-testid="pathway-lesson-cta-cat-practice"
             data-nn-pathway-id={pathwayId}
-            className="inline-flex min-h-10 flex-1 items-center justify-center rounded-md border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-brand)_12%)] bg-[color-mix(in_srgb,var(--theme-page-bg)_94%,var(--semantic-surface)_6%)] px-3 py-2 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:min-w-[10rem] sm:flex-none"
+            className="nn-lesson-study-actions__cta-ghost nn-lesson-study-actions__cta-ghost--cool sm:min-w-[10rem] sm:flex-none"
           >
-            {t("learner.studyLoop.sameTopicFlashcards")}
+            <LineChart className="nn-lesson-study-actions__icon h-4 w-4 shrink-0" aria-hidden />
+            {t("learner.studyLoop.catFromLesson")}
           </Link>
-          {showCatCta ? (
-            <Link
-              href={catWeakHref}
-              data-testid="pathway-lesson-cta-cat-practice"
-              data-nn-pathway-id={pathwayId}
-              className="inline-flex min-h-10 flex-1 items-center justify-center rounded-md border border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-chart-2)_12%)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_10%,var(--theme-page-bg))] px-3 py-2 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:border-[color-mix(in_srgb,var(--semantic-chart-2)_35%,var(--semantic-border-soft))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-chart-2)_35%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:min-w-[10rem] sm:flex-none"
-            >
-              {t("learner.studyLoop.catFromLesson")}
-            </Link>
-          ) : null}
-          <Link
-            href={allLessonsHref}
-            data-testid="pathway-lesson-cta-all-lessons"
-            className="inline-flex min-h-10 flex-1 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--theme-page-bg)_94%,var(--semantic-surface)_6%)] px-3 py-2 text-sm font-semibold text-[var(--theme-heading-text)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_35%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--theme-page-bg)] sm:min-w-[10rem] sm:flex-none"
-          >
-            {t("learner.lessons.detail.allLessons")}
-          </Link>
-        </div>
+        ) : null}
+        <Link
+          href={allLessonsHref}
+          data-testid="pathway-lesson-cta-all-lessons"
+          className="nn-lesson-study-actions__cta-ghost sm:min-w-[10rem] sm:flex-none"
+        >
+          <Library className="nn-lesson-study-actions__icon h-4 w-4 shrink-0" aria-hidden />
+          {t("learner.lessons.detail.allLessons")}
+        </Link>
+      </div>
 
-        {!userId ? (
-          <p className="text-sm text-muted">
-            <Link href="/login" className="nn-marketing-body-sm font-semibold text-primary underline">
-              {t("learner.studyLoop.signIn")}
-            </Link>{" "}
-            {t("learner.studyLoop.signInProgressHint")}
-          </p>
-        ) : canMarkComplete ? (
-          <div className="mt-1 flex flex-col gap-1 border-t border-dashed border-[var(--semantic-border-soft)] pt-4 sm:flex-row sm:items-center sm:gap-3">
+      {!userId ? (
+        <p className="mt-3 text-sm text-muted">
+          <Link href="/login" className="nn-marketing-body-sm font-semibold text-primary underline">
+            {t("learner.studyLoop.signIn")}
+          </Link>{" "}
+          {t("learner.studyLoop.signInProgressHint")}
+        </p>
+      ) : canMarkComplete ? (
+        <div className="nn-lesson-study-actions__meta flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
             {progress === "completed" ? (
               <button
                 type="button"
@@ -185,9 +188,8 @@ export function PathwayLessonActions({
             {error ? <span className="text-xs text-amber-800">{t("learner.studyLoop.markStudiedError")}</span> : null}
           </div>
         ) : (
-          <p className="text-sm text-muted">{t("learner.studyLoop.subscribePathwayHint")}</p>
+          <p className="mt-3 text-sm text-muted">{t("learner.studyLoop.subscribePathwayHint")}</p>
         )}
-      </div>
     </section>
   );
 }

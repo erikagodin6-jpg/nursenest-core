@@ -207,8 +207,29 @@ export function AdminBlogControlPanelClient({
   /** Open HTML preview column when arriving from library “Preview” for non-live posts */
   initialPreviewOpen?: boolean;
 }) {
+  function formatAdminApiError(body: unknown, fallback: string): string {
+    if (!body || typeof body !== "object") return fallback;
+    const o = body as Record<string, unknown>;
+    const line =
+      (typeof o.message === "string" && o.message.trim()) ||
+      (typeof o.error === "string" && o.error.trim()) ||
+      fallback;
+    const code = typeof o.code === "string" ? o.code.trim() : "";
+    let out = code && !line.toLowerCase().includes(code.toLowerCase()) ? `[${code}] ${line}` : line;
+    if ("details" in o && o.details != null) {
+      try {
+        const d = typeof o.details === "string" ? o.details : JSON.stringify(o.details);
+        if (d && d !== "null") out = `${out}\n${d.length > 3500 ? `${d.slice(0, 3500)}…` : d}`;
+      } catch {
+        /* ignore */
+      }
+    }
+    return out;
+  }
+
   function httpErr(res: Response, body: unknown, fallback: string): string {
-    return res.status === 429 ? formatAdminRateLimitMessageFromJson(body) : fallback;
+    if (res.status === 429) return formatAdminRateLimitMessageFromJson(body);
+    return formatAdminApiError(body, fallback);
   }
 
   const aiGate = useAdminAiGenerationGate();
@@ -425,6 +446,14 @@ export function AdminBlogControlPanelClient({
       setGenError("Verified sources JSON must be a valid JSON array (use [] if none yet).");
       return;
     }
+    if (topic.trim().length < 3) {
+      setGenError("Topic must be at least 3 characters.");
+      return;
+    }
+    if (exam.trim().length < 2) {
+      setGenError("Select a pathway / audience.");
+      return;
+    }
     setGenState("generating");
     setGenError(null);
     setWarnings([]);
@@ -454,11 +483,12 @@ export function AdminBlogControlPanelClient({
           allowInsufficientCitations: allowInsufficientCitations || undefined,
         }),
       });
-      const json = (await res.json()) as {
+      let json: {
         ok?: boolean;
         error?: string;
         message?: string;
         code?: string;
+        details?: unknown;
         plan?: BlogControlPanelPlan;
         bodyHtml?: string;
         post?: AdminPostPayload | null;
@@ -470,6 +500,13 @@ export function AdminBlogControlPanelClient({
         hint?: string;
         riskFlags?: string[];
       };
+      try {
+        json = (await res.json()) as typeof json;
+      } catch {
+        setGenState("failed");
+        setGenError(`Server returned an unreadable response (HTTP ${res.status}).`);
+        return;
+      }
 
       if (res.status === 409) {
         setGenState("failed");
@@ -498,14 +535,17 @@ export function AdminBlogControlPanelClient({
         }
         const flagStr = json.riskFlags?.length ? ` Risk flags: ${json.riskFlags.join(", ")}.` : "";
         setGenError(
-          `${json.message ?? "Citation support insufficient for this topic."}${flagStr} Add verified sources (HTTPS URL or valid DOI + title + year) or use “Allow save without verified citations”, then Persist draft.`,
+          formatAdminApiError(
+            json,
+            `${json.message ?? "Citation support insufficient for this topic."}${flagStr} Add verified sources (HTTPS URL or valid DOI + title + year) or use “Allow save without verified citations”, then Persist draft.`,
+          ),
         );
         return;
       }
 
       if (!res.ok) {
         setGenState("failed");
-        setGenError(httpErr(res, json, json.message ?? json.error ?? "Generation failed"));
+        setGenError(httpErr(res, json, json.message ?? json.error ?? `Generation failed (HTTP ${res.status})`));
         if (json.plan) {
           setPlan(json.plan);
           setImageAttachments((prev) => mergeAttachmentRowsForPlan(json.plan!, prev));

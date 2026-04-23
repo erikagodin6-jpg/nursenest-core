@@ -11,7 +11,10 @@ export async function GET(req: Request, ctx: RouteContext) {
   const { id } = await ctx.params;
   const job = await loadBlogGenerationJobForAdmin(id);
   if (!job) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json(
+      { ok: false, error: "Not found", code: "NOT_FOUND", message: "No generation job exists for this id." },
+      { status: 404 },
+    );
   }
 
   return NextResponse.json({ ok: true, job });
