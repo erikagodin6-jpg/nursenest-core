@@ -386,13 +386,18 @@ export function shouldStopAfterAnswer(
   bounds?: CatStopBounds,
 ): CatAdaptiveState["stoppedReason"] {
   const minQ = bounds?.min ?? CAT_MIN_QUESTIONS;
-  const maxQ = Math.min(bounds?.max ?? CAT_MAX_QUESTIONS, 15);
+  /** Use pathway/session bounds (e.g. NCLEX 85–145). Do not cap below configured max — that broke full-length exam simulation. */
+  const maxQ = bounds?.max ?? CAT_MAX_QUESTIONS;
   const minForConfidence =
     bounds?.minAnsweredForConfidenceStop ?? CAT_MIN_ANSWERED_FOR_CONFIDENCE_STOP;
   const passingThreshold = bounds?.passingThreshold ?? 0;
   const earlyStopMargin = Math.max(0.18, bounds?.earlyStopMargin ?? 0.32);
   const passCutoff = passingThreshold + earlyStopMargin;
   const failCutoff = passingThreshold - earlyStopMargin;
+
+  if (nAnswered >= maxQ) return "max_length";
+  /** Exam boards require a minimum run length; never allow “streak” or confidence stops before this floor. */
+  if (nAnswered < minQ) return null;
 
   if (nAnswered >= 8) {
     const lastFive = state.results.slice(-5);
@@ -404,8 +409,6 @@ export function shouldStopAfterAnswer(
     }
   }
 
-  if (nAnswered >= maxQ) return "max_length";
-  if (nAnswered < minQ) return null;
   if (nAnswered < minForConfidence) return null;
   if (state.se <= CAT_EARLY_STOP_SE && state.theta >= passCutoff) return "confidence_pass";
   if (state.se <= CAT_EARLY_STOP_SE && state.theta <= failCutoff) return "confidence_fail";

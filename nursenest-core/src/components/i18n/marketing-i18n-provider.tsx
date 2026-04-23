@@ -24,7 +24,7 @@ const MarketingI18nContext = createContext<MarketingI18nContextValue | null>(nul
 let warnedUseMarketingI18nOutsideProvider = false;
 
 const degradedT = (key: string, params?: Params) =>
-  formatMarketingMessage({}, key, params, undefined, { locale: DEFAULT_MARKETING_LOCALE });
+  formatMarketingMessage({}, key, params, undefined, { locale: DEFAULT_MARKETING_LOCALE }).trim();
 
 /** Safe default when a component calls `useMarketingI18n()` without a provider (never throws). */
 const DEGRADED_MARKETING_I18N: MarketingI18nContextValue = {
@@ -68,7 +68,7 @@ export function MarketingI18nProvider({
       messages: safeMessages,
       fallbackMessages: safeFallback,
       t: (key: string, params?: Params) =>
-        formatMarketingMessage(safeMessages, key, params, safeFallback, { locale }),
+        formatMarketingMessage(safeMessages, key, params, safeFallback, { locale }).trim(),
     }),
     [locale, safeMessages, safeFallback],
   );

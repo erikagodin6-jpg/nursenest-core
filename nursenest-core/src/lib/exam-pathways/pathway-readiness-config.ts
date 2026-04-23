@@ -134,22 +134,33 @@ const PATHWAY_READINESS_OVERRIDES: Record<string, Omit<PathwayReadinessConfig, "
   },
 };
 
+export function formatTimeLimitPhrase(minutes: number): string {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  if (h > 0 && m > 0) return `${h} h ${m} min`;
+  if (h > 0) return `${h} h`;
+  return `${minutes} min`;
+}
+
 export function readinessConfigForPathway(pathway: { id: string; shortName: string; roleTrack: string }): PathwayReadinessConfig {
   const override = PATHWAY_READINESS_OVERRIDES[pathway.id];
   const questionRangeLabel = (base: Omit<PathwayReadinessConfig, "label" | "questionRange" | "timeEstimate">): string => {
     if (base.engineType === "CAT") {
-      return "Up to 15 adaptive questions";
+      if (base.minQuestions === base.maxQuestions) {
+        return `${base.minQuestions} items (fixed length)`;
+      }
+      return `${base.minQuestions}–${base.maxQuestions} items (adaptive length within this band)`;
     }
     if (base.mode === "mini_adaptive") {
       return base.maxQuestions <= 50
         ? `Up to ${base.maxQuestions} adaptive questions`
-        : `${base.minQuestions}-${base.maxQuestions} adaptive questions`;
+        : `${base.minQuestions}–${base.maxQuestions} adaptive questions`;
     }
-    return `${base.minQuestions}-${base.maxQuestions} questions`;
+    return `${base.minQuestions}–${base.maxQuestions} questions`;
   };
   const timeEstimateLabel = (base: Omit<PathwayReadinessConfig, "label" | "questionRange" | "timeEstimate">): string => {
     if (base.engineType === "CAT") {
-      return "~15-25m";
+      return formatTimeLimitPhrase(base.timeLimitMinutes);
     }
     const h = Math.floor(base.timeLimitMinutes / 60);
     const m = base.timeLimitMinutes % 60;
@@ -197,28 +208,31 @@ export function publicCopyForReadinessConfig(config: PathwayReadinessConfig): Pa
     return {
       effectiveMode,
       /** Product-facing name for CAT surfaces — not “readiness exam” (reserved for report-card / readiness analytics). */
-      title: `${config.label} CAT`,
-      subtitle: "Exam-style computerized adaptive testing aligned to pathway rules and a practice passing band.",
+      title: `Adaptive exam simulation · ${config.label}`,
+      subtitle:
+        "One item at a time, timed, with pathway min/max counts and no backtracking. NurseNest practice ability estimates and stopping rules are not official board algorithms or outcomes.",
       strongSimulationClaim: true,
       betaLabel: null,
-      experienceLabel: "Full exam-style adaptive flow with no backtracking.",
+      experienceLabel: "Full-length adaptive session: timer enforced, no return to prior items after submit.",
     };
   }
   if (effectiveMode === "mini_adaptive" && config.engineType === "CAT") {
     return {
       effectiveMode,
-      title: `${config.label} short adaptive CAT`,
-      subtitle: "Shorter adaptive run for progress checks — not a full-length exam simulation.",
+      title: `Short adaptive session · ${config.label}`,
+      subtitle:
+        "Shorter adaptive run for calibration between full sessions. Same delivery pattern as CAT, with a reduced item budget.",
       strongSimulationClaim: false,
       betaLabel: null,
-      experienceLabel: "Short adaptive practice flow calibrated to pathway topics.",
+      experienceLabel: "Reduced item budget; timed; no backtracking unless explicitly enabled for the pathway.",
     };
   }
   if (effectiveMode === "simulation") {
     return {
       effectiveMode,
-      title: `${config.label} adaptive simulation`,
-      subtitle: "Structured adaptive simulation focused on exam-relevant scenarios for this pathway.",
+      title: `Adaptive simulation · ${config.label}`,
+      subtitle:
+        "Structured scenario-weighted simulation with timed progression. This track uses simulation rules rather than a full board CAT specification.",
       strongSimulationClaim: false,
       betaLabel: null,
       experienceLabel: "Scenario-based adaptive simulation with timed progression.",
@@ -226,8 +240,9 @@ export function publicCopyForReadinessConfig(config: PathwayReadinessConfig): Pa
   }
   return {
     effectiveMode: "beta",
-    title: `${config.label} adaptive CAT (beta)`,
-    subtitle: "Beta adaptive session. Pair with lessons and question practice before high-stakes testing.",
+    title: `Adaptive CAT (beta) · ${config.label}`,
+    subtitle:
+      "Beta adaptive session: rules and pool coverage may change. Pair with lessons and targeted question practice before high-stakes testing.",
     strongSimulationClaim: false,
     betaLabel: "Beta",
     experienceLabel: "Adaptive practice flow in active beta.",

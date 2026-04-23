@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => ({
       robots: { index: false, follow: false },
-      title: "Start CAT practice | NurseNest",
+      title: "Adaptive exam simulation | NurseNest",
     }),
     { pathname: "/app/practice-tests/start", routeGroup: "student.learner.practice_test_start" },
   );
@@ -54,8 +54,10 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
         <div className="mb-4">
           <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
         </div>
-        <h1 className="text-3xl font-bold">CAT (adaptive practice)</h1>
-        <p className="mt-2 text-sm text-muted">Subscribe to run timed, one-question-at-a-time CAT sessions matched to your exam track.</p>
+        <h1 className="sr-only">Adaptive exam simulation</h1>
+        <p className="mt-2 text-sm text-muted">
+          Subscribe for timed, one-question-at-a-time adaptive exam simulation matched to your exam track.
+        </p>
         <div className="mt-6">
           <SubscriptionPaywall
             context="questions"
@@ -150,10 +152,9 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
       <div className="mb-4">
         <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
       </div>
-      <h1 className="text-3xl font-bold">CAT (adaptive practice)</h1>
-      <p className="mt-2 text-sm text-muted">
-        Confirm the pathway and start your CAT session. Exam-style constraints (timing, navigation, stop rules) are applied
-        automatically per pathway.
+      <p className="mt-2 max-w-3xl text-sm text-[var(--semantic-text-secondary)]">
+        Select your exam pathway, review conditions, then start. Timing, navigation, and min/max item rules follow the pathway
+        configuration below — not generic quiz defaults.
       </p>
       {catEligiblePathways.length > 1 ? (
         <p className="mt-3 text-sm text-[var(--semantic-text-secondary)]">

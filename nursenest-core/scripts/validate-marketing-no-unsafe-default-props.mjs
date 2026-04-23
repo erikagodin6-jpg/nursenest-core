@@ -40,6 +40,23 @@ const UNSAFE_RESOLVE_MARKETING_WEAK_FALLBACK = new RegExp(
   "g",
 );
 
+/**
+ * `generateMetadata` must not assign title/description via client-style `t()` / `formatMarketingMessage`.
+ * (Object literal `title: t(...)` is allowed for non-metadata UI objects like trust tiles.)
+ */
+const UNSAFE_METADATA_CONST_TITLE_T = /const\s+title\s*=\s*t\s*\(/;
+const UNSAFE_METADATA_CONST_DESCRIPTION_T = /const\s+description\s*=\s*t\s*\(/;
+const UNSAFE_METADATA_CONST_TITLE_FMT = /const\s+title\s*=\s*formatMarketingMessage\s*\(/;
+const UNSAFE_METADATA_CONST_DESCRIPTION_FMT = /const\s+description\s*=\s*formatMarketingMessage\s*\(/;
+
+/** Generic placeholder words in literal metadata strings (marketing route TSX only). */
+const UNSAFE_METADATA_LITERAL_PLACEHOLDERS = [
+  /\btitle\s*:\s*["']Title["']/i,
+  /\bdescription\s*:\s*["']Description["']/i,
+  /\bdescription\s*:\s*["']Learn more["']/i,
+  /\bdescription\s*:\s*["']Get started["']/i,
+];
+
 function isMarketingPublicSurfacePath(rel) {
   return (
     rel.includes(`${path.sep}marketing${path.sep}`) ||
@@ -49,6 +66,10 @@ function isMarketingPublicSurfacePath(rel) {
     rel.includes(`${path.sep}seo${path.sep}`) ||
     rel.includes(`${path.sep}marketing-i18n${path.sep}`)
   );
+}
+
+function isMarketingRoutePageTsx(rel) {
+  return rel.includes("(marketing)") && rel.endsWith(`${path.sep}page.tsx`);
 }
 
 function walkTsxFiles(dir, out = [], opts = {}) {
@@ -113,6 +134,46 @@ for (const file of collectScanFiles()) {
       `[validate-marketing-no-unsafe-default-props] Forbidden resolveMarketingCopy weak literal fallback in ${rel} — use getRequiredPublicMetadataLine + marketing-safe-fallbacks.ts`,
     );
     failures += 1;
+  }
+
+  if (isMarketingRoutePageTsx(rel) && /export async function generateMetadata/.test(src)) {
+    for (const re of UNSAFE_METADATA_LITERAL_PLACEHOLDERS) {
+      re.lastIndex = 0;
+      if (re.test(src)) {
+        console.error(
+          `[validate-marketing-no-unsafe-default-props] Forbidden placeholder literal in marketing generateMetadata surface ${rel} (pattern ${re})`,
+        );
+        failures += 1;
+      }
+    }
+    UNSAFE_METADATA_CONST_TITLE_T.lastIndex = 0;
+    UNSAFE_METADATA_CONST_DESCRIPTION_T.lastIndex = 0;
+    UNSAFE_METADATA_CONST_TITLE_FMT.lastIndex = 0;
+    UNSAFE_METADATA_CONST_DESCRIPTION_FMT.lastIndex = 0;
+    if (UNSAFE_METADATA_CONST_TITLE_T.test(src)) {
+      console.error(
+        `[validate-marketing-no-unsafe-default-props] Forbidden const title = t(...) in marketing generateMetadata ${rel} — use getRequiredPublicMetadataLine / getRequiredPublicMetadataInterpolated`,
+      );
+      failures += 1;
+    }
+    if (UNSAFE_METADATA_CONST_DESCRIPTION_T.test(src)) {
+      console.error(
+        `[validate-marketing-no-unsafe-default-props] Forbidden const description = t(...) in marketing generateMetadata ${rel} — use getRequiredPublicMetadataLine / getRequiredPublicMetadataInterpolated`,
+      );
+      failures += 1;
+    }
+    if (UNSAFE_METADATA_CONST_TITLE_FMT.test(src)) {
+      console.error(
+        `[validate-marketing-no-unsafe-default-props] Forbidden const title = formatMarketingMessage(...) in marketing generateMetadata ${rel}`,
+      );
+      failures += 1;
+    }
+    if (UNSAFE_METADATA_CONST_DESCRIPTION_FMT.test(src)) {
+      console.error(
+        `[validate-marketing-no-unsafe-default-props] Forbidden const description = formatMarketingMessage(...) in marketing generateMetadata ${rel}`,
+      );
+      failures += 1;
+    }
   }
 }
 

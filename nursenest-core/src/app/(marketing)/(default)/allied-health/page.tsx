@@ -17,6 +17,11 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
+import {
+  MARKETING_ALLIED_HUB_META_DESCRIPTION_FALLBACK,
+  MARKETING_ALLIED_HUB_META_TITLE_FALLBACK,
+} from "@/lib/marketing-i18n/marketing-safe-fallbacks";
+import { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-metadata-strict";
 import { alliedHubBreadcrumbs } from "@/lib/seo/allied-breadcrumbs";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -32,9 +37,18 @@ export async function generateMetadata(): Promise<Metadata> {
       const locale = await getMarketingLocaleForDefaultRoute();
       const m = await loadMarketingMessages(locale);
       const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-      const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
-      const title = t("pages.alliedHealthHub.metaTitle");
-      const description = t("pages.alliedHealthHub.metaDescription");
+      const title = getRequiredPublicMetadataLine(
+        m,
+        "pages.alliedHealthHub.metaTitle",
+        en,
+        MARKETING_ALLIED_HUB_META_TITLE_FALLBACK,
+      );
+      const description = getRequiredPublicMetadataLine(
+        m,
+        "pages.alliedHealthHub.metaDescription",
+        en,
+        MARKETING_ALLIED_HUB_META_DESCRIPTION_FALLBACK,
+      );
       const alt = marketingAlternatesSharedPage(locale, BASE);
       return {
         title,

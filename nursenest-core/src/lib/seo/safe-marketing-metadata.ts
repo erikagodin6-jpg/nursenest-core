@@ -15,6 +15,17 @@ import {
 
 const METADATA_SLOW_MS = 2000;
 
+/** Marketing copy / strict metadata failures must surface in development (not replaced by generic site fallback). */
+export function isStrictPublicMarketingMetadataGenerationError(e: unknown): boolean {
+  if (!(e instanceof Error)) return false;
+  const msg = e.message;
+  return (
+    msg.includes("[marketing-i18n]") ||
+    msg.includes("[marketing-metadata-strict]") ||
+    msg.includes("[marketing] forbidden")
+  );
+}
+
 export const FALLBACK_SITE_METADATA: Metadata = {
   title: "NurseNest | Nursing exam prep",
   description: "Adaptive practice, lessons, and exam-focused prep for nursing candidates.",
@@ -146,6 +157,10 @@ export async function safeGenerateMetadata(
     }
     return result;
   } catch (e) {
+    const isDev = process.env.NODE_ENV !== "production";
+    if (isDev && isStrictPublicMarketingMetadataGenerationError(e)) {
+      throw e;
+    }
     if (e instanceof SeoHttpValidationStrictError) {
       logNonfatalMetadataValidationFailure(ctx, classifySeoHttpValidationFailureReason(e.failures), Date.now() - t0);
       return fallbackMetadata;

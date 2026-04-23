@@ -690,6 +690,7 @@ export default async function LessonDetailPage({ params }: Props) {
                         examFocus={section.examFocus}
                         viewerTier={lessonViewerTier}
                         measurementSystem={lessonMeasurementSystem ?? undefined}
+                        sectionKind={section.kind ?? null}
                         emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
                         figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
                       />

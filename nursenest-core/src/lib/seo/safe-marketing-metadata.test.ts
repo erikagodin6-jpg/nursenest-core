@@ -5,7 +5,7 @@ import {
   SeoHttpValidationStrictError,
   validateMetadataAlternatesHttp,
 } from "@/lib/seo/seo-http-emit-validation";
-import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { isStrictPublicMarketingMetadataGenerationError, safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 const SAVED_ENV = { ...process.env };
 const ORIGINAL_FETCH = globalThis.fetch;
@@ -84,6 +84,28 @@ test("validateMetadataAlternatesHttp still throws strict validation errors in de
       generator: "generateMetadata",
     }),
     SeoHttpValidationStrictError,
+  );
+});
+
+test("isStrictPublicMarketingMetadataGenerationError recognizes marketing-i18n failures", () => {
+  assert.equal(isStrictPublicMarketingMetadataGenerationError(new Error("[marketing-i18n] missing key")), true);
+  assert.equal(isStrictPublicMarketingMetadataGenerationError(new Error("random")), false);
+});
+
+test("safeGenerateMetadata rethrows strict marketing copy errors in development", async () => {
+  setEnv({
+    NODE_ENV: "development",
+    VERCEL_ENV: undefined,
+    CI: undefined,
+    SEO_HTTP_VALIDATE_PAGE_METADATA: undefined,
+    SEO_HTTP_VALIDATE_STRICT: undefined,
+  });
+  await assert.rejects(
+    () =>
+      safeGenerateMetadata(async () => {
+        throw new Error('[marketing-i18n] getRequiredMarketingMessage: missing or forbidden value for key "x"');
+      }),
+    /\[marketing-i18n\]/,
   );
 });
 

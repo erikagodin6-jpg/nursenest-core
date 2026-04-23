@@ -26,6 +26,7 @@
  *
  * **Stop** — `shouldStopAfterAnswer`:
  * - Always stop at `max` questions (fixed length cap).
+ * - Never apply streak or confidence-based early stop before the pathway `min` (board-style floor).
  * - After `min` and ≥ `CAT_MIN_ANSWERED_FOR_CONFIDENCE_STOP` items, optional early stop when
  *   `se` is tight and `theta` clears pass/fail bands (confidence threshold).
  *

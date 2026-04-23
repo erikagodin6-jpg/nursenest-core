@@ -1,6 +1,8 @@
 import { getRequiredPublicMessage, type MarketingMessages } from "@/lib/marketing-i18n-core";
 import { assertNoPublicPlaceholderCopy } from "@/lib/marketing-i18n/marketing-message-value-policy";
 
+export type MarketingMetadataInterpolationParams = Record<string, string | number | undefined>;
+
 function logMetadataRequiredFallback(key: string): void {
   const payload = JSON.stringify({
     scope: "i18n",
@@ -43,4 +45,52 @@ export function getRequiredPublicMetadataLine(
     logMetadataRequiredFallback(key);
     return scrubbedFallback;
   }
+}
+
+/**
+ * Like {@link getRequiredPublicMetadataLine} but applies `{{param}}` interpolation after resolving the template.
+ * Use for metadata strings that include dynamic segments (e.g. deck title). `productionOnlyFallback` must pass
+ * {@link assertNoPublicPlaceholderCopy} and must not be empty.
+ */
+export function getRequiredPublicMetadataInterpolated(
+  messages: MarketingMessages,
+  key: string,
+  params: MarketingMetadataInterpolationParams,
+  fallbackMessages: MarketingMessages | undefined,
+  productionOnlyFallback: string,
+): string {
+  const scrubbedFallback = assertNoPublicPlaceholderCopy(
+    productionOnlyFallback.trim(),
+    `metadata-fallback-constant-interpolated:${key}`,
+  ).trim();
+  if (!scrubbedFallback) {
+    throw new Error(
+      `[marketing-metadata-strict] productionOnlyFallback is empty or forbidden placeholder after scrub (interpolated key "${key}") — use an explicit string from marketing-safe-fallbacks.ts.`,
+    );
+  }
+  let template: string;
+  try {
+    template = getRequiredPublicMessage(messages, key, fallbackMessages).trim();
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") {
+      throw e instanceof Error ? e : new Error(String(e));
+    }
+    logMetadataRequiredFallback(`${key}:interpolated-template`);
+    return scrubbedFallback;
+  }
+  let s = template;
+  for (const [k, val] of Object.entries(params)) {
+    if (val === undefined) continue;
+    s = s.split(`{{${k}}}`).join(String(val));
+  }
+  s = s.trim();
+  const checked = assertNoPublicPlaceholderCopy(s, `metadata-interpolated:${key}`).trim();
+  if (checked) return checked;
+  if (process.env.NODE_ENV !== "production") {
+    throw new Error(
+      `[marketing-metadata-strict] interpolated metadata empty or scrubbed to empty (key "${key}") — check params and template.`,
+    );
+  }
+  logMetadataRequiredFallback(`${key}:interpolated-empty`);
+  return scrubbedFallback;
 }

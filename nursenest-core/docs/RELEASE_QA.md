@@ -47,7 +47,8 @@ Optional: set `E2E_RELEASE_SKIP_BILLING=1` to skip account/billing smoke only wh
 | Session persistence | `tests/e2e/paid-user/paid-user-session-persistence.spec.ts` |
 | Navigation / i18n / mobile | `paid-user-navigation`, `paid-user-i18n`, `paid-user-mobile` |
 | Stress / performance / degraded | `paid-user-stress`, `paid-user-performance`, `paid-user-degraded-mode` |
-| Public marketing | `npm run qa:pre-deploy:public` |
+| Public marketing | `npm run qa:pre-deploy:public` (includes `marketing-production-sentinel`, **DOM placeholder** spec `tests/marketing/marketing-placeholder-dom.spec.ts`, and `pre-deploy-regression`) |
+| Public marketing — DOM placeholder only | `npm run qa:marketing-placeholder-dom` (Playwright: `/` + `/pricing` visible text; requires app at `BASE_URL` or local `webServer`) |
 | Login flow (explicit UI) | `tests/e2e/paid-user/paid-user-login-flow.spec.ts` |
 | Auth audit (optional creds) | `tests/e2e/auth/auth-audit.spec.ts` |
 | Adaptive questions | `tests/e2e/paid-user/paid-user-adaptive-question-flow.spec.ts` |
@@ -137,6 +138,7 @@ npm run test:e2e:paid-fast-sanity
 | `npm run qa:smoke` | Minimal four-group smoke (`tests/e2e/smoke-production`) |
 | `npm run qa:smoke:extended` | Legacy broad `tests/e2e/smoke` suite |
 | `npm run qa:smoke:emergency` | Health APIs + paid fast sanity when creds exist (`playwright.emergency.config.ts`) |
+| `npm run qa:marketing-placeholder-dom` | Playwright: visible `/` + `/pricing` must not contain placeholder tokens (`tests/marketing/marketing-placeholder-dom.spec.ts`) |
 
 ---
 

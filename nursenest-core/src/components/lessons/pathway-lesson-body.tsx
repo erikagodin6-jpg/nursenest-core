@@ -1,11 +1,17 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import type { TierCode } from "@prisma/client";
-import type { PathwayLessonExamFocus, PathwayLessonFigure } from "@/lib/lessons/pathway-lesson-types";
+import { AlertTriangle, ClipboardList, ListOrdered } from "lucide-react";
+import type {
+  PathwayLessonExamFocus,
+  PathwayLessonFigure,
+  PathwayLessonSectionKind,
+} from "@/lib/lessons/pathway-lesson-types";
 import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
 import { resolveTierBlocksForViewer } from "@/lib/lessons/tier-block-content";
 import type { MeasurementSystem } from "@/lib/measurements/measurement-system";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
+import { lessonBodyPresentationClass } from "@/lib/ui/lesson-body-presentation";
 
 /** Markdown-style internal links: `LESSON:slug` wiki or root-relative `/path`. */
 const MD_INTERNAL_LINK = /(\[[^\]]+\]\((?:LESSON:[^)]+|\/[^)]+)\))/g;
@@ -117,53 +123,73 @@ function PathwayLessonExamFocusInlineBlocks({
   measurementSystem?: MeasurementSystem | null;
   measurementDual?: boolean;
 }) {
-  const blocks: { title: string; text: string }[] = [];
+  type ExamFocusBlockKey = "how-tested" | "traps" | "priorities";
+  const blocks: { key: ExamFocusBlockKey; title: string; text: string; Icon: typeof ListOrdered }[] = [];
   if (examFocus.howTested?.trim()) {
-    blocks.push({ title: "How this concept is tested", text: examFocus.howTested });
+    blocks.push({
+      key: "how-tested",
+      title: "How this concept is tested",
+      text: examFocus.howTested,
+      Icon: ListOrdered,
+    });
   }
   if (examFocus.commonTraps?.trim()) {
-    blocks.push({ title: "Common traps", text: examFocus.commonTraps });
+    blocks.push({
+      key: "traps",
+      title: "Common traps",
+      text: examFocus.commonTraps,
+      Icon: AlertTriangle,
+    });
   }
   if (examFocus.prioritizationCues?.trim()) {
-    blocks.push({ title: "Prioritization cues", text: examFocus.prioritizationCues });
+    blocks.push({
+      key: "priorities",
+      title: "Prioritization cues",
+      text: examFocus.prioritizationCues,
+      Icon: ClipboardList,
+    });
   }
   if (blocks.length === 0) return null;
   return (
-    <div className="space-y-3 rounded-md border border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-info)_8%)] bg-[color-mix(in_srgb,var(--bg-card)_96%,var(--semantic-panel-cool)_4%)] p-3 sm:p-3.5">
+    <div className="nn-lesson-exam-focus-inline" role="region" aria-label="Exam focus">
       {blocks.map((b) => (
-        <div key={b.title}>
-          <h3 className="text-[0.7rem] font-medium uppercase tracking-[0.12em] text-[var(--theme-muted-text)]">
-            {b.title}
-          </h3>
-          <div className="mt-1.5">
+        <article
+          key={b.key}
+          className="nn-lesson-exam-focus-inline__card"
+          data-exam-focus-block={b.key}
+        >
+          <header className="nn-lesson-exam-focus-inline__head">
+            <b.Icon className="nn-lesson-exam-focus-inline__icon" aria-hidden />
+            <h3 className="nn-lesson-exam-focus-inline__title">{b.title}</h3>
+          </header>
+          <div className="nn-lesson-exam-focus-inline__body">
             <PathwayLessonBody
               text={b.text}
               viewerTier={viewerTier}
               measurementSystem={measurementSystem ?? undefined}
               measurementDual={measurementDual}
+              compactProse
             />
           </div>
-        </div>
+        </article>
       ))}
     </div>
   );
 }
 
 /**
- * Classifies a resolved paragraph block so the renderer can pick the right
- * HTML element — plain text, bullet list, or a labelled list (bold header + bullets).
+ * Classifies a resolved paragraph block for HTML rendering (no full markdown parser).
  *
- * Patterns we handle:
- *   "text" — regular prose paragraph (no bullet lines)
- *   "list" — every line starts with "- " (pure bullet list)
- *   "headed-list" — first line is prose, remaining lines all start with "- "
- *
- * This converts markdown-style lesson content into scannable HTML structure
- * without requiring a full markdown parser.
+ * Patterns:
+ *   "text" — regular prose
+ *   "list" — every line starts with "- "
+ *   "ordered-list" — every line starts with a decimal prefix like "1. ", "2. "
+ *   "headed-list" — first line is prose; remaining lines are "- " bullets
  */
 type ParagraphBlock =
   | { kind: "text"; text: string }
   | { kind: "list"; items: string[] }
+  | { kind: "ordered-list"; items: string[] }
   | { kind: "headed-list"; header: string; items: string[] };
 
 function isBulletLine(line: string): boolean {
@@ -174,13 +200,27 @@ function stripBullet(line: string): string {
   return line.replace(/^[ \t]*-\s+/, "");
 }
 
-function parseParagraphBlock(raw: string): ParagraphBlock {
+function isNumberedLine(line: string): boolean {
+  return /^[ \t]*\d+\.\s+/.test(line);
+}
+
+function stripNumberPrefix(line: string): string {
+  return line.replace(/^[ \t]*\d+\.\s+/, "");
+}
+
+/** @internal Exported for contract tests. */
+export function parseParagraphBlock(raw: string): ParagraphBlock {
   const p = raw.trim();
   const lines = p.split("\n");
 
   // Pure bullet list: every line starts with "- "
   if (lines.length > 0 && lines.every(isBulletLine)) {
     return { kind: "list", items: lines.map(stripBullet) };
+  }
+
+  // Pure numbered list: every line starts with "1. ", "2. ", …
+  if (lines.length > 0 && lines.every(isNumberedLine)) {
+    return { kind: "ordered-list", items: lines.map(stripNumberPrefix) };
   }
 
   // Labelled list: first line is a prose header; all remaining lines are bullets
@@ -198,22 +238,27 @@ function parseParagraphBlock(raw: string): ParagraphBlock {
 export function PathwayLessonBody({
   text,
   lessonWikiBasePath,
-  /**
-   * When set, `<TierBlock tier="PN|RN|NP|ALL">` regions are filtered for that ladder.
-   * When omitted, all tier blocks are unwrapped (legacy / unspecified context).
-   */
   viewerTier,
-  /** When set, `{{measurement_token}}` placeholders resolve to region-aware units. */
   measurementSystem,
-  /** Show secondary unit in parentheses (e.g. dual US/SI). */
   measurementDual,
+  sectionKind,
+  compactProse,
+  className,
 }: {
   text: string;
   /** Base URL for `[label](LESSON:slug)` → `{base}/{slug}` (same hub as this lesson). */
   lessonWikiBasePath?: string | null;
+  /** Filters `<TierBlock tier="…">` regions for the viewer ladder; omitted unwraps all tiers. */
   viewerTier?: TierCode | null;
+  /** Resolves `{{measurement_token}}` placeholders to region-aware units. */
   measurementSystem?: MeasurementSystem | null;
+  /** Show secondary unit in parentheses (e.g. dual US/SI). */
   measurementDual?: boolean;
+  /** Adds `.nn-lesson-body--*` hooks paired with `LessonSectionCard` `data-lsc-kind`. */
+  sectionKind?: PathwayLessonSectionKind | null;
+  /** Tighter vertical rhythm for nested blocks (e.g. exam-focus mini-cards). */
+  compactProse?: boolean;
+  className?: string | null;
 }) {
   const paragraphs = pathwayLessonResolvedParagraphs(text, {
     viewerTier,
@@ -223,8 +268,17 @@ export function PathwayLessonBody({
   if (paragraphs.length === 0) {
     return null;
   }
+  const presentation = lessonBodyPresentationClass(sectionKind);
+  const rootClass = [
+    "nn-lesson-content nn-lesson-prose",
+    compactProse ? "space-y-3" : "space-y-5",
+    presentation,
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
   return (
-    <div className="nn-lesson-content nn-lesson-prose space-y-5">
+    <div className={rootClass}>
       {paragraphs.map((p, idx) => {
         const block = parseParagraphBlock(p);
 
@@ -237,6 +291,18 @@ export function PathwayLessonBody({
                 </li>
               ))}
             </ul>
+          );
+        }
+
+        if (block.kind === "ordered-list") {
+          return (
+            <ol key={idx}>
+              {block.items.map((item, i) => (
+                <li key={i}>
+                  {renderParagraphWithLinks(item, lessonWikiBasePath, `para-${idx}-oli-${i}`)}
+                </li>
+              ))}
+            </ol>
           );
         }
 
@@ -276,6 +342,7 @@ export function PathwayLessonSectionContent({
   viewerTier,
   measurementSystem,
   measurementDual,
+  sectionKind,
   emptyBodyMessage,
   figuresVisualLeadMessage,
 }: {
@@ -286,6 +353,7 @@ export function PathwayLessonSectionContent({
   viewerTier?: TierCode | null;
   measurementSystem?: MeasurementSystem | null;
   measurementDual?: boolean;
+  sectionKind?: PathwayLessonSectionKind | null;
   /** Shown when there is no prose, no exam-focus blocks, and no figures (subscriber lesson). */
   emptyBodyMessage: string;
   /** Short line when prose is empty but figures carry the teaching. */
@@ -306,6 +374,7 @@ export function PathwayLessonSectionContent({
         viewerTier={viewerTier}
         measurementSystem={measurementSystem}
         measurementDual={measurementDual}
+        sectionKind={sectionKind}
       />
     ) : null;
   const examEl =

@@ -59,6 +59,18 @@ execFileSync(process.execPath, ["--import", "tsx", "--test", publicMarketingCopy
   stdio: "inherit",
 });
 
+const forbiddenMarketingPlaceholdersUnitTest = path.join(
+  packageRoot,
+  "tests",
+  "marketing",
+  "forbidden-marketing-placeholders.test.ts",
+);
+console.log("[build-prechecks] running forbidden-marketing-placeholders unit test (Playwright matcher parity)");
+execFileSync(process.execPath, ["--import", "tsx", "--test", forbiddenMarketingPlaceholdersUnitTest], {
+  cwd: packageRoot,
+  stdio: "inherit",
+});
+
 const homeGlobalRegionsContractTest = path.join(
   packageRoot,
   "src",

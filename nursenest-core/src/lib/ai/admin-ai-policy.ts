@@ -5,8 +5,9 @@
  * - `AI_INTEGRATIONS_OPENAI_API_KEY` or `OPENAI_API_KEY` — required when enabled.
  *
  * Env reads are centralized in `@/lib/env/runtime-env` (fresh `process.env` each evaluation — no
- * stale module cache). **This module is the only gate** for enabled / misconfigured / disabled
- * decisions (`getAdminAiGenerationGate`).
+ * stale module cache). `getAdminAiGenerationGate` calls `validateRuntimeEnvOrThrow()` from
+ * `@/lib/env/runtime-env-guard` first so missing critical env cannot fail silently.
+ * **This module is the only gate** for enabled / misconfigured / disabled decisions.
  */
 import { NextResponse } from "next/server";
 import { parseBooleanEnv } from "@/lib/env/parse-boolean-env";

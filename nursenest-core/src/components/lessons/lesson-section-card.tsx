@@ -84,6 +84,7 @@ export function LessonSectionCard({
         .filter(Boolean)
         .join(" ")}
       data-lsc-role={dataRole}
+      data-lsc-kind={kind ?? undefined}
       aria-label={heading?.trim() || "Lesson section"}
     >
       {surface === "callout" ? (

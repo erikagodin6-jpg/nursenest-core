@@ -27,3 +27,15 @@ export const MARKETING_PRICING_CONVERSION_LEAD_FALLBACK =
 /** Per-tier narrative subhead when a tier’s narrative key is missing. */
 export const MARKETING_PRICING_TIER_SUBHEAD_FALLBACK =
   "Pick a billing cadence that fits your study plan and exam date.";
+
+/** Allied health hub index — production metadata continuity when required keys are absent. */
+export const MARKETING_ALLIED_HUB_META_TITLE_FALLBACK = "Allied health exam prep hub | NurseNest";
+export const MARKETING_ALLIED_HUB_META_DESCRIPTION_FALLBACK =
+  "Browse allied health professions, lessons, and practice questions for Canada and United States exam tracks on NurseNest.";
+
+/** Public flashcard slug route — when the deck/topic cannot be resolved (metadata only). */
+export const MARKETING_PUBLIC_FLASHCARD_SLUG_NOT_FOUND_TITLE_FALLBACK = "Nursing exam flashcards | NurseNest";
+
+/** Public flashcard slug route — production continuity when interpolated meta keys fail validation. */
+export const MARKETING_PUBLIC_FLASHCARD_SLUG_META_DESCRIPTION_GENERIC_FALLBACK =
+  "Study nursing and allied health flashcards on NurseNest — preview decks on the web; unlock full decks with a plan that includes flashcards.";

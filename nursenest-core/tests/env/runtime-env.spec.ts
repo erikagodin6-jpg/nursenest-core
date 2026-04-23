@@ -1,17 +1,17 @@
 /**
- * Runtime env guard (bootstrap script). Run without starting Next:
- * `PLAYWRIGHT_SKIP_WEB_SERVER=1 npx playwright test tests/env/runtime-env.spec.ts --project chromium`
+ * Runtime env guard (bootstrap script). Run without starting Next, from nursenest-core/:
+ * PLAYWRIGHT_SKIP_WEB_SERVER=1 npx playwright test tests/env/runtime-env.spec.ts --project chromium
  */
 import { spawnSync } from "node:child_process";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 import { test, expect } from "@playwright/test";
 
-const nursenestCoreRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+/** Playwright is expected to run with cwd = nursenest-core (see playwright.config.ts). */
+const nursenestCoreRoot = process.cwd();
 const bootstrapScript = path.join(nursenestCoreRoot, "scripts", "runtime-env-guard-bootstrap.mjs");
 
-function stripAiRuntimeEnv(): NodeJS.ProcessEnv {
+function stripAiRuntimeEnv(): Record<string, string | undefined> {
   const env = { ...process.env };
   delete env.AI_ADMIN_GENERATION_ENABLED;
   delete env.AI_INTEGRATIONS_OPENAI_API_KEY;

@@ -78,31 +78,73 @@ export function ExamSessionProgressStrip({ pct }: { pct: number }) {
   );
 }
 
-/** Thin progress track — fill uses theme primary at restrained opacity. */
+export type ExamProgressBarVariant = "fixed_session" | "adaptive_item";
+
+/**
+ * Thin progress track — fill uses theme primary at restrained opacity.
+ *
+ * `adaptive_item`: avoids implying a fixed session length (CAT can grow/stop early). The bar uses
+ * `adaptiveMaxItems` as a soft ceiling when provided; otherwise it falls back to `total` from the server.
+ */
 export function ExamProgressBar({
   current,
   total,
   answeredCount,
+  variant = "fixed_session",
+  sessionLabel,
+  adaptiveMaxItems,
 }: {
   current: number;
   total: number;
   /** Optional: how many questions have been answered/graded (for richer status). */
   answeredCount?: number;
+  variant?: ExamProgressBarVariant;
+  /** Left label override (e.g. pathway-aware "Adaptive session"). */
+  sessionLabel?: string;
+  /** Soft upper bound for fill + a11y when `variant === "adaptive_item"` (e.g. config catMaxQuestions). */
+  adaptiveMaxItems?: number | null;
 }) {
-  const pct = total > 0 ? Math.min(100, Math.max(0, (current / total) * 100)) : 0;
+  const isAdaptive = variant === "adaptive_item";
+  const denom =
+    isAdaptive && adaptiveMaxItems != null && adaptiveMaxItems > 0
+      ? adaptiveMaxItems
+      : total > 0
+        ? total
+        : 1;
+  const pct = denom > 0 ? Math.min(100, Math.max(0, (current / denom) * 100)) : 0;
   const remaining = total - (answeredCount ?? current - 1);
+  const leftLabel = sessionLabel ?? (isAdaptive ? "Adaptive session" : "Session progress");
+  const ariaAdaptive =
+    isAdaptive && adaptiveMaxItems != null && adaptiveMaxItems > 0
+      ? `${leftLabel}: item ${current}, up to ${adaptiveMaxItems} items (length is not fixed).`
+      : isAdaptive
+        ? `${leftLabel}: item ${current} (session length is not fixed).`
+        : `Session progress ${current} of ${total}`;
   return (
     <div className="nn-exam-progress border-b border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-2.5">
       <div className="nn-marketing-caption mb-1.5 flex justify-between gap-3 font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
-        <span>Session progress</span>
+        <span>{leftLabel}</span>
         <div className="flex items-center gap-2 shrink-0">
-          {answeredCount != null && answeredCount > 0 ? (
+          {!isAdaptive && answeredCount != null && answeredCount > 0 ? (
             <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-0.5 text-[10px] font-semibold tabular-nums text-[var(--semantic-text-muted)]">
               {remaining} left
             </span>
           ) : null}
           <span className="tabular-nums text-[var(--semantic-text-primary)]">
-            {current} / {total}
+            {isAdaptive ? (
+              <>
+                Item <span className="tabular-nums">{current}</span>
+                {adaptiveMaxItems != null && adaptiveMaxItems > 0 ? (
+                  <span className="ml-1 font-normal normal-case text-[10px] text-[var(--semantic-text-muted)]">
+                    (≤{adaptiveMaxItems})
+                  </span>
+                ) : null}
+              </>
+            ) : (
+              <>
+                {current} / {total}
+              </>
+            )}
           </span>
         </div>
       </div>
@@ -112,7 +154,7 @@ export function ExamProgressBar({
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={Math.round(pct)}
-        aria-label={`Session progress ${current} of ${total}`}
+        aria-label={ariaAdaptive}
       >
         <div
           className="nn-progress-fill-semantic-readiness nn-progress-fill-reveal transition-[width] duration-500 ease-out"

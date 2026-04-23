@@ -3175,6 +3175,99 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-exam-chrome-dim {
   margin-bottom: 0;
 }
 
+/* ── Inline exam-focus fallback (structured fields when section body is empty) ── */
+.nn-lesson-exam-focus-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .nn-lesson-exam-focus-inline {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 0.75rem;
+  }
+}
+
+.nn-lesson-exam-focus-inline__card {
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-info) 12%);
+  background: color-mix(in srgb, var(--semantic-panel-cool) 18%, var(--bg-card) 82%);
+  padding: 0.85rem 1rem 1rem;
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 78%, transparent);
+}
+
+.nn-lesson-exam-focus-inline__card[data-exam-focus-block="traps"] {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 82%, var(--semantic-warning) 18%);
+  background: color-mix(in srgb, var(--semantic-panel-warm) 14%, var(--bg-card) 86%);
+}
+
+.nn-lesson-exam-focus-inline__card[data-exam-focus-block="priorities"] {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 84%, var(--semantic-brand) 16%);
+  background: color-mix(in srgb, var(--semantic-brand) 5%, var(--bg-card) 95%);
+}
+
+.nn-lesson-exam-focus-inline__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+}
+
+.nn-lesson-exam-focus-inline__icon {
+  flex-shrink: 0;
+  width: 1.05rem;
+  height: 1.05rem;
+  margin-top: 0.08rem;
+}
+
+.nn-lesson-exam-focus-inline__card[data-exam-focus-block="how-tested"] .nn-lesson-exam-focus-inline__icon {
+  color: color-mix(in srgb, var(--semantic-info) 72%, var(--semantic-text-muted));
+}
+
+.nn-lesson-exam-focus-inline__card[data-exam-focus-block="traps"] .nn-lesson-exam-focus-inline__icon {
+  color: color-mix(in srgb, var(--semantic-warning) 78%, var(--semantic-text-muted));
+}
+
+.nn-lesson-exam-focus-inline__card[data-exam-focus-block="priorities"] .nn-lesson-exam-focus-inline__icon {
+  color: color-mix(in srgb, var(--semantic-brand) 70%, var(--semantic-text-muted));
+}
+
+.nn-lesson-exam-focus-inline__title {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1.35;
+  color: var(--semantic-text-secondary);
+}
+
+.nn-lesson-exam-focus-inline__body {
+  min-width: 0;
+}
+
+/* Section-kind + body presentation — scan rhythm without changing authored meaning */
+.nn-lesson-section-card[data-lsc-kind="tier_specific_relevance"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--tier {
+  max-width: min(64ch, 100%);
+}
+
+.nn-lesson-section-card[data-lsc-kind="labs_diagnostics"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--labs ol,
+.nn-lesson-section-card[data-lsc-kind="labs_diagnostics"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--labs ul {
+  padding-left: 1.65rem;
+}
+
+.nn-lesson-section-card[data-lsc-kind="clinical_pearls"] .nn-lesson-content.nn-lesson-prose.nn-lesson-body--pearl ul {
+  padding-left: 1.55rem;
+}
+
+.nn-lesson-section-card[data-lsc-kind="nursing_assessment_interventions"]
+  .nn-lesson-content.nn-lesson-prose.nn-lesson-body--intervention
+  ol {
+  padding-left: 1.65rem;
+}
+
 .nn-lesson-prose strong {
   font-weight: 600;
   color: var(--palette-heading, var(--semantic-text-primary));
@@ -5637,6 +5730,31 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   max-width: 780px;
   margin: 0 auto;
   padding: 24px 0 40px;
+}
+
+/* CAT test (non-study): single-column shell + slightly denser stem/options */
+.nn-cat-session.nn-cat-session--exam-single .nn-cat-question-stem {
+  font-size: clamp(15.5px, 1.12vw, 16px);
+  line-height: 1.55;
+  margin-bottom: 1rem;
+}
+
+.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt__text {
+  font-size: clamp(14.5px, 1vw, 15px);
+  line-height: 1.45;
+}
+
+.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt {
+  padding: 12px 14px;
+}
+
+.nn-cat-session.nn-cat-session--exam-single .nn-cat-opt-list {
+  gap: 10px;
+}
+
+.nn-cat-session.nn-cat-session--exam-single .nn-cat-exam-col {
+  padding-top: 12px;
+  padding-bottom: 16px;
 }
 
 .nn-cat-question-card {

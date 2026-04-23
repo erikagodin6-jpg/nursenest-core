@@ -1,11 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { PracticeTestPathwayClientShell, PracticeTestPathwayOption } from "@/lib/practice-tests/types";
 import { catPathwayRegionalExamLine, catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
-import { pathwayCatLandingTitle } from "@/lib/exam-pathways/pathway-cat-marketing-copy";
 import { catHowItWorksBulletItems } from "@/lib/exam-pathways/pathway-cat-how-it-works";
+import {
+  catAfterSessionPoints,
+  catExamConditionRows,
+  catHeroSummaryChips,
+  catHowItWorksIntro,
+} from "@/lib/exam-pathways/pathway-cat-setup-display";
 import { publicCopyForReadinessConfig, readinessConfigForPathway } from "@/lib/exam-pathways/pathway-readiness-config";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
@@ -19,6 +24,16 @@ import {
   resolveCatStartUiState,
   resolveReadinessStartQuestionCount,
 } from "@/components/student/pathway-cat-start-payload";
+
+function sectionShell(children: ReactNode, className = "") {
+  return (
+    <section
+      className={`rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_100%,transparent)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)] ${className}`}
+    >
+      {children}
+    </section>
+  );
+}
 
 export function PathwayCatSessionStartClient({
   initialPathwayId,
@@ -54,6 +69,10 @@ export function PathwayCatSessionStartClient({
     () => (normalizedPathwayId ? pathwayShellById[normalizedPathwayId] : undefined),
     [normalizedPathwayId, pathwayShellById],
   );
+  const pathwayOptionLabel = useMemo(
+    () => pathwayOptions.find((p) => p.id === pathwayId)?.label ?? pathwayOptions.find((p) => p.id === normalizedPathwayId)?.label,
+    [pathwayId, pathwayOptions, normalizedPathwayId],
+  );
   const catShort = pathwayMeta ? catPathwayShortCatLabel(pathwayMeta) : null;
   const catLine = pathwayMeta ? catPathwayRegionalExamLine(pathwayMeta) : null;
   const readinessConfig = useMemo(
@@ -64,9 +83,18 @@ export function PathwayCatSessionStartClient({
     () => (readinessConfig ? publicCopyForReadinessConfig(readinessConfig) : null),
     [readinessConfig],
   );
-  const examTitle = pathwayMeta ? pathwayCatLandingTitle(pathwayMeta) : "CAT session";
+  const examConditionRows = useMemo(
+    () => (readinessConfig && catLine ? catExamConditionRows(readinessConfig, catLine) : []),
+    [readinessConfig, catLine],
+  );
+  const heroChips = useMemo(
+    () => (readinessConfig && publicCopy ? catHeroSummaryChips(readinessConfig, publicCopy) : []),
+    [readinessConfig, publicCopy],
+  );
+  const afterSessionPoints = useMemo(() => catAfterSessionPoints(), []);
   const fallbackLessons = normalizedPathwayId ? (fallbackLessonsByPathway?.[normalizedPathwayId] ?? []) : [];
   const lessonsHubHref = pathwayMeta ? buildExamPathwayPath(pathwayMeta, "lessons") : "/app/lessons";
+  const pathwayQuestionsHref = pathwayMeta ? buildExamPathwayPath(pathwayMeta, "questions") : null;
   const uiState = resolveCatStartUiState({
     pathwayId: normalizedPathwayId,
     pathwayChoiceRequired,
@@ -164,7 +192,7 @@ export function PathwayCatSessionStartClient({
       const timedMode = true;
       const timeLimitSec = (readinessConfig?.timeLimitMinutes ?? 300) * 60;
       const payload = {
-        title: pathwayMeta ? pathwayCatLandingTitle(pathwayMeta) : "CAT session",
+        title: publicCopy?.title ?? (pathwayMeta ? catPathwayRegionalExamLine(pathwayMeta) : "Adaptive exam simulation"),
         questionCount,
         topicNames: [],
         difficultyMin: null,
@@ -217,13 +245,16 @@ export function PathwayCatSessionStartClient({
     } finally {
       setCreating(false);
     }
-  }, [normalizedPathwayId, pathwayId, pathwayMeta?.examFamily, pathwayMeta?.shortName, readinessConfig, publicCopy?.title, isDev]);
+  }, [normalizedPathwayId, pathwayId, pathwayMeta?.examFamily, readinessConfig, publicCopy?.title, isDev]);
 
   if (pathwayOptions.length === 0) {
     return (
-      <div className="nn-card p-6 text-sm text-muted-foreground">
+      <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 text-sm text-[var(--semantic-text-secondary)]">
         <p>No exam pathways match your subscription region and tier.</p>
-        <Link href="/app/practice-tests" className="mt-3 inline-block font-semibold text-primary underline">
+        <Link
+          href="/app/practice-tests"
+          className="mt-3 inline-block text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
+        >
           Back to practice tests
         </Link>
       </div>
@@ -231,43 +262,70 @@ export function PathwayCatSessionStartClient({
   }
 
   return (
-    <div className="nn-card space-y-6 p-6">
-      <div>
-        <p className="text-[10px] font-bold uppercase tracking-widest text-primary">{catLine ?? "CAT practice"}</p>
-        <h2 className="mt-1 text-xl font-bold text-[var(--theme-heading-text)]">{examTitle}</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {publicCopy ? (
-            <>
-              {publicCopy.subtitle}
-            </>
-          ) : catLine ? (
-            <>
-              <span className="font-medium text-foreground">{catLine}</span>, one-question exam flow with adaptive scoring,
-              timed delivery, and exam-style constraints.
-            </>
-          ) : (
-            <>
-              One-question exam flow with adaptive scoring, timed delivery, and exam-style constraints.
-            </>
-          )}
-        </p>
-        {readinessConfig ? (
-          <p className="mt-2 text-xs text-muted-foreground">
-            {readinessConfig.questionRange} · {readinessConfig.timeLimitMinutes} minute limit ·{" "}
-            {readinessConfig.allowBackNavigation ? "Back navigation enabled" : "No backtracking"}
+    <div className="mx-auto max-w-3xl space-y-7 text-[var(--semantic-text-primary)]">
+      <nav aria-label="Pathway context" className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
+        <div className="min-w-0 space-y-1">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
+            Practice tests
+            {pathwayOptionLabel ? (
+              <>
+                <span aria-hidden className="mx-1.5 text-[var(--semantic-border-soft)]">
+                  /
+                </span>
+                <span className="text-[var(--semantic-text-secondary)]">{pathwayOptionLabel}</span>
+              </>
+            ) : null}
           </p>
-        ) : null}
-        {publicCopy?.betaLabel ? (
-          <p className="mt-2 text-xs font-medium text-muted-foreground">Adaptive Practice ({publicCopy.betaLabel})</p>
-        ) : null}
-      </div>
+          <Link
+            href="/app/practice-tests"
+            className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
+          >
+            ← Return to practice tests
+          </Link>
+        </div>
+      </nav>
 
-      <label className="block text-sm">
-        <span className="text-muted-foreground">Pathway</span>
+      <header className="space-y-4">
+        <div className="space-y-2">
+          {catLine ? (
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--semantic-text-muted)]">{catLine}</p>
+          ) : null}
+          <h1 className="text-[1.65rem] font-bold leading-tight tracking-tight text-[var(--theme-heading-text)] sm:text-[2rem]">
+            Adaptive exam simulation
+          </h1>
+          <p className="max-w-2xl text-[15px] leading-relaxed text-[var(--semantic-text-secondary)] sm:text-base">
+            {publicCopy?.subtitle ??
+              "One item at a time, timed, with pathway-scoped rules. Official board CAT algorithms and pass/fail decisions are not reproduced here."}
+          </p>
+        </div>
+        {heroChips.length > 0 ? (
+          <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {heroChips.map((chip) => (
+              <div
+                key={chip.id}
+                className="rounded-md border border-[color-mix(in_srgb,var(--semantic-border-soft)_100%,transparent)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))] px-3 py-2.5"
+              >
+                <dt className="text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">{chip.label}</dt>
+                <dd className="mt-0.5 text-sm font-semibold leading-snug text-[var(--theme-heading-text)]">{chip.value}</dd>
+              </div>
+            ))}
+          </dl>
+        ) : null}
+        <p className="text-xs leading-relaxed text-[var(--semantic-text-muted)]">
+          This is the closest timed, linear adaptive mode we offer for your selected track. Engine behavior is documented under
+          Exam conditions — use it to calibrate pacing and topic mix, not as a regulatory outcome.
+        </p>
+      </header>
+
+      <div className="space-y-2">
+        <label htmlFor="nn-cat-pathway-select" className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+          Exam pathway
+        </label>
         <select
+          id="nn-cat-pathway-select"
           ref={pathwaySelectRef}
           data-nn-qa-cat-pathway-select
-          className="mt-1 w-full max-w-xl rounded-lg border border-border px-3 py-2 text-sm"
+          className="block w-full max-w-xl rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm font-medium text-[var(--theme-heading-text)] shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
           value={pathwayId}
           onChange={(e) => setPathwayId(normalizePathwaySelection(e.target.value))}
           onInput={(e) => {
@@ -276,7 +334,7 @@ export function PathwayCatSessionStartClient({
           }}
         >
           {pathwayOptions.length > 1 ? (
-            <option value="">Choose which exam pathway you want to practice…</option>
+            <option value="">Select the exam track for this session…</option>
           ) : null}
           {pathwayOptions.map((p) => (
             <option key={p.id} value={p.id}>
@@ -284,57 +342,34 @@ export function PathwayCatSessionStartClient({
             </option>
           ))}
         </select>
-      </label>
+      </div>
       {needsPathwayChoice ? (
-        <p className="text-xs text-[var(--semantic-text-secondary)]">
-          We need your pathway before starting CAT so the adaptive pool matches the right exam.
+        <p className="text-sm text-[var(--semantic-text-secondary)]">
+          Choose the pathway before starting so items, blueprint weighting, and limits match the correct exam scope.
         </p>
       ) : null}
-
-      {publicCopy && readinessConfig ? (
-        <section
-          className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-4 text-sm shadow-[var(--semantic-shadow-soft)]"
-          aria-labelledby="cat-how-it-works-heading"
-        >
-          <h3 id="cat-how-it-works-heading" className="font-semibold text-[var(--theme-heading-text)]">
-            How this CAT session works
-          </h3>
-          <ul className="mt-2 list-inside list-disc space-y-1.5 text-[var(--theme-body-text)]">
-            {catHowItWorksBulletItems(publicCopy, readinessConfig).map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </section>
-      ) : null}
-
-      <p className="text-xs text-[var(--semantic-text-secondary)]">
-        <Link href="/app/practice-tests" className="font-semibold text-primary underline underline-offset-2">
-          Practice tests hub
-        </Link>{" "}
-        — resume an in-progress session or open results from a recent run.
-      </p>
 
       {readinessLoading ? (
-        <p className="text-sm text-muted-foreground">
-          Checking adaptive question pool{catShort ? ` for ${catShort}` : ""}…
+        <p className="text-sm text-[var(--semantic-text-secondary)]">
+          Verifying adaptive pool{catShort ? ` for ${catShort}` : ""}…
         </p>
       ) : null}
+
       {uiState.showReadinessMessage && readiness && !readiness.ok ? (
-        <aside className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-warning-soft)] p-4 text-sm text-[var(--semantic-text-primary)] shadow-sm">
-          <p className="font-semibold">
-            {readinessGate.title}
-          </p>
-          <p className="mt-1 text-muted-foreground">{readiness.message}</p>
+        <aside
+          className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_12%,var(--semantic-surface))] p-4 text-sm shadow-sm"
+          role="status"
+        >
+          <p className="font-semibold text-[var(--theme-heading-text)]">{readinessGate.title}</p>
+          <p className="mt-1 text-[var(--semantic-text-secondary)]">{readiness.message}</p>
           {fallbackLessons.length > 0 ? (
             <div className="mt-3">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Complete lessons you can study now
-              </p>
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Study next</p>
               <ul className="mt-2 space-y-1 text-sm">
                 {fallbackLessons.slice(0, 5).map((lesson) => (
                   <li key={lesson.slug}>
                     <Link
-                      className="font-medium text-primary underline"
+                      className="font-medium text-[var(--semantic-brand)] underline underline-offset-2"
                       href={`${lessonsHubHref}/${encodeURIComponent(lesson.slug)}`}
                     >
                       {lesson.title}
@@ -344,48 +379,31 @@ export function PathwayCatSessionStartClient({
               </ul>
             </div>
           ) : null}
-          <ul className="mt-3 list-inside list-disc space-y-1 text-muted-foreground">
+          <ul className="mt-3 list-inside list-disc space-y-1 text-[var(--semantic-text-secondary)]">
             {readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid && pathwayMeta ? (
               <li>
-                <Link className="font-medium text-primary underline" href={buildExamPathwayPath(pathwayMeta, "questions")}>
+                <Link className="font-medium text-[var(--semantic-brand)] underline" href={buildExamPathwayPath(pathwayMeta, "questions")}>
                   Open pathway question bank
-                </Link>{" "}
-                (practice items may still be available)
+                </Link>
               </li>
             ) : null}
             {readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_entitled ? (
               <li>
-                <Link className="font-medium text-primary underline" href="/app/account/billing">
+                <Link className="font-medium text-[var(--semantic-brand)] underline" href="/app/account/billing">
                   Review subscription &amp; billing
                 </Link>
               </li>
             ) : null}
             {readiness.code === PRACTICE_TEST_CAT_CREATE_CODE.pathway_not_found && pathwayMeta ? (
               <li>
-                <Link className="font-medium text-primary underline" href={buildExamPathwayPath(pathwayMeta)}>
+                <Link className="font-medium text-[var(--semantic-brand)] underline" href={buildExamPathwayPath(pathwayMeta)}>
                   Pathway hub
-                </Link>{" "}
-                for lessons, waitlist, or alternate tracks
+                </Link>
               </li>
             ) : null}
             <li>
-              <Link className="font-medium text-primary underline" href="/app/practice-tests">
-                Practice exams
-              </Link>
-            </li>
-            <li>
-              <Link className="font-medium text-primary underline" href={lessonsHubHref}>
-                Explore available content
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="font-medium text-primary underline"
-                href={
-                  normalizedPathwayId ? pathwayHubAppQuestionsHref(normalizedPathwayId) : "/app/account/study-preferences"
-                }
-              >
-                App question bank
+              <Link className="font-medium text-[var(--semantic-brand)] underline" href="/app/practice-tests">
+                Practice tests hub
               </Link>
             </li>
           </ul>
@@ -393,55 +411,186 @@ export function PathwayCatSessionStartClient({
       ) : null}
 
       {error ? (
-        <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm">
-          <p className="font-semibold text-destructive">Unable to start exam</p>
-          <p className="mt-1 text-foreground">{error}</p>
+        <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-danger)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] p-4 text-sm">
+          <p className="font-semibold text-[var(--semantic-danger)]">Unable to start session</p>
+          <p className="mt-1 text-[var(--semantic-text-primary)]">{error}</p>
           {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_pathway_ambiguous ? (
             <CatAmbiguityPathwayPicker catEligibleOptions={pathwayOptions} surface="start_page" className="mt-3" />
           ) : null}
           {errorCode === PRACTICE_TEST_CAT_CREATE_CODE.cat_weak_areas_empty ? (
-            <p className="mt-2 text-muted-foreground">
-              Tip: switch <strong>Pool basis</strong> to <strong>Balanced pool</strong>, use the question bank, then try weak
-              areas again.
+            <p className="mt-2 text-[var(--semantic-text-secondary)]">
+              Tip: switch <strong>Pool basis</strong> to <strong>Balanced pool</strong>, use the question bank, then try weak areas
+              again.
             </p>
           ) : null}
         </div>
       ) : null}
 
-      <div className="flex flex-wrap gap-3">
-        <button
-          type="button"
-          data-nn-qa-cat-start-session
-          disabled={
-            creating ||
-            uiState.startDisabled ||
-            isHardBlockingReadinessCode(readinessCode) ||
-            false
-          }
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
-          onClick={() => setCustomizeOpen(true)}
-        >
-          {creating ? "Starting…" : readinessLoading ? "Checking…" : "Start CAT session"}
-        </button>
-        {!readinessLoading && readinessCode === "readiness_fetch_failed" ? (
-          <button
-            type="button"
-            className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-6 py-2.5 text-sm font-semibold hover:bg-card"
-            onClick={() => {
-              setReadiness(null);
-              setReadinessRefreshToken((t) => t + 1);
-            }}
+      {readinessConfig && publicCopy && examConditionRows.length > 0
+        ? sectionShell(
+            <div className="p-5 sm:p-6">
+              <h2 className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-xl">Exam conditions</h2>
+              <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
+                Values follow your selected pathway configuration. They are not a substitute for official candidate bulletins.
+              </p>
+              <dl className="mt-5 divide-y divide-[color-mix(in_srgb,var(--semantic-border-soft)_100%,transparent)] border-t border-[var(--semantic-border-soft)]">
+                {examConditionRows.map((row) => (
+                  <div
+                    key={row.id}
+                    className="grid gap-1 py-3 sm:grid-cols-[minmax(0,220px)_minmax(0,1fr)] sm:items-start sm:gap-6 sm:py-3.5"
+                  >
+                    <dt className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">{row.label}</dt>
+                    <dd className="min-w-0">
+                      <p className="text-sm font-medium leading-snug text-[var(--theme-heading-text)]">{row.value}</p>
+                      {row.meta ? (
+                        <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-muted)]">{row.meta}</p>
+                      ) : null}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </div>,
+          )
+        : null}
+
+      {readiness?.ok ? (
+        sectionShell(
+          <div className="border-t-0 p-5 sm:p-6">
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-xl">Live item pool</h2>
+                <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
+                  CAT-scoped, pathway-isolated items available for selection right now.
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Available</p>
+                <p className="font-mono text-3xl font-bold tabular-nums text-[var(--theme-heading-text)]">{readiness.availableQuestions}</p>
+              </div>
+            </div>
+            <p className="mt-3 text-xs leading-relaxed text-[var(--semantic-text-muted)]">
+              Launch requires at least {readiness.requiredQuestions} complete, validated items in this pool. Counts change as
+              your bank grows; refresh if you have just added questions.
+            </p>
+          </div>,
+        )
+      ) : null}
+
+      {publicCopy && readinessConfig ? (
+        sectionShell(
+          <div className="p-5 sm:p-6">
+            <h2 className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-xl">How this CAT works</h2>
+            <p className="mt-2 text-sm font-medium text-[var(--semantic-text-secondary)]">{catHowItWorksIntro(publicCopy)}</p>
+            <ol className="mt-4 list-decimal space-y-2.5 pl-5 text-sm leading-relaxed text-[var(--theme-body-text)] marker:font-semibold">
+              {catHowItWorksBulletItems(publicCopy, readinessConfig).map((item) => (
+                <li key={item} className="pl-1">
+                  {item}
+                </li>
+              ))}
+            </ol>
+          </div>,
+        )
+      ) : null}
+
+      {sectionShell(
+        <div className="p-5 sm:p-6">
+          <h2 className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-xl">What happens after the session</h2>
+          <ul className="mt-3 space-y-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            {afterSessionPoints.map((pt) => (
+              <li key={pt} className="flex gap-2">
+                <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--semantic-brand)]" aria-hidden />
+                <span>{pt}</span>
+              </li>
+            ))}
+          </ul>
+        </div>,
+      )}
+
+      {sectionShell(
+        <div className="p-5 sm:p-6">
+          <h2 className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)] sm:text-xl">Start exam simulation</h2>
+          <p className="mt-1 max-w-xl text-sm text-[var(--semantic-text-secondary)]">
+            You will choose interface contrast in the next step, then enter the timed exam shell. Rationales stay off until the
+            session completes (exam feedback mode).
+          </p>
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+            <button
+              type="button"
+              data-nn-qa-cat-start-session
+              disabled={creating || uiState.startDisabled || isHardBlockingReadinessCode(readinessCode)}
+              className="inline-flex min-h-11 min-w-[200px] items-center justify-center rounded-md px-6 text-sm font-semibold text-[var(--role-cta-foreground,var(--theme-primary-foreground))] shadow-sm transition hover:opacity-[0.94] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)] disabled:cursor-not-allowed disabled:opacity-45"
+              style={{ background: "var(--role-cta, var(--semantic-text-primary))" }}
+              onClick={() => setCustomizeOpen(true)}
+            >
+              {creating ? "Starting…" : readinessLoading ? "Checking pool…" : "Start exam simulation"}
+            </button>
+            <Link
+              href={pathwayQuestionsHref ?? "/app/questions"}
+              className="inline-flex min-h-11 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] bg-transparent px-5 text-sm font-semibold text-[var(--theme-heading-text)] shadow-sm transition hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
+            >
+              Warm up in question bank
+            </Link>
+            <Link
+              href={lessonsHubHref}
+              className="inline-flex min-h-11 items-center justify-center text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
+            >
+              Review lessons first
+            </Link>
+            {!readinessLoading && readinessCode === "readiness_fetch_failed" ? (
+              <button
+                type="button"
+                className="inline-flex min-h-11 items-center justify-center rounded-md border border-[var(--semantic-border-soft)] px-5 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
+                onClick={() => {
+                  setReadiness(null);
+                  setReadinessRefreshToken((t) => t + 1);
+                }}
+              >
+                Retry readiness check
+              </button>
+            ) : null}
+          </div>
+          <p className="mt-4 text-xs text-[var(--semantic-text-muted)]">
+            <Link href="/app/practice-tests" className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
+              Practice tests hub
+            </Link>{" "}
+            — resume an in-progress linear or adaptive session, or open a prior report.
+          </p>
+        </div>,
+      )}
+
+      <div className="rounded-lg border border-dashed border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_30%,var(--semantic-surface))] px-4 py-4">
+        <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">More study tools</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Link
+            href={lessonsHubHref}
+            className="inline-flex min-h-10 items-center rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-xs font-semibold text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_50%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
           >
-            Retry readiness check
-          </button>
-        ) : null}
-        <Link
-          href="/app/practice-tests"
-          className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-border px-6 py-2.5 text-sm font-semibold hover:bg-card"
-        >
-          Full practice test builder
-        </Link>
+            Lessons
+          </Link>
+          <Link
+            href={pathwayQuestionsHref ?? "/app/questions"}
+            className="inline-flex min-h-10 items-center rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-xs font-semibold text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_50%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
+          >
+            {pathwayQuestionsHref ? "Pathway question bank" : "Question bank"}
+          </Link>
+          <Link
+            href="/app/practice-tests"
+            className="inline-flex min-h-10 items-center rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-xs font-semibold text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_50%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
+          >
+            All practice exams
+          </Link>
+          <Link
+            href={normalizedPathwayId ? pathwayHubAppQuestionsHref(normalizedPathwayId) : "/app/account/study-preferences"}
+            className="inline-flex min-h-10 items-center rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 text-xs font-semibold text-[var(--theme-heading-text)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-muted)_50%,var(--semantic-surface))] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--semantic-brand)]"
+          >
+            App question bank
+          </Link>
+        </div>
       </div>
+
+      <footer className="border-t border-[var(--semantic-border-soft)] pt-4 text-center text-[11px] text-[var(--semantic-text-muted)]">
+        NurseNest adaptive engine · pathway-isolated content · timed exam simulation mode
+      </footer>
 
       <ExamPreExamCustomizeModal
         open={customizeOpen}

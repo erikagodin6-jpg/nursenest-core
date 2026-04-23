@@ -382,6 +382,10 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
       return NextResponse.json({ error: "Not a CAT session" }, { status: 400 });
     }
 
+    // One atomic step: score the current item (from `mergedAnswers` + `cursorIndex`), update adaptive
+    // state, append or complete. There is no separate "commit answer only" action; the runner may use a
+    // two-phase UI (submit lock, then advance) that still ends in this single PATCH.
+
     const adv = await practiceTestRouteDeps.advanceCatPracticeTest({
       questionIds: ids,
       adaptiveState: row.adaptiveState,

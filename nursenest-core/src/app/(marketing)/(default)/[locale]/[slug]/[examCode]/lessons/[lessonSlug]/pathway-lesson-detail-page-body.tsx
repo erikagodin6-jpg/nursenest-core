@@ -458,6 +458,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
                         lessonWikiBasePath={base}
                         viewerTier={lessonContentTier}
                         measurementSystem={lessonMeasurementSystem}
+                        sectionKind={section.kind ?? null}
                         emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
                         figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
                       />

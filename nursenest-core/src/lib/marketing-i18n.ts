@@ -8,14 +8,21 @@ export {
   type MarketingMessages,
 } from "@/lib/marketing-i18n-core";
 export { assertNoPlaceholder } from "@/lib/marketing-i18n/marketing-message-value-policy";
-export { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-metadata-strict";
+export {
+  getRequiredPublicMetadataInterpolated,
+  getRequiredPublicMetadataLine,
+} from "@/lib/marketing-i18n/marketing-metadata-strict";
 export {
   DEFAULT_SITE_BRAND_TITLE,
   DEFAULT_SITE_PRIMARY_DESCRIPTION,
+  MARKETING_ALLIED_HUB_META_DESCRIPTION_FALLBACK,
+  MARKETING_ALLIED_HUB_META_TITLE_FALLBACK,
   MARKETING_PRICING_CONVERSION_H1_FALLBACK,
   MARKETING_PRICING_CONVERSION_LEAD_FALLBACK,
   MARKETING_PRICING_CONVERSION_TRUST_LINE_FALLBACK,
   MARKETING_PRICING_TIER_SUBHEAD_FALLBACK,
+  MARKETING_PUBLIC_FLASHCARD_SLUG_META_DESCRIPTION_GENERIC_FALLBACK,
+  MARKETING_PUBLIC_FLASHCARD_SLUG_NOT_FOUND_TITLE_FALLBACK,
 } from "@/lib/marketing-i18n/marketing-safe-fallbacks";
 /** Server-only: import from `@/lib/marketing-i18n/load-marketing-messages` (not this barrel). */
 export {

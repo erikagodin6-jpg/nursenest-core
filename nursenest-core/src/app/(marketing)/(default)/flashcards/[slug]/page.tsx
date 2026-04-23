@@ -11,6 +11,15 @@ import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-ser
 import { rnQuestions } from "@/lib/marketing/marketing-entry-routes";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
+import {
+  MARKETING_PUBLIC_FLASHCARD_SLUG_META_DESCRIPTION_GENERIC_FALLBACK,
+  MARKETING_PUBLIC_FLASHCARD_SLUG_NOT_FOUND_TITLE_FALLBACK,
+} from "@/lib/marketing-i18n/marketing-safe-fallbacks";
+import {
+  getRequiredPublicMetadataInterpolated,
+  getRequiredPublicMetadataLine,
+} from "@/lib/marketing-i18n/marketing-metadata-strict";
+import { defaultFlashcardsMetaDescription } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -24,30 +33,72 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return safeGenerateMetadata(
     async () => {
       const locale = await getMarketingLocaleForDefaultRoute();
+      const marketingRegion = await getMarketingRegionFromCookies();
       const m = await loadMarketingMessages(locale);
       const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
+      const metaSfx = marketingRegion === "US" ? "US" : "CA";
       const t = (key: string, p?: Record<string, string | number>) => formatMarketingMessage(m, key, p, en);
 
       const data = await resolvePublicFlashcardLanding(slug);
       if (!data) {
-        return { title: t("pages.publicFlashcardSlug.metaTitleFallback") };
-      }
-      if (data.kind === "deck") {
-        const title = t("pages.publicFlashcardSlug.metaDeckTitle", { title: data.title });
-        const desc =
-          (data.description && String(data.description).trim().slice(0, 155)) ||
-          t("pages.publicFlashcardSlug.metaDeckDescriptionFallback", { title: data.title, count: data.cardCount });
         return {
-          title,
-          description: desc,
+          title: getRequiredPublicMetadataLine(
+            m,
+            "pages.publicFlashcardSlug.metaTitleFallback",
+            en,
+            MARKETING_PUBLIC_FLASHCARD_SLUG_NOT_FOUND_TITLE_FALLBACK,
+          ),
+          description: getRequiredPublicMetadataLine(
+            m,
+            `pages.publicFlashcardsHub.metaDescription${metaSfx}`,
+            en,
+            defaultFlashcardsMetaDescription(marketingRegion),
+          ),
           alternates: { canonical: absoluteUrl(`/flashcards/${slug}`) },
         };
       }
-      const title = t("pages.publicFlashcardSlug.metaTopicTitle", { name: data.name });
-      const desc = t("pages.publicFlashcardSlug.metaTopicDescription", { name: data.name });
+      if (data.kind === "deck") {
+        const title = getRequiredPublicMetadataInterpolated(
+          m,
+          "pages.publicFlashcardSlug.metaDeckTitle",
+          { title: data.title, count: data.cardCount },
+          en,
+          MARKETING_PUBLIC_FLASHCARD_SLUG_NOT_FOUND_TITLE_FALLBACK,
+        );
+        const userDesc = data.description && String(data.description).trim().slice(0, 155);
+        const description =
+          userDesc && userDesc.length > 0
+            ? userDesc
+            : getRequiredPublicMetadataInterpolated(
+                m,
+                "pages.publicFlashcardSlug.metaDeckDescriptionFallback",
+                { title: data.title, count: data.cardCount },
+                en,
+                MARKETING_PUBLIC_FLASHCARD_SLUG_META_DESCRIPTION_GENERIC_FALLBACK,
+              );
+        return {
+          title,
+          description,
+          alternates: { canonical: absoluteUrl(`/flashcards/${slug}`) },
+        };
+      }
+      const title = getRequiredPublicMetadataInterpolated(
+        m,
+        "pages.publicFlashcardSlug.metaTopicTitle",
+        { name: data.name },
+        en,
+        MARKETING_PUBLIC_FLASHCARD_SLUG_NOT_FOUND_TITLE_FALLBACK,
+      );
+      const description = getRequiredPublicMetadataInterpolated(
+        m,
+        "pages.publicFlashcardSlug.metaTopicDescription",
+        { name: data.name },
+        en,
+        MARKETING_PUBLIC_FLASHCARD_SLUG_META_DESCRIPTION_GENERIC_FALLBACK,
+      );
       return {
         title,
-        description: desc,
+        description,
         alternates: { canonical: absoluteUrl(`/flashcards/${slug}`) },
       };
     },

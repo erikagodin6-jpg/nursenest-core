@@ -28,6 +28,13 @@ import { PracticeTestTeachingReviewPanel } from "@/components/student/practice-t
 import { PracticeTestStudyLoopNext } from "@/components/student/practice-test-study-loop-next";
 import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teaching-review";
 import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
+import {
+  catExamCanLockAnswer,
+  catExamCanRequestCatAdvance,
+  catExamFooterPrimaryBusy,
+  catExamOptionsInteractionLocked,
+  type CatExamUiPhase,
+} from "@/lib/practice-tests/cat-exam-ui-state";
 import { PracticeSessionLayout } from "@/components/study/practice-session-layout";
 import {
   PracticeQuestionCard,
@@ -45,7 +52,6 @@ import {
   type SmartReviewItem,
 } from "@/components/study/smart-review-screen";
 import { StudyPlanFromResults } from "@/components/study/study-plan";
-import { SessionSplitRationaleAside } from "@/components/exam/session-split-rationale-aside";
 import { QuestionCard, AnswerOptionRow } from "@/components/study/cat-question-card";
 import type { AnswerOptionState } from "@/components/study/cat-question-card";
 import { RationalePanel } from "@/components/study/cat-rationale-panel";
@@ -139,6 +145,17 @@ export function PracticeTestRunnerClient({
   const [adaptiveSe, setAdaptiveSe] = useState<number | null>(null);
   const [adaptiveDifficultyHistory, setAdaptiveDifficultyHistory] = useState<number[]>([]);
   const [catLiveTransparency, setCatLiveTransparency] = useState(false);
+  /**
+   * CAT exam (test) mode UI phase — explicit submit → lock → single `cat_advance` per transition.
+   * Study mode ignores this; server contract is unchanged (`action: "cat_advance"`).
+   */
+  const [catExamUiPhase, setCatExamUiPhase] = useState<CatExamUiPhase>("answering");
+  const catExamUiPhaseRef = useRef<CatExamUiPhase>("answering");
+  const catExamAdvanceButtonRef = useRef<HTMLButtonElement | null>(null);
+  /** When true, after the next item loads we move focus to the first option (keyboard-driven flow). */
+  const catExamKeyboardAdvanceRef = useRef(false);
+  /** Dedupes rapid Enter / Space activation (OS key-repeat). */
+  const catExamPrimaryActionGateMsRef = useRef(0);
   const [saving, setSaving] = useState(false);
   const [teachingReviewItems, setTeachingReviewItems] = useState<PracticeTestTeachingItem[] | null>(null);
   const [teachingReviewLoading, setTeachingReviewLoading] = useState(false);
@@ -185,6 +202,10 @@ export function PracticeTestRunnerClient({
   useEffect(() => {
     idxRef.current = idx;
   }, [idx]);
+
+  useEffect(() => {
+    catExamUiPhaseRef.current = catExamUiPhase;
+  }, [catExamUiPhase]);
 
   const debugEventCapRef = useRef(0);
   const logSessionEvent = useCallback(
@@ -461,8 +482,8 @@ export function PracticeTestRunnerClient({
   const chromeClass = `nn-exam-variant--${chromeVariant}`;
   const examSimulation = testConfig?.catPresentationMode === "exam_simulation";
   const catFeedbackStudy = Boolean(catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study");
-  // isExamStyle — CAT test mode: FAQ-aligned split with locked rationale column (reference parity with question bank).
-  // CAT study mode uses the same split; rationale panel unlocks after submit (see explanation flow).
+  // isExamStyle — CAT test mode: single-column exam shell; explicit submit then lock then next.
+  // CAT study mode uses split layout; rationale panel unlocks after submit (see explanation flow).
   const isExamStyle = catMode && !catFeedbackStudy;
   const catStudyLocked =
     catFeedbackStudy &&
@@ -488,6 +509,24 @@ export function PracticeTestRunnerClient({
       setCatStudyFeedback(null);
     }
   }, [current, catStudyFeedback]);
+
+  useEffect(() => {
+    catExamUiPhaseRef.current = "answering";
+    setCatExamUiPhase("answering");
+  }, [qid]);
+
+  useEffect(() => {
+    const feedbackStudy =
+      catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study";
+    const examStyle = catMode && !feedbackStudy;
+    if (!examStyle || status !== "IN_PROGRESS") return;
+    const onLeave = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", onLeave);
+    return () => window.removeEventListener("beforeunload", onLeave);
+  }, [catMode, testConfig?.catExamFeedbackMode, status]);
 
   const linearDelivery = testConfig?.linearDeliveryMode;
   const linearRationaleVisibility =
@@ -582,6 +621,9 @@ export function PracticeTestRunnerClient({
   function setAnswerForCurrent(next: unknown) {
     if (!current) return;
     if (submitInFlightRef.current || catAdvanceInFlightRef.current || linearCommitInFlightRef.current) return;
+    if (catMode && (testConfig?.catExamFeedbackMode ?? "test") !== "study" && !catExamCanChangeAnswer(catExamUiPhaseRef.current)) {
+      return;
+    }
     if (isLinearEngine && committedSet.has(current.id)) return;
     const nextAnswers = { ...answersRef.current, [current.id]: next };
     answersRef.current = nextAnswers;
@@ -659,8 +701,22 @@ export function PracticeTestRunnerClient({
   async function catAdvance() {
     if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
     if (!current || !hasMeaningfulAnswer(current.id)) return;
+
+    const feedbackStudy = catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study";
+    const examStyle = catMode && !feedbackStudy;
+    if (examStyle && !catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) {
+      return;
+    }
+
+    const advanceQuestionId = current.id;
+    const advanceIdx = idx;
+
     catAdvanceInFlightRef.current = true;
-    logSessionEvent("submit_cat_advance_start", { idx, questionId: current.id });
+    if (examStyle) {
+      catExamUiPhaseRef.current = "advancing";
+      setCatExamUiPhase("advancing");
+    }
+    logSessionEvent("submit_cat_advance_start", { idx, questionId: advanceQuestionId });
     setSaving(true);
     try {
       const elapsedMs =
@@ -671,7 +727,7 @@ export function PracticeTestRunnerClient({
         body: JSON.stringify({
           action: "cat_advance",
           answers: answersRef.current,
-          cursorIndex: idx,
+          cursorIndex: advanceIdx,
           ...(elapsedMs !== undefined ? { elapsedMs } : {}),
         }),
       });
@@ -689,9 +745,17 @@ export function PracticeTestRunnerClient({
         throw new Error("Could not read the server response for this step.");
       }
       if (!res.ok) throw new Error(data.error ?? "Could not advance.");
+      if (idxRef.current !== advanceIdx) {
+        logSessionEvent("submit_cat_advance_stale_ignored", { advanceIdx, advanceQuestionId });
+        if (examStyle) {
+          catExamUiPhaseRef.current = "submitted_locked";
+          setCatExamUiPhase("submitted_locked");
+        }
+        return;
+      }
       if (data.catStudyReveal) {
         await load();
-        logSessionEvent("submit_cat_advance_reveal", { idx, questionId: current.id });
+        logSessionEvent("submit_cat_advance_reveal", { idx: advanceIdx, questionId: advanceQuestionId });
         return;
       }
       if (data.catCompleted && data.results) {
@@ -701,19 +765,30 @@ export function PracticeTestRunnerClient({
           setCatFinalStudyFeedback(data.studyFeedback);
         }
         setStatus("COMPLETED");
-        logSessionEvent("submit_cat_advance_completed", { idx, questionId: current.id });
+        logSessionEvent("submit_cat_advance_completed", { idx: advanceIdx, questionId: advanceQuestionId });
         return;
       }
       if (data.catAdvanced) {
         setCatStudyFeedback(null);
         await load();
-        logSessionEvent("submit_cat_advance_next", { idx, questionId: current.id });
+        logSessionEvent("submit_cat_advance_next", { idx: advanceIdx, questionId: advanceQuestionId });
+        return;
       }
+      throw new Error(
+        tx(
+          "learner.practiceTests.run.catAdvanceUnexpectedResponse",
+          "The server did not return the next exam step. Try again or reload the session.",
+        ),
+      );
     } catch (e) {
+      if (examStyle) {
+        catExamUiPhaseRef.current = "submitted_locked";
+        setCatExamUiPhase("submitted_locked");
+      }
       setError(e instanceof Error ? e.message : "Advance failed");
       logSessionEvent("submit_cat_advance_failed", {
-        idx,
-        questionId: current?.id ?? null,
+        idx: advanceIdx,
+        questionId: advanceQuestionId,
         message: e instanceof Error ? e.message : "Advance failed",
       });
     } finally {
@@ -724,8 +799,12 @@ export function PracticeTestRunnerClient({
 
   async function goNext() {
     if (saving || navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
-    if (catMode && idx >= total - 1) {
-      await catAdvance();
+    if (catMode) {
+      if (idx >= total - 1) {
+        const examStyle = (testConfig?.catExamFeedbackMode ?? "test") !== "study";
+        if (catMode && examStyle && !catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) return;
+        await catAdvance();
+      }
       return;
     }
     if (isLinearEngine && qid && !committedSet.has(qid)) return;
@@ -755,6 +834,108 @@ export function PracticeTestRunnerClient({
       navInFlightRef.current = false;
     }
   }
+
+  /** CAT exam mode: keyboard shortcuts (letters / digits, Enter); deduped against double-fire. */
+  useEffect(() => {
+    if (!isExamStyle || !catMode || status !== "IN_PROGRESS" || phase !== "ready" || !current) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+      const target = e.target as HTMLElement | null;
+      if (target?.closest?.('[role="dialog"]')) return;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
+        return;
+      }
+      const root = target?.closest?.("[data-cat-exam-root]");
+      if (e.key === " " && root) {
+        e.preventDefault();
+      }
+      const gate = () => {
+        const now = Date.now();
+        if (now - catExamPrimaryActionGateMsRef.current < 420) return false;
+        catExamPrimaryActionGateMsRef.current = now;
+        return true;
+      };
+      const letterIndex = (() => {
+        if (optsCanonical.length === 0) return null;
+        const k = e.key.length === 1 ? e.key.toUpperCase() : "";
+        if (!k || k < "A" || k > "Z") return null;
+        const i = k.charCodeAt(0) - "A".charCodeAt(0);
+        return i >= 0 && i < optsCanonical.length ? i : null;
+      })();
+      const digitIndex = (() => {
+        if (optsCanonical.length === 0) return null;
+        const d = e.key;
+        if (d < "1" || d > "9") return null;
+        const i = Number.parseInt(d, 10) - 1;
+        return i >= 0 && i < optsCanonical.length ? i : null;
+      })();
+      if (letterIndex != null || digitIndex != null) {
+        if (!catExamCanChangeAnswer(catExamUiPhaseRef.current)) return;
+        if (saving || qLoading || catAdvanceInFlightRef.current) return;
+        const i = letterIndex ?? digitIndex!;
+        const canonical = optsCanonical[i];
+        if (!canonical) return;
+        if (isSata) {
+          const prior = answersRef.current[current.id];
+          const prev = Array.isArray(prior) ? [...prior] : [];
+          const has = prev.includes(canonical);
+          setAnswerForCurrent(has ? prev.filter((x) => x !== canonical) : [...prev, canonical]);
+        } else {
+          setAnswerForCurrent(canonical);
+        }
+        e.preventDefault();
+        return;
+      }
+      if (e.key !== "Enter") return;
+      if (!gate()) {
+        e.preventDefault();
+        return;
+      }
+      const phaseNow = catExamUiPhaseRef.current;
+      if (phaseNow === "answering") {
+        if (!hasMeaningfulAnswer(current.id)) return;
+        if (saving || qLoading || catAdvanceInFlightRef.current) return;
+        lockCatExamAnswer();
+        e.preventDefault();
+        return;
+      }
+      if (phaseNow === "submitted_locked") {
+        if (saving || qLoading || catAdvanceInFlightRef.current) return;
+        catExamKeyboardAdvanceRef.current = true;
+        void catAdvance();
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown, true);
+    return () => window.removeEventListener("keydown", onKeyDown, true);
+  }, [
+    isExamStyle,
+    catMode,
+    status,
+    phase,
+    current,
+    current?.id,
+    optsCanonical,
+    isSata,
+    saving,
+    qLoading,
+  ]);
+
+  useEffect(() => {
+    if (!isExamStyle || !catExamKeyboardAdvanceRef.current) return;
+    catExamKeyboardAdvanceRef.current = false;
+    queueMicrotask(() => {
+      const wrap = document.querySelector("[data-cat-exam-root]");
+      const btn = wrap?.querySelector("button.nn-cat-opt") as HTMLButtonElement | null;
+      btn?.focus();
+    });
+  }, [qid, isExamStyle]);
+
+  useEffect(() => {
+    if (!isExamStyle) return;
+    const el = document.getElementById("nn-cat-exam-scroll-region");
+    if (el) el.scrollTop = 0;
+  }, [qid, isExamStyle]);
 
   /** Inline recovery when PATCH save / CAT advance / linear commit fails but the item is still visible (legacy exam-fallbacks recovery intent). */
   const sessionRecoverable =
@@ -1237,7 +1418,9 @@ export function PracticeTestRunnerClient({
           : tx("learner.practiceTests.run.nclexSimulationMode", "NCLEX simulation · CAT")
         : catFeedbackStudy
           ? tx("learner.practiceTests.run.catStudyMode", "CAT · Study Mode")
-          : tx("learner.practiceTests.run.catTestMode", "CAT · Test Mode")
+          : pathwaySurface?.shortName
+            ? `${pathwaySurface.shortName} · ${tx("learner.practiceTests.run.adaptiveExamShort", "Adaptive exam")}`
+            : tx("learner.practiceTests.run.catTestMode", "CAT · Test Mode")
       : tx("learner.practiceTests.run.practiceMode", "Practice test");
   const controlsBusy = saving || qLoading;
 
@@ -1248,8 +1431,8 @@ export function PracticeTestRunnerClient({
   );
 
   // ══════════════════════════════════════════════════════════════════════════
-  // CAT MODE — spec-driven 2-column layout (65% / 35%, max 1200px)
-  // Test mode: right panel locked. Study mode: right panel shows rationale.
+  // CAT MODE — study: split + rationale. Test (exam): single column, submit→lock→next, adaptive progress.
+  // Server: `cat_advance` still scores and selects the next item in one PATCH (no separate commit endpoint).
   // ══════════════════════════════════════════════════════════════════════════
   if (catMode) {
     // Determine option state per canonical key for CAT (no correct/incorrect during test mode)
@@ -1261,11 +1444,17 @@ export function PracticeTestRunnerClient({
         if (isSelected) return "incorrect";
         return "dim";
       }
+      if (isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase) && !isSata) {
+        if (isSelected) return "selected";
+        return "dim";
+      }
       return isSelected ? "selected" : "default";
     }
 
     const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
     const optLocked = catStudyLocked;
+    const optionsInteractionLocked =
+      optLocked || Boolean(isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase));
 
     // Build CAT-specific option rows using AnswerOptionRow
     const catOptions =
@@ -1293,8 +1482,16 @@ export function PracticeTestRunnerClient({
                 <AnswerOptionRow
                   letter={LETTERS[i] ?? String(i + 1)}
                   text={optsDisplay[i] ?? canonical}
-                  state={optLocked ? (optState === "selected" ? "selected" : optState) : (selected ? "selected" : "default")}
-                  disabled={optLocked}
+                  state={
+                    optionsInteractionLocked
+                      ? optState === "selected"
+                        ? "selected"
+                        : optState
+                      : selected
+                        ? "selected"
+                        : "default"
+                  }
+                  disabled={optionsInteractionLocked}
                   isCheckbox
                   checked={selected}
                   onChange={(checked) => {
@@ -1321,7 +1518,7 @@ export function PracticeTestRunnerClient({
                 letter={LETTERS[i] ?? String(i + 1)}
                 text={optsDisplay[i] ?? canonical}
                 state={catOptState(canonical)}
-                disabled={optLocked}
+                disabled={optionsInteractionLocked}
                 onClick={() => setAnswerForCurrent(canonical)}
               />
             </li>
@@ -1337,6 +1534,93 @@ export function PracticeTestRunnerClient({
           ? "waiting"
           : "locked";
 
+    const catMaxQ = testConfig?.catMaxQuestions ?? null;
+    const catMinQ = testConfig?.catMinQuestions ?? null;
+
+    const lockCatExamAnswer = () => {
+      if (!isExamStyle || !current) return;
+      if (!catExamCanLockAnswer(catExamUiPhaseRef.current, hasMeaningfulAnswer(current.id))) return;
+      catExamUiPhaseRef.current = "submitted_locked";
+      setCatExamUiPhase("submitted_locked");
+      queueMicrotask(() => {
+        catExamAdvanceButtonRef.current?.focus();
+      });
+    };
+
+    const catExamNavFooter = (
+      <div className="nn-cat-question-nav nn-question-nav-actions">
+        <button
+          type="button"
+          aria-pressed={Boolean(flagged[current.id])}
+          disabled={controlsBusy}
+          className={`nn-cat-question-nav__flag inline-flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-semibold transition ${
+            flagged[current.id]
+              ? "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]"
+              : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--semantic-panel-muted)]"
+          }`}
+          onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
+        >
+          <span aria-hidden="true">{flagged[current.id] ? "★" : "☆"}</span>
+          {flagged[current.id]
+            ? tx("learner.practiceTests.run.flagged", "Flagged")
+            : tx("learner.practiceTests.run.flag", "Flag")}
+        </button>
+        <button
+          type="button"
+          disabled={controlsBusy}
+          className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
+          onClick={() => void abandon()}
+        >
+          {tx("learner.practiceTests.run.endSession", "End session")}
+        </button>
+        {isExamStyle ? (
+          !catExamAnswerSubmitted ? (
+            <button
+              type="button"
+              disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
+              className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
+              onClick={lockCatExamAnswer}
+            >
+              {tx("learner.practiceTests.run.submitAnswer", "Submit answer")}
+            </button>
+          ) : idx < total - 1 ? (
+            <button
+              type="button"
+              disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
+              className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
+              onClick={() => void catAdvance()}
+            >
+              {saving
+                ? tx("learner.practiceTests.run.working", "Working...")
+                : tx("learner.practiceTests.run.nextQuestion", "Next question")}
+            </button>
+          ) : (
+            <button
+              type="button"
+              disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
+              className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
+              onClick={() => void catAdvance()}
+            >
+              {saving
+                ? tx("learner.practiceTests.run.working", "Working...")
+                : tx("learner.practiceTests.run.submitAndFinish", "Submit & finish")}
+            </button>
+          )
+        ) : rationalePanelMode === "feedback" ? null : (
+          <button
+            type="button"
+            disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
+            className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
+            onClick={() => void catAdvance()}
+          >
+            {saving
+              ? tx("learner.practiceTests.run.working", "Working...")
+              : tx("learner.practiceTests.run.seeExplanation", "See explanation")}
+          </button>
+        )}
+      </div>
+    );
+
     return (
       <ProtectedPremiumContent
         userLabel={userLabel}
@@ -1349,8 +1633,27 @@ export function PracticeTestRunnerClient({
               left={
                 <div className="space-y-1">
                   <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                    {tx("learner.practiceTests.run.question", "Question")} {idx + 1}{" "}
-                    {tx("learner.practiceTests.run.of", "of")} {total}
+                    {isExamStyle ? (
+                      <>
+                        {tx("learner.practiceTests.run.item", "Item")}{" "}
+                        <span className="tabular-nums">{idx + 1}</span>
+                        {catMaxQ != null && catMaxQ > 0 ? (
+                          <span className="font-normal normal-case text-[var(--semantic-text-muted)]">
+                            {" "}
+                            (
+                            {tx("learner.practiceTests.run.adaptiveUpToHint", "up to {max} items", {
+                              max: String(catMaxQ),
+                            })}
+                            )
+                          </span>
+                        ) : null}
+                      </>
+                    ) : (
+                      <>
+                        {tx("learner.practiceTests.run.question", "Question")} {idx + 1}{" "}
+                        {tx("learner.practiceTests.run.of", "of")} {total}
+                      </>
+                    )}
                   </p>
                   {examName ? (
                     <p className="line-clamp-2 nn-marketing-body-sm font-medium text-[var(--theme-heading-text)]">
@@ -1360,9 +1663,20 @@ export function PracticeTestRunnerClient({
                 </div>
               }
               center={
-                <span className="nn-marketing-caption font-semibold tabular-nums text-[var(--semantic-text-muted)]">
-                  {Math.round(sessionPct)}% {tx("learner.practiceTests.run.complete", "complete")}
-                </span>
+                isExamStyle ? (
+                  <span className="nn-marketing-caption max-w-[18rem] text-center font-semibold leading-snug text-[var(--semantic-text-muted)]">
+                    {catMinQ != null && catMaxQ != null && catMinQ > 0 && catMaxQ > 0
+                      ? tx("learner.practiceTests.run.catLengthBounds", "{min}–{max} items", {
+                          min: String(catMinQ),
+                          max: String(catMaxQ),
+                        })
+                      : tx("learner.practiceTests.run.catAdaptiveSession", "Adaptive session")}
+                  </span>
+                ) : (
+                  <span className="nn-marketing-caption font-semibold tabular-nums text-[var(--semantic-text-muted)]">
+                    {Math.round(sessionPct)}% {tx("learner.practiceTests.run.complete", "complete")}
+                  </span>
+                )
               }
               right={
                 <div className="flex flex-wrap items-center justify-end gap-2">
@@ -1371,127 +1685,92 @@ export function PracticeTestRunnerClient({
                 </div>
               }
             />
-            <ExamProgressBar current={idx + 1} total={total} />
+            {isExamStyle ? (
+              <ExamProgressBar
+                current={idx + 1}
+                total={Math.max(total, 1)}
+                variant="adaptive_item"
+                adaptiveMaxItems={catMaxQ}
+                sessionLabel={
+                  pathwaySurface?.shortName
+                    ? `${pathwaySurface.shortName} · ${tx("learner.practiceTests.run.adaptiveSessionShort", "Adaptive")}`
+                    : undefined
+                }
+              />
+            ) : (
+              <ExamProgressBar current={idx + 1} total={total} />
+            )}
             {sessionRecoveryBanner}
-            <div className={`nn-cat-session ${chromeClass}`}>
-              <div className="nn-question-session nn-question-session--split !px-0 sm:!px-0">
-                <div className="nn-question-session-primary min-h-0 overflow-y-auto overflow-x-hidden">
-                  <QuestionCard
-                    stem={current.stem ?? ""}
-                    topic={current.topic}
-                    subtopic={current.subtopic}
-                    difficultyLabel={
-                      current.difficulty != null ? difficultyBandLabel(current.difficulty) : null
+            <div
+              className={`nn-cat-session min-h-0 flex-1 ${chromeClass}${isExamStyle ? " nn-cat-session--exam-single" : ""}`}
+            >
+              <div
+                className={`nn-question-session nn-question-session--split !px-0 sm:!px-0${isExamStyle ? " nn-question-session--single flex min-h-0 min-w-0 flex-1 flex-col" : ""}`}
+              >
+                <div
+                  className={`nn-question-session-primary min-h-0 overflow-x-hidden${isExamStyle ? " flex min-h-0 flex-1 flex-col overflow-hidden" : " overflow-y-auto"}`}
+                >
+                  <div
+                    className={
+                      isExamStyle ? "nn-cat-exam-col flex min-h-0 min-w-0 flex-1 flex-col" : "min-h-0 min-w-0"
                     }
                   >
-                    {timedMode && timeLimitSec != null ? (
-                      <div className="nn-cat-exam-timing-alert mb-5" role="alert">
-                        {tx(
-                          "learner.practiceTests.run.timedAutoEnd",
-                          "Timed session: the exam may end automatically when time expires.",
-                        )}
-                      </div>
-                    ) : null}
+                    <QuestionCard
+                      stem={current.stem ?? ""}
+                      topic={current.topic}
+                      subtopic={current.subtopic}
+                      difficultyLabel={
+                        current.difficulty != null ? difficultyBandLabel(current.difficulty) : null
+                      }
+                      examStackedLayout={isExamStyle}
+                      footerSlot={isExamStyle ? catExamNavFooter : undefined}
+                    >
+                      {timedMode && timeLimitSec != null ? (
+                        <div className="nn-cat-exam-timing-alert mb-5" role="alert">
+                          {tx(
+                            "learner.practiceTests.run.timedAutoEnd",
+                            "Timed session: the exam may end automatically when time expires.",
+                          )}
+                        </div>
+                      ) : null}
 
-                    {catLiveTransparency || adaptiveDifficultyHistory.length > 0 ? (
-                      <div className="mb-5">
-                        <CatLiveTransparencyStrip
-                          difficultyTail={adaptiveDifficultyHistory}
-                          theta={adaptiveTheta}
-                          se={adaptiveSe}
-                          show={catLiveTransparency}
-                          onToggle={setCatLiveTransparency}
-                        />
-                      </div>
-                    ) : null}
+                      {!isExamStyle && (catLiveTransparency || adaptiveDifficultyHistory.length > 0) ? (
+                        <div className="mb-5">
+                          <CatLiveTransparencyStrip
+                            difficultyTail={adaptiveDifficultyHistory}
+                            theta={adaptiveTheta}
+                            se={adaptiveSe}
+                            show={catLiveTransparency}
+                            onToggle={setCatLiveTransparency}
+                          />
+                        </div>
+                      ) : null}
 
-                    <p className="nn-cat-options-label">
-                      {isSata
-                        ? tx("learner.practiceTests.run.selectAllThatApply", "Select all that apply")
-                        : tx("learner.practiceTests.run.selectBestAnswer", "Select the best answer")}
-                    </p>
+                      <p className="nn-cat-options-label">
+                        {isSata
+                          ? tx("learner.practiceTests.run.selectAllThatApply", "Select all that apply")
+                          : tx("learner.practiceTests.run.selectBestAnswer", "Select the best answer")}
+                      </p>
 
-                    {catOptions}
+                      {catOptions}
 
-                    {confidenceTrackingEnabled && hasMeaningfulAnswer(current.id) ? (
-                      <div className="mt-4">
-                        <ConfidenceSelector
-                          questionId={current.id}
-                          value={confidence[current.id] ?? null}
-                          neutral
-                          onChange={setConfidenceForQuestion}
-                        />
-                      </div>
-                    ) : null}
+                      {confidenceTrackingEnabled && !isExamStyle && hasMeaningfulAnswer(current.id) ? (
+                        <div className="mt-4">
+                          <ConfidenceSelector
+                            questionId={current.id}
+                            value={confidence[current.id] ?? null}
+                            neutral
+                            onChange={setConfidenceForQuestion}
+                          />
+                        </div>
+                      ) : null}
 
-                    <div className="nn-cat-question-nav nn-question-nav-actions">
-                      <button
-                        type="button"
-                        aria-pressed={Boolean(flagged[current.id])}
-                        disabled={controlsBusy}
-                        className={`nn-cat-question-nav__flag inline-flex items-center gap-1.5 rounded border px-3 py-1.5 text-xs font-semibold transition ${
-                          flagged[current.id]
-                            ? "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]"
-                            : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-muted)] hover:bg-[var(--semantic-panel-muted)]"
-                        }`}
-                        onClick={() => setFlagged((f) => ({ ...f, [current.id]: !f[current.id] }))}
-                      >
-                        <span aria-hidden="true">{flagged[current.id] ? "★" : "☆"}</span>
-                        {flagged[current.id]
-                          ? tx("learner.practiceTests.run.flagged", "Flagged")
-                          : tx("learner.practiceTests.run.flag", "Flag")}
-                      </button>
-                      <button
-                        type="button"
-                        disabled={controlsBusy}
-                        className="text-xs font-medium text-[var(--semantic-text-muted)] underline-offset-2 hover:text-[var(--semantic-text-secondary)] hover:underline"
-                        onClick={() => void abandon()}
-                      >
-                        {tx("learner.practiceTests.run.endSession", "End session")}
-                      </button>
-                      {isExamStyle ? (
-                        idx < total - 1 ? (
-                          <button
-                            type="button"
-                            disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
-                            className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
-                            onClick={() => void catAdvance()}
-                          >
-                            {saving
-                              ? tx("learner.practiceTests.run.working", "Working...")
-                              : tx("learner.practiceTests.run.nextQuestion", "Next question")}
-                          </button>
-                        ) : (
-                          <button
-                            type="button"
-                            disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
-                            className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
-                            onClick={() => void catAdvance()}
-                          >
-                            {saving
-                              ? tx("learner.practiceTests.run.working", "Working...")
-                              : tx("learner.practiceTests.run.submitAndFinish", "Submit & finish")}
-                          </button>
-                        )
-                      ) : rationalePanelMode === "feedback" ? null : (
-                        <button
-                          type="button"
-                          disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
-                          className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
-                          onClick={() => void catAdvance()}
-                        >
-                          {saving
-                            ? tx("learner.practiceTests.run.working", "Working...")
-                            : tx("learner.practiceTests.run.seeExplanation", "See explanation")}
-                        </button>
-                      )}
-                    </div>
-                  </QuestionCard>
+                      {!isExamStyle ? catExamNavFooter : null}
+                    </QuestionCard>
+                  </div>
                 </div>
 
-                {isExamStyle ? (
-                  <SessionSplitRationaleAside variant="locked" />
-                ) : (
+                {!isExamStyle ? (
                   <aside className="nn-question-session-rationale flex min-h-0 flex-col">
                     <RationalePanel
                       mode={rationalePanelMode}
@@ -1502,7 +1781,7 @@ export function PracticeTestRunnerClient({
                       optionTexts={optsDisplay}
                     />
                   </aside>
-                )}
+                ) : null}
               </div>
             </div>
           </ExamSessionShell>
