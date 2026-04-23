@@ -7,4 +7,6 @@ export type AdminDataResult<T> =
   | { status: "degraded"; partial: Partial<T>; message?: string };
 
 /** Server actions + JSON mutations: always return this instead of void / silent no-ops. */
-export type AdminMutationResult = { ok: true } | { ok: false; error: string };
+export type AdminMutationResult =
+  | { ok: true }
+  | { ok: false; error: string; /** Stable machine-facing code for logs/tests */ code?: string };

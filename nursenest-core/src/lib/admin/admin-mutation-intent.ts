@@ -33,6 +33,7 @@ export function parseAdminJsonMutationIntent(body: unknown): AdminJsonMutationIn
 
 /** Strip control keys before passing the rest to a route-specific zod schema. */
 export function stripAdminMutationControlFields<T extends Record<string, unknown>>(body: T): Omit<T, "confirm" | "dryRun"> {
-  const { confirm: _c, dryRun: _d, ...rest } = body;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- strip control keys only
+  const { confirm, dryRun, ...rest } = body;
   return rest as Omit<T, "confirm" | "dryRun">;
 }

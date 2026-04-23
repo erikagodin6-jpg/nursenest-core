@@ -45,6 +45,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { validatePracticeExamPostLaunchRequest } from "@/lib/learner/study-product-route-contract";
 import { practiceTestRouteDeps } from "./route-deps";
 import { normalizePracticeTestQuestionIds } from "@/lib/practice-tests/practice-test-question-ids";
+import { assessPracticeTestSessionHydrateContract } from "@/lib/practice-tests/practice-session-contract";
 
 const previewSelect = {
   id: true,
@@ -134,6 +135,23 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   const base = questionAccessWhere(gate.entitlement);
   const ID_CHUNK = 200;
   let questions: Array<Record<string, unknown>> = [];
+
+  const sessionContract = assessPracticeTestSessionHydrateContract({
+    catMode: cfg.selectionMode === "cat",
+    status: row.status,
+    questionIds: ids,
+    cursorIndex: row.cursorIndex,
+    adaptiveState: row.adaptiveState ?? null,
+    config: cfg,
+    results: row.results,
+  });
+  if (!sessionContract.ok) {
+    safeServerLog("practice_tests", "practice_test_get_session_contract_violation", {
+      event: "practice_test_get_session_contract_violation",
+      practiceTestId: id.slice(0, 16),
+      code: sessionContract.violation.code,
+    });
+  }
 
   if (!teachingReviewRequested && hydrateFull && ids.length > 0) {
     const qs = await withRetry(async () => {

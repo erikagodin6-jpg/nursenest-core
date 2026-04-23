@@ -1,9 +1,15 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useAdminAiGenerationGate } from "@/components/admin/admin-ai-generation-context";
 import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN } from "@/lib/admin/blog-generate-ai-constants";
+import {
+  buildAdminBlogGenerateAiRequestBody,
+  formatAdminBlogGenerateAiBlockedError,
+  parseBatchTopicLines,
+  validateStructuredSourceRecordsJson,
+} from "@/lib/admin/admin-blog-generate-ai-client-payload";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
 import {
@@ -160,7 +166,6 @@ export function AdminBlogGenerateClient() {
   const [includeAiImage, setIncludeAiImage] = useState(false);
   const [sourceRecordsJson, setSourceRecordsJson] = useState("");
   const [slug, setSlug] = useState("");
-  const slugInputRef = useRef<HTMLInputElement | null>(null);
   const [busy, setBusy] = useState(false);
   const [batchStatus, setBatchStatus] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
@@ -169,29 +174,20 @@ export function AdminBlogGenerateClient() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (busy) return;
-    const topicLines = topicsBatch
-      .split(/\r?\n/)
-      .map((s) => s.trim())
-      .filter(Boolean);
-    const shortTopicLines = topicLines.filter((s) => s.length < 3);
-    if (enableBatch && shortTopicLines.length > 0) {
-      setErr(
-        `Each batch topic line must be at least 3 characters (API validation). Short line(s): ${shortTopicLines
-          .slice(0, 5)
-          .map((s) => JSON.stringify(s))
-          .join(", ")}${shortTopicLines.length > 5 ? "…" : ""}`,
-      );
-      return;
-    }
-    const parsedTopics = topicLines.slice(0, ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN);
-    if (enableBatch && parsedTopics.length === 0) {
-      setErr("Add at least one non-empty topic line for batch mode.");
-      return;
-    }
-    if (!enableBatch && topic.trim().length < 3) {
+
+    let parsedTopics: string[] = [];
+    if (enableBatch) {
+      const batchParsed = parseBatchTopicLines(topicsBatch, ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN);
+      if (!batchParsed.ok) {
+        setErr(batchParsed.message);
+        return;
+      }
+      parsedTopics = batchParsed.topics;
+    } else if (topic.trim().length < 3) {
       setErr("Topic must be at least 3 characters (after trimming spaces).");
       return;
     }
+
     const slugNorm = slug.trim();
     const slugCleaned = slugNorm.length > 0 ? cleanBlogSlugInput(slugNorm) : "";
     if (!enableBatch && slugCleaned.length > 0) {
@@ -201,7 +197,7 @@ export function AdminBlogGenerateClient() {
         return;
       }
     }
-    slugInputRef.current?.setCustomValidity("");
+
     let parsedSourceRecords: unknown = undefined;
     if (sourceRecordsJson.trim()) {
       try {
@@ -210,7 +206,32 @@ export function AdminBlogGenerateClient() {
         setErr("Structured sources JSON is invalid. Fix JSON syntax or clear the field.");
         return;
       }
+      const srcOk = validateStructuredSourceRecordsJson(parsedSourceRecords);
+      if (!srcOk.ok) {
+        setErr(srcOk.message);
+        return;
+      }
     }
+
+    const requestBody = buildAdminBlogGenerateAiRequestBody({
+      enableBatch,
+      topicTrimmed: topic.trim(),
+      batchTopics: parsedTopics,
+      slugCleanedOptional: !enableBatch && slugCleaned.length > 0 ? slugCleaned : undefined,
+      keywords,
+      exam,
+      template,
+      tone,
+      intent,
+      funnelStage,
+      targetKeyword,
+      keywordCluster,
+      includeImage,
+      includeAiImage,
+      sourceRecords: parsedSourceRecords,
+      publishNow,
+    });
+
     setBusy(true);
     setMsg(null);
     setErr(null);
@@ -228,27 +249,10 @@ export function AdminBlogGenerateClient() {
           "Content-Type": "application/json",
           ...(useNdjsonBatch ? { Accept: "application/x-ndjson" } : {}),
         },
-        body: JSON.stringify({
-          topic: enableBatch ? undefined : topic.trim(),
-          topics: enableBatch ? parsedTopics : undefined,
-          keywords: keywords || undefined,
-          exam,
-          template,
-          tone,
-          intent,
-          funnelStage,
-          targetKeyword: targetKeyword || undefined,
-          keywordCluster: keywordCluster || undefined,
-          includeImage,
-          includeAiImage,
-          sourceRecords: parsedSourceRecords,
-          // Batch runs one slug per generated post — never send a stale single-post slug from the disabled field.
-          slug: enableBatch ? undefined : slugCleaned.length > 0 ? slugCleaned : undefined,
-          publishNow,
-        }),
+        body: JSON.stringify(requestBody),
       });
       if (!res.ok) {
-        const json = (await res.json()) as GenerateAiJsonBody;
+        const json = (await res.json()) as GenerateAiJsonBody & { hint?: string };
         if (res.status === 429) {
           setErr(formatAdminRateLimitMessageFromJson(json));
           return;
@@ -263,7 +267,11 @@ export function AdminBlogGenerateClient() {
           );
           return;
         }
-        setErr(json.error ?? "Request failed");
+        if (json.code === "ADMIN_AI_DISABLED" || json.code === "ADMIN_AI_MISCONFIGURED") {
+          setErr(formatAdminBlogGenerateAiBlockedError(json));
+          return;
+        }
+        setErr(formatAdminBlogGenerateAiBlockedError(json) || json.error || "Request failed");
         return;
       }
 
@@ -315,7 +323,11 @@ export function AdminBlogGenerateClient() {
   }
 
   return (
-    <form noValidate onSubmit={onSubmit} className="space-y-4 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-6">
+    <form
+      noValidate
+      onSubmit={onSubmit}
+      className="space-y-4 rounded-xl border border-border/70 bg-[var(--theme-card-bg)] p-6"
+    >
       <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Single-post AI draft</h2>
       <p className="text-sm text-muted-foreground">
         Requires <code className="rounded bg-muted px-1">AI_ADMIN_GENERATION_ENABLED=true</code> and{" "}
@@ -332,7 +344,6 @@ export function AdminBlogGenerateClient() {
               setEnableBatch(on);
               if (on) {
                 setSlug("");
-                slugInputRef.current?.setCustomValidity("");
               }
             }}
           />
@@ -344,9 +355,7 @@ export function AdminBlogGenerateClient() {
             className="w-full rounded-md border border-border px-3 py-2 text-sm"
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
-            required={!enableBatch}
             disabled={enableBatch}
-            minLength={3}
           />
         </label>
         {enableBatch ? (
@@ -448,27 +457,26 @@ export function AdminBlogGenerateClient() {
             <option value="direct">Direct</option>
           </select>
         </label>
-        <label className="block space-y-1 sm:col-span-2">
-          <span className="text-xs font-medium text-muted-foreground">
-            Optional slug (leave blank to auto-generate). Use lowercase letters and hyphens only.
-          </span>
-          <input
-            ref={slugInputRef}
-            type="text"
-            inputMode="text"
-            autoComplete="off"
-            className="w-full rounded-md border border-border px-3 py-2 font-mono text-sm"
-            name="blog_optional_slug"
-            value={slug}
-            onChange={(e) => {
-              const normalized = liveNormalizeBlogSlugInputValue(e.target.value);
-              setSlug(normalized);
-              slugInputRef.current?.setCustomValidity(blogSlugCustomValidityMessage(normalized));
-            }}
-            disabled={enableBatch}
-            placeholder="leave blank to auto-generate"
-          />
-        </label>
+        {!enableBatch ? (
+          <label className="block space-y-1 sm:col-span-2">
+            <span className="text-xs font-medium text-muted-foreground">
+              Optional slug (leave blank to auto-generate). Use lowercase letters and hyphens only.
+            </span>
+            <input
+              type="text"
+              inputMode="text"
+              autoComplete="off"
+              className="w-full rounded-md border border-border px-3 py-2 font-mono text-sm"
+              name="blog_optional_slug"
+              value={slug}
+              onChange={(e) => {
+                const normalized = liveNormalizeBlogSlugInputValue(e.target.value);
+                setSlug(normalized);
+              }}
+              placeholder="leave blank to auto-generate"
+            />
+          </label>
+        ) : null}
         <label className="flex items-center gap-2 text-sm sm:col-span-2">
           <input type="checkbox" checked={publishNow} onChange={(e) => setPublishNow(e.target.checked)} />
           Publish immediately (recommended)
@@ -476,6 +484,7 @@ export function AdminBlogGenerateClient() {
       </div>
       <button
         type="submit"
+        formNoValidate
         disabled={busy || !aiGate.runnable}
         className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60"
       >
