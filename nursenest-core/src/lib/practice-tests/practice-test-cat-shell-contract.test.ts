@@ -50,6 +50,14 @@ describe("Practice test runner — CAT shell contract", () => {
     assert.equal(src.includes("PracticeQuestionCard"), false);
   });
 
+  it("delegates inline per-item rationale visibility to shouldShowLinearPerItemRationale (exam-safe)", () => {
+    assert.equal(src.includes("shouldShowLinearPerItemRationale"), true);
+    const helperPath = join(__dirname, "practice-test-linear-inline-rationale.ts");
+    const helperSrc = readFileSync(helperPath, "utf8");
+    assert.match(helperSrc, /linearDeliveryMode === "exam"/);
+    assert.match(helperSrc, /!linearIsExamShell/);
+  });
+
   it("keeps legacy + linear runner branches off the old split study grid (CAT study split stays earlier in file only)", () => {
     const legacyStart = src.indexOf("if (!catMode && !isLinearEngine)");
     const linearStart = src.indexOf("// LINEAR PRACTICE / EXAM");

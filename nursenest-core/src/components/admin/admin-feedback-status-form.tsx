@@ -1,8 +1,9 @@
 "use client";
 
-import { useFormStatus } from "react-dom";
+import { useFormState, useFormStatus } from "react-dom";
 import type { UserFeedbackStatus } from "@prisma/client";
-import { updateUserFeedbackReportStatus } from "@/app/(admin)/admin/feedback/actions";
+import { submitAdminFeedbackTriage } from "@/app/(admin)/admin/feedback/actions";
+import type { AdminActionResult } from "@/lib/admin/admin-action-result";
 
 const OPTIONS: { value: UserFeedbackStatus; label: string }[] = [
   { value: "NEW", label: "New" },

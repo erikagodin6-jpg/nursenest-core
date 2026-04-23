@@ -116,9 +116,13 @@ function LinearTutorAfterEachFixture() {
 }
 
 function LinearExamFixture() {
+  const [qIdx, setQIdx] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [committed, setCommitted] = useState(false);
+  const [flowDone, setFlowDone] = useState(false);
   const correctKey = "a";
+  const total = 2;
+  const isLast = qIdx >= total - 1;
   const opts = [
     { key: "a", letter: "A", text: "Alpha" },
     { key: "b", letter: "B", text: "Bravo" },
@@ -128,11 +132,11 @@ function LinearExamFixture() {
     <div data-testid="linear-exam-root" className={BOARD_FRAME} data-cat-exam-root>
       <div className={CONTENT_WELL}>
         <QuestionCard
-          stem="Exam item stem"
+          stem={`Exam item ${qIdx + 1} stem`}
           examStackedLayout
           examDetachedFooter
           examCategoryLabel="EXAM"
-          examLayoutMeasureKey="fixture-exam"
+          examLayoutMeasureKey={`fixture-exam-${qIdx}`}
         >
           <p className="nn-cat-options-label">Select the best answer</p>
           <ul className="nn-cat-opt-list" role="radiogroup" aria-label="Answer choices">
@@ -167,14 +171,31 @@ function LinearExamFixture() {
           <button type="button" disabled>
             Previous
           </button>
-          <p className="m-0 text-center text-xs">1 of 1 answered</p>
+          <p className="m-0 text-center text-xs">
+            {Math.min(qIdx + (committed ? 1 : 0), total)} of {total} answered
+          </p>
           <div className="min-w-[5.5rem] text-right">
-            {!committed ? (
+            {flowDone ? (
+              <span data-testid="linear-exam-flow-done">Exam flow complete</span>
+            ) : !committed ? (
               <button type="button" disabled={!selected} onClick={() => setCommitted(true)}>
                 Submit answer
               </button>
+            ) : !isLast ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setQIdx((n) => n + 1);
+                  setCommitted(false);
+                  setSelected(null);
+                }}
+              >
+                Next item
+              </button>
             ) : (
-              <button type="button">Finish test</button>
+              <button type="button" onClick={() => setFlowDone(true)}>
+                Finish test
+              </button>
             )}
           </div>
         </div>
@@ -236,7 +257,7 @@ function LegacyPracticeFixture() {
 }
 
 describe("Practice test CAT-aligned shell (mounted fixtures)", () => {
-  it("linear tutor after_each: select → submit → inline rationale in scroll well → Next advances", async () => {
+  it("linear tutor after_each: select → submit → inline rationale in scroll well → Next resets item", async () => {
     const user = userEvent.setup();
     const { container } = render(<LinearTutorAfterEachFixture />);
 
@@ -259,9 +280,16 @@ describe("Practice test CAT-aligned shell (mounted fixtures)", () => {
     await user.click(screen.getByRole("button", { name: /Next item/i }));
     assert.ok(screen.getByText(/Item 2 stem/i));
     assert.equal(document.querySelector("[data-nn-practice-per-item-rationale]"), null);
+
+    const bravo = screen.getByRole("button", { name: /Distractor/i });
+    assert.equal(bravo.hasAttribute("disabled"), false, "fresh item: options interactive again");
+    await user.click(bravo);
+    await user.click(screen.getByRole("button", { name: /Submit answer/i }));
+    assert.ok(document.querySelector("[data-nn-practice-per-item-rationale]"));
+    assert.ok(screen.getByText(/Not the best choice for this vignette/i));
   });
 
-  it("linear exam: submit locks options and does not mount per-item rationale", async () => {
+  it("linear exam: submit → no per-item rationale → Next item → second submit → Finish", async () => {
     const user = userEvent.setup();
     const { container } = render(<LinearExamFixture />);
 
@@ -273,14 +301,28 @@ describe("Practice test CAT-aligned shell (mounted fixtures)", () => {
     assert.equal(container.querySelector("[data-nn-practice-per-item-rationale]"), null);
     const locked = screen.getByRole("button", { name: /Bravo/i });
     assert.equal(locked.hasAttribute("disabled"), true);
+
+    await user.click(screen.getByRole("button", { name: /Next item/i }));
+    assert.ok(screen.getByText(/Exam item 2 stem/i));
+    assert.equal(container.querySelector("[data-nn-practice-per-item-rationale]"), null);
+
+    const alpha2 = screen.getByRole("button", { name: /Alpha/i });
+    assert.equal(alpha2.hasAttribute("disabled"), false);
+    await user.click(alpha2);
+    await user.click(screen.getByRole("button", { name: /Submit answer/i }));
+
+    await user.click(screen.getByRole("button", { name: /Finish test/i }));
+    assert.ok(screen.getByTestId("linear-exam-flow-done"));
   });
 
-  it("legacy-style free nav: CAT board frame + QuestionCard stack + opt list + footer pattern", async () => {
+  it("legacy-style free nav: CAT board shell + QuestionCard + AnswerOptionRow + footer; no split layout", async () => {
     const user = userEvent.setup();
-    render(<LegacyPracticeFixture />);
+    const { container } = render(<LegacyPracticeFixture />);
 
     const root = screen.getByTestId("legacy-root");
     assert.match(root.className, /nn-cat-session--exam-single/);
+    assert.equal(root.querySelector(".nn-question-session"), null);
+    assert.equal(container.querySelector(".nn-practice-test-linear-board"), null);
 
     const card = document.querySelector(".nn-cat-question-card--exam-stack.nn-cat-question-card--exam-detached");
     assert.ok(card, "uses stacked detached QuestionCard like the runner");

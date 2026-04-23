@@ -52,6 +52,7 @@ import {
   mcqAnswerSelectsCanonical,
 } from "@/lib/practice-tests/practice-mcq-selection";
 import { PracticeTestPerItemRationale } from "@/components/study/practice-test-per-item-rationale";
+import { shouldShowLinearPerItemRationale } from "@/lib/practice-tests/practice-test-linear-inline-rationale";
 import {
   ConfidenceSelector,
   type ConfidenceLevel,
@@ -2705,11 +2706,13 @@ export function PracticeTestRunnerClient({
     linearStemClinicalSplit?.imageSrc && linearStemClinicalSplit.imageSrc.trim().length > 0
       ? linearStemClinicalSplit.imageSrc.trim()
       : null;
-  const showLinearPerItemRationale =
-    isLinearEngine &&
-    linearRationaleVisibility === "after_each" &&
-    currentCommitted &&
-    Boolean(linearFeedback);
+  const showLinearPerItemRationale = shouldShowLinearPerItemRationale({
+    isLinearEngine,
+    linearDeliveryMode: linearDelivery,
+    linearRationaleVisibility,
+    currentCommitted,
+    linearFeedbackForCurrent: linearFeedback,
+  });
 
   const linearQuestionCardInner = (
     <>
