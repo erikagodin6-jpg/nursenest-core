@@ -1,4 +1,4 @@
-import { randomInt } from "node:crypto";
+import { randomInt, randomUUID } from "node:crypto";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
@@ -142,7 +142,9 @@ export async function fetchCatPracticePool(
   const completeRows = rows.filter((r) => isCompleteCatQuestionRow(r));
   const salt = input.sessionPickSalt?.trim();
   const ordered =
-    salt && salt.length >= 8 ? shuffleSeeded(completeRows, `${salt}:cat-pool-row-order-v1`) : completeRows;
+    salt && salt.length >= 8
+      ? shuffleSeeded(completeRows, `${salt}:cat-pool-row-order-v1`)
+      : shuffleSeeded(completeRows, `ephemeral-cat-pool:${randomUUID()}`);
 
   return ordered.map((r) => ({
     id: r.id,

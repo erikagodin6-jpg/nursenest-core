@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { ContentStatus, FlashcardDeckVisibility } from "@prisma/client";
@@ -10,7 +11,7 @@ import {
   userCanAccessDeckForStudy,
 } from "@/lib/flashcards/flashcard-access";
 import { findPublishedDeckByRef } from "@/lib/flashcards/resolve-deck";
-import { buildStudyQueueIds, shuffleIdsStableSeed } from "@/lib/flashcards/study-queue";
+import { buildStudyQueueIds, shuffleFlashcardQueueWithinDueBands } from "@/lib/flashcards/study-queue";
 import { prisma } from "@/lib/db";
 import {
   PRISMA_FLASHCARD_DECK_INDEX_MAX,
@@ -228,7 +229,7 @@ export async function GET(req: NextRequest, { params }: Props) {
 
     if (!sessionRow || reset) {
       if (shuffle) {
-        queueIds = shuffleIdsStableSeed(queueIds);
+        queueIds = shuffleFlashcardQueueWithinDueBands(queueIds, progressMap, now, randomUUID());
       }
       sessionRow = await withRetry(() =>
         prisma.flashcardStudySession.upsert({

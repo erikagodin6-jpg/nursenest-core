@@ -1,8 +1,20 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useState, type ReactNode } from "react";
-import { PageTransitionShell } from "@/lib/motion/page-transition-shell";
 import { MarketingMobilePerfProvider } from "@/lib/ui/marketing-mobile-perf-context";
+
+/**
+ * Framer route shell is desktop-only: dynamic import keeps `framer-motion` off the network/parse
+ * path when `narrow` stays true (SSR hint + `matchMedia` — marketing-only).
+ */
+const PageTransitionShellLazy = dynamic(
+  () =>
+    import("@/lib/motion/page-transition-shell").then((mod) => ({
+      default: mod.PageTransitionShell,
+    })),
+  { ssr: true },
+);
 
 /**
  * Marketing-only: narrow viewport for motion/carousel + homepage gating.
@@ -26,7 +38,7 @@ export function MarketingMobileMotionShell({
   }, []);
   return (
     <MarketingMobilePerfProvider value={narrow}>
-      <PageTransitionShell>{children}</PageTransitionShell>
+      {narrow ? children : <PageTransitionShellLazy>{children}</PageTransitionShellLazy>}
     </MarketingMobilePerfProvider>
   );
 }

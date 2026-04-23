@@ -58,7 +58,7 @@
 
 .lv-card {
   border-radius: var(--lv-radius-lg);
-  border: 1px solid var(--lv-border-soft);
+  border: 1px solid color-mix(in srgb, var(--lv-border-soft) 92%, var(--lv-accent-300) 8%);
   background: var(--lv-bg-surface);
   padding: 1rem;
   box-shadow: var(--lv-shadow-soft);
@@ -69,7 +69,8 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .lv-card:hover {
-    border-color: color-mix(in srgb, var(--lv-border-soft) 72%, var(--lv-primary-500) 28%);
+    border-color: color-mix(in srgb, var(--lv-border-soft) 68%, var(--lv-primary-500) 32%);
+    box-shadow: var(--lv-shadow-medium);
   }
 }
 
@@ -111,20 +112,32 @@
   gap: 0.5rem;
   padding: 0.6rem 1.25rem;
   border-radius: var(--lv-radius-lg);
-  border: 1px solid color-mix(in srgb, var(--lv-primary-500) 32%, var(--lv-border-soft));
-  background: var(--lv-primary-500);
+  border: 1px solid color-mix(in srgb, var(--lv-primary-500) 36%, var(--lv-border-soft));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--lv-on-primary) 14%, var(--lv-primary-500)) 0%,
+    var(--lv-primary-500) 100%
+  );
   color: var(--lv-on-primary);
   font-size: 0.875rem;
   font-weight: 600;
   text-decoration: none;
-  box-shadow: var(--lv-shadow-soft);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--lv-on-primary) 25%, transparent),
+    var(--lv-shadow-soft);
   transition:
     opacity var(--lv-motion) var(--lv-motion-ease),
-    border-color var(--lv-motion) var(--lv-motion-ease);
+    border-color var(--lv-motion) var(--lv-motion-ease),
+    box-shadow var(--lv-motion) var(--lv-motion-ease),
+    filter var(--lv-motion) var(--lv-motion-ease);
 }
 
 .lv-btn-primary:hover {
-  opacity: 0.94;
+  opacity: 0.97;
+  filter: brightness(1.03);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--lv-on-primary) 28%, transparent),
+    var(--lv-shadow-medium);
 }
 
 .lv-btn-primary:focus-visible {
@@ -205,9 +218,12 @@
 
 .lv-chip[data-selected="true"],
 .lv-chip[data-pressed="true"] {
-  border-color: color-mix(in srgb, var(--lv-primary-500) 38%, var(--lv-border-soft));
-  background: color-mix(in srgb, var(--lv-primary-50) 70%, var(--lv-bg-surface));
+  border-color: color-mix(in srgb, var(--lv-primary-500) 46%, var(--lv-border-soft));
+  background: color-mix(in srgb, var(--lv-primary-50) 78%, var(--lv-bg-surface));
   color: var(--lv-text-primary);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--lv-primary-500) 12%, transparent),
+    0 4px 12px -3px color-mix(in srgb, var(--lv-primary-500) 16%, transparent);
 }
 
 .lv-chip--stack {
@@ -539,9 +555,14 @@
 
 .lv-flash-shell {
   border-radius: var(--lv-radius-lg);
-  border: 1px solid color-mix(in srgb, var(--lv-border-soft) 92%, var(--lv-text-secondary));
-  background: color-mix(in srgb, var(--lv-bg-surface) 92%, var(--lv-bg-base));
-  box-shadow: var(--lv-shadow-soft);
+  border: 1px solid color-mix(in srgb, var(--lv-border-soft) 82%, var(--lv-secondary-300) 18%);
+  background: linear-gradient(
+    185deg,
+    color-mix(in srgb, var(--lv-secondary-100) 55%, var(--lv-bg-surface)) 0%,
+    color-mix(in srgb, var(--lv-bg-surface) 94%, var(--lv-bg-base)) 48%,
+    color-mix(in srgb, var(--lv-accent-100) 35%, var(--lv-bg-surface)) 100%
+  );
+  box-shadow: var(--lv-shadow-medium);
   padding: 1.5rem 1rem;
 }
 

@@ -12,6 +12,8 @@ import {
   recentPracticeQuestionIdsForPathway,
 } from "@/lib/practice-tests/recent-practice-question-ids";
 import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
+import { practiceRecentSessionLookback, STUDY_DIVERSITY_PRACTICE_RECENT_MIN_REMAINING_DEFAULT } from "@/lib/study/study-diversity-config";
+import { logStudyDiversity } from "@/lib/study/study-diversity-log";
 
 /** Linear pool selection — CAT uses {@link createCatPracticeTestPayload} instead. */
 export type LinearPoolSelectionMode = Exclude<PracticeTestSelectionMode, "cat">;
@@ -86,8 +88,13 @@ export async function pickPracticeQuestionIds(
   const recentPack = await recentPracticeQuestionIdsForPathway({
     userId,
     pathwayId: pathwayIdForRecent,
+    sessionLookback: practiceRecentSessionLookback(input.selectionMode),
   });
-  const recentFiltered = filterPoolRemovingRecentQuestions(pool, recentPack.ids, n);
+  const minRemain = Math.min(
+    Math.max(STUDY_DIVERSITY_PRACTICE_RECENT_MIN_REMAINING_DEFAULT, n),
+    pool.length,
+  );
+  const recentFiltered = filterPoolRemovingRecentQuestions(pool, recentPack.ids, minRemain);
 
   const poolIds = recentFiltered.pool.map((p) => p.id);
   const salt = input.sessionPickSalt?.trim();
@@ -95,6 +102,14 @@ export async function pickPracticeQuestionIds(
     ? shuffleSeeded(poolIds, `${salt}:linear-pool`)
     : shuffle(poolIds)
   ).slice(0, n);
+  logStudyDiversity("linear_pick", {
+    poolSize: pool.length,
+    poolAfterRecent: recentFiltered.pool.length,
+    recentApplied: recentFiltered.applied ? 1 : 0,
+    selectionMode: input.selectionMode,
+    questionCount: n,
+    hasSalt: salt && salt.length >= 8 ? 1 : 0,
+  });
   return {
     ok: true,
     ids,

@@ -309,7 +309,7 @@ export function PracticeTestsHubClient({
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" data-nn-learner-area="practice-tests">
       <section
         className={`nn-card nn-student-card-lift p-6 sm:p-7 ${
           isPriorityWinner(hubPriority, "weak_focus")

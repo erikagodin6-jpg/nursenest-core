@@ -10,6 +10,9 @@ test("renal keywords win over prioritization / fundamentals-style copy", () => {
   assert.equal(classifyLearningTopic("kidney transplant immunosuppression overview", null).categoryId, "renal-genitourinary");
 });
 
-test("narrow infection-control fundamentals still map to fundamentals", () => {
-  assert.equal(classifyLearningTopic("hand hygiene and standard precautions in clinical practice", null).categoryId, "fundamentals");
+test("infection-control basics map to immune / infectious (clinical domain)", () => {
+  assert.equal(
+    classifyLearningTopic("hand hygiene and standard precautions in clinical practice", null).categoryId,
+    "immune-infectious",
+  );
 });

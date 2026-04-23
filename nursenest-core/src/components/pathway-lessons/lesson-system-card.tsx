@@ -82,7 +82,7 @@ export function LessonSystemCard({
     <section
       id={section.id}
       style={systemStyle}
-      className="rounded-[1.5rem] border border-[color-mix(in_srgb,var(--nn-system-accent)_16%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-3.5 shadow-[var(--semantic-shadow-soft)] sm:p-4"
+      className="nn-lesson-system-card rounded-[1.35rem] border border-[color-mix(in_srgb,var(--nn-system-accent)_16%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-3.5 sm:p-4"
       aria-labelledby={`lesson-system-card-${section.id}`}
     >
       <div className="flex items-center gap-3">

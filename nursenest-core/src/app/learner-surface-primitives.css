@@ -7,7 +7,7 @@
 /* ── Base surface ─────────────────────────────────────────────────────── */
 
 .nn-ls-surface {
-  border-radius: 1.5rem;
+  border-radius: 1.35rem;
   border: 1px solid var(--semantic-border-soft);
   background: var(--semantic-surface);
   box-shadow: var(--semantic-shadow-soft);
@@ -111,8 +111,8 @@
 .nn-ls-title {
   margin-top: 0.45rem;
   font-size: clamp(1.05rem, 2.2vw, 1.45rem);
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  letter-spacing: -0.022em;
   line-height: 1.2;
   color: var(--semantic-text-primary);
 }
@@ -165,8 +165,12 @@
 }
 
 .nn-ls-chip[data-selected="true"] {
-  border-color: color-mix(in srgb, var(--semantic-brand) 48%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--semantic-brand) 11%, var(--semantic-surface));
+  border-color: color-mix(in srgb, var(--semantic-brand) 52%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 14%, var(--semantic-surface));
+  color: var(--semantic-text-primary);
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--semantic-brand) 12%, transparent),
+    0 4px 12px -3px color-mix(in srgb, var(--semantic-brand) 18%, transparent);
 }
 
 .nn-ls-chip[data-tone="supportive"] {

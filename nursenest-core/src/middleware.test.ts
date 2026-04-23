@@ -43,7 +43,7 @@ test("proxy sets x-nn-admin-path for /admin and /api/admin (RBAC header for guar
   const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
   assert.match(proxySrc, /x-nn-admin-path/);
   assert.match(proxySrc, /x-nn-request-pathname/);
-  assert.match(proxySrc, /x-nn-marketing-narrow-viewport-hint/);
+  assert.match(proxySrc, /MARKETING_NARROW_VIEWPORT_HINT_HEADER/);
   assert.match(proxySrc, /x-nn-request-url/);
   assert.match(
     proxySrc,

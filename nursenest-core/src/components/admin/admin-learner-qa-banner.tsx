@@ -1,15 +1,22 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { adminLearnerQaMobilePreviewHref } from "@/lib/admin/admin-learner-qa-mobile-preview";
+
+const BANNER_MOBILE_WIDTH = 390;
 
 /**
  * Persistent learner-shell banner while signed QA cookie is active (staff only).
  */
 export function AdminLearnerQaBanner({ title }: { title: string }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const learnerPath = pathname && pathname.startsWith("/app") ? pathname : "/app";
+  const mobileHref = adminLearnerQaMobilePreviewHref(learnerPath, BANNER_MOBILE_WIDTH);
 
   async function exit() {
     setErr(null);
@@ -50,6 +57,13 @@ export function AdminLearnerQaBanner({ title }: { title: string }) {
           {busy ? "…" : "Exit learner view"}
         </button>
       </div>
+      <p className="mt-2 text-xs text-muted-foreground">
+        <span className="font-medium text-[var(--semantic-text-primary)]">Mobile QA:</span>{" "}
+        <Link className="font-semibold text-primary underline" href={mobileHref}>
+          Open this page in {BANNER_MOBILE_WIDTH}px frame
+        </Link>{" "}
+        (admin tool — same cookies; viewport width only, not a device emulator).
+      </p>
       {err ? <p className="mt-1 text-xs text-[var(--semantic-danger)]">{err}</p> : null}
     </div>
   );

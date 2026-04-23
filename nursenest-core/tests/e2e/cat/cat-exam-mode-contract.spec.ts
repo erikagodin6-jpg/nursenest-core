@@ -37,7 +37,7 @@ test.describe("CAT exam mode — runner contract", () => {
       await expect(page.locator(".nn-question-session-rationale")).toHaveCount(0);
       await expect(page.locator("[data-nn-qa-cat-live-transparency]")).toHaveCount(0);
 
-      const submit = page.getByRole("button", { name: /^Submit answer$/i });
+      const submit = page.getByRole("button", { name: /^Submit & Continue$/i });
       await expect(submit).toBeDisabled();
 
       const list = page.locator("ul.nn-cat-opt-list").first();
@@ -50,7 +50,7 @@ test.describe("CAT exam mode — runner contract", () => {
       const advance = page.locator("[data-nn-qa-cat-exam-advance]");
       await expect(advance).toBeVisible({ timeout: 30_000 });
       await expect(advance).toBeEnabled();
-      await expect(page.getByRole("button", { name: /^Submit answer$/i })).toHaveCount(0);
+      await expect(page.locator("[data-nn-qa-cat-exam-submit-answer]")).toHaveCount(0);
       await expect(advance).toHaveAttribute("data-nn-qa-cat-exam-advance-intent", "server_driven");
 
       let patchCount = 0;
@@ -86,7 +86,7 @@ test.describe("CAT exam mode — runner contract", () => {
         .poll(() => patchCount, { timeout: 60_000 })
         .toBe(1);
 
-      await expect(page.getByRole("button", { name: /^Submit answer$/i })).toBeVisible({ timeout: 60_000 });
+      await expect(page.locator("[data-nn-qa-cat-exam-submit-answer]")).toBeVisible({ timeout: 60_000 });
 
       await page.unroute("**/api/practice-tests/**");
 

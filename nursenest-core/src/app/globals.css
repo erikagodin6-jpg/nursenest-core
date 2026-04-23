@@ -35,7 +35,8 @@ body {
  */
 :root {
   --font-sans: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
-  --radius: 0.75rem;
+  /* Slightly rounder global radius → calmer cards without “chunky” mobile tiles */
+  --radius: 0.8125rem;
   --color-warmwhite: #fdfcfa;
   --color-softgray: #6b7280;
 
@@ -46,10 +47,18 @@ body {
   --space-hero-bottom: clamp(1rem, 2.2vw, 1.875rem);
   --space-block: clamp(2.25rem, 4.2vw, 3.25rem);
 
-  --shadow-card: 0 1px 4px rgba(0, 0, 0, 0.07), 0 2px 8px -2px rgba(0, 0, 0, 0.05);
-  --shadow-card-hover: 0 8px 32px -8px rgba(0, 0, 0, 0.13), 0 4px 14px -4px rgba(0, 0, 0, 0.07);
+  --shadow-card:
+    0 1px 0 rgba(23, 34, 42, 0.05),
+    0 1px 3px rgba(23, 34, 42, 0.05),
+    0 12px 32px -14px rgba(23, 34, 42, 0.08);
+  --shadow-card-hover:
+    0 1px 0 rgba(23, 34, 42, 0.06),
+    0 4px 14px -4px rgba(23, 34, 42, 0.08),
+    0 18px 44px -14px rgba(23, 34, 42, 0.12);
   --shadow-nav: 0 1px 4px rgba(0, 0, 0, 0.08), 0 4px 18px -4px rgba(0, 0, 0, 0.1);
-  --shadow-elevated: 0 12px 40px -12px rgba(0, 0, 0, 0.14), 0 4px 18px -4px rgba(0, 0, 0, 0.08);
+  --shadow-elevated:
+    0 8px 28px -10px rgba(23, 34, 42, 0.12),
+    0 2px 8px -2px rgba(23, 34, 42, 0.06);
   --elevation-rest: var(--shadow-card);
   --elevation-hover: var(--shadow-card-hover);
   --elevation-active: 0 2px 10px -6px rgba(0, 0, 0, 0.14), 0 1px 4px rgba(0, 0, 0, 0.09);
@@ -228,9 +237,9 @@ body {
   --accent-soft: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 16%, var(--bg-card));
   --accent-highlight: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 18%, var(--bg-card));
 
-  /* Interactive list / tab / chip surfaces */
-  --surface-interactive-hover: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 15%, var(--bg-card));
-  --surface-selected: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 16%, var(--bg-card));
+  /* Interactive list / tab / chip surfaces — slightly richer so hover/selected read clearly */
+  --surface-interactive-hover: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 19%, var(--bg-card));
+  --surface-selected: color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 22%, var(--bg-card));
   --surface-input: color-mix(in srgb, var(--palette-primary-deep, var(--theme-secondary, var(--palette-primary))) 8%, var(--theme-input-bg));
   --surface-chip: color-mix(in srgb, var(--palette-badge, var(--theme-accent)) 75%, var(--bg-card));
   --text-on-accent: var(--palette-nav-text, var(--palette-button-primary-text, var(--theme-primary-foreground)));
@@ -461,15 +470,18 @@ body {
   --color-popover-base: var(--bg-elevated);
   --color-popover-fg-base: var(--theme-body-text);
 
-  /* Depth: neutral shadows only (no primary-hued elevation) */
+  /* Depth: neutral shadows — layered rim + soft ambient (theme-aware luminance) */
   --shadow-card:
-    0 1px 0 color-mix(in srgb, var(--theme-heading-text) 5%, transparent),
-    0 1px 3px color-mix(in srgb, var(--theme-heading-text) 8%, transparent);
+    0 1px 0 color-mix(in srgb, var(--theme-heading-text) 5.5%, transparent),
+    0 1px 3px color-mix(in srgb, var(--theme-heading-text) 7%, transparent),
+    0 14px 34px -16px color-mix(in srgb, var(--theme-heading-text) 10%, transparent);
   --shadow-card-hover:
-    0 1px 0 color-mix(in srgb, var(--theme-heading-text) 6%, transparent),
-    0 4px 14px -4px color-mix(in srgb, var(--theme-heading-text) 12%, transparent);
+    0 1px 0 color-mix(in srgb, var(--theme-heading-text) 6.5%, transparent),
+    0 6px 18px -6px color-mix(in srgb, var(--theme-heading-text) 11%, transparent),
+    0 20px 44px -16px color-mix(in srgb, var(--theme-heading-text) 13%, transparent);
   --shadow-elevated:
-    0 8px 24px -8px color-mix(in srgb, var(--theme-heading-text) 14%, transparent);
+    0 10px 30px -10px color-mix(in srgb, var(--theme-heading-text) 15%, transparent),
+    0 2px 8px -2px color-mix(in srgb, var(--theme-heading-text) 8%, transparent);
   --shadow-nav:
     0 1px 2px color-mix(in srgb, var(--theme-heading-text) 6%, transparent),
     0 4px 16px -4px color-mix(in srgb, var(--theme-heading-text) 10%, transparent);
@@ -615,8 +627,8 @@ html[data-theme="storm-slate"] {
   --ring-accent: color-mix(in srgb, var(--theme-primary) 55%, transparent);
   --accent-highlight: color-mix(in srgb, var(--theme-primary) 20%, var(--theme-card-bg));
   --accent-pressed: color-mix(in srgb, var(--theme-primary) 72%, var(--theme-heading-text));
-  --surface-interactive-hover: color-mix(in srgb, var(--theme-primary) 11%, var(--bg-card));
-  --surface-selected: color-mix(in srgb, var(--theme-primary) 18%, var(--bg-card));
+  --surface-interactive-hover: color-mix(in srgb, var(--theme-primary) 14%, var(--bg-card));
+  --surface-selected: color-mix(in srgb, var(--theme-primary) 24%, var(--bg-card));
   --surface-input: color-mix(in srgb, var(--theme-primary) 5%, var(--theme-input-bg));
   --surface-chip: color-mix(in srgb, var(--theme-primary) 12%, var(--bg-card));
   --border-subtle: color-mix(in srgb, var(--theme-border) 62%, var(--theme-page-bg));
@@ -933,8 +945,8 @@ a {
   border: 1px solid var(--border-subtle, var(--theme-card-border));
   border-radius: var(--radius-xl);
   color: var(--theme-card-foreground-readable, var(--theme-body-text));
-  /* Border defines the card; avoid border + shadow double-stacking on default cards */
-  box-shadow: none;
+  /* Single soft stack: hairline rim + calm ambient (tokens follow `[data-theme]` shadows) */
+  box-shadow: var(--shadow-card, var(--elevation-rest));
 }
 
 /**
@@ -1144,7 +1156,13 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
 .nn-marketing-card {
   border-radius: var(--radius-xl);
   border: 1px solid var(--border-subtle, var(--theme-card-border));
-  background: var(--bg-card, var(--theme-card-bg));
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in srgb, var(--accent-primary, var(--theme-primary)) 5.5%, var(--bg-card, var(--theme-card-bg))) 0%,
+      var(--bg-card, var(--theme-card-bg)) 42%,
+      color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 4%, var(--bg-card, var(--theme-card-bg))) 100%
+    );
   box-shadow: var(--elevation-rest);
   transition:
     transform var(--motion-base) var(--motion-ease),
@@ -1235,23 +1253,25 @@ html[data-theme="deep-twilight"] .nn-ui-btn--destructive {
 .nn-marketing-h1 {
   font-size: var(--text-hero);
   font-weight: var(--nn-font-weight-hero);
-  letter-spacing: -0.02em;
-  line-height: 1.08;
+  letter-spacing: -0.025em;
+  line-height: 1.07;
   color: var(--palette-heading);
+  text-wrap: balance;
 }
 
 .nn-marketing-h2 {
   font-size: var(--text-section);
   font-weight: var(--nn-font-weight-heading);
-  letter-spacing: -0.015em;
-  line-height: 1.14;
+  letter-spacing: -0.018em;
+  line-height: 1.13;
   color: var(--palette-heading);
+  text-wrap: balance;
 }
 
 .nn-marketing-h3 {
   font-size: var(--text-marketing-h3);
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-weight: 600;
+  letter-spacing: -0.012em;
   line-height: var(--leading-marketing-snug);
   color: var(--palette-heading);
 }
@@ -1448,11 +1468,11 @@ article .prose :where(pre) {
 .nn-elevation-panel {
   border: 1px solid var(--border-subtle);
   background: var(--bg-card);
-  box-shadow: none;
+  box-shadow: var(--shadow-card, var(--elevation-rest));
 }
 .nn-elevation-panel:hover {
   border-color: var(--border-medium);
-  box-shadow: none;
+  box-shadow: var(--shadow-card-hover, var(--elevation-hover));
 }
 .nn-motion-standard {
   transition:
@@ -1471,10 +1491,15 @@ article .prose :where(pre) {
   box-shadow: var(--elevation-active);
 }
 
-/* Marketing shell: flat page + one soft top wash (no stacked band gradients) */
+/* Marketing shell: one soft vertical wash — tonal variation without stacked band clutter */
 html[data-theme] .nn-marketing-surface {
   background-color: var(--page-bg, var(--bg-page));
-  background-image: none;
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--accent-primary, var(--theme-primary)) 3.5%, var(--page-bg, var(--bg-page))) 0%,
+    var(--page-bg, var(--bg-page)) 18%,
+    color-mix(in srgb, var(--bg-section-alt) 42%, var(--page-bg, var(--bg-page))) 100%
+  );
 }
 
 /* Homepage hero: flat canvas — theme accents live in CTAs / links */
@@ -1484,12 +1509,24 @@ html[data-theme] .nn-marketing-surface {
 
 /* Optional: full-width section band on page canvas */
 .nn-surface-section {
-  background: var(--bg-section);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--accent-primary, var(--theme-primary)) 2.5%, var(--bg-section)) 0%,
+      var(--bg-section) 35%,
+      var(--bg-section) 100%
+    );
 }
 
 /* Alternate band — use between major sections (pricing, hubs) for rhythm */
 .nn-surface-section-alt {
-  background: var(--bg-section-alt);
+  background:
+    linear-gradient(
+      185deg,
+      var(--bg-section-alt) 0%,
+      color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 3.5%, var(--bg-section-alt)) 55%,
+      var(--bg-section-alt) 100%
+    );
 }
 
 /*
@@ -1553,7 +1590,7 @@ html[data-theme] .nn-marketing-surface {
   background: var(--nn-aesthetic-card-bg);
   border: 1px solid var(--nn-aesthetic-border-soft);
   border-radius: 1.25rem;
-  box-shadow: none;
+  box-shadow: var(--shadow-card, var(--elevation-rest));
   transition:
     transform var(--motion-base) var(--motion-ease),
     box-shadow var(--motion-base) var(--motion-ease),
@@ -1563,7 +1600,7 @@ html[data-theme] .nn-marketing-surface {
 
 .nn-card-soft:hover {
   transform: translateY(var(--lift-card-hover-y));
-  box-shadow: none;
+  box-shadow: var(--shadow-card-hover, var(--elevation-hover));
   border-color: var(--border-strong);
 }
 
@@ -1575,7 +1612,7 @@ html[data-theme] .nn-marketing-surface {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
-  box-shadow: none;
+  box-shadow: var(--shadow-card, var(--elevation-rest));
 }
 
 .nn-card-system-pad {
@@ -1598,7 +1635,7 @@ html[data-theme] .nn-marketing-surface {
 
 .nn-card-system--interactive:hover {
   transform: translateY(var(--lift-card-hover-y));
-  box-shadow: var(--elevation-hover);
+  box-shadow: var(--shadow-card-hover, var(--elevation-hover));
   border-color: var(--border-strong);
 }
 
@@ -2247,6 +2284,68 @@ html[data-theme] .nn-marketing-surface {
   background-repeat: no-repeat;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .nn-hero-branded.nn-hero-branded--ambient-depth {
+    box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--border-subtle) 55%, transparent);
+  }
+}
+
+/*
+ * Marketing trust strip — section wash + elevated inner panel (replaces inline surface styles).
+ */
+.nn-marketing-trust-strip {
+  background: color-mix(in srgb, var(--semantic-brand) 4.5%, var(--semantic-bg-soft, var(--bg-section-alt)));
+}
+
+html[data-theme] .nn-marketing-trust-strip {
+  background: linear-gradient(
+    185deg,
+    var(--accent-surface-a) 0%,
+    color-mix(in srgb, var(--accent-surface-c) 48%, var(--accent-surface-a)) 100%
+  );
+}
+
+.nn-marketing-trust-panel {
+  border: 1px solid color-mix(in srgb, var(--theme-primary) 16%, var(--border-subtle));
+  background: linear-gradient(
+    205deg,
+    var(--bg-card) 0%,
+    color-mix(in srgb, var(--semantic-panel-cool) 32%, var(--bg-card)) 52%,
+    color-mix(in srgb, var(--semantic-panel-muted) 22%, var(--bg-card)) 100%
+  );
+  box-shadow: var(--shadow-card, var(--elevation-rest));
+}
+
+/* Practice / CAT hub — cool top rail on primary builder card (clinical / structured cue) */
+[data-nn-learner-area="practice-tests"] > section.nn-card:first-of-type {
+  border-top-width: 3px;
+  border-top-style: solid;
+  border-top-color: color-mix(in srgb, var(--semantic-info) 42%, var(--border-subtle));
+}
+
+/* Pathway lesson system accordion cards — per-system accent top stroke + soft lift */
+.nn-lesson-system-card {
+  box-shadow:
+    var(--semantic-shadow-soft),
+    inset 0 3px 0 0 color-mix(in srgb, var(--nn-system-accent) 36%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-lesson-system-card {
+    transition:
+      box-shadow var(--brand-motion-card-hover) var(--brand-motion-ease-luxury),
+      border-color var(--brand-motion-card-hover) var(--brand-motion-ease-luxury);
+  }
+
+  .nn-lesson-system-card:hover {
+    border-color: color-mix(in srgb, var(--nn-system-accent) 22%, var(--semantic-border-soft));
+    box-shadow:
+      var(--semantic-shadow-soft),
+      0 10px 28px -18px color-mix(in srgb, var(--nn-system-accent) 12%, transparent),
+      inset 0 3px 0 0 color-mix(in srgb, var(--nn-system-accent) 44%, transparent);
+  }
+}
+
 /* Accent surfaces — structured multi-role palette classes */
 .nn-accent-surface-a {
   background: var(--accent-surface-a);
@@ -2313,6 +2412,9 @@ html[data-theme] .nn-marketing-surface {
   border-color: var(--surface-bubble-border);
   color: var(--text-on-accent);
   font-weight: 600;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--text-on-accent) 22%, transparent),
+    0 6px 16px -4px color-mix(in srgb, var(--surface-bubble-strong) 28%, transparent);
 }
 
 .nn-chip:focus-visible {
@@ -2346,6 +2448,9 @@ html[data-theme] .nn-marketing-surface {
   border-color: var(--surface-bubble-border);
   color: var(--text-on-accent);
   font-weight: 600;
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--text-on-accent) 20%, transparent),
+    0 5px 14px -3px color-mix(in srgb, var(--surface-bubble-strong) 26%, transparent);
 }
 
 .nn-tab-pill:focus-visible {
@@ -4817,10 +4922,13 @@ html[data-theme="deep-twilight"] .nn-question-rationale-card__verdict--miss {
   background: color-mix(in srgb, var(--role-success) 3.5%, var(--bg-card));
 }
 
-/* Locked — list / lesson cards */
+/* Locked — list / lesson cards: clear “inactive” without heavy blur or illegibility */
 .nn-study-card--locked {
-  opacity: 0.58;
-  filter: grayscale(0.18);
+  opacity: 0.92;
+  filter: grayscale(0.12);
+  border-color: color-mix(in srgb, var(--semantic-text-muted) 38%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 55%, var(--bg-card));
+  border-left: 3px solid color-mix(in srgb, var(--semantic-text-muted) 65%, var(--border-subtle));
 }
 
 /* App-surface completed card (nn-card--completed) */
@@ -4830,8 +4938,10 @@ html[data-theme="deep-twilight"] .nn-question-rationale-card__verdict--miss {
 
 /* App-surface locked card */
 .nn-card--locked {
-  opacity: 0.58;
-  filter: grayscale(0.18);
+  opacity: 0.9;
+  filter: grayscale(0.1);
+  border-left: 3px solid color-mix(in srgb, var(--semantic-text-muted) 60%, var(--border-subtle));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 48%, var(--bg-card, var(--theme-card-bg)));
 }
 
 /* Default CAT / timed session chrome: theme-native wash (not flat slate) */

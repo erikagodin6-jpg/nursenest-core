@@ -21,6 +21,7 @@ import {
   trajectorySummary,
   weakAreaPriorityFromResults,
 } from "@/lib/exams/cat-readiness";
+import { hashSeedToUint32 } from "@/lib/practice-tests/session-seeded-random";
 import { buildCatBlueprintAdminDiagnostics } from "@/lib/exams/cat-blueprint-mapping-quality";
 import { getExamConfig } from "@/lib/exams/exam-config";
 import {
@@ -355,10 +356,17 @@ export function selectNextQuestion(
     return { row, score };
   });
 
-  scored.sort((a, b) => a.score - b.score || a.row.id.localeCompare(b.row.id));
+  const saltPrefix = options?.sessionPickSalt ? `${options.sessionPickSalt}:` : "";
+  scored.sort((a, b) => {
+    const cmp = a.score - b.score;
+    if (cmp !== 0) return cmp;
+    if (saltPrefix) {
+      return hashSeedToUint32(`${saltPrefix}tie:${a.row.id}`) - hashSeedToUint32(`${saltPrefix}tie:${b.row.id}`);
+    }
+    return a.row.id.localeCompare(b.row.id);
+  });
   const best = scored[0]?.score ?? 0;
   const top = scored.filter((s) => s.score <= best + 0.5).map((s) => s.row);
-  const saltPrefix = options?.sessionPickSalt ? `${options.sessionPickSalt}:` : "";
   const pick = top.length ? hashPickStable(top, `${saltPrefix}${usedIds.size}:${td}`) : unused[0]!;
 
   const bandMatch = band(pick.difficulty) <= 1;

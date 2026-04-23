@@ -509,7 +509,6 @@ export function PracticeTestRunnerClient({
       : tx("learner.practiceTests.run.defaultExamName", "Practice Exam"));
   const chromeVariant = examChromeVariantFromSurface(pathwaySurface);
   const chromeClass = `nn-exam-variant--${chromeVariant}`;
-  const examSimulation = testConfig?.catPresentationMode === "exam_simulation";
   const guidedPracticeCat = Boolean(catMode && (testConfig?.catAdaptiveSessionType ?? "cat") === "practice");
   /**
    * Adaptive CAT stays exam-like: no per-item rationale column during the session (rationales belong in
@@ -548,7 +547,6 @@ export function PracticeTestRunnerClient({
 
   const catStudyLocked =
     catFeedbackStudy && Boolean(catStudyFeedback && current && catStudyFeedback.questionId === current.id);
-  const aanpNpExamSim = examSimulation && testConfig?.catExamConfigId === "aanp-np-us";
   const optsCanonical = useMemo(() => (current ? parseOptions(current.options) : []), [current]);
   const optsDisplay = useMemo(() => {
     if (!current) return [];
@@ -1665,21 +1663,12 @@ export function PracticeTestRunnerClient({
   }
 
   // Derived layout / display values
-  const modeLabel = isLinearEngine
-    ? linearRationaleVisibility === "end_of_exam"
-      ? tx("learner.practiceTests.run.linearExamMode", "Linear exam")
-      : tx("learner.practiceTests.run.linearPracticeMode", "Linear practice")
-    : catMode
-      ? examSimulation
-        ? aanpNpExamSim
-          ? tx("learner.practiceTests.run.npSimulationMode", "NP adaptive simulation · AANP-style")
-          : tx("learner.practiceTests.run.nclexSimulationMode", "NCLEX-style adaptive simulation")
-        : guidedPracticeCat
-          ? tx("learner.practiceTests.run.practiceTestGuidedCat", "Practice Test")
-          : catFeedbackStudy
-            ? tx("learner.practiceTests.run.catStudyMode", "Adaptive Test · rationales each item")
-            : tx("learner.practiceTests.run.catTestMode", "Adaptive Test · board-style run")
-      : tx("learner.practiceTests.run.practiceMode", "Practice Test");
+  /** Surface mode names only — avoid “Adaptive”/“Practice” wording overlap across CAT vs linear. */
+  const modeLabel = catMode
+    ? guidedPracticeCat
+      ? tx("learner.practiceTests.run.practiceTestModeLabel", "Practice Test")
+      : tx("learner.practiceTests.run.adaptiveTestModeLabel", "Adaptive Test")
+    : tx("learner.practiceTests.run.practiceTestModeLabel", "Practice Test");
   const controlsBusy = saving || qLoading;
 
   const sessionPct = total > 0 ? Math.min(100, Math.max(0, ((idx + 1) / total) * 100)) : 0;
@@ -1731,7 +1720,7 @@ export function PracticeTestRunnerClient({
             isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase)
               ? tx(
                   "learner.practiceTests.run.answerChoicesSataLockedAria",
-                  "Answer choices (select all that apply) — response submitted; use Next when ready",
+                  "Answer choices (select all that apply) — response submitted; use Submit & Continue when ready",
                 )
               : tx(
                   "learner.practiceTests.run.answerChoicesSataAria",
@@ -1779,7 +1768,7 @@ export function PracticeTestRunnerClient({
             isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase)
               ? tx(
                   "learner.practiceTests.run.answerChoicesLockedAria",
-                  "Answer choices — response submitted; use Next when ready",
+                  "Answer choices — response submitted; use Submit & Continue when ready",
                 )
               : tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")
           }
@@ -1812,7 +1801,7 @@ export function PracticeTestRunnerClient({
     const catExamAdvancePrimaryLabel =
       catExamUiPhase === "advancing" || saving
         ? tx("learner.practiceTests.run.working", "Working...")
-        : tx("learner.practiceTests.run.nextQuestion", "Next question");
+        : tx("learner.practiceTests.run.adaptiveSubmitContinue", "Submit & Continue");
 
     const catExamNavFooter = (
       <div className="nn-cat-question-nav nn-question-nav-actions">
@@ -1849,7 +1838,7 @@ export function PracticeTestRunnerClient({
               className="nn-btn-primary min-h-[2.75rem] rounded-lg px-6 text-sm font-semibold shadow-none disabled:opacity-40"
               onClick={lockCatExamAnswer}
             >
-              {tx("learner.practiceTests.run.submitAnswer", "Submit answer")}
+              {tx("learner.practiceTests.run.adaptiveSubmitContinue", "Submit & Continue")}
             </button>
           ) : (
             <button
@@ -1932,11 +1921,14 @@ export function PracticeTestRunnerClient({
                           min: String(catMinQ),
                           max: String(catMaxQ),
                         })
-                      : tx("learner.practiceTests.run.adaptiveExamShort", "Adaptive exam")}
+                      : tx("learner.practiceTests.run.adaptiveTestModeLabel", "Adaptive Test")}
                   </span>
                 ) : (
-                  <span className="nn-marketing-caption font-semibold tabular-nums text-[var(--semantic-text-muted)]">
-                    {Math.round(sessionPct)}% {tx("learner.practiceTests.run.complete", "complete")}
+                  <span className="nn-marketing-caption max-w-[min(100%,22rem)] text-center font-semibold leading-snug text-[var(--semantic-text-muted)]">
+                    {modeLabel}
+                    <span className="mt-0.5 block text-[11px] font-semibold tabular-nums text-[var(--semantic-text-muted)]">
+                      {Math.round(sessionPct)}% {tx("learner.practiceTests.run.complete", "complete")}
+                    </span>
                   </span>
                 )
               }
@@ -2307,7 +2299,7 @@ export function PracticeTestRunnerClient({
                     className="nn-btn-primary min-h-[2.5rem] rounded-lg px-5 text-sm font-semibold shadow-none disabled:opacity-40"
                     onClick={() => void goNext()}
                   >
-                    {tx("learner.practiceTests.run.next", "Next")}
+                    {tx("learner.practiceTests.run.nextQuestionPractice", "Next Question")}
                   </button>
                 ) : (
                   <button

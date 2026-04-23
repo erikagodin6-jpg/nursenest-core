@@ -38,8 +38,10 @@ export function FunnelExamHubViewBeacon({
   pathway: Pick<ExamPathwayDefinition, "id" | "countrySlug" | "roleTrack" | "examCode" | "examKey" | "stripeTier">;
   hubPath: string;
 }) {
+  const marketingNarrow = useMarketingMobilePerfIsMobile() === true;
   const sent = useRef(false);
   useEffect(() => {
+    if (marketingNarrow) return;
     if (sent.current) return;
     sent.current = true;
     trackProductEvent(PH.funnelExamHubViewed, {
@@ -47,6 +49,6 @@ export function FunnelExamHubViewBeacon({
       hub_path: hubPath,
       ...pathwayAnalyticsDimensions(pathway),
     });
-  }, [pathway, hubPath]);
+  }, [marketingNarrow, pathway, hubPath]);
   return null;
 }

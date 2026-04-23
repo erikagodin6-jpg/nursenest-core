@@ -562,7 +562,8 @@ export function ActiveStudySession({
             </p>
             <h1 className="text-lg font-bold text-[var(--theme-heading-text)]">{header.sessionTitle}</h1>
             <p className="text-xs text-[var(--theme-muted-text)]">
-              {progressLabel} · {header.modeLabel} · {header.categoriesLabel}
+              {progressLabel} · {t("learner.flashcards.session.modeSurfaceLabel")} · {header.modeLabel} ·{" "}
+              {header.categoriesLabel}
             </p>
             <p className="mt-1 text-[10px] text-[var(--theme-muted-text)]">
               {t("learner.flashcards.session.keyboardHint")}
@@ -647,7 +648,9 @@ export function ActiveStudySession({
                 {header.sessionTitle}
               </span>
               <ChevronRight className="h-3.5 w-3.5 shrink-0 text-[var(--semantic-text-muted)]" aria-hidden />
-              <span className="text-sm font-medium text-[var(--semantic-text-secondary)]">{header.modeLabel}</span>
+              <span className="max-w-[12rem] truncate text-sm font-medium text-[var(--semantic-text-secondary)] sm:max-w-[18rem]">
+                {t("learner.flashcards.session.modeSurfaceLabel")} · {header.modeLabel}
+              </span>
               <div className="ml-auto flex flex-wrap items-center justify-end gap-2 sm:gap-3">
                 <ExamSessionThemeTrigger variant="pill" />
                 <span className="hidden font-mono text-xs tabular-nums text-[var(--semantic-text-muted)] sm:inline">
@@ -722,7 +725,7 @@ export function ActiveStudySession({
                 revealed={revealed}
                 onReveal={() => setRevealed(true)}
                 labels={{
-                  revealCta: t("learner.flashcards.session.revealAnswerCta"),
+                  revealCta: t("learner.flashcards.session.flipCardCta"),
                   revealHint: t("learner.flashcards.session.revealHint"),
                   answerHeading: t("learner.flashcards.session.correctAnswerHeading"),
                   rationaleHeading: t("learner.flashcards.session.rationaleBlockHeading"),
@@ -841,7 +844,7 @@ export function ActiveStudySession({
                   disabled={!revealed || index + 1 >= sessionCards.length}
                   className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-4 text-sm font-semibold text-[var(--semantic-text-primary)] disabled:opacity-40"
                 >
-                  <span className="hidden sm:inline">{t("learner.flashcards.session.navNext")}</span>
+                  <span className="hidden sm:inline">{t("learner.flashcards.session.reviewAgainNav")}</span>
                   <ChevronRight className="h-4 w-4 sm:ml-1" aria-hidden />
                 </button>
               </div>
@@ -906,7 +909,7 @@ export function ActiveStudySession({
               onClick={() => setRevealed(true)}
               className="mt-4 rounded-xl border border-border px-4 py-2 text-sm font-semibold text-[var(--theme-heading-text)]"
             >
-              {t("learner.flashcards.session.revealAnswerCta")}
+              {t("learner.flashcards.session.flipCardCta")}
             </button>
           ) : (
             <div className="mt-4 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-3">
@@ -934,7 +937,7 @@ export function ActiveStudySession({
               disabled={!revealed || index + 1 >= sessionCards.length}
               className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold disabled:opacity-40"
             >
-              {t("learner.flashcards.session.navNext")}
+              {t("learner.flashcards.session.reviewAgainNav")}
             </button>
           </div>
 

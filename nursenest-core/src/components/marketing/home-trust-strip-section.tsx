@@ -48,8 +48,7 @@ export function HomeTrustStripSection({ lessonCount, questionCount, registeredLe
   if (marketingNarrow) {
     return (
       <section
-        className="simple-stack nn-section-enter border-b border-[var(--border-subtle)] py-8"
-        style={{ background: "var(--accent-surface-a)" }}
+        className="simple-stack nn-marketing-trust-strip nn-section-enter border-b border-[var(--border-subtle)] py-8"
         aria-labelledby="home-trust-strip-heading"
         data-testid="section-home-trust-strip"
       >
@@ -90,17 +89,13 @@ export function HomeTrustStripSection({ lessonCount, questionCount, registeredLe
 
   return (
     <section
-      className="nn-section-enter border-b border-[var(--border-subtle)] py-10 sm:py-11"
-      style={{ background: "var(--accent-surface-a)" }}
+      className="nn-marketing-trust-strip nn-section-enter border-b border-[var(--border-subtle)] py-10 sm:py-11"
       aria-labelledby="home-trust-strip-heading"
       data-testid="section-home-trust-strip"
     >
       <div className="nn-section-shell">
         <FadeUp whenInView once viewMargin="-24px" className="mx-auto max-w-5xl">
-        <div
-          className="rounded-2xl border bg-[var(--bg-card)] px-5 py-6 shadow-[var(--shadow-elevated)] sm:px-7 sm:py-7"
-          style={{ borderColor: "color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle))" }}
-        >
+        <div className="nn-marketing-trust-panel rounded-2xl border px-5 py-6 sm:px-7 sm:py-7">
           <div className="mb-4 flex flex-col items-center justify-center gap-3 text-center sm:flex-row sm:gap-4">
             <Globe2 className="nn-icon-md shrink-0 text-[var(--semantic-info)]" aria-hidden />
             <h2

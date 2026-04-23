@@ -1,9 +1,7 @@
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
-import {
-  classifyLearningTopic,
-  learningConfigForPathwayId,
-} from "@/lib/pathways/pathway-learning-structure";
+import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
+import { classifyNursingContent, classifyPathwayLessonRecordForHub } from "@/lib/taxonomy/nursing-taxonomy-classifier";
 
 export type PathwayLessonSystemLabel = string;
 export const PATHWAY_LESSON_SYSTEM_ORDER: string[] = (() => {
@@ -48,8 +46,8 @@ export function normalizePathwayLessonSystemLabel(
 ): PathwayLessonSystemLabel {
   const normalizedSystem = normalizeText(system);
   if (!normalizedSystem) return "professional-practice-ethics";
-  const classified = classifyLearningTopic(normalizedSystem, null);
-  return classified.subcategoryId ?? classified.categoryId;
+  const classified = classifyNursingContent({ title: normalizedSystem });
+  return classified.categoryId as PathwayLessonSystemLabel;
 }
 
 /**
@@ -76,9 +74,8 @@ export function classifyLessonForHub(
   lesson: PathwayLessonRecord,
   pathwayId?: string | null,
 ): PathwayLessonSystemLabel {
-  const h = `${lesson.system ?? ""} ${lesson.bodySystem ?? ""} ${lesson.title} ${lesson.topic} ${lesson.topicSlug} ${lesson.seoDescription}`.toLowerCase();
-  const classified = classifyLearningTopic(h, pathwayId ?? null);
-  return classified.subcategoryId ?? classified.categoryId;
+  void pathwayId;
+  return classifyPathwayLessonRecordForHub(lesson).categoryId as PathwayLessonSystemLabel;
 }
 
 export function buildPathwayLessonSystemSections(

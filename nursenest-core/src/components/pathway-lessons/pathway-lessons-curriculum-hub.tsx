@@ -10,6 +10,7 @@ import {
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
 import { dedupePathwayLessonsForLibrary } from "@/lib/lessons/pathway-lesson-dedupe";
+import { filterLessonsForProfessionalPracticeHubGuard } from "@/lib/taxonomy/nursing-taxonomy-validation";
 
 type Props = {
   lessons: PathwayLessonRecord[];
@@ -33,7 +34,8 @@ export function PathwayLessonsCurriculumHub({
     source: `curriculum_hub:${pathwayId ?? "unknown"}`,
     devLog: true,
   }).items;
-  const sections = buildPathwayLessonSystemSections(dedupedSafeLessons, pathwayId);
+  const hubGuardLessons = filterLessonsForProfessionalPracticeHubGuard(dedupedSafeLessons);
+  const sections = buildPathwayLessonSystemSections(hubGuardLessons, pathwayId);
 
   if (sections.length === 0) {
     const thinInventoryCopy = emptyStateCopy.thinInventory();

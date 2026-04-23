@@ -9,15 +9,17 @@
  */
 /* First-paint defaults mirror the ocean/clinical-blue default theme. [data-theme] layers override all. */
 :root {
-  --semantic-bg-base: #ffffff;
-  --semantic-bg-soft: #f9fafb;
-  --semantic-surface: #ffffff;
+  --semantic-bg-base: #fffcfd;
+  --semantic-bg-soft: #f4f2f8;
+  --semantic-surface: #fffcfd;
   --semantic-surface-elevated: #ffffff;
   --semantic-border-soft: #bae6fd;
-  --semantic-shadow-soft: 0 10px 30px rgba(6, 66, 115, 0.06);
-  --semantic-text-primary: #111827;
-  --semantic-text-secondary: #4b6272;
-  --semantic-text-muted: #8fa8b8;
+  --semantic-shadow-soft:
+    0 1px 0 rgba(17, 24, 39, 0.04),
+    0 12px 36px -18px rgba(6, 66, 115, 0.07);
+  --semantic-text-primary: #0f172a;
+  --semantic-text-secondary: #475569;
+  --semantic-text-muted: #7b8fa3;
   --semantic-brand: #1da2d8;
   --semantic-brand-soft: #e8f7fc;
   --semantic-brand-contrast: #ffffff;
@@ -40,10 +42,10 @@
   --semantic-chart-2: #16a34a;
   --semantic-chart-3: #76b6c4;
   --semantic-chart-4: #f59e0b;
-  --semantic-chart-5: #f3b0c3;
+  --semantic-chart-5: #e8a0b8;
   --decorative-1: color-mix(in srgb, var(--semantic-info) 42%, var(--semantic-brand));
   --decorative-2: color-mix(in srgb, var(--semantic-success) 38%, var(--semantic-warning));
-  --semantic-panel-muted: #f9fafb;
+  --semantic-panel-muted: #f3f1f7;
   --semantic-panel-warm: color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface));
   --semantic-panel-cool: color-mix(in srgb, var(--semantic-info) 10%, var(--semantic-surface));
   --semantic-panel-positive: color-mix(in srgb, var(--semantic-success) 11%, var(--semantic-surface));

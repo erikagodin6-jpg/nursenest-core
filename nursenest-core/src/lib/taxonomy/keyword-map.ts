@@ -1,0 +1,52 @@
+/**
+ * Hard keyword lists per taxonomy leaf. Matching is deterministic (substring / word checks in classifier).
+ */
+
+export const KEYWORD_MAP: Record<string, readonly string[]> = {
+  cardiovascular: [
+    "heart",
+    "cardiac",
+    "mi",
+    "myocardial",
+    "arrhythmia",
+    "hypertension",
+    "angina",
+    "stemi",
+    "nstemi",
+    "heart failure",
+    "cardiogenic",
+    "pericard",
+    "endocard",
+    "ecg",
+    "ekg",
+  ],
+  respiratory: ["lung", "copd", "asthma", "oxygen", "ventilation", "pneumonia", "pulmonary", "airway", "abg"],
+  neurological: ["brain", "stroke", "seizure", "neuro", "cns", "icp", "mening", "parkinson", "delirium", "tbi"],
+  endocrine: ["diabetes", "insulin", "thyroid", "dka", "hhs", "adrenal", "pituitary", "cortisol", "glucose"],
+  renal_genitourinary: ["kidney", "renal", "urinary", "dialysis", "nephro", "creatinine", "uti", "bladder", "aki", "ckd"],
+  gastrointestinal: ["liver", "bowel", "gi", "pancreas", "hepat", "intestinal", "crohn", "colitis", "cirrhosis"],
+  hematology_oncology: ["anemia", "cancer", "leukemia", "lymphoma", "chemo", "oncolog", "sickle", "thrombocyt"],
+  musculoskeletal: ["bone", "fracture", "joint", "orthop", "arthritis", "spine", "rheumat", "mobility"],
+  integumentary: ["skin", "wound", "ulcer", "dermat", "rash", "pressure injury", "cellulitis", "burn"],
+  immune_infectious: ["infection", "sepsis", "immune", "antibiotic", "hiv", "tuberculosis", "septic", "antimicrobial"],
+  reproductive_obstetrics: ["pregnancy", "labor", "uterus", "obstetric", "postpartum", "fetal", "neonatal", "lactation"],
+  pediatrics: ["infant", "child", "pediatric", "adolescent", "newborn", "neonate"],
+
+  ethics: ["ethics", "moral", "bioethics"],
+  legal_regulation: ["law", "legal", "regulation", "hipaa", "consent", "malpractice", "jurisprudence"],
+  documentation: ["charting", "documentation", "record", "ehr", "emar"],
+  communication: ["communication", "therapeutic", "handoff", "sbar"],
+  scope_of_practice: ["scope", "responsibility", "nurse practice act"],
+  delegation_supervision: ["delegate", "assignment", "supervision"],
+  leadership_management: ["leadership", "management"],
+  patient_safety_quality: ["safety", "quality", "risk", "root cause", "near miss"],
+
+  cardiovascular_drugs: ["beta blocker", "ace inhibitor", "arb", "statin", "anticoag", "digoxin", "nitroglycerin"],
+  cns_drugs: ["benzodiazep", "opioid", "antidepress", "antipsych", "anticonvuls"],
+  endocrine_drugs: ["metformin", "sulfonylurea", "glp-1", "insulin lispro", "levothyroxine"],
+  anti_infectives: ["vancomycin", "penicillin", "cephalosporin", "macrolide", "antifungal"],
+  pain_sedation: ["analgesic", "sedation", "anxiolytic", "nsaid", "acetaminophen"],
+
+  test_taking: ["test taking", "elimination", "priority question", "nclex strategy"],
+  study_strategy: ["study plan", "pomodoro", "spaced repetition", "active recall"],
+} as const satisfies Record<string, readonly string[]>;

@@ -2,6 +2,8 @@ import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { runContentBatch, batchToPrismaInputs } from "@/lib/content-pipeline/batch-generator";
+import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import { validatePathwayLessonTaxonomyBeforeWrite } from "@/lib/taxonomy/nursing-taxonomy-validation";
 import type { ContentBatchInput } from "@/lib/content-pipeline/types";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
@@ -94,6 +96,33 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const { prisma } = await import("@/lib/db");
     const { lessons, questions } = batchToPrismaInputs(batchOutput);
     let importStats: Record<string, number> = {};
+
+    const taxonomyViolations: { slug: string; violations: string[] }[] = [];
+    for (const row of lessons) {
+      const v = validatePathwayLessonTaxonomyBeforeWrite({
+        title: row.title,
+        topic: row.topic,
+        topicSlug: row.topicSlug,
+        bodySystem: row.bodySystem,
+        seoDescription: row.seoDescription,
+        system: "",
+        sections: row.sections as PathwayLessonRecord["sections"],
+      });
+      if (!v.ok) {
+        taxonomyViolations.push({ slug: row.slug, violations: v.violations });
+      }
+    }
+    if (taxonomyViolations.length > 0) {
+      return NextResponse.json(
+        {
+          error: "Taxonomy validation failed",
+          taxonomyViolations,
+          stats: batchOutput.stats,
+          generatedAt: batchOutput.generatedAt,
+        },
+        { status: 422 },
+      );
+    }
 
     try {
       const [lessonResult, questionResult] = await Promise.all([

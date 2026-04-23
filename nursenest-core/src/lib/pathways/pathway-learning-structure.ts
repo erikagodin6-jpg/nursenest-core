@@ -1,4 +1,5 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { classifyNursingContent } from "@/lib/taxonomy/nursing-taxonomy-classifier";
 
 export type LearningSubcategory = {
   id: string;
@@ -37,6 +38,11 @@ const STANDARD_CLINICAL_CATEGORIES: LearningCategory[] = [
   { id: "mental-health", title: "Mental Health", description: "Psychiatric assessment, therapeutic communication, and behavioral health care." },
   { id: "pharmacology", title: "Pharmacology", description: "Medication classes, safety, adverse effects, and dosing judgment." },
   { id: "professional-practice-ethics", title: "Professional Practice / Ethics", description: "Scope, delegation, legal-ethical duties, and team communication." },
+  {
+    id: "taxonomy-review-required",
+    title: "Taxonomy review",
+    description: "Items that need a deterministic taxonomy assignment before publishing to a clinical or professional hub.",
+  },
 ];
 
 const LEARNING_PATHWAY_CONFIGS: Record<string, PathwayLearningConfig> = {
@@ -83,62 +89,16 @@ export function learningConfigForPathwayId(pathwayId: string | null | undefined)
   return DEFAULT_NURSING_CONFIG;
 }
 
-function hasAny(text: string, patterns: RegExp[]): boolean {
-  return patterns.some((pattern) => pattern.test(text));
-}
-
+/**
+ * Deterministic topic → hub category. Delegates to the locked rule-based taxonomy (no embeddings / LLM).
+ * @see classifyNursingContent
+ */
 export function classifyLearningTopic(
   topicLabel: string,
   pathwayId: string | null | undefined,
 ): { categoryId: string; subcategoryId?: string } {
-  const text = topicLabel.toLowerCase();
   void pathwayId;
-
-  /**
-   * Order matters: map **specific organ / system** keywords before broad “fundamentals” or
-   * “professional practice” patterns so titles like “Prioritization in acute kidney injury” classify
-   * as GU/Renal, not Fundamentals.
-   */
-  if (hasAny(text, [/cardio|heart|coronary|ecg|arrhythm|hypertension|mi\b|stemi|heart failure|acs\b|angina|a-fib|afib|shock|resusc|hemodynamic/])) return { categoryId: "cardiovascular" };
-  if (hasAny(text, [/respir|airway|asthma|copd|oxygen|ventilat|pneumonia|pulmonary|abg|\bpe\b/])) return { categoryId: "respiratory" };
-  if (hasAny(text, [/neuro|stroke|seizure|cns|icp|delirium|tbi|gcs|tia\b|mening|parkinson|neuropathy/])) return { categoryId: "neurology" };
-  if (hasAny(text, [/\bgi\b|gastro|hepatic|liver|pancrea|bowel|ibd|crohn|colitis|cirrhosis|constipation|diarrhea/])) return { categoryId: "gastrointestinal" };
-  if (
-    hasAny(text, [
-      /renal|kidney|nephro|glomerul|tubular|creatinine|\bbun\b|urinalysis|dialysis|dialysate|\baki\b|\bckd\b|oliguria|anuria|polyuria|nephrotic|nephritic|kidney stone|urolith|urinary|urolog|uti\b|pyelo|cystitis|prostat|\bbph\b|\bgu\b|genitourinary|bladder|incontinence|foley|urinary catheter|catheter-associated|electrolyte|fluid balance|euvolemia|volume overload|hyperkalem|hypokalem|hypernatr|hyponatr|metabolic acidosis|respiratory acidosis|acid-base|phosphat|parathy|polycystic kidney|nephrect/,
-    ])
-  ) {
-    return { categoryId: "renal-genitourinary" };
-  }
-  if (hasAny(text, [/endocrine|diabet|thyroid|dka|hhs|adrenal|pituitary|hypoglyc|hyperglyc|metabolic syndrome/])) return { categoryId: "endocrine" };
-  if (hasAny(text, [/musculo|orthop|fracture|cast|arthritis|sprain|strain|joint|bone|spine|rheumat/])) return { categoryId: "musculoskeletal" };
-  if (hasAny(text, [/heme|hemat|oncolog|anemia|leukemia|lymphoma|sickle|thrombocytopen|chemo|neutropenia|coagul/])) return { categoryId: "hematology-oncology" };
-  if (
-    hasAny(text, [
-      /sepsis|septic|\binfection\b|infectious disease|antimicrobial|antibiotic stewardship|\bcauti\b|\bclabsi\b|hiv|tb\b|immune|immunocomprom|autoimmune/,
-    ])
-  ) {
-    return { categoryId: "immune-infectious" };
-  }
-  if (hasAny(text, [/dermat|skin|rash|eczema|psoriasis|wound|pressure injury|burn|ulcer|cellulitis/])) return { categoryId: "dermatology" };
-  if (hasAny(text, [/reproductive|obstetric|ob-gyn|pregnan|antepartum|postpartum|intrapartum|fetal|neonat|labor|delivery|placenta|lactation|contracept|gyne/])) return { categoryId: "reproductive-ob-gyn" };
-  if (hasAny(text, [/pediatric|paediatric|child|infant|adolescent|newborn|well-child|immunization schedule/])) return { categoryId: "pediatrics" };
-  if (hasAny(text, [/mental|psychi|depress|anxiety|suicid|behavioral|bipolar|schizo|ptsd|substance use/])) return { categoryId: "mental-health" };
-  if (hasAny(text, [/pharmac|medication|drug|dosage|contraindication|adverse effect|insulin|anticoagulant|opioid|med.?admin/])) return { categoryId: "pharmacology" };
-  /** Narrow fundamentals — skills-lab / infection basics only (not generic “safety” or “prioritization”). */
-  if (
-    hasAny(text, [
-      /infection control|hand hygiene|aseptic technique|sterile technique|standard precautions|isolation precautions|chain of infection|surgical asepsis|clean technique|foundational nursing skills|vital signs assessment basics|bedmaking|transfer techniques|body mechanics for nurses/,
-    ])
-  ) {
-    return { categoryId: "fundamentals" };
-  }
-  if (hasAny(text, [/ethic|legal|scope of practice|consent|delegat|handoff|documentation standards|sbar|professional boundaries|nurse practice act/])) {
-    return { categoryId: "professional-practice-ethics" };
-  }
-  if (hasAny(text, [/fundamental|foundational nursing|nursing basics|basic care skills|comfort measures|hygiene care|therapeutic communication basics/])) {
-    return { categoryId: "fundamentals" };
-  }
-  return { categoryId: "professional-practice-ethics" };
+  const { categoryId } = classifyNursingContent({ title: topicLabel });
+  return { categoryId, subcategoryId: undefined };
 }
 

@@ -4,6 +4,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { AdminLearnerQaPublicState } from "@/lib/admin/admin-learner-qa-simulation";
+import {
+  ADMIN_LEARNER_QA_MOBILE_FLOW_LINKS,
+  ADMIN_LEARNER_QA_MOBILE_VIEWPORT_PRESETS,
+  adminLearnerQaMobilePreviewHref,
+} from "@/lib/admin/admin-learner-qa-mobile-preview";
+
+const DEFAULT_MOBILE_QA_WIDTH = 390;
 
 const TRACKS = ["RN", "RPN", "LVN_LPN", "NP", "ALLIED", "NEW_GRAD"] as const;
 const LIFECYCLES = ["paid_active", "none", "expired", "trial"] as const;
@@ -282,8 +289,50 @@ export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearn
         </div>
       </div>
 
+      <div className="rounded-2xl border border-border/80 bg-[var(--theme-card-bg)] p-6 shadow-sm">
+        <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Mobile viewport QA</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Admin-only page with a <strong>fixed-width iframe</strong> — same browser cookies, so learner simulation stays
+          on. This is a layout spot-check, not a device emulator. Learner routes are unchanged.
+        </p>
+        <p className="mt-3">
+          <Link
+            className="text-sm font-semibold text-primary underline"
+            href={adminLearnerQaMobilePreviewHref("/app", DEFAULT_MOBILE_QA_WIDTH)}
+          >
+            Open mobile QA workspace →
+          </Link>
+        </p>
+        <h3 className="mt-4 text-sm font-semibold text-foreground">Quick launch ({DEFAULT_MOBILE_QA_WIDTH}px frame)</h3>
+        <ul className="mt-2 grid gap-1 text-sm sm:grid-cols-2">
+          {ADMIN_LEARNER_QA_MOBILE_FLOW_LINKS.map((l) => (
+            <li key={l.path}>
+              <Link
+                className="text-primary underline"
+                href={adminLearnerQaMobilePreviewHref(l.path, DEFAULT_MOBILE_QA_WIDTH)}
+              >
+                {l.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <h3 className="mt-4 text-sm font-semibold text-foreground">Viewport widths (study home)</h3>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {ADMIN_LEARNER_QA_MOBILE_VIEWPORT_PRESETS.map((p) => (
+            <Link
+              key={p.id}
+              href={adminLearnerQaMobilePreviewHref("/app", p.widthPx)}
+              className="rounded-lg border border-border bg-background px-2.5 py-1 text-xs font-medium hover:bg-muted/50 sm:text-sm"
+            >
+              {p.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+
       <div className="rounded-xl border border-border/70 bg-muted/20 p-4 text-sm text-muted-foreground">
-        <p className="font-semibold text-foreground">Quick links (after starting QA)</p>
+        <p className="font-semibold text-foreground">Full-width shortcuts (same tab)</p>
+        <p className="mt-1 text-xs">Use after starting QA — no iframe; normal desktop layout.</p>
         <ul className="mt-2 list-inside list-disc space-y-1">
           <li>
             <Link className="text-primary underline" href="/app/lessons">

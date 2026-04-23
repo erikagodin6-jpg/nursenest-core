@@ -1,5 +1,10 @@
 import { prisma } from "@/lib/db";
 import type { PracticeTestConfigJson } from "@/lib/practice-tests/types";
+import {
+  STUDY_DIVERSITY_PRACTICE_RECENT_MAX_IDS,
+  STUDY_DIVERSITY_PRACTICE_RECENT_MIN_REMAINING_DEFAULT,
+  STUDY_DIVERSITY_PRACTICE_RECENT_SESSION_LOOKBACK_DEFAULT,
+} from "@/lib/study/study-diversity-config";
 
 function asIdList(raw: unknown): string[] {
   if (!Array.isArray(raw)) return [];
@@ -25,8 +30,8 @@ export async function recentPracticeQuestionIdsForPathway(params: {
   maxIds?: number;
 }): Promise<{ ids: Set<string>; sessionsScanned: number }> {
   const { userId, pathwayId } = params;
-  const sessionLookback = params.sessionLookback ?? 14;
-  const maxIds = params.maxIds ?? 72;
+  const sessionLookback = params.sessionLookback ?? STUDY_DIVERSITY_PRACTICE_RECENT_SESSION_LOOKBACK_DEFAULT;
+  const maxIds = params.maxIds ?? STUDY_DIVERSITY_PRACTICE_RECENT_MAX_IDS;
   if (!pathwayId) return { ids: new Set(), sessionsScanned: 0 };
 
   const rows = await prisma.practiceTest.findMany({
@@ -56,13 +61,11 @@ export async function recentPracticeQuestionIdsForPathway(params: {
   return { ids: new Set(uniq), sessionsScanned };
 }
 
-const DEFAULT_MIN_REMAINING = 8;
-
 /** Narrow the pool by excluding recent ids when enough items remain; otherwise keep the full pool. */
 export function filterPoolRemovingRecentQuestions<T extends { id: string }>(
   pool: T[],
   recent: Set<string>,
-  minRemaining = DEFAULT_MIN_REMAINING,
+  minRemaining = STUDY_DIVERSITY_PRACTICE_RECENT_MIN_REMAINING_DEFAULT,
 ): { pool: T[]; applied: boolean; skipReason?: string } {
   if (recent.size === 0) return { pool, applied: false };
   const filtered = pool.filter((p) => !recent.has(p.id));

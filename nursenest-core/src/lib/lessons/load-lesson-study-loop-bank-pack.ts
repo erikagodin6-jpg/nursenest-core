@@ -12,6 +12,7 @@ import {
 import { examRowToLessonBankItem, type LessonBankQuizItem } from "@/lib/lessons/exam-question-to-lesson-quiz-item";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { loadLessonBankQuizItemsByExamIds } from "@/lib/lessons/lesson-explicit-exam-question-items";
+import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 import {
   explicitLessonStudyLoopCombinedSanitizedIds,
   LESSON_STUDY_LOOP_MIN_QUESTIONS,
@@ -122,6 +123,11 @@ export async function loadLessonStudyLoopBankPack(args: {
   lessonSlug: string;
   lessonKey: string;
   targetCount?: number;
+  /**
+   * Per-request entropy so default (non-targeted) lesson quiz composition varies across visits
+   * while keeping the same pedagogical pool + balancing rules.
+   */
+  compositionEntropy?: string;
 }): Promise<LessonStudyLoopBankPack> {
   const target = Math.min(
     LESSON_STUDY_LOOP_TARGET_MAX,

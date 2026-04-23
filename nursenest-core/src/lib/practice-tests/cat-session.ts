@@ -61,6 +61,7 @@ import {
 import { GUIDED_PRACTICE_ORDER_SEED_SUFFIX } from "@/lib/practice-tests/cat-session-seed-suffixes";
 import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { STUDY_DIVERSITY_CAT_STEP_RECENT_SESSION_LOOKBACK } from "@/lib/study/study-diversity-config";
 import type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
 import type {
   CatAdaptiveSessionType,
@@ -312,7 +313,7 @@ export async function createCatPracticeTestPayload(
   const recentPack = await recentPracticeQuestionIdsForPathway({
     userId,
     pathwayId: pathwayIdForRecent,
-    sessionLookback: 20,
+    sessionLookback: STUDY_DIVERSITY_CAT_STEP_RECENT_SESSION_LOOKBACK,
     maxIds: 120,
   });
   const recentFiltered = filterPoolRemovingRecentQuestions(pool, recentPack.ids);
