@@ -14,6 +14,7 @@ import { getMarketingDefaultLayoutChromeMessages } from "@/lib/marketing-i18n/ma
 import { NursenestRegionRoot } from "@/lib/region/use-nursenest-region";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { MarketingMobileMotionShell } from "@/lib/ui/marketing-mobile-motion-shell";
+import { readMarketingNarrowViewportServerHint } from "@/lib/marketing/read-marketing-narrow-viewport-hint.server";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 import { MarketingDefaultLayoutChromeFailsafeShell } from "@/components/marketing/marketing-default-layout-chrome-failsafe";
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
@@ -63,6 +64,7 @@ function marketingDefaultLayoutStaticShellForHome({
   trustClientPersistedRegion,
   serverGlobalRegion,
   marketingCountry,
+  serverNarrowViewportHint,
 }: {
   children: React.ReactNode;
   serverRegion: MarketingRegionToggle;
@@ -71,6 +73,8 @@ function marketingDefaultLayoutStaticShellForHome({
   serverGlobalRegion: GlobalRegionSlug | null;
   /** Must match {@link getEffectiveMarketingCountry} for the same cookies/IP — never hardcode Canada. */
   marketingCountry: CountryCode;
+  /** From Edge `proxy` UA / CH hint — marketing-only first paint (see `marketing-narrow-viewport-hint.ts`). */
+  serverNarrowViewportHint: boolean;
 }) {
   const shellMessages = mergeMinimalMarketingLayoutShellMessages({});
   return (
@@ -86,7 +90,9 @@ function marketingDefaultLayoutStaticShellForHome({
             <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegion}>
               <CheckoutGlobalRegionContextPathStamp />
               <MarketingDefaultLayoutChromeFailsafeShell>
-                <MarketingMobileMotionShell>{children}</MarketingMobileMotionShell>
+                <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
+                  {children}
+                </MarketingMobileMotionShell>
               </MarketingDefaultLayoutChromeFailsafeShell>
             </MarketingHeaderGlobalRegionServerBridge>
           </MarketingFeedbackShell>
@@ -142,12 +148,14 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
           hpEarly || "/",
           staticShellRegionCookie ?? staticShellServerRegion,
         );
+        const staticShellNarrowHint = await readMarketingNarrowViewportServerHint();
         return marketingDefaultLayoutStaticShellForHome({
           children,
           serverRegion: staticShellServerRegion,
           trustClientPersistedRegion: staticShellRegionCookie !== undefined,
           serverGlobalRegion: staticShellGlobalRegion,
           marketingCountry: staticShellMarketingCountry,
+          serverNarrowViewportHint: staticShellNarrowHint,
         });
       }
     } catch {
@@ -196,6 +204,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       }
     }
     try {
+      const serverNarrowViewportHint = await readMarketingNarrowViewportServerHint();
       layoutStderrTrace("marketing_layout", "marketing layout start", { route: "shared-marketing-default" });
       const resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
       let messages: Record<string, string> = {};
@@ -346,10 +355,14 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                             locale={resolvedLocale}
                             publicContentOverrides={publicContentOverrides}
                           >
-                            <MarketingMobileMotionShell>{children}</MarketingMobileMotionShell>
+                            <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
+                              {children}
+                            </MarketingMobileMotionShell>
                           </MarketingMainI18nShards>
                         ) : (
-                          <MarketingMobileMotionShell>{children}</MarketingMobileMotionShell>
+                          <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
+                            {children}
+                          </MarketingMobileMotionShell>
                         )}
                       </main>
                       <SiteFooter serverHasStaffSession={staffSession != null} />
@@ -399,6 +412,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       } catch {
         /* headers/cookies unavailable — Canada-first matches resolveMarketingExamRegionToggle default */
       }
+      const failsafeNarrowHint = await readMarketingNarrowViewportServerHint();
       return (
         <MarketingI18nProvider
           key={DEFAULT_MARKETING_LOCALE}
@@ -412,7 +426,9 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                 <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={failsafeGlobalRegion}>
                   <CheckoutGlobalRegionContextPathStamp />
                   <MarketingDefaultLayoutChromeFailsafeShell>
-                    <MarketingMobileMotionShell>{children}</MarketingMobileMotionShell>
+                    <MarketingMobileMotionShell serverNarrowViewportHint={failsafeNarrowHint}>
+                      {children}
+                    </MarketingMobileMotionShell>
                   </MarketingDefaultLayoutChromeFailsafeShell>
                 </MarketingHeaderGlobalRegionServerBridge>
               </MarketingFeedbackShell>

@@ -16,7 +16,7 @@ import {
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { StaggerGroup, StaggerItem } from "@/lib/motion";
 import { buildHomepageHeroSlidesAtIndices } from "@/config/home-hero-carousel";
-import { useIsMobile } from "@/lib/ui/use-is-mobile";
+import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
 
 /** 0-based slide index → `screenshot9.png` (study modes / platform chrome—reads as real product UI). */
 const HOME_HERO_ABOVE_FOLD_STILL_INDEX = 8 as const;
@@ -351,8 +351,8 @@ function HomeConversionHeroDesktop({
  * Homepage hero: full marketing layout on desktop; lightweight copy + CTAs on narrow viewports (LCP).
  */
 export function HomeConversionHero(props: { questionCount?: number; lessonCount?: number }) {
-  const isMobile = useIsMobile();
-  if (isMobile) {
+  const marketingNarrow = useMarketingMobilePerfIsMobile() === true;
+  if (marketingNarrow) {
     return <HomeConversionHeroMobile {...props} />;
   }
   return <HomeConversionHeroDesktop {...props} />;

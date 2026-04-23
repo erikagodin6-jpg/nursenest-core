@@ -91,8 +91,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
   const rawSize = Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;
   const pageSizeRequested = Math.min(PATHWAY_HUB_PAGE_SIZE_MAX, Math.max(8, Math.floor(rawSize)));
+  /** Same normalization as hub list SQL/catalog filters (min length, trim) — avoids listOpts vs loader mismatch. */
   const qEffective = normalizePathwayHubSearchQuery(sp.q);
-  const listOpts = typeof sp.q === "string" && sp.q.trim().length > 0 ? { q: sp.q } : undefined;
+  const listOpts = qEffective ? { q: qEffective } : undefined;
 
   const { pageResult, questionSnapshot } = await loadPathwayLessonsHubAggregates(
     pathway,
@@ -124,7 +125,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     redirect(query ? `${base}?${query}` : base);
   }
 
-  const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
+  /** Single hub dataset: full normalized list for grouping; falls back to current page only if aggregates failed. */
+  const hubRenderableLessonRows = (pageResult.renderableAll ?? pageResult.items).filter(pathwayLessonHasRenderableHubSlug);
+  const hubListCountForChrome =
+    pageResult.renderableAll != null ? pageResult.total : hubRenderableLessonRows.length;
   const { crumbs, schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
   const pageTitle = "Lessons";
@@ -157,7 +161,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     <LessonsToolbar
       searchBasePath={base}
       initialQuery={qEffective ?? undefined}
-      totalCount={pageResult.total}
+      totalCount={hubListCountForChrome}
       countryOptions={[
         { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
         { label: "US", href: usHref, active: pathway.countrySlug === "us" },
@@ -228,10 +232,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
   const canShowResume =
     Boolean(userId) && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
-  const canShowProgressMap = canShowResume && lessons.length > 0;
+  const canShowProgressMap = canShowResume && hubRenderableLessonRows.length > 0;
 
   if (canShowResume) {
-    const hubSlugs = canShowProgressMap ? lessons.map((l) => l.slug).filter(Boolean) : [];
+    const hubSlugs = canShowProgressMap ? hubRenderableLessonRows.map((l) => l.slug).filter(Boolean) : [];
     const { progressMap: map } = await loadPathwayHubSubscriberData(
       userId,
       scope,
@@ -267,11 +271,11 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
             Lesson library
           </h2>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
-            {pageResult.total.toLocaleString()} {pageResult.total === 1 ? "lesson" : "lessons"}
+            {hubListCountForChrome.toLocaleString()} {hubListCountForChrome === 1 ? "lesson" : "lessons"}
           </span>
         </div>
         <PathwayLessonsCurriculumHub
-          lessons={lessons}
+          lessons={hubRenderableLessonRows}
           lessonsBasePath={base}
           pathwayId={pathway.id}
           progressMap={progressMap}

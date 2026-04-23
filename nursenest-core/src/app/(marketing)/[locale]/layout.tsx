@@ -22,6 +22,7 @@ import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-rout
 import { resolveMarketingExamRegionToggle } from "@/lib/marketing/resolve-default-layout-marketing-exam-region";
 import { detectedIpCountryFromHeaders } from "@/lib/region/detected-ip-country.server";
 import { MarketingMobileMotionShell } from "@/lib/ui/marketing-mobile-motion-shell";
+import { readMarketingNarrowViewportServerHint } from "@/lib/marketing/read-marketing-narrow-viewport-hint.server";
 import { MarketingFeedbackShell } from "@/components/feedback/marketing-feedback-shell";
 import { CheckoutGlobalRegionContextPathStamp } from "@/components/marketing/checkout-global-region-context-path-stamp";
 import { MarketingHeaderGlobalRegionServerBridge } from "@/lib/region/marketing-header-global-region-server-bridge";
@@ -115,9 +116,10 @@ export default async function MarketingLocaleLayout({
     marketingRegionCookie ??
     (serverGlobalRegionCookie === "us" ? "US" : serverGlobalRegionCookie === "canada" ? "CA" : examRegionToggle);
   const marketingCountry = getEffectiveMarketingCountry(marketingRequestPath, marketingCountryToggle);
-  const [publicContentOverrides, staffSession] = await Promise.all([
+  const [publicContentOverrides, staffSession, serverNarrowViewportHint] = await Promise.all([
     loadMarketingPublicContentOverridesForLocale(locale).catch(() => ({} as Record<string, string>)),
     getStaffSession().catch(() => null),
+    readMarketingNarrowViewportServerHint(),
   ]);
 
   return (
@@ -139,7 +141,9 @@ export default async function MarketingLocaleLayout({
                   <main className="flex-1">
                     <MarketingMainI18nShards locale={locale} publicContentOverrides={publicContentOverrides}>
                       <MarketingMainErrorBoundary name="marketing_locale_main">
-                        <MarketingMobileMotionShell>{children}</MarketingMobileMotionShell>
+                        <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
+                          {children}
+                        </MarketingMobileMotionShell>
                       </MarketingMainErrorBoundary>
                     </MarketingMainI18nShards>
                   </main>

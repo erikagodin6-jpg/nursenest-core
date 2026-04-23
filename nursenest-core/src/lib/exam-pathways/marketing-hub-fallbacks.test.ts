@@ -24,6 +24,7 @@ describe("marketing hub degraded defaults", () => {
     assert.equal(p.pageSize, 12);
     assert.equal(p.total, 0);
     assert.deepEqual(p.items, []);
+    assert.deepEqual(p.renderableAll, []);
   });
 });
 

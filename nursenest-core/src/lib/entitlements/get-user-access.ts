@@ -1,5 +1,9 @@
 import { cache } from "react";
 import { SubscriptionStatus, TrialStatus, type CountryCode, type TierCode, type UserRole } from "@prisma/client";
+import {
+  buildUserAccessForAdminLearnerQa,
+  getVerifiedAdminLearnerQaSimulation,
+} from "@/lib/admin/admin-learner-qa-simulation";
 import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 import { normalizeCountryCodeForEntitlement } from "@/lib/entitlements/country-code";
 import {
@@ -184,6 +188,20 @@ async function getUserAccessCore(
 
   /** Staff roles: full internal product access — do not run subscription queries or imply a paid Stripe plan. */
   if (isLearnerEntitlementStaffBypassRole(user.role)) {
+    const qaSim = await getVerifiedAdminLearnerQaSimulation(userId);
+    if (qaSim) {
+      safeServerLog("admin_learner_qa", "entitlement_overlay", {
+        userIdPrefix: userId.slice(0, 8),
+        track: qaSim.track,
+        lifecycle: qaSim.lifecycle,
+        country: qaSim.country,
+        admin_learner_qa_simulated: 1,
+        npSpecialty: qaSim.npSpecialty,
+        alliedCareer: qaSim.alliedCareer,
+        planVariant: qaSim.planVariant,
+      });
+      return withSessionJwt(buildUserAccessForAdminLearnerQa(qaSim), user);
+    }
     return withSessionJwt(
       {
         userId,

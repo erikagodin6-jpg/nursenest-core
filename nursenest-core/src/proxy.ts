@@ -21,6 +21,10 @@ import { NN_CORRELATION_HEADER } from "@/lib/observability/correlation-id";
 import { emitNnHomePerfDiagLine, isNnTraceHomePerfTrue } from "@/lib/observability/home-perf-diag";
 import { emitNnHomeRouteDiag, shouldEmitNnHomeRouteDiag } from "@/lib/observability/nn-home-isolation-flags";
 import { NN_HOME_PERF_ANCHOR_HEADER, NN_HOME_PERF_REQUEST_KIND_HEADER } from "@/lib/observability/home-perf-headers";
+import {
+  computeMarketingNarrowViewportHintFromRequestHeaders,
+  MARKETING_NARROW_VIEWPORT_HINT_HEADER,
+} from "@/lib/marketing/marketing-narrow-viewport-hint";
 
 type AdminProxyDeps = {
   loadUserRoleFromDbIdentity: typeof import("@/lib/auth/admin-role-source").loadUserRoleFromDbIdentity;
@@ -254,6 +258,11 @@ function withPathnameHeader(request: NextRequest): NextRequest {
   /** Trusted pathname for server RBAC + layouts (RSC must not rely on spoofable client headers). */
   requestHeaders.set("x-nn-request-pathname", pathname);
   requestHeaders.set("x-nn-request-method", request.method);
+  /** Marketing-only SSR hint — see `marketing-narrow-viewport-hint.ts`. */
+  requestHeaders.set(
+    MARKETING_NARROW_VIEWPORT_HINT_HEADER,
+    computeMarketingNarrowViewportHintFromRequestHeaders(request.headers) ? "1" : "0",
+  );
   if (pathname === "/" && request.method === "GET" && shouldEmitNnHomeRouteDiag()) {
     emitNnHomeRouteDiag({ segment: "proxy_withPathnameHeader_enter", pathname: "/", method: request.method });
   }

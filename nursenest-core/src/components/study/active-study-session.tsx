@@ -399,6 +399,28 @@ export function ActiveStudySession({
     );
   }
 
+  if (dedupedCards.length === 0) {
+    return (
+      <div className="space-y-3 rounded-xl border border-border p-5 text-sm text-[var(--theme-muted-text)]">
+        <p className="leading-relaxed text-[var(--theme-muted-text)]">{t("learner.flashcards.session.emptyBuilding")}</p>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/app/questions"
+            className="inline-flex min-h-10 items-center rounded-lg border border-border bg-[var(--theme-card-bg)] px-4 py-2 text-sm font-semibold text-primary hover:bg-muted/40"
+          >
+            {t("learner.flashcards.session.emptyCtaQuestions")}
+          </Link>
+          <Link
+            href="/app/lessons"
+            className="inline-flex min-h-10 items-center rounded-lg border border-border bg-[var(--theme-card-bg)] px-4 py-2 text-sm font-semibold text-primary hover:bg-muted/40"
+          >
+            {t("learner.flashcards.session.emptyCtaLessons")}
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   if (!current) {
     return (
       <div className="rounded-xl border border-border p-5 text-sm text-[var(--theme-muted-text)]">

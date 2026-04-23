@@ -14,6 +14,8 @@ import {
   readPastDueGraceDays,
 } from "@/lib/entitlements/past-due-policy";
 import { effectiveTierCountryForAccess } from "@/lib/entitlements/subscription-plan";
+import { getVerifiedAdminLearnerQaSimulation } from "@/lib/admin/admin-learner-qa-simulation";
+import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
 
 export type { BillingStatusSurface, BillingSubscriptionRow, BillingUserRow };
 
@@ -96,7 +98,7 @@ async function loadStripeRenewalSnapshot(stripeSubscriptionId: string | null | u
 export async function loadBillingPagePayload(userId: string): Promise<BillingPagePayload | null> {
   if (!userId || !isDatabaseUrlConfigured()) return null;
 
-  const [userRow, subscriptionRow, entitlement] = await Promise.all([
+  const [userRow, subscriptionRow, entitlement, qaSim] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
       select: {
@@ -130,6 +132,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
       },
     }),
     resolveEntitlementForPage(userId),
+    getVerifiedAdminLearnerQaSimulation(userId),
   ]);
 
   if (!userRow) return null;
@@ -168,10 +171,15 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
         }
       : null;
 
-  const { tier: effectiveTier, country: effectiveCountry } = effectiveTierCountryForAccess(
-    { tier: user.tier, country: userRow.country },
-    subForEffective,
-  );
+  const tierCountry = effectiveTierCountryForAccess({ tier: user.tier, country: userRow.country }, subForEffective);
+  let effectiveTier = tierCountry.tier;
+  let effectiveCountry = tierCountry.country;
+
+  const qaStaffSim = Boolean(qaSim && isLearnerEntitlementStaffBypassRole(userRow.role));
+  if (qaStaffSim && entitlement !== "error") {
+    if (entitlement.tier) effectiveTier = entitlement.tier;
+    if (entitlement.country) effectiveCountry = entitlement.country;
+  }
 
   const hasAccess = entitlement !== "error" && entitlement.hasAccess;
   const pathwayLabels =
@@ -187,6 +195,9 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
       cancelAtPeriodEnd: subscriptionRow.cancelAtPeriodEnd ?? false,
     };
   }
+  if (qaStaffSim) {
+    stripeRenewal = null;
+  }
 
   const billingPeriodEndDisplay =
     stripeRenewal?.currentPeriodEnd ?? subscriptionRow?.currentPeriodEnd ?? null;
@@ -200,6 +211,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     hasAccess,
     entitlementReason,
     trialEndsAt: user.trialEndsAt,
+    skipStaffAdminSurface: qaStaffSim,
   });
 
   let pastDueGraceEndsAt: Date | null = null;
@@ -227,13 +239,19 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
       subscription.status === SubscriptionStatus.GRACE ||
       subscription.status === SubscriptionStatus.PAST_DUE ||
       subscription.status === SubscriptionStatus.CANCELLED);
-  const showBillingPortal = Boolean(portalEligibleSub && subscription.stripeCustomerId?.trim());
+  let showBillingPortal = Boolean(portalEligibleSub && subscription.stripeCustomerId?.trim());
+  if (qaStaffSim) {
+    showBillingPortal = false;
+  }
 
   const now = Date.now();
-  const showTrialEndCallout =
+  let showTrialEndCallout =
     user.trialStatus === TrialStatus.ACTIVE &&
     Boolean(user.trialEndsAt && user.trialEndsAt.getTime() > now) &&
     subscription?.status !== SubscriptionStatus.ACTIVE;
+  if (qaStaffSim) {
+    showTrialEndCallout = entitlement !== "error" && entitlement.reason === "active_trial";
+  }
 
   return {
     user,

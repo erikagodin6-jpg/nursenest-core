@@ -53,6 +53,7 @@ const GROUPS: NavGroup[] = [
     items: [
       { href: "/admin", label: "Command center", icon: LayoutDashboard },
       { href: "/admin/access", label: "Access & roles", icon: Shield },
+      { href: "/admin/learner-qa", label: "Learner QA view", icon: GraduationCap },
     ],
   },
   {

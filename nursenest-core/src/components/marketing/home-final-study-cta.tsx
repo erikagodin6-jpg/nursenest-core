@@ -10,20 +10,20 @@ import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-l
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
-import { useIsMobile } from "@/lib/ui/use-is-mobile";
+import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
 
 /**
  * Closing conversion block — same value prop as hero; primary Practice, secondary Lessons.
  */
 export function HomeFinalStudyCta() {
-  const isMobile = useIsMobile();
+  const marketingNarrow = useMarketingMobilePerfIsMobile() === true;
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const loc = (path: string) => withMarketingLocale(locale, path);
 
   const trustKeys = ["pages.home.finalCta.trust0", "pages.home.finalCta.trust1", "pages.home.finalCta.trust2"] as const;
 
-  if (isMobile) {
+  if (marketingNarrow) {
     return (
       <section
         className="simple-stack nn-section-block border-t border-[var(--header-nav-border)] bg-[var(--hero-branded-wash)]"

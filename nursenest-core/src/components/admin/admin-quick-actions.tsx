@@ -22,6 +22,7 @@ import {
   BookMarked,
   Upload,
   MessageSquare,
+  Eye,
 } from "lucide-react";
 import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import type { StaffTier } from "@/lib/auth/staff-roles";
@@ -72,6 +73,13 @@ const actions = [
   { href: "/admin/analytics/study-performance", label: "Study & CAT analytics", desc: "Lessons, bank, CAT sessions", icon: BookMarked, tone: "from-lime-500/10 to-emerald-500/10" },
   { href: "/admin/automation-logs", label: "Automation logs", desc: "Jobs & schedulers", icon: Activity, tone: "from-neutral-500/12 to-stone-500/10" },
   { href: "/admin/access", label: "Access & roles", desc: "RBAC reference", icon: KeyRound, tone: "from-primary/15 to-primary/8" },
+  {
+    href: "/admin/learner-qa",
+    label: "Learner QA view",
+    desc: "Simulate paid / unpaid learner (signed cookie)",
+    icon: Eye,
+    tone: "from-emerald-500/14 to-teal-500/10",
+  },
 ] as const;
 
 export function AdminQuickActions({ staffTier = "super" }: { staffTier?: StaffTier }) {

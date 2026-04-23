@@ -3,9 +3,15 @@ import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 type DedupeCandidate = PathwayLessonRecord & { id?: string | null; pathwayId?: string | null };
 
 function normalizeLessonTitleForDedupe(title: string): string {
-  return title
-    .toLowerCase()
+  let t = title.toLowerCase();
+  t = t.replace(/\batrial fibrillation\b|\batrial fib\b|\bafib\b/gu, " atrial fibrillation ");
+  t = t
     .replace(/&/g, " and ")
+    .replace(/\s*—\s*rn\s*$/u, " ")
+    .replace(/\s*-\s*rn\s*$/u, " ")
+    .replace(/\s*\(rn\)\s*$/u, " ")
+    .replace(/\s+rn\s*$/u, " ");
+  return t
     .replace(/[^\p{L}\p{N}\s]+/gu, " ")
     .replace(/\band\b/gu, " ")
     .replace(/\s+/g, " ")

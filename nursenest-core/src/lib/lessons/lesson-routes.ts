@@ -71,12 +71,37 @@ export function marketingPathwayLessonsIndexPath(
   return buildExamPathwayPath(pathway, "lessons");
 }
 
+/**
+ * Canonical marketing lesson detail URL: `/{locale}/{role}/{examCode}/lessons/{lessonSlug}`.
+ * - `locale` is the pathway country segment (`us` / `canada`), not BCP-47 UI language.
+ * - `roleTrack` is the internal role id; {@link buildExamPathwayPath} maps LPN/RPN → `pn` in the URL.
+ */
+export function buildLessonPath(input: {
+  locale: string;
+  roleTrack: string;
+  examCode: string;
+  lessonSlug: string | null | undefined;
+}): string | null {
+  const slug = typeof input.lessonSlug === "string" ? input.lessonSlug.trim() : "";
+  if (!slug) return null;
+  const countrySlug = typeof input.locale === "string" ? input.locale.trim().toLowerCase() : "";
+  const roleTrack = typeof input.roleTrack === "string" ? input.roleTrack.trim().toLowerCase() : "";
+  const examCode = typeof input.examCode === "string" ? input.examCode.trim().toLowerCase() : "";
+  if (!countrySlug || !roleTrack || !examCode) return null;
+  return buildExamPathwayPath({ countrySlug, roleTrack, examCode }, `lessons/${encodeURIComponent(slug)}`);
+}
+
 /** Single lesson on the marketing pathway hub. */
 export function marketingPathwayLessonDetailPath(
   pathway: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">,
   lessonSlug: string | null | undefined,
 ): string | null {
-  return marketingLessonDetailHref(marketingPathwayLessonsIndexPath(pathway), lessonSlug);
+  return buildLessonPath({
+    locale: pathway.countrySlug,
+    roleTrack: pathway.roleTrack,
+    examCode: pathway.examCode,
+    lessonSlug,
+  });
 }
 
 /** Paginated topic cluster under a pathway lessons hub. */

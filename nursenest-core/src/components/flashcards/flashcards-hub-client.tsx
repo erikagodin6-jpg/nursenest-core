@@ -37,6 +37,7 @@ type BuilderSummary = {
   recentDays?: number;
   sourceKind?: string;
   cardLimit: string;
+  queryRelaxation?: "none" | "dropped_pathway_scope" | "dropped_country_match";
 };
 
 type Stats = {
@@ -574,6 +575,9 @@ export function FlashcardsHubClient({
               <div className="space-y-2">
                 <p className="text-sm leading-relaxed text-lv-text-secondary">{t("learner.flashcards.hub.bodySystemsEmpty")}</p>
                 <div className="flex flex-wrap gap-2">
+                  <Link href="/app/questions" className="lv-btn-secondary min-h-10 px-4 py-2 text-sm">
+                    {t("learner.flashcards.hub.bodySystemsEmptyCtaQuestions")}
+                  </Link>
                   <Link href="/app/lessons" className="lv-btn-secondary min-h-10 px-4 py-2 text-sm">
                     {t("learner.flashcards.hub.bodySystemsEmptyCtaLessons")}
                   </Link>

@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import {
   Activity,
@@ -25,6 +26,8 @@ import type {
 } from "@/lib/lessons/pathway-lesson-body-system-groups";
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+
+const LESSON_SYSTEM_PREVIEW = 12;
 
 type SystemVisual = {
   icon: LucideIcon;
@@ -72,6 +75,8 @@ export function LessonSystemCard({
   const inProgressCount = showProgress
     ? section.lessons.filter((lesson) => progressMap[lesson.slug] === "in_progress").length
     : 0;
+  const previewLessons = section.lessons.slice(0, LESSON_SYSTEM_PREVIEW);
+  const hiddenLessonCount = Math.max(0, section.lessons.length - previewLessons.length);
 
   return (
     <section
@@ -93,7 +98,13 @@ export function LessonSystemCard({
               {section.label}
             </h2>
             <span className="shrink-0 text-xs font-semibold text-[var(--theme-muted-text)]">
-              {completedCount}/{section.count}
+              {showProgress ? (
+                <>
+                  {completedCount} of {section.count} completed
+                </>
+              ) : (
+                <>{section.count} lessons</>
+              )}
             </span>
           </div>
           <CategoryProgressBar
@@ -105,7 +116,7 @@ export function LessonSystemCard({
       </div>
 
       <div className="mt-3.5 space-y-1">
-        {section.lessons.map((lesson) => {
+        {previewLessons.map((lesson) => {
           const href = pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
           if (!href) return null;
 
@@ -121,6 +132,16 @@ export function LessonSystemCard({
             />
           );
         })}
+        {hiddenLessonCount > 0 ? (
+          <div className="pt-1">
+            <Link
+              href={`${lessonsBasePath}#pathway-lesson-library`}
+              className="inline-flex text-xs font-semibold text-primary underline-offset-2 hover:underline"
+            >
+              View all {section.count} lessons in library
+            </Link>
+          </div>
+        ) : null}
       </div>
     </section>
   );

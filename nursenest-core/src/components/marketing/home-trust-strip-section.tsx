@@ -5,7 +5,7 @@ import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { FadeUp } from "@/lib/motion";
-import { useIsMobile } from "@/lib/ui/use-is-mobile";
+import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
 
 type Props = {
   lessonCount: number;
@@ -22,7 +22,7 @@ function formatCount(n: number, locale: string): string {
  * Credibility + product-trait pills after the sample question (hero already shows live counts).
  */
 export function HomeTrustStripSection({ lessonCount, questionCount, registeredLearners }: Props) {
-  const isMobile = useIsMobile();
+  const marketingNarrow = useMarketingMobilePerfIsMobile() === true;
   const { locale, t } = useMarketingI18n();
   const lessons = formatCount(lessonCount, locale);
   const questions = formatCount(questionCount, locale);
@@ -45,7 +45,7 @@ export function HomeTrustStripSection({ lessonCount, questionCount, registeredLe
     { icon: Sparkles, label: t("pages.home.trustStrip.updatedNclex"), iconClass: "text-[var(--semantic-chart-3)]" },
   ] as const;
 
-  if (isMobile) {
+  if (marketingNarrow) {
     return (
       <section
         className="simple-stack nn-section-enter border-b border-[var(--border-subtle)] py-8"

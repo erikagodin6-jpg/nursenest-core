@@ -5,10 +5,10 @@ import type { Prisma } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { buildLessonPath } from "@/lib/lessons/lesson-routes";
 import { PATHWAY_LESSON_CANONICAL_DB_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
 import {
   getProgrammaticQuestionTopicDefinition,
@@ -152,7 +152,6 @@ async function loadRelatedLessonsUncached(def: ProgrammaticQuestionTopicDefiniti
   for (const spec of def.relatedLessons) {
     const lessonPathway = getExamPathwayById(spec.pathwayId);
     if (!lessonPathway) continue;
-    const basePath = buildExamPathwayPath(lessonPathway);
     const where: Prisma.PathwayLessonWhereInput = {
       pathwayId: spec.pathwayId,
       status: ContentStatus.PUBLISHED,
@@ -180,7 +179,13 @@ async function loadRelatedLessonsUncached(def: ProgrammaticQuestionTopicDefiniti
       `related_lessons:${spec.pathwayId}`,
     );
     for (const r of rows) {
-      links.push({ title: r.title, href: `${basePath}/lessons/${r.slug}` });
+      const href = buildLessonPath({
+        locale: lessonPathway.countrySlug,
+        roleTrack: lessonPathway.roleTrack,
+        examCode: lessonPathway.examCode,
+        lessonSlug: r.slug,
+      });
+      if (href) links.push({ title: r.title, href });
     }
   }
   const seen = new Set<string>();

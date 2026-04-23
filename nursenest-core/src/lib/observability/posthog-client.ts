@@ -1,5 +1,12 @@
 "use client";
 
+/** When true, learner-shell PostHog capture is skipped (admin QA simulation). */
+let adminLearnerQaSessionSuppress = false;
+
+export function setAdminLearnerQaClientAnalyticsSuppress(value: boolean): void {
+  adminLearnerQaSessionSuppress = value;
+}
+
 let initialized = false;
 let posthogModulePromise: Promise<typeof import("posthog-js").default> | null = null;
 let posthogClient: typeof import("posthog-js").default | null = null;
@@ -37,6 +44,7 @@ export async function trackClientEvent(
   props?: Record<string, string | number | boolean | undefined>,
 ): Promise<void> {
   if (typeof window === "undefined") return;
+  if (adminLearnerQaSessionSuppress) return;
   if (!initialized || !process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim()) return;
   try {
     const posthog = await getPosthogClient();
@@ -49,6 +57,7 @@ export async function trackClientEvent(
 
 export async function capturePosthogPageview(path: string, currentUrl: string): Promise<void> {
   if (typeof window === "undefined") return;
+  if (adminLearnerQaSessionSuppress) return;
   if (!initialized || !process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim()) return;
   try {
     const posthog = await getPosthogClient();

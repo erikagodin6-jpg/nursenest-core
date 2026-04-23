@@ -511,9 +511,11 @@ export function PracticeTestRunnerClient({
   const chromeClass = `nn-exam-variant--${chromeVariant}`;
   const examSimulation = testConfig?.catPresentationMode === "exam_simulation";
   const guidedPracticeCat = Boolean(catMode && (testConfig?.catAdaptiveSessionType ?? "cat") === "practice");
-  const catFeedbackStudy = Boolean(
-    guidedPracticeCat || (catMode && (testConfig?.catExamFeedbackMode ?? "test") === "study"),
-  );
+  /**
+   * Adaptive CAT stays exam-like: no per-item rationale column during the session (rationales belong in
+   * post-run review). `catExamFeedbackMode: "study"` no longer re-enables split-pane teaching for CAT.
+   */
+  const catFeedbackStudy = false;
   // isExamStyle — CAT test mode: single-column exam shell; explicit submit then lock then next.
   // CAT study mode uses split layout; rationale panel unlocks after submit (see explanation flow).
   const isExamStyle = catMode && !catFeedbackStudy;

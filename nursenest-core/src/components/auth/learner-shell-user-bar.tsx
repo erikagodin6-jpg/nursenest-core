@@ -46,6 +46,7 @@ function tierDisplayKey(tier: string): string {
     RN: "learner.userBar.tier.RN",
     NP: "learner.userBar.tier.NP",
     ALLIED: "learner.userBar.tier.ALLIED",
+    NEW_GRAD: "learner.userBar.tier.NEW_GRAD",
   };
   return map[tier] ?? "learner.userBar.tier.fallback";
 }
@@ -59,10 +60,13 @@ function countryDisplayKey(country: string): string {
 export function LearnerShellUserBar({
   pathwayShortLabel = null,
   serverHasStaffSession,
+  learnerQaOverlay = null,
 }: {
   pathwayShortLabel?: string | null;
   /** DB staff row for this request (JWT role may still lag after promotion). */
   serverHasStaffSession?: boolean;
+  /** When staff is in learner QA mode, show simulated plan/scope instead of JWT subscription hints. */
+  learnerQaOverlay?: { planLabel: string; scopeLine: string } | null;
 }) {
   const { t } = useMarketingI18n();
   const locale = useMarketingLocale();
@@ -120,8 +124,9 @@ export function LearnerShellUserBar({
             ? "learner.userBar.plan.past_due"
             : "learner.userBar.plan.none";
 
-  const scopeLine =
-    tier && country
+  const scopeLine = learnerQaOverlay
+    ? learnerQaOverlay.scopeLine
+    : tier && country
       ? `${t(tierDisplayKey(tier))} · ${t(countryDisplayKey(country))}`
       : tier
         ? t(tierDisplayKey(tier))
@@ -181,7 +186,9 @@ export function LearnerShellUserBar({
           className="absolute right-0 z-50 mt-2 w-[min(19.5rem,calc(100vw-1.5rem))] max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] shadow-[var(--shadow-elevated)] ring-1 ring-black/[0.03] dark:ring-white/[0.04]"
         >
           <div className="border-b border-[var(--border-subtle)] bg-gradient-to-br from-primary/[0.07] via-transparent to-emerald-500/[0.04] px-4 py-3">
-            <p className="text-[11px] font-medium leading-relaxed text-muted-foreground">{t(planKey)}</p>
+            <p className="text-[11px] font-medium leading-relaxed text-muted-foreground">
+              {learnerQaOverlay ? learnerQaOverlay.planLabel : t(planKey)}
+            </p>
             {scopeLine ? (
               <p className="mt-0.5 text-xs font-medium text-foreground/90">{scopeLine}</p>
             ) : null}

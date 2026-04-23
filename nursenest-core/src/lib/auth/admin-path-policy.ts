@@ -87,6 +87,10 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/admin/pathway-launch-workflow",
   "/api/admin/pathway-launch-workflow",
   "/api/admin/exam-hub-preview",
+  "/admin/learner-qa",
+  "/api/admin/learner-qa/simulate",
+  "/api/admin/learner-qa/clear",
+  "/api/admin/learner-qa/status",
   /** Prisma env wiring (no secrets) — pooled + direct URL presence for production validation. */
   "/api/debug/db-env",
 ];

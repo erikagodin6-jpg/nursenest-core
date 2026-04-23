@@ -16,6 +16,7 @@ import {
   pathwayLessonsAppListWhereWithTopicFilter,
   visiblePathwayIdsForAppLessons,
 } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import { buildLearnerAppLessonsHubSummary } from "@/lib/lessons/learner-app-lessons-hub-summary";
 import { paginateLegacyContentMapLessons } from "@/lib/lessons/legacy-content-map-lessons";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { FreemiumCrossTrackNudge } from "@/components/student/freemium-cross-track-nudge";
@@ -180,8 +181,9 @@ export default async function LessonsPage({ searchParams }: Props) {
 
   const sp = await searchParams;
   const limitParsed = parseLessonLibraryLimit(typeof sp.limit === "string" ? sp.limit : undefined);
-  const qEffective =
-    typeof sp.q === "string" && sp.q.trim().length > 0 ? sp.q.trim() : null;
+  const qRaw = typeof sp.q === "string" ? sp.q : "";
+  /** Empty / whitespace-only search must behave as no query (full list for the active scope). */
+  const qEffective = qRaw.trim().length > 0 ? qRaw.trim() : null;
   const rawPage = Math.max(1, Number(sp.page ?? "1") || 1);
   const maxOffsetPage = maxSafeOffsetPage(limitParsed);
   const pageRequested = Math.min(rawPage, maxOffsetPage);
@@ -380,12 +382,29 @@ export default async function LessonsPage({ searchParams }: Props) {
     redirect(q ? `/app/lessons${q}` : "/app/lessons");
   }
 
-  const lessons = lessonsBlock.rows;
+  const resolvedRenderableLessons: AppLessonListRow[] = [...lessonsBlock.rows];
+  const lessonsHub = buildLearnerAppLessonsHubSummary<AppLessonListRow>({
+    rows: resolvedRenderableLessons,
+    catalogMatchTotal: lessonsBlock.total,
+    qEffective,
+    topicFilter,
+    topicSlugFilter,
+    pathwayIdFilter,
+  });
+
+  if (process.env.NODE_ENV !== "production") {
+    safeServerLog("page_lessons", "app_lessons_hub_render", {
+      pathwayId: pathwayIdFilter ?? "",
+      totalLessons: String(lessonsHub.catalogMatchTotal),
+      renderedLessons: String(resolvedRenderableLessons.length),
+      emptyReason: lessonsHub.emptyReason,
+    });
+  }
 
   const progressByRowId: Record<string, PathwayLessonProgressStatus> = {};
   if (userId && lessonsBlock.source === "pathway_lessons") {
     const byPathway = new Map<string, string[]>();
-    for (const row of lessons) {
+    for (const row of resolvedRenderableLessons) {
       const pm = row.pathwayMeta;
       if (!pm?.slug) continue;
       const list = byPathway.get(pm.pathwayId) ?? [];
@@ -395,7 +414,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     for (const [pathwayId, slugs] of byPathway) {
       const unique = [...new Set(slugs)];
       const map = await loadPathwayLessonProgressMap(userId, pathwayId, unique);
-      for (const row of lessons) {
+      for (const row of resolvedRenderableLessons) {
         const pm = row.pathwayMeta;
         if (pm && pm.pathwayId === pathwayId && pm.slug) {
           progressByRowId[row.id] = map[pm.slug] ?? "not_started";
@@ -403,6 +422,19 @@ export default async function LessonsPage({ searchParams }: Props) {
       }
     }
   }
+
+  const listSummaryLine =
+    resolvedRenderableLessons.length > 0
+      ? t("learner.lessons.list.hubListSummary", {
+          shown: String(resolvedRenderableLessons.length),
+          total: String(lessonsHub.catalogMatchTotal),
+        })
+      : lessonsHub.catalogMatchTotal > 0
+        ? t("learner.lessons.list.hubListSummary", {
+            shown: "0",
+            total: String(lessonsHub.catalogMatchTotal),
+          })
+        : null;
 
   return (
     <div className="space-y-6">
@@ -429,7 +461,19 @@ export default async function LessonsPage({ searchParams }: Props) {
           <p>{t("learner.lessons.list.topicFilterIgnored")}</p>
         </div>
       ) : null}
-      {lessons.length === 0 ? (
+      <Suspense fallback={<div className="h-24 animate-pulse rounded-xl bg-[var(--semantic-panel-muted)]" />}>
+        <LearnerLessonsSearchToolbar
+          initialQ={qEffective ?? ""}
+          label="Search lessons"
+          placeholder="Search by title, topic, or keyword"
+        />
+      </Suspense>
+      {listSummaryLine ? (
+        <p className="text-sm font-medium text-[var(--semantic-text-secondary)]" data-testid="lessons-hub-list-summary">
+          {listSummaryLine}
+        </p>
+      ) : null}
+      {resolvedRenderableLessons.length === 0 && lessonsHub.showCatalogEmpty ? (
         <div className="nn-card mt-4 space-y-3 p-6 text-sm text-muted">
           <p className="font-semibold text-[var(--semantic-text-primary)]">No lessons available yet for this topic</p>
           <p>{t("learner.lessons.list.emptyList")}</p>
@@ -449,16 +493,37 @@ export default async function LessonsPage({ searchParams }: Props) {
           </div>
         </div>
       ) : null}
-      <Suspense fallback={<div className="h-24 animate-pulse rounded-xl bg-[var(--semantic-panel-muted)]" />}>
-        <LearnerLessonsSearchToolbar
-          initialQ={qEffective ?? ""}
-          label="Search lessons"
-          placeholder="Search by title, topic, or keyword"
-        />
-      </Suspense>
+      {resolvedRenderableLessons.length === 0 && lessonsHub.showFilterMissEmpty ? (
+        <div className="nn-card mt-4 space-y-3 border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-warm)] p-6 text-sm text-[var(--semantic-text-secondary)]">
+          <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.filterNoMatchesTitle")}</p>
+          <p>{t("learner.lessons.list.filterNoMatchesBody")}</p>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/app/lessons"
+              className="inline-flex items-center rounded-xl border border-[var(--semantic-border-soft)] px-4 py-2 font-semibold text-[var(--semantic-brand)] hover:underline"
+            >
+              {t("learner.lessons.list.topicFilterClear")}
+            </Link>
+          </div>
+          {lessonsHub.showCountMismatchHint ? (
+            <p className="text-xs text-[var(--semantic-text-secondary)]">{t("learner.lessons.list.countMismatchHint")}</p>
+          ) : null}
+        </div>
+      ) : null}
+      {resolvedRenderableLessons.length === 0 && lessonsHub.showCountMismatchHint && !lessonsHub.showFilterMissEmpty ? (
+        <div className="nn-card mt-4 space-y-2 border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-6 text-sm text-[var(--semantic-text-secondary)]">
+          <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.countMismatchHint")}</p>
+          <Link
+            href="/app/lessons"
+            className="inline-flex items-center rounded-xl border border-[var(--semantic-border-soft)] px-4 py-2 font-semibold text-[var(--semantic-brand)] hover:underline"
+          >
+            {t("learner.lessons.list.topicFilterClear")}
+          </Link>
+        </div>
+      ) : null}
       <div className="mt-4">
         <LearnerLessonsVirtualList
-          lessons={lessons}
+          lessons={resolvedRenderableLessons}
           progressByRowId={progressByRowId}
           openLessonCta={t("learner.lessons.list.openLessonCta")}
         />
@@ -468,7 +533,7 @@ export default async function LessonsPage({ searchParams }: Props) {
         basePath="/app/lessons"
         page={lessonsBlock.page}
         pageCount={lessonsBlock.pageCount}
-        total={lessonsBlock.total}
+        total={lessonsHub.catalogMatchTotal}
         pageSize={limitParsed}
         topic={topicFilter ?? undefined}
         topicSlug={topicSlugFilter ?? undefined}

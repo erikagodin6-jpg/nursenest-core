@@ -3,6 +3,7 @@
 import type React from "react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
 import { trackProductEvent } from "@/lib/observability/product-analytics";
 
 type Props = {
@@ -33,6 +34,14 @@ export function MarketingTrackedLink({
   children,
   ...rest
 }: Props) {
+  const marketingNarrow = useMarketingMobilePerfIsMobile() === true;
+  if (marketingNarrow) {
+    return (
+      <Link href={href} className={className} {...rest}>
+        {children}
+      </Link>
+    );
+  }
   return (
     <Link
       href={href}

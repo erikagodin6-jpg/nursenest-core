@@ -1,11 +1,14 @@
-import { ContentStatus, type Prisma } from "@prisma/client";
+import { ContentStatus, type CountryCode, type Prisma, type TierCode } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
+import { prismaTierCodesForProfileTier } from "@/lib/entitlements/accessible-tiers";
+import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
+import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
+import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
-import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
-import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
 import {
   applyCountsToBuilderCategories,
@@ -13,6 +16,7 @@ import {
   resolveBuilderCategoryId,
 } from "@/lib/flashcards/flashcard-builder-taxonomy";
 import { serializeFlashcardForCustomSession } from "@/lib/flashcards/flashcard-study-serialize";
+import type { FlashcardCustomSessionQueryRelaxation } from "@/lib/flashcards/flashcard-custom-session-response";
 import {
   filterCardsByProgressFlags,
   parseCustomSessionSourceKind,
@@ -95,32 +99,73 @@ export async function GET(req: NextRequest) {
   const sourceKind = parseCustomSessionSourceKind(sp.get("sourceKind"));
 
   const pathwayOpts = flashcardPathwayAccessOptionsFromPathwayId(pathwayId);
-  const accessWhere = flashcardAccessWhere(entitlement, pathwayOpts);
-  const clauses: Prisma.FlashcardWhereInput[] = [{ status: ContentStatus.PUBLISHED }, accessWhere];
-  if (topicCode) clauses.push({ category: { topicCode } });
-  if (lessonId) clauses.push({ lessonId });
   const sourceClause = prismaWhereForSourceKind(sourceKind);
-  if (sourceClause) clauses.push(sourceClause);
-  const where: Prisma.FlashcardWhereInput = { AND: clauses };
 
-  const cards = await prisma.flashcard.findMany({
-    where,
-    select: {
-      id: true,
-      front: true,
-      back: true,
-      sourceKey: true,
-      examItemKind: true,
-      questionStem: true,
-      answerOptions: true,
-      correctAnswer: true,
-      rationaleCorrect: true,
-      rationaleIncorrect: true,
-      category: { select: { name: true, topicCode: true } },
-      deck: { select: { pathwayId: true, title: true } },
-    },
-    orderBy: { updatedAt: "desc" },
-    take: 5000,
+  const flashcardSelect = {
+    id: true,
+    front: true,
+    back: true,
+    sourceKey: true,
+    examItemKind: true,
+    questionStem: true,
+    answerOptions: true,
+    correctAnswer: true,
+    rationaleCorrect: true,
+    rationaleIncorrect: true,
+    category: { select: { name: true, topicCode: true } },
+    deck: { select: { pathwayId: true, title: true } },
+  } as const;
+
+  const buildFlashcardWhere = (accessWhere: Prisma.FlashcardWhereInput): Prisma.FlashcardWhereInput => {
+    const clauses: Prisma.FlashcardWhereInput[] = [{ status: ContentStatus.PUBLISHED }, accessWhere];
+    if (topicCode) clauses.push({ category: { topicCode } });
+    if (lessonId) clauses.push({ lessonId });
+    if (sourceClause) clauses.push(sourceClause);
+    return { AND: clauses };
+  };
+
+  const fetchFlashcardRows = (accessWhere: Prisma.FlashcardWhereInput) =>
+    prisma.flashcard.findMany({
+      where: buildFlashcardWhere(accessWhere),
+      select: flashcardSelect,
+      orderBy: { updatedAt: "desc" },
+      take: 5000,
+    });
+
+  let queryRelaxation: FlashcardCustomSessionQueryRelaxation = "none";
+  let cards = await fetchFlashcardRows(flashcardAccessWhere(entitlement, pathwayOpts));
+  const staffBypass = accessScopeIsStaffLearnerEntitlementBypass(entitlement);
+
+  if (cards.length === 0 && !staffBypass && pathwayOpts) {
+    cards = await fetchFlashcardRows(flashcardAccessWhere(entitlement, null));
+    if (cards.length > 0) queryRelaxation = "dropped_pathway_scope";
+  }
+  if (cards.length === 0 && !staffBypass) {
+    const country = entitlement.country as CountryCode | null;
+    const tier = entitlement.tier as TierCode | null;
+    if (country && tier) {
+      cards = await fetchFlashcardRows({
+        status: ContentStatus.PUBLISHED,
+        tier: { in: prismaTierCodesForProfileTier(tier) },
+      });
+      if (cards.length > 0) queryRelaxation = "dropped_country_match";
+    }
+  }
+
+  const topicIdsForLog =
+    selectedCategories.length > 0
+      ? selectedCategories.slice(0, 24).join(",")
+      : topicCode
+        ? `topicCode:${topicCode}`
+        : lessonId
+          ? `lessonId:${lessonId.slice(0, 12)}`
+          : "all";
+  safeServerLog("flashcards", "custom_session_query", {
+    pathwayId: pathwayId ?? "",
+    topicIds: topicIdsForLog.slice(0, 200),
+    rawCount: String(cards.length),
+    relaxation: queryRelaxation,
+    includeCards: includeCards ? "1" : "0",
   });
 
   const categoryCounts: Record<string, number> = {};
@@ -229,6 +274,7 @@ export async function GET(req: NextRequest) {
       recentDays,
       sourceKind,
       cardLimit: sp.get("cardLimit") ?? "20",
+      queryRelaxation,
     },
     categoryOptions: applyCountsToBuilderCategories(pathwayId, categoryCounts),
     cards: cardsForSession,

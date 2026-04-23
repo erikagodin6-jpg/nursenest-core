@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ExamFamily, type TierCode } from "@prisma/client";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
@@ -72,6 +71,7 @@ import {
   PathwayLessonRelatedRailSkeleton,
 } from "@/components/lessons/pathway-lesson-detail-deferred";
 import { PathwayLessonRecordChips } from "@/components/pathway-lessons/pathway-lesson-record-chips";
+import { PathwayLessonUnavailableMarketing } from "@/components/lessons/pathway-lesson-unavailable-marketing";
 import { MarketingPathwayLessonDetailViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { DEFAULT_STUDY_SETTINGS } from "@/lib/learner/study-settings";
@@ -97,6 +97,7 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import { loadMarketingMessageShardsSync } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { LEARNER_APP_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /**
  * Paywall: full `PathwayLessonRecord` / `sections[]` stay in this server component. Gate with
@@ -113,6 +114,19 @@ export type PathwayLessonDetailPageBodyProps = {
 
 export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlug }: PathwayLessonDetailPageBodyProps) {
   const lessonContentLocale = DEFAULT_MARKETING_LOCALE;
+
+  if (!lessonSlug.trim()) {
+    safeServerLog("pathway_lesson_detail", "marketing_lesson_missing_slug", {
+      event: "marketing_lesson_missing_slug",
+      pathway_id: pathway.id,
+      pathname: pathname.slice(0, 240),
+    });
+    return (
+      <div className="mx-auto max-w-5xl px-4 py-10">
+        <PathwayLessonUnavailableMarketing pathway={pathway} requestedSlug={lessonSlug} reason="empty_slug" />
+      </div>
+    );
+  }
 
   const [lessonResult, sessionRes, staffRes] = await Promise.allSettled([
     loadPathwayLessonWithLegacySlugRedirect(pathway, lessonSlug, lessonContentLocale),
@@ -154,7 +168,21 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
     learnerPathResolved,
     staffFullLessonAccess,
   });
-  if (routeResolution.kind === "not_found") notFound();
+  if (routeResolution.kind === "not_found") {
+    safeServerLog("pathway_lesson_detail", "marketing_lesson_unavailable", {
+      event: "marketing_lesson_unavailable",
+      pathway_id: pathway.id,
+      lesson_slug: lessonSlug.slice(0, 240),
+      reason: routeResolution.reason,
+      pathname: pathname.slice(0, 240),
+      lesson_load_failed: lessonLoadFailed ? "1" : "0",
+    });
+    return (
+      <div className="mx-auto max-w-5xl px-4 py-10">
+        <PathwayLessonUnavailableMarketing pathway={pathway} requestedSlug={lessonSlug} reason={routeResolution.reason} />
+      </div>
+    );
+  }
 
   const { lesson, fullAccess, scope, entitlementError } = routeResolution;
   const examName = pathwayRegionAwareExamName(pathway);

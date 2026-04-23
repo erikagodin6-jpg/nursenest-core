@@ -7,6 +7,9 @@
  *   cd nursenest-core && npm run audit:blog:seo -- --json
  *   cd nursenest-core && npm run audit:blog:seo -- --out=tmp/blog-seo-audit.csv
  *
+ * Rows are sorted by `priorityScore` (desc), then `id`. Trailing columns: `priorityScore`,
+ * `priorityTier` (P1–P4), `fixFirstReason` (deterministic label). Summary counts on stderr include P1–P4.
+ *
  * Uses the same title/H1/FAQ merge/study-anchor helpers as public blog routes.
  */
 import "../../src/lib/db/env-bootstrap";
@@ -68,6 +71,9 @@ type AuditRow = {
   duplicateComputedBrowserTitleCandidate: boolean;
   duplicateH1Candidate: boolean;
   notes: string;
+  priorityScore: number;
+  priorityTier: string;
+  fixFirstReason: string;
 };
 
 const CSV_COLUMNS: (keyof AuditRow)[] = [
@@ -102,7 +108,69 @@ const CSV_COLUMNS: (keyof AuditRow)[] = [
   "duplicateComputedBrowserTitleCandidate",
   "duplicateH1Candidate",
   "notes",
+  "priorityScore",
+  "priorityTier",
+  "fixFirstReason",
 ];
+
+/** ~2y — paired with thin content for a small urgency bump (deterministic). */
+const VERY_OLD_MS = 730 * 24 * 60 * 60 * 1000;
+
+function isVeryOld(updatedAtIso: string, nowMs: number): boolean {
+  const t = Date.parse(updatedAtIso);
+  if (!Number.isFinite(t)) return false;
+  return nowMs - t > VERY_OLD_MS;
+}
+
+function missingExamMapping(r: AuditRow): boolean {
+  return !String(r.examCode).trim();
+}
+
+function missingCountryGeo(r: AuditRow): boolean {
+  return !String(r.countryTarget).trim();
+}
+
+/**
+ * Deterministic priority score (higher = fix sooner). Weights are easy to tune in one place.
+ * Uses only fields already on the row — no extra DB reads.
+ */
+function computePriority(row: AuditRow, nowMs: number): Pick<AuditRow, "priorityScore" | "priorityTier" | "fixFirstReason"> {
+  let s = 0;
+  if (row.thinContentFlag) s += 40;
+  if (row.missingSeoTitleFlag) s += 25;
+  if (row.duplicateComputedBrowserTitleCandidate) s += 20;
+  if (row.duplicateH1Candidate) s += 15;
+  if (!row.hasFaqSchemaEligible) s += 10;
+  if (!row.hasStudyAnchorStripEligible) s += 10;
+  if (missingExamMapping(row)) s += 10;
+  if (missingCountryGeo(row)) s += 8;
+  if (row.mediumContentFlag) s += 5;
+  if (row.strongContentFlag) s -= 5;
+  if (row.thinContentFlag && isVeryOld(row.updatedAt, nowMs)) s += 5;
+
+  const priorityTier = s >= 60 ? "P1" : s >= 35 ? "P2" : s >= 15 ? "P3" : "P4";
+
+  let fixFirstReason = "mixed SEO signals";
+  if (row.thinContentFlag && row.missingSeoTitleFlag) fixFirstReason = "thin + missing seoTitle";
+  else if (row.thinContentFlag && row.duplicateComputedBrowserTitleCandidate) fixFirstReason = "thin + duplicate title";
+  else if (row.duplicateComputedBrowserTitleCandidate && row.duplicateH1Candidate) fixFirstReason = "duplicate metadata cluster";
+  else if (row.duplicateComputedBrowserTitleCandidate) fixFirstReason = "duplicate browser title";
+  else if (row.duplicateH1Candidate) fixFirstReason = "duplicate H1";
+  else if (!row.hasFaqSchemaEligible && !row.hasStudyAnchorStripEligible) fixFirstReason = "missing FAQ + anchors";
+  else if (missingExamMapping(row) || missingCountryGeo(row)) fixFirstReason = "weak exam/geo context";
+  else if (
+    row.strongContentFlag &&
+    !row.thinContentFlag &&
+    !row.missingSeoTitleFlag &&
+    !row.duplicateComputedBrowserTitleCandidate &&
+    !row.duplicateH1Candidate &&
+    row.hasFaqSchemaEligible &&
+    row.hasStudyAnchorStripEligible
+  )
+    fixFirstReason = "content strong; low urgency";
+
+  return { priorityScore: s, priorityTier, fixFirstReason };
+}
 
 function parseCliArgs(): { json: boolean; outPath: string | null } {
   const argv = process.argv.slice(2);
@@ -311,6 +379,9 @@ async function main(): Promise<void> {
       duplicateComputedBrowserTitleCandidate: false,
       duplicateH1Candidate: false,
       notes: buildNotes(baseNotes),
+      priorityScore: 0,
+      priorityTier: "P4",
+      fixFirstReason: "",
     };
     rows.push(defaultRow);
 
@@ -321,6 +392,9 @@ async function main(): Promise<void> {
         routeType: "allied_blog",
         fullPublicUrl: absolutePublicUrl(alliedPath),
         notes: buildNotes([...baseNotes, "allied surface"]),
+        priorityScore: 0,
+        priorityTier: "P4",
+        fixFirstReason: "",
       });
     }
   }
@@ -446,6 +520,9 @@ async function main(): Promise<void> {
       duplicateComputedBrowserTitleCandidate: false,
       duplicateH1Candidate: false,
       notes: buildNotes(baseNotes),
+      priorityScore: 0,
+      priorityTier: "P4",
+      fixFirstReason: "",
     });
   }
 
@@ -475,10 +552,28 @@ async function main(): Promise<void> {
     if (extra.length) r.notes = buildNotes([r.notes, ...extra].filter(Boolean));
   }
 
+  const nowMs = now.getTime();
+  for (const r of rows) {
+    const p = computePriority(r, nowMs);
+    r.priorityScore = p.priorityScore;
+    r.priorityTier = p.priorityTier;
+    r.fixFirstReason = p.fixFirstReason;
+  }
+
+  rows.sort((a, b) => {
+    if (b.priorityScore !== a.priorityScore) return b.priorityScore - a.priorityScore;
+    return a.id.localeCompare(b.id);
+  });
+
   const thin = rows.filter((r) => r.thinContentFlag).length;
   const missingSeo = rows.filter((r) => r.missingSeoTitleFlag).length;
+  const p1 = rows.filter((r) => r.priorityTier === "P1").length;
+  const p2 = rows.filter((r) => r.priorityTier === "P2").length;
+  const p3 = rows.filter((r) => r.priorityTier === "P3").length;
+  const p4 = rows.filter((r) => r.priorityTier === "P4").length;
 
   console.error(`audit:blog:seo — total rows: ${rows.length}`);
+  console.error(`audit:blog:seo — priority P1: ${p1} | P2: ${p2} | P3: ${p3} | P4: ${p4}`);
   console.error(`audit:blog:seo — thin (<800 words): ${thin}`);
   console.error(`audit:blog:seo — missing seoTitle / localizedMetaTitle: ${missingSeo}`);
   console.error(`audit:blog:seo — duplicate computedBrowserTitle candidates (rows flagged): ${dupTitle}`);

@@ -17,5 +17,7 @@ export function emptyPathwayLessonsPageResult(page: number, pageSize: number): P
     page: p,
     pageSize: ps,
     pageCount: 1,
+    /** Keeps hub + toolbar on the same shape as {@link getPathwayLessonsPageImpl} (no `items`-only fallback drift). */
+    renderableAll: [],
   };
 }

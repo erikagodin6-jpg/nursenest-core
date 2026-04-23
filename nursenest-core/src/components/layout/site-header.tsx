@@ -69,10 +69,10 @@ const NAV_FLOW_SECONDARY_CLASS = `${NAV_LINK_CLASS} text-[var(--nav-muted)]`;
 const NAV_TIER_LINK_CLASS =
   "nn-marketing-body-sm nn-marketing-nav-link inline-flex items-center justify-center whitespace-nowrap text-center font-medium leading-[1.2] tracking-normal";
 const HEADER_SECONDARY_ACTION_CLASS =
-  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
+  "nav-item inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 /** Guest marketing header: match primary CTA horizontal padding for consistent pill width. */
 const HEADER_GUEST_SECONDARY_ACTION_CLASS =
-  "inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
+  "nav-item inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
 type LearnerCountry = "CA" | "US";
 type HeaderResumeCta = { href: string; label: string } | null;
@@ -486,7 +486,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             {/* Guests: Login + primary CTA live in this row so they are never only in a secondary strip or hamburger. */}
             {isSessionPending ? (
               <div
-                className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2"
+                className="nn-header-mobile-public-ctas flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2"
                 aria-busy="true"
                 aria-label={t("nav.logIn")}
               >
@@ -494,10 +494,10 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                 <div className="h-11 min-w-[5rem] max-w-[52%] flex-1 animate-pulse rounded-xl bg-[color-mix(in_srgb,var(--nav-fg)_12%,var(--nav-border))] sm:max-w-none sm:flex-initial" />
               </div>
             ) : !isAuthenticated ? (
-              <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2">
+              <div className="nn-header-mobile-public-ctas flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2">
                 <Link
                   href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
-                  className="inline-flex min-h-[44px] max-w-[38%] shrink-0 items-center justify-center rounded-xl border border-[var(--nav-border)] px-2 py-2 text-xs font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] sm:max-w-none sm:px-3 sm:text-sm"
+                  className="nav-item inline-flex min-h-[44px] max-w-[38%] shrink-0 items-center justify-center rounded-xl border border-[var(--nav-border)] px-2 py-2 text-xs font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] sm:max-w-none sm:px-3 sm:text-sm"
                   onClick={closeMegaBeforeAuthNav}
                   aria-label="Log in to your NurseNest account"
                 >
@@ -505,7 +505,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                 </Link>
                 <Link
                   href={guestMarketingSignupHref}
-                  className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[44px] min-w-0 max-w-[52%] shrink items-center justify-center rounded-xl px-2.5 py-2 text-xs font-medium sm:max-w-none sm:px-4 sm:text-sm`}
+                  className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[44px] min-w-0 max-w-[52%] shrink items-center justify-center rounded-xl px-2.5 py-2 text-xs font-medium sm:max-w-none sm:px-4 sm:text-sm`}
                   onClick={closeMegaBeforeAuthNav}
                   aria-label="Start free account — nursing and healthcare exam prep"
                   title="Start free — no credit card required"
@@ -519,7 +519,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               <button
                 type="button"
                 onClick={() => setMobileContextOpen(true)}
-                className="nn-header-mobile-only-inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--nn-nav-border)] bg-transparent p-0 text-[var(--nn-nav-fg)] transition-colors hover:bg-[var(--nn-nav-hover-bg)]"
+                className="nn-skip-mobile-touch-target nn-header-mobile-only-inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--nn-nav-border)] bg-transparent p-0 text-[var(--nn-nav-fg)] transition-colors hover:bg-[var(--nn-nav-hover-bg)]"
                 aria-label="Region and language settings"
                 aria-expanded={mobileContextOpen}
               >
@@ -528,7 +528,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               <Button
                 type="button"
                 variant="ghost"
-                className="h-10 w-10 shrink-0 rounded-xl border border-[var(--nn-nav-border)] p-0 text-[var(--nn-nav-fg)] hover:bg-[var(--nn-nav-hover-bg)]"
+                className="nn-skip-mobile-touch-target h-10 w-10 shrink-0 rounded-xl border border-[var(--nn-nav-border)] p-0 text-[var(--nn-nav-fg)] hover:bg-[var(--nn-nav-hover-bg)]"
                 aria-label={t("nav.openMenu")}
                 aria-expanded={mobileOpen}
                 onClick={() => setMobileOpen(true)}
@@ -546,7 +546,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                   <Link
                     href={ADMIN_DASHBOARD_HREF}
                     prefetch={false}
-                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4`}
+                    className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4`}
                     onClick={(e) => {
                       closeMegaBeforeAuthNav();
                       navigateAdminDashboardHard(e);
@@ -566,7 +566,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
                     href={resumeStudyingCta?.href ?? "/app"}
-                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4`}
+                    className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4`}
                   >
                     {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
                   </Link>
@@ -582,7 +582,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
                     href={localizeHref(HUB.pricing)}
-                    className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4`}
+                    className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-11 min-w-0 flex-1 items-center justify-center rounded-xl px-3 py-2 text-sm font-medium sm:flex-initial sm:px-4`}
                     onClick={closeMegaBeforeAuthNav}
                   >
                     {formatTitleCase(t("nav.pricing"), locale)}
@@ -811,7 +811,12 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
       {mobileOpen && typeof document !== "undefined"
         ? createPortal(
             <div className="nn-header-overlay-mobile-only fixed inset-0 z-[200] animate-[nn-overlay-enter_0.24s_ease_forwards]">
-          <button type="button" className="absolute inset-0 bg-black/56" aria-label={t("nav.closeMenu")} onClick={scheduleMobileDrawerClose} />
+          <button
+            type="button"
+            className="nn-skip-mobile-touch-target absolute inset-0 bg-black/56"
+            aria-label={t("nav.closeMenu")}
+            onClick={scheduleMobileDrawerClose}
+          />
           <div className="absolute inset-x-0 top-0 flex h-[100dvh] max-h-[100dvh] flex-col border-b border-[var(--nav-border)] bg-[var(--nav-bg)] text-[var(--nav-fg)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_forwards]">
             <div className="flex h-16 shrink-0 items-center justify-between border-b border-[var(--header-border)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">
               <Link
@@ -822,7 +827,13 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               >
                 <HeaderBrandLockup />
               </Link>
-              <Button type="button" variant="ghost" className="h-10 w-10 shrink-0 rounded-xl border border-[var(--nav-border)] p-0 text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]" aria-label={t("nav.closeMenu")} onClick={scheduleMobileDrawerClose}>
+              <Button
+                type="button"
+                variant="ghost"
+                className="nn-skip-mobile-touch-target h-10 w-10 shrink-0 rounded-xl border border-[var(--nav-border)] p-0 text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                aria-label={t("nav.closeMenu")}
+                onClick={scheduleMobileDrawerClose}
+              >
                 <X className="h-5 w-5" />
               </Button>
             </div>
@@ -842,7 +853,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                               key={flowPractice.key}
                               href={localizeHref(flowPractice.href)}
                               aria-current={isActivePath(strippedPath, flowPractice.matchBase) ? "page" : undefined}
-                              className={`${HEADER_NAV_PRIMARY_CTA} mb-2 flex min-h-[48px] w-full items-center justify-center rounded-xl px-4 py-3 text-[15px] font-semibold`}
+                              className={`nav-item ${HEADER_NAV_PRIMARY_CTA} mb-2 flex min-h-[48px] w-full items-center justify-center rounded-xl px-4 py-3 text-[15px] font-semibold`}
                               onClick={() => {
                                 trackClientEvent(PH.marketingNavClick, {
                                   actor: navActor,
@@ -862,7 +873,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                                 key={item.key}
                                 href={localizeHref(item.href)}
                                 aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                                className={`flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-2 py-2.5 text-center text-[13px] font-medium leading-snug text-[var(--nav-muted)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)] ${isActivePath(strippedPath, item.matchBase) ? "border-[var(--text-accent)] text-[var(--nav-link-active)]" : ""}`}
+                                className={`nav-item flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-2 py-2.5 text-center text-[13px] font-medium leading-snug text-[var(--nav-muted)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)] ${isActivePath(strippedPath, item.matchBase) ? "border-[var(--text-accent)] text-[var(--nav-link-active)]" : ""}`}
                                 onClick={() => {
                                   trackClientEvent(PH.marketingNavClick, {
                                     actor: navActor,
@@ -886,7 +897,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                         href={localizeHref(menu.hubHref)}
                         aria-current={isMegaMenuKeyActive(menu.key, strippedPath) ? "page" : undefined}
                         data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
-                        className={`flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-medium transition-colors ${isMegaMenuKeyActive(menu.key, strippedPath) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                        className={`nav-item flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-medium transition-colors ${isMegaMenuKeyActive(menu.key, strippedPath) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
                         onClick={() => {
                           trackClientEvent(PH.marketingNavClick, {
                             actor: navActor,
@@ -913,7 +924,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                           key={item.key}
                           href={localizeHref(item.href)}
                           aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                          className={`flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-medium transition-colors ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                          className={`nav-item flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-medium transition-colors ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
                           onClick={() => {
                             trackClientEvent(PH.marketingNavClick, {
                               actor: navActor,
@@ -945,7 +956,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                   <>
                     <Link
                       href={guestMarketingSignupHref}
-                      className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
+                      className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
                       onClick={scheduleMobileDrawerClose}
                       aria-label="Start free account — nursing and healthcare exam prep"
                       title="Start free — no credit card required"
@@ -954,7 +965,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                     </Link>
                     <Link
                       href={localizeHref(`/login?callbackUrl=${encodeURIComponent(postLoginCallbackPath)}`)}
-                      className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-3 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                      className="nav-item inline-flex min-h-[46px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-3 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                       onClick={scheduleMobileDrawerClose}
                       aria-label="Log in to your NurseNest account"
                     >
@@ -966,7 +977,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                     <Link
                       href={ADMIN_DASHBOARD_HREF}
                       prefetch={false}
-                      className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
+                      className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
                       onClick={(e) => {
                         closeMegaBeforeAuthNav();
                         scheduleMobileDrawerClose();
@@ -990,7 +1001,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                       {formatTitleCase(t("nav.account"), locale)}
                     </Link>
                     <SignOutButton
-                      className="mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+                      className="nav-item mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
                       onBeforeSignOut={scheduleMobileDrawerClose}
                       redirectTo={withMarketingLocale(locale, "/login")}
                     />
@@ -1004,7 +1015,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                     ) : null}
                     <Link
                       href={resumeStudyingCta?.href ?? "/app"}
-                      className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
+                      className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
                       onClick={scheduleMobileDrawerClose}
                     >
                       {resumeStudyingCta?.label ?? formatTitleCase(CONTINUE_STUDYING_CTA, locale)}
@@ -1016,7 +1027,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                       {formatTitleCase(t("nav.account"), locale)}
                     </Link>
                     <SignOutButton
-                      className="mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+                      className="nav-item mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
                       onBeforeSignOut={scheduleMobileDrawerClose}
                       redirectTo={withMarketingLocale(locale, "/login")}
                     />
@@ -1025,7 +1036,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                   <>
                     <Link
                       href={localizeHref(HUB.pricing)}
-                      className={`${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
+                      className={`nav-item ${HEADER_NAV_PRIMARY_CTA} inline-flex min-h-[48px] items-center justify-center rounded-xl px-4 py-3 text-sm font-medium`}
                       onClick={() => {
                         closeMegaBeforeAuthNav();
                         scheduleMobileDrawerClose();
@@ -1048,7 +1059,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                       {formatTitleCase(t("nav.account"), locale)}
                     </Link>
                     <SignOutButton
-                      className="mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
+                      className="nav-item mt-3 w-full min-h-[48px] rounded-xl border border-[var(--nav-border)] px-4 py-3 text-center text-sm font-semibold text-[var(--nav-fg)] hover:bg-[var(--nav-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35"
                       onBeforeSignOut={scheduleMobileDrawerClose}
                       redirectTo={withMarketingLocale(locale, "/login")}
                     />
@@ -1076,7 +1087,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                 <button
                   type="button"
                   onClick={() => setMobileLangOpen((o) => !o)}
-                  className="flex w-full items-center justify-between gap-2 rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] px-3 py-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                  className="nav-item flex w-full items-center justify-between gap-2 rounded-xl border border-[var(--nav-border)] bg-[var(--nav-bg)] px-3 py-2 nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                 >
                   {t("nav.language")}
                   <ChevronDown className={`h-4 w-4 shrink-0 transition-transform ${mobileLangOpen ? "rotate-180" : ""}`} />
@@ -1090,7 +1101,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                           type="button"
                           disabled={disabled}
                           onClick={onSelect}
-                          className={`flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left nn-marketing-body-sm font-medium tracking-normal hover:bg-[var(--nav-hover)] ${
+                          className={`nav-item flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left nn-marketing-body-sm font-medium tracking-normal hover:bg-[var(--nav-hover)] ${
                             code === locale
                               ? "bg-[var(--nav-active)] text-[var(--nav-on-active-fg)]"
                               : "text-[var(--nav-fg)]"

@@ -58,10 +58,8 @@ import {
   filterPoolRemovingRecentQuestions,
   recentPracticeQuestionIdsForPathway,
 } from "@/lib/practice-tests/recent-practice-question-ids";
+import { GUIDED_PRACTICE_ORDER_SEED_SUFFIX } from "@/lib/practice-tests/cat-session-seed-suffixes";
 import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
-
-/** Seeded shuffle namespace for guided fixed-length runs (tests import this to stay aligned). */
-export const GUIDED_PRACTICE_ORDER_SEED_SUFFIX = ":guided-practice-order-v1";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { CatStudyFeedbackPayload } from "@/lib/practice-tests/types";
 import type {
@@ -373,7 +371,7 @@ export async function createCatPracticeTestPayload(
   if (guidedPractice) {
     const candidatePoolSize = poolForSelection.length;
     const poolIds = poolForSelection.map((r) => r.id);
-    const shuffled = shuffleSeeded([...poolIds], `${sessionPickSalt}:guided-practice-order-v1`);
+    const shuffled = shuffleSeeded([...poolIds], `${sessionPickSalt}${GUIDED_PRACTICE_ORDER_SEED_SUFFIX}`);
     const runLength = Math.min(Math.max(10, input.questionCount), shuffled.length);
     const questionIds = shuffled.slice(0, runLength);
     const guidedPickInput: PickQuestionsInput = { ...poolInput, questionCount: runLength };

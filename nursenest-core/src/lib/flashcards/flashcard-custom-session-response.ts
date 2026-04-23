@@ -1,5 +1,7 @@
 import type { BuilderCategoryOption } from "@/lib/flashcards/flashcard-builder-taxonomy";
 
+export type FlashcardCustomSessionQueryRelaxation = "none" | "dropped_pathway_scope" | "dropped_country_match";
+
 export type FlashcardCustomSessionSummary = {
   pathwayId: string | null;
   topicCode?: string | null;
@@ -20,6 +22,8 @@ export type FlashcardCustomSessionSummary = {
   recentDays?: number;
   sourceKind?: string;
   cardLimit: string;
+  /** When the API widened access filters to return cards (debug / transparency). */
+  queryRelaxation?: FlashcardCustomSessionQueryRelaxation;
 };
 
 export type ParsedCustomSessionSuccess = {
@@ -115,6 +119,12 @@ export function parseFlashcardCustomSessionResponse(
       recentDays: typeof s.recentDays === "number" ? s.recentDays : undefined,
       sourceKind: typeof s.sourceKind === "string" ? s.sourceKind : undefined,
       cardLimit: typeof s.cardLimit === "string" ? s.cardLimit : "20",
+      queryRelaxation:
+        s.queryRelaxation === "dropped_pathway_scope" ||
+        s.queryRelaxation === "dropped_country_match" ||
+        s.queryRelaxation === "none"
+          ? s.queryRelaxation
+          : undefined,
     };
   }
 

@@ -13,7 +13,9 @@ export type ProductEventName =
   | "cron_jobs_batch"
   | "signup_ok"
   | "signup_rate_limited"
-  | "signup_captcha_failed";
+  | "signup_captcha_failed"
+  | "admin_learner_qa_started"
+  | "admin_learner_qa_cleared";
 
 /**
  * Lightweight product/system signals: stderr + optional Sentry breadcrumb (no PII).

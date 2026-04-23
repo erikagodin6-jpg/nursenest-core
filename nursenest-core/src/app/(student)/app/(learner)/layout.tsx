@@ -56,6 +56,14 @@ import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 
 import { getStaffSession } from "@/lib/auth/staff-session";
+import {
+  bannerTitleForPayload,
+  getVerifiedAdminLearnerQaSimulation,
+  learnerPathwayNavFromQaPayload,
+  learnerQaUserBarOverlayFromPayload,
+} from "@/lib/admin/admin-learner-qa-simulation";
+import { AdminLearnerQaBanner } from "@/components/admin/admin-learner-qa-banner";
+import { AdminLearnerQaPosthogSuppressor } from "@/components/admin/admin-learner-qa-posthog-suppressor";
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
 
@@ -72,10 +80,11 @@ export default async function LearnerShellLayout({ children }: { children: React
     return <LearnerUnauthenticatedGate />;
   }
 
-  const [entitlement, paywallHomeStats, staffSession] = await Promise.all([
+  const [entitlement, paywallHomeStats, staffSession, qaPayload] = await Promise.all([
     resolveEntitlementForPage(userId),
     loadPaywallHomeStatsForShell(),
     getStaffSession().catch(() => null),
+    getVerifiedAdminLearnerQaSimulation(userId),
   ]);
 
   const skipNonCritical = shouldSkipNonCriticalLearnerWork();
@@ -91,27 +100,29 @@ export default async function LearnerShellLayout({ children }: { children: React
   const cachedNav =
     entitlement !== "error" ? getLearnerFallback(userId, entitlement, isLearnerPathwayNavMetadata) : null;
 
-  const pathwayNav = await safeOptional(
-    async () => {
-      const fresh = await loadLearnerPathwayNavMetadata(userId);
-      if (entitlement !== "error") {
-        setLearnerFallback(userId, entitlement, fresh);
-      }
-      return fresh;
-    },
-    cachedNav ?? DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
-    {
-      label: "learner_pathway_nav_metadata",
-      onUsedFallback: (reason) => {
-        if (cachedNav != null) {
-          layoutStderrTrace("learner_shell", "fallback_used", {
-            surface: "pathway_nav",
-            reason,
-          });
-        }
-      },
-    },
-  );
+  const pathwayNav = qaPayload
+    ? learnerPathwayNavFromQaPayload(qaPayload)
+    : await safeOptional(
+        async () => {
+          const fresh = await loadLearnerPathwayNavMetadata(userId);
+          if (entitlement !== "error") {
+            setLearnerFallback(userId, entitlement, fresh);
+          }
+          return fresh;
+        },
+        cachedNav ?? DEFAULT_LEARNER_PATHWAY_NAV_METADATA,
+        {
+          label: "learner_pathway_nav_metadata",
+          onUsedFallback: (reason) => {
+            if (cachedNav != null) {
+              layoutStderrTrace("learner_shell", "fallback_used", {
+                surface: "pathway_nav",
+                reason,
+              });
+            }
+          },
+        },
+      );
 
   const { showBaselinePrompt, pathwayId, pathwayShortLabel } = pathwayNav;
   let { pathwayHubHref, examsLabel, pathwayContextBar } = pathwayNav;
@@ -203,6 +214,7 @@ export default async function LearnerShellLayout({ children }: { children: React
 
   return (
     <SentryLearnerShell userId={userId}>
+      <AdminLearnerQaPosthogSuppressor active={Boolean(qaPayload)} />
       <PaywallHomeStatsProvider value={paywallHomeStats}>
         <LearnerExamStudyProviders>
           <LearnerExamChromeGate>
@@ -218,6 +230,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                 serverDegraded={isDegradedMode()}
                 serverCoreEmergency={isCoreOnlyEmergencyMode()}
               />
+              {qaPayload ? <AdminLearnerQaBanner title={bannerTitleForPayload(qaPayload)} /> : null}
               {!skipNonCritical ? <LearnerAppSectionAnalytics /> : null}
               <div className="nn-learner-exam-chrome-target nn-learner-shell-sticky sticky top-0 z-50 mb-[var(--nn-rhythm-tight-y)] bg-[var(--semantic-bg-base)] pt-1">
                 <div className="flex flex-col gap-2">
@@ -228,7 +241,11 @@ export default async function LearnerShellLayout({ children }: { children: React
                         <LearnerShellPathwayPill pathwayPillLabel={pathwayShortLabel} pathwayHubHref={pathwayHubHref} />
                       </div>
                       <div className="flex flex-shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-2.5">
-                        <LearnerShellUserBar pathwayShortLabel={pathwayShortLabel} serverHasStaffSession={staffSession != null} />
+                        <LearnerShellUserBar
+                          pathwayShortLabel={pathwayShortLabel}
+                          serverHasStaffSession={staffSession != null && !qaPayload}
+                          learnerQaOverlay={qaPayload ? learnerQaUserBarOverlayFromPayload(qaPayload) : null}
+                        />
                         {!coreOnlyEmergency ? <UserFeedbackNavPill /> : null}
                         <LearnerShellLanguageControl />
                         <LearnerThemeControl />

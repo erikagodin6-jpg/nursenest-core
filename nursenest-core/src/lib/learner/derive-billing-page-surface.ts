@@ -25,8 +25,13 @@ export function deriveBillingSurface(args: {
   hasAccess: boolean;
   entitlementReason: AccessScope["reason"] | "error";
   trialEndsAt: Date | null;
+  /**
+   * When staff use signed **admin learner QA** simulation, entitlement reflects the simulated learner.
+   * Skip the unconditional `"admin"` billing banner so surfaces match {@link getUserAccess} / paywall state.
+   */
+  skipStaffAdminSurface?: boolean;
 }): BillingStatusSurface {
-  if (isLearnerEntitlementStaffBypassRole(args.user.role)) return "admin";
+  if (isLearnerEntitlementStaffBypassRole(args.user.role) && !args.skipStaffAdminSurface) return "admin";
 
   const sub = args.subscription;
   const now = Date.now();

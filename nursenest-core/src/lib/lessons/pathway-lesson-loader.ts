@@ -469,6 +469,11 @@ export type PathwayLessonsPageResult = {
   pageSize: number;
   pageCount: number;
   locale?: PathwayLessonListLocaleInfo;
+  /**
+   * Full normalized hub list backing `items` + `total` (same filters as pagination).
+   * Used by the curriculum hub so body-system sections are not built from a single page slice alone.
+   */
+  renderableAll?: PathwayLessonRecord[];
 };
 
 const HUB_FULL_SCAN_CHUNK = 400;
@@ -702,6 +707,7 @@ async function getPathwayLessonsPageImpl(
     pageSize: slice.pageSize,
     pageCount: slice.pageCount,
     locale: resolved.locale,
+    renderableAll: resolved.renderableAll,
   };
 }
 

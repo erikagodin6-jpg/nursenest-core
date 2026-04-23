@@ -5,6 +5,24 @@ import {
   parseFlashcardCustomSessionResponse,
 } from "@/lib/flashcards/flashcard-custom-session-response";
 
+test("parseFlashcardCustomSessionResponse: preserves queryRelaxation on summary", () => {
+  const r = parseFlashcardCustomSessionResponse(true, {
+    ok: true,
+    summary: {
+      pathwayId: "us-rn-nclex",
+      matchingCards: 2,
+      returnedCards: 2,
+      selectedCategories: [],
+      mode: "mixed",
+      queryRelaxation: "dropped_pathway_scope",
+    },
+    categoryOptions: [{ id: "a", title: "A", count: 1 }],
+  });
+  assert.equal(r.ok, true);
+  if (!r.ok) return;
+  assert.equal(r.summary?.queryRelaxation, "dropped_pathway_scope");
+});
+
 test("parseFlashcardCustomSessionResponse: success with categories", () => {
   const r = parseFlashcardCustomSessionResponse(true, {
     ok: true,

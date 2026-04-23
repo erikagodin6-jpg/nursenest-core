@@ -14,6 +14,7 @@ import "./globals.css";
 /** Bundled with root layout CSS so marketing pages avoid a second render-blocking stylesheet (rules are dark-theme + `.nn-marketing-surface` scoped). */
 import "./(marketing)/marketing-dark-utilities.css";
 
+/** `display: "swap"` → `font-display: swap` on emitted `@font-face`; `adjustFontFallback` + `preload` reduce CLS while fonts load. */
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],

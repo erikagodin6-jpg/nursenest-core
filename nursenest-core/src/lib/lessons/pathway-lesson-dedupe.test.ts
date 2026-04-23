@@ -25,6 +25,17 @@ describe("pathway-lesson-dedupe", () => {
     assert.equal(out, "acs chest pain");
   });
 
+  it("collapses RN suffix variants and common atrial fibrillation spellings for dedupe keys", () => {
+    assert.equal(
+      normalizeLessonTitleForDedupe("Atrial Fibrillation — RN"),
+      normalizeLessonTitleForDedupe("Atrial Fibrillation (RN)"),
+    );
+    assert.equal(
+      normalizeLessonTitleForDedupe("AFib management"),
+      normalizeLessonTitleForDedupe("atrial fibrillation management"),
+    );
+  });
+
   it("dedupes by id first, then slug, then normalized title", () => {
     const input = [
       lesson({ id: "a1", slug: "first", title: "First Title" }),
