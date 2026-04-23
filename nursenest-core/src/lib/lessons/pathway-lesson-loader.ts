@@ -10,7 +10,7 @@
  * homepage shell, or header/nav chrome; use metadata/preview helpers on shared surfaces instead.
  */
 import { prisma } from "@/lib/db";
-import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
+import { PRISMA_ID_IN_CHUNK_SIZE, takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import type { PathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
 import { applyPathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
@@ -62,7 +62,10 @@ import {
 } from "@/lib/lessons/pathway-lesson-scale";
 import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
 import { dedupePathwayLessonsForLibrary } from "@/lib/lessons/pathway-lesson-dedupe";
-import { PATHWAY_LESSON_DB_TIMEOUT_MS } from "@/lib/lessons/pathway-lesson-loader-config";
+import {
+  PATHWAY_LESSON_DB_TIMEOUT_MS,
+  PATHWAY_LESSON_MARKETING_HUB_VERIFY_DB_TIMEOUT_MS,
+} from "@/lib/lessons/pathway-lesson-loader-config";
 import type { LessonInput } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import {
   getCatalogLessonsRaw,
@@ -94,7 +97,10 @@ export {
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-scale";
-export { PATHWAY_LESSON_DB_TIMEOUT_MS } from "@/lib/lessons/pathway-lesson-loader-config";
+export {
+  PATHWAY_LESSON_DB_TIMEOUT_MS,
+  PATHWAY_LESSON_MARKETING_HUB_VERIFY_DB_TIMEOUT_MS,
+} from "@/lib/lessons/pathway-lesson-loader-config";
 /**
  * Cross-request Data Cache TTL for public lesson payloads (no user/session).
  * Personalized progress stays outside this layer (see pathway-lesson-progress).
@@ -279,8 +285,12 @@ function lessonLocaleMeta(
   };
 }
 
-async function dbCall<T>(run: () => Promise<T>, fallback: T): Promise<T> {
-  return withDatabaseFallbackTimeout(run, fallback, PATHWAY_LESSON_DB_TIMEOUT_MS, {
+async function dbCall<T>(
+  run: () => Promise<T>,
+  fallback: T,
+  timeoutMs: number = PATHWAY_LESSON_DB_TIMEOUT_MS,
+): Promise<T> {
+  return withDatabaseFallbackTimeout(run, fallback, timeoutMs, {
     scope: "pathway_lessons",
     label: "pathway_lesson_prisma",
   });
@@ -295,15 +305,29 @@ const fetchPublishedLessonOverlaysForMarketingLocale = cache(async (normalizedLo
   fetchPublishedPathwayLessonOverlayMapSafe(normalizedLocale),
 );
 
-async function scopedGoldSlugPublishedInDb(pathwayId: string, locale: string, slug: string): Promise<boolean> {
-  const n = await dbCall(
-    () =>
-      prisma.pathwayLesson.count({
-        where: { pathwayId, locale, slug, status: ContentStatus.PUBLISHED },
-      }),
-    0,
-  );
-  return n > 0;
+/** Batch: which scoped-gold slugs already have a published row (avoids N sequential count queries on hub cold start). */
+async function scopedGoldPublishedSlugSet(pathwayId: string, locale: string, slugs: string[]): Promise<Set<string>> {
+  const unique = [...new Set(slugs.map((s) => s.trim()).filter(Boolean))];
+  if (unique.length === 0) return new Set();
+  const out = new Set<string>();
+  for (let i = 0; i < unique.length; i += PRISMA_ID_IN_CHUNK_SIZE) {
+    const chunk = unique.slice(i, i + PRISMA_ID_IN_CHUNK_SIZE);
+    const rows = await dbCall(
+      () =>
+        prisma.pathwayLesson.findMany({
+          where: {
+            pathwayId,
+            locale,
+            status: ContentStatus.PUBLISHED,
+            slug: { in: chunk },
+          },
+          select: { slug: true },
+        }),
+      [],
+    );
+    for (const r of rows) out.add(r.slug);
+  }
+  return out;
 }
 
 /** Hub rows for scoped gold lessons not yet published in DB (DB overrides catalog/injections). */
@@ -314,10 +338,15 @@ async function listMissingScopedGoldHubRows(
 ): Promise<LessonInput[]> {
   const { scopedGoldHubRowsForPathway } = await import("@/lib/lessons/scoped-lessons/scoped-gold-registry");
   const candidates = scopedGoldHubRowsForPathway(pathwayId, topicSlugsIn);
+  const publishedSlugs = await scopedGoldPublishedSlugSet(
+    pathwayId,
+    locale,
+    candidates.map((c) => c.slug),
+  );
   const catalogFullBySlug = new Map(getCatalogLessonsRaw(pathwayId).map((l) => [l.slug, l]));
   const out: LessonInput[] = [];
   for (const row of candidates) {
-    if (await scopedGoldSlugPublishedInDb(pathwayId, locale, row.slug)) continue;
+    if (publishedSlugs.has(row.slug)) continue;
     const full = catalogFullBySlug.get(row.slug);
     if (full) {
       out.push(full);
@@ -1100,7 +1129,9 @@ async function getPathwayLessonImpl(
   pathwayId: string,
   slug: string,
   marketingLocale?: string,
+  options?: { dbTimeoutMs?: number },
 ): Promise<PathwayLessonRecord | undefined> {
+  const dbTimeout = options?.dbTimeoutMs ?? PATHWAY_LESSON_DB_TIMEOUT_MS;
   const overlayLocale = normalizePathwayLessonLocale(marketingLocale);
   const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(overlayLocale);
   const catalogLessons = getCatalogLessonsRaw(pathwayId);
@@ -1132,6 +1163,7 @@ async function getPathwayLessonImpl(
         },
       }),
     null,
+    dbTimeout,
   );
   if (rowEn && rowEn.status === ContentStatus.PUBLISHED) {
     const fromDb = applyOverlayAndStructural(
@@ -1167,6 +1199,7 @@ async function getPathwayLessonImpl(
           },
         }),
       null,
+      dbTimeout,
     );
     if (rowRequested && rowRequested.status === ContentStatus.PUBLISHED) {
       const fromLocaleRow = applyOverlayAndStructural(
@@ -1219,6 +1252,7 @@ async function getPathwayLessonImpl(
             },
           }),
         null,
+        dbTimeout,
       );
       if (rowWh && rowWh.status === ContentStatus.PUBLISHED) {
         const fromWh = applyOverlayAndStructural(
@@ -1310,7 +1344,9 @@ export async function getPathwayLessonForMarketingHubVerify(
   slug: string,
   marketingLocale?: string,
 ): Promise<PathwayLessonRecord | undefined> {
-  return getPathwayLessonImpl(pathwayId, slug, marketingLocale);
+  return getPathwayLessonImpl(pathwayId, slug, marketingLocale, {
+    dbTimeoutMs: PATHWAY_LESSON_MARKETING_HUB_VERIFY_DB_TIMEOUT_MS,
+  });
 }
 
 export type PathwayLessonSeoMeta = {

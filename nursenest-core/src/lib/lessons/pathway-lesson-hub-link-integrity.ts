@@ -35,7 +35,8 @@ import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-const DEFAULT_DETAIL_VERIFY_CONCURRENCY = 8;
+/** Hub verify issues one full-lesson read per unique slug; keep concurrency high enough to finish under serverless budgets without starving the pool. */
+const DEFAULT_DETAIL_VERIFY_CONCURRENCY = 24;
 
 export type ResolveMarketingLessonDetailFn = (
   pathwayId: string,
