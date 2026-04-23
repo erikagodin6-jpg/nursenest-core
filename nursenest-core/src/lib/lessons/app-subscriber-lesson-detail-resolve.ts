@@ -1,12 +1,17 @@
-import type { CountryCode, Prisma, TierCode } from "@prisma/client";
+import type { CountryCode, TierCode } from "@prisma/client";
 import { ContentStatus } from "@prisma/client";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { prisma } from "@/lib/db";
 import { appPathwayLessonVisibleToSubscriber } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import { filterLearnerPresentablePathwaySections } from "@/lib/lessons/lesson-section-presentability";
+import { shouldRenderPathwayLessonSection } from "@/lib/lessons/lesson-section-page-layout";
+import { pathwayLessonMatchesMarketingPathwayContext } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { getPathwayLesson } from "@/lib/lessons/pathway-lesson-loader";
+import { visibleSectionsForLesson } from "@/lib/lessons/pathway-lesson-access";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
-import { PATHWAY_APP_SUBSCRIBER_HUB_DETAIL_RESOLVER_SCAN_CAP } from "@/lib/lessons/pathway-lesson-scale";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { classifyPathwayLessonRecordForHub } from "@/lib/taxonomy/classifier";
+import { shouldSuppressProfessionalPracticeHubLesson } from "@/lib/taxonomy/nursing-taxonomy-validation";
+import { REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
 
 /** Minimal `pathway_lessons` row fields used by `/app/lessons/[id]` pathway resolution. */
 export type AppSubscriberPathwayLessonDetailRow = Pick<
@@ -26,9 +31,19 @@ export type AppSubscriberPathwayLessonDetailResolution =
   | { kind: "not_found" }
   | { kind: "pathway_ok"; record: PathwayLessonRecord; pathwayId: string };
 
+/** Same presentable-spine gate as `/app/lessons/[id]` before rendering article sections (omitHy handled later on the page). */
+export function pathwayLessonRecordHasAppSubscriberDetailPresentableSections(record: PathwayLessonRecord): boolean {
+  const visibleRaw = visibleSectionsForLesson(record, true);
+  const visible = filterLearnerPresentablePathwaySections(
+    visibleRaw.filter((s) => shouldRenderPathwayLessonSection(s.kind)),
+  );
+  return visible.length > 0;
+}
+
 /**
  * Same pathway contract as `/app/lessons/[id]`: entitlement + learner path gate, then
- * {@link getPathwayLesson} for `pathwayId` + `slug` + marketing locale (canonical learner lesson identity).
+ * {@link getPathwayLesson} for `pathwayId` + `slug` + marketing locale (canonical learner lesson identity),
+ * then **the same post-hydration gates the hub uses** so list rows never diverge from the detail surface.
  */
 export async function resolveAppSubscriberPathwayLessonForDetail(args: {
   entitlement: AccessScope;
@@ -39,8 +54,41 @@ export async function resolveAppSubscriberPathwayLessonForDetail(args: {
   if (!(await appPathwayLessonVisibleToSubscriber(args.entitlement, args.pwRow, args.learnerPath))) {
     return { kind: "out_of_plan" };
   }
-  const record = await getPathwayLesson(args.pwRow.pathwayId, args.pwRow.slug, args.marketingLocale);
+  const slug = typeof args.pwRow.slug === "string" ? args.pwRow.slug.trim() : "";
+  if (!slug) {
+    safeServerLog("page_lessons", "app_pathway_detail_contract_empty_slug", { pathwayId: args.pwRow.pathwayId });
+    return { kind: "not_found" };
+  }
+  const record = await getPathwayLesson(args.pwRow.pathwayId, slug, args.marketingLocale);
   if (!record) return { kind: "not_found" };
+  if (!pathwayLessonMatchesMarketingPathwayContext(args.pwRow.pathwayId, record)) {
+    safeServerLog("page_lessons", "app_pathway_detail_contract_pathway_context_mismatch", {
+      pathwayId: args.pwRow.pathwayId,
+      slug: slug.slice(0, 160),
+    });
+    return { kind: "not_found" };
+  }
+  if (shouldSuppressProfessionalPracticeHubLesson(record)) {
+    safeServerLog("page_lessons", "app_pathway_detail_contract_professional_hub_guard", {
+      pathwayId: args.pwRow.pathwayId,
+      slug: slug.slice(0, 160),
+    });
+    return { kind: "not_found" };
+  }
+  if (classifyPathwayLessonRecordForHub(record).categoryId === REVIEW_REQUIRED) {
+    safeServerLog("page_lessons", "app_pathway_detail_contract_taxonomy_review_required", {
+      pathwayId: args.pwRow.pathwayId,
+      slug: slug.slice(0, 160),
+    });
+    return { kind: "not_found" };
+  }
+  if (!pathwayLessonRecordHasAppSubscriberDetailPresentableSections(record)) {
+    safeServerLog("page_lessons", "app_pathway_detail_contract_no_presentable_sections", {
+      pathwayId: args.pwRow.pathwayId,
+      slug: slug.slice(0, 160),
+    });
+    return { kind: "not_found" };
+  }
   return { kind: "pathway_ok", record, pathwayId: args.pwRow.pathwayId };
 }
 
@@ -50,28 +98,13 @@ export async function isAppSubscriberPathwayLessonRowResolvableForDetail(args: {
   marketingLocale: string | undefined;
   row: AppSubscriberPathwayLessonDetailRow;
 }): Promise<boolean> {
-  const r = await resolveAppSubscriberPathwayLessonForDetail(args);
+  const r = await resolveAppSubscriberPathwayLessonForDetail({
+    entitlement: args.entitlement,
+    learnerPath: args.learnerPath,
+    marketingLocale: args.marketingLocale,
+    pwRow: args.row,
+  });
   return r.kind === "pathway_ok";
-}
-
-const hubResolverMemo = new Map<string, Promise<boolean>>();
-
-function hubResolverMemoKey(row: AppSubscriberPathwayLessonDetailRow): string {
-  return `${row.id}`;
-}
-
-async function isAppSubscriberPathwayLessonRowResolvableForDetailMemoized(args: {
-  entitlement: AccessScope;
-  learnerPath: string | null;
-  marketingLocale: string | undefined;
-  row: AppSubscriberPathwayLessonDetailRow;
-}): Promise<boolean> {
-  const k = hubResolverMemoKey(args.row);
-  const hit = hubResolverMemo.get(k);
-  if (hit) return hit;
-  const p = isAppSubscriberPathwayLessonRowResolvableForDetail(args);
-  hubResolverMemo.set(k, p);
-  return p;
 }
 
 /** Hub card row shape — matches `/app/lessons` pathway branch `select`. */
@@ -86,109 +119,3 @@ export type AppSubscriberPathwayHubListRow = AppSubscriberPathwayLessonDetailRow
   seoTitle: string;
   locale: string;
 };
-
-/**
- * Walks `pathway_lessons` in hub order and keeps only rows that {@link resolveAppSubscriberPathwayLessonForDetail}
- * would accept (same as `/app/lessons/[id]`). Computes an exact resolvable total when the scan finishes before the cap.
- */
-export async function paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver(args: {
-  where: Prisma.PathwayLessonWhereInput;
-  page: number;
-  pageSize: number;
-  entitlement: AccessScope;
-  learnerPath: string | null;
-  marketingLocale: string | undefined;
-}): Promise<{
-  rows: AppSubscriberPathwayHubListRow[];
-  totalResolvable: number;
-  scanCapped: boolean;
-  dbRowsScanned: number;
-}> {
-  hubResolverMemo.clear();
-
-  const page = Math.max(1, args.page);
-  const pageSize = Math.max(1, args.pageSize);
-  const start = (page - 1) * pageSize;
-
-  const pageRows: AppSubscriberPathwayHubListRow[] = [];
-  let resolvableIndex = 0;
-  let dbRowsScanned = 0;
-  let scanCapped = false;
-
-  const batchSize = 80;
-
-  while (dbRowsScanned < PATHWAY_APP_SUBSCRIBER_HUB_DETAIL_RESOLVER_SCAN_CAP) {
-    const take = Math.min(batchSize, PATHWAY_APP_SUBSCRIBER_HUB_DETAIL_RESOLVER_SCAN_CAP - dbRowsScanned);
-    const batch = await prisma.pathwayLesson.findMany({
-      where: args.where,
-      select: {
-        id: true,
-        title: true,
-        seoDescription: true,
-        topic: true,
-        bodySystem: true,
-        slug: true,
-        pathwayId: true,
-        updatedAt: true,
-        topicSlug: true,
-        previewSectionCount: true,
-        seoTitle: true,
-        locale: true,
-        status: true,
-        countryCode: true,
-        tierCode: true,
-      },
-      orderBy: { updatedAt: "desc" },
-      skip: dbRowsScanned,
-      take,
-    });
-
-    if (batch.length === 0) break;
-
-    const flags = await Promise.all(
-      batch.map((row) =>
-        isAppSubscriberPathwayLessonRowResolvableForDetailMemoized({
-          entitlement: args.entitlement,
-          learnerPath: args.learnerPath,
-          marketingLocale: args.marketingLocale,
-          row,
-        }),
-      ),
-    );
-
-    for (let i = 0; i < batch.length; i++) {
-      if (!flags[i]) continue;
-      if (resolvableIndex >= start && pageRows.length < pageSize) {
-        pageRows.push(batch[i] as AppSubscriberPathwayHubListRow);
-      }
-      resolvableIndex++;
-    }
-
-    dbRowsScanned += batch.length;
-
-    if (batch.length < take) break;
-
-    if (dbRowsScanned >= PATHWAY_APP_SUBSCRIBER_HUB_DETAIL_RESOLVER_SCAN_CAP) {
-      const more = await prisma.pathwayLesson.findFirst({
-        where: args.where,
-        select: { id: true },
-        skip: dbRowsScanned,
-      });
-      if (more) {
-        scanCapped = true;
-        safeServerLog("page_lessons", "app_lessons_hub_pathway_detail_resolver_scan_capped", {
-          dbRowsScanned: String(dbRowsScanned),
-          resolvableCounted: String(resolvableIndex),
-        });
-      }
-      break;
-    }
-  }
-
-  return {
-    rows: pageRows,
-    totalResolvable: resolvableIndex,
-    scanCapped,
-    dbRowsScanned,
-  };
-}

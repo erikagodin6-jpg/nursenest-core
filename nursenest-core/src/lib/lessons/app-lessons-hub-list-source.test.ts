@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { pickAppLessonsHubListSource } from "@/lib/lessons/app-lessons-hub-list-source";
 
-test("prefers pathway when any pathway row matches filters", () => {
+test("prefers pathway when any pathway row matches filters (source priority alone does not prove renderability)", () => {
   assert.equal(
     pickAppLessonsHubListSource({
       pathwaySampleExists: true,

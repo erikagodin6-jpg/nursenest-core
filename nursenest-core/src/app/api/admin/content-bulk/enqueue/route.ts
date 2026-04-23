@@ -2,15 +2,13 @@ import { randomUUID } from "crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import {
-  contentBulkBlogBodySchema,
-  contentBulkEnqueueBodySchema,
-  contentBulkUtilityEnqueueSchema,
-} from "@/lib/admin/content-bulk/content-bulk-request-body";
+import { contentBulkEnqueueBodySchema, contentBulkUtilityEnqueueSchema } from "@/lib/admin/content-bulk/content-bulk-request-body";
 import { BLOG_BULK_CHUNK_SIZE } from "@/lib/admin/content-bulk/blog-bulk-schema";
 import { resolveBlogBulkTargets } from "@/lib/admin/content-bulk/resolve-blog-bulk-ids";
 import { enqueueJob } from "@/lib/jobs/enqueue";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+
+export const dynamic = "force-dynamic";
 
 const bodySchema = z.union([
   z.object({ scope: z.literal("blog"), blog: contentBulkEnqueueBodySchema }),

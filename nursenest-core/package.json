@@ -57,6 +57,7 @@
     "audit:internal-links": "tsx ../scripts/audit-internal-links.ts",
     "audit:links": "tsx scripts/audit/link-integrity-check.mts",
     "audit:app-lessons-pathway-resolve": "tsx scripts/audit/app-lessons-pathway-hub-resolve.mts",
+    "audit:app-lessons-hub-prepared-inventory": "tsx scripts/audit/app-lessons-hub-prepared-inventory.mts",
     "audit:marketing-lesson-hub-links": "tsx scripts/audit/marketing-lesson-hub-links.mts",
     "seo:validate-http-sitemap": "tsx scripts/validate-seo-http-sitemap.mts",
     "audit:navigation-inventory": "tsx scripts/audit/navigation-inventory.mts",

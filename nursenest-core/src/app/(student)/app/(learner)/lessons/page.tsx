@@ -17,7 +17,6 @@ import {
   visiblePathwayIdsForAppLessons,
 } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { buildLearnerAppLessonsHubSummary } from "@/lib/lessons/learner-app-lessons-hub-summary";
-import { paginateLegacyContentMapLessons } from "@/lib/lessons/legacy-content-map-lessons";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { FreemiumCrossTrackNudge } from "@/components/student/freemium-cross-track-nudge";
 import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
@@ -34,7 +33,11 @@ import {
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { freemiumLessonsExhausted, freemiumQuestionsExhausted } from "@/lib/conversion/freemium-gates";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
-import { paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver } from "@/lib/lessons/app-subscriber-lesson-detail-resolve";
+import {
+  paginateContentItemsForAppSubscriberHubMatchingDetailResolver,
+  paginateLegacyContentMapLessonsForAppSubscriberHubMatchingDetailResolver,
+  paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver,
+} from "@/lib/lessons/app-lessons-hub-row-renderability";
 import { pickAppLessonsHubListSource } from "@/lib/lessons/app-lessons-hub-list-source";
 
 type AppLessonListRow = {
@@ -325,30 +328,49 @@ export default async function LessonsPage({ searchParams }: Props) {
     }
 
     if (listSource === "content_items") {
-      const pageCount = Math.max(1, Math.ceil(contentTotal / limitParsed) || 1);
-      const safePage = Math.min(pageRequested, pageCount);
-      const rowsRaw = await prisma.contentItem.findMany({
+      let paginated = await paginateContentItemsForAppSubscriberHubMatchingDetailResolver({
         where: contentScopedWhere,
-        select: { id: true, title: true, summary: true },
-        orderBy: { updatedAt: "desc" },
-        skip: (safePage - 1) * limitParsed,
-        take: limitParsed,
+        page: pageRequested,
+        pageSize: limitParsed,
+        entitlement,
       });
-      const rows: AppLessonListRow[] = rowsRaw.map((r) => ({
+      const contentResolvableTotal = paginated.totalResolvable;
+      const pageCount = Math.max(1, Math.ceil(contentResolvableTotal / limitParsed) || 1);
+      const safePage = Math.min(pageRequested, pageCount);
+      if (paginated.rows.length === 0 && contentResolvableTotal > 0 && safePage !== pageRequested) {
+        paginated = await paginateContentItemsForAppSubscriberHubMatchingDetailResolver({
+          where: contentScopedWhere,
+          page: safePage,
+          pageSize: limitParsed,
+          entitlement,
+        });
+      }
+      if (paginated.scanCapped) {
+        safeServerLog("page_lessons", "app_lessons_hub_content_total_may_be_truncated", {
+          dbRowsScanned: String(paginated.dbRowsScanned),
+          resolvableTotal: String(contentResolvableTotal),
+        });
+      }
+      const rows: AppLessonListRow[] = paginated.rows.map((r) => ({
         id: r.id,
         title: r.title,
         summary: r.summary ?? null,
       }));
       return {
         source: "content_items" as const,
-        total: contentTotal,
+        total: contentResolvableTotal,
         page: safePage,
         pageCount,
         rows,
       };
     }
 
-    const legacy = await paginateLegacyContentMapLessons(entitlement, pageRequested, limitParsed, qEffective);
+    const legacy = await paginateLegacyContentMapLessonsForAppSubscriberHubMatchingDetailResolver(
+      entitlement,
+      pageRequested,
+      limitParsed,
+      qEffective,
+    );
     const rows: AppLessonListRow[] = legacy.rows.map((r) => ({
       id: r.id,
       title: r.title,
@@ -368,7 +390,12 @@ export default async function LessonsPage({ searchParams }: Props) {
     lessonsBlock = lessonsBlockFromDb;
   } else {
     safeServerLog("page_lessons", "lesson_list_db_unavailable_fallback_legacy", {});
-    const legacy = await paginateLegacyContentMapLessons(entitlement, pageRequested, limitParsed, qEffective);
+    const legacy = await paginateLegacyContentMapLessonsForAppSubscriberHubMatchingDetailResolver(
+      entitlement,
+      pageRequested,
+      limitParsed,
+      qEffective,
+    );
     const rows: AppLessonListRow[] = legacy.rows.map((r) => ({
       id: r.id,
       title: r.title,

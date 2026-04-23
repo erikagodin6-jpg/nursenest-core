@@ -42,3 +42,9 @@ export const PATHWAY_CATALOG_LIST_HARD_CAP = 2_000;
  * Rows must pass the same {@link getPathwayLesson} contract as `/app/lessons/[id]`; the scan stays bounded.
  */
 export const PATHWAY_APP_SUBSCRIBER_HUB_DETAIL_RESOLVER_SCAN_CAP = 8_000;
+
+/**
+ * Max `content_items` rows scanned when building subscriber `/app/lessons` from Prisma — each survivor must
+ * pass the same detail contract as `/app/lessons/[id]` (see {@link evaluateAppLessonsHubContentItemRowRenderability}).
+ */
+export const CONTENT_ITEMS_APP_SUBSCRIBER_HUB_DETAIL_RESOLVER_SCAN_CAP = 8_000;
