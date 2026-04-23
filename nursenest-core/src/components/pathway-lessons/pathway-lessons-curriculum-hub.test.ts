@@ -32,7 +32,7 @@ describe("prepareLessonsForHubCurriculum", () => {
     assert.equal(prepared[0]?.slug, "valid-lesson");
   });
 
-  it("merges near-duplicate titles under the same topic into one resolvable card", () => {
+  it("keeps distinct slugs even when topic + normalized titles match (full hub inventory)", () => {
     const lessons = [
       row({
         slug: "lesson-a",
@@ -51,7 +51,6 @@ describe("prepareLessonsForHubCurriculum", () => {
       pathwayId: "us-rn-nclex-rn",
       lessonsBasePath: "/us/rn/nclex-rn/lessons",
     });
-    assert.equal(prepared.length, 1);
-    assert.equal(prepared[0]?.slug, "lesson-b");
+    assert.equal(prepared.length, 2);
   });
 });

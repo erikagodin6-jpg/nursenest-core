@@ -85,19 +85,24 @@ describe("getPublishedBlogPostBySlug visibility (matches blogLiveWhere / list su
     assert.equal(await getPublishedBlogPostBySlug("draft-only"), null);
   });
 
-  it("returns null for NEEDS_REVIEW and APPROVED", async () => {
+  it("returns null for NEEDS_REVIEW", async () => {
     stubFindUniqueForSlug("needs-review", {
       postStatus: BlogPostStatus.NEEDS_REVIEW,
       publishAt: null,
       scheduledAt: null,
     });
     assert.equal(await getPublishedBlogPostBySlug("needs-review"), null);
+  });
 
+  it("returns APPROVED rows (public blog treats editorial approval as go-live)", async () => {
     stubFindUniqueForSlug("approved", {
       postStatus: BlogPostStatus.APPROVED,
       publishAt: null,
       scheduledAt: null,
     });
-    assert.equal(await getPublishedBlogPostBySlug("approved"), null);
+    const got = await getPublishedBlogPostBySlug("approved");
+    assert.ok(got);
+    assert.equal(got.slug, "approved");
+    assert.equal(got.postStatus, BlogPostStatus.APPROVED);
   });
 });

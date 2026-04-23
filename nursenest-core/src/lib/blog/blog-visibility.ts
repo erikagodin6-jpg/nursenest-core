@@ -7,8 +7,12 @@ export function blogPostIsLive(
 ): boolean {
   if (row.postStatus === BlogPostStatus.DRAFT) return false;
   if (row.postStatus === BlogPostStatus.NEEDS_REVIEW) return false;
-  if (row.postStatus === BlogPostStatus.APPROVED) return false;
   if (row.postStatus === BlogPostStatus.FAILED) return false;
+  /**
+   * Editorial **APPROVED** is treated as public-ready. Teams often stop after “Approve” without a second
+   * “Publish now” click; excluding APPROVED hid large batches from `/blog` while PUBLISHED stayed rare.
+   */
+  if (row.postStatus === BlogPostStatus.APPROVED) return true;
   if (row.postStatus === BlogPostStatus.PUBLISHED) return true;
   if (row.postStatus === BlogPostStatus.SCHEDULED) {
     const gate = row.publishAt ?? row.scheduledAt ?? null;
@@ -22,6 +26,7 @@ export function blogLiveWhere(now: Date = new Date()): Prisma.BlogPostWhereInput
   return {
     OR: [
       { postStatus: BlogPostStatus.PUBLISHED },
+      { postStatus: BlogPostStatus.APPROVED },
       {
         AND: [
           { postStatus: BlogPostStatus.SCHEDULED },

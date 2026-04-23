@@ -124,7 +124,7 @@ test("primary failure with snapshot where total disagrees with renderableAll is 
     throw new Error("database_timeout");
   };
 
-  const { pageResult, lessonsPageLoad } = await loadPathwayLessonsHubPageWithTelemetry(
+  const { pageResult, lessonsPageLoad, snapshotDiagnostics } = await loadPathwayLessonsHubPageWithTelemetry(
     ctx.pathwayId,
     args,
     ctx,
@@ -142,6 +142,8 @@ test("primary failure with snapshot where total disagrees with renderableAll is 
 
   assert.equal(lessonsPageLoad.status, "error");
   assert.equal(pageResult.total, 0);
+  assert.equal(snapshotDiagnostics.snapshotRejected, true);
+  assert.ok(snapshotDiagnostics.snapshotRejectReason);
 });
 
 test("primary failure with valid snapshot returns ok + secondary (degraded inventory)", async () => {

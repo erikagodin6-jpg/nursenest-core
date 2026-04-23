@@ -53,6 +53,7 @@ function formatSource(row: AdminBlogLibraryRow) {
 function previewHref(row: AdminBlogLibraryRow) {
   const live =
     row.postStatus === BlogPostStatus.PUBLISHED ||
+    row.postStatus === BlogPostStatus.APPROVED ||
     (row.postStatus === BlogPostStatus.SCHEDULED &&
       row.publishAt &&
       new Date(row.publishAt).getTime() <= Date.now());

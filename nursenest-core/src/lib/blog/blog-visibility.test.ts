@@ -45,17 +45,25 @@ test("PUBLISHED is always live (publishAt irrelevant)", () => {
   );
 });
 
-test("DRAFT, NEEDS_REVIEW, APPROVED, FAILED are never live", () => {
+test("DRAFT, NEEDS_REVIEW, FAILED are never live", () => {
   const now = new Date("2026-06-15T12:00:00Z");
   const past = new Date("2020-01-01T00:00:00Z");
-  for (const postStatus of [
-    BlogPostStatus.DRAFT,
-    BlogPostStatus.NEEDS_REVIEW,
-    BlogPostStatus.APPROVED,
-    BlogPostStatus.FAILED,
-  ]) {
+  for (const postStatus of [BlogPostStatus.DRAFT, BlogPostStatus.NEEDS_REVIEW, BlogPostStatus.FAILED]) {
     assert.equal(blogPostIsLive({ postStatus, publishAt: past, scheduledAt: null }, now), false);
   }
+});
+
+test("APPROVED is live on public surfaces (matches list / SEO after editorial sign-off)", () => {
+  const now = new Date("2026-06-15T12:00:00Z");
+  assert.equal(
+    blogPostIsLive(
+      { postStatus: BlogPostStatus.APPROVED, publishAt: null, scheduledAt: null },
+      now,
+    ),
+    true,
+  );
+  const where = blogLiveWhere(now) as { OR: Array<{ postStatus?: BlogPostStatus }> };
+  assert.ok(where.OR.some((c) => c.postStatus === BlogPostStatus.APPROVED));
 });
 
 test("SCHEDULED uses scheduledAt when publishAt is null and time has passed", () => {

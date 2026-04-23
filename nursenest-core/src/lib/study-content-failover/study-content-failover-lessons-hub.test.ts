@@ -37,7 +37,7 @@ test("primary failure uses secondary snapshot with same page contract", async ()
     payload: page,
   };
 
-  const { pageResult, lessonsPageLoad } = await loadPathwayLessonsHubPageWithTelemetry(
+  const { pageResult, lessonsPageLoad, snapshotDiagnostics } = await loadPathwayLessonsHubPageWithTelemetry(
     ctx.pathwayId,
     args,
     ctx,
@@ -55,10 +55,12 @@ test("primary failure uses secondary snapshot with same page contract", async ()
   assert.equal(lessonsPageLoad.snapshotVersion, "snap-v1");
   assert.ok((lessonsPageLoad.snapshotAgeMs ?? 0) >= 59_000);
   assert.equal(pageResult.total, 0);
+  assert.equal(snapshotDiagnostics.snapshotUsed, true);
+  assert.equal(snapshotDiagnostics.snapshotRejected, false);
 });
 
 test("primary failure without secondary remains error (distinct from true empty via snapshot)", async () => {
-  const { lessonsPageLoad } = await loadPathwayLessonsHubPageWithTelemetry(
+  const { lessonsPageLoad, snapshotDiagnostics } = await loadPathwayLessonsHubPageWithTelemetry(
     ctx.pathwayId,
     args,
     ctx,
@@ -68,4 +70,5 @@ test("primary failure without secondary remains error (distinct from true empty 
     { readHubSnapshot: async () => null },
   );
   assert.equal(lessonsPageLoad.status, "error");
+  assert.equal(snapshotDiagnostics.snapshotAttempted, true);
 });

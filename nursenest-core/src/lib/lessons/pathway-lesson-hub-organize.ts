@@ -12,8 +12,9 @@
  * **Canonical display title:** `cleanLessonTitleForDisplay(seoTitle || title)` so cards show one
  * consistent line (exam pathway tokens stripped, acronyms preserved per lesson-title rules).
  *
- * **Dedupe order:** (1) collapse by slug → (2) collapse by concept key → (3) rewrite `title` to the
- * canonical display string. Callers still run taxonomy guard + link checks afterward.
+ * **Dedupe order:** (1) collapse by slug → (2) optional collapse by concept key when
+ * {@link OrganizeHubLessonsOptions.mergeNearDuplicateTitles} is true → (3) rewrite `title` to the
+ * canonical display string. Marketing curriculum uses **slug-only** dedupe by default.
  */
 
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";

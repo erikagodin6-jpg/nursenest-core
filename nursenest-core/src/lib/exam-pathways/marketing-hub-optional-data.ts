@@ -137,7 +137,10 @@ export async function loadMarketingExamHubOptionalBlocks(
   return { npInventory, questionSnapshot, pathwayLessonCount };
 }
 
-export type { PathwayLessonsHubPageLoadState } from "@/lib/exam-pathways/marketing-hub-lessons-page-fetch";
+export type {
+  LessonsHubSnapshotDiagnostics,
+  PathwayLessonsHubPageLoadState,
+} from "@/lib/exam-pathways/marketing-hub-lessons-page-fetch";
 
 export type PathwayLessonsHubAggregates = {
   pageResult: PathwayLessonsPageResult;
@@ -155,6 +158,8 @@ export type PathwayLessonsHubAggregates = {
   pathwayLessonCountLoadRejected: boolean;
   /** True when topic cluster navigation query failed (only when that task ran). */
   topicClustersLoadRejected: boolean;
+  /** Snapshot read / reject telemetry from {@link loadPathwayLessonsHubPageWithTelemetry}. */
+  lessonsHubSnapshotDiagnostics: LessonsHubSnapshotDiagnostics;
 };
 
 /**
@@ -195,13 +200,14 @@ export async function loadPathwayLessonsHubAggregates(
   } = args;
 
   const fetchLessons = deps?.fetchLessonsPageFresh ?? getPathwayLessonsPageFresh;
-  const { pageResult, lessonsPageLoad } = await loadPathwayLessonsHubPageWithTelemetry(
-    pathway.id,
-    { pageRequested, pageSizeRequested, lessonContentLocale, listOpts },
-    ctx,
-    fetchLessons,
-    deps?.readHubLessonsSnapshot ? { readHubSnapshot: deps.readHubLessonsSnapshot } : undefined,
-  );
+  const { pageResult, lessonsPageLoad, snapshotDiagnostics: lessonsHubSnapshotDiagnostics } =
+    await loadPathwayLessonsHubPageWithTelemetry(
+      pathway.id,
+      { pageRequested, pageSizeRequested, lessonContentLocale, listOpts },
+      ctx,
+      fetchLessons,
+      deps?.readHubLessonsSnapshot ? { readHubSnapshot: deps.readHubLessonsSnapshot } : undefined,
+    );
   const lessonsPageLoadRejected = lessonsPageLoad.status === "error";
 
   const tasks: { name: string; run: () => Promise<unknown> }[] = [
@@ -314,5 +320,6 @@ export async function loadPathwayLessonsHubAggregates(
     questionSnapshotLoadRejected,
     pathwayLessonCountLoadRejected,
     topicClustersLoadRejected,
+    lessonsHubSnapshotDiagnostics,
   };
 }

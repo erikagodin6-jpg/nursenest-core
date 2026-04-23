@@ -34,8 +34,9 @@ import type {
 import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 
-/** Hub preview: keep sections scannable; full library via “View all”. */
-const LESSON_SYSTEM_PREVIEW = 10;
+/** Hub preview: keep sections scannable; full library via “View all”. Exported for hub diagnostics (`RN_LESSONS_HUB_ACTUAL_COUNTS`). */
+export const LESSON_SYSTEM_HUB_CARD_PREVIEW_MAX = 10;
+const LESSON_SYSTEM_PREVIEW = LESSON_SYSTEM_HUB_CARD_PREVIEW_MAX;
 
 type SystemVisual = {
   icon: LucideIcon;

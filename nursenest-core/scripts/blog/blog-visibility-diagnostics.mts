@@ -30,7 +30,7 @@ function exclusionReason(row: {
   const { postStatus, publishAt, scheduledAt } = row;
   if (postStatus === BlogPostStatus.DRAFT) return "status=DRAFT (not live)";
   if (postStatus === BlogPostStatus.NEEDS_REVIEW) return "status=NEEDS_REVIEW";
-  if (postStatus === BlogPostStatus.APPROVED) return "status=APPROVED (not yet published)";
+  if (postStatus === BlogPostStatus.APPROVED) return "unexpected: APPROVED matches blogLiveWhere (public-ready)";
   if (postStatus === BlogPostStatus.FAILED) return "status=FAILED";
   if (postStatus === BlogPostStatus.PUBLISHED) return "unexpected: PUBLISHED should match blogLiveWhere";
   if (postStatus === BlogPostStatus.SCHEDULED) {

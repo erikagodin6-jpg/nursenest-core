@@ -25,6 +25,17 @@ function lesson(overrides: Partial<PathwayLessonRecord>): PathwayLessonRecord {
   };
 }
 
+test("lessons with empty bodySystem map to REVIEW_REQUIRED and render in that visible section", () => {
+  const lessons = [
+    lesson({ slug: "orphan-a", title: "Orphan lesson A", bodySystem: "", system: "" }),
+    lesson({ slug: "orphan-b", title: "Orphan lesson B", bodySystem: "  ", system: "" }),
+  ];
+  const sections = buildPathwayLessonSystemSections(lessons, "ca-rn-nclex-rn");
+  const rr = sections.find((s) => s.systemLabel === REVIEW_REQUIRED);
+  assert.ok(rr, "expected REVIEW_REQUIRED section in pathway config");
+  assert.equal(rr!.lessons.length, 2);
+});
+
 test("normalizes lesson system values: taxonomy ids resolve exactly; empty uses review sentinel", () => {
   assert.equal(normalizePathwayLessonSystemLabel(""), REVIEW_REQUIRED);
   assert.equal(normalizePathwayLessonSystemLabel("Cardiovascular"), "cardiovascular");

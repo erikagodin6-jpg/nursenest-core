@@ -377,7 +377,6 @@ export async function isBlogPostMetaVisible(slug: string, scope?: BlogQueryScope
   if (
     meta.postStatus === BlogPostStatus.DRAFT ||
     meta.postStatus === BlogPostStatus.NEEDS_REVIEW ||
-    meta.postStatus === BlogPostStatus.APPROVED ||
     meta.postStatus === BlogPostStatus.FAILED
   ) {
     return false;

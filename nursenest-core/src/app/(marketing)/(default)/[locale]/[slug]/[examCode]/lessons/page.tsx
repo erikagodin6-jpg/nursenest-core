@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
+import { LESSON_SYSTEM_HUB_CARD_PREVIEW_MAX } from "@/components/pathway-lessons/lesson-system-card";
 import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
 import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
@@ -41,7 +42,6 @@ import {
   pathwayLessonMarketingDetailHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
-import type { MarketingHubLessonVerifyDiagnostics } from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
 import { verifyMarketingHubLessonRowsResolve } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { pathwayLessonsHubBreadcrumbs, pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
@@ -66,6 +66,41 @@ import {
   ALLIED_PROFESSION_QUERY_PARAM,
   isAlliedMarketingCorePathwayId,
 } from "@/lib/lessons/canonical-lessons-hubs";
+
+/** Required runtime diagnostics: `/canada/rn/nclex-rn/lessons` (all query variants). */
+const RN_CANADA_NCLEX_LESSONS_HUB_PATH = "/canada/rn/nclex-rn/lessons" as const;
+
+type RnLessonsHubActualCountsPayload = {
+  rawDbCount: number | null;
+  afterSlugNormalizeCount: number | null;
+  afterPathwayContextCount: number | null;
+  afterDedupeCount: number | null;
+  renderableAllCount: number;
+  afterVerifyCount: number | null;
+  finalRenderedCardCount: number | null;
+  total: number;
+  snapshotUsed: boolean;
+  verifyCallsCount: number | null;
+  topDropReasons: Array<{ reason: string; count: number }>;
+};
+
+function hubDiagFinite(n: number | undefined): number | null {
+  return typeof n === "number" && Number.isFinite(n) ? n : null;
+}
+
+function logRnLessonsHubActualCounts(
+  routePathname: string,
+  payload: RnLessonsHubActualCountsPayload,
+  extra?: Record<string, string | number | boolean | undefined>,
+): void {
+  /** Required label for ops grep; body duplicates structured fields for copy/paste. */
+  console.error("RN_LESSONS_HUB_ACTUAL_COUNTS", JSON.stringify({ routePathname, ...payload }));
+  safeServerLog("pathway_lessons", "RN_LESSONS_HUB_ACTUAL_COUNTS", {
+    routePathname,
+    counts_json: JSON.stringify(payload),
+    ...extra,
+  });
+}
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -145,6 +180,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) notFound();
 
+  const isRnCanadaNclexLessonsHub =
+    `${pathname}/lessons` === RN_CANADA_NCLEX_LESSONS_HUB_PATH;
+
   const base = marketingPathwayLessonsIndexPath(pathway);
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
@@ -187,6 +225,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     questionSnapshot,
     lessonsPageLoadRejected,
     questionSnapshotLoadRejected,
+    lessonsHubSnapshotDiagnostics,
   } = await loadPathwayLessonsHubAggregates(
     pathway,
     {
@@ -210,6 +249,38 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     },
   );
   const hubAggregatesDurationMs = Math.round(performance.now() - hubLoadT0);
+
+  if (
+    isRnCanadaNclexLessonsHub &&
+    lessonsPageLoad.status === "ok" &&
+    pageResult.total > 0 &&
+    pageRequested !== pageResult.page
+  ) {
+    const raEarly = pageResult.renderableAll ?? pageResult.items;
+    const ldEarly = pageResult.loadDiagnostics;
+    logRnLessonsHubActualCounts(
+      RN_CANADA_NCLEX_LESSONS_HUB_PATH,
+      {
+        rawDbCount: hubDiagFinite(ldEarly?.rawDbCount),
+        afterSlugNormalizeCount: hubDiagFinite(ldEarly?.afterSlugNormalizeCount),
+        afterPathwayContextCount: hubDiagFinite(ldEarly?.afterPathwayContextCount),
+        afterDedupeCount: hubDiagFinite(ldEarly?.afterDedupeCount),
+        renderableAllCount: raEarly.length,
+        afterVerifyCount: null,
+        finalRenderedCardCount: null,
+        total: pageResult.total,
+        snapshotUsed: lessonsHubSnapshotDiagnostics.snapshotUsed,
+        verifyCallsCount: null,
+        topDropReasons: [],
+      },
+      {
+        pathway_id: pathway.id,
+        phase: "pre_verify_pagination_redirect",
+        page_requested: pageRequested,
+        page_loader: pageResult.page,
+      },
+    );
+  }
 
   const hubQuerySuffix = (() => {
     const qs = new URLSearchParams();
@@ -285,6 +356,31 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         ]}
       />
     );
+    if (isRnCanadaNclexLessonsHub) {
+      const errRenderable = pageResult.renderableAll ?? pageResult.items;
+      const errLd = pageResult.loadDiagnostics;
+      logRnLessonsHubActualCounts(
+        RN_CANADA_NCLEX_LESSONS_HUB_PATH,
+        {
+          rawDbCount: hubDiagFinite(errLd?.rawDbCount),
+          afterSlugNormalizeCount: hubDiagFinite(errLd?.afterSlugNormalizeCount),
+          afterPathwayContextCount: hubDiagFinite(errLd?.afterPathwayContextCount),
+          afterDedupeCount: hubDiagFinite(errLd?.afterDedupeCount),
+          renderableAllCount: errRenderable.length,
+          afterVerifyCount: null,
+          finalRenderedCardCount: null,
+          total: pageResult.total,
+          snapshotUsed: lessonsHubSnapshotDiagnostics.snapshotUsed,
+          verifyCallsCount: null,
+          topDropReasons: [],
+        },
+        {
+          lessons_page_error: "1",
+          lessons_page_load_reason: lessonsPageLoad.reason,
+          pathway_id: pathway.id,
+        },
+      );
+    }
     safeServerLog("pathway_lessons", "marketing_hub_lessons_page_error_surface", {
       pathway_id: pathway.id,
       country_slug: countrySlug,
@@ -381,56 +477,58 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       n + s.lessons.filter((l) => pathwayLessonMarketingDetailHref(base, l.slug) != null).length,
     0,
   );
+  /** Matches {@link LessonSystemCard}: only first N link rows render per section (CASE D vs curl unique hrefs). */
+  const finalRenderedVisibleLessonLinkCount = hubSectionModel.reduce((sum, s) => {
+    const linkable = s.lessons.filter((l) => pathwayLessonMarketingDetailHref(base, l.slug) != null);
+    return sum + Math.min(LESSON_SYSTEM_HUB_CARD_PREVIEW_MAX, linkable.length);
+  }, 0);
   const groupingDurationMs = Math.round(performance.now() - groupT0);
 
   const ld = pageResult.loadDiagnostics;
-  const topDropReasons = (hubVerifyDiagnostics.exclusionReasonsRanked ?? []).slice(0, 8);
-  const first10KeptSlugs = hubCurriculumLessons.slice(0, 10).map((l) => l.slug);
-  const first10DroppedSlugsWithReasons = vr.excluded.slice(0, 10).map((e) => ({ slug: e.slug, reason: e.reason }));
-  const sourceUsed: "db" | "snapshot" | "fallback" | "unknown" =
-    lessonsPageLoad.status === "ok"
-      ? lessonsPageLoad.sourceUsed === "primary"
-        ? "db"
-        : lessonsPageLoad.sourceUsed === "secondary"
-          ? "snapshot"
-          : "unknown"
-      : lessonsPageLoad.status === "error"
-        ? "fallback"
-        : "unknown";
+  const rankedReasons = hubVerifyDiagnostics.exclusionReasonsRanked ?? [];
+  const topDropReasonsForPayload = rankedReasons
+    .slice(0, 8)
+    .map((x) => ({ reason: String(x.reason), count: x.count }));
 
-  safeServerLog("pathway_lessons", "RN_LESSONS_HUB_ACTUAL_COUNTS", {
-    pathname: `${pathname}/lessons`,
-    pathwayId: pathway.id,
-    country: countrySlug,
-    locale: lessonContentLocale,
-    list_warehouse_locale: listWarehouseLocale,
-    page: pageRequested,
-    pageSize: pageSizeRequested,
-    rawDbCount: ld?.rawDbCount ?? ld?.sqlDbPublishedApprox ?? -1,
-    afterPathwayCount: ld?.afterPathwayContextCount ?? -1,
-    afterPublicCompleteCount: ld?.afterPathwayContextCount ?? -1,
-    afterCountryContextCount: ld?.afterPathwayContextCount ?? -1,
-    afterHubNormalizedCount: ld?.afterHubNormalizedCount ?? -1,
-    afterSlugNormalizeCount: ld?.afterSlugNormalizeCount ?? -1,
-    afterDedupeCount: ld?.afterDedupeCount ?? -1,
-    afterVerifyCount: hubCurriculumLessons.length,
-    renderableAllCount: renderableAllIn.length,
-    itemsCount: pageResult.items.length,
-    finalCardCount: stage6LinkableLessonRows,
-    total: pageResult.total,
-    sourceUsed,
-    topDropReasons,
-    first10KeptSlugs,
-    first10DroppedSlugsWithReasons,
-    hub_aggregates_ms: hubAggregatesDurationMs,
-    prepare_ms: prepareDurationMs,
-    list_warehouse_resolve_ms: listWarehouseResolveMs,
-    verify_ms: verifyDurationMs,
-    grouping_ms: groupingDurationMs,
-    loader_resolve_ms: ld?.resolveDurationMs ?? -1,
-    loader_slice_ms: ld?.sliceDurationMs ?? -1,
-    runtime_source: ld?.runtimeSource ?? "unknown",
-  });
+  if (isRnCanadaNclexLessonsHub) {
+    const totalLoaderMs =
+      hubAggregatesDurationMs +
+      prepareDurationMs +
+      listWarehouseResolveMs +
+      verifyDurationMs +
+      groupingDurationMs;
+    logRnLessonsHubActualCounts(
+      RN_CANADA_NCLEX_LESSONS_HUB_PATH,
+      {
+        rawDbCount: hubDiagFinite(ld?.rawDbCount),
+        afterSlugNormalizeCount: hubDiagFinite(ld?.afterSlugNormalizeCount),
+        afterPathwayContextCount: hubDiagFinite(ld?.afterPathwayContextCount),
+        afterDedupeCount: hubDiagFinite(ld?.afterDedupeCount),
+        renderableAllCount: renderableAllIn.length,
+        afterVerifyCount: hubCurriculumLessons.length,
+        finalRenderedCardCount: finalRenderedVisibleLessonLinkCount,
+        total: pageResult.total,
+        snapshotUsed: lessonsHubSnapshotDiagnostics.snapshotUsed,
+        verifyCallsCount: hubDiagFinite(hubVerifyDiagnostics.verifyResolverCallCount),
+        topDropReasons: topDropReasonsForPayload,
+      },
+      {
+        pathway_id: pathway.id,
+        stage_6_linkable_rows: stage6LinkableLessonRows,
+        stage_6_section_rows: stage6SectionModelLessonRows,
+        hub_aggregates_ms: hubAggregatesDurationMs,
+        prepare_ms: prepareDurationMs,
+        list_warehouse_resolve_ms: listWarehouseResolveMs,
+        verify_ms: verifyDurationMs,
+        grouping_ms: groupingDurationMs,
+        total_loader_ms: totalLoaderMs,
+        loader_resolve_ms: hubDiagFinite(ld?.resolveDurationMs),
+        loader_slice_ms: hubDiagFinite(ld?.sliceDurationMs),
+        grid_prepared_row_count: lessonsForCurriculumHub.length,
+        section_model_linkable_rows: stage6LinkableLessonRows,
+      },
+    );
+  }
 
   safeServerLog("pathway_lessons", "marketing_hub_pipeline_snapshot", {
     pathway_id: pathway.id,
