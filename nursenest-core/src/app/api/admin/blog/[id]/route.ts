@@ -28,7 +28,9 @@ import {
   type PrePublishPatch,
   validateBlogPrePublish,
 } from "@/lib/blog/blog-pre-publish-validation";
+import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
 import { prisma } from "@/lib/db";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { classifyBlogCorpus, collectClassificationViolations } from "@/lib/taxonomy/content-write-taxonomy";
 
 const slugSchema = z
@@ -125,6 +127,7 @@ const adminBlogPostSelect = {
   featuredSnippet: true,
   apaReferences: true,
   tags: true,
+  careerSlug: true,
   keyQuestions: true,
   updatedAt: true,
   coverImage: true,
@@ -558,6 +561,28 @@ export async function PATCH(req: Request, { params }: Props) {
       reason: failMsg,
       createdById: gate.admin.userId,
     });
+  }
+
+  const revalidateActions = new Set([
+    "publish_now",
+    "schedule",
+    "unpublish",
+    "revert_to_draft",
+    "mark_failed",
+  ]);
+  if (d.action && revalidateActions.has(d.action)) {
+    try {
+      revalidateBlogPublishingSurfaces({
+        slug: updated.slug,
+        alliedProfessionKey: updated.careerSlug ?? null,
+        tags: updated.tags,
+      });
+    } catch (e) {
+      safeServerLog("admin", "blog_patch_revalidate_failed", {
+        message: e instanceof Error ? e.message : String(e),
+        slug: updated.slug,
+      });
+    }
   }
 
   return NextResponse.json({ post: updated });

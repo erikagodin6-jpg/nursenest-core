@@ -323,17 +323,6 @@ export async function POST(req: Request) {
     createdById: gate.admin.userId,
   });
 
-  if (result.post.postStatus === BlogPostStatus.PUBLISHED) {
-    try {
-      revalidateBlogPublishingSurfaces();
-    } catch (e) {
-      safeServerLog("admin", "blog_control_panel_generate_revalidate_failed", {
-        message: e instanceof Error ? e.message : String(e),
-        slug: result.post.slug,
-      });
-    }
-  }
-
   const full = await prisma.blogPost.findUnique({
     where: { id: result.post.id },
     select: {
@@ -343,6 +332,7 @@ export async function POST(req: Request) {
       excerpt: true,
       body: true,
       category: true,
+      careerSlug: true,
       exam: true,
       postStatus: true,
       seoTitle: true,
@@ -385,6 +375,21 @@ export async function POST(req: Request) {
       { ok: true, postId: result.post.id, slug: result.post.slug, warnings: result.warnings, plan: result.plan, post: null },
       { status: 201 },
     );
+  }
+
+  if (result.post.postStatus === BlogPostStatus.PUBLISHED) {
+    try {
+      revalidateBlogPublishingSurfaces({
+        slug: full.slug,
+        alliedProfessionKey: full.careerSlug ?? null,
+        tags: full.tags,
+      });
+    } catch (e) {
+      safeServerLog("admin", "blog_control_panel_generate_revalidate_failed", {
+        message: e instanceof Error ? e.message : String(e),
+        slug: result.post.slug,
+      });
+    }
   }
 
   return NextResponse.json(

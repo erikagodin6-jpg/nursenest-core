@@ -17,6 +17,8 @@ export type PromoteScheduledBlogPostsResult = {
   considered: number;
   skippedMaxRetries: number;
   failures: Array<{ id: string; slug: string; attempt: number; error: string; exhausted: boolean }>;
+  /** Slugs that were promoted this run (for ISR / on-demand revalidation). */
+  promotedSlugs: string[];
 };
 
 function autoPublishFailureCount(adminPublishLog: unknown): number {
@@ -25,7 +27,7 @@ function autoPublishFailureCount(adminPublishLog: unknown): number {
 
 export async function promoteScheduledBlogPosts(now: Date = new Date()): Promise<PromoteScheduledBlogPostsResult> {
   if (!isDatabaseUrlConfigured()) {
-    return { count: 0, considered: 0, skippedMaxRetries: 0, failures: [] };
+    return { count: 0, considered: 0, skippedMaxRetries: 0, failures: [], promotedSlugs: [] };
   }
   try {
     const candidates = await prisma.blogPost.findMany({
@@ -37,11 +39,12 @@ export async function promoteScheduledBlogPosts(now: Date = new Date()): Promise
       orderBy: [{ publishAt: "asc" }, { scheduledAt: "asc" }, { updatedAt: "asc" }],
       take: 500,
     });
-    if (candidates.length === 0) return { count: 0, considered: 0, skippedMaxRetries: 0, failures: [] };
+    if (candidates.length === 0) return { count: 0, considered: 0, skippedMaxRetries: 0, failures: [], promotedSlugs: [] };
     let promotedCount = 0;
     let skippedMaxRetries = 0;
     const failures: PromoteScheduledBlogPostsResult["failures"] = [];
     const promotedIds: string[] = [];
+    const promotedSlugs: string[] = [];
 
     for (const c of candidates) {
       const priorFailures = autoPublishFailureCount(c.adminPublishLog);
@@ -122,7 +125,10 @@ export async function promoteScheduledBlogPosts(now: Date = new Date()): Promise
           },
         });
         promotedCount += res.count;
-        if (res.count > 0) promotedIds.push(c.id);
+        if (res.count > 0) {
+          promotedIds.push(c.id);
+          promotedSlugs.push(c.slug);
+        }
       } catch (error) {
         const attempt = priorFailures + 1;
         const exhausted = attempt >= MAX_AUTO_PUBLISH_RETRIES;
@@ -172,10 +178,10 @@ export async function promoteScheduledBlogPosts(now: Date = new Date()): Promise
     if (promotedCount > 0) {
       safeServerLog("blog_scheduler", "promoted_scheduled_posts", { count: promotedCount });
     }
-    return { count: promotedCount, considered: candidates.length, skippedMaxRetries, failures };
+    return { count: promotedCount, considered: candidates.length, skippedMaxRetries, failures, promotedSlugs };
   } catch (e) {
     safeServerLog("blog_scheduler", "promote_failed", { error: String(e) });
-    return { count: 0, considered: 0, skippedMaxRetries: 0, failures: [] };
+    return { count: 0, considered: 0, skippedMaxRetries: 0, failures: [], promotedSlugs: [] };
   }
 }
 
