@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   appCatWeakFocusPath,
+  appPathwayCatFullSetupHref,
   appPathwayCatSessionStartPath,
+  isForcedCatFullSetupReviewParam,
   resolveStudySurfaceCatHref,
 } from "@/lib/exam-pathways/pathway-cat-flow";
 
@@ -39,4 +41,21 @@ test("resolveStudySurfaceCatHref keeps the explicit chooser when multiple pathwa
     }),
     "/app/practice-tests/start",
   );
+});
+
+test("appPathwayCatFullSetupHref includes pathwayId and review=1 for full setup escape hatch", () => {
+  const href = appPathwayCatFullSetupHref("us-rn-nclex-rn");
+  assert.ok(href.startsWith("/app/practice-tests/start?"));
+  const q = new URLSearchParams(href.slice("/app/practice-tests/start?".length));
+  assert.equal(q.get("pathwayId"), "us-rn-nclex-rn");
+  assert.equal(q.get("review"), "1");
+});
+
+test("isForcedCatFullSetupReviewParam: only 1 and true (trimmed, case-insensitive)", () => {
+  assert.equal(isForcedCatFullSetupReviewParam("1"), true);
+  assert.equal(isForcedCatFullSetupReviewParam(" true "), true);
+  assert.equal(isForcedCatFullSetupReviewParam("TRUE"), true);
+  assert.equal(isForcedCatFullSetupReviewParam("0"), false);
+  assert.equal(isForcedCatFullSetupReviewParam("yes"), false);
+  assert.equal(isForcedCatFullSetupReviewParam(undefined), false);
 });

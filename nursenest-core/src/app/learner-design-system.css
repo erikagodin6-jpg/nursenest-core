@@ -150,6 +150,15 @@ html[data-theme="storm-slate"] {
   box-shadow: none;
 }
 
+/** Section frame without inner padding (CAT / long-form blocks bring their own `p-*`). */
+.nn-ls-ds-shell {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-soft);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
 /* ==========================================================================
  * CTAs
  * ========================================================================== */
@@ -251,6 +260,11 @@ html[data-theme="storm-slate"] {
 
 .nn-ls-ds-cta-banner:hover {
   opacity: 0.95;
+}
+
+.nn-ls-ds-cta-banner--brand-tint {
+  border-color: color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-brand) 8%, var(--color-surface));
 }
 
 /* ==========================================================================

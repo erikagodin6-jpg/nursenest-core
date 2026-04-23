@@ -1,0 +1,72 @@
+/**
+ * Learner UI design tokens — calm pastel palette (strict hex source of truth).
+ * Tailwind: `bg-lv-bg-base`, `text-lv-text-primary`, `rounded-lv-lg`, `shadow-lv-soft`, …
+ * Dark themes remap the same keys so surfaces stay soft (no pure black).
+ *
+ * Spec parity (names in comments → CSS variable):
+ * --bg-base → --lv-bg-base, --primary-500 → --lv-primary-500, etc.
+ */
+
+:root {
+  --lv-bg-base: #f8fafb;
+  --lv-bg-surface: #ffffff;
+  --lv-bg-surface-alt: #f1f5f7;
+
+  --lv-primary-50: #e6f4f4;
+  --lv-primary-100: #cfeaea;
+  --lv-primary-300: #8fd3d3;
+  --lv-primary-500: #4baaaa;
+
+  --lv-secondary-100: #eaf6ef;
+  --lv-secondary-300: #a7d7b8;
+
+  --lv-accent-100: #f1ecf8;
+  --lv-accent-300: #c7b8e6;
+
+  --lv-text-primary: #1f2a30;
+  --lv-text-secondary: #5c6b73;
+
+  --lv-border-soft: #e3e8eb;
+
+  --lv-radius-sm: 8px;
+  --lv-radius-md: 12px;
+  --lv-radius-lg: 16px;
+
+  --lv-shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --lv-shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.06);
+
+  --lv-motion: 160ms;
+  --lv-motion-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+html[data-theme="dark-clinical"],
+html[data-theme="dark-academia"],
+html[data-theme="dark-mode"],
+html[data-theme="midnight-indigo"],
+html[data-theme="deep-twilight"],
+html[data-theme="evergreen-steel"],
+html[data-theme="midnight-ink"],
+html[data-theme="storm-slate"] {
+  --lv-bg-base: #171c20;
+  --lv-bg-surface: #1e252b;
+  --lv-bg-surface-alt: #232b32;
+
+  --lv-primary-50: color-mix(in srgb, var(--lv-primary-500) 12%, var(--lv-bg-surface));
+  --lv-primary-100: color-mix(in srgb, var(--lv-primary-500) 18%, var(--lv-bg-surface));
+  --lv-primary-300: color-mix(in srgb, var(--lv-primary-500) 42%, var(--lv-bg-surface));
+  --lv-primary-500: #5ebdbd;
+
+  --lv-secondary-100: color-mix(in srgb, var(--lv-secondary-300) 14%, var(--lv-bg-surface));
+  --lv-secondary-300: #7fb892;
+
+  --lv-accent-100: color-mix(in srgb, var(--lv-accent-300) 12%, var(--lv-bg-surface));
+  --lv-accent-300: #9d8cc4;
+
+  --lv-text-primary: #e8eef1;
+  --lv-text-secondary: #b5c0c7;
+
+  --lv-border-soft: color-mix(in srgb, var(--lv-text-secondary) 22%, var(--lv-bg-surface));
+
+  --lv-shadow-soft: 0 2px 10px rgba(0, 0, 0, 0.28);
+  --lv-shadow-medium: 0 6px 22px rgba(0, 0, 0, 0.35);
+}

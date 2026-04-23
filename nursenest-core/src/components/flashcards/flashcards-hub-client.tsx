@@ -1,11 +1,11 @@
 "use client";
 
-import type { CSSProperties } from "react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { countSavedStudyItems, getStudyItemIdsMatchingFilters } from "@/lib/flashcards/study-session-persistence";
+import { LearnerCtaLink } from "@/components/learner-ui/learner-cta-link";
 
 type BuilderCategory = { id: string; title: string; description?: string; count: number };
 type BuilderMode = "term_to_definition" | "definition_to_term" | "mixed";
@@ -46,17 +46,6 @@ type DueSummary = {
 };
 
 const CARD_COUNTS = [10, 20, 30, 50] as const;
-
-const shellStyle: CSSProperties = {
-  borderColor: "color-mix(in srgb, var(--semantic-border-soft) 92%, var(--semantic-text-muted))",
-  background: "color-mix(in srgb, var(--semantic-surface) 94%, var(--theme-card-bg))",
-  boxShadow: "var(--semantic-shadow-soft)",
-};
-
-const sectionStyle: CSSProperties = {
-  borderColor: "var(--semantic-border-soft)",
-  background: "var(--theme-card-bg)",
-};
 
 function buildCustomSessionParams(opts: {
   pathwayId: string;
@@ -371,26 +360,16 @@ export function FlashcardsHubClient({
   const isNpPathway = scopedPathwayId.includes("-np-");
 
   return (
-    <div
-      className="mx-auto flex min-h-[60vh] max-w-xl flex-col gap-10 px-4 py-8 sm:max-w-2xl sm:py-10"
-      style={{ color: "var(--semantic-text-primary)" }}
-    >
+    <div className="nn-ls-ds-page-scope mx-auto flex min-h-[60vh] max-w-xl flex-col gap-10 px-4 py-8 sm:max-w-2xl sm:py-10">
       <header className="space-y-3">
-        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl" style={{ color: "var(--theme-heading-text)" }}>
+        <h1 className="text-2xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-3xl">
           {t("learner.flashcards.hub.title")}
         </h1>
         <p className="max-w-prose text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("learner.flashcards.hub.subtitle")}</p>
         <div className="pt-1">
-          <Link
-            href={weakAreasStudyHref}
-            className="inline-flex min-h-[44px] items-center justify-center rounded-2xl px-5 py-2.5 text-sm font-semibold shadow-sm transition hover:opacity-95"
-            style={{
-              background: "var(--role-cta, var(--semantic-brand))",
-              color: "var(--role-cta-foreground, var(--semantic-text-on-brand))",
-            }}
-          >
+          <LearnerCtaLink href={weakAreasStudyHref} variant="primary" className="min-h-11 px-5">
             {t("learner.flashcards.hub.weakAreasCta")}
-          </Link>
+          </LearnerCtaLink>
         </div>
       </header>
 
@@ -398,11 +377,11 @@ export function FlashcardsHubClient({
         <section className="space-y-3" aria-label={t("learner.flashcards.hub.masteryOverview")}>
           <p className="text-xs font-medium tracking-wide text-[var(--semantic-text-secondary)]">{t("learner.flashcards.hub.masteryOverview")}</p>
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl border p-4 shadow-sm" style={sectionStyle}>
+            <div className="nn-ls-ds-kpi-tile">
               <p className="text-xs text-[var(--semantic-text-muted)]">{t("learner.flashcards.hub.kpiDueToday")}</p>
               <p className="mt-1 text-2xl font-semibold tabular-nums text-[var(--semantic-info)]">{dueSummary != null ? dueSummary.dueToday : "—"}</p>
             </div>
-            <div className="rounded-2xl border p-4 shadow-sm" style={sectionStyle}>
+            <div className="nn-ls-ds-kpi-tile">
               <p className="text-xs text-[var(--semantic-text-muted)]">{t("learner.flashcards.hub.kpiOverdue")}</p>
               <p
                 className={`mt-1 text-2xl font-semibold tabular-nums ${
@@ -412,7 +391,7 @@ export function FlashcardsHubClient({
                 {dueSummary != null ? dueSummary.overdue : "—"}
               </p>
             </div>
-            <div className="rounded-2xl border p-4 shadow-sm" style={sectionStyle}>
+            <div className="nn-ls-ds-kpi-tile">
               <p className="text-xs text-[var(--semantic-text-muted)]">{t("learner.flashcards.hub.kpiStreak")}</p>
               <p className="mt-1 text-2xl font-semibold tabular-nums text-[var(--semantic-chart-3)]">{stats != null ? stats.currentStreak : "—"}</p>
               {stats != null ? (
@@ -421,32 +400,20 @@ export function FlashcardsHubClient({
                 </p>
               ) : null}
             </div>
-            <div className="rounded-2xl border p-4 shadow-sm" style={sectionStyle}>
+            <div className="nn-ls-ds-kpi-tile">
               <p className="text-xs text-[var(--semantic-text-muted)]">{t("learner.flashcards.hub.kpiReviewed")}</p>
               <p className="mt-1 text-2xl font-semibold tabular-nums">{stats != null ? stats.cardsReviewedTotal : "—"}</p>
             </div>
           </div>
           {totalDue > 0 ? (
-            <Link
-              href={weakAreasStudyHref}
-              className="block w-full rounded-2xl border py-3 text-center text-sm font-semibold transition hover:opacity-95"
-              style={{
-                borderColor: "color-mix(in srgb, var(--semantic-brand) 28%, var(--semantic-border-soft))",
-                background: "color-mix(in srgb, var(--semantic-brand) 8%, var(--theme-card-bg))",
-              }}
-            >
+            <Link href={weakAreasStudyHref} className="nn-ls-ds-cta-banner nn-ls-ds-cta-banner--brand-tint">
               Review {totalDue} due now →
             </Link>
           ) : null}
         </section>
       ) : null}
 
-      <section
-        id="study-session"
-        className="space-y-8 rounded-2xl border p-6 sm:p-8"
-        style={shellStyle}
-        aria-labelledby="custom-study-heading"
-      >
+      <section id="study-session" className="nn-ls-ds-flash-shell space-y-8" aria-labelledby="custom-study-heading">
         <div className="space-y-2">
           <p className="text-xs font-medium tracking-wide text-[var(--semantic-brand)]">{pathwayDisplayName}</p>
           <h2 id="custom-study-heading" className="text-xl font-semibold tracking-tight sm:text-2xl">
@@ -467,21 +434,9 @@ export function FlashcardsHubClient({
                   key={n}
                   type="button"
                   aria-pressed={on}
+                  data-pressed={on ? "true" : "false"}
                   onClick={() => setCardLimit(n)}
-                  className="min-h-[44px] min-w-[3.25rem] rounded-2xl border px-4 text-sm font-semibold transition"
-                  style={
-                    on
-                      ? {
-                          borderColor: "color-mix(in srgb, var(--semantic-brand) 45%, var(--semantic-border-soft))",
-                          background: "color-mix(in srgb, var(--semantic-brand) 14%, var(--theme-card-bg))",
-                          color: "var(--semantic-text-primary)",
-                        }
-                      : {
-                          borderColor: "var(--semantic-border-soft)",
-                          background: "var(--theme-card-bg)",
-                          color: "var(--semantic-text-secondary)",
-                        }
-                  }
+                  className="nn-ls-ds-pill-toggle"
                 >
                   {n}
                 </button>
@@ -498,30 +453,14 @@ export function FlashcardsHubClient({
             </div>
             <div className="flex flex-wrap gap-2">
               {showWeakShortcut ? (
-                <button
-                  type="button"
-                  onClick={applyWeakShortcut}
-                  className="min-h-[40px] rounded-2xl border px-3 text-xs font-semibold text-[var(--semantic-warning)] transition hover:opacity-90"
-                  style={{
-                    borderColor: "color-mix(in srgb, var(--semantic-warning) 35%, var(--semantic-border-soft))",
-                    background: "color-mix(in srgb, var(--semantic-warning) 10%, var(--theme-card-bg))",
-                  }}
-                >
+                <button type="button" onClick={applyWeakShortcut} className="nn-ls-ds-cta-warn">
                   Focus due cards
                 </button>
               ) : null}
-              <button
-                type="button"
-                onClick={selectAllSystems}
-                className="min-h-[40px] rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-3 text-xs font-semibold text-[var(--semantic-text-primary)]"
-              >
+              <button type="button" onClick={selectAllSystems} className="nn-ls-ds-cta-quiet text-[var(--semantic-text-primary)]">
                 Select all
               </button>
-              <button
-                type="button"
-                onClick={clearSystemsAndSearch}
-                className="min-h-[40px] rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-3 text-xs font-semibold text-[var(--semantic-text-secondary)]"
-              >
+              <button type="button" onClick={clearSystemsAndSearch} className="nn-ls-ds-cta-quiet">
                 Clear
               </button>
             </div>
@@ -537,10 +476,7 @@ export function FlashcardsHubClient({
               className="mt-1.5 w-full min-h-[44px] rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-3 py-2.5 text-sm text-[var(--semantic-text-primary)] shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)]"
             />
           </label>
-          <div
-            className="flex min-h-[5rem] flex-wrap gap-2 rounded-2xl border p-3 sm:p-4"
-            style={{ ...sectionStyle, borderColor: "var(--semantic-border-soft)" }}
-          >
+          <div className="nn-ls-ds-panel nn-ls-ds-panel--border-muted flex min-h-[5rem] flex-wrap gap-2 p-3 sm:p-4">
             {builderLoading && builderCategories.length === 0 ? (
               <p className="text-sm text-[var(--semantic-text-muted)]">Loading areas…</p>
             ) : null}
@@ -556,20 +492,8 @@ export function FlashcardsHubClient({
                   key={category.id}
                   type="button"
                   onClick={() => toggleBodySystem(category.id)}
-                  className="min-h-[44px] rounded-full border-2 px-4 py-2 text-left text-sm font-medium transition"
-                  style={
-                    selected
-                      ? {
-                          borderColor: "color-mix(in srgb, var(--semantic-brand) 40%, var(--semantic-border-soft))",
-                          background: "color-mix(in srgb, var(--semantic-brand) 12%, var(--theme-card-bg))",
-                          color: "var(--semantic-text-primary)",
-                        }
-                      : {
-                          borderColor: "var(--semantic-border-soft)",
-                          background: "var(--theme-card-bg)",
-                          color: "var(--semantic-text-secondary)",
-                        }
-                  }
+                  data-pressed={selected ? "true" : "false"}
+                  className="nn-ls-ds-filter-chip"
                 >
                   <span className="block">{formatTitleCase(category.title)}</span>
                   {category.count > 0 ? (
@@ -581,7 +505,7 @@ export function FlashcardsHubClient({
           </div>
         </div>
 
-        <div className="space-y-4 rounded-2xl border p-5" style={sectionStyle}>
+        <div className="nn-ls-ds-panel space-y-4 p-5">
           <div>
             <p className="text-sm font-medium text-[var(--semantic-text-primary)]">{t("learner.flashcards.hub.reviewFiltersHeading")}</p>
             <p className="mt-1 text-xs leading-relaxed text-[var(--semantic-text-muted)]">Focus your session using progress and review markers.</p>
@@ -630,7 +554,7 @@ export function FlashcardsHubClient({
           </div>
         </div>
 
-        <div className="flex min-h-[52px] items-center justify-between gap-4 rounded-2xl border px-4 py-3" style={sectionStyle}>
+        <div className="nn-ls-ds-panel flex min-h-[52px] items-center justify-between gap-4 px-4 py-3">
           <div>
             <p className="text-sm font-medium">Shuffle</p>
             <p className="text-xs text-[var(--semantic-text-muted)]">Mix card order in this session</p>
@@ -639,21 +563,15 @@ export function FlashcardsHubClient({
             type="button"
             role="switch"
             aria-checked={shuffleOn}
+            data-on={shuffleOn ? "true" : "false"}
             onClick={() => setShuffleOn((s) => !s)}
-            className="relative h-8 w-14 shrink-0 rounded-full border-2 transition"
-            style={{
-              borderColor: "var(--semantic-border-soft)",
-              background: shuffleOn ? "color-mix(in srgb, var(--semantic-brand) 35%, var(--theme-card-bg))" : "var(--semantic-surface)",
-            }}
+            className="nn-ls-ds-toggle"
           >
-            <span
-              className="absolute top-0.5 size-6 rounded-full bg-[var(--theme-card-bg)] shadow transition"
-              style={{ left: shuffleOn ? "calc(100% - 1.75rem)" : "0.125rem" }}
-            />
+            <span className="nn-ls-ds-toggle-thumb" data-on={shuffleOn ? "true" : "false"} aria-hidden />
           </button>
         </div>
 
-        <div className="rounded-2xl border p-5" style={{ ...sectionStyle, borderColor: "color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft))" }}>
+        <div className="nn-ls-ds-panel nn-ls-ds-panel--tint-info p-5">
           <p className="text-xs font-medium tracking-wide text-[var(--semantic-text-secondary)]">Session summary</p>
           <ul className="mt-3 space-y-2 text-sm text-[var(--semantic-text-secondary)]">
             <li>
@@ -668,24 +586,23 @@ export function FlashcardsHubClient({
               {filterCount === 0 ? "No review filters" : filterCount === 1 ? "1 filter applied" : `${filterCount} filters applied`}
             </li>
             <li>Shuffle {shuffleOn ? "on" : "off"}</li>
+            {builderSummary ? (
+              <li>
+                <span className="font-medium text-[var(--semantic-text-primary)]">{builderSummary.matchingCards}</span> cards
+                match filters; <span className="font-medium">{builderSummary.returnedCards}</span> available for this session cap
+              </li>
+            ) : null}
           </ul>
         </div>
 
         <div className="sticky bottom-0 -mx-2 flex flex-col gap-3 border-t border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-surface)_88%,var(--theme-card-bg))] px-2 pb-2 pt-4 sm:static sm:border-0 sm:bg-transparent sm:p-0">
-          <Link
-            href={startHref}
-            className="inline-flex min-h-[48px] w-full items-center justify-center rounded-2xl px-6 text-sm font-semibold shadow-md transition hover:opacity-95 sm:w-auto"
-            style={{
-              background: "var(--role-cta, var(--semantic-brand))",
-              color: "var(--role-cta-foreground, var(--semantic-text-on-brand))",
-            }}
-          >
+          <LearnerCtaLink href={startHref} variant="primary" className="min-h-12 w-full px-6 sm:w-auto">
             {t("learner.flashcards.hub.startStudying")}
-          </Link>
+          </LearnerCtaLink>
           <button
             type="button"
             onClick={() => void previewCustomCards()}
-            className="inline-flex min-h-[48px] w-full items-center justify-center rounded-2xl border-2 border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-6 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] sm:w-auto"
+            className="nn-ls-ds-cta-secondary min-h-12 w-full px-6 sm:w-auto"
           >
             {t("learner.flashcards.hub.previewCards")}
           </button>

@@ -957,8 +957,14 @@ export function PracticeTestRunnerClient({
   async function goNext() {
     if (saving || navInFlightRef.current || submitInFlightRef.current || catAdvanceInFlightRef.current) return;
     if (catMode) {
-      const examStyle = (testConfig?.catExamFeedbackMode ?? "test") !== "study";
-      if (catMode && examStyle && !catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) return;
+      const feedbackStudy = (testConfig?.catExamFeedbackMode ?? "test") === "study";
+      if (feedbackStudy) {
+        /* Study-mode CAT may still expose linear-style navigation for delivered items only. */
+        if (idx < total - 1) return;
+        await catAdvance();
+        return;
+      }
+      if (!catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) return;
       await catAdvance();
       return;
     }

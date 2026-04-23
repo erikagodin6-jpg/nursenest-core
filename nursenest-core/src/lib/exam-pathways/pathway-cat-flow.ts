@@ -16,6 +16,21 @@ export function appPathwayCatSessionStartPath(pathwayId: string): string {
   return `/app/practice-tests/cat-launch?${q.toString()}`;
 }
 
+/**
+ * Full CAT briefing/setup (escape hatch from cat-launch). Uses `review=1` so `/start` never auto-redirects back to cat-launch.
+ */
+export function appPathwayCatFullSetupHref(pathwayId: string): string {
+  const q = new URLSearchParams({ pathwayId: pathwayId.trim(), review: "1" });
+  return `/app/practice-tests/start?${q.toString()}`;
+}
+
+/** Only `review=1` and case-insensitive `true` force the full setup page; other values are ignored (no redirect loop). */
+export function isForcedCatFullSetupReviewParam(review: unknown): boolean {
+  if (typeof review !== "string") return false;
+  const v = review.trim().toLowerCase();
+  return v === "1" || v === "true";
+}
+
 export function resolvePreferredCatPathwayId(
   preferredPathwayId?: string | null,
   availablePathwayIds?: Array<string | null | undefined>,

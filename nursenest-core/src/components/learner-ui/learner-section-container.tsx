@@ -8,12 +8,13 @@ export type LearnerSectionVariant = "neutral" | "tint-primary" | "tint-secondary
 export function LearnerSectionContainer({
   id,
   "aria-labelledby": ariaLabelledBy,
-  variant = "neutral",
+  variant,
   className = "",
   children,
 }: {
   id?: string;
   "aria-labelledby"?: string;
+  /** Omit for default surface; otherwise one tint per section. */
   variant?: LearnerSectionVariant;
   className?: string;
   children: ReactNode;
@@ -23,7 +24,7 @@ export function LearnerSectionContainer({
       id={id}
       aria-labelledby={ariaLabelledBy}
       className={`nn-ls-ds-section ${className}`.trim()}
-      data-variant={variant}
+      {...(variant ? { "data-variant": variant } : {})}
     >
       {children}
     </section>

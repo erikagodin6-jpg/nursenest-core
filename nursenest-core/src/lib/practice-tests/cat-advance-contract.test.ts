@@ -8,26 +8,28 @@ import {
 
 describe("cat-advance-contract", () => {
   it("buildCatAdvancePatchBody includes session, question, and selected answer echo", () => {
+    const qid = "clqtestquestionid00";
     const body = buildCatAdvancePatchBody({
       testId: "clxxxxxxxxxxxxxxxx",
-      answers: { q1: "A" },
+      answers: { [qid]: "A" },
       cursorIndex: 0,
-      examQuestionId: "q1",
+      examQuestionId: qid,
     });
     assert.equal(body.action, "cat_advance");
     assert.equal(body.sessionId, "clxxxxxxxxxxxxxxxx");
-    assert.equal(body.examQuestionId, "q1");
+    assert.equal(body.examQuestionId, qid);
     assert.equal(body.selectedAnswer, "A");
     assert.equal(body.cursorIndex, 0);
   });
 
   it("assertCatAdvanceRequestPayload rejects empty answer", () => {
+    const qid = "clqtestquestionid01";
     assert.throws(() =>
       assertCatAdvanceRequestPayload({
         testId: "clxxxxxxxxxxxxxxxx",
-        answers: { q1: "" },
+        answers: { [qid]: "" },
         cursorIndex: 0,
-        examQuestionId: "q1",
+        examQuestionId: qid,
       }),
     );
   });

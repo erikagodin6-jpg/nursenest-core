@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
-import type { CatPracticeReadinessResult } from "@/lib/practice-tests/cat-practice-readiness";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
-import { buildCatExamSimulationCreatePayload } from "@/components/student/pathway-cat-start-payload";
+import { appPathwayCatFullSetupHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { runCatDirectLaunchSessionOnce } from "@/lib/practice-tests/cat-direct-launch-session";
 
 /**
  * Minimal bridge: verify pool readiness, POST session, redirect into the exam runner.
@@ -20,59 +20,52 @@ export function CatDirectLaunchClient({
   pathwayShell: PracticeTestPathwayClientShell;
 }) {
   const isDev = process.env.NODE_ENV !== "production";
-  const [phase, setPhase] = useState<"checking" | "starting" | "error">("checking");
+  const [phase, setPhase] = useState<"loading" | "error">("loading");
   const [message, setMessage] = useState<string | null>(null);
   const [errorCode, setErrorCode] = useState<string | null>(null);
 
-  const setupHref = useMemo(
-    () =>
-      `/app/practice-tests/start?pathwayId=${encodeURIComponent(pathwayId)}&review=1`,
-    [pathwayId],
+  const setupHref = useMemo(() => appPathwayCatFullSetupHref(pathwayId), [pathwayId]);
+
+  const shellStable = useMemo(
+    (): PracticeTestPathwayClientShell => ({
+      id: pathwayShell.id,
+      countrySlug: pathwayShell.countrySlug,
+      roleTrack: pathwayShell.roleTrack,
+      examCode: pathwayShell.examCode,
+      shortName: pathwayShell.shortName,
+      examFamily: pathwayShell.examFamily,
+    }),
+    [
+      pathwayShell.id,
+      pathwayShell.countrySlug,
+      pathwayShell.roleTrack,
+      pathwayShell.examCode,
+      pathwayShell.shortName,
+      pathwayShell.examFamily,
+    ],
   );
 
   useEffect(() => {
     let cancelled = false;
-    void (async () => {
-      try {
-        const resReady = await fetch(`/api/practice-tests/cat-readiness?pathwayId=${encodeURIComponent(pathwayId)}`, {
-          method: "GET",
-          credentials: "same-origin",
-        });
-        const readiness = (await resReady.json()) as CatPracticeReadinessResult;
-        if (cancelled) return;
-        if (!readiness.ok) {
-          setErrorCode(readiness.code);
-          setMessage(readiness.message);
-          setPhase("error");
-          return;
-        }
-        setPhase("starting");
-        const payload = buildCatExamSimulationCreatePayload(pathwayShell);
-        const res = await fetch("/api/practice-tests", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        const data = (await res.json()) as { id?: string; error?: string; code?: string };
-        if (cancelled) return;
-        if (!res.ok) {
-          setErrorCode(typeof data.code === "string" ? data.code : null);
-          throw new Error(data.error ?? "Could not start session.");
-        }
-        if (!data.id) throw new Error("Session was created without an id. Please try again.");
-        window.location.replace(`/app/practice-tests/${data.id}`);
-      } catch (e) {
-        if (cancelled) return;
-        const text = e instanceof Error ? e.message : "Could not start session.";
-        setMessage(text);
-        setPhase("error");
-        if (isDev) console.error("[CAT direct launch] failed", { pathwayId, text });
+    void runCatDirectLaunchSessionOnce(pathwayId, shellStable).then((result) => {
+      if (cancelled) return;
+      if (result.ok) {
+        window.location.replace(`/app/practice-tests/${result.practiceTestId}`);
+        return;
       }
-    })();
+      const learnerMessage =
+        result.phase === "readiness"
+          ? "We could not verify the practice pool for this track yet. You can open the full setup page to review conditions and try again."
+          : "We could not start the timed session. Please try again, or use full setup below.";
+      setErrorCode(result.code);
+      setMessage(result.message?.trim() ? result.message : learnerMessage);
+      setPhase("error");
+      if (isDev) console.error("[CAT direct launch] failed", { pathwayId, result });
+    });
     return () => {
       cancelled = true;
     };
-  }, [pathwayId, pathwayShell, isDev]);
+  }, [pathwayId, shellStable, isDev]);
 
   if (phase === "error") {
     return (
@@ -115,7 +108,7 @@ export function CatDirectLaunchClient({
       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">Exam session</p>
       <h1 className="mt-2 text-xl font-bold text-[var(--theme-heading-text)]">Preparing your exam</h1>
       <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">
-        {phase === "checking" ? "Verifying item pool…" : "Starting timed session…"}
+        Verifying your pathway pool and starting the timed session…
       </p>
       <div
         className="mx-auto mt-6 h-8 w-8 animate-spin rounded-full border-2 border-[var(--semantic-border-soft)] border-t-[var(--semantic-brand)]"

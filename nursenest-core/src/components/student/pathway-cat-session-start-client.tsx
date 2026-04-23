@@ -25,13 +25,7 @@ import {
 } from "@/components/student/pathway-cat-start-payload";
 
 function sectionShell(children: ReactNode, className = "") {
-  return (
-    <section
-      className={`rounded-lg border border-[color-mix(in_srgb,var(--semantic-border-soft)_100%,transparent)] bg-[var(--semantic-surface)] shadow-[var(--semantic-shadow-soft)] ${className}`}
-    >
-      {children}
-    </section>
-  );
+  return <section className={`nn-ls-ds-shell ${className}`.trim()}>{children}</section>;
 }
 
 export function PathwayCatSessionStartClient({

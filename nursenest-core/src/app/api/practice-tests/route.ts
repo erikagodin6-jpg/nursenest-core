@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
-import { ExamFamily, PracticeTestStatus } from "@prisma/client";
+import { ExamFamily, PracticeTestStatus, Prisma } from "@prisma/client";
 import { z } from "zod";
 import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-read-cache";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
@@ -28,6 +28,16 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
+
+/** Serialize CAT exam_simulation creates per learner + pathway + presentation mode (reduces duplicate rows under parallel POSTs). */
+function catSessionAdvisoryLockKey(userId: string, pathwayId: string, presentationMode: string): bigint {
+  const s = `${userId}\0${pathwayId}\0${presentationMode}`;
+  let h = 0n;
+  for (let i = 0; i < s.length; i++) {
+    h = (h * 131n + BigInt(s.charCodeAt(i))) & ((1n << 62n) - 1n);
+  }
+  return h === 0n ? 1n : h;
+}
 
 const createSchema = z
   .object({
@@ -368,39 +378,68 @@ export async function POST(req: Request) {
       catPresentationMode: d.catPresentationMode,
       pathway: simPathway,
     });
-    const existingInProgress = await prisma.practiceTest.findFirst({
-      where: {
-        userId: gate.userId,
-        status: PracticeTestStatus.IN_PROGRESS,
-        AND: [
-          { config: { path: ["selectionMode"], equals: "cat" } },
-          { config: { path: ["pathwayId"], equals: pathwayIdForCat } },
-          { config: { path: ["catPresentationMode"], equals: d.catPresentationMode } },
-        ],
+    const lockKey = catSessionAdvisoryLockKey(gate.userId, pathwayIdForCat, d.catPresentationMode);
+    const txOutcome = await prisma.$transaction(
+      async (tx) => {
+        await tx.$executeRaw(Prisma.sql`SELECT pg_advisory_xact_lock(${lockKey})`);
+        const existingInProgress = await tx.practiceTest.findFirst({
+          where: {
+            userId: gate.userId,
+            status: PracticeTestStatus.IN_PROGRESS,
+            AND: [
+              { config: { path: ["selectionMode"], equals: "cat" } },
+              { config: { path: ["pathwayId"], equals: pathwayIdForCat } },
+              { config: { path: ["catPresentationMode"], equals: d.catPresentationMode } },
+            ],
+          },
+          select: { id: true },
+          orderBy: { updatedAt: "desc" },
+        });
+        if (existingInProgress) {
+          return { kind: "resume" as const, id: existingInProgress.id };
+        }
+        const cat = await createCatPracticeTestPayload(
+          gate.userId,
+          gate.entitlement,
+          basis,
+          {
+            questionCount: enforcedQuestionCount,
+            topicNames,
+            difficultyMin,
+            difficultyMax,
+            pathwayId: pathwayIdForCat,
+          },
+          enforcedTimedMode,
+          examTimedLimit,
+          d.catPresentationMode,
+          d.catExamFeedbackMode,
+        );
+        if (!cat.ok) {
+          return { kind: "reject" as const, cat };
+        }
+        const row = await tx.practiceTest.create({
+          data: {
+            userId: gate.userId,
+            title: d.title?.trim() || null,
+            config: cat.config as object,
+            questionIds: cat.questionIds,
+            adaptiveState: cat.adaptiveState as object,
+            status: PracticeTestStatus.IN_PROGRESS,
+            timedMode: enforcedTimedMode,
+            timeLimitSec: examTimedLimit,
+            cursorIndex: 0,
+          },
+        });
+        return { kind: "created" as const, row, cat };
       },
-      select: { id: true },
-      orderBy: { updatedAt: "desc" },
-    });
-    if (existingInProgress) {
-      return NextResponse.json({ id: existingInProgress.id, resumed: true as const }, { status: 200 });
-    }
-    const cat = await createCatPracticeTestPayload(
-      gate.userId,
-      gate.entitlement,
-      basis,
-      {
-        questionCount: enforcedQuestionCount,
-        topicNames,
-        difficultyMin,
-        difficultyMax,
-        pathwayId: pathwayIdForCat,
-      },
-      enforcedTimedMode,
-      examTimedLimit,
-      d.catPresentationMode,
-      d.catExamFeedbackMode,
+      { maxWait: 15_000, timeout: 60_000 },
     );
-    if (!cat.ok) {
+
+    if (txOutcome.kind === "resume") {
+      return NextResponse.json({ id: txOutcome.id, resumed: true as const }, { status: 200 });
+    }
+    if (txOutcome.kind === "reject") {
+      const cat = txOutcome.cat;
       safeServerLog("practice_tests", "cat_create_rejected", {
         code: String(cat.code ?? PRACTICE_TEST_CAT_CREATE_CODE.cat_create_failed),
         pathwayIdPrefix: pathwayIdForCat.length > 14 ? `${pathwayIdForCat.slice(0, 14)}…` : pathwayIdForCat,
@@ -412,19 +451,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const row = await prisma.practiceTest.create({
-      data: {
-        userId: gate.userId,
-        title: d.title?.trim() || null,
-        config: cat.config as object,
-        questionIds: cat.questionIds,
-        adaptiveState: cat.adaptiveState as object,
-        status: PracticeTestStatus.IN_PROGRESS,
-        timedMode: enforcedTimedMode,
-        timeLimitSec: examTimedLimit,
-        cursorIndex: 0,
-      },
-    });
+    const { row, cat } = txOutcome;
 
     captureLearnerProductEvent(gate.userId, gate.entitlement, PH.learnerCatExamStarted, {
       pathway_id: pathwayIdForCat,

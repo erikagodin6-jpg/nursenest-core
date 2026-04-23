@@ -19,7 +19,10 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
-import { resolveCatPathwayIdForCatPost } from "@/lib/practice-tests/resolve-cat-pathway-for-post";
+import {
+  catLaunchPathwayIdForLearnerStartPage,
+  resolveCatPathwayIdForCatPost,
+} from "@/lib/practice-tests/resolve-cat-pathway-for-post";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import {
   catPathwayRegionalExamLine,
@@ -286,5 +289,28 @@ describe("appPathwayCatSessionStartPath: pathway-scoped CAT start URL", () => {
     const url = appPathwayCatSessionStartPath("ca-rn-nclex-rn");
     assert.ok(!url.includes("/app/practice-tests?"), "must not point to the hub with query params only");
     assert.ok(url.includes("/app/practice-tests/cat-launch"), "must always target direct CAT launch");
+  });
+});
+
+// ─── Learner /start page vs POST: same ambiguity contract ─────────────────────
+
+describe("catLaunchPathwayIdForLearnerStartPage", () => {
+  it("returns the requested id when it is CAT-eligible", () => {
+    assert.equal(
+      catLaunchPathwayIdForLearnerStartPage("us-rn-nclex-rn", [stub("us-rn-nclex-rn"), stub("us-np-fnp")]),
+      "us-rn-nclex-rn",
+    );
+  });
+
+  it("returns the sole eligible id when none requested", () => {
+    assert.equal(catLaunchPathwayIdForLearnerStartPage(null, [stub("us-rn-nclex-rn")]), "us-rn-nclex-rn");
+  });
+
+  it("returns null when multiple eligible and no explicit request", () => {
+    assert.equal(catLaunchPathwayIdForLearnerStartPage(null, [stub("us-rn-nclex-rn"), stub("us-np-fnp")]), null);
+  });
+
+  it("returns null when requested id is not in the eligible list", () => {
+    assert.equal(catLaunchPathwayIdForLearnerStartPage("us-rn-nclex-rn", [stub("us-np-fnp")]), null);
   });
 });

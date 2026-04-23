@@ -11,6 +11,7 @@ const PAD: Record<"none" | "sm" | "md" | "lg", string> = {
 /**
  * Token-based learner surface — cards, insets, and tinted sections.
  * Tones map to `learner-surface-primitives.css` (`data-nn-ls-tone`).
+ * Spacing/radius/color steps: `learner-design-system.css` (`--space-*`, `--radius-*`, `--color-*`).
  */
 export function LearnerSurface({
   tone = "secondary",

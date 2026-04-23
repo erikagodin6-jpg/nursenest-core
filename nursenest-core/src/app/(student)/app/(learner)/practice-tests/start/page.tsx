@@ -8,6 +8,8 @@ import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
+import { isForcedCatFullSetupReviewParam } from "@/lib/exam-pathways/pathway-cat-flow";
+import { catLaunchPathwayIdForLearnerStartPage } from "@/lib/practice-tests/resolve-cat-pathway-for-post";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { getPathwayLessonsPage } from "@/lib/lessons/pathway-lesson-loader";
 import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
@@ -15,6 +17,8 @@ import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -33,7 +37,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
   const sp = await searchParams;
   const requestedPathwayId = typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 2 ? sp.pathwayId.trim() : null;
   /** When set, show the full briefing UI (avoids redirect loop from cat-launch error “Full setup” link). */
-  const forceFullSetup = sp.review === "1" || sp.review === "true";
+  const forceFullSetup = isForcedCatFullSetupReviewParam(sp.review);
 
   const session = await getProtectedRouteSession("(student).app.(learner).practice-tests.start");
   const userId = (session?.user as { id?: string })?.id ?? "";
@@ -104,12 +108,7 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
   }
 
   /** When several CAT-eligible tracks exist, require an explicit choice (URL or dropdown) — no silent default. */
-  const initialPathwayId =
-    requestedPathwayId && catEligiblePathways.some((p) => p.id === requestedPathwayId)
-      ? requestedPathwayId
-      : catEligiblePathways.length === 1
-        ? catEligiblePathways[0]!.id
-        : null;
+  const initialPathwayId = catLaunchPathwayIdForLearnerStartPage(requestedPathwayId, catEligiblePathways);
 
   /** Pathway is known → go straight to session bridge unless learner explicitly opened the full briefing. */
   if (initialPathwayId && !forceFullSetup) {

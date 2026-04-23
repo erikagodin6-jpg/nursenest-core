@@ -24,6 +24,26 @@ export type ResolveCatPathwayForPostResult =
       catEligibleCount: number;
     };
 
+/**
+ * Learner `/app/practice-tests/start` server page: pathway id to send to cat-launch when the learner did not request full setup.
+ * Matches POST ambiguity rules: explicit entitled pathway, else exactly one CAT-eligible track.
+ */
+export function catLaunchPathwayIdForLearnerStartPage(
+  requestedPathwayId: string | null,
+  catEligiblePathways: ExamPathwayDefinition[],
+): string | null {
+  const trimmed = typeof requestedPathwayId === "string" ? requestedPathwayId.trim() : "";
+  if (trimmed.length > 2) {
+    if (catEligiblePathways.some((p) => p.id === trimmed)) return trimmed;
+    /** Explicit pathway that is not CAT-eligible for this viewer — never substitute a different track. */
+    return null;
+  }
+  if (catEligiblePathways.length === 1) {
+    return catEligiblePathways[0]!.id;
+  }
+  return null;
+}
+
 export function resolveCatPathwayIdForCatPost(
   requestedPathwayId: string | null | undefined,
   catEligible: ExamPathwayDefinition[],

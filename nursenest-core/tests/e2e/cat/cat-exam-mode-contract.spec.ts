@@ -51,13 +51,29 @@ test.describe("CAT exam mode — runner contract", () => {
       await expect(advance).toBeVisible({ timeout: 30_000 });
       await expect(advance).toBeEnabled();
       await expect(page.getByRole("button", { name: /^Submit answer$/i })).toHaveCount(0);
+      await expect(advance).toHaveAttribute("data-nn-qa-cat-exam-advance-intent", "server_driven");
 
       let patchCount = 0;
       await page.route("**/api/practice-tests/**", async (route) => {
         if (route.request().method() === "PATCH") {
           try {
-            const body = route.request().postDataJSON() as { action?: string } | null;
-            if (body?.action === "cat_advance") patchCount += 1;
+            const body = route.request().postDataJSON() as {
+              action?: string;
+              examQuestionId?: string;
+              sessionId?: string;
+              selectedAnswer?: unknown;
+              cursorIndex?: number;
+              answers?: Record<string, unknown>;
+            } | null;
+            if (body?.action === "cat_advance") {
+              patchCount += 1;
+              expect(body.examQuestionId, "cat_advance must echo examQuestionId").toMatch(/^[a-z0-9_-]{8,}$/i);
+              expect(body.sessionId, "cat_advance must echo sessionId (practice test id)").toMatch(/^[a-z0-9_-]{8,}$/i);
+              expect(body.cursorIndex, "cat_advance requires cursorIndex").toBeGreaterThanOrEqual(0);
+              expect(body.answers?.[body.examQuestionId!], "selectedAnswer must match answers[examQuestionId]").toEqual(
+                body.selectedAnswer,
+              );
+            }
           } catch {
             /* non-JSON body */
           }
@@ -69,6 +85,8 @@ test.describe("CAT exam mode — runner contract", () => {
       await expect
         .poll(() => patchCount, { timeout: 60_000 })
         .toBe(1);
+
+      await expect(page.getByRole("button", { name: /^Submit answer$/i })).toBeVisible({ timeout: 60_000 });
 
       await page.unroute("**/api/practice-tests/**");
 

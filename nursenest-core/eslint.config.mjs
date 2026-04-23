@@ -36,6 +36,19 @@ const eslintConfig = defineConfig([
     },
   },
   {
+    files: ["src/components/flashcards/flashcards-hub-client.tsx", "src/components/learner-ui/**/*.tsx"],
+    rules: {
+      "no-restricted-syntax": [
+        "warn",
+        {
+          selector: "JSXAttribute[name.name='style']",
+          message:
+            "Prefer learner design tokens (`learner-design-system.css`, `nn-ls-ds-*`, `nn-ls-*`) over inline styles so themes stay consistent.",
+        },
+      ],
+    },
+  },
+  {
     files: ["src/app/(admin)/**/*.{ts,tsx,js,jsx,mjs,cjs}"],
     rules: {
       "no-restricted-imports": [

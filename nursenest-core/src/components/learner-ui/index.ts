@@ -10,6 +10,7 @@ export type { LearnerSectionVariant } from "@/components/learner-ui/learner-sect
 export { LearnerSectionContainer } from "@/components/learner-ui/learner-section-container";
 export { LearnerSegmentedBlock } from "@/components/learner-ui/learner-segmented-block";
 export { LearnerStatCard } from "@/components/learner-ui/learner-stat-card";
+export type { LearnerStudyCardVariant } from "@/components/learner-ui/learner-study-card";
 export { LearnerStudyCard } from "@/components/learner-ui/learner-study-card";
 export { LearnerStudyRecommendationCard } from "@/components/learner-ui/learner-study-recommendation-card";
 export { LearnerStudySurfaceSection } from "@/components/learner-ui/learner-study-surface-section";
