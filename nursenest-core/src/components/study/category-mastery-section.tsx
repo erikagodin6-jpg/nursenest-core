@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import { Minus, Star, Target } from "lucide-react";
 import type { TopicRow } from "@/lib/study/analytics-data";
+import type { AnalyticsLoadResult } from "@/lib/study/analytics-load-result";
+import { analyticsResolvedData, formatQuestionVolumeRow } from "@/lib/study/analytics-load-result";
 import { semanticFillClassForAccuracyPct } from "@/lib/ui/semantic-progress-fill";
 import { formatSentenceCase } from "@/lib/format/text-case";
 
@@ -53,8 +55,52 @@ function badgeStyle(label: MasteryLabel): { bg: string; text: string; border: st
 /**
  * Category performance bars plus ranked strengths and focus lists from topic stats.
  */
-export function CategoryMasterySection({ topics }: { topics: TopicRow[] }) {
-  const sorted = [...topics].sort((a, b) => b.totalCount - a.totalCount);
+export function CategoryMasterySection({ topics }: { topics: AnalyticsLoadResult<TopicRow[]> }) {
+  if (topics.kind === "empty") {
+    return (
+      <div className="space-y-6" data-testid="category-mastery-empty">
+        <section
+          className="rounded-2xl border p-5 sm:p-6"
+          style={{
+            background: "var(--semantic-surface)",
+            borderColor: "var(--semantic-border-soft)",
+            boxShadow: "var(--semantic-shadow-soft)",
+          }}
+        >
+          <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">Category performance</h2>
+          <p className="mt-2 text-sm text-[var(--semantic-text-muted)]">
+            No topic mastery snapshot yet — this is an explicit empty state, not a failed load.
+          </p>
+        </section>
+      </div>
+    );
+  }
+
+  if (topics.kind === "error") {
+    return (
+      <div className="space-y-6" data-testid="category-mastery-error">
+        <section
+          className="rounded-2xl border p-5 sm:p-6"
+          style={{
+            background: "var(--semantic-surface)",
+            borderColor: "var(--semantic-border-soft)",
+            boxShadow: "var(--semantic-shadow-soft)",
+          }}
+        >
+          <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">Category performance</h2>
+          <p className="mt-2 text-sm text-[var(--semantic-danger)]">
+            Could not load topic mastery ({topics.reason}). This is a load failure — not the same as having no topics
+            yet.
+          </p>
+        </section>
+      </div>
+    );
+  }
+
+  const topicRows = analyticsResolvedData(topics) ?? [];
+  const degradedReason = topics.kind === "degraded" ? topics.reason : null;
+
+  const sorted = [...topicRows].sort((a, b) => b.totalCount - a.totalCount);
   const withVolume = sorted.filter((t) => t.totalCount >= 3);
   const strengths = [...withVolume].sort((a, b) => b.accuracyPct - a.accuracyPct).slice(0, 4);
   const focus = [...withVolume].sort((a, b) => a.accuracyPct - b.accuracyPct).slice(0, 4);
@@ -72,6 +118,11 @@ export function CategoryMasterySection({ topics }: { topics: TopicRow[] }) {
         <div className="mb-5">
           <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">Category performance</h2>
           <p className="mt-0.5 text-xs text-[var(--semantic-text-muted)]">Mastery level by content domain</p>
+          {degradedReason ? (
+            <p className="mt-2 text-xs font-semibold text-[var(--semantic-warning)]" data-testid="category-mastery-degraded">
+              <span className="uppercase tracking-wide">Degraded</span> — {degradedReason}
+            </p>
+          ) : null}
         </div>
         {sorted.length === 0 ? (
           <p className="text-sm text-[var(--semantic-text-muted)]">
@@ -91,9 +142,7 @@ export function CategoryMasterySection({ topics }: { topics: TopicRow[] }) {
                       <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">
                         {formatSentenceCase(row.topic)}
                       </p>
-                      <p className="text-xs text-[var(--semantic-text-muted)]">
-                        {total} question{total !== 1 ? "s" : ""}
-                      </p>
+                      <p className="text-xs text-[var(--semantic-text-muted)]">{formatQuestionVolumeRow(total)}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <span

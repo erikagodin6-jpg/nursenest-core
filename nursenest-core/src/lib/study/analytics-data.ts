@@ -23,6 +23,13 @@ import { loadStudyStreakDays } from "@/lib/learner/premium-dashboard-snapshot";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getReadinessBand } from "@/components/study/cat-readiness-hero";
 import type { ReadinessBand } from "@/components/study/cat-readiness-hero";
+import {
+  analyticsDegraded,
+  analyticsError,
+  analyticsOk,
+  analyticsResolvedData,
+  type AnalyticsLoadResult,
+} from "@/lib/study/analytics-load-result";
 
 // ── Shared types ──────────────────────────────────────────────────────────────
 
@@ -131,22 +138,30 @@ export type AnalyticsSupplementalMetrics = AnalyticsDbSupplemental & {
   adaptiveDifficultyDisplay: number | null;
 };
 
+/** Readiness trend window + pagination cursor (CAT sessions). */
+export type AnalyticsReadinessTrendWindow = {
+  points: ReadinessTrendPoint[];
+  hasMore: boolean;
+  cursor: string | null;
+};
+
 export type AnalyticsPagePayload = {
-  summary: AnalyticsSummary;
-  /** Initial trend window — last 10 CATs. */
-  trendWindow: ReadinessTrendPoint[];
-  /** Whether older CAT history exists beyond the initial window. */
-  hasMorTrend: boolean;
-  /** ID of the oldest item in trendWindow (used as cursor for more history). */
-  trendCursor: string | null;
-  /** Topic mastery (UserTopicStat) — server-rendered for summary cards. */
-  initialTopicRows: TopicRow[];
-  /** Performance by question type — server-rendered. */
-  questionTypeRows: QuestionTypeRow[];
-  /** Points for confidence vs. performance scatter (recent graded attempts). */
-  confidenceScatterPoints: ConfidenceScatterPoint[];
+  summary: AnalyticsLoadResult<AnalyticsSummary>;
+  trend: AnalyticsLoadResult<AnalyticsReadinessTrendWindow>;
+  initialTopicRows: AnalyticsLoadResult<TopicRow[]>;
+  questionTypeRows: AnalyticsLoadResult<QuestionTypeRow[]>;
+  confidenceScatterPoints: AnalyticsLoadResult<ConfidenceScatterPoint[]>;
+  dbSupplemental: AnalyticsLoadResult<AnalyticsDbSupplemental>;
+  dailyActivity: AnalyticsLoadResult<DailyActivityCell[]>;
+  /** Merged KPI metrics; passProbability null when hidden per quality rules. */
   supplemental: AnalyticsSupplementalMetrics;
-  dailyActivity: DailyActivityCell[];
+  /** Explicit load / data-quality flags for analytics surfaces. */
+  analyticsQuality: {
+    hasError: boolean;
+    hasDegraded: boolean;
+    failedSegments: string[];
+    passProbabilityVisible: boolean;
+  };
 };
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -224,8 +239,9 @@ function emptyDailyActivity(days: number): DailyActivityCell[] {
 export async function loadDailyQuestionActivity(
   userId: string,
   days = 28,
-): Promise<DailyActivityCell[]> {
-  if (!userId || !isDatabaseUrlConfigured()) return emptyDailyActivity(days);
+): Promise<AnalyticsLoadResult<DailyActivityCell[]>> {
+  if (!userId) return analyticsError("missing_user_id");
+  if (!isDatabaseUrlConfigured()) return analyticsError("database_not_configured");
 
   try {
     const end = new Date();
@@ -253,22 +269,22 @@ export async function loadDailyQuestionActivity(
       tally.set(key, (tally.get(key) ?? 0) + n);
     }
 
-    return [...tally.entries()]
-      .sort(([x], [y]) => x.localeCompare(y))
-      .map(([dateKey, questionsAnswered]) => ({ dateKey, questionsAnswered }));
+    return analyticsOk(
+      [...tally.entries()]
+        .sort(([x], [y]) => x.localeCompare(y))
+        .map(([dateKey, questionsAnswered]) => ({ dateKey, questionsAnswered })),
+    );
   } catch {
     logAnalyticsFailure("daily_activity_block_failed", userId);
-    return emptyDailyActivity(days);
+    return analyticsError("daily_activity_load_failed");
   }
 }
 
-export async function loadAnalyticsDbSupplemental(userId: string): Promise<AnalyticsDbSupplemental> {
-  const empty: AnalyticsDbSupplemental = {
-    flashcardsReviewedTotal: 0,
-    studyHoursApprox: null,
-    avgMsPerQuestion: null,
-  };
-  if (!userId || !isDatabaseUrlConfigured()) return empty;
+export async function loadAnalyticsDbSupplemental(
+  userId: string,
+): Promise<AnalyticsLoadResult<AnalyticsDbSupplemental>> {
+  if (!userId) return analyticsError("missing_user_id");
+  if (!isDatabaseUrlConfigured()) return analyticsError("database_not_configured");
 
   try {
     const since90 = new Date();
@@ -319,15 +335,15 @@ export async function loadAnalyticsDbSupplemental(userId: string): Promise<Analy
     }
 
     const sumMs = sumElapsed._sum.elapsedMs;
-    return {
+    return analyticsOk({
       flashcardsReviewedTotal: stats?.cardsReviewedTotal ?? 0,
       studyHoursApprox:
         sumMs != null && sumMs > 0 ? Math.round((sumMs / 3600000) * 10) / 10 : null,
       avgMsPerQuestion: totalQs > 0 ? Math.round(totalMs / totalQs) : null,
-    };
+    });
   } catch {
     logAnalyticsFailure("db_supplemental_block_failed", userId);
-    return empty;
+    return analyticsError("db_supplemental_load_failed");
   }
 }
 
@@ -349,27 +365,90 @@ function deriveAdaptiveDifficultyDisplay(summary: AnalyticsSummary): number | nu
   return Math.round((summary.latestReadinessScore / 100) * 100) / 10;
 }
 
+function buildAnalyticsSupplementalAndQuality(args: {
+  summary: AnalyticsLoadResult<AnalyticsSummary>;
+  trend: AnalyticsLoadResult<AnalyticsReadinessTrendWindow>;
+  initialTopicRows: AnalyticsLoadResult<TopicRow[]>;
+  questionTypeRows: AnalyticsLoadResult<QuestionTypeRow[]>;
+  confidenceScatterPoints: AnalyticsLoadResult<ConfidenceScatterPoint[]>;
+  dbSupplemental: AnalyticsLoadResult<AnalyticsDbSupplemental>;
+  dailyActivity: AnalyticsLoadResult<DailyActivityCell[]>;
+}): {
+  supplemental: AnalyticsSupplementalMetrics;
+  analyticsQuality: {
+    hasError: boolean;
+    hasDegraded: boolean;
+    failedSegments: string[];
+    passProbabilityVisible: boolean;
+  };
+} {
+  const segmentEntries: Array<[string, AnalyticsLoadResult<unknown>]> = [
+    ["summary", args.summary],
+    ["trend", args.trend],
+    ["topics", args.initialTopicRows],
+    ["question_types", args.questionTypeRows],
+    ["confidence_scatter", args.confidenceScatterPoints],
+    ["db_supplemental", args.dbSupplemental],
+    ["daily_activity", args.dailyActivity],
+  ];
+  const failedSegments: string[] = [];
+  let hasError = false;
+  let hasDegraded = false;
+  for (const [key, r] of segmentEntries) {
+    if (r.kind === "error") {
+      hasError = true;
+      failedSegments.push(key);
+    } else if (r.kind === "degraded") {
+      hasDegraded = true;
+      failedSegments.push(`${key}:degraded`);
+    }
+  }
+
+  const summaryData = analyticsResolvedData(args.summary);
+  const dbData = analyticsResolvedData(args.dbSupplemental);
+  const dbBase: AnalyticsDbSupplemental =
+    dbData ??
+    ({
+      flashcardsReviewedTotal: 0,
+      studyHoursApprox: null,
+      avgMsPerQuestion: null,
+    } satisfies AnalyticsDbSupplemental);
+
+  const passProbabilityVisible =
+    !hasError &&
+    !hasDegraded &&
+    summaryData != null &&
+    derivePassProbabilityEstimate(summaryData) != null;
+
+  const supplemental: AnalyticsSupplementalMetrics = {
+    ...dbBase,
+    passProbabilityEstimate: passProbabilityVisible ? derivePassProbabilityEstimate(summaryData) : null,
+    adaptiveDifficultyDisplay: summaryData ? deriveAdaptiveDifficultyDisplay(summaryData) : null,
+  };
+
+  return {
+    supplemental,
+    analyticsQuality: {
+      hasError,
+      hasDegraded,
+      failedSegments,
+      passProbabilityVisible,
+    },
+  };
+}
+
 // ── Data loaders ──────────────────────────────────────────────────────────────
 
 /**
  * Load the fast summary layer — runs 4 queries in parallel.
  * Target: < 300ms total.
  */
-export async function loadAnalyticsSummary(userId: string): Promise<AnalyticsSummary> {
-  const empty: AnalyticsSummary = {
-    totalQuestionsAnswered: 0,
-    overallAccuracyPct: null,
-    streakDays: 0,
-    latestReadinessScore: null,
-    latestReadinessBand: null,
-    catSessionCount: 0,
-    studySessionCount: 0,
-  };
-
-  if (!userId || !isDatabaseUrlConfigured()) return empty;
+export async function loadAnalyticsSummary(userId: string): Promise<AnalyticsLoadResult<AnalyticsSummary>> {
+  if (!userId) return analyticsError("missing_user_id");
+  if (!isDatabaseUrlConfigured()) return analyticsError("database_not_configured");
 
   try {
-    const [studySessionCount, latestCat, topicStats, streakDays] = await Promise.all([
+    const [studySessionCount, latestCat, topicStats] = await Promise.all([
       withRetry(() =>
         prisma.examAttempt.count({ where: { userId } }),
       ),
@@ -387,8 +466,15 @@ export async function loadAnalyticsSummary(userId: string): Promise<AnalyticsSum
           take: 200,
         }),
       ),
-      loadStudyStreakDays(userId).catch(() => 0),
     ]);
+
+    let streakDays = 0;
+    let streakFailureReason: string | null = null;
+    try {
+      streakDays = await loadStudyStreakDays(userId);
+    } catch (e) {
+      streakFailureReason = e instanceof Error ? e.message : "streak_load_failed";
+    }
 
     // Compute accuracy from UserTopicStat aggregates
     let totalCorrect = 0;
@@ -415,7 +501,7 @@ export async function loadAnalyticsSummary(userId: string): Promise<AnalyticsSum
       }),
     );
 
-    return {
+    const built: AnalyticsSummary = {
       totalQuestionsAnswered: totalAttempted > 0 ? totalAttempted : studySessionCount,
       overallAccuracyPct,
       streakDays,
@@ -424,9 +510,14 @@ export async function loadAnalyticsSummary(userId: string): Promise<AnalyticsSum
       catSessionCount,
       studySessionCount,
     };
+
+    if (streakFailureReason) {
+      return analyticsDegraded(built, streakFailureReason);
+    }
+    return analyticsOk(built);
   } catch {
     logAnalyticsFailure("summary_block_failed", userId);
-    return empty;
+    return analyticsError("summary_load_failed");
   }
 }
 
@@ -437,9 +528,10 @@ export async function loadAnalyticsSummary(userId: string): Promise<AnalyticsSum
 export async function loadReadinessTrend(
   userId: string,
   limit = 10,
-): Promise<{ points: ReadinessTrendPoint[]; hasMore: boolean; cursor: string | null }> {
-  if (!userId || !isDatabaseUrlConfigured()) {
-    return { points: [], hasMore: false, cursor: null };
+): Promise<AnalyticsLoadResult<AnalyticsReadinessTrendWindow>> {
+  if (!userId) return analyticsError("missing_user_id");
+  if (!isDatabaseUrlConfigured()) {
+    return analyticsError("database_not_configured");
   }
 
   try {
@@ -470,10 +562,10 @@ export async function loadReadinessTrend(
     }
 
     const cursor = window.length > 0 ? (window[window.length - 1]?.id ?? null) : null;
-    return { points, hasMore, cursor };
+    return analyticsOk({ points, hasMore, cursor });
   } catch {
     logAnalyticsFailure("readiness_trend_block_failed", userId);
-    return { points: [], hasMore: false, cursor: null };
+    return analyticsError("readiness_trend_load_failed");
   }
 }
 
@@ -485,9 +577,10 @@ export async function loadMoreReadinessTrend(
   userId: string,
   afterId: string,
   limit = 10,
-): Promise<{ points: ReadinessTrendPoint[]; hasMore: boolean; cursor: string | null }> {
-  if (!userId || !isDatabaseUrlConfigured()) {
-    return { points: [], hasMore: false, cursor: null };
+): Promise<AnalyticsLoadResult<AnalyticsReadinessTrendWindow>> {
+  if (!userId) return analyticsError("missing_user_id");
+  if (!isDatabaseUrlConfigured()) {
+    return analyticsError("database_not_configured");
   }
 
   try {
@@ -516,10 +609,10 @@ export async function loadMoreReadinessTrend(
     }).filter((p) => p.score > 0);
 
     const cursor = window.length > 0 ? (window[window.length - 1]?.id ?? null) : null;
-    return { points, hasMore, cursor };
+    return analyticsOk({ points, hasMore, cursor });
   } catch {
     logAnalyticsFailure("more_readiness_trend_block_failed", userId);
-    return { points: [], hasMore: false, cursor: null };
+    return analyticsError("readiness_trend_more_load_failed");
   }
 }
 
@@ -546,8 +639,9 @@ export async function loadConfidenceScatterPoints(
   userId: string,
   sessionLimit = 25,
   maxPoints = 160,
-): Promise<ConfidenceScatterPoint[]> {
-  if (!userId || !isDatabaseUrlConfigured()) return [];
+): Promise<AnalyticsLoadResult<ConfidenceScatterPoint[]>> {
+  if (!userId) return analyticsError("missing_user_id");
+  if (!isDatabaseUrlConfigured()) return analyticsError("database_not_configured");
 
   try {
     const recentSessions = await withRetry(() =>
@@ -564,7 +658,7 @@ export async function loadConfidenceScatterPoints(
     for (const session of sessions) {
       const items = parseAttemptResults(session.results);
       for (let i = 0; i < items.length; i++) {
-        if (out.length >= maxPoints) return out;
+        if (out.length >= maxPoints) return analyticsOk(out);
         const item = items[i]!;
         if (item.confidence === null) continue;
         const seed = `${session.id}:${item.questionId}:${i}`;
@@ -577,10 +671,10 @@ export async function loadConfidenceScatterPoints(
         out.push({ id: seed, x, y });
       }
     }
-    return out;
+    return analyticsOk(out);
   } catch {
     logAnalyticsFailure("confidence_scatter_block_failed", userId);
-    return [];
+    return analyticsError("confidence_scatter_load_failed");
   }
 }
 
@@ -591,17 +685,9 @@ export async function loadConfidenceScatterPoints(
 export async function loadConfidencePatterns(
   userId: string,
   sessionLimit = 20,
-): Promise<ConfidencePatternSummary> {
-  const empty: ConfidencePatternSummary = {
-    overconfidentErrors: 0,
-    uncertainCorrect: 0,
-    stableMastery: 0,
-    totalRated: 0,
-    highConfidenceAccuracy: null,
-    sessionsAnalyzed: 0,
-  };
-
-  if (!userId || !isDatabaseUrlConfigured()) return empty;
+): Promise<AnalyticsLoadResult<ConfidencePatternSummary>> {
+  if (!userId) return analyticsError("missing_user_id");
+  if (!isDatabaseUrlConfigured()) return analyticsError("database_not_configured");
 
   try {
     const recentSessions = await withRetry(() =>
@@ -635,17 +721,17 @@ export async function loadConfidencePatterns(
       }
     }
 
-    return {
+    return analyticsOk({
       overconfidentErrors,
       uncertainCorrect,
       stableMastery,
       totalRated,
       highConfidenceAccuracy: highTotal > 0 ? highCorrect / highTotal : null,
       sessionsAnalyzed: sessions.length,
-    };
+    });
   } catch {
     logAnalyticsFailure("confidence_patterns_block_failed", userId);
-    return empty;
+    return analyticsError("confidence_patterns_load_failed");
   }
 }
 
@@ -656,7 +742,7 @@ export async function loadConfidencePatterns(
 export async function loadTimeMetrics(
   userId: string,
   sessionLimit = 10,
-): Promise<TimeMetrics> {
+): Promise<AnalyticsLoadResult<TimeMetrics>> {
   const empty: TimeMetrics = {
     avgMsPerQuestion: null,
     avgSessionDurationMs: null,
@@ -667,7 +753,8 @@ export async function loadTimeMetrics(
     maxSessionMs: null,
   };
 
-  if (!userId || !isDatabaseUrlConfigured()) return empty;
+  if (!userId) return analyticsError("missing_user_id");
+  if (!isDatabaseUrlConfigured()) return analyticsError("database_not_configured");
 
   try {
     const recentSessions = await withRetry(() =>
@@ -684,7 +771,7 @@ export async function loadTimeMetrics(
     );
     const sessions = recentSessions.slice(0, sessionLimit);
 
-    if (sessions.length === 0) return empty;
+    if (sessions.length === 0) return analyticsOk(empty);
 
     let totalMs = 0;
     let totalQs = 0;
@@ -714,7 +801,7 @@ export async function loadTimeMetrics(
       if (maxMs === null || ms > maxMs) maxMs = ms;
     }
 
-    return {
+    return analyticsOk({
       avgMsPerQuestion: totalQs > 0 ? Math.round(totalMs / totalQs) : null,
       avgSessionDurationMs: sessions.length > 0 ? Math.round(totalMs / sessions.length) : null,
       rushSessions,
@@ -722,10 +809,10 @@ export async function loadTimeMetrics(
       sessionsAnalyzed: sessions.length,
       minSessionMs: minMs,
       maxSessionMs: maxMs,
-    };
+    });
   } catch {
     logAnalyticsFailure("time_metrics_block_failed", userId);
-    return empty;
+    return analyticsError("time_metrics_load_failed");
   }
 }
 
@@ -736,8 +823,9 @@ export async function loadTimeMetrics(
 export async function loadTopicBreakdown(
   userId: string,
   limit = 15,
-): Promise<TopicRow[]> {
-  if (!userId || !isDatabaseUrlConfigured()) return [];
+): Promise<AnalyticsLoadResult<TopicRow[]>> {
+  if (!userId) return analyticsError("missing_user_id");
+  if (!isDatabaseUrlConfigured()) return analyticsError("database_not_configured");
 
   try {
     const rows = await withRetry(() =>
@@ -749,21 +837,23 @@ export async function loadTopicBreakdown(
       }),
     );
 
-    return rows
-      .filter((r) => r.correctCount + r.wrongCount >= 3)
-      .map((r) => {
-        const total = r.correctCount + r.wrongCount;
-        return {
-          topic: r.topic,
-          correctCount: r.correctCount,
-          totalCount: total,
-          accuracyPct: total > 0 ? Math.round((r.correctCount / total) * 100) : 0,
-        };
-      })
-      .sort((a, b) => b.totalCount - a.totalCount);
+    return analyticsOk(
+      rows
+        .filter((r) => r.correctCount + r.wrongCount >= 3)
+        .map((r) => {
+          const total = r.correctCount + r.wrongCount;
+          return {
+            topic: r.topic,
+            correctCount: r.correctCount,
+            totalCount: total,
+            accuracyPct: total > 0 ? Math.round((r.correctCount / total) * 100) : 0,
+          };
+        })
+        .sort((a, b) => b.totalCount - a.totalCount),
+    );
   } catch {
     logAnalyticsFailure("topic_breakdown_block_failed", userId);
-    return [];
+    return analyticsError("topic_breakdown_load_failed");
   }
 }
 
@@ -774,8 +864,9 @@ export async function loadTopicBreakdown(
 export async function loadQuestionTypeBreakdown(
   userId: string,
   sessionLimit = 40,
-): Promise<QuestionTypeRow[]> {
-  if (!userId || !isDatabaseUrlConfigured()) return [];
+): Promise<AnalyticsLoadResult<QuestionTypeRow[]>> {
+  if (!userId) return analyticsError("missing_user_id");
+  if (!isDatabaseUrlConfigured()) return analyticsError("database_not_configured");
 
   try {
     const recentSessions = await withRetry(() =>
@@ -798,7 +889,7 @@ export async function loadQuestionTypeBreakdown(
     }
 
     const uniqueIds = [...new Set(allItems.map((i) => i.qid))];
-    if (uniqueIds.length === 0) return [];
+    if (uniqueIds.length === 0) return analyticsOk([]);
 
     const typeById = new Map<string, string>();
     const CHUNK = 200;
@@ -825,21 +916,23 @@ export async function loadQuestionTypeBreakdown(
       tallies.set(qt, t);
     }
 
-    return [...tallies.entries()]
-      .map(([questionType, { c, w }]) => {
-        const total = c + w;
-        return {
-          questionType,
-          correctCount: c,
-          wrongCount: w,
-          accuracyPct: total > 0 ? Math.round((c / total) * 100) : 0,
-        };
-      })
-      .filter((r) => r.correctCount + r.wrongCount >= 3)
-      .sort((a, b) => b.correctCount + b.wrongCount - (a.correctCount + a.wrongCount));
+    return analyticsOk(
+      [...tallies.entries()]
+        .map(([questionType, { c, w }]) => {
+          const total = c + w;
+          return {
+            questionType,
+            correctCount: c,
+            wrongCount: w,
+            accuracyPct: total > 0 ? Math.round((c / total) * 100) : 0,
+          };
+        })
+        .filter((r) => r.correctCount + r.wrongCount >= 3)
+        .sort((a, b) => b.correctCount + b.wrongCount - (a.correctCount + a.wrongCount)),
+    );
   } catch {
     logAnalyticsFailure("question_type_block_failed", userId);
-    return [];
+    return analyticsError("question_type_load_failed");
   }
 }
 
@@ -853,7 +946,7 @@ export async function loadAnalyticsPagePayload(
 ): Promise<AnalyticsPagePayload> {
   const [
     summary,
-    trendResult,
+    trend,
     initialTopicRows,
     questionTypeRows,
     confidenceScatterPoints,
@@ -869,21 +962,25 @@ export async function loadAnalyticsPagePayload(
     loadDailyQuestionActivity(userId, 28),
   ]);
 
-  const supplemental: AnalyticsSupplementalMetrics = {
-    ...dbSupplemental,
-    passProbabilityEstimate: derivePassProbabilityEstimate(summary),
-    adaptiveDifficultyDisplay: deriveAdaptiveDifficultyDisplay(summary),
-  };
-
-  return {
+  const { supplemental, analyticsQuality } = buildAnalyticsSupplementalAndQuality({
     summary,
-    trendWindow: trendResult.points,
-    hasMorTrend: trendResult.hasMore,
-    trendCursor: trendResult.cursor,
+    trend,
     initialTopicRows,
     questionTypeRows,
     confidenceScatterPoints,
-    supplemental,
+    dbSupplemental,
     dailyActivity,
+  });
+
+  return {
+    summary,
+    trend,
+    initialTopicRows,
+    questionTypeRows,
+    confidenceScatterPoints,
+    dbSupplemental,
+    dailyActivity,
+    supplemental,
+    analyticsQuality,
   };
 }

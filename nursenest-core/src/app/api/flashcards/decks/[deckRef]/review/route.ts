@@ -21,7 +21,8 @@ import {
 } from "@/lib/observability/flashcard-log";
 import { enforceFlashcardReviewProtection } from "@/lib/http/api-protection";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
-import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { validateFlashcardsPostLaunchRequest } from "@/lib/learner/study-product-route-contract";
 import type { Prisma } from "@prisma/client";
 import { toSchedulerRating } from "@/lib/flashcards/map-study-rating";
 
@@ -58,6 +59,22 @@ export async function POST(req: NextRequest, { params }: Props) {
   const { deckRef } = await params;
 
   setSentryServerContext({ route: "/api/flashcards/decks/[deckRef]/review", feature: SERVER_FEATURE.flashcard, userId });
+
+  const surface = validateFlashcardsPostLaunchRequest(req);
+  if (!surface.ok) {
+    safeServerLog("api_flashcards", "study_launch_route_contract_violation", {
+      event: "study_launch_route_contract_violation",
+      feature_surface: "flashcards",
+      outcome: "rejected_invalid_route",
+      expected: surface.expected,
+      received: surface.received,
+      user_id_prefix: userId.slice(0, 8),
+    });
+    return NextResponse.json(
+      { error: surface.error, expected: surface.expected, received: surface.received, reason: surface.reason, retryable: false },
+      { status: 403 },
+    );
+  }
 
   const reviewLimited = await enforceFlashcardReviewProtection(req, userId);
   if (reviewLimited) return reviewLimited;

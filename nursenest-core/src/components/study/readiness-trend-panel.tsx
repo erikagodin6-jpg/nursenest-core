@@ -16,17 +16,13 @@
 
 import { useState, useTransition } from "react";
 import { getReadinessBand, BAND_LABELS } from "./cat-readiness-hero";
-import type { ReadinessTrendPoint } from "@/lib/study/analytics-data";
+import type { AnalyticsReadinessTrendWindow, ReadinessTrendPoint } from "@/lib/study/analytics-data";
+import type { AnalyticsLoadResult } from "@/lib/study/analytics-load-result";
+import { analyticsResolvedData } from "@/lib/study/analytics-load-result";
 
 type Props = {
-  initialPoints: ReadinessTrendPoint[];
-  hasMore: boolean;
-  cursor: string | null;
-  onLoadMore: (cursor: string) => Promise<{
-    points: ReadinessTrendPoint[];
-    hasMore: boolean;
-    cursor: string | null;
-  }>;
+  trend: AnalyticsLoadResult<AnalyticsReadinessTrendWindow>;
+  onLoadMore: (cursor: string) => Promise<AnalyticsLoadResult<AnalyticsReadinessTrendWindow>>;
   /** Override default section heading. */
   title?: string;
   subtitle?: string;
@@ -34,27 +30,39 @@ type Props = {
   className?: string;
 };
 
+function bundleFromTrend(t: AnalyticsLoadResult<AnalyticsReadinessTrendWindow>): AnalyticsReadinessTrendWindow {
+  const d = analyticsResolvedData(t);
+  return d ?? { points: [], hasMore: false, cursor: null };
+}
+
 export function ReadinessTrendPanel({
-  initialPoints,
-  hasMore: initialHasMore,
-  cursor: initialCursor,
+  trend,
   onLoadMore,
   title = "Readiness evolution",
   subtitle = "Based on CAT readiness scores over time",
   className = "",
 }: Props) {
-  const [points, setPoints] = useState<ReadinessTrendPoint[]>(initialPoints);
-  const [hasMore, setHasMore] = useState(initialHasMore);
-  const [cursor, setCursor] = useState<string | null>(initialCursor);
+  const initialBundle = bundleFromTrend(trend);
+  const [points, setPoints] = useState<ReadinessTrendPoint[]>(initialBundle.points);
+  const [hasMore, setHasMore] = useState(initialBundle.hasMore);
+  const [cursor, setCursor] = useState<string | null>(initialBundle.cursor);
   const [isPending, startTransition] = useTransition();
+  const [loadMoreError, setLoadMoreError] = useState<string | null>(null);
 
   function handleLoadMore() {
     if (!cursor) return;
+    setLoadMoreError(null);
     startTransition(async () => {
       const result = await onLoadMore(cursor);
-      setPoints((prev) => [...prev, ...result.points]);
-      setHasMore(result.hasMore);
-      setCursor(result.cursor);
+      if (result.kind === "error") {
+        setLoadMoreError(result.reason);
+        return;
+      }
+      const data = analyticsResolvedData(result);
+      if (!data) return;
+      setPoints((prev) => [...prev, ...data.points]);
+      setHasMore(data.hasMore);
+      setCursor(data.cursor);
     });
   }
 
@@ -64,6 +72,28 @@ export function ReadinessTrendPanel({
   const delta = hasData && points.length >= 2
     ? (latest?.score ?? 0) - (earliest?.score ?? 0)
     : null;
+
+  if (trend.kind === "error") {
+    return (
+      <section
+        className={`rounded-2xl border p-5 sm:p-6 ${className}`.trim()}
+        style={{
+          background: "var(--surface-soft-b, var(--semantic-panel-cool))",
+          borderColor: "color-mix(in srgb, var(--semantic-brand) 20%, var(--semantic-border-soft))",
+        }}
+        data-testid="readiness-trend-error"
+      >
+        <div className="mb-3">
+          <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">{title}</h2>
+          <p className="mt-2 text-sm text-[var(--semantic-danger)]">
+            Could not load readiness trend ({trend.reason}). This is not the same as having no CAT history yet.
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  const trendDegradedReason = trend.kind === "degraded" ? trend.reason : null;
 
   return (
     <section
@@ -77,6 +107,11 @@ export function ReadinessTrendPanel({
         <div>
           <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">{title}</h2>
           <p className="mt-0.5 text-xs text-[var(--semantic-text-muted)]">{subtitle}</p>
+          {trendDegradedReason ? (
+            <p className="mt-2 text-xs font-semibold text-[var(--semantic-warning)]" data-testid="readiness-trend-degraded">
+              <span className="uppercase tracking-wide">Degraded</span> — {trendDegradedReason}
+            </p>
+          ) : null}
         </div>
         {hasData && delta !== null && (
           <DeltaBadge delta={delta} sessionCount={points.length} />
@@ -123,6 +158,11 @@ export function ReadinessTrendPanel({
               {isPending ? "Loading…" : "Load older history"}
             </button>
           )}
+          {loadMoreError ? (
+            <p className="text-center text-xs text-[var(--semantic-danger)]" data-testid="readiness-trend-load-more-error">
+              Could not load older history ({loadMoreError}).
+            </p>
+          ) : null}
         </div>
       )}
     </section>

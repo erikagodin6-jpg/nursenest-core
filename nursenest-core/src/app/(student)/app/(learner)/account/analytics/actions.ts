@@ -12,8 +12,9 @@ import type {
   ConfidencePatternSummary,
   TimeMetrics,
   TopicRow,
-  ReadinessTrendPoint,
+  AnalyticsReadinessTrendWindow,
 } from "@/lib/study/analytics-data";
+import type { AnalyticsLoadResult } from "@/lib/study/analytics-load-result";
 
 async function requireSubscriberUserId(): Promise<string | null> {
   const session = await auth();
@@ -30,9 +31,11 @@ async function requireSubscriberUserId(): Promise<string | null> {
  */
 export async function loadMoreTrendData(
   afterId: string,
-): Promise<{ points: ReadinessTrendPoint[]; hasMore: boolean; cursor: string | null }> {
+): Promise<AnalyticsLoadResult<AnalyticsReadinessTrendWindow>> {
   const userId = await requireSubscriberUserId();
-  if (!userId) return { points: [], hasMore: false, cursor: null };
+  if (!userId) {
+    return { kind: "error", reason: "unauthorized" };
+  }
   return loadMoreReadinessTrend(userId, afterId, 10);
 }
 
@@ -40,43 +43,26 @@ export async function loadMoreTrendData(
  * Load detailed confidence patterns on-demand.
  * Called when the confidence panel is expanded / scrolled into view.
  */
-export async function loadConfidencePatternsAction(): Promise<ConfidencePatternSummary> {
-  const empty: ConfidencePatternSummary = {
-    overconfidentErrors: 0,
-    uncertainCorrect: 0,
-    stableMastery: 0,
-    totalRated: 0,
-    highConfidenceAccuracy: null,
-    sessionsAnalyzed: 0,
-  };
+export async function loadConfidencePatternsAction(): Promise<AnalyticsLoadResult<ConfidencePatternSummary>> {
   const userId = await requireSubscriberUserId();
-  if (!userId) return empty;
+  if (!userId) return { kind: "error", reason: "unauthorized" };
   return loadConfidencePatterns(userId, 20);
 }
 
 /**
  * Load time analysis metrics on-demand.
  */
-export async function loadTimeMetricsAction(): Promise<TimeMetrics> {
-  const empty: TimeMetrics = {
-    avgMsPerQuestion: null,
-    avgSessionDurationMs: null,
-    rushSessions: 0,
-    deepStudySessions: 0,
-    sessionsAnalyzed: 0,
-    minSessionMs: null,
-    maxSessionMs: null,
-  };
+export async function loadTimeMetricsAction(): Promise<AnalyticsLoadResult<TimeMetrics>> {
   const userId = await requireSubscriberUserId();
-  if (!userId) return empty;
+  if (!userId) return { kind: "error", reason: "unauthorized" };
   return loadTimeMetrics(userId, 10);
 }
 
 /**
  * Load topic breakdown on-demand.
  */
-export async function loadTopicBreakdownAction(): Promise<TopicRow[]> {
+export async function loadTopicBreakdownAction(): Promise<AnalyticsLoadResult<TopicRow[]>> {
   const userId = await requireSubscriberUserId();
-  if (!userId) return [];
+  if (!userId) return { kind: "error", reason: "unauthorized" };
   return loadTopicBreakdown(userId, 15);
 }

@@ -156,7 +156,13 @@ export function PracticeTestsHubClient({
       const res = await fetch("/api/practice-tests");
       const data = (await res.json()) as { tests?: TestListRow[]; error?: string };
       if (!res.ok) throw new Error(data.error ?? t("learner.practiceTests.hub.error.loadTests"));
-      setList(data.tests ?? []);
+      if (!Array.isArray(data.tests)) {
+        throw new Error(
+          data.error?.trim() ||
+            `${t("learner.practiceTests.hub.error.loadTests")} (invalid response shape — refresh to retry; this is not a trusted empty list).`,
+        );
+      }
+      setList(data.tests);
     } catch (e) {
       setError(e instanceof Error ? e.message : t("learner.practiceTests.hub.error.generic"));
     } finally {
@@ -308,17 +314,23 @@ export function PracticeTestsHubClient({
           : linearPayload;
       const res = await fetch("/api/practice-tests", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+          "x-nn-study-launch-surface": "practice_exams",
+        },
+        body: JSON.stringify(payload),
       });
       const data = (await res.json()) as { id?: string; error?: string; code?: string };
       if (!res.ok) {
         setErrorCode(typeof data.code === "string" ? data.code : null);
         throw new Error(data.error ?? t("learner.practiceTests.hub.error.createTest"));
       }
-      if (data.id) {
-        window.location.href = `/app/practice-tests/${data.id}`;
+      if (!data.id) {
+        throw new Error(
+          `${t("learner.practiceTests.hub.error.createTest")} (missing session id — stay on this page and retry; we will not send you to the dashboard.)`,
+        );
       }
+      window.location.href = `/app/practice-tests/${data.id}`;
     } catch (e) {
       setError(e instanceof Error ? e.message : t("learner.practiceTests.hub.error.generic"));
     } finally {

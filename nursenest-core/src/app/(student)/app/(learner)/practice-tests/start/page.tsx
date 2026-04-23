@@ -17,6 +17,7 @@ import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import type { Metadata } from "next";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export const dynamic = "force-dynamic";
 
@@ -134,24 +135,31 @@ export default async function PathwayCatStartPage({ searchParams }: Props) {
       return [p.id, shell] as const;
     }),
   );
-  const lessonsByPathway = Object.fromEntries(
-    await Promise.all(
-      catEligiblePathways.map(async (pathway) => {
-        let page;
-        try {
-          page = await getPathwayLessonsPage(pathway.id, 1, 5);
-        } catch {
-          page = { items: [] as Array<{ slug: string; title: string }> };
-        }
+  const lessonPreviewSettled = await Promise.allSettled(
+    catEligiblePathways.map((pathway) => getPathwayLessonsPage(pathway.id, 1, 5)),
+  );
+  const lessonsByPathway: Record<string, Array<{ slug: string; title: string }> | null> = Object.fromEntries(
+    catEligiblePathways.map((pathway, i) => {
+      const r = lessonPreviewSettled[i]!;
+      if (r.status === "fulfilled") {
         return [
           pathway.id,
-          page.items.map((item) => ({
+          r.value.items.map((item) => ({
             slug: item.slug,
             title: item.title,
           })),
         ] as const;
-      }),
-    ),
+      }
+      const msg = r.reason instanceof Error ? r.reason.message.slice(0, 400) : String(r.reason).slice(0, 400);
+      safeServerLog("cat_start_page", "lesson_preview_segment_failed", {
+        operation: "cat_start_lesson_preview",
+        feature_surface: "practice_tests_cat_start",
+        pathway_id_prefix: pathway.id.slice(0, 12),
+        outcome: "error",
+        reason: msg,
+      });
+      return [pathway.id, null] as const;
+    }),
   );
 
   return (

@@ -501,6 +501,42 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ id: strin
   }
 
   if (parsed.data.action === "complete") {
+    const answeredForComplete = ids.filter((qid) => merged[qid] !== undefined).length;
+    if (answeredForComplete === 0) {
+      safeServerLog("cat_runner", "practice_test_complete_blocked_no_answers", {
+        event: "practice_test_complete_blocked_no_answers",
+        practiceTestId: id.slice(0, 16),
+        selectionMode: cfg.selectionMode,
+      });
+      return NextResponse.json(
+        {
+          error: "Cannot complete a session with no recorded answers.",
+          code: "complete_no_answers",
+          retryable: false,
+        },
+        { status: 400 },
+      );
+    }
+    if (
+      cfg.selectionMode === "cat" &&
+      (cfg.catAdaptiveSessionType ?? "cat") === "cat" &&
+      answeredForComplete < 2
+    ) {
+      safeServerLog("cat_runner", "cat_complete_blocked_insufficient_adaptive_answers", {
+        event: "cat_complete_blocked_insufficient_adaptive_answers",
+        practiceTestId: id.slice(0, 16),
+        answeredCount: answeredForComplete,
+      });
+      return NextResponse.json(
+        {
+          error:
+            "Strict adaptive (CAT) runs cannot be manually finalized this early. Continue the session from the CAT screen or refresh if the UI is out of sync.",
+          code: "cat_complete_not_terminal",
+          retryable: true,
+        },
+        { status: 400 },
+      );
+    }
     if (cfg.selectionMode === "cat") {
       try {
         const fin = await practiceTestRouteDeps.finalizeCatPracticeTest(ids, merged, gate.entitlement, row.adaptiveState);

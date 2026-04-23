@@ -127,12 +127,23 @@ function deriveNextStep(
   readinessBand: ReadinessBand | null,
   hasEnoughData: boolean,
   criticalLoadFailed: boolean,
+  topicStatsReliable: boolean,
 ): GuidedStudyStep {
   if (criticalLoadFailed) {
     return {
       kind: "baseline",
       title: "We couldn’t refresh your study signals",
       why: "Your personalized plan is paused until practice data loads. This is not the same as having nothing to study.",
+      ctaLabel: "Retry",
+      href: "/app/guided",
+      urgency: "high",
+    };
+  }
+  if (!topicStatsReliable) {
+    return {
+      kind: "baseline",
+      title: "We couldn’t load your topic performance",
+      why: "Without topic stats we cannot tell whether you have weak areas or are caught up. Refresh guided study — an empty list here is not proof you are done.",
       ctaLabel: "Retry",
       href: "/app/guided",
       urgency: "high",
@@ -223,8 +234,9 @@ function buildStudyStack(
   reviewCount: number,
   readinessBand: ReadinessBand | null,
   hasEnoughData: boolean,
+  topicStatsReliable: boolean,
 ): GuidedStudyStep[] {
-  if (!hasEnoughData) return [];
+  if (!hasEnoughData || !topicStatsReliable) return [];
 
   const steps: GuidedStudyStep[] = [];
 
@@ -307,12 +319,23 @@ function buildRetestRec(
   accuracyPct: number | null,
   hasEnoughData: boolean,
   criticalLoadFailed: boolean,
+  topicStatsReliable: boolean,
 ): GuidedRetestRec {
   if (criticalLoadFailed) {
     return {
       band: null,
       message: "We could not load your readiness band. Refresh to retry — this is not a recommendation to wait.",
       ctaLabel: "Refresh guided study",
+      href: "/app/guided",
+      urgency: "not_yet",
+    };
+  }
+  if (!topicStatsReliable) {
+    return {
+      band: null,
+      message:
+        "We could not load your topic performance, so retest guidance is paused. Refresh — this is not a signal to delay studying.",
+      ctaLabel: "Retry",
       href: "/app/guided",
       urgency: "not_yet",
     };
@@ -497,11 +520,13 @@ export async function loadGuidedStudyPayload(userId: string): Promise<GuidedStud
     })
     .slice(0, 4);
 
-  // Topics with wrongStreak > 0 (for review block labels)
-  const reviewLaterTopics = topicStats
-    .filter((s) => s.wrongStreak > 0)
-    .map((s) => s.topic)
-    .slice(0, 3);
+  // Topics with wrongStreak > 0 (for review block labels) — only when topic stats actually loaded
+  const reviewLaterTopics = reliability.topicStats
+    ? topicStats
+        .filter((s) => s.wrongStreak > 0)
+        .map((s) => s.topic)
+        .slice(0, 3)
+    : [];
 
   // ── Compute signals ───────────────────────────────────────────────────────
   const readinessScore = summary?.latestReadinessScore ?? null;
@@ -519,15 +544,29 @@ export async function loadGuidedStudyPayload(userId: string): Promise<GuidedStud
       (reliability.analyticsSummary && (summary?.totalQuestionsAnswered ?? 0) >= 5));
 
   // ── Build recommendation plan ─────────────────────────────────────────────
-  const nextStep = deriveNextStep(rawAreas, reviewLaterCount, readinessBand, hasEnoughData, criticalLoadFailed);
+  const nextStep = deriveNextStep(
+    rawAreas,
+    reviewLaterCount,
+    readinessBand,
+    hasEnoughData,
+    criticalLoadFailed,
+    reliability.topicStats,
+  );
   const studyStack = buildStudyStack(
     nextStep,
     rawAreas,
     reliability.reviewLaterCount ? reviewLaterCount : 0,
     readinessBand,
     hasEnoughData,
+    reliability.topicStats,
   );
-  const retestRec = buildRetestRec(readinessBand, overallAccuracyPct, hasEnoughData, criticalLoadFailed);
+  const retestRec = buildRetestRec(
+    readinessBand,
+    overallAccuracyPct,
+    hasEnoughData,
+    criticalLoadFailed,
+    reliability.topicStats,
+  );
 
   logLearnerStudyLoadDiagnostics({
     operation: "loadGuidedStudyPayload",

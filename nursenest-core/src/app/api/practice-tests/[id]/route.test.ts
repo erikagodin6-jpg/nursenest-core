@@ -1,3 +1,7 @@
+/**
+ * Run: `NODE_ENV=test node --import tsx --test src/app/api/practice-tests/[id]/route.test.ts`
+ * so learner-private cache invalidation is bypassed (see `shouldBypassLearnerPrivateReadCache`).
+ */
 import "../../../../../scripts/stub-server-only.cjs";
 import assert from "node:assert/strict";
 import { afterEach, describe, it, mock } from "node:test";
@@ -6,7 +10,6 @@ import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { PATCH } from "@/app/api/practice-tests/[id]/route";
 import { practiceTestRouteDeps } from "@/app/api/practice-tests/[id]/route-deps";
 import type { SubscriberSessionOk } from "@/lib/entitlements/require-subscriber-session";
-
 const gate: SubscriberSessionOk = {
   ok: true,
   userId: "user_test_123",
@@ -34,6 +37,9 @@ const gate: SubscriberSessionOk = {
   },
 };
 
+const Q1 = "q11111111";
+const Q2 = "q22222222";
+
 const catConfig = {
   questionCount: 75,
   topicNames: [],
@@ -54,7 +60,7 @@ const catResults: PracticeTestResultsJson = {
     Pharmacology: { correct: 2, total: 4 },
   },
   weakAreas: ["Pharmacology"],
-  incorrectQuestionIds: ["q1", "q2"],
+  incorrectQuestionIds: [Q1, Q2],
   estimatedAbility: 0.32,
   abilityStdError: 0.58,
   readinessLabel: "Building confidence",
@@ -131,7 +137,7 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
       id: "test_12345678",
       userId: gate.userId,
       status: PracticeTestStatus.IN_PROGRESS,
-      questionIds: ["q1"],
+      questionIds: [Q1],
       answers: {},
       cursorIndex: 0,
       elapsedMs: null,
@@ -152,7 +158,7 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
     mock.method(practiceTestRouteDeps, "capturePracticeTestCompletedAnalytics", captureCompleted);
     mock.method(practiceTestRouteDeps, "captureCatCoachGenerationAnalytics", captureCoach);
 
-    const res = await PATCH(makeRequest({ action: "cat_advance", answers: { q1: "A" }, cursorIndex: 0 }) as never, {
+    const res = await PATCH(makeRequest({ action: "cat_advance", answers: { [Q1]: "A" }, cursorIndex: 0 }) as never, {
       params: Promise.resolve({ id: "test_12345678" }),
     });
     const data = (await res.json()) as { ok: boolean; catCompleted?: boolean; results?: PracticeTestResultsJson };
@@ -179,8 +185,8 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
       id: "test_12345678",
       userId: gate.userId,
       status: PracticeTestStatus.IN_PROGRESS,
-      questionIds: ["q1", "q2"],
-      answers: { q1: "A" },
+      questionIds: [Q1, Q2],
+      answers: { [Q1]: "A" },
       cursorIndex: 1,
       elapsedMs: null,
       config: {},
@@ -199,9 +205,10 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
     mock.method(practiceTestRouteDeps, "capturePracticeTestCompletedAnalytics", captureCompleted);
     mock.method(practiceTestRouteDeps, "captureCatCoachGenerationAnalytics", captureCoach);
 
-    const res = await PATCH(makeRequest({ action: "complete", answers: { q1: "A", q2: "B" }, cursorIndex: 1 }) as never, {
-      params: Promise.resolve({ id: "test_12345678" }),
-    });
+    const res = await PATCH(
+      makeRequest({ action: "complete", answers: { [Q1]: "A", [Q2]: "B" }, cursorIndex: 1 }) as never,
+      { params: Promise.resolve({ id: "test_12345678" }) },
+    );
     const data = (await res.json()) as { ok: boolean; results?: PracticeTestResultsJson };
 
     assert.equal(res.status, 200);
@@ -210,6 +217,35 @@ describe("PATCH /api/practice-tests/[id] CAT completion paths", () => {
     assert.equal(update.mock.callCount(), 1);
     assert.equal(captureCompleted.mock.callCount(), 1);
     assert.equal(captureCoach.mock.callCount(), 1);
+  });
+
+  it("rejects explicit CAT complete with only one answered item on strict adaptive runs", async () => {
+    mock.method(practiceTestRouteDeps, "requireSubscriberSession", async () => gate);
+    mock.method(practiceTestRouteDeps, "enforcePracticeTestMutationProtection", () => null);
+    mock.method(practiceTestRouteDeps, "setSentryServerContext", () => {});
+    mock.method(practiceTestRouteDeps, "parsePracticeTestConfigAtBoundary", () => ({
+      ...catConfig,
+      catAdaptiveSessionType: "cat" as const,
+    }));
+    mock.method(practiceTestRouteDeps, "findPracticeTest", async () => ({
+      id: "test_12345678",
+      userId: gate.userId,
+      status: PracticeTestStatus.IN_PROGRESS,
+      questionIds: [Q1, Q2],
+      answers: { [Q1]: "A" },
+      cursorIndex: 0,
+      elapsedMs: null,
+      config: {},
+      adaptiveState: {},
+    }));
+
+    const res = await PATCH(makeRequest({ action: "complete", answers: { [Q1]: "A" }, cursorIndex: 0 }) as never, {
+      params: Promise.resolve({ id: "test_12345678" }),
+    });
+    const data = (await res.json()) as { code?: string };
+
+    assert.equal(res.status, 400);
+    assert.equal(data.code, "cat_complete_not_terminal", JSON.stringify(data));
   });
 });
 
@@ -234,7 +270,7 @@ describe("PATCH /api/practice-tests/[id] cursor safety", () => {
       id: "test_12345678",
       userId: gate.userId,
       status: PracticeTestStatus.IN_PROGRESS,
-      questionIds: ["q12345", "q23456", "q34567"],
+      questionIds: ["q12345678", "q23456789", "q34567890"],
       answers: {},
       cursorIndex: 0,
       elapsedMs: null,
@@ -246,7 +282,7 @@ describe("PATCH /api/practice-tests/[id] cursor safety", () => {
     const res = await PATCH(
       makeRequest({
         action: "save",
-        answers: { q12345: "A" },
+        answers: { q12345678: "A" },
         cursorIndex: 999, // intentionally invalid/out-of-range
       }) as never,
       { params: Promise.resolve({ id: "test_12345678" }) },

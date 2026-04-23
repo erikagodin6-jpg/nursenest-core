@@ -26,6 +26,8 @@ import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-re
 import type { LearnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
 import { learnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
 import { logLearnerStudyLoadDiagnostics } from "@/lib/learner/learner-study-load-diagnostics";
+import { progressPagePayloadToDataResult } from "@/lib/learner/progress-page-data-result";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { loadSessionGradingAggregate } from "@/lib/learner/session-grading-aggregate";
 import { loadPathwayTopicCoverageBatch, type PathwayTopicCoverage } from "@/lib/lessons/pathway-topic-coverage";
@@ -99,7 +101,14 @@ export type ProgressPageSegmentReliability = {
   examMockHistory: boolean;
   practiceTestHistory: boolean;
   pathwayTopicCoverage: boolean;
+  /** false when latest incomplete lesson id lookup failed — absence of continue CTA must not imply “no in-progress lesson”. */
+  incompleteLessonProgressLookup: boolean;
+  /** false when we had an in-progress lesson but could not resolve title/href (or resolution threw). */
+  continueLessonHrefResolution: boolean;
 };
+
+/** Top-level load trust for progress page consumers (charts, CTAs). */
+export type ProgressPageLoadOutcome = "ok" | "degraded" | "error";
 
 export type ProgressPagePayload = {
   lessonsPool: LessonsPoolProgress;
@@ -109,6 +118,7 @@ export type ProgressPagePayload = {
   continueLesson: { title: string; href: string } | null;
   degraded?: LearnerAggregateDegradedState;
   segmentReliability: ProgressPageSegmentReliability;
+  loadOutcome: ProgressPageLoadOutcome;
 };
 
 const TRACK_ORDER: RoleTrackSlug[] = ["rn", "rpn", "lpn", "np", "allied"];
@@ -139,6 +149,8 @@ const ALL_SEGMENTS_RELIABLE: ProgressPageSegmentReliability = {
   examMockHistory: true,
   practiceTestHistory: true,
   pathwayTopicCoverage: true,
+  incompleteLessonProgressLookup: true,
+  continueLessonHrefResolution: true,
 };
 
 function sortPathways(a: PathwayProgressCardModel, b: PathwayProgressCardModel): number {
@@ -191,7 +203,10 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
         examMockHistory: false,
         practiceTestHistory: false,
         pathwayTopicCoverage: false,
+        incompleteLessonProgressLookup: false,
+        continueLessonHrefResolution: false,
       },
+      loadOutcome: "degraded",
     };
   }
   const tPage = performance.now();
@@ -311,6 +326,7 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
     }),
     findLatestIncompleteProgressLessonId(userId, visibleLessonScope.lessonIds),
   ]);
+  const parallelMs = Math.round(performance.now() - tParallel);
 
   let contentLessonTotal = 0;
   if (contentLessonTotalResult.status === "fulfilled") {
@@ -343,7 +359,7 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
       operation: "loadProgressPagePayload",
       feature_surface: "progress_page",
       outcome: "error",
-      duration_ms: 0,
+      duration_ms: parallelMs,
       segment: "scoped_lessons_completed",
       user_id_prefix: userId.slice(0, 8),
       reason:
@@ -364,7 +380,7 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
       operation: "loadProgressPagePayload",
       feature_surface: "progress_page",
       outcome: "error",
-      duration_ms: 0,
+      duration_ms: parallelMs,
       segment: "lessons_in_progress_count",
       user_id_prefix: userId.slice(0, 8),
       reason:
@@ -385,7 +401,7 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
       operation: "loadProgressPagePayload",
       feature_surface: "progress_page",
       outcome: "error",
-      duration_ms: 0,
+      duration_ms: parallelMs,
       segment: "user_topic_stat_aggregate",
       user_id_prefix: userId.slice(0, 8),
       reason:
@@ -406,7 +422,7 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
       operation: "loadProgressPagePayload",
       feature_surface: "progress_page",
       outcome: "error",
-      duration_ms: 0,
+      duration_ms: parallelMs,
       segment: "user_topic_stat_count",
       user_id_prefix: userId.slice(0, 8),
       reason:
@@ -427,7 +443,7 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
       operation: "loadProgressPagePayload",
       feature_surface: "progress_page",
       outcome: "error",
-      duration_ms: 0,
+      duration_ms: parallelMs,
       segment: "session_grading_aggregate",
       user_id_prefix: userId.slice(0, 8),
       reason:
@@ -455,7 +471,7 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
       operation: "loadProgressPagePayload",
       feature_surface: "progress_page",
       outcome: "error",
-      duration_ms: 0,
+      duration_ms: parallelMs,
       segment: "exam_attempt_recent",
       user_id_prefix: userId.slice(0, 8),
       reason:
@@ -476,7 +492,7 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
       operation: "loadProgressPagePayload",
       feature_surface: "progress_page",
       outcome: "error",
-      duration_ms: 0,
+      duration_ms: parallelMs,
       segment: "practice_test_count",
       user_id_prefix: userId.slice(0, 8),
       reason:
@@ -504,7 +520,7 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
       operation: "loadProgressPagePayload",
       feature_surface: "progress_page",
       outcome: "error",
-      duration_ms: 0,
+      duration_ms: parallelMs,
       segment: "practice_test_recent_list",
       user_id_prefix: userId.slice(0, 8),
       reason:
@@ -518,10 +534,14 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
   const incompleteProgress =
     incompleteProgressResult.status === "fulfilled" ? incompleteProgressResult.value : null;
   if (incompleteProgressResult.status === "rejected") {
+    reliability.incompleteLessonProgressLookup = false;
+    reliability.continueLessonHrefResolution = false;
+    degradedPanels.push("continue_lesson_progress_lookup");
     logLearnerStudyLoadDiagnostics({
       operation: "loadProgressPagePayload",
       feature_surface: "progress_page",
-      outcome: "degraded",
+      duration_ms: parallelMs,
+      outcome: "error",
       segment: "continue_lesson_progress_lookup",
       user_id_prefix: userId.slice(0, 8),
       reason:
@@ -583,9 +603,35 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
         entitlement,
         learnerPath,
       });
-      if (ref) continueLesson = { title: ref.title, href: ref.href };
-    } catch {
-      continueLesson = null;
+      if (ref) {
+        continueLesson = { title: ref.title, href: ref.href };
+      } else {
+        reliability.continueLessonHrefResolution = false;
+        degradedPanels.push("continue_lesson_href_unresolved");
+        logLearnerStudyLoadDiagnostics({
+          operation: "loadProgressPagePayload",
+          feature_surface: "progress_page",
+          duration_ms: Math.round(performance.now() - tPage),
+          outcome: "error",
+          segment: "continue_lesson_href_resolution",
+          user_id_prefix: userId.slice(0, 8),
+          reason: "resolveLessonRefFromProgressId_returned_null",
+          fallback_used: "false",
+        });
+      }
+    } catch (e) {
+      reliability.continueLessonHrefResolution = false;
+      degradedPanels.push("continue_lesson_href_resolution");
+      logLearnerStudyLoadDiagnostics({
+        operation: "loadProgressPagePayload",
+        feature_surface: "progress_page",
+        duration_ms: Math.round(performance.now() - tPage),
+        outcome: "error",
+        segment: "continue_lesson_href_resolution",
+        user_id_prefix: userId.slice(0, 8),
+        reason: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+        fallback_used: "false",
+      });
     }
   }
 
@@ -632,17 +678,24 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
 
   const degraded =
     degradedPanels.length > 0 ? learnerAggregateDegradedState("temporarily_unavailable", degradedPanels) : undefined;
+  const loadOutcome: ProgressPageLoadOutcome = degraded ? "degraded" : "ok";
   logLearnerStudyLoadDiagnostics({
     operation: "loadProgressPagePayload",
     feature_surface: "progress_page",
     duration_ms: Math.round(performance.now() - tPage),
-    outcome: degraded ? "degraded" : "ok",
+    outcome: loadOutcome,
     user_id_prefix: userId.slice(0, 8),
+    source_row_count: [
+      `pathway_rows=${pathwayRows.length}`,
+      `practice_recent=${practiceRecent.length}`,
+      `mock_raw=${mocksRaw.length}`,
+    ].join(";"),
     fallback_used: degradedPanels.some((p) => p.includes("fallback")) ? "true" : "false",
-    final_outcome: degraded ? "degraded" : "ok",
+    final_outcome: loadOutcome,
   });
 
-  return {
+  const durationTotal = Math.round(performance.now() - tPage);
+  const out: ProgressPagePayload = {
     lessonsPool: {
       available: lessonsAvailable,
       completed: lessonsCompleted,
@@ -669,7 +722,32 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
     continueLesson,
     degraded,
     segmentReliability: reliability,
+    loadOutcome,
   };
+
+  const trust = progressPagePayloadToDataResult(out, durationTotal);
+  safeServerLog("progress_payload", trust.status, {
+    operation: "progress_payload",
+    segment: "aggregate",
+    outcome: trust.status,
+    duration_ms: String(durationTotal),
+    counts: [
+      `pathways=${pathways.length}`,
+      `lessons_avail=${lessonsAvailable}`,
+      `ledger=${ledgerAttempted}`,
+      `topics_practiced=${questionTopicsPracticed}`,
+      `mocks=${mocksRaw.length}`,
+      `practice_recent=${practiceRecent.length}`,
+    ].join(";"),
+    reason:
+      trust.status === "degraded"
+        ? trust.reason.slice(0, 400)
+        : trust.status === "error"
+          ? trust.error.slice(0, 400)
+          : "",
+  });
+
+  return out;
   } catch (e) {
     logLearnerStudyLoadDiagnostics({
       operation: "loadProgressPagePayload",
@@ -681,7 +759,7 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
       reason: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
       fallback_used: "false",
     });
-    return {
+    const errOut: ProgressPagePayload = {
       lessonsPool: { available: 0, completed: 0, inProgress: 0, notStarted: 0 },
       pathways: [],
       questionBank: {
@@ -704,8 +782,22 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
         examMockHistory: false,
         practiceTestHistory: false,
         pathwayTopicCoverage: false,
+        incompleteLessonProgressLookup: false,
+        continueLessonHrefResolution: false,
       },
+      loadOutcome: "error",
     };
+    const durationErr = Math.round(performance.now() - tPage);
+    const trustErr = progressPagePayloadToDataResult(errOut, durationErr);
+    safeServerLog("progress_payload", "error", {
+      operation: "progress_payload",
+      segment: "uncaught",
+      outcome: trustErr.status,
+      duration_ms: String(durationErr),
+      counts: "pathways=0;lessons_avail=0;ledger=0",
+      reason: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+    });
+    return errOut;
   }
 }
 

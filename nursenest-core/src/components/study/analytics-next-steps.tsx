@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
 import type { ConfidencePatternSummary, AnalyticsSummary } from "@/lib/study/analytics-data";
+import type { AnalyticsLoadResult } from "@/lib/study/analytics-load-result";
+import { analyticsResolvedData } from "@/lib/study/analytics-load-result";
 
 type RecKind = "risk" | "build" | "measure" | "consistency" | "progress";
 
@@ -28,10 +30,127 @@ export function AnalyticsNextSteps({
   summary,
   patterns,
 }: {
-  summary: AnalyticsSummary;
-  patterns: ConfidencePatternSummary;
+  summary: AnalyticsLoadResult<AnalyticsSummary>;
+  patterns: AnalyticsLoadResult<ConfidencePatternSummary> | null;
 }) {
-  const steps = buildSteps(summary, patterns);
+  if (patterns === null) {
+    return (
+      <section className="space-y-4" data-testid="analytics-next-steps-loading">
+        <div>
+          <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-muted)]">
+            Recommendations
+          </p>
+          <h2 className="mt-1 flex flex-wrap items-center gap-2 text-lg font-bold text-[var(--semantic-text-primary)]">
+            <Sparkles className="h-5 w-5 text-[var(--semantic-brand)]" aria-hidden />
+            Next best actions
+          </h2>
+          <p className="mt-1 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+            Loading confidence signals for personalized recommendations…
+          </p>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className="h-40 animate-pulse rounded-2xl border"
+              style={{
+                borderColor: "var(--semantic-border-soft)",
+                background: "color-mix(in srgb, var(--semantic-panel-cool) 40%, var(--semantic-surface))",
+              }}
+              aria-hidden
+            />
+          ))}
+        </div>
+        <span className="sr-only">Loading recommendations</span>
+      </section>
+    );
+  }
+
+  if (summary.kind === "error") {
+    return (
+      <section className="space-y-4" data-testid="analytics-next-steps-summary-error">
+        <div>
+          <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-muted)]">
+            Recommendations
+          </p>
+          <h2 className="mt-1 flex flex-wrap items-center gap-2 text-lg font-bold text-[var(--semantic-text-primary)]">
+            <Sparkles className="h-5 w-5 text-[var(--semantic-brand)]" aria-hidden />
+            Next best actions
+          </h2>
+        </div>
+        <p className="text-sm text-[var(--semantic-danger)]">
+          Recommendations unavailable: summary failed to load ({summary.reason}). This is not the same as having no
+          study history yet.
+        </p>
+      </section>
+    );
+  }
+
+  if (patterns.kind === "error") {
+    return (
+      <section className="space-y-4" data-testid="analytics-next-steps-patterns-error">
+        <div>
+          <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-muted)]">
+            Recommendations
+          </p>
+          <h2 className="mt-1 flex flex-wrap items-center gap-2 text-lg font-bold text-[var(--semantic-text-primary)]">
+            <Sparkles className="h-5 w-5 text-[var(--semantic-brand)]" aria-hidden />
+            Next best actions
+          </h2>
+        </div>
+        <p className="text-sm text-[var(--semantic-danger)]">
+          Recommendations unavailable: confidence pattern load failed ({patterns.reason}). Fix the error to see
+          tailored next steps — empty cards here would misleadingly look like “nothing to do”.
+        </p>
+      </section>
+    );
+  }
+
+  if (patterns.kind === "empty") {
+    return (
+      <section className="space-y-4" data-testid="analytics-next-steps-patterns-empty">
+        <div>
+          <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--semantic-text-muted)]">
+            Recommendations
+          </p>
+          <h2 className="mt-1 flex flex-wrap items-center gap-2 text-lg font-bold text-[var(--semantic-text-primary)]">
+            <Sparkles className="h-5 w-5 text-[var(--semantic-brand)]" aria-hidden />
+            Next best actions
+          </h2>
+        </div>
+        <p className="text-sm text-[var(--semantic-text-muted)]">
+          No confidence-rated attempts yet — add a few self-ratings during practice to unlock tailored next steps.
+        </p>
+      </section>
+    );
+  }
+
+  if (summary.kind === "empty") {
+    return (
+      <section className="space-y-4" data-testid="analytics-next-steps-summary-empty">
+        <p className="text-sm text-[var(--semantic-text-muted)]">No summary data — complete a practice session to unlock recommendations.</p>
+      </section>
+    );
+  }
+
+  const summaryData = analyticsResolvedData(summary);
+  const patternsData = analyticsResolvedData(patterns);
+  if (summaryData == null || patternsData == null) {
+    return (
+      <section className="space-y-4" data-testid="analytics-next-steps-unresolved">
+        <p className="text-sm text-[var(--semantic-text-muted)]">Recommendations are temporarily unavailable.</p>
+      </section>
+    );
+  }
+
+  const steps = buildSteps(summaryData, patternsData);
+  const degradedNote =
+    summary.kind === "degraded" || patterns.kind === "degraded" ? (
+      <p className="text-xs font-semibold text-[var(--semantic-warning)]" data-testid="analytics-next-steps-degraded">
+        <span className="uppercase tracking-wide">Degraded</span> — some inputs may be partial; suggestions still
+        reflect the data we could load.
+      </p>
+    ) : null;
 
   return (
     <section className="space-y-4">
@@ -46,6 +165,7 @@ export function AnalyticsNextSteps({
         <p className="mt-1 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
           Personalized recommendations from your adaptive performance and confidence patterns.
         </p>
+        {degradedNote}
       </div>
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5">
         {steps.map((step, i) => (

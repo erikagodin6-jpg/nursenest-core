@@ -10,6 +10,7 @@ import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { prisma } from "@/lib/db";
 import { loadAnalyticsPagePayload } from "@/lib/study/analytics-data";
+import { analyticsResolvedData } from "@/lib/study/analytics-load-result";
 import { AnalyticsPerformanceReport } from "@/components/study/analytics-performance-report";
 import { AnalyticsDetailClient } from "./analytics-detail-client";
 import { loadMoreTrendData } from "./actions";
@@ -102,14 +103,13 @@ export default async function AccountAnalyticsPage() {
   ]);
   const {
     summary,
-    trendWindow,
-    hasMorTrend,
-    trendCursor,
+    trend,
     initialTopicRows,
     questionTypeRows,
     confidenceScatterPoints,
     supplemental,
     dailyActivity,
+    analyticsQuality,
   } = payload;
 
   const displayName =
@@ -128,10 +128,13 @@ export default async function AccountAnalyticsPage() {
         })}.`
       : null;
 
+  const summaryData = analyticsResolvedData(summary);
   const noAnalyticsYet =
-    summary.totalQuestionsAnswered === 0 &&
-    summary.studySessionCount === 0 &&
-    summary.catSessionCount === 0;
+    summary.kind !== "error" &&
+    summaryData != null &&
+    summaryData.totalQuestionsAnswered === 0 &&
+    summaryData.studySessionCount === 0 &&
+    summaryData.catSessionCount === 0;
   const analyticsIntro = emptyStateCopy.noAnalyticsYet();
 
   return (
@@ -167,12 +170,11 @@ export default async function AccountAnalyticsPage() {
             credentialLine={credentialLine}
             targetExamLine={targetExamLine}
             summary={summary}
+            trend={trend}
             supplemental={supplemental}
             dailyActivity={dailyActivity}
-            initialTrendPoints={trendWindow}
-            hasMorTrend={hasMorTrend}
-            trendCursor={trendCursor}
             initialTopicRows={initialTopicRows}
+            analyticsQuality={analyticsQuality}
             onLoadMoreTrend={loadMoreTrendData}
           />
         </>

@@ -1,17 +1,23 @@
 /**
  * Typed outcomes for **critical** server loads where empty must never masquerade as a thrown/timeout failure.
  * Call sites should branch UI on `status`; do not collapse `error` into `empty` without logging.
+ *
+ * Canonical name: {@link DataResult}. Prefer `error` (not `reason`) on the `error` branch; `degraded` carries a human reason plus partial data.
  */
 
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-export type CriticalLoadResult<T> =
+/** Single shared discriminated union for learner-critical loads (progress, hubs, study payloads). */
+export type DataResult<T> =
   | { status: "ok"; data: T; durationMs: number }
   | { status: "empty"; data: T; durationMs: number }
-  | { status: "error"; reason: string; retryable: boolean; durationMs: number };
+  | { status: "error"; error: string; retryable: boolean; durationMs: number }
+  | { status: "degraded"; data: Partial<T>; reason: string; durationMs: number };
+
+export type CriticalLoadResult<T> = DataResult<T>;
 
 /** Alias for product specs / audits that refer to `LoadResult`. */
-export type LoadResult<T> = CriticalLoadResult<T>;
+export type LoadResult<T> = DataResult<T>;
 
 /** How eligibility was resolved relative to Next.js data cache (for diagnostics only). */
 export type ContractCacheMode = "fresh" | "cached" | "mixed" | "unknown";

@@ -38,7 +38,8 @@ export function PathwayCatSessionStartClient({
   pathwayOptions: PracticeTestPathwayOption[];
   /** Server-resolved pathway rows for labels + links (avoids importing the exam catalog in this client bundle). */
   pathwayShellById: Record<string, PracticeTestPathwayClientShell>;
-  fallbackLessonsByPathway?: Record<string, Array<{ slug: string; title: string }>>;
+  /** Per pathway: lesson links, empty list when truly none, or `null` when preview load failed (never fake-empty on error). */
+  fallbackLessonsByPathway?: Record<string, Array<{ slug: string; title: string }> | null>;
 }) {
   const isDev = process.env.NODE_ENV !== "production";
   const [pathwayId, setPathwayId] = useState(() => {
@@ -84,7 +85,9 @@ export function PathwayCatSessionStartClient({
     [readinessConfig, publicCopy],
   );
   const afterSessionPoints = useMemo(() => catAfterSessionPoints(), []);
-  const fallbackLessons = normalizedPathwayId ? (fallbackLessonsByPathway?.[normalizedPathwayId] ?? []) : [];
+  const rawFallbackLessons = normalizedPathwayId ? fallbackLessonsByPathway?.[normalizedPathwayId] : undefined;
+  const fallbackLessons = Array.isArray(rawFallbackLessons) ? rawFallbackLessons : [];
+  const fallbackLessonsLoadFailed = Boolean(normalizedPathwayId && rawFallbackLessons === null);
   const lessonsHubHref = pathwayMeta ? buildExamPathwayPath(pathwayMeta, "lessons") : "/app/lessons";
   const pathwayQuestionsHref = pathwayMeta ? buildExamPathwayPath(pathwayMeta, "questions") : null;
   const uiState = resolveCatStartUiState({
@@ -333,6 +336,12 @@ export function PathwayCatSessionStartClient({
         >
           <p className="font-semibold text-[var(--theme-heading-text)]">{readinessGate.title}</p>
           <p className="mt-1 text-[var(--semantic-text-secondary)]">{readiness.message}</p>
+          {fallbackLessonsLoadFailed ? (
+            <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">
+              Recommended lessons could not be loaded for this pathway. This is not the same as having no lessons — open
+              your pathway lesson library from the hub.
+            </p>
+          ) : null}
           {fallbackLessons.length > 0 ? (
             <div className="mt-3">
               <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Study next</p>

@@ -40,6 +40,8 @@ export function LearnerProgressPageContent({
   localeTag: string;
 }) {
   const { lessonsPool, pathways, questionBank, exams, continueLesson, segmentReliability } = data;
+  const continueBlockTrusted =
+    segmentReliability.incompleteLessonProgressLookup && segmentReliability.continueLessonHrefResolution;
   const poolUnreliable =
     !segmentReliability.contentLessonInventoryCount ||
     !segmentReliability.pathwaySummaries ||
@@ -49,6 +51,24 @@ export function LearnerProgressPageContent({
 
   return (
     <div className="space-y-6 sm:space-y-8">
+      {data.loadOutcome === "error" ? (
+        <section
+          className="rounded-2xl border border-dashed border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-muted/10 p-4 sm:p-5"
+          data-testid="progress-load-error-banner"
+        >
+          <p className="font-medium text-foreground">We could not load your progress aggregates</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Numbers below may be placeholders. This is a load failure — not proof you have no activity.{" "}
+            <Link href="/app/account/progress" className="font-semibold text-primary underline-offset-2 hover:underline">
+              Retry
+            </Link>
+            {" · "}
+            <Link href="/contact" className="font-semibold text-primary underline-offset-2 hover:underline">
+              {t("learner.account.personal.contactLink")}
+            </Link>
+          </p>
+        </section>
+      ) : null}
       {continueLesson ? (
         <section className="rounded-2xl border border-role-cta/25 bg-role-cta-soft/50 p-4 sm:p-5">
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.progressPage.continueTitle")}</p>
@@ -59,6 +79,28 @@ export function LearnerProgressPageContent({
           >
             {continueLesson.title}
           </Link>
+        </section>
+      ) : !continueBlockTrusted ? (
+        <section
+          className="rounded-2xl border border-dashed border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] bg-muted/10 p-4 text-sm text-muted-foreground sm:p-5"
+          data-testid="progress-continue-degraded"
+        >
+          <p className="font-medium text-foreground">We couldn’t verify your in-progress lesson link</p>
+          <p className="mt-2">
+            This is not the same as having nothing to continue — refresh the page or open your lesson library to pick up
+            where you left off.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-3">
+            <Link
+              href="/app/account/progress"
+              className="font-semibold text-primary underline-offset-2 hover:underline"
+            >
+              Refresh progress
+            </Link>
+            <Link href="/app/lessons" className="font-semibold text-primary underline-offset-2 hover:underline">
+              {t("learner.progressPage.openLessons")}
+            </Link>
+          </div>
         </section>
       ) : (
         <section className="rounded-2xl border border-dashed border-border/70 bg-muted/10 p-4 text-sm text-muted-foreground sm:p-5">

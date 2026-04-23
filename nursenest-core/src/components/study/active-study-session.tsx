@@ -14,11 +14,8 @@ import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-tr
 import { ExamSessionProgressStrip } from "@/components/exam/exam-session-shell";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
 import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
-import {
-  firstTeachingLine,
-  FlashcardExamMcqAnswerList,
-  FlashcardStudyQuestionStack,
-} from "@/components/flashcards/flashcard-study-question-stack";
+import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
+import { firstTeachingLine, FlashcardStudyQuestionStack } from "@/components/flashcards/flashcard-study-question-stack";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 
 export type ActiveStudyCard = {
@@ -193,6 +190,12 @@ export function ActiveStudySession({
   useEffect(() => {
     setSplitMcqPick(null);
   }, [current?.id]);
+
+  useEffect(() => {
+    if (!splitMcqPick || revealed || !current?.examMicroQuestion) return;
+    const id = requestAnimationFrame(() => setRevealed(true));
+    return () => cancelAnimationFrame(id);
+  }, [splitMcqPick, revealed, current?.examMicroQuestion]);
 
   const sessionCount = Math.max(
     1,
@@ -904,7 +907,6 @@ export function ActiveStudySession({
                 revealHint={t("learner.flashcards.session.revealHint")}
                 onPickLetter={(letter) => {
                   setSplitMcqPick(letter);
-                  setRevealed(true);
                 }}
               />
             </div>

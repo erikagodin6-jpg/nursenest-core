@@ -42,6 +42,7 @@ import {
   assertCatAdvanceResponseShape,
   buildCatAdvancePatchBody,
 } from "@/lib/practice-tests/cat-advance-contract";
+import { assessCatPracticeHydrateInvariants } from "@/lib/practice-tests/cat-session-surface-invariants";
 import { PracticeSessionLayout } from "@/components/study/practice-session-layout";
 import { normalizePracticeTestQuestionIds } from "@/lib/practice-tests/practice-test-question-ids";
 import { PracticeRationaleFullPanel } from "@/components/study/practice-rationale-full-panel";
@@ -288,6 +289,17 @@ export function PracticeTestRunnerClient({
           ? normalizePracticeTestQuestionIds(data.questionIds)
           : normalizePracticeTestQuestionIds((data.questions ?? []).map((q) => q.id));
       setQuestionIds(ids);
+      const hydrateInv = assessCatPracticeHydrateInvariants({
+        catMode: Boolean(data.catMode),
+        status: data.status ?? "IN_PROGRESS",
+        questionIds: ids,
+      });
+      if (!hydrateInv.ok) {
+        logSessionEvent("cat_hydrate_invariant_block", { code: hydrateInv.code });
+        setError(hydrateInv.message);
+        setPhase("error");
+        return;
+      }
       if ((data.questions?.length ?? 0) > 0) {
         const seed: Record<string, QRow> = {};
         for (const q of data.questions!) seed[q.id] = q;
@@ -351,6 +363,12 @@ export function PracticeTestRunnerClient({
       if (data.status === "IN_PROGRESS" && data.timedMode && data.timeLimitSec) {
         const usedSec = data.elapsedMs != null ? Math.floor(data.elapsedMs / 1000) : 0;
         const serverRemaining = Math.max(0, data.timeLimitSec - usedSec);
+        if (data.catMode && serverRemaining === 0) {
+          logSessionEvent("cat_timer_zero_on_hydrate", {
+            timeLimitSec: data.timeLimitSec,
+            elapsedMs: data.elapsedMs ?? null,
+          });
+        }
         setRemainingSec((prev) => {
           if (prev == null) return serverRemaining;
           // Never increase remaining time on refresh/reload due to stale network snapshots.

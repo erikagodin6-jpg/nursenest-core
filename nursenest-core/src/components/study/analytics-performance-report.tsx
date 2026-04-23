@@ -17,16 +17,14 @@ import type {
   AnalyticsSummary,
   AnalyticsSupplementalMetrics,
   DailyActivityCell,
-  ReadinessTrendPoint,
+  AnalyticsReadinessTrendWindow,
   TopicRow,
 } from "@/lib/study/analytics-data";
+import type { AnalyticsLoadResult } from "@/lib/study/analytics-load-result";
+import { analyticsResolvedData } from "@/lib/study/analytics-load-result";
 import { formatSentenceCase } from "@/lib/format/text-case";
 
-type TrendMoreLoader = (cursor: string) => Promise<{
-  points: ReadinessTrendPoint[];
-  hasMore: boolean;
-  cursor: string | null;
-}>;
+type TrendMoreLoader = (cursor: string) => Promise<AnalyticsLoadResult<AnalyticsReadinessTrendWindow>>;
 
 const RING_SIZE = 160;
 const RING_STROKE = 12;
@@ -117,33 +115,44 @@ export function AnalyticsPerformanceReport({
   credentialLine,
   targetExamLine,
   summary,
+  trend,
   supplemental,
   dailyActivity,
-  initialTrendPoints,
-  hasMorTrend,
-  trendCursor,
   initialTopicRows,
+  analyticsQuality,
   onLoadMoreTrend,
 }: {
   displayName: string;
   credentialLine: string;
   targetExamLine: string | null;
-  summary: AnalyticsSummary;
+  summary: AnalyticsLoadResult<AnalyticsSummary>;
+  trend: AnalyticsLoadResult<AnalyticsReadinessTrendWindow>;
   supplemental: AnalyticsSupplementalMetrics;
-  dailyActivity: DailyActivityCell[];
-  initialTrendPoints: ReadinessTrendPoint[];
-  hasMorTrend: boolean;
-  trendCursor: string | null;
-  initialTopicRows: TopicRow[];
+  dailyActivity: AnalyticsLoadResult<DailyActivityCell[]>;
+  initialTopicRows: AnalyticsLoadResult<TopicRow[]>;
+  analyticsQuality: {
+    hasError: boolean;
+    hasDegraded: boolean;
+    failedSegments: string[];
+    passProbabilityVisible: boolean;
+  };
   onLoadMoreTrend: TrendMoreLoader;
 }) {
-  const band = summary.latestReadinessBand;
-  const score = summary.latestReadinessScore;
+  const summaryData = analyticsResolvedData(summary);
+  const trendData = analyticsResolvedData(trend);
+  const initialTrendPoints = trendData?.points ?? [];
+  const hasMorTrend = trendData?.hasMore ?? false;
+  const trendCursor = trendData?.cursor ?? null;
+  const topicRowsForHints = analyticsResolvedData(initialTopicRows) ?? [];
+
+  const band = summaryData?.latestReadinessBand ?? null;
+  const score = summaryData?.latestReadinessScore ?? null;
   const onTrack = band === "exam_ready" || band === "approaching";
-  const adaptiveActive = summary.catSessionCount > 0;
-  const highEngagement = summary.totalQuestionsAnswered >= 400 || summary.streakDays >= 10;
+  const adaptiveActive = (summaryData?.catSessionCount ?? 0) > 0;
+  const highEngagement =
+    (summaryData?.totalQuestionsAnswered ?? 0) >= 400 || (summaryData?.streakDays ?? 0) >= 10;
   const narrativeBand = band ? BAND_HELPER[band] : "Complete a CAT to anchor a personalized readiness narrative.";
-  const weakHint = weakTopicHints(initialTopicRows);
+  const weakHint = weakTopicHints(topicRowsForHints);
   const narrativeBody =
     score != null
       ? `${narrativeBand} Continue reinforcing ${weakHint} to support your predicted trajectory.`
@@ -158,6 +167,32 @@ export function AnalyticsPerformanceReport({
         boxShadow: "var(--semantic-shadow-soft)",
       }}
     >
+      {analyticsQuality.hasError ? (
+        <p
+          className="rounded-xl border px-3 py-2 text-xs font-medium text-[var(--semantic-danger)]"
+          style={{
+            borderColor: "color-mix(in srgb, var(--semantic-danger) 35%, var(--semantic-border-soft))",
+            background: "color-mix(in srgb, var(--semantic-danger) 8%, var(--semantic-surface))",
+          }}
+          data-testid="analytics-data-error-banner"
+        >
+          Some analytics segments failed to load (not the same as having no activity). Failed:{" "}
+          {analyticsQuality.failedSegments.join(", ") || "unknown"}.
+        </p>
+      ) : null}
+      {analyticsQuality.hasDegraded && !analyticsQuality.hasError ? (
+        <p
+          className="rounded-xl border px-3 py-2 text-xs font-medium text-[var(--semantic-warning)]"
+          style={{
+            borderColor: "color-mix(in srgb, var(--semantic-warning) 35%, var(--semantic-border-soft))",
+            background: "color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface))",
+          }}
+          data-testid="analytics-data-degraded-banner"
+        >
+          <span className="font-bold uppercase tracking-wide">Degraded</span> — partial analytics:{" "}
+          {analyticsQuality.failedSegments.join(", ") || "unspecified segment"}.
+        </p>
+      ) : null}
       {/* Header strip */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
         <div className="flex gap-4">
@@ -230,8 +265,16 @@ export function AnalyticsPerformanceReport({
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
           <KpiTile
             label="Pass probability"
-            value={supplemental.passProbabilityEstimate != null ? `${supplemental.passProbabilityEstimate}%` : "—"}
-            sub="Composite estimate · not a guarantee"
+            value={
+              analyticsQuality.passProbabilityVisible && supplemental.passProbabilityEstimate != null
+                ? `${supplemental.passProbabilityEstimate}%`
+                : "—"
+            }
+            sub={
+              analyticsQuality.passProbabilityVisible
+                ? "Composite estimate · not a guarantee"
+                : "Insufficient data · hidden when signals are incomplete or degraded"
+            }
             Icon={Target}
             surface="color-mix(in srgb, var(--semantic-panel-positive) 55%, var(--semantic-surface))"
             border="color-mix(in srgb, var(--semantic-success) 22%, transparent)"
@@ -248,8 +291,14 @@ export function AnalyticsPerformanceReport({
           />
           <KpiTile
             label="Study streak"
-            value={summary.streakDays > 0 ? `${summary.streakDays} days` : "—"}
-            sub="Consecutive study days"
+            value={
+              summary.kind === "error"
+                ? "—"
+                : (summaryData?.streakDays ?? 0) > 0
+                  ? `${summaryData!.streakDays} days`
+                  : "—"
+            }
+            sub={summary.kind === "degraded" ? "Streak may be incomplete (degraded load)" : "Consecutive study days"}
             Icon={Flame}
             surface="color-mix(in srgb, var(--semantic-warning) 10%, var(--semantic-surface))"
             border="color-mix(in srgb, var(--semantic-warning) 25%, transparent)"
@@ -257,11 +306,13 @@ export function AnalyticsPerformanceReport({
           />
           <KpiTile
             label="Questions done"
-            value={summary.totalQuestionsAnswered.toLocaleString()}
+            value={(summaryData?.totalQuestionsAnswered ?? 0).toLocaleString()}
             sub={
-              summary.overallAccuracyPct != null
-                ? `${summary.overallAccuracyPct}% accuracy`
-                : "Keep practicing for accuracy"
+              summary.kind === "error"
+                ? "Summary unavailable"
+                : summaryData?.overallAccuracyPct != null
+                  ? `${summaryData.overallAccuracyPct}% accuracy`
+                  : "Keep practicing for accuracy"
             }
             Icon={BarChart3}
             surface="var(--semantic-panel-cool)"
@@ -280,7 +331,7 @@ export function AnalyticsPerformanceReport({
           <KpiTile
             label="Flashcards"
             value={supplemental.flashcardsReviewedTotal.toLocaleString()}
-            sub={`${initialTopicRows.length} topic area${initialTopicRows.length !== 1 ? "s" : ""} tracked`}
+            sub={`${topicRowsForHints.length} topic area${topicRowsForHints.length !== 1 ? "s" : ""} tracked`}
             Icon={LayoutList}
             surface="color-mix(in srgb, var(--semantic-chart-3) 12%, var(--semantic-surface))"
             border="color-mix(in srgb, var(--semantic-chart-3) 28%, transparent)"
@@ -292,15 +343,13 @@ export function AnalyticsPerformanceReport({
       {/* Trend + heatmap */}
       <div className="grid items-stretch gap-4 lg:grid-cols-[minmax(0,1.65fr)_minmax(0,1fr)]">
         <ReadinessTrendPanel
-          initialPoints={initialTrendPoints}
-          hasMore={hasMorTrend}
-          cursor={trendCursor}
+          trend={trend}
           onLoadMore={onLoadMoreTrend}
           title="Adaptive growth trend"
           subtitle="Readiness score progression across recent CAT sessions"
           className="h-full border-0 shadow-none"
         />
-        <StudyActivityHeatmap cells={dailyActivity} />
+        <StudyActivityHeatmap dailyActivity={dailyActivity} />
       </div>
 
       <div className="flex flex-wrap gap-3 border-t border-[var(--semantic-border-soft)] pt-5">

@@ -31,6 +31,7 @@ import { examContextAnalyticsProps } from "@/lib/exam-context/global-exam-contex
 import { captureLearnerProductEvent } from "@/lib/observability/learner-product-analytics";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { validatePracticeExamPostLaunchRequest } from "@/lib/learner/study-product-route-contract";
 
 export const dynamic = "force-dynamic";
 
@@ -202,6 +203,28 @@ export async function POST(req: Request) {
   if (!gate.ok) return gate.response;
 
   setSentryServerContext({ route: "/api/practice-tests", feature: SERVER_FEATURE.practiceTest, userId: gate.userId });
+
+  const launchCheck = validatePracticeExamPostLaunchRequest(req);
+  if (!launchCheck.ok) {
+    safeServerLog("practice_tests", "study_launch_route_contract_violation", {
+      event: "study_launch_route_contract_violation",
+      feature_surface: "practice_exams",
+      outcome: "rejected_invalid_route",
+      expected: launchCheck.expected,
+      received: launchCheck.received,
+      userIdPrefix: gate.userId.slice(0, 8),
+    });
+    return NextResponse.json(
+      {
+        error: launchCheck.error,
+        expected: launchCheck.expected,
+        received: launchCheck.received,
+        reason: launchCheck.reason,
+        retryable: false,
+      },
+      { status: 403 },
+    );
+  }
 
   let body: unknown;
   try {

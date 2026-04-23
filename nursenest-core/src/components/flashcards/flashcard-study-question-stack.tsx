@@ -3,8 +3,12 @@
 import { useEffect, useState } from "react";
 import { BookOpen, CheckCircle2, Lightbulb, X } from "lucide-react";
 import { FlashcardRichContent, flashcardTextMayContainMarkup } from "@/components/flashcards/flashcard-rich-content";
+import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { stripRedundantMcqLetterPrefix } from "@/lib/questions/strip-mcq-option-letter-prefix";
+
+export { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
+export type { FlashcardExamMcqAnswerListProps } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
 
 /** One-line teaching blurb for “why wrong” rows (competitor-style scan). */
 export function firstTeachingLine(raw: string): string {
@@ -30,175 +34,6 @@ export function splitPromptLeadingImage(prompt: string): { stem: string; imageSr
   const textOnly = without.replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
   if (textOnly.length < 8) return { stem: prompt, imageSrc };
   return { stem: without, imageSrc };
-}
-
-export function flashcardExamMcqOptionClass(args: {
-  letter: string;
-  exam: ExamMicroQuestionPayload;
-  revealed: boolean;
-  pickedLetter: string | null;
-  tutorMode: boolean;
-  interactive: boolean;
-}): string {
-  const { letter, exam, revealed, pickedLetter, tutorMode, interactive } = args;
-  const base =
-    "flex w-full min-h-[52px] items-center gap-3 rounded-xl border px-3 py-2.5 text-left text-sm leading-snug text-[var(--semantic-text-primary)] transition";
-  if (!revealed) {
-    if (interactive) {
-      return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] hover:bg-[color-mix(in_srgb,var(--semantic-panel-cool)_38%,var(--semantic-surface))]`;
-    }
-    return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_92%,var(--semantic-text-primary))] bg-[var(--semantic-surface)]`;
-  }
-  if (!tutorMode) {
-    const isCorrect = letter === exam.correctLetter;
-    if (isCorrect) {
-      return `${base} border-[color-mix(in_srgb,var(--semantic-success)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_11%,var(--semantic-surface))] shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--semantic-success)_22%,transparent)]`;
-    }
-    return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_95%,var(--semantic-text-primary))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_42%,var(--semantic-surface))] opacity-[0.78]`;
-  }
-  const isCorrect = letter === exam.correctLetter;
-  const wasPicked = pickedLetter === letter;
-  if (isCorrect) {
-    return `${base} border-[color-mix(in_srgb,var(--semantic-success)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_11%,var(--semantic-surface))] shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--semantic-success)_22%,transparent)]`;
-  }
-  if (wasPicked) {
-    return `${base} border-[color-mix(in_srgb,var(--semantic-danger)_50%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))]`;
-  }
-  return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_95%,var(--semantic-text-primary))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_42%,var(--semantic-surface))] opacity-[0.78]`;
-}
-
-function optionLetterCircleClass(args: {
-  letter: string;
-  exam: ExamMicroQuestionPayload;
-  revealed: boolean;
-  pickedLetter: string | null;
-  tutorMode: boolean;
-  interactive: boolean;
-}): string {
-  const { letter, exam, revealed, pickedLetter, tutorMode, interactive } = args;
-  const base =
-    "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold tabular-nums transition";
-  if (!revealed) {
-    if (interactive) {
-      return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)]`;
-    }
-    return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)]`;
-  }
-  if (!tutorMode) {
-    const isCorrect = letter === exam.correctLetter;
-    if (isCorrect) {
-      return `${base} border-[color-mix(in_srgb,var(--semantic-success)_55%,transparent)] bg-[var(--semantic-success)] text-[var(--semantic-surface)]`;
-    }
-    return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] text-[var(--semantic-text-muted)]`;
-  }
-  const isCorrect = letter === exam.correctLetter;
-  const wasPicked = pickedLetter === letter;
-  if (isCorrect) {
-    return `${base} border-[color-mix(in_srgb,var(--semantic-success)_55%,transparent)] bg-[var(--semantic-success)] text-[var(--semantic-surface)]`;
-  }
-  if (wasPicked) {
-    return `${base} border-[color-mix(in_srgb,var(--semantic-danger)_50%,transparent)] bg-[color-mix(in_srgb,var(--semantic-danger)_12%,var(--semantic-surface))] text-[var(--semantic-danger)]`;
-  }
-  return `${base} border-[color-mix(in_srgb,var(--semantic-border-soft)_88%,var(--semantic-text-primary))] bg-[var(--semantic-surface)] text-[var(--semantic-text-muted)]`;
-}
-
-export type FlashcardExamMcqAnswerListProps = {
-  exam: ExamMicroQuestionPayload;
-  revealed: boolean;
-  pickedLetter: string | null;
-  tutorMcq: boolean;
-  answerChoicesHeading: string;
-  revealHint?: string | null;
-  onPickLetter?: (letter: string) => void;
-};
-
-/**
- * Shared A–D row list for exam-style flashcards (card + split layouts).
- */
-export function FlashcardExamMcqAnswerList({
-  exam,
-  revealed,
-  pickedLetter,
-  tutorMcq,
-  answerChoicesHeading,
-  revealHint,
-  onPickLetter,
-}: FlashcardExamMcqAnswerListProps) {
-  return (
-    <div className="mt-3 space-y-2">
-      <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-[var(--semantic-text-muted)]">
-        {answerChoicesHeading}
-      </p>
-      <ul className="space-y-2" aria-label={answerChoicesHeading}>
-        {exam.answerOptions.map((o) => {
-          const interactive = tutorMcq && !revealed && Boolean(onPickLetter);
-          const showCorrectMark = revealed && o.letter === exam.correctLetter;
-          const row = (
-            <>
-              <span
-                className={optionLetterCircleClass({
-                  letter: o.letter,
-                  exam,
-                  revealed,
-                  pickedLetter,
-                  tutorMode: tutorMcq,
-                  interactive,
-                })}
-                aria-hidden
-              >
-                {o.letter}
-              </span>
-              <FlashcardRichContent
-                text={stripRedundantMcqLetterPrefix(o.text)}
-                className="min-w-0 flex-1 text-[var(--semantic-text-primary)] [&_p]:mb-1 [&_p:last-child]:mb-0"
-              />
-              {showCorrectMark ? (
-                <CheckCircle2 className="h-5 w-5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-              ) : (
-                <span className="h-5 w-5 shrink-0" aria-hidden />
-              )}
-            </>
-          );
-          return (
-            <li key={o.letter} className="list-none">
-              {interactive ? (
-                <button
-                  type="button"
-                  onClick={() => onPickLetter?.(o.letter)}
-                  className={flashcardExamMcqOptionClass({
-                    letter: o.letter,
-                    exam,
-                    revealed,
-                    pickedLetter,
-                    tutorMode: tutorMcq,
-                    interactive: true,
-                  })}
-                >
-                  {row}
-                </button>
-              ) : (
-                <div
-                  className={flashcardExamMcqOptionClass({
-                    letter: o.letter,
-                    exam,
-                    revealed,
-                    pickedLetter,
-                    tutorMode: tutorMcq,
-                    interactive: false,
-                  })}
-                >
-                  {row}
-                </div>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-      {tutorMcq && !revealed && revealHint ? (
-        <p className="text-xs text-[var(--semantic-text-muted)]">{revealHint}</p>
-      ) : null}
-    </div>
-  );
 }
 
 export type FlashcardStudyQuestionStackProps = {
@@ -264,6 +99,15 @@ export function FlashcardStudyQuestionStack({
     setPickedLetter(null);
   }, [exam?.questionStem, exam?.correctLetter, prompt]);
 
+  /** One frame with “selected” styling before reveal so rows never jump straight to green/red. */
+  useEffect(() => {
+    if (!pickedLetter || revealed || !tutorMcq || !exam) return;
+    const id = requestAnimationFrame(() => {
+      onReveal();
+    });
+    return () => cancelAnimationFrame(id);
+  }, [pickedLetter, revealed, tutorMcq, exam, onReveal]);
+
   const exp = exam ? exam.rationaleCorrect.trim() : explanation?.trim() ?? "";
   const pearlTrim = pearl.trim();
   const missing = labels.emptyPearlMessage.trim();
@@ -278,7 +122,6 @@ export function FlashcardStudyQuestionStack({
   function commitPick(letter: string) {
     if (revealed || !exam || !tutorMcq) return;
     setPickedLetter(letter);
-    onReveal();
   }
 
   const correctOptionText = exam
@@ -375,14 +218,19 @@ export function FlashcardStudyQuestionStack({
               </div>
               <div className="text-sm font-medium leading-relaxed text-[var(--semantic-text-primary)]">
                 {exam && correctOptionText ? (
-                  <>
-                    <span className="font-bold text-[var(--semantic-success)]">{exam.correctLetter}.</span>{" "}
+                  <span className="inline-flex flex-wrap items-start gap-2">
+                    <span
+                      className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-[color-mix(in_srgb,var(--semantic-success)_55%,transparent)] bg-[var(--semantic-success)] text-[11px] font-bold text-[var(--semantic-surface)]"
+                      aria-hidden
+                    >
+                      {exam.correctLetter}
+                    </span>
                     {flashcardTextMayContainMarkup(correctOptionText) ? (
-                      <FlashcardRichContent text={correctOptionText} className="inline-block align-top" />
+                      <FlashcardRichContent text={correctOptionText} className="inline-block min-w-0 flex-1 align-top" />
                     ) : (
-                      <span>{correctOptionText}</span>
+                      <span className="min-w-0 flex-1">{correctOptionText}</span>
                     )}
-                  </>
+                  </span>
                 ) : (
                   <FlashcardRichContent text={answer} />
                 )}

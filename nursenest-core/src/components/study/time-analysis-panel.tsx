@@ -14,9 +14,53 @@
  */
 
 import type { TimeMetrics } from "@/lib/study/analytics-data";
+import type { AnalyticsLoadResult } from "@/lib/study/analytics-load-result";
+import { analyticsResolvedData } from "@/lib/study/analytics-load-result";
 
-export function TimeAnalysisPanel({ metrics }: { metrics: TimeMetrics }) {
-  const hasData = metrics.sessionsAnalyzed > 0;
+export function TimeAnalysisPanel({ metrics }: { metrics: AnalyticsLoadResult<TimeMetrics> }) {
+  if (metrics.kind === "empty") {
+    return (
+      <section
+        className="rounded-2xl border p-5 sm:p-6"
+        style={{
+          background: "var(--surface-soft-a, var(--semantic-panel-cool))",
+          borderColor: "color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft))",
+        }}
+        data-testid="time-analysis-empty"
+      >
+        <div className="mb-5 flex items-baseline gap-2">
+          <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">Time Analysis</h2>
+        </div>
+        <p className="text-sm text-[var(--semantic-text-muted)]">
+          Complete practice sessions with timing to see time analysis here.
+        </p>
+      </section>
+    );
+  }
+
+  if (metrics.kind === "error") {
+    return (
+      <section
+        className="rounded-2xl border p-5 sm:p-6"
+        style={{
+          background: "var(--surface-soft-a, var(--semantic-panel-cool))",
+          borderColor: "color-mix(in srgb, var(--semantic-info) 20%, var(--semantic-border-soft))",
+        }}
+        data-testid="time-analysis-error"
+      >
+        <div className="mb-5 flex items-baseline gap-2">
+          <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">Time Analysis</h2>
+        </div>
+        <p className="text-sm text-[var(--semantic-danger)]">
+          Could not load time metrics ({metrics.reason}). This is not the same as having no timed sessions yet.
+        </p>
+      </section>
+    );
+  }
+
+  const m = analyticsResolvedData(metrics)!;
+  const degradedReason = metrics.kind === "degraded" ? metrics.reason : null;
+  const hasData = m.sessionsAnalyzed > 0;
 
   return (
     <section
@@ -32,10 +76,16 @@ export function TimeAnalysisPanel({ metrics }: { metrics: TimeMetrics }) {
         </h2>
         {hasData && (
           <span className="text-xs text-[var(--semantic-text-muted)]">
-            {metrics.sessionsAnalyzed} session{metrics.sessionsAnalyzed !== 1 ? "s" : ""} analyzed
+            {m.sessionsAnalyzed} session{m.sessionsAnalyzed !== 1 ? "s" : ""} analyzed
           </span>
         )}
       </div>
+
+      {degradedReason ? (
+        <p className="mb-3 text-xs font-semibold text-[var(--semantic-warning)]" data-testid="time-analysis-degraded">
+          <span className="uppercase tracking-wide">Degraded</span> — {degradedReason}
+        </p>
+      ) : null}
 
       {!hasData ? (
         <p className="text-sm text-[var(--semantic-text-muted)]">
@@ -47,41 +97,41 @@ export function TimeAnalysisPanel({ metrics }: { metrics: TimeMetrics }) {
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <TimeMetricChip
               label="Avg per question"
-              value={formatMs(metrics.avgMsPerQuestion)}
-              sub={msLabel(metrics.avgMsPerQuestion)}
+              value={formatMs(m.avgMsPerQuestion)}
+              sub={msLabel(m.avgMsPerQuestion)}
               accent="info"
             />
             <TimeMetricChip
               label="Avg session"
-              value={formatDuration(metrics.avgSessionDurationMs)}
+              value={formatDuration(m.avgSessionDurationMs)}
               sub="per study block"
               accent="neutral"
             />
             <TimeMetricChip
               label="Rush sessions"
-              value={String(metrics.rushSessions)}
+              value={String(m.rushSessions)}
               sub="under 1 minute"
-              accent={metrics.rushSessions > 2 ? "warning" : "neutral"}
+              accent={m.rushSessions > 2 ? "warning" : "neutral"}
             />
             <TimeMetricChip
               label="Deep sessions"
-              value={String(metrics.deepStudySessions)}
+              value={String(m.deepStudySessions)}
               sub="over 45 minutes"
-              accent={metrics.deepStudySessions > 0 ? "success" : "neutral"}
+              accent={m.deepStudySessions > 0 ? "success" : "neutral"}
             />
           </div>
 
           {/* Session range bar */}
-          {metrics.minSessionMs !== null && metrics.maxSessionMs !== null && (
+          {m.minSessionMs !== null && m.maxSessionMs !== null && (
             <SessionRangeBar
-              minMs={metrics.minSessionMs}
-              maxMs={metrics.maxSessionMs}
-              avgMs={metrics.avgSessionDurationMs}
+              minMs={m.minSessionMs}
+              maxMs={m.maxSessionMs}
+              avgMs={m.avgSessionDurationMs}
             />
           )}
 
           {/* Interpretation */}
-          <TimeInterpretation metrics={metrics} />
+          <TimeInterpretation metrics={m} />
         </div>
       )}
     </section>
