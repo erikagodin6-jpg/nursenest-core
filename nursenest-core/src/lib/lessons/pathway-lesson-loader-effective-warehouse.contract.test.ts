@@ -18,7 +18,9 @@ test("getPathwayLessonImpl includes effective warehouse locale fallback after ov
     "must log when resolving via dominant warehouse locale",
   );
   assert.ok(
-    src.includes("effectiveLocaleForPathwayLessonDbRows(pathwayId, overlayLocale)"),
+    /getPathwayLessonListWarehouseLocaleForHub\(pathwayId, overlayLocale\)|effectiveLocaleForPathwayLessonDbRows\(pathwayId, overlayLocale\)/.test(
+      src,
+    ),
     "must reuse hub list warehouse picker for per-slug hydration",
   );
 });
@@ -28,7 +30,7 @@ test("hub hot paths memoize locale groupBy, pathway DB presence, and overlay bun
   const src = readFileSync(loaderPath, "utf8");
   assert.match(
     src,
-    /effectiveLocaleForPathwayLessonDbRows\s*=\s*cache\(/,
+    /effectiveLocaleForPathwayLessonDbRows\s*=\s*cache\(|getPathwayLessonListWarehouseLocaleForHub/,
     "warehouse locale groupBy must not run once per verified slug",
   );
   assert.match(

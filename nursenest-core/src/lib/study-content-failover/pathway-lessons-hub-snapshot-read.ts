@@ -12,7 +12,10 @@ function isPathwayLessonsPageResult(raw: unknown): raw is PathwayLessonsPageResu
   const items = o.items as unknown[];
   const total = o.total as number;
   const ra = o.renderableAll;
-  if (Array.isArray(ra)) return true;
+  if (Array.isArray(ra)) {
+    if (total !== ra.length) return false;
+    return true;
+  }
   /** Legacy snapshots may omit `renderableAll` only when `items` already represents the full list. */
   return total <= items.length;
 }

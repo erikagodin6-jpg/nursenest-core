@@ -16,6 +16,7 @@ import {
 } from "@/lib/lessons/lesson-routes";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import {
+  getPathwayLessonListWarehouseLocaleForHub,
   listTopicClustersForPublicNavigation,
   normalizePathwayHubSearchQuery,
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
@@ -179,6 +180,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
             : undefined;
   }
 
+  const hubLoadT0 = performance.now();
   const {
     pageResult,
     lessonsPageLoad,
@@ -207,6 +209,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       roleTrack,
     },
   );
+  const hubAggregatesDurationMs = Math.round(performance.now() - hubLoadT0);
 
   const hubQuerySuffix = (() => {
     const qs = new URLSearchParams();
@@ -327,12 +330,21 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const renderableAllIn = pageResult.renderableAll ?? pageResult.items;
   const rawHubLessonRows = renderableAllIn.filter(pathwayLessonHasRenderableHubSlug);
   /** Dedupe + taxonomy guard + linkable href — must match curriculum grid and toolbar count. */
+  const prepareT0 = performance.now();
   const hubCurriculumPrepared = prepareLessonsForHubCurriculum(rawHubLessonRows, {
     pathwayId: pathway.id,
     lessonsBasePath: base,
   });
+  const prepareDurationMs = Math.round(performance.now() - prepareT0);
+  const listWarehouseT0 = performance.now();
+  const listWarehouseLocale = await getPathwayLessonListWarehouseLocaleForHub(pathway.id, lessonContentLocale);
+  const listWarehouseResolveMs = Math.round(performance.now() - listWarehouseT0);
   /** Drop any row that does not hydrate to a marketing-public-complete lesson (same contract as lesson detail). */
-  const vr = await verifyMarketingHubLessonRowsResolve(pathway, hubCurriculumPrepared, lessonContentLocale);
+  const verifyT0 = performance.now();
+  const vr = await verifyMarketingHubLessonRowsResolve(pathway, hubCurriculumPrepared, lessonContentLocale, {
+    listWarehouseLocale,
+  });
+  const verifyDurationMs = Math.round(performance.now() - verifyT0);
   const hubCurriculumLessons = vr.kept;
   const hubVerifyDiagnostics = vr.diagnostics;
   if (hubCurriculumPrepared.length > 0 && hubCurriculumLessons.length === 0) {
@@ -361,6 +373,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const hubVerifiedPage = sliceNormalizedHubLessons(hubCurriculumLessons, pageRequested, effectiveHubPageSize);
   const lessonsForCurriculumHub =
     hubCurriculumLessons.length <= PATHWAY_HUB_PAGE_SIZE_MAX ? hubCurriculumLessons : hubVerifiedPage.items;
+  const groupT0 = performance.now();
   const hubSectionModel = buildPathwayLessonSystemSections(lessonsForCurriculumHub, pathway.id);
   const stage6SectionModelLessonRows = hubSectionModel.reduce((n, s) => n + s.lessons.length, 0);
   const stage6LinkableLessonRows = hubSectionModel.reduce(
@@ -368,6 +381,56 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       n + s.lessons.filter((l) => pathwayLessonMarketingDetailHref(base, l.slug) != null).length,
     0,
   );
+  const groupingDurationMs = Math.round(performance.now() - groupT0);
+
+  const ld = pageResult.loadDiagnostics;
+  const topDropReasons = (hubVerifyDiagnostics.exclusionReasonsRanked ?? []).slice(0, 8);
+  const first10KeptSlugs = hubCurriculumLessons.slice(0, 10).map((l) => l.slug);
+  const first10DroppedSlugsWithReasons = vr.excluded.slice(0, 10).map((e) => ({ slug: e.slug, reason: e.reason }));
+  const sourceUsed: "db" | "snapshot" | "fallback" | "unknown" =
+    lessonsPageLoad.status === "ok"
+      ? lessonsPageLoad.sourceUsed === "primary"
+        ? "db"
+        : lessonsPageLoad.sourceUsed === "secondary"
+          ? "snapshot"
+          : "unknown"
+      : lessonsPageLoad.status === "error"
+        ? "fallback"
+        : "unknown";
+
+  safeServerLog("pathway_lessons", "RN_LESSONS_HUB_ACTUAL_COUNTS", {
+    pathname: `${pathname}/lessons`,
+    pathwayId: pathway.id,
+    country: countrySlug,
+    locale: lessonContentLocale,
+    list_warehouse_locale: listWarehouseLocale,
+    page: pageRequested,
+    pageSize: pageSizeRequested,
+    rawDbCount: ld?.rawDbCount ?? ld?.sqlDbPublishedApprox ?? -1,
+    afterPathwayCount: ld?.afterPathwayContextCount ?? renderableAllIn.length,
+    afterPublicCompleteCount: ld?.afterPathwayContextCount ?? renderableAllIn.length,
+    afterCountryContextCount: ld?.afterPathwayContextCount ?? renderableAllIn.length,
+    afterSlugNormalizeCount: ld?.afterSlugNormalizeCount ?? rawHubLessonRows.length,
+    afterDedupeCount: ld?.afterDedupeCount ?? renderableAllIn.length,
+    afterVerifyCount: hubCurriculumLessons.length,
+    renderableAllCount: renderableAllIn.length,
+    itemsCount: pageResult.items.length,
+    finalCardCount: stage6LinkableLessonRows,
+    total: pageResult.total,
+    sourceUsed,
+    topDropReasons,
+    first10KeptSlugs,
+    first10DroppedSlugsWithReasons,
+    hub_aggregates_ms: hubAggregatesDurationMs,
+    prepare_ms: prepareDurationMs,
+    list_warehouse_resolve_ms: listWarehouseResolveMs,
+    verify_ms: verifyDurationMs,
+    grouping_ms: groupingDurationMs,
+    loader_resolve_ms: ld?.resolveDurationMs ?? -1,
+    loader_slice_ms: ld?.sliceDurationMs ?? -1,
+    runtime_source: ld?.runtimeSource ?? "unknown",
+  });
+
   safeServerLog("pathway_lessons", "marketing_hub_pipeline_snapshot", {
     pathway_id: pathway.id,
     route_pathname: `${pathname}/lessons`,

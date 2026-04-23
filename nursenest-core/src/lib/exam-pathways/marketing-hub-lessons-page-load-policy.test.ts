@@ -94,6 +94,56 @@ test("failed lessons page fetch returns error state (not ok-with-empty inventory
   assert.equal(pageResult.items.length, 0);
 });
 
+test("primary failure with snapshot where total disagrees with renderableAll is rejected (no fake full library)", async () => {
+  const item = {
+    slug: "stale-snap",
+    title: "Stale",
+    topic: "Topic",
+    topicSlug: "infection",
+    bodySystem: "cardiovascular",
+    system: "cardiovascular",
+    previewSectionCount: 1,
+    seoTitle: "Stale",
+    seoDescription: "D",
+    sections: [],
+    structuralQuality: { publicComplete: true },
+    exams: [],
+    countries: [],
+  } as PathwayLessonRecord;
+
+  const snapPayload: PathwayLessonsPageResult = {
+    items: [item],
+    total: 500,
+    page: 1,
+    pageSize: 24,
+    pageCount: 21,
+    renderableAll: [item],
+  };
+
+  const mockFetch = async () => {
+    throw new Error("database_timeout");
+  };
+
+  const { pageResult, lessonsPageLoad } = await loadPathwayLessonsHubPageWithTelemetry(
+    ctx.pathwayId,
+    args,
+    ctx,
+    mockFetch,
+    {
+      readHubSnapshot: async () => ({
+        schema: "nursenest.study_snapshot.v1",
+        surface: "pathway_lessons_hub",
+        version: "stale-snap-v1",
+        capturedAt: new Date().toISOString(),
+        payload: snapPayload,
+      }),
+    },
+  );
+
+  assert.equal(lessonsPageLoad.status, "error");
+  assert.equal(pageResult.total, 0);
+});
+
 test("primary failure with valid snapshot returns ok + secondary (degraded inventory)", async () => {
   const item = {
     slug: "snap-lesson",
@@ -214,6 +264,45 @@ test("Canada NP (CNPLE) pathway accepts a well-formed primary lessons payload (n
   assert.equal(lessonsPageLoad.status, "ok");
   assert.equal(pageResult.total, 2);
   assert.equal(pageResult.items.length, 1);
+});
+
+test("primary payload with renderableAll length disagreeing with total is invalid (stale export guard)", async () => {
+  const row = {
+    slug: "mismatch-a",
+    title: "A",
+    topic: "Topic",
+    topicSlug: "infection",
+    bodySystem: "cardiovascular",
+    system: "cardiovascular",
+    previewSectionCount: 1,
+    seoTitle: "A",
+    seoDescription: "D",
+    sections: [],
+    structuralQuality: { publicComplete: true },
+    exams: [],
+    countries: [],
+  } as PathwayLessonRecord;
+  const badPage = {
+    items: [row],
+    total: 99,
+    page: 1,
+    pageSize: 24,
+    pageCount: 5,
+    renderableAll: [row],
+  };
+
+  const { pageResult, lessonsPageLoad } = await loadPathwayLessonsHubPageWithTelemetry(
+    ctx.pathwayId,
+    args,
+    ctx,
+    async () => badPage as PathwayLessonsPageResult,
+  );
+
+  assert.equal(lessonsPageLoad.status, "error");
+  if (lessonsPageLoad.status === "error") {
+    assert.equal(lessonsPageLoad.reason, "invalid_payload");
+  }
+  assert.equal(pageResult.total, 0);
 });
 
 test("primary payload missing renderableAll while total exceeds items is invalid (no silent curriculum shrink)", async () => {

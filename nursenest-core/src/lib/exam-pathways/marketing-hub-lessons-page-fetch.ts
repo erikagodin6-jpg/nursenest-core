@@ -45,6 +45,16 @@ function coercePathwayLessonsPageResult(raw: unknown): PathwayLessonsPageResult 
   const total = o.total as number;
   const ra = o.renderableAll;
   if (Array.isArray(ra)) {
+    /** `sliceNormalizedHubLessons` guarantees `total === renderableAll.length` — reject stale exports. */
+    if (total !== ra.length) {
+      safeServerLog("exam_pathway_hub", "lessons_hub_payload_total_renderable_mismatch", {
+        event: "lessons_hub_payload_total_renderable_mismatch",
+        claimed_total: String(total),
+        renderable_len: String(ra.length),
+        items_len: String(items.length),
+      });
+      return null;
+    }
     return raw as PathwayLessonsPageResult;
   }
   /** Without `renderableAll`, a paginated `items` slice cannot back the curriculum grid (must reject). */

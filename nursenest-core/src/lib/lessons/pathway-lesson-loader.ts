@@ -531,6 +531,24 @@ export type PathwayLessonListLocaleInfo = {
   catalogEnglishOnlySource: boolean;
 };
 
+/** Stage counts for marketing lessons hub debugging (optional; populated by {@link getPathwayLessonsPageFresh}). */
+export type PathwayLessonsHubLoadDiagnostics = {
+  runtimeSource?: "database" | "catalog" | "none";
+  /** Published rows in dominant list locale (DB path) or undefined in catalog path. */
+  rawDbCount?: number;
+  /** Alias of {@link rawDbCount} retained for log field parity with older diagnostics. */
+  sqlDbPublishedApprox?: number;
+  rawMergedInputCount?: number;
+  afterSlugNormalizeCount?: number;
+  afterPathwayContextCount?: number;
+  afterDedupeCount?: number;
+  catalogRawFilteredApprox?: number;
+  truncatedDbScan?: boolean;
+  goldInjectedCount?: number;
+  resolveDurationMs?: number;
+  sliceDurationMs?: number;
+};
+
 export type PathwayLessonsPageResult = {
   items: PathwayLessonRecord[];
   total: number;
@@ -543,6 +561,8 @@ export type PathwayLessonsPageResult = {
    * Used by the curriculum hub so body-system sections are not built from a single page slice alone.
    */
   renderableAll?: PathwayLessonRecord[];
+  /** Optional pipeline metrics for `/…/lessons` diagnostics (never required for rendering). */
+  loadDiagnostics?: PathwayLessonsHubLoadDiagnostics;
 };
 
 const HUB_FULL_SCAN_CHUNK = 400;
@@ -582,12 +602,7 @@ async function resolveMarketingHubRenderableLessonList(
   renderableAll: PathwayLessonRecord[];
   locale: PathwayLessonListLocaleInfo;
   runtimeSource: "database" | "catalog" | "none";
-  diagnostics: {
-    sqlDbPublishedApprox?: number;
-    catalogRawFilteredApprox?: number;
-    truncatedDbScan?: boolean;
-    goldInjectedCount?: number;
-  };
+  diagnostics: PathwayLessonsHubLoadDiagnostics;
 }> {
   const requested = normalizePathwayLessonLocale(marketingLocale);
   const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(requested);
@@ -610,7 +625,7 @@ async function resolveMarketingHubRenderableLessonList(
         catalogEnglishOnlySource: false,
       },
       runtimeSource: "none",
-      diagnostics: {},
+      diagnostics: { runtimeSource: "none" },
     };
   }
 
@@ -709,7 +724,13 @@ async function resolveMarketingHubRenderableLessonList(
       },
       runtimeSource: "database",
       diagnostics: {
+        runtimeSource: "database",
+        rawDbCount: sqlDbOnly,
         sqlDbPublishedApprox: sqlDbOnly,
+        rawMergedInputCount: rawInputs.length,
+        afterSlugNormalizeCount: afterSafeSlug.length,
+        afterPathwayContextCount: afterPathwayContext.length,
+        afterDedupeCount: renderableAll.length,
         truncatedDbScan,
         goldInjectedCount: goldsFiltered.length,
       },
@@ -769,7 +790,14 @@ async function resolveMarketingHubRenderableLessonList(
       catalogEnglishOnlySource: true,
     },
     runtimeSource: renderableAll.length > 0 ? "catalog" : "none",
-    diagnostics: { catalogRawFilteredApprox: filteredRaw.length },
+    diagnostics: {
+      runtimeSource: renderableAll.length > 0 ? "catalog" : "none",
+      catalogRawFilteredApprox: filteredRaw.length,
+      rawMergedInputCount: filteredRaw.length,
+      afterSlugNormalizeCount: afterSafeSlugCat.length,
+      afterPathwayContextCount: afterContextCat.length,
+      afterDedupeCount: renderableAll.length,
+    },
   };
 }
 
@@ -793,13 +821,19 @@ async function getPathwayLessonsPageImpl(
   const qRaw = normalizePathwayHubSearchQuery(listOptions?.q);
   const t0 = performance.now();
   const resolved = await resolveMarketingHubRenderableLessonList(pathwayId, marketingLocale, listOptions);
+  const tResolve = performance.now();
   const slice = sliceNormalizedHubLessons(resolved.renderableAll, p, ps);
-  const durationMs = Math.round(performance.now() - t0);
+  const tEnd = performance.now();
+  const durationMs = Math.round(tEnd - t0);
+  const resolveDurationMs = Math.round(tResolve - t0);
+  const sliceDurationMs = Math.round(tEnd - tResolve);
   const diag = resolved.diagnostics;
   safeServerLog("pathway_lessons", "hub_list_resolved", {
     pathwayId,
     pathwayLessonRuntimeSource: resolved.runtimeSource,
     durationMs,
+    resolve_duration_ms: resolveDurationMs,
+    slice_duration_ms: sliceDurationMs,
     page: slice.page,
     pageSize: slice.pageSize,
     renderable_total: slice.total,
@@ -824,6 +858,11 @@ async function getPathwayLessonsPageImpl(
     pageCount: slice.pageCount,
     locale: resolved.locale,
     renderableAll: resolved.renderableAll,
+    loadDiagnostics: {
+      ...diag,
+      resolveDurationMs,
+      sliceDurationMs,
+    },
   };
 }
 
@@ -1929,3 +1968,6 @@ export async function countPathwayLessonsPublic(
   const { renderableAll } = await resolveMarketingHubRenderableLessonList(pathwayId, marketingLocale, undefined);
   return renderableAll.length;
 }
+
+/** Same warehouse locale as hub SQL lists — use as verify fallback when hub rows omit `localeMeta.contentLocale`. */
+export { effectiveLocaleForPathwayLessonDbRows as getPathwayLessonListWarehouseLocaleForHub };

@@ -14,6 +14,10 @@ test.describe("Canada RN lessons hub (public)", () => {
 
     const lessonLinks = page.locator('#pathway-lesson-library a[href*="/lessons/"]');
     await expect(lessonLinks.first()).toBeVisible({ timeout: 60_000 });
-    await expect(lessonLinks.nth(1)).toBeVisible({ timeout: 60_000 });
+    const n = await lessonLinks.count();
+    expect(n, "expected at least 2 public lesson links in #pathway-lesson-library").toBeGreaterThanOrEqual(2);
+    if (n >= 10) {
+      await expect(lessonLinks.nth(9)).toBeVisible({ timeout: 60_000 });
+    }
   });
 });

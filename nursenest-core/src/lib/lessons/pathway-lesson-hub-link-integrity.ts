@@ -151,6 +151,11 @@ export async function verifyMarketingHubLessonRowsResolve(
   options?: {
     concurrency?: number;
     resolveLessonDetail?: ResolveMarketingLessonDetailFn;
+    /**
+     * Dominant `pathway_lessons.locale` warehouse for this pathway (same as hub SQL list). When hub list rows omit
+     * `localeMeta.contentLocale`, verify must still hydrate with this shard or Canada/US peers collapse to `en`-only misses.
+     */
+    listWarehouseLocale?: string;
     /** When true, zero-kept critical log uses `all_rows_excluded_tests` outcome (unit tests). */
     skipZeroKeptPipelineInvariant?: boolean;
   },
@@ -173,8 +178,13 @@ export async function verifyMarketingHubLessonRowsResolve(
   }
   const uniqueSlugs = [...new Set(safe.map((l) => l.slug.trim()))];
 
+  const listWarehouseLocale = options?.listWarehouseLocale?.trim();
+
   const pairs = await mapWithConcurrency(uniqueSlugs, concurrency, async (slug) => {
-    const detailLocale = slugToListDetailLocale.get(slug) ?? lessonContentLocale;
+    const detailLocale =
+      slugToListDetailLocale.get(slug) ??
+      (listWarehouseLocale ? normalizePathwayLessonLocale(listWarehouseLocale) : undefined) ??
+      lessonContentLocale;
     const ev = await evaluatePublicMarketingLessonCrossLinkIntegrity(
       pathway,
       slug,
