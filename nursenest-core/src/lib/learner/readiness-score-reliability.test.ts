@@ -36,4 +36,36 @@ describe("computeReadiness reliability flags", () => {
     assert.equal(p!.maxPoints, 0);
     assert.match(p!.detail, /could not be loaded/i);
   });
+
+  it("does not use mock history for scoring when mock history signal is unreliable", () => {
+    const r = computeReadiness({
+      practiceCorrect: 40,
+      practiceTotal: 80,
+      recentMocks: [{ score: 99, total: 100 }],
+      weakTopics: [],
+      lessonsCompleted: 0,
+      lessonsAvailable: 0,
+      mockHistorySignalReliable: false,
+    });
+    const m = r.factors.find((f) => f.id === "mock_performance");
+    assert.ok(m);
+    assert.equal(m!.maxPoints, 0);
+    assert.match(m!.detail, /could not be loaded/i);
+  });
+
+  it("does not award lesson completion points when lesson completion signal is unreliable", () => {
+    const r = computeReadiness({
+      practiceCorrect: 40,
+      practiceTotal: 80,
+      recentMocks: [{ score: 40, total: 50 }],
+      weakTopics: [],
+      lessonsCompleted: 10,
+      lessonsAvailable: 20,
+      lessonCompletionSignalReliable: false,
+    });
+    const l = r.factors.find((f) => f.id === "lesson_completion");
+    assert.ok(l);
+    assert.equal(l!.maxPoints, 0);
+    assert.match(l!.detail, /could not be loaded/i);
+  });
 });

@@ -30,7 +30,7 @@ import {
 } from "@/lib/learner/topic-performance";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { logLearnerStudyLoadDiagnostics, type LearnerStudyLoadOutcome } from "@/lib/learner/learner-study-load-diagnostics";
+import { logLearnerStudyLoadDiagnostics } from "@/lib/learner/learner-study-load-diagnostics";
 import { PATHWAY_LESSON_METADATA_LIST_SELECT } from "@/lib/lessons/pathway-lesson-metadata-select";
 import {
   buildVisibleLessonScopeForLearner,

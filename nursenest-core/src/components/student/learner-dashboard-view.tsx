@@ -240,7 +240,9 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
               }}
             />
           </div>
-          <p className="mt-2 text-xs font-medium text-primary">{lessonPct} of current pool completed</p>
+          <p className="mt-2 text-xs font-medium text-primary">
+            {coreOk ? `${lessonPct} of current pool completed` : "Completion rate unavailable"}
+          </p>
         </div>
 
         <div className="nn-card p-5">
@@ -248,7 +250,7 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Questions (mocks)</p>
               <p className="mt-2 text-3xl font-bold tabular-nums text-[var(--theme-heading-text)]">
-                {data.questionsInMocksLast14d}
+                {data.coreReliability.questionsInMocksLast14d ? data.questionsInMocksLast14d : "—"}
               </p>
               <p className="mt-1 text-xs text-muted-foreground">Items in scored sessions · last 14 days</p>
             </div>
@@ -261,7 +263,11 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Mocks taken</p>
               <p className="mt-2 text-3xl font-bold tabular-nums text-[var(--theme-heading-text)]">
-                {data.recentMocks.length > 0 ? data.recentMocks.length : "N/A"}
+                {!data.coreReliability.recentMocks
+                  ? "—"
+                  : data.recentMocks.length > 0
+                    ? data.recentMocks.length
+                    : "0"}
               </p>
               <p className="mt-1 text-xs text-muted-foreground">Recent attempts below</p>
             </div>
@@ -290,6 +296,11 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
+          ) : !data.coreReliability.visibleLessonScope ? (
+            <p className="mt-4 text-sm text-muted-foreground">
+              Your lesson plan scope could not be loaded, so we cannot show an in-progress lesson here. Refresh to try
+              again.
+            </p>
           ) : (
             <p className="mt-4 text-sm text-muted-foreground">
               No in-progress lesson. Start one from your list or try a quick question block.
@@ -326,7 +337,9 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
                 <p className="text-muted-foreground">
                   {data.continueLesson
                     ? `Finish “${data.continueLesson.title.slice(0, 48)}${data.continueLesson.title.length > 48 ? "…" : ""}”.`
-                    : "Open a lesson in your tier and mark a section complete."}
+                    : !data.coreReliability.visibleLessonScope
+                      ? "Lesson scope did not load — refresh, then pick up from your lessons list."
+                      : "Open a lesson in your tier and mark a section complete."}
                 </p>
               </div>
             </li>
@@ -336,7 +349,12 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
               </span>
               <div>
                 <p className="font-medium text-foreground">Quiz block</p>
-                {data.recommendedQuizTopic ? (
+                {!data.topicPerformanceReliable ? (
+                  <p className="text-muted-foreground">
+                    Topic recommendations could not be loaded. Refresh to retry, or open the question bank from the
+                    header.
+                  </p>
+                ) : data.recommendedQuizTopic ? (
                   <Link
                     href={`/app/questions?topic=${encodeURIComponent(data.recommendedQuizTopic)}`}
                     className="text-primary underline-offset-4 hover:underline"
@@ -370,7 +388,12 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
             <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Priority review queue</h2>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">From recent scored mock sessions (your plan only).</p>
-          {topWeak.length > 0 ? (
+          {!data.topicPerformanceReliable ? (
+            <p className="mt-4 rounded-xl border border-border/60 bg-muted/20 px-3 py-2 text-sm text-muted-foreground">
+              Weak-topic signals could not be loaded. Refresh to retry — an empty list here does not mean you have no
+              weak areas.
+            </p>
+          ) : topWeak.length > 0 ? (
             <ul className="mt-4 space-y-2">
               {topWeak.map((w) => (
                 <li
@@ -412,7 +435,11 @@ export async function LearnerDashboardView({ data }: { data: LearnerDashboardMod
         <section className="nn-card p-6">
           <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">Recent performance</h2>
           <p className="mt-1 text-xs text-muted-foreground">Latest mock attempts.</p>
-          {data.recentMocks.length > 0 ? (
+          {!data.coreReliability.recentMocks ? (
+            <p className="mt-4 rounded-xl border border-border/60 bg-muted/20 px-3 py-2 text-sm text-muted-foreground">
+              Recent mock history could not be loaded. Refresh to retry.
+            </p>
+          ) : data.recentMocks.length > 0 ? (
             <ul className="mt-4 space-y-2">
               {data.recentMocks.map((m) => (
                 <li

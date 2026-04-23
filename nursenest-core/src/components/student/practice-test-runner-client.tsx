@@ -48,11 +48,8 @@ import { PracticeRationaleFullPanel } from "@/components/study/practice-rational
 import { PracticeTestLinearRightColumn } from "@/components/study/practice-test-linear-right-column";
 import { splitPromptLeadingImage } from "@/components/flashcards/flashcard-study-question-stack";
 import { resolvePracticeLinearRightColumnPhase } from "@/lib/practice-tests/practice-linear-right-column-phase";
-import {
-  PracticeQuestionCard,
-  PracticeAnswerOptionRow,
-} from "@/components/study/practice-question-card";
-import type { PracticeOptionState } from "@/components/study/practice-question-card";
+import { mcqAnswerSelectsCanonical } from "@/lib/practice-tests/practice-mcq-selection";
+import { PracticeQuestionCard } from "@/components/study/practice-question-card";
 import {
   ConfidenceSelector,
   type ConfidenceLevel,
@@ -1713,6 +1710,16 @@ export function PracticeTestRunnerClient({
     optsOrderCanonical.map((k, i) => [k, optsOrderDisplay[i] ?? k]),
   );
 
+  /** Shared empty state for CAT / linear / legacy MCQ lists (same copy + surfaces). */
+  const mcqNoChoicesFallback = (
+    <p className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-muted)]">
+      {tx(
+        "learner.practiceTests.run.noAnswerChoices",
+        "No answer choices were returned for this item. Use Retry, reload the test, or contact support if this persists.",
+      )}
+    </p>
+  );
+
   // ══════════════════════════════════════════════════════════════════════════
   // CAT MODE — study: split + rationale. Test (exam): single column, submit→lock→next, adaptive progress.
   // Server: `cat_advance` still scores and selects the next item in one PATCH (no separate commit endpoint).
@@ -1720,7 +1727,7 @@ export function PracticeTestRunnerClient({
   if (catMode) {
     // Determine option state per canonical key for CAT (no correct/incorrect during test mode)
     function catOptState(canonical: string): AnswerOptionState {
-      const isSelected = raw === canonical;
+      const isSelected = mcqAnswerSelectsCanonical(raw, canonical);
       if (catFeedbackStudy && catStudyFeedback && catStudyFeedback.questionId === current?.id) {
         const ck = new Set(catStudyFeedback.correctKeys);
         if (ck.has(canonical)) return "correct";
@@ -1734,7 +1741,6 @@ export function PracticeTestRunnerClient({
       return isSelected ? "selected" : "default";
     }
 
-    const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
     const optLocked = catStudyLocked;
     const optionsInteractionLocked =
       optLocked || Boolean(isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase));
@@ -1747,12 +1753,7 @@ export function PracticeTestRunnerClient({
     // Build CAT-specific option rows using AnswerOptionRow
     const catOptions =
       optsCanonical.length === 0 ? (
-        <p className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-muted)]">
-          {tx(
-            "learner.practiceTests.run.noAnswerChoices",
-            "No answer choices were returned for this item. Use Retry, reload the test, or contact support if this persists.",
-          )}
-        </p>
+        mcqNoChoicesFallback
       ) : isSata ? (
         <ul
           className="nn-cat-opt-list"
@@ -1770,12 +1771,12 @@ export function PracticeTestRunnerClient({
           }
         >
           {optsCanonical.map((canonical, i) => {
-            const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
+            const selected = mcqAnswerSelectsCanonical(raw, canonical);
             const optState = catOptState(canonical);
             return (
               <li key={canonical}>
                 <AnswerOptionRow
-                  letter={LETTERS[i] ?? String(i + 1)}
+                  letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
                   text={formatCatOptionText(i, canonical)}
                   state={
                     optionsInteractionLocked
@@ -1817,7 +1818,7 @@ export function PracticeTestRunnerClient({
           {optsOrderCanonical.map((canonical, i) => (
             <li key={canonical}>
               <AnswerOptionRow
-                letter={LETTERS[i] ?? String(i + 1)}
+                letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
                 text={formatCatOptionText(i, canonical)}
                 state={catOptState(canonical)}
                 disabled={optionsInteractionLocked}
@@ -2181,31 +2182,32 @@ export function PracticeTestRunnerClient({
     );
   }
 
-  // Legacy linear sessions (no `linearDeliveryMode`): free navigation + practice option chrome — not CAT exam shell.
+  // Legacy linear sessions (no `linearDeliveryMode`): free navigation — same MCQ rows as CAT (`AnswerOptionRow`).
   if (!catMode && !isLinearEngine) {
-    function legacyPracticeOptState(canonical: string): PracticeOptionState {
-      const isSelected = raw === canonical || (Array.isArray(raw) && raw.includes(canonical));
-      return isSelected ? "selected" : "default";
+    function legacyCatOptState(canonical: string): AnswerOptionState {
+      return mcqAnswerSelectsCanonical(raw, canonical) ? "selected" : "default";
     }
 
-    const legacyPracticeOptionRows =
+    const legacyCatOptions =
       optsCanonical.length === 0 ? (
-        <p className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-muted)]">
-          {tx(
-            "learner.practiceTests.run.noAnswerChoices",
-            "No answer choices were returned for this item. Use Retry, reload the test, or contact support if this persists.",
-          )}
-        </p>
+        mcqNoChoicesFallback
       ) : isSata ? (
-        <ul className="nn-practice-opt-list" role="group" aria-label="Answer choices (select all that apply)">
+        <ul
+          className="nn-cat-opt-list"
+          role="group"
+          aria-label={tx(
+            "learner.practiceTests.run.answerChoicesSataAria",
+            "Answer choices (select all that apply)",
+          )}
+        >
           {optsCanonical.map((canonical, i) => {
-            const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
+            const selected = mcqAnswerSelectsCanonical(raw, canonical);
             return (
               <li key={canonical}>
-                <PracticeAnswerOptionRow
-                  index={i}
+                <AnswerOptionRow
+                  letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
                   text={optsDisplay[i] ?? canonical}
-                  state={legacyPracticeOptState(canonical)}
+                  state={selected ? "selected" : "default"}
                   disabled={false}
                   isCheckbox
                   checked={selected}
@@ -2222,13 +2224,17 @@ export function PracticeTestRunnerClient({
           })}
         </ul>
       ) : (
-        <ul className="nn-practice-opt-list" role="radiogroup" aria-label="Answer choices">
+        <ul
+          className="nn-cat-opt-list"
+          role="radiogroup"
+          aria-label={tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")}
+        >
           {optsOrderCanonical.map((canonical, i) => (
             <li key={canonical}>
-              <PracticeAnswerOptionRow
-                index={i}
+              <AnswerOptionRow
+                letter={MCQ_OPTION_LETTERS[i] ?? String(i + 1)}
                 text={optsOrderDisplay[i] ?? canonical}
-                state={legacyPracticeOptState(canonical)}
+                state={legacyCatOptState(canonical)}
                 disabled={false}
                 onClick={() => setAnswerForCurrent(canonical)}
               />
@@ -2306,7 +2312,7 @@ export function PracticeTestRunnerClient({
                       <ExamTimerReadout remainingSec={remainingSec} />
                     </div>
                   ) : null}
-                  {legacyPracticeOptionRows}
+                  {legacyCatOptions}
                   {confidenceTrackingEnabled ? (
                     <ConfidenceSelector
                       questionId={current.id}
@@ -2404,7 +2410,7 @@ export function PracticeTestRunnerClient({
   // ══════════════════════════════════════════════════════════════════════════
 
   function linearOptState(canonical: string): AnswerOptionState {
-    const isSelected = raw === canonical || (Array.isArray(raw) && raw.includes(canonical));
+    const isSelected = mcqAnswerSelectsCanonical(raw, canonical);
     if (
       isLinearEngine &&
       currentCommitted &&
@@ -2437,12 +2443,7 @@ export function PracticeTestRunnerClient({
 
   const linearCatOptions =
     optsCanonical.length === 0 ? (
-      <p className="rounded-md border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 text-sm text-[var(--semantic-text-muted)]">
-        {tx(
-          "learner.practiceTests.run.noAnswerChoices",
-          "No answer choices were returned for this item. Use Retry, reload the test, or contact support if this persists.",
-        )}
-      </p>
+      mcqNoChoicesFallback
     ) : isSata ? (
       <ul
         className="nn-cat-opt-list"
@@ -2453,7 +2454,7 @@ export function PracticeTestRunnerClient({
         )}
       >
         {optsCanonical.map((canonical, i) => {
-          const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
+          const selected = mcqAnswerSelectsCanonical(raw, canonical);
           const st = linearOptState(canonical);
           const rowText = linearIsExamShell
             ? stripRedundantMcqLetterPrefix(optsDisplay[i] ?? canonical)
@@ -2516,7 +2517,9 @@ export function PracticeTestRunnerClient({
         ? "exam_locked"
         : "waiting";
 
-  const linearShowRationaleAside = isLinearEngine && !linearIsExamShell;
+  /** Tutor / review teaching column — only when per-item rationales are enabled (`after_each`). */
+  const linearShowRationaleAside =
+    isLinearEngine && !linearIsExamShell && linearRationaleVisibility === "after_each";
   const linearRightColumnPhase = resolvePracticeLinearRightColumnPhase({
     linearIsExamShell,
     hasRationalePayload: Boolean(linearFeedback),
