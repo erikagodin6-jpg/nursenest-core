@@ -14,6 +14,7 @@ import path from "node:path";
 import type { StudyPublishedSnapshotEnvelope } from "../../src/lib/study-content-failover/study-published-snapshot-types";
 import { getPathwayLessonsPageFresh } from "../../src/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonsPageResult } from "../../src/lib/lessons/pathway-lesson-loader";
+import { touchStudySnapshotManifest } from "./study-snapshot-manifest-touch.mts";
 
 function stableListOptsKey(listOpts: { q?: string; topicSlugsIn?: string[] } | undefined): string {
   if (!listOpts) return "all";
@@ -59,6 +60,7 @@ async function main(): Promise<void> {
   await mkdir(relDir, { recursive: true });
   const filePath = path.join(relDir, `p${pageRequested}-s${pageSizeRequested}-${optsKey}.json`);
   await writeFile(filePath, JSON.stringify(envelope, null, 2), "utf8");
+  await touchStudySnapshotManifest(baseDir, "pathway_lessons_hub");
   console.log(`Wrote ${filePath}`);
 }
 

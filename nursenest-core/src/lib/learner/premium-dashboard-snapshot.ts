@@ -21,7 +21,8 @@ import {
 import type { ReadinessResult } from "@/lib/learner/readiness-score";
 import type { TopicPerformanceSnapshot } from "@/lib/learner/topic-performance";
 import type { LearnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
-import { learnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
+import { learnerAggregateDegradedState, mergeLearnerAggregateDegraded } from "@/lib/learner/aggregate-loader-degraded-state";
+import { logLearnerStudyLoadDiagnostics } from "@/lib/learner/learner-study-load-diagnostics";
 
 export type PathwayProgressRow = {
   pathwayId: string;
@@ -291,7 +292,7 @@ async function loadPremiumDashboardSnapshotUncached(
 
     const skipOptional = shouldSkipNonCriticalLearnerWork();
 
-    const [pathwayRaw, streakDays, topStrongTopic] = await Promise.all([
+    const [pathwayLoad, streakDays, topStrongTopic] = await Promise.all([
       loadPathwayStudySummaries(userId, entitlement, {
         lessonRows: bundle.pathwayLessonRows,
         pathwayProgress: bundle.pathwayProgressScoped,
@@ -305,7 +306,22 @@ async function loadPremiumDashboardSnapshotUncached(
       ? []
       : await loadLessonContinuationRows(userId, entitlement, bundle.user.learnerPath ?? null);
 
-    const pathways: PathwayProgressRow[] = pathwayRaw.map((p) => {
+    let pathwayDegraded: LearnerAggregateDegradedState | undefined;
+    if (pathwayLoad.status !== "ok") {
+      logLearnerStudyLoadDiagnostics({
+        operation: "loadPremiumDashboardSnapshot",
+        feature_surface: "premium_dashboard",
+        duration_ms: 0,
+        outcome: "error",
+        segment: "pathway_study_summaries",
+        user_id_prefix: userId.slice(0, 8),
+        reason: pathwayLoad.reason ?? "pathway_summaries_failed",
+        fallback_used: "false",
+      });
+      pathwayDegraded = learnerAggregateDegradedState("temporarily_unavailable", ["pathway_summaries"]);
+    }
+
+    const pathways: PathwayProgressRow[] = pathwayLoad.rows.map((p) => {
       const pct = p.lessonsTotal > 0 ? Math.round((p.lessonsCompleted / p.lessonsTotal) * 100) : 0;
       return { ...p, pct };
     });
@@ -315,10 +331,11 @@ async function loadPremiumDashboardSnapshotUncached(
 
     const agg = dash.sessionGrading;
     const practice: PracticePerformanceSummary = {
-      gradedCorrect: agg.correct,
-      gradedTotal: agg.total,
-      sessionCount: agg.sessionCount,
-      accuracyPct: agg.total > 0 ? Math.round((agg.correct / agg.total) * 100) : null,
+      gradedCorrect: dash.sessionGradingReliable ? agg.correct : 0,
+      gradedTotal: dash.sessionGradingReliable ? agg.total : 0,
+      sessionCount: dash.sessionGradingReliable ? agg.sessionCount : 0,
+      accuracyPct:
+        dash.sessionGradingReliable && agg.total > 0 ? Math.round((agg.correct / agg.total) * 100) : null,
     };
 
     const momentumMessages = buildMomentumMessages({
@@ -419,15 +436,18 @@ async function loadPremiumDashboardSnapshotUncached(
         examDate: bundle.user.examDate ?? null,
         examDatePlanType: bundle.user.examDatePlanType ?? null,
       },
-      degraded: skipOptional
-        ? learnerAggregateDegradedState("durability_degraded", [
-            "study_streak",
-            "strong_topic",
-            "lesson_continuations",
-            "flashcards",
-            "insights",
-          ])
-        : undefined,
+      degraded: mergeLearnerAggregateDegraded(
+        skipOptional
+          ? learnerAggregateDegradedState("durability_degraded", [
+              "study_streak",
+              "strong_topic",
+              "lesson_continuations",
+              "flashcards",
+              "insights",
+            ])
+          : undefined,
+        pathwayDegraded,
+      ),
     };
   } catch {
     safeServerLog("learner_dashboard", "premium_snapshot_load_failed", {

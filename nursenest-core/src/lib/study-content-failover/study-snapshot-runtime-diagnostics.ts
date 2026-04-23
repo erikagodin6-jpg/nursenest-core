@@ -46,7 +46,7 @@ export async function readStudySnapshotManifestLastRefreshedAt(): Promise<string
   const base = snapshotDirFromEnv();
   if (!base) return null;
   try {
-    const txt = await readFile(path.join(path.resolve(base), "manifest.json"), "utf8");
+    const txt = await readFile(path.join(base, "manifest.json"), "utf8");
     const raw: unknown = JSON.parse(txt) as unknown;
     if (!raw || typeof raw !== "object") return null;
     const last = (raw as Record<string, unknown>).lastRefreshedAt;

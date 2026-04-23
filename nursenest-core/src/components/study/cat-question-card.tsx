@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { CheckCircle2, XCircle } from "lucide-react";
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 /**
@@ -272,10 +273,15 @@ export function AnswerOptionRow({
           {letter}
         </span>
         <span
-          className={`nn-cat-opt__control ${checked ? "nn-cat-opt__control--checked" : ""}`}
+          className={`nn-cat-opt__control ${checked || state === "correct" ? "nn-cat-opt__control--checked" : ""}`}
           aria-hidden="true"
         />
         <span className="nn-cat-opt__text">{text}</span>
+        {state === "correct" ? (
+          <CheckCircle2 className="h-5 w-5 shrink-0 text-[var(--nn-exam-accent)]" aria-hidden />
+        ) : state === "incorrect" ? (
+          <XCircle className="h-5 w-5 shrink-0 text-[var(--semantic-danger)]" aria-hidden />
+        ) : null}
       </label>
     );
   }
@@ -292,10 +298,15 @@ export function AnswerOptionRow({
         {letter}
       </span>
       <span
-        className={`nn-cat-opt__control ${state === "selected" ? "nn-cat-opt__control--checked" : ""}`}
+        className={`nn-cat-opt__control ${state === "selected" || state === "correct" ? "nn-cat-opt__control--checked" : ""}`}
         aria-hidden="true"
       />
       <span className="nn-cat-opt__text">{text}</span>
+      {state === "correct" ? (
+        <CheckCircle2 className="h-5 w-5 shrink-0 text-[var(--nn-exam-accent)]" aria-hidden />
+      ) : state === "incorrect" ? (
+        <XCircle className="h-5 w-5 shrink-0 text-[var(--semantic-danger)]" aria-hidden />
+      ) : null}
     </button>
   );
 }

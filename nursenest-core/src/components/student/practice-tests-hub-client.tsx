@@ -31,6 +31,7 @@ import {
 } from "@/lib/student/interaction-priority";
 import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exam-start-payload";
 import { ExamPreExamCustomizeModal } from "@/components/exam/exam-study-theme-modal";
+import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 
 type TestListRow = {
   id: string;
@@ -56,12 +57,15 @@ export function PracticeTestsHubClient({
   pathwayOptions = [],
   defaultPathwayId = null,
   catEligiblePathwayIds = [],
+  hubBootstrapSource = "primary",
 }: {
   examSimulationEnabled?: boolean;
   pathwayOptions?: PracticeTestPathwayOption[];
   defaultPathwayId?: string | null;
   /** Pathway ids that support CAT adaptive start (server-aligned with POST /api/practice-tests). */
   catEligiblePathwayIds?: string[];
+  /** When hub pathway bootstrap used a published snapshot (DB degraded). */
+  hubBootstrapSource?: "primary" | "secondary";
 }) {
   const { t } = useMarketingI18n();
   const searchParams = useSearchParams();
@@ -332,6 +336,11 @@ export function PracticeTestsHubClient({
 
   return (
     <div className="space-y-8" data-nn-learner-area="practice-tests">
+      {hubBootstrapSource === "secondary" ? (
+        <div className="max-w-3xl" data-nn-practice-hub-bootstrap-source="secondary">
+          <LearnerStudyLiveSyncBanner />
+        </div>
+      ) : null}
       <section
         className={`nn-card nn-student-card-lift p-6 sm:p-7 ${
           isPriorityWinner(hubPriority, "weak_focus")

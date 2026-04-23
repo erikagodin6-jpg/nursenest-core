@@ -10,9 +10,11 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { RoleTrackSlug } from "@/lib/exam-pathways/types";
 import {
+  buildPathwayStudySummariesFromLessonInventory,
   loadPathwayLessonProgressBundle,
   loadPathwayStudySummaries,
 } from "@/lib/learner/load-learner-dashboard";
+import type { PathwayStudySummariesRow } from "@/lib/learner/load-learner-dashboard";
 import {
   buildVisibleLessonScopeForLearner,
   countProgressInProgressForLessonIds,
@@ -22,10 +24,11 @@ import {
 import type { RecentMock } from "@/lib/learner/load-learner-dashboard";
 import { resolveLessonRefFromProgressId } from "@/lib/lessons/lesson-progress-resolver";
 import type { LearnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
-import { learnerAggregateDegradedState } from "@/lib/learner/aggregate-loader-degraded-state";
+import { learnerAggregateDegradedState, mergeLearnerAggregateDegraded } from "@/lib/learner/aggregate-loader-degraded-state";
+import { logLearnerStudyLoadDiagnostics } from "@/lib/learner/learner-study-load-diagnostics";
 import type { PracticeTestConfigJson, PracticeTestResultsJson } from "@/lib/practice-tests/types";
 import { loadSessionGradingAggregate } from "@/lib/learner/session-grading-aggregate";
-import { loadPathwayTopicCoverageBatch } from "@/lib/lessons/pathway-topic-coverage";
+import { loadPathwayTopicCoverageBatch, type PathwayTopicCoverage } from "@/lib/lessons/pathway-topic-coverage";
 
 const PRACTICE_RECENT_LIMIT = 6;
 const MOCK_RECENT_LIMIT = 5;
@@ -85,6 +88,19 @@ export type PathwayProgressCardModel = {
   topicCoveragePct: number;
 };
 
+/** Per-segment trust: when false, zeros/empties in that column must not be read as real learner state. */
+export type ProgressPageSegmentReliability = {
+  pathwaySummaries: boolean;
+  contentLessonInventoryCount: boolean;
+  scopedLessonProgress: boolean;
+  topicLedgerAggregate: boolean;
+  topicLedgerTopicCount: boolean;
+  recentGradedSessions: boolean;
+  examMockHistory: boolean;
+  practiceTestHistory: boolean;
+  pathwayTopicCoverage: boolean;
+};
+
 export type ProgressPagePayload = {
   lessonsPool: LessonsPoolProgress;
   pathways: PathwayProgressCardModel[];
@@ -92,6 +108,7 @@ export type ProgressPagePayload = {
   exams: PracticeExamProgress;
   continueLesson: { title: string; href: string } | null;
   degraded?: LearnerAggregateDegradedState;
+  segmentReliability: ProgressPageSegmentReliability;
 };
 
 const TRACK_ORDER: RoleTrackSlug[] = ["rn", "rpn", "lpn", "np", "allied"];
@@ -111,6 +128,18 @@ function pathwayTrackKey(roleTrack: RoleTrackSlug | undefined): PathwayProgressT
       return "other";
   }
 }
+
+const ALL_SEGMENTS_RELIABLE: ProgressPageSegmentReliability = {
+  pathwaySummaries: true,
+  contentLessonInventoryCount: true,
+  scopedLessonProgress: true,
+  topicLedgerAggregate: true,
+  topicLedgerTopicCount: true,
+  recentGradedSessions: true,
+  examMockHistory: true,
+  practiceTestHistory: true,
+  pathwayTopicCoverage: true,
+};
 
 function sortPathways(a: PathwayProgressCardModel, b: PathwayProgressCardModel): number {
   const defA = getExamPathwayById(a.pathwayId);
@@ -151,10 +180,25 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
         "question_bank",
         "recent_exams",
       ]),
+      segmentReliability: {
+        ...ALL_SEGMENTS_RELIABLE,
+        pathwaySummaries: false,
+        contentLessonInventoryCount: false,
+        scopedLessonProgress: false,
+        topicLedgerAggregate: false,
+        topicLedgerTopicCount: false,
+        recentGradedSessions: false,
+        examMockHistory: false,
+        practiceTestHistory: false,
+        pathwayTopicCoverage: false,
+      },
     };
   }
-  try {
+  const tPage = performance.now();
+  let reliability: ProgressPageSegmentReliability = { ...ALL_SEGMENTS_RELIABLE };
+  const degradedPanels: string[] = [];
 
+  try {
   const bundle = await loadPathwayLessonProgressBundle(userId, entitlement, { source: "loadProgressPagePayload" });
   if (!bundle) return null;
 
@@ -166,34 +210,85 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
     pathwayLessonRows: bundle.pathwayLessonRows,
   });
 
-  const pathwaySummaries = await loadPathwayStudySummaries(userId, entitlement, {
+  const tSummaries = performance.now();
+  const pathwaySummariesResult = await loadPathwayStudySummaries(userId, entitlement, {
     lessonRows: bundle.pathwayLessonRows,
     pathwayProgress: bundle.pathwayProgressScoped,
     learnerPath: bundle.user.learnerPath,
   });
+  let pathwayRows: PathwayStudySummariesRow[] = pathwaySummariesResult.rows;
+  let pathwaysReliable = pathwaySummariesResult.status === "ok";
+  if (!pathwaysReliable) {
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadProgressPagePayload",
+      feature_surface: "progress_page",
+      duration_ms: Math.round(performance.now() - tSummaries),
+      outcome: "error",
+      segment: "pathway_study_summaries",
+      user_id_prefix: userId.slice(0, 8),
+      reason: pathwaySummariesResult.reason ?? "pathway_summaries_failed",
+      fallback_used: "false",
+    });
+    if (bundle.pathwayLessonRows.length > 0) {
+      const tRec = performance.now();
+      try {
+        pathwayRows = await buildPathwayStudySummariesFromLessonInventory(
+          entitlement,
+          bundle.pathwayLessonRows,
+          bundle.pathwayProgressScoped,
+        );
+        pathwaysReliable = true;
+        logLearnerStudyLoadDiagnostics({
+          operation: "loadProgressPagePayload",
+          feature_surface: "progress_page",
+          duration_ms: Math.round(performance.now() - tRec),
+          outcome: "degraded",
+          segment: "pathway_summaries_bundle_rebuild",
+          user_id_prefix: userId.slice(0, 8),
+          source_row_count: String(bundle.pathwayLessonRows.length),
+          fallback_used: "true",
+        });
+        degradedPanels.push("pathway_inventory_bundle_fallback");
+      } catch (e) {
+        logLearnerStudyLoadDiagnostics({
+          operation: "loadProgressPagePayload",
+          feature_surface: "progress_page",
+          duration_ms: Math.round(performance.now() - tRec),
+          outcome: "error",
+          segment: "pathway_summaries_bundle_rebuild",
+          user_id_prefix: userId.slice(0, 8),
+          reason: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+          fallback_used: "false",
+        });
+      }
+    }
+    if (!pathwaysReliable) {
+      degradedPanels.push("pathway_summaries");
+    }
+  }
+  reliability.pathwaySummaries = pathwaysReliable;
 
+  const tParallel = performance.now();
   const [
-    contentLessonTotal,
-    lessonsCompleted,
-    lessonsInProgressCount,
-    topicSums,
-    questionTopicsPracticed,
-    recentGraded,
-    mocksRaw,
-    practiceCompletedCount,
-    practiceRecent,
-    incompleteProgress,
-  ] = await Promise.all([
+    contentLessonTotalResult,
+    lessonsCompletedResult,
+    lessonsInProgressResult,
+    topicSumsResult,
+    questionTopicsPracticedResult,
+    recentGradedResult,
+    mocksRawResult,
+    practiceCompletedResult,
+    practiceRecentResult,
+    incompleteProgressResult,
+  ] = await Promise.allSettled([
     prisma.contentItem.count({ where: { ...lessonWhere, type: "lesson" } }),
     countScopedLessonsCompleted(userId, entitlement, visibleLessonScope, bundle.pathwayLessonRows),
     countProgressInProgressForLessonIds(userId, visibleLessonScope.lessonIds),
-    prisma.userTopicStat
-      .aggregate({
-        where: { userId },
-        _sum: { correctCount: true, wrongCount: true },
-      })
-      .catch(() => ({ _sum: { correctCount: null as number | null, wrongCount: null as number | null } })),
-    prisma.userTopicStat.count({ where: { userId } }).catch(() => 0),
+    prisma.userTopicStat.aggregate({
+      where: { userId },
+      _sum: { correctCount: true, wrongCount: true },
+    }),
+    prisma.userTopicStat.count({ where: { userId } }),
     loadSessionGradingAggregate(userId, entitlement, 8),
     prisma.examAttempt.findMany({
       where: { userId },
@@ -207,27 +302,250 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
         exam: { select: { title: true } },
       },
     }),
-    prisma.practiceTest.count({ where: { userId, status: PracticeTestStatus.COMPLETED } }).catch(() => 0),
-    prisma.practiceTest
-      .findMany({
-        where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-        orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
-        take: 12,
-        select: { id: true, title: true, completedAt: true, config: true, results: true },
-      })
-      .catch(() => []),
+    prisma.practiceTest.count({ where: { userId, status: PracticeTestStatus.COMPLETED } }),
+    prisma.practiceTest.findMany({
+      where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
+      orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
+      take: 12,
+      select: { id: true, title: true, completedAt: true, config: true, results: true },
+    }),
     findLatestIncompleteProgressLessonId(userId, visibleLessonScope.lessonIds),
   ]);
 
-  const pathwayLessonTotal = pathwaySummaries.reduce((sum, row) => sum + row.lessonsTotal, 0);
+  let contentLessonTotal = 0;
+  if (contentLessonTotalResult.status === "fulfilled") {
+    contentLessonTotal = contentLessonTotalResult.value;
+  } else {
+    reliability.contentLessonInventoryCount = false;
+    degradedPanels.push("content_lesson_inventory");
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadProgressPagePayload",
+      feature_surface: "progress_page",
+      duration_ms: Math.round(performance.now() - tParallel),
+      outcome: "error",
+      segment: "content_lesson_count",
+      user_id_prefix: userId.slice(0, 8),
+      reason:
+        contentLessonTotalResult.reason instanceof Error
+          ? contentLessonTotalResult.reason.message.slice(0, 400)
+          : String(contentLessonTotalResult.reason).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
+
+  let lessonsCompleted = 0;
+  if (lessonsCompletedResult.status === "fulfilled") {
+    lessonsCompleted = lessonsCompletedResult.value;
+  } else {
+    reliability.scopedLessonProgress = false;
+    degradedPanels.push("lessons_completed");
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadProgressPagePayload",
+      feature_surface: "progress_page",
+      outcome: "error",
+      duration_ms: 0,
+      segment: "scoped_lessons_completed",
+      user_id_prefix: userId.slice(0, 8),
+      reason:
+        lessonsCompletedResult.reason instanceof Error
+          ? lessonsCompletedResult.reason.message.slice(0, 400)
+          : String(lessonsCompletedResult.reason).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
+
+  let lessonsInProgressCount = 0;
+  if (lessonsInProgressResult.status === "fulfilled") {
+    lessonsInProgressCount = lessonsInProgressResult.value;
+  } else {
+    reliability.scopedLessonProgress = false;
+    degradedPanels.push("lessons_in_progress");
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadProgressPagePayload",
+      feature_surface: "progress_page",
+      outcome: "error",
+      duration_ms: 0,
+      segment: "lessons_in_progress_count",
+      user_id_prefix: userId.slice(0, 8),
+      reason:
+        lessonsInProgressResult.reason instanceof Error
+          ? lessonsInProgressResult.reason.message.slice(0, 400)
+          : String(lessonsInProgressResult.reason).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
+
+  let topicSums = { _sum: { correctCount: null as number | null, wrongCount: null as number | null } };
+  if (topicSumsResult.status === "fulfilled") {
+    topicSums = topicSumsResult.value;
+  } else {
+    reliability.topicLedgerAggregate = false;
+    degradedPanels.push("topic_ledger_aggregate");
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadProgressPagePayload",
+      feature_surface: "progress_page",
+      outcome: "error",
+      duration_ms: 0,
+      segment: "user_topic_stat_aggregate",
+      user_id_prefix: userId.slice(0, 8),
+      reason:
+        topicSumsResult.reason instanceof Error
+          ? topicSumsResult.reason.message.slice(0, 400)
+          : String(topicSumsResult.reason).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
+
+  let questionTopicsPracticed = 0;
+  if (questionTopicsPracticedResult.status === "fulfilled") {
+    questionTopicsPracticed = questionTopicsPracticedResult.value;
+  } else {
+    reliability.topicLedgerTopicCount = false;
+    degradedPanels.push("topic_ledger_topics");
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadProgressPagePayload",
+      feature_surface: "progress_page",
+      outcome: "error",
+      duration_ms: 0,
+      segment: "user_topic_stat_count",
+      user_id_prefix: userId.slice(0, 8),
+      reason:
+        questionTopicsPracticedResult.reason instanceof Error
+          ? questionTopicsPracticedResult.reason.message.slice(0, 400)
+          : String(questionTopicsPracticedResult.reason).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
+
+  let recentGraded = { correct: 0, total: 0, sessionCount: 0 };
+  if (recentGradedResult.status === "fulfilled") {
+    recentGraded = recentGradedResult.value;
+  } else {
+    reliability.recentGradedSessions = false;
+    degradedPanels.push("recent_graded_sessions");
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadProgressPagePayload",
+      feature_surface: "progress_page",
+      outcome: "error",
+      duration_ms: 0,
+      segment: "session_grading_aggregate",
+      user_id_prefix: userId.slice(0, 8),
+      reason:
+        recentGradedResult.reason instanceof Error
+          ? recentGradedResult.reason.message.slice(0, 400)
+          : String(recentGradedResult.reason).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
+
+  type MockAttemptRow = {
+    id: string;
+    score: number;
+    total: number;
+    createdAt: Date;
+    exam: { title: string };
+  };
+  let mocksRaw: MockAttemptRow[] = [];
+  if (mocksRawResult.status === "fulfilled") {
+    mocksRaw = mocksRawResult.value as MockAttemptRow[];
+  } else {
+    reliability.examMockHistory = false;
+    degradedPanels.push("exam_mock_history");
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadProgressPagePayload",
+      feature_surface: "progress_page",
+      outcome: "error",
+      duration_ms: 0,
+      segment: "exam_attempt_recent",
+      user_id_prefix: userId.slice(0, 8),
+      reason:
+        mocksRawResult.reason instanceof Error
+          ? mocksRawResult.reason.message.slice(0, 400)
+          : String(mocksRawResult.reason).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
+
+  let practiceCompletedCount = 0;
+  if (practiceCompletedResult.status === "fulfilled") {
+    practiceCompletedCount = practiceCompletedResult.value;
+  } else {
+    reliability.practiceTestHistory = false;
+    degradedPanels.push("practice_test_completed_count");
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadProgressPagePayload",
+      feature_surface: "progress_page",
+      outcome: "error",
+      duration_ms: 0,
+      segment: "practice_test_count",
+      user_id_prefix: userId.slice(0, 8),
+      reason:
+        practiceCompletedResult.reason instanceof Error
+          ? practiceCompletedResult.reason.message.slice(0, 400)
+          : String(practiceCompletedResult.reason).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
+
+  type PracticeRecentRow = {
+    id: string;
+    title: string | null;
+    completedAt: Date | null;
+    config: unknown;
+    results: unknown;
+  };
+  let practiceRecent: PracticeRecentRow[] = [];
+  if (practiceRecentResult.status === "fulfilled") {
+    practiceRecent = practiceRecentResult.value as PracticeRecentRow[];
+  } else {
+    reliability.practiceTestHistory = false;
+    degradedPanels.push("practice_test_recent");
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadProgressPagePayload",
+      feature_surface: "progress_page",
+      outcome: "error",
+      duration_ms: 0,
+      segment: "practice_test_recent_list",
+      user_id_prefix: userId.slice(0, 8),
+      reason:
+        practiceRecentResult.reason instanceof Error
+          ? practiceRecentResult.reason.message.slice(0, 400)
+          : String(practiceRecentResult.reason).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
+
+  const incompleteProgress =
+    incompleteProgressResult.status === "fulfilled" ? incompleteProgressResult.value : null;
+  if (incompleteProgressResult.status === "rejected") {
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadProgressPagePayload",
+      feature_surface: "progress_page",
+      outcome: "degraded",
+      segment: "continue_lesson_progress_lookup",
+      user_id_prefix: userId.slice(0, 8),
+      reason:
+        incompleteProgressResult.reason instanceof Error
+          ? incompleteProgressResult.reason.message.slice(0, 400)
+          : String(incompleteProgressResult.reason).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
+
+  const pathwayLessonTotal = pathwayRows.reduce((sum, row) => sum + row.lessonsTotal, 0);
   const lessonsAvailable = contentLessonTotal + pathwayLessonTotal;
   const notStartedPool = Math.max(0, lessonsAvailable - lessonsCompleted - lessonsInProgressCount);
 
   const correctSum = topicSums._sum.correctCount ?? 0;
   const wrongSum = topicSums._sum.wrongCount ?? 0;
-  const ledgerAttempted = correctSum + wrongSum;
+  const ledgerAttempted =
+    reliability.topicLedgerAggregate && topicSums._sum.correctCount != null && topicSums._sum.wrongCount != null
+      ? correctSum + wrongSum
+      : 0;
   const ledgerAccuracyPct =
-    ledgerAttempted > 0 ? Math.round((correctSum / ledgerAttempted) * 100) : null;
+    reliability.topicLedgerAggregate && ledgerAttempted > 0
+      ? Math.round((correctSum / ledgerAttempted) * 100)
+      : null;
 
   const recentMocks: RecentMock[] = mocksRaw.slice(0, MOCK_RECENT_LIMIT).map((a) => ({
     id: a.id,
@@ -271,10 +589,27 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
     }
   }
 
-  const pathwayIdList = pathwaySummaries.map((p) => p.pathwayId);
-  const topicCoverageMap = await loadPathwayTopicCoverageBatch(userId, pathwayIdList);
+  const pathwayIdList = pathwayRows.map((p) => p.pathwayId);
+  let topicCoverageMap = new Map<string, PathwayTopicCoverage>();
+  const tCov = performance.now();
+  try {
+    topicCoverageMap = await loadPathwayTopicCoverageBatch(userId, pathwayIdList);
+  } catch (e) {
+    reliability.pathwayTopicCoverage = false;
+    degradedPanels.push("pathway_topic_coverage");
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadProgressPagePayload",
+      feature_surface: "progress_page",
+      duration_ms: Math.round(performance.now() - tCov),
+      outcome: "error",
+      segment: "pathway_topic_coverage_batch",
+      user_id_prefix: userId.slice(0, 8),
+      reason: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      fallback_used: "false",
+    });
+  }
 
-  const pathways: PathwayProgressCardModel[] = pathwaySummaries.map((p) => {
+  const pathways: PathwayProgressCardModel[] = pathwayRows.map((p) => {
     const def = getExamPathwayById(p.pathwayId);
     const notStarted = Math.max(0, p.lessonsTotal - p.lessonsCompleted - p.lessonsInProgress);
     const pct = p.lessonsTotal > 0 ? Math.round((p.lessonsCompleted / p.lessonsTotal) * 100) : 0;
@@ -295,6 +630,18 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
   });
   pathways.sort(sortPathways);
 
+  const degraded =
+    degradedPanels.length > 0 ? learnerAggregateDegradedState("temporarily_unavailable", degradedPanels) : undefined;
+  logLearnerStudyLoadDiagnostics({
+    operation: "loadProgressPagePayload",
+    feature_surface: "progress_page",
+    duration_ms: Math.round(performance.now() - tPage),
+    outcome: degraded ? "degraded" : "ok",
+    user_id_prefix: userId.slice(0, 8),
+    fallback_used: degradedPanels.some((p) => p.includes("fallback")) ? "true" : "false",
+    final_outcome: degraded ? "degraded" : "ok",
+  });
+
   return {
     lessonsPool: {
       available: lessonsAvailable,
@@ -306,7 +653,7 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
     questionBank: {
       ledgerAttempted,
       ledgerAccuracyPct,
-      topicsPracticed: questionTopicsPracticed,
+      topicsPracticed: reliability.topicLedgerTopicCount ? questionTopicsPracticed : 0,
       recentGraded: {
         correct: recentGraded.correct,
         total: recentGraded.total,
@@ -320,10 +667,45 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
       recentMocks,
     },
     continueLesson,
-    degraded: undefined,
+    degraded,
+    segmentReliability: reliability,
   };
-  } catch {
-    return null;
+  } catch (e) {
+    logLearnerStudyLoadDiagnostics({
+      operation: "loadProgressPagePayload",
+      feature_surface: "progress_page",
+      duration_ms: Math.round(performance.now() - tPage),
+      outcome: "error",
+      segment: "uncaught",
+      user_id_prefix: userId.slice(0, 8),
+      reason: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      fallback_used: "false",
+    });
+    return {
+      lessonsPool: { available: 0, completed: 0, inProgress: 0, notStarted: 0 },
+      pathways: [],
+      questionBank: {
+        ledgerAttempted: 0,
+        ledgerAccuracyPct: null,
+        topicsPracticed: 0,
+        recentGraded: { correct: 0, total: 0, sessionCount: 0, accuracyPct: null },
+      },
+      exams: { completedPracticeTests: 0, recentPracticeTests: [], recentMocks: [] },
+      continueLesson: null,
+      degraded: learnerAggregateDegradedState("temporarily_unavailable", ["progress_page_uncaught"]),
+      segmentReliability: {
+        ...ALL_SEGMENTS_RELIABLE,
+        pathwaySummaries: false,
+        contentLessonInventoryCount: false,
+        scopedLessonProgress: false,
+        topicLedgerAggregate: false,
+        topicLedgerTopicCount: false,
+        recentGradedSessions: false,
+        examMockHistory: false,
+        practiceTestHistory: false,
+        pathwayTopicCoverage: false,
+      },
+    };
   }
 }
 

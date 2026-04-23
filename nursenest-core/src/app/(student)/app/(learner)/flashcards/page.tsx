@@ -11,6 +11,8 @@ import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/path
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { resolveSubscribedQuestionBankPathways, type ResolvedQuestionBankPathways } from "@/lib/learner/tier-scoped-study-routes";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { readFlashcardsHubPathwayBootstrapSnapshot } from "@/lib/study-content-failover/flashcards-hub-bootstrap-snapshot-read";
+import { snapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
 
 type PageProps = { searchParams: Promise<{ pathwayId?: string | string[] }> };
 
@@ -47,6 +49,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   let pathwayOptions: { id: string; label: string }[] = [];
   let pathwayResolution: ResolvedQuestionBankPathways | null = null;
+  let pathwayBootstrapSource: "primary" | "secondary" = "primary";
 
   if (userId && isDatabaseUrlConfigured()) {
     try {
@@ -68,21 +71,47 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
         pathwayOptions = [{ id: "pre-nursing", label: "Pre-Nursing" }, ...pathwayOptions];
       }
     } catch (e) {
-      safeServerLog("learner_flashcards", "pathway_bootstrap_failed", {
+      safeServerLog("learner_flashcards", "pathway_bootstrap_primary_failed", {
         user_id: userId.slice(0, 8),
         outcome: "error",
         error_message: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
       });
-      return (
-        <div className="mx-auto max-w-3xl px-4 py-8">
-          <ContentEmptyState
-            variant="generic"
-            headline="Could not load flashcard tracks"
-            body="We hit an error while loading your subscription pathways. Retry in a moment — this is not an empty library."
-            primaryCta={{ label: "Retry", href: "/app/flashcards" }}
-          />
-        </div>
-      );
+      const tier = entitlement.tier != null ? String(entitlement.tier) : "";
+      const country = entitlement.country != null ? String(entitlement.country) : "";
+      const snap = tier && country ? await readFlashcardsHubPathwayBootstrapSnapshot({ tier, country }) : null;
+      if (snap?.payload) {
+        pathwayBootstrapSource = "secondary";
+        pathwayOptions = snap.payload.pathwayOptions;
+        if (entitlement.tier === TierCode.PRE_NURSING) {
+          pathwayOptions = [{ id: "pre-nursing", label: "Pre-Nursing" }, ...pathwayOptions];
+        }
+        pathwayResolution = resolveSubscribedQuestionBankPathways({
+          requestedPathwayId,
+          compatible: snap.payload.compatibleRows,
+          learnerPath: null,
+        });
+        const age = snapshotAgeMs(snap.capturedAt);
+        safeServerLog("learner_flashcards", "study_content_failover", {
+          event: "study_content_failover",
+          surface: "flashcards_hub_pathway_bootstrap",
+          source_used: "secondary",
+          failover_reason: "primary_db_failed",
+          snapshot_version: snap.version.slice(0, 120),
+          snapshot_age_ms: String(Math.round(age)),
+          user_id_prefix: userId.slice(0, 8),
+        });
+      } else {
+        return (
+          <div className="mx-auto max-w-3xl px-4 py-8">
+            <ContentEmptyState
+              variant="generic"
+              headline="Could not load flashcard tracks"
+              body="We hit an error while loading your subscription pathways and no published snapshot is available. Retry in a moment — this is not an empty library."
+              primaryCta={{ label: "Retry", href: "/app/flashcards" }}
+            />
+          </div>
+        );
+      }
     }
   }
 
@@ -129,7 +158,11 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   return (
     <Suspense fallback={<div className="mx-auto max-w-3xl px-4 py-8 text-sm">{t("learner.loading.flashcards")}</div>}>
-      <FlashcardsHubClient scopedPathwayId={scopedPathwayId} pathwayDisplayName={pathwayDisplayName} />
+      <FlashcardsHubClient
+        scopedPathwayId={scopedPathwayId}
+        pathwayDisplayName={pathwayDisplayName}
+        pathwayBootstrapSource={pathwayBootstrapSource}
+      />
     </Suspense>
   );
 }

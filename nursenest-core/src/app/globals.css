@@ -6442,7 +6442,7 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 /* Option row — 16px padding, horizontal flex */
 .nn-cat-opt {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
   padding: 16px;
   width: 100%;
@@ -6476,10 +6476,12 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--nn-exam-accent) 16%, transparent);
 }
 
-/* Correct — soft success surface */
+/* Correct (study / review) — exam-accent “selected correct” board (UWorld-style) */
 .nn-cat-opt--correct {
-  border-color: color-mix(in srgb, var(--role-success) 28%, var(--semantic-border-soft));
-  background: var(--role-success-soft);
+  border-width: 2px;
+  border-color: color-mix(in srgb, var(--nn-exam-accent) 52%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-exam-accent) 7%, var(--bg-card, var(--semantic-surface)));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--nn-exam-accent) 14%, transparent);
 }
 
 /* Incorrect (selected wrong answer) — soft error surface */
@@ -6530,9 +6532,15 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
 }
 
 .nn-cat-opt--correct .nn-cat-opt__letter {
-  border-color: color-mix(in srgb, var(--role-success) 36%, var(--semantic-border-soft));
-  background: color-mix(in srgb, var(--role-success) 14%, var(--bg-card));
-  color: var(--role-success-text);
+  border-color: color-mix(in srgb, var(--nn-exam-accent) 40%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-exam-accent) 82%, var(--semantic-surface));
+  color: var(--semantic-surface);
+}
+
+.nn-cat-opt--correct .nn-cat-opt__control,
+.nn-cat-opt--correct .nn-cat-opt__control--checked {
+  border-color: color-mix(in srgb, var(--nn-exam-accent) 65%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--nn-exam-accent) 78%, var(--semantic-surface));
 }
 
 .nn-cat-opt--incorrect .nn-cat-opt__letter {
@@ -7623,6 +7631,16 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
     color-mix(in srgb, var(--theme-primary) 14%, var(--semantic-border-soft));
 }
 
+/* Clinical pearl — warm highlight (review boards) */
+.nn-practice-rsection--pearl {
+  background: color-mix(in srgb, var(--semantic-warning) 9%, var(--semantic-surface));
+  border: 1px solid color-mix(in srgb, var(--semantic-warning) 22%, var(--semantic-border-soft));
+}
+
+.nn-practice-rsection--pearl .nn-practice-rsection__label {
+  color: color-mix(in srgb, var(--semantic-warning) 55%, var(--semantic-text-muted));
+}
+
 .nn-practice-rsection__label {
   font-size: 0.6875rem;
   font-weight: 700;
@@ -7681,6 +7699,10 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   font-weight: 600;
   color: var(--semantic-text-secondary);
   line-height: 1.4;
+}
+
+.nn-practice-incorrect-opt-row--danger-label .nn-practice-incorrect-opt-row__text {
+  color: color-mix(in srgb, var(--semantic-danger) 78%, var(--semantic-text-primary));
 }
 
 .nn-practice-incorrect-opt-row__explanation {

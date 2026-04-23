@@ -6,6 +6,7 @@ import {
   loadPathwayLessonProgressBundle,
   loadPathwayStudySummaries,
   type LearnerDashboardModel,
+  type PathwayStudySummariesLoadResult,
 } from "@/lib/learner/load-learner-dashboard";
 
 /**
@@ -13,7 +14,8 @@ import {
  */
 export type StudyPlannerContext = {
   dashboard: LearnerDashboardModel | null;
-  pathways: Awaited<ReturnType<typeof loadPathwayStudySummaries>>;
+  /** Typed load outcome — do not treat `rows.length === 0` as “no pathways” when `status === "error"`. */
+  pathwaySummaries: PathwayStudySummariesLoadResult;
   dailyStudyMinutes: number | null;
   examFocus: string | null;
   studyGoal: string | null;
@@ -51,7 +53,7 @@ export async function loadStudyPlannerContext(
 
   return {
     dashboard,
-    pathways,
+    pathwaySummaries: pathways,
     dailyStudyMinutes: bundle.user.dailyStudyMinutes,
     examFocus: bundle.user.examFocus,
     studyGoal: bundle.user.studyGoal,

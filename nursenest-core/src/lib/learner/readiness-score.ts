@@ -129,6 +129,16 @@ export function computeReadiness(args: {
   lessonsAvailable: number;
   /** Optional scope for conservative calibration in thinner cohorts. */
   scope?: { tier?: string; country?: string };
+  /**
+   * When false, session-graded practice totals must not be interpreted as real zeros —
+   * readiness omits the practice factor (0 max) instead of implying “no practice yet”.
+   */
+  practiceSignalReliable?: boolean;
+  /**
+   * When false, weak-topic rows must not be interpreted as “no weak areas” —
+   * readiness omits the topic factor (0 max) instead of awarding full topic credit.
+   */
+  topicPerformanceSignalReliable?: boolean;
 }): ReadinessResult {
   const {
     practiceCorrect,
@@ -138,6 +148,8 @@ export function computeReadiness(args: {
     lessonsCompleted,
     lessonsAvailable,
     scope,
+    practiceSignalReliable = true,
+    topicPerformanceSignalReliable = true,
   } = args;
   const signalProfile = resolveSignalProfile(scope);
   const calibratedPreview = signalProfile.minPracticeItems > MIN_PRACTICE_ITEMS;
@@ -151,7 +163,9 @@ export function computeReadiness(args: {
 
   const usableMocks = recentMocks.filter((m) => m.total >= MIN_QUESTIONS_PER_MOCK).slice(0, 3);
 
-  if (!hasMinimumSignal(practiceTotal, recentMocks, signalProfile)) {
+  const practiceTotalForSignals = practiceSignalReliable ? practiceTotal : 0;
+
+  if (!hasMinimumSignal(practiceTotalForSignals, recentMocks, signalProfile)) {
     return {
       score: null,
       band: "insufficient_data",
@@ -181,7 +195,16 @@ export function computeReadiness(args: {
   /** Practice accuracy factor (0–35) */
   let practicePoints = 0;
   let practiceMax = 0;
-  if (practiceTotal >= signalProfile.minPracticeItems) {
+  if (!practiceSignalReliable) {
+    factors.push({
+      id: "practice_accuracy",
+      label: "Practice Questions",
+      points: 0,
+      maxPoints: 0,
+      detail:
+        "Recent scored practice data could not be loaded. Refresh to try again — this factor is hidden until the signal is available.",
+    });
+  } else if (practiceTotal >= signalProfile.minPracticeItems) {
     practiceMax = 35;
     const acc = practiceTotal > 0 ? practiceCorrect / practiceTotal : 0;
     practicePoints = Math.round(35 * clamp01(acc));
@@ -236,29 +259,41 @@ export function computeReadiness(args: {
 
   /** Topic error pressure (0–25): lower miss concentration → higher score */
   let topicPoints = 0;
-  const topicMax = 25;
-  if (weakTopics.length === 0) {
-    topicPoints = 25;
+  let topicMax = 0;
+  if (!topicPerformanceSignalReliable) {
     factors.push({
       id: "topic_errors",
       label: "Topic Strength",
-      points: topicPoints,
-      maxPoints: topicMax,
-      detail: "No weak topics identified yet. This improves as you answer more questions.",
+      points: 0,
+      maxPoints: 0,
+      detail:
+        "Topic performance could not be loaded. An empty weak-topic list here does not mean you have no weak areas — refresh to retry.",
     });
   } else {
-    const top = weakTopics.slice(0, 3);
-    const weights = top.map((t) => Math.max(0.12, (t.weakPriorityScore ?? 0.5) + 0.12));
-    const wSum = weights.reduce((s, w) => s + w, 0) || 1;
-    const avgMiss = top.reduce((s, t, i) => s + t.missRate * (weights[i] ?? 1), 0) / wSum;
-    topicPoints = Math.round(25 * clamp01(1 - avgMiss / 100));
-    factors.push({
-      id: "topic_errors",
-      label: "Topic Strength",
-      points: topicPoints,
-      maxPoints: topicMax,
-      detail: `Your weakest topics have a ~${Math.round(avgMiss)}% miss rate. Bringing this down will lift your score.`,
-    });
+    topicMax = 25;
+    if (weakTopics.length === 0) {
+      topicPoints = 25;
+      factors.push({
+        id: "topic_errors",
+        label: "Topic Strength",
+        points: topicPoints,
+        maxPoints: topicMax,
+        detail: "No weak topics identified yet. This improves as you answer more questions.",
+      });
+    } else {
+      const top = weakTopics.slice(0, 3);
+      const weights = top.map((t) => Math.max(0.12, (t.weakPriorityScore ?? 0.5) + 0.12));
+      const wSum = weights.reduce((s, w) => s + w, 0) || 1;
+      const avgMiss = top.reduce((s, t, i) => s + t.missRate * (weights[i] ?? 1), 0) / wSum;
+      topicPoints = Math.round(25 * clamp01(1 - avgMiss / 100));
+      factors.push({
+        id: "topic_errors",
+        label: "Topic Strength",
+        points: topicPoints,
+        maxPoints: topicMax,
+        detail: `Your weakest topics have a ~${Math.round(avgMiss)}% miss rate. Bringing this down will lift your score.`,
+      });
+    }
   }
 
   /** Lesson completion (0–15) */
@@ -293,7 +328,7 @@ export function computeReadiness(args: {
     band = "near_ready";
   }
 
-  let confidence = confidenceLevel(practiceTotal, usableMocks.length, signalProfile);
+  let confidence = confidenceLevel(practiceTotalForSignals, usableMocks.length, signalProfile);
   if (spread != null && spread > 18 && confidence === "high") {
     confidence = "medium";
   }
@@ -321,13 +356,18 @@ export function computeReadiness(args: {
   }
 
   const whatToImprove: string[] = [];
-  if (practiceTotal >= MIN_PRACTICE_ITEMS && practiceCorrect / practiceTotal < 0.65) {
+  if (
+    practiceSignalReliable &&
+    practiceTotal >= MIN_PRACTICE_ITEMS &&
+    practiceTotal > 0 &&
+    practiceCorrect / practiceTotal < 0.65
+  ) {
     whatToImprove.push("Review explanations on missed questions before adding more practice.");
   }
   if (usableMocks.length && usableMocks.reduce((s, m) => s + m.score / m.total, 0) / usableMocks.length < 0.65) {
     whatToImprove.push("Focus on shorter topic drills before taking full-length exams.");
   }
-  if (weakTopics.length) {
+  if (topicPerformanceSignalReliable && weakTopics.length) {
     whatToImprove.push(
       `Focus on weak topics: ${weakTopics
         .slice(0, 3)
@@ -343,7 +383,7 @@ export function computeReadiness(args: {
   }
 
   const nextActions: string[] = [];
-  if (weakTopics[0]) {
+  if (topicPerformanceSignalReliable && weakTopics[0]) {
     nextActions.push(`Practice ${weakTopics[0].topic} questions.`);
   }
   nextActions.push("Take a full practice exam and review your mistakes.");
@@ -356,7 +396,7 @@ export function computeReadiness(args: {
     if (ratio < 0.42) holdingBack.push(f.label);
   }
 
-  const topWeakAreas = weakTopics.slice(0, 3).map((w) => w.topic);
+  const topWeakAreas = topicPerformanceSignalReliable ? weakTopics.slice(0, 3).map((w) => w.topic) : [];
 
   return {
     score,

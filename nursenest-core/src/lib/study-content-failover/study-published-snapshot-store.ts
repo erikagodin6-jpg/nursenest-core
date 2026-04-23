@@ -5,6 +5,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import type { StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failover/study-published-snapshot-types";
+import { noteStudyPublishedSnapshotReadAttemptWithoutDir } from "@/lib/study-content-failover/study-snapshot-runtime-diagnostics";
 
 function snapshotBaseDir(): string | null {
   const raw = process.env.STUDY_PUBLISHED_SNAPSHOT_DIR?.trim();
@@ -42,7 +43,10 @@ export async function readStudyPublishedSnapshotFile<TPayload>(
   relativePathSegments: string[],
 ): Promise<StudyPublishedSnapshotEnvelope<TPayload> | null> {
   const base = snapshotBaseDir();
-  if (!base) return null;
+  if (!base) {
+    noteStudyPublishedSnapshotReadAttemptWithoutDir();
+    return null;
+  }
   for (const seg of relativePathSegments) {
     if (typeof seg !== "string" || seg.length === 0 || seg.includes("..") || path.isAbsolute(seg)) {
       return null;

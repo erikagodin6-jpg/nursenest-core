@@ -1,7 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
+import { BookOpen, CheckCircle2, Lightbulb, Ban, Sparkles } from "lucide-react";
+
+function RationaleReviewBoardHeader() {
+  return (
+    <div className="mb-2 flex items-center gap-2 border-b border-[var(--semantic-border-soft)] pb-2.5">
+      <BookOpen className="h-4 w-4 shrink-0 text-[var(--semantic-brand)]" aria-hidden />
+      <h2 className="m-0 text-sm font-semibold text-[var(--semantic-brand)]">Rationale & Review</h2>
+    </div>
+  );
+}
 import type { ReactNode } from "react";
 import { ConfidenceChip, type ConfidenceLevel } from "./confidence-selector";
 
@@ -235,6 +244,7 @@ export function PracticeRationaleFullPanel({
 
   return (
     <RationaleFullFrame>
+      <RationaleReviewBoardHeader />
       {/* Confidence chip — shown when user rated their confidence */}
       {confidenceLevel ? (
         <div className="flex items-center gap-2">
@@ -242,17 +252,22 @@ export function PracticeRationaleFullPanel({
         </div>
       ) : null}
 
-      {/* 1 ─ Correct Answer ──────────────────────────────────────────────── */}
+      {/* 1 ─ Correct Answer (info panel — matches CAT / UWorld review boards) */}
       <PracticeRationaleSection
-        variant={status === "correct" ? "success" : "info"}
+        variant="info"
         label="Correct Answer"
+        icon={<CheckCircle2 className="h-3.5 w-3.5 text-[var(--semantic-info)]" aria-hidden />}
       >
         <p>{correctDisplayTexts || "—"}</p>
       </PracticeRationaleSection>
 
       {/* 2 ─ Why This Is Correct ──────────────────────────────────────────── */}
       {whyCorrectText ? (
-        <PracticeRationaleSection variant="info" label="Why This Is Correct">
+        <PracticeRationaleSection
+          variant="muted"
+          label="Why This Is Correct"
+          icon={<Lightbulb className="h-3.5 w-3.5 text-[var(--semantic-warning)]" aria-hidden />}
+        >
           <p>{whyCorrectText}</p>
         </PracticeRationaleSection>
       ) : null}
@@ -262,6 +277,7 @@ export function PracticeRationaleFullPanel({
         <PracticeRationaleSection
           variant="muted"
           label="Why The Other Options Are Incorrect"
+          icon={<Ban className="h-3.5 w-3.5 text-[var(--semantic-danger)]" aria-hidden />}
         >
           {incorrectKeys.map((key, i) => {
             const displayIdx = allOptionKeys.indexOf(key);
@@ -273,6 +289,7 @@ export function PracticeRationaleFullPanel({
                 index={displayIdx >= 0 ? displayIdx : i}
                 optionText={optionText}
                 explanation={explanation}
+                optionTextTone="danger"
               />
             );
           })}
@@ -281,7 +298,11 @@ export function PracticeRationaleFullPanel({
 
       {/* 4 ─ Key Takeaway ────────────────────────────────────────────────── */}
       {keyTakeaway ? (
-        <PracticeRationaleSection variant="takeaway" label="Key Takeaway">
+        <PracticeRationaleSection
+          variant="takeaway"
+          label="Key Takeaway"
+          icon={<Sparkles className="h-3.5 w-3.5 text-[var(--semantic-brand)]" aria-hidden />}
+        >
           <p>{keyTakeaway}</p>
         </PracticeRationaleSection>
       ) : null}
