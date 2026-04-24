@@ -8,7 +8,7 @@
  */
 import { ContentStatus, PrismaClient } from "@prisma/client";
 
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
 import { prepareLessonsForHubCurriculumWithDiagnostics } from "../../src/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import { EXAM_PATHWAYS } from "../../src/lib/exam-pathways/exam-pathways-catalog";
 import {
@@ -22,11 +22,6 @@ import { marketingPathwayLessonsIndexPath } from "../../src/lib/lessons/lesson-r
 const DEFAULT_PATHWAY_ID = "ca-rn-nclex-rn";
 
 async function main(): Promise<void> {
-  if (!process.env.DATABASE_URL?.trim()) {
-    console.error("DATABASE_URL is not set.");
-    process.exit(1);
-  }
-
   const pathwayId = process.env.PROBE_PATHWAY_ID?.trim() || DEFAULT_PATHWAY_ID;
   const pathway = EXAM_PATHWAYS.find((p) => p.id === pathwayId);
   if (!pathway) {

@@ -40,6 +40,8 @@ export function isDatabaseContractSkippedPhase(): boolean {
   if (lifecycle === "build") return true;
   if (argv.includes("next build")) return true;
   if (/prisma\s+generate\b/i.test(argv)) return true;
+  // `npm run db:generate` → `tsx scripts/run-prisma-with-env.mts generate` (no `prisma` token in argv).
+  if (/run-prisma-with-env\.(?:mts?|cjs|js)\s+generate\b/i.test(argv)) return true;
   if (process.env.NN_APP_PLATFORM_BUILD === "true") return true;
   return false;
 }

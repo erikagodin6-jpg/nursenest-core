@@ -9,7 +9,12 @@ import {
 import { logRouteDataPipeline } from "@/lib/observability/route-data-pipeline-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
-import { blogLiveWhere, blogPostIsLive, isBlogPostMarketingMetaVisible } from "@/lib/blog/blog-visibility";
+import {
+  blogLiveWhere,
+  blogPostIsLive,
+  buildBlogPublicListWhere,
+  isBlogPostMarketingMetaVisible,
+} from "@/lib/blog/blog-visibility";
 import {
   getStaticBlogPost,
   listStaticBlogPostsForIndex,
@@ -455,14 +460,7 @@ export async function getPublishedBlogPostsPage(
 
   const now = new Date();
   /** Align with tag list / sitemap / {@link blogPostIsLive} — include due SCHEDULED rows, not only PUBLISHED. */
-  const where = {
-    AND: [
-      blogLiveWhere(now),
-      scope?.locale ? { locale: scope.locale } : {},
-      scope?.careerSlug ? { careerSlug: scope.careerSlug } : {},
-      scope?.exam ? { exam: scope.exam } : {},
-    ],
-  } satisfies Prisma.BlogPostWhereInput;
+  const where = buildBlogPublicListWhere(now, scope);
 
   const primary = await loadBlogIndexPageFromDb(where, safePage, safeSize, includeTotal, "blog_posts_page");
   if (!primary.ok) {
@@ -502,14 +500,11 @@ export async function getPublishedBlogPostsPage(
     dbTotal === 0
   ) {
     const sourceLocale = scope.sourceLocale ?? "en";
-    const sourceWhere = {
-      AND: [
-        blogLiveWhere(now),
-        { locale: sourceLocale },
-        scope.careerSlug ? { careerSlug: scope.careerSlug } : {},
-        scope.exam ? { exam: scope.exam } : {},
-      ],
-    } satisfies Prisma.BlogPostWhereInput;
+    const sourceWhere = buildBlogPublicListWhere(now, {
+      locale: sourceLocale,
+      careerSlug: scope.careerSlug,
+      exam: scope.exam,
+    });
     const localeRead = await loadBlogIndexPageFromDb(
       sourceWhere,
       safePage,

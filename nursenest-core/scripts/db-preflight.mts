@@ -7,12 +7,10 @@
 import "./load-dotenv-for-cli.mts";
 import { cliDotenvTelemetry } from "./load-dotenv-for-cli.mts";
 import { parsePostgresUrlTargetSafe } from "./cli-db-url-snapshot.mts";
-import { assertDatabaseUrlPresentOrExit } from "./lib/database-env-assert.mts";
+import "../src/lib/db/script-env-bootstrap";
 import { databaseUrlSource } from "../src/lib/db/env-bootstrap";
 
 const PREFIX = "[db-preflight]";
-
-assertDatabaseUrlPresentOrExit("db:preflight — DATABASE_URL is required for database operations.");
 
 const raw = process.env.DATABASE_URL!.trim();
 const t = parsePostgresUrlTargetSafe(raw);

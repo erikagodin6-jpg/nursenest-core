@@ -147,6 +147,12 @@ async function main(): Promise<void> {
     if (!blogPostIsLive(row, now)) {
       reasons.push("not_visible_under_blogLiveWhere");
     }
+    const prismaLiveCount = await prisma.blogPost.count({
+      where: { AND: [blogLiveWhere(now), { slug: row.slug }] },
+    });
+    if (prismaLiveCount !== 1) {
+      reasons.push(`prisma_blogLiveWhere_slug_count_expected_1_got_${prismaLiveCount}`);
+    }
     if (!row.category?.trim()) reasons.push("missing_category");
     if (!row.postTemplate) reasons.push("missing_postTemplate");
     const st = row.seoTitle?.trim() ?? "";

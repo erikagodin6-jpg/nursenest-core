@@ -76,6 +76,15 @@ describe("getPublishedBlogPostBySlug visibility (matches blogLiveWhere / list su
     assert.equal(got.postStatus, BlogPostStatus.PUBLISHED);
   });
 
+  it("returns null for PUBLISHED when publishAt is in the future (embargo; matches blogLiveWhere)", async () => {
+    stubFindUniqueForSlug("pub-future", {
+      postStatus: BlogPostStatus.PUBLISHED,
+      publishAt: new Date("2099-01-01T00:00:00Z"),
+      scheduledAt: null,
+    });
+    assert.equal(await getPublishedBlogPostBySlug("pub-future"), null);
+  });
+
   it("returns null for DRAFT", async () => {
     stubFindUniqueForSlug("draft-only", {
       postStatus: BlogPostStatus.DRAFT,

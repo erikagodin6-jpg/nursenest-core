@@ -8,7 +8,7 @@
  */
 import { ContentStatus, PrismaClient } from "@prisma/client";
 
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
 import { blogLiveWhere } from "../../src/lib/blog/blog-visibility";
 import { publicMarketingFlashcardDeckWhere } from "../../src/lib/entitlements/content-access-scope";
 
@@ -16,11 +16,6 @@ const CANADA_RN_PATHWAY_ID = "ca-rn-nclex-rn";
 const strict = process.argv.includes("--strict");
 
 async function main(): Promise<void> {
-  if (!process.env.DATABASE_URL?.trim()) {
-    console.error("DATABASE_URL is not set.");
-    process.exit(1);
-  }
-
   const prisma = new PrismaClient();
   const now = new Date();
   const liveBlogWhere = blogLiveWhere(now);

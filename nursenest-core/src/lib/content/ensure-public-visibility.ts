@@ -79,6 +79,14 @@ export function ensurePublicBlogPostVisibilityForSeed<T extends Record<string, u
     postStatus = BlogPostStatus.PUBLISHED;
   }
 
+  /**
+   * Immediate **PUBLISHED** rows: clear `scheduledAt` so public list gates (`blogLiveWhere`) never
+   * combine stale schedule metadata with PUBLISHED status.
+   */
+  if (postStatus === BlogPostStatus.PUBLISHED) {
+    scheduledAt = null;
+  }
+
   return {
     ...row,
     slug,

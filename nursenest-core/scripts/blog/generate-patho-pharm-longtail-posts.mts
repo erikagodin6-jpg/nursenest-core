@@ -13,7 +13,7 @@ import "../../src/lib/db/script-env-bootstrap";
 import { BlogPostStatus, BlogWorkflowStatus, Prisma } from "@prisma/client";
 
 import { validateClinicalTopicCoherence } from "../../src/lib/blog/patho-pharm-longtail-topic-coherence";
-import { blogLiveWhere } from "../../src/lib/blog/blog-visibility";
+import { blogLiveWhere, blogPostIsLive } from "../../src/lib/blog/blog-visibility";
 import {
   sqlBlogLiveWhere,
   sqlPathoPharmLongTail,
@@ -206,10 +206,21 @@ async function main(): Promise<void> {
       ? await loadPublishedSlugPool(now, 4000)
       : [];
 
-    const pathoPharmBatchBefore = process.env.DATABASE_URL?.trim() ? await pathoCounts(now) : null;
+    const pathoPharmBatchBefore = process.env.DATABASE_URL?.trim() ? await pathoCounts(new Date()) : null;
 
     const batchSampleRejected: string[] = [];
     const batchSampleApproved: string[] = [];
+    const visibilitySamples: Array<{
+      slug: string;
+      publishAt: string | null;
+      postStatus: string;
+      workflowStatus: string;
+      careerSlug: string | null;
+      exam: string | null;
+      scheduledAt: string | null;
+      passesBlogPostIsLive: boolean;
+      prismaBlogLiveWhereMatch: boolean;
+    }> = [];
 
     let createdCount = 0;
     let skippedExisting = 0;
@@ -315,6 +326,8 @@ async function main(): Promise<void> {
       const keyQuestions = [faq.q1, faq.q2, faq.q3];
       const internalLinkPlan: Prisma.InputJsonValue = { slugs: internalSlugs, kind: "patho-pharm-longtail" };
 
+      /** Fresh instant so `publishAt` is never accidentally after a stale `now` used in `blogLiveWhere` checks. */
+      const publishAt = new Date();
       const baseData = {
         slug: topic.slug,
         title: topic.title.slice(0, 200),
@@ -324,8 +337,9 @@ async function main(): Promise<void> {
         category: topic.category,
         legacySource: PATHO_PHARM_LONGTAIL_LEGACY_SOURCE,
         postTemplate: topic.postTemplate,
-        careerSlug: topic.careerSlug,
-        exam: topic.exam,
+        /** Global marketing posts: appear on unscoped `/blog` and scoped hubs (see `buildBlogPublicListWhere`). */
+        careerSlug: null,
+        exam: null,
         locale: "en",
         seoTitle: metaTitle,
         seoDescription: metaDescription,
@@ -343,7 +357,8 @@ async function main(): Promise<void> {
           retrieved: publishedIso,
         } as Prisma.InputJsonValue,
         postStatus: BlogPostStatus.PUBLISHED,
-        publishAt: now,
+        publishAt,
+        scheduledAt: null,
         workflowStatus: BlogWorkflowStatus.PUBLISHED,
       };
 
@@ -375,6 +390,38 @@ async function main(): Promise<void> {
         existingTitleHashes.add(titleHash);
         if (batchSampleApproved.length < 8) batchSampleApproved.push(topic.title);
         if (sampleApprovedTopics.length < 8) sampleApprovedTopics.push(topic.title);
+
+        if (visibilitySamples.length < 5) {
+          const checkNow = new Date();
+          const persisted = await prisma.blogPost.findUnique({
+            where: { slug: topic.slug },
+            select: {
+              postStatus: true,
+              workflowStatus: true,
+              publishAt: true,
+              careerSlug: true,
+              exam: true,
+              scheduledAt: true,
+            },
+          });
+          if (persisted) {
+            const prismaBlogLiveWhereMatch =
+              (await prisma.blogPost.count({
+                where: { AND: [blogLiveWhere(checkNow), { slug: topic.slug }] },
+              })) === 1;
+            visibilitySamples.push({
+              slug: topic.slug,
+              publishAt: persisted.publishAt?.toISOString() ?? null,
+              postStatus: persisted.postStatus,
+              workflowStatus: persisted.workflowStatus,
+              careerSlug: persisted.careerSlug,
+              exam: persisted.exam,
+              scheduledAt: persisted.scheduledAt?.toISOString() ?? null,
+              passesBlogPostIsLive: blogPostIsLive(persisted, checkNow),
+              prismaBlogLiveWhereMatch,
+            });
+          }
+        }
       } catch (e) {
         console.error("[patho-pharm-longtail] DB insert failed:", e);
         process.exit(1);
@@ -402,10 +449,12 @@ async function main(): Promise<void> {
       sampleApprovedTopics: batchSampleApproved,
       internalLinksInsufficientCount,
       createdSlugs,
+      visibilitySamples,
     };
     let batchVisibility: Record<string, unknown> = { skipped: dryRun || createdSlugs.length === 0 };
     if (!dryRun && createdSlugs.length > 0 && process.env.DATABASE_URL?.trim()) {
-      const liveListed = await countLiveBySlugs(now, createdSlugs);
+      const checkNow = new Date();
+      const liveListed = await countLiveBySlugs(checkNow, createdSlugs);
       batchVisibility = {
         liveListedCount: liveListed,
         expectedLive: createdSlugs.length,
@@ -416,7 +465,7 @@ async function main(): Promise<void> {
         process.exit(1);
       }
       if (pathoPharmBatchBefore) {
-        const afterBatch = await pathoCounts(now);
+        const afterBatch = await pathoCounts(checkNow);
         const increased =
           afterBatch.visible_public_total > pathoPharmBatchBefore.visible_public_total ||
           afterBatch.patho_pharm_topical > pathoPharmBatchBefore.patho_pharm_topical ||
@@ -450,7 +499,7 @@ async function main(): Promise<void> {
   let pathoPharmCountsAfter = pathoPharmCountsBefore;
   let visiblePublicCountAfter = visiblePublicCountBefore;
   if (process.env.DATABASE_URL?.trim()) {
-    pathoPharmCountsAfter = await pathoCounts(now);
+    pathoPharmCountsAfter = await pathoCounts(new Date());
     visiblePublicCountAfter = pathoPharmCountsAfter.visible_public_total;
   }
 

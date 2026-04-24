@@ -30,13 +30,28 @@ test("SCHEDULED post with publishAt in the future is not live", () => {
   );
 });
 
-test("PUBLISHED is always live (publishAt irrelevant)", () => {
+test("PUBLISHED with future publishAt is not live (embargo; matches blogLiveWhere)", () => {
   const now = new Date("2026-06-15T12:00:00Z");
   assert.equal(
     blogPostIsLive(
       {
         postStatus: BlogPostStatus.PUBLISHED,
         publishAt: new Date("2099-01-01T00:00:00Z"),
+        scheduledAt: null,
+      },
+      now,
+    ),
+    false,
+  );
+});
+
+test("PUBLISHED with null publishAt is live", () => {
+  const now = new Date("2026-06-15T12:00:00Z");
+  assert.equal(
+    blogPostIsLive(
+      {
+        postStatus: BlogPostStatus.PUBLISHED,
+        publishAt: null,
         scheduledAt: null,
       },
       now,

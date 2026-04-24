@@ -122,15 +122,25 @@ export function explainMissingPathoPharmTopicalMatch(row: PathoPharmRowShape): s
 
 /** Raw SQL fragment: public “live” rows aligned with `blogLiveWhere(now)` (includes APPROVED). */
 export function sqlBlogLiveWhere(alias = "p", nowParam = "$1"): string {
+  const wfFail = `'FAILED_GENERATION','FAILED_IMAGE'`;
+  const wfPipeline = `'GENERATED','OUTLINE_READY','NEEDS_SOURCE_REVIEW','NEEDS_MEDICAL_REVIEW','NEEDS_SEO_REVIEW','NEEDS_METADATA','NEEDS_REFERENCES'`;
   return `(
-  ${alias}."postStatus" = 'PUBLISHED'
-  OR ${alias}."postStatus" = 'APPROVED'
+  (
+    ${alias}."postStatus" = 'PUBLISHED'
+    AND (${alias}."publishAt" IS NULL OR ${alias}."publishAt" <= ${nowParam}::timestamptz)
+    AND ${alias}."workflowStatus"::text NOT IN (${wfFail}, ${wfPipeline})
+  )
+  OR (
+    ${alias}."postStatus" = 'APPROVED'
+    AND ${alias}."workflowStatus"::text NOT IN (${wfFail})
+  )
   OR (
     ${alias}."postStatus" = 'SCHEDULED'
     AND (
       (${alias}."publishAt" IS NOT NULL AND ${alias}."publishAt" <= ${nowParam}::timestamptz)
       OR (${alias}."scheduledAt" IS NOT NULL AND ${alias}."scheduledAt" <= ${nowParam}::timestamptz)
     )
+    AND ${alias}."workflowStatus"::text NOT IN (${wfFail}, ${wfPipeline})
   )
 )`;
 }

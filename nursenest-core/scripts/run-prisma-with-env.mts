@@ -13,7 +13,6 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import "./load-dotenv-for-cli.mts";
-import "../src/lib/db/env-bootstrap";
 import { assertDatabaseUrlPresentOrExit } from "./lib/database-env-assert.mts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -28,6 +27,18 @@ if (forwarded.length === 0) {
   );
   process.exit(1);
 }
+
+/** `prisma generate` does not open a DB; Prisma still needs a syntactically valid URL. Must not match the banned Docker placeholder (`127.0.0.1:5432/postgres`). */
+const isGenerateOnly = forwarded[0] === "generate" && forwarded.length === 1;
+if (isGenerateOnly && !process.env.DATABASE_URL?.trim()) {
+  process.env.DATABASE_URL =
+    "postgresql://nn_prisma_codegen:nn_prisma_codegen@127.0.0.1:65432/nn_prisma_codegen?schema=public";
+  console.warn(
+    "[run-prisma-with-env] DATABASE_URL unset — using local Prisma codegen stub (no network). For migrate/db push, set DATABASE_URL in .env.local.",
+  );
+}
+
+await import("../src/lib/db/env-bootstrap");
 
 assertDatabaseUrlPresentOrExit("Prisma CLI requires DATABASE_URL (loaded from nursenest-core env files).");
 
