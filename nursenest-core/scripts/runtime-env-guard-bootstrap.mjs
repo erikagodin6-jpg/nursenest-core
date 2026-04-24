@@ -50,9 +50,25 @@ function isDatabaseContractSkippedPhase() {
   return false;
 }
 
+/** Keep aligned with `isAllowedPrismaCodegenStubDatabaseUrl` in `require-database-env.ts`. */
+function isAllowedPrismaCodegenStubDatabaseUrl(url) {
+  try {
+    const u = new URL(String(url).trim());
+    const h = u.hostname.toLowerCase();
+    if (h !== "127.0.0.1" && h !== "localhost") return false;
+    const port = u.port || (u.protocol === "postgresql:" || u.protocol === "postgres:" ? "5432" : "");
+    if (port !== "65432") return false;
+    const db = (u.pathname.replace(/^\//, "").split("/")[0] ?? "").trim();
+    return db === "nn_prisma_codegen";
+  } catch {
+    return false;
+  }
+}
+
 function isRejectedRuntimePlaceholderDatabaseUrl(url) {
   const t = String(url).trim();
   if (t.includes(DOCKER_BUILD_PLACEHOLDER_DATABASE_URL_MARKER)) return true;
+  if (isAllowedPrismaCodegenStubDatabaseUrl(t)) return false;
   if (t.includes(REJECTED_DEFAULT_POSTGRES_LOCALHOST_CREDENTIALS)) return true;
   return false;
 }

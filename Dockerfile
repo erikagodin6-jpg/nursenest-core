@@ -6,7 +6,7 @@
 #
 # Build pipeline (same `package.json` scripts as the Node buildpack path):
 #   1) `npm ci` in `nursenest-core/` (includes devDependencies: prisma, tsx, typescript, eslint-config-next, …)
-#   2) `npm run db:generate` (Prisma client; one-off synthetic DATABASE_URL on the RUN line only — never bake DATABASE_URL into the image ENV)
+#   2) `npm run db:generate` (Prisma client; ephemeral DATABASE_URL on a dedicated RUN line only — never ARG/ENV DATABASE_URL)
 #   3) `npm run heroku-postbuild` → hints + verify + `NN_POSTBUILD_NEXT_BUILD=1 npm run build` → `build:compile` / `next build`
 #   4) `npm run build:deploy` → verify standalone + static sync + post-build prune
 #   5) `npm prune --omit=dev` (matches former App Platform `build_command` tail)
@@ -34,6 +34,8 @@ WORKDIR /app
 COPY shared ./shared
 COPY client ./client
 COPY nursenest-core ./nursenest-core
+# Introspection only: lets `scripts/verify-dockerfile-database-url.mjs` run during `heroku-postbuild` inside the image.
+COPY Dockerfile /app/Dockerfile
 
 WORKDIR /app/nursenest-core
 
@@ -49,11 +51,13 @@ ENV NODE_ENV=production \
   NODE_OPTIONS=--max-old-space-size=4096 \
   BUILD_WEBPACK_PARALLELISM=1
 
-# **Never** bake DATABASE_URL into image ENV — it would override platform runtime secrets.
-# Prisma `generate` only needs a syntactically valid URL on this RUN line (ephemeral); use a dedicated
-# host/port/db name so it does not match runtime-banned localhost placeholder substrings (see `require-database-env.ts`).
-RUN DATABASE_URL="postgresql://nn_prisma_codegen:nn_prisma_codegen@127.0.0.1:65432/nn_prisma_codegen?schema=public" npm run db:generate \
-  && npm run heroku-postbuild \
+# **Never** bake DATABASE_URL into image ENV or ARG — it would leak into build logs / layers and can override
+# platform runtime secrets. Prisma `generate` only needs a parseable URL on the single RUN below (ephemeral shell
+# assignment only; no subsequent RUN inherits it). Stub must match `isAllowedPrismaCodegenStubDatabaseUrl` in
+# `require-database-env.ts` (port 65432, database name `nn_prisma_codegen`, not `127.0.0.1:5432/postgres`).
+RUN DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" npm run db:generate
+
+RUN npm run heroku-postbuild \
   && npm run build:deploy \
   && npm prune --omit=dev --no-fund --no-audit \
   && rm -rf .next/cache

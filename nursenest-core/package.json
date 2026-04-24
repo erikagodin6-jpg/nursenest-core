@@ -16,7 +16,7 @@
     }
   },
   "scripts": {
-    "heroku-postbuild": "node scripts/log-build-cache-hints.mjs && npm run verify:bootstrap-probe-pathname && NN_POSTBUILD_NEXT_BUILD=1 npm run build && node scripts/log-build-cache-hints.mjs --phase=heroku_postbuild_after_compile",
+    "heroku-postbuild": "node scripts/log-build-cache-hints.mjs && node scripts/verify-dockerfile-database-url.mjs && npm run verify:bootstrap-probe-pathname && NN_POSTBUILD_NEXT_BUILD=1 npm run build && node scripts/log-build-cache-hints.mjs --phase=heroku_postbuild_after_compile",
     "heroku-cleanup": "node scripts/log-build-cache-hints.mjs --phase=heroku_cleanup",
     "prepare": "node scripts/install-husky.mjs",
     "dev": "TMPDIR=${TMPDIR:-/tmp} next dev",
@@ -29,6 +29,7 @@
     "verify:core-build-modules": "node --import tsx --test src/lib/build/build-safe-mode.test.ts",
     "verify:lesson-hubs": "node scripts/verify-lesson-hubs.mjs",
     "verify:bootstrap-probe-pathname": "node --test scripts/standalone-bootstrap-probe-pathname.test.mjs",
+    "verify:dockerfile-database-url": "node scripts/verify-dockerfile-database-url.mjs",
     "build:deploy:postbuild": "npm run verify:bootstrap-probe-pathname && npm run verify:standalone-artifact && node scripts/ensure-standalone-static.mjs && node scripts/post-build-prune.mjs",
     "validate:marketing-production-surface": "node scripts/validate-marketing-production-surface.mjs",
     "build:deploy:full": "node scripts/run-build-deploy-full.mjs",

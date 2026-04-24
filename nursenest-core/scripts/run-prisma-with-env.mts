@@ -40,11 +40,11 @@ if (forwarded.length === 0) {
   process.exit(1);
 }
 
-/** `prisma generate` does not open a DB; Prisma still needs a syntactically valid URL. Must not match the banned Docker placeholder (`127.0.0.1:5432/postgres`). */
+/** `prisma generate` does not open a DB; Prisma still needs a syntactically valid URL. Must not match the banned Docker image default (`127.0.0.1:5432/postgres`); use the approved codegen stub (65432 + `nn_prisma_codegen`). */
 const isGenerateOnly = forwarded[0] === "generate" && forwarded.length === 1;
 if (isGenerateOnly && !process.env.DATABASE_URL?.trim()) {
   process.env.DATABASE_URL =
-    "postgresql://nn_prisma_codegen:nn_prisma_codegen@127.0.0.1:65432/nn_prisma_codegen?schema=public";
+    "postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public";
   console.warn(
     "[run-prisma-with-env] DATABASE_URL unset — using local Prisma codegen stub (no network). For migrate/db push, set DATABASE_URL in .env.local.",
   );

@@ -17,8 +17,8 @@ This complements `.do/app-nursenest-core-next.yaml` (Heroku Node buildpack path)
 ## Docker path (after) — mental model
 
 1. **Context:** repo root (`.`), not only `nursenest-core/`.
-2. **Stages:** `deps` (`npm ci` in `nursenest-core`) → `builder` (copy app sources, dummy `DATABASE_URL` for `prisma generate`, `verify:bootstrap-probe-pathname`, **`build:compile` once**, `build:deploy`) → `runner` (copy built tree + `npm run start`).
-3. **No Heroku buildpack:** Node version comes from the image (`ARG NODE_VERSION`, default `22.22.2` aligned with production logs / `engines`).
+2. **Stages:** `builder` (`npm ci` in `nursenest-core`, copy `shared/` + `client/` + app, **ephemeral** `DATABASE_URL=…` on the **single** `RUN` that runs only `npm run db:generate`, then `heroku-postbuild` / `build:deploy` / prune) → `runner` (copy built tree + `npm run start`). A copy of the repo-root `Dockerfile` is placed at `/app/Dockerfile` so `verify-dockerfile-database-url.mjs` can assert no `ARG DATABASE_URL` / `ENV DATABASE_URL` / banned placeholder during `heroku-postbuild`.
+3. **No Heroku buildpack:** Node version comes from the base image (`node:22.22.2-alpine`, aligned with `engines` / App Platform `NODE_VERSION` env).
 4. **Low-memory flags:** set in Dockerfile for the compile stage (`NN_FORCE_SINGLE_BUILD_WORKER`, `NN_APP_PLATFORM_BUILD`, single webpack parallelism, heap cap). Keep parity with YAML build env when switching.
 
 ## Switching App Platform to Docker

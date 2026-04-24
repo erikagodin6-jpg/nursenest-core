@@ -52,10 +52,29 @@ export function isDatabaseContractSkippedPhase(): boolean {
   return false;
 }
 
+/**
+ * Prisma `generate` only needs a parseable URL; Docker/CI may use a dedicated loopback stub that must never
+ * collide with the historical image default (`127.0.0.1:5432/postgres`) or be mistaken for production.
+ */
+export function isAllowedPrismaCodegenStubDatabaseUrl(url: string): boolean {
+  try {
+    const u = new URL(url.trim());
+    const h = u.hostname.toLowerCase();
+    if (h !== "127.0.0.1" && h !== "localhost") return false;
+    const port = u.port || (u.protocol === "postgresql:" || u.protocol === "postgres:" ? "5432" : "");
+    if (port !== "65432") return false;
+    const db = u.pathname.replace(/^\//, "").split("/")[0] ?? "";
+    return db === "nn_prisma_codegen";
+  } catch {
+    return false;
+  }
+}
+
 /** True when `DATABASE_URL` matches known localhost / image-default placeholders (never production). */
 export function isRejectedRuntimePlaceholderDatabaseUrl(url: string): boolean {
   const t = url.trim();
   if (t.includes(DOCKER_BUILD_PLACEHOLDER_DATABASE_URL_MARKER)) return true;
+  if (isAllowedPrismaCodegenStubDatabaseUrl(t)) return false;
   if (t.includes(REJECTED_DEFAULT_POSTGRES_LOCALHOST_CREDENTIALS)) return true;
   return false;
 }

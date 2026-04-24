@@ -49,6 +49,15 @@ describe("require-database-env", () => {
     );
   });
 
+  it("allows the Prisma codegen-only stub on 65432 with nn_prisma_codegen (Dockerfile RUN line)", () => {
+    assert.equal(
+      isRejectedRuntimePlaceholderDatabaseUrl(
+        "postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public",
+      ),
+      false,
+    );
+  });
+
   it("requireDatabaseEnv throws when DATABASE_URL is missing", () => {
     const snap = snapshotEnv();
     try {

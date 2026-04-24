@@ -6,6 +6,13 @@ const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const npmCommand = process.platform === "win32" ? "npm.cmd" : "npm";
 const skipPrebuild = /^(1|true|yes)$/i.test(process.env.SKIP_I18N_PREBUILD ?? "");
 
+const verifyDockerfileDbUrl = path.join(packageRoot, "scripts", "verify-dockerfile-database-url.mjs");
+console.log("[build-prechecks] running verify-dockerfile-database-url.mjs (always)");
+execFileSync(process.execPath, [verifyDockerfileDbUrl], {
+  cwd: packageRoot,
+  stdio: "inherit",
+});
+
 const marketingSurfaceScript = path.join(packageRoot, "scripts", "validate-marketing-production-surface.mjs");
 console.log("[build-prechecks] running validate-marketing-production-surface.mjs (always)");
 execFileSync(process.execPath, [marketingSurfaceScript], {
