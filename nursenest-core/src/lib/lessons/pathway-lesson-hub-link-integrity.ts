@@ -31,6 +31,10 @@ import { getPathwayLessonForMarketingHubVerify } from "@/lib/lessons/pathway-les
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
+import {
+  buildMarketingLessonHubVerifySummaryLogFields,
+  classifyPreparedRowsForMarketingHubVisibility,
+} from "@/lib/lessons/lesson-hub-visibility-diagnostics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /**
@@ -466,6 +470,26 @@ export async function verifyMarketingHubLessonRowsResolve(
       dropped_count: String(diagnostics.droppedRowCount),
       example_slugs_json: JSON.stringify(kept.slice(0, 12).map((l) => l.slug)),
     });
+  }
+
+  if (lessons.length > 0) {
+    const visibility = classifyPreparedRowsForMarketingHubVisibility({
+      pathwayId: pathway.id,
+      prepared: lessons,
+      verifyKept: kept,
+      verifyExcluded,
+    });
+    safeServerLog(
+      "pathway_lessons",
+      "marketing_lesson_hub_verify_summary",
+      buildMarketingLessonHubVerifySummaryLogFields({
+        pathwayId: pathway.id,
+        preparedCount: visibility.totalPrepared,
+        verifyKeptStrictCount: visibility.totalVerifyKeptStrict,
+        excludedCount: visibility.totalExcluded,
+        exclusionReasonCounts: visibility.exclusionReasonCounts,
+      }),
+    );
   }
 
   return { kept, excluded, diagnostics };

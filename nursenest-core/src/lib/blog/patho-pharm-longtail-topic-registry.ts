@@ -1,9 +1,10 @@
 /**
  * Strict production pathophysiology / pharmacology long-tail topic registry.
- * Source: clinically vetted pairs in `patho-pharm-longtail-clinical-pairs.ts` (audit-aligned), with
- * search-style titles only, deduplication, and validation via `validateClinicalTopicCoherence`.
+ * Source: clinically vetted pairs in `patho-pharm-longtail-clinical-pairs.ts` (curated / audit-aligned bank),
+ * materialized into search-style titles only, with `normalizeTopicKey` + `semanticMechanismDuplicateKey`
+ * dedupe, sepsis–hypotension cluster collapse, and `validateClinicalTopicCoherence` on every row at build time.
  *
- * Consumed by `scripts/blog/lib/patho-pharm-longtail-post-builder.ts` before any optional synthetic expansion.
+ * Consumed by `scripts/blog/lib/patho-pharm-longtail-post-builder.ts` (registry-first; no unvetted fill past exhaustion).
  */
 
 import { BlogPostTemplate } from "@prisma/client";
