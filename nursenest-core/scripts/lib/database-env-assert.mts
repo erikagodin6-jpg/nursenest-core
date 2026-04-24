@@ -2,29 +2,25 @@
  * Shared database URL checks for CLI entrypoints (after dotenv + env-bootstrap).
  * Never prints credentials — only package root, context, and inferred dotenv source.
  */
-import {
-  requireDatabaseEnv,
-  type DatabaseUrlContractSource,
-} from "../../src/lib/env/require-database-env.ts";
+
+import { assertRuntimeDatabaseEnvContract } from "../../src/lib/env/require-database-env";
 import { cliDotenvTelemetry } from "../load-dotenv-for-cli.mts";
 
-function databaseUrlContractSourceFromCliTelemetry(): DatabaseUrlContractSource {
+function databaseUrlContractSourceFromCliTelemetry(): "process_env" | "dotenv" | "unknown" {
   if (cliDotenvTelemetry.preDotenv.DATABASE_URL) return "process_env";
   if (cliDotenvTelemetry.afterDotenv.DATABASE_URL) return "dotenv";
   return "unknown";
 }
 
 /**
- * Validates `DATABASE_URL` (strict: missing or localhost placeholder throws / exits).
- * Call after `import "../load-dotenv-for-cli.mts"` and
- * `import "../src/lib/db/env-bootstrap"` (or `script-env-bootstrap`
- * for strict DATABASE_URL + dotenv from cwd).
- *
- * Legacy `PROD_DATABASE_URL` is surfaced only by `env-bootstrap.ts` (never merged).
+ * Validates `DATABASE_URL`.
+ * Fails on:
+ * - missing
+ * - localhost placeholder
  */
 export function assertDatabaseUrlPresentOrExit(context: string): void {
   try {
-    requireDatabaseEnv({
+    assertRuntimeDatabaseEnvContract({
       context: `database-env-assert:${context}`,
       urlSource: databaseUrlContractSourceFromCliTelemetry(),
     });
