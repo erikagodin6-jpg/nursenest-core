@@ -13,7 +13,7 @@ import "server-only";
 
 import { localizedBlogPath } from "@/lib/blog/blog-slug-localized";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { getSitemapLocalizedBlogRows } from "@/lib/blog/safe-localized-blog-queries";
+import { getSitemapLocalizedBlogRowsStrict } from "@/lib/blog/safe-localized-blog-queries";
 import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { isLocaleSitemapIncluded } from "@/lib/i18n/language-readiness";
 import {
@@ -33,53 +33,47 @@ export async function listLocalizedBlogSitemapEntriesSafe(): Promise<SitemapUrlE
   const origin = normalizeOrigin(resolveSitemapOrigin());
   const entries: SitemapUrlEntry[] = [];
 
-  try {
-    const rows = await getSitemapLocalizedBlogRows();
-    let excluded = 0;
-    let excludedIncompletePath = 0;
+  const rows = await getSitemapLocalizedBlogRowsStrict();
+  let excluded = 0;
+  let excludedIncompletePath = 0;
 
-    for (const r of rows) {
-      // Skip locales that are not sitemap-eligible (partial + incomplete tiers).
-      if (!isLocaleSitemapIncluded(r.locale)) {
-        excluded++;
-        continue;
-      }
-
-      const profession = r.profession?.trim() ?? "";
-      const exam = r.exam?.trim() ?? "";
-      // Public localized blog routes always use four segments before `/blog/:slug` (see `localizedBlogPath`).
-      if (!profession || !exam) {
-        excludedIncompletePath++;
-        continue;
-      }
-
-      const path = localizedBlogPath({
-        locale: r.locale as GlobalLocaleCode,
-        region: r.region as GlobalRegionSlug,
-        profession,
-        exam,
-        slug: r.localizedSlug,
-      });
-      entries.push({
-        loc: `${origin}${path}`,
-        lastmod: r.updatedAt.toISOString(),
-      });
+  for (const r of rows) {
+    // Skip locales that are not sitemap-eligible (partial + incomplete tiers).
+    if (!isLocaleSitemapIncluded(r.locale)) {
+      excluded++;
+      continue;
     }
 
-    if (excluded > 0) {
-      safeServerLog("seo", "sitemap_localized_blog_locale_excluded", { excluded });
-    }
-    if (excludedIncompletePath > 0) {
-      safeServerLog("seo", "sitemap_localized_blog_incomplete_path_excluded", { excluded: excludedIncompletePath });
+    const profession = r.profession?.trim() ?? "";
+    const exam = r.exam?.trim() ?? "";
+    // Public localized blog routes always use four segments before `/blog/:slug` (see `localizedBlogPath`).
+    if (!profession || !exam) {
+      excludedIncompletePath++;
+      continue;
     }
 
-    if (rows.length >= 50_000) {
-      safeServerLog("seo", "sitemap_localized_blog_cap_reached", { count: rows.length });
-    }
-  } catch (e) {
-    safeServerLog("seo", "sitemap_localized_blog_query_failed", {
-      detail: e instanceof Error ? e.message.slice(0, 120) : "unknown",
+    const path = localizedBlogPath({
+      locale: r.locale as GlobalLocaleCode,
+      region: r.region as GlobalRegionSlug,
+      profession,
+      exam,
+      slug: r.localizedSlug,
     });
+    entries.push({
+      loc: `${origin}${path}`,
+      lastmod: r.updatedAt.toISOString(),
+    });
+  }
+
+  if (excluded > 0) {
+    safeServerLog("seo", "sitemap_localized_blog_locale_excluded", { excluded });
+  }
+  if (excludedIncompletePath > 0) {
+    safeServerLog("seo", "sitemap_localized_blog_incomplete_path_excluded", { excluded: excludedIncompletePath });
+  }
+
+  if (rows.length >= 50_000) {
+    safeServerLog("seo", "sitemap_localized_blog_cap_reached", { count: rows.length });
   }
 
   return entries;

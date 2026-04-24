@@ -132,3 +132,39 @@ export async function withDatabaseFallbackTimeout<T>(
     if (timer) clearTimeout(timer);
   }
 }
+
+/**
+ * Like {@link withDatabaseFallbackTimeout}, but **never** swallows failures: used by `/sitemap.xml`
+ * so a broken DB cannot be mistaken for an empty library (which would emit a misleading home-only urlset).
+ */
+export async function withDatabaseFallbackTimeoutOrThrow<T>(
+  run: () => Promise<T>,
+  timeoutMs: number,
+  logCtx: DatabaseTimeoutLogContext,
+): Promise<T> {
+  if (!isDatabaseUrlConfigured()) {
+    throw new Error(`${logCtx.label ?? "db_query"}: DATABASE_URL is not configured`);
+  }
+  if (isRuntimeSafeMode()) {
+    throw new Error(`${logCtx.label ?? "db_query"}: runtime safe mode blocks this database read`);
+  }
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      run(),
+      new Promise<T>((_, reject) => {
+        timer = setTimeout(() => reject(new Error("database_timeout")), timeoutMs);
+      }),
+    ]);
+  } catch (e) {
+    const kind = classifyDatabaseFallbackKind(e);
+    safeServerLog(logCtx.scope ?? "database", "sitemap_db_query_failed", {
+      label: logCtx.label ?? "",
+      kind,
+      detail: errorMessage(e).slice(0, 500),
+    });
+    throw e;
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}

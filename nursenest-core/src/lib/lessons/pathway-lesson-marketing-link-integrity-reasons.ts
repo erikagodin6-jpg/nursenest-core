@@ -10,10 +10,29 @@ export type HubMarketingLessonDetailFailureReason =
   | "professional_hub_corpus_guard"
   | "taxonomy_review_required";
 
+/** Stage counts inside {@link prepareLessonsForHubCurriculumWithDiagnostics} (marketing hub only). */
+export type HubCurriculumPrepareStageDiagnostics = {
+  incomingFromLoader: number;
+  afterRenderableSlugFilter: number;
+  droppedMissingOrUnsafeSlug: number;
+  afterLibraryDedupe: number;
+  droppedDuplicateSlug: number;
+  afterOrganize: number;
+  droppedOrganizeShrink: number;
+  afterMarketingHrefFilter: number;
+  droppedNoMarketingHref: number;
+};
+
 /** Structured counts for marketing lessons hub verify — safe to pass into presentation components. */
 export type MarketingHubLessonVerifyDiagnostics = {
   pathwayId: string;
   lessonContentLocale: string;
+  /** Hub page marketing locale (overlays) — same as {@link getPathwayLessonsPageFresh} `marketingLocale`. */
+  hubPageMarketingLocale?: string;
+  /** Dominant list warehouse locale passed into verify (DB shard fallback when rows omit `localeMeta`). */
+  verifyListWarehouseLocale?: string;
+  /** Populated when verify merges `prepareLessonsForHubCurriculumWithDiagnostics` output. */
+  prepareStages?: HubCurriculumPrepareStageDiagnostics;
   /** Rows passed into verify (after hub prepare / dedupe on the marketing lessons page). */
   incomingPreparedRowCount: number;
   uniqueSlugCount: number;
@@ -29,6 +48,8 @@ export type MarketingHubLessonVerifyDiagnostics = {
    * Present whenever verify ran with at least one incoming row.
    */
   exclusionReasonsRanked?: Array<{ reason: HubMarketingLessonDetailFailureReason; count: number }>;
+  /** Capped unique-slug failures for debug (`NN_MARKETING_HUB_PIPELINE_DEBUG=1`) and ops triage. */
+  excludedSlugSamples?: Array<{ slug: string; reason: HubMarketingLessonDetailFailureReason }>;
 };
 
 export type PublicMarketingLessonCrossLinkExclusionReason =

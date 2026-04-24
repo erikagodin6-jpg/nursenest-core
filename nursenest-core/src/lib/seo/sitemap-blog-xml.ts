@@ -1,7 +1,7 @@
 import "server-only";
 
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { getSitemapPublishedBlogSlugs } from "@/lib/blog/safe-blog-queries";
+import { getSitemapPublishedBlogSlugsStrict } from "@/lib/blog/safe-blog-queries";
 import {
   buildSitemapUrlsetFromAbsoluteUrls,
   minimalUrlsetSingleHome,
@@ -12,8 +12,9 @@ import {
 import { logSeoEmittedUrlBatch } from "@/lib/seo/seo-url-emission-audit";
 
 /**
- * Blog sitemap: `/blog` plus published post URLs when Prisma is available.
- * On any failure, returns a valid urlset with at least `/blog` (caller may also use minimal home).
+ * Blog slice for merged `/sitemap.xml`: `/blog` plus live post URLs when Prisma is reachable.
+ * When `DATABASE_URL` is set (and build-time DB skip is off), DB failures **propagate** so the
+ * merged sitemap route can return 503 instead of silently omitting every `/blog/{slug}` URL.
  */
 export async function listBlogSitemapUrlsSafe(): Promise<string[]> {
   const entries = await listBlogSitemapEntriesSafe();
@@ -26,23 +27,17 @@ export async function listBlogSitemapEntriesSafe(): Promise<SitemapUrlEntry[]> {
 
   /** Sitemaps support at most ~50k URLs per file; split into multiple sitemaps if you exceed this. */
   const SITEMAP_BLOG_CAP = 50_000;
-  try {
-    const rows = await getSitemapPublishedBlogSlugs();
-    if (rows.length >= SITEMAP_BLOG_CAP) {
-      safeServerLog("seo", "sitemap_blog_url_cap_reached", { cap: SITEMAP_BLOG_CAP });
+  const rows = await getSitemapPublishedBlogSlugsStrict();
+  if (rows.length >= SITEMAP_BLOG_CAP) {
+    safeServerLog("seo", "sitemap_blog_url_cap_reached", { cap: SITEMAP_BLOG_CAP });
+  }
+  for (const r of rows) {
+    if (r.slug?.trim()) {
+      entries.push({
+        loc: `${origin}/blog/${encodeURIComponent(r.slug.trim())}`,
+        lastmod: r.updatedAt.toISOString(),
+      });
     }
-    for (const r of rows) {
-      if (r.slug?.trim()) {
-        entries.push({
-          loc: `${origin}/blog/${encodeURIComponent(r.slug.trim())}`,
-          lastmod: r.updatedAt.toISOString(),
-        });
-      }
-    }
-  } catch (e) {
-    safeServerLog("seo", "sitemap_blog_optional_query_failed", {
-      detail: e instanceof Error ? e.message.slice(0, 120) : "unknown",
-    });
   }
 
   logSeoEmittedUrlBatch("sitemap_blog", entries.map((e) => e.loc), {

@@ -4,6 +4,8 @@ import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import {
   BLOG_LIST_PAGE_SIZE,
+  PATHOPHYSIOLOGY_HUB_PRIMARY_TAG,
+  getPathophysiologyBlogHubPosts,
   getPublishedBlogPostsPage,
 } from "@/lib/blog/safe-blog-queries";
 import { blogIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
@@ -57,10 +59,18 @@ export default async function BlogIndexPage({ searchParams }: Props) {
   const sp = await searchParams;
   const raw = Number(sp.page ?? "1");
   const page = Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : 1;
-  const { posts, total, pageSize } = await getPublishedBlogPostsPage(page, BLOG_LIST_PAGE_SIZE);
+  const [{ posts, total, pageSize }, pathophysiologyHub] = await Promise.all([
+    getPublishedBlogPostsPage(page, BLOG_LIST_PAGE_SIZE),
+    page === 1 ? getPathophysiologyBlogHubPosts(12) : Promise.resolve([]),
+  ]);
+  const pathoSlugSet = new Set(pathophysiologyHub.map((p) => p.slug));
+  const postsForList = page === 1 ? posts.filter((p) => !pathoSlugSet.has(p.slug)) : posts;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const { crumbs, schemaItems } = blogIndexBreadcrumbs();
   const blogInlinePreloaded = await preloadInlineContentMap([...BLOG_INLINE_KEYS]);
+  const pathoTagHref = `/blog/tag/${encodeURIComponent(PATHOPHYSIOLOGY_HUB_PRIMARY_TAG)}`;
+  const showPathophysiologySection = pathophysiologyHub.length > 0;
+  const showEmptyState = posts.length === 0 && !showPathophysiologySection;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -81,7 +91,7 @@ export default async function BlogIndexPage({ searchParams }: Props) {
           preloaded={blogInlinePreloaded}
         />
       </header>
-      {posts.length === 0 ? (
+      {showEmptyState ? (
         <>
           <EditableText
             as="p"
@@ -94,20 +104,69 @@ export default async function BlogIndexPage({ searchParams }: Props) {
         </>
       ) : (
         <>
-          <ul className="space-y-6">
-            {posts.map((p) => (
-              <li key={p.slug} className="border-b border-[var(--theme-separator)] pb-6">
-                <Link href={`/blog/${p.slug}`} className="text-lg font-semibold text-primary hover:underline">
-                  {p.title}
+          {showPathophysiologySection ? (
+            <section
+              className="mb-12 rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-6 shadow-sm"
+              aria-labelledby="blog-pathophysiology-heading"
+            >
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <h2
+                  id="blog-pathophysiology-heading"
+                  className="text-xl font-semibold tracking-tight text-[var(--theme-heading-text)]"
+                >
+                  Pathophysiology for Nursing Students
+                </h2>
+                <Link
+                  href={pathoTagHref}
+                  className="text-sm font-medium text-primary hover:underline"
+                >
+                  Browse all pathophysiology articles
                 </Link>
-                {p.category ? (
-                  <p className="mt-1 text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">{p.category}</p>
-                ) : null}
-                <p className="mt-2 line-clamp-3 text-sm text-[var(--theme-muted-text)]">{p.excerpt}</p>
-                <p className="mt-2 text-xs text-[var(--theme-muted-text)]">{p.createdAt.toISOString().slice(0, 10)}</p>
-              </li>
-            ))}
-          </ul>
+              </div>
+              <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+                Exam-style disease mechanisms and clinical reasoning — NCLEX-oriented depth with nursing scope in mind.
+              </p>
+              <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+                {pathophysiologyHub.map((p) => (
+                  <li
+                    key={p.slug}
+                    className="rounded-lg border border-[var(--theme-separator)] bg-[var(--theme-page-bg)] p-4"
+                  >
+                    <Link href={`/blog/${p.slug}`} className="font-semibold text-primary hover:underline">
+                      {p.title}
+                    </Link>
+                    {p.category ? (
+                      <p className="mt-1 text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">{p.category}</p>
+                    ) : null}
+                    <p className="mt-2 line-clamp-2 text-sm text-[var(--theme-muted-text)]">{p.excerpt}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+          {postsForList.length > 0 ? (
+            <>
+              {page === 1 && showPathophysiologySection ? (
+                <h2 className="mb-4 text-lg font-semibold text-[var(--theme-heading-text)]">All articles</h2>
+              ) : null}
+              <ul className="space-y-6">
+                {postsForList.map((p) => (
+                  <li key={p.slug} className="border-b border-[var(--theme-separator)] pb-6">
+                    <Link href={`/blog/${p.slug}`} className="text-lg font-semibold text-primary hover:underline">
+                      {p.title}
+                    </Link>
+                    {p.category ? (
+                      <p className="mt-1 text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">{p.category}</p>
+                    ) : null}
+                    <p className="mt-2 line-clamp-3 text-sm text-[var(--theme-muted-text)]">{p.excerpt}</p>
+                    <p className="mt-2 text-xs text-[var(--theme-muted-text)]">{p.createdAt.toISOString().slice(0, 10)}</p>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : page === 1 && showPathophysiologySection ? (
+            <p className="text-sm text-[var(--theme-muted-text)]">More clinical articles appear in the list as they publish.</p>
+          ) : null}
           {totalPages > 1 ? (
             <nav className="mt-10 flex flex-wrap items-center justify-between gap-4 text-sm" aria-label="Blog pagination">
               <span className="text-[var(--theme-muted-text)]">

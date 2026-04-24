@@ -25,7 +25,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-loader";
 import {
   PathwayLessonsCurriculumHub,
-  prepareLessonsForHubCurriculum,
+  prepareLessonsForHubCurriculumWithDiagnostics,
 } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import {
   pathwayCountryLabel,
@@ -453,10 +453,11 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const rawHubLessonRows = renderableAllIn.filter(pathwayLessonHasRenderableHubSlug);
   /** Dedupe + taxonomy guard + linkable href — must match curriculum grid and toolbar count. */
   const prepareT0 = performance.now();
-  const hubCurriculumPrepared = prepareLessonsForHubCurriculum(rawHubLessonRows, {
-    pathwayId: pathway.id,
-    lessonsBasePath: base,
-  });
+  const { lessons: hubCurriculumPrepared, prepareStages: hubPrepareStages } =
+    prepareLessonsForHubCurriculumWithDiagnostics(rawHubLessonRows, {
+      pathwayId: pathway.id,
+      lessonsBasePath: base,
+    });
   const prepareDurationMs = Math.round(performance.now() - prepareT0);
   const listWarehouseT0 = performance.now();
   const listWarehouseLocale = await getPathwayLessonListWarehouseLocaleForHub(pathway.id, lessonContentLocale);
@@ -465,6 +466,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const verifyT0 = performance.now();
   const vr = await verifyMarketingHubLessonRowsResolve(pathway, hubCurriculumPrepared, lessonContentLocale, {
     listWarehouseLocale,
+    prepareStages: hubPrepareStages,
   });
   const verifyDurationMs = Math.round(performance.now() - verifyT0);
   const hubCurriculumLessons = vr.kept;
@@ -566,6 +568,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     role_track: roleTrack,
     exam_code: examCode,
     lesson_content_locale: lessonContentLocale,
+    list_warehouse_locale_for_verify: listWarehouseLocale ?? "",
+    prepare_stages_json: JSON.stringify(hubPrepareStages),
     list_locale_requested: pageResult.locale?.requested ?? "",
     list_locale_effective: pageResult.locale?.effective ?? "",
     list_locale_used_fallback: pageResult.locale?.usedEnglishFallback ? "1" : "0",
@@ -596,7 +600,29 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     question_snapshot_rejected: questionSnapshotLoadRejected ? "1" : "0",
     verify_drop_reasons_json: JSON.stringify(hubVerifyDiagnostics.excludedByReason ?? {}),
     verify_exclusion_ranked_json: JSON.stringify(hubVerifyDiagnostics.exclusionReasonsRanked ?? []),
+    verify_excluded_slug_samples_json: JSON.stringify(hubVerifyDiagnostics.excludedSlugSamples ?? []),
   });
+
+  if (process.env.NN_MARKETING_HUB_PIPELINE_DEBUG === "1") {
+    console.error(
+      "NN_MARKETING_HUB_PIPELINE_DEBUG",
+      JSON.stringify({
+        pathwayId: pathway.id,
+        routePathname: `${pathname}/lessons`,
+        dbPublishedApprox: ld?.rawDbCount ?? null,
+        loaderRenderableTotal: pageResult.total,
+        loaderRenderableAllLen: renderableAllIn.length,
+        prepareStages: hubPrepareStages,
+        verify: {
+          incomingPrepared: hubVerifyDiagnostics.incomingPreparedRowCount,
+          uniqueSlugs: hubVerifyDiagnostics.uniqueSlugCount,
+          kept: hubVerifyDiagnostics.keptRowCount,
+          excludedByReason: hubVerifyDiagnostics.excludedByReason,
+          excludedSlugSamples: hubVerifyDiagnostics.excludedSlugSamples,
+        },
+      }),
+    );
+  }
   const hubListCountForChrome = hubCurriculumLessons.length;
   if (hubVerifiedPage.total > 0 && pageRequested !== hubVerifiedPage.page) {
     const qs = new URLSearchParams();
@@ -913,6 +939,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           showLockedState={!canShowResume}
           hubVerifyDiagnostics={hubVerifyDiagnostics}
         />
+        <LessonHubFullLessonLinkNav lessons={lessonsForCurriculumHub} lessonsBasePath={base} />
       </section>
       <PathwayLessonPagination
         basePath={base}

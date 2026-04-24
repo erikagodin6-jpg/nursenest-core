@@ -10,34 +10,81 @@ import {
 } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { emptyStateCopy } from "@/lib/ui/empty-state-copy";
-import type { MarketingHubLessonVerifyDiagnostics } from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
+import type {
+  HubCurriculumPrepareStageDiagnostics,
+  MarketingHubLessonVerifyDiagnostics,
+} from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { dedupePathwayLessonsForLibrary } from "@/lib/lessons/pathway-lesson-dedupe";
 import { organizeHubLessonsForPresentation } from "@/lib/lessons/pathway-lesson-hub-organize";
 
 /**
- * Single pipeline for hub chrome + curriculum grid: library dedupe (id/slug), hub organize
+ * Single pipeline for hub chrome + curriculum grid: library dedupe (pathway + canonical slug only), hub organize
  * (**slug-only**; concept merge disabled + guarded), then drop rows that cannot build a marketing detail href.
  * Professional-practice corpus suppression is **not** applied here — hub list rows are hub-stripped
  * (`sections: []`) so that guard diverged from full-lesson marketing detail; {@link verifyMarketingHubLessonRowsResolve}
  * already re-checks the hydrated document with the same gates as the public lesson detail route.
  */
-export function prepareLessonsForHubCurriculum(
+/**
+ * Same as {@link prepareLessonsForHubCurriculum} plus stage counts for hub verify / `NN_MARKETING_HUB_PIPELINE_DEBUG`.
+ */
+export function prepareLessonsForHubCurriculumWithDiagnostics(
   lessons: PathwayLessonRecord[],
   args: { pathwayId?: string; lessonsBasePath: string },
-): PathwayLessonRecord[] {
+): { lessons: PathwayLessonRecord[]; prepareStages: HubCurriculumPrepareStageDiagnostics } {
+  const incomingFromLoader = lessons.length;
   const safeLessons = lessons.filter(pathwayLessonHasRenderableHubSlug);
-  const dedupedSafeLessons = dedupePathwayLessonsForLibrary(safeLessons, {
+  const droppedMissingOrUnsafeSlug = incomingFromLoader - safeLessons.length;
+  const dedupeResult = dedupePathwayLessonsForLibrary(safeLessons, {
     pathwayIdHint: args.pathwayId,
     source: `curriculum_hub_prepare:${args.pathwayId ?? "unknown"}`,
     devLog: false,
-  }).items;
+  });
+  const dedupedSafeLessons = dedupeResult.items;
+  const droppedDuplicateSlug = dedupeResult.duplicateCount;
+  const beforeOrganize = dedupedSafeLessons.length;
   /** Slug-only organization: never merge different public slugs that share a topic/title pattern (hub card count bug). */
   const organized = organizeHubLessonsForPresentation(dedupedSafeLessons, args.pathwayId, {
     mergeNearDuplicateTitles: false,
     marketingLessonsHubInvocation: true,
   });
-  return organized.filter((l) => pathwayLessonMarketingDetailHref(args.lessonsBasePath, l.slug) != null);
+  const droppedOrganizeShrink = Math.max(0, beforeOrganize - organized.length);
+  const afterHrefFiltered = organized.filter(
+    (l) => pathwayLessonMarketingDetailHref(args.lessonsBasePath, l.slug) != null,
+  );
+  const droppedNoMarketingHref = organized.length - afterHrefFiltered.length;
+
+  const prepareStages: HubCurriculumPrepareStageDiagnostics = {
+    incomingFromLoader,
+    afterRenderableSlugFilter: safeLessons.length,
+    droppedMissingOrUnsafeSlug,
+    afterLibraryDedupe: dedupedSafeLessons.length,
+    droppedDuplicateSlug,
+    afterOrganize: organized.length,
+    droppedOrganizeShrink,
+    afterMarketingHrefFilter: afterHrefFiltered.length,
+    droppedNoMarketingHref,
+  };
+
+  if (process.env.NN_MARKETING_HUB_PIPELINE_DEBUG === "1") {
+    const droppedHrefSlugs = organized
+      .filter((l) => pathwayLessonMarketingDetailHref(args.lessonsBasePath, l.slug) == null)
+      .map((l) => String(l.slug ?? "").slice(0, 160));
+    safeServerLog("pathway_lessons", "hub_prepare_pipeline_debug", {
+      pathway_id: args.pathwayId ?? "",
+      prepare_stages_json: JSON.stringify(prepareStages),
+      dropped_href_slug_sample_json: JSON.stringify(droppedHrefSlugs.slice(0, 60)),
+    });
+  }
+
+  return { lessons: afterHrefFiltered, prepareStages };
+}
+
+export function prepareLessonsForHubCurriculum(
+  lessons: PathwayLessonRecord[],
+  args: { pathwayId?: string; lessonsBasePath: string },
+): PathwayLessonRecord[] {
+  return prepareLessonsForHubCurriculumWithDiagnostics(lessons, args).lessons;
 }
 
 type Props = {

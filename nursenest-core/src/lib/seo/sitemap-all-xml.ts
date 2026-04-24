@@ -2,6 +2,7 @@ import "server-only";
 
 import { listBlogSitemapEntriesSafe } from "@/lib/seo/sitemap-blog-xml";
 import { listLocalizedBlogSitemapEntriesSafe } from "@/lib/seo/sitemap-localized-blog-xml";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { shouldReduceNonCriticalBuildWork } from "@/lib/build/build-safe-mode";
 import { shouldSkipDbBackedSitemapUrlsForBuild } from "@/lib/seo/sitemap-build-skip";
@@ -11,7 +12,6 @@ import {
   collectLocaleMarketingUrls,
   collectSeoPagesUrls,
   collectToolsUrls,
-  minimalUrlsetSingleHome,
   normalizeOrigin,
   resolveSitemapOrigin,
   type SitemapUrlEntry,
@@ -173,15 +173,85 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
       });
     }
 
+    if (merged.length === 0) {
+      safeServerLog("seo", "sitemap_merged_empty", {
+        staticCandidates: String(allStatic.size),
+        blogMapSize: String(blogEntries.size),
+        skipDbBackedEntries: skipDbBackedEntries ? "1" : "0",
+        buildSafeMode: reduceForBuildSafeMode ? "1" : "0",
+      });
+      throw new Error(
+        "sitemap_merged_empty: no indexable URLs after merge (check origin alignment, public-url-validator rejections, and locale tier exclusions).",
+      );
+    }
+
+    if (merged.length === 1) {
+      let solePath: string;
+      try {
+        solePath = new URL(merged[0]!.loc).pathname.replace(/\/$/, "") || "/";
+      } catch {
+        throw new Error("sitemap_degenerate: sole merged URL is not parseable");
+      }
+      if (solePath === "" || solePath === "/") {
+        throw new Error(
+          "sitemap_degenerate_home_only: merged urlset collapsed to the homepage only — refusing to emit a misleading sitemap.",
+        );
+      }
+    }
+
+    let blogDetailUrlCount = 0;
+    let canadaRnLessonUrlCount = 0;
+    for (const m of merged) {
+      try {
+        const path = new URL(m.loc).pathname;
+        if (path.startsWith("/blog/") && path !== "/blog" && path.length > "/blog/".length) {
+          blogDetailUrlCount += 1;
+        }
+        if (path.includes("/canada/rn/nclex-rn/lessons")) {
+          canadaRnLessonUrlCount += 1;
+        }
+      } catch {
+        /* ignore parse errors here; validation happens elsewhere */
+      }
+    }
+    safeServerLog("seo", "sitemap_merged_semantic_counts", {
+      mergedTotal: String(merged.length),
+      blogDetailUrlCount: String(blogDetailUrlCount),
+      canadaRnLessonUrlCount: String(canadaRnLessonUrlCount),
+    });
+    if (
+      isDatabaseUrlConfigured() &&
+      !skipDbBackedEntries &&
+      !reduceForBuildSafeMode &&
+      blogDetailUrlCount === 0
+    ) {
+      safeServerLog("seo", "sitemap_semantic_warning_no_blog_detail_urls", {
+        mergedTotal: String(merged.length),
+        blogMapSize: String(blogEntries.size),
+      });
+    }
+    if (
+      isDatabaseUrlConfigured() &&
+      !skipDbBackedEntries &&
+      !reduceForBuildSafeMode &&
+      canadaRnLessonUrlCount === 0
+    ) {
+      safeServerLog("seo", "sitemap_semantic_warning_no_canada_rn_nclex_lesson_urls", {
+        mergedTotal: String(merged.length),
+      });
+    }
+
     return buildSitemapUrlsetFromAbsoluteUrls(merged);
   } catch (e) {
     if (e instanceof SeoHttpValidationStrictError) {
       throw e;
     }
     const detail = e instanceof Error ? e.message : String(e);
+    const stack = e instanceof Error && e.stack ? e.stack.slice(0, 2500) : "";
     safeServerLog("seo", "sitemap_merged_build_failed", {
-      detail: detail.slice(0, 400),
+      detail: detail.slice(0, 800),
+      stack,
     });
-    return minimalUrlsetSingleHome();
+    throw e;
   }
 }

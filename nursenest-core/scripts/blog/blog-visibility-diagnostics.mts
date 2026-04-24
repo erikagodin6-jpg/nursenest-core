@@ -5,8 +5,11 @@
  * Usage (from nursenest-core/, requires DATABASE_URL):
  *   npx tsx scripts/blog/blog-visibility-diagnostics.mts
  *   npx tsx scripts/blog/blog-visibility-diagnostics.mts --sample-excluded 20
+ *
+ * Prints `dbProbe`: SELECT 1, legacySource seed counts, postStatus / workflowStatus / publishAt slices,
+ * and `blogLiveWhere` live count for production triage (same DB URL the app uses).
  */
-import { BlogPostStatus, PrismaClient } from "@prisma/client";
+import { BlogPostStatus, BlogWorkflowStatus, PrismaClient } from "@prisma/client";
 
 import "../../src/lib/db/env-bootstrap";
 import { blogLiveWhere, blogPostIsLive } from "../../src/lib/blog/blog-visibility";
@@ -67,8 +70,29 @@ async function main(): Promise<void> {
   const liveWhere = blogLiveWhere(now);
 
   try {
+    const ping = await prisma.$queryRaw<{ ok: number }[]>`SELECT 1::int as ok`;
+    const select1Ok = Array.isArray(ping) && ping[0]?.ok === 1;
+
     const total = await prisma.blogPost.count();
     const liveCount = await prisma.blogPost.count({ where: liveWhere });
+
+    const PATHO_SEED = "pathophysiology-nursing-blog-seed";
+    const legacySeedTotal = await prisma.blogPost.count({ where: { legacySource: PATHO_SEED } });
+    const legacySeedLive = await prisma.blogPost.count({
+      where: { AND: [liveWhere, { legacySource: PATHO_SEED }] },
+    });
+    const postStatusApproved = await prisma.blogPost.count({
+      where: { postStatus: BlogPostStatus.APPROVED },
+    });
+    const postStatusPublished = await prisma.blogPost.count({
+      where: { postStatus: BlogPostStatus.PUBLISHED },
+    });
+    const workflowStatusPublished = await prisma.blogPost.count({
+      where: { workflowStatus: BlogWorkflowStatus.PUBLISHED },
+    });
+    const publishAtLteNow = await prisma.blogPost.count({
+      where: { publishAt: { lte: now } },
+    });
     const byStatus = await prisma.blogPost.groupBy({
       by: ["postStatus"],
       _count: { _all: true },
@@ -137,11 +161,23 @@ async function main(): Promise<void> {
       JSON.stringify(
         {
           at: now.toISOString(),
+          dbProbe: {
+            select1Ok,
+            legacySourcePathophysiologySeedTotal: legacySeedTotal,
+            legacySourcePathophysiologySeedMatchingBlogLiveWhere: legacySeedLive,
+            postStatusPublishedTotal: postStatusPublished,
+            workflowStatusPublishedTotal: workflowStatusPublished,
+            publishAtLteNowTotal: publishAtLteNow,
+            blogLiveWhereCount: liveCount,
+          },
           totals: {
             allPosts: total,
             liveQueryMatch: liveCount,
             excludedFromLive: Math.max(0, total - liveCount),
             byPostStatus: statusMap,
+            approvedCount: postStatusApproved,
+            publishedCount: postStatusPublished,
+            legacySourcePathophysiologySeed: legacySeedTotal,
             scheduledNotYetDue: scheduledFuture,
             recentDraftsScanned: recentDrafts.length,
             controlPanelStyleDraftsAmongRecentDrafts: controlPanelStyleDraftsInRecent,

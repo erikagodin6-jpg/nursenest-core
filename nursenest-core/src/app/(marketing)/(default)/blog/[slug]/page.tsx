@@ -53,8 +53,8 @@ type Props = { params: Promise<{ slug: string }> };
 
 export const dynamicParams = true;
 
-/** ISR: slug pages are public; cache publicly for one hour and revalidate in the background. */
-export const revalidate = 3600;
+/** ISR backup; align with `/blog` so pathophysiology hub + lists refresh together after publish. */
+export const revalidate = 180;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

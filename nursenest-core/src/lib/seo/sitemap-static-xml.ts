@@ -374,8 +374,17 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     ...listPublishedExpansionExamMarketingPaths().map((p) => add(p)),
     ...regionalTopicPaths.map((p) => add(p)),
   ];
-  /** Keep `/sitemap.xml` under platform timeouts: pathway lesson enumeration can be huge. */
-  const pathwayLessonDeadlineMs = Date.now() + 24_000;
+  /**
+   * Pathway lesson URLs are the dominant sitemap cost. Cap wall time (override via `SITEMAP_PATHWAY_BUDGET_MS`).
+   * Blog URLs are merged separately in `sitemap-all-xml.ts` and are not dropped when this budget elapses.
+   */
+  const pathwayBudgetMs = (() => {
+    const raw = process.env.SITEMAP_PATHWAY_BUDGET_MS?.trim();
+    const n = raw ? Number.parseInt(raw, 10) : 8000;
+    if (!Number.isFinite(n)) return 8000;
+    return Math.min(60_000, Math.max(2000, n));
+  })();
+  const pathwayLessonDeadlineMs = Date.now() + pathwayBudgetMs;
   const lessonUrls = await collectPathwayLessonSeoUrls(o, { deadlineEpochMs: pathwayLessonDeadlineMs });
   const pathwayTopicUrls = await collectPathwayTopicProgrammaticUrls(o);
   const [examHubUrls, npPracticeHubUrls, contentBackedStudyHubUrls] = await Promise.all([

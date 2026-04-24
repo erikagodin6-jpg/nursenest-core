@@ -4,7 +4,6 @@ import {
 } from "@/lib/observability/crawl-surface-observability";
 import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
 import { buildSingleSitemapXmlSafe } from "@/lib/seo/sitemap-all-xml";
-import { minimalUrlsetSingleHome } from "@/lib/seo/sitemap-static-xml";
 import { SeoHttpValidationStrictError } from "@/lib/seo/seo-http-emit-validation";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { sitemapXmlResponse } from "@/lib/seo/sitemap-xml-http";
@@ -12,9 +11,9 @@ import { sitemapXmlResponse } from "@/lib/seo/sitemap-xml-http";
 /**
  * Single sitemap urlset at `/sitemap.xml` (canonical crawler entrypoint).
  *
- * Force runtime generation: build-time prerender of this route can hang or fail
- * when optional DB-backed sitemap enrichment cannot reach Postgres in CI/App Platform.
- * Freshness is still controlled by explicit sitemap cache headers.
+ * Force runtime generation. On generation failure (DB unreachable, merge invariants, etc.) this route
+ * returns **503** with a short plain-text body — it does **not** fall back to a misleading home-only
+ * urlset (crawlers must see failure, not a false “single URL” success).
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -25,6 +24,16 @@ export const maxDuration = 120;
 const SITEMAP_SLOW_MS = 1500;
 
 const SITEMAP_PATHNAME = "/sitemap.xml";
+
+function sitemapFailureResponse(status: number, body: string): Response {
+  return new Response(body, {
+    status,
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "private, no-store, must-revalidate",
+    },
+  });
+}
 
 function cachedSitemapXmlResponse(req: Request, xml: string): Response {
   const response = sitemapXmlResponse(xml);
@@ -59,17 +68,21 @@ export async function GET(req: Request) {
       });
     }
     if (!xml || typeof xml !== "string" || xml.length < 80) {
+      safeServerLog("seo", "sitemap_xml_invalid_body", { approxLen: String(approxLen) });
       logCrawlSurfaceEvent({
         routeType: "marketing.sitemap_xml",
         pathname: SITEMAP_PATHNAME,
         durationMs: ms,
-        outcome: "fallback",
-        httpStatus: 200,
-        fallback: true,
+        outcome: "error",
+        httpStatus: 503,
+        fallback: false,
         approxResponseLen: approxLen,
         errorCode: "sitemap_degenerate_body",
       });
-      return cachedSitemapXmlResponse(req, minimalUrlsetSingleHome());
+      return sitemapFailureResponse(
+        503,
+        "Sitemap generation produced an empty or truncated body. See logs (sitemap_degenerate_body).",
+      );
     }
     return cachedSitemapXmlResponse(req, xml);
   } catch (e) {
@@ -101,31 +114,23 @@ export async function GET(req: Request) {
       );
     }
     const ms = Date.now() - t0;
+    const detail = e instanceof Error ? e.message : String(e);
+    safeServerLog("seo", "sitemap_xml_generation_failed", {
+      detail: detail.slice(0, 800),
+      code: crawlSurfaceErrorCode(e),
+    });
     logCrawlSurfaceEvent({
       routeType: "marketing.sitemap_xml",
       pathname: SITEMAP_PATHNAME,
       durationMs: ms,
-      outcome: "fallback",
-      httpStatus: 200,
-      fallback: true,
+      outcome: "error",
+      httpStatus: 503,
+      fallback: false,
       errorCode: crawlSurfaceErrorCode(e),
     });
-    try {
-      return cachedSitemapXmlResponse(req, minimalUrlsetSingleHome());
-    } catch (inner) {
-      logCrawlSurfaceEvent({
-        routeType: "marketing.sitemap_xml",
-        pathname: SITEMAP_PATHNAME,
-        durationMs: Date.now() - t0,
-        outcome: "fallback",
-        httpStatus: 200,
-        fallback: true,
-        errorCode: crawlSurfaceErrorCode(inner),
-      });
-      return cachedSitemapXmlResponse(
-        req,
-        `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://www.nursenest.ca/</loc></url></urlset>`,
-      );
-    }
+    return sitemapFailureResponse(
+      503,
+      `Sitemap generation failed: ${detail.slice(0, 500)}. See server logs (sitemap_xml_generation_failed / sitemap_merged_build_failed).`,
+    );
   }
 }

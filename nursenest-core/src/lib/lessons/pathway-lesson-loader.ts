@@ -1277,10 +1277,13 @@ async function getPathwayLessonImpl(
   pathwayId: string,
   slug: string,
   marketingLocale?: string,
-  options?: { dbTimeoutMs?: number },
+  options?: { dbTimeoutMs?: number; lessonDbShardLocale?: string },
 ): Promise<PathwayLessonRecord | undefined> {
   const dbTimeout = options?.dbTimeoutMs ?? PATHWAY_LESSON_DB_TIMEOUT_MS;
   const overlayLocale = normalizePathwayLessonLocale(marketingLocale);
+  const shardNorm = options?.lessonDbShardLocale?.trim()
+    ? normalizePathwayLessonLocale(options.lessonDbShardLocale)
+    : undefined;
   const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(overlayLocale);
   const catalogLessons = getCatalogLessonsRaw(pathwayId);
   const catalogHitForSlug = catalogLessons.find((l) => l.slug === slug);
@@ -1336,6 +1339,56 @@ async function getPathwayLessonImpl(
       return fromCatalogEn;
     }
     /** Do not return incomplete EN rows — marketing detail + hub integrity require `publicComplete`. */
+  }
+
+  /**
+   * Hub list rows are keyed by warehouse `locale` (`localeMeta.contentLocale`) while overlays follow the
+   * hub page marketing locale (`marketingLocale`). When they differ, read the shard row here before the
+   * generic `overlayLocale` Prisma pass (which may equal the page locale, not the warehouse).
+   */
+  if (
+    shardNorm &&
+    shardNorm !== PATHWAY_LESSON_CANONICAL_DB_LOCALE &&
+    shardNorm !== overlayLocale
+  ) {
+    const rowShard = await dbCall(
+      () =>
+        prisma.pathwayLesson.findUnique({
+          where: {
+            pathwayId_slug_locale: { pathwayId, slug, locale: shardNorm },
+          },
+        }),
+      null,
+      dbTimeout,
+    );
+    if (rowShard && rowShard.status === ContentStatus.PUBLISHED) {
+      const fromShard = applyOverlayAndStructural(
+        withLocaleMeta(
+          normalizeLesson(pathwayLessonRowToInput(rowShard), pathwayId),
+          lessonLocaleMeta(
+            marketingLocale,
+            shardNorm,
+            normalizePathwayLessonLocale(marketingLocale) !== shardNorm,
+            false,
+          ),
+        ),
+        marketingLocale,
+        pathwayId,
+        lessonDbOverlays,
+      );
+      if (pathwayLessonEligibleForPublicMarketingSurface(fromShard)) {
+        return fromShard;
+      }
+      const fromCatalogAfterShard = tryCatalogPublicComplete();
+      if (fromCatalogAfterShard) {
+        safeServerLog("pathway_lessons", "lesson_detail_catalog_fallback_after_shard_row_incomplete", {
+          pathwayId,
+          slug: slug.slice(0, 160),
+          shard_locale: shardNorm,
+        });
+        return fromCatalogAfterShard;
+      }
+    }
   }
 
   if (overlayLocale !== PATHWAY_LESSON_CANONICAL_DB_LOCALE) {
@@ -1490,10 +1543,14 @@ export const getPathwayLesson = cache(getPathwayLessonWithDataCache);
 export async function getPathwayLessonForMarketingHubVerify(
   pathwayId: string,
   slug: string,
-  marketingLocale?: string,
+  hubMarketingLocale?: string,
+  lessonDbShardLocale?: string,
 ): Promise<PathwayLessonRecord | undefined> {
-  return getPathwayLessonImpl(pathwayId, slug, marketingLocale, {
+  return getPathwayLessonImpl(pathwayId, slug, hubMarketingLocale, {
     dbTimeoutMs: PATHWAY_LESSON_MARKETING_HUB_VERIFY_DB_TIMEOUT_MS,
+    ...(lessonDbShardLocale?.trim()
+      ? { lessonDbShardLocale: normalizePathwayLessonLocale(lessonDbShardLocale) }
+      : {}),
   });
 }
 

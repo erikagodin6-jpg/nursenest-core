@@ -13,9 +13,9 @@
  *
  * List rows can still diverge on slug/overlay drift; this pass closes **hydration + publicComplete + pathway context** only.
  *
- * **Per-row locale:** Hub rows carry {@link PathwayLessonRecord.localeMeta}`.contentLocale` (warehouse shard used when
- * the list row was built). Verify passes that into {@link getPathwayLessonForMarketingHubVerify} so hydration matches
- * the list SQL/catalog merge even when the page-level marketing locale cookie differs.
+ * **Per-row locale:** Hub rows carry {@link PathwayLessonRecord.localeMeta}`.contentLocale` (warehouse shard). Verify
+ * passes the **hub page** marketing locale into {@link getPathwayLessonForMarketingHubVerify} for overlays (same as
+ * {@link getPathwayLessonsPageFresh}) and passes the warehouse shard separately so Prisma reads match list SQL.
  *
  * **Resolver parity:** {@link pathwayLessonEligibleForPublicMarketingSurface} is the same `publicComplete` gate as
  * {@link resolveMarketingPathwayLessonRouteResolution} (detail returns `not_found` / `lesson_not_public_complete` when
@@ -24,6 +24,7 @@
 
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type {
+  HubCurriculumPrepareStageDiagnostics,
   HubMarketingLessonDetailFailureReason,
   MarketingHubLessonVerifyDiagnostics,
 } from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
@@ -41,10 +42,24 @@ const DEFAULT_DETAIL_VERIFY_CONCURRENCY = 24;
 export type ResolveMarketingLessonDetailFn = (
   pathwayId: string,
   slug: string,
-  lessonContentLocale: string,
+  hubMarketingLocale: string,
+  lessonDbShardLocale?: string,
 ) => Promise<PathwayLessonRecord | undefined>;
 
-export type { MarketingHubLessonVerifyDiagnostics } from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
+/** Optional 4th argument to {@link evaluatePublicMarketingLessonCrossLinkIntegrity}. */
+export type EvaluatePublicMarketingLessonCrossLinkOptions = {
+  resolveLessonDetail?: ResolveMarketingLessonDetailFn;
+  /**
+   * `pathway_lessons.locale` shard used when the hub list row was built (`localeMeta.contentLocale`).
+   * When set, Prisma reads prefer this shard while overlays still use `hubMarketingLocale` (parity with list SQL).
+   */
+  lessonDbShardLocale?: string;
+};
+
+export type {
+  HubCurriculumPrepareStageDiagnostics,
+  MarketingHubLessonVerifyDiagnostics,
+} from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
 
 function tallyReason(
   map: Partial<Record<HubMarketingLessonDetailFailureReason, number>>,
@@ -75,25 +90,27 @@ export type HubLessonDetailExcluded = {
  * Single-slug **same contract** as {@link verifyMarketingHubLessonRowsResolve} — fresh detail load,
  * {@link pathwayLessonEligibleForPublicMarketingSurface}, pathway exam/country context (matches marketing detail gates).
  *
- * @param lessonContentLocale Preferred locale for {@link getPathwayLessonForMarketingHubVerify} — use hub row
- * `localeMeta.contentLocale` when verifying list rows so it matches the list pipeline warehouse.
+ * @param hubMarketingLocale Hub page marketing locale (same value passed into {@link getPathwayLessonsPageFresh}) — drives overlays.
+ * @param opts.lessonDbShardLocale Optional list-row warehouse locale; when set, pass to resolver so DB reads match list SQL.
  */
 export async function evaluatePublicMarketingLessonCrossLinkIntegrity(
   pathway: Pick<ExamPathwayDefinition, "id">,
   rawSlug: string,
-  lessonContentLocale: string,
-  resolveLessonDetail: ResolveMarketingLessonDetailFn = getPathwayLessonForMarketingHubVerify,
+  hubMarketingLocale: string,
+  opts?: EvaluatePublicMarketingLessonCrossLinkOptions,
 ): Promise<
   | { ok: true; lesson: PathwayLessonRecord }
   | { ok: false; reason: HubMarketingLessonDetailFailureReason; slug: string }
 > {
+  const resolveLessonDetail = opts?.resolveLessonDetail ?? getPathwayLessonForMarketingHubVerify;
+  const dbShard = opts?.lessonDbShardLocale?.trim() ? normalizePathwayLessonLocale(opts.lessonDbShardLocale) : undefined;
   const slug = typeof rawSlug === "string" ? rawSlug.trim() : "";
   if (!pathwayLessonHasRenderableHubSlug({ slug })) {
     return { ok: false, reason: "missing_slug", slug: String(rawSlug ?? "") };
   }
   let loaded: PathwayLessonRecord | undefined;
   try {
-    loaded = await resolveLessonDetail(pathway.id, slug, lessonContentLocale);
+    loaded = await resolveLessonDetail(pathway.id, slug, hubMarketingLocale, dbShard);
   } catch {
     safeServerLog("pathway_lessons", "hub_lesson_detail_verify_loader_error", {
       pathway_id: pathway.id,
@@ -158,6 +175,8 @@ export async function verifyMarketingHubLessonRowsResolve(
     listWarehouseLocale?: string;
     /** When true, zero-kept critical log uses `all_rows_excluded_tests` outcome (unit tests). */
     skipZeroKeptPipelineInvariant?: boolean;
+    /** Optional prepare-stage counts merged into `diagnostics` for debug / ops. */
+    prepareStages?: HubCurriculumPrepareStageDiagnostics;
   },
 ): Promise<{
   kept: PathwayLessonRecord[];
@@ -185,12 +204,10 @@ export async function verifyMarketingHubLessonRowsResolve(
       slugToListDetailLocale.get(slug) ??
       (listWarehouseLocale ? normalizePathwayLessonLocale(listWarehouseLocale) : undefined) ??
       lessonContentLocale;
-    const ev = await evaluatePublicMarketingLessonCrossLinkIntegrity(
-      pathway,
-      slug,
-      detailLocale,
+    const ev = await evaluatePublicMarketingLessonCrossLinkIntegrity(pathway, slug, lessonContentLocale, {
       resolveLessonDetail,
-    );
+      lessonDbShardLocale: detailLocale,
+    });
     return { slug, ev };
   });
 
@@ -253,9 +270,17 @@ export async function verifyMarketingHubLessonRowsResolve(
     tallyReason(rowLevelExcludedByReason, r);
   }
 
+  const excludedSlugSampleCap =
+    process.env.NN_MARKETING_HUB_PIPELINE_DEBUG === "1"
+      ? Math.min(400, Math.max(48, verifyExcluded.length))
+      : 24;
+
   const diagnostics: MarketingHubLessonVerifyDiagnostics = {
     pathwayId: pathway.id,
     lessonContentLocale,
+    hubPageMarketingLocale: lessonContentLocale,
+    verifyListWarehouseLocale: listWarehouseLocale ?? "",
+    prepareStages: options?.prepareStages,
     incomingPreparedRowCount: lessons.length,
     uniqueSlugCount: uniqueSlugs.length,
     keptRowCount: kept.length,
@@ -264,6 +289,10 @@ export async function verifyMarketingHubLessonRowsResolve(
     verifyResolverCallCount: uniqueSlugs.length,
     excludedByReason,
     exclusionReasonsRanked: lessons.length > 0 ? exclusionReasonsRanked : undefined,
+    excludedSlugSamples: verifyExcluded.slice(0, excludedSlugSampleCap).map((e) => ({
+      slug: e.slug.slice(0, 200),
+      reason: e.reason,
+    })),
   };
 
   if (lessons.length > 0) {
@@ -303,6 +332,19 @@ export async function verifyMarketingHubLessonRowsResolve(
       unique_slugs: String(uniqueSlugs.length),
       reasons_json: JSON.stringify(excludedByReason),
       outcome: "pipeline_break",
+    });
+  }
+
+  if (process.env.NN_MARKETING_HUB_PIPELINE_DEBUG === "1" && verifyExcluded.length > 0) {
+    safeServerLog("pathway_lessons", "hub_verify_excluded_slugs_compact", {
+      pathway_id: pathway.id,
+      hub_page_marketing_locale: lessonContentLocale,
+      list_warehouse_locale: listWarehouseLocale ?? "",
+      excluded_count: String(verifyExcluded.length),
+      pipe_joined: verifyExcluded
+        .slice(0, 320)
+        .map((e) => `${e.slug.slice(0, 120)}:${e.reason}`)
+        .join("|"),
     });
   }
 

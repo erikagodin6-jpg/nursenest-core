@@ -13,7 +13,12 @@
 import "server-only";
 
 import { prisma } from "@/lib/db";
-import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
+import {
+  isDatabaseUrlConfigured,
+  withDatabaseFallbackTimeout,
+  withDatabaseFallbackTimeoutOrThrow,
+} from "@/lib/db/safe-database";
+import { shouldSkipDbBackedSitemapUrlsForBuild } from "@/lib/seo/sitemap-build-skip";
 import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
 
@@ -403,6 +408,38 @@ export async function getSitemapLocalizedBlogRows(): Promise<
     [],
     "localized_blog_sitemap.rows",
     LOCALIZED_BLOG_SITEMAP_TIMEOUT_MS,
+  );
+}
+
+/**
+ * Same projection as {@link getSitemapLocalizedBlogRows}, but **throws** on DB failure when
+ * `DATABASE_URL` is set and build-time DB skip is off — used by merged `/sitemap.xml` only.
+ */
+export async function getSitemapLocalizedBlogRowsStrict(): Promise<
+  { locale: string; region: string; profession: string | null; exam: string | null; localizedSlug: string; updatedAt: Date }[]
+> {
+  if (!isDatabaseUrlConfigured() || shouldSkipDbBackedSitemapUrlsForBuild()) {
+    return [];
+  }
+  const now = new Date();
+  const m = localizedModel();
+  return withDatabaseFallbackTimeoutOrThrow(
+    () =>
+      m.findMany({
+        where: localizedBlogLiveWhere(now),
+        select: {
+          locale: true,
+          region: true,
+          profession: true,
+          exam: true,
+          localizedSlug: true,
+          updatedAt: true,
+        },
+        orderBy: { updatedAt: "desc" },
+        take: SITEMAP_CAP,
+      }) as Promise<{ locale: string; region: string; profession: string | null; exam: string | null; localizedSlug: string; updatedAt: Date }[]>,
+    LOCALIZED_BLOG_SITEMAP_TIMEOUT_MS,
+    { scope: "localized_blog", label: "localized_blog_sitemap.rows_strict" },
   );
 }
 

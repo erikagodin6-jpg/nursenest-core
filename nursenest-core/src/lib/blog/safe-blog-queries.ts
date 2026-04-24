@@ -1,7 +1,11 @@
 import type { BlogPost, Prisma } from "@prisma/client";
 import { BlogPostStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
+import {
+  isDatabaseUrlConfigured,
+  withDatabaseFallbackTimeout,
+  withDatabaseFallbackTimeoutOrThrow,
+} from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { blogLiveWhere, blogPostIsLive, isBlogPostMarketingMetaVisible } from "@/lib/blog/blog-visibility";
 import {
@@ -10,6 +14,7 @@ import {
   publishedBlogPostFromStaticRecord,
 } from "@/lib/blog/static-blog-posts";
 import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
+import { shouldSkipDbBackedSitemapUrlsForBuild } from "@/lib/seo/sitemap-build-skip";
 
 /** @deprecated Use `isDatabaseUrlConfigured` from `@/lib/db/safe-database`. */
 export const isBlogDatabaseConfigured = isDatabaseUrlConfigured;
@@ -110,6 +115,61 @@ type BlogQueryScope = {
  * Uses {@link API_LIST_PAGE_SIZE_HARD_MAX} as ceiling (defense-in-depth for list APIs).
  */
 export const BLOG_LIST_PAGE_SIZE = 50;
+
+/** Matches `import-pathophysiology-nursing-blog-seeds.mts` upserts. */
+export const PATHOPHYSIOLOGY_SEED_LEGACY_SOURCE = "pathophysiology-nursing-blog-seed" as const;
+/** Primary tag on seeded pathophysiology posts; powers `/blog/tag/pathophysiology`. */
+export const PATHOPHYSIOLOGY_HUB_PRIMARY_TAG = "pathophysiology" as const;
+const PATHOPHYSIOLOGY_HUB_DEFAULT_TAKE = 12;
+
+/**
+ * Live posts for the `/blog` pathophysiology spotlight (seed corpus, `pp-*` slugs, or primary tag).
+ * No locale/career/exam filters — same contract as the main index {@link blogLiveWhere}.
+ */
+export async function getPathophysiologyBlogHubPosts(take: number = PATHOPHYSIOLOGY_HUB_DEFAULT_TAKE): Promise<BlogIndexPost[]> {
+  const safeTake = Math.min(API_LIST_PAGE_SIZE_HARD_MAX, Math.max(1, Math.floor(take)));
+  if (shouldSkipBlogDbForProductionBuild()) {
+    const tag = PATHOPHYSIOLOGY_HUB_PRIMARY_TAG.toLowerCase();
+    const rows = listStaticBlogPostsForIndex().filter(
+      (p) =>
+        p.slug.startsWith("pp-") ||
+        (p.tags ?? []).some((t) => t.toLowerCase() === tag),
+    );
+    return rows.slice(0, safeTake).map((p) => ({
+      slug: p.slug,
+      title: p.title,
+      excerpt: p.excerpt,
+      category: p.category,
+      createdAt: new Date(`${p.createdAt}T12:00:00Z`),
+      publishAt: null,
+      postStatus: BlogPostStatus.PUBLISHED,
+    }));
+  }
+  const now = new Date();
+  const where = {
+    AND: [
+      blogLiveWhere(now),
+      {
+        OR: [
+          { legacySource: PATHOPHYSIOLOGY_SEED_LEGACY_SOURCE },
+          { slug: { startsWith: "pp-" } },
+          { tags: { has: PATHOPHYSIOLOGY_HUB_PRIMARY_TAG } },
+        ],
+      },
+    ],
+  } satisfies Prisma.BlogPostWhereInput;
+  return withBlogTimeoutFallback(
+    () =>
+      prisma.blogPost.findMany({
+        where,
+        orderBy: [{ updatedAt: "desc" }, { slug: "asc" }],
+        take: safeTake,
+        select: indexSelect,
+      }),
+    [],
+    "blog_pathophysiology_hub.posts",
+  );
+}
 
 /**
  * Opt-in deep diagnostics: `BLOG_INDEX_DIAGNOSTICS=1` logs groupBy + live counts (extra DB work).
@@ -650,6 +710,46 @@ export async function getSitemapPublishedBlogSlugs(): Promise<{ slug: string; up
     [],
     "blog_sitemap.slugs_batched",
     BLOG_SITEMAP_SLUG_LIST_TIMEOUT_MS,
+  );
+}
+
+/**
+ * Batched live blog slugs for `/sitemap.xml`. **Throws** on DB timeout, auth, or connectivity errors
+ * when a database URL is configured (so sitemap generation cannot silently omit every `/blog/{slug}` row).
+ * Returns `[]` only when DB-backed sitemap queries are intentionally skipped (build / no URL / static-only blog build).
+ */
+export async function getSitemapPublishedBlogSlugsStrict(): Promise<{ slug: string; updatedAt: Date }[]> {
+  if (!isDatabaseUrlConfigured() || shouldSkipBlogDbForProductionBuild() || shouldSkipDbBackedSitemapUrlsForBuild()) {
+    return [];
+  }
+  const now = new Date();
+  return withDatabaseFallbackTimeoutOrThrow(
+    async () => {
+      const out: { slug: string; updatedAt: Date }[] = [];
+      let cursor: { slug: string } | undefined;
+      for (;;) {
+        const page = await prisma.blogPost.findMany({
+          where: blogLiveWhere(now),
+          select: { slug: true, updatedAt: true },
+          orderBy: { slug: "asc" },
+          take: SITEMAP_BLOG_SLUG_PAGE_SIZE,
+          ...(cursor ? { cursor, skip: 1 } : {}),
+        });
+        if (page.length === 0) break;
+        for (const r of page) {
+          const s = r.slug?.trim();
+          if (s) out.push({ slug: s, updatedAt: r.updatedAt });
+        }
+        if (out.length >= SITEMAP_BLOG_ROW_CAP) break;
+        if (page.length < SITEMAP_BLOG_SLUG_PAGE_SIZE) break;
+        const last = page[page.length - 1];
+        if (!last?.slug) break;
+        cursor = { slug: last.slug };
+      }
+      return out.slice(0, SITEMAP_BLOG_ROW_CAP);
+    },
+    BLOG_SITEMAP_SLUG_LIST_TIMEOUT_MS,
+    { scope: "blog", label: "blog_sitemap.slugs_batched_strict" },
   );
 }
 

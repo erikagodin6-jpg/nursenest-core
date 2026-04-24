@@ -20,6 +20,8 @@ const MAX_BATCH_SLUG_REVALIDATIONS = 120;
 export function revalidateBlogPublishingSurfaces(options?: BlogPublishingRevalidateOptions): void {
   revalidatePath("/blog");
   revalidatePath("/blog", "layout");
+  /** Primary tag for seeded pathophysiology series (`getPathophysiologyBlogHubPosts` hub link). */
+  revalidatePath("/blog/tag/pathophysiology");
   revalidatePath("/");
   revalidatePath("/lessons");
   revalidatePath("/sitemap.xml");
