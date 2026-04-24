@@ -40,6 +40,8 @@ Do **not** rely on raw `npx prisma` from the monorepo root without the wrapper â
 
 Code must never log full connection strings. Use `maskDatabaseUrl` in `src/lib/db/database-env.ts` for operator logs. CLI tools print host/port/db only.
 
+For **deploy-time drift** (same host visible but wrong password, rotated secret, pooler swap), see **`nursenest-core/docs/database-url-drift-audit.md`** â€” boot/connectivity logs and a **SHA-256 prefix fingerprint** of the full URL (password never printed).
+
 ## Related files
 
 - `nursenest-core/prisma/schema.prisma`

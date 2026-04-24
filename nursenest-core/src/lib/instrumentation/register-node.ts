@@ -1,5 +1,6 @@
 import "@/lib/db/env-bootstrap";
 import { logDatabaseEnvOnce } from "@/lib/db/database-env";
+import { logDatabaseUrlDriftAuditOnce } from "@/lib/db/database-url-drift-audit";
 import { validateProductionDatabaseEnv } from "@/lib/db/validate-production-db-env";
 import {
   assertNextPublicSurfaceHasNoSecrets,
@@ -34,6 +35,7 @@ export async function registerNodeInstrumentation(): Promise<void> {
   assertNextPublicSurfaceHasNoSecrets();
   warnIfStripeLiveKeyOutsideProduction();
   logDatabaseEnvOnce();
+  logDatabaseUrlDriftAuditOnce("nodejs_boot");
   validateProductionDatabaseEnv();
   runProductionEnvGuard();
   logRuntimeEnvSnapshot();

@@ -3,6 +3,10 @@ import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import { DB_PUBLISHED } from "@/lib/entitlements/content-access-scope";
 import { prisma } from "@/lib/db";
 import { checkDatabaseReadiness } from "@/lib/db/prisma-readiness";
+import {
+  databaseUrlDriftAuditPublic,
+  type DatabaseUrlDriftAuditPublic,
+} from "@/lib/db/database-url-drift-audit";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { buildQuestionBankCoverageReport } from "@/lib/questions/build-question-bank-diagnostics";
 import { safePrismaCount, withPrismaReadFallback } from "@/lib/prisma/safe-reads";
@@ -13,6 +17,8 @@ const PATHWAY_REGISTRY = new Map(EXAM_PATHWAYS.map((p) => [p.id, p.displayName])
 
 export type AdminDiagnostics = {
   generatedAt: string;
+  /** Redacted DATABASE_URL facts + fingerprint prefix — admin-only; password never included. */
+  databaseUrlDrift: DatabaseUrlDriftAuditPublic | null;
   dbHealth: {
     configured: boolean;
     status: "ok" | "skipped" | "error";
@@ -85,6 +91,8 @@ export async function loadAdminDiagnostics(): Promise<AdminDiagnostics> {
   const countWarnings: string[] = [];
   const pathwayWarnings: string[] = [];
   const missingData: string[] = [];
+
+  const databaseUrlDrift = databaseUrlDriftAuditPublic(process.env.DATABASE_URL?.trim() ?? "") ?? null;
 
   const readiness = await checkDatabaseReadiness(4000);
   const dbHealth =
@@ -247,6 +255,7 @@ export async function loadAdminDiagnostics(): Promise<AdminDiagnostics> {
 
   return {
     generatedAt,
+    databaseUrlDrift,
     dbHealth,
     apiHealth: {
       probed: Boolean(base),

@@ -78,12 +78,23 @@ export function classifyDatabaseFallbackKind(e: unknown): DatabaseFallbackKind {
 
 /**
  * Classify DB/connectivity failures for **lessons hub** and `db:connectivity-check` (includes URL + Prisma shape).
+ * Prisma often wraps auth/network errors as `Invalid \`prisma.*\` invocation` — peel those first.
  */
 export function classifyHubDbFailure(e: unknown): HubDbFailureCategory {
   if (!isDatabaseUrlConfigured()) return "db_missing_url";
   const msg = errorMessage(e);
-  if (/Invalid `prisma\.|Invalid `PrismaClient/i.test(msg)) return "db_query_shape_failure";
-  return classifyDatabaseFallbackKind(e);
+  const lower = msg.toLowerCase();
+  if (
+    /password authentication failed|authentication failed|p1000\b|role .* does not exist|permission denied for/i.test(
+      lower,
+    )
+  ) {
+    return "db_auth_failure";
+  }
+  const kind = classifyDatabaseFallbackKind(e);
+  if (kind !== "db_error") return kind;
+  if (/invalid `prisma\.|invalid `prismaclient/i.test(msg)) return "db_query_shape_failure";
+  return kind;
 }
 
 export async function withDatabaseFallbackTimeout<T>(

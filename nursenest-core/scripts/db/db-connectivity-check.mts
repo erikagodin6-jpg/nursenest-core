@@ -9,6 +9,10 @@
  * Requires DATABASE_URL (see `src/lib/db/env-bootstrap.ts`).
  */
 import "../../src/lib/db/env-bootstrap";
+import {
+  databaseUrlDriftAuditPublic,
+  logDatabaseUrlDriftAuditEvent,
+} from "../../src/lib/db/database-url-drift-audit";
 import { classifyHubDbFailure } from "../../src/lib/db/safe-database";
 import { ContentStatus, PrismaClient } from "@prisma/client";
 
@@ -49,6 +53,7 @@ async function main(): Promise<void> {
           at: new Date().toISOString(),
           pathwayId,
           database_url_configured: false,
+          databaseUrlDrift: null,
           steps,
         },
         null,
@@ -58,39 +63,64 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
+  const databaseUrlDrift = databaseUrlDriftAuditPublic(process.env.DATABASE_URL?.trim() ?? "");
+  if (databaseUrlDrift) {
+    logDatabaseUrlDriftAuditEvent("db_connectivity_check");
+  }
+
   const prisma = new PrismaClient();
+
+  async function runStep<T>(name: string, fn: () => Promise<T>): Promise<{ ok: true; value: T } | { ok: false }> {
+    const t0 = performance.now();
+    try {
+      const value = await fn();
+      steps.push({ step: name, ok: true, ms: Math.round(performance.now() - t0), value: value as unknown });
+      return { ok: true, value };
+    } catch (e) {
+      const category = classifyHubDbFailure(e);
+      const detail = e instanceof Error ? e.message : String(e);
+      steps.push({
+        step: name,
+        ok: false,
+        category,
+        ms: Math.round(performance.now() - t0),
+        detail: detail.slice(0, 500),
+      });
+      return { ok: false };
+    }
+  }
+
   try {
-    const t1 = performance.now();
-    await prisma.$queryRaw`SELECT 1 as connect_ok`;
-    steps.push({ step: "select_1", ok: true, ms: Math.round(performance.now() - t1) });
-
-    const t2 = performance.now();
-    const blogCount = await prisma.blogPost.count();
-    steps.push({ step: "blog_post_count", ok: true, ms: Math.round(performance.now() - t2), value: blogCount });
-
-    const t3 = performance.now();
-    const lessonCount = await prisma.pathwayLesson.count({
-      where: { pathwayId, status: ContentStatus.PUBLISHED },
-    });
-    steps.push({
-      step: "pathway_lesson_count_published",
-      ok: true,
-      ms: Math.round(performance.now() - t3),
-      value: lessonCount,
-    });
-
-    const t4 = performance.now();
-    const groupByRows = await prisma.pathwayLesson.groupBy({
-      by: ["locale"],
-      where: { pathwayId, status: ContentStatus.PUBLISHED },
-      _count: { _all: true },
-    });
-    steps.push({
-      step: "pathway_lesson_locale_groupby",
-      ok: true,
-      ms: Math.round(performance.now() - t4),
-      value: groupByRows,
-    });
+    if ((await runStep("select_1", () => prisma.$queryRaw`SELECT 1 as connect_ok`)).ok === false) {
+      throw new Error("select_1_failed");
+    }
+    if ((await runStep("blog_post_count", () => prisma.blogPost.count())).ok === false) {
+      throw new Error("blog_post_count_failed");
+    }
+    if (
+      (
+        await runStep("pathway_lesson_count_published", () =>
+          prisma.pathwayLesson.count({
+            where: { pathwayId, status: ContentStatus.PUBLISHED },
+          }),
+        )
+      ).ok === false
+    ) {
+      throw new Error("pathway_lesson_count_failed");
+    }
+    if (
+      (
+        await runStep("pathway_lesson_locale_groupby", () =>
+          prisma.pathwayLesson.groupBy({
+            by: ["locale"],
+            where: { pathwayId, status: ContentStatus.PUBLISHED },
+            _count: { _all: true },
+          }),
+        )
+      ).ok === false
+    ) {
+      throw new Error("pathway_lesson_locale_groupby_failed");
+    }
 
     console.log(
       JSON.stringify(
@@ -100,6 +130,7 @@ async function main(): Promise<void> {
           pathwayId,
           database_url_configured: true,
           database_host: urlInfo.host ?? null,
+          databaseUrlDrift,
           total_ms: Math.round(performance.now() - tAll),
           steps,
         },
@@ -107,10 +138,8 @@ async function main(): Promise<void> {
         2,
       ),
     );
-  } catch (e) {
-    const category = classifyHubDbFailure(e);
-    const detail = e instanceof Error ? e.message : String(e);
-    steps.push({ step: "prisma_operation", ok: false, category, detail: detail.slice(0, 500) });
+  } catch {
+    const lastFail = [...steps].reverse().find((s) => !s.ok);
     console.log(
       JSON.stringify(
         {
@@ -119,7 +148,9 @@ async function main(): Promise<void> {
           pathwayId,
           database_url_configured: true,
           database_host: urlInfo.host ?? null,
-          outcome: category,
+          databaseUrlDrift,
+          outcome: lastFail?.category ?? "db_error",
+          failed_step: lastFail?.step ?? null,
           total_ms: Math.round(performance.now() - tAll),
           steps,
         },

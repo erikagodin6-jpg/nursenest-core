@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { BlogPostStatus } from "@prisma/client";
-import { blogLiveWhere, blogPostIsLive } from "./blog-visibility";
+import { blogLiveWhere, blogPostIsLive, isBlogPostMarketingMetaVisible } from "./blog-visibility";
 
 test("SCHEDULED post with publishAt in the past is live (matches list/sitemap filters)", () => {
   const now = new Date("2026-06-15T12:00:00Z");
@@ -64,6 +64,32 @@ test("APPROVED is live on public surfaces (matches list / SEO after editorial si
   );
   const where = blogLiveWhere(now) as { OR: Array<{ postStatus?: BlogPostStatus }> };
   assert.ok(where.OR.some((c) => c.postStatus === BlogPostStatus.APPROVED));
+});
+
+test("isBlogPostMarketingMetaVisible matches draft vs live gates", () => {
+  const now = new Date("2026-06-15T12:00:00Z");
+  assert.equal(
+    isBlogPostMarketingMetaVisible(
+      {
+        postStatus: BlogPostStatus.DRAFT,
+        publishAt: null,
+        scheduledAt: null,
+      },
+      now,
+    ),
+    false,
+  );
+  assert.equal(
+    isBlogPostMarketingMetaVisible(
+      {
+        postStatus: BlogPostStatus.PUBLISHED,
+        publishAt: null,
+        scheduledAt: null,
+      },
+      now,
+    ),
+    true,
+  );
 });
 
 test("SCHEDULED uses scheduledAt when publishAt is null and time has passed", () => {

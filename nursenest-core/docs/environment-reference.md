@@ -37,7 +37,7 @@ Test/staging/production should use **different** secrets and DB URLs; never reus
 
 | Variable | Required (prod) | Purpose |
 |----------|------------------|---------|
-| `DATABASE_URL` | **Yes** | Prisma Postgres URL (only variable; do not use `PROD_DATABASE_URL`) |
+| `DATABASE_URL` | **Yes** | Prisma Postgres URL (only variable; do not use `PROD_DATABASE_URL`). Drift audit + fingerprint: `docs/database-url-drift-audit.md`. Optional CI guard: `npm run db:validate-url-shape` (`NN_DATABASE_URL_SHAPE_GUARD=1` or `CI` + set URL). |
 | `DIRECT_URL` | Optional | Direct (non-pooler) URL for migrations; often derived by env-bootstrap (`DATABASE_DIRECT_URL` is a legacy alias) |
 | `PRISMA_CONNECTION_LIMIT` | Optional | Pool size override |
 | `PRISMA_POOL_TIMEOUT` | Optional | Pool timeout override |
