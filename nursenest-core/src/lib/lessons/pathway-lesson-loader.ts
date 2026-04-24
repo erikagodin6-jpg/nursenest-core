@@ -47,6 +47,7 @@ import {
   type PathwayLessonSectionKind,
   type PathwayLessonYieldLevel,
 } from "@/lib/lessons/pathway-lesson-types";
+import { cacheDeploymentRevision } from "@/lib/cache/cache-revision";
 import { cacheTagPathwayLessonsHub } from "@/lib/cache/cache-tags";
 import { ContentStatus, type Prisma } from "@prisma/client";
 import { unstable_cache } from "next/cache";
@@ -979,8 +980,25 @@ async function getPathwayLessonsPageWithDataCache(
   const topicKey = JSON.stringify(listOptions?.topicSlugsIn?.slice().sort() ?? []);
   const qKey = listOptions?.q ?? "";
   return unstable_cache(
-    async () => getPathwayLessonsPageImpl(pathwayId, page, pageSize, marketingLocale, listOptions),
-    ["pathway-hub-all", pathwayId, String(page), String(pageSize), marketingLocale ?? "", topicKey, qKey],
+    async () => {
+      const r = await getPathwayLessonsPageImpl(pathwayId, page, pageSize, marketingLocale, listOptions);
+      if (r.total > 0 && r.items.length === 0 && r.page === 1) {
+        throw new Error(
+          `pathway_hub_list_cache_refuse: total=${r.total} but first page slice empty pathway=${pathwayId}`,
+        );
+      }
+      return r;
+    },
+    [
+      "pathway-hub-all",
+      `rev:${cacheDeploymentRevision()}`,
+      pathwayId,
+      String(page),
+      String(pageSize),
+      marketingLocale ?? "",
+      topicKey,
+      qKey,
+    ],
     { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [cacheTagPathwayLessonsHub(pathwayId)] },
   )();
 }
@@ -1238,7 +1256,15 @@ async function getLessonsForTopicPageWithDataCache(
 ): Promise<TopicLessonsPageResult> {
   return unstable_cache(
     async () => getLessonsForTopicPageImpl(pathwayId, topicSlug, page, pageSize, marketingLocale),
-    ["pathway-topic-page", pathwayId, topicSlug, String(page), String(pageSize), marketingLocale ?? ""],
+    [
+      "pathway-topic-page",
+      `rev:${cacheDeploymentRevision()}`,
+      pathwayId,
+      topicSlug,
+      String(page),
+      String(pageSize),
+      marketingLocale ?? "",
+    ],
     { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [cacheTagPathwayLessonsHub(pathwayId)] },
   )();
 }
@@ -1613,7 +1639,7 @@ async function getPathwayLessonWithDataCache(
 ): Promise<PathwayLessonRecord | undefined> {
   return unstable_cache(
     async () => getPathwayLessonImpl(pathwayId, slug, marketingLocale),
-    ["pathway-lesson-detail", pathwayId, slug, marketingLocale ?? ""],
+    ["pathway-lesson-detail", `rev:${cacheDeploymentRevision()}`, pathwayId, slug, marketingLocale ?? ""],
     {
       revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS,
       tags: [cacheTagPathwayLessonsHub(pathwayId), `pathway-lesson:${pathwayId}:${slug}`],
@@ -1739,7 +1765,7 @@ async function getPathwayLessonSeoMetaWithDataCache(
 ): Promise<PathwayLessonSeoMeta | undefined> {
   return unstable_cache(
     async () => getPathwayLessonSeoMetaImpl(pathwayId, slug),
-    ["pathway-lesson-seo-meta", pathwayId, slug],
+    ["pathway-lesson-seo-meta", `rev:${cacheDeploymentRevision()}`, pathwayId, slug],
     {
       revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS,
       tags: [cacheTagPathwayLessonsHub(pathwayId), `pathway-lesson:${pathwayId}:${slug}`],
@@ -1976,6 +2002,7 @@ async function getRelatedPathwayLessonsWithDataCache(
       ),
     [
       "pathway-related",
+      `rev:${cacheDeploymentRevision()}`,
       pathwayId,
       topicSlug,
       excludeSlug,
@@ -2099,7 +2126,7 @@ async function listTopicClustersImpl(pathwayId: string, marketingLocale?: string
 async function listTopicClustersWithDataCache(pathwayId: string, marketingLocale?: string): Promise<TopicCluster[]> {
   return unstable_cache(
     async () => listTopicClustersImpl(pathwayId, marketingLocale),
-    ["pathway-topic-clusters", pathwayId, marketingLocale ?? ""],
+    ["pathway-topic-clusters", `rev:${cacheDeploymentRevision()}`, pathwayId, marketingLocale ?? ""],
     { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [cacheTagPathwayLessonsHub(pathwayId)] },
   )();
 }

@@ -37,8 +37,25 @@ import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-/** Hub verify issues one full-lesson read per unique slug; keep concurrency high enough to finish under serverless budgets without starving the pool. */
-const DEFAULT_DETAIL_VERIFY_CONCURRENCY = 24;
+/**
+ * Hub verify issues one full-lesson read per unique slug (`getPathwayLessonForMarketingHubVerify`).
+ * Values in the ~20s range overload remote poolers: many rows time out → `detail_loader_miss` → verify collapse.
+ * Default stays conservative; raise via `NN_MARKETING_HUB_VERIFY_CONCURRENCY` on fast private DBs.
+ */
+const DEFAULT_DETAIL_VERIFY_CONCURRENCY = 8;
+const MAX_DETAIL_VERIFY_CONCURRENCY = 16;
+
+function resolvedMarketingHubVerifyConcurrency(explicit?: number): number {
+  if (typeof explicit === "number" && Number.isFinite(explicit)) {
+    return Math.max(1, Math.min(MAX_DETAIL_VERIFY_CONCURRENCY, Math.floor(explicit)));
+  }
+  const raw = process.env.NN_MARKETING_HUB_VERIFY_CONCURRENCY?.trim();
+  if (raw && /^\d+$/.test(raw)) {
+    const n = Number(raw);
+    if (Number.isFinite(n)) return Math.max(1, Math.min(MAX_DETAIL_VERIFY_CONCURRENCY, n));
+  }
+  return DEFAULT_DETAIL_VERIFY_CONCURRENCY;
+}
 
 export type ResolveMarketingLessonDetailFn = (
   pathwayId: string,
@@ -70,16 +87,31 @@ function tallyReason(
   map[reason] = (map[reason] ?? 0) + 1;
 }
 
+/**
+ * Run `fn` over `items` with at most `limit` in-flight promises (pool). Preserves output order.
+ * Prefer this over chunked `Promise.all` so fast rows do not wait for the slowest row in each chunk.
+ */
 export async function mapWithConcurrency<T, R>(
   items: readonly T[],
   limit: number,
   fn: (item: T) => Promise<R>,
 ): Promise<R[]> {
-  const out: R[] = [];
-  for (let i = 0; i < items.length; i += limit) {
-    const chunk = items.slice(i, i + limit);
-    out.push(...(await Promise.all(chunk.map((x) => fn(x)))));
+  const n = items.length;
+  if (n === 0) return [];
+  const lim = Math.max(1, limit);
+  const out: R[] = new Array(n);
+  let nextIndex = 0;
+
+  async function worker(): Promise<void> {
+    for (;;) {
+      const i = nextIndex++;
+      if (i >= n) return;
+      out[i] = await fn(items[i]!);
+    }
   }
+
+  const workers = Math.min(lim, n);
+  await Promise.all(Array.from({ length: workers }, () => worker()));
   return out;
 }
 
@@ -185,7 +217,7 @@ export async function verifyMarketingHubLessonRowsResolve(
   excluded: HubLessonDetailExcluded[];
   diagnostics: MarketingHubLessonVerifyDiagnostics;
 }> {
-  const concurrency = Math.max(1, Math.min(24, options?.concurrency ?? DEFAULT_DETAIL_VERIFY_CONCURRENCY));
+  const concurrency = resolvedMarketingHubVerifyConcurrency(options?.concurrency);
   const resolveLessonDetail = options?.resolveLessonDetail ?? getPathwayLessonForMarketingHubVerify;
 
   const safe = lessons.filter((l) => pathwayLessonHasRenderableHubSlug(l));

@@ -4,8 +4,7 @@
   "private": true,
   "packageManager": "npm@10.9.7",
   "cacheDirectories": [
-    "node_modules",
-    ".next/cache"
+    "node_modules"
   ],
   "engines": {
     "node": "22.22.2",
@@ -43,6 +42,7 @@
     "loadtest:k6": "k6 run tools/loadtest/k6-smoke.js",
     "loadtest:k6:horizontal": "k6 run tools/loadtest/k6-app-platform-horizontal.js",
     "ci:verify": "npm run db:generate && npm run typecheck && SKIP_I18N_PREBUILD=${SKIP_I18N_PREBUILD:-1} npm run build:prechecks && npm run build && node scripts/ensure-standalone-static.mjs",
+    "deploy:revalidate-marketing-cache": "node scripts/post-deploy-revalidate-marketing-cache.mjs",
     "deploy:precheck": "npm run ci:verify",
     "qa:verify:health": "node scripts/verify-deploy-health.mjs",
     "qa:verify:health:with-learner-smoke": "VERIFY_LEARNER_SMOKE_SURFACES=1 VERIFY_CANONICAL_HOME=1 node scripts/verify-deploy-health.mjs",
@@ -81,6 +81,7 @@
     "blog:visibility-diagnostics": "tsx scripts/blog/blog-visibility-diagnostics.mts",
     "blog:db-probe": "tsx scripts/blog/blog-visibility-diagnostics.mts",
     "data:public-content-pipeline-probe": "tsx scripts/data/public-content-pipeline-probe.mts",
+    "data:public-content-pipeline-probe:strict": "tsx scripts/data/public-content-pipeline-probe.mts --strict",
     "data:marketing-lessons-hub-pipeline-probe": "tsx scripts/data/marketing-lessons-hub-pipeline-probe.mts",
     "blog:promote-control-panel-drafts": "tsx scripts/blog/blog-promote-control-panel-drafts.mts",
     "blog:manifest-japan-200": "tsx scripts/blog/generate-japan-nursing-manifest.mts",

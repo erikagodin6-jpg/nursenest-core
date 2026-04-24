@@ -3,7 +3,9 @@ import "server-only";
 import { revalidatePath, revalidateTag } from "next/cache";
 
 import {
+  CACHE_TAG_MARKETING_BLOG_SURFACES,
   CACHE_TAG_MARKETING_PUBLIC_FLASHCARD_TAGS,
+  CACHE_TAG_PATHWAY_LESSON_INDEX,
   cacheTagPathwayLessonsHub,
 } from "@/lib/cache/cache-tags";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
@@ -64,7 +66,9 @@ export function revalidateBlogPublishingSurfaces(options?: BlogPublishingRevalid
    * Bust marketing `unstable_cache` layers that may have cached empty payloads during DB outages
    * (flashcard tag list + per-pathway lesson hub lists used by sitemap/ISR surfaces).
    */
+  revalidateTag(CACHE_TAG_MARKETING_BLOG_SURFACES);
   revalidateTag(CACHE_TAG_MARKETING_PUBLIC_FLASHCARD_TAGS);
+  revalidateTag(CACHE_TAG_PATHWAY_LESSON_INDEX);
   for (const pathway of listPublishedExamPathwaysForPublicSite()) {
     revalidateTag(cacheTagPathwayLessonsHub(pathway.id));
   }

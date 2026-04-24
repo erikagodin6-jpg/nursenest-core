@@ -4,6 +4,8 @@
  *
  * **heroku-postbuild (first run, default phase):** after `npm install` / cache **restore**, **before** `next build`.
  * Creates `.next/cache` if missing so Next’s `getCacheDir` path exists in CI-ish builders (see `next/dist/build/index.js`).
+ * **Note:** `package.json` `cacheDirectories` no longer persists `.next/cache` across deploys; production
+ * compile still creates a fresh `.next` under the slug after `run-next-prod-build.mjs` removes the prior tree.
  *
  * **heroku-postbuild_after_compile:** run **after** `next build` in the same `heroku-postbuild` chain — reports real
  * `.next/cache/webpack` / `swc` population (nested file counts). The first run’s `dot_next_cache_entry_count_visible_only`

@@ -5,8 +5,7 @@
  * Next.js 16 defaults to **Turbopack** when no bundler is selected (`next/dist/lib/bundler.js`).
  * If the host sets `TURBOPACK` (or related test flags), `parseBundlerArgs` can select Turbopack **even when**
  * the intent is webpack — or it can error when both conflict. Turbopack production builds use
- * `turbopackBuild` and do **not** populate `.next/cache/webpack`, so Heroku/DO `cacheDirectories` for
- * `.next/cache` stays empty and the buildpack logs ".next/cache (not cached - skipping)".
+ * `turbopackBuild` and do **not** populate `.next/cache/webpack` the same way webpack does.
  *
  * This wrapper deletes bundler-selection env keys, normalizes **`NODE_OPTIONS` `--max-old-space-size`**
  * against **`BUILD_NODE_MAX_OLD_SPACE_SIZE_MB`** (so a global 6144-style heap cannot leak into the Next child), then
@@ -16,13 +15,79 @@
  * to the same value under **BUILD_TIME** in `.do/app-nursenest-core-next.yaml`. Runtime behavior of the app is unchanged.
  */
 import { spawnSync } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, rmSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const require = createRequire(import.meta.url);
+const nextOutDir = path.join(packageRoot, ".next");
+
+function truthyEnv(name) {
+  return /^(1|true|yes)$/i.test(String(process.env[name] ?? ""));
+}
+
+/** Per-compile cache key segment for Next `unstable_cache` (see `cacheDeploymentRevision`). */
+function ensureBuildCacheVersionEnv() {
+  if (String(process.env.BUILD_CACHE_VERSION ?? "").trim()) return;
+  const fromGit =
+    process.env.VERCEL_GIT_COMMIT_SHA?.trim() ||
+    process.env.GITHUB_SHA?.trim() ||
+    process.env.CI_COMMIT_SHA?.trim() ||
+    process.env.CI_COMMIT_SHORT_SHA?.trim() ||
+    process.env.SOURCE_VERSION?.trim() ||
+    "";
+  process.env.BUILD_CACHE_VERSION = fromGit || `local-${Date.now()}`;
+  console.log(
+    "[next-prod-build] build_cache_version=" +
+      JSON.stringify(process.env.BUILD_CACHE_VERSION.slice(0, 20)) +
+      (fromGit ? " source=git_sha" : " source=ephemeral_timestamp"),
+  );
+}
+
+/**
+ * Heroku/DO historically restored `package.json` `cacheDirectories` including `.next/cache`, which could
+ * reuse webpack/swc entries across deploys. We always remove `.next` before `next build` so the compile
+ * tree and Data Cache filestore for this slug are fresh for this workspace.
+ */
+function removeNextOutputDir() {
+  if (!existsSync(nextOutDir)) {
+    console.log("[next-prod-build] clean_dot_next=skip missing");
+    return;
+  }
+  rmSync(nextOutDir, { recursive: true, force: true });
+  console.log("[next-prod-build] clean_dot_next=ok removed=" + nextOutDir);
+}
+
+function enforceMarketingSkipDbForCompile() {
+  const raw = String(process.env.MARKETING_BLOG_SKIP_DB_FOR_BUILD ?? "").trim().toLowerCase();
+  if (raw === "false" || raw === "0") {
+    console.log("[next-prod-build] marketing_blog_skip_db_for_build=0 (explicit false; blog may query DB during SSG)");
+    return;
+  }
+  process.env.MARKETING_BLOG_SKIP_DB_FOR_BUILD = "1";
+  console.log("[next-prod-build] marketing_blog_skip_db_for_build=1 (default for production compile)");
+}
+
+function runPublicContentPipelineProbeIfConfigured() {
+  if (truthyEnv("NN_SKIP_PUBLIC_CONTENT_PIPELINE_PROBE")) {
+    console.log("[next-prod-build] public_content_probe=skip NN_SKIP_PUBLIC_CONTENT_PIPELINE_PROBE=1");
+    return 0;
+  }
+  if (!String(process.env.DATABASE_URL ?? "").trim()) {
+    console.log("[next-prod-build] public_content_probe=skip no_database_url");
+    return 0;
+  }
+  console.log("[next-prod-build] public_content_probe=run strict");
+  const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
+  const r = spawnSync(npmCmd, ["run", "data:public-content-pipeline-probe:strict"], {
+    cwd: packageRoot,
+    stdio: "inherit",
+    env: process.env,
+  });
+  return r.status === 0 ? 0 : r.status ?? 1;
+}
 
 function logEffectiveHeapMb(label) {
   const m = String(process.env.NODE_OPTIONS ?? "").match(/--max-old-space-size=(\d+)/);
@@ -111,10 +176,19 @@ if (!existsSync(nextBin)) {
   process.exit(1);
 }
 
+ensureBuildCacheVersionEnv();
+enforceMarketingSkipDbForCompile();
+removeNextOutputDir();
+
 const r = spawnSync(process.execPath, [nextBin, "build", "--webpack"], {
   cwd: packageRoot,
   stdio: "inherit",
   env: process.env,
 });
 
-process.exit(r.status === 0 ? 0 : r.status ?? 1);
+if (r.status !== 0) {
+  process.exit(r.status ?? 1);
+}
+
+const probeStatus = runPublicContentPipelineProbeIfConfigured();
+process.exit(probeStatus === 0 ? 0 : probeStatus ?? 1);

@@ -3,8 +3,9 @@
  * Heroku / DigitalOcean App Platform invoke `npm run build` after `npm install` and `heroku-postbuild`.
  *
  * DigitalOcean documents `heroku-postbuild` as running **before** prune/cache. We run
- * `NN_POSTBUILD_NEXT_BUILD=1 npm run build` there so `next build` creates `.next/cache` for the
- * `cacheDirectories` snapshot.
+ * `NN_POSTBUILD_NEXT_BUILD=1 npm run build` there. **`package.json` `cacheDirectories` only lists
+ * `node_modules`** — `.next` is removed at the start of each production compile (`run-next-prod-build.mjs`)
+ * so webpack/swc/Data Cache filestore from a prior slug cannot leak across deploys.
  *
  * When **both** `heroku-postbuild` and `build` exist, the Heroku Node buildpack runs **only**
  * `heroku-postbuild` (not the `build` script). That `npm run build` chain still runs from inside

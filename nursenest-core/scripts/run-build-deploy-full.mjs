@@ -66,7 +66,7 @@ console.log(
   `[build-deploy-full] pipeline_start ts_iso=${new Date().toISOString()} package_root=${packageRoot}`,
 );
 console.log(
-  "[build-deploy-full] cache_note=Heroku/DO Node buildpack restores cacheDirectories (node_modules + .next/cache) before install; npm run build must run next build before cache snapshot.",
+  "[build-deploy-full] cache_note=Heroku/DO Node buildpack restores cacheDirectories (node_modules only). Production compile wipes .next before next build; set BUILD_CACHE_VERSION to git SHA at build+runtime for cache key rotation.",
 );
 console.log(
   `[build-deploy-full] pre_step dot_next_cache_present=${existsSync(nextCachePath) ? "1" : "0"} BUILD_ID_present=${existsSync(buildIdPath) ? "1" : "0"} digitalocean=${onDigitalOceanAppPlatform() ? "1" : "0"}`,

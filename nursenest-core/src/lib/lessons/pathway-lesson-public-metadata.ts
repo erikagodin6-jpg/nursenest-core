@@ -1,5 +1,7 @@
 import { ContentStatus } from "@prisma/client";
 import { unstable_cache } from "next/cache";
+import { cacheDeploymentRevision } from "@/lib/cache/cache-revision";
+import { CACHE_TAG_PATHWAY_LESSON_INDEX } from "@/lib/cache/cache-tags";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { PATHWAY_LESSON_DB_TIMEOUT_MS } from "@/lib/lessons/pathway-lesson-loader-config";
@@ -40,8 +42,8 @@ export const listPathwayIdsWithLessonsForPublicSurface = unstable_cache(
     const dbIds = await listPathwayIdsWithPublishedDbLessons();
     return [...new Set([...catalogIds, ...dbIds])].sort((a, b) => a.localeCompare(b));
   },
-  ["public-pathway-lesson-metadata-v1"],
-  { revalidate: 600, tags: ["pathway-lesson-index"] },
+  ["public-pathway-lesson-metadata-v1", `rev:${cacheDeploymentRevision()}`],
+  { revalidate: 600, tags: [CACHE_TAG_PATHWAY_LESSON_INDEX] },
 );
 
 export async function getCatalogLessonPreviewTitlesForPublicSurface(pathwayId: string, limit = 4): Promise<string[]> {

@@ -26,6 +26,8 @@ import {
   publicLessonsHubSectionLeadPn,
   publicLessonsHubSectionLeadRn,
 } from "@/lib/marketing/nursing-tier-public-labels";
+import { cacheDeploymentRevision } from "@/lib/cache/cache-revision";
+import { CACHE_TAG_PATHWAY_LESSON_INDEX } from "@/lib/cache/cache-tags";
 import {
   getCatalogLessonPreviewTitlesForPublicSurface,
   listPathwayIdsWithLessonsForPublicSurface,
@@ -33,8 +35,8 @@ import {
 
 const cachedPathwayIdsWithLessons = unstable_cache(
   () => listPathwayIdsWithLessonsForPublicSurface(),
-  ["public-lessons-pathway-sections-v1"],
-  { revalidate: 600, tags: ["pathway-lesson-index"] },
+  ["public-lessons-pathway-sections-v1", `rev:${cacheDeploymentRevision()}`],
+  { revalidate: 600, tags: [CACHE_TAG_PATHWAY_LESSON_INDEX] },
 );
 const MARKETING_BUILD_PHASE = "phase-production-build";
 const LESSONS_BUILD_MESSAGE_SHARDS = [...MARKETING_PAGE_BODY_MESSAGE_SHARDS, "billing"] as const;

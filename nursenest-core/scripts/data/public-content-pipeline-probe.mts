@@ -4,6 +4,7 @@
  * Run from `nursenest-core/` with `DATABASE_URL` set (same semantics as the app).
  *
  *   npm run data:public-content-pipeline-probe
+ *   npm run data:public-content-pipeline-probe:strict   # exit 1 if DB unreachable or all public counts are zero
  */
 import { ContentStatus, PrismaClient } from "@prisma/client";
 
@@ -12,6 +13,7 @@ import { blogLiveWhere } from "../../src/lib/blog/blog-visibility";
 import { publicMarketingFlashcardDeckWhere } from "../../src/lib/entitlements/content-access-scope";
 
 const CANADA_RN_PATHWAY_ID = "ca-rn-nclex-rn";
+const strict = process.argv.includes("--strict");
 
 async function main(): Promise<void> {
   if (!process.env.DATABASE_URL?.trim()) {
@@ -49,26 +51,39 @@ async function main(): Promise<void> {
       where: { ...deckWhere, cardCount: { gt: 0 } },
     });
 
-    console.log(
-      JSON.stringify(
-        {
-          dbProbe: {
-            select1Ok,
-            blogPostLiveUnderBlogLiveWhere: blogLiveTotal,
-            pathwayLessonPublishedAllPathways: pathwayLessonPublishedTotal,
-            pathwayLessonPublishedCanadaRnHub: pathwayLessonCanadaRn,
-            pathwayLessonCanadaRnPathwayId: CANADA_RN_PATHWAY_ID,
-            flashcardDeckPublishedNonHidden: flashcardDeckPublic,
-            flashcardTagLinkedToPublicDeck: flashcardTagPublic,
-            flashcardRowUnderPublicDeck: flashcardRowPublic,
-            flashcardPublishedAllStatusesPublished: flashcardPublishedAll,
-            flashcardDeckPublicMarketingWithCardCountGt0: flashcardDeckPublicCardCountPositive,
-          },
-        },
-        null,
-        2,
-      ),
-    );
+    const dbProbe = {
+      select1Ok,
+      blogPostLiveUnderBlogLiveWhere: blogLiveTotal,
+      pathwayLessonPublishedAllPathways: pathwayLessonPublishedTotal,
+      pathwayLessonPublishedCanadaRnHub: pathwayLessonCanadaRn,
+      pathwayLessonCanadaRnPathwayId: CANADA_RN_PATHWAY_ID,
+      flashcardDeckPublishedNonHidden: flashcardDeckPublic,
+      flashcardTagLinkedToPublicDeck: flashcardTagPublic,
+      flashcardRowUnderPublicDeck: flashcardRowPublic,
+      flashcardPublishedAllStatusesPublished: flashcardPublishedAll,
+      flashcardDeckPublicMarketingWithCardCountGt0: flashcardDeckPublicCardCountPositive,
+    };
+
+    console.log(JSON.stringify({ dbProbe, strict }, null, 2));
+
+    if (strict) {
+      if (!select1Ok) {
+        console.error("[public-content-pipeline-probe] strict: select1Ok is false");
+        process.exit(1);
+      }
+      const sumPublic =
+        blogLiveTotal +
+        pathwayLessonPublishedTotal +
+        flashcardDeckPublic +
+        flashcardTagPublic +
+        flashcardRowPublic;
+      if (sumPublic === 0) {
+        console.error(
+          "[public-content-pipeline-probe] strict: all primary public content counts are zero (blog live + pathway lessons + flashcard public scope)",
+        );
+        process.exit(1);
+      }
+    }
   } finally {
     await prisma.$disconnect();
   }
