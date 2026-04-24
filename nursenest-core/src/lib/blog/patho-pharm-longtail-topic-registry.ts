@@ -1,11 +1,18 @@
 /**
- * Curated long-tail pathophysiology / pharmacology blog topics (≥500 clinically vetted rows).
- * Consumed by `scripts/blog/lib/patho-pharm-longtail-post-builder.ts` before any synthetic expansion.
+ * Strict production pathophysiology / pharmacology long-tail topic registry.
+ * Source: clinically vetted pairs in `patho-pharm-longtail-clinical-pairs.ts` (audit-aligned), with
+ * search-style titles only, deduplication, and validation via `validateClinicalTopicCoherence`.
+ *
+ * Consumed by `scripts/blog/lib/patho-pharm-longtail-post-builder.ts` before any optional synthetic expansion.
  */
 
 import { BlogPostTemplate } from "@prisma/client";
 
+import { ALLIED_PROFESSION_KEYS } from "@/lib/allied/allied-professions-registry";
+
 import type { ClinicalRelationshipType } from "./patho-pharm-longtail-topic-coherence";
+import { validateClinicalTopicCoherence, semanticMechanismDuplicateKey } from "./patho-pharm-longtail-topic-coherence";
+import { normalizeTopicKey } from "./patho-pharm-longtail-topic-patterns";
 import {
   CONDITION_SYMPTOM_PAIRS,
   DISEASE_MECHANISM_STEP_CONDITIONS,
@@ -26,6 +33,45 @@ export type PathoPharmLongtailAudience = {
   label: string;
 };
 
+/** Production registry category (body-system / pharm axis). */
+export type PathoPharmTopicRegistryCategory =
+  | "cardio"
+  | "resp"
+  | "renal"
+  | "endo"
+  | "neuro"
+  | "heme"
+  | "infection"
+  | "pharm";
+
+/** Public relationship labels (map to `ClinicalRelationshipType` internally). */
+export type PathoPharmTopicRegistryRelationship =
+  | "condition_symptom"
+  | "condition_lab"
+  | "drug_effect"
+  | "drug_monitoring"
+  | "mechanism";
+
+export type PathoPharmTopicRegistryEntry = {
+  id: string;
+  title: string;
+  slug: string;
+  category: PathoPharmTopicRegistryCategory;
+  relationshipType: PathoPharmTopicRegistryRelationship;
+  keywords: string[];
+  patternId: number;
+};
+
+export function mapRegistryRelationshipToClinical(
+  rt: PathoPharmTopicRegistryRelationship,
+): ClinicalRelationshipType {
+  if (rt === "drug_effect") return "drug_adverse_effect";
+  if (rt === "mechanism") return "disease_mechanism";
+  if (rt === "condition_lab") return "condition_lab";
+  if (rt === "condition_symptom") return "condition_symptom";
+  return "drug_monitoring";
+}
+
 /** Mirrors `LongTailTopicSpec` in the post-builder (kept here to avoid circular imports). */
 export type PathoPharmLongtailRegistryTopic = {
   slug: string;
@@ -43,13 +89,18 @@ export type PathoPharmLongtailRegistryTopic = {
   exam: string;
 };
 
-const AUDIENCES: readonly PathoPharmLongtailAudience[] = [
-  { careerSlug: "rn", exam: "NCLEX_RN", label: "RN" },
-  { careerSlug: "pn", exam: "NCLEX_PN", label: "PN" },
-  { careerSlug: "np", exam: "NP", label: "NP" },
-  { careerSlug: "allied", exam: "ALLIED_HEALTH", label: "Allied Health" },
-  { careerSlug: "rn", exam: "NEW_GRAD", label: "New Grad RN" },
-] as const;
+function rotateAudience(idx: number): PathoPharmLongtailAudience {
+  const alliedKey = ALLIED_PROFESSION_KEYS[idx % ALLIED_PROFESSION_KEYS.length]!;
+  const cycle: readonly PathoPharmLongtailAudience[] = [
+    { careerSlug: "rn", exam: "NCLEX_RN", label: "RN" },
+    { careerSlug: "pn", exam: "NCLEX_PN", label: "PN" },
+    { careerSlug: "np", exam: "NP", label: "NP" },
+    /** Must match `professionKey` values used by `/allied-health/[slug]/blog` — not a synthetic `"allied"` bucket. */
+    { careerSlug: alliedKey, exam: "ALLIED_HEALTH", label: "Allied Health" },
+    { careerSlug: "rn", exam: "NEW_GRAD", label: "New Grad RN" },
+  ];
+  return cycle[idx % cycle.length]!;
+}
 
 function slugPart(raw: string): string {
   return raw
@@ -71,236 +122,311 @@ function uniqueSlug(base: string, seen: Set<string>): string {
   return s;
 }
 
+/** Populated while building `PATHO_PHARM_TOPIC_REGISTRY` (dedupe + validation drops). */
+export const PATHO_PHARM_REGISTRY_BUILD_STATS = {
+  duplicateNormalizedKey: 0,
+  duplicateSemantic: 0,
+  duplicateCluster: 0,
+  validationFailed: 0,
+};
+
+function normPairKey(a: string, b: string): string {
+  return `${a.trim().toLowerCase()}|||${b.trim().toLowerCase()}`;
+}
+
+function registryCategoryFromBodySystem(bodySystem: string, kind: "pathophysiology" | "pharmacology"): PathoPharmTopicRegistryCategory {
+  if (kind === "pharmacology") return "pharm";
+  const s = bodySystem.toLowerCase();
+  if (/cardio|vascular|heart/i.test(s)) return "cardio";
+  if (/respir|pulm|lung/i.test(s)) return "resp";
+  if (/renal|kidney|urin|electroly/i.test(s)) return "renal";
+  if (/endo|thyroid|diabet|insulin|glucose|cortisol/i.test(s)) return "endo";
+  if (/neuro|brain|spinal|seizure|mening|ictal/i.test(s)) return "neuro";
+  if (/hema|anemia|platelet|coagul|sickle|thromb|bleed|dic\b/i.test(s)) return "heme";
+  return "infection";
+}
+
+function keywordsForEntry(title: string, anchor: string, category: PathoPharmTopicRegistryCategory): string[] {
+  const words = title
+    .toLowerCase()
+    .replace(/\?/g, "")
+    .split(/\s+/)
+    .map((w) => w.replace(/[^a-z0-9-]/g, ""))
+    .filter((w) => w.length > 4);
+  const merged = [anchor, category, ...words];
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const x of merged) {
+    const k = x.trim().toLowerCase();
+    if (!k || seen.has(k)) continue;
+    seen.add(k);
+    out.push(k);
+    if (out.length >= 10) break;
+  }
+  return out;
+}
+
+function buildPathoPharmTopicRegistryEntries(): PathoPharmTopicRegistryEntry[] {
+  PATHO_PHARM_REGISTRY_BUILD_STATS.duplicateNormalizedKey = 0;
+  PATHO_PHARM_REGISTRY_BUILD_STATS.duplicateSemantic = 0;
+  PATHO_PHARM_REGISTRY_BUILD_STATS.duplicateCluster = 0;
+  PATHO_PHARM_REGISTRY_BUILD_STATS.validationFailed = 0;
+
+  const seenNorm = new Set<string>();
+  const seenSemantic = new Set<string>();
+  const seenCondFinding = new Set<string>();
+  const seenMonitoringSubject = new Set<string>();
+  const out: PathoPharmTopicRegistryEntry[] = [];
+  let idn = 0;
+
+  const tryPush = (args: {
+    title: string;
+    slugBase: string;
+    anchor: string;
+    bodySystem: string;
+    kind: "pathophysiology" | "pharmacology";
+    relationshipType: PathoPharmTopicRegistryRelationship;
+    patternId: number;
+    clusterKey?: string;
+  }) => {
+    const title = args.title.trim();
+    if (args.clusterKey) {
+      if (seenCondFinding.has(args.clusterKey)) {
+        PATHO_PHARM_REGISTRY_BUILD_STATS.duplicateCluster += 1;
+        return;
+      }
+      seenCondFinding.add(args.clusterKey);
+    }
+    const nk = normalizeTopicKey(title);
+    if (seenNorm.has(nk)) {
+      PATHO_PHARM_REGISTRY_BUILD_STATS.duplicateNormalizedKey += 1;
+      return;
+    }
+    const sk = semanticMechanismDuplicateKey(title);
+    if (seenSemantic.has(sk)) {
+      PATHO_PHARM_REGISTRY_BUILD_STATS.duplicateSemantic += 1;
+      return;
+    }
+    const clinicalRt = mapRegistryRelationshipToClinical(args.relationshipType);
+    const slug = `lt-reg-${args.slugBase}`.slice(0, 118);
+    const coh = validateClinicalTopicCoherence({
+      title,
+      slug,
+      topicSource: "registry",
+      relationshipType: clinicalRt,
+    });
+    if (!coh.ok) {
+      PATHO_PHARM_REGISTRY_BUILD_STATS.validationFailed += 1;
+      return;
+    }
+    seenNorm.add(nk);
+    seenSemantic.add(sk);
+    const cat = registryCategoryFromBodySystem(args.bodySystem, args.kind);
+    out.push({
+      id: `pph-${String(idn++).padStart(5, "0")}`,
+      title,
+      slug,
+      category: cat,
+      relationshipType: args.relationshipType,
+      patternId: args.patternId,
+      keywords: keywordsForEntry(title, args.anchor, cat),
+    });
+  };
+
+  let pairIdx = 0;
+  for (const [condition, finding] of CONDITION_SYMPTOM_PAIRS) {
+    const bodySystem = inferSystem(condition, finding, pairIdx++);
+    tryPush({
+      title: `Why does ${condition} cause ${finding}?`,
+      slugBase: `cs-${slugPart(condition)}-${slugPart(finding)}`,
+      anchor: condition,
+      bodySystem,
+      kind: "pathophysiology",
+      relationshipType: "condition_symptom",
+      patternId: 1,
+      clusterKey: normPairKey(condition, finding),
+    });
+  }
+
+  for (const [drug, effect] of DRUG_EFFECT_PAIRS) {
+    const bodySystem = "multisystem";
+    tryPush({
+      title: `How does ${drug} cause ${effect}?`,
+      slugBase: `de-${slugPart(drug)}-${slugPart(effect)}`,
+      anchor: drug,
+      bodySystem,
+      kind: "pharmacology",
+      relationshipType: "drug_effect",
+      patternId: 2,
+    });
+  }
+
+  for (const [lab, condition] of LAB_IN_CONDITION_PAIRS) {
+    const bodySystem = inferSystem(condition, lab, pairIdx++);
+    tryPush({
+      title: `Why does ${lab} cause ${condition}?`,
+      slugBase: `lab-${slugPart(lab)}-${slugPart(condition)}`,
+      anchor: condition,
+      bodySystem,
+      kind: "pathophysiology",
+      relationshipType: "condition_lab",
+      patternId: 4,
+      clusterKey: normPairKey(lab, condition),
+    });
+  }
+
+  for (const [condition, sys] of DISEASE_MECHANISM_STEP_CONDITIONS) {
+    tryPush({
+      title: `How does ${condition} affect ${sys} physiologically?`,
+      slugBase: `mech-${slugPart(condition)}-${slugPart(sys)}`,
+      anchor: condition,
+      bodySystem: sys,
+      kind: "pathophysiology",
+      relationshipType: "mechanism",
+      patternId: 3,
+    });
+  }
+
+  for (const [sign, _mechanism, disease, sys] of SIGN_MECHANISM_DISEASE_TRIPLES) {
+    tryPush({
+      title: `How does ${sign} affect ${disease} physiologically?`,
+      slugBase: `sign-${slugPart(sign)}-${slugPart(disease)}`,
+      anchor: disease,
+      bodySystem: sys,
+      kind: "pathophysiology",
+      relationshipType: "mechanism",
+      patternId: 6,
+    });
+  }
+
+  for (const [tx, cons, sys] of TREATMENT_CONSEQUENCE_PAIRS) {
+    tryPush({
+      title: `Why does ${tx} lead to ${cons}?`,
+      slugBase: `tx-${slugPart(tx)}-${slugPart(cons)}`,
+      anchor: tx,
+      bodySystem: sys,
+      kind: "pathophysiology",
+      relationshipType: "condition_symptom",
+      patternId: 7,
+      clusterKey: normPairKey(tx, cons),
+    });
+  }
+
+  for (const [el, cond, sys] of ELECTROLYTE_CONDITION_PAIRS) {
+    tryPush({
+      title: `Why does ${el} lead to ${cond}?`,
+      slugBase: `el-${slugPart(el)}-${slugPart(cond)}`,
+      anchor: cond,
+      bodySystem: sys,
+      kind: "pathophysiology",
+      relationshipType: "condition_symptom",
+      patternId: 10,
+      clusterKey: normPairKey(el, cond),
+    });
+  }
+
+  for (const [a, b, _ctx, sys] of SYSTEM_BRIDGE_TRIPLES) {
+    tryPush({
+      title: `How does ${a} affect ${b} physiologically?`,
+      slugBase: `br-${slugPart(a)}-${slugPart(b)}`,
+      anchor: b,
+      bodySystem: sys,
+      kind: "pathophysiology",
+      relationshipType: "mechanism",
+      patternId: 9,
+    });
+  }
+
+  const monitoringSubjects = new Map<string, { display: string; sys: string }>();
+  for (const [drug, sys] of DRUG_MONITORING_LIST) {
+    const k = drug.trim().toLowerCase();
+    monitoringSubjects.set(k, { display: drug, sys });
+  }
+  for (const [drug, sys] of NURSING_IMPLICATION_DRUGS) {
+    const k = drug.trim().toLowerCase();
+    if (!monitoringSubjects.has(k)) monitoringSubjects.set(k, { display: drug, sys });
+  }
+  for (const { display, sys } of monitoringSubjects.values()) {
+    const k = display.trim().toLowerCase();
+    if (seenMonitoringSubject.has(k)) continue;
+    seenMonitoringSubject.add(k);
+    tryPush({
+      title: `What should nurses monitor in ${display} and why?`,
+      slugBase: `mon-${slugPart(display)}`,
+      anchor: display,
+      bodySystem: sys,
+      kind: "pharmacology",
+      relationshipType: "drug_monitoring",
+      patternId: 8,
+    });
+  }
+
+  for (const [cond, sys] of NURSING_IMPLICATION_CONDITIONS) {
+    const k = cond.trim().toLowerCase();
+    if (seenMonitoringSubject.has(k)) continue;
+    seenMonitoringSubject.add(k);
+    tryPush({
+      title: `What should nurses monitor in ${cond} and why?`,
+      slugBase: `mon-cond-${slugPart(cond)}`,
+      anchor: cond,
+      bodySystem: sys,
+      kind: "pathophysiology",
+      relationshipType: "drug_monitoring",
+      patternId: 5,
+    });
+  }
+
+  return out;
+}
+
+/** Strict production topic registry (validated titles + deduped). */
+export const PATHO_PHARM_TOPIC_REGISTRY: readonly PathoPharmTopicRegistryEntry[] = Object.freeze(
+  buildPathoPharmTopicRegistryEntries(),
+);
+
 let memo: PathoPharmLongtailRegistryTopic[] | null = null;
 
 /**
- * Deterministic curated catalog (≥500). All rows use vetted clinical pairings only.
+ * Deterministic curated catalog (≥500). Built from `PATHO_PHARM_TOPIC_REGISTRY` + audience rotation.
  */
 export function getPathoPharmLongtailTopicRegistry(): readonly PathoPharmLongtailRegistryTopic[] {
   if (memo) return memo;
 
   const seenSlugs = new Set<string>();
-  const seenTitles = new Set<string>();
   const out: PathoPharmLongtailRegistryTopic[] = [];
   let idx = 0;
-
-  const push = (row: Omit<PathoPharmLongtailRegistryTopic, "topicSource">) => {
-    const title = row.title.trim();
-    const k = title.toLowerCase();
-    if (seenTitles.has(k)) return;
-    seenTitles.add(k);
-    const slug = uniqueSlug(row.slug, seenSlugs);
-    out.push({ ...row, slug, title, topicSource: "registry" });
+  for (const row of PATHO_PHARM_TOPIC_REGISTRY) {
+    const aud = rotateAudience(idx);
+    const clinicalRt = mapRegistryRelationshipToClinical(row.relationshipType);
+    const kind: "pathophysiology" | "pharmacology" =
+      row.relationshipType === "drug_effect" || row.relationshipType === "drug_monitoring"
+        ? "pharmacology"
+        : "pathophysiology";
+    const postTemplate =
+      kind === "pharmacology" ? BlogPostTemplate.MEDICATION_REVIEW : BlogPostTemplate.DISEASE_PROCESS_EXPLAINER;
+    const anchor = row.keywords[0] ?? row.slug;
+    const bodySystem =
+      kind === "pharmacology" && row.relationshipType === "drug_effect"
+        ? "multisystem"
+        : inferSystem(anchor, row.title, idx);
+    const slug = uniqueSlug(row.slug.slice(0, 110), seenSlugs);
+    const categoryLabel = row.category === "pharm" ? "Pharmacology" : "Pathophysiology";
+    out.push({
+      slug,
+      title: row.title,
+      kind,
+      category: categoryLabel,
+      postTemplate,
+      targetKeyword: row.title.toLowerCase().replace(/\?/g, "").slice(0, 200),
+      bodySystem,
+      anchorLabel: anchor,
+      patternId: row.patternId,
+      relationshipType: clinicalRt,
+      topicSource: "registry",
+      careerSlug: aud.careerSlug,
+      exam: aud.exam,
+    });
     idx += 1;
-  };
-
-  for (const [condition, finding] of CONDITION_SYMPTOM_PAIRS) {
-    const aud = AUDIENCES[idx % AUDIENCES.length]!;
-    const title = `Why does ${condition} cause ${finding}?`;
-    push({
-      slug: `lt-reg-cs-${slugPart(condition)}-${slugPart(finding)}`,
-      title,
-      kind: "pathophysiology",
-      category: "Pathophysiology",
-      postTemplate: BlogPostTemplate.DISEASE_PROCESS_EXPLAINER,
-      targetKeyword: title.toLowerCase().replace(/\?/g, "").slice(0, 200),
-      bodySystem: inferSystem(condition, finding, idx),
-      anchorLabel: condition,
-      patternId: 1,
-      relationshipType: "condition_symptom",
-      careerSlug: aud.careerSlug,
-      exam: aud.exam,
-    });
-  }
-
-  for (const [drug, effect] of DRUG_EFFECT_PAIRS) {
-    const aud = AUDIENCES[idx % AUDIENCES.length]!;
-    const title = `How does ${drug} cause ${effect}?`;
-    push({
-      slug: `lt-reg-de-${slugPart(drug)}-${slugPart(effect)}`,
-      title,
-      kind: "pharmacology",
-      category: "Pharmacology",
-      postTemplate: BlogPostTemplate.MEDICATION_REVIEW,
-      targetKeyword: title.toLowerCase().replace(/\?/g, "").slice(0, 200),
-      bodySystem: "multisystem",
-      anchorLabel: drug,
-      patternId: 2,
-      relationshipType: "drug_adverse_effect",
-      careerSlug: aud.careerSlug,
-      exam: aud.exam,
-    });
-  }
-
-  for (const [lab, condition] of LAB_IN_CONDITION_PAIRS) {
-    const aud = AUDIENCES[idx % AUDIENCES.length]!;
-    const title = `Why does ${lab} occur in ${condition}?`;
-    push({
-      slug: `lt-reg-lab-${slugPart(lab)}-${slugPart(condition)}`,
-      title,
-      kind: "pathophysiology",
-      category: "Pathophysiology",
-      postTemplate: BlogPostTemplate.DISEASE_PROCESS_EXPLAINER,
-      targetKeyword: title.toLowerCase().replace(/\?/g, "").slice(0, 200),
-      bodySystem: inferSystem(condition, lab, idx),
-      anchorLabel: condition,
-      patternId: 4,
-      relationshipType: "condition_lab",
-      careerSlug: aud.careerSlug,
-      exam: aud.exam,
-    });
-  }
-
-  for (const [condition, sys] of DISEASE_MECHANISM_STEP_CONDITIONS) {
-    const aud = AUDIENCES[idx % AUDIENCES.length]!;
-    const title = `What happens in ${condition} pathophysiology step by step?`;
-    push({
-      slug: `lt-reg-mech-${slugPart(condition)}-step`,
-      title,
-      kind: "pathophysiology",
-      category: "Pathophysiology",
-      postTemplate: BlogPostTemplate.DISEASE_PROCESS_EXPLAINER,
-      targetKeyword: title.toLowerCase().replace(/\?/g, "").slice(0, 200),
-      bodySystem: sys,
-      anchorLabel: condition,
-      patternId: 3,
-      relationshipType: "disease_mechanism",
-      careerSlug: aud.careerSlug,
-      exam: aud.exam,
-    });
-  }
-
-  for (const [sign, mechanism, disease, sys] of SIGN_MECHANISM_DISEASE_TRIPLES) {
-    const aud = AUDIENCES[idx % AUDIENCES.length]!;
-    const title = `Explain the mechanism behind ${sign} in ${disease} for bedside nursing`;
-    push({
-      slug: `lt-reg-sign-${slugPart(sign)}-${slugPart(disease)}`,
-      title,
-      kind: "pathophysiology",
-      category: "Pathophysiology",
-      postTemplate: BlogPostTemplate.DISEASE_PROCESS_EXPLAINER,
-      targetKeyword: title.toLowerCase().replace(/\?/g, "").slice(0, 200),
-      bodySystem: sys,
-      anchorLabel: disease,
-      patternId: 6,
-      relationshipType: "disease_mechanism",
-      careerSlug: aud.careerSlug,
-      exam: aud.exam,
-    });
-  }
-
-  for (const [tx, cons, sys] of TREATMENT_CONSEQUENCE_PAIRS) {
-    const aud = AUDIENCES[idx % AUDIENCES.length]!;
-    const title = `Why does ${tx} cause ${cons}?`;
-    push({
-      slug: `lt-reg-tx-${slugPart(tx)}-${slugPart(cons)}`,
-      title,
-      kind: "pathophysiology",
-      category: "Pathophysiology",
-      postTemplate: BlogPostTemplate.DISEASE_PROCESS_EXPLAINER,
-      targetKeyword: title.toLowerCase().replace(/\?/g, "").slice(0, 200),
-      bodySystem: sys,
-      anchorLabel: tx,
-      patternId: 7,
-      relationshipType: "condition_symptom",
-      careerSlug: aud.careerSlug,
-      exam: aud.exam,
-    });
-  }
-
-  for (const [el, cond, sys] of ELECTROLYTE_CONDITION_PAIRS) {
-    const aud = AUDIENCES[idx % AUDIENCES.length]!;
-    const title = `Why does ${el} happen in ${cond}?`;
-    push({
-      slug: `lt-reg-el-${slugPart(el)}-${slugPart(cond)}`,
-      title,
-      kind: "pathophysiology",
-      category: "Pathophysiology",
-      postTemplate: BlogPostTemplate.DISEASE_PROCESS_EXPLAINER,
-      targetKeyword: title.toLowerCase().replace(/\?/g, "").slice(0, 200),
-      bodySystem: sys,
-      anchorLabel: cond,
-      patternId: 10,
-      relationshipType: "condition_symptom",
-      careerSlug: aud.careerSlug,
-      exam: aud.exam,
-    });
-  }
-
-  for (const [a, b, ctx, sys] of SYSTEM_BRIDGE_TRIPLES) {
-    const aud = AUDIENCES[idx % AUDIENCES.length]!;
-    const title = `How does ${a} affect ${b} during ${ctx}?`;
-    push({
-      slug: `lt-reg-br-${slugPart(a)}-${slugPart(b)}-${slugPart(ctx)}`,
-      title,
-      kind: "pathophysiology",
-      category: "Pathophysiology",
-      postTemplate: BlogPostTemplate.DISEASE_PROCESS_EXPLAINER,
-      targetKeyword: title.toLowerCase().replace(/\?/g, "").slice(0, 200),
-      bodySystem: sys,
-      anchorLabel: ctx,
-      patternId: 9,
-      relationshipType: "disease_mechanism",
-      careerSlug: aud.careerSlug,
-      exam: aud.exam,
-    });
-  }
-
-  for (const [drug, sys] of DRUG_MONITORING_LIST) {
-    const aud = AUDIENCES[idx % AUDIENCES.length]!;
-    const title = `What should nurses monitor in ${drug} and why?`;
-    push({
-      slug: `lt-reg-mon-${slugPart(drug)}`,
-      title,
-      kind: "pharmacology",
-      category: "Pharmacology",
-      postTemplate: BlogPostTemplate.MEDICATION_REVIEW,
-      targetKeyword: title.toLowerCase().replace(/\?/g, "").slice(0, 200),
-      bodySystem: sys,
-      anchorLabel: drug,
-      patternId: 8,
-      relationshipType: "drug_monitoring",
-      careerSlug: aud.careerSlug,
-      exam: aud.exam,
-    });
-  }
-
-  for (const [drug, sys] of NURSING_IMPLICATION_DRUGS) {
-    const aud = AUDIENCES[idx % AUDIENCES.length]!;
-    const title = `Nursing implications of ${drug} mechanism`;
-    push({
-      slug: `lt-reg-ni-d-${slugPart(drug)}`,
-      title,
-      kind: "pharmacology",
-      category: "Pharmacology",
-      postTemplate: BlogPostTemplate.MEDICATION_REVIEW,
-      targetKeyword: title.toLowerCase().replace(/\?/g, "").slice(0, 200),
-      bodySystem: sys,
-      anchorLabel: drug,
-      patternId: 5,
-      relationshipType: "drug_monitoring",
-      careerSlug: aud.careerSlug,
-      exam: aud.exam,
-    });
-  }
-
-  for (const [cond, sys] of NURSING_IMPLICATION_CONDITIONS) {
-    const aud = AUDIENCES[idx % AUDIENCES.length]!;
-    const title = `Nursing implications of ${cond} mechanism`;
-    push({
-      slug: `lt-reg-ni-c-${slugPart(cond)}`,
-      title,
-      kind: "pathophysiology",
-      category: "Pathophysiology",
-      postTemplate: BlogPostTemplate.DISEASE_PROCESS_EXPLAINER,
-      targetKeyword: title.toLowerCase().replace(/\?/g, "").slice(0, 200),
-      bodySystem: sys,
-      anchorLabel: cond,
-      patternId: 5,
-      relationshipType: "drug_monitoring",
-      careerSlug: aud.careerSlug,
-      exam: aud.exam,
-    });
   }
 
   memo = out;
@@ -337,3 +463,5 @@ export function assertRegistryMeetsMinimum(): void {
     throw new Error(`patho-pharm topic registry too small: ${n} < ${PATHO_PHARM_LONGTAIL_TOPIC_REGISTRY_MIN}`);
   }
 }
+
+export { normalizeTopicKey } from "./patho-pharm-longtail-topic-patterns";

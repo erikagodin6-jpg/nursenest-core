@@ -48,8 +48,8 @@
  *
  * Or set `PLAYWRIGHT_TEST_EMAIL` / `PLAYWRIGHT_TEST_PASSWORD` (same as `paid-test-credentials.ts`).
  */
+import "./load-dotenv-for-cli.mts";
 import { cliDotenvTelemetry } from "./load-dotenv-for-cli.mts";
-import { assertDatabaseUrlPresentOrExit } from "./lib/database-env-assert.mts";
 import { createInterface } from "node:readline";
 import bcrypt from "bcryptjs";
 import {
@@ -61,6 +61,7 @@ import {
   TrialStatus,
 } from "@prisma/client";
 
+import "../src/lib/db/script-env-bootstrap";
 import { databaseUrlSource } from "../src/lib/db/env-bootstrap";
 import { parsePostgresUrlTargetSafe } from "./cli-db-url-snapshot.mts";
 import { normalizeEmailForDedup } from "../src/lib/auth/email-address-normalization";
@@ -76,10 +77,6 @@ function examGoalSlugForTier(tier: TierCode): "rn" | "rpn" | "np" | "allied" {
   if (tier === TierCode.RPN || tier === TierCode.LVN_LPN) return "rpn";
   return "rn";
 }
-
-assertDatabaseUrlPresentOrExit(
-  "QA paid test reset requires DATABASE_URL (local CLI; load nursenest-core/.env.local — see docs/database-environment.md).",
-);
 
 {
   const raw = process.env.DATABASE_URL?.trim();

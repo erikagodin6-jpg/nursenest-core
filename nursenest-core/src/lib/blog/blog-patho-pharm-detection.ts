@@ -128,7 +128,7 @@ export function sqlBlogLiveWhere(alias = "p", nowParam = "$1"): string {
   (
     ${alias}."postStatus" = 'PUBLISHED'
     AND (${alias}."publishAt" IS NULL OR ${alias}."publishAt" <= ${nowParam}::timestamptz)
-    AND ${alias}."workflowStatus"::text NOT IN (${wfFail}, ${wfPipeline})
+    AND ${alias}."workflowStatus" = 'PUBLISHED'
   )
   OR (
     ${alias}."postStatus" = 'APPROVED'

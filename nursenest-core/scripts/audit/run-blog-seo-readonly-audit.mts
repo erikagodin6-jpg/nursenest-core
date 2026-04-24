@@ -13,7 +13,7 @@
  * Uses the same title/H1/FAQ merge/study-anchor helpers as public blog routes, plus programmatic SEO
  * guardrails (`mergePublicBlogMetaDescription`, weak meta/title flags, merged description duplicates).
  */
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
 import fs from "node:fs";
 import path from "node:path";
 import { CountryCode, LocalizedBlogStatus, Prisma } from "@prisma/client";

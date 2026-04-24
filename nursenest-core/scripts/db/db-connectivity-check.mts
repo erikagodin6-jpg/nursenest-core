@@ -8,7 +8,7 @@
  *
  * Requires DATABASE_URL (see `src/lib/db/env-bootstrap.ts`).
  */
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
 import {
   databaseUrlDriftAuditPublic,
   logDatabaseUrlDriftAuditEvent,

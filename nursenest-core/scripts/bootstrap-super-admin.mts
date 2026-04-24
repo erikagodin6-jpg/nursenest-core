@@ -14,15 +14,10 @@
 import bcrypt from "bcryptjs";
 import { PrismaClient, UserRole, CountryCode, TierCode } from "@prisma/client";
 
-import "../src/lib/db/env-bootstrap";
+import "../src/lib/db/script-env-bootstrap";
 import { normalizeEmailForDedup } from "../src/lib/auth/email-address-normalization";
 import { strongPasswordSchema } from "../src/lib/auth/password-policy";
 import { createInterface } from "node:readline";
-
-if (!process.env.DATABASE_URL?.trim()) {
-  console.error("DATABASE_URL is not set.");
-  process.exit(1);
-}
 
 const prisma = new PrismaClient();
 

@@ -1,9 +1,17 @@
 /**
  * Clinical coherence gate for patho/pharm long-tail blog topics.
- * Registry topics are pre-vetted; synthetic topics must match curated allowlists.
+ * Registry rows must pass strict search-style patterns + duplicate-safe keys; synthetic rows must match curated allowlists.
  */
 
 import {
+  normalizeTopicKey,
+  titleHasVaguePhrasing,
+  titleMatchesBannedBroadOrNonClinicalTopic,
+  titleMatchesStrictSearchPattern,
+  titleSuggestsUnrelatedSystemPairing,
+} from "./patho-pharm-longtail-topic-patterns";
+import {
+  BODY_SYSTEMS,
   CONDITION_SYMPTOM_PAIRS,
   DISEASE_MECHANISM_STEP_CONDITIONS,
   DRUG_EFFECT_PAIRS,
@@ -31,9 +39,13 @@ export type TopicCoherenceInput = {
   relationshipType: ClinicalRelationshipType;
 };
 
-export type ClinicalCoherenceResult = {
+/** Minimal validation surface (strict production gate). */
+export type ClinicalTopicValidationResult = {
   ok: boolean;
-  reason: string;
+  reason?: string;
+};
+
+export type ClinicalCoherenceResult = ClinicalTopicValidationResult & {
   relationshipType: ClinicalRelationshipType;
 };
 
@@ -60,6 +72,7 @@ let cachedAllowlists: {
   diseaseMechanism: Set<string>;
   signMechanismDisease: Set<string>;
   systemBridge: Set<string>;
+  systemBridgeAb: Set<string>;
   drugMonitoring: Set<string>;
   nursingDrug: Set<string>;
   nursingCondition: Set<string>;
@@ -72,6 +85,7 @@ export function buildClinicalTopicAllowlists(): {
   diseaseMechanism: Set<string>;
   signMechanismDisease: Set<string>;
   systemBridge: Set<string>;
+  systemBridgeAb: Set<string>;
   drugMonitoring: Set<string>;
   nursingDrug: Set<string>;
   nursingCondition: Set<string>;
@@ -98,7 +112,11 @@ export function buildClinicalTopicAllowlists(): {
   }
 
   const systemBridge = new Set<string>();
-  for (const [a, b, ctx] of SYSTEM_BRIDGE_TRIPLES) systemBridge.add(tripleKey(a, b, ctx));
+  const systemBridgeAb = new Set<string>();
+  for (const [a, b, ctx] of SYSTEM_BRIDGE_TRIPLES) {
+    systemBridge.add(tripleKey(a, b, ctx));
+    systemBridgeAb.add(pairKey(a, b));
+  }
 
   const drugMonitoring = new Set<string>();
   for (const [d] of DRUG_MONITORING_LIST) drugMonitoring.add(norm(d));
@@ -116,6 +134,7 @@ export function buildClinicalTopicAllowlists(): {
     diseaseMechanism,
     signMechanismDisease,
     systemBridge,
+    systemBridgeAb,
     drugMonitoring,
     nursingDrug,
     nursingCondition,
@@ -123,51 +142,49 @@ export function buildClinicalTopicAllowlists(): {
   return cachedAllowlists;
 }
 
-/** Heuristic: title reads like a focused search query (not a generic overview). */
+const BODY_SYSTEM_NORM = new Set<string>(BODY_SYSTEMS.map((s) => norm(s)));
+
+/** @deprecated Prefer `titleMatchesStrictSearchPattern` from topic-patterns. */
 export function titleLooksLikeNaturalSearchQuery(title: string): boolean {
-  const t = title.trim();
-  if (t.length < 18 || t.length > 200) return false;
-  const words = t.split(/\s+/).length;
-  if (words < 5 || words > 32) return false;
-  if (/\b(overview of|introduction to|^what is\s+\w+\s*\?)\b/i.test(t)) return false;
-  if (/\b(lorem ipsum|TODO|TBD|FIXME)\b/i.test(t)) return false;
-  const mechanismStatement = /\bnursing implications of\b.+\bmechanism\b$/i.test(t);
-  const explainMechanism = /^explain the mechanism behind\b/i.test(t);
-  if (!t.includes("?") && !mechanismStatement && !explainMechanism) return false;
-  return true;
+  return titleMatchesStrictSearchPattern(title);
 }
 
 /**
- * Validates that a topic reflects a clinically plausible relationship.
- * Registry rows are trusted; synthetic rows must match curated allowlists + title heuristics.
+ * Validates that a topic reflects a clinically plausible relationship and strict production phrasing.
  */
 export function validateClinicalTopicCoherence(topic: TopicCoherenceInput): ClinicalCoherenceResult {
   const rt = topic.relationshipType;
+  const fail = (reason: string): ClinicalCoherenceResult => ({ ok: false, reason, relationshipType: rt });
+  const ok = (): ClinicalCoherenceResult => ({ ok: true, relationshipType: rt });
 
-  if (topic.topicSource === "registry") {
-    if (!titleLooksLikeNaturalSearchQuery(topic.title)) {
-      return { ok: false, reason: "title_not_natural_search_query", relationshipType: rt };
-    }
-    return { ok: true, reason: "", relationshipType: rt };
+  if (!titleMatchesStrictSearchPattern(topic.title)) {
+    return fail("title_not_strict_search_pattern");
+  }
+  if (titleHasVaguePhrasing(topic.title)) {
+    return fail("title_contains_vague_phrasing");
+  }
+  if (titleMatchesBannedBroadOrNonClinicalTopic(topic.title)) {
+    return fail("title_banned_broad_or_non_clinical");
+  }
+  if (titleSuggestsUnrelatedSystemPairing(topic.title)) {
+    return fail("title_unrelated_system_mashup");
   }
 
-  if (!titleLooksLikeNaturalSearchQuery(topic.title)) {
-    return { ok: false, reason: "title_not_natural_search_query", relationshipType: rt };
+  if (topic.topicSource === "registry") {
+    return ok();
   }
 
   const lists = buildClinicalTopicAllowlists();
   const title = topic.title.trim();
 
-  const fail = (reason: string): ClinicalCoherenceResult => ({ ok: false, reason, relationshipType: rt });
-
   if (rt === "condition_symptom") {
     const mCause = /^Why does (.+?) cause (.+)\?$/i.exec(title);
     if (mCause && lists.conditionSymptom.has(pairKey(mCause[1]!, mCause[2]!))) {
-      return { ok: true, reason: "", relationshipType: rt };
+      return ok();
     }
-    const mHappen = /^Why does (.+?) happen in (.+)\?$/i.exec(title);
-    if (mHappen && lists.conditionSymptom.has(pairKey(mHappen[1]!, mHappen[2]!))) {
-      return { ok: true, reason: "", relationshipType: rt };
+    const mLead = /^Why does (.+?) lead to (.+)\?$/i.exec(title);
+    if (mLead && lists.conditionSymptom.has(pairKey(mLead[1]!, mLead[2]!))) {
+      return ok();
     }
     return fail("pattern_mismatch_or_pair_not_in_condition_symptom_allowlist");
   }
@@ -176,59 +193,43 @@ export function validateClinicalTopicCoherence(topic: TopicCoherenceInput): Clin
     const m = /^How does (.+?) cause (.+)\?$/i.exec(title);
     if (!m) return fail("pattern_mismatch_how_does_cause");
     if (!lists.drugEffect.has(pairKey(m[1]!, m[2]!))) return fail("pair_not_in_drug_effect_allowlist");
-    return { ok: true, reason: "", relationshipType: rt };
+    return ok();
   }
 
   if (rt === "condition_lab") {
-    const m = /^Why does (.+?) occur in (.+)\?$/i.exec(title);
-    if (!m) return fail("pattern_mismatch_why_lab_in_condition");
+    const m = /^Why does (.+?) cause (.+)\?$/i.exec(title);
+    if (!m) return fail("pattern_mismatch_why_does_cause_lab");
     if (!lists.labInCondition.has(pairKey(m[1]!, m[2]!))) return fail("pair_not_in_lab_condition_allowlist");
-    return { ok: true, reason: "", relationshipType: rt };
+    return ok();
   }
 
   if (rt === "disease_mechanism") {
-    const m1 = /^What happens in (.+?) pathophysiology step by step\?$/i.exec(title);
-    if (m1) {
-      if (!lists.diseaseMechanism.has(norm(m1[1]!))) return fail("condition_not_in_mechanism_allowlist");
-      return { ok: true, reason: "", relationshipType: rt };
+    const mPhys = /^How does (.+?) affect (.+?) physiologically\?$/i.exec(title);
+    if (!mPhys) return fail("disease_mechanism_title_unrecognized");
+    const a = mPhys[1]!;
+    const b = mPhys[2]!;
+    const na = norm(a);
+    const nb = norm(b);
+    if (lists.diseaseMechanism.has(na) && BODY_SYSTEM_NORM.has(nb)) return ok();
+    for (const [sign, _mech, dis] of SIGN_MECHANISM_DISEASE_TRIPLES) {
+      if (norm(sign) === na && norm(dis) === nb) return ok();
     }
-    const m2 =
-      /^Explain the mechanism behind (.+?) in (.+?) for bedside nursing$/i.exec(title) ||
-      /^Explain the mechanism behind (.+?) in (.+?) for bedside nursing\.$/i.exec(title);
-    if (m2) {
-      const sign = m2[1]!;
-      const disease = m2[2]!;
-      let hit = false;
-      for (const [s, mech, d] of SIGN_MECHANISM_DISEASE_TRIPLES) {
-        if (norm(s) === norm(sign) && norm(d) === norm(disease)) {
-          hit = true;
-          break;
-        }
-      }
-      if (!hit) return fail("sign_disease_not_in_mechanism_sign_allowlist");
-      return { ok: true, reason: "", relationshipType: rt };
-    }
-    const m5 = /^How does (.+?) affect (.+?) during (.+)\?$/i.exec(title);
-    if (m5) {
-      if (!lists.systemBridge.has(tripleKey(m5[1]!, m5[2]!, m5[3]!))) return fail("system_bridge_not_allowlisted");
-      return { ok: true, reason: "", relationshipType: rt };
-    }
-    return fail("disease_mechanism_title_unrecognized");
+    if (lists.systemBridgeAb.has(pairKey(a, b))) return ok();
+    return fail("mechanism_pair_not_allowlisted");
   }
 
   if (rt === "drug_monitoring") {
     const m1 = /^What should nurses monitor in (.+?) and why\?$/i.exec(title);
-    if (m1 && lists.drugMonitoring.has(norm(m1[1]!))) return { ok: true, reason: "", relationshipType: rt };
-    const m2 = /^Nursing implications of (.+?) mechanism$/i.exec(title);
-    if (m2) {
-      const subj = norm(m2[1]!);
-      if (lists.nursingDrug.has(subj) || lists.nursingCondition.has(subj)) {
-        return { ok: true, reason: "", relationshipType: rt };
-      }
-      return fail("nursing_implication_subject_not_allowlisted");
-    }
+    if (m1 && lists.drugMonitoring.has(norm(m1[1]!))) return ok();
+    if (m1 && lists.nursingDrug.has(norm(m1[1]!))) return ok();
+    if (m1 && lists.nursingCondition.has(norm(m1[1]!))) return ok();
     return fail("drug_monitoring_title_unrecognized");
   }
 
   return fail("unknown_relationship_type");
+}
+
+/** Semantic duplicate key: normalized title without question style (condition + outcome words). */
+export function semanticMechanismDuplicateKey(title: string): string {
+  return normalizeTopicKey(title.replace(/\?/g, ""));
 }

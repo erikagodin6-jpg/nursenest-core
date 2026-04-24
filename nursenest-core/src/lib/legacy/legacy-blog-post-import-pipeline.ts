@@ -1,5 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
-import { BlogPostStatus, BlogPostTemplate } from "@prisma/client";
+import { BlogPostStatus, BlogPostTemplate, BlogWorkflowStatus } from "@prisma/client";
 
 import { blogPostIsLive } from "@/lib/blog/blog-visibility";
 import type { LegacyBlogPostExportRow, LegacyBlogPostExportV1 } from "@/lib/legacy/legacy-blog-post-export-types";
@@ -32,6 +32,7 @@ export type BlogPostImportIndexRow = {
   scheduledAt: Date | null;
   legacySource: string | null;
   legacyUrl: string | null;
+  workflowStatus: BlogWorkflowStatus;
 };
 
 export type LegacyBlogPostAuditReport = {
@@ -112,6 +113,7 @@ async function loadBlogPostIndex(prisma: PrismaClient): Promise<{
       scheduledAt: true,
       legacySource: true,
       legacyUrl: true,
+      workflowStatus: true,
     },
   });
 
@@ -293,9 +295,15 @@ export async function auditLegacyBlogPosts(
       existing: row,
       legacyImportOverwriteBody: false,
     });
+    const workflowForLive = row?.workflowStatus ?? BlogWorkflowStatus.GENERATED;
     if (
       blogPostIsLive(
-        { postStatus: preview.postStatus, publishAt: preview.publishAt, scheduledAt: preview.scheduledAt },
+        {
+          postStatus: preview.postStatus,
+          publishAt: preview.publishAt,
+          scheduledAt: preview.scheduledAt,
+          workflowStatus: workflowForLive,
+        },
         now,
       )
     ) {

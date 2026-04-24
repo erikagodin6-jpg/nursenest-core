@@ -68,6 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           postStatus: post.postStatus,
           publishAt: post.publishAt,
           scheduledAt: post.scheduledAt,
+          workflowStatus: post.workflowStatus,
         })
       ) {
         return {};

@@ -6,7 +6,7 @@
  *
  *   cd nursenest-core && npx tsx scripts/backfill-pathway-lesson-structural-public-complete.mts
  */
-import "../src/lib/db/env-bootstrap";
+import "../src/lib/db/script-env-bootstrap";
 import { prisma } from "../src/lib/db";
 import { computeStructuralPublicCompleteFromDbRow } from "../src/lib/lessons/pathway-lesson-catalog-sync";
 

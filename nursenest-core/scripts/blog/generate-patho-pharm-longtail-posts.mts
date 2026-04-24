@@ -5,13 +5,24 @@
  * Defaults: dry-run (no DB writes). Set APPLY_BLOG_GENERATION=1 to insert.
  * BATCH_SIZE (default 50), TARGET_COUNT (default 500).
  *
+ * Topics come from `PATHO_PHARM_TOPIC_REGISTRY` (see `patho-pharm-longtail-topic-registry.ts`); each row is
+ * validated with `validateClinicalTopicCoherence` before body generation.
+ *
+ * Strict dry-run: if any topic fails clinical/title gates, the script exits 1 (so APPLY is never reached with
+ * bad topics). To bypass only for local debugging: PATHO_PHARM_RELAX_DRY_RUN=1.
+ *
  *   DOTENV_CONFIG_PATH=.env.local npm run blog:generate-patho-pharm-longtail
+ *   TARGET_COUNT=50 DOTENV_CONFIG_PATH=.env.local npm run blog:generate-patho-pharm-longtail
  *   APPLY_BLOG_GENERATION=1 BATCH_SIZE=50 TARGET_COUNT=50 DOTENV_CONFIG_PATH=.env.local npm run blog:generate-patho-pharm-longtail
  */
 import "../../src/lib/db/script-env-bootstrap";
 
 import { BlogPostStatus, BlogWorkflowStatus, Prisma } from "@prisma/client";
 
+import {
+  PATHO_PHARM_REGISTRY_BUILD_STATS,
+  PATHO_PHARM_TOPIC_REGISTRY,
+} from "../../src/lib/blog/patho-pharm-longtail-topic-registry";
 import { validateClinicalTopicCoherence } from "../../src/lib/blog/patho-pharm-longtail-topic-coherence";
 import { blogLiveWhere, blogPostIsLive } from "../../src/lib/blog/blog-visibility";
 import {
@@ -192,6 +203,8 @@ async function main(): Promise<void> {
   const clinicalRejectionReasons: Record<string, number> = {};
   const sampleRejectedTopics: string[] = [];
   const sampleApprovedTopics: string[] = [];
+  const approvedTopicsSample: string[] = [];
+  const rejectedTopicsSample: string[] = [];
   let globalInternalLinksInsufficient = 0;
 
   const bumpReason = (rs: string[]) => {
@@ -266,12 +279,14 @@ async function main(): Promise<void> {
         rejectedCount += 1;
         batchClinicalRejected += 1;
         globalClinicalRejected += 1;
-        const r = `clinical_coherence:${coh.reason}`;
+        const reason = coh.reason ?? "unknown";
+        const r = `clinical_coherence:${reason}`;
         batchRejectionReasons.push(r);
         bumpReason([r]);
-        clinicalRejectionReasons[coh.reason] = (clinicalRejectionReasons[coh.reason] ?? 0) + 1;
+        clinicalRejectionReasons[reason] = (clinicalRejectionReasons[reason] ?? 0) + 1;
         if (batchSampleRejected.length < 8) batchSampleRejected.push(topic.title);
         if (sampleRejectedTopics.length < 8) sampleRejectedTopics.push(topic.title);
+        if (rejectedTopicsSample.length < 10) rejectedTopicsSample.push(topic.title);
         continue;
       }
 
@@ -284,6 +299,7 @@ async function main(): Promise<void> {
         rejectedCount += 1;
         batchRejectionReasons.push(...v.reasons);
         bumpReason(v.reasons);
+        if (rejectedTopicsSample.length < 10) rejectedTopicsSample.push(topic.title);
         continue;
       }
 
@@ -294,6 +310,7 @@ async function main(): Promise<void> {
         const r = "internal_link_count_insufficient_for_corpus";
         batchRejectionReasons.push(r);
         bumpReason([r]);
+        if (rejectedTopicsSample.length < 10) rejectedTopicsSample.push(topic.title);
         continue;
       }
 
@@ -370,6 +387,7 @@ async function main(): Promise<void> {
         createdSlugs.push(topic.slug);
         if (batchSampleApproved.length < 8) batchSampleApproved.push(topic.title);
         if (sampleApprovedTopics.length < 8) sampleApprovedTopics.push(topic.title);
+        if (approvedTopicsSample.length < 10) approvedTopicsSample.push(topic.title);
         continue;
       }
 
@@ -390,6 +408,7 @@ async function main(): Promise<void> {
         existingTitleHashes.add(titleHash);
         if (batchSampleApproved.length < 8) batchSampleApproved.push(topic.title);
         if (sampleApprovedTopics.length < 8) sampleApprovedTopics.push(topic.title);
+        if (approvedTopicsSample.length < 10) approvedTopicsSample.push(topic.title);
 
         if (visibilitySamples.length < 5) {
           const checkNow = new Date();
@@ -503,19 +522,30 @@ async function main(): Promise<void> {
     visiblePublicCountAfter = pathoPharmCountsAfter.visible_public_total;
   }
 
+  const registryDuplicateTotal =
+    PATHO_PHARM_REGISTRY_BUILD_STATS.duplicateNormalizedKey +
+    PATHO_PHARM_REGISTRY_BUILD_STATS.duplicateSemantic +
+    PATHO_PHARM_REGISTRY_BUILD_STATS.duplicateCluster;
+
   const finalSummary = {
     dryRun,
     targetCount,
     batchSize,
     plannedCount,
+    registryTopicCount: PATHO_PHARM_TOPIC_REGISTRY.length,
+    registryBuildDedupe: { ...PATHO_PHARM_REGISTRY_BUILD_STATS, registryDuplicateTotal },
     createdCount: globalCreated,
     skippedExisting: globalSkipped,
     rejectedCount: globalRejected,
     clinicallyRejectedCount: globalClinicalRejected,
     rejectionReasons,
+    rejectionReasonsCount: Object.keys(rejectionReasons).length,
     clinicallyRejectedReasons: clinicalRejectionReasons,
+    duplicateCount: registryDuplicateTotal,
     sampleRejectedTopics,
     sampleApprovedTopics,
+    approvedTopicsSample,
+    rejectedTopicsSample,
     internalLinksInsufficientCount: globalInternalLinksInsufficient,
     createdSlugs: globalCreatedSlugs,
     visiblePublicBefore: visiblePublicCountBefore,
@@ -528,6 +558,14 @@ async function main(): Promise<void> {
     pathoPharmCountsAfter,
   };
   console.log(JSON.stringify({ finalSummary }));
+
+  const relaxDryRunStrict = process.env.PATHO_PHARM_RELAX_DRY_RUN === "1";
+  if (dryRun && !relaxDryRunStrict && globalClinicalRejected > 0) {
+    console.error(
+      "[patho-pharm-longtail] Strict dry-run failed: clinical/title validation rejected one or more topics. Fix registry or coherence rules, or set PATHO_PHARM_RELAX_DRY_RUN=1 to bypass this gate (not for production).",
+    );
+    process.exit(1);
+  }
 }
 
 function summarizeReasons(rs: string[]): Record<string, number> {

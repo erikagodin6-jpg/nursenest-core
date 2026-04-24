@@ -9,15 +9,10 @@
  */
 import { PrismaClient } from "@prisma/client";
 
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
 import { PASSWORD_RESET_TOKEN_TTL_MS } from "../../src/lib/auth/password-reset-constants";
 import { generatePasswordResetRawToken, hashPasswordResetToken } from "../../src/lib/password-reset-crypto";
 import { buildPasswordResetUrl } from "../../src/lib/send-password-reset-email";
-
-if (!process.env.DATABASE_URL?.trim()) {
-  console.error("DATABASE_URL is not set.");
-  process.exit(1);
-}
 
 const prisma = new PrismaClient();
 

@@ -6,7 +6,7 @@
  *   cd nursenest-core && npx tsx scripts/audit/run-blog-prisma-readonly-export.mts
  *   npx tsx scripts/audit/reconcile-blog-live-corpus.mts
  */
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";

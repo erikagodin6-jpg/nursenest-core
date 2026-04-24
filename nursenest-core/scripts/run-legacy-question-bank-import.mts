@@ -15,7 +15,7 @@ import { runLegacyClientCareerImport } from "./import-legacy-client-career-quest
 import { isDatabaseUrlConfigured } from "../src/lib/db/safe-database";
 import { assertLiveImportPreconditions } from "./lib/import-live-guards.mts";
 
-import "../src/lib/db/env-bootstrap";
+import "../src/lib/db/script-env-bootstrap";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = join(__dirname, "..");

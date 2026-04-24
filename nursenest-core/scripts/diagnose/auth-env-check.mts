@@ -4,7 +4,7 @@
  * Usage (from nursenest-core/):
  *   npx tsx scripts/diagnose/auth-env-check.mts
  */
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
 
 function has(k: string): boolean {
   return Boolean(typeof process.env[k] === "string" && process.env[k]!.trim().length > 0);

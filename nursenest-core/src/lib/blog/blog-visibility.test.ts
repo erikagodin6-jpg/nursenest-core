@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { BlogPostStatus } from "@prisma/client";
-import { blogLiveWhere, blogPostIsLive, isBlogPostMarketingMetaVisible } from "./blog-visibility";
+import { BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
+import { blogLiveWhere, blogPostIsLive, buildBlogPublicListWhere, isBlogPostMarketingMetaVisible } from "./blog-visibility";
 
 test("SCHEDULED post with publishAt in the past is live (matches list/sitemap filters)", () => {
   const now = new Date("2026-06-15T12:00:00Z");
@@ -9,6 +9,7 @@ test("SCHEDULED post with publishAt in the past is live (matches list/sitemap fi
     postStatus: BlogPostStatus.SCHEDULED,
     publishAt: new Date("2026-06-01T12:00:00Z"),
     scheduledAt: null as Date | null,
+    workflowStatus: BlogWorkflowStatus.PUBLISHED,
   };
   assert.equal(blogPostIsLive(row, now), true);
   const where = blogLiveWhere(now) as { OR: unknown[] };
@@ -23,6 +24,7 @@ test("SCHEDULED post with publishAt in the future is not live", () => {
         postStatus: BlogPostStatus.SCHEDULED,
         publishAt: new Date("2026-07-01T12:00:00Z"),
         scheduledAt: null,
+        workflowStatus: BlogWorkflowStatus.PUBLISHED,
       },
       now,
     ),
@@ -38,6 +40,7 @@ test("PUBLISHED with future publishAt is not live (embargo; matches blogLiveWher
         postStatus: BlogPostStatus.PUBLISHED,
         publishAt: new Date("2099-01-01T00:00:00Z"),
         scheduledAt: null,
+        workflowStatus: BlogWorkflowStatus.PUBLISHED,
       },
       now,
     ),
@@ -53,10 +56,43 @@ test("PUBLISHED with null publishAt is live", () => {
         postStatus: BlogPostStatus.PUBLISHED,
         publishAt: null,
         scheduledAt: null,
+        workflowStatus: BlogWorkflowStatus.PUBLISHED,
       },
       now,
     ),
     true,
+  );
+});
+
+test("PUBLISHED with pipeline workflow is not live (matches blogLiveWhere)", () => {
+  const now = new Date("2026-06-15T12:00:00Z");
+  assert.equal(
+    blogPostIsLive(
+      {
+        postStatus: BlogPostStatus.PUBLISHED,
+        publishAt: new Date("2020-01-01T00:00:00Z"),
+        scheduledAt: null,
+        workflowStatus: BlogWorkflowStatus.GENERATED,
+      },
+      now,
+    ),
+    false,
+  );
+});
+
+test("PUBLISHED requires workflowStatus PUBLISHED (not editorial APPROVED workflow)", () => {
+  const now = new Date("2026-06-15T12:00:00Z");
+  assert.equal(
+    blogPostIsLive(
+      {
+        postStatus: BlogPostStatus.PUBLISHED,
+        publishAt: new Date("2020-01-01T00:00:00Z"),
+        scheduledAt: null,
+        workflowStatus: BlogWorkflowStatus.APPROVED,
+      },
+      now,
+    ),
+    false,
   );
 });
 
@@ -72,13 +108,18 @@ test("APPROVED is live on public surfaces (matches list / SEO after editorial si
   const now = new Date("2026-06-15T12:00:00Z");
   assert.equal(
     blogPostIsLive(
-      { postStatus: BlogPostStatus.APPROVED, publishAt: null, scheduledAt: null },
+      {
+        postStatus: BlogPostStatus.APPROVED,
+        publishAt: null,
+        scheduledAt: null,
+        workflowStatus: BlogWorkflowStatus.APPROVED,
+      },
       now,
     ),
     true,
   );
-  const where = blogLiveWhere(now) as { OR: Array<{ postStatus?: BlogPostStatus }> };
-  assert.ok(where.OR.some((c) => c.postStatus === BlogPostStatus.APPROVED));
+  const where = blogLiveWhere(now);
+  assert.ok(JSON.stringify(where).includes('"APPROVED"'), "blogLiveWhere should include an APPROVED branch");
 });
 
 test("isBlogPostMarketingMetaVisible matches draft vs live gates", () => {
@@ -100,6 +141,7 @@ test("isBlogPostMarketingMetaVisible matches draft vs live gates", () => {
         postStatus: BlogPostStatus.PUBLISHED,
         publishAt: null,
         scheduledAt: null,
+        workflowStatus: BlogWorkflowStatus.PUBLISHED,
       },
       now,
     ),
@@ -115,9 +157,23 @@ test("SCHEDULED uses scheduledAt when publishAt is null and time has passed", ()
         postStatus: BlogPostStatus.SCHEDULED,
         publishAt: null,
         scheduledAt: new Date("2026-06-01T12:00:00Z"),
+        workflowStatus: BlogWorkflowStatus.PUBLISHED,
       },
       now,
     ),
     true,
   );
+});
+
+test("buildBlogPublicListWhere can restrict main index to global rows when env is set", () => {
+  const prev = process.env.BLOG_MAIN_INDEX_EXCLUDE_SCOPED_POSTS;
+  process.env.BLOG_MAIN_INDEX_EXCLUDE_SCOPED_POSTS = "1";
+  try {
+    const now = new Date("2026-06-15T12:00:00Z");
+    const where = buildBlogPublicListWhere(now, {});
+    assert.ok(JSON.stringify(where).includes("careerSlug"));
+  } finally {
+    if (prev === undefined) delete process.env.BLOG_MAIN_INDEX_EXCLUDE_SCOPED_POSTS;
+    else process.env.BLOG_MAIN_INDEX_EXCLUDE_SCOPED_POSTS = prev;
+  }
 });

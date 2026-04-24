@@ -1,7 +1,8 @@
 #!/usr/bin/env npx tsx
 /**
  * Verifies posts created by `generate-patho-pharm-longtail-posts.mts`:
- * published, live under blogLiveWhere(now), SEO, references, FAQ, schema metadata.
+ * published, live under blogLiveWhere(now), SEO, references, FAQ, schema metadata,
+ * and public discoverability (main `/blog`, scoped hubs, or sitemap contract).
  *
  *   DOTENV_CONFIG_PATH=.env.local npm run blog:verify-generated-publication
  *
@@ -10,6 +11,9 @@
  * Optional HTTP smoke (production or preview origin):
  *   VERIFY_HTTP=1 NURSENEST_ORIGIN=https://example.com npm run blog:verify-generated-publication
  * (falls back to NEXT_PUBLIC_SITE_URL if NURSENEST_ORIGIN unset)
+ *
+ * When `BLOG_MAIN_INDEX_EXCLUDE_SCOPED_POSTS=1`, career-tagged posts need not match the unscoped main
+ * index query; discoverability is satisfied by a **scoped hub** list hit and/or `blogLiveWhere` (sitemap).
  */
 import "../../src/lib/db/script-env-bootstrap";
 
@@ -19,11 +23,28 @@ import {
   rowMatchesLongTailHeuristics,
   rowMatchesPathoPharmTopicalCriteria,
 } from "../../src/lib/blog/blog-patho-pharm-detection";
-import { blogLiveWhere, blogPostIsLive } from "../../src/lib/blog/blog-visibility";
+import { expectedGeneratedBlogPaths } from "../../src/lib/blog/blog-scoped-career-hubs";
+import { blogLiveWhere, blogPostIsLive, buildBlogPublicListWhere } from "../../src/lib/blog/blog-visibility";
+import { getPublishedBlogPostBySlug } from "../../src/lib/blog/safe-blog-queries";
 import { prisma } from "../lib/prisma-script-client";
 import { PATHO_PHARM_LONGTAIL_LEGACY_SOURCE } from "./lib/patho-pharm-longtail-post-builder";
 
 type FailRow = { slug: string; reasons: string[] };
+
+type VisibilityReport = {
+  slug: string;
+  careerSlug: string | null;
+  exam: string | null;
+  expectedPublicBlogPath: string;
+  expectedDetailPath: string;
+  appearsInMainBlogQuery: boolean;
+  appearsInScopedBlogQuery: boolean;
+  passesBlogLiveWhere: boolean;
+  detailResolvable: boolean;
+  visibilitySurface: "main_blog" | "scoped_blog" | "sitemap_blog";
+  /** True when `BLOG_MAIN_INDEX_EXCLUDE_SCOPED_POSTS=1`, the row is career-tagged, and the scoped hub query lists it. */
+  scopedVisibilityBecauseMainExcludes: boolean;
+};
 
 async function mapWithConcurrency<T, R>(items: T[], concurrency: number, fn: (item: T) => Promise<R>): Promise<R[]> {
   const out: R[] = new Array(items.length);
@@ -40,22 +61,36 @@ async function mapWithConcurrency<T, R>(items: T[], concurrency: number, fn: (it
   return out;
 }
 
-/** When VERIFY_HTTP=1, GET /blog and each /blog/{slug} (200 expected). */
-async function verifyHttpForSlugs(origin: string, slugs: string[]): Promise<FailRow[]> {
+/** When VERIFY_HTTP=1, GET /blog, each expected list path (first page), and each expected detail URL. */
+async function verifyHttpForReports(origin: string, reports: VisibilityReport[]): Promise<FailRow[]> {
   const base = origin.replace(/\/$/, "");
   const fails: FailRow[] = [];
+  const listPaths = new Set<string>();
+  for (const r of reports) {
+    listPaths.add(r.expectedPublicBlogPath);
+  }
+  listPaths.add("/blog");
   try {
     const r = await fetch(`${base}/blog`, { redirect: "follow" });
     if (!r.ok) fails.push({ slug: "__blog_index__", reasons: [`http_blog_index_status_${r.status}`] });
   } catch (e) {
     fails.push({ slug: "__blog_index__", reasons: [`http_blog_index_error:${String(e)}`] });
   }
-  const results = await mapWithConcurrency(slugs, 8, async (slug) => {
+  for (const p of listPaths) {
+    if (p === "/blog") continue;
     try {
-      const r = await fetch(`${base}/blog/${encodeURIComponent(slug)}`, { redirect: "follow" });
-      if (!r.ok) return { slug, reasons: [`http_detail_status_${r.status}`] as string[] };
+      const r = await fetch(`${base}${p}`, { redirect: "follow" });
+      if (!r.ok) fails.push({ slug: `__list__${p}`, reasons: [`http_list_${p}_status_${r.status}`] });
     } catch (e) {
-      return { slug, reasons: [`http_detail_error:${String(e)}`] };
+      fails.push({ slug: `__list__${p}`, reasons: [`http_list_${p}_error:${String(e)}`] });
+    }
+  }
+  const results = await mapWithConcurrency(reports, 8, async (rep) => {
+    try {
+      const r = await fetch(`${base}${rep.expectedDetailPath}`, { redirect: "follow" });
+      if (!r.ok) return { slug: rep.slug, reasons: [`http_detail_status_${r.status}`] as string[] };
+    } catch (e) {
+      return { slug: rep.slug, reasons: [`http_detail_error:${String(e)}`] };
     }
     return null;
   });
@@ -101,6 +136,7 @@ async function main(): Promise<void> {
 
   const now = new Date();
   const allowEmpty = process.env.VERIFY_ALLOW_EMPTY?.trim() === "1";
+  const mainExcludesScoped = process.env.BLOG_MAIN_INDEX_EXCLUDE_SCOPED_POSTS === "1";
 
   const rows = await prisma.blogPost.findMany({
     where: { legacySource: PATHO_PHARM_LONGTAIL_LEGACY_SOURCE },
@@ -115,6 +151,8 @@ async function main(): Promise<void> {
       publishAt: true,
       scheduledAt: true,
       workflowStatus: true,
+      careerSlug: true,
+      exam: true,
       seoTitle: true,
       seoDescription: true,
       apaReferences: true,
@@ -131,6 +169,7 @@ async function main(): Promise<void> {
   }
 
   const failures: FailRow[] = [];
+  const visibilityReports: VisibilityReport[] = [];
 
   for (const row of rows) {
     const reasons: string[] = [];
@@ -145,14 +184,91 @@ async function main(): Promise<void> {
       reasons.push("publishAt_missing_or_future");
     }
     if (!blogPostIsLive(row, now)) {
-      reasons.push("not_visible_under_blogLiveWhere");
+      reasons.push("not_visible_under_blogPostIsLive");
     }
     const prismaLiveCount = await prisma.blogPost.count({
       where: { AND: [blogLiveWhere(now), { slug: row.slug }] },
     });
-    if (prismaLiveCount !== 1) {
+    const passesBlogLiveWhere = prismaLiveCount === 1;
+    if (!passesBlogLiveWhere) {
       reasons.push(`prisma_blogLiveWhere_slug_count_expected_1_got_${prismaLiveCount}`);
     }
+
+    const paths = expectedGeneratedBlogPaths({ slug: row.slug, careerSlug: row.careerSlug });
+    const mainWhere = buildBlogPublicListWhere(now, {});
+    const scopedWhere =
+      row.careerSlug && paths.scopedListPath
+        ? buildBlogPublicListWhere(now, { locale: "en", careerSlug: row.careerSlug.trim().toLowerCase() })
+        : null;
+
+    const appearsInMainBlogQuery =
+      (await prisma.blogPost.count({
+        where: { AND: [mainWhere, { slug: row.slug }] },
+      })) > 0;
+
+    const appearsInScopedBlogQuery = scopedWhere
+      ? (await prisma.blogPost.count({
+          where: { AND: [scopedWhere, { slug: row.slug }] },
+        })) > 0
+      : false;
+
+    const scopeForDetail =
+      row.careerSlug && paths.scopedListPath
+        ? {
+            locale: "en",
+            sourceLocale: "en" as const,
+            careerSlug: row.careerSlug.trim().toLowerCase(),
+            allowSourceLocaleFallback: true as const,
+          }
+        : undefined;
+    const detailRow = scopeForDetail
+      ? await getPublishedBlogPostBySlug(row.slug, scopeForDetail)
+      : null;
+    const detailGlobal = await getPublishedBlogPostBySlug(row.slug, undefined);
+    const detailResolvable = paths.scopedListPath ? Boolean(detailRow) : Boolean(detailGlobal);
+
+    const scopedVisibilityBecauseMainExcludes = Boolean(
+      mainExcludesScoped && row.careerSlug?.trim() && !appearsInMainBlogQuery && appearsInScopedBlogQuery,
+    );
+
+    let visibilitySurface: VisibilityReport["visibilitySurface"];
+    if (appearsInMainBlogQuery) {
+      visibilitySurface = "main_blog";
+    } else if (appearsInScopedBlogQuery) {
+      visibilitySurface = "scoped_blog";
+    } else if (passesBlogLiveWhere) {
+      visibilitySurface = "sitemap_blog";
+    } else {
+      visibilitySurface = "sitemap_blog";
+    }
+
+    const discoverable =
+      mainExcludesScoped && row.careerSlug?.trim()
+        ? appearsInScopedBlogQuery || passesBlogLiveWhere
+        : appearsInMainBlogQuery || appearsInScopedBlogQuery || passesBlogLiveWhere;
+
+    if (!discoverable) {
+      reasons.push("not_discoverable_on_any_public_surface");
+    }
+
+    visibilityReports.push({
+      slug: row.slug,
+      careerSlug: row.careerSlug,
+      exam: row.exam,
+      expectedPublicBlogPath: paths.expectedPublicBlogPath,
+      expectedDetailPath: paths.expectedDetailPath,
+      appearsInMainBlogQuery,
+      appearsInScopedBlogQuery,
+      passesBlogLiveWhere,
+      detailResolvable,
+      visibilitySurface,
+      scopedVisibilityBecauseMainExcludes,
+    });
+
+    if (!detailResolvable) {
+      reasons.push("detail_not_resolvable_at_expected_scope_or_global");
+    }
+
     if (!row.category?.trim()) reasons.push("missing_category");
     if (!row.postTemplate) reasons.push("missing_postTemplate");
     const st = row.seoTitle?.trim() ?? "";
@@ -220,10 +336,7 @@ async function main(): Promise<void> {
       process.exit(1);
     }
     const absoluteOrigin = /^https?:\/\//i.test(origin) ? origin : `https://${origin}`;
-    const httpFails = await verifyHttpForSlugs(
-      absoluteOrigin,
-      rows.map((r) => r.slug),
-    );
+    const httpFails = await verifyHttpForReports(absoluteOrigin, visibilityReports);
     for (const f of httpFails) failures.push(f);
   }
 
@@ -233,6 +346,8 @@ async function main(): Promise<void> {
     failedSlugs: failures.map((f) => f.slug),
     details: failures,
     verifyHttp: process.env.VERIFY_HTTP?.trim() === "1",
+    mainBlogExcludesScopedPosts: mainExcludesScoped,
+    visibilityReports,
   };
   console.log(JSON.stringify({ verifyGeneratedBlogPublication: summary }));
 

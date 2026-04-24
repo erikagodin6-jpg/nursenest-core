@@ -1,5 +1,5 @@
 import type { BlogPost, Prisma } from "@prisma/client";
-import { BlogPostStatus } from "@prisma/client";
+import { BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import {
   isDatabaseUrlConfigured,
@@ -727,6 +727,7 @@ const metaSelect = {
   title: true,
   excerpt: true,
   postStatus: true,
+  workflowStatus: true,
   publishAt: true,
   scheduledAt: true,
   seoTitle: true,
@@ -832,6 +833,7 @@ export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope
       title: s.title,
       excerpt: s.excerpt,
       postStatus: BlogPostStatus.PUBLISHED,
+      workflowStatus: BlogWorkflowStatus.PUBLISHED,
       publishAt: null,
       scheduledAt: null,
       seoTitle: null,
@@ -851,6 +853,7 @@ export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope
       title: db.title,
       excerpt: db.excerpt,
       postStatus: db.postStatus,
+      workflowStatus: db.workflowStatus,
       publishAt: db.publishAt,
       scheduledAt: db.scheduledAt,
       seoTitle: db.seoTitle,
@@ -871,6 +874,7 @@ export async function getBlogPostMetaBySlug(slug: string, scope?: BlogQueryScope
     title: s.title,
     excerpt: s.excerpt,
     postStatus: BlogPostStatus.PUBLISHED,
+    workflowStatus: BlogWorkflowStatus.PUBLISHED,
     publishAt: null,
     scheduledAt: null,
     seoTitle: null,
@@ -893,6 +897,7 @@ export async function isBlogPostMetaVisible(slug: string, scope?: BlogQueryScope
     postStatus: meta.postStatus,
     publishAt: meta.publishAt,
     scheduledAt: meta.scheduledAt,
+    workflowStatus: meta.workflowStatus,
   });
 }
 
@@ -918,7 +923,18 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
     return null;
   }
   /** Align with {@link blogLiveWhere} on index/tag routes: live SCHEDULED rows, not only PUBLISHED. */
-  if (!blogPostIsLive({ postStatus: row.postStatus, publishAt: row.publishAt, scheduledAt: row.scheduledAt }, now)) return null;
+  if (
+    !blogPostIsLive(
+      {
+        postStatus: row.postStatus,
+        publishAt: row.publishAt,
+        scheduledAt: row.scheduledAt,
+        workflowStatus: row.workflowStatus,
+      },
+      now,
+    )
+  )
+    return null;
   return row;
 }
 

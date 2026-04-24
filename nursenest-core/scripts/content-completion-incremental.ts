@@ -16,7 +16,7 @@
  *
  * Dry-run (default): no DB writes; still updates the progress JSON with snapshot + report.
  */
-import "../src/lib/db/env-bootstrap";
+import "../src/lib/db/script-env-bootstrap";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { prisma } from "../src/lib/db";

@@ -8,6 +8,8 @@
  * Standalone bootstrap uses `scripts/runtime-env-guard-bootstrap.mjs` (plain Node, no TS loader) — keep logic in sync.
  */
 
+import { assertRuntimeDatabaseEnvContract } from "./require-database-env";
+
 const REQUIRED_RUNTIME_ENVS = ["AI_ADMIN_GENERATION_ENABLED"] as const;
 
 const REQUIRED_ONE_OF = [
@@ -77,6 +79,9 @@ export function validateRuntimeEnvOrThrow(): void {
   if (isNextProductionBuildPhase()) {
     return;
   }
+
+  /** Fails fast before AI env checks — catches baked build ARG / missing DO runtime env on the bootstrap parent. */
+  assertRuntimeDatabaseEnvContract();
 
   const mode = getEnvValidationMode();
   if (mode === "off") {

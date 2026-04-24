@@ -2,13 +2,19 @@
  * Strict DATABASE_URL contract for runtime and CLI scripts.
  *
  * - Rejects Docker image build-time placeholder URLs (see Dockerfile history).
- * - Never logs credentials — only masked host + source hints.
+ * - Never logs credentials — only masked host + source hints (`[nn-db-contract]`).
  *
  * Opt-out (rare): `NN_SKIP_DATABASE_ENV_CONTRACT=1` (e.g. isolated unit tests that unset DATABASE_URL).
  */
 
 /** Substring match for the historical Docker build ARG default (must never be used as a real DB). */
 export const DOCKER_BUILD_PLACEHOLDER_DATABASE_URL_MARKER = "127.0.0.1:5432/postgres";
+
+/**
+ * Typical docker-compose / local default credentials + loopback host (must not be treated as production).
+ * Intentionally substring-based so encoded URLs still match when decoded into the same shape.
+ */
+export const REJECTED_DEFAULT_POSTGRES_LOCALHOST_CREDENTIALS = "postgres:postgres@127.0.0.1";
 
 export type DatabaseUrlContractSource = "process_env" | "dotenv" | "unknown";
 
@@ -46,9 +52,17 @@ export function isDatabaseContractSkippedPhase(): boolean {
   return false;
 }
 
-export function isDockerBuildPlaceholderDatabaseUrl(url: string): boolean {
+/** True when `DATABASE_URL` matches known localhost / image-default placeholders (never production). */
+export function isRejectedRuntimePlaceholderDatabaseUrl(url: string): boolean {
   const t = url.trim();
-  return t.includes(DOCKER_BUILD_PLACEHOLDER_DATABASE_URL_MARKER);
+  if (t.includes(DOCKER_BUILD_PLACEHOLDER_DATABASE_URL_MARKER)) return true;
+  if (t.includes(REJECTED_DEFAULT_POSTGRES_LOCALHOST_CREDENTIALS)) return true;
+  return false;
+}
+
+/** @alias Prefer {@link isRejectedRuntimePlaceholderDatabaseUrl} in new code. */
+export function isDockerBuildPlaceholderDatabaseUrl(url: string): boolean {
+  return isRejectedRuntimePlaceholderDatabaseUrl(url);
 }
 
 /**
@@ -112,9 +126,9 @@ export function requireDatabaseEnv(options?: RequireDatabaseEnvOptions): string 
     );
   }
 
-  if (isDockerBuildPlaceholderDatabaseUrl(raw)) {
+  if (isRejectedRuntimePlaceholderDatabaseUrl(raw)) {
     throw new Error(
-      "Detected placeholder DATABASE_URL from Docker build ARG. Refusing to use non-production DB.",
+      "DATABASE_URL matches a localhost placeholder (Docker default or postgres:postgres@127.0.0.1). Refusing to connect.",
     );
   }
 
@@ -138,9 +152,15 @@ export function requireDatabaseEnv(options?: RequireDatabaseEnvOptions): string 
  * - **Missing URL:** throws only in `NODE_ENV=production` runtime (development may run without a DB for static paths).
  */
 export function assertRuntimeDatabaseEnvContract(): void {
+  const raw = process.env.DATABASE_URL?.trim();
+  if (raw && isRejectedRuntimePlaceholderDatabaseUrl(raw)) {
+    throw new Error(
+      "DATABASE_URL matches a localhost placeholder (Docker default or postgres:postgres@127.0.0.1). Refusing to connect.",
+    );
+  }
+
   if (isDatabaseContractSkippedPhase()) return;
 
-  const raw = process.env.DATABASE_URL?.trim();
   if (!raw) {
     if (process.env.NODE_ENV === "production") {
       throw new Error(
@@ -148,12 +168,6 @@ export function assertRuntimeDatabaseEnvContract(): void {
       );
     }
     return;
-  }
-
-  if (isDockerBuildPlaceholderDatabaseUrl(raw)) {
-    throw new Error(
-      "Detected placeholder DATABASE_URL from Docker build ARG. Refusing to use non-production DB.",
-    );
   }
 
   const { host, port } = maskDatabaseUrlHostForLog(raw);

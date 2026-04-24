@@ -143,6 +143,8 @@ services:
         scope: RUN_TIME
         type: SECRET
       # Canonical production DB connection (DigitalOcean Managed PostgreSQL). Do not set a second conflicting URL.
+      # **RUN_TIME only** — never BUILD_TIME or BUILD_AND_RUN_TIME: a build-visible DATABASE_URL would bake into
+      # the image / build job and can override the real managed DB at runtime (see Dockerfile comments).
       - key: DATABASE_URL
         scope: RUN_TIME
         type: SECRET

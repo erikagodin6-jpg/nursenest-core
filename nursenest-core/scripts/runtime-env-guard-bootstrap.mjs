@@ -1,9 +1,16 @@
 /**
  * Plain-Node duplicate of `src/lib/env/runtime-env-guard.ts` for `start-standalone.mjs` and CLI checks
  * (production image has no TS runtime loader). **Keep in sync** with the TypeScript module.
+ *
+ * `assertRuntimeDatabaseEnvContractMjs` mirrors `src/lib/env/require-database-env.ts` → `assertRuntimeDatabaseEnvContract`
+ * (bootstrap parent has no TS / no `env-bootstrap` import — this is the only DB guard on that process).
  */
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+
+/** Must stay aligned with `require-database-env.ts` placeholder markers. */
+const DOCKER_BUILD_PLACEHOLDER_DATABASE_URL_MARKER = "127.0.0.1:5432/postgres";
+const REJECTED_DEFAULT_POSTGRES_LOCALHOST_CREDENTIALS = "postgres:postgres@127.0.0.1";
 
 const REQUIRED_RUNTIME_ENVS = ["AI_ADMIN_GENERATION_ENABLED"];
 
@@ -18,6 +25,102 @@ function getEnvValidationMode() {
   if (raw === "off") return "off";
   if (raw === "warn") return "warn";
   return "strict";
+}
+
+function safeArgvJoin() {
+  try {
+    const argv = globalThis.process?.argv;
+    if (!Array.isArray(argv)) return "";
+    return argv.join(" ");
+  } catch {
+    return "";
+  }
+}
+
+/** Mirrors `isDatabaseContractSkippedPhase` in `require-database-env.ts`. */
+function isDatabaseContractSkippedPhase() {
+  if (process.env.NN_SKIP_DATABASE_ENV_CONTRACT === "1") return true;
+  const argv = safeArgvJoin();
+  const lifecycle = process.env.npm_lifecycle_event ?? "";
+  if (lifecycle === "build") return true;
+  if (argv.includes("next build")) return true;
+  if (/prisma\s+generate\b/i.test(argv)) return true;
+  if (/run-prisma-with-env\.(?:mts?|cjs|js)\s+generate\b/i.test(argv)) return true;
+  if (process.env.NN_APP_PLATFORM_BUILD === "true") return true;
+  return false;
+}
+
+function isDockerBuildPlaceholderDatabaseUrl(url) {
+  return String(url).trim().includes(DOCKER_BUILD_PLACEHOLDER_DATABASE_URL_MARKER);
+}
+
+function isProductionLikeDatabaseHost(urlString) {
+  try {
+    const u = new URL(urlString);
+    const h = u.hostname.toLowerCase();
+    if (h === "localhost" || h === "127.0.0.1" || h === "::1") return false;
+    if (h.endsWith(".local")) return false;
+    if (h === "0.0.0.0") return false;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function maskDatabaseUrlHostForLog(urlString) {
+  try {
+    const u = new URL(urlString);
+    const host = u.hostname;
+    const port = u.port || (u.protocol === "postgresql:" || u.protocol === "postgres:" ? "5432" : "");
+    if (!host) return { host: "(unparseable)", port: port || "?" };
+    const parts = host.split(".").filter(Boolean);
+    if (parts.length <= 1) {
+      return { host: `${host.slice(0, 1)}***`, port: port || "default" };
+    }
+    const tld = parts.slice(-2).join(".");
+    const first = parts[0];
+    return { host: `${first.slice(0, 1)}***.${tld}`, port: port || "default" };
+  } catch {
+    return { host: "(unparseable)", port: "?" };
+  }
+}
+
+let dbContractLogEmitted = false;
+
+function logDatabaseContractLine(payload) {
+  if (dbContractLogEmitted) return;
+  dbContractLogEmitted = true;
+  console.info(`[nn-db-startup] ${JSON.stringify(payload)}`);
+}
+
+/** Mirrors `assertRuntimeDatabaseEnvContract` in `require-database-env.ts`. */
+function assertRuntimeDatabaseEnvContractMjs() {
+  if (isDatabaseContractSkippedPhase()) return;
+
+  const raw = process.env.DATABASE_URL?.trim();
+  if (!raw) {
+    if (process.env.NODE_ENV === "production") {
+      throw new Error(
+        "DATABASE_URL is missing in runtime environment (not build ARG). Ensure .env.local or runtime env is set.",
+      );
+    }
+    return;
+  }
+
+  if (isDockerBuildPlaceholderDatabaseUrl(raw)) {
+    throw new Error(
+      "Detected placeholder DATABASE_URL from Docker build ARG. Refusing to use non-production DB.",
+    );
+  }
+
+  const { host, port } = maskDatabaseUrlHostForLog(raw);
+  logDatabaseContractLine({
+    context: "runtime-env-guard-bootstrap",
+    database_url_source: "process_env",
+    host_masked: host,
+    port,
+    isProductionDb: isProductionLikeDatabaseHost(raw),
+  });
 }
 
 function collectMissingRuntimeEnvIssues() {
@@ -63,6 +166,8 @@ export function validateRuntimeEnvOrThrow() {
   if (isNextProductionBuildPhase()) {
     return;
   }
+
+  assertRuntimeDatabaseEnvContractMjs();
 
   const mode = getEnvValidationMode();
   if (mode === "off") {

@@ -13,14 +13,11 @@
 import bcrypt from "bcryptjs";
 import { Prisma, PrismaClient } from "@prisma/client";
 
+import "./load-dotenv-for-cli.mts";
+import "../src/lib/db/script-env-bootstrap";
 import { databaseUrlSource } from "../src/lib/db/env-bootstrap";
 import { maskDatabaseUrl } from "../src/lib/db/database-env";
 import { isStaffRole, staffTierFromRole } from "../src/lib/auth/staff-roles";
-
-if (!process.env.DATABASE_URL?.trim()) {
-  console.error("DATABASE_URL is not set.");
-  process.exit(1);
-}
 
 const prisma = new PrismaClient();
 

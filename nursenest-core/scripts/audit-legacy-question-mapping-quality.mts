@@ -13,7 +13,7 @@ import { PrismaClient } from "@prisma/client";
 
 import { requireDatabaseUrlForLiveImport } from "./lib/require-database-for-live-import.mts";
 
-import "../src/lib/db/env-bootstrap";
+import "../src/lib/db/script-env-bootstrap";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = join(__dirname, "..");

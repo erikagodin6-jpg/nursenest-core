@@ -7,15 +7,10 @@
 import { Prisma } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
 import { normalizeEmailForDedup } from "../../src/lib/auth/email-address-normalization";
 import { normalizeLoginIdentifier } from "../../src/lib/auth/normalize-login-identifier";
 import { isStaffRole } from "../../src/lib/auth/staff-roles";
-
-if (!process.env.DATABASE_URL?.trim()) {
-  console.error("DATABASE_URL is not set.");
-  process.exit(1);
-}
 
 const prisma = new PrismaClient();
 

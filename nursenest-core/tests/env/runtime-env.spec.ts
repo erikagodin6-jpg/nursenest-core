@@ -66,4 +66,55 @@ test.describe("runtime-env-guard bootstrap", () => {
     const out = `${result.stderr}\n${result.stdout}`;
     expect(out).not.toContain("[ENV VALIDATION ERROR]");
   });
+
+  test("production exits non-zero when DATABASE_URL is missing (before AI env checks)", () => {
+    const result = spawnSync(process.execPath, [bootstrapScript], {
+      cwd: nursenestCoreRoot,
+      env: {
+        ...stripAiRuntimeEnv(),
+        NODE_ENV: "production",
+        NN_ENV_VALIDATION_MODE: "off",
+        DATABASE_URL: "",
+      },
+      encoding: "utf8",
+    });
+
+    expect(result.status).not.toBe(0);
+    const out = `${result.stderr}\n${result.stdout}`;
+    expect(out).toMatch(/DATABASE_URL is missing/i);
+  });
+
+  test("production exits non-zero when DATABASE_URL is the Docker build placeholder", () => {
+    const result = spawnSync(process.execPath, [bootstrapScript], {
+      cwd: nursenestCoreRoot,
+      env: {
+        ...stripAiRuntimeEnv(),
+        NODE_ENV: "production",
+        NN_ENV_VALIDATION_MODE: "off",
+        DATABASE_URL: "postgresql://postgres:postgres@127.0.0.1:5432/postgres?schema=public",
+      },
+      encoding: "utf8",
+    });
+
+    expect(result.status).not.toBe(0);
+    const out = `${result.stderr}\n${result.stdout}`;
+    expect(out).toMatch(/placeholder DATABASE_URL/i);
+  });
+
+  test("production with real-looking DATABASE_URL and NN_ENV_VALIDATION_MODE=off exits zero", () => {
+    const result = spawnSync(process.execPath, [bootstrapScript], {
+      cwd: nursenestCoreRoot,
+      env: {
+        ...stripAiRuntimeEnv(),
+        NODE_ENV: "production",
+        NN_ENV_VALIDATION_MODE: "off",
+        DATABASE_URL: "postgresql://u:p@db.ondigitalocean.com:25061/defaultdb?sslmode=require",
+      },
+      encoding: "utf8",
+    });
+
+    expect(result.status).toBe(0);
+    const out = `${result.stderr}\n${result.stdout}`;
+    expect(out).toContain("[nn-db-startup]");
+  });
 });

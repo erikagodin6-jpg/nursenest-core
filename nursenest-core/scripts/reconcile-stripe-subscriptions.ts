@@ -10,7 +10,7 @@
  * Env: DATABASE_URL, STRIPE_SECRET_KEY
  * Out: data/audit/stripe-reconciliation.json (monorepo root)
  */
-import "../src/lib/db/env-bootstrap";
+import "../src/lib/db/script-env-bootstrap";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";

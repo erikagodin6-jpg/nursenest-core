@@ -26,21 +26,52 @@ function parseArgs(argv: string[]): { excludedSampleLimit: number } {
   return { excludedSampleLimit };
 }
 
-function exclusionReason(row: {
-  postStatus: BlogPostStatus;
-  publishAt: Date | null;
-  scheduledAt: Date | null;
-}): string {
-  const { postStatus, publishAt, scheduledAt } = row;
+/** Keep aligned with `src/lib/blog/blog-visibility.ts` pipeline gate for PUBLISHED / due SCHEDULED. */
+const WORKFLOW_PIPELINE_IN_PROGRESS: readonly BlogWorkflowStatus[] = [
+  BlogWorkflowStatus.OUTLINE_READY,
+  BlogWorkflowStatus.GENERATED,
+  BlogWorkflowStatus.NEEDS_SOURCE_REVIEW,
+  BlogWorkflowStatus.NEEDS_MEDICAL_REVIEW,
+  BlogWorkflowStatus.NEEDS_SEO_REVIEW,
+  BlogWorkflowStatus.NEEDS_METADATA,
+  BlogWorkflowStatus.NEEDS_REFERENCES,
+] as const;
+
+function exclusionReason(
+  row: {
+    postStatus: BlogPostStatus;
+    publishAt: Date | null;
+    scheduledAt: Date | null;
+    workflowStatus: BlogWorkflowStatus | null;
+  },
+  now: Date,
+): string {
+  const { postStatus, publishAt, scheduledAt, workflowStatus } = row;
+  if (workflowStatus === BlogWorkflowStatus.FAILED_GENERATION || workflowStatus === BlogWorkflowStatus.FAILED_IMAGE) {
+    return `workflowStatus=${workflowStatus} (blocked from public lists)`;
+  }
   if (postStatus === BlogPostStatus.DRAFT) return "status=DRAFT (not live)";
   if (postStatus === BlogPostStatus.NEEDS_REVIEW) return "status=NEEDS_REVIEW";
-  if (postStatus === BlogPostStatus.APPROVED) return "unexpected: APPROVED matches blogLiveWhere (public-ready)";
+  if (postStatus === BlogPostStatus.APPROVED) {
+    return "unexpected: APPROVED with non-failed workflow should match blogLiveWhere (public-ready)";
+  }
   if (postStatus === BlogPostStatus.FAILED) return "status=FAILED";
-  if (postStatus === BlogPostStatus.PUBLISHED) return "unexpected: PUBLISHED should match blogLiveWhere";
+  if (postStatus === BlogPostStatus.PUBLISHED) {
+    if (publishAt != null && publishAt.getTime() > now.getTime()) {
+      return `status=PUBLISHED but publishAt ${publishAt.toISOString()} is in the future (embargo)`;
+    }
+    if (workflowStatus != null && WORKFLOW_PIPELINE_IN_PROGRESS.includes(workflowStatus)) {
+      return `status=PUBLISHED but workflowStatus=${workflowStatus} (editorial pipeline)`;
+    }
+    return "unexpected: PUBLISHED should match blogLiveWhere";
+  }
   if (postStatus === BlogPostStatus.SCHEDULED) {
+    if (workflowStatus != null && WORKFLOW_PIPELINE_IN_PROGRESS.includes(workflowStatus)) {
+      return `status=SCHEDULED but workflowStatus=${workflowStatus} (editorial pipeline)`;
+    }
     const gate = publishAt ?? scheduledAt;
     if (!gate) return "status=SCHEDULED but publishAt and scheduledAt are null";
-    if (gate.getTime() > Date.now()) return `status=SCHEDULED, gate ${gate.toISOString()} is in the future`;
+    if (gate.getTime() > now.getTime()) return `status=SCHEDULED, gate ${gate.toISOString()} is in the future`;
     return "status=SCHEDULED (unexpected)";
   }
   return `status=${postStatus}`;
@@ -132,6 +163,7 @@ async function main(): Promise<void> {
         postStatus: true,
         publishAt: true,
         scheduledAt: true,
+        workflowStatus: true,
         updatedAt: true,
         adminPublishLog: true,
       },
@@ -143,16 +175,26 @@ async function main(): Promise<void> {
       title: r.title.slice(0, 120),
       locale: r.locale,
       postStatus: r.postStatus,
+      workflowStatus: r.workflowStatus,
       publishAt: r.publishAt?.toISOString() ?? null,
       scheduledAt: r.scheduledAt?.toISOString() ?? null,
       updatedAt: r.updatedAt.toISOString(),
-      exclusionReason: exclusionReason(r),
+      exclusionReason: exclusionReason(
+        {
+          postStatus: r.postStatus,
+          publishAt: r.publishAt,
+          scheduledAt: r.scheduledAt,
+          workflowStatus: r.workflowStatus,
+        },
+        now,
+      ),
       matchesControlPanelDraftLog: isControlPanelAiDraftLog(r.adminPublishLog),
       liveByPredicate: blogPostIsLive(
         {
           postStatus: r.postStatus,
           publishAt: r.publishAt,
           scheduledAt: r.scheduledAt,
+          workflowStatus: r.workflowStatus,
         },
         now,
       ),

@@ -10,7 +10,7 @@
  * Does not overwrite published posts (skips if slug exists).
  * Processes one post at a time (sequential loop).
  */
-import "../src/lib/db/env-bootstrap";
+import "../src/lib/db/script-env-bootstrap";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";

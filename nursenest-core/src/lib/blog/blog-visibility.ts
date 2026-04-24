@@ -62,7 +62,7 @@ function workflowIsFailed(ws: BlogWorkflowStatus | null | undefined): boolean {
   return ws != null && BLOG_WORKFLOW_FAILURES.includes(ws);
 }
 
-/** Matches {@link blogLiveWhere} `workflowReleasedForTimedPosts` (PUBLISHED / due SCHEDULED). */
+/** For **SCHEDULED** `postStatus` rows (calendar go-live), allow workflow once failures/pipeline are cleared. */
 function workflowReleasedForPublicTimedPost(ws: BlogWorkflowStatus | null | undefined): boolean {
   if (ws == null) return true;
   return !BLOG_WORKFLOW_FAILURES.includes(ws) && !BLOG_WORKFLOW_PIPELINE_IN_PROGRESS.includes(ws);
@@ -93,7 +93,8 @@ export function blogPostIsLive(
    * Aligns with {@link blogLiveWhere} and SQL `sqlBlogLiveWhere` used by diagnostics counts.
    */
   if (row.postStatus === BlogPostStatus.PUBLISHED) {
-    if (!workflowReleasedForPublicTimedPost(row.workflowStatus)) return false;
+    /** Canonical marketing posts: `PUBLISHED` must pair with `workflowStatus` **PUBLISHED** (generated + editorial ship). */
+    if (row.workflowStatus !== BlogWorkflowStatus.PUBLISHED) return false;
     if (row.publishAt == null) return true;
     return row.publishAt.getTime() <= now.getTime();
   }
@@ -107,7 +108,12 @@ export function blogPostIsLive(
 
 /** True when list/metadata should treat the row as public (draft-like statuses excluded; live gate). */
 export function isBlogPostMarketingMetaVisible(
-  meta: { postStatus: BlogPostStatus; publishAt: Date | null; scheduledAt: Date | null },
+  meta: {
+    postStatus: BlogPostStatus;
+    publishAt: Date | null;
+    scheduledAt: Date | null;
+    workflowStatus?: BlogWorkflowStatus | null;
+  },
   now: Date = new Date(),
 ): boolean {
   if (
@@ -117,7 +123,15 @@ export function isBlogPostMarketingMetaVisible(
   ) {
     return false;
   }
-  return blogPostIsLive(meta, now);
+  return blogPostIsLive(
+    {
+      postStatus: meta.postStatus,
+      publishAt: meta.publishAt,
+      scheduledAt: meta.scheduledAt,
+      workflowStatus: meta.workflowStatus,
+    },
+    now,
+  );
 }
 
 /** Prisma filter for list/count/sitemap/tag queries. */
@@ -136,7 +150,7 @@ export function blogLiveWhere(now: Date = new Date()): Prisma.BlogPostWhereInput
           {
             OR: [{ publishAt: null }, { publishAt: { lte: now } }],
           },
-          workflowReleasedForTimedPosts,
+          { workflowStatus: BlogWorkflowStatus.PUBLISHED },
         ],
       },
       {

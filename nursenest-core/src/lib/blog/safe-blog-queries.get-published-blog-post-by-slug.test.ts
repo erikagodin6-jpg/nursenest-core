@@ -2,7 +2,7 @@ import "./blog-public-read-tests-env";
 import assert from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
 import type { BlogPost } from "@prisma/client";
-import { BlogPostStatus } from "@prisma/client";
+import { BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { getPublishedBlogPostBySlug } from "@/lib/blog/safe-blog-queries";
 
@@ -33,6 +33,7 @@ function stubFindUniqueForSlug(
     updatedAt: new Date("2024-01-02T00:00:00Z"),
     body: "<p>x</p>",
     excerpt: "excerpt",
+    workflowStatus: BlogWorkflowStatus.PUBLISHED,
     ...partial,
   } as BlogPost;
   prisma.blogPost.findUnique = (async (args) => {
@@ -76,6 +77,16 @@ describe("getPublishedBlogPostBySlug visibility (matches blogLiveWhere / list su
     assert.equal(got.postStatus, BlogPostStatus.PUBLISHED);
   });
 
+  it("returns null for PUBLISHED when workflow is not PUBLISHED (matches blogLiveWhere)", async () => {
+    stubFindUniqueForSlug("pub-wf-approved", {
+      postStatus: BlogPostStatus.PUBLISHED,
+      publishAt: new Date("2024-06-01T00:00:00Z"),
+      scheduledAt: null,
+      workflowStatus: BlogWorkflowStatus.APPROVED,
+    });
+    assert.equal(await getPublishedBlogPostBySlug("pub-wf-approved"), null);
+  });
+
   it("returns null for PUBLISHED when publishAt is in the future (embargo; matches blogLiveWhere)", async () => {
     stubFindUniqueForSlug("pub-future", {
       postStatus: BlogPostStatus.PUBLISHED,
@@ -108,6 +119,7 @@ describe("getPublishedBlogPostBySlug visibility (matches blogLiveWhere / list su
       postStatus: BlogPostStatus.APPROVED,
       publishAt: null,
       scheduledAt: null,
+      workflowStatus: BlogWorkflowStatus.APPROVED,
     });
     const got = await getPublishedBlogPostBySlug("approved");
     assert.ok(got);

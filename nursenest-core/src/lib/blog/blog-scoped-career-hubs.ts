@@ -32,10 +32,12 @@ export function isAlliedBlogProfessionCareerSlug(careerSlug: string | null | und
 /**
  * Default marketing locale scope for allied + nursing scoped hubs (mirrors route loaders).
  */
-export function defaultMarketingScopedBlogScope(careerSlug: string): Pick<
-  BlogQueryScope,
-  "locale" | "sourceLocale" | "careerSlug" | "allowSourceLocaleFallback"
-> {
+export function defaultMarketingScopedBlogScope(careerSlug: string): {
+  locale: string;
+  sourceLocale: string;
+  careerSlug: string;
+  allowSourceLocaleFallback: boolean;
+} {
   return {
     locale: "en",
     sourceLocale: "en",

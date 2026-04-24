@@ -25,7 +25,7 @@ import { assertLiveImportPreconditions } from "./lib/import-live-guards.mts";
 import { assertSourceFileBounded } from "./lib/import-fs-guards.mts";
 import { logImportProgressLine, truncateImportMessage } from "./lib/import-safe-log.mts";
 
-import "../src/lib/db/env-bootstrap";
+import "../src/lib/db/script-env-bootstrap";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = join(__dirname, "..");

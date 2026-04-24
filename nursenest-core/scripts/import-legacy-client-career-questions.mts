@@ -26,7 +26,7 @@ import { examQuestionScopedDedupeKey, loadExistingScopedKeys } from "./lib/impor
 import { readCheckpoint, writeCheckpoint } from "./lib/import-checkpoint.mts";
 import { logImportProgressLine, truncateImportMessage } from "./lib/import-safe-log.mts";
 
-import "../src/lib/db/env-bootstrap";
+import "../src/lib/db/script-env-bootstrap";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = join(__dirname, "..");

@@ -8,7 +8,7 @@
  *
  * Usage: `npm run db:validate-url-shape`
  */
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
 import {
   evaluateDatabaseUrlShape,
   runDatabaseUrlShapeGuardForProcess,

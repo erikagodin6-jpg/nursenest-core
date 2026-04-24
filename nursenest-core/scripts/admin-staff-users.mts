@@ -7,12 +7,7 @@
  */
 import { PrismaClient, UserRole } from "@prisma/client";
 
-import "../src/lib/db/env-bootstrap";
-
-if (!process.env.DATABASE_URL?.trim()) {
-  console.error("DATABASE_URL is not set. Configure Postgres and retry.");
-  process.exit(1);
-}
+import "../src/lib/db/script-env-bootstrap";
 
 const prisma = new PrismaClient();
 

@@ -15,6 +15,18 @@ import { fileURLToPath } from "node:url";
 import "./load-dotenv-for-cli.mts";
 import { assertDatabaseUrlPresentOrExit } from "./lib/database-env-assert.mts";
 
+/** `load-dotenv-for-cli.mts` already clears invalid `PRISMA_CLI_USE_DIRECT_URL`; repeat here so any future import reorder cannot skip it. */
+function ensurePrismaCliDirectUrlFlagConsistent(): void {
+  const direct = process.env.DIRECT_URL?.trim() ?? process.env.DATABASE_DIRECT_URL?.trim();
+  if (process.env.PRISMA_CLI_USE_DIRECT_URL === "1" && !direct) {
+    delete process.env.PRISMA_CLI_USE_DIRECT_URL;
+    console.warn(
+      "[run-prisma-with-env] PRISMA_CLI_USE_DIRECT_URL=1 but DIRECT_URL/DATABASE_DIRECT_URL is unset — Prisma will use DATABASE_URL.",
+    );
+  }
+}
+ensurePrismaCliDirectUrlFlagConsistent();
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(__dirname, "..");
 
