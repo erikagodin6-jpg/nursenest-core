@@ -14,7 +14,7 @@ import { ContentStatus, PrismaClient } from "@prisma/client";
 import { blogPostIsLive } from "../src/lib/blog/blog-visibility";
 import { PATHOPHYSIOLOGY_SEED_LEGACY_SOURCE } from "../src/lib/blog/safe-blog-queries";
 import { ensurePublicBlogPostVisibilityForSeed } from "../src/lib/content/ensure-public-visibility";
-import "../src/lib/db/env-bootstrap";
+import "../src/lib/db/script-env-bootstrap";
 import { publicMarketingFlashcardDeckWhere } from "../src/lib/entitlements/content-access-scope";
 
 const CANADA_RN_NCLEX_PATHWAY_ID = "ca-rn-nclex-rn" as const;

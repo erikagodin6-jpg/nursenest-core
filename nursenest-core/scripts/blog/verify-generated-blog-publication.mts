@@ -1,75 +1,96 @@
 #!/usr/bin/env npx tsx
 /**
- * Verifies long-tail patho/pharm regeneration posts are public, complete, and counted as topical/long-tail.
+ * Verifies posts created by `generate-patho-pharm-longtail-posts.mts`:
+ * published, live under blogLiveWhere(now), SEO, references, FAQ, schema metadata.
  *
- *   npm run blog:verify-generated-publication
+ *   DOTENV_CONFIG_PATH=.env.local npm run blog:verify-generated-publication
+ *
+ * Exit 1 if any generated post fails checks or none exist (set VERIFY_ALLOW_EMPTY=1 to allow zero rows).
+ *
+ * Optional HTTP smoke (production or preview origin):
+ *   VERIFY_HTTP=1 NURSENEST_ORIGIN=https://example.com npm run blog:verify-generated-publication
+ * (falls back to NEXT_PUBLIC_SITE_URL if NURSENEST_ORIGIN unset)
  */
 import "../../src/lib/db/script-env-bootstrap";
-import { BlogPostStatus, BlogWorkflowStatus, PrismaClient } from "@prisma/client";
 
-import { blogLiveWhere } from "../../src/lib/blog/blog-visibility";
-import { sqlBlogLiveWhere, sqlPathoPharmLongTail, sqlPathoPharmTopical } from "../../src/lib/blog/blog-patho-pharm-detection";
-import { validatePostContent } from "./lib/patho-pharm-longtail-content";
+import { BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
 
-const prisma = new PrismaClient();
-const LEGACY_SOURCE = "patho-pharm-longtail-regeneration";
+import {
+  rowMatchesLongTailHeuristics,
+  rowMatchesPathoPharmTopicalCriteria,
+} from "../../src/lib/blog/blog-patho-pharm-detection";
+import { blogLiveWhere, blogPostIsLive } from "../../src/lib/blog/blog-visibility";
+import { prisma } from "../lib/prisma-script-client";
+import { PATHO_PHARM_LONGTAIL_LEGACY_SOURCE } from "./lib/patho-pharm-longtail-post-builder";
 
-type PathoCounts = {
-  visible_public_total: number;
-  patho_pharm_topical: number;
-  patho_pharm_long_tail: number;
-};
+type FailRow = { slug: string; reasons: string[] };
 
-async function readPathoCounts(now: Date): Promise<PathoCounts> {
-  const live = sqlBlogLiveWhere("p", "$1");
-  const topical = sqlPathoPharmTopical("p");
-  const lt = sqlPathoPharmLongTail("p");
-  const rows = await prisma.$queryRawUnsafe<
-    Array<{
-      visible_public_total: number;
-      patho_pharm_topical: number;
-      patho_pharm_long_tail: number;
-    }>
-  >(
-    `SELECT
-      (SELECT COUNT(*)::int FROM "BlogPost" p WHERE ${live}) AS visible_public_total,
-      (SELECT COUNT(*)::int FROM "BlogPost" p WHERE ${live} AND ${topical}) AS patho_pharm_topical,
-      (SELECT COUNT(*)::int FROM "BlogPost" p WHERE ${live} AND ${topical} AND ${lt}) AS patho_pharm_long_tail`,
-    now,
-  );
-  return rows[0] ?? { visible_public_total: 0, patho_pharm_topical: 0, patho_pharm_long_tail: 0 };
-}
-
-function faqItemCountFromBlock(block: unknown): number {
-  if (block == null) return 0;
-  let o: unknown = block;
-  if (typeof block === "string") {
-    try {
-      o = JSON.parse(block) as unknown;
-    } catch {
-      return 0;
+async function mapWithConcurrency<T, R>(items: T[], concurrency: number, fn: (item: T) => Promise<R>): Promise<R[]> {
+  const out: R[] = new Array(items.length);
+  let next = 0;
+  const worker = async () => {
+    while (true) {
+      const idx = next++;
+      if (idx >= items.length) break;
+      out[idx] = await fn(items[idx]!);
     }
-  }
-  if (typeof o !== "object" || o === null || Array.isArray(o)) return 0;
-  const items = (o as { items?: unknown }).items;
-  return Array.isArray(items) ? items.length : 0;
+  };
+  const n = Math.max(1, Math.min(concurrency, items.length || 1));
+  await Promise.all(Array.from({ length: n }, () => worker()));
+  return out;
 }
 
-function schemaGraphTypes(schemaSummary: string | null): string[] {
-  if (!schemaSummary?.trim()) return [];
+/** When VERIFY_HTTP=1, GET /blog and each /blog/{slug} (200 expected). */
+async function verifyHttpForSlugs(origin: string, slugs: string[]): Promise<FailRow[]> {
+  const base = origin.replace(/\/$/, "");
+  const fails: FailRow[] = [];
   try {
-    const j = JSON.parse(schemaSummary) as { "@graph"?: Array<{ "@type"?: string | string[] }> };
-    const g = j["@graph"];
-    if (!Array.isArray(g)) return [];
-    return g.flatMap((node) => {
-      const t = node["@type"];
-      if (Array.isArray(t)) return t;
-      if (typeof t === "string") return [t];
-      return [];
-    });
-  } catch {
-    return ["parse_error"];
+    const r = await fetch(`${base}/blog`, { redirect: "follow" });
+    if (!r.ok) fails.push({ slug: "__blog_index__", reasons: [`http_blog_index_status_${r.status}`] });
+  } catch (e) {
+    fails.push({ slug: "__blog_index__", reasons: [`http_blog_index_error:${String(e)}`] });
   }
+  const results = await mapWithConcurrency(slugs, 8, async (slug) => {
+    try {
+      const r = await fetch(`${base}/blog/${encodeURIComponent(slug)}`, { redirect: "follow" });
+      if (!r.ok) return { slug, reasons: [`http_detail_status_${r.status}`] as string[] };
+    } catch (e) {
+      return { slug, reasons: [`http_detail_error:${String(e)}`] };
+    }
+    return null;
+  });
+  for (const x of results) {
+    if (x) fails.push(x);
+  }
+  return fails;
+}
+
+function assertSchema(schemaSummary: string | null): string[] {
+  const reasons: string[] = [];
+  if (!schemaSummary?.trim()) {
+    reasons.push("missing_schemaSummary");
+    return reasons;
+  }
+  const hasArticle = schemaSummary.includes('"@type":"Article"') || schemaSummary.includes('"@type": "Article"');
+  const hasBlogPosting =
+    schemaSummary.includes('"@type":"BlogPosting"') || schemaSummary.includes('"@type": "BlogPosting"');
+  if (!hasArticle && !hasBlogPosting) reasons.push("schema_missing_Article_or_BlogPosting");
+  if (!schemaSummary.includes("BreadcrumbList")) reasons.push("schema_missing_BreadcrumbList");
+  if (!schemaSummary.includes("FAQPage")) reasons.push("schema_missing_FAQPage");
+  return reasons;
+}
+
+function assertFaq(body: string, faqBlock: unknown): string[] {
+  const reasons: string[] = [];
+  if (!/frequently asked questions/i.test(body)) reasons.push("body_missing_faq_heading");
+  if ((body.match(/<h3\b/gi) ?? []).length < 3) reasons.push("body_faq_h3_below_3");
+  if (faqBlock == null || typeof faqBlock !== "object" || faqBlock === null) {
+    reasons.push("faqBlock_missing");
+  } else {
+    const items = (faqBlock as { items?: unknown }).items;
+    if (!Array.isArray(items) || items.length < 3) reasons.push("faqBlock_items_below_3");
+  }
+  return reasons;
 }
 
 async function main(): Promise<void> {
@@ -79,136 +100,139 @@ async function main(): Promise<void> {
   }
 
   const now = new Date();
-  const pathoGlobal = await readPathoCounts(now);
+  const allowEmpty = process.env.VERIFY_ALLOW_EMPTY?.trim() === "1";
 
-  const posts = await prisma.blogPost.findMany({
-    where: { legacySource: LEGACY_SOURCE },
+  const rows = await prisma.blogPost.findMany({
+    where: { legacySource: PATHO_PHARM_LONGTAIL_LEGACY_SOURCE },
     select: {
-      id: true,
       slug: true,
       title: true,
       body: true,
-      postStatus: true,
-      publishAt: true,
-      workflowStatus: true,
+      excerpt: true,
       category: true,
       postTemplate: true,
-      tags: true,
+      postStatus: true,
+      publishAt: true,
+      scheduledAt: true,
+      workflowStatus: true,
       seoTitle: true,
       seoDescription: true,
       apaReferences: true,
-      faqBlock: true,
       schemaSummary: true,
+      faqBlock: true,
+      targetKeyword: true,
+      tags: true,
     },
   });
 
-  if (posts.length === 0) {
-    console.log(
-      JSON.stringify(
-        {
-          ok: false,
-          reason: "no_posts_with_legacy_source",
-          legacySource: LEGACY_SOURCE,
-          hint: "Run APPLY_BLOG_GENERATION=1 npm run blog:generate-patho-pharm-longtail first.",
-        },
-        null,
-        2,
-      ),
-    );
+  if (rows.length === 0 && !allowEmpty) {
+    console.error("[verify-generated-blog-publication] No posts with legacySource patho-pharm-longtail-regeneration.");
     process.exit(1);
   }
 
-  const visibleRows = await prisma.blogPost.findMany({
-    where: { legacySource: LEGACY_SOURCE, AND: [blogLiveWhere(now)] },
-    select: { id: true },
-  });
-  const visibleIdSet = new Set(visibleRows.map((r) => r.id));
+  const failures: FailRow[] = [];
 
-  const rowIssues: Array<{ slug: string; issues: string[] }> = [];
-  let internalBlogLinksLt3 = 0;
+  for (const row of rows) {
+    const reasons: string[] = [];
 
-  for (const p of posts) {
-    const issues: string[] = [];
-    if (p.postStatus !== BlogPostStatus.PUBLISHED) issues.push("postStatus_not_PUBLISHED");
-    if (p.workflowStatus !== BlogWorkflowStatus.PUBLISHED) issues.push("workflowStatus_not_PUBLISHED");
-    if (!p.publishAt) issues.push("publishAt_missing");
-    else if (p.publishAt.getTime() > now.getTime()) issues.push("publishAt_in_future");
-    if (!visibleIdSet.has(p.id)) issues.push("not_visible_via_blogLiveWhere");
-    if (!p.category?.trim()) issues.push("category_missing");
-    if (!p.postTemplate) issues.push("postTemplate_missing");
-    if (!p.tags?.length) issues.push("tags_missing");
-    if (!p.seoTitle?.trim()) issues.push("seoTitle_missing");
-    if (!p.seoDescription?.trim()) issues.push("seoDescription_missing");
-    if (!p.apaReferences?.length || p.apaReferences.length < 3) issues.push("apaReferences_lt_3");
+    if (row.postStatus !== BlogPostStatus.PUBLISHED) {
+      reasons.push(`postStatus_not_PUBLISHED:${row.postStatus}`);
+    }
+    if (row.workflowStatus !== BlogWorkflowStatus.PUBLISHED) {
+      reasons.push(`workflowStatus_not_PUBLISHED:${row.workflowStatus}`);
+    }
+    if (!row.publishAt || row.publishAt.getTime() > now.getTime()) {
+      reasons.push("publishAt_missing_or_future");
+    }
+    if (!blogPostIsLive(row, now)) {
+      reasons.push("not_visible_under_blogLiveWhere");
+    }
+    if (!row.category?.trim()) reasons.push("missing_category");
+    if (!row.postTemplate) reasons.push("missing_postTemplate");
+    const st = row.seoTitle?.trim() ?? "";
+    const sd = row.seoDescription?.trim() ?? "";
+    if (st.length < 8) reasons.push("seoTitle_too_short");
+    if (st.length > 60) reasons.push("seoTitle_over_60_chars");
+    if (sd.length < 40) reasons.push("seoDescription_too_short");
+    if (sd.length > 155) reasons.push("seoDescription_over_155_chars");
+    if (!row.apaReferences || row.apaReferences.length < 3) reasons.push("apaReferences_below_3");
+    else if (!row.apaReferences.every((line) => /https?:\/\//i.test(line))) {
+      reasons.push("apa_reference_missing_url");
+    }
+    reasons.push(...assertFaq(row.body, row.faqBlock));
+    reasons.push(...assertSchema(row.schemaSummary));
 
-    const blogLinks = (p.body.match(/href="\/blog\//g) ?? []).length;
-    if (blogLinks < 3) internalBlogLinksLt3 += 1;
+    if (
+      !rowMatchesPathoPharmTopicalCriteria({
+        postTemplate: row.postTemplate,
+        category: row.category,
+        title: row.title,
+        tags: row.tags,
+      })
+    ) {
+      reasons.push("fails_patho_pharm_topical_criteria");
+    }
+    if (
+      !rowMatchesLongTailHeuristics({
+        slug: row.slug,
+        title: row.title,
+        targetKeyword: row.targetKeyword,
+      })
+    ) {
+      reasons.push("fails_patho_pharm_long_tail_heuristics");
+    }
 
-    const contentErr = validatePostContent(p.body, p.title, 0);
-    if (contentErr) issues.push(`content_gate:${contentErr}`);
-
-    const faqItems = faqItemCountFromBlock(p.faqBlock);
-    if (faqItems < 3) issues.push("faqBlock_items_lt_3");
-
-    const types = schemaGraphTypes(p.schemaSummary);
-    if (!types.includes("BlogPosting")) issues.push("schemaSummary_missing_BlogPosting");
-    if (!types.includes("BreadcrumbList")) issues.push("schemaSummary_missing_BreadcrumbList");
-    if (!types.includes("FAQPage")) issues.push("schemaSummary_missing_FAQPage");
-
-    if (issues.length) rowIssues.push({ slug: p.slug, issues });
+    if (reasons.length) failures.push({ slug: row.slug, reasons: Array.from(new Set(reasons)) });
   }
 
-  const liveSql = sqlBlogLiveWhere("p", "$1");
-  const topicalSql = sqlPathoPharmTopical("p");
-  const longTailSql = sqlPathoPharmLongTail("p");
-
-  const topicalRows = await prisma.$queryRawUnsafe<Array<{ c: number }>>(
-    `SELECT COUNT(*)::int as c FROM "BlogPost" p WHERE p."legacySource" = $2 AND ${liveSql} AND ${topicalSql}`,
-    now,
-    LEGACY_SOURCE,
-  );
-  const longTailRows = await prisma.$queryRawUnsafe<Array<{ c: number }>>(
-    `SELECT COUNT(*)::int as c FROM "BlogPost" p WHERE p."legacySource" = $2 AND ${liveSql} AND ${topicalSql} AND ${longTailSql}`,
-    now,
-    LEGACY_SOURCE,
-  );
-
-  const pathoPharmTopicalForLegacy = topicalRows[0]?.c ?? 0;
-  const pathoPharmLongTailForLegacy = longTailRows[0]?.c ?? 0;
-  const pathoCountsOk = pathoPharmTopicalForLegacy > 0 || pathoPharmLongTailForLegacy > 0;
-
-  const minVisible = process.env.BLOG_VERIFY_MIN_VISIBLE_PUBLIC?.trim();
-  const visibleFloorOk =
-    !minVisible ||
-    pathoGlobal.visible_public_total >= (parseInt(minVisible, 10) || 0);
-
-  const ok =
-    rowIssues.length === 0 &&
-    visibleIdSet.size === posts.length &&
-    pathoCountsOk &&
-    visibleFloorOk;
-
-  console.log(
-    JSON.stringify(
-      {
-        ok,
-        legacySource: LEGACY_SOURCE,
-        postCount: posts.length,
-        visibleThroughBlogLiveWhereCount: visibleIdSet.size,
-        pathoPharmTopicalCountForLegacy: pathoPharmTopicalForLegacy,
-        pathoPharmLongTailCountForLegacy: pathoPharmLongTailForLegacy,
-        pathoGlobalCounts: pathoGlobal,
-        internalBlogLinksLt3Count: internalBlogLinksLt3,
-        rowIssues,
-        note:
-          "Set BLOG_VERIFY_MIN_VISIBLE_PUBLIC to assert visible_public_total floor after a known baseline. schemaSummary must parse as JSON-LD @graph with BlogPosting, BreadcrumbList, FAQPage.",
+  if (rows.length > 0 && failures.length === 0) {
+    const slugs = rows.map((r) => r.slug);
+    const liveBatchCount = await prisma.blogPost.count({
+      where: {
+        AND: [blogLiveWhere(now), { legacySource: PATHO_PHARM_LONGTAIL_LEGACY_SOURCE }, { slug: { in: slugs } }],
       },
-      null,
-      2,
-    ),
-  );
+    });
+    if (liveBatchCount !== rows.length) {
+      failures.push({
+        slug: "__batch_listing__",
+        reasons: [
+          `blogLiveWhere_batch_count_mismatch:expected_${rows.length}_got_${liveBatchCount}`,
+        ],
+      });
+    }
+  }
 
-  if (!ok) process.exit(1);
+  if (process.env.VERIFY_HTTP?.trim() === "1" && rows.length > 0) {
+    const origin =
+      process.env.NURSENEST_ORIGIN?.trim() ||
+      process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+      process.env.VERCEL_URL?.trim();
+    if (!origin) {
+      console.error(
+        "[verify-generated-blog-publication] VERIFY_HTTP=1 requires NURSENEST_ORIGIN, NEXT_PUBLIC_SITE_URL, or VERCEL_URL.",
+      );
+      process.exit(1);
+    }
+    const absoluteOrigin = /^https?:\/\//i.test(origin) ? origin : `https://${origin}`;
+    const httpFails = await verifyHttpForSlugs(
+      absoluteOrigin,
+      rows.map((r) => r.slug),
+    );
+    for (const f of httpFails) failures.push(f);
+  }
+
+  const summary = {
+    checked: rows.length,
+    failures: failures.length,
+    failedSlugs: failures.map((f) => f.slug),
+    details: failures,
+    verifyHttp: process.env.VERIFY_HTTP?.trim() === "1",
+  };
+  console.log(JSON.stringify({ verifyGeneratedBlogPublication: summary }));
+
+  if (failures.length) {
+    process.exit(1);
+  }
 }
 
 main()

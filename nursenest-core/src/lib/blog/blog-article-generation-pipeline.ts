@@ -39,6 +39,7 @@
  * Editing: admin `PATCH /api/admin/blog/[id]` and control panel UI update these fields without re-running the pipeline.
  */
 
+import { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-bounds";
 import type { ControlPanelGenerateInput, ControlPanelPersistResult } from "@/lib/blog/blog-control-panel-generation";
 import {
   BlogControlPanelPlanError,
@@ -57,7 +58,7 @@ import {
 } from "@/lib/blog/blog-longform-body-enforcement";
 
 /** Soft floor on raw HTML size before word counting (word count is authoritative; see {@link BLOG_ARTICLE_MIN_WORDS}). */
-export const BLOG_ARTICLE_MIN_BODY_CHARS = 450;
+export { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-bounds";
 
 export type BlogArticlePipelineStage = "plan" | "body" | "persist" | "citations";
 

@@ -262,7 +262,7 @@
     "test:audit-links": "tsx --test scripts/audit/link-integrity-check.test.ts",
     "test:prisma-cli-contract": "tsx --test scripts/prisma-cli-contract.test.mts",
     "test:blog-build-phase": "tsx --test src/lib/blog/safe-blog-queries.build-phase.test.mts",
-    "test:blog-quality": "tsx --test src/lib/blog/blog-generated-draft-quality.test.ts src/lib/blog/blog-pre-publish-validation.test.ts",
+    "test:blog-quality": "tsx --test src/lib/blog/blog-generated-draft-quality.test.ts src/lib/blog/blog-pre-publish-validation.test.ts src/lib/blog/publish-blog-post-canonical.test.ts",
     "test:marketing-exam-hub-smoke": "tsx --test scripts/marketing-exam-hub-smoke.test.ts scripts/marketing-exam-hub-degraded-smoke.test.ts",
     "generate:rn-content": "tsx scripts/generate-rn-content.ts",
     "generate:rn-content:dry-run": "tsx scripts/generate-rn-content.ts --dry-run",

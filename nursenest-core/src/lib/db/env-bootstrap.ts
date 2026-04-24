@@ -14,6 +14,8 @@
  *
  * `schema.prisma` uses `url = env("DATABASE_URL")` and `directUrl = env("DIRECT_URL")` (see `applyDirectDatabaseUrlFromEnv`).
  */
+import { assertRuntimeDatabaseEnvContract } from "../env/require-database-env";
+
 export type DatabaseUrlSource = "database_url" | "missing";
 
 export let databaseUrlSource: DatabaseUrlSource = "missing";
@@ -234,6 +236,7 @@ export function applyDatabaseUrlFromEnv(): void {
 
 applyDatabaseUrlFromEnv();
 applyDirectDatabaseUrlFromEnv();
+assertRuntimeDatabaseEnvContract();
 
 if (process.env.NODE_ENV !== "production" && process.env.NN_LOG_DIRECT_URL !== "0") {
   // Temporary visibility for Prisma `directUrl` / migrate — remove or gate further if noisy.

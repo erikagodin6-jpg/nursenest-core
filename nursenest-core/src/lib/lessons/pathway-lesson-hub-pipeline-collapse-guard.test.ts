@@ -85,6 +85,7 @@ test("shouldShowMarketingLessonHubInvariantErrorShell: no UX hard-fail when inve
   });
   assert.equal(violation.kind, "violation");
   assert.equal(shouldShowMarketingLessonHubInvariantErrorShell(violation, 5), false);
+  assert.equal(shouldShowMarketingLessonHubInvariantErrorShell(violation, 11), false);
   assert.equal(shouldShowMarketingLessonHubInvariantErrorShell(violation, 0), true);
 });
 

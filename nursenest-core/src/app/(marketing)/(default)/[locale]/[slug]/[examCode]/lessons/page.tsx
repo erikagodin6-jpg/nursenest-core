@@ -544,6 +544,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       rejected_evaluate: String(fillDiag.rejectedEvaluateCount),
       evaluate_reasons_json: JSON.stringify(fillDiag.evaluateRejectionReasons),
       prefilter_json: JSON.stringify(fillDiag.prefilterDropped),
+      rejects_by_reason_json: JSON.stringify({
+        evaluate: fillDiag.evaluateRejectionReasons,
+        prefilter: fillDiag.prefilterDropped,
+      }),
       after_verify_before_fill: String(vr.kept.length),
       after_fill: String(hubCurriculumLessons.length),
     });
@@ -864,7 +868,13 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     }
     if (shouldShowMarketingLessonHubInvariantErrorShell(collapse, hubCurriculumLessons.length)) {
       safeServerLog("pathway_lessons", "marketing_hub_lessons_page_pipeline_invariant_failed", {
+        stage: "marketing_hub_inventory_rejected",
         pathway_id: pathway.id,
+        route_pathname: routePathLessons,
+        content_locale: lessonContentLocale,
+        lesson_content_locale: lessonContentLocale,
+        verified_row_count: String(hubCurriculumLessons.length),
+        strict_count: String(countStrictMarketingHubInventoryRows(hubCurriculumLessons)),
         invariant_code: collapse.invariantCode,
         metric_event: collapse.metricEvent,
         outcome: "error_shell",

@@ -7,6 +7,8 @@
  * Optional:
  *   MARKETING_HUB_AUDIT_LOCALE=en  (content locale; default en)
  *   MARKETING_HUB_AUDIT_PATHWAY_IDS=ca-rn-nclex-rn,us-rn-nclex-rn  (comma list; default = all non-hidden pathways)
+ *   MARKETING_HUB_AUDIT_DETAIL_PROBE=1  (HTTP-check first 5 lesson detail URLs; needs MARKETING_HUB_AUDIT_ORIGIN
+ *     or MARKETING_STUDY_SMOKE_BASE_URL, e.g. https://www.nursenest.ca)
  *
  * Requires DATABASE_URL.
  */
@@ -27,6 +29,15 @@ async function main() {
   if (!process.env.DATABASE_URL?.trim()) {
     console.error("[lessons:audit-public-hubs] DATABASE_URL is required.");
     process.exit(1);
+  }
+
+  if (process.env.MARKETING_HUB_AUDIT_DETAIL_PROBE === "1") {
+    const origin = (process.env.MARKETING_HUB_AUDIT_ORIGIN ?? process.env.MARKETING_STUDY_SMOKE_BASE_URL)?.trim();
+    if (!origin) {
+      console.warn(
+        "[lessons:audit-public-hubs] MARKETING_HUB_AUDIT_DETAIL_PROBE=1 but no MARKETING_HUB_AUDIT_ORIGIN or MARKETING_STUDY_SMOKE_BASE_URL — detailStatus rows will be empty.",
+      );
+    }
   }
 
   const locale = normalizePreferredMarketingLocale(process.env.MARKETING_HUB_AUDIT_LOCALE);

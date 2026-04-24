@@ -1,10 +1,14 @@
 /**
- * Manual / production verification: blog index, public flashcard tags + hub, Canada RN lessons hub.
+ * Manual / production verification: blog index, public flashcard tags + hub, marketing lesson hubs (matrix).
  *
  * Skipped unless `MARKETING_STUDY_SMOKE_BASE_URL` is set (no trailing slash).
  *
  * Pathophysiology blog links: require ≥1 `href` containing `/blog/pp-` unless
  * `MARKETING_STUDY_REQUIRE_PP_BLOG_LINKS=0`.
+ *
+ * Lesson hubs: default matrix covers CA RN, CA PN, US RN, US NP FNP, US allied, US new-grad.
+ * Override with `MARKETING_STUDY_LESSON_HUB_PATHS=/us/rn/nclex-rn/lessons|12,/us/np/fnp/lessons|1` (comma-separated;
+ * optional `|minLinks` after each path).
  *
  * Run:
  *   cd nursenest-core && npm run qa:marketing-study-production-smoke
@@ -231,7 +235,7 @@ test.describe("Marketing study surfaces (env-gated)", () => {
         const lessonLinks = page.locator('#pathway-lesson-library a[href*="/lessons/"]');
         const n = await lessonLinks.count();
         if (hub.minLessonLinks <= 1 && n === 0) {
-          testInfo.skip(true, `${hub.path}: no public lesson links in this environment`);
+          testInfo.skip();
           return;
         }
         expect(n, `expected ≥1 lesson link on ${hub.path}`).toBeGreaterThanOrEqual(1);

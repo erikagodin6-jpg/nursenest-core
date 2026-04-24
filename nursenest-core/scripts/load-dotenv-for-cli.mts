@@ -51,17 +51,24 @@ if (envFound) {
 }
 const afterDotenv: DbEnvPresence = dbEnvPresence();
 
-const prismaCliUseDirect = process.env.PRISMA_CLI_USE_DIRECT_URL === "1";
 const directTrimmed =
   process.env.DIRECT_URL?.trim() ?? process.env.DATABASE_DIRECT_URL?.trim();
+
+/** Prisma migrate/introspect: use direct URL as `DATABASE_URL` for this process only when a direct URL exists. */
+let prismaCliUseDirect = process.env.PRISMA_CLI_USE_DIRECT_URL === "1";
+if (prismaCliUseDirect && !directTrimmed) {
+  delete process.env.PRISMA_CLI_USE_DIRECT_URL;
+  prismaCliUseDirect = false;
+  console.warn(
+    `${PREFIX} PRISMA_CLI_USE_DIRECT_URL was set but DIRECT_URL/DATABASE_DIRECT_URL is unset — cleared flag; Prisma will use DATABASE_URL.`,
+  );
+}
+
 let effectiveDbVariable: "DATABASE_URL" | "DIRECT_URL_as_DATABASE_URL" = "DATABASE_URL";
 
 if (prismaCliUseDirect && directTrimmed) {
   process.env.DATABASE_URL = directTrimmed;
   effectiveDbVariable = "DIRECT_URL_as_DATABASE_URL";
-} else if (prismaCliUseDirect && !directTrimmed) {
-  // Flag set but nothing to copy — Prisma still uses DATABASE_URL as-is
-  effectiveDbVariable = "DATABASE_URL";
 }
 
 function envFileDeclaresDirectUrlSync(filePath: string): boolean {

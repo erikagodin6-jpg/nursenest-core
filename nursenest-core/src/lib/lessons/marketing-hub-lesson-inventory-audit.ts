@@ -7,6 +7,7 @@ import {
   countStrictMarketingHubInventoryRows,
   fillMarketingHubLessonInventoryToMinimum,
   MARKETING_HUB_MIN_VISIBLE_LESSONS,
+  type MarketingHubLessonInventoryFillPrefilterDropped,
 } from "@/lib/lessons/marketing-hub-lesson-inventory-fill";
 import {
   getPathwayLessonListWarehouseLocaleForHub,
@@ -17,7 +18,13 @@ import {
   pathwayLessonHasRenderableHubSlug,
   pathwayLessonMarketingDetailHref,
 } from "@/lib/lessons/pathway-lesson-types";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
+/** HTTP probe of lesson detail URLs (optional; see `MARKETING_HUB_AUDIT_DETAIL_PROBE`). */
+export type PublicMarketingLessonHubAuditDetailStatus = {
+  href: string;
+  status: number | null;
+  ok: boolean;
+  note?: string;
+};
 
 export type PublicMarketingLessonHubAuditRow = {
   pathwayId: string;
@@ -34,9 +41,13 @@ export type PublicMarketingLessonHubAuditRow = {
   filledStrictCount: number;
   finalStrictCount: number;
   finalTotalCount: number;
+  /** Distinct rows rejected in prefilter buckets plus evaluate/professional-guard rejects during fill. */
+  rejectedCount: number;
   rejectedEvaluateCount: number;
   rejectReasons: Record<string, number | Record<string, number>>;
   firstLessonHrefs: string[];
+  /** Present when `MARKETING_HUB_AUDIT_DETAIL_PROBE=1` and an origin URL is configured. */
+  detailStatus?: PublicMarketingLessonHubAuditDetailStatus[];
   passesMinVisible12: boolean;
 };
 
@@ -47,6 +58,59 @@ function rejectReasonsRollup(
     evaluate: fill.evaluateRejectionReasons as Record<string, number>,
     prefilter: fill.prefilterDropped as unknown as Record<string, number>,
   };
+}
+
+function sumPrefilterDropped(p: MarketingHubLessonInventoryFillPrefilterDropped): number {
+  return (
+    p.missingSlug +
+    p.missingMarketingHref +
+    p.taxonomyReviewRequired +
+    p.listRowNotPublicComplete +
+    p.pathwayContextMismatchOnListRow
+  );
+}
+
+function auditOriginFromEnv(): string {
+  const a = process.env.MARKETING_HUB_AUDIT_ORIGIN?.trim();
+  if (a) return a.replace(/\/$/, "");
+  const b = process.env.MARKETING_STUDY_SMOKE_BASE_URL?.trim();
+  if (b) return b.replace(/\/$/, "");
+  return "";
+}
+
+/**
+ * Best-effort HEAD, then tiny ranged GET when HEAD is disallowed. Used only when `MARKETING_HUB_AUDIT_DETAIL_PROBE=1`.
+ */
+async function probeLessonDetailHttpStatuses(
+  origin: string,
+  relativeHrefs: readonly string[],
+  max: number,
+): Promise<PublicMarketingLessonHubAuditDetailStatus[]> {
+  const out: PublicMarketingLessonHubAuditDetailStatus[] = [];
+  for (const rel of relativeHrefs.slice(0, max)) {
+    const path = rel.startsWith("/") ? rel : `/${rel}`;
+    const href = `${origin}${path}`;
+    try {
+      const ac = AbortSignal.timeout(12_000);
+      let res = await fetch(href, { method: "HEAD", redirect: "follow", signal: ac });
+      if (res.status === 405 || res.status === 501) {
+        res = await fetch(href, {
+          method: "GET",
+          redirect: "follow",
+          signal: ac,
+          headers: { Range: "bytes=0-0", Accept: "*/*" },
+        });
+        await res.arrayBuffer().catch(() => undefined);
+      }
+      const status = res.status;
+      const ok = (status >= 200 && status < 400) || status === 206;
+      out.push({ href, status, ok });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      out.push({ href, status: null, ok: false, note: msg.slice(0, 200) });
+    }
+  }
+  return out;
 }
 
 /**
@@ -100,6 +164,7 @@ export async function auditPublicMarketingLessonHubForPathway(
       filledStrictCount: 0,
       finalStrictCount: 0,
       finalTotalCount: 0,
+      rejectedCount: 0,
       rejectedEvaluateCount: 0,
       rejectReasons: {},
       firstLessonHrefs: [],
@@ -136,6 +201,19 @@ export async function auditPublicMarketingLessonHubForPathway(
     .map((l) => pathwayLessonMarketingDetailHref(base, l.slug))
     .filter((h): h is string => Boolean(h));
 
+  const fillDiag = fillResult.diagnostics;
+  const rejectedCount = sumPrefilterDropped(fillDiag.prefilterDropped) + fillDiag.rejectedEvaluateCount;
+
+  let detailStatus: PublicMarketingLessonHubAuditDetailStatus[] | undefined;
+  if (process.env.MARKETING_HUB_AUDIT_DETAIL_PROBE === "1") {
+    const origin = auditOriginFromEnv();
+    if (origin && firstLessonHrefs.length > 0) {
+      detailStatus = await probeLessonDetailHttpStatuses(origin, firstLessonHrefs, 5);
+    } else {
+      detailStatus = [];
+    }
+  }
+
   const row: PublicMarketingLessonHubAuditRow = {
     pathwayId: pathway.id,
     country: pathway.countrySlug,
@@ -151,27 +229,13 @@ export async function auditPublicMarketingLessonHubForPathway(
     filledStrictCount: fillResult.diagnostics.filledStrictCount,
     finalStrictCount: strict,
     finalTotalCount: lessons.length,
+    rejectedCount,
     rejectedEvaluateCount: fillResult.diagnostics.rejectedEvaluateCount,
     rejectReasons: rejectReasonsRollup(fillResult.diagnostics),
     firstLessonHrefs,
+    ...(detailStatus !== undefined ? { detailStatus } : {}),
     passesMinVisible12: strict >= MARKETING_HUB_MIN_VISIBLE_LESSONS,
   };
-
-  safeServerLog("pathway_lessons", "marketing_hub_inventory_audit", {
-    stage: "marketing_hub_inventory_audit",
-    pathway_id: pathway.id,
-    route_pathname: routePathname,
-    content_locale: lessonContentLocale,
-    list_warehouse_locale: listWarehouseLocale ?? "",
-    loader_total: String(row.loaderTotal),
-    loader_renderable: String(row.loaderRenderableCount),
-    prepared: String(row.preparedCount),
-    verified_kept: String(row.verifiedKeptCount),
-    verified_strict: String(row.verifiedStrictCount),
-    final_strict: String(row.finalStrictCount),
-    final_total: String(row.finalTotalCount),
-    passes_min_12: row.passesMinVisible12 ? "1" : "0",
-  });
 
   return row;
 }

@@ -15,7 +15,6 @@ import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
 import { normalizeBlogControlPanelGenerateRequestBody } from "@/lib/blog/blog-admin-control-panel-generate-body";
 import { prisma } from "@/lib/db";
-import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const bodySchema = z.object({
@@ -377,20 +376,7 @@ export async function POST(req: Request) {
     );
   }
 
-  if (result.post.postStatus === BlogPostStatus.PUBLISHED) {
-    try {
-      revalidateBlogPublishingSurfaces({
-        slug: full.slug,
-        alliedProfessionKey: full.careerSlug ?? null,
-        tags: full.tags,
-      });
-    } catch (e) {
-      safeServerLog("admin", "blog_control_panel_generate_revalidate_failed", {
-        message: e instanceof Error ? e.message : String(e),
-        slug: result.post.slug,
-      });
-    }
-  }
+  /** Immediate publish uses {@link publishBlogPostCanonical} which already revalidates `/blog` + `/blog/{slug}`. */
 
   return NextResponse.json(
     {

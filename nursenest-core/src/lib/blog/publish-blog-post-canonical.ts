@@ -1,5 +1,7 @@
-import "server-only";
-
+/**
+ * Server-only publish orchestration (DB + Next `revalidatePath`). Kept importable from Node `tsx --test`
+ * without the `server-only` runtime guard — do not import from client bundles.
+ */
 import {
   BlogPostStatus,
   BlogPostTemplate,

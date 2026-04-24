@@ -17,6 +17,11 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { config } from "dotenv";
 
+import {
+  requireDatabaseEnv,
+  type DatabaseUrlContractSource,
+} from "../env/require-database-env";
+
 const require = createRequire(import.meta.url);
 
 const cwd = process.cwd();
@@ -27,11 +32,23 @@ const dotenvPath = explicit
     : path.resolve(cwd, explicit)
   : path.join(cwd, ".env.local");
 
+const databaseUrlFromShellBeforeDotenv = Boolean(process.env.DATABASE_URL?.trim());
 config({ path: dotenvPath, override: false, quiet: true });
+const databaseUrlAfterDotenv = Boolean(process.env.DATABASE_URL?.trim());
+
+/** `override: false` — if DATABASE_URL was already in the shell, dotenv does not replace it. */
+let urlSource: DatabaseUrlContractSource = "unknown";
+if (databaseUrlFromShellBeforeDotenv && databaseUrlAfterDotenv) {
+  urlSource = "process_env";
+} else if (!databaseUrlFromShellBeforeDotenv && databaseUrlAfterDotenv) {
+  urlSource = "dotenv";
+}
 
 if (process.env.NN_LOG_DIRECT_URL === undefined) {
   process.env.NN_LOG_DIRECT_URL = "0";
 }
+
+requireDatabaseEnv({ context: "script-env-bootstrap", urlSource });
 
 require("./env-bootstrap.ts");
 

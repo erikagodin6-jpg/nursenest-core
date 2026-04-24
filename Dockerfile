@@ -6,7 +6,7 @@
 #
 # Build pipeline (same `package.json` scripts as the Node buildpack path):
 #   1) `npm ci` in `nursenest-core/` (includes devDependencies: prisma, tsx, typescript, eslint-config-next, …)
-#   2) `npm run db:generate` (Prisma client; dummy DATABASE_URL at image build only)
+#   2) `npm run db:generate` (Prisma client; one-off synthetic DATABASE_URL on the RUN line only — never bake DATABASE_URL into the image ENV)
 #   3) `npm run heroku-postbuild` → hints + verify + `NN_POSTBUILD_NEXT_BUILD=1 npm run build` → `build:compile` / `next build`
 #   4) `npm run build:deploy` → verify standalone + static sync + post-build prune
 #   5) `npm prune --omit=dev` (matches former App Platform `build_command` tail)
@@ -49,11 +49,9 @@ ENV NODE_ENV=production \
   NODE_OPTIONS=--max-old-space-size=4096 \
   BUILD_WEBPACK_PARALLELISM=1
 
-# Prisma generate does not require a reachable DB; URL must be syntactically valid.
-ARG DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:5432/postgres?schema=public"
-ENV DATABASE_URL=${DATABASE_URL}
-
-RUN npm run db:generate \
+# Do NOT set DATABASE_URL at build time on the image — runtime must supply the real URL.
+# Prisma generate does not require a reachable DB; URL must be syntactically valid and must not match the banned Docker-placeholder pattern (127.0.0.1:5432/postgres).
+RUN DATABASE_URL="postgresql://nn_prisma_codegen:nn_prisma_codegen@127.0.0.1:65432/nn_prisma_codegen?schema=public" npm run db:generate \
   && npm run heroku-postbuild \
   && npm run build:deploy \
   && npm prune --omit=dev --no-fund --no-audit \

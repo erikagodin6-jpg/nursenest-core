@@ -1,381 +1,492 @@
 #!/usr/bin/env npx tsx
 /**
- * Production-safe long-tail RN pathophysiology / pharmacology blog pipeline (500-topic catalog).
+ * Production-safe long-tail pathophysiology / pharmacology blog generator.
  *
- * - **Dry-run by default.** Writes only when **`APPLY_BLOG_GENERATION=1`** (requires `DATABASE_URL`).
- * - **`TARGET_COUNT`** (default 500), **`BATCH_SIZE`** (default 50).
- * - **`BLOG_GENERATION_OVERWRITE=1`**: update existing rows only when `legacySource` matches this generator.
+ * Defaults: dry-run (no DB writes). Set APPLY_BLOG_GENERATION=1 to insert.
+ * BATCH_SIZE (default 50), TARGET_COUNT (default 500).
  *
  *   DOTENV_CONFIG_PATH=.env.local npm run blog:generate-patho-pharm-longtail
  *   APPLY_BLOG_GENERATION=1 BATCH_SIZE=50 TARGET_COUNT=50 DOTENV_CONFIG_PATH=.env.local npm run blog:generate-patho-pharm-longtail
  */
 import "../../src/lib/db/script-env-bootstrap";
-import {
-  BlogPostIntent,
-  BlogPostStatus,
-  BlogPostTemplate,
-  BlogWorkflowStatus,
-  Prisma,
-  PrismaClient,
-} from "@prisma/client";
 
+import { BlogPostStatus, BlogWorkflowStatus, Prisma } from "@prisma/client";
+
+import { validateClinicalTopicCoherence } from "../../src/lib/blog/patho-pharm-longtail-topic-coherence";
 import { blogLiveWhere } from "../../src/lib/blog/blog-visibility";
-import { sqlBlogLiveWhere, sqlPathoPharmLongTail, sqlPathoPharmTopical } from "../../src/lib/blog/blog-patho-pharm-detection";
 import {
-  buildArticleHtml,
-  buildConservativeApaReferences,
-  buildSchemaJsonLd,
-  slugify,
-  validatePostContent,
-} from "./lib/patho-pharm-longtail-content";
-import { buildLongTailTopicCatalog } from "./lib/patho-pharm-longtail-topic-catalog";
+  sqlBlogLiveWhere,
+  sqlPathoPharmLongTail,
+  sqlPathoPharmTopical,
+} from "../../src/lib/blog/blog-patho-pharm-detection";
+import { assertPublicBlogSeedRenderable } from "../../src/lib/content/assert-public-renderable";
+import { ensurePublicBlogPostVisibilityForSeed } from "../../src/lib/content/ensure-public-visibility";
+import { prisma } from "../lib/prisma-script-client";
+import {
+  PATHO_PHARM_LONGTAIL_LEGACY_SOURCE,
+  buildApaReferences,
+  buildFaq,
+  buildLongTailBody,
+  buildSchemaSummaryJson,
+  clampMetaDescription,
+  clampMetaTitle,
+  enumerateLongTailTopics,
+  excerptFromHtml,
+  normalizedTitleHash,
+  resolveSiteOrigin,
+  tagsForTopic,
+  validateGeneratedBody,
+  type LongTailTopicSpec,
+} from "./lib/patho-pharm-longtail-post-builder";
 
-const prisma = new PrismaClient();
+type PublishedSlugRow = { slug: string; title: string };
 
-const LEGACY_SOURCE = "patho-pharm-longtail-regeneration";
+function envInt(name: string, fallback: number): number {
+  const v = process.env[name]?.trim();
+  if (!v) return fallback;
+  const n = parseInt(v, 10);
+  return Number.isFinite(n) && n > 0 ? n : fallback;
+}
 
-type PathoCounts = {
+function tokenize(s: string): Set<string> {
+  const out = new Set<string>();
+  for (const raw of s.toLowerCase().split(/[^a-z0-9]+/)) {
+    if (raw.length >= 4) out.add(raw);
+  }
+  return out;
+}
+
+function scoreInternalLink(topic: LongTailTopicSpec, row: PublishedSlugRow): number {
+  if (row.slug === topic.slug) return -1;
+  const tt = tokenize(`${topic.title} ${topic.slug} ${topic.targetKeyword}`);
+  const rt = tokenize(`${row.title} ${row.slug}`);
+  let n = 0;
+  for (const x of tt) {
+    if (rt.has(x)) n += 1;
+  }
+  return n;
+}
+
+function pickInternalLinks(topic: LongTailTopicSpec, pool: PublishedSlugRow[], need: number): {
+  html: string;
+  slugs: string[];
+  insufficient: boolean;
+} {
+  const scored = pool
+    .map((r) => ({ r, s: scoreInternalLink(topic, r) }))
+    .filter((x) => x.s >= 0)
+    .sort((a, b) => b.s - a.s);
+  const picked: PublishedSlugRow[] = [];
+  const seen = new Set<string>();
+  for (const { r } of scored) {
+    if (picked.length >= need) break;
+    if (seen.has(r.slug)) continue;
+    seen.add(r.slug);
+    picked.push(r);
+  }
+  const want = Math.min(need, pool.length);
+  while (picked.length < want && picked.length < pool.length) {
+    const next = pool.find((r) => !seen.has(r.slug));
+    if (!next) break;
+    seen.add(next.slug);
+    picked.push(next);
+  }
+  const slugs = picked.map((p) => p.slug);
+  const html = picked
+    .map((p) => {
+      const label = p.title.length > 72 ? `${p.title.slice(0, 69)}…` : p.title;
+      return `<a href="/blog/${p.slug}">${label.replace(/</g, "&lt;")}</a>`;
+    })
+    .join(", ");
+  return { html, slugs, insufficient: slugs.length < need };
+}
+
+async function pathoCounts(now: Date): Promise<{
   visible_public_total: number;
   patho_pharm_topical: number;
   patho_pharm_long_tail: number;
-};
-
-async function readPathoCounts(now: Date): Promise<PathoCounts> {
-  const live = sqlBlogLiveWhere("p", "$1");
-  const topical = sqlPathoPharmTopical("p");
-  const lt = sqlPathoPharmLongTail("p");
+}> {
+  const liveSql = sqlBlogLiveWhere("p", "$1");
+  const pathoSql = sqlPathoPharmTopical("p");
+  const longSql = sqlPathoPharmLongTail("p");
+  const q = `
+SELECT
+  (SELECT COUNT(*)::int FROM "BlogPost" p WHERE ${liveSql}) AS visible_public_total,
+  (SELECT COUNT(*)::int FROM "BlogPost" p WHERE ${liveSql} AND ${pathoSql}) AS patho_pharm_topical,
+  (SELECT COUNT(*)::int FROM "BlogPost" p WHERE ${liveSql} AND ${pathoSql} AND ${longSql}) AS patho_pharm_long_tail
+`;
   const rows = await prisma.$queryRawUnsafe<
-    Array<{
-      visible_public_total: number;
-      patho_pharm_topical: number;
-      patho_pharm_long_tail: number;
-    }>
-  >(
-    `SELECT
-      (SELECT COUNT(*)::int FROM "BlogPost" p WHERE ${live}) AS visible_public_total,
-      (SELECT COUNT(*)::int FROM "BlogPost" p WHERE ${live} AND ${topical}) AS patho_pharm_topical,
-      (SELECT COUNT(*)::int FROM "BlogPost" p WHERE ${live} AND ${topical} AND ${lt}) AS patho_pharm_long_tail`,
-    now,
-  );
+    Array<{ visible_public_total: number; patho_pharm_topical: number; patho_pharm_long_tail: number }>
+  >(q, now);
   return rows[0] ?? { visible_public_total: 0, patho_pharm_topical: 0, patho_pharm_long_tail: 0 };
 }
 
-function siteBase(): string {
-  const raw =
-    process.env.NN_PUBLIC_SITE_URL?.trim() ||
-    process.env.NEXT_PUBLIC_APP_URL?.trim() ||
-    process.env.VERCEL_URL?.trim();
-  if (!raw) return "https://www.nursenest.com";
-  if (raw.startsWith("http")) return raw.replace(/\/$/, "");
-  return `https://${raw}`.replace(/\/$/, "");
+async function loadPublishedSlugPool(now: Date, take: number): Promise<PublishedSlugRow[]> {
+  return prisma.blogPost.findMany({
+    where: blogLiveWhere(now),
+    select: { slug: true, title: true },
+    take,
+    orderBy: { updatedAt: "desc" },
+  });
 }
 
-type LinkRow = { slug: string; title: string };
+async function loadExistingTitleHashesForPipeline(): Promise<Set<string>> {
+  const rows = await prisma.blogPost.findMany({
+    where: { legacySource: PATHO_PHARM_LONGTAIL_LEGACY_SOURCE },
+    select: { title: true },
+    take: 50_000,
+  });
+  const s = new Set<string>();
+  for (const r of rows) s.add(normalizedTitleHash(r.title));
+  return s;
+}
 
-function scoreInternalLinks(topicTitle: string, pool: LinkRow[], excludeSlug: string, take: number): LinkRow[] {
-  const stop = new Set([
-    "the",
-    "a",
-    "an",
-    "and",
-    "or",
-    "for",
-    "with",
-    "from",
-    "that",
-    "this",
-    "does",
-    "why",
-    "how",
-    "what",
-    "when",
-    "nursing",
-    "nurses",
-  ]);
-  const tokens = topicTitle
-    .toLowerCase()
-    .split(/\W+/)
-    .filter((w) => w.length > 3 && !stop.has(w));
-  return pool
-    .filter((p) => p.slug !== excludeSlug)
-    .map((p) => {
-      const tl = p.title.toLowerCase();
-      const score = tokens.reduce((acc, t) => acc + (tl.includes(t) ? 1 : 0), 0);
-      return { ...p, score };
-    })
-    .sort((a, b) => b.score - a.score)
-    .slice(0, take)
-    .map(({ slug, title }) => ({ slug, title }));
+/** Same listing gate as public `/blog` index (live rows only). */
+async function countLiveBySlugs(now: Date, slugs: string[]): Promise<number> {
+  if (slugs.length === 0) return 0;
+  return prisma.blogPost.count({
+    where: {
+      AND: [blogLiveWhere(now), { slug: { in: slugs } }],
+    },
+  });
 }
 
 async function main(): Promise<void> {
-  const apply = process.env.APPLY_BLOG_GENERATION?.trim() === "1";
+  const dryRun = process.env.APPLY_BLOG_GENERATION?.trim() !== "1";
+  const batchSize = envInt("BATCH_SIZE", 50);
+  const targetCount = envInt("TARGET_COUNT", 500);
   const overwrite = process.env.BLOG_GENERATION_OVERWRITE?.trim() === "1";
-  const targetCount = Math.min(5000, Math.max(1, parseInt(process.env.TARGET_COUNT?.trim() ?? "500", 10) || 500));
-  const batchSize = Math.min(200, Math.max(1, parseInt(process.env.BATCH_SIZE?.trim() ?? "50", 10) || 50));
+  const now = new Date();
+  const accessDate = now.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
-  if (apply && !process.env.DATABASE_URL?.trim()) {
-    console.error("[generate-patho-pharm-longtail-posts] Refusing write: DATABASE_URL is not set.");
+  if (!dryRun && !process.env.DATABASE_URL?.trim()) {
+    console.error("[patho-pharm-longtail] Refusing write mode: DATABASE_URL is not set.");
     process.exit(1);
   }
 
-  const now = new Date();
-  const accessDate = now.toISOString().slice(0, 10);
-  const base = siteBase();
+  const topics = enumerateLongTailTopics(targetCount);
+  const plannedCount = topics.length;
 
-  const visiblePublicCountBefore = await prisma.blogPost.count({ where: blogLiveWhere(now) });
-  const pathoPharmCountsBefore = await readPathoCounts(now);
+  let visiblePublicCountBefore = 0;
+  let pathoPharmCountsBefore = { patho_pharm_topical: 0, patho_pharm_long_tail: 0, visible_public_total: 0 };
+  const existingTitleHashes = new Set<string>();
+  if (process.env.DATABASE_URL?.trim()) {
+    pathoPharmCountsBefore = await pathoCounts(now);
+    visiblePublicCountBefore = pathoPharmCountsBefore.visible_public_total;
+    if (!dryRun) {
+      const h = await loadExistingTitleHashesForPipeline();
+      for (const x of h) existingTitleHashes.add(x);
+    }
+  }
 
-  const topics = buildLongTailTopicCatalog(targetCount);
-  const linkPool = await prisma.blogPost.findMany({
-    where: blogLiveWhere(now),
-    select: { slug: true, title: true },
-    take: 400,
-    orderBy: { updatedAt: "desc" },
-  });
-
-  let createdTotal = 0;
-  let skippedTotal = 0;
-  let rejectedTotal = 0;
-  let plannedTotal = 0;
-  let internalLinksInsufficientTotal = 0;
+  const globalCreatedSlugs: string[] = [];
+  let globalCreated = 0;
+  let globalSkipped = 0;
+  let globalRejected = 0;
+  let globalClinicalRejected = 0;
   const rejectionReasons: Record<string, number> = {};
-  const bump = (k: string) => {
-    rejectionReasons[k] = (rejectionReasons[k] ?? 0) + 1;
+  const clinicalRejectionReasons: Record<string, number> = {};
+  const sampleRejectedTopics: string[] = [];
+  const sampleApprovedTopics: string[] = [];
+  let globalInternalLinksInsufficient = 0;
+
+  const bumpReason = (rs: string[]) => {
+    for (const r of rs) {
+      rejectionReasons[r] = (rejectionReasons[r] ?? 0) + 1;
+    }
   };
-  const allCreatedSlugs: string[] = [];
-  let aborted = false;
-  let abortReason: string | null = null;
 
   for (let offset = 0; offset < topics.length; offset += batchSize) {
-    const slice = topics.slice(offset, offset + batchSize);
-    let batchCreated = 0;
-    let batchSkipped = 0;
-    let batchRejected = 0;
-    let batchPlanned = 0;
-    let batchQualityRejected = 0;
-    let batchInsufficientLinks = 0;
-    const batchSlugs: string[] = [];
+    const batch = topics.slice(offset, offset + batchSize);
+    const pool = process.env.DATABASE_URL?.trim()
+      ? await loadPublishedSlugPool(now, 4000)
+      : [];
 
-    for (const topic of slice) {
-      let slug = slugify(topic.title);
-      const category = topic.pharm ? "Pharmacology" : "Pathophysiology";
-      const template = topic.pharm ? BlogPostTemplate.MEDICATION_REVIEW : BlogPostTemplate.DISEASE_PROCESS_EXPLAINER;
-      const tags = Array.from(
-        new Set([
-          "nursing",
-          "NCLEX",
-          "RN",
-          topic.pharm ? "pharmacology" : "pathophysiology",
-          topic.bodySystem.toLowerCase().replace(/\s+/g, "-"),
-          topic.conditionOrDrug.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "clinical-focus",
-        ]),
-      );
+    const pathoPharmBatchBefore = process.env.DATABASE_URL?.trim() ? await pathoCounts(now) : null;
 
-      const ranked = scoreInternalLinks(topic.title, linkPool, slug, 6);
-      const internal = ranked.slice(0, 3);
-      const minLinksRequired = Math.min(3, linkPool.filter((p) => p.slug !== slug).length);
-      if (internal.length < 3) batchInsufficientLinks += 1;
+    const batchSampleRejected: string[] = [];
+    const batchSampleApproved: string[] = [];
 
-      const body = buildArticleHtml(topic, internal, accessDate);
-      const v = validatePostContent(body, topic.title, minLinksRequired);
-      if (v) {
-        bump(v);
-        batchRejected += 1;
-        batchQualityRejected += 1;
-        rejectedTotal += 1;
-        continue;
-      }
+    let createdCount = 0;
+    let skippedExisting = 0;
+    let rejectedCount = 0;
+    let batchClinicalRejected = 0;
+    let internalLinksInsufficientCount = 0;
+    const createdSlugs: string[] = [];
+    const batchRejectionReasons: string[] = [];
 
-      const bySlug = await prisma.blogPost.findUnique({
-        where: { slug },
-        select: { legacySource: true },
-      });
-      if (bySlug && !overwrite) {
-        batchSkipped += 1;
-        skippedTotal += 1;
-        continue;
-      }
-      if (bySlug && overwrite && bySlug.legacySource !== LEGACY_SOURCE) {
-        bump("slug_collision_non_generation_post");
-        batchRejected += 1;
-        rejectedTotal += 1;
-        continue;
-      }
+    let attemptedNew = 0;
 
-      const titleDup = await prisma.blogPost.findFirst({
-        where: { title: { equals: topic.title, mode: "insensitive" } },
+    const slugList = batch.map((t) => t.slug);
+    const existingSlugSet = new Set<string>();
+    if (!dryRun && process.env.DATABASE_URL?.trim()) {
+      const slugHits = await prisma.blogPost.findMany({
+        where: { slug: { in: slugList } },
         select: { slug: true },
       });
-      if (titleDup && titleDup.slug !== slug) {
-        bump("duplicate_title_different_slug");
-        batchRejected += 1;
-        rejectedTotal += 1;
+      for (const r of slugHits) existingSlugSet.add(r.slug);
+    }
+
+    for (const topic of batch) {
+      const slugExists = !dryRun && existingSlugSet.has(topic.slug);
+      const titleHash = normalizedTitleHash(topic.title);
+      const titleHashExists = !dryRun && !overwrite && existingTitleHashes.has(titleHash);
+
+      if (!overwrite && slugExists) {
+        skippedExisting += 1;
+        continue;
+      }
+      if (!overwrite && titleHashExists) {
+        skippedExisting += 1;
         continue;
       }
 
-      batchPlanned += 1;
-      plannedTotal += 1;
-
-      const excerpt = `${topic.title} — Mechanism-focused RN review with assessment cues, interventions, teaching, escalation guidance, NCLEX reasoning, FAQ, and conservative reference entries for exam preparation.`.slice(
-        0,
-        480,
-      );
-      const faqItems = [
-        {
-          q: "What should I prioritize first in an unstable presentation?",
-          a: "Protect airway, breathing, and circulation, then treat the underlying mechanism while trending focused reassessments.",
-        },
-        {
-          q: "How do I avoid choosing a true-but-not-best NCLEX answer?",
-          a: "Pick the option that addresses the primary mechanism and highest-risk harm described in the stem.",
-        },
-        {
-          q: "Is this article individualized medical advice?",
-          a: "No—this article is for nursing education and exam preparation, not personal medical advice.",
-        },
-      ];
-      const schemaJson = buildSchemaJsonLd({
+      const coh = validateClinicalTopicCoherence({
         title: topic.title,
-        slug,
-        excerpt,
-        siteBase: base,
-        publishedIso: now.toISOString(),
-        faqItems,
+        slug: topic.slug,
+        topicSource: topic.topicSource,
+        relationshipType: topic.relationshipType,
       });
-      const schemaSummary = JSON.stringify(schemaJson);
-      const apaReferences = buildConservativeApaReferences(accessDate);
+      if (!coh.ok) {
+        rejectedCount += 1;
+        batchClinicalRejected += 1;
+        globalClinicalRejected += 1;
+        const r = `clinical_coherence:${coh.reason}`;
+        batchRejectionReasons.push(r);
+        bumpReason([r]);
+        clinicalRejectionReasons[coh.reason] = (clinicalRejectionReasons[coh.reason] ?? 0) + 1;
+        if (batchSampleRejected.length < 8) batchSampleRejected.push(topic.title);
+        if (sampleRejectedTopics.length < 8) sampleRejectedTopics.push(topic.title);
+        continue;
+      }
 
-      const publishAt = new Date();
-      const data: Prisma.BlogPostCreateInput = {
-        slug,
-        title: topic.title,
-        excerpt,
-        body,
-        category,
-        postTemplate: template,
-        tags,
-        postStatus: BlogPostStatus.PUBLISHED,
-        publishAt,
-        workflowStatus: BlogWorkflowStatus.PUBLISHED,
-        legacySource: LEGACY_SOURCE,
-        seoTitle: topic.title.slice(0, 120),
-        seoDescription: excerpt.slice(0, 300),
-        intent: BlogPostIntent.INFORMATIONAL,
-        faqBlock: { items: faqItems } as Prisma.InputJsonValue,
-        schemaSummary,
-        apaReferences,
-        exam: "RN",
-        locale: "en",
+      const { html: internalHtml, slugs: internalSlugs, insufficient } = pickInternalLinks(topic, pool, 3);
+      if (insufficient) internalLinksInsufficientCount += 1;
+
+      const body = buildLongTailBody(topic, internalHtml);
+      const v = validateGeneratedBody(body, topic.title);
+      if (!v.ok) {
+        rejectedCount += 1;
+        batchRejectionReasons.push(...v.reasons);
+        bumpReason(v.reasons);
+        continue;
+      }
+
+      const minLinksRequired = Math.min(3, pool.length);
+      const linkCount = (body.match(/href="\/blog\//g) ?? []).length;
+      if (linkCount < minLinksRequired) {
+        rejectedCount += 1;
+        const r = "internal_link_count_insufficient_for_corpus";
+        batchRejectionReasons.push(r);
+        bumpReason([r]);
+        continue;
+      }
+
+      attemptedNew += 1;
+
+      const excerpt = excerptFromHtml(body, topic.title);
+      const metaTitle = clampMetaTitle(topic.title, 60);
+      const metaDescription = clampMetaDescription(excerpt, 155);
+      const faq = buildFaq(topic);
+      const apa = buildApaReferences(accessDate);
+      const origin = resolveSiteOrigin();
+      const publishedIso = now.toISOString();
+      const schemaSummary = buildSchemaSummaryJson({
+        slug: topic.slug,
+        title: metaTitle,
+        excerpt: metaDescription,
+        publishedIso,
+        faq,
+        origin,
+      });
+
+      const faqBlock: Prisma.InputJsonValue = {
+        items: [
+          { q: faq.q1, a: faq.a1 },
+          { q: faq.q2, a: faq.a2 },
+          { q: faq.q3, a: faq.a3 },
+        ],
       };
 
-      if (!apply) {
-        batchCreated += 1;
-        createdTotal += 1;
-        batchSlugs.push(slug);
-        allCreatedSlugs.push(slug);
+      const keyQuestions = [faq.q1, faq.q2, faq.q3];
+      const internalLinkPlan: Prisma.InputJsonValue = { slugs: internalSlugs, kind: "patho-pharm-longtail" };
+
+      const baseData = {
+        slug: topic.slug,
+        title: topic.title.slice(0, 200),
+        excerpt,
+        body,
+        tags: tagsForTopic(topic),
+        category: topic.category,
+        legacySource: PATHO_PHARM_LONGTAIL_LEGACY_SOURCE,
+        postTemplate: topic.postTemplate,
+        careerSlug: topic.careerSlug,
+        exam: topic.exam,
+        locale: "en",
+        seoTitle: metaTitle,
+        seoDescription: metaDescription,
+        targetKeyword: topic.targetKeyword.slice(0, 200),
+        keywordCluster: "patho-pharm-longtail",
+        keywordPlan: [topic.bodySystem, "multi-tier", "long-tail"],
+        apaReferences: apa,
+        requiresReferences: true,
+        schemaSummary,
+        faqBlock,
+        keyQuestions,
+        internalLinkPlan,
+        sourcesJson: {
+          families: ["CDC", "NIH/NIDDK", "MedlinePlus", "WHO"],
+          retrieved: publishedIso,
+        } as Prisma.InputJsonValue,
+        postStatus: BlogPostStatus.PUBLISHED,
+        publishAt: now,
+        workflowStatus: BlogWorkflowStatus.PUBLISHED,
+      };
+
+      assertPublicBlogSeedRenderable({ slug: topic.slug, title: topic.title, body });
+      const data = ensurePublicBlogPostVisibilityForSeed(baseData);
+
+      if (dryRun) {
+        createdCount += 1;
+        createdSlugs.push(topic.slug);
+        if (batchSampleApproved.length < 8) batchSampleApproved.push(topic.title);
+        if (sampleApprovedTopics.length < 8) sampleApprovedTopics.push(topic.title);
         continue;
       }
 
       try {
-        if (bySlug && overwrite) {
+        if (overwrite && slugExists) {
           await prisma.blogPost.update({
-            where: { slug },
-            data: data as Prisma.BlogPostUpdateInput,
+            where: { slug: topic.slug },
+            data: {
+              ...data,
+              slug: topic.slug,
+            },
           });
         } else {
           await prisma.blogPost.create({ data });
         }
-        batchCreated += 1;
-        createdTotal += 1;
-        batchSlugs.push(slug);
-        allCreatedSlugs.push(slug);
-        if (!linkPool.some((p) => p.slug === slug)) {
-          linkPool.unshift({ slug, title: topic.title });
-        }
-      } catch {
-        bump("db_insert_failed");
-        batchRejected += 1;
-        rejectedTotal += 1;
-        aborted = true;
-        abortReason = "db_insert_failed";
-        break;
+        createdCount += 1;
+        createdSlugs.push(topic.slug);
+        existingTitleHashes.add(titleHash);
+        if (batchSampleApproved.length < 8) batchSampleApproved.push(topic.title);
+        if (sampleApprovedTopics.length < 8) sampleApprovedTopics.push(topic.title);
+      } catch (e) {
+        console.error("[patho-pharm-longtail] DB insert failed:", e);
+        process.exit(1);
       }
     }
 
-    internalLinksInsufficientTotal += batchInsufficientLinks;
-
-    if (!aborted && slice.length > 0 && batchQualityRejected / slice.length > 0.25) {
-      aborted = true;
-      abortReason = "batch_quality_rejection_rate_exceeded_25_percent";
+    const denom = Math.max(1, attemptedNew);
+    const rejectionRate = rejectedCount / denom;
+    const batchSummary = {
+      dryRun,
+      targetCount,
+      batchSize,
+      batchOffset: offset,
+      plannedCount: batch.length,
+      createdCount,
+      skippedExisting,
+      rejectedCount,
+      rejectionRate: Math.round(rejectionRate * 1000) / 1000,
+      rejectionReasons: summarizeReasons(batchRejectionReasons),
+      clinicallyRejectedCount: batchClinicalRejected,
+      clinicallyRejectedReasons: summarizeReasons(
+        batchRejectionReasons.filter((x) => x.startsWith("clinical_coherence:")),
+      ),
+      sampleRejectedTopics: batchSampleRejected,
+      sampleApprovedTopics: batchSampleApproved,
+      internalLinksInsufficientCount,
+      createdSlugs,
+    };
+    let batchVisibility: Record<string, unknown> = { skipped: dryRun || createdSlugs.length === 0 };
+    if (!dryRun && createdSlugs.length > 0 && process.env.DATABASE_URL?.trim()) {
+      const liveListed = await countLiveBySlugs(now, createdSlugs);
+      batchVisibility = {
+        liveListedCount: liveListed,
+        expectedLive: createdSlugs.length,
+        liveListingOk: liveListed === createdSlugs.length,
+      };
+      if (liveListed !== createdSlugs.length) {
+        console.error("[patho-pharm-longtail] Batch visibility check failed: not all new slugs are blogLiveWhere live.");
+        process.exit(1);
+      }
+      if (pathoPharmBatchBefore) {
+        const afterBatch = await pathoCounts(now);
+        const increased =
+          afterBatch.visible_public_total > pathoPharmBatchBefore.visible_public_total ||
+          afterBatch.patho_pharm_topical > pathoPharmBatchBefore.patho_pharm_topical ||
+          afterBatch.patho_pharm_long_tail > pathoPharmBatchBefore.patho_pharm_long_tail;
+        (batchVisibility as Record<string, unknown>).pathoPharmBatchBefore = pathoPharmBatchBefore;
+        (batchVisibility as Record<string, unknown>).pathoPharmBatchAfter = afterBatch;
+        (batchVisibility as Record<string, unknown>).pathoCountsIncreased = increased;
+        if (!increased) {
+          console.error(
+            "[patho-pharm-longtail] Batch visibility check failed: patho/pharm or visible_public counts did not increase after inserts.",
+          );
+          process.exit(1);
+        }
+      }
     }
 
-    const visibleMid = await prisma.blogPost.count({ where: blogLiveWhere(now) });
-    const pathoMid = await readPathoCounts(now);
+    console.log(JSON.stringify({ batchSummary: { ...batchSummary, batchVisibility } }));
 
-    console.log(
-      JSON.stringify(
-        {
-          dryRun: !apply,
-          batchIndex: offset / batchSize,
-          batchOffset: offset,
-          targetCount,
-          batchSize: slice.length,
-          plannedCount: batchPlanned,
-          createdCount: batchCreated,
-          skippedExisting: batchSkipped,
-          rejectedCount: batchRejected,
-          rejectionReasons: Object.fromEntries(
-            Object.entries(rejectionReasons).filter(([, v]) => v > 0),
-          ),
-          internalLinksInsufficientCount: batchInsufficientLinks,
-          createdSlugs: batchSlugs,
-          visiblePublicCountBefore: visiblePublicCountBefore,
-          visiblePublicCountAfterBatch: visibleMid,
-          pathoPharmCountsBefore: pathoPharmCountsBefore,
-          pathoPharmCountsAfterBatch: pathoMid,
-          aborted,
-          abortReason,
-        },
-        null,
-        2,
-      ),
-    );
+    globalCreated += createdCount;
+    globalSkipped += skippedExisting;
+    globalRejected += rejectedCount;
+    globalCreatedSlugs.push(...createdSlugs);
+    globalInternalLinksInsufficient += internalLinksInsufficientCount;
 
-    if (aborted) break;
+    if (rejectionRate > 0.25 && attemptedNew > 0) {
+      console.error("[patho-pharm-longtail] Stopping: batch rejection rate > 25%.");
+      process.exit(1);
+    }
   }
 
-  const visiblePublicCountAfter = await prisma.blogPost.count({ where: blogLiveWhere(now) });
-  const pathoPharmCountsAfter = await readPathoCounts(now);
+  let pathoPharmCountsAfter = pathoPharmCountsBefore;
+  let visiblePublicCountAfter = visiblePublicCountBefore;
+  if (process.env.DATABASE_URL?.trim()) {
+    pathoPharmCountsAfter = await pathoCounts(now);
+    visiblePublicCountAfter = pathoPharmCountsAfter.visible_public_total;
+  }
 
-  console.log(
-    JSON.stringify(
-      {
-        phase: "final_summary",
-        dryRun: !apply,
-        targetCount,
-        batchSize,
-        plannedCount: plannedTotal,
-        createdCount: createdTotal,
-        skippedExisting: skippedTotal,
-        rejectedCount: rejectedTotal,
-        rejectionReasons,
-        internalLinksInsufficientCount: internalLinksInsufficientTotal,
-        createdSlugs: allCreatedSlugs.slice(-200),
-        visiblePublicCountBefore,
-        visiblePublicCountAfter,
-        pathoPharmCountsBefore: pathoPharmCountsBefore,
-        pathoPharmCountsAfter,
-        aborted,
-        abortReason,
-        canonicalNote: "Public path for each post is /blog/{slug}; absolute URL in schemaSummary uses NN_PUBLIC_SITE_URL, NEXT_PUBLIC_APP_URL, VERCEL_URL, or nursenest.com default.",
-      },
-      null,
-      2,
-    ),
-  );
+  const finalSummary = {
+    dryRun,
+    targetCount,
+    batchSize,
+    plannedCount,
+    createdCount: globalCreated,
+    skippedExisting: globalSkipped,
+    rejectedCount: globalRejected,
+    clinicallyRejectedCount: globalClinicalRejected,
+    rejectionReasons,
+    clinicallyRejectedReasons: clinicalRejectionReasons,
+    sampleRejectedTopics,
+    sampleApprovedTopics,
+    internalLinksInsufficientCount: globalInternalLinksInsufficient,
+    createdSlugs: globalCreatedSlugs,
+    visiblePublicBefore: visiblePublicCountBefore,
+    visiblePublicAfter: visiblePublicCountAfter,
+    pathoPharmBefore: pathoPharmCountsBefore,
+    pathoPharmAfter: pathoPharmCountsAfter,
+    visiblePublicCountBefore,
+    visiblePublicCountAfter,
+    pathoPharmCountsBefore,
+    pathoPharmCountsAfter,
+  };
+  console.log(JSON.stringify({ finalSummary }));
+}
 
-  if (aborted) process.exit(1);
+function summarizeReasons(rs: string[]): Record<string, number> {
+  const m: Record<string, number> = {};
+  for (const r of rs) {
+    m[r] = (m[r] ?? 0) + 1;
+  }
+  return m;
 }
 
 main()

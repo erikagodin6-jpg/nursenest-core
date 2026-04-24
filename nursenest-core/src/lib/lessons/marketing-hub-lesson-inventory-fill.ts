@@ -191,13 +191,18 @@ export async function fillMarketingHubLessonInventoryToMinimum(args: {
         pathway_id: pathwayId,
         content_locale: args.lessonContentLocale,
         list_warehouse_locale: listWh,
+        strict_before: String(initialStrict),
+        strict_after: String(initialStrict),
         initial_strict: String(initialStrict),
         final_strict: String(initialStrict),
+        min_visible: String(min),
         min_target: String(min),
+        candidates_considered: "0",
         candidate_slugs_discovered: String(orderedExtras.length),
         candidate_slugs_evaluated: "0",
         reason: "no_additional_candidates_or_target_met",
         prefilter_json: JSON.stringify(prefilterDropped),
+        rejects_by_reason_json: JSON.stringify({ evaluate: evaluateRejectionReasons, prefilter: prefilterDropped }),
       });
     }
     return { lessons: initialTotal, diagnostics };
@@ -272,17 +277,22 @@ export async function fillMarketingHubLessonInventoryToMinimum(args: {
       pathway_id: pathwayId,
       content_locale: args.lessonContentLocale,
       list_warehouse_locale: listWh,
+      strict_before: String(initialStrict),
+      strict_after: String(finalStrict),
       initial_strict: String(initialStrict),
       filled_strict: String(filledStrict),
       final_strict: String(finalStrict),
       final_total: String(lessons.length),
+      min_visible: String(min),
       min_target: String(min),
+      candidates_considered: String(cappedExtras.length),
       candidate_slugs_discovered: String(orderedExtras.length),
       candidate_slugs_evaluated: String(cappedExtras.length),
       rejected_evaluate: String(rejectedEvaluateCount),
       professional_corpus_suppressed: String(professionalCorpusSuppressedCount),
       evaluate_reasons_json: JSON.stringify(evaluateRejectionReasons),
       prefilter_json: JSON.stringify(prefilterDropped),
+      rejects_by_reason_json: JSON.stringify({ evaluate: evaluateRejectionReasons, prefilter: prefilterDropped }),
     });
   }
 
@@ -294,15 +304,20 @@ export async function fillMarketingHubLessonInventoryToMinimum(args: {
       pathway_id: pathwayId,
       content_locale: args.lessonContentLocale,
       list_warehouse_locale: listWh,
+      strict_before: String(initialStrict),
+      strict_after: String(finalStrict),
       initial_strict: String(initialStrict),
       final_strict: String(finalStrict),
+      min_visible: String(min),
       min_target: String(min),
+      candidates_considered: String(cappedExtras.length),
       candidate_slugs_discovered: String(orderedExtras.length),
       candidate_slugs_evaluated: String(cappedExtras.length),
       filled_strict: String(filledStrict),
       reason: "insufficient_strict_inventory_after_fill",
       evaluate_reasons_json: JSON.stringify(evaluateRejectionReasons),
       prefilter_json: JSON.stringify(prefilterDropped),
+      rejects_by_reason_json: JSON.stringify({ evaluate: evaluateRejectionReasons, prefilter: prefilterDropped }),
     });
   }
 
@@ -317,7 +332,7 @@ export async function fillMarketingHubLessonInventoryToMinimum(args: {
       strict_after: String(finalStrict),
       min_visible: String(min),
       candidates_considered: String(cappedExtras.length),
-      rejects_by_reason_json: JSON.stringify(evaluateRejectionReasons),
+      rejects_by_reason_json: JSON.stringify({ evaluate: evaluateRejectionReasons, prefilter: prefilterDropped }),
       rejected_evaluate: String(rejectedEvaluateCount),
     });
   }

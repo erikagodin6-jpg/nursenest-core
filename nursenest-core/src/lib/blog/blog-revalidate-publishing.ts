@@ -1,5 +1,7 @@
-import "server-only";
-
+/**
+ * Uses Next `revalidatePath` / `revalidateTag`. Not marked `server-only` so Node `tsx --test` can load the module;
+ * do not import from client bundles.
+ */
 import { revalidatePath, revalidateTag } from "next/cache";
 
 import {

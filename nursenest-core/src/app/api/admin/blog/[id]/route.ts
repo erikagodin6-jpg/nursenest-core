@@ -408,7 +408,7 @@ export async function PATCH(req: Request, { params }: Props) {
       safeServerLog("admin", "blog_publish_now_failed", {
         postId: id,
         error: e instanceof Error ? e.message : String(e),
-        visibility: isCanonicalBlogPublishVisibilityError(e) ? e.failure : undefined,
+        visibility_json: isCanonicalBlogPublishVisibilityError(e) ? JSON.stringify(e.failure) : "",
       });
       if (isCanonicalBlogPublishVisibilityError(e)) {
         return NextResponse.json(
