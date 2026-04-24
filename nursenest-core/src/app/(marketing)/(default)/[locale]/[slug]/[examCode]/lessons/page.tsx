@@ -27,6 +27,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
 export const dynamicParams = true;
+
 /** Aggregates + paginated hub queries can run long on cold DB; avoid hard serverless timeouts under spike load. */
 export const maxDuration = 60;
 
@@ -35,20 +36,31 @@ type Props = {
   searchParams: Promise<{ page?: string; pageSize?: string; q?: string }>;
 };
 
+type SafePageResult = {
+  total: number;
+  page: number;
+  pageCount: number;
+  pageSize: number;
+  items: Awaited<ReturnType<typeof loadPathwayLessonsHubAggregates>>["pageResult"]["items"];
+};
+
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
   const hubPath = `${pathname}/lessons`;
   const sp = await searchParams;
   const q = normalizePathwayHubSearchQuery(sp.q);
+
   return safeGenerateMetadata(
     async () => {
       const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
       if (!pathway) return {};
+
       const path = buildExamPathwayPath(pathway, "lessons");
       const canonical = absoluteUrl(path);
       const title = pathwayLessonHubMetaTitle(pathway);
       const description = pathwayLessonHubMetaDescription(pathway);
+
       return {
         title,
         description,
@@ -65,35 +77,73 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
   const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+
   const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) notFound();
 
   const base = marketingPathwayLessonsIndexPath(pathway);
   const sp = await searchParams;
+
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
   const pageSizeRequested = Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;
   const qEffective = normalizePathwayHubSearchQuery(sp.q);
   const listOpts = typeof sp.q === "string" && sp.q.trim().length > 0 ? { q: sp.q } : undefined;
 
-  const { pageResult } = await loadPathwayLessonsHubAggregates(
-    pathway,
-    {
-      pageRequested,
-      pageSizeRequested,
-      lessonContentLocale,
-      listOpts,
-      qEffective: qEffective ?? "",
-      skipLaunchBundle: pageRequested !== 1 || Boolean(qEffective),
-    },
-    {
+  let pageResult: SafePageResult;
+  let hubLoadFailed = false;
+
+  try {
+    const result = await loadPathwayLessonsHubAggregates(
+      pathway,
+      {
+        pageRequested,
+        pageSizeRequested,
+        lessonContentLocale,
+        listOpts,
+        qEffective: qEffective ?? "",
+        skipLaunchBundle: pageRequested !== 1 || Boolean(qEffective),
+      },
+      {
+        pathname: `${pathname}/lessons`,
+        locale: countrySlug,
+        country: countrySlug,
+        examCode,
+        pathwayId: pathway.id,
+        roleTrack,
+      },
+    );
+
+    pageResult = result.pageResult;
+
+    console.log("[LESSONS HUB] loaded", {
       pathname: `${pathname}/lessons`,
-      locale: countrySlug,
-      country: countrySlug,
-      examCode,
       pathwayId: pathway.id,
+      total: pageResult.total,
+      page: pageResult.page,
+      pageSize: pageResult.pageSize,
+      itemCount: pageResult.items.length,
+    });
+  } catch (err) {
+    hubLoadFailed = true;
+
+    console.error("[LESSONS HUB ERROR]", {
+      pathname: `${pathname}/lessons`,
+      pathwayId: pathway.id,
+      countrySlug,
       roleTrack,
-    },
-  );
+      examCode,
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+
+    pageResult = {
+      total: 0,
+      page: 1,
+      pageCount: 1,
+      pageSize: pageSizeRequested || PATHWAY_HUB_PAGE_SIZE_DEFAULT,
+      items: [],
+    };
+  }
 
   const hubQuerySuffix = (page: number) => {
     const qs = new URLSearchParams();
@@ -103,27 +153,39 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     return s ? `?${s}` : "";
   };
 
-  if (pageResult.total === 0) {
-    if (pageRequested > 1) redirect(`${base}${hubQuerySuffix(1)}`);
-  } else if (pageRequested !== pageResult.page) {
-    redirect(`${base}${hubQuerySuffix(pageResult.page)}`);
+  if (!hubLoadFailed) {
+    if (pageResult.total === 0) {
+      if (pageRequested > 1) redirect(`${base}${hubQuerySuffix(1)}`);
+    } else if (pageRequested !== pageResult.page) {
+      redirect(`${base}${hubQuerySuffix(pageResult.page)}`);
+    }
   }
 
-  const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
+  const rawLessons = pageResult.items;
+  const lessons = rawLessons.filter(pathwayLessonHasRenderableHubSlug);
+
+  console.log("[LESSONS HUB] renderable lessons", {
+    pathname: `${pathname}/lessons`,
+    rawCount: rawLessons.length,
+    renderableCount: lessons.length,
+    total: pageResult.total,
+    hubLoadFailed,
+  });
+
   const { schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
   const headerDescription = `Browse ${pathway.shortName} lessons grouped by clinical area.`;
 
-  if (pageResult.total === 0) {
-    const querySuffix = qEffective ? `?q=${encodeURIComponent(qEffective)}` : "";
-    const canadaHref =
-      pathway.countrySlug === "canada"
-        ? `${base}${querySuffix}`
-        : `${equivalentExamHubUrlAfterRegionToggle(base, "CA") ?? base}${querySuffix}`;
-    const usHref =
-      pathway.countrySlug === "us"
-        ? `${base}${querySuffix}`
-        : `${equivalentExamHubUrlAfterRegionToggle(base, "US") ?? base}${querySuffix}`;
+  const querySuffix = qEffective ? `?q=${encodeURIComponent(qEffective)}` : "";
+  const canadaHref =
+    pathway.countrySlug === "canada"
+      ? `${base}${querySuffix}`
+      : `${equivalentExamHubUrlAfterRegionToggle(base, "CA") ?? base}${querySuffix}`;
+  const usHref =
+    pathway.countrySlug === "us"
+      ? `${base}${querySuffix}`
+      : `${equivalentExamHubUrlAfterRegionToggle(base, "US") ?? base}${querySuffix}`;
 
+  if (pageResult.total === 0 || lessons.length === 0) {
     return (
       <LessonsPageShell
         schemaItems={schemaItems}
@@ -140,10 +202,18 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       >
         <div className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
           <p className="text-sm font-medium text-[var(--theme-heading-text)]">
-            {qEffective ? `No lessons match "${qEffective}".` : `No lessons are published for ${pathway.shortName} yet.`}
+            {hubLoadFailed
+              ? "Lessons are temporarily unavailable."
+              : qEffective
+                ? `No lessons match "${qEffective}".`
+                : `No lessons are published for ${pathway.shortName} yet.`}
           </p>
           <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-            {qEffective ? "Try a broader search or clear the search to view the full lesson library." : "Check back here for structured lessons as this pathway library grows."}
+            {hubLoadFailed
+              ? "The page stayed online, but the lesson loader failed. Check the server logs for [LESSONS HUB ERROR]."
+              : qEffective
+                ? "Try a broader search or clear the search to view the full lesson library."
+                : "Check back here for structured lessons as this pathway library grows."}
           </p>
         </div>
       </LessonsPageShell>
@@ -154,17 +224,29 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     pathname: `${pathname}/lessons`,
     surface: "marketing.exam_hub.lessons",
   });
+
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
+
   let learnerPath: string | null = null;
+
   if (userId && isDatabaseUrlConfigured()) {
     try {
-      const u = await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } });
+      const u = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { learnerPath: true },
+      });
       learnerPath = u?.learnerPath ?? null;
-    } catch {
+    } catch (err) {
+      console.error("[LESSONS HUB] learnerPath lookup failed", {
+        pathname: `${pathname}/lessons`,
+        userId,
+        error: err instanceof Error ? err.message : String(err),
+      });
       learnerPath = null;
     }
   }
+
   const scope =
     entitlement === "error"
       ? { hasAccess: false, reason: "no_access" as const, tier: null, country: null }
@@ -172,32 +254,31 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
 
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
 
-  const canShowResume =
-    Boolean(userId) && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
+  const canShowResume = Boolean(userId) && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
   const canShowProgressMap = canShowResume && lessons.length > 0;
 
   if (canShowResume) {
-    const hubSlugs = canShowProgressMap ? lessons.map((l) => l.slug).filter(Boolean) : [];
-    const { progressMap: map } = await loadPathwayHubSubscriberData(
-      userId,
-      scope,
-      learnerPath,
-      pathway,
-      base,
-      hubSlugs,
-    );
-    progressMap = map;
+    try {
+      const hubSlugs = canShowProgressMap ? lessons.map((l) => l.slug).filter(Boolean) : [];
+      const { progressMap: map } = await loadPathwayHubSubscriberData(
+        userId,
+        scope,
+        learnerPath,
+        pathway,
+        base,
+        hubSlugs,
+      );
+      progressMap = map;
+    } catch (err) {
+      console.error("[LESSONS HUB] subscriber progress load failed", {
+        pathname: `${pathname}/lessons`,
+        userId,
+        pathwayId: pathway.id,
+        error: err instanceof Error ? err.message : String(err),
+      });
+      progressMap = {};
+    }
   }
-
-  const querySuffix = qEffective ? `?q=${encodeURIComponent(qEffective)}` : "";
-  const canadaHref =
-    pathway.countrySlug === "canada"
-      ? `${base}${querySuffix}`
-      : `${equivalentExamHubUrlAfterRegionToggle(base, "CA") ?? base}${querySuffix}`;
-  const usHref =
-    pathway.countrySlug === "us"
-      ? `${base}${querySuffix}`
-      : `${equivalentExamHubUrlAfterRegionToggle(base, "US") ?? base}${querySuffix}`;
 
   return (
     <LessonsPageShell
