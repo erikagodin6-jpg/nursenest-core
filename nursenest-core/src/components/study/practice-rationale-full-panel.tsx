@@ -1,7 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { BookOpen, CheckCircle2, Lightbulb, Ban, Sparkles } from "lucide-react";
+import { BookOpen, CheckCircle2, Lightbulb, Ban, Sparkles, Star } from "lucide-react";
+
+/** Shown when a distractor row has no stored per-option rationale (never invent clinical text). */
+export const PRACTICE_EXAM_MISSING_DISTRACTOR_FALLBACK =
+  "No separate rationale is available for this option.";
 
 function RationaleReviewBoardHeader() {
   return (
@@ -74,14 +78,19 @@ export function PracticeIncorrectOptionRow({
   optionText,
   explanation,
   optionTextTone = "secondary",
+  missingExplanationFallback,
 }: {
   index: number;
   optionText: string;
   explanation?: string | null;
   /** `danger` tints option labels red (UWorld-style distractor review). */
   optionTextTone?: "secondary" | "danger";
+  /** When set and `explanation` is empty, shows this copy (practice exam contract). */
+  missingExplanationFallback?: string | null;
 }) {
   const letter = LETTERS[index] ?? String(index + 1);
+  const fallback =
+    !explanation?.trim() && missingExplanationFallback?.trim() ? missingExplanationFallback.trim() : null;
   return (
     <div
       className={`nn-practice-incorrect-opt-row${optionTextTone === "danger" ? " nn-practice-incorrect-opt-row--danger-label" : ""}`}
@@ -91,8 +100,12 @@ export function PracticeIncorrectOptionRow({
       </span>
       <div className="nn-practice-incorrect-opt-row__content">
         <p className="nn-practice-incorrect-opt-row__text">{optionText}</p>
-        {explanation ? (
+        {explanation?.trim() ? (
           <p className="nn-practice-incorrect-opt-row__explanation">{explanation}</p>
+        ) : fallback ? (
+          <p className="nn-practice-incorrect-opt-row__explanation text-[var(--semantic-text-muted)]">
+            {fallback}
+          </p>
         ) : null}
       </div>
     </div>
@@ -167,6 +180,11 @@ export interface PracticeRationaleFullPanelProps {
   relatedLessons?: { title: string; href: string }[];
   /** Confidence rating selected for this question — shown as a chip (spec §10). */
   confidenceLevel?: ConfidenceLevel | null;
+  /** Resolved clinical teaching line (DB pearl / reasoning / strategy / hook). */
+  clinicalPearlDisplay?: string | null;
+  referenceSource?: string | null;
+  /** When true, incorrect option rows without stored text show {@link PRACTICE_EXAM_MISSING_DISTRACTOR_FALLBACK}. */
+  showDistractorFallback?: boolean;
 }
 
 /**
@@ -193,6 +211,9 @@ export function PracticeRationaleFullPanel({
   keyTakeaway,
   relatedLessons = [],
   confidenceLevel,
+  clinicalPearlDisplay,
+  referenceSource,
+  showDistractorFallback = false,
 }: PracticeRationaleFullPanelProps) {
   // ── Waiting / not-yet-submitted ──────────────────────────────────────────
   if (status === "waiting" || status === null) {
@@ -203,12 +224,10 @@ export function PracticeRationaleFullPanel({
             className="h-6 w-6 text-[var(--semantic-text-muted)]"
             aria-hidden
           />
-          <p className="nn-practice-rationale-waiting__text">
-            Select an answer and submit to reveal the explanation.
-          </p>
+          <p className="nn-practice-rationale-waiting__text">Review appears after you answer.</p>
           <p className="nn-practice-rationale-waiting__sub">
-            The correct answer, why each option is right or wrong, and related
-            lessons will appear here.
+            Submit your response to see the correct answer, teaching rationale, distractor review, and optional
+            references. Prioritize airway, breathing, and circulation when choosing the most urgent option.
           </p>
         </div>
       </RationaleFullFrame>
@@ -290,9 +309,20 @@ export function PracticeRationaleFullPanel({
                 optionText={optionText}
                 explanation={explanation}
                 optionTextTone="danger"
+                missingExplanationFallback={showDistractorFallback ? PRACTICE_EXAM_MISSING_DISTRACTOR_FALLBACK : null}
               />
             );
           })}
+        </PracticeRationaleSection>
+      ) : null}
+
+      {clinicalPearlDisplay?.trim() ? (
+        <PracticeRationaleSection
+          variant="pearl"
+          label="Clinical Pearl"
+          icon={<Star className="h-3.5 w-3.5 text-[var(--semantic-warning)]" aria-hidden />}
+        >
+          <p>{clinicalPearlDisplay.trim()}</p>
         </PracticeRationaleSection>
       ) : null}
 
@@ -304,6 +334,12 @@ export function PracticeRationaleFullPanel({
           icon={<Sparkles className="h-3.5 w-3.5 text-[var(--semantic-brand)]" aria-hidden />}
         >
           <p>{keyTakeaway}</p>
+        </PracticeRationaleSection>
+      ) : null}
+
+      {referenceSource?.trim() ? (
+        <PracticeRationaleSection variant="muted" label="References / Source">
+          <p className="m-0 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{referenceSource.trim()}</p>
         </PracticeRationaleSection>
       ) : null}
 

@@ -47,7 +47,7 @@ import {
   verifyMarketingHubLessonRowsResolve,
 } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
 import {
-  fillMarketingHubLessonsToMinimumVisible,
+  fillMarketingHubLessonInventoryToMinimum,
   MARKETING_HUB_MIN_VISIBLE_LESSONS,
 } from "@/lib/lessons/marketing-hub-lesson-inventory-fill";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -65,6 +65,7 @@ import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { MarketingLessonsHubRetryableErrorShell } from "@/components/pathway-lessons/marketing-lessons-hub-retryable-error-shell";
+import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
 import { LessonHubFullLessonLinkNav } from "@/components/pathway-lessons/lesson-hub-full-lesson-link-nav";
 import { assessCanadaRnNclexLessonHubPipelineCollapseGuard } from "@/lib/lessons/pathway-lesson-hub-pipeline-collapse-guard";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
@@ -431,27 +432,44 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       outcome: "error",
       fallback_used: "false",
     });
+    const errRenderable = pageResult.renderableAll ?? pageResult.items;
     return (
-      <MarketingLessonsHubRetryableErrorShell
-        title={pageTitle}
-        subtitle={headerDescription}
-        toolbar={toolbar}
-        backLabel={`${examName} overview`}
-        backHref={overviewHref}
-        crumbs={crumbs}
-        schemaItems={schemaItems}
-        surfaceChips={lessonHubSurfaceChips}
-        errorTitle={"Lessons temporarily unavailable"}
-        errorBody={
-          "We could not load the lesson library from our database right now. Your progress is safe — please retry in a moment."
-        }
-        errorDetail={marketingLessonsHubLoadErrorDetail(lessonsPageLoad)}
-        retryHref={`${base}${hubQuerySuffix}`}
-        secondaryHref={overviewHref}
-        secondaryLabel="Back to exam overview"
-        supportHref={`/${countrySlug}/contact`}
-        supportLabel="Contact support"
-      />
+      <>
+        <MarketingHubSmokeDiagnosticsJson
+          payload={{
+            surface: "marketing_pathway_lessons",
+            outcome: "lessons_load_error",
+            pathwayId: pathway.id,
+            routePathname: `${pathname}/lessons`,
+            contentLocale: lessonContentLocale,
+            lessonsPageLoadReason: lessonsPageLoad.reason,
+            lessonsPageLoadTimedOut: lessonsPageLoad.timedOut,
+            lessonsPageLoadDbFailureCategory: lessonsPageLoad.dbFailureCategory ?? null,
+            loaderTotal: pageResult.total,
+            renderableAllCount: errRenderable.length,
+          }}
+        />
+        <MarketingLessonsHubRetryableErrorShell
+          title={pageTitle}
+          subtitle={headerDescription}
+          toolbar={toolbar}
+          backLabel={`${examName} overview`}
+          backHref={overviewHref}
+          crumbs={crumbs}
+          schemaItems={schemaItems}
+          surfaceChips={lessonHubSurfaceChips}
+          errorTitle={"Lessons temporarily unavailable"}
+          errorBody={
+            "We could not load the lesson library from our database right now. Your progress is safe — please retry in a moment."
+          }
+          errorDetail={marketingLessonsHubLoadErrorDetail(lessonsPageLoad)}
+          retryHref={`${base}${hubQuerySuffix}`}
+          secondaryHref={overviewHref}
+          secondaryLabel="Back to exam overview"
+          supportHref={`/${countrySlug}/contact`}
+          supportLabel="Contact support"
+        />
+      </>
     );
   }
 
@@ -476,28 +494,44 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     prepareStages: hubPrepareStages,
   });
   const verifyDurationMs = Math.round(performance.now() - verifyT0);
-  const fillMin = fillMarketingHubLessonsToMinimumVisible({
-    minVisible: MARKETING_HUB_MIN_VISIBLE_LESSONS,
+  const fillResult = await fillMarketingHubLessonInventoryToMinimum({
+    pathway,
+    routePathname: `${pathname}/lessons`,
+    lessonContentLocale,
+    listWarehouseLocale,
     lessonsBasePath: base,
+    minVisible: MARKETING_HUB_MIN_VISIBLE_LESSONS,
     verifiedKept: vr.kept,
     hubCurriculumPrepared,
     loaderRenderable: rawHubLessonRows,
   });
-  let hubCurriculumLessons = fillMin.lessons;
+  let hubCurriculumLessons = fillResult.lessons;
   const hubVerifyDiagnostics = vr.diagnostics;
-  if (fillMin.filledFromInventory > 0) {
+  const fillDiag = fillResult.diagnostics;
+  if (fillDiag.filledStrictCount > 0) {
     safeServerLog("pathway_lessons", "marketing_hub_min_visible_inventory_fill", {
       pathway_id: pathway.id,
       country_slug: countrySlug,
       role_track: roleTrack,
       exam_code: examCode,
-      filled_from_inventory: String(fillMin.filledFromInventory),
+      route: fillDiag.routePathname,
+      content_locale: fillDiag.contentLocale,
+      list_warehouse_locale: fillDiag.listWarehouseLocale,
+      initial_strict: String(fillDiag.initialStrictCount),
+      filled_strict: String(fillDiag.filledStrictCount),
+      final_strict: String(fillDiag.finalStrictCount),
+      final_total: String(fillDiag.finalTotalCount),
+      candidate_slugs_discovered: String(fillDiag.candidateSlugsDiscovered),
+      candidate_slugs_evaluated: String(fillDiag.candidateSlugsEvaluated),
+      rejected_evaluate: String(fillDiag.rejectedEvaluateCount),
+      evaluate_reasons_json: JSON.stringify(fillDiag.evaluateRejectionReasons),
+      prefilter_json: JSON.stringify(fillDiag.prefilterDropped),
       after_verify_before_fill: String(vr.kept.length),
       after_fill: String(hubCurriculumLessons.length),
     });
   }
   if (
-    hubCurriculumLessons.length < MARKETING_HUB_MIN_VISIBLE_LESSONS &&
+    fillDiag.finalStrictCount < MARKETING_HUB_MIN_VISIBLE_LESSONS &&
     pageResult.total >= MARKETING_HUB_MIN_VISIBLE_LESSONS
   ) {
     safeServerLog("pathway_lessons", "marketing_hub_inventory_below_minimum_after_fill_critical", {
@@ -506,8 +540,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       role_track: roleTrack,
       exam_code: examCode,
       loader_total: String(pageResult.total),
-      after_fill_count: String(hubCurriculumLessons.length),
+      after_fill_strict: String(fillDiag.finalStrictCount),
+      after_fill_total: String(hubCurriculumLessons.length),
       min_requested: String(MARKETING_HUB_MIN_VISIBLE_LESSONS),
+      evaluate_reasons_json: JSON.stringify(fillDiag.evaluateRejectionReasons),
     });
   }
   if (process.env.NN_MARKETING_HUB_DETAIL_PROBE === "1" && hubCurriculumLessons.length > 0) {
@@ -796,26 +832,44 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         outcome: "error_shell",
       });
       return (
-        <MarketingLessonsHubRetryableErrorShell
-          title={pageTitle}
-          subtitle={headerDescription}
-          toolbar={toolbar}
-          backLabel={`${examName} overview`}
-          backHref={overviewHref}
-          crumbs={crumbs}
-          schemaItems={schemaItems}
-          surfaceChips={lessonHubSurfaceChips}
-          errorTitle={"Lessons temporarily unavailable"}
-          errorBody={
-            "The lesson library did not pass a safety check: the visible list does not match how many lessons should be available. This is usually temporary — please retry."
-          }
-          errorDetail={collapse.userFacingDetail}
-          retryHref={`${base}${hubQuerySuffix}`}
-          secondaryHref={overviewHref}
-          secondaryLabel="Back to exam overview"
-          supportHref={`/${countrySlug}/contact`}
-          supportLabel="Contact support"
-        />
+        <>
+          <MarketingHubSmokeDiagnosticsJson
+            payload={{
+              surface: "marketing_pathway_lessons",
+              outcome: "pipeline_invariant_failed",
+              pathwayId: pathway.id,
+              routePathname: `${pathname}/lessons`,
+              contentLocale: lessonContentLocale,
+              pipelineInvariantCode: collapse.invariantCode,
+              pipelineMetricEvent: collapse.metricEvent,
+              pipelineFields: collapse.fields,
+              preparedLessonCount: hubCurriculumPrepared.length,
+              verifiedLessonCount: hubCurriculumLessons.length,
+              finalRenderedLessonLinkCount: finalRenderedVisibleLessonLinkCount,
+              loaderTotal: pageResult.total,
+            }}
+          />
+          <MarketingLessonsHubRetryableErrorShell
+            title={pageTitle}
+            subtitle={headerDescription}
+            toolbar={toolbar}
+            backLabel={`${examName} overview`}
+            backHref={overviewHref}
+            crumbs={crumbs}
+            schemaItems={schemaItems}
+            surfaceChips={lessonHubSurfaceChips}
+            errorTitle={"Lessons temporarily unavailable"}
+            errorBody={
+              "The lesson library did not pass a safety check: the visible list does not match how many lessons should be available. This is usually temporary — please retry."
+            }
+            errorDetail={collapse.userFacingDetail}
+            retryHref={`${base}${hubQuerySuffix}`}
+            secondaryHref={overviewHref}
+            secondaryLabel="Back to exam overview"
+            supportHref={`/${countrySlug}/contact`}
+            supportLabel="Contact support"
+          />
+        </>
       );
     }
   }
@@ -855,6 +909,29 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         toolbar={toolbar}
         backLink={{ label: `${examName} overview`, href: overviewHref }}
       >
+        <MarketingHubSmokeDiagnosticsJson
+          payload={{
+            surface: "marketing_pathway_lessons",
+            outcome: "zero_total",
+            pathwayId: pathway.id,
+            routePathname: `${pathname}/lessons`,
+            contentLocale: lessonContentLocale,
+            loaderTotal: pageResult.total,
+            renderableAllCount: renderableAllIn.length,
+            preparedLessonCount: hubCurriculumPrepared.length,
+            verifiedLessonCount: hubCurriculumLessons.length,
+            curriculumGridRowCount: lessonsForCurriculumHub.length,
+            finalRenderedLessonLinkCount: finalRenderedVisibleLessonLinkCount,
+            verifyIncomingPrepared: hubVerifyDiagnostics.incomingPreparedRowCount,
+            verifyKept: hubVerifyDiagnostics.keptRowCount,
+            topRejectionReasons: topDropReasonsForPayload,
+            excludedByReason: hubVerifyDiagnostics.excludedByReason ?? {},
+            fillEvaluateRejectionReasons: fillDiag.evaluateRejectionReasons,
+            fillRejectedEvaluateCount: fillDiag.rejectedEvaluateCount,
+            lessonsPageSource: lessonsPageLoad.sourceUsed,
+            note: "No #pathway-lesson-library — hub list total is zero for this query.",
+          }}
+        />
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
         <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
         <div className="mt-6 rounded-[1.75rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
@@ -952,6 +1029,29 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       toolbar={toolbar}
       backLink={{ label: `${examName} overview`, href: overviewHref }}
     >
+      <MarketingHubSmokeDiagnosticsJson
+        payload={{
+          surface: "marketing_pathway_lessons",
+          outcome: "rendered_library",
+          pathwayId: pathway.id,
+          routePathname: `${pathname}/lessons`,
+          contentLocale: lessonContentLocale,
+          loaderTotal: pageResult.total,
+          renderableAllCount: renderableAllIn.length,
+          preparedLessonCount: hubCurriculumPrepared.length,
+          verifiedLessonCount: hubCurriculumLessons.length,
+          curriculumGridRowCount: lessonsForCurriculumHub.length,
+          finalRenderedLessonLinkCount: finalRenderedVisibleLessonLinkCount,
+          verifyIncomingPrepared: hubVerifyDiagnostics.incomingPreparedRowCount,
+          verifyUniqueSlugs: hubVerifyDiagnostics.uniqueSlugCount,
+          verifyKept: hubVerifyDiagnostics.keptRowCount,
+          topRejectionReasons: topDropReasonsForPayload,
+          excludedByReason: hubVerifyDiagnostics.excludedByReason ?? {},
+          fillEvaluateRejectionReasons: fillDiag.evaluateRejectionReasons,
+          fillRejectedEvaluateCount: fillDiag.rejectedEvaluateCount,
+          lessonsPageSource: lessonsPageLoad.sourceUsed,
+        }}
+      />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
       <LessonHubSurfaceChips links={lessonHubSurfaceChips} />
       {lessonsPageLoad.status === "ok" && lessonsPageLoad.sourceUsed === "secondary" ? (

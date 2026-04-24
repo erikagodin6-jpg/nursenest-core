@@ -24,7 +24,10 @@ import { CatResultsCoachSection } from "@/components/student/cat-results-coach-s
 import { CatStudyFeedbackPanel } from "@/components/student/cat-study-feedback-panel";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { StudyNotesPanel } from "@/components/student/study-notes-panel";
+import { PracticeExamProgressHeader } from "@/components/student/practice-exam/practice-exam-progress-header";
+import { PracticeExamRationalePanel } from "@/components/student/practice-exam/practice-exam-rationale-panel";
 import { PracticeTestTeachingReviewPanel } from "@/components/student/practice-test-teaching-review-panel";
+import { PracticeRationaleFullPanel } from "@/components/study/practice-rationale-full-panel";
 import { PracticeTestStudyLoopNext } from "@/components/student/practice-test-study-loop-next";
 import type { PracticeTestTeachingItem } from "@/lib/practice-tests/build-teaching-review";
 import { getLinearCommittedQuestionIds } from "@/lib/practice-tests/practice-linear-engine";
@@ -200,6 +203,8 @@ export function PracticeTestRunnerClient({
       distractorRationalesMap?: Record<string, string> | null;
       keyTakeaway?: string | null;
       relatedLessons?: { title: string; href: string }[];
+      clinicalPearlDisplay?: string | null;
+      referenceSource?: string | null;
     }>
   >({});
   /** CAT Study Mode: rationale for the current item after scoring, before the next adaptive pick. */
@@ -677,6 +682,9 @@ export function PracticeTestRunnerClient({
   const linearCatShellPresentation =
     linearIsExamShell ||
     (isLinearEngine && linearDelivery === "practice" && linearRationaleVisibility === "after_each");
+  /** Desktop/tablet split: question left, rationale right (mobile stacks). */
+  const linearPracticeSplitReview =
+    isLinearEngine && linearDelivery === "practice" && linearRationaleVisibility === "after_each";
   const linearEngineUiKind = resolveLinearEngineRunnerUiKind({
     catMode,
     linearDeliveryMode: linearDelivery,
@@ -889,6 +897,8 @@ export function PracticeTestRunnerClient({
           distractorRationalesMap?: Record<string, string> | null;
           keyTakeaway?: string | null;
           relatedLessons?: { title: string; href: string }[];
+          clinicalPearlDisplay?: string | null;
+          referenceSource?: string | null;
         };
       };
       if (!res.ok) throw new Error(data.error ?? "Could not submit answer.");
@@ -906,6 +916,8 @@ export function PracticeTestRunnerClient({
             distractorRationalesMap: data.feedback!.distractorRationalesMap ?? null,
             keyTakeaway: data.feedback!.keyTakeaway ?? null,
             relatedLessons: data.feedback!.relatedLessons ?? [],
+            clinicalPearlDisplay: data.feedback!.clinicalPearlDisplay ?? null,
+            referenceSource: data.feedback!.referenceSource ?? null,
           },
         }));
       }
@@ -2721,13 +2733,15 @@ export function PracticeTestRunnerClient({
     linearStemClinicalSplit?.imageSrc && linearStemClinicalSplit.imageSrc.trim().length > 0
       ? linearStemClinicalSplit.imageSrc.trim()
       : null;
-  const showLinearPerItemRationale = shouldShowLinearPerItemRationale({
-    isLinearEngine,
-    linearDeliveryMode: linearDelivery,
-    linearRationaleVisibility,
-    currentCommitted,
-    linearFeedbackForCurrent: linearFeedback,
-  });
+  const showLinearPerItemRationale = linearPracticeSplitReview
+    ? false
+    : shouldShowLinearPerItemRationale({
+        isLinearEngine,
+        linearDeliveryMode: linearDelivery,
+        linearRationaleVisibility,
+        currentCommitted,
+        linearFeedbackForCurrent: linearFeedback,
+      });
 
   const linearQuestionCardInner = (
     <>
@@ -2923,47 +2937,101 @@ export function PracticeTestRunnerClient({
         <ExamSessionShell
           neutralPalette
           immersive
-          className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none nn-cat-exam-chrome${linearCatShellPresentation ? " nn-cat-adaptive-exam-session" : ""}`}
+          className={`flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden border-0 bg-transparent !shadow-none nn-cat-exam-chrome${linearCatShellPresentation ? " nn-cat-adaptive-exam-session" : ""}${linearPracticeSplitReview ? " nn-practice-exam-runner" : ""}`}
         >
-          <header
-            className={`nn-cat-exam-board-top flex shrink-0 items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] px-3 py-2 sm:px-4${linearCatShellPresentation ? " nn-cat-exam-board-top--adaptive py-1.5 sm:py-2" : " min-h-[3.5rem]"}`}
-          >
-            <p className="nn-cat-exam-board-top__progress m-0 text-sm font-semibold leading-snug text-[var(--semantic-text-secondary)]">
-              {linearCatShellPresentation
-                ? tx("learner.practiceTests.run.itemInProgress", "Item {n} in Progress", { n: String(idx + 1) })
-                : `${tx("learner.practiceTests.run.question", "Question")} ${idx + 1} ${tx("learner.practiceTests.run.of", "of")} ${total}`}
-            </p>
-            <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
-              <ExamSessionThemeTrigger variant="pill" />
-              <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
-              <button
-                type="button"
-                disabled={controlsBusy}
-                className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] disabled:opacity-40"
-                onClick={() => void abandon()}
+          {linearPracticeSplitReview ? (
+            <>
+              <PracticeExamProgressHeader
+                questionIndexOneBased={idx + 1}
+                total={Math.max(total, 1)}
+                toolbar={
+                  <div className="flex flex-wrap items-center justify-end gap-2">
+                    <ExamSessionThemeTrigger variant="pill" />
+                    <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+                    <button
+                      type="button"
+                      disabled={controlsBusy}
+                      className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] disabled:opacity-40"
+                      onClick={() => void abandon()}
+                    >
+                      <Send className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+                      {tx("learner.practiceTests.run.endExam", "End")}
+                    </button>
+                  </div>
+                }
+              />
+              {sessionRecoveryBanner}
+              <div
+                className={`nn-cat-exam-board-frame nn-cat-session flex min-h-0 flex-1 flex-col overflow-hidden ${chromeClass} nn-cat-session--exam-single`}
               >
-                <Send className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
-                {tx("learner.practiceTests.run.endExam", "End")}
-              </button>
-            </div>
-          </header>
-          <ExamProgressBar
-            className={`nn-cat-exam-board-progress shrink-0${linearCatShellPresentation ? " nn-exam-progress--cat-exam-adaptive" : ""}`}
-            current={idx + 1}
-            total={Math.max(total, 1)}
-            variant={linearCatShellPresentation ? "adaptive_item" : "fixed_session"}
-            adaptiveMaxItems={linearCatShellPresentation ? null : undefined}
-            sessionLabel={modeLabel}
-          />
-          {sessionRecoveryBanner}
-          <div
-            className={`nn-cat-exam-board-frame nn-cat-session flex min-h-0 flex-1 flex-col overflow-hidden ${chromeClass} nn-cat-session--exam-single`}
-          >
-            <div className="nn-cat-exam-content-well nn-cat-exam-col mx-auto flex min-h-0 w-full max-w-[48.75rem] flex-1 flex-col overflow-hidden">
-              {linearExamQuestionCard}
-            </div>
-            {linearBoardFooter}
-          </div>
+                <div className="nn-practice-exam-split mx-auto flex min-h-0 w-full max-w-[min(112rem,calc(100vw-1.5rem))] flex-1 flex-col gap-4 px-2 pb-1 pt-1 lg:flex-row lg:items-stretch lg:gap-5 lg:px-4 lg:pb-2">
+                  <div className="nn-practice-exam-split__primary flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+                    {linearExamQuestionCard}
+                  </div>
+                  <PracticeExamRationalePanel>
+                    <PracticeRationaleFullPanel
+                      status={rationaleFullStatus}
+                      correctKeys={linearFeedback?.correctKeys}
+                      optionDisplayMap={optionDisplayMap}
+                      allOptionKeys={optsOrderCanonical}
+                      correctAnswerExplanation={linearFeedback?.correctAnswerExplanation}
+                      rationale={linearFeedback?.rationale}
+                      distractorRationalesMap={linearFeedback?.distractorRationalesMap}
+                      keyTakeaway={linearFeedback?.keyTakeaway}
+                      relatedLessons={linearFeedback?.relatedLessons ?? []}
+                      confidenceLevel={confidenceTrackingEnabled ? (confidence[current.id] ?? null) : null}
+                      clinicalPearlDisplay={linearFeedback?.clinicalPearlDisplay ?? null}
+                      referenceSource={linearFeedback?.referenceSource ?? null}
+                      showDistractorFallback={Boolean(currentCommitted && rationaleFullStatus !== "waiting" && rationaleFullStatus !== null)}
+                    />
+                  </PracticeExamRationalePanel>
+                </div>
+                {linearBoardFooter}
+              </div>
+            </>
+          ) : (
+            <>
+              <header
+                className={`nn-cat-exam-board-top flex shrink-0 items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] px-3 py-2 sm:px-4${linearCatShellPresentation ? " nn-cat-exam-board-top--adaptive py-1.5 sm:py-2" : " min-h-[3.5rem]"}`}
+              >
+                <p className="nn-cat-exam-board-top__progress m-0 text-sm font-semibold leading-snug text-[var(--semantic-text-secondary)]">
+                  {linearCatShellPresentation
+                    ? tx("learner.practiceTests.run.itemInProgress", "Item {n} in Progress", { n: String(idx + 1) })
+                    : `${tx("learner.practiceTests.run.question", "Question")} ${idx + 1} ${tx("learner.practiceTests.run.of", "of")} ${total}`}
+                </p>
+                <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+                  <ExamSessionThemeTrigger variant="pill" />
+                  <ExamTimerReadout remainingSec={timedMode ? remainingSec : null} />
+                  <button
+                    type="button"
+                    disabled={controlsBusy}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_25%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] px-2.5 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] disabled:opacity-40"
+                    onClick={() => void abandon()}
+                  >
+                    <Send className="h-3.5 w-3.5 shrink-0 opacity-80" aria-hidden />
+                    {tx("learner.practiceTests.run.endExam", "End")}
+                  </button>
+                </div>
+              </header>
+              <ExamProgressBar
+                className={`nn-cat-exam-board-progress shrink-0${linearCatShellPresentation ? " nn-exam-progress--cat-exam-adaptive" : ""}`}
+                current={idx + 1}
+                total={Math.max(total, 1)}
+                variant={linearCatShellPresentation ? "adaptive_item" : "fixed_session"}
+                adaptiveMaxItems={linearCatShellPresentation ? null : undefined}
+                sessionLabel={modeLabel}
+              />
+              {sessionRecoveryBanner}
+              <div
+                className={`nn-cat-exam-board-frame nn-cat-session flex min-h-0 flex-1 flex-col overflow-hidden ${chromeClass} nn-cat-session--exam-single`}
+              >
+                <div className="nn-cat-exam-content-well nn-cat-exam-col mx-auto flex min-h-0 w-full max-w-[48.75rem] flex-1 flex-col overflow-hidden">
+                  {linearExamQuestionCard}
+                </div>
+                {linearBoardFooter}
+              </div>
+            </>
+          )}
         </ExamSessionShell>
       </PracticeSessionLayout>
     </ProtectedPremiumContent>

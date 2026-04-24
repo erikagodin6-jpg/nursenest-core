@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "lessons": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "slug": "legacy-slug-demo",
+      "title": "Legacy title",
+      "topic": "Pharmacology",
+      "topicSlug": "pharmacology",
+      "bodySystem": "cardiovascular",
+      "status": "PUBLISHED",
+      "visiblePublic": true
+    }
+  ],
+  "flashcards": {
+    "tags": [{ "slug": "legacy-tag-demo", "name": "Legacy tag demo" }],
+    "deckTagLinks": [{ "deckSlug": "legacy-deck-demo", "tagSlug": "legacy-tag-demo" }]
+  }
+}

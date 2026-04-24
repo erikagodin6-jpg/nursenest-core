@@ -9,7 +9,14 @@ import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeoutOrThrow } from "@/lib/db/safe-database";
 import { logRouteDataPipeline, routeDataDiagnosticsEnabled } from "@/lib/observability/route-data-pipeline-log";
 
-export type PublicFlashcardTagsPayload = { tags: Array<{ slug: string; name: string }> };
+/** How the tag list was derived from Prisma (not HTTP/Data Cache hit/miss). */
+export type PublicFlashcardTagsInventorySource = "db" | "fallback";
+
+export type PublicFlashcardTagsPayload = {
+  tags: Array<{ slug: string; name: string }>;
+  /** Join-table tags vs deck slug/title fallback when join is empty. */
+  inventorySource?: PublicFlashcardTagsInventorySource;
+};
 
 /** Cold pool / Prisma warmup can exceed sub-second budgets; empty fallback here poisons `unstable_cache`. */
 const TAG_QUERY_TIMEOUT_MS = 12_000;
@@ -28,7 +35,7 @@ async function loadPublicFlashcardTagsFromDb(): Promise<PublicFlashcardTagsPaylo
     take: 80,
     select: { slug: true, name: true },
   });
-  if (joinTags.length > 0) return { tags: joinTags };
+  if (joinTags.length > 0) return { tags: joinTags, inventorySource: "db" };
 
   const decks = await prisma.flashcardDeck.findMany({
     where: { ...deckWhere, cardCount: { gt: 0 } },
@@ -36,7 +43,10 @@ async function loadPublicFlashcardTagsFromDb(): Promise<PublicFlashcardTagsPaylo
     take: 80,
     select: { slug: true, title: true },
   });
-  return { tags: decks.map((d) => ({ slug: d.slug, name: d.title })) };
+  return {
+    tags: decks.map((d) => ({ slug: d.slug, name: d.title })),
+    inventorySource: "fallback",
+  };
 }
 
 /**
@@ -70,7 +80,7 @@ export const getCachedPublicFlashcardTags = unstable_cache(
   async () => loadPublicFlashcardTags(),
   [
     "public-flashcard-tags",
-    "v2-deck-fallback",
+    "v3-contract-no-empty-200",
     `rev:${cacheDeploymentRevision()}`,
     String(PUBLIC_FLASHCARD_TAGS_CACHE_REVALIDATE_SEC),
   ],

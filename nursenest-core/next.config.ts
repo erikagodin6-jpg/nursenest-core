@@ -43,7 +43,15 @@ import { createRequire } from "module";
 import os from "node:os";
 import { fileURLToPath } from "url";
 import type { NextConfig } from "next";
+import { CACHE_HEADER_HOME_STATS, CACHE_HEADER_PUBLIC_LIST } from "./src/lib/cache/public-edge-cache-headers";
 import { CORE_HOSTED_MARKETING_LOCALES } from "./src/lib/i18n/marketing-locale-policy";
+
+function cacheControlFromHeadersInit(h: HeadersInit): string {
+  if (h && typeof h === "object" && !Array.isArray(h) && "Cache-Control" in h) {
+    return String((h as { "Cache-Control": string })["Cache-Control"]);
+  }
+  throw new Error("next.config headers: expected Cache-Control on HeadersInit");
+}
 
 /** Parent of `nursenest-core/` (repo root); avoids `path` in config bundle (fixes ESM load). */
 const monorepoRoot = fileURLToPath(new URL("..", import.meta.url));
@@ -425,20 +433,20 @@ const nextConfig: NextConfig = {
         headers: [{ key: "Cache-Control", value: STATIC_ASSET_CACHE_CONTROL }],
       },
       /**
-       * Anonymous public JSON (`/api/public/*`) — CDN may cache; handlers also set `Cache-Control`.
-       * Listed explicitly (no blanket `/api/*` Cache-Control rule) so this policy is not overridden.
+       * Anonymous public JSON — CDN `Cache-Control` must **match** each handler (`public-edge-cache-headers.ts`).
+       * Do not use one TTL for all `/api/public/*`: e.g. flashcard-tags uses `s-maxage=120`; home-stats uses 3600.
        */
       {
-        source: "/api/public/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400, stale-if-error=86400",
-          },
-        ],
+        source: "/api/public/home-stats",
+        headers: [{ key: "Cache-Control", value: cacheControlFromHeadersInit(CACHE_HEADER_HOME_STATS) }],
+      },
+      {
+        source: "/api/public/flashcard-tags",
+        headers: [{ key: "Cache-Control", value: cacheControlFromHeadersInit(CACHE_HEADER_PUBLIC_LIST) }],
       },
       /**
-       * APIs are not HTML landing pages; keep them out of the index even if discovered outside `robots.txt`.
+       * APIs are not HTML landing pages; `X-Robots-Tag` applies to **API responses only** — not marketing HTML
+       * (see root `src/app/layout.tsx` `metadata.robots` in production).
        * (`Disallow: /api/` is still emitted in `/robots.txt`.)
        */
       {

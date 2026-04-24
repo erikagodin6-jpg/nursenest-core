@@ -52,6 +52,12 @@
   --hero-gradient-start: transparent;
   --hero-gradient-mid: transparent;
   --hero-gradient-end: transparent;
+  /* Practice exam runner — maps to semantic + theme layers (no raw hex in components). */
+  --nn-correct-bg: color-mix(in srgb, var(--semantic-success) 9%, var(--semantic-surface));
+  --nn-correct-border: color-mix(in srgb, var(--semantic-success) 22%, var(--semantic-border-soft));
+  --nn-correct-fg: var(--semantic-text-primary);
+  --nn-review-panel-bg: var(--semantic-surface);
+  --nn-exam-option-selected-bg: color-mix(in srgb, var(--semantic-brand) 11%, var(--semantic-surface));
 }
 
 :where([data-theme]) {

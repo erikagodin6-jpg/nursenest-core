@@ -7,6 +7,7 @@ import {
   canonicalCorrectKeysForQuestion,
 } from "@/lib/exams/score-session-answers";
 import { resolveRationaleLessonLinksForQuestion } from "@/lib/learner/rationale-lesson-link-resolve";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type LinearCommitFeedbackJson = {
   isCorrect: boolean;
@@ -23,7 +24,26 @@ export type LinearCommitFeedbackJson = {
   keyTakeaway: string | null;
   /** Resolved lesson links for the question's topic (0–4 items). */
   relatedLessons: { title: string; href: string }[];
+  /**
+   * First non-empty among clinical pearl, clinical reasoning, exam strategy, memory hook — for review UI only.
+   */
+  clinicalPearlDisplay: string | null;
+  /** Optional citation line when present in the question row. */
+  referenceSource: string | null;
 };
+
+function firstNonEmptyTrimmed(...candidates: (string | null | undefined)[]): string | null {
+  for (const c of candidates) {
+    const t = typeof c === "string" ? c.trim() : "";
+    if (t.length > 0) return t;
+  }
+  return null;
+}
+
+function optionCanonicalKeysFromJson(options: unknown): string[] {
+  if (!Array.isArray(options)) return [];
+  return options.map((x) => String(x).trim()).filter((s) => s.length > 0);
+}
 
 /**
  * Parse `distractorRationales` (or `incorrectAnswerRationale`) into a
@@ -76,6 +96,12 @@ export async function buildLinearCommitFeedback(
       subtopic: true,
       bodySystem: true,
       tags: true,
+      clinicalPearl: true,
+      clinicalReasoning: true,
+      examStrategy: true,
+      memoryHook: true,
+      referenceSource: true,
+      options: true,
     },
   });
   if (!q) return null;
@@ -99,6 +125,37 @@ export async function buildLinearCommitFeedback(
     typeof q.keyTakeaway === "string" && q.keyTakeaway.trim().length > 0
       ? q.keyTakeaway.trim()
       : null;
+  const clinicalPearlDisplay = firstNonEmptyTrimmed(
+    q.clinicalPearl,
+    q.clinicalReasoning,
+    q.examStrategy,
+    q.memoryHook,
+  );
+  const referenceSource =
+    typeof q.referenceSource === "string" && q.referenceSource.trim().length > 0
+      ? q.referenceSource.trim()
+      : null;
+
+  const correctKeySet = new Set(correctKeys);
+  const optionKeys = optionCanonicalKeysFromJson(q.options);
+  const incorrectOptionKeys = optionKeys.filter((k) => !correctKeySet.has(k));
+  const missingDistractorKeys = incorrectOptionKeys.filter((k) => {
+    const v = distractorRationalesMap?.[k];
+    return typeof v !== "string" || v.trim().length === 0;
+  });
+  if (missingDistractorKeys.length > 0) {
+    safeServerLog("practice_tests", "linear_feedback_missing_distractor_rationale", {
+      questionId: questionId.slice(0, 12),
+      missingCount: missingDistractorKeys.length,
+      pathwayId: pathwayId ? pathwayId.slice(0, 16) : "",
+    });
+  }
+  if (!rationale && !correctAnswerExplanation) {
+    safeServerLog("practice_tests", "linear_feedback_missing_primary_rationale", {
+      questionId: questionId.slice(0, 12),
+      pathwayId: pathwayId ? pathwayId.slice(0, 16) : "",
+    });
+  }
 
   // Resolve lesson links — non-critical; silently falls back to empty array
   let relatedLessons: { title: string; href: string }[] = [];
@@ -123,5 +180,7 @@ export async function buildLinearCommitFeedback(
     distractorRationalesMap,
     keyTakeaway,
     relatedLessons,
+    clinicalPearlDisplay,
+    referenceSource,
   };
 }

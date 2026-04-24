@@ -14,6 +14,7 @@
  * CI: workflow `marketing-study-production-smoke.yml` (workflow_dispatch only).
  */
 import { expect, test } from "@playwright/test";
+import { readMarketingHubSmokeDiagnostics } from "../helpers/marketing-hub-smoke-diagnostics";
 
 const base = process.env.MARKETING_STUDY_SMOKE_BASE_URL?.trim().replace(/\/$/, "") ?? "";
 const rawRequirePp = process.env.MARKETING_STUDY_REQUIRE_PP_BLOG_LINKS?.trim().toLowerCase() ?? "";
@@ -93,15 +94,32 @@ test.describe("Marketing study surfaces (env-gated)", () => {
   test("flashcards — API tags non-empty + hub has deck/category navigation", async ({ request, page }) => {
     const apiUrl = `${base}/api/public/flashcard-tags`;
     const res = await request.get(apiUrl, { timeout: 45_000 });
-    expect(
-      res.ok(),
-      `GET flashcard-tags ${res.status()} (503 DATA_UNAVAILABLE means empty inventory — fix data or cache)`,
-    ).toBeTruthy();
     const ct = res.headers()["content-type"] ?? "";
     expect(ct, "content-type should be JSON").toMatch(/application\/json/i);
-    const body = (await res.json()) as { tags?: Array<{ slug: string; name: string }> };
-    expect(Array.isArray(body.tags), "`tags` must be an array").toBe(true);
-    expect(body.tags!.length, "tags.length must be ≥1 after cache purge / deploy").toBeGreaterThanOrEqual(1);
+    const body = (await res.json()) as {
+      tags?: Array<{ slug: string; name: string }>;
+      contractVersion?: string;
+      source?: string;
+      tagCount?: number;
+      error?: string;
+      code?: string;
+    };
+
+    if (res.status() === 200 && Array.isArray(body.tags) && body.tags.length === 0) {
+      expect(
+        false,
+        `STALE_ROUTE_OR_CDN: flashcard-tags returned 200 with tags:[] — old safeJsonReadRoute/degraded handler or CDN may still be live. Full body (truncated): ${JSON.stringify(body).slice(0, 600)}`,
+      ).toBeTruthy();
+    }
+
+    expect(
+      res.ok() && Array.isArray(body.tags) && body.tags.length > 0,
+      `flashcard-tags must return 200 with a non-empty tags list when production inventory is healthy. status=${res.status()} source=${body.source ?? ""} error=${body.error ?? ""} code=${body.code ?? ""} body=${JSON.stringify(body).slice(0, 900)}`,
+    ).toBeTruthy();
+
+    expect(body.contractVersion, "contractVersion flashcard-tags-v3 proves current handler is deployed").toBe("flashcard-tags-v3");
+    expect(body.source === "db" || body.source === "fallback", "branch source db|fallback").toBeTruthy();
+    expect(body.tagCount, "tagCount mirrors tags.length").toBe(body.tags!.length);
 
     const tagHrefs = body.tags!.slice(0, 3).map((t) => `${base}/flashcards/${encodeURIComponent(t.slug)}`);
 
@@ -110,6 +128,8 @@ test.describe("Marketing study surfaces (env-gated)", () => {
       counts: {
         httpStatus: res.status(),
         tagCount: body.tags!.length,
+        contractVersion: body.contractVersion ?? "(missing)",
+        branchSource: body.source ?? "(missing)",
       },
       firstHrefs: tagHrefs,
     });
@@ -156,7 +176,21 @@ test.describe("Marketing study surfaces (env-gated)", () => {
     const r = await page.goto(routeUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
     expect(r?.ok(), `HTTP ${r?.status()}`).toBeTruthy();
 
-    await expect(page.locator("#pathway-lesson-library")).toBeVisible({ timeout: 90_000 });
+    const lessonLibrary = page.locator("#pathway-lesson-library");
+    try {
+      await lessonLibrary.waitFor({ state: "visible", timeout: 90_000 });
+    } catch {
+      const diag = await readMarketingHubSmokeDiagnostics(page);
+      const errShell = await page.getByTestId("marketing-hub-load-error").count();
+      const title = await page.title().catch(() => "");
+      console.error("\n[MARKETING_STUDY_SMOKE] canada-rn-lessons-hub: #pathway-lesson-library not visible within 90s");
+      console.error("[MARKETING_STUDY_SMOKE] page title:", title);
+      console.error("[MARKETING_STUDY_SMOKE] marketing-hub-load-error elements:", errShell);
+      console.error("[MARKETING_STUDY_SMOKE] nn-marketing-hub-smoke-diagnostics:", JSON.stringify(diag, null, 2));
+      throw new Error(
+        `#pathway-lesson-library did not become visible within 90s (see stdout for server-rendered smoke diagnostics: prepared/verified counts, outcome, pathwayId). marketing-hub-load-error count=${errShell}`,
+      );
+    }
 
     const bodyText = (await page.locator("body").innerText()).toLowerCase();
     expect(bodyText, "must not show lessons hub retry/error copy").not.toContain("lessons temporarily unavailable");

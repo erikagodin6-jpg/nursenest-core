@@ -89,6 +89,7 @@ export default async function ReviewQueuePage() {
           dueNow: { items: [], total: 0, hasMore: false },
           reviewSoon: { items: [], total: 0, hasMore: false },
           stable: { items: [], total: 0, hasMore: false },
+          degraded: undefined,
         },
   ]);
 

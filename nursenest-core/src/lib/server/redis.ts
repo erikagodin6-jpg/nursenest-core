@@ -19,13 +19,15 @@ function createRedisClient(): RedisJsonClient | null {
   if (!url || !token) return null;
 
   const r = new Redis({ url, token });
-  return {
-    get: (key) => r.get(key),
-    set: (key, value, options) => r.set(key, value as never, options),
-    incr: (key) => r.incr(key),
-    expire: (key, seconds) => r.expire(key, seconds),
-    del: (key) => r.del(key),
+  const client = {
+    get: (key: string) => r.get(key),
+    set: (key: string, value: unknown, options?: { ex?: number }) =>
+      r.set(key, value as never, options as never),
+    incr: (key: string) => r.incr(key),
+    expire: (key: string, seconds: number) => r.expire(key, seconds),
+    del: (key: string) => r.del(key),
   };
+  return client as unknown as RedisJsonClient;
 }
 
 export function getRedisClient(): RedisJsonClient | null {

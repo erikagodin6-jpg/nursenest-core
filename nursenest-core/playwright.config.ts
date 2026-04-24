@@ -41,44 +41,37 @@ function localDevWebServer() {
   const secret = process.env.NEXTAUTH_SECRET?.trim() || "playwright-e2e-local-secret";
   /** Bind to the same hostname as `baseURL` so the browser, dev server, and Auth.js share one origin. */
   const bindHost = host;
+  /** Playwright `webServer.env` must be `Record<string, string>` (no optional keys / undefined values). */
+  const env: Record<string, string> = {
+    RUN_HEAVY_BUILD_TASKS: "false",
+    /**
+     * Local/E2E `next dev` often omits production AI keys; runtime guard defaults to `strict`.
+     * Keep Playwright's dev server bootable unless a suite explicitly forces strict validation.
+     */
+    NN_ENV_VALIDATION_MODE: process.env.NN_ENV_VALIDATION_MODE?.trim() || "warn",
+    NEXTAUTH_SECRET: secret,
+    /** Client session fetch uses absolute origin; unset values cause ClientFetchError in Playwright. */
+    AUTH_URL: process.env.AUTH_URL ?? origin.origin,
+    /** Prefer explicit env; fall back to dev server origin so Auth.js always has a non-empty URL. */
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL ?? origin.origin,
+    DIRECT_URL: process.env.DIRECT_URL ?? process.env.DATABASE_DIRECT_URL ?? "",
+    DATABASE_URL: process.env.DATABASE_URL ?? "",
+  };
+  if (process.env.E2E_LEARNER_DEGRADED === "1") {
+    env.NN_DEGRADED_MODE = "1";
+    env.NEXT_PUBLIC_NN_DEGRADED_MODE = "1";
+  }
+  if (process.env.PRISMA_QUERY_AUDIT !== "0") {
+    env.PRISMA_QUERY_AUDIT = "1";
+  }
   return {
     command: `npm run dev -- --hostname ${bindHost} --port ${port}`,
     url: origin.origin,
     reuseExistingServer: !process.env.CI,
     /** Cold compile after `scripts/clean-next-for-e2e.cjs` can exceed 3m on constrained CI — keep below RN full-content cap. */
     timeout: 420_000,
-    env: {
-      RUN_HEAVY_BUILD_TASKS: "false",
-      /**
-       * Local/E2E `next dev` often omits production AI keys; runtime guard defaults to `strict`.
-       * Keep Playwright's dev server bootable unless a suite explicitly forces strict validation.
-       */
-      NN_ENV_VALIDATION_MODE: process.env.NN_ENV_VALIDATION_MODE?.trim() || "warn",
-      NEXTAUTH_SECRET: secret,
-      /** Client session fetch uses absolute origin; unset values cause ClientFetchError in Playwright. */
-      AUTH_URL: origin.origin,
-      NEXTAUTH_URL: origin.origin,
-      /**
-       * When running paid E2E with a shell-provided DB (e.g. `test:e2e:paid-local-green`), forward the same
-       * URLs into `next dev`. Otherwise `.env.local` may still contain a placeholder `DATABASE_URL` while the
-       * preflight script connected with a working URL — Auth would keep using the broken value.
-       */
-      ...(process.env.DATABASE_URL?.trim()
-        ? { DATABASE_URL: process.env.DATABASE_URL.trim() }
-        : {}),
-      ...(function directUrlForPlaywright() {
-        const d =
-          process.env.DIRECT_URL?.trim() ?? process.env.DATABASE_DIRECT_URL?.trim();
-        return d ? { DIRECT_URL: d } : {};
-      })(),
-      /** When `E2E_LEARNER_DEGRADED=1`, start Next with learner degraded mode (paid degraded-mode spec). */
-      ...(process.env.E2E_LEARNER_DEGRADED === "1"
-        ? { NN_DEGRADED_MODE: "1", NEXT_PUBLIC_NN_DEGRADED_MODE: "1" }
-        : {}),
-      /** Prisma `$on('query')` + bounded-read audit for `paid-user-prisma-query-bounds` (override with `PRISMA_QUERY_AUDIT=0`). */
-      ...(process.env.PRISMA_QUERY_AUDIT === "0" ? {} : { PRISMA_QUERY_AUDIT: "1" }),
-    },
-  } as const;
+    env,
+  };
 }
 
 /**

@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
+// Must use `safeJsonRoute` — not the degraded-read JSON helper (200 + empty payload on throw).
 import { safeJsonRoute } from "@/lib/server/safe-api-route";
 import { handlePublicFlashcardTagsGet } from "./handle-public-flashcard-tags-get";
 

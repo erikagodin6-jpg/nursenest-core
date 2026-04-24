@@ -7,6 +7,14 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const JSON_HEADERS = { "Content-Type": "application/json; charset=utf-8" } as const;
 
+const CACHE_SOURCE_LABEL = "getCachedPublicFlashcardTags" as const;
+
+/** Hard contract marker on every JSON response (prod smoke + CDN stale detection). */
+export const PUBLIC_FLASHCARD_TAGS_CONTRACT_VERSION = "flashcard-tags-v3" as const;
+
+/** Branch diagnostic `source` (inventory path / layer). */
+export type PublicFlashcardTagsBranchSource = "db" | "cache" | "fallback";
+
 function errorCodeForPublicFlashcardTagsFailure(kind: HubDbFailureCategory): "database_error" | "public_flashcard_tags_unavailable" {
   if (
     kind === "db_missing_url" ||
@@ -20,17 +28,41 @@ function errorCodeForPublicFlashcardTagsFailure(kind: HubDbFailureCategory): "da
   return "public_flashcard_tags_unavailable";
 }
 
+function mapInventoryToBranchSource(payload: PublicFlashcardTagsPayload): Exclude<PublicFlashcardTagsBranchSource, "cache"> {
+  return payload.inventorySource === "fallback" ? "fallback" : "db";
+}
+
+/** Common fields on every JSON body (success + error). */
+function contractEnvelope(
+  branch: {
+    source: PublicFlashcardTagsBranchSource;
+    tagCount: number;
+    cacheHit?: boolean | null;
+  },
+  extra?: Record<string, unknown>,
+): Record<string, unknown> {
+  const env: Record<string, unknown> = {
+    contractVersion: PUBLIC_FLASHCARD_TAGS_CONTRACT_VERSION,
+    source: branch.source,
+    tagCount: branch.tagCount,
+    ...extra,
+  };
+  if (branch.cacheHit !== undefined && branch.cacheHit !== null) {
+    env.cacheHit = branch.cacheHit;
+  }
+  return env;
+}
+
 async function defaultFlashcardTagsLoader(): Promise<PublicFlashcardTagsPayload> {
   const { getCachedPublicFlashcardTags } = await import("@/lib/marketing/public-flashcard-tags");
   return getCachedPublicFlashcardTags();
 }
 
 /**
- * GET /api/public/flashcard-tags — success returns cache-aligned JSON; failures return **503** JSON
- * (never 200 with an empty `tags` list caused by a thrown loader/cache/DB error).
+ * GET /api/public/flashcard-tags — success returns JSON with `tags` + contract fields.
+ * **Never** returns `200` with `tags: []`. Empty inventory → **503** `DATA_UNAVAILABLE` without a `tags` key.
  *
- * @param loader Injectable for tests; defaults to dynamic import of {@link getCachedPublicFlashcardTags}
- * (dynamic import keeps `node:test` able to load this module without resolving `server-only` from marketing).
+ * @param loader Injectable for tests; defaults to dynamic import of {@link getCachedPublicFlashcardTags}.
  */
 export async function handlePublicFlashcardTagsGet(
   loader?: () => Promise<PublicFlashcardTagsPayload>,
@@ -50,26 +82,29 @@ export async function handlePublicFlashcardTagsGet(
       });
       safeServerLog("api_public", "public_flashcard_tags_error", {
         route: "/api/public/flashcard-tags",
-        stage: "public_flashcard_tags_empty_inventory",
-        cacheSource: "getCachedPublicFlashcardTags",
-        kind: "empty_result",
+        stage: "public_flashcard_tags_empty",
+        tagCount: "0",
+        cacheSource: CACHE_SOURCE_LABEL,
+        reason: "tags array empty — no public marketing decks/tags in inventory",
         code: "DATA_UNAVAILABLE",
-        reasonFailed: "tags array empty — public marketing decks have no linked tags",
       });
       return NextResponse.json(
         {
-          error: "DATA_UNAVAILABLE",
-          surface: "flashcard_tags",
-          retryable: true,
-          count: 0,
           code: "DATA_UNAVAILABLE",
+          message: "No public flashcard tags available",
+          ...contractEnvelope({ source: "db", tagCount: 0 }),
         },
         { status: 503, headers: JSON_HEADERS },
       );
     }
-    /** TEMP: deployment/cache-bust signature — remove after confirming prod returns `s-maxage=120` + this field. */
+
+    const branchSource = mapInventoryToBranchSource(body) as PublicFlashcardTagsBranchSource;
+    const { inventorySource: _inv, ...tagsOnly } = body;
     return NextResponse.json(
-      { ...body, __debug: "flashcard-tags-v2" as const },
+      {
+        ...tagsOnly,
+        ...contractEnvelope({ source: branchSource, tagCount: body.tags.length }),
+      },
       { headers: CACHE_HEADER_PUBLIC_LIST },
     );
   } catch (e) {
@@ -83,16 +118,17 @@ export async function handlePublicFlashcardTagsGet(
       safeServerLog("api_public", "public_flashcard_tags_error", {
         route: "/api/public/flashcard-tags",
         stage: "public_flashcard_tags_invalid_payload",
-        cacheSource: "getCachedPublicFlashcardTags",
-        kind: "invalid_payload",
+        tagCount: "0",
+        cacheSource: CACHE_SOURCE_LABEL,
+        reason: "INVALID_TAG_PAYLOAD",
         code: "public_flashcard_tags_unavailable",
-        reasonFailed: "INVALID_TAG_PAYLOAD",
       });
       return NextResponse.json(
         {
           error: "Public flashcard tags could not be loaded",
           code: "public_flashcard_tags_unavailable",
           reasonFailed: "INVALID_TAG_PAYLOAD",
+          ...contractEnvelope({ source: "db", tagCount: 0 }),
         },
         { status: 503, headers: JSON_HEADERS },
       );
@@ -109,10 +145,11 @@ export async function handlePublicFlashcardTagsGet(
     safeServerLog("api_public", "public_flashcard_tags_error", {
       route: "/api/public/flashcard-tags",
       stage: "public_flashcard_tags_error",
-      cacheSource: "getCachedPublicFlashcardTags",
+      tagCount: "0",
+      cacheSource: CACHE_SOURCE_LABEL,
+      reason: message.slice(0, 500),
       kind,
       code,
-      reasonFailed: message.slice(0, 500),
     });
     return NextResponse.json(
       {
@@ -121,6 +158,7 @@ export async function handlePublicFlashcardTagsGet(
         retryable: true,
         code,
         reasonFailed: `${kind}:${message}`.slice(0, 500),
+        ...contractEnvelope({ source: "db", tagCount: 0 }),
       },
       { status: 503, headers: JSON_HEADERS },
     );

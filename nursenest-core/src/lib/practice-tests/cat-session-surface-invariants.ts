@@ -18,7 +18,8 @@ export type CatHydrateInvariantResult =
         | "cat_in_progress_cursor_invalid"
         | "cat_completed_terminal_invalid"
         | "linear_engine_in_progress_no_questions"
-        | "linear_engine_session_pick_salt_missing";
+        | "linear_engine_session_pick_salt_missing"
+        | "legacy_linear_in_progress_no_questions";
       message: string;
     };
 
@@ -81,6 +82,22 @@ export function assessCatPracticeHydrateInvariants(input: {
           "This linear session is missing secure shuffle metadata (session pick salt). Return to Practice tests and start a new session, or contact support — we will not guess item order.",
       };
     }
+  }
+
+  if (
+    !input.catMode &&
+    cfg &&
+    cfg.selectionMode !== "cat" &&
+    !cfg.linearDeliveryMode &&
+    input.status === "IN_PROGRESS" &&
+    input.questionIds.length === 0
+  ) {
+    return {
+      ok: false,
+      code: "legacy_linear_in_progress_no_questions",
+      message:
+        "This practice session has no questions on load. Return to Practice tests and start a new session — we will not run an empty exam.",
+    };
   }
 
   if (input.catMode && input.status === "IN_PROGRESS" && input.questionIds.length > 0) {

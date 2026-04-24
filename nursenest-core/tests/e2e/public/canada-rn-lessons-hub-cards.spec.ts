@@ -4,13 +4,23 @@
  * Run (local): `cd nursenest-core && npx playwright test tests/e2e/public/canada-rn-lessons-hub-cards.spec.ts`
  */
 import { expect, test } from "@playwright/test";
+import { readMarketingHubSmokeDiagnostics } from "../helpers/marketing-hub-smoke-diagnostics";
 
 test.describe("Canada RN lessons hub (public)", () => {
   test("/canada/rn/nclex-rn/lessons shows a lesson library and lesson detail links resolve", async ({ page }) => {
     const r = await page.goto("/canada/rn/nclex-rn/lessons", { waitUntil: "domcontentloaded" });
     expect(r?.ok(), `HTTP ${r?.status()}`).toBeTruthy();
 
-    await expect(page.locator("#pathway-lesson-library")).toBeVisible({ timeout: 60_000 });
+    const lessonLibrary = page.locator("#pathway-lesson-library");
+    try {
+      await lessonLibrary.waitFor({ state: "visible", timeout: 60_000 });
+    } catch {
+      const diag = await readMarketingHubSmokeDiagnostics(page);
+      console.error("[lessons-hub] #pathway-lesson-library missing. diagnostics:", JSON.stringify(diag, null, 2));
+      throw new Error(
+        `#pathway-lesson-library not visible (see stderr for nn-marketing-hub-smoke-diagnostics JSON)`,
+      );
+    }
 
     const retryShell = page.getByText("Lessons temporarily unavailable");
     const emptyCurriculum = page.locator('[data-nn-empty="curriculum-hub-empty"]');
@@ -29,7 +39,7 @@ test.describe("Canada RN lessons hub (public)", () => {
       expect(detail?.ok(), `detail HTTP ${detail?.status()} for ${href}`).toBeTruthy();
       expect(detail?.status(), `expected 2xx lesson detail for ${href}`).toBeLessThan(400);
       await page.goto("/canada/rn/nclex-rn/lessons", { waitUntil: "domcontentloaded" });
-      await expect(page.locator("#pathway-lesson-library")).toBeVisible({ timeout: 60_000 });
+      await lessonLibrary.waitFor({ state: "visible", timeout: 60_000 });
     }
   });
 });
