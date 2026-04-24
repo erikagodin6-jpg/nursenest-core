@@ -60,15 +60,21 @@ export async function MarketingBlogLatestLinks({ take = 3, className, heading, p
     return <MarketingBlogLatestLinksWithPosts take={take} className={className} heading={heading} posts={postsProp} />;
   }
   try {
-    const posts = (
-      await (await import("@/lib/blog/safe-blog-queries")).getPublishedBlogPostsPage(
-        1,
-        safeTake,
-        undefined,
-        { includeTotal: false },
-      )
-    ).posts;
-    return <MarketingBlogLatestLinksWithPosts take={take} className={className} heading={heading} posts={posts} />;
+    const page = await (await import("@/lib/blog/safe-blog-queries")).getPublishedBlogPostsPage(
+      1,
+      safeTake,
+      undefined,
+      { includeTotal: false },
+    );
+    if (!page.listLoad.querySucceeded) {
+      safeServerLog("blog", "marketing_blog_latest_links_list_load_error", {
+        reason: page.listLoad.reasonFailed?.slice(0, 200) ?? "",
+      });
+      return null;
+    }
+    return (
+      <MarketingBlogLatestLinksWithPosts take={take} className={className} heading={heading} posts={page.posts} />
+    );
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     safeServerLog("blog", "marketing_blog_latest_links_degraded", {

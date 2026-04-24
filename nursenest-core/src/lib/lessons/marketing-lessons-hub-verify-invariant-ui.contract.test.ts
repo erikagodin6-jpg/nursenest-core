@@ -23,6 +23,7 @@ test("marketing lessons hub page wires verify + staged pipeline logs (no verify-
   assert.ok(src.includes("stage_1_raw_slug_safe_rows"), "must log numbered pipeline stages");
   assert.ok(src.includes("list_locale_effective"), "must log list warehouse locale for verify parity");
   assert.ok(src.includes("verify_exclusion_ranked_json"), "must log ranked verify exclusion reasons");
+  assert.ok(src.includes("verify_dropped_prepared_samples_json"), "must log verify drop samples joined to list rows");
   assert.ok(src.includes("raw_after_slug_filter"), "must log slug-filter stage");
   assert.ok(src.includes("marketing_hub_verify_all_rows_excluded_soft"), "must log soft all-excluded verify");
   assert.ok(src.includes("MarketingLessonsHubRetryableErrorShell"), "must keep retry shell for load failures");

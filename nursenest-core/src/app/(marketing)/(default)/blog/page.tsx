@@ -8,6 +8,7 @@ import {
   getPathophysiologyBlogHubPosts,
   getPublishedBlogPostsPage,
 } from "@/lib/blog/safe-blog-queries";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { blogIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -59,10 +60,23 @@ export default async function BlogIndexPage({ searchParams }: Props) {
   const sp = await searchParams;
   const raw = Number(sp.page ?? "1");
   const page = Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : 1;
-  const [{ posts, total, pageSize }, pathophysiologyHub] = await Promise.all([
+  const [{ posts, total, pageSize, listLoad }, pathophysiologyHub] = await Promise.all([
     getPublishedBlogPostsPage(page, BLOG_LIST_PAGE_SIZE),
     page === 1 ? getPathophysiologyBlogHubPosts(12) : Promise.resolve([]),
   ]);
+  if (process.env.BLOG_INDEX_ROUTE_LIST_LOAD === "1") {
+    safeServerLog("blog", "BLOG_INDEX_ROUTE_LIST_LOAD", {
+      pathname: "/blog",
+      page: String(page),
+      querySucceeded: listLoad.querySucceeded ? "1" : "0",
+      source: listLoad.source,
+      rawCount: listLoad.rawCount === null ? "" : String(listLoad.rawCount),
+      filteredCount: listLoad.filteredCount === null ? "" : String(listLoad.filteredCount),
+      finalCount: String(listLoad.finalCount),
+      reasonFailed: listLoad.reasonFailed ?? "",
+      reasonDropped: listLoad.reasonDropped ?? "",
+    });
+  }
   const pathoSlugSet = new Set(pathophysiologyHub.map((p) => p.slug));
   const postsForList = page === 1 ? posts.filter((p) => !pathoSlugSet.has(p.slug)) : posts;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
@@ -71,11 +85,31 @@ export default async function BlogIndexPage({ searchParams }: Props) {
   const pathoTagHref = `/blog/tag/${encodeURIComponent(PATHOPHYSIOLOGY_HUB_PRIMARY_TAG)}`;
   const showPathophysiologySection = pathophysiologyHub.length > 0;
   const showEmptyState = posts.length === 0 && !showPathophysiologySection;
+  const showListLoadError = !listLoad.querySucceeded;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
       <RegionalBlogDiscoveryHint />
+      {showListLoadError ? (
+        <>
+          <section
+            className="mb-10 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--theme-card-bg))] p-6"
+            role="alert"
+            aria-live="polite"
+          >
+            <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Blog list could not load</h2>
+            <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+              We could not reach the article database. This is usually temporary — refresh the page or try again in a
+              moment.
+            </p>
+            <p className="mt-3 text-xs text-[var(--theme-muted-text)]">
+              {listLoad.reasonFailed ? `Details: ${listLoad.reasonFailed}` : null}
+            </p>
+          </section>
+          <MarketingStudyCrossLinks className="mt-10" />
+        </>
+      ) : null}
       <header className="mb-10">
         <EditableHeading
           as="h1"
@@ -91,7 +125,7 @@ export default async function BlogIndexPage({ searchParams }: Props) {
           preloaded={blogInlinePreloaded}
         />
       </header>
-      {showEmptyState ? (
+      {showListLoadError ? null : showEmptyState ? (
         <>
           <EditableText
             as="p"

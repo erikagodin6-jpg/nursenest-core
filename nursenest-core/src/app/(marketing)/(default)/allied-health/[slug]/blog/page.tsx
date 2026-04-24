@@ -5,6 +5,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { BLOG_LIST_PAGE_SIZE, getPublishedBlogPostsPage } from "@/lib/blog/safe-blog-queries";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -46,12 +47,25 @@ export default async function AlliedProfessionBlogIndexPage({ params, searchPara
   const sp = await searchParams;
   const raw = Number(sp.page ?? "1");
   const page = Number.isFinite(raw) && raw >= 1 ? Math.floor(raw) : 1;
-  const { posts, total, pageSize } = await getPublishedBlogPostsPage(page, BLOG_LIST_PAGE_SIZE, {
+  const { posts, total, pageSize, listLoad } = await getPublishedBlogPostsPage(page, BLOG_LIST_PAGE_SIZE, {
     locale,
     sourceLocale: "en",
     careerSlug: prof.professionKey,
     allowSourceLocaleFallback: true,
   });
+  if (process.env.BLOG_INDEX_ROUTE_LIST_LOAD === "1") {
+    safeServerLog("blog", "BLOG_INDEX_ROUTE_LIST_LOAD", {
+      pathname: `/allied-health/${slug}/blog`,
+      page: String(page),
+      querySucceeded: listLoad.querySucceeded ? "1" : "0",
+      source: listLoad.source,
+      rawCount: listLoad.rawCount === null ? "" : String(listLoad.rawCount),
+      filteredCount: listLoad.filteredCount === null ? "" : String(listLoad.filteredCount),
+      finalCount: String(listLoad.finalCount),
+      reasonFailed: listLoad.reasonFailed ?? "",
+      reasonDropped: listLoad.reasonDropped ?? "",
+    });
+  }
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const crumbs = [
     { name: "Allied health", href: "/allied-health" },
@@ -78,7 +92,21 @@ export default async function AlliedProfessionBlogIndexPage({ params, searchPara
           Profession-specific clinical insights, certification strategies, and practical study guidance.
         </p>
       </header>
-      {posts.length === 0 ? (
+      {!listLoad.querySucceeded ? (
+        <section
+          className="mb-6 rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--theme-card-bg))] p-6"
+          role="alert"
+          aria-live="polite"
+        >
+          <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Blog list could not load</h2>
+          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+            We could not reach the article database. Please refresh or try again shortly.
+          </p>
+          {listLoad.reasonFailed ? (
+            <p className="mt-2 text-xs text-[var(--theme-muted-text)]">Details: {listLoad.reasonFailed}</p>
+          ) : null}
+        </section>
+      ) : posts.length === 0 ? (
         <p className="text-sm text-[var(--theme-muted-text)]">
           No published posts yet for this profession. Check back soon.
         </p>

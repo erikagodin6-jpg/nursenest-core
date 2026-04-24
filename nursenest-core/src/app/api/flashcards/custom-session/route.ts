@@ -6,6 +6,7 @@ import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { classifyDatabaseFallbackKind } from "@/lib/db/safe-database";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
@@ -133,6 +134,8 @@ export async function GET(req: NextRequest) {
 
   /** Strict scope only: no silent widening when pathway or entitlement filters yield zero rows. */
   const queryRelaxation: FlashcardCustomSessionQueryRelaxation = "none";
+
+  try {
   const cards = await fetchFlashcardRows(flashcardAccessWhere(entitlement, pathwayOpts));
 
   const topicIdsForLog =
@@ -268,5 +271,30 @@ export async function GET(req: NextRequest) {
     categoryOptions: applyCountsToBuilderCategories(pathwayId, categoryCounts),
     cards: cardsForSession,
   });
+  } catch (e) {
+    const kind = classifyDatabaseFallbackKind(e);
+    const message = e instanceof Error ? e.message : String(e);
+    safeServerLog("flashcards", "custom_session_db_failed", {
+      kind,
+      message: message.slice(0, 400),
+      pathwayId: pathwayId ?? "",
+    });
+    return NextResponse.json(
+      {
+        ok: false,
+        code: "database_error",
+        error: "Flashcards could not be loaded. Please retry.",
+        integrity: {
+          querySucceeded: false,
+          source: "error",
+          rawCount: null,
+          filteredCount: null,
+          finalCount: 0,
+          reasonFailed: `${kind}:${message}`.slice(0, 500),
+        },
+      },
+      { status: 503 },
+    );
+  }
   });
 }

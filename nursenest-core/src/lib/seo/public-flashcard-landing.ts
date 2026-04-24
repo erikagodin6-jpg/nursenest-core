@@ -2,6 +2,7 @@ import { ContentStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { publicMarketingFlashcardDeckWhere } from "@/lib/entitlements/content-access-scope";
+import { logRouteDataPipeline, routeDataDiagnosticsEnabled } from "@/lib/observability/route-data-pipeline-log";
 import { truncateForPreview } from "@/lib/flashcards/flashcard-access";
 import {
   classifyPublicFlashcardDeck,
@@ -12,7 +13,12 @@ import {
 import { formatTitleCase } from "@/lib/format/text-case";
 
 export type PublicFlashcardTopicRow = { slug: string; name: string };
-const PUBLIC_FLASHCARD_DB_TIMEOUT_MS = 1000;
+/**
+ * Cold Prisma / pool warmup often exceeds 1s; empty `[]` here yields a blank `/flashcards` hub (same class of bug as
+ * the legacy 800ms public tag list timeout before `public-flashcard-tags` was aligned to ~12s).
+ */
+export const PUBLIC_FLASHCARD_LANDING_DB_TIMEOUT_MS = 12_000;
+const PUBLIC_FLASHCARD_DB_TIMEOUT_MS = PUBLIC_FLASHCARD_LANDING_DB_TIMEOUT_MS;
 
 async function withPublicFlashcardFallback<T>(run: () => Promise<T>, fallback: T, label: string): Promise<T> {
   return withDatabaseFallbackTimeout(run, fallback, PUBLIC_FLASHCARD_DB_TIMEOUT_MS, {
@@ -179,6 +185,23 @@ export async function loadPublicFlashcardHub(): Promise<{
         })
         .filter((section) => section.decks.length > 0 || (section.subcategories?.length ?? 0) > 0);
     });
+
+  if (routeDataDiagnosticsEnabled()) {
+    logRouteDataPipeline({
+      route: "/flashcards",
+      stage: "public_flashcard_hub_payload",
+      meta: {
+        topicRows: topics.length,
+        rawDeckRows: rawDecks.length,
+        nursingDeckRows: nursingDecks.length,
+        decoratedDecks: decorated.length,
+        categorySectionCount: categorySections.length,
+        highYieldDeckCount: decorated.filter((deck) => deck.highYield).length,
+        dbTimeoutMs: PUBLIC_FLASHCARD_DB_TIMEOUT_MS,
+        cacheSource: "live_prisma",
+      },
+    });
+  }
 
   return {
     topics,

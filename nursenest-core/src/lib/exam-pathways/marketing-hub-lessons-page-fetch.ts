@@ -4,6 +4,7 @@ import type { LoadPathwayLessonsHubPageArgs } from "@/lib/exam-pathways/marketin
 import { getPathwayLessonsPageFresh, type PathwayLessonsPageResult } from "@/lib/lessons/pathway-lesson-loader";
 import { classifyHubDbFailure, type HubDbFailureCategory } from "@/lib/db/safe-database";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
+import { logRouteDataPipeline, routeDataDiagnosticsEnabled } from "@/lib/observability/route-data-pipeline-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { logContractLoadDiagnostics } from "@/lib/loading/critical-load-outcome";
 import { HubLessonsListDatabaseError } from "@/lib/lessons/hub-lessons-database-error";
@@ -246,6 +247,19 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
       total: primaryCoerced.total,
       sourceUsed: "primary",
     });
+    if (routeDataDiagnosticsEnabled()) {
+      logRouteDataPipeline({
+        route: ctx.pathname,
+        stage: "lessons_hub_primary_ok",
+        meta: {
+          pathwayId: ctx.pathwayId,
+          finalItemCount: primaryCoerced.items.length,
+          finalTotal: primaryCoerced.total,
+          cacheSource: "live_getPathwayLessonsPageFresh",
+          fetchDurationMs: Math.round(fetchDurationMsPrimary),
+        },
+      });
+    }
     return {
       pageResult: primaryCoerced,
       lessonsPageLoad: {
@@ -338,6 +352,17 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
       fallback_used: "false",
       error_message: message.slice(0, 500),
     });
+    logRouteDataPipeline({
+      route: ctx.pathname,
+      stage: "lessons_hub_primary_error",
+      meta: {
+        pathwayId: ctx.pathwayId,
+        reasonCode: timedOut ? "PRIMARY_TIMEOUT" : "PRIMARY_THROW",
+        finalItemCount: 0,
+        finalTotal: 0,
+        cacheSource: "none_empty_hub",
+      },
+    });
     return {
       pageResult: emptyPathwayLessonsPageResult(pageRequested, pageSizeRequested),
       lessonsPageLoad: {
@@ -390,6 +415,17 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
     snapshot_used: "false",
     fallback_used: "false",
     error_message: "invalid_lessons_page_payload_shape",
+  });
+  logRouteDataPipeline({
+    route: ctx.pathname,
+    stage: "lessons_hub_primary_invalid_payload",
+    meta: {
+      pathwayId: ctx.pathwayId,
+      reasonCode: "PRIMARY_INVALID_PAYLOAD",
+      finalItemCount: 0,
+      finalTotal: 0,
+      cacheSource: "none_empty_hub",
+    },
   });
   return {
     pageResult: emptyPathwayLessonsPageResult(pageRequested, pageSizeRequested),

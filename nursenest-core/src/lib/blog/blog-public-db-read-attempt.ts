@@ -1,5 +1,3 @@
-import "server-only";
-
 import { classifyDatabaseFallbackKind, isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 

@@ -27,12 +27,20 @@ export async function loadHomeBlogTeaserPostsSafe(take: number): Promise<BlogInd
     const t0 = Date.now();
     try {
       const { getPublishedBlogPostsPage } = await import("@/lib/blog/safe-blog-queries");
-      const { posts } = await Promise.race([
+      const timeout = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error("home_blog_teaser_timeout")), HOME_BLOG_TEASER_TIMEOUT_MS);
+      });
+      const result = await Promise.race([
         getPublishedBlogPostsPage(1, safeTake, undefined, { includeTotal: false }),
-        new Promise<{ posts: BlogIndexPost[] }>((_, reject) => {
-          setTimeout(() => reject(new Error("home_blog_teaser_timeout")), HOME_BLOG_TEASER_TIMEOUT_MS);
-        }),
+        timeout,
       ]);
+      const { posts, listLoad } = result;
+      if (!listLoad.querySucceeded) {
+        safeServerLog("crawl_surface", "home_blog_teaser_list_load_error", {
+          reason: listLoad.reasonFailed?.slice(0, 200) ?? "",
+        });
+        return [];
+      }
       const ms = Date.now() - t0;
       if (ms > HOME_BLOG_TEASER_SLOW_MS) {
         safeServerLog("crawl_surface", "home_blog_teaser_slow", { ms, count: posts.length });
