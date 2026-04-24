@@ -185,6 +185,7 @@ export async function fillMarketingHubLessonInventoryToMinimum(args: {
     };
     if (initialStrict < min) {
       safeServerLog("pathway_lessons", "marketing_hub_inventory_fill_degraded", {
+        stage: "marketing_hub_inventory_fill_degraded",
         event: "marketing_hub_inventory_fill_degraded",
         route: args.routePathname,
         pathway_id: pathwayId,
@@ -265,6 +266,7 @@ export async function fillMarketingHubLessonInventoryToMinimum(args: {
 
   if (filledStrict > 0) {
     safeServerLog("pathway_lessons", "marketing_hub_inventory_fill_applied", {
+      stage: "marketing_hub_inventory_fill_applied",
       event: "marketing_hub_inventory_fill_applied",
       route: args.routePathname,
       pathway_id: pathwayId,
@@ -286,6 +288,7 @@ export async function fillMarketingHubLessonInventoryToMinimum(args: {
 
   if (finalStrict < min) {
     safeServerLog("pathway_lessons", "marketing_hub_inventory_fill_degraded", {
+      stage: "marketing_hub_inventory_fill_degraded",
       event: "marketing_hub_inventory_fill_degraded",
       route: args.routePathname,
       pathway_id: pathwayId,
@@ -300,6 +303,22 @@ export async function fillMarketingHubLessonInventoryToMinimum(args: {
       reason: "insufficient_strict_inventory_after_fill",
       evaluate_reasons_json: JSON.stringify(evaluateRejectionReasons),
       prefilter_json: JSON.stringify(prefilterDropped),
+    });
+  }
+
+  if (rejectedEvaluateCount > 0) {
+    safeServerLog("pathway_lessons", "marketing_hub_inventory_rejected", {
+      stage: "marketing_hub_inventory_rejected",
+      route: args.routePathname,
+      pathway_id: pathwayId,
+      content_locale: args.lessonContentLocale,
+      list_warehouse_locale: listWh,
+      strict_before: String(initialStrict),
+      strict_after: String(finalStrict),
+      min_visible: String(min),
+      candidates_considered: String(cappedExtras.length),
+      rejects_by_reason_json: JSON.stringify(evaluateRejectionReasons),
+      rejected_evaluate: String(rejectedEvaluateCount),
     });
   }
 

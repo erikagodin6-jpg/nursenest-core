@@ -1,6 +1,9 @@
 /**
- * Hard guardrails for the Canada RN NCLEX-RN marketing lessons hub so a large DB inventory
- * cannot silently collapse to a tiny prepared/verified/rendered set without failing the route.
+ * Hard guardrails for **any** public marketing lessons hub: a large DB-backed inventory cannot silently collapse
+ * to a tiny prepared/verified/rendered set without tripping diagnostics.
+ *
+ * Callers must **not** show the user-facing invariant error shell when at least one verified lesson row is still
+ * renderable — use {@link shouldShowMarketingLessonHubInvariantErrorShell}.
  *
  * Only evaluated on the default hub (no search/topic/allied narrowing) — filtered views can legitimately be small.
  */
@@ -21,10 +24,19 @@ function num(n: number | null | undefined): number {
   return typeof n === "number" && Number.isFinite(n) ? n : 0;
 }
 
+/** True only when the invariant fired **and** the hub has zero lesson rows to render (no “fake empty” UX). */
+export function shouldShowMarketingLessonHubInvariantErrorShell(
+  collapse: LessonHubPipelineCollapseAssessment,
+  verifiedLessonRowCount: number,
+): boolean {
+  if (collapse.kind === "ok") return false;
+  return verifiedLessonRowCount <= 0;
+}
+
 /**
  * @param stage6LinkableLessonRows — lessons with a valid marketing detail href after body-system grouping (not UI preview cap).
  */
-export function assessCanadaRnNclexLessonHubPipelineCollapseGuard(input: {
+export function assessMarketingLessonHubPipelineCollapseGuard(input: {
   rawDbCount?: number | null;
   renderableAllCount: number;
   afterPrepareCount: number;
@@ -97,3 +109,6 @@ export function assessCanadaRnNclexLessonHubPipelineCollapseGuard(input: {
 
   return { kind: "ok" };
 }
+
+/** @deprecated Use {@link assessMarketingLessonHubPipelineCollapseGuard} (pathway-agnostic). */
+export const assessCanadaRnNclexLessonHubPipelineCollapseGuard = assessMarketingLessonHubPipelineCollapseGuard;

@@ -7,6 +7,7 @@ import { generateBlogSEOFromPostRow } from "@/lib/blog/blog-generate-seo";
 import { regenerateBlogPostSeoById } from "@/lib/blog/blog-post-seo-regenerate-by-id";
 import { clampSerpDescription, clampSerpTitle, normalizeBlogTagsForStorage } from "@/lib/blog/blog-seo-package";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { publishBlogPostCanonical } from "@/lib/blog/publish-blog-post-canonical";
 
 export type BlogBulkChunkRunResult = {
   ok: number;
@@ -134,9 +135,13 @@ export async function executeBlogBulkChunk(payload: BlogBulkChunkPayload): Promi
         continue;
       }
       if (operation === "blog_publish") {
-        await prisma.blogPost.update({
-          where: { id: postId },
-          data: { postStatus: BlogPostStatus.PUBLISHED },
+        await publishBlogPostCanonical({
+          postId,
+          publishAt: new Date(),
+          clearScheduledAt: true,
+          context: "bulk_chunk_blog_publish",
+          acknowledgePrePublishWarnings: true,
+          skipRevalidate: true,
         });
         ok += 1;
         continue;

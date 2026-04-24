@@ -235,7 +235,7 @@ async function main(): Promise<void> {
           a: "No—this article is for nursing education and exam preparation, not personal medical advice.",
         },
       ];
-      const schemaSummary = buildSchemaJsonLd({
+      const schemaJson = buildSchemaJsonLd({
         title: topic.title,
         slug,
         excerpt,
@@ -243,6 +243,7 @@ async function main(): Promise<void> {
         publishedIso: now.toISOString(),
         faqItems,
       });
+      const schemaSummary = JSON.stringify(schemaJson);
       const apaReferences = buildConservativeApaReferences(accessDate);
 
       const publishAt = new Date();
@@ -262,7 +263,7 @@ async function main(): Promise<void> {
         seoDescription: excerpt.slice(0, 300),
         intent: BlogPostIntent.INFORMATIONAL,
         faqBlock: { items: faqItems } as Prisma.InputJsonValue,
-        schemaSummary: schemaSummary as Prisma.InputJsonValue,
+        schemaSummary,
         apaReferences,
         exam: "RN",
         locale: "en",
@@ -374,7 +375,7 @@ async function main(): Promise<void> {
     ),
   );
 
-  if (aborted && apply) process.exit(1);
+  if (aborted) process.exit(1);
 }
 
 main()

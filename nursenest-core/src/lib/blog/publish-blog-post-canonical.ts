@@ -11,6 +11,7 @@ import {
   blogPrePublishValidationSelect,
   mergeBlogPostForPrePublishPatch,
   type BlogPostPrePublishPayload,
+  type BlogPostPrePublishRow,
   type PrePublishPatch,
   validateBlogPrePublish,
 } from "@/lib/blog/blog-pre-publish-validation";
@@ -32,8 +33,6 @@ const canonicalPublishSelect = {
   careerSlug: true,
   legacySource: true,
 } as const;
-
-type CanonicalPublishRow = Prisma.BlogPostGetPayload<{ select: typeof canonicalPublishSelect }>;
 
 export type BlogCanonicalPublishContext =
   | "admin_patch_publish_now"
@@ -124,7 +123,7 @@ function assertCompanionSafe(companion: Prisma.BlogPostUpdateInput | undefined):
 }
 
 /** Persist scalar fields that participate in pre-publish so DB matches the validated merge. */
-function mergedRowToPersistedScalars(merged: BlogPostPrePublishPayload): Prisma.BlogPostUpdateInput {
+function mergedRowToPersistedScalars(merged: BlogPostPrePublishRow): Prisma.BlogPostUpdateInput {
   return {
     slug: merged.slug,
     title: merged.title,
@@ -337,7 +336,7 @@ export async function publishBlogPostCanonical(
       ? mergedForValidate.metaDescriptionVariant
       : seoDescFinal;
 
-  const mergedWithSeo: BlogPostPrePublishPayload = {
+  const mergedWithSeoRow: BlogPostPrePublishRow = {
     ...mergedForValidate,
     seoTitle: seoTitleFinal,
     seoDescription: seoDescFinal,
@@ -346,10 +345,7 @@ export async function publishBlogPostCanonical(
     postTemplate: mergedForValidate.postTemplate ?? BlogPostTemplate.TOPIC_EXPLAINED,
   };
 
-  const preAfterSeo = await validateBlogPrePublish(
-    { ...mergedWithSeo, postStatus: merged.postStatus } as typeof mergedForValidate,
-    input.postId,
-  );
+  const preAfterSeo = await validateBlogPrePublish(mergedWithSeoRow, input.postId);
   if (!preAfterSeo.okToPublish) {
     throw new Error(
       `publishBlogPostCanonical: post-SEO pre-publish blocked (${input.context}): ${preAfterSeo.blocking.map((b) => b.message).join("; ")}`,
@@ -376,7 +372,7 @@ export async function publishBlogPostCanonical(
       : undefined;
 
   const data: Prisma.BlogPostUpdateInput = {
-    ...mergedRowToPersistedScalars(mergedWithSeo),
+    ...mergedRowToPersistedScalars(mergedWithSeoRow),
     ...input.companionUpdate,
     postStatus: BlogPostStatus.PUBLISHED,
     workflowStatus: BlogWorkflowStatus.PUBLISHED,
@@ -391,7 +387,7 @@ export async function publishBlogPostCanonical(
     data,
   });
 
-  await verifyPublishedPostVisibleOrThrow(input.postId, mergedWithSeo.slug, now);
+  await verifyPublishedPostVisibleOrThrow(input.postId, mergedWithSeoRow.slug, now);
 
   const out = await prisma.blogPost.findUnique({
     where: { id: input.postId },

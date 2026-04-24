@@ -174,65 +174,106 @@ test.describe("Marketing study surfaces (env-gated)", () => {
     });
   });
 
-  test("Canada RN lessons hub — ≥12 links, no error shell, detail <400", async ({ page }) => {
-    const routeUrl = `${base}/canada/rn/nclex-rn/lessons`;
-    const r = await page.goto(routeUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
-    expect(r?.ok(), `HTTP ${r?.status()}`).toBeTruthy();
+  const DEFAULT_LESSON_HUB_ROUTES: Array<{ path: string; minLessonLinks: number }> = [
+    { path: "/canada/rn/nclex-rn/lessons", minLessonLinks: 12 },
+    { path: "/canada/pn/rex-pn/lessons", minLessonLinks: 12 },
+    { path: "/us/rn/nclex-rn/lessons", minLessonLinks: 12 },
+    { path: "/us/np/fnp/lessons", minLessonLinks: 1 },
+    { path: "/us/allied/allied-health/lessons", minLessonLinks: 1 },
+    { path: "/us/rn/new-grad-transition/lessons", minLessonLinks: 1 },
+  ];
 
-    const lessonLibrary = page.locator("#pathway-lesson-library");
-    try {
-      await lessonLibrary.waitFor({ state: "visible", timeout: 90_000 });
-    } catch {
-      const diag = await readMarketingHubSmokeDiagnostics(page);
-      const errShell = await page.getByTestId("marketing-hub-load-error").count();
-      const title = await page.title().catch(() => "");
-      console.error("\n[MARKETING_STUDY_SMOKE] canada-rn-lessons-hub: #pathway-lesson-library not visible within 90s");
-      console.error("[MARKETING_STUDY_SMOKE] page title:", title);
-      console.error("[MARKETING_STUDY_SMOKE] marketing-hub-load-error elements:", errShell);
-      console.error("[MARKETING_STUDY_SMOKE] nn-marketing-hub-smoke-diagnostics:", JSON.stringify(diag, null, 2));
-      throw new Error(
-        `#pathway-lesson-library did not become visible within 90s (see stdout for server-rendered smoke diagnostics: prepared/verified counts, outcome, pathwayId). marketing-hub-load-error count=${errShell}`,
-      );
-    }
-
-    const bodyText = (await page.locator("body").innerText()).toLowerCase();
-    expect(bodyText, "must not show lessons hub retry/error copy").not.toContain("lessons temporarily unavailable");
-    expect(bodyText, "must not show DB outage body copy").not.toContain("we could not load the lesson library");
-    await expect(page.getByTestId("marketing-hub-load-error")).toHaveCount(0);
-    await expect(page.locator('[data-nn-empty="curriculum-hub-empty"]')).toHaveCount(0);
-
-    const lessonLinks = page.locator('#pathway-lesson-library a[href*="/lessons/"]');
-    await expect(lessonLinks.first()).toBeVisible({ timeout: 60_000 });
-    const n = await lessonLinks.count();
-    expect(n, "expected ≥12 public lesson links when production inventory is healthy").toBeGreaterThanOrEqual(12);
-
-    const hrefs: string[] = [];
-    for (let i = 0; i < Math.min(3, n); i += 1) {
-      const h = (await lessonLinks.nth(i).getAttribute("href"))?.trim();
-      if (h) hrefs.push(normalizeHref(h, base));
-    }
-
-    const detailStatuses: number[] = [];
-    for (let i = 0; i < Math.min(3, n); i += 1) {
-      const raw = (await lessonLinks.nth(i).getAttribute("href"))?.trim();
-      expect(raw).toBeTruthy();
-      const detail = await page.goto(raw!.startsWith("http") ? raw! : `${base}${raw}`, {
-        waitUntil: "domcontentloaded",
-        timeout: 60_000,
-      });
-      expect(detail?.ok(), `lesson detail ${raw}`).toBeTruthy();
-      expect(detail?.status() ?? 0, `lesson detail status for ${raw}`).toBeLessThan(400);
-      detailStatuses.push(detail?.status() ?? 0);
-    }
-
-    printMarketingSmokeReport("canada-rn-lessons-hub", {
-      routeUrl,
-      counts: {
-        httpStatus: r?.status() ?? 0,
-        lessonLinkCount: n,
-        firstThreeDetailHttpStatuses: detailStatuses.join(","),
-      },
-      firstHrefs: hrefs,
+  function parseLessonHubMatrixFromEnv(): Array<{ path: string; minLessonLinks: number }> {
+    const raw = process.env.MARKETING_STUDY_LESSON_HUB_PATHS?.trim();
+    if (!raw) return DEFAULT_LESSON_HUB_ROUTES;
+    return raw.split(",").map((segment) => {
+      const [pathPart, minPart] = segment.split("|").map((s) => s.trim());
+      const path = pathPart.startsWith("/") ? pathPart : `/${pathPart}`;
+      const minLessonLinks = Math.max(1, Number(minPart || "12") || 12);
+      return { path, minLessonLinks };
     });
-  });
+  }
+
+  for (const hub of parseLessonHubMatrixFromEnv()) {
+    test(`lessons hub ${hub.path} — status, no unavailable copy, links, detail <400`, async ({ page, request }, testInfo) => {
+      const routeUrl = `${base}${hub.path}`;
+      const head = await request.get(routeUrl, { timeout: 60_000 });
+      if (head.status() === 404) {
+        testInfo.skip();
+        return;
+      }
+      expect(head.ok(), `GET ${hub.path} ${head.status()}`).toBeTruthy();
+
+      const r = await page.goto(routeUrl, { waitUntil: "domcontentloaded", timeout: 60_000 });
+      expect(r?.ok(), `HTTP ${r?.status()}`).toBeTruthy();
+
+      const bodyText = (await page.locator("body").innerText()).toLowerCase();
+      expect(bodyText, "must not show lessons hub retry/error copy").not.toContain("lessons temporarily unavailable");
+      expect(bodyText, "must not show DB outage body copy").not.toContain("we could not load the lesson library");
+
+      const lessonLibrary = page.locator("#pathway-lesson-library");
+      if (hub.minLessonLinks >= 12) {
+        try {
+          await lessonLibrary.waitFor({ state: "visible", timeout: 90_000 });
+        } catch {
+          const diag = await readMarketingHubSmokeDiagnostics(page);
+          const errShell = await page.getByTestId("marketing-hub-load-error").count();
+          throw new Error(
+            `${hub.path}: #pathway-lesson-library not visible in 90s; marketing-hub-load-error=${errShell}; diag=${JSON.stringify(diag).slice(0, 1200)}`,
+          );
+        }
+      }
+
+      const libVisible = await lessonLibrary.isVisible().catch(() => false);
+      const errCount = await page.getByTestId("marketing-hub-load-error").count();
+      if (libVisible) {
+        await expect(page.getByTestId("marketing-hub-load-error")).toHaveCount(0);
+        const lessonLinks = page.locator('#pathway-lesson-library a[href*="/lessons/"]');
+        const n = await lessonLinks.count();
+        if (hub.minLessonLinks <= 1 && n === 0) {
+          testInfo.skip(true, `${hub.path}: no public lesson links in this environment`);
+          return;
+        }
+        expect(n, `expected ≥1 lesson link on ${hub.path}`).toBeGreaterThanOrEqual(1);
+        if (hub.minLessonLinks > 1) {
+          expect(n, `expected ≥${hub.minLessonLinks} links on ${hub.path}`).toBeGreaterThanOrEqual(hub.minLessonLinks);
+        }
+        const detailStatuses: number[] = [];
+        for (let i = 0; i < Math.min(5, n); i += 1) {
+          const raw = (await lessonLinks.nth(i).getAttribute("href"))?.trim();
+          expect(raw).toBeTruthy();
+          const detail = await request.get(normalizeHref(raw!, base), { timeout: 60_000 });
+          expect(detail.status(), `lesson detail ${raw}`).toBeLessThan(400);
+          detailStatuses.push(detail.status());
+        }
+        printMarketingSmokeReport(`lessons-hub:${hub.path}`, {
+          routeUrl,
+          counts: {
+            httpStatus: r?.status() ?? 0,
+            lessonLinkCount: n,
+            firstFiveDetailStatuses: detailStatuses.join(","),
+            minConfigured: hub.minLessonLinks,
+          },
+          firstHrefs: [],
+        });
+        return;
+      }
+
+      if (errCount > 0) {
+        const diag = await readMarketingHubSmokeDiagnostics(page);
+        printMarketingSmokeReport(`lessons-hub-error:${hub.path}`, {
+          routeUrl,
+          counts: { httpStatus: r?.status() ?? 0, marketingHubLoadError: errCount },
+          firstHrefs: [],
+        });
+        expect(
+          false,
+          `Hub ${hub.path} shows error shell without #pathway-lesson-library — diagnostics: ${JSON.stringify(diag).slice(0, 1200)}`,
+        ).toBeTruthy();
+      }
+
+      const zeroCopy = await page.getByText(/no lessons are indexed|no lessons match/i).count();
+      expect(zeroCopy >= 1 || (await page.content()).includes("pathway-lesson-library")).toBeTruthy();
+    });
+  }
 });

@@ -47,6 +47,7 @@ import {
 } from "@/lib/blog/blog-article-pipeline-prompts";
 import type { BlogImageSlotAttachment } from "@/lib/blog/blog-image-workflow";
 import { appendBlogAdminPublishLog, seedBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
+import { publishBlogPostCanonical } from "@/lib/blog/publish-blog-post-canonical";
 import {
   blogPrePublishValidationSelect,
   validateBlogPrePublish,
@@ -611,42 +612,42 @@ export async function persistControlPanelDraft(
     ];
 
     if (input.publishImmediately) {
-      const forPre = await prisma.blogPost.findUnique({
-        where: { id: post.id },
-        select: blogPrePublishValidationSelect,
-      });
-      if (!forPre) {
-        return { ok: false, error: "Post row missing for immediate publish validation" };
-      }
-      const pre = await validateBlogPrePublish(forPre, post.id);
-      if (!pre.okToPublish) {
-        return {
-          ok: false,
-          code: "PRE_PUBLISH_BLOCKED",
-          error: pre.blocking.map((b) => b.message).join("; "),
-          prePublish: pre,
-          post,
-        };
-      }
       const publishedNow = new Date();
-      const logRow = await prisma.blogPost.findUnique({
-        where: { id: post.id },
-        select: { adminPublishLog: true },
-      });
-      await prisma.blogPost.update({
-        where: { id: post.id },
-        data: {
-          postStatus: BlogPostStatus.PUBLISHED,
+      try {
+        await publishBlogPostCanonical({
+          postId: post.id,
           publishAt: publishedNow,
-          workflowStatus: BlogWorkflowStatus.PUBLISHED,
-          adminPublishLog: appendBlogAdminPublishLog(logRow?.adminPublishLog, {
-            level: "info",
-            event: "published_immediate_control_panel",
-            message: "Published immediately after generation (pre-publish checks passed).",
-            detail: { publishAt: publishedNow.toISOString() },
-          }),
-        },
-      });
+          clearScheduledAt: true,
+          context: "control_panel_immediate",
+          acknowledgePrePublishWarnings: true,
+          setLegacySourceIfEmpty: "control_panel_ai",
+          extraLogEntries: [
+            {
+              level: "info",
+              event: "published_immediate_control_panel",
+              message: "Published immediately after generation (canonical publish + visibility checks).",
+              detail: { publishAt: publishedNow.toISOString() },
+            },
+          ],
+        });
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        if (msg.includes("publishBlogPostCanonical: pre-publish")) {
+          const forPre = await prisma.blogPost.findUnique({
+            where: { id: post.id },
+            select: blogPrePublishValidationSelect,
+          });
+          const preRes = forPre ? await validateBlogPrePublish(forPre, post.id) : null;
+          return {
+            ok: false,
+            code: "PRE_PUBLISH_BLOCKED",
+            error: preRes?.blocking.map((b) => b.message).join("; ") ?? msg,
+            prePublish: preRes ?? undefined,
+            post,
+          };
+        }
+        return { ok: false, error: msg, post };
+      }
       const published = await prisma.blogPost.findUnique({
         where: { id: post.id },
         select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },

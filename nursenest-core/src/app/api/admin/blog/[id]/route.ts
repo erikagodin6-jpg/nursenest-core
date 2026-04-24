@@ -29,6 +29,10 @@ import {
   validateBlogPrePublish,
 } from "@/lib/blog/blog-pre-publish-validation";
 import { blogPostIsLive } from "@/lib/blog/blog-visibility";
+import {
+  isCanonicalBlogPublishVisibilityError,
+  publishBlogPostCanonical,
+} from "@/lib/blog/publish-blog-post-canonical";
 import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -172,6 +176,7 @@ function partialPrePublishFromPatch(d: z.infer<typeof patchSchema>): Partial<Pre
   if (d.exam !== undefined) p.exam = d.exam;
   if (d.category !== undefined) p.category = d.category;
   if (d.tags !== undefined) p.tags = d.tags;
+  if (d.postTemplate !== undefined) p.postTemplate = d.postTemplate;
   return p;
 }
 
@@ -258,6 +263,13 @@ export async function PATCH(req: Request, { params }: Props) {
   });
   if (!current) return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
 
+  let bodyForUpdate: string | undefined;
+  if (d.action === "publish_now") {
+    bodyForUpdate = stripBrokenOrEmptyImagesFromHtml(d.body ?? current.body);
+  } else if (d.body !== undefined) {
+    bodyForUpdate = d.body;
+  }
+
   if (d.slug !== undefined) {
     const clash = await prisma.blogPost.findFirst({
       where: { slug: d.slug, NOT: { id } },
@@ -273,10 +285,11 @@ export async function PATCH(req: Request, { params }: Props) {
 
   const runPrePublishGate = async (): Promise<NextResponse | null> => {
     const { adminPublishLog, ...postSlice } = current;
-    const merged = mergeBlogPostForPrePublishPatch(
-      postSlice as unknown as BlogPostPrePublishPayload,
-      partialPrePublishFromPatch(d),
-    );
+    const mergePatch: Partial<PrePublishPatch> = {
+      ...partialPrePublishFromPatch(d),
+      ...(d.action === "publish_now" && bodyForUpdate ? { body: bodyForUpdate } : {}),
+    };
+    const merged = mergeBlogPostForPrePublishPatch(postSlice as unknown as BlogPostPrePublishPayload, mergePatch);
     const prePublish = await validateBlogPrePublish(merged, id);
     if (!prePublish.okToPublish) {
       const nextLog = appendBlogAdminPublishLog(adminPublishLog, {
@@ -328,14 +341,101 @@ export async function PATCH(req: Request, { params }: Props) {
   let actionPatch: ActionPatch = {};
 
   if (d.action === "publish_now") {
+    const taxonomyTouchPublish =
+      d.title !== undefined || d.body !== undefined || d.tags !== undefined || d.category !== undefined;
+    if (taxonomyTouchPublish) {
+      const mergedTitle = d.title ?? current.title;
+      const mergedBody = bodyForUpdate ?? current.body;
+      const mergedTags = d.tags ?? current.tags;
+      const mergedCategory = d.category !== undefined ? d.category : current.category;
+      const blogTax = classifyBlogCorpus({
+        title: mergedTitle,
+        body: mergedBody,
+        category: mergedCategory,
+        tags: mergedTags,
+      });
+      const viol = collectClassificationViolations(blogTax);
+      if (viol.length > 0) {
+        return NextResponse.json(
+          { error: "Taxonomy classifier rejected merged content", violations: viol, code: "taxonomy_invalid" },
+          { status: 422 },
+        );
+      }
+      if (d.category !== undefined && d.category !== null && d.category !== blogTax.category) {
+        return NextResponse.json(
+          {
+            error: "category does not match classifier output",
+            code: "taxonomy_override_mismatch",
+            expected: blogTax.category,
+          },
+          { status: 422 },
+        );
+      }
+    }
+
     const blocked = await runPrePublishGate();
     if (blocked) return blocked;
-    actionPatch = {
-      postStatus: BlogPostStatus.PUBLISHED,
-      publishAt: now,
-      workflowStatus: BlogWorkflowStatus.PUBLISHED,
+
+    const companionUpdate: Prisma.BlogPostUpdateInput = {
+      ...(d.targetKeyword !== undefined ? { targetKeyword: d.targetKeyword } : {}),
+      ...(d.keywordCluster !== undefined ? { keywordCluster: d.keywordCluster } : {}),
+      ...(d.intent !== undefined ? { intent: d.intent } : {}),
+      ...(d.funnelStage !== undefined ? { funnelStage: d.funnelStage } : {}),
+      ...(d.titleAlternates !== undefined ? { titleAlternates: d.titleAlternates } : {}),
+      ...(d.keyTakeaways !== undefined ? { keyTakeaways: d.keyTakeaways } : {}),
+      ...(d.relatedLessonPaths !== undefined ? { relatedLessonPaths: d.relatedLessonPaths } : {}),
+      ...(d.featuredSnippet !== undefined ? { featuredSnippet: d.featuredSnippet } : {}),
+      ...(d.keyQuestions !== undefined ? { keyQuestions: d.keyQuestions } : {}),
+      ...(d.reviewDueAt !== undefined ? { reviewDueAt: d.reviewDueAt ? new Date(d.reviewDueAt) : null } : {}),
+      ...(d.lastReviewedAt !== undefined ? { lastReviewedAt: d.lastReviewedAt ? new Date(d.lastReviewedAt) : null } : {}),
     };
-    logQueue.push({ level: "info", event: "published", message: "Post published live." });
+
+    try {
+      await publishBlogPostCanonical({
+        postId: id,
+        publishAt: now,
+        clearScheduledAt: true,
+        context: "admin_patch_publish_now",
+        acknowledgePrePublishWarnings: Boolean(d.acknowledgePrePublishWarnings),
+        prePublishMerge: {
+          ...partialPrePublishFromPatch(d),
+          ...(bodyForUpdate ? { body: bodyForUpdate } : {}),
+        },
+        companionUpdate,
+        extraLogEntries: [{ level: "info", event: "published", message: "Post published live." }],
+      });
+    } catch (e) {
+      safeServerLog("admin", "blog_publish_now_failed", {
+        postId: id,
+        error: e instanceof Error ? e.message : String(e),
+        visibility: isCanonicalBlogPublishVisibilityError(e) ? e.failure : undefined,
+      });
+      if (isCanonicalBlogPublishVisibilityError(e)) {
+        return NextResponse.json(
+          {
+            error: "Published row failed public visibility checks — post was not left in a false-published state.",
+            visibility: e.failure,
+          },
+          { status: 502 },
+        );
+      }
+      if (e instanceof Error && e.message.includes("publishBlogPostCanonical: pre-publish")) {
+        return NextResponse.json({ error: e.message }, { status: 422 });
+      }
+      throw e;
+    }
+
+    const updatedEarly = await prisma.blogPost.findUnique({ where, select: adminBlogPostSelect });
+    if (!updatedEarly) {
+      return NextResponse.json({ error: "Blog post not found after publish" }, { status: 500 });
+    }
+    await logPublishSucceeded({
+      blogPostId: updatedEarly.id,
+      title: updatedEarly.title,
+      slug: updatedEarly.slug,
+      createdById: gate.admin.userId,
+    });
+    return NextResponse.json({ post: updatedEarly });
   } else if (d.action === "unpublish") {
     actionPatch = { postStatus: BlogPostStatus.DRAFT };
     logQueue.push({ level: "warn", event: "unpublished", message: "Post unpublished to draft." });
@@ -404,13 +504,6 @@ export async function PATCH(req: Request, { params }: Props) {
     });
   }
 
-  let bodyForUpdate: string | undefined;
-  if (d.action === "publish_now") {
-    bodyForUpdate = stripBrokenOrEmptyImagesFromHtml(d.body ?? current.body);
-  } else if (d.body !== undefined) {
-    bodyForUpdate = d.body;
-  }
-
   const effectivePostStatus: BlogPostStatus | undefined =
     d.action !== undefined && actionPatch.postStatus !== undefined
       ? actionPatch.postStatus
@@ -423,8 +516,6 @@ export async function PATCH(req: Request, { params }: Props) {
     effectivePublishAt = actionPatch.publishAt;
   } else if (d.action === "revert_to_draft" || d.action === "mark_failed") {
     effectivePublishAt = actionPatch.publishAt ?? null;
-  } else if (d.action === "publish_now") {
-    effectivePublishAt = now;
   } else if (d.publishAt !== undefined) {
     effectivePublishAt = d.publishAt ? new Date(d.publishAt) : null;
   } else {
@@ -449,10 +540,7 @@ export async function PATCH(req: Request, { params }: Props) {
   }
 
   const workflowStatusUpdate =
-    d.action === "publish_now" ||
-    d.action === "submit_for_review" ||
-    d.action === "approve" ||
-    d.action === "mark_failed"
+    d.action === "submit_for_review" || d.action === "approve" || d.action === "mark_failed"
       ? actionPatch.workflowStatus
       : d.workflowStatus !== undefined
         ? d.workflowStatus
@@ -549,14 +637,6 @@ export async function PATCH(req: Request, { params }: Props) {
     select: adminBlogPostSelect,
   });
 
-  if (d.action === "publish_now") {
-    await logPublishSucceeded({
-      blogPostId: updated.id,
-      title: updated.title,
-      slug: updated.slug,
-      createdById: gate.admin.userId,
-    });
-  }
   if (d.action === "mark_failed") {
     const failMsg = d.failureReason?.trim() || "Marked as failed (incomplete draft or generation issue).";
     await logMarkFailed({
@@ -573,7 +653,6 @@ export async function PATCH(req: Request, { params }: Props) {
    * bulk APPROVED posts stayed invisible until the hourly window.
    */
   const revalidateActions = new Set([
-    "publish_now",
     "schedule",
     "unpublish",
     "revert_to_draft",

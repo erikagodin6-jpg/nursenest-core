@@ -23,6 +23,7 @@ import {
   blogPrePublishValidationSelect,
   validateBlogPrePublish,
 } from "@/lib/blog/blog-pre-publish-validation";
+import { publishBlogPostCanonical } from "@/lib/blog/publish-blog-post-canonical";
 import {
   GLOBAL_LOCALE_CODES,
   isAllowedLocaleForRegion,
@@ -385,15 +386,40 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
     publishHeldAsDraft = true;
   }
 
-  const post = await prisma.blogPost.update({
-    where: { id: persisted.post.id },
-    data: {
-      postStatus: finalPublish.postStatus,
-      publishAt: finalPublish.publishAt,
-      workflowStatus: finalPublish.workflowStatus,
-    },
-    select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
-  });
+  let post: {
+    id: string;
+    slug: string;
+    title: string;
+    postStatus: BlogPostStatus;
+    updatedAt: Date;
+  };
+  if (finalPublish.postStatus === BlogPostStatus.PUBLISHED) {
+    await publishBlogPostCanonical({
+      postId: persisted.post.id,
+      publishAt: finalPublish.publishAt ?? new Date(),
+      clearScheduledAt: true,
+      context: "automation_engine",
+      acknowledgePrePublishWarnings: true,
+    });
+    const loaded = await prisma.blogPost.findUnique({
+      where: { id: persisted.post.id },
+      select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
+    });
+    if (!loaded) {
+      throw new Error("Blog automation: post missing after canonical publish.");
+    }
+    post = loaded;
+  } else {
+    post = await prisma.blogPost.update({
+      where: { id: persisted.post.id },
+      data: {
+        postStatus: finalPublish.postStatus,
+        publishAt: finalPublish.publishAt,
+        workflowStatus: finalPublish.workflowStatus,
+      },
+      select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
+    });
+  }
 
   const seoReadiness: BlogAutomationSeoReadiness = {
     okToPublish: prePublish.okToPublish,

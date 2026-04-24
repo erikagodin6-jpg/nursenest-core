@@ -1,6 +1,7 @@
 import { BlogCampaignItemStatus, BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
 import { appendBlogAdminPublishLog, parseBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
 import { blogPrePublishValidationSelect, validateBlogPrePublish } from "@/lib/blog/blog-pre-publish-validation";
+import { publishBlogPostCanonical } from "@/lib/blog/publish-blog-post-canonical";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -109,26 +110,25 @@ export async function promoteScheduledBlogPosts(now: Date = new Date()): Promise
             .catch(() => undefined);
           continue;
         }
-        const nextLog = appendBlogAdminPublishLog(c.adminPublishLog, {
-          level: "info",
-          event: "auto_published",
-          message: "Published by scheduled auto-publish job.",
-          detail: { previousStatus: c.postStatus, publishAt: canonicalPublishAt.toISOString() },
+        await publishBlogPostCanonical({
+          postId: c.id,
+          publishAt: canonicalPublishAt,
+          clearScheduledAt: true,
+          context: "scheduler_auto_publish",
+          acknowledgePrePublishWarnings: true,
+          skipRevalidate: true,
+          extraLogEntries: [
+            {
+              level: "info",
+              event: "auto_published",
+              message: "Published by scheduled auto-publish job.",
+              detail: { previousStatus: c.postStatus, publishAt: canonicalPublishAt.toISOString() },
+            },
+          ],
         });
-        const res = await prisma.blogPost.updateMany({
-          where: { id: c.id, postStatus: { not: BlogPostStatus.PUBLISHED } },
-          data: {
-            postStatus: BlogPostStatus.PUBLISHED,
-            workflowStatus: BlogWorkflowStatus.PUBLISHED,
-            publishAt: canonicalPublishAt,
-            adminPublishLog: nextLog,
-          },
-        });
-        promotedCount += res.count;
-        if (res.count > 0) {
-          promotedIds.push(c.id);
-          promotedSlugs.push(c.slug);
-        }
+        promotedCount += 1;
+        promotedIds.push(c.id);
+        promotedSlugs.push(c.slug);
       } catch (error) {
         const attempt = priorFailures + 1;
         const exhausted = attempt >= MAX_AUTO_PUBLISH_RETRIES;
@@ -227,17 +227,22 @@ export async function recoverOverdueBlogPosts(
           .catch(() => undefined);
         continue;
       }
-      const res = await prisma.blogPost.updateMany({
-        where: { id: row.id, postStatus: { in: [BlogPostStatus.SCHEDULED, BlogPostStatus.DRAFT, BlogPostStatus.APPROVED] } },
-        data: {
-          postStatus: BlogPostStatus.PUBLISHED,
-          workflowStatus: BlogWorkflowStatus.PUBLISHED,
+      try {
+        await publishBlogPostCanonical({
+          postId: row.id,
           publishAt,
-        },
-      });
-      if (res.count > 0) {
+          clearScheduledAt: true,
+          context: "scheduler_recover_overdue",
+          acknowledgePrePublishWarnings: true,
+          skipRevalidate: true,
+        });
         count += 1;
         ids.push(row.id);
+      } catch (e) {
+        safeServerLog("blog_scheduler", "recover_overdue_canonical_failed", {
+          postId: row.id,
+          error: e instanceof Error ? e.message : String(e),
+        });
       }
     }
     if (count > 0) {

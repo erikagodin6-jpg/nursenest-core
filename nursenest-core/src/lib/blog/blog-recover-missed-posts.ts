@@ -1,8 +1,10 @@
 import { BlogCampaignItemStatus, BlogPostStatus, BlogWorkflowStatus, type Prisma } from "@prisma/client";
 import { appendBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
 import { blogPrePublishValidationSelect, validateBlogPrePublish } from "@/lib/blog/blog-pre-publish-validation";
+import { publishBlogPostCanonical } from "@/lib/blog/publish-blog-post-canonical";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const MIN_BODY_CHARS_FOR_FAILED_RECOVERY = 200;
 
@@ -123,28 +125,32 @@ export async function recoverMissedBlogPostsBatch(
         .catch(() => undefined);
       continue;
     }
-    const log = appendBlogAdminPublishLog(row.adminPublishLog ?? [], {
-      level: "info",
-      event: "missed_publish_recovered",
-      message: "Recovered missed publish: set live with publishAt=now; scheduledAt preserved when present.",
-      detail: {
-        previousStatus: row.postStatus,
-        slug: row.slug,
-      },
-    });
-    const res = await prisma.blogPost.updateMany({
-      where: { id: row.id, postStatus: { not: BlogPostStatus.PUBLISHED } },
-      data: {
-        postStatus: BlogPostStatus.PUBLISHED,
-        workflowStatus: BlogWorkflowStatus.PUBLISHED,
+    try {
+      await publishBlogPostCanonical({
+        postId: row.id,
         publishAt: now,
-        adminPublishLog: log,
-      },
-    });
-    if (res.count > 0) {
+        clearScheduledAt: false,
+        context: "recover_missed_blog_batch",
+        acknowledgePrePublishWarnings: true,
+        skipRevalidate: true,
+        extraLogEntries: [
+          {
+            level: "info",
+            event: "missed_publish_recovered",
+            message: "Recovered missed publish via canonical helper; scheduledAt preserved when present.",
+            detail: { previousStatus: row.postStatus, slug: row.slug },
+          },
+        ],
+      });
       recovered += 1;
       ids.push(row.id);
       slugs.push(row.slug);
+    } catch (e) {
+      safeServerLog("blog_recover", "missed_publish_canonical_failed", {
+        postId: row.id,
+        slug: row.slug,
+        error: e instanceof Error ? e.message : String(e),
+      });
     }
   }
 

@@ -12,15 +12,16 @@
  *   npx tsx scripts/blog/blog-promote-control-panel-drafts.mts --limit 50
  *   npx tsx scripts/blog/blog-promote-control-panel-drafts.mts --limit 20 --apply
  */
-import { BlogPostStatus, BlogWorkflowStatus, PrismaClient } from "@prisma/client";
+import { BlogPostStatus } from "@prisma/client";
 
 import "../../src/lib/db/script-env-bootstrap";
 
-import { appendBlogAdminPublishLog } from "../../src/lib/blog/blog-admin-publish-log";
+import { prisma } from "../../src/lib/db";
 import {
   blogPrePublishValidationSelect,
   validateBlogPrePublish,
 } from "../../src/lib/blog/blog-pre-publish-validation";
+import { publishBlogPostCanonical } from "../../src/lib/blog/publish-blog-post-canonical";
 
 function isControlPanelAiDraftLog(adminPublishLog: unknown): boolean {
   if (!Array.isArray(adminPublishLog)) return false;
@@ -55,8 +56,6 @@ async function main(): Promise<void> {
     console.error("DATABASE_URL is not set.");
     process.exit(1);
   }
-
-  const prisma = new PrismaClient();
 
   try {
     const candidates = await prisma.blogPost.findMany({
@@ -118,23 +117,22 @@ async function main(): Promise<void> {
       }
 
       const publishedNow = new Date();
-      const logRow = await prisma.blogPost.findUnique({
-        where: { id: c.id },
-        select: { adminPublishLog: true },
-      });
-      await prisma.blogPost.update({
-        where: { id: c.id },
-        data: {
-          postStatus: BlogPostStatus.PUBLISHED,
-          publishAt: publishedNow,
-          workflowStatus: BlogWorkflowStatus.PUBLISHED,
-          adminPublishLog: appendBlogAdminPublishLog(logRow?.adminPublishLog, {
+      await publishBlogPostCanonical({
+        postId: c.id,
+        publishAt: publishedNow,
+        clearScheduledAt: true,
+        context: "script_promote_control_panel_drafts",
+        acknowledgePrePublishWarnings: true,
+        skipRevalidate: true,
+        setLegacySourceIfEmpty: "control_panel_ai",
+        extraLogEntries: [
+          {
             level: "info",
             event: "published_backfill_script",
-            message: "Promoted from DRAFT via blog-promote-control-panel-drafts.mts (pre-publish passed).",
+            message: "Promoted from DRAFT via blog-promote-control-panel-drafts.mts (canonical publish).",
             detail: { publishAt: publishedNow.toISOString() },
-          }),
-        },
+          },
+        ],
       });
       results.push({ id: c.id, slug: c.slug, action: "published" });
     }
@@ -148,7 +146,7 @@ async function main(): Promise<void> {
       );
     }
   } finally {
-    await prisma.$disconnect();
+    await prisma.$disconnect().catch(() => undefined);
   }
 }
 
