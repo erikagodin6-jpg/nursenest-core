@@ -724,7 +724,17 @@ async function resolveMarketingHubRenderableLessonList(
     const afterSafeSlug = filterHubListItemsForSafeSlugs(hubNormalized, pathwayId);
     const tCtx0 = performance.now();
     const ctxStages = countMarketingPathwayContextFilterStages(pathwayId, afterSafeSlug);
-    const afterPathwayContext = sortAndFilterLessonsForPathwayContext(pathwayId, afterSafeSlug);
+    /**
+ * FIX: Do NOT filter out lessons at this stage.
+ * We only apply pathway context matching — NOT publicComplete filtering.
+ * The verify layer will handle degraded vs strict visibility.
+ */
+const afterPathwayContext = sortPathwayLessonsForPublicPreview(
+  pathwayId,
+  afterSafeSlug.filter((lesson) =>
+    pathwayLessonMatchesMarketingPathwayContext(pathwayId, lesson)
+  )
+);
     const contextFilterMs = Math.round(performance.now() - tCtx0);
     const contextDropSummary = summarizePathwayContextPipelineDrops(pathwayId, afterSafeSlug, afterPathwayContext);
     logHubListPipelineDropSamples(pathwayId, afterSafeSlug, afterPathwayContext, 24);
@@ -838,7 +848,12 @@ async function resolveMarketingHubRenderableLessonList(
   const afterSafeSlugCat = filterHubListItemsForSafeSlugs(hydratedCatalog, pathwayId);
   const tCtxCat0 = performance.now();
   const ctxStagesCat = countMarketingPathwayContextFilterStages(pathwayId, afterSafeSlugCat);
-  const afterContextCat = sortAndFilterLessonsForPathwayContext(pathwayId, afterSafeSlugCat);
+  const afterContextCat = sortPathwayLessonsForPublicPreview(
+    pathwayId,
+    afterSafeSlugCat.filter((lesson) =>
+      pathwayLessonMatchesMarketingPathwayContext(pathwayId, lesson)
+    )
+  );
   const contextFilterCatMs = Math.round(performance.now() - tCtxCat0);
   const contextDropSummaryCat = summarizePathwayContextPipelineDrops(pathwayId, afterSafeSlugCat, afterContextCat);
   logHubListPipelineDropSamples(pathwayId, afterSafeSlugCat, afterContextCat, 24);

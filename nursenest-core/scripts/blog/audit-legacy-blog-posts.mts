@@ -10,28 +10,32 @@
  *
  * Requires DATABASE_URL (e.g. from `.env.local`).
  */
-import { readFileSync } from "node:fs";
 
+import { readFileSync } from "node:fs";
 import { PrismaClient } from "@prisma/client";
 
-import "../../src/lib/db/script-env-bootstrap";
-import { collectLegacyBlogPostsFromSite } from "../../src/lib/legacy/legacy-blog-site-collector";
-import { parseLegacyBlogPostExportJsonText } from "../../src/lib/legacy/legacy-blog-post-export-types";
-import { auditLegacyBlogPosts } from "../../src/lib/legacy/legacy-blog-post-import-pipeline";
+// ✅ FIX: explicit .ts extensions for ESM / tsx
+import "../../src/lib/db/script-env-bootstrap.ts";
+import { collectLegacyBlogPostsFromSite } from "../../src/lib/legacy/legacy-blog-site-collector.ts";
+import { parseLegacyBlogPostExportJsonText } from "../../src/lib/legacy/legacy-blog-post-export-types.ts";
+import { auditLegacyBlogPosts } from "../../src/lib/legacy/legacy-blog-post-import-pipeline.ts";
 
 const prisma = new PrismaClient();
 
 async function loadExport() {
   const exportPath = process.env.LEGACY_CONTENT_EXPORT_PATH?.trim() || process.argv[2]?.trim();
   const base = process.env.LEGACY_SITE_BASE_URL?.trim();
+
   if (exportPath) {
     const text = readFileSync(exportPath, "utf8");
     return parseLegacyBlogPostExportJsonText(text);
   }
+
   if (base) {
     const crawled = await collectLegacyBlogPostsFromSite(base);
     if (crawled) return crawled;
   }
+
   console.error(
     "[blog:audit-legacy] Provide LEGACY_CONTENT_EXPORT_PATH or argv[2] JSON path, or LEGACY_SITE_BASE_URL for blog crawl.",
   );
@@ -44,8 +48,10 @@ async function main() {
     console.error("[blog:audit-legacy] DATABASE_URL is required.");
     process.exit(1);
   }
+
   const doc = await loadExport();
   const audit = await auditLegacyBlogPosts(prisma, doc);
+
   console.log(JSON.stringify({ ok: true, audit }, null, 2));
 }
 

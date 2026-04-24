@@ -9,7 +9,7 @@ export type FlashcardProgressPick = {
 
 /**
  * Optional deck / lesson / question provenance filter for custom study sessions.
- * `all` — no extra constraint (beyond access scope).
+ * `all` — no extra constraint beyond access scope.
  */
 export type CustomSessionSourceKind = "all" | "lesson" | "question" | "deck";
 
@@ -27,30 +27,43 @@ export function prismaWhereForSourceKind(source: CustomSessionSourceKind): Prism
 }
 
 export function parseCustomSessionSourceKind(raw: string | null | undefined): CustomSessionSourceKind {
-  const v = (raw ?? "").trim().toLowerCase();
-  if (v === "lesson" || v === "question" || v === "deck") return v;
+  const value = (raw ?? "").trim().toLowerCase();
+
+  if (value === "lesson" || value === "question" || value === "deck") {
+    return value;
+  }
+
   return "all";
 }
 
 export function filterCardsByProgressFlags<T extends { id: string }>(
   cards: T[],
   progressById: Map<string, FlashcardProgressPick>,
-  opts: { notStudiedOnly: boolean; recentStudiedOnly: boolean; recentWindowMs: number; nowMs: number },
+  opts: {
+    notStudiedOnly: boolean;
+    recentStudiedOnly: boolean;
+    recentWindowMs: number;
+    nowMs: number;
+  },
 ): T[] {
   let out = cards;
+
   if (opts.notStudiedOnly) {
-    out = out.filter((c) => {
-      const p = progressById.get(c.id);
-      return !p || p.repetitions === 0;
+    out = out.filter((card) => {
+      const progress = progressById.get(card.id);
+      return !progress || progress.repetitions === 0;
     });
   }
+
   if (opts.recentStudiedOnly) {
     const cutoff = opts.nowMs - opts.recentWindowMs;
-    out = out.filter((c) => {
-      const p = progressById.get(c.id);
-      if (!p?.lastReviewedAt) return false;
-      return p.lastReviewedAt.getTime() >= cutoff;
+
+    out = out.filter((card) => {
+      const progress = progressById.get(card.id);
+      if (!progress?.lastReviewedAt) return false;
+      return progress.lastReviewedAt.getTime() >= cutoff;
     });
   }
+
   return out;
 }

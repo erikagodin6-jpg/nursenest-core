@@ -1,10 +1,11 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+
 import {
   filterCardsByProgressFlags,
   parseCustomSessionSourceKind,
   prismaWhereForSourceKind,
-} from "@/lib/flashcards/custom-session-card-filters";
+} from "../../src/lib/flashcards/custom-session-card-filters.ts";
 
 describe("custom-session-card-filters", () => {
   it("parseCustomSessionSourceKind", () => {
@@ -24,13 +25,15 @@ describe("custom-session-card-filters", () => {
       ["a", { flashcardId: "a", lastQuality: 4, repetitions: 3, lastReviewedAt: new Date() }],
       ["b", { flashcardId: "b", lastQuality: null, repetitions: 0, lastReviewedAt: null }],
     ]);
+
     const out = filterCardsByProgressFlags(cards, map, {
       notStudiedOnly: true,
       recentStudiedOnly: false,
       recentWindowMs: 7 * 86_400_000,
       nowMs: Date.now(),
     });
-    assert.deepEqual(out.map((c) => c.id).sort(), ["b", "c"].sort());
+
+    assert.deepEqual(out.map((card) => card.id).sort(), ["b", "c"].sort());
   });
 
   it("filterCardsByProgressFlags recentStudiedOnly", () => {
@@ -40,12 +43,14 @@ describe("custom-session-card-filters", () => {
       ["x", { flashcardId: "x", lastQuality: 4, repetitions: 2, lastReviewedAt: new Date(now - 86_400_000) }],
       ["y", { flashcardId: "y", lastQuality: 4, repetitions: 2, lastReviewedAt: new Date(now - 10 * 86_400_000) }],
     ]);
+
     const out = filterCardsByProgressFlags(cards, map, {
       notStudiedOnly: false,
       recentStudiedOnly: true,
       recentWindowMs: 2 * 86_400_000,
       nowMs: now,
     });
-    assert.deepEqual(out.map((c) => c.id), ["x"]);
+
+    assert.deepEqual(out.map((card) => card.id), ["x"]);
   });
 });

@@ -7,10 +7,11 @@
  *
  *   npx tsx scripts/blog/blog-full-inventory-diagnostics.mts
  */
-import "../../src/lib/db/script-env-bootstrap";
+
+import "../../src/lib/db/script-env-bootstrap.ts";
 import { BlogPostStatus, PrismaClient } from "@prisma/client";
 
-import { blogLiveWhere } from "../../src/lib/blog/blog-visibility";
+import { blogLiveWhere } from "../../src/lib/blog/blog-visibility.ts";
 
 const prisma = new PrismaClient();
 const SAMPLE_LIMIT = 50;
@@ -34,11 +35,13 @@ function histogramFromGroupBy<K extends string>(
   key: K,
 ): Record<string, number> {
   const out: Record<string, number> = {};
+
   for (const row of rows) {
     const raw = row[key];
     const label = raw === null || raw === "" ? "(null)" : String(raw);
     out[label] = (out[label] ?? 0) + row._count._all;
   }
+
   return out;
 }
 
@@ -95,7 +98,10 @@ async function main(): Promise<void> {
   ]);
 
   const byStatus: Record<string, number> = {};
-  for (const s of STATUS_ORDER) byStatus[statusLabelForReport(s)] = 0;
+  for (const status of STATUS_ORDER) {
+    byStatus[statusLabelForReport(status)] = 0;
+  }
+
   for (const row of groupedStatus) {
     byStatus[statusLabelForReport(row.postStatus)] = row._count._all;
   }
@@ -139,19 +145,19 @@ async function main(): Promise<void> {
     },
     note:
       "REVIEW_REQUIRED maps to Prisma BlogPostStatus.NEEDS_REVIEW. Histogram keys (null) mean empty DB null.",
-    sampleExcludedPosts: samples.map((r) => ({
-      id: r.id,
-      slug: r.slug,
-      title: r.title.slice(0, 200),
-      postStatus: statusLabelForReport(r.postStatus),
-      postStatusRaw: r.postStatus,
-      publishAt: r.publishAt?.toISOString() ?? null,
-      scheduledAt: r.scheduledAt?.toISOString() ?? null,
-      category: r.category,
-      template: r.postTemplate,
-      legacySource: r.legacySource,
-      createdAt: r.createdAt.toISOString(),
-      updatedAt: r.updatedAt.toISOString(),
+    sampleExcludedPosts: samples.map((row) => ({
+      id: row.id,
+      slug: row.slug,
+      title: row.title.slice(0, 200),
+      postStatus: statusLabelForReport(row.postStatus),
+      postStatusRaw: row.postStatus,
+      publishAt: row.publishAt?.toISOString() ?? null,
+      scheduledAt: row.scheduledAt?.toISOString() ?? null,
+      category: row.category,
+      template: row.postTemplate,
+      legacySource: row.legacySource,
+      createdAt: row.createdAt.toISOString(),
+      updatedAt: row.updatedAt.toISOString(),
     })),
   };
 
@@ -162,18 +168,20 @@ async function main(): Promise<void> {
   console.error(`visible (blogLiveWhere): ${visibleCount}`);
   console.error(`excluded: ${excludedCount}`);
   console.error("by status (REVIEW_REQUIRED = NEEDS_REVIEW):");
-  for (const s of STATUS_ORDER) {
-    const label = statusLabelForReport(s);
+
+  for (const status of STATUS_ORDER) {
+    const label = statusLabelForReport(status);
     console.error(`  ${label}: ${byStatus[label] ?? 0}`);
   }
+
   console.error(
     `PUBLISHED publishAt null: ${publishedPublishAtNull}; APPROVED: ${approvedTotal}; SCHEDULED future gate: ${scheduledFuture}; SCHEDULED no dates: ${scheduledStuckNoDates}; REVIEW_REQUIRED: ${needsReviewTotal}`,
   );
 }
 
 main()
-  .catch((e) => {
-    console.error(e);
+  .catch((error) => {
+    console.error(error);
     process.exit(1);
   })
   .finally(async () => {
