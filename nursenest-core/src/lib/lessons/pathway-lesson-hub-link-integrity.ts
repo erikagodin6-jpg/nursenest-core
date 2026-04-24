@@ -1,7 +1,7 @@
 /**
  * Marketing lessons hub — cross-checks list rows with a **fresh** {@link getPathwayLessonForMarketingHubVerify} load
  * (no `unstable_cache` lag vs the hub list). **Strict** rows match the historical contract (publicComplete + pathway context).
- * **Soft** failures (`detail_not_public_complete`, `pathway_context_mismatch`) still hydrate — those rows are kept
+ * **Soft** failures (`detail_not_public_complete`, `pathway_context_mismatch`, `detail_loader_miss`) still hydrate/recover — those rows are kept
  * with {@link PathwayLessonRecord.hubMarketingDegraded} so the grid does not silently empty while the detail route
  * can still render preview/quality states (see {@link resolveMarketingPathwayLessonRouteResolution}).
  *
@@ -87,10 +87,15 @@ function tallyReason(
   map[reason] = (map[reason] ?? 0) + 1;
 }
 
-/** Slugs that hydrate but fail strict marketing gates — keep on hub as {@link PathwayLessonRecord.hubMarketingDegraded}. */
+/**
+ * Slugs that fail strict marketing gates but are safe to keep on the hub as degraded rows.
+ * `detail_loader_miss` is included intentionally: the hub list row is already prepared/renderable, and dropping it
+ * when the uncached detail verifier misses causes the public hub to collapse from hundreds of rows to one/few rows.
+ */
 const SOFT_HUB_VERIFY_RECOVERY_REASONS = new Set<HubMarketingLessonDetailFailureReason>([
   "detail_not_public_complete",
   "pathway_context_mismatch",
+  "detail_loader_miss",
 ]);
 
 function isSoftHubVerifyRecoveryReason(
@@ -305,7 +310,7 @@ export async function verifyMarketingHubLessonRowsResolve(
     const r = slugFailureReason.get(slug);
     if (isSoftHubVerifyRecoveryReason(r)) {
       const hubMarketingDegradedReason =
-        r === "detail_not_public_complete" ? ("partial_content" as const) : ("pathway_mismatch" as const);
+        r === "pathway_context_mismatch" ? ("pathway_mismatch" as const) : ("partial_content" as const);
       kept.push({
         ...lesson,
         hubMarketingDegraded: true,
