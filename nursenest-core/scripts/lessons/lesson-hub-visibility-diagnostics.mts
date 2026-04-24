@@ -9,20 +9,28 @@
  *     ./node_modules/.bin/tsx --import dotenv/config scripts/lessons/lesson-hub-visibility-diagnostics.mts \
  *     --pathway ca-rn-nclex-rn --country canada --locale en --limit 50 --sample-excluded 20
  */
-import { ContentStatus, PrismaClient } from "@prisma/client";
+import { ContentStatus } from "@prisma/client";
 
 import "../../src/lib/db/script-env-bootstrap";
 import { prepareLessonsForHubCurriculumWithDiagnostics } from "../../src/components/pathway-lessons/pathway-lessons-curriculum-hub";
+import {
+  PATHWAY_LESSONS_STRUCTURAL_PUBLIC_COMPLETE_COLUMN,
+  PATHWAY_LESSONS_STRUCTURAL_PUBLIC_COMPLETE_MIGRATION_DIR,
+  pathwayLessonsSchemaDriftFromPrismaErrorMessage,
+  pathwayLessonsStructuralPublicCompleteColumnPresent,
+} from "../../src/lib/db/pathway-lessons-schema-contract";
+import { prisma } from "../../src/lib/db";
 import { EXAM_PATHWAYS } from "../../src/lib/exam-pathways/exam-pathways-catalog";
+import { maskDatabaseUrlHostForLog } from "../../src/lib/env/require-database-env";
 import { buildLessonHubVisibilityDiagnosticsReport } from "../../src/lib/lessons/lesson-hub-visibility-diagnostics";
 import {
   getPathwayLessonListWarehouseLocaleForHub,
   getPathwayLessonsPageFresh,
 } from "../../src/lib/lessons/pathway-lesson-loader";
-import { PATHWAY_HUB_PAGE_SIZE_DEFAULT } from "../../src/lib/lessons/pathway-lesson-scale";
 import { verifyMarketingHubLessonRowsResolve } from "../../src/lib/lessons/pathway-lesson-hub-link-integrity";
-import { pathwayLessonHasRenderableHubSlug } from "../../src/lib/lessons/pathway-lesson-types";
+import { PATHWAY_HUB_PAGE_SIZE_DEFAULT } from "../../src/lib/lessons/pathway-lesson-scale";
 import { marketingPathwayLessonsIndexPath } from "../../src/lib/lessons/lesson-routes";
+import { pathwayLessonHasRenderableHubSlug } from "../../src/lib/lessons/pathway-lesson-types";
 
 function argValue(argv: string[], name: string): string | undefined {
   const i = argv.indexOf(name);
@@ -47,8 +55,24 @@ function parseArgs(argv: string[]): {
   return { pathwayId, countrySlug, locale, sampleKept, sampleExcluded };
 }
 
+function maskedDbTarget(): string {
+  const raw = process.env.DATABASE_URL?.trim() ?? "";
+  if (!raw) return "(none)";
+  const { host, port } = maskDatabaseUrlHostForLog(raw);
+  return `${host}:${port}`;
+}
+
+async function printSchemaDriftAndExit(payload: Record<string, unknown>): Promise<never> {
+  console.log(JSON.stringify(payload, null, 2));
+  try {
+    await prisma.$disconnect();
+  } catch {
+    /* ignore */
+  }
+  process.exit(1);
+}
+
 async function prismaStatusBySlugs(
-  prisma: PrismaClient,
   pathwayId: string,
   slugs: readonly string[],
 ): Promise<Map<string, string>> {
@@ -84,15 +108,57 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  const prisma = new PrismaClient();
   try {
-    const pageResult = await getPathwayLessonsPageFresh(
-      pathway.id,
-      1,
-      PATHWAY_HUB_PAGE_SIZE_DEFAULT,
-      locale,
-      undefined,
-    );
+    let structuralColumnPresent = false;
+    try {
+      structuralColumnPresent = await pathwayLessonsStructuralPublicCompleteColumnPresent(prisma);
+    } catch (probeErr) {
+      const msg = probeErr instanceof Error ? probeErr.message : String(probeErr);
+      await printSchemaDriftAndExit({
+        error: "schema_drift",
+        code: "pathway_lessons_schema_probe_failed",
+        databaseHostMasked: maskedDbTarget(),
+        message: msg.slice(0, 500),
+        remediation: `Verify DATABASE_URL targets the intended Postgres and that prisma/schema.prisma matches that database.`,
+      });
+    }
+    if (!structuralColumnPresent) {
+      await printSchemaDriftAndExit({
+        error: "schema_drift",
+        code: "missing_structural_public_complete",
+        databaseHostMasked: maskedDbTarget(),
+        prismaModel: "PathwayLesson",
+        table: "pathway_lessons",
+        column: PATHWAY_LESSONS_STRUCTURAL_PUBLIC_COMPLETE_COLUMN,
+        migrationDirectory: PATHWAY_LESSONS_STRUCTURAL_PUBLIC_COMPLETE_MIGRATION_DIR,
+        remediation: `Apply pending Prisma migrations (includes ${PATHWAY_LESSONS_STRUCTURAL_PUBLIC_COMPLETE_MIGRATION_DIR}), e.g. npx prisma migrate deploy`,
+      });
+    }
+
+    let pageResult: Awaited<ReturnType<typeof getPathwayLessonsPageFresh>>;
+    try {
+      pageResult = await getPathwayLessonsPageFresh(
+        pathway.id,
+        1,
+        PATHWAY_HUB_PAGE_SIZE_DEFAULT,
+        locale,
+        undefined,
+      );
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      const drift = pathwayLessonsSchemaDriftFromPrismaErrorMessage(msg);
+      if (drift) {
+        await printSchemaDriftAndExit({
+          error: "schema_drift",
+          code: drift.code,
+          databaseHostMasked: maskedDbTarget(),
+          message: drift.message,
+          remediation: drift.remediation,
+        });
+      }
+      throw e;
+    }
+
     const renderableAll = pageResult.renderableAll ?? pageResult.items;
     const rawHubLessonRows = renderableAll.filter(pathwayLessonHasRenderableHubSlug);
     const base = marketingPathwayLessonsIndexPath(pathway);
@@ -101,16 +167,49 @@ async function main(): Promise<void> {
       lessonsBasePath: base,
     });
     const listWarehouseLocale = await getPathwayLessonListWarehouseLocaleForHub(pathway.id, locale);
-    const vr = await verifyMarketingHubLessonRowsResolve(pathway, prepared, locale, {
-      listWarehouseLocale: listWarehouseLocale ?? undefined,
-      prepareStages,
-    });
+
+    let vr: Awaited<ReturnType<typeof verifyMarketingHubLessonRowsResolve>>;
+    try {
+      vr = await verifyMarketingHubLessonRowsResolve(pathway, prepared, locale, {
+        listWarehouseLocale: listWarehouseLocale ?? undefined,
+        prepareStages,
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      const drift = pathwayLessonsSchemaDriftFromPrismaErrorMessage(msg);
+      if (drift) {
+        await printSchemaDriftAndExit({
+          error: "schema_drift",
+          code: drift.code,
+          databaseHostMasked: maskedDbTarget(),
+          message: drift.message,
+          remediation: drift.remediation,
+        });
+      }
+      throw e;
+    }
 
     const sampleSlugs = [
       ...vr.kept.filter((l) => !l.hubMarketingDegraded).slice(0, sampleKept).map((l) => l.slug.trim()),
       ...vr.excluded.slice(0, sampleExcluded).map((e) => e.slug.trim()),
     ];
-    const statusMap = await prismaStatusBySlugs(prisma, pathway.id, sampleSlugs);
+    let statusMap: Map<string, string>;
+    try {
+      statusMap = await prismaStatusBySlugs(pathway.id, sampleSlugs);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      const drift = pathwayLessonsSchemaDriftFromPrismaErrorMessage(msg);
+      if (drift) {
+        await printSchemaDriftAndExit({
+          error: "schema_drift",
+          code: drift.code,
+          databaseHostMasked: maskedDbTarget(),
+          message: drift.message,
+          remediation: drift.remediation,
+        });
+      }
+      throw e;
+    }
 
     const report = await buildLessonHubVisibilityDiagnosticsReport({
       pathway,
@@ -147,11 +246,44 @@ async function main(): Promise<void> {
       ),
     );
   } finally {
-    await prisma.$disconnect();
+    try {
+      await prisma.$disconnect();
+    } catch {
+      /* ignore */
+    }
   }
 }
 
-main().catch((e) => {
+main().catch(async (e) => {
+  const msg = e instanceof Error ? e.message : String(e);
+  const drift = pathwayLessonsSchemaDriftFromPrismaErrorMessage(msg);
+  if (drift) {
+    console.log(
+      JSON.stringify(
+        {
+          error: "schema_drift",
+          code: drift.code,
+          databaseHostMasked: maskedDbTarget(),
+          message: drift.message,
+          remediation: drift.remediation,
+        },
+        null,
+        2,
+      ),
+    );
+    try {
+      await prisma.$disconnect();
+    } catch {
+      /* ignore */
+    }
+    process.exit(1);
+    return;
+  }
   console.error(e);
+  try {
+    await prisma.$disconnect();
+  } catch {
+    /* ignore */
+  }
   process.exit(1);
 });
