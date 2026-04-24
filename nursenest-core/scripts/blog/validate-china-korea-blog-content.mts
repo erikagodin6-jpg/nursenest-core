@@ -1,4 +1,5 @@
 #!/usr/bin/env npx tsx
+import "../../src/lib/db/script-env-bootstrap";
 /**
  * Validates China/Korea manifest rows (live HTML) and/or materialized JSON batches under data/blog-content/.
  *

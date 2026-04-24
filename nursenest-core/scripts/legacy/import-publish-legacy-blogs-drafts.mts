@@ -20,7 +20,7 @@ import { readFileSync } from "node:fs";
 
 import { PrismaClient } from "@prisma/client";
 
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
 import { parseLegacyBlogExportV1Json } from "../../src/lib/legacy/legacy-blog-draft-recovery-types";
 import { runBlogDraftRecoveryImport } from "../../src/lib/legacy/legacy-blog-draft-recovery-pipeline";
 

@@ -14,7 +14,7 @@
  * Idempotent: safe on a schedule (e.g. every 5–10 minutes) alongside the HTTP cron route — **do not** run two
  * writers that duplicate topics; this script does not create duplicate schedules, only processes pending work.
  */
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
 import { isDatabaseUrlConfigured } from "../../src/lib/db/safe-database";
 import { ensureDailyBlogQueue, processDueBlogBatchScheduleItems } from "../../src/lib/blog/blog-batch-schedule";
 import { promoteScheduledBlogPosts } from "../../src/lib/blog/blog-publish-scheduler";

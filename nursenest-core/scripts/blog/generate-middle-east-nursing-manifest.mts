@@ -1,4 +1,5 @@
 #!/usr/bin/env npx tsx
+import "../../src/lib/db/script-env-bootstrap";
 /**
  * Generates `data/blog-manifest/middle-east-nursing-200.manifest.json` with 200 planned entries.
  * Content files are generated separately in batches; this manifest drives the pipeline.

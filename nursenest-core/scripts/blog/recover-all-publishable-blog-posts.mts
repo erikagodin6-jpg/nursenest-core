@@ -17,15 +17,8 @@
  *   npm run blog:recover-publishable
  *   DRY_RUN=false npm run blog:recover-publishable
  */
-import { config } from "dotenv";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import "../../src/lib/db/script-env-bootstrap";
 import { BlogPostStatus, type Prisma, PrismaClient } from "@prisma/client";
-
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-config({ path: path.join(root, ".env.local") });
-
-import "../../src/lib/db/env-bootstrap";
 
 const prisma = new PrismaClient();
 

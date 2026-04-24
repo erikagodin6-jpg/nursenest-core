@@ -11,14 +11,8 @@
  * - **patho_pharm_topical**: visible rows matching template/category/title/tags heuristics (see `blog-patho-pharm-detection.ts`).
  * - **patho_pharm_long_tail**: subset of topical rows that also match long-tail slug/title/targetKeyword heuristics.
  */
-import { config } from "dotenv";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import "../../src/lib/db/script-env-bootstrap";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-config({ path: path.join(root, ".env.local") });
-
-await import("../../src/lib/db/env-bootstrap");
 import { PrismaClient } from "@prisma/client";
 
 import {

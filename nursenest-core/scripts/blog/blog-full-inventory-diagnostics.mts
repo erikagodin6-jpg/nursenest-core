@@ -7,15 +7,9 @@
  *
  *   npx tsx scripts/blog/blog-full-inventory-diagnostics.mts
  */
-import { config } from "dotenv";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import "../../src/lib/db/script-env-bootstrap";
 import { BlogPostStatus, PrismaClient } from "@prisma/client";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-config({ path: path.join(root, ".env.local") });
-
-import "../../src/lib/db/env-bootstrap";
 import { blogLiveWhere } from "../../src/lib/blog/blog-visibility";
 
 const prisma = new PrismaClient();

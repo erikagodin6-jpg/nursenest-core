@@ -10,7 +10,8 @@
  */
 import { BlogPostStatus } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
+
 import {
   PHILIPPINES_NLE_BLOG_TOPICS,
   buildPhilippinesBlogBody,

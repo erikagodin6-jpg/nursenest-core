@@ -1,4 +1,5 @@
 #!/usr/bin/env npx tsx
+import "../../src/lib/db/script-env-bootstrap";
 /**
  * Materializes long-form HTML from China or Korea 200-topic manifests into data/blog-content/{china-nursing|korea-nursing}/.
  * Filesystem only — not part of Next build.

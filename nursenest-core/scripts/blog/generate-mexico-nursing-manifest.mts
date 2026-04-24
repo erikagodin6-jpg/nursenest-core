@@ -1,4 +1,5 @@
 #!/usr/bin/env npx tsx
+import "../../src/lib/db/script-env-bootstrap";
 /**
  * Generates `data/blog-manifest/mexico-nursing-200.manifest.json` with 200 planned entries.
  *

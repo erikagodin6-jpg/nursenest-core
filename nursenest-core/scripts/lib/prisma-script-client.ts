@@ -1,4 +1,4 @@
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
 import { PrismaClient } from "@prisma/client";
 
 const globalForScriptPrisma = globalThis as typeof globalThis & {

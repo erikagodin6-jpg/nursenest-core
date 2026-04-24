@@ -14,7 +14,8 @@
  */
 import { BlogPostStatus, BlogWorkflowStatus, PrismaClient } from "@prisma/client";
 
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
+
 import { appendBlogAdminPublishLog } from "../../src/lib/blog/blog-admin-publish-log";
 import {
   blogPrePublishValidationSelect,

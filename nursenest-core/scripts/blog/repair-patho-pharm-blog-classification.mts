@@ -9,15 +9,9 @@
  *   DRY_RUN=true npx tsx scripts/blog/repair-patho-pharm-blog-classification.mts
  *   DRY_RUN=false npx tsx scripts/blog/repair-patho-pharm-blog-classification.mts
  */
-import { config } from "dotenv";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
+import "../../src/lib/db/script-env-bootstrap";
 import { BlogPostTemplate, PrismaClient } from "@prisma/client";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
-config({ path: path.join(root, ".env.local") });
-
-import "../../src/lib/db/env-bootstrap";
 import { blogLiveWhere } from "../../src/lib/blog/blog-visibility";
 import {
   hasStrongPathoPharmClassification,

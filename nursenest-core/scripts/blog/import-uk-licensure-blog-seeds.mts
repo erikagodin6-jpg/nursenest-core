@@ -10,7 +10,8 @@
  */
 import { BlogPostStatus } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
+
 import {
   UK_LICENSURE_BLOG_TOPICS,
   buildUkBlogBody,

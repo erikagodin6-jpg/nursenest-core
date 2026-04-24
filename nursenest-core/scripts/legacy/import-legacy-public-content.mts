@@ -17,7 +17,7 @@ import { readFileSync } from "node:fs";
 
 import { PrismaClient } from "@prisma/client";
 
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
 import { collectLegacyLessonsFromSite } from "../../src/lib/legacy/legacy-site-export-collector";
 import { parseLegacyPublicContentExportJson } from "../../src/lib/legacy/legacy-public-content-types";
 import { runLegacyPublicContentImport } from "../../src/lib/legacy/legacy-public-content-pipeline";

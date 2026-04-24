@@ -17,7 +17,8 @@
  */
 import { BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
+
 import {
   buildPathophysiologyBlogBody,
   enumeratePathophysiologySeeds,

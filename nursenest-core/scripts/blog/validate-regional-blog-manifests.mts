@@ -1,4 +1,5 @@
 #!/usr/bin/env npx tsx
+import "../../src/lib/db/script-env-bootstrap";
 /**
  * Validates all regional *-nursing-200.manifest.json files under data/blog-manifest/.
  * Checks: duplicate slug/title, language distribution, required fields.

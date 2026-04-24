@@ -12,7 +12,12 @@ const CACHE_SOURCE_LABEL = "getCachedPublicFlashcardTags" as const;
 /** Hard contract marker on every JSON response (prod smoke + CDN stale detection). */
 export const PUBLIC_FLASHCARD_TAGS_CONTRACT_VERSION = "flashcard-tags-v3" as const;
 
-/** Branch diagnostic `source` (inventory path / layer). */
+/**
+ * Branch diagnostic `source` for clients and smoke.
+ * - `db` — tags from join-table inventory (or empty-inventory / error paths that queried the loader).
+ * - `fallback` — tags derived from public deck slug/title list when join tags are empty.
+ * - `cache` — reserved for future use when we can reliably observe Next.js Data Cache / edge hits at the handler.
+ */
 export type PublicFlashcardTagsBranchSource = "db" | "cache" | "fallback";
 
 function errorCodeForPublicFlashcardTagsFailure(kind: HubDbFailureCategory): "database_error" | "public_flashcard_tags_unavailable" {

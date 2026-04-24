@@ -1,4 +1,5 @@
 #!/usr/bin/env npx tsx
+import "../../src/lib/db/script-env-bootstrap";
 /**
  * Materializes long-form HTML from regional 200-topic manifests in batches (filesystem only; no DB).
  * Does not run at build time.

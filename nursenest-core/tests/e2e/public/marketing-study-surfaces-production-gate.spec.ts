@@ -118,7 +118,10 @@ test.describe("Marketing study surfaces (env-gated)", () => {
     ).toBeTruthy();
 
     expect(body.contractVersion, "contractVersion flashcard-tags-v3 proves current handler is deployed").toBe("flashcard-tags-v3");
-    expect(body.source === "db" || body.source === "fallback", "branch source db|fallback").toBeTruthy();
+    expect(
+      body.source === "db" || body.source === "fallback" || body.source === "cache",
+      "branch source db|fallback|cache",
+    ).toBeTruthy();
     expect(body.tagCount, "tagCount mirrors tags.length").toBe(body.tags!.length);
 
     const tagHrefs = body.tags!.slice(0, 3).map((t) => `${base}/flashcards/${encodeURIComponent(t.slug)}`);

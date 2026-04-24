@@ -1,4 +1,5 @@
 #!/usr/bin/env npx tsx
+import "../../src/lib/db/script-env-bootstrap";
 /**
  * Generates `data/blog-manifest/australia-nursing-200.manifest.json` with 200 planned entries.
  * Full article bodies are generated in batches separately.

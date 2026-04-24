@@ -11,7 +11,8 @@
  */
 import { BlogPostStatus, BlogWorkflowStatus, PrismaClient } from "@prisma/client";
 
-import "../../src/lib/db/env-bootstrap";
+import "../../src/lib/db/script-env-bootstrap";
+
 import { blogLiveWhere, blogPostIsLive } from "../../src/lib/blog/blog-visibility";
 
 function parseArgs(argv: string[]): { excludedSampleLimit: number } {
