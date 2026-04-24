@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { Suspense } from "react";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
@@ -22,7 +23,9 @@ import { type MarketingMessages } from "@/lib/marketing-i18n-core";
 import { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-metadata-strict";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { ExamSelectorGateLazy } from "@/components/onboarding/exam-selector-gate-lazy";
 import {
+  HomeBlogTeaserSectionAsync,
   HomeBlogTeaserSectionShell,
 } from "@/components/marketing/home-blog-teaser-section.server";
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
@@ -91,7 +94,6 @@ async function loadHomePageMarketingMessagesSafe(budgetMs: number, label: string
     try {
       const sync = loadMarketingMessageShardsSync(STATIC_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
       if (Object.keys(sync).length > 0) return sync;
-      layoutStderrTrace("marketing_home", "homepage_i18n_sync_also_empty", { label });
     } catch (syncErr) {
       layoutStderrTrace("marketing_home", "homepage_i18n_sync_throw", {
         label,
@@ -109,7 +111,6 @@ async function loadHomePageMarketingMessagesSafe(budgetMs: number, label: string
     try {
       const sync = loadMarketingMessageShardsSync(STATIC_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
       if (Object.keys(sync).length > 0) return sync;
-      layoutStderrTrace("marketing_home", "homepage_i18n_sync_empty_after_async_error", { label });
     } catch (syncErr) {
       layoutStderrTrace("marketing_home", "homepage_i18n_sync_throw_after_async_error", {
         label,
@@ -124,30 +125,35 @@ async function loadHomePageMarketingMessagesSafe(budgetMs: number, label: string
 function listPublishedHomeGlobalRegionCardIdsSafe(): readonly string[] {
   try {
     return listPublishedHomeGlobalRegionCardIds();
-  } catch {
+  } catch (err) {
+    layoutStderrTrace("marketing_home", "region_card_ids_failed", {
+      error: err instanceof Error ? err.message : String(err),
+    });
     return ["us", "ca"] as const;
+  }
+}
+
+async function SafeHomeBlogTeaserSection({ m }: { m: MarketingMessages }) {
+  try {
+    return <HomeBlogTeaserSectionAsync m={m} />;
+  } catch (err) {
+    layoutStderrTrace("marketing_home", "home_blog_teaser_failed_open", {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return <HomeBlogTeaserSectionShell m={m} posts={[]} />;
   }
 }
 
 export async function generateMetadata(): Promise<Metadata> {
   const tDiag = nnHomeDiagNowMs();
 
-  if (nnHomeStaticMetadataEnabled()) {
-    try {
-      console.error("[nursenest-core] NN_HOME_STATIC_METADATA=1: generateMetadata returns static fallback");
-    } catch {
-      /* noop */
-    }
-    emitNnHomeRouteDiag({ segment: "metadata_static_metadata_short_circuit", elapsed_ms: nnHomeDiagNowMs() - tDiag });
+  if (nnHomeStaticMetadataEnabled() || nnHomeStaticProbeEnabled()) {
+    emitNnHomeRouteDiag({
+      segment: "metadata_static_short_circuit",
+      elapsed_ms: nnHomeDiagNowMs() - tDiag,
+    });
     return HOME_FALLBACK_METADATA;
   }
-
-  if (nnHomeStaticProbeEnabled()) {
-    emitNnHomeRouteDiag({ segment: "metadata_static_probe_short_circuit", elapsed_ms: nnHomeDiagNowMs() - tDiag });
-    return HOME_FALLBACK_METADATA;
-  }
-
-  emitNnHomeRouteDiag({ segment: "metadata_fn_enter", elapsed_ms: 0 });
 
   const runtime = await safeAwait(
     homeMarketingSentryRuntimePromise,
@@ -155,11 +161,7 @@ export async function generateMetadata(): Promise<Metadata> {
     HOME_SENTRY_RUNTIME_BUDGET_MS,
   );
 
-  emitNnHomeRouteDiag({ segment: "metadata_after_sentry_import", elapsed_ms: nnHomeDiagNowMs() - tDiag });
-
   const runMetadataInner = async (): Promise<Metadata> => {
-    layoutStderrTrace("marketing_home", "home metadata start", { route: "/" });
-
     return safeGenerateMetadata(
       async () => {
         const m = await loadHomePageMarketingMessagesSafe(HOME_METADATA_I18N_BUDGET_MS, "marketing_home.metadata");
@@ -224,7 +226,6 @@ export default async function HomePage() {
   const tDiag = nnHomeDiagNowMs();
 
   if (nnHomeStaticProbeEnabled()) {
-    emitNnHomeRouteDiag({ segment: "page_static_probe_short_circuit", elapsed_ms: nnHomeDiagNowMs() - tDiag });
     return (
       <div data-nn-home-static-probe="1" className="p-6">
         <p>NN_HOME_STATIC_PROBE</p>
@@ -265,7 +266,6 @@ export default async function HomePage() {
       }
 
       void homePerfLogForGetRoot("home.server.03_page_render_start", perfPageT0).catch(() => {});
-      layoutStderrTrace("marketing_home", "home page start", { route: "/" });
 
       const skipOptionalDbReads = shouldSkipOptionalMarketingDbReads();
 
@@ -300,8 +300,10 @@ export default async function HomePage() {
         const b = marketingHomeSurfaceBreadcrumbs();
         crumbs = b.crumbs;
         schemaItems = b.schemaItems;
-      } catch {
-        /* optional breadcrumb/schema only */
+      } catch (err) {
+        layoutStderrTrace("marketing_home", "breadcrumbs_failed_open", {
+          error: err instanceof Error ? err.message : String(err),
+        });
       }
 
       const webPageProps = buildMarketingWebPageJsonLdProps({
@@ -331,18 +333,25 @@ export default async function HomePage() {
             introAfterHero={<GlobalMarketingHomeIntro />}
           />
 
-          {/* TEMP FIX:
-              Keep the blog area server-safe and non-streaming.
-              The async Suspense blog teaser was causing homepage client hydration bailout/crash. */}
-          <HomeBlogTeaserSectionShell m={m} posts={[]} />
+          <Suspense fallback={<HomeBlogTeaserSectionShell m={m} posts={[]} />}>
+            <SafeHomeBlogTeaserSection m={m} />
+          </Suspense>
 
-          {/* TEMP FIX:
-              Disabled onboarding gate from homepage because client lazy gates can crash hydration.
-              Re-enable only after homepage hydration is stable. */}
+          <Suspense fallback={null}>
+            <ExamSelectorGateLazy />
+          </Suspense>
         </>
       );
-    } catch {
-      emitNnHomeRouteDiag({ segment: "page_catch_emergency_fallback", elapsed_ms: nnHomeDiagNowMs() - tDiag });
+    } catch (err) {
+      emitNnHomeRouteDiag({
+        segment: "page_catch_emergency_fallback",
+        elapsed_ms: nnHomeDiagNowMs() - tDiag,
+      });
+
+      layoutStderrTrace("marketing_home", "home_page_failed_to_emergency_fallback", {
+        error: err instanceof Error ? err.message : String(err),
+      });
+
       void homePerfFinalForGetRoot("failure", { error_phase: "page" }).catch(() => {});
       return <MarketingHomeEmergencyFallback />;
     }
