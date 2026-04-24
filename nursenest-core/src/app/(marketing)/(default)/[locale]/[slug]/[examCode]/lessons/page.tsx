@@ -601,6 +601,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     verify_drop_reasons_json: JSON.stringify(hubVerifyDiagnostics.excludedByReason ?? {}),
     verify_exclusion_ranked_json: JSON.stringify(hubVerifyDiagnostics.exclusionReasonsRanked ?? []),
     verify_excluded_slug_samples_json: JSON.stringify(hubVerifyDiagnostics.excludedSlugSamples ?? []),
+    verify_dropped_prepared_samples_json: JSON.stringify(
+      hubVerifyDiagnostics.droppedPreparedRowSamples?.slice(0, 12) ?? [],
+    ).slice(0, 6000),
   });
 
   if (process.env.NN_MARKETING_HUB_PIPELINE_DEBUG === "1") {

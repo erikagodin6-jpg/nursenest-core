@@ -26,11 +26,11 @@ function hubRow(slug: string, title = "Lesson title"): PathwayLessonRecord {
 
 describe("verifyMarketingHubLessonRowsResolve", () => {
   it("uses listWarehouseLocale for hydration when row omits localeMeta.contentLocale", async () => {
-    const calls: Array<{ slug: string; loc: string }> = [];
-    const resolveLessonDetail = async (pathwayId: string, slug: string, loc: string) => {
-      calls.push({ slug, loc });
+    const calls: Array<{ slug: string; hub: string; shard?: string }> = [];
+    const resolveLessonDetail = async (pathwayId: string, slug: string, hub: string, shard?: string) => {
+      calls.push({ slug, hub, shard });
       if (pathwayId !== "ca-rn-nclex-rn") return undefined;
-      if (loc === "fr") return hubRow(slug);
+      if (shard === "fr" || hub === "fr") return hubRow(slug);
       return undefined;
     };
     const rowNoMeta = hubRow("lesson-wh");
@@ -40,15 +40,15 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
       listWarehouseLocale: "fr-CA",
     });
     assert.equal(kept.length, 1);
-    assert.deepEqual(calls, [{ slug: "lesson-wh", loc: "fr" }]);
+    assert.deepEqual(calls, [{ slug: "lesson-wh", hub: "en", shard: "fr" }]);
   });
 
   it("hydrates each slug using the hub row localeMeta.contentLocale when present", async () => {
-    const calls: Array<{ slug: string; loc: string }> = [];
-    const resolveLessonDetail = async (pathwayId: string, slug: string, loc: string) => {
-      calls.push({ slug, loc });
+    const calls: Array<{ slug: string; hub: string; shard?: string }> = [];
+    const resolveLessonDetail = async (pathwayId: string, slug: string, hub: string, shard?: string) => {
+      calls.push({ slug, hub, shard });
       if (pathwayId !== "ca-rn-nclex-rn") return undefined;
-      if (loc === "fr") return hubRow(slug);
+      if (shard === "fr" || hub === "fr") return hubRow(slug);
       return undefined;
     };
     const rowFr: PathwayLessonRecord = {
@@ -64,7 +64,21 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
       resolveLessonDetail,
     });
     assert.equal(kept.length, 1);
-    assert.deepEqual(calls, [{ slug: "lesson-fr", loc: "fr" }]);
+    assert.deepEqual(calls, [{ slug: "lesson-fr", hub: "en", shard: "fr" }]);
+  });
+
+  it("surfaces droppedPreparedRowSamples for failed slugs (ops triage)", async () => {
+    const resolveLessonDetail = async () => undefined;
+    const row = hubRow("gone-bad");
+    row.topicSlug = "pharmacology";
+    const { diagnostics } = await verifyMarketingHubLessonRowsResolve({ id: "ca-rn-nclex-rn" }, [row], "en", {
+      resolveLessonDetail,
+    });
+    assert.ok(diagnostics.droppedPreparedRowSamples?.length);
+    const s = diagnostics.droppedPreparedRowSamples![0]!;
+    assert.equal(s.slug, "gone-bad");
+    assert.equal(s.reasonDropped, "detail_loader_miss");
+    assert.equal(s.topicSlug, "pharmacology");
   });
 
   it("keeps valid rows and drops only unresolvable slugs (mixed inventory)", async () => {

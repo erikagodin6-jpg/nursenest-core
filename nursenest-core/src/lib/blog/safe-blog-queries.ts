@@ -6,7 +6,9 @@ import {
   withDatabaseFallbackTimeout,
   withDatabaseFallbackTimeoutOrThrow,
 } from "@/lib/db/safe-database";
+import { logRouteDataPipeline } from "@/lib/observability/route-data-pipeline-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 import { blogLiveWhere, blogPostIsLive, isBlogPostMarketingMetaVisible } from "@/lib/blog/blog-visibility";
 import {
   getStaticBlogPost,
@@ -15,6 +17,7 @@ import {
 } from "@/lib/blog/static-blog-posts";
 import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
 import { shouldSkipDbBackedSitemapUrlsForBuild } from "@/lib/seo/sitemap-build-skip";
+import { blogPublicDbReadAttempt } from "@/lib/blog/blog-public-db-read-attempt";
 
 /** @deprecated Use `isDatabaseUrlConfigured` from `@/lib/db/safe-database`. */
 export const isBlogDatabaseConfigured = isDatabaseUrlConfigured;
@@ -24,6 +27,8 @@ export const isBlogDatabaseConfigured = isDatabaseUrlConfigured;
  * waiting longer on list/detail reads (bounded by `take` / pagination).
  */
 const BLOG_PUBLIC_QUERY_TIMEOUT_MS = 12_000;
+/** Second pass when first list+count both empty — avoids caching/static fallback on cold Prisma timeouts. */
+const BLOG_INDEX_EMPTY_RETRY_TIMEOUT_MS = 24_000;
 /** Batched slug walk for sitemap — one outer budget for many small `findMany` pages. */
 const BLOG_SITEMAP_SLUG_LIST_TIMEOUT_MS = 35_000;
 
@@ -37,6 +42,10 @@ async function withBlogTimeoutFallback<T>(
     scope: "blog",
     label,
   });
+}
+
+function shouldRetryBlogIndexAfterTransientEmpty(): boolean {
+  return isDatabaseUrlConfigured() && !shouldSkipBlogDbForProductionBuild() && !isRuntimeSafeMode();
 }
 
 const MARKETING_BUILD_PHASE = "phase-production-build";
@@ -71,15 +80,21 @@ function blogIndexPostsFromStaticCorpusOnly(
   return { posts, total, page: safePage, pageSize: safeSize };
 }
 
+type BlogStaticFallbackProbeResult =
+  | { kind: "use_static" }
+  | { kind: "deny_no_static_corpus" }
+  | { kind: "deny_has_live_posts"; liveCount: number }
+  | { kind: "deny_probe_failed" };
+
 /**
- * True when the bundled static corpus may back `/blog` lists and slug metadata because Postgres has
- * **no live posts** (same {@link blogLiveWhere} contract as public lists). On probe timeout/error we
- * return false so a slow DB cannot be mistaken for an empty library (which would hide hundreds of rows).
+ * Resolves whether the bundled static blog corpus may be used for **public** reads (index, meta, slug body).
+ * Failed live-count probes **deny** static so we do not mask DB outages as an empty library; callers that
+ * need a retry surface should use {@link getPublishedBlogPostsPage} `listLoad` after explicit DB attempts.
  */
-export async function canUseStaticBlogFallback(): Promise<boolean> {
-  if (listStaticBlogPostsForIndex().length === 0) return false;
-  if (shouldSkipBlogDbForProductionBuild()) return true;
-  if (!isDatabaseUrlConfigured()) return true;
+async function resolveBlogStaticFallbackProbe(): Promise<BlogStaticFallbackProbeResult> {
+  if (listStaticBlogPostsForIndex().length === 0) return { kind: "deny_no_static_corpus" };
+  if (shouldSkipBlogDbForProductionBuild()) return { kind: "use_static" };
+  if (!isDatabaseUrlConfigured()) return { kind: "use_static" };
   const now = new Date();
   const probe = await withBlogTimeoutFallback(
     async () => ({ ok: true as const, liveCount: await prisma.blogPost.count({ where: blogLiveWhere(now) }) }),
@@ -87,8 +102,18 @@ export async function canUseStaticBlogFallback(): Promise<boolean> {
     "blog_static_fallback_probe",
     BLOG_PUBLIC_QUERY_TIMEOUT_MS,
   );
-  if (!probe.ok) return false;
-  return probe.liveCount === 0;
+  if (!probe.ok) return { kind: "deny_probe_failed" };
+  if (probe.liveCount > 0) return { kind: "deny_has_live_posts", liveCount: probe.liveCount };
+  return { kind: "use_static" };
+}
+
+/**
+ * True when the bundled static corpus may back `/blog` lists and slug metadata because Postgres has
+ * **no live posts** (same {@link blogLiveWhere} contract as public lists). Probe timeout/error returns false.
+ */
+export async function canUseStaticBlogFallback(): Promise<boolean> {
+  const probe = await resolveBlogStaticFallbackProbe();
+  return probe.kind === "use_static";
 }
 
 const indexSelect = {
@@ -260,7 +285,7 @@ export async function getPublishedBlogPostsPage(
       scope?.exam ? { exam: scope.exam } : {},
     ],
   } satisfies Prisma.BlogPostWhereInput;
-  const [dbPosts, dbTotal] = await Promise.all([
+  let [dbPosts, dbTotal] = await Promise.all([
     withBlogTimeoutFallback(
       () =>
         prisma.blogPost.findMany({
@@ -278,6 +303,53 @@ export async function getPublishedBlogPostsPage(
       ? withBlogTimeoutFallback(() => prisma.blogPost.count({ where }), 0, "blog_posts_page.total")
       : Promise.resolve(0),
   ]);
+
+  if (
+    shouldRetryBlogIndexAfterTransientEmpty() &&
+    dbPosts.length === 0 &&
+    (!includeTotal || dbTotal === 0)
+  ) {
+    const retryMs = BLOG_INDEX_EMPTY_RETRY_TIMEOUT_MS;
+    const [retryPosts, retryTotal] = await Promise.all([
+      withBlogTimeoutFallback(
+        () =>
+          prisma.blogPost.findMany({
+            where,
+            orderBy: [{ updatedAt: "desc" }, { createdAt: "desc" }, { slug: "asc" }],
+            select: indexSelect,
+            skip: (safePage - 1) * safeSize,
+            take: safeSize,
+          }),
+        [],
+        "blog_posts_page.posts_retry",
+        retryMs,
+      ),
+      includeTotal
+        ? withBlogTimeoutFallback(() => prisma.blogPost.count({ where }), 0, "blog_posts_page.total_retry", retryMs)
+        : Promise.resolve(0),
+    ]);
+    if (retryPosts.length > 0 || (includeTotal && retryTotal > 0)) {
+      safeServerLog("blog", "blog_index_page_recovered_after_timeout_retry", {
+        recoveredPosts: String(retryPosts.length),
+        recoveredTotal: String(retryTotal),
+        retryTimeoutMs: String(retryMs),
+      });
+      dbPosts = retryPosts;
+      dbTotal = retryTotal;
+    } else {
+      logRouteDataPipeline({
+        route: "/blog",
+        stage: "blog_index_empty_after_expand_timeout_retry",
+        meta: {
+          firstPassTimeoutMs: BLOG_PUBLIC_QUERY_TIMEOUT_MS,
+          retryTimeoutMs: retryMs,
+          reasonCode: "TIMEOUT_OR_TRUE_EMPTY",
+          includeTotal: includeTotal ? 1 : 0,
+        },
+      });
+    }
+  }
+
   if (
     scope?.locale &&
     scope.locale !== (scope.sourceLocale ?? "en") &&
@@ -358,6 +430,17 @@ export async function getPublishedBlogPostsPage(
       pageSize: safeSize,
       usedStaticFallback: false,
       scope,
+    });
+    logRouteDataPipeline({
+      route: "/blog",
+      stage: "blog_index_return_live_db",
+      meta: {
+        finalRowCount: dbPosts.length,
+        finalTotal: dbTotal,
+        cacheSource: "live_prisma",
+        page: safePage,
+        pageSize: safeSize,
+      },
     });
     return { posts: dbPosts, total: dbTotal, page: safePage, pageSize: safeSize };
   }

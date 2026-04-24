@@ -26,6 +26,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type {
   HubCurriculumPrepareStageDiagnostics,
   HubMarketingLessonDetailFailureReason,
+  HubVerifyDroppedPreparedRowSample,
   MarketingHubLessonVerifyDiagnostics,
 } from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
 import { pathwayLessonMatchesMarketingPathwayContext } from "@/lib/lessons/pathway-lesson-catalog-sync";
@@ -58,6 +59,7 @@ export type EvaluatePublicMarketingLessonCrossLinkOptions = {
 
 export type {
   HubCurriculumPrepareStageDiagnostics,
+  HubVerifyDroppedPreparedRowSample,
   MarketingHubLessonVerifyDiagnostics,
 } from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
 
@@ -251,6 +253,31 @@ export async function verifyMarketingHubLessonRowsResolve(
     slugFailureReason.set(e.slug.trim(), e.reason);
   }
 
+  const preparedRowBySlug = new Map<string, PathwayLessonRecord>();
+  for (const l of lessons) {
+    if (!pathwayLessonHasRenderableHubSlug(l)) continue;
+    const k = l.slug.trim();
+    if (!preparedRowBySlug.has(k)) preparedRowBySlug.set(k, l);
+  }
+  const droppedSampleCap =
+    process.env.NN_MARKETING_HUB_PIPELINE_DEBUG === "1"
+      ? Math.min(120, Math.max(48, verifyExcluded.length))
+      : 24;
+  const droppedPreparedRowSamples: HubVerifyDroppedPreparedRowSample[] = verifyExcluded
+    .slice(0, droppedSampleCap)
+    .map((e) => {
+      const hit = preparedRowBySlug.get(e.slug.trim());
+      return {
+        slug: e.slug.slice(0, 200),
+        pathwayId: pathway.id,
+        reasonDropped: e.reason,
+        contentLocale: hit?.localeMeta?.contentLocale,
+        publicComplete: hit?.structuralQuality?.publicComplete,
+        bodySystem: hit?.bodySystem,
+        topicSlug: hit?.topicSlug,
+      };
+    });
+
   const exclusionReasonsRanked: Array<{ reason: HubMarketingLessonDetailFailureReason; count: number }> = [
     ...Object.entries(excludedByReason),
   ]
@@ -280,6 +307,7 @@ export async function verifyMarketingHubLessonRowsResolve(
     lessonContentLocale,
     hubPageMarketingLocale: lessonContentLocale,
     verifyListWarehouseLocale: listWarehouseLocale ?? "",
+    droppedPreparedRowSamples,
     prepareStages: options?.prepareStages,
     incomingPreparedRowCount: lessons.length,
     uniqueSlugCount: uniqueSlugs.length,
@@ -320,6 +348,11 @@ export async function verifyMarketingHubLessonRowsResolve(
         .slice(0, 12)
         .map((e) => `${e.slug}:${e.reason}`)
         .join("|"),
+    });
+    safeServerLog("pathway_lessons", "hub_verify_dropped_prepared_row_samples", {
+      pathway_id: pathway.id,
+      lesson_content_locale: lessonContentLocale,
+      dropped_prepared_row_samples_json: JSON.stringify(droppedPreparedRowSamples.slice(0, 12)).slice(0, 6000),
     });
   }
   if (lessons.length > 0 && kept.length === 0) {

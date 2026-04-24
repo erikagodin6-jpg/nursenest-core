@@ -15,9 +15,14 @@ test("getPathwayLessonForMarketingHubVerify calls getPathwayLessonImpl without u
   const marker = "export async function getPathwayLessonForMarketingHubVerify";
   const i = src.indexOf(marker);
   assert.ok(i >= 0, "expected export getPathwayLessonForMarketingHubVerify");
-  const block = src.slice(i, i + 450);
+  const block = src.slice(i, i + 520);
   assert.match(block, /getPathwayLessonImpl\(/, "verify must load via uncached impl");
   assert.ok(!block.includes("unstable_cache"), "verify export must not wrap unstable_cache");
+  assert.match(
+    block,
+    /preferPublishedLocaleScan:\s*true/,
+    "verify must enable published-locale scan for hub list vs detail drift recovery",
+  );
 });
 
 test("cached single-lesson read still wraps getPathwayLessonImpl (not getPathwayLesson) inside unstable_cache", () => {

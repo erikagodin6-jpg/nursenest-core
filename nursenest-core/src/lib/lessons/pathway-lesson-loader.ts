@@ -47,6 +47,7 @@ import {
   type PathwayLessonSectionKind,
   type PathwayLessonYieldLevel,
 } from "@/lib/lessons/pathway-lesson-types";
+import { cacheTagPathwayLessonsHub } from "@/lib/cache/cache-tags";
 import { ContentStatus, type Prisma } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { cache } from "react";
@@ -980,7 +981,7 @@ async function getPathwayLessonsPageWithDataCache(
   return unstable_cache(
     async () => getPathwayLessonsPageImpl(pathwayId, page, pageSize, marketingLocale, listOptions),
     ["pathway-hub-all", pathwayId, String(page), String(pageSize), marketingLocale ?? "", topicKey, qKey],
-    { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
+    { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [cacheTagPathwayLessonsHub(pathwayId)] },
   )();
 }
 
@@ -1238,7 +1239,7 @@ async function getLessonsForTopicPageWithDataCache(
   return unstable_cache(
     async () => getLessonsForTopicPageImpl(pathwayId, topicSlug, page, pageSize, marketingLocale),
     ["pathway-topic-page", pathwayId, topicSlug, String(page), String(pageSize), marketingLocale ?? ""],
-    { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
+    { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [cacheTagPathwayLessonsHub(pathwayId)] },
   )();
 }
 
@@ -1272,12 +1273,82 @@ export async function listTopicClustersForSitemap(pathwayId: string): Promise<To
   return listTopicClustersForPublicNavigation(pathwayId, PATHWAY_LESSON_SITEMAP_LOCALE);
 }
 
+/**
+ * Last-resort marketing verify recovery: when targeted `findUnique` shards all miss (timeouts,
+ * drifted locale metadata, or composite edge cases) but the pathway still has published inventory,
+ * scan published rows for this slug and prefer locales aligned with hub hints + warehouse picks.
+ */
+async function tryRecoverPublishedLessonAcrossWarehouseLocales(params: {
+  pathwayId: string;
+  slug: string;
+  marketingLocale?: string;
+  overlayLocale: string;
+  shardNorm?: string;
+  lessonDbOverlays: Awaited<ReturnType<typeof fetchPublishedLessonOverlaysForMarketingLocale>>;
+  dbTimeout: number;
+}): Promise<PathwayLessonRecord | undefined> {
+  const { pathwayId, slug, marketingLocale, overlayLocale, shardNorm, lessonDbOverlays, dbTimeout } = params;
+  const rows = await dbCall(
+    () =>
+      prisma.pathwayLesson.findMany({
+        where: { pathwayId, slug, status: ContentStatus.PUBLISHED },
+        take: 24,
+        orderBy: [{ updatedAt: "desc" }],
+      }),
+    [],
+    dbTimeout,
+  );
+  if (rows.length === 0) return undefined;
+  const effectiveWarehouse = await effectiveLocaleForPathwayLessonDbRows(pathwayId, overlayLocale);
+  const preferred = [
+    shardNorm,
+    overlayLocale,
+    effectiveWarehouse,
+    PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+  ]
+    .filter((x): x is string => Boolean(x && String(x).trim()))
+    .map((loc) => normalizePathwayLessonLocale(loc));
+  const rank = new Map(preferred.map((loc, i) => [loc, i]));
+  const sorted = [...rows].sort((a, b) => {
+    const ra = rank.get(normalizePathwayLessonLocale(a.locale)) ?? 50;
+    const rb = rank.get(normalizePathwayLessonLocale(b.locale)) ?? 50;
+    if (ra !== rb) return ra - rb;
+    return 0;
+  });
+  for (const row of sorted) {
+    const locNorm = normalizePathwayLessonLocale(row.locale);
+    const rec = applyOverlayAndStructural(
+      withLocaleMeta(
+        normalizeLesson(pathwayLessonRowToInput(row), pathwayId),
+        lessonLocaleMeta(
+          marketingLocale,
+          locNorm,
+          normalizePathwayLessonLocale(marketingLocale ?? "") !== locNorm,
+          false,
+        ),
+      ),
+      marketingLocale,
+      pathwayId,
+      lessonDbOverlays,
+    );
+    if (pathwayLessonEligibleForPublicMarketingSurface(rec)) {
+      safeServerLog("pathway_lessons", "lesson_detail_any_published_locale_recovered", {
+        pathway_id: pathwayId,
+        slug: slug.slice(0, 180),
+        chosen_locale: row.locale,
+      });
+      return rec;
+    }
+  }
+  return undefined;
+}
+
 /** Single lesson by slug — canonical English DB row when present, then file/DB overlays; legacy non-English row if no English. */
 async function getPathwayLessonImpl(
   pathwayId: string,
   slug: string,
   marketingLocale?: string,
-  options?: { dbTimeoutMs?: number; lessonDbShardLocale?: string },
+  options?: { dbTimeoutMs?: number; lessonDbShardLocale?: string; preferPublishedLocaleScan?: boolean },
 ): Promise<PathwayLessonRecord | undefined> {
   const dbTimeout = options?.dbTimeoutMs ?? PATHWAY_LESSON_DB_TIMEOUT_MS;
   const overlayLocale = normalizePathwayLessonLocale(marketingLocale);
@@ -1492,6 +1563,25 @@ async function getPathwayLessonImpl(
     }
   }
 
+  if (
+    options?.preferPublishedLocaleScan === true &&
+    dbHasAny &&
+    !(rowEn && rowEn.status === ContentStatus.PUBLISHED)
+  ) {
+    const recovered = await tryRecoverPublishedLessonAcrossWarehouseLocales({
+      pathwayId,
+      slug,
+      marketingLocale,
+      overlayLocale,
+      shardNorm,
+      lessonDbOverlays,
+      dbTimeout,
+    });
+    if (recovered) {
+      return recovered;
+    }
+  }
+
   if (!catalogHitForSlug) return undefined;
   const fromCatalogOnly = applyOverlayAndStructural(
     withLocaleMeta(
@@ -1526,7 +1616,7 @@ async function getPathwayLessonWithDataCache(
     ["pathway-lesson-detail", pathwayId, slug, marketingLocale ?? ""],
     {
       revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS,
-      tags: [`pathway-lessons:${pathwayId}`, `pathway-lesson:${pathwayId}:${slug}`],
+      tags: [cacheTagPathwayLessonsHub(pathwayId), `pathway-lesson:${pathwayId}:${slug}`],
     },
   )();
 }
@@ -1548,6 +1638,7 @@ export async function getPathwayLessonForMarketingHubVerify(
 ): Promise<PathwayLessonRecord | undefined> {
   return getPathwayLessonImpl(pathwayId, slug, hubMarketingLocale, {
     dbTimeoutMs: PATHWAY_LESSON_MARKETING_HUB_VERIFY_DB_TIMEOUT_MS,
+    preferPublishedLocaleScan: true,
     ...(lessonDbShardLocale?.trim()
       ? { lessonDbShardLocale: normalizePathwayLessonLocale(lessonDbShardLocale) }
       : {}),
@@ -1651,7 +1742,7 @@ async function getPathwayLessonSeoMetaWithDataCache(
     ["pathway-lesson-seo-meta", pathwayId, slug],
     {
       revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS,
-      tags: [`pathway-lessons:${pathwayId}`, `pathway-lesson:${pathwayId}:${slug}`],
+      tags: [cacheTagPathwayLessonsHub(pathwayId), `pathway-lesson:${pathwayId}:${slug}`],
     },
   )();
 }
@@ -1892,7 +1983,7 @@ async function getRelatedPathwayLessonsWithDataCache(
       marketingLocale ?? "",
       relatedBackfillBodySystem?.trim().toLowerCase() ?? "",
     ],
-    { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
+    { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [cacheTagPathwayLessonsHub(pathwayId)] },
   )();
 }
 
@@ -2009,7 +2100,7 @@ async function listTopicClustersWithDataCache(pathwayId: string, marketingLocale
   return unstable_cache(
     async () => listTopicClustersImpl(pathwayId, marketingLocale),
     ["pathway-topic-clusters", pathwayId, marketingLocale ?? ""],
-    { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [`pathway-lessons:${pathwayId}`] },
+    { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [cacheTagPathwayLessonsHub(pathwayId)] },
   )();
 }
 

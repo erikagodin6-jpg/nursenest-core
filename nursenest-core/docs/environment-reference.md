@@ -147,6 +147,14 @@ External dashboards: **Stripe** webhook → **`https://www.nursenest.ca/api/subs
 
 Full operator narrative: `docs/INTEGRATIONS_RUNBOOK.md`.
 
+## Marketing pathway lessons hub diagnostics
+
+| Variable | Purpose |
+|----------|--------|
+| `NN_MARKETING_HUB_PIPELINE_DEBUG` | Set to `1` to log prepare-stage counts (`hub_prepare_pipeline_debug`), capped slug-level verify exclusions (`hub_verify_excluded_slugs_compact`), and a single `NN_MARKETING_HUB_PIPELINE_DEBUG` JSON line on exam hub `/…/lessons` pages (totals, `prepareStages`, verify samples). |
+| `RN_LESSONS_HUB_DIAGNOSTICS` | Set to `1` for Canada RN NCLEX hub `RN_LESSONS_HUB_ACTUAL_COUNTS` stderr lines (existing). |
+| `NN_PATHWAY_HUB_PIPELINE_DROP_LOG` | Set to `1` for list-stage drop samples inside `resolveMarketingHubRenderableLessonList`. |
+
 ## Related files
 
 - `src/instrumentation.ts` — runs DB validation + production env guard  

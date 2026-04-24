@@ -10,7 +10,7 @@ export type HubMarketingLessonDetailFailureReason =
   | "professional_hub_corpus_guard"
   | "taxonomy_review_required";
 
-/** Stage counts inside {@link prepareLessonsForHubCurriculumWithDiagnostics} (marketing hub only). */
+/** Stage counts from `prepareLessonsForHubCurriculumWithDiagnostics` (marketing hub curriculum pipeline). */
 export type HubCurriculumPrepareStageDiagnostics = {
   incomingFromLoader: number;
   afterRenderableSlugFilter: number;
@@ -50,6 +50,22 @@ export type MarketingHubLessonVerifyDiagnostics = {
   exclusionReasonsRanked?: Array<{ reason: HubMarketingLessonDetailFailureReason; count: number }>;
   /** Capped unique-slug failures for debug (`NN_MARKETING_HUB_PIPELINE_DEBUG=1`) and ops triage. */
   excludedSlugSamples?: Array<{ slug: string; reason: HubMarketingLessonDetailFailureReason }>;
+  /**
+   * First prepared hub rows that failed verify — joins slug failure reason with list-row metadata
+   * (`localeMeta`, structural gate) for production triage without removing verify.
+   */
+  droppedPreparedRowSamples?: HubVerifyDroppedPreparedRowSample[];
+};
+
+/** One dropped prepared row aligned with a verify exclusion (best-effort join on slug). */
+export type HubVerifyDroppedPreparedRowSample = {
+  slug: string;
+  pathwayId: string;
+  reasonDropped: HubMarketingLessonDetailFailureReason;
+  contentLocale?: string;
+  publicComplete?: boolean;
+  bodySystem?: string;
+  topicSlug?: string;
 };
 
 export type PublicMarketingLessonCrossLinkExclusionReason =

@@ -165,14 +165,6 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
       blogLocCount: String(blogEntries.size),
     });
 
-    if (isSeoHttpValidationEnabled()) {
-      await validateUrlsHttpBatch(merged.map((m) => m.loc), {
-        sourceFile: "src/lib/seo/sitemap-all-xml.ts",
-        generator: "buildSingleSitemapXmlSafe",
-        kind: "sitemap",
-      });
-    }
-
     if (merged.length === 0) {
       safeServerLog("seo", "sitemap_merged_empty", {
         staticCandidates: String(allStatic.size),
@@ -238,6 +230,14 @@ export async function buildSingleSitemapXmlSafe(): Promise<string> {
     ) {
       safeServerLog("seo", "sitemap_semantic_warning_no_canada_rn_nclex_lesson_urls", {
         mergedTotal: String(merged.length),
+      });
+    }
+
+    if (isSeoHttpValidationEnabled()) {
+      await validateUrlsHttpBatch(merged.map((m) => m.loc), {
+        sourceFile: "src/lib/seo/sitemap-all-xml.ts",
+        generator: "buildSingleSitemapXmlSafe",
+        kind: "sitemap",
       });
     }
 

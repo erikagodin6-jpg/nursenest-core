@@ -1,6 +1,12 @@
 import "server-only";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
+
+import {
+  CACHE_TAG_MARKETING_PUBLIC_FLASHCARD_TAGS,
+  cacheTagPathwayLessonsHub,
+} from "@/lib/cache/cache-tags";
+import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 
 export type BlogPublishingRevalidateOptions = {
   /** Canonical marketing slug — invalidates `/blog/[slug]` */
@@ -52,5 +58,14 @@ export function revalidateBlogPublishingSurfaces(options?: BlogPublishingRevalid
     if (!s) continue;
     revalidatePath(`/blog/${s}`);
     batchN++;
+  }
+
+  /**
+   * Bust marketing `unstable_cache` layers that may have cached empty payloads during DB outages
+   * (flashcard tag list + per-pathway lesson hub lists used by sitemap/ISR surfaces).
+   */
+  revalidateTag(CACHE_TAG_MARKETING_PUBLIC_FLASHCARD_TAGS);
+  for (const pathway of listPublishedExamPathwaysForPublicSite()) {
+    revalidateTag(cacheTagPathwayLessonsHub(pathway.id));
   }
 }
