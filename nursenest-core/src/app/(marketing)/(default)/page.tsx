@@ -23,7 +23,6 @@ import { type MarketingMessages } from "@/lib/marketing-i18n-core";
 import { getRequiredPublicMetadataLine } from "@/lib/marketing-i18n/marketing-metadata-strict";
 import { defaultHomeMetaDescription, defaultHomeMetaTitle } from "@/lib/marketing/nursing-tier-public-labels";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { ExamSelectorGateLazy } from "@/components/onboarding/exam-selector-gate-lazy";
 import {
   HomeBlogTeaserSectionAsync,
   HomeBlogTeaserSectionShell,
@@ -135,7 +134,7 @@ function listPublishedHomeGlobalRegionCardIdsSafe(): readonly string[] {
 
 async function SafeHomeBlogTeaserSection({ m }: { m: MarketingMessages }) {
   try {
-    return <HomeBlogTeaserSectionAsync m={m} />;
+    return await HomeBlogTeaserSectionAsync({ m });
   } catch (err) {
     layoutStderrTrace("marketing_home", "home_blog_teaser_failed_open", {
       error: err instanceof Error ? err.message : String(err),
@@ -335,10 +334,6 @@ export default async function HomePage() {
 
           <Suspense fallback={<HomeBlogTeaserSectionShell m={m} posts={[]} />}>
             <SafeHomeBlogTeaserSection m={m} />
-          </Suspense>
-
-          <Suspense fallback={null}>
-            <ExamSelectorGateLazy />
           </Suspense>
         </>
       );
