@@ -1,72 +1,238 @@
-import { MarketingLessonsHubRetryableErrorShell } from "@/components/pathway-lessons/marketing-lessons-hub-retryable-error-shell";
-import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
+import type { Metadata } from "next";
+import { notFound, redirect } from "next/navigation";
+import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
+import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
+import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
+import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
+import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
+import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
+import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
+import {
+  PATHWAY_HUB_PAGE_SIZE_DEFAULT,
+  normalizePathwayHubSearchQuery,
+} from "@/lib/lessons/pathway-lesson-loader";
+import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
+import { pathwayLessonHubMetaDescription, pathwayLessonHubMetaTitle } from "@/lib/lessons/pathway-lesson-hub-seo";
+import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
+import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
+import { absoluteUrl } from "@/lib/seo/site-origin";
+import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
+import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-continuation";
+import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
-// ⚠️ keep ALL your existing imports above this line in your real file
+export const dynamicParams = true;
+/** Aggregates + paginated hub queries can run long on cold DB; avoid hard serverless timeouts under spike load. */
+export const maxDuration = 60;
 
-export default async function LessonsPage(props: any) {
-const result = await originalLessonsPageLogic(props);
+type Props = {
+  params: Promise<{ locale: string; slug: string; examCode: string }>;
+  searchParams: Promise<{ page?: string; pageSize?: string; q?: string }>;
+};
 
-// 🔴 HARD SAFETY: NEVER SHOW ERROR SHELL
-if (result?.error) {
-console.error("[LESSONS_HUB_FORCE_RENDER] bypassing page error", result.error);
-
-```
-safeServerLog("pathway_lessons", "lessons_page_error_bypassed", {
-  reason: result.error,
-});
-```
-
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+  const { locale: countrySlug, slug: roleTrack, examCode } = await params;
+  const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
+  const hubPath = `${pathname}/lessons`;
+  const sp = await searchParams;
+  const q = normalizePathwayHubSearchQuery(sp.q);
+  return safeGenerateMetadata(
+    async () => {
+      const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
+      if (!pathway) return {};
+      const path = buildExamPathwayPath(pathway, "lessons");
+      const canonical = absoluteUrl(path);
+      const title = pathwayLessonHubMetaTitle(pathway);
+      const description = pathwayLessonHubMetaDescription(pathway);
+      return {
+        title,
+        description,
+        alternates: { canonical },
+        openGraph: { title, description, url: canonical, type: "website" },
+        ...(q ? { robots: { index: false, follow: true } } : {}),
+      };
+    },
+    { pathname: hubPath, locale: countrySlug, routeGroup: "marketing.exam_hub.lessons" },
+  );
 }
 
-// 🔴 HARD SAFETY: ALWAYS RETURN CONTENT
-return (
-<>
-{result?.diagnostics && ( <MarketingHubSmokeDiagnosticsJson payload={result.diagnostics} />
-)}
+export default async function PathwayLessonsHubPage({ params, searchParams }: Props) {
+  const { locale: countrySlug, slug: roleTrack, examCode } = await params;
+  const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
+  const lessonContentLocale = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const pathway = resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
+  if (!pathway) notFound();
 
-```
-  {/* 👇 THIS MUST MATCH YOUR REAL GRID COMPONENT */}
-  {result?.content ?? result?.lessons ?? result?.hub ?? result?.items ?? null}
-</>
-```
+  const base = marketingPathwayLessonsIndexPath(pathway);
+  const sp = await searchParams;
+  const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
+  const pageSizeRequested = Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;
+  const qEffective = normalizePathwayHubSearchQuery(sp.q);
+  const listOpts = typeof sp.q === "string" && sp.q.trim().length > 0 ? { q: sp.q } : undefined;
 
-);
+  const { pageResult } = await loadPathwayLessonsHubAggregates(
+    pathway,
+    {
+      pageRequested,
+      pageSizeRequested,
+      lessonContentLocale,
+      listOpts,
+      qEffective: qEffective ?? "",
+      skipLaunchBundle: pageRequested !== 1 || Boolean(qEffective),
+    },
+    {
+      pathname: `${pathname}/lessons`,
+      locale: countrySlug,
+      country: countrySlug,
+      examCode,
+      pathwayId: pathway.id,
+      roleTrack,
+    },
+  );
+
+  const hubQuerySuffix = (page: number) => {
+    const qs = new URLSearchParams();
+    if (page > 1) qs.set("page", String(page));
+    if (qEffective) qs.set("q", qEffective);
+    const s = qs.toString();
+    return s ? `?${s}` : "";
+  };
+
+  if (pageResult.total === 0) {
+    if (pageRequested > 1) redirect(`${base}${hubQuerySuffix(1)}`);
+  } else if (pageRequested !== pageResult.page) {
+    redirect(`${base}${hubQuerySuffix(pageResult.page)}`);
+  }
+
+  const lessons = pageResult.items.filter(pathwayLessonHasRenderableHubSlug);
+  const { schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
+  const headerDescription = `Browse ${pathway.shortName} lessons grouped by clinical area.`;
+
+  if (pageResult.total === 0) {
+    const querySuffix = qEffective ? `?q=${encodeURIComponent(qEffective)}` : "";
+    const canadaHref =
+      pathway.countrySlug === "canada"
+        ? `${base}${querySuffix}`
+        : `${equivalentExamHubUrlAfterRegionToggle(base, "CA") ?? base}${querySuffix}`;
+    const usHref =
+      pathway.countrySlug === "us"
+        ? `${base}${querySuffix}`
+        : `${equivalentExamHubUrlAfterRegionToggle(base, "US") ?? base}${querySuffix}`;
+
+    return (
+      <LessonsPageShell
+        schemaItems={schemaItems}
+        eyebrow={pathway.displayName}
+        title={`${pathway.shortName} lessons`}
+        description={headerDescription}
+        searchBasePath={base}
+        initialQuery={qEffective ?? undefined}
+        countryOptions={[
+          { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
+          { label: "US", href: usHref, active: pathway.countrySlug === "us" },
+        ]}
+        boardId="pathway-lesson-library"
+      >
+        <div className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+          <p className="text-sm font-medium text-[var(--theme-heading-text)]">
+            {qEffective ? `No lessons match "${qEffective}".` : `No lessons are published for ${pathway.shortName} yet.`}
+          </p>
+          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+            {qEffective ? "Try a broader search or clear the search to view the full lesson library." : "Check back here for structured lessons as this pathway library grows."}
+          </p>
+        </div>
+      </LessonsPageShell>
+    );
+  }
+
+  const session = await getOptionalPublicSession({
+    pathname: `${pathname}/lessons`,
+    surface: "marketing.exam_hub.lessons",
+  });
+  const userId = (session?.user as { id?: string })?.id ?? "";
+  const entitlement = await resolveEntitlementForPage(userId);
+  let learnerPath: string | null = null;
+  if (userId && isDatabaseUrlConfigured()) {
+    try {
+      const u = await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } });
+      learnerPath = u?.learnerPath ?? null;
+    } catch {
+      learnerPath = null;
+    }
+  }
+  const scope =
+    entitlement === "error"
+      ? { hasAccess: false, reason: "no_access" as const, tier: null, country: null }
+      : entitlement;
+
+  let progressMap: Record<string, PathwayLessonProgressStatus> = {};
+
+  const canShowResume =
+    Boolean(userId) && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
+  const canShowProgressMap = canShowResume && lessons.length > 0;
+
+  if (canShowResume) {
+    const hubSlugs = canShowProgressMap ? lessons.map((l) => l.slug).filter(Boolean) : [];
+    const { progressMap: map } = await loadPathwayHubSubscriberData(
+      userId,
+      scope,
+      learnerPath,
+      pathway,
+      base,
+      hubSlugs,
+    );
+    progressMap = map;
+  }
+
+  const querySuffix = qEffective ? `?q=${encodeURIComponent(qEffective)}` : "";
+  const canadaHref =
+    pathway.countrySlug === "canada"
+      ? `${base}${querySuffix}`
+      : `${equivalentExamHubUrlAfterRegionToggle(base, "CA") ?? base}${querySuffix}`;
+  const usHref =
+    pathway.countrySlug === "us"
+      ? `${base}${querySuffix}`
+      : `${equivalentExamHubUrlAfterRegionToggle(base, "US") ?? base}${querySuffix}`;
+
+  return (
+    <LessonsPageShell
+      schemaItems={schemaItems}
+      eyebrow={pathway.displayName}
+      title={`${pathway.shortName} lessons`}
+      description={headerDescription}
+      searchBasePath={base}
+      initialQuery={qEffective ?? undefined}
+      countryOptions={[
+        { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
+        { label: "US", href: usHref, active: pathway.countrySlug === "us" },
+      ]}
+      boardId="pathway-lesson-library"
+      pagination={
+        <PathwayLessonPagination
+          basePath={base}
+          page={pageResult.page}
+          pageCount={pageResult.pageCount}
+          total={pageResult.total}
+          pageSize={pageResult.pageSize}
+          hubSearch={qEffective}
+        />
+      }
+    >
+      <div className="rounded-[1.5rem] border border-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_45%,var(--semantic-surface))] p-1.5">
+        <PathwayLessonsCurriculumHub
+          pathway={pathway}
+          lessons={lessons}
+          lessonsBasePath={base}
+          progressMap={progressMap}
+          canShowProgressMap={canShowProgressMap}
+          showLockedState={!canShowResume}
+        />
+      </div>
+    </LessonsPageShell>
+  );
 }
-
-/**
-
-* Wrap your existing page logic so we can intercept failures
-  */
-  async function originalLessonsPageLogic(props: any) {
-  try {
-  // 👇 PASTE YOUR ORIGINAL PAGE LOGIC HERE
-  // EVERYTHING that was inside your default export before
-
-  // IMPORTANT:
-  // Wherever you had:
-  // return <MarketingLessonsHubRetryableErrorShell ... />
-  // → replace with:
-  // return { error: "some_reason", diagnostics: {...} }
-
-  // Wherever you had:
-  // return <ActualPage />
-  // → replace with:
-  // return { content: <ActualPage /> }
-
-  return {
-  content: <div>TODO: paste original logic</div>,
-  };
-  } catch (err) {
-  console.error("[LESSONS_PAGE_CRASH_BYPASSED]", err);
-
-  return {
-  error: "exception",
-  diagnostics: {
-  surface: "marketing_pathway_lessons",
-  outcome: "exception_bypassed",
-  },
-  content: <div style={{ padding: 40 }}>Lessons loading fallback</div>,
-  };
-  }
-  }
