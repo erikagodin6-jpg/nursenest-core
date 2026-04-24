@@ -49,10 +49,9 @@ ENV NODE_ENV=production \
   NODE_OPTIONS=--max-old-space-size=4096 \
   BUILD_WEBPACK_PARALLELISM=1
 
-# **Never** add image-wide `ARG DATABASE_URL=…` + `ENV DATABASE_URL=…` — Docker would freeze that value into
-# the runtime layer and override DigitalOcean App Platform `DATABASE_URL` (RUN_TIME) / `.env.local`.
-# Prisma `generate` only needs a syntactically valid URL on this RUN line (ephemeral); use a non-placeholder
-# host/port (65432 + dedicated db name) so it does not match the runtime-banned substring `127.0.0.1:5432/postgres`.
+# **Never** bake DATABASE_URL into image ENV — it would override platform runtime secrets.
+# Prisma `generate` only needs a syntactically valid URL on this RUN line (ephemeral); use a dedicated
+# host/port/db name so it does not match runtime-banned localhost placeholder substrings (see `require-database-env.ts`).
 RUN DATABASE_URL="postgresql://nn_prisma_codegen:nn_prisma_codegen@127.0.0.1:65432/nn_prisma_codegen?schema=public" npm run db:generate \
   && npm run heroku-postbuild \
   && npm run build:deploy \

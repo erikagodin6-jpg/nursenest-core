@@ -144,6 +144,39 @@ export function buildClinicalTopicAllowlists(): {
 
 const BODY_SYSTEM_NORM = new Set<string>(BODY_SYSTEMS.map((s) => norm(s)));
 
+const MAX_TITLE_ENTITY_LEN = 95;
+
+function titleSuggestsVersusComparison(title: string): boolean {
+  return /\bvs\.?\b|\bversus\b|\bcompared to\b/i.test(title);
+}
+
+function titleEntitiesWithinSingleArticleScope(title: string): { ok: true } | { ok: false; reason: string } {
+  const t = title.trim();
+  const chunks: string[] = [];
+  const m1 = /^Why does (.+?) cause (.+)\?$/i.exec(t);
+  const m2 = /^Why does (.+?) lead to (.+)\?$/i.exec(t);
+  const m3 = /^How does (.+?) cause (.+)\?$/i.exec(t);
+  const m4 = /^How does (.+?) affect (.+?) physiologically\?$/i.exec(t);
+  const m5 = /^What should nurses monitor in (.+?) and why\?$/i.exec(t);
+  if (m1) {
+    chunks.push(m1[1]!, m1[2]!);
+  } else if (m2) {
+    chunks.push(m2[1]!, m2[2]!);
+  } else if (m3) {
+    chunks.push(m3[1]!, m3[2]!);
+  } else if (m4) {
+    chunks.push(m4[1]!, m4[2]!);
+  } else if (m5) {
+    chunks.push(m5[1]!);
+  }
+  for (const c of chunks) {
+    if (c.length > MAX_TITLE_ENTITY_LEN) {
+      return { ok: false, reason: "title_entity_too_long_for_single_article" };
+    }
+  }
+  return { ok: true };
+}
+
 /** @deprecated Prefer `titleMatchesStrictSearchPattern` from topic-patterns. */
 export function titleLooksLikeNaturalSearchQuery(title: string): boolean {
   return titleMatchesStrictSearchPattern(title);
@@ -151,6 +184,7 @@ export function titleLooksLikeNaturalSearchQuery(title: string): boolean {
 
 /**
  * Validates that a topic reflects a clinically plausible relationship and strict production phrasing.
+ * Registry and synthetic rows share the same gate: title templates + curated allowlists (no registry bypass).
  */
 export function validateClinicalTopicCoherence(topic: TopicCoherenceInput): ClinicalCoherenceResult {
   const rt = topic.relationshipType;
@@ -169,9 +203,12 @@ export function validateClinicalTopicCoherence(topic: TopicCoherenceInput): Clin
   if (titleSuggestsUnrelatedSystemPairing(topic.title)) {
     return fail("title_unrelated_system_mashup");
   }
-
-  if (topic.topicSource === "registry") {
-    return ok();
+  if (titleSuggestsVersusComparison(topic.title)) {
+    return fail("title_multi_mechanism_comparison");
+  }
+  const scope = titleEntitiesWithinSingleArticleScope(topic.title);
+  if (!scope.ok) {
+    return fail(scope.reason);
   }
 
   const lists = buildClinicalTopicAllowlists();
@@ -229,7 +266,31 @@ export function validateClinicalTopicCoherence(topic: TopicCoherenceInput): Clin
   return fail("unknown_relationship_type");
 }
 
-/** Semantic duplicate key: normalized title without question style (condition + outcome words). */
+function pairSemanticDuplicateParts(a: string, b: string, kind: string): string {
+  let ca = norm(a);
+  let cb = norm(b);
+  /* Collapse near-duplicate “sepsis spectrum + hypotension outcome” article ideas to one slot. */
+  if (/^(sepsis|septic shock|severe sepsis)$/.test(ca) && /\b(hypotension|refractory hypotension)\b/.test(cb)) {
+    ca = "__sepsis_spectrum__";
+    cb = "__hypotension_outcome__";
+  }
+  return `${kind}|||${ca}|||${cb}`;
+}
+
+/**
+ * Duplicate-safe key: parsed relationship slots + light clinical canonicalization (e.g. sepsis–hypotension cluster).
+ */
 export function semanticMechanismDuplicateKey(title: string): string {
-  return normalizeTopicKey(title.replace(/\?/g, ""));
+  const t = title.trim();
+  const whyCause = /^Why does (.+?) cause (.+)\?$/i.exec(t);
+  if (whyCause) return pairSemanticDuplicateParts(whyCause[1]!, whyCause[2]!, "why_cause");
+  const whyLead = /^Why does (.+?) lead to (.+)\?$/i.exec(t);
+  if (whyLead) return pairSemanticDuplicateParts(whyLead[1]!, whyLead[2]!, "why_lead");
+  const howCause = /^How does (.+?) cause (.+)\?$/i.exec(t);
+  if (howCause) return pairSemanticDuplicateParts(howCause[1]!, howCause[2]!, "how_cause");
+  const howPhys = /^How does (.+?) affect (.+?) physiologically\?$/i.exec(t);
+  if (howPhys) return pairSemanticDuplicateParts(howPhys[1]!, howPhys[2]!, "how_phys");
+  const mon = /^What should nurses monitor in (.+?) and why\?$/i.exec(t);
+  if (mon) return `monitor|||${norm(mon[1]!)}`;
+  return normalizeTopicKey(t.replace(/\?/g, ""));
 }

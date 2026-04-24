@@ -28,7 +28,7 @@ This complements `.do/app-nursenest-core-next.yaml` (Heroku Node buildpack path)
 3. **Remove** `environment_slug: node-js` for that component (image supplies Node).
 4. Set **`build_command` empty** or omit — the image build is the compile. Do **not** run `npm run build` again on the platform unless you intend a second compile.
 5. Keep **`run_command: npm run start`** and **`http_port: 8080`** aligned with the Dockerfile `CMD` / `PORT`.
-6. Re-apply secrets (`DATABASE_URL`, auth, etc.) as **RUN_TIME** (and BUILD_TIME only if a future image step needs them).
+6. Re-apply secrets (`DATABASE_URL`, auth, etc.) as **RUN_TIME only** for DB connection strings. **Do not** add `DATABASE_URL`, `DIRECT_URL`, or `DATABASE_DIRECT_URL` to App Platform **build-time** env: Docker passes them into `RUN` layers and they can override runtime secrets (see root `Dockerfile` — no image-wide `ARG`/`ENV` for `DATABASE_URL`; Prisma `generate` uses an ephemeral URL on the `RUN` line only).
 
 ## Local image build
 
@@ -70,7 +70,9 @@ docker run --rm -e PORT=8080 nursenest-core-next:local node -e "const fs=require
 | Variable | Role |
 |----------|------|
 | `NODE_VERSION` (Docker `ARG`) | Pin Node base image |
-| `DATABASE_URL` (build) | Dummy URL in Dockerfile for `prisma generate` only |
+| `DATABASE_URL` | **Runtime:** managed Postgres URI (App Platform secret, `RUN_TIME` only). **Not** a platform build env — never bake into the image. **Build:** the Dockerfile sets a **one-line** ephemeral URL only for `npm run db:generate` inside that `RUN` (not `ENV`). |
 | `NN_FORCE_SINGLE_BUILD_WORKER` / `NN_APP_PLATFORM_BUILD` | Low-memory / DO-aware compile |
 | `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` | Heap for `build:compile` (Docker `ARG`) |
 | Runtime secrets | Same as buildpack deploy (`DATABASE_URL`, NextAuth, etc.) |
+
+If App Platform logs show **“configuring build-time app environment variables”** and the list includes **`DATABASE_URL`**, remove it from the component’s build env in the DO UI (or narrow scope in spec) so only **run-time** injection applies.

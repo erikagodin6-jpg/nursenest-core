@@ -52,13 +52,18 @@ export type PathoPharmTopicRegistryRelationship =
   | "drug_monitoring"
   | "mechanism";
 
-export type PathoPharmTopicRegistryEntry = {
+/** Public production contract (strict topic bank row). */
+export type PathoPharmTopicRegistryItem = {
   id: string;
   title: string;
   slug: string;
   category: PathoPharmTopicRegistryCategory;
   relationshipType: PathoPharmTopicRegistryRelationship;
   keywords: string[];
+};
+
+/** Full registry row including generator metadata (`patternId`). */
+export type PathoPharmTopicRegistryEntry = PathoPharmTopicRegistryItem & {
   patternId: number;
 };
 
@@ -132,6 +137,16 @@ export const PATHO_PHARM_REGISTRY_BUILD_STATS = {
 
 function normPairKey(a: string, b: string): string {
   return `${a.trim().toLowerCase()}|||${b.trim().toLowerCase()}`;
+}
+
+/** One slot for near-duplicate “sepsis spectrum + hypotension outcome” variants (clinical mechanism overlap). */
+function conditionSymptomClusterSlot(condition: string, finding: string): string {
+  const c = condition.trim().toLowerCase();
+  const f = finding.trim().toLowerCase();
+  if (/^(sepsis|septic shock|severe sepsis)$/.test(c) && /\b(hypotension|refractory hypotension)\b/.test(f)) {
+    return "__cluster__:sepsis-spectrum-hypotension";
+  }
+  return normPairKey(condition, finding);
 }
 
 function registryCategoryFromBodySystem(bodySystem: string, kind: "pathophysiology" | "pharmacology"): PathoPharmTopicRegistryCategory {
@@ -244,7 +259,7 @@ function buildPathoPharmTopicRegistryEntries(): PathoPharmTopicRegistryEntry[] {
       kind: "pathophysiology",
       relationshipType: "condition_symptom",
       patternId: 1,
-      clusterKey: normPairKey(condition, finding),
+      clusterKey: conditionSymptomClusterSlot(condition, finding),
     });
   }
 
@@ -379,7 +394,10 @@ function buildPathoPharmTopicRegistryEntries(): PathoPharmTopicRegistryEntry[] {
   return out;
 }
 
-/** Strict production topic registry (validated titles + deduped). */
+/**
+ * Strict production topic registry (validated titles + deduped).
+ * Rows satisfy {@link PathoPharmTopicRegistryItem}; `patternId` is included for the long-tail post builder.
+ */
 export const PATHO_PHARM_TOPIC_REGISTRY: readonly PathoPharmTopicRegistryEntry[] = Object.freeze(
   buildPathoPharmTopicRegistryEntries(),
 );
@@ -465,3 +483,4 @@ export function assertRegistryMeetsMinimum(): void {
 }
 
 export { normalizeTopicKey } from "./patho-pharm-longtail-topic-patterns";
+export { validateClinicalTopicCoherence, semanticMechanismDuplicateKey } from "./patho-pharm-longtail-topic-coherence";

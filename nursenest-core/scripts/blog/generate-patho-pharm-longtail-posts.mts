@@ -8,8 +8,9 @@
  * Topics come from `PATHO_PHARM_TOPIC_REGISTRY` (see `patho-pharm-longtail-topic-registry.ts`); each row is
  * validated with `validateClinicalTopicCoherence` before body generation.
  *
- * Strict dry-run: if any topic fails clinical/title gates, the script exits 1 (so APPLY is never reached with
- * bad topics). To bypass only for local debugging: PATHO_PHARM_RELAX_DRY_RUN=1.
+ * Strict dry-run: if any topic fails clinical/title gates, duplicate keys in the approved set, or body
+ * validation, the script exits 1 — do **not** set APPLY_BLOG_GENERATION=1 until dry-run is clean. Local-only
+ * bypass: PATHO_PHARM_RELAX_DRY_RUN=1 (not for production).
  *
  *   DOTENV_CONFIG_PATH=.env.local npm run blog:generate-patho-pharm-longtail
  *   TARGET_COUNT=50 DOTENV_CONFIG_PATH=.env.local npm run blog:generate-patho-pharm-longtail
@@ -22,6 +23,8 @@ import { BlogPostStatus, BlogWorkflowStatus, Prisma } from "@prisma/client";
 import {
   PATHO_PHARM_REGISTRY_BUILD_STATS,
   PATHO_PHARM_TOPIC_REGISTRY,
+  normalizeTopicKey,
+  semanticMechanismDuplicateKey,
 } from "../../src/lib/blog/patho-pharm-longtail-topic-registry";
 import { validateClinicalTopicCoherence } from "../../src/lib/blog/patho-pharm-longtail-topic-coherence";
 import { blogLiveWhere, blogPostIsLive } from "../../src/lib/blog/blog-visibility";
@@ -205,6 +208,8 @@ async function main(): Promise<void> {
   const sampleApprovedTopics: string[] = [];
   const approvedTopicsSample: string[] = [];
   const rejectedTopicsSample: string[] = [];
+  const rejectedTopicsWithReasonSample: Array<{ title: string; reason: string }> = [];
+  const dryRunApprovedTitles: string[] = [];
   let globalInternalLinksInsufficient = 0;
 
   const bumpReason = (rs: string[]) => {
@@ -287,6 +292,9 @@ async function main(): Promise<void> {
         if (batchSampleRejected.length < 8) batchSampleRejected.push(topic.title);
         if (sampleRejectedTopics.length < 8) sampleRejectedTopics.push(topic.title);
         if (rejectedTopicsSample.length < 10) rejectedTopicsSample.push(topic.title);
+        if (rejectedTopicsWithReasonSample.length < 10) {
+          rejectedTopicsWithReasonSample.push({ title: topic.title, reason });
+        }
         continue;
       }
 
@@ -300,6 +308,10 @@ async function main(): Promise<void> {
         batchRejectionReasons.push(...v.reasons);
         bumpReason(v.reasons);
         if (rejectedTopicsSample.length < 10) rejectedTopicsSample.push(topic.title);
+        for (const r of v.reasons) {
+          if (rejectedTopicsWithReasonSample.length >= 10) break;
+          rejectedTopicsWithReasonSample.push({ title: topic.title, reason: r });
+        }
         continue;
       }
 
@@ -311,6 +323,9 @@ async function main(): Promise<void> {
         batchRejectionReasons.push(r);
         bumpReason([r]);
         if (rejectedTopicsSample.length < 10) rejectedTopicsSample.push(topic.title);
+        if (rejectedTopicsWithReasonSample.length < 10) {
+          rejectedTopicsWithReasonSample.push({ title: topic.title, reason: r });
+        }
         continue;
       }
 
@@ -385,6 +400,7 @@ async function main(): Promise<void> {
       if (dryRun) {
         createdCount += 1;
         createdSlugs.push(topic.slug);
+        dryRunApprovedTitles.push(topic.title);
         if (batchSampleApproved.length < 8) batchSampleApproved.push(topic.title);
         if (sampleApprovedTopics.length < 8) sampleApprovedTopics.push(topic.title);
         if (approvedTopicsSample.length < 10) approvedTopicsSample.push(topic.title);
@@ -527,6 +543,19 @@ async function main(): Promise<void> {
     PATHO_PHARM_REGISTRY_BUILD_STATS.duplicateSemantic +
     PATHO_PHARM_REGISTRY_BUILD_STATS.duplicateCluster;
 
+  const seenNormDry = new Set<string>();
+  const seenSemDry = new Set<string>();
+  let dryRunDupNormalizedKey = 0;
+  let dryRunDupSemantic = 0;
+  for (const title of dryRunApprovedTitles) {
+    const nk = normalizeTopicKey(title);
+    if (seenNormDry.has(nk)) dryRunDupNormalizedKey += 1;
+    else seenNormDry.add(nk);
+    const sk = semanticMechanismDuplicateKey(title);
+    if (seenSemDry.has(sk)) dryRunDupSemantic += 1;
+    else seenSemDry.add(sk);
+  }
+
   const finalSummary = {
     dryRun,
     targetCount,
@@ -542,10 +571,14 @@ async function main(): Promise<void> {
     rejectionReasonsCount: Object.keys(rejectionReasons).length,
     clinicallyRejectedReasons: clinicalRejectionReasons,
     duplicateCount: registryDuplicateTotal,
+    dryRunApprovedCount: dryRunApprovedTitles.length,
+    dryRunDuplicateNormalizedKeyCount: dryRunDupNormalizedKey,
+    dryRunDuplicateSemanticKeyCount: dryRunDupSemantic,
     sampleRejectedTopics,
     sampleApprovedTopics,
     approvedTopicsSample,
     rejectedTopicsSample,
+    rejectedTopicsWithReasonSample,
     internalLinksInsufficientCount: globalInternalLinksInsufficient,
     createdSlugs: globalCreatedSlugs,
     visiblePublicBefore: visiblePublicCountBefore,
@@ -560,11 +593,20 @@ async function main(): Promise<void> {
   console.log(JSON.stringify({ finalSummary }));
 
   const relaxDryRunStrict = process.env.PATHO_PHARM_RELAX_DRY_RUN === "1";
-  if (dryRun && !relaxDryRunStrict && globalClinicalRejected > 0) {
-    console.error(
-      "[patho-pharm-longtail] Strict dry-run failed: clinical/title validation rejected one or more topics. Fix registry or coherence rules, or set PATHO_PHARM_RELAX_DRY_RUN=1 to bypass this gate (not for production).",
-    );
-    process.exit(1);
+  if (dryRun && !relaxDryRunStrict) {
+    const strictFailures: string[] = [];
+    if (globalClinicalRejected > 0) strictFailures.push("clinical_coherence_rejections");
+    if (globalRejected > 0) strictFailures.push("rejected_topics_including_body_or_links");
+    if (dryRunDupNormalizedKey > 0) strictFailures.push("duplicate_normalized_keys_in_approved_dry_run");
+    if (dryRunDupSemantic > 0) strictFailures.push("semantic_duplicate_keys_in_approved_dry_run");
+    if (strictFailures.length > 0) {
+      console.error(
+        `[patho-pharm-longtail] Strict dry-run failed (${strictFailures.join(
+          ", ",
+        )}). Fix registry, coherence rules, or corpus/link pool; PATHO_PHARM_RELAX_DRY_RUN=1 bypasses this gate (not for production).`,
+      );
+      process.exit(1);
+    }
   }
 }
 

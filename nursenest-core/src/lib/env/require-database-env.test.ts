@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
 import {
   DOCKER_BUILD_PLACEHOLDER_DATABASE_URL_MARKER,
+  REJECTED_DEFAULT_POSTGRES_LOCALHOST_CREDENTIALS,
   isDockerBuildPlaceholderDatabaseUrl,
+  isRejectedRuntimePlaceholderDatabaseUrl,
   isProductionLikeDatabaseHost,
   maskDatabaseUrlHostForLog,
   requireDatabaseEnv,
@@ -38,6 +40,15 @@ describe("require-database-env", () => {
     );
   });
 
+  it("rejects default postgres:postgres@127.0.0.1 even when db name is not postgres", () => {
+    assert.equal(
+      isRejectedRuntimePlaceholderDatabaseUrl(
+        `postgresql://${REJECTED_DEFAULT_POSTGRES_LOCALHOST_CREDENTIALS}:5432/myapp?schema=public`,
+      ),
+      true,
+    );
+  });
+
   it("requireDatabaseEnv throws when DATABASE_URL is missing", () => {
     const snap = snapshotEnv();
     try {
@@ -54,7 +65,7 @@ describe("require-database-env", () => {
     try {
       process.env.DATABASE_URL = `postgresql://postgres:postgres@${DOCKER_BUILD_PLACEHOLDER_DATABASE_URL_MARKER}?schema=public`;
       delete process.env.NN_SKIP_DATABASE_ENV_CONTRACT;
-      assert.throws(() => requireDatabaseEnv({ context: "test" }), /Docker build ARG/);
+      assert.throws(() => requireDatabaseEnv({ context: "test" }), /localhost placeholder/);
     } finally {
       restoreEnv(snap);
     }

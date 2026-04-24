@@ -9,7 +9,8 @@
 import { ContentStatus, PrismaClient } from "@prisma/client";
 
 import "../../src/lib/db/script-env-bootstrap";
-import { blogLiveWhere } from "../../src/lib/blog/blog-visibility";
+/** Explicit `.ts` specifier avoids ambiguous resolution during Docker / `tsx` builds. */
+import { blogLiveWhere } from "../../src/lib/blog/blog-visibility.ts";
 import { publicMarketingFlashcardDeckWhere } from "../../src/lib/entitlements/content-access-scope";
 
 const CANADA_RN_PATHWAY_ID = "ca-rn-nclex-rn";

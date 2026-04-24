@@ -88,7 +88,8 @@ function registryRowToSpec(r: PathoPharmLongtailRegistryTopic): LongTailTopicSpe
 
 /**
  * Curated clinical long-tail topics only (≥500). No Cartesian symptom×condition expansion.
- * If `limit` exceeds the registry, the slice is clamped (no unvetted synthetic fill).
+ * Topics are sourced exclusively from `PATHO_PHARM_TOPIC_REGISTRY` until exhausted; there is no
+ * unvetted synthetic topic fill when `limit` exceeds the registry (the slice is clamped).
  */
 export function enumerateLongTailTopics(limit: number): LongTailTopicSpec[] {
   assertRegistryMeetsMinimum();

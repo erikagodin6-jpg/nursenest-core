@@ -289,6 +289,7 @@
     "db:preflight": "tsx scripts/db-preflight.mts",
     "db:connectivity-check": "DOTENV_CONFIG_PATH=.env.local tsx --import dotenv/config scripts/db/db-connectivity-check.mts",
     "db:validate-url-shape": "tsx scripts/db/validate-database-url-shape.mts",
+    "db:verify-runtime-target": "tsx scripts/verify-runtime-database-target.mts",
     "db:status": "tsx scripts/run-prisma-with-env.mts migrate status",
     "db:generate": "tsx scripts/run-prisma-with-env.mts generate",
     "db:deploy": "tsx scripts/run-prisma-with-env.mts migrate deploy",

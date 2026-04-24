@@ -15,7 +15,7 @@ function databaseUrlContractSourceFromCliTelemetry(): DatabaseUrlContractSource 
 }
 
 /**
- * Validates `DATABASE_URL` (strict: missing or Docker build placeholder throws / exits).
+ * Validates `DATABASE_URL` (strict: missing or localhost placeholder throws / exits).
  * Call after `import "../load-dotenv-for-cli.mts"` and `import "../src/lib/db/env-bootstrap"` (or `script-env-bootstrap` for strict DATABASE_URL + dotenv from cwd).
  *
  * Legacy `PROD_DATABASE_URL` is surfaced only by `env-bootstrap.ts` (never merged).

@@ -111,7 +111,7 @@ function logDatabaseContractLine(payload: Record<string, string | boolean>): voi
 /**
  * Validates DATABASE_URL and returns the trimmed value.
  *
- * @throws Error when missing or when the Docker build placeholder is detected.
+ * @throws Error when missing or when a known localhost placeholder is detected.
  */
 export function requireDatabaseEnv(options?: RequireDatabaseEnvOptions): string {
   if (process.env.NN_SKIP_DATABASE_ENV_CONTRACT === "1") {
