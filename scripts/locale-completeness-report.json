@@ -1,7 +1,7 @@
 {
   "fr": {
     "name": "French",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -9,7 +9,7 @@
   },
   "tl": {
     "name": "Filipino",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -17,7 +17,7 @@
   },
   "hi": {
     "name": "Hindi",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -25,7 +25,7 @@
   },
   "es": {
     "name": "Spanish",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -33,7 +33,7 @@
   },
   "zh": {
     "name": "Chinese (Simplified)",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -41,7 +41,7 @@
   },
   "zh-tw": {
     "name": "Chinese (Traditional)",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -49,7 +49,7 @@
   },
   "ar": {
     "name": "Arabic",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -57,7 +57,7 @@
   },
   "ko": {
     "name": "Korean",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -65,7 +65,7 @@
   },
   "pt": {
     "name": "Portuguese",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -73,7 +73,7 @@
   },
   "pa": {
     "name": "Punjabi",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -81,7 +81,7 @@
   },
   "vi": {
     "name": "Vietnamese",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -89,7 +89,7 @@
   },
   "ht": {
     "name": "Haitian Creole",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -97,7 +97,7 @@
   },
   "ur": {
     "name": "Urdu",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -105,7 +105,7 @@
   },
   "ja": {
     "name": "Japanese",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -113,7 +113,7 @@
   },
   "fa": {
     "name": "Farsi",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -121,7 +121,7 @@
   },
   "de": {
     "name": "German",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -129,7 +129,7 @@
   },
   "th": {
     "name": "Thai",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -137,7 +137,7 @@
   },
   "tr": {
     "name": "Turkish",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
@@ -145,7 +145,7 @@
   },
   "id": {
     "name": "Indonesian",
-    "totalKeys": 21159,
+    "totalKeys": 21215,
     "missingKeys": 0,
     "extraKeys": 0,
     "coverage": 100,
