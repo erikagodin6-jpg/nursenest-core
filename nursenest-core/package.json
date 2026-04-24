@@ -191,7 +191,7 @@
     "qa:cat-entrypoints:browser": "playwright test tests/e2e/cat/cat-entrypoints.spec.ts",
     "qa:homepage-first-paint": "playwright test tests/e2e/public/homepage-first-paint.spec.ts --project=chromium",
     "qa:marketing-sentinel": "playwright test tests/e2e/public/marketing-production-sentinel.spec.ts --project=chromium",
-    "qa:marketing-study-production-smoke": "BASE_URL=https://www.nursenest.ca MARKETING_STUDY_SMOKE_BASE_URL=https://www.nursenest.ca playwright test tests/e2e/public/marketing-study-surfaces-production-gate.spec.ts --project=chromium",
+    "qa:marketing-study-production-smoke": "BASE_URL=https://www.nursenest.ca MARKETING_STUDY_SMOKE_BASE_URL=https://www.nursenest.ca MARKETING_STUDY_REQUIRE_PP_BLOG_LINKS=0 playwright test tests/e2e/public/marketing-study-surfaces-production-gate.spec.ts --project=chromium",
     "qa:marketing-placeholder-dom": "playwright test tests/marketing/marketing-placeholder-dom.spec.ts --project=chromium",
     "qa:pre-deploy:public": "playwright test tests/e2e/public/pre-deploy-regression.spec.ts tests/e2e/public/marketing-production-sentinel.spec.ts tests/marketing/marketing-placeholder-dom.spec.ts --project=chromium",
     "qa:release-gate": "npm run test:e2e:learner-shell-contract && node scripts/check-paid-e2e-credentials.cjs && node scripts/check-e2e-database-connect.cjs && playwright test -c playwright.release-gate.config.ts --project=release-health && playwright test -c playwright.release-gate.config.ts --project=setup-paid-auth --project=release-blocking-paid",

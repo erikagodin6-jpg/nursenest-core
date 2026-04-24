@@ -8,6 +8,7 @@ import {
   CACHE_TAG_PATHWAY_LESSON_INDEX,
   cacheTagPathwayLessonsHub,
 } from "@/lib/cache/cache-tags";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 
 export type BlogPublishingRevalidateOptions = {
@@ -71,6 +72,7 @@ export function revalidateBlogPublishingSurfaces(options?: BlogPublishingRevalid
   revalidateTag(CACHE_TAG_MARKETING_PUBLIC_FLASHCARD_TAGS);
   revalidateTag(CACHE_TAG_PATHWAY_LESSON_INDEX);
   for (const pathway of listPublishedExamPathwaysForPublicSite()) {
+    revalidatePath(buildExamPathwayPath(pathway, "lessons"));
     revalidateTag(cacheTagPathwayLessonsHub(pathway.id));
   }
 }

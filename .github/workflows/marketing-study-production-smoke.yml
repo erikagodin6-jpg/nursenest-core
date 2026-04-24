@@ -48,10 +48,13 @@ jobs:
 
       - name: Marketing study smoke
         env:
+          # Same hostname as smoke target so Playwright does not start `webServer` for localhost.
+          BASE_URL: ${{ inputs.base_url }}
           MARKETING_STUDY_SMOKE_BASE_URL: ${{ inputs.base_url }}
           MARKETING_STUDY_REQUIRE_PP_BLOG_LINKS: ${{ inputs.require_pp_blog }}
         run: |
           set -euo pipefail
+          echo "BASE_URL=${BASE_URL}"
           echo "MARKETING_STUDY_SMOKE_BASE_URL=${MARKETING_STUDY_SMOKE_BASE_URL}"
           echo "MARKETING_STUDY_REQUIRE_PP_BLOG_LINKS=${MARKETING_STUDY_REQUIRE_PP_BLOG_LINKS}"
           npx playwright test tests/e2e/public/marketing-study-surfaces-production-gate.spec.ts --project=chromium

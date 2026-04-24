@@ -23,9 +23,10 @@ test("handlePublicFlashcardTagsGet returns 200 JSON with tags array on success",
   );
   assert.equal(res.status, 200);
   assert.equal(res.headers.get("content-type")?.includes("application/json"), true);
-  const body = (await readJson(res)) as { tags?: unknown };
+  const body = (await readJson(res)) as { tags?: unknown; __debug?: string };
   assert.ok(Array.isArray(body.tags));
   assert.equal((body.tags as { slug: string }[]).length, 1);
+  assert.equal(body.__debug, "flashcard-tags-v2", "TEMP: remove __debug after prod deploy verification");
 });
 
 function withConfiguredDatabaseUrl<T>(run: () => Promise<T>): Promise<T> {
@@ -60,6 +61,15 @@ test("handlePublicFlashcardTagsGet returns public_flashcard_tags_unavailable for
   const body = (await readJson(res)) as { code?: string; error?: string };
   assert.equal(body.code, "public_flashcard_tags_unavailable");
   assert.equal(body.error, "DATA_UNAVAILABLE");
+});
+
+test("handlePublicFlashcardTagsGet returns 503 public_flashcard_tags_unavailable when tags is not an array", async () => {
+  const res = await handlePublicFlashcardTagsGet(() => Promise.resolve({ tags: "not-array" } as unknown as { tags: unknown[] }));
+  assert.equal(res.status, 503);
+  const body = (await readJson(res)) as { code?: string; reasonFailed?: string; tags?: unknown };
+  assert.equal(body.code, "public_flashcard_tags_unavailable");
+  assert.equal(body.reasonFailed, "INVALID_TAG_PAYLOAD");
+  assert.equal(body.tags === undefined || body.tags === null, true);
 });
 
 test("handlePublicFlashcardTagsGet returns 503 DATA_UNAVAILABLE when loader returns zero tags", async () => {

@@ -7,7 +7,9 @@
  * `MARKETING_STUDY_REQUIRE_PP_BLOG_LINKS=0`.
  *
  * Run:
- *   cd nursenest-core && MARKETING_STUDY_SMOKE_BASE_URL=https://www.nursenest.ca npx playwright test tests/e2e/public/marketing-study-surfaces-production-gate.spec.ts --project=chromium
+ *   cd nursenest-core && npm run qa:marketing-study-production-smoke
+ *   (BASE_URL must match the smoke origin so Playwright does not start a local webServer; use
+ *   MARKETING_STUDY_REQUIRE_PP_BLOG_LINKS=0 when production has no /blog/pp-* links yet.)
  *
  * CI: workflow `marketing-study-production-smoke.yml` (workflow_dispatch only).
  */

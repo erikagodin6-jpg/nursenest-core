@@ -24,7 +24,13 @@ import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-p
 /** Chips row: metadata only — no `sections`, no bodies. */
 export type PathwayLessonMarketingRecordChipsSource = Pick<
   PathwayLessonRecord,
-  "topic" | "bodySystem" | "examRelevance" | "audienceTiers" | "countryScope"
+  | "topic"
+  | "bodySystem"
+  | "examRelevance"
+  | "audienceTiers"
+  | "countryScope"
+  | "hubMarketingDegraded"
+  | "hubMarketingDegradedReason"
 >;
 
 /**

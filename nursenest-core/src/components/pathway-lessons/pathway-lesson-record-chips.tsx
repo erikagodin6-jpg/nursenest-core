@@ -60,6 +60,9 @@ export function PathwayLessonRecordChips({
 
   return (
     <div className={`flex flex-wrap gap-1.5 ${className}`}>
+      {lesson.hubMarketingDegraded ? (
+        <LessonCardChip variant="neutral">Preview</LessonCardChip>
+      ) : null}
       {!omitTopic && topic ? <LessonCardChip variant="category">{topic}</LessonCardChip> : null}
       {body ? <LessonCardChip variant="body">{body}</LessonCardChip> : null}
       {lesson.examRelevance ? (

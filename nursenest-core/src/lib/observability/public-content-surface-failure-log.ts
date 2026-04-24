@@ -1,5 +1,3 @@
-import "server-only";
-
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type PublicMarketingContentSurface = "lessons" | "blog" | "flashcards" | "flashcard_tags";

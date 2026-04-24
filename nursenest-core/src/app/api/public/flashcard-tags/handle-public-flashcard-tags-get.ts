@@ -38,7 +38,10 @@ export async function handlePublicFlashcardTagsGet(
   const load = loader ?? defaultFlashcardTagsLoader;
   try {
     const body = await load();
-    if (!body.tags?.length) {
+    if (!body || !Array.isArray(body.tags)) {
+      throw new Error("INVALID_TAG_PAYLOAD");
+    }
+    if (!body.tags.length) {
       logPublicContentSurfaceFailure({
         surface: "flashcard_tags",
         reason: "zero_tags_after_successful_loader_response",
@@ -64,8 +67,36 @@ export async function handlePublicFlashcardTagsGet(
         { status: 503, headers: JSON_HEADERS },
       );
     }
-    return NextResponse.json(body, { headers: CACHE_HEADER_PUBLIC_LIST });
+    /** TEMP: deployment/cache-bust signature — remove after confirming prod returns `s-maxage=120` + this field. */
+    return NextResponse.json(
+      { ...body, __debug: "flashcard-tags-v2" as const },
+      { headers: CACHE_HEADER_PUBLIC_LIST },
+    );
   } catch (e) {
+    if (e instanceof Error && e.message === "INVALID_TAG_PAYLOAD") {
+      logPublicContentSurfaceFailure({
+        surface: "flashcard_tags",
+        reason: "invalid_tag_payload",
+        count: 0,
+        exampleUrls: [`/api/public/flashcard-tags`],
+      });
+      safeServerLog("api_public", "public_flashcard_tags_error", {
+        route: "/api/public/flashcard-tags",
+        stage: "public_flashcard_tags_invalid_payload",
+        cacheSource: "getCachedPublicFlashcardTags",
+        kind: "invalid_payload",
+        code: "public_flashcard_tags_unavailable",
+        reasonFailed: "INVALID_TAG_PAYLOAD",
+      });
+      return NextResponse.json(
+        {
+          error: "Public flashcard tags could not be loaded",
+          code: "public_flashcard_tags_unavailable",
+          reasonFailed: "INVALID_TAG_PAYLOAD",
+        },
+        { status: 503, headers: JSON_HEADERS },
+      );
+    }
     const kind = classifyHubDbFailure(e);
     const message = e instanceof Error ? e.message : String(e);
     const code = errorCodeForPublicFlashcardTagsFailure(kind);

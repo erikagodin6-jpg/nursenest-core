@@ -42,7 +42,14 @@ import {
   pathwayLessonMarketingDetailHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
-import { verifyMarketingHubLessonRowsResolve } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
+import {
+  probeMarketingHubLessonDetailReachability,
+  verifyMarketingHubLessonRowsResolve,
+} from "@/lib/lessons/pathway-lesson-hub-link-integrity";
+import {
+  fillMarketingHubLessonsToMinimumVisible,
+  MARKETING_HUB_MIN_VISIBLE_LESSONS,
+} from "@/lib/lessons/marketing-hub-lesson-inventory-fill";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { pathwayLessonsHubBreadcrumbs, pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -462,15 +469,55 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const listWarehouseT0 = performance.now();
   const listWarehouseLocale = await getPathwayLessonListWarehouseLocaleForHub(pathway.id, lessonContentLocale);
   const listWarehouseResolveMs = Math.round(performance.now() - listWarehouseT0);
-  /** Drop any row that does not hydrate to a marketing-public-complete lesson (same contract as lesson detail). */
+  /** Cross-check list rows with fresh detail loads; soft failures stay as {@link PathwayLessonRecord.hubMarketingDegraded}. */
   const verifyT0 = performance.now();
   const vr = await verifyMarketingHubLessonRowsResolve(pathway, hubCurriculumPrepared, lessonContentLocale, {
     listWarehouseLocale,
     prepareStages: hubPrepareStages,
   });
   const verifyDurationMs = Math.round(performance.now() - verifyT0);
-  const hubCurriculumLessons = vr.kept;
+  const fillMin = fillMarketingHubLessonsToMinimumVisible({
+    minVisible: MARKETING_HUB_MIN_VISIBLE_LESSONS,
+    lessonsBasePath: base,
+    verifiedKept: vr.kept,
+    hubCurriculumPrepared,
+    loaderRenderable: rawHubLessonRows,
+  });
+  let hubCurriculumLessons = fillMin.lessons;
   const hubVerifyDiagnostics = vr.diagnostics;
+  if (fillMin.filledFromInventory > 0) {
+    safeServerLog("pathway_lessons", "marketing_hub_min_visible_inventory_fill", {
+      pathway_id: pathway.id,
+      country_slug: countrySlug,
+      role_track: roleTrack,
+      exam_code: examCode,
+      filled_from_inventory: String(fillMin.filledFromInventory),
+      after_verify_before_fill: String(vr.kept.length),
+      after_fill: String(hubCurriculumLessons.length),
+    });
+  }
+  if (
+    hubCurriculumLessons.length < MARKETING_HUB_MIN_VISIBLE_LESSONS &&
+    pageResult.total >= MARKETING_HUB_MIN_VISIBLE_LESSONS
+  ) {
+    safeServerLog("pathway_lessons", "marketing_hub_inventory_below_minimum_after_fill_critical", {
+      pathway_id: pathway.id,
+      country_slug: countrySlug,
+      role_track: roleTrack,
+      exam_code: examCode,
+      loader_total: String(pageResult.total),
+      after_fill_count: String(hubCurriculumLessons.length),
+      min_requested: String(MARKETING_HUB_MIN_VISIBLE_LESSONS),
+    });
+  }
+  if (process.env.NN_MARKETING_HUB_DETAIL_PROBE === "1" && hubCurriculumLessons.length > 0) {
+    await probeMarketingHubLessonDetailReachability({
+      pathway,
+      hubMarketingLocale: lessonContentLocale,
+      listWarehouseLocale,
+      lessonSlugs: hubCurriculumLessons.map((l) => l.slug),
+    });
+  }
   if (hubCurriculumPrepared.length > 0 && hubCurriculumLessons.length === 0) {
     safeServerLog("pathway_lessons", "marketing_hub_verify_all_rows_excluded_soft", {
       pathway_id: pathway.id,

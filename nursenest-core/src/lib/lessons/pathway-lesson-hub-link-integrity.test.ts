@@ -142,20 +142,24 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
     assert.ok((diagnostics.excludedByReason.detail_loader_miss ?? 0) >= 1);
   });
 
-  it("drops rows when resolver returns lesson failing pathway exam/country context", async () => {
+  it("keeps rows as degraded when resolver returns lesson failing pathway exam/country context", async () => {
     const wrongExam = {
       ...hubRow("geo-miss"),
       exams: ["NP" as const],
       countries: ["US" as const],
     } as PathwayLessonRecord;
     const resolveLessonDetail = async () => wrongExam;
-    const { kept } = await verifyMarketingHubLessonRowsResolve(
+    const { kept, diagnostics } = await verifyMarketingHubLessonRowsResolve(
       { id: "ca-rn-nclex-rn" },
       [hubRow("geo-miss")],
       "en",
       { resolveLessonDetail, skipZeroKeptPipelineInvariant: true },
     );
-    assert.equal(kept.length, 0);
+    assert.equal(kept.length, 1);
+    assert.equal(kept[0]?.hubMarketingDegraded, true);
+    assert.equal(kept[0]?.hubMarketingDegradedReason, "pathway_mismatch");
+    assert.equal(diagnostics.degradedHubRowCount, 1);
+    assert.equal(diagnostics.strictVerifiedRowCount, 0);
   });
 
   it("returns empty kept without throwing when every slug fails (recoverable inventory shrink)", async () => {

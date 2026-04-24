@@ -455,5 +455,63 @@ export async function verifyMarketingHubLessonRowsResolve(
     });
   }
 
+  if (lessons.length > 0) {
+    safeServerLog("pathway_lessons", "marketing_hub_verify_inventory", {
+      pathway_id: pathway.id,
+      lesson_content_locale: lessonContentLocale,
+      total_fetched: String(lessons.length),
+      total_returned: String(kept.length),
+      strict_verified: String(strictVerifiedRowCount),
+      degraded_count: String(degradedHubRowCount),
+      dropped_count: String(diagnostics.droppedRowCount),
+      example_slugs_json: JSON.stringify(kept.slice(0, 12).map((l) => l.slug)),
+    });
+  }
+
   return { kept, excluded, diagnostics };
+}
+
+/**
+ * Best-effort: first N hub slugs must still hydrate via the same uncached loader as verify/detail.
+ * Opt-in with `NN_MARKETING_HUB_DETAIL_PROBE=1` from the hub page to avoid extra DB reads on every request.
+ */
+export async function probeMarketingHubLessonDetailReachability(args: {
+  pathway: Pick<ExamPathwayDefinition, "id">;
+  hubMarketingLocale: string;
+  listWarehouseLocale?: string;
+  lessonSlugs: readonly string[];
+}): Promise<void> {
+  const shard = args.listWarehouseLocale?.trim()
+    ? normalizePathwayLessonLocale(args.listWarehouseLocale)
+    : undefined;
+  for (const raw of args.lessonSlugs.slice(0, 5)) {
+    const slug = typeof raw === "string" ? raw.trim() : "";
+    if (!slug) continue;
+    const detailLocale = shard ?? args.hubMarketingLocale;
+    try {
+      const loaded = await getPathwayLessonForMarketingHubVerify(
+        args.pathway.id,
+        slug,
+        args.hubMarketingLocale,
+        detailLocale,
+      );
+      if (!loaded) {
+        safeServerLog("pathway_lessons", "marketing_hub_detail_probe_critical", {
+          pathway_id: args.pathway.id,
+          stage: "marketing_hub_detail_probe",
+          slug: slug.slice(0, 200),
+          outcome: "detail_loader_miss",
+        });
+      }
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      safeServerLog("pathway_lessons", "marketing_hub_detail_probe_critical", {
+        pathway_id: args.pathway.id,
+        stage: "marketing_hub_detail_probe",
+        slug: slug.slice(0, 200),
+        outcome: "detail_loader_throw",
+        reason_failed: msg.slice(0, 300),
+      });
+    }
+  }
 }
