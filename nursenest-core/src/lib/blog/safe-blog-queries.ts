@@ -111,7 +111,10 @@ type BlogQueryScope = {
  */
 export const BLOG_LIST_PAGE_SIZE = 50;
 
-/** Opt-in: set `BLOG_INDEX_DIAGNOSTICS=1` in production to log index health (counts + slugs) on each `/blog` data load. */
+/**
+ * Opt-in deep diagnostics: `BLOG_INDEX_DIAGNOSTICS=1` logs groupBy + live counts (extra DB work).
+ * Lightweight: `BLOG_INDEX_COUNTS=1` logs returned row count + first 10 slugs only (`seo` / `BLOG_INDEX_COUNTS`).
+ */
 async function logBlogIndexDiagnosticsIfEnabled(args: {
   posts: BlogIndexPost[];
   totalMatchingLiveFilter: number;
@@ -309,7 +312,20 @@ export async function getPublishedBlogPostsPage(
   }));
   const total = all.length;
   const posts = all.slice((safePage - 1) * safeSize, (safePage - 1) * safeSize + safeSize);
-  if (total === 0) return { posts: dbPosts, total: dbTotal, page: safePage, pageSize: safeSize };
+  if (total === 0) {
+    if (process.env.BLOG_INDEX_COUNTS === "1") {
+      safeServerLog("seo", "BLOG_INDEX_COUNTS", {
+        scope: "getPublishedBlogPostsPage_static_fallback_empty",
+        page: String(safePage),
+        pageSize: String(safeSize),
+        returnedRows: "0",
+        totalCount: "0",
+        firstTenSlugs: "",
+        usedStaticFallback: "1",
+      });
+    }
+    return { posts: dbPosts, total: dbTotal, page: safePage, pageSize: safeSize };
+  }
   if (process.env.BLOG_INDEX_COUNTS === "1") {
     safeServerLog("seo", "BLOG_INDEX_COUNTS", {
       scope: "getPublishedBlogPostsPage",

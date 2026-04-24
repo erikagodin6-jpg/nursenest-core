@@ -36,20 +36,33 @@ describe("pathway-lesson-dedupe", () => {
     );
   });
 
-  it("dedupes by id first, then slug, then normalized title", () => {
+  it("dedupes by pathway + canonical slug only (same slug drops; same title different slugs kept)", () => {
     const input = [
       lesson({ id: "a1", slug: "first", title: "First Title" }),
-      lesson({ id: "a1", slug: "first-copy", title: "First Title Copy" }),
+      lesson({ id: "a2", slug: "first-copy", title: "First Title Copy" }),
       lesson({ slug: "same-slug", title: "Any Title" }),
       lesson({ slug: "same-slug", title: "Any Title 2" }),
       lesson({ slug: "", title: "Sepsis: Recognition & Nursing Response" }),
       lesson({ slug: "", title: "sepsis recognition nursing response" }),
     ];
     const deduped = dedupePathwayLessonsForLibrary(input, { pathwayIdHint: "us-rn-nclex-rn" });
-    assert.equal(deduped.duplicateCount, 3);
-    assert.equal(deduped.items.length, 3);
-    assert.equal(deduped.items[0]?.id, "a1");
-    assert.equal(deduped.items[1]?.slug, "same-slug");
-    assert.equal(deduped.items[2]?.title, "Sepsis: Recognition & Nursing Response");
+    assert.equal(deduped.duplicateCount, 1);
+    assert.equal(deduped.items.length, 5);
+    assert.ok(deduped.items.some((x) => x.slug === "first"));
+    assert.ok(deduped.items.some((x) => x.slug === "first-copy"));
+    assert.ok(deduped.items.some((x) => x.slug === "same-slug"));
+  });
+
+  it("keeps 50 lessons with identical titles when slugs differ (hub cannot collapse by title)", () => {
+    const sharedTitle = "Sepsis recognition and escalation — RN";
+    const input = Array.from({ length: 50 }, (_, i) =>
+      lesson({
+        slug: `sepsis-dup-title-${i + 1}`,
+        title: sharedTitle,
+      }),
+    );
+    const deduped = dedupePathwayLessonsForLibrary(input, { pathwayIdHint: "ca-rn-nclex-rn" });
+    assert.equal(deduped.duplicateCount, 0);
+    assert.equal(deduped.items.length, 50);
   });
 });

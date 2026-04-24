@@ -681,6 +681,11 @@ async function resolveMarketingHubRenderableLessonList(
       hubSearch: qRaw ? "1" : "0",
       db_failure_category: err.category,
     });
+    safeServerLog("pathway_lessons", "lesson_hub_db_unavailable", {
+      pathway_id: pathwayId,
+      hub_search: qRaw ? "1" : "0",
+      db_failure_category: err.category,
+    });
     throw err;
   }
 

@@ -18,15 +18,15 @@ function normalizeLessonTitleForDedupe(title: string): string {
     .trim();
 }
 
+/**
+ * Hub + library lists: **pathwayId + canonical slug only** (never title/body/topic/concept).
+ * Rows without a usable slug are kept as-is (caller should filter with `pathwayLessonHasRenderableHubSlug`).
+ */
 function dedupeKeyForLesson(lesson: DedupeCandidate, pathwayIdHint?: string): string | null {
   const pathwayId = lesson.pathwayId?.trim() || pathwayIdHint?.trim() || "_unknown_pathway";
-  const id = lesson.id?.trim();
-  if (id) return `id:${pathwayId}:${id}`;
   const slug = lesson.slug?.trim();
-  if (slug) return `slug:${pathwayId}:${slug.toLowerCase()}`;
-  const normalizedTitle = normalizeLessonTitleForDedupe(lesson.title ?? "");
-  if (!normalizedTitle) return null;
-  return `title:${pathwayId}:${normalizedTitle}`;
+  if (!slug) return null;
+  return `slug:${pathwayId}:${slug.toLowerCase()}`;
 }
 
 export function dedupePathwayLessonsForLibrary<T extends DedupeCandidate>(
@@ -34,6 +34,7 @@ export function dedupePathwayLessonsForLibrary<T extends DedupeCandidate>(
   options?: {
     pathwayIdHint?: string;
     source?: string;
+    /** When true, log duplicate drops in dev (slug collisions only). */
     devLog?: boolean;
   },
 ): { items: T[]; duplicateCount: number } {

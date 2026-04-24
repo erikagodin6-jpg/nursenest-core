@@ -58,6 +58,8 @@ import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
 import { MarketingLessonsHubRetryableErrorShell } from "@/components/pathway-lessons/marketing-lessons-hub-retryable-error-shell";
+import { LessonHubFullLessonLinkNav } from "@/components/pathway-lessons/lesson-hub-full-lesson-link-nav";
+import { assessCanadaRnNclexLessonHubPipelineCollapseGuard } from "@/lib/lessons/pathway-lesson-hub-pipeline-collapse-guard";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
@@ -677,6 +679,70 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       ]}
     />
   );
+
+  const pipelineWallClockMs =
+    hubAggregatesDurationMs +
+    prepareDurationMs +
+    listWarehouseResolveMs +
+    verifyDurationMs +
+    groupingDurationMs;
+  if (
+    isRnCanadaNclexLessonsHub &&
+    lessonsPageLoad.status === "ok" &&
+    !qEffective &&
+    !topicSlugNorm &&
+    !alliedProfessionKey
+  ) {
+    if (pipelineWallClockMs > 45_000) {
+      safeServerLog("pathway_lessons", "lesson_hub_slow_load", {
+        pathway_id: pathway.id,
+        total_loader_ms: String(pipelineWallClockMs),
+      });
+    }
+    const ldGuard = pageResult.loadDiagnostics;
+    const collapse = assessCanadaRnNclexLessonHubPipelineCollapseGuard({
+      rawDbCount: ldGuard?.rawDbCount,
+      renderableAllCount: renderableAllIn.length,
+      afterPrepareCount: hubCurriculumPrepared.length,
+      afterVerifyCount: hubCurriculumLessons.length,
+      stage6LinkableLessonRows,
+    });
+    if (collapse.kind === "violation") {
+      safeServerLog("pathway_lessons", collapse.metricEvent, {
+        pathway_id: pathway.id,
+        invariant_code: collapse.invariantCode,
+        ...collapse.fields,
+      });
+      safeServerLog("pathway_lessons", "marketing_hub_lessons_page_pipeline_invariant_failed", {
+        pathway_id: pathway.id,
+        invariant_code: collapse.invariantCode,
+        metric_event: collapse.metricEvent,
+        outcome: "error_shell",
+      });
+      return (
+        <MarketingLessonsHubRetryableErrorShell
+          title={pageTitle}
+          subtitle={headerDescription}
+          toolbar={toolbar}
+          backLabel={`${examName} overview`}
+          backHref={overviewHref}
+          crumbs={crumbs}
+          schemaItems={schemaItems}
+          surfaceChips={lessonHubSurfaceChips}
+          errorTitle={"Lessons temporarily unavailable"}
+          errorBody={
+            "The lesson library did not pass a safety check: the visible list does not match how many lessons should be available. This is usually temporary — please retry."
+          }
+          errorDetail={collapse.userFacingDetail}
+          retryHref={`${base}${hubQuerySuffix}`}
+          secondaryHref={overviewHref}
+          secondaryLabel="Back to exam overview"
+          supportHref={`/${countrySlug}/contact`}
+          supportLabel="Contact support"
+        />
+      );
+    }
+  }
 
   if (pageResult.total === 0) {
     if (isRnCanadaNclexLessonsHub && lessonsPageLoad.status === "ok") {

@@ -286,6 +286,11 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
       pathname: ctx.pathname,
       reason: snapshotDiagnostics.snapshotRejectReason,
     });
+    safeServerLog("pathway_lessons", "lesson_hub_snapshot_rejected", {
+      pathway_id: ctx.pathwayId,
+      pathname: ctx.pathname,
+      snapshot_reject_reason: snapshotDiagnostics.snapshotRejectReason ?? "",
+    });
   }
 
   if (primaryError) {
