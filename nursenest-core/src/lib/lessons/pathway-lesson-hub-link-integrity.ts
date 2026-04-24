@@ -1,11 +1,9 @@
 /**
- * Marketing lessons hub — guarantees every linked lesson matches the **same server contract** as
- * the marketing lesson detail route (`resolveMarketingPathwayLessonRouteResolution` inputs), not only list-row metadata.
- *
- * Runs **after** {@link prepareLessonsForHubCurriculum}. A slug is kept only when a **fresh**
- * {@link getPathwayLessonForMarketingHubVerify} load (no `unstable_cache` lag vs the hub list) yields a lesson that:
- * - is {@link pathwayLessonEligibleForPublicMarketingSurface} (same `publicComplete` gate as detail)
- * - passes {@link pathwayLessonMatchesMarketingPathwayContext} (same exam/country gate as the hub list pipeline)
+ * Marketing lessons hub — cross-checks list rows with a **fresh** {@link getPathwayLessonForMarketingHubVerify} load
+ * (no `unstable_cache` lag vs the hub list). **Strict** rows match the historical contract (publicComplete + pathway context).
+ * **Soft** failures (`detail_not_public_complete`, `pathway_context_mismatch`) still hydrate — those rows are kept
+ * with {@link PathwayLessonRecord.hubMarketingDegraded} so the grid does not silently empty while the detail route
+ * can still render preview/quality states (see {@link resolveMarketingPathwayLessonRouteResolution}).
  *
  * Intentionally **does not** re-apply professional-practice corpus suppression or `REVIEW_REQUIRED` hub taxonomy —
  * those are not part of marketing detail `not_found` resolution and caused silent “0 lessons” when list rows
@@ -17,9 +15,7 @@
  * passes the **hub page** marketing locale into {@link getPathwayLessonForMarketingHubVerify} for overlays (same as
  * {@link getPathwayLessonsPageFresh}) and passes the warehouse shard separately so Prisma reads match list SQL.
  *
- * **Resolver parity:** {@link pathwayLessonEligibleForPublicMarketingSurface} is the same `publicComplete` gate as
- * {@link resolveMarketingPathwayLessonRouteResolution} (detail returns `not_found` / `lesson_not_public_complete` when
- * this would be false). Do not add stricter hub-only filters than the detail route uses.
+ * **Resolver parity:** strict verify still uses the same gates as {@link evaluatePublicMarketingLessonCrossLinkIntegrity}.
  */
 
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -85,6 +81,18 @@ function tallyReason(
   reason: HubMarketingLessonDetailFailureReason,
 ): void {
   map[reason] = (map[reason] ?? 0) + 1;
+}
+
+/** Slugs that hydrate but fail strict marketing gates — keep on hub as {@link PathwayLessonRecord.hubMarketingDegraded}. */
+const SOFT_HUB_VERIFY_RECOVERY_REASONS = new Set<HubMarketingLessonDetailFailureReason>([
+  "detail_not_public_complete",
+  "pathway_context_mismatch",
+]);
+
+function isSoftHubVerifyRecoveryReason(
+  r: HubMarketingLessonDetailFailureReason | undefined,
+): r is HubMarketingLessonDetailFailureReason {
+  return Boolean(r && SOFT_HUB_VERIFY_RECOVERY_REASONS.has(r));
 }
 
 /**
@@ -285,6 +293,24 @@ export async function verifyMarketingHubLessonRowsResolve(
     slugFailureReason.set(e.slug.trim(), e.reason);
   }
 
+  const strictVerifiedRowCount = kept.length;
+  for (const lesson of lessons) {
+    if (!pathwayLessonHasRenderableHubSlug(lesson)) continue;
+    const slug = lesson.slug.trim();
+    if (okSlugSet.has(slug)) continue;
+    const r = slugFailureReason.get(slug);
+    if (isSoftHubVerifyRecoveryReason(r)) {
+      const hubMarketingDegradedReason =
+        r === "detail_not_public_complete" ? ("partial_content" as const) : ("pathway_mismatch" as const);
+      kept.push({
+        ...lesson,
+        hubMarketingDegraded: true,
+        hubMarketingDegradedReason,
+      });
+    }
+  }
+  const degradedHubRowCount = Math.max(0, kept.length - strictVerifiedRowCount);
+
   const preparedRowBySlug = new Map<string, PathwayLessonRecord>();
   for (const l of lessons) {
     if (!pathwayLessonHasRenderableHubSlug(l)) continue;
@@ -326,6 +352,7 @@ export async function verifyMarketingHubLessonRowsResolve(
     const s = lesson.slug.trim();
     if (okSlugSet.has(s)) continue;
     const r = slugFailureReason.get(s) ?? "detail_loader_miss";
+    if (isSoftHubVerifyRecoveryReason(r)) continue;
     tallyReason(rowLevelExcludedByReason, r);
   }
 
@@ -334,6 +361,7 @@ export async function verifyMarketingHubLessonRowsResolve(
       ? Math.min(400, Math.max(48, verifyExcluded.length))
       : 24;
 
+  const renderablePreparedRows = lessons.filter(pathwayLessonHasRenderableHubSlug).length;
   const diagnostics: MarketingHubLessonVerifyDiagnostics = {
     pathwayId: pathway.id,
     lessonContentLocale,
@@ -344,7 +372,9 @@ export async function verifyMarketingHubLessonRowsResolve(
     incomingPreparedRowCount: lessons.length,
     uniqueSlugCount: uniqueSlugs.length,
     keptRowCount: kept.length,
-    droppedRowCount: Math.max(0, lessons.length - kept.length),
+    strictVerifiedRowCount,
+    degradedHubRowCount,
+    droppedRowCount: Math.max(0, renderablePreparedRows - kept.length),
     excludedUniqueSlugCount: verifyExcluded.length,
     verifyResolverCallCount: uniqueSlugs.length,
     excludedByReason,

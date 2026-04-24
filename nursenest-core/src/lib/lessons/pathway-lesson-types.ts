@@ -317,6 +317,16 @@ export type PathwayLessonRecord = {
    * Lesson pages render this array once (after section articles, before reinforcement strips).
    */
   interactiveModules?: LessonInteractiveModule[];
+  /**
+   * Marketing lessons hub only: row was kept after verify despite a **soft** mismatch (partial structure,
+   * pathway metadata drift) or an inventory fill — avoids silent empty grids. Detail route still applies
+   * paywall / quality UI; metadata may noindex when `publicComplete` is false.
+   */
+  hubMarketingDegraded?: boolean;
+  hubMarketingDegradedReason?:
+    | "partial_content"
+    | "pathway_mismatch"
+    | "unverified_inventory_fill";
 };
 
 /** Hub cards must not link with empty or whitespace slugs (defensive; DB/catalog should always set slug). */

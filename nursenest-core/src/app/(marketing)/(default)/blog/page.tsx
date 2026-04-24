@@ -8,6 +8,7 @@ import {
   getPathophysiologyBlogHubPosts,
   getPublishedBlogPostsPage,
 } from "@/lib/blog/safe-blog-queries";
+import { logPublicContentSurfaceFailure } from "@/lib/observability/public-content-surface-failure-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { blogIndexBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -75,6 +76,21 @@ export default async function BlogIndexPage({ searchParams }: Props) {
       finalCount: String(listLoad.finalCount),
       reasonFailed: listLoad.reasonFailed ?? "",
       reasonDropped: listLoad.reasonDropped ?? "",
+    });
+  }
+  if (!listLoad.querySucceeded) {
+    logPublicContentSurfaceFailure({
+      surface: "blog",
+      reason: listLoad.reasonFailed ?? "blog_index_list_load_failed",
+      count: listLoad.finalCount,
+      exampleUrls: ["/blog"],
+    });
+  } else if (page === 1 && posts.length < 8) {
+    logPublicContentSurfaceFailure({
+      surface: "blog",
+      reason: "blog_index_below_marketing_minimum_article_rows",
+      count: posts.length,
+      exampleUrls: posts.slice(0, 3).map((p) => `/blog/${p.slug}`),
     });
   }
   const pathoSlugSet = new Set(pathophysiologyHub.map((p) => p.slug));

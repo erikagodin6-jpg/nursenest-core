@@ -1,9 +1,11 @@
 /**
  * Single server-side decision point for marketing pathway lesson **detail** routes.
  *
- * - **Libraries / hubs** also filter incomplete rows via
+ * - **Libraries / hubs** still filter incomplete rows for **list SQL** via
  *   {@link pathwayLessonEligibleForPublicMarketingSurface} in
  *   {@link sortAndFilterLessonsForPathwayContext} (`pathway-lesson-catalog-sync.ts`).
+ * - **Marketing lesson detail** may still render when `publicComplete` is false (preview / quality notices);
+ *   metadata + robots follow {@link pathwayLessonEligibleForPublicMarketingSurface} for indexing.
  * - **Paywall body serialization** is enforced in the RSC page using
  *   {@link visibleSectionsForLesson} + {@link sanitizePaywallPreviewSection}.
  */
@@ -45,7 +47,7 @@ function syntheticScopeForEntitlementError(): AccessScope {
 
 /**
  * Authoritative marketing lesson detail resolution — use from `/lessons/[lessonSlug]` only.
- * Returns `not_found` when the lesson must not render as a normal public lesson page.
+ * Returns `not_found` only when the pathway is invalid, the lesson failed to load, or the slug resolved to no row.
  */
 export function resolveMarketingPathwayLessonRouteResolution(input: {
   pathway: ExamPathwayDefinition | null | undefined;
@@ -61,9 +63,6 @@ export function resolveMarketingPathwayLessonRouteResolution(input: {
   if (!input.pathway) return { kind: "not_found", reason: "invalid_pathway" };
   if (input.lessonLoadFailed) return { kind: "not_found", reason: "lesson_load_failed" };
   if (!input.lesson) return { kind: "not_found", reason: "lesson_not_found" };
-  if (!pathwayLessonEligibleForPublicMarketingSurface(input.lesson)) {
-    return { kind: "not_found", reason: "lesson_not_public_complete" };
-  }
 
   const entitlementError = input.entitlement === "error";
   const scope: AccessScope =

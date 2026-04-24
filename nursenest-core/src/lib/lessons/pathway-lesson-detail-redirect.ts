@@ -18,11 +18,20 @@ export async function loadPathwayLessonWithLegacySlugRedirect(
   lessonSlug: string,
   contentLocale: string | undefined,
 ): Promise<PathwayLessonRecord | undefined> {
-  const direct = await getPathwayLesson(pathway.id, lessonSlug, contentLocale);
+  const trimmed = typeof lessonSlug === "string" ? lessonSlug.trim() : "";
+  if (!trimmed) return undefined;
+
+  let direct = await getPathwayLesson(pathway.id, trimmed, contentLocale);
   if (direct) return direct;
 
-  const canon = resolvePathwayLessonSlugRedirectChain(pathway.id, lessonSlug);
-  if (!canon || canon === lessonSlug) return undefined;
+  const lowered = trimmed.toLowerCase();
+  if (lowered !== trimmed) {
+    direct = await getPathwayLesson(pathway.id, lowered, contentLocale);
+    if (direct) return direct;
+  }
+
+  const canon = resolvePathwayLessonSlugRedirectChain(pathway.id, trimmed);
+  if (!canon || canon === trimmed) return undefined;
 
   const resolved = await getPathwayLesson(pathway.id, canon, contentLocale);
   if (!resolved) return undefined;
@@ -34,11 +43,20 @@ export async function loadPathwayLessonSeoMetaWithLegacySlugRedirect(
   pathway: ExamPathwayDefinition,
   lessonSlug: string,
 ): Promise<PathwayLessonSeoMeta | undefined> {
-  const direct = await getPathwayLessonSeoMeta(pathway.id, lessonSlug);
+  const trimmed = typeof lessonSlug === "string" ? lessonSlug.trim() : "";
+  if (!trimmed) return undefined;
+
+  let direct = await getPathwayLessonSeoMeta(pathway.id, trimmed);
   if (direct) return direct;
 
-  const canon = resolvePathwayLessonSlugRedirectChain(pathway.id, lessonSlug);
-  if (!canon || canon === lessonSlug) return undefined;
+  const lowered = trimmed.toLowerCase();
+  if (lowered !== trimmed) {
+    direct = await getPathwayLessonSeoMeta(pathway.id, lowered);
+    if (direct) return direct;
+  }
+
+  const canon = resolvePathwayLessonSlugRedirectChain(pathway.id, trimmed);
+  if (!canon || canon === trimmed) return undefined;
 
   const resolved = await getPathwayLessonSeoMeta(pathway.id, canon);
   if (!resolved) return undefined;

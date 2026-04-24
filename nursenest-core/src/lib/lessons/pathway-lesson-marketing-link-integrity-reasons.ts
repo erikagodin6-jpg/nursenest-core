@@ -37,6 +37,10 @@ export type MarketingHubLessonVerifyDiagnostics = {
   incomingPreparedRowCount: number;
   uniqueSlugCount: number;
   keptRowCount: number;
+  /** Rows that passed strict verify (hydration + publicComplete + pathway context). */
+  strictVerifiedRowCount?: number;
+  /** Rows kept only via soft-verify recovery or downstream inventory fill (see hub page). */
+  degradedHubRowCount?: number;
   droppedRowCount: number;
   /** Count of **unique slugs** failing detail resolution. */
   excludedUniqueSlugCount: number;

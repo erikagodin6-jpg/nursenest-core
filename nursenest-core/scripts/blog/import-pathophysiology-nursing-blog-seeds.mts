@@ -23,6 +23,8 @@ import {
   enumeratePathophysiologySeeds,
   excerptFromBody,
 } from "./pathophysiology-nursing-blog-seed-catalog";
+import { assertPublicBlogSeedRenderable } from "../../src/lib/content/assert-public-renderable";
+import { ensurePublicBlogPostVisibilityForSeed } from "../../src/lib/content/ensure-public-visibility";
 
 const dryRun = process.argv.includes("--dry-run");
 const limitArg = process.argv.find((a) => a.startsWith("--limit="));
@@ -69,7 +71,8 @@ async function main() {
         const body = buildPathophysiologyBlogBody(topic);
         const excerpt = excerptFromBody(body);
         const seoDescription = excerpt.slice(0, 160);
-        const data = {
+        assertPublicBlogSeedRenderable({ slug: topic.slug, title: topic.title, body });
+        const data = ensurePublicBlogPostVisibilityForSeed({
           title: topic.title.slice(0, 200),
           excerpt,
           body,
@@ -86,10 +89,11 @@ async function main() {
           keywordCluster: "pathophysiology-long-tail",
           legacySource: "pathophysiology-nursing-blog-seed",
           workflowStatus: BlogWorkflowStatus.PUBLISHED,
-        };
+          slug: topic.slug,
+        });
         return prisma.blogPost.upsert({
-          where: { slug: topic.slug },
-          create: { slug: topic.slug, ...data },
+          where: { slug: data.slug },
+          create: { ...data },
           update: { ...data },
         });
       }),

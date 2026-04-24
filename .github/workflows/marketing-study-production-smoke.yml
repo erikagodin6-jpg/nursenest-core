@@ -1,0 +1,57 @@
+# Manual only: production Playwright checks for blog, public flashcards, and Canada RN lessons hub.
+# Expects post-deploy cache purge (e.g. POST /api/cron/blog-revalidate) and warm DB/CDN for strict gates.
+#
+# Run: Actions → "Marketing study production smoke" → Run workflow
+name: Marketing study production smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Base URL (no trailing slash), e.g. https://www.nursenest.ca"
+        required: true
+        default: "https://www.nursenest.ca"
+      require_pp_blog:
+        description: "Require ≥1 /blog/pp-* article link on index"
+        type: choice
+        options:
+          - "true"
+          - "false"
+        default: "true"
+
+concurrency:
+  group: marketing-study-production-smoke
+  cancel-in-progress: false
+
+jobs:
+  playwright:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: nursenest-core
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: nursenest-core/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Marketing study smoke
+        env:
+          MARKETING_STUDY_SMOKE_BASE_URL: ${{ inputs.base_url }}
+          MARKETING_STUDY_REQUIRE_PP_BLOG_LINKS: ${{ inputs.require_pp_blog }}
+        run: |
+          set -euo pipefail
+          echo "MARKETING_STUDY_SMOKE_BASE_URL=${MARKETING_STUDY_SMOKE_BASE_URL}"
+          echo "MARKETING_STUDY_REQUIRE_PP_BLOG_LINKS=${MARKETING_STUDY_REQUIRE_PP_BLOG_LINKS}"
+          npx playwright test tests/e2e/public/marketing-study-surfaces-production-gate.spec.ts --project=chromium

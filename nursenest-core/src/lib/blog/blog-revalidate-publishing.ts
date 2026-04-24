@@ -32,6 +32,7 @@ export function revalidateBlogPublishingSurfaces(options?: BlogPublishingRevalid
   revalidatePath("/blog/tag/pathophysiology");
   revalidatePath("/");
   revalidatePath("/lessons");
+  revalidatePath("/flashcards");
   revalidatePath("/sitemap.xml");
 
   const slug = options?.slug?.trim();
