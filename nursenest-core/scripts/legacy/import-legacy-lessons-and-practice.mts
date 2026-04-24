@@ -13,9 +13,11 @@
  *   LEGACY_IMPORT_CREATE_MISSING_LESSONS=1
  *
  * After import (operator checklist):
- *   npm run test:pathway-lessons (or targeted lesson hub integrity tests)
- *   npm run test:legacy-public-content
- *   MARKETING_STUDY_SMOKE_BASE_URL=... npx playwright test tests/e2e/public/marketing-study-surfaces-production-gate.spec.ts --project=chromium
+ *   npm run test:pathway-lessons
+ *   npm run test:question-bank
+ *   npm run test:legacy-public-content && npm run test:legacy-lessons-practice
+ *   npx tsx --test src/lib/seo/public-flashcard-landing.contract.test.ts
+ *   MARKETING_STUDY_SMOKE_BASE_URL=https://www.nursenest.ca MARKETING_STUDY_REQUIRE_PP_BLOG_LINKS=0 npx playwright test tests/e2e/public/marketing-study-surfaces-production-gate.spec.ts --project=chromium
  *
  *   cd nursenest-core && npm run legacy:import-lessons-practice
  */
@@ -40,11 +42,10 @@ async function loadV2() {
   if (base) {
     const crawled = await collectLegacyLessonsFromSite(base);
     if (crawled) {
-      const v1 = toLegacyPublicContentExportV1({ version: 2, lessons: crawled.lessons, flashcards: crawled.flashcards });
       return {
         version: 2 as const,
-        lessons: v1.lessons ?? [],
-        flashcards: v1.flashcards,
+        lessons: crawled.lessons ?? [],
+        flashcards: crawled.flashcards ?? {},
         questions: [],
         practiceTests: [],
       };

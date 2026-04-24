@@ -1,6 +1,14 @@
 /**
  * JSON export shape for `scripts/legacy/*-legacy-lessons-and-practice.mts`.
- * Version 2 bundles pathway lessons (same rows as public-content v1) plus `exam_questions` recovery rows.
+ *
+ * **Version 2** bundles:
+ * - Pathway lessons (same shape as public-content v1 `lessons`)
+ * - Optional `flashcards` (reuses v1 bundle; passed through to the public-content importer)
+ * - `questions[]` → `exam_questions` (match by `legacyId` then `stemHash`; no deletes)
+ * - Optional `practiceTests[]` → audit-only checks that legacy question ids resolve in DB
+ *
+ * Other legacy sources (CSV, SQL dumps, HTML trees) should be converted to this JSON offline
+ * before import; bounded `LEGACY_SITE_BASE_URL` crawl still only hydrates **lessons** today.
  */
 
 import type {

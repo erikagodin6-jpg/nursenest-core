@@ -31,11 +31,10 @@ async function loadV2() {
   if (base) {
     const crawled = await collectLegacyLessonsFromSite(base);
     if (crawled) {
-      const v1 = toLegacyPublicContentExportV1({ version: 2, lessons: crawled.lessons, flashcards: crawled.flashcards });
       return {
         version: 2 as const,
-        lessons: v1.lessons ?? [],
-        flashcards: v1.flashcards,
+        lessons: crawled.lessons ?? [],
+        flashcards: crawled.flashcards ?? {},
         questions: [],
         practiceTests: [],
       };

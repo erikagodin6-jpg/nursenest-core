@@ -1,22 +1,25 @@
 #!/usr/bin/env npx tsx
 /**
- * Read-only inventory: total BlogPost rows, status histogram, publish-schedule gaps, `blogLiveWhere` exclusion
- * count, and 25 sample rows **not** matching public live list semantics (same filter as `/blog` lists).
+ * Read-only blog inventory: totals, histograms, live vs excluded (blogLiveWhere), schedule buckets,
+ * and sample rows excluded from public live lists.
  *
- * Prisma `BlogPostStatus` uses **NEEDS_REVIEW** (there is no `REVIEW_REQUIRED` enum value) — reported as
- * `REVIEW_REQUIRED` in JSON for product language alignment with editorial "review queue" posts.
+ * Prisma uses BlogPostStatus.NEEDS_REVIEW — reported as REVIEW_REQUIRED for editorial language.
  *
- * Usage (from nursenest-core/, requires DATABASE_URL):
  *   npx tsx scripts/blog/blog-full-inventory-diagnostics.mts
  */
+import { config } from "dotenv";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { BlogPostStatus, PrismaClient } from "@prisma/client";
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+config({ path: path.join(root, ".env.local") });
 
 import "../../src/lib/db/env-bootstrap";
 import { blogLiveWhere } from "../../src/lib/blog/blog-visibility";
 
 const prisma = new PrismaClient();
-
-const SAMPLE_LIMIT = 25;
+const SAMPLE_LIMIT = 50;
 
 const STATUS_ORDER: BlogPostStatus[] = [
   BlogPostStatus.DRAFT,
@@ -32,6 +35,19 @@ function statusLabelForReport(status: BlogPostStatus): string {
   return status;
 }
 
+function histogramFromGroupBy<K extends string>(
+  rows: Array<Record<K, string | null> & { _count: { _all: number } }>,
+  key: K,
+): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const row of rows) {
+    const raw = row[key];
+    const label = raw === null || raw === "" ? "(null)" : String(raw);
+    out[label] = (out[label] ?? 0) + row._count._all;
+  }
+  return out;
+}
+
 async function main(): Promise<void> {
   if (!process.env.DATABASE_URL?.trim()) {
     console.error("[blog-full-inventory-diagnostics] DATABASE_URL is not set.");
@@ -41,36 +57,54 @@ async function main(): Promise<void> {
   const now = new Date();
   const liveWhere = blogLiveWhere(now);
 
-  const total = await prisma.blogPost.count();
+  const [
+    total,
+    groupedStatus,
+    groupedTemplate,
+    groupedCategory,
+    groupedLegacy,
+    visibleCount,
+    excludedCount,
+    publishedPublishAtNull,
+    approvedTotal,
+    scheduledFuture,
+    needsReviewTotal,
+    scheduledStuckNoDates,
+  ] = await Promise.all([
+    prisma.blogPost.count(),
+    prisma.blogPost.groupBy({ by: ["postStatus"], _count: { _all: true } }),
+    prisma.blogPost.groupBy({ by: ["postTemplate"], _count: { _all: true } }),
+    prisma.blogPost.groupBy({ by: ["category"], _count: { _all: true } }),
+    prisma.blogPost.groupBy({ by: ["legacySource"], _count: { _all: true } }),
+    prisma.blogPost.count({ where: liveWhere }),
+    prisma.blogPost.count({ where: { NOT: liveWhere } }),
+    prisma.blogPost.count({
+      where: { postStatus: BlogPostStatus.PUBLISHED, publishAt: null },
+    }),
+    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.APPROVED } }),
+    prisma.blogPost.count({
+      where: {
+        postStatus: BlogPostStatus.SCHEDULED,
+        NOT: {
+          OR: [{ publishAt: { lte: now } }, { scheduledAt: { lte: now } }],
+        },
+      },
+    }),
+    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.NEEDS_REVIEW } }),
+    prisma.blogPost.count({
+      where: {
+        postStatus: BlogPostStatus.SCHEDULED,
+        publishAt: null,
+        scheduledAt: null,
+      },
+    }),
+  ]);
 
-  const grouped = await prisma.blogPost.groupBy({
-    by: ["postStatus"],
-    _count: { _all: true },
-  });
   const byStatus: Record<string, number> = {};
   for (const s of STATUS_ORDER) byStatus[statusLabelForReport(s)] = 0;
-  for (const row of grouped) {
+  for (const row of groupedStatus) {
     byStatus[statusLabelForReport(row.postStatus)] = row._count._all;
   }
-
-  const publishedPublishAtNull = await prisma.blogPost.count({
-    where: { postStatus: BlogPostStatus.PUBLISHED, publishAt: null },
-  });
-
-  const scheduledPublishAtFuture = await prisma.blogPost.count({
-    where: {
-      postStatus: BlogPostStatus.SCHEDULED,
-      publishAt: { not: null, gt: now },
-    },
-  });
-
-  const approvedWithoutPublishAt = await prisma.blogPost.count({
-    where: { postStatus: BlogPostStatus.APPROVED, publishAt: null },
-  });
-
-  const excludedFromLiveList = await prisma.blogPost.count({
-    where: { NOT: liveWhere },
-  });
 
   const samples = await prisma.blogPost.findMany({
     where: { NOT: liveWhere },
@@ -82,9 +116,12 @@ async function main(): Promise<void> {
       title: true,
       postStatus: true,
       publishAt: true,
+      scheduledAt: true,
       category: true,
       postTemplate: true,
       legacySource: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 
@@ -92,25 +129,35 @@ async function main(): Promise<void> {
     generatedAt: now.toISOString(),
     totalBlogPostCount: total,
     countByPostStatus: byStatus,
-    note:
-      "REVIEW_REQUIRED count maps to Prisma enum BlogPostStatus.NEEDS_REVIEW (editorial review queue before publish).",
-    scheduleAnomalies: {
+    countByTemplate: histogramFromGroupBy(groupedTemplate, "postTemplate"),
+    countByCategory: histogramFromGroupBy(groupedCategory, "category"),
+    countByLegacySource: histogramFromGroupBy(groupedLegacy, "legacySource"),
+    visibleByBlogLiveWhereCount: visibleCount,
+    excludedFromBlogLiveWhereCount: excludedCount,
+    blogLiveWhereNote:
+      "Aligned with src/lib/blog/blog-visibility.ts blogLiveWhere(now): PUBLISHED, APPROVED, or SCHEDULED with publishAt<=now OR scheduledAt<=now.",
+    keyCounts: {
       PUBLISHED_with_publishAt_null: publishedPublishAtNull,
-      SCHEDULED_with_publishAt_in_future: scheduledPublishAtFuture,
-      APPROVED_without_publishAt: approvedWithoutPublishAt,
+      APPROVED_total: approvedTotal,
+      SCHEDULED_not_yet_live_future_gate: scheduledFuture,
+      SCHEDULED_stuck_no_publishAt_or_scheduledAt: scheduledStuckNoDates,
+      REVIEW_REQUIRED_total_maps_NEEDS_REVIEW: needsReviewTotal,
     },
-    excludedFromBlogLiveWhereCount: excludedFromLiveList,
-    blogLiveWhereSemantics: "Same OR as src/lib/blog/blog-visibility.ts blogLiveWhere(now).",
-    sampleMissingPosts: samples.map((r) => ({
+    note:
+      "REVIEW_REQUIRED maps to Prisma BlogPostStatus.NEEDS_REVIEW. Histogram keys (null) mean empty DB null.",
+    sampleExcludedPosts: samples.map((r) => ({
       id: r.id,
       slug: r.slug,
       title: r.title.slice(0, 200),
       postStatus: statusLabelForReport(r.postStatus),
       postStatusRaw: r.postStatus,
       publishAt: r.publishAt?.toISOString() ?? null,
+      scheduledAt: r.scheduledAt?.toISOString() ?? null,
       category: r.category,
       template: r.postTemplate,
       legacySource: r.legacySource,
+      createdAt: r.createdAt.toISOString(),
+      updatedAt: r.updatedAt.toISOString(),
     })),
   };
 
@@ -118,14 +165,15 @@ async function main(): Promise<void> {
 
   console.error("\n--- summary (human) ---");
   console.error(`total: ${total}`);
+  console.error(`visible (blogLiveWhere): ${visibleCount}`);
+  console.error(`excluded: ${excludedCount}`);
   console.error("by status (REVIEW_REQUIRED = NEEDS_REVIEW):");
   for (const s of STATUS_ORDER) {
     const label = statusLabelForReport(s);
     console.error(`  ${label}: ${byStatus[label] ?? 0}`);
   }
-  console.error(`excluded from blogLiveWhere(now): ${excludedFromLiveList}`);
   console.error(
-    `anomalies — PUBLISHED publishAt null: ${publishedPublishAtNull}; SCHEDULED publishAt>now: ${scheduledPublishAtFuture}; APPROVED publishAt null: ${approvedWithoutPublishAt}`,
+    `PUBLISHED publishAt null: ${publishedPublishAtNull}; APPROVED: ${approvedTotal}; SCHEDULED future gate: ${scheduledFuture}; SCHEDULED no dates: ${scheduledStuckNoDates}; REVIEW_REQUIRED: ${needsReviewTotal}`,
   );
 }
 

@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "posts": [
+    {
+      "slug": "example-legacy-blog-slug",
+      "title": "Example legacy nursing article title",
+      "excerpt": "This excerpt is long enough for card surfaces and describes the article for learners preparing for NCLEX-style exams.",
+      "body": "<p>Opening paragraph with clinical substance for recovery pipelines and word count gates.</p><h2>Pathophysiology</h2><p>Mechanism and disease process explanation repeated across many sentences so automated word counts exceed minimum publish floors during audits and imports without filler spam patterns that break taxonomy classifiers in the NurseNest blog recovery test harness.</p><h2>Nursing implications</h2><p>Prioritization safety delegation scope communication escalation documentation handoff SBAR ISBAR therapeutic communication infection control standard precautions airborne droplet contact isolation PPE donning doffing medication administration five rights six rights barcode scanning high alert medications insulin heparin chemo digoxin potassium magnesium calcium labs interpretation ABGs electrolytes fluid balance shock sepsis DKA HHNK stroke MI CHF COPD asthma pneumonia GI bleed liver failure renal AKI CKD dialysis considerations perioperative pain management end of life ethics legal scope evidence based practice quality improvement interprofessional collaboration leadership management delegation chain of command incident reporting root cause analysis just culture shared governance magnet model EBP research critique PICOT PICO literature search peer reviewed guidelines CDC WHO NIH AHRQ QSEN IOM six aims safety effectiveness patient centeredness timeliness efficiency equity.</p>",
+      "tags": ["nclex", "clinical"],
+      "category": "Clinical",
+      "exam": "NCLEX-RN",
+      "legacySource": "fixture-json"
+    }
+  ]
+}
