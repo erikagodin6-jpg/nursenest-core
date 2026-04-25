@@ -9,17 +9,76 @@ function logMetadataRequiredFallback(key: string): void {
     event: "marketing_metadata_required_fallback",
     key: key.slice(0, 160),
   });
-  if (process.env.NODE_ENV !== "production") {
-    console.error(`[marketing-i18n] ${payload}`);
-  } else {
-    console.error(`[nursenest-core] ${payload}`);
+
+  const prefix = process.env.NODE_ENV === "production" ? "[nursenest-core]" : "[marketing-i18n]";
+  console.error(`${prefix} ${payload}`);
+}
+
+function assertUsableMetadataFallback(value: string, context: string): string {
+  const checked = assertNoPublicPlaceholderCopy(value.trim(), context).trim();
+
+  if (!checked) {
+    throw new Error(
+      `[marketing-metadata-strict] fallback is empty or forbidden after validation (${context}).`,
+    );
+  }
+
+  return checked;
+}
+
+function resolveRequiredMetadataTemplate(
+  messages: MarketingMessages,
+  key: string,
+  fallbackMessages: MarketingMessages | undefined,
+  productionOnlyFallback: string,
+  context: string,
+): string {
+  const safeFallback = assertUsableMetadataFallback(productionOnlyFallback, `${context}:${key}`);
+
+  try {
+    const resolved = getRequiredPublicMessage(messages, key, fallbackMessages).trim();
+    const checked = assertNoPublicPlaceholderCopy(resolved, `metadata-resolved:${key}`).trim();
+
+    if (checked) return checked;
+
+    throw new Error(`[marketing-metadata-strict] resolved metadata is empty for key "${key}".`);
+  } catch (err) {
+    if (process.env.NODE_ENV !== "production") {
+      throw err instanceof Error ? err : new Error(String(err));
+    }
+
+    logMetadataRequiredFallback(key);
+    return safeFallback;
   }
 }
 
+function interpolateTemplate(
+  template: string,
+  params: MarketingMetadataInterpolationParams,
+): string {
+  let output = template;
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value === undefined) continue;
+    output = output.split(`{{${key}}}`).join(String(value));
+  }
+
+  return output.trim();
+}
+
+function hasUnresolvedInterpolationToken(value: string): boolean {
+  return /\{\{[^{}]+\}\}/u.test(value);
+}
+
 /**
- * Required metadata / JSON-LD line: {@link getRequiredPublicMessage} in dev/test; in production
- * only, falls back to `productionOnlyFallback` (must be explicit product copy from
- * {@link marketing-safe-fallbacks} or {@link @/lib/marketing/nursing-tier-public-labels}).
+ * Required metadata / JSON-LD line.
+ *
+ * In development/test:
+ * - missing or invalid message copy throws immediately
+ *
+ * In production:
+ * - falls back only to the explicit productionOnlyFallback
+ * - fallback itself must be real product copy, not a placeholder
  */
 export function getRequiredPublicMetadataLine(
   messages: MarketingMessages,
@@ -27,30 +86,17 @@ export function getRequiredPublicMetadataLine(
   fallbackMessages: MarketingMessages | undefined,
   productionOnlyFallback: string,
 ): string {
-  const scrubbedFallback = assertNoPublicPlaceholderCopy(
-    productionOnlyFallback.trim(),
-    `metadata-fallback-constant:${key}`,
-  ).trim();
-  if (!scrubbedFallback) {
-    throw new Error(
-      `[marketing-metadata-strict] productionOnlyFallback is empty or forbidden placeholder after scrub (key "${key}") — use an explicit string from marketing-safe-fallbacks.ts or nursing-tier-public-labels.`,
-    );
-  }
-  try {
-    return getRequiredPublicMessage(messages, key, fallbackMessages).trim();
-  } catch (e) {
-    if (process.env.NODE_ENV !== "production") {
-      throw e instanceof Error ? e : new Error(String(e));
-    }
-    logMetadataRequiredFallback(key);
-    return scrubbedFallback;
-  }
+  return resolveRequiredMetadataTemplate(
+    messages,
+    key,
+    fallbackMessages,
+    productionOnlyFallback,
+    "metadata-fallback-constant",
+  );
 }
 
 /**
- * Like {@link getRequiredPublicMetadataLine} but applies `{{param}}` interpolation after resolving the template.
- * Use for metadata strings that include dynamic segments (e.g. deck title). `productionOnlyFallback` must pass
- * {@link assertNoPublicPlaceholderCopy} and must not be empty.
+ * Required metadata / JSON-LD line with {{param}} interpolation.
  */
 export function getRequiredPublicMetadataInterpolated(
   messages: MarketingMessages,
@@ -59,38 +105,55 @@ export function getRequiredPublicMetadataInterpolated(
   fallbackMessages: MarketingMessages | undefined,
   productionOnlyFallback: string,
 ): string {
-  const scrubbedFallback = assertNoPublicPlaceholderCopy(
-    productionOnlyFallback.trim(),
+  const safeFallback = assertUsableMetadataFallback(
+    productionOnlyFallback,
     `metadata-fallback-constant-interpolated:${key}`,
-  ).trim();
-  if (!scrubbedFallback) {
-    throw new Error(
-      `[marketing-metadata-strict] productionOnlyFallback is empty or forbidden placeholder after scrub (interpolated key "${key}") — use an explicit string from marketing-safe-fallbacks.ts.`,
-    );
-  }
+  );
+
   let template: string;
+
   try {
     template = getRequiredPublicMessage(messages, key, fallbackMessages).trim();
-  } catch (e) {
-    if (process.env.NODE_ENV !== "production") {
-      throw e instanceof Error ? e : new Error(String(e));
+    template = assertNoPublicPlaceholderCopy(template, `metadata-template:${key}`).trim();
+
+    if (!template) {
+      throw new Error(`[marketing-metadata-strict] resolved metadata template is empty for "${key}".`);
     }
+  } catch (err) {
+    if (process.env.NODE_ENV !== "production") {
+      throw err instanceof Error ? err : new Error(String(err));
+    }
+
     logMetadataRequiredFallback(`${key}:interpolated-template`);
-    return scrubbedFallback;
+    return safeFallback;
   }
-  let s = template;
-  for (const [k, val] of Object.entries(params)) {
-    if (val === undefined) continue;
-    s = s.split(`{{${k}}}`).join(String(val));
+
+  const interpolated = interpolateTemplate(template, params);
+
+  try {
+    if (!interpolated) {
+      throw new Error(`[marketing-metadata-strict] interpolated metadata is empty for "${key}".`);
+    }
+
+    if (hasUnresolvedInterpolationToken(interpolated)) {
+      throw new Error(
+        `[marketing-metadata-strict] unresolved interpolation token in metadata key "${key}": ${interpolated}`,
+      );
+    }
+
+    const checked = assertNoPublicPlaceholderCopy(interpolated, `metadata-interpolated:${key}`).trim();
+
+    if (!checked) {
+      throw new Error(`[marketing-metadata-strict] interpolated metadata was scrubbed empty for "${key}".`);
+    }
+
+    return checked;
+  } catch (err) {
+    if (process.env.NODE_ENV !== "production") {
+      throw err instanceof Error ? err : new Error(String(err));
+    }
+
+    logMetadataRequiredFallback(`${key}:interpolated-invalid`);
+    return safeFallback;
   }
-  s = s.trim();
-  const checked = assertNoPublicPlaceholderCopy(s, `metadata-interpolated:${key}`).trim();
-  if (checked) return checked;
-  if (process.env.NODE_ENV !== "production") {
-    throw new Error(
-      `[marketing-metadata-strict] interpolated metadata empty or scrubbed to empty (key "${key}") — check params and template.`,
-    );
-  }
-  logMetadataRequiredFallback(`${key}:interpolated-empty`);
-  return scrubbedFallback;
 }

@@ -1,36 +1,56 @@
 /**
- * DigitalOcean / Render / Railway are not auto-detected like VERCEL or CF_PAGES.
- * @auth/core setEnvDefaults() treats an empty AUTH_URL string as a real URL, which forces trustHost off.
+ * Runtime-safe Auth.js trust-host env normalization.
  *
- * Do **not** write `process.env.FOO = …` or `delete process.env.FOO` here: Next.js webpack inlines
- * `process.env.*` in RSC/middleware bundles and turns those into invalid syntax ("Invalid left-hand side").
- * Use dynamic access via a plain object reference instead.
+ * Do not use direct `process.env.X = ...` or `delete process.env.X` here.
+ * Middleware/RSC bundling can inline those expressions incorrectly.
  */
-const g = globalThis as unknown as { process?: { env?: Record<string, string | undefined> } };
-const env = g.process?.env;
+
+const runtime = globalThis as unknown as {
+  process?: {
+    env?: Record<string, string | undefined>;
+  };
+};
+
+const env = runtime.process?.env;
+
+function isBlank(value: string | undefined): boolean {
+  return value !== undefined && value.trim().length === 0;
+}
+
+function deleteEnvKey(key: string): void {
+  if (!env) return;
+
+  try {
+    Reflect.deleteProperty(env, key);
+  } catch {
+    /* env may be frozen in some runtimes */
+  }
+}
+
+function setEnvDefault(key: string, value: string): void {
+  if (!env) return;
+
+  const current = env[key];
+
+  if (current !== undefined && current.trim().length > 0) {
+    return;
+  }
+
+  try {
+    env[key] = value;
+  } catch {
+    /* env may be read-only in some runtimes */
+  }
+}
+
 if (env) {
-  const url = env.AUTH_URL;
-  const legacyUrl = env.NEXTAUTH_URL;
-  if (url !== undefined && url.trim() === "") {
-    try {
-      Reflect.deleteProperty(env, "AUTH_URL");
-    } catch {
-      /* frozen env in some runtimes */
-    }
+  if (isBlank(env.AUTH_URL)) {
+    deleteEnvKey("AUTH_URL");
   }
-  if (legacyUrl !== undefined && legacyUrl.trim() === "") {
-    try {
-      Reflect.deleteProperty(env, "NEXTAUTH_URL");
-    } catch {
-      /* ignore */
-    }
+
+  if (isBlank(env.NEXTAUTH_URL)) {
+    deleteEnvKey("NEXTAUTH_URL");
   }
-  const v = env.AUTH_TRUST_HOST;
-  if (v === undefined || v === "") {
-    try {
-      env.AUTH_TRUST_HOST = "true";
-    } catch {
-      /* ignore */
-    }
-  }
+
+  setEnvDefault("AUTH_TRUST_HOST", "true");
 }

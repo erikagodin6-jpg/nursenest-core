@@ -8,58 +8,88 @@ import {
   MARKETING_PAGE_BODY_MESSAGE_SHARDS,
 } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 
-const loadMarketingPageBodyModuleCache = new Map<
+/**
+ * Safe caches
+ */
+const pageBodyCache = new Map<
   string,
   Promise<{ primary: MarketingMessages; en: MarketingMessages }>
 >();
 
-const loadMarketingLayoutOverlayModuleCache = new Map<string, Promise<MarketingMessages>>();
+const layoutOverlayCache = new Map<string, Promise<MarketingMessages>>();
 
 /**
- * Loads only the `pages` shard for `locale`, plus English `pages` for missing-key resolution.
- * Prefer this over {@link loadMarketingMessages} when a route only needs `pages.*` keys.
+ * SAFE: page body + EN fallback
  */
 export async function loadMarketingPageBodyWithEnFallback(
   locale: string,
 ): Promise<{ primary: MarketingMessages; en: MarketingMessages }> {
-  let p = loadMarketingPageBodyModuleCache.get(locale);
-  if (!p) {
-    p = (async () => {
-      const primary = (await loadMarketingMessageShards(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS)) ?? {};
-      const en =
-        locale === DEFAULT_MARKETING_LOCALE
-          ? primary
-          : ((await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS)) ?? {});
-      return { primary, en };
-    })().catch((err) => {
-      loadMarketingPageBodyModuleCache.delete(locale);
-      throw err;
-    });
-    loadMarketingPageBodyModuleCache.set(locale, p);
+  let cached = pageBodyCache.get(locale);
+
+  if (!cached) {
+    cached = (async () => {
+      try {
+        const primary =
+          (await loadMarketingMessageShards(
+            locale,
+            MARKETING_PAGE_BODY_MESSAGE_SHARDS,
+          )) ?? {};
+
+        const en =
+          locale === DEFAULT_MARKETING_LOCALE
+            ? primary
+            : (await loadMarketingMessageShards(
+                DEFAULT_MARKETING_LOCALE,
+                MARKETING_PAGE_BODY_MESSAGE_SHARDS,
+              )) ?? {};
+
+        return { primary, en };
+      } catch {
+        return { primary: {}, en: {} };
+      }
+    })();
+
+    pageBodyCache.set(locale, cached);
   }
-  return p;
+
+  return cached;
 }
 
 /**
- * English marketing chrome + `pages` shards, overlaid by the same shard set for `locale`.
- * Same intent as `{ ...enMessages, ...localeMessages }` from merged bundles, without loading monolith JSON.
+ * SAFE: layout overlay
  */
 export async function loadMarketingLayoutShardsOverlay(
   locale: string,
 ): Promise<MarketingMessages> {
-  let p = loadMarketingLayoutOverlayModuleCache.get(locale);
-  if (!p) {
-    p = (async () => {
-      const base =
-        (await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS)) ?? {};
-      if (locale === DEFAULT_MARKETING_LOCALE) return base;
-      const overlay = (await loadMarketingMessageShards(locale, MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS)) ?? {};
-      return { ...base, ...overlay };
-    })().catch((err) => {
-      loadMarketingLayoutOverlayModuleCache.delete(locale);
-      throw err;
-    });
-    loadMarketingLayoutOverlayModuleCache.set(locale, p);
+  let cached = layoutOverlayCache.get(locale);
+
+  if (!cached) {
+    cached = (async () => {
+      try {
+        const base =
+          (await loadMarketingMessageShards(
+            DEFAULT_MARKETING_LOCALE,
+            MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
+          )) ?? {};
+
+        if (locale === DEFAULT_MARKETING_LOCALE) {
+          return base;
+        }
+
+        const overlay =
+          (await loadMarketingMessageShards(
+            locale,
+            MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS,
+          )) ?? {};
+
+        return { ...base, ...overlay };
+      } catch {
+        return {};
+      }
+    })();
+
+    layoutOverlayCache.set(locale, cached);
   }
-  return p;
+
+  return cached;
 }

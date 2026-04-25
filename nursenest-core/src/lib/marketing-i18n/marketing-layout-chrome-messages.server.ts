@@ -11,9 +11,7 @@ import {
   MARKETING_CHROME_MESSAGE_SHARDS,
 } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 
-/** Must exceed `MARKETING_SHARD_ASYNC_FACTORY_BUDGET_MS` in `load-marketing-message-shards.ts` (2500). */
 const MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS = 2600;
-/** Must exceed `MARKETING_SHARD_ASYNC_FACTORY_BUDGET_MS` in `load-marketing-message-shards.ts` (2500). */
 const LOCALE_CHROME_SHARD_TIMEOUT_MS = 2600;
 const MARKETING_BUILD_PHASE = "phase-production-build";
 
@@ -21,11 +19,6 @@ function defaultLayoutShardList() {
   return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE
     ? MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS
     : MARKETING_CHROME_MESSAGE_SHARDS;
-}
-
-/** Locale marketing layout mirrors default layout: narrower shard list during `next build`. */
-function layoutChromeShardList() {
-  return defaultLayoutShardList();
 }
 
 type DefaultChromeState = {
@@ -40,19 +33,30 @@ const defaultChromeState: DefaultChromeState = {
   inflight: null,
 };
 
+function loadEnglishFallback(shards: readonly string[]) {
+  try {
+    return loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
+  } catch {
+    return {};
+  }
+}
+
 /**
- * Singleton chrome bundle for `(marketing)/(default)` layout — loader runs here, not in `layout.tsx`.
- * Runtime uses `MARKETING_CHROME_MESSAGE_SHARDS` only; `pages.*` loads under `<main>` via
- * `MarketingMainI18nShards`.
+ * HARD GUARANTEES:
+ * - NEVER returns {}
+ * - NEVER caches empty bundle
+ * - ALWAYS falls back to English
  */
 export async function getMarketingDefaultLayoutChromeMessages(): Promise<Record<string, string>> {
   const shards = defaultLayoutShardList();
   const key = shards.join(",");
+
   if (defaultChromeState.shardKey !== key) {
     defaultChromeState.shardKey = key;
     defaultChromeState.resolved = null;
     defaultChromeState.inflight = null;
   }
+
   if (defaultChromeState.resolved) return defaultChromeState.resolved;
   if (defaultChromeState.inflight) return defaultChromeState.inflight;
 
@@ -63,36 +67,48 @@ export async function getMarketingDefaultLayoutChromeMessages(): Promise<Record<
         "marketing_layout.chrome_messages",
         MARKETING_LAYOUT_MESSAGES_TIMEOUT_MS,
       );
-      /**
-       * When `safeAwait` times out it returns `null`. Treating that as `{}` and caching it wedged the
-       * process-wide singleton with empty chrome — `SiteHeader` lost mega-menu / carousel copy keys
-       * until restart. If async is empty or timed out, retry via the same sync FS merge the shard
-       * loader uses internally.
-       */
-      let out: Record<string, string> = loaded != null ? loaded : {};
+
+      let out: Record<string, string> = loaded ?? {};
+
+      // Retry with sync fill
       if (Object.keys(out).length === 0) {
         try {
           const syncFill = loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
-          if (Object.keys(syncFill).length > 0) out = syncFill;
-        } catch {
-          /* keep out */
+          if (Object.keys(syncFill).length > 0) {
+            out = syncFill;
+          }
+        } catch {}
+      }
+
+      // FINAL GUARANTEE: fallback to English ALWAYS
+      if (Object.keys(out).length === 0) {
+        const fallback = loadEnglishFallback(shards);
+
+        if (Object.keys(fallback).length === 0) {
+          throw new Error(
+            "[marketing_layout] CRITICAL: Unable to load ANY marketing chrome i18n (even English fallback)",
+          );
         }
+
+        out = fallback;
       }
-      /** Same contract as locale chrome: never cache `{}` — a later request can retry after FS/cwd fixes. */
-      if (Object.keys(out).length > 0) {
-        defaultChromeState.resolved = out;
-      }
+
+      // Only cache VALID bundle
+      defaultChromeState.resolved = out;
+
       return out;
-    } catch {
-      /* Leave `resolved` null so a later request can retry after transient FS/network issues. */
-      return {};
     } finally {
       defaultChromeState.inflight = null;
     }
   })();
+
   defaultChromeState.inflight = p;
   return p;
 }
+
+/* =========================
+   LOCALE VERSION (FIXED)
+   ========================= */
 
 type LocaleChromePayload = {
   messages: Record<string, string>;
@@ -102,72 +118,80 @@ type LocaleChromePayload = {
 const localeChromeResolved = new Map<string, LocaleChromePayload>();
 const localeChromeInflight = new Map<string, Promise<LocaleChromePayload>>();
 
-/**
- * Singleton chrome bundle for `(marketing)/[locale]` layout.
- */
-function fillLocaleChromeFromSync(locale: string): LocaleChromePayload {
-  const shards = layoutChromeShardList();
+function fillLocaleChromeFromSync(locale: string, shards: readonly string[]): LocaleChromePayload {
   const messages = loadMarketingMessageShardsSync(locale, shards);
+
   const fallbackMessages =
     locale === DEFAULT_MARKETING_LOCALE
       ? undefined
       : loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
+
   return { messages, fallbackMessages };
 }
 
-export async function getMarketingLocaleLayoutChromePayload(locale: string): Promise<LocaleChromePayload> {
-  const hit = localeChromeResolved.get(locale);
-  if (hit) return hit;
+export async function getMarketingLocaleLayoutChromePayload(
+  locale: string,
+): Promise<LocaleChromePayload> {
+  const cached = localeChromeResolved.get(locale);
+  if (cached) return cached;
 
   let p = localeChromeInflight.get(locale);
+
   if (!p) {
     p = (async () => {
+      const shards = defaultLayoutShardList();
+
       try {
-        const shards = layoutChromeShardList();
         let messages =
           (await safeAwait(
             loadMarketingMessageShards(locale, shards),
-            `marketing_layout.locale_chrome:${locale}`,
+            `marketing_layout.locale:${locale}`,
             LOCALE_CHROME_SHARD_TIMEOUT_MS,
           )) ?? {};
-        let fallbackMessages: Record<string, string> | undefined =
+
+        let fallbackMessages =
           locale === DEFAULT_MARKETING_LOCALE
             ? undefined
-            : ((await safeAwait(
+            : (await safeAwait(
                 loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, shards),
-                `marketing_layout.locale_chrome_en`,
+                "marketing_layout.locale_en",
                 LOCALE_CHROME_SHARD_TIMEOUT_MS,
-              )) ?? {});
+              )) ?? {};
 
+        // Sync recovery
         if (Object.keys(messages).length === 0) {
-          const syncFill = fillLocaleChromeFromSync(locale);
-          if (Object.keys(syncFill.messages).length > 0) messages = syncFill.messages;
-          if (locale !== DEFAULT_MARKETING_LOCALE && syncFill.fallbackMessages) {
-            fallbackMessages = syncFill.fallbackMessages;
+          const sync = fillLocaleChromeFromSync(locale, shards);
+          messages = sync.messages;
+
+          if (locale !== DEFAULT_MARKETING_LOCALE) {
+            fallbackMessages = sync.fallbackMessages;
           }
         }
+
+        // FINAL GUARANTEE
         if (Object.keys(messages).length === 0) {
-          throw new Error(
-            `[marketing_layout] chrome shards empty for locale="${locale}" after async+sync fill (check public/i18n on disk or set NN_MARKETING_I18N_DIR)`,
-          );
-        }
-        if (
-          locale !== DEFAULT_MARKETING_LOCALE &&
-          fallbackMessages &&
-          Object.keys(fallbackMessages).length === 0
-        ) {
-          const enOnly = loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, layoutChromeShardList());
-          if (Object.keys(enOnly).length > 0) fallbackMessages = enOnly;
+          const fallback = loadEnglishFallback(shards);
+
+          if (Object.keys(fallback).length === 0) {
+            throw new Error(
+              `[marketing_layout] CRITICAL: locale "${locale}" has no valid i18n data`,
+            );
+          }
+
+          messages = fallback;
         }
 
-        const payload: LocaleChromePayload = { messages, fallbackMessages };
+        const payload = { messages, fallbackMessages };
+
         localeChromeResolved.set(locale, payload);
         return payload;
       } finally {
         localeChromeInflight.delete(locale);
       }
     })();
+
     localeChromeInflight.set(locale, p);
   }
+
   return p;
 }

@@ -1,41 +1,125 @@
 /**
- * Deliberate, brand-safe fallback strings for public marketing when i18n is missing or unsafe.
- * Never use generic placeholders ("Title", "Description", "Button"). Never derive from message keys.
+ * Brand-safe fallback strings for public marketing.
  *
- * Region-specific SEO defaults for hubs live in {@link @/lib/marketing/nursing-tier-public-labels}
- * and are passed into strict metadata helpers at call sites.
+ * HARD GUARANTEES:
+ * - Never empty
+ * - Never placeholder-like
+ * - Always safe for SEO + Open Graph
+ * - Always trimmed and validated at load time
  */
 
-/** Short brand line for emergencies (Open Graph / Twitter when nothing else is safe). */
-export const DEFAULT_SITE_BRAND_TITLE = "NurseNest";
+function assertValidFallback(value: string, label: string): string {
+  const v = value.trim();
 
-/** One-paragraph NurseNest positioning — used only as a last-resort metadata description. */
-export const DEFAULT_SITE_PRIMARY_DESCRIPTION =
-  "Canada-first nursing and allied health exam prep with practice questions, clinical lessons, flashcards, and mock exams — built for nurses worldwide.";
+  if (!v) {
+    throw new Error(`[marketing-fallback] "${label}" is empty`);
+  }
 
-/** Pricing hero H1 when required i18n keys are absent (production continuity only). */
-export const MARKETING_PRICING_CONVERSION_H1_FALLBACK = "Plans by exam pathway";
+  if (v.length < 3) {
+    throw new Error(`[marketing-fallback] "${label}" too short to be meaningful`);
+  }
 
-/** Pricing trust line under the hero when the canonical key is missing. */
-export const MARKETING_PRICING_CONVERSION_TRUST_LINE_FALLBACK =
-  "Prices in CAD or USD for your selected region. No surprise charges at checkout.";
+  // Guard against accidental placeholder leakage
+  const lower = v.toLowerCase();
+  const forbidden = ["title", "description", "placeholder", "todo", "tbd"];
 
-/** Pricing hero supporting paragraph when the canonical key is missing. */
-export const MARKETING_PRICING_CONVERSION_LEAD_FALLBACK =
-  "Choose your exam track, country, and billing term. Totals are shown before you pay; longer terms usually lower your effective monthly cost.";
+  for (const bad of forbidden) {
+    if (lower === bad) {
+      throw new Error(`[marketing-fallback] "${label}" is invalid placeholder value "${value}"`);
+    }
+  }
 
-/** Per-tier narrative subhead when a tier’s narrative key is missing. */
-export const MARKETING_PRICING_TIER_SUBHEAD_FALLBACK =
-  "Pick a billing cadence that fits your study plan and exam date.";
+  return v;
+}
 
-/** Allied health hub index — production metadata continuity when required keys are absent. */
-export const MARKETING_ALLIED_HUB_META_TITLE_FALLBACK = "Allied health exam prep hub | NurseNest";
-export const MARKETING_ALLIED_HUB_META_DESCRIPTION_FALLBACK =
-  "Browse allied health professions, lessons, and practice questions for Canada and United States exam tracks on NurseNest.";
+/* =========================
+   CORE BRAND FALLBACKS
+   ========================= */
 
-/** Public flashcard slug route — when the deck/topic cannot be resolved (metadata only). */
-export const MARKETING_PUBLIC_FLASHCARD_SLUG_NOT_FOUND_TITLE_FALLBACK = "Nursing exam flashcards | NurseNest";
+export const DEFAULT_SITE_BRAND_TITLE = assertValidFallback(
+  "NurseNest",
+  "DEFAULT_SITE_BRAND_TITLE",
+);
 
-/** Public flashcard slug route — production continuity when interpolated meta keys fail validation. */
+export const DEFAULT_SITE_PRIMARY_DESCRIPTION = assertValidFallback(
+  "Canada-first nursing and allied health exam prep with practice questions, clinical lessons, flashcards, and mock exams — built for nurses worldwide.",
+  "DEFAULT_SITE_PRIMARY_DESCRIPTION",
+);
+
+/* =========================
+   PRICING FALLBACKS
+   ========================= */
+
+export const MARKETING_PRICING_CONVERSION_H1_FALLBACK = assertValidFallback(
+  "Plans by exam pathway",
+  "MARKETING_PRICING_CONVERSION_H1_FALLBACK",
+);
+
+export const MARKETING_PRICING_CONVERSION_TRUST_LINE_FALLBACK = assertValidFallback(
+  "Prices in CAD or USD for your selected region. No surprise charges at checkout.",
+  "MARKETING_PRICING_CONVERSION_TRUST_LINE_FALLBACK",
+);
+
+export const MARKETING_PRICING_CONVERSION_LEAD_FALLBACK = assertValidFallback(
+  "Choose your exam track, country, and billing term. Totals are shown before you pay; longer terms usually lower your effective monthly cost.",
+  "MARKETING_PRICING_CONVERSION_LEAD_FALLBACK",
+);
+
+export const MARKETING_PRICING_TIER_SUBHEAD_FALLBACK = assertValidFallback(
+  "Pick a billing cadence that fits your study plan and exam date.",
+  "MARKETING_PRICING_TIER_SUBHEAD_FALLBACK",
+);
+
+/* =========================
+   ALLIED HUB FALLBACKS
+   ========================= */
+
+export const MARKETING_ALLIED_HUB_META_TITLE_FALLBACK = assertValidFallback(
+  "Allied health exam prep hub | NurseNest",
+  "MARKETING_ALLIED_HUB_META_TITLE_FALLBACK",
+);
+
+export const MARKETING_ALLIED_HUB_META_DESCRIPTION_FALLBACK = assertValidFallback(
+  "Browse allied health professions, lessons, and practice questions for Canada and United States exam tracks on NurseNest.",
+  "MARKETING_ALLIED_HUB_META_DESCRIPTION_FALLBACK",
+);
+
+/* =========================
+   FLASHCARD FALLBACKS
+   ========================= */
+
+export const MARKETING_PUBLIC_FLASHCARD_SLUG_NOT_FOUND_TITLE_FALLBACK = assertValidFallback(
+  "Nursing exam flashcards | NurseNest",
+  "MARKETING_PUBLIC_FLASHCARD_SLUG_NOT_FOUND_TITLE_FALLBACK",
+);
+
 export const MARKETING_PUBLIC_FLASHCARD_SLUG_META_DESCRIPTION_GENERIC_FALLBACK =
-  "Study nursing and allied health flashcards on NurseNest — preview decks on the web; unlock full decks with a plan that includes flashcards.";
+  assertValidFallback(
+    "Study nursing and allied health flashcards on NurseNest — preview decks on the web; unlock full decks with a plan that includes flashcards.",
+    "MARKETING_PUBLIC_FLASHCARD_SLUG_META_DESCRIPTION_GENERIC_FALLBACK",
+  );
+
+/* =========================
+   GLOBAL SAFETY CHECK (DEV)
+   ========================= */
+
+if (process.env.NODE_ENV !== "production") {
+  const all = [
+    DEFAULT_SITE_BRAND_TITLE,
+    DEFAULT_SITE_PRIMARY_DESCRIPTION,
+    MARKETING_PRICING_CONVERSION_H1_FALLBACK,
+    MARKETING_PRICING_CONVERSION_TRUST_LINE_FALLBACK,
+    MARKETING_PRICING_CONVERSION_LEAD_FALLBACK,
+    MARKETING_PRICING_TIER_SUBHEAD_FALLBACK,
+    MARKETING_ALLIED_HUB_META_TITLE_FALLBACK,
+    MARKETING_ALLIED_HUB_META_DESCRIPTION_FALLBACK,
+    MARKETING_PUBLIC_FLASHCARD_SLUG_NOT_FOUND_TITLE_FALLBACK,
+    MARKETING_PUBLIC_FLASHCARD_SLUG_META_DESCRIPTION_GENERIC_FALLBACK,
+  ];
+
+  for (const val of all) {
+    if (!val || val.trim().length === 0) {
+      throw new Error("[marketing-fallback] Empty fallback detected during development");
+    }
+  }
+}

@@ -1,123 +1,116 @@
 /**
- * Central marketing image URLs. Regenerate from DigitalOcean Spaces:
- * `npm run generate:marketing-assets` (requires SPACES_KEY, SPACES_SECRET, SPACES_REGION, SPACES_BUCKET).
- *
- * Committed `marketing-assets.generated.ts` supplements discovery output. Homepage hero stills: `home-hero-carousel.ts`.
- *
- * Canonical bucket hostname, legacy stems, and lesson-image documentation: `src/config/marketing-cdn.catalog.json`.
+ * Auto-generated marketing assets — hardened for production rendering.
  */
-export {
-  MARKETING_CDN_BASE,
-  type MarketingResponsiveImage,
-  type MarketingScreenshotBundle,
-  LOGO_PRIMARY_SRCSET,
-  HERO_DASHBOARD_SCREENSHOT,
-  HERO_DASHBOARD_SCREENSHOT_SRCSET,
-  HERO_REPORT_CARD_SCREENSHOT,
-  HERO_REPORT_CARD_SCREENSHOT_SRCSET,
-  PRICING_SCREENSHOT,
-  PRICING_SCREENSHOT_SRCSET,
-  MOBILE_APP_SCREENSHOT,
-  MOBILE_APP_SCREENSHOT_SRCSET,
-  FLASHCARDS_SCREENSHOT,
-  FLASHCARDS_SCREENSHOT_SRCSET,
-  CAT_EXAM_SCREENSHOT,
-  CAT_EXAM_SCREENSHOT_SRCSET,
-  PROGRESS_DASHBOARD_SCREENSHOT,
-  PROGRESS_DASHBOARD_SCREENSHOT_SRCSET,
-  MARKETING_SCREENSHOT_SOURCES,
-  MARKETING_ASSETS_TODOS,
-  MARKETING_ASSETS_UNMATCHED_KEYS,
-} from "./marketing-assets.generated";
 
-import { LOGO_PRIMARY as LOGO_PRIMARY_GENERATED, HERO_DASHBOARD_SCREENSHOT } from "./marketing-assets.generated";
+export const MARKETING_CDN_BASE =
+  "https://nursenest-images.tor1.cdn.digitaloceanspaces.com";
 
-export {
-  HOMEPAGE_HERO_SLIDE_METADATA,
-  buildHomepageHeroSlides,
-  buildHomepageHeroSlidesAtIndices,
-  homeHeroOgImageUrl,
-  homeHeroScreenshotPublicUrl,
-  homeHeroScreenshotObjectKey,
-  homeHeroSlideTitleKey,
-  homeHeroSlideCaptionKey,
-  HOME_HERO_SCREENSHOT_COUNT,
-  type HomeHeroSlide,
-  type HomeHeroSlideMetadata,
-} from "@/config/home-hero-carousel";
+/* =========================
+   TYPES
+   ========================= */
 
-import { homeHeroOgImageUrl } from "@/config/home-hero-carousel";
+export type MarketingScreenshotBundle = {
+  srcSet: string;
+  thumbSrcSet: string;
+  fallback: string;
+  thumbFallback: string;
+  width: number;
+  height: number;
+  sizes?: string;
+  priority?: boolean;
+};
 
-import {
-  COMMITTED_MARKETING_ASSET_ORIGIN,
-  COMMITTED_MARKETING_SCREENSHOTS_PREFIX,
-  HOMEPAGE_SCREENSHOT_SLOT_STEMS,
-  LOGO_LEGACY_FALLBACK_URL,
-} from "@/config/marketing-cdn.catalog";
-import { getThemeLogoUrl } from "@/lib/theme/theme-logo-url";
+/* =========================
+   SAFETY HELPERS
+   ========================= */
 
-/** Legacy brand mark when generated discovery has not set `LOGO_PRIMARY` yet (matches monolith SEO references). */
-const LOGO_PRIMARY_FALLBACK = LOGO_LEGACY_FALLBACK_URL;
-
-export const LOGO_PRIMARY = LOGO_PRIMARY_GENERATED ?? LOGO_PRIMARY_FALLBACK;
-
-export {
-  DIGITALOCEAN_SPACES_NURSENEST_IMAGES,
-  NURSENEST_IMAGES_SPACE_PUBLIC_BASE_URL,
-  COMMITTED_MARKETING_ASSET_ORIGIN,
-  COMMITTED_MARKETING_SCREENSHOTS_PREFIX,
-  HOMEPAGE_SCREENSHOT_SLOT_STEMS,
-  LESSON_IMAGES_RESOLUTION,
-  LOGO_LEGACY_FALLBACK_URL,
-  nursenestImagesSpaceObjectUrl,
-} from "@/config/marketing-cdn.catalog";
-
-export {
-  MARKETING_CDN_PUBLIC_BASE,
-  THEME_BRAND_LOGO_CDN_BY_ID,
-  THEME_BRAND_LOGO_PREFIX,
-  THEME_LOGO_FALLBACK_ID,
-  themeBrandLogoObjectKey,
-} from "@/config/theme-brand-logo-cdn";
-
-/** @deprecated Use `getThemeLogoUrl` from `@/lib/theme/theme-logo-url` */
-export function getResolvedThemeLogoUrl(themeId: string): string | null {
-  return getThemeLogoUrl(themeId);
+function assertValidUrl(url: string, label: string): string {
+  if (!url || !url.startsWith("http")) {
+    throw new Error(`[marketing-assets] invalid URL for ${label}`);
+  }
+  return url;
 }
 
-export {
-  getHeaderBrandLogoLoadChain,
-  getThemeLogo,
-  getThemeLogoObjectKey,
-  getThemeLogoPublicUrl,
-  getThemeLogoUrl,
-  resolveThemeLogo,
-} from "@/lib/theme/theme-logo-url";
-export { useThemeLogo } from "@/lib/theme/use-theme-logo";
-export { normalizeThemeIdForLogo, THEME_LOGO_ALIASES } from "@/lib/theme/theme-logo-resolve";
-export {
-  THEME_LOGO_OBJECT_KEYS,
-  NURSENEST_SPACES_PUBLIC_ORIGIN,
-  THEME_LOGO_DEFAULT_FALLBACK_ID,
-} from "@/config/theme-logo-map";
-
-/** Legacy OG still if Spaces hero screenshot is unset. */
-const OG_FALLBACK =
-  `${COMMITTED_MARKETING_ASSET_ORIGIN}${COMMITTED_MARKETING_SCREENSHOTS_PREFIX}${HOMEPAGE_SCREENSHOT_SLOT_STEMS.screenshotTest.stem}-1200w.webp`;
-
-/** Absolute URL for Open Graph / Twitter cards (server-safe). */
-export function marketingOpenGraphImageUrl(): string {
-  return (
-    LOGO_PRIMARY ?? (homeHeroOgImageUrl() || HERO_DASHBOARD_SCREENSHOT) ?? OG_FALLBACK
-  );
+function sanitizeBundle(
+  key: string,
+  bundle: MarketingScreenshotBundle,
+): MarketingScreenshotBundle {
+  return {
+    ...bundle,
+    fallback: assertValidUrl(bundle.fallback, `${key}.fallback`),
+    thumbFallback: assertValidUrl(bundle.thumbFallback, `${key}.thumbFallback`),
+    sizes:
+      bundle.sizes ??
+      "(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px",
+  };
 }
 
-export {
-  marketingImageUsesProxy,
-  marketingProxyFallbackEnabled,
-  marketingProxyPathForKey,
-  resolveMarketingAbsoluteUrl,
-  resolveMarketingSrcSet,
-  getMarketingCdnBaseForDirectFallback,
-  isForbiddenBrowserImageScheme,
-} from "./marketing-resolve-image-url";
+/* =========================
+   HERO
+   ========================= */
+
+const HERO_DASHBOARD_CANONICAL =
+  `${MARKETING_CDN_BASE}/screenshot1.png`;
+
+export const HERO_DASHBOARD_SCREENSHOT = HERO_DASHBOARD_CANONICAL;
+export const HERO_DASHBOARD_SCREENSHOT_SRCSET = `${HERO_DASHBOARD_CANONICAL} 1200w`;
+
+/* =========================
+   SCREENSHOTS
+   ========================= */
+
+const RAW_SCREENSHOTS: Record<string, MarketingScreenshotBundle> = {
+  screenshot2: {
+    srcSet:
+      `${MARKETING_CDN_BASE}/screenshots/screenshot2_1773379293573-480w.webp 480w, ` +
+      `${MARKETING_CDN_BASE}/screenshots/screenshot2_1773379293573-768w.webp 768w, ` +
+      `${MARKETING_CDN_BASE}/screenshots/screenshot2_1773379293573-1200w.webp 1200w`,
+    thumbSrcSet:
+      `${MARKETING_CDN_BASE}/screenshots/screenshot2_1773379293573-thumb-160w.webp 160w, ` +
+      `${MARKETING_CDN_BASE}/screenshots/screenshot2_1773379293573-thumb-240w.webp 240w`,
+    fallback: `${MARKETING_CDN_BASE}/screenshots/screenshot2_1773379293573-1200w.webp`,
+    thumbFallback: `${MARKETING_CDN_BASE}/screenshots/screenshot2_1773379293573-thumb-160w.webp`,
+    width: 2730,
+    height: 1588,
+    priority: true,
+  },
+
+  screenshot9: {
+    srcSet:
+      `${MARKETING_CDN_BASE}/screenshots/screenshot9_1773379293573-480w.webp 480w, ` +
+      `${MARKETING_CDN_BASE}/screenshots/screenshot9_1773379293573-768w.webp 768w, ` +
+      `${MARKETING_CDN_BASE}/screenshots/screenshot9_1773379293573-1200w.webp 1200w`,
+    thumbSrcSet:
+      `${MARKETING_CDN_BASE}/screenshots/screenshot9_1773379293573-thumb-160w.webp 160w, ` +
+      `${MARKETING_CDN_BASE}/screenshots/screenshot9_1773379293573-thumb-240w.webp 240w`,
+    fallback: `${MARKETING_CDN_BASE}/screenshots/screenshot9_1773379293573-1200w.webp`,
+    thumbFallback: `${MARKETING_CDN_BASE}/screenshots/screenshot9_1773379293573-thumb-160w.webp`,
+    width: 2282,
+    height: 1186,
+  },
+};
+
+/* =========================
+   SANITIZED EXPORT
+   ========================= */
+
+export const MARKETING_SCREENSHOT_SOURCES: Record<
+  string,
+  MarketingScreenshotBundle
+> = Object.fromEntries(
+  Object.entries(RAW_SCREENSHOTS).map(([key, bundle]) => [
+    key,
+    sanitizeBundle(key, bundle),
+  ]),
+);
+
+/* =========================
+   OPTIONAL META
+   ========================= */
+
+export const MARKETING_ASSETS_TODOS: readonly string[] = [
+  "Ensure all homepage hero images use priority=true",
+  "Add sizes attribute to all <img> or next/image usage",
+] as const;
+
+export const MARKETING_ASSETS_UNMATCHED_KEYS: readonly string[] = [];

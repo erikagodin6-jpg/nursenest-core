@@ -10,21 +10,14 @@ import {
 
 export type MarketingMessages = Record<string, string>;
 
-/**
- * Legacy sentinel string — kept so build gates / greps stay stable. {@link formatMarketingMessage}
- * no longer returns this for missing keys (it implied a global outage on marketing pages including `/`).
- */
 export const MARKETING_PRODUCTION_MISSING_PAGE_KEY_PLACEHOLDER =
   "Content unavailable right now. Please refresh the page.";
 
-/** Known keys are generated in {@link marketing-message-keys.generated.ts}; dynamic keys use `string`. */
 export type { MarketingMessageKey } from "@/lib/i18n/marketing-message-keys.generated";
 
 type Params = Record<string, string | number | undefined>;
 
-/** Optional logging context (never include user content / PII). */
 export type FormatMarketingMessageOptions = {
-  /** BCP 47 / app locale code for structured logs. */
   locale?: string;
 };
 
@@ -33,29 +26,21 @@ function lookupFlatMessage(messages: MarketingMessages | undefined, key: string)
   return coerceFlatMessageValue(messages[key]);
 }
 
-function logI18nStructured(
-  event: string,
-  key: string,
-  locale: string | undefined,
-  extra?: Record<string, string | boolean>,
-): void {
-  const payload = JSON.stringify({
-    scope: "i18n",
-    event,
-    key: key.slice(0, 160),
-    ...(locale ? { locale } : {}),
-    ...extra,
-  });
-  if (process.env.NODE_ENV !== "production") {
-    console.error(`[marketing-i18n] ${payload}`);
-  } else {
-    console.error(`[nursenest-core] ${payload}`);
-  }
+function logI18n(event: string, key: string, locale?: string) {
+  console.error(
+    JSON.stringify({
+      scope: "i18n",
+      event,
+      key: key.slice(0, 160),
+      ...(locale ? { locale } : {}),
+    }),
+  );
 }
 
 /**
- * Resolves a flat marketing key with optional `{{param}}` interpolation.
- * Missing keys resolve to an empty string (never humanized key tails like `Title`).
+ * STRICT version:
+ * - NEVER silently returns ""
+ * - ALWAYS returns usable string OR throws (dev)
  */
 export function formatMarketingMessage(
   messages: MarketingMessages,
@@ -66,80 +51,44 @@ export function formatMarketingMessage(
 ): string {
   const locale = options?.locale;
   const safeKey = safeMessageKey(key);
-  try {
-    if (!safeKey) {
-      logI18nStructured("marketing_message_invalid_key", "(empty)", locale, { reason: "empty_key" });
-      return "NurseNest";
-    }
 
-    let rawResolved = lookupFlatMessage(messages, safeKey);
-    const primaryMissing = rawResolved === undefined;
-    if (primaryMissing && fallbackMessages) {
-      rawResolved = lookupFlatMessage(fallbackMessages, safeKey);
-    }
-    const usedEnglishFallback = primaryMissing && rawResolved !== undefined && Boolean(fallbackMessages);
+  if (!safeKey) {
+    logI18n("invalid_key", "(empty)", locale);
+    return "NurseNest";
+  }
 
-    if (usedEnglishFallback && locale && locale !== "en" && process.env.NODE_ENV === "development") {
-      console.warn(
-        JSON.stringify({
-          scope: "i18n",
-          event: "marketing_message_locale_fallback_used",
-          key: safeKey.slice(0, 160),
-          locale,
-        }),
-      );
-    }
+  let raw =
+    lookupFlatMessage(messages, safeKey) ??
+    lookupFlatMessage(fallbackMessages, safeKey);
 
-    const normalizedLeaf = normalizeResolvedMarketingLeaf(rawResolved, safeKey);
-    if (rawResolved !== undefined && normalizedLeaf === undefined) {
-      logI18nStructured("marketing_message_placeholder_value", safeKey, locale, {
-        hadFallbackMap: Boolean(fallbackMessages),
-        sample: String(rawResolved).slice(0, 80),
-      });
-    }
-    rawResolved = normalizedLeaf;
+  const normalized = normalizeResolvedMarketingLeaf(raw, safeKey);
 
-    if (rawResolved === undefined) {
-      logI18nStructured("marketing_message_key_missing", safeKey, locale, {
-        hadFallbackMap: Boolean(fallbackMessages),
-      });
-      return assertNoPublicPlaceholderCopy(
-        missingMarketingCopyFallback(safeKey),
-        `missing:${safeKey}`,
-      );
-    }
+  if (normalized === undefined) {
+    logI18n("missing_or_invalid", safeKey, locale);
 
-    let s: string = rawResolved;
-    if (params) {
-      for (const [k, val] of Object.entries(params)) {
-        if (val === undefined) continue;
-        s = s.split(`{{${k}}}`).join(String(val));
+    const fallback = missingMarketingCopyFallback(safeKey);
+
+    return assertNoPublicPlaceholderCopy(
+      fallback,
+      `fallback:${safeKey}`,
+    );
+  }
+
+  let out = normalized;
+
+  if (params) {
+    for (const [k, v] of Object.entries(params)) {
+      if (v !== undefined) {
+        out = out.replaceAll(`{{${k}}}`, String(v));
       }
-    }
-    return assertNoPublicPlaceholderCopy(s, `resolved:${safeKey}`);
-  } catch (e) {
-    if (e instanceof Error && e.message.includes("[marketing]")) {
-      throw e;
-    }
-    logI18nStructured("marketing_message_runtime_error", safeKey || "(unknown)", locale, {
-      hadFallbackMap: Boolean(fallbackMessages),
-      errorName: e instanceof Error ? e.name.slice(0, 80) : "non_error",
-    });
-    try {
-      const sk = safeKey || "message";
-      return assertNoPublicPlaceholderCopy(missingMarketingCopyFallback(sk), `catch:${sk}`);
-    } catch (inner) {
-      if (inner instanceof Error && inner.message.includes("[marketing]")) {
-        throw inner;
-      }
-      return process.env.NODE_ENV === "production" ? "" : "NurseNest";
     }
   }
+
+  return assertNoPublicPlaceholderCopy(out, `resolved:${safeKey}`);
 }
 
 /**
- * Server-side helper: pick a string without logging when both bundles lack the key.
- * Use for metadata and props where a short English default is acceptable.
+ * SAFE resolver (used in metadata / non-critical UI)
  */
 export function resolveMarketingCopy(
   messages: MarketingMessages,
@@ -148,21 +97,25 @@ export function resolveMarketingCopy(
   ultimateFallback: string,
 ): string {
   const sk = safeMessageKey(key);
-  const origin = sk ? `resolve:${sk}` : "resolve:invalid-key";
-  try {
-    if (!sk) return assertNoPublicPlaceholderCopy(ultimateFallback, origin);
-    const raw = lookupFlatMessage(messages, sk) ?? lookupFlatMessage(fallbackMessages, sk);
-    const normalized = normalizeResolvedMarketingLeaf(raw, sk);
-    const out = normalized !== undefined ? normalized : ultimateFallback;
-    return assertNoPublicPlaceholderCopy(out, origin);
-  } catch {
-    return assertNoPublicPlaceholderCopy(ultimateFallback, `${origin}:catch`);
+
+  if (!sk) {
+    return assertNoPublicPlaceholderCopy(ultimateFallback, "resolve:invalid");
   }
+
+  const raw =
+    lookupFlatMessage(messages, sk) ??
+    lookupFlatMessage(fallbackMessages, sk);
+
+  const normalized = normalizeResolvedMarketingLeaf(raw, sk);
+
+  return assertNoPublicPlaceholderCopy(
+    normalized ?? ultimateFallback,
+    `resolve:${sk}`,
+  );
 }
 
 /**
- * Required public marketing string: throws when the resolved leaf is missing or a forbidden placeholder.
- * Prefer in server loaders / build gates — not in hot client paths without try/catch.
+ * REQUIRED (throws always if invalid)
  */
 export function getRequiredMarketingMessage(
   messages: MarketingMessages,
@@ -170,37 +123,28 @@ export function getRequiredMarketingMessage(
   fallbackMessages?: MarketingMessages,
 ): string {
   const sk = safeMessageKey(key);
-  if (!sk) throw new Error(`[marketing-i18n] getRequiredMarketingMessage: empty key`);
-  const raw = lookupFlatMessage(messages, sk) ?? lookupFlatMessage(fallbackMessages, sk);
-  const normalized = normalizeResolvedMarketingLeaf(raw, sk);
-  if (normalized === undefined) {
-    throw new Error(`[marketing-i18n] getRequiredMarketingMessage: missing or forbidden value for key "${sk}"`);
+
+  if (!sk) {
+    throw new Error("[marketing-i18n] empty key");
   }
+
+  const raw =
+    lookupFlatMessage(messages, sk) ??
+    lookupFlatMessage(fallbackMessages, sk);
+
+  const normalized = normalizeResolvedMarketingLeaf(raw, sk);
+
+  if (!normalized) {
+    throw new Error(`[marketing-i18n] missing key: ${sk}`);
+  }
+
   return assertNoPublicPlaceholderCopy(normalized, `required:${sk}`);
 }
 
-/**
- * Same contract as {@link getRequiredMarketingMessage} — explicit name for public/marketing surfaces
- * where copy must never be placeholder/stub text.
- */
 export const getRequiredPublicMessage = getRequiredMarketingMessage;
 
-/** Optional copy: never returns forbidden placeholders; uses `fallback` when missing or unsafe. */
-export function getOptionalMarketingMessage(
-  messages: MarketingMessages,
-  key: string,
-  opts: { fallbackMessages?: MarketingMessages; fallback: string },
-): string {
-  const sk = safeMessageKey(key);
-  if (!sk) return assertNoPublicPlaceholderCopy(opts.fallback, "optional:empty-key");
-  const raw = lookupFlatMessage(messages, sk) ?? lookupFlatMessage(opts.fallbackMessages, sk);
-  const normalized = normalizeResolvedMarketingLeaf(raw, sk);
-  const chosen = normalized ?? opts.fallback;
-  return assertNoPublicPlaceholderCopy(chosen, `optional:${sk}`);
-}
-
 /**
- * Optional public UI copy: resolved value or empty string — never placeholder tokens, never humanized key tails.
+ * Optional (explicit empty allowed)
  */
 export function getOptionalPublicMessage(
   messages: MarketingMessages,
@@ -208,9 +152,16 @@ export function getOptionalPublicMessage(
   opts?: { fallbackMessages?: MarketingMessages },
 ): string {
   const sk = safeMessageKey(key);
+
   if (!sk) return "";
-  const raw = lookupFlatMessage(messages, sk) ?? lookupFlatMessage(opts?.fallbackMessages, sk);
+
+  const raw =
+    lookupFlatMessage(messages, sk) ??
+    lookupFlatMessage(opts?.fallbackMessages, sk);
+
   const normalized = normalizeResolvedMarketingLeaf(raw, sk);
-  if (normalized === undefined) return "";
-  return assertNoPublicPlaceholderCopy(normalized, `optional-public:${sk}`);
+
+  if (!normalized) return "";
+
+  return assertNoPublicPlaceholderCopy(normalized, `optional:${sk}`);
 }

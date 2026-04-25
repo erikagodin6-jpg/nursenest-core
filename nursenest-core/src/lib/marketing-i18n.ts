@@ -4,14 +4,24 @@ export {
   getOptionalPublicMessage,
   getRequiredMarketingMessage,
   getRequiredPublicMessage,
+  resolveMarketingCopy,
   type MarketingMessageKey,
   type MarketingMessages,
 } from "@/lib/marketing-i18n-core";
-export { assertNoPlaceholder } from "@/lib/marketing-i18n/marketing-message-value-policy";
+
+export {
+  assertNoPlaceholder,
+  assertNoPublicPlaceholderCopy,
+  humanizedMarketingKeyFallback,
+  normalizeResolvedMarketingLeaf,
+} from "@/lib/marketing-i18n/marketing-message-value-policy";
+
 export {
   getRequiredPublicMetadataInterpolated,
   getRequiredPublicMetadataLine,
+  type MarketingMetadataInterpolationParams,
 } from "@/lib/marketing-i18n/marketing-metadata-strict";
+
 export {
   DEFAULT_SITE_BRAND_TITLE,
   DEFAULT_SITE_PRIMARY_DESCRIPTION,
@@ -24,7 +34,7 @@ export {
   MARKETING_PUBLIC_FLASHCARD_SLUG_META_DESCRIPTION_GENERIC_FALLBACK,
   MARKETING_PUBLIC_FLASHCARD_SLUG_NOT_FOUND_TITLE_FALLBACK,
 } from "@/lib/marketing-i18n/marketing-safe-fallbacks";
-/** Server-only: import from `@/lib/marketing-i18n/load-marketing-messages` (not this barrel). */
+
 export {
   MarketingI18nProvider,
   MarketingI18nShardLayer,

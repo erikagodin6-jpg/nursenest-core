@@ -1,5 +1,21 @@
 type SharedLoader<T> = () => Promise<T>;
 
+function logSharedMarketingLoadFailure(key: string, error: unknown): void {
+  try {
+    console.error(
+      JSON.stringify({
+        scope: "i18n",
+        event: "marketing_shared_message_load_failed",
+        cacheKey: key.slice(0, 240),
+        errorName: error instanceof Error ? error.name.slice(0, 80) : "non_error",
+        errorMessage: error instanceof Error ? error.message.slice(0, 240) : String(error).slice(0, 240),
+      }),
+    );
+  } catch {
+    /* noop */
+  }
+}
+
 export function createSharedMarketingMessageCache<T>() {
   const cache = new Map<string, Promise<T>>();
 
@@ -12,19 +28,28 @@ export function createSharedMarketingMessageCache<T>() {
         .then(load)
         .catch((error) => {
           cache.delete(key);
+          logSharedMarketingLoadFailure(key, error);
           throw error;
         });
 
       cache.set(key, pending);
       return pending;
     },
+
     clear(): void {
       cache.clear();
     },
   };
 }
 
-/** In-flight dedupe for marketing shard loads — failures resolve to `{}` so RSC never rejects on i18n. */
+/**
+ * In-flight dedupe for marketing shard loads.
+ *
+ * Important:
+ * - NEVER resolves failures to {}
+ * - NEVER caches failed promises permanently
+ * - Always deletes failed entries so later requests can retry
+ */
 const marketingShardMessageDedupe = new Map<string, Promise<Record<string, string>>>();
 
 export function loadSharedMarketingMessagesOnce(
@@ -37,21 +62,15 @@ export function loadSharedMarketingMessagesOnce(
   const pending = Promise.resolve()
     .then(load)
     .catch((error) => {
-      try {
-        console.error(
-          JSON.stringify({
-            scope: "i18n",
-            event: "marketing_shared_message_load_failed",
-            cacheKey: key.slice(0, 240),
-            errorName: error instanceof Error ? error.name.slice(0, 80) : "non_error",
-          }),
-        );
-      } catch {
-        /* noop */
-      }
-      return {};
+      marketingShardMessageDedupe.delete(key);
+      logSharedMarketingLoadFailure(key, error);
+      throw error;
     });
 
   marketingShardMessageDedupe.set(key, pending);
   return pending;
+}
+
+export function clearSharedMarketingMessagesForTests(): void {
+  marketingShardMessageDedupe.clear();
 }
