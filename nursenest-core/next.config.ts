@@ -1,8 +1,10 @@
 import { createRequire } from "module";
-import os from "node:os";
 import { fileURLToPath } from "url";
 import type { NextConfig } from "next";
-import { CACHE_HEADER_HOME_STATS, CACHE_HEADER_PUBLIC_LIST } from "./src/lib/cache/public-edge-cache-headers";
+import {
+  CACHE_HEADER_HOME_STATS,
+  CACHE_HEADER_PUBLIC_LIST,
+} from "./src/lib/cache/public-edge-cache-headers";
 import { CORE_HOSTED_MARKETING_LOCALES } from "./src/lib/i18n/marketing-locale-policy";
 
 function cacheControlFromHeadersInit(h: HeadersInit): string {
@@ -14,15 +16,6 @@ function cacheControlFromHeadersInit(h: HeadersInit): string {
 
 const monorepoRoot = fileURLToPath(new URL("..", import.meta.url));
 const require = createRequire(import.meta.url);
-
-function resolveBuildWebpackParallelism(): number {
-  const raw = process.env.BUILD_WEBPACK_PARALLELISM?.trim();
-  const parsed = raw ? Number.parseInt(raw, 10) : 2;
-  if (!Number.isFinite(parsed) || parsed < 1) return 2;
-  return Math.min(parsed, Math.max(2, os.cpus().length));
-}
-
-const effectiveParallelism = resolveBuildWebpackParallelism();
 
 const nextConfig: NextConfig = {
   typescript: {
@@ -62,28 +55,14 @@ const nextConfig: NextConfig = {
     AUTH_TRUST_HOST: process.env.AUTH_TRUST_HOST || "true",
   },
 
+  /**
+   * Keep this minimal and stable — no forced worker hacks
+   */
   experimental: {
-    cpus: effectiveParallelism,
+    cpus: 2,
     memoryBasedWorkersCount: false,
     webpackBuildWorker: false,
-    webpackMemoryOptimizations: true,
     externalDir: true,
-  },
-
-  /**
-   * 🔥 CRITICAL FIX:
-   * Disables broken Webpack minifier causing:
-   * "WebpackError is not a constructor"
-   */
-  webpack: (config, { isServer }) => {
-    config.parallelism = effectiveParallelism;
-
-    if (!isServer) {
-      config.optimization = config.optimization || {};
-      config.optimization.minimize = false;
-    }
-
-    return config;
   },
 
   async redirects() {
@@ -124,11 +103,21 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/public/home-stats",
-        headers: [{ key: "Cache-Control", value: cacheControlFromHeadersInit(CACHE_HEADER_HOME_STATS) }],
+        headers: [
+          {
+            key: "Cache-Control",
+            value: cacheControlFromHeadersInit(CACHE_HEADER_HOME_STATS),
+          },
+        ],
       },
       {
         source: "/api/public/flashcard-tags",
-        headers: [{ key: "Cache-Control", value: cacheControlFromHeadersInit(CACHE_HEADER_PUBLIC_LIST) }],
+        headers: [
+          {
+            key: "Cache-Control",
+            value: cacheControlFromHeadersInit(CACHE_HEADER_PUBLIC_LIST),
+          },
+        ],
       },
     ];
   },
