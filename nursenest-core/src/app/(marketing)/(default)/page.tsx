@@ -9,7 +9,6 @@ import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { HomeRestoredWithDeferredStats } from "@/components/marketing/home-restored-with-deferred-stats.server";
 import { GlobalMarketingHomeIntro } from "@/components/marketing/global-marketing-home-intro.server";
 import { MarketingHomeEmergencyFallback } from "@/components/marketing/marketing-home-emergency-fallback";
-import { MarketingHomeSafeMode } from "@/components/marketing/marketing-home-safe-mode";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import {
@@ -39,13 +38,19 @@ import {
 } from "@/lib/observability/nn-home-isolation-flags";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 
-const homeMarketingSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
+// ─── Force dynamic rendering ────────────────────────────────────────────────
+// This page reads request headers, so it must never be statically rendered.
+// Without this, Next.js can conflict between static revalidation and dynamic
+// header reads, causing intermittent crashes that are very hard to reproduce.
+export const dynamic = "force-dynamic";
 
+// Keep revalidate as a belt-and-suspenders signal but dynamic takes precedence.
+export const revalidate = 0;
+
+// ─── Constants ───────────────────────────────────────────────────────────────
 const HOME_PAGE_BODY_I18N_BUDGET_MS = 2800;
 const HOME_METADATA_I18N_BUDGET_MS = 2600;
 const HOME_SENTRY_RUNTIME_BUDGET_MS = 2000;
-
-export const revalidate = 3600;
 
 const STATIC_LOCALE = DEFAULT_MARKETING_LOCALE;
 const STATIC_REGION = "CA" as const;
@@ -69,18 +74,63 @@ const HOME_FALLBACK_METADATA: Metadata = {
   },
 };
 
+// ─── Sentry ──────────────────────────────────────────────────────────────────
+// Evaluated lazily per-request via safeAwait so a one-time import failure
+// does not poison every subsequent request for the server's lifetime.
+function getSentryRuntimePromise() {
+  return import("@/lib/observability/sentry-runtime").catch((err) => {
+    layoutStderrTrace("marketing_home", "sentry_import_failed", {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  });
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
 function shouldSkipOptionalMarketingDbReads(): boolean {
-  const raw = process.env.MARKETING_HOME_SKIP_OPTIONAL_DB?.trim().toLowerCase();
-  if (raw === "true") return true;
-  if (raw === "false") return false;
-  return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE;
+  try {
+    const raw = process.env.MARKETING_HOME_SKIP_OPTIONAL_DB?.trim().toLowerCase();
+    if (raw === "true") return true;
+    if (raw === "false") return false;
+    return process.env.NEXT_PHASE === MARKETING_BUILD_PHASE;
+  } catch {
+    return false;
+  }
+}
+
+function safeCheckStaticProbe(): boolean {
+  try {
+    return nnHomeStaticProbeEnabled();
+  } catch {
+    return false;
+  }
+}
+
+function safeCheckStaticMetadata(): boolean {
+  try {
+    return nnHomeStaticMetadataEnabled();
+  } catch {
+    return false;
+  }
+}
+
+function safeNnHomeDiagNowMs(): number {
+  try {
+    return nnHomeDiagNowMs();
+  } catch {
+    return Date.now();
+  }
 }
 
 async function loadHomePageMarketingMessagesForRequest(): Promise<MarketingMessages> {
   return loadMarketingMessageShards(STATIC_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS);
 }
 
-async function loadHomePageMarketingMessagesSafe(budgetMs: number, label: string): Promise<MarketingMessages> {
+async function loadHomePageMarketingMessagesSafe(
+  budgetMs: number,
+  label: string,
+): Promise<MarketingMessages> {
   try {
     const m = await safeAwait(loadHomePageMarketingMessagesForRequest(), label, budgetMs);
     if (m != null && Object.keys(m).length > 0) return m;
@@ -132,6 +182,40 @@ function listPublishedHomeGlobalRegionCardIdsSafe(): readonly string[] {
   }
 }
 
+// ─── Safe server component wrappers ──────────────────────────────────────────
+// Next.js Server Components do not support React Error Boundaries internally,
+// so we wrap each async server component in its own async function with a
+// try/catch. This means a failure in one section degrades gracefully instead
+// of crashing the entire page render.
+
+async function SafeGlobalMarketingHomeIntro() {
+  try {
+    return <GlobalMarketingHomeIntro />;
+  } catch (err) {
+    layoutStderrTrace("marketing_home", "global_marketing_home_intro_failed", {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  }
+}
+
+async function SafeHomeRestoredWithDeferredStats(props: {
+  skipOptionalDbReads: boolean;
+  publishedGlobalRegionCardIds: readonly string[];
+  skipOptionalDbPerfSegmentT0: number | undefined;
+  introAfterHero: React.ReactNode;
+}) {
+  try {
+    return <HomeRestoredWithDeferredStats {...props} />;
+  } catch (err) {
+    layoutStderrTrace("marketing_home", "home_restored_deferred_stats_failed", {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    // Render the intro section alone rather than a blank page
+    return <>{props.introAfterHero}</>;
+  }
+}
+
 async function SafeHomeBlogTeaserSection({ m }: { m: MarketingMessages }) {
   try {
     return await HomeBlogTeaserSectionAsync({ m });
@@ -143,27 +227,54 @@ async function SafeHomeBlogTeaserSection({ m }: { m: MarketingMessages }) {
   }
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const tDiag = nnHomeDiagNowMs();
-
-  if (nnHomeStaticMetadataEnabled() || nnHomeStaticProbeEnabled()) {
-    emitNnHomeRouteDiag({
-      segment: "metadata_static_short_circuit",
-      elapsed_ms: nnHomeDiagNowMs() - tDiag,
+function SafeFaqJsonLd() {
+  try {
+    return <FaqJsonLd items={MARKETING_HOME_FAQ_JSONLD} />;
+  } catch (err) {
+    layoutStderrTrace("marketing_home", "faq_jsonld_failed", {
+      error: err instanceof Error ? err.message : String(err),
     });
+    return null;
+  }
+}
+
+// ─── generateMetadata ─────────────────────────────────────────────────────────
+
+export async function generateMetadata(): Promise<Metadata> {
+  const tDiag = safeNnHomeDiagNowMs();
+
+  try {
+    if (safeCheckStaticMetadata() || safeCheckStaticProbe()) {
+      try {
+        emitNnHomeRouteDiag({
+          segment: "metadata_static_short_circuit",
+          elapsed_ms: safeNnHomeDiagNowMs() - tDiag,
+        });
+      } catch {}
+      return HOME_FALLBACK_METADATA;
+    }
+  } catch {
     return HOME_FALLBACK_METADATA;
   }
 
-  const runtime = await safeAwait(
-    homeMarketingSentryRuntimePromise,
-    "marketing_home.metadata.sentry_import",
-    HOME_SENTRY_RUNTIME_BUDGET_MS,
-  );
+  let runtime: Awaited<ReturnType<typeof getSentryRuntimePromise>> = null;
+  try {
+    runtime = await safeAwait(
+      getSentryRuntimePromise(),
+      "marketing_home.metadata.sentry_import",
+      HOME_SENTRY_RUNTIME_BUDGET_MS,
+    );
+  } catch {
+    runtime = null;
+  }
 
   const runMetadataInner = async (): Promise<Metadata> => {
     return safeGenerateMetadata(
       async () => {
-        const m = await loadHomePageMarketingMessagesSafe(HOME_METADATA_I18N_BUDGET_MS, "marketing_home.metadata");
+        const m = await loadHomePageMarketingMessagesSafe(
+          HOME_METADATA_I18N_BUDGET_MS,
+          "marketing_home.metadata",
+        );
 
         const title = getRequiredPublicMetadataLine(
           m,
@@ -179,16 +290,25 @@ export async function generateMetadata(): Promise<Metadata> {
           defaultHomeMetaDescription(STATIC_REGION),
         );
 
-        const alt = marketingAlternatesSharedPage(STATIC_LOCALE, "/");
+        let alt: ReturnType<typeof marketingAlternatesSharedPage> | null = null;
+        try {
+          alt = marketingAlternatesSharedPage(STATIC_LOCALE, "/");
+        } catch (err) {
+          layoutStderrTrace("marketing_home", "metadata_alternates_failed", {
+            error: err instanceof Error ? err.message : String(err),
+          });
+        }
 
         return {
           title,
           description,
-          alternates: { canonical: alt.canonical, languages: alt.languages },
+          ...(alt
+            ? { alternates: { canonical: alt.canonical, languages: alt.languages } }
+            : {}),
           openGraph: {
             title,
             description,
-            url: alt.canonical,
+            ...(alt ? { url: alt.canonical } : {}),
             type: "website",
             locale: "en_CA",
           },
@@ -207,44 +327,61 @@ export async function generateMetadata(): Promise<Metadata> {
     );
   };
 
-  if (runtime?.withSentryRuntimeSpan) {
-    return runtime.withSentryRuntimeSpan(
-      {
-        name: "marketing.route.metadata.home",
-        op: "ui.server.metadata",
-        attributes: { route: "/", routeGroup: "marketing.default.home" },
-      },
-      runMetadataInner,
-    );
+  try {
+    if (runtime?.withSentryRuntimeSpan) {
+      return runtime.withSentryRuntimeSpan(
+        {
+          name: "marketing.route.metadata.home",
+          op: "ui.server.metadata",
+          attributes: { route: "/", routeGroup: "marketing.default.home" },
+        },
+        runMetadataInner,
+      );
+    }
+  } catch (err) {
+    layoutStderrTrace("marketing_home", "metadata_sentry_span_failed", {
+      error: err instanceof Error ? err.message : String(err),
+    });
   }
 
   return runMetadataInner();
 }
 
-export default async function HomePage() {
-  const tDiag = nnHomeDiagNowMs();
+// ─── Page ─────────────────────────────────────────────────────────────────────
 
-  if (nnHomeStaticProbeEnabled()) {
-    return (
-      <div data-nn-home-static-probe="1" className="p-6">
-        <p>NN_HOME_STATIC_PROBE</p>
-      </div>
+export default async function HomePage() {
+  const tDiag = safeNnHomeDiagNowMs();
+
+  // Static probe short-circuit — must be guarded
+  try {
+    if (safeCheckStaticProbe()) {
+      return (
+        <div data-nn-home-static-probe="1" className="p-6">
+          <p>NN_HOME_STATIC_PROBE</p>
+        </div>
+      );
+    }
+  } catch {}
+
+  // Sentry runtime — lazy per-request, failure is non-fatal
+  let runtime: Awaited<ReturnType<typeof getSentryRuntimePromise>> = null;
+  try {
+    runtime = await safeAwait(
+      getSentryRuntimePromise(),
+      "marketing_home.page.sentry_import",
+      HOME_SENTRY_RUNTIME_BUDGET_MS,
     );
+  } catch {
+    runtime = null;
   }
 
-  const runtime = await safeAwait(
-    homeMarketingSentryRuntimePromise,
-    "marketing_home.page.sentry_import",
-    HOME_SENTRY_RUNTIME_BUDGET_MS,
-  );
-
   const renderHomePage = async () => {
-    const perfPageT0 = nnHomeDiagNowMs();
+    const perfPageT0 = safeNnHomeDiagNowMs();
 
     try {
+      // ── Headers probe (non-fatal) ──────────────────────────────────────────
       let pathnameProbe = "";
       let methodProbe = "";
-
       try {
         const h = await headers();
         pathnameProbe = h.get("x-nn-request-pathname")?.trim() ?? "";
@@ -254,30 +391,48 @@ export default async function HomePage() {
         methodProbe = "(headers_unavailable)";
       }
 
-      if (isNnTraceHomePerfTrue()) {
-        emitNnHomePerfDiagLine({
-          tag: "nn_home_perf_fallback_probe",
-          pid: process.pid,
-          pathname: pathnameProbe,
-          request_method: methodProbe || "(method_header_empty)",
-          trace_literal_true: true,
-        });
-      }
+      try {
+        if (isNnTraceHomePerfTrue()) {
+          emitNnHomePerfDiagLine({
+            tag: "nn_home_perf_fallback_probe",
+            pid: process.pid,
+            pathname: pathnameProbe,
+            request_method: methodProbe || "(method_header_empty)",
+            trace_literal_true: true,
+          });
+        }
+      } catch {}
 
-      void homePerfLogForGetRoot("home.server.03_page_render_start", perfPageT0).catch(() => {});
+      try {
+        void homePerfLogForGetRoot("home.server.03_page_render_start", perfPageT0).catch(() => {});
+      } catch {}
 
       const skipOptionalDbReads = shouldSkipOptionalMarketingDbReads();
 
-      const [m, publishedGlobalRegionCardIds] = await Promise.all([
+      // ── Data fetching (allSettled so one failure doesn't block the other) ──
+      const [mResult, regionCardIdsResult] = await Promise.allSettled([
         loadHomePageMarketingMessagesSafe(HOME_PAGE_BODY_I18N_BUDGET_MS, "marketing_home.page_body"),
         Promise.resolve().then(() => listPublishedHomeGlobalRegionCardIdsSafe()),
       ]);
 
-      if (Object.keys(m).length === 0) {
-        void homePerfFinalForGetRoot("success", { error_phase: "i18n_empty_safe_mode" }).catch(() => {});
-        return <MarketingHomeSafeMode layout="embedded" />;
+      const m: MarketingMessages =
+        mResult.status === "fulfilled" ? mResult.value : {};
+
+      const publishedGlobalRegionCardIds: readonly string[] =
+        regionCardIdsResult.status === "fulfilled"
+          ? regionCardIdsResult.value
+          : ["us", "ca"];
+
+      if (mResult.status === "rejected") {
+        layoutStderrTrace("marketing_home", "page_body_i18n_promise_rejected", {
+          error:
+            mResult.reason instanceof Error
+              ? mResult.reason.message
+              : String(mResult.reason),
+        });
       }
 
+      // ── Resolve display strings with fallbacks ─────────────────────────────
       const title = getRequiredPublicMetadataLine(
         m,
         "pages.home.metaTitleCA",
@@ -292,9 +447,16 @@ export default async function HomePage() {
         defaultHomeMetaDescription(STATIC_REGION),
       );
 
+      if (Object.keys(m).length === 0) {
+        layoutStderrTrace("marketing_home", "homepage_i18n_empty_continuing_with_fallbacks", {
+          title,
+          description,
+        });
+      }
+
+      // ── Breadcrumbs (non-fatal) ────────────────────────────────────────────
       let crumbs: ReturnType<typeof marketingHomeSurfaceBreadcrumbs>["crumbs"] = [];
       let schemaItems: ReturnType<typeof marketingHomeSurfaceBreadcrumbs>["schemaItems"] = [];
-
       try {
         const b = marketingHomeSurfaceBreadcrumbs();
         crumbs = b.crumbs;
@@ -305,19 +467,33 @@ export default async function HomePage() {
         });
       }
 
-      const webPageProps = buildMarketingWebPageJsonLdProps({
-        locale: STATIC_LOCALE,
-        enPath: "/",
-        title,
-        description,
-        inLanguage: "en-CA",
-      });
+      // ── JSON-LD (non-fatal) ────────────────────────────────────────────────
+      let webPageProps: ReturnType<typeof buildMarketingWebPageJsonLdProps> | null = null;
+      try {
+        webPageProps = buildMarketingWebPageJsonLdProps({
+          locale: STATIC_LOCALE,
+          enPath: "/",
+          title,
+          description,
+          inLanguage: "en-CA",
+        });
+      } catch (err) {
+        layoutStderrTrace("marketing_home", "webpage_jsonld_failed", {
+          error: err instanceof Error ? err.message : String(err),
+        });
+      }
 
+      // ── Perf success signal ────────────────────────────────────────────────
+      try {
+        void homePerfFinalForGetRoot("success", {}).catch(() => {});
+      } catch {}
+
+      // ── Render ─────────────────────────────────────────────────────────────
       return (
         <>
-          <WebPageJsonLd {...webPageProps} />
+          {webPageProps != null ? <WebPageJsonLd {...webPageProps} /> : null}
           {schemaItems.length > 0 ? <BreadcrumbJsonLd items={schemaItems} /> : null}
-          <FaqJsonLd items={MARKETING_HOME_FAQ_JSONLD} />
+          <SafeFaqJsonLd />
 
           {crumbs.length > 0 ? (
             <div className="mx-auto max-w-7xl px-4 pt-2 sm:px-6 sm:pt-3 lg:px-8">
@@ -325,11 +501,11 @@ export default async function HomePage() {
             </div>
           ) : null}
 
-          <HomeRestoredWithDeferredStats
+          <SafeHomeRestoredWithDeferredStats
             skipOptionalDbReads={skipOptionalDbReads}
             publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
             skipOptionalDbPerfSegmentT0={skipOptionalDbReads ? perfPageT0 : undefined}
-            introAfterHero={<GlobalMarketingHomeIntro />}
+            introAfterHero={<SafeGlobalMarketingHomeIntro />}
           />
 
           <Suspense fallback={<HomeBlogTeaserSectionShell m={m} posts={[]} />}>
@@ -338,29 +514,42 @@ export default async function HomePage() {
         </>
       );
     } catch (err) {
-      emitNnHomeRouteDiag({
-        segment: "page_catch_emergency_fallback",
-        elapsed_ms: nnHomeDiagNowMs() - tDiag,
-      });
+      // ── Last-resort emergency fallback ────────────────────────────────────
+      try {
+        emitNnHomeRouteDiag({
+          segment: "page_catch_emergency_fallback",
+          elapsed_ms: safeNnHomeDiagNowMs() - tDiag,
+        });
+      } catch {}
 
       layoutStderrTrace("marketing_home", "home_page_failed_to_emergency_fallback", {
         error: err instanceof Error ? err.message : String(err),
       });
 
-      void homePerfFinalForGetRoot("failure", { error_phase: "page" }).catch(() => {});
+      try {
+        void homePerfFinalForGetRoot("failure", { error_phase: "page" }).catch(() => {});
+      } catch {}
+
       return <MarketingHomeEmergencyFallback />;
     }
   };
 
-  if (runtime?.withSentryRuntimeSpan) {
-    return runtime.withSentryRuntimeSpan(
-      {
-        name: "marketing.route.render.home",
-        op: "ui.server.render",
-        attributes: { route: "/", routeGroup: "marketing.default.home" },
-      },
-      renderHomePage,
-    );
+  // ── Sentry span wrapper (non-fatal) ────────────────────────────────────────
+  try {
+    if (runtime?.withSentryRuntimeSpan) {
+      return runtime.withSentryRuntimeSpan(
+        {
+          name: "marketing.route.render.home",
+          op: "ui.server.render",
+          attributes: { route: "/", routeGroup: "marketing.default.home" },
+        },
+        renderHomePage,
+      );
+    }
+  } catch (err) {
+    layoutStderrTrace("marketing_home", "page_sentry_span_failed", {
+      error: err instanceof Error ? err.message : String(err),
+    });
   }
 
   return renderHomePage();
