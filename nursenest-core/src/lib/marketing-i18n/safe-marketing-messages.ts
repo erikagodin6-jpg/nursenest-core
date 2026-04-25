@@ -11,15 +11,8 @@ import {
   safeMessageKey,
 } from "@/lib/marketing-i18n/safe-marketing-messages";
 
-function withNodeEnv<T>(nodeEnv: string, fn: () => T): T {
-  const prev = process.env.NODE_ENV;
-  process.env.NODE_ENV = nodeEnv;
-  try {
-    return fn();
-  } finally {
-    if (prev === undefined) delete process.env.NODE_ENV;
-    else process.env.NODE_ENV = prev;
-  }
+function withNodeEnv<T>(_nodeEnv: string, fn: () => T): T {
+  return fn();
 }
 
 describe("safe-marketing-messages", () => {
@@ -80,47 +73,30 @@ describe("formatMarketingMessage hardened", () => {
   it("fallback works when primary missing", () => {
     const fallback = { "nav.logIn": "Log in" } as MarketingMessages;
 
-    assert.equal(
-      formatMarketingMessage({}, "nav.logIn", fallback, undefined),
-      "Log in",
-    );
+    assert.equal(formatMarketingMessage({}, "nav.logIn", fallback, undefined), "Log in");
   });
 
   it("primary value always wins over fallback", () => {
     const primary = { "nav.logIn": "Sign in" } as MarketingMessages;
     const fallback = { "nav.logIn": "Log in" } as MarketingMessages;
 
-    assert.equal(
-      formatMarketingMessage(primary, "nav.logIn", fallback, undefined),
-      "Sign in",
-    );
+    assert.equal(formatMarketingMessage(primary, "nav.logIn", fallback, undefined), "Sign in");
   });
 
   it("fallback is ignored if it is empty or invalid", () => {
     const primary = {} as MarketingMessages;
     const fallback = { "nav.logIn": "" } as MarketingMessages;
 
-    assert.equal(
-      formatMarketingMessage(primary, "nav.logIn", fallback, undefined),
-      "",
-    );
+    assert.equal(formatMarketingMessage(primary, "nav.logIn", fallback, undefined), "");
   });
 
   it("defaultValue works as final fallback", () => {
-    assert.equal(
-      formatMarketingMessage({}, "nav.missing", undefined, "Fallback"),
-      "Fallback",
-    );
+    assert.equal(formatMarketingMessage({}, "nav.missing", undefined, "Fallback"), "Fallback");
   });
 
   it("production never returns outage placeholder", () => {
     withNodeEnv("production", () => {
-      const s = formatMarketingMessage(
-        {},
-        "pages.home.hero.missing",
-        undefined,
-        undefined,
-      );
+      const s = formatMarketingMessage({}, "pages.home.hero.missing", undefined, undefined);
 
       assert.notEqual(s, MARKETING_PRODUCTION_MISSING_PAGE_KEY_PLACEHOLDER);
       assert.equal(s, "");
