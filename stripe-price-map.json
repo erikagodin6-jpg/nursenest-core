@@ -1,341 +1,64 @@
 {
   "syncedAt": "2026-03-14T16:21:39.458Z",
   "mode": "test",
-  "prices": [
+  "plans": [
     {
+      "key": "np_yearly",
       "tier": "np",
       "duration": "yearly",
-      "productId": "prod_U9DNipyKQ2kgC3",
+      "interval": "year",
+      "intervalCount": 1,
+      "prices": {
+        "usd": {
+          "priceId": "price_1TAuwOChmmgDwbsxavYCiWJe",
+          "unitAmount": 17749
+        },
+        "cad": {
+          "priceId": "price_1TAuwOChmmgDwbsxEPIo5fCc",
+          "unitAmount": 23999
+        }
+      },
       "productName": "NurseNest NP - 1 Year",
-      "priceId": "price_1TAuwOChmmgDwbsxavYCiWJe",
-      "unitAmount": 17749,
-      "currency": "usd",
-      "recurringInterval": "year",
-      "recurringIntervalCount": 1,
       "active": true
     },
+
     {
-      "tier": "np",
-      "duration": "yearly",
-      "productId": "prod_U9DNipyKQ2kgC3",
-      "productName": "NurseNest NP - 1 Year",
-      "priceId": "price_1TAuwOChmmgDwbsxEPIo5fCc",
-      "unitAmount": 23999,
-      "currency": "cad",
-      "recurringInterval": "year",
-      "recurringIntervalCount": 1,
-      "active": true
-    },
-    {
+      "key": "np_6month",
       "tier": "np",
       "duration": "6-month",
-      "productId": "prod_U9DN2sio2cFPHp",
+      "interval": "month",
+      "intervalCount": 6,
+      "prices": {
+        "usd": {
+          "priceId": "price_1TAuwOChmmgDwbsxD9CeCzH4",
+          "unitAmount": 11849
+        },
+        "cad": {
+          "priceId": "price_1TAuwNChmmgDwbsxp9CQx6NC",
+          "unitAmount": 15999
+        }
+      },
       "productName": "NurseNest NP - 6 Months",
-      "priceId": "price_1TAuwOChmmgDwbsxD9CeCzH4",
-      "unitAmount": 11849,
-      "currency": "usd",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 6,
       "active": true
     },
+
     {
-      "tier": "np",
-      "duration": "6-month",
-      "productId": "prod_U9DN2sio2cFPHp",
-      "productName": "NurseNest NP - 6 Months",
-      "priceId": "price_1TAuwNChmmgDwbsxp9CQx6NC",
-      "unitAmount": 15999,
-      "currency": "cad",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 6,
-      "active": true
-    },
-    {
-      "tier": "np",
-      "duration": "3-month",
-      "productId": "prod_U9DNueVFTGsUXZ",
-      "productName": "NurseNest NP - 3 Months",
-      "priceId": "price_1TAuwNChmmgDwbsx4sOkUqcJ",
-      "unitAmount": 7399,
-      "currency": "usd",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 3,
-      "active": true
-    },
-    {
-      "tier": "np",
-      "duration": "3-month",
-      "productId": "prod_U9DNueVFTGsUXZ",
-      "productName": "NurseNest NP - 3 Months",
-      "priceId": "price_1TAuwNChmmgDwbsxghEPsHva",
-      "unitAmount": 9999,
-      "currency": "cad",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 3,
-      "active": true
-    },
-    {
+      "key": "np_monthly",
       "tier": "np",
       "duration": "monthly",
-      "productId": "prod_U9DNTY0RPmVE9u",
+      "interval": "month",
+      "intervalCount": 1,
+      "prices": {
+        "usd": {
+          "priceId": "price_1TAuwMChmmgDwbsxJeq6yl1r",
+          "unitAmount": 2949
+        },
+        "cad": {
+          "priceId": "price_1TAuwMChmmgDwbsxmtmXPLRO",
+          "unitAmount": 3999
+        }
+      },
       "productName": "NurseNest NP - 1 Month",
-      "priceId": "price_1TAuwMChmmgDwbsxJeq6yl1r",
-      "unitAmount": 2949,
-      "currency": "usd",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 1,
-      "active": true
-    },
-    {
-      "tier": "np",
-      "duration": "monthly",
-      "productId": "prod_U9DNTY0RPmVE9u",
-      "productName": "NurseNest NP - 1 Month",
-      "priceId": "price_1TAuwMChmmgDwbsxmtmXPLRO",
-      "unitAmount": 3999,
-      "currency": "cad",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 1,
-      "active": true
-    },
-    {
-      "tier": "rn",
-      "duration": "yearly",
-      "productId": "prod_U9DN8BeVO66a3m",
-      "productName": "NurseNest RN - 1 Year",
-      "priceId": "price_1TAuwMChmmgDwbsx8nfEmjxA",
-      "unitAmount": 13299,
-      "currency": "usd",
-      "recurringInterval": "year",
-      "recurringIntervalCount": 1,
-      "active": true
-    },
-    {
-      "tier": "rn",
-      "duration": "yearly",
-      "productId": "prod_U9DN8BeVO66a3m",
-      "productName": "NurseNest RN - 1 Year",
-      "priceId": "price_1TAuwLChmmgDwbsxXc6668nf",
-      "unitAmount": 17999,
-      "currency": "cad",
-      "recurringInterval": "year",
-      "recurringIntervalCount": 1,
-      "active": true
-    },
-    {
-      "tier": "rn",
-      "duration": "6-month",
-      "productId": "prod_U9DNzOeySfGO6i",
-      "productName": "NurseNest RN - 6 Months",
-      "priceId": "price_1TAuwLChmmgDwbsxmxVtMGuA",
-      "unitAmount": 8899,
-      "currency": "usd",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 6,
-      "active": true
-    },
-    {
-      "tier": "rn",
-      "duration": "6-month",
-      "productId": "prod_U9DNzOeySfGO6i",
-      "productName": "NurseNest RN - 6 Months",
-      "priceId": "price_1TAuwLChmmgDwbsxMkODdrTe",
-      "unitAmount": 11999,
-      "currency": "cad",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 6,
-      "active": true
-    },
-    {
-      "tier": "rn",
-      "duration": "3-month",
-      "productId": "prod_U9DNYNDmwdIXxw",
-      "productName": "NurseNest RN - 3 Months",
-      "priceId": "price_1TAuwKChmmgDwbsxq2s37CHp",
-      "unitAmount": 5549,
-      "currency": "usd",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 3,
-      "active": true
-    },
-    {
-      "tier": "rn",
-      "duration": "3-month",
-      "productId": "prod_U9DNYNDmwdIXxw",
-      "productName": "NurseNest RN - 3 Months",
-      "priceId": "price_1TAuwKChmmgDwbsx51iv9jNB",
-      "unitAmount": 7499,
-      "currency": "cad",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 3,
-      "active": true
-    },
-    {
-      "tier": "rn",
-      "duration": "monthly",
-      "productId": "prod_U9DN5yJNM315I2",
-      "productName": "NurseNest RN - 1 Month",
-      "priceId": "price_1TAuwJChmmgDwbsxslzAK5Sf",
-      "unitAmount": 2199,
-      "currency": "usd",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 1,
-      "active": true
-    },
-    {
-      "tier": "rn",
-      "duration": "monthly",
-      "productId": "prod_U9DN5yJNM315I2",
-      "productName": "NurseNest RN - 1 Month",
-      "priceId": "price_1TAuwJChmmgDwbsxfDR5LAza",
-      "unitAmount": 2999,
-      "currency": "cad",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 1,
-      "active": true
-    },
-    {
-      "tier": "rpn",
-      "duration": "yearly",
-      "productId": "prod_U9DNCZHf9qGGLD",
-      "productName": "NurseNest RPN - 1 Year",
-      "priceId": "price_1TAuwJChmmgDwbsxszhcIK8A",
-      "unitAmount": 11099,
-      "currency": "usd",
-      "recurringInterval": "year",
-      "recurringIntervalCount": 1,
-      "active": true
-    },
-    {
-      "tier": "rpn",
-      "duration": "yearly",
-      "productId": "prod_U9DNCZHf9qGGLD",
-      "productName": "NurseNest RPN - 1 Year",
-      "priceId": "price_1TAuwJChmmgDwbsxAQBkVA17",
-      "unitAmount": 14999,
-      "currency": "cad",
-      "recurringInterval": "year",
-      "recurringIntervalCount": 1,
-      "active": true
-    },
-    {
-      "tier": "rpn",
-      "duration": "6-month",
-      "productId": "prod_U9DNzX0KPtUnMB",
-      "productName": "NurseNest RPN - 6 Months",
-      "priceId": "price_1TAuwIChmmgDwbsxOe3i8hYi",
-      "unitAmount": 7399,
-      "currency": "usd",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 6,
-      "active": true
-    },
-    {
-      "tier": "rpn",
-      "duration": "6-month",
-      "productId": "prod_U9DNzX0KPtUnMB",
-      "productName": "NurseNest RPN - 6 Months",
-      "priceId": "price_1TAuwIChmmgDwbsxreuz48vj",
-      "unitAmount": 9999,
-      "currency": "cad",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 6,
-      "active": true
-    },
-    {
-      "tier": "rpn",
-      "duration": "3-month",
-      "productId": "prod_U9DNHE9wpITgcy",
-      "productName": "NurseNest RPN - 3 Months",
-      "priceId": "price_1TAuwHChmmgDwbsxO0VRQb8o",
-      "unitAmount": 4449,
-      "currency": "usd",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 3,
-      "active": true
-    },
-    {
-      "tier": "rpn",
-      "duration": "3-month",
-      "productId": "prod_U9DNHE9wpITgcy",
-      "productName": "NurseNest RPN - 3 Months",
-      "priceId": "price_1TAuwHChmmgDwbsxBDvSJOwB",
-      "unitAmount": 5999,
-      "currency": "cad",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 3,
-      "active": true
-    },
-    {
-      "tier": "rpn",
-      "duration": "monthly",
-      "productId": "prod_U9DN7VWr1RV27y",
-      "productName": "NurseNest RPN - 1 Month",
-      "priceId": "price_1TAuwHChmmgDwbsxThEUQr57",
-      "unitAmount": 1849,
-      "currency": "usd",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 1,
-      "active": true
-    },
-    {
-      "tier": "rpn",
-      "duration": "monthly",
-      "productId": "prod_U9DN7VWr1RV27y",
-      "productName": "NurseNest RPN - 1 Month",
-      "priceId": "price_1TAuwGChmmgDwbsxroS4xFW9",
-      "unitAmount": 2499,
-      "currency": "cad",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 1,
-      "active": true
-    },
-    {
-      "tier": "allied",
-      "duration": "monthly",
-      "productId": "prod_PLACEHOLDER_allied_monthly",
-      "productName": "NurseNest Allied Health - 1 Month",
-      "priceId": "price_PLACEHOLDER_allied_monthly_cad",
-      "unitAmount": 1499,
-      "currency": "cad",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 1,
-      "active": true
-    },
-    {
-      "tier": "allied",
-      "duration": "3-month",
-      "productId": "prod_PLACEHOLDER_allied_3month",
-      "productName": "NurseNest Allied Health - 3 Months",
-      "priceId": "price_PLACEHOLDER_allied_3month_cad",
-      "unitAmount": 3499,
-      "currency": "cad",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 3,
-      "active": true
-    },
-    {
-      "tier": "allied",
-      "duration": "6-month",
-      "productId": "prod_PLACEHOLDER_allied_6month",
-      "productName": "NurseNest Allied Health - 6 Months",
-      "priceId": "price_PLACEHOLDER_allied_6month_cad",
-      "unitAmount": 5999,
-      "currency": "cad",
-      "recurringInterval": "month",
-      "recurringIntervalCount": 6,
-      "active": true
-    },
-    {
-      "tier": "allied",
-      "duration": "yearly",
-      "productId": "prod_PLACEHOLDER_allied_yearly",
-      "productName": "NurseNest Allied Health - 1 Year",
-      "priceId": "price_PLACEHOLDER_allied_yearly_cad",
-      "unitAmount": 9999,
-      "currency": "cad",
-      "recurringInterval": "year",
-      "recurringIntervalCount": 1,
       "active": true
     }
   ]

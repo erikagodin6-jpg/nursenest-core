@@ -3,29 +3,29 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "include": [
-    "server/**/*.ts",
-    "shared/**/*.ts"
-  ],
+  "include": ["server/**/*.ts", "shared/**/*.ts"],
   "exclude": [
     "node_modules",
-    "client/**/*",
+    "client",
     "build",
     "dist",
-    "**/*.test.ts",
-    "tools/i18n/**",
-    ".local/**",
-    "server/replit_integrations/**",
-    "backup-system/**",
-    "scripts/**",
-    "server/seeds/**",
-    "server/sitemap/**",
+    "coverage",
+    ".next",
+    ".turbo",
+    ".local",
+    "data",
+    "replit-export",
+    "backup-system",
+    "scripts",
+    "tools/i18n",
+    "server/replit_integrations",
+    "server/seeds",
+    "server/sitemap",
     "server/seed-replit-json-imports.ts",
-    "client/src/data/translations/**",
-    "data/**",
-    "replit-export/**",
-    "coverage/**",
-    ".next/**",
-    ".turbo/**"
+    "client/src/data/translations",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/*.test.tsx",
+    "**/*.spec.tsx"
   ]
 }

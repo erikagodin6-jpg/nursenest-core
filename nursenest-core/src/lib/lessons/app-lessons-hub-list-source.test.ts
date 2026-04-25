@@ -2,9 +2,15 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { pickAppLessonsHubListSource } from "@/lib/lessons/app-lessons-hub-list-source";
 
-test("prefers pathway when any pathway row matches filters (source priority alone does not prove renderability)", () => {
+type SourceInput = Parameters<typeof pickAppLessonsHubListSource>[0];
+
+function pick(input: SourceInput) {
+  return pickAppLessonsHubListSource(input);
+}
+
+test("uses pathway_lessons when any pathway row matches filters", () => {
   assert.equal(
-    pickAppLessonsHubListSource({
+    pick({
       pathwaySampleExists: true,
       contentTotal: 99,
       pathwayIdFilter: null,
@@ -13,9 +19,9 @@ test("prefers pathway when any pathway row matches filters (source priority alon
   );
 });
 
-test("prefers pathway even when pathwayId filter is set and content exists", () => {
+test("uses pathway_lessons when pathwayId filter is set and pathway rows exist", () => {
   assert.equal(
-    pickAppLessonsHubListSource({
+    pick({
       pathwaySampleExists: true,
       contentTotal: 10,
       pathwayIdFilter: "pw-1",
@@ -24,9 +30,9 @@ test("prefers pathway even when pathwayId filter is set and content exists", () 
   );
 });
 
-test("uses content_items when no pathway rows but content exists and no pathwayId filter", () => {
+test("uses content_items when no pathway rows exist, content exists, and no pathwayId filter is set", () => {
   assert.equal(
-    pickAppLessonsHubListSource({
+    pick({
       pathwaySampleExists: false,
       contentTotal: 3,
       pathwayIdFilter: null,
@@ -35,9 +41,9 @@ test("uses content_items when no pathway rows but content exists and no pathwayI
   );
 });
 
-test("legacy when pathwayId filter is set, no pathway rows, even if content exists", () => {
+test("uses legacy_content_map when pathwayId filter is set but no pathway rows exist", () => {
   assert.equal(
-    pickAppLessonsHubListSource({
+    pick({
       pathwaySampleExists: false,
       contentTotal: 5,
       pathwayIdFilter: "pw-1",
@@ -46,9 +52,9 @@ test("legacy when pathwayId filter is set, no pathway rows, even if content exis
   );
 });
 
-test("legacy when no pathway and no content", () => {
+test("uses legacy_content_map when neither pathway rows nor content items exist", () => {
   assert.equal(
-    pickAppLessonsHubListSource({
+    pick({
       pathwaySampleExists: false,
       contentTotal: 0,
       pathwayIdFilter: null,
