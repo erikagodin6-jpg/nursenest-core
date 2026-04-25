@@ -6,8 +6,32 @@ import { fileURLToPath } from "node:url";
 
 const dir = dirname(fileURLToPath(import.meta.url));
 const root = join(dir, "..");
+
 const emptyGenerateStaticParamsPattern =
-  /export function generateStaticParams\([^)]*\)\s*(:\s*[^{]+)?\s*\{\s*return \[\];\s*\}/m;
+  /export\s+(?:async\s+)?function\s+generateStaticParams\([^)]*\)\s*(?::\s*[^{]+)?\s*\{\s*return\s+\[\]\s*;?\s*\}/m;
+
+const eagerImportPattern = (modulePath: string) =>
+  new RegExp(
+    String.raw`^import\s+(?!type\b)[\s\S]*?from\s+["']${modulePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["'];?$`,
+    "m",
+  );
+
+const dynamicImportPattern = (modulePath: string) =>
+  new RegExp(
+    String.raw`import\s*\(\s*["']${modulePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']\s*\)`,
+  );
+
+function read(relativePath: string): string {
+  return readFileSync(join(root, relativePath), "utf8");
+}
+
+function assertNoEagerImport(source: string, modulePath: string, message?: string) {
+  assert.doesNotMatch(source, eagerImportPattern(modulePath), message ?? modulePath);
+}
+
+function assertHasDynamicImport(source: string, modulePath: string, message?: string) {
+  assert.match(source, dynamicImportPattern(modulePath), message ?? modulePath);
+}
 
 const onDemandRouteFiles = [
   "src/app/(marketing)/(default)/australia/[topic]/page.tsx",
@@ -48,98 +72,103 @@ const onDemandRouteFiles = [
 ] as const;
 
 test("next.config avoids async-module and optional static Sentry load during build", () => {
-  const nextConfig = readFileSync(join(root, "next.config.ts"), "utf8");
+  const nextConfig = read("next.config.ts");
+
   assert.doesNotMatch(nextConfig, /await\s+import\(["']@sentry\/nextjs["']\)/);
-  assert.doesNotMatch(nextConfig, /import\s+\{\s*withSentryConfig\s*\}\s+from\s+["']@sentry\/nextjs["']/);
+  assert.doesNotMatch(nextConfig, eagerImportPattern("@sentry/nextjs"));
   assert.doesNotMatch(nextConfig, /\beslint\s*:\s*\{/);
 });
 
 test("staff-session defers heavy auth and role-source imports", () => {
-  const staffSession = readFileSync(join(root, "src", "lib", "auth", "staff-session.ts"), "utf8");
-  assert.doesNotMatch(staffSession, /^import .*@\/lib\/auth["'];?$/m);
-  assert.doesNotMatch(staffSession, /^import .*@\/lib\/auth\/admin-role-source["'];?$/m);
-  assert.match(staffSession, /await import\(["']@\/lib\/auth["']\)/);
-  assert.match(staffSession, /await import\(["']@\/lib\/auth\/admin-role-source["']\)/);
+  const staffSession = read("src/lib/auth/staff-session.ts");
+
+  assertNoEagerImport(staffSession, "@/lib/auth");
+  assertNoEagerImport(staffSession, "@/lib/auth/admin-role-source");
+
+  assertHasDynamicImport(staffSession, "@/lib/auth");
+  assertHasDynamicImport(staffSession, "@/lib/auth/admin-role-source");
 });
 
-test("auth runtime defers optional Sentry import", () => {
-  const auth = readFileSync(join(root, "src", "lib", "auth.ts"), "utf8");
-  assert.doesNotMatch(auth, /^import \* as Sentry from ["']@sentry\/nextjs["'];?$/m);
-  assert.doesNotMatch(auth, /import\(["']@sentry\/nextjs["']\)/);
+test("auth runtime defers optional Sentry import through opaque helper", () => {
+  const auth = read("src/lib/auth.ts");
+
+  assert.doesNotMatch(auth, /^import\s+\*\s+as\s+Sentry\s+from\s+["']@sentry\/nextjs["'];?$/m);
+  assert.doesNotMatch(auth, /import\s*\(\s*["']@sentry\/nextjs["']\s*\)/);
   assert.match(auth, /loadSentryAuthSdk/);
 });
 
 test("sentry metrics helper defers core SDK import", () => {
-  const sentryMetrics = readFileSync(join(root, "src", "lib", "observability", "sentry-metrics.ts"), "utf8");
-  assert.doesNotMatch(sentryMetrics, /^import .*@sentry\/core["'];?$/m);
-  assert.match(sentryMetrics, /import\(["']@sentry\/core["']\)/);
+  const sentryMetrics = read("src/lib/observability/sentry-metrics.ts");
+
+  assertNoEagerImport(sentryMetrics, "@sentry/core");
+  assertHasDynamicImport(sentryMetrics, "@sentry/core");
 });
 
 test("safe server log keeps optional Sentry load opaque to build-time tracing", () => {
-  const safeServerLog = readFileSync(join(root, "src", "lib", "observability", "safe-server-log.ts"), "utf8");
-  assert.doesNotMatch(safeServerLog, /import\(["']@sentry\/nextjs["']\)/);
+  const safeServerLog = read("src/lib/observability/safe-server-log.ts");
+
+  assert.doesNotMatch(safeServerLog, /import\s*\(\s*["']@sentry\/nextjs["']\s*\)/);
   assert.match(safeServerLog, /loadSentryServerSdk/);
 });
 
 test("on-demand marketing routes do not keep empty generateStaticParams exports", () => {
   for (const file of onDemandRouteFiles) {
-    const source = readFileSync(join(root, file), "utf8");
+    const source = read(file);
     assert.doesNotMatch(source, emptyGenerateStaticParamsPattern, file);
   }
 });
 
 test("root app error boundary defers optional Sentry import", () => {
-  const appError = readFileSync(join(root, "src", "app", "error.tsx"), "utf8");
-  assert.doesNotMatch(appError, /^import \* as Sentry from ["']@sentry\/nextjs["'];?$/m);
-  assert.doesNotMatch(appError, /import\(["']@sentry\/nextjs["']\)/);
+  const appError = read("src/app/error.tsx");
+
+  assert.doesNotMatch(appError, /^import\s+\*\s+as\s+Sentry\s+from\s+["']@sentry\/nextjs["'];?$/m);
+  assert.doesNotMatch(appError, /import\s*\(\s*["']@sentry\/nextjs["']\s*\)/);
   assert.match(appError, /captureClientExceptionIfEnabled/);
 });
 
-test("safe server log helper avoids async Sentry import in shared build graph", () => {
-  const safeServerLog = readFileSync(join(root, "src", "lib", "observability", "safe-server-log.ts"), "utf8");
-  assert.doesNotMatch(safeServerLog, /import\(["']@sentry\/nextjs["']\)/);
-  assert.match(safeServerLog, /loadSentryServerSdk/);
-});
-
 test("root not-found page defers auth-bound resume imports during build", () => {
-  const notFound = readFileSync(join(root, "src", "app", "not-found.tsx"), "utf8");
-  assert.doesNotMatch(notFound, /^import .*@\/lib\/auth["'];?$/m);
-  assert.doesNotMatch(notFound, /^import .*@\/lib\/ui\/not-found-resume["'];?$/m);
-  assert.match(notFound, /import\(["']@\/lib\/auth["']\)/);
-  assert.match(notFound, /import\(["']@\/lib\/ui\/not-found-resume["']\)/);
+  const notFound = read("src/app/not-found.tsx");
+
+  assertNoEagerImport(notFound, "@/lib/auth");
+  assertNoEagerImport(notFound, "@/lib/ui/not-found-resume");
+
+  assertHasDynamicImport(notFound, "@/lib/auth");
+  assertHasDynamicImport(notFound, "@/lib/ui/not-found-resume");
 });
 
 test("shared root layouts avoid eager observability imports during production build", () => {
-  const rootLayout = readFileSync(join(root, "src", "app", "layout.tsx"), "utf8");
-  assert.doesNotMatch(rootLayout, /^import .*@\/lib\/observability\/render-trace["'];?$/m);
+  const rootLayout = read("src/app/layout.tsx");
+  assertNoEagerImport(rootLayout, "@/lib/observability/render-trace");
   assert.match(rootLayout, /loadRenderTrace/);
 
-  const marketingLayout = readFileSync(join(root, "src", "app", "(marketing)", "(default)", "layout.tsx"), "utf8");
-  assert.doesNotMatch(marketingLayout, /^import .*@\/lib\/observability\/render-trace["'];?$/m);
-  assert.doesNotMatch(marketingLayout, /^import .*@\/lib\/observability\/sentry-route-observability["'];?$/m);
+  const marketingLayout = read("src/app/(marketing)/(default)/layout.tsx");
+  assertNoEagerImport(marketingLayout, "@/lib/observability/render-trace");
+  assertNoEagerImport(marketingLayout, "@/lib/observability/sentry-route-observability");
   assert.match(marketingLayout, /loadRenderTrace/);
   assert.match(marketingLayout, /loadMarketingLayoutObservability/);
 });
 
 test("canonical destinations avoid eager learner nav imports in public marketing callers", () => {
-  const canonicalDestinations = readFileSync(
-    join(root, "src", "lib", "navigation", "canonical-destinations.ts"),
-    "utf8",
-  );
-  assert.doesNotMatch(canonicalDestinations, /^import\s+(?!type\b).*@\/lib\/navigation\/learner-primary-nav["'];?$/m);
+  const canonicalDestinations = read("src/lib/navigation/canonical-destinations.ts");
+
+  assertNoEagerImport(canonicalDestinations, "@/lib/navigation/learner-primary-nav");
   assert.match(canonicalDestinations, /getLearnerPrimaryNavModule/);
 });
 
 test("shared app layouts defer admin palette and learner bundle loaders", () => {
-  const appLayout = readFileSync(join(root, "src", "app", "(student)", "app", "layout.tsx"), "utf8");
-  assert.doesNotMatch(appLayout, /^import .*@\/components\/admin\/admin-global-command-palette["'];?$/m);
-  assert.doesNotMatch(appLayout, /^import .*@\/lib\/learner\/learner-marketing-server["'];?$/m);
-  assert.match(appLayout, /import\(["']@\/components\/admin\/admin-global-command-palette["']\)/);
-  assert.match(appLayout, /import\(["']@\/lib\/learner\/learner-marketing-server["']\)/);
+  const appLayout = read("src/app/(student)/app/layout.tsx");
 
-  const adminLayout = readFileSync(join(root, "src", "app", "(admin)", "layout.tsx"), "utf8");
-  assert.doesNotMatch(adminLayout, /^import .*@\/components\/admin\/admin-global-command-palette["'];?$/m);
-  assert.doesNotMatch(adminLayout, /^import .*@\/lib\/marketing-i18n\/load-marketing-message-shards["'];?$/m);
-  assert.match(adminLayout, /import\(["']@\/components\/admin\/admin-global-command-palette["']\)/);
-  assert.match(adminLayout, /import\(["']@\/lib\/marketing-i18n\/load-marketing-message-shards["']\)/);
+  assertNoEagerImport(appLayout, "@/components/admin/admin-global-command-palette");
+  assertNoEagerImport(appLayout, "@/lib/learner/learner-marketing-server");
+
+  assertHasDynamicImport(appLayout, "@/components/admin/admin-global-command-palette");
+  assertHasDynamicImport(appLayout, "@/lib/learner/learner-marketing-server");
+
+  const adminLayout = read("src/app/(admin)/layout.tsx");
+
+  assertNoEagerImport(adminLayout, "@/components/admin/admin-global-command-palette");
+  assertNoEagerImport(adminLayout, "@/lib/marketing-i18n/load-marketing-message-shards");
+
+  assertHasDynamicImport(adminLayout, "@/components/admin/admin-global-command-palette");
+  assertHasDynamicImport(adminLayout, "@/lib/marketing-i18n/load-marketing-message-shards");
 });

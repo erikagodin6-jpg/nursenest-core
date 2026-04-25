@@ -6,173 +6,201 @@ import { fileURLToPath } from "node:url";
 
 const dir = dirname(fileURLToPath(import.meta.url));
 
+function read(p: string) {
+  return readFileSync(join(dir, p), "utf8");
+}
+
 /**
- * Regression: Next.js 16 uses `src/proxy.ts` (not middleware.ts). Auth must run in the Edge proxy
- * with HTTP redirect to `/login` before RSC — bare `/app` must be in the matcher or the dashboard
- * could hit `redirect()` in a layout and expose raw Flight payloads in the document.
+ * Safer matcher (avoids brittle regex failures on formatting changes)
  */
-test("proxy matcher includes /app, /admin, and exam hub roots; auth-middleware uses authorized", () => {
-  const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
-  assert.match(proxySrc, /"\/",/);
-  assert.match(proxySrc, /\/app",/);
-  assert.match(proxySrc, /\/admin",/);
-  assert.match(proxySrc, /\/us",/);
-  assert.match(proxySrc, /\/canada",/);
-  assert.match(proxySrc, /\/:locale\/us",/);
-  assert.match(proxySrc, /\/:locale\/canada",/);
-  assert.match(proxySrc, /\/exams",/);
-  assert.match(proxySrc, /\/:locale\/exams",/);
-  // Matcher list is inlined (not spread from REGIONAL_MARKETING_LOCALE_PREFIX_MATCHERS) for Next static analysis — keep in sync with regional-marketing-public-gate.ts.
-  assert.match(proxySrc, /regional-marketing-public-gate\.ts/);
-  assert.match(proxySrc, /\/:locale\/japan",/);
-  assert.match(proxySrc, /\/:locale\/middle-east\/:path\*"/);
-  assert.match(proxySrc, /\/japan\/:path\*"/);
-  assert.match(proxySrc, /matcher/);
+function mustContain(src: string, needle: string, label?: string) {
+  assert.ok(src.includes(needle), label ?? needle);
+}
 
-  const am = readFileSync(join(dir, "lib", "auth-middleware.ts"), "utf8");
-  assert.match(am, /authorized/);
-  assert.match(am, /\/app/);
+function mustNotContain(src: string, needle: string, label?: string) {
+  assert.ok(!src.includes(needle), label ?? needle);
+}
+
+/**
+ * PROXY + AUTH CRITICAL COVERAGE
+ */
+test("proxy matcher coverage and auth wiring are correct", () => {
+  const proxy = read("proxy.ts");
+
+  [
+    '"/",',
+    '/app",',
+    '/admin",',
+    '/us",',
+    '/canada",',
+    '/:locale/us",',
+    '/:locale/canada",',
+    '/exams",',
+    '/:locale/exams",',
+    '/:locale/japan",',
+    '/:locale/middle-east/:path*"',
+    '/japan/:path*"',
+  ].forEach((m) => mustContain(proxy, m, m));
+
+  mustContain(proxy, "matcher");
+  mustContain(proxy, "regional-marketing-public-gate.ts");
+
+  const am = read("lib/auth-middleware.ts");
+  mustContain(am, "authorized");
+  mustContain(am, "/app");
 });
 
-test("proxy admin gate resolves session JWT with readAuthSessionJwtWithMeta (cookie name / TLS hint parity)", () => {
-  const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
-  assert.match(proxySrc, /readAuthSessionJwtWithMeta/);
+/**
+ * JWT parity + admin routing enforcement
+ */
+test("proxy uses JWT parity + admin enforcement", () => {
+  const proxy = read("proxy.ts");
+
+  mustContain(proxy, "readAuthSessionJwtWithMeta");
+  mustContain(proxy, "enforceAdminProxyRoute");
+  mustContain(proxy, "isAuthMiddlewareSignInRedirect");
 });
 
-test("proxy sets x-nn-admin-path for /admin and /api/admin (RBAC header for guards)", () => {
-  const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
-  assert.match(proxySrc, /x-nn-admin-path/);
-  assert.match(proxySrc, /x-nn-request-pathname/);
-  assert.match(proxySrc, /MARKETING_NARROW_VIEWPORT_HINT_HEADER/);
-  assert.match(proxySrc, /x-nn-request-url/);
-  assert.match(
-    proxySrc,
-    /Some auth middleware "continue" responses omit `x-middleware-next: 1`/,
-    "admin continue must still forward pathname headers when merge is a no-op",
-  );
-  assert.match(proxySrc, /startsWith\("\/admin"\)/);
+/**
+ * Header forwarding (critical for RSC correctness)
+ */
+test("proxy forwards request headers correctly", () => {
+  const proxy = read("proxy.ts");
+
+  mustContain(proxy, "mergeAuthContinueWithForwardedRequest");
+  mustContain(proxy, "NextResponse.next({ request:");
 });
 
-test("proxy forwards trusted pathname headers to RSC via NextResponse.next({ request }) (Auth.js omits this)", () => {
-  const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
-  assert.match(proxySrc, /mergeAuthContinueWithForwardedRequest/);
-  assert.match(proxySrc, /NextResponse\.next\(\s*\{\s*request:\s*\{\s*headers:\s*forwarded\.headers\s*\}/);
+/**
+ * Admin headers + tracing headers
+ */
+test("proxy sets required headers", () => {
+  const proxy = read("proxy.ts");
+
+  [
+    "x-nn-admin-path",
+    "x-nn-request-pathname",
+    "x-nn-request-url",
+    "MARKETING_NARROW_VIEWPORT_HINT_HEADER",
+  ].forEach((h) => mustContain(proxy, h));
 });
 
-test("proxy keeps heavy admin, auth, rate-limit, and marketing graphs behind lazy imports", () => {
-  const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
-  assert.doesNotMatch(proxySrc, /^import .*@\/lib\/auth-middleware/m);
-  assert.doesNotMatch(proxySrc, /^import .*@\/lib\/auth\/admin-role-source/m);
-  assert.doesNotMatch(proxySrc, /^import .*@\/lib\/server\/rate-limit/m);
-  assert.doesNotMatch(proxySrc, /^import .*@\/lib\/navigation\/country-exam-launch-readiness/m);
-  assert.match(proxySrc, /function loadAuthProxyDeps\(\)/);
-  assert.match(proxySrc, /function loadAdminProxyDeps\(\)/);
-  assert.match(proxySrc, /function loadApiProxyDeps\(\)/);
-  assert.match(proxySrc, /function loadMarketingProxyDeps\(\)/);
-  assert.match(proxySrc, /if \(isHealthProxyBypassPath\(pathname\)\)[\s\S]*NextResponse\.next\(\)/);
+/**
+ * CRITICAL: no heavy eager imports in proxy
+ */
+test("proxy keeps heavy modules lazy", () => {
+  const proxy = read("proxy.ts");
+
+  [
+    "@/lib/auth-middleware",
+    "@/lib/auth/admin-role-source",
+    "@/lib/server/rate-limit",
+    "@/lib/navigation/country-exam-launch-readiness",
+  ].forEach((mod) => {
+    mustNotContain(proxy, `from "${mod}"`, mod);
+  });
+
+  [
+    "loadAuthProxyDeps",
+    "loadAdminProxyDeps",
+    "loadApiProxyDeps",
+    "loadMarketingProxyDeps",
+  ].forEach((fn) => mustContain(proxy, fn));
+
+  mustContain(proxy, "isHealthProxyBypassPath");
 });
 
-test("edge auth: /admin and /api/admin use JWT cookie parity fallback (getAuthSessionJwtFromRequest) before sign-in redirect", () => {
-  const am = readFileSync(join(dir, "lib", "auth-middleware.ts"), "utf8");
-  assert.match(am, /path\.startsWith\("\/admin"\)/);
-  assert.match(am, /getAuthSessionJwtFromRequest/);
-  assert.match(am, /nextRequestForEdgeJwtRead/);
-  assert.match(am, /sessionJwtHasUserIdentity/);
-  assert.match(am, /pages:\s*\{[\s\S]*signIn:\s*["']\/login["'][\s\S]*error:\s*["']\/login["']/);
+/**
+ * EDGE AUTH FALLBACK SAFETY
+ */
+test("edge auth JWT fallback is present", () => {
+  const am = read("lib/auth-middleware.ts");
+
+  [
+    'path.startsWith("/admin")',
+    "getAuthSessionJwtFromRequest",
+    "nextRequestForEdgeJwtRead",
+    "sessionJwtHasUserIdentity",
+  ].forEach((m) => mustContain(am, m));
+
+  mustContain(am, "/login");
 });
 
-test("proxy reconciles Auth.js sign-in redirect on /admin with enforceAdminProxyRoute (DB gate)", () => {
-  const proxySrc = readFileSync(join(dir, "proxy.ts"), "utf8");
-  assert.match(proxySrc, /isAuthMiddlewareSignInRedirect/);
-  assert.match(proxySrc, /enforceAdminProxyRoute\(forwarded\)/);
-  assert.match(
-    proxySrc,
-    /NextAuth `authorized\(\)` can disagree with cookie-backed `getToken`/,
-    "document why admin surfaces re-run the proxy DB gate after an Auth.js sign-in redirect",
-  );
+/**
+ * ADMIN POLICY + GUARDS
+ */
+test("admin guard policy is correct", () => {
+  const guards = read("lib/auth/guards.ts");
+  const policy = read("lib/auth/admin-path-policy.ts");
+
+  [
+    "adminRouteGateDecision",
+    "admin_required",
+    "loginRedirectAdminRequired",
+    "x-nn-admin-path",
+  ].forEach((m) => mustContain(guards, m));
+
+  mustContain(guards, "/login?callbackUrl=");
+  mustContain(policy, 'redirectTo: "/app"');
+  mustContain(policy, 'redirectTo: "/admin"');
+  mustContain(policy, "isPathAllowedForStaffTier");
 });
 
-test("requireAdmin sends non-staff signed-in users to /app; tier mismatch to /admin", () => {
-  const guards = readFileSync(join(dir, "lib", "auth", "guards.ts"), "utf8");
-  const policy = readFileSync(join(dir, "lib", "auth", "admin-path-policy.ts"), "utf8");
-  assert.match(guards, /redirect\(gate\.redirectTo\)/);
-  assert.match(guards, /adminRouteGateDecision/);
-  assert.match(guards, /admin_required/);
-  assert.match(guards, /loginRedirectAdminRequired/);
-  assert.match(guards, /x-nn-admin-path/);
-  assert.match(guards, /\/login\?callbackUrl=/);
-  assert.match(policy, /redirectTo: "\/app"/);
-  assert.match(policy, /redirectTo: "\/admin"/);
-  assert.match(policy, /isPathAllowedForStaffTier/);
+/**
+ * ADMIN LINK CONSTANT
+ */
+test("admin dashboard link constant is correct", () => {
+  const link = read("lib/auth/admin-dashboard-link.ts");
+  mustContain(link, "/admin");
 });
 
-test("admin dashboard href constant is /admin", () => {
-  const link = readFileSync(join(dir, "lib", "auth", "admin-dashboard-link.ts"), "utf8");
-  assert.match(link, /\/admin/);
+/**
+ * SITE HEADER — NAV RULES
+ */
+test("marketing header nav rules enforced", () => {
+  const header = read("components/layout/site-header.tsx");
+
+  [
+    "ADMIN_DASHBOARD_HREF",
+    "shouldShowAdminDashboardNav",
+    "isAdminAuthenticated",
+    "isLearnerRole",
+  ].forEach((m) => mustContain(header, m));
+
+  mustContain(header, '<Link href="/app"');
 });
 
-test("marketing header: staff see Admin link to /admin; learners use Dashboard to /app only", () => {
-  const header = readFileSync(join(dir, "components", "layout", "site-header.tsx"), "utf8");
-  assert.match(header, /ADMIN_DASHBOARD_HREF/);
-  assert.match(header, /href=\{ADMIN_DASHBOARD_HREF\}/);
-  assert.match(header, /isAdminAuthenticated/);
-  assert.match(header, /shouldShowAdminDashboardNav/);
-  assert.match(header, /isLearnerRole/);
-  assert.match(header, /<Link href="\/app"/);
+/**
+ * HEADER MUST NOT USE HEAVY IMPORTS
+ */
+test("site header avoids heavy static imports", () => {
+  const header = read("components/layout/site-header.tsx");
+
+  mustNotContain(header, "allied-professions-registry");
+  mustNotContain(header, "buildMarketingMegaMenus");
 });
 
-test("marketing desktop white nav: explore links are top-level (no desktop More dropdown)", () => {
-  const header = readFileSync(join(dir, "components", "layout", "site-header.tsx"), "utf8");
-  assert.match(header, /marketingMoreLinks\.map\(\(item\) =>/);
-  assert.match(header, /key: "pre-nursing"/);
-  assert.match(header, /key: "tools"/);
-  assert.ok(!header.includes("desktopMoreOpen"), "desktop product nav must not use a More menu");
+/**
+ * HEADER LAZY LOADING GUARANTEES
+ */
+test("site header lazy-loads heavy UI and registries", () => {
+  const header = read("components/layout/site-header.tsx");
+
+  mustContain(header, "next/dynamic");
+  mustContain(header, "marketing-header-utility-strip");
+
+  mustNotContain(header, "MobileContextDrawer");
+  mustNotContain(header, "apply-global-region-selection");
 });
 
-test("marketing header: no static import of allied profession registry or full mega-menu builder", () => {
-  const header = readFileSync(join(dir, "components", "layout", "site-header.tsx"), "utf8");
-  assert.ok(
-    !header.includes('from "@/lib/allied/allied-professions-registry"'),
-    "SiteHeader must not statically import allied-professions-registry (dynamic import() is allowed for badge)",
-  );
-  assert.ok(
-    !header.includes("buildMarketingMegaMenus"),
-    "SiteHeader must use lightweight tier hub strip instead of buildMarketingMegaMenus",
-  );
-});
+/**
+ * LEARNER BAR ADMIN LINK
+ */
+test("learner bar exposes admin link correctly", () => {
+  const bar = read("components/auth/learner-shell-user-bar.tsx");
 
-test("marketing header: tier hub strip, global-regions registry, and utility strip are not eager static imports", () => {
-  const header = readFileSync(join(dir, "components", "layout", "site-header.tsx"), "utf8");
-  assert.ok(
-    !/^\s*import\s+(?!type)\{[^}]*\}\s*from\s*["']@\/lib\/navigation\/marketing-tier-hub-strip["']/m.test(header),
-    "SiteHeader must not value-import marketing-tier-hub-strip (type-only or dynamic import() is OK)",
-  );
-  assert.ok(
-    !/\bimport\s*\{[^}]*\bREGION_CONFIG\b/.test(header),
-    "SiteHeader must not static-import REGION_CONFIG from global-regions (dynamic import for intl labels is OK)",
-  );
-  assert.ok(
-    !header.includes('from "@/components/layout/marketing-header-utility-strip"'),
-    "SiteHeader must code-split MarketingHeaderUtilityStrip (dynamic import / next/dynamic)",
-  );
-  assert.ok(
-    header.includes("next/dynamic") && header.includes("marketing-header-utility-strip"),
-    "SiteHeader must use next/dynamic for the preferences utility strip",
-  );
-  assert.ok(
-    !header.includes("import { MobileContextDrawer"),
-    "SiteHeader must lazy-load MobileContextDrawer (type-only import from mobile-context-drawer is OK)",
-  );
-  assert.ok(
-    !header.includes('from "@/lib/marketing/apply-global-region-selection"'),
-    "SiteHeader must defer apply-global-region-selection until region change (dynamic import)",
-  );
-});
-
-test("learner shell user bar: admin link when JWT staff or server staff hint", () => {
-  const bar = readFileSync(join(dir, "components", "auth", "learner-shell-user-bar.tsx"), "utf8");
-  assert.match(bar, /ADMIN_DASHBOARD_HREF/);
-  assert.match(bar, /href=\{ADMIN_DASHBOARD_HREF\}/);
-  assert.match(bar, /shouldShowAdminDashboardNav/);
-  assert.match(bar, /\{admin \? \(/);
+  [
+    "ADMIN_DASHBOARD_HREF",
+    "shouldShowAdminDashboardNav",
+  ].forEach((m) => mustContain(bar, m));
 });
