@@ -1,241 +1,194 @@
 "use client";
 
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
-import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
-import { ExamSessionShell } from "@/components/exam/exam-session-shell";
-import { cardMatchesStudyFilters, hasActiveStudyFilters } from "@/lib/flashcards/study-session-persistence";
-import { formatTitleCase } from "@/lib/format/text-case";
-import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
+import { useState } from "react";
 
-type SessionPayload = {
-  ok: boolean;
-  summary: {
-    pathwayId: string | null;
-    selectedCategories: string[];
-    matchingCards: number;
-    returnedCards: number;
-    mode: "term_to_definition" | "definition_to_term" | "mixed";
-    shuffle: boolean;
-    weakOnly: boolean;
-    incorrectOnly: boolean;
-    starredOnly: boolean;
-    cardLimit: string;
-    savedOnly?: boolean;
-    notesOnly?: boolean;
-    revisitOnly?: boolean;
-    notStudiedOnly?: boolean;
-    recentStudiedOnly?: boolean;
-    sourceKind?: string;
-  };
-  categoryOptions: Array<{ id: string; title: string; count: number }>;
-  cards: Array<{
-    id: string;
-    front: string;
-    back: string;
-    topic?: string | null;
-    subtopic?: string | null;
-    explanation?: string;
-    examMicroQuestion?: ExamMicroQuestionPayload;
-    sourceKey?: string | null;
-    pathwayId?: string | null;
-  }>;
+type Card = {
+  id: string;
+  prompt: string;
+  answer: string;
+  explanation?: string;
+  examMicroQuestion?: {
+    question: string;
+    options: string[];
+    correctIndex: number;
+    rationaleCorrect: string;
+    rationaleIncorrect: { option: string; rationale: string }[];
+    clinicalPearl?: string;
+    keyTakeaway?: string;
+  } | null;
 };
 
-const MODE_LABEL: Record<SessionPayload["summary"]["mode"], string> = {
-  term_to_definition: "Term → Definition",
-  definition_to_term: "Definition → Term",
-  mixed: "Mixed",
-};
+export function ActiveStudySession({
+  cards,
+}: {
+  cards: Card[];
+}) {
+  const [index, setIndex] = useState(0);
+  const [selected, setSelected] = useState<number | null>(null);
 
-function parseCardLimitValue(value: string): number {
-  if (value === "all") return Number.POSITIVE_INFINITY;
-  const n = Number(value);
-  if (!Number.isFinite(n) || n <= 0) return 20;
-  return n;
-}
+  const card = cards[index];
+  const q = card.examMicroQuestion;
 
-export function FlashcardCustomStudyClient() {
-  const searchParams = useSearchParams();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [payload, setPayload] = useState<SessionPayload | null>(null);
-  const [reviewError, setReviewError] = useState<string | null>(null);
-
-  const onRate = useCallback(async (cardId: string, rating: "incorrect" | "unsure" | "known") => {
-    if (!cardId) return;
-    setReviewError(null);
-    try {
-      const res = await fetch(`/api/flashcards/cards/${encodeURIComponent(cardId)}/review`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json", "x-nn-study-launch-surface": "flashcards" },
-        body: JSON.stringify({ rating }),
-      });
-      const data = (await res.json()) as { error?: string };
-      if (!res.ok) throw new Error(data.error ?? "Unable to save review");
-    } catch (e) {
-      setReviewError(e instanceof Error ? e.message : "Unable to save review");
-    }
-  }, []);
-
-  const queryString = searchParams.toString();
-
-  const localFilters = {
-    starredOnly: searchParams.get("starredOnly") === "1",
-    savedOnly: searchParams.get("savedOnly") === "1",
-    notesOnly: searchParams.get("notesOnly") === "1",
-    confusingOnly: searchParams.get("revisitOnly") === "1",
-  };
-
-  useEffect(() => {
-    let active = true;
-    void (async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const params = new URLSearchParams(queryString);
-        params.set("includeCards", "1");
-        const lf = {
-          starredOnly: params.get("starredOnly") === "1",
-          savedOnly: params.get("savedOnly") === "1",
-          notesOnly: params.get("notesOnly") === "1",
-          confusingOnly: params.get("revisitOnly") === "1",
-        };
-        if (hasActiveStudyFilters(lf)) {
-          params.set("cardLimit", "500");
-        }
-        const res = await fetch(`/api/flashcards/custom-session?${params.toString()}`, { credentials: "include" });
-        const json = (await res.json()) as SessionPayload & { error?: string; code?: string };
-        if (!res.ok) {
-          const detail =
-            typeof json.code === "string" && json.code.length > 0 ? `${json.error ?? "Request failed"} (${json.code})` : (json.error ?? "Unable to load custom session");
-          throw new Error(detail);
-        }
-        if (json.ok === false) throw new Error(json.error ?? "Unable to load custom session");
-        if (active) setPayload(json);
-      } catch (e) {
-        if (active) setError(e instanceof Error ? e.message : "Unable to load custom session");
-      } finally {
-        if (active) setLoading(false);
-      }
-    })();
-    return () => {
-      active = false;
-    };
-  }, [queryString]);
-
-  if (loading) {
-    return <div className="mx-auto max-w-3xl px-4 py-10 text-sm text-[var(--theme-muted-text)]">Building your custom flashcard session…</div>;
+  if (!card || !q) {
+    return <div className="p-6">No question data available</div>;
   }
 
-  if (error || !payload) {
-    return (
-      <div className="mx-auto max-w-3xl px-4 py-10">
-        <p className="text-sm text-[var(--semantic-danger)]">{error ?? "Unable to load session."}</p>
-        <Link href="/app/flashcards" className="mt-4 inline-block text-sm font-semibold text-primary">
-          ← Back to Flashcards Builder
-        </Link>
-      </div>
-    );
-  }
-
-  const selectedTitles = payload.categoryOptions
-    .filter((c) => payload.summary.selectedCategories.includes(c.id))
-    .map((c) => formatTitleCase(c.title));
-
-  const filteredCards = payload.cards.filter((card) => cardMatchesStudyFilters(card.id, localFilters));
-  const cardLimit = parseCardLimitValue(payload.summary.cardLimit);
-  const limitedCards = Number.isFinite(cardLimit) ? filteredCards.slice(0, cardLimit) : filteredCards;
-  const activeCards: ActiveStudyCard[] = limitedCards.map((card) => ({
-    id: card.id,
-    prompt: card.front,
-    answer: card.back,
-    explanation: card.examMicroQuestion?.rationaleCorrect ?? card.explanation,
-    examMicroQuestion: card.examMicroQuestion ?? null,
-    distractors: card.examMicroQuestion
-      ? card.examMicroQuestion.rationaleIncorrect.map((d) => ({
-          option: `${d.letter})`,
-          rationale: d.rationale,
-        }))
-      : undefined,
-    topic: card.topic,
-    subtopic: card.subtopic,
-    sourceKey: card.sourceKey ?? null,
-    pathwayId: card.pathwayId ?? payload.summary.pathwayId,
-    topicSlug: card.subtopic ?? null,
-  }));
-  const enabledQuickFilters = [
-    localFilters.starredOnly ? "Starred" : null,
-    localFilters.savedOnly ? "Saved" : null,
-    localFilters.notesOnly ? "With Notes" : null,
-    localFilters.confusingOnly ? "Marked for Revisit" : null,
-  ].filter(Boolean) as string[];
+  const isCorrect = selected === q.correctIndex;
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8">
-      <div className="mb-6 rounded-2xl border border-border bg-[var(--theme-card-bg)] p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Custom Session</p>
-        <h1 className="mt-1 text-xl font-bold text-[var(--theme-heading-text)]">Flashcards Study Builder Session</h1>
-        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-          Pathway: {payload.summary.pathwayId ?? "Scoped by your plan"} · Categories: {selectedTitles.join(", ") || "All"}
-        </p>
-        <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
-          Cards: {payload.summary.returnedCards} of {payload.summary.matchingCards} · Mode: {MODE_LABEL[payload.summary.mode]} · Shuffle:{" "}
-          {payload.summary.shuffle ? "On" : "Off"}
-        </p>
-        {enabledQuickFilters.length > 0 ? (
-          <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
-            Local Review Filters: {enabledQuickFilters.join(", ")} · Session Items: {activeCards.length}
-          </p>
-        ) : null}
-        {enabledQuickFilters.length > 0 ? (
-          <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
-            Estimated before local review filters: {payload.summary.matchingCards}
-          </p>
-        ) : null}
+    <div className="max-w-6xl mx-auto p-4">
+      {/* Progress */}
+      <div className="mb-4">
+        <div className="text-sm text-gray-500">
+          Question {index + 1} of {cards.length}
+        </div>
+        <div className="h-2 bg-gray-200 rounded-full mt-2">
+          <div
+            className="h-2 bg-blue-500 rounded-full"
+            style={{ width: `${((index + 1) / cards.length) * 100}%` }}
+          />
+        </div>
       </div>
 
-      {reviewError ? <p className="mb-3 text-sm text-[var(--semantic-danger)]">{reviewError}</p> : null}
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* LEFT: QUESTION */}
+        <div className="bg-white rounded-2xl shadow p-6 border">
+          <h2 className="text-lg font-semibold mb-4">
+            {q.question}
+          </h2>
 
-      {payload.summary.matchingCards === 0 && activeCards.length === 0 ? (
-        <div
-          role="status"
-          className="mb-6 rounded-2xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_40%,var(--semantic-surface))] p-6 text-sm text-[var(--semantic-text-secondary)]"
-        >
-          <p className="m-0 font-semibold text-[var(--semantic-text-primary)]">No cards in this session</p>
-          <p className="mt-2">
-            Your filters and pathway scope returned zero matching flashcards. This is a valid empty result — widen
-            categories, adjust filters, or return to the builder.
-          </p>
+          <div className="space-y-3">
+            {q.options.map((opt, i) => {
+              const isSelected = selected === i;
+              const isCorrectAnswer = i === q.correctIndex;
+
+              return (
+                <button
+                  key={i}
+                  onClick={() => setSelected(i)}
+                  className={`w-full text-left p-4 rounded-xl border transition
+                    ${
+                      isSelected
+                        ? isCorrect
+                          ? "border-green-500 bg-green-50"
+                          : "border-red-500 bg-red-50"
+                        : "border-gray-200 hover:border-blue-400"
+                    }
+                    ${
+                      selected !== null && isCorrectAnswer
+                        ? "border-green-500 bg-green-50"
+                        : ""
+                    }
+                  `}
+                >
+                  <span className="font-medium mr-2">
+                    {String.fromCharCode(65 + i)}.
+                  </span>
+                  {opt}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Navigation */}
+          <div className="flex justify-between mt-6">
+            <button
+              onClick={() => {
+                setIndex((i) => Math.max(i - 1, 0));
+                setSelected(null);
+              }}
+              className="text-sm text-gray-500"
+            >
+              ← Previous
+            </button>
+
+            <button
+              onClick={() => {
+                setIndex((i) => Math.min(i + 1, cards.length - 1));
+                setSelected(null);
+              }}
+              className="text-sm text-blue-600 font-semibold"
+            >
+              Next →
+            </button>
+          </div>
         </div>
-      ) : null}
 
-      <ExamSessionShell neutralPalette immersive className="overflow-visible shadow-md">
-        <ActiveStudySession
-          cards={activeCards}
-          onRate={onRate}
-          sessionMeta={{
-            requestedCount: Number.isFinite(cardLimit) ? cardLimit : activeCards.length,
-            returnedCount: activeCards.length,
-            totalAvailable: payload.summary.matchingCards,
-            hasMore: payload.summary.matchingCards > activeCards.length,
-          }}
-          layout="split"
-          header={{
-            sessionTitle: "Custom Active Study Session",
-            modeLabel: MODE_LABEL[payload.summary.mode],
-            categoriesLabel: selectedTitles.join(", ") || "All Categories",
-            exitHref: "/app/flashcards",
-          }}
-        />
-      </ExamSessionShell>
+        {/* RIGHT: RATIONALE */}
+        <div className="bg-white rounded-2xl shadow p-6 border">
+          <h3 className="font-semibold mb-4 text-blue-600">
+            Rationale & Review
+          </h3>
 
-      <div className="mt-6">
-        <Link href="/app/flashcards" className="text-sm font-semibold text-primary">
-          ← Back to Flashcards Builder
-        </Link>
+          {selected !== null && (
+            <>
+              {/* Correct Answer */}
+              <div className="bg-blue-50 border rounded-xl p-4 mb-4">
+                <div className="text-xs font-semibold text-blue-600 mb-1">
+                  CORRECT ANSWER
+                </div>
+                <div className="font-medium">
+                  {q.options[q.correctIndex]}
+                </div>
+              </div>
+
+              {/* Why Correct */}
+              <div className="border rounded-xl p-4 mb-4">
+                <div className="font-semibold mb-1 text-sm">
+                  Why this is correct
+                </div>
+                <p className="text-sm text-gray-600">
+                  {q.rationaleCorrect}
+                </p>
+              </div>
+
+              {/* Incorrect */}
+              <div className="border rounded-xl p-4 mb-4">
+                <div className="font-semibold text-sm mb-2">
+                  Why other options are incorrect
+                </div>
+                <div className="space-y-2 text-sm text-gray-600">
+                  {q.rationaleIncorrect.map((d, i) => (
+                    <div key={i}>
+                      <span className="font-medium">{d.option}</span>:{" "}
+                      {d.rationale}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Clinical Pearl */}
+              {q.clinicalPearl && (
+                <div className="bg-yellow-50 border rounded-xl p-4 mb-4">
+                  <div className="font-semibold text-sm mb-1">
+                    Clinical Pearl
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    {q.clinicalPearl}
+                  </p>
+                </div>
+              )}
+
+              {/* Key Takeaway */}
+              {q.keyTakeaway && (
+                <div className="bg-blue-50 border rounded-xl p-4">
+                  <div className="font-semibold text-sm mb-1">
+                    Key Takeaway
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    {q.keyTakeaway}
+                  </p>
+                </div>
+              )}
+            </>
+          )}
+
+          {selected === null && (
+            <div className="text-sm text-gray-400">
+              Select an answer to view rationale
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

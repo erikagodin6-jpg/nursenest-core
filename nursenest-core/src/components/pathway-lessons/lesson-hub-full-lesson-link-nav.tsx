@@ -11,18 +11,32 @@ export function LessonHubFullLessonLinkNav(props: {
   lessonsBasePath: string;
 }) {
   const { lessons, lessonsBasePath } = props;
-  if (lessons.length === 0) return null;
+
+  if (!Array.isArray(lessons) || lessons.length === 0) return null;
 
   return (
     <nav aria-label="All lessons in this pathway" className="sr-only">
       <ul>
-        {lessons.map((l) => {
-          const href = pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug);
+        {lessons.map((lesson, index) => {
+          const slug =
+            typeof lesson.slug === "string" && lesson.slug.trim().length > 0
+              ? lesson.slug.trim()
+              : "";
+
+          if (!slug) return null;
+
+          const href = pathwayLessonMarketingDetailHref(lessonsBasePath, slug);
           if (!href) return null;
+
+          const title =
+            typeof lesson.title === "string" && lesson.title.trim().length > 0
+              ? lesson.title.trim()
+              : slug;
+
           return (
-            <li key={l.slug}>
+            <li key={`${slug}-${index}`}>
               <Link href={href} tabIndex={-1}>
-                {l.title.trim() || l.slug}
+                {title}
               </Link>
             </li>
           );

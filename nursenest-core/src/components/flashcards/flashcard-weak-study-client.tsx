@@ -31,6 +31,7 @@ export function FlashcardWeakStudyClient({
 }) {
   const searchParams = useSearchParams();
   const pathwayId = searchParams.get("pathwayId")?.trim() || null;
+
   const flashcardsHubHref = pathwayId
     ? `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}`
     : "/app/flashcards";
@@ -46,27 +47,25 @@ export function FlashcardWeakStudyClient({
   const load = useCallback(async () => {
     setLoading(true);
     setError(null);
+
     try {
       const qs = new URLSearchParams();
       if (pathwayId) qs.set("pathwayId", pathwayId);
-      const url = qs.toString() ? `/api/flashcards/weak-queue?${qs.toString()}` : "/api/flashcards/weak-queue";
-      const res = await fetch(url, { credentials: "include" });
-      const data = (await res.json()) as {
-        cards?: WeakCard[];
-        weakTopics?: string[];
-        hint?: string | null;
-        pathwayId?: string | null;
-        pathwayRequired?: boolean;
-        error?: string;
-      };
-      if (!res.ok) {
-        throw new Error(data.error ?? "Could not load weak-area cards");
-      }
-      setPathwayRequired(Boolean(data.pathwayRequired));
-      setResolvedPathwayId(typeof data.pathwayId === "string" && data.pathwayId.trim() ? data.pathwayId.trim() : null);
+
+      const res = await fetch(
+        `/api/flashcards/weak-queue${qs.toString() ? `?${qs}` : ""}`,
+        { credentials: "include" }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error ?? "Load failed");
+
       setQueue(data.cards ?? []);
       setWeakTopics(data.weakTopics ?? []);
       setHint(data.hint ?? null);
+      setPathwayRequired(Boolean(data.pathwayRequired));
+      setResolvedPathwayId(data.pathwayId ?? null);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error");
       setQueue([]);
@@ -80,80 +79,79 @@ export function FlashcardWeakStudyClient({
   }, [load]);
 
   const onRate = async (cardId: string, rating: (typeof SIMPLE)[number]) => {
-    const card = queue.find((item) => item.id === cardId);
+    const card = queue.find((c) => c.id === cardId);
     if (!card) return;
-    setError(null);
+
     try {
-      const res = await fetch(`/api/flashcards/decks/${encodeURIComponent(card.deckSlug)}/review`, {
+      await fetch(`/api/flashcards/decks/${card.deckSlug}/review`, {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json", "x-nn-study-launch-surface": "flashcards" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ flashcardId: card.id, rating }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error ?? "Could not save review");
-      }
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Save failed");
+    } catch {
+      setError("Failed to save review");
     }
   };
 
+  // 🧠 Loading
   if (loading && queue.length === 0) {
     return (
-      <div className="mx-auto max-w-lg px-4 py-16 text-center text-sm text-[var(--theme-muted-text)]">
-        Building your weak-area set…
+      <div className="text-center py-20 text-sm text-gray-400">
+        Building your weak-area session…
       </div>
     );
   }
 
+  // ❌ Error
   if (error && queue.length === 0) {
     return (
-      <div className="mx-auto max-w-lg px-4 py-16">
-        <p className="text-sm text-red-600">{error}</p>
-        <Link href={flashcardsHubHref} className="mt-4 inline-block text-sm font-semibold text-primary">
-          ← All decks
+      <div className="text-center py-20">
+        <p className="text-red-600 text-sm">{error}</p>
+        <Link href={flashcardsHubHref} className="mt-4 inline-block text-blue-600">
+          ← Back
         </Link>
       </div>
     );
   }
 
+  // 📭 Empty
   if (queue.length === 0) {
-    const questionsHref = resolvedPathwayId ? pathwayHubAppQuestionsHref(resolvedPathwayId) : "/app/questions";
+    const questionsHref = resolvedPathwayId
+      ? pathwayHubAppQuestionsHref(resolvedPathwayId)
+      : "/app/questions";
+
     return (
-      <div className="mx-auto max-w-lg px-4 py-16 text-center">
-        <p className="text-lg font-semibold text-[var(--theme-heading-text)]">
-          {pathwayRequired ? "Pick your exam track for weak-area flashcards" : "No weak-area cards yet"}
+      <div className="max-w-lg mx-auto text-center py-20">
+        <h2 className="text-lg font-semibold mb-2">
+          {pathwayRequired ? "Select your exam track" : "No weak cards yet"}
+        </h2>
+
+        <p className="text-sm text-gray-500 mb-6">
+          {hint ?? "Answer questions to build your weak-area set"}
         </p>
-        {pathwayRequired ? (
-          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-            {hint ??
-              "Weak-area cards stay on one subscription pathway. Set your track in Study preferences or open this page from Flashcards with a pathway selected."}
+
+        {weakTopics.length > 0 && (
+          <p className="text-xs text-gray-400 mb-4">
+            Tracking: {weakTopics.join(", ")}
           </p>
-        ) : hint ? (
-          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{hint}</p>
-        ) : null}
-        {weakTopics.length > 0 ? (
-          <p className="mt-2 text-xs text-[var(--theme-muted-text)]">Topics we are watching: {weakTopics.join(", ")}</p>
-        ) : null}
-        <div className="mt-8 flex flex-col gap-3">
-          {pathwayRequired ? (
+        )}
+
+        <div className="flex flex-col gap-3">
+          {pathwayRequired && (
             <Link
               href="/app/account/study-preferences"
-              className="rounded-full bg-role-cta px-5 py-2.5 text-sm font-semibold text-role-cta-foreground"
+              className="bg-blue-600 text-white rounded-full py-2"
             >
-              Study preferences
+              Set study preferences
             </Link>
-          ) : null}
-          <Link
-            href={flashcardsHubHref}
-            className={`rounded-full px-5 py-2.5 text-sm font-semibold ${
-              pathwayRequired ? "border border-border text-[var(--theme-heading-text)]" : "bg-role-cta text-role-cta-foreground"
-            }`}
-          >
+          )}
+
+          <Link href={flashcardsHubHref} className="border rounded-full py-2">
             Browse decks
           </Link>
-          <Link href={questionsHref} className="rounded-full border border-border px-5 py-2.5 text-sm font-semibold">
+
+          <Link href={questionsHref} className="border rounded-full py-2">
             Question bank
           </Link>
         </div>
@@ -161,41 +159,37 @@ export function FlashcardWeakStudyClient({
     );
   }
 
-  const activeCards: ActiveStudyCard[] = queue.map((card) => ({
-    id: card.id,
-    prompt: card.front,
-    answer: card.back,
-    topic: card.topic,
-    subtopic: card.subtopic,
-    sourceKey: card.sourceKey,
-    pathwayId: card.pathwayId,
-    topicSlug: card.subtopic,
+  // 🎯 Session cards
+  const activeCards: ActiveStudyCard[] = queue.map((c) => ({
+    id: c.id,
+    prompt: c.front,
+    answer: c.back,
+    topic: c.topic,
+    subtopic: c.subtopic,
   }));
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-6">
-      <div className="mb-3 flex items-center justify-between gap-2">
-        <Link href={flashcardsHubHref} className="text-sm font-medium text-primary">
-          ← Back to Flashcards
+    <div className="max-w-6xl mx-auto px-4 py-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-4">
+        <Link href={flashcardsHubHref} className="text-sm text-blue-600">
+          ← Flashcards
         </Link>
-        <button type="button" className="text-xs font-medium text-[var(--theme-muted-text)] underline" onClick={() => void load()}>
-          Refresh Set
+
+        <button onClick={load} className="text-xs text-gray-500 underline">
+          Refresh
         </button>
       </div>
-      {error ? <p className="mb-3 text-sm text-red-600">{error}</p> : null}
+
+      {/* SESSION */}
       <ActiveStudySession
         cards={activeCards}
-        loading={loading}
-        sessionMeta={{
-          requestedCount: activeCards.length,
-          returnedCount: activeCards.length,
-          totalAvailable: activeCards.length,
-          hasMore: false,
-        }}
+        layout="split"
         header={{
-          sessionTitle: "Weak-Area Study Session",
+          sessionTitle: "Weak Areas",
           modeLabel: "Active Recall",
-          categoriesLabel: weakTopics.length > 0 ? weakTopics.join(", ") : "Weak Areas",
+          categoriesLabel: weakTopics.join(", ") || "Focus",
           exitHref: flashcardsHubHref,
         }}
         onRate={onRate}
