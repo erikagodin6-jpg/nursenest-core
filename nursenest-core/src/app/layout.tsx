@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import type { Session } from "next-auth";
 import { DM_Sans } from "next/font/google";
-import Script from "next/script";
+
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
-import { auth } from "@/lib/auth";
-import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
+import { AnalyticsProvider } from "@/components/providers/analytics-provider";
+
+import { auth } from "@/lib/auth";
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
-import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
-import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
+import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
+
 import "./globals.css";
 import "./(marketing)/marketing-dark-utilities.css";
 
@@ -22,9 +22,8 @@ const dmSans = DM_Sans({
   preload: true,
 });
 
-const BUILD_PHASE = "phase-production-build";
+const siteUrl = MARKETING_SITE_ORIGIN || "https://www.nursenest.ca";
 
-const siteUrl = MARKETING_SITE_ORIGIN;
 const ROOT_LAYOUT_OPEN_GRAPH_IMAGE =
   "https://nursenest-images.tor1.cdn.digitaloceanspaces.com/screenshot1.png";
 
@@ -71,24 +70,13 @@ export const metadata: Metadata = {
   robots: process.env.NODE_ENV === "production" ? "index, follow" : "noindex",
 };
 
-function safeTrace(scope: string, message: string, meta?: Record<string, unknown>) {
-  try {
-    layoutStderrTrace(scope, message, meta ?? {});
-  } catch {
-    /* logging must never break root layout */
-  }
-}
-
-async function getSessionSafe(): Promise<Session | null> {
-  if (process.env.NEXT_PHASE === BUILD_PHASE) return null;
+async function getSessionSafe() {
+  if (process.env.NEXT_PHASE === "phase-production-build") return null;
 
   try {
     return await auth();
-  } catch (e) {
-    safeTrace("root_layout", "auth() failed — continuing with null session", {
-      route: "shared-root-layout",
-      detail: e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200),
-    });
+  } catch (error) {
+    console.error("[root-layout] auth failed; continuing without session", error);
     return null;
   }
 }
@@ -97,7 +85,7 @@ function SafeProviders({
   session,
   children,
 }: {
-  session: Session | null;
+  session: Awaited<ReturnType<typeof getSessionSafe>>;
   children: React.ReactNode;
 }) {
   return (
@@ -114,29 +102,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  safeTrace("root_layout", "root layout start", { route: "shared-root-layout" });
-
-  try {
-    void import("@/lib/observability/deferred-render-trace")
-      .then((m) => m.loadRenderTrace())
-      .then((m) => m.renderTrace("root_layout", { route: "shared-root-layout" }))
-      .catch(() => {});
-  } catch {
-    /* render tracing is optional */
-  }
-
   const session = await getSessionSafe();
-
-  const themeBoot = `(function(){try{var k=${JSON.stringify(
-    THEME_STORAGE_KEY,
-  )};var d=${JSON.stringify(
-    NURSENEST_DEFAULT_THEME,
-  )};var v=localStorage.getItem(k);if(v==null||v===""){v=d;localStorage.setItem(k,v);}document.documentElement.setAttribute("data-theme",v);}catch(e){document.documentElement.setAttribute("data-theme",${JSON.stringify(
-    NURSENEST_DEFAULT_THEME,
-  )});}})();`;
-
-  const rootCriticalCss =
-    "html,body{overflow-x:hidden;max-width:100vw}*{box-sizing:border-box}body{margin:0;background:#f8fafc;color:#0f172a}";
 
   return (
     <html
@@ -145,13 +111,7 @@ export default async function RootLayout({
       data-theme={NURSENEST_DEFAULT_THEME}
       suppressHydrationWarning
     >
-      <head>
-        <style dangerouslySetInnerHTML={{ __html: rootCriticalCss }} />
-      </head>
-      <body className="min-h-full flex flex-col bg-[var(--theme-page-bg)] text-[var(--theme-body-text)] transition-colors duration-200">
-        <Script id="nursenest-theme-boot" strategy="beforeInteractive">
-          {themeBoot}
-        </Script>
+      <body className="min-h-full flex flex-col bg-[var(--theme-page-bg)] text-[var(--theme-body-text)]">
         <SafeProviders session={session}>{children}</SafeProviders>
       </body>
     </html>
