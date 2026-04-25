@@ -1,7 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
+import { useTransition, useState } from "react";
 import Link from "next/link";
 import { adminFeedbackInboxHref } from "@/lib/admin/feedback-inbox-url";
 import {
@@ -16,15 +15,17 @@ import type { AdminMutationResult } from "@/lib/admin/admin-data-result";
 const initialMutation: AdminMutationResult = { ok: true };
 const initialTriage: AdminActionResult | null = null;
 
-function PendingInline() {
-  const { pending } = useFormStatus();
+function PendingInline({ pending }: { pending: boolean }) {
   if (!pending) return null;
-  return <span className="ml-2 inline-block h-2 w-2 animate-pulse rounded-full bg-primary" aria-hidden />;
+  return (
+    <span className="ml-2 inline-block h-2 w-2 animate-pulse rounded-full bg-primary" aria-hidden />
+  );
 }
 
-/** One-click status shortcuts (same contract as full status dropdown). */
+/** One-click status shortcuts */
 export function AdminFeedbackQuickStatusRow({ reportId }: { reportId: string }) {
-  const [state, action] = useActionState(submitAdminFeedbackTriage, initialTriage);
+  const [state, setState] = useState<AdminActionResult | null>(initialTriage);
+  const [isPending, startTransition] = useTransition();
 
   const rows: Array<{ status: string; label: string }> = [
     { status: "UNDER_REVIEW", label: "Mark under review" },
@@ -32,28 +33,39 @@ export function AdminFeedbackQuickStatusRow({ reportId }: { reportId: string }) 
     { status: "DISMISSED", label: "Dismiss" },
   ];
 
+  function runAction(status: string) {
+    const formData = new FormData();
+    formData.set("nn_fb_op", "set_status");
+    formData.set("reportId", reportId);
+    formData.set("status", status);
+
+    startTransition(async () => {
+      const result = await submitAdminFeedbackTriage(formData);
+      setState(result);
+    });
+  }
+
   return (
     <div className="rounded-lg border border-border/60 bg-background/60 p-3">
       {state && !state.ok ? (
-        <p className="mb-2 text-sm text-[var(--semantic-danger)]" role="alert">
-          {state.message}
-        </p>
+        <p className="mb-2 text-sm text-[var(--semantic-danger)]">{state.message}</p>
       ) : null}
-      <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Quick actions</p>
+
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+        Quick actions
+      </p>
+
       <div className="mt-2 flex flex-wrap gap-2">
         {rows.map((r) => (
-          <form key={r.status} action={action} className="inline-flex items-center">
-            <input type="hidden" name="nn_fb_op" value="set_status" />
-            <input type="hidden" name="reportId" value={reportId} />
-            <input type="hidden" name="status" value={r.status} />
-            <button
-              type="submit"
-              className="rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-semibold hover:bg-muted/50"
-            >
-              {r.label}
-              <PendingInline />
-            </button>
-          </form>
+          <button
+            key={r.status}
+            onClick={() => runAction(r.status)}
+            disabled={isPending}
+            className="rounded-md border border-border bg-background px-2.5 py-1.5 text-xs font-semibold hover:bg-muted/50 disabled:opacity-60"
+          >
+            {r.label}
+            <PendingInline pending={isPending} />
+          </button>
         ))}
       </div>
     </div>
@@ -69,60 +81,69 @@ export function AdminFeedbackDuplicateForms({
   sp: Record<string, string | undefined>;
   hasDuplicateOf: boolean;
 }) {
-  const [linkState, linkAction] = useActionState(linkUserFeedbackDuplicate, initialMutation);
-  const [clearState, clearAction] = useActionState(clearUserFeedbackDuplicate, initialMutation);
+  const [linkState, setLinkState] = useState<AdminMutationResult>(initialMutation);
+  const [clearState, setClearState] = useState<AdminMutationResult>(initialMutation);
+  const [isPending, startTransition] = useTransition();
+
+  function linkDuplicate(formData: FormData) {
+    startTransition(async () => {
+      const result = await linkUserFeedbackDuplicate(initialMutation, formData);
+      setLinkState(result);
+    });
+  }
+
+  function clearDuplicate(formData: FormData) {
+    startTransition(async () => {
+      const result = await clearUserFeedbackDuplicate(initialMutation, formData);
+      setClearState(result);
+    });
+  }
 
   return (
     <div className="mt-3 space-y-4">
-      {!linkState.ok ? (
-        <p className="text-sm text-[var(--semantic-danger)]" role="alert">
-          {linkState.message}
-        </p>
-      ) : null}
-      {!clearState.ok ? (
-        <p className="text-sm text-[var(--semantic-danger)]" role="alert">
-          {clearState.message}
-        </p>
-      ) : null}
-      <form action={linkAction} className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-end">
+      {!linkState.ok && <p className="text-sm text-[var(--semantic-danger)]">{linkState.message}</p>}
+      {!clearState.ok && <p className="text-sm text-[var(--semantic-danger)]">{clearState.message}</p>}
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          linkDuplicate(new FormData(e.currentTarget));
+        }}
+        className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-end"
+      >
         <input type="hidden" name="reportId" value={reportId} />
-        <label className="flex min-w-0 flex-1 flex-col gap-1 text-xs font-medium text-foreground">
-          Primary report id (cuid)
-          <input
-            name="primaryReportId"
-            required
-            autoComplete="off"
-            className="rounded-md border border-border bg-background px-2 py-1.5 font-mono text-xs"
-            placeholder="Paste primary feedback id"
-          />
-        </label>
-        <button
-          type="submit"
-          className="rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-95"
-        >
-          Link as duplicate
-          <PendingInline />
+
+        <input
+          name="primaryReportId"
+          required
+          className="rounded-md border border-border px-2 py-1.5 text-xs"
+          placeholder="Primary report id"
+        />
+
+        <button type="submit" disabled={isPending} className="rounded-md bg-primary px-3 py-2 text-xs font-semibold text-white">
+          Link
+          <PendingInline pending={isPending} />
         </button>
       </form>
-      {hasDuplicateOf ? (
-        <form action={clearAction} className="flex flex-wrap items-center gap-2">
+
+      {hasDuplicateOf && (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            clearDuplicate(new FormData(e.currentTarget));
+          }}
+          className="flex gap-2"
+        >
           <input type="hidden" name="reportId" value={reportId} />
-          <button
-            type="submit"
-            className="text-sm font-semibold text-[var(--semantic-danger)] underline-offset-2 hover:underline"
-          >
-            Unlink duplicate
-            <PendingInline />
+
+          <button type="submit" disabled={isPending} className="text-sm text-red-600 underline">
+            Unlink
+            <PendingInline pending={isPending} />
           </button>
-          <span className="text-xs text-muted-foreground">
-            Or open the{" "}
-            <Link href={adminFeedbackInboxHref(sp, { r: reportId })} className="text-primary underline">
-              primary report
-            </Link>
-            .
-          </span>
+
+          <Link href={adminFeedbackInboxHref(sp, { r: reportId })}>Primary report</Link>
         </form>
-      ) : null}
+      )}
     </div>
   );
 }
@@ -134,30 +155,39 @@ export function AdminFeedbackInternalNotesForm({
   reportId: string;
   defaultNotes: string | null;
 }) {
-  const [state, formAction] = useActionState(saveUserFeedbackInternalNotes, initialMutation);
+  const [state, setState] = useState<AdminMutationResult>(initialMutation);
+  const [isPending, startTransition] = useTransition();
+
+  function submitNotes(formData: FormData) {
+    startTransition(async () => {
+      const result = await saveUserFeedbackInternalNotes(initialMutation, formData);
+      setState(result);
+    });
+  }
 
   return (
     <div className="mt-2 space-y-2">
-      {!state.ok ? (
-        <p className="text-sm text-[var(--semantic-danger)]" role="alert">
-          {state.message}
-        </p>
-      ) : null}
-      <form action={formAction} className="space-y-2">
+      {!state.ok && <p className="text-sm text-[var(--semantic-danger)]">{state.message}</p>}
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          submitNotes(new FormData(e.currentTarget));
+        }}
+        className="space-y-2"
+      >
         <input type="hidden" name="reportId" value={reportId} />
+
         <textarea
           name="internalNotes"
           defaultValue={defaultNotes ?? ""}
           rows={5}
-          className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm"
-          placeholder="Internal notes for staff…"
+          className="w-full rounded-md border border-border px-3 py-2 text-sm"
         />
-        <button
-          type="submit"
-          className="rounded-md border border-border bg-background px-3 py-1.5 text-xs font-semibold hover:bg-muted/50"
-        >
-          Save notes
-          <PendingInline />
+
+        <button type="submit" disabled={isPending} className="rounded-md border px-3 py-1.5 text-xs">
+          Save
+          <PendingInline pending={isPending} />
         </button>
       </form>
     </div>

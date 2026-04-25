@@ -17,109 +17,29 @@ export const CANONICAL_LESSON_SYSTEMS = [
   "general",
 ] as const;
 
-export type CanonicalLessonSystem = (typeof CANONICAL_LESSON_SYSTEMS)[number];
+export type CanonicalLessonSystem =
+  (typeof CANONICAL_LESSON_SYSTEMS)[number];
 
-const TOPIC_TO_SYSTEM: Record<string, CanonicalLessonSystem> = {
-  cardiovascular: "cardiovascular",
-  "heart-failure": "cardiovascular",
-  "myocardial-infarction": "cardiovascular",
+export function mapTopicSlugToSystem(topicSlug?: string | null): CanonicalLessonSystem {
+  if (!topicSlug) return "general";
 
-  respiratory: "respiratory",
-  copd: "respiratory",
-  pneumonia: "respiratory",
-  "pulmonary-embolism": "respiratory",
-  "respiratory-acute": "respiratory",
-  "abg-acid-base": "respiratory",
+  const t = topicSlug.toLowerCase();
 
-  neurological: "neurological",
+  if (t.includes("cardio")) return "cardiovascular";
+  if (t.includes("resp")) return "respiratory";
+  if (t.includes("neuro")) return "neurological";
+  if (t.includes("endo")) return "endocrine";
+  if (t.includes("renal") || t.includes("gu")) return "renal-genitourinary";
+  if (t.includes("gi") || t.includes("gastro")) return "gastrointestinal";
+  if (t.includes("heme") || t.includes("onc")) return "hematology-oncology-immunology";
+  if (t.includes("skin") || t.includes("immune")) return "integumentary-immune-autoimmune";
+  if (t.includes("msk") || t.includes("musculo")) return "musculoskeletal";
+  if (t.includes("mater") || t.includes("ob")) return "maternity-newborn";
+  if (t.includes("peds")) return "pediatrics";
+  if (t.includes("mental") || t.includes("psych")) return "mental-health";
+  if (t.includes("pharm")) return "pharmacology";
+  if (t.includes("safety") || t.includes("priority")) return "safety-prioritization";
+  if (t.includes("critical") || t.includes("icu")) return "critical-care";
 
-  endocrine: "endocrine",
-  "diabetes-metabolic": "endocrine",
-  "endocrine-metabolic-fluids": "endocrine",
-
-  "renal-gu": "renal-genitourinary",
-  "renal-genitourinary": "renal-genitourinary",
-
-  gastrointestinal: "gastrointestinal",
-
-  "fluids-electrolytes": "renal-genitourinary",
-  "electrolytes-volume": "renal-genitourinary",
-
-  "hematology-oncology-immunology": "hematology-oncology-immunology",
-  "integumentary-immune-autoimmune": "integumentary-immune-autoimmune",
-  musculoskeletal: "musculoskeletal",
-
-  maternity: "maternity-newborn",
-  "maternity-newborn": "maternity-newborn",
-  "womens-health": "maternity-newborn",
-
-  pediatrics: "pediatrics",
-  "adolescent-health": "pediatrics",
-  geriatrics: "general",
-  "health-promotion": "general",
-
-  "mental-health": "mental-health",
-  psychosocial: "mental-health",
-
-  "pharmacology-master": "pharmacology",
-  antibiotics: "pharmacology",
-  pain: "pharmacology",
-  "medication-safety": "pharmacology",
-  "np-differential-prescribing-chronic": "pharmacology",
-
-  safety: "safety-prioritization",
-  "infection-control": "safety-prioritization",
-  "prioritization-delegation": "safety-prioritization",
-  "clinical-reasoning": "safety-prioritization",
-  "nclex-nursing-priorities-safety": "safety-prioritization",
-
-  sepsis: "critical-care",
-  shock: "critical-care",
-  "sepsis-infection": "critical-care",
-  "emergency-critical-perioperative": "critical-care",
-};
-
-export function canonicalLessonSystemForTopicSlug(
-  topicSlug: string | null | undefined,
-): CanonicalLessonSystem {
-  const normalized = topicSlug?.trim().toLowerCase();
-  if (!normalized) return "general";
-  return TOPIC_TO_SYSTEM[normalized] ?? "general";
-}
-
-export function canonicalLessonSystemLabel(system: CanonicalLessonSystem): string {
-  switch (system) {
-    case "cardiovascular":
-      return "Cardiovascular";
-    case "respiratory":
-      return "Respiratory";
-    case "neurological":
-      return "Neurological";
-    case "endocrine":
-      return "Endocrine";
-    case "renal-genitourinary":
-      return "Renal / Genitourinary";
-    case "gastrointestinal":
-      return "Gastrointestinal";
-    case "hematology-oncology-immunology":
-      return "Hematology / Oncology / Immunology";
-    case "integumentary-immune-autoimmune":
-      return "Integumentary / Immune / Autoimmune";
-    case "musculoskeletal":
-      return "Musculoskeletal";
-    case "maternity-newborn":
-      return "Maternity / Newborn";
-    case "pediatrics":
-      return "Pediatrics";
-    case "mental-health":
-      return "Mental Health";
-    case "pharmacology":
-      return "Pharmacology";
-    case "safety-prioritization":
-      return "Safety / Prioritization";
-    case "critical-care":
-      return "Critical Care";
-    default:
-      return "General";
-  }
+  return "general";
 }

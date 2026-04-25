@@ -6,37 +6,58 @@ async function patchPost(id: string, payload: Record<string, unknown>) {
     const res = await fetch(`/api/admin/blog/${encodeURIComponent(id)}`, {
       method: "PATCH",
       credentials: "include",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
       body: JSON.stringify(payload),
     });
 
-    let json: any = null;
-    try {
-      json = await res.json();
-    } catch {
-      setActionError(`Server returned non-JSON response (HTTP ${res.status})`);
-      return;
-    }
+    const contentType = res.headers.get("content-type") ?? "";
+    const isJson = contentType.includes("application/json");
+
+    const json = isJson ? await res.json().catch(() => null) : null;
 
     if (!res.ok) {
       const messages: string[] = [];
 
-      if (json?.error) messages.push(json.error);
+      if (typeof json?.error === "string") {
+        messages.push(json.error);
+      }
 
       if (Array.isArray(json?.reasons)) {
-        messages.push(...json.reasons);
+        messages.push(
+          ...json.reasons
+            .map((reason: unknown) => String(reason))
+            .filter(Boolean),
+        );
       }
 
       if (Array.isArray(json?.prePublish?.blocking)) {
-        messages.push(...json.prePublish.blocking.map((b: any) => b?.message).filter(Boolean));
+        messages.push(
+          ...json.prePublish.blocking
+            .map((blocker: { message?: unknown }) =>
+              typeof blocker?.message === "string" ? blocker.message : null,
+            )
+            .filter(Boolean),
+        );
       }
 
-      if (json?.details?.fieldErrors) {
-        for (const [field, errs] of Object.entries(json.details.fieldErrors)) {
+      const fieldErrors = json?.details?.fieldErrors;
+      if (fieldErrors && typeof fieldErrors === "object") {
+        for (const [field, errs] of Object.entries(fieldErrors)) {
           if (Array.isArray(errs)) {
-            messages.push(...errs.map((e) => `${field}: ${e}`));
+            messages.push(
+              ...errs
+                .map((err) => `${field}: ${String(err)}`)
+                .filter(Boolean),
+            );
           }
         }
+      }
+
+      if (!isJson) {
+        messages.push(`Server returned non-JSON response (HTTP ${res.status})`);
       }
 
       setActionError(messages.length ? messages.join(" | ") : `Request failed (${res.status})`);
@@ -44,8 +65,8 @@ async function patchPost(id: string, payload: Record<string, unknown>) {
     }
 
     router.refresh();
-  } catch (e) {
-    setActionError(e instanceof Error ? e.message : "Network error");
+  } catch (error) {
+    setActionError(error instanceof Error ? error.message : "Network error");
   } finally {
     setBusyId(null);
   }

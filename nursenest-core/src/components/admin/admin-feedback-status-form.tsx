@@ -1,7 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
+import { useTransition, useState } from "react";
 import type { UserFeedbackStatus } from "@prisma/client";
 import type { AdminMutationResult } from "@/lib/admin/admin-data-result";
 import { updateUserFeedbackReportStatus } from "@/app/(admin)/admin/feedback/actions";
@@ -15,16 +14,26 @@ const OPTIONS: { value: UserFeedbackStatus; label: string }[] = [
 
 const initialMutation: AdminMutationResult = { ok: true };
 
-function PendingDot() {
-  const { pending } = useFormStatus();
-  if (!pending) return null;
-  return (
-    <span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-primary" aria-hidden />
-  );
-}
+export function AdminFeedbackStatusForm({
+  reportId,
+  status,
+}: {
+  reportId: string;
+  status: UserFeedbackStatus;
+}) {
+  const [state, setState] = useState<AdminMutationResult>(initialMutation);
+  const [isPending, startTransition] = useTransition();
 
-export function AdminFeedbackStatusForm({ reportId, status }: { reportId: string; status: UserFeedbackStatus }) {
-  const [state, formAction] = useActionState(updateUserFeedbackReportStatus, initialMutation);
+  function submitStatus(nextStatus: UserFeedbackStatus) {
+    const formData = new FormData();
+    formData.set("reportId", reportId);
+    formData.set("status", nextStatus);
+
+    startTransition(async () => {
+      const result = await updateUserFeedbackReportStatus(initialMutation, formData);
+      setState(result);
+    });
+  }
 
   return (
     <div className="space-y-2">
@@ -33,17 +42,19 @@ export function AdminFeedbackStatusForm({ reportId, status }: { reportId: string
           {state.message}
         </p>
       )}
-      <form action={formAction} className="inline-flex items-center gap-2">
-        <input type="hidden" name="reportId" value={reportId} />
+
+      <div className="inline-flex items-center gap-2">
         <label className="sr-only" htmlFor={`fb-status-${reportId}`}>
           Update status
         </label>
+
         <select
           id={`fb-status-${reportId}`}
           name="status"
           defaultValue={status}
-          onChange={(e) => e.currentTarget.form?.requestSubmit()}
-          className="w-full min-h-[42px] rounded-xl border border-border bg-background px-3 py-2 text-sm font-medium text-foreground shadow-sm"
+          disabled={isPending}
+          onChange={(e) => submitStatus(e.currentTarget.value as UserFeedbackStatus)}
+          className="w-full min-h-[42px] rounded-xl border border-border bg-background px-3 py-2 text-sm font-medium text-foreground shadow-sm disabled:opacity-60"
         >
           {OPTIONS.map((o) => (
             <option key={o.value} value={o.value}>
@@ -51,8 +62,11 @@ export function AdminFeedbackStatusForm({ reportId, status }: { reportId: string
             </option>
           ))}
         </select>
-        <PendingDot />
-      </form>
+
+        {isPending ? (
+          <span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-primary" aria-hidden />
+        ) : null}
+      </div>
     </div>
   );
 }
