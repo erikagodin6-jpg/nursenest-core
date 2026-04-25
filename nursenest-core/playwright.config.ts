@@ -18,7 +18,8 @@
  */
 import "./playwright.env";
 import { defineConfig, devices } from "@playwright/test";
-import { FREE_USER_AUTH_FILE, PAID_USER_AUTH_FILE } from "./tests/e2e/helpers/auth-state-paths";
+const FREE_USER_AUTH_FILE = "tests/e2e/.auth/free-user.json";
+const PAID_USER_AUTH_FILE = "tests/e2e/.auth/paid-user.json";
 import { hasPaidTestCredentials } from "./tests/e2e/helpers/paid-test-credentials";
 
 /**
