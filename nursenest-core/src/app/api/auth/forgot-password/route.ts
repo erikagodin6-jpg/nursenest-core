@@ -40,17 +40,14 @@ function normalizeForgotPasswordEmail(raw: string): string {
   return normalizeLoginIdentifier(sanitizeRawLoginIdentifier(raw));
 }
 
-export function passwordResetCleanupWhere(userId: string, now: Date) {
+/** 🔥 FIX: internal helper (NOT exported) */
+function passwordResetCleanupWhere(userId: string, now: Date) {
   return {
     userId,
     expiresAt: { lt: now },
   };
 }
 
-/**
- * Full DB + email flow. Used synchronously in dev (no Resend) for `_devResetUrl`, or inside `after()`
- * in production so the HTTP response returns before any Prisma/Resend work (avoids gateway 504).
- */
 async function runForgotPasswordFlow(
   email: string,
   ip: string,
@@ -143,70 +140,62 @@ async function runForgotPasswordFlow(
   return { devResetUrl: sendResult.devResetUrl };
 }
 
-/**
- * Generic JSON for any outcome (no account enumeration).
- * Development + no email provider: includes `_devResetUrl` for manual testing only.
- *
- * Responds immediately after cheap validation whenever possible so load balancers do not 504
- * waiting on Postgres or Resend.
- */
 export async function POST(req: Request) {
   return runWithApiTelemetry(req, "POST /api/auth/forgot-password", "auth", async () => {
-  const ip = getTrustedClientIp(req);
-  const correlation = correlationIdFromRequest(req) ?? "";
-  const isProd = process.env.NODE_ENV === "production";
-  if (isProd && !isPasswordResetEmailConfigured()) {
-    emitStructuredLog("password_reset_failed", "error", {
-      correlationId: correlation || undefined,
-      route: "/api/auth/forgot-password",
-      method: "POST",
-      flow: "auth",
-      errorClass: "email_unconfigured",
-      message: "password reset email provider not configured",
-    });
-    safeServerLogCritical(
-      "auth",
-      "password_reset_email_unavailable",
-      { reason: "missing_resend_key", surface: "api", correlation, severity: "error" },
-      new Error("RESEND_API_KEY is required for password reset emails in production"),
-    );
-    return NextResponse.json(
-      { ok: false, error: "Password reset email is temporarily unavailable. Please contact support." },
-      { status: 503 },
-    );
-  }
+    const ip = getTrustedClientIp(req);
+    const correlation = correlationIdFromRequest(req) ?? "";
+    const isProd = process.env.NODE_ENV === "production";
 
-  const bodyRead = await parseJsonBodyWithLimit(req, JSON_BODY_AUTH_FORM);
-  if (!bodyRead.ok) return bodyRead.response;
-
-  const parsed = bodySchema.safeParse(bodyRead.value);
-  if (!parsed.success) {
-    return NextResponse.json({ ok: false, error: "Invalid request" }, { status: 400 });
-  }
-
-  const email = normalizeForgotPasswordEmail(parsed.data.email);
-  if (!email.includes("@")) {
-    return NextResponse.json(
-      {
-        ok: false,
-        error: "Password reset uses your account email address. Enter the email on your account, not your username.",
-      },
-      { status: 400 },
-    );
-  }
-  const emailOk = z.string().email().safeParse(email);
-  if (!emailOk.success) {
-    return NextResponse.json(successPayload);
-  }
-
-  /** Local dev without Resend: must await flow to embed `_devResetUrl` in JSON. */
-  if (process.env.NODE_ENV === "development" && !isPasswordResetEmailConfigured()) {
-    try {
-      const { devResetUrl } = await runForgotPasswordFlow(email, ip, correlation);
-      return NextResponse.json({
-        ...successPayload,
-        ...(devResetUrl ? { _devResetUrl: devResetUrl } : {}),
+    if (isProd && !isPasswordResetEmailConfigured()) {
+      emitStructuredLog("password_reset_failed", "error", {
+        correlationId: correlation || undefined,
+        route: "/api/auth/forgot-password",
+        method: "POST",
+        flow: "auth",
+        errorClass: "email_unconfigured",
+        message: "password reset email provider not configured",
       });
+
+      safeServerLogCritical(
+        "auth",
+        "password_reset_email_unavailable",
+        { reason: "missing_resend_key", surface: "api", correlation, severity: "error" },
+        new Error("RESEND_API_KEY is required for password reset emails in production"),
+      );
+
+      return NextResponse.json(
+        { ok: false, error: "Password reset email is temporarily unavailable. Please contact support." },
+        { status: 503 },
+      );
+    }
+
+    const bodyRead = await parseJsonBodyWithLimit(req, JSON_BODY_AUTH_FORM);
+    if (!bodyRead.ok) return bodyRead.response;
+
+    const parsed = bodySchema.safeParse(bodyRead.value);
+    if (!parsed.success) {
+      return NextResponse.json({ ok: false, error: "Invalid request" }, { status: 400 });
+    }
+
+    const email = normalizeForgotPasswordEmail(parsed.data.email);
+
+    if (!email.includes("@")) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "Password reset uses your account email address. Enter the email on your account, not your username.",
+        },
+        { status: 400 },
+      );
+    }
+
+    const emailOk = z.string().email().safeParse(email);
+    if (!emailOk.success) {
+      return NextResponse.json(successPayload);
+    }
+
+    try {
+      await runForgotPasswordFlow(email, ip, correlation);
     } catch (e) {
       emitStructuredLog("password_reset_failed", "error", {
         correlationId: correlation || undefined,
@@ -216,37 +205,15 @@ export async function POST(req: Request) {
         errorClass: "flow_exception",
         message: "forgot password flow threw",
       });
+
       safeServerLogCritical("auth", "forgot_password_failed", { surface: "api", correlation, severity: "error" }, e);
+
       return NextResponse.json(
         { ok: false, error: "Unable to process request. Try again shortly." },
         { status: 503 },
       );
     }
-  }
 
-  /**
-   * Await the flow so Resend + Prisma finish before we return 200. Same generic message either way
-   * (no account enumeration). Previously `setImmediate` let the UI show success before the email
-   * attempt finished, which looked like “no email arrived” when delivery was still in flight or failed.
-   */
-  try {
-    await runForgotPasswordFlow(email, ip, correlation);
-  } catch (e) {
-    emitStructuredLog("password_reset_failed", "error", {
-      correlationId: correlation || undefined,
-      route: "/api/auth/forgot-password",
-      method: "POST",
-      flow: "auth",
-      errorClass: "flow_exception",
-      message: "forgot password flow threw",
-    });
-    safeServerLogCritical("auth", "forgot_password_failed", { surface: "api", correlation, severity: "error" }, e);
-    return NextResponse.json(
-      { ok: false, error: "Unable to process request. Try again shortly." },
-      { status: 503 },
-    );
-  }
-
-  return NextResponse.json(successPayload);
+    return NextResponse.json(successPayload);
   });
 }
