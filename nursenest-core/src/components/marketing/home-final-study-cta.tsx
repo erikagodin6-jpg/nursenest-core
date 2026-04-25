@@ -4,164 +4,121 @@ import { ArrowRight, CheckCircle } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/navigation/canonical-destinations";
-import { FadeUp } from "@/lib/motion";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { MARKETING_PRIMARY_CTA_CLASS, MARKETING_SECONDARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
-import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
-import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
+import {
+  MARKETING_PRIMARY_CTA_CLASS,
+  MARKETING_SECONDARY_CTA_CLASS,
+} from "@/lib/theme/marketing-hero-pattern";
 
-/**
- * Closing conversion block — same value prop as hero; primary Practice, secondary Lessons.
- */
-export function HomeFinalStudyCta() {
-  const marketingNarrow = useMarketingMobilePerfIsMobile() === true;
-  const { locale, t } = useMarketingI18n();
-  const { region } = useNursenestRegion();
-  const loc = (path: string) => withMarketingLocale(locale, path);
-
-  const trustKeys = ["pages.home.finalCta.trust0", "pages.home.finalCta.trust1", "pages.home.finalCta.trust2"] as const;
-
-  if (marketingNarrow) {
-    return (
-      <section
-        className="simple-stack nn-section-block border-t border-[var(--header-nav-border)] bg-[var(--hero-branded-wash)]"
-        aria-labelledby="home-final-cta-heading"
-        data-testid="section-final-study-cta"
-      >
-        <div className="nn-section-shell flex flex-col gap-4 px-4 py-10 sm:px-6">
-          <p
-            className="nn-marketing-caption text-center font-bold uppercase tracking-widest"
-            style={{
-              color:
-                "color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 78%, var(--theme-heading-text))",
-            }}
-          >
-            {formatEyebrow(t("pages.home.finalCta.eyebrow"), locale)}
-          </p>
-          <h2 id="home-final-cta-heading" className="nn-marketing-h2 text-balance text-center">
-            {formatTitleCase(t("pages.home.finalCta.headline"), locale)}
-          </h2>
-          <p className="nn-marketing-body-sm text-center text-pretty leading-relaxed text-[var(--theme-muted-text)]">
-            {formatSentenceCase(t("pages.home.finalCta.subheading"), locale)}
-          </p>
-          <ul className="flex flex-col gap-2">
-            {trustKeys.map((key) => (
-              <li key={key} className="flex items-center gap-2 text-xs font-medium text-[var(--theme-muted-text)]">
-                <CheckCircle className="h-3.5 w-3.5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-                {formatSentenceCase(t(key), locale)}
-              </li>
-            ))}
-          </ul>
-          <div className="mt-2 flex flex-col gap-3">
-            <MarketingTrackedLink
-              href={loc(HUB.questionBank)}
-              event={PH.marketingHomeFinalCta}
-              eventProps={{ choice: "question_bank", region, surface: "final" }}
-              className={`${MARKETING_PRIMARY_CTA_CLASS} rounded-xl shadow-[var(--shadow-card)]`}
-              data-testid="button-final-start-practice"
-            >
-              <span className="whitespace-nowrap">{formatTitleCase(t("pages.home.hero.primaryCta"), locale)}</span>
-              <ArrowRight className="ml-2 h-5 w-5 shrink-0" aria-hidden />
-            </MarketingTrackedLink>
-            <MarketingTrackedLink
-              href={loc(HUB.examLessons)}
-              event={PH.marketingHomeFinalCta}
-              eventProps={{ choice: "lessons", region, surface: "final" }}
-              className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-xl border border-[var(--border-subtle)]`}
-              data-testid="button-final-browse-lessons"
-            >
-              {formatTitleCase(t("pages.home.hero.secondaryCta"), locale)}
-            </MarketingTrackedLink>
-          </div>
-          <p className="nn-marketing-caption text-center text-pretty text-[var(--theme-muted-text)]">
-            {formatSentenceCase(t("pages.home.finalCta.pricingLead"), locale)}{" "}
-            <MarketingTrackedLink
-              href={loc(HUB.pricing)}
-              event={PH.marketingHomeFinalCta}
-              eventProps={{ choice: "pricing", region, surface: "final" }}
-              className="font-semibold text-[var(--text-accent)] underline decoration-[color-mix(in_srgb,var(--text-accent)_45%,transparent)] underline-offset-4"
-            >
-              {formatTitleCase(t("pages.home.finalCta.pricingLink"), locale)}
-            </MarketingTrackedLink>
-            {formatSentenceCase(t("pages.home.finalCta.pricingTail"), locale)}
-          </p>
-        </div>
-      </section>
-    );
+function safeT(t: ((k: string) => string) | undefined, key: string, fallback: string) {
+  try {
+    const v = t?.(key);
+    return typeof v === "string" && v.trim() ? v : fallback;
+  } catch {
+    return fallback;
   }
+}
+
+function safeLocale(l?: string) {
+  return l || "en";
+}
+
+function safeRegion(r?: string) {
+  return r || "CA";
+}
+
+function safePath(locale: string, path: string) {
+  try {
+    return withMarketingLocale(locale, path);
+  } catch {
+    return path;
+  }
+}
+
+export function HomeFinalStudyCta() {
+  let locale = "en";
+  let t: ((k: string) => string) | undefined;
+
+  try {
+    const ctx = useMarketingI18n();
+    locale = safeLocale(ctx.locale);
+    t = ctx.t;
+  } catch {}
+
+  let region = "CA";
+  try {
+    region = safeRegion(useNursenestRegion().region);
+  } catch {}
+
+  const loc = (p: string) => safePath(locale, p);
+
+  const trust = [
+    "No credit card required",
+    "Cancel anytime",
+    "Study at your own pace",
+  ];
 
   return (
     <section
-      className="nn-section-block border-t border-[var(--header-nav-border)] bg-[var(--hero-branded-wash)]"
+      className="border-t border-[var(--header-nav-border)] bg-[var(--hero-branded-wash)] py-12"
       aria-labelledby="home-final-cta-heading"
-      data-testid="section-final-study-cta"
     >
-      <div className="nn-section-shell">
-        <FadeUp whenInView once viewMargin="-28px" className="mx-auto max-w-2xl">
-          <div className="rounded-2xl border border-[color-mix(in_srgb,var(--theme-primary)_14%,var(--border-subtle))] bg-[color-mix(in_srgb,var(--bg-card)_88%,var(--hero-branded-wash))] px-6 py-10 text-center shadow-[var(--shadow-elevated)] sm:px-10 sm:py-12">
-            <p
-              className="nn-marketing-caption mb-3 font-bold uppercase tracking-widest"
-              style={{
-                color:
-                  "color-mix(in srgb, var(--palette-accent, var(--theme-accent)) 78%, var(--theme-heading-text))",
-              }}
-            >
-              {formatEyebrow(t("pages.home.finalCta.eyebrow"), locale)}
-            </p>
-            <h2 id="home-final-cta-heading" className="nn-marketing-h2 text-balance">
-              {formatTitleCase(t("pages.home.finalCta.headline"), locale)}
-            </h2>
-            <p className="nn-marketing-body-sm mx-auto mt-3 max-w-lg text-pretty leading-relaxed text-[var(--theme-muted-text)]">
-              {formatSentenceCase(t("pages.home.finalCta.subheading"), locale)}
-            </p>
+      <div className="mx-auto max-w-2xl text-center px-4">
+        <h2 className="text-2xl font-bold">
+          {safeT(t, "pages.home.finalCta.headline", "Start preparing with confidence")}
+        </h2>
 
-            <ul className="mx-auto mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-              {trustKeys.map((key) => (
-                <li key={key} className="flex items-center gap-1.5 text-xs font-medium text-[var(--theme-muted-text)]">
-                  <CheckCircle className="h-3.5 w-3.5 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-                  {formatSentenceCase(t(key), locale)}
-                </li>
-              ))}
-            </ul>
+        <p className="mt-3 text-[var(--theme-muted-text)]">
+          {safeT(
+            t,
+            "pages.home.finalCta.subheading",
+            "Practice questions, lessons, and readiness tools designed for real exams."
+          )}
+        </p>
 
-            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-              <MarketingTrackedLink
-                href={loc(HUB.questionBank)}
-                event={PH.marketingHomeFinalCta}
-                eventProps={{ choice: "question_bank", region, surface: "final" }}
-                className={`${MARKETING_PRIMARY_CTA_CLASS} nn-motion-standard rounded-xl shadow-[var(--shadow-card)] sm:min-w-[220px]`}
-                data-testid="button-final-start-practice"
-              >
-                <span className="whitespace-nowrap">{formatTitleCase(t("pages.home.hero.primaryCta"), locale)}</span>
-                <ArrowRight className="ml-2 h-5 w-5 shrink-0" aria-hidden />
-              </MarketingTrackedLink>
-              <MarketingTrackedLink
-                href={loc(HUB.examLessons)}
-                event={PH.marketingHomeFinalCta}
-                eventProps={{ choice: "lessons", region, surface: "final" }}
-                className={`${MARKETING_SECONDARY_CTA_CLASS} nn-motion-standard rounded-xl border border-[var(--border-subtle)]`}
-                data-testid="button-final-browse-lessons"
-              >
-                {formatTitleCase(t("pages.home.hero.secondaryCta"), locale)}
-              </MarketingTrackedLink>
-            </div>
+        <ul className="mt-6 space-y-2 text-sm text-[var(--theme-muted-text)]">
+          {trust.map((item) => (
+            <li key={item} className="flex items-center justify-center gap-2">
+              <CheckCircle className="h-4 w-4 text-green-500" />
+              {item}
+            </li>
+          ))}
+        </ul>
 
-            <p className="nn-marketing-caption mx-auto mt-6 max-w-md text-pretty text-[var(--theme-muted-text)]">
-              {formatSentenceCase(t("pages.home.finalCta.pricingLead"), locale)}{" "}
-              <MarketingTrackedLink
-                href={loc(HUB.pricing)}
-                event={PH.marketingHomeFinalCta}
-                eventProps={{ choice: "pricing", region, surface: "final" }}
-                className="font-semibold text-[var(--text-accent)] underline decoration-[color-mix(in_srgb,var(--text-accent)_45%,transparent)] underline-offset-4 transition-colors hover:text-[var(--theme-heading-text)] hover:decoration-[var(--text-accent)]"
-              >
-                {formatTitleCase(t("pages.home.finalCta.pricingLink"), locale)}
-              </MarketingTrackedLink>
-              {formatSentenceCase(t("pages.home.finalCta.pricingTail"), locale)}
-            </p>
-          </div>
-        </FadeUp>
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <MarketingTrackedLink
+            href={loc(HUB.questionBank)}
+            event={PH.marketingHomeFinalCta}
+            eventProps={{ region }}
+            className={`${MARKETING_PRIMARY_CTA_CLASS} rounded-xl`}
+          >
+            {safeT(t, "pages.home.hero.primaryCta", "Start practice questions")}
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </MarketingTrackedLink>
+
+          <MarketingTrackedLink
+            href={loc(HUB.examLessons)}
+            event={PH.marketingHomeFinalCta}
+            eventProps={{ region }}
+            className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-xl`}
+          >
+            {safeT(t, "pages.home.hero.secondaryCta", "Browse lessons")}
+          </MarketingTrackedLink>
+        </div>
+
+        <p className="mt-6 text-sm text-[var(--theme-muted-text)]">
+          {safeT(t, "pages.home.finalCta.pricingLead", "See full pricing")}{" "}
+          <MarketingTrackedLink
+            href={loc(HUB.pricing)}
+            event={PH.marketingHomeFinalCta}
+            eventProps={{ region }}
+            className="font-semibold underline"
+          >
+            {safeT(t, "pages.home.finalCta.pricingLink", "here")}
+          </MarketingTrackedLink>
+        </p>
       </div>
     </section>
   );
