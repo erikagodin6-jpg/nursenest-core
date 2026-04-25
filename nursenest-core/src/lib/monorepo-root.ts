@@ -1,18 +1,34 @@
 import { existsSync } from "fs";
 import path from "path";
 
+const TARGET_RELATIVE_PATH = path.join("tools", "i18n", "source", "i18n-en.ts");
+
 /**
- * Resolves the NurseNest repository root (where `tools/i18n/source` lives).
- * Works when `process.cwd()` is the monorepo root or `nursenest-core/`.
+ * Walks upward from cwd to find the repo root.
+ * Safe for:
+ * - Docker
+ * - CI/CD
+ * - nested monorepo paths
+ * - DigitalOcean / Render builds
  */
 export function getMonorepoRoot(): string {
-  const cwd = process.cwd();
-  if (existsSync(path.join(cwd, "tools", "i18n", "source", "i18n-en.ts"))) {
-    return cwd;
+  let current = process.cwd();
+
+  for (let i = 0; i < 10; i++) {
+    const candidate = path.join(current, TARGET_RELATIVE_PATH);
+
+    if (existsSync(candidate)) {
+      return current;
+    }
+
+    const parent = path.dirname(current);
+
+    // stop at filesystem root
+    if (parent === current) break;
+
+    current = parent;
   }
-  const parent = path.join(cwd, "..");
-  if (existsSync(path.join(parent, "tools", "i18n", "source", "i18n-en.ts"))) {
-    return path.resolve(parent);
-  }
-  return cwd;
+
+  // last resort fallback
+  return process.cwd();
 }
