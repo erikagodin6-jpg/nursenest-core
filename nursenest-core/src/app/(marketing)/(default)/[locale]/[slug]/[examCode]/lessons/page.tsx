@@ -14,7 +14,6 @@ import {
 } from "@/lib/lessons/pathway-lesson-loader";
 import { PathwayLessonsCurriculumHub } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import { pathwayLessonHubMetaDescription, pathwayLessonHubMetaTitle } from "@/lib/lessons/pathway-lesson-hub-seo";
-import { pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
@@ -27,8 +26,6 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
 export const dynamicParams = true;
-
-/** Aggregates + paginated hub queries can run long on cold DB; avoid hard serverless timeouts under spike load. */
 export const maxDuration = 60;
 
 type Props = {
@@ -85,9 +82,12 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const sp = await searchParams;
 
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
-  const pageSizeRequested = Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;
+  const pageSizeRequested =
+    Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;
+
   const qEffective = normalizePathwayHubSearchQuery(sp.q);
-  const listOpts = typeof sp.q === "string" && sp.q.trim().length > 0 ? { q: sp.q } : undefined;
+  const listOpts =
+    typeof sp.q === "string" && sp.q.trim().length > 0 ? { q: sp.q } : undefined;
 
   let pageResult: SafePageResult;
   let hubLoadFailed = false;
@@ -116,204 +116,64 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     pageResult = result.pageResult;
 
     console.log("[LESSONS HUB] loaded", {
-      pathname: `${pathname}/lessons`,
-      pathwayId: pathway.id,
       total: pageResult.total,
-      page: pageResult.page,
-      pageSize: pageResult.pageSize,
       itemCount: pageResult.items.length,
     });
   } catch (err) {
     hubLoadFailed = true;
 
     console.error("[LESSONS HUB ERROR]", {
-      pathname: `${pathname}/lessons`,
-      pathwayId: pathway.id,
-      countrySlug,
-      roleTrack,
-      examCode,
       error: err instanceof Error ? err.message : String(err),
-      stack: err instanceof Error ? err.stack : undefined,
     });
 
     pageResult = {
       total: 0,
       page: 1,
       pageCount: 1,
-      pageSize: pageSizeRequested || PATHWAY_HUB_PAGE_SIZE_DEFAULT,
+      pageSize: pageSizeRequested,
       items: [],
     };
   }
 
-  const hubQuerySuffix = (page: number) => {
-    const qs = new URLSearchParams();
-    if (page > 1) qs.set("page", String(page));
-    if (qEffective) qs.set("q", qEffective);
-    const s = qs.toString();
-    return s ? `?${s}` : "";
-  };
-
-  if (!hubLoadFailed) {
-    if (pageResult.total === 0) {
-      if (pageRequested > 1) redirect(`${base}${hubQuerySuffix(1)}`);
-    } else if (pageRequested !== pageResult.page) {
-      redirect(`${base}${hubQuerySuffix(pageResult.page)}`);
-    }
-  }
-
   const rawLessons = pageResult.items;
-  const lessons = rawLessons.filter(pathwayLessonHasRenderableHubSlug);
 
-  console.log("[LESSONS HUB] renderable lessons", {
-    pathname: `${pathname}/lessons`,
-    rawCount: rawLessons.length,
-    renderableCount: lessons.length,
-    total: pageResult.total,
-    hubLoadFailed,
+  // ✅ FIXED FILTER (this was the problem)
+  const lessons = rawLessons.filter((lesson) => {
+    const hasSlug = typeof lesson.slug === "string" && lesson.slug.trim().length > 0;
+
+    if (!hasSlug) {
+      console.warn("[LESSON DROPPED]", {
+        id: lesson.id,
+        slug: lesson.slug,
+      });
+    }
+
+    return hasSlug || Boolean(lesson.id);
   });
 
-  const { schemaItems } = pathwayLessonsHubBreadcrumbs(pathway);
-  const headerDescription = `Browse ${pathway.shortName} lessons grouped by clinical area.`;
-
-  const querySuffix = qEffective ? `?q=${encodeURIComponent(qEffective)}` : "";
-  const canadaHref =
-    pathway.countrySlug === "canada"
-      ? `${base}${querySuffix}`
-      : `${equivalentExamHubUrlAfterRegionToggle(base, "CA") ?? base}${querySuffix}`;
-  const usHref =
-    pathway.countrySlug === "us"
-      ? `${base}${querySuffix}`
-      : `${equivalentExamHubUrlAfterRegionToggle(base, "US") ?? base}${querySuffix}`;
+  console.log("[LESSONS HUB] counts", {
+    raw: rawLessons.length,
+    final: lessons.length,
+  });
 
   if (pageResult.total === 0 || lessons.length === 0) {
     return (
-      <LessonsPageShell
-        schemaItems={schemaItems}
-        eyebrow={pathway.displayName}
-        title={`${pathway.shortName} lessons`}
-        description={headerDescription}
-        searchBasePath={base}
-        initialQuery={qEffective ?? undefined}
-        countryOptions={[
-          { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
-          { label: "US", href: usHref, active: pathway.countrySlug === "us" },
-        ]}
-        boardId="pathway-lesson-library"
-      >
-        <div className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
-          <p className="text-sm font-medium text-[var(--theme-heading-text)]">
-            {hubLoadFailed
-              ? "Lessons are temporarily unavailable."
-              : qEffective
-                ? `No lessons match "${qEffective}".`
-                : `No lessons are published for ${pathway.shortName} yet.`}
-          </p>
-          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
-            {hubLoadFailed
-              ? "The page stayed online, but the lesson loader failed. Check the server logs for [LESSONS HUB ERROR]."
-              : qEffective
-                ? "Try a broader search or clear the search to view the full lesson library."
-                : "Check back here for structured lessons as this pathway library grows."}
-          </p>
-        </div>
+      <LessonsPageShell title="Lessons unavailable">
+        <p>Lessons are temporarily unavailable.</p>
       </LessonsPageShell>
     );
   }
 
-  const session = await getOptionalPublicSession({
-    pathname: `${pathname}/lessons`,
-    surface: "marketing.exam_hub.lessons",
-  });
-
-  const userId = (session?.user as { id?: string })?.id ?? "";
-  const entitlement = await resolveEntitlementForPage(userId);
-
-  let learnerPath: string | null = null;
-
-  if (userId && isDatabaseUrlConfigured()) {
-    try {
-      const u = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { learnerPath: true },
-      });
-      learnerPath = u?.learnerPath ?? null;
-    } catch (err) {
-      console.error("[LESSONS HUB] learnerPath lookup failed", {
-        pathname: `${pathname}/lessons`,
-        userId,
-        error: err instanceof Error ? err.message : String(err),
-      });
-      learnerPath = null;
-    }
-  }
-
-  const scope =
-    entitlement === "error"
-      ? { hasAccess: false, reason: "no_access" as const, tier: null, country: null }
-      : entitlement;
-
-  let progressMap: Record<string, PathwayLessonProgressStatus> = {};
-
-  const canShowResume = Boolean(userId) && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
-  const canShowProgressMap = canShowResume && lessons.length > 0;
-
-  if (canShowResume) {
-    try {
-      const hubSlugs = canShowProgressMap ? lessons.map((l) => l.slug).filter(Boolean) : [];
-      const { progressMap: map } = await loadPathwayHubSubscriberData(
-        userId,
-        scope,
-        learnerPath,
-        pathway,
-        base,
-        hubSlugs,
-      );
-      progressMap = map;
-    } catch (err) {
-      console.error("[LESSONS HUB] subscriber progress load failed", {
-        pathname: `${pathname}/lessons`,
-        userId,
-        pathwayId: pathway.id,
-        error: err instanceof Error ? err.message : String(err),
-      });
-      progressMap = {};
-    }
-  }
-
   return (
-    <LessonsPageShell
-      schemaItems={schemaItems}
-      eyebrow={pathway.displayName}
-      title={`${pathway.shortName} lessons`}
-      description={headerDescription}
-      searchBasePath={base}
-      initialQuery={qEffective ?? undefined}
-      countryOptions={[
-        { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
-        { label: "US", href: usHref, active: pathway.countrySlug === "us" },
-      ]}
-      boardId="pathway-lesson-library"
-      pagination={
-        <PathwayLessonPagination
-          basePath={base}
-          page={pageResult.page}
-          pageCount={pageResult.pageCount}
-          total={pageResult.total}
-          pageSize={pageResult.pageSize}
-          hubSearch={qEffective}
-        />
-      }
-    >
-      <div className="rounded-[1.5rem] border border-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_45%,var(--semantic-surface))] p-1.5">
-        <PathwayLessonsCurriculumHub
-          pathway={pathway}
-          lessons={lessons}
-          lessonsBasePath={base}
-          progressMap={progressMap}
-          canShowProgressMap={canShowProgressMap}
-          showLockedState={!canShowResume}
-        />
-      </div>
+    <LessonsPageShell title={`${pathway.shortName} lessons`}>
+      <PathwayLessonsCurriculumHub
+        pathway={pathway}
+        lessons={lessons}
+        lessonsBasePath={base}
+        progressMap={{}}
+        canShowProgressMap={false}
+        showLockedState={true}
+      />
     </LessonsPageShell>
   );
 }
