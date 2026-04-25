@@ -57,15 +57,19 @@ export default async function MarketingLocaleLayout({
       error: e instanceof Error ? e.message : String(e),
       locale,
     });
-    const { captureSentryRuntimeSoftError } = await marketingLocaleLayoutSentryRuntimePromise;
-    captureSentryRuntimeSoftError({
-      scope: "marketing_layout",
-      event: "locale_chrome_failed",
-      error: e,
-      route: "marketing-locale-layout",
-      feature: "marketing_layout",
-      meta: { locale },
-    });
+    try {
+      const { captureSentryRuntimeSoftError } = await marketingLocaleLayoutSentryRuntimePromise;
+      captureSentryRuntimeSoftError({
+        scope: "marketing_layout",
+        event: "locale_chrome_failed",
+        error: e,
+        route: "marketing-locale-layout",
+        feature: "marketing_layout",
+        meta: { locale },
+      });
+    } catch {
+      /* Sentry import failed — continue without telemetry */
+    }
   }
   try {
     assertMarketingLayoutMessagesIntegrity({
@@ -79,15 +83,19 @@ export default async function MarketingLocaleLayout({
       error: integrityErr instanceof Error ? integrityErr.message : String(integrityErr),
       locale,
     });
-    const { captureSentryRuntimeSoftError } = await marketingLocaleLayoutSentryRuntimePromise;
-    captureSentryRuntimeSoftError({
-      scope: "marketing_layout",
-      event: "locale_layout_integrity_merge",
-      error: integrityErr,
-      route: "marketing-locale-layout",
-      feature: "marketing_layout",
-      meta: { locale },
-    });
+    try {
+      const { captureSentryRuntimeSoftError } = await marketingLocaleLayoutSentryRuntimePromise;
+      captureSentryRuntimeSoftError({
+        scope: "marketing_layout",
+        event: "locale_layout_integrity_merge",
+        error: integrityErr,
+        route: "marketing-locale-layout",
+        feature: "marketing_layout",
+        meta: { locale },
+      });
+    } catch {
+      /* Sentry import failed — continue without telemetry */
+    }
     try {
       messages = mergeMinimalMarketingLayoutShellMessages(await getMarketingDefaultLayoutChromeMessages());
     } catch {

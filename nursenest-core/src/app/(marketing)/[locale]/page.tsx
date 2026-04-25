@@ -18,8 +18,7 @@ import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-regional-marketing-urls";
 
-/** Literal required for Next segment config static analysis — keep in sync with `PUBLIC_HOME_STATS_CACHE_REVALIDATE_SEC`. */
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ locale: string }> };
 

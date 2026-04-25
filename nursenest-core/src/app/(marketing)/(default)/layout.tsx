@@ -439,15 +439,22 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
     }
   };
 
-  if (runtime?.withSentryRuntimeSpan) {
-    return runtime.withSentryRuntimeSpan(
-      {
-        name: "marketing.layout.default.render",
-        op: "ui.server.render",
-        attributes: { route: "shared-marketing-default", locale: DEFAULT_MARKETING_LOCALE },
-      },
-      marketingDefaultLayoutInner,
-    );
+  try {
+    if (runtime?.withSentryRuntimeSpan) {
+      return runtime.withSentryRuntimeSpan(
+        {
+          name: "marketing.layout.default.render",
+          op: "ui.server.render",
+          attributes: { route: "shared-marketing-default", locale: DEFAULT_MARKETING_LOCALE },
+        },
+        marketingDefaultLayoutInner,
+      );
+    }
+  } catch (err) {
+    layoutStderrTrace("marketing_layout", "sentry_span_failed_falling_back", {
+      route: "shared-marketing-default",
+      error: err instanceof Error ? err.message : String(err),
+    });
   }
   return marketingDefaultLayoutInner();
 }
