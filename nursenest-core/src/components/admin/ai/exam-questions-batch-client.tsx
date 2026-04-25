@@ -7,6 +7,7 @@ import type { QuestionBatchItem, QuestionBatchResultSummaryV1 } from "@/lib/ai/a
 
 function statusBadge(status: QuestionBatchItem["status"]) {
   const base = "rounded-full px-2 py-0.5 text-xs font-medium";
+
   switch (status) {
     case "pending":
       return `${base} bg-zinc-500/15 text-zinc-700 dark:text-zinc-300`;
@@ -25,8 +26,24 @@ function statusBadge(status: QuestionBatchItem["status"]) {
   }
 }
 
+async function readJsonSafe<T>(res: Response): Promise<T | null> {
+  try {
+    return (await res.json()) as T;
+  } catch {
+    return null;
+  }
+}
+
+function errorMessageFromResponse(
+  body: { error?: string; message?: string } | null,
+  fallback: string,
+): string {
+  return body?.error ?? body?.message ?? fallback;
+}
+
 export function ExamQuestionsBatchClient() {
   const aiGate = useAdminAiGenerationGate();
+
   const [topicsRaw, setTopicsRaw] = useState("");
   const [tier, setTier] = useState("rn");
   const [pathway, setPathway] = useState("");
@@ -49,19 +66,40 @@ export function ExamQuestionsBatchClient() {
 
   const refreshJob = useCallback(async (id: string, repair?: boolean) => {
     const q = repair ? "?repair=1" : "";
-    const res = await fetch(`/api/admin/ai/exam-questions/generate-batch/${id}${q}`, { credentials: "include" });
-    const j = (await res.json()) as { error?: string; summary?: QuestionBatchResultSummaryV1 };
-    if (!res.ok) {
-      setErr(j.error ?? String(res.status));
-      return;
+
+    try {
+      const res = await fetch(`/api/admin/ai/exam-questions/generate-batch/${encodeURIComponent(id)}${q}`, {
+        credentials: "include",
+      });
+
+      const body = await readJsonSafe<{ error?: string; summary?: QuestionBatchResultSummaryV1 }>(res);
+
+      if (!res.ok) {
+        setErr(errorMessageFromResponse(body, `Refresh failed (${res.status})`));
+        return;
+      }
+
+      if (body?.summary) {
+        setSummary(body.summary);
+      }
+    } catch {
+      setErr("Network error while loading batch status.");
     }
-    if (j.summary) setSummary(j.summary);
   }, []);
 
   async function createBatch(e: React.FormEvent) {
     e.preventDefault();
+
+    if (!aiGate.runnable) {
+      setErr("AI generation is not available right now.");
+      return;
+    }
+
     setErr(null);
     setLastMessage(null);
+    setJobId(null);
+    setSummary(null);
+
     try {
       const res = await fetch("/api/admin/ai/exam-questions/generate-batch", {
         method: "POST",
@@ -82,66 +120,85 @@ export function ExamQuestionsBatchClient() {
           ...(lessonTargets.trim() ? { lessonTargets: lessonTargets.trim() } : {}),
         }),
       });
-      const j = (await res.json()) as {
+
+      const body = await readJsonSafe<{
         error?: string;
         jobId?: string;
         summary?: QuestionBatchResultSummaryV1;
-      };
+      }>(res);
+
       if (!res.ok) {
-        setErr(String(j.error ?? res.status));
+        setErr(errorMessageFromResponse(body, `Create batch failed (${res.status})`));
         return;
       }
-      if (j.jobId) setJobId(j.jobId);
-      if (j.summary) setSummary(j.summary);
+
+      if (body?.jobId) setJobId(body.jobId);
+      if (body?.summary) setSummary(body.summary);
     } catch {
-      setErr("Network error");
+      setErr("Network error while creating batch.");
     }
   }
 
   async function resumeJob(e: React.FormEvent) {
     e.preventDefault();
+
     const id = resumeJobId.trim();
-    if (id.length < 8) return;
+
+    if (id.length < 8) {
+      setErr("Enter a valid job id.");
+      return;
+    }
+
     setErr(null);
+    setLastMessage(null);
     setJobId(id);
+
     await refreshJob(id, true);
   }
 
   async function runSteps() {
-    if (!jobId) return;
+    if (!jobId || running || !aiGate.runnable) return;
+
     setErr(null);
     setRunning(true);
     setLastMessage(null);
+
     try {
       let done = false;
+
       while (!done) {
-        const res = await fetch(`/api/admin/ai/exam-questions/generate-batch/${jobId}/step`, {
+        const res = await fetch(`/api/admin/ai/exam-questions/generate-batch/${encodeURIComponent(jobId)}/step`, {
           method: "POST",
           credentials: "include",
         });
-        const j = (await res.json()) as {
+
+        const body = await readJsonSafe<{
           error?: string;
           done?: boolean;
           message?: string;
           summary?: QuestionBatchResultSummaryV1;
           warning?: string;
-        };
+        }>(res);
+
         if (!res.ok) {
-          setErr(j.error ?? `Step failed (${res.status})`);
-          if (j.summary) setSummary(j.summary);
+          setErr(errorMessageFromResponse(body, `Step failed (${res.status})`));
+          if (body?.summary) setSummary(body.summary);
           break;
         }
-        if (j.summary) setSummary(j.summary);
-        if (j.warning) setLastMessage(j.warning);
-        if (j.done) {
+
+        if (body?.summary) setSummary(body.summary);
+        if (body?.warning) setLastMessage(body.warning);
+
+        if (body?.done) {
           done = true;
-          setLastMessage((m) => m ?? j.message ?? "Batch finished");
+          setLastMessage((m) => m ?? body.message ?? "Batch finished");
           break;
         }
-        await new Promise((r) => setTimeout(r, 200));
+
+        await new Promise((resolve) => setTimeout(resolve, 200));
       }
     } catch {
-      setErr("Network error during batch");
+      setErr("Network error during batch.");
     } finally {
       setRunning(false);
     }
@@ -161,10 +218,9 @@ export function ExamQuestionsBatchClient() {
     <div className="space-y-8">
       <div className="nn-card space-y-3 p-6">
         <p className="text-sm text-muted">
-          One <strong>GeneratedQuestionDraft</strong> per topic (stem, options, answer, rationale, tags, lesson-link
-          suggestions). Process topics sequentially so one failure does not stop the rest. Fingerprint dedup skips topics
-          already generated with the same settings; stem dedup skips when a matching question or draft already exists
-          (unless &quot;Allow duplicates&quot; is on).
+          One <strong>GeneratedQuestionDraft</strong> per topic. Process topics sequentially so one failure does not
+          stop the rest. Fingerprint dedup skips topics already generated with the same settings; stem dedup skips when
+          a matching question or draft already exists unless duplicates are allowed.
         </p>
         <p className="text-xs text-muted">
           Open drafts in the question studio to regenerate sections, approve, and promote.
@@ -173,8 +229,9 @@ export function ExamQuestionsBatchClient() {
 
       <form onSubmit={createBatch} className="nn-card space-y-4 p-6">
         <h2 className="text-sm font-semibold">1. Topics & settings</h2>
+
         <label className="block text-sm">
-          Topics (one per line or comma / semicolon separated) *
+          Topics *
           <textarea
             className="mt-1 min-h-[120px] w-full rounded border border-border px-2 py-1.5 font-mono text-sm"
             value={topicsRaw}
@@ -183,9 +240,10 @@ export function ExamQuestionsBatchClient() {
             placeholder={"Acute kidney injury — nursing priorities\nHyperkalemia management"}
           />
         </label>
+
         <div className="grid gap-3 sm:grid-cols-2">
           <label className="text-sm">
-            Pathway label (optional)
+            Pathway label
             <input
               className="mt-1 w-full rounded border border-border px-2 py-1.5 text-sm"
               value={pathway}
@@ -193,6 +251,7 @@ export function ExamQuestionsBatchClient() {
               placeholder="e.g. Med-Surg RN"
             />
           </label>
+
           <label className="text-sm">
             Tier
             <select
@@ -207,6 +266,7 @@ export function ExamQuestionsBatchClient() {
               ))}
             </select>
           </label>
+
           <label className="text-sm">
             Country
             <select
@@ -218,6 +278,7 @@ export function ExamQuestionsBatchClient() {
               <option value="US">US</option>
             </select>
           </label>
+
           <label className="text-sm">
             Exam family
             <select
@@ -232,6 +293,7 @@ export function ExamQuestionsBatchClient() {
               ))}
             </select>
           </label>
+
           <label className="text-sm">
             Difficulty
             <select
@@ -244,6 +306,7 @@ export function ExamQuestionsBatchClient() {
               <option value="ADVANCED">Advanced</option>
             </select>
           </label>
+
           <label className="text-sm">
             Question type mode
             <select
@@ -251,51 +314,58 @@ export function ExamQuestionsBatchClient() {
               value={questionTypeMode}
               onChange={(e) => setQuestionTypeMode(e.target.value as typeof questionTypeMode)}
             >
-              <option value="auto">Auto (MCQ + SATA)</option>
+              <option value="auto">Auto</option>
               <option value="mcq">MCQ only</option>
               <option value="sata">SATA only</option>
             </select>
           </label>
+
           <label className="text-sm sm:col-span-2">
-            Style hints (optional)
+            Style hints
             <input
               className="mt-1 w-full rounded border border-border px-2 py-1.5 text-sm"
               value={questionTypes}
               onChange={(e) => setQuestionTypes(e.target.value)}
             />
           </label>
+
           <label className="text-sm">
-            Category ID (optional)
+            Category ID
             <input
               className="mt-1 w-full rounded border border-border px-2 py-1.5 text-sm"
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
             />
           </label>
+
           <label className="text-sm">
-            Primary lesson ID (optional)
+            Primary lesson ID
             <input
               className="mt-1 w-full rounded border border-border px-2 py-1.5 text-sm"
               value={lessonId}
               onChange={(e) => setLessonId(e.target.value)}
             />
           </label>
+
           <label className="text-sm sm:col-span-2">
-            Lesson targets for link hints (comma-separated content IDs)
+            Lesson targets for link hints
             <input
               className="mt-1 w-full rounded border border-border px-2 py-1.5 text-sm"
               value={lessonTargets}
               onChange={(e) => setLessonTargets(e.target.value)}
+              placeholder="comma-separated content IDs"
             />
           </label>
         </div>
+
         <label className="flex cursor-pointer items-center gap-2 text-sm">
           <input type="checkbox" checked={allowDuplicates} onChange={(e) => setAllowDuplicates(e.target.checked)} />
-          Allow duplicates (skip fingerprint + stem checks)
+          Allow duplicates
         </label>
+
         <button
           type="submit"
-          disabled={!aiGate.runnable}
+          disabled={!aiGate.runnable || running}
           className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
         >
           Create batch queue
@@ -312,7 +382,8 @@ export function ExamQuestionsBatchClient() {
             placeholder="cuid…"
           />
         </label>
-        <button type="submit" className="rounded-lg border border-border px-4 py-2 text-sm font-semibold">
+
+        <button type="submit" disabled={running} className="rounded-lg border border-border px-4 py-2 text-sm font-semibold disabled:opacity-50">
           Load status
         </button>
       </form>
@@ -327,6 +398,7 @@ export function ExamQuestionsBatchClient() {
               <h2 className="text-sm font-semibold">2. Queue</h2>
               <p className="font-mono text-xs text-muted">Job {jobId}</p>
             </div>
+
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
@@ -336,6 +408,7 @@ export function ExamQuestionsBatchClient() {
               >
                 {running ? "Running…" : "Run / continue batch"}
               </button>
+
               <button
                 type="button"
                 disabled={running}
@@ -354,6 +427,7 @@ export function ExamQuestionsBatchClient() {
                   .map(([k, v]) => `${k}: ${v}`)
                   .join(" · ")}
               </p>
+
               <ul className="divide-y divide-border/60 rounded-lg border border-border/60">
                 {summary.items.map((it) => (
                   <li key={it.itemId} className="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between">
@@ -361,16 +435,16 @@ export function ExamQuestionsBatchClient() {
                       <p className="text-sm font-medium">{it.topic}</p>
                       {it.error ? <p className="text-xs text-red-600">{it.error}</p> : null}
                     </div>
+
                     <div className="flex flex-wrap items-center gap-2">
                       <span className={statusBadge(it.status)}>{it.status}</span>
+
                       {it.draftId ? (
-                        <Link
-                          className="text-xs font-semibold text-primary underline"
-                          href={`/admin/ai/drafts/questions/${it.draftId}`}
-                        >
+                        <Link className="text-xs font-semibold text-primary underline" href={`/admin/ai/drafts/questions/${it.draftId}`}>
                           Open draft
                         </Link>
                       ) : null}
+
                       {it.existingDraftId ? (
                         <Link
                           className="text-xs font-semibold text-amber-800 underline dark:text-amber-200"
@@ -379,6 +453,7 @@ export function ExamQuestionsBatchClient() {
                           Existing draft
                         </Link>
                       ) : null}
+
                       {it.existingQuestionBankId ? (
                         <Link
                           className="text-xs font-semibold text-orange-800 underline dark:text-orange-200"
