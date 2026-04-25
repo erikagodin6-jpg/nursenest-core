@@ -1,9 +1,6 @@
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
-export default function HomePage() {
+export function MarketingHomeEmergencyFallback() {
   return (
     <main className="mx-auto max-w-5xl px-6 py-16">
       <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
