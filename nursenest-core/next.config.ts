@@ -56,7 +56,7 @@ const nextConfig: NextConfig = {
   },
 
   /**
-   * Keep this minimal and stable — no forced worker hacks
+   * 🔥 CRITICAL: stabilize build
    */
   experimental: {
     cpus: 2,
@@ -64,6 +64,11 @@ const nextConfig: NextConfig = {
     webpackBuildWorker: false,
     externalDir: true,
   },
+
+  /**
+   * 🔥 THIS IS THE REAL FIX
+   */
+  swcMinify: false,
 
   async redirects() {
     return [
