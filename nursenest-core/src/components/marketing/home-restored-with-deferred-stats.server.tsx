@@ -1,30 +1,36 @@
 import "server-only";
 
 import { Suspense, type ReactNode } from "react";
+
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
 import {
   getDegradedPublicHomeStatsFallback,
   type PublicHomeStatsPayload,
 } from "@/lib/marketing/public-home-stats-payload";
 import { getHomepagePublicHomeStatsSyncInitial } from "@/lib/marketing/public-home-stats-memory";
+import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
 
-function homeMarketingStatsFromPayload(raw: {
-  questionCount: number;
-  registeredLearners: number;
-  totalLessons: number;
-}) {
+function safeNumber(value: unknown): number {
+  return Number.isFinite(value) ? Number(value) : 0;
+}
+
+function homeMarketingStatsFromPayload(raw: Partial<PublicHomeStatsPayload> | null | undefined): HomeMarketingStats {
   return {
-    questionCount: raw.questionCount,
-    registeredLearners: raw.registeredLearners,
-    totalLessons: raw.totalLessons,
+    questionCount: safeNumber(raw?.questionCount),
+    registeredLearners: safeNumber(raw?.registeredLearners),
+    totalLessons: safeNumber(raw?.totalLessons),
   };
+}
+
+function safeRegionCardIds(ids: readonly string[] | null | undefined): readonly string[] {
+  return Array.isArray(ids) ? ids.filter((id) => typeof id === "string" && id.length > 0) : [];
 }
 
 function getSafeInitial(): PublicHomeStatsPayload {
   try {
     return getHomepagePublicHomeStatsSyncInitial();
-  } catch (e) {
-    console.error("Initial stats failed:", e);
+  } catch (error) {
+    console.error("[home-restored-with-deferred-stats] initial stats failed", error);
     return getDegradedPublicHomeStatsFallback("initial_failed");
   }
 }
@@ -33,13 +39,13 @@ async function getStatsSafe(): Promise<PublicHomeStatsPayload> {
   try {
     const mod = await import("@/lib/marketing/public-home-stats");
 
-    if (!mod?.getHomepagePublicHomeStats) {
-      throw new Error("Stats module missing function");
+    if (typeof mod.getHomepagePublicHomeStats !== "function") {
+      throw new Error("Stats module missing getHomepagePublicHomeStats");
     }
 
     return await mod.getHomepagePublicHomeStats();
-  } catch (e) {
-    console.error("Deferred stats failed:", e);
+  } catch (error) {
+    console.error("[home-restored-with-deferred-stats] deferred stats failed", error);
     return getDegradedPublicHomeStatsFallback("deferred_failed");
   }
 }
@@ -48,7 +54,7 @@ async function HomeDeferred({
   publishedGlobalRegionCardIds,
   introAfterHero,
 }: {
-  publishedGlobalRegionCardIds: readonly string[];
+  publishedGlobalRegionCardIds?: readonly string[] | null;
   introAfterHero?: ReactNode;
 }) {
   const stats = await getStatsSafe();
@@ -56,7 +62,7 @@ async function HomeDeferred({
   return (
     <HomeRestoredClient
       homeMarketingStats={homeMarketingStatsFromPayload(stats)}
-      publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
+      publishedGlobalRegionCardIds={safeRegionCardIds(publishedGlobalRegionCardIds)}
       introAfterHero={introAfterHero}
     />
   );
@@ -68,15 +74,18 @@ export function HomeRestoredWithDeferredStats({
   introAfterHero,
 }: {
   skipOptionalDbReads: boolean;
-  publishedGlobalRegionCardIds: readonly string[];
+  publishedGlobalRegionCardIds?: readonly string[] | null;
   introAfterHero?: ReactNode;
 }) {
+  const safeCardIds = safeRegionCardIds(publishedGlobalRegionCardIds);
+
   if (skipOptionalDbReads) {
     const stats = getDegradedPublicHomeStatsFallback("db_skipped");
+
     return (
       <HomeRestoredClient
         homeMarketingStats={homeMarketingStatsFromPayload(stats)}
-        publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
+        publishedGlobalRegionCardIds={safeCardIds}
         introAfterHero={introAfterHero}
       />
     );
@@ -89,13 +98,13 @@ export function HomeRestoredWithDeferredStats({
       fallback={
         <HomeRestoredClient
           homeMarketingStats={homeMarketingStatsFromPayload(initial)}
-          publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
+          publishedGlobalRegionCardIds={safeCardIds}
           introAfterHero={introAfterHero}
         />
       }
     >
       <HomeDeferred
-        publishedGlobalRegionCardIds={publishedGlobalRegionCardIds}
+        publishedGlobalRegionCardIds={safeCardIds}
         introAfterHero={introAfterHero}
       />
     </Suspense>
