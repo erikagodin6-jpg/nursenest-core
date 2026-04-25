@@ -7,8 +7,8 @@
     "node_modules"
   ],
   "engines": {
-    "node": "22.22.2",
-    "npm": "10.9.7"
+    "node": "20.x",
+    "npm": "10.x"
   },
   "overrides": {
     "next-auth": {
