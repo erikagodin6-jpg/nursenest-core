@@ -9,12 +9,9 @@ import { AppThemeProvider } from "@/components/theme/app-theme-provider";
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
 import { NURSENEST_DEFAULT_THEME, THEME_STORAGE_KEY } from "@/lib/theme/theme-registry";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
-import { loadRenderTrace } from "@/lib/observability/deferred-render-trace";
 import "./globals.css";
-/** Bundled with root layout CSS so marketing pages avoid a second render-blocking stylesheet (rules are dark-theme + `.nn-marketing-surface` scoped). */
 import "./(marketing)/marketing-dark-utilities.css";
 
-/** `display: "swap"` → `font-display: swap` on emitted `@font-face`; `adjustFontFallback` + `preload` reduce CLS while fonts load. */
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
   subsets: ["latin"],
@@ -25,7 +22,6 @@ const dmSans = DM_Sans({
   preload: true,
 });
 
-/** Same as `not-found.tsx`: static prerender must not call `auth()` (uses headers; forces dynamic / noisy catch). */
 const BUILD_PHASE = "phase-production-build";
 
 const siteUrl = MARKETING_SITE_ORIGIN;
@@ -75,40 +71,78 @@ export const metadata: Metadata = {
   robots: process.env.NODE_ENV === "production" ? "index, follow" : "noindex",
 };
 
+function safeTrace(scope: string, message: string, meta?: Record<string, unknown>) {
+  try {
+    layoutStderrTrace(scope, message, meta ?? {});
+  } catch {
+    /* logging must never break root layout */
+  }
+}
+
+async function getSessionSafe(): Promise<Session | null> {
+  if (process.env.NEXT_PHASE === BUILD_PHASE) return null;
+
+  try {
+    return await auth();
+  } catch (e) {
+    safeTrace("root_layout", "auth() failed — continuing with null session", {
+      route: "shared-root-layout",
+      detail: e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200),
+    });
+    return null;
+  }
+}
+
+function SafeProviders({
+  session,
+  children,
+}: {
+  session: Session | null;
+  children: React.ReactNode;
+}) {
+  return (
+    <AppThemeProvider>
+      <AuthSessionProvider session={session}>
+        <AnalyticsProvider>{children}</AnalyticsProvider>
+      </AuthSessionProvider>
+    </AppThemeProvider>
+  );
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  layoutStderrTrace("root_layout", "root layout start", { route: "shared-root-layout" });
-  void loadRenderTrace()
-    .then((m) => m.renderTrace("root_layout", { route: "shared-root-layout" }))
-    .catch(() => {
-      /* render-trace is best-effort */
-    });
-  let session: Session | null = null;
-  if (process.env.NEXT_PHASE === BUILD_PHASE) {
-    session = null;
-  } else {
-    try {
-      session = await auth();
-    } catch (e) {
-      layoutStderrTrace("root_layout", "auth() failed — continuing with null session", {
-        route: "shared-root-layout",
-        detail: e instanceof Error ? e.message.slice(0, 200) : String(e).slice(0, 200),
-      });
-    }
-  }
-  const themeBoot = `(function(){try{var k=${JSON.stringify(THEME_STORAGE_KEY)};var d=${JSON.stringify(NURSENEST_DEFAULT_THEME)};var v=localStorage.getItem(k);if(v==null||v===""){v=d;localStorage.setItem(k,v);}document.documentElement.setAttribute("data-theme",v);}catch(e){}})();`;
+  safeTrace("root_layout", "root layout start", { route: "shared-root-layout" });
 
-  /** Duplicates the first layout rules from `globals.css` so the parser can paint before the main stylesheet finishes. */
-  const rootCriticalCss = `html,body{overflow-x:hidden;max-width:100vw}*{box-sizing:border-box}body{margin:0}`;
+  try {
+    void import("@/lib/observability/deferred-render-trace")
+      .then((m) => m.loadRenderTrace())
+      .then((m) => m.renderTrace("root_layout", { route: "shared-root-layout" }))
+      .catch(() => {});
+  } catch {
+    /* render tracing is optional */
+  }
+
+  const session = await getSessionSafe();
+
+  const themeBoot = `(function(){try{var k=${JSON.stringify(
+    THEME_STORAGE_KEY,
+  )};var d=${JSON.stringify(
+    NURSENEST_DEFAULT_THEME,
+  )};var v=localStorage.getItem(k);if(v==null||v===""){v=d;localStorage.setItem(k,v);}document.documentElement.setAttribute("data-theme",v);}catch(e){document.documentElement.setAttribute("data-theme",${JSON.stringify(
+    NURSENEST_DEFAULT_THEME,
+  )});}})();`;
+
+  const rootCriticalCss =
+    "html,body{overflow-x:hidden;max-width:100vw}*{box-sizing:border-box}body{margin:0;background:#f8fafc;color:#0f172a}";
 
   return (
     <html
       lang="en"
       className={`${dmSans.variable} h-full antialiased`}
-      data-theme="ocean"
+      data-theme={NURSENEST_DEFAULT_THEME}
       suppressHydrationWarning
     >
       <head>
@@ -118,13 +152,7 @@ export default async function RootLayout({
         <Script id="nursenest-theme-boot" strategy="beforeInteractive">
           {themeBoot}
         </Script>
-        <AppThemeProvider>
-          <AuthSessionProvider session={session}>
-            <AnalyticsProvider>
-              {children}
-            </AnalyticsProvider>
-          </AuthSessionProvider>
-        </AppThemeProvider>
+        <SafeProviders session={session}>{children}</SafeProviders>
       </body>
     </html>
   );

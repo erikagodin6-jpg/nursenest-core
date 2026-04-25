@@ -187,7 +187,7 @@ body {
  *            .nn-surface-bubble, .nn-surface-bubble-strong, .nn-surface-accent-soft,
  *            .nn-surface-accent-strong, .nn-text-accent, .nn-ring-accent, .nn-callout-accent
  */
-html[data-theme] {
+html([data-theme]) {
   --theme-luminance: light;
   /*
    * Surfaces: neutral by default — theme color is concentrated on bubble/accent surfaces below.

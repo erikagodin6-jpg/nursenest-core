@@ -39,25 +39,52 @@ import { MarketingPublicContentEditProvider } from "@/components/marketing/marke
 import { loadMarketingPublicContentOverridesForLocale } from "@/lib/marketing/load-marketing-public-content-overrides";
 import type { CountryCode } from "@/lib/marketing/countries/types";
 
-/** Layout reads `headers()` (pathname probe + staff chrome); avoid wasted static-generation attempts during `next build`. */
 export const dynamic = "force-dynamic";
-
-/** Single module promise — avoids per-request `import()` bookkeeping on hot marketing layout path. */
-const marketingDefaultLayoutSentryRuntimePromise = import("@/lib/observability/sentry-runtime");
 
 const MARKETING_LAYOUT_SENTRY_IMPORT_BUDGET_MS = 2000;
 
-/** Keep `pages.*` off the layout merge; load under `<main>` via `MarketingMainI18nShards` (build + runtime). */
+function safeNowMs(): number {
+  try {
+    return nnHomeDiagNowMs();
+  } catch {
+    return Date.now();
+  }
+}
+
 function shouldLayerMainPageShards() {
   return true;
 }
 
-/**
- * Minimal chrome for `/` when `NN_HOME_STATIC_MARKETING_LAYOUT` (diagnostic; production-guarded).
- * Uses {@link MarketingDefaultLayoutChromeFailsafeShell} (logo + compact nav + theme), not
- * {@link SiteHeader}/{@link SiteFooter}, to avoid heavy chrome shard loads — do not expect parity
- * with the full marketing shell when this path is active.
- */
+function getMarketingDefaultLayoutSentryRuntimePromise() {
+  return import("@/lib/observability/sentry-runtime").catch((err) => {
+    layoutStderrTrace("marketing_layout", "sentry_runtime_import_failed", {
+      route: "shared-marketing-default",
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return null;
+  });
+}
+
+async function readNarrowViewportHintSafe(): Promise<boolean> {
+  try {
+    return await readMarketingNarrowViewportServerHint();
+  } catch (err) {
+    layoutStderrTrace("marketing_layout", "narrow_viewport_hint_failed", {
+      route: "shared-marketing-default",
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return false;
+  }
+}
+
+async function getHeaderPathnameSafe(): Promise<string> {
+  try {
+    return (await headers()).get("x-nn-request-pathname")?.trim() ?? "/";
+  } catch {
+    return "/";
+  }
+}
+
 function marketingDefaultLayoutStaticShellForHome({
   children,
   serverRegion,
@@ -69,14 +96,12 @@ function marketingDefaultLayoutStaticShellForHome({
   children: React.ReactNode;
   serverRegion: MarketingRegionToggle;
   trustClientPersistedRegion: boolean;
-  /** Server `nn_global_region` (or null) so client hooks match SSR under static `/` shell. */
   serverGlobalRegion: GlobalRegionSlug | null;
-  /** Must match {@link getEffectiveMarketingCountry} for the same cookies/IP — never hardcode Canada. */
   marketingCountry: CountryCode;
-  /** From Edge `proxy` UA / CH hint — marketing-only first paint (see `marketing-narrow-viewport-hint.ts`). */
   serverNarrowViewportHint: boolean;
 }) {
   const shellMessages = mergeMinimalMarketingLayoutShellMessages({});
+
   return (
     <MarketingI18nProvider
       key={DEFAULT_MARKETING_LOCALE}
@@ -103,52 +128,62 @@ function marketingDefaultLayoutStaticShellForHome({
 }
 
 export default async function MarketingDefaultLocaleLayout({ children }: { children: React.ReactNode }) {
-  const layoutBootT0 = nnHomeDiagNowMs();
-  void loadRenderTrace()
-    .then((m) => m.renderTrace("marketing_default_layout", { route: "shared-marketing-default" }))
-    .catch(() => {
-      /* best-effort */
-    });
-  void loadMarketingLayoutObservability().catch(() => {
-    /* optional Sentry span helpers — never block layout */
-  });
+  const layoutBootT0 = safeNowMs();
 
-  if (nnHomeStaticMarketingLayoutEnabled()) {
-    try {
-      const hpEarly = (await headers()).get("x-nn-request-pathname")?.trim() ?? "";
+  try {
+    void loadRenderTrace()
+      .then((m) => m.renderTrace("marketing_default_layout", { route: "shared-marketing-default" }))
+      .catch(() => {});
+  } catch {}
+
+  try {
+    void loadMarketingLayoutObservability().catch(() => {});
+  } catch {}
+
+  try {
+    if (nnHomeStaticMarketingLayoutEnabled()) {
+      const hpEarly = await getHeaderPathnameSafe();
+
       if (hpEarly === "/") {
         try {
           console.error(
-            `[nursenest-core] NN_HOME_STATIC_MARKETING_LAYOUT=1: minimal default marketing layout for / (no Sentry span, no chrome shards)`,
+            "[nursenest-core] NN_HOME_STATIC_MARKETING_LAYOUT=1: minimal default marketing layout for / (no Sentry span, no chrome shards)",
           );
-        } catch {
-          /* noop */
-        }
-        if (shouldEmitNnHomeRouteDiag()) {
-          emitNnHomeRouteDiag({
-            segment: "layout_static_marketing_shell_short_circuit",
-            pathname: hpEarly,
-            elapsed_ms: nnHomeDiagNowMs() - layoutBootT0,
-          });
-        }
-        const staticShellRegionCookie = await readOptionalMarketingRegionToggleForCountry();
-        const staticShellGlobalRegion = await readOptionalGlobalRegionSlugFromCookie();
+        } catch {}
+
+        try {
+          if (shouldEmitNnHomeRouteDiag()) {
+            emitNnHomeRouteDiag({
+              segment: "layout_static_marketing_shell_short_circuit",
+              pathname: hpEarly,
+              elapsed_ms: safeNowMs() - layoutBootT0,
+            });
+          }
+        } catch {}
+
+        const staticShellRegionCookie = await readOptionalMarketingRegionToggleForCountry().catch(() => undefined);
+        const staticShellGlobalRegion = await readOptionalGlobalRegionSlugFromCookie().catch(() => null);
+
         let staticShellDetectedIp: string | null = null;
         try {
           staticShellDetectedIp = detectedIpCountryFromHeaders(await headers());
         } catch {
           staticShellDetectedIp = null;
         }
+
         const staticShellServerRegion: MarketingRegionToggle = resolveDefaultLayoutMarketingExamRegion({
           marketingRegionCookie: staticShellRegionCookie,
           globalRegionSlug: staticShellGlobalRegion,
           detectedIpCountry: staticShellDetectedIp,
         });
+
         const staticShellMarketingCountry = getEffectiveMarketingCountry(
           hpEarly || "/",
           staticShellRegionCookie ?? staticShellServerRegion,
         );
-        const staticShellNarrowHint = await readMarketingNarrowViewportServerHint();
+
+        const staticShellNarrowHint = await readNarrowViewportHintSafe();
+
         return marketingDefaultLayoutStaticShellForHome({
           children,
           serverRegion: staticShellServerRegion,
@@ -158,72 +193,73 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
           serverNarrowViewportHint: staticShellNarrowHint,
         });
       }
-    } catch {
-      /* fall through — e.g. headers unavailable */
     }
+  } catch (err) {
+    layoutStderrTrace("marketing_layout", "static_marketing_layout_probe_failed_open", {
+      route: "shared-marketing-default",
+      error: err instanceof Error ? err.message : String(err),
+    });
   }
 
   const runtime = await safeAwait(
-    marketingDefaultLayoutSentryRuntimePromise,
+    getMarketingDefaultLayoutSentryRuntimePromise(),
     "marketing_default_layout.sentry_import",
     MARKETING_LAYOUT_SENTRY_IMPORT_BUDGET_MS,
-  );
+  ).catch(() => null);
 
-  if (shouldEmitNnHomeRouteDiag()) {
-    let hp0 = "";
-    try {
-      hp0 = (await headers()).get("x-nn-request-pathname")?.trim() ?? "";
-    } catch {
-      hp0 = "(headers_unavailable)";
-    }
-    if (hp0 === "/") {
-      emitNnHomeRouteDiag({
-        segment: "layout_after_sentry_import",
-        pathname: hp0,
-        elapsed_ms: nnHomeDiagNowMs() - layoutBootT0,
-        has_sentry_span: Boolean(runtime?.withSentryRuntimeSpan),
-      });
-    }
-  }
-
-  const marketingDefaultLayoutInner = async () => {
-    const perfLayoutT0 = nnHomeDiagNowMs();
+  try {
     if (shouldEmitNnHomeRouteDiag()) {
-      let hp = "";
-      try {
-        hp = (await headers()).get("x-nn-request-pathname")?.trim() ?? "";
-      } catch {
-        hp = "(headers_unavailable)";
-      }
-      if (hp === "/") {
+      const hp0 = await getHeaderPathnameSafe();
+
+      if (hp0 === "/") {
         emitNnHomeRouteDiag({
-          segment: "layout_marketing_default_enter",
-          pathname: hp,
-          elapsed_ms: nnHomeDiagNowMs() - perfLayoutT0,
+          segment: "layout_after_sentry_import",
+          pathname: hp0,
+          elapsed_ms: safeNowMs() - layoutBootT0,
+          has_sentry_span: Boolean(runtime?.withSentryRuntimeSpan),
         });
       }
     }
+  } catch {}
+
+  const marketingDefaultLayoutInner = async () => {
+    const perfLayoutT0 = safeNowMs();
+
     try {
-      const serverNarrowViewportHint = await readMarketingNarrowViewportServerHint();
-      layoutStderrTrace("marketing_layout", "marketing layout start", { route: "shared-marketing-default" });
+      if (shouldEmitNnHomeRouteDiag()) {
+        const hp = await getHeaderPathnameSafe();
+
+        if (hp === "/") {
+          emitNnHomeRouteDiag({
+            segment: "layout_marketing_default_enter",
+            pathname: hp,
+            elapsed_ms: safeNowMs() - perfLayoutT0,
+          });
+        }
+      }
+
+      const serverNarrowViewportHint = await readNarrowViewportHintSafe();
+
+      layoutStderrTrace("marketing_layout", "marketing layout start", {
+        route: "shared-marketing-default",
+      });
+
       const resolvedLocale: string = DEFAULT_MARKETING_LOCALE;
       let messages: Record<string, string> = {};
       let fallbackMessages: Record<string, string> | undefined = undefined;
 
-      if (shouldEmitNnHomeRouteDiag()) {
-        let hpc = "";
-        try {
-          hpc = (await headers()).get("x-nn-request-pathname")?.trim() ?? "";
-        } catch {
-          hpc = "";
+      try {
+        if (shouldEmitNnHomeRouteDiag()) {
+          const hpc = await getHeaderPathnameSafe();
+
+          if (hpc === "/") {
+            emitNnHomeRouteDiag({
+              segment: "layout_chrome_load_start",
+              elapsed_ms: safeNowMs() - perfLayoutT0,
+            });
+          }
         }
-        if (hpc === "/") {
-          emitNnHomeRouteDiag({
-            segment: "layout_chrome_load_start",
-            elapsed_ms: nnHomeDiagNowMs() - perfLayoutT0,
-          });
-        }
-      }
+      } catch {}
 
       try {
         messages = await getMarketingDefaultLayoutChromeMessages();
@@ -232,6 +268,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         console.error("[marketing-default-layout] failed to load messages", {
           error: e instanceof Error ? e.message : String(e),
         });
+
         runtime?.captureSentryRuntimeSoftError?.({
           scope: "marketing_layout",
           event: "chrome_messages_failed",
@@ -242,33 +279,34 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         });
       }
 
-      if (shouldEmitNnHomeRouteDiag()) {
-        let hpd = "";
-        try {
-          hpd = (await headers()).get("x-nn-request-pathname")?.trim() ?? "";
-        } catch {
-          hpd = "";
+      try {
+        if (shouldEmitNnHomeRouteDiag()) {
+          const hpd = await getHeaderPathnameSafe();
+
+          if (hpd === "/") {
+            emitNnHomeRouteDiag({
+              segment: "layout_chrome_load_done",
+              elapsed_ms: safeNowMs() - perfLayoutT0,
+              message_count: Object.keys(messages).length,
+            });
+          }
         }
-        if (hpd === "/") {
-          emitNnHomeRouteDiag({
-            segment: "layout_chrome_load_done",
-            elapsed_ms: nnHomeDiagNowMs() - perfLayoutT0,
-            message_count: Object.keys(messages).length,
-          });
-        }
-      }
+      } catch {}
 
       messages = mergeMinimalMarketingLayoutShellMessages(messages);
-      void homePerfLogForGetRoot("home.server.after_layout_chrome_messages", perfLayoutT0, {
-        message_count: Object.keys(messages).length,
-      }).catch(() => {
-        /* perf must not affect render */
-      });
+
+      try {
+        void homePerfLogForGetRoot("home.server.after_layout_chrome_messages", perfLayoutT0, {
+          message_count: Object.keys(messages).length,
+        }).catch(() => {});
+      } catch {}
+
       layoutStderrTrace("marketing_layout", "marketing layout after messages", {
         route: "shared-marketing-default",
         locale: resolvedLocale,
         messageCount: Object.keys(messages).length,
       });
+
       try {
         assertMarketingLayoutMessagesIntegrity({
           route: "shared-marketing-default",
@@ -287,46 +325,47 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         });
       }
 
-      if (shouldEmitNnHomeRouteDiag()) {
-        let hp2 = "";
-        try {
-          hp2 = (await headers()).get("x-nn-request-pathname")?.trim() ?? "";
-        } catch {
-          hp2 = "(headers_unavailable)";
+      try {
+        if (shouldEmitNnHomeRouteDiag()) {
+          const hp2 = await getHeaderPathnameSafe();
+
+          if (hp2 === "/") {
+            emitNnHomeRouteDiag({
+              segment: "layout_marketing_default_before_shell_return",
+              elapsed_ms: safeNowMs() - perfLayoutT0,
+            });
+          }
         }
-        if (hp2 === "/") {
-          emitNnHomeRouteDiag({
-            segment: "layout_marketing_default_before_shell_return",
-            elapsed_ms: nnHomeDiagNowMs() - perfLayoutT0,
-          });
-        }
-      }
+      } catch {}
 
       let marketingRequestPath = "/";
       let detectedIpCountry: string | null = null;
+
       try {
         const headerList = await headers();
         marketingRequestPath = headerList.get("x-nn-request-pathname")?.trim() ?? "/";
         detectedIpCountry = detectedIpCountryFromHeaders(headerList);
       } catch {
         marketingRequestPath = "/";
+        detectedIpCountry = null;
       }
-      const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
-      const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie();
-      /**
-       * Align US/CA exam labels, currency hints, and checkout defaults with `nn_global_region=us|canada`
-       * when the legacy marketing cookie is absent (header already treats global as authoritative there).
-       */
+
+      const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry().catch(() => undefined);
+      const serverGlobalRegionCookie = await readOptionalGlobalRegionSlugFromCookie().catch(() => null);
+
       const serverRegion: MarketingRegionToggle = resolveDefaultLayoutMarketingExamRegion({
         marketingRegionCookie,
         globalRegionSlug: serverGlobalRegionCookie,
         detectedIpCountry,
       });
+
       const trustClientPersistedRegion = marketingRegionCookie !== undefined;
+
       const marketingCountry = getEffectiveMarketingCountry(
         marketingRequestPath,
         marketingRegionCookie ?? serverRegion,
       );
+
       const [publicContentOverrides, staffSession] = await Promise.all([
         loadMarketingPublicContentOverridesForLocale(resolvedLocale).catch(() => ({} as Record<string, string>)),
         getStaffSession().catch(() => null),
@@ -375,13 +414,15 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         </MarketingI18nProvider>
       );
     } catch (e) {
-      void homePerfFinalForGetRoot("failure", { error_phase: "layout" }).catch(() => {
-        /* perf */
-      });
+      try {
+        void homePerfFinalForGetRoot("failure", { error_phase: "layout" }).catch(() => {});
+      } catch {}
+
       layoutStderrTrace("marketing_layout", "marketing_default_layout_failsafe_enter", {
         route: "shared-marketing-default",
         error: e instanceof Error ? e.message : String(e),
       });
+
       runtime?.captureSentryRuntimeSoftError?.({
         scope: "marketing_layout",
         event: "marketing_layout_fatal_soft_shell",
@@ -390,29 +431,33 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         feature: "marketing_layout",
         meta: { locale: DEFAULT_MARKETING_LOCALE },
       });
+
       const shellMessages = mergeMinimalMarketingLayoutShellMessages({});
       let failsafeGlobalRegion: GlobalRegionSlug | null = null;
       let failsafeServerRegion: MarketingRegionToggle = "CA";
       let failsafeMarketingCountry: CountryCode = "canada";
+
       try {
         const headerList = await headers();
         const pathname = headerList.get("x-nn-request-pathname")?.trim() ?? "/";
-        failsafeGlobalRegion = await readOptionalGlobalRegionSlugFromCookie();
-        const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry();
+        failsafeGlobalRegion = await readOptionalGlobalRegionSlugFromCookie().catch(() => null);
+        const marketingRegionCookie = await readOptionalMarketingRegionToggleForCountry().catch(() => undefined);
         const detectedIpCountry = detectedIpCountryFromHeaders(headerList);
+
         failsafeServerRegion = resolveDefaultLayoutMarketingExamRegion({
           marketingRegionCookie,
           globalRegionSlug: failsafeGlobalRegion,
           detectedIpCountry,
         });
+
         failsafeMarketingCountry = getEffectiveMarketingCountry(
           pathname,
           marketingRegionCookie ?? failsafeServerRegion,
         );
-      } catch {
-        /* headers/cookies unavailable — Canada-first matches resolveMarketingExamRegionToggle default */
-      }
-      const failsafeNarrowHint = await readMarketingNarrowViewportServerHint();
+      } catch {}
+
+      const failsafeNarrowHint = await readNarrowViewportHintSafe();
+
       return (
         <MarketingI18nProvider
           key={DEFAULT_MARKETING_LOCALE}
@@ -456,5 +501,6 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       error: err instanceof Error ? err.message : String(err),
     });
   }
+
   return marketingDefaultLayoutInner();
 }

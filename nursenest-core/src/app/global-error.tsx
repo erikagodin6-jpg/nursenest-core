@@ -1,16 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
-import { ThemeProvider } from "next-themes";
-import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
-import {
-  NURSENEST_DEFAULT_THEME,
-  THEME_OPTIONS,
-  THEME_STORAGE_KEY,
-} from "@/lib/theme/theme-registry";
-import { captureClientExceptionIfEnabled } from "@/lib/observability/sentry-if-enabled";
-import { useErrorBoundaryAutoRetry } from "@/lib/runtime/use-error-boundary-auto-retry";
-
 export default function GlobalError({
   error,
   reset,
@@ -18,59 +7,70 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    captureClientExceptionIfEnabled(error, {
-      tags: { route: "global-error", feature: "root" },
-    });
-  }, [error]);
-
-  const autoRetry = useErrorBoundaryAutoRetry(reset, {
-    errorKey: error.digest,
-    delayMs: 2200,
-    enabled: true,
-  });
-
   return (
     <html lang="en">
-      <body className="min-h-full bg-[var(--theme-page-bg)] p-6 text-[var(--theme-body-text)]">
-        <ThemeProvider
-          attribute="data-theme"
-          defaultTheme={NURSENEST_DEFAULT_THEME}
-          themes={THEME_OPTIONS.map((o) => o.id)}
-          enableSystem={false}
-          enableColorScheme={false}
-          storageKey={THEME_STORAGE_KEY}
-          disableTransitionOnChange
-        >
-          <main className="mx-auto mt-16 w-full max-w-xl">
-            <a href="/" className="mb-6 inline-flex items-center gap-2 bg-transparent">
-              <SiteBrandLogoMark variant="auth" logoVariant="leaf" />
+      <body style={{ margin: 0, fontFamily: "system-ui, sans-serif", background: "#f8fafc", color: "#0f172a" }}>
+        <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: 24 }}>
+          <section
+            style={{
+              width: "100%",
+              maxWidth: 520,
+              border: "1px solid #e2e8f0",
+              borderRadius: 24,
+              background: "#ffffff",
+              padding: 32,
+              boxShadow: "0 10px 30px rgba(15, 23, 42, 0.08)",
+            }}
+          >
+            <a href="/" style={{ display: "inline-block", marginBottom: 24, color: "#0f766e", fontWeight: 800 }}>
+              NurseNest
             </a>
-            <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
-              <h1 className="text-2xl font-bold">Just a moment</h1>
-              <p className="mt-3 text-sm text-muted">
-                We hit a temporary issue loading the app. Try again in a moment — your data stays protected on our servers.
+
+            <h1 style={{ margin: 0, fontSize: 28, lineHeight: 1.2 }}>Just a moment</h1>
+
+            <p style={{ marginTop: 12, color: "#475569", lineHeight: 1.6 }}>
+              We hit a temporary issue loading the app. Try again in a moment.
+            </p>
+
+            {error?.digest ? (
+              <p style={{ marginTop: 12, fontSize: 12, color: "#64748b" }}>
+                Reference: {error.digest}
               </p>
-              {autoRetry.status === "scheduled" ? (
-                <p className="mt-2 text-xs text-muted" aria-live="polite">
-                  Retrying automatically…
-                </p>
-              ) : null}
-              {error.digest ? (
-                <p className="mt-3 text-xs text-muted" suppressHydrationWarning>
-                  Reference: {error.digest}
-                </p>
-              ) : null}
+            ) : null}
+
+            <div style={{ marginTop: 24, display: "flex", gap: 12, flexWrap: "wrap" }}>
               <button
                 type="button"
-                className="mt-5 rounded-xl bg-primary px-4 py-2 font-semibold text-primary-foreground"
                 onClick={() => reset()}
+                style={{
+                  border: 0,
+                  borderRadius: 999,
+                  background: "#0f766e",
+                  color: "#ffffff",
+                  padding: "10px 18px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
               >
                 Try again
               </button>
+
+              <a
+                href="/"
+                style={{
+                  borderRadius: 999,
+                  border: "1px solid #cbd5e1",
+                  color: "#0f172a",
+                  padding: "10px 18px",
+                  fontWeight: 700,
+                  textDecoration: "none",
+                }}
+              >
+                Go home
+              </a>
             </div>
-          </main>
-        </ThemeProvider>
+          </section>
+        </main>
       </body>
     </html>
   );
