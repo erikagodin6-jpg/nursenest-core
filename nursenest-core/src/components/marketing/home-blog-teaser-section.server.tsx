@@ -7,14 +7,38 @@ import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { getOptionalPublicMessage } from "@/lib/marketing-i18n-core";
 import { MarketingBlogLatestLinksWithPosts } from "@/components/marketing/marketing-blog-latest-links";
 
-export function HomeBlogTeaserSectionShell({ m, posts }: { m: MarketingMessages; posts: BlogIndexPost[] }) {
-  const title = getOptionalPublicMessage(m, "pages.home.blogTeaser.title").trim();
-  const subtitle = getOptionalPublicMessage(m, "pages.home.blogTeaser.subtitle").trim();
-  const viewAll = getOptionalPublicMessage(m, "pages.home.blogTeaser.viewAll").trim();
-  const latestHeading = getOptionalPublicMessage(m, "pages.home.blogTeaser.latestHeading").trim();
+function safeMessage(m: MarketingMessages, key: string): string {
+  try {
+    return getOptionalPublicMessage(m, key).trim();
+  } catch {
+    return "";
+  }
+}
 
-  const hasList = posts.length > 0;
+async function loadPostsSafe(): Promise<BlogIndexPost[]> {
+  try {
+    return await loadHomeBlogTeaserPostsSafe(3);
+  } catch {
+    return [];
+  }
+}
+
+export function HomeBlogTeaserSectionShell({
+  m,
+  posts,
+}: {
+  m: MarketingMessages;
+  posts: BlogIndexPost[];
+}) {
+  const title = safeMessage(m, "pages.home.blogTeaser.title");
+  const subtitle = safeMessage(m, "pages.home.blogTeaser.subtitle");
+  const viewAll = safeMessage(m, "pages.home.blogTeaser.viewAll");
+  const latestHeading = safeMessage(m, "pages.home.blogTeaser.latestHeading");
+
+  const safePosts = Array.isArray(posts) ? posts : [];
+  const hasList = safePosts.length > 0;
   const hasTopCopy = Boolean(title || subtitle || viewAll);
+
   if (!hasTopCopy && !hasList) return null;
 
   return (
@@ -25,24 +49,34 @@ export function HomeBlogTeaserSectionShell({ m, posts }: { m: MarketingMessages;
             {title || subtitle ? (
               <div>
                 {title ? (
-                  <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">{title}</h2>
+                  <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">
+                    {title}
+                  </h2>
                 ) : null}
+
                 {subtitle ? (
-                  <p className="mt-1 max-w-prose text-sm text-[var(--theme-muted-text)]">{subtitle}</p>
+                  <p className="mt-1 max-w-prose text-sm text-[var(--theme-muted-text)]">
+                    {subtitle}
+                  </p>
                 ) : null}
               </div>
             ) : null}
+
             {viewAll ? (
-              <Link href="/blog" className="shrink-0 text-sm font-semibold text-primary hover:underline">
+              <Link
+                href="/blog"
+                className="shrink-0 text-sm font-semibold text-primary hover:underline"
+              >
                 {viewAll}
               </Link>
             ) : null}
           </div>
         ) : null}
+
         {hasList ? (
           <MarketingBlogLatestLinksWithPosts
             take={3}
-            posts={posts}
+            posts={safePosts}
             className={hasTopCopy ? "mt-4 border-t border-[var(--border-subtle)] pt-4" : ""}
             heading={latestHeading || undefined}
           />
@@ -52,11 +86,7 @@ export function HomeBlogTeaserSectionShell({ m, posts }: { m: MarketingMessages;
   );
 }
 
-/**
- * Async tail for homepage blog teaser — streamed after shell so `/` first byte is not blocked on DB.
- * (When optional marketing DB reads are skipped, the parent renders {@link HomeBlogTeaserSectionShell} only.)
- */
 export async function HomeBlogTeaserSectionAsync({ m }: { m: MarketingMessages }) {
-  const posts = await loadHomeBlogTeaserPostsSafe(3);
+  const posts = await loadPostsSafe();
   return <HomeBlogTeaserSectionShell m={m} posts={posts} />;
 }

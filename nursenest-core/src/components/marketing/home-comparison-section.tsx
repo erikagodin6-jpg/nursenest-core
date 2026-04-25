@@ -6,12 +6,24 @@ import { useMarketingI18n } from "@/lib/marketing-i18n";
 const ROWS = ["clarity", "simplicity", "adaptive", "integrated", "guided", "readiness"] as const;
 const HIGHLIGHT_ROWS = new Set<(typeof ROWS)[number]>(["guided", "readiness"]);
 
-/**
- * Explicit comparison vs drill-first Qbanks (e.g. UWorld-class volume banks): concrete product-shape
- * differences—integrated rail, CAT, guided loop, readiness signals—not vague superiority claims.
- */
+function safeT(t: (k: string) => string, key: string): string {
+  try {
+    const v = t(key);
+    return typeof v === "string" && v.trim() ? v : key;
+  } catch {
+    return key;
+  }
+}
+
 export function HomeComparisonSection() {
-  const { t } = useMarketingI18n();
+  let t: (k: string) => string = (k) => k;
+
+  try {
+    const ctx = useMarketingI18n();
+    t = ctx?.t ?? t;
+  } catch {
+    // fallback safe mode
+  }
 
   return (
     <section
@@ -22,57 +34,56 @@ export function HomeComparisonSection() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <header className="mx-auto mb-8 max-w-3xl md:mb-10">
           <h2 id="home-comparison-heading" className="nn-marketing-h2 text-balance text-[var(--theme-heading-text)]">
-            {t("home.comparison.title")}
+            {safeT(t, "home.comparison.title")}
           </h2>
+
           <p className="nn-marketing-body mx-auto mt-3 max-w-3xl text-pretty text-[var(--theme-muted-text)]">
-            {t("home.comparison.sub")}
+            {safeT(t, "home.comparison.sub")}
           </p>
+
           <div className="mx-auto mt-6 grid max-w-3xl gap-3 sm:grid-cols-2">
-            <div className="flex gap-3 rounded-xl border border-primary/25 bg-[color-mix(in_srgb,var(--theme-primary)_8%,var(--theme-card-bg))] px-4 py-3 text-left">
-              <Route className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
-              <p className="nn-marketing-body-sm text-pretty text-[var(--theme-body-text)]">{t("home.comparison.highlightGuided")}</p>
+            <div className="flex gap-3 rounded-xl border border-primary/25 bg-[color-mix(in_srgb,var(--theme-primary)_8%,var(--theme-card-bg))] px-4 py-3">
+              <Route className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+              <p className="text-[var(--theme-body-text)]">
+                {safeT(t, "home.comparison.highlightGuided")}
+              </p>
             </div>
-            <div className="flex gap-3 rounded-xl border border-primary/25 bg-[color-mix(in_srgb,var(--theme-primary)_8%,var(--theme-card-bg))] px-4 py-3 text-left">
-              <Activity className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden />
-              <p className="nn-marketing-body-sm text-pretty text-[var(--theme-body-text)]">{t("home.comparison.highlightReadiness")}</p>
+
+            <div className="flex gap-3 rounded-xl border border-primary/25 bg-[color-mix(in_srgb,var(--theme-primary)_8%,var(--theme-card-bg))] px-4 py-3">
+              <Activity className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+              <p className="text-[var(--theme-body-text)]">
+                {safeT(t, "home.comparison.highlightReadiness")}
+              </p>
             </div>
           </div>
-          <p className="nn-marketing-caption mt-4 text-[var(--theme-muted-text)]">{t("home.comparison.disclaimer")}</p>
+
+          <p className="mt-4 text-[var(--theme-muted-text)]">
+            {safeT(t, "home.comparison.disclaimer")}
+          </p>
         </header>
 
-        <div className="hidden md:block overflow-x-auto rounded-2xl border border-[var(--border-medium)] bg-[var(--theme-card-bg)] shadow-[var(--shadow-card)]">
-          <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+        <div className="hidden md:block overflow-x-auto rounded-2xl border border-[var(--border-medium)] bg-[var(--theme-card-bg)]">
+          <table className="w-full min-w-[640px] text-left text-sm">
             <thead>
-              <tr className="border-b border-[var(--border-subtle)] bg-[var(--nn-presentation-wash)]">
-                <th scope="col" className="px-4 py-3 font-semibold text-[var(--theme-heading-text)] sm:px-5">
-                  {t("home.comparison.colDimension")}
-                </th>
-                <th scope="col" className="px-4 py-3 font-semibold text-[var(--theme-muted-text)] sm:px-5">
-                  {t("home.comparison.colTypical")}
-                </th>
-                <th scope="col" className="px-4 py-3 font-semibold text-primary sm:px-5">
-                  {t("home.comparison.colNn")}
-                </th>
+              <tr>
+                <th className="px-4 py-3">{safeT(t, "home.comparison.colDimension")}</th>
+                <th className="px-4 py-3">{safeT(t, "home.comparison.colTypical")}</th>
+                <th className="px-4 py-3 text-primary">{safeT(t, "home.comparison.colNn")}</th>
               </tr>
             </thead>
             <tbody>
               {ROWS.map((row) => {
                 const hi = HIGHLIGHT_ROWS.has(row);
                 return (
-                  <tr
-                    key={row}
-                    className={`border-b border-[var(--border-subtle)] last:border-b-0 ${
-                      hi ? "bg-[color-mix(in_srgb,var(--theme-primary)_6%,var(--theme-card-bg))]" : ""
-                    }`}
-                  >
-                    <th scope="row" className="align-top px-4 py-3.5 font-semibold text-[var(--theme-heading-text)] sm:px-5">
-                      {t(`home.comparison.row.${row}.label`)}
+                  <tr key={row} className={hi ? "bg-primary/5" : ""}>
+                    <th className="px-4 py-3">
+                      {safeT(t, `home.comparison.row.${row}.label`)}
                     </th>
-                    <td className="align-top px-4 py-3.5 text-[var(--theme-body-text)] sm:px-5">
-                      {t(`home.comparison.row.${row}.typical`)}
+                    <td className="px-4 py-3">
+                      {safeT(t, `home.comparison.row.${row}.typical`)}
                     </td>
-                    <td className="align-top px-4 py-3.5 text-[var(--theme-body-text)] sm:px-5">
-                      {t(`home.comparison.row.${row}.nn`)}
+                    <td className="px-4 py-3">
+                      {safeT(t, `home.comparison.row.${row}.nn`)}
                     </td>
                   </tr>
                 );
@@ -85,17 +96,18 @@ export function HomeComparisonSection() {
           {ROWS.map((row) => {
             const hi = HIGHLIGHT_ROWS.has(row);
             return (
-              <li
-                key={row}
-                className={`rounded-2xl border border-[var(--border-subtle)] p-4 ${
-                  hi ? "border-primary/30 bg-[color-mix(in_srgb,var(--theme-primary)_6%,var(--theme-card-bg))]" : "bg-[var(--theme-card-bg)]"
-                }`}
-              >
-                <p className="nn-marketing-h4 text-[var(--theme-heading-text)]">{t(`home.comparison.row.${row}.label`)}</p>
-                <p className="nn-marketing-caption mt-2 font-medium text-[var(--theme-muted-text)]">{t("home.comparison.colTypical")}</p>
-                <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">{t(`home.comparison.row.${row}.typical`)}</p>
-                <p className="nn-marketing-caption mt-3 font-medium text-primary">{t("home.comparison.colNn")}</p>
-                <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">{t(`home.comparison.row.${row}.nn`)}</p>
+              <li key={row} className={`rounded-2xl p-4 ${hi ? "bg-primary/5" : ""}`}>
+                <p className="font-semibold">
+                  {safeT(t, `home.comparison.row.${row}.label`)}
+                </p>
+                <p className="mt-2 text-muted">
+                  {safeT(t, "home.comparison.colTypical")}
+                </p>
+                <p>{safeT(t, `home.comparison.row.${row}.typical`)}</p>
+                <p className="mt-3 text-primary">
+                  {safeT(t, "home.comparison.colNn")}
+                </p>
+                <p>{safeT(t, `home.comparison.row.${row}.nn`)}</p>
               </li>
             );
           })}

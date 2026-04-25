@@ -8,166 +8,159 @@ import { publicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathw
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { FadeUp, StaggerGroup, StaggerItem } from "@/lib/motion";
-import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { getPathwayHubCta } from "@/lib/copy/cta-copy";
-import type { LucideIcon } from "lucide-react";
 import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 
-type ExamCard = {
-  id: string;
-  icon: LucideIcon;
-  iconColor: string;
-  accentColor: string;
-  titleKey?: string;
-  descKey?: string;
-  titleLabel?: string;
-  descLabel?: string;
-  pathwayLabel: string;
-  href: string;
-  featured?: boolean;
-};
+function safeT(t: ((k: string) => string) | undefined, key: string, fallback: string) {
+  try {
+    const v = t?.(key);
+    return typeof v === "string" && v.trim() ? v : fallback;
+  } catch {
+    return fallback;
+  }
+}
 
-/**
- * Prominent exam selection: rich pathway cards — RN, LPN/RPN, NP, New Grad, Allied.
- * Each card has a colored top accent and semantic icon for immediate visual differentiation.
- * Section uses `page-bg` (not `bg-card`) so pathway cards read clearly above the band.
- */
+function safeLocale(l?: string) {
+  return l || "en";
+}
+
+function safeRegion(r?: string) {
+  return r || "CA";
+}
+
+function safePath(locale: string, path: string) {
+  try {
+    return withMarketingLocale(locale, path);
+  } catch {
+    return path;
+  }
+}
+
 export function HomeExamSelectionSection() {
-  const { t, locale } = useMarketingI18n();
-  const { region } = useNursenestRegion();
-  const loc = (path: string) => withMarketingLocale(locale, path);
-  const hubs = publicExamPrepHubDestinations(region);
-  const newGradDest = publicNewGradStudyDestinations(region, hubs.rn);
+  let locale = "en";
+  let t: ((k: string) => string) | undefined;
 
-  const cards: ExamCard[] = [
+  try {
+    const ctx = useMarketingI18n();
+    locale = safeLocale(ctx.locale);
+    t = ctx.t;
+  } catch {}
+
+  let region = "CA";
+  try {
+    region = safeRegion(useNursenestRegion().region);
+  } catch {}
+
+  let hubs: any = {};
+  try {
+    hubs = publicExamPrepHubDestinations(region);
+  } catch {}
+
+  let newGradHref = "/lessons";
+  try {
+    newGradHref = publicNewGradStudyDestinations(region, hubs?.rn || "").hubHref;
+  } catch {}
+
+  const cards = [
     {
       id: "rn",
-      icon: Stethoscope,
-      iconColor: "text-[var(--semantic-info)]",
-      accentColor: "var(--semantic-info)",
-      titleKey: "home.conversion.examCard.rnTitle",
-      descKey: "home.conversion.examCard.rnDesc",
-      pathwayLabel: "RN",
-      href: loc(hubs.rn),
-      featured: true,
+      label: "RN",
+      href: safePath(locale, hubs?.rn || "/lessons"),
+      title: safeT(t, "home.conversion.examCard.rnTitle", "Registered Nurse"),
+      desc: safeT(t, "home.conversion.examCard.rnDesc", "Prepare for RN exams"),
     },
     {
       id: "pn",
-      icon: HeartPulse,
-      iconColor: "text-[var(--semantic-warning)]",
-      accentColor: "var(--semantic-warning)",
-      titleKey: region === "US" ? "home.conversion.examCard.pnTitleUS" : "home.conversion.examCard.pnTitleCA",
-      descKey: region === "US" ? "home.conversion.examCard.pnDescUS" : "home.conversion.examCard.pnDescCA",
-      pathwayLabel: getNursingRoleLabel({ country: region, role: "PN" }),
-      href: loc(hubs.pn),
+      label: "PN",
+      href: safePath(locale, hubs?.pn || "/lessons"),
+      title: safeT(
+        t,
+        region === "US"
+          ? "home.conversion.examCard.pnTitleUS"
+          : "home.conversion.examCard.pnTitleCA",
+        "Practical Nurse"
+      ),
+      desc: safeT(
+        t,
+        region === "US"
+          ? "home.conversion.examCard.pnDescUS"
+          : "home.conversion.examCard.pnDescCA",
+        "Prepare for PN exams"
+      ),
     },
     {
       id: "np",
-      icon: Award,
-      iconColor: "text-[var(--semantic-brand)]",
-      accentColor: "var(--semantic-brand)",
-      titleKey: region === "US" ? "home.conversion.examCard.npTitleUS" : "home.conversion.examCard.npTitleCA",
-      descKey: region === "US" ? "home.conversion.examCard.npDescUS" : "home.conversion.examCard.npDescCA",
-      pathwayLabel: "NP",
-      href: loc(hubs.np),
+      label: "NP",
+      href: safePath(locale, hubs?.np || "/lessons"),
+      title: safeT(
+        t,
+        region === "US"
+          ? "home.conversion.examCard.npTitleUS"
+          : "home.conversion.examCard.npTitleCA",
+        "Nurse Practitioner"
+      ),
+      desc: safeT(
+        t,
+        region === "US"
+          ? "home.conversion.examCard.npDescUS"
+          : "home.conversion.examCard.npDescCA",
+        "Advanced practice prep"
+      ),
     },
     {
       id: "newgrad",
-      icon: GraduationCap,
-      iconColor: "text-[var(--semantic-chart-4)]",
-      accentColor: "var(--semantic-chart-4)",
-      titleLabel: "New Grad",
-      descLabel: "Transition-to-practice lessons, questions, adaptive prep, and study tools for your first year on the floor.",
-      pathwayLabel: "New Grad",
-      href: loc(newGradDest.hubHref),
+      label: "New Grad",
+      href: safePath(locale, newGradHref),
+      title: "New Grad",
+      desc: "Transition-to-practice support and study tools",
     },
     {
       id: "allied",
-      icon: Dna,
-      iconColor: "text-[var(--semantic-success)]",
-      accentColor: "var(--semantic-success)",
-      titleKey: "home.conversion.examCard.alliedTitle",
-      descKey: "home.conversion.examCard.alliedDesc",
-      pathwayLabel: "Allied Health",
-      href: loc(hubs.allied),
+      label: "Allied",
+      href: safePath(locale, hubs?.allied || "/lessons"),
+      title: safeT(t, "home.conversion.examCard.alliedTitle", "Allied Health"),
+      desc: safeT(t, "home.conversion.examCard.alliedDesc", "Prep for allied health exams"),
     },
   ];
 
   return (
-    <section
-      id="home-exam-paths"
-      className="nn-section-block scroll-mt-20 border-b border-[var(--border-subtle)] bg-[var(--page-bg)]"
-      aria-labelledby="home-exam-selection-heading"
-      data-testid="section-exam-selection"
-    >
-      <div className="nn-section-shell">
-        <FadeUp whenInView once viewMargin="-32px" className="mx-auto mb-12 max-w-2xl text-center">
-          <h2 id="home-exam-selection-heading" className="nn-marketing-h2 text-balance">
-            {formatTitleCase("Choose Your Exam Hub", locale)}
-          </h2>
-          <p className="nn-marketing-body mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-[var(--theme-muted-text)]">
-            {formatSentenceCase(t("home.conversion.examSelectionSub"), locale)}
-          </p>
-        </FadeUp>
+    <section className="border-b border-[var(--border-subtle)] bg-[var(--page-bg)] py-12">
+      <div className="mx-auto max-w-6xl px-4 text-center">
+        <h2 className="text-2xl font-bold">
+          {formatTitleCase("Choose Your Exam Hub", locale)}
+        </h2>
 
-        <StaggerGroup
-          className="grid gap-5 sm:grid-cols-2 lg:grid-cols-5"
-          staggerMs={65}
-          whenInView
-          once
-          viewMargin="-40px"
-        >
-          {cards.map((c) => {
-            const Icon = c.icon;
-            const title = c.titleLabel ?? (c.titleKey ? formatTitleCase(t(c.titleKey), locale) : "");
-            const description = c.descLabel ?? (c.descKey ? formatSentenceCase(t(c.descKey), locale) : "");
-            return (
-              <StaggerItem
-                key={c.id}
-                variant="softReveal"
-                className={c.featured ? "min-w-0 sm:col-span-2 lg:col-span-1" : "min-w-0"}
-              >
-                <MarketingTrackedLink
-                  href={c.href}
-                  event={PH.marketingHomePathwayCardPrimary}
-                  eventProps={{ pathway: c.id, region, surface: "exam_selection" }}
-                  secondaryCapture={{
-                    event: PH.funnelHomeToExamHub,
-                    eventProps: { placement: "exam_selection_grid", pathway: c.id, region },
-                  }}
-                  data-nn-marketing-region={region}
-                  data-nn-exam-card-id={c.id}
-                  className="nn-card-system nn-card-system-pad nn-card-system--interactive nn-student-card-lift group relative h-full min-h-[14rem] overflow-hidden"
-                  style={{
-                    borderTopColor: `color-mix(in srgb, ${c.accentColor} 70%, var(--border-subtle))`,
-                    borderTopWidth: "3px",
-                  }}
-                >
-                    {/* Icon badge — colored per pathway */}
-                    <span
-                      className="nn-card-system__icon mb-1 transition group-hover:scale-[1.03]"
-                      style={{
-                        background: `color-mix(in srgb, ${c.accentColor} 10%, var(--bg-card))`,
-                        borderColor: `color-mix(in srgb, ${c.accentColor} 24%, var(--border-subtle))`,
-                      }}
-                      aria-hidden
-                    >
-                      <Icon className={`h-5 w-5 ${c.iconColor}`} />
-                    </span>
+        <p className="mt-3 text-[var(--theme-muted-text)]">
+          {formatSentenceCase(
+            safeT(
+              t,
+              "home.conversion.examSelectionSub",
+              "Select your pathway to begin studying"
+            ),
+            locale
+          )}
+        </p>
 
-                    <span className="nn-card-system__title">{title}</span>
-                    <span className="nn-card-system__description">{description}</span>
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {cards.map((c) => (
+            <MarketingTrackedLink
+              key={c.id}
+              href={c.href}
+              event={PH.marketingHomePathwayCardPrimary}
+              eventProps={{ pathway: c.id, region }}
+              className="rounded-xl border p-4 hover:shadow-md transition"
+            >
+              <div className="font-semibold">{c.title}</div>
+              <p className="mt-2 text-sm text-muted">{c.desc}</p>
 
-                    <span className="nn-card-system__cta">
-                      {formatTitleCase(getPathwayHubCta(c.pathwayLabel), locale)}
-                      <ArrowRight className="ml-1.5 h-4 w-4 transition group-hover:translate-x-1" aria-hidden />
-                    </span>
-                  </MarketingTrackedLink>
-              </StaggerItem>
-            );
-          })}
-        </StaggerGroup>
+              <div className="mt-3 flex items-center justify-center gap-1 text-sm font-semibold text-primary">
+                {formatTitleCase(getPathwayHubCta(c.label), locale)}
+                <ArrowRight className="h-4 w-4" />
+              </div>
+            </MarketingTrackedLink>
+          ))}
+        </div>
       </div>
     </section>
   );
