@@ -1,8 +1,8 @@
 /**
  * Runtime-safe Auth.js trust-host env normalization.
  *
- * Do not use direct `process.env.X = ...` or `delete process.env.X` here.
- * Middleware/RSC bundling can inline those expressions incorrectly.
+ * Do not mutate auth URL env vars during App Platform / Next build.
+ * Runtime only.
  */
 
 const runtime = globalThis as unknown as {
@@ -12,6 +12,10 @@ const runtime = globalThis as unknown as {
 };
 
 const env = runtime.process?.env;
+
+function isTruthy(value: string | undefined): boolean {
+  return /^(1|true|yes)$/i.test(String(value ?? "").trim());
+}
 
 function isBlank(value: string | undefined): boolean {
   return value !== undefined && value.trim().length === 0;
@@ -23,7 +27,7 @@ function deleteEnvKey(key: string): void {
   try {
     Reflect.deleteProperty(env, key);
   } catch {
-    /* env may be frozen in some runtimes */
+    /* env may be frozen */
   }
 }
 
@@ -39,11 +43,16 @@ function setEnvDefault(key: string, value: string): void {
   try {
     env[key] = value;
   } catch {
-    /* env may be read-only in some runtimes */
+    /* env may be read-only */
   }
 }
 
-if (env) {
+/**
+ * Critical:
+ * During `next build`, do not alter AUTH_URL / NEXTAUTH_URL.
+ * Next/Webpack can inline or snapshot env access during compilation.
+ */
+if (env && !isTruthy(env.NN_APP_PLATFORM_BUILD)) {
   if (isBlank(env.AUTH_URL)) {
     deleteEnvKey("AUTH_URL");
   }
