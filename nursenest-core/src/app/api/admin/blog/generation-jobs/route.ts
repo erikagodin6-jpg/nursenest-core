@@ -10,7 +10,10 @@ import {
 import { parseDraftBatchTopicLines } from "@/lib/blog/blog-draft-generation-batch-parse";
 import { normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { prisma } from "@/lib/db";
-import { RN_TOPIC_MAP_SHELL_BATCH_EXAM, RN_TOPIC_MAP_SHELL_MAX_ITEMS } from "@/lib/blog/blog-topic-map-shell-batch-constants";
+import {
+  RN_TOPIC_MAP_SHELL_BATCH_EXAM,
+  RN_TOPIC_MAP_SHELL_MAX_ITEMS,
+} from "@/lib/blog/blog-topic-map-shell-batch-constants";
 import {
   loadBlogGenerationJobForAdmin,
   listBlogGenerationJobsForAdmin,
@@ -26,28 +29,41 @@ export async function POST(req: Request) {
 
   const raw = await req.json();
   const parsed = blogGenerationJobCreateBodySchema.safeParse(raw);
+
   if (!parsed.success) {
-    return NextResponse.json({ error: "Invalid body", details: parsed.error.flatten() }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid body", details: parsed.error.flatten() },
+      { status: 400 }
+    );
   }
 
   const d = parsed.data;
-  const isShell = "jobKind" in d && d.jobKind === "rn_topic_map_shell";
 
-  const tryIdempotentReplay = async (idempotencyKey: string | null | undefined, droppedShortLines: number) => {
+  const isShell =
+    "jobKind" in d && d.jobKind === "rn_topic_map_shell";
+
+  const tryIdempotentReplay = async (
+    idempotencyKey: string | null | undefined,
+    droppedShortLines: number
+  ) => {
     if (!idempotencyKey || !gate.admin.userId) return null;
 
-    const existing = await prisma.blogDraftGenerationBatch.findFirst({
-      where: {
-        createdById: gate.admin.userId,
-        idempotencyKey,
-        createdAt: { gte: new Date(Date.now() - IDEMPOTENCY_WINDOW_MS) },
-      },
-      orderBy: { createdAt: "desc" },
-    });
+    const existing =
+      await prisma.blogDraftGenerationBatch.findFirst({
+        where: {
+          createdById: gate.admin.userId,
+          idempotencyKey,
+          createdAt: {
+            gte: new Date(Date.now() - IDEMPOTENCY_WINDOW_MS),
+          },
+        },
+        orderBy: { createdAt: "desc" },
+      });
 
     if (!existing) return null;
 
     const job = await loadBlogGenerationJobForAdmin(existing.id);
+
     return NextResponse.json({
       ok: true,
       jobId: existing.id,
@@ -64,8 +80,13 @@ export async function POST(req: Request) {
     const replay = await tryIdempotentReplay(d.idempotencyKey, 0);
     if (replay) return replay;
 
-    const { loadRnTopicMapBatchRows } = await import("@/lib/admin/blog-topic-map-batch");
-    const rows = loadRnTopicMapBatchRows(RN_TOPIC_MAP_SHELL_MAX_ITEMS);
+    const { loadRnTopicMapBatchRows } = await import(
+      "@/lib/admin/blog-topic-map-batch"
+    );
+
+    const rows = loadRnTopicMapBatchRows(
+      RN_TOPIC_MAP_SHELL_MAX_ITEMS
+    );
 
     const shellErr = assertRnTopicMapShellRowCount(rows.length);
     if (shellErr) {
@@ -94,7 +115,9 @@ export async function POST(req: Request) {
           create: rows.map((row, ordinal) => ({
             ordinal,
             topicRaw: row.slug,
-            canonicalTopicKey: normalizeBlogTopicKey(row.tags[1] ?? row.title) || null,
+            canonicalTopicKey:
+              normalizeBlogTopicKey(row.tags[1] ?? row.title) ||
+              null,
           })),
         },
       },
@@ -109,29 +132,39 @@ export async function POST(req: Request) {
     });
 
     const job = await loadBlogGenerationJobForAdmin(batch.id);
-    return NextResponse.json({ ok: true, jobId: batch.id, droppedShortLines: 0, job });
+
+    return NextResponse.json({
+      ok: true,
+      jobId: batch.id,
+      droppedShortLines: 0,
+      job,
+    });
   }
 
   // =========================
-  // AI JOB (FIXED SECTION)
+  // AI JOB (FIXED)
   // =========================
 
   const aiBlock = adminAiGenerationHttpBlock();
   if (aiBlock) return aiBlock;
 
-  // 🔥 CRITICAL FIX — type narrowing
+  // ✅ CRITICAL FIX: type narrowing
   if (!("topicsText" in d)) {
     return NextResponse.json(
-      { error: "topicsText is required for AI generation jobs" },
+      { error: "topicsText is required for this job type" },
       { status: 400 }
     );
   }
 
-  const { topics, droppedShortLines } = parseDraftBatchTopicLines(d.topicsText);
+  const { topics, droppedShortLines } =
+    parseDraftBatchTopicLines(d.topicsText);
 
   if (topics.length === 0) {
     return NextResponse.json(
-      { error: "No valid topics (each line must be at least 3 characters after trim)." },
+      {
+        error:
+          "No valid topics (each line must be at least 3 characters after trim).",
+      },
       { status: 400 }
     );
   }
@@ -141,7 +174,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: overLimit }, { status: 400 });
   }
 
-  const replayAi = await tryIdempotentReplay(d.idempotencyKey, droppedShortLines);
+  const replayAi = await tryIdempotentReplay(
+    d.idempotencyKey,
+    droppedShortLines
+  );
   if (replayAi) return replayAi;
 
   const country = d.country ?? "unspecified";
@@ -159,7 +195,8 @@ export async function POST(req: Request) {
       countryTarget: d.countryTarget ?? null,
       includeImage: d.includeImage ?? true,
       includeAiImage: d.includeAiImage ?? false,
-      allowDuplicateCanonicalTopic: d.allowDuplicateCanonicalTopic ?? false,
+      allowDuplicateCanonicalTopic:
+        d.allowDuplicateCanonicalTopic ?? false,
       totalItems: topics.length,
       createdById: gate.admin.userId,
       backgroundProcessing: true,
@@ -168,7 +205,8 @@ export async function POST(req: Request) {
         create: topics.map((topicRaw, ordinal) => ({
           ordinal,
           topicRaw,
-          canonicalTopicKey: normalizeBlogTopicKey(topicRaw) || null,
+          canonicalTopicKey:
+            normalizeBlogTopicKey(topicRaw) || null,
         })),
       },
     },
@@ -198,7 +236,11 @@ export async function GET(req: Request) {
 
   const { searchParams } = new URL(req.url);
 
-  const limit = Math.min(50, Math.max(1, Number(searchParams.get("limit") ?? "20") || 20));
+  const limit = Math.min(
+    50,
+    Math.max(1, Number(searchParams.get("limit") ?? "20") || 20)
+  );
+
   const phaseRaw = searchParams.get("status")?.trim().toLowerCase();
   const all = searchParams.get("all") === "1";
 
