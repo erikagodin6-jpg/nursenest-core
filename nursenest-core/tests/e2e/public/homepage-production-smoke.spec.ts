@@ -4,13 +4,14 @@
  * Run after `npm run build && npm run start` with BASE_URL (default http://localhost:3000):
  *   npx playwright test tests/e2e/public/homepage-production-smoke.spec.ts --project=chromium
  *   npx playwright test tests/e2e/public/homepage-production-smoke.spec.ts --project=webkit
+ *     (requires `npx playwright install webkit` and a `webkit` project in playwright.config.ts)
  */
 import { expect, test } from "@playwright/test";
 
 test.describe("Homepage production smoke", () => {
   test.use({ viewport: { width: 1280, height: 800 } });
 
-  test("5s settle — no error shell; hero visible; diagnostics clean", async ({ page }) => {
+  test("5s settle: no error shell; hero visible; diagnostics clean", async ({ page }) => {
     const pageErrors: string[] = [];
     const consoleErrors: string[] = [];
     const failedRequests: { url: string; failure: string }[] = [];

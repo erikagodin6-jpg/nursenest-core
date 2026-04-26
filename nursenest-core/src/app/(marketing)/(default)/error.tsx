@@ -9,9 +9,6 @@ import {
   shouldUseMarketingHomeSafeModeFromError,
 } from "@/lib/marketing/marketing-home-safe-mode-triggers";
 
-const ERROR_BOUNDARY_SOURCE =
-  "src/app/(marketing)/(default)/error.tsx:MarketingDefaultSegmentError";
-
 export default function MarketingDefaultSegmentError({
   error,
   reset,
@@ -20,25 +17,8 @@ export default function MarketingDefaultSegmentError({
   reset: () => void;
 }) {
   useEffect(() => {
-    try {
-      const stack =
-        typeof error?.stack === "string" ? error.stack.slice(0, 12_000) : undefined;
-      console.error(
-        "[nn-homepage-error-boundary]",
-        JSON.stringify({
-          boundary: ERROR_BOUNDARY_SOURCE,
-          name: error?.name,
-          message: error?.message,
-          digest: error?.digest,
-          stack,
-        }),
-      );
-    } catch {
-      /* ignore */
-    }
+    logMarketingRouteErrorClient("marketing_default_segment_error_tsx", error);
   }, [error]);
-
-  logMarketingRouteErrorClient("marketing_default_segment_error_tsx", error);
 
   if (shouldUseMarketingHomeSafeModeFromError(error)) {
     return <MarketingHomeSafeMode layout="embedded" onRetry={reset} />;
