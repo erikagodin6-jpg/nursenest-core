@@ -72,7 +72,12 @@ export function marketingScreenshotBundleDisplaySrc(bundle: {
 
 export function marketingImageShouldUnoptimize(src: string): boolean {
   try {
-    const path = src.startsWith("http") ? new URL(src).pathname : src;
+    if (src.startsWith("http")) {
+      const url = new URL(src);
+      if (url.hostname === "nursenest-images.tor1.cdn.digitaloceanspaces.com") return true;
+      return url.pathname.toLowerCase().endsWith(".svg");
+    }
+    const path = src;
     return path.toLowerCase().endsWith(".svg");
   } catch {
     return src.toLowerCase().endsWith(".svg");

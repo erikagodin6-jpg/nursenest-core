@@ -64,12 +64,6 @@ const sectionFrameChromeClass =
 const defaultFrameChromeClass =
   "rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] shadow-sm";
 
-/** Next/Image `fill` intrinsic hint — aligns with frame aspects (16/10 vs 4/3). */
-function marketingHeroFillDimensions(mediaFrame: "default" | "hero" | "section"): { w: number; h: number } {
-  if (mediaFrame === "section") return { w: 1200, h: 900 };
-  return { w: 1600, h: 1000 };
-}
-
 function MarketingHeroCarouselInteractive({
   slides,
   onMediaUnavailable,
@@ -81,7 +75,6 @@ function MarketingHeroCarouselInteractive({
   captionOverlay = false,
   onActiveSlideAnalytics,
 }: MarketingHeroCarouselProps) {
-  const fillHint = marketingHeroFillDimensions(mediaFrame);
   const { t } = useMarketingI18n();
   const reducedMotion = useReducedMotion();
   const [current, setCurrent] = useState(0);
@@ -253,8 +246,6 @@ function MarketingHeroCarouselInteractive({
           <Image
             src={MARKETING_HERO_LOCAL_FALLBACK}
             alt=""
-            width={fillHint.w}
-            height={fillHint.h}
             fill
             unoptimized
             className={`pointer-events-none object-contain ${slideImageBgClass}`}
@@ -320,8 +311,6 @@ function MarketingHeroCarouselInteractive({
               key={`${slide.objectKey}-${index}-${tier}`}
               src={src}
               alt={slide.alt}
-              width={fillHint.w}
-              height={fillHint.h}
               fill
               sizes={carouselSizes}
               quality={photoQuality}
@@ -455,7 +444,6 @@ function MarketingHeroCarouselMobileLite({
   captionOverlay = false,
   onActiveSlideAnalytics,
 }: MarketingHeroCarouselProps) {
-  const fillHint = marketingHeroFillDimensions(mediaFrame);
   const { t } = useMarketingI18n();
   const [tier, setTier] = useState(0);
   const [heroFallback, setHeroFallback] = useState(false);
@@ -510,8 +498,6 @@ function MarketingHeroCarouselMobileLite({
           <Image
             src={MARKETING_HERO_LOCAL_FALLBACK}
             alt=""
-            width={fillHint.w}
-            height={fillHint.h}
             fill
             unoptimized
             className={`pointer-events-none object-contain ${slideImageBgClass}`}
@@ -537,8 +523,6 @@ function MarketingHeroCarouselMobileLite({
           key={`${slide0.objectKey}-m-${tierClamped}`}
           src={src}
           alt={slide0.alt}
-          width={fillHint.w}
-          height={fillHint.h}
           fill
           sizes={carouselSizes}
           quality={photoQuality}

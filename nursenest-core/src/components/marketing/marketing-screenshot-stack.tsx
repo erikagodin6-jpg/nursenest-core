@@ -49,9 +49,6 @@ export function MarketingChainScreenshot({
   const maxTierIndex = Math.max(0, chain.length - 1);
   const src = chain[Math.min(tier, maxTierIndex)] ?? MARKETING_HERO_LOCAL_FALLBACK;
   const unoptimized = marketingImageShouldUnoptimize(src);
-  const arNorm = aspectRatio.replace(/\s/g, "");
-  const fillW = arNorm === "4/3" ? 1200 : 1600;
-  const fillH = arNorm === "4/3" ? 900 : 1000;
 
   const objectClass =
     fit === "contain" ?
@@ -67,8 +64,6 @@ export function MarketingChainScreenshot({
         key={`${objectKey}-${tier}-${src}`}
         src={src}
         alt={alt}
-        width={fillW}
-        height={fillH}
         fill
         sizes={sizes}
         quality={MARKETING_PHOTO_QUALITY_BELOW_FOLD}
