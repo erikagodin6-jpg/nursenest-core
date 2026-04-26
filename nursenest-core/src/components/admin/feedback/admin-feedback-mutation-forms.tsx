@@ -40,7 +40,7 @@ export function AdminFeedbackQuickStatusRow({ reportId }: { reportId: string }) 
     formData.set("status", status);
 
     startTransition(async () => {
-      const result = await submitAdminFeedbackTriage(formData);
+      const result = await submitAdminFeedbackTriage(state, formData);
       setState(result);
     });
   }

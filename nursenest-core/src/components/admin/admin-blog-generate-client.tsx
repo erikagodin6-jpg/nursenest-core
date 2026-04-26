@@ -49,7 +49,14 @@ type GenerateAiJsonBody = {
   retryAfterSec?: number;
 };
 
+type GenerateAiResult = NonNullable<GenerateAiJsonBody["results"]>[number];
+type GenerateAiResultWithPost = GenerateAiResult & { post: { slug: string } };
+
 type NdjsonCompleteEvent = GenerateAiJsonBody & { type: "complete"; httpStatus?: number };
+
+function hasGeneratedPostSlug(result: GenerateAiResult): result is GenerateAiResultWithPost {
+  return "post" in result && typeof result.post?.slug === "string" && result.post.slug.length > 0;
+}
 
 function parseNdjsonLine(line: string, context: string): Record<string, unknown> {
   try {
@@ -114,7 +121,7 @@ function summarizeGenerateAiResponse(json: GenerateAiJsonBody): string {
   const skipped = json.summary?.skipped ?? 0;
   const failed = json.summary?.failed ?? 0;
   const requested = json.summary?.requested ?? json.results?.length;
-  const firstSlug = json.results?.find((r) => "post" in r && r.post?.slug)?.post?.slug;
+  const firstSlug = json.results?.find(hasGeneratedPostSlug)?.post.slug;
   const seoRows = (json.results ?? []).filter(
     (r): r is { ok: true; seoReadiness?: BlogAutomationSeoReadiness } =>
       "ok" in r && r.ok === true && !("skipped" in r && r.skipped === true),
