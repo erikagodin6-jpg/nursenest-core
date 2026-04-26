@@ -1,6 +1,98 @@
-// (imports unchanged — keep yours)
+import "./auth-trust-env";
+import { Auth } from "@auth/core";
+import { CredentialsSignin } from "@auth/core/errors";
+import { compare } from "bcryptjs";
+import NextAuth, { type NextAuthConfig } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { NextRequest } from "next/server";
+import { authCallbacks } from "@/lib/auth-callbacks";
+import { PINNED_AUTH_BASE_PATH } from "@/lib/auth/auth-base-path";
+import { JWT_SESSION_MAX_AGE_SEC, JWT_SESSION_UPDATE_AGE_SEC } from "@/lib/auth/auth-session-constants";
+import { clearLoginFailures } from "@/lib/auth/login-lockout";
+import { hashLoginIdentifierForLog } from "@/lib/auth/log-auth-identifier";
+import { nodeJwtCallback } from "@/lib/auth/node-jwt-callback";
+import { normalizeLoginIdentifier, sanitizeRawLoginIdentifier } from "@/lib/auth/normalize-login-identifier";
+import { normalizeStoredPasswordHash } from "@/lib/auth/normalize-stored-password-hash";
+import { prisma } from "@/lib/db";
+import {
+  getUserAccess,
+  subscriptionStatusForSession,
+  type SessionSubscriptionStatus,
+} from "@/lib/entitlements/get-user-access";
+import { getTrustedClientIp } from "@/lib/http/client-ip";
+import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { recordCredentialsLoginFailure } from "@/lib/observability/production-signal-metrics";
+import { Prisma } from "@prisma/client";
+
+if (process.env.NODE_ENV === "production") {
+  const hasSecret = Boolean(
+    (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
+      (process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.trim().length > 0),
+  );
+
+  if (!hasSecret) {
+    safeServerLogCritical(
+      "auth",
+      "missing_auth_secret",
+      { surface: "startup" },
+      new Error("AUTH_SECRET (or NEXTAUTH_SECRET) must be set in production for JWT signing"),
+    );
+  }
+
+  const nextAuthUrl = process.env.NEXTAUTH_URL?.trim();
+  if (nextAuthUrl) {
+    try {
+      const pathname = new URL(nextAuthUrl.startsWith("http") ? nextAuthUrl : `https://${nextAuthUrl}`).pathname;
+      if (pathname && pathname !== "/" && pathname !== "") {
+        safeServerLogCritical(
+          "auth",
+          "nextauth_url_must_be_origin_only",
+          { pathname, hint: "Use https://www.example.com, not a path to /login." },
+          new Error("NEXTAUTH_URL should be origin-only"),
+        );
+      }
+    } catch {
+      /* Runtime auth errors surface malformed NEXTAUTH_URL. */
+    }
+  }
+}
 
 const isProd = process.env.NODE_ENV === "production";
+
+const CREDENTIALS_USER_SELECT = {
+  id: true,
+  email: true,
+  name: true,
+  passwordHash: true,
+  role: true,
+  country: true,
+  tier: true,
+  alliedProfessionKey: true,
+  credentialVersion: true,
+} as const;
+
+type CredentialsUserRow = Prisma.UserGetPayload<{ select: typeof CREDENTIALS_USER_SELECT }>;
+
+function clientIpFromRequest(req: Request): string {
+  return getTrustedClientIp(req);
+}
+
+/** Same behavior as next-auth/lib/env `reqWithEnvURL` (not a public export). */
+function reqWithEnvURL(req: NextRequest): NextRequest {
+  const url = process.env.AUTH_URL ?? process.env.NEXTAUTH_URL;
+  if (!url) return req;
+  const { origin: envOrigin } = new URL(url);
+  const { href, origin } = req.nextUrl;
+  return new NextRequest(href.replace(origin, envOrigin), req);
+}
+
+function authCredentialDiagnosticCodesEnabled(): boolean {
+  return (
+    process.env.PLAYWRIGHT_DIAGNOSTIC_AUTH_CODES === "1" ||
+    process.env.CI === "true" ||
+    process.env.NODE_ENV !== "production"
+  );
+}
 
 /* =========================
    HELPERS (centralized)

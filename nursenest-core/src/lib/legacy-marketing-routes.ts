@@ -1,4 +1,7 @@
-// (keep your imports unchanged)
+import { resolveAlliedProfessionFromRouteSlug } from "@/lib/allied/allied-professions-registry";
+import { alliedHealthLessonDetailPath, alliedHealthLessonsIndexPath } from "@/lib/lessons/lesson-routes";
+import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
+import { marketingPublicSiteOrigin } from "@/lib/marketing/marketing-public-site-origin";
 
 function normalizeHref(href: string): string {
   if (!href) return "/";
@@ -64,8 +67,6 @@ let legacyRoutes: Record<string, string> | null = null;
 function getLegacyRoutes(): Record<string, string> {
   if (legacyRoutes) return legacyRoutes;
 
-  const origin = marketingPublicSiteOrigin();
-
   legacyRoutes = {
     "/institutional-pricing": "/for-institutions",
     "/pricing/institutional": "/for-institutions",
@@ -81,6 +82,7 @@ function getLegacyRoutes(): Record<string, string> {
 
     "/np-exam-practice-questions": CANONICAL_PATHWAY_HUB.usNp,
 
+    "/exam-lessons": "/lessons",
     "/lessons": "/lessons",
     "/flashcards": "/flashcards",
 
@@ -124,9 +126,15 @@ export function isCoreAlliedMarketingPath(href: string): boolean {
   return (
     href === "/allied-health" ||
     href.startsWith("/allied-health/") ||
+    href.startsWith("/us/allied/") ||
+    href.startsWith("/canada/allied/") ||
     href === "/allied-health-exam-prep" ||
     href.startsWith("/allied-health-exam-prep/")
   );
+}
+
+function isCorePreNursingMarketingPath(href: string): boolean {
+  return href === "/pre-nursing" || href.startsWith("/pre-nursing/");
 }
 
 /* =========================
@@ -140,6 +148,7 @@ export function mapLegacyMarketingHref(hrefRaw: string): string {
   if (allied) return allied;
 
   if (isCoreAlliedMarketingPath(href)) return href;
+  if (isCorePreNursingMarketingPath(href)) return href;
 
   if (href.startsWith("/shop")) {
     return `${marketingPublicSiteOrigin()}${href}`;
@@ -175,6 +184,7 @@ export function resolveMarketingHref(hrefRaw: string): string {
     mapped === "/" ||
     mapped === "/faq" ||
     mapped === "/blog" ||
+    isCorePreNursingMarketingPath(mapped) ||
     isCoreAlliedMarketingPath(mapped) ||
     isMarketingExamHubScopedPath(mapped)
   ) {
