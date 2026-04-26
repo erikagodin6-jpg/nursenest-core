@@ -1,195 +1,217 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
-type Card = {
+type CustomStudyCard = {
   id: string;
   prompt: string;
   answer: string;
-  explanation?: string;
+  explanation?: string | null;
   examMicroQuestion?: {
-    question: string;
-    options: string[];
-    correctIndex: number;
-    rationaleCorrect: string;
-    rationaleIncorrect: { option: string; rationale: string }[];
+    question?: string;
+    questionStem?: string;
+    options?: string[];
+    answerOptions?: Array<{ letter: string; text: string }>;
+    correctIndex?: number;
+    correctLetter?: string;
+    rationaleCorrect?: string;
+    rationaleIncorrect?: Array<{ option?: string; letter?: string; rationale: string }>;
     clinicalPearl?: string;
     keyTakeaway?: string;
   } | null;
 };
 
-export function ActiveStudySession({
-  cards,
-}: {
-  cards: Card[];
-}) {
+type FlashcardCustomStudyClientProps = {
+  cards?: CustomStudyCard[];
+};
+
+function getQuestionText(card: CustomStudyCard): string {
+  return card.examMicroQuestion?.questionStem ?? card.examMicroQuestion?.question ?? card.prompt ?? "Question unavailable";
+}
+
+function getOptions(card: CustomStudyCard): Array<{ label: string; text: string; index: number }> {
+  const exam = card.examMicroQuestion;
+
+  if (exam?.answerOptions?.length) {
+    return exam.answerOptions.map((option, index) => ({
+      label: option.letter,
+      text: option.text,
+      index,
+    }));
+  }
+
+  if (exam?.options?.length) {
+    return exam.options.map((text, index) => ({
+      label: String.fromCharCode(65 + index),
+      text,
+      index,
+    }));
+  }
+
+  return [];
+}
+
+function getCorrectIndex(card: CustomStudyCard, options: Array<{ label: string; text: string; index: number }>): number | null {
+  const exam = card.examMicroQuestion;
+
+  if (typeof exam?.correctIndex === "number") return exam.correctIndex;
+
+  if (exam?.correctLetter) {
+    const found = options.find((option) => option.label === exam.correctLetter);
+    return found?.index ?? null;
+  }
+
+  return null;
+}
+
+export function FlashcardCustomStudyClient({ cards = [] }: FlashcardCustomStudyClientProps) {
+  const safeCards = useMemo(() => cards.filter((card) => card?.id), [cards]);
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
 
-  const card = cards[index];
-  const q = card.examMicroQuestion;
+  const card = safeCards[index] ?? null;
+  const options = card ? getOptions(card) : [];
+  const correctIndex = card ? getCorrectIndex(card, options) : null;
+  const selectedIsCorrect = selected !== null && correctIndex !== null && selected === correctIndex;
 
-  if (!card || !q) {
-    return <div className="p-6">No question data available</div>;
+  if (!card) {
+    return (
+      <section className="rounded-2xl border border-border bg-[var(--theme-card-bg)] p-6 text-sm text-[var(--theme-muted-text)]">
+        No custom study cards are available yet.
+      </section>
+    );
   }
 
-  const isCorrect = selected === q.correctIndex;
-
   return (
-    <div className="max-w-6xl mx-auto p-4">
-      {/* Progress */}
+    <div className="mx-auto max-w-6xl p-4">
       <div className="mb-4">
         <div className="text-sm text-gray-500">
-          Question {index + 1} of {cards.length}
+          Question {index + 1} of {safeCards.length}
         </div>
-        <div className="h-2 bg-gray-200 rounded-full mt-2">
+        <div className="mt-2 h-2 rounded-full bg-gray-200">
           <div
-            className="h-2 bg-blue-500 rounded-full"
-            style={{ width: `${((index + 1) / cards.length) * 100}%` }}
+            className="h-2 rounded-full bg-blue-500"
+            style={{ width: `${((index + 1) / Math.max(1, safeCards.length)) * 100}%` }}
           />
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {/* LEFT: QUESTION */}
-        <div className="bg-white rounded-2xl shadow p-6 border">
-          <h2 className="text-lg font-semibold mb-4">
-            {q.question}
-          </h2>
+      <div className="grid gap-6 md:grid-cols-2">
+        <div className="rounded-2xl border bg-white p-6 shadow">
+          <h2 className="mb-4 text-lg font-semibold">{getQuestionText(card)}</h2>
 
-          <div className="space-y-3">
-            {q.options.map((opt, i) => {
-              const isSelected = selected === i;
-              const isCorrectAnswer = i === q.correctIndex;
+          {options.length > 0 ? (
+            <div className="space-y-3">
+              {options.map((option) => {
+                const isSelected = selected === option.index;
+                const isCorrectAnswer = correctIndex === option.index;
 
-              return (
-                <button
-                  key={i}
-                  onClick={() => setSelected(i)}
-                  className={`w-full text-left p-4 rounded-xl border transition
-                    ${
+                return (
+                  <button
+                    key={`${option.label}-${option.index}`}
+                    type="button"
+                    onClick={() => setSelected(option.index)}
+                    className={`w-full rounded-xl border p-4 text-left transition ${
                       isSelected
-                        ? isCorrect
+                        ? selectedIsCorrect
                           ? "border-green-500 bg-green-50"
                           : "border-red-500 bg-red-50"
                         : "border-gray-200 hover:border-blue-400"
-                    }
-                    ${
-                      selected !== null && isCorrectAnswer
-                        ? "border-green-500 bg-green-50"
-                        : ""
-                    }
-                  `}
-                >
-                  <span className="font-medium mr-2">
-                    {String.fromCharCode(65 + i)}.
-                  </span>
-                  {opt}
-                </button>
-              );
-            })}
-          </div>
+                    } ${selected !== null && isCorrectAnswer ? "border-green-500 bg-green-50" : ""}`}
+                  >
+                    <span className="mr-2 font-medium">{option.label}.</span>
+                    {option.text}
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm text-gray-600">
+              {card.answer}
+            </div>
+          )}
 
-          {/* Navigation */}
-          <div className="flex justify-between mt-6">
+          <div className="mt-6 flex justify-between">
             <button
+              type="button"
               onClick={() => {
                 setIndex((i) => Math.max(i - 1, 0));
                 setSelected(null);
               }}
-              className="text-sm text-gray-500"
+              disabled={index === 0}
+              className="text-sm text-gray-500 disabled:opacity-40"
             >
               ← Previous
             </button>
 
             <button
+              type="button"
               onClick={() => {
-                setIndex((i) => Math.min(i + 1, cards.length - 1));
+                setIndex((i) => Math.min(i + 1, safeCards.length - 1));
                 setSelected(null);
               }}
-              className="text-sm text-blue-600 font-semibold"
+              disabled={index >= safeCards.length - 1}
+              className="text-sm font-semibold text-blue-600 disabled:opacity-40"
             >
               Next →
             </button>
           </div>
         </div>
 
-        {/* RIGHT: RATIONALE */}
-        <div className="bg-white rounded-2xl shadow p-6 border">
-          <h3 className="font-semibold mb-4 text-blue-600">
-            Rationale & Review
-          </h3>
+        <div className="rounded-2xl border bg-white p-6 shadow">
+          <h3 className="mb-4 font-semibold text-blue-600">Rationale & Review</h3>
 
-          {selected !== null && (
+          {selected !== null || options.length === 0 ? (
             <>
-              {/* Correct Answer */}
-              <div className="bg-blue-50 border rounded-xl p-4 mb-4">
-                <div className="text-xs font-semibold text-blue-600 mb-1">
-                  CORRECT ANSWER
-                </div>
+              <div className="mb-4 rounded-xl border bg-blue-50 p-4">
+                <div className="mb-1 text-xs font-semibold text-blue-600">CORRECT ANSWER</div>
                 <div className="font-medium">
-                  {q.options[q.correctIndex]}
+                  {correctIndex !== null ? options[correctIndex]?.text ?? card.answer : card.answer}
                 </div>
               </div>
 
-              {/* Why Correct */}
-              <div className="border rounded-xl p-4 mb-4">
-                <div className="font-semibold mb-1 text-sm">
-                  Why this is correct
-                </div>
+              <div className="mb-4 rounded-xl border p-4">
+                <div className="mb-1 text-sm font-semibold">Why this is correct</div>
                 <p className="text-sm text-gray-600">
-                  {q.rationaleCorrect}
+                  {card.examMicroQuestion?.rationaleCorrect ?? card.explanation ?? "Review the answer and related lesson content."}
                 </p>
               </div>
 
-              {/* Incorrect */}
-              <div className="border rounded-xl p-4 mb-4">
-                <div className="font-semibold text-sm mb-2">
-                  Why other options are incorrect
-                </div>
-                <div className="space-y-2 text-sm text-gray-600">
-                  {q.rationaleIncorrect.map((d, i) => (
-                    <div key={i}>
-                      <span className="font-medium">{d.option}</span>:{" "}
-                      {d.rationale}
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Clinical Pearl */}
-              {q.clinicalPearl && (
-                <div className="bg-yellow-50 border rounded-xl p-4 mb-4">
-                  <div className="font-semibold text-sm mb-1">
-                    Clinical Pearl
+              {card.examMicroQuestion?.rationaleIncorrect?.length ? (
+                <div className="mb-4 rounded-xl border p-4">
+                  <div className="mb-2 text-sm font-semibold">Why other options are incorrect</div>
+                  <div className="space-y-2 text-sm text-gray-600">
+                    {card.examMicroQuestion.rationaleIncorrect.map((row, i) => (
+                      <div key={`${row.option ?? row.letter ?? i}`}>
+                        <span className="font-medium">{row.option ?? row.letter ?? String.fromCharCode(65 + i)}</span>:{" "}
+                        {row.rationale}
+                      </div>
+                    ))}
                   </div>
-                  <p className="text-sm text-gray-600">
-                    {q.clinicalPearl}
-                  </p>
                 </div>
-              )}
+              ) : null}
 
-              {/* Key Takeaway */}
-              {q.keyTakeaway && (
-                <div className="bg-blue-50 border rounded-xl p-4">
-                  <div className="font-semibold text-sm mb-1">
-                    Key Takeaway
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    {q.keyTakeaway}
-                  </p>
+              {card.examMicroQuestion?.clinicalPearl ? (
+                <div className="mb-4 rounded-xl border bg-yellow-50 p-4">
+                  <div className="mb-1 text-sm font-semibold">Clinical Pearl</div>
+                  <p className="text-sm text-gray-600">{card.examMicroQuestion.clinicalPearl}</p>
                 </div>
-              )}
+              ) : null}
+
+              {card.examMicroQuestion?.keyTakeaway ? (
+                <div className="rounded-xl border bg-blue-50 p-4">
+                  <div className="mb-1 text-sm font-semibold">Key Takeaway</div>
+                  <p className="text-sm text-gray-600">{card.examMicroQuestion.keyTakeaway}</p>
+                </div>
+              ) : null}
             </>
-          )}
-
-          {selected === null && (
-            <div className="text-sm text-gray-400">
-              Select an answer to view rationale
-            </div>
+          ) : (
+            <div className="text-sm text-gray-400">Select an answer to view rationale.</div>
           )}
         </div>
       </div>
     </div>
   );
 }
+
+export { FlashcardCustomStudyClient as ActiveStudySession };
