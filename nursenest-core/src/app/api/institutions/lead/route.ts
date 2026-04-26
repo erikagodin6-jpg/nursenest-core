@@ -19,18 +19,22 @@ const institutionLeadSchema = z.object({
   email: z.string().trim().email().max(320),
   phone: z.string().trim().max(80).optional().nullable(),
   message: z.string().trim().max(8000).optional().nullable(),
-  /** Legacy client field — mirrors selected country / region. */
   region: z.string().trim().min(1).max(20).optional(),
 });
 
-/**
- * Public institutional inquiry intake (legacy path `/api/institutions/lead`).
- * Delivers to support email when Resend is configured; always logs a structured receipt server-side.
- */
+function escapeHtml(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 export async function POST(req: Request) {
-  return runWithApiTelemetry(req, "POST /api/institutions/lead", "marketing", async () => {
+  return runWithApiTelemetry(req, "POST /api/institutions/lead", "public", async () => {
     const ip = getTrustedClientIp(req);
-    const rl = await checkRateLimitUnified(`institution-lead:${ip}`, { windowMs: 60 * 60_000, max: 12 });
+
+    const rl = await checkRateLimitUnified(`institution-lead:${ip}`, {
+      windowMs: 60 * 60_000,
+      max: 12,
+    });
+
     if (!rl.ok) {
       return NextResponse.json({ error: "Too many requests. Try again later." }, { status: 429 });
     }
@@ -40,42 +44,54 @@ export async function POST(req: Request) {
 
     const parsed = institutionLeadSchema.safeParse(bodyRead.value);
     if (!parsed.success) {
-      return NextResponse.json({ error: "Invalid form data", details: parsed.error.flatten() }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid form data", details: parsed.error.flatten() },
+        { status: 400 },
+      );
     }
 
-    const d = parsed.data;
-    const region = (d.region ?? d.country ?? "US").trim();
-    const phone = d.phone?.trim() || "";
-    const message = d.message?.trim() || "";
+    const data = parsed.data;
+    const region = (data.region ?? data.country ?? "US").trim();
+    const phone = data.phone?.trim() || "";
+    const message = data.message?.trim() || "";
 
     safeServerLog("institution_lead", "received", {
-      institutionName: d.institutionName.slice(0, 120),
-      programType: d.programType,
-      estimatedStudentCount: d.estimatedStudentCount,
+      institutionName: data.institutionName.slice(0, 120),
+      programType: data.programType,
+      estimatedStudentCount: data.estimatedStudentCount,
       region,
-      contactEmailDomain: d.email.includes("@") ? d.email.split("@")[1]?.slice(0, 80) : "",
+      contactEmailDomain: data.email.includes("@") ? data.email.split("@")[1]?.slice(0, 80) : "",
     });
 
     const to = supportEmail();
-    const subject = `Institutional inquiry: ${d.institutionName}`.slice(0, 200);
+    const subject = `Institutional inquiry: ${data.institutionName}`.slice(0, 200);
+
     const textLines = [
-      `Institution: ${d.institutionName}`,
-      `Program type: ${d.programType}`,
-      `Estimated students: ${d.estimatedStudentCount}`,
+      `Institution: ${data.institutionName}`,
+      `Program type: ${data.programType}`,
+      `Estimated students: ${data.estimatedStudentCount}`,
       `Country / region: ${region}`,
-      `Contact: ${d.contactName}`,
-      `Email: ${d.email}`,
+      `Contact: ${data.contactName}`,
+      `Email: ${data.email}`,
       `Phone: ${phone || "(none)"}`,
       "",
       message || "(no message)",
     ];
-    const html = `<pre style="white-space:pre-wrap;font-family:system-ui,sans-serif">${textLines
-      .map((l) => l.replace(/&/g, "&amp;").replace(/</g, "&lt;"))
-      .join("\n")}</pre>`;
 
-    const sent = await sendTransactionalEmailHtml({ to, subject, html, text: textLines.join("\n") });
+    const text = textLines.join("\n");
+    const html = `<pre style="white-space:pre-wrap;font-family:system-ui,sans-serif">${escapeHtml(text)}</pre>`;
+
+    const sent = await sendTransactionalEmailHtml({
+      to,
+      subject,
+      html,
+      text,
+    });
+
     if (!sent.ok) {
-      safeServerLog("institution_lead", "email_not_sent", { skippedReason: sent.skippedReason ?? "unknown" });
+      safeServerLog("institution_lead", "email_not_sent", {
+        skippedReason: sent.skippedReason ?? "unknown",
+      });
     }
 
     return NextResponse.json({ success: true });
