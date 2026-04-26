@@ -1431,7 +1431,7 @@ export async function enforceApiRateLimit(request: NextRequest): Promise<NextRes
         authKind: kind,
         keyShape: "ip_partition",
         clientIpSource: ipDerivation.source,
-        clientIpHeader: ipDerivation.headerName,
+        clientIpHeader: ipDerivation.headerName ?? undefined,
         method,
         path: pathname.slice(0, 96),
         windowMs: limits.windowMs,

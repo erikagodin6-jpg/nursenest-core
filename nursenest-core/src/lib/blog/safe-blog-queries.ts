@@ -524,7 +524,7 @@ export async function getPublishedBlogPostsPage(
       logRouteDataPipeline({
         route: "/blog",
         stage: "blog_index_locale_fallback_db_error",
-        meta: { page: safePage, pageSize: safeSize, listLoad: localeRead.listLoad },
+        meta: { page: safePage, pageSize: safeSize, listLoad: JSON.stringify(localeRead.listLoad) },
       });
       return {
         posts: [],
@@ -574,7 +574,7 @@ export async function getPublishedBlogPostsPage(
         cacheSource: "live_prisma_locale_fallback",
         page: safePage,
         pageSize: safeSize,
-        listLoad: listLoadLocale,
+        listLoad: JSON.stringify(listLoadLocale),
       },
     });
     return { posts: dbPosts, total: dbTotal, page: safePage, pageSize: safeSize, listLoad: listLoadLocale };
@@ -621,7 +621,7 @@ export async function getPublishedBlogPostsPage(
         cacheSource: "live_prisma",
         page: safePage,
         pageSize: safeSize,
-        listLoad: listLoadLive,
+        listLoad: JSON.stringify(listLoadLive),
       },
     });
     return { posts: dbPosts, total: dbTotal, page: safePage, pageSize: safeSize, listLoad: listLoadLive };
@@ -667,7 +667,7 @@ export async function getPublishedBlogPostsPage(
         cacheSource: "live_prisma_no_static_rows",
         page: safePage,
         pageSize: safeSize,
-        listLoad: listLoadTrueEmpty,
+        listLoad: JSON.stringify(listLoadTrueEmpty),
       },
     });
     return {
@@ -717,7 +717,7 @@ export async function getPublishedBlogPostsPage(
       cacheSource: "static_bundle_fallback",
       page: safePage,
       pageSize: safeSize,
-      listLoad: listLoadStatic,
+      listLoad: JSON.stringify(listLoadStatic),
     },
   });
   return { posts, total, page: safePage, pageSize: safeSize, listLoad: listLoadStatic };

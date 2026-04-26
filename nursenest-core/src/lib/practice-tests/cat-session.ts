@@ -431,7 +431,7 @@ export async function createCatPracticeTestPayload(
       catAdaptiveSessionType: "practice",
       guidedRunLength: runLength,
       hasSessionPickSalt: sessionPickSalt.length >= 8,
-      firstQuestionIdPrefix: questionIds[0] ? questionIds[0]!.slice(0, 12) : null,
+      firstQuestionIdPrefix: questionIds[0] ? questionIds[0]!.slice(0, 12) : undefined,
     });
 
     const config: PracticeTestConfigJson = {
