@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
+import { ActiveStudySession, type ActiveStudyCard, type ActiveStudyHeader } from "@/components/study/active-study-session";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatTitleCase } from "@/lib/format/text-case";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
@@ -190,6 +190,12 @@ export function FlashcardStudyClient({
         <ActiveStudySession
           key={sessionKey}
           cards={activeCards}
+          header={{
+            sessionTitle: title || "Flashcards",
+            modeLabel: studyMode === "test" ? "Test" : "Learn",
+            categoriesLabel: "",
+            exitHref: "/app/flashcards",
+          } satisfies ActiveStudyHeader}
           layout="split"
           sessionMode={studyMode}
           initialCardIndex={resumeInitial.index}
