@@ -62,7 +62,7 @@ export function readCachedI18nJsonFile(
       diskCache.delete(absPath);
       return null;
     }
-    const normalized = normalizeMarketingMessagesRecord(parsed);
+    const normalized = normalizeMarketingMessagesRecord(parsed as Record<string, unknown> | null | undefined);
     if (Object.keys(normalized).length === 0) return null;
     diskCache.set(absPath, {
       mtimeMs: st.mtimeMs,

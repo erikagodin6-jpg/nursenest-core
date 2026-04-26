@@ -83,7 +83,7 @@ function sampleRowBase(
     slug: String(row.slug ?? "").slice(0, 500),
     title: String(row.title ?? "").slice(0, 500),
     pathwayId,
-    careerSlug: firstNonEmpty(active?.careerSlug, (row as { careerSlug?: string }).careerSlug) ?? null,
+    careerSlug: firstNonEmpty((active as { careerSlug?: string } | undefined)?.careerSlug, (row as { careerSlug?: string }).careerSlug) ?? null,
     exam: firstNonEmpty(active?.exam, (row as { exam?: string }).exam) ?? null,
     workflowStatus: extras.workflowStatus,
     publishStatus: extras.publishStatus,
@@ -176,7 +176,7 @@ export function classifyPreparedRowsForMarketingHubVisibility(args: {
     const internal = slugToVerifyReason.get(slug) ?? "detail_loader_miss";
     const listIncomplete = row.structuralQuality?.publicComplete === false;
     let r = mapHubMarketingFailureToVisibilityReason(internal);
-    let failedGate = internal;
+    let failedGate: string = internal;
     if (internal === "detail_loader_miss" && listIncomplete) {
       r = "missing_required_metadata";
       failedGate = "list_row_incomplete_then_detail_miss";

@@ -658,6 +658,7 @@ async function catPoolAndSelectOpts(
   });
   const { pool: poolForSelection } = filterPoolRemovingRecentQuestions(pool, recentPack.ids);
   const saltOk = typeof config.sessionPickSalt === "string" && config.sessionPickSalt.trim().length >= 8;
+  const presentationMode = config.catPresentationMode ?? "practice";
   if (!sim && !saltOk) {
     safeServerLog("practice_test", "cat_adaptive_pick_missing_session_pick_salt", {
       feature_surface: "cat_adaptive",
@@ -674,7 +675,7 @@ async function catPoolAndSelectOpts(
     pool: poolForSelection,
     selectOpts,
     bounds,
-    presentationMode: config.catPresentationMode ?? "practice",
+    presentationMode,
   };
 }
 

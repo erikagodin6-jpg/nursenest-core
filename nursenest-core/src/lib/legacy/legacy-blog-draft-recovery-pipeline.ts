@@ -25,6 +25,7 @@ import type {
   BlogDraftRecoveryPipelineOptions,
   BlogRecoveryChangeLogEntry,
   LegacyBlogExportV1,
+  LegacyBlogExportRow,
 } from "@/lib/legacy/legacy-blog-draft-recovery-types";
 import { approximatePlainTextFromHtmlForAudit } from "@/lib/blog/blog-word-count";
 
@@ -278,12 +279,6 @@ export async function runBlogDraftRecoveryImport(
       postStatus: BlogPostStatusEnum.PUBLISHED,
       publishAt: new Date(),
       workflowStatus: BlogWorkflowStatus.PUBLISHED,
-      adminPublishLog: appendPublishLog((row.adminPublishLog ?? []) as Prisma.JsonValue, {
-        at: new Date().toISOString(),
-        kind: "legacy_blog_draft_recovery",
-        dryRun: !opts.apply,
-        emergencySeoPublish: opts.emergencySeoPublish,
-      }),
     };
 
     if (!opts.apply) {
@@ -375,7 +370,6 @@ export async function runBlogDraftRecoveryImport(
           workflowStatus: BlogWorkflowStatus.PUBLISHED,
           legacySource: p.legacySource ?? "legacy-json-import",
           postTemplate: p.postTemplate ?? "TOPIC_EXPLAINED",
-          adminPublishLog: [{ at: new Date().toISOString(), kind: "legacy_blog_import_create" }] as unknown as Prisma.InputJsonValue,
         },
       });
       logChange({

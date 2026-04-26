@@ -109,9 +109,9 @@ async function collectJsonStats(
 
   async function walk(dir: string, depth: number): Promise<void> {
     if (count >= opts.maxFiles || depth > opts.maxDepth) return;
-    let entries: Awaited<ReturnType<typeof readdir>>;
+    let entries: import("node:fs").Dirent<string>[];
     try {
-      entries = await readdir(dir, { withFileTypes: true });
+      entries = (await readdir(dir, { withFileTypes: true })) as import("node:fs").Dirent<string>[];
     } catch {
       return;
     }

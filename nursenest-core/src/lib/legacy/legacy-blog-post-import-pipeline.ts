@@ -31,7 +31,6 @@ export type BlogPostImportIndexRow = {
   publishAt: Date | null;
   scheduledAt: Date | null;
   legacySource: string | null;
-  legacyUrl: string | null;
   workflowStatus: BlogWorkflowStatus;
 };
 
@@ -112,7 +111,6 @@ async function loadBlogPostIndex(prisma: PrismaClient): Promise<{
       publishAt: true,
       scheduledAt: true,
       legacySource: true,
-      legacyUrl: true,
       workflowStatus: true,
     },
   });
@@ -171,7 +169,6 @@ export type MergePreview = {
   publishAt: Date | null;
   scheduledAt: Date | null;
   legacySource: string | null;
-  legacyUrl: string | null;
 };
 
 export function buildMergedBlogPostPreview(input: {
@@ -238,7 +235,6 @@ export function buildMergedBlogPostPreview(input: {
   }
 
   const legacySource = mergeLegacyBlogPostSource(existing?.legacySource, legacy.legacyId, legacy.legacySource);
-  const legacyUrl = existing?.legacyUrl?.trim() || legacy.legacyUrl?.trim() || null;
 
   return {
     slug,
@@ -252,7 +248,6 @@ export function buildMergedBlogPostPreview(input: {
     publishAt,
     scheduledAt,
     legacySource,
-    legacyUrl,
   };
 }
 
@@ -416,7 +411,6 @@ export async function importLegacyBlogPosts(
             postStatus: preview.postStatus,
             publishAt: preview.publishAt,
             legacySource: preview.legacySource,
-            legacyUrl: preview.legacyUrl,
           },
         });
         summary.updated += 1;
@@ -431,7 +425,6 @@ export async function importLegacyBlogPosts(
           postStatus: preview.postStatus,
           publishAt: preview.publishAt,
           legacySource: preview.legacySource,
-          legacyUrl: preview.legacyUrl,
         });
       } else {
         const excerptOut =
@@ -448,7 +441,6 @@ export async function importLegacyBlogPosts(
             postStatus: preview.postStatus,
             publishAt: preview.publishAt,
             legacySource: preview.legacySource,
-            legacyUrl: preview.legacyUrl,
           },
         });
         summary.created += 1;
@@ -465,7 +457,7 @@ export async function importLegacyBlogPosts(
           publishAt: created.publishAt,
           scheduledAt: created.scheduledAt,
           legacySource: created.legacySource,
-          legacyUrl: created.legacyUrl,
+          workflowStatus: created.workflowStatus,
         });
       }
     } catch (e) {

@@ -6,6 +6,7 @@ import {
   loadMarketingMessageShards,
   loadMarketingMessageShardsSync,
 } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import type { I18nShardFilename } from "@shared/i18n-shard-policy";
 import {
   MARKETING_BUILD_LAYOUT_MESSAGE_SHARDS,
   MARKETING_CHROME_MESSAGE_SHARDS,
@@ -33,7 +34,7 @@ const defaultChromeState: DefaultChromeState = {
   inflight: null,
 };
 
-function loadEnglishFallback(shards: readonly string[]) {
+function loadEnglishFallback(shards: readonly I18nShardFilename[]) {
   try {
     return loadMarketingMessageShardsSync(DEFAULT_MARKETING_LOCALE, shards);
   } catch {
@@ -118,7 +119,7 @@ type LocaleChromePayload = {
 const localeChromeResolved = new Map<string, LocaleChromePayload>();
 const localeChromeInflight = new Map<string, Promise<LocaleChromePayload>>();
 
-function fillLocaleChromeFromSync(locale: string, shards: readonly string[]): LocaleChromePayload {
+function fillLocaleChromeFromSync(locale: string, shards: readonly I18nShardFilename[]): LocaleChromePayload {
   const messages = loadMarketingMessageShardsSync(locale, shards);
 
   const fallbackMessages =

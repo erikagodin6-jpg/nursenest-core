@@ -237,7 +237,7 @@ async function logBlogIndexDiagnosticsIfEnabled(args: {
   }, {});
   type StatusAgg = { postStatus: BlogPostStatus; _count: { _all: number } };
   const dbAllStatuses = await withBlogTimeoutFallback<StatusAgg[]>(
-    () => prisma.blogPost.groupBy({ by: ["postStatus"], _count: { _all: true } }),
+    async () => (await prisma.blogPost.groupBy({ by: ["postStatus"], _count: { _all: true } })) as unknown as StatusAgg[],
     [],
     "blog_index_diag_groupby_all",
   );

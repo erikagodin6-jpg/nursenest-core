@@ -56,9 +56,9 @@ export function lessonsListBlockFromPathwayHubSnapshot(
   const rows: AppLessonsHubSnapshotLessonsBlock["rows"] = [];
   for (const raw of p.items) {
     const r = raw as PathwayLessonRecord;
-    if (!r?.id || !r.slug || !r.title) continue;
+    if (!r?.slug || !r.title) continue;
     rows.push({
-      id: r.id,
+      id: r.slug,
       title: r.title,
       summary: pathwayLessonCardSummary({
         seoDescription: r.seoDescription ?? "",

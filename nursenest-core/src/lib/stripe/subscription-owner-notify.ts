@@ -2,7 +2,9 @@ import "server-only";
 
 import type Stripe from "stripe";
 import { Prisma, SubscriptionStatus, type TierCode } from "@prisma/client";
-import { after } from "next/server";
+function after(fn: () => void | Promise<void>): void {
+  void Promise.resolve().then(fn);
+}
 import { prisma } from "@/lib/db";
 import { sendTransactionalEmailHtml, htmlEmailShell } from "@/lib/email/resend-transactional";
 import { safeServerLog } from "@/lib/observability/safe-server-log";

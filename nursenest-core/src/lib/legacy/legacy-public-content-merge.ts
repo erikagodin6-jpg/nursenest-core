@@ -1,7 +1,7 @@
 import type { ContentStatus, Prisma, TierCode } from "@prisma/client";
 
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-pathways-catalog";
-import { computeStructuralPublicCompleteFromDbRow } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import { computeStructuralPublicCompleteFromDbRow, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import type { LegacyLessonExportRow } from "@/lib/legacy/legacy-public-content-types";
 import { normalizeLegacySlug } from "@/lib/legacy/legacy-public-content-types";
 

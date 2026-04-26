@@ -128,7 +128,7 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     let res: Response | null = null;
 
     try {
-      res = await runAuthMiddleware(forwarded, event);
+      res = (await runAuthMiddleware(forwarded, event)) ?? null;
     } catch {
       // Auth failure must not break app
       res = null;

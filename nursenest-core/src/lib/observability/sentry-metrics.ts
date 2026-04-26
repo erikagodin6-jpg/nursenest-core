@@ -16,10 +16,10 @@ let sentryMetricsPromise: Promise<SentryMetricsApi | null> | null = null;
 function loadSentryMetrics(): Promise<SentryMetricsApi | null> {
   if (!sentryMetricsPromise) {
     sentryMetricsPromise = import("@sentry/core")
-      .then((mod) => ({ metrics: mod.metrics }))
+      .then((mod) => ({ metrics: mod.metrics as unknown as SentryMetricsApi["metrics"] }))
       .catch(() => null);
   }
-  return sentryMetricsPromise;
+  return sentryMetricsPromise!;
 }
 
 function enabled(): boolean {

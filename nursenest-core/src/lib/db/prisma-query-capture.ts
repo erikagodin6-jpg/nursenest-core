@@ -31,7 +31,8 @@ export function getPrismaQueryLog(): CapturedPrismaQuery[] {
  * Safe to skip in production unless `PRISMA_QUERY_AUDIT=1`.
  */
 export function attachPrismaQueryCapture(prisma: PrismaClient): void {
-  prisma.$on("query", (e) => {
+  const p = prisma as PrismaClient & { $on(event: string, cb: (e: { query: string; duration: number }) => void): void };
+  p.$on("query", (e) => {
     pushQuery({ query: e.query, durationMs: e.duration });
     auditRawSqlQuery(e.query);
   });

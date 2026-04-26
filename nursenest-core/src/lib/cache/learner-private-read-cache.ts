@@ -1,6 +1,6 @@
 import "server-only";
 
-import { revalidateTag, unstable_cache, updateTag } from "next/cache";
+import { revalidateTag, unstable_cache } from "next/cache";
 import {
   ALL_LEARNER_PRIVATE_READ_SURFACES,
   buildLearnerPrivateReadCacheKeyParts,
@@ -13,9 +13,9 @@ import {
 
 async function expireTag(tag: string): Promise<void> {
   try {
-    updateTag(tag);
+    revalidateTag(tag);
   } catch {
-    revalidateTag(tag, "max");
+    // ignore
   }
 }
 

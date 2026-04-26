@@ -128,6 +128,8 @@ export function reconstructBlogControlPanelPlanFromPost(row: {
     keyTakeaways,
     featuredSnippetHint: row.featuredSnippet?.trim() ? row.featuredSnippet.trim().slice(0, 400) : undefined,
     suggestedExcerpt,
+    openGraphTitle: metaTitle || undefined,
+    openGraphDescription: metaDescription || undefined,
     schemaOpportunities: undefined,
     seoFocusKeywords: seoFocusKeywords.length ? seoFocusKeywords : undefined,
     internalAnchorOpportunities: pkg?.internalAnchorOpportunities?.length

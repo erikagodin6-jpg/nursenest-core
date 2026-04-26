@@ -216,11 +216,11 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
     return {
       pageResult,
       lessonsPageLoad: {
-        status: "ok",
+        status: "ok" as const,
         fetchDurationMs,
         responseItemCount: items.length,
         responseTotal: pageResult.total,
-        sourceUsed: "secondary",
+        sourceUsed: "secondary" as const,
         failoverReason,
         snapshotVersion: envelope.version,
         snapshotAgeMs: age >= 0 ? age : undefined,
