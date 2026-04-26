@@ -30,7 +30,24 @@ test.describe("Homepage stays real after hydration", () => {
       pageErrors.push(err?.message ?? String(err));
     });
 
+    const badStaticChunks: { url: string; status: number }[] = [];
+    page.on("response", (res) => {
+      const url = res.url();
+      if (!url.includes("/_next/static/")) return;
+      const status = res.status();
+      if (status !== 200 && status !== 304) {
+        badStaticChunks.push({ url, status });
+      }
+    });
+
     await page.goto("/", { waitUntil: "load", timeout: 120_000 });
+
+    expect(
+      badStaticChunks,
+      `Non-OK /_next/static responses: ${JSON.stringify(badStaticChunks)}`,
+    ).toEqual([]);
+
+    await expect(page.getByText("We're updating the site right now")).toHaveCount(0);
 
     await expect(page.locator('[data-nn-home-safe-mode="1"]')).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /^Just a moment$/i })).toHaveCount(0);
@@ -42,6 +59,11 @@ test.describe("Homepage stays real after hydration", () => {
     await expect(page.locator("main h1")).toHaveCount(1);
 
     await page.waitForTimeout(2500);
+
+    expect(
+      badStaticChunks,
+      `Non-OK /_next/static after hydration: ${JSON.stringify(badStaticChunks)}`,
+    ).toEqual([]);
 
     await expect(page.locator('[data-nn-home-safe-mode="1"]')).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /^Just a moment$/i })).toHaveCount(0);

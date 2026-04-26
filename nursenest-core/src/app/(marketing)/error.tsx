@@ -1,8 +1,11 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { NnErrorCard } from "@/components/error/nn-error-card";
 import { MarketingHomeSafeMode } from "@/components/marketing/marketing-home-safe-mode";
+import {
+  logMarketingRouteErrorClient,
+  shouldUseMarketingHomeSafeModeFromError,
+} from "@/lib/marketing/marketing-home-safe-mode-triggers";
 
 export default function MarketingSegmentError({
   error,
@@ -11,10 +14,9 @@ export default function MarketingSegmentError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const pathname = usePathname();
-  const isHome = pathname === "/" || pathname === "" || pathname == null;
+  logMarketingRouteErrorClient("marketing_segment_error_tsx", error);
 
-  if (isHome) {
+  if (shouldUseMarketingHomeSafeModeFromError(error)) {
     return <MarketingHomeSafeMode layout="embedded" onRetry={reset} />;
   }
 

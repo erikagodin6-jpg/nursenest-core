@@ -15,14 +15,19 @@ export class MarketingMainErrorBoundary extends Component<Props, State> {
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, info: ErrorInfo): void {
+  componentDidCatch(error: Error & { digest?: string }, info: ErrorInfo): void {
+    const digest = error?.digest != null ? String(error.digest) : "";
     console.error(
+      "[nn-marketing-main-error-boundary]",
       JSON.stringify({
         scope: "client_ui",
         event: "marketing_main_error_boundary",
-        name: this.props.name ?? "marketing_main",
-        message: error.message?.slice(0, 300),
-        componentStack: info.componentStack?.slice(0, 500),
+        boundaryName: this.props.name ?? "marketing_main",
+        errorName: error?.name,
+        message: error?.message,
+        digest: digest || undefined,
+        stack: typeof error?.stack === "string" ? error.stack.slice(0, 4000) : undefined,
+        componentStack: info.componentStack?.slice(0, 2000),
       }),
     );
   }
