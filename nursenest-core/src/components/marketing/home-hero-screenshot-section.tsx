@@ -29,10 +29,7 @@ export function HomeHeroScreenshotSection() {
 
   const slides = useMemo(() => {
     try {
-      return buildHomepageHeroSlidesAtIndices(
-        t ?? ((key: string) => key),
-        HOME_HERO_PRIMARY_CAROUSEL_INDICES,
-      );
+      return buildHomepageHeroSlidesAtIndices(t, HOME_HERO_PRIMARY_CAROUSEL_INDICES);
     } catch {
       return [];
     }

@@ -1,10 +1,9 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useEffect, useMemo, type ReactNode } from "react";
 
-import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
 import { HomeTrustStripSection } from "@/components/marketing/home-trust-strip-section";
@@ -41,35 +40,37 @@ function safeNumber(n: unknown): number {
   return Number.isFinite(n) ? Number(n) : 0;
 }
 
-/* ------------------ DYNAMIC CHUNKS ------------------ */
-
-const HomeMarketingDesktopRegionsStackLazy = dynamic(
-  () =>
-    import("@/components/marketing/home-marketing-home-desktop-below-fold")
-      .then((m) => m.HomeMarketingDesktopRegionsStack),
-  { ssr: false },
-);
-
-const HomeMarketingDesktopPostTrustStackLazy = dynamic(
-  () =>
-    import("@/components/marketing/home-marketing-home-desktop-below-fold")
-      .then((m) => m.HomeMarketingDesktopPostTrustStack),
-  { ssr: false },
-);
-
-/* ------------------ STATIC RESERVES ------------------ */
-
-function Reserve({ h }: { h: string }) {
+/**
+ * Lightweight stand-ins for former client-only desktop slices (carousel,
+ * screenshot bands, next/image marketing rows). Same markup on all viewports.
+ */
+function HomeStableMarketingPlaceholder({
+  title,
+  body,
+  href,
+  linkLabel,
+}: {
+  title: string;
+  body: string;
+  href: string;
+  linkLabel: string;
+}) {
   return (
-    <div
-      className="border-b border-[var(--border-subtle)] bg-[var(--page-bg)] px-4 py-[var(--nn-rhythm-mobile-section-y)]"
-      aria-hidden="true"
-    >
-      <div
-        className="mx-auto max-w-5xl rounded-2xl border border-dashed border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--semantic-panel-muted)_70%,transparent)]"
-        style={{ minHeight: h }}
-      />
-    </div>
+    <section className="border-b border-[var(--border-subtle)] bg-[var(--page-bg)] px-4 py-[var(--nn-rhythm-mobile-section-y)] sm:px-6 md:py-[var(--nn-rhythm-shell-y)]">
+      <div className="mx-auto max-w-5xl rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--semantic-info))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--surface-base))] p-6 sm:p-8">
+        <h2 className="nn-marketing-h3 text-balance text-[var(--palette-heading)]">{title}</h2>
+        <p className="mt-2 max-w-prose text-pretty nn-marketing-body text-[var(--palette-text-muted)]">{body}</p>
+        <p className="mt-4">
+          <Link
+            href={href}
+            className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline"
+          >
+            {linkLabel}
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </Link>
+        </p>
+      </div>
+    </section>
   );
 }
 
@@ -85,14 +86,15 @@ export type HomeRestoredClientProps = {
 
 export default function HomeRestoredClient({
   homeMarketingStats,
-  publishedGlobalRegionCardIds,
+  publishedGlobalRegionCardIds: _publishedGlobalRegionCardIds,
   introAfterHero,
 }: HomeRestoredClientProps) {
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
 
   const marketingRegion = region === "US" ? "US" : "CA";
-  const marketingNarrow = useMarketingMobilePerfIsMobile() === true;
+  const exploreQuestionsHref = withMarketingLocale(locale, "/question-bank");
+  const explorePricingHref = withMarketingLocale(locale, "/pricing");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -161,20 +163,27 @@ export default function HomeRestoredClient({
         lessonCount={lessonCount}
       />
 
-      {/* ABOVE FOLD STACK */}
-      {marketingNarrow ? (
-        <>
-          <Reserve h="18rem" />
-          <Reserve h="18rem" />
-          <Reserve h="16rem" />
-        </>
-      ) : (
-        <HomeMarketingDesktopRegionsStackLazy
-          publishedGlobalRegionCardIds={
-            publishedGlobalRegionCardIds ?? []
-          }
-        />
-      )}
+      {/* Former desktop carousel / screenshot / image-heavy rows — stable cards */}
+      <HomeStableMarketingPlaceholder
+        title={safeT(t, "pages.home.stablePlaceholder.product.title", "See how NurseNest fits your study plan")}
+        body={safeT(
+          t,
+          "pages.home.stablePlaceholder.product.body",
+          "Jump into the question bank or lessons when you are ready — no heavy previews on this load path.",
+        )}
+        href={exploreQuestionsHref}
+        linkLabel={safeT(t, "pages.home.stablePlaceholder.product.link", "Open the question bank")}
+      />
+      <HomeStableMarketingPlaceholder
+        title={safeT(t, "pages.home.stablePlaceholder.regions.title", "Exam prep hubs")}
+        body={safeT(
+          t,
+          "pages.home.stablePlaceholder.regions.body",
+          "Choose RN, PN, NP, or Allied from the pathway cards below — regional hubs stay one click away.",
+        )}
+        href={explorePricingHref}
+        linkLabel={safeT(t, "pages.home.stablePlaceholder.regions.link", "View pricing")}
+      />
 
       {/* TRUST */}
       <HomeTrustStripSection
@@ -183,18 +192,27 @@ export default function HomeRestoredClient({
         registeredLearners={registeredLearners}
       />
 
-      {/* BELOW FOLD STACK */}
-      {marketingNarrow ? (
-        <>
-          <Reserve h="14rem" />
-          <Reserve h="20rem" />
-        </>
-      ) : (
-        <HomeMarketingDesktopPostTrustStackLazy
-          questionCount={questionCount}
-          registeredLearners={registeredLearners}
-        />
-      )}
+      {/* Former trust-fears / platform preview / proof / FAQ lazy stack */}
+      <HomeStableMarketingPlaceholder
+        title={safeT(t, "pages.home.stablePlaceholder.study.title", "Study tools that stay exam-scoped")}
+        body={safeT(
+          t,
+          "pages.home.stablePlaceholder.study.body",
+          "CAT-style practice, rationales, and lessons are available after you sign in — this page keeps the shell lightweight.",
+        )}
+        href={exploreQuestionsHref}
+        linkLabel={safeT(t, "pages.home.stablePlaceholder.study.link", "Start practicing")}
+      />
+      <HomeStableMarketingPlaceholder
+        title={safeT(t, "pages.home.stablePlaceholder.support.title", "Questions about access or billing?")}
+        body={safeT(
+          t,
+          "pages.home.stablePlaceholder.support.body",
+          "Pricing and plans are documented on the pricing page so you can compare tiers without loading large previews here.",
+        )}
+        href={explorePricingHref}
+        linkLabel={safeT(t, "pages.home.stablePlaceholder.support.link", "Compare plans")}
+      />
 
       {/* HUB STRIP */}
       {introAfterHero}
