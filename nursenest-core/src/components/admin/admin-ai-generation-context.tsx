@@ -7,6 +7,9 @@ const FALLBACK_ADMIN_AI_GENERATION_GATE: AdminAiGenerationGate = {
   runnable: false,
   mode: "misconfigured",
   summaryLine: "AI generation is unavailable because the admin AI generation context was not loaded.",
+  flagEnabled: false,
+  openAiKeyPresent: false,
+  diagnostics: [],
 };
 
 const AdminAiGenerationContext = createContext<AdminAiGenerationGate | null>(null);
