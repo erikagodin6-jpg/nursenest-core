@@ -38,12 +38,14 @@ test.describe("Homepage stays real after hydration", () => {
     const mainH1 = page.locator("main").getByRole("heading", { level: 1 }).first();
     await expect(mainH1).toBeVisible({ timeout: 30_000 });
     await expect(mainH1).not.toHaveText(/^\s*$/);
+    await expect(page.locator("main").getByRole("heading", { level: 1 })).toHaveCount(1);
 
     await page.waitForTimeout(2500);
 
     await expect(page.locator('[data-nn-home-safe-mode="1"]')).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /^Just a moment$/i })).toHaveCount(0);
     await expect(mainH1).toBeVisible();
+    await expect(page.locator("main").getByRole("heading", { level: 1 })).toHaveCount(1);
 
     const fatal = pageErrors.filter((msg) => !PAGEERROR_ALLOWLIST.some((re) => re.test(msg)));
     expect(fatal, `Uncaught page errors: ${fatal.join(" | ")}`).toEqual([]);

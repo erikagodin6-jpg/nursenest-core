@@ -1,4 +1,4 @@
-import { Suspense, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { MarketingI18nShardLayer } from "@/components/i18n/marketing-i18n-provider";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
@@ -35,79 +35,57 @@ function safeSyncLoad(locale: string): MarketingMessages {
   }
 }
 
-async function safeAsyncLoad(locale: string): Promise<MarketingMessages> {
-  try {
-    return (
-      (await safeAwait(
-        loadMarketingMessageShards(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS),
-        `marketing_main:${locale}`,
-        MARKETING_MAIN_SHARDS_TIMEOUT_MS,
-      )) ?? {}
-    );
-  } catch {
-    return {};
+async function loadPrimaryAndFallback(locale: string): Promise<{
+  primary: MarketingMessages;
+  fallback: MarketingMessages | undefined;
+}> {
+  safeTrace("marketing_main", "load_start", { locale });
+
+  let primary =
+    (await safeAwait(
+      loadMarketingMessageShards(locale, MARKETING_PAGE_BODY_MESSAGE_SHARDS),
+      `marketing_main:${locale}`,
+      MARKETING_MAIN_SHARDS_TIMEOUT_MS,
+    )) ?? {};
+
+  if (Object.keys(primary).length === 0) {
+    primary = safeSyncLoad(locale);
   }
-}
 
-function MarketingMainI18nShardsStreamingFallback({
-  locale,
-  children,
-  publicContentOverrides,
-}: {
-  locale: string;
-  children: ReactNode;
-  publicContentOverrides?: Record<string, string>;
-}) {
-  safeTrace("marketing_main", "fallback", { locale });
-
-  const primary = safeSyncLoad(locale);
-  const fallback =
-    locale === DEFAULT_MARKETING_LOCALE ? undefined : safeSyncLoad(DEFAULT_MARKETING_LOCALE);
-
-  return (
-    <MarketingI18nShardLayer
-      messages={safeMerge(primary, publicContentOverrides)}
-      fallbackMessages={fallback ? safeMerge(fallback, publicContentOverrides) : undefined}
-    >
-      {children}
-    </MarketingI18nShardLayer>
-  );
-}
-
-async function MarketingMainI18nShardsDeferred({
-  locale,
-  children,
-  publicContentOverrides,
-}: {
-  locale: string;
-  children: ReactNode;
-  publicContentOverrides?: Record<string, string>;
-}) {
-  safeTrace("marketing_main", "deferred_start", { locale });
-
-  const primary = await safeAsyncLoad(locale);
-  const fallback =
+  let fallbackMessages: MarketingMessages | undefined =
     locale === DEFAULT_MARKETING_LOCALE
       ? undefined
-      : await safeAsyncLoad(DEFAULT_MARKETING_LOCALE);
+      : ((await safeAwait(
+          loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, MARKETING_PAGE_BODY_MESSAGE_SHARDS),
+          "marketing_main:en",
+          MARKETING_MAIN_SHARDS_TIMEOUT_MS,
+        )) ?? {});
 
-  safeTrace("marketing_main", "deferred_done", {
+  if (locale !== DEFAULT_MARKETING_LOCALE && Object.keys(fallbackMessages ?? {}).length === 0) {
+    fallbackMessages = safeSyncLoad(DEFAULT_MARKETING_LOCALE);
+  }
+
+  safeTrace("marketing_main", "load_done", {
     locale,
     primary: Object.keys(primary).length,
-    fallback: fallback ? Object.keys(fallback).length : 0,
+    fallback: fallbackMessages ? Object.keys(fallbackMessages).length : 0,
   });
 
-  return (
-    <MarketingI18nShardLayer
-      messages={safeMerge(primary, publicContentOverrides)}
-      fallbackMessages={fallback ? safeMerge(fallback, publicContentOverrides) : undefined}
-    >
-      {children}
-    </MarketingI18nShardLayer>
-  );
+  return {
+    primary,
+    fallback: locale === DEFAULT_MARKETING_LOCALE ? undefined : fallbackMessages,
+  };
 }
 
-export function MarketingMainI18nShards({
+/**
+ * Merges page-body marketing shards (`pages` JSON) into the parent chrome provider.
+ *
+ * **Single `{children}` render:** Previously this used `<Suspense>` with the same
+ * `{children}` in both the fallback and the deferred branch, which could duplicate
+ * the homepage (and other routes) in streamed HTML / hydration. Loads are awaited
+ * here once, then one `MarketingI18nShardLayer` wraps the segment page.
+ */
+export async function MarketingMainI18nShards({
   locale,
   children,
   publicContentOverrides,
@@ -116,23 +94,14 @@ export function MarketingMainI18nShards({
   children: ReactNode;
   publicContentOverrides?: Record<string, string>;
 }) {
+  const { primary, fallback } = await loadPrimaryAndFallback(locale);
+
   return (
-    <Suspense
-      fallback={
-        <MarketingMainI18nShardsStreamingFallback
-          locale={locale}
-          publicContentOverrides={publicContentOverrides}
-        >
-          {children}
-        </MarketingMainI18nShardsStreamingFallback>
-      }
+    <MarketingI18nShardLayer
+      messages={safeMerge(primary, publicContentOverrides)}
+      fallbackMessages={fallback ? safeMerge(fallback, publicContentOverrides) : undefined}
     >
-      <MarketingMainI18nShardsDeferred
-        locale={locale}
-        publicContentOverrides={publicContentOverrides}
-      >
-        {children}
-      </MarketingMainI18nShardsDeferred>
-    </Suspense>
+      {children}
+    </MarketingI18nShardLayer>
   );
 }
