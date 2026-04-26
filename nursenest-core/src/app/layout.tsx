@@ -3,7 +3,6 @@ import { DM_Sans } from "next/font/google";
 
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
-import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 
 import { auth } from "@/lib/auth";
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
@@ -90,9 +89,7 @@ function SafeProviders({
 }) {
   return (
     <AppThemeProvider>
-      <AuthSessionProvider session={session}>
-        <AnalyticsProvider>{children}</AnalyticsProvider>
-      </AuthSessionProvider>
+      <AuthSessionProvider session={session}>{children}</AuthSessionProvider>
     </AppThemeProvider>
   );
 }
