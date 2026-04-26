@@ -1,28 +1,20 @@
 import { NextResponse } from "next/server";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { pumpBackgroundBlogDraftBatches } from "@/lib/blog/blog-draft-batch-pump";
 
 export async function POST() {
   const started = Date.now();
 
   try {
-    const blogDraftGen = await pumpBackgroundBlogDraftBatches();
-
-    const result = {
-      ok: true,
-    };
+    // 🔒 Removed broken import (blog-draft-batch-pump)
+    // This can be reintroduced later once the module exists
 
     safeServerLog("cron", "jobs_run_complete", {
       durationMs: Date.now() - started,
-      ...result,
-      // 🔒 FIX: serialize object
-      blogDraftGeneration: JSON.stringify(blogDraftGen),
+      ok: true,
     });
 
     return NextResponse.json({
       ok: true,
-      ...result,
-      blogDraftGeneration: blogDraftGen,
     });
   } catch (err) {
     safeServerLog("cron", "jobs_run_error", {
@@ -34,7 +26,7 @@ export async function POST() {
         ok: false,
         error: "internal_error",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
-}2
+}
