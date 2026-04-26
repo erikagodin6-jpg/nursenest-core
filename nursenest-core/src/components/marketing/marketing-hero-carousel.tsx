@@ -90,7 +90,10 @@ function MarketingHeroCarouselInteractive({
   const lastSlideFingerprintRef = useRef<string | null>(null);
   const lastAnalyticsSlideIndex = useRef<number | null>(null);
 
-  const slideFingerprint = slides.map((s) => `${s.objectKey}\u0001${s.publicUrl}`).join("\u0002");
+  /** Avoid throws if a caller ever passes a sparse/invalid slide list (would crash next/image + fingerprint effects). */
+  const slideFingerprint = slides
+    .map((s) => `${s?.objectKey ?? ""}\u0001${s?.publicUrl ?? ""}`)
+    .join("\u0002");
 
   useEffect(() => {
     if (lastSlideFingerprintRef.current === slideFingerprint) return;
@@ -285,14 +288,20 @@ function MarketingHeroCarouselInteractive({
           />
         ) : null}
         {slides.map((slide, index) => {
+          if (!slide?.objectKey?.trim() || !slide?.publicUrl?.trim()) return null;
           if (failed.has(index)) return null;
           if (index > 0 && !extraSlidesMounted) return null;
           const chain = getMarketingHeroImageUrlChain({
             objectKey: slide.objectKey,
             publicCdnUrl: slide.publicUrl,
           });
-          const tier = Math.min(heroTierByIndex[index] ?? 0, chain.length - 1);
-          const src = chain[tier];
+          const maxTier = Math.max(0, chain.length - 1);
+          const tier = Math.min(Math.max(0, heroTierByIndex[index] ?? 0), maxTier);
+          const rawSrc = chain[tier];
+          const src =
+            typeof rawSrc === "string" && rawSrc.trim()
+              ? rawSrc.trim()
+              : MARKETING_HERO_LOCAL_FALLBACK;
           const active = index === current;
           const lcp = mediaFrame === "hero" && index === 0;
           const loadLazy = isBelowFoldSection ? index > 0 : !lcp && index > 0;
@@ -512,8 +521,13 @@ function MarketingHeroCarouselMobileLite({
     objectKey: slide0.objectKey,
     publicCdnUrl: slide0.publicUrl,
   });
-  const tierClamped = Math.min(tier, chain.length - 1);
-  const src = chain[tierClamped];
+  const maxTier = Math.max(0, chain.length - 1);
+  const tierClamped = Math.min(Math.max(0, tier), maxTier);
+  const rawSrc = chain[tierClamped];
+  const src =
+    typeof rawSrc === "string" && rawSrc.trim()
+      ? rawSrc.trim()
+      : MARKETING_HERO_LOCAL_FALLBACK;
   const lcp = mediaFrame === "hero";
 
   return (

@@ -22,19 +22,10 @@ function safeT(t: ((key: string) => string) | undefined, key: string, fallback: 
 }
 
 export function HomeHeroScreenshotSection() {
-  let locale = "en";
-  let region = "CA";
-  let t: ((key: string) => string) | undefined;
-
-  try {
-    const ctx = useMarketingI18n();
-    locale = ctx.locale || "en";
-    t = ctx.t;
-  } catch {}
-
-  try {
-    region = useNursenestRegion()?.region || "CA";
-  } catch {}
+  const { locale: ctxLocale, t } = useMarketingI18n();
+  const { region: ctxRegion } = useNursenestRegion();
+  const locale = ctxLocale || "en";
+  const region = ctxRegion || "CA";
 
   const slides = useMemo(() => {
     try {
