@@ -20,7 +20,6 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const IDEMPOTENCY_WINDOW_MS = 120_000;
 
-/** Create one durable background job (returns immediately; cron advances items). */
 export async function POST(req: Request) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
@@ -30,11 +29,13 @@ export async function POST(req: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: "Invalid body", details: parsed.error.flatten() }, { status: 400 });
   }
+
   const d = parsed.data;
   const isShell = "jobKind" in d && d.jobKind === "rn_topic_map_shell";
 
   const tryIdempotentReplay = async (idempotencyKey: string | null | undefined, droppedShortLines: number) => {
     if (!idempotencyKey || !gate.admin.userId) return null;
+
     const existing = await prisma.blogDraftGenerationBatch.findFirst({
       where: {
         createdById: gate.admin.userId,
@@ -43,7 +44,9 @@ export async function POST(req: Request) {
       },
       orderBy: { createdAt: "desc" },
     });
+
     if (!existing) return null;
+
     const job = await loadBlogGenerationJobForAdmin(existing.id);
     return NextResponse.json({
       ok: true,
@@ -54,12 +57,16 @@ export async function POST(req: Request) {
     });
   };
 
+  // =========================
+  // SHELL JOB
+  // =========================
   if (isShell) {
     const replay = await tryIdempotentReplay(d.idempotencyKey, 0);
     if (replay) return replay;
 
     const { loadRnTopicMapBatchRows } = await import("@/lib/admin/blog-topic-map-batch");
     const rows = loadRnTopicMapBatchRows(RN_TOPIC_MAP_SHELL_MAX_ITEMS);
+
     const shellErr = assertRnTopicMapShellRowCount(rows.length);
     if (shellErr) {
       return NextResponse.json({ error: shellErr }, { status: 400 });
@@ -102,24 +109,33 @@ export async function POST(req: Request) {
     });
 
     const job = await loadBlogGenerationJobForAdmin(batch.id);
-    return NextResponse.json({
-      ok: true,
-      jobId: batch.id,
-      droppedShortLines: 0,
-      job,
-    });
+    return NextResponse.json({ ok: true, jobId: batch.id, droppedShortLines: 0, job });
   }
+
+  // =========================
+  // AI JOB (FIXED SECTION)
+  // =========================
 
   const aiBlock = adminAiGenerationHttpBlock();
   if (aiBlock) return aiBlock;
 
+  // 🔥 CRITICAL FIX — type narrowing
+  if (!("topicsText" in d)) {
+    return NextResponse.json(
+      { error: "topicsText is required for AI generation jobs" },
+      { status: 400 }
+    );
+  }
+
   const { topics, droppedShortLines } = parseDraftBatchTopicLines(d.topicsText);
+
   if (topics.length === 0) {
     return NextResponse.json(
       { error: "No valid topics (each line must be at least 3 characters after trim)." },
-      { status: 400 },
+      { status: 400 }
     );
   }
+
   const overLimit = assertTopicsWithinBatchLimit(topics.length);
   if (overLimit) {
     return NextResponse.json({ error: overLimit }, { status: 400 });
@@ -129,6 +145,7 @@ export async function POST(req: Request) {
   if (replayAi) return replayAi;
 
   const country = d.country ?? "unspecified";
+
   const batch = await prisma.blogDraftGenerationBatch.create({
     data: {
       exam: d.exam,
@@ -166,6 +183,7 @@ export async function POST(req: Request) {
   });
 
   const job = await loadBlogGenerationJobForAdmin(batch.id);
+
   return NextResponse.json({
     ok: true,
     jobId: batch.id,
@@ -174,17 +192,22 @@ export async function POST(req: Request) {
   });
 }
 
-/** List recent generation jobs (background batches). */
 export async function GET(req: Request) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
   const { searchParams } = new URL(req.url);
+
   const limit = Math.min(50, Math.max(1, Number(searchParams.get("limit") ?? "20") || 20));
   const phaseRaw = searchParams.get("status")?.trim().toLowerCase();
   const all = searchParams.get("all") === "1";
+
   const phase =
-    phaseRaw === "queued" || phaseRaw === "running" || phaseRaw === "completed" || phaseRaw === "cancelled" || phaseRaw === "partial"
+    phaseRaw === "queued" ||
+    phaseRaw === "running" ||
+    phaseRaw === "completed" ||
+    phaseRaw === "cancelled" ||
+    phaseRaw === "partial"
       ? (phaseRaw as BlogGenerationJobPhase)
       : undefined;
 
