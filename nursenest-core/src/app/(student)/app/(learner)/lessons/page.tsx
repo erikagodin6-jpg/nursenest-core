@@ -195,9 +195,7 @@ export default async function LessonsPage({ searchParams }: Props) {
           <FreemiumCrossTrackNudge variant="questions_exhausted" />
         ) : null}
 
-        {userId && snap && freemiumLessonsExhausted(snap) ? (
-          <FreemiumPreviewExhaustedSurface kind="lessons" />
-        ) : null}
+        {userId && snap && freemiumLessonsExhausted(snap) ? <FreemiumPreviewExhaustedSurface kind="lessons" /> : null}
       </div>
     );
   }
@@ -213,19 +211,13 @@ export default async function LessonsPage({ searchParams }: Props) {
   const pageRequested = Math.min(rawPage, maxOffsetPage);
 
   const topicSlugFilter =
-    typeof sp.topicSlug === "string" && sp.topicSlug.trim().length > 0
-      ? sp.topicSlug.trim().toLowerCase()
-      : null;
+    typeof sp.topicSlug === "string" && sp.topicSlug.trim().length > 0 ? sp.topicSlug.trim().toLowerCase() : null;
 
   const topicFilter =
-    !topicSlugFilter && typeof sp.topic === "string" && sp.topic.trim().length > 0
-      ? sp.topic.trim()
-      : null;
+    !topicSlugFilter && typeof sp.topic === "string" && sp.topic.trim().length > 0 ? sp.topic.trim() : null;
 
   const pathwayIdFilter =
-    typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 0
-      ? sp.pathwayId.trim()
-      : null;
+    typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 0 ? sp.pathwayId.trim() : null;
 
   const learnerPathRow = await withDatabaseFallbackTimeout(
     async () =>
@@ -280,12 +272,7 @@ export default async function LessonsPage({ searchParams }: Props) {
         });
       }
 
-      const contentScopedWhere =
-        contentFilters.length > 0
-          ? {
-              AND: [contentWhere, ...contentFilters],
-            }
-          : contentWhere;
+      const contentScopedWhere = contentFilters.length > 0 ? { AND: [contentWhere, ...contentFilters] } : contentWhere;
 
       const contentTotal = await prisma.contentItem.count({ where: contentScopedWhere });
 
@@ -446,7 +433,6 @@ export default async function LessonsPage({ searchParams }: Props) {
   );
 
   let lessonsHubInventorySource: "primary" | "degraded_snapshot" = "primary";
-
   let lessonsBlock: LessonsListBlock;
 
   if (lessonsBlockFromDb !== null) {
@@ -477,7 +463,6 @@ export default async function LessonsPage({ searchParams }: Props) {
 
     if (fromSnap && snap) {
       lessonsHubInventorySource = "degraded_snapshot";
-
       const age = publishedSnapshotAgeMs(snap.capturedAt);
 
       safeServerLog("page_lessons", "critical_study_load_diagnostics", {
@@ -491,7 +476,7 @@ export default async function LessonsPage({ searchParams }: Props) {
         fallback_used: "true",
         pathway_id: pathwayForSnap ?? undefined,
         locale: marketingLocale,
-        exam: entitlement !== "error" ? String(entitlement.country ?? "") : "",
+        exam: String(entitlement.country ?? ""),
         snapshot_version: snap.version.slice(0, 120),
       });
 
@@ -513,14 +498,12 @@ export default async function LessonsPage({ searchParams }: Props) {
         fallback_used: "false",
         pathway_id: pathwayForSnap ?? undefined,
         locale: marketingLocale,
-        exam: entitlement !== "error" ? String(entitlement.country ?? "") : "",
+        exam: String(entitlement.country ?? ""),
       });
 
       return (
         <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
-          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">
-            {t("learner.lessons.list.title")}
-          </h1>
+          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.title")}</h1>
           <ContentEmptyState
             variant="generic"
             headline="Could not load your lesson list"
@@ -611,102 +594,19 @@ export default async function LessonsPage({ searchParams }: Props) {
         <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)] sm:text-[1.7rem]">
           {t("learner.lessons.list.title")}
         </h1>
-        <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">
-          {t("learner.lessons.list.subscriberIntro")}
-        </p>
+        <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.lessons.list.subscriberIntro")}</p>
       </div>
 
       {lessonsHubInventorySource === "degraded_snapshot" ? <LearnerStudyLiveSyncBanner /> : null}
 
-      {(topicFilter || topicSlugFilter) && lessonsBlock.source === "pathway_lessons" ? (
-        <div className="nn-card border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-4 text-sm text-[var(--semantic-text-secondary)]">
-          <p className="font-semibold text-[var(--semantic-text-primary)]">
-            {t("learner.lessons.list.topicFilterTitle")}
-          </p>
-          <p className="mt-1">
-            {t("learner.lessons.list.topicFilterBody", {
-              label: topicSlugFilter ?? topicFilter ?? "",
-            })}{" "}
-            <Link className="font-medium text-[var(--semantic-brand)] underline underline-offset-2" href="/app/lessons">
-              {t("learner.lessons.list.topicFilterClear")}
-            </Link>
-          </p>
-        </div>
-      ) : (topicFilter || topicSlugFilter) && lessonsBlock.source !== "pathway_lessons" ? (
-        <div className="nn-card border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 text-sm text-[var(--semantic-text-secondary)]">
-          <p>{t("learner.lessons.list.topicFilterIgnored")}</p>
-        </div>
-      ) : null}
-
       <Suspense fallback={<div className="h-24 animate-pulse rounded-xl bg-[var(--semantic-panel-muted)]" />}>
-        <LearnerLessonsSearchToolbar
-          initialQ={qEffective ?? ""}
-          label="Search lessons"
-          placeholder="Search by title, topic, or keyword"
-        />
+        <LearnerLessonsSearchToolbar initialQ={qEffective ?? ""} label="Search lessons" placeholder="Search by title, topic, or keyword" />
       </Suspense>
 
       {listSummaryLine ? (
         <p className="text-sm font-medium text-[var(--semantic-text-secondary)]" data-testid="lessons-hub-list-summary">
           {listSummaryLine}
         </p>
-      ) : null}
-
-      {resolvedRenderableLessons.length === 0 && lessonsHub.showCatalogEmpty ? (
-        <div className="nn-card mt-4 space-y-3 p-6 text-sm text-muted">
-          <p className="font-semibold text-[var(--semantic-text-primary)]">No lessons available yet for this topic</p>
-          <p>{t("learner.lessons.list.emptyList")}</p>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/app/lessons"
-              className="inline-flex items-center rounded-xl border border-[var(--semantic-border-soft)] px-4 py-2 font-semibold text-[var(--semantic-brand)] hover:underline"
-            >
-              Explore available lessons
-            </Link>
-            <Link
-              href={catHref}
-              className="inline-flex items-center rounded-xl border border-[var(--semantic-border-soft)] px-4 py-2 font-semibold text-[var(--semantic-brand)] hover:underline"
-            >
-              Start adaptive exam
-            </Link>
-          </div>
-        </div>
-      ) : null}
-
-      {resolvedRenderableLessons.length === 0 && lessonsHub.showFilterMissEmpty ? (
-        <div className="nn-card mt-4 space-y-3 border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-warm)] p-6 text-sm text-[var(--semantic-text-secondary)]">
-          <p className="font-semibold text-[var(--semantic-text-primary)]">
-            {t("learner.lessons.list.filterNoMatchesTitle")}
-          </p>
-          <p>{t("learner.lessons.list.filterNoMatchesBody")}</p>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/app/lessons"
-              className="inline-flex items-center rounded-xl border border-[var(--semantic-border-soft)] px-4 py-2 font-semibold text-[var(--semantic-brand)] hover:underline"
-            >
-              {t("learner.lessons.list.topicFilterClear")}
-            </Link>
-          </div>
-          {lessonsHub.showCountMismatchHint ? (
-            <p className="text-xs text-[var(--semantic-text-secondary)]">
-              {t("learner.lessons.list.countMismatchHint")}
-            </p>
-          ) : null}
-        </div>
-      ) : null}
-
-      {resolvedRenderableLessons.length === 0 && lessonsHub.showCountMismatchHint && !lessonsHub.showFilterMissEmpty ? (
-        <div className="nn-card mt-4 space-y-2 border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-6 text-sm text-[var(--semantic-text-secondary)]">
-          <p className="font-semibold text-[var(--semantic-text-primary)]">
-            {t("learner.lessons.list.countMismatchHint")}
-          </p>
-          <Link
-            href="/app/lessons"
-            className="inline-flex items-center rounded-xl border border-[var(--semantic-border-soft)] px-4 py-2 font-semibold text-[var(--semantic-brand)] hover:underline"
-          >
-            {t("learner.lessons.list.topicFilterClear")}
-          </Link>
-        </div>
       ) : null}
 
       <div className="mt-4">
@@ -732,24 +632,6 @@ export default async function LessonsPage({ searchParams }: Props) {
       />
 
       <LearnerStudyQuickLinksCard t={t} id="lessons-study-quick-links" catHref={catHref} />
-
-      <aside className="nn-card border-[color-mix(in_srgb,var(--semantic-success)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-positive)] p-4 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
-        <p className="font-semibold text-[var(--semantic-text-primary)]">
-          {t("learner.lessons.list.studyRhythmTitle")}
-        </p>
-        <p className="mt-1">{t("learner.lessons.list.studyRhythmBody")}</p>
-      </aside>
-
-      <p className="text-sm text-[var(--semantic-text-secondary)]">
-        {t("learner.lessons.list.paginationExplainer", { pageSize: limitParsed })}{" "}
-        <Link
-          className="font-medium text-[var(--semantic-info)] underline decoration-[color-mix(in_srgb,var(--semantic-info)_35%,transparent)] underline-offset-2"
-          href="/lessons"
-        >
-          {t("learner.lessons.list.paginationLink")}
-        </Link>
-        {t("learner.lessons.list.paginationEnd")}
-      </p>
     </div>
   );
 }
