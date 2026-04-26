@@ -254,9 +254,9 @@ async function logBlogIndexDiagnosticsIfEnabled(args: {
     totalPostsReturned: args.posts.length,
     totalMatchingLiveFilter: args.totalMatchingLiveFilter,
     liveRowCountUnderBlogLiveWhere: liveRowCount,
-    statusesBreakdownPageSlice,
-    statusesBreakdownDbAll,
-    first20Slugs: args.posts.slice(0, 20).map((p) => p.slug),
+    statusesBreakdownPageSlice: JSON.stringify(statusesBreakdownPageSlice),
+    statusesBreakdownDbAll: JSON.stringify(statusesBreakdownDbAll),
+    first20Slugs: args.posts.slice(0, 20).map((p) => p.slug).join(","),
     page: args.page,
     pageSize: args.pageSize,
     usedStaticFallback: args.usedStaticFallback ? "1" : "0",
@@ -452,7 +452,7 @@ export async function getPublishedBlogPostsPage(
         cacheSource: "static_bundle_build_skip_db",
         page: safePage,
         pageSize: safeSize,
-        listLoad,
+        listLoad: JSON.stringify(listLoad),
       },
     });
     return { ...built, listLoad };
@@ -478,7 +478,7 @@ export async function getPublishedBlogPostsPage(
       meta: {
         page: safePage,
         pageSize: safeSize,
-        listLoad: primary.listLoad,
+        listLoad: JSON.stringify(primary.listLoad),
       },
     });
     return {

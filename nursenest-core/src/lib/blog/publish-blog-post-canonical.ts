@@ -251,14 +251,14 @@ function runRevalidateSafe(input: PublishBlogPostCanonicalInput, slug: string, t
       context: input.context,
       postId: input.postId,
       slug,
-      paths: ["/blog", `/blog/${slug}`],
+      paths: ["/blog", `/blog/${slug}`].join(","),
     });
   } catch (e) {
     safeServerLog("blog_publish", "blog_revalidate_deferred", {
       context: input.context,
       postId: input.postId,
       slug,
-      targets: ["/blog", `/blog/${slug}`],
+      targets: ["/blog", `/blog/${slug}`].join(","),
       error: e instanceof Error ? e.message : String(e),
       hint: "Call GET /api/revalidate?path=/blog and /api/revalidate?path=/blog/{slug} from an authorized context if needed.",
     });
