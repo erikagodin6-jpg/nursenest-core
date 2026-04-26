@@ -1,11 +1,45 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BookOpen, CheckCircle2, Lightbulb, X } from "lucide-react";
-import { FlashcardRichContent, flashcardTextMayContainMarkup } from "@/components/flashcards/flashcard-rich-content";
+import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-content";
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
-import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { stripRedundantMcqLetterPrefix } from "@/lib/questions/strip-mcq-option-letter-prefix";
+
+type PromptImageSplit = {
+  imageHtml: string | null;
+  remainingPrompt: string;
+};
+
+export function splitPromptLeadingImage(prompt: string | null | undefined): PromptImageSplit {
+  const raw = String(prompt ?? "").trim();
+
+  if (!raw) {
+    return { imageHtml: null, remainingPrompt: "" };
+  }
+
+  const leadingImageMatch = raw.match(/^<img\b[^>]*>\s*/i);
+
+  if (!leadingImageMatch) {
+    return { imageHtml: null, remainingPrompt: raw };
+  }
+
+  return {
+    imageHtml: leadingImageMatch[0].trim(),
+    remainingPrompt: raw.slice(leadingImageMatch[0].length).trim(),
+  };
+}
+
+export function firstTeachingLine(text: string | null | undefined): string {
+  const raw = String(text ?? "")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!raw) return "";
+
+  const sentenceMatch = raw.match(/^(.+?[.!?])(\s|$)/);
+  return sentenceMatch?.[1]?.trim() ?? raw;
+}
 
 export function FlashcardStudyQuestionStack({
   sessionModeLabel,
@@ -32,13 +66,14 @@ export function FlashcardStudyQuestionStack({
 
   useEffect(() => {
     if (!pickedLetter || revealed || !tutorMcq || !exam) return;
-    const id = requestAnimationFrame(() => onReveal());
+
+    const id = requestAnimationFrame(() => onReveal?.());
     return () => cancelAnimationFrame(id);
   }, [pickedLetter, revealed, tutorMcq, exam, onReveal]);
 
   const correctOptionText = exam
     ? stripRedundantMcqLetterPrefix(
-        exam.answerOptions.find((o) => o.letter === exam.correctLetter)?.text ?? ""
+        exam.answerOptions.find((o: any) => o.letter === exam.correctLetter)?.text ?? "",
       )
     : "";
 
@@ -48,106 +83,91 @@ export function FlashcardStudyQuestionStack({
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_360px] max-w-6xl mx-auto">
+    <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[1fr_360px]">
+      <div className="rounded-2xl border bg-white p-6 shadow">
+        <div className="mb-3 text-xs uppercase text-gray-400">{sessionModeLabel}</div>
 
-      {/* LEFT PANEL */}
-      <div className="bg-white rounded-2xl shadow p-6 border">
+        {topicLine ? <div className="mb-2 text-sm text-gray-500">{topicLine}</div> : null}
 
-        <div className="mb-3 text-xs uppercase text-gray-400">
-          {sessionModeLabel}
-        </div>
-
-        {topicLine && (
-          <div className="text-sm text-gray-500 mb-2">{topicLine}</div>
-        )}
-
-        {itemKindCaption && (
-          <div className="inline-block mb-3 text-xs px-2 py-1 rounded-full bg-blue-50 border text-blue-600">
+        {itemKindCaption ? (
+          <div className="mb-3 inline-block rounded-full border bg-blue-50 px-2 py-1 text-xs text-blue-600">
             {itemKindCaption}
           </div>
-        )}
+        ) : null}
 
-        {/* QUESTION */}
-        <div className="text-lg font-semibold mb-4">
-          <FlashcardRichContent text={prompt} />
+        <div className="mb-4 text-lg font-semibold">
+          <FlashcardRichContent text={String(prompt ?? "")} />
         </div>
 
-        {/* OPTIONS */}
-        {exam && (
+        {exam ? (
           <FlashcardExamMcqAnswerList
             exam={exam}
             revealed={revealed}
             pickedLetter={pickedLetter}
             tutorMcq={tutorMcq}
-            answerChoicesHeading={labels.answerChoicesHeading}
-            revealHint={labels.revealHint}
+            answerChoicesHeading={labels?.answerChoicesHeading ?? "Answer choices"}
+            revealHint={labels?.revealHint ?? "Choose an answer to reveal the rationale."}
             onPickLetter={commitPick}
           />
-        )}
+        ) : null}
       </div>
 
-      {/* RIGHT PANEL */}
-      <div className="bg-white rounded-2xl shadow p-6 border flex flex-col gap-4">
-
+      <div className="flex flex-col gap-4 rounded-2xl border bg-white p-6 shadow">
         {!revealed ? (
-          <div className="text-sm text-gray-400 text-center py-10">
-            {labels.revealHint}
+          <div className="py-10 text-center text-sm text-gray-400">
+            {labels?.revealHint ?? "Reveal the answer to review the rationale."}
           </div>
         ) : (
           <>
-            {/* CORRECT ANSWER */}
-            <div className="bg-green-50 border rounded-xl p-4">
-              <div className="text-xs uppercase text-green-600 font-bold mb-1">
-                {labels.answerHeading}
+            <div className="rounded-xl border bg-green-50 p-4">
+              <div className="mb-1 text-xs font-bold uppercase text-green-600">
+                {labels?.answerHeading ?? "Answer"}
               </div>
 
               <div className="flex items-start gap-2">
-                <span className="bg-green-600 text-white text-xs w-6 h-6 flex items-center justify-center rounded-full">
-                  {exam?.correctLetter}
-                </span>
+                {exam?.correctLetter ? (
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-600 text-xs text-white">
+                    {exam.correctLetter}
+                  </span>
+                ) : null}
 
-                <span className="text-sm font-medium">
-                  {correctOptionText || answer}
-                </span>
+                <span className="text-sm font-medium">{correctOptionText || answer}</span>
               </div>
             </div>
 
-            {/* WHY CORRECT */}
-            {explanation && (
-              <div className="border rounded-xl p-4">
-                <div className="text-xs uppercase font-semibold text-gray-500 mb-1">
-                  {labels.whyCorrectHeading}
+            {explanation ? (
+              <div className="rounded-xl border p-4">
+                <div className="mb-1 text-xs font-semibold uppercase text-gray-500">
+                  {labels?.whyCorrectHeading ?? "Why this is correct"}
                 </div>
-                <FlashcardRichContent text={explanation} />
+                <FlashcardRichContent text={String(explanation)} />
               </div>
-            )}
+            ) : null}
 
-            {/* WHY INCORRECT */}
-            {exam && (
-              <div className="border rounded-xl p-4">
-                <div className="text-xs uppercase font-semibold text-gray-500 mb-2">
-                  {labels.whyIncorrectHeading}
+            {exam?.rationaleIncorrect?.length ? (
+              <div className="rounded-xl border p-4">
+                <div className="mb-2 text-xs font-semibold uppercase text-gray-500">
+                  {labels?.whyIncorrectHeading ?? "Why the others are incorrect"}
                 </div>
 
                 <div className="space-y-2 text-sm">
-                  {exam.rationaleIncorrect.map((r) => (
+                  {exam.rationaleIncorrect.map((r: any) => (
                     <div key={r.letter}>
                       <strong>{r.letter}</strong>: {r.rationale}
                     </div>
                   ))}
                 </div>
               </div>
-            )}
+            ) : null}
 
-            {/* CLINICAL PEARL */}
-            {pearl && (
-              <div className="bg-yellow-50 border rounded-xl p-4">
-                <div className="text-xs uppercase font-semibold text-gray-500 mb-1">
-                  {labels.takeawayHeading}
+            {pearl ? (
+              <div className="rounded-xl border bg-yellow-50 p-4">
+                <div className="mb-1 text-xs font-semibold uppercase text-gray-500">
+                  {labels?.takeawayHeading ?? "Clinical pearl"}
                 </div>
-                <FlashcardRichContent text={pearl} />
+                <FlashcardRichContent text={String(pearl)} />
               </div>
-            )}
+            ) : null}
           </>
         )}
       </div>
