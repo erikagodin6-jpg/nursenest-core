@@ -1,7 +1,7 @@
 import "server-only";
 
 import path from "path";
-import { existsSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import type { I18nShardFilename } from "@shared/i18n-shard-policy";
@@ -62,7 +62,10 @@ function readShard(
   try {
     const file = path.join(baseDir, locale, `${shard}.json`);
     if (!existsSync(file)) return {};
-    return require(file);
+    const parsed = JSON.parse(readFileSync(file, "utf8"));
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? (parsed as Record<string, string>)
+      : {};
   } catch {
     return {};
   }
