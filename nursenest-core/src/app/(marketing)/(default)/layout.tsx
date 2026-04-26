@@ -37,6 +37,7 @@ import { loadRenderTrace } from "@/lib/observability/deferred-render-trace";
 import { getStaffSession } from "@/lib/auth/staff-session";
 import { MarketingPublicContentEditProvider } from "@/components/marketing/marketing-public-content-edit-provider";
 import { loadMarketingPublicContentOverridesForLocale } from "@/lib/marketing/load-marketing-public-content-overrides";
+import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-main-error-boundary";
 import type { CountryCode } from "@/lib/marketing/countries/types";
 
 export const dynamic = "force-dynamic";
@@ -116,7 +117,9 @@ function marketingDefaultLayoutStaticShellForHome({
               <CheckoutGlobalRegionContextPathStamp />
               <MarketingDefaultLayoutChromeFailsafeShell>
                 <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
-                  {children}
+                  <MarketingMainErrorBoundary name="marketing_default_static_main">
+                    {children}
+                  </MarketingMainErrorBoundary>
                 </MarketingMobileMotionShell>
               </MarketingDefaultLayoutChromeFailsafeShell>
             </MarketingHeaderGlobalRegionServerBridge>
@@ -395,12 +398,16 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                             publicContentOverrides={publicContentOverrides}
                           >
                             <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
-                              {children}
+                              <MarketingMainErrorBoundary name="marketing_default_main">
+                                {children}
+                              </MarketingMainErrorBoundary>
                             </MarketingMobileMotionShell>
                           </MarketingMainI18nShards>
                         ) : (
                           <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
-                            {children}
+                            <MarketingMainErrorBoundary name="marketing_default_main">
+                              {children}
+                            </MarketingMainErrorBoundary>
                           </MarketingMobileMotionShell>
                         )}
                       </main>
@@ -472,7 +479,9 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                   <CheckoutGlobalRegionContextPathStamp />
                   <MarketingDefaultLayoutChromeFailsafeShell>
                     <MarketingMobileMotionShell serverNarrowViewportHint={failsafeNarrowHint}>
-                      {children}
+                      <MarketingMainErrorBoundary name="marketing_default_main_failsafe">
+                        {children}
+                      </MarketingMainErrorBoundary>
                     </MarketingMobileMotionShell>
                   </MarketingDefaultLayoutChromeFailsafeShell>
                 </MarketingHeaderGlobalRegionServerBridge>

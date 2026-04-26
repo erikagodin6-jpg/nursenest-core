@@ -12,10 +12,14 @@ export default function MarketingDefaultSegmentError({
 }) {
   const message = `${error?.message ?? ""} ${error?.digest ?? ""}`.toLowerCase();
 
+  /**
+   * Avoid matching generic substrings like "home" (matches Next chunk filenames such as
+   * `home-marketing-home-desktop-below-fold`, stack frames, hostnames, etc.).
+   */
   const likelyHomeCrash =
     message.includes("marketing_home") ||
-    message.includes("home") ||
-    message.includes("homepage");
+    message.includes("marketing_homepage") ||
+    message.includes("pages.home.");
 
   if (likelyHomeCrash) {
     return <MarketingHomeSafeMode layout="embedded" onRetry={reset} />;
