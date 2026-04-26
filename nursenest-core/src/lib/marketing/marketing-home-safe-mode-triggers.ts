@@ -1,3 +1,5 @@
+import { logNnMarketingClientError } from "@/lib/marketing/nn-marketing-client-error-log";
+
 /**
  * When to show MarketingHomeSafeMode vs a generic error card.
  * Narrow markers only — never match generic "home" (chunk paths, stacks, etc.).
@@ -20,6 +22,7 @@ export function logMarketingRouteErrorClient(
   extra?: Record<string, unknown>,
 ): void {
   try {
+    logNnMarketingClientError(`marketing_route:${surface}`, error);
     const stack = typeof error?.stack === "string" ? error.stack.slice(0, 4000) : undefined;
     console.error(
       "[nn-marketing-route-error]",

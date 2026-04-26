@@ -1,11 +1,15 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { NnErrorCard } from "@/components/error/nn-error-card";
 import { MarketingHomeSafeMode } from "@/components/marketing/marketing-home-safe-mode";
 import {
   logMarketingRouteErrorClient,
   shouldUseMarketingHomeSafeModeFromError,
 } from "@/lib/marketing/marketing-home-safe-mode-triggers";
+
+const ERROR_BOUNDARY_SOURCE = "src/app/(marketing)/error.tsx:MarketingSegmentError";
 
 export default function MarketingSegmentError({
   error,
@@ -14,6 +18,25 @@ export default function MarketingSegmentError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  useEffect(() => {
+    try {
+      const stack =
+        typeof error?.stack === "string" ? error.stack.slice(0, 12_000) : undefined;
+      console.error(
+        "[nn-homepage-error-boundary]",
+        JSON.stringify({
+          boundary: ERROR_BOUNDARY_SOURCE,
+          name: error?.name,
+          message: error?.message,
+          digest: error?.digest,
+          stack,
+        }),
+      );
+    } catch {
+      /* ignore */
+    }
+  }, [error]);
+
   logMarketingRouteErrorClient("marketing_segment_error_tsx", error);
 
   if (shouldUseMarketingHomeSafeModeFromError(error)) {

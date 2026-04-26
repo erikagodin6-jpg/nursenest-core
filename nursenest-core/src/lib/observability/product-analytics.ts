@@ -62,7 +62,8 @@ export function trackProductEvent(
   props?: Record<string, ProductAnalyticsScalar>,
 ): void {
   if (typeof window === "undefined") return;
-  initPosthogClient();
+  /** Avoid unhandled rejections if `posthog-js` dynamic import fails during homepage hydration. */
+  void initPosthogClient().catch(() => {});
   queueMicrotask(() => {
     try {
       trackClientEvent(event, props);

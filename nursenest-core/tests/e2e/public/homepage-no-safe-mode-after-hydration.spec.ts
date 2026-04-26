@@ -61,7 +61,8 @@ test.describe("Homepage stays real after hydration", () => {
       `Non-OK /_next/static responses: ${JSON.stringify(badStaticChunks)}`,
     ).toEqual([]);
 
-    await expect(page.getByText("We're updating the site right now")).toHaveCount(0);
+    /** {@link MarketingHomeEmergencyFallback} uses a typographic apostrophe in “We’re”. */
+    await expect(page.getByText(/updating the site right now/i)).toHaveCount(0);
 
     await expect(page.locator('[data-nn-home-safe-mode="1"]')).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /^Just a moment$/i })).toHaveCount(0);
@@ -72,6 +73,8 @@ test.describe("Homepage stays real after hydration", () => {
     const mainH1 = main.getByRole("heading", { level: 1 }).first();
     await expect(mainH1).toBeVisible({ timeout: 30_000 });
     await expect(mainH1).not.toHaveText(/^\s*$/);
+    const heroHeadingText = (await mainH1.innerText()).trim();
+    expect(heroHeadingText.length).toBeGreaterThan(0);
     /** Marketing home column should expose exactly one hero `<h1>` (no duplicated body). */
     await expect(page.locator("main h1")).toHaveCount(1);
 
@@ -85,6 +88,7 @@ test.describe("Homepage stays real after hydration", () => {
     await expect(page.locator('[data-nn-home-safe-mode="1"]')).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /^Just a moment$/i })).toHaveCount(0);
     await expect(mainH1).toBeVisible();
+    await expect(mainH1).toHaveText(heroHeadingText);
     await expect(page.locator("main h1")).toHaveCount(1);
 
     const fatal = pageErrors.filter((msg) => !PAGEERROR_ALLOWLIST.some((re) => re.test(msg)));

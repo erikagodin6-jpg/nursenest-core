@@ -97,7 +97,11 @@ export default function HomeRestoredClient({
   const explorePricingHref = withMarketingLocale(locale, "/pricing");
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    try {
+      window.scrollTo(0, 0);
+    } catch {
+      /* ignore — rare sandboxed / embedded browsers */
+    }
   }, []);
 
   /* -------- SAFE STATS -------- */

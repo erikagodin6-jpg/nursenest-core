@@ -1,0 +1,67 @@
+/**
+ * Production-build smoke: `/` must stay on real marketing content (no emergency error shell).
+ *
+ * Run after `npm run build && npm run start` with BASE_URL (default http://localhost:3000):
+ *   npx playwright test tests/e2e/public/homepage-production-smoke.spec.ts --project=chromium
+ *   npx playwright test tests/e2e/public/homepage-production-smoke.spec.ts --project=webkit
+ */
+import { expect, test } from "@playwright/test";
+
+test.describe("Homepage production smoke", () => {
+  test.use({ viewport: { width: 1280, height: 800 } });
+
+  test("5s settle — no error shell; hero visible; diagnostics clean", async ({ page }) => {
+    const pageErrors: string[] = [];
+    const consoleErrors: string[] = [];
+    const failedRequests: { url: string; failure: string }[] = [];
+    const badChunks: { url: string; status: number }[] = [];
+
+    page.on("pageerror", (err) => {
+      pageErrors.push(err?.message ?? String(err));
+    });
+    page.on("console", (msg) => {
+      if (msg.type() === "error") consoleErrors.push(msg.text());
+    });
+    page.on("requestfailed", (req) => {
+      failedRequests.push({ url: req.url(), failure: req.failure()?.errorText ?? "unknown" });
+    });
+    page.on("response", (res) => {
+      const url = res.url();
+      if (!url.includes("/_next/static/")) return;
+      const status = res.status();
+      if (status !== 200 && status !== 304) {
+        badChunks.push({ url, status });
+      }
+    });
+
+    await page.goto("/", { waitUntil: "load", timeout: 120_000 });
+
+    expect(badChunks, `Bad static chunks: ${JSON.stringify(badChunks)}`).toEqual([]);
+
+    await page.waitForTimeout(5000);
+
+    await expect(page.getByRole("heading", { name: /^Just a moment$/i })).toHaveCount(0);
+    await expect(page.getByText(/temporary hiccup/i)).toHaveCount(0);
+    await expect(page.getByRole("link", { name: /Browse exam pathways/i })).toHaveCount(0);
+
+    await expect(page.locator('[data-nn-home-safe-mode="1"]')).toHaveCount(0);
+
+    const main = page.locator("main");
+    await expect(main).toBeVisible();
+    const mainH1 = main.getByRole("heading", { level: 1 }).first();
+    await expect(mainH1).toBeVisible();
+    await expect(mainH1).not.toHaveText(/^\s*$/);
+
+    const fatalPage = pageErrors.filter(Boolean);
+    expect(fatalPage, `pageerror: ${fatalPage.join(" | ")}`).toEqual([]);
+
+    const hydrationNoise = /hydration|did not match/i;
+    const fatalConsole = consoleErrors.filter(
+      (t) => !hydrationNoise.test(t) && t.includes("Minified React error"),
+    );
+    expect(fatalConsole, `console error: ${fatalConsole.join(" | ")}`).toEqual([]);
+
+    const chunkFailed = failedRequests.filter((f) => f.url.includes("/_next/static/"));
+    expect(chunkFailed, `chunk requestfailed: ${JSON.stringify(chunkFailed)}`).toEqual([]);
+  });
+});
