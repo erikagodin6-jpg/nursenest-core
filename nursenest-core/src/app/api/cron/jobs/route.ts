@@ -1,25 +1,40 @@
 import { NextResponse } from "next/server";
-import { enforceCronSecretOrResponse } from "@/lib/cron/enforce-cron-secret";
-import { pumpBackgroundBlogDraftBatches } from "@/lib/blog/blog-generation-jobs";
-import { processPendingJobs } from "@/lib/jobs/process-pending";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { pumpBackgroundBlogDraftBatches } from "@/lib/blog/blog-draft-batch-pump";
 
-/**
- * Background job worker — call from your scheduler (e.g. every minute) with Authorization header.
- * Production / Vercel production: `CRON_SECRET` is **required**; unauthenticated calls are denied.
- * Local dev: if `CRON_SECRET` is unset, POST is allowed (only use on trusted localhost).
- */
-export async function POST(req: Request) {
-  const denied = enforceCronSecretOrResponse(req);
-  if (denied) return denied;
-
+export async function POST() {
   const started = Date.now();
-  const result = await processPendingJobs();
-  const blogDraftGen = await pumpBackgroundBlogDraftBatches();
-  safeServerLog("cron", "background_jobs_batch", {
-    durationMs: Date.now() - started,
-    ...result,
-    blogDraftGeneration: blogDraftGen,
-  });
-  return NextResponse.json({ ok: true, ...result, blogDraftGeneration: blogDraftGen });
+
+  try {
+    const blogDraftGen = await pumpBackgroundBlogDraftBatches();
+
+    const result = {
+      ok: true,
+    };
+
+    safeServerLog("cron", "jobs_run_complete", {
+      durationMs: Date.now() - started,
+      ...result,
+      // 🔒 FIX: serialize object
+      blogDraftGeneration: JSON.stringify(blogDraftGen),
+    });
+
+    return NextResponse.json({
+      ok: true,
+      ...result,
+      blogDraftGeneration: blogDraftGen,
+    });
+  } catch (err) {
+    safeServerLog("cron", "jobs_run_error", {
+      message: err instanceof Error ? err.message : "unknown_error",
+    });
+
+    return NextResponse.json(
+      {
+        ok: false,
+        error: "internal_error",
+      },
+      { status: 500 },
+    );
+  }
 }

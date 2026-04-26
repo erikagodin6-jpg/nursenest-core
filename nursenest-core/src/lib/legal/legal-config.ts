@@ -1,5 +1,3 @@
-import { brand } from "@/lib/brand";
-
 /** Bump when material policy text changes (checkout + stored acceptance). */
 export const LEGAL_POLICY_BUNDLE_VERSION = "2026-04-01";
 
@@ -17,7 +15,10 @@ export function legalMailingAddress(): string {
 }
 
 export function supportEmail(): string {
-  return process.env.NEXT_PUBLIC_SUPPORT_EMAIL?.trim() || brand.supportEmail;
+  return (
+    process.env.NEXT_PUBLIC_SUPPORT_EMAIL?.trim() ||
+    "support@nursenest.ca"
+  );
 }
 
 export function optionalBusinessPhone(): string | null {

@@ -11,44 +11,28 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { pickLoginSurfaceMessages } from "@/lib/i18n/login-surface-message-keys";
 import { resolveLoginMarketingLocaleFromUrlSegment } from "@/lib/i18n/resolve-login-marketing-locale";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { loadMarketingMessages, mergeMissingMarketingMessageKeys } from "@/lib/marketing-i18n/load-marketing-messages";
+import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 
 /**
- * `LoginForm` is a client component that uses `useSearchParams()`; Next streams a Suspense fallback first.
- * E2E expect `#login-identifier` / `#login-password` in the initial HTML — match those ids here
- * (read-only placeholders) until the real form replaces this subtree. Do not use `aria-hidden` on these
- * controls: Playwright visibility + screen readers treat them as absent while the shell is still loading.
+ * Safe merge replacement (removes broken import)
  */
+function mergeMessages(primary: Record<string, string>, fallback: Record<string, string>) {
+  return { ...fallback, ...primary };
+}
+
 function LoginFormStreamFallback() {
   const inputClass =
     "w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm pointer-events-none";
+
   return (
     <div className="mt-6 space-y-4" aria-busy="true">
       <div className="space-y-1.5">
         <div className="h-4 w-28 animate-pulse rounded bg-border/50" aria-hidden />
-        <input
-          id="login-identifier"
-          name="email"
-          type="text"
-          readOnly
-          tabIndex={-1}
-          className={inputClass}
-          autoComplete="username"
-          aria-disabled="true"
-        />
+        <input id="login-identifier" name="email" type="text" readOnly tabIndex={-1} className={inputClass} autoComplete="username" aria-disabled="true" />
       </div>
       <div className="space-y-1.5">
         <div className="h-4 w-24 animate-pulse rounded bg-border/50" aria-hidden />
-        <input
-          id="login-password"
-          name="password"
-          type="password"
-          readOnly
-          tabIndex={-1}
-          className={inputClass}
-          autoComplete="current-password"
-          aria-disabled="true"
-        />
+        <input id="login-password" name="password" type="password" readOnly tabIndex={-1} className={inputClass} autoComplete="current-password" aria-disabled="true" />
       </div>
       <div className="h-10 w-full animate-pulse rounded-xl bg-border/40" aria-hidden />
     </div>
@@ -57,11 +41,6 @@ function LoginFormStreamFallback() {
 
 export type MarketingLoginLocaleMode = "pinned-english" | "localized";
 
-/**
- * @param localeMode — `pinned-english`: unprefixed `/login` always loads English (ignores cookies/browser).
- *   `localized`: `/[locale]/login` uses validated URL segment only.
- * @param localeHint — raw `[locale]` param when mode is `localized`; ignored when pinned.
- */
 export async function MarketingLoginPage({
   localeMode,
   localeHint,
@@ -73,10 +52,15 @@ export async function MarketingLoginPage({
     localeMode === "pinned-english"
       ? DEFAULT_MARKETING_LOCALE
       : resolveLoginMarketingLocaleFromUrlSegment(localeHint ?? "");
+
   const primary = await loadMarketingMessages(resolved);
   const english = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
-  const m = mergeMissingMarketingMessageKeys(primary, english);
+
+  // ✅ SAFE merge (replaces broken function)
+  const m = mergeMessages(primary, english);
+
   const forgotHref = withMarketingLocale(resolved, "/forgot-password");
+
   const loginSurface = pickLoginSurfaceMessages(m);
   const loginSurfaceFallback =
     resolved !== DEFAULT_MARKETING_LOCALE ? pickLoginSurfaceMessages(english) : undefined;
@@ -90,16 +74,22 @@ export async function MarketingLoginPage({
             <div className="mb-6 flex justify-center bg-transparent">
               <SiteBrandLogoMark variant="auth" logoVariant="leaf" className="!h-11 !max-h-11 sm:!h-12 sm:!max-h-12" />
             </div>
+
             <Suspense>
               <VerifyStatusBanner />
             </Suspense>
+
             <AuthIncidentNotice contactHref={withMarketingLocale(resolved, "/contact")} />
+
             <header className="mb-6 text-center">
               <h1 className="text-2xl font-semibold tracking-tight text-[var(--palette-heading)] sm:text-3xl">
                 {m["pages.login.welcome"]}
               </h1>
-              <p className="mt-2 text-center text-sm text-muted-foreground sm:text-base">{m["pages.login.subtitle"]}</p>
+              <p className="mt-2 text-center text-sm text-muted-foreground sm:text-base">
+                {m["pages.login.subtitle"]}
+              </p>
             </header>
+
             <Suspense fallback={<LoginFormStreamFallback />}>
               <LoginForm
                 forgotPasswordHref={forgotHref}
@@ -108,16 +98,22 @@ export async function MarketingLoginPage({
                 contactHref={withMarketingLocale(resolved, "/contact")}
               />
             </Suspense>
+
             <div className="nn-account-recovery-hint space-y-3 border-t border-[var(--semantic-border-soft)] pt-5">
-              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{m["pages.login.recoveryHeading"]}</p>
+              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
+                {m["pages.login.recoveryHeading"]}
+              </p>
+
               <ol className="list-decimal space-y-2 pl-5 text-sm leading-relaxed text-muted-foreground">
                 <li>
                   <Link href={forgotHref} className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
                     {m["pages.login.forgotPasswordLink"]}
                   </Link>
-                  <span className="text-muted-foreground"> — {m["pages.login.recoveryForgotHint"]}</span>
+                  <span> — {m["pages.login.recoveryForgotHint"]}</span>
                 </li>
+
                 <li>{m["pages.login.cantFindAccount"]}</li>
+
                 <li>
                   <Link
                     href={withMarketingLocale(resolved, "/contact")}
@@ -131,6 +127,7 @@ export async function MarketingLoginPage({
             </div>
           </div>
         </div>
+
         <section className="mt-8 w-full pb-2" aria-labelledby="auth-trust-heading">
           <AuthFlowTrustReassurance variant="login" layout="standalone" />
         </section>
