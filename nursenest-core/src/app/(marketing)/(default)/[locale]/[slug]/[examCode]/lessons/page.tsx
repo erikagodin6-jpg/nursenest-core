@@ -19,6 +19,18 @@ type Props = {
   }>;
 };
 
+/**
+ * Safe title resolver — avoids accessing non-existent fields
+ */
+function getPathwayTitle(pathway: any): string {
+  return (
+    pathway?.seoTitle ??
+    pathway?.displayName ??
+    pathway?.name ??
+    "Exam Hub | NurseNest"
+  );
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug, examCode } = await params;
   const pathname = `/${locale}/${slug}/${examCode}`;
@@ -34,8 +46,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     return {
-      title: pathway.seoTitle || pathway.title || "Exam Hub | NurseNest",
-      description: pathway.seoDescription || "NurseNest exam preparation hub.",
+      title: getPathwayTitle(pathway),
+      description: pathway.seoDescription ?? "NurseNest exam preparation hub.",
     };
   } catch {
     return {
@@ -96,11 +108,13 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
       }
     })();
 
+    const title = getPathwayTitle(pathway);
+
     return (
       <main className="mx-auto max-w-6xl px-4 py-6">
         <WebPageJsonLd
-          title={pathway.seoTitle || pathway.title || "Exam Hub"}
-          description={pathway.seoDescription || ""}
+          title={title}
+          description={pathway.seoDescription ?? ""}
           path={pathname}
         />
 
@@ -117,7 +131,7 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
           />
         ) : (
           <section className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-amber-900">
-            <h1 className="text-xl font-semibold">{pathway.title || "Exam Hub"}</h1>
+            <h1 className="text-xl font-semibold">{title}</h1>
             <p className="mt-2">
               This hub is available, but the marketing content failed to load. Use the links below to continue.
             </p>
