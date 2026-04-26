@@ -193,6 +193,11 @@ function planFromPost(post: AdminPostPayload): BlogControlPanelPlan {
     openGraphDescription: seo?.openGraphDescription ?? undefined,
     canonicalPath: seo?.canonicalPath ?? undefined,
     seoFocusKeywords: seo?.focusKeywords?.length ? seo.focusKeywords : focusFromTags,
+    internalAnchorOpportunities: [],
+    recommendedInternalLinks: [],
+    sourceCandidates: [],
+    editorialNotes: [],
+    needsReviewFlags: [],
   };
 }
 
