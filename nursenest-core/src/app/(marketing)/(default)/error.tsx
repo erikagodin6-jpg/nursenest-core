@@ -1,13 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
-
 import { NnErrorCard } from "@/components/error/nn-error-card";
 import { MarketingHomeSafeMode } from "@/components/marketing/marketing-home-safe-mode";
-import {
-  logMarketingRouteErrorClient,
-  shouldUseMarketingHomeSafeModeFromError,
-} from "@/lib/marketing/marketing-home-safe-mode-triggers";
+import { shouldUseMarketingHomeSafeModeFromError } from "@/lib/marketing/marketing-home-safe-mode-triggers";
+import { useMarketingRouteErrorDiagnostics } from "@/lib/marketing/use-marketing-route-error-diagnostics";
 
 export default function MarketingDefaultSegmentError({
   error,
@@ -16,9 +12,7 @@ export default function MarketingDefaultSegmentError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    logMarketingRouteErrorClient("marketing_default_segment_error_tsx", error);
-  }, [error]);
+  useMarketingRouteErrorDiagnostics("marketing_default_segment_error_tsx", error);
 
   if (shouldUseMarketingHomeSafeModeFromError(error)) {
     return <MarketingHomeSafeMode layout="embedded" onRetry={reset} />;

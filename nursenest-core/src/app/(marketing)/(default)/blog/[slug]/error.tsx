@@ -1,6 +1,7 @@
 "use client";
 
 import { NnErrorCard } from "@/components/error/nn-error-card";
+import { useMarketingRouteErrorDiagnostics } from "@/lib/marketing/use-marketing-route-error-diagnostics";
 
 export default function BlogPostError({
   error,
@@ -9,6 +10,8 @@ export default function BlogPostError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  useMarketingRouteErrorDiagnostics("marketing_blog_post_error_tsx", error);
+
   return (
     <NnErrorCard
       error={error}

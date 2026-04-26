@@ -1,7 +1,10 @@
 "use client";
 
 import { Component, type ErrorInfo, type ReactNode } from "react";
-import { logNnMarketingClientError } from "@/lib/marketing/nn-marketing-client-error-log";
+import {
+  logNnMarketingClientError,
+  nnMarketingClientDiagnosticsEnabled,
+} from "@/lib/marketing/nn-marketing-client-error-log";
 
 type Props = { children: ReactNode; name?: string };
 type State = { hasError: boolean };
@@ -22,6 +25,7 @@ export class MarketingMainErrorBoundary extends Component<Props, State> {
       error,
       { componentStack: info.componentStack ?? undefined },
     );
+    if (!nnMarketingClientDiagnosticsEnabled()) return;
     const digest = error?.digest != null ? String(error.digest) : "";
     console.error(
       "[nn-marketing-main-error-boundary]",

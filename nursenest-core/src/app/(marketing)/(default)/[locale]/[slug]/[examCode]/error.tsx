@@ -1,6 +1,7 @@
 "use client";
 
 import { NnErrorCard } from "@/components/error/nn-error-card";
+import { useMarketingRouteErrorDiagnostics } from "@/lib/marketing/use-marketing-route-error-diagnostics";
 
 /**
  * Granular boundary for the exam hub segment (`/[country]/[role]/[exam]/…`).
@@ -13,6 +14,8 @@ export default function ExamPathwaySegmentError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  useMarketingRouteErrorDiagnostics("exam_pathway_segment_error_tsx", error);
+
   return (
     <NnErrorCard
       error={error}

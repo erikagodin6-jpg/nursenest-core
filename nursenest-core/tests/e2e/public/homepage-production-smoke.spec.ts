@@ -5,6 +5,9 @@
  *   npx playwright test tests/e2e/public/homepage-production-smoke.spec.ts --project=chromium
  *   npx playwright test tests/e2e/public/homepage-production-smoke.spec.ts --project=webkit
  *     (requires `npx playwright install webkit` and a `webkit` project in playwright.config.ts)
+ *
+ * To surface `[NN_MARKETING_CLIENT_ERROR]` JSON in the browser console from a **production**
+ * build, rebuild with: `NEXT_PUBLIC_NN_MARKETING_CLIENT_ERROR_DEBUG=1 npm run build`
  */
 import { expect, test } from "@playwright/test";
 

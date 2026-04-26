@@ -1,6 +1,7 @@
 "use client";
 
 import { NnErrorCard } from "@/components/error/nn-error-card";
+import { useMarketingRouteErrorDiagnostics } from "@/lib/marketing/use-marketing-route-error-diagnostics";
 
 /**
  * Isolated error boundary for exam pathway lesson routes.
@@ -13,6 +14,8 @@ export default function ExamPathwayLessonsSegmentError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  useMarketingRouteErrorDiagnostics("exam_pathway_lessons_error_tsx", error);
+
   return (
     <NnErrorCard
       error={error}

@@ -1,4 +1,7 @@
-import { logNnMarketingClientError } from "@/lib/marketing/nn-marketing-client-error-log";
+import {
+  logNnMarketingClientError,
+  nnMarketingClientDiagnosticsEnabled,
+} from "@/lib/marketing/nn-marketing-client-error-log";
 
 /**
  * When to show MarketingHomeSafeMode vs a generic error card.
@@ -21,6 +24,7 @@ export function logMarketingRouteErrorClient(
   error: Error & { digest?: string },
   extra?: Record<string, unknown>,
 ): void {
+  if (!nnMarketingClientDiagnosticsEnabled()) return;
   try {
     logNnMarketingClientError(`marketing_route:${surface}`, error);
     const stack = typeof error?.stack === "string" ? error.stack.slice(0, 4000) : undefined;
