@@ -6,6 +6,7 @@ import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { MARKETING_PUBLIC_CONTENT_EDITABLE_KEYS } from "@/lib/marketing/marketing-public-content-policy";
 import { logMarketingPublicContentOverrideLoadFailure } from "@/lib/marketing/marketing-public-content-observability";
 import { normalizeResolvedMarketingLeaf } from "@/lib/marketing-i18n/marketing-message-value-policy";
+import { isNonFatalPrismaSchemaError } from "@/lib/prisma/safe-reads";
 
 const ALLOWLIST_KEYS = Object.keys(MARKETING_PUBLIC_CONTENT_EDITABLE_KEYS) as string[];
 
@@ -15,6 +16,9 @@ export function marketingPublicContentOverrideLocaleTag(locale: string): string 
   const loc = locale.trim().toLowerCase() || "en";
   return `${MARKETING_PUBLIC_CONTENT_OVERRIDE_CACHE_TAG}:${loc}`;
 }
+
+/** Suppresses repeat stderr noise when the optional override table is simply absent. */
+let didWarnMissingOverrideTable = false;
 
 async function loadMarketingPublicContentOverridesImpl(locale: string): Promise<Record<string, string>> {
   const out: Record<string, string> = {};
@@ -34,9 +38,24 @@ async function loadMarketingPublicContentOverridesImpl(locale: string): Promise<
       out[r.messageKey] = normalized;
     }
   } catch (e) {
-    logMarketingPublicContentOverrideLoadFailure({
-      detail: (e instanceof Error ? e.message : String(e)).slice(0, 400),
-    });
+    const msg = e instanceof Error ? e.message : String(e);
+    // P2021 = table does not exist. The override table is optional; treat its absence as
+    // "no overrides" so the public homepage always renders with registry defaults.
+    const isTableMissing =
+      isNonFatalPrismaSchemaError(e) || msg.includes("marketing_public_content_overrides");
+    if (isTableMissing) {
+      if (!didWarnMissingOverrideTable) {
+        didWarnMissingOverrideTable = true;
+        console.warn(
+          "[nursenest-core] marketing_public_content_overrides table not found (P2021) — " +
+            "public content overrides disabled; homepage renders with registry defaults. " +
+            "Run migrations to enable admin override support.",
+        );
+      }
+    } else {
+      logMarketingPublicContentOverrideLoadFailure({ detail: msg.slice(0, 400) });
+    }
+    // Never re-throw from this path — public marketing pages must not crash.
   }
   return out;
 }
