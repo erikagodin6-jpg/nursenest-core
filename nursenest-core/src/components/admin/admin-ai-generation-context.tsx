@@ -11,7 +11,7 @@ const FALLBACK_ADMIN_AI_GENERATION_GATE: AdminAiGenerationGate = {
   openAiKeyPresent: false,
   diagnostics: {
     aiAdminGenerationEnvPresent: false,
-    aiAdminGenerationFlagClass: "disabled",
+    aiAdminGenerationFlagClass: "unset",
     aiIntegrationsOpenAiKeyPresent: false,
     legacyOpenAiKeyPresent: false,
     adminAiGenerationFlagNormalized: false,
