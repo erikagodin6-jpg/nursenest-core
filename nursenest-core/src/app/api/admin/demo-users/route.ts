@@ -5,7 +5,10 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { createDemoUser } from "@/lib/demo-users/create-demo-user";
 import { prisma } from "@/lib/db";
 import { API_LIST_PAGE_SIZE_HARD_MAX } from "@/lib/api/api-pagination-limits";
-import { parseAdminJsonMutationIntent, stripAdminMutationControlFields } from "@/lib/admin/admin-mutation-intent";
+import {
+  parseAdminJsonMutationIntent,
+  stripAdminMutationControlFields,
+} from "@/lib/admin/admin-mutation-intent";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const postBodySchema = z.object({
@@ -57,17 +60,27 @@ export async function POST(req: Request) {
 
   const stripped = stripAdminMutationControlFields(body as Record<string, unknown>);
   const parsed = postBodySchema.safeParse(stripped);
+
   if (!parsed.success) {
     safeServerLog("admin_demo_users", "post_invalid_payload", { detail: "zod" });
     return NextResponse.json(
-      { ok: false, code: "admin_demo_users_invalid_payload", error: "Invalid payload", issues: parsed.error.flatten() },
+      {
+        ok: false,
+        code: "admin_demo_users_invalid_payload",
+        error: "Invalid payload",
+        issues: parsed.error.flatten(),
+      },
       { status: 400 },
     );
   }
 
   if (intent.dryRun) {
     const pathway = getExamPathwayById(parsed.data.pathwayId);
-    safeServerLog("admin_demo_users", "create_dry_run", { pathwayId: parsed.data.pathwayId.slice(0, 24) });
+
+    safeServerLog("admin_demo_users", "create_dry_run", {
+      pathwayId: parsed.data.pathwayId.slice(0, 24),
+    });
+
     return NextResponse.json({
       ok: true,
       dryRun: true,
@@ -81,13 +94,25 @@ export async function POST(req: Request) {
   }
 
   const result = await createDemoUser(parsed.data);
+
   if (!result.ok) {
     safeServerLog("admin_demo_users", "create_failed", { code: result.code });
-    return NextResponse.json({ ok: false, error: result.message, code: result.code }, { status: 400 });
+
+    return NextResponse.json(
+      { ok: false, error: result.message, code: result.code },
+      { status: 400 },
+    );
   }
 
-  safeServerLog("admin_demo_users", "create_ok", { userIdPrefix: result.userId.slice(0, 8) });
-  return NextResponse.json({ ok: true, ...result });
+  safeServerLog("admin_demo_users", "create_ok", {
+    userIdPrefix: result.userId.slice(0, 8),
+  });
+
+  // ✅ FIXED HERE
+  return NextResponse.json({
+    ...result,
+    ok: true,
+  });
 }
 
 const deleteBodySchema = z.object({
@@ -103,6 +128,7 @@ export async function DELETE(req: Request) {
     body = await req.json();
   } catch {
     safeServerLog("admin_demo_users", "delete_invalid_json", {});
+
     return NextResponse.json(
       {
         ok: false,
@@ -118,9 +144,14 @@ export async function DELETE(req: Request) {
 
   const stripped = stripAdminMutationControlFields(body as Record<string, unknown>);
   const parsed = deleteBodySchema.safeParse(stripped);
+
   if (!parsed.success) {
     return NextResponse.json(
-      { ok: false, code: "admin_demo_users_delete_missing_user_id", error: "userId required in body" },
+      {
+        ok: false,
+        code: "admin_demo_users_delete_missing_user_id",
+        error: "userId required in body",
+      },
       { status: 400 },
     );
   }
@@ -129,24 +160,43 @@ export async function DELETE(req: Request) {
     where: { id: parsed.data.userId, isDemoUser: true },
     select: { id: true, email: true },
   });
+
   if (!existing) {
-    safeServerLog("admin_demo_users", "delete_not_found", { userIdPrefix: parsed.data.userId.slice(0, 8) });
+    safeServerLog("admin_demo_users", "delete_not_found", {
+      userIdPrefix: parsed.data.userId.slice(0, 8),
+    });
+
     return NextResponse.json(
-      { ok: false, code: "admin_demo_users_not_found", error: "Demo user not found" },
+      {
+        ok: false,
+        code: "admin_demo_users_not_found",
+        error: "Demo user not found",
+      },
       { status: 404 },
     );
   }
 
   if (intent.dryRun) {
-    safeServerLog("admin_demo_users", "delete_dry_run", { userIdPrefix: existing.id.slice(0, 8) });
+    safeServerLog("admin_demo_users", "delete_dry_run", {
+      userIdPrefix: existing.id.slice(0, 8),
+    });
+
     return NextResponse.json({
       ok: true,
       dryRun: true,
-      preview: { userId: existing.id, email: existing.email, wouldDelete: true },
+      preview: {
+        userId: existing.id,
+        email: existing.email,
+        wouldDelete: true,
+      },
     });
   }
 
   await prisma.user.delete({ where: { id: existing.id } });
-  safeServerLog("admin_demo_users", "delete_ok", { userIdPrefix: existing.id.slice(0, 8) });
+
+  safeServerLog("admin_demo_users", "delete_ok", {
+    userIdPrefix: existing.id.slice(0, 8),
+  });
+
   return NextResponse.json({ ok: true });
 }
