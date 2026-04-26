@@ -3,7 +3,7 @@
 import { ArrowRight, Stethoscope, HeartPulse, Award, Dna, GraduationCap } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
+import { publicExamPrepHubDestinations, type MarketingRegionToggle } from "@/lib/navigation/canonical-destinations";
 import { publicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
@@ -47,9 +47,9 @@ export function HomeExamSelectionSection() {
     t = ctx.t;
   } catch {}
 
-  let region = "CA";
+  let region: MarketingRegionToggle = "CA";
   try {
-    region = safeRegion(useNursenestRegion().region);
+    region = safeRegion(useNursenestRegion().region) as MarketingRegionToggle;
   } catch {}
 
   let hubs: any = {};

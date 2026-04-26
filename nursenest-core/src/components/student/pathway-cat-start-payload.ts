@@ -55,7 +55,7 @@ export function buildCatExamSimulationCreatePayload(pathwayMeta: PracticeTestPat
 } {
   const pathwayFull = getExamPathwayById(pathwayMeta.id);
   const examCfg = examSimulationConfigForPathway(
-    pathwayFull,
+    pathwayFull ?? null,
     pathwayFull?.examFamily === ExamFamily.NP ? { npBoard: "AANP" } : undefined,
   );
   const simMax = nclexRnSimulationBoundsFromConfig(examCfg).max;

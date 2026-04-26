@@ -2,7 +2,7 @@ import "./auth-trust-env";
 
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import type { NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 import { authCallbacks } from "@/lib/auth-callbacks";
 import { PINNED_AUTH_BASE_PATH } from "@/lib/auth/auth-base-path";
 import {

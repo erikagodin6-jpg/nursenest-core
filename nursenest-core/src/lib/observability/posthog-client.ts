@@ -60,6 +60,16 @@ export async function trackClientEvent(
   }
 }
 
+export async function identifyPosthogUser(distinctId: string): Promise<void> {
+  if (typeof window === "undefined") return;
+  if (!initialized) return;
+  try {
+    const ph = await getPosthogClient();
+    if (!ph) return;
+    ph.identify(distinctId);
+  } catch {}
+}
+
 export async function capturePosthogPageview(path: string, currentUrl: string): Promise<void> {
   if (typeof window === "undefined") return;
   if (adminLearnerQaSessionSuppress) return;

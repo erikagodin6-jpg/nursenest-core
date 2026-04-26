@@ -178,7 +178,7 @@ export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, 
       if (isPlainObject(ol)) ol = [ol];
       else throw new Error(`[blog-plan-normalize] outline must be array or object, got ${typeof ol}`);
     }
-    out.outline = ol.map((node: unknown, idx: number) => {
+    out.outline = (ol as unknown[]).map((node: unknown, idx: number) => {
       if (!isPlainObject(node)) {
         throw new Error(`[blog-plan-normalize] outline[${idx}] must be object, got ${typeof node}`);
       }
@@ -210,7 +210,7 @@ export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, 
       if (isPlainObject(rows)) rows = [rows];
       else throw new Error(`[blog-plan-normalize] suggestedInternalLessons must be array or object`);
     }
-    out.suggestedInternalLessons = rows.map((row: unknown, i: number) => {
+    out.suggestedInternalLessons = (rows as unknown[]).map((row: unknown, i: number) => {
       if (!isPlainObject(row)) {
         throw new Error(`[blog-plan-normalize] suggestedInternalLessons[${i}] must be object`);
       }
@@ -239,7 +239,7 @@ export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, 
       if (isPlainObject(faqs) && "q" in faqs && "a" in faqs) faqs = [faqs];
       else throw new Error(`[blog-plan-normalize] faqs must be array or {q,a} object`);
     }
-    out.faqs = faqs.map((row: unknown, i: number) => {
+    out.faqs = (faqs as unknown[]).map((row: unknown, i: number) => {
       if (!isPlainObject(row)) throw new Error(`[blog-plan-normalize] faqs[${i}] must be object`);
       const r: Record<string, unknown> = { ...row };
       r.q = normalizePlanString(r.q, `faqs[${i}].q`);
@@ -254,7 +254,7 @@ export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, 
       if (isPlainObject(bc) && "label" in bc && "href" in bc) bc = [bc];
       else throw new Error(`[blog-plan-normalize] breadcrumbs must be array or single link object`);
     }
-    out.breadcrumbs = bc.map((row: unknown, i: number) => {
+    out.breadcrumbs = (bc as unknown[]).map((row: unknown, i: number) => {
       if (!isPlainObject(row)) throw new Error(`[blog-plan-normalize] breadcrumbs[${i}] must be object`);
       const r: Record<string, unknown> = { ...row };
       r.label = normalizePlanString(r.label, `breadcrumbs[${i}].label`);
@@ -269,7 +269,7 @@ export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, 
       if (isPlainObject(im)) im = [im];
       else throw new Error(`[blog-plan-normalize] imagePlacements must be array or object`);
     }
-    out.imagePlacements = im.map((row: unknown, i: number) => {
+    out.imagePlacements = (im as unknown[]).map((row: unknown, i: number) => {
       if (!isPlainObject(row)) throw new Error(`[blog-plan-normalize] imagePlacements[${i}] must be object`);
       const r: Record<string, unknown> = { ...row };
       if (r.slotKey !== undefined) {
@@ -315,7 +315,7 @@ export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, 
       if (isPlainObject(rows)) rows = [rows];
       else throw new Error(`[blog-plan-normalize] recommendedInternalLinks must be array or object`);
     }
-    out.recommendedInternalLinks = rows.map((row: unknown, i: number) => {
+    out.recommendedInternalLinks = (rows as unknown[]).map((row: unknown, i: number) => {
       if (!isPlainObject(row)) throw new Error(`[blog-plan-normalize] recommendedInternalLinks[${i}] must be object`);
       const r: Record<string, unknown> = { ...row };
       r.targetType = normalizePlanString(r.targetType, `recommendedInternalLinks[${i}].targetType`);
@@ -334,7 +334,7 @@ export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, 
       if (isPlainObject(rows)) rows = [rows];
       else throw new Error(`[blog-plan-normalize] sourceCandidates must be array or object`);
     }
-    out.sourceCandidates = rows.map((row: unknown, i: number) => {
+    out.sourceCandidates = (rows as unknown[]).map((row: unknown, i: number) => {
       if (!isPlainObject(row)) throw new Error(`[blog-plan-normalize] sourceCandidates[${i}] must be object`);
       const r: Record<string, unknown> = { ...row };
       r.title = normalizePlanString(r.title, `sourceCandidates[${i}].title`);
@@ -368,7 +368,7 @@ export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, 
       if (isPlainObject(rows)) rows = [rows];
       else throw new Error(`[blog-plan-normalize] internalAnchorOpportunities must be array or object`);
     }
-    out.internalAnchorOpportunities = rows.map((row: unknown, i: number) => {
+    out.internalAnchorOpportunities = (rows as unknown[]).map((row: unknown, i: number) => {
       if (!isPlainObject(row)) throw new Error(`[blog-plan-normalize] internalAnchorOpportunities[${i}] must be object`);
       const r: Record<string, unknown> = { ...row };
       r.phrase = normalizePlanString(r.phrase, `internalAnchorOpportunities[${i}].phrase`);

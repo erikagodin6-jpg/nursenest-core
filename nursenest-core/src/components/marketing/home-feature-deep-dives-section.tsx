@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
-import { HUB, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { HUB, rnQuestions, type MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -27,14 +27,14 @@ function safeCall(fn: any, fallback: any) {
 
 export function HomeFeatureDeepDivesSection() {
   let locale = "en";
-  let region = "CA";
+  let region: MarketingRegionToggle = "CA";
 
   try {
     locale = safe(useMarketingI18n()?.locale, "en");
   } catch {}
 
   try {
-    region = safe(useNursenestRegion()?.region, "CA");
+    region = safe(useNursenestRegion()?.region, "CA") as MarketingRegionToggle;
   } catch {}
 
   const loc = (path: string) => {

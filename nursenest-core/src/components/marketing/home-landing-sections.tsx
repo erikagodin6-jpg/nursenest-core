@@ -23,10 +23,10 @@ import {
  * Safe translation accessor (prevents production crashes)
  */
 function safeT(
-  t: (k: string, vars?: Record<string, unknown>) => string,
+  t: (k: string, vars?: Record<string, string | number | undefined>) => string,
   key: string,
   fallback: string,
-  vars?: Record<string, unknown>
+  vars?: Record<string, string | number | undefined>
 ) {
   try {
     const val = t(key, vars);

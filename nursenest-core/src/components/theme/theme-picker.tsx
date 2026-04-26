@@ -33,7 +33,7 @@ function ThemeMenuList({
 }: {
   current: string;
   currentLabel: string;
-  L: typeof DEFAULT_THEME_LABELS;
+  L: Record<keyof typeof DEFAULT_THEME_LABELS, string>;
   setTheme: (id: string) => void;
   setOpen: (v: boolean) => void;
 }) {

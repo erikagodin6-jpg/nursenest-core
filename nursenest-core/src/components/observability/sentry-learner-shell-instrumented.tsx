@@ -91,7 +91,7 @@ export default function SentryLearnerShellInstrumented({
       beforeCapture={(scope, err, componentStack) => {
         enrichSentryScopeWithUx(scope, { kind: "render_failure", fallbackShown: true });
         scope.setTag("feature", "learner_app");
-        scope.setContext("react", { componentStack: componentStack.slice(0, 4000) });
+        scope.setContext("react", { componentStack: componentStack?.slice(0, 4000) ?? null });
         if (err instanceof Error) {
           scope.setFingerprint(["learner-shell", err.name, err.message.slice(0, 80)]);
         }

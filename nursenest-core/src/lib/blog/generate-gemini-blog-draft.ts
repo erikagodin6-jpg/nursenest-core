@@ -79,6 +79,11 @@ function buildPlanFromDraft(draft: z.infer<typeof geminiDraftSchema>, topic: str
     canonicalPath: undefined,
     seoFocusKeywords: [normalizeBlogTopicKey(topic), "nursing exam prep"].filter(Boolean),
     schemaOpportunities: undefined,
+    internalAnchorOpportunities: [],
+    recommendedInternalLinks: [],
+    sourceCandidates: [],
+    needsReviewFlags: [],
+    editorialNotes: [],
   };
 }
 

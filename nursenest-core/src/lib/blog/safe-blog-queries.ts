@@ -104,7 +104,7 @@ async function resolveBlogStaticFallbackProbe(): Promise<BlogStaticFallbackProbe
   if (shouldSkipBlogDbForProductionBuild()) return { kind: "use_static" };
   if (!isDatabaseUrlConfigured()) return { kind: "use_static" };
   const now = new Date();
-  const probe = await withBlogTimeoutFallback(
+  const probe = await withBlogTimeoutFallback<{ ok: true; liveCount: number } | { ok: false }>(
     async () => ({ ok: true as const, liveCount: await prisma.blogPost.count({ where: blogLiveWhere(now) }) }),
     { ok: false as const },
     "blog_static_fallback_probe",

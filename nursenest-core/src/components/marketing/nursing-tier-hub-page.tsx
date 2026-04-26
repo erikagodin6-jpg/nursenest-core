@@ -59,7 +59,7 @@ export function NursingTierHubPage({
     content.actions.map((action) => [action.id, action])
   );
 
-  const orderedActions = ["lessons", "flashcards", "practice_questions", "exams"]
+  const orderedActions = (["lessons", "flashcards", "practice_questions", "exams"] as NursingTierHubActionId[])
     .map((id) => actionsById.get(id))
     .filter(Boolean);
 

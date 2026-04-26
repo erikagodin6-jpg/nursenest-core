@@ -158,7 +158,7 @@ export function validateEnabledManifestRow(u: unknown, index: number): RowValida
   errs.push(...validateManifestInternalPaths(row).map((e) => `upgrades[${index}]:${e}`));
   if (errs.length) return { ok: false, reasons: errs };
 
-  return { ok: true, row: { ...row, slugNorm } };
+  return { ok: true, row: { ...row, slugNorm: slugNorm.slug } };
 }
 
 /** Non-blocking warnings for disabled rows (shape / markers / paths for operator hygiene). */

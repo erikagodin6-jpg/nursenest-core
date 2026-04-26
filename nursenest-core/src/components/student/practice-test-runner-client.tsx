@@ -2412,16 +2412,16 @@ export function PracticeTestRunnerClient({
       typeof current.stem === "string" && current.stem.trim().length > 0 ? current.stem.trim() : "";
     const legacyStemSplit = legacyStemTrimmed ? splitPromptLeadingImage(legacyStemTrimmed) : null;
     const legacyClinicalSrc =
-      legacyStemSplit?.imageSrc && legacyStemSplit.imageSrc.trim().length > 0
-        ? legacyStemSplit.imageSrc.trim()
+      legacyStemSplit?.imageHtml && legacyStemSplit.imageHtml.trim().length > 0
+        ? legacyStemSplit.imageHtml.trim()
         : null;
     const legacyStemUnavailable = tx(
       "learner.practiceTests.run.questionUnavailable",
       "Question text is unavailable. Try reloading this item.",
     );
     const legacyStemForCard =
-      legacyStemSplit && legacyStemSplit.stem.trim().length > 0
-        ? legacyStemSplit.stem
+      legacyStemSplit && legacyStemSplit.remainingPrompt.trim().length > 0
+        ? legacyStemSplit.remainingPrompt
         : legacyStemTrimmed
           ? current.stem
           : legacyStemUnavailable;
@@ -2726,12 +2726,12 @@ export function PracticeTestRunnerClient({
     typeof current.stem === "string" && current.stem.trim().length > 0 ? current.stem.trim() : "";
   const linearStemClinicalSplit = rawStemTrimmed ? splitPromptLeadingImage(rawStemTrimmed) : null;
   const stemBodyForLinearCard =
-    linearStemClinicalSplit && linearStemClinicalSplit.stem.trim().length > 0
-      ? linearStemClinicalSplit.stem
+    linearStemClinicalSplit && linearStemClinicalSplit.remainingPrompt.trim().length > 0
+      ? linearStemClinicalSplit.remainingPrompt
       : linearQuestionStem;
   const clinicalImageSrcLinear =
-    linearStemClinicalSplit?.imageSrc && linearStemClinicalSplit.imageSrc.trim().length > 0
-      ? linearStemClinicalSplit.imageSrc.trim()
+    linearStemClinicalSplit?.imageHtml && linearStemClinicalSplit.imageHtml.trim().length > 0
+      ? linearStemClinicalSplit.imageHtml.trim()
       : null;
   const showLinearPerItemRationale = linearPracticeSplitReview
     ? false

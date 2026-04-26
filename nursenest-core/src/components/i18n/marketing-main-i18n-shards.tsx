@@ -13,9 +13,9 @@ import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 
 const MARKETING_MAIN_SHARDS_TIMEOUT_MS = 2600;
 
-function safeTrace(...args: any[]) {
+function safeTrace(scope: string, label: string, meta?: Record<string, unknown>) {
   try {
-    layoutStderrTrace(...args);
+    layoutStderrTrace(scope, label, meta);
   } catch {}
 }
 

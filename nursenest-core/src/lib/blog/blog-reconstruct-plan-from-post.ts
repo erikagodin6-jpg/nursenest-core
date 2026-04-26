@@ -126,7 +126,7 @@ export function reconstructBlogControlPanelPlanFromPost(row: {
     imagePlacements: parsedPlan.imagePlacements ?? [],
     apaSourceStubs: [],
     keyTakeaways,
-    featuredSnippet: row.featuredSnippet?.trim() ? row.featuredSnippet.trim().slice(0, 400) : undefined,
+    featuredSnippetHint: row.featuredSnippet?.trim() ? row.featuredSnippet.trim().slice(0, 400) : undefined,
     suggestedExcerpt,
     schemaOpportunities: undefined,
     seoFocusKeywords: seoFocusKeywords.length ? seoFocusKeywords : undefined,

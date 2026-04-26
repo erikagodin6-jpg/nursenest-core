@@ -102,7 +102,8 @@ export async function onRequestError(...args: unknown[]) {
       | undefined;
 
     if (capture) {
-      return capture(...args);
+      const [arg0, arg1, ...rest] = args;
+      return capture(arg0, arg1, ...rest);
     }
   } catch {
     // never throw from error handler
