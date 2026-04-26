@@ -11,6 +11,14 @@ const SELECTOR_DISMISSED_LS = "nn_selector_dismissed";
 /** Non-fatal browser quirks occasionally surface as pageerror in automation — extend only with comment. */
 const PAGEERROR_ALLOWLIST: RegExp[] = [];
 
+/** Carousel / next/image hard failures that must not reach the browser console on `/`. */
+const FATAL_CONSOLE_SUBSTRINGS = [
+  "Cannot read properties of undefined",
+  "Image is missing required src",
+  "Invalid src prop",
+  "Minified React error",
+] as const;
+
 test.beforeEach(async ({ context }) => {
   await context.addInitScript((key) => {
     try {
@@ -28,6 +36,12 @@ test.describe("Homepage stays real after hydration", () => {
     const pageErrors: string[] = [];
     page.on("pageerror", (err) => {
       pageErrors.push(err?.message ?? String(err));
+    });
+
+    const consoleErrors: string[] = [];
+    page.on("console", (msg) => {
+      if (msg.type() !== "error") return;
+      consoleErrors.push(msg.text());
     });
 
     const badStaticChunks: { url: string; status: number }[] = [];
@@ -52,7 +66,10 @@ test.describe("Homepage stays real after hydration", () => {
     await expect(page.locator('[data-nn-home-safe-mode="1"]')).toHaveCount(0);
     await expect(page.getByRole("heading", { name: /^Just a moment$/i })).toHaveCount(0);
 
-    const mainH1 = page.locator("main").getByRole("heading", { level: 1 }).first();
+    const main = page.locator("main");
+    await expect(main).toBeVisible({ timeout: 30_000 });
+
+    const mainH1 = main.getByRole("heading", { level: 1 }).first();
     await expect(mainH1).toBeVisible({ timeout: 30_000 });
     await expect(mainH1).not.toHaveText(/^\s*$/);
     /** Marketing home column should expose exactly one hero `<h1>` (no duplicated body). */
@@ -72,5 +89,13 @@ test.describe("Homepage stays real after hydration", () => {
 
     const fatal = pageErrors.filter((msg) => !PAGEERROR_ALLOWLIST.some((re) => re.test(msg)));
     expect(fatal, `Uncaught page errors: ${fatal.join(" | ")}`).toEqual([]);
+
+    const fatalConsole = consoleErrors.filter((text) =>
+      FATAL_CONSOLE_SUBSTRINGS.some((sub) => text.includes(sub)),
+    );
+    expect(
+      fatalConsole,
+      `Console errors (carousel/image/React): ${fatalConsole.join(" | ")}`,
+    ).toEqual([]);
   });
 });
