@@ -54,7 +54,6 @@ type AppLessonListRow = {
   summary: string | null;
   topic?: string | null;
   bodySystem?: string | null;
-  /** Present for `pathway_lessons` rows — used for hub-style progress + chips. */
   pathwayMeta?: { pathwayId: string; slug: string };
 };
 
@@ -75,6 +74,7 @@ function pathwayLessonCardSummary(row: {
 }): string | null {
   const d = row.seoDescription?.trim();
   if (d) return d.length > 220 ? `${d.slice(0, 217)}…` : d;
+
   const parts = [row.topic?.trim(), row.bodySystem?.trim()].filter(Boolean);
   return parts.length ? parts.join(" · ") : null;
 }
@@ -122,14 +122,20 @@ function appLessonsListQuery(
   limit: number,
 ): string {
   const qs = new URLSearchParams();
+
   if (page > 1) qs.set("page", String(page));
+
   const ts = topicSlug?.trim().toLowerCase();
   if (ts) qs.set("topicSlug", ts);
   else if (topic?.trim()) qs.set("topic", topic.trim());
+
   if (pathwayId?.trim()) qs.set("pathwayId", pathwayId.trim());
+
   const qt = q?.trim();
   if (qt) qs.set("q", qt);
+
   if (limit !== LEARNER_APP_LESSONS_PAGE_SIZE_DEFAULT) qs.set("limit", String(limit));
+
   const s = qs.toString();
   return s ? `?${s}` : "";
 }
@@ -154,15 +160,12 @@ export default async function LessonsPage({ searchParams }: Props) {
   const entitlement = await resolveEntitlementForPage(userId);
 
   if (entitlement === "error") {
-    return (
-      <p className="nn-card p-6 text-sm text-muted">
-        {t("learner.entitlement.verifyFailed")}
-      </p>
-    );
+    return <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>;
   }
 
   if (!entitlement.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
+
     return (
       <div>
         <h1 className="text-3xl font-bold">{t("learner.lessons.list.title")}</h1>
@@ -173,11 +176,13 @@ export default async function LessonsPage({ searchParams }: Props) {
           </Link>{" "}
           {t("learner.lessons.list.freemiumTail")}
         </p>
+
         {userId && snap && !freemiumLessonsExhausted(snap) ? (
           <div className="mt-6">
             <FreemiumLessonPeek />
           </div>
         ) : null}
+
         <div className="mt-6">
           <SubscriptionPaywall
             context="lessons"
@@ -185,37 +190,60 @@ export default async function LessonsPage({ searchParams }: Props) {
             freemiumRemainingQuestions={snap != null ? snap.questionRemaining : undefined}
           />
         </div>
+
         {userId && snap && freemiumQuestionsExhausted(snap) && !freemiumLessonsExhausted(snap) ? (
           <FreemiumCrossTrackNudge variant="questions_exhausted" />
         ) : null}
-        {userId && snap && freemiumLessonsExhausted(snap) ? <FreemiumPreviewExhaustedSurface kind="lessons" /> : null}
+
+        {userId && snap && freemiumLessonsExhausted(snap) ? (
+          <FreemiumPreviewExhaustedSurface kind="lessons" />
+        ) : null}
       </div>
     );
   }
 
   const sp = await searchParams;
   const limitParsed = parseLessonLibraryLimit(typeof sp.limit === "string" ? sp.limit : undefined);
+
   const qRaw = typeof sp.q === "string" ? sp.q : "";
-  /** Empty / whitespace-only search must behave as no query (full list for the active scope). */
   const qEffective = qRaw.trim().length > 0 ? qRaw.trim() : null;
+
   const rawPage = Math.max(1, Number(sp.page ?? "1") || 1);
   const maxOffsetPage = maxSafeOffsetPage(limitParsed);
   const pageRequested = Math.min(rawPage, maxOffsetPage);
+
   const topicSlugFilter =
-    typeof sp.topicSlug === "string" && sp.topicSlug.trim().length > 0 ? sp.topicSlug.trim().toLowerCase() : null;
+    typeof sp.topicSlug === "string" && sp.topicSlug.trim().length > 0
+      ? sp.topicSlug.trim().toLowerCase()
+      : null;
+
   const topicFilter =
-    !topicSlugFilter && typeof sp.topic === "string" && sp.topic.trim().length > 0 ? sp.topic.trim() : null;
+    !topicSlugFilter && typeof sp.topic === "string" && sp.topic.trim().length > 0
+      ? sp.topic.trim()
+      : null;
+
   const pathwayIdFilter =
-    typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 0 ? sp.pathwayId.trim() : null;
+    typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 0
+      ? sp.pathwayId.trim()
+      : null;
+
   const learnerPathRow = await withDatabaseFallbackTimeout(
-    async () => (userId ? prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } }) : null),
+    async () =>
+      userId
+        ? prisma.user.findUnique({
+            where: { id: userId },
+            select: { learnerPath: true },
+          })
+        : null,
     null,
     LESSONS_PAGE_DB_TIMEOUT_MS,
     { scope: "page_lessons", label: "learner_path" },
   );
+
   const learnerPath = learnerPathRow?.learnerPath ?? null;
   const marketingLocale = await getMarketingLocaleForDefaultRoute();
   const visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+
   const catHref = resolveStudyLoopCatHref({
     authState: "signed_in",
     pathwayId: pathwayIdFilter ?? learnerPath,
@@ -223,191 +251,219 @@ export default async function LessonsPage({ searchParams }: Props) {
     intent: "start",
   });
 
-  const lessonsBlockFromDb = await withDatabaseFallbackTimeout(async () => {
-    const contentWhere = lessonAccessWhere(entitlement);
-    const contentFilters: typeof contentWhere[] = [];
-    if (topicFilter || topicSlugFilter) {
-      const term = (topicSlugFilter ?? topicFilter ?? "").trim();
-      if (term.length > 0) {
+  const lessonsBlockFromDb = await withDatabaseFallbackTimeout(
+    async () => {
+      const contentWhere = lessonAccessWhere(entitlement);
+      const contentFilters: typeof contentWhere[] = [];
+
+      if (topicFilter || topicSlugFilter) {
+        const term = (topicSlugFilter ?? topicFilter ?? "").trim();
+
+        if (term.length > 0) {
+          contentFilters.push({
+            OR: [
+              { title: { contains: term, mode: "insensitive" } },
+              { bodySystem: { contains: term, mode: "insensitive" } },
+              { category: { contains: term, mode: "insensitive" } },
+            ],
+          });
+        }
+      }
+
+      if (qEffective) {
         contentFilters.push({
           OR: [
-            { title: { contains: term, mode: "insensitive" } },
-            { bodySystem: { contains: term, mode: "insensitive" } },
-            { category: { contains: term, mode: "insensitive" } },
+            { title: { contains: qEffective, mode: "insensitive" } },
+            { bodySystem: { contains: qEffective, mode: "insensitive" } },
+            { category: { contains: qEffective, mode: "insensitive" } },
           ],
         });
       }
-    }
-    if (qEffective) {
-      contentFilters.push({
-        OR: [
-          { title: { contains: qEffective, mode: "insensitive" } },
-          { bodySystem: { contains: qEffective, mode: "insensitive" } },
-          { category: { contains: qEffective, mode: "insensitive" } },
+
+      const contentScopedWhere =
+        contentFilters.length > 0
+          ? {
+              AND: [contentWhere, ...contentFilters],
+            }
+          : contentWhere;
+
+      const contentTotal = await prisma.contentItem.count({ where: contentScopedWhere });
+
+      const pathwayWhere = await pathwayLessonsAppListWhereWithTopicFilter(entitlement, learnerPath, {
+        topic: topicFilter,
+        topicSlug: topicSlugFilter,
+        pathwayId: pathwayIdFilter,
+      });
+
+      const pathwayWhereWithSafety = {
+        AND: [
+          pathwayWhere,
+          pathwayLessonSafetyGateWhere(),
+          ...(qEffective
+            ? [
+                {
+                  OR: [
+                    { title: { contains: qEffective, mode: "insensitive" as const } },
+                    { topic: { contains: qEffective, mode: "insensitive" as const } },
+                    { bodySystem: { contains: qEffective, mode: "insensitive" as const } },
+                    { slug: { contains: qEffective, mode: "insensitive" as const } },
+                    { seoTitle: { contains: qEffective, mode: "insensitive" as const } },
+                  ],
+                },
+              ]
+            : []),
         ],
-      });
-    }
-    const contentScopedWhere =
-      contentFilters.length > 0
-        ? {
-            AND: [contentWhere, ...contentFilters],
-          }
-        : contentWhere;
-    const contentTotal = await prisma.contentItem.count({ where: contentScopedWhere });
+      };
 
-    const pathwayWhere = await pathwayLessonsAppListWhereWithTopicFilter(entitlement, learnerPath, {
-      topic: topicFilter,
-      topicSlug: topicSlugFilter,
-      pathwayId: pathwayIdFilter,
-    });
-    const pathwayWhereWithSafety = {
-      AND: [
-        pathwayWhere,
-        pathwayLessonSafetyGateWhere(),
-        ...(qEffective
-          ? [
-              {
-                OR: [
-                  { title: { contains: qEffective, mode: "insensitive" as const } },
-                  { topic: { contains: qEffective, mode: "insensitive" as const } },
-                  { bodySystem: { contains: qEffective, mode: "insensitive" as const } },
-                  { slug: { contains: qEffective, mode: "insensitive" as const } },
-                  { seoTitle: { contains: qEffective, mode: "insensitive" as const } },
-                ],
-              },
-            ]
-          : []),
-      ],
-    };
-    const pathwaySample = await prisma.pathwayLesson.findFirst({
-      where: pathwayWhereWithSafety,
-      select: { id: true },
-    });
-
-    const listSource = pickAppLessonsHubListSource({
-      pathwaySampleExists: Boolean(pathwaySample),
-      contentTotal,
-      pathwayIdFilter,
-    });
-
-    if (listSource === "pathway_lessons") {
-      let paginated = await paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver({
+      const pathwaySample = await prisma.pathwayLesson.findFirst({
         where: pathwayWhereWithSafety,
-        page: pageRequested,
-        pageSize: limitParsed,
-        entitlement,
-        learnerPath,
-        marketingLocale,
+        select: { id: true },
       });
-      const pathwayTotal = paginated.totalResolvable;
-      const pageCount = Math.max(1, Math.ceil(pathwayTotal / limitParsed) || 1);
-      const safePage = Math.min(pageRequested, pageCount);
-      if (paginated.rows.length === 0 && pathwayTotal > 0 && safePage !== pageRequested) {
-        paginated = await paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver({
+
+      const listSource = pickAppLessonsHubListSource({
+        pathwaySampleExists: Boolean(pathwaySample),
+        contentTotal,
+        pathwayIdFilter,
+      });
+
+      if (listSource === "pathway_lessons") {
+        let paginated = await paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver({
           where: pathwayWhereWithSafety,
-          page: safePage,
+          page: pageRequested,
           pageSize: limitParsed,
           entitlement,
           learnerPath,
           marketingLocale,
         });
-      }
-      if (paginated.scanCapped) {
-        safeServerLog("page_lessons", "app_lessons_hub_pathway_total_may_be_truncated", {
-          dbRowsScanned: String(paginated.dbRowsScanned),
-          resolvableTotal: String(pathwayTotal),
-        });
-      }
-      const rows: AppLessonListRow[] = paginated.rows.map((r) => ({
-        id: r.id,
-        title: r.title,
-        summary: pathwayLessonCardSummary(r),
-        topic: r.topic,
-        bodySystem: r.bodySystem,
-        pathwayMeta: { pathwayId: r.pathwayId, slug: r.slug },
-      }));
-      return {
-        source: "pathway_lessons" as const,
-        total: pathwayTotal,
-        page: safePage,
-        pageCount,
-        rows,
-      };
-    }
 
-    if (listSource === "content_items") {
-      let paginated = await paginateContentItemsForAppSubscriberHubMatchingDetailResolver({
-        where: contentScopedWhere,
-        page: pageRequested,
-        pageSize: limitParsed,
-        entitlement,
-      });
-      const contentResolvableTotal = paginated.totalResolvable;
-      const pageCount = Math.max(1, Math.ceil(contentResolvableTotal / limitParsed) || 1);
-      const safePage = Math.min(pageRequested, pageCount);
-      if (paginated.rows.length === 0 && contentResolvableTotal > 0 && safePage !== pageRequested) {
-        paginated = await paginateContentItemsForAppSubscriberHubMatchingDetailResolver({
-          where: contentScopedWhere,
+        const pathwayTotal = paginated.totalResolvable;
+        const pageCount = Math.max(1, Math.ceil(pathwayTotal / limitParsed) || 1);
+        const safePage = Math.min(pageRequested, pageCount);
+
+        if (paginated.rows.length === 0 && pathwayTotal > 0 && safePage !== pageRequested) {
+          paginated = await paginatePathwayLessonsForAppSubscriberHubMatchingDetailResolver({
+            where: pathwayWhereWithSafety,
+            page: safePage,
+            pageSize: limitParsed,
+            entitlement,
+            learnerPath,
+            marketingLocale,
+          });
+        }
+
+        if (paginated.scanCapped) {
+          safeServerLog("page_lessons", "app_lessons_hub_pathway_total_may_be_truncated", {
+            dbRowsScanned: String(paginated.dbRowsScanned),
+            resolvableTotal: String(pathwayTotal),
+          });
+        }
+
+        const rows: AppLessonListRow[] = paginated.rows.map((r) => ({
+          id: r.id,
+          title: r.title,
+          summary: pathwayLessonCardSummary(r),
+          topic: r.topic,
+          bodySystem: r.bodySystem,
+          pathwayMeta: { pathwayId: r.pathwayId, slug: r.slug },
+        }));
+
+        return {
+          source: "pathway_lessons" as const,
+          total: pathwayTotal,
           page: safePage,
+          pageCount,
+          rows,
+        };
+      }
+
+      if (listSource === "content_items") {
+        let paginated = await paginateContentItemsForAppSubscriberHubMatchingDetailResolver({
+          where: contentScopedWhere,
+          page: pageRequested,
           pageSize: limitParsed,
           entitlement,
         });
+
+        const contentResolvableTotal = paginated.totalResolvable;
+        const pageCount = Math.max(1, Math.ceil(contentResolvableTotal / limitParsed) || 1);
+        const safePage = Math.min(pageRequested, pageCount);
+
+        if (paginated.rows.length === 0 && contentResolvableTotal > 0 && safePage !== pageRequested) {
+          paginated = await paginateContentItemsForAppSubscriberHubMatchingDetailResolver({
+            where: contentScopedWhere,
+            page: safePage,
+            pageSize: limitParsed,
+            entitlement,
+          });
+        }
+
+        if (paginated.scanCapped) {
+          safeServerLog("page_lessons", "app_lessons_hub_content_total_may_be_truncated", {
+            dbRowsScanned: String(paginated.dbRowsScanned),
+            resolvableTotal: String(contentResolvableTotal),
+          });
+        }
+
+        const rows: AppLessonListRow[] = paginated.rows.map((r) => ({
+          id: r.id,
+          title: r.title,
+          summary: r.summary ?? null,
+        }));
+
+        return {
+          source: "content_items" as const,
+          total: contentResolvableTotal,
+          page: safePage,
+          pageCount,
+          rows,
+        };
       }
-      if (paginated.scanCapped) {
-        safeServerLog("page_lessons", "app_lessons_hub_content_total_may_be_truncated", {
-          dbRowsScanned: String(paginated.dbRowsScanned),
-          resolvableTotal: String(contentResolvableTotal),
-        });
-      }
-      const rows: AppLessonListRow[] = paginated.rows.map((r) => ({
+
+      const legacy = await paginateLegacyContentMapLessonsForAppSubscriberHubMatchingDetailResolver(
+        entitlement,
+        pageRequested,
+        limitParsed,
+        qEffective,
+      );
+
+      const rows: AppLessonListRow[] = legacy.rows.map((r) => ({
         id: r.id,
         title: r.title,
-        summary: r.summary ?? null,
+        summary: r.summary,
       }));
+
       return {
-        source: "content_items" as const,
-        total: contentResolvableTotal,
-        page: safePage,
-        pageCount,
+        source: "legacy_content_map" as const,
+        total: legacy.total,
+        page: legacy.page,
+        pageCount: legacy.pageCount,
         rows,
       };
-    }
-
-    const legacy = await paginateLegacyContentMapLessonsForAppSubscriberHubMatchingDetailResolver(
-      entitlement,
-      pageRequested,
-      limitParsed,
-      qEffective,
-    );
-    const rows: AppLessonListRow[] = legacy.rows.map((r) => ({
-      id: r.id,
-      title: r.title,
-      summary: r.summary,
-    }));
-    return {
-      source: "legacy_content_map" as const,
-      total: legacy.total,
-      page: legacy.page,
-      pageCount: legacy.pageCount,
-      rows,
-    };
-  }, null, LESSONS_PAGE_DB_TIMEOUT_MS, { scope: "page_lessons", label: "lesson_list_block" });
+    },
+    null,
+    LESSONS_PAGE_DB_TIMEOUT_MS,
+    { scope: "page_lessons", label: "lesson_list_block" },
+  );
 
   let lessonsHubInventorySource: "primary" | "degraded_snapshot" = "primary";
 
   let lessonsBlock: LessonsListBlock;
+
   if (lessonsBlockFromDb !== null) {
     lessonsBlock = lessonsBlockFromDb;
   } else {
     safeServerLog("page_lessons", "app_lessons_hub_primary_db_timeout", {
-      pathway_id: pathwayIdFilter ?? "",
-      learner_path: learnerPath ?? "",
+      pathway_id: pathwayIdFilter ?? undefined,
+      learner_path: learnerPath ?? undefined,
     });
+
     const pathwayForSnap = (pathwayIdFilter?.trim() || learnerPath?.trim() || visiblePathwayIds[0] || "").trim() || null;
+
     const listOptsSnap = appLessonsHubListOptsForSnapshot({
       qEffective,
       topicSlugFilter,
     });
+
     const snap = pathwayForSnap
       ? await readPathwayLessonsHubPageSnapshot(pathwayForSnap, {
           pageRequested,
@@ -416,10 +472,14 @@ export default async function LessonsPage({ searchParams }: Props) {
           listOpts: listOptsSnap,
         })
       : null;
+
     const fromSnap = snap && pathwayForSnap ? lessonsListBlockFromPathwayHubSnapshot(pathwayForSnap, snap) : null;
+
     if (fromSnap && snap) {
       lessonsHubInventorySource = "degraded_snapshot";
+
       const age = publishedSnapshotAgeMs(snap.capturedAt);
+
       safeServerLog("page_lessons", "critical_study_load_diagnostics", {
         event: "critical_study_load_diagnostics",
         operation: "app_lessons_hub_list",
@@ -429,11 +489,12 @@ export default async function LessonsPage({ searchParams }: Props) {
         snapshot_age_ms: String(Math.round(age >= 0 ? age : -1)),
         final_outcome: fromSnap.total === 0 ? "empty" : "degraded_snapshot",
         fallback_used: "true",
-        pathway_id: pathwayForSnap,
+        pathway_id: pathwayForSnap ?? undefined,
         locale: marketingLocale,
         exam: entitlement !== "error" ? String(entitlement.country ?? "") : "",
         snapshot_version: snap.version.slice(0, 120),
       });
+
       lessonsBlock = {
         source: "pathway_lessons",
         total: fromSnap.total,
@@ -450,13 +511,16 @@ export default async function LessonsPage({ searchParams }: Props) {
         snapshot_used: "false",
         final_outcome: "error",
         fallback_used: "false",
-        pathway_id: pathwayForSnap ?? "",
+        pathway_id: pathwayForSnap ?? undefined,
         locale: marketingLocale,
         exam: entitlement !== "error" ? String(entitlement.country ?? "") : "",
       });
+
       return (
         <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
-          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.title")}</h1>
+          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">
+            {t("learner.lessons.list.title")}
+          </h1>
           <ContentEmptyState
             variant="generic"
             headline="Could not load your lesson list"
@@ -477,10 +541,12 @@ export default async function LessonsPage({ searchParams }: Props) {
       qEffective,
       limitParsed,
     );
+
     redirect(q ? `/app/lessons${q}` : "/app/lessons");
   }
 
   const resolvedRenderableLessons: AppLessonListRow[] = [...lessonsBlock.rows];
+
   const lessonsHub = buildLearnerAppLessonsHubSummary<AppLessonListRow>({
     rows: resolvedRenderableLessons,
     catalogMatchTotal: lessonsBlock.total,
@@ -492,7 +558,7 @@ export default async function LessonsPage({ searchParams }: Props) {
 
   if (process.env.NODE_ENV !== "production") {
     safeServerLog("page_lessons", "app_lessons_hub_render", {
-      pathwayId: pathwayIdFilter ?? "",
+      pathwayId: pathwayIdFilter ?? undefined,
       totalLessons: String(lessonsHub.catalogMatchTotal),
       renderedLessons: String(resolvedRenderableLessons.length),
       emptyReason: lessonsHub.emptyReason,
@@ -500,18 +566,23 @@ export default async function LessonsPage({ searchParams }: Props) {
   }
 
   const progressByRowId: Record<string, PathwayLessonProgressStatus> = {};
+
   if (userId && lessonsBlock.source === "pathway_lessons") {
     const byPathway = new Map<string, string[]>();
+
     for (const row of resolvedRenderableLessons) {
       const pm = row.pathwayMeta;
       if (!pm?.slug) continue;
+
       const list = byPathway.get(pm.pathwayId) ?? [];
       list.push(pm.slug);
       byPathway.set(pm.pathwayId, list);
     }
+
     for (const [pathwayId, slugs] of byPathway) {
       const unique = [...new Set(slugs)];
       const map = await loadPathwayLessonProgressMap(userId, pathwayId, unique);
+
       for (const row of resolvedRenderableLessons) {
         const pm = row.pathwayMeta;
         if (pm && pm.pathwayId === pathwayId && pm.slug) {
@@ -540,12 +611,18 @@ export default async function LessonsPage({ searchParams }: Props) {
         <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)] sm:text-[1.7rem]">
           {t("learner.lessons.list.title")}
         </h1>
-        <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.lessons.list.subscriberIntro")}</p>
+        <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">
+          {t("learner.lessons.list.subscriberIntro")}
+        </p>
       </div>
+
       {lessonsHubInventorySource === "degraded_snapshot" ? <LearnerStudyLiveSyncBanner /> : null}
+
       {(topicFilter || topicSlugFilter) && lessonsBlock.source === "pathway_lessons" ? (
         <div className="nn-card border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-4 text-sm text-[var(--semantic-text-secondary)]">
-          <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.topicFilterTitle")}</p>
+          <p className="font-semibold text-[var(--semantic-text-primary)]">
+            {t("learner.lessons.list.topicFilterTitle")}
+          </p>
           <p className="mt-1">
             {t("learner.lessons.list.topicFilterBody", {
               label: topicSlugFilter ?? topicFilter ?? "",
@@ -560,6 +637,7 @@ export default async function LessonsPage({ searchParams }: Props) {
           <p>{t("learner.lessons.list.topicFilterIgnored")}</p>
         </div>
       ) : null}
+
       <Suspense fallback={<div className="h-24 animate-pulse rounded-xl bg-[var(--semantic-panel-muted)]" />}>
         <LearnerLessonsSearchToolbar
           initialQ={qEffective ?? ""}
@@ -567,11 +645,13 @@ export default async function LessonsPage({ searchParams }: Props) {
           placeholder="Search by title, topic, or keyword"
         />
       </Suspense>
+
       {listSummaryLine ? (
         <p className="text-sm font-medium text-[var(--semantic-text-secondary)]" data-testid="lessons-hub-list-summary">
           {listSummaryLine}
         </p>
       ) : null}
+
       {resolvedRenderableLessons.length === 0 && lessonsHub.showCatalogEmpty ? (
         <div className="nn-card mt-4 space-y-3 p-6 text-sm text-muted">
           <p className="font-semibold text-[var(--semantic-text-primary)]">No lessons available yet for this topic</p>
@@ -592,9 +672,12 @@ export default async function LessonsPage({ searchParams }: Props) {
           </div>
         </div>
       ) : null}
+
       {resolvedRenderableLessons.length === 0 && lessonsHub.showFilterMissEmpty ? (
         <div className="nn-card mt-4 space-y-3 border-[color-mix(in_srgb,var(--semantic-warning)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-warm)] p-6 text-sm text-[var(--semantic-text-secondary)]">
-          <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.filterNoMatchesTitle")}</p>
+          <p className="font-semibold text-[var(--semantic-text-primary)]">
+            {t("learner.lessons.list.filterNoMatchesTitle")}
+          </p>
           <p>{t("learner.lessons.list.filterNoMatchesBody")}</p>
           <div className="flex flex-wrap gap-3">
             <Link
@@ -605,13 +688,18 @@ export default async function LessonsPage({ searchParams }: Props) {
             </Link>
           </div>
           {lessonsHub.showCountMismatchHint ? (
-            <p className="text-xs text-[var(--semantic-text-secondary)]">{t("learner.lessons.list.countMismatchHint")}</p>
+            <p className="text-xs text-[var(--semantic-text-secondary)]">
+              {t("learner.lessons.list.countMismatchHint")}
+            </p>
           ) : null}
         </div>
       ) : null}
+
       {resolvedRenderableLessons.length === 0 && lessonsHub.showCountMismatchHint && !lessonsHub.showFilterMissEmpty ? (
         <div className="nn-card mt-4 space-y-2 border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-6 text-sm text-[var(--semantic-text-secondary)]">
-          <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.countMismatchHint")}</p>
+          <p className="font-semibold text-[var(--semantic-text-primary)]">
+            {t("learner.lessons.list.countMismatchHint")}
+          </p>
           <Link
             href="/app/lessons"
             className="inline-flex items-center rounded-xl border border-[var(--semantic-border-soft)] px-4 py-2 font-semibold text-[var(--semantic-brand)] hover:underline"
@@ -620,6 +708,7 @@ export default async function LessonsPage({ searchParams }: Props) {
           </Link>
         </div>
       ) : null}
+
       <div className="mt-4">
         <LearnerLessonsVirtualList
           lessons={resolvedRenderableLessons}
@@ -643,10 +732,14 @@ export default async function LessonsPage({ searchParams }: Props) {
       />
 
       <LearnerStudyQuickLinksCard t={t} id="lessons-study-quick-links" catHref={catHref} />
+
       <aside className="nn-card border-[color-mix(in_srgb,var(--semantic-success)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-positive)] p-4 text-sm text-[var(--semantic-text-secondary)] shadow-[var(--semantic-shadow-soft)]">
-        <p className="font-semibold text-[var(--semantic-text-primary)]">{t("learner.lessons.list.studyRhythmTitle")}</p>
+        <p className="font-semibold text-[var(--semantic-text-primary)]">
+          {t("learner.lessons.list.studyRhythmTitle")}
+        </p>
         <p className="mt-1">{t("learner.lessons.list.studyRhythmBody")}</p>
       </aside>
+
       <p className="text-sm text-[var(--semantic-text-secondary)]">
         {t("learner.lessons.list.paginationExplainer", { pageSize: limitParsed })}{" "}
         <Link
