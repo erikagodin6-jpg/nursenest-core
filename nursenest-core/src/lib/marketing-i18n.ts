@@ -1,9 +1,9 @@
 export {
   formatMarketingMessage,
-  getOptionalMarketingMessage,
   getOptionalPublicMessage,
-  getRequiredMarketingMessage,
+  getOptionalPublicMessage as getOptionalMarketingMessage,
   getRequiredPublicMessage,
+  getRequiredPublicMessage as getRequiredMarketingMessage,
   resolveMarketingCopy,
   type MarketingMessageKey,
   type MarketingMessages,
