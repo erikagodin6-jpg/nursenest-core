@@ -56,6 +56,23 @@ export function parseOptionalBlogSlug(raw: string | null | undefined): string | 
   return cleaned.slice(0, 180);
 }
 
+/**
+ * Admin-only: accept pasted article titles or loose text in an optional slug field.
+ * Returns a slug that always matches {@link BLOG_SLUG_FORMAT_RE} (never throws).
+ * Empty / whitespace-only input → `null` (caller should omit / auto-generate).
+ */
+export function coerceAdminOptionalSlugFromRawInput(raw: string | null | undefined, maxLen = 180): string | null {
+  if (raw == null) return null;
+  const trimmed = String(raw).trim();
+  if (trimmed.length === 0) return null;
+
+  const cleaned = cleanBlogSlugInput(trimmed).slice(0, maxLen);
+  if (cleaned.length >= 3 && BLOG_SLUG_FORMAT_RE.test(cleaned)) {
+    return cleaned;
+  }
+  return generateBlogSlugBaseFromTitle(trimmed, Math.min(100, maxLen)).slice(0, maxLen);
+}
+
 export function generateBlogSlugBaseFromTitle(title: string, maxLen = 100): string {
   const t = cleanBlogSlugInput(title).slice(0, maxLen);
   if (t.length >= 3 && BLOG_SLUG_FORMAT_RE.test(t)) return t;

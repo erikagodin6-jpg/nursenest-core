@@ -9,7 +9,7 @@ import {
 } from "@/lib/blog/blog-admin-library-query";
 import { parseBoundedPageSize } from "@/lib/api/api-pagination-limits";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import { BlogInvalidSlugError, generateBlogSlugBaseFromTitle, parseOptionalBlogSlug } from "@/lib/blog/blog-optional-slug";
+import { coerceAdminOptionalSlugFromRawInput, generateBlogSlugBaseFromTitle } from "@/lib/blog/blog-optional-slug";
 import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
 import { prisma } from "@/lib/db";
 import { classifyBlogCorpus, collectClassificationViolations, isPublishBlockedByTaxonomy } from "@/lib/taxonomy/content-write-taxonomy";
@@ -43,6 +43,11 @@ const adminBlogListSelect = {
   campaignId: true,
 } as const;
 
+const adminBlogTitleSchema = z.preprocess(
+  (v) => (typeof v === "string" ? v.replace(/\s+/g, " ").trim() : v),
+  z.string().min(3, "Title must be at least 3 characters.").max(220),
+);
+
 const createSchema = z.object({
   slug: z.preprocess((v) => {
     if (v === undefined || v === null) return undefined;
@@ -50,7 +55,7 @@ const createSchema = z.object({
     const t = v.trim();
     return t === "" ? undefined : t;
   }, z.string().max(500).optional()),
-  title: z.string().min(3).max(220),
+  title: adminBlogTitleSchema,
   excerpt: z.string().min(10).max(500),
   body: z.string().min(20),
   exam: z.string().max(80).optional().nullable(),
@@ -215,20 +220,13 @@ export async function POST(req: Request) {
   }
   const d = parsed.data;
 
-  let finalSlug: string;
-  try {
-    const explicit = parseOptionalBlogSlug(d.slug ?? "");
-    const base = explicit ?? generateBlogSlugBaseFromTitle(d.title);
-    if (!explicit) {
-      console.info("[blog] slug auto-generated", { title: d.title });
-    }
-    finalSlug = await ensureUniqueBlogPostSlug(base);
-  } catch (e) {
-    if (BlogInvalidSlugError.is(e)) {
-      return NextResponse.json({ error: e.message, code: "INVALID_SLUG" }, { status: 400 });
-    }
-    throw e;
+  const explicitRaw = typeof d.slug === "string" ? d.slug.trim() : "";
+  const explicit = explicitRaw ? coerceAdminOptionalSlugFromRawInput(d.slug) : null;
+  const base = explicit ?? generateBlogSlugBaseFromTitle(d.title);
+  if (!explicit) {
+    console.info("[blog] slug auto-generated", { title: d.title });
   }
+  const finalSlug = await ensureUniqueBlogPostSlug(base);
 
   const blogTax = classifyBlogCorpus({
     title: d.title,

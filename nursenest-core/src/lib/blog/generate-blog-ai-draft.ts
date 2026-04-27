@@ -18,11 +18,7 @@ import { blogPrimaryStudyCta } from "@/lib/blog/blog-study-cta";
 import { buildOutline, detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
 import { prisma } from "@/lib/db";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
-import {
-  BlogInvalidSlugError,
-  generateBlogSlugBaseFromExamTopic,
-  parseOptionalBlogSlug,
-} from "@/lib/blog/blog-optional-slug";
+import { coerceAdminOptionalSlugFromRawInput } from "@/lib/blog/blog-optional-slug";
 import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
 import {
   generateBlogSEO,
@@ -146,20 +142,15 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
     breadcrumb: taxonomySeo.breadcrumb,
   });
 
-  let slug: string;
-  try {
-    const explicit = parseOptionalBlogSlug(d.slug ?? "");
-    const base = explicit ?? taxonomySeo.slug;
-    if (!explicit) {
-      console.info("[blog] slug auto-generated", { base, topic: d.topic, exam: d.exam });
-    }
-    slug = explicit ? await ensureUniqueBlogPostSlug(base) : await ensureUniqueTaxonomyTerminalSlug(prisma, base);
-  } catch (e) {
-    if (BlogInvalidSlugError.is(e)) {
-      return { ok: false, error: e.message };
-    }
-    throw e;
+  const explicitRaw = typeof d.slug === "string" ? d.slug.trim() : "";
+  const explicit = explicitRaw ? coerceAdminOptionalSlugFromRawInput(d.slug) : null;
+  const base = explicit ?? taxonomySeo.slug;
+  if (!explicit) {
+    console.info("[blog] slug auto-generated", { base, topic: d.topic, exam: d.exam });
   }
+  const slug = explicit
+    ? await ensureUniqueBlogPostSlug(base)
+    : await ensureUniqueTaxonomyTerminalSlug(prisma, base);
 
   try {
     await assertSeoSafeToCreateBlog(prisma, { slug, metaTitle: taxonomySeo.metaTitle, h1: taxonomySeo.h1 });

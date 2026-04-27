@@ -3,9 +3,14 @@ import { z } from "zod";
 import { ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN } from "@/lib/admin/blog-generate-ai-constants";
 import { GLOBAL_LOCALE_CODES, GLOBAL_REGION_SLUGS } from "@/lib/i18n/global-regions";
 
+const adminBlogTopicSchema = z.preprocess(
+  (v) => (typeof v === "string" ? v.replace(/\s+/g, " ").trim() : v),
+  z.string().min(3, "Topic must be at least 3 non-whitespace characters.").max(500),
+);
+
 /** Shared body schema for legacy single-post AI draft + automation-log retries. */
 export const blogSimpleAiDraftBodySchema = z.object({
-  topic: z.string().min(3).max(200),
+  topic: adminBlogTopicSchema,
   keywords: z.string().max(400).optional(),
   exam: z.string().min(2).max(80),
   country: z.enum(["US", "CA", "unspecified"]).optional(),
@@ -68,7 +73,7 @@ export const blogSimpleAiDraftBodySchema = z.object({
         .optional(),
     }),
   ).optional(),
-  /** Raw optional slug; server normalizes / validates via `parseOptionalBlogSlug`. */
+  /** Raw optional slug or title-like hint; server coerces via `coerceAdminOptionalSlugFromRawInput`. */
   slug: z.preprocess((v) => {
     if (v === undefined || v === null) return undefined;
     if (typeof v !== "string") return v;
@@ -96,9 +101,9 @@ export type BlogSimpleAiDraftBody = z.infer<typeof blogSimpleAiDraftBodySchema>;
 /** Admin API payload: single topic or bounded multi-topic batch (one server job per POST). */
 export const blogGenerateByTopicRequestSchema = z
   .object({
-    topic: z.string().min(3).max(200).optional(),
+    topic: adminBlogTopicSchema.optional(),
     topics: z
-      .array(z.string().min(3).max(200))
+      .array(adminBlogTopicSchema)
       .min(1)
       .max(ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN)
       .optional(),

@@ -4,6 +4,7 @@ import {
   BlogInvalidSlugError,
   BLOG_SLUG_FORMAT_RE,
   cleanBlogSlugInput,
+  coerceAdminOptionalSlugFromRawInput,
   generateBlogSlugBaseFromTitle,
   liveNormalizeBlogSlugInputValue,
   normalizeSlugPreprocess,
@@ -42,9 +43,50 @@ describe("parseOptionalBlogSlug", () => {
   });
 });
 
+describe("coerceAdminOptionalSlugFromRawInput", () => {
+  it("accepts normal pasted article titles in admin slug fields", () => {
+    assert.equal(
+      coerceAdminOptionalSlugFromRawInput("Parkinson’s Disease: Nursing Priorities & Red Flags"),
+      "parkinson-s-disease-nursing-priorities-and-red-flags",
+    );
+  });
+
+  it("returns null for blank admin slug input", () => {
+    assert.equal(coerceAdminOptionalSlugFromRawInput("   "), null);
+  });
+
+  it("coerces titles with question marks and apostrophes to valid slug pattern", () => {
+    for (const raw of [
+      "Why does COPD cause CO2 retention?",
+      "Nephrotic Syndrome and Low Urine Output: What Nurses Need to Know",
+      "CABG: Priority Nursing Assessments After Surgery",
+    ]) {
+      const s = coerceAdminOptionalSlugFromRawInput(raw);
+      assert.ok(s, raw);
+      assert.ok(BLOG_SLUG_FORMAT_RE.test(s), `${raw} -> ${s}`);
+    }
+  });
+});
+
 describe("generateBlogSlugBaseFromTitle", () => {
   it("builds kebab-case from title", () => {
     assert.equal(generateBlogSlugBaseFromTitle("Sepsis Management"), "sepsis-management");
+  });
+
+  it("generates valid slugs for normal admin article titles", () => {
+    const cases = [
+      [
+        "Nephrotic Syndrome and Low Urine Output: What Nurses Need to Know",
+        "nephrotic-syndrome-and-low-urine-output-what-nurses-need-to-know",
+      ],
+      ["Why does COPD cause CO2 retention?", "why-does-copd-cause-co2-retention"],
+      ["CABG: Priority Nursing Assessments After Surgery", "cabg-priority-nursing-assessments-after-surgery"],
+      ["Parkinson’s Disease: Nursing Priorities & Red Flags", "parkinson-s-disease-nursing-priorities-and-red-flags"],
+    ] as const;
+
+    for (const [title, expected] of cases) {
+      assert.equal(generateBlogSlugBaseFromTitle(title), expected);
+    }
   });
 
   it("handles long clinical title with special chars", () => {

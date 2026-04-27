@@ -1443,16 +1443,16 @@ export function AdminBlogControlPanelClient({
           </label>
           <label className="block space-y-1 sm:col-span-2">
             <span className="text-xs font-medium text-muted-foreground">
-              Optional fixed slug (leave blank to auto-generate). Use lowercase letters and hyphens only.
+              Optional URL slug hint (leave blank to auto-generate). You can paste a full article title — the server
+              normalizes it to a valid slug.
             </span>
             <input
               ref={fixedGenSlugInputRef}
               className="w-full rounded-lg border border-border px-3 py-2 font-mono text-sm"
               value={fixedSlug}
               onChange={(e) => {
-                const normalized = liveNormalizeBlogSlugInputValue(e.target.value);
-                setFixedSlug(normalized);
-                fixedGenSlugInputRef.current?.setCustomValidity(blogSlugCustomValidityMessage(normalized));
+                setFixedSlug(e.target.value);
+                fixedGenSlugInputRef.current?.setCustomValidity("");
               }}
               disabled={formDisabled}
               placeholder="leave blank to auto-generate"

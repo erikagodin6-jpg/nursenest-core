@@ -67,8 +67,8 @@ import {
   BlogInvalidSlugError,
   BLOG_SLUG_FORMAT_RE,
   cleanBlogSlugInput,
+  coerceAdminOptionalSlugFromRawInput,
   generateBlogSlugBaseFromExamTopic,
-  parseOptionalBlogSlug,
 } from "@/lib/blog/blog-optional-slug";
 import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
 
@@ -129,7 +129,7 @@ function extractJsonObject(raw: string): unknown {
   return JSON.parse(t) as unknown;
 }
 
-function sanitizeSlugInput(s: string, exam: string, topic: string): string {
+export function sanitizeControlPanelGeneratedSlugInput(s: string, exam: string, topic: string): string {
   const fromAi = cleanBlogSlugInput(s).slice(0, 100);
   if (fromAi.length >= 3 && BLOG_SLUG_FORMAT_RE.test(fromAi)) return fromAi;
   return generateBlogSlugBaseFromExamTopic(exam, topic, 100) || "blog-draft";
@@ -303,10 +303,11 @@ export async function persistControlPanelDraft(
   const pageTitle = (plan.h1 || plan.titleOptions[0] || input.topic).slice(0, 220);
   let slugBase: string;
   try {
-    if (input.fixedSlug?.trim()) {
-      slugBase = parseOptionalBlogSlug(input.fixedSlug)!;
+    const fixed = input.fixedSlug?.trim() ? coerceAdminOptionalSlugFromRawInput(input.fixedSlug, 180) : null;
+    if (fixed) {
+      slugBase = fixed;
     } else {
-      slugBase = sanitizeSlugInput(plan.recommendedSlug, input.exam, input.topic);
+      slugBase = sanitizeControlPanelGeneratedSlugInput(plan.recommendedSlug, input.exam, input.topic);
     }
   } catch (e) {
     if (BlogInvalidSlugError.is(e)) {

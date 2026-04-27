@@ -17,11 +17,11 @@ import { annotateBlogInternalLinkRowsWithVerification } from "@/lib/blog/blog-in
 import { normalizePlanSuggestedLessonRows } from "@/lib/blog/blog-internal-lesson-links";
 import { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-generation-pipeline";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import { normalizeSlugPreprocess } from "@/lib/blog/blog-optional-slug";
+import { BLOG_SLUG_FORMAT_RE, coerceAdminOptionalSlugFromRawInput } from "@/lib/blog/blog-optional-slug";
 import { prisma } from "@/lib/db";
 
 const bodySchema = z.object({
-  topic: z.string().min(3).max(200),
+  topic: z.string().trim().min(3, "Topic must be at least 3 non-whitespace characters.").max(500),
   exam: z.string().min(2).max(80),
   country: z.enum(["US", "CA", "unspecified"]).default("unspecified"),
   keywords: z.string().max(500).optional(),
@@ -34,13 +34,12 @@ const bodySchema = z.object({
   includeImage: z.boolean().optional(),
   includeAiImage: z.boolean().optional(),
   sourceRecords: z.array(z.unknown()).max(30).optional(),
-  fixedSlug: z.preprocess(
-    (v) => normalizeSlugPreprocess(v, 180),
-    z.string().min(3).max(180).regex(
-      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-      "Slug must be lowercase letters, numbers, and hyphens only (e.g. heart-failure-nclex-guide). Special characters are stripped automatically.",
-    ).optional(),
-  ),
+  fixedSlug: z.preprocess((v): string | undefined => {
+    if (v === undefined || v === null) return undefined;
+    if (typeof v !== "string") return undefined;
+    const coerced = coerceAdminOptionalSlugFromRawInput(v, 180);
+    return coerced ?? undefined;
+  }, z.string().min(3).max(180).regex(BLOG_SLUG_FORMAT_RE).optional()),
   allowInsufficientCitations: z.boolean().optional(),
   plan: z.unknown(),
   bodyHtml: z.string().min(BLOG_ARTICLE_MIN_BODY_CHARS),

@@ -17,8 +17,13 @@ import { normalizeBlogControlPanelGenerateRequestBody } from "@/lib/blog/blog-ad
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
+const adminBlogTopicSchema = z.preprocess(
+  (v) => (typeof v === "string" ? v.replace(/\s+/g, " ").trim() : v),
+  z.string().min(3, "Topic must be at least 3 non-whitespace characters.").max(500),
+);
+
 const bodySchema = z.object({
-  topic: z.string().min(3).max(200),
+  topic: adminBlogTopicSchema,
   exam: z.string().min(2).max(80),
   country: z.enum(["US", "CA", "unspecified"]).default("unspecified"),
   keywords: z.string().max(500).optional(),

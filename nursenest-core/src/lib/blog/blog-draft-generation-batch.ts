@@ -10,7 +10,7 @@ import { generateAutomatedBlogPost } from "@/lib/blog/blog-automation-engine";
 import { getAdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
 import { logDraftBatchItemRun } from "@/lib/admin/blog-content-automation-log";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import { BlogInvalidSlugError, generateBlogSlugBaseFromTitle, parseOptionalBlogSlug } from "@/lib/blog/blog-optional-slug";
+import { coerceAdminOptionalSlugFromRawInput, generateBlogSlugBaseFromTitle } from "@/lib/blog/blog-optional-slug";
 import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
 import { prisma } from "@/lib/db";
 import { isRnTopicMapShellGenerationBatch, RN_TOPIC_MAP_SHELL_MAX_ITEMS } from "@/lib/blog/blog-topic-map-shell-batch-constants";
@@ -177,27 +177,10 @@ async function processRnTopicMapShellBatchItems(batchId: string, limit: number):
         continue;
       }
 
-      let slug: string;
-      try {
-        const normalizedSlug = parseOptionalBlogSlug(row.slug) ?? undefined;
-        const base = normalizedSlug ?? generateBlogSlugBaseFromTitle(row.title);
-        slug = await ensureUniqueBlogPostSlug(base);
-      } catch (e) {
-        const msg = BlogInvalidSlugError.is(e) ? e.message : e instanceof Error ? e.message : String(e);
-        await prisma.blogDraftGenerationBatchItem.update({
-          where: { id: item.id },
-          data: { status: BlogDraftGenerationBatchItemStatus.FAILED, error: `invalid_slug:${msg.slice(0, 200)}` },
-        });
-        results.push({
-          itemId: item.id,
-          ordinal: item.ordinal,
-          topicRaw: item.topicRaw,
-          outcome: "failed",
-          message: msg,
-        });
-        await refreshDraftGenerationBatchStats(batchId);
-        continue;
-      }
+      const normalizedSlug =
+        typeof row.slug === "string" && row.slug.trim() ? coerceAdminOptionalSlugFromRawInput(row.slug) : null;
+      const base = normalizedSlug ?? generateBlogSlugBaseFromTitle(row.title);
+      const slug = await ensureUniqueBlogPostSlug(base);
 
       const normalizedTopic = normalizeBlogTopicKey(row.tags[1] ?? row.title);
       if (normalizedTopic) {
