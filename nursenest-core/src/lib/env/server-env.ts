@@ -1,7 +1,7 @@
 /**
  * Typed env access for server runtime. Never log raw secrets.
  */
-import { maskDatabaseUrl } from "@/lib/db/database-env";
+import { maskDatabaseUrl } from "@/lib/env/mask-database-url";
 
 export function optionalEnv(name: string): string | undefined {
   const v = process.env[name];

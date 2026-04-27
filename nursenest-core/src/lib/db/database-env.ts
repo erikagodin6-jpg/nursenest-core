@@ -1,6 +1,6 @@
 import "server-only";
 
-import { databaseUrlSource } from "@/lib/db/env-bootstrap";
+import { databaseUrlSource } from "@/lib/db/database-url-source";
 import { maskDatabaseUrl } from "@/lib/env/mask-database-url";
 
 export { maskDatabaseUrl } from "@/lib/env/mask-database-url";
@@ -15,7 +15,7 @@ export function logDatabaseEnvOnce(): void {
   const db = process.env.DATABASE_URL?.trim();
 
   console.error(
-    `[nursenest-core] prisma: effectiveConnection masked=${db ? maskDatabaseUrl(db) : "(MISSING)"} source=${databaseUrlSource}`,
+    `[nursenest-core] prisma: effectiveConnection masked=${db ? maskDatabaseUrl(db) : "(MISSING)"} source=${databaseUrlSource.value}`,
   );
 
   if (process.env.PROD_DATABASE_URL?.trim()) {

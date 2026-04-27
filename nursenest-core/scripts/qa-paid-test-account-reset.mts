@@ -81,7 +81,7 @@ function examGoalSlugForTier(tier: TierCode): "rn" | "rpn" | "np" | "allied" {
 {
   const raw = process.env.DATABASE_URL?.trim();
   const t = raw ? parsePostgresUrlTargetSafe(raw) : null;
-  console.log(`[qa-cli-env] after_env_bootstrap: databaseUrlSource=${databaseUrlSource}`);
+  console.log(`[qa-cli-env] after_env_bootstrap: databaseUrlSource=${databaseUrlSource.value}`);
   if (t) {
     console.log(
       `[qa-cli-env] effective_DATABASE_URL_for_Prisma (tuned; no secrets): host=${t.hostname} port=${t.port} database=${t.database}`,

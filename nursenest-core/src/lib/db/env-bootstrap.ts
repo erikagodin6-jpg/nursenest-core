@@ -18,9 +18,10 @@ import "server-only";
  */
 import { assertRuntimeDatabaseEnvContract } from "../env/require-database-env";
 
-export type DatabaseUrlSource = "database_url" | "missing";
+import { databaseUrlSource } from "./database-url-source";
 
-export let databaseUrlSource: DatabaseUrlSource = "missing";
+export type { DatabaseUrlSource } from "./database-url-source";
+export { databaseUrlSource };
 
 function withDefaultQueryParam(urlString: string, key: string, value: string): string {
   try {
@@ -219,7 +220,7 @@ export function applyDatabaseUrlFromEnv(): void {
 
   if (direct) {
     process.env.DATABASE_URL = tuneDatabaseUrlForProcess(direct, "pooled");
-    databaseUrlSource = "database_url";
+    databaseUrlSource.value = "database_url";
     if (legacyProd && legacyProd !== direct) {
       console.warn(
         "[nursenest-core] PROD_DATABASE_URL is set but ignored — DATABASE_URL is the only source of truth. Remove PROD_DATABASE_URL.",
@@ -228,7 +229,7 @@ export function applyDatabaseUrlFromEnv(): void {
     return;
   }
 
-  databaseUrlSource = "missing";
+  databaseUrlSource.value = "missing";
   if (legacyProd) {
     console.error(
       "[nursenest-core] DATABASE_URL is unset. PROD_DATABASE_URL is no longer merged — copy the connection string to DATABASE_URL (DigitalOcean app env, GitHub secret, or .env.local). See docs/database-environment.md",
