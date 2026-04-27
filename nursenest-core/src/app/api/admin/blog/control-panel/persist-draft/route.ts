@@ -17,6 +17,7 @@ import { annotateBlogInternalLinkRowsWithVerification } from "@/lib/blog/blog-in
 import { normalizePlanSuggestedLessonRows } from "@/lib/blog/blog-internal-lesson-links";
 import { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-generation-pipeline";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
+import { normalizeSlugPreprocess } from "@/lib/blog/blog-optional-slug";
 import { prisma } from "@/lib/db";
 
 const bodySchema = z.object({
@@ -33,12 +34,13 @@ const bodySchema = z.object({
   includeImage: z.boolean().optional(),
   includeAiImage: z.boolean().optional(),
   sourceRecords: z.array(z.unknown()).max(30).optional(),
-  fixedSlug: z
-    .string()
-    .min(3)
-    .max(180)
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
-    .optional(),
+  fixedSlug: z.preprocess(
+    (v) => normalizeSlugPreprocess(v, 180),
+    z.string().min(3).max(180).regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      "Slug must be lowercase letters, numbers, and hyphens only (e.g. heart-failure-nclex-guide). Special characters are stripped automatically.",
+    ).optional(),
+  ),
   allowInsufficientCitations: z.boolean().optional(),
   plan: z.unknown(),
   bodyHtml: z.string().min(BLOG_ARTICLE_MIN_BODY_CHARS),

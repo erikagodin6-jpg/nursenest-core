@@ -37,12 +37,15 @@ import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-pub
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { classifyBlogCorpus, collectClassificationViolations } from "@/lib/taxonomy/content-write-taxonomy";
+import { normalizeSlugPreprocess } from "@/lib/blog/blog-optional-slug";
 
-const slugSchema = z
-  .string()
-  .min(3)
-  .max(120)
-  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use kebab-case (lowercase letters, numbers, hyphens)");
+const slugSchema = z.preprocess(
+  (v) => normalizeSlugPreprocess(v, 120) ?? v,
+  z.string().min(3).max(120).regex(
+    /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+    "Slug must be lowercase letters, numbers, and hyphens only (e.g. heart-failure-nclex). Special characters are stripped automatically — if slug is empty after stripping, provide a clean slug manually.",
+  ),
+);
 
 const patchSchema = z.object({
   /** URL slug; must stay unique. */
