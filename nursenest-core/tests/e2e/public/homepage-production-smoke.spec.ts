@@ -10,6 +10,7 @@
  * build, rebuild with: `NEXT_PUBLIC_NN_MARKETING_CLIENT_ERROR_DEBUG=1 npm run build`
  */
 import { expect, test } from "@playwright/test";
+import { HOMEPAGE_VISIBLE_RAW_I18N_PATH_RE } from "@/lib/marketing/homepage-safe-copy";
 
 test.describe("Homepage production smoke", () => {
   test.use({ viewport: { width: 1280, height: 800 } });
@@ -69,6 +70,13 @@ test.describe("Homepage production smoke", () => {
     const mainH1 = main.getByRole("heading", { level: 1 }).first();
     await expect(mainH1).toBeVisible();
     await expect(mainH1).not.toHaveText(/^\s*$/);
+
+    const mainText = (await main.innerText()).replace(/\s+/g, " ").trim();
+    const rawKeyMatch = mainText.match(HOMEPAGE_VISIBLE_RAW_I18N_PATH_RE);
+    expect(
+      rawKeyMatch,
+      `Homepage <main> must not show raw i18n key paths (matched: ${rawKeyMatch?.[0] ?? "none"}; snippet: ${mainText.slice(0, 400)})`,
+    ).toBeNull();
 
     const fatalPage = pageErrors.filter(Boolean);
     expect(fatalPage, `pageerror: ${fatalPage.join(" | ")}`).toEqual([]);
