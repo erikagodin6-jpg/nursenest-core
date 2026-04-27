@@ -1,3 +1,4 @@
+import React from "react";
 import { LessonSystemCard } from "@/components/pathway-lessons/lesson-system-card";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import {

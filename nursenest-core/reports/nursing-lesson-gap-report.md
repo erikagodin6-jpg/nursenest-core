@@ -1,12 +1,18 @@
 # Nursing lesson gap scan
 
-Generated: 2026-04-27T09:45:43.158Z
+Generated: 2026-04-27T10:56:19.823Z
 
 High-yield checklist vs **effective** catalog lesson titles (all nursing pathways).
 
 ## Chest Pain Triage
 
-_No effective catalog lesson title matched — consider adding content if a template exists elsewhere._
+- `us-rn-nclex-rn` / `clinical-casebook-acs-chest-pain-gold`: ACS case study: chest pain triage
+- `ca-rn-nclex-rn` / `clinical-casebook-acs-chest-pain-gold`: ACS case study: chest pain triage
+- `ca-rpn-rex-pn` / `clinical-casebook-acs-chest-pain-gold`: ACS case study: chest pain triage
+- `us-lpn-nclex-pn` / `clinical-casebook-acs-chest-pain-gold`: ACS case study: chest pain triage
+- `us-np-fnp` / `clinical-casebook-acs-chest-pain-gold`: ACS case study: chest pain triage
+- `us-np-agpcnp` / `clinical-casebook-acs-chest-pain-gold`: ACS case study: chest pain triage
+- `us-np-pmhnp` / `clinical-casebook-acs-chest-pain-gold`: ACS case study: chest pain triage
 
 ## Ventricular Tachycardia
 

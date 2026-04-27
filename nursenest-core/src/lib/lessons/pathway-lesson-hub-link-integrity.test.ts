@@ -93,12 +93,15 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
       "en",
       { resolveLessonDetail },
     );
-    assert.equal(kept.length, 2);
-    assert.equal(diagnostics.keptRowCount, 2);
+    // Soft verify recovery keeps `detail_loader_miss` rows as hubMarketingDegraded so the grid does not empty.
+    assert.equal(kept.length, 3);
+    assert.equal(diagnostics.keptRowCount, 3);
     assert.equal(diagnostics.incomingPreparedRowCount, 3);
     assert.ok(Array.isArray(diagnostics.exclusionReasonsRanked));
     assert.equal(diagnostics.exclusionReasonsRanked?.[0]?.reason, "detail_loader_miss");
     assert.equal(diagnostics.exclusionReasonsRanked?.[0]?.count, 1);
+    assert.equal(kept.find((r) => r.slug === "missing")?.hubMarketingDegraded, true);
+    assert.equal(kept.filter((r) => r.slug !== "missing").every((r) => !r.hubMarketingDegraded), true);
   });
 
   it("calls resolveLessonDetail once per unique slug (duplicate rows do not multiply verify work)", async () => {
@@ -126,7 +129,8 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
       "en",
       { resolveLessonDetail },
     );
-    assert.equal(kept.length, 2);
+    assert.equal(kept.length, 3);
+    assert.equal(kept.find((r) => r.slug === "x")?.hubMarketingDegraded, true);
   });
 
   it("reports diagnostics when every slug fails the resolver", async () => {
@@ -137,8 +141,9 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
       "en",
       { resolveLessonDetail, skipZeroKeptPipelineInvariant: true },
     );
-    assert.equal(kept.length, 0);
-    assert.equal(diagnostics.keptRowCount, 0);
+    assert.equal(kept.length, 2);
+    assert.equal(diagnostics.keptRowCount, 2);
+    assert.ok(kept.every((r) => r.hubMarketingDegraded));
     assert.ok((diagnostics.excludedByReason.detail_loader_miss ?? 0) >= 1);
   });
 
@@ -170,8 +175,9 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
       "en",
       { resolveLessonDetail },
     );
-    assert.equal(kept.length, 0);
-    assert.equal(diagnostics.keptRowCount, 0);
+    assert.equal(kept.length, 1);
+    assert.equal(diagnostics.keptRowCount, 1);
+    assert.equal(kept[0]?.hubMarketingDegraded, true);
     assert.ok((diagnostics.excludedByReason.detail_loader_miss ?? 0) >= 1);
   });
 });

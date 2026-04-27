@@ -51,7 +51,6 @@ import { cacheDeploymentRevision } from "@/lib/cache/cache-revision";
 import { cacheTagPathwayLessonsHub } from "@/lib/cache/cache-tags";
 import { ContentStatus, type Prisma } from "@prisma/client";
 import { unstable_cache } from "next/cache";
-import { cache } from "react";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { logDurabilityEvent } from "@/lib/durability/durability-log";
 import { getPaidContentStaleCache } from "@/lib/durability/paid-content-stale-cache";
@@ -117,6 +116,23 @@ export {
   RELATED_LESSONS_FOR_TOPIC_CAP,
   RELATED_PATHWAY_LESSONS_LIMIT,
 } from "@/lib/lessons/pathway-lesson-loader-config";
+
+/**
+ * Async dedupe for loader entrypoints under Node test runners (tsx) where React `cache` is unavailable.
+ * Keys by JSON-serialized args; retains settled promises for the process lifetime (bounded by distinct arg tuples).
+ */
+function pathwayLoaderAsyncMemo<A extends unknown[], R>(fn: (...args: A) => Promise<R>): (...args: A) => Promise<R> {
+  const store = new Map<string, Promise<R>>();
+  return (...args: A) => {
+    const key = JSON.stringify(args);
+    const hit = store.get(key);
+    if (hit) return hit;
+    const p = fn(...args);
+    store.set(key, p);
+    return p;
+  };
+}
+
 /**
  * Cross-request Data Cache TTL for public lesson payloads (no user/session).
  * Personalized progress stays outside this layer (see pathway-lesson-progress).
@@ -341,7 +357,7 @@ async function assertPublishedLessonInventoryDbReachable(pathwayId: string): Pro
  * locale-wide (not per slug). Without memoization each verify call re-hit the overlay query and
  * amplified timeouts → `detail_loader_miss` for most rows while the hub list still looked healthy.
  */
-const fetchPublishedLessonOverlaysForMarketingLocale = cache(async (normalizedLocale: string) =>
+const fetchPublishedLessonOverlaysForMarketingLocale = pathwayLoaderAsyncMemo(async (normalizedLocale: string) =>
   fetchPublishedPathwayLessonOverlayMapSafe(normalizedLocale),
 );
 
@@ -404,7 +420,7 @@ async function listMissingScopedGoldHubRows(
  * Any published row for pathway (any locale).
  * Request-memoized — {@link getPathwayLessonImpl} consults this for every slug during hub verify.
  */
-const pathwayHasPublishedDbLessons = cache(async function pathwayHasPublishedDbLessons(pathwayId: string): Promise<boolean> {
+const pathwayHasPublishedDbLessons = pathwayLoaderAsyncMemo(async function pathwayHasPublishedDbLessons(pathwayId: string): Promise<boolean> {
   const row = await dbCall(
     () =>
       prisma.pathwayLesson.findFirst({
@@ -448,7 +464,7 @@ async function countPublishedDbLessonsAllLocalesWithHealth(
  * **Request-memoized:** hub list and per-slug marketing verify both call this; without memoization a
  * full-hub verify issued hundreds of identical `groupBy` queries and starved Prisma time budgets.
  */
-const effectiveLocaleForPathwayLessonDbRows = cache(async function effectiveLocaleForPathwayLessonDbRows(
+const effectiveLocaleForPathwayLessonDbRows = pathwayLoaderAsyncMemo(async function effectiveLocaleForPathwayLessonDbRows(
   pathwayId: string,
   requestedRaw: string,
 ): Promise<string> {
@@ -1012,12 +1028,12 @@ async function getPathwayLessonsPageWithDataCache(
 }
 
 /** Dedupes identical hub list fetches within a single request (metadata + page, etc.). */
-export const getPathwayLessonsPage = cache(getPathwayLessonsPageWithDataCache);
+export const getPathwayLessonsPage = pathwayLoaderAsyncMemo(getPathwayLessonsPageWithDataCache);
 /**
  * Non-persistent cached variant for live hubs that must reflect recent imports immediately.
- * Uses request-scope memoization only (React cache), bypassing Next Data Cache.
+ * Uses in-process async memoization only (`pathwayLoaderAsyncMemo`), bypassing Next Data Cache.
  */
-export const getPathwayLessonsPageFresh = cache(async function getPathwayLessonsPageFresh(
+export const getPathwayLessonsPageFresh = pathwayLoaderAsyncMemo(async function getPathwayLessonsPageFresh(
   pathwayId: string,
   page: number,
   pageSize: number,
@@ -1277,7 +1293,7 @@ async function getLessonsForTopicPageWithDataCache(
   )();
 }
 
-export const getLessonsForTopicPage = cache(getLessonsForTopicPageWithDataCache);
+export const getLessonsForTopicPage = pathwayLoaderAsyncMemo(getLessonsForTopicPageWithDataCache);
 
 /**
  * Public topic-link list for marketing UI: keeps only clusters whose topic page resolves to at least
@@ -1295,7 +1311,7 @@ async function listTopicClustersForPublicNavigationImpl(
   );
 }
 
-export const listTopicClustersForPublicNavigation = cache(listTopicClustersForPublicNavigationImpl);
+export const listTopicClustersForPublicNavigation = pathwayLoaderAsyncMemo(listTopicClustersForPublicNavigationImpl);
 
 /**
  * Topic clusters for `/sitemap.xml` only: keeps slugs where {@link getLessonsForTopicPage} would list
@@ -1640,23 +1656,43 @@ async function getPathwayLessonImpl(
   return fromCatalogOnly;
 }
 
+/** Plain `tsx` / `node:test` runs do not mount Next incremental cache; fall back to the direct loader. */
+async function runUnstableCacheWithIncrementalCacheFallback<T>(
+  runCached: () => Promise<T>,
+  runDirect: () => Promise<T>,
+): Promise<T> {
+  try {
+    return await runCached();
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    if (msg.includes("incrementalCache missing")) {
+      return runDirect();
+    }
+    throw e;
+  }
+}
+
 async function getPathwayLessonWithDataCache(
   pathwayId: string,
   slug: string,
   marketingLocale?: string,
 ): Promise<PathwayLessonRecord | undefined> {
-  return unstable_cache(
-    async () => getPathwayLessonImpl(pathwayId, slug, marketingLocale),
-    ["pathway-lesson-detail", `rev:${cacheDeploymentRevision()}`, pathwayId, slug, marketingLocale ?? ""],
-    {
-      revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS,
-      tags: [cacheTagPathwayLessonsHub(pathwayId), `pathway-lesson:${pathwayId}:${slug}`],
-    },
-  )();
+  return runUnstableCacheWithIncrementalCacheFallback(
+    () =>
+      unstable_cache(
+        async () => getPathwayLessonImpl(pathwayId, slug, marketingLocale),
+        ["pathway-lesson-detail", `rev:${cacheDeploymentRevision()}`, pathwayId, slug, marketingLocale ?? ""],
+        {
+          revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS,
+          tags: [cacheTagPathwayLessonsHub(pathwayId), `pathway-lesson:${pathwayId}:${slug}`],
+        },
+      )(),
+    () => getPathwayLessonImpl(pathwayId, slug, marketingLocale),
+  );
 }
 
 /** Dedupes metadata + page lesson fetches in the same request. */
-export const getPathwayLesson = cache(getPathwayLessonWithDataCache);
+export const getPathwayLesson = pathwayLoaderAsyncMemo(getPathwayLessonWithDataCache);
 
 /**
  * Uncached lesson read for **marketing hub row integrity** (`verifyMarketingHubLessonRowsResolve`).
@@ -1782,7 +1818,7 @@ async function getPathwayLessonSeoMetaWithDataCache(
 }
 
 /** Thin metadata loader for lesson SEO without hydrating the full lesson body. */
-export const getPathwayLessonSeoMeta = cache(getPathwayLessonSeoMetaWithDataCache);
+export const getPathwayLessonSeoMeta = pathwayLoaderAsyncMemo(getPathwayLessonSeoMetaWithDataCache);
 
 export type ResolvedPathwayLaunchBundle = {
   spec: PathwayLaunchBundleSpec;
@@ -1793,7 +1829,7 @@ export type ResolvedPathwayLaunchBundle = {
  * Resolves the editorial **launch essentials** list for a pathway (independent of hub pagination).
  * Missing slugs are skipped — content can roll out incrementally.
  */
-export const resolvePathwayLaunchBundle = cache(async function resolvePathwayLaunchBundle(
+export const resolvePathwayLaunchBundle = pathwayLoaderAsyncMemo(async function resolvePathwayLaunchBundle(
   pathwayId: string,
   marketingLocale?: string,
 ): Promise<ResolvedPathwayLaunchBundle | null> {
@@ -2022,7 +2058,7 @@ async function getRelatedPathwayLessonsWithDataCache(
   )();
 }
 
-export const getRelatedPathwayLessons = cache(getRelatedPathwayLessonsWithDataCache);
+export const getRelatedPathwayLessons = pathwayLoaderAsyncMemo(getRelatedPathwayLessonsWithDataCache);
 
 async function listPathwayIdsWithDbLessons(): Promise<string[]> {
   return dbCall(
@@ -2140,7 +2176,7 @@ async function listTopicClustersWithDataCache(pathwayId: string, marketingLocale
 }
 
 /** Dedupes topic index work when metadata + page both need clusters in one request. */
-export const listTopicClusters = cache(listTopicClustersWithDataCache);
+export const listTopicClusters = pathwayLoaderAsyncMemo(listTopicClustersWithDataCache);
 
 export type PathwayLessonSlugRow = { slug: string; topicSlug: string };
 

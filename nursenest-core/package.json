@@ -345,6 +345,7 @@
     "admin:promote": "tsx scripts/ensure-admin-user.ts",
     "create-admin": "tsx scripts/create-admin.ts",
     "content:inventory": "tsx scripts/content-inventory.ts",
+    "content:nursing-lesson-inventory": "node scripts/debug-all-nursing-lesson-inventory.mjs",
     "content:topic-map": "node scripts/generate-master-topic-map.mjs",
     "content:validate-topic-map": "node scripts/validate-master-topic-map.mjs",
     "content:blog-bulk-schedule": "node scripts/blog-bulk-schedule.mjs",

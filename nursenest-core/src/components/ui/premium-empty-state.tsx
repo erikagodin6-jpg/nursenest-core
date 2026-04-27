@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, type LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { sanitizeRelativeNavHrefOrFallback } from "@/lib/ui/safe-relative-href";
 

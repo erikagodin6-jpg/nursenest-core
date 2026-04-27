@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import React, { type CSSProperties } from "react";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import {

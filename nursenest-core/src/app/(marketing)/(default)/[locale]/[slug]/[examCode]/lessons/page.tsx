@@ -1222,7 +1222,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         </div>
         <PathwayLessonsCurriculumHub
           lessons={rawHubLessonRows}
-          preparedLessons={lessonsForCurriculumHub}
+          preparedLessons={hubPageLessons}
           lessonsBasePath={base}
           pathwayId={pathway.id}
           progressMap={progressMap}

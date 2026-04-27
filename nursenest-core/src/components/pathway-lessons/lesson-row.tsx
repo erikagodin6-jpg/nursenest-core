@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import { ChevronRight, Circle, CircleCheckBig, CircleDot } from "lucide-react";
 import { DifficultyBadge } from "@/components/pathway-lessons/difficulty-badge";
