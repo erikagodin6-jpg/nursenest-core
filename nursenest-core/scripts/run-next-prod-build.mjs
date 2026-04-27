@@ -76,11 +76,13 @@ removeNextOutputDir();
  * 🔥 CRITICAL FIX:
  * REMOVE "--webpack"
  */
+console.log(`[next-prod-build] next_cli_invocation_start pid=${process.pid}`);
 const r = spawnSync(process.execPath, [nextBin, "build"], {
   cwd: packageRoot,
   stdio: "inherit",
   env: process.env,
 });
+console.log(`[next-prod-build] next_cli_invocation_end status=${r.status ?? "null"}`);
 
 if (r.status !== 0) {
   process.exit(r.status ?? 1);
