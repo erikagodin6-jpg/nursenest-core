@@ -6,9 +6,9 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { StudyCard } from "@/components/ui/study-card";
-import type { NursingTierHubAction, NursingTierHubActionId, NursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
+import type { NursingTierHubActionId, NursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
+import { resolveNursingTierHubActionHref } from "@/lib/marketing/nursing-tier-hub-content";
 import type { PathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
-import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 
 const ACTION_ICON: Record<NursingTierHubActionId, LucideIcon> = {
   lessons: BookOpen,
@@ -16,23 +16,6 @@ const ACTION_ICON: Record<NursingTierHubActionId, LucideIcon> = {
   practice_questions: Target,
   exams: Activity,
 };
-
-function resolvedTierHubActionHref(pathway: ExamPathwayDefinition, action: NursingTierHubAction): string {
-  const trimmed = action.href?.trim();
-  if (trimmed) return trimmed;
-  switch (action.id) {
-    case "lessons":
-      return marketingPathwayLessonsIndexPath(pathway);
-    case "flashcards":
-      return `/app/flashcards?pathwayId=${encodeURIComponent(pathway.id)}`;
-    case "practice_questions":
-      return buildExamPathwayPath(pathway, "questions");
-    case "exams":
-      return buildExamPathwayPath(pathway, "cat");
-    default:
-      return buildExamPathwayPath(pathway);
-  }
-}
 
 export function NursingTierHubPage({
   pathway,
@@ -86,7 +69,7 @@ export function NursingTierHubPage({
             if (!action) return null;
 
             const Icon = ACTION_ICON[action.id];
-            const href = resolvedTierHubActionHref(pathway, action);
+            const href = resolveNursingTierHubActionHref(pathway, action);
             const locked = Boolean(action.disabled);
 
             return (
@@ -95,6 +78,7 @@ export function NursingTierHubPage({
                   surface="hub"
                   variant={locked ? "locked" : "featured"}
                   href={locked ? buildExamPathwayPath(pathway) : href}
+                  className={action.id === "lessons" ? "nn-qa-nursing-tier-hub-lessons-card" : undefined}
                   icon={Icon}
                   title={action.label || "Open"}
                   description={

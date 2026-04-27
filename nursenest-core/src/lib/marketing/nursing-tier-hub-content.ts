@@ -48,6 +48,38 @@ export type NursingTierHubContent = {
   actions: NursingTierHubAction[];
 };
 
+/** Rejects placeholder / unsafe hrefs so tier hub tiles still use canonical builders per {@link NursingTierHubActionId}. */
+function isNavigableTierHubActionHref(href: string): boolean {
+  const h = href.trim();
+  if (!h) return false;
+  const lower = h.toLowerCase();
+  if (lower.startsWith("javascript:") || lower.startsWith("data:") || lower.startsWith("vbscript:")) return false;
+  if (h === "#" || lower === "#/") return false;
+  if (h.startsWith("#")) return false;
+  return h.startsWith("/") || lower.startsWith("https://") || lower.startsWith("http://");
+}
+
+/**
+ * Final navigation target for a hub study tile. If `action.href` is missing or a placeholder
+ * (`#`, fragment-only, `javascript:`, etc.), falls back to pathway-scoped URLs from the builders.
+ */
+export function resolveNursingTierHubActionHref(pathway: ExamPathwayDefinition, action: NursingTierHubAction): string {
+  const trimmed = action.href?.trim();
+  if (trimmed && isNavigableTierHubActionHref(trimmed)) return trimmed;
+  switch (action.id) {
+    case "lessons":
+      return marketingPathwayLessonsIndexPath(pathway);
+    case "flashcards":
+      return `/app/flashcards?pathwayId=${encodeURIComponent(pathway.id)}`;
+    case "practice_questions":
+      return buildExamPathwayPath(pathway, "questions");
+    case "exams":
+      return buildExamPathwayPath(pathway, "cat");
+    default:
+      return buildExamPathwayPath(pathway);
+  }
+}
+
 function normalizeDash(value: string): string {
   return value.replace(/\u2013|\u2014/g, "-");
 }

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { buildNursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
+import { buildNursingTierHubContent, resolveNursingTierHubActionHref } from "@/lib/marketing/nursing-tier-hub-content";
 
 describe("buildNursingTierHubContent", () => {
   it("builds stable RN hub content with the four primary study actions", () => {
@@ -10,7 +10,7 @@ describe("buildNursingTierHubContent", () => {
 
     const content = buildNursingTierHubContent(pathway);
 
-    assert.equal(content.title, "RN learning and exam prep");
+    assert.equal(content.title, "NCLEX-RN practice questions for the US");
     assert.equal(content.audienceLabel, "RN");
     assert.equal(content.examLabel, "NCLEX-RN");
     assert.deepEqual(
@@ -52,7 +52,7 @@ describe("buildNursingTierHubContent", () => {
 
     const content = buildNursingTierHubContent(pathway);
 
-    assert.equal(content.title, "NP learning and exam prep");
+    assert.equal(content.title, "FNP NP exam prep for the US");
     assert.equal(content.audienceLabel, "NP");
     assert.equal(content.examLabel, "ANCC / AANP - Family NP");
     assert.equal(content.actions[0]?.href, "/us/np/fnp/lessons");
@@ -74,5 +74,44 @@ describe("buildNursingTierHubContent", () => {
         "/canada/rn/nclex-rn/cat",
       ],
     );
+  });
+});
+
+describe("resolveNursingTierHubActionHref", () => {
+  it("ignores placeholder # href and uses pathway lessons index", () => {
+    const pathway = getExamPathwayById("us-rn-nclex-rn");
+    assert.ok(pathway);
+    const href = resolveNursingTierHubActionHref(pathway, {
+      id: "lessons",
+      label: "Lessons",
+      description: "x",
+      href: "#",
+    });
+    assert.equal(href, "/us/rn/nclex-rn/lessons");
+  });
+
+  it("ignores fragment-only hrefs for lessons", () => {
+    const pathway = getExamPathwayById("us-lpn-nclex-pn");
+    assert.ok(pathway);
+    const href = resolveNursingTierHubActionHref(pathway, {
+      id: "lessons",
+      label: "Lessons",
+      description: "x",
+      href: "#topics",
+    });
+    assert.equal(href, "/us/pn/nclex-pn/lessons");
+  });
+
+  it("keeps a valid absolute pathway href when present", () => {
+    const pathway = getExamPathwayById("us-np-fnp");
+    assert.ok(pathway);
+    const custom = "/us/np/fnp/lessons?topicSlug=foo";
+    const href = resolveNursingTierHubActionHref(pathway, {
+      id: "lessons",
+      label: "Lessons",
+      description: "x",
+      href: custom,
+    });
+    assert.equal(href, custom);
   });
 });
