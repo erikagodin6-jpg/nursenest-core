@@ -42,7 +42,7 @@ describe("marketing lessons hub vs lesson detail routing", () => {
     assert.match(src, /verifyMarketingHubLessonRowsResolve/);
     assert.match(src, /const rawHubLessonRows =/);
     assert.match(src, /sliceNormalizedHubLessons/);
-    assert.match(src, /preparedLessons=\{hubPageLessons\}/);
+    assert.match(src, /preparedLessons=\{lessonsForCurriculumHub\}/);
   });
 
   it("lesson detail route uses redesigned detail body, not curriculum hub", () => {

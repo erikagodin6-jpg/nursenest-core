@@ -74,11 +74,11 @@ function fallbackPublicPathwayIds(region: MarketingRegionToggle): string[] {
   const candidates = [
     "ca-rn-nclex-rn",
     "ca-rpn-rex-pn",
-    "ca-np-primary-health-care",
+    "ca-np-cnple",
     "us-rn-nclex-rn",
-    "us-pn-nclex-pn",
+    "us-lpn-nclex-pn",
     "us-np-fnp",
-    "us-allied-nclex-style",
+    "us-allied-core",
   ];
 
   return candidates.filter((id) => {

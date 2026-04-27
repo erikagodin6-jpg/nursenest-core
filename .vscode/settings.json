@@ -33,5 +33,6 @@
     "**/nursenest-core/data": true,
     "**/nursenest-core/public": true,
     "**/client/src/data/translations": true
-  }
+  },
+  "chatgpt.openOnStartup": true
 }

@@ -678,8 +678,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         verify_ms: verifyDurationMs,
         grouping_ms: groupingDurationMs,
         total_loader_ms: totalLoaderMs,
-        loader_resolve_ms: hubDiagFinite(ld?.resolveDurationMs),
-        loader_slice_ms: hubDiagFinite(ld?.sliceDurationMs),
+        loader_resolve_ms: hubDiagFinite(ld?.resolveDurationMs) ?? undefined,
+        loader_slice_ms: hubDiagFinite(ld?.sliceDurationMs) ?? undefined,
         grid_prepared_row_count: lessonsForCurriculumHub.length,
         section_model_linkable_rows: stage6LinkableLessonRows,
       },
@@ -866,7 +866,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         ...collapse.fields,
       });
     }
-    if (shouldShowMarketingLessonHubInvariantErrorShell(collapse, hubCurriculumLessons.length)) {
+    if (collapse.kind === "violation" && shouldShowMarketingLessonHubInvariantErrorShell(collapse, hubCurriculumLessons.length)) {
       safeServerLog("pathway_lessons", "marketing_hub_lessons_page_pipeline_invariant_failed", {
         stage: "marketing_hub_inventory_rejected",
         pathway_id: pathway.id,
@@ -878,19 +878,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         invariant_code: collapse.invariantCode,
         metric_event: collapse.metricEvent,
         outcome: "error_shell",
-if (shouldShowMarketingLessonHubInvariantErrorShell(collapse, hubCurriculumLessons.length)) {
-  safeServerLog("pathway_lessons", "marketing_hub_lessons_page_pipeline_invariant_bypassed", {
-    stage: "marketing_hub_inventory_rejected_bypassed",
-    pathway_id: pathway.id,
-    route_pathname: routePathLessons,
-    content_locale: lessonContentLocale,
-    verified_row_count: String(hubCurriculumLessons.length),
-    strict_count: String(countStrictMarketingHubInventoryRows(hubCurriculumLessons)),
-    invariant_code: collapse.invariantCode,
-    metric_event: collapse.metricEvent,
-    outcome: "render_anyway",
-  });
-}      });
+      });
       return (
         <>
           <MarketingHubSmokeDiagnosticsJson
