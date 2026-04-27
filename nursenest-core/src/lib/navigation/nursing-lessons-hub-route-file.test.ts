@@ -29,7 +29,9 @@ describe("nursing lessons hub — route module exists on disk", () => {
       /PathwayLessonsCurriculumHub|pathway-lessons-curriculum-hub/,
       "lessons index page should load the curriculum hub (not a duplicate tier overview stub)",
     );
-    assert.equal(src.includes("buildNursingTierHubContent") && !src.includes("PathwayLessonsCurriculumHub"), false);
+    assert.equal(src.includes("NursingTierHubPage"), false);
+    assert.equal(src.includes("buildNursingTierHubContent"), false);
+    assert.ok(src.includes("data-nn-qa-pathway-lessons-hub"));
   });
 
   it("RN / PN / NP resolved lessons hrefs map to the shared dynamic lessons route file", () => {

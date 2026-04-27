@@ -11,13 +11,27 @@ import { expectNotPageNotFound, gotoExpectOk, requireOrigin, seedUsMarketingCook
 
 const LESSONS_CARD = "a.nn-qa-nursing-tier-hub-lessons-card";
 
-async function assertLessonsHubContent(page: Page) {
+async function assertLessonsHubSurface(page: Page) {
   await expectNotPageNotFound(page);
   await expect(page.getByRole("heading", { name: /page not found/i })).toHaveCount(0);
-  await expect(page.getByText(/hub content failed|exam hub unavailable|lessons page failed/i)).toHaveCount(0);
-  await expect(
-    page.getByRole("heading", { name: /how to use|clinical topic|lessons|lesson library|NCLEX|NP|Family|REx-PN|Browse/i }).first(),
-  ).toBeVisible({ timeout: 60_000 });
+  await expect(page.getByText(/application error|just a moment|safe mode|something went wrong/i)).toHaveCount(0);
+  await expect(page.getByText(/\b404\b/)).toHaveCount(0);
+  await expect(page.locator(LESSONS_CARD)).toHaveCount(0);
+  const hubLandmark = page.locator('[data-nn-qa-pathway-lessons-hub="true"]');
+  const emptyState = page.locator('[data-nn-qa-pathway-lessons-empty="true"]');
+  const grid = page.locator(".nn-qa-pathway-lessons-grid");
+  await expect(hubLandmark.or(emptyState).or(grid).first()).toBeVisible({ timeout: 60_000 });
+  const cards = await page.locator(".nn-qa-pathway-lesson-card").count();
+  const groups = await page.locator(".nn-qa-pathway-lessons-group").count();
+  const empty = await emptyState.count();
+  expect(cards + groups + empty).toBeGreaterThan(0);
+  if (empty === 0) {
+    await expect(
+      page.getByRole("heading", { name: /lesson library|how to use|clinical topic|lessons|NCLEX|NP|Family|REx-PN/i }).first(),
+    ).toBeVisible({ timeout: 30_000 });
+  } else {
+    await expect(page.getByText(/no lessons are available for this pathway yet/i)).toBeVisible();
+  }
 }
 
 test.describe("Nursing tier hub → lessons hub (routing evidence)", () => {
@@ -46,7 +60,7 @@ test.describe("Nursing tier hub → lessons hub (routing evidence)", () => {
     await card.click();
     await page.waitForLoadState("domcontentloaded");
     await expect(page).toHaveURL(/\/us\/rn\/nclex-rn\/lessons(?:\/|\?|#|$)/, { timeout: 25_000 });
-    await assertLessonsHubContent(page);
+    await assertLessonsHubSurface(page);
   });
 
   test("RPN/PN (US): log href, navigate to PN lessons hub", async ({ page, baseURL }) => {
@@ -62,7 +76,7 @@ test.describe("Nursing tier hub → lessons hub (routing evidence)", () => {
     await card.click();
     await page.waitForLoadState("domcontentloaded");
     await expect(page).toHaveURL(/\/us\/pn\/nclex-pn\/lessons(?:\/|\?|#|$)/, { timeout: 25_000 });
-    await assertLessonsHubContent(page);
+    await assertLessonsHubSurface(page);
   });
 
   test("NP (FNP): log href, navigate to NP lessons hub", async ({ page, baseURL }) => {
@@ -78,6 +92,16 @@ test.describe("Nursing tier hub → lessons hub (routing evidence)", () => {
     await card.click();
     await page.waitForLoadState("domcontentloaded");
     await expect(page).toHaveURL(/\/us\/np\/fnp\/lessons(?:\/|\?|#|$)/, { timeout: 25_000 });
-    await assertLessonsHubContent(page);
+    await assertLessonsHubSurface(page);
+  });
+
+  test("invalid pathway lessons URL shows unavailable state (not tier hub)", async ({ page, baseURL }) => {
+    const origin = requireOrigin(baseURL);
+    await seedUsMarketingCookie(page, origin);
+    await gotoExpectOk(page, "/us/rn/__nonexistent_exam__/lessons");
+    await expect(page.locator('[data-nn-qa-pathway-lessons-unavailable="true"]')).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByText(/lessons hub unavailable for this pathway/i)).toBeVisible();
+    await expect(page.locator(LESSONS_CARD)).toHaveCount(0);
+    await expect(page.locator('[data-nn-qa-pathway-lessons-hub="true"]')).toHaveCount(0);
   });
 });

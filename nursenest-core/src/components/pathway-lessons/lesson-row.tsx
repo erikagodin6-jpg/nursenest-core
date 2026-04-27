@@ -29,7 +29,7 @@ export function LessonRow({ href, title, progressStatus, durationLabel, difficul
   return (
     <Link
       href={href}
-      className="group block rounded-xl px-3 py-2 text-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
+      className="nn-qa-pathway-lesson-card group block rounded-xl px-3 py-2 text-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
     >
       <div className="flex items-start gap-3">
         <StatusIcon status={progressStatus} />

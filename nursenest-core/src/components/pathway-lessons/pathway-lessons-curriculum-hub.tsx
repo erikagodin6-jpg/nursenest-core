@@ -133,28 +133,33 @@ export function PathwayLessonsCurriculumHub({
         reasons_json: JSON.stringify(hubVerifyDiagnostics.excludedByReason),
       });
     }
+    const zeroPathwayCopy = "No lessons are available for this pathway yet.";
     return (
-      <PremiumEmptyState
-        data-nn-empty="curriculum-hub-empty"
-        tone="growth"
-        density="compact"
-        visualLayout="stack"
-        headline={thinInventoryCopy.headline}
-        body={
-          verifyPipelineDroppedAll && diagSummary
-            ? diagSummary
-            : hadIncoming
-              ? "Some rows were removed because they could not be matched to a live public lesson for this pathway (stale slug, incomplete publish, or pathway metadata mismatch). Open Browse lessons to retry the full library."
-              : "No lessons are available in this pathway yet. The curriculum hub will expand here as more indexed sections go live."
-        }
-        hint={thinInventoryCopy.hint}
-        primaryCta={{ label: "Browse lessons", href: lessonsBasePath, variant: "primary" }}
-      />
+      <div className="nn-qa-pathway-lessons-empty" data-nn-qa-pathway-lessons-empty="true">
+        <PremiumEmptyState
+          data-nn-empty="curriculum-hub-empty"
+          tone="growth"
+          density="compact"
+          visualLayout="stack"
+          headline={!hadIncoming && !verifyPipelineDroppedAll ? zeroPathwayCopy : thinInventoryCopy.headline}
+          body={
+            verifyPipelineDroppedAll && diagSummary
+              ? diagSummary
+              : hadIncoming
+                ? "Some rows were removed because they could not be matched to a live public lesson for this pathway (stale slug, incomplete publish, or pathway metadata mismatch). Open Browse lessons to retry the full library."
+                : verifyPipelineDroppedAll
+                  ? thinInventoryCopy.body
+                  : `${zeroPathwayCopy} The curriculum hub will expand here as more indexed sections go live.`
+          }
+          hint={thinInventoryCopy.hint}
+          primaryCta={{ label: "Browse lessons", href: lessonsBasePath, variant: "primary" }}
+        />
+      </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+    <div className="nn-qa-pathway-lessons-grid grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
       {sections.map((section) => (
         <LessonSystemCard
           key={section.id}

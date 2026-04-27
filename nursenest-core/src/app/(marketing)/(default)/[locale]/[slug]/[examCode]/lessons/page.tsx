@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { LESSON_SYSTEM_HUB_CARD_PREVIEW_MAX } from "@/components/pathway-lessons/lesson-system-card";
 import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
@@ -229,7 +229,45 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
   const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
   const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
-  if (!pathway) notFound();
+  if (!pathway) {
+    safeServerLog("pathway_lessons", "marketing_lessons_hub_pathway_unresolved", {
+      stage: "pathway_resolution",
+      country_slug: countrySlug,
+      url_role_slug: roleTrack,
+      exam_code: examCode,
+      route_pathname: `${pathname}/lessons`,
+      lesson_content_locale: lessonContentLocale,
+    });
+    const devSegments =
+      process.env.NODE_ENV === "development"
+        ? ` Requested marketing segments: locale=${countrySlug}, slug=${roleTrack}, examCode=${examCode}.`
+        : "";
+    return (
+      <main
+        className="mx-auto max-w-2xl px-4 py-16"
+        data-nn-qa-pathway-lessons-unavailable="true"
+      >
+        <h1 className="text-xl font-semibold text-[var(--theme-heading-text)]">
+          Lessons hub unavailable for this pathway.
+        </h1>
+        <p className="mt-3 text-sm text-[var(--theme-muted-text)]">
+          The URL does not match a published NurseNest exam pathway. Use the exam overview or browse exams to find
+          your track.{devSegments}
+        </p>
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link
+            href="/exams"
+            className="inline-flex rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-5 py-2.5 text-sm font-semibold text-[var(--theme-heading-text)] hover:bg-[var(--semantic-panel-muted)]"
+          >
+            Browse exams
+          </Link>
+          <Link href="/" className="inline-flex text-sm font-semibold text-primary underline-offset-4 hover:underline">
+            Home
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   const base = marketingPathwayLessonsIndexPath(pathway);
   const sp = await searchParams;
@@ -301,6 +339,27 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     },
   );
   const hubAggregatesDurationMs = Math.round(performance.now() - hubLoadT0);
+
+  safeServerLog("pathway_lessons", "marketing_lessons_hub_loader_snapshot", {
+    stage: "post_aggregates",
+    pathway_id: pathway.id,
+    country_slug: countrySlug,
+    url_role_slug: roleTrack,
+    exam_code: examCode,
+    route_pathname: `${pathname}/lessons`,
+    lesson_content_locale: lessonContentLocale,
+    lessons_page_load_status: lessonsPageLoad.status,
+    lessons_page_load_reason:
+      lessonsPageLoad.status === "error" ? lessonsPageLoad.reason : "",
+    lessons_page_source_used:
+      lessonsPageLoad.status === "ok" ? (lessonsPageLoad.sourceUsed ?? "") : "",
+    loader_total: String(pageResult.total),
+    loader_page: String(pageResult.page),
+    page_size: String(pageSizeRequested),
+    hub_aggregates_ms: String(hubAggregatesDurationMs),
+    snapshot_used: lessonsHubSnapshotDiagnostics.snapshotUsed ? "1" : "0",
+    question_snapshot_ok: questionSnapshot.status === "ok" ? "1" : "0",
+  });
 
   if (
     isDefaultUnfilteredMarketingLessonsHub &&
@@ -638,6 +697,16 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     return sum + Math.min(LESSON_SYSTEM_HUB_CARD_PREVIEW_MAX, linkable.length);
   }, 0);
   const groupingDurationMs = Math.round(performance.now() - groupT0);
+
+  safeServerLog("pathway_lessons", "marketing_lessons_hub_render_ready", {
+    stage: "render_ready",
+    pathway_id: pathway.id,
+    route_pathname: routePathLessons,
+    body_system_section_count: String(hubSectionModel.length),
+    curriculum_grid_rows: String(lessonsForCurriculumHub.length),
+    linkable_lesson_rows: String(stage6LinkableLessonRows),
+    grouping_ms: String(groupingDurationMs),
+  });
 
   const ld = pageResult.loadDiagnostics;
   const rankedReasons = hubVerifyDiagnostics.exclusionReasonsRanked ?? [];
@@ -1136,7 +1205,12 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         </div>
       ) : null}
 
-      <section id="pathway-lesson-library" className="mt-4 scroll-mt-24" aria-labelledby="lesson-library-heading">
+      <section
+        id="pathway-lesson-library"
+        className="nn-qa-pathway-lessons-hub mt-4 scroll-mt-24"
+        data-nn-qa-pathway-lessons-hub="true"
+        aria-labelledby="lesson-library-heading"
+      >
         {/* Section toolbar: heading + count badge */}
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
           <h2 id="lesson-library-heading" className="text-base font-semibold text-[var(--theme-heading-text)]">

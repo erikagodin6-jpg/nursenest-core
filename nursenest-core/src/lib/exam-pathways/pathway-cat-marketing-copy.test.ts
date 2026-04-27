@@ -54,6 +54,14 @@ describe("pathway CAT marketing copy", () => {
       );
     }
   });
+
+  it("CNPLE beta public copy names the track when pathway context is passed", () => {
+    const pathway = getExamPathwayById("ca-np-cnple");
+    assert.ok(pathway);
+    const rc = readinessConfigForPathway(pathway);
+    const pc = publicCopyForReadinessConfig(rc, pathway);
+    assert.equal(pc.betaLabel, "Canadian NP (CNPLE) beta");
+  });
 });
 
 describe("marketing CAT route source (static string regression)", () => {
