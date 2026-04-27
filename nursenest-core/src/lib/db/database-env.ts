@@ -1,3 +1,5 @@
+import "server-only";
+
 import { databaseUrlSource } from "@/lib/db/env-bootstrap";
 
 /**

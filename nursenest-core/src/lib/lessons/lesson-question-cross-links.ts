@@ -303,7 +303,7 @@ export async function countRelatedExamQuestionsForPathwayLesson(
   return withDatabaseFallback(() => prisma.examQuestion.count({ where }), 0);
 }
 
-export { RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL } from "@/lib/lessons/pathway-lesson-loader";
+export { RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL } from "@/lib/lessons/pathway-lesson-loader-config";
 
 /**
  * Resolve `topicSlug` from a human topic label (one row) so we can reuse {@link getRelatedPathwayLessons} safely.

@@ -5,7 +5,7 @@ import {
   isAlliedHeroExamPrepSlug,
 } from "@/lib/allied/allied-professions-registry";
 import { alliedHealthLessonsIndexPath } from "@/lib/lessons/lesson-routes";
-import { normalizePathwayHubSearchQuery } from "@/lib/lessons/pathway-lesson-loader";
+import { normalizePathwayHubSearchQuery } from "@/lib/lessons/pathway-lesson-loader-config";
 import { PATHWAY_HUB_PAGE_SIZE_MAX } from "@/lib/lessons/pathway-lesson-scale";
 import { ALLIED_LESSON_HUB_PAGE_SIZE } from "@/lib/allied/allied-marketing-constants";
 

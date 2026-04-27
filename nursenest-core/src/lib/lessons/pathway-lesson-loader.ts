@@ -67,8 +67,12 @@ import {
 import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
 import { dedupePathwayLessonsForLibrary } from "@/lib/lessons/pathway-lesson-dedupe";
 import {
+  normalizePathwayHubSearchQuery,
+  PATHWAY_HUB_SEARCH_MIN_LEN,
   PATHWAY_LESSON_DB_TIMEOUT_MS,
   PATHWAY_LESSON_MARKETING_HUB_VERIFY_DB_TIMEOUT_MS,
+  RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
+  RELATED_PATHWAY_LESSONS_LIMIT,
 } from "@/lib/lessons/pathway-lesson-loader-config";
 import type { LessonInput } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import {
@@ -104,8 +108,14 @@ export {
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-scale";
 export {
+  normalizePathwayHubSearchQuery,
+  PATHWAY_HUB_SEARCH_MAX_LEN,
+  PATHWAY_HUB_SEARCH_MIN_LEN,
   PATHWAY_LESSON_DB_TIMEOUT_MS,
   PATHWAY_LESSON_MARKETING_HUB_VERIFY_DB_TIMEOUT_MS,
+  RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL,
+  RELATED_LESSONS_FOR_TOPIC_CAP,
+  RELATED_PATHWAY_LESSONS_LIMIT,
 } from "@/lib/lessons/pathway-lesson-loader-config";
 /**
  * Cross-request Data Cache TTL for public lesson payloads (no user/session).
@@ -113,25 +123,8 @@ export {
  * Also use as `export const revalidate` on marketing lesson detail so page ISR matches Data Cache.
  */
 export const PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS = 3600;
-/** Related lessons block on lesson detail — small bounded list. */
-export const RELATED_PATHWAY_LESSONS_LIMIT = 8;
-/** Topic-filtered question hub / cross-links: same numeric cap as {@link RELATED_PATHWAY_LESSONS_LIMIT}. */
-export const RELATED_LESSONS_FOR_TOPIC_CAP = RELATED_PATHWAY_LESSONS_LIMIT;
-/** Pass to {@link getRelatedPathwayLessons} when no lesson should be excluded (hub / topic-only views). */
-export const RELATED_LESSONS_EXCLUDE_SLUG_SENTINEL = "__related_lessons_exclude_none__";
 /** Sitemap / batch reads: rows per round-trip. */
 export const PATHWAY_LESSON_SITEMAP_BATCH = 600;
-/** Hub lesson search: ignore single-character noise; cap length for safety. */
-export const PATHWAY_HUB_SEARCH_MIN_LEN = 2;
-export const PATHWAY_HUB_SEARCH_MAX_LEN = 80;
-
-/** Normalized search string for pathway lesson hubs (catalog + DB lists), or `undefined` when inactive. */
-export function normalizePathwayHubSearchQuery(raw: string | undefined): string | undefined {
-  if (typeof raw !== "string") return undefined;
-  const t = raw.trim();
-  if (t.length < PATHWAY_HUB_SEARCH_MIN_LEN) return undefined;
-  return t.slice(0, PATHWAY_HUB_SEARCH_MAX_LEN);
-}
 
 function hubSearchHaystackLessonInput(l: LessonInput): string {
   const system = typeof l.system === "string" ? l.system : "";

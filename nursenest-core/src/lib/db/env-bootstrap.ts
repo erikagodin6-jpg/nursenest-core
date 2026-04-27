@@ -1,3 +1,5 @@
+import "server-only";
+
 /**
  * Import this module before constructing `PrismaClient` (directly or via `@/lib/db`).
  *

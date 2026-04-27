@@ -1,3 +1,5 @@
+import "../../../scripts/stub-server-only.cjs";
+
 import test from "node:test";
 import assert from "node:assert/strict";
 import {

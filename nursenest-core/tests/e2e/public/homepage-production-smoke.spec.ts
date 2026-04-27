@@ -17,14 +17,28 @@ test.describe("Homepage production smoke", () => {
   test("5s settle: no error shell; hero visible; diagnostics clean", async ({ page }) => {
     const pageErrors: string[] = [];
     const consoleErrors: string[] = [];
+    /** Any log level — catches server-only / DATABASE_URL leaks that surface as warnings. */
+    const clientBundleDbLeakHints: string[] = [];
     const failedRequests: { url: string; failure: string }[] = [];
     const badChunks: { url: string; status: number }[] = [];
 
+    const recordDbLeakHint = (text: string) => {
+      if (
+        /DATABASE_URL|PrismaClient|cannot be imported from a Client Component|server-only package/i.test(text)
+      ) {
+        clientBundleDbLeakHints.push(text);
+      }
+    };
+
     page.on("pageerror", (err) => {
-      pageErrors.push(err?.message ?? String(err));
+      const m = err?.message ?? String(err);
+      pageErrors.push(m);
+      recordDbLeakHint(m);
     });
     page.on("console", (msg) => {
-      if (msg.type() === "error") consoleErrors.push(msg.text());
+      const text = msg.text();
+      recordDbLeakHint(text);
+      if (msg.type() === "error") consoleErrors.push(text);
     });
     page.on("requestfailed", (req) => {
       failedRequests.push({ url: req.url(), failure: req.failure()?.errorText ?? "unknown" });
@@ -58,6 +72,11 @@ test.describe("Homepage production smoke", () => {
 
     const fatalPage = pageErrors.filter(Boolean);
     expect(fatalPage, `pageerror: ${fatalPage.join(" | ")}`).toEqual([]);
+
+    expect(
+      clientBundleDbLeakHints,
+      `client bundle must not log DB/server-only leaks: ${clientBundleDbLeakHints.join(" | ")}`,
+    ).toEqual([]);
 
     const hydrationNoise = /hydration|did not match/i;
     const fatalConsole = consoleErrors.filter(

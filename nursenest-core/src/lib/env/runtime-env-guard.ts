@@ -8,6 +8,8 @@
  * Standalone bootstrap uses `scripts/runtime-env-guard-bootstrap.mjs` (plain Node, no TS loader) — keep logic in sync.
  */
 
+import "server-only";
+
 import { assertRuntimeDatabaseEnvContract } from "./require-database-env";
 
 const REQUIRED_RUNTIME_ENVS = ["AI_ADMIN_GENERATION_ENABLED"] as const;
