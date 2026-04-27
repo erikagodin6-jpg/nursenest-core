@@ -5,9 +5,10 @@
  * Use these when `getExamPathwayById` is unavailable and for legacy programmatic SEO slug → hub redirects.
  */
 export const CANONICAL_PATHWAY_HUB = {
-  /** Retired marketing RN NCLEX overview; consolidate legacy + toggles on `/lessons`. */
-  usRn: "/lessons",
-  caRn: "/lessons",
+  /** US RN NCLEX pathway hub root (registry-aligned). Not the mixed-tier `/lessons` index. */
+  usRn: "/us/rn/nclex-rn",
+  /** Canada RN NCLEX pathway hub root (registry-aligned). */
+  caRn: "/canada/rn/nclex-rn",
   usPn: "/us/pn/nclex-pn",
   caPn: "/canada/pn/rex-pn",
   usNp: "/us/np/fnp",

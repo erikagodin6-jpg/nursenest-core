@@ -13,7 +13,7 @@ const KNOWN_SHORT_MARKETING_DESTINATIONS = new Set([
 
 /**
  * Guards nav and CTAs: marketing exam hubs are `/{us|canada}/{role}/{exam}[/…]`, or known short canonical routes.
- * Invalid strings fall back to `/lessons` so the shell never emits broken hrefs.
+ * Invalid strings fall back to the region’s canonical RN pathway hub so the shell never emits broken hrefs.
  */
 export function isWellFormedExamHubPath(href: string): boolean {
   const raw = href.trim().split("?")[0]?.split("#")[0] ?? href.trim();
@@ -25,8 +25,8 @@ export function isWellFormedExamHubPath(href: string): boolean {
   return country === "us" || country === "canada";
 }
 
-export function fallbackNursingExamHubForRegion(_region: MarketingRegionToggle): string {
-  return CANONICAL_PATHWAY_HUB.usRn;
+export function fallbackNursingExamHubForRegion(region: MarketingRegionToggle): string {
+  return region === "US" ? CANONICAL_PATHWAY_HUB.usRn : CANONICAL_PATHWAY_HUB.caRn;
 }
 
 export function ensureMarketingExamHubPath(region: MarketingRegionToggle, href: string): string {

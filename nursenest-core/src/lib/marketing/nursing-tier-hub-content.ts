@@ -1,6 +1,8 @@
-import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
+import {
+  marketingTierHubStudyActionHref,
+  type MarketingTierHubStudyActionId,
+} from "@/lib/navigation/marketing-tier-hub-study-hrefs";
 
 /**
  * SERP-aligned hub headline (H1): primary exam keyword + country, without the brand suffix.
@@ -24,7 +26,7 @@ export function nursingTierMarketingHeadline(pathway: ExamPathwayDefinition): st
   return stripped.length > 0 ? stripped : `${shortName} exam prep`;
 }
 
-export type NursingTierHubActionId = "lessons" | "flashcards" | "practice_questions" | "exams";
+export type NursingTierHubActionId = MarketingTierHubStudyActionId;
 
 export type NursingTierHubAction = {
   id: NursingTierHubActionId;
@@ -48,36 +50,12 @@ export type NursingTierHubContent = {
   actions: NursingTierHubAction[];
 };
 
-/** Rejects placeholder / unsafe hrefs so tier hub tiles still use canonical builders per {@link NursingTierHubActionId}. */
-function isNavigableTierHubActionHref(href: string): boolean {
-  const h = href.trim();
-  if (!h) return false;
-  const lower = h.toLowerCase();
-  if (lower.startsWith("javascript:") || lower.startsWith("data:") || lower.startsWith("vbscript:")) return false;
-  if (h === "#" || lower === "#/") return false;
-  if (h.startsWith("#")) return false;
-  return h.startsWith("/") || lower.startsWith("https://") || lower.startsWith("http://");
-}
-
 /**
- * Final navigation target for a hub study tile. If `action.href` is missing or a placeholder
- * (`#`, fragment-only, `javascript:`, etc.), falls back to pathway-scoped URLs from the builders.
+ * Final navigation target for a hub study tile. Core tiles always use {@link marketingTierHubStudyActionHref}
+ * so RN/RPN/NP stay pathway-scoped regardless of `action.href` overrides.
  */
 export function resolveNursingTierHubActionHref(pathway: ExamPathwayDefinition, action: NursingTierHubAction): string {
-  const trimmed = action.href?.trim();
-  if (trimmed && isNavigableTierHubActionHref(trimmed)) return trimmed;
-  switch (action.id) {
-    case "lessons":
-      return marketingPathwayLessonsIndexPath(pathway);
-    case "flashcards":
-      return `/app/flashcards?pathwayId=${encodeURIComponent(pathway.id)}`;
-    case "practice_questions":
-      return buildExamPathwayPath(pathway, "questions");
-    case "exams":
-      return buildExamPathwayPath(pathway, "cat");
-    default:
-      return buildExamPathwayPath(pathway);
-  }
+  return marketingTierHubStudyActionHref(pathway, action.id);
 }
 
 function normalizeDash(value: string): string {
@@ -133,25 +111,25 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
         id: "lessons",
         label: "Lessons",
         description: "Review concepts by topic.",
-        href: marketingPathwayLessonsIndexPath(pathway),
+        href: marketingTierHubStudyActionHref(pathway, "lessons"),
       },
       {
         id: "flashcards",
         label: "Flashcards",
         description: "Strengthen recall quickly.",
-        href: `/app/flashcards?pathwayId=${encodeURIComponent(pathway.id)}`,
+        href: marketingTierHubStudyActionHref(pathway, "flashcards"),
       },
       {
         id: "practice_questions",
         label: "Practice Questions",
         description: "Drill by topic or weakness.",
-        href: buildExamPathwayPath(pathway, "questions"),
+        href: marketingTierHubStudyActionHref(pathway, "practice_questions"),
       },
       {
         id: "exams",
         label: "Exams",
         description: "Take exam-style sessions.",
-        href: buildExamPathwayPath(pathway, "cat"),
+        href: marketingTierHubStudyActionHref(pathway, "exams"),
       },
     ],
   };

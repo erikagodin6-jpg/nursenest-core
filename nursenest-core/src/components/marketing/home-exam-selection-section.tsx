@@ -3,6 +3,7 @@
 import { ArrowRight, Stethoscope, HeartPulse, Award, Dna, GraduationCap } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { marketingExamHubPath } from "@/lib/marketing/marketing-exam-navigation";
 import { publicExamPrepHubDestinations, type MarketingRegionToggle } from "@/lib/navigation/canonical-destinations";
 import { publicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
@@ -52,28 +53,34 @@ export function HomeExamSelectionSection() {
     region = safeRegion(useNursenestRegion().region) as MarketingRegionToggle;
   } catch {}
 
-  let hubs: any = {};
+  let hubs: Record<string, string> = {
+    rn: marketingExamHubPath(region, "rn"),
+    pn: marketingExamHubPath(region, "pn"),
+    np: marketingExamHubPath(region, "np"),
+    allied: marketingExamHubPath(region, "allied"),
+  };
   try {
-    hubs = publicExamPrepHubDestinations(region);
+    hubs = { ...hubs, ...publicExamPrepHubDestinations(region) };
   } catch {}
 
-  let newGradHref = "/lessons";
+  const rnHubFallback = marketingExamHubPath(region, "rn");
+  let newGradHref = rnHubFallback;
   try {
-    newGradHref = publicNewGradStudyDestinations(region, hubs?.rn || "").hubHref;
+    newGradHref = publicNewGradStudyDestinations(region, hubs.rn || rnHubFallback).hubHref;
   } catch {}
 
   const cards = [
     {
       id: "rn",
       label: "RN",
-      href: safePath(locale, hubs?.rn || "/lessons"),
+      href: safePath(locale, hubs.rn || rnHubFallback),
       title: safeT(t, "home.conversion.examCard.rnTitle", "Registered Nurse"),
       desc: safeT(t, "home.conversion.examCard.rnDesc", "Prepare for RN exams"),
     },
     {
       id: "pn",
       label: "PN",
-      href: safePath(locale, hubs?.pn || "/lessons"),
+      href: safePath(locale, hubs.pn || marketingExamHubPath(region, "pn")),
       title: safeT(
         t,
         region === "US"
@@ -92,7 +99,7 @@ export function HomeExamSelectionSection() {
     {
       id: "np",
       label: "NP",
-      href: safePath(locale, hubs?.np || "/lessons"),
+      href: safePath(locale, hubs.np || marketingExamHubPath(region, "np")),
       title: safeT(
         t,
         region === "US"
@@ -118,7 +125,7 @@ export function HomeExamSelectionSection() {
     {
       id: "allied",
       label: "Allied",
-      href: safePath(locale, hubs?.allied || "/lessons"),
+      href: safePath(locale, hubs.allied || marketingExamHubPath(region, "allied")),
       title: safeT(t, "home.conversion.examCard.alliedTitle", "Allied Health"),
       desc: safeT(t, "home.conversion.examCard.alliedDesc", "Prep for allied health exams"),
     },
@@ -150,6 +157,7 @@ export function HomeExamSelectionSection() {
               event={PH.marketingHomePathwayCardPrimary}
               eventProps={{ pathway: c.id, region }}
               className="rounded-xl border p-4 hover:shadow-md transition"
+              data-nn-home-tier-card={c.id}
             >
               <div className="font-semibold">{c.title}</div>
               <p className="mt-2 text-sm text-muted">{c.desc}</p>

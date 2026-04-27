@@ -102,16 +102,15 @@ describe("resolveNursingTierHubActionHref", () => {
     assert.equal(href, "/us/pn/nclex-pn/lessons");
   });
 
-  it("keeps a valid absolute pathway href when present", () => {
+  it("ignores overridden lessons href and always uses the pathway lessons index", () => {
     const pathway = getExamPathwayById("us-np-fnp");
     assert.ok(pathway);
-    const custom = "/us/np/fnp/lessons?topicSlug=foo";
     const href = resolveNursingTierHubActionHref(pathway, {
       id: "lessons",
       label: "Lessons",
       description: "x",
-      href: custom,
+      href: "/us/np/fnp/lessons?topicSlug=foo",
     });
-    assert.equal(href, custom);
+    assert.equal(href, "/us/np/fnp/lessons");
   });
 });
