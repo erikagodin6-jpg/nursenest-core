@@ -1,9 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
 import { NnErrorCard } from "@/components/error/nn-error-card";
 import { MarketingHomeSafeMode } from "@/components/marketing/marketing-home-safe-mode";
-import { shouldUseMarketingHomeSafeModeFromError } from "@/lib/marketing/marketing-home-safe-mode-triggers";
-import { useMarketingRouteErrorDiagnostics } from "@/lib/marketing/use-marketing-route-error-diagnostics";
+import {
+  logMarketingRouteErrorClient,
+  shouldUseMarketingHomeSafeModeFromError,
+} from "@/lib/marketing/marketing-home-safe-mode-triggers";
 
 export default function MarketingDefaultSegmentError({
   error,
@@ -12,7 +15,30 @@ export default function MarketingDefaultSegmentError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useMarketingRouteErrorDiagnostics("marketing_default_segment_error_tsx", error);
+  useEffect(() => {
+    const shouldLog =
+      process.env.NODE_ENV !== "production" ||
+      process.env.NEXT_PUBLIC_NN_DEBUG_HOMEPAGE === "1";
+    if (shouldLog) {
+      try {
+        console.error(
+          "[NN_HOMEPAGE_REAL_CRASH]",
+          JSON.stringify({
+            boundary: "marketing_default_segment_error_tsx",
+            pathname: typeof window !== "undefined" ? window.location.pathname : null,
+            name: error?.name,
+            message: error?.message,
+            digest: error?.digest,
+            stack: error?.stack,
+            componentStack: null,
+          }),
+        );
+      } catch {
+        /* ignore */
+      }
+    }
+    logMarketingRouteErrorClient("marketing_default_segment_error_tsx", error);
+  }, [error]);
 
   if (shouldUseMarketingHomeSafeModeFromError(error)) {
     return <MarketingHomeSafeMode layout="embedded" onRetry={reset} />;

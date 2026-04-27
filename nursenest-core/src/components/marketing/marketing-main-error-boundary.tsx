@@ -27,20 +27,23 @@ export class MarketingMainErrorBoundary extends Component<Props, State> {
       /* logging must never mask the original error path */
     }
     try {
-      const digest = error?.digest != null ? String(error.digest) : "";
-      console.error(
-        "[nn-marketing-main-error-boundary]",
-        JSON.stringify({
-          scope: "client_ui",
-          event: "marketing_main_error_boundary",
-          boundaryName: this.props.name ?? "marketing_main",
-          errorName: error?.name,
-          message: error?.message,
-          digest: digest || undefined,
-          stack: typeof error?.stack === "string" ? error.stack.slice(0, 4000) : undefined,
-          componentStack: info.componentStack?.slice(0, 2000),
-        }),
-      );
+      const shouldLog =
+        process.env.NODE_ENV !== "production" ||
+        process.env.NEXT_PUBLIC_NN_DEBUG_HOMEPAGE === "1";
+      if (shouldLog) {
+        console.error(
+          "[NN_HOMEPAGE_REAL_CRASH]",
+          JSON.stringify({
+            boundary: `marketing_main_error_boundary:${this.props.name ?? "marketing_main"}`,
+            pathname: typeof window !== "undefined" ? window.location.pathname : null,
+            name: error?.name,
+            message: error?.message,
+            digest: error?.digest,
+            stack: error?.stack,
+            componentStack: info?.componentStack ?? null,
+          }),
+        );
+      }
     } catch {
       /* ignore */
     }
