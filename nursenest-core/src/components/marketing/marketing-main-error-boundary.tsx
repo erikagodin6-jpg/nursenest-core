@@ -1,10 +1,7 @@
 "use client";
 
 import { Component, type ErrorInfo, type ReactNode } from "react";
-import {
-  logNnMarketingClientError,
-  nnMarketingClientDiagnosticsEnabled,
-} from "@/lib/marketing/nn-marketing-client-error-log";
+import { logNnMarketingClientError } from "@/lib/marketing/nn-marketing-client-error-log";
 
 type Props = { children: ReactNode; name?: string };
 type State = { hasError: boolean };
@@ -20,26 +17,33 @@ export class MarketingMainErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error & { digest?: string }, info: ErrorInfo): void {
-    logNnMarketingClientError(
-      `marketing_main_error_boundary:${this.props.name ?? "marketing_main"}`,
-      error,
-      { componentStack: info.componentStack ?? undefined },
-    );
-    if (!nnMarketingClientDiagnosticsEnabled()) return;
-    const digest = error?.digest != null ? String(error.digest) : "";
-    console.error(
-      "[nn-marketing-main-error-boundary]",
-      JSON.stringify({
-        scope: "client_ui",
-        event: "marketing_main_error_boundary",
-        boundaryName: this.props.name ?? "marketing_main",
-        errorName: error?.name,
-        message: error?.message,
-        digest: digest || undefined,
-        stack: typeof error?.stack === "string" ? error.stack.slice(0, 4000) : undefined,
-        componentStack: info.componentStack?.slice(0, 2000),
-      }),
-    );
+    try {
+      logNnMarketingClientError(
+        `marketing_main_error_boundary:${this.props.name ?? "marketing_main"}`,
+        error,
+        { componentStack: info.componentStack == null ? undefined : info.componentStack },
+      );
+    } catch {
+      /* logging must never mask the original error path */
+    }
+    try {
+      const digest = error?.digest != null ? String(error.digest) : "";
+      console.error(
+        "[nn-marketing-main-error-boundary]",
+        JSON.stringify({
+          scope: "client_ui",
+          event: "marketing_main_error_boundary",
+          boundaryName: this.props.name ?? "marketing_main",
+          errorName: error?.name,
+          message: error?.message,
+          digest: digest || undefined,
+          stack: typeof error?.stack === "string" ? error.stack.slice(0, 4000) : undefined,
+          componentStack: info.componentStack?.slice(0, 2000),
+        }),
+      );
+    } catch {
+      /* ignore */
+    }
   }
 
   render(): ReactNode {
