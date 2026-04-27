@@ -1,6 +1,6 @@
 # Nursing lesson gap scan
 
-Generated: 2026-04-27T10:56:19.823Z
+Generated: 2026-04-27T11:06:41.184Z
 
 High-yield checklist vs **effective** catalog lesson titles (all nursing pathways).
 

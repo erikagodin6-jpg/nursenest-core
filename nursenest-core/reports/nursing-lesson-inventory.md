@@ -1,6 +1,6 @@
 # Nursing lesson inventory
 
-Generated: 2026-04-27T10:56:15.205Z
+Generated: 2026-04-27T11:06:36.629Z
 
 ## Per pathway
 
