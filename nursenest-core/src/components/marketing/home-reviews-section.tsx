@@ -3,6 +3,7 @@
 import { Star } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 
 const CARD_KEYS = [
   { quote: "home.landing.reviews.card1.quote", meta: "home.landing.reviews.card1.meta" },
@@ -12,6 +13,36 @@ const CARD_KEYS = [
   { quote: "home.landing.reviews.card5.quote", meta: "home.landing.reviews.card5.meta" },
   { quote: "home.landing.reviews.card6.quote", meta: "home.landing.reviews.card6.meta" },
 ] as const;
+
+const REVIEW_FB: Record<string, string> = {
+  "home.landing.reviews.title": "How learners structure study",
+  "home.landing.reviews.sub":
+    "Typical workflows: rationales tied to stems, pathway lessons, practice exams, and weak-area review, with US and Canada wording where registration differs.",
+  "home.landing.reviews.disclaimer":
+    "Composite, anonymized study scenarios for illustration—not paid testimonials or guaranteed outcomes.",
+  "home.landing.reviews.card1.quote":
+    "I stopped guessing on SATA. The rationales tie each option back to the stem, and the lesson links are the fastest way to patch a weak topic before I start another block.",
+  "home.landing.reviews.card1.meta": "RN candidate, NCLEX-RN, United States",
+  "home.landing.reviews.card2.quote":
+    "Clinical days eat my week, so I study in short runs. Flashcards for labs and a timed practice exam on the commute keep me honest without another app stack.",
+  "home.landing.reviews.card2.meta": "PN student, NCLEX-PN, United States",
+  "home.landing.reviews.card3.quote":
+    "REx-PN is not recycled US NCLEX-PN copy. I needed Canadian scope and wording in the stems, then practice exams and weak-area review that stay inside the right exam.",
+  "home.landing.reviews.card3.meta": "LPN/RPN candidate, REx-PN, Canada",
+  "home.landing.reviews.card4.quote":
+    "I lean on long rationales to check my reasoning, then open the lesson when I miss the same concept twice. It feels like closing gaps, not collecting screenshots.",
+  "home.landing.reviews.card4.meta": "NP student, board-style prep, United States",
+  "home.landing.reviews.card5.quote":
+    "When my scores stall I pair the bank with the lesson library and stay inside the pathway I registered for, instead of drifting into random trivia.",
+  "home.landing.reviews.card5.meta": "RN candidate, NCLEX-RN, Canada",
+  "home.landing.reviews.card6.quote":
+    "Med math and safety were my panic zone. I use practice exams for pacing, then flashcards and rationales until the calculations feel automatic.",
+  "home.landing.reviews.card6.meta": "Career changer, NCLEX-RN, United States",
+};
+
+function pickReviewFb(key: string): string {
+  return REVIEW_FB[key] ?? "";
+}
 
 function StarRow({ count = 5 }: { count?: number }) {
   return (
@@ -58,10 +89,10 @@ export function HomeReviewsSection() {
           </div>
 
           <h2 id="home-reviews-heading" className="nn-marketing-h2 text-balance">
-            {t("home.landing.reviews.title")}
+            {safeHomepageMarketingCopy(t, "home.landing.reviews.title", pickReviewFb("home.landing.reviews.title"))}
           </h2>
           <p className="nn-marketing-body mx-auto mt-2 max-w-2xl text-pretty text-[var(--palette-text-muted)]">
-            {t("home.landing.reviews.sub")}
+            {safeHomepageMarketingCopy(t, "home.landing.reviews.sub", pickReviewFb("home.landing.reviews.sub"))}
           </p>
         </header>
 
@@ -74,16 +105,18 @@ export function HomeReviewsSection() {
               <p className="nn-card-system__eyebrow">{formatEyebrow("Student Review", locale)}</p>
               <StarRow />
               <blockquote className="nn-card-system__description flex-1 text-[var(--palette-text)]">
-                &ldquo;{formatSentenceCase(t(c.quote), locale)}&rdquo;
+                &ldquo;
+                {formatSentenceCase(safeHomepageMarketingCopy(t, c.quote, pickReviewFb(c.quote)), locale)}
+                &rdquo;
               </blockquote>
               <p className="nn-card-system__title text-[0.92rem] text-[var(--palette-text-muted)]">
-                {formatTitleCase(t(c.meta), locale)}
+                {formatTitleCase(safeHomepageMarketingCopy(t, c.meta, pickReviewFb(c.meta)), locale)}
               </p>
             </li>
           ))}
         </ul>
         <p className="nn-marketing-caption mx-auto mt-8 max-w-2xl text-center text-[var(--palette-text-muted)]">
-          {t("home.landing.reviews.disclaimer")}
+          {safeHomepageMarketingCopy(t, "home.landing.reviews.disclaimer", pickReviewFb("home.landing.reviews.disclaimer"))}
         </p>
       </div>
     </section>

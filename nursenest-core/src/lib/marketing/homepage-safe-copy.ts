@@ -32,9 +32,10 @@ export function looksLikeRawMarketingI18nKeyVisibleText(text: string): boolean {
 /**
  * Regex for Playwright / CI: visible copy must not look like a raw shard key path.
  * Case-insensitive so it catches CSS `text-transform: uppercase` leaks.
+ * Non-global so repeated `.test()` does not stick on `lastIndex`.
  */
 export const HOMEPAGE_VISIBLE_RAW_I18N_PATH_RE =
-  /\b(?:pages|learner|marketing|components|home)(?:\.[A-Za-z0-9_]+){2,}\b/gi;
+  /\b(?:pages|learner|marketing|components|home)(?:\.[A-Za-z0-9_]+){2,}\b/i;
 
 export function safeHomepageMarketingCopy(
   t: MarketingTFn | undefined,

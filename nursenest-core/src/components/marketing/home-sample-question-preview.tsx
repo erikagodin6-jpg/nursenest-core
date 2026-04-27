@@ -10,6 +10,7 @@ import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { MARKETING_TERTIARY_LINK_CLASS } from "@/lib/theme/marketing-hero-pattern";
 import { MarketingEditableI18nText } from "@/components/marketing/marketing-editable-i18n-text";
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 
 const CHOICE_KEYS = [
   "pages.home.sampleQuestion.choiceA",
@@ -18,6 +19,38 @@ const CHOICE_KEYS = [
   "pages.home.sampleQuestion.choiceD",
 ] as const;
 
+const SAMPLE_FB: Record<string, string> = {
+  "pages.home.sampleQuestion.sectionKicker": "From the bank",
+  "pages.home.sampleQuestion.sectionTitle": "One stem, four options—full teaching rationale",
+  "pages.home.sampleQuestion.sectionLead":
+    "This is the real format: exam-style prioritization, plausible distractors, then a rationale that states the correct action with pathophysiology and dismantles at least one trap option—same structure as the full bank, item after item.",
+  "pages.home.sampleQuestion.safeToTryLine":
+    "This is the real format—read through the rationale here without signing up or paying.",
+  "pages.home.sampleQuestion.stem":
+    "A client with heart failure reports increased shortness of breath when lying flat. Which action should the nurse take first?",
+  "pages.home.sampleQuestion.choicesHeading": "Answer choices",
+  "pages.home.sampleQuestion.rationaleLabel": "Teaching rationale",
+  "pages.home.sampleQuestion.rationaleBody":
+    "Correct (A): Elevate the head of the bed. Orthopnea from decompensated HF worsens supine—increased venous return and pulmonary congestion raise work of breathing; raising the torso cuts preload and congestion before you add anything else. High-flow oxygen (B) is the classic trap: it treats hypoxemia, not positional overload. Unless the stem flags desaturation, oxygen after positioning follows assessment—boards expect the mechanism addressed first.",
+  "pages.home.sampleQuestion.examTip":
+    "NCLEX-style priority: match the intervention to the mechanism in the stem—orthopnea → reduce preload and orthopnea first; escalate oxygen when assessment shows need, not by default.",
+  "pages.home.sampleQuestion.continueCta": "Continue to question bank",
+  "pages.home.sampleQuestion.choiceA": "Elevate the head of the bed",
+  "pages.home.sampleQuestion.choiceB": "Start high-flow oxygen via non-rebreather mask",
+  "pages.home.sampleQuestion.choiceC": "Administer a rapid IV fluid bolus",
+  "pages.home.sampleQuestion.choiceD": "Place the client in a left lateral position",
+  "pages.home.differentiation.contrastGenericLabel": "What generic prep often feels like",
+  "pages.home.differentiation.contrastGenericLine":
+    "Disjointed question dumps, thin explanations, and scope that drifts between apps and PDFs.",
+  "pages.home.differentiation.contrastNnLabel": "NurseNest",
+  "pages.home.differentiation.contrastNnLine":
+    "One registration context end to end: teaching rationales, lessons, and drills that stay on your license path.",
+};
+
+function pickSampleFb(key: string): string {
+  return SAMPLE_FB[key] ?? "";
+}
+
 /**
  * Public sample item + teaching rationale (no auth) — demonstrates real bank flow above the fold.
  */
@@ -25,7 +58,7 @@ export function HomeSampleQuestionPreview() {
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
   const loc = (path: string) => withMarketingLocale(locale, path);
-  const choices = CHOICE_KEYS.map((k) => t(k));
+  const choices = CHOICE_KEYS.map((k) => safeHomepageMarketingCopy(t, k, pickSampleFb(k)));
 
   return (
     <section
@@ -36,14 +69,23 @@ export function HomeSampleQuestionPreview() {
       <div className="nn-section-shell">
         <div className="mx-auto max-w-3xl">
           <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-info)]">
-            {formatTitleCase(t("pages.home.sampleQuestion.sectionKicker"), locale)}
+            {formatTitleCase(
+              safeHomepageMarketingCopy(t, "pages.home.sampleQuestion.sectionKicker", pickSampleFb("pages.home.sampleQuestion.sectionKicker")),
+              locale,
+            )}
           </p>
           <h2 className="nn-marketing-h2 mt-2 max-w-2xl text-balance text-[var(--palette-heading)]">
             <MarketingEditableI18nText
               messageKey="pages.home.sampleQuestion.sectionTitle"
-              initialDraft={formatTitleCase(t("pages.home.sampleQuestion.sectionTitle"), locale)}
+              initialDraft={formatTitleCase(
+                safeHomepageMarketingCopy(t, "pages.home.sampleQuestion.sectionTitle", pickSampleFb("pages.home.sampleQuestion.sectionTitle")),
+                locale,
+              )}
             >
-              {formatTitleCase(t("pages.home.sampleQuestion.sectionTitle"), locale)}
+              {formatTitleCase(
+                safeHomepageMarketingCopy(t, "pages.home.sampleQuestion.sectionTitle", pickSampleFb("pages.home.sampleQuestion.sectionTitle")),
+                locale,
+              )}
             </MarketingEditableI18nText>
           </h2>
           <div
@@ -58,10 +100,24 @@ export function HomeSampleQuestionPreview() {
               }}
             >
               <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--palette-text-muted)]">
-                {formatTitleCase(t("pages.home.differentiation.contrastGenericLabel"), locale)}
+                {formatTitleCase(
+                  safeHomepageMarketingCopy(
+                    t,
+                    "pages.home.differentiation.contrastGenericLabel",
+                    pickSampleFb("pages.home.differentiation.contrastGenericLabel"),
+                  ),
+                  locale,
+                )}
               </p>
               <p className="nn-marketing-body-sm mt-1.5 leading-snug text-[var(--palette-text)]">
-                {formatSentenceCase(t("pages.home.differentiation.contrastGenericLine"), locale)}
+                {formatSentenceCase(
+                  safeHomepageMarketingCopy(
+                    t,
+                    "pages.home.differentiation.contrastGenericLine",
+                    pickSampleFb("pages.home.differentiation.contrastGenericLine"),
+                  ),
+                  locale,
+                )}
               </p>
             </div>
             <div
@@ -72,30 +128,56 @@ export function HomeSampleQuestionPreview() {
               }}
             >
               <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--semantic-success)]">
-                {formatTitleCase(t("pages.home.differentiation.contrastNnLabel"), locale)}
+                {formatTitleCase(
+                  safeHomepageMarketingCopy(
+                    t,
+                    "pages.home.differentiation.contrastNnLabel",
+                    pickSampleFb("pages.home.differentiation.contrastNnLabel"),
+                  ),
+                  locale,
+                )}
               </p>
               <p className="nn-marketing-body-sm mt-1.5 leading-snug text-[var(--palette-text)]">
-                {formatSentenceCase(t("pages.home.differentiation.contrastNnLine"), locale)}
+                {formatSentenceCase(
+                  safeHomepageMarketingCopy(
+                    t,
+                    "pages.home.differentiation.contrastNnLine",
+                    pickSampleFb("pages.home.differentiation.contrastNnLine"),
+                  ),
+                  locale,
+                )}
               </p>
             </div>
           </div>
           <p className="nn-marketing-body mt-4 max-w-2xl text-pretty leading-relaxed text-[var(--palette-text-muted)]">
-            {formatSentenceCase(t("pages.home.sampleQuestion.sectionLead"), locale)}
+            {formatSentenceCase(
+              safeHomepageMarketingCopy(t, "pages.home.sampleQuestion.sectionLead", pickSampleFb("pages.home.sampleQuestion.sectionLead")),
+              locale,
+            )}
           </p>
           <p
             className="nn-marketing-body-sm mt-3 max-w-2xl text-pretty leading-relaxed text-[var(--semantic-success)]"
             data-testid="text-sample-safe-to-try"
           >
-            {formatSentenceCase(t("pages.home.sampleQuestion.safeToTryLine"), locale)}
+            {formatSentenceCase(
+              safeHomepageMarketingCopy(t, "pages.home.sampleQuestion.safeToTryLine", pickSampleFb("pages.home.sampleQuestion.safeToTryLine")),
+              locale,
+            )}
           </p>
           <h3
             id="home-sample-question-heading"
             className="nn-marketing-body mt-6 text-pretty text-lg font-semibold leading-snug text-[var(--palette-heading)] sm:text-xl"
           >
-            {formatSentenceCase(t("pages.home.sampleQuestion.stem"), locale)}
+            {formatSentenceCase(
+              safeHomepageMarketingCopy(t, "pages.home.sampleQuestion.stem", pickSampleFb("pages.home.sampleQuestion.stem")),
+              locale,
+            )}
           </h3>
           <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-[var(--palette-text-muted)]">
-            {formatTitleCase(t("pages.home.sampleQuestion.choicesHeading"), locale)}
+            {formatTitleCase(
+              safeHomepageMarketingCopy(t, "pages.home.sampleQuestion.choicesHeading", pickSampleFb("pages.home.sampleQuestion.choicesHeading")),
+              locale,
+            )}
           </p>
           <ul className="mt-3 space-y-3" role="list">
             {choices.map((text, i) => (
@@ -134,13 +216,22 @@ export function HomeSampleQuestionPreview() {
             style={{ borderColor: "color-mix(in srgb, var(--semantic-info) 22%, var(--semantic-border-soft))" }}
           >
             <p className="text-xs font-bold uppercase tracking-wide text-[color-mix(in_srgb,var(--semantic-info)_85%,var(--semantic-text-primary))]">
-              {formatTitleCase(t("pages.home.sampleQuestion.rationaleLabel"), locale)}
+              {formatTitleCase(
+                safeHomepageMarketingCopy(t, "pages.home.sampleQuestion.rationaleLabel", pickSampleFb("pages.home.sampleQuestion.rationaleLabel")),
+                locale,
+              )}
             </p>
             <p className="nn-marketing-body mt-2 text-pretty leading-relaxed text-[var(--palette-text-muted)]">
-              {formatSentenceCase(t("pages.home.sampleQuestion.rationaleBody"), locale)}
+              {formatSentenceCase(
+                safeHomepageMarketingCopy(t, "pages.home.sampleQuestion.rationaleBody", pickSampleFb("pages.home.sampleQuestion.rationaleBody")),
+                locale,
+              )}
             </p>
             <p className="nn-marketing-caption mt-4 border-t border-[var(--semantic-border-soft)] pt-4 text-pretty text-[var(--palette-text-muted)]">
-              {formatSentenceCase(t("pages.home.sampleQuestion.examTip"), locale)}
+              {formatSentenceCase(
+                safeHomepageMarketingCopy(t, "pages.home.sampleQuestion.examTip", pickSampleFb("pages.home.sampleQuestion.examTip")),
+                locale,
+              )}
             </p>
           </div>
           <div className="mt-8 flex justify-center sm:justify-start">
@@ -156,7 +247,10 @@ export function HomeSampleQuestionPreview() {
               className={`${MARKETING_TERTIARY_LINK_CLASS} nn-motion-standard inline-flex items-center gap-1.5 font-semibold text-[var(--semantic-brand)]`}
               data-testid="button-home-sample-question-cta"
             >
-              {formatTitleCase(t("pages.home.sampleQuestion.continueCta"), locale)}
+              {formatTitleCase(
+                safeHomepageMarketingCopy(t, "pages.home.sampleQuestion.continueCta", pickSampleFb("pages.home.sampleQuestion.continueCta")),
+                locale,
+              )}
               <ArrowRight className="h-4 w-4 shrink-0" aria-hidden />
             </MarketingTrackedLink>
           </div>

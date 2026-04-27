@@ -9,6 +9,7 @@ import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-l
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { MARKETING_PRIMARY_CTA_CLASS } from "@/lib/theme/marketing-hero-pattern";
 import { formatTitleCase } from "@/lib/format/text-case";
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 
 export type HomeStartPracticeCtaBandPlacement = "after_screenshots" | "mid_page";
 
@@ -29,7 +30,11 @@ export function HomeStartPracticeCtaBand({ placement }: { placement: HomeStartPr
           : "mt-4 border-t border-[var(--header-nav-border)] pt-5 text-center sm:mt-5 sm:pt-6"
       }
       role="region"
-      aria-label={t("pages.home.ctaBand.ariaLabel")}
+      aria-label={safeHomepageMarketingCopy(
+        t,
+        "pages.home.ctaBand.ariaLabel",
+        "Start practicing with exam-style questions",
+      )}
       data-testid={`home-start-practice-band-${placement}`}
     >
       <MarketingTrackedLink
@@ -39,11 +44,18 @@ export function HomeStartPracticeCtaBand({ placement }: { placement: HomeStartPr
         className={`${MARKETING_PRIMARY_CTA_CLASS} nn-motion-standard mx-auto inline-flex rounded-xl shadow-[var(--shadow-card)]`}
         data-testid={`button-start-practice-${placement}`}
       >
-        {formatTitleCase(t("pages.home.hero.primaryCta"), locale)}
+        {formatTitleCase(
+          safeHomepageMarketingCopy(t, "pages.home.hero.primaryCta", "Start practice questions"),
+          locale,
+        )}
         <ArrowRight className="h-5 w-5 shrink-0" aria-hidden />
       </MarketingTrackedLink>
       <p className="nn-marketing-caption mx-auto mt-3 max-w-md text-pretty font-medium text-[var(--palette-text)]">
-        {t("pages.home.ctaBand.microcopy")}
+        {safeHomepageMarketingCopy(
+          t,
+          "pages.home.ctaBand.microcopy",
+          "Jump into the public question bank in your pathway context.",
+        )}
       </p>
     </div>
   );
