@@ -102,16 +102,107 @@ describe("resolveNursingTierHubActionHref", () => {
     assert.equal(href, "/us/pn/nclex-pn/lessons");
   });
 
-  it("keeps a valid absolute pathway href when present", () => {
+  it("ignores overridden lessons href and always uses the pathway lessons index", () => {
     const pathway = getExamPathwayById("us-np-fnp");
     assert.ok(pathway);
-    const custom = "/us/np/fnp/lessons?topicSlug=foo";
     const href = resolveNursingTierHubActionHref(pathway, {
       id: "lessons",
       label: "Lessons",
       description: "x",
-      href: custom,
+      href: "/us/np/fnp/lessons?topicSlug=foo",
     });
-    assert.equal(href, custom);
+    assert.equal(href, "/us/np/fnp/lessons");
+  });
+
+  it("treats empty lessons href as invalid and uses the pathway lessons index", () => {
+    const pathway = getExamPathwayById("us-rn-nclex-rn");
+    assert.ok(pathway);
+    assert.equal(
+      resolveNursingTierHubActionHref(pathway, {
+        id: "lessons",
+        label: "Lessons",
+        description: "x",
+        href: "",
+      }),
+      "/us/rn/nclex-rn/lessons",
+    );
+    assert.equal(
+      resolveNursingTierHubActionHref(pathway, {
+        id: "lessons",
+        label: "Lessons",
+        description: "x",
+        href: "   ",
+      }),
+      "/us/rn/nclex-rn/lessons",
+    );
+  });
+
+  it("rejects javascript:, data:, and vbscript: for practice questions", () => {
+    const pathway = getExamPathwayById("us-rn-nclex-rn");
+    assert.ok(pathway);
+    const want = "/us/rn/nclex-rn/questions";
+    for (const href of ["javascript:alert(1)", "data:text/html,<p>x</p>", "vbscript:msgbox(1)"] as const) {
+      assert.equal(
+        resolveNursingTierHubActionHref(pathway, {
+          id: "practice_questions",
+          label: "Practice",
+          description: "x",
+          href,
+        }),
+        want,
+      );
+    }
+  });
+
+  it("preserves a safe internal lessons href that matches this pathway lessons index", () => {
+    const pathway = getExamPathwayById("us-rn-nclex-rn");
+    assert.ok(pathway);
+    assert.equal(
+      resolveNursingTierHubActionHref(pathway, {
+        id: "lessons",
+        label: "Lessons",
+        description: "x",
+        href: "/us/rn/nclex-rn/lessons",
+      }),
+      "/us/rn/nclex-rn/lessons",
+    );
+  });
+
+  it("resolves RN, PN, and NP lesson tiles to distinct pathway lessons hubs", () => {
+    const rn = getExamPathwayById("us-rn-nclex-rn");
+    const pn = getExamPathwayById("us-lpn-nclex-pn");
+    const np = getExamPathwayById("us-np-fnp");
+    assert.ok(rn && pn && np);
+    const rnL = resolveNursingTierHubActionHref(rn, { id: "lessons", label: "L", description: "d", href: "#" });
+    const pnL = resolveNursingTierHubActionHref(pn, { id: "lessons", label: "L", description: "d", href: "#topics" });
+    const npL = resolveNursingTierHubActionHref(np, { id: "lessons", label: "L", description: "d", href: "#" });
+    assert.equal(rnL, "/us/rn/nclex-rn/lessons");
+    assert.equal(pnL, "/us/pn/nclex-pn/lessons");
+    assert.equal(npL, "/us/np/fnp/lessons");
+    assert.notEqual(rnL, pnL);
+    assert.notEqual(pnL, npL);
+  });
+
+  it("rejects placeholder practice and exams hrefs in favor of pathway hubs", () => {
+    const pathway = getExamPathwayById("ca-rn-nclex-rn");
+    assert.ok(pathway);
+    assert.equal(
+      resolveNursingTierHubActionHref(pathway, {
+        id: "practice_questions",
+        label: "Practice",
+        description: "x",
+        href: "#",
+      }),
+      "/canada/rn/nclex-rn/questions",
+    );
+    assert.equal(
+      resolveNursingTierHubActionHref(pathway, {
+        id: "exams",
+        label: "Exams",
+        description: "x",
+        href: "#topics",
+      }),
+      "/canada/rn/nclex-rn/cat",
+    );
   });
 });

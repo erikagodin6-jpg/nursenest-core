@@ -1,3 +1,5 @@
+import { TOPIC_CLUSTER_GROUP_TITLES } from "@/lib/lessons/lesson-taxonomy";
+
 /**
  * Canonical topic-cluster model for pathway lessons:
  * stable `topicSlug` buckets, navigation groups, and question-text → hub slug resolution.
@@ -44,25 +46,7 @@ export const TOPIC_CLUSTER_GROUP_ORDER: TopicClusterGroupId[] = [
 ];
 
 export function topicClusterGroupTitle(group: TopicClusterGroupId): string {
-  const titles: Record<TopicClusterGroupId, string> = {
-    cardiovascular: "Cardiovascular",
-    respiratory: "Respiratory",
-    endocrine: "Endocrine & diabetes",
-    neuro: "Neurological",
-    pharmacology: "Pharmacology",
-    safety_prioritization: "Safety, prioritization & delegation",
-    fluids_renal_gi: "Fluids, electrolytes & renal",
-    maternity_pediatrics: "Maternity & pediatrics",
-    mental_health: "Mental health",
-    infection_immunology: "Infection control, immune & sepsis",
-    gastrointestinal: "Gastrointestinal",
-    hematology_oncology: "Hematology & oncology",
-    musculoskeletal_integumentary: "Musculoskeletal & integumentary",
-    emergency_triage: "Emergency, shock & critical care",
-    other: "More topics",
-  };
-
-  return titles[group];
+  return TOPIC_CLUSTER_GROUP_TITLES[group];
 }
 
 export type TopicClusterCanonicalDef = {

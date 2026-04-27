@@ -1,3 +1,4 @@
+import React from "react";
 import type { LessonDifficulty } from "@/components/pathway-lessons/lesson-board-metadata";
 
 export function DifficultyBadge({ difficulty }: { difficulty: LessonDifficulty }) {

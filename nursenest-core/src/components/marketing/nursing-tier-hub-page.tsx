@@ -17,6 +17,13 @@ const ACTION_ICON: Record<NursingTierHubActionId, LucideIcon> = {
   exams: Activity,
 };
 
+/** Stable Playwright hooks — hub `StudyCard` applies this on the whole-card `Link`. */
+const ACTION_QA_CLASS: Partial<Record<NursingTierHubActionId, string>> = {
+  lessons: "nn-qa-nursing-tier-hub-lessons-card",
+  practice_questions: "nn-qa-nursing-tier-hub-practice-card",
+  exams: "nn-qa-nursing-tier-hub-exams-card",
+};
+
 export function NursingTierHubPage({
   pathway,
   hubPath,
@@ -78,7 +85,7 @@ export function NursingTierHubPage({
                   surface="hub"
                   variant={locked ? "locked" : "featured"}
                   href={locked ? buildExamPathwayPath(pathway) : href}
-                  className={action.id === "lessons" ? "nn-qa-nursing-tier-hub-lessons-card" : undefined}
+                  className={ACTION_QA_CLASS[action.id]}
                   icon={Icon}
                   title={action.label || "Open"}
                   description={

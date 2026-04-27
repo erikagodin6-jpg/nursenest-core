@@ -198,7 +198,13 @@ export async function readinessConfigForPathwayId(pathwayId: string | null | und
   return readinessConfigForPathway(pathway);
 }
 
-export function publicCopyForReadinessConfig(config: PathwayReadinessConfig): PathwayReadinessPublicCopy {
+/** Optional pathway so beta / public labels can name the licensure track (not generic “Beta”). */
+export type PublicCopyPathwayContext = { id: string; shortName?: string };
+
+export function publicCopyForReadinessConfig(
+  config: PathwayReadinessConfig,
+  pathway?: PublicCopyPathwayContext | null,
+): PathwayReadinessPublicCopy {
   const effectiveMode: PathwayReadinessMode =
     config.engineType === "CAT" && config.mode === "production_ready" && config.maxQuestions < 85
       ? "mini_adaptive"
@@ -238,13 +244,19 @@ export function publicCopyForReadinessConfig(config: PathwayReadinessConfig): Pa
       experienceLabel: "Scenario-based adaptive simulation with timed progression.",
     };
   }
+  const betaLabel =
+    pathway?.id === "ca-np-cnple"
+      ? "Canadian NP (CNPLE) beta"
+      : pathway?.shortName
+        ? `${pathway.shortName} beta`
+        : "Beta";
   return {
     effectiveMode: "beta",
     title: `Adaptive CAT (beta) · ${config.label}`,
     subtitle:
       "Beta adaptive session: rules and pool coverage may change. Pair with lessons and targeted question practice before high-stakes testing.",
     strongSimulationClaim: false,
-    betaLabel: "Beta",
+    betaLabel,
     experienceLabel: "Adaptive practice flow in active beta.",
   };
 }

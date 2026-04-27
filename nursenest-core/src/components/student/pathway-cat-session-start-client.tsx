@@ -73,8 +73,8 @@ export function PathwayCatSessionStartClient({
     [pathwayMeta],
   );
   const publicCopy = useMemo(
-    () => (readinessConfig ? publicCopyForReadinessConfig(readinessConfig) : null),
-    [readinessConfig],
+    () => (readinessConfig && pathwayMeta ? publicCopyForReadinessConfig(readinessConfig, pathwayMeta) : null),
+    [readinessConfig, pathwayMeta],
   );
   const examConditionRows = useMemo(
     () => (readinessConfig && catLine ? catExamConditionRows(readinessConfig, catLine) : []),

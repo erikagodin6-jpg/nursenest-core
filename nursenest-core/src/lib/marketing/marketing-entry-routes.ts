@@ -24,7 +24,7 @@ export const HUB = {
 
 /** RN / NCLEX-RN */
 export const RN = {
-  /** Legacy name: canonical public RN entry (retired `/us/rn/nclex-rn` overview). */
+  /** Canonical public RN pathway hub root (same as {@link CANONICAL_PATHWAY_HUB.usRn}). */
   practiceProgrammatic: CANONICAL_PATHWAY_HUB.usRn,
   usLessons: HUB.examLessons,
   caLessons: HUB.examLessons,

@@ -67,7 +67,7 @@ describe("PathwayLessonsCurriculumHub", () => {
       />,
     );
 
-    assert.match(html, /Cardiac/);
+    assert.match(html, /Cardiovascular/);
     assert.match(html, /2 of 6 completed/);
     assert.match(html, /Category progress/i);
     assert.match(html, /line-clamp-3/);

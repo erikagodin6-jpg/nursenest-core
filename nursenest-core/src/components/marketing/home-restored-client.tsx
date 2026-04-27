@@ -14,6 +14,7 @@ import { FunnelHomepageViewBeacon } from "@/components/marketing/funnel-analytic
 import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
+import { marketingExamHubPath } from "@/lib/marketing/marketing-exam-navigation";
 import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
@@ -108,7 +109,17 @@ export default function HomeRestoredClient({
 
   const audienceCards = useMemo(() => {
     const l = (p: string) => withMarketingLocale(locale, p);
-    const hubs = publicExamPrepHubDestinations(region);
+    let hubs = {
+      rn: marketingExamHubPath(region, "rn"),
+      pn: marketingExamHubPath(region, "pn"),
+      np: marketingExamHubPath(region, "np"),
+      allied: marketingExamHubPath(region, "allied"),
+    };
+    try {
+      hubs = { ...hubs, ...publicExamPrepHubDestinations(region) };
+    } catch {
+      /* keep marketingExamHubPath fallbacks */
+    }
 
     return [
       {
@@ -230,6 +241,7 @@ export default function HomeRestoredClient({
                 eventProps={{ pathway: c.id, region }}
                 className="nn-card-system nn-card-system-pad nn-card-system--interactive group flex flex-col"
                 style={{ borderTop: `3px solid ${c.color}` }}
+                data-nn-home-tier-card={c.id}
               >
                 <span className="nn-card-system__title">
                   {c.title}

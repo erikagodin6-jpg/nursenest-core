@@ -60,7 +60,7 @@ export function buildCatExamSimulationCreatePayload(pathwayMeta: PracticeTestPat
   );
   const simMax = nclexRnSimulationBoundsFromConfig(examCfg).max;
   const readinessConfig = readinessConfigForPathway(pathwayMeta);
-  const publicCopy = publicCopyForReadinessConfig(readinessConfig);
+  const publicCopy = publicCopyForReadinessConfig(readinessConfig, pathwayFull ?? pathwayMeta);
   const questionCount = resolveReadinessStartQuestionCount({
     configuredMaxQuestions: simMax,
     catPresentationMode: "exam_simulation",

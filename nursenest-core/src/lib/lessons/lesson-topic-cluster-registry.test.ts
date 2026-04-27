@@ -10,7 +10,7 @@ describe("lesson-topic-cluster-registry", () => {
   it("maps question-like topic codes to canonical slugs", () => {
     assert.equal(mapTopicCodeToCanonicalClusterSlug("acute coronary syndrome"), "cardiovascular");
     assert.equal(mapTopicCodeToCanonicalClusterSlug("copd exacerbation"), "copd");
-    assert.equal(mapTopicCodeToCanonicalClusterSlug("prioritization"), "prioritization-delegation");
+    assert.equal(mapTopicCodeToCanonicalClusterSlug("prioritization"), "prioritization");
   });
 
   it("pickTopicClusterSlugForPathway only emits slugs present for the pathway", () => {

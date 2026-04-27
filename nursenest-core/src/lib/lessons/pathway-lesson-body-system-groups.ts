@@ -1,7 +1,8 @@
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import { mapTaxonomyLeafToNursingHubCategory } from "@/lib/lessons/lesson-taxonomy";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
-import { classifyNursingContent, classifyPathwayLessonRecordForHub } from "@/lib/taxonomy/classifier";
+import { buildLessonTaxonomyCorpus, classifyNursingContent, classifyStrings } from "@/lib/taxonomy/classifier";
 import { allTaxonomyLeaves, REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -102,15 +103,34 @@ export function classifyLessonForHub(
   const tryLabel = (raw: string | null | undefined): PathwayLessonSystemLabel | null => {
     const t = raw?.trim();
     if (!t) return null;
+    const directHubCategory = t.toLowerCase().replace(/[\s/-]+/g, "_");
+    if (directHubCategory !== REVIEW_REQUIRED.toLowerCase() && known.has(directHubCategory)) {
+      return directHubCategory;
+    }
     const mapped = normalizePathwayLessonSystemLabel(t);
-    if (mapped !== REVIEW_REQUIRED && known.has(mapped)) return mapped;
+    const hubCategory = mapTaxonomyLeafToNursingHubCategory(mapped, lesson, pathwayId);
+    if (hubCategory !== REVIEW_REQUIRED && known.has(hubCategory)) return hubCategory;
     return null;
   };
   const fromBody = tryLabel(lesson.bodySystem);
   if (fromBody) return fromBody;
   const fromSystem = tryLabel(lesson.system);
   if (fromSystem) return fromSystem;
-  return classifyPathwayLessonRecordForHub(lesson).categoryId as PathwayLessonSystemLabel;
+  const titleOnly = classifyStrings({ title: lesson.title, placementStrictUnique: true });
+  const titleHubCategory = mapTaxonomyLeafToNursingHubCategory(titleOnly.category, lesson, pathwayId);
+  if (titleHubCategory !== REVIEW_REQUIRED && known.has(titleHubCategory)) {
+    return titleHubCategory as PathwayLessonSystemLabel;
+  }
+  const strict = classifyStrings({
+    title: lesson.title,
+    content: buildLessonTaxonomyCorpus(lesson),
+    placementStrictUnique: true,
+  });
+  const strictHubCategory = mapTaxonomyLeafToNursingHubCategory(strict.category, lesson, pathwayId);
+  if (strictHubCategory !== REVIEW_REQUIRED && known.has(strictHubCategory)) {
+    return strictHubCategory as PathwayLessonSystemLabel;
+  }
+  return REVIEW_REQUIRED;
 }
 
 export function buildPathwayLessonSystemSections(

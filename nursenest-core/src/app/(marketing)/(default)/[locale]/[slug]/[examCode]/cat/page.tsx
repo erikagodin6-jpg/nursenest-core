@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         return { robots: { index: false, follow: true } };
       }
       const readinessConfig = readinessConfigForPathway(pathway);
-      const publicCopy = publicCopyForReadinessConfig(readinessConfig);
+      const publicCopy = publicCopyForReadinessConfig(readinessConfig, pathway);
       const country = pathway.countrySlug === "canada" ? "Canada" : "United States";
       const title = `${pathwayCatLandingTitle(pathway)} · ${country} | NurseNest`;
       const description = pathwayCatMetadataDescription(pathway, publicCopy);
@@ -127,7 +127,7 @@ export default async function PathwayCatEntryPage({ params }: Props) {
   const countryLabel = pathway.countrySlug === "canada" ? "Canada" : "US";
   const catShort = catPathwayShortCatLabel(pathway);
   const readinessConfig = readinessConfigForPathway(pathway);
-  const publicCopy = publicCopyForReadinessConfig(readinessConfig);
+  const publicCopy = publicCopyForReadinessConfig(readinessConfig, pathway);
   const landingTitle = pathwayCatLandingTitle(pathway);
   const landingSubtitle = pathwayCatLandingSubtitle(pathway, publicCopy);
   const howItWorksItems = catHowItWorksBulletItems(publicCopy, readinessConfig);
@@ -175,7 +175,10 @@ export default async function PathwayCatEntryPage({ params }: Props) {
         </p>
       ) : null}
       {publicCopy.betaLabel ? (
-        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">CAT surface ({publicCopy.betaLabel})</p>
+        <p className="mt-2 text-sm text-[var(--theme-muted-text)]">
+          Program status: <strong className="text-[var(--theme-heading-text)]">{publicCopy.betaLabel}</strong>
+          {" — "}session length, scoring rules, and eligible items may change while this pathway is finalized.
+        </p>
       ) : null}
 
       <section className="mt-6 rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
