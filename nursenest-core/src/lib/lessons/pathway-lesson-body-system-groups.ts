@@ -1,8 +1,9 @@
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
+import { mapTaxonomyLeafToNursingHubCategory } from "@/lib/lessons/lesson-taxonomy";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
 import { buildLessonTaxonomyCorpus, classifyNursingContent, classifyStrings } from "@/lib/taxonomy/classifier";
-import { allTaxonomyLeaves, REVIEW_REQUIRED, TAXONOMY } from "@/lib/taxonomy/taxonomy";
+import { allTaxonomyLeaves, REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /** Exact taxonomy leaf ids (and space/kebab variants) resolve before substring keyword scoring — avoids false hits (e.g. "neurological" contains "intestinal"). */
@@ -23,119 +24,6 @@ function knownHubCategoryIds(pathwayId?: string | null): Set<string> {
     for (const s of c.subcategories ?? []) ids.add(s.id);
   }
   return ids;
-}
-
-const PHARMACOLOGY_LEAVES = new Set<string>(TAXONOMY.PHARMACOLOGY);
-const PROFESSIONAL_LEAVES = new Set<string>(TAXONOMY.PROFESSIONAL_PRACTICE);
-const EXAM_META_LEAVES = new Set<string>(TAXONOMY.EXAM_META);
-
-function isNpPathway(pathwayId?: string | null): boolean {
-  return Boolean(pathwayId && (pathwayId.includes("-np-") || pathwayId === "ca-np-cnple"));
-}
-
-function textHasAny(text: string, patterns: readonly RegExp[]): boolean {
-  return patterns.some((pattern) => pattern.test(text));
-}
-
-function hubClassificationCorpus(lesson: PathwayLessonRecord): string {
-  return `${lesson.title ?? ""} ${lesson.topic ?? ""} ${lesson.topicSlug ?? ""} ${lesson.bodySystem ?? ""} ${
-    lesson.system ?? ""
-  } ${lesson.seoDescription ?? ""}`.toLowerCase();
-}
-
-const MENTAL_HEALTH_PATTERNS = [
-  /\bpsychiat/,
-  /\bmental health\b/,
-  /\bdepression\b/,
-  /\banxiety\b/,
-  /\bsuicid/,
-  /\bbipolar\b/,
-  /\bschizo/,
-  /\bptsd\b/,
-  /\bbehavioral health\b/,
-] as const;
-
-const NP_ASSESSMENT_PATTERNS = [/\bassessment\b/, /\bphysical exam\b/, /\bhistory\b/, /\brisk assessment\b/] as const;
-const NP_DIAGNOSTIC_PATTERNS = [
-  /\bdifferential\b/,
-  /\bdiagnos/,
-  /\bdiagnostic/,
-  /\bclinical reasoning\b/,
-  /\babg\b/,
-  /\bacid[- ]base\b/,
-  /\binterpretation\b/,
-] as const;
-const NP_PRESCRIBING_PATTERNS = [/\bprescrib/, /\bmedication\b/, /\bmedications\b/, /\bpharmac/, /\bdrug\b/] as const;
-const NP_CHRONIC_PATTERNS = [
-  /\bchronic\b/,
-  /\bdiabetes\b/,
-  /\bhypertension\b/,
-  /\bheart failure\b/,
-  /\bckd\b/,
-  /\bcopd\b/,
-  /\blongitudinal\b/,
-] as const;
-const NP_ACUTE_PATTERNS = [
-  /\bacute\b/,
-  /\burgent\b/,
-  /\bepisodic\b/,
-  /\bunstable\b/,
-  /\bshock\b/,
-  /\brapid response\b/,
-  /\bfirst-day admissions\b/,
-  /\boverflow unit\b/,
-] as const;
-const NP_OLDER_ADULT_PATTERNS = [/\bolder adult/, /\bgeriatric/, /\bfrailty\b/, /\bpolypharmacy\b/] as const;
-
-function mapTaxonomyLeafToRnPnHubCategory(leaf: string, corpus: string): string {
-  if (leaf === REVIEW_REQUIRED) return REVIEW_REQUIRED;
-  if (leaf === "renal_genitourinary") return "renal_urinary";
-  if (leaf === "reproductive_obstetrics") return "reproductive_maternal_newborn";
-  if (leaf === "neurological" && textHasAny(corpus, MENTAL_HEALTH_PATTERNS)) return "mental_health";
-  if (leaf === "patient_safety_quality") return "fundamentals_safety";
-  if (PHARMACOLOGY_LEAVES.has(leaf)) return "pharmacology";
-  if (PROFESSIONAL_LEAVES.has(leaf)) return "professional_practice";
-  if (EXAM_META_LEAVES.has(leaf)) return "exam_strategy";
-  switch (leaf) {
-    case "cardiovascular":
-    case "respiratory":
-    case "neurological":
-    case "gastrointestinal":
-    case "endocrine":
-    case "pediatrics":
-      return leaf;
-    case "immune_infectious":
-    case "hematology_oncology":
-    case "musculoskeletal":
-    case "integumentary":
-      return "fundamentals_safety";
-    default:
-      return REVIEW_REQUIRED;
-  }
-}
-
-function mapTaxonomyLeafToNpHubCategory(leaf: string, corpus: string): string {
-  if (leaf === REVIEW_REQUIRED) return REVIEW_REQUIRED;
-  if (textHasAny(corpus, MENTAL_HEALTH_PATTERNS)) return "mental_health";
-  if (textHasAny(corpus, NP_OLDER_ADULT_PATTERNS)) return "older_adults";
-  if (leaf === "pediatrics") return "pediatrics";
-  if (leaf === "reproductive_obstetrics") return "womens_health";
-  if (PHARMACOLOGY_LEAVES.has(leaf) || textHasAny(corpus, NP_PRESCRIBING_PATTERNS)) return "pharmacology_prescribing";
-  if (PROFESSIONAL_LEAVES.has(leaf)) return "professional_practice";
-  if (EXAM_META_LEAVES.has(leaf)) return "exam_strategy";
-  if (textHasAny(corpus, NP_ASSESSMENT_PATTERNS)) return "health_assessment";
-  if (textHasAny(corpus, NP_DIAGNOSTIC_PATTERNS)) return "diagnostics_clinical_reasoning";
-  if (textHasAny(corpus, NP_ACUTE_PATTERNS)) return "acute_episodic_care";
-  if (textHasAny(corpus, NP_CHRONIC_PATTERNS)) return "chronic_disease_management";
-  if (TAXONOMY.CLINICAL.includes(leaf as (typeof TAXONOMY.CLINICAL)[number])) return "primary_care";
-  return REVIEW_REQUIRED;
-}
-
-function mapTaxonomyLeafToHubCategory(leaf: string, lesson: PathwayLessonRecord, pathwayId?: string | null): string {
-  const corpus = hubClassificationCorpus(lesson);
-  return isNpPathway(pathwayId)
-    ? mapTaxonomyLeafToNpHubCategory(leaf, corpus)
-    : mapTaxonomyLeafToRnPnHubCategory(leaf, corpus);
 }
 
 export type PathwayLessonSystemLabel = string;
@@ -220,7 +108,7 @@ export function classifyLessonForHub(
       return directHubCategory;
     }
     const mapped = normalizePathwayLessonSystemLabel(t);
-    const hubCategory = mapTaxonomyLeafToHubCategory(mapped, lesson, pathwayId);
+    const hubCategory = mapTaxonomyLeafToNursingHubCategory(mapped, lesson, pathwayId);
     if (hubCategory !== REVIEW_REQUIRED && known.has(hubCategory)) return hubCategory;
     return null;
   };
@@ -229,7 +117,7 @@ export function classifyLessonForHub(
   const fromSystem = tryLabel(lesson.system);
   if (fromSystem) return fromSystem;
   const titleOnly = classifyStrings({ title: lesson.title, placementStrictUnique: true });
-  const titleHubCategory = mapTaxonomyLeafToHubCategory(titleOnly.category, lesson, pathwayId);
+  const titleHubCategory = mapTaxonomyLeafToNursingHubCategory(titleOnly.category, lesson, pathwayId);
   if (titleHubCategory !== REVIEW_REQUIRED && known.has(titleHubCategory)) {
     return titleHubCategory as PathwayLessonSystemLabel;
   }
@@ -238,7 +126,7 @@ export function classifyLessonForHub(
     content: buildLessonTaxonomyCorpus(lesson),
     placementStrictUnique: true,
   });
-  const strictHubCategory = mapTaxonomyLeafToHubCategory(strict.category, lesson, pathwayId);
+  const strictHubCategory = mapTaxonomyLeafToNursingHubCategory(strict.category, lesson, pathwayId);
   if (strictHubCategory !== REVIEW_REQUIRED && known.has(strictHubCategory)) {
     return strictHubCategory as PathwayLessonSystemLabel;
   }

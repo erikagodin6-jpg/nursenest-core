@@ -1,0 +1,3895 @@
+{
+  "generatedAt": "2026-04-27T09:45:43.149Z",
+  "pathways": [
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "rawCatalogCount": 183,
+      "effectiveHubVisibleCount": 31,
+      "uniqueCompositeIds": 183,
+      "uniqueSlugs": 183,
+      "topicsUsed": [
+        "ACS / chest pain — clinical case study",
+        "ARDS",
+        "Acute kidney injury",
+        "Adrenal crisis",
+        "Antibiotics",
+        "Anticoagulation",
+        "Antihypertensives",
+        "Atrial fibrillation",
+        "COPD",
+        "Cardiac medications",
+        "Cardiovascular",
+        "Delegation",
+        "Delegation & collaboration",
+        "Delirium",
+        "Diabetes medications",
+        "Diabetic ketoacidosis & HHS",
+        "Electrolyte emergency — clinical case study",
+        "Emergency medications",
+        "Endocrine",
+        "Escalation & reporting",
+        "Falls prevention",
+        "Fluids & electrolytes",
+        "Fluids, Electrolytes & Acid-Base",
+        "Gastrointestinal",
+        "Glucose emergencies — clinical case study",
+        "Hematology & Oncology",
+        "Infection & Sepsis",
+        "Infection control",
+        "Integumentary & Wound Care",
+        "Isolation precautions",
+        "Leadership & Delegation",
+        "Maternal / newborn emergency — clinical case study",
+        "Maternity",
+        "Medication administration",
+        "Medication safety",
+        "Meningitis",
+        "Mental Health",
+        "Mental health & safety — clinical case study",
+        "Musculoskeletal",
+        "Neurological",
+        "Nutrition",
+        "Opioid toxicity",
+        "Pain & sedation",
+        "Pediatric fever / dehydration — clinical case study",
+        "Pediatrics",
+        "Pharmacology",
+        "Pneumonia",
+        "Prioritization & delegation",
+        "Prioritization & staffing",
+        "Prioritization under uncertainty",
+        "Psychotropic medications",
+        "Pulmonary embolism",
+        "Renal & GU",
+        "Renal / GU",
+        "Respiratory",
+        "Respiratory distress — clinical case study",
+        "Respiratory medications",
+        "Restraints",
+        "Safety & Prioritization",
+        "Sepsis & infection",
+        "Sepsis — clinical case study",
+        "Shock",
+        "Thyroid storm",
+        "Upper GI bleeding"
+      ],
+      "topicSlugsUsed": [
+        "abg",
+        "acid-base",
+        "acute-coronary",
+        "angina",
+        "antibiotics",
+        "anticoagulation",
+        "ards",
+        "asthma",
+        "cardiovascular",
+        "clinical-judgment",
+        "copd",
+        "delegation",
+        "diabetes-meds",
+        "dysrhythmias",
+        "endocrine",
+        "fluids-electrolytes",
+        "gastrointestinal",
+        "heart-failure",
+        "hematology",
+        "hypertension",
+        "infection-control",
+        "infectious",
+        "integumentary",
+        "leadership",
+        "maternity",
+        "medication-safety",
+        "mental-health",
+        "musculoskeletal",
+        "neurological",
+        "nutrition",
+        "pain",
+        "pediatrics",
+        "pharmacology",
+        "pneumonia",
+        "potassium",
+        "prioritization",
+        "prioritization-delegation",
+        "pulmonary-embolism",
+        "renal-gu",
+        "respiratory",
+        "safety",
+        "sepsis",
+        "shock",
+        "sodium",
+        "wounds"
+      ],
+      "bodySystemsUsed": [
+        "Cardiovascular",
+        "Cardiovascular / respiratory",
+        "Emergency / resuscitation",
+        "Endocrine",
+        "Endocrine / metabolic",
+        "Fluids & electrolytes",
+        "Gastrointestinal",
+        "General",
+        "Hematologic",
+        "Hematology / cardiovascular",
+        "Immune",
+        "Infection",
+        "Infection / sepsis",
+        "Infection / shock",
+        "Infection control",
+        "Integumentary",
+        "Leadership / safety",
+        "Maternity",
+        "Mental Health",
+        "Mental health / neurology",
+        "Mental health / safety",
+        "Neurologic",
+        "Neurological",
+        "Neurological / geriatrics",
+        "Neurological / infection",
+        "Obstetric",
+        "Pain / perioperative",
+        "Pediatrics",
+        "Pharmacology",
+        "Pharmacology / infection",
+        "Pharmacology / neuro",
+        "Renal",
+        "Respiratory",
+        "Respiratory / infection",
+        "Respiratory / pulmonary",
+        "Safety / clinical judgment",
+        "Safety / communication",
+        "Safety / ethics",
+        "Safety / geriatrics",
+        "Safety / infection prevention",
+        "Safety / leadership",
+        "Safety / mobility",
+        "Safety / pharmacology"
+      ],
+      "hasNoBundledLessons": false
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "rawCatalogCount": 184,
+      "effectiveHubVisibleCount": 96,
+      "uniqueCompositeIds": 184,
+      "uniqueSlugs": 184,
+      "topicsUsed": [
+        "ACS / chest pain — clinical case study",
+        "ARDS",
+        "Acute kidney injury",
+        "Adrenal crisis",
+        "Antibiotics",
+        "Anticoagulation",
+        "Antihypertensives",
+        "Atrial fibrillation",
+        "COPD",
+        "Cardiac medications",
+        "Cardiovascular",
+        "Delegation",
+        "Delegation & collaboration",
+        "Delirium",
+        "Diabetes medications",
+        "Diabetic ketoacidosis & HHS",
+        "Electrolyte emergency — clinical case study",
+        "Emergency medications",
+        "Endocrine",
+        "Escalation & reporting",
+        "Falls prevention",
+        "Fluids & electrolytes",
+        "Fluids, Electrolytes & Acid-Base",
+        "Gastrointestinal",
+        "Glucose emergencies — clinical case study",
+        "Hematology & Oncology",
+        "Infection & Sepsis",
+        "Infection control",
+        "Integumentary & Wound Care",
+        "Isolation precautions",
+        "Leadership & Delegation",
+        "Maternal / newborn emergency — clinical case study",
+        "Maternity",
+        "Medication administration",
+        "Medication safety",
+        "Meningitis",
+        "Mental Health",
+        "Mental health & safety — clinical case study",
+        "Musculoskeletal",
+        "Neurological",
+        "Nutrition",
+        "Opioid toxicity",
+        "Pain & sedation",
+        "Pediatric fever / dehydration — clinical case study",
+        "Pediatrics",
+        "Pharmacology",
+        "Pneumonia",
+        "Prioritization & delegation",
+        "Prioritization & staffing",
+        "Prioritization under uncertainty",
+        "Psychotropic medications",
+        "Pulmonary embolism",
+        "Renal & GU",
+        "Renal / GU",
+        "Respiratory",
+        "Respiratory distress — clinical case study",
+        "Respiratory medications",
+        "Restraints",
+        "Safety & Prioritization",
+        "Sepsis & infection",
+        "Sepsis — clinical case study",
+        "Shock",
+        "Thyroid storm",
+        "Upper GI bleeding"
+      ],
+      "topicSlugsUsed": [
+        "abg",
+        "acid-base",
+        "acute-coronary",
+        "angina",
+        "antibiotics",
+        "anticoagulation",
+        "ards",
+        "asthma",
+        "cardiovascular",
+        "clinical-judgment",
+        "copd",
+        "delegation",
+        "diabetes-meds",
+        "dysrhythmias",
+        "endocrine",
+        "fluids-electrolytes",
+        "gastrointestinal",
+        "heart-failure",
+        "hematology",
+        "hypertension",
+        "infection-control",
+        "infectious",
+        "integumentary",
+        "leadership",
+        "maternity",
+        "medication-safety",
+        "mental-health",
+        "musculoskeletal",
+        "neurological",
+        "nutrition",
+        "pain",
+        "pediatrics",
+        "pharmacology",
+        "pneumonia",
+        "potassium",
+        "prioritization",
+        "prioritization-delegation",
+        "pulmonary-embolism",
+        "renal-gu",
+        "respiratory",
+        "safety",
+        "sepsis",
+        "shock",
+        "sodium",
+        "wounds"
+      ],
+      "bodySystemsUsed": [
+        "Cardiovascular",
+        "Cardiovascular / respiratory",
+        "Emergency / resuscitation",
+        "Endocrine",
+        "Endocrine / metabolic",
+        "Fluids & electrolytes",
+        "Gastrointestinal",
+        "General",
+        "Hematologic",
+        "Hematology / cardiovascular",
+        "Immune",
+        "Infection",
+        "Infection / sepsis",
+        "Infection / shock",
+        "Infection control",
+        "Integumentary",
+        "Leadership / safety",
+        "Maternity",
+        "Mental Health",
+        "Mental health / neurology",
+        "Mental health / safety",
+        "Neurologic",
+        "Neurological",
+        "Neurological / geriatrics",
+        "Neurological / infection",
+        "Obstetric",
+        "Pain / perioperative",
+        "Pediatrics",
+        "Pharmacology",
+        "Pharmacology / infection",
+        "Pharmacology / neuro",
+        "Renal",
+        "Respiratory",
+        "Respiratory / infection",
+        "Respiratory / pulmonary",
+        "Safety / clinical judgment",
+        "Safety / communication",
+        "Safety / ethics",
+        "Safety / geriatrics",
+        "Safety / infection prevention",
+        "Safety / leadership",
+        "Safety / mobility",
+        "Safety / pharmacology"
+      ],
+      "hasNoBundledLessons": false
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "rawCatalogCount": 150,
+      "effectiveHubVisibleCount": 38,
+      "uniqueCompositeIds": 150,
+      "uniqueSlugs": 150,
+      "topicsUsed": [
+        "ACS / chest pain — clinical case study",
+        "ARDS",
+        "Acute kidney injury",
+        "Adrenal crisis",
+        "Antibiotics",
+        "Anticoagulation",
+        "Antihypertensives",
+        "Atrial fibrillation",
+        "COPD",
+        "Cardiac medications",
+        "Cardiovascular",
+        "Delegation",
+        "Delegation & collaboration",
+        "Delirium",
+        "Diabetes medications",
+        "Diabetic ketoacidosis & HHS",
+        "Electrolyte emergency — clinical case study",
+        "Emergency medications",
+        "Endocrine",
+        "Escalation & reporting",
+        "Falls prevention",
+        "Fluids & electrolytes",
+        "Fluids, Electrolytes & Acid-Base",
+        "Gastrointestinal",
+        "Glucose emergencies — clinical case study",
+        "Infection & Sepsis",
+        "Infection control",
+        "Integumentary & Wound Care",
+        "Isolation precautions",
+        "Leadership & Delegation",
+        "Maternal / newborn emergency — clinical case study",
+        "Maternity",
+        "Medication administration",
+        "Medication safety",
+        "Meningitis",
+        "Mental Health",
+        "Mental health & safety — clinical case study",
+        "Neurological",
+        "Opioid toxicity",
+        "Pain & sedation",
+        "Pediatric fever / dehydration — clinical case study",
+        "Pediatrics",
+        "Pharmacology",
+        "Pneumonia",
+        "Prioritization & delegation",
+        "Prioritization & staffing",
+        "Prioritization under uncertainty",
+        "Procedures & Skills",
+        "Psychotropic medications",
+        "Pulmonary embolism",
+        "Renal & GU",
+        "Renal / GU",
+        "Respiratory",
+        "Respiratory distress — clinical case study",
+        "Respiratory medications",
+        "Restraints",
+        "Safety & Prioritization",
+        "Sepsis & infection",
+        "Sepsis — clinical case study",
+        "Shock",
+        "Thyroid storm",
+        "Upper GI bleeding"
+      ],
+      "topicSlugsUsed": [
+        "abg",
+        "acid-base",
+        "acute-coronary",
+        "angina",
+        "antibiotics",
+        "anticoagulation",
+        "ards",
+        "asthma",
+        "cardiovascular",
+        "clinical-judgment",
+        "copd",
+        "delegation",
+        "diabetes-meds",
+        "dysrhythmias",
+        "endocrine",
+        "fluids-electrolytes",
+        "gastrointestinal",
+        "heart-failure",
+        "hypertension",
+        "infection-control",
+        "infectious",
+        "maternity",
+        "medication-safety",
+        "mental-health",
+        "neurological",
+        "pain",
+        "pediatrics",
+        "pharmacology",
+        "pn-foundation",
+        "pneumonia",
+        "potassium",
+        "prioritization",
+        "prioritization-delegation",
+        "pulmonary-embolism",
+        "renal-gu",
+        "respiratory",
+        "safety",
+        "safety-scope",
+        "sepsis",
+        "shock",
+        "sodium",
+        "wounds"
+      ],
+      "bodySystemsUsed": [
+        "Cardiovascular",
+        "Cardiovascular / respiratory",
+        "Emergency / resuscitation",
+        "Endocrine",
+        "Endocrine / metabolic",
+        "Fluids & electrolytes",
+        "Gastrointestinal",
+        "General",
+        "Hematologic",
+        "Hematology / cardiovascular",
+        "Immune",
+        "Infection",
+        "Infection / sepsis",
+        "Infection / shock",
+        "Infection control",
+        "Integumentary",
+        "Leadership / safety",
+        "Maternity",
+        "Mental Health",
+        "Mental health / neurology",
+        "Mental health / safety",
+        "Neurologic",
+        "Neurological",
+        "Neurological / geriatrics",
+        "Neurological / infection",
+        "Obstetric",
+        "Pain / perioperative",
+        "Pediatrics",
+        "Pharmacology",
+        "Pharmacology / infection",
+        "Pharmacology / neuro",
+        "Psychosocial",
+        "Renal",
+        "Respiratory",
+        "Respiratory / infection",
+        "Respiratory / pulmonary",
+        "Safety / clinical judgment",
+        "Safety / communication",
+        "Safety / ethics",
+        "Safety / geriatrics",
+        "Safety / infection prevention",
+        "Safety / leadership",
+        "Safety / mobility",
+        "Safety / pharmacology"
+      ],
+      "hasNoBundledLessons": false
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "rawCatalogCount": 150,
+      "effectiveHubVisibleCount": 38,
+      "uniqueCompositeIds": 150,
+      "uniqueSlugs": 150,
+      "topicsUsed": [
+        "ACS / chest pain — clinical case study",
+        "ARDS",
+        "Acute kidney injury",
+        "Adrenal crisis",
+        "Antibiotics",
+        "Anticoagulation",
+        "Antihypertensives",
+        "Atrial fibrillation",
+        "COPD",
+        "Cardiac medications",
+        "Cardiovascular",
+        "Delegation",
+        "Delegation & collaboration",
+        "Delirium",
+        "Diabetes medications",
+        "Diabetic ketoacidosis & HHS",
+        "Electrolyte emergency — clinical case study",
+        "Emergency medications",
+        "Endocrine",
+        "Escalation & reporting",
+        "Falls prevention",
+        "Fluids & electrolytes",
+        "Fluids, Electrolytes & Acid-Base",
+        "Gastrointestinal",
+        "Glucose emergencies — clinical case study",
+        "Infection & Sepsis",
+        "Infection control",
+        "Integumentary & Wound Care",
+        "Isolation precautions",
+        "Leadership & Delegation",
+        "Maternal / newborn emergency — clinical case study",
+        "Maternity",
+        "Medication administration",
+        "Medication safety",
+        "Meningitis",
+        "Mental Health",
+        "Mental health & safety — clinical case study",
+        "Neurological",
+        "Nutrition",
+        "Opioid toxicity",
+        "Pain & sedation",
+        "Pediatric fever / dehydration — clinical case study",
+        "Pediatrics",
+        "Pharmacology",
+        "Pneumonia",
+        "Prioritization & delegation",
+        "Prioritization & staffing",
+        "Prioritization under uncertainty",
+        "Procedures & Skills",
+        "Psychotropic medications",
+        "Pulmonary embolism",
+        "Renal & GU",
+        "Renal / GU",
+        "Respiratory",
+        "Respiratory distress — clinical case study",
+        "Respiratory medications",
+        "Restraints",
+        "Safety & Prioritization",
+        "Sepsis & infection",
+        "Sepsis — clinical case study",
+        "Shock",
+        "Thyroid storm",
+        "Upper GI bleeding"
+      ],
+      "topicSlugsUsed": [
+        "abg",
+        "acid-base",
+        "acute-coronary",
+        "angina",
+        "antibiotics",
+        "anticoagulation",
+        "ards",
+        "asthma",
+        "cardiovascular",
+        "clinical-judgment",
+        "coordinated-care",
+        "copd",
+        "delegation",
+        "diabetes-meds",
+        "dysrhythmias",
+        "endocrine",
+        "fluids-electrolytes",
+        "gastrointestinal",
+        "health-promotion",
+        "heart-failure",
+        "hypertension",
+        "infection-control",
+        "infectious",
+        "maternity",
+        "medication-safety",
+        "mental-health",
+        "neurological",
+        "pain",
+        "pediatrics",
+        "pharmacology",
+        "pn-foundation",
+        "pneumonia",
+        "potassium",
+        "prioritization",
+        "prioritization-delegation",
+        "psychosocial",
+        "pulmonary-embolism",
+        "renal-gu",
+        "respiratory",
+        "safety",
+        "sepsis",
+        "shock",
+        "sodium",
+        "wounds"
+      ],
+      "bodySystemsUsed": [
+        "Cardiovascular",
+        "Cardiovascular / respiratory",
+        "Emergency / resuscitation",
+        "Endocrine",
+        "Endocrine / metabolic",
+        "Fluids & electrolytes",
+        "Gastrointestinal",
+        "General",
+        "Hematologic",
+        "Hematology / cardiovascular",
+        "Immune",
+        "Infection",
+        "Infection / sepsis",
+        "Infection / shock",
+        "Infection control",
+        "Integumentary",
+        "Leadership / safety",
+        "Maternity",
+        "Mental Health",
+        "Mental health / neurology",
+        "Mental health / safety",
+        "Multisystem",
+        "Neurologic",
+        "Neurological",
+        "Neurological / geriatrics",
+        "Neurological / infection",
+        "Obstetric",
+        "Pain / perioperative",
+        "Pediatrics",
+        "Pharmacology",
+        "Pharmacology / infection",
+        "Pharmacology / neuro",
+        "Psychosocial",
+        "Renal",
+        "Respiratory",
+        "Respiratory / infection",
+        "Respiratory / pulmonary",
+        "Safety / clinical judgment",
+        "Safety / communication",
+        "Safety / ethics",
+        "Safety / geriatrics",
+        "Safety / infection prevention",
+        "Safety / leadership",
+        "Safety / mobility",
+        "Safety / pharmacology"
+      ],
+      "hasNoBundledLessons": false
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "rawCatalogCount": 161,
+      "effectiveHubVisibleCount": 91,
+      "uniqueCompositeIds": 161,
+      "uniqueSlugs": 161,
+      "topicsUsed": [
+        "ACS / chest pain — clinical case study",
+        "ARDS",
+        "Acute kidney injury",
+        "Adrenal crisis",
+        "Antibiotics",
+        "Anticoagulation",
+        "Antihypertensives",
+        "Atrial fibrillation",
+        "COPD",
+        "Cardiac medications",
+        "Cardiovascular",
+        "Delegation",
+        "Delegation & collaboration",
+        "Delirium",
+        "Diabetes & metabolic",
+        "Diabetes medications",
+        "Diabetic ketoacidosis & HHS",
+        "Electrolyte emergency — clinical case study",
+        "Emergency medications",
+        "Endocrine",
+        "Escalation & reporting",
+        "Falls prevention",
+        "Fluids & electrolytes",
+        "Fluids, Electrolytes & Acid-Base",
+        "Gastrointestinal",
+        "Geriatrics",
+        "Glucose emergencies — clinical case study",
+        "Infection & Sepsis",
+        "Infection control",
+        "Infectious disease",
+        "Isolation precautions",
+        "Maternal / newborn emergency — clinical case study",
+        "Maternity",
+        "Medication administration",
+        "Medication safety",
+        "Meningitis",
+        "Mental health",
+        "Mental health & safety — clinical case study",
+        "Musculoskeletal",
+        "NP foundations",
+        "Neurological",
+        "Opioid toxicity",
+        "Pain & sedation",
+        "Pediatric fever / dehydration — clinical case study",
+        "Pediatrics",
+        "Pharmacology",
+        "Pneumonia",
+        "Prioritization & delegation",
+        "Prioritization & staffing",
+        "Prioritization under uncertainty",
+        "Psychotropic medications",
+        "Pulmonary embolism",
+        "Renal & GU",
+        "Renal / GU",
+        "Respiratory",
+        "Respiratory (acute)",
+        "Respiratory distress — clinical case study",
+        "Respiratory medications",
+        "Restraints",
+        "Safety & Prioritization",
+        "Sepsis & infection",
+        "Sepsis — clinical case study",
+        "Shock",
+        "Sleep medicine",
+        "Thyroid storm",
+        "Travel medicine",
+        "Upper GI bleeding",
+        "Women’s health"
+      ],
+      "topicSlugsUsed": [
+        "abg-acid-base",
+        "adolescent-health",
+        "antibiotics",
+        "anticoagulation",
+        "cardiovascular",
+        "clinical-reasoning",
+        "copd",
+        "delegation",
+        "diabetes-meds",
+        "diabetes-metabolic",
+        "electrolytes-volume",
+        "endocrine",
+        "fluids-electrolytes",
+        "gastrointestinal",
+        "geriatrics",
+        "heart-failure",
+        "hypertension",
+        "infection-control",
+        "infectious-disease",
+        "maternity",
+        "medication-safety",
+        "mental-health",
+        "musculoskeletal",
+        "myocardial-infarction",
+        "neurological",
+        "np-differential-prescribing-chronic",
+        "pain",
+        "pediatrics",
+        "pharmacology",
+        "pneumonia",
+        "prioritization",
+        "prioritization-delegation",
+        "renal-gu",
+        "respiratory",
+        "respiratory-acute",
+        "safety",
+        "sepsis",
+        "sepsis-infection",
+        "shock",
+        "sleep-medicine",
+        "womens-health"
+      ],
+      "bodySystemsUsed": [
+        "Cardiovascular",
+        "Cardiovascular / respiratory",
+        "Emergency / resuscitation",
+        "Endocrine",
+        "Endocrine / metabolic",
+        "Fluids & electrolytes",
+        "Gastrointestinal",
+        "General",
+        "Hematologic",
+        "Hematology / cardiovascular",
+        "Immune",
+        "Infection",
+        "Infection / sepsis",
+        "Infection / shock",
+        "Infectious disease",
+        "Leadership / safety",
+        "Maternity",
+        "Mental health / neurology",
+        "Mental health / safety",
+        "Musculoskeletal",
+        "Neurologic",
+        "Neurological",
+        "Neurological / geriatrics",
+        "Neurological / infection",
+        "Obstetric",
+        "Pain / perioperative",
+        "Pediatrics",
+        "Pharmacology",
+        "Pharmacology / infection",
+        "Pharmacology / neuro",
+        "Psychiatric",
+        "Renal",
+        "Reproductive",
+        "Respiratory",
+        "Respiratory / infection",
+        "Respiratory / pulmonary",
+        "Safety / clinical judgment",
+        "Safety / communication",
+        "Safety / ethics",
+        "Safety / geriatrics",
+        "Safety / infection prevention",
+        "Safety / leadership",
+        "Safety / mobility",
+        "Safety / pharmacology"
+      ],
+      "hasNoBundledLessons": false
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "rawCatalogCount": 21,
+      "effectiveHubVisibleCount": 0,
+      "uniqueCompositeIds": 21,
+      "uniqueSlugs": 21,
+      "topicsUsed": [
+        "COPD",
+        "Cardiovascular",
+        "Diabetes & metabolic",
+        "Endocrine",
+        "Geriatrics",
+        "Infectious disease",
+        "Mental health",
+        "Musculoskeletal",
+        "NP foundations",
+        "Neurological",
+        "Pediatrics",
+        "Respiratory",
+        "Respiratory (acute)",
+        "Sleep medicine",
+        "Travel medicine",
+        "Women’s health"
+      ],
+      "topicSlugsUsed": [
+        "cardiovascular",
+        "clinical-reasoning",
+        "copd",
+        "diabetes-metabolic",
+        "endocrine",
+        "geriatrics",
+        "infectious-disease",
+        "mental-health",
+        "musculoskeletal",
+        "neurological",
+        "pediatrics",
+        "respiratory",
+        "respiratory-acute",
+        "sleep-medicine",
+        "womens-health"
+      ],
+      "bodySystemsUsed": [
+        "Cardiovascular",
+        "Endocrine",
+        "General",
+        "Immune",
+        "Infectious disease",
+        "Musculoskeletal",
+        "Neurological",
+        "Psychiatric",
+        "Reproductive",
+        "Respiratory"
+      ],
+      "hasNoBundledLessons": false
+    },
+    {
+      "pathwayId": "us-np-agpcnp",
+      "rawCatalogCount": 70,
+      "effectiveHubVisibleCount": 0,
+      "uniqueCompositeIds": 70,
+      "uniqueSlugs": 70,
+      "topicsUsed": [
+        "ACS / chest pain — clinical case study",
+        "ARDS",
+        "Acute kidney injury",
+        "Adrenal crisis",
+        "Antibiotics",
+        "Anticoagulation",
+        "Antihypertensives",
+        "Atrial fibrillation",
+        "COPD",
+        "Cardiac medications",
+        "Cardiovascular",
+        "Delegation",
+        "Delegation & collaboration",
+        "Delirium",
+        "Diabetes & metabolic",
+        "Diabetes medications",
+        "Diabetic ketoacidosis & HHS",
+        "Electrolyte emergency — clinical case study",
+        "Emergency medications",
+        "Endocrine",
+        "Escalation & reporting",
+        "Falls prevention",
+        "Fluids & electrolytes",
+        "Geriatrics",
+        "Glucose emergencies — clinical case study",
+        "Infection control",
+        "Infectious disease",
+        "Isolation precautions",
+        "Maternal / newborn emergency — clinical case study",
+        "Maternity",
+        "Medication administration",
+        "Medication safety",
+        "Meningitis",
+        "Mental health",
+        "Mental health & safety — clinical case study",
+        "Musculoskeletal",
+        "NP foundations",
+        "Neurological",
+        "Opioid toxicity",
+        "Pain & sedation",
+        "Pediatric fever / dehydration — clinical case study",
+        "Pediatrics",
+        "Pneumonia",
+        "Prioritization & delegation",
+        "Prioritization & staffing",
+        "Prioritization under uncertainty",
+        "Psychotropic medications",
+        "Pulmonary embolism",
+        "Renal / GU",
+        "Respiratory",
+        "Respiratory (acute)",
+        "Respiratory distress — clinical case study",
+        "Respiratory medications",
+        "Restraints",
+        "Sepsis & infection",
+        "Sepsis — clinical case study",
+        "Shock",
+        "Sleep medicine",
+        "Thyroid storm",
+        "Travel medicine",
+        "Upper GI bleeding",
+        "Women’s health"
+      ],
+      "topicSlugsUsed": [
+        "antibiotics",
+        "anticoagulation",
+        "cardiovascular",
+        "clinical-reasoning",
+        "copd",
+        "delegation",
+        "diabetes-meds",
+        "diabetes-metabolic",
+        "endocrine",
+        "fluids-electrolytes",
+        "gastrointestinal",
+        "geriatrics",
+        "hypertension",
+        "infection-control",
+        "infectious-disease",
+        "maternity",
+        "medication-safety",
+        "mental-health",
+        "musculoskeletal",
+        "neurological",
+        "pain",
+        "pediatrics",
+        "pharmacology",
+        "pneumonia",
+        "prioritization",
+        "prioritization-delegation",
+        "renal-gu",
+        "respiratory",
+        "respiratory-acute",
+        "safety",
+        "sepsis",
+        "shock",
+        "sleep-medicine",
+        "womens-health"
+      ],
+      "bodySystemsUsed": [
+        "Cardiovascular",
+        "Cardiovascular / respiratory",
+        "Emergency / resuscitation",
+        "Endocrine",
+        "Endocrine / metabolic",
+        "Fluids & electrolytes",
+        "Gastrointestinal",
+        "General",
+        "Hematology / cardiovascular",
+        "Immune",
+        "Infection / sepsis",
+        "Infection / shock",
+        "Infectious disease",
+        "Leadership / safety",
+        "Maternity",
+        "Mental health / neurology",
+        "Mental health / safety",
+        "Musculoskeletal",
+        "Neurological",
+        "Neurological / geriatrics",
+        "Neurological / infection",
+        "Obstetric",
+        "Pain / perioperative",
+        "Pediatrics",
+        "Pharmacology",
+        "Pharmacology / infection",
+        "Pharmacology / neuro",
+        "Psychiatric",
+        "Renal",
+        "Reproductive",
+        "Respiratory",
+        "Respiratory / infection",
+        "Respiratory / pulmonary",
+        "Safety / clinical judgment",
+        "Safety / communication",
+        "Safety / ethics",
+        "Safety / geriatrics",
+        "Safety / infection prevention",
+        "Safety / leadership",
+        "Safety / mobility",
+        "Safety / pharmacology"
+      ],
+      "hasNoBundledLessons": false
+    },
+    {
+      "pathwayId": "us-np-pmhnp",
+      "rawCatalogCount": 50,
+      "effectiveHubVisibleCount": 0,
+      "uniqueCompositeIds": 50,
+      "uniqueSlugs": 50,
+      "topicsUsed": [
+        "ACS / chest pain — clinical case study",
+        "ARDS",
+        "Acute kidney injury",
+        "Adrenal crisis",
+        "Antibiotics",
+        "Anticoagulation",
+        "Antihypertensives",
+        "Atrial fibrillation",
+        "Cardiac medications",
+        "Cardiovascular",
+        "Delegation",
+        "Delegation & collaboration",
+        "Delirium",
+        "Diabetes medications",
+        "Diabetic ketoacidosis & HHS",
+        "Electrolyte emergency — clinical case study",
+        "Emergency medications",
+        "Escalation & reporting",
+        "Falls prevention",
+        "Fluids & electrolytes",
+        "Glucose emergencies — clinical case study",
+        "Infection control",
+        "Isolation precautions",
+        "Maternal / newborn emergency — clinical case study",
+        "Maternity",
+        "Medication administration",
+        "Medication safety",
+        "Meningitis",
+        "Mental health & safety — clinical case study",
+        "Neurological",
+        "Opioid toxicity",
+        "Pain & sedation",
+        "Pediatric fever / dehydration — clinical case study",
+        "Pediatrics",
+        "Pneumonia",
+        "Prioritization & delegation",
+        "Prioritization & staffing",
+        "Prioritization under uncertainty",
+        "Psychotropic medications",
+        "Pulmonary embolism",
+        "Renal / GU",
+        "Respiratory distress — clinical case study",
+        "Respiratory medications",
+        "Restraints",
+        "Sepsis & infection",
+        "Sepsis — clinical case study",
+        "Shock",
+        "Thyroid storm",
+        "Upper GI bleeding"
+      ],
+      "topicSlugsUsed": [
+        "antibiotics",
+        "anticoagulation",
+        "cardiovascular",
+        "delegation",
+        "diabetes-meds",
+        "endocrine",
+        "fluids-electrolytes",
+        "gastrointestinal",
+        "hypertension",
+        "infection-control",
+        "maternity",
+        "medication-safety",
+        "mental-health",
+        "neurological",
+        "pain",
+        "pediatrics",
+        "pharmacology",
+        "pneumonia",
+        "prioritization",
+        "prioritization-delegation",
+        "renal-gu",
+        "respiratory",
+        "safety",
+        "sepsis",
+        "shock"
+      ],
+      "bodySystemsUsed": [
+        "Cardiovascular",
+        "Cardiovascular / respiratory",
+        "Emergency / resuscitation",
+        "Endocrine",
+        "Endocrine / metabolic",
+        "Fluids & electrolytes",
+        "Gastrointestinal",
+        "General",
+        "Hematology / cardiovascular",
+        "Infection / sepsis",
+        "Infection / shock",
+        "Leadership / safety",
+        "Maternity",
+        "Mental health / neurology",
+        "Mental health / safety",
+        "Neurological",
+        "Neurological / geriatrics",
+        "Neurological / infection",
+        "Obstetric",
+        "Pain / perioperative",
+        "Pediatrics",
+        "Pharmacology",
+        "Pharmacology / infection",
+        "Pharmacology / neuro",
+        "Renal",
+        "Respiratory",
+        "Respiratory / infection",
+        "Respiratory / pulmonary",
+        "Safety / clinical judgment",
+        "Safety / communication",
+        "Safety / ethics",
+        "Safety / geriatrics",
+        "Safety / infection prevention",
+        "Safety / leadership",
+        "Safety / mobility",
+        "Safety / pharmacology"
+      ],
+      "hasNoBundledLessons": false
+    },
+    {
+      "pathwayId": "us-np-whnp",
+      "rawCatalogCount": 21,
+      "effectiveHubVisibleCount": 0,
+      "uniqueCompositeIds": 21,
+      "uniqueSlugs": 21,
+      "topicsUsed": [
+        "COPD",
+        "Cardiovascular",
+        "Diabetes & metabolic",
+        "Endocrine",
+        "Geriatrics",
+        "Infectious disease",
+        "Mental health",
+        "Musculoskeletal",
+        "NP foundations",
+        "Neurological",
+        "Pediatrics",
+        "Respiratory",
+        "Respiratory (acute)",
+        "Sleep medicine",
+        "Travel medicine",
+        "Women’s health"
+      ],
+      "topicSlugsUsed": [
+        "cardiovascular",
+        "clinical-reasoning",
+        "copd",
+        "diabetes-metabolic",
+        "endocrine",
+        "geriatrics",
+        "infectious-disease",
+        "mental-health",
+        "musculoskeletal",
+        "neurological",
+        "pediatrics",
+        "respiratory",
+        "respiratory-acute",
+        "sleep-medicine",
+        "womens-health"
+      ],
+      "bodySystemsUsed": [
+        "Cardiovascular",
+        "Endocrine",
+        "General",
+        "Immune",
+        "Infectious disease",
+        "Musculoskeletal",
+        "Neurological",
+        "Psychiatric",
+        "Reproductive",
+        "Respiratory"
+      ],
+      "hasNoBundledLessons": false
+    },
+    {
+      "pathwayId": "us-np-pnp-pc",
+      "rawCatalogCount": 21,
+      "effectiveHubVisibleCount": 0,
+      "uniqueCompositeIds": 21,
+      "uniqueSlugs": 21,
+      "topicsUsed": [
+        "COPD",
+        "Cardiovascular",
+        "Diabetes & metabolic",
+        "Endocrine",
+        "Geriatrics",
+        "Infectious disease",
+        "Mental health",
+        "Musculoskeletal",
+        "NP foundations",
+        "Neurological",
+        "Pediatrics",
+        "Respiratory",
+        "Respiratory (acute)",
+        "Sleep medicine",
+        "Travel medicine",
+        "Women’s health"
+      ],
+      "topicSlugsUsed": [
+        "cardiovascular",
+        "clinical-reasoning",
+        "copd",
+        "diabetes-metabolic",
+        "endocrine",
+        "geriatrics",
+        "infectious-disease",
+        "mental-health",
+        "musculoskeletal",
+        "neurological",
+        "pediatrics",
+        "respiratory",
+        "respiratory-acute",
+        "sleep-medicine",
+        "womens-health"
+      ],
+      "bodySystemsUsed": [
+        "Cardiovascular",
+        "Endocrine",
+        "General",
+        "Immune",
+        "Infectious disease",
+        "Musculoskeletal",
+        "Neurological",
+        "Psychiatric",
+        "Reproductive",
+        "Respiratory"
+      ],
+      "hasNoBundledLessons": false
+    }
+  ],
+  "crossPathwaySlugTitleMismatches": [
+    {
+      "slug": "acute-coronary-syndrome-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "ACS & chest pain: RN management (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "ACS & chest pain (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Chest pain & ACS cues (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Chest pain & ACS cues: PN actions (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Chest pain triage in primary care (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Chest pain triage in primary care (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Chest pain triage in primary care (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Chest pain triage in primary care (PMHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Chest pain triage in primary care (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Chest pain triage in primary care (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "acute-kidney-injury-nursing-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Acute kidney injury: nursing surveillance (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Acute kidney injury: nursing surveillance (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Acute kidney injury: nursing surveillance (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Acute kidney injury: nursing surveillance (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "AKI — drug & perfusion review (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "AKI — drug & perfusion review (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "AKI — drug & perfusion review (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "adrenal-crisis-addisonian-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Adrenal crisis (Addisonian) (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Adrenal crisis (Addisonian) (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Adrenal crisis (Addisonian) (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Adrenal crisis (Addisonian) (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Adrenal insufficiency — stress dosing themes (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Adrenal insufficiency — stress dosing themes (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Adrenal insufficiency — stress dosing themes (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "antibiotic-side-effect-reporting",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Antibiotic Side Effect Reporting (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Antibiotic Side Effect Reporting"
+        }
+      ]
+    },
+    {
+      "slug": "ards-acute-respiratory-failure-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "ARDS & acute respiratory failure (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "ARDS & acute respiratory failure (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "ARDS & acute respiratory failure (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "ARDS & acute respiratory failure (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "ARDS — oxygenation & escalation themes (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "ARDS — oxygenation & escalation themes (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "ARDS — oxygenation & escalation themes (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "atrial-fibrillation-stroke-prevention-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Atrial fibrillation: stroke prevention (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Atrial fibrillation: stroke prevention (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Atrial fibrillation: stroke prevention (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Atrial fibrillation: stroke prevention (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "AFib — stroke prevention & anticoagulation themes (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "AFib — stroke prevention & anticoagulation themes (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "AFib — stroke prevention & anticoagulation themes (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "behavioral-escalation-reporting",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Behavioral Escalation Reporting (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Behavioral Escalation Reporting"
+        }
+      ]
+    },
+    {
+      "slug": "c-diff-contact-precautions",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "C. diff Contact Precautions (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "C. diff Contact Precautions"
+        }
+      ]
+    },
+    {
+      "slug": "canadian-rpn-scope-collaboration-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Supervising practical nurses: delegation & safety (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Collaborating with RPNs: assignment & accountability (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "REx-PN high yield: scope, meds & collaboration (Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Practical nursing scope: US PN vs Canadian RPN ideas (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Team-based care with LPN/RPN support (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Team-based care with LPN/RPN support (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Team-based care with LPN/RPN support (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "catheter-care-cauti-prevention",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Catheter Care & CAUTI Prevention (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Catheter Care & CAUTI Prevention"
+        }
+      ]
+    },
+    {
+      "slug": "clinical-casebook-acs-chest-pain-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "ACS case study: chest pain triage (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "ACS case study: chest pain triage (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "ACS case study: chest pain triage (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "ACS case study: chest pain triage (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "ACS case study — risk stratification & escalation (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "ACS case study — risk stratification & escalation (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "ACS case study — risk stratification & escalation (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "clinical-casebook-electrolyte-crisis-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Electrolyte crisis case study (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Electrolyte crisis case study (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Electrolyte crisis case study (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Electrolyte crisis case study (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Electrolyte crisis case study — K, Na, Ca (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Electrolyte crisis case study — K, Na, Ca (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Electrolyte crisis case study — K, Na, Ca (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "clinical-casebook-glucose-dka-hypoglycemia-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Glucose emergency case study (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Glucose emergency case study (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Glucose emergency case study (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Glucose emergency case study (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Glucose emergency case study — DKA vs hypoglycemia (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Glucose emergency case study — DKA vs hypoglycemia (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Glucose emergency case study — DKA vs hypoglycemia (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "clinical-casebook-maternal-newborn-emergency-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Maternal emergency case study (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Maternal emergency case study (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Maternal emergency case study (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Maternal emergency case study (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Maternal emergency case study — bleeding & preeclampsia (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Maternal emergency case study — bleeding & preeclampsia (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Maternal emergency case study — bleeding & preeclampsia (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "clinical-casebook-mental-health-safety-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Mental health & safety case study (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Mental health & safety case study (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Mental health & safety case study (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Mental health & safety case study (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Mental health case study — suicide risk & safety planning (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Mental health case study — suicide risk & safety planning (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Mental health case study — suicide risk & safety planning (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "clinical-casebook-pediatric-fever-dehydration-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Pediatric fever / dehydration case study (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Pediatric fever / dehydration case study (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Pediatric fever / dehydration case study (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Pediatric fever / dehydration case study (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Pediatric fever case study — dehydration & sepsis (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Pediatric fever case study — dehydration & sepsis (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Pediatric fever case study — dehydration & sepsis (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "clinical-casebook-respiratory-distress-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Respiratory distress case study (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Respiratory distress case study (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Respiratory distress case study (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Respiratory distress case study (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Respiratory distress case study — oxygen & escalation (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Respiratory distress case study — oxygen & escalation (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Respiratory distress case study — oxygen & escalation (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "clinical-casebook-sepsis-rapid-response-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Sepsis case study: rapid response (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Sepsis case study: rapid response (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Sepsis case study: rapid response (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Sepsis case study: rapid response (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Sepsis case study — escalation & bundle themes (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Sepsis case study — escalation & bundle themes (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Sepsis case study — escalation & bundle themes (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "clinical-judgment-prioritization-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Clinical judgment: prioritization (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Clinical judgment: prioritization (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Clinical judgment: prioritization (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Clinical judgment: prioritization (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Clinical judgment in ambulatory care (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Clinical judgment in ambulatory care (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Clinical judgment in ambulatory care (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "copd-clinical-judgment-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "COPD: clinical judgment (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "COPD: clinical judgment (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "COPD: clinical judgment (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "COPD: clinical judgment (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "COPD: primary care judgment (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "COPD: primary care judgment (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "COPD: primary care judgment (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "COPD: primary care judgment (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "COPD: primary care judgment (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "copd-home-care",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "COPD Home Care (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "COPD Home Care"
+        }
+      ]
+    },
+    {
+      "slug": "daily-weights-pattern",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Daily Weights Pattern (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Daily Weights Pattern"
+        }
+      ]
+    },
+    {
+      "slug": "delirium-acute-confusion-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Delirium: acute confusion & safety (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Delirium: acute confusion & safety (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Delirium: acute confusion & safety (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Delirium: acute confusion & safety (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Delirium — causes & safety planning (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Delirium — causes & safety planning (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Delirium — causes & safety planning (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "dialysis-diet-teaching",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Dialysis Diet Teaching (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Dialysis Diet Teaching"
+        }
+      ]
+    },
+    {
+      "slug": "dka-hhs-hyperglycemic-emergencies-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "DKA & HHS: clinical judgment (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "DKA & HHS: clinical judgment (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "DKA & HHS: recognition & safety (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "DKA & HHS: recognition & safety (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "DKA & HHS — hyperglycemic emergencies (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "DKA & HHS — hyperglycemic emergencies (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "DKA & HHS — hyperglycemic emergencies (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "documentation-do-nots",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Documentation Do-Nots (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Documentation Do-Nots"
+        }
+      ]
+    },
+    {
+      "slug": "edema-daily-weights",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Edema & Daily Weights (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Edema & Daily Weights"
+        }
+      ]
+    },
+    {
+      "slug": "falls-injury-prevention-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Falls & injury prevention (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Falls & injury prevention (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Falls & injury prevention (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Falls & injury prevention (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Fall risk — screening & safety planning (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Fall risk — screening & safety planning (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Fall risk — screening & safety planning (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "falls-risk-side-rails-policy",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Falls Risk & Side Rails Policy (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Falls Risk & Side Rails Policy"
+        }
+      ]
+    },
+    {
+      "slug": "fingerstick-hypoglycemia-response",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Fingerstick & Hypoglycemia Response (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Fingerstick & Hypoglycemia Response"
+        }
+      ]
+    },
+    {
+      "slug": "fluids-electrolytes-emergencies-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Electrolyte & fluid crises: RN judgment (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Electrolyte & fluid crises (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Electrolyte & fluid emergencies (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Electrolyte & fluid emergencies: what to spot (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Electrolyte crises: outpatient triage (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Electrolyte crises: outpatient triage (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Electrolyte crises: outpatient triage (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "foot-inspection-teaching",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Foot Inspection Teaching (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Foot Inspection Teaching"
+        }
+      ]
+    },
+    {
+      "slug": "growth-chart-basics",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Growth Chart Basics (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Growth Chart Basics"
+        }
+      ]
+    },
+    {
+      "slug": "heart-failure-monitoring",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Heart Failure Monitoring (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Heart Failure Monitoring"
+        }
+      ]
+    },
+    {
+      "slug": "high-alert-medications-safety-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "High-alert meds: nursing management (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "High-alert meds: nursing management (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "High-alert meds: insulin, anticoagulants, opioids (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "High-alert meds: insulin, anticoagulants, opioids (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "High-alert meds: prescribing & monitoring (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "High-alert meds: prescribing & monitoring (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "High-alert meds: prescribing & monitoring (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "hypertension-teaching",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Hypertension Teaching (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Hypertension Teaching"
+        }
+      ]
+    },
+    {
+      "slug": "hypokalemia-symptoms",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Hypokalemia Symptoms (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Hypokalemia Symptoms"
+        }
+      ]
+    },
+    {
+      "slug": "i-o-fluid-restriction-teaching",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "I&O & Fluid Restriction Teaching (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "I&O & Fluid Restriction Teaching"
+        }
+      ]
+    },
+    {
+      "slug": "immunization-consent",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Immunization Consent (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Immunization Consent"
+        }
+      ]
+    },
+    {
+      "slug": "inhaler-technique-teaching",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Inhaler Technique Teaching (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Inhaler Technique Teaching"
+        }
+      ]
+    },
+    {
+      "slug": "insulin-administration-checks",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Insulin Administration Checks (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Insulin Administration Checks"
+        }
+      ]
+    },
+    {
+      "slug": "med-family-antibiotics-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Antibiotics — nursing implications (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Antibiotics — nursing implications (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Antibiotics — nursing implications (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Antibiotics — nursing implications (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Antibiotics — selection themes & safety counseling (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Antibiotics — selection themes & safety counseling (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Antibiotics — selection themes & safety counseling (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "med-family-anticoagulants-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Anticoagulants — monitoring & safety (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Anticoagulants — monitoring & safety (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Anticoagulants — monitoring & safety (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Anticoagulants — monitoring & safety (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Anticoagulation — risk, reversal themes, & counseling (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Anticoagulation — risk, reversal themes, & counseling (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Anticoagulation — risk, reversal themes, & counseling (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "med-family-antihypertensives-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Antihypertensives (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Antihypertensives (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Antihypertensives (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Antihypertensives (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Hypertension meds — titration & follow-up (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Hypertension meds — titration & follow-up (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Hypertension meds — titration & follow-up (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "med-family-cardiac-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Cardiac medications (ischemia & rhythm) (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Cardiac medications (ischemia & rhythm) (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Cardiac medications (ischemia & rhythm) (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Cardiac medications (ischemia & rhythm) (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Cardiac meds — rate/rhythm & ischemia themes (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Cardiac meds — rate/rhythm & ischemia themes (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Cardiac meds — rate/rhythm & ischemia themes (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "med-family-emergency-response-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Emergency response medications (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Emergency response medications (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Emergency response medications (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Emergency response medications (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Emergency meds — ACLS-adjacent themes & safety (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Emergency meds — ACLS-adjacent themes & safety (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Emergency meds — ACLS-adjacent themes & safety (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "med-family-insulin-diabetes-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Insulin & diabetes medications (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Insulin & diabetes medications (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Insulin & diabetes medications (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Insulin & diabetes medications (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Diabetes meds — insulin titration & safety (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Diabetes meds — insulin titration & safety (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Diabetes meds — insulin titration & safety (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "med-family-pain-sedation-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Pain & sedation medications (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Pain & sedation medications (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Pain & sedation medications (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Pain & sedation medications (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Pain & sedation — multimodal & opioid risk (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Pain & sedation — multimodal & opioid risk (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Pain & sedation — multimodal & opioid risk (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "med-family-psychotropic-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Psychotropic medications (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Psychotropic medications (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Psychotropic medications (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Psychotropic medications (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Psychotropics — titration, EPS, & metabolic monitoring (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Psychotropics — titration, EPS, & metabolic monitoring (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Psychotropics — titration, EPS, & metabolic monitoring (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "med-family-respiratory-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Respiratory medications (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Respiratory medications (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Respiratory medications (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Respiratory medications (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Respiratory meds — inhaler technique & escalation (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Respiratory meds — inhaler technique & escalation (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Respiratory meds — inhaler technique & escalation (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "meningitis-emergency-recognition-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Meningitis: emergency recognition (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Meningitis: emergency recognition (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Meningitis: emergency recognition (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Meningitis: emergency recognition (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Meningitis — ED referral & precautions (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Meningitis — ED referral & precautions (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Meningitis — ED referral & precautions (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "newborn-safety-bath",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Newborn Safety & Bath (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Newborn Safety & Bath"
+        }
+      ]
+    },
+    {
+      "slug": "np-ambulatory-gynec-common-presentations-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Ambulatory gynec: common presentations (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Ambulatory gynec: common presentations (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Ambulatory gynec: common presentations (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Women’s health depth: ambulatory gynec — AUB, pelvic pain, vaginitis, and urgent triage (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Ambulatory gynec: common presentations (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-antiinfectives-stewardship-outpatient-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Anti-infectives & stewardship (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Anti-infectives & stewardship (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Anti-infectives & stewardship (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Anti-infectives & stewardship (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Anti-infectives & stewardship (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-asthma-outpatient-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Asthma: outpatient management (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Asthma: outpatient management (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Asthma: outpatient management (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Asthma: outpatient management (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Asthma: outpatient management (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-contraception-counseling-selection-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Contraception: counseling & selection (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Contraception: prescribing & counseling (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Contraception: counseling & selection (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Women’s health depth: contraception counseling, eligibility, and method selection (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Contraception: counseling & selection (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-geriatrics-polypharmacy-deprescribing-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Polypharmacy & deprescribing (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Polypharmacy & deprescribing (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Polypharmacy & deprescribing (AGPCNP, US — adult–gerontology depth)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Polypharmacy & deprescribing (WHNP, US — women’s-health primary care)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Polypharmacy & deprescribing (PNP-PC, US — pediatric primary care cross-age awareness)"
+        }
+      ]
+    },
+    {
+      "slug": "np-heart-failure-primary-care-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Heart failure: outpatient management (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Heart failure: outpatient management (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Heart failure: outpatient management (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Heart failure: outpatient management (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Heart failure: outpatient management (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-immunization-vaccines-primary-care-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Immunization & vaccines (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Immunization & vaccines (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Immunization & vaccines (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Immunization & vaccines (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Immunization & vaccines (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-mental-health-anxiety-depression-ptsd-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Anxiety, depression & PTSD (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Anxiety, depression & PTSD (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Anxiety, depression & PTSD (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Anxiety, depression & PTSD (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Anxiety, depression & PTSD (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-msk-rheumatology-outpatient-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "MSK & rheumatology: outpatient care (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "MSK & rheumatology: outpatient care (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "MSK & rheumatology: outpatient care (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "MSK & rheumatology: outpatient care (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "MSK & rheumatology: outpatient care (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-neurology-outpatient-primary-care-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Outpatient neurology triage (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Outpatient neurology triage (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Outpatient neurology triage (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Outpatient neurology triage (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Outpatient neurology triage (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-obesity-metabolic-management-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Obesity & metabolic risk: primary care (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Obesity & metabolic risk: primary care (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Obesity & metabolic risk: primary care (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Obesity & metabolic risk: primary care (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Obesity & metabolic risk: primary care (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-pediatric-well-child-prevention-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Pediatric well-child & prevention (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Pediatric well-child & prevention (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Pediatric well-child & prevention (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Pediatric well-child & prevention (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Pediatric well-child & prevention (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-pneumonia-cap-outpatient-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Community-acquired pneumonia: outpatient judgment (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Community-acquired pneumonia: outpatient judgment (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Community-acquired pneumonia: outpatient judgment (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Community-acquired pneumonia: outpatient judgment (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Community-acquired pneumonia: outpatient judgment (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-primary-care-foundations-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "NP foundations: clinical reasoning, prevention, and primary-care judgment (US boards)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "NP foundations: clinical reasoning, prevention, and primary-care judgment (Canada / CNPLE-aligned)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "NP foundations: clinical reasoning, prevention, and primary-care judgment (US boards)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "NP foundations: clinical reasoning, prevention, and primary-care judgment (US boards)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "NP foundations: clinical reasoning, prevention, and primary-care judgment (US boards)"
+        }
+      ]
+    },
+    {
+      "slug": "np-reproductive-screening-prevention-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Reproductive screening & prevention (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Reproductive screening & prevention (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Reproductive screening & prevention (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Women’s health depth: cervical & breast screening, HPV pathways, and prevention counseling (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Reproductive screening & prevention (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-sleep-insomnia-osa-primary-care-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Sleep: insomnia, OSA & RLS (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Sleep: insomnia, OSA & RLS (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Sleep: insomnia, OSA & RLS (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Sleep: insomnia, OSA & RLS (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Sleep: insomnia, OSA & RLS (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-thyroid-primary-care-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Thyroid disorders: primary care (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Thyroid disorders: primary care (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Thyroid disorders: primary care (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Thyroid disorders: primary care (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Thyroid disorders: primary care (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-travel-medicine-pretravel-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Travel medicine: pre-travel consult (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Travel medicine: pre-travel consult (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Travel medicine: pre-travel consult (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Travel medicine: pre-travel consult (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Travel medicine: pre-travel consult (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "np-type2-diabetes-outpatient-gold",
+      "entries": [
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Type 2 diabetes: outpatient management (FNP, US)"
+        },
+        {
+          "pathwayId": "ca-np-cnple",
+          "title": "Type 2 diabetes: outpatient management (Canadian NP (primary care))"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Type 2 diabetes: outpatient management (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-whnp",
+          "title": "Type 2 diabetes: outpatient management (WHNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pnp-pc",
+          "title": "Type 2 diabetes: outpatient management (PNP-PC, US)"
+        }
+      ]
+    },
+    {
+      "slug": "npo-post-op-diet-progression",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "NPO & Post-Op Diet Progression (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "NPO & Post-Op Diet Progression"
+        }
+      ]
+    },
+    {
+      "slug": "nurse-patient-assignment-acuity-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Patient assignment & acuity (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Patient assignment & acuity (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Patient assignment & acuity (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Patient assignment & acuity (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Acuity — supervision & handoff themes (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Acuity — supervision & handoff themes (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Acuity — supervision & handoff themes (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "ob-emergencies-gold-standard",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "OB emergencies: RN stabilization & protocols (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "OB emergencies (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "OB emergency cues & escalation (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "OB emergency cues & escalation (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "OB red flags & emergency referral (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "OB red flags & emergency referral (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "OB red flags & emergency referral (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "opioid-toxicity-naloxone-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Opioid toxicity & naloxone safety (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Opioid toxicity & naloxone safety (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Opioid toxicity & naloxone safety (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Opioid toxicity & naloxone safety (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Opioid risk — monitoring & reversal themes (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Opioid risk — monitoring & reversal themes (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Opioid risk — monitoring & reversal themes (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "oral-hypoglycemics",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Oral Hypoglycemics (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Oral Hypoglycemics"
+        }
+      ]
+    },
+    {
+      "slug": "oxygen-devices-for-pn-care",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Oxygen Devices for PN Care (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Oxygen Devices for PN Care"
+        }
+      ]
+    },
+    {
+      "slug": "pediatric-triage-emergencies-gold-standard",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Pediatric respiratory & fluid emergencies (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Pediatric triage & dehydration (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Pediatric triage & dehydration cues (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Pediatric triage & dehydration cues (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Pediatric urgent triage in primary care (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Pediatric urgent triage in primary care (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Pediatric urgent triage in primary care (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "pn-scope-boundaries-delegation-rules-hy",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "PN scope boundaries & delegation rules (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "PN scope boundaries & delegation rules"
+        }
+      ]
+    },
+    {
+      "slug": "pneumonia-cap-nursing-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Pneumonia (CAP): nursing priorities (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Pneumonia (CAP): nursing priorities (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Pneumonia (CAP): nursing priorities (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Pneumonia (CAP): nursing priorities (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Pneumonia — outpatient versus inpatient framing (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Pneumonia — outpatient versus inpatient framing (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Pneumonia — outpatient versus inpatient framing (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "postpartum-fundus-lochia",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Postpartum Fundus & Lochia (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Postpartum Fundus & Lochia"
+        }
+      ]
+    },
+    {
+      "slug": "ppe-transmission-basics",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "PPE & Transmission Basics (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "PPE & Transmission Basics"
+        }
+      ]
+    },
+    {
+      "slug": "pulmonary-embolism-recognition-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Pulmonary embolism: recognition (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Pulmonary embolism: recognition (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Pulmonary embolism: recognition (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Pulmonary embolism: recognition (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "PE — recognition & escalation (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "PE — recognition & escalation (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "PE — recognition & escalation (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "renal-dialysis-acute-complications-gold-standard",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Renal failure & dialysis acute management (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Renal failure & dialysis complications (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Dialysis & renal crisis cues (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Dialysis & renal crisis cues (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Renal risk & dialysis access in ambulatory care (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Renal risk & dialysis access in ambulatory care (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Renal risk & dialysis access in ambulatory care (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "restraint-monitoring-requirements",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Restraint Monitoring Requirements (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Restraint Monitoring Requirements"
+        }
+      ]
+    },
+    {
+      "slug": "safety-family-delegation-supervision-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Delegation & supervision (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Delegation & supervision (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Delegation & supervision (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Delegation & supervision (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Delegation — NP vs RN scope in teams (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Delegation — NP vs RN scope in teams (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Delegation — NP vs RN scope in teams (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "safety-family-escalation-notification-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Escalation & when to notify (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Escalation & when to notify (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Escalation & when to notify (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Escalation & when to notify (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Escalation — urgent comms & safety netting (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Escalation — urgent comms & safety netting (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Escalation — urgent comms & safety netting (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "safety-family-falls-prevention-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Falls prevention & safety (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Falls prevention & safety (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Falls prevention & safety (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Falls prevention & safety (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Falls — risk assessment & bone health (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Falls — risk assessment & bone health (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Falls — risk assessment & bone health (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "safety-family-infection-control-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Infection control & standard precautions (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Infection control & standard precautions (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Infection control & standard precautions (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Infection control & standard precautions (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Infection prevention — PPE & exposure workup (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Infection prevention — PPE & exposure workup (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Infection prevention — PPE & exposure workup (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "safety-family-isolation-precautions-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Isolation & transmission precautions (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Isolation & transmission precautions (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Isolation & transmission precautions (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Isolation & transmission precautions (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Isolation — indication & discontinuation themes (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Isolation — indication & discontinuation themes (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Isolation — indication & discontinuation themes (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "safety-family-medication-administration-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Medication administration & error prevention (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Medication administration & error prevention (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Medication administration & error prevention (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Medication administration & error prevention (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Med admin — reconciliation & e-prescribing safety (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Med admin — reconciliation & e-prescribing safety (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Med admin — reconciliation & e-prescribing safety (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "safety-family-prioritization-uncertainty-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Prioritization under uncertainty (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Prioritization under uncertainty (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Prioritization under uncertainty (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Prioritization under uncertainty (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Uncertainty — differential breadth & safety netting (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Uncertainty — differential breadth & safety netting (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Uncertainty — differential breadth & safety netting (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "safety-family-restraints-alternatives-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Restraints & least-restrictive alternatives (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Restraints & least-restrictive alternatives (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Restraints & least-restrictive alternatives (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Restraints & least-restrictive alternatives (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Restraints — indications & monitoring (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Restraints — indications & monitoring (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Restraints — indications & monitoring (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "seizure-observation",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Seizure Observation (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Seizure Observation"
+        }
+      ]
+    },
+    {
+      "slug": "sepsis-early-recognition-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Sepsis: recognition & first-line nursing response (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Sepsis: recognition & nursing response (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Sepsis cues & escalation (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Sepsis cues & escalation (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Sepsis risk & escalation (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Sepsis risk & escalation (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Sepsis risk & escalation (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "shock-emergencies-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Shock resuscitation: RN acute management (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Shock resuscitation (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Shock cues & perfusion support (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Shock cues & perfusion support (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Shock risk & escalation in ambulatory settings (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Shock risk & escalation in ambulatory settings (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Shock risk & escalation in ambulatory settings (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "stool-assessment-report",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Stool Assessment & Report (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Stool Assessment & Report"
+        }
+      ]
+    },
+    {
+      "slug": "stroke-increased-icp-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Stroke & elevated ICP: RN acute care (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Stroke & elevated ICP (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Stroke cues & neuro emergencies (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Stroke cues & neuro emergencies: PN actions (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "TIA & stroke red flags in ambulatory care (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "TIA & stroke red flags in ambulatory care (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "TIA & stroke red flags in ambulatory care (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "stroke-sequela-mobility-assist",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Stroke Sequela & Mobility Assist (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Stroke Sequela & Mobility Assist"
+        }
+      ]
+    },
+    {
+      "slug": "suicide-precautions-observation",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Suicide Precautions Observation (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Suicide Precautions Observation"
+        }
+      ]
+    },
+    {
+      "slug": "therapeutic-communication",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Therapeutic Communication (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Therapeutic Communication"
+        }
+      ]
+    },
+    {
+      "slug": "thyroid-storm-emergency-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Thyroid storm: emergency recognition (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Thyroid storm: emergency recognition (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Thyroid storm: emergency recognition (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Thyroid storm: emergency recognition (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Thyroid storm — stabilization themes (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Thyroid storm — stabilization themes (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Thyroid storm — stabilization themes (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "upper-gi-bleed-prioritization-gold",
+      "entries": [
+        {
+          "pathwayId": "us-rn-nclex-rn",
+          "title": "Upper GI bleed: priorities (NCLEX-RN, US)"
+        },
+        {
+          "pathwayId": "ca-rn-nclex-rn",
+          "title": "Upper GI bleed: priorities (NCLEX-RN, Canada)"
+        },
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Upper GI bleed: priorities (REx-PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Upper GI bleed: priorities (NCLEX-PN, US)"
+        },
+        {
+          "pathwayId": "us-np-fnp",
+          "title": "Upper GI bleed — stabilization & referral (FNP, US)"
+        },
+        {
+          "pathwayId": "us-np-agpcnp",
+          "title": "Upper GI bleed — stabilization & referral (AGPCNP, US)"
+        },
+        {
+          "pathwayId": "us-np-pmhnp",
+          "title": "Upper GI bleed — stabilization & referral (PMHNP, US)"
+        }
+      ]
+    },
+    {
+      "slug": "vital-signs-escalation",
+      "entries": [
+        {
+          "pathwayId": "ca-rpn-rex-pn",
+          "title": "Vital Signs & Escalation (REx-PN / PN, Canada)"
+        },
+        {
+          "pathwayId": "us-lpn-nclex-pn",
+          "title": "Vital Signs & Escalation"
+        }
+      ]
+    }
+  ],
+  "canonicalNote": "Lesson identity in catalog is `slug` per pathway; composite id is `pathwayId::slug`. Hub visibility uses structural publicComplete + exam/country context filters."
+}

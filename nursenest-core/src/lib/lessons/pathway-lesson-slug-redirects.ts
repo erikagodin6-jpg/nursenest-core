@@ -5,7 +5,8 @@
  * - Old marketing URLs `/[country]/[role]/[exam]/lessons/[oldSlug]` 308 → canonical slug
  * - `getPathwayLesson` miss + registry hit triggers {@link loadPathwayLessonWithLegacySlugRedirect}
  *
- * **Audit (2026-04):** No renames are registered yet — git history for `catalog.json` shows bulk appends, not slug renames.
+ * **Audit (2026-04):** RN NCLEX-RN / CA RN catalog merged shallow duplicate rows into fuller `us-rn-*` / `ca-rn-*` lessons;
+ * legacy marketing URLs for removed slugs redirect here.
  * Keep this list authoritative when editorial re-slugs content.
  *
  * **Rules:** `fromSlug` ≠ `toSlug`; avoid cycles; one row per rename (chains are resolved in code).
@@ -20,7 +21,16 @@ export type PathwayLessonSlugRedirect = {
 };
 
 /** Add entries when a published lesson slug changes; empty means no legacy URLs to honor. */
-export const PATHWAY_LESSON_SLUG_REDIRECTS: readonly PathwayLessonSlugRedirect[] = [];
+export const PATHWAY_LESSON_SLUG_REDIRECTS: readonly PathwayLessonSlugRedirect[] = [
+  { pathwayId: "us-rn-nclex-rn", fromSlug: "pulmonary-embolism-nclex-rn", toSlug: "us-rn-pulmonary-embolism" },
+  { pathwayId: "us-rn-nclex-rn", fromSlug: "heart-failure-nclex-rn", toSlug: "us-rn-heart-failure" },
+  { pathwayId: "us-rn-nclex-rn", fromSlug: "myocardial-infarction-nclex-rn", toSlug: "us-rn-myocardial-infarction" },
+  { pathwayId: "us-rn-nclex-rn", fromSlug: "insulin-hypoglycemia-hy", toSlug: "us-rn-insulin-hypoglycemia" },
+  { pathwayId: "ca-rn-nclex-rn", fromSlug: "pulmonary-embolism-nclex-rn", toSlug: "ca-rn-pulmonary-embolism" },
+  { pathwayId: "ca-rn-nclex-rn", fromSlug: "heart-failure-nclex-rn", toSlug: "ca-rn-heart-failure" },
+  { pathwayId: "ca-rn-nclex-rn", fromSlug: "myocardial-infarction-nclex-rn", toSlug: "ca-rn-myocardial-infarction" },
+  { pathwayId: "ca-rn-nclex-rn", fromSlug: "insulin-hypoglycemia-hy", toSlug: "ca-rn-insulin-hypoglycemia" },
+];
 
 const MAX_CHAIN = 12;
 

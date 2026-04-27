@@ -882,7 +882,31 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
     ...(usePremium ? { premiumValidation: validatePathwayLessonPremium(withStudyStrips) } : {}),
   };
 }
-export function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
+type LessonLibraryRow = LessonInput & { pathwayIds: string[] };
+
+type LessonLibraryFile = {
+  version: number;
+  generatedAt?: string;
+  lessons: LessonLibraryRow[];
+};
+
+let lessonLibraryCache: LessonLibraryFile | null | undefined;
+
+function readLessonLibrarySync(): LessonLibraryFile | null {
+  if (lessonLibraryCache !== undefined) return lessonLibraryCache;
+  try {
+    lessonLibraryCache = require("@/content/lessons/lesson-library.json") as LessonLibraryFile;
+  } catch {
+    lessonLibraryCache = null;
+  }
+  return lessonLibraryCache;
+}
+
+/**
+ * Catalog + allied + new-grad + scoped-gold merge **without** reading `lesson-library.json`.
+ * Use for build tooling that must not recurse through the library file.
+ */
+export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonInput[] {
   const bucket = getCatalogData().pathways[pathwayId];
   const fromJson = bucket?.lessons?.length ? bucket.lessons.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
   const allied = alliedBundledLessonsForPathway(pathwayId);
@@ -895,6 +919,21 @@ export function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
     merged.push(l);
   }
   return prependScopedGoldCatalogLessons(pathwayId, merged);
+}
+
+export function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
+  const lib = readLessonLibrarySync();
+  if (lib?.lessons?.length) {
+    const rows = lib.lessons.filter((r) => Array.isArray(r.pathwayIds) && r.pathwayIds.includes(pathwayId));
+    if (rows.length > 0) {
+      const stripped: LessonInput[] = rows.map((r) => {
+        const { pathwayIds: _p, ...rest } = r;
+        return rest;
+      });
+      return prependScopedGoldCatalogLessons(pathwayId, stripped);
+    }
+  }
+  return getCatalogLessonsRawFromBundledOnly(pathwayId);
 }
 
 export function getCatalogPathwayLessonsSync(pathwayId: string): PathwayLessonRecord[] {

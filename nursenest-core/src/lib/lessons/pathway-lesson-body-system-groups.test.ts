@@ -91,8 +91,8 @@ test("buildPathwayLessonSystemSections preserves config order and only emits non
       "Respiratory",
       "Neurological",
       "Gastrointestinal",
-      "Reproductive / Maternal-Newborn",
-      "Fundamentals / Safety",
+      "Maternity",
+      "Safety & Prioritization",
     ],
   );
   assert.deepEqual(

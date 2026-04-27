@@ -374,6 +374,7 @@
     "test:breadcrumbs": "tsx --test src/lib/exam-pathways/build-exam-pathway-path-contract.test.ts src/lib/seo/pathway-breadcrumbs.test.ts src/lib/seo/pathway-programmatic-seo.test.ts src/lib/seo/sitemap-locale-prefixed-path-guard.test.ts src/lib/seo/sitemap-marketing-exclusions.test.ts src/lib/seo/exam-pathway-hub-alternates.test.ts src/lib/exam-pathways/programmatic-slug-redirects.test.ts",
     "test:lesson-routes": "tsx --test src/lib/lessons/lesson-routes.test.ts src/lib/learner/study-loop-recommendations.test.ts src/lib/learner/weak-area-flashcards-href.test.ts src/lib/learner/command-center-api-types.test.ts",
     "test:nursing-lessons-routing": "tsx --test src/lib/marketing/nursing-tier-hub-content.test.ts src/lib/marketing/pathway-lessons-hub-page-safety.test.ts src/lib/navigation/marketing-tier-hub-study-hrefs.test.ts src/lib/navigation/nursing-lessons-hub-route-file.test.ts",
+    "test:rn-nclex-catalog-taxonomy": "node --import tsx --test src/lib/lessons/rn-nclex-catalog-taxonomy.test.ts src/lib/lessons/pathway-lesson-slug-redirects.test.ts",
     "test:content-quality": "tsx --test src/lib/content-quality/plain-text.test.ts",
     "test:question-bank": "tsx --test src/lib/questions/question-bank-taxonomy.test.ts src/lib/questions/adaptive-question-selection.test.ts",
     "test:middleware": "tsx --test src/middleware.test.ts src/proxy-regional-matcher-alignment.test.ts src/lib/auth/auth-base-path.test.ts src/lib/auth/nextauth-secure-cookie-request.test.ts src/lib/auth/auth-public-origin-env.test.ts",

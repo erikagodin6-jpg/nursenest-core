@@ -1,4 +1,5 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { NP_HUB_CATEGORY_DEFS, RN_PN_RPN_HUB_CATEGORY_DEFS } from "@/lib/lessons/lesson-taxonomy";
 import { classifyNursingContent } from "@/lib/taxonomy/classifier";
 import { REVIEW_REQUIRED, TAXONOMY } from "@/lib/taxonomy/taxonomy";
 
@@ -23,22 +24,11 @@ export type PathwayLearningConfig = {
 };
 
 const CATEGORY_TITLE: Partial<Record<string, string>> = {
-  renal_urinary: "Renal / Urinary",
-  reproductive_maternal_newborn: "Reproductive / Maternal-Newborn",
   mental_health: "Mental Health",
   pharmacology: "Pharmacology",
-  fundamentals_safety: "Fundamentals / Safety",
   professional_practice: "Professional Practice",
   exam_strategy: "Exam Strategy",
-  primary_care: "Primary Care",
-  health_assessment: "Health Assessment",
-  diagnostics_clinical_reasoning: "Diagnostics / Clinical Reasoning",
-  pharmacology_prescribing: "Pharmacology / Prescribing",
-  chronic_disease_management: "Chronic Disease Management",
-  acute_episodic_care: "Acute Episodic Care",
   pediatrics: "Pediatrics",
-  womens_health: "Women’s Health",
-  older_adults: "Older Adults",
   renal_genitourinary: "Renal / Genitourinary",
   hematology_oncology: "Hematology / Oncology",
   immune_infectious: "Immune / Infectious",
@@ -65,21 +55,11 @@ const CATEGORY_DESCRIPTION: Partial<Record<string, string>> = {
   respiratory: "Airway, oxygenation, ventilation, and pulmonary disorders.",
   neurological: "Neurologic assessment, stroke and seizure patterns, neuro safety, and acute behavioral emergencies when assessment-led.",
   endocrine: "Metabolic and hormonal disorders including diabetes and thyroid disease.",
-  renal_urinary: "Kidney function, fluid balance, urinary disorders, and urinary care.",
-  reproductive_maternal_newborn: "Reproductive health, pregnancy, labor, postpartum, and newborn transition.",
   mental_health: "Psychiatric, behavioral health, crisis, and therapeutic mental health care.",
   pharmacology: "Medication classes, monitoring, adverse effects, and safe medication administration.",
-  fundamentals_safety: "Foundational nursing care, mobility, infection prevention, skin integrity, and safety priorities.",
   professional_practice: "Ethics, legal duties, documentation, communication, delegation, and leadership.",
   exam_strategy: "Exam mechanics, prioritization strategy, and durable study routines.",
-  primary_care: "Ambulatory primary care, prevention, screening, and longitudinal first-contact care.",
-  health_assessment: "History, physical exam, risk assessment, and patient presentation synthesis.",
-  diagnostics_clinical_reasoning: "Differential diagnosis, diagnostic test interpretation, and clinical reasoning.",
-  pharmacology_prescribing: "Prescribing, medication selection, monitoring, interactions, and medication safety.",
-  chronic_disease_management: "Longitudinal management of stable chronic and multisystem conditions.",
-  acute_episodic_care: "New, urgent, unstable, or short-episode presentations requiring timely triage and treatment.",
-  womens_health: "Gynecologic, reproductive, pregnancy-related, and preventive women’s health care.",
-  older_adults: "Geriatric assessment, frailty, polypharmacy, function, and age-related risks.",
+  pediatrics: "Neonatal through adolescent care, development, and family-centered practice.",
   renal_genitourinary: "Kidney function, fluid balance, urinary disorders, and GU care.",
   gastrointestinal: "GI and hepatic disorders, nutrition, elimination, and digestive emergencies.",
   hematology_oncology: "Blood disorders, malignancy care, and oncologic complications.",
@@ -87,7 +67,6 @@ const CATEGORY_DESCRIPTION: Partial<Record<string, string>> = {
   integumentary: "Skin integrity, wound and pressure injury prevention, burns, and dermatologic disorders.",
   immune_infectious: "Immune disorders, infection prevention, sepsis, and antimicrobial stewardship.",
   reproductive_obstetrics: "Reproductive health, pregnancy, postpartum, and gynecologic care.",
-  pediatrics: "Neonatal through adolescent care, development, and family-centered practice.",
   ethics: "Ethical reasoning, moral distress, and professional values.",
   legal_regulation: "Regulation, consent, liability, and privacy obligations.",
   documentation: "Charting, records, and safe information practices.",
@@ -134,38 +113,17 @@ function buildStandardPathwayCategories(): LearningCategory[] {
 
 const STANDARD_PATHWAY_CATEGORIES = buildStandardPathwayCategories();
 
-const RN_PN_RPN_HUB_CATEGORIES: LearningCategory[] = [
-  learningCategoryRow("cardiovascular"),
-  learningCategoryRow("respiratory"),
-  learningCategoryRow("neurological"),
-  learningCategoryRow("gastrointestinal"),
-  learningCategoryRow("renal_urinary"),
-  learningCategoryRow("endocrine"),
-  learningCategoryRow("reproductive_maternal_newborn"),
-  learningCategoryRow("pediatrics"),
-  learningCategoryRow("mental_health"),
-  learningCategoryRow("pharmacology"),
-  learningCategoryRow("fundamentals_safety"),
-  learningCategoryRow("professional_practice"),
-  learningCategoryRow("exam_strategy"),
-  learningCategoryRow(REVIEW_REQUIRED),
-];
+const RN_PN_RPN_HUB_CATEGORIES: LearningCategory[] = RN_PN_RPN_HUB_CATEGORY_DEFS.map((d) => ({
+  id: d.id,
+  title: d.hubDisplayTitle,
+  description: d.description,
+}));
 
-const NP_HUB_CATEGORIES: LearningCategory[] = [
-  learningCategoryRow("primary_care"),
-  learningCategoryRow("health_assessment"),
-  learningCategoryRow("diagnostics_clinical_reasoning"),
-  learningCategoryRow("pharmacology_prescribing"),
-  learningCategoryRow("chronic_disease_management"),
-  learningCategoryRow("acute_episodic_care"),
-  learningCategoryRow("pediatrics"),
-  learningCategoryRow("womens_health"),
-  learningCategoryRow("older_adults"),
-  learningCategoryRow("mental_health"),
-  learningCategoryRow("professional_practice"),
-  learningCategoryRow("exam_strategy"),
-  learningCategoryRow(REVIEW_REQUIRED),
-];
+const NP_HUB_CATEGORIES: LearningCategory[] = NP_HUB_CATEGORY_DEFS.map((d) => ({
+  id: d.id,
+  title: d.hubDisplayTitle,
+  description: d.description,
+}));
 
 const LEARNING_PATHWAY_CONFIGS: Record<string, PathwayLearningConfig> = {
   "ca-rpn-rex-pn": { pathwayId: "ca-rpn-rex-pn", label: "REx-PN", categories: RN_PN_RPN_HUB_CATEGORIES, profile: "clinical" },
