@@ -10,12 +10,8 @@ import { generateAutomatedBlogPost } from "@/lib/blog/blog-automation-engine";
 import { getAdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
 import { logDraftBatchItemRun } from "@/lib/admin/blog-content-automation-log";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import {
-  BlogInvalidSlugError,
-  ensureUniqueBlogPostSlug,
-  generateBlogSlugBaseFromTitle,
-  parseOptionalBlogSlug,
-} from "@/lib/blog/blog-optional-slug";
+import { BlogInvalidSlugError, generateBlogSlugBaseFromTitle, parseOptionalBlogSlug } from "@/lib/blog/blog-optional-slug";
+import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
 import { prisma } from "@/lib/db";
 import { isRnTopicMapShellGenerationBatch, RN_TOPIC_MAP_SHELL_MAX_ITEMS } from "@/lib/blog/blog-topic-map-shell-batch-constants";
 import { DRAFT_BATCH_MAX_ITEMS_PER_PROCESS } from "@/lib/blog/blog-draft-generation-batch-constants";

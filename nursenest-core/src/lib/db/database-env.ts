@@ -1,23 +1,9 @@
 import "server-only";
 
 import { databaseUrlSource } from "@/lib/db/env-bootstrap";
+import { maskDatabaseUrl } from "@/lib/env/mask-database-url";
 
-/**
- * Masked logging for operators. Only `DATABASE_URL` is used (see `env-bootstrap.ts`).
- */
-
-export function maskDatabaseUrl(url: string): string {
-  try {
-    const u = new URL(url);
-    const host = u.hostname;
-    const port = u.port ? `:${u.port}` : "";
-    const db = u.pathname.replace(/^\//, "") || "(no database name)";
-    const search = u.search || "";
-    return `${u.protocol}//***:***@${host}${port}/${db}${search}`;
-  } catch {
-    return "(unparseable connection string)";
-  }
-}
+export { maskDatabaseUrl } from "@/lib/env/mask-database-url";
 
 /** Log once per Node process in production so platform log drains show which env wins. */
 let logged = false;

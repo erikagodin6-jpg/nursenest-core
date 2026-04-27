@@ -67,10 +67,10 @@ import {
   BlogInvalidSlugError,
   BLOG_SLUG_FORMAT_RE,
   cleanBlogSlugInput,
-  ensureUniqueBlogPostSlug,
   generateBlogSlugBaseFromExamTopic,
   parseOptionalBlogSlug,
 } from "@/lib/blog/blog-optional-slug";
+import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
 
 export type ControlPanelGenerateInput = {
   topic: string;

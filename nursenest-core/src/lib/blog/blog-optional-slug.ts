@@ -1,5 +1,3 @@
-import { prisma } from "@/lib/db";
-
 /** URL segment: lowercase alphanumeric, single hyphens between groups. */
 export const BLOG_SLUG_FORMAT_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -70,17 +68,6 @@ export function generateBlogSlugBaseFromExamTopic(exam: string, topic: string, m
     .slice(0, maxLen);
   if (base.length >= 3 && BLOG_SLUG_FORMAT_RE.test(base)) return base;
   return generateBlogSlugBaseFromTitle(topic || exam || "blog", maxLen);
-}
-
-/** First free slug: `base`, `base-1`, `base-2`, … (bounded by DB checks). */
-export async function ensureUniqueBlogPostSlug(baseSlug: string, maxTotalLength = 120): Promise<string> {
-  const base = cleanBlogSlugInput(baseSlug).slice(0, maxTotalLength) || "blog-post";
-  let slug = base.slice(0, maxTotalLength);
-  let i = 1;
-  while (await prisma.blogPost.findUnique({ where: { slug }, select: { id: true } })) {
-    slug = `${base}-${i++}`.slice(0, maxTotalLength);
-  }
-  return slug;
 }
 
 /** Live typing helper for admin inputs (does not throw). */

@@ -20,10 +20,10 @@ import { prisma } from "@/lib/db";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import {
   BlogInvalidSlugError,
-  ensureUniqueBlogPostSlug,
   generateBlogSlugBaseFromExamTopic,
   parseOptionalBlogSlug,
 } from "@/lib/blog/blog-optional-slug";
+import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
 import {
   generateBlogSEO,
   normalizeCountryForBlogSeo,

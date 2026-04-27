@@ -9,12 +9,8 @@ import {
 } from "@/lib/blog/blog-admin-library-query";
 import { parseBoundedPageSize } from "@/lib/api/api-pagination-limits";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import {
-  BlogInvalidSlugError,
-  ensureUniqueBlogPostSlug,
-  generateBlogSlugBaseFromTitle,
-  parseOptionalBlogSlug,
-} from "@/lib/blog/blog-optional-slug";
+import { BlogInvalidSlugError, generateBlogSlugBaseFromTitle, parseOptionalBlogSlug } from "@/lib/blog/blog-optional-slug";
+import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
 import { prisma } from "@/lib/db";
 import { classifyBlogCorpus, collectClassificationViolations, isPublishBlockedByTaxonomy } from "@/lib/taxonomy/content-write-taxonomy";
 
