@@ -14,6 +14,12 @@ export type QuestionPerformanceEventV1 = {
   /** Wall-clock time on item when available (ms). */
   timeSpentMs?: number;
   at: string;
+  /** Learner self-rating after practice question session (optional). */
+  confidence?: "low" | "medium" | "high";
+  /** Practice session UX mode when recorded from `/app/questions/session`. */
+  practiceSessionMode?: string;
+  /** Short canonical answer representation for report cards (optional). */
+  selectedAnswerSummary?: string | null;
 };
 
 export type WeakPerformanceArea = {

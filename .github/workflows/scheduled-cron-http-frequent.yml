@@ -1,6 +1,7 @@
 # Calls production HTTP cron routes (blog scheduler + background job worker).
 # Liveness: GET https://www.nursenest.ca/healthz (no secrets).
-# Cron POSTs require repository secrets: PRODUCTION_CRON_BASE_URL (no trailing slash), CRON_SECRET.
+# Cron POSTs run only after the "Require cron repository secrets" step passes (Bearer never logged).
+# Required repository secrets: PRODUCTION_CRON_BASE_URL (no trailing slash), CRON_SECRET.
 name: scheduled-cron-http-frequent
 
 on:

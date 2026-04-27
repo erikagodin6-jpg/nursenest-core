@@ -27,6 +27,7 @@
     "build:full": "npm run build:compile",
     "build:verify": "npm run typecheck && SKIP_I18N_PREBUILD=${SKIP_I18N_PREBUILD:-1} npm run build:prechecks && npm run build",
     "verify:core-build-modules": "node --import tsx --test src/lib/build/build-safe-mode.test.ts",
+    "test:inbound-email": "node --import tsx --test src/lib/inbound-email/inbound-email-spam-guard.test.ts src/lib/inbound-email/inbound-ai-autoreply-env.test.ts src/lib/inbound-email/inbound-email-autoreply-flow.test.ts",
     "verify:lesson-hubs": "node scripts/verify-lesson-hubs.mjs",
     "verify:bootstrap-probe-pathname": "node --test scripts/standalone-bootstrap-probe-pathname.test.mjs",
     "verify:dockerfile-database-url": "node scripts/verify-dockerfile-database-url.mjs",
