@@ -17,6 +17,7 @@ export default function BlogPostError({
       error={error}
       reset={reset}
       surface="marketing_blog_post"
+      marketingErrorTelemetry
       title="Just a moment"
       description="We’re loading this article. Try again in a moment — or browse the blog from the link below."
       primaryAction={{ label: "Blog", href: "/blog" }}

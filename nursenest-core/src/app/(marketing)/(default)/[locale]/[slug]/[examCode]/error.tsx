@@ -21,6 +21,7 @@ export default function ExamPathwaySegmentError({
       error={error}
       reset={reset}
       surface="exam_pathway_segment"
+      marketingErrorTelemetry
       title="Just a moment"
       description="We’re loading this exam section. Try again in a moment, or pick another track from home or the pathways list."
       primaryAction={{ label: "Go home", href: "/" }}

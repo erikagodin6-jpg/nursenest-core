@@ -52,7 +52,11 @@ export class MarketingMainErrorBoundary extends Component<Props, State> {
   render(): ReactNode {
     if (this.state.hasError) {
       return (
-        <div className="mx-auto max-w-2xl px-4 py-16 text-center">
+        <div
+          className="mx-auto max-w-2xl px-4 py-16 text-center"
+          data-nn-app-error-screen="1"
+          data-nn-error-boundary="marketing"
+        >
           <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Something went wrong loading this section.</p>
           <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Try refreshing the page. If it keeps happening, contact support.</p>
         </div>

@@ -17,6 +17,7 @@ export default function BlogIndexError({
       error={error}
       reset={reset}
       surface="marketing_blog_index"
+      marketingErrorTelemetry
       title="Just a moment"
       description="We’re loading the blog. Try again in a moment — or head home and come back when you’re ready."
       primaryAction={{ label: "Home", href: "/" }}

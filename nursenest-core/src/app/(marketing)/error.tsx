@@ -49,6 +49,7 @@ export default function MarketingSegmentError({
       error={error}
       reset={reset}
       surface="marketing_segment"
+      marketingErrorTelemetry
       title="Just a moment"
       description="We’re having a temporary hiccup on this page. Try again in a moment, or continue browsing below."
       primaryAction={{ label: "Go home", href: "/" }}
