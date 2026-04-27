@@ -10,6 +10,11 @@
  * homepage shell, or header/nav chrome; use metadata/preview helpers on shared surfaces instead.
  */
 import { prisma } from "@/lib/db";
+import {
+  isPathwayLessonStructuralPublicCompleteColumnPresent,
+  pathwayLessonReadOmitArgs,
+  pathwayLessonStructuralCompleteWhereInput,
+} from "@/lib/db/pathway-lesson-structural-column-runtime";
 import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 import { PRISMA_ID_IN_CHUNK_SIZE, takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
@@ -1335,11 +1340,14 @@ async function tryRecoverPublishedLessonAcrossWarehouseLocales(params: {
   shardNorm?: string;
   lessonDbOverlays: Awaited<ReturnType<typeof fetchPublishedLessonOverlaysForMarketingLocale>>;
   dbTimeout: number;
+  pathwayLessonDbReadOmit: Awaited<ReturnType<typeof pathwayLessonReadOmitArgs>>;
 }): Promise<PathwayLessonRecord | undefined> {
-  const { pathwayId, slug, marketingLocale, overlayLocale, shardNorm, lessonDbOverlays, dbTimeout } = params;
+  const { pathwayId, slug, marketingLocale, overlayLocale, shardNorm, lessonDbOverlays, dbTimeout, pathwayLessonDbReadOmit } =
+    params;
   const rows = await dbCall(
     () =>
       prisma.pathwayLesson.findMany({
+        ...pathwayLessonDbReadOmit,
         where: { pathwayId, slug, status: ContentStatus.PUBLISHED },
         take: 24,
         orderBy: [{ updatedAt: "desc" }],
@@ -1404,6 +1412,7 @@ async function getPathwayLessonImpl(
   const shardNorm = options?.lessonDbShardLocale?.trim()
     ? normalizePathwayLessonLocale(options.lessonDbShardLocale)
     : undefined;
+  const pathwayLessonDbReadOmit = await pathwayLessonReadOmitArgs();
   const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(overlayLocale);
   const catalogLessons = getCatalogLessonsRaw(pathwayId);
   const catalogHitForSlug = catalogLessons.find((l) => l.slug === slug);
@@ -1425,6 +1434,7 @@ async function getPathwayLessonImpl(
   const rowEn = await dbCall(
     () =>
       prisma.pathwayLesson.findUnique({
+        ...pathwayLessonDbReadOmit,
         where: {
           pathwayId_slug_locale: {
             pathwayId,
@@ -1474,6 +1484,7 @@ async function getPathwayLessonImpl(
     const rowShard = await dbCall(
       () =>
         prisma.pathwayLesson.findUnique({
+          ...pathwayLessonDbReadOmit,
           where: {
             pathwayId_slug_locale: { pathwayId, slug, locale: shardNorm },
           },
@@ -1515,6 +1526,7 @@ async function getPathwayLessonImpl(
     const rowRequested = await dbCall(
       () =>
         prisma.pathwayLesson.findUnique({
+          ...pathwayLessonDbReadOmit,
           where: {
             pathwayId_slug_locale: { pathwayId, slug, locale: overlayLocale },
           },
@@ -1564,6 +1576,7 @@ async function getPathwayLessonImpl(
       const rowWh = await dbCall(
         () =>
           prisma.pathwayLesson.findUnique({
+            ...pathwayLessonDbReadOmit,
             where: {
               pathwayId_slug_locale: {
                 pathwayId,
@@ -1625,6 +1638,7 @@ async function getPathwayLessonImpl(
       shardNorm,
       lessonDbOverlays,
       dbTimeout,
+      pathwayLessonDbReadOmit,
     });
     if (recovered) {
       return recovered;
@@ -1737,6 +1751,7 @@ function pathwayLessonSeoMetaFromRecord(record: PathwayLessonRecord): PathwayLes
 }
 
 async function getPathwayLessonSeoMetaImpl(pathwayId: string, slug: string): Promise<PathwayLessonSeoMeta | undefined> {
+  const structuralCol = await isPathwayLessonStructuralPublicCompleteColumnPresent();
   const rowEn = await dbCall(
     () =>
       prisma.pathwayLesson.findUnique({
@@ -1754,7 +1769,7 @@ async function getPathwayLessonSeoMetaImpl(pathwayId: string, slug: string): Pro
           topic: true,
           topicSlug: true,
           bodySystem: true,
-          structuralPublicComplete: true,
+          ...(structuralCol ? { structuralPublicComplete: true as const } : {}),
           status: true,
         },
       }),
@@ -1762,7 +1777,8 @@ async function getPathwayLessonSeoMetaImpl(pathwayId: string, slug: string): Pro
   );
 
   if (rowEn && rowEn.status === ContentStatus.PUBLISHED) {
-    if (rowEn.structuralPublicComplete) {
+    const structurallyComplete = structuralCol && "structuralPublicComplete" in rowEn && rowEn.structuralPublicComplete;
+    if (structurallyComplete) {
       return {
         slug: rowEn.slug,
         seoTitle: rowEn.seoTitle,
@@ -1855,9 +1871,11 @@ export const resolvePathwayLaunchBundle = pathwayLoaderAsyncMemo(async function 
  * Progress API: accept lesson completion if slug exists in any published locale (prefer `en` row when duplicated).
  */
 export async function getPathwayLessonForProgress(pathwayId: string, slug: string): Promise<PathwayLessonRecord | undefined> {
+  const readOmit = await pathwayLessonReadOmitArgs();
   const rowEn = await dbCall(
     () =>
       prisma.pathwayLesson.findUnique({
+        ...readOmit,
         where: { pathwayId_slug_locale: { pathwayId, slug, locale: "en" } },
       }),
     null,
@@ -1868,6 +1886,7 @@ export async function getPathwayLessonForProgress(pathwayId: string, slug: strin
   const rowAny = await dbCall(
     () =>
       prisma.pathwayLesson.findFirst({
+        ...readOmit,
         where: { pathwayId, slug, status: ContentStatus.PUBLISHED },
         orderBy: [{ locale: "asc" }],
       }),
@@ -1887,7 +1906,8 @@ export async function getPublishedPathwayLessonRecordById(
   marketingLocale?: string,
 ): Promise<PathwayLessonRecord | undefined> {
   const staleKey = `lesson:${id}:${normalizePathwayLessonLocale(marketingLocale)}`;
-  const row = await dbCall(() => prisma.pathwayLesson.findUnique({ where: { id } }), null);
+  const readOmit = await pathwayLessonReadOmitArgs();
+  const row = await dbCall(() => prisma.pathwayLesson.findUnique({ ...readOmit, where: { id } }), null);
   if (!row || row.status !== ContentStatus.PUBLISHED) {
     const stale = getPaidContentStaleCache().get<PathwayLessonRecord>(staleKey);
     if (stale) {
@@ -2203,6 +2223,7 @@ export async function listPathwayLessonSlugBatch(
   const sk = Math.max(0, Math.floor(skip));
   const loc = normalizePathwayLessonLocale(contentLocale);
   const surfaceOnly = Boolean(opts?.restrictToPublicMarketingSurface);
+  const publicSurfaceStructuralWhere = surfaceOnly ? await pathwayLessonStructuralCompleteWhereInput() : {};
 
   const dbHas = await pathwayHasPublishedDbLessons(pathwayId);
   if (sk === 0) {
@@ -2225,7 +2246,7 @@ export async function listPathwayLessonSlugBatch(
             pathwayId,
             status: ContentStatus.PUBLISHED,
             locale: loc,
-            ...(surfaceOnly ? { structuralPublicComplete: true } : {}),
+            ...publicSurfaceStructuralWhere,
           },
           select: PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS,
           orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],

@@ -42,7 +42,7 @@ import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import { hydratePremiumCatalogSectionsForMarketingGate } from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { prependScopedGoldCatalogLessons } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
-import { premiumizeLessonDisplayTitle } from "@/lib/lessons/lesson-taxonomy";
+import { normalizeLessonCategory, premiumizeLessonDisplayTitle } from "@/lib/lessons/lesson-taxonomy";
 
 type CatalogShape = {
   version: number;
@@ -868,7 +868,7 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
   }
 
   if (!usePremium) {
-    const topic = typeof raw.topic === "string" ? raw.topic : "";
+    const topic = normalizedTopic;
     const bodySystem = typeof raw.bodySystem === "string" ? raw.bodySystem : "";
     expanded = enrichLegacyFiveBlockSectionsForSubscriberGates(expanded, {
       title,
@@ -886,10 +886,12 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
   const embeddedSoundLibraries = sanitizeEmbeddedSoundLibraries(
     (raw as { embeddedSoundLibraries?: unknown }).embeddedSoundLibraries,
   );
+  const normalizedTopic = normalizeLessonCategory(typeof raw.topic === "string" ? raw.topic : "", rawTitle);
+
   const base: PathwayLessonRecord = {
     slug: raw.slug,
     title,
-    topic: typeof raw.topic === "string" ? raw.topic : "",
+    topic: normalizedTopic,
     topicSlug: typeof raw.topicSlug === "string" ? raw.topicSlug : "",
     system: system || bodySystem,
     bodySystem,

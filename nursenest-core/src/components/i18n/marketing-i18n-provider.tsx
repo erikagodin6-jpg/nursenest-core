@@ -5,6 +5,7 @@ import { formatMarketingMessage, type MarketingMessages } from "@/lib/marketing-
 import { isRtlMarketingLocale, localePrimarySubtag, DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { validateMarketingHeroNavCriticalKeys } from "@/lib/marketing/marketing-hero-nav-critical-keys";
 import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
+import { humanizedMarketingKeyFallback } from "@/lib/marketing-i18n/marketing-message-value-policy";
 
 type Params = Record<string, string | number | undefined>;
 
@@ -29,7 +30,7 @@ function safeFormat(
   try {
     return formatMarketingMessage(messages, key, params, fallback, { locale }).trim();
   } catch {
-    return key; // fallback to key instead of crashing
+    return humanizedMarketingKeyFallback(key);
   }
 }
 
@@ -37,7 +38,7 @@ const DEGRADED_MARKETING_I18N: MarketingI18nContextValue = {
   locale: DEFAULT_MARKETING_LOCALE,
   messages: {},
   fallbackMessages: undefined,
-  t: (key: string) => key,
+  t: (key: string) => humanizedMarketingKeyFallback(key),
 };
 
 const RENDERED_I18N_KEY_PREFIX_PATTERN = /\b(?:pages|footer|blog)\.[A-Za-z0-9_.-]+/;

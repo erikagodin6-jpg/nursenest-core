@@ -23,7 +23,7 @@ export const LESSON_CATEGORIES = [
   "Infection Control",
   "Safety & Prioritization",
   "Leadership & Delegation",
-  "Maternity",
+  "Maternal & Newborn",
   "Pediatrics",
   "Mental Health",
   "Fundamentals",
@@ -87,8 +87,8 @@ const LEGACY_TOPIC_TO_CATEGORY: Record<string, LessonCategory> = {
   "Insulin & hypoglycemia": "Pharmacology",
   "Integumentary & Wound Care": "Integumentary & Wound Care",
   "Leadership & Delegation": "Leadership & Delegation",
-  Maternity: "Maternity",
-  "Maternity (PN)": "Maternity",
+  Maternity: "Maternal & Newborn",
+  "Maternity (PN)": "Maternal & Newborn",
   "Medication safety": "Pharmacology",
   "Mental Health": "Mental Health",
   "Mental Health (PN)": "Mental Health",
@@ -98,7 +98,7 @@ const LEGACY_TOPIC_TO_CATEGORY: Record<string, LessonCategory> = {
   Neurological: "Neurological",
   "Neurological (PN)": "Neurological",
   Nutrition: "Nutrition",
-  "Pain management": "Safety & Prioritization",
+  "Pain management": "Pharmacology",
   "Palliative basics": "Safety & Prioritization",
   "Patient safety": "Safety & Prioritization",
   Pediatrics: "Pediatrics",
@@ -129,7 +129,7 @@ const LEGACY_TOPIC_TO_CATEGORY: Record<string, LessonCategory> = {
   "Skin integrity": "Integumentary & Wound Care",
   "Sodium imbalance": "Fluids, Electrolytes & Acid-Base",
   Surgical: "Procedures & Skills",
-  "Women’s health": "Maternity",
+  "Women’s health": "Maternal & Newborn",
   "Wound care": "Integumentary & Wound Care",
   ARDS: "Respiratory",
   "MI / ACS": "Cardiovascular",
@@ -145,14 +145,41 @@ function normalizeKey(s: string): string {
 
 /**
  * Map a catalog `topic` (or free text) to exactly one {@link LESSON_CATEGORIES} value.
+ * When `title` is provided, keywords in the title can override a miscoded `topic` (e.g. pharmacology
+ * lessons incorrectly tagged as Safety & Prioritization).
  */
-export function normalizeLessonCategory(input: string | null | undefined): LessonCategory {
+export function normalizeLessonCategory(
+  input: string | null | undefined,
+  title?: string | null,
+): LessonCategory {
   const raw = typeof input === "string" ? input.trim() : "";
-  if (!raw) return inferLessonCategoryFromTitle("");
-  if (CATEGORY_SET.has(raw)) return raw as LessonCategory;
-  const direct = LEGACY_TOPIC_TO_CATEGORY[raw];
-  if (direct) return direct;
-  const inferred = inferLessonCategoryFromTitle(raw);
+  const titlePart = typeof title === "string" ? title.trim() : "";
+  const corpus = `${titlePart} ${raw}`.trim();
+
+  if (!corpus) return inferLessonCategoryFromTitle("");
+
+  if (raw && CATEGORY_SET.has(raw)) {
+    const inferredFromCorpus = inferLessonCategoryFromTitle(corpus);
+    if (
+      raw === "Safety & Prioritization" &&
+      (inferredFromCorpus === "Pharmacology" ||
+        inferredFromCorpus === "Infection Control" ||
+        inferredFromCorpus === "Leadership & Delegation")
+    ) {
+      return inferredFromCorpus;
+    }
+    return raw as LessonCategory;
+  }
+
+  const legacy = raw ? LEGACY_TOPIC_TO_CATEGORY[raw] : undefined;
+  const inferred = inferLessonCategoryFromTitle(corpus);
+  if (
+    legacy === "Safety & Prioritization" &&
+    (inferred === "Pharmacology" || inferred === "Infection Control" || inferred === "Leadership & Delegation")
+  ) {
+    return inferred;
+  }
+  if (legacy) return legacy;
   return inferred;
 }
 
@@ -168,25 +195,49 @@ export function lessonCategoryToSlug(category: LessonCategory): string {
     .replace(/^-|-$/g, "");
 }
 
+/**
+ * Keyword priority: pharmacology → infection control → leadership/delegation → safety/prioritization
+ * → body systems → exam strategy. First match wins.
+ */
 const TITLE_HINT_RULES: ReadonlyArray<{ re: RegExp; category: LessonCategory }> = [
-  { re: /\b(cabg|stemi|nSTEMI|myocardial|angina|dysrhythm|afib|atrial fibr|hypertens|heart failure|cardiac|pericardi|tamponade|endocarditis|dvt|pe\b|pacemaker|phlebostatic|cardioversion|defibrillat|vascular)\b/i, category: "Cardiovascular" },
+  {
+    re: /\b(antibiot|anticoag|warfarin|heparin|doac|dabigatran|rivaroxaban|apixaban|enoxaparin|insulin|opioid|analges|diuretic|digoxin|lithium|pharmac|medication|meds\b|drug\b|adverse effect|contraindicat|nursing implication|stewardship|high.?alert)\b/i,
+    category: "Pharmacology",
+  },
+  {
+    re: /\bmeningitis\b.*\b(isolation|precaution|transmission|ppe|infection control)\b|\b(isolation|transmission|precautions?)\b.*\bmeningitis\b/i,
+    category: "Infection Control",
+  },
+  {
+    re: /\bmeningitis\b.*\b(emergency|recognition|triage|red flag)\b|\b(emergency|recognition)\b.*\bmeningitis\b/i,
+    category: "Safety & Prioritization",
+  },
+  {
+    re: /\b(sepsis prevention|hand hygiene|infection control|standard precautions?|isolation|transmission|ppe\b|hai\b|clabsi|nosocomial|contact precautions?|droplet|airborne)\b/i,
+    category: "Infection Control",
+  },
+  {
+    re: /\b(delegat|assignment|scope of practice|lpn\b|rpn\b|uap\b|unlicensed assist|supervision|nurse practice act|interprofessional)\b/i,
+    category: "Leadership & Delegation",
+  },
+  {
+    re: /\b(fall|injury prevention|triage|abc\b|maslow|near miss|fire safety|barcode|rapid response|restraint|patient safety|clinical judgment|prioritiz|sbar\b)\b/i,
+    category: "Safety & Prioritization",
+  },
+  { re: /\b(cabg|stemi|nSTEMI|myocardial|angina|dysrhythm|afib|atrial fibr|hypertens|heart failure|cardiac|pericardi|tamponade|endocarditis|dvt|pe\b|pacemaker|phlebostatic|cardioversion|defibrillat|vascular|chest pain)\b/i, category: "Cardiovascular" },
   { re: /\b(copd|asthma|ards|pneumonia|respiratory|airway|oxygen|abg\b|ventilat|pleural|chest tube|pneumothorax|croup|epiglottitis|tuberculosis|tb\b)\b/i, category: "Respiratory" },
   { re: /\b(stroke|seizure|neuro|ich\b|icp\b|meningitis|spinal cord|parkinson|delirium|dementia|migraine|tpa\b)\b/i, category: "Neurological" },
   { re: /\b(aki\b|ckd\b|dialysis|renal|urinary|uti\b|pyeloneph|creatinine|catheter.?associated|urine output|kidney)\b/i, category: "Renal & Urinary" },
   { re: /\b(gi\b|gastro|liver|cirrhosis|pancreatit|bowel|ileus|gerd|pud\b|gi bleed|c\.?\s*diff|ostomy|aspiration|hepatic)\b/i, category: "Gastrointestinal" },
-  { re: /\b(dka\b|hhs\b|diabetes|insulin|thyroid|addison|cushing|siadh\b|di\b|endocrine|hyperglycem|hypoglycem)\b/i, category: "Endocrine" },
+  { re: /\b(dka\b|hhs\b|diabetes|thyroid|addison|cushing|siadh\b|di\b|endocrine|hyperglycem|hypoglycem)\b/i, category: "Endocrine" },
   { re: /\b(anemia|transfusion|oncology|chemo|neutropen|sickle)\b/i, category: "Hematology & Oncology" },
   { re: /\b(hip fracture|arthritis|musculoskeletal|traction|cast care|immobil)\b/i, category: "Musculoskeletal" },
   { re: /\b(burn|pressure injury|wound|skin integrity|dermatitis|integument)\b/i, category: "Integumentary & Wound Care" },
   { re: /\b(sodium|potassium|magnesium|calcium|phosphate|fluid deficit|fluid overload|electrolyte|acid.?base|hyponatr|hypernatr)\b/i, category: "Fluids, Electrolytes & Acid-Base" },
-  { re: /\b(antibiot|anticoag|opioid|digoxin|diuretic|lithium|serotonin|nms\b|pharmacology|medication|high.?alert)\b/i, category: "Pharmacology" },
-  {
-    re: /\b(sepsis|infection control|isolation|hai\b|hand hygiene|standard precautions?|transmission|airborne|droplet|contact precautions?|hiv\b|pep\b|clabsi|central line|culture|ppe\b|wound infection|nosocomial)\b/i,
-    category: "Infection Control",
-  },
-  { re: /\b(delegat|assignment|scope of practice|ethics|advocacy|qi\b|incident|interprofessional|nurse practice)\b/i, category: "Leadership & Delegation" },
-  { re: /\b(prioritiz|clinical judgment|abc\b|rapid response|unstable|fall|restraint|barcode|near miss|fire safety|sbar\b|triage|chest pain)\b/i, category: "Safety & Prioritization" },
-  { re: /\b(preeclamps|eclamps|postpartum|labor|fhr\b|fetal|newborn|breastfeed|rh\b|maternity|obstetr|pregnancy)\b/i, category: "Maternity" },
+  { re: /\b(sepsis|hiv\b|pep\b|culture)\b/i, category: "Infection Control" },
+  { re: /\b(ethics|advocacy|qi\b|incident)\b/i, category: "Leadership & Delegation" },
+  { re: /\b(unstable)\b/i, category: "Safety & Prioritization" },
+  { re: /\b(preeclamps|eclamps|postpartum|labor|fhr\b|fetal|newborn|breastfeed|rh\b|maternity|obstetr|pregnancy)\b/i, category: "Maternal & Newborn" },
   { re: /\b(pediatr|rsv\b|immuniz|growth chart|febrile infant|toddler|child)\b/i, category: "Pediatrics" },
   { re: /\b(mental health|psychiat|suicide|withdrawal|ciwa|anxiety|substance|trauma.?informed)\b/i, category: "Mental Health" },
   { re: /\b(nutrition|enteral|tpn\b|feeding tube)\b/i, category: "Nutrition" },
@@ -196,14 +247,16 @@ const TITLE_HINT_RULES: ReadonlyArray<{ re: RegExp; category: LessonCategory }> 
 
 /**
  * Best-effort category when `topic` is missing or unknown — keyword scan only (no LLM).
+ * No "Unknown" bucket: uncategorized strings fall back to {@link Fundamentals} for display;
+ * inventory scripts should still flag low-signal rows for manual review.
  */
 export function inferLessonCategoryFromTitle(title: string): LessonCategory {
   const t = collapseDiacritics((title ?? "").trim());
-  if (!t) return "Safety & Prioritization";
+  if (!t) return "Fundamentals";
   for (const { re, category } of TITLE_HINT_RULES) {
     if (re.test(t)) return category;
   }
-  return "Exam Strategy";
+  return "Fundamentals";
 }
 
 /** Topic-cluster navigation group labels (single source for `lesson-topic-cluster-registry`). */
@@ -261,16 +314,21 @@ export const RN_PN_RPN_HUB_CATEGORY_DEFS: readonly RnPnRpnHubCategoryDef[] = [
   { id: "endocrine", hubDisplayTitle: "Endocrine", description: "Metabolic and hormonal disorders including diabetes and thyroid disease." },
   {
     id: "reproductive_maternal_newborn",
-    hubDisplayTitle: "Maternity",
+    hubDisplayTitle: "Maternal & Newborn",
     description: "Reproductive health, pregnancy, labor, postpartum, and newborn transition.",
   },
   { id: "pediatrics", hubDisplayTitle: "Pediatrics", description: "Neonatal through adolescent care, development, and family-centered practice." },
   { id: "mental_health", hubDisplayTitle: "Mental Health", description: "Psychiatric, behavioral health, crisis, and therapeutic mental health care." },
   { id: "pharmacology", hubDisplayTitle: "Pharmacology", description: "Medication classes, monitoring, adverse effects, and safe medication administration." },
   {
+    id: "infection_control",
+    hubDisplayTitle: "Infection Control",
+    description: "Isolation and transmission precautions, HAI prevention, sepsis and infectious-disease nursing practice, and antimicrobial stewardship signals.",
+  },
+  {
     id: "fundamentals_safety",
     hubDisplayTitle: "Safety & Prioritization",
-    description: "Foundational nursing care, mobility, infection prevention, skin integrity, and safety priorities.",
+    description: "Triage, falls and injury prevention, rapid response, restraints, barcoding, fire safety, and other non-infection safety priorities.",
   },
   {
     id: "professional_practice",
@@ -414,6 +472,7 @@ export function mapTaxonomyLeafToRnPnHubCategory(leaf: string, corpus: string): 
     case "pediatrics":
       return leaf;
     case "immune_infectious":
+      return "infection_control";
     case "hematology_oncology":
     case "musculoskeletal":
     case "integumentary":
@@ -576,6 +635,35 @@ const NP_INTEGRATED_TITLE_RE =
   /^Integrated review:\s*(.+?)\s*\(([^)]+)\)\s*#(\d+)\s*[—–-]\s*FNP certification preparation.*$/i;
 
 /**
+ * Strip SEO pipe suffixes and normalize separators before premium title passes (exam branding still removed later).
+ */
+export function normalizeVisibleLessonTitle(title: string): string {
+  let t = (title ?? "").trim();
+  for (let i = 0; i < 8; i++) {
+    const next = t
+      .replace(/\s*\|\s*NurseNest\s*$/i, "")
+      .replace(/\s*\|\s*US\s*$/i, "")
+      .replace(/\s*\|\s*Canada\s*$/i, "")
+      .trim();
+    if (next === t) break;
+    t = next;
+  }
+  t = t.replace(/\s*\|\s*$/g, "").trim();
+  if (!t.includes(":")) {
+    const pipe = t.indexOf("|");
+    if (pipe > 0) {
+      const left = t.slice(0, pipe).trim();
+      const right = t.slice(pipe + 1).trim();
+      if (right && !/^(nursenest|nclex|exam prep)\b/i.test(right)) t = `${left}: ${right}`;
+      else t = left || t;
+    }
+  }
+  t = t.replace(/\s*\|\s*/g, ": ");
+  t = t.replace(/\s*:\s*/g, ": ");
+  return t.replace(/[—–]/g, " – ").trim();
+}
+
+/**
  * Replace NP “Integrated review … FNP certification preparation” hub titles with clinical review lines.
  */
 export function rewriteNpIntegratedReviewDisplayTitle(title: string): string {
@@ -616,7 +704,7 @@ function stripNclexExamInlineFromDisplayTitle(title: string): string {
  * Pass `slug` when known (e.g. catalog rows) so slug-specific overrides apply.
  */
 export function premiumizeLessonDisplayTitle(priorTitle: string, slug?: string | null): string {
-  const trimmed = stripNclexExamInlineFromDisplayTitle((priorTitle ?? "").trim());
+  const trimmed = stripNclexExamInlineFromDisplayTitle(normalizeVisibleLessonTitle((priorTitle ?? "").trim()));
   const s = typeof slug === "string" ? slug.trim() : "";
   if (s && PREMIUM_DISPLAY_TITLE_OVERRIDES_BY_SLUG[s]) {
     return clampDisplayTitleToWordBudget(PREMIUM_DISPLAY_TITLE_OVERRIDES_BY_SLUG[s]);

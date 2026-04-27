@@ -34,6 +34,7 @@ import {
 } from "@/lib/linking/automatic-internal-links-scoring";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const MARKETING_BUILD_PHASE = "phase-production-build";
 
@@ -225,19 +226,29 @@ async function fetchRelatedLessonRows(input: {
     }
   }
   if (or.length === 0) return [];
-  return prisma.pathwayLesson.findMany({
-    where: {
-      pathwayId: input.pathwayId,
-      locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
-      status: ContentStatus.PUBLISHED,
-      structuralPublicComplete: true,
-      ...(input.excludeSlug ? { slug: { not: input.excludeSlug } } : {}),
-      OR: or,
-    },
-    orderBy: { sortOrder: "asc" },
-    take: 14,
-    select: { slug: true, title: true, topic: true, topicSlug: true, bodySystem: true },
-  });
+  try {
+    return await prisma.pathwayLesson.findMany({
+      where: {
+        pathwayId: input.pathwayId,
+        locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+        status: ContentStatus.PUBLISHED,
+        ...(input.excludeSlug ? { slug: { not: input.excludeSlug } } : {}),
+        OR: or,
+      },
+      orderBy: { sortOrder: "asc" },
+      take: 14,
+      select: { slug: true, title: true, topic: true, topicSlug: true, bodySystem: true },
+    });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    safeServerLog("automatic_links", "fetch_related_lessons_db_error", {
+      route: "fetchRelatedLessonRows",
+      query_name: "pathwayLesson.findMany",
+      error_code: (e as { code?: string })?.code ?? "unknown",
+      error_message: msg.slice(0, 300),
+    });
+    return [];
+  }
 }
 
 async function fetchRelatedFlashcardDecks(input: {

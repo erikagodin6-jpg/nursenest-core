@@ -90,6 +90,7 @@ const SYSTEM_VISUALS: Record<string, SystemVisual> = {
   delegation_supervision: { icon: Briefcase, accentVar: "--semantic-chart-2" },
   leadership_management: { icon: Briefcase, accentVar: "--semantic-chart-5" },
   patient_safety_quality: { icon: AlertTriangle, accentVar: "--semantic-warning" },
+  infection_control: { icon: AlertTriangle, accentVar: "--semantic-info" },
   fundamentals_safety: { icon: Shield, accentVar: "--semantic-warning" },
   test_taking: { icon: BookOpen, accentVar: "--semantic-brand" },
   study_strategy: { icon: BookOpen, accentVar: "--semantic-chart-1" },

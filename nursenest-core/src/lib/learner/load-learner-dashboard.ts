@@ -1,5 +1,6 @@
 import { ExamDatePlanType, TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { pathwayLessonMetadataListSelectForReads } from "@/lib/db/pathway-lesson-structural-column-runtime";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import {
   getLearnerDurabilityObservabilityFields,
@@ -31,7 +32,6 @@ import {
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { logLearnerStudyLoadDiagnostics } from "@/lib/learner/learner-study-load-diagnostics";
-import { PATHWAY_LESSON_METADATA_LIST_SELECT } from "@/lib/lessons/pathway-lesson-metadata-select";
 import {
   buildVisibleLessonScopeForLearner,
   countScopedLessonsCompleted,
@@ -756,12 +756,20 @@ export async function loadLearnerDashboardPracticeDetails(
 export async function fetchPathwayLessonRowsForDashboard(
   where: import("@prisma/client").Prisma.PathwayLessonWhereInput,
 ): Promise<PathwayLessonDashboardRow[]> {
+  const select = await pathwayLessonMetadataListSelectForReads();
   const rows = await prisma.pathwayLesson.findMany({
     where,
-    select: PATHWAY_LESSON_METADATA_LIST_SELECT,
+    select,
     take: PATHWAY_CATALOG_LIST_HARD_CAP,
   });
-  return rows as PathwayLessonDashboardRow[];
+  return rows.map((r) => ({
+    ...r,
+    structuralPublicComplete: Boolean(
+      "structuralPublicComplete" in r && typeof (r as { structuralPublicComplete?: unknown }).structuralPublicComplete === "boolean"
+        ? (r as { structuralPublicComplete: boolean }).structuralPublicComplete
+        : false,
+    ),
+  })) as PathwayLessonDashboardRow[];
 }
 
 /**

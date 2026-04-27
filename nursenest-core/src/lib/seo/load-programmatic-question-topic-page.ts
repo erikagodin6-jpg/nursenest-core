@@ -4,6 +4,7 @@ import { ContentStatus } from "@prisma/client";
 import type { Prisma } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/db";
+import { pathwayLessonStructuralCompleteWhereInput } from "@/lib/db/pathway-lesson-structural-column-runtime";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { pathwayExamQuestionMarketingWhere } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
@@ -158,11 +159,12 @@ async function loadRelatedLessonsUncached(def: ProgrammaticQuestionTopicDefiniti
   for (const spec of def.relatedLessons) {
     const lessonPathway = getExamPathwayById(spec.pathwayId);
     if (!lessonPathway) continue;
+    const structuralWhere = await pathwayLessonStructuralCompleteWhereInput();
     const where: Prisma.PathwayLessonWhereInput = {
       pathwayId: spec.pathwayId,
       status: ContentStatus.PUBLISHED,
-      structuralPublicComplete: true,
       locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+      ...structuralWhere,
     };
     const or: Prisma.PathwayLessonWhereInput[] = [];
     if (spec.topicSlugContains?.trim()) {

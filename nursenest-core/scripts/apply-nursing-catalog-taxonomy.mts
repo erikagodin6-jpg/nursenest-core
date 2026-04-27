@@ -36,12 +36,12 @@ function main(): void {
     if (!Array.isArray(lessons)) continue;
     for (const row of lessons) {
       const t = typeof row.topic === "string" ? row.topic : "";
-      const nextTopic = normalizeLessonCategory(t);
+      const title = typeof row.title === "string" ? row.title : "";
+      const nextTopic = normalizeLessonCategory(t, title);
       if (nextTopic !== t) {
         row.topic = nextTopic;
         topics += 1;
       }
-      const title = typeof row.title === "string" ? row.title : "";
       const slug = typeof row.slug === "string" ? row.slug : "";
       const nextTitle = premiumizeLessonDisplayTitle(title, slug);
       if (nextTitle !== title) {

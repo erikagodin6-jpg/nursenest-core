@@ -16,6 +16,7 @@ import { isGlobalRegionSlug, REGION_CONFIG } from "@/lib/i18n/global-regions";
 import type { GlobalLocaleCode, GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { localizedMarketingBlogIndexCopy } from "@/lib/blog/blog-index-hero-copy";
 
 // See src/lib/blog/localized-blog-route-params.ts for why slug/examCode are overloaded here.
 type Props = {
@@ -34,10 +35,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       if (!isGlobalRegionSlug(region)) return {};
       const regionConfig = REGION_CONFIG[region as GlobalRegionSlug];
       const regionName = regionConfig?.displayName ?? region;
+      const copy = localizedMarketingBlogIndexCopy(region as GlobalRegionSlug, regionName, exam);
 
       return {
-        title: `${exam.toUpperCase()} Blog — ${regionName} | NurseNest`,
-        description: `Exam prep articles, study tips, and guides for ${exam.toUpperCase()} nursing exam preparation in ${regionName}.`,
+        title: copy.metadataTitle,
+        description: copy.metadataDescription,
         alternates: { canonical: pathname },
       };
     },
@@ -54,6 +56,7 @@ export default async function LocalizedBlogIndexPage({ params, searchParams }: P
 
   const regionConfig = REGION_CONFIG[region as GlobalRegionSlug];
   const regionName = regionConfig?.displayName ?? region;
+  const blogIndexCopy = localizedMarketingBlogIndexCopy(region as GlobalRegionSlug, regionName, exam);
   const page = Math.max(1, parseInt(sp.page ?? "1", 10));
 
   const { posts, total, pageSize } = await getPublishedLocalizedBlogPostsPage({
@@ -83,12 +86,8 @@ export default async function LocalizedBlogIndexPage({ params, searchParams }: P
       </div>
 
       <header className="mb-10">
-        <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">
-          {exam.toUpperCase()} Blog — {regionName}
-        </h1>
-        <p className="mt-2 text-[var(--theme-muted-text)]">
-          Exam prep articles and study guides for {regionName} nursing students.
-        </p>
+        <h1 className="text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)]">{blogIndexCopy.heroH1}</h1>
+        <p className="mt-2 text-[var(--theme-muted-text)]">{blogIndexCopy.heroSubtitle}</p>
       </header>
 
       {posts.length === 0 ? (

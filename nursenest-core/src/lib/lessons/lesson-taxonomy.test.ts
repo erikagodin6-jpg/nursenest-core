@@ -7,8 +7,10 @@ import { fileURLToPath } from "node:url";
 import { getEffectiveCatalogLessonsForPathwaySync } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import {
   LESSON_CATEGORIES,
+  inferLessonCategoryFromTitle,
   lessonCategoryToSlug,
   normalizeLessonCategory,
+  normalizeVisibleLessonTitle,
   premiumizeLessonDisplayTitle,
 } from "@/lib/lessons/lesson-taxonomy";
 
@@ -51,7 +53,8 @@ test("every bundled catalog lesson topic normalizes to a controlled category", (
     const lessons = cat.pathways[pid]?.lessons ?? [];
     for (const row of lessons) {
       const topic = typeof row.topic === "string" ? row.topic : "";
-      const n = normalizeLessonCategory(topic);
+      const title = typeof row.title === "string" ? row.title : "";
+      const n = normalizeLessonCategory(topic, title);
       if (!LESSON_CATEGORIES.includes(n)) {
         missing.push(`${pid}/${row.slug}: topic=${JSON.stringify(topic)} → ${JSON.stringify(n)}`);
       }
@@ -99,8 +102,37 @@ test("no duplicate premiumized titles within the same pathway (effective list)",
 });
 
 test("lessonCategoryToSlug round-trip smoke", () => {
-  assert.equal(lessonCategoryToSlug("Renal & GU"), "renal-and-gu");
+  assert.equal(lessonCategoryToSlug("Renal & Urinary"), "renal-and-urinary");
   assert.equal(lessonCategoryToSlug("Fluids, Electrolytes & Acid-Base"), "fluids-electrolytes-and-acid-base");
+});
+
+test("inferLessonCategoryFromTitle respects pharm → infection → leadership → safety priority", () => {
+  assert.equal(inferLessonCategoryFromTitle("Vancomycin troughs and nephrotoxicity monitoring"), "Pharmacology");
+  assert.equal(inferLessonCategoryFromTitle("Standard precautions and airborne isolation for TB"), "Infection Control");
+  assert.equal(inferLessonCategoryFromTitle("Delegation to the UAP in acute care"), "Leadership & Delegation");
+  assert.equal(inferLessonCategoryFromTitle("Fall risk and hourly rounding priorities"), "Safety & Prioritization");
+  assert.equal(inferLessonCategoryFromTitle("Meningitis: droplet precautions and assessment"), "Infection Control");
+  assert.equal(inferLessonCategoryFromTitle("Meningitis: emergency recognition and triage"), "Safety & Prioritization");
+});
+
+test("normalizeLessonCategory can override miscoded Safety topic when title signals pharm or infection", () => {
+  assert.equal(
+    normalizeLessonCategory("Safety & Prioritization", "Antibiotic stewardship and culture timing"),
+    "Pharmacology",
+  );
+  assert.equal(
+    normalizeLessonCategory("Safety & Prioritization", "PPE sequence and contact precautions"),
+    "Infection Control",
+  );
+});
+
+test("normalizeVisibleLessonTitle removes NurseNest pipe suffix and prefers colon over pipe", () => {
+  assert.equal(normalizeVisibleLessonTitle("Sepsis bundles | NurseNest"), "Sepsis bundles");
+  assert.equal(normalizeVisibleLessonTitle("Topic A | Clinical focus"), "Topic A: Clinical focus");
+});
+
+test("premiumizeLessonDisplayTitle runs visible-title cleanup before exam strip", () => {
+  assert.equal(premiumizeLessonDisplayTitle("Prioritization drills | NurseNest", null), "Prioritization drills");
 });
 
 type LessonLibraryJson = {

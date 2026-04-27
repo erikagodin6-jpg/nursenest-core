@@ -3,6 +3,7 @@
  */
 import type { PrismaClient } from "@prisma/client";
 import { ContentStatus, CountryCode } from "@prisma/client";
+import { pathwayLessonStructuralCompleteWhereInput } from "@/lib/db/pathway-lesson-structural-column-runtime";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { pathwayLessonWhere } from "@/lib/exam-context/query-scope";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
@@ -73,12 +74,13 @@ async function resolveSlugHrefBatch(
   const pathway = getExamPathwayById(pathwayId);
   if (!examContext || !pathway) return out;
 
+  const structuralWhere = await pathwayLessonStructuralCompleteWhereInput();
   const rows = await prisma.pathwayLesson.findMany({
     where: {
       ...pathwayLessonWhere(examContext),
       slug: { in: unique },
       status: ContentStatus.PUBLISHED,
-      structuralPublicComplete: true,
+      ...structuralWhere,
     },
     select: {
       id: true,
@@ -150,12 +152,13 @@ export async function resolveRationaleLessonLinksForQuestion(
     kind: RationaleLessonLinkKind;
   }> = [];
   if (topicCodeDerived && pathwayCtx) {
+    const structuralWhereRanked = await pathwayLessonStructuralCompleteWhereInput();
     const completeRows = await prisma.pathwayLesson.findMany({
       where: {
         ...pathwayLessonWhere(examContext),
         topicSlug: topicCodeDerived,
         status: ContentStatus.PUBLISHED,
-        structuralPublicComplete: true,
+        ...structuralWhereRanked,
       },
       select: {
         id: true,
@@ -259,12 +262,13 @@ export async function resolveRationaleLessonLinksForQuestion(
     bodySystem: args.bodySystem,
   });
   if (topicCode) {
+    const structuralWhereLegacy = await pathwayLessonStructuralCompleteWhereInput();
     const legacy = await prisma.pathwayLesson.findFirst({
       where: {
         ...pathwayLessonWhere(examContext),
         topicSlug: topicCode,
         status: ContentStatus.PUBLISHED,
-        structuralPublicComplete: true,
+        ...structuralWhereLegacy,
       },
       orderBy: { sortOrder: "asc" },
       select: {

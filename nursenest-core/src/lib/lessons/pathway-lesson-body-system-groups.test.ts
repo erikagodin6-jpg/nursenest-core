@@ -179,7 +179,7 @@ test("PN/RPN hub classification groups clinically specific lessons into approved
   );
   assert.deepEqual(
     sections.map((section) => section.systemLabel),
-    ["respiratory", "fundamentals_safety"],
+    ["respiratory", "infection_control"],
   );
 });
 

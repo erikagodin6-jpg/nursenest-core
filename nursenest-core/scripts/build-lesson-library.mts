@@ -49,7 +49,7 @@ function main(): void {
       const title = typeof row.title === "string" ? row.title : "";
       const hit = bySlug.get(slug);
       if (!hit) {
-        const nextTopic = normalizeLessonCategory(topic);
+        const nextTopic = normalizeLessonCategory(topic, title);
         const nextTitle = premiumizeLessonDisplayTitle(title, slug);
         const lesson = { ...(row as unknown as Record<string, unknown>), topic: nextTopic, title: nextTitle };
         bySlug.set(slug, { lesson, pathwayIds: new Set([pid]) });
