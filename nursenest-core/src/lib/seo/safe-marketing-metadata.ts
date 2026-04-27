@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 import {
   crawlSurfaceErrorCode,
   logCrawlSurfaceEvent,
@@ -182,6 +183,7 @@ export async function safeGenerateMetadata(
     }
     return result;
   } catch (e) {
+    rethrowNextNavigationControlFlow(e);
     const isDev = process.env.NODE_ENV !== "production";
     if (isDev && isStrictPublicMarketingMetadataGenerationError(e)) {
       throw e;

@@ -10,8 +10,6 @@ import {
   PRACTICE_CATEGORY_LABEL,
   PRACTICE_CATEGORY_SLUGS,
   PRACTICE_QUESTION_COUNTS,
-  PRACTICE_SESSION_MODES,
-  PRACTICE_SESSION_SOURCES,
   type PracticeCategorySlug,
   type PracticeSessionMode,
   type PracticeSessionSource,

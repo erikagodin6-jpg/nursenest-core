@@ -2,6 +2,7 @@
  * Unified, low-cardinality observability for crawl-critical public routes.
  * No PII — pathname segments only, bounded strings, stderr via {@link safeServerLog}.
  */
+import { isNextRedirectError } from "@/lib/next/navigation-abort";
 import { safeServerLog, type SafeLogMeta } from "@/lib/observability/safe-server-log";
 
 export type CrawlSurfaceRouteType =
@@ -130,6 +131,14 @@ export async function withCrawlSurfacePageRender<T>(
         outcome: "not_found",
         httpStatus: 404,
         notFound: true,
+      });
+    } else if (isNextRedirectError(e)) {
+      logCrawlSurfaceEvent({
+        routeType,
+        pathname,
+        durationMs,
+        outcome: "redirect",
+        redirect: true,
       });
     } else {
       logCrawlSurfaceEvent({

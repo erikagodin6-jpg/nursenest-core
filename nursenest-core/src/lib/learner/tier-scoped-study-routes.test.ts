@@ -121,6 +121,11 @@ describe("parseTierScopedAppStudyCallbackPath", () => {
     );
   });
 
+  it("allows /app/questions/session with pathwayId", () => {
+    const u = `/app/questions/session?pathwayId=${encodeURIComponent(RN)}&source=mixed_review&count=20&mode=tutor&shuffle=true`;
+    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
+  });
+
   it("allows /app/practice-tests/start with pathwayId", () => {
     const u = `/app/practice-tests/start?pathwayId=${encodeURIComponent(PN)}`;
     assert.equal(parseTierScopedAppStudyCallbackPath(u), u);

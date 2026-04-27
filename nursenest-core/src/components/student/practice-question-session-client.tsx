@@ -19,6 +19,7 @@ import { buildQuestionListSearchParams } from "@/lib/practice-question-session/b
 import {
   DEFAULT_PRACTICE_COUNT,
   DEFAULT_PRACTICE_MODE,
+  DEFAULT_PRACTICE_SOURCE,
   DEFAULT_SHUFFLE,
 } from "@/lib/practice-question-session/constants";
 import { parsePracticeSessionSearchParams } from "@/lib/practice-question-session/parse-session-search-params";
@@ -81,14 +82,12 @@ export function PracticeQuestionSessionClient({
   userLabel,
   protectionFlags,
   defaultPathwayId,
-  pathwayOptions,
   pathwayCountryByPathwayId,
 }: {
   userId: string;
   userLabel: string;
   protectionFlags: PremiumProtectionFlags;
   defaultPathwayId: string | null;
-  pathwayOptions: { id: string; label: string }[];
   pathwayCountryByPathwayId: Record<string, string>;
 }) {
   const router = useRouter();
@@ -194,9 +193,10 @@ export function PracticeQuestionSessionClient({
   );
 
   const g = current ? graded[current.id] : undefined;
-  const isSata =
+  const isSata = Boolean(
     current &&
-    (current.questionType.toUpperCase() === "SATA" || current.questionType.toUpperCase() === "SELECT_ALL_THAT_APPLY");
+      (current.questionType.toUpperCase() === "SATA" || current.questionType.toUpperCase() === "SELECT_ALL_THAT_APPLY"),
+  );
 
   const sessionCorrect = useMemo(() => Object.values(graded).filter((x) => x.correct).length, [graded]);
   const sessionAttempted = useMemo(() => Object.keys(graded).length, [graded]);
@@ -253,14 +253,16 @@ export function PracticeQuestionSessionClient({
   }
 
   function recordAttempt(confidence: "low" | "medium" | "high") {
-    if (!current || !g) return;
+    if (!current) return;
+    const row = graded[current.id];
+    if (!row) return;
     recordQuestionPerformanceEvent(userId, {
       questionId: current.id,
       topic: current.topic ?? null,
       subtopic: current.subtopic ?? null,
       pathwayId: pathwayId ?? null,
       exam: current.exam ?? null,
-      correct: g.correct,
+      correct: row.correct,
       confidence,
       practiceSessionMode: mode,
       selectedAnswerSummary: answerSummary(),
@@ -456,6 +458,24 @@ export function PracticeQuestionSessionClient({
             ) : (
               <div className="space-y-3">
                 <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">{g?.correct ? "Correct" : "Incorrect"}</p>
+                {g && current ? (
+                  <ul className="nn-qopt-list" aria-label="Answer review">
+                    {optsCanonical.map((canonical, i) => {
+                      const label = optsClinical[i] ?? optsDisplay[i] ?? canonical;
+                      const raw = answer;
+                      const picked = Array.isArray(raw) ? raw.includes(canonical) : raw === canonical;
+                      const surface = gradedAnswerSurfaceClass(true, g, canonical, picked);
+                      return (
+                        <li key={canonical}>
+                          <div className={`flex items-start gap-3 px-3 py-2.5 text-sm ${surface}`}>
+                            <QuestionChoiceLetter index={i} />
+                            <span className="min-w-0 flex-1 leading-relaxed">{label}</span>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : null}
                 {g && showRationaleNow && rationaleText ? (
                   <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_40%,var(--semantic-surface))] p-4 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
                     <p className="text-xs font-semibold uppercase text-[var(--semantic-text-muted)]">Rationale</p>
@@ -476,10 +496,6 @@ export function PracticeQuestionSessionClient({
                       </div>
                     ))
                   : null}
-                <div className="rounded-xl border border-dashed border-[var(--semantic-border-soft)] p-3 text-xs text-[var(--semantic-text-muted)]">
-                  Optional test-taking strategy: use the strike/highlighter tools on future items if you enable them from the
-                  question bank; this focused session keeps the stem clear.
-                </div>
               </div>
             )}
 

@@ -99,6 +99,7 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import { loadMarketingMessageShardsSync } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { LEARNER_APP_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
+import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /**
@@ -136,11 +137,15 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
     getProtectedRouteSession("marketing.pathway_lesson_detail"),
     getStaffSession(),
   ]);
+  for (const res of [sessionRes, staffRes]) {
+    if (res.status === "rejected") rethrowNextNavigationControlFlow(res.reason);
+  }
   const loadedLesson =
     lessonResult.status === "fulfilled" ? lessonResult.value : undefined;
   const lessonLoadFailed = lessonResult.status === "rejected";
 
   if (lessonResult.status === "rejected") {
+    rethrowNextNavigationControlFlow(lessonResult.reason);
     const err = lessonResult.reason;
     const msg = err instanceof Error ? err.message : String(err);
     safeServerLog("pathway_lesson_detail", "marketing_lesson_detail_load_rejected", {
@@ -170,6 +175,9 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
       }
     })(),
   ]);
+  for (const res of [studySettingsRes, entRes, lpRes]) {
+    if (res.status === "rejected") rethrowNextNavigationControlFlow(res.reason);
+  }
   const studySettings = studySettingsRes.status === "fulfilled" ? studySettingsRes.value : DEFAULT_STUDY_SETTINGS;
   const entitlement = entRes.status === "fulfilled" ? entRes.value : "error";
   const learnerPathResolved = lpRes.status === "fulfilled" ? lpRes.value : null;
@@ -231,6 +239,9 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
     loadPathwayLessonAdjacent(pathway.id, lesson.slug, lessonContentLocale),
     getPathwayLessonContentDates(pathway.id, lesson.slug, lessonContentLocale),
   ]);
+  for (const res of [bankAssessmentsRes, adjacentSlugsRes, contentDatesRes]) {
+    if (res.status === "rejected") rethrowNextNavigationControlFlow(res.reason);
+  }
   const bankAssessments: { preTest: PathwayLessonQuizItem[]; postTest: PathwayLessonQuizItem[] } =
     bankAssessmentsRes.status === "fulfilled"
       ? bankAssessmentsRes.value

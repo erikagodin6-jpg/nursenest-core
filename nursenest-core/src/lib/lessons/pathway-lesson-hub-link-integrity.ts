@@ -27,6 +27,7 @@ import type {
 } from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
 import { pathwayLessonMatchesMarketingPathwayContext } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { normalizePathwayLessonLocale } from "@/lib/lessons/pathway-lesson-locale";
+import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 import { getPathwayLessonForMarketingHubVerify } from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
@@ -138,7 +139,8 @@ export async function evaluatePublicMarketingLessonCrossLinkIntegrity(
   let loaded: PathwayLessonRecord | undefined;
   try {
     loaded = await resolveLessonDetail(pathway.id, slug, hubMarketingLocale, dbShard);
-  } catch {
+  } catch (e) {
+    rethrowNextNavigationControlFlow(e);
     safeServerLog("pathway_lessons", "hub_lesson_detail_verify_loader_error", {
       pathway_id: pathway.id,
       slug: slug.slice(0, 200),

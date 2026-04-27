@@ -10,6 +10,7 @@
  * homepage shell, or header/nav chrome; use metadata/preview helpers on shared surfaces instead.
  */
 import { prisma } from "@/lib/db";
+import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 import { PRISMA_ID_IN_CHUNK_SIZE, takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
@@ -1836,6 +1837,9 @@ export const resolvePathwayLaunchBundle = pathwayLoaderAsyncMemo(async function 
   const settled = await Promise.allSettled(
     spec.entries.map((e) => getPathwayLesson(pathwayId, e.slug, marketingLocale)),
   );
+  for (const r of settled) {
+    if (r.status === "rejected") rethrowNextNavigationControlFlow(r.reason);
+  }
   const resolved = spec.entries
     .map((entry, i) => {
       const r = settled[i];

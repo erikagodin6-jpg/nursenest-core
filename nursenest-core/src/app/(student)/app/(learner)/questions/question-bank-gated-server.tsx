@@ -3,7 +3,8 @@ import Link from "next/link";
 import { FreemiumCrossTrackNudge } from "@/components/student/freemium-cross-track-nudge";
 import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
 import { FreemiumQuestionPeek } from "@/components/student/freemium-question-peek";
-import { PracticeExamLauncherClient } from "@/components/student/practice-exam-launcher-client";
+import { PracticeQuestionSessionClient } from "@/components/student/practice-question-session-client";
+import { PracticeQuestionSessionSetupClient } from "@/components/student/practice-question-session-setup-client";
 import { QuestionBankPracticeClient } from "@/components/student/question-bank-practice-client";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
@@ -27,7 +28,7 @@ export async function QuestionBankGatedEntry({
   variant,
 }: {
   searchParams: SearchParams;
-  variant: "launcher" | "bank";
+  variant: "launcher" | "bank" | "practice_session";
 }) {
   const { t } = await getLearnerMarketingBundle();
   const sp = await searchParams;
@@ -173,7 +174,39 @@ export async function QuestionBankGatedEntry({
               </div>
             }
           >
-            <PracticeExamLauncherClient pathwayId={defaultPathwayId} />
+            <PracticeQuestionSessionSetupClient
+              defaultPathwayId={defaultPathwayId}
+              pathwayOptions={pathwayOptions}
+            />
+          </Suspense>
+        ) : null}
+      </div>
+    );
+  }
+
+  if (variant === "practice_session") {
+    return (
+      <div className="space-y-6">
+        {userId ? (
+          <Suspense
+            fallback={
+              <div
+                role="status"
+                aria-busy="true"
+                aria-live="polite"
+                className="flex min-h-[8rem] items-center justify-center rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-6"
+              >
+                <p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.loading.questionBank")}</p>
+              </div>
+            }
+          >
+            <PracticeQuestionSessionClient
+              userId={userId}
+              userLabel={userLabel}
+              protectionFlags={protectionFlags}
+              defaultPathwayId={defaultPathwayId}
+              pathwayCountryByPathwayId={pathwayCountryByPathwayId}
+            />
           </Suspense>
         ) : null}
       </div>
@@ -188,7 +221,7 @@ export async function QuestionBankGatedEntry({
           <p className="mt-1 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
             Filters, presets, and topic rollups for power users. For a quick session, use the{" "}
             <Link href="/app/questions" className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
-              practice exam launcher
+              Practice Question Session setup
             </Link>
             .
           </p>

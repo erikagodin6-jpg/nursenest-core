@@ -75,6 +75,7 @@ export function parseTierScopedAppStudyCallbackPath(raw: string | null): string 
     const u = new URL(raw.trim(), "http://localhost");
     if (
       u.pathname !== "/app/questions" &&
+      u.pathname !== "/app/questions/session" &&
       u.pathname !== "/app/practice-tests/start" &&
       u.pathname !== "/app/practice-tests/cat-launch" &&
       u.pathname !== "/app/flashcards"
