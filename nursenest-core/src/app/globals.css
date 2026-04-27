@@ -2332,6 +2332,25 @@ html[data-theme] .nn-marketing-surface {
   }
 }
 
+/* Light public header: RN/PN/NP tier strip sits on the same white chrome as the logo row
+ * (avoids an extra dark/purple band under the main nav). Dark headers keep `.nn-header-nav-row` defaults. */
+.nn-header-logo-row .nn-header-nav-row {
+  background: var(--theme-header-surface, var(--palette-surface, #ffffff));
+  color: var(--theme-heading-text);
+  border-top: 1px solid color-mix(in srgb, var(--theme-border, var(--border)) 50%, transparent);
+  --nav-fg: var(--theme-heading-text);
+  --nav-link: var(--theme-heading-text);
+  --nav-link-hover: var(--theme-brand-strong, var(--theme-primary));
+  --nav-hover: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-header-surface, #ffffff));
+  --nav-active: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-header-surface, #ffffff));
+  --nav-link-active: var(--theme-brand-strong, var(--theme-primary));
+  --nav-on-active-fg: var(--nav-link-active);
+  --nav-border: var(--theme-border, var(--border));
+  --nav-muted: var(--theme-muted-text, var(--text-muted));
+  --header-background: var(--theme-header-surface, var(--palette-surface, #ffffff));
+  --header-border: color-mix(in srgb, var(--theme-border, var(--border)) 50%, transparent);
+}
+
 /* Bottom accent strip separating logo row from page content (light themes) */
 .nn-header-accent-bar {
   height: 2px;

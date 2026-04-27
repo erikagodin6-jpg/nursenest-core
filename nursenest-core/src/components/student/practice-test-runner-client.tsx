@@ -52,6 +52,7 @@ import {
 import { resolveLinearEngineRunnerUiKind } from "@/lib/practice-tests/linear-runner-session-mode";
 import { PracticeSessionLayout } from "@/components/study/practice-session-layout";
 import { normalizePracticeTestQuestionIds } from "@/lib/practice-tests/practice-test-question-ids";
+import { resolvePracticeTestRunCopy } from "@/lib/practice-tests/practice-test-run-i18n-fallbacks";
 import { splitPromptLeadingImage } from "@/components/flashcards/flashcard-study-question-stack";
 import {
   computePracticeMcqOptionRowState,
@@ -146,7 +147,7 @@ export function PracticeTestRunnerClient({
   const tx = useCallback(
     (key: string, fallback: string, params?: Record<string, string | number | undefined>) => {
       const resolved = t(key, params);
-      return resolved.startsWith("[missing:") ? fallback : resolved;
+      return resolvePracticeTestRunCopy(resolved, key, fallback, params);
     },
     [t],
   );
@@ -1855,7 +1856,7 @@ export function PracticeTestRunnerClient({
             isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase)
               ? tx(
                   "learner.practiceTests.run.answerChoicesSataLockedAria",
-                  "Answer choices (select all that apply) — response submitted; use Submit & Continue when ready",
+                  "Answer choices (select all that apply) — response submitted; use Submit answer when ready",
                 )
               : tx(
                   "learner.practiceTests.run.answerChoicesSataAria",
@@ -1894,7 +1895,7 @@ export function PracticeTestRunnerClient({
             isExamStyle && catExamOptionsInteractionLocked(catExamUiPhase)
               ? tx(
                   "learner.practiceTests.run.answerChoicesLockedAria",
-                  "Answer choices — response submitted; use Submit & Continue when ready",
+                  "Answer choices — response submitted; use Submit answer when ready",
                 )
               : tx("learner.practiceTests.run.answerChoicesAria", "Answer choices")
           }
@@ -1979,7 +1980,7 @@ export function PracticeTestRunnerClient({
               <>
                 <header className="nn-cat-exam-board-top nn-cat-exam-board-top--adaptive flex shrink-0 items-center justify-between gap-2 border-b border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] px-3 py-1.5 sm:gap-3 sm:px-4 sm:py-2">
                   <p className="nn-cat-exam-board-top__progress m-0 text-xs font-semibold leading-snug text-[var(--semantic-text-secondary)] sm:text-sm">
-                    {tx("learner.practiceTests.run.itemInProgress", "Item {n} in Progress", { n: String(idx + 1) })}
+                    {tx("learner.practiceTests.run.itemInProgress", "Question in progress")}
                   </p>
                   <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
                     {showCatExamStrictBadge ? (
@@ -2161,7 +2162,7 @@ export function PracticeTestRunnerClient({
                             className="inline-flex items-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40"
                             onClick={lockCatExamAnswer}
                           >
-                            {tx("learner.practiceTests.run.submit", "Submit")}
+                            {tx("learner.practiceTests.run.submit", "Submit answer")}
                             <ChevronRight className="h-4 w-4 opacity-80" aria-hidden />
                           </button>
                         ) : (
@@ -2996,7 +2997,7 @@ export function PracticeTestRunnerClient({
               >
                 <p className="nn-cat-exam-board-top__progress m-0 text-sm font-semibold leading-snug text-[var(--semantic-text-secondary)]">
                   {linearCatShellPresentation
-                    ? tx("learner.practiceTests.run.itemInProgress", "Item {n} in Progress", { n: String(idx + 1) })
+                    ? tx("learner.practiceTests.run.itemInProgress", "Question in progress")
                     : `${tx("learner.practiceTests.run.question", "Question")} ${idx + 1} ${tx("learner.practiceTests.run.of", "of")} ${total}`}
                 </p>
                 <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">

@@ -243,11 +243,20 @@ export default async function LearnerShellLayout({ children }: { children: React
                 <div
                   role="region"
                   aria-label="Staff access override"
-                  className="mb-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-info)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_14%,var(--semantic-surface))] px-3 py-2 text-sm text-[var(--semantic-text-primary)] shadow-sm sm:px-4"
+                  data-nn-staff-access-banner
+                  className="mb-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_42%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_18%,var(--semantic-surface))] px-3 py-2.5 text-sm text-[var(--semantic-text-primary)] shadow-sm ring-1 ring-[color-mix(in_srgb,var(--semantic-warning)_14%,transparent)] sm:px-4"
                 >
-                  <p className="m-0 font-semibold leading-snug">
-                    Staff access override: you have full learner access from your staff role. This is not a paid
-                    subscription and is separate from simulated learner QA.
+                  <div className="mb-1.5 flex flex-wrap items-center gap-2">
+                    <span className="nn-badge-semantic-warning inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                      Staff access
+                    </span>
+                    <span className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+                      Admin / QA — not a subscription
+                    </span>
+                  </div>
+                  <p className="m-0 text-sm leading-snug text-[var(--semantic-text-primary)]">
+                    You have full learner access from your staff role. This is not paid billing or a subscriber
+                    entitlement, and it is separate from simulated learner QA.
                   </p>
                 </div>
               ) : null}

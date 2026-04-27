@@ -322,10 +322,10 @@ test("ensure-standalone-static copies .next/static beside both nested and top-le
 
 test("deploy scripts: build:deploy is post-compile only; heroku-postbuild runs compile before cache", () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
-  assert.deepEqual(pkg.cacheDirectories, ["node_modules", ".next/cache"]);
+  assert.deepEqual(pkg.cacheDirectories, ["node_modules"]);
   assert.equal(
     pkg.scripts["heroku-postbuild"],
-    "node scripts/log-build-cache-hints.mjs && npm run verify:bootstrap-probe-pathname && NN_POSTBUILD_NEXT_BUILD=1 npm run build && node scripts/log-build-cache-hints.mjs --phase=heroku_postbuild_after_compile",
+    "node scripts/log-build-cache-hints.mjs && node scripts/verify-dockerfile-database-url.mjs && npm run verify:bootstrap-probe-pathname && NN_POSTBUILD_NEXT_BUILD=1 npm run build && node scripts/log-build-cache-hints.mjs --phase=heroku_postbuild_after_compile",
   );
   assert.equal(pkg.scripts.build, "node scripts/run-buildpack-build.mjs");
   assert.equal(pkg.scripts["build:compile"].includes("scripts/run-next-prod-build.mjs"), true);
@@ -337,9 +337,18 @@ test("deploy scripts: build:deploy is post-compile only; heroku-postbuild runs c
   assert.equal(pkg.scripts["build:deploy"], "npm run build:deploy:postbuild");
   assert.equal(pkg.scripts["build:deploy:app-platform"], "npm run build:deploy");
   assert.equal(pkg.scripts["build:deploy:postbuild"].includes("npm run build"), false);
+  const post = pkg.scripts["build:deploy:postbuild"];
+  const ensureIdx = post.indexOf("ensure-standalone-static.mjs");
+  const verifyIdx = post.indexOf("verify:standalone-artifact");
+  assert.ok(ensureIdx !== -1 && verifyIdx !== -1 && ensureIdx < verifyIdx, post);
   assert.equal(pkg.scripts["build:deploy:full"], "node scripts/run-build-deploy-full.mjs");
   assert.equal(pkg.scripts.start, "node scripts/start-standalone.mjs");
-  assert.match(pkg.scripts["ci:verify"], /node scripts\/ensure-standalone-static\.mjs/);
+  assert.equal(
+    pkg.scripts["ci:verify"].includes("ensure-standalone-static"),
+    false,
+    "ci:verify relies on npm run build → run-next-prod-build (sync runs after next build)",
+  );
+  assert.match(pkg.scripts["ci:verify"], /npm run build$/);
 });
 
 test("active DigitalOcean app spec builds before runtime, starts through npm run start, and routes readiness through /readyz", () => {

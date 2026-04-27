@@ -83,13 +83,53 @@ export function verifyStandaloneArtifact(root = packageRoot) {
   return standaloneServerPath;
 }
 
+/**
+ * Fails if hashed assets were not synced next to each standalone `server.js`
+ * (`…/standalone/.next/static`, populated by `ensure-standalone-static.mjs` after `next build`).
+ */
+export function verifyStandaloneStaticAssetsPresent(root = packageRoot) {
+  const targets = getStandaloneStaticSyncTargets(root);
+  if (targets.length === 0) {
+    throw new Error(
+      "[verify-standalone-static] no standalone server.js under .next/standalone — run `npm run build` first.",
+    );
+  }
+  for (const { serverPath, destStatic } of targets) {
+    if (!existsSync(destStatic)) {
+      throw new Error(
+        `[verify-standalone-static] missing static tree: ${destStatic}\n` +
+          `Sibling to: ${serverPath}\n` +
+          `Run: node scripts/ensure-standalone-static.mjs (included automatically after \`npm run build\` / \`npm run build:compile\`).`,
+      );
+    }
+    const chunksDir = path.join(destStatic, "chunks");
+    const cssDir = path.join(destStatic, "css");
+    if (!existsSync(chunksDir) || !existsSync(cssDir)) {
+      throw new Error(
+        `[verify-standalone-static] incomplete static tree under ${destStatic} (expected chunks/ and css/).`,
+      );
+    }
+    const chunkJs = readdirSync(chunksDir).filter((n) => n.endsWith(".js"));
+    const cssFiles = readdirSync(cssDir).filter((n) => n.endsWith(".css"));
+    if (chunkJs.length === 0 || cssFiles.length === 0) {
+      throw new Error(
+        `[verify-standalone-static] static tree at ${destStatic} is empty or corrupt (js=${chunkJs.length} css=${cssFiles.length}).`,
+      );
+    }
+  }
+}
+
 const scriptPath = fileURLToPath(import.meta.url);
 const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === scriptPath;
 
 if (isDirectRun) {
   try {
     const standaloneServerPath = verifyStandaloneArtifact();
-    console.log(`[verify-standalone-artifact] verified ${standaloneServerPath}`);
+    verifyStandaloneStaticAssetsPresent();
+    const staticTargets = getStandaloneStaticSyncTargets().length;
+    console.log(
+      `[verify-standalone-artifact] verified ${standaloneServerPath} and ${staticTargets} static asset tree(s)`,
+    );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error(`[nursenest-core] FATAL: ${message}`);

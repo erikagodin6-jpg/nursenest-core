@@ -91,8 +91,8 @@ if (shouldSkipNextCompileAfterBuildpack()) {
   }
   runStep("npm_run_build_compile", () => npmRun("build:compile"));
 }
-runStep("verify_standalone_artifact", () => npmRun("verify:standalone-artifact"));
 runStep("ensure_standalone_static", () => nodeScript(path.join("scripts", "ensure-standalone-static.mjs")));
+runStep("verify_standalone_artifact", () => npmRun("verify:standalone-artifact"));
 runStep("post_build_prune", () => nodeScript(path.join("scripts", "post-build-prune.mjs")));
 
 if (truthyEnv("NN_TIMED_INCLUDE_NPM_PRUNE")) {

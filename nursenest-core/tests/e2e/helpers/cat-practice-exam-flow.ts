@@ -23,8 +23,8 @@ export async function clickBeginExamAfterPracticeHubStart(page: Page): Promise<v
 }
 
 /**
- * One CAT **exam / test mode** item: select → Submit & Continue → advance (`data-nn-qa-cat-exam-advance`).
- * Primary advance CTA uses the same “Submit & Continue” label as the initial submit control.
+ * One CAT **exam / test mode** item: select → Submit answer → advance (`data-nn-qa-cat-exam-advance`).
+ * Primary advance CTA uses the “Next item” label after the first submit locks the answer.
  */
 export async function answerOneCatExamItem(page: Page): Promise<void> {
   const list = page.locator("ul.nn-cat-opt-list").first();
@@ -39,7 +39,7 @@ export async function answerOneCatExamItem(page: Page): Promise<void> {
     throw new Error("No CAT answer options found (expected MC or SATA controls).");
   }
 
-  const submit = page.getByRole("button", { name: /^Submit & Continue$/i });
+  const submit = page.getByRole("button", { name: /^Submit answer$/i });
   await expect(submit).toBeEnabled({ timeout: 30_000 });
   await submit.click();
 

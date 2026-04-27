@@ -86,4 +86,16 @@ if (r.status !== 0) {
   process.exit(r.status ?? 1);
 }
 
+/** Every `output: "standalone"` build must sync `.next/static` next to `server.js` before `npm run start` or smoke tests (idempotent). */
+const ensureStandaloneStatic = path.join(packageRoot, "scripts", "ensure-standalone-static.mjs");
+const sync = spawnSync(process.execPath, [ensureStandaloneStatic], {
+  cwd: packageRoot,
+  stdio: "inherit",
+  env: process.env,
+});
+if (sync.status !== 0) {
+  process.exit(sync.status ?? 1);
+}
+console.log("[next-prod-build] ensure_standalone_static_ok=1");
+
 process.exit(0);

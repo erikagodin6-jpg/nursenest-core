@@ -37,7 +37,10 @@ test.describe("CAT exam mode — runner contract", () => {
       await expect(page.locator(".nn-question-session-rationale")).toHaveCount(0);
       await expect(page.locator("[data-nn-qa-cat-live-transparency]")).toHaveCount(0);
 
-      const submit = page.getByRole("button", { name: /^Submit & Continue$/i });
+      const examRootText = await page.locator("[data-cat-exam-root]").innerText();
+      expect(examRootText).not.toContain("learner.practiceTests.run.");
+
+      const submit = page.getByRole("button", { name: /^Submit answer$/i });
       await expect(submit).toBeDisabled();
 
       const list = page.locator("ul.nn-cat-opt-list").first();
