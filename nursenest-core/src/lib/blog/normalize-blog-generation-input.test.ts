@@ -156,6 +156,21 @@ describe("sanitizeAiReturnedSlug", () => {
     assertValidSlug(slug, "messy AI slug");
   });
 
+  it("normalizes AI slug suggestions that are actually raw admin article titles", () => {
+    const cases = [
+      "Nephrotic Syndrome and Low Urine Output: What Nurses Need to Know",
+      "Why does COPD cause CO2 retention?",
+      "CABG: Priority Nursing Assessments After Surgery",
+      "Parkinson’s Disease: Nursing Priorities & Red Flags",
+    ];
+
+    for (const title of cases) {
+      const slug = sanitizeAiReturnedSlug(title, `nclex-rn ${title}`);
+      assertValidSlug(slug, title);
+      assert.ok(!slug.includes(":") && !slug.includes("?") && !slug.includes("&"), slug);
+    }
+  });
+
   it("falls back to title-derived slug when AI slug is empty", () => {
     const slug = sanitizeAiReturnedSlug("", "Heart Failure Guide");
     assertValidSlug(slug, "empty AI slug fallback");
