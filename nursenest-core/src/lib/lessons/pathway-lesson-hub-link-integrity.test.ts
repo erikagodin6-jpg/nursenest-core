@@ -167,6 +167,28 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
     assert.equal(diagnostics.strictVerifiedRowCount, 0);
   });
 
+  it("maxUniqueSlugsToVerify caps detail resolver calls but keeps remaining rows as degraded inventory", async () => {
+    let slugResolveCalls = 0;
+    const resolveLessonDetail = async (pathwayId: string, slug: string) => {
+      if (pathwayId !== "ca-rn-nclex-rn") return undefined;
+      slugResolveCalls += 1;
+      return hubRow(slug);
+    };
+    const rows = ["s1", "s2", "s3", "s4"].map((s) => hubRow(s));
+    const { kept, diagnostics } = await verifyMarketingHubLessonRowsResolve({ id: "ca-rn-nclex-rn" }, rows, "en", {
+      resolveLessonDetail,
+      maxUniqueSlugsToVerify: 2,
+    });
+    assert.equal(kept.length, 4);
+    assert.equal(slugResolveCalls, 2);
+    assert.equal(diagnostics.verifyResolverCallCount, 2);
+    assert.equal(diagnostics.verifyUniqueSlugCap, 2);
+    assert.equal(diagnostics.verifyUniqueSlugSkippedCount, 2);
+    const degraded = kept.filter((r) => r.hubMarketingDegraded);
+    assert.equal(degraded.length, 2);
+    assert.ok(degraded.every((r) => r.hubMarketingDegradedReason === "unverified_inventory_fill"));
+  });
+
   it("returns empty kept without throwing when every slug fails (recoverable inventory shrink)", async () => {
     const resolveLessonDetail = async () => undefined;
     const { kept, diagnostics } = await verifyMarketingHubLessonRowsResolve(

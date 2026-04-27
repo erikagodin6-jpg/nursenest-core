@@ -205,6 +205,7 @@
     "qa:lesson-flows:browser": "playwright test tests/e2e/lessons/lesson-flows.spec.ts tests/e2e/lessons/lesson-flows.mobile.spec.ts",
     "qa:cat-entrypoints:browser": "playwright test tests/e2e/cat/cat-entrypoints.spec.ts",
     "qa:homepage-first-paint": "playwright test tests/e2e/public/homepage-first-paint.spec.ts --project=chromium",
+    "qa:marketing-header-bands": "playwright test tests/e2e/public/marketing-header-bands.spec.ts --project=chromium",
     "qa:marketing-sentinel": "playwright test tests/e2e/public/marketing-production-sentinel.spec.ts --project=chromium",
     "qa:marketing-study-production-smoke": "BASE_URL=https://www.nursenest.ca MARKETING_STUDY_SMOKE_BASE_URL=https://www.nursenest.ca MARKETING_STUDY_REQUIRE_PP_BLOG_LINKS=0 playwright test tests/e2e/public/marketing-study-surfaces-production-gate.spec.ts --project=chromium",
     "qa:marketing-placeholder-dom": "playwright test tests/marketing/marketing-placeholder-dom.spec.ts --project=chromium",

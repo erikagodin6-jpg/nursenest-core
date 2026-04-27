@@ -91,7 +91,7 @@ export function LessonsToolbar({
 
       {/* Result count strip — shown when a query is active or always if count provided */}
       {(initialQuery || totalCount !== undefined) && (
-        <div className="flex items-center justify-center gap-2 border-t border-[var(--semantic-border-soft)] pt-2.5 text-center sm:justify-start sm:text-left">
+        <div className="flex items-center justify-center gap-2 border-t border-[var(--semantic-border-soft)] pt-2.5 text-center">
           <span className="inline-flex h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--semantic-info)]" aria-hidden />
           <p className="text-xs font-medium text-[var(--theme-muted-text)]">
             {initialQuery && totalCount !== undefined

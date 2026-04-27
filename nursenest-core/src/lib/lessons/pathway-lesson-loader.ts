@@ -2290,4 +2290,3 @@ export async function countPathwayLessonsPublic(
 
 /** Same warehouse locale as hub SQL lists — use as verify fallback when hub rows omit `localeMeta.contentLocale`. */
 export { effectiveLocaleForPathwayLessonDbRows as getPathwayLessonListWarehouseLocaleForHub };
- };

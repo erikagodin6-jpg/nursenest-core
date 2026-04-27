@@ -28,4 +28,15 @@ describe("pathway lessons hub page — production safety invariants", () => {
     assert.equal(/\bnotFound\s*\(/.test(src), false);
     assert.ok(src.includes("Lessons hub unavailable for this pathway"));
   });
+
+  it("does not inflate marketing hub page size to the full verified inventory (avoids rendering every card at once)", () => {
+    const src = fs.readFileSync(LESSONS_PAGE, "utf8");
+    assert.equal(
+      src.includes("Math.max(pageSizeRequested, hubCurriculumLessons.length"),
+      false,
+      "must not force effective page size to entire verified list",
+    );
+    assert.ok(src.includes("Math.max(pageSizeRequested, PATHWAY_HUB_PAGE_SIZE_DEFAULT"));
+    assert.ok(src.includes("resolvedMarketingHubVerifySlugCap"));
+  });
 });

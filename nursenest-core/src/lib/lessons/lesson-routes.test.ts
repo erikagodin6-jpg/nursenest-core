@@ -72,6 +72,41 @@ describe("buildLessonPath", () => {
     const pathway = { countrySlug: "canada", roleTrack: "rn", examCode: "nclex-rn" };
     assert.equal(buildLessonPath({ pathway, lessonSlug: "fluid-balance" }), "/canada/rn/nclex-rn/lessons/fluid-balance");
   });
+
+  it("builds canonical marketing detail paths for RN, RPN, NP, new-grad, and allied pathways", () => {
+    assert.equal(
+      marketingPathwayLessonDetailPath(
+        { countrySlug: "canada", roleTrack: "rn", examCode: "nclex-rn" },
+        "sepsis-care",
+      ),
+      "/canada/rn/nclex-rn/lessons/sepsis-care",
+    );
+    assert.equal(
+      marketingPathwayLessonDetailPath(
+        { countrySlug: "canada", roleTrack: "rpn", examCode: "nclex-rpn" },
+        "vitals",
+      ),
+      "/canada/pn/nclex-rpn/lessons/vitals",
+    );
+    assert.equal(
+      marketingPathwayLessonDetailPath({ countrySlug: "us", roleTrack: "np", examCode: "fnp" }, "women-health"),
+      "/us/np/fnp/lessons/women-health",
+    );
+    assert.equal(
+      marketingPathwayLessonDetailPath(
+        { countrySlug: "us", roleTrack: "rn", examCode: "new-grad-transition" },
+        "first-shifts",
+      ),
+      "/us/rn/new-grad-transition/lessons/first-shifts",
+    );
+    assert.equal(
+      marketingPathwayLessonDetailPath(
+        { countrySlug: "us", roleTrack: "allied", examCode: "allied-health" },
+        "infection-control",
+      ),
+      "/us/allied/allied-health/lessons/infection-control",
+    );
+  });
 });
 
 describe("marketingLessonSlugFromRouteParam", () => {

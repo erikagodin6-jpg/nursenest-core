@@ -22,7 +22,7 @@ type Props = {
 
 /**
  * Shared hero header for marketing study hubs (e.g. practice questions).
- * The public lessons library hub uses {@link LessonsPageShell} with a centered hero layout instead.
+ * The public lessons library hub uses `LessonsPageShell` with a centered hero layout instead.
  */
 export function PathwayHero({ title, subtitle, toolbar, ctas, backLink }: Props) {
   return (

@@ -79,4 +79,29 @@ describe("PathwayLessonsCurriculumHub", () => {
     assert.ok(!html.includes("PathwayLessonDetailPageLoadingFallback"));
     assert.ok(!html.includes("pathway-lesson-detail-loading"));
   });
+
+  it("renders lesson card titles with QA hooks and non-empty text (bounded preview rows per section)", () => {
+    const lessons = Array.from({ length: 12 }, (_, index) =>
+      lesson({
+        slug: `preview-${index + 1}`,
+        title: `Clinical topic ${index + 1}`,
+        bodySystem: "cardiovascular",
+        system: "cardiovascular",
+      }),
+    );
+    const html = renderToStaticMarkup(
+      <PathwayLessonsCurriculumHub
+        lessons={lessons}
+        preparedLessons={lessons.slice(0, 12)}
+        lessonsBasePath="/canada/rn/nclex-rn/lessons"
+        pathwayId="ca-rn-nclex-rn"
+      />,
+    );
+    const titleMatches = [...html.matchAll(/data-testid="lesson-card-title"/g)];
+    assert.ok(titleMatches.length >= 10);
+    assert.match(html, /data-testid="lesson-card-link"/);
+    assert.match(html, /data-testid="lesson-card"/);
+    assert.match(html, /Clinical Topic 1/);
+    assert.match(html, /text-\[var\(--theme-body-text\)\]/);
+  });
 });
