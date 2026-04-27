@@ -1,9 +1,9 @@
 /**
  * Import this module before constructing `PrismaClient` (directly or via `@/lib/db`).
  *
- * **No `import "server-only"` here** — this file is loaded by `tsx` for `npm run db:generate`
+ * **No Next.js server-module guard import here** — this file is loaded by `tsx` for `npm run db:generate`
  * (`scripts/run-prisma-with-env.mts`) and other Prisma/CLI entrypoints. The app Prisma
- * client (`src/lib/db.ts`) remains `server-only` and imports this module first.
+ * client (`src/lib/db.ts`) applies the RSC server boundary and imports this module first.
  *
  * Production (DigitalOcean, etc.): use **`DATABASE_URL`** — the managed Postgres connection string.
  * **`PROD_DATABASE_URL` is not read** (legacy; must not be used — set `DATABASE_URL` only).
