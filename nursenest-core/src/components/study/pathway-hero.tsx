@@ -21,8 +21,8 @@ type Props = {
 };
 
 /**
- * Shared hero header used on both the Lessons hub and Questions hub pages.
- * Matches the existing LessonsPageShell header style so both surfaces look identical.
+ * Shared hero header for marketing study hubs (e.g. practice questions).
+ * The public lessons library hub uses {@link LessonsPageShell} with a centered hero layout instead.
  */
 export function PathwayHero({ title, subtitle, toolbar, ctas, backLink }: Props) {
   return (

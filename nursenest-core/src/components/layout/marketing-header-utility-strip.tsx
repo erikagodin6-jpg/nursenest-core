@@ -137,6 +137,7 @@ export function MarketingHeaderUtilityStrip({
 
   return (
     <div
+      data-nn-header-band={variant === "dark-bar" ? "utility" : undefined}
       className={`top-bar relative z-[25] w-full ${variant === "dark-bar" ? "nn-header-utility-dark" : "nn-header-utility"}`}
     >
       <div

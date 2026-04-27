@@ -26,16 +26,21 @@ type Props = {
 };
 
 export function LessonRow({ href, title, progressStatus, durationLabel, difficulty, yieldBadgeLabel }: Props) {
-  const displayTitle = cleanLessonTitleForDisplay(title);
+  const cleaned = cleanLessonTitleForDisplay(title);
+  const displayTitle = cleaned.trim().length > 0 ? cleaned : title.trim() || "Lesson";
   return (
     <Link
       href={href}
+      data-testid="lesson-card-link"
       className="nn-qa-pathway-lesson-card group block rounded-xl px-3 py-2 text-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-3" data-testid="lesson-card">
         <StatusIcon status={progressStatus} />
         <div className="min-w-0 flex-1">
-          <p className="line-clamp-3 text-sm font-medium leading-snug text-[var(--theme-heading-text)] sm:line-clamp-2">
+          <p
+            data-testid="lesson-card-title"
+            className="line-clamp-3 text-sm font-semibold leading-snug text-[var(--theme-body-text)] sm:line-clamp-2"
+          >
             {displayTitle}
           </p>
           <div className="mt-1 flex flex-wrap items-center gap-1.5">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ExamFamily, type TierCode } from "@prisma/client";
 import { PathwayLessonSectionContent } from "@/components/lessons/pathway-lesson-body";
@@ -139,6 +140,18 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
     lessonResult.status === "fulfilled" ? lessonResult.value : undefined;
   const lessonLoadFailed = lessonResult.status === "rejected";
 
+  if (lessonResult.status === "rejected") {
+    const err = lessonResult.reason;
+    const msg = err instanceof Error ? err.message : String(err);
+    safeServerLog("pathway_lesson_detail", "marketing_lesson_detail_load_rejected", {
+      pathway_id: pathway.id,
+      lesson_slug: lessonSlug.slice(0, 240),
+      lesson_content_locale: lessonContentLocale,
+      pathname: pathname.slice(0, 240),
+      error_message: msg.slice(0, 800),
+    });
+  }
+
   const session = sessionRes.status === "fulfilled" ? sessionRes.value : null;
   const userIdRaw = (session?.user as { id?: string } | undefined)?.id;
   const userId = typeof userIdRaw === "string" ? userIdRaw.trim() : "";
@@ -171,17 +184,30 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
     staffFullLessonAccess,
   });
   if (routeResolution.kind === "not_found") {
+    const nfReason = routeResolution.reason;
     safeServerLog("pathway_lesson_detail", "marketing_lesson_unavailable", {
       event: "marketing_lesson_unavailable",
       pathway_id: pathway.id,
       lesson_slug: lessonSlug.slice(0, 240),
-      reason: routeResolution.reason,
+      reason: nfReason,
       pathname: pathname.slice(0, 240),
       lesson_load_failed: lessonLoadFailed ? "1" : "0",
+      country: pathway.countryCode,
+      exam_code: pathway.examCode,
     });
+    if (lessonLoadFailed) {
+      return (
+        <div className="mx-auto max-w-5xl px-4 py-10">
+          <PathwayLessonUnavailableMarketing pathway={pathway} requestedSlug={lessonSlug} reason="lesson_load_failed" />
+        </div>
+      );
+    }
+    if (nfReason === "lesson_not_found" || nfReason === "invalid_pathway") {
+      notFound();
+    }
     return (
       <div className="mx-auto max-w-5xl px-4 py-10">
-        <PathwayLessonUnavailableMarketing pathway={pathway} requestedSlug={lessonSlug} reason={routeResolution.reason} />
+        <PathwayLessonUnavailableMarketing pathway={pathway} requestedSlug={lessonSlug} reason={nfReason} />
       </div>
     );
   }

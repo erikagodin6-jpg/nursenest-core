@@ -20,6 +20,7 @@ import {
   getPathwayLessonListWarehouseLocaleForHub,
   listTopicClustersForPublicNavigation,
   normalizePathwayHubSearchQuery,
+  PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP,
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-loader";
@@ -83,6 +84,15 @@ import {
 
 /** Canonical Canada RN hub path (used for legacy ops grep + optional verbose console). */
 const RN_CANADA_NCLEX_LESSONS_HUB_PATH = "/canada/rn/nclex-rn/lessons" as const;
+
+function resolvedMarketingHubVerifySlugCap(): number {
+  const raw = process.env.NN_MARKETING_HUB_VERIFY_SLUG_CAP?.trim();
+  if (raw && /^\d+$/.test(raw)) {
+    const n = Number(raw);
+    if (Number.isFinite(n)) return Math.min(2000, Math.max(60, Math.floor(n)));
+  }
+  return PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP;
+}
 
 function marketingHubPipelineVerboseLoggingEnabled(routePathname: string): boolean {
   return (
@@ -568,6 +578,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const vr = await verifyMarketingHubLessonRowsResolve(pathway, hubCurriculumPrepared, lessonContentLocale, {
     listWarehouseLocale,
     prepareStages: hubPrepareStages,
+    maxUniqueSlugsToVerify: resolvedMarketingHubVerifySlugCap(),
   });
   const verifyDurationMs = Math.round(performance.now() - verifyT0);
   const fillResult = await fillMarketingHubLessonInventoryToMinimum({
@@ -672,17 +683,16 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     });
   }
   /**
-   * Pagination slice for nav + rare pathways above {@link PATHWAY_HUB_PAGE_SIZE_MAX}. The curriculum grid must render
-   * the **full** verified inventory (metadata-only cards), not only the first page slice — otherwise hubs show ~72
-   * lessons while the badge reports hundreds.
+   * Pagination slice for the curriculum grid: bounded page size so first paint does not build hundreds of cards.
+   * Toolbar / badge counts still use the full verified inventory length (`hubCurriculumLessons.length`).
    */
   const effectiveHubPageSize = Math.min(
     PATHWAY_HUB_PAGE_SIZE_MAX,
-    Math.max(pageSizeRequested, hubCurriculumLessons.length, 1),
+    Math.max(pageSizeRequested, PATHWAY_HUB_PAGE_SIZE_DEFAULT, 1),
   );
   const hubVerifiedPage = sliceNormalizedHubLessons(hubCurriculumLessons, pageRequested, effectiveHubPageSize);
-  const lessonsForCurriculumHub =
-    hubCurriculumLessons.length <= PATHWAY_HUB_PAGE_SIZE_MAX ? hubCurriculumLessons : hubVerifiedPage.items;
+  /** Current page only — grouping, progress batching, and diagnostics stay O(page size). */
+  const lessonsForCurriculumHub = hubVerifiedPage.items;
   const groupT0 = performance.now();
   const hubSectionModel = buildPathwayLessonSystemSections(lessonsForCurriculumHub, pathway.id);
   const stage6SectionModelLessonRows = hubSectionModel.reduce((n, s) => n + s.lessons.length, 0);
@@ -788,7 +798,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     stage_3_verify_unique_slugs: String(hubVerifyDiagnostics.uniqueSlugCount),
     /** Stage 4: rows kept after verify (hydration + publicComplete + pathway context). */
     stage_4_after_verify_kept: String(hubCurriculumLessons.length),
-    /** Stage 5: rows rendered in the curriculum grid (full verified set when under cap). */
+    /** Stage 5: rows rendered in the curriculum grid (current hub page slice). */
     stage_5_curriculum_grid_rows: String(lessonsForCurriculumHub.length),
     /** Stage 6: body-system section model (after orphan-bucket merge) — should match stage 5 for verified rows. */
     stage_6_section_model_lesson_rows: String(stage6SectionModelLessonRows),
@@ -840,7 +850,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     redirect(query ? `${base}?${query}` : base);
   }
   const hubPageLessons = hubVerifiedPage.items;
-  const lessonsOnPageForPagination = lessonsForCurriculumHub.length;
+  const lessonsOnPageForPagination = hubPageLessons.length;
 
   let topicClusterLabel: string | null = null;
   if (topicSlugNorm) {
@@ -1221,7 +1231,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           </span>
         </div>
         <PathwayLessonsCurriculumHub
-          lessons={rawHubLessonRows}
+          lessons={hubPageLessons}
           preparedLessons={hubPageLessons}
           lessonsBasePath={base}
           pathwayId={pathway.id}
@@ -1230,7 +1240,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           showLockedState={!canShowResume}
           hubVerifyDiagnostics={hubVerifyDiagnostics}
         />
-        <LessonHubFullLessonLinkNav lessons={lessonsForCurriculumHub} lessonsBasePath={base} />
+        <LessonHubFullLessonLinkNav lessons={hubCurriculumLessons} lessonsBasePath={base} />
       </section>
       <PathwayLessonPagination
         basePath={base}

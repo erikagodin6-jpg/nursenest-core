@@ -317,7 +317,16 @@ html[data-theme] {
    * --header-nav-border        main nav bottom border (stronger than utility)
    * --header-nav-shadow        nav drop shadow — separates it from hero below
    * --footer-surface           footer background, slightly heavier than page sections
+   *
+   * Marketing SiteHeader (light group): utility + tier bands share one fixed chrome surface so
+   * `[data-theme]` personality does not tint those rows independently. Middle row stays neutral paper.
+   * (Exception: documented fixed sRGB anchors — see semantic-color-guardrails.mdc for product chrome.)
    */
+  --nn-header-utility-bg: #0f172a;
+  --nn-header-tier-bg: var(--nn-header-utility-bg);
+  --nn-header-primary-bg: #ffffff;
+  --nn-header-primary-fg: #0f172a;
+  --nn-header-on-accent-fg: #f8fafc;
   --header-utility-surface: color-mix(in srgb, var(--palette-top-bar-background, var(--theme-topbar-bg)) 16%, var(--bg-page));
   --header-utility-border: color-mix(in srgb, var(--palette-top-bar-background, var(--theme-topbar-bg)) 35%, var(--border-subtle));
   --header-utility-text: color-mix(in srgb, var(--palette-top-bar-text, var(--theme-heading-text)) 82%, var(--palette-text-muted, var(--theme-muted-text)));
@@ -2214,57 +2223,62 @@ html[data-theme] .nn-marketing-surface {
 
 /* === Light-theme 3-layer header ===
  *
- * Dark themes use a single unified dark header (nn-header-nav, unchanged above).
+ * Dark themes use a single unified dark header (nn-header-dark-surface).
  * Light themes use three stacked bands:
- *   1. nn-header-utility-dark  – top preferences rail on brand/nav background
- *   2. nn-header-logo-row      – logo + nav links + CTA on page background
- *   3. nn-header-accent-bar    – thin bottom strip on brand/nav background
+ *   1. nn-header-utility-dark  – top preferences rail (fixed --nn-header-utility-bg, not per-theme nav chrome)
+ *   2. nn-header-logo-row      – logo + nav links + CTA on --nn-header-primary-bg
+ *   3. nn-header-nav-row (direct child) – exam tier strip, same surface as utility
  */
 
-/* Top brand bar — uses nn-nav-bg from the sticky wrapper's CSS vars (set by getNavChromeVars) */
+/* Top preferences rail — fixed navy slate; independent of getNavChromeVars / theme chrome */
 .nn-header-utility-dark {
-  background: var(--nn-nav-bg, var(--theme-nav-background, var(--nav-bg)));
-  color: #ffffff;
-  border-bottom: 1px solid var(--nn-nav-border, color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 18%, transparent));
-  --header-utility-text: #ffffff;
-  --header-utility-border: var(--nn-nav-border, color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 18%, transparent));
-  --nav-fg: #ffffff;
-  --nav-link: #ffffff;
-  --nav-link-hover: #ffffff;
-  --nav-link-active: #ffffff;
-  --nav-muted: color-mix(in srgb, #ffffff 70%, transparent);
-  --nav-border: color-mix(in srgb, #ffffff 22%, transparent);
-  --nav-hover: color-mix(in srgb, #ffffff 12%, transparent);
-  --nav-active: color-mix(in srgb, #ffffff 18%, transparent);
+  background: var(--nn-header-utility-bg);
+  color: var(--nn-header-on-accent-fg);
+  border-bottom: 1px solid color-mix(in srgb, var(--nn-header-on-accent-fg) 18%, transparent);
+  --header-utility-text: var(--nn-header-on-accent-fg);
+  --header-utility-border: color-mix(in srgb, var(--nn-header-on-accent-fg) 22%, transparent);
+  --nav-fg: var(--nn-header-on-accent-fg);
+  --nav-link: var(--nn-header-on-accent-fg);
+  --nav-link-hover: var(--nn-header-on-accent-fg);
+  --nav-link-active: var(--nn-header-on-accent-fg);
+  --nav-muted: color-mix(in srgb, var(--nn-header-on-accent-fg) 72%, transparent);
+  --nav-border: color-mix(in srgb, var(--nn-header-on-accent-fg) 22%, transparent);
+  --nav-hover: color-mix(in srgb, var(--nn-header-on-accent-fg) 14%, transparent);
+  --nav-active: color-mix(in srgb, var(--nn-header-on-accent-fg) 20%, transparent);
   /* --nav-active is a light translucency on the brand bar; keep chrome links white but use dark text on selected chips. */
-  --nav-on-active-fg: var(--theme-heading-text, #0f172a);
+  --nav-on-active-fg: var(--nn-header-primary-fg);
 }
 
-/* Logo/content row — sits on white/near-white surface, visually above the tinted page canvas */
+/* Logo/content row — neutral paper; theme personality stays in link hovers / CTAs, not the band wash */
 .nn-header-logo-row {
-  background: var(--theme-header-surface, var(--palette-surface, #ffffff));
-  color: var(--theme-heading-text);
+  background: var(--nn-header-primary-bg);
+  color: var(--nn-header-primary-fg);
   border-bottom: none;
   box-shadow: none;
   isolation: isolate;
   transition: box-shadow var(--motion-base) var(--motion-ease);
+  /* Sticky wrapper still injects per-theme --nn-nav-*; rebind for this subtree (mobile icons + middle row). */
+  --nn-nav-fg: var(--nn-header-primary-fg);
+  --nn-nav-border: color-mix(in srgb, var(--nn-header-primary-fg) 16%, var(--nn-header-primary-bg));
+  --nn-nav-hover-bg: color-mix(in srgb, var(--nn-header-primary-fg) 10%, var(--nn-header-primary-bg));
+  --nn-nav-hover-fg: var(--nn-header-primary-fg);
   /* Override header link tokens to work on a light page surface */
-  --header-link: var(--theme-heading-text);
+  --header-link: var(--nn-header-primary-fg);
   --header-link-hover: var(--theme-brand-strong, var(--theme-primary));
   --header-link-active: var(--theme-brand-strong, var(--theme-primary));
-  --header-background: var(--theme-header-surface, var(--palette-surface, #ffffff));
-  --header-text: var(--theme-heading-text);
-  --header-border: color-mix(in srgb, var(--theme-border, var(--border)) 50%, transparent);
+  --header-background: var(--nn-header-primary-bg);
+  --header-text: var(--nn-header-primary-fg);
+  --header-border: color-mix(in srgb, var(--nn-header-primary-fg) 14%, var(--nn-header-primary-bg));
   /* Override nav surface tokens to work on light page surface */
-  --nav-fg: var(--theme-heading-text);
-  --nav-link: var(--theme-heading-text);
+  --nav-fg: var(--nn-header-primary-fg);
+  --nav-link: var(--nn-header-primary-fg);
   --nav-link-hover: var(--theme-brand-strong, var(--theme-primary));
-  --nav-hover: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-header-surface, #ffffff));
-  --nav-active: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-header-surface, #ffffff));
+  --nav-hover: color-mix(in srgb, var(--nn-header-primary-fg) 8%, var(--nn-header-primary-bg));
+  --nav-active: color-mix(in srgb, var(--theme-primary) 12%, var(--nn-header-primary-bg));
   /* Match header-link-active: dark emphasis on a light selected tint (avoids inheriting white --nav-link-active from dark themes). */
   --nav-link-active: var(--theme-brand-strong, var(--theme-primary));
   --nav-on-active-fg: var(--nav-link-active);
-  --nav-border: var(--theme-border, var(--border));
+  --nav-border: color-mix(in srgb, var(--nn-header-primary-fg) 14%, var(--nn-header-primary-bg));
   --nav-muted: var(--theme-muted-text, var(--text-muted));
 }
 
@@ -2299,9 +2313,8 @@ html[data-theme] .nn-marketing-surface {
   --header-border: var(--nn-nav-border, rgba(255, 255, 255, 0.18));
 }
 
-/* Nav row — bottom product-nav strip in light-theme 3-row headers.
- * Child of nn-header-logo-row; re-asserts dark-bar surface tokens so links read
- * white-on-dark instead of inheriting the light page-surface overrides above. */
+/* Nav row — bottom exam-tier strip (desktop). Under `.nn-header-logo-row` the tier surface is
+ * overridden to `--nn-header-tier-bg`; dark unified headers keep theme nav chrome here. */
 .nn-header-nav-row {
   background: var(--nn-nav-bg, var(--theme-nav-background, var(--nav-bg)));
   color: #ffffff;
@@ -2332,23 +2345,22 @@ html[data-theme] .nn-marketing-surface {
   }
 }
 
-/* Light public header: RN/PN/NP tier strip sits on the same white chrome as the logo row
- * (avoids an extra dark/purple band under the main nav). Dark headers keep `.nn-header-nav-row` defaults. */
-.nn-header-logo-row .nn-header-nav-row {
-  background: var(--theme-header-surface, var(--palette-surface, #ffffff));
-  color: var(--theme-heading-text);
-  border-top: 1px solid color-mix(in srgb, var(--theme-border, var(--border)) 50%, transparent);
-  --nav-fg: var(--theme-heading-text);
-  --nav-link: var(--theme-heading-text);
-  --nav-link-hover: var(--theme-brand-strong, var(--theme-primary));
-  --nav-hover: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-header-surface, #ffffff));
-  --nav-active: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-header-surface, #ffffff));
-  --nav-link-active: var(--theme-brand-strong, var(--theme-primary));
-  --nav-on-active-fg: var(--nav-link-active);
-  --nav-border: var(--theme-border, var(--border));
-  --nav-muted: var(--theme-muted-text, var(--text-muted));
-  --header-background: var(--theme-header-surface, var(--palette-surface, #ffffff));
-  --header-border: color-mix(in srgb, var(--theme-border, var(--border)) 50%, transparent);
+/* Light public header: RN/PN/NP tier strip matches utility band (fixed chrome, not theme-tinted middle). */
+.nn-header-logo-row > .nn-header-nav-row {
+  background: var(--nn-header-tier-bg);
+  color: var(--nn-header-on-accent-fg);
+  border-top: 1px solid color-mix(in srgb, var(--nn-header-on-accent-fg) 16%, transparent);
+  --nav-fg: var(--nn-header-on-accent-fg);
+  --nav-link: var(--nn-header-on-accent-fg);
+  --nav-link-hover: var(--nn-header-on-accent-fg);
+  --nav-link-active: #ffffff;
+  --nav-hover: color-mix(in srgb, var(--nn-header-on-accent-fg) 14%, transparent);
+  --nav-active: color-mix(in srgb, var(--nn-header-on-accent-fg) 20%, transparent);
+  --nav-on-active-fg: var(--nn-header-primary-fg);
+  --nav-border: color-mix(in srgb, var(--nn-header-on-accent-fg) 22%, transparent);
+  --nav-muted: color-mix(in srgb, var(--nn-header-on-accent-fg) 70%, transparent);
+  --header-background: var(--nn-header-tier-bg);
+  --header-border: color-mix(in srgb, var(--nn-header-on-accent-fg) 20%, transparent);
 }
 
 /* Bottom accent strip separating logo row from page content (light themes) */

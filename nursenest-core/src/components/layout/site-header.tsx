@@ -463,7 +463,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             includeUnpublishedRegions={isAdminAuthenticated}
           />
         </div>
-        <div className="nn-section-shell flex flex-col overflow-visible">
+        <div className="nn-section-shell flex flex-col overflow-visible" data-nn-header-band="primary">
           {/* ── Mobile brand row ── */}
           <div className="top-bar nn-header-mobile-only-flex min-h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] pt-[env(safe-area-inset-top,0px)] sm:gap-4">
             <div className="flex min-w-0 shrink items-center gap-2 overflow-hidden">
@@ -729,7 +729,10 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             </div>
           </div>{/* /nav-row */}
         </div>{/* /shell */}
-        <div className="nn-header-hide-until-xl w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row">
+        <div
+          className="nn-header-hide-until-xl w-full nn-header-nav-row"
+          data-nn-header-band="tier"
+        >
           <div className="nn-section-shell flex min-h-[30px] flex-wrap items-center gap-x-0.5 gap-y-0 py-0 md:min-h-[32px] md:py-0 lg:gap-x-0.5">
             <nav
               aria-label={t("nav.marketingExplore")}

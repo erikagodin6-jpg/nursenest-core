@@ -60,6 +60,7 @@ import { getLaunchBundleSpec } from "@/lib/lessons/pathway-launch-bundle";
 import { maxSafeOffsetPage } from "@/lib/api/api-pagination-limits";
 import {
   PATHWAY_CATALOG_LIST_HARD_CAP,
+  PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP,
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-scale";
@@ -103,6 +104,7 @@ export {
 
 export {
   PATHWAY_CATALOG_LIST_HARD_CAP,
+  PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP,
   PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   PATHWAY_HUB_PAGE_SIZE_MAX,
 } from "@/lib/lessons/pathway-lesson-scale";
@@ -176,7 +178,7 @@ function pathwayLessonHubSearchWhere(q: string): Prisma.PathwayLessonWhereInput 
 
 
 /**
- * Hub cards: keep metadata + structural gate, drop heavy bodies after completeness filtering.
+ * Hub index shape: metadata + structural gate; no section bodies, pre/post tests, or question payloads.
  */
 export function stripPathwayLessonToHubListShape(full: PathwayLessonRecord): PathwayLessonRecord {
   return {
@@ -203,10 +205,6 @@ export function stripPathwayLessonToHubListShape(full: PathwayLessonRecord): Pat
     ...(full.priority ? { priority: full.priority } : {}),
     ...(full.examMeta?.length ? { examMeta: full.examMeta } : {}),
     ...(full.activeExamMeta ? { activeExamMeta: full.activeExamMeta } : {}),
-    ...(full.preTestQuestionIds?.length ? { preTestQuestionIds: full.preTestQuestionIds } : {}),
-    ...(full.postTestQuestionIds?.length ? { postTestQuestionIds: full.postTestQuestionIds } : {}),
-    ...(full.preTest ? { preTest: full.preTest } : {}),
-    ...(full.postTest ? { postTest: full.postTest } : {}),
     ...(full.premiumValidation ? { premiumValidation: full.premiumValidation } : {}),
   };
 }
@@ -2292,3 +2290,4 @@ export async function countPathwayLessonsPublic(
 
 /** Same warehouse locale as hub SQL lists — use as verify fallback when hub rows omit `localeMeta.contentLocale`. */
 export { effectiveLocaleForPathwayLessonDbRows as getPathwayLessonListWarehouseLocaleForHub };
+ };
