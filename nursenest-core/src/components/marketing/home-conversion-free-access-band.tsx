@@ -1,19 +1,7 @@
 "use client";
 
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-
-function safeT(
-  t: ((key: string) => string) | undefined,
-  key: string,
-  fallback: string
-): string {
-  try {
-    const value = t?.(key);
-    return typeof value === "string" && value.trim() ? value : fallback;
-  } catch {
-    return fallback;
-  }
-}
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 
 /**
  * Soft friction-reduction band: what is free vs paid, without aggressive sales tone.
@@ -39,11 +27,11 @@ export function HomeConversionFreeAccessBand() {
           id="home-free-access-heading"
           className="nn-marketing-h3 text-balance text-[var(--theme-heading-text)]"
         >
-          {safeT(t, "home.conversion.freeAccess.title", "Start free. Upgrade when you’re ready.")}
+          {safeHomepageMarketingCopy(t, "home.conversion.freeAccess.title", "Start free. Upgrade when you’re ready.")}
         </h2>
 
         <p className="nn-marketing-body-sm mx-auto mt-3 max-w-2xl text-pretty text-[var(--theme-body-text)]">
-          {safeT(
+          {safeHomepageMarketingCopy(
             t,
             "home.conversion.freeAccess.body",
             "Access lessons, flashcards, and practice questions at no cost. Unlock advanced tools as you progress."
@@ -51,7 +39,7 @@ export function HomeConversionFreeAccessBand() {
         </p>
 
         <p className="nn-marketing-caption mx-auto mt-3 max-w-xl text-pretty text-[var(--theme-muted-text)]">
-          {safeT(
+          {safeHomepageMarketingCopy(
             t,
             "home.conversion.freeAccess.tiersHint",
             "Free core access with optional premium tiers for deeper preparation."

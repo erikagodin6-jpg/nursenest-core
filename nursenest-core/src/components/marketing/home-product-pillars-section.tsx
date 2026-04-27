@@ -3,6 +3,7 @@
 import { ArrowRight, BookOpen, ClipboardList, Layers } from "lucide-react";
 
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { HomeConversionCtaStrip } from "@/components/marketing/home-conversion-cta-strip";
@@ -21,15 +22,6 @@ const PILLARS = [
 ] as const;
 
 type PillarHrefKey = (typeof PILLARS)[number]["hrefKey"];
-
-function safeT(t: (key: string) => string, key: string, fallback: string): string {
-  try {
-    const value = t(key);
-    return value && value !== key ? value : fallback;
-  } catch {
-    return fallback;
-  }
-}
 
 function pillarHref(loc: (path: string) => string, key: PillarHrefKey): string {
   switch (key) {
@@ -61,7 +53,7 @@ export function HomeProductPillarsSection() {
             id="home-product-pillars-heading"
             className="nn-marketing-h2 text-balance text-[var(--theme-heading-text)]"
           >
-            {safeT(
+            {safeHomepageMarketingCopy(
               t,
               "home.conversion.pillars.title",
               "Practice smarter with NurseNest",
@@ -69,7 +61,7 @@ export function HomeProductPillarsSection() {
           </h2>
 
           <p className="nn-marketing-body mx-auto mt-2 max-w-xl text-pretty text-[var(--theme-muted-text)]">
-            {safeT(
+            {safeHomepageMarketingCopy(
               t,
               "home.conversion.pillars.sub",
               "Use lessons, questions, and adaptive practice to prepare with confidence.",
@@ -107,7 +99,7 @@ export function HomeProductPillarsSection() {
 
                   <h3 className="nn-card-system__title">
                     {formatTitleCase(
-                      safeT(
+                      safeHomepageMarketingCopy(
                         t,
                         `home.conversion.pillars.${pillar.id}Title`,
                         pillar.label,
@@ -118,7 +110,7 @@ export function HomeProductPillarsSection() {
 
                   <p className="nn-card-system__description">
                     {formatSentenceCase(
-                      safeT(
+                      safeHomepageMarketingCopy(
                         t,
                         `home.conversion.pillars.${pillar.id}Body`,
                         "Build exam readiness with focused study tools.",
@@ -129,7 +121,7 @@ export function HomeProductPillarsSection() {
 
                   <span className="nn-card-system__cta">
                     {formatTitleCase(
-                      safeT(
+                      safeHomepageMarketingCopy(
                         t,
                         `home.conversion.pillars.${pillar.id}Cta`,
                         "Explore",

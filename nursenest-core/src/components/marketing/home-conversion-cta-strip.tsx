@@ -13,21 +13,13 @@ import {
 } from "@/lib/theme/marketing-hero-pattern";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { PRIMARY_CTA, SECONDARY_CTA, TERTIARY_CTA } from "@/lib/copy/cta-copy";
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 
 export type HomeConversionCtaStripPlacement =
   | "after_exam_paths"
   | "after_pillars"
   | "after_platform_preview"
   | "after_how_it_works";
-
-function safeT(t: ((key: string) => string) | undefined, key: string, fallback: string): string {
-  try {
-    const value = t?.(key);
-    return typeof value === "string" && value.trim() ? value : fallback;
-  } catch {
-    return fallback;
-  }
-}
 
 function safeTitle(value: string, locale: string): string {
   try {
@@ -65,7 +57,7 @@ export function HomeConversionCtaStrip({ placement }: { placement: HomeConversio
     <div
       className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center"
       role="group"
-      aria-label={safeT(t, "home.conversion.inlineCta.aria", "Homepage calls to action")}
+      aria-label={safeHomepageMarketingCopy(t, "home.conversion.inlineCta.aria", "Homepage calls to action")}
       data-testid={`home-cta-strip-${placement}`}
     >
       <MarketingTrackedLink

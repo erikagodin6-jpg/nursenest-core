@@ -4,6 +4,7 @@ import { BadgeCheck, BarChart3, BookOpen, ClipboardCheck, Globe2, Layers3, Spark
 import { BrandTrustInline } from "@/components/brand/brand-trust-inline";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 import { FadeUp } from "@/lib/motion";
 import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
 
@@ -29,20 +30,71 @@ export function HomeTrustStripSection({ lessonCount, questionCount, registeredLe
   const learners = formatCount(registeredLearners, locale);
 
   const pills = [
-    { icon: BadgeCheck, label: t("pages.home.trustStrip.pill.examScoped"), iconClass: "text-[var(--semantic-success)]" },
-    ...(questions
-      ? [{ icon: BarChart3, label: t("pages.home.trustStrip.pill.questionsCount", { count: questions }), iconClass: "text-[var(--semantic-chart-1)]" }]
-      : [{ icon: BarChart3, label: t("pages.home.trustStrip.pill.questionsLarge"), iconClass: "text-[var(--semantic-chart-1)]" }]),
-    { icon: Layers3, label: t("pages.home.trustStrip.pill.adaptiveCat"), iconClass: "text-[var(--semantic-info)]" },
-    { icon: ClipboardCheck, label: t("pages.home.trustStrip.pill.rationaleEveryItem"), iconClass: "text-[var(--semantic-brand)]" },
     {
+      key: "examScoped",
+      icon: BadgeCheck,
+      label: safeHomepageMarketingCopy(t, "pages.home.trustStrip.pill.examScoped", "Written for your pathway"),
+      iconClass: "text-[var(--semantic-success)]",
+    },
+    ...(questions
+      ? [
+          {
+            key: "questionsCount",
+            icon: BarChart3,
+            label: safeHomepageMarketingCopy(t, "pages.home.trustStrip.pill.questionsCount", "{{count}} questions", {
+              count: questions,
+            }),
+            iconClass: "text-[var(--semantic-chart-1)]",
+          },
+        ]
+      : [
+          {
+            key: "questionsLarge",
+            icon: BarChart3,
+            label: safeHomepageMarketingCopy(t, "pages.home.trustStrip.pill.questionsLarge", "Large question bank"),
+            iconClass: "text-[var(--semantic-chart-1)]",
+          },
+        ]),
+    {
+      key: "adaptiveCat",
+      icon: Layers3,
+      label: safeHomepageMarketingCopy(t, "pages.home.trustStrip.pill.adaptiveCat", "Adaptive CAT sessions"),
+      iconClass: "text-[var(--semantic-info)]",
+    },
+    {
+      key: "rationaleEveryItem",
+      icon: ClipboardCheck,
+      label: safeHomepageMarketingCopy(
+        t,
+        "pages.home.trustStrip.pill.rationaleEveryItem",
+        "Full rationale on each item",
+      ),
+      iconClass: "text-[var(--semantic-brand)]",
+    },
+    {
+      key: "lessons",
       icon: BookOpen,
       label: lessons
-        ? t("pages.home.trustStrip.pill.lessonsCount", { count: lessons })
-        : t("pages.home.trustStrip.pill.lessonsLarge"),
+        ? safeHomepageMarketingCopy(t, "pages.home.trustStrip.pill.lessonsCount", "{{count}}+ lessons", {
+            count: lessons,
+          })
+        : safeHomepageMarketingCopy(
+            t,
+            "pages.home.trustStrip.pill.lessonsLarge",
+            "Structured pathway lessons",
+          ),
       iconClass: "text-[var(--semantic-warning)]",
     },
-    { icon: Sparkles, label: t("pages.home.trustStrip.updatedNclex"), iconClass: "text-[var(--semantic-chart-3)]" },
+    {
+      key: "updatedNclex",
+      icon: Sparkles,
+      label: safeHomepageMarketingCopy(
+        t,
+        "pages.home.trustStrip.updatedNclex",
+        "Maintained for current exam expectations",
+      ),
+      iconClass: "text-[var(--semantic-chart-3)]",
+    },
   ] as const;
 
   if (marketingNarrow) {
@@ -57,15 +109,37 @@ export function HomeTrustStripSection({ lessonCount, questionCount, registeredLe
             id="home-trust-strip-heading"
             className="nn-marketing-h2 text-balance text-center text-[var(--palette-heading)]"
           >
-            {formatTitleCase(t("pages.home.trustStrip.heading"), locale)}
+            {formatTitleCase(
+              safeHomepageMarketingCopy(
+                t,
+                "pages.home.trustStrip.heading",
+                "Scoped to your registration—not a mixed quiz feed",
+              ),
+              locale,
+            )}
           </h2>
           <p className="nn-marketing-body text-center text-pretty leading-relaxed text-[var(--palette-text-muted)]">
-            {formatSentenceCase(t("pages.home.trustStrip.subheading"), locale)}
+            {formatSentenceCase(
+              safeHomepageMarketingCopy(
+                t,
+                "pages.home.trustStrip.subheading",
+                "Questions, lessons, and readiness cues follow the RN, PN, NP, or allied track—and country—you pick, without mixing registration scope in one run.",
+              ),
+              locale,
+            )}
           </p>
           <BrandTrustInline variant="prep" className="justify-center text-center" />
           {learners ? (
             <p className="nn-marketing-caption text-center text-[var(--palette-text-muted)]">
-              {formatSentenceCase(t("pages.home.trustStrip.learnersLine", { count: learners }), locale)}
+              {formatSentenceCase(
+                safeHomepageMarketingCopy(
+                  t,
+                  "pages.home.trustStrip.learnersLine",
+                  "{{count}} learners are preparing here now.",
+                  { count: learners },
+                ),
+                locale,
+              )}
             </p>
           ) : null}
           <ul className="flex flex-col gap-2">
@@ -73,7 +147,7 @@ export function HomeTrustStripSection({ lessonCount, questionCount, registeredLe
               const Icon = pill.icon;
               return (
                 <li
-                  key={pill.label}
+                  key={pill.key}
                   className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--pill-border))] bg-[var(--pill-bg)] px-3.5 py-1.5 text-sm font-semibold text-[var(--pill-fg)]"
                 >
                   <Icon className={`h-4 w-4 shrink-0 ${pill.iconClass}`} aria-hidden />
@@ -102,16 +176,38 @@ export function HomeTrustStripSection({ lessonCount, questionCount, registeredLe
               id="home-trust-strip-heading"
               className="nn-marketing-h2 max-w-[min(100%,42rem)] text-balance text-[var(--palette-heading)]"
             >
-              {formatTitleCase(t("pages.home.trustStrip.heading"), locale)}
+              {formatTitleCase(
+              safeHomepageMarketingCopy(
+                t,
+                "pages.home.trustStrip.heading",
+                "Scoped to your registration—not a mixed quiz feed",
+              ),
+              locale,
+            )}
             </h2>
           </div>
           <p className="nn-marketing-body mx-auto mb-6 max-w-2xl text-center text-pretty leading-relaxed text-[var(--palette-text-muted)]">
-            {formatSentenceCase(t("pages.home.trustStrip.subheading"), locale)}
+            {formatSentenceCase(
+              safeHomepageMarketingCopy(
+                t,
+                "pages.home.trustStrip.subheading",
+                "Questions, lessons, and readiness cues follow the RN, PN, NP, or allied track—and country—you pick, without mixing registration scope in one run.",
+              ),
+              locale,
+            )}
           </p>
           <BrandTrustInline variant="prep" className="mb-5 justify-center text-center" />
           {learners ? (
             <p className="nn-marketing-caption mb-5 text-center text-[var(--palette-text-muted)]">
-              {formatSentenceCase(t("pages.home.trustStrip.learnersLine", { count: learners }), locale)}
+              {formatSentenceCase(
+                safeHomepageMarketingCopy(
+                  t,
+                  "pages.home.trustStrip.learnersLine",
+                  "{{count}} learners are preparing here now.",
+                  { count: learners },
+                ),
+                locale,
+              )}
             </p>
           ) : null}
           <ul className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
@@ -119,7 +215,7 @@ export function HomeTrustStripSection({ lessonCount, questionCount, registeredLe
               const Icon = pill.icon;
               return (
                 <li
-                  key={pill.label}
+                  key={pill.key}
                   className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--pill-border))] bg-[var(--pill-bg)] px-3.5 py-1.5 text-sm font-semibold text-[var(--pill-fg)] shadow-[var(--elevation-rest)]"
                 >
                   <Icon className={`h-4 w-4 shrink-0 ${pill.iconClass}`} aria-hidden />

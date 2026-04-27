@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight, ShieldCheck } from "lucide-react";
-import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
@@ -13,6 +13,7 @@ import {
 } from "@/lib/theme/marketing-hero-pattern";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 
 function safeLocale(locale?: string) {
   return locale || "en";
@@ -61,14 +62,14 @@ export function HomeConversionHero(props: { questionCount?: number; lessonCount?
           className="nn-marketing-h1 max-w-[22ch] text-[var(--palette-heading)]"
         >
           {formatTitleCase(
-            safeHomepageMarketingT(t, "pages.home.hero.headline", "Canada-First Nursing Exam Prep"),
+            safeHomepageMarketingCopy(t, "pages.home.hero.headline", "Canada-First Nursing Exam Prep"),
             locale
           )}
         </h1>
 
         <p className="mt-3 text-[var(--palette-text-muted)]">
           {formatSentenceCase(
-            safeHomepageMarketingT(
+            safeHomepageMarketingCopy(
               t,
               "pages.home.hero.subheading",
               "Practice questions, lessons, and flashcards designed for real exams."
@@ -85,7 +86,7 @@ export function HomeConversionHero(props: { questionCount?: number; lessonCount?
             className={`${MARKETING_PRIMARY_CTA_CLASS} rounded-xl`}
           >
             {formatTitleCase(
-              safeHomepageMarketingT(t, "pages.home.hero.primaryCta", "Start practice questions"),
+              safeHomepageMarketingCopy(t, "pages.home.hero.primaryCta", "Start practice questions"),
               locale
             )}
             <ArrowRight className="ml-2 h-4 w-4" />
@@ -98,7 +99,7 @@ export function HomeConversionHero(props: { questionCount?: number; lessonCount?
             className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-xl`}
           >
             {formatTitleCase(
-              safeHomepageMarketingT(t, "pages.home.hero.secondaryCta", "Browse lessons"),
+              safeHomepageMarketingCopy(t, "pages.home.hero.secondaryCta", "Browse lessons"),
               locale
             )}
           </MarketingTrackedLink>
@@ -107,12 +108,12 @@ export function HomeConversionHero(props: { questionCount?: number; lessonCount?
         <p className="mt-4 text-sm text-[var(--palette-text-muted)]">
           {q > 0 || lessons > 0
             ? `${q || ""} questions · ${lessons || ""} lessons`
-            : safeHomepageMarketingT(t, "pages.home.hero.statsFallback", "Updated regularly")}
+            : safeHomepageMarketingCopy(t, "pages.home.hero.statsFallback", "Updated regularly")}
         </p>
 
         <p className="mt-2 flex items-center gap-2 text-sm text-[var(--palette-text-muted)]">
           <ShieldCheck className="h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
-          {safeHomepageMarketingT(t, "pages.home.hero.noCreditCard", "No credit card required")}
+          {safeHomepageMarketingCopy(t, "pages.home.hero.noCreditCard", "No credit card required")}
         </p>
       </div>
     </section>

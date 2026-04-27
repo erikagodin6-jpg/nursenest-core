@@ -11,7 +11,7 @@ import { HomeTrustStripSection } from "@/components/marketing/home-trust-strip-s
 import { HomeFinalStudyCta } from "@/components/marketing/home-final-study-cta";
 import { FunnelHomepageViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 
-import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
@@ -21,6 +21,7 @@ import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 
 import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 
 /**
  * Normalize numbers from server (prevents crashes + hydration issues)
@@ -113,33 +114,33 @@ export default function HomeRestoredClient({
     return [
       {
         id: "rn",
-        title: safeHomepageMarketingT(t, "pages.home.audience.rn.title", "RN"),
-        body: safeHomepageMarketingT(t, "pages.home.audience.rn.description", ""),
-        cta: safeHomepageMarketingT(t, "pages.home.audience.rn.cta", "Explore"),
+        title: safeHomepageMarketingCopy(t, "pages.home.audience.rn.title", "RN"),
+        body: safeHomepageMarketingCopy(t, "pages.home.audience.rn.description", ""),
+        cta: safeHomepageMarketingCopy(t, "pages.home.audience.rn.cta", "Explore"),
         href: l(hubs.rn),
         color: "var(--semantic-info)",
       },
       {
         id: "pn",
-        title: safeHomepageMarketingT(t, "pages.home.audience.pn.title", "PN"),
-        body: safeHomepageMarketingT(t, "pages.home.audience.pn.description", ""),
-        cta: safeHomepageMarketingT(t, "pages.home.audience.pn.cta", "Explore"),
+        title: safeHomepageMarketingCopy(t, "pages.home.audience.pn.title", "PN"),
+        body: safeHomepageMarketingCopy(t, "pages.home.audience.pn.description", ""),
+        cta: safeHomepageMarketingCopy(t, "pages.home.audience.pn.cta", "Explore"),
         href: l(hubs.pn),
         color: "var(--semantic-warning)",
       },
       {
         id: "np",
-        title: safeHomepageMarketingT(t, "pages.home.audience.np.title", "NP"),
-        body: safeHomepageMarketingT(t, "pages.home.audience.np.description", ""),
-        cta: safeHomepageMarketingT(t, "pages.home.audience.np.cta", "Explore"),
+        title: safeHomepageMarketingCopy(t, "pages.home.audience.np.title", "NP"),
+        body: safeHomepageMarketingCopy(t, "pages.home.audience.np.description", ""),
+        cta: safeHomepageMarketingCopy(t, "pages.home.audience.np.cta", "Explore"),
         href: l(hubs.np),
         color: "var(--semantic-brand)",
       },
       {
         id: "allied",
-        title: safeHomepageMarketingT(t, "pages.home.audience.allied.title", "Allied"),
-        body: safeHomepageMarketingT(t, "pages.home.audience.allied.description", ""),
-        cta: safeHomepageMarketingT(t, "pages.home.audience.allied.cta", "Explore"),
+        title: safeHomepageMarketingCopy(t, "pages.home.audience.allied.title", "Allied"),
+        body: safeHomepageMarketingCopy(t, "pages.home.audience.allied.description", ""),
+        cta: safeHomepageMarketingCopy(t, "pages.home.audience.allied.cta", "Explore"),
         href: l(hubs.allied),
         color: "var(--semantic-success)",
       },
@@ -165,14 +166,14 @@ export default function HomeRestoredClient({
 
       <HomeStableMarketingPlaceholder
         bandToneClass="nn-home-rich-placeholder-band--tone-warm"
-        title={safeHomepageMarketingT(t, "pages.home.stablePlaceholder.regions.title", "Exam prep hubs")}
-        body={safeHomepageMarketingT(
+        title={safeHomepageMarketingCopy(t, "pages.home.stablePlaceholder.regions.title", "Exam prep hubs")}
+        body={safeHomepageMarketingCopy(
           t,
           "pages.home.stablePlaceholder.regions.body",
           "Choose RN, PN, NP, or Allied from the pathway cards below — regional hubs stay one click away.",
         )}
         href={explorePricingHref}
-        linkLabel={safeHomepageMarketingT(t, "pages.home.stablePlaceholder.regions.link", "View pricing")}
+        linkLabel={safeHomepageMarketingCopy(t, "pages.home.stablePlaceholder.regions.link", "View pricing")}
       />
 
       {/* TRUST */}
@@ -185,25 +186,25 @@ export default function HomeRestoredClient({
       {/* Former trust-fears / platform preview / proof / FAQ lazy stack */}
       <HomeStableMarketingPlaceholder
         bandToneClass="nn-home-rich-placeholder-band--tone-positive"
-        title={safeHomepageMarketingT(t, "pages.home.stablePlaceholder.study.title", "Study tools that stay exam-scoped")}
-        body={safeHomepageMarketingT(
+        title={safeHomepageMarketingCopy(t, "pages.home.stablePlaceholder.study.title", "Study tools that stay exam-scoped")}
+        body={safeHomepageMarketingCopy(
           t,
           "pages.home.stablePlaceholder.study.body",
           "CAT-style practice, rationales, and lessons are available after you sign in — this page keeps the shell lightweight.",
         )}
         href={exploreQuestionsHref}
-        linkLabel={safeHomepageMarketingT(t, "pages.home.stablePlaceholder.study.link", "Start practicing")}
+        linkLabel={safeHomepageMarketingCopy(t, "pages.home.stablePlaceholder.study.link", "Start practicing")}
       />
       <HomeStableMarketingPlaceholder
         bandToneClass="nn-home-rich-placeholder-band--tone-cool"
-        title={safeHomepageMarketingT(t, "pages.home.stablePlaceholder.support.title", "Questions about access or billing?")}
-        body={safeHomepageMarketingT(
+        title={safeHomepageMarketingCopy(t, "pages.home.stablePlaceholder.support.title", "Questions about access or billing?")}
+        body={safeHomepageMarketingCopy(
           t,
           "pages.home.stablePlaceholder.support.body",
           "Pricing and plans are documented on the pricing page so you can compare tiers without loading large previews here.",
         )}
         href={explorePricingHref}
-        linkLabel={safeHomepageMarketingT(t, "pages.home.stablePlaceholder.support.link", "Compare plans")}
+        linkLabel={safeHomepageMarketingCopy(t, "pages.home.stablePlaceholder.support.link", "Compare plans")}
       />
 
       {/* HUB STRIP */}
@@ -215,7 +216,7 @@ export default function HomeRestoredClient({
           <div className="mx-auto mb-8 max-w-2xl text-center">
             <h2 className="nn-marketing-h2">
               {formatTitleCase(
-                safeHomepageMarketingT(t, "pages.home.pathwaysSection.title", "Choose your path"),
+                safeHomepageMarketingCopy(t, "pages.home.pathwaysSection.title", "Choose your path"),
                 locale
               )}
             </h2>

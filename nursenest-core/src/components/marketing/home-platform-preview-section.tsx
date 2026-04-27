@@ -4,24 +4,9 @@ import { useMemo, useState } from "react";
 import { Activity, CheckCircle2, FileText, Target } from "lucide-react";
 
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { FadeUp } from "@/lib/motion";
-
-/**
- * Safe translation accessor (prevents white-screen on missing keys)
- */
-function safeT(
-  t: (key: string) => string,
-  key: string,
-  fallback: string
-): string {
-  try {
-    const val = t(key);
-    return val && val !== key ? val : fallback;
-  } catch {
-    return fallback;
-  }
-}
 
 const READINESS_META = [
   { key: "readinessBand0", value: 72, toneClass: "nn-progress-fill-semantic-readiness" },
@@ -49,7 +34,7 @@ export function HomePlatformPreviewSection() {
     () =>
       OPTION_IDS.map((id) => ({
         id,
-        text: safeT(
+        text: safeHomepageMarketingCopy(
           t,
           `pages.home.platformPreview.option${id}`,
           `Option ${id}`
@@ -78,7 +63,7 @@ export function HomePlatformPreviewSection() {
         >
           <p className="nn-marketing-eyebrow font-semibold tracking-wide text-[color-mix(in_srgb,var(--semantic-brand)_82%,var(--theme-heading-text))]">
             {formatTitleCase(
-              safeT(
+              safeHomepageMarketingCopy(
                 t,
                 "pages.home.platformPreview.eyebrow",
                 "Inside the platform"
@@ -92,7 +77,7 @@ export function HomePlatformPreviewSection() {
             className="nn-marketing-h2 mt-3 text-balance"
           >
             {formatTitleCase(
-              safeT(
+              safeHomepageMarketingCopy(
                 t,
                 "pages.home.platformPreview.title",
                 "How you actually learn"
@@ -103,7 +88,7 @@ export function HomePlatformPreviewSection() {
 
           <p className="nn-marketing-body mx-auto mt-3 max-w-2xl text-pretty leading-relaxed text-[var(--theme-muted-text)]">
             {formatSentenceCase(
-              safeT(
+              safeHomepageMarketingCopy(
                 t,
                 "pages.home.platformPreview.subtitle",
                 "Practice questions, detailed rationales, and performance tracking."
@@ -137,21 +122,21 @@ export function HomePlatformPreviewSection() {
 
                 <p className="nn-card-system__eyebrow">
                   {formatTitleCase(
-                    safeT(t, "pages.home.platformPreview.cardQuestion.eyebrow", "Question"),
+                    safeHomepageMarketingCopy(t, "pages.home.platformPreview.cardQuestion.eyebrow", "Question"),
                     locale
                   )}
                 </p>
 
                 <h3 className="nn-card-system__title">
                   {formatTitleCase(
-                    safeT(t, "pages.home.platformPreview.cardQuestion.title", "Practice question"),
+                    safeHomepageMarketingCopy(t, "pages.home.platformPreview.cardQuestion.title", "Practice question"),
                     locale
                   )}
                 </h3>
 
                 <p className="nn-card-system__description">
                   {formatSentenceCase(
-                    safeT(t, "pages.home.platformPreview.cardQuestion.body", "Answer exam-style questions."),
+                    safeHomepageMarketingCopy(t, "pages.home.platformPreview.cardQuestion.body", "Answer exam-style questions."),
                     locale
                   )}
                 </p>
@@ -159,7 +144,7 @@ export function HomePlatformPreviewSection() {
                 <div className="mt-4 rounded-xl border border-[var(--border-subtle)] bg-[color-mix(in_srgb,var(--surface)_88%,white)] p-4">
                   <p className="text-sm font-semibold text-[var(--palette-text)]">
                     {formatSentenceCase(
-                      safeT(t, "pages.home.platformPreview.cardQuestion.stem", "Sample question"),
+                      safeHomepageMarketingCopy(t, "pages.home.platformPreview.cardQuestion.stem", "Sample question"),
                       locale
                     )}
                   </p>
@@ -197,21 +182,21 @@ export function HomePlatformPreviewSection() {
 
                 <p className="nn-card-system__eyebrow">
                   {formatTitleCase(
-                    safeT(t, "pages.home.platformPreview.cardRationale.eyebrow", "Rationale"),
+                    safeHomepageMarketingCopy(t, "pages.home.platformPreview.cardRationale.eyebrow", "Rationale"),
                     locale
                   )}
                 </p>
 
                 <h3 className="nn-card-system__title">
                   {formatTitleCase(
-                    safeT(t, "pages.home.platformPreview.cardRationale.title", "Explanation"),
+                    safeHomepageMarketingCopy(t, "pages.home.platformPreview.cardRationale.title", "Explanation"),
                     locale
                   )}
                 </h3>
 
                 <p className="nn-card-system__description">
                   {formatSentenceCase(
-                    safeT(t, "pages.home.platformPreview.cardRationale.body", "Understand why answers are correct."),
+                    safeHomepageMarketingCopy(t, "pages.home.platformPreview.cardRationale.body", "Understand why answers are correct."),
                     locale
                   )}
                 </p>
@@ -220,18 +205,18 @@ export function HomePlatformPreviewSection() {
                   <p className="text-sm font-semibold">
                     {isCorrect
                       ? formatTitleCase(
-                          safeT(t, "pages.home.platformPreview.rationaleCorrect", "Correct"),
+                          safeHomepageMarketingCopy(t, "pages.home.platformPreview.rationaleCorrect", "Correct"),
                           locale
                         )
                       : formatTitleCase(
-                          safeT(t, "pages.home.platformPreview.rationaleWrong", "Incorrect"),
+                          safeHomepageMarketingCopy(t, "pages.home.platformPreview.rationaleWrong", "Incorrect"),
                           locale
                         )}
                   </p>
 
                   <p className="mt-2 text-sm text-[var(--palette-text-muted)]">
                     {formatSentenceCase(
-                      safeT(t, "pages.home.platformPreview.rationaleExplain", "Detailed explanation."),
+                      safeHomepageMarketingCopy(t, "pages.home.platformPreview.rationaleExplain", "Detailed explanation."),
                       locale
                     )}
                   </p>
@@ -246,21 +231,21 @@ export function HomePlatformPreviewSection() {
 
                 <p className="nn-card-system__eyebrow">
                   {formatTitleCase(
-                    safeT(t, "pages.home.platformPreview.cardPerformance.eyebrow", "Performance"),
+                    safeHomepageMarketingCopy(t, "pages.home.platformPreview.cardPerformance.eyebrow", "Performance"),
                     locale
                   )}
                 </p>
 
                 <h3 className="nn-card-system__title">
                   {formatTitleCase(
-                    safeT(t, "pages.home.platformPreview.cardPerformance.title", "Track progress"),
+                    safeHomepageMarketingCopy(t, "pages.home.platformPreview.cardPerformance.title", "Track progress"),
                     locale
                   )}
                 </h3>
 
                 <p className="nn-card-system__description">
                   {formatSentenceCase(
-                    safeT(t, "pages.home.platformPreview.cardPerformance.body", "See your readiness."),
+                    safeHomepageMarketingCopy(t, "pages.home.platformPreview.cardPerformance.body", "See your readiness."),
                     locale
                   )}
                 </p>
@@ -274,7 +259,7 @@ export function HomePlatformPreviewSection() {
                           <div className="flex justify-between text-sm">
                             <span>
                               {formatTitleCase(
-                                safeT(
+                                safeHomepageMarketingCopy(
                                   t,
                                   `pages.home.platformPreview.${band.key}`,
                                   "Category"
@@ -306,7 +291,7 @@ export function HomePlatformPreviewSection() {
                         >
                           <Target className="mr-1.5 h-3 w-3" />
                           {formatTitleCase(
-                            safeT(
+                            safeHomepageMarketingCopy(
                               t,
                               `pages.home.platformPreview.${wk}`,
                               "Topic"

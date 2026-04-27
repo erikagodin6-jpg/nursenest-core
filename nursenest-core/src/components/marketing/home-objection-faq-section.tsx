@@ -5,17 +5,9 @@ import { ChevronDown } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { FadeUp } from "@/lib/motion";
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 
 const KEYS = ["worthIt", "countryExam", "rationales", "platform", "vsOthers"] as const;
-
-function safeT(t: (key: string) => string, key: string, fallback: string): string {
-  try {
-    const value = t(key);
-    return value && value !== key ? value : fallback;
-  } catch {
-    return fallback;
-  }
-}
 
 export function HomeObjectionFaqSection() {
   const { locale, t } = useMarketingI18n();
@@ -35,7 +27,7 @@ export function HomeObjectionFaqSection() {
         >
           <p className="nn-marketing-eyebrow text-[var(--semantic-brand)]">
             {formatTitleCase(
-              safeT(t, "pages.home.objections.eyebrow", "Common questions"),
+              safeHomepageMarketingCopy(t, "pages.home.objections.eyebrow", "Common questions"),
               locale,
             )}
           </p>
@@ -45,14 +37,14 @@ export function HomeObjectionFaqSection() {
             className="nn-marketing-h2 mt-2 text-balance text-[var(--palette-heading)]"
           >
             {formatTitleCase(
-              safeT(t, "pages.home.objections.heading", "Before you start"),
+              safeHomepageMarketingCopy(t, "pages.home.objections.heading", "Before you start"),
               locale,
             )}
           </h2>
 
           <p className="nn-marketing-body-sm mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-[var(--palette-text-muted)]">
             {formatSentenceCase(
-              safeT(
+              safeHomepageMarketingCopy(
                 t,
                 "pages.home.objections.subheading",
                 "Answers to common questions about NurseNest and exam prep.",
@@ -71,7 +63,7 @@ export function HomeObjectionFaqSection() {
               <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-left [&::-webkit-details-marker]:hidden">
                 <span className="text-sm font-semibold text-[var(--palette-heading)]">
                   {formatTitleCase(
-                    safeT(
+                    safeHomepageMarketingCopy(
                       t,
                       `pages.home.objections.${key}Question`,
                       "Question",
@@ -88,7 +80,7 @@ export function HomeObjectionFaqSection() {
 
               <p className="nn-marketing-body-sm mt-3 border-t border-[var(--semantic-border-soft)] pt-3 text-[var(--theme-muted-text)]">
                 {formatSentenceCase(
-                  safeT(
+                  safeHomepageMarketingCopy(
                     t,
                     `pages.home.objections.${key}Answer`,
                     "Answer coming soon.",

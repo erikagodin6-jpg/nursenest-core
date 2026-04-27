@@ -2332,10 +2332,10 @@ html[data-theme] .nn-marketing-surface {
   }
 }
 
-/* Light public header: RN/PN/NP tier strip sits on the same white chrome as the logo row
- * (avoids an extra dark/purple band under the main nav). Dark headers keep `.nn-header-nav-row` defaults. */
+/* Light public header: RN/PN/NP tier strip — flat white bar (do not use `--theme-header-surface`,
+ * which is intentionally primary-tinted in `[data-theme]` and reads as a blue/purple band). */
 .nn-header-logo-row .nn-header-nav-row {
-  background: var(--theme-header-surface, var(--palette-surface, #ffffff));
+  background: #ffffff;
   color: var(--theme-heading-text);
   border-top: 1px solid color-mix(in srgb, var(--theme-border, var(--border)) 50%, transparent);
   --nav-fg: var(--theme-heading-text);

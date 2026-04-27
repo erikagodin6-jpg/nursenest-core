@@ -2,6 +2,7 @@
 
 import { ArrowRight, Globe2 } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { PH } from "@/lib/observability/posthog-conversion-events";
@@ -12,15 +13,6 @@ const DEFAULT_CARDS = [
   { id: "ph", title: "Philippines", body: "NLE exam preparation", path: "/philippines" },
   { id: "me", title: "Middle East", body: "Prometric and regional exams", path: "/middle-east" },
 ];
-
-function safeT(t: ((k: string) => string) | undefined, key: string, fallback: string) {
-  try {
-    const v = t?.(key);
-    return typeof v === "string" && v.trim() ? v : fallback;
-  } catch {
-    return fallback;
-  }
-}
 
 function safeLocale(l?: string) {
   return l || "en";
@@ -60,11 +52,11 @@ export function HomeGlobalRegionsSection({
         <div className="mb-8 text-center">
           <p className="text-sm font-semibold text-primary flex justify-center items-center gap-2">
             <Globe2 className="h-4 w-4" />
-            {safeT(t, "pages.home.globalRegions.eyebrow", "Global coverage")}
+            {safeHomepageMarketingCopy(t, "pages.home.globalRegions.eyebrow", "Global coverage")}
           </p>
 
           <h2 className="text-2xl font-bold mt-2">
-            {safeT(
+            {safeHomepageMarketingCopy(
               t,
               "pages.home.globalRegions.title",
               "Prepare for exams worldwide"
@@ -72,7 +64,7 @@ export function HomeGlobalRegionsSection({
           </h2>
 
           <p className="mt-2 text-muted">
-            {safeT(
+            {safeHomepageMarketingCopy(
               t,
               "pages.home.globalRegions.subtitle",
               "Explore exam prep across major regions"
@@ -93,7 +85,7 @@ export function HomeGlobalRegionsSection({
               <p className="mt-2 text-sm text-muted">{c.body}</p>
 
               <div className="mt-3 flex items-center gap-1 text-primary text-sm font-semibold">
-                {safeT(t, "pages.home.globalRegions.cta", "Explore")}
+                {safeHomepageMarketingCopy(t, "pages.home.globalRegions.cta", "Explore")}
                 <ArrowRight className="h-4 w-4" />
               </div>
             </MarketingTrackedLink>

@@ -11,15 +11,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 import { getPathwayHubCta } from "@/lib/copy/cta-copy";
 import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
-
-function safeT(t: ((k: string) => string) | undefined, key: string, fallback: string) {
-  try {
-    const v = t?.(key);
-    return typeof v === "string" && v.trim() ? v : fallback;
-  } catch {
-    return fallback;
-  }
-}
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 
 function safeLocale(l?: string) {
   return l || "en";
@@ -67,21 +59,21 @@ export function HomeExamSelectionSection() {
       id: "rn",
       label: "RN",
       href: safePath(locale, hubs?.rn || "/lessons"),
-      title: safeT(t, "home.conversion.examCard.rnTitle", "Registered Nurse"),
-      desc: safeT(t, "home.conversion.examCard.rnDesc", "Prepare for RN exams"),
+      title: safeHomepageMarketingCopy(t, "home.conversion.examCard.rnTitle", "Registered Nurse"),
+      desc: safeHomepageMarketingCopy(t, "home.conversion.examCard.rnDesc", "Prepare for RN exams"),
     },
     {
       id: "pn",
       label: "PN",
       href: safePath(locale, hubs?.pn || "/lessons"),
-      title: safeT(
+      title: safeHomepageMarketingCopy(
         t,
         region === "US"
           ? "home.conversion.examCard.pnTitleUS"
           : "home.conversion.examCard.pnTitleCA",
         "Practical Nurse"
       ),
-      desc: safeT(
+      desc: safeHomepageMarketingCopy(
         t,
         region === "US"
           ? "home.conversion.examCard.pnDescUS"
@@ -93,14 +85,14 @@ export function HomeExamSelectionSection() {
       id: "np",
       label: "NP",
       href: safePath(locale, hubs?.np || "/lessons"),
-      title: safeT(
+      title: safeHomepageMarketingCopy(
         t,
         region === "US"
           ? "home.conversion.examCard.npTitleUS"
           : "home.conversion.examCard.npTitleCA",
         "Nurse Practitioner"
       ),
-      desc: safeT(
+      desc: safeHomepageMarketingCopy(
         t,
         region === "US"
           ? "home.conversion.examCard.npDescUS"
@@ -119,8 +111,8 @@ export function HomeExamSelectionSection() {
       id: "allied",
       label: "Allied",
       href: safePath(locale, hubs?.allied || "/lessons"),
-      title: safeT(t, "home.conversion.examCard.alliedTitle", "Allied Health"),
-      desc: safeT(t, "home.conversion.examCard.alliedDesc", "Prep for allied health exams"),
+      title: safeHomepageMarketingCopy(t, "home.conversion.examCard.alliedTitle", "Allied Health"),
+      desc: safeHomepageMarketingCopy(t, "home.conversion.examCard.alliedDesc", "Prep for allied health exams"),
     },
   ];
 
@@ -133,7 +125,7 @@ export function HomeExamSelectionSection() {
 
         <p className="mt-3 text-[var(--theme-muted-text)]">
           {formatSentenceCase(
-            safeT(
+            safeHomepageMarketingCopy(
               t,
               "home.conversion.examSelectionSub",
               "Select your pathway to begin studying"

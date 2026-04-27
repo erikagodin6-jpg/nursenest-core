@@ -2,6 +2,7 @@
 
 import { LayoutDashboard, MonitorSmartphone, Sparkles, Stethoscope } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 import { formatEyebrow, formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 const ICONS = [Sparkles, Stethoscope, LayoutDashboard, MonitorSmartphone] as const;
@@ -28,15 +29,6 @@ const ITEMS = [
     bodyFallback: "Study lessons, questions, and flashcards from any device.",
   },
 ] as const;
-
-function safeT(t: ((key: string) => string) | undefined, key: string, fallback: string): string {
-  try {
-    const value = t?.(key);
-    return typeof value === "string" && value.trim() ? value : fallback;
-  } catch {
-    return fallback;
-  }
-}
 
 function safeFormat(formatter: (value: string, locale: string) => string, value: string, locale: string): string {
   try {
@@ -67,11 +59,11 @@ export function HomeFeaturesSection() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <header className="mx-auto mb-10 max-w-2xl text-center">
           <h2 id="home-features-heading" className="nn-marketing-h2 text-balance">
-            {safeT(t, "home.conversion.features.title", "Everything you need to prepare")}
+            {safeHomepageMarketingCopy(t, "home.conversion.features.title", "Everything you need to prepare")}
           </h2>
 
           <p className="nn-marketing-body mx-auto mt-2 max-w-xl text-pretty text-[var(--theme-muted-text)]">
-            {safeT(
+            {safeHomepageMarketingCopy(
               t,
               "home.conversion.features.sub",
               "Build confidence with adaptive practice, clear explanations, readiness tracking, and mobile-friendly study tools.",
@@ -82,8 +74,8 @@ export function HomeFeaturesSection() {
         <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {ITEMS.map((item, i) => {
             const Icon = ICONS[i] ?? Sparkles;
-            const title = safeT(t, `home.conversion.features.${item.id}Title`, item.titleFallback);
-            const body = safeT(t, `home.conversion.features.${item.id}Body`, item.bodyFallback);
+            const title = safeHomepageMarketingCopy(t, `home.conversion.features.${item.id}Title`, item.titleFallback);
+            const body = safeHomepageMarketingCopy(t, `home.conversion.features.${item.id}Body`, item.bodyFallback);
 
             return (
               <li key={item.id} className="nn-card-system nn-card-system-pad nn-card-system--interactive">

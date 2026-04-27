@@ -18,23 +18,7 @@ import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_TERTIARY_LINK_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
-
-/**
- * Safe translation accessor (prevents production crashes)
- */
-function safeT(
-  t: (k: string, vars?: Record<string, string | number | undefined>) => string,
-  key: string,
-  fallback: string,
-  vars?: Record<string, string | number | undefined>
-) {
-  try {
-    const val = t(key, vars);
-    return val && val !== key ? val : fallback;
-  } catch {
-    return fallback;
-  }
-}
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 
 function formatQCount(n: number, locale: string): string {
   if (!Number.isFinite(n) || n <= 0) return "";
@@ -80,7 +64,7 @@ export function HomeLandingSections({ questionCount }: Props) {
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 className="nn-marketing-h2 mb-6 text-[var(--text-accent)]">
-            {safeT(t, "home.landing.why.title", "Why NurseNest")}
+            {safeHomepageMarketingCopy(t, "home.landing.why.title", "Why NurseNest")}
           </h2>
 
           <ul className="grid gap-4 sm:grid-cols-3">
@@ -90,7 +74,7 @@ export function HomeLandingSections({ questionCount }: Props) {
                 className="nn-marketing-card nn-marketing-card-pad"
               >
                 <h3 className="nn-marketing-h3">
-                  {safeT(
+                  {safeHomepageMarketingCopy(
                     t,
                     `home.landing.why.${key}Title`,
                     "Structured learning"
@@ -98,7 +82,7 @@ export function HomeLandingSections({ questionCount }: Props) {
                 </h3>
 
                 <p className="nn-marketing-body-sm mt-2 text-[var(--theme-muted-text)]">
-                  {safeT(
+                  {safeHomepageMarketingCopy(
                     t,
                     `home.landing.why.${key}Body`,
                     "Built for exam success"
@@ -117,19 +101,19 @@ export function HomeLandingSections({ questionCount }: Props) {
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 className="nn-marketing-h2 mb-3">
-            {safeT(t, "home.landing.trust.title", "Built for real exam success")}
+            {safeHomepageMarketingCopy(t, "home.landing.trust.title", "Built for real exam success")}
           </h2>
 
           <div className="max-w-2xl space-y-3 nn-marketing-body-sm text-[var(--theme-body-text)]">
             <p>
               {computed.qFormatted
-                ? safeT(
+                ? safeHomepageMarketingCopy(
                     t,
                     "home.landing.trust.questionsLine",
                     `${computed.qFormatted}+ practice questions`,
                     { count: computed.qFormatted }
                   )
-                : safeT(
+                : safeHomepageMarketingCopy(
                     t,
                     "home.landing.trust.questionsFallback",
                     "Extensive practice question bank"
@@ -137,7 +121,7 @@ export function HomeLandingSections({ questionCount }: Props) {
             </p>
 
             <p>
-              {safeT(
+              {safeHomepageMarketingCopy(
                 t,
                 "home.landing.trust.noCardAndGuarantee",
                 "No credit card required. Start free."
@@ -154,7 +138,7 @@ export function HomeLandingSections({ questionCount }: Props) {
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 className="nn-marketing-h2 mb-6">
-            {safeT(t, "home.landing.faq.title", "Frequently asked questions")}
+            {safeHomepageMarketingCopy(t, "home.landing.faq.title", "Frequently asked questions")}
           </h2>
 
           <div className="mx-auto max-w-3xl space-y-2">
@@ -164,7 +148,7 @@ export function HomeLandingSections({ questionCount }: Props) {
                 className="group rounded-[var(--radius-lg)] border border-[var(--surface-bubble-border)] bg-[var(--surface-bubble)] px-4 py-3.5"
               >
                 <summary className="nn-marketing-h3 flex cursor-pointer items-center justify-between gap-3 list-none [&::-webkit-details-marker]:hidden">
-                  {safeT(t, `home.landing.faq.q${n}`, "Question")}
+                  {safeHomepageMarketingCopy(t, `home.landing.faq.q${n}`, "Question")}
                   <ChevronDown
                     className="h-4 w-4 shrink-0 text-[var(--theme-muted-text)] transition group-open:rotate-180"
                     aria-hidden
@@ -172,7 +156,7 @@ export function HomeLandingSections({ questionCount }: Props) {
                 </summary>
 
                 <p className="nn-marketing-body-sm mt-3 border-t border-[var(--border-subtle)] pt-3 text-[var(--theme-muted-text)]">
-                  {safeT(t, `home.landing.faq.a${n}`, "Answer")}
+                  {safeHomepageMarketingCopy(t, `home.landing.faq.a${n}`, "Answer")}
                 </p>
               </details>
             ))}
@@ -187,7 +171,7 @@ export function HomeLandingSections({ questionCount }: Props) {
       >
         <div className="mx-auto max-w-6xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="nn-marketing-h2 text-balance">
-            {safeT(
+            {safeHomepageMarketingCopy(
               t,
               "home.landing.final.closingTitle",
               "Start your exam prep today"
@@ -195,7 +179,7 @@ export function HomeLandingSections({ questionCount }: Props) {
           </h2>
 
           <p className="nn-marketing-body-sm mx-auto mt-2 max-w-lg text-[var(--theme-muted-text)]">
-            {safeT(
+            {safeHomepageMarketingCopy(
               t,
               "home.landing.final.closingSub",
               "Join thousands of nurses preparing smarter"
@@ -211,7 +195,7 @@ export function HomeLandingSections({ questionCount }: Props) {
               data-testid="button-final-cta-start-free"
             >
               <span className="whitespace-nowrap">
-                {safeT(
+                {safeHomepageMarketingCopy(
                   t,
                   "home.landing.final.closingCtaPrimary",
                   "Start Free"
@@ -234,7 +218,7 @@ export function HomeLandingSections({ questionCount }: Props) {
               }}
               className={MARKETING_TERTIARY_LINK_CLASS}
             >
-              {safeT(
+              {safeHomepageMarketingCopy(
                 t,
                 "home.landing.final.closingCtaLink",
                 "Browse exam prep"

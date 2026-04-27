@@ -14,6 +14,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
 
 import { FadeUp, StaggerGroup, StaggerItem } from "@/lib/motion";
+import { safeHomepageMarketingCopy } from "@/lib/marketing/homepage-safe-copy";
 
 /**
  * Stable semantic color tokens (no runtime mutation)
@@ -35,19 +36,6 @@ const STEP_COLORS = [
     surface: "color-mix(in srgb, var(--semantic-success) 18%, var(--bg-card))",
   },
 ] as const;
-
-/**
- * Hard-safe translation accessor
- * Prevents crashes if keys are missing during production builds
- */
-function safeT(t: (k: string) => string, key: string, fallback: string) {
-  try {
-    const val = t(key);
-    return val && val !== key ? val : fallback;
-  } catch {
-    return fallback;
-  }
-}
 
 export function HomeHowItWorksSection() {
   const { locale, t } = useMarketingI18n();
@@ -73,26 +61,26 @@ export function HomeHowItWorksSection() {
     () => [
       {
         icon: BookOpen,
-        title: safeT(t, "pages.home.howItWorks.step1.title", "Learn"),
-        body: safeT(t, "pages.home.howItWorks.step1.body", "Study core concepts efficiently"),
+        title: safeHomepageMarketingCopy(t, "pages.home.howItWorks.step1.title", "Learn"),
+        body: safeHomepageMarketingCopy(t, "pages.home.howItWorks.step1.body", "Study core concepts efficiently"),
         href: links.lessons,
-        label: safeT(t, "pages.home.howItWorks.step1.cta", "Start Learning"),
+        label: safeHomepageMarketingCopy(t, "pages.home.howItWorks.step1.cta", "Start Learning"),
         testId: "how-step-learn",
       },
       {
         icon: ClipboardList,
-        title: safeT(t, "pages.home.howItWorks.step2.title", "Practice"),
-        body: safeT(t, "pages.home.howItWorks.step2.body", "Apply knowledge with exam-style questions"),
+        title: safeHomepageMarketingCopy(t, "pages.home.howItWorks.step2.title", "Practice"),
+        body: safeHomepageMarketingCopy(t, "pages.home.howItWorks.step2.body", "Apply knowledge with exam-style questions"),
         href: links.questions,
-        label: safeT(t, "pages.home.howItWorks.step2.cta", "Practice Questions"),
+        label: safeHomepageMarketingCopy(t, "pages.home.howItWorks.step2.cta", "Practice Questions"),
         testId: "how-step-practice",
       },
       {
         icon: Flag,
-        title: safeT(t, "pages.home.howItWorks.step3.title", "Pass"),
-        body: safeT(t, "pages.home.howItWorks.step3.body", "Build confidence for exam day"),
+        title: safeHomepageMarketingCopy(t, "pages.home.howItWorks.step3.title", "Pass"),
+        body: safeHomepageMarketingCopy(t, "pages.home.howItWorks.step3.body", "Build confidence for exam day"),
         href: links.exams,
-        label: safeT(t, "pages.home.howItWorks.step3.cta", "Take Practice Exams"),
+        label: safeHomepageMarketingCopy(t, "pages.home.howItWorks.step3.cta", "Take Practice Exams"),
         testId: "how-step-pass",
       },
     ],
@@ -117,21 +105,21 @@ export function HomeHowItWorksSection() {
         >
           <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
             {formatSentenceCase(
-              safeT(t, "pages.home.howItWorks.kicker", "How it works"),
+              safeHomepageMarketingCopy(t, "pages.home.howItWorks.kicker", "How it works"),
               locale
             )}
           </p>
 
           <h2 id="home-how-heading" className="nn-marketing-h2 mt-2 text-balance">
             {formatTitleCase(
-              safeT(t, "pages.home.howItWorks.title", "Simple, structured learning"),
+              safeHomepageMarketingCopy(t, "pages.home.howItWorks.title", "Simple, structured learning"),
               locale
             )}
           </h2>
 
           <p className="nn-marketing-body mx-auto mt-3 max-w-xl text-pretty leading-relaxed text-[var(--theme-muted-text)]">
             {formatSentenceCase(
-              safeT(
+              safeHomepageMarketingCopy(
                 t,
                 "pages.home.howItWorks.subtitle",
                 "A focused path from learning to exam readiness"
