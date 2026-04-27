@@ -5,11 +5,14 @@ const nextConfig = {
   reactStrictMode: true,
 
   experimental: {
-    cpus: 2,
+    // Fewer workers → lower peak RSS during `next build` (helps 8GiB VMs avoid OOM kills).
+    cpus: 1,
     externalDir: true,
   },
 
   webpack: (config) => {
+    // Default parallelism can spike memory; cap so native allocations + V8 heap fit small hosts.
+    config.parallelism = 1;
     return config;
   },
 };

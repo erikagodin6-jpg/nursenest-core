@@ -76,7 +76,7 @@ You are responsible for keeping your payment information current.
 
 ## Cancellation
 
-You may cancel your subscription at any time through your account settings or by contacting support at support@nursenest.ca. Unless required by law or expressly stated otherwise, cancellation stops future renewals but does not retroactively cancel charges already incurred for the current billing period.
+You may cancel your subscription at any time through your account settings or by emailing support@nursenest.ca. Please allow up to 4 business days for a response. Unless required by law or expressly stated otherwise, cancellation stops future renewals but does not retroactively cancel charges already incurred for the current billing period.
 
 If you cancel, your paid access generally continues until the end of the current paid term, after which your subscription will not renew.
 

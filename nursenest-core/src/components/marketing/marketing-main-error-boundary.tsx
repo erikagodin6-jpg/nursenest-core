@@ -2,6 +2,7 @@
 
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { logNnMarketingClientError } from "@/lib/marketing/nn-marketing-client-error-log";
+import { SUPPORT_CONTACT_COPY } from "@/lib/support/support-policy";
 
 type Props = { children: ReactNode; name?: string };
 type State = { hasError: boolean };
@@ -58,7 +59,7 @@ export class MarketingMainErrorBoundary extends Component<Props, State> {
           data-nn-error-boundary="marketing"
         >
           <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Something went wrong loading this section.</p>
-          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Try refreshing the page. If it keeps happening, contact support.</p>
+          <p className="mt-2 text-sm text-[var(--theme-muted-text)]">Try refreshing the page. If it keeps happening: {SUPPORT_CONTACT_COPY}</p>
         </div>
       );
     }

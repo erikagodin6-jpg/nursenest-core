@@ -10,7 +10,7 @@ Yes, unless you cancel before the next renewal date.
 
 ## How do I cancel?
 
-You can cancel through your account settings if available, or by contacting support at support@nursenest.ca. Cancellation stops future renewals.
+You can cancel through your account settings if available, or by emailing support@nursenest.ca. Please allow up to 4 business days for a response. Cancellation stops future renewals.
 
 ## Do I still have access after I cancel?
 
@@ -62,11 +62,11 @@ Readiness or performance indicators are estimates based on your activity and are
 
 ## I do not recognize a charge. What should I do?
 
-Contact us first at support@nursenest.ca so we can review the transaction quickly.
+Email support@nursenest.ca first so we can review the transaction quickly. Please allow up to 4 business days for a response.
 
 ## Should I file a chargeback with my bank?
 
-Please contact us first. Many issues can be resolved faster through support than through a formal dispute process.
+Please email support@nursenest.ca first. Many issues can be resolved faster by email than through a formal dispute process. Please allow up to 4 business days for a response.
 
 ## What records do you keep about purchases and usage?
 
@@ -98,7 +98,7 @@ Every scored item includes a teaching rationale: why the best option is safest u
 
 ## Is the NurseNest platform reliable while I study?
 
-Your progress is stored with your account; access to premium content is checked on the server so your tier and pathway stay enforced. Paid checkout runs through Stripe. If you hit a technical issue, contact support—we treat study-time stability as core to the product.
+Your progress is stored with your account; access to premium content is checked on the server so your tier and pathway stay enforced. Paid checkout runs through Stripe. If you hit a technical issue, email support@nursenest.ca (please allow up to 4 business days for a response)—we treat study-time stability as core to the product.
 
 ## What do I get for free before I pay for a subscription?
 

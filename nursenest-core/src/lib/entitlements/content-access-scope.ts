@@ -253,10 +253,10 @@ export function userCanAccessExam(
   if (exam.status !== ContentStatus.PUBLISHED || !entitlement.hasAccess) return false;
   const country = entitlement.country as CountryCode | null;
   const tier = entitlement.tier as TierCode | null;
+  if (!country || !tier) return false;
+  if (exam.country !== country) return false;
   if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
     return true;
   }
-  if (!country || !tier) return false;
-  if (exam.country !== country) return false;
   return accessibleTiersForUserTier(tier).includes(exam.tier);
 }

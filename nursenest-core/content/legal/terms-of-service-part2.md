@@ -39,7 +39,7 @@ If a payment is reversed or disputed, we may suspend or terminate your access wh
 
 ## Third-Party Services
 
-The Services may integrate with or rely on third-party providers such as payment processors, analytics providers, hosting vendors, authentication tools, email services, media storage providers, or customer support systems. We are not responsible for third-party services except as required by law.
+The Services may integrate with or rely on third-party providers such as payment processors, analytics providers, hosting vendors, authentication tools, email services, media storage providers, or related infrastructure vendors. We are not responsible for third-party services except as required by law.
 
 Your use of third-party services may also be governed by their terms and policies.
 

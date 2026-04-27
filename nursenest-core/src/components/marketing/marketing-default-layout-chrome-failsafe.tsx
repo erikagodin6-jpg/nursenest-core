@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { HeaderBrandLockup } from "@/components/brand/header-brand-lockup";
 import { ThemePicker } from "@/components/theme/theme-picker";
+import { SUPPORT_RESPONSE_TIME_COPY, supportMailtoHref } from "@/lib/support/support-policy";
 
 const PRIMARY_LINKS = [
   { href: "/pricing", label: "Pricing" },
@@ -96,10 +97,11 @@ export function MarketingDefaultLayoutChromeFailsafeShell({ children }: { childr
             <Link href="/terms" className="underline underline-offset-2">
               Terms
             </Link>
-            <Link href="/contact" className="underline underline-offset-2">
-              Contact
-            </Link>
+            <a href={supportMailtoHref()} className="underline underline-offset-2">
+              Email support
+            </a>
           </div>
+          <p className="mx-auto mt-2 max-w-md text-[var(--theme-muted-text)]">{SUPPORT_RESPONSE_TIME_COPY}</p>
         </div>
       </footer>
     </div>

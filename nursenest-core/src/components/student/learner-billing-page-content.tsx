@@ -4,6 +4,7 @@ import { SubscriptionStatus } from "@prisma/client";
 import type { BillingPagePayload } from "@/lib/learner/load-billing-page-payload";
 import { formatBillingTierLabel } from "@/lib/learner/load-billing-page-payload";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
+import { LearnerBillingCancelSubscription } from "@/components/student/learner-billing-cancel-subscription";
 import { LearnerBillingPortalButton } from "@/components/student/learner-billing-portal-button";
 import { LearnerProfileAccountActions } from "@/components/student/learner-profile-account-actions";
 
@@ -186,6 +187,7 @@ export function LearnerBillingPageContent({
     showTrialEndCallout,
     pastDueGraceEndsAt,
     billingPeriodEndDisplay,
+    showCancelSubscription,
   } = payload;
 
   const planLabel = formatBillingTierLabel(effectiveTier, effectiveCountry);
@@ -330,6 +332,8 @@ export function LearnerBillingPageContent({
           </Link>
         </div>
       </section>
+
+      <LearnerBillingCancelSubscription t={t} enabled={showCancelSubscription} />
 
       <section
         id="billing-portal"

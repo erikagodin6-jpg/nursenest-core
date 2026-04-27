@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { SubscriptionStatus } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
@@ -8,6 +7,8 @@ import { serverLearnerPosthogDisabledForVerifiedQaUser } from "@/lib/observabili
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { publicAppOriginForBilling } from "@/lib/env/public-app-origin";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
+import { reconcileUserSubscriptionFromStripe } from "@/lib/subscriptions/stripe-subscription-reconcile";
+import { SUPPORT_EMAIL, SUPPORT_RESPONSE_TIME_COPY } from "@/lib/support/support-policy";
 
 export const runtime = "nodejs";
 
@@ -26,22 +27,26 @@ export async function POST() {
     return NextResponse.json({ error: "Billing portal unavailable." }, { status: 503 });
   }
 
-  const sub = await prisma.subscription.findFirst({
-    where: {
-      userId,
-      status: {
-        in: [SubscriptionStatus.ACTIVE, SubscriptionStatus.GRACE, SubscriptionStatus.PAST_DUE, SubscriptionStatus.CANCELLED],
-      },
-    },
+  let customerRow = await prisma.subscription.findFirst({
+    where: { userId, stripeCustomerId: { not: null } },
     orderBy: { createdAt: "desc" },
     select: { stripeCustomerId: true },
   });
 
-  const customerId = sub?.stripeCustomerId?.trim();
+  let customerId = customerRow?.stripeCustomerId?.trim();
+  if (!customerId) {
+    await reconcileUserSubscriptionFromStripe(userId, { surface: "billing_portal" });
+    customerRow = await prisma.subscription.findFirst({
+      where: { userId, stripeCustomerId: { not: null } },
+      orderBy: { createdAt: "desc" },
+      select: { stripeCustomerId: true },
+    });
+    customerId = customerRow?.stripeCustomerId?.trim();
+  }
   if (!customerId) {
     return NextResponse.json(
       {
-        error: "No Stripe customer on file. Subscribe from pricing first, or contact support if you already paid.",
+        error: `No Stripe customer on file. Subscribe from pricing first, or email ${SUPPORT_EMAIL} if you already paid. ${SUPPORT_RESPONSE_TIME_COPY}`,
         code: "NO_CUSTOMER",
       },
       { status: 400 },

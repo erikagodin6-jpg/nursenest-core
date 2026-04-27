@@ -27,7 +27,7 @@ import { HUB, loginWithCallback, signupWithCallback } from "@/lib/marketing/mark
 import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
-import { SiteFooterFeedbackTrigger } from "@/components/layout/site-footer-feedback-trigger";
+import { SUPPORT_RESPONSE_TIME_COPY, supportMailtoHref } from "@/lib/support/support-policy";
 import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
 import { useMarketingChromeCountry } from "@/components/marketing/marketing-country-chrome-context";
@@ -69,6 +69,21 @@ function FLink({
   );
 }
 
+function FooterAccountSupportEmailBlock() {
+  return (
+    <li>
+      <a
+        href={supportMailtoHref()}
+        className="nn-footer-link break-words text-sm leading-relaxed [overflow-wrap:anywhere]"
+      >
+        Email support
+      </a>
+      <span className="mt-1 block max-w-[18rem] text-xs leading-snug text-[var(--footer-muted)]">
+        {SUPPORT_RESPONSE_TIME_COPY}
+      </span>
+    </li>
+  );
+}
 
 function FooterLeafWatermark() {
   const { url, kind } = useThemeLogo("leaf");
@@ -218,10 +233,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                       <li>
                         <FLink href={learnerSignInHref}>{formatTitleCase(t("nav.logIn"), locale)}</FLink>
                       </li>
-                      <li>
-                        <FLink href="/contact">Contact Support</FLink>
-                      </li>
-                      <SiteFooterFeedbackTrigger />
+                      <FooterAccountSupportEmailBlock />
                       <li className="pt-1">
                         <Link
                           href={startPracticingHref}
@@ -251,10 +263,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                           {formatTitleCase("Dashboard", locale)}
                         </Link>
                       </li>
-                      <li>
-                        <FLink href="/contact">Contact Support</FLink>
-                      </li>
-                      <SiteFooterFeedbackTrigger />
+                      <FooterAccountSupportEmailBlock />
                     </>
                   ) : isEntitledLearner ? (
                     <>
@@ -274,10 +283,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                           {formatTitleCase("Account", locale)}
                         </Link>
                       </li>
-                      <li>
-                        <FLink href="/contact">Contact Support</FLink>
-                      </li>
-                      <SiteFooterFeedbackTrigger />
+                      <FooterAccountSupportEmailBlock />
                       <li className="pt-1">
                         <Link
                           href={learnerContinueHref}
@@ -300,10 +306,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                       <li>
                         <FLink href={explore.pricing}>{formatTitleCase("Pricing", locale)}</FLink>
                       </li>
-                      <li>
-                        <FLink href="/contact">Contact Support</FLink>
-                      </li>
-                      <SiteFooterFeedbackTrigger />
+                      <FooterAccountSupportEmailBlock />
                       <li className="pt-1">
                         <Link
                           href={startPracticingHref}

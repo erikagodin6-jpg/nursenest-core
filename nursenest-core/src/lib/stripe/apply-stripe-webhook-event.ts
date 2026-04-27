@@ -27,6 +27,10 @@ import {
 } from "@/lib/stripe/sync-user-from-stripe-subscription";
 import { pastDueSinceForStatusTransition } from "@/lib/stripe/subscription-past-due-since";
 import { scheduleOwnerPaidSubscriptionCheckoutNotificationsIfEligible } from "@/lib/stripe/subscription-owner-notify";
+import {
+  persistStripeSubscriptionMirrorForUser,
+  resolveUserIdForOrphanStripeSubscription,
+} from "@/lib/subscriptions/stripe-subscription-reconcile";
 
 type LifecycleData = ReturnType<typeof billingLifecycleFields>;
 
@@ -124,12 +128,77 @@ async function applyCustomerSubscriptionUpsert(
     await syncUserFromStripePriceId(row.userId, priceId);
   }
   if (!row) {
-    safeServerLog("billing_sync", "subscription_webhook_no_local_row", {
-      stripeSubscriptionIdPrefix: sub.id.slice(0, 14),
+    const resolvedUserId = await resolveUserIdForOrphanStripeSubscription(sub);
+    if (!resolvedUserId) {
+      safeServerLog("billing_sync", "subscription_webhook_no_local_row", {
+        stripeSubscriptionIdPrefix: sub.id.slice(0, 14),
+        stripeStatus: sub.status,
+        eventIdPrefix,
+        correlation: ctx.correlation ?? "",
+        hint: "No metadata userId or customer-linked Subscription row to attach this Stripe subscription",
+      });
+      return;
+    }
+    const persisted = await persistStripeSubscriptionMirrorForUser(resolvedUserId, sub);
+    if (!persisted) {
+      safeServerLog("billing_sync", "subscription_webhook_orphan_persist_skipped", {
+        stripeSubscriptionIdPrefix: sub.id.slice(0, 14),
+        resolvedUserIdPrefix: resolvedUserId.slice(0, 8),
+        stripeStatus: sub.status,
+        eventIdPrefix,
+        correlation: ctx.correlation ?? "",
+        severity: "info",
+      });
+      return;
+    }
+    const fresh = await prisma.subscription.findUnique({
+      where: { stripeSubscriptionId: sub.id },
+      select: {
+        id: true,
+        userId: true,
+        status: true,
+        updatedAt: true,
+        currentPeriodEnd: true,
+        pastDueSince: true,
+        planTier: true,
+        planCountry: true,
+        stripeCustomerId: true,
+      },
+    });
+    if (!fresh) return;
+    logBillingTransition({
+      kind: "customer_subscription_upsert_orphan",
+      stripeSubscriptionId: sub.id,
+      userId: fresh.userId,
+      fromStatus: undefined,
+      toStatus: fresh.status,
       stripeStatus: sub.status,
       eventIdPrefix,
       correlation: ctx.correlation ?? "",
-      hint: "checkout.session.completed normally creates the row first",
+      stripeEventType,
+      stripeCustomerId: fresh.stripeCustomerId ?? undefined,
+    });
+    emitEntitlementShiftFromRowTransition({
+      correlationId: ctx.correlation,
+      userId: fresh.userId,
+      stripeSubscriptionId: sub.id,
+      country: fresh.planCountry != null ? String(fresh.planCountry) : undefined,
+      tier: tierToAuditString(fresh.planTier),
+      before: {
+        status: SubscriptionStatus.CANCELLED,
+        updatedAt: new Date(0),
+        currentPeriodEnd: null,
+        pastDueSince: null,
+      },
+      after: {
+        status: fresh.status,
+        updatedAt: fresh.updatedAt,
+        currentPeriodEnd: fresh.currentPeriodEnd,
+        pastDueSince: fresh.pastDueSince,
+      },
+      source: "webhook",
+      stripeEventType,
+      stripeEventIdPrefix: eventIdPrefix,
     });
     return;
   }
@@ -535,15 +604,92 @@ export async function applyStripeWebhookEvent(
       let invoiceSucceededSkippedCancelled = false;
       if (row) {
         if (row.status === SubscriptionStatus.CANCELLED) {
-          invoiceSucceededSkippedCancelled = true;
-          safeServerLog("billing_sync", "invoice_payment_succeeded_skipped_cancelled_row", {
-            stripeSubscriptionIdPrefix: subId.slice(0, 14),
-            userIdPrefix: row.userId.slice(0, 8),
-            eventIdPrefix,
-            correlation,
-            severity: "info",
-            hint: "Avoid resurrecting ACTIVE after refund/cancel; wait for subscription.updated or reconcile",
-          });
+          let stripeSub: Stripe.Subscription | null = null;
+          try {
+            stripeSub = await stripe.subscriptions.retrieve(subId);
+          } catch (e) {
+            safeServerLog("billing_sync", "invoice_payment_succeeded_stripe_retrieve_failed", {
+              stripeSubscriptionIdPrefix: subId.slice(0, 14),
+              userIdPrefix: row.userId.slice(0, 8),
+              eventIdPrefix,
+              correlation,
+              severity: "warning",
+              message: e instanceof Error ? e.message.slice(0, 160) : "unknown",
+            });
+          }
+          const mappedFromStripe = stripeSub ? mapStripeSubscriptionStatus(stripeSub.status) : null;
+          const canResurrect =
+            Boolean(stripeSub) &&
+            mappedFromStripe !== null &&
+            mappedFromStripe !== SubscriptionStatus.CANCELLED;
+
+          if (!canResurrect) {
+            invoiceSucceededSkippedCancelled = true;
+            safeServerLog("billing_sync", "invoice_payment_succeeded_skipped_cancelled_row", {
+              stripeSubscriptionIdPrefix: subId.slice(0, 14),
+              userIdPrefix: row.userId.slice(0, 8),
+              eventIdPrefix,
+              correlation,
+              severity: "info",
+              stripeStatus: stripeSub?.status,
+              hint: "DB row was cancelled and Stripe subscription is not in a paying/active state",
+            });
+          } else {
+            const lifecycle = billingLifecycleFields(stripeSub!);
+            const pastPatch = pastDueSinceForStatusTransition(mappedFromStripe!, row.status);
+            const updated = await prisma.subscription.update({
+              where: { id: row.id },
+              data: {
+                status: mappedFromStripe!,
+                currentPeriodEnd: lifecycle.currentPeriodEnd ?? undefined,
+                trialEnd: lifecycle.trialEnd ?? null,
+                cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
+                ...(pastPatch ?? {}),
+              },
+              select: {
+                status: true,
+                updatedAt: true,
+                currentPeriodEnd: true,
+                pastDueSince: true,
+                planTier: true,
+                planCountry: true,
+              },
+            });
+            logBillingTransition({
+              kind: "invoice_payment_succeeded_resurrect",
+              stripeSubscriptionId: subId,
+              userId: row.userId,
+              fromStatus: row.status,
+              toStatus: mappedFromStripe!,
+              stripeStatus: stripeSub!.status,
+              eventIdPrefix,
+              correlation,
+              stripeEventType: event.type,
+              stripeCustomerId: row.stripeCustomerId,
+            });
+            emitEntitlementShiftFromRowTransition({
+              correlationId: correlation,
+              userId: row.userId,
+              stripeSubscriptionId: subId,
+              country: updated.planCountry != null ? String(updated.planCountry) : undefined,
+              tier: tierToAuditString(updated.planTier),
+              before: {
+                status: row.status,
+                updatedAt: row.updatedAt,
+                currentPeriodEnd: row.currentPeriodEnd,
+                pastDueSince: row.pastDueSince,
+              },
+              after: {
+                status: updated.status,
+                updatedAt: updated.updatedAt,
+                currentPeriodEnd: updated.currentPeriodEnd,
+                pastDueSince: updated.pastDueSince,
+              },
+              source: "webhook",
+              stripeEventType: event.type,
+              stripeEventIdPrefix: eventIdPrefix,
+            });
+          }
         } else {
           const pastPatch = pastDueSinceForStatusTransition(SubscriptionStatus.ACTIVE, row.status);
           const updated = await prisma.subscription.update({

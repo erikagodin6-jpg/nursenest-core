@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
 import { ADMIN_DASHBOARD_HREF } from "@/lib/auth/admin-dashboard-link";
 import { shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
-import { UserFeedbackAccountMenuItem } from "@/components/feedback/user-feedback-account-menu-item";
+import { SupportEmailAccountMenuLink } from "@/components/support/support-email-account-menu-link";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 
@@ -228,7 +228,7 @@ export function LearnerShellUserBar({
             </div>
           ) : null}
           <div className="border-t border-[var(--border-subtle)] bg-[var(--bg-muted)]/30 p-2">
-            <UserFeedbackAccountMenuItem
+            <SupportEmailAccountMenuLink
               onActivate={closeAfterNav}
               className={`${linkClass} mb-1.5 w-full border-0 text-left text-foreground`}
             />

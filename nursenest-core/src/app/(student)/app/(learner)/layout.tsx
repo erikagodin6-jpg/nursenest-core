@@ -44,8 +44,7 @@ import {
   learnerShellShouldDisablePageTransition,
 } from "@/lib/motion/page-transition-shell";
 import { isLearnerTutorShellEnabled } from "@/lib/learner/tutor/learner-tutor-policy";
-import { LearnerFeedbackShell } from "@/components/feedback/learner-feedback-shell";
-import { UserFeedbackNavPill } from "@/components/feedback/user-feedback-nav-pill";
+import { SupportEmailHeaderLink } from "@/components/support/support-email-header-link";
 import { LearnerExamStudyProviders } from "@/components/exam/learner-exam-study-providers";
 import { isCoreOnlyEmergencyMode, shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
@@ -223,7 +222,6 @@ export default async function LearnerShellLayout({ children }: { children: React
       <PaywallHomeStatsProvider value={paywallHomeStats}>
         <LearnerExamStudyProviders>
           <LearnerExamChromeGate>
-            <LearnerFeedbackShell pathwayId={pathwayId}>
             <div
               className="nn-learner-app mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+5rem+env(safe-area-inset-bottom,0px))] sm:px-6 md:pb-[var(--nn-rhythm-shell-y)]"
               data-nn-learner-ds
@@ -276,7 +274,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                           serverHasStaffSession={staffSession != null && !qaPayload}
                           learnerQaOverlay={qaPayload ? learnerQaUserBarOverlayFromPayload(qaPayload) : null}
                         />
-                        {!coreOnlyEmergency ? <UserFeedbackNavPill /> : null}
+                        {!coreOnlyEmergency ? <SupportEmailHeaderLink /> : null}
                         <LearnerShellLanguageControl />
                         <LearnerThemeControl />
                       </div>
@@ -338,7 +336,6 @@ export default async function LearnerShellLayout({ children }: { children: React
                 </LearnerSilentSectionBoundary>
               ) : null}
             </div>
-          </LearnerFeedbackShell>
         </LearnerExamChromeGate>
       </LearnerExamStudyProviders>
       </PaywallHomeStatsProvider>
