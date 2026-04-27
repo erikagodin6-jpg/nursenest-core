@@ -297,6 +297,30 @@ model EmailNotificationLog {
   @@index([createdAt])
 }
 
+/// * Postmark inbound MessageID idempotency + audit for `/api/inbound-email` AI autoreply.
+enum InboundEmailAutoreplyStatus {
+  PENDING
+  SKIPPED
+  REPLIED
+  FAILED
+}
+
+model InboundEmailAutoreplyEvent {
+  id                         String                      @id @default(cuid())
+  postmarkInboundMessageId   String                      @unique @map("postmark_inbound_message_id") @db.VarChar(200)
+  senderEmail                String                      @map("sender_email") @db.VarChar(320)
+  subject                    String                      @db.VarChar(998)
+  receivedAt                 DateTime                    @default(now()) @map("received_at")
+  replySentAt                DateTime?                   @map("reply_sent_at")
+  status                     InboundEmailAutoreplyStatus @default(PENDING)
+  /// * Skip or failure detail (e.g. auto_reply_disabled, missing_openai_api_key).
+  failureReason              String?                     @map("failure_reason") @db.Text
+  postmarkOutboundMessageId  String?                     @map("postmark_outbound_message_id") @db.VarChar(200)
+
+  @@index([status, receivedAt])
+  @@map("inbound_email_autoreply_events")
+}
+
 /// * One-time password reset tokens; raw token is never stored (only SHA-256 hex).
 model PasswordResetToken {
   id        String   @id @default(cuid())
