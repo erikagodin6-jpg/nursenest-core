@@ -6,6 +6,7 @@ import { useEffect, useMemo, type ReactNode } from "react";
 
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
+import { HomeHeroScreenshotSection } from "@/components/marketing/home-hero-screenshot-section";
 import { HomeTrustStripSection } from "@/components/marketing/home-trust-strip-section";
 import { HomeFinalStudyCta } from "@/components/marketing/home-final-study-cta";
 import { FunnelHomepageViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
@@ -49,15 +50,20 @@ function HomeStableMarketingPlaceholder({
   body,
   href,
   linkLabel,
+  bandToneClass = "nn-home-rich-placeholder-band--tone-cool",
 }: {
   title: string;
   body: string;
   href: string;
   linkLabel: string;
+  /** Token-only section wash (see `globals.css`). */
+  bandToneClass?: "nn-home-rich-placeholder-band--tone-cool" | "nn-home-rich-placeholder-band--tone-warm" | "nn-home-rich-placeholder-band--tone-positive";
 }) {
   return (
-    <section className="border-b border-[var(--border-subtle)] bg-[var(--page-bg)] px-4 py-[var(--nn-rhythm-mobile-section-y)] sm:px-6 md:py-[var(--nn-rhythm-shell-y)]">
-      <div className="mx-auto max-w-5xl rounded-2xl border border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--semantic-info))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--surface-base))] p-6 sm:p-8">
+    <section
+      className={`nn-home-rich-placeholder-band ${bandToneClass} border-b border-[var(--border-subtle)] px-4 py-[var(--nn-rhythm-mobile-section-y)] sm:px-6 md:py-[var(--nn-rhythm-shell-y)]`}
+    >
+      <div className="nn-home-rich-placeholder-card mx-auto max-w-5xl rounded-2xl border p-6 sm:p-8">
         <h2 className="nn-marketing-h3 text-balance text-[var(--palette-heading)]">{title}</h2>
         <p className="mt-2 max-w-prose text-pretty nn-marketing-body text-[var(--palette-text-muted)]">{body}</p>
         <p className="mt-4">
@@ -155,7 +161,7 @@ export default function HomeRestoredClient({
   /* ------------------ RENDER ------------------ */
 
   return (
-    <div className="font-sans flex w-full min-h-0 flex-1 flex-col overflow-x-hidden bg-[var(--page-bg)]">
+    <div className="font-sans flex w-full min-h-0 flex-1 flex-col overflow-x-hidden bg-[var(--page-bg)] nn-home-marketing-root">
       <FunnelHomepageViewBeacon
         marketingRegion={marketingRegion}
         marketingLocale={locale}
@@ -167,18 +173,10 @@ export default function HomeRestoredClient({
         lessonCount={lessonCount}
       />
 
-      {/* Former desktop carousel / screenshot / image-heavy rows — stable cards */}
+      <HomeHeroScreenshotSection />
+
       <HomeStableMarketingPlaceholder
-        title={safeT(t, "pages.home.stablePlaceholder.product.title", "See how NurseNest fits your study plan")}
-        body={safeT(
-          t,
-          "pages.home.stablePlaceholder.product.body",
-          "Jump into the question bank or lessons when you are ready — no heavy previews on this load path.",
-        )}
-        href={exploreQuestionsHref}
-        linkLabel={safeT(t, "pages.home.stablePlaceholder.product.link", "Open the question bank")}
-      />
-      <HomeStableMarketingPlaceholder
+        bandToneClass="nn-home-rich-placeholder-band--tone-warm"
         title={safeT(t, "pages.home.stablePlaceholder.regions.title", "Exam prep hubs")}
         body={safeT(
           t,
@@ -198,6 +196,7 @@ export default function HomeRestoredClient({
 
       {/* Former trust-fears / platform preview / proof / FAQ lazy stack */}
       <HomeStableMarketingPlaceholder
+        bandToneClass="nn-home-rich-placeholder-band--tone-positive"
         title={safeT(t, "pages.home.stablePlaceholder.study.title", "Study tools that stay exam-scoped")}
         body={safeT(
           t,
@@ -208,6 +207,7 @@ export default function HomeRestoredClient({
         linkLabel={safeT(t, "pages.home.stablePlaceholder.study.link", "Start practicing")}
       />
       <HomeStableMarketingPlaceholder
+        bandToneClass="nn-home-rich-placeholder-band--tone-cool"
         title={safeT(t, "pages.home.stablePlaceholder.support.title", "Questions about access or billing?")}
         body={safeT(
           t,
@@ -222,7 +222,7 @@ export default function HomeRestoredClient({
       {introAfterHero}
 
       {/* AUDIENCE CARDS */}
-      <section className="nn-section-block border-b border-[var(--border-subtle)] bg-[var(--page-bg)]">
+      <section className="nn-section-block nn-home-pathways-band border-b border-[var(--border-subtle)]">
         <div className="nn-section-shell">
           <div className="mx-auto mb-8 max-w-2xl text-center">
             <h2 className="nn-marketing-h2">

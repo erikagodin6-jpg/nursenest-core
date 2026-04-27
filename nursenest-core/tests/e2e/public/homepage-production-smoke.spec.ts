@@ -73,6 +73,29 @@ test.describe("Homepage production smoke", () => {
     const fatalPage = pageErrors.filter(Boolean);
     expect(fatalPage, `pageerror: ${fatalPage.join(" | ")}`).toEqual([]);
 
+    const nextImageSrcErrors = consoleErrors.filter(
+      (t) => /invalid src prop|failed to parse src|empty string/i.test(t) && /next\/image|Image/i.test(t),
+    );
+    expect(
+      nextImageSrcErrors,
+      `next/image invalid src: ${nextImageSrcErrors.join(" | ")}`,
+    ).toEqual([]);
+
+    const heroSection = page.getByTestId("home-hero-screenshot-section");
+    await expect(heroSection).toBeVisible();
+
+    const carouselRoot = page.getByTestId("hero-platform-carousel");
+    const heroImgs = page.locator('[data-testid^="img-hero-platform-slide-"]');
+    const staticHandoff = page.getByTestId("home-hero-carousel-static-handoff");
+    const carouselCount = await carouselRoot.count();
+    const imgCount = await heroImgs.count();
+    const handoffCount = await staticHandoff.count();
+    if (carouselCount > 0) {
+      expect(imgCount, "Carousel mounted: expect at least one hero slide image").toBeGreaterThan(0);
+    } else {
+      expect(handoffCount, "Carousel absent: expect static handoff (no slides or local error boundary)").toBeGreaterThan(0);
+    }
+
     expect(
       clientBundleDbLeakHints,
       `client bundle must not log DB/server-only leaks: ${clientBundleDbLeakHints.join(" | ")}`,

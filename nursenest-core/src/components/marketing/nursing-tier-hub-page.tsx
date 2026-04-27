@@ -1,22 +1,14 @@
 "use client";
 
-import Link from "next/link";
-import { useCallback } from "react";
 import { Activity, BookOpen, ClipboardList, Target } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { ExamPathwayWaitlistBanner } from "@/components/exam-pathways/exam-pathway-waitlist-banner";
-import { NpSeoAliasHubAnalytics } from "@/components/marketing/np-seo-alias-hub-analytics";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { StudyCard } from "@/components/ui/study-card";
-import type { NursingTierHubActionId, NursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
+import type { NursingTierHubAction, NursingTierHubActionId, NursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
 import type { PathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
-import { pathwayMarketingHubLinkContext } from "@/lib/marketing/np-seo-alias-analytics-props";
-import { PH } from "@/lib/observability/posthog-conversion-events";
-import { pathwayAnalyticsDimensions, trackProductEvent } from "@/lib/observability/product-analytics";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
-import { selectMarketingTierHubContextualCta } from "@/lib/conversion/select-marketing-tier-hub-contextual-cta";
-import { MarketingTierHubContextualCta } from "@/components/conversion/marketing-tier-hub-contextual-cta";
+import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 
 const ACTION_ICON: Record<NursingTierHubActionId, LucideIcon> = {
   lessons: BookOpen,
@@ -25,14 +17,31 @@ const ACTION_ICON: Record<NursingTierHubActionId, LucideIcon> = {
   exams: Activity,
 };
 
+function resolvedTierHubActionHref(pathway: ExamPathwayDefinition, action: NursingTierHubAction): string {
+  const trimmed = action.href?.trim();
+  if (trimmed) return trimmed;
+  switch (action.id) {
+    case "lessons":
+      return marketingPathwayLessonsIndexPath(pathway);
+    case "flashcards":
+      return `/app/flashcards?pathwayId=${encodeURIComponent(pathway.id)}`;
+    case "practice_questions":
+      return buildExamPathwayPath(pathway, "questions");
+    case "exams":
+      return buildExamPathwayPath(pathway, "cat");
+    default:
+      return buildExamPathwayPath(pathway);
+  }
+}
+
 export function NursingTierHubPage({
   pathway,
   hubPath,
   content,
-  npSeoAliasSegment,
-  hubResume,
-  viewerSignedIn = false,
-  viewerHasPathwayLessonAccess = false,
+  npSeoAliasSegment: _npSeoAliasSegment,
+  hubResume: _hubResume,
+  viewerSignedIn: _viewerSignedIn,
+  viewerHasPathwayLessonAccess: _viewerHasPathwayLessonAccess,
 }: {
   pathway: ExamPathwayDefinition;
   hubPath: string;
@@ -52,8 +61,6 @@ export function NursingTierHubPage({
       </div>
     );
   }
-
-  const linkCtx = pathwayMarketingHubLinkContext(pathway, npSeoAliasSegment);
 
   const actionsById = new Map(
     content.actions.map((action) => [action.id, action])
@@ -79,17 +86,23 @@ export function NursingTierHubPage({
             if (!action) return null;
 
             const Icon = ACTION_ICON[action.id];
+            const href = resolvedTierHubActionHref(pathway, action);
+            const locked = Boolean(action.disabled);
 
             return (
               <li key={action.id}>
                 <StudyCard
                   surface="hub"
-                  variant="featured"
-                  href={action.href || "#"}
+                  variant={locked ? "locked" : "featured"}
+                  href={locked ? buildExamPathwayPath(pathway) : href}
                   icon={Icon}
                   title={action.label || "Open"}
-                  description={action.description || ""}
-                  cta={action.label || "Open"}
+                  description={
+                    locked && action.disabledNote
+                      ? action.disabledNote
+                      : action.description || ""
+                  }
+                  cta={locked ? (action.disabledNote || "Lessons unavailable for this pathway") : action.label || "Open"}
                 />
               </li>
             );

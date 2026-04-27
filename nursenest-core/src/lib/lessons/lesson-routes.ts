@@ -88,6 +88,28 @@ export function marketingPathwayLessonsIndexPath(
   return buildExamPathwayPath(pathway, "lessons");
 }
 
+type MarketingExamHubSubpath = "lessons" | "questions" | "cat";
+
+/**
+ * Resolves `…/{subpath}` next to a marketing exam **hub root** without duplicating `/lessons` when the hub
+ * already *is* the short canonical `/lessons` fallback (see {@link marketingExamHubPath} + `CANONICAL_PATHWAY_HUB`).
+ * When a registry pathway is available, always use {@link buildExamPathwayPath}.
+ */
+export function marketingPathwaySubpathBesideExamHub(
+  examHubRoot: string,
+  pathway: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode"> | null | undefined,
+  subpath: MarketingExamHubSubpath,
+): string {
+  if (pathway) return buildExamPathwayPath(pathway, subpath);
+  const hub = examHubRoot.replace(/\/$/, "");
+  if (hub === "/lessons") {
+    if (subpath === "lessons") return "/lessons";
+    if (subpath === "questions") return "/question-bank";
+    return "/practice-exams";
+  }
+  return `${hub}/${subpath}`;
+}
+
 /**
  * Normalized topic slug for `?topicSlug=` on the pathway lessons hub, or null when unusable.
  * Keeps hub filters aligned with DB/catalog topicSlug values (lowercase, bounded length).

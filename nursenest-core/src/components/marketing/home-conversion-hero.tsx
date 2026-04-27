@@ -63,9 +63,12 @@ export function HomeConversionHero(props: { questionCount?: number; lessonCount?
   const lessons = props.lessonCount ?? 0;
 
   return (
-    <section className="border-b border-[var(--header-nav-border)] bg-[var(--page-bg)]">
-      <div className="mx-auto max-w-6xl px-4 py-12">
-        <h1 className="text-3xl font-bold text-[var(--palette-heading)]">
+    <section className="nn-hero-bridge nn-home-marketing-rich-hero border-b border-[var(--header-nav-border)]">
+      <div className="mx-auto max-w-6xl px-4 py-12 md:py-14">
+        <h1
+          id="home-conversion-hero-heading"
+          className="nn-marketing-h1 max-w-[22ch] text-[var(--palette-heading)]"
+        >
           {formatTitleCase(
             safeT(t, "pages.home.hero.headline", "Canada-First Nursing Exam Prep"),
             locale
@@ -117,7 +120,7 @@ export function HomeConversionHero(props: { questionCount?: number; lessonCount?
         </p>
 
         <p className="mt-2 flex items-center gap-2 text-sm text-[var(--palette-text-muted)]">
-          <ShieldCheck className="h-4 w-4 text-green-500" />
+          <ShieldCheck className="h-4 w-4 shrink-0 text-[var(--semantic-success)]" aria-hidden />
           {safeT(t, "pages.home.hero.noCreditCard", "No credit card required")}
         </p>
       </div>

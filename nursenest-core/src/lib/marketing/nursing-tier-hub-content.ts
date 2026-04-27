@@ -1,5 +1,6 @@
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 
 /**
  * SERP-aligned hub headline (H1): primary exam keyword + country, without the brand suffix.
@@ -100,7 +101,7 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
         id: "lessons",
         label: "Lessons",
         description: "Review concepts by topic.",
-        href: buildExamPathwayPath(pathway, "lessons"),
+        href: marketingPathwayLessonsIndexPath(pathway),
       },
       {
         id: "flashcards",

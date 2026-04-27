@@ -1507,6 +1507,113 @@ html[data-theme] .nn-marketing-surface {
   background-image: none;
 }
 
+/*
+ * Homepage marketing richness (recovery) — opt-in utilities; token / color-mix only.
+ */
+.nn-home-marketing-root {
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-brand) 3.5%, var(--page-bg, var(--bg-page))) 0%,
+    var(--page-bg, var(--bg-page)) 22%,
+    color-mix(in srgb, var(--semantic-panel-cool) 8%, var(--page-bg, var(--bg-page))) 100%
+  );
+}
+
+.nn-home-marketing-rich-hero.nn-hero-bridge {
+  background-color: var(--page-bg, var(--bg-page));
+  background-image:
+    radial-gradient(
+      ellipse 120% 85% at 100% -20%,
+      color-mix(in srgb, var(--semantic-chart-5) 12%, transparent),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 90% 70% at 0% 105%,
+      color-mix(in srgb, var(--semantic-chart-3) 14%, transparent),
+      transparent 50%
+    ),
+    linear-gradient(
+      168deg,
+      color-mix(in srgb, var(--semantic-brand) 8%, var(--page-bg, var(--bg-page))) 0%,
+      color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--page-bg, var(--bg-page))) 40%,
+      var(--page-bg, var(--bg-page)) 100%
+    );
+  background-repeat: no-repeat;
+}
+
+.nn-home-hero-product-band {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-info) 5%, var(--page-bg, var(--bg-page))) 0%,
+    var(--page-bg, var(--bg-page)) 55%,
+    color-mix(in srgb, var(--semantic-brand) 4%, var(--page-bg, var(--bg-page))) 100%
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-warm {
+  background: linear-gradient(
+    185deg,
+    color-mix(in srgb, var(--semantic-panel-warm) 14%, var(--page-bg, var(--bg-page))) 0%,
+    var(--page-bg, var(--bg-page)) 100%
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-positive {
+  background: linear-gradient(
+    188deg,
+    color-mix(in srgb, var(--semantic-panel-positive) 12%, var(--page-bg, var(--bg-page))) 0%,
+    var(--page-bg, var(--bg-page)) 100%
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-cool {
+  background: linear-gradient(
+    182deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 13%, var(--page-bg, var(--bg-page))) 0%,
+    var(--page-bg, var(--bg-page)) 100%
+  );
+}
+
+.nn-home-rich-placeholder-card {
+  box-shadow: var(--shadow-elevated, var(--elevation-overlay));
+}
+
+.nn-home-rich-placeholder-band--tone-warm .nn-home-rich-placeholder-card {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 1, var(--semantic-warning));
+  background: linear-gradient(
+    200deg,
+    color-mix(in srgb, var(--semantic-panel-warm) 16%, var(--surface-base, var(--bg-card))) 0%,
+    color-mix(in srgb, var(--semantic-chart-4) 7%, var(--surface-base, var(--bg-card))) 100%
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-positive .nn-home-rich-placeholder-card {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 1, var(--semantic-success));
+  background: linear-gradient(
+    205deg,
+    color-mix(in srgb, var(--semantic-panel-positive) 14%, var(--surface-base, var(--bg-card))) 0%,
+    color-mix(in srgb, var(--semantic-chart-2) 8%, var(--surface-base, var(--bg-card))) 100%
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-cool .nn-home-rich-placeholder-card {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 1, var(--semantic-info));
+  background: linear-gradient(
+    205deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 18%, var(--surface-base, var(--bg-card))) 0%,
+    color-mix(in srgb, var(--semantic-panel-muted) 12%, var(--surface-base, var(--bg-card))) 100%
+  );
+}
+
+.nn-home-pathways-band {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-brand) 4%, var(--bg-section-alt, var(--semantic-bg-soft))) 0%,
+    var(--bg-section-alt, var(--semantic-bg-soft)) 45%,
+    color-mix(in srgb, var(--semantic-success) 5%, var(--bg-section-alt, var(--semantic-bg-soft))) 100%
+  );
+}
+
 /* Optional: full-width section band on page canvas */
 .nn-surface-section {
   background:

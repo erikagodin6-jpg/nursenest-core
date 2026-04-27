@@ -4,6 +4,7 @@ import {
   buildLessonPath,
   marketingLessonSlugFromRouteParam,
   marketingPathwayLessonDetailPath,
+  marketingPathwaySubpathBesideExamHub,
 } from "@/lib/lessons/lesson-routes";
 
 describe("buildLessonPath", () => {
@@ -76,5 +77,23 @@ describe("buildLessonPath", () => {
 describe("marketingLessonSlugFromRouteParam", () => {
   it("decodes a once-encoded slug segment", () => {
     assert.equal(marketingLessonSlugFromRouteParam("fluid%20overload"), "fluid overload");
+  });
+});
+
+describe("marketingPathwaySubpathBesideExamHub", () => {
+  const pathway = { countrySlug: "us", roleTrack: "rn", examCode: "nclex-rn" };
+
+  it("uses buildExamPathwayPath when a pathway is provided", () => {
+    assert.equal(marketingPathwaySubpathBesideExamHub("/lessons", pathway, "lessons"), "/us/rn/nclex-rn/lessons");
+    assert.equal(marketingPathwaySubpathBesideExamHub("/lessons", pathway, "questions"), "/us/rn/nclex-rn/questions");
+  });
+
+  it("does not append /lessons when the hub root is already the short /lessons index", () => {
+    assert.equal(marketingPathwaySubpathBesideExamHub("/lessons", null, "lessons"), "/lessons");
+    assert.equal(marketingPathwaySubpathBesideExamHub("/lessons/", undefined, "questions"), "/question-bank");
+  });
+
+  it("appends subpath for full exam hub roots when pathway is missing", () => {
+    assert.equal(marketingPathwaySubpathBesideExamHub("/us/rn/nclex-rn", null, "lessons"), "/us/rn/nclex-rn/lessons");
   });
 });
