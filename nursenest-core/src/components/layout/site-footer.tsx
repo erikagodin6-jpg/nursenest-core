@@ -37,6 +37,11 @@ function formatFooterNode(children: React.ReactNode, locale: string): React.Reac
   return typeof children === "string" ? formatTitleCase(children, locale) : children;
 }
 
+function footerCopyWithFallback(value: string, fallback: string): string {
+  const trimmed = value.trim();
+  return !trimmed || trimmed.startsWith("footer.") ? fallback : trimmed;
+}
+
 function FLink({
   href,
   children,
@@ -121,6 +126,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
     learnerPathwayId != null
       ? `/app/lessons?pathwayId=${encodeURIComponent(learnerPathwayId)}`
       : "/app";
+  const regionalHubLinksLabel = footerCopyWithFallback(t("footer.regionalHubLinks"), "Regional hubs");
 
   return (
     <footer
@@ -193,7 +199,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
 
               <div>
                 <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">
-                  {formatTitleCase(t("footer.regionalHubLinks"), locale)}
+                  {formatTitleCase(regionalHubLinksLabel, locale)}
                 </h3>
                 <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
                   {countryNav.footerFeatured.map((item) => (

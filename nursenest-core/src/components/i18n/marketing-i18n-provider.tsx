@@ -40,6 +40,8 @@ const DEGRADED_MARKETING_I18N: MarketingI18nContextValue = {
   t: (key: string) => key,
 };
 
+const RENDERED_I18N_KEY_PREFIX_PATTERN = /\b(?:pages|footer|blog)\.[A-Za-z0-9_.-]+/;
+
 function HtmlLangSync({ locale }: { locale: string }) {
   useEffect(() => {
     try {
@@ -51,6 +53,33 @@ function HtmlLangSync({ locale }: { locale: string }) {
       document.documentElement.dir = "ltr";
     }
   }, [locale]);
+
+  return null;
+}
+
+function RenderedI18nKeyLeakGuard() {
+  useEffect(() => {
+    let lastLogged = "";
+
+    function checkRenderedText() {
+      try {
+        const renderedText = document.body?.innerText ?? "";
+        const match = renderedText.match(RENDERED_I18N_KEY_PREFIX_PATTERN)?.[0] ?? "";
+        if (match && match !== lastLogged) {
+          lastLogged = match;
+          console.error("[MarketingI18n] Rendered raw i18n key", { key: match });
+        }
+      } catch {
+        // never break app rendering
+      }
+    }
+
+    checkRenderedText();
+    if (!document.body) return undefined;
+    const observer = new MutationObserver(checkRenderedText);
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+    return () => observer.disconnect();
+  }, []);
 
   return null;
 }
@@ -117,6 +146,7 @@ export function MarketingI18nProvider({
   return (
     <MarketingI18nContext.Provider value={value}>
       <HtmlLangSync locale={locale} />
+      <RenderedI18nKeyLeakGuard />
       {children}
     </MarketingI18nContext.Provider>
   );

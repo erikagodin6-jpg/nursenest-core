@@ -7,6 +7,7 @@ import {
   logMarketingRouteErrorClient,
   shouldUseMarketingHomeSafeModeFromError,
 } from "@/lib/marketing/marketing-home-safe-mode-triggers";
+import { errorBoundaryDescription, isLikelyTransientBoundaryError } from "@/lib/runtime/error-boundary-copy";
 
 export default function MarketingSegmentError({
   error,
@@ -44,14 +45,21 @@ export default function MarketingSegmentError({
     return <MarketingHomeSafeMode layout="embedded" onRetry={reset} />;
   }
 
+  const isTransient = isLikelyTransientBoundaryError(error);
+
   return (
     <NnErrorCard
       error={error}
       reset={reset}
       surface="marketing_segment"
       marketingErrorTelemetry
-      title="Just a moment"
-      description="We’re having a temporary hiccup on this page. Try again in a moment, or continue browsing below."
+      title={isTransient ? "Just a moment" : "Page could not load"}
+      description={errorBoundaryDescription({
+        error,
+        fallback: isTransient
+          ? "We’re having a temporary hiccup on this page. Try again in a moment, or continue browsing below."
+          : "This page hit an unexpected error. It has been logged so we can fix it.",
+      })}
       primaryAction={{ label: "Go home", href: "/" }}
       secondaryAction={{ label: "Browse exam pathways", href: "/lessons" }}
     />

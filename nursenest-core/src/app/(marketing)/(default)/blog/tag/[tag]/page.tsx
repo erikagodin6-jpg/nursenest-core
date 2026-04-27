@@ -17,6 +17,13 @@ type Props = { params: Promise<{ tag: string }>; searchParams: Promise<{ page?: 
 
 export const revalidate = 3600;
 
+function getCanonicalBlogPostHref(slug: unknown): string | null {
+  if (typeof slug !== "string") return null;
+  const trimmed = slug.trim();
+  if (!trimmed) return null;
+  return `/blog/${encodeURIComponent(trimmed)}`;
+}
+
 export async function generateMetadata({
   params,
   searchParams,
@@ -79,15 +86,29 @@ export default async function BlogTagPage({ params, searchParams }: Props) {
       ) : (
         <>
           <ul className="space-y-6">
-            {posts.map((p) => (
-              <li key={p.slug} className="border-b border-[var(--theme-separator)] pb-6">
-                <Link href={`/blog/${p.slug}`} className="text-lg font-semibold text-primary hover:underline">
-                  {p.title}
-                </Link>
-                <p className="mt-2 line-clamp-2 text-sm text-[var(--theme-muted-text)]">{p.excerpt}</p>
-                <p className="mt-2 text-xs text-[var(--theme-muted-text)]">{p.createdAt.toISOString().slice(0, 10)}</p>
-              </li>
-            ))}
+            {posts.map((p) => {
+              const href = getCanonicalBlogPostHref(p.slug);
+              if (!href) {
+                console.error("[blog-tag] missing post slug; rendering non-clickable tag result", {
+                  tag: decoded,
+                  title: p.title,
+                });
+              }
+
+              return (
+                <li key={p.slug || p.title} className="border-b border-[var(--theme-separator)] pb-6">
+                  {href ? (
+                    <Link href={href} className="text-lg font-semibold text-primary hover:underline">
+                      {p.title}
+                    </Link>
+                  ) : (
+                    <span className="text-lg font-semibold text-[var(--theme-heading-text)]">{p.title}</span>
+                  )}
+                  <p className="mt-2 line-clamp-2 text-sm text-[var(--theme-muted-text)]">{p.excerpt}</p>
+                  <p className="mt-2 text-xs text-[var(--theme-muted-text)]">{p.createdAt.toISOString().slice(0, 10)}</p>
+                </li>
+              );
+            })}
           </ul>
           {totalPages > 1 ? (
             <nav className="mt-10 flex flex-wrap items-center justify-between gap-4 text-sm" aria-label="Tag results pagination">

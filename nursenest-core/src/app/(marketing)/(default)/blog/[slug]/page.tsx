@@ -56,8 +56,20 @@ export const dynamicParams = true;
 /** ISR backup; align with `/blog` so pathophysiology hub + lists refresh together after publish. */
 export const revalidate = 180;
 
+function normalizeBlogSlugParam(slug: unknown): string | null {
+  if (typeof slug !== "string") return null;
+  const trimmed = slug.trim();
+  if (!trimmed) return null;
+  try {
+    return decodeURIComponent(trimmed).trim() || null;
+  } catch {
+    return trimmed;
+  }
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug } = await params;
+  const slug = normalizeBlogSlugParam((await params).slug);
+  if (!slug) return {};
   const pathname = `/blog/${slug}`;
   return safeGenerateMetadata(
     async () => {
@@ -120,7 +132,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const { slug } = await params;
+  const slug = normalizeBlogSlugParam((await params).slug);
+  if (!slug) {
+    console.error("[blog-post] missing or invalid slug param", { slug });
+    notFound();
+  }
   const pathname = `/blog/${slug}`;
   return withCrawlSurfacePageRender(
     "marketing.blog_post",
