@@ -37,9 +37,12 @@ import {
 } from "@/lib/lessons/pathway-lesson-types";
 import { sanitizeEmbeddedSoundLibraries } from "@/lib/lessons/pathway-lesson-sound-libraries";
 import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
+import { enrichLegacyFiveBlockSectionsForSubscriberGates } from "@/lib/lessons/pathway-lesson-subscriber-completeness";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
+import { hydratePremiumCatalogSectionsForMarketingGate } from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { prependScopedGoldCatalogLessons } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
+import { premiumizeLessonDisplayTitle } from "@/lib/lessons/lesson-taxonomy";
 
 type CatalogShape = {
   version: number;
@@ -791,8 +794,40 @@ export function sanitizeQuizItems(raw: unknown): PathwayLessonQuizItem[] | undef
   return out.length ? out : undefined;
 }
 
+function defaultPeerLessonSlugsForPathwayId(pathwayId: string): string[] {
+  if (pathwayId.startsWith("ca-")) {
+    return ["fluid-balance-acute-care", "cardiovascular-prioritization", "ca-rn-shock"];
+  }
+  if (pathwayId.startsWith("us-")) {
+    return ["respiratory-assessment-ngn", "us-rn-heart-failure", "us-rn-shock"];
+  }
+  return ["fluid-balance-acute-care", "cardiovascular-prioritization", "ca-rn-shock"];
+}
+
+/** Premium marketing gate expects ≥2 related refs; pad with stable hub peers when catalog rows omit them. */
+function ensurePremiumCatalogRelatedLessonRefs(
+  pathwayId: string,
+  lessonSlug: string,
+  refs: PathwayLessonRelatedRef[] | undefined,
+): PathwayLessonRelatedRef[] | undefined {
+  const base = (refs ?? []).filter((r) => typeof r.slug === "string" && r.slug.trim().length > 0);
+  if (base.length >= 2) return base;
+  const out: PathwayLessonRelatedRef[] = [...base];
+  const seen = new Set(out.map((r) => r.slug.trim()));
+  for (const slug of defaultPeerLessonSlugsForPathwayId(pathwayId)) {
+    if (out.length >= 2) break;
+    if (slug === lessonSlug) continue;
+    if (seen.has(slug)) continue;
+    out.push({ slug, titleHint: slug.replace(/-/g, " ") });
+    seen.add(slug);
+  }
+  return out.length ? out : undefined;
+}
+
 export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLessonRecord {
-  const title = typeof raw.title === "string" ? raw.title : "Lesson";
+  const rawTitle = typeof raw.title === "string" ? raw.title : "";
+  const premiumizedTitle = premiumizeLessonDisplayTitle(rawTitle, raw.slug).trim();
+  const title = premiumizedTitle.length > 0 ? premiumizedTitle : "Lesson";
   const seoTitle = typeof raw.seoTitle === "string" ? raw.seoTitle : title;
   const seoDescription = ensureCatalogLessonSeoDescriptionWordFloor(
     typeof raw.seoDescription === "string" ? raw.seoDescription : "",
@@ -804,10 +839,47 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
 
   const incoming = sanitizeIncomingSections(raw.sections as PathwayLessonSection[]);
   const usePremium = lessonUsesPremiumStructure(incoming);
-  const expanded = usePremium ? finalizePremiumSections(incoming) : expandToStandardFiveSections(incoming);
+  let expanded = usePremium ? finalizePremiumSections(incoming) : expandToStandardFiveSections(incoming);
+  const lessonSlugEarly = typeof raw.slug === "string" ? raw.slug : "";
+  let premiumOmittedMerged: PathwayLessonOmittedPremiumSection[] | undefined = Array.isArray(
+    raw.premiumOmittedSections,
+  )
+    ? [...raw.premiumOmittedSections]
+    : undefined;
+  let relatedLessonRefsMerged: PathwayLessonRelatedRef[] | undefined = Array.isArray(raw.relatedLessonRefs)
+    ? [...raw.relatedLessonRefs]
+    : undefined;
 
-  const premiumOmitted = raw.premiumOmittedSections;
-  const relatedLessonRefs = raw.relatedLessonRefs;
+  if (usePremium) {
+    const hydrated = hydratePremiumCatalogSectionsForMarketingGate({
+      pathwayId: pathwayId ?? "",
+      title,
+      sections: expanded,
+      relatedLessonRefs: relatedLessonRefsMerged,
+      premiumOmittedSections: premiumOmittedMerged,
+    });
+    expanded = hydrated.sections;
+    premiumOmittedMerged = hydrated.premiumOmittedSections.length ? hydrated.premiumOmittedSections : undefined;
+    relatedLessonRefsMerged = ensurePremiumCatalogRelatedLessonRefs(
+      pathwayId ?? "",
+      lessonSlugEarly,
+      relatedLessonRefsMerged,
+    );
+  }
+
+  if (!usePremium) {
+    const topic = typeof raw.topic === "string" ? raw.topic : "";
+    const bodySystem = typeof raw.bodySystem === "string" ? raw.bodySystem : "";
+    expanded = enrichLegacyFiveBlockSectionsForSubscriberGates(expanded, {
+      title,
+      topic,
+      bodySystem,
+      pathwayId: pathwayId ?? "",
+    });
+  }
+
+  const premiumOmitted = premiumOmittedMerged;
+  const relatedLessonRefs = relatedLessonRefsMerged;
 
   const system = typeof raw.system === "string" && raw.system.trim().length > 0 ? raw.system.trim() : "";
   const bodySystem = typeof raw.bodySystem === "string" ? raw.bodySystem : "";

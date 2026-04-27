@@ -588,15 +588,34 @@ export const PREMIUM_DISPLAY_TITLE_OVERRIDES_BY_SLUG: Record<string, string> = {
 };
 
 /**
+ * Strip inline / trailing NCLEX-style exam branding from a human title (catalog or display).
+ * Uses regex passes (not chained one-off replaces) so variants like "Canadian NCLEX-RN" and
+ * "for … NCLEX" are removed consistently.
+ */
+function stripNclexExamInlineFromDisplayTitle(title: string): string {
+  let t = (title ?? "").trim();
+  if (!t) return t;
+  t = t.replace(/\s*\([^)]*NCLEX[^)]*\)/gi, "");
+  t = t.replace(/\s*-\s*NCLEX.*$/gi, "");
+  t = t.replace(/\bfor\s+the\s+(Canadian\s+|US\s+)?NCLEX(-RN)?\b/gi, "");
+  t = t.replace(/\bfor\s+(Canadian\s+|US\s+)?NCLEX(-RN)?\b/gi, "");
+  t = t.replace(/\b(Canadian\s+|US\s+)?NCLEX(-RN)?\b/gi, "");
+  t = t.replace(/\s{2,}/g, " ").trim();
+  t = t.replace(/\s+for\s*$/i, "").trim();
+  t = t.replace(/\s*[,;:]\s*$/g, "").trim();
+  return t;
+}
+
+/**
  * Apply slug override → exact-map → NP integrated rewrite → generic exam suffix strip.
  * Pass `slug` when known (e.g. catalog rows) so slug-specific overrides apply.
  */
 export function premiumizeLessonDisplayTitle(priorTitle: string, slug?: string | null): string {
+  const trimmed = stripNclexExamInlineFromDisplayTitle((priorTitle ?? "").trim());
   const s = typeof slug === "string" ? slug.trim() : "";
   if (s && PREMIUM_DISPLAY_TITLE_OVERRIDES_BY_SLUG[s]) {
     return clampDisplayTitleToWordBudget(PREMIUM_DISPLAY_TITLE_OVERRIDES_BY_SLUG[s]);
   }
-  const trimmed = (priorTitle ?? "").trim();
   const exact = CANONICAL_TITLE_BY_EXACT_PRIOR[trimmed];
   if (exact) return clampDisplayTitleToWordBudget(exact);
   const np = rewriteNpIntegratedReviewDisplayTitle(trimmed);
