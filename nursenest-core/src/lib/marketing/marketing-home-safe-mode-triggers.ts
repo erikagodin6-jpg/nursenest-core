@@ -5,18 +5,21 @@ import {
 
 /**
  * When to show MarketingHomeSafeMode vs a generic error card.
- * Narrow markers only — never match generic "home" (chunk paths, stacks, etc.).
+ *
+ * Do **not** match `pages.home.` — i18n and copy guards often embed that key prefix in
+ * thrown messages (e.g. `[marketing] missing required marketing copy: pages.home…`,
+ * `… in resolved:pages.home…`), which would incorrectly force safe-mode for routine
+ * marketing errors and hide the real homepage.
+ *
+ * Reserve safe-mode for errors that **explicitly** opt in via `marketing_homepage` /
+ * `nn_homepage` in the message or digest.
  */
 export function shouldUseMarketingHomeSafeModeFromError(error: {
   message?: string;
   digest?: string;
 }): boolean {
   const blob = `${error?.message ?? ""} ${error?.digest ?? ""}`.toLowerCase();
-  return (
-    blob.includes("marketing_homepage") ||
-    blob.includes("pages.home.") ||
-    blob.includes("nn_homepage")
-  );
+  return blob.includes("marketing_homepage") || blob.includes("nn_homepage");
 }
 
 export function logMarketingRouteErrorClient(
