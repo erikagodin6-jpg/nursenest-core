@@ -1,6 +1,7 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   marketingTierHubStudyActionHref,
+  resolveMarketingTierHubStudyActionHref,
   type MarketingTierHubStudyActionId,
 } from "@/lib/navigation/marketing-tier-hub-study-hrefs";
 
@@ -51,11 +52,11 @@ export type NursingTierHubContent = {
 };
 
 /**
- * Final navigation target for a hub study tile. Core tiles always use {@link marketingTierHubStudyActionHref}
- * so RN/RPN/NP stay pathway-scoped regardless of `action.href` overrides.
+ * Final navigation target for a hub study tile. Uses {@link resolveMarketingTierHubStudyActionHref}
+ * so empty, fragment-only, or unsafe `action.href` values cannot override pathway-scoped URLs.
  */
 export function resolveNursingTierHubActionHref(pathway: ExamPathwayDefinition, action: NursingTierHubAction): string {
-  return marketingTierHubStudyActionHref(pathway, action.id);
+  return resolveMarketingTierHubStudyActionHref(pathway, action.id, action.href);
 }
 
 function normalizeDash(value: string): string {

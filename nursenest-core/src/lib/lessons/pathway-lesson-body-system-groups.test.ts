@@ -4,6 +4,7 @@ import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
 import {
   buildPathwayLessonSystemSections,
+  classifyLessonForHub,
   normalizePathwayLessonSystemLabel,
   PATHWAY_LESSON_SYSTEM_ORDER,
 } from "@/lib/lessons/pathway-lesson-body-system-groups";
@@ -45,7 +46,7 @@ test("normalizes lesson system values: taxonomy ids resolve exactly; empty uses 
   assert.equal(normalizePathwayLessonSystemLabel("Pulmonary / Airway"), "respiratory");
   assert.equal(normalizePathwayLessonSystemLabel("Vital signs"), REVIEW_REQUIRED);
   assert.equal(normalizePathwayLessonSystemLabel("Neuro"), "neurological");
-  assert.equal(normalizePathwayLessonSystemLabel("Rapid response / unstable"), REVIEW_REQUIRED);
+  assert.equal(normalizePathwayLessonSystemLabel("Rapid response / unstable"), "patient_safety_quality");
   assert.equal(normalizePathwayLessonSystemLabel("Infection control"), "immune_infectious");
   assert.equal(normalizePathwayLessonSystemLabel("Medication safety"), "patient_safety_quality");
   assert.equal(normalizePathwayLessonSystemLabel("Pediatric"), "pediatrics");
@@ -88,16 +89,15 @@ test("buildPathwayLessonSystemSections preserves config order and only emits non
     [
       "Cardiovascular",
       "Respiratory",
-      "Neurology",
+      "Neurological",
       "Gastrointestinal",
-      "Immune / Infectious",
-      "Reproductive / OB",
-      "Patient safety & quality",
+      "Reproductive / Maternal-Newborn",
+      "Fundamentals / Safety",
     ],
   );
   assert.deepEqual(
     sections.flatMap((section) => section.lessons.map((entry) => entry.slug)),
-    ["cardio-1", "resp-1", "neuro-1", "fund-1", "infect-1", "maternal-1", "med-1"],
+    ["cardio-1", "resp-1", "neuro-1", "fund-1", "maternal-1", "infect-1", "med-1"],
     );
 });
 
@@ -119,9 +119,9 @@ test("classifies lessons into separate buckets when bodySystem is an explicit ta
   assert.deepEqual(
     sections.map((section) => [section.id, section.lessons.map((l) => l.slug)]),
     [
-      ["reproductive_obstetrics", ["postpartum-care"]],
+      ["reproductive_maternal_newborn", ["postpartum-care"]],
       ["pediatrics", ["peds-fever"]],
-      ["cns_drugs", ["cns-pharm"]],
+      ["pharmacology", ["cns-pharm"]],
     ],
   );
 });
@@ -137,4 +137,88 @@ test("lessons missing optional bodySystem/system stay in the review sentinel buc
   const rr = sections.find((s) => s.id === REVIEW_REQUIRED);
   assert.ok(rr, "expected REVIEW_REQUIRED section");
   assert.equal(rr!.lessons.length, 2);
+});
+
+test("RN hub classification uses approved professional and fundamentals/safety categories", () => {
+  assert.equal(
+    classifyLessonForHub(
+      lesson({
+        title: "Assignment vs Delegation (NCLEX-RN, Canada)",
+        bodySystem: "General",
+        system: "General",
+      }),
+      "ca-rn-nclex-rn",
+    ),
+    "professional_practice",
+  );
+  assert.equal(
+    classifyLessonForHub(
+      lesson({
+        title: "Transfusion Reaction Recognition (NCLEX-RN, Canada)",
+        bodySystem: "Hematologic",
+        system: "Hematologic",
+      }),
+      "ca-rn-nclex-rn",
+    ),
+    "fundamentals_safety",
+  );
+});
+
+test("PN/RPN hub classification groups clinically specific lessons into approved buckets", () => {
+  const sections = buildPathwayLessonSystemSections(
+    [
+      lesson({ slug: "pn-copd", title: "COPD oxygen titration", bodySystem: "General", system: "General" }),
+      lesson({
+        slug: "rpn-infection",
+        title: "Standard precautions and isolation",
+        bodySystem: "General",
+        system: "General",
+      }),
+    ],
+    "ca-rpn-rex-pn",
+  );
+  assert.deepEqual(
+    sections.map((section) => section.systemLabel),
+    ["respiratory", "fundamentals_safety"],
+  );
+});
+
+test("NP hub classification keeps unique clinical signals and sends unsafe multi-system overlays to review", () => {
+  assert.equal(
+    classifyLessonForHub(
+      lesson({
+        title: "ABG & acid-base - NP interpretation (FNP)",
+        bodySystem: "General",
+        system: "General",
+      }),
+      "us-np-fnp",
+    ),
+    "diagnostics_clinical_reasoning",
+  );
+  assert.equal(
+    classifyLessonForHub(
+      lesson({
+        title: "Differential, prescribing & chronic care - NP core (FNP)",
+        bodySystem: "General",
+        system: "General",
+      }),
+      "us-np-fnp",
+    ),
+    REVIEW_REQUIRED,
+  );
+});
+
+test("public hub sections never display an unknown category label", () => {
+  const sections = buildPathwayLessonSystemSections(
+    [
+      lesson({ slug: "rn-qI", title: "QI & Incident Reporting", bodySystem: "General", system: "General" }),
+      lesson({ slug: "ambiguous", title: "MI and COPD combined management", bodySystem: "General", system: "General" }),
+    ],
+    "us-rn-nclex-rn",
+  );
+  assert.ok(sections.length > 0);
+  assert.ok(sections.every((section) => !section.id.toLowerCase().includes("unknown")));
+  assert.ok(sections.every((section) => !section.label.toLowerCase().includes("unknown")));
+  assert.ok(sections.some((section) => section.systemLabel === "fundamentals_safety"));
+  assert.ok(sections.some((section) => section.systemLabel === REVIEW_REQUIRED));
 });

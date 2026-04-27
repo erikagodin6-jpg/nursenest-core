@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { marketingTierHubStudyActionHref } from "@/lib/navigation/marketing-tier-hub-study-hrefs";
+import {
+  isUnsafeOrPlaceholderTierHubHref,
+  marketingTierHubStudyActionHref,
+  resolveMarketingTierHubStudyActionHref,
+} from "@/lib/navigation/marketing-tier-hub-study-hrefs";
 
 describe("marketingTierHubStudyActionHref", () => {
   it("scopes core study surfaces to the pathway URL tree", () => {
@@ -22,5 +26,43 @@ describe("marketingTierHubStudyActionHref", () => {
       assert.notEqual(h, "#");
       assert.equal(h.includes("#"), false);
     }
+  });
+});
+
+describe("isUnsafeOrPlaceholderTierHubHref", () => {
+  it("flags empty and fragment-only values", () => {
+    assert.equal(isUnsafeOrPlaceholderTierHubHref(undefined), true);
+    assert.equal(isUnsafeOrPlaceholderTierHubHref(""), true);
+    assert.equal(isUnsafeOrPlaceholderTierHubHref(" "), true);
+    assert.equal(isUnsafeOrPlaceholderTierHubHref("#"), true);
+    assert.equal(isUnsafeOrPlaceholderTierHubHref("#topics"), true);
+  });
+
+  it("flags disallowed protocols", () => {
+    assert.equal(isUnsafeOrPlaceholderTierHubHref("javascript:void(0)"), true);
+    assert.equal(isUnsafeOrPlaceholderTierHubHref("data:text/html,hi"), true);
+    assert.equal(isUnsafeOrPlaceholderTierHubHref("vbscript:evil"), true);
+  });
+
+  it("allows normal internal paths", () => {
+    assert.equal(isUnsafeOrPlaceholderTierHubHref("/us/rn/nclex-rn/lessons"), false);
+  });
+});
+
+describe("resolveMarketingTierHubStudyActionHref", () => {
+  it("preserves https URLs when explicitly provided", () => {
+    const pathway = getExamPathwayById("us-rn-nclex-rn");
+    assert.ok(pathway);
+    const ext = "https://example.com/help";
+    assert.equal(resolveMarketingTierHubStudyActionHref(pathway, "lessons", ext), ext);
+  });
+
+  it("rejects protocol-relative URLs", () => {
+    const pathway = getExamPathwayById("us-rn-nclex-rn");
+    assert.ok(pathway);
+    assert.equal(
+      resolveMarketingTierHubStudyActionHref(pathway, "lessons", "//evil.example/phish"),
+      "/us/rn/nclex-rn/lessons",
+    );
   });
 });
