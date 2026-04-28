@@ -51,6 +51,11 @@ type CatalogShape = {
     {
       lessons: Array<{
         slug: string;
+        /**
+         * Canonical public display title in bundled catalog JSON. Generated inventory/taxonomy scripts
+         * must preserve curated values; user-facing resolvers only use generated or slug fallback when
+         * this title is missing or unsafe.
+         */
         title: string;
         topic: string;
         topicSlug: string;
@@ -826,6 +831,7 @@ function ensurePremiumCatalogRelatedLessonRefs(
 
 export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLessonRecord {
   const rawTitle = typeof raw.title === "string" ? raw.title : "";
+  const normalizedTopic = normalizeLessonCategory(typeof raw.topic === "string" ? raw.topic : "", rawTitle);
   const premiumizedTitle = premiumizeLessonDisplayTitle(rawTitle, raw.slug).trim();
   const title = premiumizedTitle.length > 0 ? premiumizedTitle : "Lesson";
   const seoTitle = typeof raw.seoTitle === "string" ? raw.seoTitle : title;
@@ -886,7 +892,6 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
   const embeddedSoundLibraries = sanitizeEmbeddedSoundLibraries(
     (raw as { embeddedSoundLibraries?: unknown }).embeddedSoundLibraries,
   );
-  const normalizedTopic = normalizeLessonCategory(typeof raw.topic === "string" ? raw.topic : "", rawTitle);
 
   const base: PathwayLessonRecord = {
     slug: raw.slug,

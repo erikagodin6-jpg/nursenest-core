@@ -4,6 +4,7 @@ import {
   resolveMarketingTierHubStudyActionHref,
   type MarketingTierHubStudyActionId,
 } from "@/lib/navigation/marketing-tier-hub-study-hrefs";
+import { resolveMarketingDisplayCopy } from "@/lib/public-display-copy";
 
 /**
  * SERP-aligned hub headline (H1): primary exam keyword + country, without the brand suffix.
@@ -95,7 +96,10 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
   const audienceLabel = audienceLabelFor(pathway);
   const examLabel = examLabelFor(pathway);
   const countryLabel = countryLabelFor(pathway);
-  const title = nursingTierMarketingHeadline(pathway);
+  const title = resolveMarketingDisplayCopy({
+    curatedCopy: nursingTierMarketingHeadline(pathway),
+    slug: pathway.id,
+  });
 
   return {
     audienceLabel,
@@ -110,25 +114,25 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
     actions: [
       {
         id: "lessons",
-        label: "Lessons",
+        label: resolveMarketingDisplayCopy({ curatedCopy: "Lessons" }),
         description: "Review concepts by topic.",
         href: marketingTierHubStudyActionHref(pathway, "lessons"),
       },
       {
         id: "flashcards",
-        label: "Flashcards",
+        label: resolveMarketingDisplayCopy({ curatedCopy: "Flashcards" }),
         description: "Strengthen recall quickly.",
         href: marketingTierHubStudyActionHref(pathway, "flashcards"),
       },
       {
         id: "practice_questions",
-        label: "Practice Questions",
+        label: resolveMarketingDisplayCopy({ curatedCopy: "Practice Questions" }),
         description: "Drill by topic or weakness.",
         href: marketingTierHubStudyActionHref(pathway, "practice_questions"),
       },
       {
         id: "exams",
-        label: "Exams",
+        label: resolveMarketingDisplayCopy({ curatedCopy: "Exams" }),
         description: "Take exam-style sessions.",
         href: marketingTierHubStudyActionHref(pathway, "exams"),
       },

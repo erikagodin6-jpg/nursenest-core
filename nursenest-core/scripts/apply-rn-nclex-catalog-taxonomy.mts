@@ -1,6 +1,7 @@
 /**
- * One-shot / repeatable: normalize `topic` + `title` for `us-rn-nclex-rn` and `ca-rn-nclex-rn` in catalog.json,
+ * One-shot / repeatable: normalize `topic` for `us-rn-nclex-rn` and `ca-rn-nclex-rn` in catalog.json,
  * and remove merged duplicate lesson rows (see {@link RN_NCLEX_DUPLICATE_SLUGS_TO_REMOVE}).
+ * Public lesson `title` in catalog.json is curated display copy; generated taxonomy must not overwrite it.
  *
  * Run from nursenest-core:
  *   npx tsx scripts/apply-rn-nclex-catalog-taxonomy.mts
@@ -70,7 +71,9 @@ function main() {
 
     for (const lesson of bucket.lessons) {
       const { title, topic } = premiumTitleForRnNclexLesson(lesson, pathwayId);
-      lesson.title = title;
+      if (!String(lesson.title ?? "").trim() && title.trim()) {
+        lesson.title = title;
+      }
       lesson.topic = topic;
       if (!RN_NCLEX_CONTROLLED_TOPICS.includes(topic as (typeof RN_NCLEX_CONTROLLED_TOPICS)[number])) {
         throw new Error(`Post-normalize topic not controlled: ${topic} slug=${lesson.slug}`);

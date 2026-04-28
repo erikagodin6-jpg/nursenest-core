@@ -1,6 +1,6 @@
 # Lesson library refactor (generated)
 
-- **Generated at:** 2026-04-27T10:38:56.981Z
+- **Generated at:** 2026-04-28T00:00:37.538Z
 - **Source:** bundled `catalog.json` + allied + new-grad + scoped-gold via `getCatalogLessonsRawFromBundledOnly` per pathway.
 - **Pathways merged:** us-rn-nclex-rn, ca-rn-nclex-rn, ca-rpn-rex-pn, us-lpn-nclex-pn, us-np-fnp, us-np-agpcnp, us-np-pmhnp, us-np-whnp, us-np-pnp-pc, ca-np-cnple
 

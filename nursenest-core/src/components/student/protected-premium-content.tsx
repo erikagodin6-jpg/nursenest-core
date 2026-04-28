@@ -7,6 +7,7 @@ import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 export type PremiumProtectionTelemetrySurface =
   | "question_bank"
   | "practice_test"
+  | "practice_question_session"
   | "flashcards"
   | "pathway_lesson"
   | "content_lesson"

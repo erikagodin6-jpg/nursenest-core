@@ -46,6 +46,8 @@ import {
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { stripForbiddenLocalePrefixedPathwayTopics } from "@/lib/seo/sitemap-locale-prefixed-path-guard";
 import { shouldReduceNonCriticalBuildWork } from "@/lib/build/build-safe-mode";
+import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
+import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 
 /** Locales included in merged urlset tooling (tier=full only); sorted for deterministic URL lists. */
 const SORTED_SITEMAP_LOCALES = [...getSitemapIncludedLocales()].sort();
@@ -141,6 +143,69 @@ export function collectAlliedMarketingUrls(origin: string): string[] {
   }
   return urls;
 }
+
+/**
+ * Pathway lesson **hub/index** URLs only (launch snapshot; no Postgres, no per-lesson detail URLs).
+ */
+export function collectPathwayLessonHubUrlsOnly(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  const urls: string[] = [`${o}/lessons`];
+  for (const p of listPublishedExamPathwaysForPublicSite()) {
+    urls.push(`${o}${buildExamPathwayPath(p, "lessons")}`);
+  }
+  return urls;
+}
+
+/** Pre-nursing hub + lesson index + study plan (no per-module lesson detail URLs). */
+export function collectPreNursingSitemapHubUrlsOnly(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  return [`${o}/pre-nursing`, `${o}${PRE_NURSING_LESSONS_INDEX_PATH}`, `${o}/pre-nursing/study-plan`];
+}
+
+/**
+ * Locale marketing URLs for sitemap without DB: no localized pre-nursing lesson slugs, no `/{locale}/{programmatic}` fan-out.
+ */
+export function collectLocaleMarketingSitemapSafeUrls(origin: string, locale: string): string[] {
+  const o = normalizeOrigin(origin);
+  const add = (path: string) => {
+    const p = path.startsWith("/") ? path : `/${path}`;
+    return `${o}${p}`;
+  };
+  const urls: string[] = [
+    add(`/${locale}`),
+    add(`/${locale}/pricing`),
+    add(`/${locale}/lessons`),
+    add(`/${locale}/question-bank`),
+    add(`/${locale}/practice-exams`),
+    add(`/${locale}/pre-nursing`),
+    add(`/${locale}/for-institutions`),
+    add(`/${locale}/faq`),
+    add(`/${locale}/terms`),
+    add(`/${locale}/privacy`),
+    add(`/${locale}/refund-policy`),
+    add(`/${locale}/acceptable-use`),
+    add(`/${locale}/disclaimer`),
+    add(`/${locale}/editorial-policy`),
+    add(`/${locale}/content-review-policy`),
+    add(`/${locale}/contact`),
+  ];
+  const pathwayTopicPublicPaths = collectPathwayTopicProgrammaticPublicPaths();
+  const stripped = stripForbiddenLocalePrefixedPathwayTopics(urls, o, locale, pathwayTopicPublicPaths);
+  if (stripped.removed > 0) {
+    safeServerLog("seo", "sitemap_locale_strip_prefixed_pathway_topics", {
+      locale,
+      removed: stripped.removed,
+    });
+  }
+  return stripped.urls;
+}
+
+export type CollectCoreUrlsOptions = {
+  /**
+   * Merged `/sitemap.xml` mode: no Prisma, no pathway lesson detail URLs, no content-backed study hub DB slice.
+   */
+  productionSafeStatic?: boolean;
+};
 
 /** Pre-Nursing public hub, lesson index, study planning, and module pages (registry-backed). */
 export function collectPreNursingSeoUrls(origin: string): string[] {
@@ -289,11 +354,11 @@ ${body}
 /**
  * Default-locale “core” slice (merged into `/sitemap.xml` via `collectCoreUrls`).
  *
- * Omits auth/account routes (`/login`, `/signup`, …) — they are `noindex` (see
- * `sitemap-marketing-exclusions.ts` and merge-time filtering in `sitemap-all-xml.ts`).
+ * Unless {@link CollectCoreUrlsOptions.productionSafeStatic} is set, omits `/login` (noindex auth surface).
  */
-export async function collectCoreUrls(origin: string): Promise<string[]> {
+export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOptions): Promise<string[]> {
   const o = normalizeOrigin(origin);
+  const productionSafe = opts?.productionSafeStatic === true;
   const add = (path: string) => {
     const p = path.startsWith("/") ? path : `/${path}`;
     return `${o}${p}`;
@@ -359,6 +424,7 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     add("/editorial-policy"),
     add("/content-review-policy"),
     add("/contact"),
+    ...(productionSafe ? [add("/login")] : []),
   ];
   if (reduceForBuildSafeMode) {
     safeServerLog("seo", "sitemap_build_safe_mode_core_only", {
@@ -374,6 +440,23 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     ...listPublishedExpansionExamMarketingPaths().map((p) => add(p)),
     ...regionalTopicPaths.map((p) => add(p)),
   ];
+  if (productionSafe) {
+    const pathwayTopicUrls = await collectPathwayTopicProgrammaticUrls(o);
+    const [examHubUrls, npPracticeHubUrls] = await Promise.all([
+      collectExamPathwayUrls(o),
+      collectNpPracticeTestHubUrls(o),
+    ]);
+    const lessonHubUrls = collectPathwayLessonHubUrlsOnly(o);
+    return [
+      ...expandedBase,
+      ...examHubUrls,
+      ...npPracticeHubUrls,
+      ...pathwayTopicUrls,
+      ...collectAlliedMarketingUrls(o),
+      ...collectPreNursingSitemapHubUrlsOnly(o),
+      ...lessonHubUrls,
+    ];
+  }
   /**
    * Pathway lesson URLs are the dominant sitemap cost. Cap wall time (override via `SITEMAP_PATHWAY_BUDGET_MS`).
    * Blog URLs are merged separately in `sitemap-all-xml.ts` and are not dropped when this budget elapses.

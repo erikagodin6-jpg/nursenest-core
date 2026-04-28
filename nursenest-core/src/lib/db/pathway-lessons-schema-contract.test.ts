@@ -16,4 +16,12 @@ describe("pathway-lessons-schema-contract", () => {
   it("returns null for unrelated errors", () => {
     assert.equal(pathwayLessonsSchemaDriftFromPrismaErrorMessage("connection refused"), null);
   });
+
+  it("detects invalid prisma invocation text mentioning structural_public_complete", () => {
+    const drift = pathwayLessonsSchemaDriftFromPrismaErrorMessage(
+      "Invalid prisma.pathwayLesson.findMany() invocation: The column pathway_lessons.structural_public_complete does not exist in the current database.",
+    );
+    assert.ok(drift);
+    assert.equal(drift.code, "missing_structural_public_complete");
+  });
 });

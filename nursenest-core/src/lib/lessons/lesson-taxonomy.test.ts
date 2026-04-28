@@ -36,7 +36,7 @@ const NURSING_PATHWAYS = [
 ] as const;
 
 test("LESSON_CATEGORIES is fixed length and slug mapping is injective for this set", () => {
-  assert.equal(LESSON_CATEGORIES.length, 20);
+  assert.equal(LESSON_CATEGORIES.length, 21);
   const slugs = new Set<string>();
   for (const c of LESSON_CATEGORIES) {
     const s = lessonCategoryToSlug(c);
@@ -128,6 +128,7 @@ test("normalizeLessonCategory can override miscoded Safety topic when title sign
 
 test("normalizeVisibleLessonTitle removes NurseNest pipe suffix and prefers colon over pipe", () => {
   assert.equal(normalizeVisibleLessonTitle("Sepsis bundles | NurseNest"), "Sepsis bundles");
+  assert.equal(normalizeVisibleLessonTitle("Sepsis | NurseNest | Bundles"), "Sepsis: Bundles");
   assert.equal(normalizeVisibleLessonTitle("Topic A | Clinical focus"), "Topic A: Clinical focus");
 });
 

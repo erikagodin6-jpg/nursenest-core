@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { validateLearnerCopyForExamContext } from "@/lib/learner/validate-learner-copy-context";
 import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
-import { compactPathwayLabel } from "@/lib/lessons/lesson-title-presentation";
+import { cleanLessonTitleForDisplay, compactPathwayLabel } from "@/lib/lessons/lesson-title-presentation";
 
 type Props = {
   pathway: ExamPathwayDefinition;
@@ -66,6 +66,7 @@ export function PathwayLessonDetailHeader({
   const compactExamName = compactPathwayLabel(examName);
   const hasTrailing = Boolean(trailing);
   validateLearnerCopyForExamContext(pathway, lessonTitle, "lesson_header");
+  const displayLessonTitle = cleanLessonTitleForDisplay(lessonTitle);
 
   return (
     <header
@@ -97,7 +98,7 @@ export function PathwayLessonDetailHeader({
 
       <div className={`mt-2.5 ${hasTrailing ? "lg:flex lg:items-start lg:justify-between lg:gap-6" : ""}`}>
         <div className="min-w-0 flex-1">
-          <h1 className="nn-lesson-page-title text-balance">{lessonTitle}</h1>
+          <h1 className="nn-lesson-page-title text-balance">{displayLessonTitle}</h1>
           <p className="mt-1.5 text-sm font-medium leading-snug text-[var(--theme-heading-text)] sm:text-[0.9375rem]">
             {lessonTopic}
           </p>

@@ -12,4 +12,10 @@ describe("cleanLessonTitleForDisplay", () => {
     const title = cleanLessonTitleForDisplay("Heart Failure Management (NCLEX-RN, US)");
     assert.equal(title, "Heart Failure Management");
   });
+
+  it("strips NurseNest branding pipes and avoids NurseNest in output", () => {
+    assert.match(cleanLessonTitleForDisplay("Sepsis care | NurseNest"), /^(?!.*NurseNest).*$/i);
+    assert.equal(cleanLessonTitleForDisplay("Sepsis care | NurseNest"), "Sepsis Care");
+    assert.equal(cleanLessonTitleForDisplay("Topic | NurseNest | Subtitle"), "Topic: Subtitle");
+  });
 });

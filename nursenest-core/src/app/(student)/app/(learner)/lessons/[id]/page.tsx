@@ -10,6 +10,7 @@ import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { logBlockedAccess, logEntitlementMismatch } from "@/lib/entitlements/entitlement-logging";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { prisma } from "@/lib/db";
+import { pathwayLessonReadOmitArgs } from "@/lib/db/pathway-lesson-structural-column-runtime";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import { resolveAppSubscriberPathwayLessonForDetail } from "@/lib/lessons/app-subscriber-lesson-detail-resolve";
 import { visibleSectionsForLesson } from "@/lib/lessons/pathway-lesson-access";
@@ -73,6 +74,7 @@ import {
 import { loadLessonBankQuizItemsByExamIdsWithDiagnostics } from "@/lib/lessons/lesson-explicit-exam-question-items";
 import { PathwayLessonStudyLoopOrchestrator } from "@/components/lessons/pathway-lesson-study-loop-orchestrator";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
+import { resolvePublicLessonTitle } from "@/lib/public-display-copy";
 import { shouldRenderPathwayLessonSection } from "@/lib/lessons/lesson-section-page-layout";
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonCommonTrapsStrip, PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
@@ -233,16 +235,19 @@ export default async function LessonDetailPage({ params }: Props) {
         select: {
           id: true,
           title: true,
+          slug: true,
           summary: true,
           content: true,
           bodySystem: true,
+          seoTitle: true,
         },
       });
       if (!row) return { kind: "out_of_plan" as const };
       return { kind: "content_ok" as const, row };
     }
 
-    const pwRow = await prisma.pathwayLesson.findUnique({ where: { id } });
+    const pathwayLessonReadOmit = await pathwayLessonReadOmitArgs();
+    const pwRow = await prisma.pathwayLesson.findUnique({ ...pathwayLessonReadOmit, where: { id } });
     if (pwRow) {
       const pathwayResolution = await resolveAppSubscriberPathwayLessonForDetail({
         entitlement,
@@ -400,7 +405,11 @@ export default async function LessonDetailPage({ params }: Props) {
 
   if (resolvedLesson.kind === "pathway_ok") {
     const record = resolvedLesson.record;
-    const displayTitle = cleanLessonTitleForDisplay(record.title);
+    const displayTitle = resolvePublicLessonTitle({
+      curatedTitle: record.title,
+      generatedTitle: record.seoTitle,
+      slug: record.slug,
+    });
     const visibleRaw = visibleSectionsForLesson(record, true);
     const visible = filterLearnerPresentablePathwaySections(
       visibleRaw.filter((s) => shouldRenderPathwayLessonSection(s.kind)),
@@ -878,7 +887,11 @@ export default async function LessonDetailPage({ params }: Props) {
   }
 
   const row = resolvedLesson.row;
-  const displayTitle = cleanLessonTitleForDisplay(row.title);
+  const displayTitle = resolvePublicLessonTitle({
+    curatedTitle: row.title,
+    generatedTitle: row.seoTitle,
+    slug: row.slug,
+  });
   const contentQ = classifyContentItemLesson(row.content);
   const bs = row.bodySystem?.trim() ?? "";
   const anchorNorm = normalizeTopicKey(bs || displayTitle);

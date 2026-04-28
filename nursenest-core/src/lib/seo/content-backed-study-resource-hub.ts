@@ -207,8 +207,8 @@ export async function listContentBackedStudyResourceHubSitemapRows(
   if (!isDatabaseUrlConfigured()) return [];
   let groups: { bodySystem: string; _count: { _all: number } }[];
   try {
-    groups = await prisma.pathwayLesson.groupBy({
-      by: ["bodySystem"],
+    groups = (await prisma.pathwayLesson.groupBy({
+      by: ["bodySystem"] as const,
       where: {
         pathwayId: pathway.id,
         status: ContentStatus.PUBLISHED,
@@ -216,7 +216,7 @@ export async function listContentBackedStudyResourceHubSitemapRows(
         bodySystem: { not: "" },
       },
       _count: { _all: true },
-    });
+    })) as { bodySystem: string; _count: { _all: number } }[];
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     safeServerLog("content_backed_hub", "sitemap_rows_db_error", {

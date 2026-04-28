@@ -10,6 +10,7 @@ import { isClientProtectionMetricKey, recordPremiumProtectionClientBatch } from 
 const surfaceSchema = z.enum([
   "question_bank",
   "practice_test",
+  "practice_question_session",
   "flashcards",
   "pathway_lesson",
   "content_lesson",

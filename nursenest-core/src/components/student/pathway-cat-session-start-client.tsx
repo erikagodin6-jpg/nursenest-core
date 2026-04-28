@@ -17,6 +17,7 @@ import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-ques
 import type { CatPracticeReadinessResult } from "@/lib/practice-tests/cat-practice-readiness";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import { CatAmbiguityPathwayPicker } from "@/components/student/cat-ambiguity-pathway-picker";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 import {
   buildCatExamSimulationCreatePayload,
   isHardBlockingReadinessCode,
@@ -355,7 +356,7 @@ export function PathwayCatSessionStartClient({
                       className="font-medium text-[var(--semantic-brand)] underline underline-offset-2"
                       href={`${lessonsHubHref}/${encodeURIComponent(lesson.slug)}`}
                     >
-                      {lesson.title}
+                      {cleanLessonTitleForDisplay(lesson.title)}
                     </Link>
                   </li>
                 ))}

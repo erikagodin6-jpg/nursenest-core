@@ -1,4 +1,5 @@
 import { formatTitleCase } from "@/lib/format/text-case";
+import { normalizeVisibleLessonTitle } from "@/lib/lessons/lesson-taxonomy";
 
 const PATHWAY_LABEL_PATTERN = /\b(?:nclex[\s-]?rn|nclex[\s-]?pn|rex[\s-]?pn|cnple|fnp|aanp|ancc)\b/i;
 const COUNTRY_PATTERN = /\b(?:canada|us|u\.s\.|united states)\b/i;
@@ -68,7 +69,7 @@ function restoreAcronymCasing(value: string, sourceTitle: string): string {
 }
 
 export function cleanLessonTitleForDisplay(rawTitle: string): string {
-  const source = normalizeSpacing(rawTitle);
+  const source = normalizeSpacing(normalizeVisibleLessonTitle(normalizeSpacing(rawTitle)));
   if (!source) return "";
 
   const stripped = normalizeSpacing(

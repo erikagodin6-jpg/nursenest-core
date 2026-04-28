@@ -91,7 +91,8 @@ test("buildPathwayLessonSystemSections preserves config order and only emits non
       "Respiratory",
       "Neurological",
       "Gastrointestinal",
-      "Maternity",
+      "Maternal & Newborn",
+      "Infection Control",
       "Safety & Prioritization",
     ],
   );

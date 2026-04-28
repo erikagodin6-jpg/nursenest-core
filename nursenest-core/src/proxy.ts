@@ -60,8 +60,12 @@ function forwardRequest(request: NextRequest): NextResponse {
   return res;
 }
 
-function isHealthRoute(pathname: string) {
-  return pathname.startsWith("/api/health");
+/** Public probes and crawler assets must not run auth/session work. */
+export function isPublicProbeOrCrawlerBypassPath(pathname: string): boolean {
+  if (pathname === "/healthz" || pathname === "/readyz") return true;
+  if (pathname === "/sitemap.xml" || pathname === "/robots.txt") return true;
+  if (pathname === "/api/health" || pathname.startsWith("/api/health/")) return true;
+  return false;
 }
 
 /**
@@ -110,8 +114,7 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     const req = ensureCorrelationId(request);
     const pathname = req.nextUrl.pathname;
 
-    // Health bypass (critical)
-    if (isHealthRoute(pathname)) {
+    if (isPublicProbeOrCrawlerBypassPath(pathname)) {
       return forwardRequest(req);
     }
 

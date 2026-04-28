@@ -22,5 +22,6 @@ test("sitemap builders gate long-tail SEO fan-out behind build safe mode", () =>
 
   assert.match(mergedXml, /shouldReduceNonCriticalBuildWork/);
   assert.match(mergedXml, /if \(!reduceForBuildSafeMode\)/);
+  assert.match(mergedXml, /productionSafeStatic: "1"/);
   assert.match(mergedXml, /buildSafeMode: reduceForBuildSafeMode \? "1" : "0"/);
 });

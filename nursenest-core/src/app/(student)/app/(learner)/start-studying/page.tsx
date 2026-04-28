@@ -5,6 +5,7 @@ import { ContentStatus } from "@prisma/client";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { prisma } from "@/lib/db";
+import { isPathwayLessonStructuralPublicCompleteColumnPresent } from "@/lib/db/pathway-lesson-structural-column-runtime";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
@@ -13,6 +14,7 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import type { BreadcrumbCrumb } from "@/lib/seo/breadcrumb-types";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 export const dynamic = "force-dynamic";
 
@@ -97,6 +99,20 @@ export default async function StartStudyingPage() {
 
   const pathway = pathwayId ? getExamPathwayById(pathwayId) : null;
   const lessonLocale = locale.split("-")[0] || "en";
+  const pathwayLessonStructuralCol = await isPathwayLessonStructuralPublicCompleteColumnPresent();
+  const firstLessonSelect = {
+    id: true,
+    title: true,
+    topic: true,
+    slug: true,
+    topicSlug: true,
+    bodySystem: true,
+    previewSectionCount: true,
+    seoTitle: true,
+    seoDescription: true,
+    locale: true,
+    ...(pathwayLessonStructuralCol ? { structuralPublicComplete: true as const } : {}),
+  };
 
   const firstLessonRaw =
     pathwayId != null
@@ -109,19 +125,7 @@ export default async function StartStudyingPage() {
                 locale: lessonLocale,
               },
               orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }],
-              select: {
-                id: true,
-                title: true,
-                topic: true,
-                slug: true,
-                topicSlug: true,
-                bodySystem: true,
-                previewSectionCount: true,
-                seoTitle: true,
-                seoDescription: true,
-                locale: true,
-                structuralPublicComplete: true,
-              },
+              select: firstLessonSelect,
             }),
           null,
           START_STUDYING_DB_TIMEOUT_MS,
@@ -129,7 +133,12 @@ export default async function StartStudyingPage() {
         )
       : null;
   let firstLesson = firstLessonRaw;
-  if (firstLessonRaw && pathwayId != null && !firstLessonRaw.structuralPublicComplete) {
+  if (
+    firstLessonRaw &&
+    pathwayId != null &&
+    pathwayLessonStructuralCol &&
+    !(firstLessonRaw as { structuralPublicComplete?: boolean }).structuralPublicComplete
+  ) {
     firstLesson = null;
   }
   if (!firstLesson && pathwayId != null && lessonLocale !== "en") {
@@ -138,25 +147,17 @@ export default async function StartStudyingPage() {
         prisma.pathwayLesson.findFirst({
           where: { pathwayId, status: ContentStatus.PUBLISHED, locale: "en" },
           orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }],
-          select: {
-            id: true,
-            title: true,
-            topic: true,
-            slug: true,
-            topicSlug: true,
-            bodySystem: true,
-            previewSectionCount: true,
-            seoTitle: true,
-            seoDescription: true,
-            locale: true,
-            structuralPublicComplete: true,
-          },
+          select: firstLessonSelect,
         }),
       null,
       START_STUDYING_DB_TIMEOUT_MS,
       { scope: "start_studying", label: "first_lesson_fallback_locale" },
     );
-    if (fallbackRaw?.structuralPublicComplete) {
+    if (
+      fallbackRaw &&
+      (!pathwayLessonStructuralCol ||
+        Boolean((fallbackRaw as { structuralPublicComplete?: boolean }).structuralPublicComplete))
+    ) {
       firstLesson = fallbackRaw;
     }
   }
@@ -200,7 +201,9 @@ export default async function StartStudyingPage() {
           {firstLesson ? (
             <>
               <p className="text-sm text-[var(--semantic-text-secondary)]">
-                <span className="font-medium text-[var(--semantic-text-primary)]">{firstLesson.title}</span>
+                <span className="font-medium text-[var(--semantic-text-primary)]">
+                  {cleanLessonTitleForDisplay(firstLesson.title)}
+                </span>
                 {firstLesson.topic ? (
                   <span className="block text-xs text-[var(--semantic-text-muted)]">{firstLesson.topic}</span>
                 ) : null}

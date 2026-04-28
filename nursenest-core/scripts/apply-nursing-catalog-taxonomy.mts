@@ -1,5 +1,6 @@
 /**
- * One-shot editorial pass: normalize catalog `topic` to controlled categories and premiumize titles.
+ * One-shot editorial pass: normalize catalog `topic` to controlled categories.
+ * Public lesson `title` in catalog.json is curated display copy; do not rewrite it from generated taxonomy.
  * Run: npx tsx scripts/apply-nursing-catalog-taxonomy.mts (cwd: nursenest-core)
  */
 import fs from "node:fs";
@@ -29,7 +30,6 @@ function main(): void {
   const raw = fs.readFileSync(CATALOG, "utf8");
   const data = JSON.parse(raw) as Catalog;
   let topics = 0;
-  let titles = 0;
   let seos = 0;
   for (const [, bucket] of Object.entries(data.pathways ?? {})) {
     const lessons = bucket?.lessons;
@@ -43,12 +43,11 @@ function main(): void {
         topics += 1;
       }
       const slug = typeof row.slug === "string" ? row.slug : "";
-      const nextTitle = premiumizeLessonDisplayTitle(title, slug);
-      if (nextTitle !== title) {
-        row.title = nextTitle;
-        titles += 1;
+      const generatedTitle = premiumizeLessonDisplayTitle(title, slug);
+      if (!title.trim() && generatedTitle.trim()) {
+        row.title = generatedTitle;
         const seo = row.seoTitle;
-        const nextSeo = patchSeoTitle(nextTitle, seo);
+        const nextSeo = patchSeoTitle(generatedTitle, seo);
         if (typeof seo === "string" && nextSeo !== seo) {
           row.seoTitle = nextSeo;
           seos += 1;
@@ -57,7 +56,7 @@ function main(): void {
     }
   }
   fs.writeFileSync(CATALOG, `${JSON.stringify(data, null, 2)}\n`, "utf8");
-  console.log(`Updated topics=${topics} titles=${titles} seoTitles=${seos} → ${CATALOG}`);
+  console.log(`Updated topics=${topics} missingTitlesOnly seoTitles=${seos} → ${CATALOG}`);
 }
 
 void main();

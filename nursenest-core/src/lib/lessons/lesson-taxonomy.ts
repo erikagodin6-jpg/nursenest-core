@@ -201,7 +201,7 @@ export function lessonCategoryToSlug(category: LessonCategory): string {
  */
 const TITLE_HINT_RULES: ReadonlyArray<{ re: RegExp; category: LessonCategory }> = [
   {
-    re: /\b(antibiot|anticoag|warfarin|heparin|doac|dabigatran|rivaroxaban|apixaban|enoxaparin|insulin|opioid|analges|diuretic|digoxin|lithium|pharmac|medication|meds\b|drug\b|adverse effect|contraindicat|nursing implication|stewardship|high.?alert)\b/i,
+    re: /\b(antibiot|vancomycin|aminoglycos|anticoag|warfarin|heparin|doac|dabigatran|rivaroxaban|apixaban|enoxaparin|insulin|opioid|analges|diuretic|digoxin|lithium|pharmac|medication|meds\b|drug\b|trough|nephrotoxic|adverse effect|contraindicat|nursing implication|stewardship|high.?alert)\b/i,
     category: "Pharmacology",
   },
   {
@@ -639,6 +639,9 @@ const NP_INTEGRATED_TITLE_RE =
  */
 export function normalizeVisibleLessonTitle(title: string): string {
   let t = (title ?? "").trim();
+  /** Strip product branding pipes anywhere (not only trailing) — keeps display lines short for UI density. */
+  t = t.replace(/\s*\|\s*NurseNest\b/gi, "").trim();
+  t = t.replace(/\s*\|\s*Nurse\s+Nest\b/gi, "").trim();
   for (let i = 0; i < 8; i++) {
     const next = t
       .replace(/\s*\|\s*NurseNest\s*$/i, "")

@@ -5,6 +5,7 @@ import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-stru
 import { buildLessonTaxonomyCorpus, classifyNursingContent, classifyStrings } from "@/lib/taxonomy/classifier";
 import { allTaxonomyLeaves, REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { resolvePublicHubTitle } from "@/lib/public-display-copy";
 
 /** Exact taxonomy leaf ids (and space/kebab variants) resolve before substring keyword scoring — avoids false hits (e.g. "neurological" contains "intestinal"). */
 const TAXONOMY_LEAF_ID_SET = new Set<string>(allTaxonomyLeaves());
@@ -183,7 +184,7 @@ export function buildPathwayLessonSystemSections(
       return [
         {
           id: category.id,
-          label: category.title,
+          label: resolvePublicHubTitle({ curatedTitle: category.title, slug: category.id }),
           systemLabel: category.id,
           description: category.description ?? "",
           lessons: sorted,
@@ -202,7 +203,10 @@ export function buildPathwayLessonSystemSections(
       return [
         {
           id: `${category.id}:${sub.id}`,
-          label: `${category.title} - ${sub.title}`,
+          label: resolvePublicHubTitle({
+            curatedTitle: `${category.title} - ${sub.title}`,
+            slug: sub.id,
+          }),
           systemLabel: sub.id,
           description: category.description ?? "",
           lessons: sorted,

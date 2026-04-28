@@ -17,11 +17,11 @@
  * canonical display string. Marketing curriculum uses **slug-only** dedupe by default.
  */
 
-import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 import { normalizeLessonTitleForDedupe } from "@/lib/lessons/pathway-lesson-dedupe";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { resolvePublicLessonTitle } from "@/lib/public-display-copy";
 
 /** Higher = preferred when choosing one row per slug or per concept. */
 export function hubLessonPresentationRank(lesson: PathwayLessonRecord): number {
@@ -53,8 +53,11 @@ function pickBetterHubLesson(a: PathwayLessonRecord, b: PathwayLessonRecord): Pa
 
 /** Single learner-facing title for hub cards and concept keys. */
 export function canonicalHubLessonDisplayTitle(lesson: PathwayLessonRecord): string {
-  const raw = (lesson.seoTitle?.trim() || lesson.title || "").trim();
-  return cleanLessonTitleForDisplay(raw);
+  return resolvePublicLessonTitle({
+    curatedTitle: lesson.title,
+    generatedTitle: lesson.seoTitle,
+    slug: lesson.slug,
+  });
 }
 
 function hubConceptKey(lesson: PathwayLessonRecord): string | null {

@@ -4,7 +4,7 @@ This file tracks **editorial taxonomy rules** implemented in `nursenest-core/src
 
 ## Controlled categories
 
-Display categories are the fixed list `LESSON_CATEGORIES` (same module). There is **no** `"Unknown"` bucket: empty or unclassified free text falls back to **Fundamentals** for display; hub routing still uses `REVIEW_REQUIRED` when taxonomy cannot place a lesson.
+Display categories are the fixed list `LESSON_CATEGORIES` in `lesson-taxonomy.ts` (**21** entries, including **Fundamentals**). There is **no** `"Unknown"` bucket: empty or unclassified free text falls back to **Fundamentals** for display; hub routing still uses `REVIEW_REQUIRED` when taxonomy cannot place a lesson.
 
 ## Keyword priority (title + topic corpus)
 

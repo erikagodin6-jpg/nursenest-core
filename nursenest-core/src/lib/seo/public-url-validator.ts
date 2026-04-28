@@ -59,7 +59,10 @@ function isHttpsOrLocalhost(url: URL): boolean {
  * Returns whether an absolute public URL is safe to emit in sitemaps, schema, alternates, and links.
  * Prefer calling this for **every** string that becomes a crawlable same-origin URL.
  */
-export function isValidPublicUrl(url: string, options?: { origin?: string }): PublicUrlValidationResult {
+export function isValidPublicUrl(
+  url: string,
+  options?: { origin?: string; allowSitemapLogin?: boolean },
+): PublicUrlValidationResult {
   let parsed: URL;
   try {
     parsed = new URL(url.trim());
@@ -93,7 +96,11 @@ export function isValidPublicUrl(url: string, options?: { origin?: string }): Pu
   }
 
   if (isAuthNoindexMarketingPathname(pathname)) {
-    return { ok: false, code: "auth_noindex_path", detail: pathname };
+    if (options?.allowSitemapLogin === true && pathname === "/login") {
+      /* `/login` is noindex for SERPs but may appear in `/sitemap.xml` for crawler discovery. */
+    } else {
+      return { ok: false, code: "auth_noindex_path", detail: pathname };
+    }
   }
 
   if (isDisallowedMarketingSeoPathname(pathname)) {

@@ -7,6 +7,7 @@ import { invalidateLearnerPrivateReadCache } from "@/lib/cache/learner-private-r
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { notSubscribedResponse, requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { prisma } from "@/lib/db";
+import { pathwayLessonReadOmitArgs } from "@/lib/db/pathway-lesson-structural-column-runtime";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { appPathwayLessonVisibleToSubscriber } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import { getPublishedPathwayLessonRecordById } from "@/lib/lessons/pathway-lesson-loader";
@@ -55,7 +56,9 @@ export async function POST(req: Request) {
   });
   const learnerPath = user?.learnerPath ?? null;
 
+  const readOmit = await pathwayLessonReadOmitArgs();
   const pw = await prisma.pathwayLesson.findUnique({
+    ...readOmit,
     where: { id: lessonId },
   });
   if (pw && pw.status === ContentStatus.PUBLISHED) {

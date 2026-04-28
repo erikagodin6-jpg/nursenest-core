@@ -77,7 +77,7 @@ import { PathwayLessonUnavailableMarketing } from "@/components/lessons/pathway-
 import { MarketingPathwayLessonDetailViewBeacon } from "@/components/observability/marketing-study-surface-view-beacons";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { DEFAULT_STUDY_SETTINGS } from "@/lib/learner/study-settings";
-import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
+import { resolvePublicLessonTitle } from "@/lib/public-display-copy";
 import { shouldRenderPathwayLessonSection } from "@/lib/lessons/lesson-section-page-layout";
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
@@ -280,7 +280,11 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           .filter((s) => shouldRenderPathwayLessonSection(s.kind))
           .map(({ id, heading }) => ({ id, heading }))
       : [];
-  const displayLessonTitle = cleanLessonTitleForDisplay(lesson.title);
+  const displayLessonTitle = resolvePublicLessonTitle({
+    curatedTitle: lesson.title,
+    generatedTitle: lesson.seoTitle,
+    slug: lesson.slug,
+  });
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, displayLessonTitle);
   const lessonQuality = classifyPathwayLesson(lesson);
   const contentDates = contentDatesRes.status === "fulfilled" ? contentDatesRes.value : null;

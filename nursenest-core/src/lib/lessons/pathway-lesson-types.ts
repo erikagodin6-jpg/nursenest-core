@@ -246,6 +246,11 @@ export type PathwayLessonLocaleMeta = {
 
 export type PathwayLessonRecord = {
   slug: string;
+  /**
+   * Canonical public display title. `catalog.json` authors curate this value; generated scripts may add
+   * metadata but must not overwrite it from older registries, SEO helpers, or slug fallbacks. Regression
+   * tests intentionally fail when known old public titles return.
+   */
   title: string;
   topic: string;
   topicSlug: string;
