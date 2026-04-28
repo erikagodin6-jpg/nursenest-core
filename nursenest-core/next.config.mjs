@@ -19,9 +19,15 @@ const nextConfig = {
     externalDir: true,
   },
 
-  webpack: (config) => {
+  webpack: (config, { dev }) => {
     // Default parallelism can spike memory; cap so native allocations + V8 heap fit small hosts.
     config.parallelism = 1;
+    // On some hosts webpack's PackFileCacheStrategy hits ENOENT while renaming pack files under
+    // `.next/cache/webpack`, which can leave `.next/server` incomplete and break the build with
+    // "pages-manifest.json" missing during "Collecting page data". Disable persistent cache in prod.
+    if (!dev) {
+      config.cache = false;
+    }
     return config;
   },
 };
