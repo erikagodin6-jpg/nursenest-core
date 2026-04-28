@@ -1054,6 +1054,12 @@ export function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
         seen.add(s);
         merged.push(extra);
       }
+      for (const extra of rnNeurologicalExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
       return prependScopedGoldCatalogLessons(pathwayId, merged);
     }
   }
