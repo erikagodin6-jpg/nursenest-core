@@ -145,6 +145,15 @@ function jobPhaseBadge(phase: NonNullable<BatchDetail["jobPhase"]>) {
   }
 }
 
+function repairSummary(meta: ItemRepairMeta | undefined): string | null {
+  if (!meta || (meta.repairAttempts == null && meta.terminal == null)) return null;
+  const parts: string[] = [];
+  if (meta.repairAttempts != null) parts.push(`repair rounds: ${meta.repairAttempts}`);
+  if (meta.terminal === true) parts.push("failure is terminal (auto-repair exhausted)");
+  else if (meta.terminal === false) parts.push("may be re-queued");
+  return parts.join(" · ");
+}
+
 function statusBadge(status: BlogDraftGenerationBatchItemStatus | BlogDraftGenerationBatchStatus) {
   const base = "inline-flex rounded-full px-2 py-0.5 text-xs font-semibold";
   switch (status) {
@@ -239,6 +248,31 @@ export function AdminBlogDraftBatchClient() {
     setBatch(mapJobPayloadToBatchDetail(json.job));
     setErr(null);
   }, []);
+
+  const retryRepairItem = useCallback(
+    async (itemId: string) => {
+      if (!batchId) return;
+      setBusy(true);
+      setErr(null);
+      try {
+        const res = await fetch(`/api/admin/blog/draft-batch/items/${encodeURIComponent(itemId)}/retry-repair`, {
+          method: "POST",
+          credentials: "include",
+        });
+        const json = (await res.json()) as { ok?: boolean; error?: string };
+        if (!res.ok || !json.ok) {
+          setErr(json.error || `HTTP ${res.status}`);
+          return;
+        }
+        await loadBatch(batchId);
+      } catch (e) {
+        setErr(e instanceof Error ? e.message : String(e));
+      } finally {
+        setBusy(false);
+      }
+    },
+    [batchId, loadBatch],
+  );
 
   useEffect(() => {
     void loadRecent();
@@ -632,7 +666,9 @@ export function AdminBlogDraftBatchClient() {
                 </tr>
               </thead>
               <tbody>
-                {batch.items.map((row) => (
+                {batch.items.map((row) => {
+                  const repairLine = repairSummary(row.repairMeta);
+                  return (
                   <tr key={row.id} className="border-b border-border/60">
                     <td className="py-2 pr-2 align-top text-muted-foreground">{row.ordinal + 1}</td>
                     <td className="py-2 pr-2 align-top">{row.topicRaw}</td>
@@ -645,12 +681,28 @@ export function AdminBlogDraftBatchClient() {
                           {row.blogPost.slug}
                         </Link>
                       ) : null}
-                      {row.error ? (
-                        <p className="mt-1 max-w-md text-xs text-rose-700 dark:text-rose-300">{row.error}</p>
+                      {row.repairMeta?.message || row.error ? (
+                        <p className="mt-1 max-w-md text-xs text-rose-700 dark:text-rose-300">
+                          {row.repairMeta?.message || row.error}
+                        </p>
+                      ) : null}
+                      {repairLine ? (
+                        <p className="mt-1 max-w-md text-xs text-muted-foreground">{repairLine}</p>
+                      ) : null}
+                      {row.status === BlogDraftGenerationBatchItemStatus.FAILED ? (
+                        <button
+                          type="button"
+                          disabled={busy}
+                          className="mt-2 rounded-md border border-border px-2 py-1 text-xs font-medium text-foreground disabled:opacity-50"
+                          onClick={() => void retryRepairItem(row.id)}
+                        >
+                          Retry repair (re-queue)
+                        </button>
                       ) : null}
                     </td>
                   </tr>
-                ))}
+                );
+                })}
               </tbody>
             </table>
           </div>

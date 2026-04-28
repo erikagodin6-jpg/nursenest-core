@@ -94,6 +94,8 @@ export type AutomationResult =
       localized: Array<{ locale: string; region: string; localizedSlug: string; mode: "created" | "updated" }>;
       localizationErrors: string[];
       seoReadiness: BlogAutomationSeoReadiness;
+      /** Control-panel pipeline repair rounds used before a successful persist. */
+      repairPassesUsed?: number;
     }
   | { ok: false; error: string; repairPassesUsed?: number };
 
@@ -501,6 +503,7 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
     localized,
     localizationErrors,
     seoReadiness,
+    repairPassesUsed: pipelineResult.repairPassesUsed,
   };
 }
 

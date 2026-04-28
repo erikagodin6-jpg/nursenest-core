@@ -100,7 +100,7 @@ export type GenerateBlogAiDraftResult =
       post: { id: string; slug: string; title: string; postStatus: BlogPostStatus; updatedAt: Date };
       warnings: string[];
     }
-  | { ok: false; error: string };
+  | { ok: false; error: string; repairPassesUsed?: number };
 
 function sleepMs(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -194,7 +194,7 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
       const msg = e instanceof Error ? e.message : String(e);
       if (!(e instanceof SeoDuplicateBlockedError)) throw e;
       if (seoRepairPasses >= MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS - 1) {
-        return { ok: false, error: msg };
+        return { ok: false, error: msg, repairPassesUsed: seoRepairPasses };
       }
       const repaired = await repairSimpleAiDraftHeadlines({
         topic: d.topic,
@@ -209,7 +209,7 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
           : undefined,
       });
       if (!repaired) {
-        return { ok: false, error: msg };
+        return { ok: false, error: msg, repairPassesUsed: seoRepairPasses };
       }
       headlineH1 = repaired.h1;
       headlineMetaTitle = repaired.metaTitle;
@@ -284,10 +284,10 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
     });
     bodyHtml = response.content.trim();
     if (bodyHtml.length < 200) {
-      return { ok: false, error: "Model returned too little content" };
+      return { ok: false, error: "Model returned too little content", repairPassesUsed: seoRepairPasses };
     }
   } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+    return { ok: false, error: e instanceof Error ? e.message : String(e), repairPassesUsed: seoRepairPasses };
   }
 
   const countryForLinks = d.country ?? "unspecified";
@@ -319,6 +319,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
   let bodyRepairPasses = 0;
   while (wordCount < BLOG_ARTICLE_MIN_WORDS && bodyRepairPasses < MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS) {
     await sleepMs(repairBackoffMs(bodyRepairPasses));
+    bodyRepairPasses += 1;
     try {
       const expandedMain = await repairSimpleAiDraftBodyHtml({
         topic: d.topic,
@@ -343,13 +344,17 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
         studyAppendix && !bodyHtml.includes("Study next in NurseNest") ? `${bodyHtml.trim()}\n${studyAppendix}` : bodyHtml;
       wordCount = countWordsFromHtml(bodyWithStudy);
     } catch {
-      break;
+      // repair call failed; count attempt consumed and try again or exit loop
     }
-    bodyRepairPasses += 1;
   }
 
+  const totalRepairPasses = seoRepairPasses + bodyRepairPasses;
   if (wordCount < BLOG_ARTICLE_MIN_WORDS) {
-    return { ok: false, error: `Article body too short (${wordCount} words; minimum ${BLOG_ARTICLE_MIN_WORDS}).` };
+    return {
+      ok: false,
+      error: `Article body too short (${wordCount} words; minimum ${BLOG_ARTICLE_MIN_WORDS}).`,
+      repairPassesUsed: totalRepairPasses,
+    };
   }
 
   let excerpt = bodyWithStudy.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);

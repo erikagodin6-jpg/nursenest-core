@@ -503,6 +503,10 @@ export async function processDraftGenerationBatchItems(
         outcome: "completed",
         blogPostId: result.post.id,
         createdById: batch.createdById,
+        extraMetadata: {
+          repairPassesUsed: result.repairPassesUsed ?? 0,
+          idempotencyKey: idemKey,
+        },
       });
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);

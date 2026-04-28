@@ -90,6 +90,10 @@ type CatalogShape = {
 
 let catalogDataCache: CatalogShape | null = null;
 let alliedBundledPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+let rnCardiovascularExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null =
+  null;
+let rnNeurologicalExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null =
+  null;
 let newGradTransitionPathwaysCache: Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> | null = null;
 
 function getCatalogData(): CatalogShape {
@@ -105,6 +109,36 @@ function getAlliedBundledPathways(): Record<string, CatalogShape["pathways"][str
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return alliedBundledPathwaysCache;
+}
+
+/** RN NCLEX-RN cardiovascular expansion rows (merged after main catalog + allied; deduped by slug). */
+function getRnCardiovascularExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnCardiovascularExpansionPathwaysCache) return rnCardiovascularExpansionPathwaysCache;
+  rnCardiovascularExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-cardiovascular-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnCardiovascularExpansionPathwaysCache;
+}
+
+function rnCardiovascularExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnCardiovascularExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+/** RN NCLEX-RN neurological expansion rows (merged after cardio expansion; deduped by slug). */
+function getRnNeurologicalExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnNeurologicalExpansionPathwaysCache) return rnNeurologicalExpansionPathwaysCache;
+  rnNeurologicalExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-neurological-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnNeurologicalExpansionPathwaysCache;
+}
+
+function rnNeurologicalExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnNeurologicalExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
 }
 
 function getNewGradTransitionPathways(): Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> {
@@ -990,10 +1024,12 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
   const bucket = getCatalogData().pathways[pathwayId];
   const fromJson = bucket?.lessons?.length ? bucket.lessons.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
   const allied = alliedBundledLessonsForPathway(pathwayId);
+  const cardioExpansion = rnCardiovascularExpansionLessonsForPathway(pathwayId);
+  const neuroExpansion = rnNeurologicalExpansionLessonsForPathway(pathwayId);
   const newGrad = newGradTransitionLessonsForPathway(pathwayId);
   const seen = new Set<string>();
   const merged: LessonInput[] = [];
-  for (const l of [...fromJson, ...allied, ...newGrad]) {
+  for (const l of [...fromJson, ...allied, ...cardioExpansion, ...neuroExpansion, ...newGrad]) {
     if (seen.has(l.slug)) continue;
     seen.add(l.slug);
     merged.push(l);
@@ -1010,7 +1046,15 @@ export function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
         const { pathwayIds: _p, ...rest } = r;
         return rest;
       });
-      return prependScopedGoldCatalogLessons(pathwayId, stripped);
+      const seen = new Set(stripped.map((l) => l.slug.trim()));
+      const merged: LessonInput[] = [...stripped];
+      for (const extra of rnCardiovascularExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      return prependScopedGoldCatalogLessons(pathwayId, merged);
     }
   }
   return getCatalogLessonsRawFromBundledOnly(pathwayId);

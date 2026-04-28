@@ -13,6 +13,11 @@ import { runBlogBatchLocalizedFollowup } from "@/lib/blog/blog-batch-localized-f
 import { getAdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  formatBlogBatchItemFailureMessage,
+  MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS,
+} from "@/lib/blog/blog-generation-repair-classifier";
+import { isLikelyTransientProviderOverload } from "@/lib/blog/blog-draft-generation-batch";
 
 /** Min interval between slots: 1 post per day max spacing when cadence is 1. */
 export function slotIntervalMs(cadencePerDay: number): number {
@@ -495,6 +500,11 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
     },
   });
 
+  let providerThrottleBackoffMs = Math.min(
+    60_000,
+    Math.max(2000, Number(process.env.BLOG_BG_DRAFT_THROTTLE_BACKOFF_MS?.trim()) || 10_000),
+  );
+
   for (const item of due) {
     const { schedule } = item;
     schedulesTouched.add(schedule.id);
@@ -531,15 +541,30 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
       });
 
       if (!result.ok) {
+        const repairPasses = result.repairPassesUsed ?? MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS;
+        const failureReason = formatBlogBatchItemFailureMessage({
+          originalError: result.error,
+          repairAttempts: repairPasses,
+          terminal: true,
+        });
         await prisma.blogBatchScheduleItem.update({
           where: { id: item.id },
           data: {
             status: BlogBatchScheduleItemStatus.FAILED,
-            failureReason: result.error.slice(0, 4000),
+            failureReason: failureReason.slice(0, 4000),
           },
         });
         processedItems += 1;
         await refreshBlogBatchScheduleStats(schedule.id);
+        if (isLikelyTransientProviderOverload(result.error)) {
+          safeServerLog("blog_batch_schedule", "provider_throttle_backoff", {
+            scheduleId: schedule.id,
+            itemId: item.id,
+            backoffMs: providerThrottleBackoffMs,
+          });
+          await new Promise((r) => setTimeout(r, providerThrottleBackoffMs));
+          providerThrottleBackoffMs = Math.min(60_000, Math.floor(providerThrottleBackoffMs * 1.5));
+        }
         continue;
       }
 
@@ -602,16 +627,25 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       errors.push(`${item.id}: ${msg}`);
+      const failureReason = formatBlogBatchItemFailureMessage({
+        originalError: msg,
+        repairAttempts: 0,
+        terminal: true,
+      });
       await prisma.blogBatchScheduleItem
         .update({
           where: { id: item.id },
           data: {
             status: BlogBatchScheduleItemStatus.FAILED,
-            failureReason: msg.slice(0, 4000),
+            failureReason: failureReason.slice(0, 4000),
           },
         })
         .catch(() => {});
       await refreshBlogBatchScheduleStats(schedule.id);
+      if (isLikelyTransientProviderOverload(msg)) {
+        await new Promise((r) => setTimeout(r, providerThrottleBackoffMs));
+        providerThrottleBackoffMs = Math.min(60_000, Math.floor(providerThrottleBackoffMs * 1.5));
+      }
     }
   }
 

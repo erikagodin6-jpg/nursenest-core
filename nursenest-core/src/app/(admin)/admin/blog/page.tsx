@@ -11,6 +11,8 @@ import { requireAdmin } from "@/lib/auth/guards";
 import { prisma } from "@/lib/db";
 import { AdminBlogControlPanelClient } from "@/components/admin/admin-blog-control-panel-client";
 import { getAdminBlogOperationsStatus } from "@/lib/blog/admin-blog-operations-status";
+import { parseBlogBatchItemRepairMeta } from "@/lib/blog/blog-generation-repair-classifier";
+import { AdminBlogRepairRetryButton } from "@/components/admin/admin-blog-repair-retry-button";
 
 export const dynamic = "force-dynamic";
 
@@ -240,31 +242,91 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
           </StatusList>
 
           <StatusList title="Scheduled batch items">
-            {scheduleItems.map((item) => (
-              <li key={item.id} className="border-b border-border/40 py-2 last:border-0">
-                <p className="font-medium">{item.topicRaw}</p>
-                <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                  <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.status)}`}>{item.status}</span>
-                  <span>{fmtDate(item.plannedPublishAt)}</span>
-                  {item.blogPostId ? <Link href={`/admin/blog?id=${encodeURIComponent(item.blogPostId)}`} className="text-primary underline">Open draft</Link> : null}
-                  {item.failureReason ? <span className="text-rose-700 dark:text-rose-300">{item.failureReason}</span> : null}
-                </p>
-              </li>
-            ))}
+            {scheduleItems.map((item) => {
+              const repairMeta = item.status === BlogBatchScheduleItemStatus.FAILED
+                ? parseBlogBatchItemRepairMeta(item.failureReason)
+                : null;
+              return (
+                <li key={item.id} className="border-b border-border/40 py-2 last:border-0">
+                  <p className="font-medium">{item.topicRaw}</p>
+                  <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                    <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.status)}`}>{item.status}</span>
+                    <span>{fmtDate(item.plannedPublishAt)}</span>
+                    {item.blogPostId ? <Link href={`/admin/blog?id=${encodeURIComponent(item.blogPostId)}`} className="text-primary underline">Open draft</Link> : null}
+                    {repairMeta ? (
+                      <>
+                        {repairMeta.repairAttempts !== null && (
+                          <span className="text-amber-700 dark:text-amber-300">
+                            Repair attempts: {repairMeta.repairAttempts}
+                          </span>
+                        )}
+                        {repairMeta.terminal === true ? (
+                          <span className="font-semibold text-rose-700 dark:text-rose-300">Terminal</span>
+                        ) : (
+                          <span className="text-amber-600 dark:text-amber-400">Repairable</span>
+                        )}
+                        {repairMeta.message ? (
+                          <span className="text-rose-700 dark:text-rose-300">{repairMeta.message}</span>
+                        ) : null}
+                      </>
+                    ) : item.failureReason ? (
+                      <span className="text-rose-700 dark:text-rose-300">{item.failureReason}</span>
+                    ) : null}
+                  </p>
+                  {item.status === BlogBatchScheduleItemStatus.FAILED && repairMeta?.terminal !== true ? (
+                    <div className="mt-1">
+                      <AdminBlogRepairRetryButton
+                        apiPath={`/api/admin/blog/batch-schedule/items/${item.id}/retry-repair`}
+                      />
+                    </div>
+                  ) : null}
+                </li>
+              );
+            })}
           </StatusList>
 
           <StatusList title="Draft generation batch">
-            {draftBatchItems.map((item) => (
-              <li key={item.id} className="border-b border-border/40 py-2 last:border-0">
-                <p className="font-medium">{item.topicRaw}</p>
-                <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                  <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.status)}`}>{item.status}</span>
-                  <span>{fmtDate(item.updatedAt)}</span>
-                  {item.blogPostId ? <Link href={`/admin/blog?id=${encodeURIComponent(item.blogPostId)}`} className="text-primary underline">Open draft</Link> : null}
-                  {item.error ? <span className="text-rose-700 dark:text-rose-300">{item.error}</span> : null}
-                </p>
-              </li>
-            ))}
+            {draftBatchItems.map((item) => {
+              const repairMeta = item.status === BlogDraftGenerationBatchItemStatus.FAILED
+                ? parseBlogBatchItemRepairMeta(item.error)
+                : null;
+              return (
+                <li key={item.id} className="border-b border-border/40 py-2 last:border-0">
+                  <p className="font-medium">{item.topicRaw}</p>
+                  <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                    <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.status)}`}>{item.status}</span>
+                    <span>{fmtDate(item.updatedAt)}</span>
+                    {item.blogPostId ? <Link href={`/admin/blog?id=${encodeURIComponent(item.blogPostId)}`} className="text-primary underline">Open draft</Link> : null}
+                    {repairMeta ? (
+                      <>
+                        {repairMeta.repairAttempts !== null && (
+                          <span className="text-amber-700 dark:text-amber-300">
+                            Repair attempts: {repairMeta.repairAttempts}
+                          </span>
+                        )}
+                        {repairMeta.terminal === true ? (
+                          <span className="font-semibold text-rose-700 dark:text-rose-300">Terminal</span>
+                        ) : (
+                          <span className="text-amber-600 dark:text-amber-400">Repairable</span>
+                        )}
+                        {repairMeta.message ? (
+                          <span className="text-rose-700 dark:text-rose-300">{repairMeta.message}</span>
+                        ) : null}
+                      </>
+                    ) : item.error ? (
+                      <span className="text-rose-700 dark:text-rose-300">{item.error}</span>
+                    ) : null}
+                  </p>
+                  {item.status === BlogDraftGenerationBatchItemStatus.FAILED && repairMeta?.terminal !== true ? (
+                    <div className="mt-1">
+                      <AdminBlogRepairRetryButton
+                        apiPath={`/api/admin/blog/draft-batch/items/${item.id}/retry-repair`}
+                      />
+                    </div>
+                  ) : null}
+                </li>
+              );
+            })}
           </StatusList>
         </div>
       </section>
