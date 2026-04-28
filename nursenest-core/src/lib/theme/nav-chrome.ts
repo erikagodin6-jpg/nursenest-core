@@ -118,6 +118,40 @@ export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
     panel: "rgba(255,255,255,0.11)",
   },
 
+  /* ── Premium clinical palettes ── */
+  blossom: {
+    chrome: "#D9436A",
+    foreground: "#FFFFFF",
+    border: "rgba(255,255,255,0.22)",
+    hoverBg: "rgba(255,255,255,0.16)",
+    hoverFg: "#FFFFFF",
+    panel: "rgba(255,255,255,0.12)",
+  },
+  meadow: {
+    chrome: "#3D9A72",
+    foreground: "#FFFFFF",
+    border: "rgba(255,255,255,0.20)",
+    hoverBg: "rgba(255,255,255,0.15)",
+    hoverFg: "#FFFFFF",
+    panel: "rgba(255,255,255,0.11)",
+  },
+  "ocean-air": {
+    chrome: "#2563EB",
+    foreground: "#FFFFFF",
+    border: "rgba(255,255,255,0.22)",
+    hoverBg: "rgba(255,255,255,0.16)",
+    hoverFg: "#FFFFFF",
+    panel: "rgba(255,255,255,0.12)",
+  },
+  sunset: {
+    chrome: "#E85D4C",
+    foreground: "#FFFFFF",
+    border: "rgba(255,255,255,0.22)",
+    hoverBg: "rgba(255,255,255,0.16)",
+    hoverFg: "#FFFFFF",
+    panel: "rgba(255,255,255,0.12)",
+  },
+
   /* ── Pink family ── */
   blush: {
     chrome: "#DB2777",
@@ -192,7 +226,7 @@ export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
     panel: "rgba(255,255,255,0.10)",
   },
   "petal-pop": {
-    chrome: "#DB2777",
+    chrome: "#C73E7C",
     foreground: "#FFFFFF",
     border: "rgba(255,255,255,0.20)",
     hoverBg: "rgba(255,255,255,0.14)",
@@ -200,7 +234,7 @@ export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
     panel: "rgba(255,255,255,0.10)",
   },
   "cotton-candy": {
-    chrome: "#EC4899",
+    chrome: "#D977A8",
     foreground: "#FFFFFF",
     border: "rgba(255,255,255,0.20)",
     hoverBg: "rgba(255,255,255,0.14)",
@@ -208,7 +242,7 @@ export const NAV_CHROME_BY_THEME: Record<string, NavChromeTheme> = {
     panel: "rgba(255,255,255,0.10)",
   },
   "pink-skies": {
-    chrome: "#DB2777",
+    chrome: "#C73E7C",
     foreground: "#FFFFFF",
     border: "rgba(255,255,255,0.20)",
     hoverBg: "rgba(255,255,255,0.14)",

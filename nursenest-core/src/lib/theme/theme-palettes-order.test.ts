@@ -108,6 +108,10 @@ const EXPECTED_COMPLETE_LIGHT_THEMES = [
   "plum-mist",
   "graphite-blue",
   "north-sea",
+  "blossom",
+  "sunset",
+  "ocean-air",
+  "meadow",
 ];
 
 // ── 1. CSS source-order tests ─────────────────────────────────────────────

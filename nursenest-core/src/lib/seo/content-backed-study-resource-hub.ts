@@ -207,8 +207,10 @@ export async function listContentBackedStudyResourceHubSitemapRows(
   if (!isDatabaseUrlConfigured()) return [];
   let groups: { bodySystem: string; _count: { _all: number } }[];
   try {
+    // Prisma 6.x: `groupBy` overload inference can intersect the args object with the result array type;
+    // cast keeps runtime behavior identical while satisfying the compiler.
     groups = (await prisma.pathwayLesson.groupBy({
-      by: ["bodySystem"] as const,
+      by: ["bodySystem"],
       where: {
         pathwayId: pathway.id,
         status: ContentStatus.PUBLISHED,
@@ -216,7 +218,7 @@ export async function listContentBackedStudyResourceHubSitemapRows(
         bodySystem: { not: "" },
       },
       _count: { _all: true },
-    })) as { bodySystem: string; _count: { _all: number } }[];
+    } as never)) as { bodySystem: string; _count: { _all: number } }[];
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     safeServerLog("content_backed_hub", "sitemap_rows_db_error", {

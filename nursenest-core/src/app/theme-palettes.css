@@ -658,6 +658,7 @@
   [data-theme="arctic-frost"],
   [data-theme="berry"],
   [data-theme="berry-bonbon"],
+  [data-theme="blossom"],
   [data-theme="blueberry-sherbet"],
   [data-theme="bluebird"],
   [data-theme="blush"],
@@ -674,12 +675,14 @@
   [data-theme="lavender"],
   [data-theme="lavender-dream"],
   [data-theme="mint"],
+  [data-theme="meadow"],
   [data-theme="mint-breeze"],
   [data-theme="multi-pastel"],
   [data-theme="neutral-sand"],
   [data-theme="neutral-slate"],
   [data-theme="north-sea"],
   [data-theme="ocean"],
+  [data-theme="ocean-air"],
   [data-theme="ocean-mist"],
   [data-theme="pastel-blush"],
   [data-theme="pastel-lavender"],
@@ -699,6 +702,7 @@
   [data-theme="soft-sage"],
   [data-theme="strawberry"],
   [data-theme="strawberry-cream"],
+  [data-theme="sunset"],
   [data-theme="sunny-lilac"],
   [data-theme="teal"],
   [data-theme="violet-night"]
@@ -1420,6 +1424,156 @@
   --theme-page-bg: #ffffff;
 }
 
+/* ── Premium clinical palettes (Blossom, Sunset, Ocean, Garden) ── */
+
+[data-theme="blossom"] {
+  --theme-primary: #e75480;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #3a86ff;
+  --theme-secondary-foreground: #1e3a8a;
+  --theme-accent: #ffd166;
+  --theme-accent-foreground: #7c5a12;
+  --theme-border: #e5e7eb;
+  --theme-ring: #d9436a;
+  --theme-page-bg: #f8fafc;
+  --theme-heading-text: #1f2937;
+  --theme-body-text: #4b5563;
+  --theme-muted-text: #6b7280;
+
+  --lesson-summary: #fce4ec;
+  --lesson-key-concepts: #eaf2ff;
+  --lesson-signs-symptoms: #fff0f3;
+  --lesson-assessment: #e6f4ea;
+  --lesson-diagnostics: #eaf2ff;
+  --lesson-interventions: #e6faf7;
+  --lesson-medications: #fff6da;
+  --lesson-patient-teaching: #e8f7f0;
+  --lesson-exam-tips: #fff6da;
+  --lesson-red-flags: #fde8ec;
+  --lesson-clinical-pearls: #f3e8ff;
+  --lesson-notes: #f1f5f9;
+
+  --state-success: #e6f4ea;
+  --state-warning: #fff6da;
+  --state-info: #eaf2ff;
+  --state-danger-soft: #fde8ec;
+
+  --logo-primary: #e75480;
+  --logo-accent: #3a86ff;
+  --logo-text: #1f2937;
+}
+
+[data-theme="sunset"] {
+  --theme-primary: #f97361;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #7c8cff;
+  --theme-secondary-foreground: #3730a3;
+  --theme-accent: #f6c453;
+  --theme-accent-foreground: #78350f;
+  --theme-border: #eadfd8;
+  --theme-ring: #e85d4c;
+  --theme-page-bg: #fff9f5;
+  --theme-heading-text: #3f2d28;
+  --theme-body-text: #5c4a42;
+  --theme-muted-text: #6b5b54;
+
+  --lesson-summary: #ffe7df;
+  --lesson-key-concepts: #eef0ff;
+  --lesson-signs-symptoms: #fdece8;
+  --lesson-assessment: #e7f6ee;
+  --lesson-diagnostics: #e8ecff;
+  --lesson-interventions: #e8f7f0;
+  --lesson-medications: #fff4d6;
+  --lesson-patient-teaching: #f2ebe6;
+  --lesson-exam-tips: #fff4d6;
+  --lesson-red-flags: #fcdede;
+  --lesson-clinical-pearls: #f0ecff;
+  --lesson-notes: #faf6f3;
+
+  --state-success: #e7f6ee;
+  --state-warning: #fff4d6;
+  --state-info: #eef0ff;
+  --state-danger-soft: #fdece8;
+
+  --logo-primary: #f97361;
+  --logo-accent: #7c8cff;
+  --logo-text: #3f2d28;
+}
+
+[data-theme="ocean-air"] {
+  --theme-primary: #2f80ed;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #2ec4b6;
+  --theme-secondary-foreground: #0f766e;
+  --theme-accent: #90e0ef;
+  --theme-accent-foreground: #0c4a6e;
+  --theme-border: #ddeaf3;
+  --theme-ring: #1f6fd1;
+  --theme-page-bg: #f6fbff;
+  --theme-heading-text: #0f172a;
+  --theme-body-text: #334155;
+  --theme-muted-text: #64748b;
+
+  --lesson-summary: #eaf4ff;
+  --lesson-key-concepts: #e6faf7;
+  --lesson-signs-symptoms: #fdeef0;
+  --lesson-assessment: #e6f4ea;
+  --lesson-diagnostics: #e8f0ff;
+  --lesson-interventions: #e9fbff;
+  --lesson-medications: #fff6e6;
+  --lesson-patient-teaching: #e6f4ea;
+  --lesson-exam-tips: #e9fbff;
+  --lesson-red-flags: #fde2e4;
+  --lesson-clinical-pearls: #e4ecff;
+  --lesson-notes: #f0f4f8;
+
+  --state-success: #e6f4ea;
+  --state-warning: #fff6e6;
+  --state-info: #eaf4ff;
+  --state-danger-soft: #fdeef0;
+
+  --logo-primary: #2f80ed;
+  --logo-accent: #2ec4b6;
+  --logo-text: #0f172a;
+}
+
+[data-theme="meadow"] {
+  --theme-primary: #52b788;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #48a6e8;
+  --theme-secondary-foreground: #0c4a6e;
+  --theme-accent: #f6d365;
+  --theme-accent-foreground: #713f12;
+  --theme-border: #ddebe1;
+  --theme-ring: #40916c;
+  --theme-page-bg: #f8fcf9;
+  --theme-heading-text: #1a2e24;
+  --theme-body-text: #3d5348;
+  --theme-muted-text: #5a6b62;
+
+  --lesson-summary: #e6f4ea;
+  --lesson-key-concepts: #eaf7ff;
+  --lesson-signs-symptoms: #fdeeed;
+  --lesson-assessment: #e5f7f0;
+  --lesson-diagnostics: #e0ecf8;
+  --lesson-interventions: #dff3eb;
+  --lesson-medications: #fff6d8;
+  --lesson-patient-teaching: #e8f5e8;
+  --lesson-exam-tips: #fff6d8;
+  --lesson-red-flags: #fad4d4;
+  --lesson-clinical-pearls: #e6eef8;
+  --lesson-notes: #eef6f0;
+
+  --state-success: #e5f7f0;
+  --state-warning: #fff6d8;
+  --state-info: #eaf7ff;
+  --state-danger-soft: #fdeeed;
+
+  --logo-primary: #52b788;
+  --logo-accent: #48a6e8;
+  --logo-text: #1a2e24;
+}
+
 /*
  * Button / pill foreground contrast — light-primary themes need dark text.
  * Rule: if the primary colour has high luminance (pastels, light mid-tones),
@@ -1435,7 +1589,8 @@
 [data-theme="coral"],
 [data-theme="rose-quartz"],
 [data-theme="dusty-rose"],
-[data-theme="coral-sunset"] {
+[data-theme="coral-sunset"],
+[data-theme="sunset"] {
   --theme-primary-foreground: #3d0a1a;
 }
 
@@ -1449,6 +1604,7 @@
 }
 
 /* Teal / mint / sage / green family */
+[data-theme="meadow"],
 [data-theme="mint"],
 [data-theme="pastel-mint"],
 [data-theme="soft-sage"],
@@ -1485,6 +1641,7 @@
   [data-theme="arctic-frost"],
   [data-theme="berry"],
   [data-theme="berry-bonbon"],
+  [data-theme="blossom"],
   [data-theme="blueberry-sherbet"],
   [data-theme="bluebird"],
   [data-theme="blush"],
@@ -1501,12 +1658,14 @@
   [data-theme="lavender"],
   [data-theme="lavender-dream"],
   [data-theme="mint"],
+  [data-theme="meadow"],
   [data-theme="mint-breeze"],
   [data-theme="multi-pastel"],
   [data-theme="neutral-sand"],
   [data-theme="neutral-slate"],
   [data-theme="north-sea"],
   [data-theme="ocean"],
+  [data-theme="ocean-air"],
   [data-theme="ocean-mist"],
   [data-theme="pastel-blush"],
   [data-theme="pastel-lavender"],
@@ -1526,6 +1685,7 @@
   [data-theme="soft-sage"],
   [data-theme="strawberry"],
   [data-theme="strawberry-cream"],
+  [data-theme="sunset"],
   [data-theme="sunny-lilac"],
   [data-theme="teal"],
   [data-theme="violet-night"]
