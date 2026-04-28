@@ -49,6 +49,7 @@ import { buildSchemaSummaryPayload } from "@/lib/blog/blog-seo-automation";
 import {
   BLOG_BODY_REPAIR_WORD_BUFFER,
   MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS,
+  isTransientBlogProviderError,
 } from "@/lib/blog/blog-generation-repair-classifier";
 import {
   repairSimpleAiDraftBodyHtml,
@@ -100,7 +101,17 @@ export type GenerateBlogAiDraftResult =
       post: { id: string; slug: string; title: string; postStatus: BlogPostStatus; updatedAt: Date };
       warnings: string[];
     }
-  | { ok: false; error: string; repairPassesUsed?: number };
+  | {
+      ok: false;
+      error: string;
+      repairPassesUsed?: number;
+      /** Matches {@link PipelineFailureLike.stage} for classifier routing. */
+      stage?: "body" | "seo_title" | "plan" | "persist";
+      /** Machine-readable failure code for the classifier. */
+      code?: string;
+      /** Structured details for the classifier (e.g. PRE_PUBLISH_BLOCKED prePublish result). */
+      details?: unknown;
+    };
 
 function sleepMs(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -194,7 +205,7 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
       const msg = e instanceof Error ? e.message : String(e);
       if (!(e instanceof SeoDuplicateBlockedError)) throw e;
       if (seoRepairPasses >= MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS - 1) {
-        return { ok: false, error: msg, repairPassesUsed: seoRepairPasses };
+        return { ok: false, error: msg, repairPassesUsed: seoRepairPasses, stage: "seo_title", code: "SEO_DUPLICATE_BLOCKED" };
       }
       const repaired = await repairSimpleAiDraftHeadlines({
         topic: d.topic,
@@ -209,7 +220,7 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
           : undefined,
       });
       if (!repaired) {
-        return { ok: false, error: msg, repairPassesUsed: seoRepairPasses };
+        return { ok: false, error: msg, repairPassesUsed: seoRepairPasses, stage: "seo_title", code: "SEO_DUPLICATE_BLOCKED" };
       }
       headlineH1 = repaired.h1;
       headlineMetaTitle = repaired.metaTitle;
@@ -284,10 +295,24 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
     });
     bodyHtml = response.content.trim();
     if (bodyHtml.length < 200) {
-      return { ok: false, error: "Model returned too little content", repairPassesUsed: seoRepairPasses };
+      return {
+        ok: false,
+        error: "Model returned too little content",
+        repairPassesUsed: seoRepairPasses,
+        stage: "body",
+        code: "BODY_TOO_LITTLE_CONTENT",
+      };
     }
   } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : String(e), repairPassesUsed: seoRepairPasses };
+    const msg = e instanceof Error ? e.message : String(e);
+    return {
+      ok: false,
+      error: msg,
+      repairPassesUsed: seoRepairPasses,
+      stage: "body",
+      // transient overloads are recoverable; hard errors remain generic body failures
+      code: isTransientBlogProviderError(msg) ? "TRANSIENT_PROVIDER_ERROR" : undefined,
+    };
   }
 
   const countryForLinks = d.country ?? "unspecified";
@@ -354,6 +379,8 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
       ok: false,
       error: `Article body too short (${wordCount} words; minimum ${BLOG_ARTICLE_MIN_WORDS}).`,
       repairPassesUsed: totalRepairPasses,
+      stage: "body",
+      code: "BODY_TOO_SHORT",
     };
   }
 

@@ -18,8 +18,9 @@ import { isRnTopicMapShellGenerationBatch, RN_TOPIC_MAP_SHELL_MAX_ITEMS } from "
 import { DRAFT_BATCH_MAX_ITEMS_PER_PROCESS } from "@/lib/blog/blog-draft-generation-batch-constants";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
+  classifyBlogPipelineFailureForRepair,
   formatBlogBatchItemFailureMessage,
-  MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS,
+  isTransientBlogProviderError,
   parseBlogBatchItemRepairMeta,
 } from "@/lib/blog/blog-generation-repair-classifier";
 
@@ -29,23 +30,12 @@ function sleepMs(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-/** Heuristic for OpenAI / upstream overload — used to slow the batch loop (no retry storm). */
-export function isLikelyTransientProviderOverload(errorText: string): boolean {
-  const m = errorText.toLowerCase();
-  return (
-    m.includes("429") ||
-    m.includes("rate limit") ||
-    m.includes("too many requests") ||
-    m.includes("throttl") ||
-    m.includes("overloaded") ||
-    m.includes("slow down") ||
-    m.includes("resource exhausted") ||
-    m.includes("temporarily unavailable") ||
-    m.includes("econnreset") ||
-    m.includes("socket hang up") ||
-    m.includes("timed out")
-  );
-}
+/**
+ * Re-exported for callers that imported this from the batch module.
+ * Canonical implementation lives in {@link blog-generation-repair-classifier}.
+ */
+/** @deprecated Use {@link isTransientBlogProviderError} from blog-generation-repair-classifier. */
+export { isTransientBlogProviderError as isLikelyTransientProviderOverload } from "@/lib/blog/blog-generation-repair-classifier";
 
 export async function refreshDraftGenerationBatchStats(batchId: string): Promise<void> {
   const batch = await prisma.blogDraftGenerationBatch.findUnique({
@@ -272,7 +262,7 @@ async function processRnTopicMapShellBatchItems(batchId: string, limit: number):
         message: msg,
       });
       await refreshDraftGenerationBatchStats(batchId);
-      if (isLikelyTransientProviderOverload(msg)) {
+      if (isTransientBlogProviderError(msg)) {
         safeServerLog("blog", "shell_batch_db_throttle_backoff", {
           batchId,
           itemOrdinal: item.ordinal,
@@ -391,11 +381,17 @@ export async function processDraftGenerationBatchItems(
       });
 
       if (!result.ok) {
-        const repairPasses = result.repairPassesUsed ?? MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS;
+        const cl = classifyBlogPipelineFailureForRepair({
+          stage: result.stage ?? "body",
+          error: result.error,
+          code: result.code,
+          details: result.details,
+        });
+        const repairPasses = result.repairPassesUsed ?? 0;
         const errText = formatBlogBatchItemFailureMessage({
           originalError: result.error,
           repairAttempts: repairPasses,
-          terminal: true,
+          terminal: !cl.recoverable,
         });
         await prisma.blogDraftGenerationBatchItem.update({
           where: { id: item.id },
@@ -427,7 +423,7 @@ export async function processDraftGenerationBatchItems(
             idempotencyKey: idemKey,
           },
         });
-        if (isLikelyTransientProviderOverload(result.error)) {
+        if (isTransientBlogProviderError(result.error)) {
           safeServerLog("blog", "draft_batch_provider_throttle_backoff", {
             batchId,
             itemOrdinal: item.ordinal,
@@ -537,7 +533,7 @@ export async function processDraftGenerationBatchItems(
         message: msg,
         createdById: batch.createdById,
       });
-      if (isLikelyTransientProviderOverload(msg)) {
+      if (isTransientBlogProviderError(msg)) {
         safeServerLog("blog", "draft_batch_provider_throttle_backoff", {
           batchId,
           itemOrdinal: item.ordinal,

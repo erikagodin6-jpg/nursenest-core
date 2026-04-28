@@ -97,7 +97,20 @@ export type AutomationResult =
       /** Control-panel pipeline repair rounds used before a successful persist. */
       repairPassesUsed?: number;
     }
-  | { ok: false; error: string; repairPassesUsed?: number };
+  | {
+      ok: false;
+      error: string;
+      repairPassesUsed?: number;
+      /** Pipeline stage where failure occurred — used for failure classification. */
+      stage?: string;
+      /** Machine-readable failure code — used for failure classification. */
+      code?: string;
+      /**
+       * Structured failure details propagated from the pipeline.
+       * For PRE_PUBLISH_BLOCKED contains `{ prePublish: PrePublishValidationResult }`.
+       */
+      details?: unknown;
+    };
 
 const localizedAiOutputSchema = z.object({
   localizedTitle: z.string().min(10),
@@ -339,12 +352,17 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
       topic: input.topic,
       exam: input.exam,
       error: pipelineResult.error,
+      stage: pipelineResult.stage,
+      code: pipelineResult.code,
       repairPassesUsed: pipelineResult.repairPassesUsed,
     });
     return {
       ok: false,
       error: pipelineResult.error,
       repairPassesUsed: pipelineResult.repairPassesUsed,
+      stage: pipelineResult.stage,
+      code: pipelineResult.code,
+      details: pipelineResult.details,
     };
   }
   if (pipelineResult.persistSkipped) {

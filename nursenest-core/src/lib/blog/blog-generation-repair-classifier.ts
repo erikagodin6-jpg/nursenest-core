@@ -18,7 +18,124 @@ export type PipelineFailureLike = {
   stage: string;
   error: string;
   code?: string;
+  /**
+   * Optional structured failure details.
+   * For PRE_PUBLISH_BLOCKED: `{ prePublish: { blocking: Array<{ id: string; message: string }> } }`
+   * Passed from BlogArticlePipelineFailure.details so we can inspect individual issue IDs
+   * instead of treating the whole block as terminal.
+   */
+  details?: unknown;
 };
+
+/**
+ * Returns true when the error message indicates a transient provider problem
+ * (rate limits, overloads, timeouts, connection resets).  These are always
+ * recoverable — the admin can retry once the provider recovers.
+ */
+export function isTransientBlogProviderError(errorText: string): boolean {
+  const m = errorText.toLowerCase();
+  return (
+    m.includes("429") ||
+    m.includes("rate limit") ||
+    m.includes("too many requests") ||
+    m.includes("throttl") ||
+    m.includes("overloaded") ||
+    m.includes("slow down") ||
+    m.includes("resource exhausted") ||
+    m.includes("temporarily unavailable") ||
+    m.includes("econnreset") ||
+    m.includes("socket hang up") ||
+    m.includes("timed out") ||
+    m.includes("timeout")
+  );
+}
+
+/**
+ * Pre-publish check IDs (from PrePublishCheckId) that the AI repair pipeline can
+ * autonomously fix without human intervention:
+ * - body length / word count → body expansion repair
+ * - meta description / title → headline / meta repair
+ * - excerpt → can be regenerated from body
+ * - FAQ required → FAQ section repair
+ * - nursing content quality → body improvement repair
+ */
+const RECOVERABLE_PRE_PUBLISH_IDS = new Set([
+  "body",
+  "body_word_count",
+  "meta_description",
+  "meta_title",
+  "excerpt",
+  "title",
+  "faq_content_when_required",
+  "content_nursing_implications",
+  "content_clinical_mechanism",
+  "primary_keyword",
+  "internal_link_recommendations",
+  "schema_contract_notes",
+]);
+
+/**
+ * Safely extract blocking issue array from PRE_PUBLISH_BLOCKED details.
+ * The details object is typed as unknown; we do defensive access.
+ */
+function extractPrePublishBlocking(details: unknown): Array<{ id: string }> | null {
+  if (!details || typeof details !== "object") return null;
+  const d = details as Record<string, unknown>;
+  const pp = d.prePublish;
+  if (!pp || typeof pp !== "object") return null;
+  const blocking = (pp as Record<string, unknown>).blocking;
+  if (!Array.isArray(blocking)) return null;
+  const issues: Array<{ id: string }> = [];
+  for (const b of blocking) {
+    if (b !== null && typeof b === "object" && typeof (b as Record<string, unknown>).id === "string") {
+      issues.push({ id: (b as Record<string, unknown>).id as string });
+    }
+  }
+  return issues;
+}
+
+/**
+ * Classify PRE_PUBLISH_BLOCKED using structured issue IDs.
+ *
+ * - All recoverable IDs → recoverable (AI can repair body length, meta, FAQ, etc.)
+ * - Any terminal ID present → terminal (slug collision, required references, unsafe taxonomy, etc.)
+ * - Empty blocking list (shouldn't happen) → treat as recoverable (publish wasn't actually blocked)
+ */
+function classifyPrePublishBlockedByIds(
+  blocking: Array<{ id: string }>,
+): { recoverable: boolean; terminalReason?: BlogRepairTerminalReason } {
+  if (blocking.length === 0) return { recoverable: true };
+
+  const hasTerminal = blocking.some((b) => !RECOVERABLE_PRE_PUBLISH_IDS.has(b.id));
+  return hasTerminal
+    ? { recoverable: false, terminalReason: "pre_publish_blocked" }
+    : { recoverable: true };
+}
+
+/**
+ * Fallback when structured details are unavailable: inspect the joined error text.
+ * The error is `blocking.map(b => b.message).join("; ")` so individual messages are present.
+ */
+function classifyPrePublishBlockedByErrorText(
+  errorLower: string,
+): { recoverable: boolean; terminalReason?: BlogRepairTerminalReason } {
+  const recoverableSignals = [
+    "too short for publish",
+    "body is too short",
+    "word count",
+    "meta description is missing",
+    "meta description is missing or too short",
+    "excerpt",
+    "meta / seo title is empty",
+    "missing or too short",
+    "faq",
+  ];
+  if (recoverableSignals.some((s) => errorLower.includes(s))) {
+    return { recoverable: true };
+  }
+  // Conservative default when we cannot identify individual issues
+  return { recoverable: false, terminalReason: "pre_publish_blocked" };
+}
 
 export function classifyBlogPipelineFailureForRepair(
   f: PipelineFailureLike,
@@ -26,18 +143,26 @@ export function classifyBlogPipelineFailureForRepair(
   const code = f.code ?? "";
   const e = f.error.toLowerCase();
 
+  // ── Citations / safety gates (always terminal) ──
   if (code === "INSUFFICIENT_CITATIONS" || f.stage === "citations") {
     return { recoverable: false, terminalReason: "citations" };
   }
 
+  // ── PRE_PUBLISH_BLOCKED: inspect individual issue IDs when available ──
   if (code === "PRE_PUBLISH_BLOCKED") {
-    return { recoverable: false, terminalReason: "pre_publish_blocked" };
+    const blocking = extractPrePublishBlocking(f.details);
+    if (blocking !== null) {
+      return classifyPrePublishBlockedByIds(blocking);
+    }
+    return classifyPrePublishBlockedByErrorText(e);
   }
 
+  // ── SEO / title duplication (always recoverable — can generate distinct headline) ──
   if (code === "SEO_DUPLICATE_BLOCKED") {
     return { recoverable: true };
   }
 
+  // ── Plan structural failures ──
   if (code === "PLAN_INVALID_JSON" || code === "PLAN_ZOD" || code === "PLAN_NORMALIZE") {
     return { recoverable: false, terminalReason: "api_failure" };
   }
@@ -46,35 +171,70 @@ export function classifyBlogPipelineFailureForRepair(
     return { recoverable: true };
   }
 
+  // ── Body quality codes (from pipeline and simple-AI-draft paths) ──
   if (code === "BODY_LONGFORM_ENFORCEMENT") {
     return { recoverable: true };
   }
 
-  if (f.stage === "body") {
+  // Codes set by generate-blog-ai-draft when word count / content checks fail
+  if (code === "BODY_TOO_SHORT" || code === "BODY_TOO_LITTLE_CONTENT") {
+    return { recoverable: true };
+  }
+
+  // ── SEO-title stage: title/headline similarity is always recoverable ──
+  if (f.stage === "seo_title") {
+    if (isTransientBlogProviderError(e)) return { recoverable: true };
+    // Title similarity / duplicate headline — can always generate a distinct angle
     if (
-      e.includes("too short") ||
-      e.includes("after generation") ||
-      e.includes("body_outline_mismatch") ||
-      e.includes("body_h2_count_low") ||
-      e.includes("body_main_depth_insufficient") ||
-      e.includes("too little html")
+      e.includes("similar") ||
+      e.includes("duplicate") ||
+      e.includes("existing post") ||
+      e.includes("seo") ||
+      e.includes("title") ||
+      e.includes("h1")
     ) {
       return { recoverable: true };
     }
-    if (e.includes("unsupported") || e.includes("not a nursing")) {
+    return { recoverable: false, terminalReason: "unknown" };
+  }
+
+  // ── Body stage: match on error text ──
+  if (f.stage === "body") {
+    // Recoverable content-quality issues
+    if (
+      e.includes("too short") ||
+      e.includes("too little content") ||
+      e.includes("too little html") ||
+      e.includes("after generation") ||
+      e.includes("body_outline_mismatch") ||
+      e.includes("body_h2_count_low") ||
+      e.includes("body_main_depth_insufficient")
+    ) {
+      return { recoverable: true };
+    }
+
+    // Unsafe / prohibited topics (terminal — no amount of retry fixes a policy violation)
+    if (
+      e.includes("unsafe") ||
+      e.includes("unsafe medical") ||
+      e.includes("not a nursing") ||
+      e.includes("unsupported") ||
+      e.includes("prohibited")
+    ) {
       return { recoverable: false, terminalReason: "unsupported_topic" };
     }
-    if (e.includes("429") || e.includes("rate limit") || e.includes("overloaded")) {
-      return { recoverable: false, terminalReason: "api_failure" };
+
+    // Transient provider issues — recoverable (admin can retry when provider recovers)
+    if (isTransientBlogProviderError(e)) {
+      return { recoverable: true };
     }
+
     return { recoverable: false, terminalReason: "api_failure" };
   }
 
   if (f.stage === "plan") {
     if (code === "PLAN_LONGFORM_CONTRACT") return { recoverable: true };
-    if (e.includes("429") || e.includes("rate limit") || e.includes("overloaded")) {
-      return { recoverable: false, terminalReason: "api_failure" };
-    }
+    if (isTransientBlogProviderError(e)) return { recoverable: true };
     if (e.includes("unsupported")) return { recoverable: false, terminalReason: "unsupported_topic" };
     return { recoverable: false, terminalReason: "unknown" };
   }
