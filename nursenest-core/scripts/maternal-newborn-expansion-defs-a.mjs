@@ -5,7 +5,7 @@ export const MATERNAL_NEWBORN_EXPANSION_DEFS_A = [
     title: "Prenatal Assessment & Routine Care",
     seoTitle: "Prenatal Assessment and Routine Care | NCLEX-RN | NurseNest",
     hook: "first prenatal visit with uncertain last menstrual period",
-    exam: "Items cluster **dating**, **risk screening**, **nutrition and teratogen teaching**, **IPV** and mental health themes when shown**, and **referral** when red flags appear. Expect to prioritize **objective data collection** before reassurance alone.",
+    exam: "Items cluster **dating**, **risk screening**, **nutrition and teratogen teaching**, **IPV** and mental health themes when shown, and **referral** when red flags appear. Expect to prioritize **objective data collection** before reassurance alone.",
     bullets: `- **History**: obstetric history, medications, allergies, immunizations, social determinants when the stem lists them.
 - **Physical**: fundal height themes, fetal heart rate auscultation, blood pressure trends, edema, and warning-sign education.
 - **Scope**: support ordered labs and referrals; nursing focuses on **assessment, teaching, and escalation** rather than independent diagnosis.`,

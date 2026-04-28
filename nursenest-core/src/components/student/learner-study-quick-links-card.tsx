@@ -39,15 +39,22 @@ export function LearnerStudyQuickLinksCard({
   t,
   id = "learner-study-quick-links",
   catHref,
+  flashcardsHrefOverride,
 }: {
   t: LearnerMarketingT;
   /** Optional anchor id for skip links / aria */
   id?: string;
   catHref?: string;
+  /** When set, the Flashcards quick link targets this pathway-scoped hub URL. */
+  flashcardsHrefOverride?: string | null;
 }) {
-  const studyLinks = DEFAULT_STUDY_LINKS.map((link) =>
-    link.accent === "cat" && catHref?.trim() ? { ...link, href: catHref.trim() } : link,
-  );
+  const studyLinks = DEFAULT_STUDY_LINKS.map((link) => {
+    if (link.accent === "cat" && catHref?.trim()) return { ...link, href: catHref.trim() };
+    if (link.accent === "flashcards" && flashcardsHrefOverride?.trim()) {
+      return { ...link, href: flashcardsHrefOverride.trim() };
+    }
+    return link;
+  });
 
   return (
     <section
