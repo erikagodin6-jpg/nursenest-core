@@ -10,6 +10,7 @@ export function subscriptionStatusForSession(ua: UserAccess): SessionSubscriptio
   if (ua.hasPremium) {
     if (ua.reason === "past_due_grace") return "past_due_grace";
     if (ua.reason === "grace_period") return "grace";
+    if (ua.reason === "canceled_paid_through") return "active";
     return "active";
   }
   if (ua.plan.status === "past_due") return "past_due";

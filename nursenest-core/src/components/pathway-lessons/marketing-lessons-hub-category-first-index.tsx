@@ -281,7 +281,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
             <ul className="mt-3 space-y-2">
               {reviewRows.map((l) => {
                 const href = pathwayLessonMarketingDetailHref(base, l.slug);
-                const label = cleanLessonTitleForDisplay(l.title, l.seoTitle, l.slug);
+                const label = cleanLessonTitleForDisplay((l.seoTitle ?? "").trim() || l.title);
                 const prog = progressMap[l.slug];
                 return (
                   <li key={l.slug}>

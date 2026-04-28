@@ -91,7 +91,7 @@ export function marketingPathwayLessonsIndexPath(
 /**
  * Marketing category hub: `/{country}/{role}/{exam}/lessons/{categorySlug}`.
  * {@link marketingLessonDetailHref} uses the same base + segment; category slugs are reserved via
- * {@link resolveMarketingLessonsHubDynamicSegment} so lesson detail wins when a slug collides.
+ * {@link resolveMarketingLessonsHubDynamicSegment} in `marketing-lessons-hub-category-resolve` so lesson detail wins when a slug collides.
  */
 export function marketingPathwayLessonsCategoryPath(
   pathway: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">,

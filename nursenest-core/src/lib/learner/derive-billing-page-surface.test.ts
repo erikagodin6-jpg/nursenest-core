@@ -71,4 +71,25 @@ describe("deriveBillingSurface", () => {
     });
     assert.equal(s, "active_paid");
   });
+
+  it("maps canceled subscription with paid-through entitlement to canceled_access_until", () => {
+    const s = deriveBillingSurface({
+      user: { ...baseUser, role: UserRole.LEARNER },
+      subscription: {
+        status: SubscriptionStatus.CANCELLED,
+        stripeSubscriptionId: "sub_x",
+        stripeCustomerId: "cus_x",
+        planTier: "RN",
+        planCountry: "US",
+        alliedCareer: null,
+        cancelAtPeriodEnd: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      hasAccess: true,
+      entitlementReason: "canceled_paid_through",
+      trialEndsAt: null,
+    });
+    assert.equal(s, "canceled_access_until");
+  });
 });

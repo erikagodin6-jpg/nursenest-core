@@ -47,6 +47,8 @@ function billingAccessWhyLine(
       return t("learner.billingPage.accessDetail.grace_period");
     case "active_trial":
       return t("learner.billingPage.accessDetail.active_trial");
+    case "canceled_paid_through":
+      return t("learner.billingPage.accessDetail.canceled_paid_through");
     case "admin_override":
       return t("learner.billingPage.accessDetail.admin_override");
     default:
@@ -124,6 +126,8 @@ function StatusBanner({
       "border-[color-mix(in_srgb,var(--semantic-warning)_32%,var(--semantic-border-soft))] bg-[var(--semantic-panel-warm)] text-[var(--semantic-warning-contrast)]",
     past_due:
       "border-[color-mix(in_srgb,var(--semantic-danger)_30%,var(--semantic-border-soft))] bg-[var(--semantic-danger-soft)] text-[var(--semantic-danger-contrast)]",
+    canceled_access_until:
+      "border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] text-[var(--semantic-info-contrast)]",
     cancelled: "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]",
     trial: "border-[color-mix(in_srgb,var(--semantic-brand)_25%,var(--semantic-border-soft))] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-primary)]",
     trial_ending:
@@ -154,6 +158,11 @@ function StatusBanner({
       {surface === "active_scheduled_cancel" && periodFmt ? (
         <p className="mt-2 text-sm font-medium leading-relaxed opacity-95">
           {t("learner.billingPage.surface.active_scheduled_cancel.periodEndLine", { date: periodFmt })}
+        </p>
+      ) : null}
+      {surface === "canceled_access_until" && periodFmt ? (
+        <p className="mt-2 text-sm font-medium leading-relaxed opacity-95">
+          {t("learner.billingPage.surface.canceled_access_until.accessUntilLine", { date: periodFmt })}
         </p>
       ) : null}
       {surface === "cancelled" && periodFmt ? (

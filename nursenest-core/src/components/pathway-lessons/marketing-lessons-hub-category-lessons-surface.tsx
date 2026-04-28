@@ -32,7 +32,7 @@ import {
   pathwayLessonMarketingDetailHref,
   pathwayLessonHasRenderableHubSlug,
 } from "@/lib/lessons/pathway-lesson-types";
-import { pathwayCountryLabel } from "@/lib/lessons/pathway-lesson-hub-seo";
+import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonsDisplayCategoryBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
@@ -104,8 +104,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
     lessonCategoryToSlug(category),
   );
   const examName = pathwayRegionAwareExamName(pathway);
-  const pageTitle = `${category} lessons`;
-  const headerDescription = pathwayLessonHubMetaDescription(pathway);
+  const pageTitle = `${examName} · ${category} lessons`;
   const overviewHref = marketingExamHubBasePath(pathway);
   const questionsHref = buildExamPathwayPath(pathway, "questions");
   const catHref = buildExamPathwayPath(pathway, "cat");
@@ -261,7 +260,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
           <ul className="space-y-2">
             {rows.map((l) => {
               const href = pathwayLessonMarketingDetailHref(base, l.slug);
-              const label = cleanLessonTitleForDisplay(l.title, l.seoTitle, l.slug);
+              const label = cleanLessonTitleForDisplay((l.seoTitle ?? "").trim() || l.title);
               const prog = progressMap[l.slug];
               return (
                 <li key={l.slug}>

@@ -69,6 +69,7 @@ import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-s
 import { MarketingLessonsHubRetryableErrorShell } from "@/components/pathway-lessons/marketing-lessons-hub-retryable-error-shell";
 import { MarketingHubSmokeDiagnosticsJson } from "@/components/pathway-lessons/marketing-hub-smoke-diagnostics-json";
 import { LessonHubFullLessonLinkNav } from "@/components/pathway-lessons/lesson-hub-full-lesson-link-nav";
+import { MarketingLessonsHubCategoryFirstIndex } from "@/components/pathway-lessons/marketing-lessons-hub-category-first-index";
 import {
   assessMarketingLessonHubPipelineCollapseGuard,
   shouldShowMarketingLessonHubInvariantErrorShell,
@@ -316,6 +317,21 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           : topicSlugNorm
             ? { topicSlugsIn: [topicSlugNorm] }
             : undefined;
+  }
+
+  if (isDefaultUnfilteredMarketingLessonsHub) {
+    return (
+      <MarketingLessonsHubCategoryFirstIndex
+        pathway={pathway}
+        base={base}
+        pathname={pathname}
+        routePathLessons={routePathLessons}
+        countrySlug={countrySlug}
+        roleTrack={roleTrack}
+        examCode={examCode}
+        lessonContentLocale={lessonContentLocale}
+      />
+    );
   }
 
   const hubLoadT0 = performance.now();

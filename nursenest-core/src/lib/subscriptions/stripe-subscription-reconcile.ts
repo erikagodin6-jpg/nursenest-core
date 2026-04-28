@@ -23,28 +23,38 @@ import {
   canUserCancelStripeSubscription,
   pickControllingStripeSubscription,
 } from "@/lib/subscriptions/stripe-subscription-eligibility";
+import type { BillingSubscriptionRow } from "@/lib/learner/billing-page-payload-types";
 
 export { canUserCancelStripeSubscription, pickControllingStripeSubscription } from "@/lib/subscriptions/stripe-subscription-eligibility";
 
 async function resolveStripeCustomerIdForUser(userId: string): Promise<string | null> {
-  const row = await prisma.subscription.findFirst({
+  /** Newest row may lack `stripeCustomerId` while an older row still has it — scan recent history. */
+  const rows = await prisma.subscription.findMany({
     where: { userId, stripeCustomerId: { not: null } },
     orderBy: { createdAt: "desc" },
+    take: 24,
     select: { stripeCustomerId: true },
   });
-  const c = row?.stripeCustomerId?.trim();
-  return c || null;
+  for (const r of rows) {
+    const c = r.stripeCustomerId?.trim();
+    if (c) return c;
+  }
+  return null;
 }
 
 async function latestStripeSubscriptionIdForUser(userId: string): Promise<string | null> {
-  const row = await prisma.subscription.findFirst({
+  /** Newest row may omit `stripeSubscriptionId` while an older row still has it. */
+  const rows = await prisma.subscription.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
+    take: 24,
     select: { stripeSubscriptionId: true },
   });
-  const id = row?.stripeSubscriptionId?.trim();
-  if (!id || isDemoStripeSubscriptionId(id)) return null;
-  return id;
+  for (const r of rows) {
+    const id = r.stripeSubscriptionId?.trim();
+    if (id && !isDemoStripeSubscriptionId(id)) return id;
+  }
+  return null;
 }
 
 /**
@@ -284,4 +294,46 @@ export async function persistStripeSubscriptionMirrorForUser(userId: string, sub
   }
 
   return true;
+}
+
+/**
+ * When Postgres is stale but Stripe has a controlling subscription, billing UI should reflect Stripe
+ * for status / cancel-at-end / ids (entitlements still follow DB until persist succeeds).
+ */
+export function mergeBillingSubscriptionRowWithStripe(
+  row: BillingSubscriptionRow,
+  sub: Stripe.Subscription,
+): BillingSubscriptionRow {
+  const mapped = mapStripeSubscriptionStatus(sub.status);
+  const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer?.id ?? null;
+  return {
+    ...row,
+    status: mapped ?? row.status,
+    cancelAtPeriodEnd: Boolean(sub.cancel_at_period_end),
+    stripeCustomerId: customerId?.trim() || row.stripeCustomerId,
+    stripeSubscriptionId: sub.id?.trim() || row.stripeSubscriptionId,
+  };
+}
+
+/** Stripe-only row for billing chrome when DB has no row but Stripe lists an active subscription. */
+export function billingSubscriptionRowFromStripeSubscription(sub: Stripe.Subscription): BillingSubscriptionRow | null {
+  const mapped = mapStripeSubscriptionStatus(sub.status);
+  if (!mapped) return null;
+  const priceId = firstSubscriptionPriceId(sub);
+  const mappedPlan = priceId ? findTierCountryByPriceId(priceId) : undefined;
+  const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer?.id ?? null;
+  const createdSec = (sub as unknown as { created?: number }).created;
+  const createdAt =
+    typeof createdSec === "number" && createdSec > 0 ? new Date(createdSec * 1000) : new Date();
+  return {
+    status: mapped,
+    stripeSubscriptionId: sub.id,
+    stripeCustomerId: customerId?.trim() ?? null,
+    planTier: mappedPlan?.tier ?? null,
+    planCountry: mappedPlan?.country ?? null,
+    alliedCareer: mappedPlan?.alliedCareer ?? null,
+    cancelAtPeriodEnd: Boolean(sub.cancel_at_period_end),
+    createdAt,
+    updatedAt: new Date(),
+  };
 }

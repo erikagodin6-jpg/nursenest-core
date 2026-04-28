@@ -112,6 +112,25 @@ test("subscriptionStatusForSession: canceled / expired learner shows none (not p
   );
 });
 
+test("subscriptionStatusForSession: canceled_paid_through maps to active", () => {
+  assert.equal(
+    subscriptionStatusForSession(
+      ua({
+        hasPremium: true,
+        reason: "canceled_paid_through",
+        plan: {
+          planCode: null,
+          duration: null,
+          status: "canceled",
+          expiresAt: new Date("2099-06-01"),
+          cancelAtPeriodEnd: true,
+        },
+      }),
+    ),
+    "active",
+  );
+});
+
 test("subscriptionStatusForSession: cancel_at_period_end while still ACTIVE remains active", () => {
   assert.equal(
     subscriptionStatusForSession(

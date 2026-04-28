@@ -23,6 +23,8 @@ function accessSummaryLine(
       return t("learner.billingPage.accessDetail.grace_period");
     case "active_trial":
       return t("learner.billingPage.accessDetail.active_trial");
+    case "canceled_paid_through":
+      return t("learner.billingPage.accessDetail.canceled_paid_through");
     case "admin_override":
       return t("learner.billingPage.accessDetail.admin_override");
     default:

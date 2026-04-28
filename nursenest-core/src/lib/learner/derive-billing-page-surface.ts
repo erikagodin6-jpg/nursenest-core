@@ -9,6 +9,8 @@ export type BillingStatusSurface =
   | "grace"
   | "past_due_grace"
   | "past_due"
+  /** Subscription is canceled in billing records but paid access continues until `billingPeriodEndDisplay`. */
+  | "canceled_access_until"
   | "cancelled"
   | "trial"
   | "trial_ending"
@@ -58,6 +60,14 @@ export function deriveBillingSurface(args: {
       return "trial";
     }
     return "past_due";
+  }
+
+  if (
+    sub?.status === SubscriptionStatus.CANCELLED &&
+    args.hasAccess &&
+    reason === "canceled_paid_through"
+  ) {
+    return "canceled_access_until";
   }
 
   if (sub?.status === SubscriptionStatus.CANCELLED) {

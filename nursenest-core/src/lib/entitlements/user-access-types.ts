@@ -6,6 +6,8 @@ export type AccessScope = {
   hasAccess: boolean;
   reason:
     | "active_subscription"
+    /** Paid period not over yet while DB/Stripe row is `CANCELLED` (e.g. after period-end cancel or `customer.subscription.deleted` with paid-through). */
+    | "canceled_paid_through"
     /** Staff/student-ops bypass — not a paid plan; see {@link isLearnerEntitlementStaffBypassRole}. */
     | "admin_override"
     | "grace_period"

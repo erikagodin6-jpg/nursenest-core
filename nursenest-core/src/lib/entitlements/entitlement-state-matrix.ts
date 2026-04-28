@@ -24,12 +24,18 @@
  *    and within window); else falls through (no premium from this row).
  * 6. **App trial** (`User.trialStatus === ACTIVE` and `trialEndsAt` in future) → `active_trial` (uses **profile** tier/country,
  *    not Stripe plan fields — subscription snapshot may still appear on `plan` for UI).
- * 7. Else → `hasPremium: false`, `reason: no_access` (includes `CANCELLED`, expired trial, denied past_due, no rows).
+ * 7. **`CANCELLED`** row with **future** paid-through (`max(currentPeriodEnd, trialEnd)` &gt; now) → `canceled_paid_through`,
+ *    `plan.status: canceled`, premium until that instant (covers Stripe `canceled` + `customer.subscription.deleted` when
+ *    a paid period end is still in the future).
+ * 8. Else → `hasPremium: false`, `reason: no_access` (expired trial, denied past_due, no qualifying rows).
  *
- * **Scheduled cancellation:** While Stripe still reports `active` with `cancel_at_period_end`, webhooks should keep DB
- * **`ACTIVE`** with `cancelAtPeriodEnd: true` — user keeps premium until period end. If DB is **`CANCELLED`** early,
- * `getUserAccess` does **not** treat period end as access (deny until data fixed or trial applies).
- * **Billing UI:** `deriveBillingSurface` maps that row to `active_scheduled_cancel` (not the same copy as fully active).
+ * **Scheduled cancellation:** While Stripe still reports `active` with `cancel_at_period_end`, webhooks keep DB
+ * **`ACTIVE`** with `cancelAtPeriodEnd: true` — user keeps premium until period end (`ACTIVE` branch).
+ * **After cancel at period end:** Stripe moves to `canceled`; DB is **`CANCELLED`** with `currentPeriodEnd` at period end.
+ *    Premium continues until that timestamp via step 7. **`ACTIVE`/`GRACE`** rows also require a **future** paid-through
+ *    when period/trial ends are present (null ends still grant to avoid false revokes during sync gaps).
+ * **Billing UI:** scheduled cancel on an `ACTIVE` row → `active_scheduled_cancel`; paid-through on `CANCELLED` →
+ *    `canceled_access_until`.
  *
  * **Duration / plan code:** Exposed on `UserAccess.plan` for UI; content gates use **effective tier + country**, not plan
  * string alone.
@@ -44,7 +50,11 @@ export const STRIPE_STATUS_DB_MAPPING_NOTES: ReadonlyArray<{
   { stripe: "trialing", db: "ACTIVE", note: "Trial billed through Stripe." },
   { stripe: "past_due", db: "PAST_DUE", note: "Entitlement may still grant via past-due policy." },
   { stripe: "unpaid", db: "PAST_DUE", note: "Mapped to same DB bucket as past_due." },
-  { stripe: "canceled", db: "CANCELLED", note: "Stripe ended; access stops unless User trial still active." },
+  {
+    stripe: "canceled",
+    db: "CANCELLED",
+    note: "Stripe ended in billing sense; app may still grant premium until current_period_end / trial_end (see getUserAccess).",
+  },
   { stripe: "incomplete_expired", db: "CANCELLED", note: "Checkout abandoned / expired." },
   {
     stripe: "incomplete",
@@ -78,8 +88,13 @@ export const GET_USER_ACCESS_REASON_PREMIUM: ReadonlyArray<{
     note: "PAST_DUE + ENTITLEMENT_PAST_DUE_* policy grants continued access.",
   },
   { reason: "active_trial", typicallyPremium: true, note: "App trial on User." },
+  {
+    reason: "canceled_paid_through",
+    typicallyPremium: true,
+    note: "DB CANCELLED but paid/trial window still open — see subscription-paid-access.",
+  },
   { reason: "admin_override", typicallyPremium: true, note: "Staff — not Stripe subscription emulation." },
-  { reason: "no_access", typicallyPremium: false, note: "CANCELLED, denied past_due, expired trial, etc." },
+  { reason: "no_access", typicallyPremium: false, note: "No qualifying subscription window, denied past_due, expired trial, etc." },
 ];
 
 /** DB / Prisma read failures**: `getUserAccess` **throws**; API gates return **503** (`access_verify_failed`), RSC returns `"error"` — never silent `no_access`. */
@@ -90,7 +105,7 @@ export const ENTITLEMENT_FAILURE_MODES = {
 
 /**
  * **App DB / product state → premium flag** (after staff bypass). Mirrors `getUserAccess` branches.
- * "—" = field ignored for that row. CANCELLED with future `currentPeriodEnd` still means no premium unless trial applies.
+ * "—" = field ignored for that row. CANCELLED with future paid-through can still grant premium (`canceled_paid_through`).
  */
 export const DB_SUBSCRIPTION_TO_PREMIUM_MATRIX: ReadonlyArray<{
   dbSubscriptionStatus: string;
@@ -144,9 +159,17 @@ export const DB_SUBSCRIPTION_TO_PREMIUM_MATRIX: ReadonlyArray<{
     dbSubscriptionStatus: "CANCELLED",
     userTrialActiveInWindow: false,
     pastDuePolicyGrants: false,
+    hasPremium: true,
+    reason: "canceled_paid_through",
+    note: "Paid/trial window still open (max of period end and trial end).",
+  },
+  {
+    dbSubscriptionStatus: "CANCELLED",
+    userTrialActiveInWindow: false,
+    pastDuePolicyGrants: false,
     hasPremium: false,
     reason: "no_access",
-    note: "Expired or never subscribed.",
+    note: "No remaining paid-through window.",
   },
 ];
 
