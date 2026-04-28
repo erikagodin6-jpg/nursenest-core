@@ -175,7 +175,12 @@ export default async function PathwayLessonDetailPage({ params, searchParams }: 
 
     return (
       <Suspense fallback={<PathwayLessonDetailPageLoadingFallback pathway={pathway} />}>
-        <PathwayLessonDetailPageBody pathway={pathway} pathname={pathname} lessonSlug={lessonSlug} />
+        <PathwayLessonDetailPageBody
+          pathway={pathway}
+          pathname={pathname}
+          lessonSlug={lessonSlug}
+          lessonContentLocale={lessonContentLocale}
+        />
       </Suspense>
     );
   });

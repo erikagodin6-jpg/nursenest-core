@@ -10,6 +10,9 @@
  * 4. **Publishing package (same transaction)** — After insert, refreshes `internalLinkPlan.publishingPackage.relatedBlogPosts`
  *    from **live** posts (tag overlap) so related links stay current; anchor opportunities come from the plan JSON.
  *
+ * Recoverable validation failures (short body, long-form outline mismatch, SEO near-duplicate titles) trigger an
+ * automatic repair pass (bounded attempts) before returning `ok: false`.
+ *
  * **Post-save SEO refresh** (separate admin action): `POST /api/admin/blog/[id]/seo/regenerate` rebuilds the JSON SEO bundle
  * and related blog rows without touching the HTML body unless `overwrite: true` (then SERP columns refresh from deterministic SEO).
  *
@@ -56,6 +59,16 @@ import {
   enforceLongFormBodyQuality,
   mergeUniqueNeedsReviewFlags,
 } from "@/lib/blog/blog-longform-body-enforcement";
+import {
+  BLOG_BODY_REPAIR_WORD_BUFFER,
+  classifyBlogPipelineFailureForRepair,
+  MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS,
+} from "@/lib/blog/blog-generation-repair-classifier";
+import {
+  repairBlogPlanHeadlinesForSeoDistinctness,
+  repairControlPanelArticleBodyHtml,
+  repairPlanForLongformContractIssues,
+} from "@/lib/blog/blog-generation-repair-ai";
 
 /** Soft floor on raw HTML size before word counting (word count is authoritative; see {@link BLOG_ARTICLE_MIN_WORDS}). */
 export { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-bounds";
@@ -70,6 +83,8 @@ export type BlogArticlePipelineSuccess = {
   persist?: Extract<ControlPanelPersistResult, { ok: true; skipped: false }>;
   /** When persistence skipped (duplicate topic/slug race). */
   persistSkipped?: Extract<ControlPanelPersistResult, { ok: true; skipped: true }>;
+  /** Count of repair rounds (plan/body/headline) applied before success. */
+  repairPassesUsed?: number;
 };
 
 export type BlogArticlePipelineFailure = {
@@ -84,6 +99,8 @@ export type BlogArticlePipelineFailure = {
   /** Structured validation issues or debug payloads for admin UI. */
   details?: unknown;
   riskFlags?: string[];
+  /** Repair rounds attempted before terminal failure. */
+  repairPassesUsed?: number;
 };
 
 export type BlogArticlePipelineResult = BlogArticlePipelineSuccess | BlogArticlePipelineFailure;
@@ -93,9 +110,28 @@ export type RunBlogArticlePipelineOptions = {
   persist?: boolean;
   /** Override on-page H1 for the body pass (e.g. admin picked another title option). */
   pageH1Override?: string;
+  /** Suffix for OpenAI `user` on completions (e.g. batch id + item id). */
+  idempotencyKey?: string;
 };
 
 const MIN_BODY_CHARS = BLOG_ARTICLE_MIN_BODY_CHARS;
+
+function repairBackoffMs(passIndex: number): number {
+  const base = Math.min(
+    30_000,
+    Math.max(800, Number(process.env.BLOG_REPAIR_BACKOFF_BASE_MS?.trim()) || 1200),
+  );
+  return Math.min(30_000, Math.floor(base * Math.pow(2, Math.max(0, passIndex))));
+}
+
+function sleepMs(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function openAiUserTag(idempotencyKey: string | undefined, ...parts: (string | number)[]): string | undefined {
+  if (!idempotencyKey) return undefined;
+  return `${idempotencyKey}:${parts.join(":")}`.slice(0, 120);
+}
 
 /**
  * End-to-end generation: structured plan → HTML article → optional DB draft.
@@ -106,33 +142,76 @@ export async function runBlogArticleGenerationPipeline(
   options: RunBlogArticlePipelineOptions = {},
 ): Promise<BlogArticlePipelineResult> {
   const persist = options.persist !== false;
+  const idem = options.idempotencyKey;
+  let repairPassesUsed = 0;
 
   let plan: BlogControlPanelPlan;
   try {
-    plan = await fetchControlPanelPlan(input);
-    const verifiedLessons = normalizePlanSuggestedLessonRows(
-      await annotateBlogInternalLinkRowsWithVerification(plan.suggestedInternalLessons, input.country),
-    );
-    plan = {
-      ...plan,
-      suggestedInternalLessons: verifiedLessons as BlogControlPanelPlan["suggestedInternalLessons"],
-    };
-    const longCheck = validateLongFormNursingPlanContract(plan, { template: input.template, intent: input.intent });
-    if (!longCheck.ok) {
-      return {
-        ok: false,
+    while (true) {
+      try {
+        plan = await fetchControlPanelPlan(input, { openAiUser: openAiUserTag(idem, "plan", repairPassesUsed) });
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        if (BlogControlPanelPlanError.is(e)) {
+          return { ok: false, stage: "plan", error: msg, code: e.code, details: e.details, repairPassesUsed };
+        }
+        return { ok: false, stage: "plan", error: msg, repairPassesUsed };
+      }
+
+      const verifiedLessons = normalizePlanSuggestedLessonRows(
+        await annotateBlogInternalLinkRowsWithVerification(plan.suggestedInternalLessons, input.country),
+      );
+      plan = {
+        ...plan,
+        suggestedInternalLessons: verifiedLessons as BlogControlPanelPlan["suggestedInternalLessons"],
+      };
+
+      const longCheck = validateLongFormNursingPlanContract(plan, { template: input.template, intent: input.intent });
+      if (longCheck.ok) break;
+
+      const synthetic = {
         stage: "plan",
         error: longCheck.issues.join(" "),
-        code: "PLAN_LONGFORM_CONTRACT",
-        details: { issues: longCheck.issues },
+        code: "PLAN_LONGFORM_CONTRACT" as const,
       };
+      const cl = classifyBlogPipelineFailureForRepair(synthetic);
+      if (!cl.recoverable || repairPassesUsed >= MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS) {
+        return {
+          ok: false,
+          stage: "plan",
+          error: longCheck.issues.join(" "),
+          code: "PLAN_LONGFORM_CONTRACT",
+          details: { issues: longCheck.issues },
+          plan,
+          repairPassesUsed,
+        };
+      }
+
+      plan = await repairPlanForLongformContractIssues({
+        plan,
+        topic: input.topic,
+        exam: input.exam,
+        country: input.country,
+        template: input.template,
+        intent: input.intent,
+        funnelStage: input.funnelStage,
+        tone: input.tone,
+        keywords: input.keywords,
+        issuesJoined: longCheck.issues.join(" "),
+      });
+      const reVerified = normalizePlanSuggestedLessonRows(
+        await annotateBlogInternalLinkRowsWithVerification(plan.suggestedInternalLessons, input.country),
+      );
+      plan = { ...plan, suggestedInternalLessons: reVerified as BlogControlPanelPlan["suggestedInternalLessons"] };
+      repairPassesUsed += 1;
+      await sleepMs(repairBackoffMs(repairPassesUsed - 1));
     }
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     if (BlogControlPanelPlanError.is(e)) {
-      return { ok: false, stage: "plan", error: msg, code: e.code, details: e.details };
+      return { ok: false, stage: "plan", error: msg, code: e.code, details: e.details, repairPassesUsed };
     }
-    return { ok: false, stage: "plan", error: msg };
+    return { ok: false, stage: "plan", error: msg, repairPassesUsed };
   }
 
   let bodyHtml: string;
@@ -148,87 +227,256 @@ export async function runBlogArticleGenerationPipeline(
       tone: input.tone,
       keywords: input.keywords,
       selectedTitle: options.pageH1Override,
+      openAiUser: openAiUserTag(idem, "body", repairPassesUsed),
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
-    return { ok: false, stage: "body", error: msg, plan };
+    return { ok: false, stage: "body", error: msg, plan, repairPassesUsed };
   }
 
-  if (bodyHtml.length < MIN_BODY_CHARS) {
-    return { ok: false, stage: "body", error: "Article body too short after generation", plan, bodyHtml };
-  }
-  const bodyWordCount = countWordsFromHtml(bodyHtml);
-  if (bodyWordCount < BLOG_ARTICLE_MIN_WORDS) {
-    return {
-      ok: false,
-      stage: "body",
-      error: `Article body too short after generation (${bodyWordCount} words; minimum ${BLOG_ARTICLE_MIN_WORDS}).`,
-      plan,
-      bodyHtml,
-    };
-  }
+  for (;;) {
+    const validationMessages: string[] = [];
+    if (bodyHtml.length < MIN_BODY_CHARS) {
+      validationMessages.push(`Article body is below minimum character length (${bodyHtml.length}; min ${MIN_BODY_CHARS}).`);
+    }
+    const bodyWordCount = countWordsFromHtml(bodyHtml);
+    if (bodyWordCount < BLOG_ARTICLE_MIN_WORDS) {
+      validationMessages.push(
+        `Article body is too short (${bodyWordCount} words; minimum ${BLOG_ARTICLE_MIN_WORDS}). Target at least ${BLOG_ARTICLE_MIN_WORDS + BLOG_BODY_REPAIR_WORD_BUFFER} substantive words.`,
+      );
+    }
 
-  const longformBody = enforceLongFormBodyQuality({
-    plan,
-    bodyHtml,
-    template: input.template,
-    intent: input.intent,
-  });
-  if (!longformBody.ok) {
-    return {
-      ok: false,
-      stage: "body",
-      error: longformBody.errors.join(" "),
+    const longformBody = enforceLongFormBodyQuality({
       plan,
       bodyHtml,
-      code: "BODY_LONGFORM_ENFORCEMENT",
-      details: { ...longformBody.details, errors: longformBody.errors },
+      template: input.template,
+      intent: input.intent,
+    });
+    if (!longformBody.ok) {
+      validationMessages.push(...longformBody.errors);
+    } else if (longformBody.flags.length > 0) {
+      plan = mergeUniqueNeedsReviewFlags(plan, longformBody.flags);
+    }
+
+    if (validationMessages.length === 0 && longformBody.ok) {
+      break;
+    }
+
+    const synthetic = {
+      stage: "body",
+      error: validationMessages.join(" ") || longformBody.errors.join(" "),
+      code: longformBody.ok ? undefined : ("BODY_LONGFORM_ENFORCEMENT" as const),
     };
-  }
-  if (longformBody.flags.length > 0) {
-    plan = mergeUniqueNeedsReviewFlags(plan, longformBody.flags);
+    const cl = classifyBlogPipelineFailureForRepair(synthetic);
+    if (!cl.recoverable || repairPassesUsed >= MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS) {
+      return {
+        ok: false,
+        stage: "body",
+        error: synthetic.error,
+        plan,
+        bodyHtml,
+        ...(longformBody.ok ? {} : { code: "BODY_LONGFORM_ENFORCEMENT", details: { ...longformBody.details, errors: longformBody.errors } }),
+        repairPassesUsed,
+      };
+    }
+
+    await sleepMs(repairBackoffMs(repairPassesUsed));
+    try {
+      bodyHtml = await repairControlPanelArticleBodyHtml({
+        plan,
+        topic: input.topic,
+        exam: input.exam,
+        country: input.country,
+        template: input.template,
+        intent: input.intent,
+        funnelStage: input.funnelStage,
+        tone: input.tone,
+        keywords: input.keywords,
+        selectedTitle: options.pageH1Override,
+        currentHtml: bodyHtml,
+        validationMessages,
+        targetWordMin: BLOG_ARTICLE_MIN_WORDS + BLOG_BODY_REPAIR_WORD_BUFFER,
+        openAiUser: openAiUserTag(idem, "repair-body", repairPassesUsed),
+      });
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      return { ok: false, stage: "body", error: msg, plan, bodyHtml, repairPassesUsed };
+    }
+    repairPassesUsed += 1;
+
+    const longformAfter = enforceLongFormBodyQuality({
+      plan,
+      bodyHtml,
+      template: input.template,
+      intent: input.intent,
+    });
+    if (longformAfter.flags.length > 0) {
+      plan = mergeUniqueNeedsReviewFlags(plan, longformAfter.flags);
+    }
   }
 
   if (!persist) {
-    return { ok: true, plan, bodyHtml };
+    return { ok: true, plan, bodyHtml, repairPassesUsed };
   }
 
-  try {
-    const persistResult = await persistControlPanelDraft(input, plan, bodyHtml);
-    if (!persistResult.ok) {
-      if (persistResult.code === "INSUFFICIENT_CITATIONS") {
-        return {
-          ok: false,
-          stage: "citations",
-          error: persistResult.error,
-          plan,
-          bodyHtml,
-          code: persistResult.code,
-          riskFlags: persistResult.riskFlags,
-        };
+  while (true) {
+    try {
+      const persistResult = await persistControlPanelDraft(input, plan, bodyHtml);
+      if (!persistResult.ok) {
+        if (persistResult.code === "INSUFFICIENT_CITATIONS") {
+          return {
+            ok: false,
+            stage: "citations",
+            error: persistResult.error,
+            plan,
+            bodyHtml,
+            code: persistResult.code,
+            riskFlags: persistResult.riskFlags,
+            repairPassesUsed,
+          };
+        }
+        if (persistResult.code === "PRE_PUBLISH_BLOCKED") {
+          return {
+            ok: false,
+            stage: "persist",
+            error: persistResult.error,
+            plan,
+            bodyHtml,
+            code: persistResult.code,
+            details: {
+              prePublish: persistResult.prePublish ?? null,
+              draftPost: persistResult.post ?? null,
+            },
+            repairPassesUsed,
+          };
+        }
+        if (persistResult.code === "SEO_DUPLICATE_BLOCKED") {
+          const cl = classifyBlogPipelineFailureForRepair({
+            stage: "persist",
+            error: persistResult.error,
+            code: persistResult.code,
+          });
+          if (!cl.recoverable || repairPassesUsed >= MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS) {
+            return {
+              ok: false,
+              stage: "persist",
+              error: persistResult.error,
+              plan,
+              bodyHtml,
+              code: persistResult.code,
+              repairPassesUsed,
+            };
+          }
+          const repairedPlan = await repairBlogPlanHeadlinesForSeoDistinctness({
+            plan,
+            topic: input.topic,
+            exam: input.exam,
+            country: input.country,
+            template: input.template,
+            intent: input.intent,
+            funnelStage: input.funnelStage,
+            tone: input.tone,
+            keywords: input.keywords,
+            blockedReason: persistResult.error,
+            openAiUser: openAiUserTag(idem, "repair-seo", repairPassesUsed),
+          });
+          if (!repairedPlan) {
+            return {
+              ok: false,
+              stage: "persist",
+              error: `${persistResult.error} (could not generate a sufficiently distinct headline after repair).`,
+              plan,
+              bodyHtml,
+              code: persistResult.code,
+              repairPassesUsed,
+            };
+          }
+          plan = repairedPlan;
+          const reVerified = normalizePlanSuggestedLessonRows(
+            await annotateBlogInternalLinkRowsWithVerification(plan.suggestedInternalLessons, input.country),
+          );
+          plan = { ...plan, suggestedInternalLessons: reVerified as BlogControlPanelPlan["suggestedInternalLessons"] };
+          repairPassesUsed += 1;
+          await sleepMs(repairBackoffMs(repairPassesUsed - 1));
+          // Regenerate body so headings align with new H1 theme
+          try {
+            bodyHtml = await fetchControlPanelBodyHtml({
+              plan,
+              topic: input.topic,
+              exam: input.exam,
+              country: input.country,
+              template: input.template,
+              intent: input.intent,
+              funnelStage: input.funnelStage,
+              tone: input.tone,
+              keywords: input.keywords,
+              selectedTitle: plan.h1,
+              openAiUser: openAiUserTag(idem, "body-after-seo", repairPassesUsed),
+            });
+          } catch (e) {
+            const msg = e instanceof Error ? e.message : String(e);
+            return { ok: false, stage: "body", error: msg, plan, repairPassesUsed };
+          }
+          const wc = countWordsFromHtml(bodyHtml);
+          if (bodyHtml.length < MIN_BODY_CHARS || wc < BLOG_ARTICLE_MIN_WORDS) {
+            const msgs = [
+              `Post–title-repair body below limits (${wc} words; need ≥${BLOG_ARTICLE_MIN_WORDS}).`,
+            ];
+            try {
+              bodyHtml = await repairControlPanelArticleBodyHtml({
+                plan,
+                topic: input.topic,
+                exam: input.exam,
+                country: input.country,
+                template: input.template,
+                intent: input.intent,
+                funnelStage: input.funnelStage,
+                tone: input.tone,
+                keywords: input.keywords,
+                selectedTitle: plan.h1,
+                currentHtml: bodyHtml,
+                validationMessages: msgs,
+                targetWordMin: BLOG_ARTICLE_MIN_WORDS + BLOG_BODY_REPAIR_WORD_BUFFER,
+                openAiUser: openAiUserTag(idem, "repair-body-post-seo", repairPassesUsed),
+              });
+              repairPassesUsed += 1;
+            } catch (ex) {
+              const m = ex instanceof Error ? ex.message : String(ex);
+              return { ok: false, stage: "body", error: m, plan, bodyHtml, repairPassesUsed };
+            }
+          }
+          const lf = enforceLongFormBodyQuality({
+            plan,
+            bodyHtml,
+            template: input.template,
+            intent: input.intent,
+          });
+          if (!lf.ok) {
+            return {
+              ok: false,
+              stage: "body",
+              error: lf.errors.join(" "),
+              plan,
+              bodyHtml,
+              code: "BODY_LONGFORM_ENFORCEMENT",
+              details: lf.details,
+              repairPassesUsed,
+            };
+          }
+          if (lf.flags.length > 0) {
+            plan = mergeUniqueNeedsReviewFlags(plan, lf.flags);
+          }
+          continue;
+        }
+        return { ok: false, stage: "persist", error: persistResult.error, plan, bodyHtml, repairPassesUsed };
       }
-      if (persistResult.code === "PRE_PUBLISH_BLOCKED") {
-        return {
-          ok: false,
-          stage: "persist",
-          error: persistResult.error,
-          plan,
-          bodyHtml,
-          code: persistResult.code,
-          details: {
-            prePublish: persistResult.prePublish ?? null,
-            draftPost: persistResult.post ?? null,
-          },
-        };
+      if (persistResult.skipped) {
+        return { ok: true, plan, bodyHtml, persistSkipped: persistResult, repairPassesUsed };
       }
-      return { ok: false, stage: "persist", error: persistResult.error, plan, bodyHtml };
+      return { ok: true, plan, bodyHtml, persist: persistResult, repairPassesUsed };
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      return { ok: false, stage: "persist", error: msg, plan, bodyHtml, repairPassesUsed };
     }
-    if (persistResult.skipped) {
-      return { ok: true, plan, bodyHtml, persistSkipped: persistResult };
-    }
-    return { ok: true, plan, bodyHtml, persist: persistResult };
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    return { ok: false, stage: "persist", error: msg, plan, bodyHtml };
   }
 }

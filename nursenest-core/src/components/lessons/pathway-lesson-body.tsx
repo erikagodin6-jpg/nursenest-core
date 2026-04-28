@@ -339,6 +339,8 @@ export function PathwayLessonSectionContent({
   sectionKind,
   emptyBodyMessage,
   figuresVisualLeadMessage,
+  /** When the parent renders the first figure as a lead image in the section card, avoid empty-body panel. */
+  hasSectionLeadFigure = false,
 }: {
   text: string;
   figures?: PathwayLessonFigure[] | undefined;
@@ -352,6 +354,7 @@ export function PathwayLessonSectionContent({
   emptyBodyMessage: string;
   /** Short line when prose is empty but figures carry the teaching. */
   figuresVisualLeadMessage: string;
+  hasSectionLeadFigure?: boolean;
 }) {
   const paragraphs = pathwayLessonResolvedParagraphs(text, {
     viewerTier,
@@ -384,7 +387,7 @@ export function PathwayLessonSectionContent({
   const figuresEl = hasFigures ? <PathwayLessonFigures figures={figures!} /> : null;
 
   const showFiguresLead = !bodyEl && !examEl && hasFigures;
-  const showEmptyPanel = !bodyEl && !examEl && !hasFigures;
+  const showEmptyPanel = !bodyEl && !examEl && !hasFigures && !hasSectionLeadFigure;
 
   return (
     <div className="space-y-3">

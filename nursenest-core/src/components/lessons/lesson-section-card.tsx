@@ -12,9 +12,23 @@ import {
   ShieldAlert,
   Stethoscope,
 } from "lucide-react";
-import type { PathwayLessonSectionKind } from "@/lib/lessons/pathway-lesson-types";
+import type { PathwayLessonFigure, PathwayLessonSectionKind } from "@/lib/lessons/pathway-lesson-types";
+import { LessonSectionOptionalImage } from "@/components/lessons/lesson-section-optional-image";
 import { getLessonSectionTheme } from "@/lib/ui/lesson-section-theme";
 import { LearnerSectionContainer } from "@/components/learner-ui/learner-section-container";
+
+const SPINE_ACCENT_CLASS: Partial<Record<PathwayLessonSectionKind, string>> = {
+  clinical_meaning: "nn-lesson-section-card--spine-clinical-meaning",
+  exam_relevance: "nn-lesson-section-card--spine-exam-relevance",
+  core_concept: "nn-lesson-section-card--spine-core-concept",
+  clinical_scenario: "nn-lesson-section-card--spine-clinical-scenario",
+  takeaways: "nn-lesson-section-card--spine-takeaways",
+};
+
+function spineAccentClass(kind: PathwayLessonSectionKind | undefined | null): string {
+  if (!kind) return "";
+  return SPINE_ACCENT_CLASS[kind] ?? "";
+}
 
 export function lessonSectionSurface(kind: PathwayLessonSectionKind | undefined | null): "editorial" | "callout" {
   if (!kind) return "editorial";
@@ -46,6 +60,8 @@ export function LessonSectionCard({
   /** Zero-based count among editorial-only sections for alternating soft bands. */
   editorialRhythmIndex,
   tierRelevanceLearnerSection = false,
+  /** First section figure rendered as a lead visual under the heading (remaining figures stay in body). */
+  sectionLeadFigure = null,
   children,
 }: {
   id: string;
@@ -61,18 +77,22 @@ export function LessonSectionCard({
    * instead of stacked `nn-lesson-section-card--callout` framing.
    */
   tierRelevanceLearnerSection?: boolean;
+  sectionLeadFigure?: PathwayLessonFigure | null;
   children: ReactNode;
 }) {
   const { chipLabel: derivedChipLabel, dataRole, role } = getLessonSectionTheme(kind);
   const chipLabel = chipLabelOverride ?? derivedChipLabel;
   const surface = lessonSectionSurface(kind);
   const tierCrosswalk = kind === "tier_specific_relevance";
+  const spineClass = spineAccentClass(kind);
   const rhythmClass =
-    surface === "editorial" && typeof editorialRhythmIndex === "number"
-      ? editorialRhythmIndex % 2 === 0
-        ? "nn-lesson-section-card--rhythm-a"
-        : "nn-lesson-section-card--rhythm-b"
-      : "";
+    spineClass
+      ? ""
+      : surface === "editorial" && typeof editorialRhythmIndex === "number"
+        ? editorialRhythmIndex % 2 === 0
+          ? "nn-lesson-section-card--rhythm-a"
+          : "nn-lesson-section-card--rhythm-b"
+        : "";
   const ROLE_ICON = {
     info: Lightbulb,
     warning: AlertTriangle,
@@ -113,6 +133,7 @@ export function LessonSectionCard({
         <h2 id={headingId} className="nn-lesson-section-heading mt-2 text-[var(--theme-heading-text)]">
           {heading?.trim() || "Section"}
         </h2>
+        <LessonSectionOptionalImage figure={sectionLeadFigure} />
         <div className={bodyGap}>{children}</div>
       </LearnerSectionContainer>
     );
@@ -125,6 +146,7 @@ export function LessonSectionCard({
         "nn-lesson-section-card scroll-mt-24",
         surface === "editorial" ? "nn-lesson-section-card--editorial" : "nn-lesson-section-card--callout",
         tierCrosswalk ? "nn-lesson-section-card--tier-callout" : "",
+        spineClass,
         rhythmClass,
         className,
       ]
@@ -138,6 +160,7 @@ export function LessonSectionCard({
       <h2 className="nn-lesson-section-heading mt-2 text-[var(--theme-heading-text)]">
         {heading?.trim() || "Section"}
       </h2>
+      <LessonSectionOptionalImage figure={sectionLeadFigure} />
       <div className={bodyGap}>{children}</div>
     </section>
   );

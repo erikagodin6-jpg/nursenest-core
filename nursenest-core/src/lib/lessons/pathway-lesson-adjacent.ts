@@ -96,7 +96,7 @@ export function loadPathwayLessonAdjacentFromCatalog(pathwayId: string, lessonSl
  * Uses bounded lookups (current row + prev/next) instead of loading the full pathway into memory.
  * Falls back to **catalog order** (hub-aligned) when the DB is unavailable or the slug is not published in DB yet.
  */
-export async function loadPathwayLessonAdjacent(
+async function loadPathwayLessonAdjacentImpl(
   pathwayId: string,
   lessonSlug: string,
   locale: string,
@@ -162,6 +162,9 @@ export async function loadPathwayLessonAdjacent(
     );
   }
 }
+
+/** Request-scoped dedupe for prev/next resolution (same pathway/slug/locale). */
+export const loadPathwayLessonAdjacent = cache(loadPathwayLessonAdjacentImpl);
 
 /** Build ready-to-render prev/next links (e.g. marketing vs allied URL shapes). */
 export function mapPathwayLessonAdjacentToHrefs(

@@ -3642,8 +3642,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   --lsc-surface: color-mix(in srgb, var(--lsc-soft) 38%, var(--bg-card, var(--theme-card-bg)) 62%);
 
   border-radius: 0.875rem;
-  border: 1px solid color-mix(in srgb, var(--lsc-color) 14%, var(--semantic-border-soft));
-  border-left: 3px solid color-mix(in srgb, var(--lsc-color) 42%, var(--semantic-border-soft));
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 11%, var(--semantic-border-soft));
+  border-left: 2px solid color-mix(in srgb, var(--lsc-color) 34%, var(--semantic-border-soft));
   background: var(--lsc-surface);
   padding: 1.125rem 1.125rem 1.25rem 1.25rem;
   box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 80%, transparent);
@@ -3766,6 +3766,19 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   color: var(--semantic-text-secondary);
   font-size: 0.8125rem;
   line-height: 1.5;
+}
+
+/* Lead figure under section heading — inherits section role tint from `.nn-lesson-section-card`. */
+.nn-lesson-section-card .nn-lesson-section-lead-figure {
+  border-color: color-mix(in srgb, var(--lsc-color) 16%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--lsc-color) 5%, var(--bg-card, var(--theme-card-bg)));
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 68%, transparent);
+}
+
+.lv-section[data-lsc-role] .nn-lesson-section-lead-figure {
+  border-color: color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 14%, var(--bg-card, var(--theme-card-bg)));
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 68%, transparent);
 }
 
 /* ── Quiz rationale panels ───────────────────────────────────────────────────
@@ -4044,7 +4057,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   z-index: 0;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.125rem, 2.2vw, 1.65rem);
+  gap: clamp(0.65rem, 1.2vw, 1.05rem);
 }
 
 .nn-lesson-article-flow::before {
@@ -4067,6 +4080,32 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 
 .nn-lesson-article-flow > .nn-lesson-section-card.nn-lesson-section-card--callout {
   border-radius: 1rem;
+}
+
+/* Canonical nursing spine — distinct left accents (token-driven). */
+.nn-lesson-article-flow .nn-lesson-section-card.nn-lesson-section-card--spine-clinical-meaning {
+  border-left: 3px solid color-mix(in srgb, var(--semantic-info) 34%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 16%, var(--bg-card, var(--theme-card-bg)) 84%);
+}
+
+.nn-lesson-article-flow .nn-lesson-section-card.nn-lesson-section-card--spine-exam-relevance {
+  border-left: 3px solid color-mix(in srgb, var(--semantic-chart-2) 38%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-chart-2) 9%, var(--bg-card, var(--theme-card-bg)) 91%);
+}
+
+.nn-lesson-article-flow .nn-lesson-section-card.nn-lesson-section-card--spine-core-concept {
+  border-left: 3px solid color-mix(in srgb, var(--semantic-brand) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 12%, var(--bg-card, var(--theme-card-bg)) 88%);
+}
+
+.nn-lesson-article-flow .nn-lesson-section-card.nn-lesson-section-card--spine-clinical-scenario {
+  border-left: 3px solid color-mix(in srgb, var(--semantic-chart-3) 36%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-warm) 14%, var(--bg-card, var(--theme-card-bg)) 86%);
+}
+
+.nn-lesson-article-flow .nn-lesson-section-card.nn-lesson-section-card--spine-takeaways {
+  border-left: 3px solid color-mix(in srgb, var(--semantic-success) 34%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 16%, var(--bg-card, var(--theme-card-bg)) 84%);
 }
 
 /* Editorial bands alternate only inside article flow (controlled variation). */

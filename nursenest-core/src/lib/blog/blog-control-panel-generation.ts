@@ -71,6 +71,7 @@ import {
   generateBlogSlugBaseFromExamTopic,
 } from "@/lib/blog/blog-optional-slug";
 import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
+import { assertSeoSafeToCreateBlog, SeoDuplicateBlockedError } from "@/lib/seo/seo-duplicate-guard";
 
 export type ControlPanelGenerateInput = {
   topic: string;
@@ -163,7 +164,10 @@ export function appendRequiredStudyLinksBlock(params: {
   return `${params.bodyHtml.trim()}\n<h2>Study next in NurseNest</h2><ul>${listHtml}</ul>`;
 }
 
-export async function fetchControlPanelPlan(input: ControlPanelGenerateInput): Promise<BlogControlPanelPlan> {
+export async function fetchControlPanelPlan(
+  input: ControlPanelGenerateInput,
+  opts?: { openAiUser?: string },
+): Promise<BlogControlPanelPlan> {
   const system = buildStructuredPlanSystemPrompt({ template: input.template, intent: input.intent });
   const user = `${buildStructuredPlanUserPrompt({
     topic: input.topic,
@@ -185,6 +189,7 @@ export async function fetchControlPanelPlan(input: ControlPanelGenerateInput): P
     ],
     temperature: 0.35,
     maxTokens: 4096,
+    user: opts?.openAiUser,
   });
 
   let parsed: unknown;
@@ -230,6 +235,7 @@ export async function fetchControlPanelBodyHtml(params: {
   keywords?: string;
   /** Overrides plan.h1 when admin picked a different title option. */
   selectedTitle?: string;
+  openAiUser?: string;
 }): Promise<string> {
   const pageH1 = params.selectedTitle?.trim() || params.plan.h1;
   const system = buildArticleBodySystemPrompt({ template: params.template, intent: params.intent });
@@ -253,6 +259,7 @@ export async function fetchControlPanelBodyHtml(params: {
     ],
     temperature: 0.42,
     maxTokens: 8192,
+    user: params.openAiUser,
   });
 
   const bodyHtml = response.content.trim();
@@ -287,7 +294,7 @@ export type ControlPanelPersistResult =
   | {
       ok: false;
       error: string;
-      code?: "INSUFFICIENT_CITATIONS" | "PRE_PUBLISH_BLOCKED";
+      code?: "INSUFFICIENT_CITATIONS" | "PRE_PUBLISH_BLOCKED" | "SEO_DUPLICATE_BLOCKED";
       riskFlags?: string[];
       prePublish?: PrePublishValidationResult;
       /** Present when `PRE_PUBLISH_BLOCKED`: draft row was committed; publish step skipped. */
@@ -486,6 +493,19 @@ export async function persistControlPanelDraft(
   }
 
   try {
+    try {
+      await assertSeoSafeToCreateBlog(prisma, {
+        slug,
+        metaTitle: seoTitleStored,
+        h1: pageTitle,
+      });
+    } catch (e) {
+      if (e instanceof SeoDuplicateBlockedError) {
+        return { ok: false, error: e.message, code: "SEO_DUPLICATE_BLOCKED" };
+      }
+      throw e;
+    }
+
     const post = await prisma.$transaction(async (tx) => {
       const created = await tx.blogPost.create({
         data: {

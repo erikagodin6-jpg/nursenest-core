@@ -85,6 +85,8 @@ export async function logDraftBatchItemRun(opts: {
   blogPostId?: string | null;
   message?: string | null;
   createdById?: string | null;
+  /** Merged into automation log metadata (repair attempts, terminal flag, etc.). */
+  extraMetadata?: Record<string, unknown> | null;
 }): Promise<void> {
   const st =
     opts.outcome === "completed" ? ContentAutomationLogStatus.SUCCEEDED
@@ -98,7 +100,11 @@ export async function logDraftBatchItemRun(opts: {
     topic: opts.topicRaw,
     summary: `batch ${opts.batchId.slice(0, 8)}… #${opts.ordinal + 1}`,
     error: opts.message ?? null,
-    metadata: { ordinal: opts.ordinal, batchId: opts.batchId },
+    metadata: {
+      ordinal: opts.ordinal,
+      batchId: opts.batchId,
+      ...(opts.extraMetadata && typeof opts.extraMetadata === "object" ? opts.extraMetadata : {}),
+    },
     blogPostId: opts.blogPostId ?? null,
     correlationId: opts.batchId,
     sourceItemId: opts.itemId,

@@ -527,6 +527,7 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
         targetKeyword: prepared.targetKeyword,
         slug: prepared.uniqueSlug,
         publishAt,
+        generationIdempotencyKey: `batch-schedule:${schedule.id}:${item.id}`,
       });
 
       if (!result.ok) {

@@ -680,7 +680,13 @@ export default async function LessonDetailPage({ params }: Props) {
             pathwayId={pathwayId}
             topic={record.topic}
             sourceLabel={displayTitle}
-            qualityNotice={<LessonQualityNotice tier={pathwayQuality.tier} wordCount={pathwayQuality.wordCount} />}
+            qualityNotice={
+              <LessonQualityNotice
+                tier={pathwayQuality.tier}
+                wordCount={pathwayQuality.wordCount}
+                mode={process.env.NODE_ENV === "development" ? "staff_qa" : "hidden"}
+              />
+            }
             compactSubscriberBanner
           >
             {pathway && record.memoryAnchor ? (
@@ -698,6 +704,10 @@ export default async function LessonDetailPage({ params }: Props) {
                       : typeof section.body === "string"
                         ? section.body
                         : "";
+                  const figs = section.figures;
+                  const sectionLeadFigure = figs?.length ? figs[0] : undefined;
+                  const sectionFiguresRest =
+                    figs && figs.length > 1 ? figs.slice(1) : undefined;
                   return (
                     <LessonSectionCard
                       key={section.id}
@@ -705,6 +715,10 @@ export default async function LessonDetailPage({ params }: Props) {
                       heading={surfaceHeading}
                       kind={section.kind ?? null}
                       editorialRhythmIndex={editorialRhythmIndexBySectionId.get(section.id)}
+                      tierRelevanceLearnerSection={
+                        Boolean(pathway) && section.kind === "tier_specific_relevance"
+                      }
+                      sectionLeadFigure={sectionLeadFigure}
                     >
                       {section.kind === "related_next_steps" && pathway ? (
                         <PathwayLessonNextStepsCards
@@ -724,7 +738,7 @@ export default async function LessonDetailPage({ params }: Props) {
                       ) : (
                         <PathwayLessonSectionContent
                           text={sectionBody}
-                          figures={section.figures}
+                          figures={sectionFiguresRest}
                           examFocus={section.examFocus}
                           lessonWikiBasePath={pathway ? marketingPathwayLessonsIndexPath(pathway) : null}
                           viewerTier={lessonViewerTier}
@@ -732,6 +746,7 @@ export default async function LessonDetailPage({ params }: Props) {
                           sectionKind={section.kind ?? null}
                           emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
                           figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
+                          hasSectionLeadFigure={Boolean(sectionLeadFigure)}
                         />
                       )}
                       {userId ? (
@@ -952,7 +967,13 @@ export default async function LessonDetailPage({ params }: Props) {
           scope={LearnerNoteScope.CONTENT_LESSON}
           contextId={id}
           sourceLabel={displayTitle}
-          qualityNotice={<LessonQualityNotice tier={contentQ.tier} wordCount={contentQ.wordCount} />}
+          qualityNotice={
+            <LessonQualityNotice
+              tier={contentQ.tier}
+              wordCount={contentQ.wordCount}
+              mode={process.env.NODE_ENV === "development" ? "staff_qa" : "hidden"}
+            />
+          }
         >
           <LessonBody content={row.content as unknown} t={t} />
         </PremiumLessonShell>

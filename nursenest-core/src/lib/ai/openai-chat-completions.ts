@@ -15,6 +15,8 @@ export async function openAiChatCompletion(params: {
   messages: ChatMessage[];
   temperature: number;
   maxTokens: number;
+  /** OpenAI `user` field — stable per generation attempt for tracing / abuse signals. */
+  user?: string;
 }): Promise<ChatCompletionResult> {
   const key = getOpenAiApiKey();
   if (!key) {
@@ -36,6 +38,7 @@ export async function openAiChatCompletion(params: {
       messages: params.messages,
       temperature: params.temperature,
       max_tokens: params.maxTokens,
+      ...(params.user ? { user: String(params.user).slice(0, 128) } : {}),
     }),
   });
 

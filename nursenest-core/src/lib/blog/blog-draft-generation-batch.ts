@@ -17,6 +17,11 @@ import { prisma } from "@/lib/db";
 import { isRnTopicMapShellGenerationBatch, RN_TOPIC_MAP_SHELL_MAX_ITEMS } from "@/lib/blog/blog-topic-map-shell-batch-constants";
 import { DRAFT_BATCH_MAX_ITEMS_PER_PROCESS } from "@/lib/blog/blog-draft-generation-batch-constants";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  formatBlogBatchItemFailureMessage,
+  MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS,
+  parseBlogBatchItemRepairMeta,
+} from "@/lib/blog/blog-generation-repair-classifier";
 
 const STALE_GENERATING_MS = 25 * 60 * 1000;
 
@@ -337,16 +342,34 @@ export async function processDraftGenerationBatchItems(
 
   for (const item of items) {
     try {
-      await prisma.blogDraftGenerationBatchItem.update({
-        where: { id: item.id },
+      const claimed = await prisma.blogDraftGenerationBatchItem.updateMany({
+        where: { id: item.id, status: BlogDraftGenerationBatchItemStatus.PENDING },
         data: { status: BlogDraftGenerationBatchItemStatus.GENERATING, error: null },
       });
+      if (claimed.count === 0) {
+        results.push({
+          itemId: item.id,
+          ordinal: item.ordinal,
+          topicRaw: item.topicRaw,
+          outcome: "skipped",
+          message: "already_claimed_or_not_pending",
+        });
+        continue;
+      }
 
       const prepared = await prepareAdminBlogGenerationInput({
         rawTitle: item.topicRaw,
         exam: batch.exam,
         targetKeyword: item.topicRaw,
         publishMode: "draft",
+      });
+
+      const idemKey = `${batchId}:${item.id}`;
+      await prisma.blogDraftGenerationBatchItem.update({
+        where: { id: item.id },
+        data: {
+          error: `[NN_REPAIRING] ${item.topicRaw.slice(0, 200)}`.slice(0, 4000),
+        },
       });
 
       const result = await generateAutomatedBlogPost({
@@ -364,14 +387,21 @@ export async function processDraftGenerationBatchItems(
         keywordCluster: batch.keywordCluster ?? undefined,
         fixedSlug: prepared.uniqueSlug,
         autoPublish: false,
+        generationIdempotencyKey: idemKey,
       });
 
       if (!result.ok) {
+        const repairPasses = result.repairPassesUsed ?? MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS;
+        const errText = formatBlogBatchItemFailureMessage({
+          originalError: result.error,
+          repairAttempts: repairPasses,
+          terminal: true,
+        });
         await prisma.blogDraftGenerationBatchItem.update({
           where: { id: item.id },
           data: {
             status: BlogDraftGenerationBatchItemStatus.FAILED,
-            error: result.error.slice(0, 4000),
+            error: errText.slice(0, 4000),
           },
         });
         results.push({
@@ -382,14 +412,20 @@ export async function processDraftGenerationBatchItems(
           message: result.error,
         });
         await refreshDraftGenerationBatchStats(batchId);
+        const parsed = parseBlogBatchItemRepairMeta(errText);
         await logDraftBatchItemRun({
           batchId,
           itemId: item.id,
           ordinal: item.ordinal,
           topicRaw: item.topicRaw,
           outcome: "failed",
-          message: result.error,
+          message: parsed.message || result.error,
           createdById: batch.createdById,
+          extraMetadata: {
+            repairAttempts: parsed.repairAttempts,
+            terminal: parsed.terminal,
+            idempotencyKey: idemKey,
+          },
         });
         if (isLikelyTransientProviderOverload(result.error)) {
           safeServerLog("blog", "draft_batch_provider_throttle_backoff", {

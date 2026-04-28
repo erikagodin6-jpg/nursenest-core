@@ -101,6 +101,8 @@ import { loadMarketingMessageShardsSync } from "@/lib/marketing-i18n/load-market
 import { LEARNER_APP_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { createPathwayLessonDetailTiming } from "@/lib/observability/pathway-lesson-detail-dev-timing";
+import { PathwayLessonThinStudyExpansion } from "@/components/lessons/pathway-lesson-thin-study-expansion";
 
 /**
  * Paywall: full `PathwayLessonRecord` / `sections[]` stay in this server component. Gate with
@@ -113,11 +115,34 @@ export type PathwayLessonDetailPageBodyProps = {
   pathway: ExamPathwayDefinition;
   pathname: string;
   lessonSlug: string;
+  /** When set, avoids a duplicate marketing locale read (parent already resolved it). */
+  lessonContentLocale?: string;
 };
 
-export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlug }: PathwayLessonDetailPageBodyProps) {
+function pathwayRailProgressCopy(status: PathwayLessonProgressStatus): string {
+  switch (status) {
+    case "completed":
+      return "Marked studied — keep reinforcing with questions and flashcards while the lesson stays fresh.";
+    case "in_progress":
+      return "In progress — finish the read, then mark studied when you are ready for reinforcement.";
+    default:
+      return "Not started — skim the rail, read the lesson, then mark studied when the concepts click.";
+  }
+}
+
+export async function PathwayLessonDetailPageBody({
+  pathway,
+  pathname,
+  lessonSlug,
+  lessonContentLocale: lessonContentLocaleProp,
+}: PathwayLessonDetailPageBodyProps) {
+  const timing = createPathwayLessonDetailTiming(pathname);
   /** Match lessons hub + {@link verifyMarketingHubLessonRowsResolve} (marketing locale cookie / preference). */
-  const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
+  const lessonContentLocale =
+    typeof lessonContentLocaleProp === "string" && lessonContentLocaleProp.trim().length > 0
+      ? lessonContentLocaleProp.trim()
+      : await getMarketingLocaleForDefaultRoute();
+  timing.mark("locale_resolved");
 
   if (!lessonSlug.trim()) {
     safeServerLog("pathway_lesson_detail", "marketing_lesson_missing_slug", {
@@ -137,6 +162,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
     getProtectedRouteSession("marketing.pathway_lesson_detail"),
     getStaffSession(),
   ]);
+  timing.mark("lesson_lookup_session_staff");
   for (const res of [sessionRes, staffRes]) {
     if (res.status === "rejected") rethrowNextNavigationControlFlow(res.reason);
   }
@@ -175,6 +201,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
       }
     })(),
   ]);
+  timing.mark("study_settings_entitlement_learner_path");
   for (const res of [studySettingsRes, entRes, lpRes]) {
     if (res.status === "rejected") rethrowNextNavigationControlFlow(res.reason);
   }
@@ -234,12 +261,19 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
             alliedCareer: null,
           }
         : null;
-  const [bankAssessmentsRes, adjacentSlugsRes, contentDatesRes] = await Promise.allSettled([
+  const lessonProgressPromise: Promise<PathwayLessonProgressStatus> =
+    userId && fullAccess
+      ? loadPathwayLessonProgressForSlug(userId, pathway.id, lesson.slug)
+      : Promise.resolve("not_started");
+
+  const [bankAssessmentsRes, adjacentSlugsRes, contentDatesRes, lessonProgressRes] = await Promise.allSettled([
     resolvePathwayLessonBankAssessments(pathway, lesson, bankEntitlement),
     loadPathwayLessonAdjacent(pathway.id, lesson.slug, lessonContentLocale),
     getPathwayLessonContentDates(pathway.id, lesson.slug, lessonContentLocale),
+    lessonProgressPromise,
   ]);
-  for (const res of [bankAssessmentsRes, adjacentSlugsRes, contentDatesRes]) {
+  timing.mark("bank_adjacent_dates_progress");
+  for (const res of [bankAssessmentsRes, adjacentSlugsRes, contentDatesRes, lessonProgressRes]) {
     if (res.status === "rejected") rethrowNextNavigationControlFlow(res.reason);
   }
   const bankAssessments: { preTest: PathwayLessonQuizItem[]; postTest: PathwayLessonQuizItem[] } =
@@ -266,9 +300,9 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
   const base = marketingPathwayLessonsIndexPath(pathway);
   const blogHubPath = buildExamPathwayPath(pathway, "blog");
 
-  const lessonProgress =
-    userId && fullAccess
-      ? await loadPathwayLessonProgressForSlug(userId, pathway.id, lesson.slug)
+  const lessonProgress: PathwayLessonProgressStatus =
+    lessonProgressRes.status === "fulfilled"
+      ? lessonProgressRes.value
       : ("not_started" satisfies PathwayLessonProgressStatus);
 
   // Strip body before passing locked sections to any downstream component — only headings are needed for the
@@ -361,8 +395,10 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           datePublished={contentDates?.datePublished ?? null}
           dateModified={contentDates?.dateModified ?? null}
         />
-        <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
-        <PathwayLessonSequenceNavBar adjacent={lessonAdjacentHrefs} className="mb-2 mt-1" />
+        <div className="mb-0.5 opacity-[0.88]">
+          <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
+        </div>
+        <PathwayLessonSequenceNavBar adjacent={lessonAdjacentHrefs} className="mb-1.5 mt-0.5 sm:mb-2" />
         <PathwayLessonProgressTracker
           pathwayId={pathway.id}
           lessonSlug={lesson.slug}
@@ -375,6 +411,18 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
           lessonTitle={displayLessonTitle}
           lessonTopic={lesson.topic}
           bodySystem={lesson.bodySystem}
+          heroLayout="centered"
+          heroBelowTitle={
+            matchedLessonImage.url ? (
+              <LessonClinicalImageCard
+                url={matchedLessonImage.url}
+                alt={matchedLessonImage.alt}
+                source={matchedLessonImage.source}
+                lessonTitle={displayLessonTitle}
+                className="!mt-0 !mb-0 w-full max-w-[44rem]"
+              />
+            ) : null
+          }
           studyQuickLinks={lessonStudyQuickLinks}
           assessmentFlowHint={lessonAssessmentFlowHint}
           metaChips={
@@ -399,7 +447,13 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
         {fullAccess ? (
           <div className="mt-4 space-y-2">
             <PremiumLessonPublishNotice validation={lesson.premiumValidation} />
-            <LessonQualityNotice tier={lessonQuality.tier} wordCount={lessonQuality.wordCount} />
+            <LessonQualityNotice
+              tier={lessonQuality.tier}
+              wordCount={lessonQuality.wordCount}
+              mode={
+                staffFullLessonAccess || process.env.NODE_ENV === "development" ? "staff_qa" : "hidden"
+              }
+            />
           </div>
         ) : null}
         {fullAccess && lesson.memoryAnchor ? (
@@ -467,6 +521,11 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
               examFocusLines={examFocusRailLines}
               commonMistakes={fullAccess ? lesson.studyCommonTraps : undefined}
               fullAccess={fullAccess}
+              progressSummary={
+                userId && fullAccess
+                  ? { status: lessonProgress, label: pathwayRailProgressCopy(lessonProgress) }
+                  : null
+              }
               relatedQuestionsSlot={
                 <Suspense fallback={<PathwayLessonRelatedRailSkeleton />}>
                   <PathwayLessonDeferredRelatedRail
@@ -484,15 +543,6 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
 
           <div className="min-w-0 xl:order-1 xl:col-start-1 xl:row-start-1">
         <div className="nn-lesson-page-reading">
-        {matchedLessonImage.url ? (
-          <LessonClinicalImageCard
-            url={matchedLessonImage.url}
-            alt={matchedLessonImage.alt}
-            source={matchedLessonImage.source}
-          lessonTitle={displayLessonTitle}
-          />
-        ) : null}
-
         {fullAccess && lesson.audioUrl ? (
           <LessonAudioCard audioUrl={lesson.audioUrl} lessonTitle={displayLessonTitle} />
         ) : null}
@@ -520,6 +570,10 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
                 {displaySections.map((section) => {
                   const surfaceHeading = pathwayLessonSectionSurfaceHeading(section, pathway.countryCode, t);
                   const sectionBody = pathwayLessonPremiumSectionBodyText(section, pathway.id, pathway.countryCode);
+                  const figs = section.figures;
+                  const sectionLeadFigure = figs?.length ? figs[0] : undefined;
+                  const sectionFiguresRest =
+                    figs && figs.length > 1 ? figs.slice(1) : undefined;
                   return (
                     <LessonSectionCard
                       key={section.id}
@@ -528,6 +582,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
                       kind={section.kind}
                       editorialRhythmIndex={editorialRhythmIndexBySectionId.get(section.id)}
                       tierRelevanceLearnerSection={section.kind === "tier_specific_relevance"}
+                      sectionLeadFigure={sectionLeadFigure}
                     >
                       {section.audioUrl ? (
                         <LessonSectionAudioButton
@@ -556,7 +611,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
                       ) : (
                         <PathwayLessonSectionContent
                           text={sectionBody}
-                          figures={section.figures}
+                          figures={sectionFiguresRest}
                           examFocus={section.examFocus}
                           lessonWikiBasePath={base}
                           viewerTier={lessonContentTier}
@@ -564,6 +619,7 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
                           sectionKind={section.kind ?? null}
                           emptyBodyMessage={t("learner.lessons.detail.sectionEmptyBody")}
                           figuresVisualLeadMessage={t("learner.lessons.detail.sectionFiguresVisualLead")}
+                          hasSectionLeadFigure={Boolean(sectionLeadFigure)}
                         />
                       )}
                       {section.keyRecallFacts?.length ? (
@@ -579,6 +635,9 @@ export async function PathwayLessonDetailPageBody({ pathway, pathname, lessonSlu
                   );
                 })}
               </article>
+              {fullAccess && lessonQuality.tier === "thin" ? (
+                <PathwayLessonThinStudyExpansion lesson={previewLesson} />
+              ) : null}
             </div>
             {pathwayInteractiveModules.length > 0 ? (
               <div className="mt-6">

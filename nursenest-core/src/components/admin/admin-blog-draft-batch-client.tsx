@@ -45,6 +45,8 @@ type BatchRow = {
   createdAt: string;
 };
 
+type ItemRepairMeta = { repairAttempts: number | null; terminal: boolean | null; message: string };
+
 type ItemRow = {
   id: string;
   ordinal: number;
@@ -53,6 +55,7 @@ type ItemRow = {
   blogPostId: string | null;
   error: string | null;
   blogPost: { id: string; slug: string; title: string } | null;
+  repairMeta?: ItemRepairMeta;
 };
 
 type BatchDetail = BatchRow & {

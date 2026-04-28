@@ -46,6 +46,14 @@ import {
   normalizeBlogTagsForStorage,
 } from "@/lib/blog/blog-seo-package";
 import { buildSchemaSummaryPayload } from "@/lib/blog/blog-seo-automation";
+import {
+  BLOG_BODY_REPAIR_WORD_BUFFER,
+  MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS,
+} from "@/lib/blog/blog-generation-repair-classifier";
+import {
+  repairSimpleAiDraftBodyHtml,
+  repairSimpleAiDraftHeadlines,
+} from "@/lib/blog/blog-generation-repair-ai";
 
 export type GenerateBlogAiDraftInput = {
   topic: string;
@@ -73,6 +81,8 @@ export type GenerateBlogAiDraftInput = {
    * Use only when an admin explicitly accepts duplicate topic coverage (e.g. variant angles).
    */
   allowDuplicateCanonicalTopic?: boolean;
+  /** OpenAI `user` / trace id (e.g. batchId:itemId). */
+  generationIdempotencyKey?: string;
 };
 
 export type GenerateBlogAiDraftResult =
@@ -91,6 +101,18 @@ export type GenerateBlogAiDraftResult =
       warnings: string[];
     }
   | { ok: false; error: string };
+
+function sleepMs(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function repairBackoffMs(idx: number): number {
+  const base = Math.min(
+    30_000,
+    Math.max(800, Number(process.env.BLOG_REPAIR_BACKOFF_BASE_MS?.trim()) || 1200),
+  );
+  return Math.min(30_000, Math.floor(base * Math.pow(2, Math.max(0, idx))));
+}
 
 function resolvePostStatusForPublishAt(publishAt: Date | undefined, now: Date): { postStatus: BlogPostStatus; publishAt: Date | null } {
   if (!publishAt) {
@@ -161,14 +183,39 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
     ? await ensureUniqueBlogPostSlug(base)
     : await ensureUniqueTaxonomyTerminalSlug(prisma, base);
 
-  try {
-    await assertSeoSafeToCreateBlog(prisma, { slug, metaTitle: taxonomySeo.metaTitle, h1: taxonomySeo.h1 });
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    if (e instanceof SeoDuplicateBlockedError) {
-      return { ok: false, error: msg };
+  let headlineH1 = taxonomySeo.h1.trim();
+  let headlineMetaTitle = taxonomySeo.metaTitle.trim();
+  let seoRepairPasses = 0;
+  for (;;) {
+    try {
+      await assertSeoSafeToCreateBlog(prisma, { slug, metaTitle: headlineMetaTitle, h1: headlineH1 });
+      break;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      if (!(e instanceof SeoDuplicateBlockedError)) throw e;
+      if (seoRepairPasses >= MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS - 1) {
+        return { ok: false, error: msg };
+      }
+      const repaired = await repairSimpleAiDraftHeadlines({
+        topic: d.topic,
+        exam: d.exam,
+        template: d.template,
+        country: d.country,
+        blockedReason: msg,
+        priorH1: headlineH1,
+        priorMetaTitle: headlineMetaTitle,
+        openAiUser: d.generationIdempotencyKey
+          ? `${d.generationIdempotencyKey}:seo-headline:${seoRepairPasses}`.slice(0, 120)
+          : undefined,
+      });
+      if (!repaired) {
+        return { ok: false, error: msg };
+      }
+      headlineH1 = repaired.h1;
+      headlineMetaTitle = repaired.metaTitle;
+      seoRepairPasses += 1;
+      await sleepMs(repairBackoffMs(seoRepairPasses - 1));
     }
-    throw e;
   }
 
   const autoSeo = generateBlogSEO({
@@ -178,8 +225,8 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
     country: normalizeCountryForBlogSeo(countryTargetResolved),
     existingSlug: slug,
   });
-  const title = taxonomySeo.h1.slice(0, 220);
-  const seoTitle = clampSerpTitle(taxonomySeo.metaTitle, 70).slice(0, 200);
+  const title = headlineH1.slice(0, 220);
+  const seoTitle = clampSerpTitle(headlineMetaTitle, 70).slice(0, 200);
   const seoDescription = clampSerpDescription(taxonomySeo.metaDescription, 120, 155).slice(0, 500);
   if (!d.allowDuplicateCanonicalTopic) {
     const dupByTopic = normalizedTopic
@@ -233,6 +280,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
       ],
       temperature: 0.45,
       maxTokens: 8192,
+      user: d.generationIdempotencyKey ? `${d.generationIdempotencyKey}:body:0`.slice(0, 120) : undefined,
     });
     bodyHtml = response.content.trim();
     if (bodyHtml.length < 200) {
@@ -268,30 +316,36 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
     studyAppendix && !bodyHtml.includes("Study next in NurseNest") ? `${bodyHtml.trim()}\n${studyAppendix}` : bodyHtml;
 
   let wordCount = countWordsFromHtml(bodyWithStudy);
-  if (wordCount < BLOG_ARTICLE_MIN_WORDS) {
+  let bodyRepairPasses = 0;
+  while (wordCount < BLOG_ARTICLE_MIN_WORDS && bodyRepairPasses < MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS) {
+    await sleepMs(repairBackoffMs(bodyRepairPasses));
     try {
-      const expand = await openAiChatCompletion({
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: user },
-          { role: "assistant", content: bodyHtml },
-          {
-            role: "user",
-            content: `The article is only ${wordCount} words after stripping HTML. Expand it to at least ${BLOG_ARTICLE_MIN_WORDS} words of substantive NCLEX-style teaching. Keep valid HTML (<h2>, <h3>, <p>, <ul>, <li>, <strong> only). Preserve any existing "Study next in NurseNest" appendix block verbatim at the end if present. Return the full revised HTML only.`,
-          },
-        ],
-        temperature: 0.35,
-        maxTokens: 8192,
+      const expandedMain = await repairSimpleAiDraftBodyHtml({
+        topic: d.topic,
+        exam: d.exam,
+        template: d.template,
+        intent: d.intent,
+        funnelStage: d.funnelStage,
+        country: d.country,
+        keywords: d.keywords,
+        targetKeyword: d.targetKeyword,
+        keywordCluster: d.keywordCluster,
+        tone: d.tone,
+        currentHtml: bodyHtml,
+        currentWordCount: wordCount,
+        targetWordMin: BLOG_ARTICLE_MIN_WORDS + BLOG_BODY_REPAIR_WORD_BUFFER,
+        openAiUser: d.generationIdempotencyKey
+          ? `${d.generationIdempotencyKey}:body-repair:${bodyRepairPasses}`.slice(0, 120)
+          : undefined,
       });
-      const expandedMain = expand.content.trim();
+      bodyHtml = expandedMain;
       bodyWithStudy =
-        studyAppendix && !expandedMain.includes("Study next in NurseNest") ?
-          `${expandedMain}\n${studyAppendix}`
-        : expandedMain;
+        studyAppendix && !bodyHtml.includes("Study next in NurseNest") ? `${bodyHtml.trim()}\n${studyAppendix}` : bodyHtml;
       wordCount = countWordsFromHtml(bodyWithStudy);
     } catch {
-      /* keep wordCount as-is */
+      break;
     }
+    bodyRepairPasses += 1;
   }
 
   if (wordCount < BLOG_ARTICLE_MIN_WORDS) {

@@ -46,6 +46,8 @@ type AutomationInput = {
   includeAiImage?: boolean;
   sourceRecords?: Prisma.JsonValue;
   fixedSlug?: string;
+  /** Passed to OpenAI `user` and pipeline repair idempotency (e.g. batchId:itemId). */
+  generationIdempotencyKey?: string;
   autoPublish?: boolean;
   publishAt?: Date;
   generateTranslations?: boolean;
@@ -93,7 +95,7 @@ export type AutomationResult =
       localizationErrors: string[];
       seoReadiness: BlogAutomationSeoReadiness;
     }
-  | { ok: false; error: string };
+  | { ok: false; error: string; repairPassesUsed?: number };
 
 const localizedAiOutputSchema = z.object({
   localizedTitle: z.string().min(10),
@@ -327,7 +329,7 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
       fixedSlug: input.fixedSlug,
       allowInsufficientCitations: true,
     },
-    { persist: true },
+    { persist: true, idempotencyKey: input.generationIdempotencyKey },
   );
 
   if (!pipelineResult.ok) {
@@ -335,8 +337,13 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
       topic: input.topic,
       exam: input.exam,
       error: pipelineResult.error,
+      repairPassesUsed: pipelineResult.repairPassesUsed,
     });
-    return { ok: false, error: pipelineResult.error };
+    return {
+      ok: false,
+      error: pipelineResult.error,
+      repairPassesUsed: pipelineResult.repairPassesUsed,
+    };
   }
   if (pipelineResult.persistSkipped) {
     console.info("[blog_automation] generation_skipped", {

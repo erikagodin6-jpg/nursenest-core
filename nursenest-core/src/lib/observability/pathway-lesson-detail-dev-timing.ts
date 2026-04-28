@@ -1,26 +1,23 @@
-import "server-only";
-
 /**
- * Dev-only timing for marketing pathway lesson detail — avoids production log noise.
- * Logs `[lesson-detail] phase=… ms=…` to stdout when `NODE_ENV === "development"`.
+ * Development-only timing marks for marketing pathway lesson detail.
+ * Enable with `NODE_ENV=development` (no extra env flag).
  */
-export async function withLessonDetailTiming<T>(phase: string, fn: () => Promise<T>): Promise<T> {
+export function createPathwayLessonDetailTiming(pathname: string): {
+  mark: (phase: string) => void;
+} {
   if (process.env.NODE_ENV !== "development") {
-    return fn();
+    return { mark: () => {} };
   }
-  const t0 = performance.now();
-  try {
-    return await fn();
-  } finally {
-    const ms = Math.round((performance.now() - t0) * 10) / 10;
-    // eslint-disable-next-line no-console -- intentional dev-only diagnostics
-    console.info(`[lesson-detail] phase=${phase} ms=${ms}`);
-  }
-}
-
-export function logLessonDetailSyncPhase(phase: string, startedAt: number): void {
-  if (process.env.NODE_ENV !== "development") return;
-  const ms = Math.round((performance.now() - startedAt) * 10) / 10;
-  // eslint-disable-next-line no-console -- intentional dev-only diagnostics
-  console.info(`[lesson-detail] phase=${phase} ms=${ms}`);
+  let last = performance.now();
+  const pathHint = pathname.length > 96 ? `${pathname.slice(0, 96)}…` : pathname;
+  return {
+    mark(phase: string) {
+      const now = performance.now();
+      const deltaMs = Math.round(now - last);
+      last = now;
+      if (typeof globalThis.console !== "undefined" && "info" in globalThis.console) {
+        globalThis.console.info(`[nn:lesson-detail] ${phase} +${deltaMs}ms path=${pathHint}`);
+      }
+    },
+  };
 }
