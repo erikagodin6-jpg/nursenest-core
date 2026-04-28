@@ -13,6 +13,8 @@ export const FORBIDDEN_MARKETING_STANDALONE_LINES = new Set(
     "title",
     "description",
     "button",
+    "body",
+    "link",
     "kicker",
     "eyebrow",
     "intro",
@@ -61,7 +63,7 @@ export const FORBIDDEN_MARKETING_SUBSTRINGS = [
  * acronyms like `RN` or normal words like `lead` in prose.
  */
 export const FORBIDDEN_SHOUTY_DESIGN_TOKEN_RE = new RegExp(
-  String.raw`\b(?:KICKER|LABEL|TITLE|DESCRIPTION|LEAD|SUBTITLE|CTA|BUTTON|HEADING|EYEBROW|INTRO|STUB|TODO|TBD|PLACEHOLDER)\b`,
+  String.raw`\b(?:KICKER|LABEL|TITLE|DESCRIPTION|LEAD|BODY|LINK|SUBTITLE|CTA|BUTTON|HEADING|EYEBROW|INTRO|STUB|TODO|TBD|PLACEHOLDER)\b`,
 );
 
 export function normalizeMarketingDomText(raw: string): string {

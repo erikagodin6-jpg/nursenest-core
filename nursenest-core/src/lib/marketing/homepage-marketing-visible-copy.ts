@@ -5,6 +5,33 @@
 
 type MarketingT = (key: string, params?: Record<string, string | number | undefined>) => string;
 
+const HOMEPAGE_PLACEHOLDER_LEAVES = new Set(
+  [
+    "kicker",
+    "lead",
+    "title",
+    "body",
+    "link",
+    "label",
+    "heading",
+    "description",
+    "subtitle",
+    "cta",
+    "button",
+    "placeholder",
+    "todo",
+    "tbd",
+  ].map((s) => s.toLowerCase()),
+);
+
+function warnHomepageFallbackDev(key: string, resolved: string) {
+  if (process.env.NODE_ENV !== "development") return;
+  console.error("[homepage-marketing-copy] missing or placeholder copy", {
+    key,
+    resolved: resolved.slice(0, 120),
+  });
+}
+
 /**
  * True when `resolved` is not safe human copy for the given dotted `key`.
  */
@@ -22,6 +49,8 @@ export function isUntranslatedHomepageMarketingCopy(resolved: string, key: strin
   if (singleSegmentPath) return true;
 
   if (/^\[missing:/iu.test(r)) return true;
+  if (HOMEPAGE_PLACEHOLDER_LEAVES.has(r.toLowerCase())) return true;
+  if (/^(KICKER|LEAD|TITLE|BODY|LINK|LABEL|HEADING|CTA|BUTTON)$/u.test(r)) return true;
 
   return false;
 }
@@ -34,7 +63,9 @@ export function resolveHomepageMarketingVisibleCopy(
   key: string,
   fallback: string,
 ): string {
-  return isUntranslatedHomepageMarketingCopy(resolved, key) ? fallback : resolved;
+  if (!isUntranslatedHomepageMarketingCopy(resolved, key)) return resolved;
+  warnHomepageFallbackDev(key, resolved);
+  return fallback;
 }
 
 /**

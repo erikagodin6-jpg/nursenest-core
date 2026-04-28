@@ -19,6 +19,7 @@ import { buildOutline, detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-
 import { prisma } from "@/lib/db";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import { coerceAdminOptionalSlugFromRawInput } from "@/lib/blog/blog-optional-slug";
+import { prepareAdminBlogGenerationInput } from "@/lib/blog/admin-blog-generation-service";
 import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
 import {
   generateBlogSEO,
@@ -106,7 +107,15 @@ function resolvePostStatusForPublishAt(publishAt: Date | undefined, now: Date): 
  * Enforces slug + canonical intent dedupe via {@link findExistingBlogByCanonicalIntent}.
  */
 export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<GenerateBlogAiDraftResult> {
-  const normalizedTopic = normalizeBlogTopicKey(d.targetKeyword ?? d.topic);
+  const prepared = await prepareAdminBlogGenerationInput({
+    rawTitle: d.topic,
+    exam: d.exam,
+    targetKeyword: d.targetKeyword ?? d.topic,
+    fixedSlug: d.slug,
+    publishMode: d.publishAt ? "schedule" : "draft",
+    scheduledAt: d.publishAt,
+  });
+  const normalizedTopic = prepared.normalizedTopic || normalizeBlogTopicKey(d.targetKeyword ?? d.topic);
   const now = new Date();
 
   const titleFn = BLOG_TEMPLATE_TITLE_PATTERNS[d.template];
@@ -142,9 +151,9 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
     breadcrumb: taxonomySeo.breadcrumb,
   });
 
-  const explicitRaw = typeof d.slug === "string" ? d.slug.trim() : "";
-  const explicit = explicitRaw ? coerceAdminOptionalSlugFromRawInput(d.slug) : null;
-  const base = explicit ?? taxonomySeo.slug;
+  const explicitRaw = typeof prepared.uniqueSlug === "string" ? prepared.uniqueSlug.trim() : "";
+  const explicit = explicitRaw ? coerceAdminOptionalSlugFromRawInput(prepared.uniqueSlug) : null;
+  const base = explicit ?? prepared.uniqueSlug ?? taxonomySeo.slug;
   if (!explicit) {
     console.info("[blog] slug auto-generated", { base, topic: d.topic, exam: d.exam });
   }

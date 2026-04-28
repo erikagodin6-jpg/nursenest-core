@@ -11,9 +11,13 @@ import {
 } from "@/lib/admin/blog-content-automation-log";
 import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { coerceBlogSourceRows } from "@/lib/blog/apa7";
-import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
 import { normalizeBlogControlPanelGenerateRequestBody } from "@/lib/blog/blog-admin-control-panel-generate-body";
+import {
+  AdminBlogValidationError,
+  findDuplicateAdminBlogIntent,
+  prepareAdminBlogGenerationInput,
+} from "@/lib/blog/admin-blog-generation-service";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -130,36 +134,49 @@ export async function POST(req: Request) {
   }
   const d = parsed.data;
 
-  const normalizedTopic = normalizeBlogTopicKey(d.targetKeyword ?? d.topic);
-  if (normalizedTopic) {
-    const dup = await findExistingBlogByCanonicalIntent({ exam: d.exam, normalizedTopic });
-    if (dup) {
-      await logPipelineDuplicateTopic({
-        topic: d.topic,
-        existingSlug: dup.slug,
-        createdById: gate.admin.userId,
-        source: "control_panel_generate",
-      });
-      return NextResponse.json(
-        {
-          error: "duplicate_topic",
-          code: "duplicate_topic",
-          message: "A draft or published post already targets this topic intent.",
-          existingSlug: dup.slug,
-          normalizedTopic,
-          hint: "Open the existing post or change topic / primary keyword.",
-        },
-        { status: 409 },
-      );
+  let prepared;
+  try {
+    prepared = await prepareAdminBlogGenerationInput({
+      rawTitle: d.topic,
+      exam: d.exam,
+      targetKeyword: d.targetKeyword,
+      fixedSlug: d.fixedSlug,
+      publishMode: d.publishImmediately === true ? "publish_now" : "draft",
+    });
+  } catch (error) {
+    if (error instanceof AdminBlogValidationError) {
+      return NextResponse.json({ error: "validation_error", fieldErrors: [error.fieldError] }, { status: 400 });
     }
+    throw error;
+  }
+
+  const dup = await findDuplicateAdminBlogIntent({ exam: d.exam, normalizedTopic: prepared.normalizedTopic });
+  if (dup) {
+    await logPipelineDuplicateTopic({
+      topic: prepared.topic,
+      existingSlug: dup.slug,
+      createdById: gate.admin.userId,
+      source: "control_panel_generate",
+    });
+    return NextResponse.json(
+      {
+        error: "duplicate_topic",
+        code: "duplicate_topic",
+        message: "A draft or published post already targets this topic intent.",
+        existingSlug: dup.slug,
+        normalizedTopic: prepared.normalizedTopic,
+        hint: "Open the existing post or change topic / primary keyword.",
+      },
+      { status: 409 },
+    );
   }
 
   const input = {
-    topic: d.topic,
+    topic: prepared.topic,
     exam: d.exam,
     country: d.country,
     keywords: d.keywords,
-    targetKeyword: d.targetKeyword,
+    targetKeyword: prepared.targetKeyword,
     keywordCluster: d.keywordCluster,
     template: d.template,
     intent: d.intent ?? BlogPostIntent.EXAM_PREP,
@@ -168,7 +185,7 @@ export async function POST(req: Request) {
     includeImage: d.includeImage ?? true,
     includeAiImage: d.includeAiImage ?? false,
     sourceRecordsJson: d.sourceRecords?.length ? coerceBlogSourceRows(d.sourceRecords) : undefined,
-    fixedSlug: d.fixedSlug,
+    fixedSlug: prepared.uniqueSlug,
     allowInsufficientCitations: d.allowInsufficientCitations,
     publishImmediately: d.publishImmediately === true,
   };

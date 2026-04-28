@@ -8,6 +8,7 @@ import {
 } from "@prisma/client";
 import { normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { generateBlogPost } from "@/lib/blog/generate-blog-ai-draft";
+import { prepareAdminBlogGenerationInput } from "@/lib/blog/admin-blog-generation-service";
 import { runBlogBatchLocalizedFollowup } from "@/lib/blog/blog-batch-localized-followup";
 import { getAdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
 import { prisma } from "@/lib/db";
@@ -508,15 +509,23 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
       const intent = schedule.defaultIntent ?? BlogPostIntent.EXAM_PREP;
 
       const publishAt = effectivePublishAtForBatchItem(schedule.publishMode, item.plannedPublishAt, now);
+      const prepared = await prepareAdminBlogGenerationInput({
+        rawTitle: item.topicRaw,
+        exam: schedule.exam,
+        targetKeyword: item.topicRaw,
+        publishMode: publishAt ? (publishAt <= now ? "publish_now" : "schedule") : "draft",
+        scheduledAt: publishAt,
+      });
 
       const result = await generateBlogPost({
-        topic: item.topicRaw,
+        topic: prepared.topic,
         exam: schedule.exam,
         country: schedule.country === "US" || schedule.country === "CA" ? schedule.country : "unspecified",
         template,
         intent,
         funnelStage: BlogFunnelStage.CONSIDERATION,
-        targetKeyword: item.topicRaw,
+        targetKeyword: prepared.targetKeyword,
+        slug: prepared.uniqueSlug,
         publishAt,
       });
 

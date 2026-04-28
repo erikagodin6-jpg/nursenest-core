@@ -322,11 +322,11 @@ html[data-theme] {
    * `[data-theme]` personality does not tint those rows independently. Middle row stays neutral paper.
    * (Exception: documented fixed sRGB anchors — see semantic-color-guardrails.mdc for product chrome.)
    */
-  --nn-header-utility-bg: #0f172a;
-  --nn-header-tier-bg: var(--nn-header-utility-bg);
-  --nn-header-primary-bg: #ffffff;
-  --nn-header-primary-fg: #0f172a;
-  --nn-header-on-accent-fg: #f8fafc;
+  --nn-header-utility-bg: var(--theme-header-top-bg, var(--theme-nav-background, #0f172a));
+  --nn-header-tier-bg: var(--theme-header-main-bg, var(--nn-header-utility-bg));
+  --nn-header-primary-bg: var(--theme-header-secondary-bg, #ffffff);
+  --nn-header-primary-fg: var(--theme-header-secondary-fg, #0f172a);
+  --nn-header-on-accent-fg: var(--theme-nav-foreground, #f8fafc);
   --header-utility-surface: color-mix(in srgb, var(--palette-top-bar-background, var(--theme-topbar-bg)) 16%, var(--bg-page));
   --header-utility-border: color-mix(in srgb, var(--palette-top-bar-background, var(--theme-topbar-bg)) 35%, var(--border-subtle));
   --header-utility-text: color-mix(in srgb, var(--palette-top-bar-text, var(--theme-heading-text)) 82%, var(--palette-text-muted, var(--theme-muted-text)));

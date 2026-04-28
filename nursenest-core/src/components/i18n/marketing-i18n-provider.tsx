@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, type ReactNode } from "react";
+import React, { createContext, useContext, useEffect, useMemo, type ReactNode } from "react";
 import { formatMarketingMessage, type MarketingMessages } from "@/lib/marketing-i18n-core";
 import { isRtlMarketingLocale, localePrimarySubtag, DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { validateMarketingHeroNavCriticalKeys } from "@/lib/marketing/marketing-hero-nav-critical-keys";

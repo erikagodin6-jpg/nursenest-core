@@ -716,6 +716,17 @@
    */
   --theme-page-bg: #ffffff;
   --theme-nav-bg: #ffffff;
+  --theme-brand-accent: var(--logo-primary, var(--theme-primary));
+  --theme-brand-strong: var(--logo-primary, var(--theme-primary));
+  --theme-nav-background: var(--theme-primary);
+  --theme-nav-foreground: #ffffff;
+  --theme-nav-hover: color-mix(in srgb, #ffffff 14%, var(--theme-primary));
+  --theme-nav-hover-foreground: #ffffff;
+  --theme-header-top-bg: var(--theme-nav-background);
+  --theme-header-main-bg: var(--theme-nav-background);
+  --theme-header-secondary-bg: #ffffff;
+  --theme-header-secondary-fg: #0f172a;
+  --theme-header-divider: color-mix(in srgb, var(--theme-primary) 26%, #e5e7eb);
   /* gray-50 — alternating sections / muted bands (no hue from --theme-primary) */
   --theme-surface-strong: #f9fafb;
   --theme-nav-text: #6b7280;
@@ -810,6 +821,17 @@
   --logo-primary: #9B8EC7;
   --logo-accent: #F2EAE0;
   --logo-text: #5A4878;
+  --theme-brand-accent: #9B8EC7;
+  --theme-brand-strong: #7C5FB0;
+  --theme-nav-background: #7C5FB0;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.16);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #7C5FB0;
+  --theme-header-main-bg: #7C5FB0;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #251D35;
+  --theme-header-divider: rgba(124, 95, 176, 0.24);
 }
 
 /* ── Named themes (production) ────────────────────────────────────── */
@@ -849,6 +871,17 @@
   --logo-primary: #5068CC;
   --logo-accent: #F3BE7A;
   --logo-text: #30405E;
+  --theme-brand-accent: #5068CC;
+  --theme-brand-strong: #3B4DC8;
+  --theme-nav-background: #3B4DC8;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.16);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #3B4DC8;
+  --theme-header-main-bg: #3B4DC8;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #0F172A;
+  --theme-header-divider: rgba(59, 77, 200, 0.24);
 }
 
 [data-theme="strawberry-cream"] {
@@ -886,6 +919,17 @@
   --logo-primary: #ECA0A0;
   --logo-accent: #FFEAD3;
   --logo-text: #644040;
+  --theme-brand-accent: #ECA0A0;
+  --theme-brand-strong: #C2314D;
+  --theme-nav-background: #C2314D;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.15);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #C2314D;
+  --theme-header-main-bg: #C2314D;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #2F1D1D;
+  --theme-header-divider: rgba(194, 49, 77, 0.24);
 }
 
 [data-theme="ocean-mist"] {
@@ -923,6 +967,17 @@
   --logo-primary: #1D546D;
   --logo-accent: #B0E4CC;
   --logo-text: #0F2E3A;
+  --theme-brand-accent: #1D546D;
+  --theme-brand-strong: #0E7490;
+  --theme-nav-background: #0E7490;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.15);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #0E7490;
+  --theme-header-main-bg: #0E7490;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #0F2E3A;
+  --theme-header-divider: rgba(14, 116, 144, 0.24);
 }
 
 /* ── 6. Mint Breeze ── */
@@ -961,6 +1016,17 @@
   --logo-primary: #3A9E8F;
   --logo-accent: #F7D9A4;
   --logo-text: #1A3A34;
+  --theme-brand-accent: #3A9E8F;
+  --theme-brand-strong: #08776B;
+  --theme-nav-background: #08776B;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.15);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #08776B;
+  --theme-header-main-bg: #08776B;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #123A35;
+  --theme-header-divider: rgba(8, 119, 107, 0.24);
 }
 
 /* ── 7. Rose Quartz ── */
@@ -1461,6 +1527,17 @@
   --logo-primary: #e75480;
   --logo-accent: #3a86ff;
   --logo-text: #1f2937;
+  --theme-brand-accent: #e75480;
+  --theme-brand-strong: #D9436A;
+  --theme-nav-background: #D9436A;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.16);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #D9436A;
+  --theme-header-main-bg: #D9436A;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #111827;
+  --theme-header-divider: rgba(217, 67, 106, 0.24);
 }
 
 [data-theme="sunset"] {
@@ -1498,6 +1575,17 @@
   --logo-primary: #f97361;
   --logo-accent: #7c8cff;
   --logo-text: #3f2d28;
+  --theme-brand-accent: #f97361;
+  --theme-brand-strong: #E85D4C;
+  --theme-nav-background: #E85D4C;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.16);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #E85D4C;
+  --theme-header-main-bg: #E85D4C;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #2D1D18;
+  --theme-header-divider: rgba(232, 93, 76, 0.24);
 }
 
 [data-theme="ocean-air"] {
@@ -1535,6 +1623,17 @@
   --logo-primary: #2f80ed;
   --logo-accent: #2ec4b6;
   --logo-text: #0f172a;
+  --theme-brand-accent: #2f80ed;
+  --theme-brand-strong: #2563EB;
+  --theme-nav-background: #2563EB;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.16);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #2563EB;
+  --theme-header-main-bg: #2563EB;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #0F172A;
+  --theme-header-divider: rgba(37, 99, 235, 0.24);
 }
 
 [data-theme="meadow"] {
@@ -1572,6 +1671,17 @@
   --logo-primary: #52b788;
   --logo-accent: #48a6e8;
   --logo-text: #1a2e24;
+  --theme-brand-accent: #52b788;
+  --theme-brand-strong: #3D9A72;
+  --theme-nav-background: #3D9A72;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.15);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #3D9A72;
+  --theme-header-main-bg: #3D9A72;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #10251A;
+  --theme-header-divider: rgba(61, 154, 114, 0.24);
 }
 
 /*
