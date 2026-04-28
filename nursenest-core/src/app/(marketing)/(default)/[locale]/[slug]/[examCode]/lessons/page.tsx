@@ -40,7 +40,7 @@ import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page
 import { buildPathwayLessonSystemSections } from "@/lib/lessons/pathway-lesson-body-system-groups";
 import {
   pathwayLessonHasRenderableHubSlug,
-  pathwayLessonMarketingDetailHref,
+  pathwayLessonMarketingHubVerifiedCardHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import {
@@ -714,12 +714,12 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const stage6SectionModelLessonRows = hubSectionModel.reduce((n, s) => n + s.lessons.length, 0);
   const stage6LinkableLessonRows = hubSectionModel.reduce(
     (n, s) =>
-      n + s.lessons.filter((l) => pathwayLessonMarketingDetailHref(base, l.slug) != null).length,
+      n + s.lessons.filter((l) => pathwayLessonMarketingHubVerifiedCardHref(base, l) != null).length,
     0,
   );
   /** Matches {@link LessonSystemCard}: only first N link rows render per section (CASE D vs curl unique hrefs). */
   const finalRenderedVisibleLessonLinkCount = hubSectionModel.reduce((sum, s) => {
-    const linkable = s.lessons.filter((l) => pathwayLessonMarketingDetailHref(base, l.slug) != null);
+    const linkable = s.lessons.filter((l) => pathwayLessonMarketingHubVerifiedCardHref(base, l) != null);
     return sum + Math.min(LESSON_SYSTEM_HUB_CARD_PREVIEW_MAX, linkable.length);
   }, 0);
   const groupingDurationMs = Math.round(performance.now() - groupT0);

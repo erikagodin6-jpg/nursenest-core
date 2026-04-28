@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
-import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
+import { pathwayLessonMarketingHubVerifiedCardHref } from "@/lib/lessons/pathway-lesson-types";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 /**
@@ -26,7 +26,7 @@ export function LessonHubFullLessonLinkNav(props: {
 
           if (!slug) return null;
 
-          const href = pathwayLessonMarketingDetailHref(lessonsBasePath, slug);
+          const href = pathwayLessonMarketingHubVerifiedCardHref(lessonsBasePath, lesson);
           if (!href) return null;
 
           const raw =

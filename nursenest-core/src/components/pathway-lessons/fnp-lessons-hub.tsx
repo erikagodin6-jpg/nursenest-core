@@ -38,7 +38,7 @@ import {
 } from "@/lib/lessons/fnp-us-lesson-enrichment";
 import {
   pathwayLessonHasRenderableHubSlug,
-  pathwayLessonMarketingDetailHref,
+  pathwayLessonMarketingHubVerifiedCardHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
@@ -67,6 +67,9 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
   const explorerPayload = buildFnpExplorerPayload(safeLessons);
   const { countsLife, countsDom } = fnpExplorerCounts(explorerPayload);
   const featured = safeLessons.length > 0 ? [...safeLessons].sort((a, b) => a.slug.localeCompare(b.slug))[0] : null;
+  const featuredDetailHref = featured
+    ? pathwayLessonMarketingHubVerifiedCardHref(lessonsBasePath, featured)
+    : null;
   const featuredPreview = featured ? fnpLessonClinicalPreview(featured) : null;
   const questionsHub = buildExamPathwayPath(pathway, "questions");
   const examHub = buildExamPathwayPath(pathway);
@@ -196,13 +199,15 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
             </div>
           </div>
           <div className="mt-5 flex flex-wrap gap-2">
-            <Link
-              href={pathwayLessonMarketingDetailHref(lessonsBasePath, featured.slug)!}
-              data-nn-qa-primary-lesson="true"
-              className="inline-flex rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
-            >
-              Open lesson
-            </Link>
+            {featuredDetailHref ? (
+              <Link
+                href={featuredDetailHref}
+                data-nn-qa-primary-lesson="true"
+                className="inline-flex rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
+              >
+                Open lesson
+              </Link>
+            ) : null}
             <Link
               href={pathwayHubAppQuestionsHref(pathway.id, featured.topic)}
               className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold"

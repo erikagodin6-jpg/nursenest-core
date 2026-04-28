@@ -31,7 +31,7 @@ import { pathwayLessonYieldLabel } from "@/lib/lessons/pathway-lesson-yield";
 import type {
   PathwayLessonSystemSection,
 } from "@/lib/lessons/pathway-lesson-body-system-groups";
-import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
+import { pathwayLessonMarketingHubVerifiedCardHref } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 
 /** Hub preview: keep sections scannable; full library via “View all”. Exported for hub diagnostics (`RN_LESSONS_HUB_ACTUAL_COUNTS`). */
@@ -117,7 +117,7 @@ export function LessonSystemCard({
   const systemStyle = { "--nn-system-accent": `var(${visual.accentVar})` } as CSSProperties;
   /** Rows that actually render a link — counts and progress must match visible cards, not raw section length. */
   const linkableLessons = section.lessons.filter(
-    (lesson) => pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug) != null,
+    (lesson) => pathwayLessonMarketingHubVerifiedCardHref(lessonsBasePath, lesson) != null,
   );
   const displayCount = linkableLessons.length;
   const completedCount = showProgress
@@ -170,7 +170,7 @@ export function LessonSystemCard({
 
       <div className="mt-3.5 min-h-[4.5rem] space-y-1">
         {previewLessons.map((lesson) => {
-          const href = pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
+          const href = pathwayLessonMarketingHubVerifiedCardHref(lessonsBasePath, lesson);
           if (!href) return null;
 
           return (

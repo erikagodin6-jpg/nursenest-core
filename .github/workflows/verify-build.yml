@@ -16,7 +16,10 @@ jobs:
     env:
       # Align with production compile: heavy multi-locale merge audits run in dedicated i18n jobs.
       SKIP_I18N_PREBUILD: "1"
-    timeout-minutes: 30
+      # `npm run typecheck` runs before `next build` in `ci:verify`; skip duplicate integrated TS pass
+      # to lower peak RAM (see `next.config.mjs` `typescript.ignoreBuildErrors`).
+      SKIP_NEXT_BUILD_TYPECHECK: "1"
+    timeout-minutes: 45
     defaults:
       run:
         working-directory: nursenest-core

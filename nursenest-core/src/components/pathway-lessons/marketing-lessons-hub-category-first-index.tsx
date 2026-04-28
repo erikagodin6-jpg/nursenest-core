@@ -29,7 +29,10 @@ import {
 } from "@/lib/lessons/pathway-lesson-loader";
 import { prepareLessonsForHubCurriculumWithDiagnostics } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import { verifyMarketingHubLessonRowsResolve } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
-import { pathwayLessonMarketingDetailHref, pathwayLessonHasRenderableHubSlug } from "@/lib/lessons/pathway-lesson-types";
+import {
+  pathwayLessonHasRenderableHubSlug,
+  pathwayLessonMarketingHubVerifiedCardHref,
+} from "@/lib/lessons/pathway-lesson-types";
 import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
@@ -280,7 +283,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
             </p>
             <ul className="mt-3 space-y-2">
               {reviewRows.map((l) => {
-                const href = pathwayLessonMarketingDetailHref(base, l.slug);
+                const href = pathwayLessonMarketingHubVerifiedCardHref(base, l);
                 const label = cleanLessonTitleForDisplay((l.seoTitle ?? "").trim() || l.title);
                 const prog = progressMap[l.slug];
                 return (

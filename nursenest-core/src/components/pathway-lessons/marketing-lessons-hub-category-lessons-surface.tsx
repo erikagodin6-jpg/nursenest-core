@@ -29,7 +29,7 @@ import {
 import { prepareLessonsForHubCurriculumWithDiagnostics } from "@/components/pathway-lessons/pathway-lessons-curriculum-hub";
 import { verifyMarketingHubLessonRowsResolve } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
 import {
-  pathwayLessonMarketingDetailHref,
+  pathwayLessonMarketingHubVerifiedCardHref,
   pathwayLessonHasRenderableHubSlug,
 } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
@@ -260,7 +260,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
         ) : (
           <ul className="space-y-2">
             {rows.map((l) => {
-              const href = pathwayLessonMarketingDetailHref(base, l.slug);
+              const href = pathwayLessonMarketingHubVerifiedCardHref(base, l);
               const label = cleanLessonTitleForDisplay((l.seoTitle ?? "").trim() || l.title);
               const prog = progressMap[l.slug];
               return (

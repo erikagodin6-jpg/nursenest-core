@@ -33,3 +33,22 @@ test("cached single-lesson read still wraps getPathwayLessonImpl (not getPathway
     "detail cache must target impl; hub verify bypasses this via getPathwayLessonForMarketingHubVerify",
   );
 });
+
+test("getPathwayLessonWithDataCache passes preferPublishedLocaleScan into getPathwayLessonImpl (parity with hub verify)", () => {
+  const src = readFileSync(join(__dirname, "pathway-lesson-loader.ts"), "utf8");
+  const marker = "async function getPathwayLessonWithDataCache";
+  const i = src.indexOf(marker);
+  assert.ok(i >= 0, "expected getPathwayLessonWithDataCache");
+  const j = src.indexOf("async function getPathwayLessonForMarketingHubVerify", i);
+  assert.ok(j > i, "expected verify export after cache fn");
+  const block = src.slice(i, j);
+  assert.match(
+    block,
+    /preferPublishedLocaleScan:\s*true/,
+    "detail cache path must enable published-locale scan like getPathwayLessonForMarketingHubVerify",
+  );
+  assert.ok(
+    block.includes("getPathwayLessonImpl(pathwayId, slug, marketingLocale, implOpts)"),
+    "implOpts must be forwarded to getPathwayLessonImpl in cache + direct fallback",
+  );
+});

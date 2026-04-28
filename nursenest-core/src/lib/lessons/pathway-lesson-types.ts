@@ -352,6 +352,19 @@ export function pathwayLessonMarketingDetailHref(
 }
 
 /**
+ * Hub lesson **card** link only after strict {@link verifyMarketingHubLessonRowsResolve} success.
+ * Rows marked {@link PathwayLessonRecord.hubMarketingDegraded} (soft recovery, verify cap, or pipeline bypass)
+ * must not render a marketing detail `href` — same contract as “detail loader would not treat as strict public link”.
+ */
+export function pathwayLessonMarketingHubVerifiedCardHref(
+  lessonsBasePath: string,
+  lesson: Pick<PathwayLessonRecord, "slug" | "hubMarketingDegraded">,
+): string | null {
+  if (lesson.hubMarketingDegraded) return null;
+  return pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
+}
+
+/**
  * Single helper for public marketing lesson URLs: `/{country}/{role}/{exam}/lessons/{slug}`.
  * Prefer this over manual string concat so redirects and link audits stay aligned.
  */

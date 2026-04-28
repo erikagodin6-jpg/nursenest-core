@@ -2,8 +2,8 @@
  * Marketing lessons hub — cross-checks list rows with a **fresh** {@link getPathwayLessonForMarketingHubVerify} load
  * (no `unstable_cache` lag vs the hub list). **Strict** rows match the historical contract (publicComplete + pathway context).
  * **Soft** failures (`detail_not_public_complete`, `pathway_context_mismatch`, `detail_loader_miss`) still hydrate/recover — those rows are kept
- * with {@link PathwayLessonRecord.hubMarketingDegraded} so the grid does not silently empty while the detail route
- * can still render preview/quality states (see {@link resolveMarketingPathwayLessonRouteResolution}).
+ * with {@link PathwayLessonRecord.hubMarketingDegraded} so the grid does not silently empty. Hub **cards** must use
+ * {@link pathwayLessonMarketingHubVerifiedCardHref} so those rows stay visible but **not** as lesson detail links.
  *
  * Intentionally **does not** re-apply professional-practice corpus suppression or `REVIEW_REQUIRED` hub taxonomy —
  * those are not part of marketing detail `not_found` resolution and caused silent “0 lessons” when list rows
@@ -232,7 +232,8 @@ function ensureNonEmptyHubResult(
 }
 
 export async function verifyMarketingHubLessonRowsResolve(
-  pathway: Pick<ExamPathwayDefinition, "id">,
+  pathway: Pick<ExamPathwayDefinition, "id"> &
+    Partial<Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">>,
   lessons: readonly PathwayLessonRecord[],
   lessonContentLocale: string,
   options?: {
@@ -494,6 +495,21 @@ export async function verifyMarketingHubLessonRowsResolve(
       lesson_content_locale: lessonContentLocale,
       dropped_prepared_row_samples_json: JSON.stringify(droppedPreparedRowSamples.slice(0, 12)).slice(0, 6000),
     });
+
+    const countrySlug = pathway.countrySlug ?? "";
+    const roleTrack = pathway.roleTrack ?? "";
+    const examCode = pathway.examCode ?? "";
+    for (const e of verifyExcluded.slice(0, 40)) {
+      safeServerLog("pathway_lessons", "marketing_hub_lesson_detail_verify_mismatch", {
+        pathway_id: pathway.id,
+        country_slug: countrySlug,
+        role_track: roleTrack,
+        exam_code: examCode,
+        lesson_content_locale: lessonContentLocale,
+        slug: e.slug.slice(0, 200),
+        failure_reason: e.reason,
+      });
+    }
   }
 
   if (lessons.length > 0 && kept.length === 0) {

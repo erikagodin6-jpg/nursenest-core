@@ -1668,17 +1668,26 @@ async function getPathwayLessonWithDataCache(
   slug: string,
   marketingLocale?: string,
 ): Promise<PathwayLessonRecord | undefined> {
+  /** Align with {@link getPathwayLessonForMarketingHubVerify} / hub row integrity (warehouse locale recovery). */
+  const implOpts = { preferPublishedLocaleScan: true as const };
   return runUnstableCacheWithIncrementalCacheFallback(
     () =>
       unstable_cache(
-        async () => getPathwayLessonImpl(pathwayId, slug, marketingLocale),
-        ["pathway-lesson-detail", `rev:${cacheDeploymentRevision()}`, pathwayId, slug, marketingLocale ?? ""],
+        async () => getPathwayLessonImpl(pathwayId, slug, marketingLocale, implOpts),
+        [
+          "pathway-lesson-detail",
+          `rev:${cacheDeploymentRevision()}`,
+          "ps1",
+          pathwayId,
+          slug,
+          marketingLocale ?? "",
+        ],
         {
           revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS,
           tags: [cacheTagPathwayLessonsHub(pathwayId), `pathway-lesson:${pathwayId}:${slug}`],
         },
       )(),
-    () => getPathwayLessonImpl(pathwayId, slug, marketingLocale),
+    () => getPathwayLessonImpl(pathwayId, slug, marketingLocale, implOpts),
   );
 }
 

@@ -6,7 +6,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-body-system-groups";
 import {
   pathwayLessonHasRenderableHubSlug,
-  pathwayLessonMarketingDetailHref,
+  pathwayLessonMarketingHubVerifiedCardHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
@@ -51,7 +51,7 @@ export function prepareLessonsForHubCurriculumWithDiagnostics(
   });
   const droppedOrganizeShrink = Math.max(0, beforeOrganize - organized.length);
   const afterHrefFiltered = organized.filter(
-    (l) => pathwayLessonMarketingDetailHref(args.lessonsBasePath, l.slug) != null,
+    (l) => pathwayLessonMarketingHubVerifiedCardHref(args.lessonsBasePath, l) != null,
   );
   const droppedNoMarketingHref = organized.length - afterHrefFiltered.length;
 
@@ -69,7 +69,7 @@ export function prepareLessonsForHubCurriculumWithDiagnostics(
 
   if (process.env.NN_MARKETING_HUB_PIPELINE_DEBUG === "1") {
     const droppedHrefSlugs = organized
-      .filter((l) => pathwayLessonMarketingDetailHref(args.lessonsBasePath, l.slug) == null)
+      .filter((l) => pathwayLessonMarketingHubVerifiedCardHref(args.lessonsBasePath, l) == null)
       .map((l) => String(l.slug ?? "").slice(0, 160));
     safeServerLog("pathway_lessons", "hub_prepare_pipeline_debug", {
       pathway_id: args.pathwayId ?? "",
