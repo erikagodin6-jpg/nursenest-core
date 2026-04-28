@@ -21,6 +21,7 @@ import { PRISMA_ID_IN_CHUNK_SIZE, takeForIdIn } from "@/lib/db/prisma-find-many-
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 import { HubLessonsListDatabaseError } from "@/lib/lessons/hub-lessons-database-error";
+import { stripPathwayLessonToHubListShape } from "@/lib/lessons/pathway-lesson-hub-list-shape";
 import type { PathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
 import { applyPathwayLessonEducationalOverlay } from "@/lib/i18n/educational-content-overlay";
 import { fetchPublishedPathwayLessonOverlayMapSafe } from "@/lib/i18n/educational-translation-db";
@@ -126,6 +127,8 @@ export {
   RELATED_PATHWAY_LESSONS_LIMIT,
 } from "@/lib/lessons/pathway-lesson-loader-config";
 
+export { stripPathwayLessonToHubListShape } from "@/lib/lessons/pathway-lesson-hub-list-shape";
+
 /**
  * Async dedupe for loader entrypoints under Node test runners (tsx) where React `cache` is unavailable.
  * Keys by JSON-serialized args; retains settled promises for the process lifetime (bounded by distinct arg tuples).
@@ -183,38 +186,6 @@ function pathwayLessonHubSearchWhere(q: string): Prisma.PathwayLessonWhereInput 
   };
 }
 
-
-/**
- * Hub index shape: metadata + structural gate; no section bodies, pre/post tests, or question payloads.
- */
-export function stripPathwayLessonToHubListShape(full: PathwayLessonRecord): PathwayLessonRecord {
-  return {
-    slug: full.slug,
-    title: full.title,
-    topic: full.topic,
-    topicSlug: full.topicSlug,
-    system: full.system ?? full.bodySystem,
-    bodySystem: full.bodySystem,
-    previewSectionCount: full.previewSectionCount,
-    seoTitle: full.seoTitle,
-    seoDescription: full.seoDescription,
-    sections: [],
-    structuralQuality: full.structuralQuality,
-    localeMeta: full.localeMeta,
-    ...(full.audienceTiers?.length ? { audienceTiers: full.audienceTiers } : {}),
-    ...(full.countryScope ? { countryScope: full.countryScope } : {}),
-    ...(full.examRelevance ? { examRelevance: full.examRelevance } : {}),
-    ...(full.relatedLessonRefs?.length ? { relatedLessonRefs: full.relatedLessonRefs } : {}),
-    ...(full.premiumOmittedSections?.length ? { premiumOmittedSections: full.premiumOmittedSections } : {}),
-    ...(full.audioUrl ? { audioUrl: full.audioUrl } : {}),
-    ...(full.exams?.length ? { exams: full.exams } : {}),
-    ...(full.countries?.length ? { countries: full.countries } : {}),
-    ...(full.priority ? { priority: full.priority } : {}),
-    ...(full.examMeta?.length ? { examMeta: full.examMeta } : {}),
-    ...(full.activeExamMeta ? { activeExamMeta: full.activeExamMeta } : {}),
-    ...(full.premiumValidation ? { premiumValidation: full.premiumValidation } : {}),
-  };
-}
 
 /** Drops lesson rows that cannot build a safe public hub href; logs for admin follow-up. */
 function filterHubListItemsForSafeSlugs(items: PathwayLessonRecord[], pathwayId: string): PathwayLessonRecord[] {

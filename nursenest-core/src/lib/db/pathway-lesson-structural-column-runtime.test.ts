@@ -1,3 +1,5 @@
+import "../../../scripts/stub-server-only.cjs";
+
 import assert from "node:assert/strict";
 import { beforeEach, describe, it } from "node:test";
 
