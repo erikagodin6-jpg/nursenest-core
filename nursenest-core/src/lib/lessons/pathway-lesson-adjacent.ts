@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { ContentStatus } from "@prisma/client";
 import type { PathwayLessonAdjacentHrefs } from "@/components/lessons/pathway-lesson-sequence-nav";
 import { prisma } from "@/lib/db";
