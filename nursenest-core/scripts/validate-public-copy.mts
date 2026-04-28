@@ -1,3 +1,7 @@
+/**
+ * Static checks for user-facing copy regressions: raw i18n keys, placeholder markers, banned legacy
+ * titles, and duplicate display titles within a pathway in `catalog.json`. Run via `npm run validate:public-copy`.
+ */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";

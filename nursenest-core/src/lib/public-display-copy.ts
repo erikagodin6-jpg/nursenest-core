@@ -1,3 +1,8 @@
+/**
+ * Central resolvers for **public** lesson titles, hub section labels, and marketing strings.
+ * Precedence is enforced here so registries, DB rows, and SEO fields cannot silently override curated
+ * `catalog.json` titles. Use these helpers from hubs and cards instead of ad-hoc `title || slug` logic.
+ */
 import { formatTitleCase } from "@/lib/format/text-case";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 import { assertNoPublicPlaceholderCopy, normalizeResolvedMarketingLeaf } from "@/lib/marketing-i18n/marketing-message-value-policy";

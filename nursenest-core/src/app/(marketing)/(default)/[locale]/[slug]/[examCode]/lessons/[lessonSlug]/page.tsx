@@ -152,6 +152,7 @@ export default async function PathwayLessonDetailPage({ params, searchParams }: 
           getMarketingLessonsHubCatalogLessons(pathway.id),
           resolved.category,
         ),
+        pathway.id,
       );
       const hubSlice = sliceNormalizedHubLessons(filtered, pageRequested, MARKETING_HUB_CATEGORY_PAGE_SIZE);
       if (filtered.length > 0 && pageRequested !== hubSlice.page) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, type ReactNode } from "react";
+import React, { createContext, useContext, type ReactNode } from "react";
 import type { AdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
 
 const FALLBACK_ADMIN_AI_GENERATION_GATE: AdminAiGenerationGate = {

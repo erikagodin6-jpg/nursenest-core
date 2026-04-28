@@ -9,8 +9,9 @@
  * {@link cleanLessonTitleForDisplay} first, then {@link normalizeLessonTitleForDedupe} so pathway/exam
  * suffix noise and punctuation variants collapse before comparison.
  *
- * **Canonical display title:** `cleanLessonTitleForDisplay(seoTitle || title)` so cards show one
- * consistent line (exam pathway tokens stripped, acronyms preserved per lesson-title rules).
+ * **Canonical display title:** {@link canonicalHubLessonDisplayTitle} → {@link resolvePublicLessonTitle} so
+ * bundled `catalog.json` curated `title` wins over DB/SEO drift when `pathwayId` is known; exam tokens are
+ * stripped via lesson-title rules. Generated inventory scripts must not overwrite catalog titles.
  *
  * **Dedupe order:** (1) collapse by slug → (2) optional collapse by concept key when
  * {@link OrganizeHubLessonsOptions.mergeNearDuplicateTitles} is true → (3) rewrite `title` to the
@@ -18,6 +19,7 @@
  */
 
 import { normalizeLessonTitleForDedupe } from "@/lib/lessons/pathway-lesson-dedupe";
+import { getCatalogPathwayLessonsSync } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
@@ -51,18 +53,33 @@ function pickBetterHubLesson(a: PathwayLessonRecord, b: PathwayLessonRecord): Pa
   return a.slug.toLowerCase() <= b.slug.toLowerCase() ? a : b;
 }
 
-/** Single learner-facing title for hub cards and concept keys. */
-export function canonicalHubLessonDisplayTitle(lesson: PathwayLessonRecord): string {
+/**
+ * Single learner-facing title for hub cards and concept keys.
+ * When `pathwayId` is set, prefers the bundled catalog `title` for that slug so DB-only regressions
+ * (e.g. long legacy strings) cannot override curated public copy.
+ */
+export function canonicalHubLessonDisplayTitle(lesson: PathwayLessonRecord, pathwayId?: string | null): string {
+  let catalogCurated: string | undefined;
+  const pid = typeof pathwayId === "string" ? pathwayId.trim() : "";
+  if (pid) {
+    try {
+      catalogCurated = getCatalogPathwayLessonsSync(pid).find((l) => l.slug === lesson.slug)?.title;
+    } catch {
+      catalogCurated = undefined;
+    }
+  }
+  const curatedFromCatalog = (catalogCurated ?? "").trim();
   return resolvePublicLessonTitle({
-    curatedTitle: lesson.title,
+    curatedTitle: curatedFromCatalog || undefined,
+    i18nTitle: curatedFromCatalog ? undefined : lesson.title,
     generatedTitle: lesson.seoTitle,
     slug: lesson.slug,
   });
 }
 
-function hubConceptKey(lesson: PathwayLessonRecord): string | null {
+function hubConceptKey(lesson: PathwayLessonRecord, pathwayId?: string | null): string | null {
   const ts = (lesson.topicSlug ?? "").trim().toLowerCase();
-  const cleaned = canonicalHubLessonDisplayTitle(lesson);
+  const cleaned = canonicalHubLessonDisplayTitle(lesson, pathwayId);
   const normalized = normalizeLessonTitleForDedupe(cleaned);
   if (!ts || !normalized) return null;
   return `${ts}|${normalized}`;
@@ -131,7 +148,7 @@ export function organizeHubLessonsForPresentation(
     const byConcept = new Map<string, PathwayLessonRecord>();
     const noConceptKey: PathwayLessonRecord[] = [];
     for (const l of slugPass) {
-      const ck = hubConceptKey(l);
+      const ck = hubConceptKey(l, pathwayId);
       if (!ck) {
         noConceptKey.push(l);
         continue;
@@ -150,7 +167,7 @@ export function organizeHubLessonsForPresentation(
   });
 
   const out = merged.map((l) => {
-    const display = canonicalHubLessonDisplayTitle(l);
+    const display = canonicalHubLessonDisplayTitle(l, pathwayId);
     if (display === l.title) return l;
     return { ...l, title: display };
   });

@@ -50,6 +50,15 @@ describe("public display copy resolvers", () => {
     assert.notEqual(canonicalHubLessonDisplayTitle(lesson), "CABG Post-Op Complications");
   });
 
+  it("canonicalHubLessonDisplayTitle prefers bundled catalog over regressed lesson.title when pathwayId is set", () => {
+    const regressed = row({
+      slug: "cabg-and-postoperative-cabg-complications-nclex-rn",
+      title: "CABG and Postoperative CABG Complications",
+      seoTitle: "CABG | NCLEX-RN Canada lesson",
+    });
+    assert.equal(canonicalHubLessonDisplayTitle(regressed, "us-rn-nclex-rn"), "CABG");
+  });
+
   it("lesson cards keep curated titles ahead of slug-humanized fallback", () => {
     assert.equal(
       resolvePublicLessonTitle({

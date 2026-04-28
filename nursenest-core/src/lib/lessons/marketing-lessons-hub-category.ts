@@ -38,13 +38,20 @@ export function displayCategoryForMarketingHubLesson(lesson: PathwayLessonRecord
   return normalizeLessonCategory(lesson.topic, lesson.title);
 }
 
-export function sortLessonsForMarketingCategoryPage(lessons: PathwayLessonRecord[]): PathwayLessonRecord[] {
+export function sortLessonsForMarketingCategoryPage(
+  lessons: PathwayLessonRecord[],
+  pathwayId?: string | null,
+): PathwayLessonRecord[] {
   return [...lessons].sort((a, b) => {
     const diff = hubLessonPresentationRank(b) - hubLessonPresentationRank(a);
     if (diff !== 0) return diff;
-    return canonicalHubLessonDisplayTitle(a).localeCompare(canonicalHubLessonDisplayTitle(b), undefined, {
-      sensitivity: "base",
-    });
+    return canonicalHubLessonDisplayTitle(a, pathwayId).localeCompare(
+      canonicalHubLessonDisplayTitle(b, pathwayId),
+      undefined,
+      {
+        sensitivity: "base",
+      },
+    );
   });
 }
 
@@ -77,7 +84,7 @@ export function pickReviewRequiredCatalogLessons(
   max: number,
 ): PathwayLessonRecord[] {
   const rr = lessons.filter((l) => classifyLessonForHub(l, pathwayId) === REVIEW_REQUIRED);
-  const sorted = sortLessonsForMarketingCategoryPage(rr);
+  const sorted = sortLessonsForMarketingCategoryPage(rr, pathwayId);
   return sorted.slice(0, Math.max(0, max));
 }
 

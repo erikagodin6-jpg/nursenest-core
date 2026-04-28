@@ -69,6 +69,7 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
   const catalogAll = getMarketingLessonsHubCatalogLessons(pathway.id);
   const filtered = sortLessonsForMarketingCategoryPage(
     filterMarketingHubLessonsByDisplayCategory(catalogAll, category),
+    pathway.id,
   );
 
   const pageSize = MARKETING_HUB_CATEGORY_PAGE_SIZE;
