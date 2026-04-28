@@ -8,6 +8,20 @@ import {
 } from "@/lib/navigation/marketing-tier-hub-study-hrefs";
 
 describe("marketingTierHubStudyActionHref", () => {
+  it("routes tier hub Lessons CTA to the canonical pathway lessons hub (RN, RPN/PN, NP, Allied, New Grad)", () => {
+    const usRn = getExamPathwayById("us-rn-nclex-rn");
+    const caRpn = getExamPathwayById("ca-rpn-rex-pn");
+    const usNp = getExamPathwayById("us-np-fnp");
+    const usAllied = getExamPathwayById("us-allied-core");
+    const usNewGrad = getExamPathwayById("us-rn-new-grad-transition");
+    assert.ok(usRn && caRpn && usNp && usAllied && usNewGrad);
+    assert.equal(marketingTierHubStudyActionHref(usRn!, "lessons"), "/us/rn/nclex-rn/lessons");
+    assert.equal(marketingTierHubStudyActionHref(caRpn!, "lessons"), "/canada/pn/rex-pn/lessons");
+    assert.equal(marketingTierHubStudyActionHref(usNp!, "lessons"), "/us/np/fnp/lessons");
+    assert.equal(marketingTierHubStudyActionHref(usAllied!, "lessons"), "/us/allied/allied-health/lessons");
+    assert.equal(marketingTierHubStudyActionHref(usNewGrad!, "lessons"), "/us/rn/new-grad-transition/lessons");
+  });
+
   it("scopes core study surfaces to the pathway URL tree", () => {
     const usPn = getExamPathwayById("us-lpn-nclex-pn");
     assert.ok(usPn);

@@ -39,6 +39,7 @@ import { sanitizeEmbeddedSoundLibraries } from "@/lib/lessons/pathway-lesson-sou
 import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
 import { enrichLegacyFiveBlockSectionsForSubscriberGates } from "@/lib/lessons/pathway-lesson-subscriber-completeness";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
+import { stripPathwayLessonToHubListShape } from "@/lib/lessons/pathway-lesson-hub-list-shape";
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import { hydratePremiumCatalogSectionsForMarketingGate } from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { prependScopedGoldCatalogLessons } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
@@ -1024,9 +1025,14 @@ export function getCatalogPathwayLessonsSync(pathwayId: string): PathwayLessonRe
  * `new-grad-transition-catalog.json` + scoped-gold,
  * normalized, then the same exam/country filter as catalog-backed hub paths. **Does not include Prisma-published
  * lessons.** DB-only pathways still list via `getPathwayLessonsPage` when published rows exist.
+ *
+ * Returns **hub index rows** only: {@link stripPathwayLessonToHubListShape} removes section bodies and quiz payloads
+ * so category-first marketing hubs never retain full catalog lesson JSON in memory (detail routes load bodies).
  */
 export function getEffectiveCatalogLessonsForPathwaySync(pathwayId: string): PathwayLessonRecord[] {
-  return sortAndFilterLessonsForPathwayContext(pathwayId, getCatalogPathwayLessonsSync(pathwayId));
+  return sortAndFilterLessonsForPathwayContext(pathwayId, getCatalogPathwayLessonsSync(pathwayId)).map(
+    stripPathwayLessonToHubListShape,
+  );
 }
 
 /** True when the bundled catalog path yields at least one lesson (JSON slice and/or scoped-gold for this pathway). */

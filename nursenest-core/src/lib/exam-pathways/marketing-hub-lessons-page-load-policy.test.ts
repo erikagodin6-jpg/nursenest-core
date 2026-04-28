@@ -368,3 +368,16 @@ test("primary payload missing renderableAll while total exceeds items is invalid
   }
   assert.equal(pageResult.total, 0);
 });
+
+test("NEXT_REDIRECT from primary lessons fetch is rethrown (not treated as hub load failure)", async () => {
+  const { getRedirectError, isRedirectError, RedirectType } = await import("next/dist/client/components/redirect");
+  const redirectErr = getRedirectError("/us/rn/nclex-rn/lessons?n=1", RedirectType.replace);
+  const mockFetch = async () => {
+    throw redirectErr;
+  };
+
+  await assert.rejects(
+    () => loadPathwayLessonsHubPageWithTelemetry(ctx.pathwayId, args, ctx, mockFetch),
+    (e: unknown) => isRedirectError(e),
+  );
+});

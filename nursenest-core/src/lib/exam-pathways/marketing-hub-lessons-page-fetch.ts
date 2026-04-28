@@ -7,6 +7,7 @@ import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tr
 import { logRouteDataPipeline, routeDataDiagnosticsEnabled } from "@/lib/observability/route-data-pipeline-log";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { logContractLoadDiagnostics } from "@/lib/loading/critical-load-outcome";
+import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 import { HubLessonsListDatabaseError } from "@/lib/lessons/hub-lessons-database-error";
 import { readPathwayLessonsHubPageSnapshot } from "@/lib/study-content-failover/pathway-lessons-hub-snapshot-read";
 import { snapshotAgeMs as computeSnapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
@@ -234,6 +235,7 @@ export async function loadPathwayLessonsHubPageWithTelemetry(
   try {
     rawPrimary = await fetchImpl(pathwayId, pageRequested, pageSizeRequested, lessonContentLocale, listOpts);
   } catch (e) {
+    rethrowNextNavigationControlFlow(e);
     primaryError = e;
   }
 
