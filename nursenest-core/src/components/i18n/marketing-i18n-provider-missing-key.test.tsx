@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
-import { createElement } from "react";
+import React, { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { MarketingI18nProvider } from "@/components/i18n/marketing-i18n-provider";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
