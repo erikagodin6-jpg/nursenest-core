@@ -42,14 +42,22 @@ test.describe("Questions — practice", () => {
       const bodyPreview = await page.locator("body").innerText().catch(() => "");
       expect(bodyPreview.length, "questions page should render body text").toBeGreaterThan(80);
 
+      await expect(page.getByRole("heading", { name: /Practice Question Session/i })).toBeVisible({
+        timeout: 30_000,
+      });
+      await expect(page.getByRole("button", { name: /^Start Practice$/i })).toBeVisible();
+
+      await page.getByRole("button", { name: /^Start Practice$/i }).click();
+      await expect(page).toHaveURL(/\/app\/questions\/session\?/, { timeout: 30_000 });
+
       const firstPick = page.locator(".nn-qopt-list").first().locator("button, label").first();
       if (await firstPick.isVisible().catch(() => false)) {
         await expect(firstPick).toBeEnabled({ timeout: 15_000 });
         await firstPick.click();
-        const check = page.getByRole("button", { name: /^Check answer$/i });
-        if (await check.isVisible().catch(() => false)) {
-          await expect(check).toBeEnabled();
-          await check.click();
+        const submit = page.getByRole("button", { name: /^Submit answer$/i });
+        if (await submit.isVisible().catch(() => false)) {
+          await expect(submit).toBeEnabled();
+          await submit.click();
         }
       }
 

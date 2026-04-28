@@ -145,6 +145,10 @@ describe("parseTierScopedAppStudyCallbackPath", () => {
     assert.equal(parseTierScopedAppStudyCallbackPath("/app/questions"), null);
   });
 
+  it("rejects /app/questions/session without pathwayId", () => {
+    assert.equal(parseTierScopedAppStudyCallbackPath("/app/questions/session?source=mixed_review"), null);
+  });
+
   it("rejects /app/flashcards without pathwayId", () => {
     assert.equal(parseTierScopedAppStudyCallbackPath("/app/flashcards"), null);
   });

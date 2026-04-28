@@ -13,6 +13,7 @@ import {
   normalizeVisibleLessonTitle,
   premiumizeLessonDisplayTitle,
 } from "@/lib/lessons/lesson-taxonomy";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CATALOG_PATH = path.join(__dirname, "../../content/pathway-lessons/catalog.json");
@@ -78,6 +79,15 @@ test("no effective lesson display title contains exam branding strings", () => {
       assert.match(t, /^(?!.*\(NCLEX).*$/, `${pid}/${l.slug}: ${t}`);
       assert.match(t, /^(?!.*— REx-PN).*$/, `${pid}/${l.slug}: ${t}`);
       assert.ok(!/\bNCLEX-RN\b/i.test(t), `${pid}/${l.slug}: ${t}`);
+    }
+  }
+});
+
+test("effective catalog lesson titles never show NurseNest after display cleanup", () => {
+  for (const pid of NURSING_PATHWAYS) {
+    for (const l of getEffectiveCatalogLessonsForPathwaySync(pid)) {
+      const display = cleanLessonTitleForDisplay(l.title ?? "");
+      assert.ok(!/\bnursenest\b/i.test(display), `${pid}/${l.slug}: ${display}`);
     }
   }
 });
@@ -153,6 +163,7 @@ test("lesson-library.json: controlled categories, no NCLEX in display titles, un
     assert.ok(LESSON_CATEGORIES.includes(topic as (typeof LESSON_CATEGORIES)[number]), `invalid topic: ${slug} → ${topic}`);
     const title = typeof row.title === "string" ? row.title : "";
     assert.match(title, /^(?!.*\(NCLEX).*$/, `${slug}: ${title}`);
+    assert.ok(!/\bnursenest\b/i.test(cleanLessonTitleForDisplay(title)), `${slug}: ${title}`);
   }
 });
 

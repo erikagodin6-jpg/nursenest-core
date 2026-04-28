@@ -37,7 +37,7 @@ interface StartCard {
 
 export function ReviewStartCards({
   summary,
-  practiceBaseHref = "/app/practice",
+  practiceBaseHref = "/app/questions",
 }: {
   summary: ReviewQueueSummary;
   /** Base href for launching practice sessions. Extend with query params. */
