@@ -199,11 +199,23 @@ export type FlatMessageScanHit = {
   reason: string;
 };
 
+/**
+ * Full authored-marketing leaf policy (mirror stubs + single-word placeholders) applies to
+ * the flat `pages.*` table shipped as `public/i18n/en/pages.json`. Chrome shards (`components`,
+ * `learner`, etc.) may legitimately use short labels like "Title" for form fields — those are
+ * still guarded in runtime via {@link normalizeResolvedMarketingLeaf} where needed, but must
+ * not fail the global marketing bundle scan.
+ */
+export function marketingShardUsesStrictPublicPageLeafPolicy(fileLabel: string): boolean {
+  return fileLabel === "en/pages.json";
+}
+
 export function scanFlatMarketingMessagesForForbiddenValues(
   fileLabel: string,
   messages: Record<string, unknown>,
 ): FlatMessageScanHit[] {
   const hits: FlatMessageScanHit[] = [];
+  const strictLeafPolicy = marketingShardUsesStrictPublicPageLeafPolicy(fileLabel);
 
   for (const [key, val] of Object.entries(messages)) {
     if (typeof val !== "string") continue;
@@ -211,10 +223,36 @@ export function scanFlatMarketingMessagesForForbiddenValues(
     const t = val.trim();
     if (!t) continue;
 
+    let substringHit: string | null = null;
+    for (const sub of MARKETING_FORBIDDEN_VALUE_SUBSTRINGS) {
+      if (t.toLowerCase().includes(sub.toLowerCase())) {
+        substringHit = sub;
+        break;
+      }
+    }
+    if (substringHit) {
+      hits.push({
+        file: fileLabel,
+        key,
+        value: t.slice(0, 120),
+        reason: `forbidden substring "${substringHit}"`,
+      });
+      continue;
+    }
+
+    if (isForbiddenShoutyTemplateToken(t)) {
+      hits.push({
+        file: fileLabel,
+        key,
+        value: t.slice(0, 120),
+        reason: "invalid marketing copy",
+      });
+      continue;
+    }
+
     if (
-      isKeyContentMirrorStub(key, t) ||
-      isForbiddenShoutyTemplateToken(t) ||
-      MARKETING_FORBIDDEN_WHOLE_VALUE_CI.has(t.toLowerCase())
+      strictLeafPolicy &&
+      (isKeyContentMirrorStub(key, t) || MARKETING_FORBIDDEN_WHOLE_VALUE_CI.has(t.toLowerCase()))
     ) {
       hits.push({
         file: fileLabel,

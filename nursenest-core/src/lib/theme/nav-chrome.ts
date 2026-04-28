@@ -1,4 +1,6 @@
 import type { CSSProperties } from "react";
+import { getThemeSurfaceContrastTokens } from "@/lib/theme/theme-palette-tokens";
+import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
 
 export type NavChromeTheme = {
   chrome: string;
@@ -514,11 +516,29 @@ const FALLBACK: NavChromeTheme = {
   panel: "rgba(255,255,255,0.10)",
 };
 
+/** Prefer canonical surface tokens whenever they exist (palette-derived or overrides). */
+function navChromeFromSemantic(themeId: string): NavChromeTheme | null {
+  const semantic = getThemeSurfaceContrastTokens(themeId);
+  if (!semantic) return null;
+  const fg = semantic.navForeground;
+  return {
+    chrome: semantic.navBackground,
+    foreground: fg,
+    border: semantic.navBorder,
+    hoverBg: semantic.navHover,
+    hoverFg: fg,
+    panel: `color-mix(in srgb, ${fg} 12%, transparent)`,
+  };
+}
+
 export function getNavChrome(themeId?: string | null): NavChromeTheme {
   const key = String(themeId ?? "")
     .trim()
     .toLowerCase();
-  return NAV_CHROME_BY_THEME[key] ?? FALLBACK;
+  const resolvedId = key || NURSENEST_DEFAULT_THEME;
+  const fromSemantic = navChromeFromSemantic(resolvedId);
+  if (fromSemantic) return fromSemantic;
+  return NAV_CHROME_BY_THEME[key] ?? NAV_CHROME_BY_THEME[NURSENEST_DEFAULT_THEME] ?? FALLBACK;
 }
 
 /** CSS custom properties only — no direct backgroundColor/color. Use on wrapper elements that
