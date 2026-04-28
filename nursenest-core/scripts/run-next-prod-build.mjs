@@ -108,6 +108,35 @@ function capV8HeapForPhysicalRam() {
 ensureNodeHeapOption();
 capV8HeapForPhysicalRam();
 
+function envTruthy(name) {
+  return /^(1|true|yes)$/i.test(String(process.env[name] ?? "").trim());
+}
+function envExplicitlyFalse(name) {
+  const v = String(process.env[name] ?? "").trim();
+  return v === "0" || /^false$/i.test(v);
+}
+const totalRamMb = Math.max(512, Math.floor(os.totalmem() / 1024 / 1024));
+const autoLowMemoryHost = totalRamMb <= 9216;
+const lowMemoryHeuristic =
+  !envExplicitlyFalse("NN_LOW_MEMORY_BUILD") &&
+  (envTruthy("NN_LOW_MEMORY_BUILD") ||
+    envTruthy("CI") ||
+    process.env.GITHUB_ACTIONS === "true" ||
+    envTruthy("NN_APP_PLATFORM_BUILD") ||
+    autoLowMemoryHost);
+console.log(
+  "[next-prod-build] compile_profile",
+  JSON.stringify({
+    lowMemoryHeuristic,
+    totalRamMb,
+    NN_LOW_MEMORY_BUILD: process.env.NN_LOW_MEMORY_BUILD ?? null,
+    CI: process.env.CI ?? null,
+    GITHUB_ACTIONS: process.env.GITHUB_ACTIONS ?? null,
+    NN_APP_PLATFORM_BUILD: process.env.NN_APP_PLATFORM_BUILD ?? null,
+    NODE_OPTIONS_has_heap: /--max-old-space-size=\d+/.test(String(process.env.NODE_OPTIONS ?? "")),
+  }),
+);
+
 /**
  * 🔥 CRITICAL FIX:
  * REMOVE "--webpack"

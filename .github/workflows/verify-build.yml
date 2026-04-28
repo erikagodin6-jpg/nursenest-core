@@ -19,6 +19,8 @@ jobs:
       # `npm run typecheck` runs before `next build` in `ci:verify`; skip duplicate integrated TS pass
       # to lower peak RAM (see `next.config.mjs` `typescript.ignoreBuildErrors`).
       SKIP_NEXT_BUILD_TYPECHECK: "1"
+      # Tighter webpack + static worker profile (see `next.config.mjs` `isLowMemoryBuild`).
+      NN_LOW_MEMORY_BUILD: "1"
     timeout-minutes: 45
     defaults:
       run:
