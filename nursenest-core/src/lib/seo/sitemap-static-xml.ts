@@ -2,7 +2,7 @@
  * Mostly synchronous sitemap URL lists (no filesystem i18n, no network).
  * Pathway lesson URLs may query Postgres via the shared loader (DB-first, catalog fallback).
  *
- * **Public surface:** a single merged urlset is served at `/sitemap.xml` (see `sitemap-all-xml.ts`).
+ * **Public surface:** `/sitemap.xml` is served by `src/app/sitemap.xml/route.ts` (static url list + canonical origin).
  *
  * ## When URL volume forces a split (not urgent until thresholds hit)
  *
@@ -459,7 +459,7 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
   }
   /**
    * Pathway lesson URLs are the dominant sitemap cost. Cap wall time (override via `SITEMAP_PATHWAY_BUDGET_MS`).
-   * Blog URLs are merged separately in `sitemap-all-xml.ts` and are not dropped when this budget elapses.
+   * Blog index and posts are not emitted from this heavy pathway path; `/sitemap.xml` lists `/blog` in the static route.
    */
   const pathwayBudgetMs = (() => {
     const raw = process.env.SITEMAP_PATHWAY_BUDGET_MS?.trim();

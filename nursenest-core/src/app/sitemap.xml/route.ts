@@ -1,15 +1,15 @@
+import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
+import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
+import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
+
 /**
  * Lightweight public sitemap.
  *
- * Keep this route independent from Prisma, Stripe, auth/session state, external fetches,
- * lesson body loaders, and dynamic blog/lesson detail inventories. It must always return
- * a valid XML response for crawlers, even when optional content systems are degraded.
+ * No Prisma, Stripe, auth/session, external fetches, or lesson/blog inventories. Origin follows
+ * {@link resolveCanonicalSiteOrigin}. Always returns valid `application/xml` (200 or 304).
  */
 export const runtime = "nodejs";
-export const dynamic = "force-static";
-export const revalidate = 3600;
-
-const DEFAULT_ORIGIN = "https://www.nursenest.ca";
+export const dynamic = "force-dynamic";
 
 const STATIC_SITEMAP_PATHS = [
   "/",
@@ -29,18 +29,6 @@ const STATIC_SITEMAP_PATHS = [
   "/canada/np/cnple",
   "/canada/np/cnple/lessons",
 ] as const;
-
-function normalizeOrigin(value: string | undefined): string {
-  const raw = value?.trim();
-  if (!raw) return DEFAULT_ORIGIN;
-
-  const withProtocol = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
-  try {
-    return new URL(withProtocol).origin.replace(/\/+$/, "");
-  } catch {
-    return DEFAULT_ORIGIN;
-  }
-}
 
 function xmlEscape(value: string): string {
   return value
@@ -66,16 +54,17 @@ function buildStaticSitemapXml(origin: string): string {
   ].join("\n");
 }
 
-export function GET(): Response {
-  const origin = normalizeOrigin(process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL);
+export function GET(request: Request): Response {
+  const origin = resolveCanonicalSiteOrigin();
   const xml = buildStaticSitemapXml(origin);
+  const etag = buildPublicResponseEtag(xml);
 
-  return new Response(xml, {
-    status: 200,
-    headers: {
-      "Content-Type": "application/xml; charset=utf-8",
-      "Cache-Control": "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
-      "X-Robots-Tag": "index, follow",
-    },
-  });
+  const headers = new Headers(SITEMAP_XML_HEADERS);
+  headers.set("ETag", etag);
+
+  if (requestMatchesEtag(request, etag)) {
+    return new Response(null, { status: 304, headers });
+  }
+
+  return new Response(xml, { status: 200, headers });
 }

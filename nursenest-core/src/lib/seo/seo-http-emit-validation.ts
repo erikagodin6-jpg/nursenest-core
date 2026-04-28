@@ -1,7 +1,7 @@
 /**
  * Optional HTTP verification for URLs we emit (sitemap, canonical, hreflang).
  *
- * - `SEO_HTTP_VALIDATE_EMITTED_URLS=1` — HEAD/GET each URL (sitemap merge path; see `sitemap-all-xml.ts`).
+ * - `SEO_HTTP_VALIDATE_EMITTED_URLS=1` — HEAD/GET each URL (optional CI checks against emitted locs).
  * - `SEO_HTTP_VALIDATE_PAGE_METADATA=1` — after metadata resolves, check canonical + hreflang (`safe-marketing-metadata.ts`).
  * - `SEO_HTTP_VALIDATE_STRICT=1` — throw {@link SeoHttpValidationStrictError} on 404/410/5xx for sitemap flows and
  *   for page-metadata validation only outside production request rendering (development or explicit CI checks).
