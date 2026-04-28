@@ -184,10 +184,14 @@ export function normalizeLessonCategory(
 }
 
 /**
- * Stable kebab slug for topic URLs / `topicSlug` when authoring new rows.
+ * Stable kebab slug for marketing **category hub** URLs (`…/lessons/{slug}`) and breadcrumbs.
  * Existing catalog rows may keep legacy `topicSlug` to avoid breaking `/lessons/topics/[topicSlug]`.
+ *
+ * `Fundamentals` uses `nursing-fundamentals` (not `fundamentals`) so the hub segment never collides
+ * with a pathway lesson slug `fundamentals` (marketing hub dynamic segment resolution gives the lesson route precedence when both match).
  */
 export function lessonCategoryToSlug(category: LessonCategory): string {
+  if (category === "Fundamentals") return "nursing-fundamentals";
   return category
     .toLowerCase()
     .replace(/&/g, "and")

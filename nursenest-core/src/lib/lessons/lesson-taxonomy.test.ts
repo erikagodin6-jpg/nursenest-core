@@ -114,6 +114,7 @@ test("no duplicate premiumized titles within the same pathway (effective list)",
 test("lessonCategoryToSlug round-trip smoke", () => {
   assert.equal(lessonCategoryToSlug("Renal & Urinary"), "renal-and-urinary");
   assert.equal(lessonCategoryToSlug("Fluids, Electrolytes & Acid-Base"), "fluids-electrolytes-and-acid-base");
+  assert.equal(lessonCategoryToSlug("Fundamentals"), "nursing-fundamentals");
 });
 
 test("inferLessonCategoryFromTitle respects pharm → infection → leadership → safety priority", () => {

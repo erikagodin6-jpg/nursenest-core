@@ -19,6 +19,14 @@ const SLUG_TO_CATEGORY: ReadonlyMap<string, LessonCategory> = new Map(
   LESSON_CATEGORIES.map((c) => [lessonCategoryToSlug(c), c]),
 );
 
+/**
+ * Legacy hub segment for Fundamentals before {@link lessonCategoryToSlug} reserved `nursing-fundamentals`.
+ * Still resolves when no published lesson claims slug `fundamentals` for the pathway (lesson wins).
+ */
+const MARKETING_HUB_CATEGORY_PATH_SLUG_ALIASES: ReadonlyMap<string, LessonCategory> = new Map([
+  ["fundamentals", "Fundamentals"],
+]);
+
 export const MARKETING_HUB_CATEGORY_PAGE_SIZE = 24;
 
 export const MARKETING_HUB_REVIEW_REQUIRED_PREVIEW_MAX = 8;
@@ -27,7 +35,7 @@ export const MARKETING_HUB_REVIEW_REQUIRED_PREVIEW_MAX = 8;
 export function lessonCategoryFromMarketingHubPathSegment(segment: string | null | undefined): LessonCategory | null {
   const raw = typeof segment === "string" ? segment.trim().toLowerCase() : "";
   if (!raw) return null;
-  return SLUG_TO_CATEGORY.get(raw) ?? null;
+  return SLUG_TO_CATEGORY.get(raw) ?? MARKETING_HUB_CATEGORY_PATH_SLUG_ALIASES.get(raw) ?? null;
 }
 
 export function marketingHubCategorySlugForCategory(category: LessonCategory): string {

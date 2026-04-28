@@ -36,8 +36,11 @@ test("maps known category slugs round-trip", () => {
     lessonCategoryFromMarketingHubPathSegment("fluids-electrolytes-and-acid-base"),
     "Fluids, Electrolytes & Acid-Base",
   );
+  assert.equal(lessonCategoryFromMarketingHubPathSegment("nursing-fundamentals"), "Fundamentals");
+  assert.equal(lessonCategoryFromMarketingHubPathSegment("fundamentals"), "Fundamentals");
   assert.equal(marketingHubCategorySlugForCategory("Pharmacology"), "pharmacology");
   assert.equal(lessonCategoryToSlug("Pharmacology"), "pharmacology");
+  assert.equal(marketingHubCategorySlugForCategory("Fundamentals"), "nursing-fundamentals");
 });
 
 test("returns null for non-category segments", () => {
