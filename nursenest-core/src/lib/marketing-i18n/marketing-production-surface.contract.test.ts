@@ -14,7 +14,9 @@ import { scanFlatMarketingMessagesForForbiddenValues } from "@/lib/marketing-i18
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = resolve(HERE, "..", "..", "..");
+const REPO_ROOT = resolve(PKG_ROOT, "..");
 const PAGES_EN = join(PKG_ROOT, "public", "i18n", "en", "pages.json");
+const MARKETING_EN = join(REPO_ROOT, "tools", "i18n", "marketing", "marketing-en.json");
 const VALIDATE_SCRIPT = join(PKG_ROOT, "scripts", "validate-marketing-production-surface.mjs");
 
 /** Must stay aligned with `scripts/validate-marketing-production-surface.mjs` REQUIRED_PAGE_KEYS. */
@@ -86,6 +88,15 @@ describe("marketing production surface (en/pages + validate script)", () => {
         false,
         `value for ${key} must not look like a raw i18n path`,
       );
+    }
+  });
+
+  it("canonical marketing-en.json contains the same required keys as strings (survives i18n:compile merge)", () => {
+    const marketing = JSON.parse(readFileSync(MARKETING_EN, "utf8")) as Record<string, unknown>;
+    for (const key of REQUIRED_MARKETING_SURFACE_PAGE_KEYS) {
+      const v = marketing[key];
+      assert.equal(typeof v, "string", `marketing-en.json: expected string for ${key}`);
+      assert.ok((v as string).trim().length > 0, `marketing-en.json: expected non-empty ${key}`);
     }
   });
 
