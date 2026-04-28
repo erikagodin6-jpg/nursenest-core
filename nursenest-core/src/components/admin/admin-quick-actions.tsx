@@ -1,6 +1,5 @@
 import Link from "next/link";
 import {
-  BookOpen,
   FileEdit,
   ImageIcon,
   KeyRound,
@@ -28,7 +27,7 @@ import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import type { StaffTier } from "@/lib/auth/staff-roles";
 
 const actions = [
-  { href: "/admin/blog/studio", label: "Article studio", desc: "AI blog package → draft → publish", icon: Sparkles, tone: "from-violet-500/14 to-fuchsia-500/10" },
+  { href: "/admin/blog", label: "Blog", desc: "Generate, review, schedule, publish", icon: Sparkles, tone: "from-violet-500/14 to-fuchsia-500/10" },
   { href: "/admin/analytics", label: "Analytics hub", desc: "Usage, CAT, subs, content jobs", icon: BarChart3, tone: "from-cyan-500/12 to-sky-500/10" },
   { href: "/admin/analytics/content", label: "Content analytics", desc: "Lessons, topics, learner activity", icon: BookMarked, tone: "from-teal-500/12 to-cyan-500/10" },
   { href: "/admin/inventory", label: "Inventory drill-down", desc: "Lessons & bank by pathway", icon: Package, tone: "from-emerald-500/12 to-teal-500/10" },
@@ -40,8 +39,6 @@ const actions = [
     tone: "from-indigo-500/12 to-violet-500/10",
   },
   { href: "/admin/hub/publishing", label: "Publishing hub", desc: "Blog + SEO entry", icon: Megaphone, tone: "from-violet-500/12 to-fuchsia-500/10" },
-  { href: "/admin/blog/generate", label: "Blog generator", desc: "AI drafts + SEO shells", icon: Sparkles, tone: "from-violet-500/15 to-fuchsia-500/10" },
-  { href: "/admin/blog/scheduler", label: "Blog scheduler", desc: "Drafts & publish queue", icon: BookOpen, tone: "from-amber-500/15 to-orange-500/10" },
   { href: "/admin/seo", label: "SEO review", desc: "Meta gaps & inventory", icon: Search, tone: "from-emerald-500/15 to-teal-500/10" },
   {
     href: "/admin/content-quality",

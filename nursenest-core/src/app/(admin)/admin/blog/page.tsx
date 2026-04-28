@@ -1,205 +1,320 @@
 import Link from "next/link";
-import { BlogCampaignItemStatus, BlogPostStatus } from "@prisma/client";
+import {
+  BlogBatchScheduleItemStatus,
+  BlogCampaignItemStatus,
+  BlogDraftGenerationBatchItemStatus,
+  BlogPostStatus,
+  ContentAutomationLogCategory,
+  type ContentAutomationLogStatus,
+} from "@prisma/client";
 import { requireAdmin } from "@/lib/auth/guards";
 import { prisma } from "@/lib/db";
+import { AdminBlogControlPanelClient } from "@/components/admin/admin-blog-control-panel-client";
+import { getAdminBlogOperationsStatus } from "@/lib/blog/admin-blog-operations-status";
 
 export const dynamic = "force-dynamic";
 
-function statusBadgeClass(status: BlogPostStatus) {
+type SearchParams = { id?: string; preview?: string };
+
+function statusBadgeClass(status: BlogPostStatus | BlogCampaignItemStatus | BlogBatchScheduleItemStatus | BlogDraftGenerationBatchItemStatus) {
   switch (status) {
     case BlogPostStatus.PUBLISHED:
+    case BlogCampaignItemStatus.PUBLISHED:
+    case BlogBatchScheduleItemStatus.PUBLISHED:
+    case BlogDraftGenerationBatchItemStatus.COMPLETED:
       return "bg-emerald-500/15 text-emerald-950 dark:text-emerald-100";
     case BlogPostStatus.SCHEDULED:
+    case BlogCampaignItemStatus.SCHEDULED:
+    case BlogBatchScheduleItemStatus.PENDING:
+    case BlogDraftGenerationBatchItemStatus.PENDING:
       return "bg-amber-500/15 text-amber-950 dark:text-amber-100";
-    case BlogPostStatus.APPROVED:
+    case BlogCampaignItemStatus.GENERATING:
+    case BlogBatchScheduleItemStatus.GENERATING:
+    case BlogDraftGenerationBatchItemStatus.GENERATING:
       return "bg-sky-500/15 text-sky-950 dark:text-sky-100";
-    case BlogPostStatus.NEEDS_REVIEW:
-      return "bg-orange-500/15 text-orange-950 dark:text-orange-100";
     case BlogPostStatus.FAILED:
-      return "bg-red-500/15 text-red-950 dark:text-red-100";
+    case BlogCampaignItemStatus.FAILED:
+    case BlogBatchScheduleItemStatus.FAILED:
+    case BlogDraftGenerationBatchItemStatus.FAILED:
+      return "bg-rose-500/15 text-rose-950 dark:text-rose-100";
     default:
       return "bg-muted text-foreground";
   }
 }
 
-export default async function AdminBlogHubPage() {
+function automationBadgeClass(status: ContentAutomationLogStatus): string {
+  if (status === "SUCCEEDED") return "bg-emerald-500/15 text-emerald-950 dark:text-emerald-100";
+  if (status === "FAILED") return "bg-rose-500/15 text-rose-950 dark:text-rose-100";
+  if (status === "SKIPPED") return "bg-zinc-500/15 text-zinc-900 dark:text-zinc-100";
+  return "bg-amber-500/15 text-amber-950 dark:text-amber-100";
+}
+
+function fmtDate(value: Date | null | undefined): string {
+  return value ? value.toISOString().replace("T", " ").slice(0, 16) : "No date";
+}
+
+export default async function AdminBlogConsolePage({ searchParams }: { searchParams?: Promise<SearchParams> }) {
   await requireAdmin();
+  const sp = (await searchParams) ?? {};
+  const initialPostId = typeof sp.id === "string" && sp.id.length > 0 ? sp.id : null;
+  const initialPreviewOpen = sp.preview === "1" || sp.preview === "true";
+
   const [
-    draft,
-    needsReview,
-    approved,
-    scheduled,
-    published,
+    opsStatus,
+    scheduledPosts,
+    campaignItems,
+    scheduleItems,
+    draftBatchItems,
     failedPosts,
-    recent,
-    next,
-    campaignCount,
-    queuedItems,
-    failedItems,
+    failedActivity,
   ] = await Promise.all([
-    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.DRAFT } }),
-    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.NEEDS_REVIEW } }),
-    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.APPROVED } }),
-    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.SCHEDULED } }),
-    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.PUBLISHED } }),
-    prisma.blogPost.count({ where: { postStatus: BlogPostStatus.FAILED } }),
+    getAdminBlogOperationsStatus(),
     prisma.blogPost.findMany({
+      where: { postStatus: { in: [BlogPostStatus.SCHEDULED, BlogPostStatus.APPROVED, BlogPostStatus.NEEDS_REVIEW] } },
+      orderBy: [{ publishAt: "asc" }, { updatedAt: "desc" }],
+      take: 12,
+      select: { id: true, title: true, slug: true, postStatus: true, publishAt: true, updatedAt: true },
+    }),
+    prisma.blogCampaignItem.findMany({
+      where: { status: { in: [BlogCampaignItemStatus.QUEUED, BlogCampaignItemStatus.GENERATING, BlogCampaignItemStatus.FAILED] } },
+      orderBy: [{ plannedPublishAt: "asc" }, { updatedAt: "desc" }],
+      take: 8,
+      select: { id: true, plannedTitle: true, plannedKeyword: true, plannedSlug: true, plannedPublishAt: true, status: true, error: true },
+    }),
+    prisma.blogBatchScheduleItem.findMany({
+      where: { status: { in: [BlogBatchScheduleItemStatus.PENDING, BlogBatchScheduleItemStatus.GENERATING, BlogBatchScheduleItemStatus.FAILED] } },
+      orderBy: [{ plannedPublishAt: "asc" }, { updatedAt: "desc" }],
+      take: 8,
+      select: { id: true, topicRaw: true, plannedPublishAt: true, status: true, failureReason: true, blogPostId: true },
+    }),
+    prisma.blogDraftGenerationBatchItem.findMany({
+      where: {
+        status: {
+          in: [
+            BlogDraftGenerationBatchItemStatus.PENDING,
+            BlogDraftGenerationBatchItemStatus.GENERATING,
+            BlogDraftGenerationBatchItemStatus.FAILED,
+          ],
+        },
+      },
+      orderBy: [{ updatedAt: "desc" }],
+      take: 8,
+      select: { id: true, topicRaw: true, status: true, error: true, blogPostId: true, updatedAt: true },
+    }),
+    prisma.blogPost.findMany({
+      where: { postStatus: BlogPostStatus.FAILED },
       orderBy: { updatedAt: "desc" },
       take: 8,
-      select: { id: true, slug: true, title: true, postStatus: true, publishAt: true, updatedAt: true },
+      select: { id: true, title: true, slug: true, postStatus: true, updatedAt: true },
     }),
-    prisma.blogPost.findFirst({
-      where: { postStatus: BlogPostStatus.SCHEDULED, publishAt: { gte: new Date() } },
-      orderBy: { publishAt: "asc" },
-      select: { title: true, publishAt: true, slug: true },
+    prisma.contentAutomationLog.findMany({
+      where: {
+        category: {
+          in: [
+            ContentAutomationLogCategory.BLOG_AI_SIMPLE,
+            ContentAutomationLogCategory.BLOG_AI_BATCH_ITEM,
+            ContentAutomationLogCategory.BLOG_CONTROL_PANEL_PIPELINE,
+            ContentAutomationLogCategory.BLOG_CONTROL_PANEL_PERSIST,
+            ContentAutomationLogCategory.BLOG_PUBLISH_BLOCKED,
+            ContentAutomationLogCategory.BLOG_PUBLISH,
+            ContentAutomationLogCategory.BLOG_MARK_FAILED,
+            ContentAutomationLogCategory.BLOG_REFERENCE_GATE,
+            ContentAutomationLogCategory.BLOG_INTERNAL_LINK_CHECK,
+          ],
+        },
+        status: "FAILED",
+      },
+      orderBy: { createdAt: "desc" },
+      take: 8,
+      select: { id: true, jobType: true, topic: true, summary: true, error: true, status: true, createdAt: true, blogPostId: true },
     }),
-    prisma.blogCampaign.count(),
-    prisma.blogCampaignItem.count({ where: { status: { in: [BlogCampaignItemStatus.QUEUED, BlogCampaignItemStatus.GENERATING] } } }),
-    prisma.blogCampaignItem.count({ where: { status: BlogCampaignItemStatus.FAILED } }),
   ]);
 
-  const missingSeo = await prisma.blogPost.count({
-    where: {
-      OR: [{ seoTitle: null }, { seoDescription: null }, { seoTitle: "" }, { seoDescription: "" }],
-    },
-  });
+  const queuedCount =
+    campaignItems.filter((item) => item.status !== BlogCampaignItemStatus.FAILED).length +
+    scheduleItems.filter((item) => item.status !== BlogBatchScheduleItemStatus.FAILED).length +
+    draftBatchItems.filter((item) => item.status !== BlogDraftGenerationBatchItemStatus.FAILED).length;
+  const failureCount = failedPosts.length + failedActivity.length + campaignItems.filter((item) => item.status === BlogCampaignItemStatus.FAILED).length;
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Admin</p>
-          <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">Blog operations</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Draft → review → approved → scheduled / published. Slugs stay unique; non-public statuses never hit the live blog.
+          <p className="text-xs font-semibold uppercase tracking-wide text-primary">Admin · Blog</p>
+          <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">Blog console</h1>
+          <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
+            One workflow for generation, review, SEO, scheduling, publishing, and queue health. Backend APIs and publish gates stay unchanged.
           </p>
         </div>
-        <Link href="/admin" className="text-sm font-semibold text-primary underline">
-          ← Overview
-        </Link>
+        <div className="flex flex-wrap gap-3 text-sm font-semibold">
+          <Link href="/admin/blog/library" className="text-primary underline">
+            Library
+          </Link>
+          <Link href="/admin/automation-logs" className="text-muted-foreground underline">
+            Automation logs
+          </Link>
+        </div>
       </div>
 
-      <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        <div className="rounded-xl border border-border/70 bg-gradient-to-br from-slate-500/10 to-transparent p-5">
-          <p className="text-xs font-medium uppercase text-muted-foreground">Drafts</p>
-          <p className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{draft}</p>
+      <section className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="rounded-lg border border-border/60 bg-[var(--theme-card-bg)] p-3">
+          <p className="text-xs uppercase text-muted-foreground">Canonical posts</p>
+          <p className="mt-1 text-2xl font-bold">{opsStatus.canonicalBlogPostCount}</p>
         </div>
-        <div className="rounded-xl border border-orange-500/25 bg-gradient-to-br from-orange-500/10 to-transparent p-5">
-          <p className="text-xs font-medium uppercase text-muted-foreground">Needs review</p>
-          <p className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{needsReview}</p>
+        <div className="rounded-lg border border-border/60 bg-[var(--theme-card-bg)] p-3">
+          <p className="text-xs uppercase text-muted-foreground">Localized variants</p>
+          <p className="mt-1 text-2xl font-bold">{opsStatus.localizedVariantCount ?? "Unavailable"}</p>
         </div>
-        <div className="rounded-xl border border-sky-500/25 bg-gradient-to-br from-sky-500/10 to-transparent p-5">
-          <p className="text-xs font-medium uppercase text-muted-foreground">Approved</p>
-          <p className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{approved}</p>
+        <div className="rounded-lg border border-border/60 bg-[var(--theme-card-bg)] p-3">
+          <p className="text-xs uppercase text-muted-foreground">Queued items</p>
+          <p className="mt-1 text-2xl font-bold">{queuedCount}</p>
         </div>
-        <div className="rounded-xl border border-amber-500/25 bg-gradient-to-br from-amber-500/12 to-transparent p-5">
-          <p className="text-xs font-medium uppercase text-muted-foreground">Scheduled</p>
-          <p className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{scheduled}</p>
+        <div className="rounded-lg border border-border/60 bg-[var(--theme-card-bg)] p-3">
+          <p className="text-xs uppercase text-muted-foreground">Visible failures</p>
+          <p className="mt-1 text-2xl font-bold">{failureCount}</p>
         </div>
-        <div className="rounded-xl border border-emerald-500/25 bg-gradient-to-br from-emerald-500/12 to-transparent p-5">
-          <p className="text-xs font-medium uppercase text-muted-foreground">Published</p>
-          <p className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{published}</p>
-        </div>
-        <div className="rounded-xl border border-red-500/20 bg-gradient-to-br from-red-500/10 to-transparent p-5">
-          <p className="text-xs font-medium uppercase text-muted-foreground">Failed</p>
-          <p className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{failedPosts}</p>
+        <div className="rounded-lg border border-border/60 bg-[var(--theme-card-bg)] p-3">
+          <p className="text-xs uppercase text-muted-foreground">Translation generation</p>
+          <p className="mt-1 text-lg font-semibold">{opsStatus.translationGenerationAvailable ? "Available" : "Unavailable"}</p>
         </div>
       </section>
 
-      <section className="mt-4">
-        <div className="rounded-xl border border-rose-500/20 bg-gradient-to-br from-rose-500/10 to-transparent p-5 sm:inline-block sm:min-w-[14rem]">
-          <p className="text-xs font-medium uppercase text-muted-foreground">Missing SEO (all posts)</p>
-          <p className="mt-1 text-2xl font-bold text-[var(--theme-heading-text)]">{missingSeo}</p>
+      <nav className="mt-6 flex flex-wrap gap-2 text-xs font-semibold" aria-label="Blog console sections">
+        {[
+          ["Generate blog draft", "#generate-blog-draft"],
+          ["Draft review/edit", "#draft-review-edit"],
+          ["SEO fields/title/slug/meta description", "#seo-fields"],
+          ["Schedule publish date/time", "#schedule-publish"],
+          ["Publish now", "#publish-now"],
+          ["Scheduled/queued posts with status", "#scheduled-queued-posts"],
+          ["Error/failure messages", "#error-failure-messages"],
+        ].map(([label, href]) => (
+          <a key={href} href={href} className="rounded-full border border-border bg-muted/40 px-3 py-1 hover:bg-muted">
+            {label}
+          </a>
+        ))}
+      </nav>
+
+      <section id="generate-blog-draft" className="mt-8 scroll-mt-24">
+        <AdminBlogControlPanelClient initialPostId={initialPostId} initialPreviewOpen={initialPreviewOpen} />
+      </section>
+
+      <section id="scheduled-queued-posts" className="mt-10 scroll-mt-24 rounded-xl border border-border/80 bg-[var(--theme-card-bg)] p-6">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary">Scheduled/queued posts with status</p>
+            <h2 className="mt-1 text-xl font-semibold text-[var(--theme-heading-text)]">Queue and publish status</h2>
+          </div>
+          <Link href="/admin/blog/draft-batch" className="text-sm font-semibold text-primary underline">
+            Batch queue
+          </Link>
+        </div>
+
+        <div className="mt-5 grid gap-5 lg:grid-cols-2">
+          <StatusList title="Editorial queue">
+            {scheduledPosts.map((post) => (
+              <li key={post.id} className="border-b border-border/40 py-2 last:border-0">
+                <Link href={`/admin/blog?id=${encodeURIComponent(post.id)}`} className="font-medium text-primary underline-offset-2 hover:underline">
+                  {post.title}
+                </Link>
+                <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                  <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(post.postStatus)}`}>{post.postStatus}</span>
+                  <span>{fmtDate(post.publishAt ?? post.updatedAt)}</span>
+                  <span className="font-mono">{post.slug}</span>
+                </p>
+              </li>
+            ))}
+          </StatusList>
+
+          <StatusList title="Campaign items">
+            {campaignItems.map((item) => (
+              <li key={item.id} className="border-b border-border/40 py-2 last:border-0">
+                <p className="font-medium">{item.plannedTitle ?? item.plannedKeyword ?? item.plannedSlug ?? "Untitled campaign item"}</p>
+                <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                  <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.status)}`}>{item.status}</span>
+                  <span>{fmtDate(item.plannedPublishAt)}</span>
+                  {item.error ? <span className="text-rose-700 dark:text-rose-300">{item.error}</span> : null}
+                </p>
+              </li>
+            ))}
+          </StatusList>
+
+          <StatusList title="Scheduled batch items">
+            {scheduleItems.map((item) => (
+              <li key={item.id} className="border-b border-border/40 py-2 last:border-0">
+                <p className="font-medium">{item.topicRaw}</p>
+                <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                  <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.status)}`}>{item.status}</span>
+                  <span>{fmtDate(item.plannedPublishAt)}</span>
+                  {item.blogPostId ? <Link href={`/admin/blog?id=${encodeURIComponent(item.blogPostId)}`} className="text-primary underline">Open draft</Link> : null}
+                  {item.failureReason ? <span className="text-rose-700 dark:text-rose-300">{item.failureReason}</span> : null}
+                </p>
+              </li>
+            ))}
+          </StatusList>
+
+          <StatusList title="Draft generation batch">
+            {draftBatchItems.map((item) => (
+              <li key={item.id} className="border-b border-border/40 py-2 last:border-0">
+                <p className="font-medium">{item.topicRaw}</p>
+                <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                  <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.status)}`}>{item.status}</span>
+                  <span>{fmtDate(item.updatedAt)}</span>
+                  {item.blogPostId ? <Link href={`/admin/blog?id=${encodeURIComponent(item.blogPostId)}`} className="text-primary underline">Open draft</Link> : null}
+                  {item.error ? <span className="text-rose-700 dark:text-rose-300">{item.error}</span> : null}
+                </p>
+              </li>
+            ))}
+          </StatusList>
         </div>
       </section>
 
-      <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Link
-          href="/admin/blog/library"
-          className="rounded-xl border border-primary/40 bg-gradient-to-br from-primary/12 to-sky-500/10 p-6 text-center font-semibold text-primary hover:bg-primary/18"
-        >
-          Blog library →
-        </Link>
-        <Link
-          href="/admin/blog/control-panel"
-          className="rounded-xl border border-primary/35 bg-gradient-to-br from-primary/15 to-emerald-500/10 p-6 text-center font-semibold text-primary hover:bg-primary/20"
-        >
-          AI control panel →
-        </Link>
-        <Link
-          href="/admin/blog/generate"
-          className="rounded-xl border border-primary/30 bg-primary/10 p-6 text-center font-semibold text-primary hover:bg-primary/15"
-        >
-          Legacy generator →
-        </Link>
-        <Link
-          href="/admin/blog/campaigns"
-          className="rounded-xl border border-border/80 bg-[var(--theme-card-bg)] p-6 text-center font-semibold hover:bg-muted/40"
-        >
-          Campaigns →
-        </Link>
-        <Link
-          href="/admin/blog/scheduler"
-          className="rounded-xl border border-border/80 bg-[var(--theme-card-bg)] p-6 text-center font-semibold hover:bg-muted/40"
-        >
-          Scheduler →
-        </Link>
-        <Link
-          href="/admin/blog/topic-batch"
-          className="rounded-xl border border-primary/25 bg-primary/8 p-6 text-center font-semibold text-primary hover:bg-primary/12"
-        >
-          Topic batch schedule →
-        </Link>
-        <Link
-          href="/admin/blog/draft-batch"
-          className="rounded-xl border border-primary/30 bg-primary/10 p-6 text-center font-semibold text-primary hover:bg-primary/15"
-        >
-          Batch draft queue →
-        </Link>
-        <Link
-          href="/admin/automation-logs"
-          className="rounded-xl border border-border/80 bg-[var(--theme-card-bg)] p-6 text-center font-semibold hover:bg-muted/40"
-        >
-          Automation logs →
-        </Link>
-        <Link
-          href="/admin/seo"
-          className="rounded-xl border border-border/80 bg-[var(--theme-card-bg)] p-6 text-center font-semibold hover:bg-muted/40"
-        >
-          SEO backlog →
-        </Link>
-      </section>
-
-      <p className="mt-4 text-xs text-muted-foreground">
-        Campaigns: {campaignCount} · Queue pending: {queuedItems} · Queue failed: {failedItems}
-      </p>
-
-      {next ? (
-        <p className="mt-6 text-sm text-muted-foreground">
-          Next scheduled: <strong>{next.title}</strong> at {next.publishAt?.toISOString()} ({next.slug})
-        </p>
-      ) : null}
-
-      <section className="mt-8 nn-card p-6">
-        <h2 className="text-lg font-semibold">Recently updated</h2>
-        <ul className="mt-3 space-y-2 text-sm">
-          {recent.map((p) => (
-            <li key={p.id} className="flex flex-wrap items-center justify-between gap-2 border-b border-border/40 py-2">
-              <Link
-                href={`/admin/blog/control-panel?id=${encodeURIComponent(p.id)}`}
-                className="font-medium text-primary underline-offset-2 hover:underline"
-              >
-                {p.title}
-              </Link>
-              <span className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(p.postStatus)}`}>{p.postStatus}</span>
-                <span>{p.updatedAt.toISOString().slice(0, 10)}</span>
-                <span className="font-mono text-[10px] opacity-80">{p.slug}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
+      <section id="error-failure-messages" className="mt-8 scroll-mt-24 rounded-xl border border-rose-500/25 bg-rose-500/[0.04] p-6">
+        <p className="text-xs font-semibold uppercase tracking-wide text-rose-700 dark:text-rose-300">Error/failure messages</p>
+        <h2 className="mt-1 text-xl font-semibold text-[var(--theme-heading-text)]">Recent failures</h2>
+        <div className="mt-4 grid gap-5 lg:grid-cols-2">
+          <StatusList title="Failed posts">
+            {failedPosts.map((post) => (
+              <li key={post.id} className="border-b border-border/40 py-2 last:border-0">
+                <Link href={`/admin/blog?id=${encodeURIComponent(post.id)}`} className="font-medium text-primary underline-offset-2 hover:underline">
+                  {post.title}
+                </Link>
+                <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                  <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(post.postStatus)}`}>{post.postStatus}</span>
+                  <span>{fmtDate(post.updatedAt)}</span>
+                  <span className="font-mono">{post.slug}</span>
+                </p>
+              </li>
+            ))}
+          </StatusList>
+          <StatusList title="Automation failures">
+            {failedActivity.map((item) => (
+              <li key={item.id} className="border-b border-border/40 py-2 last:border-0">
+                <p className="font-medium">{item.jobType}</p>
+                <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                  <span className={`rounded-full px-2 py-0.5 font-medium ${automationBadgeClass(item.status)}`}>{item.status}</span>
+                  <span>{fmtDate(item.createdAt)}</span>
+                  {item.blogPostId ? <Link href={`/admin/blog?id=${encodeURIComponent(item.blogPostId)}`} className="text-primary underline">Open draft</Link> : null}
+                </p>
+                <p className="mt-1 text-xs text-rose-800 dark:text-rose-200">{item.error ?? item.summary ?? item.topic ?? "No failure message recorded."}</p>
+              </li>
+            ))}
+          </StatusList>
+        </div>
       </section>
     </main>
+  );
+}
+
+function StatusList({ title, children }: { title: string; children: React.ReactNode }) {
+  const items = Array.isArray(children) ? children.filter(Boolean) : children;
+  const empty = Array.isArray(items) && items.length === 0;
+  return (
+    <div>
+      <h3 className="text-sm font-semibold text-[var(--theme-heading-text)]">{title}</h3>
+      <ul className="mt-2 text-sm">
+        {empty ? <li className="py-3 text-xs text-muted-foreground">No current items.</li> : items}
+      </ul>
+    </div>
   );
 }

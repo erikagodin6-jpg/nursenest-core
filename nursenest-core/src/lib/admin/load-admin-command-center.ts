@@ -449,7 +449,7 @@ export async function loadAdminCommandCenter(): Promise<AdminCommandCenterData |
         severity: "warning",
         title: `${overdueSched} scheduled blog post(s) past publish time`,
         detail: "Run cron blog-publish or promote from ops. Posts may already be visible via SCHEDULED+publishAt rule.",
-        href: "/admin/blog/scheduler",
+        href: "/admin/blog#scheduled-queued-posts",
       });
     }
     if (blogMissingSeo > 0) {

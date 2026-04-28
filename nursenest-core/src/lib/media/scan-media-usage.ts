@@ -51,7 +51,7 @@ export async function scanMediaUsage(
         type: "blog",
         id: r.id,
         label: r.title.slice(0, 120),
-        href: `/admin/blog/control-panel?id=${encodeURIComponent(r.id)}`,
+        href: `/admin/blog?id=${encodeURIComponent(r.id)}`,
       });
     }
 
@@ -65,7 +65,7 @@ export async function scanMediaUsage(
         type: "blog",
         id: r.id,
         label: r.title.slice(0, 120),
-        href: `/admin/blog/control-panel?id=${encodeURIComponent(r.id)}`,
+        href: `/admin/blog?id=${encodeURIComponent(r.id)}`,
       });
     }
 

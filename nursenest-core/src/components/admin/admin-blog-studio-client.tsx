@@ -366,8 +366,8 @@ export function AdminBlogStudioClient() {
         <h2 className="text-lg font-semibold text-[var(--theme-heading-text)]">Topic → structured package → draft</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           Uses the same two-stage pipeline as the{" "}
-          <Link href="/admin/blog/control-panel" className="font-semibold text-primary underline">
-            AI control panel
+          <Link href="/admin/blog" className="font-semibold text-primary underline">
+            blog console
           </Link>
           : editorial JSON plan, then HTML body, then a real <code className="rounded bg-muted px-1">DRAFT</code> row. Add verified
           sources (HTTPS or DOI + metadata) to satisfy the citation gate on high-risk topics. Future locales: store English first;
@@ -550,7 +550,7 @@ export function AdminBlogStudioClient() {
             <h2 className="text-xl font-bold text-[var(--theme-heading-text)]">2. Generated package</h2>
             <div className="flex flex-wrap gap-2">
               <Link
-                href={`/admin/blog/control-panel?id=${encodeURIComponent(post.id)}`}
+                href={`/admin/blog?id=${encodeURIComponent(post.id)}`}
                 className="rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm font-semibold hover:bg-muted/50"
               >
                 Open in full editor

@@ -611,7 +611,7 @@ export function AdminBlogDraftBatchClient() {
                 </p>
               ) : null}
               <Link
-                href="/admin/blog/control-panel"
+                href="/admin/blog"
                 className="rounded-full border border-primary/40 px-4 py-2 text-sm font-semibold text-primary"
               >
                 Open control panel
@@ -638,7 +638,7 @@ export function AdminBlogDraftBatchClient() {
                     </td>
                     <td className="py-2 pr-2 align-top">
                       {row.blogPost ? (
-                        <Link href={`/admin/blog/control-panel?id=${row.blogPost.id}`} className="font-medium text-primary underline">
+                        <Link href={`/admin/blog?id=${row.blogPost.id}`} className="font-medium text-primary underline">
                           {row.blogPost.slug}
                         </Link>
                       ) : null}

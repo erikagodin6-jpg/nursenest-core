@@ -43,8 +43,7 @@ const LEGACY_STYLE_GROUPS: readonly HubGroup[] = [
     subtitle: "Legacy blog / social / SEO tabs — publishing hub plus schedulers.",
     items: [
       { href: "/admin/hub/publishing", title: "Publishing hub", body: "Blog + SEO shortcuts in one place." },
-      { href: "/admin/blog/studio", title: "Article studio", body: "Draft packages and editorial workflow." },
-      { href: "/admin/blog/scheduler", title: "Blog scheduler", body: "Queue and publish timing." },
+      { href: "/admin/blog", title: "Blog console", body: "Draft packages, editorial workflow, queue, and publish timing." },
       { href: "/admin/seo", title: "SEO & internal links", body: "Meta gaps, href inventory, fixes." },
     ],
   },

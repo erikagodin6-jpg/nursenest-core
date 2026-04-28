@@ -28,9 +28,9 @@ const cards: HubCard[] = [
     icon: Layers,
   },
   {
-    href: "/admin/blog/generate",
-    title: "Blog article",
-    description: "Topic → draft post; pair with blog control panel for linking and references.",
+    href: "/admin/blog",
+    title: "Blog console",
+    description: "Topic → draft post, review, SEO, schedule, publish, and queue status.",
     icon: BookOpen,
   },
   {
@@ -38,12 +38,6 @@ const cards: HubCard[] = [
     title: "Blog topic batch",
     description: "Multiple topics in one run.",
     icon: BookOpen,
-  },
-  {
-    href: "/admin/blog/control-panel",
-    title: "Blog AI panel",
-    description: "Orchestration, internal linking, and publish gates.",
-    icon: Sparkles,
   },
   {
     href: "/admin/hub/ai",

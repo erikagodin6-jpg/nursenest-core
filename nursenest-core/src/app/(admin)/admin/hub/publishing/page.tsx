@@ -1,39 +1,15 @@
 import Link from "next/link";
-import { BookOpen, FileText, Megaphone, Search, Sparkles, Wand2 } from "lucide-react";
+import { FileText, Megaphone, Search, Sparkles } from "lucide-react";
 import { requireAdmin } from "@/lib/auth/guards";
 
 export const dynamic = "force-dynamic";
 
 const CARDS = [
   {
-    href: "/admin/blog/studio",
-    title: "Article studio",
-    body: "Topic → structured SEO package, draft HTML, review gates, then full editor.",
-    icon: Sparkles,
-  },
-  {
     href: "/admin/blog",
-    title: "Blog library",
-    body: "List, edit, schedule, and publish articles.",
-    icon: FileText,
-  },
-  {
-    href: "/admin/blog/control-panel",
-    title: "Blog AI control panel",
-    body: "Campaign-style generation, regenerate, persist drafts.",
-    icon: Wand2,
-  },
-  {
-    href: "/admin/blog/generate",
-    title: "Blog generator",
-    body: "Single-article AI workflow with SEO shell.",
+    title: "Blog console",
+    body: "Generate, review, SEO, schedule, publish, and monitor queue status.",
     icon: Sparkles,
-  },
-  {
-    href: "/admin/blog/scheduler",
-    title: "Scheduler",
-    body: "Queue drafts and timed publishes.",
-    icon: BookOpen,
   },
   {
     href: "/admin/blog/draft-batch",

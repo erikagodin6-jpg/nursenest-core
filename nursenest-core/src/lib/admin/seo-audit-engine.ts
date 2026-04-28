@@ -217,7 +217,7 @@ export async function loadMetadataAudit(prisma: PrismaClient): Promise<{
       title: p.title,
       postStatus: String(p.postStatus),
       issues,
-      editHref: `/admin/blog/control-panel?id=${encodeURIComponent(p.id)}`,
+      editHref: `/admin/blog?id=${encodeURIComponent(p.id)}`,
       publicHref: `/blog/${encodeURIComponent(p.slug)}`,
     });
   }
@@ -304,7 +304,7 @@ export async function loadSlugCollisions(prisma: PrismaClient): Promise<SlugColl
       type: "blog",
       id: b.id,
       label: b.title.slice(0, 80),
-      href: `/admin/blog/control-panel?id=${encodeURIComponent(b.id)}`,
+      href: `/admin/blog?id=${encodeURIComponent(b.id)}`,
     });
     map.set(b.slug, arr);
   }
@@ -376,7 +376,7 @@ export async function loadWeakInternalLinking(prisma: PrismaClient): Promise<Wea
       internalAnchors,
       relatedPaths,
       reasons,
-      editHref: `/admin/blog/control-panel?id=${encodeURIComponent(p.id)}`,
+      editHref: `/admin/blog?id=${encodeURIComponent(p.id)}`,
     });
   }
   return out;
@@ -416,7 +416,7 @@ export async function loadBrokenInternalLinks(prisma: PrismaClient, ctx: SeoAudi
           href: h,
           status: check.status,
           detail: check.detail,
-          editHref: `/admin/blog/control-panel?id=${encodeURIComponent(b.id)}`,
+          editHref: `/admin/blog?id=${encodeURIComponent(b.id)}`,
         });
       }
     }
@@ -495,7 +495,7 @@ export async function loadLinkOpportunities(prisma: PrismaClient): Promise<Oppor
         title: p.title,
         exam: p.exam,
         hints,
-        editHref: `/admin/blog/control-panel?id=${encodeURIComponent(p.id)}`,
+        editHref: `/admin/blog?id=${encodeURIComponent(p.id)}`,
       });
     }
   }

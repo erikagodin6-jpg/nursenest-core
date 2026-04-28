@@ -13,8 +13,8 @@ export default async function AdminMediaLibraryPage() {
         <Link href="/admin" className="text-primary underline">
           ← Admin home
         </Link>
-        <Link href="/admin/blog/control-panel" className="text-muted-foreground underline">
-          Blog panel
+        <Link href="/admin/blog" className="text-muted-foreground underline">
+          Blog
         </Link>
         <Link href="/admin/lessons" className="text-muted-foreground underline">
           Lessons

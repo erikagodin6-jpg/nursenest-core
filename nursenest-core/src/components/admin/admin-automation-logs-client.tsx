@@ -126,7 +126,7 @@ export function AdminAutomationLogsClient() {
 
               <td>
                 {row.blogPost ? (
-                  <Link href={`/admin/blog/control-panel?id=${row.blogPost.id}`}>
+                  <Link href={`/admin/blog?id=${row.blogPost.id}`}>
                     {row.blogPost.slug}
                   </Link>
                 ) : (

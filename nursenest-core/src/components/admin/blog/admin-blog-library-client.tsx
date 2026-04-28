@@ -58,7 +58,7 @@ function previewHref(row: AdminBlogLibraryRow) {
       row.publishAt &&
       new Date(row.publishAt).getTime() <= Date.now());
   if (live) return `/blog/${row.slug}`;
-  return `/admin/blog/control-panel?id=${encodeURIComponent(row.id)}&preview=1`;
+  return `/admin/blog?id=${encodeURIComponent(row.id)}&preview=1`;
 }
 
 export function AdminBlogLibraryClient() {
@@ -180,7 +180,7 @@ export function AdminBlogLibraryClient() {
       }
       await load();
       if (j.post?.id) {
-        window.open(`/admin/blog/control-panel?id=${encodeURIComponent(j.post.id)}`, "_blank", "noopener,noreferrer");
+        window.open(`/admin/blog?id=${encodeURIComponent(j.post.id)}`, "_blank", "noopener,noreferrer");
       }
     } finally {
       setBusyId(null);
@@ -345,7 +345,7 @@ export function AdminBlogLibraryClient() {
                   <td className="px-3 py-2">
                     <div className="flex min-w-[200px] flex-col gap-1">
                       <Link
-                        href={`/admin/blog/control-panel?id=${encodeURIComponent(row.id)}`}
+                        href={`/admin/blog?id=${encodeURIComponent(row.id)}`}
                         className="text-xs font-semibold text-primary underline-offset-2 hover:underline"
                       >
                         Edit

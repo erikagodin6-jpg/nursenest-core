@@ -40,7 +40,7 @@ export function AdminWorkspaceStripDisplay({ data }: { data: AdminWorkspaceStrip
           </span>
           {data.blog.overdueScheduled > 0 ? (
             <Link
-              href="/admin/blog/scheduler"
+              href="/admin/blog#scheduled-queued-posts"
               className="rounded-full bg-rose-500/15 px-2.5 py-1 font-semibold text-rose-900 hover:bg-rose-500/25 dark:text-rose-100"
             >
               {data.blog.overdueScheduled} overdue scheduled post{data.blog.overdueScheduled === 1 ? "" : "s"}
