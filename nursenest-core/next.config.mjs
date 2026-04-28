@@ -25,12 +25,20 @@ const isLowMemoryBuild =
     autoLowMemoryHost);
 
 /**
+ * Production Next config: avoid duplicate validation inside `next build`.
+ *
  * `next build` runs an integrated "Linting and checking validity of types" pass by default.
  * That duplicates `tsc` + ESLint and can SIGKILL the process on memory-tight builders after compile.
  *
- * We disable those integrated checks here. **Strictness is unchanged** when CI / deploy runs, in order:
- *   `npm run typecheck` → `npm run test:reliability` (and other gates you use) → `npm run build`
- * Use `npm run validate:prebuild` for the typecheck + reliability slice before a production build.
+ * `eslint.ignoreDuringBuilds` and `typescript.ignoreBuildErrors` below are **safe only because**
+ * CI / deploy must run strict checks **before** `npm run build`, in order:
+ *   1. `npm run typecheck`
+ *   2. `npm run test:reliability` (and any other suites your pipeline requires)
+ *   3. then `npm run build`
+ *
+ * Shortcut for (1)+(2): `npm run validate:prebuild`
+ *
+ * Note: Next.js 14.2 resolves `next.config.js` / `next.config.mjs` only (not `next.config.ts`).
  */
 const webpackParallelism = isLowMemoryBuild ? 1 : 2;
 
