@@ -88,6 +88,20 @@ export function marketingPathwayLessonsIndexPath(
   return buildExamPathwayPath(pathway, "lessons");
 }
 
+/**
+ * Marketing category hub: `/{country}/{role}/{exam}/lessons/{categorySlug}`.
+ * {@link marketingLessonDetailHref} uses the same base + segment; category slugs are reserved via
+ * {@link resolveMarketingLessonsHubDynamicSegment} so lesson detail wins when a slug collides.
+ */
+export function marketingPathwayLessonsCategoryPath(
+  pathway: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">,
+  categorySlug: string,
+): string {
+  const base = marketingPathwayLessonsIndexPath(pathway).replace(/\/$/, "");
+  const seg = categorySlug.trim().toLowerCase();
+  return seg ? `${base}/${encodeURIComponent(seg)}` : base;
+}
+
 type MarketingExamHubSubpath = "lessons" | "questions" | "cat";
 
 /**
