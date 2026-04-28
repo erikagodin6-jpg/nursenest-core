@@ -94,6 +94,14 @@ let rnCardiovascularExpansionPathwaysCache: Record<string, CatalogShape["pathway
   null;
 let rnNeurologicalExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null =
   null;
+let rnHematologyOncologyExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null =
+  null;
+let rnGastrointestinalExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null =
+  null;
+let rnIntegumentaryWoundCareExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null =
+  null;
+let rnInfectionControlExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+let rnLeadershipDelegationExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 let newGradTransitionPathwaysCache: Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> | null = null;
 
 function getCatalogData(): CatalogShape {
@@ -138,6 +146,81 @@ function getRnNeurologicalExpansionPathways(): Record<string, CatalogShape["path
 
 function rnNeurologicalExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
   const rows = getRnNeurologicalExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+/** RN NCLEX-RN hematology & oncology expansion rows (merged after neuro expansion; deduped by slug). */
+function getRnHematologyOncologyExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnHematologyOncologyExpansionPathwaysCache) return rnHematologyOncologyExpansionPathwaysCache;
+  rnHematologyOncologyExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-hematology-oncology-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnHematologyOncologyExpansionPathwaysCache;
+}
+
+function rnHematologyOncologyExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnHematologyOncologyExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+/** RN NCLEX-RN gastrointestinal expansion rows (merged after hem/onc expansion; deduped by slug). */
+function getRnGastrointestinalExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnGastrointestinalExpansionPathwaysCache) return rnGastrointestinalExpansionPathwaysCache;
+  rnGastrointestinalExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-gastrointestinal-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnGastrointestinalExpansionPathwaysCache;
+}
+
+function rnGastrointestinalExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnGastrointestinalExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+/** RN NCLEX-RN integumentary & wound care expansion rows (merged after GI expansion; deduped by slug). */
+function getRnIntegumentaryWoundCareExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnIntegumentaryWoundCareExpansionPathwaysCache) return rnIntegumentaryWoundCareExpansionPathwaysCache;
+  rnIntegumentaryWoundCareExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-integumentary-wound-care-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnIntegumentaryWoundCareExpansionPathwaysCache;
+}
+
+function rnIntegumentaryWoundCareExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnIntegumentaryWoundCareExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+/** RN NCLEX-RN infection control expansion rows (merged after integumentary expansion; deduped by slug). */
+function getRnInfectionControlExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnInfectionControlExpansionPathwaysCache) return rnInfectionControlExpansionPathwaysCache;
+  rnInfectionControlExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-infection-control-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnInfectionControlExpansionPathwaysCache;
+}
+
+function rnInfectionControlExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnInfectionControlExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+/** RN NCLEX-RN leadership & delegation expansion rows (merged after infection control expansion; deduped by slug). */
+function getRnLeadershipDelegationExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnLeadershipDelegationExpansionPathwaysCache) return rnLeadershipDelegationExpansionPathwaysCache;
+  rnLeadershipDelegationExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-leadership-delegation-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnLeadershipDelegationExpansionPathwaysCache;
+}
+
+function rnLeadershipDelegationExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnLeadershipDelegationExpansionPathways()[pathwayId];
   return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
 }
 
@@ -1026,10 +1109,26 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
   const allied = alliedBundledLessonsForPathway(pathwayId);
   const cardioExpansion = rnCardiovascularExpansionLessonsForPathway(pathwayId);
   const neuroExpansion = rnNeurologicalExpansionLessonsForPathway(pathwayId);
+  const hemOncExpansion = rnHematologyOncologyExpansionLessonsForPathway(pathwayId);
+  const giExpansion = rnGastrointestinalExpansionLessonsForPathway(pathwayId);
+  const integumentaryExpansion = rnIntegumentaryWoundCareExpansionLessonsForPathway(pathwayId);
+  const infectionControlExpansion = rnInfectionControlExpansionLessonsForPathway(pathwayId);
+  const leadershipDelegationExpansion = rnLeadershipDelegationExpansionLessonsForPathway(pathwayId);
   const newGrad = newGradTransitionLessonsForPathway(pathwayId);
   const seen = new Set<string>();
   const merged: LessonInput[] = [];
-  for (const l of [...fromJson, ...allied, ...cardioExpansion, ...neuroExpansion, ...newGrad]) {
+  for (const l of [
+    ...fromJson,
+    ...allied,
+    ...cardioExpansion,
+    ...neuroExpansion,
+    ...hemOncExpansion,
+    ...giExpansion,
+    ...integumentaryExpansion,
+    ...infectionControlExpansion,
+    ...leadershipDelegationExpansion,
+    ...newGrad,
+  ]) {
     if (seen.has(l.slug)) continue;
     seen.add(l.slug);
     merged.push(l);
@@ -1055,6 +1154,36 @@ export function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
         merged.push(extra);
       }
       for (const extra of rnNeurologicalExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of rnHematologyOncologyExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of rnGastrointestinalExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of rnIntegumentaryWoundCareExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of rnInfectionControlExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of rnLeadershipDelegationExpansionLessonsForPathway(pathwayId)) {
         const s = extra.slug.trim();
         if (!s || seen.has(s)) continue;
         seen.add(s);
