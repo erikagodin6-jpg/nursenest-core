@@ -6,6 +6,7 @@ import { isRtlMarketingLocale, localePrimarySubtag, DEFAULT_MARKETING_LOCALE } f
 import { validateMarketingHeroNavCriticalKeys } from "@/lib/marketing/marketing-hero-nav-critical-keys";
 import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
 import { humanizedMarketingKeyFallback } from "@/lib/marketing-i18n/marketing-message-value-policy";
+import { warnMissingMarketingMessageKeyDev } from "@/lib/marketing-i18n/marketing-missing-key-dev-warn";
 
 type Params = Record<string, string | number | undefined>;
 
@@ -29,8 +30,16 @@ function safeFormat(
 ): string {
   try {
     return formatMarketingMessage(messages, key, params, fallback, { locale }).trim();
-  } catch {
-    return humanizedMarketingKeyFallback(key);
+  } catch (e) {
+    const fb = humanizedMarketingKeyFallback(key);
+    const isMissingRequiredCopy =
+      e instanceof Error && e.message.includes("missing required marketing copy");
+    if (isMissingRequiredCopy) {
+      warnMissingMarketingMessageKeyDev(key, fb, {
+        hasCatalog: hasNonEmptyMarketingCatalog(messages, fallback),
+      });
+    }
+    return fb;
   }
 }
 
@@ -42,6 +51,10 @@ const DEGRADED_MARKETING_I18N: MarketingI18nContextValue = {
 };
 
 const RENDERED_I18N_KEY_PREFIX_PATTERN = /\b(?:pages|footer|blog)\.[A-Za-z0-9_.-]+/;
+
+function hasNonEmptyMarketingCatalog(messages: MarketingMessages, fallback?: MarketingMessages): boolean {
+  return Object.keys(messages).length > 0 || Boolean(fallback && Object.keys(fallback).length > 0);
+}
 
 function HtmlLangSync({ locale }: { locale: string }) {
   useEffect(() => {

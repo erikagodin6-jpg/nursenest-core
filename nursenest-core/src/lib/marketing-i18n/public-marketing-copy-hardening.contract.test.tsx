@@ -12,11 +12,14 @@ import {
 } from "@/lib/marketing-i18n-core";
 
 describe("public marketing copy hardening (contract)", () => {
-  it("formatMarketingMessage never emits humanized missing-key tails in development", () => {
+  it("formatMarketingMessage throws on missing required copy (strict path; UI provider humanizes separately)", () => {
     const prev = process.env.NODE_ENV;
     Object.assign(process.env, { NODE_ENV: "development" });
     try {
-      assert.equal(formatMarketingMessage({}, "pages.home.hero.intentionallyMissing", undefined, undefined), "");
+      assert.throws(
+        () => formatMarketingMessage({}, "pages.home.hero.intentionallyMissing", undefined, undefined),
+        /missing required marketing copy/,
+      );
     } finally {
       Object.assign(process.env, { NODE_ENV: prev });
     }
