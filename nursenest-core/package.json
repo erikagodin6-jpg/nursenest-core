@@ -27,7 +27,7 @@
     "build:full": "npm run build:compile",
     "build:verify": "npm run typecheck && SKIP_I18N_PREBUILD=${SKIP_I18N_PREBUILD:-1} npm run build:prechecks && npm run build",
     "verify:core-build-modules": "node --import tsx --test src/lib/build/build-safe-mode.test.ts",
-    "test:inbound-email": "node --import tsx --test src/lib/inbound-email/inbound-email-spam-guard.test.ts src/lib/inbound-email/inbound-ai-autoreply-env.test.ts src/lib/inbound-email/inbound-email-autoreply-flow.test.ts",
+    "test:inbound-email": "node --import tsx --test src/lib/inbound-email/inbound-email-spam-guard.test.ts src/lib/inbound-email/inbound-ai-autoreply-env.test.ts src/lib/inbound-email/inbound-email-manual-review-guard.test.ts src/lib/inbound-email/inbound-email-autoreply-flow.test.ts",
     "test:subscription-entitlement": "node --import tsx --test src/lib/entitlements/subscription-paid-access.test.ts src/lib/learner/derive-billing-page-surface.test.ts src/lib/entitlements/get-user-access-session.test.ts src/lib/learner/load-billing-page-payload.test.ts src/lib/billing/billing-correctness-regression.test.ts",
     "verify:lesson-hubs": "node scripts/verify-lesson-hubs.mjs",
     "verify:bootstrap-probe-pathname": "node --test scripts/standalone-bootstrap-probe-pathname.test.mjs",

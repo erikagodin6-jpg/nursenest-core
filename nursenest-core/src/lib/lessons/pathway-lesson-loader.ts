@@ -14,6 +14,7 @@ import {
   isPathwayLessonStructuralPublicCompleteColumnPresent,
   pathwayLessonReadOmitArgs,
   pathwayLessonStructuralCompleteWhereInput,
+  withPrismaPathwayLessonStructuralDriftRetry,
 } from "@/lib/db/pathway-lesson-structural-column-runtime";
 import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 import { PRISMA_ID_IN_CHUNK_SIZE, takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
@@ -1340,18 +1341,18 @@ async function tryRecoverPublishedLessonAcrossWarehouseLocales(params: {
   shardNorm?: string;
   lessonDbOverlays: Awaited<ReturnType<typeof fetchPublishedLessonOverlaysForMarketingLocale>>;
   dbTimeout: number;
-  pathwayLessonDbReadOmit: Awaited<ReturnType<typeof pathwayLessonReadOmitArgs>>;
 }): Promise<PathwayLessonRecord | undefined> {
-  const { pathwayId, slug, marketingLocale, overlayLocale, shardNorm, lessonDbOverlays, dbTimeout, pathwayLessonDbReadOmit } =
-    params;
+  const { pathwayId, slug, marketingLocale, overlayLocale, shardNorm, lessonDbOverlays, dbTimeout } = params;
   const rows = await dbCall(
     () =>
-      prisma.pathwayLesson.findMany({
-        ...pathwayLessonDbReadOmit,
-        where: { pathwayId, slug, status: ContentStatus.PUBLISHED },
-        take: 24,
-        orderBy: [{ updatedAt: "desc" }],
-      }),
+      withPrismaPathwayLessonStructuralDriftRetry(async (getReadOmit) =>
+        prisma.pathwayLesson.findMany({
+          ...(await getReadOmit()),
+          where: { pathwayId, slug, status: ContentStatus.PUBLISHED },
+          take: 24,
+          orderBy: [{ updatedAt: "desc" }],
+        }),
+      ),
     [],
     dbTimeout,
   );
@@ -1412,7 +1413,6 @@ async function getPathwayLessonImpl(
   const shardNorm = options?.lessonDbShardLocale?.trim()
     ? normalizePathwayLessonLocale(options.lessonDbShardLocale)
     : undefined;
-  const pathwayLessonDbReadOmit = await pathwayLessonReadOmitArgs();
   const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(overlayLocale);
   const catalogLessons = getCatalogLessonsRaw(pathwayId);
   const catalogHitForSlug = catalogLessons.find((l) => l.slug === slug);
@@ -1433,16 +1433,18 @@ async function getPathwayLessonImpl(
 
   const rowEn = await dbCall(
     () =>
-      prisma.pathwayLesson.findUnique({
-        ...pathwayLessonDbReadOmit,
-        where: {
-          pathwayId_slug_locale: {
-            pathwayId,
-            slug,
-            locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+      withPrismaPathwayLessonStructuralDriftRetry(async (getReadOmit) =>
+        prisma.pathwayLesson.findUnique({
+          ...(await getReadOmit()),
+          where: {
+            pathwayId_slug_locale: {
+              pathwayId,
+              slug,
+              locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+            },
           },
-        },
-      }),
+        }),
+      ),
     null,
     dbTimeout,
   );
@@ -1483,12 +1485,14 @@ async function getPathwayLessonImpl(
   ) {
     const rowShard = await dbCall(
       () =>
-        prisma.pathwayLesson.findUnique({
-          ...pathwayLessonDbReadOmit,
-          where: {
-            pathwayId_slug_locale: { pathwayId, slug, locale: shardNorm },
-          },
-        }),
+        withPrismaPathwayLessonStructuralDriftRetry(async (getReadOmit) =>
+          prisma.pathwayLesson.findUnique({
+            ...(await getReadOmit()),
+            where: {
+              pathwayId_slug_locale: { pathwayId, slug, locale: shardNorm },
+            },
+          }),
+        ),
       null,
       dbTimeout,
     );
@@ -1525,12 +1529,14 @@ async function getPathwayLessonImpl(
   if (overlayLocale !== PATHWAY_LESSON_CANONICAL_DB_LOCALE) {
     const rowRequested = await dbCall(
       () =>
-        prisma.pathwayLesson.findUnique({
-          ...pathwayLessonDbReadOmit,
-          where: {
-            pathwayId_slug_locale: { pathwayId, slug, locale: overlayLocale },
-          },
-        }),
+        withPrismaPathwayLessonStructuralDriftRetry(async (getReadOmit) =>
+          prisma.pathwayLesson.findUnique({
+            ...(await getReadOmit()),
+            where: {
+              pathwayId_slug_locale: { pathwayId, slug, locale: overlayLocale },
+            },
+          }),
+        ),
       null,
       dbTimeout,
     );
@@ -1575,16 +1581,18 @@ async function getPathwayLessonImpl(
     if (!attemptedDbLocales.has(effectiveWarehouse)) {
       const rowWh = await dbCall(
         () =>
-          prisma.pathwayLesson.findUnique({
-            ...pathwayLessonDbReadOmit,
-            where: {
-              pathwayId_slug_locale: {
-                pathwayId,
-                slug,
-                locale: effectiveWarehouse,
+          withPrismaPathwayLessonStructuralDriftRetry(async (getReadOmit) =>
+            prisma.pathwayLesson.findUnique({
+              ...(await getReadOmit()),
+              where: {
+                pathwayId_slug_locale: {
+                  pathwayId,
+                  slug,
+                  locale: effectiveWarehouse,
+                },
               },
-            },
-          }),
+            }),
+          ),
         null,
         dbTimeout,
       );
@@ -1638,7 +1646,6 @@ async function getPathwayLessonImpl(
       shardNorm,
       lessonDbOverlays,
       dbTimeout,
-      pathwayLessonDbReadOmit,
     });
     if (recovered) {
       return recovered;
@@ -1751,33 +1758,36 @@ function pathwayLessonSeoMetaFromRecord(record: PathwayLessonRecord): PathwayLes
 }
 
 async function getPathwayLessonSeoMetaImpl(pathwayId: string, slug: string): Promise<PathwayLessonSeoMeta | undefined> {
-  const structuralCol = await isPathwayLessonStructuralPublicCompleteColumnPresent();
   const rowEn = await dbCall(
     () =>
-      prisma.pathwayLesson.findUnique({
-        where: {
-          pathwayId_slug_locale: {
-            pathwayId,
-            slug,
-            locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+      withPrismaPathwayLessonStructuralDriftRetry(async (_getReadOmit) => {
+        const structuralCol = await isPathwayLessonStructuralPublicCompleteColumnPresent();
+        return prisma.pathwayLesson.findUnique({
+          where: {
+            pathwayId_slug_locale: {
+              pathwayId,
+              slug,
+              locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+            },
           },
-        },
-        select: {
-          slug: true,
-          seoTitle: true,
-          seoDescription: true,
-          topic: true,
-          topicSlug: true,
-          bodySystem: true,
-          ...(structuralCol ? { structuralPublicComplete: true as const } : {}),
-          status: true,
-        },
+          select: {
+            slug: true,
+            seoTitle: true,
+            seoDescription: true,
+            topic: true,
+            topicSlug: true,
+            bodySystem: true,
+            ...(structuralCol ? { structuralPublicComplete: true as const } : {}),
+            status: true,
+          },
+        });
       }),
     null,
   );
 
   if (rowEn && rowEn.status === ContentStatus.PUBLISHED) {
-    const structurallyComplete = structuralCol && "structuralPublicComplete" in rowEn && rowEn.structuralPublicComplete;
+    const structurallyComplete =
+      "structuralPublicComplete" in rowEn && rowEn.structuralPublicComplete === true;
     if (structurallyComplete) {
       return {
         slug: rowEn.slug,

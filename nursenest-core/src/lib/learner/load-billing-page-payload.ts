@@ -21,8 +21,10 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getStripeClient } from "@/lib/stripe/stripe-client";
 import {
   billingSubscriptionRowFromStripeSubscription,
-  canUserCancelStripeSubscription,
   mergeBillingSubscriptionRowWithStripe,
+} from "@/lib/subscriptions/stripe-subscription-billing-display";
+import {
+  canUserCancelStripeSubscription,
   reconcileUserSubscriptionFromStripe,
 } from "@/lib/subscriptions/stripe-subscription-reconcile";
 

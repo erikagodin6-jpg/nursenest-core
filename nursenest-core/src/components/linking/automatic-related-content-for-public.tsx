@@ -49,9 +49,19 @@ export async function AutomaticRelatedContentForPublic(props: AutomaticRelatedCo
   const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
 
   if (props.surface === "blog") {
-    let resolved = await resolveAutomaticRelatedBundleForBlogPost(props.post, {
-      excludeHrefs: props.excludeHrefs,
-    });
+    let resolved: Awaited<ReturnType<typeof resolveAutomaticRelatedBundleForBlogPost>>;
+    try {
+      resolved = await resolveAutomaticRelatedBundleForBlogPost(props.post, {
+        excludeHrefs: props.excludeHrefs,
+      });
+    } catch (e) {
+      rethrowNextNavigationControlFlow(e);
+      safeServerLog("linking", "automatic_related_content_blog_failed", {
+        slug: props.post.slug.slice(0, 200),
+        detail: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      });
+      return null;
+    }
     const blogPathwayId = pathwayIdForBlogPost(props.post);
     const blogPathway = blogPathwayId ? getExamPathwayById(blogPathwayId) : undefined;
     resolved = (

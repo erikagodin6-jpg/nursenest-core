@@ -1,4 +1,5 @@
 import { generateInboundSupportReplyText } from "@/lib/inbound-email/generate-inbound-support-reply";
+import { inboundEmailContentRequiresManualReview } from "@/lib/inbound-email/inbound-email-manual-review-guard";
 import { shouldIgnoreInboundAsSpam } from "@/lib/inbound-email/inbound-email-spam-guard";
 import type { PostmarkSendResult } from "@/lib/inbound-email/postmark-outbound";
 import { sendPostmarkReply } from "@/lib/inbound-email/postmark-outbound";
@@ -75,6 +76,16 @@ export async function processInboundEmailAutoreplyFlow(input: InboundAutoreplyFl
   if (slot === "duplicate") {
     safeServerLog("inbound_email", "skipped_duplicate_message_id", { ...meta, messageIdPrefix: messageId.slice(0, 24) });
     return { status: 200, body: { ok: true, skipped: true, reason: "duplicate" } };
+  }
+
+  const manualReview = inboundEmailContentRequiresManualReview(msg);
+  if (manualReview.required) {
+    await deps.finalizeSkipped(messageId, "requires_manual_review");
+    safeServerLog("inbound_email", "skipped_requires_manual_review", {
+      ...meta,
+      matchedKeyword: manualReview.matched ?? "",
+    });
+    return { status: 200, body: { ok: true, skipped: true, reason: "requires_manual_review" } };
   }
 
   if (!autoReplyEnabled) {

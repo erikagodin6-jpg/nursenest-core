@@ -6,7 +6,7 @@ import type { BillingSubscriptionRow } from "@/lib/learner/billing-page-payload-
 import {
   billingSubscriptionRowFromStripeSubscription,
   mergeBillingSubscriptionRowWithStripe,
-} from "./stripe-subscription-reconcile";
+} from "./stripe-subscription-billing-display";
 import { canUserCancelStripeSubscription, pickControllingStripeSubscription } from "./stripe-subscription-eligibility";
 
 function sub(status: Stripe.Subscription.Status, cancelAtEnd = false, id = "sub_x"): Stripe.Subscription {

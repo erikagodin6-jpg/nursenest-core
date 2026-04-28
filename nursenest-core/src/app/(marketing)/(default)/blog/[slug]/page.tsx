@@ -48,6 +48,7 @@ import { buildProgrammaticBlogContinuationLinks } from "@/lib/seo/programmatic-s
 import { ProgrammaticSeoContinuationSection } from "@/components/seo/programmatic-seo-continuation-section";
 import { AutomaticRelatedContentForPublic } from "@/components/linking/automatic-related-content-for-public";
 import { prisma } from "@/lib/db";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -219,13 +220,21 @@ export default async function BlogPostPage({ params }: Props) {
           maxTotalAutoLinks: 14,
         }),
       );
-      const continuationLinks = await buildProgrammaticBlogContinuationLinks(prisma, {
-        slug,
-        category: post.category,
-        tags: post.tags,
-        exam: post.exam,
-        countryTarget: post.countryTarget,
-      });
+      let continuationLinks: Awaited<ReturnType<typeof buildProgrammaticBlogContinuationLinks>> = [];
+      try {
+        continuationLinks = await buildProgrammaticBlogContinuationLinks(prisma, {
+          slug,
+          category: post.category,
+          tags: post.tags,
+          exam: post.exam,
+          countryTarget: post.countryTarget,
+        });
+      } catch (e) {
+        safeServerLog("blog", "blog_continuation_links_failed", {
+          slug,
+          detail: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+        });
+      }
       const framingHtml = blogExamFramingHtml({
         keywordStem,
         examGeo: geo.examGeo,

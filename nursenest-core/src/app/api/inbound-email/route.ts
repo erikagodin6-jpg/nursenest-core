@@ -35,6 +35,7 @@ function outboundFromAddress(): string {
  * In production the secret must be configured or the route returns 503.
  *
  * Idempotency: Postmark inbound `MessageID` is unique in `InboundEmailAutoreplyEvent`; duplicates return `{ ok: true, skipped: true, reason: "duplicate" }`.
+ * Sensitive subjects/bodies (refund, billing, subscription, legal, etc.) return `{ skipped: true, reason: "requires_manual_review" }` with no AI send.
  *
  * Kill switch: set `INBOUND_AI_AUTO_REPLY_ENABLED=true` to send replies. When unset/false, payload is parsed and logged, row is marked skipped (`auto_reply_disabled`), no OpenAI/Postmark send.
  *

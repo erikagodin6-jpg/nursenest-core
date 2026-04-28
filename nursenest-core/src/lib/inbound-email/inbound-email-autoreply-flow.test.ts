@@ -9,8 +9,8 @@ function base(over: Partial<NormalizedInboundMessage>): NormalizedInboundMessage
   return {
     fromEmail: "learner@example.com",
     fromDisplayName: "Learner",
-    subject: "Billing question",
-    textBody: "Hello, I need help with my subscription.",
+    subject: "Study question",
+    textBody: "Hello, I need help with flashcards.",
     htmlBody: "",
     messageId: "pm-inbound-1",
     headers: [],
@@ -175,4 +175,29 @@ test("flow when enabled sends once", async () => {
   assert.equal(metrics.generateCalls, 1);
   assert.equal(metrics.sendCalls, 1);
   assert.equal(repliedWith, "pm-inbound-1:out-1");
+});
+
+test("flow skips sensitive billing/refund content before AI and Postmark", async () => {
+  let skippedDetail = "";
+  const { deps, metrics } = noopDeps({
+    finalizeSkipped: async (_id, detail) => {
+      skippedDetail = detail;
+    },
+  });
+  const r = await processInboundEmailAutoreplyFlow({
+    msg: base({ subject: "Refund please", textBody: "I was charged twice." }),
+    autoReplyEnabled: true,
+    postmarkToken: "tok",
+    openAiConfigured: true,
+    outboundFrom: SUPPORT_EMAIL,
+    supportEmail: SUPPORT_EMAIL,
+    databaseConfigured: true,
+    deps,
+  });
+  assert.equal(r.status, 200);
+  assert.deepEqual(r.body, { ok: true, skipped: true, reason: "requires_manual_review" });
+  assert.equal(skippedDetail, "requires_manual_review");
+  assert.equal(metrics.reserveCalls, 1);
+  assert.equal(metrics.generateCalls, 0);
+  assert.equal(metrics.sendCalls, 0);
 });
