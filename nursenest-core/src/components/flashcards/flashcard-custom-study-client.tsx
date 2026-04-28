@@ -1,11 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ActiveStudySession, type ActiveStudyCard, type ActiveStudyHeader } from "@/components/study/active-study-session";
-import { buildAppFlashcardsHubHref } from "@/lib/flashcards/flashcards-hub-url";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { ExamSessionShell } from "@/components/exam/exam-session-shell";
+import {
+  ActiveStudySession,
+  type ActiveStudyCard,
+  type ActiveStudyHeader,
+} from "@/components/study/active-study-session";
 import { parseFlashcardCustomSessionResponse } from "@/lib/flashcards/flashcard-custom-session-response";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 type ApiCard = {
   id: string;
@@ -16,122 +22,207 @@ type ApiCard = {
   sourceKey?: string | null;
   pathwayId?: string | null;
   explanation?: string;
-  examMicroQuestion?: ExamMicroQuestionPayload | null;
+  examMicroQuestion?: ExamMicroQuestionPayload;
+  lessonHref?: string;
+  lessonTitle?: string;
+  lessonSlug?: string;
 };
 
-function toActiveCards(rows: ApiCard[]): ActiveStudyCard[] {
-  return rows.map((c) => ({
-    id: c.id,
-    prompt: c.front,
-    answer: c.back,
-    explanation: c.explanation,
-    examMicroQuestion: c.examMicroQuestion ?? null,
-    topic: c.topic ?? null,
-    subtopic: c.subtopic ?? null,
-    sourceKey: c.sourceKey ?? null,
-    pathwayId: c.pathwayId ?? null,
-  }));
+type SessionSummary = {
+  matchingCards: number;
+  weakOnly: boolean;
+  starredOnly: boolean;
+  selectedCategories: string[];
+};
+
+function isVirtualLessonCardId(id: string): boolean {
+  return id.startsWith("lq:");
 }
 
 export function FlashcardCustomStudyClient() {
-  const searchParams = useSearchParams();
+  const sp = useSearchParams();
+  const { t } = useMarketingI18n();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [cards, setCards] = useState<ActiveStudyCard[]>([]);
+  const [cards, setCards] = useState<ApiCard[]>([]);
+  const [summary, setSummary] = useState<SessionSummary | null>(null);
 
-  const pathwayId = searchParams.get("pathwayId")?.trim() || "";
-
-  const apiQuery = useMemo(() => {
-    const sp = new URLSearchParams(searchParams.toString());
-    sp.set("includeCards", "1");
-    if (!sp.get("pathwayId")?.trim()) return null;
-    return sp.toString();
-  }, [searchParams]);
+  const queryString = useMemo(() => {
+    const q = new URLSearchParams(sp.toString());
+    q.set("includeCards", "1");
+    if (!q.get("shuffle")) q.set("shuffle", "1");
+    if (!q.get("cardLimit")) q.set("cardLimit", "20");
+    return q.toString();
+  }, [sp]);
 
   const exitHref = useMemo(() => {
-    if (!pathwayId) return "/app/flashcards";
-    return buildAppFlashcardsHubHref({ pathwayId });
-  }, [pathwayId]);
+    const pid = sp.get("pathwayId")?.trim();
+    return pid ? `/app/flashcards?pathwayId=${encodeURIComponent(pid)}` : "/app/flashcards";
+  }, [sp]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch(`/api/flashcards/custom-session?${queryString}`, { credentials: "include" });
+        const json: unknown = await res.json();
+        const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
+        if (!parsed.ok) {
+          if (!cancelled) setError(parsed.message);
+          return;
+        }
+        const rawCards =
+          json && typeof json === "object" && Array.isArray((json as { cards?: unknown }).cards)
+            ? ((json as { cards: ApiCard[] }).cards ?? [])
+            : [];
+        if (!cancelled) {
+          setCards(rawCards.filter((c) => c && typeof c.id === "string" && c.id.length > 0));
+          setSummary(
+            parsed.summary
+              ? {
+                  matchingCards: parsed.summary.matchingCards,
+                  weakOnly: parsed.summary.weakOnly,
+                  starredOnly: parsed.summary.starredOnly,
+                  selectedCategories: parsed.summary.selectedCategories ?? [],
+                }
+              : null,
+          );
+        }
+      } catch {
+        if (!cancelled) setError("Could not load this session. Check your connection and try again.");
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [queryString]);
+
+  const activeCards: ActiveStudyCard[] = useMemo(
+    () =>
+      cards.map((c) => ({
+        id: c.id,
+        prompt: c.front,
+        answer: c.back,
+        explanation: c.explanation,
+        examMicroQuestion: c.examMicroQuestion,
+        topic: c.topic,
+        subtopic: c.subtopic,
+        sourceKey: c.sourceKey,
+        pathwayId: c.pathwayId,
+        topicSlug: c.subtopic,
+        lessonHref: c.lessonHref,
+        lessonTitle: c.lessonTitle,
+      })),
+    [cards],
+  );
 
   const header: ActiveStudyHeader = useMemo(
     () => ({
-      sessionTitle: "Custom flashcards",
+      sessionTitle: t("learner.flashcards.hub.title"),
       modeLabel: "Study",
       categoriesLabel: "",
       exitHref,
     }),
-    [exitHref],
+    [exitHref, t],
   );
 
-  const load = useCallback(async () => {
-    if (!apiQuery) {
-      setError("Missing pathway");
-      setLoading(false);
-      return;
-    }
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/flashcards/custom-session?${apiQuery}`, { credentials: "include" });
-      const json: unknown = await res.json();
-      const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
-      if (!parsed.ok) {
-        setError(parsed.message);
-        setCards([]);
-        return;
-      }
-      const raw = (json as { cards?: ApiCard[] }).cards ?? [];
-      setCards(toActiveCards(Array.isArray(raw) ? raw : []));
-      void parsed.summary;
-    } catch {
-      setError("Could not load session");
-      setCards([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [apiQuery]);
-
-  useEffect(() => {
-    void load();
-  }, [load]);
-
   const onRate = useCallback(async (cardId: string, rating: "incorrect" | "unsure" | "known") => {
-    await fetch(`/api/flashcards/cards/${encodeURIComponent(cardId)}/review`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ rating }),
-    });
+    if (isVirtualLessonCardId(cardId)) return;
+    try {
+      await fetch(`/api/flashcards/cards/${encodeURIComponent(cardId)}/review`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ rating }),
+      });
+    } catch {
+      /* non-fatal — progress is best-effort for custom sessions */
+    }
   }, []);
 
-  if (!apiQuery) {
+  if (loading) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-10 text-sm text-[var(--semantic-text-secondary)]">
-        Choose a pathway from the flashcards hub to start a session.
+      <div className="mx-auto max-w-3xl px-4 py-10 text-sm text-muted-foreground">
+        {t("learner.loading.flashcards")}
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="mx-auto max-w-3xl space-y-4 px-4 py-10">
-        <p className="text-sm text-[var(--semantic-danger)]">{error}</p>
-        <a className="text-sm font-medium text-primary underline" href={exitHref}>
-          Back to flashcards
-        </a>
+      <div className="mx-auto max-w-3xl space-y-4 px-4 py-10 text-sm">
+        <p className="text-destructive">{error}</p>
+        <Link href={exitHref} className="text-primary underline">
+          {t("flashcards.backToMyCards")}
+        </Link>
       </div>
     );
   }
 
+  if (!activeCards.length) {
+    if (summary?.starredOnly) {
+      return (
+        <section className="mx-auto max-w-3xl space-y-3 rounded-2xl border border-border bg-[var(--theme-card-bg)] px-6 py-8 text-sm text-[var(--theme-muted-text)]">
+          <h2 className="text-lg font-semibold text-[var(--theme-fg)]">No starred cards yet</h2>
+          <p>Star cards while you study — they will appear here for quick review.</p>
+          <Link href={exitHref} className="inline-block text-primary underline">
+            {t("flashcards.backToMyCards")}
+          </Link>
+        </section>
+      );
+    }
+    if (summary?.weakOnly) {
+      return (
+        <section className="mx-auto max-w-3xl space-y-3 rounded-2xl border border-border bg-[var(--theme-card-bg)] px-6 py-8 text-sm text-[var(--theme-muted-text)]">
+          <h2 className="text-lg font-semibold text-[var(--theme-fg)]">No weak-area flashcards yet</h2>
+          <p>Weak-area cards appear after you rate cards as difficult or need more practice in a tracked session.</p>
+          <Link href={exitHref} className="inline-block text-primary underline">
+            {t("flashcards.backToMyCards")}
+          </Link>
+        </section>
+      );
+    }
+    if (summary && summary.selectedCategories.length > 0) {
+      return (
+        <section className="mx-auto max-w-3xl space-y-3 rounded-2xl border border-border bg-[var(--theme-card-bg)] px-6 py-8 text-sm text-[var(--theme-muted-text)]">
+          <h2 className="text-lg font-semibold text-[var(--theme-fg)]">No cards in selected systems</h2>
+          <p>Try adding another body system or clear the filter to study all systems.</p>
+          <Link href={exitHref} className="inline-block text-primary underline">
+            {t("flashcards.backToMyCards")}
+          </Link>
+        </section>
+      );
+    }
+    return (
+      <section className="mx-auto max-w-3xl space-y-3 rounded-2xl border border-border bg-[var(--theme-card-bg)] px-6 py-8 text-sm text-[var(--theme-muted-text)]">
+        <h2 className="text-lg font-semibold text-[var(--theme-fg)]">No cards for this pathway yet</h2>
+        <p>
+          {summary && summary.matchingCards === 0
+            ? "There are no published flashcards or bank-linked lesson questions available for this exam track yet."
+            : t("flashcards.noCardsMatch")}
+        </p>
+        <Link href={exitHref} className="inline-block text-primary underline">
+          {t("flashcards.backToMyCards")}
+        </Link>
+      </section>
+    );
+  }
+
   return (
-    <div className="mx-auto max-w-4xl px-4 py-6">
-      <ActiveStudySession
-        cards={cards}
-        header={header}
-        loading={loading}
-        onRate={onRate}
-        sessionMode="learn"
-      />
+    <div className="mx-auto max-w-6xl px-4 py-6">
+      <div className="mb-4 flex justify-between">
+        <Link href={exitHref} className="text-sm text-primary underline">
+          ← {t("flashcards.backToMyCards")}
+        </Link>
+      </div>
+
+      <ExamSessionShell>
+        <ActiveStudySession cards={activeCards} header={header} layout="split" onRate={onRate} />
+      </ExamSessionShell>
     </div>
   );
 }

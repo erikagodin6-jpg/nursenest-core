@@ -15,7 +15,12 @@ import {
 } from "@/lib/learner/tier-scoped-study-routes";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { readFlashcardsHubPathwayBootstrapSnapshot } from "@/lib/study-content-failover/flashcards-hub-bootstrap-snapshot-read";
-import { snapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
+import { buildFlashcardCustomSession } from "@/lib/flashcards/build-flashcard-custom-session";
+import { parseCustomSessionSourceKind } from "@/lib/flashcards/custom-session-card-filters";
+import { visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
 
 type PageProps = { searchParams: Promise<{ pathwayId?: string | string[] }> };
 
@@ -59,6 +64,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
   let pathwayOptions: { id: string; label: string }[] = [];
   let pathwayResolution: ResolvedQuestionBankPathways | null = null;
   let pathwayBootstrapSource: "primary" | "secondary" = "primary";
+  let learnerPath: string | null = null;
 
   if (userId && isDatabaseUrlConfigured()) {
     try {
@@ -70,6 +76,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
       });
 
       const lp = u?.learnerPath?.trim() ?? null;
+      learnerPath = lp;
 
       pathwayResolution = resolveSubscribedQuestionBankPathways({
         requestedPathwayId,
@@ -156,12 +163,57 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   const scopedPathwayId = pathwayResolution.defaultPathwayId;
 
+  const catalogPathway = getExamPathwayById(scopedPathwayId);
+  const pathwayLabelFromOptions = pathwayOptions.find((p) => p.id === scopedPathwayId)?.label;
+  const pathwayDisplayName =
+    catalogPathway?.displayName ?? catalogPathway?.shortName ?? pathwayLabelFromOptions ?? scopedPathwayId;
+
+  let initialHub: FlashcardsHubServerPayload | null = null;
+  if (userId && isDatabaseUrlConfigured() && entitlement.hasAccess) {
+    const inv = await buildFlashcardCustomSession({
+      userId,
+      entitlement,
+      pathwayId: scopedPathwayId,
+      selectedCategories: [],
+      stateIds: [],
+      weakOnly: false,
+      incorrectOnly: false,
+      starredOnly: false,
+      savedOnly: false,
+      notesOnly: false,
+      revisitOnly: false,
+      notStudiedOnly: false,
+      recentStudiedOnly: false,
+      recentDays: 7,
+      shuffle: false,
+      mode: "mixed",
+      limit: 20,
+      includeCards: false,
+      sourceKind: parseCustomSessionSourceKind("all"),
+      sessionSeed: null,
+      cardLimitRaw: "20",
+    });
+    if (inv.ok) {
+      initialHub = { categoryOptions: inv.categoryOptions, matchingTotal: inv.summary.matchingCards };
+    }
+  }
+
+  const visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+  const catHref = resolveStudyLoopCatHref({
+    authState: "signed_in",
+    pathwayId: scopedPathwayId,
+    availablePathwayIds: visiblePathwayIds,
+    intent: "start",
+  });
+
   return (
     <Suspense fallback={<div className="p-4">{t("learner.loading.flashcards")}</div>}>
       <FlashcardsHubClient
         scopedPathwayId={scopedPathwayId}
-        pathwayDisplayName={scopedPathwayId}
+        pathwayDisplayName={pathwayDisplayName}
         pathwayBootstrapSource={pathwayBootstrapSource}
+        catHref={catHref}
+        initialHub={initialHub}
       />
     </Suspense>
   );

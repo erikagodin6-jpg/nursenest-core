@@ -135,14 +135,20 @@ export function FlashcardStudyQuestionStack({
               </div>
             </div>
 
-            {explanation ? (
-              <div className="rounded-xl border p-4">
-                <div className="mb-1 text-xs font-semibold uppercase text-gray-500">
-                  {labels?.whyCorrectHeading ?? "Why this is correct"}
+            {(() => {
+              const whyCorrect =
+                (explanation && String(explanation).trim()) ||
+                (exam?.rationaleCorrect && String(exam.rationaleCorrect).trim()) ||
+                "";
+              return whyCorrect ? (
+                <div className="rounded-xl border p-4">
+                  <div className="mb-1 text-xs font-semibold uppercase text-gray-500">
+                    {labels?.whyCorrectHeading ?? "Why this is correct"}
+                  </div>
+                  <FlashcardRichContent text={whyCorrect} />
                 </div>
-                <FlashcardRichContent text={String(explanation)} />
-              </div>
-            ) : null}
+              ) : null;
+            })()}
 
             {exam?.rationaleIncorrect?.length ? (
               <div className="rounded-xl border p-4">

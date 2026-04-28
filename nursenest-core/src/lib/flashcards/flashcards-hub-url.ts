@@ -6,15 +6,16 @@
 export type FlashcardsHubMode = "all" | "starred" | "weak" | "incorrect" | "unstudied";
 
 export function parseHubSystemsFromSearchParams(sp: URLSearchParams): string[] {
+  const norm = (s: string) => s.trim().toLowerCase().replace(/-/g, "_");
   const multi = sp.get("systems")?.trim();
   if (multi) {
     return multi
       .split(",")
-      .map((s) => s.trim().toLowerCase())
+      .map((s) => norm(s))
       .filter(Boolean);
   }
-  const one = sp.get("system")?.trim().toLowerCase();
-  return one ? [one] : [];
+  const one = sp.get("system")?.trim();
+  return one ? [norm(one)] : [];
 }
 
 export function parseHubMode(sp: URLSearchParams): FlashcardsHubMode {

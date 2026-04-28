@@ -102,6 +102,9 @@ let rnIntegumentaryWoundCareExpansionPathwaysCache: Record<string, CatalogShape[
   null;
 let rnInfectionControlExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 let rnLeadershipDelegationExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+let rnMaternalNewbornExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+/** RN NCLEX-RN Procedures & Skills expansion (merged after maternal & newborn expansion). */
+let rnProceduresSkillsExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 let newGradTransitionPathwaysCache: Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> | null = null;
 
 function getCatalogData(): CatalogShape {
@@ -221,6 +224,35 @@ function getRnLeadershipDelegationExpansionPathways(): Record<string, CatalogSha
 
 function rnLeadershipDelegationExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
   const rows = getRnLeadershipDelegationExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+/** RN NCLEX-RN maternal & newborn expansion rows (merged after leadership expansion; deduped by slug). */
+function getRnMaternalNewbornExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnMaternalNewbornExpansionPathwaysCache) return rnMaternalNewbornExpansionPathwaysCache;
+  rnMaternalNewbornExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-maternal-newborn-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnMaternalNewbornExpansionPathwaysCache;
+}
+
+function rnMaternalNewbornExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnMaternalNewbornExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+function getRnProceduresSkillsExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnProceduresSkillsExpansionPathwaysCache) return rnProceduresSkillsExpansionPathwaysCache;
+  rnProceduresSkillsExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-procedures-skills-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnProceduresSkillsExpansionPathwaysCache;
+}
+
+function rnProceduresSkillsExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnProceduresSkillsExpansionPathways()[pathwayId];
   return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
 }
 
@@ -1114,6 +1146,8 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
   const integumentaryExpansion = rnIntegumentaryWoundCareExpansionLessonsForPathway(pathwayId);
   const infectionControlExpansion = rnInfectionControlExpansionLessonsForPathway(pathwayId);
   const leadershipDelegationExpansion = rnLeadershipDelegationExpansionLessonsForPathway(pathwayId);
+  const maternalNewbornExpansion = rnMaternalNewbornExpansionLessonsForPathway(pathwayId);
+  const proceduresSkillsExpansion = rnProceduresSkillsExpansionLessonsForPathway(pathwayId);
   const newGrad = newGradTransitionLessonsForPathway(pathwayId);
   const seen = new Set<string>();
   const merged: LessonInput[] = [];
@@ -1127,6 +1161,8 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
     ...integumentaryExpansion,
     ...infectionControlExpansion,
     ...leadershipDelegationExpansion,
+    ...maternalNewbornExpansion,
+    ...proceduresSkillsExpansion,
     ...newGrad,
   ]) {
     if (seen.has(l.slug)) continue;
@@ -1184,6 +1220,18 @@ export function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
         merged.push(extra);
       }
       for (const extra of rnLeadershipDelegationExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of rnMaternalNewbornExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of rnProceduresSkillsExpansionLessonsForPathway(pathwayId)) {
         const s = extra.slug.trim();
         if (!s || seen.has(s)) continue;
         seen.add(s);

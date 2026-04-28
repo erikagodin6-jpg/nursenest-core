@@ -9,7 +9,6 @@ import {
   setStudyItemState,
   type StudyItemState,
 } from "@/lib/flashcards/study-session-persistence";
-import { resolveFlashcardRelatedLessonLink } from "@/lib/flashcards/flashcard-study-links";
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 import { ExamSessionProgressStrip } from "@/components/exam/exam-session-shell";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
@@ -32,6 +31,9 @@ export type ActiveStudyCard = {
   pathwayId?: string | null;
   topicSlug?: string | null;
   distractors?: Array<{ option: string; rationale: string }>;
+  /** Deep link to the pathway lesson this card was synthesized from (custom session). */
+  lessonHref?: string | null;
+  lessonTitle?: string | null;
 };
 
 export type ActiveStudyHeader = {
@@ -208,7 +210,7 @@ export function ActiveStudySession({
         examMicroQuestion={current.examMicroQuestion}
         prompt={current.prompt}
         answer={current.answer}
-        explanation={current.explanation}
+        explanation={current.explanation ?? current.examMicroQuestion?.rationaleCorrect}
         pearl={buildClinicalPearl(current, "No clinical pearl available.")}
         revealed={revealed}
         onReveal={() => setRevealed(true)}
@@ -221,6 +223,18 @@ export function ActiveStudySession({
           answerChoicesHeading: "Choices",
         }}
       />
+
+      {revealed && current.lessonHref ? (
+        <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] p-4 text-sm">
+          <div className="mb-2 text-xs font-semibold uppercase text-[var(--theme-muted-text)]">Related lesson</div>
+          <Link
+            href={current.lessonHref}
+            className="font-medium text-primary underline underline-offset-2"
+          >
+            {current.lessonTitle?.trim() || "Review lesson"}
+          </Link>
+        </div>
+      ) : null}
 
       {/* RATING */}
       {revealed && (

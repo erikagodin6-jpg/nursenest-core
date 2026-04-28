@@ -182,7 +182,7 @@ export async function loadLessonLinkedFlashcardVirtuals(args: {
       id: stableId,
       sourceKey: `lessonq:${pathwayId}:${lesson.slug}:${qid}:${source}`,
       category: { name: catName, topicCode },
-      deck: { pathwayId },
+      deck: { pathwayId, title: lesson.title },
     };
 
     out.push({

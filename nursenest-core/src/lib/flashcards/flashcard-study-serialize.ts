@@ -23,7 +23,7 @@ export type FlashcardStudySelectRow = {
   rationaleCorrect: string | null;
   rationaleIncorrect: Prisma.JsonValue | null;
   category: { name: string; topicCode: string | null };
-  deck: { pathwayId: string | null } | null;
+  deck: { pathwayId: string | null; title?: string | null } | null;
 };
 
 export type FlashcardStudyApiCard = {

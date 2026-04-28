@@ -11,7 +11,11 @@ import {
   resolveBuilderCategoryId,
   type BuilderCategoryOption,
 } from "@/lib/flashcards/flashcard-builder-taxonomy";
-import { serializeFlashcardForCustomSession } from "@/lib/flashcards/flashcard-study-serialize";
+import { loadLessonLinkedFlashcardVirtuals } from "@/lib/flashcards/lesson-linked-flashcards-for-pathway";
+import {
+  serializeFlashcardForCustomSession,
+  type FlashcardStudySelectRow,
+} from "@/lib/flashcards/flashcard-study-serialize";
 import type {
   FlashcardCustomSessionQueryRelaxation,
   FlashcardCustomSessionSummary,
@@ -52,12 +56,18 @@ export type BuildFlashcardCustomSessionInput = {
   cardLimitRaw?: string | null;
 };
 
+export type CustomSessionSerializedCard = ReturnType<typeof serializeFlashcardForCustomSession> & {
+  lessonHref?: string;
+  lessonTitle?: string;
+  lessonSlug?: string;
+};
+
 export type BuildFlashcardCustomSessionSuccess = {
   ok: true;
   queryRelaxation: FlashcardCustomSessionQueryRelaxation;
   summary: FlashcardCustomSessionSummary;
   categoryOptions: BuilderCategoryOption[];
-  cards: ReturnType<typeof serializeFlashcardForCustomSession>[];
+  cards: CustomSessionSerializedCard[];
 };
 
 export type BuildFlashcardCustomSessionFailure = {
@@ -74,6 +84,8 @@ const flashcardSelect = {
   front: true,
   back: true,
   sourceKey: true,
+  lessonId: true,
+  examQuestionId: true,
   examItemKind: true,
   questionStem: true,
   answerOptions: true,
@@ -152,7 +164,16 @@ export async function buildFlashcardCustomSession(
     });
 
     const categoryCounts: Record<string, number> = {};
-    const cardWithCategory = cards.map((card) => {
+    type DbFlashcardRow = (typeof cards)[number];
+
+    type WorkingCard = DbFlashcardRow & {
+      builderCategoryId: string;
+      lessonMeta?: { href: string; title: string; slug: string };
+      /** Present on lesson-linked virtual rows for `sourceKind` filtering. */
+      linkedExamQuestionId?: string;
+    };
+
+    const cardWithCategory: WorkingCard[] = cards.map((card) => {
       const categoryId = resolveBuilderCategoryId({
         label: card.category.name,
         topicCode: card.category.topicCode,
@@ -165,7 +186,55 @@ export async function buildFlashcardCustomSession(
       return { ...card, builderCategoryId: categoryId };
     });
 
-    let scoped = cardWithCategory;
+    const allowLessonQuestionVirtuals =
+      sourceKind === "all" || sourceKind === "lesson" || sourceKind === "question";
+    if (pathwayId?.trim() && allowLessonQuestionVirtuals) {
+      const existingExamQ = new Set(
+        cards
+          .map((c) => c.examQuestionId)
+          .filter((x): x is string => typeof x === "string" && x.trim().length > 0),
+      );
+      const virtuals = await loadLessonLinkedFlashcardVirtuals({
+        pathwayId: pathwayId.trim(),
+        entitlement,
+        existingExamQuestionIds: existingExamQ,
+      });
+      for (const v of virtuals) {
+        const categoryId = resolveBuilderCategoryId({
+          label: v.row.category.name,
+          topicCode: v.row.category.topicCode,
+          pathwayId,
+          deckTitle: null,
+          front: v.row.front,
+          back: v.row.back,
+        });
+        categoryCounts[categoryId] = (categoryCounts[categoryId] ?? 0) + 1;
+        const synthetic: DbFlashcardRow = {
+          ...(v.row as unknown as DbFlashcardRow),
+          lessonId: null,
+          examQuestionId: v.examQuestionId,
+        };
+        cardWithCategory.push({
+          ...synthetic,
+          builderCategoryId: categoryId,
+          linkedExamQuestionId: v.examQuestionId,
+          lessonMeta: { href: v.lessonHref, title: v.lessonTitle, slug: v.lessonSlug },
+        });
+      }
+    }
+
+    let scoped: WorkingCard[] = cardWithCategory;
+    if (sourceKind === "lesson") {
+      scoped = scoped.filter((c) => {
+        const sk = c.sourceKey ?? "";
+        return Boolean(c.lessonId) || sk.startsWith("lessonq:");
+      });
+    } else if (sourceKind === "question") {
+      scoped = scoped.filter((c) => {
+        const sk = c.sourceKey ?? "";
+        return Boolean(c.examQuestionId) || Boolean(c.linkedExamQuestionId) || sk.startsWith("lessonq:");
+      });
+    }
     if (selectedCategories.length > 0) {
       const selected = new Set(selectedCategories);
       scoped = scoped.filter((c) => selected.has(c.builderCategoryId));
@@ -208,7 +277,10 @@ export async function buildFlashcardCustomSession(
     const persistenceFiltersActive = starredOnly || savedOnly || notesOnly || revisitOnly;
     if (persistenceFiltersActive) {
       const allowedIds = new Set(stateIds);
-      if (allowedIds.size > 0) {
+      if (starredOnly) {
+        if (allowedIds.size === 0) scoped = [];
+        else scoped = scoped.filter((c) => allowedIds.has(c.id));
+      } else if (allowedIds.size > 0) {
         scoped = scoped.filter((c) => allowedIds.has(c.id));
       }
     }
@@ -220,19 +292,37 @@ export async function buildFlashcardCustomSession(
     const selectedRows = shuffle ? shuffled(scoped, orderingSeed) : scoped;
     const limited = selectedRows.slice(0, limit);
 
-    const cardsForSession = includeCards
+    const cardsForSession: CustomSessionSerializedCard[] = includeCards
       ? limited.map((card, index) => {
           const mixedSwap = mode === "mixed" && index % 2 === 1;
           const swap = mode === "definition_to_term" || mixedSwap;
           const topic = builderCategoryTitleForId(pathwayId, card.builderCategoryId);
-          const { builderCategoryId: _bc, ...dbRow } = card;
+          const {
+            builderCategoryId: _bc,
+            lessonMeta,
+            linkedExamQuestionId: _lq,
+            lessonId: _lid,
+            examQuestionId: _eqid,
+            ...dbRow
+          } = card;
           void _bc;
-          return serializeFlashcardForCustomSession(dbRow, {
+          void _lq;
+          void _lid;
+          void _eqid;
+          const base = serializeFlashcardForCustomSession(dbRow as FlashcardStudySelectRow, {
             swapFrontBack: swap,
             topic,
             pathwayId: card.deck?.pathwayId ?? pathwayId,
             examOptionShuffleSalt: sessionShuffleSalt,
           });
+          return lessonMeta
+            ? {
+                ...base,
+                lessonHref: lessonMeta.href,
+                lessonTitle: lessonMeta.title,
+                lessonSlug: lessonMeta.slug,
+              }
+            : base;
         })
       : [];
 
