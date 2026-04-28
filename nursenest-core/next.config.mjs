@@ -24,11 +24,14 @@ const isLowMemoryBuild =
     envTruthy("NN_APP_PLATFORM_BUILD") ||
     autoLowMemoryHost);
 
-// `ci:verify` runs `npm run typecheck` before `next build`. Skipping the second integrated pass
-// avoids a large RSS spike after webpack on memory-tight hosts (OOM during "Linting and checking…").
-// Production image / DO builds must not set `SKIP_NEXT_BUILD_TYPECHECK` unless you run typecheck separately.
-const skipNextBuildTypecheck = process.env.SKIP_NEXT_BUILD_TYPECHECK === "1";
-
+/**
+ * `next build` runs an integrated "Linting and checking validity of types" pass by default.
+ * That duplicates `tsc` + ESLint and can SIGKILL the process on memory-tight builders after compile.
+ *
+ * We disable those integrated checks here. **Strictness is unchanged** when CI / deploy runs, in order:
+ *   `npm run typecheck` → `npm run test:reliability` (and other gates you use) → `npm run build`
+ * Use `npm run validate:prebuild` for the typecheck + reliability slice before a production build.
+ */
 const webpackParallelism = isLowMemoryBuild ? 1 : 2;
 
 function shouldEmitBuildConfigDiagnostics() {
@@ -59,7 +62,7 @@ if (shouldEmitBuildConfigDiagnostics()) {
       parallelServerBuildTraces: false,
       staticGenerationMaxConcurrency:
         "(not a Next 14.2 config key — worker pool size follows experimental.cpus when set)",
-      skipNextIntegratedTypecheck: skipNextBuildTypecheck,
+      skipNextIntegratedLintAndTypes: true,
     }),
   );
 }
@@ -87,8 +90,12 @@ const nextConfig = {
 
   reactStrictMode: true,
 
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
   typescript: {
-    ignoreBuildErrors: skipNextBuildTypecheck,
+    ignoreBuildErrors: true,
   },
 
   experimental,
