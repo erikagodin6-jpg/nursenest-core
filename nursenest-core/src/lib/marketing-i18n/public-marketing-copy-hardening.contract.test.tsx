@@ -12,26 +12,26 @@ import {
 } from "@/lib/marketing-i18n-core";
 
 describe("public marketing copy hardening (contract)", () => {
-  it("formatMarketingMessage throws on missing required copy (strict path; UI provider humanizes separately)", () => {
+  it("formatMarketingMessage returns empty for missing copy (MarketingI18nProvider humanizes for t())", () => {
     const prev = process.env.NODE_ENV;
     Object.assign(process.env, { NODE_ENV: "development" });
     try {
-      assert.throws(
-        () => formatMarketingMessage({}, "pages.home.hero.intentionallyMissing", undefined, undefined),
-        /missing required marketing copy/,
+      assert.equal(
+        formatMarketingMessage({}, "pages.home.hero.intentionallyMissing", undefined, undefined),
+        "",
       );
     } finally {
       Object.assign(process.env, { NODE_ENV: prev });
     }
   });
 
-  it("getOptionalPublicMessage returns empty for missing keys and rejects forbidden shouty tokens", () => {
+  it("getOptionalPublicMessage returns empty for missing keys and scrubs forbidden shouty tokens in production", () => {
     assert.equal(getOptionalPublicMessage({}, "pages.any.optional"), "");
     const m: MarketingMessages = { "x.y": "KICKER" };
     const prev = process.env.NODE_ENV;
     Object.assign(process.env, { NODE_ENV: "production" });
     try {
-      assert.throws(() => getOptionalPublicMessage(m, "x.y"), /forbidden|KICKER|placeholder/i);
+      assert.equal(getOptionalPublicMessage(m, "x.y"), "");
     } finally {
       Object.assign(process.env, { NODE_ENV: prev });
     }

@@ -13,9 +13,8 @@ execFileSync(process.execPath, [verifyDockerfileDbUrl], {
   stdio: "inherit",
 });
 
-const marketingSurfaceScript = path.join(packageRoot, "scripts", "validate-marketing-production-surface.mjs");
-console.log("[build-prechecks] running validate-marketing-production-surface.mjs (always)");
-execFileSync(process.execPath, [marketingSurfaceScript], {
+console.log("[build-prechecks] running validate:production-surface (marketing JSON + route manifest + theme palette + forbidden copy + robots source)");
+execFileSync(npmCommand, ["run", "validate:production-surface"], {
   cwd: packageRoot,
   stdio: "inherit",
 });

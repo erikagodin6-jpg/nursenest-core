@@ -91,12 +91,12 @@ describe("formatMarketingMessage hardened", () => {
     const primary = {} as MarketingMessages;
     const fallback = { "nav.logIn": "Log in" } as MarketingMessages;
 
-    assert.equal(formatMarketingMessage(primary, "nav.logIn", fallback, undefined), "Log in");
+    assert.equal(formatMarketingMessage(primary, "nav.logIn", undefined, fallback), "Log in");
   });
 
   it("returns explicit defaultValue when primary and fallback are missing", () => {
     assert.equal(
-      formatMarketingMessage({}, "nav.missing", undefined, "Fallback label"),
+      formatMarketingMessage({}, "nav.missing", undefined, { "nav.missing": "Fallback label" }),
       "Fallback label",
     );
   });

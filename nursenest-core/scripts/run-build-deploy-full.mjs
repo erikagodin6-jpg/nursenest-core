@@ -73,9 +73,7 @@ console.log(
 );
 
 runStep("verify:bootstrap-probe-pathname", () => npmRun("verify:bootstrap-probe-pathname"));
-runStep("validate-marketing-production-surface", () =>
-  nodeScript(path.join("scripts", "validate-marketing-production-surface.mjs")),
-);
+runStep("validate:production-surface", () => npmRun("validate:production-surface"));
 
 if (shouldSkipNextCompileAfterBuildpack()) {
   console.log(

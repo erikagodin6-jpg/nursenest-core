@@ -29,7 +29,15 @@ function safeFormat(
   locale?: string
 ): string {
   try {
-    return formatMarketingMessage(messages, key, params, fallback, { locale }).trim();
+    const resolved = formatMarketingMessage(messages, key, params, fallback, { locale }).trim();
+    if (!resolved) {
+      const fb = humanizedMarketingKeyFallback(key);
+      warnMissingMarketingMessageKeyDev(key, fb, {
+        hasCatalog: hasNonEmptyMarketingCatalog(messages, fallback),
+      });
+      return fb;
+    }
+    return resolved;
   } catch (e) {
     const fb = humanizedMarketingKeyFallback(key);
     const isMissingRequiredCopy =

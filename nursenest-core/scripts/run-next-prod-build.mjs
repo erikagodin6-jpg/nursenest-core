@@ -137,6 +137,20 @@ console.log(
   }),
 );
 
+/** Site-wide production gates (marketing JSON, route manifest, theme chrome, forbidden copy). */
+const npmCmd = process.platform === "win32" ? "npm.cmd" : "npm";
+console.log("[next-prod-build] validate:production-surface_start");
+const validateSurface = spawnSync(npmCmd, ["run", "validate:production-surface"], {
+  cwd: packageRoot,
+  stdio: "inherit",
+  env: process.env,
+});
+if ((validateSurface.status ?? 1) !== 0) {
+  console.error("[next-prod-build] FATAL: validate:production-surface failed");
+  process.exit(validateSurface.status ?? 1);
+}
+console.log("[next-prod-build] validate:production-surface_ok");
+
 /**
  * 🔥 CRITICAL FIX:
  * REMOVE "--webpack"
