@@ -7,7 +7,10 @@ import {
 import { classifyLessonForHub } from "@/lib/lessons/pathway-lesson-body-system-groups";
 import { hubLessonPresentationRank, canonicalHubLessonDisplayTitle } from "@/lib/lessons/pathway-lesson-hub-organize";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
-import { getEffectiveCatalogLessonsForPathwaySync } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import {
+  getEffectiveCatalogLessonsForPathwaySync,
+  getLessonSummariesIndex,
+} from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
 
 /** URL segment for each {@link LESSON_CATEGORIES} value (kebab, stable). */
@@ -71,6 +74,16 @@ export function countMarketingHubLessonsByDisplayCategory(
   for (const l of lessons) {
     const cat = displayCategoryForMarketingHubLesson(l);
     m.set(cat, (m.get(cat) ?? 0) + 1);
+  }
+  return m;
+}
+
+/** Data-driven category counts without materializing full {@link PathwayLessonRecord} rows for every lesson. */
+export function countMarketingHubLessonsByDisplayCategoryForPathway(pathwayId: string): Map<LessonCategory, number> {
+  const m = new Map<LessonCategory, number>();
+  for (const c of LESSON_CATEGORIES) m.set(c, 0);
+  for (const row of getLessonSummariesIndex(pathwayId)) {
+    m.set(row.category, (m.get(row.category) ?? 0) + 1);
   }
   return m;
 }

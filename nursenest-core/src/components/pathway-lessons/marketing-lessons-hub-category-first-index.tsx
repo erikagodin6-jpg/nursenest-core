@@ -18,7 +18,7 @@ import {
   lessonCategoryToSlug,
 } from "@/lib/lessons/lesson-taxonomy";
 import {
-  countMarketingHubLessonsByDisplayCategory,
+  countMarketingHubLessonsByDisplayCategoryForPathway,
   getMarketingLessonsHubCatalogLessons,
   MARKETING_HUB_REVIEW_REQUIRED_PREVIEW_MAX,
   pickReviewRequiredCatalogLessons,
@@ -45,6 +45,7 @@ import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-p
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
+import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 
 type Props = {
   pathway: ExamPathwayDefinition;
@@ -67,8 +68,11 @@ export async function MarketingLessonsHubCategoryFirstIndex({
   examCode,
   lessonContentLocale,
 }: Props) {
+  const categoryIndexT0 = performance.now();
+  lessonsPerfMark("route_start", { surface: "marketing_lessons_category_index", pathwayId: pathway.id });
+
   const catalog = getMarketingLessonsHubCatalogLessons(pathway.id);
-  const counts = countMarketingHubLessonsByDisplayCategory(catalog);
+  const counts = countMarketingHubLessonsByDisplayCategoryForPathway(pathway.id);
   const reviewPick = pickReviewRequiredCatalogLessons(
     catalog,
     pathway.id,
@@ -79,6 +83,12 @@ export async function MarketingLessonsHubCategoryFirstIndex({
     { pathwayId: pathway.id, lessonsBasePath: base },
   );
   const listWarehouseLocale = await getPathwayLessonListWarehouseLocaleForHub(pathway.id, lessonContentLocale);
+  lessonsPerfMark("catalog_size", {
+    surface: "category_index_pre_verify",
+    pathwayId: pathway.id,
+    review_pick: reviewPick.length,
+    elapsed_ms: Math.round(performance.now() - categoryIndexT0),
+  });
   const vrReview = await verifyMarketingHubLessonRowsResolve(
     pathway,
     reviewPrepared.lessons,
@@ -93,6 +103,12 @@ export async function MarketingLessonsHubCategoryFirstIndex({
     },
   );
   const reviewRows = vrReview.kept;
+  lessonsPerfMark("route_end", {
+    surface: "marketing_lessons_category_index",
+    pathwayId: pathway.id,
+    kept: reviewRows.length,
+    elapsed_ms: Math.round(performance.now() - categoryIndexT0),
+  });
 
   let questionSnapshot = EMPTY_QUESTION_SNAPSHOT;
   let questionSnapshotLoadRejected = false;

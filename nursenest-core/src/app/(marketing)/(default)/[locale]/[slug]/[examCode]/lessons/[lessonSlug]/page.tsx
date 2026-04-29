@@ -27,6 +27,7 @@ import { resolveMarketingLessonsHubDynamicSegment } from "@/lib/lessons/marketin
 import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
 import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 
 /**
  * Paywall: full `PathwayLessonRecord` / `sections[]` stay in the body server component. Gate with
@@ -137,6 +138,9 @@ export default async function PathwayLessonDetailPage({ params, searchParams }: 
   const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
 
   return withCrawlSurfacePageRender("marketing.pathway_lesson", pathname, async () => {
+    const routeT0 = performance.now();
+    lessonsPerfMark("route_start", { surface: "pathway_lesson_detail", pathname });
+    try {
     const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
     if (!pathway) notFound();
 
@@ -183,5 +187,11 @@ export default async function PathwayLessonDetailPage({ params, searchParams }: 
         />
       </Suspense>
     );
+    } finally {
+      lessonsPerfMark("route_end", {
+        surface: "pathway_lesson_detail",
+        elapsed_ms: Math.round(performance.now() - routeT0),
+      });
+    }
   });
 }

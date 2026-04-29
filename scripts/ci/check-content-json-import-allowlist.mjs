@@ -29,6 +29,10 @@ const PATHWAY_LESSONS_ALLOW = new Set([
   "rn-nclex-procedures-skills-expansion-catalog.json",
   "rn-nclex-nutrition-expansion-catalog.json",
   "rn-nclex-exam-strategy-expansion-catalog.json",
+  "rn-nclex-respiratory-expansion-catalog.json",
+  "rn-nclex-renal-expansion-catalog.json",
+  "rn-nclex-endocrine-expansion-catalog.json",
+  "rn-nclex-musculoskeletal-expansion-catalog.json",
 ]);
 
 /** topic-maps/ — keep tiny; expand allowlist deliberately if adding files. */

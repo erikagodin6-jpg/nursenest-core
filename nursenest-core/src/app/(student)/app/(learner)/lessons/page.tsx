@@ -16,6 +16,7 @@ import {
   pathwayLessonsAppListWhereWithTopicFilter,
   visiblePathwayIdsForAppLessons,
 } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import { pathwayLessonAppHubSafetyPrismaWhere } from "@/lib/lessons/app-lessons-hub-pathway-safety-where";
 import { buildLearnerAppLessonsHubSummary } from "@/lib/lessons/learner-app-lessons-hub-summary";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { FreemiumCrossTrackNudge } from "@/components/student/freemium-cross-track-nudge";
@@ -47,6 +48,7 @@ import {
 import { readPathwayLessonsHubPageSnapshot } from "@/lib/study-content-failover/pathway-lessons-hub-snapshot-read";
 import { snapshotAgeMs as publishedSnapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
+import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 
 type AppLessonListRow = {
   id: string;
@@ -77,29 +79,6 @@ function pathwayLessonCardSummary(row: {
 
   const parts = [row.topic?.trim(), row.bodySystem?.trim()].filter(Boolean);
   return parts.length ? parts.join(" · ") : null;
-}
-
-function pathwayLessonSafetyGateWhere() {
-  return {
-    AND: [
-      { title: { not: "" } },
-      { slug: { not: "" } },
-      { topic: { not: "" } },
-      { topicSlug: { not: "" } },
-      { previewSectionCount: { gt: 0 } },
-      {
-        OR: [{ seoDescription: { not: "" } }, { seoTitle: { not: "" } }],
-      },
-      {
-        NOT: [
-          { title: { contains: "placeholder", mode: "insensitive" as const } },
-          { title: { contains: "tbd", mode: "insensitive" as const } },
-          { slug: { startsWith: "tmp-" } },
-          { slug: { startsWith: "draft-" } },
-        ],
-      },
-    ],
-  };
 }
 
 type Props = {
@@ -200,6 +179,8 @@ export default async function LessonsPage({ searchParams }: Props) {
     );
   }
 
+  lessonsPerfMark("route_start", { route: "app_lessons_hub" });
+  try {
   const sp = await searchParams;
   const limitParsed = parseLessonLibraryLimit(typeof sp.limit === "string" ? sp.limit : undefined);
 
@@ -285,7 +266,7 @@ export default async function LessonsPage({ searchParams }: Props) {
       const pathwayWhereWithSafety = {
         AND: [
           pathwayWhere,
-          pathwayLessonSafetyGateWhere(),
+          pathwayLessonAppHubSafetyPrismaWhere(),
           ...(qEffective
             ? [
                 {
@@ -530,6 +511,7 @@ export default async function LessonsPage({ searchParams }: Props) {
 
   const resolvedRenderableLessons: AppLessonListRow[] = [...lessonsBlock.rows];
 
+  lessonsPerfMark("summary_index_start", { route: "app_lessons_hub" });
   const lessonsHub = buildLearnerAppLessonsHubSummary<AppLessonListRow>({
     rows: resolvedRenderableLessons,
     catalogMatchTotal: lessonsBlock.total,
@@ -538,6 +520,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     topicSlugFilter,
     pathwayIdFilter,
   });
+  lessonsPerfMark("summary_index_end", { route: "app_lessons_hub" });
 
   if (process.env.NODE_ENV !== "production") {
     safeServerLog("page_lessons", "app_lessons_hub_render", {
@@ -551,6 +534,7 @@ export default async function LessonsPage({ searchParams }: Props) {
   const progressByRowId: Record<string, PathwayLessonProgressStatus> = {};
 
   if (userId && lessonsBlock.source === "pathway_lessons") {
+    lessonsPerfMark("personalization_start", { route: "app_lessons_hub" });
     const byPathway = new Map<string, string[]>();
 
     for (const row of resolvedRenderableLessons) {
@@ -573,6 +557,7 @@ export default async function LessonsPage({ searchParams }: Props) {
         }
       }
     }
+    lessonsPerfMark("personalization_end", { route: "app_lessons_hub" });
   }
 
   const listSummaryLine =
@@ -634,4 +619,7 @@ export default async function LessonsPage({ searchParams }: Props) {
       <LearnerStudyQuickLinksCard t={t} id="lessons-study-quick-links" catHref={catHref} />
     </div>
   );
+  } finally {
+    lessonsPerfMark("route_end", { route: "app_lessons_hub" });
+  }
 }

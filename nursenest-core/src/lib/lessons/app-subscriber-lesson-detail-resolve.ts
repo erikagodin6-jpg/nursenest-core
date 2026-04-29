@@ -5,7 +5,8 @@ import { appPathwayLessonVisibleToSubscriber } from "@/lib/lessons/app-pathway-l
 import { filterLearnerPresentablePathwaySections } from "@/lib/lessons/lesson-section-presentability";
 import { shouldRenderPathwayLessonSection } from "@/lib/lessons/lesson-section-page-layout";
 import { pathwayLessonMatchesMarketingPathwayContext } from "@/lib/lessons/pathway-lesson-catalog-sync";
-import { getPathwayLesson } from "@/lib/lessons/pathway-lesson-loader";
+import { getPathwayLesson, getPublishedPathwayLessonRecordById } from "@/lib/lessons/pathway-lesson-loader";
+import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 import { visibleSectionsForLesson } from "@/lib/lessons/pathway-lesson-access";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -40,10 +41,47 @@ export function pathwayLessonRecordHasAppSubscriberDetailPresentableSections(rec
   return visible.length > 0;
 }
 
+function classifyAppSubscriberPathwayLessonRecord(args: {
+  pathwayId: string;
+  slug: string;
+  record: PathwayLessonRecord;
+}): AppSubscriberPathwayLessonDetailResolution {
+  if (!pathwayLessonMatchesMarketingPathwayContext(args.pathwayId, args.record)) {
+    safeServerLog("page_lessons", "app_pathway_detail_contract_pathway_context_mismatch", {
+      pathwayId: args.pathwayId,
+      slug: args.slug.slice(0, 160),
+    });
+    return { kind: "not_found" };
+  }
+  if (shouldSuppressProfessionalPracticeHubLesson(args.record)) {
+    safeServerLog("page_lessons", "app_pathway_detail_contract_professional_hub_guard", {
+      pathwayId: args.pathwayId,
+      slug: args.slug.slice(0, 160),
+    });
+    return { kind: "not_found" };
+  }
+  if (classifyPathwayLessonRecordForHub(args.record).categoryId === REVIEW_REQUIRED) {
+    safeServerLog("page_lessons", "app_pathway_detail_contract_taxonomy_review_required", {
+      pathwayId: args.pathwayId,
+      slug: args.slug.slice(0, 160),
+    });
+    return { kind: "not_found" };
+  }
+  if (!pathwayLessonRecordHasAppSubscriberDetailPresentableSections(args.record)) {
+    safeServerLog("page_lessons", "app_pathway_detail_contract_no_presentable_sections", {
+      pathwayId: args.pathwayId,
+      slug: args.slug.slice(0, 160),
+    });
+    return { kind: "not_found" };
+  }
+  return { kind: "pathway_ok", record: args.record, pathwayId: args.pathwayId };
+}
+
 /**
  * Same pathway contract as `/app/lessons/[id]`: entitlement + learner path gate, then
- * {@link getPathwayLesson} for `pathwayId` + `slug` + marketing locale (canonical learner lesson identity),
- * then **the same post-hydration gates the hub uses** so list rows never diverge from the detail surface.
+ * **prefer** {@link getPublishedPathwayLessonRecordById} (single DB row by primary key — matches hub list rows),
+ * falling back to {@link getPathwayLesson} when catalog/warehouse slug resolution is required.
+ * Post-hydration gates match the hub so list rows never diverge from the detail surface.
  */
 export async function resolveAppSubscriberPathwayLessonForDetail(args: {
   entitlement: AccessScope;
@@ -59,37 +97,29 @@ export async function resolveAppSubscriberPathwayLessonForDetail(args: {
     safeServerLog("page_lessons", "app_pathway_detail_contract_empty_slug", { pathwayId: args.pwRow.pathwayId });
     return { kind: "not_found" };
   }
-  const record = await getPathwayLesson(args.pwRow.pathwayId, slug, args.marketingLocale);
-  if (!record) return { kind: "not_found" };
-  if (!pathwayLessonMatchesMarketingPathwayContext(args.pwRow.pathwayId, record)) {
-    safeServerLog("page_lessons", "app_pathway_detail_contract_pathway_context_mismatch", {
+
+  lessonsPerfMark("detail_lookup_start", { pathwayId: args.pwRow.pathwayId });
+  const byId = await getPublishedPathwayLessonRecordById(args.pwRow.id, args.marketingLocale);
+  if (byId) {
+    const fast = classifyAppSubscriberPathwayLessonRecord({
       pathwayId: args.pwRow.pathwayId,
-      slug: slug.slice(0, 160),
+      slug,
+      record: byId,
     });
-    return { kind: "not_found" };
+    if (fast.kind === "pathway_ok") {
+      lessonsPerfMark("detail_lookup_end", { pathwayId: args.pwRow.pathwayId, source: "db_by_id" });
+      return fast;
+    }
   }
-  if (shouldSuppressProfessionalPracticeHubLesson(record)) {
-    safeServerLog("page_lessons", "app_pathway_detail_contract_professional_hub_guard", {
-      pathwayId: args.pwRow.pathwayId,
-      slug: slug.slice(0, 160),
-    });
-    return { kind: "not_found" };
-  }
-  if (classifyPathwayLessonRecordForHub(record).categoryId === REVIEW_REQUIRED) {
-    safeServerLog("page_lessons", "app_pathway_detail_contract_taxonomy_review_required", {
-      pathwayId: args.pwRow.pathwayId,
-      slug: slug.slice(0, 160),
-    });
-    return { kind: "not_found" };
-  }
-  if (!pathwayLessonRecordHasAppSubscriberDetailPresentableSections(record)) {
-    safeServerLog("page_lessons", "app_pathway_detail_contract_no_presentable_sections", {
-      pathwayId: args.pwRow.pathwayId,
-      slug: slug.slice(0, 160),
-    });
-    return { kind: "not_found" };
-  }
-  return { kind: "pathway_ok", record, pathwayId: args.pwRow.pathwayId };
+
+  const bySlug = await getPathwayLesson(args.pwRow.pathwayId, slug, args.marketingLocale);
+  lessonsPerfMark("detail_lookup_end", { pathwayId: args.pwRow.pathwayId, source: bySlug ? "slug_resolver" : "miss" });
+  if (!bySlug) return { kind: "not_found" };
+  return classifyAppSubscriberPathwayLessonRecord({
+    pathwayId: args.pwRow.pathwayId,
+    slug,
+    record: bySlug,
+  });
 }
 
 export async function isAppSubscriberPathwayLessonRowResolvableForDetail(args: {

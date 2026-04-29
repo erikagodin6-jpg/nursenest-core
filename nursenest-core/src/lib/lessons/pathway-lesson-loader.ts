@@ -84,6 +84,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-loader-config";
 import type { LessonInput } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import {
+  getCatalogLessonRawBySlug,
   getCatalogLessonsRaw,
   getCatalogPathwayLessonsSync,
   getEffectiveCatalogLessonsForPathwaySync,
@@ -100,6 +101,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
 
 export {
+  getCatalogLessonRawBySlug,
   getCatalogLessonsRaw,
   getCatalogPathwayLessonsSync,
   getEffectiveCatalogLessonsForPathwaySync,
@@ -1385,8 +1387,7 @@ async function getPathwayLessonImpl(
     ? normalizePathwayLessonLocale(options.lessonDbShardLocale)
     : undefined;
   const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(overlayLocale);
-  const catalogLessons = getCatalogLessonsRaw(pathwayId);
-  const catalogHitForSlug = catalogLessons.find((l) => l.slug === slug);
+  const catalogHitForSlug = getCatalogLessonRawBySlug(pathwayId, slug);
 
   const tryCatalogPublicComplete = (): PathwayLessonRecord | undefined => {
     if (!catalogHitForSlug) return undefined;
@@ -1780,7 +1781,7 @@ async function getPathwayLessonSeoMetaImpl(pathwayId: string, slug: string): Pro
       };
     }
 
-    const catalogHit = getCatalogLessonsRaw(pathwayId).find((lesson) => lesson.slug === slug);
+    const catalogHit = getCatalogLessonRawBySlug(pathwayId, slug);
     if (catalogHit) {
       const fromCatalog = normalizeLesson(catalogHit, pathwayId);
       if (pathwayLessonEligibleForPublicMarketingSurface(fromCatalog)) {
@@ -1803,7 +1804,7 @@ async function getPathwayLessonSeoMetaImpl(pathwayId: string, slug: string): Pro
     };
   }
 
-  const hit = getCatalogLessonsRaw(pathwayId).find((lesson) => lesson.slug === slug);
+  const hit = getCatalogLessonRawBySlug(pathwayId, slug);
   if (!hit) return undefined;
   return pathwayLessonSeoMetaFromRecord(normalizeLesson(hit, pathwayId));
 }
@@ -1883,7 +1884,7 @@ export async function getPathwayLessonForProgress(pathwayId: string, slug: strin
     null,
   );
   if (rowAny) return normalizeLesson(pathwayLessonRowToInput(rowAny), pathwayId);
-  const hit = getCatalogLessonsRaw(pathwayId).find((l) => l.slug === slug);
+  const hit = getCatalogLessonRawBySlug(pathwayId, slug);
   return hit ? normalizeLesson(hit, pathwayId) : undefined;
 }
 

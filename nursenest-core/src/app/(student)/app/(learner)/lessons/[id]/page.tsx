@@ -86,6 +86,7 @@ import {
 import { PathwayLessonInteractiveModules } from "@/components/lessons/pathway-lesson-interactive-modules";
 import { getLessonInteractiveModules } from "@/lib/lessons/lesson-interactive-modules";
 import { loadPathwayLessonAdjacent, mapPathwayLessonAdjacentToAppHrefs } from "@/lib/lessons/pathway-lesson-adjacent";
+import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 
 function LessonBody({
   content,
@@ -174,7 +175,7 @@ function LessonBody({
 
 type Props = { params: Promise<{ id: string }> };
 
-export default async function LessonDetailPage({ params }: Props) {
+async function LessonDetailPageInner({ params }: Props) {
   const { id } = await params;
   const session = await getProtectedRouteSession("(student).app.(learner).lessons.[id]");
   const userId = (session?.user as { id?: string })?.id ?? "";
@@ -522,6 +523,7 @@ export default async function LessonDetailPage({ params }: Props) {
       next: null,
     }));
 
+    lessonsPerfMark("personalization_start", { route: "app_lessons_detail" });
     const [relatedQuestionStems, initialProgress, pathwayStudySnap, bankLoopPack, bankAssessments, pathwayAdjacentSlugs] =
       await Promise.all([
         pathway != null
@@ -544,6 +546,7 @@ export default async function LessonDetailPage({ params }: Props) {
         bankAssessmentsPromise,
         pathwayAdjacentPromise,
       ]);
+    lessonsPerfMark("personalization_end", { route: "app_lessons_detail" });
     const studyNextHint =
       Boolean(
         pathwayStudySnap &&
@@ -1003,4 +1006,13 @@ export default async function LessonDetailPage({ params }: Props) {
       </div>
     </div>
   );
+}
+
+export default async function LessonDetailPage(props: Props) {
+  lessonsPerfMark("route_start", { route: "app_lessons_detail" });
+  try {
+    return await LessonDetailPageInner(props);
+  } finally {
+    lessonsPerfMark("route_end", { route: "app_lessons_detail" });
+  }
 }

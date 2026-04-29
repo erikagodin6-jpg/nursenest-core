@@ -25,8 +25,12 @@ export const PATHWAY_HUB_PAGE_SIZE_DEFAULT = 60;
  * Max unique slugs to run {@link verifyMarketingHubLessonRowsResolve} detail checks per hub request.
  * Remaining prepared rows are kept as inventory (degraded) so the grid + totals stay aligned without N detail reads.
  * Override with `NN_MARKETING_HUB_VERIFY_SLUG_CAP` (integer, clamped 60–2000).
+ *
+ * Lowered from 400 → 80: the hub page now further bounds this to `pageSize × pageRequested` so
+ * page 1 only verifies the first 60 lessons. This constant acts as the upper safety ceiling for
+ * cases where the page-level bound is not applied (e.g. the category-first index verify pass).
  */
-export const PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP = 400;
+export const PATHWAY_HUB_MARKETING_VERIFY_UNIQUE_SLUG_CAP = 80;
 /**
  * Upper bound for marketing hub pagination slices + single-request metadata lists.
  * Hub cards are metadata-only (`sections: []`); align with {@link PATHWAY_CATALOG_LIST_HARD_CAP} for URL caps.

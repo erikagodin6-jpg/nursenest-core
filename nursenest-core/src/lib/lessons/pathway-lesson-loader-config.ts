@@ -25,8 +25,15 @@ export function normalizePathwayHubSearchQuery(raw: string | undefined): string 
 export const PATHWAY_LESSON_DB_TIMEOUT_MS = 1000;
 
 /**
- * Marketing lessons hub runs {@link verifyMarketingHubLessonRowsResolve} with one full-row Prisma read per slug.
- * The default 1s cap races large `sections` JSON and cold DB latency, returns fallback `null`, and collapses the hub
- * to a handful of “lucky” fast rows. Keep this bounded but high enough for production lesson payloads.
+ * Marketing lessons hub runs {@link verifyMarketingHubLessonRowsResolve} with one Prisma read per slug.
+ *
+ * Previously 15 000 ms: with 400 slugs at concurrency=8, the worst case was 50 rounds × 15 s = 750 s.
+ * Now 4 000 ms: the hub verify scope is also capped to the current page size (see hub page.tsx), so
+ * page 1 at concurrency=8 means at most 8 rounds × 4 s = 32 s worst-case (all time out). Normal
+ * latency is well under 500 ms per query, giving 8 rounds × 500 ms = 4 s per page.
+ *
+ * If a slug's DB row takes longer than 4 s, the verify returns `detail_loader_miss` and the row is
+ * kept as `hubMarketingDegraded` via the soft-recovery path — the hub still renders, just with that
+ * lesson's card link suppressed until the next request succeeds.
  */
-export const PATHWAY_LESSON_MARKETING_HUB_VERIFY_DB_TIMEOUT_MS = 15_000;
+export const PATHWAY_LESSON_MARKETING_HUB_VERIFY_DB_TIMEOUT_MS = 4_000;

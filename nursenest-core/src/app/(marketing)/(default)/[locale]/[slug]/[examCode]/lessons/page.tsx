@@ -82,6 +82,7 @@ import {
   ALLIED_PROFESSION_QUERY_PARAM,
   isAlliedMarketingCorePathwayId,
 } from "@/lib/lessons/canonical-lessons-hubs";
+import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 
 /** Canonical Canada RN hub path (used for legacy ops grep + optional verbose console). */
 const RN_CANADA_NCLEX_LESSONS_HUB_PATH = "/canada/rn/nclex-rn/lessons" as const;
@@ -280,6 +281,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     );
   }
 
+  const hubRouteT0 = performance.now();
+  lessonsPerfMark("route_start", { pathwayId: pathway.id, surface: "pathway_lessons_hub_page" });
+  try {
   const base = marketingPathwayLessonsIndexPath(pathway);
   const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
@@ -334,6 +338,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     );
   }
 
+  const pageRenderT0 = performance.now();
+  console.error(`[lessons-perf] marketing_hub_render_start pathway=${pathway.id} locale=${lessonContentLocale} page=${pageRequested}`);
+
   const hubLoadT0 = performance.now();
   const {
     pageResult,
@@ -365,6 +372,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     },
   );
   const hubAggregatesDurationMs = Math.round(performance.now() - hubLoadT0);
+  console.error(`[lessons-perf] hub_aggregates_done pathway=${pathway.id} total=${pageResult.total} ms=${hubAggregatesDurationMs} source=${lessonsPageLoad.status === "ok" ? (lessonsPageLoad.sourceUsed ?? "?") : "error"}`);
 
   safeServerLog("pathway_lessons", "marketing_lessons_hub_loader_snapshot", {
     stage: "post_aggregates",
@@ -586,17 +594,45 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       lessonsBasePath: base,
     });
   const prepareDurationMs = Math.round(performance.now() - prepareT0);
+  console.error(`[lessons-perf] prepare_done pathway=${pathway.id} prepared=${hubCurriculumPrepared.length} ms=${prepareDurationMs}`);
+
   const listWarehouseT0 = performance.now();
   const listWarehouseLocale = await getPathwayLessonListWarehouseLocaleForHub(pathway.id, lessonContentLocale);
   const listWarehouseResolveMs = Math.round(performance.now() - listWarehouseT0);
+
+  /**
+   * FIX: Only verify lessons on the current page (not the entire catalog).
+   *
+   * Previously the verify cap was a flat 400, meaning every hub render fired 400 individual
+   * full-row Prisma reads (including heavy sections JSONB), each with a 15-second timeout.
+   * At concurrency=8 that produced 50 serial rounds × query-time, causing 5+ minute renders.
+   *
+   * Now we cap at `effectiveHubPageSize × pageRequested` so:
+   *   Page 1: verify  60 lessons  (8 concurrent rounds of 8 queries)
+   *   Page 2: verify 120 lessons  (15 rounds)
+   *   etc.
+   * Lessons beyond the cap are kept as hubMarketingDegraded="unverified_inventory_fill" so
+   * the total/pagination counts remain accurate — they are just non-clickable in the card nav.
+   */
+  const effectiveHubPageSizeForVerify = Math.min(
+    PATHWAY_HUB_PAGE_SIZE_MAX,
+    Math.max(pageSizeRequested, PATHWAY_HUB_PAGE_SIZE_DEFAULT, 1),
+  );
+  const pageVerifyCap = Math.min(
+    resolvedMarketingHubVerifySlugCap(),
+    effectiveHubPageSizeForVerify * pageRequested,
+  );
+
   /** Cross-check list rows with fresh detail loads; soft failures stay as {@link PathwayLessonRecord.hubMarketingDegraded}. */
   const verifyT0 = performance.now();
+  console.error(`[lessons-perf] verify_start pathway=${pathway.id} prepared=${hubCurriculumPrepared.length} cap=${pageVerifyCap} page=${pageRequested}`);
   const vr = await verifyMarketingHubLessonRowsResolve(pathway, hubCurriculumPrepared, lessonContentLocale, {
     listWarehouseLocale,
     prepareStages: hubPrepareStages,
-    maxUniqueSlugsToVerify: resolvedMarketingHubVerifySlugCap(),
+    maxUniqueSlugsToVerify: pageVerifyCap,
   });
   const verifyDurationMs = Math.round(performance.now() - verifyT0);
+  console.error(`[lessons-perf] verify_done pathway=${pathway.id} kept=${vr.kept.length} excluded=${vr.excluded.length} ms=${verifyDurationMs}`);
   const fillResult = await fillMarketingHubLessonInventoryToMinimum({
     pathway,
     routePathname: `${pathname}/lessons`,
@@ -723,6 +759,9 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     return sum + Math.min(LESSON_SYSTEM_HUB_CARD_PREVIEW_MAX, linkable.length);
   }, 0);
   const groupingDurationMs = Math.round(performance.now() - groupT0);
+
+  const pageWallClockMs = Math.round(performance.now() - pageRenderT0);
+  console.error(`[lessons-perf] render_ready pathway=${pathway.id} page=${pageRequested} grid_rows=${lessonsForCurriculumHub.length} linkable=${stage6LinkableLessonRows} aggregates_ms=${hubAggregatesDurationMs} prepare_ms=${prepareDurationMs} verify_ms=${verifyDurationMs} grouping_ms=${groupingDurationMs} total_ms=${pageWallClockMs}`);
 
   safeServerLog("pathway_lessons", "marketing_lessons_hub_render_ready", {
     stage: "render_ready",
@@ -1284,4 +1323,11 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       />
     </LessonsPageShell>
   );
+  } finally {
+    lessonsPerfMark("route_end", {
+      pathwayId: pathway.id,
+      surface: "pathway_lessons_hub_page",
+      elapsed_ms: Math.round(performance.now() - hubRouteT0),
+    });
+  }
 }

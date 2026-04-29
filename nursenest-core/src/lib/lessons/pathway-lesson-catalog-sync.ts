@@ -43,7 +43,12 @@ import { stripPathwayLessonToHubListShape } from "@/lib/lessons/pathway-lesson-h
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import { hydratePremiumCatalogSectionsForMarketingGate } from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { prependScopedGoldCatalogLessons } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
-import { normalizeLessonCategory, premiumizeLessonDisplayTitle } from "@/lib/lessons/lesson-taxonomy";
+import {
+  normalizeLessonCategory,
+  premiumizeLessonDisplayTitle,
+  type LessonCategory,
+} from "@/lib/lessons/lesson-taxonomy";
+import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 
 type CatalogShape = {
   version: number;
@@ -109,11 +114,27 @@ let rnProceduresSkillsExpansionPathwaysCache: Record<string, CatalogShape["pathw
 let rnNutritionExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 /** RN NCLEX-RN Exam Strategy expansion (merged after nutrition expansion; deduped by slug). */
 let rnExamStrategyExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+/** RN NCLEX-RN respiratory expansion (merged after exam strategy expansion; deduped by slug). */
+let rnRespiratoryExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+/** RN NCLEX-RN renal & urinary expansion (merged after respiratory expansion; deduped by slug). */
+let rnRenalExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+/** RN NCLEX-RN endocrine expansion (merged after renal expansion; deduped by slug). */
+let rnEndocrineExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+/** RN NCLEX-RN musculoskeletal expansion (merged after endocrine expansion; deduped by slug). */
+let rnMusculoskeletalExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 let newGradTransitionPathwaysCache: Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> | null = null;
 
 function getCatalogData(): CatalogShape {
   if (catalogDataCache) return catalogDataCache;
+  lessonsPerfMark("catalog_build_start", { scope: "bundled_catalog_json" });
   catalogDataCache = require("@/content/pathway-lessons/catalog.json") as CatalogShape;
+  lessonsPerfMark("catalog_build_end", { scope: "bundled_catalog_json" });
+  const pathwayCount = Object.keys(catalogDataCache.pathways ?? {}).length;
+  const lessonRows = Object.values(catalogDataCache.pathways ?? {}).reduce(
+    (n, p) => n + (Array.isArray(p.lessons) ? p.lessons.length : 0),
+    0,
+  );
+  lessonsPerfMark("catalog_size", { scope: "bundled_catalog_json", pathwayKeys: pathwayCount, lessonRows });
   return catalogDataCache;
 }
 
@@ -289,6 +310,62 @@ function rnExamStrategyExpansionLessonsForPathway(pathwayId: string): LessonInpu
   return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
 }
 
+function getRnRespiratoryExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnRespiratoryExpansionPathwaysCache) return rnRespiratoryExpansionPathwaysCache;
+  rnRespiratoryExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-respiratory-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnRespiratoryExpansionPathwaysCache;
+}
+
+function rnRespiratoryExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnRespiratoryExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+function getRnRenalExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnRenalExpansionPathwaysCache) return rnRenalExpansionPathwaysCache;
+  rnRenalExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-renal-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnRenalExpansionPathwaysCache;
+}
+
+function rnRenalExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnRenalExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+function getRnEndocrineExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnEndocrineExpansionPathwaysCache) return rnEndocrineExpansionPathwaysCache;
+  rnEndocrineExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-endocrine-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnEndocrineExpansionPathwaysCache;
+}
+
+function rnEndocrineExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnEndocrineExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+function getRnMusculoskeletalExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnMusculoskeletalExpansionPathwaysCache) return rnMusculoskeletalExpansionPathwaysCache;
+  rnMusculoskeletalExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-musculoskeletal-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnMusculoskeletalExpansionPathwaysCache;
+}
+
+function rnMusculoskeletalExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnMusculoskeletalExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
 function getNewGradTransitionPathways(): Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> {
   if (newGradTransitionPathwaysCache) return newGradTransitionPathwaysCache;
   newGradTransitionPathwaysCache =
@@ -310,6 +387,90 @@ function newGradTransitionLessonsForPathway(pathwayId: string): LessonInput[] {
 }
 
 export type LessonInput = CatalogShape["pathways"][string]["lessons"][number];
+
+export type PathwayLessonSummaryIndexRow = {
+  id: string;
+  slug: string;
+  title: string;
+  category: LessonCategory;
+  shortDescription: string;
+};
+
+/** Merged raw catalog rows per pathway (lesson-library + expansions); avoids O(n) rebuild per slug lookup. */
+const catalogLessonsRawByPathwayIdCache = new Map<string, LessonInput[]>();
+
+/** Full {@link normalizeLesson} results per pathway — built once per process (hub + detail reuse). */
+const pathwayNormalizedCatalogRows = new Map<string, PathwayLessonRecord[]>();
+/** Slug → normalized lesson for O(1) detail/catalog reads. */
+const pathwayNormalizedLessonBySlug = new Map<string, Map<string, PathwayLessonRecord>>();
+/** Slug → raw merged JSON row (no normalize) for loaders that overlay DB onto catalog input. */
+const pathwayCatalogRawBySlug = new Map<string, Map<string, LessonInput>>();
+/**
+ * Lowercased slugs that appear on the marketing hub after the same filters as
+ * {@link sortAndFilterLessonsForPathwayContext} (used for dynamic segment resolution without scanning the list).
+ */
+const marketingEffectiveCatalogSlugSetByPathway = new Map<string, Set<string>>();
+/** Hub-effective list with bodies stripped — reused by marketing category helpers. */
+const effectiveHubCatalogLessonsByPathway = new Map<string, PathwayLessonRecord[]>();
+/** Memoized {@link getLessonSummariesIndex} rows per pathway (process lifetime). */
+const lessonSummariesIndexByPathway = new Map<string, PathwayLessonSummaryIndexRow[]>();
+
+/** Test-only: clear merged catalog slice cache and derived normalized indexes. */
+export function resetCatalogLessonsRawMergeCacheForTests(): void {
+  catalogLessonsRawByPathwayIdCache.clear();
+  pathwayNormalizedCatalogRows.clear();
+  pathwayNormalizedLessonBySlug.clear();
+  pathwayCatalogRawBySlug.clear();
+  marketingEffectiveCatalogSlugSetByPathway.clear();
+  effectiveHubCatalogLessonsByPathway.clear();
+  lessonSummariesIndexByPathway.clear();
+}
+
+function ensurePathwayCatalogIndexes(pathwayId: string): void {
+  const key = pathwayId.trim();
+  if (pathwayNormalizedCatalogRows.has(key)) return;
+  lessonsPerfMark("catalog_build_start", { scope: "normalized_pathway_catalog", pathwayId: key });
+  const rawList = getCatalogLessonsRaw(key);
+  const normRows: PathwayLessonRecord[] = [];
+  const normBySlug = new Map<string, PathwayLessonRecord>();
+  const rawBySlug = new Map<string, LessonInput>();
+  for (const raw of rawList) {
+    const slugKey = typeof raw.slug === "string" ? raw.slug.trim() : "";
+    if (!slugKey) continue;
+    rawBySlug.set(slugKey, raw);
+    const norm = normalizeLesson(raw, key);
+    normRows.push(norm);
+    normBySlug.set(slugKey, norm);
+  }
+  pathwayNormalizedCatalogRows.set(key, normRows);
+  pathwayNormalizedLessonBySlug.set(key, normBySlug);
+  pathwayCatalogRawBySlug.set(key, rawBySlug);
+  lessonsPerfMark("catalog_build_end", { scope: "normalized_pathway_catalog", pathwayId: key, count: normRows.length });
+  lessonsPerfMark("catalog_size", { scope: "normalized_pathway_catalog", pathwayId: key, count: normRows.length });
+}
+
+/** Raw merged catalog row for `slug` when present (no normalize). */
+export function getCatalogLessonRawBySlug(pathwayId: string, slug: string): LessonInput | undefined {
+  const key = pathwayId.trim();
+  ensurePathwayCatalogIndexes(key);
+  return pathwayCatalogRawBySlug.get(key)?.get(slug.trim());
+}
+
+/**
+ * Normalized bundled lesson for `slug` when present — O(1) after first pathway catalog build.
+ * Does not apply DB overlays; use {@link getPathwayLesson} for marketing detail.
+ */
+export function getLessonBySlug(pathwayId: string, slug: string): PathwayLessonRecord | undefined {
+  const key = pathwayId.trim();
+  ensurePathwayCatalogIndexes(key);
+  return pathwayNormalizedLessonBySlug.get(key)?.get(slug.trim());
+}
+
+/** Curated display title from the bundled normalized catalog (hub card title parity). */
+export function getCatalogPathwayLessonDisplayTitleForSlug(pathwayId: string, slug: string): string | undefined {
+  return getLessonBySlug(pathwayId, slug)?.title;
+}
+
 const CANONICAL_ORDER: PathwayLessonSectionKind[] = [
   "clinical_meaning",
   "exam_relevance",
@@ -1183,6 +1344,10 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
   const proceduresSkillsExpansion = rnProceduresSkillsExpansionLessonsForPathway(pathwayId);
   const nutritionExpansion = rnNutritionExpansionLessonsForPathway(pathwayId);
   const examStrategyExpansion = rnExamStrategyExpansionLessonsForPathway(pathwayId);
+  const respiratoryExpansion = rnRespiratoryExpansionLessonsForPathway(pathwayId);
+  const renalExpansion = rnRenalExpansionLessonsForPathway(pathwayId);
+  const endocrineExpansion = rnEndocrineExpansionLessonsForPathway(pathwayId);
+  const musculoskeletalExpansion = rnMusculoskeletalExpansionLessonsForPathway(pathwayId);
   const newGrad = newGradTransitionLessonsForPathway(pathwayId);
   const seen = new Set<string>();
   const merged: LessonInput[] = [];
@@ -1200,6 +1365,10 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
     ...proceduresSkillsExpansion,
     ...nutritionExpansion,
     ...examStrategyExpansion,
+    ...respiratoryExpansion,
+    ...renalExpansion,
+    ...endocrineExpansion,
+    ...musculoskeletalExpansion,
     ...newGrad,
   ]) {
     if (seen.has(l.slug)) continue;
@@ -1209,7 +1378,7 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
   return prependScopedGoldCatalogLessons(pathwayId, merged);
 }
 
-export function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
+function buildCatalogLessonsRawUncached(pathwayId: string): LessonInput[] {
   const lib = readLessonLibrarySync();
   if (lib?.lessons?.length) {
     const rows = lib.lessons.filter((r) => Array.isArray(r.pathwayIds) && r.pathwayIds.includes(pathwayId));
@@ -1286,14 +1455,52 @@ export function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
         seen.add(s);
         merged.push(extra);
       }
+      for (const extra of rnRespiratoryExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of rnRenalExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of rnEndocrineExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of rnMusculoskeletalExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
       return prependScopedGoldCatalogLessons(pathwayId, merged);
     }
   }
   return getCatalogLessonsRawFromBundledOnly(pathwayId);
 }
 
+export function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
+  const key = pathwayId.trim();
+  const hit = catalogLessonsRawByPathwayIdCache.get(key);
+  if (hit) return hit;
+  lessonsPerfMark("catalog_build_start", { scope: "merged_catalog_lessons_raw", pathwayId: key });
+  const built = buildCatalogLessonsRawUncached(key);
+  catalogLessonsRawByPathwayIdCache.set(key, built);
+  lessonsPerfMark("catalog_build_end", { scope: "merged_catalog_lessons_raw", pathwayId: key, count: built.length });
+  lessonsPerfMark("catalog_size", { scope: "merged_catalog_lessons_raw", pathwayId: key, count: built.length });
+  return built;
+}
+
 export function getCatalogPathwayLessonsSync(pathwayId: string): PathwayLessonRecord[] {
-  return getCatalogLessonsRaw(pathwayId).map((raw) => normalizeLesson(raw, pathwayId));
+  const key = pathwayId.trim();
+  ensurePathwayCatalogIndexes(key);
+  return pathwayNormalizedCatalogRows.get(key) ?? [];
 }
 
 /**
@@ -1306,14 +1513,54 @@ export function getCatalogPathwayLessonsSync(pathwayId: string): PathwayLessonRe
  * so category-first marketing hubs never retain full catalog lesson JSON in memory (detail routes load bodies).
  */
 export function getEffectiveCatalogLessonsForPathwaySync(pathwayId: string): PathwayLessonRecord[] {
-  return sortAndFilterLessonsForPathwayContext(pathwayId, getCatalogPathwayLessonsSync(pathwayId)).map(
-    stripPathwayLessonToHubListShape,
-  );
+  const key = pathwayId.trim();
+  const hit = effectiveHubCatalogLessonsByPathway.get(key);
+  if (hit) return hit;
+  ensurePathwayCatalogIndexes(key);
+  const normalized = pathwayNormalizedCatalogRows.get(key) ?? [];
+  const built = sortAndFilterLessonsForPathwayContext(key, normalized).map(stripPathwayLessonToHubListShape);
+  effectiveHubCatalogLessonsByPathway.set(key, built);
+  return built;
+}
+
+/**
+ * Slugs accepted on the marketing hub for this pathway (post publicComplete + exam/country context filter).
+ */
+export function getMarketingHubEffectiveCatalogSlugSet(pathwayId: string): Set<string> {
+  const key = pathwayId.trim();
+  const hit = marketingEffectiveCatalogSlugSetByPathway.get(key);
+  if (hit) return hit;
+  const eff = getEffectiveCatalogLessonsForPathwaySync(key);
+  const s = new Set(eff.map((l) => l.slug.trim().toLowerCase()));
+  marketingEffectiveCatalogSlugSetByPathway.set(key, s);
+  return s;
+}
+
+/**
+ * Lightweight marketing-hub index: no section bodies, one row per hub-visible lesson.
+ * Process-memoized (cleared in tests via {@link resetCatalogLessonsRawMergeCacheForTests}).
+ */
+export function getLessonSummariesIndex(pathwayId: string): PathwayLessonSummaryIndexRow[] {
+  const key = pathwayId.trim();
+  const memo = lessonSummariesIndexByPathway.get(key);
+  if (memo) return memo;
+  lessonsPerfMark("summary_index_start", { pathwayId: key });
+  const filtered = getEffectiveCatalogLessonsForPathwaySync(key);
+  const rows: PathwayLessonSummaryIndexRow[] = filtered.map((l) => ({
+    id: l.slug,
+    slug: l.slug,
+    title: l.title,
+    category: normalizeLessonCategory(l.topic, l.title),
+    shortDescription: l.seoDescription,
+  }));
+  lessonSummariesIndexByPathway.set(key, rows);
+  lessonsPerfMark("summary_index_end", { pathwayId: key, count: rows.length });
+  return rows;
 }
 
 /** True when the bundled catalog path yields at least one lesson (JSON slice and/or scoped-gold for this pathway). */
 export function pathwayHasBundledCatalogLessonsSync(pathwayId: string): boolean {
-  return getCatalogPathwayLessonsSync(pathwayId).length > 0;
+  return getCatalogLessonsRaw(pathwayId).length > 0;
 }
 
 /** Pathway ids that have at least one catalog (+ allied bundled slice + scoped-gold) lesson row. */
@@ -1323,7 +1570,7 @@ export function listCatalogPathwayIdsWithLessonsSync(): string[] {
     ...Object.keys(getAlliedBundledPathways()),
     ...Object.keys(getNewGradTransitionPathways()),
   ]);
-  return [...ids].filter((id) => getCatalogPathwayLessonsSync(id).length > 0);
+  return [...ids].filter((id) => getCatalogLessonsRaw(id).length > 0);
 }
 
 /**

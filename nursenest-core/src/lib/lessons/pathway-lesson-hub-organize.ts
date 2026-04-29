@@ -19,7 +19,7 @@
  */
 
 import { normalizeLessonTitleForDedupe } from "@/lib/lessons/pathway-lesson-dedupe";
-import { getCatalogPathwayLessonsSync } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import { getCatalogPathwayLessonDisplayTitleForSlug } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
@@ -63,7 +63,7 @@ export function canonicalHubLessonDisplayTitle(lesson: PathwayLessonRecord, path
   const pid = typeof pathwayId === "string" ? pathwayId.trim() : "";
   if (pid) {
     try {
-      catalogCurated = getCatalogPathwayLessonsSync(pid).find((l) => l.slug === lesson.slug)?.title;
+      catalogCurated = getCatalogPathwayLessonDisplayTitleForSlug(pid, lesson.slug);
     } catch {
       catalogCurated = undefined;
     }

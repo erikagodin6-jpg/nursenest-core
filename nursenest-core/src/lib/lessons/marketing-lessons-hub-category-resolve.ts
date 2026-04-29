@@ -2,10 +2,8 @@ import { ContentStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { LessonCategory } from "@/lib/lessons/lesson-taxonomy";
-import {
-  getMarketingLessonsHubCatalogLessons,
-  lessonCategoryFromMarketingHubPathSegment,
-} from "@/lib/lessons/marketing-lessons-hub-category";
+import { getMarketingHubEffectiveCatalogSlugSet } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import { lessonCategoryFromMarketingHubPathSegment } from "@/lib/lessons/marketing-lessons-hub-category";
 
 /**
  * When `…/lessons/{segment}` matches a display-category slug, route to the category hub **unless**
@@ -20,8 +18,7 @@ export async function resolveMarketingLessonsHubDynamicSegment(
   const cat = lessonCategoryFromMarketingHubPathSegment(slug);
   if (!cat) return "lesson";
 
-  const catalog = getMarketingLessonsHubCatalogLessons(pathwayId);
-  if (catalog.some((l) => (l.slug ?? "").trim().toLowerCase() === slugLower)) {
+  if (getMarketingHubEffectiveCatalogSlugSet(pathwayId).has(slugLower)) {
     return "lesson";
   }
 
