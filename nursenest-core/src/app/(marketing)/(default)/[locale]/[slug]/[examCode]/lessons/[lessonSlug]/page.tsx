@@ -17,9 +17,8 @@ import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway
 import { withCrawlSurfacePageRender } from "@/lib/observability/crawl-surface-observability";
 import { PathwayLessonDetailPageBody } from "./pathway-lesson-detail-page-body";
 import {
-  filterMarketingHubLessonsByDisplayCategory,
+  filterPathwayMarketingHubLessonsByCategory,
   getMarketingLessonsHubCatalogLessons,
-  marketingHubCategorySlugForCategory,
   MARKETING_HUB_CATEGORY_PAGE_SIZE,
   sortLessonsForMarketingCategoryPage,
 } from "@/lib/lessons/marketing-lessons-hub-category";
@@ -106,13 +105,13 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
       const resolved = await resolveMarketingLessonsHubDynamicSegment(pathway.id, lessonSlug);
       if (resolved === "lesson") return {};
       const { category } = resolved;
-      const catPath = marketingPathwayLessonsCategoryPath(pathway, marketingHubCategorySlugForCategory(category));
+      const catPath = marketingPathwayLessonsCategoryPath(pathway, category.slug);
       const qs = page > 1 ? `?page=${page}` : "";
       const canonical = absoluteUrl(`${catPath}${qs}`);
       const examName = pathwayRegionAwareExamName(pathway);
       const region = pathwayCountryLabel(pathway);
-      const title = `${category} lessons — ${pathway.shortName} (${examName})`;
-      const description = `Browse ${category.toLowerCase()} lessons for ${pathway.shortName} in ${region}.`;
+      const title = `${category.label} lessons — ${pathway.shortName} (${examName})`;
+      const description = `Browse ${category.label.toLowerCase()} lessons for ${pathway.shortName} in ${region}.`;
       return {
         title,
         description,
@@ -149,12 +148,13 @@ export default async function PathwayLessonDetailPage({ params, searchParams }: 
       const base = marketingPathwayLessonsIndexPath(pathway);
       const categoryBasePath = marketingPathwayLessonsCategoryPath(
         pathway,
-        marketingHubCategorySlugForCategory(resolved.category),
+        resolved.category.slug,
       );
       const filtered = sortLessonsForMarketingCategoryPage(
-        filterMarketingHubLessonsByDisplayCategory(
+        filterPathwayMarketingHubLessonsByCategory(
           getMarketingLessonsHubCatalogLessons(pathway.id),
-          resolved.category,
+          pathway.id,
+          resolved.category.id,
         ),
         pathway.id,
       );

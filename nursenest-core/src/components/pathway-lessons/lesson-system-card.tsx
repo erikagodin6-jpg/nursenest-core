@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
 import { CategoryProgressBar } from "@/components/pathway-lessons/category-progress-bar";
-import { aggregatePathwayLessonProgress } from "@/components/pathway-lessons/pathway-progress-aggregation";
+import { buildLessonCategoryProgress } from "@/lib/lessons/build-lesson-category-progress";
 import {
   lessonDifficultyLabel,
   lessonEstimatedDurationLabel,
@@ -121,9 +121,9 @@ export function LessonSystemCard({
     (lesson) => pathwayLessonMarketingHubVerifiedCardHref(lessonsBasePath, lesson) != null,
   );
   const displayCount = linkableLessons.length;
-  const { completedCount, inProgressCount } = showProgress
-    ? aggregatePathwayLessonProgress(linkableLessons, progressMap)
-    : { completedCount: 0, inProgressCount: 0 };
+  const { completedCount, inProgressCount, percentComplete } = showProgress
+    ? buildLessonCategoryProgress({ lessons: linkableLessons, progressMap })
+    : { completedCount: 0, inProgressCount: 0, percentComplete: 0 };
   const previewLessons = linkableLessons.slice(0, LESSON_SYSTEM_PREVIEW);
   const hiddenLessonCount = Math.max(0, linkableLessons.length - previewLessons.length);
 
@@ -146,10 +146,13 @@ export function LessonSystemCard({
             >
               {section.label}
             </h2>
-            <span className="shrink-0 text-xs font-semibold text-[var(--theme-muted-text)]">
+            <span className="shrink-0 text-right text-xs font-semibold text-[var(--theme-muted-text)]">
               {showProgress ? (
                 <>
-                  {completedCount} of {displayCount} completed
+                  <span className="hidden sm:inline">
+                    {percentComplete}% complete ·{" "}
+                  </span>
+                  {completedCount} of {displayCount} lessons
                 </>
               ) : (
                 <>

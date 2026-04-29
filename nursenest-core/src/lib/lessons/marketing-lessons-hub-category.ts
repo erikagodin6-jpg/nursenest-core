@@ -11,6 +11,7 @@ import {
   getEffectiveCatalogLessonsForPathwaySync,
   getLessonSummariesIndex,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
 import { REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
 
 /** URL segment for each {@link LESSON_CATEGORIES} value (kebab, stable). */
@@ -34,6 +35,13 @@ export const MARKETING_HUB_CATEGORY_PAGE_SIZE = 24;
 
 export const MARKETING_HUB_REVIEW_REQUIRED_PREVIEW_MAX = 8;
 
+export type MarketingHubCategoryDescriptor = {
+  id: string;
+  label: string;
+  slug: string;
+  legacyCategory?: LessonCategory;
+};
+
 /** Resolve `…/lessons/{segment}` when {@link lessonCategoryFromMarketingHubPathSegment} matches. */
 export function lessonCategoryFromMarketingHubPathSegment(segment: string | null | undefined): LessonCategory | null {
   const raw = typeof segment === "string" ? segment.trim().toLowerCase() : "";
@@ -43,6 +51,77 @@ export function lessonCategoryFromMarketingHubPathSegment(segment: string | null
 
 export function marketingHubCategorySlugForCategory(category: LessonCategory): string {
   return lessonCategoryToSlug(category);
+}
+
+function genericSlug(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+export function isNewGradLessonPathwayId(pathwayId: string): boolean {
+  return pathwayId === "us-rn-new-grad-transition" || pathwayId.includes("new-grad");
+}
+
+export function pathwayMarketingHubCategories(pathwayId: string): MarketingHubCategoryDescriptor[] {
+  if (isNewGradLessonPathwayId(pathwayId)) {
+    return learningConfigForPathwayId(pathwayId).categories.map((category) => ({
+      id: category.id,
+      label: category.title,
+      slug: genericSlug(category.title),
+    }));
+  }
+  return LESSON_CATEGORIES.map((category) => ({
+    id: category,
+    label: category,
+    slug: marketingHubCategorySlugForCategory(category),
+    legacyCategory: category,
+  }));
+}
+
+export function pathwayMarketingHubCategoryFromSegment(
+  pathwayId: string,
+  segment: string | null | undefined,
+): MarketingHubCategoryDescriptor | null {
+  const raw = typeof segment === "string" ? segment.trim().toLowerCase() : "";
+  if (!raw) return null;
+  if (!isNewGradLessonPathwayId(pathwayId)) {
+    const legacy = lessonCategoryFromMarketingHubPathSegment(raw);
+    return legacy
+      ? { id: legacy, label: legacy, slug: marketingHubCategorySlugForCategory(legacy), legacyCategory: legacy }
+      : null;
+  }
+  return (
+    pathwayMarketingHubCategories(pathwayId).find(
+      (category) => category.slug === raw || genericSlug(category.id) === raw,
+    ) ?? null
+  );
+}
+
+export function displayCategoryForPathwayMarketingHubLesson(
+  lesson: PathwayLessonRecord,
+  pathwayId: string,
+): MarketingHubCategoryDescriptor {
+  if (isNewGradLessonPathwayId(pathwayId)) {
+    const id = classifyLessonForHub(lesson, pathwayId);
+    return (
+      pathwayMarketingHubCategories(pathwayId).find((category) => category.id === id) ?? {
+        id: REVIEW_REQUIRED,
+        label: "Review Required",
+        slug: genericSlug("Review Required"),
+      }
+    );
+  }
+  const legacyCategory = displayCategoryForMarketingHubLesson(lesson);
+  return {
+    id: legacyCategory,
+    label: legacyCategory,
+    slug: marketingHubCategorySlugForCategory(legacyCategory),
+    legacyCategory,
+  };
 }
 
 export function displayCategoryForMarketingHubLesson(lesson: PathwayLessonRecord): LessonCategory {
@@ -88,11 +167,35 @@ export function countMarketingHubLessonsByDisplayCategoryForPathway(pathwayId: s
   return m;
 }
 
+export function countPathwayMarketingHubLessonsByCategoryForPathway(pathwayId: string): Map<string, number> {
+  if (!isNewGradLessonPathwayId(pathwayId)) {
+    return new Map([...countMarketingHubLessonsByDisplayCategoryForPathway(pathwayId)].map(([category, count]) => [category, count]));
+  }
+  const m = new Map<string, number>();
+  for (const category of pathwayMarketingHubCategories(pathwayId)) m.set(category.id, 0);
+  for (const lesson of getMarketingLessonsHubCatalogLessons(pathwayId)) {
+    const category = displayCategoryForPathwayMarketingHubLesson(lesson, pathwayId);
+    m.set(category.id, (m.get(category.id) ?? 0) + 1);
+  }
+  return m;
+}
+
 export function filterMarketingHubLessonsByDisplayCategory(
   lessons: readonly PathwayLessonRecord[],
   category: LessonCategory,
 ): PathwayLessonRecord[] {
   return lessons.filter((l) => displayCategoryForMarketingHubLesson(l) === category);
+}
+
+export function filterPathwayMarketingHubLessonsByCategory(
+  lessons: readonly PathwayLessonRecord[],
+  pathwayId: string,
+  categoryId: string,
+): PathwayLessonRecord[] {
+  if (!isNewGradLessonPathwayId(pathwayId)) {
+    return filterMarketingHubLessonsByDisplayCategory(lessons, categoryId as LessonCategory);
+  }
+  return lessons.filter((lesson) => displayCategoryForPathwayMarketingHubLesson(lesson, pathwayId).id === categoryId);
 }
 
 /**

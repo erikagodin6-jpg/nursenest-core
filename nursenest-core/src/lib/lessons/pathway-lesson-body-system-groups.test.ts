@@ -184,6 +184,52 @@ test("PN/RPN hub classification groups clinically specific lessons into approved
   );
 });
 
+test("New Grad hub classification uses transition-to-practice categories instead of NCLEX body-system buckets", () => {
+  const sections = buildPathwayLessonSystemSections(
+    [
+      lesson({
+        slug: "first-call",
+        title: "Your first phone call to a physician as a new nurse",
+        topic: "Communication",
+        topicSlug: "communication",
+        bodySystem: "Professional Practice",
+      }),
+      lesson({
+        slug: "charting",
+        title: "Documentation: Keeping up without staying late",
+        topic: "Time Management",
+        topicSlug: "time-management",
+        bodySystem: "Professional Practice",
+      }),
+      lesson({
+        slug: "delegation",
+        title: "What can and can't be delegated to CNAs and PCTs",
+        topic: "Delegation",
+        topicSlug: "delegation",
+        bodySystem: "Professional Practice",
+      }),
+      lesson({
+        slug: "post-op",
+        title: "Post-op return patients: What to watch first",
+        topic: "Prioritization",
+        topicSlug: "prioritization",
+        bodySystem: "Professional Practice",
+      }),
+    ],
+    "us-rn-new-grad-transition",
+  );
+
+  assert.deepEqual(
+    sections.map((section) => [section.id, section.label, section.lessons.map((l) => l.slug)]),
+    [
+      ["operating_room_pacu", "Operating Room and PACU", ["post-op"]],
+      ["assessments_documentation", "Assessments and Documentation", ["charting"]],
+      ["prioritization_delegation", "Prioritization and Delegation", ["delegation"]],
+      ["communication_providers_families", "Communication with Providers and Families", ["first-call"]],
+    ],
+  );
+});
+
 test("NP hub classification keeps unique clinical signals and sends unsafe multi-system overlays to review", () => {
   assert.equal(
     classifyLessonForHub(

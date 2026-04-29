@@ -8,7 +8,8 @@ import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { CategoryProgressBar } from "@/components/pathway-lessons/category-progress-bar";
-import { aggregatePathwayLessonProgress } from "@/components/pathway-lessons/pathway-progress-aggregation";
+import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
+import { buildLessonCategoryProgress } from "@/lib/lessons/build-lesson-category-progress";
 import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
@@ -16,14 +17,11 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingExamHubBasePath, marketingPathwayLessonsCategoryPath } from "@/lib/lessons/lesson-routes";
 import {
-  LESSON_CATEGORIES,
-  lessonCategoryToSlug,
-} from "@/lib/lessons/lesson-taxonomy";
-import {
-  countMarketingHubLessonsByDisplayCategoryForPathway,
-  displayCategoryForMarketingHubLesson,
+  countPathwayMarketingHubLessonsByCategoryForPathway,
+  displayCategoryForPathwayMarketingHubLesson,
   getMarketingLessonsHubCatalogLessons,
   MARKETING_HUB_REVIEW_REQUIRED_PREVIEW_MAX,
+  pathwayMarketingHubCategories,
   pickReviewRequiredCatalogLessons,
 } from "@/lib/lessons/marketing-lessons-hub-category";
 import {
@@ -44,7 +42,7 @@ import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
-import { loadPathwayLessonProgressMapForSlugs } from "@/lib/lessons/pathway-lesson-progress";
+import { getLessonProgressForPathwayUser } from "@/lib/lessons/get-lesson-progress-for-pathway-user";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
@@ -75,7 +73,8 @@ export async function MarketingLessonsHubCategoryFirstIndex({
   lessonsPerfMark("route_start", { surface: "marketing_lessons_category_index", pathwayId: pathway.id });
 
   const catalog = getMarketingLessonsHubCatalogLessons(pathway.id);
-  const counts = countMarketingHubLessonsByDisplayCategoryForPathway(pathway.id);
+  const hubCategories = pathwayMarketingHubCategories(pathway.id);
+  const counts = countPathwayMarketingHubLessonsByCategoryForPathway(pathway.id);
   const reviewPick = pickReviewRequiredCatalogLessons(
     catalog,
     pathway.id,
@@ -186,11 +185,11 @@ export async function MarketingLessonsHubCategoryFirstIndex({
     Boolean(userId) && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
   if (canShowResume && catalog.length > 0) {
-    progressMap = await loadPathwayLessonProgressMapForSlugs(
+    progressMap = await getLessonProgressForPathwayUser({
       userId,
-      pathway.id,
-      catalog.map((l) => l.slug),
-    );
+      pathwayId: pathway.id,
+      lessonSlugs: catalog.map((l) => l.slug),
+    });
   }
 
   const studyCards = defaultLessonModeCards({
@@ -308,11 +307,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
                         className="flex flex-wrap items-baseline justify-between gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm font-medium text-primary hover:underline"
                       >
                         <span className="min-w-0 flex-1">{label}</span>
-                        {canShowResume && prog && prog !== "not_started" ? (
-                          <span className="shrink-0 text-xs font-normal text-[var(--theme-muted-text)]">
-                            {prog === "completed" ? "Completed" : "In progress"}
-                          </span>
-                        ) : null}
+                        {canShowResume ? <PathwayLessonProgressBadge status={prog ?? "not_started"} /> : null}
                       </Link>
                     ) : (
                       <span className="text-sm text-[var(--theme-muted-text)]">{label}</span>
@@ -325,29 +320,41 @@ export async function MarketingLessonsHubCategoryFirstIndex({
         ) : null}
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {LESSON_CATEGORIES.map((cat) => {
-            const n = counts.get(cat) ?? 0;
-            const slug = lessonCategoryToSlug(cat);
-            const href = marketingPathwayLessonsCategoryPath(pathway, slug);
+          {hubCategories.map((cat) => {
+            const n = counts.get(cat.id) ?? 0;
+            const href = marketingPathwayLessonsCategoryPath(pathway, cat.slug);
             const categoryProgress = canShowResume
-              ? aggregatePathwayLessonProgress(
-                  catalog.filter((lesson) => displayCategoryForMarketingHubLesson(lesson) === cat),
+              ? buildLessonCategoryProgress({
+                  lessons: catalog.filter((lesson) => displayCategoryForPathwayMarketingHubLesson(lesson, pathway.id).id === cat.id),
                   progressMap,
-                )
+                })
               : null;
             return (
               <Link
-                key={cat}
+                key={cat.id}
                 href={href}
                 className="group flex min-h-[72px] flex-col justify-center rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_55%,var(--semantic-surface))] px-4 py-3 transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] hover:bg-[color-mix(in_srgb,var(--semantic-panel-positive)_40%,var(--semantic-surface))]"
               >
                 <span className="text-sm font-semibold text-[var(--theme-heading-text)] group-hover:text-primary">
-                  {cat}
+                  {cat.label}
                 </span>
                 <span className="mt-1 text-xs text-[var(--theme-muted-text)]">
-                  {canShowResume && categoryProgress
-                    ? `${categoryProgress.completedCount.toLocaleString()} of ${n.toLocaleString()} completed`
-                    : `${n.toLocaleString()} ${n === 1 ? "lesson" : "lessons"}`}
+                  {canShowResume && categoryProgress ? (
+                    <>
+                      <span className="hidden sm:inline">
+                        {categoryProgress.percentComplete}% complete ·{" "}
+                      </span>
+                      <span aria-hidden="true">
+                        {categoryProgress.completedCount.toLocaleString()}/
+                        {categoryProgress.totalCount.toLocaleString()} lessons
+                      </span>
+                      <span className="sr-only">
+                        {`${categoryProgress.completedCount.toLocaleString()} of ${categoryProgress.totalCount.toLocaleString()} lessons completed`}
+                      </span>
+                    </>
+                  ) : (
+                    `${n.toLocaleString()} ${n === 1 ? "lesson" : "lessons"}`
+                  )}
                 </span>
                 {canShowResume && categoryProgress ? (
                   <CategoryProgressBar

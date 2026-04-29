@@ -125,6 +125,115 @@ const NP_HUB_CATEGORIES: LearningCategory[] = NP_HUB_CATEGORY_DEFS.map((d) => ({
   description: d.description,
 }));
 
+export const NEW_GRAD_HUB_CATEGORIES: LearningCategory[] = [
+  {
+    id: "medical_surgical_nursing",
+    title: "Medical-Surgical Nursing",
+    description: "Floor nursing routines, multi-patient care, common adult pathophysiology, and med-surg skill judgment.",
+  },
+  {
+    id: "emergency_department",
+    title: "Emergency Department",
+    description: "Triage, stabilization, rapid reassessment, and emergency escalation for new graduate nurses.",
+  },
+  {
+    id: "icu_stepdown",
+    title: "ICU and Stepdown",
+    description: "Higher-acuity monitoring, deterioration cues, alarms, handoffs, and escalation on stepdown or ICU-adjacent units.",
+  },
+  {
+    id: "pediatrics",
+    title: "Pediatrics",
+    description: "Pediatric floor care, family-centered communication, development-aware assessment, and safety.",
+  },
+  {
+    id: "labour_delivery",
+    title: "Labour and Delivery",
+    description: "Labor assessment, fetal or maternal warning signs, team communication, and urgent escalation.",
+  },
+  {
+    id: "postpartum",
+    title: "Postpartum",
+    description: "Postpartum assessment, bleeding, newborn-family teaching, and maternal safety.",
+  },
+  {
+    id: "mental_health",
+    title: "Mental Health",
+    description: "Behavioral safety, de-escalation, therapeutic communication, and psychiatric nursing foundations.",
+  },
+  {
+    id: "long_term_care",
+    title: "Long-Term Care",
+    description: "Resident safety, chronic-care workflows, delegation, documentation, and escalation in LTC settings.",
+  },
+  {
+    id: "community_health",
+    title: "Community Health",
+    description: "Home and community nursing, teaching, follow-up, and resource coordination.",
+  },
+  {
+    id: "operating_room_pacu",
+    title: "Operating Room and PACU",
+    description: "Perioperative flow, PACU assessment, post-anesthesia safety, and surgical handoffs.",
+  },
+  {
+    id: "oncology",
+    title: "Oncology",
+    description: "Oncology floor patterns, neutropenia, chemotherapy safety cues, and symptom escalation.",
+  },
+  {
+    id: "cardiology",
+    title: "Cardiology",
+    description: "Telemetry, chest pain, heart failure, rhythm concerns, and cardiac medication safety.",
+  },
+  {
+    id: "nephrology_dialysis",
+    title: "Nephrology and Dialysis",
+    description: "Renal patients, dialysis timing, fluid balance, electrolytes, and urgent kidney-related escalation.",
+  },
+  {
+    id: "neurology",
+    title: "Neurology",
+    description: "Stroke, seizures, neuro checks, mental status changes, and neurologic deterioration.",
+  },
+  {
+    id: "assessments_documentation",
+    title: "Assessments and Documentation",
+    description: "Focused assessment, charting, late documentation, handoff records, and safe information transfer.",
+  },
+  {
+    id: "prioritization_delegation",
+    title: "Prioritization and Delegation",
+    description: "Acuity sorting, assignment safety, CNA/PCT delegation, follow-up, and charge-nurse escalation.",
+  },
+  {
+    id: "communication_providers_families",
+    title: "Communication with Providers and Families",
+    description: "SBAR, family communication, conflict, huddles, asking for help, and provider calls.",
+  },
+  {
+    id: "safety_emergencies_escalation",
+    title: "Safety, Emergencies, and Escalation",
+    description: "Rapid response thinking, early deterioration, safety threats, alarms, and urgent escalation.",
+  },
+  {
+    id: "job_applications_interviews",
+    title: "Job Applications and Interviews",
+    description: "Applications, resumes, cover letters, interviews, references, and first nursing job decisions.",
+  },
+  {
+    id: "choosing_floor_unit",
+    title: "Choosing a Floor/Unit",
+    description: "Comparing hospital units, fit, workload, specialty culture, and first-year learning environment.",
+  },
+  {
+    id: "orientation_preceptorship",
+    title: "Orientation and Preceptorship",
+    description: "Orientation, preceptor relationships, surviving the first year, feedback, and building independence.",
+  },
+  learningCategoryRow(REVIEW_REQUIRED),
+];
+
 const LEARNING_PATHWAY_CONFIGS: Record<string, PathwayLearningConfig> = {
   "ca-rpn-rex-pn": { pathwayId: "ca-rpn-rex-pn", label: "REx-PN", categories: RN_PN_RPN_HUB_CATEGORIES, profile: "clinical" },
   "us-lpn-nclex-pn": { pathwayId: "us-lpn-nclex-pn", label: "NCLEX-PN", categories: RN_PN_RPN_HUB_CATEGORIES, profile: "clinical" },
@@ -138,6 +247,7 @@ const LEARNING_PATHWAY_CONFIGS: Record<string, PathwayLearningConfig> = {
   "us-np-pnp-pc": { pathwayId: "us-np-pnp-pc", label: "PNP-PC", categories: NP_HUB_CATEGORIES, profile: "clinical" },
   "ca-allied-core": { pathwayId: "ca-allied-core", label: "Allied Health", categories: STANDARD_PATHWAY_CATEGORIES, profile: "clinical" },
   "us-allied-core": { pathwayId: "us-allied-core", label: "Allied Health", categories: STANDARD_PATHWAY_CATEGORIES, profile: "clinical" },
+  "us-rn-new-grad-transition": { pathwayId: "us-rn-new-grad-transition", label: "New Grad", categories: NEW_GRAD_HUB_CATEGORIES, profile: "clinical" },
 };
 
 const DEFAULT_NURSING_CONFIG: PathwayLearningConfig = {
@@ -165,6 +275,9 @@ export function learningConfigForPathwayId(pathwayId: string | null | undefined)
   if (!pathwayId) return DEFAULT_NURSING_CONFIG;
   const direct = LEARNING_PATHWAY_CONFIGS[pathwayId];
   if (direct) return direct;
+  if (pathwayId.includes("new-grad")) {
+    return { pathwayId: "default-new-grad", label: "New Grad", categories: NEW_GRAD_HUB_CATEGORIES, profile: "clinical" };
+  }
   if (pathwayId.includes("allied")) return DEFAULT_ALLIED_CONFIG;
   return DEFAULT_NURSING_CONFIG;
 }

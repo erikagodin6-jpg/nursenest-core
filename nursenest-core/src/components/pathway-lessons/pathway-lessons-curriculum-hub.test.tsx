@@ -69,7 +69,8 @@ describe("PathwayLessonsCurriculumHub", () => {
     );
 
     assert.match(html, /Cardiovascular/);
-    assert.match(html, /2 of 6 completed/);
+    assert.match(html, /33% complete/);
+    assert.match(html, /2 of 6 lessons/);
     assert.match(html, /Category progress/i);
     assert.match(html, /line-clamp-3/);
   });
@@ -95,12 +96,13 @@ describe("PathwayLessonsCurriculumHub", () => {
     assert.match(html, /2 lessons/);
   });
 
-  it("renders the same shared progress UI for RN, RPN/PN, NP, and Allied paid users", () => {
+  it("renders the same shared progress UI for RN, RPN/PN, NP, Allied, and New Grad paid users", () => {
     const pathways = [
       { pathwayId: "ca-rn-nclex-rn", base: "/canada/rn/nclex-rn/lessons" },
       { pathwayId: "ca-rpn-rex-pn", base: "/canada/pn/rex-pn/lessons" },
       { pathwayId: "us-np-fnp", base: "/us/np/fnp/lessons" },
       { pathwayId: "ca-allied-core", base: "/canada/allied/allied-health/lessons" },
+      { pathwayId: "us-rn-new-grad-transition", base: "/us/rn/new-grad-transition/lessons" },
     ];
     const lessons = [
       lesson({ slug: "cardiac-1", title: "Cardiac lesson 1" }),
@@ -123,7 +125,8 @@ describe("PathwayLessonsCurriculumHub", () => {
         />,
       );
       assert.match(html, /Category progress/i, pathwayId);
-      assert.match(html, /1 of 3 completed/i, pathwayId);
+      assert.match(html, /33% complete/, pathwayId);
+      assert.match(html, /1 of 3 lessons/, pathwayId);
       assert.match(html, /data-testid="lesson-card-link"/, pathwayId);
     }
   });
@@ -134,7 +137,13 @@ describe("PathwayLessonsCurriculumHub", () => {
       lesson({ slug: "two", title: "Two" }),
       lesson({ slug: "three", title: "Three" }),
     ];
-    for (const pathwayId of ["ca-rn-nclex-rn", "ca-rpn-rex-pn", "us-np-fnp", "ca-allied-core"]) {
+    for (const pathwayId of [
+      "ca-rn-nclex-rn",
+      "ca-rpn-rex-pn",
+      "us-np-fnp",
+      "ca-allied-core",
+      "us-rn-new-grad-transition",
+    ]) {
       const counts = aggregatePathwayLessonProgress(lessons, {
         one: "completed",
         two: "in_progress",
