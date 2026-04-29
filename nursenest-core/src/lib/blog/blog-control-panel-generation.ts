@@ -62,6 +62,7 @@ import {
   isLongFormPathophysiologyProfile,
   validateLongFormNursingPlanContract,
 } from "@/lib/blog/blog-longform-nursing-contract";
+import { fetchControlPanelBodyHtmlSectionIsolated } from "@/lib/blog/blog-section-isolated-body-generation";
 import { mergePublishingPackageIntoLinkPlanJson } from "@/lib/blog/blog-publishing-package";
 import { blogPrimaryStudyCta, marketingStudyHubsForBlogExam } from "@/lib/blog/blog-study-cta";
 import { detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
@@ -249,6 +250,10 @@ export async function fetchControlPanelBodyHtml(params: {
   selectedTitle?: string;
   openAiUser?: string;
 }): Promise<string> {
+  if (isLongFormPathophysiologyProfile({ template: params.template, intent: params.intent })) {
+    return fetchControlPanelBodyHtmlSectionIsolated(params);
+  }
+
   const pageH1 = params.selectedTitle?.trim() || params.plan.h1;
   const system = buildArticleBodySystemPrompt({ template: params.template, intent: params.intent });
   const user = buildArticleBodyUserPrompt({

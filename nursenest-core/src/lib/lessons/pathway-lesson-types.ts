@@ -310,6 +310,13 @@ export type PathwayLessonRecord = {
   studyCommonTraps?: string[];
   /** “If you only remember one thing” — optional single line when authored. */
   memoryAnchor?: string;
+  /**
+   * RN expansion / authoring: human-readable flashcard stems mirrored into the
+   * `linked_flashcard_prompts` section for depth checks. Kept as `string[]` for catalog compatibility.
+   * TODO: migrate to structured objects `{ id, sourceSection, prompt, kind }` when the flashcard
+   * pipeline and loaders accept a stable object shape end-to-end.
+   */
+  linked_flashcard_prompts?: string[];
   /** Section ids skipped in the article when takeaways bullets were hoisted to strips. */
   omitHighYieldSectionIds?: string[];
   /**

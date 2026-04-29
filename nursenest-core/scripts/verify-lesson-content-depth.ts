@@ -20,6 +20,7 @@ import {
   LESSON_DEPTH_TOTAL_WORD_MIN,
   rollupDepthByCohort,
 } from "@/lib/lessons/lesson-content-depth-schema";
+import { isRnNclexExpandPathwayId, validateExpandedLesson } from "@/lib/lessons/rn-expanded-lesson-contract";
 import {
   getCatalogPathwayLessonsSync,
   listCatalogPathwayIdsWithLessonsSync,
@@ -40,6 +41,16 @@ type SummaryJson = {
     legacyOnlyKinds: number;
     genericFiller: number;
     missingFlashcardSurface: number;
+    /** RN NCLEX-RN/US+CA expanded-lesson contract (same rules as rn-ai-expand-lessons). */
+    rnExpandLessonsTotal: number;
+    rnExpandPassing: number;
+    rnExpandBelow1200Words: number;
+    rnExpandMissingRequiredSection: number;
+    rnExpandThinSectionLessons: number;
+    rnExpandThinSectionsTotal: number;
+    rnExpandClinicalGapLessons: number;
+    rnExpandMissingClinicalTotal: number;
+    rnExpandFlashcardIssueLessons: number;
   };
   byPathway: Record<
     string,
@@ -75,6 +86,16 @@ function main() {
   let filler = 0;
   let noFlash = 0;
 
+  let rnExpandLessonsTotal = 0;
+  let rnExpandPassing = 0;
+  let rnExpandBelow1200 = 0;
+  let rnExpandMissingSection = 0;
+  let rnExpandThinLessons = 0;
+  let rnExpandThinSectionsTotal = 0;
+  let rnExpandClinicalGapLessons = 0;
+  let rnExpandMissingClinicalTotal = 0;
+  let rnExpandFlashcardIssueLessons = 0;
+
   for (const pathwayId of pathwayIds) {
     const lessons = getCatalogPathwayLessonsSync(pathwayId);
     const failingSlugs: string[] = [];
@@ -90,6 +111,23 @@ function main() {
       if (a.legacyOnlyKindsPresent.length) legacyOnly += 1;
       if (a.genericFillerHits.length) filler += 1;
       if (a.missingFlashcardSurface) noFlash += 1;
+
+      if (isRnNclexExpandPathwayId(pathwayId)) {
+        const ev = validateExpandedLesson(lesson);
+        rnExpandLessonsTotal += 1;
+        if (ev.pass) rnExpandPassing += 1;
+        if (ev.totalWords < LESSON_DEPTH_TOTAL_WORD_MIN) rnExpandBelow1200 += 1;
+        if (ev.missingSections.length > 0) rnExpandMissingSection += 1;
+        if (ev.thinSections.length > 0) {
+          rnExpandThinLessons += 1;
+          rnExpandThinSectionsTotal += ev.thinSections.length;
+        }
+        if (ev.missingClinicalRequirements.length > 0) {
+          rnExpandClinicalGapLessons += 1;
+          rnExpandMissingClinicalTotal += ev.missingClinicalRequirements.length;
+        }
+        if (ev.flashcardPromptErrors.length > 0 || ev.flashcardPromptCount < 8) rnExpandFlashcardIssueLessons += 1;
+      }
     }
     byPathway[pathwayId] = {
       lessonCount: lessons.length,
@@ -114,6 +152,15 @@ function main() {
       legacyOnlyKinds: legacyOnly,
       genericFiller: filler,
       missingFlashcardSurface: noFlash,
+      rnExpandLessonsTotal,
+      rnExpandPassing,
+      rnExpandBelow1200Words: rnExpandBelow1200,
+      rnExpandMissingRequiredSection: rnExpandMissingSection,
+      rnExpandThinSectionLessons: rnExpandThinLessons,
+      rnExpandThinSectionsTotal,
+      rnExpandClinicalGapLessons,
+      rnExpandMissingClinicalTotal,
+      rnExpandFlashcardIssueLessons,
     },
     byPathway,
     cohortRollups: rollups,
@@ -131,6 +178,16 @@ function main() {
   console.log(`Lessons still containing legacy-only kinds: ${summary.totals.legacyOnlyKinds}`);
   console.log(`Lessons with generic filler phrases: ${summary.totals.genericFiller}`);
   console.log(`Lessons without flashcard prompts section / recallPrompts: ${summary.totals.missingFlashcardSurface}`);
+  console.log("\n--- RN expanded-lesson contract (us-rn-nclex-rn + ca-rn-nclex-rn) ---");
+  console.log(`RN lessons (total): ${summary.totals.rnExpandLessonsTotal}`);
+  console.log(`RN fully passing expanded contract: ${summary.totals.rnExpandPassing}`);
+  console.log(`RN lessons total words < ${LESSON_DEPTH_TOTAL_WORD_MIN}: ${summary.totals.rnExpandBelow1200Words}`);
+  console.log(`RN lessons with any missing required section: ${summary.totals.rnExpandMissingRequiredSection}`);
+  console.log(`RN lessons with any thin section (<150w): ${summary.totals.rnExpandThinSectionLessons}`);
+  console.log(`RN thin section rows (sum across lessons): ${summary.totals.rnExpandThinSectionsTotal}`);
+  console.log(`RN lessons with any missing clinical requirement: ${summary.totals.rnExpandClinicalGapLessons}`);
+  console.log(`RN missing clinical requirement rows (sum): ${summary.totals.rnExpandMissingClinicalTotal}`);
+  console.log(`RN lessons with flashcard prompt issues or <8 prompts: ${summary.totals.rnExpandFlashcardIssueLessons}`);
   console.log("\n--- Cohort completion % (strict pass / all lessons in cohort pathways) ---");
   for (const r of rollups) {
     if (r.totalLessons === 0 && r.cohort === "OTHER") continue;
@@ -156,7 +213,14 @@ function main() {
     process.exit(1);
   }
 
-  console.log("\nverify:lesson-content-depth OK (non-strict: exit 0). Use --strict to fail CI on gate.");
+  if (summary.totals.rnExpandLessonsTotal > 0 && summary.totals.rnExpandPassing !== summary.totals.rnExpandLessonsTotal) {
+    console.error(
+      `\nRN expanded-lesson contract: ${summary.totals.rnExpandPassing}/${summary.totals.rnExpandLessonsTotal} lessons pass — exiting 1.`,
+    );
+    process.exit(1);
+  }
+
+  console.log("\nverify:lesson-content-depth OK (RN expand contract satisfied when RN lessons present).");
 }
 
 main();

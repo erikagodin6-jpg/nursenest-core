@@ -110,7 +110,7 @@ describe("safeParseBlogControlPanelPlan", () => {
     }
   });
 
-  it("fills default imagePlacements when the model returns an empty array", () => {
+  it("B: empty imagePlacements array gets one fallback item", () => {
     const raw = {
       ...minimalValidPlan(),
       imagePlacements: [],
@@ -166,6 +166,18 @@ describe("safeParseBlogControlPanelPlan", () => {
     const raw = {
       ...minimalValidPlan(),
       imagePlacements: [{ ...goodRow, promptIdea: "short" }],
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA);
+    }
+  });
+
+  it("invalid_type promptIdea (object) gets fallback without throwing", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [{ ...goodRow, promptIdea: { nested: "bad" } }],
     };
     const r = safeParseBlogControlPanelPlan(raw);
     assert.equal(r.success, true);

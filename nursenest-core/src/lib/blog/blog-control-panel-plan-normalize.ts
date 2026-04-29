@@ -48,7 +48,7 @@ function logImagePlacementRepair(
   ctx?: BlogEditorialPlanNormalizeContext,
 ): void {
   const titleSlice = ctx?.title ? String(ctx.title).slice(0, 120) : undefined;
-  safeServerLog("blog-plan-normalize", "repaired_imagePlacements_promptIdea", {
+  safeServerLog("blog-plan-normalize", "repaired imagePlacements.promptIdea", {
     reason,
     index,
     ...(ctx?.jobId ? { jobId: ctx.jobId } : {}),

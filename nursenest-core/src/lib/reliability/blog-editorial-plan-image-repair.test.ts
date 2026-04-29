@@ -13,7 +13,7 @@ describe("blog editorial plan image repair (reliability)", () => {
   it("normalizeBlogEditorialPlanCandidate never throws on garbage imagePlacements root", () => {
     assert.doesNotThrow(() => {
       const out = normalizeBlogEditorialPlanCandidate(
-        { imagePlacements: "not-an-array" as unknown as string[] },
+        { imagePlacements: "not-an-array" },
         { jobId: "rel-1" },
       ) as Record<string, unknown>;
       assert.ok(Array.isArray(out.imagePlacements));

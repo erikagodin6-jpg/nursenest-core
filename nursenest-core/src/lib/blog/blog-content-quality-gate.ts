@@ -152,7 +152,7 @@ function jaccard(a: Set<string>, b: Set<string>): number {
   return union === 0 ? 0 : inter / union;
 }
 
-function titleLooksTruncated(title: string): boolean {
+export function titleLooksTruncated(title: string): boolean {
   const t = title.trim();
   if (t.length < 8) return true;
   if (/\.\.\.\s*$/.test(t)) return true;
@@ -164,6 +164,42 @@ function titleLooksTruncated(title: string): boolean {
   const close = (t.match(/\)/g) ?? []).length;
   if (open > close) return true;
   return false;
+}
+
+/** Strip leading first <h2>…</h2> so similarity compares prose under the heading. */
+function proseAfterFirstH2(html: string): string {
+  return html.replace(/^\s*<h2\b[^>]*>[\s\S]*?<\/h2>\s*/i, "").trim();
+}
+
+/**
+ * Max Jaccard similarity (word overlap) of a newly generated section vs each prior section in accumulated HTML.
+ * Used during section-isolated generation to trigger immediate regeneration when prose is too repetitive.
+ */
+export function maxJaccardOfNewSectionVsPriorSections(newSectionHtml: string, priorAccumulatedHtml: string): number {
+  const newPlain = normalizeParagraphText(proseAfterFirstH2(newSectionHtml));
+  const newWords = wordSet(newPlain);
+  if (!priorAccumulatedHtml.trim()) return 0;
+  const segments = splitBlogBodyByH2(priorAccumulatedHtml);
+  let max = 0;
+  for (const seg of segments) {
+    const priorPlain = normalizeParagraphText(proseAfterFirstH2(seg.html));
+    const priorWords = wordSet(priorPlain);
+    max = Math.max(max, jaccard(newWords, priorWords));
+  }
+  return max;
+}
+
+/**
+ * Pathophysiology / section-isolated body generation requires a headline that will not truncate in SERP
+ * and reads as a complete thought (see {@link titleLooksTruncated}).
+ */
+export function validateBlogTitleForBodyGeneration(title: string): { ok: true } | { ok: false; reason: string } {
+  const t = title.trim();
+  if (!t) return { ok: false, reason: "empty_title" };
+  if (t.length < 30) return { ok: false, reason: "title_too_short_min_30" };
+  if (t.length > 100) return { ok: false, reason: "title_too_long_max_100" };
+  if (titleLooksTruncated(t)) return { ok: false, reason: "title_looks_truncated" };
+  return { ok: true };
 }
 
 function faqBlockItemTexts(faqBlock: Prisma.JsonValue): { q: string; a: string }[] {

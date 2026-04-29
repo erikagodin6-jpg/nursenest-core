@@ -1366,10 +1366,22 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
 
   const structuralQuality = evaluatePathwayLessonStructuralGate(withStudyStrips);
   const interactiveModules = buildLessonInteractiveModules(withStudyStrips);
+  const rawLfp = (raw as { linked_flashcard_prompts?: unknown }).linked_flashcard_prompts;
+  const linked_flashcard_prompts = (() => {
+    if (!Array.isArray(rawLfp) || rawLfp.length === 0) return undefined;
+    const strings = rawLfp
+      .filter((x): x is string => typeof x === "string")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0)
+      .slice(0, 48);
+    return strings.length ? strings : undefined;
+  })();
+
   return {
     ...withStudyStrips,
     structuralQuality,
     interactiveModules,
+    ...(linked_flashcard_prompts ? { linked_flashcard_prompts } : {}),
     ...(usePremium ? { premiumValidation: validatePathwayLessonPremium(withStudyStrips) } : {}),
   };
 }
