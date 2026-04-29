@@ -159,8 +159,15 @@ export function evaluateCitationGate(params: {
   riskFlags: string[];
   verifiedCount: number;
   allowInsufficientCitations: boolean;
+  /**
+   * When saving a **draft** with zero admin-verified bibliography rows, do not block the citation gate
+   * (APA list may be empty; admin can add sources before publish). Ignored when combined with immediate publish
+   * flows that require verified citations at the gate layer.
+   */
+  allowDraftWithoutVerifiedSources?: boolean;
 }): { ok: true } | { ok: false; code: "INSUFFICIENT_CITATIONS"; message: string; riskFlags: string[] } {
   if (params.allowInsufficientCitations) return { ok: true };
+  if (params.allowDraftWithoutVerifiedSources && params.verifiedCount === 0) return { ok: true };
   if (!citationSupportRequired(params.riskFlags)) return { ok: true };
   if (params.verifiedCount >= 1) return { ok: true };
   return {

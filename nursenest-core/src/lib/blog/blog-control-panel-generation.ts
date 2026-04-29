@@ -64,6 +64,10 @@ import { detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engin
 import { prisma } from "@/lib/db";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import {
+  ensureNonEmptyBlogBodyHtmlForPersist,
+  blogBodyHtmlWhenAiReturnedEmpty,
+} from "@/lib/blog/blog-article-bounds";
+import {
   BlogInvalidSlugError,
   BLOG_SLUG_FORMAT_RE,
   cleanBlogSlugInput,
@@ -128,6 +132,18 @@ function extractJsonObject(raw: string): unknown {
   const end = t.lastIndexOf("}");
   if (start >= 0 && end > start) t = t.slice(start, end + 1);
   return JSON.parse(t) as unknown;
+}
+
+/**
+ * Reserved hook for bounded plan materialization repairs (outline/FAQ density, slug hygiene).
+ * Long-form contract recovery remains in {@link repairPlanForLongformContractIssues} (pipeline loop).
+ */
+async function repairMaterializedPlanSectionsOnce(
+  plan: BlogControlPanelPlan,
+  _input: ControlPanelGenerateInput,
+  _opts?: { openAiUser?: string },
+): Promise<BlogControlPanelPlan> {
+  return plan;
 }
 
 export function sanitizeControlPanelGeneratedSlugInput(s: string, exam: string, topic: string): string {
@@ -220,7 +236,7 @@ export async function fetchControlPanelPlan(
     }
     throw new BlogControlPanelPlanError("PLAN_ZOD", "Editorial plan validation failed for an unknown reason.", null);
   }
-  return plan.data;
+  return await repairMaterializedPlanSectionsOnce(plan.data, input, opts);
 }
 
 export async function fetchControlPanelBodyHtml(params: {
@@ -263,6 +279,10 @@ export async function fetchControlPanelBodyHtml(params: {
   });
 
   const bodyHtml = response.content.trim();
+  const visible = bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  if (!bodyHtml.length || !visible.length) {
+    return blogBodyHtmlWhenAiReturnedEmpty();
+  }
   if (bodyHtml.length < 1800) {
     throw new Error("Model returned too little HTML for the article body");
   }
@@ -316,7 +336,8 @@ export async function persistControlPanelDraft(
   },
 ): Promise<ControlPanelPersistResult> {
   const normalizedTopic = normalizeBlogTopicKey(input.targetKeyword ?? input.topic);
-  const pageTitle = (plan.h1 || plan.titleOptions[0] || input.topic).slice(0, 220);
+  const pageTitle =
+    String((plan.h1 || plan.titleOptions[0] || input.topic || "Blog draft").trim()).slice(0, 220) || "Blog draft";
   let slugBase: string;
   try {
     const fixed = input.fixedSlug?.trim() ? coerceAdminOptionalSlugFromRawInput(input.fixedSlug, 180) : null;
@@ -369,12 +390,13 @@ export async function persistControlPanelDraft(
     funnel: input.funnelStage,
     template: input.template,
   });
-  const bodyWithRequiredLinks = appendRequiredStudyLinksBlock({
+  let bodyWithRequiredLinks = appendRequiredStudyLinksBlock({
     bodyHtml,
     exam: input.exam,
     country: input.country,
     relatedPaths,
   });
+  bodyWithRequiredLinks = ensureNonEmptyBlogBodyHtmlForPersist(bodyWithRequiredLinks);
   const riskFlags = detectRiskFlags({ template: input.template, keyword: input.targetKeyword ?? input.topic });
   const thinWarning = thinDraftWarning(bodyWithRequiredLinks);
 
@@ -383,6 +405,7 @@ export async function persistControlPanelDraft(
     riskFlags,
     verifiedCount: partition.verified.length,
     allowInsufficientCitations: Boolean(input.allowInsufficientCitations),
+    allowDraftWithoutVerifiedSources: partition.verified.length === 0 && !input.publishImmediately,
   });
   if (!citationGate.ok) {
     return {
@@ -544,14 +567,18 @@ export async function persistControlPanelDraft(
           metaTitleVariant: seoTitleStored,
           metaDescriptionVariant: seoDescriptionStored,
           tags: tagsForSeo,
-          outlineJson: plan.outline as unknown as Prisma.InputJsonValue,
-          keyQuestions: plan.faqs.slice(0, 6).map((f) => f.q),
+          outlineJson: (Array.isArray(plan.outline) && plan.outline.length > 0
+            ? plan.outline
+            : []) as unknown as Prisma.InputJsonValue,
+          keyQuestions: (Array.isArray(plan.faqs) ? plan.faqs : []).slice(0, 6).map((f) => f.q),
           keywordPlan: [
             input.targetKeyword ?? input.topic,
             ...(input.keywords ? input.keywords.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 8) : []),
           ].filter(Boolean),
-          titleAlternates: plan.titleOptions.filter((t) => t !== pageTitle).slice(0, 6),
-          keyTakeaways: plan.keyTakeaways,
+          titleAlternates: (Array.isArray(plan.titleOptions) ? plan.titleOptions : [])
+            .filter((t) => t && t !== pageTitle)
+            .slice(0, 6),
+          keyTakeaways: Array.isArray(plan.keyTakeaways) ? plan.keyTakeaways : [],
           faqBlock: faqBlock as unknown as Prisma.InputJsonValue,
           internalLinkPlan: internalLinkPlanInitial as unknown as Prisma.InputJsonValue,
           relatedLessonPaths: relatedPaths,
