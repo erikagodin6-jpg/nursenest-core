@@ -213,6 +213,21 @@ export async function runClaimedBlogArticleGenerationJob(jobId: string): Promise
       return { ok: false, error: "skipped" };
     }
 
+    if (!result.persist) {
+      await logJobStage(jobId, "failed");
+      await prisma.blogArticleGenerationJob.update({
+        where: { id: jobId },
+        data: {
+          lastError: "Pipeline succeeded but persist payload was missing.",
+          failureCode: "PERSIST_MISSING",
+          repairable: false,
+          planSnapshot: result.plan as unknown as Prisma.InputJsonValue,
+        },
+      });
+      safeServerLog("admin", "blog_article_generation_job_stage", { jobId, stage: "failed" });
+      return { ok: false, error: "persist_missing" };
+    }
+
     const p = result.persist.post;
     await logJobStage(jobId, "published");
     await prisma.blogArticleGenerationJob.update({
@@ -293,10 +308,10 @@ export async function retryRepairBlogArticleGenerationJob(jobId: string): Promis
     if (!post || !post.exam) return { ok: false, error: "post_missing" };
 
     const planParsed = row.planSnapshot ? safeParseBlogControlPanelPlan(row.planSnapshot) : null;
-    if (!planParsed.success || !planParsed.plan) {
+    if (!planParsed || !planParsed.success) {
       return { ok: false, error: "plan_snapshot_invalid" };
     }
-    const plan = planParsed.plan;
+    const plan = planParsed.data;
     const country =
       post.countryTarget === "US" ? "US" : post.countryTarget === "CA" ? "CA" : ("unspecified" as const);
 
@@ -383,7 +398,7 @@ export async function retryRepairBlogArticleGenerationJob(jobId: string): Promis
   }
 
   const planParsed = row.planSnapshot ? safeParseBlogControlPanelPlan(row.planSnapshot) : null;
-  if (!planParsed.success || !planParsed.plan) {
+  if (!planParsed || !planParsed.success) {
     return { ok: false, error: "plan_snapshot_required" };
   }
 
@@ -404,7 +419,7 @@ export async function retryRepairBlogArticleGenerationJob(jobId: string): Promis
   const result = await runBlogArticleGenerationPipeline(input, {
     persist: true,
     idempotencyKey: `${jobId}:retry`,
-    initialPlan: planParsed.plan,
+    initialPlan: planParsed.data,
     initialBodyHtml: row.bodyHtmlSnapshot ?? undefined,
     onProgressStage: async (stage) => {
       await logJobStage(jobId, stage);

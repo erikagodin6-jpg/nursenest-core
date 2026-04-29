@@ -1,3 +1,4 @@
+import "../../../scripts/stub-server-only.cjs";
 import assert from "node:assert/strict";
 import { after, describe, it } from "node:test";
 import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";

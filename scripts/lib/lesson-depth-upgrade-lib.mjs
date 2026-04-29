@@ -44,7 +44,7 @@ function scaffoldBlock(id, topic, bodySystem, title) {
   return `${head}\n\n**Clinical depth (authoring required):** Expand this block for **${topic}** (${bodySystem || "general"}) in the context of **${title}**. ` +
     `Use condition-specific mechanisms, expected assessment findings, and concrete nursing actions. ` +
     `Do **not** invent trial names, bracketed citations, or numeric doses unless they already appear elsewhere in this lesson and are clinically standard. ` +
-    `When you document monitoring, specify **which** assessments or lab trends you mean and **why** they change management (avoid vague “monitor closely” without targets).\n\n`;
+    `When you document monitoring, specify **which** assessments or lab trends you mean and **why** they change management (avoid vague surveillance language without concrete targets).\n\n`;
 }
 
 function hardBannedIn(corpus) {

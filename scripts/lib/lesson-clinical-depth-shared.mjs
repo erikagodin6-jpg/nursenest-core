@@ -151,7 +151,12 @@ export function detectMissingSpineSections(lesson) {
     if (!ok) missing.push(id);
   };
 
-  need("pathophysiology", /\b(pathophysiolog|pathophys|mechanism|etiology|physiology|cascade|dysfunction)\b/i.test(corpus));
+  need(
+    "pathophysiology",
+    /\b(pathophysiolog|pathophysiology|pathophys)\b/i.test(corpus) ||
+      (/\b(mechanism|etiology|physiology|cascade|dysfunction)\b/i.test(corpus) &&
+        !/\b(without\s+mechanism|no\s+mechanism|mechanism\s+vocabulary|lack(s)?\s+mechanism)\b/i.test(corpus)),
+  );
   need("risk_factors", /\b(risk factor|risk factors|predispos|contributing factor|modifiable risk)\b/i.test(corpus));
   need(
     "signs_symptoms",

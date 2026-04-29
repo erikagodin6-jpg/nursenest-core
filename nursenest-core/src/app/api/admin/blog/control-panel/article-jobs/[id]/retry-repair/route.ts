@@ -13,7 +13,7 @@ export const maxDuration = 300;
 
 type RouteContext = { params: Promise<{ id: string }> };
 
-export async function POST(_req: Request, ctx: RouteContext) {
+export async function POST(req: Request, ctx: RouteContext) {
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
 
