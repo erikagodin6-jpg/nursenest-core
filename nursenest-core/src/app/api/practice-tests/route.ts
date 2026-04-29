@@ -61,7 +61,7 @@ const createSchema = z
     topicNames: z.array(z.string().min(1).max(200)).max(30).optional().default([]),
     difficultyMin: z.union([z.number().int().min(1).max(5), z.null()]).optional(),
     difficultyMax: z.union([z.number().int().min(1).max(5), z.null()]).optional(),
-    selectionMode: z.enum(["random", "targeted", "weak", "missed", "cat"]),
+    selectionMode: z.enum(["random", "targeted", "weak", "missed", "starred", "cat"]),
     /** Pool strategy when `selectionMode` is `cat`. */
     catSelectionBasis: z.enum(["random", "targeted", "weak", "missed", "starred"]).optional(),
     /** Practice CAT: widen filters server-side when the narrow slice is too small (hub default: soft). */

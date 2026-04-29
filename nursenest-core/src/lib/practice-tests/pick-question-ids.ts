@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { loadMissedQuestionSignals } from "@/lib/learner/study-question-signals";
+import { loadMissedQuestionSignals, loadSavedRationaleQuestionIdsForPoolFilter } from "@/lib/learner/study-question-signals";
 import { loadWeakTopicPracticePlan } from "@/lib/learner/topic-performance";
 import type {
   LinearDeliveryMode,
@@ -61,10 +61,14 @@ export async function pickPracticeQuestionIds(
   const n = Math.min(PRACTICE_TEST_MAX_Q, Math.max(PRACTICE_TEST_MIN_Q, Math.floor(input.questionCount)));
 
   if (input.selectionMode === "starred") {
-    return {
-      ok: false,
-      message: "Starred / saved-rationale filtering is only available for adaptive (CAT) practice sessions.",
-    };
+    const starredIds = await loadSavedRationaleQuestionIdsForPoolFilter(userId, 200);
+    if (starredIds.length === 0) {
+      return {
+        ok: false,
+        message:
+          "No starred questions yet. Star items in the question bank or during review, then try a saved-questions practice exam.",
+      };
+    }
   }
 
   if (input.selectionMode === "targeted" && input.topicNames.length === 0) {

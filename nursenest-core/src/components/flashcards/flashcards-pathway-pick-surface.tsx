@@ -8,11 +8,15 @@ export function FlashcardsPathwayPickSurface({
   title,
   subtitle,
   pathways,
+  /** Learner surface to open after picking a track (defaults to flashcards hub). */
+  baseAppPath = "/app/flashcards",
 }: {
   title: string;
   subtitle: string;
   pathways: { id: string; label: string }[];
+  baseAppPath?: string;
 }) {
+  const base = baseAppPath.replace(/\/$/, "") || "/app/flashcards";
   return (
     <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
       <header className="space-y-2">
@@ -30,7 +34,7 @@ export function FlashcardsPathwayPickSurface({
           {pathways.map((p) => (
             <li key={p.id}>
               <Link
-                href={`/app/flashcards?pathwayId=${encodeURIComponent(p.id)}`}
+                href={`${base}?pathwayId=${encodeURIComponent(p.id)}`}
                 className="block rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-4 py-3 text-sm font-medium text-[var(--theme-fg)] transition-colors hover:border-[var(--semantic-info)]"
               >
                 {p.label}
@@ -44,7 +48,7 @@ export function FlashcardsPathwayPickSurface({
         <Link href="/app/account/study-preferences" className="text-primary underline underline-offset-2">
           Study preferences
         </Link>{" "}
-        — set a default track for questions, CAT, and flashcards.
+        — set a default track for questions, CAT, flashcards, and practice exams.
       </p>
     </div>
   );

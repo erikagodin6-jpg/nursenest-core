@@ -76,6 +76,8 @@ export function PracticeTestsHubClient({
 }) {
   const { t } = useMarketingI18n();
   const searchParams = useSearchParams();
+  /** Stable dependency so URL-driven effects do not re-fire on unrelated `useSearchParams` identity churn. */
+  const searchParamString = useMemo(() => searchParams.toString(), [searchParams]);
   const [topics, setTopics] = useState<{ topic: string; count: number }[]>([]);
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState<TestListRow[]>([]);
@@ -144,8 +146,9 @@ export function PracticeTestsHubClient({
 
   useEffect(() => {
     const prev = prevSelectionModeRef.current;
+    const qp = new URLSearchParams(searchParamString);
+    const urlPid = qp.get("pathwayId");
     if (prev !== "cat" && selectionMode === "cat") {
-      const urlPid = searchParams.get("pathwayId");
       setPathwayId(
         pathwayIdWhenEnteringCatMode({
           catEligibleOptions: catOptions,
@@ -157,7 +160,7 @@ export function PracticeTestsHubClient({
       setCatAdaptiveSessionType("cat");
     }
     prevSelectionModeRef.current = selectionMode;
-  }, [selectionMode, catOptions, defaultPathwayId, pathwayOptions, searchParams]);
+  }, [selectionMode, catOptions, defaultPathwayId, pathwayOptions, searchParamString]);
 
   const loadList = useCallback(async () => {
     setLoading(true);
@@ -196,21 +199,22 @@ export function PracticeTestsHubClient({
   }
 
   useEffect(() => {
-    const pid = searchParams.get("pathwayId")?.trim();
+    const qp = new URLSearchParams(searchParamString);
+    const pid = qp.get("pathwayId")?.trim();
     if (pid && pathwayOptions.some((p) => p.id === pid)) {
       setPathwayId(pid);
     }
-    const cat = searchParams.get("cat");
+    const cat = qp.get("cat");
     if (cat === "1" || cat === "true") {
       setSelectionMode("cat");
     }
-    const startMode = searchParams.get("startMode");
+    const startMode = qp.get("startMode");
     if (startMode === "practice_exam") {
       setSelectionMode("random");
       setLinearDeliveryMode("practice");
       setLinearRationaleVisibility("after_each");
     }
-    const focus = searchParams.get("focus");
+    const focus = qp.get("focus");
     if (focus === "weak") {
       setSelectionMode((prev) => {
         if (prev === "cat") {
@@ -229,7 +233,16 @@ export function PracticeTestsHubClient({
         return "missed";
       });
     }
-  }, [searchParams, pathwayOptions]);
+    if (focus === "starred") {
+      setSelectionMode((prev) => {
+        if (prev === "cat") {
+          setCatSelectionBasis("starred");
+          return prev;
+        }
+        return "starred";
+      });
+    }
+  }, [searchParamString, pathwayOptions]);
 
   useEffect(() => {
     let cancelled = false;
@@ -297,7 +310,9 @@ export function PracticeTestsHubClient({
               ? "weak"
               : selectionMode === "missed"
                 ? "missed"
-                : "random",
+                : selectionMode === "starred"
+                  ? "starred"
+                  : "random",
         topicNames: topicPicks,
         pathwayId: pathwayId.trim() || null,
         timedMode,
@@ -501,6 +516,7 @@ export function PracticeTestsHubClient({
                 ["targeted", t("learner.practiceTests.hub.selection.targeted")],
                 ["weak", t("learner.practiceTests.hub.selection.weak")],
                 ["missed", t("learner.practiceTests.hub.selection.missed")],
+                ["starred", t("learner.practiceTests.hub.selection.starred")],
                 ["cat", t("learner.practiceTests.hub.selection.cat")],
               ] as const
             ).map(([v, label]) => (
@@ -530,19 +546,21 @@ export function PracticeTestsHubClient({
                 ? t("learner.practiceTests.hub.selectionHelp.weak")
                 : selectionMode === "missed"
                   ? t("learner.practiceTests.hub.selectionHelp.missed")
-                  : selectionMode === "cat"
-                    ? catPresentationMode === "exam_simulation"
-                      ? isNpPathway
-                        ? t("learner.practiceTests.hub.selectionHelp.cat.examSim.np")
-                        : t("learner.practiceTests.hub.selectionHelp.cat.examSim.rn")
-                      : t("learner.practiceTests.hub.selectionHelp.cat.practice")
-                    : t("learner.practiceTests.hub.selectionHelp.linear")}
+                  : selectionMode === "starred"
+                    ? t("learner.practiceTests.hub.selectionHelp.starred")
+                    : selectionMode === "cat"
+                      ? catPresentationMode === "exam_simulation"
+                        ? isNpPathway
+                          ? t("learner.practiceTests.hub.selectionHelp.cat.examSim.np")
+                          : t("learner.practiceTests.hub.selectionHelp.cat.examSim.rn")
+                        : t("learner.practiceTests.hub.selectionHelp.cat.practice")
+                      : t("learner.practiceTests.hub.selectionHelp.linear")}
           </p>
         </div>
 
         {selectionMode !== "cat" ? (
           <div className="mt-4 space-y-2 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 shadow-sm">
-            <span className="text-sm font-medium text-foreground">Question focus</span>
+            <span className="text-sm font-medium text-foreground">{t("learner.practiceTests.hub.questionFocusLabel")}</span>
             <div className="flex flex-wrap gap-2" data-nn-e2e-practice-pool-presets>
               <button
                 type="button"
@@ -554,7 +572,7 @@ export function PracticeTestsHubClient({
                   setTopicPicks([]);
                 }}
               >
-                All questions
+                {t("learner.practiceTests.hub.poolPresetAllQuestions")}
               </button>
               <button
                 type="button"
@@ -565,7 +583,7 @@ export function PracticeTestsHubClient({
                   setCatSelectionBasis("weak");
                 }}
               >
-                Weak areas
+                {t("learner.practiceTests.hub.selection.weak")}
               </button>
               <button
                 type="button"
@@ -576,7 +594,19 @@ export function PracticeTestsHubClient({
                   setCatSelectionBasis("missed");
                 }}
               >
-                Incorrect review
+                {t("learner.practiceTests.hub.selection.missed")}
+              </button>
+              <button
+                type="button"
+                data-selected={selectionMode === "starred"}
+                className="nn-chip px-3 py-1.5 text-xs font-medium"
+                data-nn-e2e-practice-pool-starred
+                onClick={() => {
+                  setSelectionMode("starred");
+                  setCatSelectionBasis("starred");
+                }}
+              >
+                {t("learner.practiceTests.hub.selection.starred")}
               </button>
               <button
                 type="button"
@@ -587,12 +617,13 @@ export function PracticeTestsHubClient({
                   setCatSelectionBasis("random");
                 }}
               >
-                Fresh mix
+                {t("learner.practiceTests.hub.poolPresetFreshMix")}
               </button>
               {catOptions.length > 0 ? (
                 <button
                   type="button"
                   className="nn-chip px-3 py-1.5 text-xs font-medium"
+                  data-nn-e2e-practice-cat-starred-pool
                   onClick={() => {
                     setSelectionMode("cat");
                     setCatPresentationMode("practice");
@@ -602,15 +633,11 @@ export function PracticeTestsHubClient({
                     if (questionCount > 75) setQuestionCount(75);
                   }}
                 >
-                  Starred / saved (guided CAT pool)
+                  {t("learner.practiceTests.hub.catSavedPoolChip")}
                 </button>
               ) : null}
             </div>
-            <p className="text-xs text-muted-foreground">
-              Linear modes use the question bank with your filters. The Fresh mix action keeps random selection with
-              your category picks. Starred items open the adaptive builder on a saved-questions pool when your track
-              supports CAT.
-            </p>
+            <p className="text-xs text-muted-foreground">{t("learner.practiceTests.hub.poolPresetIntro")}</p>
           </div>
         ) : null}
 
@@ -1066,9 +1093,11 @@ export function PracticeTestsHubClient({
                       ? t("learner.practiceTests.hub.selection.weak")
                       : row.selectionMode === "missed"
                         ? t("learner.practiceTests.hub.selection.missed")
-                        : row.selectionMode === "cat"
-                          ? t("learner.practiceTests.hub.selection.cat")
-                          : row.selectionMode ?? t("learner.practiceTests.hub.notApplicable");
+                        : row.selectionMode === "starred"
+                          ? t("learner.practiceTests.hub.selection.starred")
+                          : row.selectionMode === "cat"
+                            ? t("learner.practiceTests.hub.selection.cat")
+                            : row.selectionMode ?? t("learner.practiceTests.hub.notApplicable");
               const timedPart = row.timedMode
                 ? `${t("learner.practiceTests.hub.rowTimed")}${row.timeLimitSec ? ` ${Math.round(row.timeLimitSec / 60)} min` : ""}`
                 : t("learner.practiceTests.hub.rowUntimed");

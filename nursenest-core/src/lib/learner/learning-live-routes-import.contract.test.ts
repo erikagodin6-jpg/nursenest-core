@@ -29,5 +29,20 @@ describe("learner live study routes import contract", () => {
     const src = read("src/app/(student)/app/(learner)/practice-exams/page.tsx");
     assert.match(src, /redirect\(/);
     assert.match(src, /\/app\/practice-tests/);
+    assert.match(src, /practice-tests\?\$\{suffix\}/);
+    assert.match(src, /: "\/app\/practice-tests"/);
+  });
+
+  it("practice-tests hub page uses pathway picker surface (no silent default when context missing)", () => {
+    const src = read("src/app/(student)/app/(learner)/practice-tests/page.tsx");
+    assert.match(src, /FlashcardsPathwayPickSurface/);
+    assert.match(src, /baseAppPath=\"\/app\/practice-tests\"/);
+    assert.match(src, /resolveSubscribedQuestionBankPathways/);
+  });
+
+  it("practice-tests hub client stabilizes URL sync (avoids searchParams identity churn)", () => {
+    const src = read("src/components/student/practice-tests-hub-client.tsx");
+    assert.match(src, /searchParamString/);
+    assert.match(src, /\[searchParamString, pathwayOptions\]/);
   });
 });

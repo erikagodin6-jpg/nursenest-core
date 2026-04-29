@@ -18,6 +18,16 @@ describe("shouldRefreshServerAfterPathwayLessonProgress", () => {
     assert.equal(shouldRefreshServerAfterPathwayLessonProgress("/app/questions"), false);
     assert.equal(shouldRefreshServerAfterPathwayLessonProgress("/app/questions?pathwayId=ca-rn-nclex-rn"), false);
     assert.equal(shouldRefreshServerAfterPathwayLessonProgress("/app/practice-tests/start"), false);
+    assert.equal(shouldRefreshServerAfterPathwayLessonProgress("/app/practice-tests"), false);
+    assert.equal(
+      shouldRefreshServerAfterPathwayLessonProgress("/app/practice-tests?pathwayId=ca-rn-nclex-rn"),
+      false,
+    );
+    assert.equal(shouldRefreshServerAfterPathwayLessonProgress("/app/practice-exams"), false);
+    assert.equal(
+      shouldRefreshServerAfterPathwayLessonProgress("/app/practice-exams?pathwayId=ca-rn-nclex-rn"),
+      false,
+    );
   });
 
   it("does not refresh /app/lessons/[slug] detail (client-driven progress there)", () => {

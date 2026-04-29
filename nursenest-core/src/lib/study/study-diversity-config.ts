@@ -39,7 +39,7 @@ export function studyDiversityDebugEnabled(): boolean {
 }
 
 export function practiceRecentSessionLookback(
-  selectionMode: "random" | "weak" | "targeted" | "missed",
+  selectionMode: "random" | "weak" | "targeted" | "missed" | "starred",
 ): number {
   if (selectionMode === "weak") return STUDY_DIVERSITY_PRACTICE_RECENT_SESSION_LOOKBACK_WEAK;
   if (selectionMode === "missed") return STUDY_DIVERSITY_PRACTICE_RECENT_SESSION_LOOKBACK_MISSED;

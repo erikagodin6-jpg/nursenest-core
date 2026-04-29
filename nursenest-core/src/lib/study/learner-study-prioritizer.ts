@@ -6,7 +6,7 @@ import {
   STUDY_LINEAR_PRIORITIZE_MIN_SPARE,
 } from "@/lib/study/study-diversity-config";
 
-export type LinearStudyPrioritizerMode = "random" | "targeted" | "weak" | "missed";
+export type LinearStudyPrioritizerMode = "random" | "targeted" | "weak" | "missed" | "starred";
 
 /** Shape-compatible with {@link MissedQuestionSignal} from study-question-signals (pure module). */
 export type MissedSignalLite = { missCount: number; lastMissedAtMs: number };
