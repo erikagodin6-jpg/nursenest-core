@@ -39,6 +39,9 @@ setup("authenticate paid test account and save storage state", async ({ page, re
   console.log(
     `[setup-paid-auth] AUTH_SECRET=${process.env.AUTH_SECRET?.trim() ? "set" : "unset"} NEXTAUTH_SECRET=${process.env.NEXTAUTH_SECRET?.trim() ? "set" : "unset"} DATABASE_URL=${process.env.DATABASE_URL?.trim() ? "set" : "unset"}`,
   );
+  console.log(
+    "[setup-paid-auth] auth URL hint: local webServer injects AUTH_URL/NEXTAUTH_URL=origin from playwright.learning-routes.config.ts; Playwright worker may show AUTH_URL unset unless exported in shell — browser still targets baseURL.",
+  );
   console.log(`[setup-paid-auth] credentialSource=${credResolution.source} maskedEmail=${credResolution.maskedEmail ?? "n/a"}`);
 
   /** Warm Auth.js routes so `signIn()`'s internal `getProviders()` + CSRF fetches are not blocked behind first-compile. */
@@ -55,7 +58,14 @@ setup("authenticate paid test account and save storage state", async ({ page, re
   const observers = attachPageObservers(page, { profile: "public", probeAuthApi: true, captureConsoleContext: true });
 
   try {
-    await loginWithCredentials(page, creds.email, creds.password, { enterLearnerApp: false });
+    await loginWithCredentials(page, creds.email, creds.password, {
+      enterLearnerApp: false,
+      onCredentialsSuccess: (info) => {
+        console.log(
+          `[setup-paid-auth] credentials POST httpStatus=${info.httpStatus} callbackRedirect=${info.callbackRedirectRedacted} pageUrl=${info.pageUrlRedacted}`,
+        );
+      },
+    });
     console.log(`[setup-paid-auth] credentials flow completed browser url=${redactAuthDiagnosticsUrl(page.url())}`);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);

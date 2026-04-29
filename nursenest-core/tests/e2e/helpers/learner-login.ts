@@ -61,6 +61,12 @@ function metaFromAuthCode(code: string | null, errorParam: string | null): RnFul
 }
 
 export type LoginWithCredentialsOptions = {
+  /** Setup-only: log credentials callback HTTP status + redirect hint (redacted; never secrets). */
+  onCredentialsSuccess?: (info: {
+    httpStatus: number;
+    callbackRedirectRedacted: string;
+    pageUrlRedacted: string;
+  }) => void;
   /**
    * When true (default), navigate to `/app` after a successful marketing login so specs that exercise the
    * learner shell keep a single entry point. Set false to assert marketing-shell continuity (no `/app` hop).
@@ -223,6 +229,24 @@ export async function loginWithCredentials(
       ].join(" "),
       phase0,
     );
+  }
+
+  try {
+    let callbackRedirectRedacted = parsed.redirectUrl;
+    try {
+      callbackRedirectRedacted = redactAuthDiagnosticsUrl(
+        parsed.redirectUrl.startsWith("http") ? parsed.redirectUrl : `http://local.invalid${parsed.redirectUrl.startsWith("/") ? parsed.redirectUrl : `/${parsed.redirectUrl}`}`,
+      );
+    } catch {
+      callbackRedirectRedacted = parsed.redirectUrl.slice(0, 200);
+    }
+    opts?.onCredentialsSuccess?.({
+      httpStatus: authRes.status(),
+      callbackRedirectRedacted,
+      pageUrlRedacted: redactAuthDiagnosticsUrl(page.url()),
+    });
+  } catch {
+    /* diagnostics only */
   }
 
   try {

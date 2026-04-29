@@ -31,6 +31,8 @@ export function LoginForm({
   const [error, setError] = useState<string | null>(null);
   const [errorHelp, setErrorHelp] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  /** Until true, keep submit disabled so E2E / fast users cannot trigger a native form POST before React `onSubmit` runs. */
+  const [clientReady, setClientReady] = useState(false);
   /** Synchronous guard — `pending` state may not flip before a second submit in the same tick. */
   const submitInFlightRef = useRef(false);
   const urlRateLimitBannerRef = useRef(false);
@@ -92,6 +94,10 @@ export function LoginForm({
     const base = pathname ?? "/login";
     router.replace(`${base}${qs ? `?${qs}` : ""}`);
   }, [searchParams, pathname, router, t]);
+
+  useEffect(() => {
+    setClientReady(true);
+  }, []);
 
   useEffect(() => {
     if (status !== "authenticated") return;
@@ -311,7 +317,7 @@ export function LoginForm({
       <button
         className="w-full rounded-xl bg-role-cta px-4 py-3 text-sm font-semibold text-role-cta-foreground transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--primary)_40%,transparent)] disabled:pointer-events-none disabled:opacity-60"
         type="submit"
-        disabled={pending}
+        disabled={pending || !clientReady}
       >
         {pending ? t("pages.login.signingIn") : t("pages.login.submit")}
       </button>
