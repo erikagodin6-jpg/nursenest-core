@@ -13,7 +13,12 @@
 import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, symlinkSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getStandaloneStaticSyncTargets, verifyStandaloneArtifact } from "./verify-standalone-artifact.mjs";
+import { isNNSkipLessonIndexBuild } from "./run-lesson-indexes-for-build.mjs";
+import {
+  discoverStandaloneServerJsPaths,
+  getStandaloneStaticSyncTargets,
+  verifyStandaloneArtifact,
+} from "./verify-standalone-artifact.mjs";
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const sourceStatic = path.join(packageRoot, ".next", "static");
@@ -77,6 +82,46 @@ assertNonEmptyCssDir(sourceStatic);
 assertNonEmptyChunksDir(sourceStatic);
 
 verifyStandaloneArtifact(packageRoot);
+
+/**
+ * Standalone traces server chunks under `.next/standalone/...`; `pathway-lesson-generated-index` resolves
+ * the package root as three levels above `src/lib/lessons`, so indexes must live at
+ * `…/standalone/<app>/src/content/pathway-lessons/generated-indexes/*.json`.
+ */
+function syncPathwayLessonIndexesIntoStandaloneRoots(root) {
+  if (isNNSkipLessonIndexBuild()) {
+    console.log("[lesson-indexes] copy-to-standalone skipped reason=NN_SKIP_LESSON_INDEX_BUILD");
+    return;
+  }
+  const srcDir = path.join(root, "src", "content", "pathway-lessons", "generated-indexes");
+  if (!existsSync(srcDir)) {
+    throw new Error(`[lesson-indexes] FATAL: missing source index dir ${srcDir}`);
+  }
+  const files = readdirSync(srcDir).filter((n) => n.endsWith(".json"));
+  if (files.length === 0) {
+    throw new Error(
+      `[lesson-indexes] FATAL: no *.json under ${srcDir} — lesson index build did not run (or set NN_SKIP_LESSON_INDEX_BUILD).`,
+    );
+  }
+  const servers = discoverStandaloneServerJsPaths(root);
+  if (servers.length === 0) {
+    throw new Error("[lesson-indexes] FATAL: no standalone server.js under .next/standalone");
+  }
+  for (const serverPath of servers) {
+    const appRoot = path.dirname(serverPath);
+    const destDir = path.join(appRoot, "src", "content", "pathway-lessons", "generated-indexes");
+    mkdirSync(destDir, { recursive: true });
+    for (const name of files) {
+      cpSync(path.join(srcDir, name), path.join(destDir, name), { force: true });
+    }
+    console.log(
+      `[lesson-indexes] copied ${files.length} index file(s) -> ${destDir} (server=${serverPath})`,
+    );
+  }
+}
+
+syncPathwayLessonIndexesIntoStandaloneRoots(packageRoot);
+
 const targets = getStandaloneStaticSyncTargets(packageRoot);
 if (targets.length === 0) {
   throw new Error(

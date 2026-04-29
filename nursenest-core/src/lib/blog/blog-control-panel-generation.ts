@@ -301,10 +301,19 @@ export type ControlPanelPersistResult =
       post?: { id: string; slug: string; title: string; postStatus: BlogPostStatus; updatedAt: Date };
     };
 
+export type ControlPanelPersistProgressStage =
+  | "validating_citations"
+  | "prepublish_checks"
+  | "publishing"
+  | "published";
+
 export async function persistControlPanelDraft(
   input: ControlPanelGenerateInput,
   plan: BlogControlPanelPlan,
   bodyHtml: string,
+  persistHooks?: {
+    onPersistStage?: (stage: ControlPanelPersistProgressStage) => void | Promise<void>;
+  },
 ): Promise<ControlPanelPersistResult> {
   const normalizedTopic = normalizeBlogTopicKey(input.targetKeyword ?? input.topic);
   const pageTitle = (plan.h1 || plan.titleOptions[0] || input.topic).slice(0, 220);
@@ -369,6 +378,7 @@ export async function persistControlPanelDraft(
   const riskFlags = detectRiskFlags({ template: input.template, keyword: input.targetKeyword ?? input.topic });
   const thinWarning = thinDraftWarning(bodyWithRequiredLinks);
 
+  await persistHooks?.onPersistStage?.("validating_citations");
   const citationGate = evaluateCitationGate({
     riskFlags,
     verifiedCount: partition.verified.length,
@@ -635,6 +645,8 @@ export async function persistControlPanelDraft(
     if (input.publishImmediately) {
       const publishedNow = new Date();
       try {
+        await persistHooks?.onPersistStage?.("prepublish_checks");
+        await persistHooks?.onPersistStage?.("publishing");
         await publishBlogPostCanonical({
           postId: post.id,
           publishAt: publishedNow,
@@ -676,6 +688,7 @@ export async function persistControlPanelDraft(
       if (!published) {
         return { ok: false, error: "Post missing after immediate publish update" };
       }
+      await persistHooks?.onPersistStage?.("published");
       return { ok: true, skipped: false, post: published, plan, warnings };
     }
 

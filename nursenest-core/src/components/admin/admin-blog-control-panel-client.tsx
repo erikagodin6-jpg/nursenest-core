@@ -42,6 +42,7 @@ import { AdminBlogDraftEditorShell, DraftSectionCard } from "@/components/admin/
 import { AdminBlogHtmlPreview } from "@/components/admin/blog/admin-blog-html-preview";
 import { AdminMediaPickerDialog } from "@/components/admin/media/admin-media-picker-dialog";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
+import { parseAdminJsonResponse } from "@/lib/admin/parse-admin-json-response";
 import { blogSlugCustomValidityMessage, liveNormalizeBlogSlugInputValue } from "@/lib/blog/blog-optional-slug";
 import { iso8601ToDatetimeLocalInputValue } from "@/lib/datetime/datetime-local-input";
 
@@ -273,6 +274,9 @@ export function AdminBlogControlPanelClient({
   const [genState, setGenState] = useState<GenState>("idle");
   const [genError, setGenError] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<string[]>([]);
+  const [generationJobId, setGenerationJobId] = useState<string | null>(null);
+  const [generationJobStatus, setGenerationJobStatus] = useState<string | null>(null);
+  const [lastJobRepairable, setLastJobRepairable] = useState(false);
 
   const [postId, setPostId] = useState<string | null>(initialPostId ?? null);
   const [post, setPost] = useState<AdminPostPayload | null>(null);
@@ -472,6 +476,9 @@ export function AdminBlogControlPanelClient({
     setSaveMsg(null);
     setSaveErr(null);
     setCitationRecoveryMode(false);
+    setGenerationJobId(null);
+    setGenerationJobStatus(null);
+    setLastJobRepairable(false);
     try {
       const res = await fetch("/api/admin/blog/control-panel/generate", {
         ...ADMIN_BLOG_COOKIE_FETCH,
@@ -496,7 +503,9 @@ export function AdminBlogControlPanelClient({
           publishImmediately: publishToLiveBlog,
         }),
       });
-      let json: {
+      type GenerateJson = {
+        jobId?: string;
+        status?: string;
         ok?: boolean;
         error?: string;
         message?: string;
@@ -514,15 +523,81 @@ export function AdminBlogControlPanelClient({
         hint?: string;
         riskFlags?: string[];
       };
-      try {
-        json = (await res.json()) as typeof json;
-      } catch {
+      const parsed = await parseAdminJsonResponse<GenerateJson>(res);
+      if (!parsed.ok) {
         setGenState("failed");
-        setGenError(`Server returned an unreadable response (HTTP ${res.status}).`);
+        setGenError(parsed.errorMessage);
+        return;
+      }
+      const json = parsed.json;
+      const resStatus = parsed.status;
+
+      if (resStatus === 202 && typeof json.jobId === "string" && json.status === "queued") {
+        setGenerationJobId(json.jobId);
+        setGenerationJobStatus("queued");
+        const jobBase = `/api/admin/blog/control-panel/article-jobs/${json.jobId}`;
+        const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+        for (let attempt = 0; attempt < 4; attempt++) {
+          const tickRes = await fetch(`${jobBase}/tick`, {
+            ...ADMIN_BLOG_COOKIE_FETCH,
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: "{}",
+            signal: AbortSignal.timeout(320_000),
+          });
+          const tickParsed = await parseAdminJsonResponse<{
+            ok?: boolean;
+            job?: {
+              status: string;
+              blogPostId?: string | null;
+              resultWarnings?: string[] | null;
+              lastError?: string | null;
+              repairable?: boolean;
+            };
+            error?: string;
+          }>(tickRes);
+          if (!tickParsed.ok) {
+            setGenState("failed");
+            setGenError(tickParsed.errorMessage);
+            return;
+          }
+          const job = tickParsed.json.job;
+          if (job?.status) setGenerationJobStatus(job.status);
+          if (job?.status === "published" && job.blogPostId) {
+            const g = await fetch(`/api/admin/blog/${job.blogPostId}`, ADMIN_BLOG_COOKIE_FETCH);
+            const gParsed = await parseAdminJsonResponse<{ post?: AdminPostPayload }>(g);
+            if (!gParsed.ok) {
+              setGenState("failed");
+              setGenError(gParsed.errorMessage);
+              return;
+            }
+            if (gParsed.json.post) {
+              hydrateFromPost(gParsed.json.post);
+              setWarnings(Array.isArray(job.resultWarnings) ? job.resultWarnings : []);
+              setGenState("success");
+              setLastJobRepairable(false);
+              return;
+            }
+            setGenState("failed");
+            setGenError("Job finished but the post could not be loaded.");
+            return;
+          }
+          if (job?.status === "failed") {
+            setGenState("failed");
+            setLastJobRepairable(Boolean(job.repairable));
+            setGenError(job.lastError ?? tickParsed.json.error ?? "Generation failed.");
+            return;
+          }
+          await sleep(attempt < 3 ? 1500 : 0);
+        }
+        setGenState("failed");
+        setGenError(
+          "The background job did not reach a terminal state after several attempts. Check cron or try Tick again from the API.",
+        );
         return;
       }
 
-      if (res.status === 409) {
+      if (resStatus === 409) {
         setGenState("failed");
         setGenError(
           json.hint
@@ -532,7 +607,7 @@ export function AdminBlogControlPanelClient({
         return;
       }
 
-      if (res.status === 422 && (json.error === "insufficient_citations" || json.code === "INSUFFICIENT_CITATIONS")) {
+      if (resStatus === 422 && (json.error === "insufficient_citations" || json.code === "INSUFFICIENT_CITATIONS")) {
         setGenState("failed");
         setCitationRecoveryMode(true);
         if (json.plan) {
@@ -557,7 +632,7 @@ export function AdminBlogControlPanelClient({
         return;
       }
 
-      if (res.status === 422 && (json.error === "pre_publish_blocked" || json.code === "PRE_PUBLISH_BLOCKED")) {
+      if (resStatus === 422 && (json.error === "pre_publish_blocked" || json.code === "PRE_PUBLISH_BLOCKED")) {
         setGenState("failed");
         if (json.plan) {
           setPlan(json.plan);
@@ -590,9 +665,16 @@ export function AdminBlogControlPanelClient({
         return;
       }
 
-      if (!res.ok) {
+      if (resStatus < 200 || resStatus >= 400) {
         setGenState("failed");
-        setGenError(httpErr(res, json, json.message ?? json.error ?? `Generation failed (HTTP ${res.status})`));
+        setGenError(
+          resStatus === 429
+            ? formatAdminRateLimitMessageFromJson(json)
+            : formatAdminApiError(
+                json,
+                json.message ?? json.error ?? `Generation failed (HTTP ${resStatus})`,
+              ),
+        );
         if (json.plan) {
           setPlan(json.plan);
           setImageAttachments((prev) => mergeAttachmentRowsForPlan(json.plan!, prev));
@@ -643,6 +725,63 @@ export function AdminBlogControlPanelClient({
     } catch (err) {
       setGenState("failed");
       setGenError(err instanceof Error ? err.message : String(err));
+    }
+  }
+
+  async function retryGenerationJobRepair() {
+    if (!generationJobId) return;
+    setGenState("generating");
+    setGenError(null);
+    try {
+      const r = await fetch(`/api/admin/blog/control-panel/article-jobs/${generationJobId}/retry-repair`, {
+        ...ADMIN_BLOG_COOKIE_FETCH,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "{}",
+        signal: AbortSignal.timeout(320_000),
+      });
+      const pr = await parseAdminJsonResponse<{
+        ok?: boolean;
+        error?: string;
+        job?: {
+          status: string;
+          blogPostId?: string | null;
+          repairable?: boolean;
+          lastError?: string | null;
+          resultWarnings?: string[] | null;
+        };
+      }>(r);
+      if (!pr.ok) {
+        setGenState("failed");
+        setGenError(pr.errorMessage);
+        return;
+      }
+      if (!pr.json.ok) {
+        setGenState("failed");
+        setGenError(pr.json.error ?? "Retry repair failed.");
+        setLastJobRepairable(Boolean(pr.json.job?.repairable));
+        if (pr.json.job?.status) setGenerationJobStatus(pr.json.job.status);
+        return;
+      }
+      const job = pr.json.job;
+      if (job?.status) setGenerationJobStatus(job.status);
+      if (job?.status === "published" && job.blogPostId) {
+        const g = await fetch(`/api/admin/blog/${job.blogPostId}`, ADMIN_BLOG_COOKIE_FETCH);
+        const gParsed = await parseAdminJsonResponse<{ post?: AdminPostPayload }>(g);
+        if (gParsed.ok && gParsed.json.post) {
+          hydrateFromPost(gParsed.json.post);
+          setWarnings(Array.isArray(job.resultWarnings) ? job.resultWarnings : []);
+          setGenState("success");
+          setLastJobRepairable(false);
+          return;
+        }
+      }
+      setGenState("failed");
+      setGenError(job?.lastError ?? "Retry finished without a published post.");
+      setLastJobRepairable(Boolean(job?.repairable));
+    } catch (e) {
+      setGenState("failed");
+      setGenError(e instanceof Error ? e.message : String(e));
     }
   }
 
@@ -1282,10 +1421,13 @@ export function AdminBlogControlPanelClient({
 
   const statusBadge = useMemo(() => {
     if (genState === "idle") return { label: "Idle", className: "bg-muted text-muted-foreground" };
-    if (genState === "generating") return { label: "Generating…", className: "bg-amber-500/20 text-amber-900 dark:text-amber-100" };
+    if (genState === "generating") {
+      const sub = generationJobStatus ? ` (${generationJobStatus})` : "";
+      return { label: `Generating…${sub}`, className: "bg-amber-500/20 text-amber-900 dark:text-amber-100" };
+    }
     if (genState === "success") return { label: "Ready", className: "bg-emerald-500/15 text-emerald-900 dark:text-emerald-100" };
     return { label: "Failed", className: "bg-rose-500/15 text-rose-900 dark:text-rose-100" };
-  }, [genState]);
+  }, [genState, generationJobStatus]);
 
   const publishBlockedByValidation = Boolean(prePublish && !prePublish.okToPublish);
 
@@ -1512,7 +1654,22 @@ export function AdminBlogControlPanelClient({
               ? "Generate and publish to /blog"
               : "Generate draft only"}
         </button>
+        {generationJobStatus && genState === "generating" ? (
+          <p className="text-xs text-muted-foreground">Job status: {generationJobStatus}</p>
+        ) : null}
         {genError ? <p className="text-sm text-rose-700 dark:text-rose-300">{genError}</p> : null}
+        {genState === "failed" && generationJobId && lastJobRepairable ? (
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              className="rounded-lg border border-border bg-[var(--theme-card-bg)] px-4 py-2 text-sm font-semibold hover:bg-muted/60"
+              onClick={() => void retryGenerationJobRepair()}
+            >
+              Retry repair (reuse plan / draft)
+            </button>
+            <span className="text-xs text-muted-foreground">Job id: {generationJobId.slice(0, 12)}…</span>
+          </div>
+        ) : null}
       </form>
 
       {warnings.length > 0 ? (

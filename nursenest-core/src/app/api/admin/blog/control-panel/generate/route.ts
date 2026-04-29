@@ -1,24 +1,17 @@
-import { BlogFunnelStage, BlogPostIntent, BlogPostStatus, BlogPostTemplate } from "@prisma/client";
+import { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import {
-  logControlPanelPipelineFailure,
-  logControlPanelPipelineSuccess,
-  logPipelineDuplicateTopic,
-  logPipelinePersistSkipped,
-  logReferenceGate,
-} from "@/lib/admin/blog-content-automation-log";
+import { logPipelineDuplicateTopic } from "@/lib/admin/blog-content-automation-log";
 import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { coerceBlogSourceRows } from "@/lib/blog/apa7";
-import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
+import { createBlogArticleGenerationJob } from "@/lib/blog/blog-article-generation-job";
 import { normalizeBlogControlPanelGenerateRequestBody } from "@/lib/blog/blog-admin-control-panel-generate-body";
 import {
   AdminBlogValidationError,
   findDuplicateAdminBlogIntent,
   prepareAdminBlogGenerationInput,
 } from "@/lib/blog/admin-blog-generation-service";
-import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const adminBlogTopicSchema = z.preprocess(
@@ -190,227 +183,24 @@ export async function POST(req: Request) {
     publishImmediately: d.publishImmediately === true,
   };
 
-  const pipelineResult = await runBlogArticleGenerationPipeline(input, { persist: true });
-  if (!pipelineResult.ok) {
-    if (pipelineResult.stage === "plan") {
-      await logControlPanelPipelineFailure({
-        topic: d.topic,
-        stage: "plan",
-        message: pipelineResult.error,
-        createdById: gate.admin.userId,
-      });
-      const status = pipelineResult.code === "PLAN_LONGFORM_CONTRACT" ? 422 : 502;
-      return NextResponse.json(
-        {
-          error: "plan_generation_failed",
-          code: pipelineResult.code ?? "plan_generation_failed",
-          message: pipelineResult.error,
-          details: pipelineResult.details ?? null,
-        },
-        { status },
-      );
-    }
-    if (pipelineResult.stage === "body") {
-      await logControlPanelPipelineFailure({
-        topic: d.topic,
-        stage: "body",
-        message: pipelineResult.error,
-        createdById: gate.admin.userId,
-        metadata: { hasPlan: Boolean(pipelineResult.plan) },
-      });
-      const bodyStatus = pipelineResult.code === "BODY_LONGFORM_ENFORCEMENT" ? 422 : 502;
-      return NextResponse.json(
-        {
-          error: "body_generation_failed",
-          code: pipelineResult.code ?? "body_generation_failed",
-          message: pipelineResult.error,
-          details: pipelineResult.details ?? null,
-          plan: pipelineResult.plan,
-          hint: "Plan may be usable; retry body from the control panel.",
-        },
-        { status: bodyStatus },
-      );
-    }
-    if (pipelineResult.stage === "citations") {
-      await logReferenceGate({
-        topic: d.topic,
-        message: pipelineResult.error,
-        riskFlags: pipelineResult.riskFlags ?? [],
-        source: "control_panel_pipeline",
-        createdById: gate.admin.userId,
-      });
-      return NextResponse.json(
-        {
-          error: "insufficient_citations",
-          code: pipelineResult.code ?? "INSUFFICIENT_CITATIONS",
-          message: pipelineResult.error,
-          details: pipelineResult.details ?? { riskFlags: pipelineResult.riskFlags ?? [] },
-          riskFlags: pipelineResult.riskFlags ?? [],
-          plan: pipelineResult.plan,
-          bodyHtml: pipelineResult.bodyHtml,
-          hint: "Add admin-verified source JSON (HTTPS URL or valid DOI + title + year) and use Persist draft, or enable override in the control panel.",
-        },
-        { status: 422 },
-      );
-    }
-    if (pipelineResult.stage === "persist" && pipelineResult.code === "PRE_PUBLISH_BLOCKED") {
-      await logControlPanelPipelineFailure({
-        topic: d.topic,
-        stage: "persist",
-        message: pipelineResult.error,
-        createdById: gate.admin.userId,
-        metadata: { code: "PRE_PUBLISH_BLOCKED" },
-      });
-      return NextResponse.json(
-        {
-          error: "pre_publish_blocked",
-          code: "PRE_PUBLISH_BLOCKED",
-          message: pipelineResult.error,
-          details: pipelineResult.details ?? null,
-          draftPost:
-            pipelineResult.details &&
-            typeof pipelineResult.details === "object" &&
-            pipelineResult.details !== null &&
-            "draftPost" in pipelineResult.details
-              ? (pipelineResult.details as { draftPost?: unknown }).draftPost
-              : null,
-          plan: pipelineResult.plan,
-          bodyHtml: pipelineResult.bodyHtml,
-          hint: "Draft was saved. Fix blocking issues in the admin editor, then publish from the post detail — or disable “Publish to live blog” to keep drafts only.",
-        },
-        { status: 422 },
-      );
-    }
-    await logControlPanelPipelineFailure({
-      topic: d.topic,
-      stage: "persist",
-      message: pipelineResult.error,
-      createdById: gate.admin.userId,
-    });
-    return NextResponse.json(
-      {
-        error: "persist_failed",
-        code: "persist_failed",
-        message: pipelineResult.error,
-        details: pipelineResult.details ?? null,
-        plan: pipelineResult.plan,
-        bodyHtml: pipelineResult.bodyHtml,
-      },
-      { status: 500 },
-    );
-  }
-
-  if (pipelineResult.persistSkipped) {
-    const sk = pipelineResult.persistSkipped;
-    await logPipelinePersistSkipped({
-      topic: d.topic,
-      reason: sk.reason,
-      existingSlug: sk.existingSlug,
-      normalizedTopic: sk.normalizedTopic,
-      createdById: gate.admin.userId,
-    });
-    return NextResponse.json(
-      {
-        skipped: true,
-        reason: sk.reason,
-        existingSlug: sk.existingSlug,
-        normalizedTopic: sk.normalizedTopic,
-        slug: sk.slug,
-        plan: pipelineResult.plan,
-      },
-      { status: 200 },
-    );
-  }
-
-  const result = pipelineResult.persist;
-  if (!result) {
-    await logControlPanelPipelineFailure({
-      topic: d.topic,
-      stage: "persist_missing",
-      message: "Pipeline returned no persist result",
-      createdById: gate.admin.userId,
-    });
-    return NextResponse.json(
-      { error: "persist_missing", code: "persist_missing", message: "Pipeline returned no persist result" },
-      { status: 500 },
-    );
-  }
-
-  await logControlPanelPipelineSuccess({
-    topic: d.topic,
-    blogPostId: result.post.id,
-    slug: result.post.slug,
-    plan: pipelineResult.plan,
+  const job = await createBlogArticleGenerationJob({
     createdById: gate.admin.userId,
+    input,
   });
 
-  const full = await prisma.blogPost.findUnique({
-    where: { id: result.post.id },
-    select: {
-      id: true,
-      slug: true,
-      title: true,
-      excerpt: true,
-      body: true,
-      category: true,
-      careerSlug: true,
-      exam: true,
-      postStatus: true,
-      seoTitle: true,
-      seoDescription: true,
-      targetKeyword: true,
-      keywordCluster: true,
-      countryTarget: true,
-      intent: true,
-      funnelStage: true,
-      postTemplate: true,
-      outlineJson: true,
-      faqBlock: true,
-      internalLinkPlan: true,
-      titleAlternates: true,
-      keyTakeaways: true,
-      relatedLessonPaths: true,
-      schemaSummary: true,
-      metaTitleVariant: true,
-      metaDescriptionVariant: true,
-      featuredSnippet: true,
-      apaReferences: true,
-      tags: true,
-      keyQuestions: true,
-      updatedAt: true,
-      sourcesJson: true,
-      requiresReferences: true,
-      medicalRiskFlags: true,
-      sourceReliabilityScore: true,
-      coverImage: true,
-      coverImageAlt: true,
-      coverImageCaption: true,
-      coverImagePrompt: true,
-      imageStatus: true,
-      adminPublishLog: true,
-    },
+  safeServerLog("admin", "blog_article_generation_job_enqueued", {
+    jobId: job.id,
+    topic: prepared.topic,
+    publishImmediately: input.publishImmediately,
   });
-
-  if (!full) {
-    return NextResponse.json(
-      { ok: true, postId: result.post.id, slug: result.post.slug, warnings: result.warnings, plan: result.plan, post: null },
-      { status: 201 },
-    );
-  }
-
-  /** Immediate publish uses {@link publishBlogPostCanonical} which already revalidates `/blog` + `/blog/{slug}`. */
 
   return NextResponse.json(
     {
-      ok: true,
-      postId: result.post.id,
-      slug: result.post.slug,
-      title: result.post.title,
-      postStatus: result.post.postStatus,
-      warnings: result.warnings,
-      plan: result.plan,
-      post: full,
+      jobId: job.id,
+      status: "queued" as const,
+      message:
+        "Generation queued. Poll GET /api/admin/blog/control-panel/article-jobs/{jobId} and POST …/tick to run the worker, or wait for the blog-article-generation cron.",
     },
-    { status: 201 },
+    { status: 202 },
   );
 }

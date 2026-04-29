@@ -46,4 +46,11 @@ describe("admin blog generation service contract", () => {
       assert.doesNotMatch(src, /\/blog\/\$\{(?:topic|d\.topic|rawTitle|title)\}/);
     }
   });
+
+  it("enqueues control-panel longform generation instead of running the pipeline synchronously in the HTTP handler", () => {
+    const src = read("app/api/admin/blog/control-panel/generate/route.ts");
+    assert.match(src, /createBlogArticleGenerationJob/);
+    assert.match(src, /status:\s*202/);
+    assert.doesNotMatch(src, /runBlogArticleGenerationPipeline/);
+  });
 });

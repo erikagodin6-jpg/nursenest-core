@@ -107,6 +107,7 @@ model User {
   baselineAssessmentAttempts    BaselineAssessmentAttempt[]
   blogBatchSchedules            BlogBatchSchedule[]
   blogDraftGenerationBatches    BlogDraftGenerationBatch[]
+  blogArticleGenerationJobs     BlogArticleGenerationJob[]
   contentAutomationLogs         ContentAutomationLog[]
   emailNotificationLogs         EmailNotificationLog[]
   emailVerificationTokens       EmailVerificationToken[]
@@ -515,6 +516,7 @@ model BlogPost {
   batchScheduleItems         BlogBatchScheduleItem[]
   campaignItems              BlogCampaignItem[]
   draftGenerationBatchItems  BlogDraftGenerationBatchItem[]
+  blogArticleGenerationJobs  BlogArticleGenerationJob[]
   campaign                   BlogCampaign?                  @relation(fields: [campaignId], references: [id])
   canonicalPost              BlogPost?                      @relation("BlogPostCanonicalRelation", fields: [canonicalPostId], references: [id])
   translatedVariants         BlogPost[]                     @relation("BlogPostCanonicalRelation")
@@ -695,6 +697,33 @@ model BlogDraftGenerationBatchItem {
 
   @@unique([batchId, ordinal])
   @@index([batchId, status, ordinal])
+}
+
+/// * Async admin control-panel article generation (plan → body → repair → publish). Avoids long synchronous HTTP.
+model BlogArticleGenerationJob {
+  id               String    @id @default(cuid())
+  createdById      String?
+  /// * Pipeline progress / terminal: queued, generating_plan, generating_body, repairing_body, validating_citations, prepublish_checks, publishing, published, failed
+  stage            String    @default("queued") @db.VarChar(40)
+  requestPayload   Json
+  planSnapshot       Json?
+  bodyHtmlSnapshot   String? @db.Text
+  blogPostId       String?
+  lastError        String?   @db.Text
+  failureCode      String?   @db.VarChar(64)
+  repairable       Boolean   @default(false)
+  retryCount       Int       @default(0)
+  resultWarnings   Json?
+  resultSlug       String?   @db.VarChar(200)
+  resultTitle      String?   @db.VarChar(300)
+  resultPostStatus String?   @db.VarChar(32)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  createdBy        User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  blogPost         BlogPost? @relation(fields: [blogPostId], references: [id], onDelete: SetNull)
+
+  @@index([stage, createdAt])
+  @@map("blog_article_generation_jobs")
 }
 
 model ContentAutomationLog {

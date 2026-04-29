@@ -2,7 +2,8 @@
  * Classifies blog generation / validation failures for automatic repair vs terminal failure.
  */
 
-export const MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS = 3;
+/** Bounded repair rounds for plan/body/publish gates (thin-body expansion may need more than one pass). */
+export const MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS = 5;
 
 /** Extra words beyond policy minimum when expanding thin bodies (substantive depth, not padding). */
 export const BLOG_BODY_REPAIR_WORD_BUFFER = 150;

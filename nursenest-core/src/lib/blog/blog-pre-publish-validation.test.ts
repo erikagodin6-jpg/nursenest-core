@@ -2,7 +2,10 @@ import assert from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
 import { BlogImageStatus, BlogPostStatus, BlogPostTemplate, CountryCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
-import { BLOG_ARTICLE_MIN_WORDS } from "@/lib/blog/blog-word-count";
+import {
+  BLOG_ARTICLE_MIN_WORDS,
+  BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH,
+} from "@/lib/blog/blog-word-count";
 import { validateBlogPrePublish, type BlogPostPrePublishRow } from "@/lib/blog/blog-pre-publish-validation";
 
 function longWords(n: number): string {
@@ -12,7 +15,7 @@ function longWords(n: number): string {
 function baseRow(overrides: Partial<BlogPostPrePublishRow> = {}): BlogPostPrePublishRow {
   const slug = "quality-contract-test-slug";
   const body =
-    `${longWords(BLOG_ARTICLE_MIN_WORDS + 40)}` +
+    `${longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 40)}` +
     "<h2>Pathophysiology</h2><p>Mechanism explanation for clinical depth.</p>" +
     "<h2>Nursing implications</h2><p>Practice and safety considerations.</p>";
   const r: BlogPostPrePublishRow = {
@@ -123,6 +126,22 @@ describe("validateBlogPrePublish + generated draft quality", () => {
     assert.ok(res.blocking.some((i) => i.id === "body_word_count"));
   });
 
+  it("blocks publish when body is above hard min but below substantive publish target", async () => {
+    stubSlugUniqueCheck();
+    const between = BLOG_ARTICLE_MIN_WORDS + 25;
+    assert.ok(between < BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH);
+    const row = baseRow({
+      body: `${longWords(between)}<h2>Pathophysiology</h2><p>depth</p><h2>Nursing implications</h2><p>depth</p>`,
+    });
+    const res = await validateBlogPrePublish(row, row.id);
+    assert.equal(res.okToPublish, false);
+    assert.ok(res.blocking.some((i) => i.id === "body_word_count"));
+    assert.ok(
+      res.blocking.some((i) => i.message.includes(String(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH))),
+      "message should cite publish-depth target",
+    );
+  });
+
   it("blocks when slug is not kebab-case", async () => {
     stubSlugUniqueCheck();
     const row = baseRow({ slug: "Invalid Uppercase Slug" });
@@ -134,7 +153,7 @@ describe("validateBlogPrePublish + generated draft quality", () => {
   it("includes draft-quality issues for missing nursing implications when other checks pass structure", async () => {
     stubSlugUniqueCheck();
     const row = baseRow({
-      body: `${longWords(BLOG_ARTICLE_MIN_WORDS + 20)}<h2>Pathophysiology</h2><p>depth</p>`,
+      body: `${longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 20)}<h2>Pathophysiology</h2><p>depth</p>`,
     });
     const res = await validateBlogPrePublish(row, row.id);
     assert.equal(res.okToPublish, false);

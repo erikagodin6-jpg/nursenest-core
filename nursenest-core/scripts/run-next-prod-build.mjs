@@ -151,6 +151,17 @@ if ((validateSurface.status ?? 1) !== 0) {
 }
 console.log("[next-prod-build] validate:production-surface_ok");
 
+const lessonIndexesForBuild = path.join(packageRoot, "scripts", "run-lesson-indexes-for-build.mjs");
+const lessonIndexes = spawnSync(process.execPath, [lessonIndexesForBuild], {
+  cwd: packageRoot,
+  stdio: "inherit",
+  env: process.env,
+});
+if ((lessonIndexes.status ?? 1) !== 0) {
+  console.error("[next-prod-build] FATAL: pathway lesson index build/verify failed (see [lesson-indexes] logs)");
+  process.exit(lessonIndexes.status ?? 1);
+}
+
 /**
  * 🔥 CRITICAL FIX:
  * REMOVE "--webpack"
@@ -233,5 +244,17 @@ if (sync.status !== 0) {
   process.exit(sync.status ?? 1);
 }
 console.log("[next-prod-build] ensure_standalone_static_ok=1");
+
+const verifyStandaloneScript = path.join(packageRoot, "scripts", "verify-standalone-artifact.mjs");
+const verifyStandalone = spawnSync(process.execPath, [verifyStandaloneScript], {
+  cwd: packageRoot,
+  stdio: "inherit",
+  env: process.env,
+});
+if ((verifyStandalone.status ?? 1) !== 0) {
+  console.error("[next-prod-build] FATAL: verify-standalone-artifact failed");
+  process.exit(verifyStandalone.status ?? 1);
+}
+console.log("[next-prod-build] verify_standalone_artifact_ok=1");
 
 process.exit(0);

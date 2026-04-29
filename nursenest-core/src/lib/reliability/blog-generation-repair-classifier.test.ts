@@ -58,7 +58,7 @@ describe("blog-generation-repair-classifier", () => {
   });
 
   it("exposes repair constants", () => {
-    assert.equal(MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS, 3);
+    assert.equal(MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS, 5);
     assert.ok(BLOG_BODY_REPAIR_WORD_BUFFER >= 100);
   });
 });

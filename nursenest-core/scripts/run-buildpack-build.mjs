@@ -65,7 +65,7 @@ if (onDigitalOceanAppPlatform && !postbuildCompilePass && !forceSecondBuild) {
 
 const runNextProd = path.join(packageRoot, "scripts", "run-next-prod-build.mjs");
 console.log(
-  `[buildpack-build] next_compile_start pid=${process.pid} postbuild_next_build=${postbuildCompilePass ? 1 : 0} digitalocean=${onDigitalOceanAppPlatform ? 1 : 0}`,
+  `[buildpack-build] next_compile_start pid=${process.pid} postbuild_next_build=${postbuildCompilePass ? 1 : 0} digitalocean=${onDigitalOceanAppPlatform ? 1 : 0} (pathway lesson indexes run inside run-next-prod-build before next unless NN_SKIP_LESSON_INDEX_BUILD)`,
 );
 const t0 = Date.now();
 const r = spawnSync(process.execPath, [runNextProd], {

@@ -49,6 +49,11 @@ import {
   type LessonCategory,
 } from "@/lib/lessons/lesson-taxonomy";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
+import {
+  clearGeneratedPathwayLessonIndexCacheForTests,
+  getOptionalGeneratedPathwayLessonIndex,
+  type PathwayLessonGeneratedIndexFileV1,
+} from "@/lib/lessons/pathway-lesson-generated-index";
 
 type CatalogShape = {
   version: number;
@@ -430,6 +435,11 @@ const marketingEffectiveCatalogSlugSetByPathway = new Map<string, Set<string>>()
 const effectiveHubCatalogLessonsByPathway = new Map<string, PathwayLessonRecord[]>();
 /** Memoized {@link getLessonSummariesIndex} rows per pathway (process lifetime). */
 const lessonSummariesIndexByPathway = new Map<string, PathwayLessonSummaryIndexRow[]>();
+/**
+ * Parsed optional disk index after a cheap trust check against merged raw slugs.
+ * `null` value means "computed: no trusted disk index for this pathway".
+ */
+const trustedGeneratedLessonIndexByPathway = new Map<string, PathwayLessonGeneratedIndexFileV1 | null>();
 
 /** Test-only: clear merged catalog slice cache and derived normalized indexes. */
 export function resetCatalogLessonsRawMergeCacheForTests(): void {
@@ -440,6 +450,41 @@ export function resetCatalogLessonsRawMergeCacheForTests(): void {
   marketingEffectiveCatalogSlugSetByPathway.clear();
   effectiveHubCatalogLessonsByPathway.clear();
   lessonSummariesIndexByPathway.clear();
+  trustedGeneratedLessonIndexByPathway.clear();
+  clearGeneratedPathwayLessonIndexCacheForTests();
+}
+
+/**
+ * True when optional `generated-indexes/{pathwayId}.json` matches current merged raw catalog slugs
+ * (cheap check — does not prove marketing filter parity; use `npm run verify:lesson-indexes` for that).
+ */
+function isTrustedGeneratedLessonIndex(pathwayId: string, idx: PathwayLessonGeneratedIndexFileV1): boolean {
+  const key = pathwayId.trim();
+  const raw = getCatalogLessonsRaw(key);
+  if (idx.mergedRawLessonCount !== raw.length) return false;
+  const rawSlugs = new Set<string>();
+  for (const r of raw) {
+    const s = typeof r.slug === "string" ? r.slug.trim() : "";
+    if (s) rawSlugs.add(s);
+  }
+  for (const row of idx.summaries) {
+    if (!rawSlugs.has(row.slug)) return false;
+  }
+  return true;
+}
+
+function tryTrustedGeneratedLessonIndex(pathwayId: string): PathwayLessonGeneratedIndexFileV1 | null {
+  const key = pathwayId.trim();
+  if (trustedGeneratedLessonIndexByPathway.has(key)) {
+    return trustedGeneratedLessonIndexByPathway.get(key) ?? null;
+  }
+  const idx = getOptionalGeneratedPathwayLessonIndex(key);
+  if (!idx || !isTrustedGeneratedLessonIndex(pathwayId, idx)) {
+    trustedGeneratedLessonIndexByPathway.set(key, null);
+    return null;
+  }
+  trustedGeneratedLessonIndexByPathway.set(key, idx);
+  return idx;
 }
 
 function ensurePathwayCatalogIndexes(pathwayId: string): void {
@@ -484,7 +529,14 @@ export function getLessonBySlug(pathwayId: string, slug: string): PathwayLessonR
 
 /** Curated display title from the bundled normalized catalog (hub card title parity). */
 export function getCatalogPathwayLessonDisplayTitleForSlug(pathwayId: string, slug: string): string | undefined {
-  return getLessonBySlug(pathwayId, slug)?.title;
+  const key = pathwayId.trim();
+  const s = slug.trim();
+  const trusted = tryTrustedGeneratedLessonIndex(key);
+  if (trusted) {
+    const t = trusted.slugToDisplayTitle[s];
+    if (typeof t === "string" && t.trim()) return t.trim();
+  }
+  return getLessonBySlug(pathwayId, s)?.title;
 }
 
 const CANONICAL_ORDER: PathwayLessonSectionKind[] = [
@@ -1554,6 +1606,14 @@ export function getMarketingHubEffectiveCatalogSlugSet(pathwayId: string): Set<s
   const key = pathwayId.trim();
   const hit = marketingEffectiveCatalogSlugSetByPathway.get(key);
   if (hit) return hit;
+  const trusted = tryTrustedGeneratedLessonIndex(key);
+  if (trusted) {
+    const s = new Set(
+      trusted.marketingEffectiveSlugsLowercase.map((x) => x.trim().toLowerCase()).filter(Boolean),
+    );
+    marketingEffectiveCatalogSlugSetByPathway.set(key, s);
+    return s;
+  }
   const eff = getEffectiveCatalogLessonsForPathwaySync(key);
   const s = new Set(eff.map((l) => l.slug.trim().toLowerCase()));
   marketingEffectiveCatalogSlugSetByPathway.set(key, s);
@@ -1568,6 +1628,19 @@ export function getLessonSummariesIndex(pathwayId: string): PathwayLessonSummary
   const key = pathwayId.trim();
   const memo = lessonSummariesIndexByPathway.get(key);
   if (memo) return memo;
+  const trusted = tryTrustedGeneratedLessonIndex(key);
+  if (trusted) {
+    const rows: PathwayLessonSummaryIndexRow[] = trusted.summaries.map((r) => ({
+      id: r.id,
+      slug: r.slug,
+      title: r.title,
+      category: r.category,
+      shortDescription: r.shortDescription,
+    }));
+    lessonSummariesIndexByPathway.set(key, rows);
+    lessonsPerfMark("summary_index_end", { pathwayId: key, count: rows.length, source: "generated_disk" });
+    return rows;
+  }
   lessonsPerfMark("summary_index_start", { pathwayId: key });
   const filtered = getEffectiveCatalogLessonsForPathwaySync(key);
   const rows: PathwayLessonSummaryIndexRow[] = filtered.map((l) => ({
@@ -1578,7 +1651,7 @@ export function getLessonSummariesIndex(pathwayId: string): PathwayLessonSummary
     shortDescription: l.seoDescription,
   }));
   lessonSummariesIndexByPathway.set(key, rows);
-  lessonsPerfMark("summary_index_end", { pathwayId: key, count: rows.length });
+  lessonsPerfMark("summary_index_end", { pathwayId: key, count: rows.length, source: "live_normalize" });
   return rows;
 }
 

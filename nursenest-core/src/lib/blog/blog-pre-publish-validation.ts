@@ -8,7 +8,11 @@ import type {
 import { collectBlogGeneratedDraftQualityIssues } from "@/lib/blog/blog-generated-draft-quality";
 import { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-bounds";
 import { generateBlogSEOFromPostRow } from "@/lib/blog/blog-generate-seo";
-import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
+import {
+  BLOG_ARTICLE_MIN_WORDS,
+  BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH,
+  countWordsFromHtml,
+} from "@/lib/blog/blog-word-count";
 import { coerceBlogSourceRows, validateSources } from "@/lib/blog/apa7";
 import { parseInternalLinkPlanJson } from "@/lib/blog/blog-image-workflow";
 import { parseMarketingLessonDetailPath } from "@/lib/blog/blog-internal-link-verify";
@@ -366,8 +370,15 @@ export async function validateBlogPrePublish(
     push(issues, {
       id: "body_word_count",
       severity: "block",
-      message: `Article body is too short for publish (${bodyWords} words; minimum ${BLOG_ARTICLE_MIN_WORDS}).`,
+      message: `Article body is too short for publish (${bodyWords} words; hard minimum ${BLOG_ARTICLE_MIN_WORDS}).`,
       fix: "Expand the article body or regenerate with the long-form blog generator until it meets the word minimum.",
+    });
+  } else if (bodyWords < BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH) {
+    push(issues, {
+      id: "body_word_count",
+      severity: "block",
+      message: `Article body is too short for publish (${bodyWords} words; target at least ${BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH} substantive words before going live).`,
+      fix: "Expand thin sections with clinically substantive depth (not filler), or run Repair from the admin blog job queue.",
     });
   }
 

@@ -82,6 +82,55 @@ export function buildCatExamSimulationCreatePayload(pathwayMeta: PracticeTestPat
   };
 }
 
+export type PracticeAdaptiveSelectionBasis = "random" | "weak" | "missed";
+
+export type PracticeAdaptiveCreatePayload = {
+  title: string;
+  questionCount: number;
+  topicNames: string[];
+  difficultyMin: null;
+  difficultyMax: null;
+  selectionMode: "cat";
+  catSelectionBasis: PracticeAdaptiveSelectionBasis;
+  catPresentationMode: "practice";
+  catExamFeedbackMode: "study";
+  pathwayId: string;
+  timedMode: false;
+  timeLimitSec: 0;
+};
+
+/**
+ * POST body for adaptive practice sessions launched from the Practice Questions hub.
+ *
+ * Key differences from exam simulation:
+ * - `catPresentationMode: "practice"` — not timed, shorter runs
+ * - `catExamFeedbackMode: "study"` — rationale shown after each question
+ * - `timedMode: false` — no countdown timer
+ * - `topicNames` — narrows the question pool to selected body systems (empty = all)
+ * - `catSelectionBasis` — "weak" or "missed" targets specific weaknesses; "random" = standard adaptive
+ */
+export function buildPracticeAdaptiveCreatePayload(opts: {
+  pathwayId: string;
+  topicNames: string[];
+  catSelectionBasis: PracticeAdaptiveSelectionBasis;
+  questionCount: number;
+}): PracticeAdaptiveCreatePayload {
+  return {
+    title: "Adaptive Practice Session",
+    questionCount: Math.max(10, Math.min(200, opts.questionCount)),
+    topicNames: opts.topicNames,
+    difficultyMin: null,
+    difficultyMax: null,
+    selectionMode: "cat",
+    catSelectionBasis: opts.catSelectionBasis,
+    catPresentationMode: "practice",
+    catExamFeedbackMode: "study",
+    pathwayId: opts.pathwayId,
+    timedMode: false,
+    timeLimitSec: 0,
+  };
+}
+
 export function resolveCatStartUiState(input: {
   pathwayId: string | null | undefined;
   pathwayChoiceRequired: boolean;

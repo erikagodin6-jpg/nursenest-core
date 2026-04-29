@@ -7,7 +7,7 @@ import {
   BlogWorkflowStatus,
   CountryCode,
 } from "@prisma/client";
-import { BLOG_ARTICLE_MIN_WORDS } from "@/lib/blog/blog-word-count";
+import { BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH } from "@/lib/blog/blog-word-count";
 import { blogLiveWhere } from "@/lib/blog/blog-visibility";
 import { publishBlogPostCanonical } from "@/lib/blog/publish-blog-post-canonical";
 import { prisma } from "@/lib/db";
@@ -19,7 +19,7 @@ function longWords(n: number): string {
 
 function buildPublishableBody(): string {
   return (
-    `${longWords(BLOG_ARTICLE_MIN_WORDS + 40)}` +
+    `${longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 40)}` +
     "<h2>Pathophysiology</h2><p>Mechanism explanation for clinical depth.</p>" +
     "<h2>Nursing implications</h2><p>Practice and safety considerations.</p>"
   );

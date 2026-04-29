@@ -45,6 +45,9 @@ tests/e2e/.auth/
 # Local published study snapshots (failover secondary); set STUDY_PUBLISHED_SNAPSHOT_DIR in prod.
 var/study-published-snapshots/
 
+# Optional precomputed pathway lesson indexes (`npm run build:lesson-indexes`); README + .gitkeep stay tracked.
+src/content/pathway-lessons/generated-indexes/*.json
+
 # misc
 .cache/
 .DS_Store

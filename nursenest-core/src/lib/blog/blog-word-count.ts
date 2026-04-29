@@ -2,6 +2,18 @@
 export const BLOG_ARTICLE_MIN_WORDS = 1200;
 
 /**
+ * Minimum substantive words before immediate publish (`publishImmediately`) or live `/blog` promotion.
+ * Keeps long-form depth above the hard {@link BLOG_ARTICLE_MIN_WORDS} floor used for drafts.
+ */
+export const BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH = 1350;
+
+/**
+ * When the model lands in this band (thin but not empty), the pipeline runs extra expansion repair
+ * before failing (see {@link MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS}).
+ */
+export const BLOG_ARTICLE_EXPANSION_REPAIR_FLOOR_WORDS = 1150;
+
+/**
  * Deterministic HTML → plain-ish text for audits and word estimates.
  * Strips `script`/`style` bodies first, then other tags (no DOM; no network).
  */

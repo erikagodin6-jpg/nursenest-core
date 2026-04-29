@@ -53,14 +53,18 @@ import {
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 import { annotateBlogInternalLinkRowsWithVerification } from "@/lib/blog/blog-internal-link-verify";
 import { normalizePlanSuggestedLessonRows } from "@/lib/blog/blog-internal-lesson-links";
-import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
+import {
+  BLOG_ARTICLE_EXPANSION_REPAIR_FLOOR_WORDS,
+  BLOG_ARTICLE_MIN_WORDS,
+  BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH,
+  countWordsFromHtml,
+} from "@/lib/blog/blog-word-count";
 import { validateLongFormNursingPlanContract } from "@/lib/blog/blog-longform-nursing-contract";
 import {
   enforceLongFormBodyQuality,
   mergeUniqueNeedsReviewFlags,
 } from "@/lib/blog/blog-longform-body-enforcement";
 import {
-  BLOG_BODY_REPAIR_WORD_BUFFER,
   classifyBlogPipelineFailureForRepair,
   MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS,
 } from "@/lib/blog/blog-generation-repair-classifier";
@@ -112,6 +116,12 @@ export type RunBlogArticlePipelineOptions = {
   pageH1Override?: string;
   /** Suffix for OpenAI `user` on completions (e.g. batch id + item id). */
   idempotencyKey?: string;
+  /** Skip first plan LLM fetch (async job retry / resume). */
+  initialPlan?: BlogControlPanelPlan;
+  /** Skip first body LLM fetch; enter repair/validation loop from this HTML. */
+  initialBodyHtml?: string;
+  /** Pipeline observability (admin job queue + server logs). */
+  onProgressStage?: (stage: string) => void | Promise<void>;
 };
 
 const MIN_BODY_CHARS = BLOG_ARTICLE_MIN_BODY_CHARS;
@@ -144,12 +154,26 @@ export async function runBlogArticleGenerationPipeline(
   const persist = options.persist !== false;
   const idem = options.idempotencyKey;
   let repairPassesUsed = 0;
+  const substantiveWordMin = input.publishImmediately
+    ? BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH
+    : BLOG_ARTICLE_MIN_WORDS;
+
+  const reportStage = async (stage: string) => {
+    await options.onProgressStage?.(stage);
+  };
 
   let plan: BlogControlPanelPlan;
+  let planSeed: BlogControlPanelPlan | null = options.initialPlan ?? null;
   try {
+    await reportStage("generating_plan");
     while (true) {
       try {
-        plan = await fetchControlPanelPlan(input, { openAiUser: openAiUserTag(idem, "plan", repairPassesUsed) });
+        if (planSeed) {
+          plan = planSeed;
+          planSeed = null;
+        } else {
+          plan = await fetchControlPanelPlan(input, { openAiUser: openAiUserTag(idem, "plan", repairPassesUsed) });
+        }
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
         if (BlogControlPanelPlanError.is(e)) {
@@ -216,19 +240,24 @@ export async function runBlogArticleGenerationPipeline(
 
   let bodyHtml: string;
   try {
-    bodyHtml = await fetchControlPanelBodyHtml({
-      plan,
-      topic: input.topic,
-      exam: input.exam,
-      country: input.country,
-      template: input.template,
-      intent: input.intent,
-      funnelStage: input.funnelStage,
-      tone: input.tone,
-      keywords: input.keywords,
-      selectedTitle: options.pageH1Override,
-      openAiUser: openAiUserTag(idem, "body", repairPassesUsed),
-    });
+    await reportStage("generating_body");
+    if (typeof options.initialBodyHtml === "string" && options.initialBodyHtml.trim().length > 0) {
+      bodyHtml = options.initialBodyHtml;
+    } else {
+      bodyHtml = await fetchControlPanelBodyHtml({
+        plan,
+        topic: input.topic,
+        exam: input.exam,
+        country: input.country,
+        template: input.template,
+        intent: input.intent,
+        funnelStage: input.funnelStage,
+        tone: input.tone,
+        keywords: input.keywords,
+        selectedTitle: options.pageH1Override,
+        openAiUser: openAiUserTag(idem, "body", repairPassesUsed),
+      });
+    }
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     return { ok: false, stage: "body", error: msg, plan, repairPassesUsed };
@@ -240,9 +269,13 @@ export async function runBlogArticleGenerationPipeline(
       validationMessages.push(`Article body is below minimum character length (${bodyHtml.length}; min ${MIN_BODY_CHARS}).`);
     }
     const bodyWordCount = countWordsFromHtml(bodyHtml);
-    if (bodyWordCount < BLOG_ARTICLE_MIN_WORDS) {
+    if (bodyWordCount < substantiveWordMin) {
+      const inExpansionBand =
+        bodyWordCount >= BLOG_ARTICLE_EXPANSION_REPAIR_FLOOR_WORDS && bodyWordCount < substantiveWordMin;
       validationMessages.push(
-        `Article body is too short (${bodyWordCount} words; minimum ${BLOG_ARTICLE_MIN_WORDS}). Target at least ${BLOG_ARTICLE_MIN_WORDS + BLOG_BODY_REPAIR_WORD_BUFFER} substantive words.`,
+        inExpansionBand
+          ? `Article body is below publish depth (${bodyWordCount} words; target ${substantiveWordMin} substantive words; hard minimum ${BLOG_ARTICLE_MIN_WORDS}). Running expansion repair.`
+          : `Article body is too short (${bodyWordCount} words; minimum ${BLOG_ARTICLE_MIN_WORDS}). Target at least ${BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH} substantive words before publish.`,
       );
     }
 
@@ -281,6 +314,7 @@ export async function runBlogArticleGenerationPipeline(
     }
 
     await sleepMs(repairBackoffMs(repairPassesUsed));
+    await reportStage("repairing_body");
     try {
       bodyHtml = await repairControlPanelArticleBodyHtml({
         plan,
@@ -295,7 +329,7 @@ export async function runBlogArticleGenerationPipeline(
         selectedTitle: options.pageH1Override,
         currentHtml: bodyHtml,
         validationMessages,
-        targetWordMin: BLOG_ARTICLE_MIN_WORDS + BLOG_BODY_REPAIR_WORD_BUFFER,
+        targetWordMin: substantiveWordMin,
         openAiUser: openAiUserTag(idem, "repair-body", repairPassesUsed),
       });
     } catch (e) {
@@ -321,7 +355,11 @@ export async function runBlogArticleGenerationPipeline(
 
   while (true) {
     try {
-      const persistResult = await persistControlPanelDraft(input, plan, bodyHtml);
+      const persistResult = await persistControlPanelDraft(input, plan, bodyHtml, {
+        onPersistStage: async (s) => {
+          await reportStage(s);
+        },
+      });
       if (!persistResult.ok) {
         if (persistResult.code === "INSUFFICIENT_CITATIONS") {
           return {
@@ -418,11 +456,12 @@ export async function runBlogArticleGenerationPipeline(
             return { ok: false, stage: "body", error: msg, plan, repairPassesUsed };
           }
           const wc = countWordsFromHtml(bodyHtml);
-          if (bodyHtml.length < MIN_BODY_CHARS || wc < BLOG_ARTICLE_MIN_WORDS) {
+          if (bodyHtml.length < MIN_BODY_CHARS || wc < substantiveWordMin) {
             const msgs = [
-              `Post–title-repair body below limits (${wc} words; need ≥${BLOG_ARTICLE_MIN_WORDS}).`,
+              `Post–title-repair body below limits (${wc} words; need ≥${substantiveWordMin}).`,
             ];
             try {
+              await reportStage("repairing_body");
               bodyHtml = await repairControlPanelArticleBodyHtml({
                 plan,
                 topic: input.topic,
@@ -436,7 +475,7 @@ export async function runBlogArticleGenerationPipeline(
                 selectedTitle: plan.h1,
                 currentHtml: bodyHtml,
                 validationMessages: msgs,
-                targetWordMin: BLOG_ARTICLE_MIN_WORDS + BLOG_BODY_REPAIR_WORD_BUFFER,
+                targetWordMin: substantiveWordMin,
                 openAiUser: openAiUserTag(idem, "repair-body-post-seo", repairPassesUsed),
               });
               repairPassesUsed += 1;

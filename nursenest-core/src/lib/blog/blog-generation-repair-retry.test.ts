@@ -449,8 +449,8 @@ describe("batch-schedule retry-repair endpoint", () => {
 // Constants sanity
 // ─────────────────────────────────────────────────────────────────────────────
 describe("repair constants", () => {
-  it("MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS is 3", () => {
-    assert.equal(MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS, 3);
+  it("MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS is 5", () => {
+    assert.equal(MAX_BLOG_ARTICLE_REPAIR_ATTEMPTS, 5);
   });
 
   it("BLOG_BODY_REPAIR_WORD_BUFFER is 150", () => {

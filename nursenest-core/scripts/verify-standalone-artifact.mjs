@@ -2,6 +2,8 @@ import { existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { isNNSkipLessonIndexBuild } from "./run-lesson-indexes-for-build.mjs";
+
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 
 export function getStandaloneServerCandidates(root = packageRoot) {
@@ -119,6 +121,58 @@ export function verifyStandaloneStaticAssetsPresent(root = packageRoot) {
   }
 }
 
+/**
+ * When lesson indexes are built (NN_SKIP_LESSON_INDEX_BUILD unset), generated JSON must exist at the
+ * package root and beside each standalone `server.js` (copied by ensure-standalone-static).
+ */
+export function verifyPathwayLessonGeneratedIndexesArtifact(root = packageRoot) {
+  if (isNNSkipLessonIndexBuild()) {
+    console.log("[lesson-indexes] standalone artifact check skipped reason=NN_SKIP_LESSON_INDEX_BUILD");
+    return;
+  }
+  const srcDir = path.join(root, "src", "content", "pathway-lessons", "generated-indexes");
+  if (!existsSync(srcDir)) {
+    throw new Error(
+      `[lesson-indexes] FATAL: missing generated index directory at package root:\n  ${srcDir}\n` +
+        `Run \`npm run build\` (indexes run before \`next build\` unless NN_SKIP_LESSON_INDEX_BUILD is set).`,
+    );
+  }
+  const srcJson = readdirSync(srcDir).filter((n) => n.endsWith(".json"));
+  if (srcJson.length === 0) {
+    throw new Error(
+      `[lesson-indexes] FATAL: no *.json under ${srcDir} — indexes were not generated (NN_SKIP_LESSON_INDEX_BUILD is not set).`,
+    );
+  }
+  const servers = discoverStandaloneServerJsPaths(root);
+  if (servers.length === 0) {
+    throw new Error(
+      "[lesson-indexes] FATAL: no standalone server.js under .next/standalone — cannot verify lesson indexes.",
+    );
+  }
+  for (const serverPath of servers) {
+    const destDir = path.join(path.dirname(serverPath), "src", "content", "pathway-lessons", "generated-indexes");
+    if (!existsSync(destDir)) {
+      throw new Error(
+        `[lesson-indexes] FATAL: standalone tree missing lesson index directory:\n  ${destDir}\n` +
+          `Sibling server: ${serverPath}\n` +
+          `Run \`node scripts/ensure-standalone-static.mjs\` after \`next build\`.`,
+      );
+    }
+    const destJson = readdirSync(destDir).filter((n) => n.endsWith(".json"));
+    if (destJson.length !== srcJson.length) {
+      throw new Error(
+        `[lesson-indexes] FATAL: lesson index file count mismatch.\n` +
+          `  src=${srcJson.length} (${srcDir})\n` +
+          `  dest=${destJson.length} (${destDir})\n` +
+          `  server=${serverPath}`,
+      );
+    }
+  }
+  console.log(
+    `[lesson-indexes] standalone artifact verified (${srcJson.length} index file(s), ${servers.length} server root(s))`,
+  );
+}
+
 const scriptPath = fileURLToPath(import.meta.url);
 const isDirectRun = process.argv[1] && path.resolve(process.argv[1]) === scriptPath;
 
@@ -126,6 +180,7 @@ if (isDirectRun) {
   try {
     const standaloneServerPath = verifyStandaloneArtifact();
     verifyStandaloneStaticAssetsPresent();
+    verifyPathwayLessonGeneratedIndexesArtifact();
     const staticTargets = getStandaloneStaticSyncTargets().length;
     console.log(
       `[verify-standalone-artifact] verified ${standaloneServerPath} and ${staticTargets} static asset tree(s)`,
