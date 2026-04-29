@@ -122,6 +122,8 @@ let rnRenalExpansionPathwaysCache: Record<string, CatalogShape["pathways"][strin
 let rnEndocrineExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 /** RN NCLEX-RN musculoskeletal expansion (merged after endocrine expansion; deduped by slug). */
 let rnMusculoskeletalExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+/** RN NCLEX-RN fluids, electrolytes & acid-base expansion (merged after musculoskeletal expansion; deduped by slug). */
+let rnFluidsElectrolytesExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 let newGradTransitionPathwaysCache: Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> | null = null;
 
 function getCatalogData(): CatalogShape {
@@ -363,6 +365,20 @@ function getRnMusculoskeletalExpansionPathways(): Record<string, CatalogShape["p
 
 function rnMusculoskeletalExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
   const rows = getRnMusculoskeletalExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+function getRnFluidsElectrolytesExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnFluidsElectrolytesExpansionPathwaysCache) return rnFluidsElectrolytesExpansionPathwaysCache;
+  rnFluidsElectrolytesExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-fluids-electrolytes-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnFluidsElectrolytesExpansionPathwaysCache;
+}
+
+function rnFluidsElectrolytesExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnFluidsElectrolytesExpansionPathways()[pathwayId];
   return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
 }
 
@@ -1348,6 +1364,7 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
   const renalExpansion = rnRenalExpansionLessonsForPathway(pathwayId);
   const endocrineExpansion = rnEndocrineExpansionLessonsForPathway(pathwayId);
   const musculoskeletalExpansion = rnMusculoskeletalExpansionLessonsForPathway(pathwayId);
+  const fluidsElectrolytesExpansion = rnFluidsElectrolytesExpansionLessonsForPathway(pathwayId);
   const newGrad = newGradTransitionLessonsForPathway(pathwayId);
   const seen = new Set<string>();
   const merged: LessonInput[] = [];
@@ -1369,6 +1386,7 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
     ...renalExpansion,
     ...endocrineExpansion,
     ...musculoskeletalExpansion,
+    ...fluidsElectrolytesExpansion,
     ...newGrad,
   ]) {
     if (seen.has(l.slug)) continue;
@@ -1474,6 +1492,12 @@ function buildCatalogLessonsRawUncached(pathwayId: string): LessonInput[] {
         merged.push(extra);
       }
       for (const extra of rnMusculoskeletalExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of rnFluidsElectrolytesExpansionLessonsForPathway(pathwayId)) {
         const s = extra.slug.trim();
         if (!s || seen.has(s)) continue;
         seen.add(s);
