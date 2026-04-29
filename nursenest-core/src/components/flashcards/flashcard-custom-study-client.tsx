@@ -31,6 +31,7 @@ type ApiCard = {
 
 type SessionSummary = {
   matchingCards: number;
+  returnedCards?: number;
   weakOnly: boolean;
   starredOnly: boolean;
   selectedCategories: string[];
@@ -82,6 +83,7 @@ export function FlashcardCustomStudyClient() {
             parsed.summary
               ? {
                   matchingCards: parsed.summary.matchingCards,
+                  returnedCards: parsed.summary.returnedCards,
                   weakOnly: parsed.summary.weakOnly,
                   starredOnly: parsed.summary.starredOnly,
                   selectedCategories: parsed.summary.selectedCategories ?? [],
@@ -128,6 +130,17 @@ export function FlashcardCustomStudyClient() {
     }),
     [exitHref, t],
   );
+
+  const sessionMeta = useMemo(() => {
+    if (!summary) return undefined;
+    const q = new URLSearchParams(searchParamString);
+    const requested = Math.max(1, Number(q.get("cardLimit") || "20") || 20);
+    return {
+      requestedCount: requested,
+      returnedCount: summary.returnedCards ?? cards.length,
+      totalAvailable: summary.matchingCards,
+    };
+  }, [summary, searchParamString, cards.length]);
 
   const onRate = useCallback(async (cardId: string, rating: "incorrect" | "unsure" | "known") => {
     if (isSyntheticFlashcardStudyId(cardId)) return;
@@ -220,7 +233,14 @@ export function FlashcardCustomStudyClient() {
       </div>
 
       <ExamSessionShell>
-        <ActiveStudySession cards={activeCards} header={header} layout="split" onRate={onRate} />
+        <ActiveStudySession
+          cards={activeCards}
+          header={header}
+          layout="split"
+          onRate={onRate}
+          sessionMeta={sessionMeta}
+          enableLocalStudyPins
+        />
       </ExamSessionShell>
     </div>
   );

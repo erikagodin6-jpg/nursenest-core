@@ -1,14 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { CheckCircle2, ChevronLeft, ChevronRight, Home, RefreshCw, XCircle } from "lucide-react";
+import { useEffect, useMemo, useReducer, useRef, useState } from "react";
+import { AlertCircle, CheckCircle2, ChevronLeft, ChevronRight, Home, RefreshCw, Star, XCircle } from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import {
-  getStudyItemState,
-  setStudyItemState,
-  type StudyItemState,
-} from "@/lib/flashcards/study-session-persistence";
+import { getStudyItemState, setStudyItemState } from "@/lib/flashcards/study-session-persistence";
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 import { ExamSessionProgressStrip } from "@/components/exam/exam-session-shell";
 import { SiteBrandLogoMark } from "@/components/brand/site-brand-logo";
@@ -62,6 +58,8 @@ type Props = {
   onStudyProgress?: (state: { index: number; revealed: boolean }) => void;
   onSessionComplete?: () => void;
   onSessionRestart?: () => void;
+  /** Local-only star / review flags (localStorage) for flashcard-style sessions. */
+  enableLocalStudyPins?: boolean;
 };
 
 /* ================= HELPERS ================= */
@@ -106,8 +104,10 @@ export function ActiveStudySession({
   onStudyProgress,
   onSessionComplete,
   onSessionRestart,
+  enableLocalStudyPins = false,
 }: Props) {
   const { t } = useMarketingI18n();
+  const [, bumpPins] = useReducer((x: number) => x + 1, 0);
 
   const deduped = useMemo(() => dedupeCardsById(cards), [cards]);
 
@@ -119,6 +119,7 @@ export function ActiveStudySession({
   const [elapsed, setElapsed] = useState(0);
 
   const current = sessionCards[index] ?? null;
+  const pinState = current?.id && enableLocalStudyPins ? getStudyItemState(current.id) : {};
 
   useEffect(() => {
     setSessionCards(deduped);
@@ -187,8 +188,15 @@ export function ActiveStudySession({
       <div className="flex items-center justify-between border p-3 rounded-xl">
         <div>
           <h1 className="font-bold">{header.sessionTitle}</h1>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-[var(--semantic-text-secondary)]">
             {index + 1} / {sessionCards.length}
+            {sessionMeta?.returnedCount != null || sessionMeta?.totalAvailable != null ? (
+              <span className="ml-1.5 text-[var(--semantic-text-secondary)]">
+                · {sessionMeta.returnedCount ?? sessionCards.length} in session
+                {sessionMeta.totalAvailable != null ? ` · ${sessionMeta.totalAvailable} matched filters` : ""}
+                {sessionMeta.requestedCount != null ? ` · up to ${sessionMeta.requestedCount} requested` : ""}
+              </span>
+            ) : null}
           </p>
         </div>
 
@@ -236,17 +244,70 @@ export function ActiveStudySession({
         </div>
       ) : null}
 
+      {revealed && enableLocalStudyPins && current?.id ? (
+        <div className="flex flex-wrap gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3">
+          <button
+            type="button"
+            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${
+              pinState.starred
+                ? "border-[color-mix(in_srgb,var(--semantic-warning)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_14%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
+                : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)]"
+            }`}
+            onClick={() => {
+              setStudyItemState(current.id, { starred: !pinState.starred });
+              bumpPins();
+            }}
+          >
+            <Star className="h-3.5 w-3.5" aria-hidden />
+            {pinState.starred ? "Starred" : "Star card"}
+          </button>
+          <button
+            type="button"
+            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${
+              pinState.confusing
+                ? "border-[color-mix(in_srgb,var(--semantic-danger)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
+                : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)]"
+            }`}
+            onClick={() => {
+              setStudyItemState(current.id, { confusing: !pinState.confusing });
+              bumpPins();
+            }}
+          >
+            <AlertCircle className="h-3.5 w-3.5" aria-hidden />
+            {pinState.confusing ? "Flagged weak" : "Flag weak"}
+          </button>
+          <span className="self-center text-[10px] text-[var(--semantic-text-secondary)]">
+            Saved on this device for starred / weak filters on the hub.
+          </span>
+        </div>
+      ) : null}
+
       {/* RATING */}
       {revealed && (
-        <div className="grid grid-cols-3 gap-2">
-          <button onClick={() => submitRating("incorrect")} disabled={saving}>
-            <XCircle /> Incorrect
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+          <button
+            type="button"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-danger)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)]"
+            onClick={() => submitRating("incorrect")}
+            disabled={saving}
+          >
+            <XCircle className="h-4 w-4" aria-hidden /> Incorrect
           </button>
-          <button onClick={() => submitRating("unsure")} disabled={saving}>
-            <RefreshCw /> Unsure
+          <button
+            type="button"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)]"
+            onClick={() => submitRating("unsure")}
+            disabled={saving}
+          >
+            <RefreshCw className="h-4 w-4" aria-hidden /> Unsure
           </button>
-          <button onClick={() => submitRating("known")} disabled={saving}>
-            <CheckCircle2 /> Known
+          <button
+            type="button"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--semantic-success)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-3 py-2 text-sm font-semibold text-[var(--semantic-text-primary)]"
+            onClick={() => submitRating("known")}
+            disabled={saving}
+          >
+            <CheckCircle2 className="h-4 w-4" aria-hidden /> Known
           </button>
         </div>
       )}

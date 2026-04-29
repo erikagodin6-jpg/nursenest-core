@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { type CSSProperties } from "react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -13,6 +13,7 @@ import {
 import { LearnerCtaLink } from "@/components/learner-ui/learner-cta-link";
 import { weakAreaFlashcardsHref } from "@/lib/learner/weak-area-flashcards-href";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
+import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
 
 const CARD_COUNTS = [10, 20, 30, 50] as const;
@@ -48,20 +49,31 @@ function buildCustomSessionQuery(args: {
   return q.toString();
 }
 
+function hubVisualKeyForCategory(id: string): string {
+  const s = id.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_");
+  return s.length > 0 ? s : "fundamentals";
+}
+
 export function FlashcardsHubClient({
   scopedPathwayId,
   pathwayDisplayName,
   pathwayBootstrapSource = "primary",
   catHref,
   initialHub,
+  lessonsHubHref,
 }: {
   scopedPathwayId: string;
   pathwayDisplayName: string;
   pathwayBootstrapSource?: "primary" | "secondary";
   catHref?: string;
   initialHub?: FlashcardsHubServerPayload | null;
+  /** Same-pathway lessons hub — mirrors learner lessons IA for every tier/pathway. */
+  lessonsHubHref?: string;
 }) {
   const { t } = useMarketingI18n();
+  const resolvedLessonsHubHref =
+    lessonsHubHref?.trim() ||
+    `/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`;
 
   const [builderCategories, setBuilderCategories] = useState<
     Array<{ id: string; title: string; description?: string; count: number }>
@@ -225,7 +237,7 @@ export function FlashcardsHubClient({
   };
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 px-4 py-6" data-nn-e2e-flashcards-hub>
+    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6" data-nn-e2e-flashcards-hub>
       {pathwayBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}
 
       {catHref ? (
@@ -241,6 +253,18 @@ export function FlashcardsHubClient({
         <p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.flashcards.hub.subtitle")}</p>
         <p className="text-xs text-[var(--semantic-brand)]">{pathwayDisplayName}</p>
         <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">{sessionSummaryLine}</p>
+        <div className="flex flex-wrap gap-3 pt-1 text-sm">
+          <Link
+            href={resolvedLessonsHubHref}
+            className="font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
+          >
+            Open lessons hub (same pathway)
+          </Link>
+          <span className="text-[var(--semantic-text-secondary)]">·</span>
+          <span className="text-[var(--semantic-text-secondary)]">
+            Pick one or more body systems below — layout matches your pathway lessons hub.
+          </span>
+        </div>
       </header>
 
       <div className="flex flex-wrap gap-2" data-nn-e2e-flashcard-filter-presets>
@@ -280,6 +304,27 @@ export function FlashcardsHubClient({
         </div>
       ) : null}
 
+      {!loadError &&
+      matchingCards === 0 &&
+      !starredOnly &&
+      builderCategories.length > 0 &&
+      (weakOnly || incorrectOnly || notStudiedOnly || starredOnly || selectedBodyIds.length > 0) ? (
+        <div
+          className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
+          data-nn-e2e-flashcards-filter-empty
+        >
+          <p className="font-medium text-[var(--semantic-text-primary)]">No cards match this combination</p>
+          <p className="mt-2">
+            Systems are listed below, but filters removed every matching card. Choose <strong>All cards</strong>, clear
+            extra system picks, or open the{" "}
+            <Link href={resolvedLessonsHubHref} className="font-semibold text-[var(--semantic-brand)] underline">
+              lessons hub
+            </Link>{" "}
+            to confirm lesson-linked recall is available for this track.
+          </p>
+        </div>
+      ) : null}
+
       {!loadError && matchingCards === 0 && !starredOnly && builderCategories.length === 0 ? (
         <div
           className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
@@ -289,7 +334,7 @@ export function FlashcardsHubClient({
           <p className="mt-2">
             When the question bank has no published cards for this pathway, we still try to build study cards from
             your lesson checkpoints. Open the{" "}
-            <Link href={`/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`} className="font-semibold text-[var(--semantic-brand)] underline">
+            <Link href={resolvedLessonsHubHref} className="font-semibold text-[var(--semantic-brand)] underline">
               lessons hub
             </Link>{" "}
             for this track, complete a lesson section, then return — or clear filters above and choose <strong>All cards</strong>.
@@ -306,6 +351,9 @@ export function FlashcardsHubClient({
       <section className="space-y-4">
         <div>
           <h2 className="text-lg font-semibold">{t("learner.flashcards.hub.bodySystemsHeading")}</h2>
+          <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">
+            Tap to include or exclude systems — same multi-select pattern as the lessons hub category cards.
+          </p>
         </div>
 
         <input
@@ -313,12 +361,15 @@ export function FlashcardsHubClient({
           placeholder="Search body systems…"
           value={categorySearch}
           onChange={(e) => setCategorySearch(e.target.value)}
-          className="w-full rounded-lg border px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
         />
 
-        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="nn-qa-pathway-lessons-grid grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {filteredCategories.map((c) => {
             const selected = selectedBodyIds.length === 0 || selectedBodyIds.includes(c.id);
+            const visual = getLessonHubSystemVisual(hubVisualKeyForCategory(c.id));
+            const Icon = visual.icon;
+            const systemStyle = { "--nn-system-accent": `var(${visual.accentVar})` } as CSSProperties;
 
             return (
               <button
@@ -327,44 +378,70 @@ export function FlashcardsHubClient({
                 onClick={() => toggleBodySystem(c.id)}
                 data-selected={selected}
                 data-nn-e2e-body-system-card={c.id}
-                className="rounded-lg border border-[var(--semantic-border-soft)] p-3 text-left transition-all hover:scale-[1.02] data-[selected=true]:ring-2 data-[selected=true]:ring-[color-mix(in_srgb,var(--semantic-info)_55%,transparent)]"
+                style={systemStyle}
+                className="nn-lesson-system-card text-left transition hover:shadow-[var(--semantic-shadow-soft)] data-[selected=false]:opacity-70 rounded-[1.35rem] border border-[color-mix(in_srgb,var(--nn-system-accent)_16%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-3.5 sm:p-4 data-[selected=true]:ring-2 data-[selected=true]:ring-[color-mix(in_srgb,var(--nn-system-accent)_45%,transparent)]"
               >
-                <div className="font-medium">{formatTitleCase(c.title)}</div>
-                {c.count ? <div className="text-xs text-gray-400">{c.count} cards</div> : null}
+                <div className="flex items-start gap-3">
+                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--nn-system-accent)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-system-accent)_9%,var(--semantic-panel-muted))] text-[var(--nn-system-accent)]">
+                    <Icon className="h-4 w-4" aria-hidden />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <div className="line-clamp-2 text-base font-semibold leading-snug text-[var(--theme-heading-text)]">
+                      {formatTitleCase(c.title)}
+                    </div>
+                    {c.description ? (
+                      <p className="mt-1 line-clamp-2 text-xs text-[var(--semantic-text-secondary)]">{c.description}</p>
+                    ) : null}
+                    <p className="mt-2 text-xs font-semibold text-[var(--semantic-text-secondary)]">
+                      {c.count} card{c.count === 1 ? "" : "s"} in pool
+                    </p>
+                  </div>
+                </div>
               </button>
             );
           })}
         </div>
       </section>
 
-      <section className="space-y-5 border-t pt-4">
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
-          Weak areas only
-        </label>
+      <section className="space-y-5 border-t border-[var(--semantic-border-soft)] pt-4">
+        <details className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3">
+          <summary className="cursor-pointer text-sm font-semibold text-[var(--semantic-text-primary)]">
+            Advanced filters (same flags as the API)
+          </summary>
+          <div className="mt-3 space-y-3">
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
+              Weak areas only
+            </label>
 
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={incorrectOnly} onChange={(e) => setIncorrectOnly(e.target.checked)} />
-          Previously incorrect
-        </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={incorrectOnly} onChange={(e) => setIncorrectOnly(e.target.checked)} />
+              Previously incorrect
+            </label>
 
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={notStudiedOnly} onChange={(e) => setNotStudiedOnly(e.target.checked)} />
-          Not studied
-        </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={notStudiedOnly} onChange={(e) => setNotStudiedOnly(e.target.checked)} />
+              Not studied
+            </label>
 
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} />
-          Starred only
-        </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} />
+              Starred only
+            </label>
+          </div>
+        </details>
 
         <div className="flex flex-wrap items-center gap-2 text-sm">
-          <span className="text-muted-foreground">Deck size:</span>
+          <span className="text-[var(--semantic-text-secondary)]">Deck size:</span>
           {CARD_COUNTS.map((n) => (
             <button
               key={n}
               type="button"
-              className={`rounded-full border px-3 py-1 ${cardLimit === n ? "border-primary bg-primary/10" : ""}`}
+              className={`rounded-full border border-[var(--semantic-border-soft)] px-3 py-1 ${
+                cardLimit === n
+                  ? "border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))]"
+                  : ""
+              }`}
               onClick={() => setCardLimit(n)}
             >
               {n}

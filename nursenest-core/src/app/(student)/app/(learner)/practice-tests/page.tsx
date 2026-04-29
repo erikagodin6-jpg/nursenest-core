@@ -22,8 +22,19 @@ import { readPracticeTestsHubBootstrapSnapshot } from "@/lib/study-content-failo
 import { snapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
-export default async function PracticeTestsPage() {
+type PageProps = { searchParams: Promise<{ pathwayId?: string | string[] | undefined }> };
+
+export default async function PracticeTestsPage({ searchParams }: PageProps) {
   const { t } = await getLearnerMarketingBundle();
+  const sp = await searchParams;
+  const rawPid = sp.pathwayId;
+  const requestedPathwayId =
+    typeof rawPid === "string" && rawPid.trim().length > 2
+      ? rawPid.trim()
+      : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
+        ? rawPid[0].trim()
+        : null;
+
   const session = await getProtectedRouteSession("(student).app.(learner).practice-tests");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
@@ -89,6 +100,9 @@ export default async function PracticeTestsPage() {
       examCodeLabel: p.shortName.trim(),
     }));
     catEligiblePathwayIds = compatiblePathways.filter(pathwayAllowsCatAdaptiveStart).map((p) => p.id);
+    if (requestedPathwayId && pathwayOptions.some((p) => p.id === requestedPathwayId)) {
+      defaultPathwayId = requestedPathwayId;
+    }
   } catch (e) {
     safeServerLog("learner_practice_tests", "hub_bootstrap_primary_failed", {
       user_id_prefix: userId.slice(0, 8),
@@ -102,6 +116,9 @@ export default async function PracticeTestsPage() {
       pathwayOptions = snap.payload.pathwayOptions;
       defaultPathwayId = snap.payload.defaultPathwayId;
       catEligiblePathwayIds = snap.payload.catEligiblePathwayIds;
+      if (requestedPathwayId && pathwayOptions.some((p) => p.id === requestedPathwayId)) {
+        defaultPathwayId = requestedPathwayId;
+      }
       const age = snapshotAgeMs(snap.capturedAt);
       safeServerLog("learner_practice_tests", "study_content_failover", {
         event: "study_content_failover",

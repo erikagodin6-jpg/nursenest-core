@@ -220,6 +220,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
           pathwayBootstrapSource={pathwayBootstrapSource}
           catHref={catHref}
           initialHub={initialHub}
+          lessonsHubHref={`/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`}
         />
       </Suspense>
     </div>

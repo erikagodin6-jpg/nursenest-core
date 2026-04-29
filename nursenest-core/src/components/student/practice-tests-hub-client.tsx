@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { formatTitleCase } from "@/lib/format/text-case";
+import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import type {
   CatAdaptiveSessionType,
@@ -32,6 +34,11 @@ import {
 import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exam-start-payload";
 import { ExamPreExamCustomizeModal } from "@/components/exam/exam-study-theme-modal";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
+
+function hubVisualKeyForCategory(id: string): string {
+  const s = id.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_");
+  return s.length > 0 ? s : "fundamentals";
+}
 
 type TestListRow = {
   id: string;
@@ -263,6 +270,10 @@ export function PracticeTestsHubClient({
     setTopicInput("");
   }
 
+  function toggleTopicBucket(topic: string) {
+    setTopicPicks((prev) => (prev.includes(topic) ? prev.filter((x) => x !== topic) : [...prev, topic]));
+  }
+
   async function createTest() {
     setCreating(true);
     setError(null);
@@ -334,7 +345,10 @@ export function PracticeTestsHubClient({
           `${t("learner.practiceTests.hub.error.createTest")} (missing session id — stay on this page and retry; we will not send you to the dashboard.)`,
         );
       }
-      window.location.href = `/app/practice-tests/${data.id}`;
+      const pid = pathwayId.trim();
+      window.location.href = `/app/practice-tests/${encodeURIComponent(data.id)}${
+        pid ? `?pathwayId=${encodeURIComponent(pid)}` : ""
+      }`;
     } catch (e) {
       setError(e instanceof Error ? e.message : t("learner.practiceTests.hub.error.generic"));
     } finally {
@@ -527,6 +541,80 @@ export function PracticeTestsHubClient({
         </div>
 
         {selectionMode !== "cat" ? (
+          <div className="mt-4 space-y-2 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 shadow-sm">
+            <span className="text-sm font-medium text-foreground">Question focus</span>
+            <div className="flex flex-wrap gap-2" data-nn-e2e-practice-pool-presets>
+              <button
+                type="button"
+                data-selected={selectionMode === "random" && topicPicks.length === 0}
+                className="nn-chip px-3 py-1.5 text-xs font-medium"
+                onClick={() => {
+                  setSelectionMode("random");
+                  setCatSelectionBasis("random");
+                  setTopicPicks([]);
+                }}
+              >
+                All questions
+              </button>
+              <button
+                type="button"
+                data-selected={selectionMode === "weak"}
+                className="nn-chip px-3 py-1.5 text-xs font-medium"
+                onClick={() => {
+                  setSelectionMode("weak");
+                  setCatSelectionBasis("weak");
+                }}
+              >
+                Weak areas
+              </button>
+              <button
+                type="button"
+                data-selected={selectionMode === "missed"}
+                className="nn-chip px-3 py-1.5 text-xs font-medium"
+                onClick={() => {
+                  setSelectionMode("missed");
+                  setCatSelectionBasis("missed");
+                }}
+              >
+                Incorrect review
+              </button>
+              <button
+                type="button"
+                data-selected={selectionMode === "random" && topicPicks.length > 0}
+                className="nn-chip px-3 py-1.5 text-xs font-medium"
+                onClick={() => {
+                  setSelectionMode("random");
+                  setCatSelectionBasis("random");
+                }}
+              >
+                Fresh mix
+              </button>
+              {catOptions.length > 0 ? (
+                <button
+                  type="button"
+                  className="nn-chip px-3 py-1.5 text-xs font-medium"
+                  onClick={() => {
+                    setSelectionMode("cat");
+                    setCatPresentationMode("practice");
+                    setCatAdaptiveSessionType("practice");
+                    setCatExamFeedbackMode("study");
+                    setCatSelectionBasis("starred");
+                    if (questionCount > 75) setQuestionCount(75);
+                  }}
+                >
+                  Starred / saved (guided CAT pool)
+                </button>
+              ) : null}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Linear modes use the question bank with your filters. The Fresh mix action keeps random selection with
+              your category picks. Starred items open the adaptive builder on a saved-questions pool when your track
+              supports CAT.
+            </p>
+          </div>
+        ) : null}
+
+        {selectionMode !== "cat" ? (
           <div className="mt-4 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 shadow-sm">
             <span className="text-sm font-medium text-foreground">{t("learner.practiceTests.hub.sessionModeLabel")}</span>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -600,6 +688,65 @@ export function PracticeTestsHubClient({
               </label>
             ) : null}
             <p className="mt-2 text-xs text-muted-foreground">{t("learner.practiceTests.hub.sessionModeHelp")}</p>
+          </div>
+        ) : null}
+
+        {selectionMode !== "cat" && topics.length > 0 ? (
+          <div className="mt-6 space-y-3" data-nn-e2e-practice-topic-grid>
+            <div>
+              <span className="text-sm font-medium text-foreground">Systems and categories</span>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Tap cards to add or remove filters — same multi-select pattern as the lessons hub.
+              </p>
+            </div>
+            {topicPicks.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {topicPicks.map((pickedTopic) => (
+                  <button
+                    key={pickedTopic}
+                    type="button"
+                    className="nn-chip px-3 py-1 text-xs font-medium"
+                    data-selected="true"
+                    onClick={() => removeTopic(pickedTopic)}
+                  >
+                    {pickedTopic} ✕
+                  </button>
+                ))}
+              </div>
+            ) : null}
+            <div className="nn-qa-pathway-lessons-grid grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+              {topics.map((b) => {
+                const picked = topicPicks.includes(b.topic);
+                const visual = getLessonHubSystemVisual(hubVisualKeyForCategory(b.topic));
+                const Icon = visual.icon;
+                const systemStyle = { "--nn-system-accent": `var(${visual.accentVar})` } as CSSProperties;
+                return (
+                  <button
+                    key={b.topic}
+                    type="button"
+                    onClick={() => toggleTopicBucket(b.topic)}
+                    data-selected={picked}
+                    data-nn-e2e-practice-topic-card={b.topic}
+                    style={systemStyle}
+                    className="nn-lesson-system-card text-left transition hover:shadow-[var(--semantic-shadow-soft)] data-[selected=false]:opacity-70 rounded-[1.35rem] border border-[color-mix(in_srgb,var(--nn-system-accent)_16%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-3.5 sm:p-4 data-[selected=true]:ring-2 data-[selected=true]:ring-[color-mix(in_srgb,var(--nn-system-accent)_45%,transparent)]"
+                  >
+                    <div className="flex items-start gap-3">
+                      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--nn-system-accent)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-system-accent)_9%,var(--semantic-panel-muted))] text-[var(--nn-system-accent)]">
+                        <Icon className="h-4 w-4" aria-hidden />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="line-clamp-2 text-base font-semibold leading-snug text-[var(--theme-heading-text)]">
+                          {formatTitleCase(b.topic)}
+                        </div>
+                        <p className="mt-2 text-xs font-semibold text-[var(--semantic-text-secondary)]">
+                          {b.count} question{b.count === 1 ? "" : "s"}
+                        </p>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         ) : null}
 
@@ -738,10 +885,7 @@ export function PracticeTestsHubClient({
           </div>
         ) : null}
 
-        {(selectionMode === "random" ||
-          selectionMode === "targeted" ||
-          selectionMode === "missed" ||
-          selectionMode === "cat") && (
+        {selectionMode === "cat" ? (
           <div className="mt-4 space-y-2">
             <span className="text-sm text-muted-foreground">{t("learner.practiceTests.hub.topicsLabel")}</span>
             <div className="flex flex-wrap gap-2">
@@ -785,7 +929,7 @@ export function PracticeTestsHubClient({
               </button>
             </div>
           </div>
-        )}
+        ) : null}
 
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           <label className="block text-sm">
