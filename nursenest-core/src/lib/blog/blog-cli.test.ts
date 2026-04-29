@@ -5,7 +5,8 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { describe, it } from "node:test";
+import { afterEach, beforeEach, describe, it } from "node:test";
+import { getBlogOpenAiChatModel, getLessonOpenAiChatModel } from "@/lib/ai/openai-env";
 import { parseBlogCliArgs } from "@/lib/blog/blog-cli-generate-args";
 import {
   BLOG_CLI_PATHOPHYSIOLOGY_CORPUS,
@@ -100,6 +101,36 @@ describe("BLOG_TITLE_BODY_GATE vs repair classifier", () => {
     });
     assert.equal(r.recoverable, false);
     assert.equal(r.terminalReason, "blog_title_gate");
+  });
+});
+
+describe("blog-ai-generate model env (same helpers as pipeline)", () => {
+  let saved: Record<string, string | undefined>;
+  beforeEach(() => {
+    saved = {
+      BLOG_OPENAI_MODEL: process.env.BLOG_OPENAI_MODEL,
+      LESSON_OPENAI_MODEL: process.env.LESSON_OPENAI_MODEL,
+      AI_INTEGRATIONS_OPENAI_MODEL: process.env.AI_INTEGRATIONS_OPENAI_MODEL,
+    };
+  });
+  afterEach(() => {
+    for (const [k, v] of Object.entries(saved)) {
+      if (v === undefined) delete process.env[k];
+      else process.env[k] = v;
+    }
+  });
+
+  it("getBlogOpenAiChatModel matches BLOG_OPENAI_MODEL → AI_INTEGRATIONS_OPENAI_MODEL → default", () => {
+    process.env.BLOG_OPENAI_MODEL = "custom-blog-model";
+    process.env.AI_INTEGRATIONS_OPENAI_MODEL = "ignored-when-blog-set";
+    assert.equal(getBlogOpenAiChatModel(), "custom-blog-model");
+  });
+
+  it("getLessonOpenAiChatModel matches LESSON_OPENAI_MODEL → AI_INTEGRATIONS_OPENAI_MODEL chain", () => {
+    delete process.env.BLOG_OPENAI_MODEL;
+    process.env.LESSON_OPENAI_MODEL = "custom-lesson-model";
+    process.env.AI_INTEGRATIONS_OPENAI_MODEL = "shared-fallback";
+    assert.equal(getLessonOpenAiChatModel(), "custom-lesson-model");
   });
 });
 

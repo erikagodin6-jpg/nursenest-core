@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
+import { getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { logLocalizedGenerationRun } from "@/lib/admin/blog-content-automation-log";
@@ -276,6 +277,8 @@ export async function POST(req: NextRequest) {
       region: d.targetRegion,
     });
     const completion = await openAiChatCompletion({
+      useBlogOpenAiApiKey: true,
+      model: getBlogOpenAiChatModel(),
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },

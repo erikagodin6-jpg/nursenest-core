@@ -5,6 +5,7 @@
  */
 
 import type { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
+import { getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { countryEditorialContext, pathwayEditorialContext } from "@/lib/blog/blog-article-pathway-context";
 import { blogBodyHtmlWhenAiReturnedEmpty } from "@/lib/blog/blog-article-bounds";
@@ -258,6 +259,8 @@ export async function fetchControlPanelBodyHtmlSectionIsolated(params: FetchCont
       })}${regenHint}`;
 
       const response = await openAiChatCompletion({
+        useBlogOpenAiApiKey: true,
+        model: getBlogOpenAiChatModel(),
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: user },

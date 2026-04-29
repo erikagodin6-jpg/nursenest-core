@@ -4,13 +4,15 @@
  * Run from nursenest-core:
  *   npx tsx scripts/rn-ai-expand-lessons.ts [--dry-run] [--slug SLUG] [--limit N] [--force]
  *
- * Env: AI_INTEGRATIONS_OPENAI_API_KEY (unless --dry-run), UPGRADE_MODEL (default gpt-4o)
+ * Env: AI_INTEGRATIONS_OPENAI_API_KEY (unless --dry-run).
+ * Model: LESSON_OPENAI_MODEL → AI_INTEGRATIONS_OPENAI_MODEL → gpt-4.1-mini (see {@link getLessonOpenAiChatModel}).
  */
 import OpenAI from "openai";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { getLessonOpenAiChatModel } from "@/lib/ai/openai-env";
 import {
   RN_EXPAND_REQUIRED_SECTION_KINDS,
   sectionKindsNeedingRegeneration,
@@ -59,7 +61,6 @@ const LIMIT = (() => {
   return i !== -1 ? parseInt(args[i + 1]!, 10) : Infinity;
 })();
 const SECTION_MIN = 150;
-const MODEL = process.env.UPGRADE_MODEL || "gpt-4o";
 const RN_PATHWAYS = new Set(["ca-rn-nclex-rn", "us-rn-nclex-rn"]);
 const SAVE_EVERY = 3;
 const MAX_CLINICAL_REGEN_ROUNDS = 2;
@@ -231,7 +232,7 @@ Task: ${meta.prompt}${existingBody.trim() ? `\n\nExisting thin content (expand i
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
       const resp = await openai.chat.completions.create({
-        model: MODEL,
+        model: getLessonOpenAiChatModel(),
         max_tokens: 900,
         temperature: 0.25,
         messages: [
@@ -300,10 +301,10 @@ function logLessonOutcome(
 }
 
 async function main(): Promise<void> {
+  console.log(`Model: ${getLessonOpenAiChatModel()}`);
   console.log("═══════════════════════════════════════════════════════");
   console.log(" RN Clinical Expansion — validate / retry / gate");
   console.log("═══════════════════════════════════════════════════════");
-  console.log(`  Model:      ${MODEL}`);
   console.log(`  Dry run:    ${DRY_RUN}`);
   console.log(`  Force:      ${FORCE}`);
   console.log(`  Filter:     ${SLUG_FILTER || "all RN lessons"}`);

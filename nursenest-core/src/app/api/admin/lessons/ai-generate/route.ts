@@ -2,7 +2,7 @@ import { DraftReviewStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import { getOpenAiChatModel } from "@/lib/ai/openai-env";
+import { getLessonOpenAiChatModel } from "@/lib/ai/openai-env";
 import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { checkAdminAiGenerateLimit } from "@/lib/ai/admin-rate-limit";
 import {
@@ -77,7 +77,7 @@ export async function POST(req: Request) {
   try {
     const { lesson, rawTokens } = await generateAdminAiLesson(input);
     const normalized = buildDraftNormalized(input, lesson);
-    const model = getOpenAiChatModel();
+    const model = getLessonOpenAiChatModel();
 
     const batchTopicKey = lessonBatchTopicKey(d.topic, d.pathway, d.country, d.lessonType);
 

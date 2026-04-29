@@ -14,7 +14,10 @@
  * Env vars required:
  *   AI_INTEGRATIONS_OPENAI_API_KEY  — API key for LLM provider
  *   AI_INTEGRATIONS_OPENAI_BASE_URL — Base URL (defaults to OpenAI)
- *   UPGRADE_MODEL                   — Model to use (default: gpt-4o)
+ *   UPGRADE_MODEL                   — Explicit model override (optional)
+ *   LESSON_OPENAI_MODEL             — Same resolution as nursenest-core lesson expansion
+ *   AI_INTEGRATIONS_OPENAI_MODEL    — Shared fallback
+ *   (default model: gpt-4.1-mini)
  */
 
 import OpenAI from "openai";
@@ -54,7 +57,11 @@ const MIN_WORDS = (() => {
 })();
 
 // ─── Config ──────────────────────────────────────────────────────────────────
-const MODEL = process.env.UPGRADE_MODEL || "gpt-4o";
+const MODEL =
+  process.env.UPGRADE_MODEL?.trim() ||
+  process.env.LESSON_OPENAI_MODEL?.trim() ||
+  process.env.AI_INTEGRATIONS_OPENAI_MODEL?.trim() ||
+  "gpt-4.1-mini";
 const MAX_RETRIES = 3;
 const CONCURRENCY = 2;         // parallel lessons per pathway
 const SAVE_EVERY = 5;          // write catalog to disk every N upgrades

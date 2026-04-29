@@ -8,6 +8,7 @@ import {
   CountryCode,
   Prisma,
 } from "@prisma/client";
+import { getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { BLOG_TEMPLATE_TITLE_PATTERNS } from "@/lib/blog/blog-template-copy";
 import { buildApa7References, type BlogSourceRecord, validateSources } from "@/lib/blog/apa7";
@@ -285,6 +286,8 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
   let bodyHtml: string;
   try {
     const response = await openAiChatCompletion({
+      useBlogOpenAiApiKey: true,
+      model: getBlogOpenAiChatModel(),
       messages: [
         { role: "system", content: system },
         { role: "user", content: user },

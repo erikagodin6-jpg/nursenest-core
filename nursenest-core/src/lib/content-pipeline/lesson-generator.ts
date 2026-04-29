@@ -1,6 +1,7 @@
 import "server-only";
 
 import { z } from "zod";
+import { getLessonOpenAiChatModel } from "@/lib/ai/openai-env";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import type {
   TopicSpec,
@@ -174,6 +175,7 @@ export async function generatePathwayLesson(
   const resolvedCountry = topic.country ?? country;
 
   const result = await openAiChatCompletion({
+    model: getLessonOpenAiChatModel(),
     messages: [
       { role: "system", content: SYSTEM_PROMPT },
       { role: "user", content: buildLessonUserPrompt(topic, exam, country) },

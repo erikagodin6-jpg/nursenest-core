@@ -9,6 +9,7 @@ import {
   Prisma,
 } from "@prisma/client";
 import { z } from "zod";
+import { getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import type { BlogSourceRecord } from "@/lib/blog/apa7";
 import { coerceBlogSourceRows } from "@/lib/blog/apa7";
@@ -196,6 +197,8 @@ export async function fetchControlPanelPlan(
   })}\n\n${getBlogInternalLinkPathHintsForPrompt(input.exam, input.country)}`;
 
   const res = await openAiChatCompletion({
+    useBlogOpenAiApiKey: true,
+    model: getBlogOpenAiChatModel(),
     messages: [
       { role: "system", content: system },
       { role: "user", content: user },
@@ -270,6 +273,8 @@ export async function fetchControlPanelBodyHtml(params: {
   });
 
   const response = await openAiChatCompletion({
+    useBlogOpenAiApiKey: true,
+    model: getBlogOpenAiChatModel(),
     messages: [
       { role: "system", content: system },
       { role: "user", content: user },
@@ -892,6 +897,8 @@ Current placements for reference: ${JSON.stringify(params.currentPlan?.imagePlac
   const user = sectionPrompts[params.section as Exclude<RegenerateSection, "article_html">];
 
   const res = await openAiChatCompletion({
+    useBlogOpenAiApiKey: true,
+    model: getBlogOpenAiChatModel(),
     messages: [
       { role: "system", content: system },
       { role: "user", content: user },

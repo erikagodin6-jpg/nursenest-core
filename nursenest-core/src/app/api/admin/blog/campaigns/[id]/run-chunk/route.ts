@@ -14,6 +14,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
+import { getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { buildSchemaSummaryPayload } from "@/lib/blog/blog-seo-automation";
 import {
@@ -106,6 +107,8 @@ export async function POST(req: Request, { params }: Props) {
       if (d.mode === "generate") {
         const prompt = `Write SEO-ready HTML for nursing exam prep. Topic: ${item.plannedKeyword ?? campaign.keywordCluster}. Template: ${template}. Intent: ${intent}. Include practical advice, FAQs, and key takeaways.`;
         const ai = await openAiChatCompletion({
+          useBlogOpenAiApiKey: true,
+          model: getBlogOpenAiChatModel(),
           messages: [{ role: "system", content: "Return HTML only with h2/h3/p/ul/li tags." }, { role: "user", content: prompt }],
           maxTokens: 2800,
           temperature: 0.45,

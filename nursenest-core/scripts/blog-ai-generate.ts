@@ -6,6 +6,7 @@
  *     [--tier rn|rpn|pn|np|new-grad|allied] [--publish true|false] [--min-words 1200]
  *
  * API key: `BLOG_OPENAI_API_KEY` || `AI_INTEGRATIONS_OPENAI_API_KEY` (injected into `AI_INTEGRATIONS_OPENAI_API_KEY` for shared helpers).
+ * Model: `BLOG_OPENAI_MODEL` → `AI_INTEGRATIONS_OPENAI_MODEL` → gpt-4.1-mini (see {@link getBlogOpenAiChatModel}).
  */
 import "../src/lib/db/script-env-bootstrap";
 
@@ -26,7 +27,7 @@ import {
 } from "@/lib/blog/blog-content-quality-gate";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
-import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { assertOpenAiKeyConfigured, getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
 import { countWordsFromHtml } from "@/lib/blog/blog-word-count";
 
 const SITE_ORIGIN = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://nursenest.ca").replace(/\/$/, "");
@@ -77,9 +78,10 @@ type RunStats = {
 };
 
 async function main(): Promise<void> {
+  console.log(`Model: ${getBlogOpenAiChatModel()}`);
   primeOpenAiKeyFromCliEnv();
 
-  const keyGate = assertOpenAiKeyConfigured();
+  const keyGate = assertOpenAiKeyConfigured({ pipeline: "blog" });
   if (!keyGate.ok) {
     console.error(`[blog-ai-generate] ${keyGate.message}`);
     console.error("Set BLOG_OPENAI_API_KEY or AI_INTEGRATIONS_OPENAI_API_KEY (e.g. in .env.local).");

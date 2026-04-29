@@ -1,4 +1,5 @@
 import type { BlogFunnelStage, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
+import { getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 import {
@@ -94,6 +95,8 @@ Requirements:
 - Do not add fabricated statistics or treatment orders for real patients.`;
 
   const res = await openAiChatCompletion({
+    useBlogOpenAiApiKey: true,
+    model: getBlogOpenAiChatModel(),
     messages: [
       { role: "system", content: system },
       { role: "user", content: `${baseUser}\n\n${repairUser}` },
@@ -192,6 +195,8 @@ export async function repairBlogPlanHeadlinesForSeoDistinctness(
     }
 
     const anglePrompt = await openAiChatCompletion({
+      useBlogOpenAiApiKey: true,
+      model: getBlogOpenAiChatModel(),
       messages: [
         {
           role: "system",
@@ -259,6 +264,8 @@ export async function repairSimpleAiDraftHeadlines(params: SimpleDraftTitleRepai
   metaTitle: string;
 } | null> {
   const res = await openAiChatCompletion({
+    useBlogOpenAiApiKey: true,
+    model: getBlogOpenAiChatModel(),
     messages: [
       {
         role: "system",
@@ -312,6 +319,8 @@ ${params.currentHtml.slice(0, 100_000)}
 
 Return full revised HTML only. Preserve any trailing "Study next in NurseNest" block verbatim if present.`;
   const res = await openAiChatCompletion({
+    useBlogOpenAiApiKey: true,
+    model: getBlogOpenAiChatModel(),
     messages: [
       { role: "system", content: system },
       { role: "user", content: user },
