@@ -9,6 +9,8 @@ import {
   regenerateControlPanelSection,
   sanitizeControlPanelGeneratedSlugInput,
 } from "@/lib/blog/blog-control-panel-generation";
+import { isLongFormPathophysiologyProfile } from "@/lib/blog/blog-longform-nursing-contract";
+import { fetchControlPanelBodyHtmlSectionIsolated } from "@/lib/blog/blog-section-isolated-body-generation";
 import { prisma } from "@/lib/db";
 import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
 import { assertSeoSafeToCreateBlog, SeoDuplicateBlockedError } from "@/lib/seo/seo-duplicate-guard";
@@ -41,6 +43,28 @@ export type RepairBodyParams = {
  * NCLEX traps, safety) — not filler.
  */
 export async function repairControlPanelArticleBodyHtml(params: RepairBodyParams): Promise<string> {
+  if (isLongFormPathophysiologyProfile({ template: params.template, intent: params.intent })) {
+    const priorWords = countWordsFromHtml(params.currentHtml);
+    const repairNote = [
+      `Prior draft was approximately ${priorWords} substantive words (HTML stripped); each section should add enough unique teaching depth that the full article reaches at least ${params.targetWordMin} words total.`,
+      ...params.validationMessages,
+    ].join("\n");
+    return fetchControlPanelBodyHtmlSectionIsolated({
+      plan: params.plan,
+      topic: params.topic,
+      exam: params.exam,
+      country: params.country,
+      template: params.template,
+      intent: params.intent,
+      funnelStage: params.funnelStage,
+      tone: params.tone,
+      keywords: params.keywords,
+      selectedTitle: params.selectedTitle,
+      openAiUser: params.openAiUser ? `${params.openAiUser}-body-repair` : undefined,
+      sectionGenerationRepairNote: repairNote,
+    });
+  }
+
   const pageH1 = params.selectedTitle?.trim() || params.plan.h1;
   const system = buildArticleBodySystemPrompt({ template: params.template, intent: params.intent });
   const baseUser = buildArticleBodyUserPrompt({

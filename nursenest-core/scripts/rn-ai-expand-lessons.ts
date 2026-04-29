@@ -21,8 +21,31 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PKG_ROOT = path.resolve(__dirname, "..");
-const CATALOG_PATH = path.join(PKG_ROOT, "src/content/pathway-lessons/catalog.json");
+const CATALOG_DIR = path.join(PKG_ROOT, "src/content/pathway-lessons");
 const PROGRESS_PATH = path.join(PKG_ROOT, "tmp/rn-expand-progress.json");
+
+/** Return all catalog JSON files that contain at least one RN lesson. */
+function getRnCatalogFiles(): Array<{ filePath: string; fileName: string }> {
+  const skip = new Set([
+    "rn-nclex-catalog-import-state.json",
+    "rn-nclex-master-map.json",
+    "rn-nclex-explicit-inventory-aliases.json",
+    "nclex-rn-source-checklist.json",
+  ]);
+  const results: Array<{ filePath: string; fileName: string }> = [];
+  for (const fname of fs.readdirSync(CATALOG_DIR).sort()) {
+    if (!fname.endsWith(".json") || skip.has(fname)) continue;
+    const fpath = path.join(CATALOG_DIR, fname);
+    let data: unknown;
+    try { data = JSON.parse(fs.readFileSync(fpath, "utf8")); } catch { continue; }
+    if (!data || typeof data !== "object" || !("pathways" in data)) continue;
+    const pathways = (data as Record<string, unknown>).pathways;
+    if (!pathways || typeof pathways !== "object") continue;
+    const hasRn = Object.keys(pathways as object).some(k => RN_PATHWAYS.has(k));
+    if (hasRn) results.push({ filePath: fpath, fileName: fname });
+  }
+  return results;
+}
 
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes("--dry-run");
@@ -292,7 +315,11 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  const catalog = JSON.parse(fs.readFileSync(CATALOG_PATH, "utf8")) as { pathways: Record<string, { lessons: object[] }> };
+  const catalogFiles = getRnCatalogFiles();
+  console.log(`  Catalog files with RN lessons: ${catalogFiles.length}`);
+  catalogFiles.forEach(f => console.log(`    ${f.fileName}`));
+  console.log("");
+
   const progress = loadProgress();
   const openai = DRY_RUN ? (null as unknown as OpenAI) : new OpenAI({ apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY, baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL });
 
@@ -302,163 +329,155 @@ async function main(): Promise<void> {
   let totalFailed = 0;
   let count = 0;
 
-  for (const [pwKey, pwVal] of Object.entries(catalog.pathways || {})) {
-    if (!RN_PATHWAYS.has(pwKey)) continue;
-    const region: "ca" | "us" = pwKey.startsWith("ca-") ? "ca" : "us";
+  for (const { filePath, fileName } of catalogFiles) {
+    if (count >= LIMIT) break;
 
-    for (const lesson of pwVal.lessons || []) {
-      if (SLUG_FILTER && (lesson as { slug?: string }).slug !== SLUG_FILTER) continue;
+    const catalog = JSON.parse(fs.readFileSync(filePath, "utf8")) as { pathways: Record<string, { lessons: object[] } | object[]> };
+    let fileDirty = false;
 
-      const L = lesson as {
-        slug: string;
-        title: string;
-        bodySystem?: string;
-        sections?: { kind?: string; body?: string; heading?: string; id?: string }[];
-        linked_flashcard_prompts?: string[];
-      };
-      const sections = L.sections || [];
-      const startWc = lessonWordCount(sections);
-      const key = `${pwKey}:${L.slug}`;
+    console.log(`\n━━━ ${fileName} ━━━`);
 
-      const initialValidation = validateExpandedLesson(L);
-      if (initialValidation.pass && !FORCE && !SLUG_FILTER) {
-        totalSkipped++;
-        continue;
-      }
-      if (progress.done.includes(key) && !FORCE && !SLUG_FILTER) {
-        if (initialValidation.pass) {
+    for (const [pwKey, pwValRaw] of Object.entries(catalog.pathways || {})) {
+      if (!RN_PATHWAYS.has(pwKey)) continue;
+      if (count >= LIMIT) break;
+
+      const region: "ca" | "us" = pwKey.startsWith("ca-") ? "ca" : "us";
+      // Handle both {lessons: [...]} and direct array shapes
+      const lessonList: object[] = Array.isArray(pwValRaw)
+        ? pwValRaw
+        : (pwValRaw as { lessons?: object[] }).lessons || [];
+
+      for (const lesson of lessonList) {
+        if (SLUG_FILTER && (lesson as { slug?: string }).slug !== SLUG_FILTER) continue;
+
+        const L = lesson as {
+          slug: string;
+          title: string;
+          bodySystem?: string;
+          sections?: { kind?: string; body?: string; heading?: string; id?: string }[];
+          linked_flashcard_prompts?: string[];
+        };
+        const sections = L.sections || [];
+        const startWc = lessonWordCount(sections);
+        const key = `${pwKey}:${L.slug}`;
+
+        const initialValidation = validateExpandedLesson(L);
+        if (initialValidation.pass && !FORCE && !SLUG_FILTER) {
           totalSkipped++;
           continue;
         }
-        progress.done = progress.done.filter((x) => x !== key);
-      }
+        if (progress.done.includes(key) && !FORCE && !SLUG_FILTER) {
+          if (initialValidation.pass) { totalSkipped++; continue; }
+          progress.done = progress.done.filter((x) => x !== key);
+        }
 
-      if (count >= LIMIT) break;
-      count++;
+        if (count >= LIMIT) break;
+        count++;
 
-      const thinInitial = getThinSections(sections);
-      console.log(`\n[${count}] [${pwKey}] ${L.slug}`);
-      console.log(`  "${L.title}" | ${L.bodySystem || "?"} | ${startWc}w | thin(initial): ${thinInitial.join(", ") || "none"}`);
+        const thinInitial = getThinSections(sections);
+        console.log(`\n[${count}] [${pwKey}] ${L.slug}`);
+        console.log(`  "${L.title}" | ${L.bodySystem || "?"} | ${startWc}w | thin: ${thinInitial.join(", ") || "none"}`);
 
-      if (DRY_RUN) {
-        console.log(`  [DRY] Would process; initial validation pass=${initialValidation.pass}`);
-        totalSkipped++;
-        continue;
-      }
-
-      const sectionMap = new Map<string, { kind?: string; body?: string; heading?: string; id?: string }>(
-        sections.map((s) => [String(s.kind), { ...s }]),
-      );
-      let generated = 0;
-      let failedGen = 0;
-
-      for (const kind of thinInitial) {
-        const existing = sectionMap.get(kind)?.body || "";
-        const meta = SECTION_META[kind];
-        process.stdout.write(`  ↳ [${kind}] generating...`);
-        const body = await generateSection(openai, L.title, L.bodySystem || "General", kind, existing, region);
-        if (!body) {
-          console.log(" ✗ failed");
-          failedGen++;
+        if (DRY_RUN) {
+          console.log(`  [DRY] Would process; pass=${initialValidation.pass}, missing=${initialValidation.missingSections.length}`);
+          totalSkipped++;
           continue;
         }
-        console.log(` ✓ ${countWords(body)}w`);
-        sectionMap.set(kind, { id: kind, heading: meta.heading, kind, body });
-        generated++;
-        totalSections++;
-      }
 
-      const ORDER = [...REQUIRED_KINDS] as readonly string[];
-      const newSections: typeof sections = [];
-      for (const k of ORDER) {
-        if (sectionMap.has(k)) newSections.push(sectionMap.get(k)!);
-      }
-      for (const [k, v] of sectionMap) {
-        if (!ORDER.includes(k)) newSections.push(v);
-      }
-      L.sections = newSections;
-
-      L.linked_flashcard_prompts = buildFlashcardPrompts(L.title);
-      syncLinkedFlashcardSection(L, L.linked_flashcard_prompts);
-
-      let v = validateExpandedLesson(L);
-      for (let regenRound = 0; regenRound < MAX_CLINICAL_REGEN_ROUNDS && !v.pass; regenRound++) {
-        if (v.flashcardPromptCount < 8 || v.flashcardPromptErrors.length > 0) {
-          L.linked_flashcard_prompts = buildFlashcardPrompts(L.title);
-          syncLinkedFlashcardSection(L, L.linked_flashcard_prompts);
-        }
-        v = validateExpandedLesson(L);
-        if (v.pass) break;
-
-        const sm = new Map<string, { kind?: string; body?: string; heading?: string; id?: string }>(
-          (L.sections || []).map((s) => [String(s.kind), { ...s }]),
+        const sectionMap = new Map<string, { kind?: string; body?: string; heading?: string; id?: string }>(
+          sections.map((s) => [String(s.kind), { ...s }]),
         );
-        const targetKinds = sectionKindsNeedingRegeneration(v);
-        if (targetKinds.length === 0) break;
+        let generated = 0;
+        let failedGen = 0;
 
-        for (const kind of targetKinds) {
-          const existing = sm.get(kind)?.body || "";
+        for (const kind of thinInitial) {
+          const existing = sectionMap.get(kind)?.body || "";
           const meta = SECTION_META[kind];
-          const ctx = buildRepairContext(kind, v);
-          process.stdout.write(`  ↳ [repair ${regenRound + 1}] [${kind}] ...`);
-          const body = await generateSection(openai, L.title, L.bodySystem || "General", kind, existing, region, ctx);
-          if (!body) {
-            console.log(" ✗");
-            failedGen++;
-          } else {
-            console.log(` ✓ ${countWords(body)}w`);
-            sm.set(kind, { id: kind, heading: meta.heading, kind, body });
-            generated++;
-            totalSections++;
+          process.stdout.write(`  ↳ [${kind}] generating...`);
+          const body = await generateSection(openai, L.title, L.bodySystem || "General", kind, existing, region);
+          if (!body) { console.log(" ✗ failed"); failedGen++; continue; }
+          console.log(` ✓ ${countWords(body)}w`);
+          sectionMap.set(kind, { id: kind, heading: meta.heading, kind, body });
+          generated++;
+          totalSections++;
+        }
+
+        const ORDER = [...REQUIRED_KINDS] as readonly string[];
+        const newSections: typeof sections = [];
+        for (const k of ORDER) { if (sectionMap.has(k)) newSections.push(sectionMap.get(k)!); }
+        for (const [k, val] of sectionMap) { if (!ORDER.includes(k)) newSections.push(val); }
+        L.sections = newSections;
+
+        L.linked_flashcard_prompts = buildFlashcardPrompts(L.title);
+        syncLinkedFlashcardSection(L, L.linked_flashcard_prompts);
+
+        let v = validateExpandedLesson(L);
+        for (let regenRound = 0; regenRound < MAX_CLINICAL_REGEN_ROUNDS && !v.pass; regenRound++) {
+          if (v.flashcardPromptCount < 8 || v.flashcardPromptErrors.length > 0) {
+            L.linked_flashcard_prompts = buildFlashcardPrompts(L.title);
+            syncLinkedFlashcardSection(L, L.linked_flashcard_prompts);
           }
-        }
-        const rebuilt: typeof sections = [];
-        for (const k of ORDER) {
-          if (sm.has(k)) rebuilt.push(sm.get(k)!);
-        }
-        for (const [k, row] of sm) {
-          if (!ORDER.includes(k)) rebuilt.push(row);
-        }
-        L.sections = rebuilt;
-        v = validateExpandedLesson(L);
-      }
+          v = validateExpandedLesson(L);
+          if (v.pass) break;
 
-      logLessonOutcome(pwKey, L, startWc, generated, v);
+          const sm = new Map<string, { kind?: string; body?: string; heading?: string; id?: string }>(
+            (L.sections || []).map((s) => [String(s.kind), { ...s }]),
+          );
+          const targetKinds = sectionKindsNeedingRegeneration(v);
+          if (targetKinds.length === 0) break;
 
-      if (v.pass) {
-        totalExpanded++;
-        if (!progress.done.includes(key)) progress.done.push(key);
-        progress.failed = progress.failed.filter((s) => s !== key);
-      } else {
-        totalFailed++;
-        if (!progress.failed.includes(key)) progress.failed.push(key);
-        console.error(
-          JSON.stringify({
-            event: "rn_expand_validation_failed",
-            pathway: pwKey,
-            slug: L.slug,
-            missingSections: v.missingSections,
-            thinSections: v.thinSections,
+          for (const kind of targetKinds) {
+            const existing = sm.get(kind)?.body || "";
+            const meta = SECTION_META[kind];
+            const ctx = buildRepairContext(kind, v);
+            process.stdout.write(`  ↳ [repair ${regenRound + 1}] [${kind}] ...`);
+            const body = await generateSection(openai, L.title, L.bodySystem || "General", kind, existing, region, ctx);
+            if (!body) { console.log(" ✗"); failedGen++; }
+            else {
+              console.log(` ✓ ${countWords(body)}w`);
+              sm.set(kind, { id: kind, heading: meta.heading, kind, body });
+              generated++; totalSections++;
+            }
+          }
+          const rebuilt: typeof sections = [];
+          for (const k of ORDER) { if (sm.has(k)) rebuilt.push(sm.get(k)!); }
+          for (const [k, row] of sm) { if (!ORDER.includes(k)) rebuilt.push(row); }
+          L.sections = rebuilt;
+          v = validateExpandedLesson(L);
+        }
+
+        logLessonOutcome(pwKey, L, startWc, generated, v);
+        fileDirty = true;
+
+        if (v.pass) {
+          totalExpanded++;
+          if (!progress.done.includes(key)) progress.done.push(key);
+          progress.failed = progress.failed.filter((s) => s !== key);
+        } else {
+          totalFailed++;
+          if (!progress.failed.includes(key)) progress.failed.push(key);
+          console.error(JSON.stringify({
+            event: "rn_expand_validation_failed", pathway: pwKey, slug: L.slug,
+            missingSections: v.missingSections, thinSections: v.thinSections,
             missingClinicalCount: v.missingClinicalRequirements.length,
             flashcardErrors: v.flashcardPromptErrors.length,
-          }),
-        );
-      }
+          }));
+        }
 
-      if ((totalExpanded + totalFailed) % SAVE_EVERY === 0) {
-        fs.writeFileSync(CATALOG_PATH, JSON.stringify(catalog, null, 2));
-        saveProgress(progress);
-        console.log("  [checkpoint saved]");
-      }
+        if ((totalExpanded + totalFailed) % SAVE_EVERY === 0) {
+          fs.writeFileSync(filePath, JSON.stringify(catalog, null, 2));
+          saveProgress(progress);
+          console.log("  [checkpoint saved]");
+        }
+      } // end lessons
+    } // end pathways
+
+    if (!DRY_RUN && fileDirty) {
+      fs.writeFileSync(filePath, JSON.stringify(catalog, null, 2));
+      saveProgress(progress);
+      console.log(`\n  Saved: ${fileName}`);
     }
-    if (count >= LIMIT) break;
-  }
-
-  if (!DRY_RUN) {
-    fs.writeFileSync(CATALOG_PATH, JSON.stringify(catalog, null, 2));
-    saveProgress(progress);
-    console.log(`\nSaved: ${CATALOG_PATH}`);
-  }
+  } // end files
 
   console.log("\n═══════════════════════════════════════════════════════");
   console.log(` Done | expanded(valid): ${totalExpanded} | sections: ${totalSections} | skipped: ${totalSkipped} | failed: ${totalFailed}`);

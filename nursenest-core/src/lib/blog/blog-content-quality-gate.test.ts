@@ -5,7 +5,11 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { BlogPostTemplate } from "@prisma/client";
-import { collectBlogContentQualityIssues } from "@/lib/blog/blog-content-quality-gate";
+import {
+  collectBlogContentQualityIssues,
+  maxJaccardOfNewSectionVsPriorSections,
+  validateBlogTitleForBodyGeneration,
+} from "@/lib/blog/blog-content-quality-gate";
 import { stripDuplicateStructuredModulesFromPublicBlogBodyHtml } from "@/lib/blog/blog-public-body-strip";
 
 const REPEATED_FILLER =
@@ -97,6 +101,70 @@ describe("collectBlogContentQualityIssues (diabetic neuropathy regression)", () 
       0,
       blocking.map((b) => `${b.id}: ${b.message}`).join("\n"),
     );
+  });
+});
+
+describe("collectBlogContentQualityIssues — Unicode dash gate (pathophysiology_strict)", () => {
+  it("blocks en dash and em dash in body when intent is pathophysiology_strict", () => {
+    const body = `<h2>Overview</h2><p>Ranges 5\u201310 mmol/L and one clause\u2014another clause.</p>`;
+    const issues = collectBlogContentQualityIssues({
+      title: "Electrolyte teaching for nursing students",
+      body,
+      targetKeyword: "potassium",
+      postTemplate: BlogPostTemplate.DISEASE_PROCESS_EXPLAINER,
+      intent: "pathophysiology_strict",
+      faqBlock: { items: [{ q: "What is hyperkalemia?", a: "Elevated serum potassium." }] },
+      apaReferences: ["World Health Organization. (2023). Clinical guideline summary. WHO."],
+      sourcesJson: { version: 2, verified: [], excluded: [], generatedAt: new Date().toISOString() },
+    });
+    assert.ok(issues.some((i) => i.id === "blog_unicode_en_em_dash_body" && i.severity === "block"));
+  });
+
+  it("does not block Unicode dashes when intent is not pathophysiology_strict", () => {
+    const body = `<h2>Note</h2><p>One range\u2013two and a break\u2014here.</p>`;
+    const issues = collectBlogContentQualityIssues({
+      title: "Short clinical note",
+      body,
+      targetKeyword: "note",
+      postTemplate: BlogPostTemplate.DISEASE_PROCESS_EXPLAINER,
+      intent: null,
+      faqBlock: { items: [] },
+      apaReferences: [],
+      sourcesJson: { version: 2, verified: [], excluded: [], generatedAt: new Date().toISOString() },
+    });
+    assert.equal(
+      issues.some((i) => i.id === "blog_unicode_en_em_dash_body"),
+      false,
+    );
+  });
+});
+
+describe("validateBlogTitleForBodyGeneration", () => {
+  it("accepts complete titles within 30–100 characters", () => {
+    const ok = validateBlogTitleForBodyGeneration("Diabetic neuropathy: nursing assessment and foot safety priorities");
+    assert.equal(ok.ok, true);
+  });
+  it("rejects titles over 100 characters", () => {
+    const bad = validateBlogTitleForBodyGeneration(`${"word ".repeat(30)}end`);
+    assert.equal(bad.ok, false);
+    if (!bad.ok) assert.equal(bad.reason, "title_too_long_max_100");
+  });
+});
+
+describe("maxJaccardOfNewSectionVsPriorSections", () => {
+  it("returns high overlap when section prose is nearly identical", () => {
+    const prior = "<h2>Mechanism</h2><p>hyperglycemia drives sorbitol accumulation microvascular damage ischemic neuropathy progression</p>";
+    const next = "<h2>Assessment</h2><p>hyperglycemia drives sorbitol accumulation microvascular damage ischemic neuropathy progression</p>";
+    const score = maxJaccardOfNewSectionVsPriorSections(next, prior);
+    assert.ok(score > 0.55, `expected high similarity, got ${score}`);
+  });
+  it("returns lower overlap when prose uses distinct long tokens", () => {
+    const prior =
+      "<h2>Mechanism</h2><p>oxidative stress advanced glycation endothelial dysfunction autonomic denervation cascades uniquelyone</p>";
+    const next =
+      "<h2>Assessment</h2><p>monofilament vibration achilles reflex stocking glove sensory loss gait instability uniquelytwo</p>";
+    const score = maxJaccardOfNewSectionVsPriorSections(next, prior);
+    assert.ok(score < 0.35, `expected low similarity, got ${score}`);
   });
 });
 

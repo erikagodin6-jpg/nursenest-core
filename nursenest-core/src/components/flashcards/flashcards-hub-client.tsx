@@ -102,7 +102,12 @@ export function FlashcardsHubClient({
    * refresh loop on `/app/flashcards?pathwayId=…`).
    */
   const skipDuplicateInitialInventoryFetchRef = useRef(
-    Boolean(initialHub?.categoryOptions && initialHub.categoryOptions.length > 0),
+    Boolean(
+      initialHub &&
+        ((initialHub.categoryOptions?.length ?? 0) > 0 ||
+          (initialHub.matchingTotal ?? 0) > 0 ||
+          (initialHub.lessonVirtualDiagnostics?.totalGeneratedVirtualCards ?? 0) > 0),
+    ),
   );
 
   const allBodyIds = useMemo(() => builderCategories.map((c) => c.id), [builderCategories]);
@@ -527,7 +532,7 @@ export function FlashcardsHubClient({
             <LearnerCtaLink href={startHref} data-nn-e2e-start-review>
               {t("flashcards.startSession")}
             </LearnerCtaLink>
-            <p className="mt-1 text-xs text-gray-500">{sessionSummaryLine}</p>
+            <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">{sessionSummaryLine}</p>
           </div>
 
           <Link href={weakAreaFlashcardsHref(scopedPathwayId)} className="text-xs text-primary underline">

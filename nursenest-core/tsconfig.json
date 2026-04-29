@@ -40,6 +40,7 @@
     "next-env.d.ts",
     "next.config.ts",
     "playwright.config.ts",
+    "scripts/blog-ai-generate.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
     "prisma/**/*.ts",
@@ -62,7 +63,6 @@
     "public",
     "playwright-report",
     "test-results",
-    "scripts",
     "src/**/*.test.ts",
     "src/**/*.test.tsx",
     "tests/e2e/**/*.ts"

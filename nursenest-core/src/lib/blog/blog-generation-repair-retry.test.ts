@@ -105,6 +105,16 @@ describe("classifyBlogPipelineFailureForRepair — terminal", () => {
     assert.equal(r.terminalReason, "citations");
   });
 
+  it("BLOG_TITLE_BODY_GATE → terminal blog_title_gate (admin must fix H1)", () => {
+    const r = classifyBlogPipelineFailureForRepair({
+      stage: "body",
+      error: "On-page title is not ready for section-isolated body generation",
+      code: "BLOG_TITLE_BODY_GATE",
+    });
+    assert.equal(r.recoverable, false);
+    assert.equal(r.terminalReason, "blog_title_gate");
+  });
+
   it("PRE_PUBLISH_BLOCKED with only body_word_count → recoverable", () => {
     const r = classifyBlogPipelineFailureForRepair({
       stage: "persist",

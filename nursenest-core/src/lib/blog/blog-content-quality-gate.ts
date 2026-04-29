@@ -316,6 +316,7 @@ export function collectBlogContentQualityIssues(input: BlogContentQualityGateInp
   const issues: BlogContentQualityIssue[] = [];
   const body = input.body.trim();
   const title = input.title.trim();
+  const pathophysiologyStrict = input.intent === "pathophysiology_strict";
 
   if (titleLooksTruncated(title)) {
     issues.push({
@@ -336,6 +337,15 @@ export function collectBlogContentQualityIssues(input: BlogContentQualityGateInp
       });
       break;
     }
+  }
+
+  if (pathophysiologyStrict && /[\u2014\u2013]/.test(body)) {
+    issues.push({
+      id: "blog_unicode_en_em_dash_body",
+      severity: "block",
+      message: "Body contains Unicode en dash or em dash characters; use commas, colons, or ASCII hyphen for learner-facing HTML.",
+      fix: "Replace en/em dashes in body HTML with commas, parentheses, or hyphen-minus.",
+    });
   }
 
   const paras = extractParagraphTextsFromBlogHtml(body);
@@ -432,8 +442,6 @@ export function collectBlogContentQualityIssues(input: BlogContentQualityGateInp
       });
     }
   }
-
-  const pathophysiologyStrict = input.intent === "pathophysiology_strict";
 
   if (pathophysiologyStrict && body.length > 200) {
     const requiredH2Snippets: { label: string; patterns: RegExp[] }[] = [

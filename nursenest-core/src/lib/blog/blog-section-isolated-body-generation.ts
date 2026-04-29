@@ -193,6 +193,11 @@ export type FetchControlPanelBodyHtmlParams = {
   keywords?: string;
   selectedTitle?: string;
   openAiUser?: string;
+  /**
+   * When set (e.g. pipeline body repair), merged into the section system prompt so the model
+   * addresses validation failures while still following isolation rules.
+   */
+  sectionGenerationRepairNote?: string;
 };
 
 /**
@@ -209,6 +214,10 @@ export async function fetchControlPanelBodyHtmlSectionIsolated(params: FetchCont
   if (outline.length < 2) {
     throw new Error("Section-isolated generation requires at least two outline headings");
   }
+
+  const systemPrompt = params.sectionGenerationRepairNote?.trim()
+    ? `${SECTION_ISOLATED_SYSTEM}\n\n## Revision priority (from automated checks)\n${params.sectionGenerationRepairNote.trim().slice(0, 6000)}`
+    : SECTION_ISOLATED_SYSTEM;
 
   const forbiddenReuseLines: string[] = [];
   const parts: string[] = [];
@@ -250,7 +259,7 @@ export async function fetchControlPanelBodyHtmlSectionIsolated(params: FetchCont
 
       const response = await openAiChatCompletion({
         messages: [
-          { role: "system", content: SECTION_ISOLATED_SYSTEM },
+          { role: "system", content: systemPrompt },
           { role: "user", content: user },
         ],
         temperature: 0.38,

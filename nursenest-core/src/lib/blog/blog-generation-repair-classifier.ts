@@ -13,6 +13,7 @@ export type BlogRepairTerminalReason =
   | "api_failure"
   | "unsupported_topic"
   | "pre_publish_blocked"
+  | "blog_title_gate"
   | "unknown";
 
 export type PipelineFailureLike = {
@@ -153,6 +154,11 @@ export function classifyBlogPipelineFailureForRepair(
 
   if (code === "QUALITY_GATE") {
     return { recoverable: true };
+  }
+
+  /** H1/title fails section-isolated body gate (length, truncation) — admin must edit plan, not blind retry. */
+  if (code === "BLOG_TITLE_BODY_GATE") {
+    return { recoverable: false, terminalReason: "blog_title_gate" };
   }
 
   // ── PRE_PUBLISH_BLOCKED: inspect individual issue IDs when available ──

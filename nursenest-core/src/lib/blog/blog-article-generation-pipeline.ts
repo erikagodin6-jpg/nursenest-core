@@ -5,7 +5,7 @@
  * 1. **Structured plan** — One JSON completion validated by {@link blogControlPanelPlanSchema}:
  *    audience titles, H1, slug, SEO title & meta, excerpt, outline, internal link ideas, internal anchor opportunities,
  *    FAQs, breadcrumbs, schema opportunities, image prompts/placements, APA stubs, key takeaways.
- * 2. **Long-form body** — Second completion: HTML only (H2+), pathway/country-aware, anti-filler rules. For the long-form profile, {@link enforceLongFormBodyQuality} then checks outline H2 coverage, main-body word depth before FAQ, embedded `recommendedInternalLinks`, FAQ/total balance, and breadcrumb href sanity (errors block persist; flags merge into `plan.needsReviewFlags`).
+ * 2. **Long-form body** — HTML (H2+), pathway/country-aware, anti-filler rules. For **long-form pathophysiology** (`isLongFormPathophysiologyProfile`), the body is built **section-isolated** (one completion per outline H2 with reuse memory + similarity regeneration; see `blog-section-isolated-body-generation.ts`). Other templates use a single body completion. The on-page title is validated (30–100 chars, not truncated) **before** any body LLM calls on that profile. Then {@link enforceLongFormBodyQuality} checks outline H2 coverage, main-body word depth before FAQ, embedded `recommendedInternalLinks`, FAQ/total balance, and breadcrumb href sanity (errors block persist; flags merge into `plan.needsReviewFlags`).
  * 3. **Persist (optional)** — {@link persistControlPanelDraft} writes a `BlogPost` (default `DRAFT`; with `publishImmediately`, promotes to `PUBLISHED` when pre-publish validation passes).
  * 4. **Publishing package (same transaction)** — After insert, refreshes `internalLinkPlan.publishingPackage.relatedBlogPosts`
  *    from **live** posts (tag overlap) so related links stay current; anchor opportunities come from the plan JSON.
@@ -62,7 +62,11 @@ import {
   BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH,
   countWordsFromHtml,
 } from "@/lib/blog/blog-word-count";
-import { validateLongFormNursingPlanContract } from "@/lib/blog/blog-longform-nursing-contract";
+import {
+  isLongFormPathophysiologyProfile,
+  validateLongFormNursingPlanContract,
+} from "@/lib/blog/blog-longform-nursing-contract";
+import { validateBlogTitleForBodyGeneration } from "@/lib/blog/blog-content-quality-gate";
 import {
   enforceLongFormBodyQuality,
   mergeUniqueNeedsReviewFlags,
@@ -125,6 +129,11 @@ export type RunBlogArticlePipelineOptions = {
   initialBodyHtml?: string;
   /** Pipeline observability (admin job queue + server logs). */
   onProgressStage?: (stage: string) => void | Promise<void>;
+  /**
+   * Optional floor for substantive body words (HTML stripped). When set, must be ≥ {@link BLOG_ARTICLE_MIN_WORDS}.
+   * The pipeline uses max(base draft/publish minimum, this value) for repair targets and body validation.
+   */
+  substantiveWordMinOverride?: number;
 };
 
 const MIN_BODY_CHARS = BLOG_ARTICLE_MIN_BODY_CHARS;
@@ -157,9 +166,12 @@ export async function runBlogArticleGenerationPipeline(
   const persist = options.persist !== false;
   const idem = options.idempotencyKey;
   let repairPassesUsed = 0;
-  const substantiveWordMin = input.publishImmediately
-    ? BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH
-    : BLOG_ARTICLE_MIN_WORDS;
+  const baseWordMin = input.publishImmediately ? BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH : BLOG_ARTICLE_MIN_WORDS;
+  const override = options.substantiveWordMinOverride;
+  const substantiveWordMin =
+    typeof override === "number" && Number.isFinite(override) && override >= BLOG_ARTICLE_MIN_WORDS
+      ? Math.max(baseWordMin, Math.floor(override))
+      : baseWordMin;
 
   const reportStage = async (stage: string) => {
     await options.onProgressStage?.(stage);
@@ -243,9 +255,32 @@ export async function runBlogArticleGenerationPipeline(
 
   let bodyHtml: string;
   try {
+    const skipBodyLlm =
+      typeof options.initialBodyHtml === "string" && options.initialBodyHtml.trim().length > 0;
+    if (!skipBodyLlm && isLongFormPathophysiologyProfile({ template: input.template, intent: input.intent })) {
+      const pageTitle = (
+        options.pageH1Override?.trim() ||
+        plan.h1 ||
+        plan.titleOptions[0] ||
+        input.topic
+      ).trim();
+      const tv = validateBlogTitleForBodyGeneration(pageTitle);
+      if (!tv.ok) {
+        return {
+          ok: false,
+          stage: "body",
+          error: `On-page title is not ready for section-isolated body generation (${tv.reason}). Use a complete H1 between 30 and 100 characters (edit plan title / H1, then retry).`,
+          plan,
+          code: "BLOG_TITLE_BODY_GATE",
+          details: { titleGateReason: tv.reason, pageTitleLength: pageTitle.length },
+          repairPassesUsed,
+        };
+      }
+    }
+
     await reportStage("generating_body");
-    if (typeof options.initialBodyHtml === "string" && options.initialBodyHtml.trim().length > 0) {
-      bodyHtml = options.initialBodyHtml;
+    if (skipBodyLlm) {
+      bodyHtml = options.initialBodyHtml!;
     } else {
       bodyHtml = await fetchControlPanelBodyHtml({
         plan,

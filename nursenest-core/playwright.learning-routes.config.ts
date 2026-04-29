@@ -56,7 +56,10 @@ if (!paidAuthEnabled) {
 export default defineConfig({
   ...(e2eWebServer ? { webServer: e2eWebServer } : {}),
   testDir: ".",
-  testMatch: [/tests\/e2e\/paid-user\/learning-routes-live-surfaces\.spec\.ts$/],
+  testMatch: [
+    /tests\/e2e\/paid-user\/learning-routes-live-surfaces\.spec\.ts$/,
+    /tests\/e2e\/paid-user\/flashcards-live-route-tiers\.spec\.ts$/,
+  ],
   fullyParallel: false,
   workers: 1,
   timeout: 180_000,

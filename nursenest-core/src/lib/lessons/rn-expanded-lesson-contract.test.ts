@@ -85,10 +85,9 @@ describe("validateExpandedLesson", () => {
 
   it("fails when a section is thin", () => {
     const good = basePassingLesson();
-    const stubs = clinicalStubs();
     const sections = (good.sections ?? []).map((s) =>
       s.kind === "introduction"
-        ? { ...s, body: `${stubs.introduction} ${filler(20)}` }
+        ? { ...s, body: `why it matters for nurses. ${filler(100)}` }
         : s,
     );
     const v = validateExpandedLesson({ ...good, sections });
@@ -119,7 +118,10 @@ describe("validateExpandedLesson", () => {
   it("passes with exactly 8 valid flashcard strings", () => {
     const good = basePassingLesson();
     const prompts = Array.from({ length: 8 }, (_, i) => `Detailed recall prompt ${i} for sepsis care planning`);
-    const v = validateExpandedLesson({ ...good, linked_flashcard_prompts: prompts });
+    const sections = (good.sections ?? []).map((s) =>
+      s.kind === "linked_flashcard_prompts" ? { ...s, body: "" } : s,
+    );
+    const v = validateExpandedLesson({ ...good, sections, linked_flashcard_prompts: prompts });
     assert.equal(v.pass, true);
     assert.equal(v.flashcardPromptCount, 8);
   });

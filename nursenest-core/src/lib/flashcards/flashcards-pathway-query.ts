@@ -1,0 +1,27 @@
+import type { CountryCode } from "@prisma/client";
+
+/**
+ * Maps short or marketing-style `pathwayId` query values to canonical exam-pathway ids
+ * (catalog keys, entitlements, `buildFlashcardCustomSession`).
+ */
+export function normalizeLearnerFlashcardsPathwayQueryId(
+  raw: string,
+  country: CountryCode | string | null | undefined,
+): string {
+  const id = raw.trim();
+  if (!id) return id;
+  const key = id.toLowerCase();
+  const countryIsCa = String(country ?? "").toUpperCase() === "CA";
+
+  const aliases: Record<string, string> = {
+    /** Short NP slug used in deep links — canonical id is CNPLE. */
+    "ca-np": "ca-np-cnple",
+    /** Hub-style slugs → bundled catalog pathway ids. */
+    "new-grad": "us-rn-new-grad-transition",
+    "default-new-grad": "us-rn-new-grad-transition",
+    "allied-health": countryIsCa ? "ca-allied-core" : "us-allied-core",
+    "default-allied": countryIsCa ? "ca-allied-core" : "us-allied-core",
+  };
+
+  return aliases[key] ?? id;
+}

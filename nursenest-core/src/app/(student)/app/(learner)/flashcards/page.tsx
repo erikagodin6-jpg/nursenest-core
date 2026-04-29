@@ -21,6 +21,7 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { buildFlashcardCustomSession } from "@/lib/flashcards/build-flashcard-custom-session";
 import { parseCustomSessionSourceKind } from "@/lib/flashcards/custom-session-card-filters";
+import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
 
@@ -31,7 +32,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
   const sp = await searchParams;
 
   const rawPid = sp.pathwayId;
-  const requestedPathwayId =
+  const pathwayQueryRaw =
     typeof rawPid === "string" && rawPid.trim().length > 2
       ? rawPid.trim()
       : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
@@ -62,6 +63,10 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
       </div>
     );
   }
+
+  const requestedPathwayId = pathwayQueryRaw
+    ? normalizeLearnerFlashcardsPathwayQueryId(pathwayQueryRaw, entitlement.country)
+    : null;
 
   let pathwayOptions: { id: string; label: string }[] = [];
   let pathwayResolution: ResolvedQuestionBankPathways | null = null;

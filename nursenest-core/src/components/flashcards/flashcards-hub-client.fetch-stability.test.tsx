@@ -9,6 +9,7 @@ import React from "react";
 import { cleanup, render, waitFor } from "@testing-library/react";
 import { MarketingI18nProvider } from "@/components/i18n/marketing-i18n-provider";
 import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-client";
+import type { FlashcardLessonVirtualDiagnostics } from "@/lib/flashcards/flashcard-custom-session-response";
 
 const hubMessages: Record<string, string> = {
   "learner.flashcards.hub.title": "Flashcards",
@@ -77,6 +78,86 @@ describe("FlashcardsHubClient", () => {
       fetchCount <= 4,
       `expected a bounded number of custom-session fetches (React Strict Mode may double), got ${fetchCount}`,
     );
+
+    globalThis.fetch = origFetch;
+  });
+
+  it("skips the first custom-session fetch when RSC passed initialHub (categoryOptions)", async () => {
+    const origFetch = globalThis.fetch;
+    let fetchCount = 0;
+
+    globalThis.fetch = async (...args: Parameters<typeof fetch>) => {
+      const url = String(args[0]);
+      if (url.includes("/api/flashcards/custom-session")) {
+        fetchCount += 1;
+        return new Response(JSON.stringify({ ok: false }), { status: 500 });
+      }
+      return origFetch(...args);
+    };
+
+    render(
+      <MarketingI18nProvider locale="en" messages={hubMessages}>
+        <FlashcardsHubClient
+          scopedPathwayId="ca-rn-nclex-rn"
+          pathwayDisplayName="Canada RN (NCLEX-RN)"
+          initialHub={{
+            categoryOptions: [
+              { id: "cardiovascular", title: "Cardiovascular", count: 3 },
+              { id: "respiratory", title: "Respiratory", count: 2 },
+            ],
+            matchingTotal: 5,
+            lessonVirtualDiagnostics: null,
+          }}
+        />
+      </MarketingI18nProvider>,
+    );
+
+    await new Promise((r) => setTimeout(r, 800));
+    assert.equal(fetchCount, 0, "initialHub with categories must skip duplicate inventory fetch");
+
+    globalThis.fetch = origFetch;
+  });
+
+  it("skips first fetch when initialHub has matchingTotal only (virtual inventory without category rows yet)", async () => {
+    const origFetch = globalThis.fetch;
+    let fetchCount = 0;
+
+    globalThis.fetch = async (...args: Parameters<typeof fetch>) => {
+      const url = String(args[0]);
+      if (url.includes("/api/flashcards/custom-session")) {
+        fetchCount += 1;
+      }
+      return origFetch(...args);
+    };
+
+    const lessonVirtualDiagnostics: FlashcardLessonVirtualDiagnostics = {
+      pathwayId: "ca-rn-nclex-rn",
+      catalogLessonCount: 10,
+      lessonsWithDerivedCards: 3,
+      totalGeneratedVirtualCards: 12,
+      recallVirtualCount: 4,
+      sectionDerivedVirtualCount: 8,
+      genericFillerSectionCardHits: 0,
+      selectedCategoryIds: [],
+      filterModeLabel: "all cards",
+    };
+
+    render(
+      <MarketingI18nProvider locale="en" messages={hubMessages}>
+        <FlashcardsHubClient
+          scopedPathwayId="ca-rn-nclex-rn"
+          pathwayDisplayName="Canada RN (NCLEX-RN)"
+          initialHub={{
+            categoryOptions: [],
+            matchingTotal: 12,
+            lessonVirtualDiagnostics,
+          }}
+        />
+      </MarketingI18nProvider>,
+    );
+
+    await new Promise((r) => setTimeout(r, 800));
+    assert.equal(fetchCount, 0, "initialHub with virtual diagnostics must skip duplicate inventory fetch");
 
     globalThis.fetch = origFetch;
   });

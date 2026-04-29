@@ -17,6 +17,8 @@ describe("learner live study routes import contract", () => {
     const src = read("src/app/(student)/app/(learner)/flashcards/page.tsx");
     assert.match(src, /FlashcardsHubClient/);
     assert.match(src, /from "@\/components\/flashcards\/flashcards-hub-client"/);
+    assert.match(src, /normalizeLearnerFlashcardsPathwayQueryId/);
+    assert.match(src, /from "@\/lib\/flashcards\/flashcards-pathway-query"/);
   });
 
   it("practice-tests page wires PracticeTestsHubClient (live /app/practice-tests)", () => {
