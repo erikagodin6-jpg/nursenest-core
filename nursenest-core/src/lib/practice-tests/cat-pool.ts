@@ -7,6 +7,7 @@ import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entit
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { CatPoolRow } from "@/lib/exams/cat-engine";
+import type { CatPracticePoolBuildMeta } from "@/lib/practice-tests/types";
 import {
   loadMissedQuestionIdsForPoolFilter,
   loadSavedRationaleQuestionIdsForPoolFilter,
@@ -201,16 +202,22 @@ export async function fetchCatPracticePool(
   userId: string,
   entitlement: AccessScope,
   input: PickQuestionsInput,
-): Promise<CatPoolRow[]> {
+): Promise<{ pool: CatPoolRow[]; buildMeta: CatPracticePoolBuildMeta }> {
   const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const pathwayIdTrim = input.pathwayId?.trim() ?? "";
   let pathway: ExamPathwayDefinition | null = pathwayIdTrim ? getExamPathwayById(pathwayIdTrim) ?? null : null;
+  const emptyMeta = (strict = 0): CatPracticePoolBuildMeta => ({
+    strictCompleteRowCount: strict,
+    usedRelaxedFilters: false,
+    finalCompleteRowCount: 0,
+  });
+
   if (pathwayIdTrim && !pathway) {
-    return [];
+    return { pool: [], buildMeta: emptyMeta() };
   }
   if (pathway && !subscriptionCoversPathwayBase(entitlement, pathway)) {
     // Fail closed when a pathway was requested: never widen to a broader tier pool.
-    return [];
+    return { pool: [], buildMeta: emptyMeta() };
   }
 
   const base: Prisma.ExamQuestionWhereInput = pathway

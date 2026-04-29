@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { LESSON_SYSTEM_HUB_CARD_PREVIEW_MAX } from "@/components/pathway-lessons/lesson-system-card";
 import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
 import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
@@ -56,13 +55,14 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { pathwayLessonsHubBreadcrumbs, pathwayTopicClusterBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
+import {
+  canShowPaidPathwayLessonProgress,
+  loadMarketingPathwayLessonProgressSessionContext,
+} from "@/lib/lessons/marketing-pathway-lesson-progress-server";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-continuation";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
-import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured, type HubDbFailureCategory } from "@/lib/db/safe-database";
+import type { HubDbFailureCategory } from "@/lib/db/safe-database";
 import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study-mode-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-surface-chips";
@@ -1177,38 +1177,22 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
     );
   }
 
-  const session = await getOptionalPublicSession({
-    pathname: `${pathname}/lessons`,
-    surface: "marketing.exam_hub.lessons",
+  const progressCtx = await loadMarketingPathwayLessonProgressSessionContext({
+    sessionPathname: `${pathname}/lessons`,
+    sessionSurface: "marketing.exam_hub.lessons",
   });
-  const userId = (session?.user as { id?: string })?.id ?? "";
-  const entitlement = await resolveEntitlementForPage(userId);
-  let learnerPath: string | null = null;
-  if (userId && isDatabaseUrlConfigured()) {
-    try {
-      const u = await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } });
-      learnerPath = u?.learnerPath ?? null;
-    } catch {
-      learnerPath = null;
-    }
-  }
-  const scope =
-    entitlement === "error"
-      ? { hasAccess: false, reason: "no_access" as const, tier: null, country: null, alliedCareer: null }
-      : entitlement;
 
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
 
-  const canShowResume =
-    Boolean(userId) && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
+  const canShowResume = canShowPaidPathwayLessonProgress(progressCtx, pathway);
   const canShowProgressMap = canShowResume && lessonsForCurriculumHub.length > 0;
 
   if (canShowResume) {
     const hubSlugs = canShowProgressMap ? lessonsForCurriculumHub.map((l) => l.slug).filter(Boolean) : [];
     const { progressMap: map } = await loadPathwayHubSubscriberData(
-      userId,
-      scope,
-      learnerPath,
+      progressCtx.userId,
+      progressCtx.scope,
+      progressCtx.learnerPath,
       pathway,
       base,
       hubSlugs,

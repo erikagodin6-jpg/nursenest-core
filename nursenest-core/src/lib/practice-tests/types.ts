@@ -73,6 +73,41 @@ export type CatSelectionBasis = "random" | "targeted" | "weak" | "missed" | "sta
 
 /** Practice hub: bias/narrow pools without hard-failing when filters are too tight (server-side expansion). */
 export type CatPoolSelectionStrictness = "soft" | "strict";
+
+/** How aggressively the server widened the CAT practice pool vs the learner’s requested filters. */
+export type CatSelectionExpansionTier = "exact" | "soft" | "broad";
+
+/**
+ * Echo of create-time filters + pool expansion (persisted on `PracticeTest.config` and returned on POST)
+ * so clients can surface “silent” widenings as explicit UX copy.
+ */
+export type CatSelectionAppliedMeta = {
+  selectionStrictness: CatSelectionExpansionTier;
+  requestedFilters: {
+    topicNames: string[];
+    catSelectionBasis: CatSelectionBasis;
+    poolRequestStrictness: CatPoolSelectionStrictness;
+  };
+  appliedFilters: {
+    topicNames: string[];
+    catSelectionBasis: CatSelectionBasis;
+    poolRequestStrictness: CatPoolSelectionStrictness;
+  };
+  /** Complete eligible rows matching strict secondary filters (before soft relaxation). */
+  matchedCountBeforeExpansion: number;
+  /** Rows in the built pool before recent-session exclusion. */
+  finalPoolSize: number;
+  /** Rows available to the first pick after recent exclusion (when computed at create). */
+  candidatePoolSize?: number;
+  fallbackReason?: string;
+};
+
+/** Internal: `fetchCatPracticePool` instrumentation for {@link CatSelectionAppliedMeta}. */
+export type CatPracticePoolBuildMeta = {
+  strictCompleteRowCount: number;
+  usedRelaxedFilters: boolean;
+  finalCompleteRowCount: number;
+};
 export type CatEngineType = "CAT" | "SIMULATION";
 export type CatEngineMode = "production_ready" | "beta" | "mini_adaptive" | "simulation" | "unavailable";
 
@@ -118,6 +153,8 @@ export type PracticeTestConfigJson = {
   catPresentationMode?: CatPresentationMode;
   /** When `soft`, pathway pool may widen if filtered eligible items fall below engine minimums. */
   catPoolSelectionStrictness?: CatPoolSelectionStrictness;
+  /** Create-time record of requested vs applied filters + pool expansion tier (practice CAT). */
+  catSelectionAppliedMeta?: CatSelectionAppliedMeta;
   /**
    * Instant rationales vs end-only explanations for CAT (`selectionMode === "cat"`).
    * Exam simulation coerces to `test` on the server.

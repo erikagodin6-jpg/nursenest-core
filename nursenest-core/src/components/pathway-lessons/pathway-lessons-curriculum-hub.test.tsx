@@ -96,8 +96,9 @@ describe("PathwayLessonsCurriculumHub", () => {
     assert.match(html, /2 lessons/);
   });
 
-  it("renders the same shared progress UI for RN, RPN/PN, NP, Allied, and New Grad paid users", () => {
+  it("renders the same shared progress UI in tier priority order: RN (US+CA), RPN/PN, NP, Allied, then New Grad", () => {
     const pathways = [
+      { pathwayId: "us-rn-nclex-rn", base: "/us/rn/nclex-rn/lessons" },
       { pathwayId: "ca-rn-nclex-rn", base: "/canada/rn/nclex-rn/lessons" },
       { pathwayId: "ca-rpn-rex-pn", base: "/canada/pn/rex-pn/lessons" },
       { pathwayId: "us-np-fnp", base: "/us/np/fnp/lessons" },

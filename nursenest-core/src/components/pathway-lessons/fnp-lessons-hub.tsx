@@ -43,6 +43,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-types";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 
 type Props = {
@@ -172,9 +173,14 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
       {/* Featured clinical case */}
       {featured && featured.slug?.trim() && featuredPreview && (
         <section className="nn-study-card bg-gradient-to-b from-[var(--bg-card)] to-[var(--nn-presentation-wash)] p-5 sm:p-7">
-          <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-primary)]">
-            Featured clinical case
-          </p>
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-primary)]">
+              Featured clinical case
+            </p>
+            {Object.keys(progressMap).length > 0 ? (
+              <PathwayLessonProgressBadge status={progressMap[featured.slug] ?? "not_started"} />
+            ) : null}
+          </div>
           <h3 className="nn-marketing-h2 mt-2">{featured.title}</h3>
           <div className="mt-4 grid gap-3 border-t border-border/80 pt-4 sm:grid-cols-2">
             <div className="sm:col-span-2">

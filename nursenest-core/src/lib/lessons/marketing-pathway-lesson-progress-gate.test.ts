@@ -1,10 +1,12 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
-import { canShowPaidPathwayLessonProgress } from "./marketing-pathway-lesson-progress-server";
-import type { MarketingPathwayLessonProgressSessionContext } from "./marketing-pathway-lesson-progress-server";
+import {
+  canShowPaidPathwayLessonProgress,
+  type MarketingPathwayLessonProgressSessionContext,
+} from "./marketing-pathway-lesson-progress-gate";
 
-describe("canShowPaidPathwayLessonProgress (tier-agnostic gate)", () => {
+describe("canShowPaidPathwayLessonProgress (RN → RPN/PN → NP → Allied parity gate)", () => {
   const noUser: MarketingPathwayLessonProgressSessionContext = {
     userId: "",
     learnerPath: null,
@@ -28,16 +30,14 @@ describe("canShowPaidPathwayLessonProgress (tier-agnostic gate)", () => {
     assert.equal(canShowPaidPathwayLessonProgress(ctx, pathway), false);
   });
 
-  /**
-   * RN → RPN/PN → NP → Allied: same gate for every pathway id the hubs render.
-   */
-  it("matches RN, RPN/PN, NP, and Allied pathway ids when access is on (country aligned) and learnerPath matches NP specialty", () => {
+  it("is true for RN, RPN/PN, NP, and Allied pathway ids when access is on (country aligned) and NP learnerPath matches", () => {
     const tiers = [
       { id: "us-rn-nclex-rn", learnerPath: null as string | null },
       { id: "ca-rn-nclex-rn", learnerPath: null },
       { id: "ca-rpn-rex-pn", learnerPath: null },
       { id: "us-np-fnp", learnerPath: "us-np-fnp" },
       { id: "ca-allied-core", learnerPath: null },
+      { id: "us-rn-new-grad-transition", learnerPath: null },
     ];
     for (const { id, learnerPath } of tiers) {
       const pathway = getExamPathwayById(id);
@@ -47,7 +47,8 @@ describe("canShowPaidPathwayLessonProgress (tier-agnostic gate)", () => {
         learnerPath,
         scope: {
           hasAccess: true,
-          reason: "ok",
+          /** Staff bypass covers every visible pathway tier/country in {@link subscriptionCoversPathwayBase}. */
+          reason: "admin_override",
           tier: "pro",
           country: pathway.countryCode,
           alliedCareer: null,

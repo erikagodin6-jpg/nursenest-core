@@ -107,7 +107,7 @@ function classifyNewGradLessonForHub(lesson: PathwayLessonRecord): PathwayLesson
   if (/\b(choose|choosing|unit fit|floor|specialty|med[\s-]?surg vs|hospital unit|which unit)\b/.test(hay)) {
     return "choosing_floor_unit";
   }
-  if (/\b(orientation|preceptor|preceptorship|preceptee|feedback|first year|first-year|new grad|surviving)\b/.test(hay)) {
+  if (/\b(orientation|preceptor|preceptorship|preceptee|feedback|first year|first-year|surviving)\b/.test(hay)) {
     return "orientation_preceptorship";
   }
 
@@ -119,22 +119,22 @@ function classifyNewGradLessonForHub(lesson: PathwayLessonRecord): PathwayLesson
   if (/\b(mental health|psychiatric|suicide|behavioral|de-?escalat|confrontational|aggressive)\b/.test(hay)) return "mental_health";
   if (/\b(long[-\s]?term care|\bltc\b|resident|nursing home)\b/.test(hay)) return "long_term_care";
   if (/\b(community|home health|public health|clinic|follow-up)\b/.test(hay)) return "community_health";
-  if (/\b(operating room|\bor\b|pacu|perioperative|post-?op|postoperative|surgical)\b/.test(hay)) return "operating_room_pacu";
+  if (/\b(operating room|pacu|perioperative|post-?op|postoperative|surgical)\b/.test(hay)) return "operating_room_pacu";
   if (/\b(oncology|chemo|neutropen|cancer)\b/.test(hay)) return "oncology";
   if (/\b(cardiology|cardiac|heart failure|chest pain|telemetry|rhythm|stemi|acs)\b/.test(hay)) return "cardiology";
   if (/\b(nephrology|dialysis|renal|kidney|electrolyte|fluid balance)\b/.test(hay)) return "nephrology_dialysis";
   if (/\b(neurology|neuro|stroke|seizure|mental status|confusion)\b/.test(hay)) return "neurology";
 
-  if (/\b(chart|charting|document|documentation|assessment|assessments|handoff|report|receiving report|shift report)\b/.test(hay)) {
+  if (/\b(chart\w*|document\w*|assessment\w*|handoff|report|receiving report|shift report)\b/.test(hay)) {
     return "assessments_documentation";
   }
-  if (/\b(delegat|cna|pct|aide|unlicensed|charge nurse|assignment|priorit|acuity|patient load|task batching|time management|rounding)\b/.test(hay)) {
+  if (/\b(delegat\w*|cna|pct|aide|unlicensed|charge nurse|assignment|priorit\w*|acuity|patient load|task batching|time management|rounding)\b/.test(hay)) {
     return "prioritization_delegation";
   }
-  if (/\b(communication|communicat|sbar|physician|provider|family|families|huddle|speaking up|asking for help|clinical concern|difficult conversation)\b/.test(hay)) {
+  if (/\b(communication|communicat\w*|sbar|physician|provider|family|families|huddle|speaking up|asking for help|clinical concern|difficult conversation)\b/.test(hay)) {
     return "communication_providers_families";
   }
-  if (/\b(safety|emergency|rapid response|decline|deteriorat|unstable|alarm|escalat|abcs?|short-staffed)\b/.test(hay)) {
+  if (/\b(safety|emergency|rapid response|decline|deteriorat\w*|unstable|alarm\w*|escalat\w*|abcs?|short-staffed)\b/.test(hay)) {
     return "safety_emergencies_escalation";
   }
 

@@ -33,14 +33,13 @@ import {
 import { pathwayCountryLabel, pathwayRegionAwareExamName } from "@/lib/lessons/pathway-lesson-hub-seo";
 import { pathwayLessonsDisplayCategoryBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { sliceNormalizedHubLessons } from "@/lib/lessons/pathway-lesson-hub-page-slice";
-import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
-import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import { CategoryProgressBar } from "@/components/pathway-lessons/category-progress-bar";
 import { buildLessonCategoryProgress } from "@/lib/lessons/build-lesson-category-progress";
 import { getLessonProgressForPathwayUser } from "@/lib/lessons/get-lesson-progress-for-pathway-user";
-import { prisma } from "@/lib/db";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import {
+  canShowPaidPathwayLessonProgress,
+  loadMarketingPathwayLessonProgressSessionContext,
+} from "@/lib/lessons/marketing-pathway-lesson-progress-server";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
@@ -144,31 +143,15 @@ export async function MarketingLessonsHubCategoryLessonsSurface({
     />
   );
 
-  const session = await getOptionalPublicSession({
-    pathname: routePathLessonsCategory,
-    surface: "marketing.exam_hub.lessons_category",
+  const progressCtx = await loadMarketingPathwayLessonProgressSessionContext({
+    sessionPathname: routePathLessonsCategory,
+    sessionSurface: "marketing.exam_hub.lessons_category",
   });
-  const userId = (session?.user as { id?: string })?.id ?? "";
-  const entitlement = await resolveEntitlementForPage(userId);
-  let learnerPath: string | null = null;
-  if (userId && isDatabaseUrlConfigured()) {
-    try {
-      const u = await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } });
-      learnerPath = u?.learnerPath ?? null;
-    } catch {
-      learnerPath = null;
-    }
-  }
-  const scope =
-    entitlement === "error"
-      ? { hasAccess: false, reason: "no_access" as const, tier: null, country: null, alliedCareer: null }
-      : entitlement;
-  const canShowResume =
-    Boolean(userId) && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
+  const canShowResume = canShowPaidPathwayLessonProgress(progressCtx, pathway);
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
   if (canShowResume && filtered.length > 0) {
     progressMap = await getLessonProgressForPathwayUser({
-      userId,
+      userId: progressCtx.userId,
       pathwayId: pathway.id,
       lessonSlugs: filtered.map((l) => l.slug).filter(Boolean),
     });
