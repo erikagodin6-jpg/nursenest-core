@@ -92,6 +92,15 @@ export function FlashcardsHubClient({
   const builderCategoriesRef = useRef(builderCategories);
   builderCategoriesRef.current = builderCategories;
 
+  /**
+   * When the RSC page already passed `initialHub`, skip the first client `custom-session` fetch so
+   * `router.refresh()` / Strict Mode remounts do not stack duplicate inventory requests (felt like a
+   * refresh loop on `/app/flashcards?pathwayId=…`).
+   */
+  const skipDuplicateInitialInventoryFetchRef = useRef(
+    Boolean(initialHub?.categoryOptions && initialHub.categoryOptions.length > 0),
+  );
+
   const allBodyIds = useMemo(() => builderCategories.map((c) => c.id), [builderCategories]);
 
   const refreshCategories = useCallback(async () => {
@@ -138,6 +147,10 @@ export function FlashcardsHubClient({
   ]);
 
   useEffect(() => {
+    if (skipDuplicateInitialInventoryFetchRef.current) {
+      skipDuplicateInitialInventoryFetchRef.current = false;
+      return;
+    }
     void refreshCategories();
   }, [refreshCategories]);
 

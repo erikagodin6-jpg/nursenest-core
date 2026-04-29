@@ -10,6 +10,7 @@ import { expect, test as setup } from "@playwright/test";
 import { PAID_USER_AUTH_FILE } from "../helpers/auth-state-paths";
 import { attachPageObservers } from "../helpers/attach-observers";
 import { describeAuthFailureSurface, redactAuthDiagnosticsUrl } from "../helpers/auth-diagnostics";
+import { paidFlashcardsHubUrl } from "../helpers/paid-content-discovery";
 import { loginWithCredentials } from "../helpers/learner-login";
 import {
   describePaidCredentialResolution,
@@ -131,9 +132,9 @@ setup("authenticate paid test account and save storage state", async ({ page, re
       "Learner shell main landmark missing on /app — session invalid, auth gate, or layout error. See waitForAuthenticatedLearnerShell diagnostics in paid-learner-shell.ts.",
   });
 
-  // Confirm premium path without going through Stripe (lessons hub must not be paywalled).
-  await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });
-  await expectNoSubscriptionPaywall(page, "setup-paid-auth /app/lessons (premium seed required)");
+  // Confirm premium path without going through Stripe — use flashcards hub (same pathway as learning-routes E2E).
+  await page.goto(paidFlashcardsHubUrl(), { waitUntil: "domcontentloaded" });
+  await expectNoSubscriptionPaywall(page, "setup-paid-auth /app/flashcards (premium seed required)");
 
   fs.mkdirSync(path.dirname(PAID_USER_AUTH_FILE), { recursive: true });
   await page.context().storageState({ path: PAID_USER_AUTH_FILE });
