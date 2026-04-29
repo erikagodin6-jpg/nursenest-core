@@ -9,6 +9,7 @@ import {
   type ActiveStudyCard,
   type ActiveStudyHeader,
 } from "@/components/study/active-study-session";
+import { isSyntheticFlashcardStudyId } from "@/lib/flashcards/flashcard-access";
 import { parseFlashcardCustomSessionResponse } from "@/lib/flashcards/flashcard-custom-session-response";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
@@ -35,10 +36,6 @@ type SessionSummary = {
   selectedCategories: string[];
 };
 
-function isVirtualLessonCardId(id: string): boolean {
-  return id.startsWith("lq:");
-}
-
 export function FlashcardCustomStudyClient() {
   const sp = useSearchParams();
   const { t } = useMarketingI18n();
@@ -47,18 +44,20 @@ export function FlashcardCustomStudyClient() {
   const [cards, setCards] = useState<ApiCard[]>([]);
   const [summary, setSummary] = useState<SessionSummary | null>(null);
 
+  const searchParamString = sp.toString();
   const queryString = useMemo(() => {
-    const q = new URLSearchParams(sp.toString());
+    const q = new URLSearchParams(searchParamString);
     q.set("includeCards", "1");
     if (!q.get("shuffle")) q.set("shuffle", "1");
     if (!q.get("cardLimit")) q.set("cardLimit", "20");
     return q.toString();
-  }, [sp]);
+  }, [searchParamString]);
 
   const exitHref = useMemo(() => {
-    const pid = sp.get("pathwayId")?.trim();
+    const q = new URLSearchParams(searchParamString);
+    const pid = q.get("pathwayId")?.trim();
     return pid ? `/app/flashcards?pathwayId=${encodeURIComponent(pid)}` : "/app/flashcards";
-  }, [sp]);
+  }, [searchParamString]);
 
   useEffect(() => {
     let cancelled = false;
@@ -131,7 +130,7 @@ export function FlashcardCustomStudyClient() {
   );
 
   const onRate = useCallback(async (cardId: string, rating: "incorrect" | "unsure" | "known") => {
-    if (isVirtualLessonCardId(cardId)) return;
+    if (isSyntheticFlashcardStudyId(cardId)) return;
     try {
       await fetch(`/api/flashcards/cards/${encodeURIComponent(cardId)}/review`, {
         method: "POST",

@@ -13,7 +13,14 @@ export const ADMIN_LEARNER_QA_COOKIE = "nn_admin_learner_qa";
 const PAYLOAD_VERSION = 1 as const;
 export const ADMIN_LEARNER_QA_MAX_AGE_SEC = 2 * 60 * 60;
 
-export type AdminLearnerQaTrack = "RN" | "RPN" | "LVN_LPN" | "NP" | "ALLIED" | "NEW_GRAD";
+export type AdminLearnerQaTrack =
+  | "RN"
+  | "RPN"
+  | "LVN_LPN"
+  | "NP"
+  | "ALLIED"
+  | "NEW_GRAD"
+  | "PRE_NURSING";
 export type AdminLearnerQaLifecycle = "paid_active" | "none" | "expired" | "trial";
 
 /** NP board prep specialization — maps to `exam-pathways` ids (US). */
@@ -73,6 +80,8 @@ function tierForTrack(track: AdminLearnerQaTrack): TierCode {
       return TierCode.ALLIED;
     case "NEW_GRAD":
       return TierCode.NEW_GRAD;
+    case "PRE_NURSING":
+      return TierCode.PRE_NURSING;
   }
 }
 
@@ -135,6 +144,8 @@ export function pathwayIdForQaTrack(
       return country === "CA" ? "ca-allied-core" : "us-allied-core";
     case "NEW_GRAD":
       return "us-rn-new-grad-transition";
+    case "PRE_NURSING":
+      return null;
     default:
       return null;
   }
@@ -151,7 +162,15 @@ export function learnerQaUserBarOverlayFromPayload(p: AdminLearnerQaPayloadV1): 
           ? "Simulated: expired subscription"
           : "Simulated: no subscription";
   const track =
-    p.track === "LVN_LPN" ? "LVN/LPN" : p.track === "NEW_GRAD" ? "New Grad" : p.track === "ALLIED" ? "Allied" : p.track;
+    p.track === "LVN_LPN"
+      ? "LVN/LPN"
+      : p.track === "NEW_GRAD"
+        ? "New Grad"
+        : p.track === "ALLIED"
+          ? "Allied"
+          : p.track === "PRE_NURSING"
+            ? "Pre-Nursing"
+            : p.track;
   const np =
     p.track === "NP"
       ? ` · NP ${(p.npSpecialty ?? "FNP").replace("_", "-")}`
@@ -170,7 +189,9 @@ export function bannerTitleForPayload(p: AdminLearnerQaPayloadV1): string {
         ? "New Grad"
         : p.track === "ALLIED"
           ? "Allied"
-          : p.track;
+          : p.track === "PRE_NURSING"
+            ? "Pre-Nursing"
+            : p.track;
   const life =
     p.lifecycle === "paid_active"
       ? "Paid (active)"
@@ -234,7 +255,15 @@ export function verifyAdminLearnerQaCookieValue(
   const track = o.track as AdminLearnerQaTrack;
   const lifecycle = o.lifecycle as AdminLearnerQaLifecycle;
   const country = o.country as "US" | "CA";
-  const validTracks: AdminLearnerQaTrack[] = ["RN", "RPN", "LVN_LPN", "NP", "ALLIED", "NEW_GRAD"];
+  const validTracks: AdminLearnerQaTrack[] = [
+    "RN",
+    "RPN",
+    "LVN_LPN",
+    "NP",
+    "ALLIED",
+    "NEW_GRAD",
+    "PRE_NURSING",
+  ];
   const validLife: AdminLearnerQaLifecycle[] = ["paid_active", "none", "expired", "trial"];
   if (!validTracks.includes(track)) return null;
   if (!validLife.includes(lifecycle)) return null;
@@ -268,6 +297,17 @@ export function verifyAdminLearnerQaCookieValue(
     ...(alliedCareer ? { alliedCareer } : {}),
     ...(planVariant ? { planVariant } : {}),
   };
+}
+
+/**
+ * Verified QA cookie payloads must not affect learner shell or chrome unless the requester has a
+ * DB-backed staff session (defense in depth: cookie alone never changes non-staff UI).
+ */
+export function staffGatedVerifiedSimulation(
+  hasStaffSession: boolean,
+  verified: AdminLearnerQaPayloadV1 | null,
+): AdminLearnerQaPayloadV1 | null {
+  return hasStaffSession && verified ? verified : null;
 }
 
 export const getVerifiedAdminLearnerQaSimulation = cache(async function getVerifiedAdminLearnerQaSimulation(
@@ -308,6 +348,16 @@ export async function readAdminLearnerQaPublicState(userId: string): Promise<Adm
 }
 
 export function learnerPathwayNavFromQaPayload(payload: AdminLearnerQaPayloadV1): LearnerPathwayNavMetadata {
+  if (payload.track === "PRE_NURSING") {
+    return {
+      showBaselinePrompt: false,
+      pathwayId: null,
+      pathwayShortLabel: "Pre-Nursing",
+      pathwayHubHref: "/pre-nursing",
+      pathwayContextBar: null,
+      examsLabel: "Exams",
+    };
+  }
   const np = payload.track === "NP" ? (payload.npSpecialty ?? "FNP") : null;
   const pathwayId = pathwayIdForQaTrack(payload.track, payload.country, np);
   let pathwayShortLabel: string | null = null;

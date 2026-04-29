@@ -25,10 +25,12 @@ export async function POST(req: Request) {
   productEvent("admin_learner_qa_cleared", {
     userIdPrefix: gate.admin.userId.slice(0, 8),
     admin_learner_qa_simulated: 0,
+    adminViewAs: 0,
   });
   safeServerLog("admin_learner_qa", "simulate_cookie_cleared", {
     userIdPrefix: gate.admin.userId.slice(0, 8),
     admin_learner_qa_simulated: 0,
+    adminViewAs: 0,
   });
 
   return NextResponse.json({ ok: true, dryRun: false });

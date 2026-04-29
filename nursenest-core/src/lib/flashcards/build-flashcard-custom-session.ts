@@ -12,6 +12,7 @@ import {
   type BuilderCategoryOption,
 } from "@/lib/flashcards/flashcard-builder-taxonomy";
 import { loadLessonLinkedFlashcardVirtuals } from "@/lib/flashcards/lesson-linked-flashcards-for-pathway";
+import { collectLessonRecallFlashcardsForPathway } from "@/lib/flashcards/lesson-recall-flashcards-for-pathway";
 import {
   serializeFlashcardForCustomSession,
   type FlashcardStudySelectRow,
@@ -218,6 +219,31 @@ export async function buildFlashcardCustomSession(
           ...synthetic,
           builderCategoryId: categoryId,
           linkedExamQuestionId: v.examQuestionId,
+          lessonMeta: { href: v.lessonHref, title: v.lessonTitle, slug: v.lessonSlug },
+        });
+      }
+    }
+
+    if (pathwayId?.trim() && allowLessonQuestionVirtuals && cardWithCategory.length === 0) {
+      const recallVirtuals = collectLessonRecallFlashcardsForPathway(pathwayId.trim());
+      for (const v of recallVirtuals) {
+        const categoryId = resolveBuilderCategoryId({
+          label: v.row.category.name,
+          topicCode: v.row.category.topicCode,
+          pathwayId,
+          deckTitle: null,
+          front: v.row.front,
+          back: v.row.back,
+        });
+        categoryCounts[categoryId] = (categoryCounts[categoryId] ?? 0) + 1;
+        const synthetic: DbFlashcardRow = {
+          ...(v.row as unknown as DbFlashcardRow),
+          lessonId: null,
+          examQuestionId: null,
+        };
+        cardWithCategory.push({
+          ...synthetic,
+          builderCategoryId: categoryId,
           lessonMeta: { href: v.lessonHref, title: v.lessonTitle, slug: v.lessonSlug },
         });
       }

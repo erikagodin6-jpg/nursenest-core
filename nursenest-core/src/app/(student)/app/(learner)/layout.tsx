@@ -54,15 +54,15 @@ import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-
 import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded-mode-banner";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 
-import { getStaffSession } from "@/lib/auth/staff-session";
 import {
   bannerTitleForPayload,
-  getVerifiedAdminLearnerQaSimulation,
   learnerPathwayNavFromQaPayload,
   learnerQaChromeTierFallbackString,
   learnerQaUserBarOverlayFromPayload,
+  publicQaStateFromPayload,
 } from "@/lib/admin/admin-learner-qa-simulation";
-import { AdminLearnerQaBanner } from "@/components/admin/admin-learner-qa-banner";
+import { getAdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-context";
+import { AdminLearnerQaAppToolbar } from "@/components/admin/admin-learner-qa-app-toolbar";
 import { AdminLearnerQaPosthogSuppressor } from "@/components/admin/admin-learner-qa-posthog-suppressor";
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
@@ -80,12 +80,12 @@ export default async function LearnerShellLayout({ children }: { children: React
     return <LearnerUnauthenticatedGate />;
   }
 
-  const [entitlement, paywallHomeStats, staffSession, qaPayload] = await Promise.all([
+  const [entitlement, paywallHomeStats, viewAsCtx] = await Promise.all([
     resolveEntitlementForPage(userId),
     loadPaywallHomeStatsForShell(),
-    getStaffSession().catch(() => null),
-    getVerifiedAdminLearnerQaSimulation(userId),
+    getAdminViewAsLearnerContext(userId),
   ]);
+  const { staffSession, simulation: qaShell } = viewAsCtx;
 
   const skipNonCritical = shouldSkipNonCriticalLearnerWork();
   const coreOnlyEmergency = isCoreOnlyEmergencyMode();
@@ -100,8 +100,8 @@ export default async function LearnerShellLayout({ children }: { children: React
   const cachedNav =
     entitlement !== "error" ? getLearnerFallback(userId, entitlement, isLearnerPathwayNavMetadata) : null;
 
-  const pathwayNav = qaPayload
-    ? learnerPathwayNavFromQaPayload(qaPayload)
+  const pathwayNav = qaShell
+    ? learnerPathwayNavFromQaPayload(qaShell)
     : await safeOptional(
         async () => {
           const fresh = await loadLearnerPathwayNavMetadata(userId);
@@ -129,7 +129,7 @@ export default async function LearnerShellLayout({ children }: { children: React
 
   if (!pathwayHubHref) {
     const tier = (
-      qaPayload ? learnerQaChromeTierFallbackString(qaPayload.track) : (session?.user as { tier?: string | null })?.tier ?? ""
+      qaShell ? learnerQaChromeTierFallbackString(qaShell.track) : (session?.user as { tier?: string | null })?.tier ?? ""
     ).toUpperCase();
     const tierHub = await learnerPathwayHubChromeHrefForTierFallback(tier);
     if (tierHub) {
@@ -146,7 +146,7 @@ export default async function LearnerShellLayout({ children }: { children: React
     }
     if (!pathwayContextBar && pathwayHubHref) {
       const tier = (
-        qaPayload ? learnerQaChromeTierFallbackString(qaPayload.track) : (session?.user as { tier?: string | null })?.tier ?? ""
+        qaShell ? learnerQaChromeTierFallbackString(qaShell.track) : (session?.user as { tier?: string | null })?.tier ?? ""
       ).toUpperCase();
       const fallbackPathwayId =
         tier === "RN"
@@ -218,7 +218,7 @@ export default async function LearnerShellLayout({ children }: { children: React
 
   return (
     <SentryLearnerShell userId={userId}>
-      <AdminLearnerQaPosthogSuppressor active={Boolean(qaPayload)} />
+      <AdminLearnerQaPosthogSuppressor active={Boolean(qaShell)} />
       <PaywallHomeStatsProvider value={paywallHomeStats}>
         <LearnerExamStudyProviders>
           <LearnerExamChromeGate>
@@ -236,7 +236,7 @@ export default async function LearnerShellLayout({ children }: { children: React
               {entitlement !== "error" &&
               entitlement.hasAccess &&
               entitlement.reason === "admin_override" &&
-              !qaPayload &&
+              !qaShell &&
               !entitlement.adminLearnerQaSimulation ? (
                 <div
                   role="region"
@@ -258,8 +258,13 @@ export default async function LearnerShellLayout({ children }: { children: React
                   </p>
                 </div>
               ) : null}
-              {qaPayload ? <AdminLearnerQaBanner title={bannerTitleForPayload(qaPayload)} /> : null}
-              {!skipNonCritical && !qaPayload ? <LearnerAppSectionAnalytics /> : null}
+              {qaShell ? (
+                <AdminLearnerQaAppToolbar
+                  bannerTitle={bannerTitleForPayload(qaShell)}
+                  initialPublicState={publicQaStateFromPayload(qaShell)}
+                />
+              ) : null}
+              {!skipNonCritical && !qaShell ? <LearnerAppSectionAnalytics /> : null}
               <div className="nn-learner-exam-chrome-target nn-learner-shell-sticky sticky top-0 z-50 mb-[var(--nn-rhythm-tight-y)] bg-[var(--semantic-bg-base)] pt-1">
                 <div className="flex flex-col gap-2">
                   <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 shadow-sm sm:px-4 sm:py-2.5">
@@ -271,8 +276,8 @@ export default async function LearnerShellLayout({ children }: { children: React
                       <div className="flex flex-shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-2.5">
                         <LearnerShellUserBar
                           pathwayShortLabel={pathwayShortLabel}
-                          serverHasStaffSession={staffSession != null && !qaPayload}
-                          learnerQaOverlay={qaPayload ? learnerQaUserBarOverlayFromPayload(qaPayload) : null}
+                          serverHasStaffSession={staffSession != null && !qaShell}
+                          learnerQaOverlay={qaShell ? learnerQaUserBarOverlayFromPayload(qaShell) : null}
                         />
                         {!coreOnlyEmergency ? <SupportEmailHeaderLink /> : null}
                         <LearnerShellLanguageControl />

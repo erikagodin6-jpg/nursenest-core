@@ -1,7 +1,8 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { parseFlashcardCustomSessionResponse } from "@/lib/flashcards/flashcard-custom-session-response";
@@ -76,17 +77,21 @@ export function FlashcardsHubClient({
   const [notStudiedOnly, setNotStudiedOnly] = useState(false);
   const [categorySearch, setCategorySearch] = useState("");
 
+  const builderCategoriesRef = useRef(builderCategories);
+  builderCategoriesRef.current = builderCategories;
+
   const allBodyIds = useMemo(() => builderCategories.map((c) => c.id), [builderCategories]);
 
   const refreshCategories = useCallback(async () => {
     setLoadError(null);
     try {
+      const allIds = builderCategoriesRef.current.map((c) => c.id);
       const qs = buildCustomSessionQuery({
         pathwayId: scopedPathwayId,
         cardLimit,
         shuffleOn,
         selectedBodyIds,
-        allBodyIds,
+        allBodyIds: allIds,
         weakOnly,
         incorrectOnly,
         starredOnly,
@@ -114,7 +119,6 @@ export function FlashcardsHubClient({
     cardLimit,
     shuffleOn,
     selectedBodyIds,
-    allBodyIds,
     weakOnly,
     incorrectOnly,
     starredOnly,
@@ -182,8 +186,46 @@ export function FlashcardsHubClient({
 
   const starredCount = useMemo(() => countSavedStudyItems().starred, []);
 
+  const activePreset = useMemo((): "all" | "weak" | "incorrect" | "starred" | "unseen" | "custom" => {
+    if (starredOnly && !weakOnly && !incorrectOnly && !notStudiedOnly) return "starred";
+    if (notStudiedOnly && !weakOnly && !incorrectOnly && !starredOnly) return "unseen";
+    if (incorrectOnly && !weakOnly && !starredOnly && !notStudiedOnly) return "incorrect";
+    if (weakOnly && !incorrectOnly && !starredOnly && !notStudiedOnly) return "weak";
+    if (!weakOnly && !incorrectOnly && !starredOnly && !notStudiedOnly) return "all";
+    return "custom";
+  }, [weakOnly, incorrectOnly, starredOnly, notStudiedOnly]);
+
+  const applyFilterPreset = (p: "all" | "weak" | "incorrect" | "starred" | "unseen") => {
+    if (p === "all") {
+      setWeakOnly(false);
+      setIncorrectOnly(false);
+      setStarredOnly(false);
+      setNotStudiedOnly(false);
+    } else if (p === "weak") {
+      setWeakOnly(true);
+      setIncorrectOnly(false);
+      setStarredOnly(false);
+      setNotStudiedOnly(false);
+    } else if (p === "incorrect") {
+      setWeakOnly(false);
+      setIncorrectOnly(true);
+      setStarredOnly(false);
+      setNotStudiedOnly(false);
+    } else if (p === "starred") {
+      setWeakOnly(false);
+      setIncorrectOnly(false);
+      setStarredOnly(true);
+      setNotStudiedOnly(false);
+    } else {
+      setWeakOnly(false);
+      setIncorrectOnly(false);
+      setStarredOnly(false);
+      setNotStudiedOnly(true);
+    }
+  };
+
   return (
-    <div className="mx-auto max-w-3xl space-y-6 px-4 py-6">
+    <div className="mx-auto max-w-3xl space-y-6 px-4 py-6" data-nn-e2e-flashcards-hub>
       {pathwayBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}
 
       {catHref ? (
@@ -196,10 +238,41 @@ export function FlashcardsHubClient({
 
       <header className="space-y-2">
         <h1 className="text-2xl font-semibold">{t("learner.flashcards.hub.title")}</h1>
-        <p className="text-sm text-gray-500">{t("learner.flashcards.hub.subtitle")}</p>
-        <p className="text-xs text-blue-500">{pathwayDisplayName}</p>
-        <p className="mt-1 text-xs text-gray-500">{sessionSummaryLine}</p>
+        <p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.flashcards.hub.subtitle")}</p>
+        <p className="text-xs text-[var(--semantic-brand)]">{pathwayDisplayName}</p>
+        <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">{sessionSummaryLine}</p>
       </header>
+
+      <div className="flex flex-wrap gap-2" data-nn-e2e-flashcard-filter-presets>
+        {(
+          [
+            ["all", "All cards"],
+            ["weak", "Weak areas"],
+            ["starred", "Starred"],
+            ["unseen", "Unseen"],
+            ["incorrect", "Review incorrect"],
+          ] as const
+        ).map(([key, label]) => {
+          const on = activePreset === key;
+          return (
+            <button
+              key={key}
+              type="button"
+              onClick={() => applyFilterPreset(key)}
+              className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                on
+                  ? "border-[color-mix(in_srgb,var(--semantic-info)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
+                  : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-panel-muted)]"
+              }`}
+            >
+              {label}
+            </button>
+          );
+        })}
+        {activePreset === "custom" ? (
+          <span className="self-center text-xs text-[var(--semantic-text-secondary)]">Custom mix</span>
+        ) : null}
+      </div>
 
       {loadError ? (
         <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
@@ -207,10 +280,20 @@ export function FlashcardsHubClient({
         </div>
       ) : null}
 
-      {!loadError && matchingCards === 0 && !starredOnly ? (
-        <div className="rounded-lg border border-border bg-[var(--theme-card-bg)] px-4 py-3 text-sm text-[var(--theme-muted-text)]">
-          No cards for this pathway yet. When lesson pre/post checks and practice items are published for this track,
-          they will appear here automatically.
+      {!loadError && matchingCards === 0 && !starredOnly && builderCategories.length === 0 ? (
+        <div
+          className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
+          data-nn-e2e-flashcards-setup-report
+        >
+          <p className="font-medium text-[var(--semantic-text-primary)]">No flashcard deck loaded for this filter yet</p>
+          <p className="mt-2">
+            When the question bank has no published cards for this pathway, we still try to build study cards from
+            your lesson checkpoints. Open the{" "}
+            <Link href={`/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`} className="font-semibold text-[var(--semantic-brand)] underline">
+              lessons hub
+            </Link>{" "}
+            for this track, complete a lesson section, then return — or clear filters above and choose <strong>All cards</strong>.
+          </p>
         </div>
       ) : null}
 
@@ -243,7 +326,8 @@ export function FlashcardsHubClient({
                 type="button"
                 onClick={() => toggleBodySystem(c.id)}
                 data-selected={selected}
-                className="rounded-lg border p-3 text-left transition-all hover:scale-[1.02] data-[selected=true]:ring-2 data-[selected=true]:ring-blue-400"
+                data-nn-e2e-body-system-card={c.id}
+                className="rounded-lg border border-[var(--semantic-border-soft)] p-3 text-left transition-all hover:scale-[1.02] data-[selected=true]:ring-2 data-[selected=true]:ring-[color-mix(in_srgb,var(--semantic-info)_55%,transparent)]"
               >
                 <div className="font-medium">{formatTitleCase(c.title)}</div>
                 {c.count ? <div className="text-xs text-gray-400">{c.count} cards</div> : null}
@@ -297,7 +381,9 @@ export function FlashcardsHubClient({
       <div className="sticky bottom-0 z-10 mt-6 border-t bg-[var(--theme-page-bg)] pb-2 pt-3">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <LearnerCtaLink href={startHref}>{t("flashcards.startSession")}</LearnerCtaLink>
+            <LearnerCtaLink href={startHref} data-nn-e2e-start-review>
+              {t("flashcards.startSession")}
+            </LearnerCtaLink>
             <p className="mt-1 text-xs text-gray-500">{sessionSummaryLine}</p>
           </div>
 

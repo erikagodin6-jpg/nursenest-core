@@ -64,13 +64,15 @@ export async function expectAtLeastOneFlashcardLearnLink(
   page: Page,
   opts?: { timeoutMs?: number },
 ): Promise<void> {
-  const learn = page.locator('a[href*="/app/flashcards/"][href*="mode=learn"]').first();
+  const hubOrStart = page
+    .locator("[data-nn-e2e-flashcards-hub], [data-nn-e2e-start-review], a[href*='/app/flashcards/custom']")
+    .first();
   try {
-    await expect(learn).toBeVisible({ timeout: opts?.timeoutMs ?? 120_000 });
+    await expect(hubOrStart).toBeVisible({ timeout: opts?.timeoutMs ?? 120_000 });
   } catch {
     throw new PaidContentDiscoveryError(
       "noFlashcardDeckAvailable",
-      "No flashcard learn-mode link found — check pathway decks and entitlement.",
+      "No flashcards hub or start-review link found — check pathway hub, custom session route, and entitlement.",
     );
   }
 }

@@ -358,6 +358,7 @@ export function PracticeTestsHubClient({
         </div>
       ) : null}
       <section
+        data-nn-e2e-practice-exams-builder
         className={`nn-card nn-student-card-lift p-6 sm:p-7 ${
           isPriorityWinner(hubPriority, "weak_focus")
             ? "border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))]"
@@ -443,6 +444,7 @@ export function PracticeTestsHubClient({
             </span>
             <input
               type="number"
+              data-nn-e2e-question-count
               min={selectionMode === "cat" ? 10 : 5}
               max={
                 selectionMode === "cat" && catPresentationMode === "exam_simulation"

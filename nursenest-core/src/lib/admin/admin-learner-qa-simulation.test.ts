@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { CountryCode } from "@prisma/client";
+import { CountryCode, TierCode } from "@prisma/client";
 import {
   bannerTitleForPayload,
   billingRegionSlugForQaCountry,
@@ -8,6 +8,7 @@ import {
   learnerQaChromeTierFallbackString,
   pathwayIdForQaTrack,
   signAdminLearnerQaCookieValue,
+  staffGatedVerifiedSimulation,
   verifyAdminLearnerQaCookieValue,
 } from "@/lib/admin/admin-learner-qa-simulation";
 
@@ -16,6 +17,34 @@ describe("learnerQaChromeTierFallbackString", () => {
     assert.equal(learnerQaChromeTierFallbackString("RN"), "RN");
     assert.equal(learnerQaChromeTierFallbackString("NP"), "NP");
     assert.equal(learnerQaChromeTierFallbackString("NEW_GRAD"), "NEW_GRAD");
+    assert.equal(learnerQaChromeTierFallbackString("PRE_NURSING"), "PRE_NURSING");
+  });
+});
+
+describe("staffGatedVerifiedSimulation", () => {
+  it("drops verified cookie when staff session is absent", () => {
+    const p = {
+      v: 1 as const,
+      sub: "u1",
+      exp: 9e15,
+      track: "RN" as const,
+      lifecycle: "paid_active" as const,
+      country: "US" as const,
+    };
+    assert.equal(staffGatedVerifiedSimulation(false, p), null);
+  });
+
+  it("returns verified cookie only when staff session is present", () => {
+    const p = {
+      v: 1 as const,
+      sub: "u1",
+      exp: 9e15,
+      track: "RN" as const,
+      lifecycle: "paid_active" as const,
+      country: "US" as const,
+    };
+    assert.deepEqual(staffGatedVerifiedSimulation(true, p), p);
+    assert.equal(staffGatedVerifiedSimulation(true, null), null);
   });
 });
 
@@ -125,6 +154,10 @@ describe("buildUserAccessForAdminLearnerQa", () => {
     assert.equal(ua.reason, "active_trial");
   });
 
+  it("PRE_NURSING has no registry pathway id in simulation", () => {
+    assert.equal(pathwayIdForQaTrack("PRE_NURSING", "US", null), null);
+  });
+
   it("NP WHNP maps pathway id", () => {
     assert.equal(pathwayIdForQaTrack("NP", "US", "WHNP"), "us-np-whnp");
     const ua = buildUserAccessForAdminLearnerQa({
@@ -151,6 +184,32 @@ describe("buildUserAccessForAdminLearnerQa", () => {
       alliedCareer: "rrt",
     });
     assert.equal(ua.allowedProfession.alliedCareer, "rrt");
+  });
+
+  it("PRE_NURSING free has no premium and no exam pathway id", () => {
+    const ua = buildUserAccessForAdminLearnerQa({
+      v: 1,
+      sub: "u1",
+      exp: 9e15,
+      track: "PRE_NURSING",
+      lifecycle: "none",
+      country: "US",
+    });
+    assert.equal(ua.hasPremium, false);
+    assert.equal(ua.allowedExam.pathwayId, null);
+    assert.equal(ua.allowedProfession.tier, TierCode.PRE_NURSING);
+  });
+
+  it("PRE_NURSING paid_active grants premium for paywall-unlock testing", () => {
+    const ua = buildUserAccessForAdminLearnerQa({
+      v: 1,
+      sub: "u1",
+      exp: 9e15,
+      track: "PRE_NURSING",
+      lifecycle: "paid_active",
+      country: "US",
+    });
+    assert.equal(ua.hasPremium, true);
   });
 
   it("legacy cookie without optional fields still verifies", () => {

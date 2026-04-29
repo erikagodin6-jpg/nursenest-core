@@ -1,6 +1,8 @@
 import { Suspense } from "react";
 import { TierCode } from "@prisma/client";
+import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner";
 import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-client";
+import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { ContentEmptyState } from "@/components/ui/content-empty-state";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
@@ -138,18 +140,20 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   if (pathwayResolution?.state === "no_pathway_context") {
     return (
-      <ContentEmptyState
-        variant="generic"
-        headline={t("learner.flashcards.page.noPathwayHeadline") ?? "Choose your exam track"}
-        body={
-          t("learner.flashcards.page.noPathwayBody") ??
-          "Select a pathway in Study preferences so flashcards stay aligned with your subscription."
-        }
-        primaryCta={{
-          label: t("learner.flashcards.page.studyPreferencesCta") ?? "Study preferences",
-          href: "/app/account/study-preferences",
-        }}
-      />
+      <div className="space-y-2">
+        <LearnerRenderTraceBanner
+          data-route="flashcards"
+          label="NN_RENDER_TRACE: flashcards live route (pathway picker)"
+        />
+        <FlashcardsPathwayPickSurface
+          title={t("learner.flashcards.page.noPathwayHeadline") ?? t("learner.flashcards.page.title")}
+          subtitle={
+            t("learner.flashcards.page.noPathwayBody") ??
+            "Choose an exam track for flashcards. Your selection is applied via the URL — no redirects."
+          }
+          pathways={pathwayOptions}
+        />
+      </div>
     );
   }
 
@@ -207,14 +211,17 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
   });
 
   return (
-    <Suspense fallback={<div className="p-4">{t("learner.loading.flashcards")}</div>}>
-      <FlashcardsHubClient
-        scopedPathwayId={scopedPathwayId}
-        pathwayDisplayName={pathwayDisplayName}
-        pathwayBootstrapSource={pathwayBootstrapSource}
-        catHref={catHref}
-        initialHub={initialHub}
-      />
-    </Suspense>
+    <div className="space-y-2">
+      <LearnerRenderTraceBanner data-route="flashcards" label="NN_RENDER_TRACE: flashcards live route" />
+      <Suspense fallback={<div className="p-4">{t("learner.loading.flashcards")}</div>}>
+        <FlashcardsHubClient
+          scopedPathwayId={scopedPathwayId}
+          pathwayDisplayName={pathwayDisplayName}
+          pathwayBootstrapSource={pathwayBootstrapSource}
+          catHref={catHref}
+          initialHub={initialHub}
+        />
+      </Suspense>
+    </div>
   );
 }

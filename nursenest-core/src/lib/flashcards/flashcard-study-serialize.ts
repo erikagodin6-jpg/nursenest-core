@@ -104,9 +104,14 @@ export function serializeFlashcardForCustomSession(
     front = exam.questionStem;
     back = correctAnswerLine(exam);
   }
+  const authoredRecall =
+    !exam && typeof card.rationaleCorrect === "string" && card.rationaleCorrect.trim().length >= 8
+      ? card.rationaleCorrect.trim()
+      : null;
   const explanation = exam
     ? undefined
-    : buildFlashcardExplanationFromSources({
+    : authoredRecall ??
+      buildFlashcardExplanationFromSources({
         front,
         back,
         topic: opts.topic,

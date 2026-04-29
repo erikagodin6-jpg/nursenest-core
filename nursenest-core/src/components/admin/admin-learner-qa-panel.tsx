@@ -12,7 +12,7 @@ import {
 
 const DEFAULT_MOBILE_QA_WIDTH = 390;
 
-const TRACKS = ["RN", "RPN", "LVN_LPN", "NP", "ALLIED", "NEW_GRAD"] as const;
+const TRACKS = ["RN", "RPN", "LVN_LPN", "NP", "ALLIED", "NEW_GRAD", "PRE_NURSING"] as const;
 const LIFECYCLES = ["paid_active", "none", "expired", "trial"] as const;
 const NP_SPECIALTIES = ["FNP", "AGPCNP", "PMHNP", "WHNP", "PNP_PC"] as const;
 const ALLIED_CAREERS = ["paramedic", "rrt", "mlt", "imaging", "ota_pta", "pharmtech", "socialwork"] as const;
@@ -200,6 +200,11 @@ export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearn
           <PresetBtn busy={busy} label="US RN · expired" onClick={() => void applyPreset({ track: "RN", lifecycle: "expired", country: "US" })} />
           <PresetBtn busy={busy} label="NP WHNP · paid" onClick={() => void applyPreset({ track: "NP", lifecycle: "paid_active", country: "US", npSpecialty: "WHNP", planVariant: "6-month" })} />
           <PresetBtn busy={busy} label="Allied RRT · CA" onClick={() => void applyPreset({ track: "ALLIED", lifecycle: "paid_active", country: "CA", alliedCareer: "rrt" })} />
+          <PresetBtn
+            busy={busy}
+            label="Pre-Nursing · free"
+            onClick={() => void applyPreset({ track: "PRE_NURSING", lifecycle: "none", country: "US" })}
+          />
         </div>
       </div>
 
@@ -221,7 +226,15 @@ export function AdminLearnerQaPanel({ initialState }: { initialState: AdminLearn
             >
               {TRACKS.map((t) => (
                 <option key={t} value={t}>
-                  {t === "LVN_LPN" ? "LVN/LPN" : t === "NEW_GRAD" ? "New Grad" : t === "ALLIED" ? "Allied" : t}
+                  {t === "LVN_LPN"
+                    ? "LVN/LPN"
+                    : t === "NEW_GRAD"
+                      ? "New Grad"
+                      : t === "ALLIED"
+                        ? "Allied"
+                        : t === "PRE_NURSING"
+                          ? "Pre-Nursing"
+                          : t}
                 </option>
               ))}
             </select>

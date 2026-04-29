@@ -141,6 +141,11 @@ describe("parseTierScopedAppStudyCallbackPath", () => {
     assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
   });
 
+  it("allows /app/practice-exams alias with pathwayId (resumes to hub after login)", () => {
+    const u = `/app/practice-exams?pathwayId=${encodeURIComponent(RN)}`;
+    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
+  });
+
   it("rejects /app/questions without pathwayId", () => {
     assert.equal(parseTierScopedAppStudyCallbackPath("/app/questions"), null);
   });

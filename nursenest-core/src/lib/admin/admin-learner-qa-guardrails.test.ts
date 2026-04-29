@@ -116,7 +116,16 @@ describe("admin learner QA — API + proxy contracts (static)", () => {
       "utf8",
     );
     assert.match(layout, /AdminLearnerQaPosthogSuppressor/);
-    assert.match(layout, /serverHasStaffSession=\{staffSession != null && !qaPayload\}/);
+    assert.match(layout, /serverHasStaffSession=\{staffSession != null && !qaShell\}/);
+    assert.match(layout, /getAdminViewAsLearnerContext/);
+    assert.match(layout, /AdminLearnerQaAppToolbar/);
+  });
+
+  it("view-as context module wires staff gate + entitlement helpers", () => {
+    const src = readFileSync(join(nursenestCoreRoot, "src", "lib", "admin", "admin-view-as-learner-context.ts"), "utf8");
+    assert.match(src, /staffGatedVerifiedSimulation/);
+    assert.match(src, /resolveEffectiveEntitlements/);
+    assert.match(src, /resolveEffectiveLearnerContext/);
   });
 
   it("server learner analytics helpers skip PostHog when QA simulation flag is on", () => {

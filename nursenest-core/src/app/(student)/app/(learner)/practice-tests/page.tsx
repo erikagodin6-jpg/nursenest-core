@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner";
 import { PracticeTestsHubClient } from "@/components/student/practice-tests-hub-client";
 import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";
 import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
@@ -139,6 +140,10 @@ export default async function PracticeTestsPage() {
       <div className="mb-4">
         <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
       </div>
+      <LearnerRenderTraceBanner
+        data-route="practice-tests"
+        label="NN_RENDER_TRACE: practice exams live route (/app/practice-tests)"
+      />
       <div className="nn-learner-page-hero">
         <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.practiceTests.title")}</h1>
         <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.subtitle.subscriber")}</p>
