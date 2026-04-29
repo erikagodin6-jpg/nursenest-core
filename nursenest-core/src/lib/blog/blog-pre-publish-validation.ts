@@ -4,6 +4,7 @@ import type {
   BlogPostTemplate,
   CountryCode,
   Prisma,
+  PrismaClient,
 } from "@prisma/client";
 import { collectBlogGeneratedDraftQualityIssues } from "@/lib/blog/blog-generated-draft-quality";
 import { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-bounds";
@@ -15,8 +16,7 @@ import {
 } from "@/lib/blog/blog-word-count";
 import { coerceBlogSourceRows, validateSources } from "@/lib/blog/apa7";
 import { parseInternalLinkPlanJson } from "@/lib/blog/blog-image-workflow";
-import { parseMarketingLessonDetailPath } from "@/lib/blog/blog-internal-link-verify";
-import { prisma } from "@/lib/db";
+import { parseMarketingLessonDetailPath } from "@/lib/blog/blog-marketing-lesson-detail-path";
 import { classifyBlogCorpus, collectClassificationViolations, isPublishBlockedByTaxonomy } from "@/lib/taxonomy/content-write-taxonomy";
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -240,6 +240,14 @@ function schemaSummaryParsed(row: BlogPostPrePublishRow): {
   }
 }
 
+export type ValidateBlogPrePublishOptions = {
+  /**
+   * Optional Prisma client for scripts and tooling that cannot import `server-only` `@/lib/db`.
+   * When omitted, the default app singleton is loaded dynamically.
+   */
+  prisma?: PrismaClient;
+};
+
 /**
  * Validates a blog post before publish or schedule. Does not mutate.
  * Slug uniqueness uses `postId` to exclude the current row.
@@ -247,7 +255,9 @@ function schemaSummaryParsed(row: BlogPostPrePublishRow): {
 export async function validateBlogPrePublish(
   row: BlogPostPrePublishRow,
   postId: string,
+  options?: ValidateBlogPrePublishOptions,
 ): Promise<PrePublishValidationResult> {
+  const prismaClient = options?.prisma ?? (await import("@/lib/db")).prisma;
   const issues: PrePublishIssue[] = [];
 
   const autoSeo = generateBlogSEOFromPostRow({
@@ -278,7 +288,7 @@ export async function validateBlogPrePublish(
       fix: "Use lowercase letters, numbers, and hyphens only (e.g. nclex-fluid-balance). Save draft to persist.",
     });
   } else {
-    const clash = await prisma.blogPost.findFirst({
+    const clash = await prismaClient.blogPost.findFirst({
       where: { slug, NOT: { id: postId } },
       select: { id: true },
     });

@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { PathwayLessonsCurriculumHub } from "./pathway-lessons-curriculum-hub";
+import { aggregatePathwayLessonProgress } from "./pathway-progress-aggregation";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 
 function lesson(overrides: Partial<PathwayLessonRecord>): PathwayLessonRecord {
@@ -71,6 +72,80 @@ describe("PathwayLessonsCurriculumHub", () => {
     assert.match(html, /2 of 6 completed/);
     assert.match(html, /Category progress/i);
     assert.match(html, /line-clamp-3/);
+  });
+
+  it("does not render paid progress UI for anonymous or unpaid visitors", () => {
+    const lessons = [
+      lesson({ slug: "cardiac-1", title: "Cardiac lesson 1" }),
+      lesson({ slug: "cardiac-2", title: "Cardiac lesson 2" }),
+    ];
+
+    const html = renderToStaticMarkup(
+      <PathwayLessonsCurriculumHub
+        lessons={lessons}
+        lessonsBasePath="/canada/rn/nclex-rn/lessons"
+        pathwayId="ca-rn-nclex-rn"
+        progressMap={{ "cardiac-1": "completed" }}
+        canShowProgressMap={false}
+      />,
+    );
+
+    assert.doesNotMatch(html, /Category progress/i);
+    assert.doesNotMatch(html, /1 of 2 completed/i);
+    assert.match(html, /2 lessons/);
+  });
+
+  it("renders the same shared progress UI for RN, RPN/PN, NP, and Allied paid users", () => {
+    const pathways = [
+      { pathwayId: "ca-rn-nclex-rn", base: "/canada/rn/nclex-rn/lessons" },
+      { pathwayId: "ca-rpn-rex-pn", base: "/canada/pn/rex-pn/lessons" },
+      { pathwayId: "us-np-fnp", base: "/us/np/fnp/lessons" },
+      { pathwayId: "ca-allied-core", base: "/canada/allied/allied-health/lessons" },
+    ];
+    const lessons = [
+      lesson({ slug: "cardiac-1", title: "Cardiac lesson 1" }),
+      lesson({ slug: "cardiac-2", title: "Cardiac lesson 2" }),
+      lesson({ slug: "cardiac-3", title: "Cardiac lesson 3" }),
+    ];
+
+    for (const { pathwayId, base } of pathways) {
+      const html = renderToStaticMarkup(
+        <PathwayLessonsCurriculumHub
+          lessons={lessons}
+          preparedLessons={lessons}
+          lessonsBasePath={base}
+          pathwayId={pathwayId}
+          progressMap={{
+            "cardiac-1": "completed",
+            "cardiac-2": "in_progress",
+          }}
+          canShowProgressMap
+        />,
+      );
+      assert.match(html, /Category progress/i, pathwayId);
+      assert.match(html, /1 of 3 completed/i, pathwayId);
+      assert.match(html, /data-testid="lesson-card-link"/, pathwayId);
+    }
+  });
+
+  it("aggregates category progress consistently across tier pathway ids", () => {
+    const lessons = [
+      lesson({ slug: "one", title: "One" }),
+      lesson({ slug: "two", title: "Two" }),
+      lesson({ slug: "three", title: "Three" }),
+    ];
+    for (const pathwayId of ["ca-rn-nclex-rn", "ca-rpn-rex-pn", "us-np-fnp", "ca-allied-core"]) {
+      const counts = aggregatePathwayLessonProgress(lessons, {
+        one: "completed",
+        two: "in_progress",
+        three: "not_started",
+      });
+      assert.deepEqual(
+        counts,
+        { completedCount: 1, inProgressCount: 1, totalCount: 3 },
+        pathwayId,
+      );
+    }
   });
 
   it("empty hub uses curriculum hub empty marker, not lesson detail loading shell", () => {

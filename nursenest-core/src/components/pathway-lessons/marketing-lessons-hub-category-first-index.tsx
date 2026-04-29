@@ -7,6 +7,8 @@ import { LessonHubSurfaceChips } from "@/components/pathway-lessons/lesson-hub-s
 import { StudyModeCards, defaultLessonModeCards } from "@/components/study/study-mode-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
+import { CategoryProgressBar } from "@/components/pathway-lessons/category-progress-bar";
+import { aggregatePathwayLessonProgress } from "@/components/pathway-lessons/pathway-progress-aggregation";
 import { EMPTY_QUESTION_SNAPSHOT } from "@/lib/exam-pathways/marketing-hub-fallbacks";
 import { loadPathwayQuestionBankSnapshot } from "@/lib/exam-pathways/pathway-question-bank-snapshot";
 import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
@@ -19,6 +21,7 @@ import {
 } from "@/lib/lessons/lesson-taxonomy";
 import {
   countMarketingHubLessonsByDisplayCategoryForPathway,
+  displayCategoryForMarketingHubLesson,
   getMarketingLessonsHubCatalogLessons,
   MARKETING_HUB_REVIEW_REQUIRED_PREVIEW_MAX,
   pickReviewRequiredCatalogLessons,
@@ -38,10 +41,10 @@ import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
-import { loadPathwayHubSubscriberData } from "@/lib/learner/pathway-lesson-continuation";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { loadPathwayLessonProgressMapForSlugs } from "@/lib/lessons/pathway-lesson-progress";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
@@ -182,17 +185,12 @@ export async function MarketingLessonsHubCategoryFirstIndex({
   const canShowResume =
     Boolean(userId) && scope.hasAccess && canViewFullPathwayLesson(scope, pathway, learnerPath);
   let progressMap: Record<string, PathwayLessonProgressStatus> = {};
-  if (canShowResume && reviewRows.length > 0) {
-    const hubSlugs = reviewRows.map((l) => l.slug).filter(Boolean);
-    const { progressMap: map } = await loadPathwayHubSubscriberData(
+  if (canShowResume && catalog.length > 0) {
+    progressMap = await loadPathwayLessonProgressMapForSlugs(
       userId,
-      scope,
-      learnerPath,
-      pathway,
-      base,
-      hubSlugs,
+      pathway.id,
+      catalog.map((l) => l.slug),
     );
-    progressMap = map;
   }
 
   const studyCards = defaultLessonModeCards({
@@ -331,6 +329,12 @@ export async function MarketingLessonsHubCategoryFirstIndex({
             const n = counts.get(cat) ?? 0;
             const slug = lessonCategoryToSlug(cat);
             const href = marketingPathwayLessonsCategoryPath(pathway, slug);
+            const categoryProgress = canShowResume
+              ? aggregatePathwayLessonProgress(
+                  catalog.filter((lesson) => displayCategoryForMarketingHubLesson(lesson) === cat),
+                  progressMap,
+                )
+              : null;
             return (
               <Link
                 key={cat}
@@ -341,8 +345,17 @@ export async function MarketingLessonsHubCategoryFirstIndex({
                   {cat}
                 </span>
                 <span className="mt-1 text-xs text-[var(--theme-muted-text)]">
-                  {n.toLocaleString()} {n === 1 ? "lesson" : "lessons"}
+                  {canShowResume && categoryProgress
+                    ? `${categoryProgress.completedCount.toLocaleString()} of ${n.toLocaleString()} completed`
+                    : `${n.toLocaleString()} ${n === 1 ? "lesson" : "lessons"}`}
                 </span>
+                {canShowResume && categoryProgress ? (
+                  <CategoryProgressBar
+                    completedCount={categoryProgress.completedCount}
+                    inProgressCount={categoryProgress.inProgressCount}
+                    totalCount={Math.max(categoryProgress.totalCount, 1)}
+                  />
+                ) : null}
               </Link>
             );
           })}

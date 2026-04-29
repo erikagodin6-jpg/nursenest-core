@@ -20,6 +20,11 @@ import { marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
 const coreRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const realIndexDir = path.join(coreRoot, "src", "content", "pathway-lessons", "generated-indexes");
 
+/** Same semantics as `scripts/run-lesson-indexes-for-build.mjs` (build + verify gates). */
+function isNNSkipLessonIndexBuild(): boolean {
+  return /^(1|true|yes)$/i.test(String(process.env.NN_SKIP_LESSON_INDEX_BUILD ?? "").trim());
+}
+
 function listGeneratedJsonFiles(): string[] {
   if (!fs.existsSync(realIndexDir)) return [];
   return fs.readdirSync(realIndexDir).filter((f) => f.endsWith(".json") && f !== "package.json");
@@ -65,10 +70,18 @@ function assertDetailHrefs(pathwayId: string, slugs: string[]): void {
 }
 
 async function main(): Promise<void> {
+  if (isNNSkipLessonIndexBuild()) {
+    console.info("[verify:lesson-indexes] skipped reason=NN_SKIP_LESSON_INDEX_BUILD");
+    return;
+  }
+
   const files = listGeneratedJsonFiles();
   if (files.length === 0) {
-    console.info("[verify:lesson-indexes] no generated *.json files — skip (run npm run build:lesson-indexes first).");
-    return;
+    throw new Error(
+      `[verify:lesson-indexes] FATAL: no generated *.json under ${realIndexDir}\n` +
+        "Run `npm run build:lesson-indexes` (or full `npm run build`, which runs indexes before `next build`).\n" +
+        "Constrained builders may set NN_SKIP_LESSON_INDEX_BUILD=true to skip index generation and checks.",
+    );
   }
 
   const catalogIds = new Set(listCatalogPathwayIdsWithLessonsSync());

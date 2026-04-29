@@ -139,6 +139,39 @@ export async function loadPathwayLessonProgressMap(
 }
 
 /**
+ * Progress for a known pathway lesson set without the hub preview cap.
+ * Use this only when the caller needs aggregate progress for a bounded page/pathway surface
+ * such as category cards; normal lesson rows should use the capped hub batch.
+ */
+export async function loadPathwayLessonProgressMapForSlugs(
+  userId: string,
+  pathwayId: string,
+  slugs: string[],
+): Promise<Record<string, PathwayLessonProgressStatus>> {
+  const uniqueSlugs = [...new Set(slugs.filter((s) => s.trim().length > 0))];
+  const initial = Object.fromEntries(uniqueSlugs.map((s) => [s, "not_started" as const]));
+  if (!userId || !isDatabaseUrlConfigured() || uniqueSlugs.length === 0) return initial;
+
+  const prefix = `pathway:${pathwayId}:`;
+  const progressMap: Record<string, PathwayLessonProgressStatus> = { ...initial };
+  for (let i = 0; i < uniqueSlugs.length; i += PROGRESS_INVENTORY_CHUNK) {
+    const chunkSlugs = uniqueSlugs.slice(i, i + PROGRESS_INVENTORY_CHUNK);
+    const ids = chunkSlugs.map((s) => syntheticPathwayLessonId(pathwayId, s));
+    const rows = await prisma.progress.findMany({
+      where: { userId, lessonId: { in: ids } },
+      select: { lessonId: true, completed: true },
+    });
+    for (const row of rows) {
+      if (!row.lessonId.startsWith(prefix)) continue;
+      const slug = row.lessonId.slice(prefix.length);
+      progressMap[slug] = pathwayLessonProgressStatusFromRow(row);
+    }
+  }
+
+  return progressMap;
+}
+
+/**
  * Completed vs in-progress counts for **published pathway inventory** (capped list) — chunked `IN`, no prefix scans.
  * Pass `inventoryIds` when the caller already listed slugs (avoids a second `pathwayLesson` read).
  */

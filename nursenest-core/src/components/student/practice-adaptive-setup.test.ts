@@ -12,6 +12,7 @@ import { describe, it } from "node:test";
 import {
   buildPracticeAdaptiveCreatePayload,
   buildCatExamSimulationCreatePayload,
+  isPracticePoolExhaustedCode,
 } from "@/components/student/pathway-cat-start-payload";
 import type { PracticeTestPathwayClientShell } from "@/lib/practice-tests/types";
 
@@ -43,6 +44,49 @@ describe("buildPracticeAdaptiveCreatePayload", () => {
     assert.equal(p.catExamFeedbackMode, "study", "Practice mode must show rationale after each question");
     assert.equal(p.selectionMode, "cat");
     assert.equal(p.timedMode, false, "Practice mode must not be timed");
+    assert.equal(p.selectionStrictness, "soft");
+  });
+
+  it("defaults selectionStrictness to soft for safe adaptive pools", () => {
+    const p = buildPracticeAdaptiveCreatePayload({
+      pathwayId: "ca-rn-nclex-rn",
+      topicNames: ["Renal"],
+      catSelectionBasis: "weak",
+      questionCount: 20,
+    });
+    assert.equal(p.selectionStrictness, "soft");
+  });
+
+  it("allows explicit selectionStrictness strict", () => {
+    const p = buildPracticeAdaptiveCreatePayload({
+      pathwayId: "ca-rn-nclex-rn",
+      topicNames: [],
+      catSelectionBasis: "random",
+      questionCount: 30,
+      selectionStrictness: "strict",
+    });
+    assert.equal(p.selectionStrictness, "strict");
+  });
+
+  it("supports starred selection basis", () => {
+    const p = buildPracticeAdaptiveCreatePayload({
+      pathwayId: "ca-rn-nclex-rn",
+      topicNames: [],
+      catSelectionBasis: "starred",
+      questionCount: 20,
+    });
+    assert.equal(p.catSelectionBasis, "starred");
+  });
+
+  it("can combine body systems with weak basis in one payload", () => {
+    const p = buildPracticeAdaptiveCreatePayload({
+      pathwayId: "us-rn-nclex-rn",
+      topicNames: ["Cardiovascular", "Renal"],
+      catSelectionBasis: "weak",
+      questionCount: 30,
+    });
+    assert.deepEqual(p.topicNames, ["Cardiovascular", "Renal"]);
+    assert.equal(p.catSelectionBasis, "weak");
   });
 
   it("passes topicNames through to the payload", () => {
@@ -157,6 +201,13 @@ describe("buildCatExamSimulationCreatePayload (CAT mode must be unchanged)", () 
     // They differ only in presentation / feedback mode
     assert.notEqual(cat.catPresentationMode, practice.catPresentationMode);
     assert.notEqual(cat.catExamFeedbackMode, practice.catExamFeedbackMode);
+    assert.ok(!("selectionStrictness" in cat), "Exam simulation payload must not carry practice strictness");
+  });
+});
+
+describe("isPracticePoolExhaustedCode", () => {
+  it("treats starred-empty as retriable in soft client fallback", () => {
+    assert.equal(isPracticePoolExhaustedCode("cat_starred_items_empty"), true);
   });
 });
 

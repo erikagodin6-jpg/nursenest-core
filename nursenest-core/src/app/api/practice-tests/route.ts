@@ -63,7 +63,9 @@ const createSchema = z
     difficultyMax: z.union([z.number().int().min(1).max(5), z.null()]).optional(),
     selectionMode: z.enum(["random", "targeted", "weak", "missed", "cat"]),
     /** Pool strategy when `selectionMode` is `cat`. */
-    catSelectionBasis: z.enum(["random", "targeted", "weak", "missed"]).optional(),
+    catSelectionBasis: z.enum(["random", "targeted", "weak", "missed", "starred"]).optional(),
+    /** Practice CAT: widen filters server-side when the narrow slice is too small (hub default: soft). */
+    selectionStrictness: z.enum(["soft", "strict"]).optional(),
     /** Exam simulation uses exam-config bounds (NCLEX 85–145, NP fixed 150/175) and blueprint balancing. */
     catPresentationMode: z.enum(["practice", "exam_simulation"]).optional().default("practice"),
     /**
@@ -450,6 +452,12 @@ export async function POST(req: Request) {
         : d.catPresentationMode === "practice"
           ? d.catExamFeedbackMode
           : "test";
+    const poolSelectionStrictness: "soft" | "strict" =
+      d.catPresentationMode === "exam_simulation"
+        ? "strict"
+        : d.selectionStrictness === "strict"
+          ? "strict"
+          : "soft";
     const lockKey = catSessionAdvisoryLockKey(
       gate.userId,
       pathwayIdForCat,
@@ -491,6 +499,7 @@ export async function POST(req: Request) {
             difficultyMin,
             difficultyMax,
             pathwayId: pathwayIdForCat,
+            selectionStrictness: poolSelectionStrictness,
           },
           enforcedTimedMode,
           examTimedLimit,

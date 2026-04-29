@@ -20,12 +20,13 @@ type Props = {
   href: string;
   title: string;
   progressStatus: PathwayLessonProgressStatus;
+  showProgress?: boolean;
   durationLabel: string;
   difficulty: LessonDifficulty;
   yieldBadgeLabel?: string | null;
 };
 
-export function LessonRow({ href, title, progressStatus, durationLabel, difficulty, yieldBadgeLabel }: Props) {
+export function LessonRow({ href, title, progressStatus, showProgress = false, durationLabel, difficulty, yieldBadgeLabel }: Props) {
   const cleaned = cleanLessonTitleForDisplay(title);
   const displayTitle = cleaned.trim().length > 0 ? cleaned : title.trim() || "Lesson";
   return (
@@ -35,7 +36,7 @@ export function LessonRow({ href, title, progressStatus, durationLabel, difficul
       className="nn-qa-pathway-lesson-card group block rounded-xl px-3 py-2 text-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
     >
       <div className="flex items-start gap-3" data-testid="lesson-card">
-        <StatusIcon status={progressStatus} />
+        {showProgress ? <StatusIcon status={progressStatus} /> : null}
         <div className="min-w-0 flex-1">
           <p
             data-testid="lesson-card-title"

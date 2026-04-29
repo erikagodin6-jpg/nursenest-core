@@ -18,10 +18,11 @@ export const DEFAULT_SAFE_PRACTICE_TEST_CONFIG: PracticeTestConfigJson = {
   timeLimitSec: null,
 };
 
-const selectionModeZ = z.enum(["random", "targeted", "weak", "missed", "cat"]);
+const selectionModeZ = z.enum(["random", "targeted", "weak", "missed", "starred", "cat"]);
 const linearDeliveryZ = z.enum(["practice", "exam"]);
 const linearRationaleVisibilityZ = z.enum(["after_each", "end_of_exam"]);
-const catSelectionBasisZ = z.enum(["random", "targeted", "weak", "missed"]);
+const catSelectionBasisZ = z.enum(["random", "targeted", "weak", "missed", "starred"]);
+const catPoolSelectionStrictnessZ = z.enum(["soft", "strict"]);
 const catPresentationZ = z.enum(["practice", "exam_simulation"]);
 const catFeedbackZ = z.enum(["study", "test"]);
 const catAdaptiveSessionTypeZ = z.enum(["cat", "practice"]);
@@ -54,6 +55,7 @@ const practiceTestConfigSchema = z.object({
   catWeakPriorityByCanonical: z.record(z.coerce.number()).optional(),
   catPresentationMode: catPresentationZ.optional(),
   catExamFeedbackMode: catFeedbackZ.optional(),
+  catPoolSelectionStrictness: catPoolSelectionStrictnessZ.optional(),
   catAdaptiveSessionType: catAdaptiveSessionTypeZ.optional(),
   catExamConfigId: z.union([z.null(), z.string()]).optional(),
   sessionPickSalt: z.string().min(8).max(128).optional(),
@@ -65,7 +67,7 @@ function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
   const o = raw as Record<string, unknown>;
   const out: Partial<PracticeTestConfigJson> = {};
   const sm = o.selectionMode;
-  if (sm === "random" || sm === "targeted" || sm === "weak" || sm === "missed" || sm === "cat") {
+  if (sm === "random" || sm === "targeted" || sm === "weak" || sm === "missed" || sm === "starred" || sm === "cat") {
     out.selectionMode = sm;
   }
   if (typeof o.pathwayId === "string" && o.pathwayId.length > 0) out.pathwayId = o.pathwayId;
@@ -88,8 +90,12 @@ function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
     }
   }
   const basis = o.catSelectionBasis;
-  if (basis === "random" || basis === "targeted" || basis === "weak" || basis === "missed") {
+  if (basis === "random" || basis === "targeted" || basis === "weak" || basis === "missed" || basis === "starred") {
     out.catSelectionBasis = basis;
+  }
+  const pss = o.catPoolSelectionStrictness;
+  if (pss === "soft" || pss === "strict") {
+    out.catPoolSelectionStrictness = pss;
   }
   const pm = o.catPresentationMode;
   if (pm === "practice" || pm === "exam_simulation") out.catPresentationMode = pm;

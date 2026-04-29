@@ -7,6 +7,7 @@ export const PRACTICE_TEST_CAT_CREATE_CODE = {
   pathway_not_entitled: "pathway_not_entitled",
   cat_weak_areas_empty: "cat_weak_areas_empty",
   cat_missed_items_empty: "cat_missed_items_empty",
+  cat_starred_items_empty: "cat_starred_items_empty",
   cat_pool_invalid: "cat_pool_invalid",
   cat_pick_failed: "cat_pick_failed",
   /** No CAT-eligible pathway for this subscription (nothing to scope the session to). */

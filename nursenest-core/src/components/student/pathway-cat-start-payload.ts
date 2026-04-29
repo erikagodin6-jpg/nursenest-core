@@ -82,7 +82,13 @@ export function buildCatExamSimulationCreatePayload(pathwayMeta: PracticeTestPat
   };
 }
 
-export type PracticeAdaptiveSelectionBasis = "random" | "weak" | "missed";
+export type PracticeAdaptiveSelectionBasis = "random" | "weak" | "missed" | "starred";
+
+/**
+ * Controls server-side pool widening when filters produce too few CAT-eligible items.
+ * Practice hub defaults to `"soft"`; exam simulation always uses `"strict"` on the server.
+ */
+export type PracticeAdaptiveSelectionStrictness = "soft" | "strict";
 
 export type PracticeAdaptiveCreatePayload = {
   title: string;
@@ -97,6 +103,7 @@ export type PracticeAdaptiveCreatePayload = {
   pathwayId: string;
   timedMode: false;
   timeLimitSec: 0;
+  selectionStrictness: PracticeAdaptiveSelectionStrictness;
 };
 
 /**
@@ -106,14 +113,16 @@ export type PracticeAdaptiveCreatePayload = {
  * - `catPresentationMode: "practice"` — not timed, shorter runs
  * - `catExamFeedbackMode: "study"` — rationale shown after each question
  * - `timedMode: false` — no countdown timer
- * - `topicNames` — narrows the question pool to selected body systems (empty = all)
- * - `catSelectionBasis` — "weak" or "missed" targets specific weaknesses; "random" = standard adaptive
+ * - `topicNames` — biases the pool toward selected body systems (empty = all systems)
+ * - `catSelectionBasis` — weak / missed / starred prioritization (combined with topics when set)
+ * - `selectionStrictness` — `"soft"` widens the pool server-side when the narrow slice is too small
  */
 export function buildPracticeAdaptiveCreatePayload(opts: {
   pathwayId: string;
   topicNames: string[];
   catSelectionBasis: PracticeAdaptiveSelectionBasis;
   questionCount: number;
+  selectionStrictness?: PracticeAdaptiveSelectionStrictness;
 }): PracticeAdaptiveCreatePayload {
   return {
     title: "Adaptive Practice Session",
@@ -128,7 +137,22 @@ export function buildPracticeAdaptiveCreatePayload(opts: {
     pathwayId: opts.pathwayId,
     timedMode: false,
     timeLimitSec: 0,
+    selectionStrictness: opts.selectionStrictness ?? "soft",
   };
+}
+
+/**
+ * Returns true if the API error code indicates the question pool was too small
+ * for the requested filter combination.  Used by the soft-filter fallback in
+ * `PracticeQuestionSessionSetupClient`.
+ */
+export function isPracticePoolExhaustedCode(code: string | null | undefined): boolean {
+  return (
+    code === "cat_pool_invalid" ||
+    code === "cat_weak_areas_empty" ||
+    code === "cat_missed_items_empty" ||
+    code === "cat_starred_items_empty"
+  );
 }
 
 export function resolveCatStartUiState(input: {

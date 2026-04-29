@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { REVIEW_REQUIRED } from "@/lib/taxonomy/taxonomy";
 import { CategoryProgressBar } from "@/components/pathway-lessons/category-progress-bar";
+import { aggregatePathwayLessonProgress } from "@/components/pathway-lessons/pathway-progress-aggregation";
 import {
   lessonDifficultyLabel,
   lessonEstimatedDurationLabel,
@@ -120,12 +121,9 @@ export function LessonSystemCard({
     (lesson) => pathwayLessonMarketingHubVerifiedCardHref(lessonsBasePath, lesson) != null,
   );
   const displayCount = linkableLessons.length;
-  const completedCount = showProgress
-    ? linkableLessons.filter((lesson) => progressMap[lesson.slug] === "completed").length
-    : 0;
-  const inProgressCount = showProgress
-    ? linkableLessons.filter((lesson) => progressMap[lesson.slug] === "in_progress").length
-    : 0;
+  const { completedCount, inProgressCount } = showProgress
+    ? aggregatePathwayLessonProgress(linkableLessons, progressMap)
+    : { completedCount: 0, inProgressCount: 0 };
   const previewLessons = linkableLessons.slice(0, LESSON_SYSTEM_PREVIEW);
   const hiddenLessonCount = Math.max(0, linkableLessons.length - previewLessons.length);
 
@@ -160,11 +158,13 @@ export function LessonSystemCard({
               )}
             </span>
           </div>
-          <CategoryProgressBar
-            completedCount={completedCount}
-            inProgressCount={inProgressCount}
-            totalCount={Math.max(displayCount, 1)}
-          />
+          {showProgress ? (
+            <CategoryProgressBar
+              completedCount={completedCount}
+              inProgressCount={inProgressCount}
+              totalCount={Math.max(displayCount, 1)}
+            />
+          ) : null}
         </div>
       </div>
 
@@ -179,6 +179,7 @@ export function LessonSystemCard({
               href={href}
               title={lesson.title}
               progressStatus={showProgress ? (progressMap[lesson.slug] ?? "not_started") : "not_started"}
+              showProgress={showProgress}
               yieldBadgeLabel={pathwayLessonYieldLabel(lesson.activeExamMeta?.yieldLevel)}
               durationLabel={lessonEstimatedDurationLabel(lesson)}
               difficulty={lessonDifficultyLabel(lesson)}

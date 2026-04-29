@@ -17,7 +17,8 @@ Validate against the live catalog merge:
 npm run verify:lesson-indexes
 ```
 
-Runtime always falls back to the in-process normalization cache when files are missing or invalid.
+That command **fails** when no `*.json` files exist unless `NN_SKIP_LESSON_INDEX_BUILD` is set (same as production
+gates). Runtime still falls back to the in-process normalization cache when files are missing or invalid at serve time.
 
 **Disk location:** JSON is read from `src/content/pathway-lessons/generated-indexes/{pathwayId}.json` under the
 `nursenest-core` package root. For tests or alternate output dirs, set `NN_PATHWAY_LESSON_INDEX_DIR` to an absolute

@@ -121,7 +121,9 @@ export function PracticeTestsHubClient({
   const hasWeakFocus =
     selectionMode === "weak" ||
     selectionMode === "missed" ||
-    (selectionMode === "cat" && (catSelectionBasis === "weak" || catSelectionBasis === "missed"));
+    selectionMode === "starred" ||
+    (selectionMode === "cat" &&
+      (catSelectionBasis === "weak" || catSelectionBasis === "missed" || catSelectionBasis === "starred"));
   const hubPriority = resolveInteractionPriority({
     hasResume: hasInProgressActivity,
     hasWeakFocus,

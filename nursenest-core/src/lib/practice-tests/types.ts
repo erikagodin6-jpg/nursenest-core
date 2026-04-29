@@ -44,7 +44,7 @@ export type CatStudyFeedbackPayload = {
   layers?: CatStudyFeedbackLayers;
 };
 
-export type PracticeTestSelectionMode = "random" | "targeted" | "weak" | "missed" | "cat";
+export type PracticeTestSelectionMode = "random" | "targeted" | "weak" | "missed" | "starred" | "cat";
 
 /** Serialized pathway row for the practice-test builder (server → client). */
 export type PracticeTestPathwayOption = {
@@ -69,7 +69,10 @@ export type PracticeTestPathwayClientShell = Pick<
 >;
 
 /** Pool basis when `selectionMode === "cat"` (how items are filtered before adaptive selection). */
-export type CatSelectionBasis = "random" | "targeted" | "weak" | "missed";
+export type CatSelectionBasis = "random" | "targeted" | "weak" | "missed" | "starred";
+
+/** Practice hub: bias/narrow pools without hard-failing when filters are too tight (server-side expansion). */
+export type CatPoolSelectionStrictness = "soft" | "strict";
 export type CatEngineType = "CAT" | "SIMULATION";
 export type CatEngineMode = "production_ready" | "beta" | "mini_adaptive" | "simulation" | "unavailable";
 
@@ -113,6 +116,8 @@ export type PracticeTestConfigJson = {
   catWeakPriorityByCanonical?: Record<string, number>;
   /** Practice CAT vs NCLEX-style exam simulation (bounds, copy, pool validation). */
   catPresentationMode?: CatPresentationMode;
+  /** When `soft`, pathway pool may widen if filtered eligible items fall below engine minimums. */
+  catPoolSelectionStrictness?: CatPoolSelectionStrictness;
   /**
    * Instant rationales vs end-only explanations for CAT (`selectionMode === "cat"`).
    * Exam simulation coerces to `test` on the server.

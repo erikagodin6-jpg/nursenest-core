@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { filterPoolRemovingRecentQuestions } from "@/lib/practice-tests/recent-practice-question-ids";
+import { filterPoolRemovingRecentQuestions } from "@/lib/practice-tests/recent-practice-question-ids-filter";
 
 describe("filterPoolRemovingRecentQuestions", () => {
   const pool = Array.from({ length: 20 }, (_, i) => ({ id: `id-${i}` }));

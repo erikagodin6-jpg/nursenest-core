@@ -10,26 +10,11 @@ import {
   alignLessonPathForAudienceCountry,
   isAllowedBlogInternalHref,
 } from "@/lib/blog/blog-internal-lesson-links";
+import { parseMarketingLessonDetailPath } from "@/lib/blog/blog-marketing-lesson-detail-path";
 import { defaultPathwayLessonContentLocaleForExamHubRoute } from "@/lib/lessons/pathway-lesson-locale";
-import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 
-const LESSON_DETAIL =
-  /^\/(us|canada)\/([^/]+)\/([^/]+)\/lessons\/([^/]+)\/?$/i;
-
-export function parseMarketingLessonDetailPath(path: string): {
-  countrySlug: string;
-  roleTrack: string;
-  examSegment: string;
-  lessonSlug: string;
-} | null {
-  const p = path.trim().split("?")[0]?.split("#")[0] ?? "";
-  const m = p.match(LESSON_DETAIL);
-  if (!m) return null;
-  const [, countrySlug, roleTrack, examSegment, lessonSlug] = m;
-  if (!lessonSlug || lessonSlug === "topics") return null;
-  return { countrySlug, roleTrack, examSegment, lessonSlug };
-}
+export { parseMarketingLessonDetailPath } from "@/lib/blog/blog-marketing-lesson-detail-path";
 
 export async function pathwayLessonExistsAtMarketingPath(path: string): Promise<boolean> {
   if (!isDatabaseUrlConfigured()) return true;
@@ -42,6 +27,7 @@ export async function pathwayLessonExistsAtMarketingPath(path: string): Promise<
   );
   if (!pathway) return false;
   const locale = defaultPathwayLessonContentLocaleForExamHubRoute();
+  const { prisma } = await import("@/lib/db");
   const row = await prisma.pathwayLesson.findFirst({
     where: {
       pathwayId: pathway.id,

@@ -165,6 +165,8 @@ export const BLOG_LIST_PAGE_SIZE = 50;
 
 /** Matches `import-pathophysiology-nursing-blog-seeds.mts` upserts. */
 export const PATHOPHYSIOLOGY_SEED_LEGACY_SOURCE = "pathophysiology-nursing-blog-seed" as const;
+/** Matches `scripts/blog/seed-long-tail-patho-blog-posts.mts` published rows. */
+export const PATHOPHYSIOLOGY_LONG_TAIL_200_LEGACY_SOURCE = "pathophysiology-long-tail-200-seed" as const;
 /** Primary tag on seeded pathophysiology posts; powers `/blog/tag/pathophysiology`. */
 export const PATHOPHYSIOLOGY_HUB_PRIMARY_TAG = "pathophysiology" as const;
 const PATHOPHYSIOLOGY_HUB_DEFAULT_TAKE = 12;
@@ -199,6 +201,7 @@ export async function getPathophysiologyBlogHubPosts(take: number = PATHOPHYSIOL
       {
         OR: [
           { legacySource: PATHOPHYSIOLOGY_SEED_LEGACY_SOURCE },
+          { legacySource: PATHOPHYSIOLOGY_LONG_TAIL_200_LEGACY_SOURCE },
           { slug: { startsWith: "pp-" } },
           { tags: { has: PATHOPHYSIOLOGY_HUB_PRIMARY_TAG } },
         ],

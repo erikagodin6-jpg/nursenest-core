@@ -1,12 +1,19 @@
 import assert from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
-import { BlogImageStatus, BlogPostStatus, BlogPostTemplate, CountryCode } from "@prisma/client";
-import { prisma } from "@/lib/db";
+import { BlogImageStatus, BlogPostStatus, BlogPostTemplate, CountryCode, type PrismaClient } from "@prisma/client";
 import {
   BLOG_ARTICLE_MIN_WORDS,
   BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH,
 } from "@/lib/blog/blog-word-count";
 import { validateBlogPrePublish, type BlogPostPrePublishRow } from "@/lib/blog/blog-pre-publish-validation";
+
+/** In-memory Prisma stub so this suite runs under `tsx --test` without importing `server-only` `@/lib/db`. */
+let slugUniqueFindFirstImpl: () => Promise<null> = async () => null;
+const testPrisma = {
+  blogPost: {
+    findFirst: async (..._args: unknown[]) => slugUniqueFindFirstImpl(),
+  },
+} as unknown as PrismaClient;
 
 function longWords(n: number): string {
   return `<p>${Array.from({ length: n }, () => "term").join(" ")}</p>`;
@@ -99,20 +106,11 @@ function baseRow(overrides: Partial<BlogPostPrePublishRow> = {}): BlogPostPrePub
 }
 
 afterEach(() => {
-  // restore findFirst if a test replaced it
-  if (findFirstRestore) {
-    prisma.blogPost.findFirst = findFirstRestore;
-    findFirstRestore = null;
-  }
+  slugUniqueFindFirstImpl = async () => null;
 });
 
-let findFirstRestore: typeof prisma.blogPost.findFirst | null = null;
-
 function stubSlugUniqueCheck() {
-  if (!findFirstRestore) {
-    findFirstRestore = prisma.blogPost.findFirst;
-  }
-  prisma.blogPost.findFirst = (async () => null) as typeof prisma.blogPost.findFirst;
+  slugUniqueFindFirstImpl = async () => null;
 }
 
 describe("validateBlogPrePublish + generated draft quality", () => {
@@ -121,7 +119,7 @@ describe("validateBlogPrePublish + generated draft quality", () => {
     const row = baseRow({
       body: `${longWords(200)}<h2>Pathophysiology</h2><p>x</p><h2>Nursing implications</h2><p>x</p>`,
     });
-    const res = await validateBlogPrePublish(row, row.id);
+    const res = await validateBlogPrePublish(row, row.id, { prisma: testPrisma });
     assert.equal(res.okToPublish, false);
     assert.ok(res.blocking.some((i) => i.id === "body_word_count"));
   });
@@ -133,7 +131,7 @@ describe("validateBlogPrePublish + generated draft quality", () => {
     const row = baseRow({
       body: `${longWords(between)}<h2>Pathophysiology</h2><p>depth</p><h2>Nursing implications</h2><p>depth</p>`,
     });
-    const res = await validateBlogPrePublish(row, row.id);
+    const res = await validateBlogPrePublish(row, row.id, { prisma: testPrisma });
     assert.equal(res.okToPublish, false);
     assert.ok(res.blocking.some((i) => i.id === "body_word_count"));
     assert.ok(
@@ -145,7 +143,7 @@ describe("validateBlogPrePublish + generated draft quality", () => {
   it("blocks when slug is not kebab-case", async () => {
     stubSlugUniqueCheck();
     const row = baseRow({ slug: "Invalid Uppercase Slug" });
-    const res = await validateBlogPrePublish(row, row.id);
+    const res = await validateBlogPrePublish(row, row.id, { prisma: testPrisma });
     assert.equal(res.okToPublish, false);
     assert.ok(res.blocking.some((i) => i.id === "slug"));
   });
@@ -155,7 +153,7 @@ describe("validateBlogPrePublish + generated draft quality", () => {
     const row = baseRow({
       body: `${longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 20)}<h2>Pathophysiology</h2><p>depth</p>`,
     });
-    const res = await validateBlogPrePublish(row, row.id);
+    const res = await validateBlogPrePublish(row, row.id, { prisma: testPrisma });
     assert.equal(res.okToPublish, false);
     assert.ok(res.blocking.some((i) => i.id === "content_nursing_implications"));
   });

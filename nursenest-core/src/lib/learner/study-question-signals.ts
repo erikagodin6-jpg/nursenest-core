@@ -1,5 +1,6 @@
 import "server-only";
 
+import { LearnerNoteScope } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import type { PracticeTestResultsJson } from "@/lib/practice-tests/types";
 
@@ -49,4 +50,33 @@ export async function loadMissedQuestionSignals(userId: string): Promise<Map<str
 export async function loadMissedQuestionIdsForPoolFilter(userId: string, cap = 200): Promise<string[]> {
   const m = await loadMissedQuestionSignals(userId);
   return [...m.keys()].slice(0, cap);
+}
+
+const SAVED_RATIONALE_PREFIX = "rationale:";
+
+/**
+ * Question ids the learner flagged via "Save this rationale" (LearnerNote scope QUESTION_BANK).
+ * Used for adaptive practice "Starred / saved for review" prioritization with soft fallback.
+ */
+export async function loadSavedRationaleQuestionIdsForPoolFilter(userId: string, cap = 200): Promise<string[]> {
+  const rows = await prisma.learnerNote.findMany({
+    where: {
+      userId,
+      scope: LearnerNoteScope.QUESTION_BANK,
+      contextId: { startsWith: SAVED_RATIONALE_PREFIX },
+    },
+    select: { contextId: true },
+    orderBy: { updatedAt: "desc" },
+    take: cap + 40,
+  });
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const r of rows) {
+    const id = r.contextId.slice(SAVED_RATIONALE_PREFIX.length).trim();
+    if (id.length < 4 || seen.has(id)) continue;
+    seen.add(id);
+    out.push(id);
+    if (out.length >= cap) break;
+  }
+  return out;
 }
