@@ -23,6 +23,21 @@ const linearDeliveryZ = z.enum(["practice", "exam"]);
 const linearRationaleVisibilityZ = z.enum(["after_each", "end_of_exam"]);
 const catSelectionBasisZ = z.enum(["random", "targeted", "weak", "missed", "starred"]);
 const catPoolSelectionStrictnessZ = z.enum(["soft", "strict"]);
+const catSelectionExpansionTierZ = z.enum(["exact", "soft", "broad"]);
+const catSelectionFilterBlockZ = z.object({
+  topicNames: z.array(z.string()).default([]),
+  catSelectionBasis: catSelectionBasisZ,
+  poolRequestStrictness: catPoolSelectionStrictnessZ,
+});
+const catSelectionAppliedMetaZ = z.object({
+  selectionStrictness: catSelectionExpansionTierZ,
+  requestedFilters: catSelectionFilterBlockZ,
+  appliedFilters: catSelectionFilterBlockZ,
+  matchedCountBeforeExpansion: z.coerce.number().int().min(0),
+  finalPoolSize: z.coerce.number().int().min(0),
+  candidatePoolSize: z.coerce.number().int().min(0).optional(),
+  fallbackReason: z.string().max(600).optional(),
+});
 const catPresentationZ = z.enum(["practice", "exam_simulation"]);
 const catFeedbackZ = z.enum(["study", "test"]);
 const catAdaptiveSessionTypeZ = z.enum(["cat", "practice"]);
@@ -56,6 +71,7 @@ const practiceTestConfigSchema = z.object({
   catPresentationMode: catPresentationZ.optional(),
   catExamFeedbackMode: catFeedbackZ.optional(),
   catPoolSelectionStrictness: catPoolSelectionStrictnessZ.optional(),
+  catSelectionAppliedMeta: catSelectionAppliedMetaZ.optional(),
   catAdaptiveSessionType: catAdaptiveSessionTypeZ.optional(),
   catExamConfigId: z.union([z.null(), z.string()]).optional(),
   sessionPickSalt: z.string().min(8).max(128).optional(),
@@ -108,6 +124,13 @@ function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
   const examCfg = o.catExamConfigId;
   if (examCfg === null) out.catExamConfigId = null;
   else if (typeof examCfg === "string" && examCfg.length > 0) out.catExamConfigId = examCfg.slice(0, 120);
+  const appliedMetaRaw = o.catSelectionAppliedMeta;
+  if (appliedMetaRaw && typeof appliedMetaRaw === "object" && !Array.isArray(appliedMetaRaw)) {
+    const m = catSelectionAppliedMetaZ.safeParse(appliedMetaRaw);
+    if (m.success) {
+      out.catSelectionAppliedMeta = m.data;
+    }
+  }
   return out;
 }
 

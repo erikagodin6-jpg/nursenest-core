@@ -93,7 +93,7 @@ export async function pickPracticeQuestionIds(
   }
 
   // Linear practice now reuses the same pathway-safe, rationale-complete CAT pool gates.
-  const pool = await fetchCatPracticePool(userId, entitlement, input);
+  const { pool } = await fetchCatPracticePool(userId, entitlement, input);
   if (pool.length < n) {
     return {
       ok: false,

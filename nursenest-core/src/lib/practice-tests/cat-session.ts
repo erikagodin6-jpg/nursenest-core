@@ -58,6 +58,7 @@ import {
 import { loadWeakTopicPracticePlan } from "@/lib/learner/topic-performance";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
+import { buildCatSelectionAppliedMeta } from "@/lib/practice-tests/cat-selection-applied-meta";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import { normalizedAdaptiveCatRunBounds, practiceCatBounds } from "@/lib/practice-tests/cat-practice-config";
 import { configFromInput, type PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
@@ -303,6 +304,8 @@ export async function createCatPracticeTestPayload(
   const pathwayReadiness = await readinessConfigForPathwayId(pathway?.id ?? input.pathwayId ?? null);
 
   const poolStrictness = input.selectionStrictness ?? "strict";
+  /** Original POST `catSelectionBasis` before soft coercion / exam-simulation normalization. */
+  const requestedCatBasisForMeta: CatSelectionBasis = catBasis;
   let poolBasis: CatSelectionBasis = sim ? "random" : catBasis;
 
   const weakPlan = sim
@@ -377,7 +380,7 @@ export async function createCatPracticeTestPayload(
     selectionStrictness: poolStrictness,
   };
 
-  const pool = await fetchCatPracticePool(userId, entitlement, poolInput);
+  const { pool, buildMeta } = await fetchCatPracticePool(userId, entitlement, poolInput);
   const pathwayIdForRecent = requestedPathwayId ?? input.pathwayId ?? null;
   const recentPack = await recentPracticeQuestionIdsForPathway({
     userId,
@@ -387,6 +390,17 @@ export async function createCatPracticeTestPayload(
   });
   const recentFiltered = filterPoolRemovingRecentQuestions(pool, recentPack.ids);
   const poolForSelection = recentFiltered.pool;
+  const topicNamesForMeta = [...(input.topicNames ?? [])];
+  const catSelectionAppliedMeta = buildCatSelectionAppliedMeta({
+    sim,
+    requestedCatBasis: requestedCatBasisForMeta,
+    appliedPoolBasis: poolBasis,
+    poolStrictness,
+    topicNames: topicNamesForMeta,
+    buildMeta,
+    finalPoolSize: pool.length,
+    candidatePoolSize: poolForSelection.length,
+  });
   let v = sim
     ? validateCatQuestionPool(pool, { minPoolSize: bounds.min })
     : validatePracticeCatPool(pool);
@@ -480,6 +494,7 @@ export async function createCatPracticeTestPayload(
       catExamConfigId: examCfg.id,
       sessionPickSalt,
       catPoolSelectionStrictness: poolStrictness,
+      catSelectionAppliedMeta,
     };
 
     return {
@@ -535,6 +550,7 @@ export async function createCatPracticeTestPayload(
       catExamConfigId: examCfg.id,
       sessionPickSalt,
       catPoolSelectionStrictness: poolStrictness,
+      catSelectionAppliedMeta,
     };
     return {
       ok: true,
@@ -600,6 +616,7 @@ export async function createCatPracticeTestPayload(
     catExamConfigId: examCfg.id,
     sessionPickSalt,
     catPoolSelectionStrictness: poolStrictness,
+    catSelectionAppliedMeta,
   };
 
   return {
@@ -682,7 +699,7 @@ async function catPoolAndSelectOpts(
       ? { sessionPickSalt: config.sessionPickSalt }
       : {}),
   };
-  const pool = await fetchCatPracticePool(userId, entitlement, pickInput);
+  const { pool } = await fetchCatPracticePool(userId, entitlement, pickInput);
   const recentPack = await recentPracticeQuestionIdsForPathway({
     userId,
     pathwayId: config.pathwayId ?? null,

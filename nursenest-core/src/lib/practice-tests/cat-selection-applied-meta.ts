@@ -37,6 +37,37 @@ export function buildCatSelectionAppliedMeta(input: {
   finalPoolSize: number;
   candidatePoolSize?: number;
 }): CatSelectionAppliedMeta {
+  const topicNames = [...input.topicNames];
+  const base = {
+    requestedFilters: {
+      topicNames,
+      catSelectionBasis: input.requestedCatBasis,
+      poolRequestStrictness: input.poolStrictness,
+    },
+    appliedFilters: {
+      topicNames,
+      catSelectionBasis: input.appliedPoolBasis,
+      poolRequestStrictness: input.poolStrictness,
+    },
+    matchedCountBeforeExpansion: input.buildMeta.strictCompleteRowCount,
+    finalPoolSize: input.finalPoolSize,
+    ...(typeof input.candidatePoolSize === "number" ? { candidatePoolSize: input.candidatePoolSize } : {}),
+  };
+
+  if (input.sim) {
+    const tier: CatSelectionExpansionTier = input.buildMeta.usedRelaxedFilters ? "broad" : "exact";
+    const parts: string[] = [];
+    if (input.buildMeta.usedRelaxedFilters) parts.push("relaxed_pathway_pool");
+    if (input.requestedCatBasis !== input.appliedPoolBasis) {
+      parts.push("exam_simulation_basis_random");
+    }
+    return {
+      selectionStrictness: tier,
+      ...base,
+      ...(parts.length > 0 ? { fallbackReason: parts.join("|") } : {}),
+    };
+  }
+
   const basisCoerced = input.requestedCatBasis !== input.appliedPoolBasis;
   const tier = expansionTier({
     usedRelaxedFilters: input.buildMeta.usedRelaxedFilters,
@@ -48,25 +79,10 @@ export function buildCatSelectionAppliedMeta(input: {
   }
   const bc = basisCoercionReason(input.requestedCatBasis, input.appliedPoolBasis);
   if (bc) parts.push(bc);
-  if (input.sim) {
-    parts.push("exam_simulation_strict_pool");
-  }
 
   return {
     selectionStrictness: tier,
-    requestedFilters: {
-      topicNames: [...input.topicNames],
-      catSelectionBasis: input.requestedCatBasis,
-      poolRequestStrictness: input.poolStrictness,
-    },
-    appliedFilters: {
-      topicNames: [...input.topicNames],
-      catSelectionBasis: input.appliedPoolBasis,
-      poolRequestStrictness: input.poolStrictness,
-    },
-    matchedCountBeforeExpansion: input.buildMeta.strictCompleteRowCount,
-    finalPoolSize: input.finalPoolSize,
-    ...(typeof input.candidatePoolSize === "number" ? { candidatePoolSize: input.candidatePoolSize } : {}),
+    ...base,
     ...(parts.length > 0 ? { fallbackReason: parts.join("|") } : {}),
   };
 }

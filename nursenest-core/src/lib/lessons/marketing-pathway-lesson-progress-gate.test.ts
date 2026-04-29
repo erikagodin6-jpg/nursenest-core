@@ -6,7 +6,7 @@ import {
   type MarketingPathwayLessonProgressSessionContext,
 } from "./marketing-pathway-lesson-progress-gate";
 
-describe("canShowPaidPathwayLessonProgress (RN → RPN/PN → NP → Allied parity gate)", () => {
+describe("canShowPaidPathwayLessonProgress (RN → RPN/PN → NP → Allied → New Grad parity gate)", () => {
   const noUser: MarketingPathwayLessonProgressSessionContext = {
     userId: "",
     learnerPath: null,
@@ -30,7 +30,7 @@ describe("canShowPaidPathwayLessonProgress (RN → RPN/PN → NP → Allied pari
     assert.equal(canShowPaidPathwayLessonProgress(ctx, pathway), false);
   });
 
-  it("is true for RN, RPN/PN, NP, and Allied pathway ids when access is on (country aligned) and NP learnerPath matches", () => {
+  it("is true for RN, RPN/PN, NP, Allied, and New Grad pathway ids when access is on (country aligned) and NP learnerPath matches", () => {
     const tiers = [
       { id: "us-rn-nclex-rn", learnerPath: null as string | null },
       { id: "ca-rn-nclex-rn", learnerPath: null },

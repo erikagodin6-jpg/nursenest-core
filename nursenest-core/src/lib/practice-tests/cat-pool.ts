@@ -230,13 +230,13 @@ export async function fetchCatPracticePool(
     if (input.selectionMode === "missed") {
       const missedIds = await loadMissedQuestionIdsForPoolFilter(userId, 200);
       if (missedIds.length === 0) {
-        return [];
+        return { pool: [], buildMeta: emptyMeta() };
       }
     }
     if (input.selectionMode === "starred") {
       const starredIds = await loadSavedRationaleQuestionIdsForPoolFilter(userId, 200);
       if (starredIds.length === 0) {
-        return [];
+        return { pool: [], buildMeta: emptyMeta() };
       }
     }
   }
@@ -244,21 +244,33 @@ export async function fetchCatPracticePool(
   const secondaryStrict = await buildSecondaryFilterParts(userId, entitlement, input, false);
   const whereStrict: Prisma.ExamQuestionWhereInput = { AND: [base, ...secondaryStrict] };
   let completeRows = await queryShuffledCompletePool(whereStrict, input);
+  const strictCount = completeRows.length;
+  let usedRelaxedFilters = false;
 
   if (strictness === "soft" && completeRows.length < CAT_SOFT_MIN_COMPLETE_ROWS) {
     const secondaryRelaxed = await buildSecondaryFilterParts(userId, entitlement, input, true);
     const whereRelaxed: Prisma.ExamQuestionWhereInput = { AND: [base, ...secondaryRelaxed] };
     completeRows = await queryShuffledCompletePool(whereRelaxed, input);
+    usedRelaxedFilters = true;
   }
 
-  return completeRows.map((r) => ({
-    id: r.id,
-    difficulty: typeof r.difficulty === "number" && Number.isFinite(r.difficulty) ? Math.round(r.difficulty) : 3,
-    bodySystem: r.bodySystem,
-    topic: r.topic,
-    nclexClientNeedsCategory: r.nclexClientNeedsCategory,
-    nclexClientNeedsSubcategory: r.nclexClientNeedsSubcategory,
-  }));
+  const buildMeta: CatPracticePoolBuildMeta = {
+    strictCompleteRowCount: strictCount,
+    usedRelaxedFilters,
+    finalCompleteRowCount: completeRows.length,
+  };
+
+  return {
+    pool: completeRows.map((r) => ({
+      id: r.id,
+      difficulty: typeof r.difficulty === "number" && Number.isFinite(r.difficulty) ? Math.round(r.difficulty) : 3,
+      bodySystem: r.bodySystem,
+      topic: r.topic,
+      nclexClientNeedsCategory: r.nclexClientNeedsCategory,
+      nclexClientNeedsSubcategory: r.nclexClientNeedsSubcategory,
+    })),
+    buildMeta,
+  };
 }
 
 export async function countCompleteCatPracticePool(
@@ -266,6 +278,6 @@ export async function countCompleteCatPracticePool(
   entitlement: AccessScope,
   input: PickQuestionsInput,
 ): Promise<number> {
-  const pool = await fetchCatPracticePool(userId, entitlement, input);
+  const { pool } = await fetchCatPracticePool(userId, entitlement, input);
   return pool.length;
 }
