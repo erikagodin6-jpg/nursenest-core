@@ -66,12 +66,17 @@ export function isNewGradLessonPathwayId(pathwayId: string): boolean {
   return pathwayId === "us-rn-new-grad-transition" || pathwayId.includes("new-grad");
 }
 
+function pathwayUsesCustomMarketingHubCategories(pathwayId: string): boolean {
+  const config = learningConfigForPathwayId(pathwayId);
+  return config.categories.some((category) => Boolean(category.slug));
+}
+
 export function pathwayMarketingHubCategories(pathwayId: string): MarketingHubCategoryDescriptor[] {
-  if (isNewGradLessonPathwayId(pathwayId)) {
+  if (pathwayUsesCustomMarketingHubCategories(pathwayId)) {
     return learningConfigForPathwayId(pathwayId).categories.map((category) => ({
       id: category.id,
-      label: category.title,
-      slug: genericSlug(category.title),
+      label: category.displayName ?? category.title,
+      slug: category.slug ?? genericSlug(category.displayName ?? category.title),
     }));
   }
   return LESSON_CATEGORIES.map((category) => ({
@@ -88,7 +93,7 @@ export function pathwayMarketingHubCategoryFromSegment(
 ): MarketingHubCategoryDescriptor | null {
   const raw = typeof segment === "string" ? segment.trim().toLowerCase() : "";
   if (!raw) return null;
-  if (!isNewGradLessonPathwayId(pathwayId)) {
+  if (!pathwayUsesCustomMarketingHubCategories(pathwayId)) {
     const legacy = lessonCategoryFromMarketingHubPathSegment(raw);
     return legacy
       ? { id: legacy, label: legacy, slug: marketingHubCategorySlugForCategory(legacy), legacyCategory: legacy }
@@ -105,7 +110,7 @@ export function displayCategoryForPathwayMarketingHubLesson(
   lesson: PathwayLessonRecord,
   pathwayId: string,
 ): MarketingHubCategoryDescriptor {
-  if (isNewGradLessonPathwayId(pathwayId)) {
+  if (pathwayUsesCustomMarketingHubCategories(pathwayId)) {
     const id = classifyLessonForHub(lesson, pathwayId);
     return (
       pathwayMarketingHubCategories(pathwayId).find((category) => category.id === id) ?? {
@@ -168,7 +173,7 @@ export function countMarketingHubLessonsByDisplayCategoryForPathway(pathwayId: s
 }
 
 export function countPathwayMarketingHubLessonsByCategoryForPathway(pathwayId: string): Map<string, number> {
-  if (!isNewGradLessonPathwayId(pathwayId)) {
+  if (!pathwayUsesCustomMarketingHubCategories(pathwayId)) {
     return new Map([...countMarketingHubLessonsByDisplayCategoryForPathway(pathwayId)].map(([category, count]) => [category, count]));
   }
   const m = new Map<string, number>();
@@ -192,7 +197,7 @@ export function filterPathwayMarketingHubLessonsByCategory(
   pathwayId: string,
   categoryId: string,
 ): PathwayLessonRecord[] {
-  if (!isNewGradLessonPathwayId(pathwayId)) {
+  if (!pathwayUsesCustomMarketingHubCategories(pathwayId)) {
     return filterMarketingHubLessonsByDisplayCategory(lessons, categoryId as LessonCategory);
   }
   return lessons.filter((lesson) => displayCategoryForPathwayMarketingHubLesson(lesson, pathwayId).id === categoryId);

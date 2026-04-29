@@ -95,50 +95,122 @@ function isNewGradPathwayId(pathwayId?: string | null): boolean {
   return pathwayId === "us-rn-new-grad-transition" || Boolean(pathwayId?.includes("new-grad"));
 }
 
+function isAlliedPathwayId(pathwayId?: string | null): boolean {
+  return pathwayId === "us-allied-core" || pathwayId === "ca-allied-core" || Boolean(pathwayId?.includes("allied"));
+}
+
+function classifyAlliedLessonForHub(lesson: PathwayLessonRecord): PathwayLessonSystemLabel {
+  const topic = `${lesson.topic ?? ""} ${lesson.topicSlug ?? ""}`.toLowerCase();
+  const title = `${lesson.title ?? ""} ${lesson.seoTitle ?? ""}`.toLowerCase();
+  const body = `${lesson.seoDescription ?? ""} ${lesson.bodySystem ?? ""} ${lesson.system ?? ""}`.toLowerCase();
+  const hay = `${topic} ${title} ${body}`;
+
+  if (/\b(mri|magnetic resonance)\b/.test(hay)) return "mri-technologist";
+  if (/\b(ct|computed tomography)\b/.test(hay)) return "ct-technologist";
+  if (/\b(ultrasound|sonograph|sonography)\b/.test(hay)) return "sonography";
+  if (/\b(nuclear medicine|radiopharm)\b/.test(hay)) return "nuclear-medicine";
+  if (/\b(x-ray|xray|radiologic|imaging)\b/.test(hay)) return "radiologic-technology";
+
+  if (/\b(perfusion|cardiopulmonary bypass)\b/.test(hay)) return "perfusionist";
+  if (/\b(ecg|ekg|electrocardi)\b/.test(hay)) return "ecg-tech";
+  if (/\b(cardiology|telemetry|rhythm)\b/.test(hay)) return "cardiology-tech";
+
+  if (/\b(respiratory|airway|ventilat|gas exchange)\b/.test(hay)) return "respiratory-therapy";
+  if (/\b(anesthesia|peri-anesthesia)\b/.test(hay)) return "anesthesia-assistant";
+  if (/\b(surgical assistant|or tech|sterile field|operating room)\b/.test(hay)) return "surgical-assistant";
+  if (/\b(orthopedic|cast|splint|traction)\b/.test(hay)) return "orthopedic-tech";
+  if (/\b(dialysis)\b/.test(hay)) return "dialysis-tech";
+
+  if (/\b(lab values|laboratory|specimen|quality control|hematology analyzer|chemistry analyzer)\b/.test(hay)) {
+    return "mlt";
+  }
+  if (/\b(phlebotom|venipuncture|blood draw)\b/.test(hay)) return "phlebotomy";
+  if (/\b(lab assistant|specimen handling|collection)\b/.test(hay)) return "mlt-assistant";
+
+  if (/\b(pharmacology|medication|dispens|dose|high-alert)\b/.test(hay)) return "pharmacy-tech";
+  if (/\b(pharmacist|med reconciliation|verification)\b/.test(hay)) return "pharmacist";
+
+  if (/\b(diet|nutrition|malnutrition|tube feed)\b/.test(hay)) return "dietitian";
+  if (/\b(social work|discharge planning|community resources|psychosocial|patient communication|teamwork|ethics|documentation)\b/.test(hay)) {
+    return "social-work";
+  }
+  if (/\b(paramedic|prehospital|emergency response|triage|scene safety|vital signs|patient assessment)\b/.test(hay)) {
+    return "paramedic";
+  }
+  if (/\b(mental health therapist|counselor|counselling|counseling|therapy session|behavioral health)\b/.test(hay)) {
+    return "mental-health-therapist";
+  }
+  if (/\b(audiolog|hearing|audiometry)\b/.test(hay)) return "audiology";
+
+  if (/\b(speech|swallow|aphasia|dysphagia|language)\b/.test(hay)) return "speech-language-pathology";
+  if (/\b(occupational therapy|adl|activity analysis|adaptive equipment)\b/.test(hay)) return "occupational-therapy";
+  if (/\b(physiotherap|physical therapy|gait|mobility|range of motion|anatomy|physiology|rehab)\b/.test(hay)) {
+    return "physiotherapy";
+  }
+  if (/\b(recreation therap|therapeutic recreation|leisure)\b/.test(hay)) return "recreation-therapy";
+
+  return REVIEW_REQUIRED;
+}
+
 function classifyNewGradLessonForHub(lesson: PathwayLessonRecord): PathwayLessonSystemLabel {
   const topic = `${lesson.topic ?? ""} ${lesson.topicSlug ?? ""}`.toLowerCase();
   const title = `${lesson.title ?? ""} ${lesson.seoTitle ?? ""}`.toLowerCase();
   const body = `${lesson.seoDescription ?? ""} ${lesson.bodySystem ?? ""} ${lesson.system ?? ""}`.toLowerCase();
   const hay = `${topic} ${title} ${body}`;
 
-  if (/\b(resume|cover letter|interview|application|applications|job offer|reference|hiring)\b/.test(hay)) {
-    return "job_applications_interviews";
+  if (/\b(cover letter|cover letters|resume|resumes|cv)\b/.test(hay)) {
+    return "resumes-cover-letters";
+  }
+  if (/\b(interview|interviews|hiring manager|behavioral question|mock interview)\b/.test(hay)) {
+    return "interviews";
+  }
+  if (/\b(application|applications|job offer|reference|hiring|job search)\b/.test(hay)) {
+    return "job-applications";
   }
   if (/\b(choose|choosing|unit fit|floor|specialty|med[\s-]?surg vs|hospital unit|which unit)\b/.test(hay)) {
-    return "choosing_floor_unit";
+    return "choosing-a-floor";
   }
   if (/\b(orientation|preceptor|preceptorship|preceptee|feedback|first year|first-year|surviving)\b/.test(hay)) {
-    return "orientation_preceptorship";
+    return "orientation-preceptorship";
   }
 
-  if (/\b(emergency department|\bed\b|triage|resuscitation|trauma bay)\b/.test(hay)) return "emergency_department";
-  if (/\b(icu|stepdown|critical care|ventilat|vasopressor|telemetry alarm|competing alarms)\b/.test(hay)) return "icu_stepdown";
+  if (/\b(cardiac icu|cvicu|cicu|post[-\s]?cath icu)\b/.test(hay)) return "cardiac-icu";
+  if (/\b(neuro icu|neuroicu|neurological icu)\b/.test(hay)) return "neuro-icu";
+  if (/\b(pediatric icu|picu)\b/.test(hay)) return "pediatric-icu";
+  if (/\b(neonatal icu|nicu)\b/.test(hay)) return "nicu";
+  if (/\b(stepdown|progressive care|pcu|telemetry alarm|competing alarms)\b/.test(hay)) return "stepdown";
+  if (/\b(emergency department|\bed\b|triage|resuscitation|trauma bay|trauma)\b/.test(hay)) return "emergency-trauma";
+  if (/\b(icu|critical care|ventilat|vasopressor)\b/.test(hay)) return "icu";
   if (/\b(pediatric|child|children|adolescent|febrile infant)\b/.test(hay)) return "pediatrics";
-  if (/\b(labou?r|delivery|fetal|fhr|contraction|intrapartum)\b/.test(hay)) return "labour_delivery";
+  if (/\b(labou?r|delivery|fetal|fhr|contraction|intrapartum)\b/.test(hay)) return "labour-delivery";
   if (/\b(postpartum|newborn|breastfeed|maternal)\b/.test(hay)) return "postpartum";
-  if (/\b(mental health|psychiatric|suicide|behavioral|de-?escalat|confrontational|aggressive)\b/.test(hay)) return "mental_health";
-  if (/\b(long[-\s]?term care|\bltc\b|resident|nursing home)\b/.test(hay)) return "long_term_care";
-  if (/\b(community|home health|public health|clinic|follow-up)\b/.test(hay)) return "community_health";
-  if (/\b(operating room|pacu|perioperative|post-?op|postoperative|surgical)\b/.test(hay)) return "operating_room_pacu";
-  if (/\b(oncology|chemo|neutropen|cancer)\b/.test(hay)) return "oncology";
+  if (/\b(mental health|psychiatric|suicide|behavioral|de-?escalat|confrontational|aggressive)\b/.test(hay)) return "mental-health";
+  if (/\b(long[-\s]?term care|\bltc\b|resident|nursing home)\b/.test(hay)) return "ltc";
+  if (/\b(public health)\b/.test(hay)) return "public-health";
+  if (/\b(home health|home care)\b/.test(hay)) return "home-care";
+  if (/\b(clinic|outpatient|ambulatory)\b/.test(hay)) return "clinic";
+  if (/\b(community|follow-up)\b/.test(hay)) return "community";
+  if (/\b(palliative|hospice|comfort care|end-of-life)\b/.test(hay)) return "palliative-care";
+  if (/\b(rehab|rehabilitation|snf rehab)\b/.test(hay)) return "rehab";
+  if (/\b(operating room|perioperative)\b/.test(hay)) return "or";
+  if (/\b(pacu|post-?anesthesia|post-?op|postoperative)\b/.test(hay)) return "pacu";
+  if (/\b(general surgery|surgical floor|surgery service)\b/.test(hay)) return "surgery";
+  if (/\b(oncology|chemo|neutropen|cancer|hematology|hem[-\s]?onc)\b/.test(hay)) return "hem-onc";
   if (/\b(cardiology|cardiac|heart failure|chest pain|telemetry|rhythm|stemi|acs)\b/.test(hay)) return "cardiology";
-  if (/\b(nephrology|dialysis|renal|kidney|electrolyte|fluid balance)\b/.test(hay)) return "nephrology_dialysis";
-  if (/\b(neurology|neuro|stroke|seizure|mental status|confusion)\b/.test(hay)) return "neurology";
+  if (/\b(dialysis)\b/.test(hay)) return "dialysis";
+  if (/\b(nephrology|renal|kidney|electrolyte|fluid balance)\b/.test(hay)) return "renal";
 
   if (/\b(chart\w*|document\w*|assessment\w*|handoff|report|receiving report|shift report)\b/.test(hay)) {
-    return "assessments_documentation";
+    return "assessments-documentation";
   }
   if (/\b(delegat\w*|cna|pct|aide|unlicensed|charge nurse|assignment|priorit\w*|acuity|patient load|task batching|time management|rounding)\b/.test(hay)) {
-    return "prioritization_delegation";
+    return "prioritization-delegation";
   }
-  if (/\b(communication|communicat\w*|sbar|physician|provider|family|families|huddle|speaking up|asking for help|clinical concern|difficult conversation)\b/.test(hay)) {
-    return "communication_providers_families";
-  }
-  if (/\b(safety|emergency|rapid response|decline|deteriorat\w*|unstable|alarm\w*|escalat\w*|abcs?|short-staffed)\b/.test(hay)) {
-    return "safety_emergencies_escalation";
+  if (/\b(communication|communicat\w*|sbar|physician|provider|family|families|huddle|speaking up|asking for help|clinical concern|difficult conversation|rapid response|deteriorat\w*|unstable|alarm\w*|escalat\w*|abcs?|short-staffed)\b/.test(hay)) {
+    return "communication-escalation";
   }
 
-  return "medical_surgical_nursing";
+  return "med-surg";
 }
 
 /**
@@ -153,13 +225,23 @@ export function classifyLessonForHub(
   if (isNewGradPathwayId(pathwayId)) {
     return classifyNewGradLessonForHub(lesson);
   }
+  if (isAlliedPathwayId(pathwayId)) {
+    return classifyAlliedLessonForHub(lesson);
+  }
   const known = knownHubCategoryIds(pathwayId);
   const tryLabel = (raw: string | null | undefined): PathwayLessonSystemLabel | null => {
     const t = raw?.trim();
     if (!t) return null;
-    const directHubCategory = t.toLowerCase().replace(/[\s/-]+/g, "_");
-    if (directHubCategory !== REVIEW_REQUIRED.toLowerCase() && known.has(directHubCategory)) {
-      return directHubCategory;
+    const lowered = t.toLowerCase();
+    const candidateIds = [
+      lowered,
+      lowered.replace(/[\s/_]+/g, "-"),
+      lowered.replace(/[\s/-]+/g, "_"),
+    ];
+    for (const candidate of candidateIds) {
+      if (candidate !== REVIEW_REQUIRED.toLowerCase() && known.has(candidate)) {
+        return candidate;
+      }
     }
     const mapped = normalizePathwayLessonSystemLabel(t);
     const hubCategory = mapTaxonomyLeafToNursingHubCategory(mapped, lesson, pathwayId);

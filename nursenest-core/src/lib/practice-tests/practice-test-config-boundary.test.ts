@@ -42,6 +42,31 @@ describe("parsePracticeTestConfigAtBoundary", () => {
     assert.equal(c.disableOptionShuffle, true);
   });
 
+  it("preserves catSelectionAppliedMeta when shape is valid", () => {
+    const meta = {
+      selectionStrictness: "broad" as const,
+      requestedFilters: {
+        topicNames: ["Cardiovascular"],
+        catSelectionBasis: "weak" as const,
+        poolRequestStrictness: "soft" as const,
+      },
+      appliedFilters: {
+        topicNames: ["Cardiovascular"],
+        catSelectionBasis: "random" as const,
+        poolRequestStrictness: "soft" as const,
+      },
+      matchedCountBeforeExpansion: 2,
+      finalPoolSize: 24,
+      candidatePoolSize: 22,
+      fallbackReason: "relaxed_pathway_pool|weak_areas_empty_coerced_random",
+    };
+    const c = parsePracticeTestConfigAtBoundary(
+      { selectionMode: "cat", questionCount: 10, catSelectionAppliedMeta: meta },
+      { surface: "test" },
+    );
+    assert.deepEqual(c.catSelectionAppliedMeta, meta);
+  });
+
   it("coerces empty pathwayId and fills defaults for garbage input", () => {
     const c = parsePracticeTestConfigAtBoundary(
       { pathwayId: "", selectionMode: "cat", questionCount: 12 },

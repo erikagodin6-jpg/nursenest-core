@@ -222,10 +222,10 @@ test("New Grad hub classification uses transition-to-practice categories instead
   assert.deepEqual(
     sections.map((section) => [section.id, section.label, section.lessons.map((l) => l.slug)]),
     [
-      ["operating_room_pacu", "Operating Room and PACU", ["post-op"]],
-      ["assessments_documentation", "Assessments and Documentation", ["charting"]],
-      ["prioritization_delegation", "Prioritization and Delegation", ["delegation"]],
-      ["communication_providers_families", "Communication with Providers and Families", ["first-call"]],
+      ["pacu", "PACU", ["post-op"]],
+      ["assessments-documentation", "Assessments and Documentation", ["charting"]],
+      ["prioritization-delegation", "Prioritization and Delegation", ["delegation"]],
+      ["communication-escalation", "Communication and Escalation", ["first-call"]],
     ],
   );
 });
@@ -252,6 +252,52 @@ test("NP hub classification keeps unique clinical signals and sends unsafe multi
       "us-np-fnp",
     ),
     REVIEW_REQUIRED,
+  );
+});
+
+test("Allied Health hub classification groups lessons by occupation instead of nursing body systems", () => {
+  const sections = buildPathwayLessonSystemSections(
+    [
+      lesson({
+        slug: "allied-imaging",
+        title: "Imaging Basics for new technologists",
+        topic: "Fundamentals",
+        topicSlug: "fundamentals",
+        bodySystem: "Professional Practice",
+      }),
+      lesson({
+        slug: "allied-labs",
+        title: "Lab Values and specimen quality control",
+        topic: "Fundamentals",
+        topicSlug: "fundamentals",
+        bodySystem: "Professional Practice",
+      }),
+      lesson({
+        slug: "allied-meds",
+        title: "Medication Safety for allied staff",
+        topic: "Pharmacology",
+        topicSlug: "pharmacology",
+        bodySystem: "Professional Practice",
+      }),
+      lesson({
+        slug: "allied-assessment",
+        title: "Patient Assessment and Vital Signs in urgent response",
+        topic: "Fundamentals",
+        topicSlug: "fundamentals",
+        bodySystem: "Professional Practice",
+      }),
+    ],
+    "us-allied-core",
+  );
+
+  assert.deepEqual(
+    sections.map((section) => [section.id, section.label, section.lessons.map((l) => l.slug)]),
+    [
+      ["radiologic-technology", "Radiologic Technologist / X-ray", ["allied-imaging"]],
+      ["mlt", "Medical Laboratory Technologist", ["allied-labs"]],
+      ["pharmacy-tech", "Pharmacy Technician", ["allied-meds"]],
+      ["paramedic", "Paramedic", ["allied-assessment"]],
+    ],
   );
 });
 

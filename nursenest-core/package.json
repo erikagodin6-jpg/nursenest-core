@@ -268,6 +268,7 @@
     "test:e2e:paid-entitlements": "node scripts/check-paid-e2e-credentials.cjs && node scripts/check-e2e-database-connect.cjs && playwright test --project=chromium-paid tests/e2e/paid-user/paid-user-entitlements.spec.ts",
     "test:e2e:paid-session-persistence": "node scripts/check-paid-e2e-credentials.cjs && node scripts/check-e2e-database-connect.cjs && playwright test --project=chromium-paid tests/e2e/paid-user/paid-user-session-persistence.spec.ts",
     "test:e2e:learner-shell-contract": "node --import tsx --test tests/e2e/helpers/learner-shell.test.ts",
+    "test:e2e:rn-signup": "playwright test tests/e2e/rn-student-signup-flow.spec.ts --project=chromium",
     "test:e2e:paid-performance": "node scripts/check-paid-e2e-credentials.cjs && node scripts/check-e2e-database-connect.cjs && playwright test --project=chromium-paid tests/e2e/paid-user/paid-user-performance.spec.ts",
     "test:e2e:paid-stress": "node scripts/check-paid-e2e-credentials.cjs && node scripts/check-e2e-database-connect.cjs && playwright test --project=chromium-paid tests/e2e/paid-user/paid-user-stress.spec.ts",
     "test:e2e:missing-direct-url": "node scripts/check-e2e-database-connect.cjs && npx playwright test -c playwright.missing-direct-url.config.ts",

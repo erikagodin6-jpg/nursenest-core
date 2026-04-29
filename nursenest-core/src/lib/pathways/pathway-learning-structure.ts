@@ -12,6 +12,10 @@ export type LearningSubcategory = {
 export type LearningCategory = {
   id: string;
   title: string;
+  displayName?: string;
+  slug?: string;
+  pathwayId?: string;
+  tags?: string[];
   description?: string;
   subcategories?: LearningSubcategory[];
 };
@@ -125,113 +129,399 @@ const NP_HUB_CATEGORIES: LearningCategory[] = NP_HUB_CATEGORY_DEFS.map((d) => ({
   description: d.description,
 }));
 
+type NewGradCategoryTag = "skills" | "patho" | "pharm" | "workflow" | "career";
+type AlliedCategoryTag = "skills" | "patho" | "pharm" | "diagnostics" | "workflow";
+
+function newGradLearningCategory(
+  slug: string,
+  displayName: string,
+  description: string,
+  tags: NewGradCategoryTag[] = ["skills", "patho", "pharm", "workflow"],
+): LearningCategory {
+  return {
+    id: slug,
+    slug,
+    title: displayName,
+    displayName,
+    pathwayId: "new-grad",
+    tags,
+    description,
+  };
+}
+
+function alliedLearningCategory(
+  slug: string,
+  displayName: string,
+  description: string,
+  tags: AlliedCategoryTag[] = ["skills", "workflow"],
+): LearningCategory {
+  return {
+    id: slug,
+    slug,
+    title: displayName,
+    displayName,
+    pathwayId: "allied-health",
+    tags,
+    description,
+  };
+}
+
 export const NEW_GRAD_HUB_CATEGORIES: LearningCategory[] = [
+  newGradLearningCategory(
+    "ltc",
+    "Long-Term Care",
+    "Resident-centered care, chronic-condition workflows, delegation, documentation, and escalation in LTC settings.",
+  ),
+  newGradLearningCategory(
+    "med-surg",
+    "Medical-Surgical",
+    "Core adult floor nursing, common pathophysiology, medication routines, and multi-patient med-surg workflow.",
+  ),
+  newGradLearningCategory(
+    "surgery",
+    "General Surgery",
+    "Surgical floor recovery, drains, pain control, wound care, and post-op prioritization for general surgery patients.",
+  ),
+  newGradLearningCategory(
+    "emergency-trauma",
+    "Emergency / Trauma",
+    "Triage, trauma stabilization, rapid reassessment, and emergency escalation in ED flow.",
+  ),
+  newGradLearningCategory(
+    "icu",
+    "Intensive Care Unit",
+    "High-acuity ICU monitoring, vasoactive medication awareness, deterioration cues, and critical-care workflow.",
+  ),
+  newGradLearningCategory(
+    "cardiac-icu",
+    "Cardiac ICU",
+    "Cardiac critical care, telemetry interpretation, hemodynamics, post-cardiac procedures, and escalation.",
+  ),
+  newGradLearningCategory(
+    "neuro-icu",
+    "Neurological ICU",
+    "Neuro checks, stroke and seizure deterioration, intracranial pressure cues, and neuro-critical workflow.",
+  ),
+  newGradLearningCategory(
+    "pediatric-icu",
+    "Pediatric ICU",
+    "Pediatric critical care, family communication, unstable child assessment, and PICU escalation patterns.",
+  ),
+  newGradLearningCategory(
+    "pediatrics",
+    "Pediatrics",
+    "Pediatric floor care, development-aware assessment, medication safety, and family-centered practice.",
+  ),
+  newGradLearningCategory(
+    "cardiology",
+    "Cardiology",
+    "Telemetry, chest pain, heart failure, cardiac medications, and bedside cardiac prioritization.",
+  ),
+  newGradLearningCategory(
+    "hem-onc",
+    "Hematology/Oncology",
+    "Neutropenia, chemo safety, symptom escalation, transfusion awareness, and hem-onc unit workflow.",
+  ),
+  newGradLearningCategory(
+    "renal",
+    "Renal / Nephrology",
+    "Renal patients, fluid balance, electrolyte issues, nephrology meds, and urgent kidney-related escalation.",
+  ),
+  newGradLearningCategory(
+    "dialysis",
+    "Dialysis",
+    "Dialysis timing, access awareness, pre/post dialysis assessment, and dialysis-related safety concerns.",
+  ),
+  newGradLearningCategory(
+    "community",
+    "Community Health",
+    "Community nursing visits, teaching, follow-up, and coordinating safe care outside the hospital.",
+  ),
+  newGradLearningCategory(
+    "public-health",
+    "Public Health",
+    "Population health, prevention, community resources, outbreak awareness, and public-health workflow.",
+  ),
+  newGradLearningCategory(
+    "clinic",
+    "Outpatient Clinic",
+    "Ambulatory clinic assessment, scheduling flow, patient teaching, follow-up, and outpatient documentation.",
+  ),
+  newGradLearningCategory(
+    "labour-delivery",
+    "Labour and Delivery",
+    "Labor assessment, fetal or maternal warning signs, intrapartum communication, and urgent OB escalation.",
+  ),
+  newGradLearningCategory(
+    "postpartum",
+    "Postpartum",
+    "Postpartum assessment, maternal safety, newborn-family teaching, bleeding concerns, and discharge teaching.",
+  ),
+  newGradLearningCategory(
+    "nicu",
+    "Neonatal ICU",
+    "Neonatal instability cues, NICU communication, newborn physiology, and family support in neonatal critical care.",
+  ),
+  newGradLearningCategory(
+    "mental-health",
+    "Mental Health / Psychiatry",
+    "Behavioral safety, psychiatric nursing foundations, de-escalation, and therapeutic communication.",
+  ),
+  newGradLearningCategory(
+    "or",
+    "Operating Room",
+    "Perioperative flow, sterile workflow, role clarity, and OR communication for new nurses.",
+  ),
+  newGradLearningCategory(
+    "pacu",
+    "PACU",
+    "Post-anesthesia assessment, airway monitoring, pain control, and early post-op safety in PACU.",
+  ),
+  newGradLearningCategory(
+    "stepdown",
+    "Stepdown / Progressive Care",
+    "Higher-acuity monitoring, telemetry alarms, handoffs, and escalation on progressive care units.",
+  ),
+  newGradLearningCategory(
+    "home-care",
+    "Home Care",
+    "Home visits, medication teaching, independent assessment, safety checks, and family support in home care.",
+  ),
+  newGradLearningCategory(
+    "palliative-care",
+    "Palliative Care",
+    "Symptom relief, goals-of-care communication, comfort-focused workflow, and family support in palliative settings.",
+  ),
+  newGradLearningCategory(
+    "rehab",
+    "Rehabilitation",
+    "Rehab nursing routines, mobility goals, interdisciplinary workflow, and longer-horizon patient education.",
+  ),
+  newGradLearningCategory(
+    "assessments-documentation",
+    "Assessments and Documentation",
+    "Focused assessment, charting, handoff records, and safe documentation habits for early-career nurses.",
+    ["skills", "workflow"],
+  ),
+  newGradLearningCategory(
+    "prioritization-delegation",
+    "Prioritization and Delegation",
+    "Acuity sorting, assignment safety, CNA/PCT delegation, and shift-level workflow decisions.",
+    ["skills", "workflow"],
+  ),
+  newGradLearningCategory(
+    "communication-escalation",
+    "Communication and Escalation",
+    "SBAR, provider calls, family updates, speaking up, asking for help, and escalation when concern rises.",
+    ["skills", "workflow", "career"],
+  ),
+  newGradLearningCategory(
+    "job-applications",
+    "Job Applications",
+    "Applications, first-job search strategy, and evaluating early-career nursing opportunities.",
+    ["career"],
+  ),
+  newGradLearningCategory(
+    "resumes-cover-letters",
+    "Resumes and Cover Letters",
+    "Resume drafting, cover letters, tailoring experience, and presenting nursing strengths clearly.",
+    ["career"],
+  ),
+  newGradLearningCategory(
+    "interviews",
+    "Interviews",
+    "Interview preparation, common nurse interview scenarios, and communication during the hiring process.",
+    ["career"],
+  ),
+  newGradLearningCategory(
+    "choosing-a-floor",
+    "Choosing a Floor",
+    "Comparing units, fit, workload, specialty culture, and where to start as a new nurse.",
+    ["career", "workflow"],
+  ),
+  newGradLearningCategory(
+    "orientation-preceptorship",
+    "Orientation and Preceptorship",
+    "Orientation, preceptor relationships, first-year feedback, and building safe independence.",
+    ["career", "workflow", "skills"],
+  ),
   {
-    id: "medical_surgical_nursing",
-    title: "Medical-Surgical Nursing",
-    description: "Floor nursing routines, multi-patient care, common adult pathophysiology, and med-surg skill judgment.",
+    ...learningCategoryRow(REVIEW_REQUIRED),
+    slug: "review-required",
+    displayName: "Review Required",
+    pathwayId: "new-grad",
   },
+];
+
+export const ALLIED_HEALTH_HUB_CATEGORIES: LearningCategory[] = [
+  alliedLearningCategory(
+    "physiotherapy",
+    "Physiotherapist",
+    "Movement assessment, rehab planning, functional recovery, and mobility-focused physiotherapy workflow.",
+    ["skills", "patho", "workflow"],
+  ),
+  alliedLearningCategory(
+    "occupational-therapy",
+    "Occupational Therapist",
+    "ADLs, adaptive strategies, discharge planning, and occupation-focused patient function.",
+    ["skills", "workflow"],
+  ),
+  alliedLearningCategory(
+    "speech-language-pathology",
+    "Speech-Language Pathologist",
+    "Communication, swallowing, cognition, and speech-language assessment workflow.",
+    ["skills", "workflow"],
+  ),
+  alliedLearningCategory(
+    "respiratory-therapy",
+    "Respiratory Therapist",
+    "Airway support, gas exchange, ventilation, respiratory devices, and bedside RT workflow.",
+    ["skills", "patho", "workflow"],
+  ),
+  alliedLearningCategory(
+    "recreation-therapy",
+    "Recreation Therapist",
+    "Therapeutic recreation planning, engagement goals, and participation-focused care.",
+    ["skills", "workflow"],
+  ),
+  alliedLearningCategory(
+    "radiologic-technology",
+    "Radiologic Technologist / X-ray",
+    "X-ray positioning, imaging safety, radiation awareness, and radiography workflow.",
+    ["skills", "diagnostics", "workflow"],
+  ),
+  alliedLearningCategory(
+    "mri-technologist",
+    "MRI Technologist",
+    "MRI screening, contrast precautions, protocol workflow, and magnet safety.",
+    ["skills", "diagnostics", "workflow"],
+  ),
+  alliedLearningCategory(
+    "ct-technologist",
+    "CT Technologist",
+    "CT protocol flow, contrast safety, trauma imaging, and scanner workflow.",
+    ["skills", "diagnostics", "workflow"],
+  ),
+  alliedLearningCategory(
+    "sonography",
+    "Ultrasound / Sonographer",
+    "Ultrasound technique, exam prep, image acquisition, and sonography workflow.",
+    ["skills", "diagnostics", "workflow"],
+  ),
+  alliedLearningCategory(
+    "nuclear-medicine",
+    "Nuclear Medicine Technologist",
+    "Radiopharmaceutical safety, scan preparation, and nuclear imaging workflow.",
+    ["skills", "diagnostics", "workflow"],
+  ),
+  alliedLearningCategory(
+    "mlt",
+    "Medical Laboratory Technologist",
+    "Lab interpretation, specimen analysis, quality control, and medical laboratory workflow.",
+    ["skills", "diagnostics", "workflow"],
+  ),
+  alliedLearningCategory(
+    "mlt-assistant",
+    "Medical Laboratory Technician",
+    "Specimen handling, lab support tasks, collection processes, and assistant workflow.",
+    ["skills", "diagnostics", "workflow"],
+  ),
+  alliedLearningCategory(
+    "phlebotomy",
+    "Phlebotomist",
+    "Venipuncture, specimen labeling, collection safety, and blood-draw workflow.",
+    ["skills", "diagnostics", "workflow"],
+  ),
+  alliedLearningCategory(
+    "cardiology-tech",
+    "Cardiology Technologist",
+    "Cardiac diagnostics, rhythm capture, stress-test prep, and cardiology tech workflow.",
+    ["skills", "diagnostics", "workflow"],
+  ),
+  alliedLearningCategory(
+    "ecg-tech",
+    "ECG Technician",
+    "ECG lead placement, tracing quality, rhythm basics, and ECG workflow.",
+    ["skills", "diagnostics", "workflow"],
+  ),
+  alliedLearningCategory(
+    "perfusionist",
+    "Perfusionist",
+    "Cardiopulmonary bypass support, perfusion safety, and operative cardiac workflow.",
+    ["skills", "patho", "workflow"],
+  ),
+  alliedLearningCategory(
+    "pharmacist",
+    "Pharmacist",
+    "Medication safety, pharmacology reasoning, verification workflow, and interprofessional medication support.",
+    ["pharm", "workflow"],
+  ),
+  alliedLearningCategory(
+    "pharmacy-tech",
+    "Pharmacy Technician",
+    "Medication prep, dispensing accuracy, calculations, and pharmacy operations workflow.",
+    ["skills", "pharm", "workflow"],
+  ),
+  alliedLearningCategory(
+    "dietitian",
+    "Dietitian / Nutritionist",
+    "Nutrition assessment, counseling, therapeutic diets, and nutrition-focused workflow.",
+    ["skills", "patho", "workflow"],
+  ),
+  alliedLearningCategory(
+    "social-work",
+    "Social Worker",
+    "Patient advocacy, discharge planning, communication, ethics, and psychosocial workflow.",
+    ["skills", "workflow"],
+  ),
+  alliedLearningCategory(
+    "paramedic",
+    "Paramedic",
+    "Prehospital assessment, emergency response, scene priorities, and paramedic workflow.",
+    ["skills", "patho", "workflow"],
+  ),
+  alliedLearningCategory(
+    "anesthesia-assistant",
+    "Anesthesia Assistant",
+    "Airway support, peri-anesthesia prep, safety checks, and anesthesia workflow.",
+    ["skills", "workflow"],
+  ),
+  alliedLearningCategory(
+    "surgical-assistant",
+    "Surgical Assistant / OR Tech",
+    "OR setup, sterile support, procedural flow, and surgical-assist workflow.",
+    ["skills", "workflow"],
+  ),
+  alliedLearningCategory(
+    "orthopedic-tech",
+    "Orthopedic Technologist",
+    "Casting, splinting, traction support, and orthopedic workflow basics.",
+    ["skills", "patho", "workflow"],
+  ),
+  alliedLearningCategory(
+    "dialysis-tech",
+    "Dialysis Technician",
+    "Dialysis machine workflow, patient prep, treatment monitoring, and renal support tasks.",
+    ["skills", "patho", "workflow"],
+  ),
+  alliedLearningCategory(
+    "mental-health-therapist",
+    "Mental Health Therapist / Counselor",
+    "Therapeutic communication, counseling workflow, crisis awareness, and mental-health support.",
+    ["skills", "workflow"],
+  ),
+  alliedLearningCategory(
+    "audiology",
+    "Audiologist",
+    "Hearing assessment, auditory diagnostics, counseling, and audiology workflow.",
+    ["skills", "diagnostics", "workflow"],
+  ),
   {
-    id: "emergency_department",
-    title: "Emergency Department",
-    description: "Triage, stabilization, rapid reassessment, and emergency escalation for new graduate nurses.",
+    ...learningCategoryRow(REVIEW_REQUIRED),
+    slug: "review-required",
+    displayName: "Review Required",
+    pathwayId: "allied-health",
   },
-  {
-    id: "icu_stepdown",
-    title: "ICU and Stepdown",
-    description: "Higher-acuity monitoring, deterioration cues, alarms, handoffs, and escalation on stepdown or ICU-adjacent units.",
-  },
-  {
-    id: "pediatrics",
-    title: "Pediatrics",
-    description: "Pediatric floor care, family-centered communication, development-aware assessment, and safety.",
-  },
-  {
-    id: "labour_delivery",
-    title: "Labour and Delivery",
-    description: "Labor assessment, fetal or maternal warning signs, team communication, and urgent escalation.",
-  },
-  {
-    id: "postpartum",
-    title: "Postpartum",
-    description: "Postpartum assessment, bleeding, newborn-family teaching, and maternal safety.",
-  },
-  {
-    id: "mental_health",
-    title: "Mental Health",
-    description: "Behavioral safety, de-escalation, therapeutic communication, and psychiatric nursing foundations.",
-  },
-  {
-    id: "long_term_care",
-    title: "Long-Term Care",
-    description: "Resident safety, chronic-care workflows, delegation, documentation, and escalation in LTC settings.",
-  },
-  {
-    id: "community_health",
-    title: "Community Health",
-    description: "Home and community nursing, teaching, follow-up, and resource coordination.",
-  },
-  {
-    id: "operating_room_pacu",
-    title: "Operating Room and PACU",
-    description: "Perioperative flow, PACU assessment, post-anesthesia safety, and surgical handoffs.",
-  },
-  {
-    id: "oncology",
-    title: "Oncology",
-    description: "Oncology floor patterns, neutropenia, chemotherapy safety cues, and symptom escalation.",
-  },
-  {
-    id: "cardiology",
-    title: "Cardiology",
-    description: "Telemetry, chest pain, heart failure, rhythm concerns, and cardiac medication safety.",
-  },
-  {
-    id: "nephrology_dialysis",
-    title: "Nephrology and Dialysis",
-    description: "Renal patients, dialysis timing, fluid balance, electrolytes, and urgent kidney-related escalation.",
-  },
-  {
-    id: "neurology",
-    title: "Neurology",
-    description: "Stroke, seizures, neuro checks, mental status changes, and neurologic deterioration.",
-  },
-  {
-    id: "assessments_documentation",
-    title: "Assessments and Documentation",
-    description: "Focused assessment, charting, late documentation, handoff records, and safe information transfer.",
-  },
-  {
-    id: "prioritization_delegation",
-    title: "Prioritization and Delegation",
-    description: "Acuity sorting, assignment safety, CNA/PCT delegation, follow-up, and charge-nurse escalation.",
-  },
-  {
-    id: "communication_providers_families",
-    title: "Communication with Providers and Families",
-    description: "SBAR, family communication, conflict, huddles, asking for help, and provider calls.",
-  },
-  {
-    id: "safety_emergencies_escalation",
-    title: "Safety, Emergencies, and Escalation",
-    description: "Rapid response thinking, early deterioration, safety threats, alarms, and urgent escalation.",
-  },
-  {
-    id: "job_applications_interviews",
-    title: "Job Applications and Interviews",
-    description: "Applications, resumes, cover letters, interviews, references, and first nursing job decisions.",
-  },
-  {
-    id: "choosing_floor_unit",
-    title: "Choosing a Floor/Unit",
-    description: "Comparing hospital units, fit, workload, specialty culture, and first-year learning environment.",
-  },
-  {
-    id: "orientation_preceptorship",
-    title: "Orientation and Preceptorship",
-    description: "Orientation, preceptor relationships, surviving the first year, feedback, and building independence.",
-  },
-  learningCategoryRow(REVIEW_REQUIRED),
 ];
 
 const LEARNING_PATHWAY_CONFIGS: Record<string, PathwayLearningConfig> = {
@@ -245,8 +535,8 @@ const LEARNING_PATHWAY_CONFIGS: Record<string, PathwayLearningConfig> = {
   "us-np-pmhnp": { pathwayId: "us-np-pmhnp", label: "PMHNP", categories: NP_HUB_CATEGORIES, profile: "clinical" },
   "us-np-whnp": { pathwayId: "us-np-whnp", label: "WHNP", categories: NP_HUB_CATEGORIES, profile: "clinical" },
   "us-np-pnp-pc": { pathwayId: "us-np-pnp-pc", label: "PNP-PC", categories: NP_HUB_CATEGORIES, profile: "clinical" },
-  "ca-allied-core": { pathwayId: "ca-allied-core", label: "Allied Health", categories: STANDARD_PATHWAY_CATEGORIES, profile: "clinical" },
-  "us-allied-core": { pathwayId: "us-allied-core", label: "Allied Health", categories: STANDARD_PATHWAY_CATEGORIES, profile: "clinical" },
+  "ca-allied-core": { pathwayId: "ca-allied-core", label: "Allied Health", categories: ALLIED_HEALTH_HUB_CATEGORIES, profile: "clinical" },
+  "us-allied-core": { pathwayId: "us-allied-core", label: "Allied Health", categories: ALLIED_HEALTH_HUB_CATEGORIES, profile: "clinical" },
   "us-rn-new-grad-transition": { pathwayId: "us-rn-new-grad-transition", label: "New Grad", categories: NEW_GRAD_HUB_CATEGORIES, profile: "clinical" },
 };
 
@@ -260,7 +550,7 @@ const DEFAULT_NURSING_CONFIG: PathwayLearningConfig = {
 const DEFAULT_ALLIED_CONFIG: PathwayLearningConfig = {
   pathwayId: "default-allied",
   label: "Allied Health",
-  categories: STANDARD_PATHWAY_CATEGORIES,
+  categories: ALLIED_HEALTH_HUB_CATEGORIES,
   profile: "clinical",
 };
 

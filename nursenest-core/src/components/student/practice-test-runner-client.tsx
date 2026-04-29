@@ -14,6 +14,7 @@ import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-tr
 import { difficultyBandLabel } from "@/lib/questions/difficulty-label";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import type {
+  CatSelectionAppliedMeta,
   CatStudyFeedbackPayload,
   PracticeTestConfigJson,
   PracticeTestPathwayClientShell,
@@ -192,6 +193,8 @@ export function PracticeTestRunnerClient({
   const [questionFetchNonce, setQuestionFetchNonce] = useState(0);
   /** Session-local only — helps pacing habits; not sent to the server. */
   const [flagged, setFlagged] = useState<Record<string, boolean>>({});
+  /** Dismisses the “pool widened vs your filters” notice for this tab only; resets when `testId` changes. */
+  const [dismissedPoolRelaxBanner, setDismissedPoolRelaxBanner] = useState(false);
   /** Linear exam engine: server-persisted committed items (`adaptiveState.linearEngine`). */
   const [linearCommittedIds, setLinearCommittedIds] = useState<string[]>([]);
   /** Practice-mode per-question feedback after commit (not fully restored on reload). */
@@ -1315,6 +1318,23 @@ export function PracticeTestRunnerClient({
     if (el) el.scrollTop = 0;
   }, [qid, isExamStyle]);
 
+  useEffect(() => {
+    setDismissedPoolRelaxBanner(false);
+  }, [testId]);
+
+  function catPoolRelaxNoticeCopy(meta: CatSelectionAppliedMeta): string {
+    if (meta.selectionStrictness === "broad") {
+      return tx(
+        "learner.practiceTests.run.poolRelaxBroad",
+        "Topic or focus filters were widened so enough pathway-eligible questions could be included in this session.",
+      );
+    }
+    return tx(
+      "learner.practiceTests.run.poolRelaxSoft",
+      "Your adaptive focus was adjusted slightly so the engine could build a full session from eligible questions.",
+    );
+  }
+
   /** Inline recovery when PATCH save / CAT advance / linear commit fails but the item is still visible (legacy exam-fallbacks recovery intent). */
   const sessionRecoverable =
     phase === "ready" &&
@@ -1346,6 +1366,34 @@ export function PracticeTestRunnerClient({
             onClick={() => setError(null)}
           >
             {tx("learner.practiceTests.run.sessionDismiss", "Dismiss")}
+          </button>
+        </div>
+      </LearnerStudyCard>
+    </div>
+  ) : null;
+
+  const appliedSelMeta = testConfig?.catSelectionAppliedMeta;
+  const showCatPoolRelaxBanner =
+    catMode &&
+    phase === "ready" &&
+    status === "IN_PROGRESS" &&
+    appliedSelMeta &&
+    appliedSelMeta.selectionStrictness !== "exact" &&
+    !dismissedPoolRelaxBanner;
+  const catPoolRelaxBanner = showCatPoolRelaxBanner ? (
+    <div role="status" className="mb-3">
+      <LearnerStudyCard className="border-[color-mix(in_srgb,var(--semantic-info)_32%,var(--lv-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_28%,var(--lv-bg-surface))] text-sm text-[var(--semantic-text-primary)] shadow-sm">
+        <p className="font-semibold text-[var(--semantic-text-primary)]">
+          {tx("learner.practiceTests.run.poolRelaxTitle", "How this session was built")}
+        </p>
+        <p className="mt-1 text-[var(--semantic-text-secondary)]">{catPoolRelaxNoticeCopy(appliedSelMeta!)}</p>
+        <div className="mt-3">
+          <button
+            type="button"
+            className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-2 text-xs font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
+            onClick={() => setDismissedPoolRelaxBanner(true)}
+          >
+            {tx("learner.practiceTests.run.poolRelaxDismiss", "Got it")}
           </button>
         </div>
       </LearnerStudyCard>
@@ -2025,6 +2073,7 @@ export function PracticeTestRunnerClient({
                   sessionLabel={tx("learner.practiceTests.run.adaptiveSessionShort", "Adaptive Test")}
                 />
                 {sessionRecoveryBanner}
+                {catPoolRelaxBanner}
                 <div
                   className={`nn-cat-exam-board-frame nn-cat-session flex min-h-0 flex-1 flex-col overflow-hidden ${chromeClass} nn-cat-session--exam-single`}
                 >
@@ -2270,6 +2319,7 @@ export function PracticeTestRunnerClient({
                 />
                 <ExamProgressBar current={idx + 1} total={total} />
                 {sessionRecoveryBanner}
+                {catPoolRelaxBanner}
                 <div className={`nn-cat-session min-h-0 flex-1 ${chromeClass}`}>
                   <div className="nn-question-session nn-question-session--split !px-0 sm:!px-0">
                     <div className="nn-question-session-primary min-h-0 overflow-x-hidden overflow-y-auto">

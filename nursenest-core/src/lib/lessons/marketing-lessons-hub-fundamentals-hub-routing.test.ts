@@ -34,25 +34,51 @@ test("US New Grad lesson areas use transition-to-practice categories and routes"
   const pathway = getExamPathwayById("us-rn-new-grad-transition");
   assert.ok(pathway);
   const categories = pathwayMarketingHubCategories(pathway.id);
-  assert.ok(categories.some((c) => c.label === "Medical-Surgical Nursing"));
-  assert.ok(categories.some((c) => c.label === "Emergency Department"));
-  assert.ok(categories.some((c) => c.label === "Job Applications and Interviews"));
+  assert.ok(categories.some((c) => c.slug === "med-surg" && c.label === "Medical-Surgical"));
+  assert.ok(categories.some((c) => c.slug === "emergency-trauma" && c.label === "Emergency / Trauma"));
+  assert.ok(categories.some((c) => c.slug === "job-applications" && c.label === "Job Applications"));
   assert.ok(categories.some((c) => c.label === "Orientation and Preceptorship"));
 
-  const communication = pathwayMarketingHubCategoryFromSegment(pathway.id, "communication-with-providers-and-families");
-  assert.equal(communication?.id, "communication_providers_families");
+  const communication = pathwayMarketingHubCategoryFromSegment(pathway.id, "communication-escalation");
+  assert.equal(communication?.id, "communication-escalation");
   assert.equal(
     marketingPathwayLessonsCategoryPath(pathway, communication!.slug),
-    "/us/rn/new-grad-transition/lessons/communication-with-providers-and-families",
+    "/us/rn/new-grad-transition/lessons/communication-escalation",
   );
 
   const counts = countPathwayMarketingHubLessonsByCategoryForPathway(pathway.id);
-  assert.ok((counts.get("prioritization_delegation") ?? 0) > 0);
-  assert.ok((counts.get("communication_providers_families") ?? 0) > 0);
+  assert.equal(counts.get("cardiac-icu") ?? 0, 0);
+  assert.ok((counts.get("prioritization-delegation") ?? 0) > 0);
+  assert.ok((counts.get("communication-escalation") ?? 0) > 0);
 
   const catalog = getMarketingLessonsHubCatalogLessons(pathway.id);
-  const rows = filterPathwayMarketingHubLessonsByCategory(catalog, pathway.id, "communication_providers_families");
+  const rows = filterPathwayMarketingHubLessonsByCategory(catalog, pathway.id, "communication-escalation");
   assert.ok(rows.some((row) => row.slug === "ngn-first-physician-call"));
+});
+
+test("US Allied lesson areas use occupation categories and stable slugs", () => {
+  const pathway = getExamPathwayById("us-allied-core");
+  assert.ok(pathway);
+  const categories = pathwayMarketingHubCategories(pathway.id);
+  assert.ok(categories.some((c) => c.slug === "radiologic-technology" && c.label === "Radiologic Technologist / X-ray"));
+  assert.ok(categories.some((c) => c.slug === "pharmacy-tech" && c.label === "Pharmacy Technician"));
+  assert.ok(categories.some((c) => c.slug === "social-work" && c.label === "Social Worker"));
+  assert.ok(categories.some((c) => c.slug === "audiology" && c.label === "Audiologist"));
+
+  const imaging = pathwayMarketingHubCategoryFromSegment(pathway.id, "radiologic-technology");
+  assert.equal(imaging?.id, "radiologic-technology");
+  assert.equal(
+    marketingPathwayLessonsCategoryPath(pathway, imaging!.slug),
+    "/us/allied/allied-health/lessons/radiologic-technology",
+  );
+
+  const counts = countPathwayMarketingHubLessonsByCategoryForPathway(pathway.id);
+  assert.ok((counts.get("radiologic-technology") ?? 0) > 0);
+  assert.equal(counts.get("audiology") ?? 0, 0);
+
+  const catalog = getMarketingLessonsHubCatalogLessons(pathway.id);
+  const imagingRows = filterPathwayMarketingHubLessonsByCategory(catalog, pathway.id, "radiologic-technology");
+  assert.ok(imagingRows.some((row) => row.slug === "allied-imaging-basics"));
 });
 
 test("Fundamentals resolves from canonical segment and legacy fundamentals alias", () => {

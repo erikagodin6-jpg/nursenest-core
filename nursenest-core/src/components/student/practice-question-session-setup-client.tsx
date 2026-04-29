@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useCallback, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -8,6 +9,7 @@ import {
   type PracticeAdaptiveSelectionBasis,
 } from "@/components/student/pathway-cat-start-payload";
 import { appPathwayCatFullSetupHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Body system definitions (topic strings match exam question `topic` labels)
@@ -292,16 +294,29 @@ export function PracticeQuestionSessionSetupClient({
         >
           {BODY_SYSTEMS.map((sys) => {
             const on = selectedSystems.has(sys.id);
+            const visual = getLessonHubSystemVisual(sys.id);
+            const Icon = visual.icon;
+            const systemStyle = { "--nn-system-accent": `var(${visual.accentVar})` } as CSSProperties;
             return (
               <button
                 key={sys.id}
                 type="button"
                 aria-pressed={on}
                 data-nn-body-system={sys.id}
+                style={systemStyle}
                 onClick={() => toggleSystem(sys.id)}
-                className={on ? cardSelected("brand") : cardUnselected}
+                className={[
+                  on ? cardSelected("brand") : cardUnselected,
+                  "flex flex-row items-center gap-3 text-left",
+                ].join(" ")}
               >
-                {sys.label}
+                <span
+                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--nn-system-accent)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-system-accent)_10%,var(--semantic-panel-muted))] text-[var(--nn-system-accent)]"
+                  aria-hidden
+                >
+                  <Icon className="h-4 w-4" />
+                </span>
+                <span className="min-w-0 leading-snug">{sys.label}</span>
               </button>
             );
           })}

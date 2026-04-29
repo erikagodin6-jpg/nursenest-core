@@ -239,6 +239,7 @@ export function TrialOnboardingFlow({
           {step === 0 && state.examGoal ? (
             <button
               type="button"
+              data-testid="onboarding-start-studying-now"
               onClick={() => void completeFast()}
               disabled={saving}
               className="nn-btn-primary inline-flex min-h-[2.75rem] w-full items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold shadow-none disabled:opacity-50"
@@ -296,6 +297,7 @@ function StepExamGoal({
           <button
             key={opt.id}
             type="button"
+            data-testid={opt.id ? `onboarding-exam-goal-${opt.id}` : undefined}
             onClick={() => onChange(opt.id)}
             className={`nn-onboarding-option ${value === opt.id ? "nn-onboarding-option--selected" : ""}`}
           >
