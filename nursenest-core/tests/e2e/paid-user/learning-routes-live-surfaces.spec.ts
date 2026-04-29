@@ -2,12 +2,15 @@
  * Asserts the **live** learner routes for flashcards hub + practice exam builder
  * (`/app/practice-tests`, not marketing `/practice-exams`).
  *
- * Run: `npx playwright test tests/e2e/paid-user/learning-routes-live-surfaces.spec.ts --project=chromium-paid`
+ * Run: `npx playwright test -c playwright.learning-routes.config.ts`
  */
 import { expect, test } from "@playwright/test";
 import { paidFlashcardsHubUrl } from "../helpers/paid-content-discovery";
-import { PAID_E2E_DEFAULT_PATHWAY_ID, learnerAppMainLandmark } from "../helpers/paid-learner-shell";
-import { expectPaidLearnerShellReady } from "../helpers/paid-learner-shell";
+import {
+  PAID_E2E_DEFAULT_PATHWAY_ID,
+  expectPaidLearnerShellReady,
+  learnerAppMainLandmark,
+} from "../helpers/paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
 import { expectNotLoginUrl } from "../helpers/paid-user-suite";
 
@@ -73,9 +76,8 @@ test.describe("Learning routes — live flashcards + practice builder", () => {
     ).toString();
     await page.goto(from, { waitUntil: "domcontentloaded" });
     await page.waitForURL(/\/app\/practice-tests/, { timeout: 60_000 });
-    expect(page.url()).toContain("pathwayId=");
-    expect(page.url()).toContain(encodeURIComponent(pathwayId).replace(/%2D/g, "-").split("?")[0] ? pathwayId : "");
-    /** pathname must be practice-tests */
-    expect(new URL(page.url()).pathname).toBe("/app/practice-tests");
+    const landed = new URL(page.url());
+    expect(landed.pathname).toBe("/app/practice-tests");
+    expect(landed.searchParams.get("pathwayId")).toBe(pathwayId);
   });
 });

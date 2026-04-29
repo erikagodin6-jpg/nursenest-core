@@ -11,7 +11,13 @@ const MAX_RECALL_CARDS_PER_PATHWAY = 1_200;
 
 function lessonHrefForCatalogLesson(pathwayId: string, lessonSlug: string): string {
   const pathway = getExamPathwayById(pathwayId);
-  return pathway ? marketingPathwayLessonDetailPath(pathway, lessonSlug) : `/app/lessons?pathwayId=${encodeURIComponent(pathwayId)}&q=${encodeURIComponent(lessonSlug)}`;
+  if (!pathway) {
+    return `/app/lessons?pathwayId=${encodeURIComponent(pathwayId)}&q=${encodeURIComponent(lessonSlug)}`;
+  }
+  return (
+    marketingPathwayLessonDetailPath(pathway, lessonSlug) ??
+    `/app/lessons?pathwayId=${encodeURIComponent(pathwayId)}&q=${encodeURIComponent(lessonSlug)}`
+  );
 }
 
 function categoryForLesson(lesson: PathwayLessonRecord): { name: string; topicCode: string | null } {

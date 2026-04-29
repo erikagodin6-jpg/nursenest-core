@@ -1,10 +1,12 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, it } from "node:test";
 
-/** File lives at `src/app/(student)/app/(learner)/` — repo root is five parents up. */
-const repoRoot = path.resolve(import.meta.dirname, "..", "..", "..", "..", "..");
+const thisDir = path.dirname(fileURLToPath(import.meta.url));
+/** `src/lib/learner/` → nursenest-core package root is three parents up. */
+const repoRoot = path.resolve(thisDir, "..", "..", "..");
 
 function read(rel: string): string {
   return fs.readFileSync(path.join(repoRoot, rel), "utf8");

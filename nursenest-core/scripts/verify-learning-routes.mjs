@@ -24,23 +24,6 @@ function exists(rel) {
   return fs.existsSync(path.join(root, rel));
 }
 
-function grepFiles(pattern, globHint) {
-  const r = spawnSync(
-    "rg",
-    ["--files", "-g", globHint, "-0", root].filter(Boolean),
-    { encoding: "utf8", shell: false },
-  );
-  if (r.status !== 0) {
-    const r2 = spawnSync("rg", ["-l", pattern, root, "--glob", globHint], { encoding: "utf8" });
-    return (r2.stdout || "")
-      .split("\n")
-      .map((s) => s.trim())
-      .filter(Boolean)
-      .map((abs) => path.relative(root, abs));
-  }
-  return [];
-}
-
 console.log("--- NurseNest learning route trace ---\n");
 console.log("Live flashcards route (GET /app/flashcards):");
 console.log(`  ${LIVE_FLASHCARDS_PAGE}  exists=${exists(LIVE_FLASHCARDS_PAGE)}`);
@@ -70,7 +53,7 @@ for (const f of dupCandidates) {
 }
 
 console.log("\nContract test (import / redirect wiring):");
-const ct = spawnSync("npx", ["tsx", "--test", "src/app/(student)/app/(learner)/learning-live-routes.contract.test.ts"], {
+const ct = spawnSync("npx", ["tsx", "--test", "src/lib/learner/learning-live-routes-import.contract.test.ts"], {
   cwd: root,
   stdio: "inherit",
   shell: false,
@@ -79,7 +62,7 @@ if (ct.status !== 0) {
   console.error("\nContract test FAILED");
   process.exit(ct.status ?? 1);
 }
-console.log("  learning-live-routes.contract.test.ts OK");
+console.log("  learning-live-routes-import.contract.test.ts OK");
 
 const paidEmail = process.env.E2E_PAID_EMAIL?.trim();
 const paidPw = process.env.E2E_PAID_PASSWORD?.trim();
@@ -95,10 +78,10 @@ if (!paidEmail || !paidPw) {
   process.exit(0);
 }
 
-console.log("\nRunning Playwright: learning-routes-live-surfaces.spec.ts (chromium-paid) …");
+console.log("\nRunning Playwright: playwright.learning-routes.config.ts …");
 const pw = spawnSync(
   "npx",
-  ["playwright", "test", "tests/e2e/paid-user/learning-routes-live-surfaces.spec.ts", "--project=chromium-paid"],
+  ["playwright", "test", "-c", "playwright.learning-routes.config.ts"],
   { cwd: root, stdio: "inherit", shell: false },
 );
 if (pw.status !== 0) {

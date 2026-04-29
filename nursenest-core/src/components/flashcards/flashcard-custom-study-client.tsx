@@ -201,7 +201,7 @@ export function FlashcardCustomStudyClient() {
         <h2 className="text-lg font-semibold text-[var(--theme-fg)]">No cards for this pathway yet</h2>
         <p>
           {summary && summary.matchingCards === 0
-            ? "There are no published flashcards or bank-linked lesson questions available for this exam track yet."
+            ? "There are no published flashcards or bank-linked lesson questions for this filter. Try the hub with All cards, study a lesson with checkpoints (we synthesize recall cards from the catalog when the bank is empty), or pick another body system."
             : t("flashcards.noCardsMatch")}
         </p>
         <Link href={exitHref} className="inline-block text-primary underline">
