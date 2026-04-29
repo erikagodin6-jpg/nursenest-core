@@ -27,6 +27,8 @@ const PATHWAY_LESSONS_ALLOW = new Set([
   "rn-nclex-leadership-delegation-expansion-catalog.json",
   "rn-nclex-maternal-newborn-expansion-catalog.json",
   "rn-nclex-procedures-skills-expansion-catalog.json",
+  "rn-nclex-nutrition-expansion-catalog.json",
+  "rn-nclex-exam-strategy-expansion-catalog.json",
 ]);
 
 /** topic-maps/ — keep tiny; expand allowlist deliberately if adding files. */

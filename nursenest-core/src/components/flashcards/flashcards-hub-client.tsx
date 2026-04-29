@@ -51,18 +51,22 @@ export function FlashcardsHubClient({
   scopedPathwayId,
   pathwayDisplayName,
   pathwayBootstrapSource = "primary",
+  catHref,
+  initialHub,
 }: {
   scopedPathwayId: string;
   pathwayDisplayName: string;
   pathwayBootstrapSource?: "primary" | "secondary";
+  catHref?: string;
+  initialHub?: FlashcardsHubServerPayload | null;
 }) {
   const { t } = useMarketingI18n();
 
   const [builderCategories, setBuilderCategories] = useState<
     Array<{ id: string; title: string; description?: string; count: number }>
-  >([]);
+  >(() => initialHub?.categoryOptions ?? []);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [matchingCards, setMatchingCards] = useState<number | null>(null);
+  const [matchingCards, setMatchingCards] = useState<number | null>(() => initialHub?.matchingTotal ?? null);
   const [selectedBodyIds, setSelectedBodyIds] = useState<string[]>([]);
   const [cardLimit, setCardLimit] = useState(20);
   const [shuffleOn, setShuffleOn] = useState(true);
@@ -92,7 +96,6 @@ export function FlashcardsHubClient({
       const res = await fetch(`/api/flashcards/custom-session?${qs}`, { credentials: "include" });
       const json: unknown = await res.json();
       const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
-      const outcome = flashcardBodySystemsUiOutcomeFromParsed(parsed);
       if (!parsed.ok) {
         setLoadError(parsed.message);
         setBuilderCategories([]);
@@ -101,9 +104,6 @@ export function FlashcardsHubClient({
       }
       setBuilderCategories(parsed.categoryOptions);
       setMatchingCards(parsed.summary?.matchingCards ?? 0);
-      if (outcome === "empty" && (parsed.summary?.matchingCards ?? 0) === 0) {
-        setLoadError(null);
-      }
     } catch {
       setLoadError("Could not load flashcard topics.");
       setBuilderCategories([]);
@@ -184,7 +184,15 @@ export function FlashcardsHubClient({
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 px-4 py-6">
-      {pathwayBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner surface="flashcards_hub" /> : null}
+      {pathwayBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}
+
+      {catHref ? (
+        <div className="text-sm">
+          <Link href={catHref} className="text-primary underline">
+            Continue adaptive (CAT)
+          </Link>
+        </div>
+      ) : null}
 
       <header className="space-y-2">
         <h1 className="text-2xl font-semibold">{t("learner.flashcards.hub.title")}</h1>

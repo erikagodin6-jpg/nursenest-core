@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
 import {
   buildAppFlashcardsCustomStudyHref,
   buildAppFlashcardsHubHref,
@@ -8,28 +9,29 @@ import {
 
 describe("flashcards-hub-url", () => {
   it("builds hub href with pathway, systems, and mode", () => {
-    expect(
+    assert.equal(
       buildAppFlashcardsHubHref({
         pathwayId: "ca-rn-nclex-rn",
         systems: ["cardiovascular", "respiratory"],
         mode: "weak",
       }),
-    ).toBe("/app/flashcards?pathwayId=ca-rn-nclex-rn&systems=cardiovascular%2Crespiratory&mode=weak");
+      "/app/flashcards?pathwayId=ca-rn-nclex-rn&systems=cardiovascular%2Crespiratory&mode=weak",
+    );
   });
 
   it("normalizes hyphenated system ids", () => {
     const sp = new URLSearchParams("systems=renal-urinary%2Cendocrine");
-    expect(parseHubSystemsFromSearchParams(sp)).toEqual(["renal_urinary", "endocrine"]);
+    assert.deepEqual(parseHubSystemsFromSearchParams(sp), ["renal_urinary", "endocrine"]);
   });
 
   it("parses single system param", () => {
     const sp = new URLSearchParams("system=Pharmacology");
-    expect(parseHubSystemsFromSearchParams(sp)).toEqual(["pharmacology"]);
+    assert.deepEqual(parseHubSystemsFromSearchParams(sp), ["pharmacology"]);
   });
 
   it("parses hub mode", () => {
-    expect(parseHubMode(new URLSearchParams("mode=starred"))).toBe("starred");
-    expect(parseHubMode(new URLSearchParams(""))).toBe("all");
+    assert.equal(parseHubMode(new URLSearchParams("mode=starred")), "starred");
+    assert.equal(parseHubMode(new URLSearchParams("")), "all");
   });
 
   it("builds custom study href with categories and weak flag", () => {
@@ -40,11 +42,11 @@ describe("flashcards-hub-url", () => {
       cardLimit: 50,
       shuffle: true,
     });
-    expect(href).toContain("pathwayId=ca-rn-nclex-rn");
-    expect(href).toContain("categories=cardiovascular%2Crenal_urinary");
-    expect(href).toContain("weakOnly=1");
-    expect(href).toContain("includeCards=1");
-    expect(href).toContain("shuffle=1");
+    assert.ok(href.includes("pathwayId=ca-rn-nclex-rn"));
+    assert.ok(href.includes("categories=cardiovascular%2Crenal_urinary"));
+    assert.ok(href.includes("weakOnly=1"));
+    assert.ok(href.includes("includeCards=1"));
+    assert.ok(href.includes("shuffle=1"));
   });
 
   it("includes starred state ids when mode is starred", () => {
@@ -53,7 +55,7 @@ describe("flashcards-hub-url", () => {
       mode: "starred",
       starredStateIds: ["a", "b"],
     });
-    expect(href).toContain("starredOnly=1");
-    expect(href).toContain("stateIds=a%2Cb");
+    assert.ok(href.includes("starredOnly=1"));
+    assert.ok(href.includes("stateIds=a%2Cb"));
   });
 });
