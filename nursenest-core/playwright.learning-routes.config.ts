@@ -21,17 +21,25 @@ function localDevWebServer() {
   const host = origin.hostname;
   if (host !== "127.0.0.1" && host !== "localhost") return undefined;
   const port = origin.port || "3000";
-  const secret = process.env.NEXTAUTH_SECRET?.trim() || "playwright-e2e-local-secret";
+  const secret = process.env.NEXTAUTH_SECRET?.trim() || process.env.AUTH_SECRET?.trim() || "playwright-e2e-local-secret";
+  const dbUrl = process.env.DATABASE_URL?.trim();
+  /**
+   * Wait until Auth.js + Next compiled the auth catch-all — polling `/` can return 200 before
+   * `/api/auth/callback/credentials` exists, which makes the first login look like a "missing POST".
+   */
+  const readyUrl = `${origin.origin}/api/auth/csrf`;
   return {
     command: `npm run dev -- --hostname 127.0.0.1 --port ${port}`,
-    url: origin.origin,
+    url: readyUrl,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
     env: {
       RUN_HEAVY_BUILD_TASKS: "false",
       NEXTAUTH_SECRET: secret,
+      AUTH_SECRET: process.env.AUTH_SECRET?.trim() || secret,
       AUTH_URL: origin.origin,
       NEXTAUTH_URL: origin.origin,
+      ...(dbUrl ? { DATABASE_URL: dbUrl } : {}),
     },
   } as const;
 }

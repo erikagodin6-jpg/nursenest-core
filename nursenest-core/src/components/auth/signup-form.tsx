@@ -214,6 +214,7 @@ export function SignupForm({
   return (
     <form
       className="mt-6 space-y-4"
+      method="post"
       onSubmit={(e) => {
         e.preventDefault();
         if (pending) return;

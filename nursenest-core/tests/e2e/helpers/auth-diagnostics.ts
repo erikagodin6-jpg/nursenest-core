@@ -19,13 +19,32 @@ export type AuthFailureSurface = {
 /** Truncate for logs — avoid dumping huge HTML. */
 const SAMPLE = 500;
 
+/** Strip credentials from accidental GET-login URLs (never log passwords). */
+export function redactAuthDiagnosticsUrl(raw: string): string {
+  try {
+    const u = new URL(raw);
+    if (!u.pathname.includes("/login")) return raw;
+    const sensitive = new Set(["password", "email", "rememberme", "csrf", "token", "secret"]);
+    let changed = false;
+    for (const key of [...u.searchParams.keys()]) {
+      if (sensitive.has(key.toLowerCase())) {
+        u.searchParams.set(key, "[REDACTED]");
+        changed = true;
+      }
+    }
+    return changed ? u.toString() : raw;
+  } catch {
+    return raw;
+  }
+}
+
 export async function describeAuthFailureSurface(page: Page): Promise<string> {
   const d = await collectAuthFailureSurface(page);
   return formatAuthFailureSurface(d);
 }
 
 export async function collectAuthFailureSurface(page: Page): Promise<AuthFailureSurface> {
-  const url = page.url();
+  const url = redactAuthDiagnosticsUrl(page.url());
   let pathname = "";
   try {
     pathname = new URL(url).pathname;

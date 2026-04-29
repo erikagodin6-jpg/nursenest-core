@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test.use({ storageState: { cookies: [], origins: [] } });
 
 function isCredentialsPost(req: { method: string; url: string }): boolean {
-  return req.method === "POST" && req.url().includes("/api/auth/callback/credentials");
+  return req.method.toUpperCase() === "POST" && req.url().includes("/api/auth/callback/credentials");
 }
 
 test.describe("Smoke — login submit dedup", () => {

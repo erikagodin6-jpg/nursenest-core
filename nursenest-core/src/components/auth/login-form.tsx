@@ -217,6 +217,8 @@ export function LoginForm({
   return (
     <form
       className="mt-6 space-y-4"
+      /** Default HTML form method is GET — a submit before React hydrates would put credentials in the URL. */
+      method="post"
       onSubmit={(e) => {
         e.preventDefault();
         if (pending || submitInFlightRef.current) return;

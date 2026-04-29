@@ -5,7 +5,7 @@
  */
 import type { Page, Response } from "@playwright/test";
 import { parseCredentialsCallbackPayload } from "./auth-credentials-login";
-import { describeAuthFailureSurface } from "./auth-diagnostics";
+import { describeAuthFailureSurface, redactAuthDiagnosticsUrl } from "./auth-diagnostics";
 import { PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS } from "./learner-shell";
 import { waitForAuthenticatedLearnerShell } from "./paid-learner-shell";
 import { resolveRnFullContentBaseUrl } from "./rn-full-content-environment";
@@ -43,7 +43,8 @@ export class RnFullContentLoginError extends Error {
 }
 
 function isCredentialsPostResponse(res: Response): boolean {
-  if (res.request().method() !== "POST") return false;
+  const m = res.request().method();
+  if (m.toUpperCase() !== "POST") return false;
   return res.url().includes("/api/auth/callback/credentials");
 }
 
@@ -105,6 +106,23 @@ export async function loginWithCredentials(
     await page.goto(loginHref, { waitUntil: "domcontentloaded" });
     await page.locator("#login-identifier").first().waitFor({ state: "visible", timeout: 25_000 });
     await page.locator("#login-password").first().waitFor({ state: "visible", timeout: 25_000 });
+    /** Prefer the real `LoginForm` shell (method=post) over Suspense skeleton / accidental GET submits. */
+    await page
+      .locator("form")
+      .filter({ has: page.locator("#login-identifier") })
+      .first()
+      .waitFor({ state: "visible", timeout: 25_000 });
+    await page.waitForFunction(
+      () => {
+        const forms = Array.from(document.querySelectorAll("form"));
+        const f = forms.find((el) => el.querySelector("#login-identifier"));
+        if (!f) return false;
+        const m = (f as HTMLFormElement).method?.toLowerCase();
+        return m === "post";
+      },
+      undefined,
+      { timeout: 30_000 },
+    );
   } catch (e) {
     const diag = await describeAuthFailureSurface(page).catch(() => "");
     const phase0: RnFullContentLoginPhase0Meta = {
@@ -135,7 +153,11 @@ export async function loginWithCredentials(
     .locator('button[type="submit"]')
     .first();
 
-  const authPostPromise = page.waitForResponse((res) => isCredentialsPostResponse(res), { timeout: 45_000 });
+  /** Cold `next dev` can compile `/api/auth/providers` + CSRF before the credentials POST; allow extra budget. */
+  const credentialsPostTimeoutMs = 120_000;
+  const authPostPromise = page.waitForResponse((res) => isCredentialsPostResponse(res), {
+    timeout: credentialsPostTimeoutMs,
+  });
 
   await submit.click();
 
@@ -143,7 +165,7 @@ export async function loginWithCredentials(
   try {
     authRes = await authPostPromise;
   } catch {
-    const at = page.url();
+    const at = redactAuthDiagnosticsUrl(page.url());
     const diag = await describeAuthFailureSurface(page).catch(() => "");
     const phase0: RnFullContentLoginPhase0Meta = {
       primaryClassification: "CREDENTIALS_CALLBACK_TIMEOUT_OR_MISSING",
@@ -154,7 +176,7 @@ export async function loginWithCredentials(
     };
     throw new RnFullContentLoginError(
       [
-        "No POST response from /api/auth/callback/credentials within 45s — submit may not have run, or Auth.js route is unreachable.",
+        `No POST response from /api/auth/callback/credentials within ${credentialsPostTimeoutMs / 1000}s — submit may not have run, or Auth.js route is unreachable.`,
         `baseURL=${baseURL} url=${at}`,
         "Check browser console, network tab, AUTH_URL/NEXTAUTH_URL vs BASE_URL, and that the dev server is healthy.",
         diag,
@@ -216,7 +238,7 @@ export async function loginWithCredentials(
       { timeout: PLAYWRIGHT_AUTH_NAV_TIMEOUT_MS },
     );
   } catch {
-    const atUrl = page.url();
+    const atUrl = redactAuthDiagnosticsUrl(page.url());
     let pathname = "";
     try {
       pathname = new URL(atUrl).pathname;
@@ -250,7 +272,7 @@ export async function loginWithCredentials(
     );
   }
 
-  let atUrl = page.url();
+  let atUrl = redactAuthDiagnosticsUrl(page.url());
   let pathname = new URL(atUrl).pathname;
   let body = await page.locator("body").innerText().catch(() => "");
 
@@ -276,7 +298,7 @@ export async function loginWithCredentials(
         : "/app";
     await page.goto(appHref, { waitUntil: "domcontentloaded" });
     await waitForAuthenticatedLearnerShell(page);
-    atUrl = page.url();
+    atUrl = redactAuthDiagnosticsUrl(page.url());
     pathname = new URL(atUrl).pathname;
     body = await page.locator("body").innerText().catch(() => "");
     if (/Unable to sign in|Invalid email, username, or password|Invalid credentials|incorrect password/i.test(body)) {
