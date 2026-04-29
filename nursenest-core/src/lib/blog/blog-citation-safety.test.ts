@@ -66,6 +66,16 @@ test("evaluateCitationGate allows override flag", () => {
   assert.equal(allowed.ok, true);
 });
 
+test("evaluateCitationGate allows draft with zero verified when allowDraftWithoutVerifiedSources", () => {
+  const allowed = evaluateCitationGate({
+    riskFlags: ["medication_safety"],
+    verifiedCount: 0,
+    allowInsufficientCitations: false,
+    allowDraftWithoutVerifiedSources: true,
+  });
+  assert.equal(allowed.ok, true);
+});
+
 test("parseBlogSourcesJson reads envelope v2", () => {
   const raw = {
     version: 2,

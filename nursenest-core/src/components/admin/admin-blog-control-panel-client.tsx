@@ -665,6 +665,39 @@ export function AdminBlogControlPanelClient({
         return;
       }
 
+      if (resStatus === 422 && json.code === "QUALITY_GATE") {
+        setGenState("failed");
+        if (json.plan) {
+          setPlan(json.plan);
+          setImageAttachments((prev) => mergeAttachmentRowsForPlan(json.plan!, prev));
+        }
+        if (typeof json.bodyHtml === "string") {
+          setBody(json.bodyHtml);
+          const plain = json.bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);
+          setExcerpt(plain.length >= 10 ? plain : "");
+        }
+        const draftId =
+          json.draftPost && typeof json.draftPost === "object" && "id" in json.draftPost
+            ? String((json.draftPost as { id: unknown }).id)
+            : null;
+        if (draftId) {
+          const g = await fetch(`/api/admin/blog/${draftId}`, ADMIN_BLOG_COOKIE_FETCH);
+          const gj = (await g.json()) as { post?: AdminPostPayload };
+          if (g.ok && gj.post) {
+            hydrateFromPost(gj.post);
+            if (json.plan) setPlan(json.plan);
+          }
+        }
+        setGenError(
+          formatAdminApiError(
+            json,
+            json.message ??
+              "Draft failed quality review: repeated filler content detected. Post saved as needs review — edit or regenerate.",
+          ),
+        );
+        return;
+      }
+
       if (resStatus < 200 || resStatus >= 400) {
         setGenState("failed");
         setGenError(
@@ -808,6 +841,7 @@ export function AdminBlogControlPanelClient({
           message?: string;
           post?: AdminPostPayload | null;
           postId?: string;
+          draftPost?: { id?: string } | null;
           warnings?: string[];
           plan?: BlogControlPanelPlan;
           code?: string;
@@ -817,6 +851,36 @@ export function AdminBlogControlPanelClient({
         if (res.status === 422 && json.code === "INSUFFICIENT_CITATIONS") {
           const flagStr = json.riskFlags?.length ? ` ${json.riskFlags.join(", ")}` : "";
           setSaveErr(`${json.message ?? "Still insufficient citations."}${flagStr}`);
+          return;
+        }
+        if (res.status === 422 && json.code === "QUALITY_GATE") {
+          const draftId =
+            json.draftPost && typeof json.draftPost === "object" && "id" in json.draftPost
+              ? String((json.draftPost as { id: unknown }).id)
+              : typeof json.postId === "string"
+                ? json.postId
+                : null;
+          if (draftId) {
+            const g = await fetch(`/api/admin/blog/${draftId}`, ADMIN_BLOG_COOKIE_FETCH);
+            const gj = (await g.json()) as { post?: AdminPostPayload };
+            if (g.ok && gj.post) {
+              hydrateFromPost(gj.post);
+              if (json.plan) setPlan(json.plan);
+            }
+          } else if (json.plan) {
+            setPlan(json.plan);
+          }
+          setCitationRecoveryMode(false);
+          setGenState("failed");
+          setGenError(
+            json.message ??
+              json.hint ??
+              "Draft failed quality review: repeated filler content detected. Edit sections or regenerate the body.",
+          );
+          setSaveErr(
+            json.message ??
+              "Draft failed quality review: repeated filler content detected. Post saved as needs review.",
+          );
           return;
         }
         if (!res.ok) {

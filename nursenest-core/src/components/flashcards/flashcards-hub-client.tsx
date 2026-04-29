@@ -14,6 +14,7 @@ import { LearnerCtaLink } from "@/components/learner-ui/learner-cta-link";
 import { weakAreaFlashcardsHref } from "@/lib/learner/weak-area-flashcards-href";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
+import type { FlashcardLessonVirtualDiagnostics } from "@/lib/flashcards/flashcard-custom-session-response";
 import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
 
 const CARD_COUNTS = [10, 20, 30, 50] as const;
@@ -80,6 +81,9 @@ export function FlashcardsHubClient({
   >(() => initialHub?.categoryOptions ?? []);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [matchingCards, setMatchingCards] = useState<number | null>(() => initialHub?.matchingTotal ?? null);
+  const [lessonVirtualDiagnostics, setLessonVirtualDiagnostics] = useState<FlashcardLessonVirtualDiagnostics | null>(
+    () => initialHub?.lessonVirtualDiagnostics ?? null,
+  );
   const [selectedBodyIds, setSelectedBodyIds] = useState<string[]>([]);
   const [cardLimit, setCardLimit] = useState(20);
   const [shuffleOn, setShuffleOn] = useState(true);
@@ -130,10 +134,12 @@ export function FlashcardsHubClient({
       }
       setBuilderCategories(parsed.categoryOptions);
       setMatchingCards(parsed.summary?.matchingCards ?? 0);
+      setLessonVirtualDiagnostics(parsed.summary?.lessonVirtualDiagnostics ?? null);
     } catch {
       setLoadError("Could not load flashcard topics.");
       setBuilderCategories([]);
       setMatchingCards(null);
+      setLessonVirtualDiagnostics(null);
     }
   }, [
     scopedPathwayId,
@@ -174,7 +180,12 @@ export function FlashcardsHubClient({
     `${cardLimit} cards`,
     selectedBodyIds.length === 0 ? "all systems" : `${selectedBodyIds.length} systems`,
     shuffleOn ? "shuffle on" : "shuffle off",
-  ].join(" · ");
+    lessonVirtualDiagnostics
+      ? `lesson-linked ${lessonVirtualDiagnostics.totalGeneratedVirtualCards} cards · ${lessonVirtualDiagnostics.lessonsWithDerivedCards}/${lessonVirtualDiagnostics.catalogLessonCount} lessons`
+      : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   const startQuery = useMemo(
     () =>
@@ -266,6 +277,25 @@ export function FlashcardsHubClient({
         <p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.flashcards.hub.subtitle")}</p>
         <p className="text-xs text-[var(--semantic-brand)]">{pathwayDisplayName}</p>
         <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">{sessionSummaryLine}</p>
+        {lessonVirtualDiagnostics ? (
+          <div
+            className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_6%,var(--semantic-surface))] px-3 py-2 text-xs text-[var(--semantic-text-secondary)]"
+            data-nn-e2e-flashcards-lesson-diagnostics
+          >
+            <p className="font-semibold text-[var(--semantic-text-primary)]">Lesson-linked inventory</p>
+            <ul className="mt-1 list-disc space-y-0.5 pl-4 font-mono leading-relaxed">
+              <li>pathwayId: {lessonVirtualDiagnostics.pathwayId}</li>
+              <li>catalog lessons: {lessonVirtualDiagnostics.catalogLessonCount}</li>
+              <li>lessons with derived cards: {lessonVirtualDiagnostics.lessonsWithDerivedCards}</li>
+              <li>total generated virtual cards: {lessonVirtualDiagnostics.totalGeneratedVirtualCards}</li>
+              <li>recall rows: {lessonVirtualDiagnostics.recallVirtualCount}</li>
+              <li>section-derived rows: {lessonVirtualDiagnostics.sectionDerivedVirtualCount}</li>
+              <li>generic-filler-tagged section rows: {lessonVirtualDiagnostics.genericFillerSectionCardHits}</li>
+              <li>selected systems/categories: {lessonVirtualDiagnostics.selectedCategoryIds.join(", ") || "(all)"}</li>
+              <li>filter mode: {lessonVirtualDiagnostics.filterModeLabel}</li>
+            </ul>
+          </div>
+        ) : null}
         <div className="flex flex-wrap gap-3 pt-1 text-sm">
           <Link
             href={resolvedLessonsHubHref}
@@ -338,7 +368,11 @@ export function FlashcardsHubClient({
         </div>
       ) : null}
 
-      {!loadError && matchingCards === 0 && !starredOnly && builderCategories.length === 0 ? (
+      {!loadError &&
+      matchingCards === 0 &&
+      !starredOnly &&
+      builderCategories.length === 0 &&
+      !(lessonVirtualDiagnostics && lessonVirtualDiagnostics.totalGeneratedVirtualCards > 0) ? (
         <div
           className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
           data-nn-e2e-flashcards-setup-report
@@ -351,6 +385,25 @@ export function FlashcardsHubClient({
               lessons hub
             </Link>{" "}
             for this track, complete a lesson section, then return — or clear filters above and choose <strong>All cards</strong>.
+          </p>
+        </div>
+      ) : null}
+
+      {!loadError &&
+      matchingCards === 0 &&
+      !starredOnly &&
+      builderCategories.length === 0 &&
+      lessonVirtualDiagnostics &&
+      lessonVirtualDiagnostics.totalGeneratedVirtualCards > 0 ? (
+        <div
+          className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
+          data-nn-e2e-flashcards-inventory-mismatch
+        >
+          <p className="font-medium text-[var(--semantic-text-primary)]">Lesson-linked cards exist but topics did not resolve</p>
+          <p className="mt-2">
+            Diagnostics show {lessonVirtualDiagnostics.totalGeneratedVirtualCards} catalog-derived cards for pathway{" "}
+            <span className="font-mono">{lessonVirtualDiagnostics.pathwayId}</span>. Try refreshing the page or clearing
+            filters; if this persists, contact support with this pathway id.
           </p>
         </div>
       ) : null}

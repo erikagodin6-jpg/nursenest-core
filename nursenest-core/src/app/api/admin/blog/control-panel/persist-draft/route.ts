@@ -62,7 +62,10 @@ export async function POST(req: Request) {
   }
   const d = parsed.data;
 
-  const planParsed = safeParseBlogControlPanelPlan(d.plan);
+  const planParsed = safeParseBlogControlPanelPlan(d.plan, {
+    title: d.topic,
+    ...(d.fixedSlug ? { slug: d.fixedSlug } : {}),
+  });
   if (!planParsed.success) {
     await logControlPanelPersistFailure({
       topic: d.topic,
@@ -157,6 +160,27 @@ export async function POST(req: Request) {
           code: persistResult.code,
           message: persistResult.error,
           riskFlags: persistResult.riskFlags ?? [],
+        },
+        { status: 422 },
+      );
+    }
+    if (persistResult.code === "QUALITY_GATE") {
+      await logControlPanelPersistFailure({
+        topic: d.topic,
+        code: "QUALITY_GATE",
+        message: persistResult.error,
+        createdById: gate.admin.userId,
+      });
+      return NextResponse.json(
+        {
+          error: "quality_gate_blocked",
+          code: persistResult.code,
+          message: persistResult.error,
+          draftPost: persistResult.post ?? null,
+          postId: persistResult.post?.id,
+          plan: persistResult.plan,
+          warnings: persistResult.warnings ?? [],
+          hint: "Draft failed quality review: repeated filler content detected. Edit body/sections or regenerate; post saved as needs review.",
         },
         { status: 422 },
       );

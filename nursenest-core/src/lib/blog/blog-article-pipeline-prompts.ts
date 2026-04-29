@@ -17,15 +17,19 @@ const PEOPLE_FIRST_SEO = `People-first SEO (non-negotiable):
 
 const LONGFORM_PATHOPHYSIOLOGY_PLAN_ADDENDUM = `## Long-form pathophysiology / disease-process mode (this article)
 When this mode applies, the JSON must satisfy a **stricter editorial contract** (server-validated):
-- **outline**: **6–10** H2 sections; each H2 must be topic-specific. Cover this arc (wording may vary but substance must appear):
-  1) Orientation ("What is …?" / clinical scope for nursing students)
-  2) Pathophysiology step-by-step (mechanisms in order; use causal language; avoid hand-waving)
-  3) Why it happens / driving forces (compensation, feedback loops, tissue-level change — as appropriate)
-  4) Signs & symptoms tied back to mechanism (not a list without "because")
-  5) Assessment & diagnostic clues (vitals, focused assessment, labs/imaging when relevant — no invented numbers)
-  6) **Nursing implications** (priorities, safety, monitoring, escalation, patient education — explicit NCLEX-style judgment where fitting)
-  7) Key takeaways (may overlap with keyTakeaways bullets but H2 still appears in outline for HTML)
-  8) Optional: complications / red flags when clinically central to the topic
+- **outline**: **10–14** H2 sections; each H2 must be topic-specific and map to a **distinct** teaching job (no copy-pasted section bodies later). Cover this arc (titles may vary; every bullet must appear as its own H2 with unique bullets/paragraphs planned):
+  1) Plain-language summary / orientation for learners
+  2) Pathophysiology mechanism (stepwise causal chain for **this** disease)
+  3) Key signs and symptoms (each tied back to mechanism, not generic lists)
+  4) Assessment priorities (focused nursing assessment, red-flag vitals/inspection cues)
+  5) Diagnostics and labs (what is ordered, why, how to interpret trends — no fabricated numeric cutoffs)
+  6) Nursing interventions (priorities, monitoring, safety, delegation boundaries)
+  7) Medications and treatment considerations (classes, monitoring, education — no invented dosing)
+  8) Patient teaching (home care, adherence, foot/skin care when relevant, when to call the care team)
+  9) NCLEX / REx-PN exam traps (distractors, prioritization, "best next action" patterns)
+  10) Escalation red flags (when to escalate, emergency vs clinic urgency)
+  11) Mini case application (short vignette + questions that reference **this** topic only)
+  12) Key takeaways (may mirror keyTakeaways JSON but still unique prose in HTML)
 - **faqs**: **at least 4** items; answers must connect mechanism → bedside decision or common exam trap. Do **not** reuse generic FAQ text across unrelated diseases; vary question stems and traps.
 - **suggestedInternalLessons** + **internalAnchorOpportunities** + **recommendedInternalLinks** together must provide **≥5** study destinations. Include a mix when relevant: pathway lessons, /questions, /practice-exams, flashcards hub, adaptive/CAT practice hints (marketing paths only — never /app/ or /api/).
 - **recommendedInternalLinks**: array of { "targetType", "suggestedPath", "anchorText", optional "reason", optional "needsReview" (true when path is best-effort) }. targetType examples: lesson, flashcards_hub, question_bank, practice_exams, adaptive_cat, blog, topic_hub. Use **needsReview: true** when the path is plausible but not certain.
@@ -41,6 +45,16 @@ When this mode applies, the JSON must satisfy a **stricter editorial contract** 
 - **needsReviewFlags** (required): include **"apa_source_review_required"** whenever the model is not attaching admin-verified sources (normal for first draft).
 - **editorialNotes** (optional): short strings for editors (e.g. Canada-specific scope, exam track nuance).
 - **apaSourceStubs**: brainstorming only — **never** present stubs as verified APA 7. Do **not** output a "referencesApa7" key; published APA lines come only from admin-verified sources in the CMS.
+- **imagePlacements** (required): **≥1** row; each **promptIdea** must be a **detailed** phrase (**≥20 characters**); include **section** and **altIdea**. Never null, undefined, empty strings, or placeholder text — if no image is needed, still return one safe generic educational row. Example shape (use your own topic-specific copy; lengths must satisfy the rules above):
+  {
+    "imagePlacements": [
+      {
+        "promptIdea": "clinical nursing education illustration showing patient assessment and care planning",
+        "section": "Article overview",
+        "altIdea": "Clinical nursing education illustration supporting article content"
+      }
+    ]
+  }
 - **Country CA**: when the brief targets Canada, foreground Canadian regulatory / practice context **where it genuinely changes** nursing implications; keep physiology universal unless evidence-based localization applies.`;
 
 export function buildStructuredPlanSystemPrompt(ctx?: { template: BlogPostTemplate; intent: BlogPostIntent }): string {
@@ -64,7 +78,12 @@ Required keys (exact names):
 - suggestedInternalLessons: { "label", "suggestedPath", optional "rationale", optional "linkKind" ("lesson"|"lessons_hub"|"question_bank"|"topic_cluster"|"practice_exams"|"practice_programmatic"|"flashcards_hub"|"adaptive_cat"|"study_plan"|"general") }[] — root-relative paths: pathway lessons + /questions hubs, /practice-exams, programmatic practice landings from the brief; match country (/us/ vs /canada/); no /app/ or /api/
 - faqs: { "q", "a" }[] — 4-7 items; answers must teach a concrete exam-relevant point
 - breadcrumbs: { "label", "href" }[] — **exact pattern** for NurseNest marketing: [ { "label": "Home", "href": "/" }, { "label": "Blog", "href": "/blog" }, optional middle crumbs with root-relative hrefs only if they are real site paths, then { "label": "<article H1 or shorter>", "href": "/blog/<recommendedSlug>" } ]. Never use /app/, /api/, or external URLs. Last href must be /blog/<recommendedSlug>.
-- imagePlacements: { optional "slotKey" (e.g. hero, inline_1), optional "role" (hero|inline), "section", "promptIdea", "altIdea", optional "captionIdea" }[] — one hero + 1-3 optional inline; clinically relevant, NurseNest brand (professional nursing education, dignified, inclusive; no gore, no identifiable patients, no real institutional logos)
+- imagePlacements: **REQUIRED** non-empty array (minimum **1** object). **Never** omit this key, return null, or use []. Each object MUST include:
+  - **promptIdea**: string, **≥20 characters**, vivid and specific (what to illustrate — e.g. "nurse assessing patient with heart failure in hospital setting"). Never "", null, undefined, or a vague one-word token. If unsure, use: "clinical nursing education illustration showing patient assessment and care planning"
+  - **section**: string (which article section this supports; ≥2 chars preferred)
+  - **altIdea**: string (accessibility description; ≥5 chars)
+  - optional **slotKey** (e.g. hero, inline_1), optional **role** ("hero"|"inline"), optional **captionIdea**
+  Target one **hero** + 1–3 optional **inline** ideas; clinically relevant, NurseNest brand (professional nursing education, dignified, inclusive; no gore, no identifiable patients, no real institutional logos). If unsure, still output one valid row using a generic but concrete medical illustration prompt (never empty).
 - apaSourceStubs: objects with optional authors[], year, title, source, publisher, url, doi, authority (regulator|guideline_body|peer_reviewed|academic_hospital|association|general_web|low_authority) — **brainstorming only**; these are NOT published as bibliography and must NOT be treated as verified. Never fabricate DOIs, URLs, journal names, or volume/issue/page numbers. Use placeholders only where clearly marked as uncertain.
 - keyTakeaways: 3-5 bullets with specific clinical or test-taking substance
 - optional featuredSnippetHint: <=300 chars
@@ -114,17 +133,23 @@ ${
 }
 
 export function buildArticleBodySystemPrompt(ctx?: { template: BlogPostTemplate; intent: BlogPostIntent }): string {
-  const longformBody =
-    ctx && isLongFormPathophysiologyProfile(ctx)
-      ? `
+  const pathophysiologyLongForm = Boolean(ctx && isLongFormPathophysiologyProfile(ctx));
+  const longformBody = pathophysiologyLongForm
+    ? `
 ## Pathophysiology long-form body rules (this article)
 - Mirror the **outline H2 order** as <h2> sections (do not skip a planned section).
-- In each major section: **mechanism → clinical picture → nursing action / monitoring** (at least one paragraph chain).
+- Target **~120–250 unique words per major H2** of substantive teaching; **never** reuse the same <p> paragraph under different H2 headings (automated quality review rejects duplicate blocks).
+- In each major section: **mechanism → clinical picture → nursing action / monitoring** (at least one paragraph chain) with **topic-specific** facts (labs, exam findings, foot care, glucose patterns, etc. as appropriate).
 - Use **plain English first**, then precise terms; define abbreviations on first use.
 - **Safety / uncertainty**: use measured language ("often", "may", "typically") — no false certainty; no fabricated trial results or statistics.
 - Include <h2>Why it matters in nursing practice</h2> **or** an equivalently titled block that is clearly nursing-priority content (if not already an H2 title from the outline, add this H2 once).
-- Vary sentence openings; avoid boilerplate openers ("In today's fast-paced healthcare…", "In conclusion…").`
-      : "";
+- Vary sentence openings; avoid boilerplate openers ("In today's fast-paced healthcare…", "In conclusion…").
+- Include <h2>Key takeaways</h2> with a bullet list (unique prose; must not repeat paragraphs from other H2 sections).
+- **Do not** embed <h2>FAQs</h2>, <h2>Frequently asked questions</h2>, or <h2>References</h2> in HTML — FAQs live in structured JSON and references render from verified APA lines; duplicating them fails quality review.`
+    : "";
+  const faqBodyRule = pathophysiologyLongForm
+    ? `- Do **not** put FAQ or References headings in the HTML body (see pathophysiology rules above).`
+    : `- Include <h2>Key takeaways</h2> (bullet list) and <h2>FAQs</h2> using the supplied FAQ items (you may tighten wording slightly).`;
   return `You write long-form, SEO-aware HTML for NurseNest nursing licensure exam prep.
 Output valid HTML only: <h2>, <h3>, <p>, <ul>, <li>, <strong>, <table>, <thead>, <tbody>, <tr>, <th>, <td>. No markdown. No <h1>.
 
@@ -138,7 +163,7 @@ Rules:
 - For comparison topics (X vs Y, differential diagnosis, syndrome contrasts), include at least one concise comparison table.
 - Include a short "Clinical pearls" section with concrete exam-day pattern recognition cues.
 - Include a short "NCLEX-style tips" section with test-taking heuristics tied to this topic.
-- Include <h2>Key takeaways</h2> (bullet list) and <h2>FAQs</h2> using the supplied FAQ items (you may tighten wording slightly).
+${faqBodyRule}
 - Include <h2>Related study paths</h2> — one short paragraph weaving in the internal paths as plain text (lessons, question bank hub, flashcards hub, practice exams directory — never raw /app/ URLs).
 - Educational exam-prep framing only — no directive treatment orders for real patients.
 - No fabricated statistics or pass-rate claims.
@@ -167,6 +192,11 @@ Exam / track label: ${params.exam}
 Template: ${params.template} · Intent: ${params.intent} · Funnel: ${params.funnelStage} · Tone: ${params.tone}
 ${params.keywords ? `Keywords: ${params.keywords}` : ""}
 Minimum body length: **≥1200 words** of substantive teaching after stripping HTML (FAQ HTML and reference blocks still count toward teaching depth, but do not pad with empty paragraphs). If you run short, expand mechanism and nursing implication paragraphs — not repetition of headings.
+${
+  isLongFormPathophysiologyProfile({ template: params.template, intent: params.intent })
+    ? "\n**Pathophysiology long-form:** keep FAQs **only** in the JSON block above — do **not** render <h2>FAQs</h2> or <h2>References</h2> in the HTML. Each planned H2 must contain **new** clinical detail; do not paste the same paragraph under multiple headings."
+    : ""
+}
 
 OUTLINE:
 ${JSON.stringify(params.plan.outline, null, 2)}

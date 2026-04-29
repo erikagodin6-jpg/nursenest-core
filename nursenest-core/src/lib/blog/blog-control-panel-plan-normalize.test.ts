@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA,
+  normalizeBlogEditorialPlanCandidate,
   normalizePlanString,
   safeParseBlogControlPanelPlan,
 } from "@/lib/blog/blog-control-panel-plan-normalize";
@@ -80,15 +82,15 @@ describe("safeParseBlogControlPanelPlan", () => {
     }
   });
 
-  it("coerces short number metaTitle to string then fails Zod min length", () => {
+  it("coerces short number metaTitle then repairs from titleOptions when too short", () => {
     const raw = {
       ...minimalValidPlan(),
       metaTitle: 1,
     };
     const r = safeParseBlogControlPanelPlan(raw);
-    assert.equal(r.success, false);
-    if (!r.success) {
-      assert.ok(r.zodError);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.ok(r.data.metaTitle.length >= 3);
     }
   });
 
@@ -105,6 +107,108 @@ describe("safeParseBlogControlPanelPlan", () => {
     assert.equal(r.success, true);
     if (r.success) {
       assert.deepEqual(r.data.outline[0]?.h3, ["single h3 string value"]);
+    }
+  });
+
+  it("fills default imagePlacements when the model returns an empty array", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [],
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.ok(r.data.imagePlacements.length >= 1);
+      assert.ok((r.data.imagePlacements[0]?.promptIdea ?? "").length >= 10);
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA);
+    }
+  });
+
+  it("A: missing imagePlacements key does not fail validation", () => {
+    const r = safeParseBlogControlPanelPlan(minimalValidPlan());
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.ok(r.data.imagePlacements.length >= 1);
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA);
+    }
+  });
+
+  const goodRow = {
+    section: "Clinical foundations",
+    altIdea: "Nurse educator reviewing care plan with student",
+  };
+
+  it("C: undefined promptIdea gets fallback", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [{ ...goodRow, promptIdea: undefined }],
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA);
+    }
+  });
+
+  it("D: empty string promptIdea gets fallback", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [{ ...goodRow, promptIdea: "" }],
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA);
+    }
+  });
+
+  it("E: promptIdea shorter than 10 characters gets fallback", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [{ ...goodRow, promptIdea: "short" }],
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA);
+    }
+  });
+
+  it("F: valid promptIdea is preserved", () => {
+    const promptIdea =
+      "Detailed clinical nursing illustration of nurse performing head-to-toe assessment in med-surg unit";
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [{ ...goodRow, promptIdea }],
+    };
+    const r = safeParseBlogControlPanelPlan(raw);
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, promptIdea);
+    }
+  });
+
+  it("G: retry-style planSnapshot parse uses normalization with job context", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [{ ...goodRow, promptIdea: null }],
+    };
+    const r = safeParseBlogControlPanelPlan(raw, { jobId: "job-retry-test", title: "Sepsis recognition" });
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.equal(r.data.imagePlacements[0]?.promptIdea, BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA);
+    }
+  });
+
+  it("H: batch-style parse uses same normalization with batch id context", () => {
+    const raw = {
+      ...minimalValidPlan(),
+      imagePlacements: [],
+    };
+    const r = safeParseBlogControlPanelPlan(raw, { jobId: "batch-campaign-chunk-3", title: "IV therapy basics" });
+    assert.equal(r.success, true);
+    if (r.success) {
+      assert.ok(r.data.imagePlacements.length >= 1);
     }
   });
 

@@ -45,6 +45,15 @@ describe("blog-generation-repair-classifier", () => {
     assert.equal(r.terminalReason, "citations");
   });
 
+  it("classifies QUALITY_GATE as recoverable (regenerate body / edit)", () => {
+    const r = classifyBlogPipelineFailureForRepair({
+      stage: "persist",
+      error: "Draft failed quality review: repeated filler content detected.",
+      code: "QUALITY_GATE",
+    });
+    assert.equal(r.recoverable, true);
+  });
+
   it("round-trips batch failure message for admin parsing", () => {
     const raw = formatBlogBatchItemFailureMessage({
       originalError: "too short",

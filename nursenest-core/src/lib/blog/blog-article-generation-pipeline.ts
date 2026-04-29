@@ -398,6 +398,21 @@ export async function runBlogArticleGenerationPipeline(
             repairPassesUsed,
           };
         }
+        if (persistResult.code === "QUALITY_GATE") {
+          return {
+            ok: false,
+            stage: "persist",
+            error: persistResult.error,
+            plan,
+            bodyHtml,
+            code: persistResult.code,
+            details: {
+              draftPost: persistResult.post ?? null,
+              qualityWarnings: persistResult.warnings ?? [],
+            },
+            repairPassesUsed,
+          };
+        }
         if (persistResult.code === "SEO_DUPLICATE_BLOCKED") {
           const cl = classifyBlogPipelineFailureForRepair({
             stage: "persist",

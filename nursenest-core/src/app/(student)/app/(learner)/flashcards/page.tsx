@@ -198,7 +198,11 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
       cardLimitRaw: "20",
     });
     if (inv.ok) {
-      initialHub = { categoryOptions: inv.categoryOptions, matchingTotal: inv.summary.matchingCards };
+      initialHub = {
+        categoryOptions: inv.categoryOptions,
+        matchingTotal: inv.summary.matchingCards,
+        lessonVirtualDiagnostics: inv.summary.lessonVirtualDiagnostics ?? null,
+      };
     }
   }
 

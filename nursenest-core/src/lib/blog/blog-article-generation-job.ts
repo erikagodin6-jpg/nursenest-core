@@ -176,7 +176,9 @@ export async function runClaimedBlogArticleGenerationJob(jobId: string): Promise
           planSnapshot: result.plan ? (result.plan as unknown as Prisma.InputJsonValue) : undefined,
           bodyHtmlSnapshot: result.bodyHtml ?? undefined,
           blogPostId:
-            result.stage === "persist" && result.code === "PRE_PUBLISH_BLOCKED" && result.details
+            result.stage === "persist" &&
+            (result.code === "PRE_PUBLISH_BLOCKED" || result.code === "QUALITY_GATE") &&
+            result.details
               ? (() => {
                   const d = result.details as { draftPost?: { id?: string } | null };
                   const id = d.draftPost && typeof d.draftPost.id === "string" ? d.draftPost.id : null;
@@ -309,7 +311,9 @@ export async function retryRepairBlogArticleGenerationJob(jobId: string): Promis
     });
     if (!post || !post.exam) return { ok: false, error: "post_missing" };
 
-    const planParsed = row.planSnapshot ? safeParseBlogControlPanelPlan(row.planSnapshot) : null;
+    const planParsed = row.planSnapshot
+      ? safeParseBlogControlPanelPlan(row.planSnapshot, { jobId: row.id, title: input.topic })
+      : null;
     if (!planParsed || !planParsed.success) {
       return { ok: false, error: "plan_snapshot_invalid" };
     }
@@ -399,7 +403,9 @@ export async function retryRepairBlogArticleGenerationJob(jobId: string): Promis
     return { ok: true };
   }
 
-  const planParsed = row.planSnapshot ? safeParseBlogControlPanelPlan(row.planSnapshot) : null;
+  const planParsed = row.planSnapshot
+    ? safeParseBlogControlPanelPlan(row.planSnapshot, { jobId: row.id, title: input.topic })
+    : null;
   if (!planParsed || !planParsed.success) {
     return { ok: false, error: "plan_snapshot_required" };
   }

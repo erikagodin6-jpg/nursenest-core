@@ -159,6 +159,15 @@ function detectGenericFiller(body: string): string[] {
   return hits;
 }
 
+/** Used by lesson-linked flashcard generation — avoid stems/backs from generic filler prose. */
+export function lessonBodyGenericFillerPatternHits(body: string): string[] {
+  return detectGenericFiller(body);
+}
+
+export function lessonBodyHasGenericFiller(body: string): boolean {
+  return detectGenericFiller(body).length > 0;
+}
+
 function evaluateSpecificity(kind: LessonContentDepthCanonicalKind, body: string): string[] {
   const plain = stripToPlainText(body);
   const fails: string[] = [];

@@ -1,5 +1,6 @@
 import type {
   BlogImageStatus,
+  BlogPostIntent,
   BlogPostStatus,
   BlogPostTemplate,
   CountryCode,
@@ -18,6 +19,10 @@ import { coerceBlogSourceRows, validateSources } from "@/lib/blog/apa7";
 import { parseInternalLinkPlanJson } from "@/lib/blog/blog-image-workflow";
 import { parseMarketingLessonDetailPath } from "@/lib/blog/blog-marketing-lesson-detail-path";
 import { classifyBlogCorpus, collectClassificationViolations, isPublishBlockedByTaxonomy } from "@/lib/taxonomy/content-write-taxonomy";
+import {
+  blogIntentForQualityGate,
+  collectBlogContentQualityIssues,
+} from "@/lib/blog/blog-content-quality-gate";
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -50,7 +55,8 @@ export type PrePublishCheckId =
   | "schema_summary_opportunities"
   | "schema_contract_notes"
   | "faq_content_when_required"
-  | "apa_verification_gating";
+  | "apa_verification_gating"
+  | "blog_content_quality_gate";
 
 export type PrePublishSeverity = "block" | "warn";
 
@@ -98,6 +104,7 @@ export type BlogPostPrePublishRow = {
   countryTarget: CountryCode | null;
   postStatus: BlogPostStatus;
   postTemplate: BlogPostTemplate | null;
+  intent: BlogPostIntent | null;
   targetKeyword: string | null;
   medicalRiskFlags: string[];
 };
@@ -131,6 +138,7 @@ export const blogPrePublishValidationSelect = {
   countryTarget: true,
   postStatus: true,
   postTemplate: true,
+  intent: true,
   targetKeyword: true,
   medicalRiskFlags: true,
 } as const;
@@ -163,6 +171,7 @@ export type PrePublishPatch = {
   imageStatus?: BlogImageStatus;
   countryTarget?: CountryCode | null;
   postTemplate?: BlogPostTemplate | null;
+  intent?: BlogPostIntent | null;
   targetKeyword?: string | null;
   medicalRiskFlags?: string[];
 };
@@ -207,6 +216,7 @@ export function mergeBlogPostForPrePublishPatch(
     countryTarget: patch.countryTarget !== undefined ? patch.countryTarget : current.countryTarget,
     postStatus: current.postStatus,
     postTemplate: patch.postTemplate !== undefined ? patch.postTemplate : current.postTemplate,
+    intent: patch.intent !== undefined ? patch.intent : current.intent,
     targetKeyword: patch.targetKeyword !== undefined ? patch.targetKeyword : current.targetKeyword,
     medicalRiskFlags: patch.medicalRiskFlags !== undefined ? patch.medicalRiskFlags : current.medicalRiskFlags,
   };
@@ -581,6 +591,25 @@ export async function validateBlogPrePublish(
   })) {
     push(issues, {
       id: q.id,
+      severity: q.severity,
+      message: q.message,
+      fix: q.fix,
+    });
+  }
+
+  const pathophysiologyQualityIntent = blogIntentForQualityGate(row.postTemplate, row.intent ?? undefined);
+  for (const q of collectBlogContentQualityIssues({
+    title: row.title,
+    body: row.body,
+    targetKeyword: row.targetKeyword,
+    postTemplate: row.postTemplate,
+    intent: pathophysiologyQualityIntent,
+    faqBlock: row.faqBlock,
+    apaReferences: row.apaReferences,
+    sourcesJson: row.sourcesJson,
+  })) {
+    push(issues, {
+      id: "blog_content_quality_gate",
       severity: q.severity,
       message: q.message,
       fix: q.fix,

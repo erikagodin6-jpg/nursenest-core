@@ -30,7 +30,9 @@ export function isSyntheticFlashcardStudyId(id: string): boolean {
     id.startsWith("lrf:") ||
     id.startsWith("lrc:") ||
     id.startsWith("ltk:") ||
-    id.startsWith("lta:")
+    id.startsWith("lta:") ||
+    id.startsWith("lls:") ||
+    id.startsWith("llp:")
   );
 }
 

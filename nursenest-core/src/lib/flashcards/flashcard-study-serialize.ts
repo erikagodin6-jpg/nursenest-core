@@ -1,5 +1,6 @@
 import { buildFlashcardExplanationFromSources } from "@/lib/content-quality/controlled-rationale-enrichment";
 import { truncateForPreview } from "@/lib/flashcards/flashcard-access";
+import { parseLessonLinkSourceKey } from "@/lib/flashcards/lesson-link-source-key";
 import {
   correctAnswerLine,
   parseExamMicroQuestionFromDbFields,
@@ -37,7 +38,13 @@ export type FlashcardStudyApiCard = {
   pathwayId: string | null;
   explanation?: string;
   examMicroQuestion?: ExamMicroQuestionPayload;
+  /** Present on `lessonlink:v1|…` catalog-derived custom-session cards. */
+  lessonLinkSectionKind?: string;
+  lessonLinkCardType?: string;
+  difficultyRating?: number;
 };
+
+export { parseLessonLinkSourceKey } from "@/lib/flashcards/lesson-link-source-key";
 
 export function serializeFlashcardForDeckStudy(
   card: FlashcardStudySelectRow,
@@ -117,6 +124,7 @@ export function serializeFlashcardForCustomSession(
         topic: opts.topic,
         subtopic: card.category.topicCode,
       });
+  const link = parseLessonLinkSourceKey(card.sourceKey);
   return {
     id: card.id,
     front,
@@ -128,5 +136,12 @@ export function serializeFlashcardForCustomSession(
     pathwayId: card.deck?.pathwayId ?? opts.pathwayId,
     ...(exam ? { examMicroQuestion: exam } : {}),
     ...(explanation ? { explanation } : {}),
+    ...(link
+      ? {
+          lessonLinkSectionKind: link.sectionKind,
+          lessonLinkCardType: link.cardType,
+          difficultyRating: link.difficulty,
+        }
+      : {}),
   };
 }

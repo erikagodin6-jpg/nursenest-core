@@ -20,7 +20,11 @@ import {
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { blogLessonLinkRowSchema, type BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 import {
+  BLOG_PLAN_FALLBACK_IMAGE_ALT_IDEA,
+  BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA,
+  BLOG_PLAN_FALLBACK_IMAGE_SECTION,
   formatZodIssuesForApi,
+  normalizeBlogEditorialPlanCandidate,
   safeParseBlogControlPanelPlan,
 } from "@/lib/blog/blog-control-panel-plan-normalize";
 import {
@@ -76,6 +80,10 @@ import {
 } from "@/lib/blog/blog-optional-slug";
 import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
 import { assertSeoSafeToCreateBlog, SeoDuplicateBlockedError } from "@/lib/seo/seo-duplicate-guard";
+import {
+  blogIntentForQualityGate,
+  collectBlogContentQualityIssues,
+} from "@/lib/blog/blog-content-quality-gate";
 
 export type ControlPanelGenerateInput = {
   topic: string;
@@ -132,18 +140,6 @@ function extractJsonObject(raw: string): unknown {
   const end = t.lastIndexOf("}");
   if (start >= 0 && end > start) t = t.slice(start, end + 1);
   return JSON.parse(t) as unknown;
-}
-
-/**
- * Reserved hook for bounded plan materialization repairs (outline/FAQ density, slug hygiene).
- * Long-form contract recovery remains in {@link repairPlanForLongformContractIssues} (pipeline loop).
- */
-async function repairMaterializedPlanSectionsOnce(
-  plan: BlogControlPanelPlan,
-  _input: ControlPanelGenerateInput,
-  _opts?: { openAiUser?: string },
-): Promise<BlogControlPanelPlan> {
-  return plan;
 }
 
 export function sanitizeControlPanelGeneratedSlugInput(s: string, exam: string, topic: string): string {
@@ -220,7 +216,7 @@ export async function fetchControlPanelPlan(
     );
   }
 
-  const plan = safeParseBlogControlPanelPlan(parsed);
+  const plan = safeParseBlogControlPanelPlan(parsed, { title: input.topic });
   if (!plan.success) {
     if (plan.normalizeError) {
       throw new BlogControlPanelPlanError("PLAN_NORMALIZE", plan.normalizeError, {
@@ -314,11 +310,14 @@ export type ControlPanelPersistResult =
   | {
       ok: false;
       error: string;
-      code?: "INSUFFICIENT_CITATIONS" | "PRE_PUBLISH_BLOCKED" | "SEO_DUPLICATE_BLOCKED";
+      code?: "INSUFFICIENT_CITATIONS" | "PRE_PUBLISH_BLOCKED" | "SEO_DUPLICATE_BLOCKED" | "QUALITY_GATE";
       riskFlags?: string[];
       prePublish?: PrePublishValidationResult;
       /** Present when `PRE_PUBLISH_BLOCKED`: draft row was committed; publish step skipped. */
       post?: { id: string; slug: string; title: string; postStatus: BlogPostStatus; updatedAt: Date };
+      /** Present when `QUALITY_GATE`: draft saved as NEEDS_REVIEW for admin repair. */
+      plan?: BlogControlPanelPlan;
+      warnings?: string[];
     };
 
 export type ControlPanelPersistProgressStage =
@@ -505,6 +504,24 @@ export async function persistControlPanelDraft(
             ? BlogWorkflowStatus.NEEDS_SOURCE_REVIEW
             : BlogWorkflowStatus.GENERATED;
 
+  const pathophysiologyQualityIntent = blogIntentForQualityGate(input.template, input.intent);
+  const contentQualityIssues = collectBlogContentQualityIssues({
+    title: pageTitle,
+    body: bodyWithRequiredLinks,
+    targetKeyword: input.targetKeyword ?? input.topic,
+    postTemplate: input.template,
+    intent: pathophysiologyQualityIntent,
+    faqBlock: faqBlock as unknown as Prisma.JsonValue,
+    apaReferences,
+    sourcesJson: citationEnvelope as unknown as Prisma.JsonValue,
+  });
+  const contentQualityBlocking = contentQualityIssues.filter((i) => i.severity === "block");
+  const qualityGateFailed = contentQualityBlocking.length > 0;
+  const postStatusForCreate = qualityGateFailed ? BlogPostStatus.NEEDS_REVIEW : BlogPostStatus.DRAFT;
+  const workflowStatusForCreate = qualityGateFailed
+    ? BlogWorkflowStatus.NEEDS_MEDICAL_REVIEW
+    : workflowStatusBase;
+
   const heroSlot = plan.imagePlacements?.[0];
   let coverImagePrompt: string | null = null;
   let coverImageAlt: string | null = null;
@@ -564,7 +581,7 @@ export async function persistControlPanelDraft(
           intent: input.intent,
           funnelStage: input.funnelStage,
           postTemplate: input.template,
-          postStatus: BlogPostStatus.DRAFT,
+          postStatus: postStatusForCreate,
           publishAt: null,
           seoTitle: seoTitleStored,
           seoDescription: seoDescriptionStored,
@@ -602,7 +619,7 @@ export async function persistControlPanelDraft(
           ctaType: cta.type,
           ctaText: cta.text,
           ctaHref: cta.href,
-          workflowStatus: workflowStatusBase,
+          workflowStatus: workflowStatusForCreate,
           sourcesJson: citationEnvelope as unknown as Prisma.InputJsonValue,
           apaReferences,
           requiresReferences: Boolean(riskFlags.length > 0 || hasAiCitationStubs || partition.excluded.length > 0),
@@ -616,8 +633,19 @@ export async function persistControlPanelDraft(
           shortSummary: excerptSuggestion.slice(0, 220) || excerpt.slice(0, 220),
           socialCaption: `${pageTitle.slice(0, 120)}. ${(excerptSuggestion.slice(0, 100) || excerpt.slice(0, 100))}…`,
           promoBlurb: cta.text,
-          updateNeeded: Boolean(thinWarning),
-          rankingNote: thinWarning ?? null,
+          updateNeeded: Boolean(thinWarning) || qualityGateFailed,
+          rankingNote:
+            [
+              qualityGateFailed
+                ? `Draft failed quality review: repeated filler or structural issues detected (${contentQualityBlocking.length}). First: ${contentQualityBlocking[0]?.message ?? ""}`.slice(
+                    0,
+                    1900,
+                  )
+                : null,
+              thinWarning ?? null,
+            ]
+              .filter(Boolean)
+              .join("\n\n") || null,
           adminPublishLog: seedBlogAdminPublishLog("draft_created", "AI draft created and saved as DRAFT (control panel)."),
         },
         select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
@@ -672,6 +700,23 @@ export async function persistControlPanelDraft(
         : []),
       ...(thinWarning ? [thinWarning] : []),
     ];
+
+    if (qualityGateFailed) {
+      return {
+        ok: false,
+        code: "QUALITY_GATE",
+        error: `Draft failed quality review: repeated filler content detected. ${contentQualityBlocking.map((b) => b.message).join("; ")}`.slice(
+          0,
+          2000,
+        ),
+        post,
+        plan,
+        warnings: [
+          ...warnings,
+          ...contentQualityIssues.map((i) => `${i.severity}:${i.id} — ${i.message}`),
+        ],
+      };
+    }
 
     if (input.publishImmediately) {
       const publishedNow = new Date();
@@ -830,8 +875,12 @@ ${getBlogInternalLinkPathHintsForPrompt(params.exam, params.country)}`,
 
     apa_sources: `Return {"apaSourceStubs": array of source objects } with 3-6 conservative references (authors[], year, title, source, url?, authority?) suitable for nursing exam prep on "${params.topic}".`,
 
-    image_placements: `Return {"imagePlacements": array of objects with optional slotKey, optional role ("hero"|"inline"), section, promptIdea, altIdea, optional captionIdea }.
-Hero + 1-3 inline ideas for "${params.topic}" (${params.exam}). NurseNest brand: educational, clinically relevant, dignified, inclusive representation in illustrations; no gore, no identifiable patients, no real hospital logos or watermarks, no sensational "stock nurse" clichés.
+    image_placements: `Return {"imagePlacements": array} with **at least 1** object (never [], null, or omitted). Each object MUST include:
+- promptIdea: string, **≥20 characters**, detailed illustration brief (e.g. "nurse assessing patient with heart failure in hospital setting"). Never "", null, or undefined.
+- section: string (which part of the article this image supports)
+- altIdea: string (≥5 chars, accessibility)
+- optional slotKey (e.g. hero, inline_1), optional role ("hero"|"inline"), optional captionIdea
+Hero + 1-3 inline ideas for "${params.topic}" (${params.exam}). NurseNest brand: educational, clinically relevant, dignified, inclusive; no gore, no identifiable patients, no real hospital logos. If unsure, output one row with a generic but valid medical illustration prompt (still ≥20 chars on promptIdea).
 Current placements for reference: ${JSON.stringify(params.currentPlan?.imagePlacements ?? [])}`,
   };
 
@@ -848,6 +897,13 @@ Current placements for reference: ${JSON.stringify(params.currentPlan?.imagePlac
   });
 
   const json = extractJsonObject(res.content) as Record<string, unknown>;
+  if (params.section === "image_placements") {
+    const primed = normalizeBlogEditorialPlanCandidate(
+      { imagePlacements: json.imagePlacements },
+      { title: params.topic },
+    ) as Record<string, unknown>;
+    json.imagePlacements = primed.imagePlacements;
+  }
 
   switch (params.section) {
     case "title_options": {
@@ -910,12 +966,40 @@ Current placements for reference: ${JSON.stringify(params.currentPlan?.imagePlac
       const placementRow = z.object({
         slotKey: z.string().min(2).max(48).optional(),
         role: z.enum(["hero", "inline"]).optional(),
-        section: z.string().min(2).max(200),
-        promptIdea: z.string().min(10).max(500),
-        altIdea: z.string().min(5).max(240),
+        section: z.string().min(1).max(200),
+        promptIdea: z.string().min(1).max(500),
+        altIdea: z.string().min(1).max(240),
         captionIdea: z.string().max(300).optional(),
       });
-      const parsed = z.array(placementRow).min(1).max(10).safeParse(json.imagePlacements);
+      let arr = json.imagePlacements;
+      if (!Array.isArray(arr) || arr.length === 0) {
+        arr = [
+          {
+            slotKey: "hero",
+            role: "hero",
+            section: BLOG_PLAN_FALLBACK_IMAGE_SECTION,
+            promptIdea: BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA,
+            altIdea: BLOG_PLAN_FALLBACK_IMAGE_ALT_IDEA,
+          },
+        ];
+      }
+      const normalized = (arr as unknown[]).map((img) => {
+        const row = img && typeof img === "object" ? { ...(img as Record<string, unknown>) } : {};
+        const p = typeof row.promptIdea === "string" ? row.promptIdea.trim() : "";
+        const promptIdea = p.length >= 10 ? p.slice(0, 500) : BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA;
+        const s = typeof row.section === "string" ? row.section.trim() : "";
+        const section = s.length >= 1 ? s.slice(0, 200) : BLOG_PLAN_FALLBACK_IMAGE_SECTION;
+        const a = typeof row.altIdea === "string" ? row.altIdea.trim() : "";
+        const altIdea = a.length >= 5 ? a.slice(0, 240) : BLOG_PLAN_FALLBACK_IMAGE_ALT_IDEA;
+        const out: Record<string, unknown> = { section, promptIdea, altIdea };
+        if (typeof row.slotKey === "string" && row.slotKey.trim().length >= 2) out.slotKey = row.slotKey.trim().slice(0, 48);
+        if (row.role === "hero" || row.role === "inline") out.role = row.role;
+        if (typeof row.captionIdea === "string" && row.captionIdea.trim()) {
+          out.captionIdea = row.captionIdea.trim().slice(0, 300);
+        }
+        return out;
+      });
+      const parsed = z.array(placementRow).min(1).max(10).safeParse(normalized);
       if (!parsed.success) throw new Error("Invalid imagePlacements payload");
       return { section: "image_placements", imagePlacements: parsed.data };
     }

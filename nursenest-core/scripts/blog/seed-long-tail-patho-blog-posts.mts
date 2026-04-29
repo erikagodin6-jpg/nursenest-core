@@ -13,7 +13,7 @@
  */
 import "../../src/lib/db/script-env-bootstrap";
 
-import { BlogPostStatus, BlogWorkflowStatus, type Prisma } from "@prisma/client";
+import { BlogPostIntent, BlogPostStatus, BlogWorkflowStatus, type Prisma } from "@prisma/client";
 
 import { prisma } from "../lib/prisma-script-client";
 import { validateBlogPrePublish, type BlogPostPrePublishRow } from "../../src/lib/blog/blog-pre-publish-validation";
@@ -88,6 +88,7 @@ function toPrePublishRow(
     countryTarget: null,
     postStatus,
     postTemplate: payload.postTemplate,
+    intent: BlogPostIntent.CONCEPT_EXPLAINER,
     targetKeyword: payload.targetKeyword,
     medicalRiskFlags: payload.medicalRiskFlags,
   };

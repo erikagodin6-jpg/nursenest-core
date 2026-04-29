@@ -12,7 +12,7 @@ import {
   type BuilderCategoryOption,
 } from "@/lib/flashcards/flashcard-builder-taxonomy";
 import { loadLessonLinkedFlashcardVirtuals } from "@/lib/flashcards/lesson-linked-flashcards-for-pathway";
-import { collectLessonRecallFlashcardsForPathway } from "@/lib/flashcards/lesson-recall-flashcards-for-pathway";
+import { collectMergedLessonVirtualFlashcardsForPathway } from "@/lib/flashcards/lesson-linked-virtual-flashcards-aggregator";
 import {
   serializeFlashcardForCustomSession,
   type FlashcardStudySelectRow,
@@ -20,6 +20,7 @@ import {
 import type {
   FlashcardCustomSessionQueryRelaxation,
   FlashcardCustomSessionSummary,
+  FlashcardLessonVirtualDiagnostics,
 } from "@/lib/flashcards/flashcard-custom-session-response";
 import {
   filterCardsByProgressFlags,
@@ -109,6 +110,26 @@ function shuffled<T>(rows: T[], seed: string): T[] {
     [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
+}
+
+function describeCustomSessionFilterMode(flags: {
+  weakOnly: boolean;
+  incorrectOnly: boolean;
+  starredOnly: boolean;
+  notStudiedOnly: boolean;
+  savedOnly: boolean;
+  notesOnly: boolean;
+  revisitOnly: boolean;
+}): string {
+  const parts: string[] = [];
+  if (flags.weakOnly) parts.push("weak areas");
+  if (flags.incorrectOnly) parts.push("review incorrect");
+  if (flags.starredOnly) parts.push("starred");
+  if (flags.notStudiedOnly) parts.push("unseen");
+  if (flags.savedOnly) parts.push("saved");
+  if (flags.notesOnly) parts.push("notes");
+  if (flags.revisitOnly) parts.push("revisit");
+  return parts.length > 0 ? parts.join(" + ") : "all cards";
 }
 
 /**
@@ -224,9 +245,15 @@ export async function buildFlashcardCustomSession(
       }
     }
 
-    if (pathwayId?.trim() && allowLessonQuestionVirtuals && cardWithCategory.length === 0) {
-      const recallVirtuals = collectLessonRecallFlashcardsForPathway(pathwayId.trim());
-      for (const v of recallVirtuals) {
+    let lessonVirtualDiagnostics: FlashcardLessonVirtualDiagnostics | null = null;
+    if (pathwayId?.trim() && allowLessonQuestionVirtuals) {
+      const pid = pathwayId.trim();
+      const { virtuals: mergedLessonVirtuals, diagnostics: lessonInv } =
+        collectMergedLessonVirtualFlashcardsForPathway(pid);
+      const existingIds = new Set(cardWithCategory.map((c) => c.id));
+      for (const v of mergedLessonVirtuals) {
+        if (existingIds.has(v.id)) continue;
+        existingIds.add(v.id);
         const categoryId = resolveBuilderCategoryId({
           label: v.row.category.name,
           topicCode: v.row.category.topicCode,
@@ -247,13 +274,39 @@ export async function buildFlashcardCustomSession(
           lessonMeta: { href: v.lessonHref, title: v.lessonTitle, slug: v.lessonSlug },
         });
       }
+      lessonVirtualDiagnostics = {
+        pathwayId: lessonInv.pathwayId,
+        catalogLessonCount: lessonInv.catalogLessonCount,
+        lessonsWithDerivedCards: lessonInv.lessonsWithVirtualCards,
+        totalGeneratedVirtualCards: lessonInv.totalVirtualCards,
+        recallVirtualCount: lessonInv.recallVirtualCount,
+        sectionDerivedVirtualCount: lessonInv.sectionDerivedVirtualCount,
+        genericFillerSectionCardHits: lessonInv.genericFillerSourcedSectionCards,
+        selectedCategoryIds: [...selectedCategories],
+        filterModeLabel: describeCustomSessionFilterMode({
+          weakOnly,
+          incorrectOnly,
+          starredOnly,
+          notStudiedOnly,
+          savedOnly,
+          notesOnly,
+          revisitOnly,
+        }),
+      };
     }
 
     let scoped: WorkingCard[] = cardWithCategory;
     if (sourceKind === "lesson") {
       scoped = scoped.filter((c) => {
         const sk = c.sourceKey ?? "";
-        return Boolean(c.lessonId) || sk.startsWith("lessonq:");
+        return (
+          Boolean(c.lessonId) ||
+          sk.startsWith("lessonq:") ||
+          sk.startsWith("lessonrecall:") ||
+          sk.startsWith("lessonlink:") ||
+          sk.startsWith("lessontakeaway:") ||
+          sk.startsWith("lessonanchor:")
+        );
       });
     } else if (sourceKind === "question") {
       scoped = scoped.filter((c) => {
@@ -376,6 +429,7 @@ export async function buildFlashcardCustomSession(
       cardLimit: cardLimitRaw ?? "20",
       queryRelaxation,
       sessionShuffleSalt,
+      lessonVirtualDiagnostics,
     };
 
     return {

@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 import { afterEach, describe, it } from "node:test";
-import { BlogImageStatus, BlogPostStatus, BlogPostTemplate, CountryCode, type PrismaClient } from "@prisma/client";
+import {
+  BlogImageStatus,
+  BlogPostIntent,
+  BlogPostStatus,
+  BlogPostTemplate,
+  CountryCode,
+  type PrismaClient,
+} from "@prisma/client";
 import {
   BLOG_ARTICLE_MIN_WORDS,
   BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH,
@@ -98,6 +105,7 @@ function baseRow(overrides: Partial<BlogPostPrePublishRow> = {}): BlogPostPrePub
     countryTarget: CountryCode.US,
     postStatus: BlogPostStatus.DRAFT,
     postTemplate: BlogPostTemplate.TOPIC_EXPLAINED,
+    intent: BlogPostIntent.EXAM_PREP,
     targetKeyword: "fluid balance",
     medicalRiskFlags: [],
     ...overrides,

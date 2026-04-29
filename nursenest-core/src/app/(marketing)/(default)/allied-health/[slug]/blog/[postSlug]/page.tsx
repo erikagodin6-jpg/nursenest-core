@@ -11,6 +11,7 @@ import {
   parseInternalLinkPlanJson,
   stripBrokenOrEmptyImagesFromHtml,
 } from "@/lib/blog/blog-image-workflow";
+import { stripDuplicateStructuredModulesFromPublicBlogBodyHtml } from "@/lib/blog/blog-public-body-strip";
 import {
   getBlogPostMetaBySlug,
   getPublishedBlogPostBySlug,
@@ -170,7 +171,7 @@ export default async function AlliedProfessionBlogPostPage({ params }: Props) {
   const mergedFaqItems = mergedFaqForSchema.map((x) => ({ q: x.question, a: x.answer }));
   const emitFaqJsonLd =
     mergedFaqItems.length >= 3 && (seo === null ? true : seo.emitFaqSchema !== false);
-  const bodyHtml = stripBrokenOrEmptyImagesFromHtml(
+  const bodyHtmlLinked = stripBrokenOrEmptyImagesFromHtml(
     applyAutoLinksToHtml(post.body, {
       exam: post.exam,
       countryTarget: post.countryTarget,
@@ -179,6 +180,10 @@ export default async function AlliedProfessionBlogPostPage({ params }: Props) {
       maxTotalAutoLinks: 14,
     }),
   );
+  const bodyHtml = stripDuplicateStructuredModulesFromPublicBlogBodyHtml(bodyHtmlLinked, {
+    hasStructuredFaq: emitFaqJsonLd,
+    hasStructuredReferences: false,
+  });
   const framingHtml = blogExamFramingHtml({
     keywordStem,
     examGeo: geo.examGeo,

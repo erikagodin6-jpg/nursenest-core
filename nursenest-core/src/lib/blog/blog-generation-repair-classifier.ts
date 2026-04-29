@@ -73,6 +73,8 @@ const RECOVERABLE_PRE_PUBLISH_IDS = new Set([
   "primary_keyword",
   "internal_link_recommendations",
   "schema_contract_notes",
+  /** Editorial / repetition gate — usually fixed by regenerating body + references. */
+  "blog_content_quality_gate",
 ]);
 
 /**
@@ -147,6 +149,10 @@ export function classifyBlogPipelineFailureForRepair(
   // ── Citations / safety gates (always terminal) ──
   if (code === "INSUFFICIENT_CITATIONS" || f.stage === "citations") {
     return { recoverable: false, terminalReason: "citations" };
+  }
+
+  if (code === "QUALITY_GATE") {
+    return { recoverable: true };
   }
 
   // ── PRE_PUBLISH_BLOCKED: inspect individual issue IDs when available ──

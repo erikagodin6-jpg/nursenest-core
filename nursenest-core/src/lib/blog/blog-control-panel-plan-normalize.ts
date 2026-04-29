@@ -1,8 +1,148 @@
 import type { ZodError, ZodIssue } from "zod";
 import { blogControlPanelPlanSchema, type BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+
+/** Default hero prompt when the model omits or weakens `imagePlacements` (keeps pipeline + image jobs unblocked). */
+export const BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA =
+  "clinical nursing education illustration showing patient assessment and care planning";
+
+export const BLOG_PLAN_FALLBACK_IMAGE_ALT_IDEA =
+  "Clinical nursing education illustration supporting article content";
+
+export const BLOG_PLAN_FALLBACK_IMAGE_SECTION = "Article overview";
 
 function isPlainObject(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v);
+}
+
+/** Optional context for structured logs when image placement fields are repaired (no secrets / no body). */
+export type BlogEditorialPlanNormalizeContext = {
+  jobId?: string;
+  slug?: string;
+  title?: string;
+};
+
+function coerceImagePlacementScalarString(raw: unknown): string {
+  if (raw === null || raw === undefined) return "";
+  if (typeof raw === "string") return raw;
+  if (typeof raw === "number" || typeof raw === "boolean") return String(raw);
+  if (Array.isArray(raw)) {
+    return raw.map((x) => coerceImagePlacementScalarString(x)).filter(Boolean).join(" ");
+  }
+  return "";
+}
+
+function promptIdeaRepairReason(raw: unknown, trimmed: string): "ok" | "missing" | "empty" | "too_short" | "invalid_type" {
+  if (raw !== null && raw !== undefined && typeof raw === "object" && !Array.isArray(raw)) {
+    return "invalid_type";
+  }
+  if (raw === null || raw === undefined) return "missing";
+  if (trimmed.length === 0) return "empty";
+  if (trimmed.length < 10) return "too_short";
+  return "ok";
+}
+
+function logImagePlacementRepair(
+  reason: "missing" | "empty" | "too_short" | "invalid_type",
+  index: number,
+  ctx?: BlogEditorialPlanNormalizeContext,
+): void {
+  const titleSlice = ctx?.title ? String(ctx.title).slice(0, 120) : undefined;
+  safeServerLog("blog-plan-normalize", "repaired_imagePlacements_promptIdea", {
+    reason,
+    index,
+    ...(ctx?.jobId ? { jobId: ctx.jobId } : {}),
+    ...(ctx?.slug ? { slug: ctx.slug } : {}),
+    ...(titleSlice ? { title: titleSlice } : {}),
+  });
+}
+
+/**
+ * Ensures `imagePlacements` is a non-empty array with valid `promptIdea` strings before Zod runs.
+ * Does not throw for missing or malformed `imagePlacements` (repairs in place).
+ */
+export function repairImagePlacementsInPlanRecord(
+  out: Record<string, unknown>,
+  ctx?: BlogEditorialPlanNormalizeContext,
+): void {
+  let im: unknown = out.imagePlacements;
+  if (im === null || im === undefined) {
+    im = [];
+  }
+  if (!Array.isArray(im)) {
+    if (isPlainObject(im)) {
+      im = [im];
+    } else {
+      logImagePlacementRepair("invalid_type", -1, ctx);
+      im = [];
+    }
+  }
+
+  const rows: Record<string, unknown>[] = [];
+  let i = 0;
+  for (const row of im as unknown[]) {
+    if (!isPlainObject(row)) {
+      logImagePlacementRepair("invalid_type", i, ctx);
+      i++;
+      continue;
+    }
+    const r: Record<string, unknown> = { ...row };
+    const rawPrompt = r.promptIdea;
+    const promptTrimmed = coerceImagePlacementScalarString(rawPrompt).trim().slice(0, 500);
+    const pr = promptIdeaRepairReason(rawPrompt, promptTrimmed);
+    if (pr !== "ok") {
+      r.promptIdea = BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA;
+      logImagePlacementRepair(pr, i, ctx);
+    } else {
+      r.promptIdea = promptTrimmed;
+    }
+
+    const sec = coerceImagePlacementScalarString(r.section).trim().slice(0, 200);
+    r.section = sec.length >= 1 ? sec : BLOG_PLAN_FALLBACK_IMAGE_SECTION;
+
+    const alt = coerceImagePlacementScalarString(r.altIdea).trim().slice(0, 240);
+    r.altIdea = alt.length >= 5 ? alt : BLOG_PLAN_FALLBACK_IMAGE_ALT_IDEA;
+
+    if (r.slotKey !== undefined) {
+      const sk = coerceImagePlacementScalarString(r.slotKey).trim().slice(0, 48);
+      if (sk.length >= 2) r.slotKey = sk;
+      else delete r.slotKey;
+    }
+    if (r.captionIdea !== undefined) {
+      const c = coerceImagePlacementScalarString(r.captionIdea).trim().slice(0, 300);
+      if (c) r.captionIdea = c;
+      else delete r.captionIdea;
+    }
+    rows.push(r);
+    i++;
+  }
+
+  if (rows.length === 0) {
+    rows.push({
+      slotKey: "hero",
+      role: "hero",
+      section: BLOG_PLAN_FALLBACK_IMAGE_SECTION,
+      promptIdea: BLOG_PLAN_FALLBACK_IMAGE_PROMPT_IDEA,
+      altIdea: BLOG_PLAN_FALLBACK_IMAGE_ALT_IDEA,
+    });
+    logImagePlacementRepair("missing", 0, ctx);
+  }
+
+  out.imagePlacements = rows.slice(0, 10);
+}
+
+/**
+ * Shallow-clone a plan-shaped object and repair `imagePlacements` / `promptIdea` before schema validation.
+ * Non-objects are returned unchanged (callers must still validate root shape).
+ */
+export function normalizeBlogEditorialPlanCandidate(
+  candidate: unknown,
+  ctx?: BlogEditorialPlanNormalizeContext,
+): unknown {
+  if (!isPlainObject(candidate)) return candidate;
+  const out = { ...candidate };
+  repairImagePlacementsInPlanRecord(out, ctx);
+  return out;
 }
 
 /** How to join string[] when a scalar string field was emitted as an array. */
@@ -116,13 +256,17 @@ export function logBlogControlPanelPlanValidationFailure(err: ZodError, raw: unk
  * (e.g. a metaTitle longer than 70 chars) without breaking the Zod parse step.
  * Provides fallbacks for required fields that are missing or too short after normalization.
  */
-export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, unknown> {
-  if (!isPlainObject(raw)) {
+export function normalizeBlogControlPanelPlanJson(
+  raw: unknown,
+  ctx?: BlogEditorialPlanNormalizeContext,
+): Record<string, unknown> {
+  const primed = normalizeBlogEditorialPlanCandidate(raw, ctx);
+  if (!isPlainObject(primed)) {
     throw new Error(
       `[blog-plan-normalize] Plan root must be a plain object, got ${raw === null ? "null" : Array.isArray(raw) ? "array" : typeof raw}`,
     );
   }
-  const out: Record<string, unknown> = { ...raw };
+  const out: Record<string, unknown> = { ...primed };
 
   /** Zod `.default([])` does not treat `null` like missing; coerce nullish list roots to []. */
   for (const k of [
@@ -368,28 +512,6 @@ export function normalizeBlogControlPanelPlanJson(raw: unknown): Record<string, 
       .slice(0, 12);
   }
 
-  if (out.imagePlacements !== undefined) {
-    let im = out.imagePlacements;
-    if (!Array.isArray(im)) {
-      if (isPlainObject(im)) im = [im];
-      else throw new Error(`[blog-plan-normalize] imagePlacements must be array or object`);
-    }
-    out.imagePlacements = (im as unknown[]).map((row: unknown, i: number) => {
-      if (!isPlainObject(row)) throw new Error(`[blog-plan-normalize] imagePlacements[${i}] must be object`);
-      const r: Record<string, unknown> = { ...row };
-      if (r.slotKey !== undefined) {
-        r.slotKey = normalizePlanString(r.slotKey, `imagePlacements[${i}].slotKey`).slice(0, 48);
-      }
-      r.section = normalizePlanString(r.section, `imagePlacements[${i}].section`).slice(0, 200);
-      r.promptIdea = normalizePlanString(r.promptIdea, `imagePlacements[${i}].promptIdea`).slice(0, 500);
-      r.altIdea = normalizePlanString(r.altIdea, `imagePlacements[${i}].altIdea`).slice(0, 240);
-      if (r.captionIdea !== undefined) {
-        r.captionIdea = normalizePlanString(r.captionIdea, `imagePlacements[${i}].captionIdea`).slice(0, 300);
-      }
-      return r;
-    });
-  }
-
   if (out.keyTakeaways !== undefined && Array.isArray(out.keyTakeaways)) {
     out.keyTakeaways = out.keyTakeaways
       .map((x: unknown, i: number) => normalizePlanString(x, `keyTakeaways[${i}]`).slice(0, 400))
@@ -543,10 +665,13 @@ export type SafeParseBlogControlPanelPlanResult =
  * Normalize LLM-shaped JSON, then validate with {@link blogControlPanelPlanSchema}.
  * On Zod failure, logs each issue with path + original value type/preview from **pre-normalized** raw input.
  */
-export function safeParseBlogControlPanelPlan(raw: unknown): SafeParseBlogControlPanelPlanResult {
+export function safeParseBlogControlPanelPlan(
+  raw: unknown,
+  ctx?: BlogEditorialPlanNormalizeContext,
+): SafeParseBlogControlPanelPlanResult {
   let normalized: Record<string, unknown>;
   try {
-    normalized = normalizeBlogControlPanelPlanJson(raw);
+    normalized = normalizeBlogControlPanelPlanJson(raw, ctx);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     console.error(`[blog-plan-validate] Normalization failed: ${msg}`);

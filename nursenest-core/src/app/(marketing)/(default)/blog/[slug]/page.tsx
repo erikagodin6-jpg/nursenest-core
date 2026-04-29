@@ -9,6 +9,7 @@ import {
   parseInternalLinkPlanJson,
   stripBrokenOrEmptyImagesFromHtml,
 } from "@/lib/blog/blog-image-workflow";
+import { stripDuplicateStructuredModulesFromPublicBlogBodyHtml } from "@/lib/blog/blog-public-body-strip";
 import { isBlogPostMarketingMetaVisible } from "@/lib/blog/blog-visibility";
 import { getBlogPostMetaBySlug, getPublishedBlogPostBySlug } from "@/lib/blog/safe-blog-queries";
 import { EeatContentAttribution } from "@/components/seo/eeat-content-attribution";
@@ -211,7 +212,7 @@ export default async function BlogPostPage({ params }: Props) {
         (seo === null ? true : seo.emitFaqSchema !== false);
 
       const publishedAt = post.publishAt ?? post.createdAt;
-      const bodyHtml = stripBrokenOrEmptyImagesFromHtml(
+      const bodyHtmlLinked = stripBrokenOrEmptyImagesFromHtml(
         applyAutoLinksToHtml(post.body, {
           exam: post.exam,
           countryTarget: post.countryTarget,
@@ -220,6 +221,13 @@ export default async function BlogPostPage({ params }: Props) {
           maxTotalAutoLinks: 14,
         }),
       );
+      const hasStructuredFaq = emitFaqJsonLd;
+      const hasStructuredReferences =
+        "apaReferences" in post && Array.isArray(post.apaReferences) && post.apaReferences.length > 0;
+      const bodyHtml = stripDuplicateStructuredModulesFromPublicBlogBodyHtml(bodyHtmlLinked, {
+        hasStructuredFaq,
+        hasStructuredReferences,
+      });
       let continuationLinks: Awaited<ReturnType<typeof buildProgrammaticBlogContinuationLinks>> = [];
       try {
         continuationLinks = await buildProgrammaticBlogContinuationLinks(prisma, {

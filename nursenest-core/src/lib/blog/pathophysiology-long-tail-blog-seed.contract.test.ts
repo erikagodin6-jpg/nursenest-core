@@ -4,7 +4,13 @@
  */
 import assert from "node:assert/strict";
 import test from "node:test";
-import { BlogImageStatus, BlogPostStatus, BlogPostTemplate, type PrismaClient } from "@prisma/client";
+import {
+  BlogImageStatus,
+  BlogPostIntent,
+  BlogPostStatus,
+  BlogPostTemplate,
+  type PrismaClient,
+} from "@prisma/client";
 
 import { collectBlogGeneratedDraftQualityIssues } from "@/lib/blog/blog-generated-draft-quality";
 import { validateBlogPrePublish, type BlogPostPrePublishRow } from "@/lib/blog/blog-pre-publish-validation";
@@ -127,6 +133,7 @@ test("validateBlogPrePublish passes for a representative seeded payload (slug un
     countryTarget: null,
     postStatus: BlogPostStatus.DRAFT,
     postTemplate: BlogPostTemplate.DISEASE_PROCESS_EXPLAINER,
+    intent: BlogPostIntent.CONCEPT_EXPLAINER,
     targetKeyword: payload.targetKeyword,
     medicalRiskFlags: payload.medicalRiskFlags,
   };
