@@ -23,33 +23,50 @@ export async function POST(req: Request, ctx: RouteContext) {
   const aiBlock = adminAiGenerationHttpBlock();
   if (aiBlock) return aiBlock;
 
-  const { id } = await ctx.params;
-  const owned = await prisma.blogArticleGenerationJob.findFirst({
-    where: { id, createdById: gate.admin.userId },
-    select: { id: true },
-  });
-  if (!owned) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  try {
+    const { id } = await ctx.params;
+    const owned = await prisma.blogArticleGenerationJob.findFirst({
+      where: { id, createdById: gate.admin.userId },
+      select: { id: true },
+    });
+    if (!owned) {
+      return NextResponse.json({ success: false, error: "Not found" }, { status: 404 });
+    }
+
+    const out = await tickBlogArticleGenerationJob(id);
+    safeServerLog("admin", "blog_article_generation_job_tick", {
+      jobId: id,
+      claimed: out.claimed,
+      ran: out.ran,
+      ok: out.ok,
+    });
+
+    const row = await prisma.blogArticleGenerationJob.findUnique({ where: { id } });
+    if (!row) {
+      return NextResponse.json(
+        { success: false, ok: false, error: "job_missing_after_tick" },
+        { status: 500 },
+      );
+    }
+
+    return NextResponse.json({
+      success: out.ok,
+      ok: out.ok,
+      claimed: out.claimed,
+      ran: out.ran,
+      error: out.error,
+      job: serializeBlogArticleGenerationJob(row),
+    });
+  } catch (error) {
+    console.error("[BLOG_GENERATION_ERROR]", error);
+    if (error instanceof Error && error.stack) {
+      console.error(error.stack);
+    }
+    const message = error instanceof Error ? error.message : String(error);
+    safeServerLog("admin", "blog_article_generation_job_tick_unexpected", {
+      message,
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
-
-  const out = await tickBlogArticleGenerationJob(id);
-  safeServerLog("admin", "blog_article_generation_job_tick", {
-    jobId: id,
-    claimed: out.claimed,
-    ran: out.ran,
-    ok: out.ok,
-  });
-
-  const row = await prisma.blogArticleGenerationJob.findUnique({ where: { id } });
-  if (!row) {
-    return NextResponse.json({ ok: false, error: "job_missing_after_tick" }, { status: 500 });
-  }
-
-  return NextResponse.json({
-    ok: out.ok,
-    claimed: out.claimed,
-    ran: out.ran,
-    error: out.error,
-    job: serializeBlogArticleGenerationJob(row),
-  });
 }

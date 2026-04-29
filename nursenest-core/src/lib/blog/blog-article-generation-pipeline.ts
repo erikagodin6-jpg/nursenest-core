@@ -42,7 +42,10 @@
  * Editing: admin `PATCH /api/admin/blog/[id]` and control panel UI update these fields without re-running the pipeline.
  */
 
-import { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-bounds";
+import {
+  BLOG_ARTICLE_MIN_BODY_CHARS,
+  isBlogBodyGenerationIncompletePlaceholderHtml,
+} from "@/lib/blog/blog-article-bounds";
 import type { ControlPanelGenerateInput, ControlPanelPersistResult } from "@/lib/blog/blog-control-panel-generation";
 import {
   BlogControlPanelPlanError,
@@ -263,7 +266,14 @@ export async function runBlogArticleGenerationPipeline(
     return { ok: false, stage: "body", error: msg, plan, repairPassesUsed };
   }
 
+  if (isBlogBodyGenerationIncompletePlaceholderHtml(bodyHtml)) {
+    plan = mergeUniqueNeedsReviewFlags(plan, ["body_generation_incomplete_placeholder"]);
+  }
+
   for (;;) {
+    if (isBlogBodyGenerationIncompletePlaceholderHtml(bodyHtml)) {
+      break;
+    }
     const validationMessages: string[] = [];
     if (bodyHtml.length < MIN_BODY_CHARS) {
       validationMessages.push(`Article body is below minimum character length (${bodyHtml.length}; min ${MIN_BODY_CHARS}).`);

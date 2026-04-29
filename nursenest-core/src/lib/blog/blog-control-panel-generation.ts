@@ -64,8 +64,8 @@ import { detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engin
 import { prisma } from "@/lib/db";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import {
-  ensureNonEmptyBlogBodyHtmlForPersist,
   blogBodyHtmlWhenAiReturnedEmpty,
+  ensureNonEmptyBlogBodyHtmlForPersist,
 } from "@/lib/blog/blog-article-bounds";
 import {
   BlogInvalidSlugError,
@@ -368,9 +368,10 @@ export async function persistControlPanelDraft(
   }
 
   const excerptFromBody = bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);
+  const excerptSuggestion = (plan.suggestedExcerpt ?? "").trim();
   const excerpt =
-    plan.suggestedExcerpt.trim().length >= 80
-      ? plan.suggestedExcerpt.trim().slice(0, 500)
+    excerptSuggestion.length >= 80
+      ? excerptSuggestion.slice(0, 500)
       : excerptFromBody.length >= 10
         ? excerptFromBody.slice(0, 500)
         : `${pageTitle.slice(0, 200)}. Draft excerpt; edit before publish.`;
@@ -428,7 +429,7 @@ export async function persistControlPanelDraft(
     template: input.template,
   });
 
-  const faqBlock = { items: plan.faqs };
+  const faqBlock = { items: Array.isArray(plan.faqs) ? plan.faqs : [] };
   let seoBundle;
   try {
     seoBundle = buildPersistedSeoBundle(plan, slug, tagsForSeo);
@@ -437,8 +438,11 @@ export async function persistControlPanelDraft(
     console.error(`[blog-persist] buildPersistedSeoBundle failed; using minimal SEO bundle: ${msg}`);
     seoBundle = buildMinimalSeoBundleFallback(plan, slug, tagsForSeo);
   }
-  const seoTitleStored = clampSerpTitle(plan.metaTitle, 70).slice(0, 200);
-  const seoDescriptionStored = clampSerpDescription(plan.metaDescription, 120, 155).slice(0, 500);
+  const seoTitleStored =
+    clampSerpTitle((plan.metaTitle ?? "").trim() || pageTitle, 70).slice(0, 200) || pageTitle.slice(0, 70);
+  const seoDescriptionStored =
+    clampSerpDescription((plan.metaDescription ?? "").trim() || pageTitle, 120, 155).slice(0, 500) ||
+    `${pageTitle.slice(0, 120)}. Draft meta description; edit before publish.`.slice(0, 500);
   seoBundle = {
     ...seoBundle,
     openGraphTitle: (seoBundle.openGraphTitle ?? seoTitleStored).slice(0, 120),
@@ -609,8 +613,8 @@ export async function persistControlPanelDraft(
           coverImageAlt,
           coverImageCaption,
           featuredSnippet: plan.featuredSnippetHint?.slice(0, 2000) ?? null,
-          shortSummary: plan.suggestedExcerpt.trim().slice(0, 220) || excerpt.slice(0, 220),
-          socialCaption: `${pageTitle.slice(0, 120)}. ${(plan.suggestedExcerpt.trim().slice(0, 100) || excerpt.slice(0, 100))}…`,
+          shortSummary: excerptSuggestion.slice(0, 220) || excerpt.slice(0, 220),
+          socialCaption: `${pageTitle.slice(0, 120)}. ${(excerptSuggestion.slice(0, 100) || excerpt.slice(0, 100))}…`,
           promoBlurb: cta.text,
           updateNeeded: Boolean(thinWarning),
           rankingNote: thinWarning ?? null,
@@ -751,6 +755,8 @@ export async function regenerateControlPanelSection(params: {
   currentPlan?: BlogControlPanelPlan;
   currentBody?: string;
   currentTitle?: string;
+  /** OpenAI end-user id (observability); forwarded to completions. */
+  openAiUser?: string;
 }): Promise<
   | { section: "title_options"; titleOptions: string[] }
   | {
@@ -787,6 +793,7 @@ export async function regenerateControlPanelSection(params: {
       tone: params.tone,
       keywords: params.keywords,
       selectedTitle: params.currentTitle ?? params.currentPlan.h1 ?? params.currentPlan.titleOptions[0] ?? params.topic,
+      openAiUser: params.openAiUser,
     });
     return { section: "article_html", bodyHtml };
   }
@@ -837,6 +844,7 @@ Current placements for reference: ${JSON.stringify(params.currentPlan?.imagePlac
     ],
     temperature: 0.4,
     maxTokens: 3000,
+    user: params.openAiUser,
   });
 
   const json = extractJsonObject(res.content) as Record<string, unknown>;
@@ -914,4 +922,116 @@ Current placements for reference: ${JSON.stringify(params.currentPlan?.imagePlac
     default:
       throw new Error("Unsupported section");
   }
+}
+
+const MIN_PLAN_TITLE_OPTION_CHARS = 3;
+const MIN_PLAN_OUTLINE_H2 = 3;
+
+type PlanMaterializedEditorialSection = "title_options" | "meta" | "outline" | "faqs";
+
+function findInvalidMaterializedPlanSections(
+  plan: BlogControlPanelPlan,
+  input: { template: BlogPostTemplate; intent: BlogPostIntent },
+): PlanMaterializedEditorialSection[] {
+  const bad: PlanMaterializedEditorialSection[] = [];
+  const titles = plan.titleOptions ?? [];
+  const goodTitles = titles.filter((t) => typeof t === "string" && t.trim().length >= MIN_PLAN_TITLE_OPTION_CHARS);
+  if (goodTitles.length < 2) bad.push("title_options");
+
+  if (
+    !plan.metaTitle?.trim() ||
+    plan.metaTitle.trim().length < 3 ||
+    !plan.metaDescription?.trim() ||
+    plan.metaDescription.trim().length < 20 ||
+    !plan.recommendedSlug?.trim() ||
+    plan.recommendedSlug.trim().length < 3
+  ) {
+    bad.push("meta");
+  }
+
+  const outline = plan.outline ?? [];
+  if (!Array.isArray(outline) || outline.length < MIN_PLAN_OUTLINE_H2) bad.push("outline");
+
+  const longform = isLongFormPathophysiologyProfile(input);
+  const minFaqs = longform ? 4 : 2;
+  const faqs = plan.faqs ?? [];
+  const faqsOk =
+    Array.isArray(faqs) &&
+    faqs.length >= minFaqs &&
+    faqs.every((f) => f.q?.trim().length >= 5 && f.a?.trim().length >= 10);
+  if (!faqsOk) bad.push("faqs");
+
+  return bad;
+}
+
+function mergeControlPanelPlanSectionPatch(
+  plan: BlogControlPanelPlan,
+  patch: { section: string } & Record<string, unknown>,
+): BlogControlPanelPlan {
+  switch (patch.section) {
+    case "title_options": {
+      const titles = patch.titleOptions as string[];
+      const h1Next = (titles[0] ?? plan.h1 ?? plan.titleOptions[0] ?? "").trim().slice(0, 200);
+      return {
+        ...plan,
+        titleOptions: titles,
+        ...(h1Next.length >= 3 ? { h1: h1Next } : {}),
+      };
+    }
+    case "meta":
+      return {
+        ...plan,
+        metaTitle: patch.metaTitle as string,
+        metaDescription: patch.metaDescription as string,
+        recommendedSlug: patch.recommendedSlug as string,
+        ...(patch.suggestedExcerpt !== undefined ? { suggestedExcerpt: patch.suggestedExcerpt as string } : {}),
+        ...(patch.openGraphTitle !== undefined ? { openGraphTitle: patch.openGraphTitle as string } : {}),
+        ...(patch.openGraphDescription !== undefined ? { openGraphDescription: patch.openGraphDescription as string } : {}),
+        ...(patch.canonicalPath !== undefined ? { canonicalPath: (patch.canonicalPath as string | null) ?? undefined } : {}),
+        ...(patch.seoFocusKeywords !== undefined ? { seoFocusKeywords: patch.seoFocusKeywords as string[] } : {}),
+      };
+    case "outline":
+      return { ...plan, outline: patch.outline as BlogControlPanelPlan["outline"] };
+    case "faqs":
+      return { ...plan, faqs: patch.faqs as BlogControlPanelPlan["faqs"] };
+    default:
+      return plan;
+  }
+}
+
+async function repairMaterializedPlanSectionsOnce(
+  plan: BlogControlPanelPlan,
+  input: ControlPanelGenerateInput,
+  opts?: { openAiUser?: string },
+): Promise<BlogControlPanelPlan> {
+  let current = plan;
+  const firstBad = findInvalidMaterializedPlanSections(current, input);
+  if (firstBad.length === 0) return current;
+
+  for (const section of firstBad) {
+    const patch = await regenerateControlPanelSection({
+      section,
+      topic: input.topic,
+      exam: input.exam,
+      country: input.country,
+      template: input.template,
+      intent: input.intent,
+      funnelStage: input.funnelStage,
+      tone: input.tone,
+      keywords: input.keywords,
+      currentPlan: current,
+      openAiUser: opts?.openAiUser ? `${opts.openAiUser}:section-repair:${section}` : undefined,
+    });
+    current = mergeControlPanelPlanSectionPatch(current, patch as { section: string } & Record<string, unknown>);
+  }
+
+  const stillBad = findInvalidMaterializedPlanSections(current, input);
+  if (stillBad.length > 0) {
+    throw new BlogControlPanelPlanError(
+      "PLAN_ZOD",
+      `Editorial plan invalid after targeted regeneration; sections still failing: ${stillBad.join(", ")}.`,
+      { sections: stillBad },
+    );
+  }
+  return current;
 }

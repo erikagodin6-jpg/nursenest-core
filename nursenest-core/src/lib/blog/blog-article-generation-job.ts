@@ -262,6 +262,8 @@ export async function runClaimedBlogArticleGenerationJob(jobId: string): Promise
     }
     return { ok: true };
   } catch (e) {
+    console.error("[BLOG_GENERATION_ERROR]", e);
+    if (e instanceof Error && e.stack) console.error(e.stack);
     const msg = e instanceof Error ? e.message : String(e);
     await logJobStage(jobId, "failed");
     await prisma.blogArticleGenerationJob.update({
