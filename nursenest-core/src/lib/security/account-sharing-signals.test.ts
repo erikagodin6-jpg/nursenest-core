@@ -3,7 +3,7 @@
  */
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { evaluateAccountSharingSignals, hmacHex } from "@/lib/security/learner-session-activity.server";
+import { evaluateAccountSharingSignals, hmacHex } from "@/lib/security/account-sharing-signals";
 
 describe("account sharing signals (pure)", () => {
   it("flags when distinct IPs exceed soft threshold", () => {

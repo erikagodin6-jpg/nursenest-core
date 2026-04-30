@@ -1,6 +1,6 @@
 import "server-only";
 
-import { createHash, createHmac, randomUUID } from "node:crypto";
+import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { getAuthSessionJwtFromRequest } from "@/lib/auth/nextauth-request-jwt";
 import { buildIncomingRequestForJwtRead } from "@/lib/auth/server-session-jwt-fallback";
@@ -19,16 +19,9 @@ import {
   isAccountSharingMonitorEnabled,
   isAccountSharingSoftLimitOnly,
 } from "@/lib/security/account-sharing-env";
+import { evaluateAccountSharingSignals, hmacHex } from "@/lib/security/account-sharing-signals";
 
-function pepper(): string {
-  return (process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET ?? "").trim();
-}
-
-export function hmacHex(input: string): string {
-  const s = pepper();
-  if (!s) return createHash("sha256").update(`no-auth-secret:${input}`).digest("hex");
-  return createHmac("sha256", s).update(input).digest("hex");
-}
+export type { AccountSharingEvaluation } from "@/lib/security/account-sharing-signals";
 
 function sessionKeyMaterialFromJwt(token: Record<string, unknown> | null): string {
   if (!token) return `anon:${randomUUID()}`;
@@ -44,38 +37,6 @@ function readRegionHint(headers: Headers): string | null {
   const vercel = headers.get("x-vercel-ip-country")?.trim().toUpperCase();
   if (vercel && /^[A-Z]{2}$/.test(vercel)) return vercel;
   return null;
-}
-
-export type AccountSharingEvaluation = {
-  distinctIps24h: number;
-  activeDeviceSlots7d: number;
-  multiRegionShortWindow: boolean;
-  reasons: string[];
-};
-
-export function evaluateAccountSharingSignals(args: {
-  distinctIps24h: number;
-  activeDeviceSlots7d: number;
-  multiRegionShortWindow: boolean;
-  maxIps: number;
-  maxDevices: number;
-}): AccountSharingEvaluation {
-  const reasons: string[] = [];
-  if (args.distinctIps24h > args.maxIps) {
-    reasons.push("many_distinct_ips_24h");
-  }
-  if (args.activeDeviceSlots7d > args.maxDevices) {
-    reasons.push("many_device_slots_7d");
-  }
-  if (args.multiRegionShortWindow) {
-    reasons.push("multi_region_short_window");
-  }
-  return {
-    distinctIps24h: args.distinctIps24h,
-    activeDeviceSlots7d: args.activeDeviceSlots7d,
-    multiRegionShortWindow: args.multiRegionShortWindow,
-    reasons,
-  };
 }
 
 export function accountSharingEnforcementResponse(): NextResponse {
