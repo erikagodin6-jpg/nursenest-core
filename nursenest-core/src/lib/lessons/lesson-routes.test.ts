@@ -1,11 +1,16 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  alliedHealthLessonsIndexPath,
+  alliedHealthSegmentPath,
   buildLessonPath,
   marketingLessonSlugFromRouteParam,
   marketingPathwayLessonDetailPath,
   marketingPathwaySubpathBesideExamHub,
+  mergeMarketingPathQuery,
+  withAlliedProfessionMarketingQuery,
 } from "@/lib/lessons/lesson-routes";
+import { ALLIED_PROFESSION_QUERY_PARAM } from "@/lib/lessons/canonical-lessons-hubs";
 
 describe("buildLessonPath", () => {
   it("builds /{country}/{role}/{exam}/lessons/{slug} with URL-safe slug encoding", () => {
@@ -130,5 +135,30 @@ describe("marketingPathwaySubpathBesideExamHub", () => {
 
   it("appends subpath for full exam hub roots when pathway is missing", () => {
     assert.equal(marketingPathwaySubpathBesideExamHub("/us/rn/nclex-rn", null, "lessons"), "/us/rn/nclex-rn/lessons");
+  });
+});
+
+describe("allied occupation marketing query helpers", () => {
+  it("withAlliedProfessionMarketingQuery sets alliedProfession on internal paths", () => {
+    assert.equal(
+      withAlliedProfessionMarketingQuery("/us/allied/allied-health/questions", "medical-assistant"),
+      `/us/allied/allied-health/questions?${ALLIED_PROFESSION_QUERY_PARAM}=medical-assistant`,
+    );
+  });
+
+  it("mergeMarketingPathQuery preserves existing params and adds q", () => {
+    const base = `/us/allied/allied-health/lessons?${ALLIED_PROFESSION_QUERY_PARAM}=psw-hca`;
+    assert.equal(mergeMarketingPathQuery(base, { q: "Safety" }).includes("q=Safety"), true);
+    assert.equal(mergeMarketingPathQuery(base, { q: "Safety" }).includes(`${ALLIED_PROFESSION_QUERY_PARAM}=psw-hca`), true);
+  });
+
+  it("alliedHealthLessonsIndexPath embeds profession key for known professions", () => {
+    const href = alliedHealthLessonsIndexPath("dental-assistant");
+    assert.ok(href.includes("/us/allied/allied-health/lessons"));
+    assert.ok(href.includes(`${ALLIED_PROFESSION_QUERY_PARAM}=dental-assistant`));
+  });
+
+  it("alliedHealthSegmentPath builds stable marketing occupation routes", () => {
+    assert.equal(alliedHealthSegmentPath("medical-assistant-exam-prep"), "/allied-health/medical-assistant-exam-prep");
   });
 });

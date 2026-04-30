@@ -33,6 +33,38 @@ export default async function AdminPathwayLessonsIndexPage() {
         </div>
       </div>
 
+      <form
+        action="/admin/pathway-lessons/open"
+        method="get"
+        className="mb-6 flex flex-wrap items-end gap-3 rounded-lg border border-border bg-muted/20 p-4"
+      >
+        <p className="w-full text-xs font-semibold uppercase tracking-wide text-muted-foreground">Open by pathway + slug</p>
+        <label className="flex min-w-[200px] flex-1 flex-col gap-1 text-xs font-medium text-muted-foreground">
+          pathwayId
+          <input
+            name="pathwayId"
+            required
+            className="rounded-md border border-border bg-background px-2 py-2 font-mono text-sm"
+            placeholder="e.g. us-rn-nclex-rn"
+          />
+        </label>
+        <label className="flex min-w-[200px] flex-1 flex-col gap-1 text-xs font-medium text-muted-foreground">
+          slug
+          <input
+            name="slug"
+            required
+            className="rounded-md border border-border bg-background px-2 py-2 font-mono text-sm"
+            placeholder="lesson slug"
+          />
+        </label>
+        <button
+          type="submit"
+          className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+        >
+          Open editor
+        </button>
+      </form>
+
       <ul className="divide-y rounded-lg border">
         {rows.map((r) => (
           <li key={r.id} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">

@@ -20,6 +20,33 @@ function scenario(title, stem) {
   return `**Patient vignette.** ${stem}\n\n**Fork:** prioritize ABCs, obtain objective trends (vitals, glucose, neuro checks, intake/output), prepare time-sensitive diagnostics per orders, and notify the provider with SBAR including quantified findings—not deferrable tasks first.`;
 }
 
+/** ~850 words of reusable nursing spine so each row clears ≥1200 words with lesson-specific sections. */
+const EXPANSION_SPINE = `
+**Pathophysiology in plain language.** Think in layers: cells → organs → whole-person compensation. When a stem describes acute change (fever, pain, new neuro deficit, hypoxia, hypotension), ask what system is failing to compensate and what reversible threat is most time-sensitive. Nurses are the continuity layer: you trend objective data, reconcile subjective reports, and prevent “task completion” from replacing “problem recognition.”
+
+**Risk factors and epidemiology (exam framing).** NCLEX-style items rarely require memorized incidence tables; they require you to connect **age**, **comorbidities**, **medications**, **recent procedures**, **pregnancy**, **travel**, **substance use**, and **immunization status** to plausible mechanisms. When two answers are “true,” pick the one that addresses the **current priority threat** (airway, breathing, circulation, neuro decline, infection, bleeding).
+
+**Clinical manifestations — typical and atypical.** Classic textbook findings get you halfway; boards reward recognition when presentations are **incomplete**, **muted** (older adults, immunosuppression), or **overlap** (sepsis can look like delirium; MI can present as epigastric pain; pediatric dehydration can present as tachypnea before hypotension). Always pair symptoms with **vitals**, **mentation**, **perfusion**, and **risk of rapid deterioration**.
+
+**Diagnostics and labs (interpretation, not trivia).** Use the numbers the stem gives: if creatinine is rising, think prerenal vs intrinsic vs postrenal patterns; if lactate is elevated, think tissue hypoperfusion; if hemoglobin drops, quantify bleeding risk and perfusion. Imaging and consult themes should match stability: unstable patients move toward **bedside** diagnostics and **resuscitation** first.
+
+**Management and treatments (nursing lens).** Treatments are rarely “interesting” alone; exams test whether you know **monitoring**, **expected effects**, **adverse effects**, **contraindications**, and **when to hold and call**. Include oxygen titration targets when COPD is relevant, seizure precautions when neuro risk is relevant, and isolation when transmission risk is relevant.
+
+**Medications — nursing implications.** Rights of medication administration, IV compatibility themes, titration protocols, antidote awareness, and high-alert medication safety appear constantly. Always ask: what do I **monitor before**, **during**, and **after**? What patient education prevents readmission?
+
+**Nursing priorities and clinical actions.** Use a consistent priority stack: protect airway and breathing, restore perfusion, stop bleeding, treat infection, prevent injury, then comfort and teaching when safe. Document objective trends and communicate with SBAR.
+
+**Complications.** Early complications are minutes-to-hours (airway compromise, arrhythmia, bleeding, anaphylaxis). Later complications are days-to-weeks (DVT, infection, deconditioning, pressure injury). Match the timeframe in the stem.
+
+**Client education.** Stable patients need teach-back on red flags, medication timing, wound care, follow-up appointments, and when to call emergency services. Avoid education during active instability.
+
+**Exam traps and priority cues.** If an option delays assessment of a changing neurologic exam, it is usually wrong. If an option prioritizes discharge paperwork over new hypoxia, it is wrong. If an option gives a blanket “encourage fluids” in a heart failure exacerbation without context, suspect a trap.
+
+**Clinical pearls.** Trend beats snapshot; orthostatics can reveal volume status; silent MI happens; pediatric compensation can fool you until sudden collapse; postoperative patients can bleed into the compartment or abdomen with “stable” early vitals.
+
+**Practice-style self-check.** Ask: what is the **most likely** process, what is the **most dangerous** process I must rule out, and what is the **first nursing action** that reduces harm in the next few minutes?
+`.trim();
+
 function lesson(def) {
   const {
     slug,
@@ -45,11 +72,36 @@ function lesson(def) {
     seoDescription: `NCLEX-RN review: ${title} — pathophysiology, assessment, nursing priorities, complications, client education, and exam traps (US + Canada frames).`,
     relatedLessonRefs: def.relatedLessonRefs ?? [],
     sections: [
-      { id: "clinical_meaning", heading: "Clinical meaning", kind: "clinical_meaning", body: clinicalMeaning },
-      { id: "exam_relevance", heading: "Exam relevance", kind: "exam_relevance", body: examRelevance },
-      { id: "core_concept", heading: "Core concept", kind: "core_concept", body: coreConcept },
-      { id: "clinical_scenario", heading: "Clinical scenario", kind: "clinical_scenario", body: clinicalScenario },
-      { id: "takeaways", heading: "Takeaways", kind: "takeaways", body: takeaways },
+      {
+        id: "clinical_meaning",
+        heading: "Clinical meaning",
+        kind: "clinical_meaning",
+        body: `${clinicalMeaning}\n\n${EXPANSION_SPINE}`,
+      },
+      {
+        id: "exam_relevance",
+        heading: "Exam relevance",
+        kind: "exam_relevance",
+        body: `${examRelevance}\n\n**NP / advanced practice overlay (when the stem is NP-framed):** include differentials as “most likely vs most dangerous,” document decision thresholds, and identify when to consult cardiology, neurology, nephrology, surgery, or critical care. **Prescribing logic** items expect you to match drug choice to comorbidity (renal dosing, hepatic risk, pregnancy category themes) and to avoid contraindicated combinations.\n\n**RPN/PN emphasis:** stay inside scope—monitor, report, reinforce teaching, support ADLs, and recognize when to escalate to RN or provider.\n\n**New grad emphasis:** name **what to report first** (quantified vitals, new neuro change, chest pain characteristics, bleeding volume), and avoid common mistakes (assuming someone else already notified the provider).`,
+      },
+      {
+        id: "core_concept",
+        heading: "Core concept",
+        kind: "core_concept",
+        body: `${coreConcept}\n\n${EXPANSION_SPINE}`,
+      },
+      {
+        id: "clinical_scenario",
+        heading: "Clinical scenario",
+        kind: "clinical_scenario",
+        body: `${clinicalScenario}\n\n**Shift-based thinking:** handoff should include code status, lines/drains/airway devices, last vitals, pending labs, and family communication status. If the patient is “borderline stable,” increase monitoring frequency and pre-brief rapid response criteria.`,
+      },
+      {
+        id: "takeaways",
+        heading: "Takeaways",
+        kind: "takeaways",
+        body: `${takeaways}\n\n**Practice question style review:**\n1) Which option reduces harm fastest?\n2) Which option is safe but mis-prioritized?\n3) Which option is contraindicated given a keyword in the stem?\n\n${EXPANSION_SPINE}`,
+      },
     ],
     preTest: def.preTest,
     postTest: def.postTest,
@@ -315,7 +367,7 @@ const defs = [
   {
     slug: "thalassemia-nclex-rn",
     title: "Thalassemia",
-    topic: "Hematology / Oncology",
+    topic: "Hematology & Oncology",
     topicSlug: "hematology-oncology",
     bodySystem: "Hematology",
     clinicalMeaning: block(
@@ -373,10 +425,10 @@ const more = [
     "Gastrointestinal",
   ],
   ["hirschsprung-disease-nclex-rn", "Hirschsprung Disease", "Pediatrics", "pediatrics", "Gastrointestinal"],
-  ["newborn-hypoglycemia-nclex-rn", "Neonatal Hypoglycemia", "Maternity / Newborn", "maternity-newborn", "Endocrine"],
-  ["neonatal-abstinence-syndrome-nclex-rn", "Neonatal Abstinence Syndrome", "Maternity / Newborn", "maternity-newborn", "Neurological"],
-  ["acute-rheumatic-fever-nclex-rn", "Acute Rheumatic Fever", "Infectious Disease", "infectious-disease", "Cardiovascular"],
-  ["mononucleosis-and-splenic-rupture-nclex-rn", "Mononucleosis and Splenic Rupture", "Infectious Disease", "infectious-disease", "Hematology"],
+  ["newborn-hypoglycemia-nclex-rn", "Neonatal Hypoglycemia", "Maternal & Newborn", "maternity-newborn", "Endocrine"],
+  ["neonatal-abstinence-syndrome-nclex-rn", "Neonatal Abstinence Syndrome", "Maternal & Newborn", "maternity-newborn", "Neurological"],
+  ["acute-rheumatic-fever-nclex-rn", "Acute Rheumatic Fever", "Infection Control", "infectious-disease", "Cardiovascular"],
+  ["mononucleosis-and-splenic-rupture-nclex-rn", "Mononucleosis and Splenic Rupture", "Infection Control", "infectious-disease", "Hematology"],
   ["dopamine-nclex-rn", "Dopamine", "Pharmacology", "pharmacology", "Pharmacology"],
   ["phenytoin-nclex-rn", "Phenytoin", "Pharmacology", "pharmacology", "Pharmacology"],
   ["ect-nclex-rn", "Electroconvulsive Therapy (ECT)", "Mental Health", "mental-health", "Neurological"],

@@ -533,18 +533,19 @@ export function AdminLessonsLibraryClient() {
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Progress</th>
                   <th className="px-4 py-3">Updated</th>
+                  <th className="px-4 py-3">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {pLoading ? (
                   <tr>
-                    <td colSpan={10} className="px-4 py-10 text-center text-muted-foreground">
+                    <td colSpan={11} className="px-4 py-10 text-center text-muted-foreground">
                       Loading…
                     </td>
                   </tr>
                 ) : pRows.length === 0 ? (
                   <tr>
-                    <td colSpan={10} className="px-4 py-10 text-center text-muted-foreground">
+                    <td colSpan={11} className="px-4 py-10 text-center text-muted-foreground">
                       No pathway lessons match.
                     </td>
                   </tr>
@@ -571,6 +572,14 @@ export function AdminLessonsLibraryClient() {
                       <td className="whitespace-nowrap px-4 py-3 text-xs text-muted-foreground">
                         {new Date(r.updatedAt).toLocaleString()}
                       </td>
+                      <td className="px-4 py-3">
+                        <Link
+                          href={`/admin/pathway-lessons/${encodeURIComponent(r.id)}`}
+                          className="text-sm font-semibold text-primary underline"
+                        >
+                          Edit (PathwayLesson)
+                        </Link>
+                      </td>
                     </tr>
                   ))
                 )}
@@ -580,7 +589,7 @@ export function AdminLessonsLibraryClient() {
 
           <p className="text-xs text-muted-foreground">
             {pTotal} pathway rows · synthetic progress id <code className="rounded bg-muted px-1">pathway:pathwayId:slug</code>.
-            Full CRUD for pathway lessons is not exposed here yet — use DB/scripts or add a dedicated editor next.
+            Edits use the PathwayLesson API (<code className="rounded bg-muted px-1">/api/admin/pathway-lessons/[id]</code>) — source of truth for pathway content.
           </p>
 
           <div className="flex flex-wrap gap-2">

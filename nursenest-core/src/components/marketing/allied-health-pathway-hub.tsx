@@ -83,7 +83,7 @@ export function AlliedHealthPathwayHub({
   const heroTitle = profession ? profession.h1 : pathway.displayName;
   const heroBody = profession ? profession.description : pathway.seoDescription;
   const heroKicker = profession
-    ? `${countryLine} · ${pathway.shortName} · ${profession.professionKey.replace(/-/g, " ")}`
+    ? `${countryLine} · ${pathway.shortName} · ${trackChipLabel(profession)}`
     : `${countryLine} · Allied health`;
 
   return (
