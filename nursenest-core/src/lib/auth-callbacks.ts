@@ -1,4 +1,5 @@
 import type { NextAuthConfig } from "next-auth";
+import { randomUUID } from "node:crypto";
 import {
   JWT_SESSION_BRIEF_MAX_AGE_SEC,
   JWT_SESSION_REMEMBER_MAX_AGE_SEC,
@@ -49,7 +50,11 @@ function normalizeSubscriptionStatus(value: unknown) {
 
 export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
   async jwt({ token, user }) {
-    if (!user) return token;
+    if (!user) {
+      const t = token as { jti?: string };
+      if (!t.jti) t.jti = randomUUID();
+      return token;
+    }
 
     const u = user as AuthUserLike;
 
@@ -83,6 +88,9 @@ export const authCallbacks: NonNullable<NextAuthConfig["callbacks"]> = {
     token.rememberLong = rememberMe;
     token.loginAtSec = nowSec;
     token.activityRollAtSec = nowSec;
+
+    const out = token as { jti?: string };
+    out.jti = randomUUID();
 
     return token;
   },

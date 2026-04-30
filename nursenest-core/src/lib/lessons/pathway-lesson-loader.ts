@@ -1932,7 +1932,10 @@ export async function getPublishedPathwayLessonRecordById(
       pathwayId: row.pathwayId,
       slug: lesson.slug,
       source: "database_by_id",
-      missing_fields: lesson.structuralQuality?.issues ?? [],
+      missing_fields:
+        lesson.structuralQuality?.issues && lesson.structuralQuality.issues.length > 0
+          ? lesson.structuralQuality.issues.join(" | ")
+          : "none",
       structural_score: `${lesson.structuralQuality?.issues.length ?? 0} issues / ${lesson.structuralQuality?.warnings.length ?? 0} warnings / ${lesson.structuralQuality?.internalStudyLinkCount ?? 0} internal links`,
       publicComplete: false,
     });

@@ -151,6 +151,8 @@ model User {
   marketingPublicContentOverrideRevisions MarketingPublicContentOverrideRevision[]
   remediationEvents                       UserRemediationEvent[]
   remediationQueueItems                   UserRemediationQueue[]
+  learnerSessionActivities                LearnerSessionActivity[]
+  learnerSessionIpObservations            LearnerSessionIpObservation[]
 
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
@@ -234,6 +236,40 @@ model ProtectionAbuseReview {
   @@index([userId, createdAt])
   @@index([dismissedAt])
   @@map("protection_abuse_reviews")
+}
+
+/// * Soft account-sharing telemetry: one row per stable session slot (JWT jti when present).
+/// * Stores only HMAC hashes of IP and User-Agent — never raw values.
+model LearnerSessionActivity {
+  id               String    @id @default(cuid())
+  userId           String
+  sessionKeyHash   String    @map("session_key_hash") @db.VarChar(64)
+  userAgentHash    String    @map("user_agent_hash") @db.VarChar(64)
+  ipHash           String    @map("ip_hash") @db.VarChar(64)
+  regionHint       String?   @map("region_hint") @db.VarChar(8)
+  firstSeenAt      DateTime  @default(now()) @map("first_seen_at")
+  lastSeenAt       DateTime  @updatedAt @map("last_seen_at")
+  revokedAt        DateTime? @map("revoked_at")
+  suspiciousReason String?   @map("suspicious_reason") @db.VarChar(240)
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, sessionKeyHash])
+  @@index([userId, lastSeenAt(sort: Desc)])
+  @@map("learner_session_activities")
+}
+
+/// * Deduped IP hashes per learner for rolling distinct-IP heuristics (no raw IP).
+model LearnerSessionIpObservation {
+  id         String   @id @default(cuid())
+  userId     String
+  ipHash     String   @map("ip_hash") @db.VarChar(64)
+  regionHint String?  @map("region_hint") @db.VarChar(8)
+  lastSeenAt DateTime @updatedAt @map("last_seen_at")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, ipHash])
+  @@index([userId, lastSeenAt(sort: Desc)])
+  @@map("learner_session_ip_observations")
 }
 
 model BaselineAssessmentAttempt {

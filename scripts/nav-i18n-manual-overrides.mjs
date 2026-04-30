@@ -10,11 +10,33 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getAuditedKeys } from "./lib/nav-i18n-audit.mjs";
 import { ensureRequiredEnNavKeys } from "./lib/ensure-en-nav-keys.mjs";
+import { loadLocaleFlatMarketingMap, resolveMarketingI18nAppRoot } from "./lib/i18n-app-root.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.join(__dirname, "..");
-const EN_PATH = path.join(ROOT, "public/i18n", "en.json");
-const I18N_DIR = path.join(ROOT, "public", "i18n");
+const REPO_ROOT = path.join(__dirname, "..");
+const APP_ROOT = resolveMarketingI18nAppRoot(REPO_ROOT);
+
+const REQUIRED_LOCALE_NAV_KEYS = {
+  fr: { "nav.getStarted": "Commencer" },
+  es: { "nav.getStarted": "Comenzar" },
+  tl: { "nav.getStarted": "Magsimula" },
+  hi: { "nav.getStarted": "शुरू करें" },
+};
+
+function localeNavPath(code) {
+  const shardPath = path.join(APP_ROOT, "public", "i18n", code, "nav.json");
+  if (fs.existsSync(shardPath)) return shardPath;
+  return path.join(APP_ROOT, "public", "i18n", `${code}.json`);
+}
+
+function localeCodesWithNavShards() {
+  const dir = path.join(APP_ROOT, "public", "i18n");
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((code) => fs.existsSync(path.join(dir, code, "nav.json")))
+    .sort();
+}
 
 /** Priority locales: natural, concise nursing-exam product UI wording. */
 export const MANUAL_NAV_OVERRIDES = {
@@ -52,6 +74,8 @@ export const MANUAL_NAV_OVERRIDES = {
     "footer.about": "À propos",
     "footer.privacy": "Confidentialité",
     "footer.faq": "FAQ",
+    "components.footer.npExamPrepCa": "Préparation NP (Canada)",
+    "components.footer.npExamPrepUs": "Préparation NP (É.-U.)",
   },
   es: {
     "nav.marketingExplore": "A quién ayudamos",
@@ -81,6 +105,43 @@ export const MANUAL_NAV_OVERRIDES = {
       "Crea mazos de tarjetas y estudia con los modos Aprender y Probar",
     "nav.simulators": "Simuladores",
     "footer.blog": "Blog",
+    "components.footer.npExamPrepCa": "Preparación para NP (Canadá)",
+    "components.footer.npExamPrepUs": "Preparación para NP (EE. UU.)",
+    "footer.linkNpExamPrepCa": "Preparación para NP (Canadá)",
+    "footer.linkNpExamPrepUs": "Preparación para NP (EE. UU.)",
+    "footer.linkNursingExamPrepHub": "Centro de preparación de exámenes de enfermería",
+    "nav.badge.alliedHealth": "Salud aliada",
+    "nav.hub.lessonProgress": "{completed} de {total} lecciones completadas",
+    "nav.mega.allied.category.acute": "Atención aguda y de campo",
+    "nav.mega.allied.category.clinical": "Apoyo clínico y comunitario",
+    "nav.mega.allied.category.lab": "Laboratorio e imagenología",
+    "nav.mega.allied.category.therapy": "Terapia y rehabilitación",
+    "nav.mega.allied.hubDescription":
+      "Selecciona tu profesión para acceder a lecciones, preguntas de práctica y preparación de exámenes adaptadas a tu campo.",
+    "nav.mega.allied.label": "Salud aliada",
+    "nav.mega.newGrad.hubDescription":
+      "Empieza con la ruta base para nuevos graduados y avanza con actividades de estudio prácticas.",
+    "nav.mega.newGrad.label": "Nuevo graduado",
+    "nav.mega.np.badgeCA": "Recomendado para Canadá",
+    "nav.mega.np.badgeUS": "Recomendado para EE. UU.",
+    "nav.mega.np.hubDescription":
+      "Abre el centro de NP para elegir tu rama de examen y empezar a estudiar.",
+    "nav.mega.pn.badgeCA": "Recomendado para Canadá",
+    "nav.mega.pn.badgeUS": "Recomendado para EE. UU.",
+    "nav.mega.pn.hubDescription":
+      "Elige el centro de tu región para iniciar una preparación específica para tu ruta.",
+    "nav.mega.rn.hubDescription":
+      "Empieza en el centro de RN para practicar, tomar lecciones y seguir tu preparación.",
+    "nav.tierDrop.alliedDesc": "Preparación para certificaciones de profesiones de salud aliadas",
+    "nav.tierDrop.alliedTitle": "Salud aliada",
+    "nav.tierDrop.heading": "Elige tu ruta de examen",
+    "nav.tierDrop.lpnDesc": "Preparación para el examen de enfermería práctica para candidatos de EE. UU. (LPN/LVN)",
+    "nav.tierDrop.npDesc": "Rutas de certificación FNP, PMHNP, AGPCNP y otras de NP",
+    "nav.tierDrop.npTitle": "Enfermero practicante",
+    "nav.tierDrop.preNursingDesc": "Cursos básicos y preparación para exámenes de admisión",
+    "nav.tierDrop.rpnDesc": "Preparación para el examen de enfermería práctica para candidatos de Canadá (RPN)",
+    "nav.tierDrop.toolsDesc": "Tarjetas, tutor con IA y utilidades de estudio",
+    "nav.tierDrop.toolsTitle": "Herramientas de estudio",
   },
   pa: {
     "nav.marketingExplore": "ਅਸੀਂ ਕਿਨ੍ਹਾਂ ਦੀ ਮਦਦ ਕਰਦੇ ਹਾਂ",
@@ -138,6 +199,68 @@ export const MANUAL_NAV_OVERRIDES = {
     "nav.studyDecksDesc":
       "फ़्लैशकार्ड डेक बनाएँ, सीखें और टेस्ट मोड में पढ़ें",
     "nav.simulators": "सिम्युलेटर",
+    "components.footer.npExamPrepCa": "NP तैयारी (कनाडा)",
+    "components.footer.npExamPrepUs": "NP तैयारी (अमेरिका)",
+    "footer.globalPathwaysLine": "उत्तर अमेरिका, एशिया और मध्य पूर्व में अध्ययन मार्ग",
+    "footer.learnerSignIn": "लर्नर साइन-इन",
+    "footer.linkNpExamPrepCa": "NP तैयारी (कनाडा)",
+    "footer.linkNpExamPrepUs": "NP तैयारी (अमेरिका)",
+    "footer.linkNursingExamPrepHub": "नर्सिंग परीक्षा तैयारी हब",
+    "footer.supportingNursesGlobally": "दुनिया भर की नर्सों का समर्थन",
+    "nav.badge.alliedHealth": "सहायक स्वास्थ्य",
+    "nav.clearCountrySearch": "खोज साफ करें",
+    "nav.examTracks.more": "और ट्रैक",
+    "nav.hub.lessonProgress": "{total} में से {completed} पाठ पूरे",
+    "nav.learnerMain.aria": "लर्नर नेविगेशन",
+    "nav.marketingFlow.learn": "सीखें",
+    "nav.marketingFlow.practice": "अभ्यास करें",
+    "nav.marketingFlow.track": "प्रगति ट्रैक करें",
+    "nav.marketingMore": "और",
+    "nav.mega.allied.category.acute": "फील्ड और तीव्र देखभाल",
+    "nav.mega.allied.category.clinical": "क्लिनिकल और सामुदायिक सहयोग",
+    "nav.mega.allied.category.lab": "प्रयोगशाला और इमेजिंग",
+    "nav.mega.allied.category.therapy": "थेरेपी और पुनर्वास",
+    "nav.mega.allied.hubDescription":
+      "अपने पेशे के अनुसार पाठ, अभ्यास प्रश्न और परीक्षा तैयारी पाने के लिए अपना करियर चुनें.",
+    "nav.mega.allied.label": "सहायक स्वास्थ्य",
+    "nav.mega.examHubSuffix": "परीक्षा हब",
+    "nav.mega.group.learn": "सीखें",
+    "nav.mega.group.practice": "अभ्यास करें",
+    "nav.mega.group.studyTools": "अध्ययन उपकरण",
+    "nav.mega.link.buildStudyPlan": "अध्ययन योजना बनाएँ",
+    "nav.mega.link.catReadiness": "CAT तैयारियों की परीक्षा",
+    "nav.mega.link.howItWorks": "यह कैसे काम करता है",
+    "nav.mega.link.lessons": "पाठ",
+    "nav.mega.link.practiceExams": "अभ्यास परीक्षाएँ",
+    "nav.mega.link.practiceQuestions": "अभ्यास प्रश्न",
+    "nav.mega.newGrad.hubDescription":
+      "नए ग्रेजुएट के मुख्य पथ से शुरू करें और व्यावहारिक अध्ययन गतिविधियों के साथ आगे बढ़ें.",
+    "nav.mega.newGrad.label": "नया ग्रेजुएट",
+    "nav.mega.np.badgeCA": "कनाडा के लिए अनुशंसित",
+    "nav.mega.np.badgeUS": "अमेरिका के लिए अनुशंसित",
+    "nav.mega.np.hubDescription": "अपनी परीक्षा शाखा चुनने और पढ़ाई शुरू करने के लिए NP हब खोलें.",
+    "nav.mega.openHub": "हब खोलें",
+    "nav.mega.pn.badgeCA": "कनाडा के लिए अनुशंसित",
+    "nav.mega.pn.badgeUS": "अमेरिका के लिए अनुशंसित",
+    "nav.mega.pn.hubDescription":
+      "अपनी क्षेत्रीय तैयारी शुरू करने के लिए अपने क्षेत्र का हब चुनें.",
+    "nav.mega.rn.hubDescription": "अभ्यास, पाठ और तैयारी ट्रैकिंग शुरू करने के लिए RN हब में जाएँ.",
+    "nav.mega.startHere": "यहाँ से शुरू करें",
+    "nav.noCountriesFound": "कोई देश नहीं मिला",
+    "nav.pathwayHubsAria": "पाथवे परीक्षा हब",
+    "nav.searchCountriesAria": "देश खोजें",
+    "nav.searchCountriesPlaceholder": "देश खोजें...",
+    "nav.selectCountry": "देश चुनें",
+    "nav.tierDrop.alliedDesc": "सहायक स्वास्थ्य पेशों के लिए प्रमाणन तैयारी",
+    "nav.tierDrop.alliedTitle": "सहायक स्वास्थ्य",
+    "nav.tierDrop.heading": "अपना परीक्षा ट्रैक चुनें",
+    "nav.tierDrop.lpnDesc": "अमेरिकी उम्मीदवारों (LPN/LVN) के लिए प्रैक्टिकल नर्स परीक्षा तैयारी",
+    "nav.tierDrop.npDesc": "FNP, PMHNP, AGPCNP और अन्य NP प्रमाणन ट्रैक",
+    "nav.tierDrop.npTitle": "नर्स प्रैक्टिशनर",
+    "nav.tierDrop.preNursingDesc": "मूलभूत पाठ्यक्रम और प्रवेश परीक्षा तैयारी",
+    "nav.tierDrop.rpnDesc": "कनाडाई उम्मीदवारों (RPN) के लिए प्रैक्टिकल नर्स परीक्षा तैयारी",
+    "nav.tierDrop.toolsDesc": "फ्लैशकार्ड, AI ट्यूटर और अध्ययन उपकरण",
+    "nav.tierDrop.toolsTitle": "अध्ययन उपकरण",
   },
   zh: {
     "nav.marketingExplore": "服务对象",
@@ -252,6 +375,70 @@ export const MANUAL_NAV_OVERRIDES = {
     "nav.simulators": "Mga interaktibong pagsasanay",
     "nav.learningTools": "Mga kagamitan sa pag-aaral",
     "footer.pricing": "Presyo",
+    "components.footer.npExamPrepCa": "Paghahanda sa NP (Canada)",
+    "components.footer.npExamPrepUs": "Paghahanda sa NP (US)",
+    "footer.globalPathwaysLine": "Mga landas sa North America, Asia, at Middle East",
+    "footer.learnerSignIn": "Pag-sign in ng mag-aaral",
+    "footer.linkNpExamPrepCa": "Paghahanda sa NP (Canada)",
+    "footer.linkNpExamPrepUs": "Paghahanda sa NP (US)",
+    "footer.linkNursingExamPrepHub": "Hub ng paghahanda sa pagsusulit sa nursing",
+    "footer.supportingNursesGlobally": "Sumusuporta sa mga nurse sa buong mundo",
+    "nav.badge.alliedHealth": "Kaugnay na kalusugan",
+    "nav.clearCountrySearch": "I-clear ang paghahanap",
+    "nav.examTracks.more": "Iba pang track",
+    "nav.hub.lessonProgress": "{completed} sa {total} na leksiyon ang natapos",
+    "nav.learnerMain.aria": "Nabigasyon ng mag-aaral",
+    "nav.marketingFlow.learn": "Matuto",
+    "nav.marketingFlow.practice": "Magsanay",
+    "nav.marketingFlow.track": "Subaybayan ang progreso",
+    "nav.marketingMore": "Higit pa",
+    "nav.mega.allied.category.acute": "Pang-emerhensiya at acute care",
+    "nav.mega.allied.category.clinical": "Suportang klinikal at pangkomunidad",
+    "nav.mega.allied.category.lab": "Laboratoryo at imaging",
+    "nav.mega.allied.category.therapy": "Terapiya at rehabilitasyon",
+    "nav.mega.allied.hubDescription":
+      "Piliin ang iyong propesyon para sa mga leksiyon, tanong sa pagsasanay, at paghahanda sa pagsusulit na akma sa iyong larangan.",
+    "nav.mega.allied.label": "Kaugnay na kalusugan",
+    "nav.mega.examHubSuffix": "Hub ng pagsusulit",
+    "nav.mega.group.learn": "Matuto",
+    "nav.mega.group.practice": "Magsanay",
+    "nav.mega.group.studyTools": "Mga kagamitan sa pag-aaral",
+    "nav.mega.link.buildStudyPlan": "Bumuo ng plano sa pag-aaral",
+    "nav.mega.link.catReadiness": "Pagsusulit sa kahandaang CAT",
+    "nav.mega.link.howItWorks": "Paano ito gumagana",
+    "nav.mega.link.lessons": "Mga leksiyon",
+    "nav.mega.link.practiceExams": "Mga pagsasanay na pagsusulit",
+    "nav.mega.link.practiceQuestions": "Mga tanong sa pagsasanay",
+    "nav.mega.newGrad.hubDescription":
+      "Magsimula sa pangunahing ruta para sa bagong graduate at humakbang gamit ang praktikal na mga gawain sa pag-aaral.",
+    "nav.mega.newGrad.label": "Bagong graduate",
+    "nav.mega.np.badgeCA": "Inirerekomenda para sa Canada",
+    "nav.mega.np.badgeUS": "Inirerekomenda para sa US",
+    "nav.mega.np.hubDescription":
+      "Buksan ang NP hub upang piliin ang sangay ng iyong pagsusulit at magsimulang mag-aral.",
+    "nav.mega.openHub": "Buksan ang hub",
+    "nav.mega.pn.badgeCA": "Inirerekomenda para sa Canada",
+    "nav.mega.pn.badgeUS": "Inirerekomenda para sa US",
+    "nav.mega.pn.hubDescription":
+      "Piliin ang hub para sa iyong rehiyon upang simulan ang paghahandang angkop sa iyong ruta.",
+    "nav.mega.rn.hubDescription":
+      "Magsimula sa RN hub para sa pagsasanay, mga leksiyon, at pagsubaybay sa kahandaan.",
+    "nav.mega.startHere": "Magsimula rito",
+    "nav.noCountriesFound": "Walang nahanap na bansa",
+    "nav.pathwayHubsAria": "Mga hub ng pathway exam",
+    "nav.searchCountriesAria": "Maghanap ng mga bansa",
+    "nav.searchCountriesPlaceholder": "Maghanap ng mga bansa...",
+    "nav.selectCountry": "Pumili ng bansa",
+    "nav.tierDrop.alliedDesc": "Paghahanda sa sertipikasyon para sa mga propesyong allied health",
+    "nav.tierDrop.alliedTitle": "Kaugnay na kalusugan",
+    "nav.tierDrop.heading": "Piliin ang iyong exam track",
+    "nav.tierDrop.lpnDesc": "Paghahanda sa pagsusulit para sa praktikal na nars sa mga kandidato sa US (LPN/LVN)",
+    "nav.tierDrop.npDesc": "FNP, PMHNP, AGPCNP, at iba pang mga track ng sertipikasyon para sa NP",
+    "nav.tierDrop.npTitle": "Nars practitioner",
+    "nav.tierDrop.preNursingDesc": "Mga pundasyong kurso at paghahanda sa admission exam",
+    "nav.tierDrop.rpnDesc": "Paghahanda sa pagsusulit para sa praktikal na nars sa mga kandidato sa Canada (RPN)",
+    "nav.tierDrop.toolsDesc": "Mga flashcard, AI tutor, at kagamitan sa pag-aaral",
+    "nav.tierDrop.toolsTitle": "Mga kagamitan sa pag-aaral",
     "home.region.caDesc":
       "Materyales sa REx-PN, NCLEX-RN, at NP: may mga sukat na para sa Canada (°C, kg, cm) at terminolohiyang RPN.",
     "home.region.usDesc":
@@ -261,23 +448,40 @@ export const MANUAL_NAV_OVERRIDES = {
 
 function main() {
   ensureRequiredEnNavKeys();
-  const en = JSON.parse(fs.readFileSync(EN_PATH, "utf8"));
+  const en = loadLocaleFlatMarketingMap(APP_ROOT, "en");
+  if (!en || typeof en !== "object") {
+    throw new Error(`Cannot load English nav shard under ${APP_ROOT}/public/i18n`);
+  }
   const audited = new Set(getAuditedKeys(en));
 
-  for (const [code, map] of Object.entries(MANUAL_NAV_OVERRIDES)) {
-    const p = path.join(I18N_DIR, `${code}.json`);
+  for (const code of localeCodesWithNavShards()) {
+    const p = localeNavPath(code);
     if (!fs.existsSync(p)) {
       console.warn(`[${code}] skip: ${p} missing`);
       continue;
     }
     const j = JSON.parse(fs.readFileSync(p, "utf8"));
     let n = 0;
-    for (const [k, v] of Object.entries(map)) {
+    for (const [k, v] of Object.entries(REQUIRED_LOCALE_NAV_KEYS[code] ?? {})) {
+      if (!audited.has(k)) {
+        console.warn(`[${code}] skip non-audited key: ${k}`);
+        continue;
+      }
+      if (j[k] == null || String(j[k]).trim() === "") {
+        j[k] = v;
+        n += 1;
+      }
+    }
+    for (const [k, v] of Object.entries(MANUAL_NAV_OVERRIDES[code] ?? {})) {
       if (!audited.has(k)) {
         console.warn(`[${code}] skip non-audited key: ${k}`);
         continue;
       }
       j[k] = v;
+      n += 1;
+    }
+    if (j["nav.getStarted"] == null || String(j["nav.getStarted"]).trim() === "") {
+      j["nav.getStarted"] = "Get Started";
       n += 1;
     }
     fs.writeFileSync(p, JSON.stringify(j));

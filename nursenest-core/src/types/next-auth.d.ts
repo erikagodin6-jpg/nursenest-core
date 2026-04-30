@@ -33,6 +33,8 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
   interface JWT {
+    /** Stable per-login / backfilled id for soft session telemetry (never exposed on Session). */
+    jti?: string;
     email?: string | null;
     name?: string | null;
     role?: SessionUserRole;

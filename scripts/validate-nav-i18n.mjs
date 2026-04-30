@@ -29,9 +29,26 @@ function localeSourcePath(appRoot, code) {
   return path.join(appRoot, "public", "i18n", code);
 }
 
+function navAuditLocaleCodes(appRoot) {
+  const sourcePath = path.join(appRoot, "src", "lib", "i18n", "marketing-languages.ts");
+  if (!fs.existsSync(sourcePath)) return MARKETING_LOCALE_CODES;
+  const source = fs.readFileSync(sourcePath, "utf8");
+  const codes = [];
+  const seen = new Set();
+  const entryPattern = /\{\s*code:\s*"([^"]+)"[\s\S]*?tier:\s*"(full|partial)"/g;
+  for (const match of source.matchAll(entryPattern)) {
+    const code = match[1];
+    if (code === "en" || seen.has(code)) continue;
+    seen.add(code);
+    codes.push(code);
+  }
+  return codes.length > 0 ? codes : MARKETING_LOCALE_CODES;
+}
+
 function main() {
   ensureRequiredEnNavKeys();
   const appRoot = resolveMarketingI18nAppRoot(REPO_ROOT);
+  const locales = navAuditLocaleCodes(appRoot);
   const en = loadLocaleFlatMarketingMap(appRoot, "en");
   if (!en || typeof en !== "object") {
     console.error(
@@ -44,7 +61,7 @@ function main() {
   const failures = [];
   const byLocale = {};
 
-  for (const code of MARKETING_LOCALE_CODES) {
+  for (const code of locales) {
     const srcPath = localeSourcePath(appRoot, code);
     const flatExists = fs.existsSync(srcPath) && fs.statSync(srcPath).isFile();
     const dirExists = fs.existsSync(srcPath) && fs.statSync(srcPath).isDirectory();
@@ -96,7 +113,7 @@ function main() {
           ok: failures.length === 0,
           appRoot,
           auditedKeyCount: auditedCount,
-          localeCount: MARKETING_LOCALE_CODES.length,
+          localeCount: locales.length,
           failureCount: failures.length,
           failures,
           byLocale,
@@ -110,7 +127,7 @@ function main() {
   }
 
   console.log(`Nav i18n validation (appRoot=${appRoot}, audited keys vs English)\n`);
-  console.log(`Audited string keys: ${auditedCount} | Locales: ${MARKETING_LOCALE_CODES.join(", ")}\n`);
+  console.log(`Audited string keys: ${auditedCount} | Locales: ${locales.join(", ")}\n`);
 
   if (failures.length === 0) {
     console.log("OK — all marketing locales pass nav/footer/breadcrumb/shell label checks.\n");
