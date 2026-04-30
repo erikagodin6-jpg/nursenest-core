@@ -1,6 +1,10 @@
 /**
  * Pathway lesson data layer (marketing + sitemap).
  *
+ * **Source of truth:** `PathwayLesson` (Prisma + catalog merge via `normalizeLesson`). Marketing and learner
+ * lesson surfaces render from this row — not from `ContentItem` sync. ContentItem → PathwayLesson linkage is
+ * compatibility-only for legacy migration (see `pathway-lesson-content-item-authority.ts`).
+ *
  * **Scale:** Hub/topic lists use offset pagination and hub-list selects (no `sections` JSON).
  * **Build:** Marketing lesson routes use `generateStaticParams() => []` + `dynamicParams` so builds
  * do not pre-render every lesson slug.

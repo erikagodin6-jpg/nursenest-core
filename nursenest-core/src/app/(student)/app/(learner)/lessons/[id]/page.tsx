@@ -1,3 +1,8 @@
+/**
+ * Learner lesson detail: when `resolvedLesson.kind === "pathway_ok"`, **PathwayLesson is the source of truth**
+ * (`getPublishedPathwayLessonRecordById` / pathway loaders). ContentItem tags only bridge legacy rows;
+ * rendering updated pathway lessons does not depend on ContentItem sync.
+ */
 import { randomUUID } from "node:crypto";
 import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
@@ -234,6 +239,7 @@ async function LessonDetailPageInner({ params }: Props) {
     const learnerPath = learnerPathRow?.learnerPath ?? null;
 
     const pathwayLessonReadOmit = await pathwayLessonReadOmitArgs();
+    // Option B: pathway lesson detail body comes from `pathway_lessons` only — ContentItem is legacy app lessons + redirect when tagged.
     const pwRow = await prisma.pathwayLesson.findUnique({ ...pathwayLessonReadOmit, where: { id } });
     if (pwRow) {
       const pathwayResolution = await resolveAppSubscriberPathwayLessonForDetail({

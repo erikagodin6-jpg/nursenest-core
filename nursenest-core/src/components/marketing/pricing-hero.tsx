@@ -60,16 +60,17 @@ export function PricingHero({
             color: "var(--semantic-text-muted)",
           }}
         >
-          Trusted by Nursing and Allied Health Students
+          Exam prep + clinical thinking + early-career support
         </p>
 
         <h1 className="nn-marketing-h1 text-balance">
-          Pass Your Exam With a Smarter Study System
+          Pass your exam — and feel confident on your first shift.
         </h1>
 
         <p className="nn-marketing-body mx-auto mt-5 max-w-xl text-pretty text-muted-foreground">
-          Know what to study, track your progress, and build confidence with
-          a structured plan designed for your exam
+          NurseNest does not just prepare you for the NCLEX. We train you to think, prioritize, and make safe clinical
+          decisions in real-world scenarios — with a structured plan for your exam and your first shifts. Designed to
+          help you pass your exam and feel confident walking into your first shift.
         </p>
 
         <p

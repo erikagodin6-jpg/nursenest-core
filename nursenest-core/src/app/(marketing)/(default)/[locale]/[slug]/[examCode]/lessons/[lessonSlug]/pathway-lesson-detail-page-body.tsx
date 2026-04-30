@@ -1,3 +1,7 @@
+/**
+ * Marketing pathway lesson detail body: **PathwayLesson is the source of truth** (record from loader).
+ * ContentItem sync is compatibility-only for legacy bridged rows.
+ */
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";

@@ -72,6 +72,8 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
   ]);
 
   const linkedPathwayLessonId = pathwayLessonIdFromContentItemTags(existing.tags);
+  /** Option B: canonical pathway authoring is `pathway_lessons` — use PathwayLesson admin API only when pathway. */
+  const lessonSurface = linkedPathwayLessonId ? ("pathway_lesson" as const) : ("content_item" as const);
 
   return NextResponse.json({
     lesson: existing,
@@ -81,6 +83,7 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
     categoryMatch: category,
     /** When set, this ContentItem is linked to a canonical pathway row — edit via `/admin/pathway-lessons/{id}` only. */
     linkedPathwayLessonId,
+    lessonSurface,
     linkMapping: {
       generatedQuestionDrafts: qDrafts,
       generatedFlashcardDrafts: fcDrafts,

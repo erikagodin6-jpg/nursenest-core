@@ -1,16 +1,13 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import { prisma } from "@/lib/db";
+import { loadAdminPathwayLessonRow } from "@/lib/admin/load-admin-pathway-lesson-row.server";
 import { plainBodyFromPathwaySectionsJson } from "@/lib/lessons/pathway-lesson-plain-body-sections";
 
 export const dynamic = "force-dynamic";
 
 /**
- * Admin read helper: resolve a {@link PathwayLesson} by stable keys (`pathwayId` + `slug` + optional `locale`)
- * without requiring the internal `pathway_lessons.id`.
- *
- * ContentItem → PathwayLesson sync is **compatibility only** (legacy migration); this route is the
- * canonical admin read path alongside `GET /api/admin/pathway-lessons/[id]`.
+ * @deprecated Prefer `GET /api/admin/pathway-lessons/[id]?pathwayId=&slug=` (same payload).
+ * ContentItem → PathwayLesson sync is **compatibility only** (legacy migration).
  */
 export async function GET(req: Request) {
   const gate = await requireAdmin(req);
@@ -25,9 +22,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "pathwayId and slug query parameters are required" }, { status: 400 });
   }
 
-  const row = await prisma.pathwayLesson.findFirst({
-    where: { pathwayId, slug, locale },
-  });
+  const row = await loadAdminPathwayLessonRow({ slugLookup: { pathwayId, slug, locale } });
   if (!row) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const body = plainBodyFromPathwaySectionsJson(row.sections);

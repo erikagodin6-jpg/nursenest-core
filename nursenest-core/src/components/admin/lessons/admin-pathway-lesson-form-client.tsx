@@ -51,7 +51,7 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
       try {
         const sp = new URLSearchParams({ pathwayId: pid, slug: sl });
         if (locale) sp.set("locale", locale);
-        const res = await fetch(`/api/admin/pathway-lessons/lookup?${sp.toString()}`);
+        const res = await fetch(`/api/admin/pathway-lessons/_?${sp.toString()}`);
         const j = (await res.json()) as { error?: string; lesson?: { id: string } };
         if (cancelled) return;
         if (!res.ok || !j.lesson?.id) {
@@ -127,19 +127,26 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
           titlePreview: title.slice(0, 120),
         });
       }
-      const res = await fetch(`/api/admin/pathway-lessons/${pathwayLessonId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          slug,
-          seoTitle,
-          seoDescription,
-          body,
-          status: nextStatus ?? status,
-          acknowledgeBelowQualityBar: acknowledgeBelowQualityBar || undefined,
-        }),
-      });
+      const payload = {
+        title,
+        slug,
+        seoTitle,
+        seoDescription,
+        body,
+        acknowledgeBelowQualityBar: acknowledgeBelowQualityBar || undefined,
+      };
+      const res =
+        nextStatus === ContentStatus.PUBLISHED
+          ? await fetch(`/api/admin/pathway-lessons/${pathwayLessonId}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            })
+          : await fetch(`/api/admin/pathway-lessons/${pathwayLessonId}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ ...payload, status: nextStatus ?? status }),
+            });
       const j = (await res.json()) as { error?: string; lesson?: { status: ContentStatus } };
       if (!res.ok) {
         setErr(j.error ?? "Save failed.");

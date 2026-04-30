@@ -6,6 +6,7 @@ import { NextResponse } from "next/server";
 import { ContentStatus, type Prisma } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
+import { loadAdminPathwayLessonRow } from "@/lib/admin/load-admin-pathway-lesson-row.server";
 import { revalidateSurfacesAfterPathwayLessonMutation } from "@/lib/admin/revalidate-pathway-lesson-surfaces";
 import { invalidatePathwayLessonPaidStaleCache } from "@/lib/lessons/invalidate-pathway-lesson-paid-stale-cache";
 import { prisma } from "@/lib/db";
@@ -44,8 +45,15 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
   const gate = await requireAdmin(req);
   if (!gate.ok) return gate.response;
   const { id } = await ctx.params;
+  const url = new URL(req.url);
+  const qPathwayId = url.searchParams.get("pathwayId")?.trim() ?? "";
+  const qSlug = url.searchParams.get("slug")?.trim() ?? "";
+  const qLocale = (url.searchParams.get("locale")?.trim() || "en").slice(0, 20);
 
-  const row = await prisma.pathwayLesson.findUnique({ where: { id } });
+  const row =
+    qPathwayId && qSlug
+      ? await loadAdminPathwayLessonRow({ slugLookup: { pathwayId: qPathwayId, slug: qSlug, locale: qLocale } })
+      : await loadAdminPathwayLessonRow({ pathwayLessonId: id });
   if (!row) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const body = plainBodyFromPathwaySectionsJson(row.sections);
@@ -53,6 +61,24 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
     lesson: row,
     body,
   });
+}
+
+/** Publish: same validation as PATCH with `status: PUBLISHED` — PathwayLesson-only (never ContentItem sync). */
+export async function POST(req: Request, ctx: { params: Promise<{ id: string }> }) {
+  const gate = await requireAdmin(req);
+  if (!gate.ok) return gate.response;
+  let body: Record<string, unknown> = {};
+  try {
+    body = (await req.json()) as Record<string, unknown>;
+  } catch {
+    body = {};
+  }
+  const nextReq = new Request(req.url, {
+    method: "PATCH",
+    headers: req.headers,
+    body: JSON.stringify({ ...body, status: ContentStatus.PUBLISHED }),
+  });
+  return PATCH(nextReq, ctx);
 }
 
 export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }> }) {
@@ -132,8 +158,29 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     );
   }
 
+  if (nextStatus === ContentStatus.PUBLISHED) {
+    if (!existing.pathwayId.trim()) {
+      return NextResponse.json(
+        { error: "Publish blocked — pathwayId is required on the lesson row", code: "pathway_id_required" },
+        { status: 422 },
+      );
+    }
+    if (!mergedTitle.trim() || !mergedSlug.trim()) {
+      return NextResponse.json(
+        { error: "Publish blocked — title and slug are required", code: "title_slug_required" },
+        { status: 422 },
+      );
+    }
+    if (mergedBody.trim().length < 20) {
+      return NextResponse.json(
+        { error: "Publish blocked — lesson body derived from sections is too short", code: "sections_body_too_short" },
+        { status: 422 },
+      );
+    }
+  }
+
   let lessonGov: ReturnType<typeof governContentItemLessonPublish> | null = null;
-  if (d.status === ContentStatus.PUBLISHED) {
+  if (nextStatus === ContentStatus.PUBLISHED) {
     const v = validateLessonForPublish({
       title: mergedTitle,
       summary: mergedSeoDescription,
@@ -202,7 +249,9 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     pathwayId: existing.pathwayId,
   });
 
-  if (nextStatus === ContentStatus.PUBLISHED && !structuralPublicComplete) {
+  const transitioningIntoPublished =
+    nextStatus === ContentStatus.PUBLISHED && existing.status !== ContentStatus.PUBLISHED;
+  if (transitioningIntoPublished && !structuralPublicComplete) {
     return NextResponse.json(
       {
         error: "Publish blocked — lesson structure does not meet public completeness requirements",

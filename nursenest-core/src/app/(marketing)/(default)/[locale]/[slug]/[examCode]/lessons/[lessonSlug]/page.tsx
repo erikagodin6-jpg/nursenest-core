@@ -29,6 +29,9 @@ import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-s
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 
 /**
+ * **PathwayLesson is the source of truth.** Body and SEO load from `PathwayLesson` via the pathway lesson
+ * loader — not from `ContentItem` sync (compatibility-only for bridged legacy rows).
+ *
  * Paywall: full `PathwayLessonRecord` / `sections[]` stay in the body server component. Gate with
  * `canViewFullPathwayLesson` / `visibleSectionsForLesson` before rendering; pass only thin props into
  * `"use client"` surfaces (see `marketing-pathway-lesson-client-contract.ts`). Subscriber-only supplements

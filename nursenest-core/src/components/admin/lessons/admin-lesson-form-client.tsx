@@ -94,16 +94,24 @@ export function AdminLessonFormClient({ lessonId }: { lessonId?: string }) {
         categoryMatch?: { id: string } | null;
         linkMapping?: LinkMapping;
         linkedPathwayLessonId?: string | null;
+        lessonSurface?: "pathway_lesson" | "content_item";
       };
       if (!res.ok || !j.lesson) {
         setErr("Could not load lesson.");
         return;
       }
       const bridgeId = j.linkedPathwayLessonId ?? pathwayLessonIdFromContentItemTags(j.lesson.tags);
-      if (bridgeId) {
-        // Pathway-linked lessons: persistence is PathwayLesson-only (Option B). ContentItem → PathwayLesson
-        // sync remains a temporary compatibility layer for legacy rows — not the publishing path.
+      if (j.lessonSurface === "pathway_lesson") {
+        if (!bridgeId) {
+          setErr("Pathway lesson link is missing — add pathway-lesson-id tag or fix API data.");
+          return;
+        }
+        // PathwayLesson API only (Option B). Do not write pathway fields through ContentItem.
         // TODO: Remove ContentItem → PathwayLesson sync bridge after pathway lesson editing migration is complete.
+        router.replace(`/admin/pathway-lessons/${encodeURIComponent(bridgeId)}`);
+        return;
+      }
+      if (j.lessonSurface === undefined && bridgeId) {
         router.replace(`/admin/pathway-lessons/${encodeURIComponent(bridgeId)}`);
         return;
       }

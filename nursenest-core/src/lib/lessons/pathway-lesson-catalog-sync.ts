@@ -2,6 +2,11 @@
  * Pure catalog lesson normalization + scoped-gold merge (no Prisma, no i18n DB overlays).
  * Split from `pathway-lesson-loader.ts` so CLI audits and tooling can import without the `server-only` graph.
  * Catalog-backed and still heavy enough to keep out of shared layouts, homepage chrome, and nav/header paths.
+ *
+ * **Expander choice:** `normalizeLesson` uses `lessonQualifiesForPremiumNormalization` (meaningful clinical
+ * prose **or** premium structural spine). **Publish / `structuralPublicComplete`:** use
+ * `evaluatePathwayLessonStructuralGate` in `pathway-lesson-premium.ts` — structural gate only, not the
+ * meaningful-content bypass.
  */
 import { createRequire } from "node:module";
 import { inferExamAudienceFromPathwayId } from "@/lib/lessons/exam-complete-lesson-template";
