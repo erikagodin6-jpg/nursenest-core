@@ -1,7 +1,7 @@
 import "@happy-dom/global-registrator/register";
 
 import assert from "node:assert/strict";
-import { afterEach, beforeEach, describe, it } from "node:test";
+import { after, afterEach, beforeEach, describe, it } from "node:test";
 import React from "react";
 import { SessionProvider } from "next-auth/react";
 
@@ -12,6 +12,14 @@ import { PaywallHomeStatsProvider } from "@/components/student/paywall-home-stat
 import type { PublicHomeStatsPayload } from "@/lib/marketing/public-home-stats-payload";
 import type { ClinicalScenarioPreviewModel } from "@/components/clinical-scenarios/clinical-scenario-unfolding-preview";
 import { ClinicalScenarioUnfoldingPreview } from "@/components/clinical-scenarios/clinical-scenario-unfolding-preview";
+
+/** Close Happy DOM after this file so `npm run test:clinical-scenarios` can exit (no dangling handles). */
+after(async () => {
+  const { GlobalRegistrator } = await import("@happy-dom/global-registrator");
+  if (GlobalRegistrator.isRegistered) {
+    await GlobalRegistrator.unregister();
+  }
+});
 
 afterEach(() => {
   cleanup();

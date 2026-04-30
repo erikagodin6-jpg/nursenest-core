@@ -28,6 +28,7 @@ import {
   getQuestionCountsByBodySystem,
   type CanonicalBodySystemId,
 } from "@/lib/learner-study-hub/body-system-data";
+import type { PathwayLessonPracticeHubSnapshot } from "@/lib/learner-study-hub/pathway-lesson-study-materials";
 import { CANONICAL_STUDY_CATEGORIES } from "@/lib/study/normalize-study-category";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import type {
@@ -85,6 +86,7 @@ export function PracticeTestsHubClient({
   catEligiblePathwayIds = [],
   hubBootstrapSource = "primary",
   catHref,
+  pathwayLessonPractice = null,
 }: {
   examSimulationEnabled?: boolean;
   pathwayOptions?: PracticeTestPathwayOption[];
@@ -95,6 +97,8 @@ export function PracticeTestsHubClient({
   hubBootstrapSource?: "primary" | "secondary";
   /** Pre-resolved CAT entry URL for this pathway (includes pathwayId when known). */
   catHref?: string;
+  /** PathwayLesson-derived practice + lesson counts (published catalog only). */
+  pathwayLessonPractice?: PathwayLessonPracticeHubSnapshot | null;
 }) {
   const { t } = useMarketingI18n();
   const searchParams = useSearchParams();
@@ -516,6 +520,83 @@ export function PracticeTestsHubClient({
           </dl>
         }
       />
+
+      {pathwayLessonPractice &&
+      (pathwayLessonPractice.publishedLessonCount > 0 ||
+        pathwayLessonPractice.practiceQuestionCount > 0 ||
+        pathwayLessonPractice.lessonLinkedVirtualCards > 0) ? (
+        <section
+          className="nn-card nn-student-card-lift border-[color-mix(in_srgb,var(--semantic-panel-cool)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_12%,var(--semantic-surface))] p-5 sm:p-6"
+          data-nn-e2e-pathway-lesson-practice-strip
+          aria-label="Pathway lesson study inventory"
+        >
+          <h2 className="text-base font-bold text-[var(--semantic-text-primary)]">Pathway lessons — study inventory</h2>
+          <p className="mt-1 max-w-3xl text-sm text-[var(--semantic-text-secondary)]">
+            Inline checks and checkpoints from your published pathway lessons (same catalog as the lessons hub). Mock
+            exams below still use the indexed question bank when you start a session.
+          </p>
+          <dl className="mt-4 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+                Published lessons
+              </dt>
+              <dd className="mt-0.5 text-lg font-semibold tabular-nums text-[var(--semantic-text-primary)]">
+                {pathwayLessonPractice.publishedLessonCount}
+              </dd>
+            </div>
+            <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+                Lesson-linked MCQs
+              </dt>
+              <dd className="mt-0.5 text-lg font-semibold tabular-nums text-[var(--semantic-text-primary)]">
+                {pathwayLessonPractice.practiceQuestionCount}
+                {pathwayLessonPractice.practiceTruncated ? "+" : ""}
+              </dd>
+            </div>
+            <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+                Lesson-linked flashcards
+              </dt>
+              <dd className="mt-0.5 text-lg font-semibold tabular-nums text-[var(--semantic-text-primary)]">
+                {pathwayLessonPractice.lessonLinkedVirtualCards}
+              </dd>
+            </div>
+          </dl>
+          {pathwayLessonPractice.topSystems.length > 0 ? (
+            <div className="mt-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+                Lessons by system (catalog)
+              </p>
+              <ul className="mt-2 flex flex-wrap gap-2">
+                {pathwayLessonPractice.topSystems.map((s) => (
+                  <li
+                    key={s.id}
+                    className="rounded-full border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-chart-2)_14%,var(--semantic-surface))] px-3 py-1 text-xs font-medium text-[var(--semantic-text-primary)]"
+                  >
+                    {s.label}{" "}
+                    <span className="tabular-nums text-[var(--semantic-text-secondary)]">({s.count})</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+          <div className="mt-4 flex flex-wrap gap-3 text-sm">
+            <Link
+              href={`/app/questions/bank?pathwayId=${encodeURIComponent(pathwayLessonPractice.pathwayId)}`}
+              className="inline-flex min-h-10 items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-4 font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+            >
+              Open question bank (same pathway)
+            </Link>
+            <Link
+              href={`/app/flashcards?pathwayId=${encodeURIComponent(pathwayLessonPractice.pathwayId)}`}
+              className="inline-flex min-h-10 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 font-semibold text-[var(--semantic-text-primary)] underline-offset-2 hover:underline"
+            >
+              Flashcards hub
+            </Link>
+          </div>
+        </section>
+      ) : null}
+
       <section
         data-nn-e2e-practice-exams-builder
         className={`nn-card nn-student-card-lift p-6 sm:p-7 ${

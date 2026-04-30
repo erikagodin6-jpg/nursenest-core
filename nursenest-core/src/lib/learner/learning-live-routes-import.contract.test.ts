@@ -25,6 +25,7 @@ describe("learner live study routes import contract", () => {
     const src = read("src/app/(student)/app/(learner)/practice-tests/page.tsx");
     assert.match(src, /PracticeTestsHubClient/);
     assert.match(src, /from "@\/components\/student\/practice-tests-hub-client"/);
+    assert.match(src, /pathwayLessonPractice/);
   });
 
   it("practice-exams alias redirects to practice-tests hub", () => {
@@ -33,6 +34,12 @@ describe("learner live study routes import contract", () => {
     assert.match(src, /\/app\/practice-tests/);
     assert.match(src, /practice-tests\?\$\{suffix\}/);
     assert.match(src, /: "\/app\/practice-tests"/);
+  });
+
+  it("practice alias redirects to practice-tests hub", () => {
+    const src = read("src/app/(student)/app/(learner)/practice/page.tsx");
+    assert.match(src, /redirect\(/);
+    assert.match(src, /\/app\/practice-tests/);
   });
 
   it("practice-tests hub page uses pathway picker surface (no silent default when context missing)", () => {

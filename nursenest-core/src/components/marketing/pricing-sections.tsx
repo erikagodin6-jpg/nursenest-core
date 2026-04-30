@@ -577,7 +577,7 @@ function CatExamPreview() {
       </div>
       <div className="grid grid-cols-3 gap-2 text-center text-[11px]">
         {[
-          { label: "Accuracy", value: "72%" },
+          { label: "Clinical accuracy", value: "72%" },
           { label: "Difficulty", value: "Medium+" },
           { label: "Consistency", value: "Improving" },
         ].map((s) => (
@@ -681,23 +681,23 @@ const PRODUCT_AREAS: {
   {
     screenshotId: 1,
     icon: BookOpen,
-    title: "Practice Interface",
-    desc: "Question stem, answer options, and full rationale, all visible at once.",
-    detail: "Correct answer, why this is correct, why other options are wrong, key takeaway, related lessons",
+    title: "Clinical Decision Practice",
+    desc: "Real-world patient scenarios with stems, options, and a Clinical Thinking Breakdown in one view.",
+    detail: "Why the safest answer is correct, why distractors fail, key takeaway, and linked Clinical Mastery Lessons",
   },
   {
     screenshotId: 6,
     icon: Target,
-    title: "CAT Exam Mode",
-    desc: "An adaptive exam that adjusts difficulty item by item, scoring your readiness on a 0 to 100 scale.",
+    title: "Adaptive NCLEX Simulation",
+    desc: "Adaptive sessions that adjust difficulty item by item while scoring readiness on a 0 to 100 scale.",
     detail: "Adaptive difficulty, readiness scoring, category breakdown, historical trend",
   },
   {
     screenshotId: 7,
     icon: BarChart3,
-    title: "Results and Remediation",
-    desc: "Structured results with weak areas, strengths, confidence patterns, and a personalized study plan.",
-    detail: "Smart review, study plan, confidence analytics, retest strategy",
+    title: "Clinical Performance & Remediation",
+    desc: "Structured results with weak areas, strengths, confidence patterns, and a plan that closes bedside gaps.",
+    detail: "Strengthen weak areas, study plan, clinical performance analytics, retest strategy",
   },
 ];
 
@@ -706,10 +706,10 @@ export function ProductPreviewGrid() {
     <section aria-labelledby="product-preview-heading">
       <FadeUp className="mb-8 text-center">
         <h2 id="product-preview-heading" className="nn-marketing-h2">
-          Practice, Test, and Review: All Connected
+          Exam prep, simulation, and remediation — connected
         </h2>
         <p className="nn-marketing-body-sm mx-auto mt-2 max-w-2xl text-muted-foreground">
-          One system that shows you exactly what to study, tests your readiness, and helps you fix weak areas
+          One system that shows you what to study, stress-tests clinical judgment, and helps you strengthen weak areas before your first shift
         </p>
       </FadeUp>
       <div className="grid gap-4 sm:grid-cols-3">
@@ -733,18 +733,18 @@ export function ProductPreviewGrid() {
 const TRUST_POINTS = [
   {
     icon: Target,
-    headline: "Designed to Help You Pass on Your First Attempt",
-    body: "Structured around real exam blueprints: NCLEX, REx-PN, and specialty exams. Not generic nursing content.",
+    headline: "From student to practicing nurse",
+    body: "You are not just preparing for a test — you are preparing for real patients. NurseNest helps you build confidence for your first year, strengthen clinical judgment under pressure, and transition from student to practicing clinician.",
   },
   {
     icon: ShieldCheck,
-    headline: "Your Study Is Structured, Not Random",
-    body: "Every session connects to your weak areas and confidence data. You always know what to study next.",
+    headline: "Recognize, prioritize, and act safely",
+    body: "Drills emphasize early deterioration, safe prioritization, and the delegation decisions new grads face — because the goal is not only to pass, but to practice safely.",
   },
   {
     icon: BarChart3,
-    headline: "You Will Know When You Are Ready",
-    body: "Readiness scoring, weak area tracking, and confidence analytics show your progress clearly.",
+    headline: "Avoid common new-grad mistakes",
+    body: "Because passing the exam is step one. Practicing confidently — without freezing on your first shifts — is what matters next.",
   },
 ];
 
@@ -753,7 +753,7 @@ export function PricingTrustReassurance() {
     <section aria-labelledby="trust-heading">
       <FadeUp className="mb-8 text-center">
         <h2 id="trust-heading" className="nn-marketing-h2">
-          Built for Students Who Want to Pass
+          Support Beyond the Exam
         </h2>
       </FadeUp>
       <div className="grid gap-5 sm:grid-cols-3 sm:gap-6">
@@ -800,10 +800,10 @@ export function PricingCTA({ plansHref }: { plansHref: string }) {
       }}
     >
       <FadeUp>
-        <h2 className="nn-marketing-h2 mb-3">Start Studying Smarter Today</h2>
+        <h2 className="nn-marketing-h2 mb-3">Do not just pass the exam.</h2>
         <p className="nn-marketing-body-sm mx-auto mb-8 max-w-lg text-muted-foreground">
-          Choose a plan above, then continue to secure checkout. Eligible plans may still include a short trial at
-          checkout.
+          Be ready for the responsibility that comes after it. Choose a plan above, then continue to secure checkout.
+          Eligible plans may still include a short trial at checkout. Start your training today.
         </p>
       </FadeUp>
       <div className="flex flex-wrap items-center justify-center gap-3">

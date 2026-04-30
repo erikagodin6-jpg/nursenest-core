@@ -24,6 +24,7 @@ import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professi
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { buildFlashcardCustomSession } from "@/lib/flashcards/build-flashcard-custom-session";
 import { builderCategoryOptionsForPathway } from "@/lib/flashcards/flashcard-builder-taxonomy";
+import { flashcardLessonVirtualDiagnosticsForPathway } from "@/lib/learner-study-hub/pathway-lesson-study-materials";
 import { parseCustomSessionSourceKind } from "@/lib/flashcards/custom-session-card-filters";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
@@ -228,14 +229,20 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
       initialHub = {
         categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
         matchingTotal: 0,
-        lessonVirtualDiagnostics: null,
+        lessonVirtualDiagnostics: flashcardLessonVirtualDiagnosticsForPathway(scopedPathwayId, {
+          selectedCategories: [],
+          filterModeLabel: "all cards",
+        }),
       };
     }
   } else if (entitlement.hasAccess) {
     initialHub = {
       categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
       matchingTotal: 0,
-      lessonVirtualDiagnostics: null,
+      lessonVirtualDiagnostics: flashcardLessonVirtualDiagnosticsForPathway(scopedPathwayId, {
+        selectedCategories: [],
+        filterModeLabel: "all cards",
+      }),
     };
   }
 

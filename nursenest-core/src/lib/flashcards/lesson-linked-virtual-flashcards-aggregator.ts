@@ -3,6 +3,7 @@ import type { FlashcardStudySelectRow } from "@/lib/flashcards/flashcard-study-s
 import { collectLessonRecallFlashcardsForPathway } from "@/lib/flashcards/lesson-recall-flashcards-for-pathway";
 import { collectLessonSectionDerivedFlashcardsForPathway } from "@/lib/flashcards/lesson-section-derived-flashcards-for-pathway";
 import { lessonBodyHasGenericFiller, lessonDepthCohortFromPathwayId } from "@/lib/lessons/lesson-content-depth-schema";
+import { pathwayLessonEligibleForLearnerStudyInventory } from "@/lib/learner-study-hub/pathway-lesson-learner-study-guards";
 import { getCatalogPathwayLessonsSync } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 
@@ -123,7 +124,7 @@ export function collectMergedLessonVirtualFlashcardsForPathway(pathwayId: string
     };
   }
 
-  const lessons = getCatalogPathwayLessonsSync(pid);
+  const lessons = getCatalogPathwayLessonsSync(pid).filter(pathwayLessonEligibleForLearnerStudyInventory);
   const sectionList = collectLessonSectionDerivedFlashcardsForPathway(pid);
   const recallList = collectLessonRecallFlashcardsForPathway(pid);
 

@@ -465,6 +465,7 @@ export function FlashcardsHubClient({
       matchingCards === 0 &&
       !starredOnly &&
       builderCategories.length === 0 &&
+      (lessonVirtualDiagnostics?.catalogLessonCount ?? 0) === 0 &&
       !(lessonVirtualDiagnostics && lessonVirtualDiagnostics.totalGeneratedVirtualCards > 0) ? (
         <div
           className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
@@ -478,6 +479,30 @@ export function FlashcardsHubClient({
               lessons hub
             </Link>{" "}
             for this track, complete a lesson section, then return — or clear filters above and choose <strong>All cards</strong>.
+          </p>
+        </div>
+      ) : null}
+
+      {!loadError &&
+      matchingCards === 0 &&
+      !starredOnly &&
+      builderCategories.length === 0 &&
+      (lessonVirtualDiagnostics?.catalogLessonCount ?? 0) > 0 &&
+      (lessonVirtualDiagnostics?.totalGeneratedVirtualCards ?? 0) === 0 ? (
+        <div
+          className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
+          data-nn-e2e-flashcards-lessons-no-derived-cards
+        >
+          <p className="font-medium text-[var(--semantic-text-primary)]">Published lessons exist — cards are still building</p>
+          <p className="mt-2">
+            This track has {lessonVirtualDiagnostics?.catalogLessonCount} pathway lesson
+            {lessonVirtualDiagnostics && lessonVirtualDiagnostics.catalogLessonCount === 1 ? "" : "s"} in catalog, but no
+            lesson-linked study cards were derived yet (recall prompts, checkpoints, or section takeaways). Open the{" "}
+            <Link href={resolvedLessonsHubHref} className="font-semibold text-[var(--semantic-brand)] underline">
+              lessons hub
+            </Link>{" "}
+            to confirm content, choose <strong>All cards</strong>, then refresh. Full mock exams and bank cards may still
+            appear once indexed separately.
           </p>
         </div>
       ) : null}

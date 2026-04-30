@@ -4,6 +4,7 @@ import {
   collectMergedLessonVirtualFlashcardsForPathway,
   minLessonLinkedCardsForPathwayLesson,
 } from "@/lib/flashcards/lesson-linked-virtual-flashcards-aggregator";
+import { pathwayLessonEligibleForLearnerStudyInventory } from "@/lib/learner-study-hub/pathway-lesson-learner-study-guards";
 import { getCatalogPathwayLessonsSync } from "@/lib/lessons/pathway-lesson-catalog-sync";
 
 describe("collectMergedLessonVirtualFlashcardsForPathway", () => {
@@ -22,6 +23,7 @@ describe("collectMergedLessonVirtualFlashcardsForPathway", () => {
       bySlug.set(v.lessonSlug, (bySlug.get(v.lessonSlug) ?? 0) + 1);
     }
     for (const l of lessons) {
+      if (!pathwayLessonEligibleForLearnerStudyInventory(l)) continue;
       const n = bySlug.get(l.slug) ?? 0;
       const min = minLessonLinkedCardsForPathwayLesson(pid, l);
       assert.ok(n >= min, `expected min ${min} cards for ${l.slug}, got ${n}`);

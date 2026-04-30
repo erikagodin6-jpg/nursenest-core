@@ -111,6 +111,19 @@ describe("Option B — pathway lesson as authoring source of truth", () => {
     assert.equal(src.includes("prisma.contentItem"), false);
   });
 
+  it("deprecated GET /api/admin/pathway-lessons/lookup delegates to PathwayLesson row loader (no ContentItem)", () => {
+    const dir = fileURLToPath(new URL(".", import.meta.url));
+    const routePath = join(dir, "../../app/api/admin/pathway-lessons/lookup/route.ts");
+    const loaderPath = join(dir, "../admin/load-admin-pathway-lesson-row.server.ts");
+    const routeSrc = readFileSync(routePath, "utf8");
+    const loaderSrc = readFileSync(loaderPath, "utf8");
+    assert.match(routeSrc, /loadAdminPathwayLessonRow/);
+    assert.match(loaderSrc, /prisma\.pathwayLesson\.findFirst/);
+    assert.equal(routeSrc.includes("prisma.contentItem"), false);
+    assert.equal(routeSrc.includes("contentItem"), false);
+    assert.equal(loaderSrc.includes("prisma.contentItem"), false);
+  });
+
   it("admin pathway-lesson route exports POST publish delegator", () => {
     const dir = fileURLToPath(new URL(".", import.meta.url));
     const routePath = join(dir, "../../app/api/admin/pathway-lessons/[id]/route.ts");

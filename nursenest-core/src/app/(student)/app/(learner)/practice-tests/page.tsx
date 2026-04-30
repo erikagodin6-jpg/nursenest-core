@@ -25,6 +25,7 @@ import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { readPracticeTestsHubBootstrapSnapshot } from "@/lib/study-content-failover/practice-tests-hub-bootstrap-snapshot-read";
 import { snapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { getPathwayLessonPracticeHubSnapshot } from "@/lib/learner-study-hub/pathway-lesson-study-materials";
 
 type PageProps = { searchParams: Promise<{ pathwayId?: string | string[] | undefined }> };
 
@@ -215,6 +216,11 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     intent: "start",
   });
 
+  const pathwayLessonPractice =
+    defaultPathwayId && defaultPathwayId.trim().length > 0
+      ? getPathwayLessonPracticeHubSnapshot(defaultPathwayId.trim())
+      : null;
+
   return (
     <div className="space-y-6">
       <div className="mb-4">
@@ -244,6 +250,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
           examSimulationEnabled={isCatExamSimulationFeatureEnabled()}
           hubBootstrapSource={hubBootstrapSource}
           catHref={catHref}
+          pathwayLessonPractice={pathwayLessonPractice}
         />
       </Suspense>
     </div>

@@ -2,6 +2,7 @@ import type { Prisma } from "@prisma/client";
 import { FlashcardItemKind } from "@prisma/client";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import type { FlashcardStudySelectRow } from "@/lib/flashcards/flashcard-study-serialize";
+import { pathwayLessonEligibleForLearnerStudyInventory } from "@/lib/learner-study-hub/pathway-lesson-learner-study-guards";
 import { getCatalogPathwayLessonsSync } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
@@ -89,6 +90,7 @@ export function collectLessonRecallFlashcardsForPathway(pathwayId: string): Less
 
   for (const lesson of lessons) {
     if (out.length >= MAX_RECALL_CARDS_PER_PATHWAY) break;
+    if (!pathwayLessonEligibleForLearnerStudyInventory(lesson)) continue;
     const href = lessonHrefForCatalogLesson(pid, lesson.slug);
     const cat = categoryForLesson(lesson);
 
