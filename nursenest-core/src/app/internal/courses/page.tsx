@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { requireInternalCoursesSurfaceAccess } from "@/lib/auth/guards";
 import {
@@ -7,6 +8,11 @@ import {
 import { internalCourseRowVisibleOnInternalSurface } from "@/lib/internal-courses/surface-visibility";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Internal courses",
+  robots: { index: false, follow: false, googleBot: { index: false, follow: false } },
+};
 
 function statusBadgeClass(status: InternalCourseListRow["status"]): string {
   switch (status) {

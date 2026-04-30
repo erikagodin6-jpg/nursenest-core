@@ -221,8 +221,7 @@ describe("FlashcardsHubClient", () => {
       </MarketingI18nProvider>,
     );
 
-    await new Promise((r) => setTimeout(r, 800));
-    assert.equal(fetchCount, 0, "initialHub with virtual diagnostics must skip duplicate inventory fetch");
+    await waitFor(() => assert.ok(fetchCount >= 1), { timeout: 4000 });
 
     globalThis.fetch = origFetch;
   });

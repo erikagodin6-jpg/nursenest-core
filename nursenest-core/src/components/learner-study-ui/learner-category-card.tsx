@@ -24,14 +24,18 @@ export function LearnerCategoryCard({
 }) {
   const systemStyle = { "--nn-system-accent": `var(${accentVar})` } as CSSProperties;
 
+  const disabled = count <= 0;
+
   return (
     <button
       type="button"
       onClick={onToggle}
+      disabled={disabled}
+      aria-disabled={disabled}
       data-selected={selected}
       data-nn-e2e-body-system-card={id}
       style={systemStyle}
-      className="nn-lesson-system-card text-left transition hover:shadow-[var(--semantic-shadow-soft)] data-[selected=false]:opacity-[0.88] rounded-2xl border border-border bg-card p-3.5 text-foreground sm:p-4 data-[selected=true]:ring-2 data-[selected=true]:ring-[color-mix(in_srgb,var(--nn-system-accent)_40%,transparent)]"
+      className="nn-lesson-system-card text-left transition hover:shadow-[var(--semantic-shadow-soft)] data-[selected=false]:opacity-[0.88] rounded-2xl border border-border bg-card p-3.5 text-foreground sm:p-4 data-[selected=true]:ring-2 data-[selected=true]:ring-[color-mix(in_srgb,var(--nn-system-accent)_40%,transparent)] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
     >
       <div className="flex items-start gap-3">
         <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border bg-muted/60 text-[var(--nn-system-accent)]">

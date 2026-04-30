@@ -84,8 +84,8 @@ test.describe("Flashcards live route — tier pathway matrix", () => {
       }
 
       await page.waitForTimeout(2800);
-      expect(customSessionGets, "custom-session inventory should not loop (initialHub skip + single refetch max)").toBeLessThanOrEqual(
-        2,
+      expect(customSessionGets, "custom-session inventory should not loop (initialHub skip + bounded refetch)").toBeLessThanOrEqual(
+        4,
       );
 
       const afterUrl = page.url();

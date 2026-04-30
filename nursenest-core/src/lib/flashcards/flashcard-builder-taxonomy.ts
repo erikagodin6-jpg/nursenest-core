@@ -1,6 +1,51 @@
 import { classifyLearningTopic, learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
 import { REVIEW_REQUIRED, TAXONOMY } from "@/lib/taxonomy/taxonomy";
 
+/**
+ * Exam-bank / classifier buckets use taxonomy leaf ids; RN/PN/RPN hub rows use stable catalog ids.
+ * Coalesce counts onto hub row ids so `applyCountsToBuilderCategories` fills the same rows the learner grid maps.
+ */
+const CLASSIFIER_COUNT_KEY_TO_RN_PN_HUB_ROW_ID: Record<string, string> = {
+  renal_genitourinary: "renal_urinary",
+  reproductive_obstetrics: "reproductive_maternal_newborn",
+  immune_infectious: "infection_control",
+  ethics: "professional_practice",
+  legal_regulation: "professional_practice",
+  documentation: "professional_practice",
+  communication: "professional_practice",
+  scope_of_practice: "professional_practice",
+  delegation_supervision: "professional_practice",
+  leadership_management: "professional_practice",
+  patient_safety_quality: "professional_practice",
+  cardiovascular_drugs: "pharmacology",
+  cns_drugs: "pharmacology",
+  endocrine_drugs: "pharmacology",
+  anti_infectives: "pharmacology",
+  pain_sedation: "pharmacology",
+  test_taking: "exam_strategy",
+  study_strategy: "exam_strategy",
+};
+
+/**
+ * Merge exam-inventory / classifier count keys onto pathway hub category ids where the catalog uses aliases.
+ */
+export function coalesceExamInventoryCountsOntoPathwayHubRows(
+  pathwayId: string | null | undefined,
+  counts: Record<string, number>,
+): Record<string, number> {
+  if (!pathwayId?.trim()) return { ...counts };
+  const cfg = learningConfigForPathwayId(pathwayId);
+  const allowed = new Set(cfg.categories.map((c) => c.id));
+  const out: Record<string, number> = {};
+  for (const [rawId, rawN] of Object.entries(counts)) {
+    if (!rawId || !Number.isFinite(rawN) || rawN <= 0) continue;
+    const mapped = CLASSIFIER_COUNT_KEY_TO_RN_PN_HUB_ROW_ID[rawId];
+    const target = mapped && allowed.has(mapped) ? mapped : rawId;
+    out[target] = (out[target] ?? 0) + rawN;
+  }
+  return out;
+}
+
 const EXAM_META_IDS = new Set<string>(TAXONOMY.EXAM_META);
 
 const OVERRIDES: Array<{ pattern: RegExp; categoryId: string }> = [
@@ -114,10 +159,11 @@ export function applyCountsToBuilderCategories(
   const listMode = options?.listMode ?? "hub_inventory";
   const categories = builderCategoryOptionsForPathway(pathwayId);
   const baseIds = new Set(categories.map((c) => c.id));
-  const merged = categories.map((c) => ({ ...c, count: counts[c.id] ?? 0 }));
+  const coalesced = coalesceExamInventoryCountsOntoPathwayHubRows(pathwayId, counts);
+  const merged = categories.map((c) => ({ ...c, count: coalesced[c.id] ?? 0 }));
 
   const extras: BuilderCategoryOption[] = [];
-  for (const [id, count] of Object.entries(counts)) {
+  for (const [id, count] of Object.entries(coalesced)) {
     if (!id || count <= 0 || baseIds.has(id)) continue;
     extras.push({
       id,

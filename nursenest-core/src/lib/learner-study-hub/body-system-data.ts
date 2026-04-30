@@ -4,6 +4,7 @@ import { REVIEW_REQUIRED, type TaxonomyLeafCategory } from "@/lib/taxonomy/taxon
 import { isTaxonomyLeafOrReview } from "@/lib/taxonomy/taxonomy";
 import {
   CANONICAL_STUDY_CATEGORIES,
+  isCanonicalStudyCategoryId,
   normalizeStudyCategory,
   type CanonicalStudyCategoryId,
 } from "@/lib/study/normalize-study-category";
@@ -116,7 +117,8 @@ export function getFlashcardCountsByBodySystem(
   const out = Object.fromEntries(CANONICAL_STUDY_CATEGORIES.map((s) => [s.id, 0])) as Record<CanonicalBodySystemId, number>;
   for (const c of categories) {
     const canon = pathwayHubCategoryToCanonical(pathwayId, c.id, c.title);
-    out[canon] += c.count;
+    const bucket: CanonicalBodySystemId = isCanonicalStudyCategoryId(canon) ? canon : "uncategorized";
+    out[bucket] += c.count;
   }
   return out;
 }

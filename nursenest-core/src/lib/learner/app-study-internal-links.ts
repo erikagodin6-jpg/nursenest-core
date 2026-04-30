@@ -27,3 +27,16 @@ export function buildAppLessonsReviewLessonHref(pathwayId: string, lessonSlug: s
   const s = lessonSlug.trim();
   return `/app/lessons?pathwayId=${encodeURIComponent(pid)}&lessonSlug=${encodeURIComponent(s)}`;
 }
+
+/** Dedupe identical `href`s within one render pass (e.g. rationale + reinforce strips). */
+export function createStudyLinkHrefDeduper(): (href: string | null | undefined) => string | null {
+  const seen = new Set<string>();
+  return (href) => {
+    if (href == null || typeof href !== "string") return null;
+    const h = href.trim();
+    if (!h) return null;
+    if (seen.has(h)) return null;
+    seen.add(h);
+    return h;
+  };
+}

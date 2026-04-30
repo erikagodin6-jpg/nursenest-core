@@ -138,7 +138,14 @@ export function parseFlashcardCustomSessionResponse(
     const r = row as Record<string, unknown>;
     const id = typeof r.id === "string" ? r.id.trim() : "";
     const title = typeof r.title === "string" ? r.title : "";
-    const count = typeof r.count === "number" && Number.isFinite(r.count) ? Math.max(0, r.count) : 0;
+    const rawCount = r.count;
+    const parsedCount =
+      typeof rawCount === "number" && Number.isFinite(rawCount)
+        ? rawCount
+        : typeof rawCount === "string" && rawCount.trim()
+          ? Number(rawCount)
+          : NaN;
+    const count = Number.isFinite(parsedCount) ? Math.max(0, Math.floor(parsedCount)) : 0;
     if (!id) continue;
     categoryOptions.push({
       id,

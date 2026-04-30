@@ -3,8 +3,21 @@ import { describe, it } from "node:test";
 import {
   applyCountsToBuilderCategories,
   builderCategoryOptionsForPathway,
+  coalesceExamInventoryCountsOntoPathwayHubRows,
   resolveBuilderCategoryId,
 } from "@/lib/flashcards/flashcard-builder-taxonomy";
+
+describe("coalesceExamInventoryCountsOntoPathwayHubRows", () => {
+  it("maps taxonomy classifier keys onto RN/PN hub row ids (renal_genitourinary → renal_urinary)", () => {
+    const coalesced = coalesceExamInventoryCountsOntoPathwayHubRows("ca-rn-nclex-rn", {
+      renal_genitourinary: 42,
+      cardiovascular: 3,
+    });
+    assert.equal(coalesced.renal_urinary, 42);
+    assert.equal(coalesced.cardiovascular, 3);
+    assert.equal(coalesced.renal_genitourinary, undefined);
+  });
+});
 
 describe("applyCountsToBuilderCategories", () => {
   it("includes dynamic category ids that are not in the static pathway config (prevents empty categoryOptions)", () => {

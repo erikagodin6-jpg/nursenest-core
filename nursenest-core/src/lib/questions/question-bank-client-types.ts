@@ -66,6 +66,8 @@ export type QuestionBankGradedStateEntry = {
   /** Optional concise clinical pearl surfaced in post-answer review. */
   clinicalPearl?: string | null;
   learningLoop?: QuestionBankLearningLoopPersisted | null;
+  /** Legacy / rehydrated graded rows may carry topic slug here without `learningLoop`. */
+  topicCode?: string | null;
   rationaleLessonLinks?: RationaleLessonLinkClient[] | null;
 };
 

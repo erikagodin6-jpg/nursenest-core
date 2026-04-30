@@ -8,6 +8,7 @@ import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/fla
 import {
   applyCountsToBuilderCategories,
   builderCategoryTitleForId,
+  coalesceExamInventoryCountsOntoPathwayHubRows,
   FLASHCARD_BUILDER_UNCATEGORIZED_ID,
   resolveBuilderCategoryId,
   type BuilderCategoryOption,
@@ -481,12 +482,20 @@ export async function buildFlashcardCustomSession(
     const useExamForHubStats =
       useExamHub && !includeCards && !needsProgress && !persistenceFiltersActive;
 
+    const examCountsCoalescedForHub = coalesceExamInventoryCountsOntoPathwayHubRows(pathwayId, examHub.countsByBuilderId);
+    const examHubBucketsNonEmpty = Object.values(examCountsCoalescedForHub).some(
+      (n) => typeof n === "number" && Number.isFinite(n) && n > 0,
+    );
+    /** Avoid matchingTotal from COUNT(*) when grouped buckets failed or never mapped — keeps totals aligned with category rows. */
+    const useExamHubForSummaryAndOptions =
+      useExamForHubStats && examHub.total > 0 && examHubBucketsNonEmpty;
+
     const matchingCardsForSummary = includeCards
       ? scoped.length
-      : useExamForHubStats && examHub.total > 0
+      : useExamHubForSummaryAndOptions
         ? selectedCategories.length === 0
           ? examHub.total
-          : selectedCategories.reduce((s, id) => s + (examHub.countsByBuilderId[id] ?? 0), 0)
+          : selectedCategories.reduce((s, id) => s + (examCountsCoalescedForHub[id] ?? 0), 0)
         : scoped.length;
 
     const sessionShuffleSalt = sessionSeed?.trim() || randomUUID();
@@ -557,8 +566,9 @@ export async function buildFlashcardCustomSession(
       lessonVirtualDiagnostics,
     };
 
-    const categoryCountsForOptions =
-      useExamForHubStats && examHub.total > 0 ? { ...examHub.countsByBuilderId } : categoryCounts;
+    const categoryCountsForOptions = useExamHubForSummaryAndOptions
+      ? { ...examCountsCoalescedForHub }
+      : categoryCounts;
     const categoryOptions = applyCountsToBuilderCategories(pathwayId, categoryCountsForOptions);
     if (process.env.NODE_ENV === "development") {
       let cardsTaggedFromExamMeta = 0;

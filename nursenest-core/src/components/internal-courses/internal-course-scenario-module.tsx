@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { InternalCourseRemediationHint } from "@/components/internal-courses/internal-course-remediation-hint";
 
 export type InternalScenarioDecision = { id: string; label: string; outcome: string };
 
@@ -18,6 +19,8 @@ export function InternalCourseScenarioModule({
   lessonAppHref: string | null;
 }) {
   const [picked, setPicked] = useState<string | null>(null);
+  const outcomeText = picked ? (content.decisions.find((d) => d.id === picked)?.outcome ?? "") : "";
+  const showScenarioRemediation = Boolean(picked && !/^correct/i.test(outcomeText.trim()));
 
   return (
     <div className="space-y-4 rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_12%,transparent)] p-4 sm:p-5">
@@ -52,8 +55,18 @@ export function InternalCourseScenarioModule({
         ))}
       </div>
       {picked ? (
-        <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,transparent)] p-3 text-sm text-foreground">
-          {content.decisions.find((d) => d.id === picked)?.outcome}
+        <div className="space-y-3">
+          <div className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,transparent)] p-3 text-sm text-foreground">
+            {outcomeText}
+          </div>
+          {showScenarioRemediation ? <InternalCourseRemediationHint lessonAppHref={lessonAppHref} /> : null}
+          <button
+            type="button"
+            className="rounded-lg border border-border bg-background/80 px-3 py-2 text-xs font-semibold text-foreground hover:bg-muted/40"
+            onClick={() => setPicked(null)}
+          >
+            Reset scenario
+          </button>
         </div>
       ) : null}
     </div>

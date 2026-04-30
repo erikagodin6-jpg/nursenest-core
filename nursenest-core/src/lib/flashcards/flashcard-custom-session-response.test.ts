@@ -41,6 +41,17 @@ test("parseFlashcardCustomSessionResponse: success with categories", () => {
   assert.ok(r.summary);
 });
 
+test("parseFlashcardCustomSessionResponse: coerces numeric count strings", () => {
+  const r = parseFlashcardCustomSessionResponse(true, {
+    ok: true,
+    summary: { pathwayId: "ca-rn-nclex-rn", matchingCards: 5, returnedCards: 0, selectedCategories: [], mode: "mixed" },
+    categoryOptions: [{ id: "cardiovascular", title: "Cardiovascular", count: "12" as unknown as number }],
+  });
+  assert.equal(r.ok, true);
+  if (!r.ok) return;
+  assert.equal(r.categoryOptions[0]!.count, 12);
+});
+
 test("parseFlashcardCustomSessionResponse: success with zero categories is valid empty", () => {
   const r = parseFlashcardCustomSessionResponse(true, {
     ok: true,

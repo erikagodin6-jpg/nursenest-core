@@ -48,7 +48,11 @@ import {
   parseSavedQuestionBankPresetsJson,
 } from "@/lib/questions/question-bank-client-types";
 import { mergeRationaleLessonLinksWithTopicFallback } from "@/lib/questions/merge-rationale-lesson-links";
-import { buildAppFlashcardsTopicHref, buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
+import {
+  buildAppFlashcardsTopicHref,
+  buildAppPracticeTestsTopicHref,
+  createStudyLinkHrefDeduper,
+} from "@/lib/learner/app-study-internal-links";
 import { parseCommaSeparatedQuestionIds } from "@/lib/questions/question-id-list-param";
 import { parsePracticeHubIdsParam } from "@/lib/questions/normalize-question-body-system";
 import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
@@ -743,6 +747,7 @@ export function QuestionBankPracticeClient({
   );
 
   const g = current ? graded[current.id] : undefined;
+  const studyLinkDedupe = useMemo(() => createStudyLinkHrefDeduper(), [current?.id]);
   const sessionElapsedLabel = `${String(Math.floor(sessionElapsedSec / 60)).padStart(2, "0")}:${String(sessionElapsedSec % 60).padStart(2, "0")}`;
   const gradedRationaleForPanel = useMemo(() => {
     if (!g) return null;
@@ -798,27 +803,31 @@ export function QuestionBankPracticeClient({
     const ll = g.learningLoop;
     const showLesson = Boolean(ll.lessonHref && rationaleLessonLinksMerged.length === 0);
     if (!showLesson && !ll.flashcardsHref && !ll.topicDrillHref) return null;
+    const lessonH = showLesson && ll.lessonHref ? studyLinkDedupe(ll.lessonHref) : null;
+    const flashH = ll.flashcardsHref ? studyLinkDedupe(ll.flashcardsHref) : null;
+    const drillH = ll.topicDrillHref ? studyLinkDedupe(ll.topicDrillHref) : null;
+    if (!lessonH && !flashH && !drillH) return null;
     return (
       <div className="flex flex-wrap gap-2">
-        {showLesson && ll.lessonHref ? (
+        {lessonH ? (
           <Link
-            href={ll.lessonHref}
+            href={lessonH}
             className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
           >
             {t("learner.qbank.ui.relatedLesson")}
           </Link>
         ) : null}
-        {ll.flashcardsHref ? (
+        {flashH ? (
           <Link
-            href={ll.flashcardsHref}
+            href={flashH}
             className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
           >
             {t("learner.qbank.ui.reviewFlashcards")}
           </Link>
         ) : null}
-        {ll.topicDrillHref ? (
+        {drillH ? (
           <Link
-            href={ll.topicDrillHref}
+            href={drillH}
             className="inline-flex min-h-11 items-center rounded-full px-4 text-xs font-semibold text-[var(--role-cta-foreground)]"
             style={{ background: "var(--role-cta)" }}
           >
@@ -827,7 +836,7 @@ export function QuestionBankPracticeClient({
         ) : null}
       </div>
     );
-  }, [g?.learningLoop, rationaleLessonLinksMerged.length, t]);
+  }, [g?.learningLoop, rationaleLessonLinksMerged.length, studyLinkDedupe, t]);
 
   const reviewLessonHref = useMemo(() => {
     const fromLoop = g?.learningLoop?.lessonHref;
@@ -842,25 +851,50 @@ export function QuestionBankPracticeClient({
     return null;
   }, [g?.learningLoop?.lessonHref, rationaleLessonLinksMerged, current?.topic, pathwayIdFilter]);
 
+  const gradedTopicSlugLower = useMemo(() => {
+    if (!g) return "";
+    const tc =
+      typeof g.learningLoop?.topicCode === "string"
+        ? g.learningLoop.topicCode.trim().toLowerCase()
+        : typeof g.topicCode === "string"
+          ? g.topicCode.trim().toLowerCase()
+          : "";
+    return tc;
+  }, [g]);
+
   const flashcardsHref = useMemo(() => {
     const pid = pathwayIdFilter?.trim();
-    const tc =
-      typeof g?.learningLoop?.topicCode === "string" ? g.learningLoop.topicCode.trim().toLowerCase() : "";
-    if (pid && tc) return buildAppFlashcardsTopicHref(pid, tc);
-    if (g?.learningLoop?.flashcardsHref) return g.learningLoop.flashcardsHref;
-    if (pid) return `/app/flashcards?pathwayId=${encodeURIComponent(pid)}`;
-    return "/app/flashcards";
-  }, [g?.learningLoop?.flashcardsHref, g?.learningLoop?.topicCode, pathwayIdFilter]);
+    if (!pid) return null;
+    const tc = gradedTopicSlugLower;
+    if (tc) return buildAppFlashcardsTopicHref(pid, tc);
+    if (g?.learningLoop?.flashcardsHref) return g.learningLoop.flashcardsHref.trim() || null;
+    return `/app/flashcards?pathwayId=${encodeURIComponent(pid)}`;
+  }, [g?.learningLoop?.flashcardsHref, gradedTopicSlugLower, pathwayIdFilter]);
 
   const practiceTestsTopicHref = useMemo(() => {
     const pid = pathwayIdFilter?.trim();
-    const tc =
-      typeof g?.learningLoop?.topicCode === "string" ? g.learningLoop.topicCode.trim().toLowerCase() : "";
-    if (!pid || !tc) return null;
+    if (!pid) return null;
+    const tc = gradedTopicSlugLower;
+    if (!tc) return null;
     return buildAppPracticeTestsTopicHref(pid, tc);
-  }, [pathwayIdFilter, g?.learningLoop?.topicCode]);
+  }, [pathwayIdFilter, gradedTopicSlugLower]);
 
   const topicDrillHref = g?.learningLoop?.topicDrillHref ?? null;
+
+  const dedupedRationaleFooterLinks = useMemo(() => {
+    const reviewLesson = reviewLessonHref ? studyLinkDedupe(reviewLessonHref) : null;
+    const flashcards = flashcardsHref ? studyLinkDedupe(flashcardsHref) : null;
+    const practiceTests = practiceTestsTopicHref ? studyLinkDedupe(practiceTestsTopicHref) : null;
+    const topicDrill = !g?.correct && topicDrillHref ? studyLinkDedupe(topicDrillHref) : null;
+    return { reviewLesson, flashcards, practiceTests, topicDrill };
+  }, [
+    reviewLessonHref,
+    flashcardsHref,
+    practiceTestsTopicHref,
+    topicDrillHref,
+    g?.correct,
+    studyLinkDedupe,
+  ]);
 
   async function checkAnswer() {
     if (!current) return;
@@ -920,6 +954,9 @@ export function QuestionBankPracticeClient({
           teaching: data.teaching ?? null,
           teachingMedia: data.teachingMedia ?? null,
           learningLoop: data.learningLoop ?? null,
+          ...(typeof data.learningLoop?.topicCode === "string"
+            ? { topicCode: data.learningLoop.topicCode }
+            : {}),
           rationaleLessonLinks: data.rationaleLessonLinks ?? null,
         },
       }));
@@ -1752,9 +1789,7 @@ export function QuestionBankPracticeClient({
                     <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-4 py-3 sm:px-5">
                       <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
                         You may need to review:{" "}
-                        <Link href={reviewLessonHref} className="underline underline-offset-2 hover:no-underline">
-                          {current.topic?.trim() || "this topic"}
-                        </Link>
+                        <strong className="font-semibold">{current.topic?.trim() || "this topic"}</strong>
                       </p>
                     </div>
                   ) : null}
@@ -1764,18 +1799,18 @@ export function QuestionBankPracticeClient({
                         Reinforce this question
                       </p>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        {reviewLessonHref ? (
+                        {dedupedRationaleFooterLinks.reviewLesson ? (
                           <Link
-                            href={reviewLessonHref}
+                            href={dedupedRationaleFooterLinks.reviewLesson}
                             data-testid="qbank-reinforce-review-lesson"
                             className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
                           >
                             {t("learner.studyLoop.reviewLessonCta")}
                           </Link>
                         ) : null}
-                        {flashcardsHref ? (
+                        {dedupedRationaleFooterLinks.flashcards ? (
                           <Link
-                            href={flashcardsHref}
+                            href={dedupedRationaleFooterLinks.flashcards}
                             data-testid="qbank-reinforce-flashcards-topic"
                             data-nn-pathway-id={pathwayIdFilter ?? ""}
                             className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
@@ -1783,9 +1818,9 @@ export function QuestionBankPracticeClient({
                             {t("learner.studyLoop.studyFlashcardsThisTopic")}
                           </Link>
                         ) : null}
-                        {practiceTestsTopicHref ? (
+                        {dedupedRationaleFooterLinks.practiceTests ? (
                           <Link
-                            href={practiceTestsTopicHref}
+                            href={dedupedRationaleFooterLinks.practiceTests}
                             data-testid="qbank-reinforce-practice-tests-topic"
                             data-nn-pathway-id={pathwayIdFilter ?? ""}
                             className="inline-flex min-h-11 items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-2)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_10%,var(--semantic-surface))] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:opacity-90"
@@ -1793,9 +1828,9 @@ export function QuestionBankPracticeClient({
                             {t("learner.studyLoop.practiceQuestionsThisTopic")}
                           </Link>
                         ) : null}
-                        {!g.correct && topicDrillHref ? (
+                        {dedupedRationaleFooterLinks.topicDrill ? (
                           <Link
-                            href={topicDrillHref}
+                            href={dedupedRationaleFooterLinks.topicDrill}
                             className="inline-flex min-h-11 items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-4 text-xs font-semibold text-[var(--semantic-info)] shadow-sm hover:opacity-90"
                           >
                             Try more questions like this

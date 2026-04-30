@@ -1,6 +1,28 @@
 import { existsSync } from "fs";
 import path from "path";
 import { execSync } from "child_process";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const repoScriptsDir = path.dirname(__filename);
+console.log(`[prebuild] repo scripts directory (resolved): ${repoScriptsDir}`);
+const siblingValidate = path.join(repoScriptsDir, "root-prebuild-i18n-validate.mjs");
+if (!existsSync(siblingValidate)) {
+  console.error(
+    `[prebuild] FATAL: expected monorepo scripts at ${repoScriptsDir} but missing root-prebuild-i18n-validate.mjs. ` +
+      "Ensure the Docker image copies repo-root ./scripts next to nursenest-core (see Dockerfile COPY scripts).",
+  );
+  process.exit(1);
+}
+const repoScriptDir = path.join(repoScriptsDir, "..", "script");
+const compileMarker = path.join(repoScriptDir, "compile-i18n.ts");
+if (!existsSync(compileMarker)) {
+  console.error(
+    `[prebuild] FATAL: expected monorepo script/ at ${repoScriptDir} but missing compile-i18n.ts. ` +
+      "Ensure the Docker image copies repo-root ./script (see Dockerfile COPY script).",
+  );
+  process.exit(1);
+}
 
 function hasPackage(pkgName) {
   // Package existence check via package.json keeps this fast and reliable.

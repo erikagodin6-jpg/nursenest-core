@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ClipboardList, Layers, Library, LineChart, ListChecks } from "lucide-react";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
@@ -15,6 +15,7 @@ import { practiceTestsWeakFocusHref } from "@/lib/learner/study-loop-recommendat
 import {
   buildAppFlashcardsTopicHref,
   buildAppPracticeTestsTopicHref,
+  createStudyLinkHrefDeduper,
 } from "@/lib/learner/app-study-internal-links";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
@@ -113,7 +114,18 @@ export function PathwayLessonActions({
   const practiceTestsTopicHref =
     topicSlugForHub.length > 0 ? buildAppPracticeTestsTopicHref(pathwayId, topicSlugForHub) : null;
 
+  const { flashcardsLinkHref, practiceTestsLinkHref, catWeakLinkHref } = useMemo(() => {
+    const d = createStudyLinkHrefDeduper();
+    return {
+      flashcardsLinkHref: flashcardsHref ? d(flashcardsHref) : null,
+      practiceTestsLinkHref: practiceTestsTopicHref ? d(practiceTestsTopicHref) : null,
+      catWeakLinkHref: showCatCta ? d(catWeakHref) : null,
+    };
+  }, [flashcardsHref, practiceTestsTopicHref, showCatCta, catWeakHref]);
+
   const saving = pending !== "idle";
+
+  if (!pathwayId.trim()) return null;
 
   return (
     <section className="lv-lesson-actions" aria-label="Continue studying">
@@ -132,18 +144,20 @@ export function PathwayLessonActions({
       </div>
 
       <div className="lv-lesson-actions__secondary">
-        <Link
-          href={flashcardsHref}
-          data-testid="pathway-lesson-cta-flashcards"
-          data-nn-pathway-id={pathwayId}
-          className="lv-btn-secondary flex-1 sm:min-w-40 sm:flex-none"
-        >
-          <Layers className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
-          {t("learner.studyLoop.sameTopicFlashcards")}
-        </Link>
-        {practiceTestsTopicHref ? (
+        {flashcardsLinkHref ? (
           <Link
-            href={practiceTestsTopicHref}
+            href={flashcardsLinkHref}
+            data-testid="pathway-lesson-cta-flashcards"
+            data-nn-pathway-id={pathwayId}
+            className="lv-btn-secondary flex-1 sm:min-w-40 sm:flex-none"
+          >
+            <Layers className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+            {t("learner.studyLoop.sameTopicFlashcards")}
+          </Link>
+        ) : null}
+        {practiceTestsLinkHref ? (
+          <Link
+            href={practiceTestsLinkHref}
             data-testid="pathway-lesson-cta-practice-tests-topic"
             data-nn-pathway-id={pathwayId}
             className="lv-btn-secondary flex-1 sm:min-w-40 sm:flex-none"
@@ -152,9 +166,9 @@ export function PathwayLessonActions({
             {t("learner.studyLoop.topicPracticeTestsCta")}
           </Link>
         ) : null}
-        {showCatCta ? (
+        {catWeakLinkHref ? (
           <Link
-            href={catWeakHref}
+            href={catWeakLinkHref}
             data-testid="pathway-lesson-cta-cat-practice"
             data-nn-pathway-id={pathwayId}
             className="lv-btn-secondary lv-lesson-actions__btn--cool flex-1 sm:min-w-40 sm:flex-none"

@@ -17,6 +17,7 @@ import {
   postProcessAiOutput,
 } from "@/lib/blog/generate-localized-blog";
 import type { LocalizedBlogAiOutput } from "@/lib/blog/blog-localization-types";
+import { normalizeBlogPostStatusWriteFields } from "@/lib/blog/blog-post-published-state";
 import { prisma } from "@/lib/db";
 import type { BlogSourceRecord } from "@/lib/blog/apa7";
 import { coerceBlogSourceRows } from "@/lib/blog/apa7";
@@ -440,12 +441,17 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
     }
     post = loaded;
   } else {
+    const statusWrite = normalizeBlogPostStatusWriteFields({
+      postStatus: finalPublish.postStatus,
+      publishAt: finalPublish.publishAt,
+      workflowFromRequest: finalPublish.workflowStatus,
+    });
     post = await prisma.blogPost.update({
       where: { id: persisted.post.id },
       data: {
-        postStatus: finalPublish.postStatus,
-        publishAt: finalPublish.publishAt,
-        workflowStatus: finalPublish.workflowStatus,
+        postStatus: statusWrite.postStatus,
+        publishAt: statusWrite.publishAt,
+        workflowStatus: statusWrite.workflowStatus,
       },
       select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
     });

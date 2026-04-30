@@ -1,9 +1,12 @@
 /**
- * Static checks for the learner study cross-link slice: `pathwayId` on topic-scoped
- * `/app/flashcards?` and `/app/practice-tests?` string literals; `lessonSlug` hub links
- * must include `pathwayId`.
+ * Static checks for learner study cross-links built from string literals in scoped files.
  *
- * Scoped to known surfaces (not global hub entry URLs without a pathway).
+ * Only validates:
+ * - `/app/flashcards…` (hub / topic query links)
+ * - `/app/practice-tests…` (hub / topic query links)
+ * - literals containing `lessonSlug` (lesson hub deep links)
+ *
+ * Ignores marketing hubs, `/app/lessons` without `lessonSlug`, and other app routes.
  *
  * Run: npx tsx scripts/validate-internal-links.ts
  */
@@ -30,13 +33,20 @@ const SCOPED_FILES = [
   "src/app/(student)/app/(learner)/practice-tests/page.tsx",
 ];
 
+function shouldValidateLiteral(href: string): boolean {
+  if (href.startsWith("/app/flashcards")) return true;
+  if (href.startsWith("/app/practice-tests")) return true;
+  if (href.includes("lessonSlug")) return true;
+  return false;
+}
+
 function checkHref(href: string, rel: string, issues: string[]) {
-  if (href.includes("/app/flashcards?") || href.includes("/app/practice-tests?")) {
+  if (href.startsWith("/app/flashcards") || href.startsWith("/app/practice-tests")) {
     if (!href.includes("pathwayId=")) {
       issues.push(`${rel}: topic/hub link missing pathwayId: ${href.slice(0, 160)}`);
     }
   }
-  if (href.includes("/app/lessons?") && href.includes("lessonSlug=") && !href.includes("pathwayId=")) {
+  if (href.includes("lessonSlug") && !href.includes("pathwayId=")) {
     issues.push(`${rel}: lessonSlug link without pathwayId`);
   }
 }
@@ -54,6 +64,7 @@ function main() {
     const hits: string[] = [];
     for (const m of text.matchAll(literalRe)) {
       const href = m[1];
+      if (!shouldValidateLiteral(href)) continue;
       hits.push(href);
       checkHref(href, rel, issues);
     }

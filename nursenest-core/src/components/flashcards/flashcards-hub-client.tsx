@@ -8,7 +8,6 @@ import {
   LearnerCategorySelector,
   LearnerFilterBar,
   LearnerSessionStartPanel,
-  LearnerStudyHero,
   LearnerStudyPageShell,
 } from "@/components/learner-study-ui";
 import {
@@ -136,29 +135,25 @@ export function FlashcardsHubClient({
   builderCategoriesRef.current = builderCategories;
 
   /**
-   * When the RSC page already passed `initialHub`, skip the first client `custom-session` fetch so
-   * `router.refresh()` / Strict Mode remounts do not stack duplicate inventory requests (felt like a
-   * refresh loop on `/app/flashcards?pathwayId=…`).
+   * Skip the first client `custom-session` fetch only when RSC already shipped **per-row** inventory counts.
+   * A positive `matchingTotal` without bucket counts (exam hub / aggregation mismatch) must still refetch so
+   * the hub does not stick on "0 items in pool" while advertising a non-zero pool.
    */
-  /**
-   * Skip the first client `custom-session` fetch when RSC already shipped usable inventory: any non-zero
-   * per-system count, a positive matching pool, or lesson-derived virtual diagnostics. Pure skeleton rows
-   * (all counts zero, no matches, no virtual diagnostics) still perform one client fetch to hydrate.
-   */
-  const skipDuplicateInitialInventoryFetchRef = useRef(
-    Boolean(
-      initialHub &&
-        ((initialHub.matchingTotal ?? 0) > 0 ||
-          (initialHub.lessonVirtualDiagnostics?.totalGeneratedVirtualCards ?? 0) > 0 ||
-          (initialHub.categoryOptions?.some((c) => c.count > 0) ?? false)),
-    ),
-  );
+  const sumInitialCategoryCounts =
+    initialHub?.categoryOptions?.reduce((s, c) => s + (typeof c.count === "number" && Number.isFinite(c.count) ? c.count : 0), 0) ??
+    0;
+  const skipDuplicateInitialInventoryFetchRef = useRef(Boolean(initialHub && sumInitialCategoryCounts > 0));
 
   const allBuilderCategoryIds = useMemo(() => builderCategories.map((c) => c.id), [builderCategories]);
 
   const countsByCanonical = useMemo(
     () => getFlashcardCountsByBodySystem(scopedPathwayId, builderCategories),
     [scopedPathwayId, builderCategories],
+  );
+
+  const sumCanonicalPool = useMemo(
+    () => CANONICAL_STUDY_CATEGORIES.reduce((s, c) => s + (countsByCanonical[c.id] ?? 0), 0),
+    [countsByCanonical],
   );
 
   const selectedBuilderCategoryIds = useMemo(() => {
@@ -210,7 +205,12 @@ export function FlashcardsHubClient({
       try {
         json = await res.json();
       } catch {
-        setLoadError("Flashcard inventory returned invalid JSON. Try again or contact support.");
+        const base = "Flashcard inventory returned invalid JSON. Try again or contact support.";
+        setLoadError(
+          process.env.NODE_ENV === "development"
+            ? `${base} (pathwayId=${scopedPathwayId}, url=/api/flashcards/custom-session)`
+            : base,
+        );
         setBuilderCategories([]);
         setMatchingCards(null);
         setLessonVirtualDiagnostics(null);
@@ -218,7 +218,12 @@ export function FlashcardsHubClient({
       }
       const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
       if (!parsed.ok) {
-        setLoadError(parsed.message.trim() ? parsed.message : "Could not load flashcard topics.");
+        const base = parsed.message.trim() ? parsed.message : "Could not load flashcard topics.";
+        setLoadError(
+          process.env.NODE_ENV === "development"
+            ? `${base} (pathwayId=${scopedPathwayId}, httpStatus=${res.status})`
+            : base,
+        );
         setBuilderCategories([]);
         setMatchingCards(null);
         return;
@@ -237,7 +242,10 @@ export function FlashcardsHubClient({
         });
       }
       } catch {
-        setLoadError("Network error while loading flashcards. Check your connection and try again.");
+        const base = "Network error while loading flashcards. Check your connection and try again.";
+        setLoadError(
+          process.env.NODE_ENV === "development" ? `${base} (pathwayId=${scopedPathwayId})` : base,
+        );
         setBuilderCategories([]);
         setMatchingCards(null);
         setLessonVirtualDiagnostics(null);
@@ -367,29 +375,81 @@ export function FlashcardsHubClient({
     <LearnerStudyPageShell className="py-6" data-nn-e2e-flashcards-hub>
       {pathwayBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}
 
-      {catHref ? (
-        <div className="text-sm">
-          <Link href={catHref} className="font-semibold text-primary underline underline-offset-2">
-            Continue adaptive (CAT)
-          </Link>
+      <header
+        className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-4 py-3 sm:px-5"
+        data-nn-e2e-flashcards-compact-header
+      >
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+              {pathwayDisplayName}
+            </p>
+            <h2 className="mt-0.5 text-xl font-bold tracking-tight text-[var(--semantic-text-primary)] sm:text-2xl">
+              {t("learner.flashcards.hub.title")}
+            </h2>
+            <p className="mt-1 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+              {t("learner.flashcards.hub.subtitle")}
+            </p>
+          </div>
+          <div className="shrink-0 text-right text-sm text-[var(--semantic-text-secondary)]">
+            {matchingCards != null ? (
+              <>
+                <span className="font-semibold text-[var(--semantic-text-primary)]">{matchingCards}</span> cards in pool
+              </>
+            ) : (
+              <span className="text-muted-foreground">Loading pool…</span>
+            )}
+          </div>
+        </div>
+        {catHref ? (
+          <p className="mt-2 text-xs">
+            <Link href={catHref} className="font-semibold text-primary underline underline-offset-2">
+              Continue adaptive (CAT)
+            </Link>
+          </p>
+        ) : null}
+      </header>
+
+      <h1 className="sr-only">{t("learner.flashcards.hub.title")}</h1>
+
+      {loadError ? (
+        <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+          {loadError}
         </div>
       ) : null}
 
-      <LearnerStudyHero
-        eyebrow={pathwayDisplayName}
-        title={t("learner.flashcards.hub.title")}
-        subtitle={t("learner.flashcards.hub.subtitle")}
-        stats={
-          <p className="text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">{sessionSummaryLine}</span>
-            {" · "}
-            <span>
-              Cards group by the same canonical exam categories as practice questions — not raw lesson topic cards on this
-              screen.
-            </span>
-          </p>
-        }
-      />
+      <LearnerFilterBar title="Deck filters">
+        <div className="flex flex-wrap gap-2" data-nn-e2e-flashcard-filter-presets>
+          {(
+            [
+              ["all", "All cards"],
+              ["weak", "Weak areas"],
+              ["starred", "Starred"],
+              ["unseen", "Unseen"],
+              ["incorrect", "Review incorrect"],
+            ] as const
+          ).map(([key, label]) => {
+            const on = activePreset === key;
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => applyFilterPreset(key)}
+                className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                  on
+                    ? "border-[color-mix(in_srgb,var(--semantic-info)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
+                    : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-panel-muted)]"
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
+          {activePreset === "custom" ? (
+            <span className="self-center text-xs text-muted-foreground">Custom mix</span>
+          ) : null}
+        </div>
+      </LearnerFilterBar>
 
       <section className="space-y-4" data-nn-e2e-flashcards-canonical-grid>
         <LearnerCategorySelector
@@ -401,58 +461,6 @@ export function FlashcardsHubClient({
           heading={t("learner.flashcards.hub.bodySystemsHeading")}
           intro="Cards are grouped by canonical exam categories (same grid as practice questions). Builder rows are mapped automatically — you are not picking raw lesson topic cards here."
         />
-      </section>
-
-      <section className="space-y-5 border-t border-[var(--semantic-border-soft)] pt-4">
-        <details className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3">
-          <summary className="cursor-pointer text-sm font-semibold text-[var(--semantic-text-primary)]">
-            Advanced filters (same flags as the API)
-          </summary>
-          <div className="mt-3 space-y-3">
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
-              Weak areas only
-            </label>
-
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={incorrectOnly} onChange={(e) => setIncorrectOnly(e.target.checked)} />
-              Previously incorrect
-            </label>
-
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={notStudiedOnly} onChange={(e) => setNotStudiedOnly(e.target.checked)} />
-              Not studied
-            </label>
-
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} />
-              Starred only
-            </label>
-          </div>
-        </details>
-
-        <div className="flex flex-wrap items-center gap-2 text-sm">
-          <span className="text-[var(--semantic-text-secondary)]">Deck size:</span>
-          {CARD_COUNTS.map((n) => (
-            <button
-              key={n}
-              type="button"
-              className={`rounded-full border border-[var(--semantic-border-soft)] px-3 py-1 ${
-                cardLimit === n
-                  ? "border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))]"
-                  : ""
-              }`}
-              onClick={() => setCardLimit(n)}
-            >
-              {n}
-            </button>
-          ))}
-        </div>
-
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={shuffleOn} onChange={(e) => setShuffleOn(e.target.checked)} />
-          Shuffle order
-        </label>
       </section>
 
       <LearnerSessionStartPanel
@@ -471,26 +479,73 @@ export function FlashcardsHubClient({
         }
       />
 
-      <h1 className="sr-only">{t("learner.flashcards.hub.title")}</h1>
-      {lessonVirtualDiagnostics ? (
-        <div
-          className="rounded-2xl border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground"
-          data-nn-e2e-flashcards-lesson-diagnostics
-        >
-          <p className="font-semibold text-foreground">Lesson-linked inventory</p>
-          <ul className="mt-1 list-disc space-y-0.5 pl-4 font-mono leading-relaxed">
-            <li>pathwayId: {lessonVirtualDiagnostics.pathwayId}</li>
-            <li>catalog lessons: {lessonVirtualDiagnostics.catalogLessonCount}</li>
-            <li>lessons with derived cards: {lessonVirtualDiagnostics.lessonsWithDerivedCards}</li>
-            <li>total generated virtual cards: {lessonVirtualDiagnostics.totalGeneratedVirtualCards}</li>
-            <li>recall rows: {lessonVirtualDiagnostics.recallVirtualCount}</li>
-            <li>section-derived rows: {lessonVirtualDiagnostics.sectionDerivedVirtualCount}</li>
-            <li>generic-filler-tagged section rows: {lessonVirtualDiagnostics.genericFillerSectionCardHits}</li>
-            <li>selected systems/categories: {lessonVirtualDiagnostics.selectedCategoryIds.join(", ") || "(all)"}</li>
-            <li>filter mode: {lessonVirtualDiagnostics.filterModeLabel}</li>
-          </ul>
+      <details className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3">
+        <summary className="cursor-pointer text-sm font-semibold text-[var(--semantic-text-primary)]">
+          Advanced filters & deck options
+        </summary>
+        <div className="mt-3 space-y-4">
+          <div className="space-y-3">
+            <p className="text-xs font-medium text-[var(--semantic-text-secondary)]">Filter flags (same as API)</p>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
+              Weak areas only
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={incorrectOnly} onChange={(e) => setIncorrectOnly(e.target.checked)} />
+              Previously incorrect
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={notStudiedOnly} onChange={(e) => setNotStudiedOnly(e.target.checked)} />
+              Not studied
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} />
+              Starred only
+            </label>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 text-sm">
+            <span className="text-[var(--semantic-text-secondary)]">Deck size:</span>
+            {CARD_COUNTS.map((n) => (
+              <button
+                key={n}
+                type="button"
+                className={`rounded-full border border-[var(--semantic-border-soft)] px-3 py-1 ${
+                  cardLimit === n
+                    ? "border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))]"
+                    : ""
+                }`}
+                onClick={() => setCardLimit(n)}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" checked={shuffleOn} onChange={(e) => setShuffleOn(e.target.checked)} />
+            Shuffle order
+          </label>
+          {lessonVirtualDiagnostics ? (
+            <div
+              className="rounded-lg border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground"
+              data-nn-e2e-flashcards-lesson-diagnostics
+            >
+              <p className="font-semibold text-foreground">Lesson-linked inventory</p>
+              <ul className="mt-1 list-disc space-y-0.5 pl-4 font-mono leading-relaxed">
+                <li>pathwayId: {lessonVirtualDiagnostics.pathwayId}</li>
+                <li>catalog lessons: {lessonVirtualDiagnostics.catalogLessonCount}</li>
+                <li>lessons with derived cards: {lessonVirtualDiagnostics.lessonsWithDerivedCards}</li>
+                <li>total generated virtual cards: {lessonVirtualDiagnostics.totalGeneratedVirtualCards}</li>
+                <li>recall rows: {lessonVirtualDiagnostics.recallVirtualCount}</li>
+                <li>section-derived rows: {lessonVirtualDiagnostics.sectionDerivedVirtualCount}</li>
+                <li>generic-filler-tagged section rows: {lessonVirtualDiagnostics.genericFillerSectionCardHits}</li>
+                <li>selected systems/categories: {lessonVirtualDiagnostics.selectedCategoryIds.join(", ") || "(all)"}</li>
+                <li>filter mode: {lessonVirtualDiagnostics.filterModeLabel}</li>
+              </ul>
+            </div>
+          ) : null}
         </div>
-      ) : null}
+      </details>
+
       <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
         <Link href={resolvedLessonsHubHref} className="font-semibold text-primary underline underline-offset-2">
           Open lessons hub (same pathway)
@@ -505,46 +560,26 @@ export function FlashcardsHubClient({
             {t("learner.studyLoop.practiceQuestionsThisTopic")}
           </Link>
         ) : null}
-        <span aria-hidden>·</span>
-        <span>Pick one or more categories below — same grid language as practice questions.</span>
       </div>
 
-      <LearnerFilterBar title="Deck filters">
-        <div className="flex flex-wrap gap-2" data-nn-e2e-flashcard-filter-presets>
-        {(
-          [
-            ["all", "All cards"],
-            ["weak", "Weak areas"],
-            ["starred", "Starred"],
-            ["unseen", "Unseen"],
-            ["incorrect", "Review incorrect"],
-          ] as const
-        ).map(([key, label]) => {
-          const on = activePreset === key;
-          return (
-            <button
-              key={key}
-              type="button"
-              onClick={() => applyFilterPreset(key)}
-              className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-                on
-                  ? "border-[color-mix(in_srgb,var(--semantic-info)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
-                  : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-panel-muted)]"
-              }`}
-            >
-              {label}
-            </button>
-          );
-        })}
-        {activePreset === "custom" ? (
-          <span className="self-center text-xs text-muted-foreground">Custom mix</span>
-        ) : null}
-        </div>
-      </LearnerFilterBar>
-
-      {loadError ? (
-        <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
-          {loadError}
+      {!loadError &&
+      matchingCards === 0 &&
+      sumCanonicalPool === 0 &&
+      (lessonVirtualDiagnostics?.totalGeneratedVirtualCards ?? 0) === 0 &&
+      !weakOnly &&
+      !incorrectOnly &&
+      !notStudiedOnly &&
+      !starredOnly &&
+      selectedCanonicalIds.length === 0 &&
+      builderCategories.length > 0 ? (
+        <div
+          className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
+          data-nn-e2e-flashcards-pathway-empty-seeded
+        >
+          <p className="font-medium text-[var(--semantic-text-primary)]">No flashcards are seeded for this pathway yet.</p>
+          {process.env.NODE_ENV === "development" ? (
+            <p className="mt-2 font-mono text-xs text-muted-foreground">pathwayId={scopedPathwayId}</p>
+          ) : null}
         </div>
       ) : null}
 
