@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 # Canonical patterns (deploy hygiene — keep nursenest-core/.gitignore aligned)
-# Safe build/cache — never commit (see TASK: no bare `build/` — would ignore src/lib/build)
+# Safe build/cache — never commit (no bare `build/` — would ignore nursenest-core/src/lib/build)
 # -----------------------------------------------------------------------------
 .next/
 node_modules/
