@@ -23,7 +23,7 @@ COPY client ./client
 COPY nursenest-core ./nursenest-core
 COPY scripts ./scripts
 COPY script ./script
-COPY Dockerfile /app/Dockerfile
+COPY tools ./tools
 
 WORKDIR /app/nursenest-core
 

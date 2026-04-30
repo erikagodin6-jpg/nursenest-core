@@ -55,6 +55,7 @@ import { stripPathwayLessonToHubListShape } from "@/lib/lessons/pathway-lesson-h
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { hydratePremiumCatalogSectionsForMarketingGate } from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
+import { applyAlliedStructuralCompletion } from "@/lib/lessons/allied-pathway-lesson-structural-normalization";
 import { prependScopedGoldCatalogLessons } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
 import {
   normalizeLessonCategory,
@@ -1318,8 +1319,8 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
   const normalizedTopic = normalizeLessonCategory(typeof raw.topic === "string" ? raw.topic : "", rawTitle);
   const premiumizedTitle = premiumizeLessonDisplayTitle(rawTitle, raw.slug).trim();
   const title = premiumizedTitle.length > 0 ? premiumizedTitle : "Lesson";
-  const seoTitle = typeof raw.seoTitle === "string" ? raw.seoTitle : title;
-  const seoDescription = ensureCatalogLessonSeoDescriptionWordFloor(
+  let seoTitle = typeof raw.seoTitle === "string" ? raw.seoTitle : title;
+  let seoDescription = ensureCatalogLessonSeoDescriptionWordFloor(
     typeof raw.seoDescription === "string" ? raw.seoDescription : "",
     title,
   );
@@ -1369,6 +1370,22 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
       lessonSlugEarly,
       relatedLessonRefsMerged,
     );
+    const alliedCompleted = applyAlliedStructuralCompletion({
+      lessonSlug: lessonSlugEarly,
+      title,
+      pathwayId: pathwayId ?? "",
+      topicSlug: typeof raw.topicSlug === "string" ? raw.topicSlug : "",
+      seoTitle,
+      seoDescription,
+      sections: expanded,
+      relatedLessonRefs: relatedLessonRefsMerged,
+      premiumOmittedSections: premiumOmittedMerged,
+    });
+    expanded = alliedCompleted.sections;
+    relatedLessonRefsMerged = alliedCompleted.relatedLessonRefs;
+    premiumOmittedMerged = alliedCompleted.premiumOmittedSections;
+    seoTitle = alliedCompleted.seoTitle;
+    seoDescription = alliedCompleted.seoDescription;
   }
 
   if (!usePremium) {

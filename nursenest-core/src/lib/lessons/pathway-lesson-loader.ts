@@ -1927,6 +1927,17 @@ export async function getPublishedPathwayLessonRecordById(
     row.pathwayId,
     lessonDbOverlays,
   );
+  if (!lesson.structuralQuality?.publicComplete) {
+    safeServerLog("pathway_lessons", "[LESSON_GATE_FAILURE]", {
+      pathwayId: row.pathwayId,
+      slug: lesson.slug,
+      source: "database_by_id",
+      missing_fields: lesson.structuralQuality?.issues ?? [],
+      structural_score: `${lesson.structuralQuality?.issues.length ?? 0} issues / ${lesson.structuralQuality?.warnings.length ?? 0} warnings / ${lesson.structuralQuality?.internalStudyLinkCount ?? 0} internal links`,
+      publicComplete: false,
+    });
+    return undefined;
+  }
   getPaidContentStaleCache().set(staleKey, lesson);
   return lesson;
 }

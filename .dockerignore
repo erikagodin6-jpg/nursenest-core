@@ -1,4 +1,5 @@
 # Git / IDE
+# Keep `tools/` out of ignore — Docker builder needs `tools/i18n/source/*.ts` for `npm run i18n:compile`.
 .git
 .github
 .cursor

@@ -22,7 +22,7 @@ const pathway: ExamPathwayDefinition = {
   status: "live",
 } as ExamPathwayDefinition;
 
-test("incomplete lesson → ready (preview marketing detail; indexing handled in metadata)", () => {
+test("incomplete lesson → not_found on marketing detail", () => {
   const lesson = {
     slug: "x",
     structuralQuality: { publicComplete: false, issues: ["a"], warnings: [], structureMode: "legacy" as const },
@@ -35,11 +35,7 @@ test("incomplete lesson → ready (preview marketing detail; indexing handled in
     entitlement: "error",
     learnerPathResolved: null,
   });
-  assert.equal(r.kind, "ready");
-  if (r.kind === "ready") {
-    assert.equal(r.fullAccess, false);
-    assert.equal(r.entitlementError, true);
-  }
+  assert.equal(r.kind, "not_found");
 });
 
 test("public complete + anonymous → ready, fullAccess false", () => {
@@ -148,7 +144,7 @@ test("admin_override scope grants fullAccess on marketing lesson without staffFu
   }
 });
 
-test("staffFullLessonAccess grants fullAccess for incomplete marketing lesson (editorial visibility)", () => {
+test("staffFullLessonAccess does not expose incomplete marketing lesson", () => {
   const lesson = {
     slug: "x",
     structuralQuality: { publicComplete: false, issues: ["a"], warnings: [], structureMode: "legacy" as const },
@@ -162,8 +158,5 @@ test("staffFullLessonAccess grants fullAccess for incomplete marketing lesson (e
     learnerPathResolved: null,
     staffFullLessonAccess: true,
   });
-  assert.equal(r.kind, "ready");
-  if (r.kind === "ready") {
-    assert.equal(r.fullAccess, true);
-  }
+  assert.equal(r.kind, "not_found");
 });

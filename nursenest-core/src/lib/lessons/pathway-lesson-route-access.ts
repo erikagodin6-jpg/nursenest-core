@@ -4,8 +4,8 @@
  * - **Libraries / hubs** still filter incomplete rows for **list SQL** via
  *   {@link pathwayLessonEligibleForPublicMarketingSurface} in
  *   {@link sortAndFilterLessonsForPathwayContext} (`pathway-lesson-catalog-sync.ts`).
- * - **Marketing lesson detail** may still render when `publicComplete` is false (preview / quality notices);
- *   metadata + robots follow {@link pathwayLessonEligibleForPublicMarketingSurface} for indexing.
+ * - **Marketing lesson detail** must hide incomplete lessons. `publicComplete` is the single publish gate
+ *   for marketing hubs, detail pages, related cards, and sitemap surfacing.
  * - **Paywall body serialization** is enforced in the RSC page using
  *   {@link visibleSectionsForLesson} + {@link sanitizePaywallPreviewSection}.
  */
@@ -63,6 +63,9 @@ export function resolveMarketingPathwayLessonRouteResolution(input: {
   if (!input.pathway) return { kind: "not_found", reason: "invalid_pathway" };
   if (input.lessonLoadFailed) return { kind: "not_found", reason: "lesson_load_failed" };
   if (!input.lesson) return { kind: "not_found", reason: "lesson_not_found" };
+  if (!pathwayLessonEligibleForPublicMarketingSurface(input.lesson)) {
+    return { kind: "not_found", reason: "lesson_not_public_complete" };
+  }
 
   const entitlementError = input.entitlement === "error";
   const scope: AccessScope =

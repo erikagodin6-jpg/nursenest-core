@@ -1,6 +1,8 @@
-import { writeFileSync, mkdirSync, readFileSync } from "fs";
+import { existsSync, writeFileSync, mkdirSync, readFileSync } from "fs";
 import path from "path";
-import { REPO_ROOT } from "./repo-root";
+import { fileURLToPath } from "url";
+import { REPO_ROOT, REPO_ROOT_FROM_SCRIPT } from "./repo-root";
+import { readMergedBundleFromNextPublicI18n } from "./lib/next-public-i18n-bundle";
 
 const LANGUAGES = [
   "en", "fr", "tl", "hi", "es", "zh", "zh-tw", "ar", "ko",
@@ -37,48 +39,123 @@ function alignMonolithToEnglishCanonical(
   return out;
 }
 
+const SHARD_FALLBACK_ENV = "NN_I18N_ALLOW_SHARD_FALLBACK";
+
+function shardFallbackEnabled(): boolean {
+  return /^(1|true|yes)$/i.test(process.env[SHARD_FALLBACK_ENV] ?? "");
+}
+
+/** Deterministic JSON: sorted keys (used for shard-sourced bundles). */
+function stringifySortedFlatBundle(flat: Record<string, string>): string {
+  const sorted: Record<string, string> = {};
+  for (const k of Object.keys(flat).sort()) {
+    sorted[k] = flat[k]!;
+  }
+  return JSON.stringify(sorted);
+}
+
+function tryLoadFromTsSource(root: string, lang: string): Record<string, string> | null {
+  const filePath = path.join(root, `tools/i18n/source/i18n-${lang}.ts`);
+  if (!existsSync(filePath)) return null;
+  try {
+    const data = extractTranslationsFromSource(filePath);
+    if (!data || typeof data !== "object") return null;
+    if (Object.keys(data).length < 10) return null;
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function tryLoadFromNextPublicShards(root: string, lang: string): Record<string, string> | null {
+  const nextI18nDir = path.join(root, "nursenest-core/public/i18n");
+  try {
+    const merged = readMergedBundleFromNextPublicI18n(nextI18nDir, lang, { adminOnlyRoot: null });
+    if (!merged || typeof merged !== "object") return null;
+    if (Object.keys(merged).length < 10) return null;
+    return merged;
+  } catch {
+    return null;
+  }
+}
+
 export async function compileI18n() {
+  const scriptDir = path.dirname(fileURLToPath(import.meta.url));
+  const appRootHint = path.join(REPO_ROOT, "nursenest-core");
+  const enPathPrimary = path.join(REPO_ROOT, "tools/i18n/source/i18n-en.ts");
+  const shardFb = shardFallbackEnabled();
+
+  console.log(`[i18n] compile: repo root (resolved)=${REPO_ROOT}`);
+  console.log(`[i18n] compile: repo root (script parent)=${REPO_ROOT_FROM_SCRIPT}`);
+  console.log(`[i18n] compile: process.cwd()=${process.cwd()}`);
+  console.log(`[i18n] compile: script dir=${scriptDir}`);
+  console.log(`[i18n] compile: app package hint=${appRootHint}`);
+  console.log(`[i18n] compile: English TS source (primary)=${enPathPrimary}`);
+  console.log(`[i18n] compile: English TS exists=${existsSync(enPathPrimary)}`);
+  console.log(
+    `[i18n] compile: ${SHARD_FALLBACK_ENV}=${shardFb ? "1 (shard fallback allowed)" : "unset/false"}`,
+  );
+
   const outDir = path.join(REPO_ROOT, "client/public/i18n");
   mkdirSync(outDir, { recursive: true });
   const errors: string[] = [];
   let totalKeys = 0;
 
-  const enPath = path.join(REPO_ROOT, "tools/i18n/source/i18n-en.ts");
-  let enData: Record<string, string> | null = null;
-  try {
-    enData = extractTranslationsFromSource(enPath);
-    if (!enData || typeof enData !== "object") {
-      errors.push(`i18n-en.ts: could not extract translations`);
-    } else if (Object.keys(enData).length < 10) {
-      errors.push(`i18n-en.ts: suspiciously few keys (${Object.keys(enData).length})`);
-      enData = null;
+  let enData: Record<string, string> | null = tryLoadFromTsSource(REPO_ROOT, "en");
+  let enSource: "tools-ts" | "next-public-shards" = "tools-ts";
+
+  if (!enData && shardFb) {
+    enData = tryLoadFromNextPublicShards(REPO_ROOT, "en");
+    if (enData) {
+      enSource = "next-public-shards";
+      console.warn(
+        `[i18n] WARNING: English monolith loaded from Next public i18n shards (emergency fallback). Restore tools/i18n/source/i18n-en.ts in the build context.`,
+      );
     }
-  } catch (err) {
-    errors.push(`i18n-en.ts: ${err instanceof Error ? err.message : String(err)}`);
-    enData = null;
   }
 
   if (!enData) {
+    if (!existsSync(enPathPrimary)) {
+      errors.push(`i18n-en.ts: missing file at ${enPathPrimary}`);
+    } else {
+      errors.push(`i18n-en.ts: could not extract translations or too few keys`);
+    }
+    if (shardFb) {
+      errors.push(
+        `i18n-en: shard fallback did not yield a bundle (check nursenest-core/public/i18n/en/ or en.json)`,
+      );
+    } else {
+      errors.push(
+        `i18n-en: set ${SHARD_FALLBACK_ENV}=1 only as emergency if committed shards exist but tools/ is absent`,
+      );
+    }
     console.error("[i18n] Compilation errors:\n  " + errors.join("\n  "));
     throw new Error(`i18n compilation failed: missing canonical English monolith`);
   }
+  console.log(`[i18n] compile: English source used=${enSource}`);
 
   for (const lang of LANGUAGES) {
-    const filePath = path.join(REPO_ROOT, `tools/i18n/source/i18n-${lang}.ts`);
     try {
-      const data = extractTranslationsFromSource(filePath);
-      if (!data || typeof data !== "object") {
-        errors.push(`i18n-${lang}.ts: could not extract translations`);
-        continue;
+      let data = tryLoadFromTsSource(REPO_ROOT, lang);
+      let langSource: "tools-ts" | "next-public-shards" = "tools-ts";
+      if (!data && shardFb) {
+        data = tryLoadFromNextPublicShards(REPO_ROOT, lang);
+        if (data) {
+          langSource = "next-public-shards";
+          console.warn(
+            `[i18n] WARNING: locale "${lang}" loaded from Next public shards (${SHARD_FALLBACK_ENV}=1). Prefer tools/i18n/source/i18n-${lang}.ts.`,
+          );
+        }
       }
-      const keys = Object.keys(data);
-      if (keys.length < 10) {
-        errors.push(`i18n-${lang}.ts: suspiciously few keys (${keys.length})`);
+      if (!data) {
+        errors.push(`i18n-${lang}.ts: could not extract translations (and shard fallback unavailable or empty)`);
         continue;
       }
       const aligned = lang === "en" ? data : alignMonolithToEnglishCanonical(enData, data);
       totalKeys += Object.keys(aligned).length;
-      writeFileSync(path.join(outDir, `${lang}.json`), JSON.stringify(aligned));
+      const payload =
+        langSource === "next-public-shards" ? stringifySortedFlatBundle(aligned) : JSON.stringify(aligned);
+      writeFileSync(path.join(outDir, `${lang}.json`), payload);
     } catch (err) {
       errors.push(`i18n-${lang}.ts: ${err instanceof Error ? err.message : String(err)}`);
     }

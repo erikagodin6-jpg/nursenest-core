@@ -46,6 +46,13 @@ function classifyAppSubscriberPathwayLessonRecord(args: {
   slug: string;
   record: PathwayLessonRecord;
 }): AppSubscriberPathwayLessonDetailResolution {
+  if (!args.record.structuralQuality?.publicComplete) {
+    safeServerLog("page_lessons", "app_pathway_detail_contract_not_public_complete", {
+      pathwayId: args.pathwayId,
+      slug: args.slug.slice(0, 160),
+    });
+    return { kind: "not_found" };
+  }
   if (!pathwayLessonMatchesMarketingPathwayContext(args.pathwayId, args.record)) {
     safeServerLog("page_lessons", "app_pathway_detail_contract_pathway_context_mismatch", {
       pathwayId: args.pathwayId,
