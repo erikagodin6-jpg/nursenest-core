@@ -8569,6 +8569,7 @@ export const MARKETING_MESSAGE_KEYS = [
   "nav.flashcards",
   "nav.forSchools",
   "nav.freeLearning",
+  "nav.getStarted",
   "nav.healthcareCareers",
   "nav.home",
   "nav.hub.lessonProgress",

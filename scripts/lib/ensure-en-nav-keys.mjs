@@ -28,6 +28,19 @@ export function ensureRequiredEnNavKeys() {
   const appRoot = resolveMarketingI18nAppRoot(REPO_ROOT);
   const flatPath = path.join(appRoot, "public", "i18n", "en.json");
   const navShardPath = path.join(appRoot, "public", "i18n", "en", "nav.json");
+  const marketingEnPath = path.join(REPO_ROOT, "tools", "i18n", "marketing", "marketing-en.json");
+
+  if (fs.existsSync(marketingEnPath)) {
+    const marketingEn = JSON.parse(fs.readFileSync(marketingEnPath, "utf8"));
+    let changed = false;
+    for (const [k, v] of Object.entries(REQUIRED_EN_NAV_STRINGS)) {
+      if (marketingEn[k] === undefined || marketingEn[k] === null) {
+        marketingEn[k] = v;
+        changed = true;
+      }
+    }
+    if (changed) writeJsonStable(marketingEnPath, marketingEn);
+  }
 
   if (fs.existsSync(navShardPath)) {
     const nav = JSON.parse(fs.readFileSync(navShardPath, "utf8"));

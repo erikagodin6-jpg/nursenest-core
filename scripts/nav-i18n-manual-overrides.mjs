@@ -15,6 +15,7 @@ import { loadLocaleFlatMarketingMap, resolveMarketingI18nAppRoot } from "./lib/i
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.join(__dirname, "..");
 const APP_ROOT = resolveMarketingI18nAppRoot(REPO_ROOT);
+const MARKETING_LOCALE_DIR = path.join(REPO_ROOT, "tools", "i18n", "marketing", "locale");
 
 const REQUIRED_LOCALE_NAV_KEYS = {
   fr: { "nav.getStarted": "Commencer" },
@@ -460,7 +461,9 @@ function main() {
       console.warn(`[${code}] skip: ${p} missing`);
       continue;
     }
+    const overlayPath = path.join(MARKETING_LOCALE_DIR, `marketing-${code}.json`);
     const j = JSON.parse(fs.readFileSync(p, "utf8"));
+    const overlay = fs.existsSync(overlayPath) ? JSON.parse(fs.readFileSync(overlayPath, "utf8")) : null;
     let n = 0;
     for (const [k, v] of Object.entries(REQUIRED_LOCALE_NAV_KEYS[code] ?? {})) {
       if (!audited.has(k)) {
@@ -469,6 +472,7 @@ function main() {
       }
       if (j[k] == null || String(j[k]).trim() === "") {
         j[k] = v;
+        if (overlay) overlay[k] = v;
         n += 1;
       }
     }
@@ -478,14 +482,17 @@ function main() {
         continue;
       }
       j[k] = v;
+      if (overlay) overlay[k] = v;
       n += 1;
     }
     if (j["nav.getStarted"] == null || String(j["nav.getStarted"]).trim() === "") {
       j["nav.getStarted"] = "Get Started";
+      if (overlay) overlay["nav.getStarted"] = "Get Started";
       n += 1;
     }
     fs.writeFileSync(p, JSON.stringify(j));
-    console.log(`[${code}] applied ${n} manual nav overrides → ${p}`);
+    if (overlay) fs.writeFileSync(overlayPath, JSON.stringify(overlay, null, 2) + "\n");
+    console.log(`[${code}] applied ${n} manual nav overrides → ${p}${overlay ? ` (+ ${overlayPath})` : ""}`);
   }
   console.log("\nDone. Run: npm run i18n:validate-nav");
 }

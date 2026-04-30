@@ -204,6 +204,35 @@ export default async function AdminUserSupportDetailPage({ params }: { params: P
       </section>
 
       <section className="mt-6 nn-card p-5">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          Session / account-sharing telemetry
+        </h2>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Approximate counts from hashed IPs and session slots only (no raw IP). Enable collection with{" "}
+          <code className="rounded bg-muted px-1">NN_ENABLE_ACCOUNT_SHARING_MONITOR</code>.
+        </p>
+        <ul className="mt-2 list-inside list-disc text-sm text-muted-foreground">
+          <li>Monitor enabled: {d.accountSharingTelemetry.monitorEnabled ? "yes" : "no"}</li>
+          <li>Active session slots (7d): {d.accountSharingTelemetry.activeSessionSlots7d}</li>
+          <li>Distinct IP hashes (24h): {d.accountSharingTelemetry.distinctIpHashes24h}</li>
+          <li>Last activity: {d.accountSharingTelemetry.lastActivityAt ?? "—"}</li>
+        </ul>
+        {d.accountSharingTelemetry.recentSoftFlags.length > 0 ? (
+          <div className="mt-3 text-xs text-muted-foreground">
+            <p className="font-medium text-foreground">Recent soft flags (account_sharing_soft)</p>
+            <ul className="mt-1 list-inside list-disc">
+              {d.accountSharingTelemetry.recentSoftFlags.map((f) => (
+                <li key={`${f.createdAt}-${f.score}`}>
+                  {new Date(f.createdAt).toLocaleString()} — score {f.score}
+                  {f.dismissedAt ? ` · dismissed ${new Date(f.dismissedAt).toLocaleString()}` : ""}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+      </section>
+
+      <section className="mt-6 nn-card p-5">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Usage summary</h2>
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 text-sm">
           <div className="rounded-lg border border-border/60 p-3">

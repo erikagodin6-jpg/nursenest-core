@@ -4037,5 +4037,6 @@
   "pages.publicFlashcards.answer": "Flashcard back",
   "pages.qbankFactory.description": "Build and tune question banks for your cohort.",
   "pages.qbankFactory.title": "Question bank studio",
-  "pages.shop.title": "NurseNest shop"
+  "pages.shop.title": "NurseNest shop",
+  "nav.getStarted": "Get Started"
 }
