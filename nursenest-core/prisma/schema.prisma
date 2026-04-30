@@ -139,6 +139,7 @@ model User {
   verifiedStudyCardProgress     VerifiedStudyCardProgress[]
   verifiedStudyDeckReports      VerifiedStudyDeckReport[]    @relation("VerifiedStudyDeckReporter")
   clinicalNursingScenariosCreated ClinicalNursingScenario[]  @relation("ClinicalNursingScenarioAuthor")
+  clinicalScenarioSimulationRuns ClinicalScenarioSimulationRun[]
   mediaAssetsUploaded           MediaAsset[]                @relation("MediaAssetUploadedBy")
   pathway_lessons               PathwayLesson[]
   practiceTests                 PracticeTest[]
@@ -906,6 +907,51 @@ model PathwayLesson {
   @@map("pathway_lessons")
 }
 
+/// * Staff-only / feature-gated interactive courses (ECG labs, ABC drills). Never linked from public marketing.
+enum InternalCourseStatus {
+  draft
+  internal
+  published
+}
+
+enum InternalCourseModuleType {
+  ecg
+  scenario
+  quiz
+  decision_tree
+}
+
+model InternalCourse {
+  id          String               @id @default(cuid())
+  /// Stable key for idempotent imports (`legacy-ecg-lab`, …).
+  code        String               @unique @db.VarChar(64)
+  title       String               @db.VarChar(240)
+  description String               @db.Text
+  status      InternalCourseStatus @default(draft)
+  pathwayIds  String[]             @default([]) @map("pathway_ids")
+  createdAt   DateTime             @default(now()) @map("created_at")
+  updatedAt   DateTime             @updatedAt @map("updated_at")
+  modules     InternalCourseModule[]
+
+  @@index([status])
+  @@map("internal_courses")
+}
+
+model InternalCourseModule {
+  id         String                 @id @default(cuid())
+  courseId   String                 @map("course_id")
+  course     InternalCourse         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  type       InternalCourseModuleType
+  sortOrder  Int                    @default(0) @map("sort_order")
+  content    Json
+  /// Optional deep link to canonical pathway lesson (no duplicated lesson body in `content`).
+  pathwayId  String?                @map("pathway_id") @db.VarChar(64)
+  lessonSlug String?                @map("lesson_slug") @db.VarChar(200)
+
+  @@index([courseId, sortOrder])
+  @@map("internal_course_modules")
+}
+
 /// * Production `exam_questions` question bank.
 model ExamQuestion {
   id                          String    @id @default(uuid()) @db.VarChar
@@ -1308,6 +1354,23 @@ model ClinicalNursingScenarioStage {
   @@unique([scenarioId, orderIndex])
   @@index([scenarioId])
   @@map("clinical_nursing_scenario_stages")
+}
+
+/// * Learner clinical simulation telemetry for weak-area targeting (one row per analytics POST).
+model ClinicalScenarioSimulationRun {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  scenarioId String   @map("scenario_id") @db.VarChar(64)
+  pathwayId  String   @map("pathway_id") @db.VarChar(64)
+  tierFocus  String   @map("tier_focus") @db.VarChar(32)
+  summary    Json
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([scenarioId])
+  @@map("clinical_scenario_simulation_runs")
 }
 
 model Exam {

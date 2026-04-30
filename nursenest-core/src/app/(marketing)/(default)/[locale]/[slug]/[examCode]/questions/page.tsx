@@ -14,7 +14,14 @@ import {
   humanizeTopicSlug,
   pathwayAppQuestionBankTopicHref,
 } from "@/components/lessons/pathway-lesson-link-practice";
-import { marketingExamHubBasePath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
+import {
+  marketingExamHubBasePath,
+  marketingPathwayLessonsIndexPath,
+  mergeMarketingPathQuery,
+  withAlliedProfessionMarketingQuery,
+} from "@/lib/lessons/lesson-routes";
+import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
+import { isAlliedMarketingCorePathwayId, ALLIED_PROFESSION_QUERY_PARAM } from "@/lib/lessons/canonical-lessons-hubs";
 import { resolveTopicSlugForPathwayTopicLabel } from "@/lib/lessons/lesson-question-cross-links";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
 import {
@@ -46,7 +53,7 @@ export const revalidate = 86400;
 
 type Props = {
   params: Promise<{ locale: string; slug: string; examCode: string }>;
-  searchParams?: Promise<{ topic?: string; topicSlug?: string }>;
+  searchParams?: Promise<{ topic?: string; topicSlug?: string; alliedProfession?: string }>;
 };
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
@@ -89,6 +96,15 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const topicSlugFromUrl = sp.topicSlug?.trim().toLowerCase() ?? "";
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname: `${pathname}/questions` });
   if (!pathway) notFound();
+
+  const spAll = searchParams ? await searchParams : {};
+  const rawAlliedProf =
+    typeof spAll.alliedProfession === "string" ? spAll.alliedProfession.trim().toLowerCase() : "";
+  const alliedProfessionResolved =
+    isAlliedMarketingCorePathwayId(pathway.id) && rawAlliedProf
+      ? getAlliedProfessionByProfessionKey(rawAlliedProf)
+      : null;
+  const alliedProfessionKey = alliedProfessionResolved?.professionKey ?? "";
 
   const { questionSnapshot, pathwayLessonCount } = await loadMarketingExamHubOptionalBlocks(pathway, {
     pathname: `${pathname}/questions`,
@@ -174,14 +190,29 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const boardLinkContext = pathwayMarketingHubLinkContext(pathway, npAliasSegment);
   const examName = pathwayRegionAwareExamName(pathway);
   const lessonsHref = marketingPathwayLessonsIndexPath(pathway);
+  const lessonsHrefWithProfession = alliedProfessionKey
+    ? mergeMarketingPathQuery(lessonsHref, { [ALLIED_PROFESSION_QUERY_PARAM]: alliedProfessionKey })
+    : lessonsHref;
   const catHref = buildExamPathwayPath(pathway, "cat");
+  const catHrefWithProfession = alliedProfessionKey
+    ? withAlliedProfessionMarketingQuery(catHref, alliedProfessionKey)
+    : catHref;
   const catShortLabel = catPathwayShortCatLabel(pathway);
   const questionsHubPath = buildExamPathwayPath(pathway, "questions");
+  const questionsHubPathWithProfession = alliedProfessionKey
+    ? withAlliedProfessionMarketingQuery(questionsHubPath, alliedProfessionKey)
+    : questionsHubPath;
 
   const appQuestionsScoped = isTopicNarrowed
-    ? pathwayAppQuestionBankTopicHref(pathway, topicFilterTrim, topicSlugFromUrl || clusterSlugForLessons || undefined)
+    ? pathwayAppQuestionBankTopicHref(pathway, topicFilterTrim, topicSlugFromUrl || clusterSlugForLessons || undefined, {
+        alliedProfession: alliedProfessionKey || undefined,
+      })
     : loginWithCallback(
-        `/app/questions?${new URLSearchParams({ pathwayId: pathway.id, preset: "pathway_mixed" }).toString()}`,
+        `/app/questions?${new URLSearchParams({
+          pathwayId: pathway.id,
+          preset: "pathway_mixed",
+          ...(alliedProfessionKey ? { alliedProfession: alliedProfessionKey } : {}),
+        }).toString()}`,
       );
 
   // Stat card values — use snapshot counts when available
@@ -210,7 +241,11 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
     });
   }
   const mixedAllTopicsHref = loginWithCallback(
-    `/app/questions?${new URLSearchParams({ pathwayId: pathway.id, preset: "pathway_mixed" }).toString()}`,
+    `/app/questions?${new URLSearchParams({
+      pathwayId: pathway.id,
+      preset: "pathway_mixed",
+      ...(alliedProfessionKey ? { alliedProfession: alliedProfessionKey } : {}),
+    }).toString()}`,
   );
 
   return (
@@ -228,7 +263,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
             href: isTopicNarrowed ? appQuestionsScoped : mixedAllTopicsHref,
             variant: "primary",
           },
-          { label: "Browse lessons", href: lessonsHref, variant: "outline" },
+          { label: "Browse lessons", href: lessonsHrefWithProfession, variant: "outline" },
           { label: "Create account", href: "/signup", variant: "ghost" },
         ]}
       />
@@ -257,9 +292,9 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         <div className="mt-6">
           <ContentEmptyState
             variant="questions"
-            primaryCta={{ label: "Start available topics", href: lessonsHref }}
+            primaryCta={{ label: "Start available topics", href: lessonsHrefWithProfession }}
             secondaryCtas={[
-              { label: `Open ${catShortLabel}`, href: catHref },
+              { label: `Open ${catShortLabel}`, href: catHrefWithProfession },
               { label: "Create account", href: "/signup", variant: "ghost" },
             ]}
           />
@@ -268,7 +303,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
 
       {!isTopicNarrowed && !(questionSnapshot?.status === "ok" && questionSnapshot.pathwayScopedCount === 0) ? (
         <div className="mt-8">
-          <MarketingPracticeQuestionsHubClient
+            <MarketingPracticeQuestionsHubClient
             pathway={pathway}
             examDisplayName={examName}
             aggregates={hubAggregates}
@@ -277,8 +312,9 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
               label: c.label,
               count: c.count,
             }))}
-            lessonsHref={lessonsHref}
-            marketingCatHref={catHref}
+            lessonsHref={lessonsHrefWithProfession}
+            marketingCatHref={catHrefWithProfession}
+            alliedProfessionKey={alliedProfessionKey || undefined}
           />
         </div>
       ) : null}
@@ -292,7 +328,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
               You landed here from a lesson or topic link. Open the full hub to see every topic for this pathway.
             </p>
             <a
-              href={questionsHubPath}
+              href={questionsHubPathWithProfession}
               className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--semantic-brand)] underline underline-offset-2 hover:no-underline"
             >
               ← Clear topic filter

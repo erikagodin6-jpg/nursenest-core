@@ -40,6 +40,12 @@ export type BranchingEngineState = {
   /** Option rationales the learner saw at each committed step. */
   rationaleTrail: string[];
   incorrectCount: number;
+  /** Delay-weighted error burden (delay wrong answers count extra). */
+  incorrectWeight: number;
+  /** Labels of incorrect picks for debrief. */
+  mistakeLabels: string[];
+  /** Prepended to `scenarioText` for stages after a deteriorating branch. */
+  deteriorationBannerByStageOrder: Record<number, string>;
 };
 
 export function initialBranchingEngineState(startOrderIndex = 0): BranchingEngineState {
@@ -49,6 +55,9 @@ export function initialBranchingEngineState(startOrderIndex = 0): BranchingEngin
     trajectoryPath: [],
     rationaleTrail: [],
     incorrectCount: 0,
+    incorrectWeight: 0,
+    mistakeLabels: [],
+    deteriorationBannerByStageOrder: {},
   };
 }
 
@@ -130,8 +139,28 @@ function ensureHiddenSet(map: Record<number, Set<string>>, order: number): Set<s
   return map[order]!;
 }
 
+function cloneHiddenMap(map: Record<number, Set<string>>): Record<number, Set<string>> {
+  const out: Record<number, Set<string>> = {};
+  for (const k of Object.keys(map)) {
+    out[Number(k)] = new Set(map[Number(k)]!);
+  }
+  return out;
+}
+
+const DETERIORATION_BANNER =
+  "Clinical update: the patient's condition has worsened since your last decision — reassess vitals, monitoring, and escalation thresholds urgently.";
+
 /**
- * Wrong / delayed choices can remove the best (correct) option on the **next** stage (`limit` effect).
+ * Narrative text for a stage, including optional deterioration prefix from prior choices.
+ */
+export function narrativeScenarioText(stage: BranchingStageView, state: BranchingEngineState): string {
+  const banner = state.deteriorationBannerByStageOrder[stage.orderIndex];
+  if (!banner?.trim()) return stage.scenarioText;
+  return `${banner.trim()}\n\n${stage.scenarioText}`;
+}
+
+/**
+ * Branching commit: applies limit/unlock/delay semantics and trajectory-linked banners.
  */
 export function applyChoiceToBranchingState(args: {
   state: BranchingEngineState;
@@ -139,24 +168,39 @@ export function applyChoiceToBranchingState(args: {
   picked: ParsedBranchingOption;
 }): BranchingEngineState {
   const { state, stages, picked } = args;
-  const traj = patientTrajectoryFromConsequence(trajectoryToConsequenceString(picked.trajectory));
   const nextOrder =
     picked.nextStageOrder != null && Number.isFinite(picked.nextStageOrder)
       ? picked.nextStageOrder
       : state.currentOrderIndex + 1;
 
-  const hidden = { ...state.hiddenOptionIdsByStageOrder };
-  for (const k of Object.keys(hidden)) {
-    hidden[Number(k)] = new Set(hidden[Number(k)]!);
+  const hidden = cloneHiddenMap(state.hiddenOptionIdsByStageOrder);
+  const deterioration = { ...state.deteriorationBannerByStageOrder };
+
+  const nextStage = stages.find((s) => s.orderIndex === nextOrder);
+
+  if (picked.effect === "limit" && nextStage) {
+    const hide = ensureHiddenSet(hidden, nextOrder);
+    hide.add(nextStage.correctOptionId);
   }
 
-  if (!picked.isCorrect) {
-    const nextStage = stages.find((s) => s.orderIndex === nextOrder);
-    if (nextStage && picked.effect === "limit") {
-      const hide = ensureHiddenSet(hidden, nextOrder);
-      hide.add(nextStage.correctOptionId);
-    }
+  if (picked.effect === "unlock" && nextStage) {
+    const set = ensureHiddenSet(hidden, nextOrder);
+    set.delete(nextStage.correctOptionId);
   }
+
+  if (picked.trajectory === "deteriorates") {
+    const prev = deterioration[nextOrder] ?? "";
+    deterioration[nextOrder] = prev ? `${prev}\n${DETERIORATION_BANNER}` : DETERIORATION_BANNER;
+  }
+
+  let consequenceStr = trajectoryToConsequenceString(picked.trajectory);
+  if (!picked.isCorrect && picked.effect === "delay") {
+    consequenceStr = "patient deteriorates";
+  }
+  const traj = patientTrajectoryFromConsequence(consequenceStr);
+
+  const wrongWeightBump = !picked.isCorrect ? (picked.effect === "delay" ? 2 : 1) : 0;
+  const mistakeLabels = !picked.isCorrect ? [...state.mistakeLabels, picked.label] : [...state.mistakeLabels];
 
   const rationaleTrail = [...state.rationaleTrail, picked.rationale || ""].filter((s) => s.trim().length > 0);
 
@@ -166,6 +210,9 @@ export function applyChoiceToBranchingState(args: {
     trajectoryPath: [...state.trajectoryPath, traj],
     rationaleTrail,
     incorrectCount: state.incorrectCount + (picked.isCorrect ? 0 : 1),
+    incorrectWeight: state.incorrectWeight + wrongWeightBump,
+    mistakeLabels,
+    deteriorationBannerByStageOrder: deterioration,
   };
 }
 

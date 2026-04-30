@@ -13,11 +13,7 @@ import {
 } from "@/lib/clinical-scenarios/clinical-nursing-scenarios.server";
 import { isClinicalScenariosPubliclyEnabled } from "@/lib/clinical-scenarios/clinical-scenarios-feature-flag";
 import { pathwayIdFromScenarioSearchParams } from "@/lib/scenarios/scenario-search-params";
-import {
-  SCENARIO_LEARNER_ROUTES,
-  withScenarioPathwayAndProfessionQuery,
-  withScenarioPathwayQuery,
-} from "@/lib/scenarios/scenario-routes";
+import { SCENARIO_LEARNER_ROUTES, withScenarioPathwayAndProfessionQuery } from "@/lib/scenarios/scenario-routes";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 
@@ -85,7 +81,11 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
         >
           <div className="mb-4 text-sm">
             <Link
-              href={withScenarioPathwayQuery(SCENARIO_LEARNER_ROUTES.clinicalScenarios, pathwayId)}
+              href={withScenarioPathwayAndProfessionQuery(
+                SCENARIO_LEARNER_ROUTES.clinicalScenarios,
+                pathwayId,
+                alliedProfessionKey,
+              )}
               className="text-[var(--semantic-brand)] underline-offset-2 hover:underline"
             >
               ← Back to list
@@ -109,7 +109,11 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
               <li key={c.id}>
                 <Link
                   href={(() => {
-                    const base = withScenarioPathwayQuery(SCENARIO_LEARNER_ROUTES.clinicalScenarios, pathwayId);
+                    const base = withScenarioPathwayAndProfessionQuery(
+                      SCENARIO_LEARNER_ROUTES.clinicalScenarios,
+                      pathwayId,
+                      alliedProfessionKey,
+                    );
                     const join = base.includes("?") ? "&" : "?";
                     return `${base}${join}scenarioId=${encodeURIComponent(c.id)}`;
                   })()}

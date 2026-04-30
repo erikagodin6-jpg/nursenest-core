@@ -405,6 +405,20 @@ function rnExamNotesIntegrationExpansionLessonsForPathway(pathwayId: string): Le
   return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
 }
 
+function getRnExamNotesIntegrationBatch3ExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnExamNotesIntegrationBatch3ExpansionPathwaysCache) return rnExamNotesIntegrationBatch3ExpansionPathwaysCache;
+  rnExamNotesIntegrationBatch3ExpansionPathwaysCache =
+    (require("@/content/pathway-lessons/rn-nclex-exam-notes-integration-batch3-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnExamNotesIntegrationBatch3ExpansionPathwaysCache;
+}
+
+function rnExamNotesIntegrationBatch3ExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnExamNotesIntegrationBatch3ExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
 function getNewGradTransitionPathways(): Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> {
   if (newGradTransitionPathwaysCache) return newGradTransitionPathwaysCache;
   newGradTransitionPathwaysCache =
@@ -1448,6 +1462,7 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
   const musculoskeletalExpansion = rnMusculoskeletalExpansionLessonsForPathway(pathwayId);
   const fluidsElectrolytesExpansion = rnFluidsElectrolytesExpansionLessonsForPathway(pathwayId);
   const examNotesIntegrationExpansion = rnExamNotesIntegrationExpansionLessonsForPathway(pathwayId);
+  const examNotesIntegrationBatch3Expansion = rnExamNotesIntegrationBatch3ExpansionLessonsForPathway(pathwayId);
   const newGrad = newGradTransitionLessonsForPathway(pathwayId);
   const seen = new Set<string>();
   const merged: LessonInput[] = [];
@@ -1471,6 +1486,7 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
     ...musculoskeletalExpansion,
     ...fluidsElectrolytesExpansion,
     ...examNotesIntegrationExpansion,
+    ...examNotesIntegrationBatch3Expansion,
     ...newGrad,
   ]) {
     if (seen.has(l.slug)) continue;
@@ -1588,6 +1604,12 @@ function buildCatalogLessonsRawUncached(pathwayId: string): LessonInput[] {
         merged.push(extra);
       }
       for (const extra of rnExamNotesIntegrationExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of rnExamNotesIntegrationBatch3ExpansionLessonsForPathway(pathwayId)) {
         const s = extra.slug.trim();
         if (!s || seen.has(s)) continue;
         seen.add(s);

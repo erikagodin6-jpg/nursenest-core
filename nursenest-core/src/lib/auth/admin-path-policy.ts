@@ -98,6 +98,8 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/admin/clinical-scenarios",
   "/admin/pathway-lessons",
   "/api/admin/pathway-lessons",
+  "/admin/courses",
+  "/api/admin/internal-courses",
   "/api/admin/verified-study",
   "/api/admin/clinical-nursing-scenarios",
   /** Prisma env wiring (no secrets) — pooled + direct URL presence for production validation. */

@@ -17,7 +17,7 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
  * - disabled (incomplete tier): `Disallow: /{code}/` plus `noindex`; excluded from hreflang and sitemaps.
  *   Routes may still return 200 for humans.
  *
- * **Authenticated / internal surfaces:** `Disallow: /app/`, `/admin/`, `/api/` — learner shell and gated flows;
+ * **Authenticated / internal surfaces:** `Disallow: /app/`, `/admin/`, `/internal/`, `/api/` — learner shell and gated flows;
  * these are also blocked from sitemap emission via URL validation (see `public-url-validator`).
  *
  * Internal `/seo/*` rewrite targets are disallowed to avoid duplicate indexing
@@ -53,6 +53,7 @@ const FALLBACK_BODY = [
   "Allow: /",
   "Disallow: /app/",
   "Disallow: /admin/",
+  "Disallow: /internal/",
   "Disallow: /api/",
   "Disallow: /seo/",
   "",
@@ -83,6 +84,7 @@ export async function GET() {
       "Allow: /",
       "Disallow: /app/",
       "Disallow: /admin/",
+      "Disallow: /internal/",
       "Disallow: /api/",
       "Disallow: /seo/",
       ...(disallowedLocales ? [disallowedLocales] : []),

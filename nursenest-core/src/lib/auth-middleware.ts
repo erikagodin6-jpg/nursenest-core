@@ -75,6 +75,11 @@ function isAdminPath(pathname: string): boolean {
   );
 }
 
+/** Staff-gated internal product surfaces (interactive course lab — not public marketing). */
+function isInternalGatedPath(pathname: string): boolean {
+  return pathname === "/internal" || pathname.startsWith("/internal/");
+}
+
 /**
  * Edge-only NextAuth instance.
  *
@@ -114,6 +119,11 @@ export const { auth: middlewareAuth } = NextAuth({
       }
 
       if (isAdminPath(pathname)) {
+        if (signedInFromAuth) return true;
+        return hasReadableSessionJwt(request as NextRequest);
+      }
+
+      if (isInternalGatedPath(pathname)) {
         if (signedInFromAuth) return true;
         return hasReadableSessionJwt(request as NextRequest);
       }

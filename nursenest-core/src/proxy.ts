@@ -78,7 +78,7 @@ async function enforceAdmin(request: NextRequest): Promise<NextResponse | null> 
   try {
     const pathname = request.nextUrl.pathname;
 
-    if (!pathname.startsWith("/admin")) return null;
+    if (!pathname.startsWith("/admin") && !pathname.startsWith("/internal")) return null;
 
     const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
     if (!secret) return null;
@@ -183,6 +183,8 @@ export const config = {
     "/app/:path*",
     "/admin",
     "/admin/:path*",
+    "/internal",
+    "/internal/:path*",
     "/api",
     "/api/:path*",
   ],

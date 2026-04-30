@@ -15,8 +15,11 @@ import {
 import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
 import { StudyCard } from "@/components/ui/study-card";
 import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
-import { formatTitleCase } from "@/lib/format/text-case";
 import {
+  alliedProfessionDefaultRoleHero,
+  alliedProfessionDefaultSkillOverlay,
+  alliedProfessionPremiumCtaHeadline,
+  alliedProfessionTrackChipLabel,
   listAlliedProfessionsSorted,
   type AlliedProfessionMarketing,
 } from "@/lib/allied/allied-professions-registry";
@@ -31,15 +34,12 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { marketingTierHubStudyActionHref } from "@/lib/navigation/marketing-tier-hub-study-hrefs";
-import { ALLIED_PROFESSION_QUERY_PARAM } from "@/lib/lessons/canonical-lessons-hubs";
+import { ALLIED_PROFESSION_QUERY_PARAM, isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
+import { SCENARIO_LEARNER_ROUTES, withScenarioPathwayAndProfessionQuery } from "@/lib/scenarios/scenario-routes";
 
 function hubVisualKeyForCategoryId(id: string): string {
   const s = id.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_");
   return s.length > 0 ? s : "fundamentals";
-}
-
-function trackChipLabel(p: AlliedProfessionMarketing): string {
-  return p.h1.replace(/\s+exam prep\s*$/i, "").trim() || formatTitleCase(p.professionKey.replace(/-/g, " "));
 }
 
 export function AlliedHealthPathwayHub({
@@ -75,6 +75,13 @@ export function AlliedHealthPathwayHub({
       )
     : loginWithCallback(`/app/practice-tests?pathwayId=${encodeURIComponent(pathway.id)}`);
 
+  const clinicalScenariosHref =
+    profKey && isAlliedMarketingCorePathwayId(pathway.id)
+      ? loginWithCallback(
+          withScenarioPathwayAndProfessionQuery(SCENARIO_LEARNER_ROUTES.clinicalScenarios, pathway.id, profKey),
+        )
+      : null;
+
   const learning = learningConfigForPathwayId(pathway.id);
   const categoryShowcase = learning.categories.slice(0, 16);
 
@@ -83,8 +90,12 @@ export function AlliedHealthPathwayHub({
   const heroTitle = profession ? profession.h1 : pathway.displayName;
   const heroBody = profession ? profession.description : pathway.seoDescription;
   const heroKicker = profession
-    ? `${countryLine} · ${pathway.shortName} · ${trackChipLabel(profession)}`
+    ? `${countryLine} · ${pathway.shortName} · ${alliedProfessionTrackChipLabel(profession)}`
     : `${countryLine} · Allied health`;
+
+  const roleHero = profession ? alliedProfessionDefaultRoleHero(profession) : null;
+  const skillOverlay = profession ? alliedProfessionDefaultSkillOverlay(profession) : null;
+  const scenarioPrimaryHref = clinicalScenariosHref ?? questionsHref;
 
   return (
     <div className="space-y-[var(--nn-rhythm-section-y)]" data-nn-allied-pathway-hub="1">
@@ -129,6 +140,41 @@ export function AlliedHealthPathwayHub({
         </div>
       </header>
 
+      {profession && roleHero ? (
+        <section
+          className="grid gap-4 md:grid-cols-3"
+          aria-labelledby="allied-role-hero-visible-heading"
+        >
+          <h2 id="allied-role-hero-visible-heading" className="sr-only">
+            Role snapshot
+          </h2>
+          <article className="rounded-[1.35rem] border border-[color-mix(in_srgb,var(--semantic-chart-3)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-3)_7%,var(--semantic-surface))] p-6">
+            <h3 className="text-base font-semibold text-[var(--theme-heading-text)]">What you do in this role</h3>
+            <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+              {roleHero.whatYouDo.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+          </article>
+          <article className="rounded-[1.35rem] border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))] p-6">
+            <h3 className="text-base font-semibold text-[var(--theme-heading-text)]">Where you work</h3>
+            <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+              {roleHero.whereYouWork.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+          </article>
+          <article className="rounded-[1.35rem] border border-[color-mix(in_srgb,var(--semantic-chart-1)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-1)_8%,var(--semantic-surface))] p-6">
+            <h3 className="text-base font-semibold text-[var(--theme-heading-text)]">Top skills required</h3>
+            <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+              {roleHero.topSkills.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
+            </ul>
+          </article>
+        </section>
+      ) : null}
+
       {profession ? (
         <section
           className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 sm:p-8"
@@ -139,7 +185,7 @@ export function AlliedHealthPathwayHub({
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
             Lessons, practice entry points, and study cards below keep{" "}
-            <span className="font-semibold text-[var(--semantic-text-primary)]">{trackChipLabel(profession)}</span> context
+            <span className="font-semibold text-[var(--semantic-text-primary)]">{alliedProfessionTrackChipLabel(profession)}</span> context
             via <code className="rounded bg-[var(--semantic-panel-muted)] px-1">{ALLIED_PROFESSION_QUERY_PARAM}</code> on the
             allied pathway hub — not mixed with RN/PN/NP-only hubs.
           </p>
@@ -185,7 +231,57 @@ export function AlliedHealthPathwayHub({
             </div>
           ) : null}
         </section>
-      ) : (
+      ) : null}
+
+      {profession && skillOverlay ? (
+        <section
+          className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 sm:p-8"
+          aria-labelledby="allied-skill-overlay-heading"
+        >
+          <h2 id="allied-skill-overlay-heading" className="text-xl font-bold text-[var(--theme-heading-text)]">
+            Study map for {alliedProfessionTrackChipLabel(profession)}
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+            Structured overlays — same lessons and questions as the allied pathway, organized for your licensing context.
+          </p>
+          <div className="mt-8 grid gap-8 lg:grid-cols-2">
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--semantic-chart-2)]">Common tasks</h3>
+              <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+                {skillOverlay.commonTasks.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--semantic-success)]">Clinical skills</h3>
+              <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+                {skillOverlay.clinicalSkills.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--semantic-warning)]">High-risk situations</h3>
+              <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+                {skillOverlay.highRiskSituations.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--semantic-info)]">Exam focus areas</h3>
+              <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+                {skillOverlay.examFocusAreas.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {!profession ? (
         <section className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 sm:p-8" aria-labelledby="allied-tracks-heading">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
@@ -209,7 +305,7 @@ export function AlliedHealthPathwayHub({
                 href={alliedHealthSegmentPath(p.segment)}
                 className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] hover:bg-[var(--semantic-surface)]"
               >
-                {trackChipLabel(p)}
+                {alliedProfessionTrackChipLabel(p)}
               </Link>
             ))}
           </div>
@@ -229,7 +325,7 @@ export function AlliedHealthPathwayHub({
                     <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--nn-system-accent)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-system-accent)_10%,var(--semantic-surface))] text-[var(--nn-system-accent)]">
                       <Icon className="h-4 w-4" aria-hidden />
                     </span>
-                    <h3 className="mt-3 text-base font-semibold text-[var(--theme-heading-text)]">{trackChipLabel(p)}</h3>
+                    <h3 className="mt-3 text-base font-semibold text-[var(--theme-heading-text)]">{alliedProfessionTrackChipLabel(p)}</h3>
                     <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{p.description}</p>
                     <div className="mt-4 flex flex-wrap gap-2 border-t border-[var(--semantic-border-soft)] pt-4">
                       <Link
@@ -252,7 +348,7 @@ export function AlliedHealthPathwayHub({
             })}
           </ul>
         </section>
-      )}
+      ) : null}
 
       {/* Core study modes — NurseNest study-card vocabulary */}
       <section aria-labelledby="allied-study-modes-heading">
@@ -265,7 +361,7 @@ export function AlliedHealthPathwayHub({
           {profession ? (
             <>
               {" "}
-              for <span className="font-semibold text-[var(--semantic-text-primary)]">{trackChipLabel(profession)}</span>.
+              for <span className="font-semibold text-[var(--semantic-text-primary)]">{alliedProfessionTrackChipLabel(profession)}</span>.
             </>
           ) : (
             "."
@@ -368,12 +464,24 @@ export function AlliedHealthPathwayHub({
           <Stethoscope className="h-8 w-8 text-[var(--semantic-chart-2)]" aria-hidden />
           <h3 className="mt-4 text-lg font-semibold text-[var(--theme-heading-text)]">Case scenarios</h3>
           <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">
-            Scenario-style stems and branching rationales live in the practice question bank. Start from the questions hub,
-            then refine by topic inside the bank.
+            {clinicalScenariosHref
+              ? "Preview the learner scenarios shell with your occupation in the URL, then reinforce with pathway-scoped questions."
+              : "Scenario-style stems and branching rationales live in the practice question bank. Start from the questions hub, then refine by topic inside the bank."}
           </p>
-          <Link href={questionsHref} className="mt-4 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
-            Open practice questions →
+          <Link
+            href={scenarioPrimaryHref}
+            className="mt-4 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+          >
+            {clinicalScenariosHref ? "Open clinical scenarios (sign in) →" : "Open practice questions →"}
           </Link>
+          {clinicalScenariosHref ? (
+            <Link
+              href={questionsHref}
+              className="mt-2 inline-flex text-sm font-medium text-[var(--semantic-text-secondary)] underline-offset-2 hover:text-[var(--semantic-brand)] hover:underline"
+            >
+              Or go straight to practice questions →
+            </Link>
+          ) : null}
         </article>
         <article className="rounded-[1.35rem] border border-[color-mix(in_srgb,var(--semantic-success)_24%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_7%,var(--semantic-surface))] p-6">
           <ClipboardCheck className="h-8 w-8 text-[var(--semantic-success)]" aria-hidden />
@@ -417,7 +525,7 @@ export function AlliedHealthPathwayHub({
       >
         <HeartHandshake className="mx-auto h-10 w-10 text-[var(--semantic-success)]" aria-hidden />
         <h2 id="allied-pricing-heading" className="mt-4 text-xl font-bold text-[var(--theme-heading-text)]">
-          Ready to study on a career-specific allied plan?
+          {profession ? alliedProfessionPremiumCtaHeadline(profession) : "Ready to study on a career-specific allied plan?"}
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
           Allied plans are priced per career lane at checkout. Pick your track above, then confirm the plan that matches your
