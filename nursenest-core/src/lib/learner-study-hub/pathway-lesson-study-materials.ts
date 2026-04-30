@@ -6,6 +6,7 @@ import { loadPublishedPathwayLessonsForStudyFromDb } from "@/lib/learner-study-h
 import {
   aggregatePracticeQuestionsFromInventoryLessons,
   type GetPracticeQuestionsForPathwayOptions,
+  type PathwayLessonDerivedPracticeQuestion,
   type PracticeQuestionsPathwayAggregation,
 } from "@/lib/learner-study-hub/pathway-lesson-practice-aggregation";
 

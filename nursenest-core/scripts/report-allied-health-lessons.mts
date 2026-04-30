@@ -5,14 +5,12 @@
  *
  * Does not mutate data. DB section is skipped when DATABASE_URL is unset or unreachable.
  */
-import { ContentStatus } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { countTotalWordsInLessonSections, evaluatePathwayLessonStructuralGate } from "@/lib/lessons/pathway-lesson-premium";
 import { getCatalogPathwayLessonsSync, getCatalogLessonsRaw } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { prisma } from "@/lib/db";
 
 const ALLIED_PATHWAY_IDS = ["us-allied-core", "ca-allied-core"] as const;
 
@@ -34,32 +32,32 @@ function lessonMetrics(lesson: ReturnType<typeof getCatalogPathwayLessonsSync>[n
   const wc = countTotalWordsInLessonSections(lesson.sections);
   const gate = evaluatePathwayLessonStructuralGate(lesson);
   const sections = lesson.sections?.length ?? 0;
-  const incompleteReasons: string[] = [];
-  if (!gate.publicComplete) incompleteReasons.push("structural_public_incomplete");
-  if (sections < MIN_SECTIONS_TARGET) incompleteReasons.push(`sections_lt_${MIN_SECTIONS_TARGET}`);
-  if (wc < MIN_WORDS_SOFT) incompleteReasons.push(`words_lt_${MIN_WORDS_SOFT}`);
-  if (wc < MIN_WORDS_HARD) incompleteReasons.push(`words_lt_${MIN_WORDS_HARD}`);
+  const publicMarketingSurface = pathwayLessonEligibleForPublicMarketingSurface(lesson);
+  const proseThin = sections < MIN_SECTIONS_TARGET || wc < MIN_WORDS_SOFT;
+  const structuralIssues = gate.issues.slice(0, 8);
   return {
     slug: lesson.slug,
     title: lesson.title,
     topicSlug: lesson.topicSlug,
     sectionCount: sections,
     wordCount: wc,
-    publicMarketingSurface: pathwayLessonEligibleForPublicMarketingSurface(lesson),
+    publicMarketingSurface,
     structuralMode: gate.structureMode,
-    structuralIssues: gate.issues.slice(0, 6),
-    incompleteReasons,
-    thin: incompleteReasons.length > 0,
+    structuralPublicComplete: gate.publicComplete,
+    structuralIssues,
+    /** Word/section floor vs RN-style bar — independent of `structuralPublicComplete` (premium gate can fail on links/metadata). */
+    proseThinHeuristic: proseThin,
   };
 }
 
 async function dbSnapshot(pathwayId: string) {
-  if (!isDatabaseUrlConfigured()) {
+  if (!process.env.DATABASE_URL?.trim()) {
     return {
       available: false as const,
-      reason: "DATABASE_URL not configured",
+      reason: "DATABASE_URL not set (catalog-only report)",
     };
   }
+  const prisma = new PrismaClient();
   try {
     const rows = await prisma.pathwayLesson.groupBy({
       by: ["status"],
@@ -87,6 +85,8 @@ async function dbSnapshot(pathwayId: string) {
       available: false as const,
       reason: e instanceof Error ? e.message : String(e),
     };
+  } finally {
+    await prisma.$disconnect().catch(() => {});
   }
 }
 
@@ -118,7 +118,8 @@ async function main() {
       const lessons = getCatalogPathwayLessonsSync(pathwayId);
       const metrics = lessons.map(lessonMetrics);
       const publishedMarketing = metrics.filter((m) => m.publicMarketingSurface).length;
-      const thin = metrics.filter((m) => m.thin).length;
+      const structuralIncomplete = metrics.filter((m) => !m.structuralPublicComplete).length;
+      const proseThin = metrics.filter((m) => m.proseThinHeuristic).length;
       const words = metrics.map((m) => m.wordCount);
       const db = await dbSnapshot(pathwayId);
       const dupCatalog = catalogDuplicateSlugs(pathwayId);
@@ -134,7 +135,8 @@ async function main() {
         country: def?.countrySlug ?? null,
         catalogLessonTotal: lessons.length,
         catalogPublishedMarketingSurface: publishedMarketing,
-        catalogThinOrIncompleteHeuristic: thin,
+        catalogStructuralPublicIncomplete: structuralIncomplete,
+        catalogProseThinHeuristic: proseThin,
         catalogWordCount: {
           min: words.length ? Math.min(...words) : 0,
           max: words.length ? Math.max(...words) : 0,
@@ -156,8 +158,9 @@ async function main() {
     return {
       ...p,
       catalogScopedTotal: scoped.length,
-      catalogScopedThin: m.filter((x) => x.thin).length,
+      catalogScopedProseThin: m.filter((x) => x.proseThinHeuristic).length,
       catalogScopedPublicMarketing: m.filter((x) => x.publicMarketingSurface).length,
+      catalogScopedStructuralIncomplete: m.filter((x) => !x.structuralPublicComplete).length,
     };
   });
 
@@ -188,8 +191,9 @@ async function main() {
   for (const pw of pathways) {
     console.log(`--- ${pw.pathwayId} (${pw.displayName}) ---`);
     console.log(`  Catalog lessons (normalized): ${pw.catalogLessonTotal}`);
-    console.log(`  Catalog publicComplete (marketing surface): ${pw.catalogPublishedMarketingSurface}`);
-    console.log(`  Catalog thin/incomplete (heuristic): ${pw.catalogThinOrIncompleteHeuristic}`);
+    console.log(`  Catalog publicComplete (marketing hub/index gate): ${pw.catalogPublishedMarketingSurface}`);
+    console.log(`  Catalog structural public incomplete: ${pw.catalogStructuralPublicIncomplete}`);
+    console.log(`  Catalog prose thin (sections<${MIN_SECTIONS_TARGET} or words<${MIN_WORDS_SOFT}): ${pw.catalogProseThinHeuristic}`);
     console.log(`  Words min/avg/max: ${pw.catalogWordCount.min} / ${pw.catalogWordCount.avg} / ${pw.catalogWordCount.max}`);
     console.log(`  Source-of-truth label: ${pw.sourceTruthNarrative}`);
     if (pw.suspiciousDuplicateCatalogSlugs.length) {
@@ -207,7 +211,7 @@ async function main() {
   console.log("Per-occupation scoped catalog counts (topicSlugsIn filter when set):");
   for (const row of byProfession) {
     console.log(
-      `  ${row.professionKey} | pathway=${row.pathwayId} | scoped=${row.catalogScopedTotal} | public=${row.catalogScopedPublicMarketing} | thin=${row.catalogScopedThin}`,
+      `  ${row.professionKey} | pathway=${row.pathwayId} | scoped=${row.catalogScopedTotal} | public=${row.catalogScopedPublicMarketing} | structuralIncomplete=${row.catalogScopedStructuralIncomplete} | proseThin=${row.catalogScopedProseThin}`,
     );
   }
   console.log("\nDone. Re-run with --json for machine-readable output.");
