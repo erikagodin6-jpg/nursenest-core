@@ -40,6 +40,8 @@ export function normalizeBlogPostStatusWriteFields(args: {
   postStatus: BlogPostStatus;
   publishAt: Date | null;
   workflowFromRequest?: BlogWorkflowStatus | null;
+  /** When `postStatus` is DRAFT (or other non-publish), prefer pipeline/editorial workflow over bare GENERATED. */
+  draftWorkflow?: BlogWorkflowStatus | null;
   now?: Date;
 }): { postStatus: BlogPostStatus; publishAt: Date | null; workflowStatus: BlogWorkflowStatus } {
   const now = args.now ?? new Date();
@@ -57,7 +59,7 @@ export function normalizeBlogPostStatusWriteFields(args: {
   return {
     postStatus: args.postStatus,
     publishAt: args.publishAt,
-    workflowStatus: args.workflowFromRequest ?? BlogWorkflowStatus.GENERATED,
+    workflowStatus: args.workflowFromRequest ?? args.draftWorkflow ?? BlogWorkflowStatus.GENERATED,
   };
 }
 

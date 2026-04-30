@@ -1,4 +1,4 @@
-import { BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
+import { BlogPostStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { normalizeBlogPostStatusWriteFields } from "@/lib/blog/blog-post-published-state";

@@ -28,6 +28,7 @@ import {
   type PrePublishPatch,
   validateBlogPrePublish,
 } from "@/lib/blog/blog-pre-publish-validation";
+import { warnIfPublishedPostWorkflowNotAligned } from "@/lib/blog/blog-post-published-state";
 import { blogPostIsLive } from "@/lib/blog/blog-visibility";
 import {
   isCanonicalBlogPublishVisibilityError,
@@ -266,6 +267,16 @@ export async function PATCH(req: Request, { params }: Props) {
     },
   });
   if (!current) return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
+
+  warnIfPublishedPostWorkflowNotAligned(
+    {
+      id: current.id,
+      slug: current.slug,
+      postStatus: current.postStatus,
+      workflowStatus: current.workflowStatus,
+    },
+    "PATCH /api/admin/blog/[id] load",
+  );
 
   let bodyForUpdate: string | undefined;
   if (d.action === "publish_now") {
@@ -713,6 +724,16 @@ export async function PATCH(req: Request, { params }: Props) {
     actionTriggersRevalidate ||
     visibilityChanged ||
     (publishAtChanged && (updated.postStatus === BlogPostStatus.SCHEDULED || current.postStatus === BlogPostStatus.SCHEDULED));
+
+  warnIfPublishedPostWorkflowNotAligned(
+    {
+      id: updated.id,
+      slug: updated.slug,
+      postStatus: updated.postStatus,
+      workflowStatus: updated.workflowStatus,
+    },
+    "PATCH /api/admin/blog/[id] after update",
+  );
 
   if (shouldRevalidateSurfaces) {
     try {

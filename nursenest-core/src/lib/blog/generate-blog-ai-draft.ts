@@ -18,6 +18,10 @@ import type { BlogLessonLinkRow } from "@/lib/blog/blog-control-panel-schema";
 import { fetchSimpleDraftStudyLinks } from "@/lib/blog/blog-simple-draft-study-links";
 import { blogPrimaryStudyCta } from "@/lib/blog/blog-study-cta";
 import { buildOutline, detectRiskFlags, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
+import {
+  devAssertPublishedWritePayloadAligned,
+  normalizeBlogPostStatusWriteFields,
+} from "@/lib/blog/blog-post-published-state";
 import { prisma } from "@/lib/db";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import { coerceAdminOptionalSlugFromRawInput } from "@/lib/blog/blog-optional-slug";
@@ -463,11 +467,17 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
     }
   }
 
-  const { postStatus, publishAt } = resolvePostStatusForPublishAt(d.publishAt, now);
-  const workflowStatus =
-    postStatus === BlogPostStatus.PUBLISHED ? BlogWorkflowStatus.PUBLISHED :
-    postStatus === BlogPostStatus.SCHEDULED ? BlogWorkflowStatus.SCHEDULED :
-    workflowStatusBase;
+  const { postStatus: resolvedPs, publishAt: resolvedPa } = resolvePostStatusForPublishAt(d.publishAt, now);
+  const statusWrite = normalizeBlogPostStatusWriteFields({
+    postStatus: resolvedPs,
+    publishAt: resolvedPa,
+    draftWorkflow: workflowStatusBase,
+  });
+  devAssertPublishedWritePayloadAligned({
+    postStatus: statusWrite.postStatus,
+    workflowStatus: statusWrite.workflowStatus,
+    label: "generateBlogAiDraftPersist",
+  });
 
   try {
     const post = await prisma.blogPost.create({
@@ -484,8 +494,8 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
         intent: d.intent ?? BlogPostIntent.EXAM_PREP,
         funnelStage: d.funnelStage ?? BlogFunnelStage.CONSIDERATION,
         postTemplate: d.template,
-        postStatus,
-        publishAt,
+        postStatus: statusWrite.postStatus,
+        publishAt: statusWrite.publishAt,
         seoTitle,
         seoDescription,
         metaTitleVariant: seoTitle,
@@ -508,7 +518,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
         ctaType: cta.type,
         ctaText: cta.text,
         ctaHref: cta.href,
-        workflowStatus,
+        workflowStatus: statusWrite.workflowStatus,
         sourcesJson: sources.length ? (sources as Prisma.InputJsonValue) : Prisma.JsonNull,
         apaReferences,
         requiresReferences: Boolean(sources.length || riskFlags.length > 0),

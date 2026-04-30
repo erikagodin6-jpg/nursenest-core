@@ -1,15 +1,11 @@
-import "../../../scripts/stub-server-only.cjs";
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { pathwayLessonEligibleForLearnerStudyInventory } from "@/lib/learner-study-hub/pathway-lesson-learner-study-guards";
-import {
-  aggregatePracticeQuestionsFromInventoryLessons,
-  getPracticeQuestionsForPathway,
-  getStudySystemsForPathway,
-  flashcardLessonVirtualDiagnosticsForPathway,
-} from "@/lib/learner-study-hub/pathway-lesson-study-materials";
+import { aggregatePracticeQuestionsFromInventoryLessons } from "@/lib/learner-study-hub/pathway-lesson-practice-aggregation";
 import { collectMergedLessonVirtualFlashcardsForPathway } from "@/lib/flashcards/lesson-linked-virtual-flashcards-aggregator";
+
+const hasDb = Boolean(process.env.DATABASE_URL?.trim());
 
 describe("pathway-lesson-learner-study-guards", () => {
   it("requires structuralQuality.publicComplete for learner inventory", () => {
@@ -29,13 +25,14 @@ describe("pathway-lesson-learner-study-guards", () => {
   });
 });
 
-describe("pathway-lesson-study-materials", () => {
-  it("flashcard diagnostics helper returns null for empty pathway", async () => {
-    assert.equal(await flashcardLessonVirtualDiagnosticsForPathway("", { selectedCategories: [], filterModeLabel: "all" }), null);
-    assert.equal(await flashcardLessonVirtualDiagnosticsForPathway("   ", { selectedCategories: [], filterModeLabel: "all" }), null);
-  });
-
-  it("RN catalog pathway exposes published lesson systems and bounded practice aggregation", async () => {
+describe("pathway-lesson-study-materials (Prisma-backed helpers)", () => {
+  it("RN pathway practice + systems load from PathwayLesson when DATABASE_URL is set", async () => {
+    if (!hasDb) {
+      console.info("[pathway-lesson-study-materials] skip Prisma integration (no DATABASE_URL)");
+      return;
+    }
+    const { getPracticeQuestionsForPathway, getStudySystemsForPathway, flashcardLessonVirtualDiagnosticsForPathway } =
+      await import("@/lib/learner-study-hub/pathway-lesson-study-materials");
     const pid = "ca-rn-nclex-rn";
     const systems = await getStudySystemsForPathway(pid);
     assert.ok(systems.publishedLessonCount >= 0);
@@ -55,10 +52,13 @@ describe("pathway-lesson-study-materials", () => {
     }
     assert.equal(stems.size, practice.questions.length, "practice list must be stem-deduped per lesson");
     assert.ok(Array.isArray(practice.byBodySystem));
+
+    assert.equal(await flashcardLessonVirtualDiagnosticsForPathway("", { selectedCategories: [], filterModeLabel: "all" }), null);
+    assert.equal(await flashcardLessonVirtualDiagnosticsForPathway("   ", { selectedCategories: [], filterModeLabel: "all" }), null);
   });
 });
 
-describe("pathway-lesson-study-materials prisma inventory aggregation", () => {
+describe("pathway-lesson practice aggregation (PathwayLesson inventory)", () => {
   const structuralOk = {
     publicComplete: true,
     issues: [] as string[],
@@ -104,7 +104,7 @@ describe("pathway-lesson-study-materials prisma inventory aggregation", () => {
     assert.equal(r.questions.filter((q) => q.stem.toLowerCase().startsWith("same stem")).length, 1);
   });
 
-  it("does not report false empty diagnostics when PathwayLesson rows exist but virtual merge is empty", () => {
+  it("flashcard merge uses PathwayLesson rows: lessons present but zero virtuals still yields non-zero catalogLessonCount", () => {
     const lesson = baseLesson({
       slug: "empty-virtual",
       sections: [{ id: "x", heading: "H", kind: "intro", body: "Short", checkpointQuestions: [] }],
