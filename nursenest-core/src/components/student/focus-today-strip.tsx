@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useMarketingI18n } from "@/lib/marketing-i18n";
 
 type PlanItem = {
   id: string;
@@ -20,10 +21,21 @@ type StudyPlanPayload = {
 };
 
 /**
- * Lightweight “Focus Today” band — data loads client-side so the dashboard shell stays cache-friendly.
- * Hidden when remediation engine is off or the learner has no due items.
+ * “Focus today” — remediation when due; otherwise weak-topic fallback when provided.
+ * Loads `/api/study-plan` client-side so the dashboard shell stays cache-friendly.
  */
-export function FocusTodayStrip(_props: { pathwayId?: string | null }) {
+export function FocusTodayStrip({
+  pathwayId: _pathwayId,
+  weakTopicFallback = [],
+  weakPracticeHref,
+}: {
+  pathwayId?: string | null;
+  /** Topic titles from dashboard snapshot when remediation queue is empty or engine off. */
+  weakTopicFallback?: readonly string[];
+  /** Pathway-scoped link to question practice filtered to weak areas. */
+  weakPracticeHref?: string;
+}) {
+  const { t } = useMarketingI18n();
   const [plan, setPlan] = useState<StudyPlanPayload | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
 
@@ -60,77 +72,123 @@ export function FocusTodayStrip(_props: { pathwayId?: string | null }) {
     }
   };
 
-  if (!plan?.enabled || plan.remediationDue.length === 0) return null;
+  if (plan === null) {
+    return (
+      <section className="nn-dash-section" aria-busy="true" aria-label={t("learner.focusToday.title")}>
+        <div className="nn-focus-today-surface nn-focus-today-surface--loading rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] p-4 sm:p-5">
+          <div className="nn-skeleton nn-skeleton-shimmer mb-3 h-3 w-28 rounded-full" />
+          <div className="nn-skeleton nn-skeleton-shimmer mb-4 h-3 w-full max-w-md rounded-full" />
+          <div className="space-y-3">
+            <div className="nn-skeleton nn-skeleton-shimmer h-16 w-full rounded-xl" />
+            <div className="nn-skeleton nn-skeleton-shimmer h-16 w-full rounded-xl opacity-80" />
+          </div>
+        </div>
+      </section>
+    );
+  }
 
-  const items = plan.remediationDue.slice(0, 5);
+  const due = plan.remediationDue ?? [];
+  const remediationItems = plan.enabled ? due.slice(0, 5) : [];
+  const weakSlice = weakTopicFallback.slice(0, 5);
+
+  if (remediationItems.length === 0 && weakSlice.length === 0) {
+    return null;
+  }
+
+  const showRemediation = plan.enabled && remediationItems.length > 0;
 
   return (
-    <section
-      className="nn-dash-section"
-      aria-label="Focus today"
-    >
-      <div className="rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-4 sm:p-5">
-        <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-info)]">Focus Today</p>
-        <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
-          Short remediation pulls from your recent question misses and low-confidence hits.
+    <section className="nn-dash-section" aria-label={t("learner.focusToday.title")}>
+      <div className="nn-focus-today-surface rounded-2xl border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-4 shadow-[var(--shadow-card)] transition-shadow duration-200 hover:shadow-[var(--shadow-card-hover)] sm:p-5">
+        <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-info)]">
+          {t("learner.focusToday.title")}
         </p>
-        <ul className="mt-4 space-y-3">
-          {items.map((it) => (
-            <li
-              key={it.id}
-              className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 sm:p-4"
+        <p className="mt-1 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+          {showRemediation ? t("learner.focusToday.intro") : t("learner.focusToday.weakFallbackIntro")}
+        </p>
+
+        {showRemediation ? (
+          <ul className="mt-4 space-y-3">
+            {remediationItems.map((it) => (
+              <li
+                key={it.id}
+                className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-md sm:p-4"
+              >
+                <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">
+                  {it.topic?.trim() || it.bodySystem?.trim() || "Review topic"}
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {it.lessonHref ? (
+                    <Link
+                      href={it.lessonHref}
+                      className="inline-flex min-h-9 items-center rounded-full border border-[var(--semantic-border-soft)] px-3 text-xs font-semibold text-[var(--semantic-text-primary)] transition-colors duration-200 hover:bg-[var(--semantic-panel-muted)]"
+                    >
+                      Review lesson
+                    </Link>
+                  ) : null}
+                  {it.flashcardsHref ? (
+                    <Link
+                      href={it.flashcardsHref}
+                      className="inline-flex min-h-9 items-center rounded-full border border-[var(--semantic-border-soft)] px-3 text-xs font-semibold text-[var(--semantic-text-primary)] transition-colors duration-200 hover:bg-[var(--semantic-panel-muted)]"
+                    >
+                      Do flashcards
+                    </Link>
+                  ) : null}
+                  {it.retestQuestionsHref || it.practiceQuestionsHref ? (
+                    <Link
+                      href={it.retestQuestionsHref ?? it.practiceQuestionsHref ?? "/app/questions"}
+                      className="inline-flex min-h-9 items-center rounded-full px-3 text-xs font-semibold text-[var(--role-cta-foreground)] transition-[filter,transform] duration-200 hover:brightness-105"
+                      style={{ background: "var(--role-cta)" }}
+                    >
+                      Retry questions
+                    </Link>
+                  ) : null}
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2 border-t border-[var(--semantic-border-soft)] pt-3">
+                  <button
+                    type="button"
+                    disabled={busyId === it.id}
+                    className="nn-btn-secondary min-h-9 rounded-full px-3 text-xs font-semibold disabled:opacity-50"
+                    onClick={() => void patchOutcome(it.id, true)}
+                  >
+                    Done — felt solid
+                  </button>
+                  <button
+                    type="button"
+                    disabled={busyId === it.id}
+                    className="inline-flex min-h-9 items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] px-3 text-xs font-semibold text-[var(--semantic-text-primary)] transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--semantic-warning)_08%,var(--semantic-surface))] disabled:opacity-50"
+                    onClick={() => void patchOutcome(it.id, false)}
+                  >
+                    Still shaky
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <ul className="mt-4 space-y-2">
+            {weakSlice.map((topic) => (
+              <li
+                key={topic}
+                className="flex items-center gap-2 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-sm text-[var(--semantic-text-secondary)] shadow-sm"
+              >
+                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--semantic-warning)]" aria-hidden />
+                <span className="font-medium text-[var(--semantic-text-primary)]">{topic}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {!showRemediation && weakPracticeHref ? (
+          <div className="mt-4">
+            <Link
+              href={weakPracticeHref}
+              className="nn-btn-primary inline-flex min-h-10 items-center justify-center rounded-full px-5 text-sm font-semibold transition-transform duration-200 hover:-translate-y-px"
             >
-              <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">
-                {it.topic?.trim() || it.bodySystem?.trim() || "Review topic"}
-              </p>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {it.lessonHref ? (
-                  <Link
-                    href={it.lessonHref}
-                    className="inline-flex min-h-9 items-center rounded-full border border-[var(--semantic-border-soft)] px-3 text-xs font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
-                  >
-                    Review lesson
-                  </Link>
-                ) : null}
-                {it.flashcardsHref ? (
-                  <Link
-                    href={it.flashcardsHref}
-                    className="inline-flex min-h-9 items-center rounded-full border border-[var(--semantic-border-soft)] px-3 text-xs font-semibold text-[var(--semantic-text-primary)] hover:bg-[var(--semantic-panel-muted)]"
-                  >
-                    Do flashcards
-                  </Link>
-                ) : null}
-                {it.retestQuestionsHref || it.practiceQuestionsHref ? (
-                  <Link
-                    href={it.retestQuestionsHref ?? it.practiceQuestionsHref ?? "/app/questions"}
-                    className="inline-flex min-h-9 items-center rounded-full px-3 text-xs font-semibold text-[var(--role-cta-foreground)]"
-                    style={{ background: "var(--role-cta)" }}
-                  >
-                    Retry questions
-                  </Link>
-                ) : null}
-              </div>
-              <div className="mt-3 flex flex-wrap gap-2 border-t border-[var(--semantic-border-soft)] pt-3">
-                <button
-                  type="button"
-                  disabled={busyId === it.id}
-                  className="nn-btn-secondary min-h-9 rounded-full px-3 text-xs font-semibold disabled:opacity-50"
-                  onClick={() => void patchOutcome(it.id, true)}
-                >
-                  Done — felt solid
-                </button>
-                <button
-                  type="button"
-                  disabled={busyId === it.id}
-                  className="inline-flex min-h-9 items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-warning)_35%,var(--semantic-border-soft))] px-3 text-xs font-semibold text-[var(--semantic-text-primary)] disabled:opacity-50"
-                  onClick={() => void patchOutcome(it.id, false)}
-                >
-                  Still shaky
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+              {t("learner.focusToday.practiceWeakCta")}
+            </Link>
+          </div>
+        ) : null}
       </div>
     </section>
   );

@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { ProtectedPremiumContent } from "@/components/student/protected-premium-content";
 import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
-import { ExamProgressBar, ExamSessionShell, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
+import { ExamProgressBar, ExamSessionShell, ExamSessionStickyChrome, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 import {
   questionIdsWithIncorrectAttempts,
@@ -111,6 +111,7 @@ export function PracticeQuestionSessionClient({
   /** Per-question: answering | awaiting_confidence | done */
   const [itemStep, setItemStep] = useState<"answering" | "feedback" | "confidence">("answering");
   const examRationaleRef = useRef<Record<string, GradedRow>>({});
+  const [sessionElapsedSec, setSessionElapsedSec] = useState(0);
 
   const source = (parsed.source ?? DEFAULT_PRACTICE_SOURCE) as PracticeSessionSource;
   const mode = (parsed.mode ?? DEFAULT_PRACTICE_MODE) as PracticeSessionMode;
@@ -179,6 +180,16 @@ export function PracticeQuestionSessionClient({
   useEffect(() => {
     reloadParams();
   }, [reloadParams]);
+
+  useEffect(() => {
+    if (phase !== "ready" || questions.length === 0) {
+      setSessionElapsedSec(0);
+      return;
+    }
+    setSessionElapsedSec(0);
+    const id = window.setInterval(() => setSessionElapsedSec((s) => s + 1), 1000);
+    return () => window.clearInterval(id);
+  }, [phase, questions.length, questions[0]?.id]);
 
   const current = questions[idx];
   const total = questions.length;
@@ -320,10 +331,17 @@ export function PracticeQuestionSessionClient({
   if (phase === "loading") {
     return (
       <div
-        className="flex min-h-[12rem] items-center justify-center rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)]"
+        className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-6 shadow-[var(--shadow-card)]"
         aria-busy="true"
       >
-        <p className="text-sm text-[var(--semantic-text-secondary)]">Loading your session…</p>
+        <div className="nn-skeleton nn-skeleton-shimmer mb-4 h-4 w-40 rounded-full" />
+        <div className="nn-skeleton nn-skeleton-shimmer mb-3 h-24 w-full rounded-xl" />
+        <div className="space-y-2">
+          <div className="nn-skeleton nn-skeleton-shimmer h-12 w-full rounded-xl" />
+          <div className="nn-skeleton nn-skeleton-shimmer h-12 w-full rounded-xl" />
+          <div className="nn-skeleton nn-skeleton-shimmer h-12 w-full rounded-xl opacity-90" />
+        </div>
+        <p className="mt-4 text-center text-sm text-[var(--semantic-text-secondary)]">Loading your session…</p>
       </div>
     );
   }
@@ -412,37 +430,45 @@ export function PracticeQuestionSessionClient({
 
   const rationaleText = g?.rationale ? resolveMeasurementTokens(g.rationale, measurementSystem) : "";
   const pearl = g?.clinicalPearl ? resolveMeasurementTokens(g.clinicalPearl, measurementSystem) : "";
+  const elapsedLabel = `${String(Math.floor(sessionElapsedSec / 60)).padStart(2, "0")}:${String(sessionElapsedSec % 60).padStart(2, "0")}`;
 
   return (
     <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} telemetrySurface="practice_question_session">
       <ExamSessionShell neutralPalette immersive className="overflow-hidden shadow-md">
-        <ExamSessionTopBar
-          left={
-            <div className="space-y-1">
-              <Link
-                href={`/app/questions${pathwayId ? `?pathwayId=${encodeURIComponent(pathwayId)}` : ""}`}
-                className="text-xs font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
-              >
-                Exit session
-              </Link>
-              <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                Question {idx + 1} of {total}
-              </p>
-              {current.topic ? <p className="line-clamp-1 text-sm font-medium text-[var(--theme-heading-text)]">{current.topic}</p> : null}
-            </div>
-          }
-          center={
-            <span className="nn-marketing-caption font-semibold tabular-nums text-[var(--semantic-text-muted)]">
-              {sessionAttempted > 0 ? `${sessionCorrect}/${sessionAttempted} correct` : "Practice"}
-            </span>
-          }
-          right={
-            <div className="flex justify-end gap-2">
-              <ExamSessionThemeTrigger />
-            </div>
-          }
-        />
-        <ExamProgressBar current={idx + 1} total={total} answeredCount={sessionAttempted} />
+        <ExamSessionStickyChrome>
+          <ExamSessionTopBar
+            left={
+              <div className="space-y-1">
+                <Link
+                  href={`/app/questions${pathwayId ? `?pathwayId=${encodeURIComponent(pathwayId)}` : ""}`}
+                  className="text-xs font-semibold text-[var(--semantic-brand)] underline-offset-2 transition-opacity duration-200 hover:underline"
+                >
+                  Exit session
+                </Link>
+                <p className="nn-marketing-caption font-bold uppercase tracking-wide text-[var(--theme-heading-text)]">
+                  Question {idx + 1} of {total}
+                </p>
+                {current.topic ? <p className="line-clamp-1 text-sm font-medium text-[var(--theme-heading-text)]">{current.topic}</p> : null}
+              </div>
+            }
+            center={
+              <div className="flex flex-col items-center gap-0.5">
+                <span className="nn-marketing-caption font-semibold tabular-nums tracking-wide text-[var(--semantic-text-muted)]">
+                  {elapsedLabel}
+                </span>
+                <span className="nn-marketing-caption font-semibold tabular-nums text-[var(--semantic-text-muted)]">
+                  {sessionAttempted > 0 ? `${sessionCorrect}/${sessionAttempted} correct` : "Practice"}
+                </span>
+              </div>
+            }
+            right={
+              <div className="flex justify-end gap-2">
+                <ExamSessionThemeTrigger />
+              </div>
+            }
+          />
+          <ExamProgressBar current={idx + 1} total={total} answeredCount={sessionAttempted} />
+        </ExamSessionStickyChrome>
 
         <div className="nn-question-session nn-question-session--split">
           <div className="nn-question-session-primary min-h-0 space-y-5 overflow-y-auto p-4 sm:p-6">
@@ -499,7 +525,7 @@ export function PracticeQuestionSessionClient({
                 </ul>
               )
             ) : (
-              <div className="space-y-3">
+              <div className={`space-y-3 ${g ? "nn-qopt-feedback-phase" : ""}`}>
                 <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">{g?.correct ? "Correct" : "Incorrect"}</p>
                 {g && current ? (
                   <ul className="nn-qopt-list" aria-label="Answer review">
@@ -526,8 +552,8 @@ export function PracticeQuestionSessionClient({
                   </div>
                 ) : null}
                 {g && showRationaleNow && pearl ? (
-                  <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4 text-sm">
-                    <p className="text-xs font-semibold uppercase text-[var(--semantic-text-muted)]">Key nursing takeaway</p>
+                  <div className="nn-rationale-clinical-takeaway rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-3)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-positive)_55%,var(--semantic-surface))] p-4 text-sm shadow-sm">
+                    <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">Key nursing takeaway</p>
                     <p className="mt-2 text-[var(--semantic-text-primary)]">{pearl}</p>
                   </div>
                 ) : null}

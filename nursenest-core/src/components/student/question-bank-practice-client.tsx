@@ -32,7 +32,7 @@ import { PH } from "@/lib/observability/posthog-conversion-events";
 import { emitClientStructuredLog } from "@/lib/observability/structured-client-log";
 import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
 import { QuestionSessionStudyLoopPanel } from "@/components/student/question-session-study-loop-panel";
-import { ExamProgressBar, ExamSessionShell, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
+import { ExamProgressBar, ExamSessionShell, ExamSessionStickyChrome, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 import type {
   QuestionBankDifficultyBand,
@@ -261,6 +261,7 @@ export function QuestionBankPracticeClient({
   const [confidence, setConfidence] = useState<Record<string, "low" | "medium" | "high" | undefined>>({});
   const feedbackAnchorRef = useRef<HTMLDivElement | null>(null);
   const feedbackScrollMarkerRef = useRef<string | null>(null);
+  const [sessionElapsedSec, setSessionElapsedSec] = useState(0);
 
   const incorrectMistakeIds = useMemo(() => {
     void graded;
@@ -296,6 +297,16 @@ export function QuestionBankPracticeClient({
   useEffect(() => {
     if (current?.id) questionOpenedAtMsRef.current = Date.now();
   }, [current?.id]);
+
+  useEffect(() => {
+    if (phase !== "ready" || total === 0) {
+      setSessionElapsedSec(0);
+      return;
+    }
+    setSessionElapsedSec(0);
+    const id = window.setInterval(() => setSessionElapsedSec((s) => s + 1), 1000);
+    return () => window.clearInterval(id);
+  }, [phase, total, questions[0]?.id]);
 
   useEffect(() => {
     const d = readLearnerStudyDefaults(userId);

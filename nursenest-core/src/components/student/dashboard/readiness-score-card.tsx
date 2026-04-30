@@ -144,7 +144,7 @@ export function ReadinessScoreCard({
 
   return (
     <article
-      className={`nn-readiness-card relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] border-t-4 ${topAccent} bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_5%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]`}
+      className={`nn-readiness-card nn-card-interactive relative overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] border-t-4 ${topAccent} bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_5%,var(--semantic-surface))] shadow-[var(--shadow-card)] transition-[transform,box-shadow] duration-200 ease-out`}
       aria-labelledby="readiness-heading"
     >
       {/* Ambient glow */}
@@ -159,8 +159,8 @@ export function ReadinessScoreCard({
 
         <div className="min-w-0 flex-1 space-y-2">
           <div className="flex flex-wrap items-center justify-center gap-2.5 sm:justify-start">
-            <h2 id="readiness-heading" className="text-[1.3rem] font-semibold tracking-tight text-[var(--semantic-text-primary)]">
-              Exam Readiness
+            <h2 id="readiness-heading" className="text-[1.35rem] font-bold tracking-tight text-[var(--semantic-text-primary)]">
+              {t("learner.dashboard.readiness.cardTitle")}
             </h2>
             {readiness.trend ? <TrendPill trend={readiness.trend} /> : null}
           </div>
@@ -168,6 +168,23 @@ export function ReadinessScoreCard({
           <p className="max-w-prose text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
             {readinessBandGuidance(readiness.band)}
           </p>
+
+          {scorePct != null ? (
+            <div className="mt-3 max-w-md">
+              <ProgressBarSemantic
+                value={scorePct}
+                max={100}
+                variant="readiness"
+                size="sm"
+                hint={`${scorePct}/100`}
+                footer={
+                  <p className="mt-1.5 text-[11px] font-medium uppercase tracking-wide text-[var(--semantic-text-muted)]">
+                    {t("learner.dashboard.readiness.performanceSubline")}
+                  </p>
+                }
+              />
+            </div>
+          ) : null}
 
           {readiness.calibratedPreview ? (
             <span className="nn-badge-semantic-warning mt-1 inline-flex px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide">{t("learner.dashboard.insight.calibrated")}</span>
@@ -218,7 +235,7 @@ export function ReadinessScoreCard({
       {factors.length > 0 ? (
         <details className="nn-readiness-details group">
           <summary className="nn-readiness-details-trigger">
-            <span>Score Breakdown</span>
+            <span>{t("learner.dashboard.readiness.scoreBreakdown")}</span>
             <ChevronDown className="h-3.5 w-3.5 transition-transform group-open:rotate-180" aria-hidden />
           </summary>
           <div className="space-y-4 px-6 pb-6 pt-4 sm:px-7">
@@ -243,9 +260,9 @@ export function ReadinessScoreCard({
    ReadinessLockedCard (trial / free users)
    ═══════════════════════════════════════════════════════════════════════ */
 
-export function ReadinessLockedCard() {
+export function ReadinessLockedCard({ t }: { t: LearnerMarketingT }) {
   return (
-    <article className="nn-readiness-card relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] border-t-4 border-t-[var(--semantic-border-soft)] bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_3%,var(--semantic-surface))] shadow-[var(--semantic-shadow-soft)]">
+    <article className="nn-readiness-card nn-card-interactive relative overflow-hidden rounded-xl border border-[color-mix(in_srgb,var(--semantic-brand)_16%,var(--semantic-border-soft))] border-t-4 border-t-[var(--semantic-border-soft)] bg-gradient-to-br from-[color-mix(in_srgb,var(--semantic-brand)_5%,var(--semantic-surface))] via-[var(--semantic-surface)] to-[color-mix(in_srgb,var(--semantic-info)_3%,var(--semantic-surface))] shadow-[var(--shadow-card)] transition-[transform,box-shadow] duration-200 ease-out">
       <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[radial-gradient(circle_at_center,color-mix(in_srgb,var(--semantic-brand)_8%,transparent),transparent_60%)] blur-3xl" aria-hidden />
 
       <div className="relative flex flex-col items-center gap-6 px-6 py-7 text-center sm:flex-row sm:items-start sm:gap-7 sm:px-7 sm:text-left">
@@ -265,20 +282,20 @@ export function ReadinessLockedCard() {
         <div className="min-w-0 flex-1 space-y-3">
           <div className="flex items-center justify-center gap-2 sm:justify-start">
             <Lock className="h-4 w-4 text-[var(--semantic-text-muted)]" aria-hidden />
-            <h2 className="text-[1.3rem] font-semibold tracking-tight text-[var(--semantic-text-primary)]">
-              Exam Readiness
+            <h2 className="text-[1.35rem] font-bold tracking-tight text-[var(--semantic-text-primary)]">
+              {t("learner.dashboard.readiness.cardTitle")}
             </h2>
           </div>
 
           <p className="max-w-md text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
-            Unlock your readiness score to see where you stand, which topics need work, and what to focus on next.
+            {t("learner.dashboard.readiness.lockedDescription")}
           </p>
 
           <Link
             href="/pricing"
-            className="mt-1 inline-flex rounded-full bg-[var(--semantic-brand)] px-5 py-2.5 text-sm font-semibold nn-text-on-solid-fill shadow-sm transition-all hover:shadow-md hover:brightness-105"
+            className="nn-btn-primary mt-1 inline-flex rounded-full px-5 py-2.5 text-sm font-semibold"
           >
-            Start Free Trial
+            {t("learner.dashboard.readiness.lockedCta")}
           </Link>
         </div>
       </div>

@@ -16,6 +16,21 @@ import { lessonBodyPresentationClass } from "@/lib/ui/lesson-body-presentation";
 /** Markdown-style internal links: `LESSON:slug` wiki or root-relative `/path`. */
 const MD_INTERNAL_LINK = /(\[[^\]]+\]\((?:LESSON:[^)]+|\/[^)]+)\))/g;
 
+/** Optional author prefixes — rendered as premium callouts (labels match `learner.lesson.callout.*` EN strings). */
+const LESSON_CALLOUT_EXAM = /^\s*\*{0,2}\s*Exam\s*Tip\s*:?\s*\*{0,2}\s*/i;
+const LESSON_CALLOUT_CLINICAL = /^\s*\*{0,2}\s*Clinical\s*Insight\s*:?\s*\*{0,2}\s*/i;
+
+function lessonCalloutFromParagraph(raw: string): { kind: "exam" | "clinical"; body: string } | null {
+  const t = raw.trim();
+  if (LESSON_CALLOUT_EXAM.test(t)) {
+    return { kind: "exam", body: t.replace(LESSON_CALLOUT_EXAM, "").trim() };
+  }
+  if (LESSON_CALLOUT_CLINICAL.test(t)) {
+    return { kind: "clinical", body: t.replace(LESSON_CALLOUT_CLINICAL, "").trim() };
+  }
+  return null;
+}
+
 function inlineBold(text: string): ReactNode {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((part, i) => {
@@ -317,9 +332,26 @@ export function PathwayLessonBody({
           );
         }
 
+        const trimmed = p.trim();
+        const callout = lessonCalloutFromParagraph(trimmed);
+        if (callout) {
+          return (
+            <aside
+              key={idx}
+              className={`nn-lesson-callout nn-lesson-callout--${callout.kind}`}
+              aria-label={callout.kind === "exam" ? "Exam tip" : "Clinical insight"}
+            >
+              <p className="nn-lesson-callout__label">{callout.kind === "exam" ? "Exam tip" : "Clinical insight"}</p>
+              <div className="nn-lesson-callout__body whitespace-pre-wrap">
+                {renderParagraphWithLinks(callout.body, lessonWikiBasePath, `para-${idx}-callout`)}
+              </div>
+            </aside>
+          );
+        }
+
         return (
           <p key={idx} className="whitespace-pre-wrap">
-            {renderParagraphWithLinks(p.trim(), lessonWikiBasePath, `para-${idx}`)}
+            {renderParagraphWithLinks(trimmed, lessonWikiBasePath, `para-${idx}`)}
           </p>
         );
       })}

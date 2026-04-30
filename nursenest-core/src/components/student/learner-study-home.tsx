@@ -202,7 +202,11 @@ export function LearnerStudyHome({
         includeStudyShortcuts
       />
 
-      <FocusTodayStrip pathwayId={preferredPathwayId} />
+      <FocusTodayStrip
+        pathwayId={preferredPathwayId}
+        weakTopicFallback={weakTopicTitles}
+        weakPracticeHref={withPathwayScopeHref("/app/questions?studyFilter=weak", preferredPathwayId)}
+      />
 
       {/* Continue + exam pacing (legacy: `continue_where_left_off` + exam context) */}
       <LearnerStudySurfaceSection

@@ -472,7 +472,7 @@ async function LearnerDashboardDeferredContent({
         </section>
 
         <section className="nn-dash-section">
-          <ReadinessLockedCard />
+          <ReadinessLockedCard t={t} />
           <BenchmarkLockedCard />
         </section>
 
