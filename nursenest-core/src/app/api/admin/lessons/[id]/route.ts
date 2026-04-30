@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 import { revalidateSurfacesForContentItemLesson } from "@/lib/admin/revalidate-content-item-lesson-surfaces";
-import { syncPublishedContentItemToPathwayLessons } from "@/lib/admin/sync-content-item-to-pathway-lesson";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { classifyContentItemLesson } from "@/lib/content-quality/classify-lesson";
 import { governContentItemLessonPublish } from "@/lib/content/editorial-publish-policy";
@@ -179,10 +178,6 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       ...(publishRequested ? { publishedAt: new Date() } : {}),
     },
   });
-
-  if ((lesson.status ?? "").toLowerCase() === "published") {
-    await syncPublishedContentItemToPathwayLessons(lesson);
-  }
 
   await revalidateSurfacesForContentItemLesson({
     lessonId: lesson.id,

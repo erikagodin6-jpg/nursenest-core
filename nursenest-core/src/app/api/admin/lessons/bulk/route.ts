@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 import { revalidateSurfacesForContentItemLesson } from "@/lib/admin/revalidate-content-item-lesson-surfaces";
-import { syncPublishedContentItemToPathwayLessons } from "@/lib/admin/sync-content-item-to-pathway-lesson";
 import { governContentItemLessonPublish, validateLessonForPublish } from "@/lib/content/publish-validation";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
@@ -101,10 +100,6 @@ export async function POST(req: Request) {
           ...(body.status === ContentStatus.PUBLISHED ? { publishedAt: new Date() } : {}),
         },
       });
-      const refreshed = await prisma.contentItem.findUnique({ where: { id: row.id } });
-      if (refreshed && (refreshed.status ?? "").toLowerCase() === "published") {
-        await syncPublishedContentItemToPathwayLessons(refreshed);
-      }
       await revalidateSurfacesForContentItemLesson({ lessonId: row.id, slug: row.slug });
       console.log("[REVALIDATE]", { slug: row.slug, contentItemId: row.id, source: "bulk_set_status" });
       if (body.status === ContentStatus.PUBLISHED) {

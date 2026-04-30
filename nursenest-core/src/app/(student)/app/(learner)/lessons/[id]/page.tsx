@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import Link from "next/link";
+import { permanentRedirect } from "next/navigation";
 import { ExamFamily, LearnerNoteScope, type TierCode } from "@prisma/client";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
@@ -11,6 +12,7 @@ import { logBlockedAccess, logEntitlementMismatch } from "@/lib/entitlements/ent
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { prisma } from "@/lib/db";
 import { pathwayLessonReadOmitArgs } from "@/lib/db/pathway-lesson-structural-column-runtime";
+import { pathwayLessonIdFromContentItemTags } from "@/lib/lessons/pathway-lesson-cms-link-tags";
 import { withDatabaseFallback } from "@/lib/db/safe-database";
 import { resolveAppSubscriberPathwayLessonForDetail } from "@/lib/lessons/app-subscriber-lesson-detail-resolve";
 import { visibleSectionsForLesson } from "@/lib/lessons/pathway-lesson-access";
@@ -90,7 +92,7 @@ import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
 
-/** Bust data cache after admin publishes/edits ContentItem lessons (see admin PATCH + revalidatePath). */
+/** Bust data cache after admin publishes pathway or ContentItem lessons (see admin PATCH + revalidatePath). */
 export const dynamic = "force-dynamic";
 
 function LessonBody({
@@ -231,27 +233,6 @@ async function LessonDetailPageInner({ params }: Props) {
       : null;
     const learnerPath = learnerPathRow?.learnerPath ?? null;
 
-    const contentLesson = await prisma.contentItem.findFirst({
-      where: { id, type: "lesson" },
-      select: { id: true },
-    });
-    if (contentLesson) {
-      const row = await prisma.contentItem.findFirst({
-        where: { AND: [{ id }, { type: "lesson" }, lessonAccessWhere(entitlement)] },
-        select: {
-          id: true,
-          title: true,
-          slug: true,
-          summary: true,
-          content: true,
-          bodySystem: true,
-          seoTitle: true,
-        },
-      });
-      if (!row) return { kind: "out_of_plan" as const };
-      return { kind: "content_ok" as const, row };
-    }
-
     const pathwayLessonReadOmit = await pathwayLessonReadOmitArgs();
     const pwRow = await prisma.pathwayLesson.findUnique({ ...pathwayLessonReadOmit, where: { id } });
     if (pwRow) {
@@ -268,6 +249,32 @@ async function LessonDetailPageInner({ params }: Props) {
         record: pathwayResolution.record,
         pathwayId: pathwayResolution.pathwayId,
       };
+    }
+
+    const contentLesson = await prisma.contentItem.findFirst({
+      where: { id, type: "lesson" },
+      select: { id: true },
+    });
+    if (contentLesson) {
+      const row = await prisma.contentItem.findFirst({
+        where: { AND: [{ id }, { type: "lesson" }, lessonAccessWhere(entitlement)] },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          summary: true,
+          content: true,
+          bodySystem: true,
+          seoTitle: true,
+          tags: true,
+        },
+      });
+      if (!row) return { kind: "out_of_plan" as const };
+      const linkedPathwayLessonId = pathwayLessonIdFromContentItemTags(row.tags);
+      if (linkedPathwayLessonId) {
+        permanentRedirect(`/app/lessons/${linkedPathwayLessonId}`);
+      }
+      return { kind: "content_ok" as const, row };
     }
 
     const legacyLesson = await getLegacyContentMapLessonById(id);
@@ -411,6 +418,12 @@ async function LessonDetailPageInner({ params }: Props) {
 
   if (resolvedLesson.kind === "pathway_ok") {
     const record = resolvedLesson.record;
+    safeServerLog("page_lesson_detail", "lesson_detail_source", {
+      source: "pathway_lesson",
+      pathwayLessonId: id,
+      pathwayId: resolvedLesson.pathwayId,
+      slug: record.slug,
+    });
     const displayTitle = resolvePublicLessonTitle({
       curatedTitle: record.title,
       generatedTitle: record.seoTitle,
@@ -929,6 +942,11 @@ async function LessonDetailPageInner({ params }: Props) {
   }
 
   const row = resolvedLesson.row;
+  safeServerLog("page_lesson_detail", "lesson_detail_source", {
+    source: "content_items",
+    contentItemId: row.id,
+    slug: row.slug,
+  });
   console.log("[PUBLIC FETCH] slug", row.slug, "contentItemId", row.id, "table", "content_items");
   const displayTitle = resolvePublicLessonTitle({
     curatedTitle: row.title,

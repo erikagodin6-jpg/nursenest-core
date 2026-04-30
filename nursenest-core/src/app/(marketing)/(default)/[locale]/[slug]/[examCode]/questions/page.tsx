@@ -202,7 +202,10 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
       categoryRowCount: hubAggregates.length,
       totalQuestionCount: totalQ,
       uncategorizedCount: unc,
-      normalizedCategoryUsageIds: hubAggregates.filter((a) => a.questionCount > 0).map((a) => a.id),
+      normalizedCategoryUsageIds: hubAggregates
+        .filter((a) => a.questionCount > 0)
+        .map((a) => a.id)
+        .join(","),
       fetchNote: "aggregates_hydrated",
     });
   }

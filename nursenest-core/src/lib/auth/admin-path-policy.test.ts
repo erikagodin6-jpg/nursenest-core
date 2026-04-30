@@ -97,3 +97,12 @@ test("support staff can GET /api/debug/db-env (Prisma env flags, no secrets)", (
   assert.equal(isPathAllowedForStaffTier("support", "/api/debug/db-env"), true);
   assert.equal(isPathAllowedForStaffTier("content", "/api/debug/db-env"), true);
 });
+
+test("support and content staff can access clinical nursing scenario admin surfaces", () => {
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/clinical-scenarios"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/clinical-scenarios/abc123"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/clinical-nursing-scenarios"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/clinical-nursing-scenarios/abc/publish-status"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/admin/clinical-scenarios"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/api/admin/clinical-nursing-scenarios"), true);
+});

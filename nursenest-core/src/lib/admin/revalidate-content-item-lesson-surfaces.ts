@@ -1,9 +1,10 @@
 import "server-only";
 
-import { revalidatePath } from "next/cache";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
+import { revalidatePath, revalidateTag } from "next/cache";
+import { cacheTagPathwayLessonsHub } from "@/lib/cache/cache-tags";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { prisma } from "@/lib/db";
+import { marketingPathwayLessonDetailPath, marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 
 /**
  * After admin mutates a `ContentItem` lesson, drop Next.js full-route cache for learner + admin surfaces,
@@ -31,9 +32,19 @@ export async function revalidateSurfacesForContentItemLesson(args: {
     take: 50,
   });
   for (const r of rows) {
+    revalidateTag(cacheTagPathwayLessonsHub(r.pathwayId));
+    revalidateTag(`pathway-lesson:${r.pathwayId}:${r.slug.trim()}`);
     const pathway = getExamPathwayById(r.pathwayId);
     if (!pathway) continue;
-    revalidatePath(buildExamPathwayPath(pathway, `lessons/${r.slug}`));
-    revalidatePath(buildExamPathwayPath(pathway, "lessons"));
+    const detail = marketingPathwayLessonDetailPath(pathway, r.slug);
+    const index = marketingPathwayLessonsIndexPath(pathway);
+    if (detail) {
+      revalidatePath(detail);
+      revalidatePath(detail, "layout");
+    }
+    if (index) {
+      revalidatePath(index);
+      revalidatePath(index, "layout");
+    }
   }
 }

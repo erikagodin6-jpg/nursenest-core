@@ -3,7 +3,7 @@ import { describe, it } from "node:test";
 import {
   buildSkeletonPracticeHubAggregates,
   hydratePracticeHubAggregatesFromGroupByRows,
-} from "@/lib/questions/pathway-practice-body-system-aggregates";
+} from "@/lib/questions/pathway-practice-hub-inventory";
 
 describe("pathway-practice-body-system-aggregates", () => {
   it("returns a full skeleton including pharmacology and leadership_prioritization at zero", () => {

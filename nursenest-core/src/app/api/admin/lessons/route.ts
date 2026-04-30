@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidateSurfacesForContentItemLesson } from "@/lib/admin/revalidate-content-item-lesson-surfaces";
-import { syncPublishedContentItemToPathwayLessons } from "@/lib/admin/sync-content-item-to-pathway-lesson";
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 import {
@@ -245,10 +244,6 @@ export async function POST(req: Request) {
       ...(publishNow ? { publishedAt: new Date() } : {}),
     },
   });
-
-  if ((lesson.status ?? "").toLowerCase() === "published") {
-    await syncPublishedContentItemToPathwayLessons(lesson);
-  }
 
   await revalidateSurfacesForContentItemLesson({ lessonId: lesson.id, slug: lesson.slug });
   console.log("[REVALIDATE]", { slug: lesson.slug, contentItemId: lesson.id, source: "admin_lessons_post" });

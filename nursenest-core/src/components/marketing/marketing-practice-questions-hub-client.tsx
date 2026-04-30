@@ -81,7 +81,8 @@ function appQuestionsSession(pathwayId: string, qs: Record<string, string>) {
 function catBasisFromStudyFilter(sf: PracticeSessionStudyFilter): PracticeAdaptiveSelectionBasis {
   if (sf === "weak") return "weak";
   if (sf === "incorrect") return "missed";
-  if (sf === "unseen") return "unseen";
+  /** CAT API has no `unseen` basis; `studyLaunchPayload` carries unseen intent. */
+  if (sf === "unseen") return "random";
   if (sf === "bookmarked") return "starred";
   return "random";
 }

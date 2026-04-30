@@ -27,7 +27,8 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
         : null;
 
   const staff = await getStaffSession();
-  const includeDrafts = Boolean(staff) || !isClinicalScenariosPubliclyEnabled();
+  /** Drafts never ship to subscribers; staff preview only (layout already blocks non-staff when flag is off). */
+  const includeDrafts = Boolean(staff);
 
   if (pathwayId) {
     const catalog = await listClinicalNursingScenariosForLearnerCatalog({
@@ -74,7 +75,11 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
             {catalog.map((c) => (
               <li key={c.id}>
                 <Link
-                  href={`${withScenarioPathwayQuery(SCENARIO_LEARNER_ROUTES.clinicalScenarios, pathwayId)}&scenarioId=${encodeURIComponent(c.id)}`}
+                  href={(() => {
+                    const base = withScenarioPathwayQuery(SCENARIO_LEARNER_ROUTES.clinicalScenarios, pathwayId);
+                    const join = base.includes("?") ? "&" : "?";
+                    return `${base}${join}scenarioId=${encodeURIComponent(c.id)}`;
+                  })()}
                   className="block rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] px-3 py-2 text-sm font-medium text-[var(--semantic-text-primary)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))]"
                 >
                   {c.title}{" "}

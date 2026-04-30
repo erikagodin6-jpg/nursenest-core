@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   buildLearnerPrimaryNavItems,
+  buildOptionalClinicalScenariosShellNavItem,
   buildOptionalOsceScenarioShellNavItems,
   buildOptionalStudyToolsShellNavItem,
   CANONICAL_LEARNER_ROUTES,
@@ -44,14 +45,24 @@ test("buildOptionalStudyToolsShellNavItem: hidden unless NEXT_PUBLIC_ENABLE_STUD
   assert.equal(row!.matchPrefix, "/app/study-tools");
 });
 
-test("buildOptionalOsceScenarioShellNavItems: hidden unless NEXT_PUBLIC_ENABLE_OSCE_SCENARIOS=true", (t) => {
+test("buildOptionalOsceScenarioShellNavItems: OSCE row hidden unless NEXT_PUBLIC_ENABLE_OSCE_SCENARIOS=true", (t) => {
   t.afterEach(() => {
     delete process.env.NEXT_PUBLIC_ENABLE_OSCE_SCENARIOS;
   });
   assert.equal(buildOptionalOsceScenarioShellNavItems("us-rn-nclex-rn").length, 0);
   process.env.NEXT_PUBLIC_ENABLE_OSCE_SCENARIOS = "true";
   const rows = buildOptionalOsceScenarioShellNavItems("us-rn-nclex-rn");
-  assert.equal(rows.length, 2);
+  assert.equal(rows.length, 1);
   assert.equal(rows[0]!.href, "/app/osce?pathwayId=us-rn-nclex-rn");
-  assert.equal(rows[1]!.href, "/app/clinical-scenarios?pathwayId=us-rn-nclex-rn");
+});
+
+test("buildOptionalClinicalScenariosShellNavItem: hidden unless NEXT_PUBLIC_ENABLE_CLINICAL_SCENARIOS=true", (t) => {
+  t.afterEach(() => {
+    delete process.env.NEXT_PUBLIC_ENABLE_CLINICAL_SCENARIOS;
+  });
+  assert.equal(buildOptionalClinicalScenariosShellNavItem("us-rn-nclex-rn"), null);
+  process.env.NEXT_PUBLIC_ENABLE_CLINICAL_SCENARIOS = "true";
+  const row = buildOptionalClinicalScenariosShellNavItem("us-rn-nclex-rn");
+  assert.ok(row);
+  assert.equal(row!.href, "/app/clinical-scenarios?pathwayId=us-rn-nclex-rn");
 });
