@@ -98,8 +98,8 @@ describe("pathway-lesson-premium", () => {
     );
     assert.equal(
       lessonQualifiesForPremiumNormalization([
-        { id: "i", heading: "I", kind: "introduction", body: `${fillerWords(50)}` },
-        { id: "p", heading: "P", kind: "pathophysiology_overview", body: `${fillerWords(50)}` },
+        { id: "i", heading: "I", kind: "introduction", body: "x".repeat(30) },
+        { id: "p", heading: "P", kind: "pathophysiology_overview", body: "y".repeat(30) },
       ]),
       false,
     );
@@ -127,14 +127,14 @@ describe("pathway-lesson-premium", () => {
     );
   });
 
-  it("lessonQualifiesForPremiumNormalization: substantive legacy five-block alone does not qualify", () => {
+  it("lessonQualifiesForPremiumNormalization: substantive legacy five-block qualifies (authoritative sole source)", () => {
     assert.equal(
       lessonQualifiesForPremiumNormalization([
         { id: "1", heading: "H", kind: "clinical_meaning", body: `${fillerWords(50)}` },
         { id: "2", heading: "H", kind: "exam_relevance", body: `${fillerWords(50)}` },
         { id: "3", heading: "H", kind: "core_concept", body: `${fillerWords(50)}` },
       ]),
-      false,
+      true,
     );
   });
 

@@ -109,6 +109,8 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { createPathwayLessonDetailTiming } from "@/lib/observability/pathway-lesson-detail-dev-timing";
 import { PathwayLessonThinStudyExpansion } from "@/components/lessons/pathway-lesson-thin-study-expansion";
 import { MarketingPathwayLessonRenderTrace } from "@/components/dev/marketing-pathway-lesson-render-trace";
+import { countTotalWordsInLessonSections } from "@/lib/lessons/pathway-lesson-premium";
+import { assertPathwayLessonNoLegacyFallbackWithSubstantiveIncoming } from "@/lib/lessons/pathway-lesson-render-invariants";
 import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
 
 /**
@@ -176,38 +178,6 @@ export async function PathwayLessonDetailPageBody({
   const loadedLesson =
     lessonResult.status === "fulfilled" ? lessonResult.value : undefined;
   const lessonLoadFailed = lessonResult.status === "rejected";
-  const sectionsForLog = loadedLesson?.sections ?? [];
-  const firstSectionBody =
-    typeof sectionsForLog[0]?.body === "string" ? sectionsForLog[0].body.replace(/\s+/g, " ").trim() : "";
-  const firstSectionWordCount = firstSectionBody
-    ? countWords(stripToPlainText(sectionsForLog[0]!.body as string))
-    : 0;
-  console.info("[PUBLIC_LESSON_RENDER]", {
-    pathname: pathname.slice(0, 240),
-    pathwayId: pathway.id,
-    lessonSlug: lessonSlug.slice(0, 240),
-    lessonContentLocale,
-    titlePreview: loadedLesson?.title?.slice(0, 120) ?? null,
-    catalogEnglishNarrative: Boolean(loadedLesson?.localeMeta?.isCatalogEnglishSource),
-    usedLocaleFallback: Boolean(loadedLesson?.localeMeta?.usedLocaleFallback),
-    loaded: Boolean(loadedLesson),
-    sectionsCount: sectionsForLog.length,
-    firstSectionKind: sectionsForLog[0]?.kind ?? null,
-    firstSectionWordCount,
-    firstSectionBodyPreview: firstSectionBody.slice(0, 200),
-    structuralPublicComplete: loadedLesson?.structuralQuality?.publicComplete ?? null,
-  });
-
-  const nt = loadedLesson?.normalizeTrace;
-  console.info("[LESSON_RENDER_DECISION]", {
-    slug: lessonSlug.slice(0, 240),
-    pathwayId: pathway.id,
-    sectionsCount: sectionsForLog.length,
-    wordCount: nt?.totalWordCount ?? null,
-    isPremium: nt?.usedPremiumPath ?? null,
-    usedFallback: nt?.usedLegacyFiveBlockExpander ?? null,
-    meaningfulClinicalBypass: nt?.meaningfulClinicalBypass ?? null,
-  });
 
   if (lessonResult.status === "rejected") {
     rethrowNextNavigationControlFlow(lessonResult.reason);
@@ -287,6 +257,16 @@ export async function PathwayLessonDetailPageBody({
   }
 
   const { lesson, fullAccess, scope, entitlementError } = routeResolution;
+  assertPathwayLessonNoLegacyFallbackWithSubstantiveIncoming({
+    lesson,
+    staffSession: staffFullLessonAccess,
+  });
+  console.info("[LESSON_RENDER]", {
+    slug: lesson.slug.slice(0, 240),
+    sectionsCount: lesson.sections.length,
+    wordCount: countTotalWordsInLessonSections(lesson.sections),
+    usedFallback: Boolean(lesson.normalizeTrace?.usedLegacyFiveBlockExpander),
+  });
   const examName = pathwayRegionAwareExamName(pathway);
   const bankEntitlement: AccessScope | null =
     entitlement !== "error"
@@ -701,7 +681,9 @@ export async function PathwayLessonDetailPageBody({
                   );
                 })}
               </article>
-              {fullAccess && lessonQuality.tier === "thin" ? (
+              {fullAccess &&
+              lessonQuality.tier === "thin" &&
+              lesson.normalizeTrace?.usedLegacyFiveBlockExpander ? (
                 <PathwayLessonThinStudyExpansion lesson={previewLesson} />
               ) : null}
             </div>

@@ -108,6 +108,24 @@ export function lessonSectionsHaveMeaningfulClinicalContent(sections: PathwayLes
   return list.some((s) => clinical.test(sectionCorpusForClinicalKeyword(s)));
 }
 
+/**
+ * True when incoming `sections[]` already carry non-trivial authored copy — the legacy five-block
+ * synthesizer must not replace or pad them (PathwayLesson.sections remain the sole render source).
+ *
+ * Looser than {@link lessonSectionsHaveMeaningfulClinicalContent} (no clinical-keyword / 3-section floor)
+ * so multi-section catalog lessons (e.g. AFib rate control) still route through the premium normalization path.
+ */
+export function lessonSectionsQualifyAsAuthoritativeSoleSource(sections: PathwayLessonSection[] | undefined): boolean {
+  const list = sections ?? [];
+  if (list.length === 0) return false;
+  const words = countTotalWordsInLessonSections(list);
+  if (words >= 50) return true;
+  return list.some((s) => {
+    const plain = stripToPlainText(typeof s.body === "string" ? s.body : "").replace(/\s+/g, " ").trim();
+    return plain.length >= 48;
+  });
+}
+
 /** Legacy five-block and pre-normalization archetypes — never count toward premium-normalization spine depth. */
 const LEGACY_SPINE_KINDS_FOR_PREMIUM_QUALIFIER = new Set<string>([
   "clinical_meaning",
@@ -212,11 +230,13 @@ export function lessonQualifiesForPremiumStructuralGate(sections: PathwayLessonS
  * instead of the legacy five-block expander in `pathway-lesson-catalog-sync.ts`.
  *
  * True when {@link lessonSectionsHaveMeaningfulClinicalContent} **or**
- * {@link lessonQualifiesForPremiumStructuralGate}.
+ * {@link lessonQualifiesForPremiumStructuralGate} **or**
+ * {@link lessonSectionsQualifyAsAuthoritativeSoleSource}.
  */
 export function lessonQualifiesForPremiumNormalization(sections: PathwayLessonSection[] | undefined): boolean {
   if (lessonSectionsHaveMeaningfulClinicalContent(sections)) return true;
-  return lessonQualifiesForPremiumStructuralGate(sections);
+  if (lessonQualifiesForPremiumStructuralGate(sections)) return true;
+  return lessonSectionsQualifyAsAuthoritativeSoleSource(sections);
 }
 
 /** Explicit N/A marker for optional sections (no filler prose). */
@@ -394,7 +414,9 @@ export function validatePathwayLessonLegacyStructural(lesson: PathwayLessonRecor
 
   const introLike = lesson.sections.find((s) => s.kind === "clinical_meaning");
   if (introLike && paragraphCount(introLike.body) < 2) {
-    warnings.push('First section ("What this means clinically") reads as one block; add a blank line for a second paragraph when you expand.');
+    warnings.push(
+      'First legacy `clinical_meaning` section reads as one block; add a blank line for a second paragraph when you expand.',
+    );
   }
 
   const strictLegacy = process.env.PATHWAY_LESSON_STRICT_LEGACY === "1";

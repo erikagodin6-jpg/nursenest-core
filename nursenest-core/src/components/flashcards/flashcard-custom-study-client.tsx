@@ -32,6 +32,9 @@ type ApiCard = {
   examMicroQuestion?: ExamMicroQuestionPayload;
   lessonHref?: string;
   lessonTitle?: string;
+  /** Same as {@link lessonHref} when serialized from `serializeFlashcardForCustomSession` cross-link. */
+  lessonStudyHref?: string;
+  lessonStudyTitle?: string;
   lessonSlug?: string;
 };
 
@@ -68,6 +71,7 @@ export function FlashcardCustomStudyClient() {
     const topicSlug =
       q.get("topic")?.trim().toLowerCase() || q.get("topicCode")?.trim().toLowerCase() || "";
     if (topicSlug) out.set("topic", topicSlug);
+    if (q.get("weakOnly") === "1") out.set("weakOnly", "1");
     return `/app/flashcards?${out.toString()}`;
   }, [searchParamString]);
 
@@ -140,22 +144,26 @@ export function FlashcardCustomStudyClient() {
 
   const activeCards: ActiveStudyCard[] = useMemo(
     () =>
-      cards.map((c) => ({
-        id: c.id,
-        prompt: c.front,
-        answer: c.back,
-        explanation: c.explanation,
-        examMicroQuestion: c.examMicroQuestion,
-        topic: c.topic,
-        subtopic: c.subtopic,
-        sourceKey: c.sourceKey,
-        pathwayId: c.pathwayId,
-        topicSlug: c.subtopic,
-        lessonHref: c.lessonHref?.trim() ? c.lessonHref : null,
-        lessonTitle: c.lessonTitle,
-        practiceTopicHref,
-        practiceTestsTopicHref,
-      })),
+      cards.map((c) => {
+        const href = c.lessonHref?.trim() || c.lessonStudyHref?.trim() || null;
+        const title = c.lessonTitle?.trim() || c.lessonStudyTitle?.trim() || null;
+        return {
+          id: c.id,
+          prompt: c.front,
+          answer: c.back,
+          explanation: c.explanation,
+          examMicroQuestion: c.examMicroQuestion,
+          topic: c.topic,
+          subtopic: c.subtopic,
+          sourceKey: c.sourceKey,
+          pathwayId: c.pathwayId,
+          topicSlug: c.subtopic,
+          lessonHref: href,
+          lessonTitle: title,
+          practiceTopicHref,
+          practiceTestsTopicHref,
+        };
+      }),
     [cards, practiceTopicHref, practiceTestsTopicHref],
   );
 

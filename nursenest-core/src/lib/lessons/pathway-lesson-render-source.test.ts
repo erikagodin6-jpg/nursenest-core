@@ -114,6 +114,29 @@ describe("pathway lesson live render source (PathwayLesson.sections)", () => {
     assert.ok(n.normalizeTrace.incomingSectionCount > 3, `expected >3 sections, got ${n.normalizeTrace.incomingSectionCount}`);
   });
 
+  it("two premium-shaped sections with many words but no clinical-keyword gate still skip legacy expander", () => {
+    const raw = {
+      slug: "fixture-authoritative-no-keyword",
+      title: "Fixture lesson",
+      topic: "Cardiac",
+      topicSlug: "cardiac",
+      bodySystem: "cardiovascular",
+      previewSectionCount: 1,
+      seoTitle: "Fixture SEO title for authoritative sole-source normalization test",
+      seoDescription:
+        "Fixture seo description with enough words to satisfy catalog description floors for normalization pathway.",
+      sections: [
+        { id: "1", heading: "Block A", kind: "introduction", body: filler(120) },
+        { id: "2", heading: "Block B", kind: "pathophysiology_overview", body: filler(120) },
+      ],
+    };
+    const n = normalizeLesson(raw as Parameters<typeof normalizeLesson>[0], "us-rn-nclex-rn");
+    assert.equal(n.normalizeTrace?.usedLegacyFiveBlockExpander, false);
+    const blob = n.sections.map((s) => `${s.heading}\n${s.body}`).join("\n");
+    assert.ok(!blob.includes("What this means clinically"), "must not inject legacy scaffold heading");
+    assert.ok(!blob.includes("Why this appears on exams"), "must not inject legacy exam scaffold heading");
+  });
+
   it("real multi-section lesson with diagnosis keyword never runs legacy scaffold (no What this means clinically)", () => {
     const a = `${filler(160)} diagnosis and stabilization priorities. ${filler(160)}`;
     const b = filler(170);

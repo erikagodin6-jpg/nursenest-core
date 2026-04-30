@@ -8,6 +8,7 @@ import Link from "next/link";
 import { permanentRedirect } from "next/navigation";
 import { ExamFamily, LearnerNoteScope, type TierCode } from "@prisma/client";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { getStaffSession } from "@/lib/auth/staff-session";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { PremiumLessonShell } from "@/components/student/premium-lesson-shell";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
@@ -35,6 +36,8 @@ import { learnerPathwayLessonBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { LegacyMonolithLessonBody } from "@/components/lessons/legacy-monolith-lesson-body";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
 import { classifyContentItemLesson, classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
+import { countTotalWordsInLessonSections } from "@/lib/lessons/pathway-lesson-premium";
+import { assertPathwayLessonNoLegacyFallbackWithSubstantiveIncoming } from "@/lib/lessons/pathway-lesson-render-invariants";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { LessonContinueStudyNextBlock } from "@/components/student/lesson-continue-study-next-block";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -425,30 +428,22 @@ async function LessonDetailPageInner({ params }: Props) {
 
   if (resolvedLesson.kind === "pathway_ok") {
     const record = resolvedLesson.record;
+    const staffSession = Boolean(await getStaffSession());
     safeServerLog("page_lesson_detail", "lesson_detail_source", {
       source: "pathway_lesson",
       pathwayLessonId: id,
       pathwayId: resolvedLesson.pathwayId,
       slug: record.slug,
     });
-    console.info("[PUBLIC_LESSON_RENDER]", {
-      surface: "app_lessons_detail",
-      pathwayLessonId: id,
-      pathwayId: resolvedLesson.pathwayId,
-      slug: record.slug,
-      titlePreview: record.title?.slice(0, 120) ?? null,
-      dataSource: "pathway_lesson_prisma_then_getPublishedPathwayLessonRecordById_or_getPathwayLesson",
-      catalogOverlay: Boolean(record.localeMeta?.isCatalogEnglishSource),
+    assertPathwayLessonNoLegacyFallbackWithSubstantiveIncoming({
+      lesson: record,
+      staffSession,
     });
-    const nt = record.normalizeTrace;
-    console.info("[LESSON_RENDER_DECISION]", {
-      slug: record.slug,
-      pathwayId: resolvedLesson.pathwayId,
+    console.info("[LESSON_RENDER]", {
+      slug: record.slug.slice(0, 240),
       sectionsCount: record.sections?.length ?? 0,
-      wordCount: nt?.totalWordCount ?? null,
-      isPremium: nt?.usedPremiumPath ?? null,
-      usedFallback: nt?.usedLegacyFiveBlockExpander ?? null,
-      meaningfulClinicalBypass: nt?.meaningfulClinicalBypass ?? null,
+      wordCount: countTotalWordsInLessonSections(record.sections),
+      usedFallback: Boolean(record.normalizeTrace?.usedLegacyFiveBlockExpander),
     });
     const displayTitle = resolvePublicLessonTitle({
       curatedTitle: record.title,

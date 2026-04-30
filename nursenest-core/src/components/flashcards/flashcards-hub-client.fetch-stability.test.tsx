@@ -6,7 +6,7 @@ import React from "react";
 
 // tsx + tsconfig `jsx: "preserve"` leaves classic JSX runtime; child modules expect `React` in scope.
 (globalThis as unknown as { React?: typeof React }).React = React;
-import { cleanup, render, waitFor } from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import { MarketingI18nProvider } from "@/components/i18n/marketing-i18n-provider";
 import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-client";
 import type { FlashcardLessonVirtualDiagnostics } from "@/lib/flashcards/flashcard-custom-session-response";
@@ -223,6 +223,66 @@ describe("FlashcardsHubClient", () => {
 
     await new Promise((r) => setTimeout(r, 800));
     assert.equal(fetchCount, 0, "initialHub with virtual diagnostics must skip duplicate inventory fetch");
+
+    globalThis.fetch = origFetch;
+  });
+
+  it("initialWeakOnly pre-checks the weak filter (URL deep link parity)", async () => {
+    const origFetch = globalThis.fetch;
+    globalThis.fetch = async (...args: Parameters<typeof fetch>) => {
+      const url = String(args[0]);
+      if (url.includes("/api/flashcards/custom-session")) {
+        return new Response(
+          JSON.stringify({
+            ok: true,
+            summary: {
+              pathwayId: "ca-rn-nclex-rn",
+              selectedCategories: [],
+              matchingCards: 3,
+              returnedCards: 0,
+              mode: "mixed",
+              shuffle: true,
+              weakOnly: true,
+              incorrectOnly: false,
+              starredOnly: false,
+              savedOnly: false,
+              notesOnly: false,
+              revisitOnly: false,
+              notStudiedOnly: false,
+              recentStudiedOnly: false,
+              recentDays: 7,
+              sourceKind: "all",
+              cardLimit: "20",
+              queryRelaxation: "none",
+              sessionShuffleSalt: "weak-init-test",
+            },
+            categoryOptions: [{ id: "respiratory", title: "Respiratory", count: 3 }],
+          }),
+          { status: 200, headers: { "Content-Type": "application/json" } },
+        );
+      }
+      return origFetch(...args);
+    };
+
+    render(
+      <MarketingI18nProvider locale="en" messages={hubMessages}>
+        <FlashcardsHubClient
+          scopedPathwayId="ca-rn-nclex-rn"
+          pathwayDisplayName="Canada RN (NCLEX-RN)"
+          initialHub={{
+            categoryOptions: [{ id: "respiratory", title: "Respiratory", count: 3 }],
+            matchingTotal: 3,
+            lessonVirtualDiagnostics: null,
+          }}
+          initialWeakOnly
+        />
+      </MarketingI18nProvider>,
+    );
+
+    await waitFor(() => {
+      const weak = screen.getByRole("checkbox", { name: /weak areas only/i }) as HTMLInputElement;
+      assert.equal(weak.checked, true);
+    });
 
     globalThis.fetch = origFetch;
   });

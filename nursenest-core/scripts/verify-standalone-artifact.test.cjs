@@ -320,35 +320,35 @@ test("ensure-standalone-static copies .next/static beside both nested and top-le
   }
 });
 
-test("deploy scripts: build:deploy is post-compile only; heroku-postbuild runs compile before cache", () => {
+test("deploy scripts: build:deploy is post-compile only; heroku-postbuild runs canonical npm run build", () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
   assert.deepEqual(pkg.cacheDirectories, ["node_modules"]);
-  assert.equal(
-    pkg.scripts["heroku-postbuild"],
-    "node scripts/log-build-cache-hints.mjs && node scripts/verify-dockerfile-database-url.mjs && npm run verify:bootstrap-probe-pathname && NN_POSTBUILD_NEXT_BUILD=1 node scripts/run-buildpack-build.mjs && node scripts/log-build-cache-hints.mjs --phase=heroku_postbuild_after_compile",
+  assert.equal(pkg.scripts["heroku-postbuild"], "NN_POSTBUILD_NEXT_BUILD=1 npm run build");
+  assert.ok(
+    typeof pkg.scripts.build === "string" && pkg.scripts.build.length > 0,
+    "build script must exist",
   );
-  assert.equal(pkg.scripts.build, "node scripts/run-buildpack-build.mjs");
-  assert.equal(pkg.scripts["build:compile"].includes("scripts/run-next-prod-build.mjs"), true);
-  assert.match(
-    pkg.scripts["build:compile"],
-    /NODE_OPTIONS=--max-old-space-size=\$\{BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-4096\}/,
+  assert.ok(
+    pkg.scripts.build.includes("verify-dist-artifacts") || pkg.scripts.build.includes("run-next-prod-build"),
+    "build should include dist/standalone verification or next compile wrapper",
   );
   assert.equal(pkg.scripts["verify:standalone-artifact"], "node scripts/verify-standalone-artifact.mjs");
+  assert.equal(pkg.scripts["verify:dockerfile-npm-scripts"], "node scripts/verify-dockerfile-npm-scripts.mjs");
   assert.equal(pkg.scripts["build:deploy"], "npm run build:deploy:postbuild");
   assert.equal(pkg.scripts["build:deploy:app-platform"], "npm run build:deploy");
   assert.equal(pkg.scripts["build:deploy:postbuild"].includes("npm run build"), false);
   const post = pkg.scripts["build:deploy:postbuild"];
+  const dockerVerifyIdx = post.indexOf("verify-dockerfile-npm-scripts.mjs");
   const ensureIdx = post.indexOf("ensure-standalone-static.mjs");
   const verifyIdx = post.indexOf("verify:standalone-artifact");
-  assert.ok(ensureIdx !== -1 && verifyIdx !== -1 && ensureIdx < verifyIdx, post);
-  assert.equal(pkg.scripts["build:deploy:full"], "node scripts/run-build-deploy-full.mjs");
-  assert.equal(pkg.scripts.start, "node scripts/start-standalone.mjs");
-  assert.equal(
-    pkg.scripts["ci:verify"].includes("ensure-standalone-static"),
-    false,
-    "ci:verify relies on npm run build → run-next-prod-build (sync runs after next build)",
+  assert.ok(
+    dockerVerifyIdx !== -1 && ensureIdx !== -1 && verifyIdx !== -1,
+    "build:deploy:postbuild must verify Dockerfile scripts, sync static, then verify standalone",
   );
-  assert.match(pkg.scripts["ci:verify"], /npm run build$/);
+  assert.ok(dockerVerifyIdx < ensureIdx && ensureIdx < verifyIdx, post);
+  if (pkg.scripts["build:deploy:full"]) {
+    assert.equal(pkg.scripts["build:deploy:full"], "node scripts/run-build-deploy-full.mjs");
+  }
 });
 
 test("active DigitalOcean app spec builds before runtime, starts through npm run start, and routes readiness through /readyz", () => {

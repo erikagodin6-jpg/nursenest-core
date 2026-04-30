@@ -4,7 +4,7 @@
  * Catalog-backed and still heavy enough to keep out of shared layouts, homepage chrome, and nav/header paths.
  *
  * **Expander choice:** `normalizeLesson` uses `lessonQualifiesForPremiumNormalization` (meaningful clinical
- * prose **or** premium structural spine). **Publish / `structuralPublicComplete`:** use
+ * prose, premium structural spine, **or** authoritative incoming section copy). **Publish / `structuralPublicComplete`:** use
  * `evaluatePathwayLessonStructuralGate` in `pathway-lesson-premium.ts` — structural gate only, not the
  * meaningful-content bypass.
  */
@@ -18,6 +18,7 @@ import {
   evaluatePathwayLessonStructuralGate,
   lessonQualifiesForPremiumNormalization,
   lessonSectionsHaveMeaningfulClinicalContent,
+  lessonSectionsQualifyAsAuthoritativeSoleSource,
   orderPremiumSections,
   PREMIUM_SECTION_KINDS,
   validatePathwayLessonPremium,
@@ -898,10 +899,15 @@ function mergeLessonAudienceMetadata(
 function expandToStandardFiveSections(sections: PathwayLessonSection[]): PathwayLessonSection[] {
   const cleaned = sanitizeIncomingSections(sections);
 
-  if (lessonSectionsHaveMeaningfulClinicalContent(cleaned)) {
-    if (process.env.NODE_ENV === "development") {
+  const mustPreserveIncoming =
+    lessonSectionsHaveMeaningfulClinicalContent(cleaned) ||
+    lessonSectionsQualifyAsAuthoritativeSoleSource(cleaned);
+  if (mustPreserveIncoming) {
+    const strict =
+      process.env.NODE_ENV === "development" || process.env.NN_PATHWAY_LESSON_RENDER_ASSERT === "1";
+    if (strict) {
       throw new Error(
-        "[pathway-lesson] expandToStandardFiveSections: blocked — sections already have meaningful clinical content; use the premium normalization path.",
+        "[pathway-lesson] expandToStandardFiveSections: blocked — incoming sections are authoritative; use the premium normalization path (PathwayLesson.sections only).",
       );
     }
     return cleaned;
@@ -937,7 +943,7 @@ function expandToStandardFiveSections(sections: PathwayLessonSection[]): Pathway
     (byKind.clinical_pearls
       ? {
           id: `${byKind.clinical_pearls.id}-takeaways`,
-          heading: "Key takeaways",
+          heading: "Summary",
           kind: "takeaways" as const,
           body: byKind.clinical_pearls.body ?? "",
           ...(byKind.clinical_pearls.figures ? { figures: byKind.clinical_pearls.figures } : {}),
@@ -947,17 +953,10 @@ function expandToStandardFiveSections(sections: PathwayLessonSection[]): Pathway
   const examBody = (exam?.body ?? "").trim();
   const sentences = examBody.split(/(?<=[.!?])\s+/).filter(Boolean);
   const examRelevanceBody =
-    sentences.length > 1
-      ? sentences.slice(0, Math.min(2, sentences.length)).join(" ")
-      : examBody.length > 0
-        ? `${examBody} Boards reward judgment, pacing, and elimination over memorizing isolated facts.`
-        : "Examiners use these topics to test whether you can prioritize, sequence safely, and justify your next action.";
+    sentences.length > 1 ? sentences.slice(0, Math.min(2, sentences.length)).join(" ") : examBody;
 
   const takeawaysBody =
-    explicitTakeaways?.body?.trim() ||
-    (sentences.length > 2
-      ? sentences.slice(2).join(" ")
-      : "Before your next question block, restate one rule you will not violate on prioritization or scope.");
+    explicitTakeaways?.body?.trim() || (sentences.length > 2 ? sentences.slice(2).join(" ") : "");
 
   const figClinical = mergeFigures(intro?.figures);
   const figExam = mergeFigures(exam?.figures);
@@ -968,41 +967,35 @@ function expandToStandardFiveSections(sections: PathwayLessonSection[]): Pathway
   return [
     {
       id: "clinical_meaning",
-      heading: "What this means clinically",
+      heading: "Clinical overview",
       kind: "clinical_meaning",
-      body:
-        intro?.body?.trim() ||
-        "Read the stem as a safety and prioritization problem first, then match your action to the risk you can justify.",
+      body: intro?.body?.trim() || "",
       ...(figClinical ? { figures: figClinical } : {}),
     },
     {
       id: "exam_relevance",
-      heading: "Why this appears on exams",
+      heading: "Exam application",
       kind: "exam_relevance",
       body: examRelevanceBody,
       ...(figExam ? { figures: figExam } : {}),
     },
     {
       id: "core_concept",
-      heading: "Core concept explanation",
+      heading: "Mechanisms and management",
       kind: "core_concept",
-      body:
-        core?.body?.trim() ||
-        "Anchor pathophysiology to assessment findings, then tie interventions to monitoring and escalation rules.",
+      body: core?.body?.trim() || "",
       ...(figCore ? { figures: figCore } : {}),
     },
     {
       id: "clinical_scenario",
-      heading: "Clinical scenario example",
+      heading: "Clinical vignette",
       kind: "clinical_scenario",
-      body:
-        clinical?.body?.trim() ||
-        "Picture one client whose data forces a fork: stable monitoring versus urgent escalation. Choose the branch the stem supports.",
+      body: clinical?.body?.trim() || "",
       ...(figScenario ? { figures: figScenario } : {}),
     },
     {
       id: "takeaways",
-      heading: "Key takeaways",
+      heading: "Summary",
       kind: "takeaways",
       body: takeawaysBody,
       ...(figTakeaways ? { figures: figTakeaways } : {}),
@@ -1010,21 +1003,8 @@ function expandToStandardFiveSections(sections: PathwayLessonSection[]): Pathway
   ];
 }
 
-function defaultBodyFor(kind: PathwayLessonSectionKind): string {
-  switch (kind) {
-    case "clinical_meaning":
-      return "Read the stem as a safety and prioritization problem first, then match your action to the risk you can justify.";
-    case "exam_relevance":
-      return "Examiners use these topics to test whether you can prioritize, sequence safely, and justify your next action.";
-    case "core_concept":
-      return "Anchor pathophysiology to assessment findings, then tie interventions to monitoring and escalation rules.";
-    case "clinical_scenario":
-      return "Picture one client whose data forces a fork: stable monitoring versus urgent escalation. Choose the branch the stem supports.";
-    case "takeaways":
-      return "Before your next question block, restate one rule you will not violate on prioritization or scope.";
-    default:
-      return "";
-  }
+function defaultBodyFor(_kind: PathwayLessonSectionKind): string {
+  return "";
 }
 function isNursingCoreRuntimeExam(exam: PathwayLessonRuntimeExam): boolean {
   return exam === "NCLEX" || exam === "NCLEX_RN" || exam === "NCLEX_PN";
@@ -1355,14 +1335,11 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
   const usedFallback = !usePremium;
 
   if (process.env.PATHWAY_LESSON_RENDER_DECISION === "1") {
-    safeServerLog("pathway_lesson", "[LESSON_RENDER_DECISION]", {
+    safeServerLog("pathway_lesson", "[LESSON_RENDER]", {
       slug: (typeof raw.slug === "string" ? raw.slug : "").slice(0, 240),
-      pathwayId: (pathwayId ?? "").slice(0, 120),
       sectionsCount: incoming.length,
       wordCount: incomingWordCount,
-      isPremium: isPremiumPath ? "true" : "false",
       usedFallback: usedFallback ? "true" : "false",
-      meaningfulClinicalBypass: meaningfulBypass ? "true" : "false",
     });
   }
 
@@ -1492,6 +1469,17 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
       .slice(0, 48);
     return strings.length ? strings : undefined;
   })();
+
+  if (
+    process.env.NODE_ENV === "development" &&
+    withStudyStrips.normalizeTrace?.usedLegacyFiveBlockExpander &&
+    (withStudyStrips.normalizeTrace.incomingSectionCount ?? 0) > 0 &&
+    (withStudyStrips.normalizeTrace.totalWordCount ?? 0) >= 50
+  ) {
+    throw new Error(
+      `[LESSON_RENDER] normalizeLesson invariant: legacy expander with substantive incoming slug=${lessonSlugForAuthoring}`,
+    );
+  }
 
   return {
     ...withStudyStrips,
