@@ -3474,7 +3474,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   line-height: 1.62;
   letter-spacing: -0.006em;
   color: var(--theme-body-text, var(--semantic-text-primary, var(--palette-text)));
-  max-width: min(62ch, 100%);
+  max-width: min(68ch, 100%);
 }
 
 @media (min-width: 768px) {
@@ -3482,6 +3482,13 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   .nn-lesson-prose {
     font-size: 1rem;
     line-height: 1.6;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nn-lesson-content.nn-lesson-prose,
+  .nn-lesson-prose {
+    max-width: min(82ch, 100%);
   }
 }
 

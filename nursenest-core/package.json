@@ -160,6 +160,8 @@
     "audit:lesson-completeness": "tsx scripts/audit/run-lesson-completeness-audit.mts",
     "audit:lesson-depth": "node ../scripts/audit-lesson-clinical-depth.mjs",
     "upgrade:lesson-depth": "node ../scripts/upgrade-existing-lesson-depth.mjs",
+    "expand:lessons": "tsx scripts/lesson-ai-expand-lessons.ts",
+    "expand:lessons:dry": "tsx scripts/lesson-ai-expand-lessons.ts --dry-run",
     "expand:rn-lessons": "tsx scripts/rn-ai-expand-lessons.ts",
     "expand:rn-lessons:dry": "tsx scripts/rn-ai-expand-lessons.ts --dry-run",
     "test:lesson-clinical-depth": "tsx --test src/lib/audit/lesson-clinical-depth-audit.test.ts src/lib/audit/lesson-depth-upgrade.test.ts",

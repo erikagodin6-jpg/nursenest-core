@@ -11,6 +11,16 @@ function getOpenAI(): OpenAI {
   });
 }
 
+/** Matches nursenest-core lesson expansion: LESSON_OPENAI_MODEL → AI_INTEGRATIONS_OPENAI_MODEL → gpt-4.1-mini; UPGRADE_MODEL is legacy fallback. */
+function resolveLessonExpansionOpenAiModel(): string {
+  return (
+    process.env.LESSON_OPENAI_MODEL?.trim() ||
+    process.env.AI_INTEGRATIONS_OPENAI_MODEL?.trim() ||
+    process.env.UPGRADE_MODEL?.trim() ||
+    "gpt-4.1-mini"
+  );
+}
+
 const CLINICAL_GRADE_SYSTEM_PROMPT = `You are a clinical nursing educator authoring lessons for NurseNest, a premium NCLEX-RN prep platform.
 
 TIER: RN / NCLEX-RN
@@ -582,7 +592,7 @@ KEYWORDS: ${keywords.join(", ")}
 Apply all 11 required sections with full clinical depth per the system prompt. Pathophysiology must reach cellular level. Every symptom must explain WHY it occurs. Nursing actions must include rationale. Case scenario must use a realistic patient name.`;
 
       const response = await openai.chat.completions.create({
-        model: process.env.UPGRADE_MODEL || "gpt-4o",
+        model: resolveLessonExpansionOpenAiModel(),
         max_tokens: 4096,
         temperature: 0.3,
         messages: [

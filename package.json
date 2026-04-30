@@ -34,6 +34,8 @@
     "migrate:legacy-lesson-content:dry": "python3 scripts/migrate-legacy-lesson-content.py --dry-run",
     "upgrade:catalog-lessons": "npx tsx scripts/upgrade-catalog-lessons.ts",
     "upgrade:catalog-lessons:dry": "npx tsx scripts/upgrade-catalog-lessons.ts --dry-run",
+    "expand:lessons": "npm --prefix nursenest-core run expand:lessons",
+    "expand:lessons:dry": "npm --prefix nursenest-core run expand:lessons:dry",
     "expand:rn-lessons": "npm --prefix nursenest-core run expand:rn-lessons",
     "expand:rn-lessons:dry": "npm --prefix nursenest-core run expand:rn-lessons:dry",
     "generate:blogs": "npm --prefix nursenest-core run generate:blogs --",

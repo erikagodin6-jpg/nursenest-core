@@ -282,3 +282,12 @@ export function sectionKindsNeedingRegeneration(v: ExpandedLessonValidation): RN
 export function isRnNclexExpandPathwayId(pathwayId: string): boolean {
   return pathwayId === "us-rn-nclex-rn" || pathwayId === "ca-rn-nclex-rn";
 }
+
+/** CA REx-PN + US NCLEX-PN (LPN) bundled catalogs — same expanded-lesson contract as RN. */
+export function isRpnPnExpandPathwayId(pathwayId: string): boolean {
+  return pathwayId === "ca-rpn-rex-pn" || pathwayId === "us-lpn-nclex-pn";
+}
+
+export function isNursingClinicalExpandPathwayId(pathwayId: string): boolean {
+  return isRnNclexExpandPathwayId(pathwayId) || isRpnPnExpandPathwayId(pathwayId);
+}

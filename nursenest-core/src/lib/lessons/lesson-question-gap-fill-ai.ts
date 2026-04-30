@@ -10,7 +10,7 @@ import {
   parseJsonArrayFromModel,
   type QuestionGenerationContext,
 } from "@/lib/ai/admin-ai-question-pipeline";
-import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { assertOpenAiKeyConfigured, getLessonOpenAiChatModel } from "@/lib/ai/openai-env";
 import { buildVariationSpecsForConcept, formatVariationDirective } from "@/lib/ai/question-variation-engine";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import {
@@ -169,11 +169,12 @@ export async function runLessonGapAiDrafts(options: {
     const sourcePrompt = `${buildExamQuestionUserPrompt(genCtx)}\n\n[lesson gap fill: require topic/subtopic tags to include "${row.topicSlug}" and "${row.bodySystem}"]`;
     const batchId = `gap-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
+    const lessonModel = getLessonOpenAiChatModel();
     const job = await prisma.aiGenerationJob.create({
       data: {
         tool: TOOL,
         status: JobStatus.RUNNING,
-        model: process.env.AI_OPENAI_MODEL ?? process.env.AI_ADMIN_MODEL ?? "gpt-4o-mini",
+        model: lessonModel,
         sourcePrompt,
         inputPayload: { pathwayId: row.pathwayId, lessonSlug: row.slug, quantity } as object,
         createdById: options.adminUserId,
@@ -190,6 +191,7 @@ export async function runLessonGapAiDrafts(options: {
         ],
         temperature: 0.72,
         maxTokens: 8000,
+        model: lessonModel,
       });
 
       const raw = response.content?.trim() ?? "[]";

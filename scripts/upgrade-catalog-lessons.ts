@@ -14,9 +14,9 @@
  * Env vars required:
  *   AI_INTEGRATIONS_OPENAI_API_KEY  — API key for LLM provider
  *   AI_INTEGRATIONS_OPENAI_BASE_URL — Base URL (defaults to OpenAI)
- *   UPGRADE_MODEL                   — Explicit model override (optional)
  *   LESSON_OPENAI_MODEL             — Same resolution as nursenest-core lesson expansion
  *   AI_INTEGRATIONS_OPENAI_MODEL    — Shared fallback
+ *   UPGRADE_MODEL                   — Legacy last-resort override (optional)
  *   (default model: gpt-4.1-mini)
  */
 
@@ -58,9 +58,9 @@ const MIN_WORDS = (() => {
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 const MODEL =
-  process.env.UPGRADE_MODEL?.trim() ||
   process.env.LESSON_OPENAI_MODEL?.trim() ||
   process.env.AI_INTEGRATIONS_OPENAI_MODEL?.trim() ||
+  process.env.UPGRADE_MODEL?.trim() ||
   "gpt-4.1-mini";
 const MAX_RETRIES = 3;
 const CONCURRENCY = 2;         // parallel lessons per pathway
@@ -242,10 +242,10 @@ async function processBatch<T, R>(
 
 // ─── Main ────────────────────────────────────────────────────────────────────
 async function main(): Promise<void> {
+  console.log(`Model: ${MODEL}`);
   console.log("═══════════════════════════════════════════════════════");
   console.log(" NurseNest Catalog Clinical-Grade Lesson Upgrade");
   console.log("═══════════════════════════════════════════════════════");
-  console.log(`  Model:       ${MODEL}`);
   console.log(`  Min words:   ${MIN_WORDS}`);
   console.log(`  Dry run:     ${DRY_RUN}`);
   console.log(`  Force:       ${FORCE}`);

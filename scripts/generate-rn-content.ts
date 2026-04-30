@@ -26,7 +26,7 @@
  *
  * Environment:
  *   AI_INTEGRATIONS_OPENAI_API_KEY  — required
- *   AI_OPENAI_MODEL / AI_ADMIN_MODEL — optional, default gpt-4o-mini
+ *   LESSON_OPENAI_MODEL / AI_INTEGRATIONS_OPENAI_MODEL — optional chat model (default gpt-4.1-mini)
  *   AI_INTEGRATIONS_OPENAI_BASE_URL  — optional, for Azure/proxy
  *
  * Resume from checkpoint:
@@ -632,14 +632,19 @@ function validateTopics() {
 
 type ChatMessage = { role: "system" | "user" | "assistant"; content: string };
 
+function resolveLessonExpansionOpenAiModel(): string {
+  return (
+    process.env.LESSON_OPENAI_MODEL?.trim() ||
+    process.env.AI_INTEGRATIONS_OPENAI_MODEL?.trim() ||
+    "gpt-4.1-mini"
+  );
+}
+
 async function openAiChat(messages: ChatMessage[], maxTokens: number): Promise<string> {
   const key = process.env.AI_INTEGRATIONS_OPENAI_API_KEY?.trim();
   if (!key) throw new Error("AI_INTEGRATIONS_OPENAI_API_KEY is not set");
 
-  const model =
-    process.env.AI_OPENAI_MODEL?.trim() ||
-    process.env.AI_ADMIN_MODEL?.trim() ||
-    "gpt-4o-mini";
+  const model = resolveLessonExpansionOpenAiModel();
 
   const baseUrl =
     process.env.AI_INTEGRATIONS_OPENAI_BASE_URL?.trim() || "https://api.openai.com/v1";
@@ -1022,6 +1027,7 @@ function parseArgs() {
 async function main() {
   const opts = parseArgs();
 
+  console.log(`Model: ${resolveLessonExpansionOpenAiModel()}`);
   console.log("\n🏥 NurseNest RN Content Batch Generator");
   console.log("=========================================");
   validateTopics();

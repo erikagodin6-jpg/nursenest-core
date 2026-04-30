@@ -10,7 +10,7 @@ export function getOpenAiChatModel(): string {
 
 /**
  * Blog AI chat model: `BLOG_OPENAI_MODEL` → `AI_INTEGRATIONS_OPENAI_MODEL` → `gpt-4.1-mini`
- * ({@link OPENAI_DEFAULT_BLOG_LESSON_MODEL}).
+ * ({@link OPENAI_DEFAULT_BLOG_LESSON_MODEL}). Scripts should log `Model: …` at startup using this value.
  */
 export function getBlogOpenAiChatModel(): string {
   return (
@@ -22,7 +22,7 @@ export function getBlogOpenAiChatModel(): string {
 
 /**
  * Lesson expansion / admin lesson AI: `LESSON_OPENAI_MODEL` → `AI_INTEGRATIONS_OPENAI_MODEL` →
- * `gpt-4.1-mini` ({@link OPENAI_DEFAULT_BLOG_LESSON_MODEL}).
+ * `gpt-4.1-mini` ({@link OPENAI_DEFAULT_BLOG_LESSON_MODEL}). Scripts should log `Model: …` at startup using this value.
  */
 export function getLessonOpenAiChatModel(): string {
   return (
