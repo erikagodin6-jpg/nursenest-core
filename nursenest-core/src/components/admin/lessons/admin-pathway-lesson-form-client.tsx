@@ -70,6 +70,14 @@ export function AdminPathwayLessonFormClient({ pathwayLessonId }: { pathwayLesso
     setErr(null);
     setMsg(null);
     try {
+      if (nextStatus === ContentStatus.PUBLISHED) {
+        console.info("[ADMIN_PUBLISH_CLICK]", {
+          pathwayLessonId,
+          pathwayId: pathwayId || null,
+          slug,
+          titlePreview: title.slice(0, 120),
+        });
+      }
       const res = await fetch(`/api/admin/pathway-lessons/${pathwayLessonId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

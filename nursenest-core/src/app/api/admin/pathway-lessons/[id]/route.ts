@@ -60,7 +60,12 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const d = parsed.data;
-  console.log("[ADMIN PATHWAY LESSON SAVE]", { pathwayLessonId: id, pathwayId: existing.pathwayId, fields: Object.keys(d) });
+  console.info("[ADMIN_PUBLISH_API]", {
+    pathwayLessonId: id,
+    pathwayId: existing.pathwayId,
+    patchKeys: Object.keys(d),
+    nextStatus: d.status ?? existing.status,
+  });
 
   const mergedTitle = d.title ?? existing.title;
   const mergedSlug = d.slug ?? existing.slug;
@@ -155,7 +160,9 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
 
   let nextPublishedAt: Date | null = existing.published_at;
   if (nextStatus === ContentStatus.PUBLISHED) {
-    nextPublishedAt = new Date();
+    if (existing.status !== ContentStatus.PUBLISHED) {
+      nextPublishedAt = new Date();
+    }
   } else if (nextStatus === ContentStatus.DRAFT || nextStatus === ContentStatus.IN_REVIEW) {
     nextPublishedAt = null;
   }
@@ -205,6 +212,15 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     }
     throw e;
   }
+
+  console.info("[ADMIN_PUBLISH_SAVED]", {
+    pathwayLessonId: updated.id,
+    pathwayId: updated.pathwayId,
+    slug: updated.slug,
+    status: String(updated.status),
+    publishedAt: updated.published_at?.toISOString() ?? null,
+    structuralPublicComplete,
+  });
 
   const indexingImpact =
     nextStatus === ContentStatus.PUBLISHED &&

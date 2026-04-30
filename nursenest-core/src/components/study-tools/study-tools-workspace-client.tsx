@@ -19,6 +19,10 @@ function modeApiValue(mode: StudyToolSessionMode): string {
   return mode;
 }
 
+function assertNeverStudyToolSessionItem(x: never): never {
+  throw new Error(`Unexpected study tool session item: ${JSON.stringify(x)}`);
+}
+
 function itemKeyForProgress(item: StudyToolSessionItem): string {
   switch (item.kind) {
     case "medication_drills":
@@ -29,6 +33,8 @@ function itemKeyForProgress(item: StudyToolSessionItem): string {
     case "fill_in_the_blank":
     case "lab_drills":
       return `st:${item.kind}:${item.sourceQuestionId}`;
+    default:
+      return assertNeverStudyToolSessionItem(item);
   }
 }
 
@@ -42,6 +48,8 @@ function sourceQuestionId(item: StudyToolSessionItem): string | null {
     case "fill_in_the_blank":
     case "lab_drills":
       return item.sourceQuestionId;
+    default:
+      return assertNeverStudyToolSessionItem(item);
   }
 }
 

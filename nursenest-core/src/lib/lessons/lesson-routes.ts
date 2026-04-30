@@ -21,6 +21,43 @@ export const PRE_NURSING_LESSONS_INDEX_PATH = "/pre-nursing/lessons" as const;
 
 const ALLIED_HEALTH_ROOT = "/allied-health" as const;
 
+/** Parse relative marketing URLs for safe query merging (pathname + search + hash only). */
+const ALLIED_MARKETING_QUERY_ORIGIN = "http://nn.allied-marketing.invalid" as const;
+
+/**
+ * Adds or replaces `alliedProfession` on internal marketing links from occupation-specific allied hubs
+ * so practice / CAT / flashcard entry points preserve the learner's track where the destination supports it.
+ */
+export function withAlliedProfessionMarketingQuery(href: string, professionKey: string): string {
+  const k = professionKey.trim().toLowerCase();
+  if (!k) return href;
+  const raw = href.trim();
+  if (!raw) return href;
+  try {
+    const u = new URL(raw, ALLIED_MARKETING_QUERY_ORIGIN);
+    u.searchParams.set(ALLIED_PROFESSION_QUERY_PARAM, k);
+    return `${u.pathname}${u.search}${u.hash}`;
+  } catch {
+    return raw;
+  }
+}
+
+/** Merge extra query keys onto an internal href (preserves existing params). */
+export function mergeMarketingPathQuery(href: string, params: Record<string, string>): string {
+  const raw = href.trim();
+  if (!raw) return raw;
+  try {
+    const u = new URL(raw, ALLIED_MARKETING_QUERY_ORIGIN);
+    for (const [key, value] of Object.entries(params)) {
+      const v = value.trim();
+      if (v) u.searchParams.set(key, v);
+    }
+    return `${u.pathname}${u.search}${u.hash}`;
+  } catch {
+    return raw;
+  }
+}
+
 /** `/allied-health/{segment}` — profession hero or canonical slug segment. */
 export function alliedHealthSegmentPath(segment: string): string {
   return `${ALLIED_HEALTH_ROOT}/${encodeURIComponent(segment.trim())}`;

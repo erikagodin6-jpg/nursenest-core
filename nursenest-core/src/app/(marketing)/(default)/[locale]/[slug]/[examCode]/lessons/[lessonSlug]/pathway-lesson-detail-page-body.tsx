@@ -169,7 +169,16 @@ export async function PathwayLessonDetailPageBody({
   const loadedLesson =
     lessonResult.status === "fulfilled" ? lessonResult.value : undefined;
   const lessonLoadFailed = lessonResult.status === "rejected";
-  console.log("[PUBLIC FETCH] slug", lessonSlug, "pathwayId", pathway.id, "table", "pathway_lessons_or_catalog");
+  console.info("[PUBLIC_LESSON_RENDER]", {
+    pathname: pathname.slice(0, 240),
+    pathwayId: pathway.id,
+    lessonSlug: lessonSlug.slice(0, 240),
+    lessonContentLocale,
+    titlePreview: loadedLesson?.title?.slice(0, 120) ?? null,
+    catalogEnglishNarrative: Boolean(loadedLesson?.localeMeta?.isCatalogEnglishSource),
+    usedLocaleFallback: Boolean(loadedLesson?.localeMeta?.usedLocaleFallback),
+    loaded: Boolean(loadedLesson),
+  });
 
   if (lessonResult.status === "rejected") {
     rethrowNextNavigationControlFlow(lessonResult.reason);

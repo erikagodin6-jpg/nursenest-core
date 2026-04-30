@@ -5,6 +5,7 @@ import { AdminMediaPickerDialog } from "@/components/admin/media/admin-media-pic
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ContentStatus } from "@prisma/client";
+import { pathwayLessonIdFromContentItemTags } from "@/lib/lessons/pathway-lesson-cms-link-tags";
 
 type CategoryOpt = { id: string; name: string; slug: string };
 
@@ -92,9 +93,15 @@ export function AdminLessonFormClient({ lessonId }: { lessonId?: string }) {
         body?: string;
         categoryMatch?: { id: string } | null;
         linkMapping?: LinkMapping;
+        linkedPathwayLessonId?: string | null;
       };
       if (!res.ok || !j.lesson) {
         setErr("Could not load lesson.");
+        return;
+      }
+      const bridgeId = j.linkedPathwayLessonId ?? pathwayLessonIdFromContentItemTags(j.lesson.tags);
+      if (bridgeId) {
+        router.replace(`/admin/pathway-lessons/${encodeURIComponent(bridgeId)}`);
         return;
       }
       const l = j.lesson;
@@ -308,8 +315,13 @@ export function AdminLessonFormClient({ lessonId }: { lessonId?: string }) {
             {isCreate ? "Create ContentItem lesson" : title || "Untitled"}
           </h1>
           <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-            App lessons live in <code className="rounded bg-muted px-1">content_items</code> (type lesson). Pathway
-            marketing lessons are managed separately on the library tab.
+            Non-pathway lessons live in <code className="rounded bg-muted px-1">content_items</code> (type lesson).
+            Pathway marketing + subscriber lessons are authored in{" "}
+            <code className="rounded bg-muted px-1">pathway_lessons</code> — open the Pathway tab or{" "}
+            <Link href="/admin/pathway-lessons" className="font-medium text-primary underline">
+              pathway lesson admin
+            </Link>
+            . Rows tagged <code className="rounded bg-muted px-1">pathway-lesson-id:…</code> redirect there automatically.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

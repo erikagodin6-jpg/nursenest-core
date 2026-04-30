@@ -9,6 +9,11 @@ import { marketingPathwayLessonDetailPath, marketingPathwayLessonsIndexPath } fr
 /**
  * After admin mutates a `ContentItem` lesson, drop Next.js full-route cache for learner + admin surfaces,
  * and for any marketing `PathwayLesson` rows that share the slug (optional cross-link by slug).
+ *
+ * TODO(Option-B migration): Remove this slug-based `PathwayLesson` cache bust once all pathway authoring
+ * flows exclusively use {@link revalidateSurfacesAfterPathwayLessonMutation} after `pathway_lessons` writes.
+ * Until then, this remains a **temporary compatibility layer** for legacy ContentItem edits that may still
+ * align with marketing slugs; canonical pathway lesson edits must not depend on ContentItem sync.
  */
 export async function revalidateSurfacesForContentItemLesson(args: {
   lessonId: string;

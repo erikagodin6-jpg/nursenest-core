@@ -20,12 +20,18 @@ import {
   listAlliedProfessionsSorted,
   type AlliedProfessionMarketing,
 } from "@/lib/allied/allied-professions-registry";
-import { alliedHealthSegmentPath } from "@/lib/lessons/lesson-routes";
+import {
+  alliedHealthLessonsIndexPath,
+  alliedHealthSegmentPath,
+  mergeMarketingPathQuery,
+  withAlliedProfessionMarketingQuery,
+} from "@/lib/lessons/lesson-routes";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { marketingTierHubStudyActionHref } from "@/lib/navigation/marketing-tier-hub-study-hrefs";
+import { ALLIED_PROFESSION_QUERY_PARAM } from "@/lib/lessons/canonical-lessons-hubs";
 
 function hubVisualKeyForCategoryId(id: string): string {
   const s = id.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_");
@@ -39,23 +45,46 @@ function trackChipLabel(p: AlliedProfessionMarketing): string {
 export function AlliedHealthPathwayHub({
   pathway,
   hubPath,
+  profession = null,
+  sampleQuestionStem = null,
 }: {
   pathway: ExamPathwayDefinition;
   hubPath: string;
+  /** When set, this hub is scoped to a single occupation (links carry `?alliedProfession=`). */
+  profession?: AlliedProfessionMarketing | null;
+  /** Optional preview line for occupation hubs (bounded stem text). */
+  sampleQuestionStem?: string | null;
 }) {
   const countryLine = pathway.countrySlug === "canada" ? "Canada" : "United States";
-  const lessonsHref = marketingTierHubStudyActionHref(pathway, "lessons");
-  const questionsHref = buildExamPathwayPath(pathway, "questions");
-  const flashcardsHref = marketingTierHubStudyActionHref(pathway, "flashcards");
-  const catHref = buildExamPathwayPath(pathway, "cat");
+  const profKey = profession?.professionKey?.trim() ?? "";
+
+  const lessonsHref = profKey
+    ? alliedHealthLessonsIndexPath(profKey)
+    : marketingTierHubStudyActionHref(pathway, "lessons");
+  const questionsBase = buildExamPathwayPath(pathway, "questions");
+  const questionsHref = profKey ? withAlliedProfessionMarketingQuery(questionsBase, profKey) : questionsBase;
+  const flashcardsBase = marketingTierHubStudyActionHref(pathway, "flashcards");
+  const flashcardsHref = profKey ? withAlliedProfessionMarketingQuery(flashcardsBase, profKey) : flashcardsBase;
+  const catBase = buildExamPathwayPath(pathway, "cat");
+  const catHref = profKey ? withAlliedProfessionMarketingQuery(catBase, profKey) : catBase;
   const pricingHref = buildExamPathwayPath(pathway, "pricing");
   const examPlanHref = loginWithCallback(`/app/exam-plan`);
-  const practiceTestsHref = loginWithCallback(`/app/practice-tests?pathwayId=${encodeURIComponent(pathway.id)}`);
+  const practiceTestsHref = profKey
+    ? loginWithCallback(
+        `/app/practice-tests?pathwayId=${encodeURIComponent(pathway.id)}&alliedProfession=${encodeURIComponent(profKey)}`,
+      )
+    : loginWithCallback(`/app/practice-tests?pathwayId=${encodeURIComponent(pathway.id)}`);
 
   const learning = learningConfigForPathwayId(pathway.id);
   const categoryShowcase = learning.categories.slice(0, 16);
 
   const tracks = listAlliedProfessionsSorted();
+
+  const heroTitle = profession ? profession.h1 : pathway.displayName;
+  const heroBody = profession ? profession.description : pathway.seoDescription;
+  const heroKicker = profession
+    ? `${countryLine} · ${pathway.shortName} · ${profession.professionKey.replace(/-/g, " ")}`
+    : `${countryLine} · Allied health`;
 
   return (
     <div className="space-y-[var(--nn-rhythm-section-y)]" data-nn-allied-pathway-hub="1">
@@ -71,14 +100,12 @@ export function AlliedHealthPathwayHub({
           className="pointer-events-none absolute -bottom-16 -left-12 h-48 w-48 rounded-full bg-[color-mix(in_srgb,var(--semantic-success)_12%,transparent)] blur-3xl"
           aria-hidden
         />
-        <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--semantic-brand)]">
-          {countryLine} · Allied health
-        </p>
+        <p className="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--semantic-brand)]">{heroKicker}</p>
         <h1 className="mt-3 max-w-3xl text-3xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-4xl sm:leading-[1.12]">
-          {pathway.displayName}
+          {heroTitle}
         </h1>
         <p className="mt-5 max-w-2xl text-base leading-relaxed text-[var(--semantic-text-secondary)] sm:text-lg">
-          {pathway.seoDescription}
+          {heroBody}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
@@ -88,84 +115,144 @@ export function AlliedHealthPathwayHub({
             View plans and pricing
           </Link>
           <Link
-            href="/allied-health#allied-professions-heading"
+            href={profession ? "/allied-health" : "/allied-health#allied-professions-heading"}
             className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[var(--semantic-panel-muted)]"
           >
-            Choose your occupation track
+            {profession ? "All occupation tracks" : "Choose your occupation track"}
           </Link>
           <Link
             href={lessonsHref}
             className="inline-flex min-h-11 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-info)] transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))]"
           >
-            Browse lessons hub
+            {profession ? "Lessons for this track" : "Browse lessons hub"}
           </Link>
         </div>
       </header>
 
-      {/* Occupation tracks — compact scan + deep grid */}
-      <section className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 sm:p-8" aria-labelledby="allied-tracks-heading">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h2 id="allied-tracks-heading" className="text-xl font-bold text-[var(--theme-heading-text)]">
-              Choose your Allied Health track
-            </h2>
-            <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
-              Every track opens the same pathway-scoped lessons and question bank, with optional profession filters so study
-              stays aligned to your licensing context.
-            </p>
-          </div>
-          <Link href="/allied-health" className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
-            Full allied marketing hub →
-          </Link>
-        </div>
-        <p className="nn-marketing-label mt-6 text-[var(--semantic-text-secondary)]">Quick scan</p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {tracks.map((p) => (
+      {profession ? (
+        <section
+          className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 sm:p-8"
+          aria-labelledby="allied-occupation-scope-heading"
+        >
+          <h2 id="allied-occupation-scope-heading" className="text-xl font-bold text-[var(--theme-heading-text)]">
+            Scoped to this occupation
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            Lessons, practice entry points, and study cards below keep{" "}
+            <span className="font-semibold text-[var(--semantic-text-primary)]">{trackChipLabel(profession)}</span> context
+            via <code className="rounded bg-[var(--semantic-panel-muted)] px-1">{ALLIED_PROFESSION_QUERY_PARAM}</code> on the
+            allied pathway hub — not mixed with RN/PN/NP-only hubs.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-3">
             <Link
-              key={p.segment}
-              href={alliedHealthSegmentPath(p.segment)}
-              className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] hover:bg-[var(--semantic-surface)]"
+              href="/allied-health"
+              className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
             >
-              {trackChipLabel(p)}
+              ← Allied health occupation chooser
             </Link>
-          ))}
-        </div>
-        <ul className="nn-qa-pathway-lessons-grid mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {tracks.map((p) => {
-            const visual = getLessonHubSystemVisual(hubVisualKeyForCategoryId(p.hubCategory));
-            const Icon = visual.icon;
-            return (
-              <li key={p.segment}>
-                <article
-                  className="flex h-full flex-col rounded-[1.35rem] border border-[color-mix(in_srgb,var(--semantic-chart-3)_18%,var(--semantic-border-soft))] bg-[var(--semantic-panel-muted)] p-5 shadow-[var(--semantic-shadow-soft)] transition hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))]"
-                  style={{ "--nn-system-accent": `var(${visual.accentVar})` } as CSSProperties}
-                >
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--nn-system-accent)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-system-accent)_10%,var(--semantic-surface))] text-[var(--nn-system-accent)]">
-                    <Icon className="h-4 w-4" aria-hidden />
-                  </span>
-                  <h3 className="mt-3 text-base font-semibold text-[var(--theme-heading-text)]">{trackChipLabel(p)}</h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{p.description}</p>
-                  <div className="mt-4 flex flex-wrap gap-2 border-t border-[var(--semantic-border-soft)] pt-4">
-                    <Link
-                      href={alliedHealthSegmentPath(p.segment)}
-                      className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
-                    >
-                      Track prep guide
-                    </Link>
-                    <span className="text-[var(--semantic-text-secondary)]">·</span>
-                    <Link
-                      href={`${lessonsHref}?${new URLSearchParams({ alliedProfession: p.professionKey }).toString()}`}
-                      className="text-sm font-medium text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-brand)]"
-                    >
-                      Lessons for this track
-                    </Link>
-                  </div>
-                </article>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
+            <Link
+              href={`/allied-health/${encodeURIComponent(profession.professionKey)}/blog`}
+              className="text-sm font-medium text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-brand)]"
+            >
+              Track blog
+            </Link>
+          </div>
+          <div className="mt-8 grid gap-8 lg:grid-cols-2">
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">Exam overview</h3>
+              <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+                {profession.examOverview.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">How NurseNest supports this track</h3>
+              <ul className="mt-3 list-inside list-disc space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+                {profession.features.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          {sampleQuestionStem ? (
+            <div className="mt-8 rounded-xl border border-[color-mix(in_srgb,var(--semantic-chart-4)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-4)_6%,var(--semantic-surface))] p-5">
+              <h3 className="text-base font-semibold text-[var(--theme-heading-text)]">Sample question stem (preview)</h3>
+              <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{sampleQuestionStem}</p>
+              <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">
+                Full items and rationales unlock with a matching allied plan in the app.
+              </p>
+            </div>
+          ) : null}
+        </section>
+      ) : (
+        <section className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 sm:p-8" aria-labelledby="allied-tracks-heading">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <h2 id="allied-tracks-heading" className="text-xl font-bold text-[var(--theme-heading-text)]">
+                Choose your Allied Health track
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+                Every track opens the same pathway-scoped lessons and question bank, with optional profession filters so study
+                stays aligned to your licensing context.
+              </p>
+            </div>
+            <Link href="/allied-health" className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
+              Full allied marketing hub →
+            </Link>
+          </div>
+          <p className="nn-marketing-label mt-6 text-[var(--semantic-text-secondary)]">Quick scan</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {tracks.map((p) => (
+              <Link
+                key={p.segment}
+                href={alliedHealthSegmentPath(p.segment)}
+                className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] hover:bg-[var(--semantic-surface)]"
+              >
+                {trackChipLabel(p)}
+              </Link>
+            ))}
+          </div>
+          <ul className="nn-qa-pathway-lessons-grid mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {tracks.map((p) => {
+              const visual = getLessonHubSystemVisual(hubVisualKeyForCategoryId(p.hubCategory));
+              const Icon = visual.icon;
+              const scopedLessons = mergeMarketingPathQuery(lessonsHref, {
+                [ALLIED_PROFESSION_QUERY_PARAM]: p.professionKey,
+              });
+              return (
+                <li key={p.segment}>
+                  <article
+                    className="flex h-full flex-col rounded-[1.35rem] border border-[color-mix(in_srgb,var(--semantic-chart-3)_18%,var(--semantic-border-soft))] bg-[var(--semantic-panel-muted)] p-5 shadow-[var(--semantic-shadow-soft)] transition hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))]"
+                    style={{ "--nn-system-accent": `var(${visual.accentVar})` } as CSSProperties}
+                  >
+                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--nn-system-accent)_20%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-system-accent)_10%,var(--semantic-surface))] text-[var(--nn-system-accent)]">
+                      <Icon className="h-4 w-4" aria-hidden />
+                    </span>
+                    <h3 className="mt-3 text-base font-semibold text-[var(--theme-heading-text)]">{trackChipLabel(p)}</h3>
+                    <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{p.description}</p>
+                    <div className="mt-4 flex flex-wrap gap-2 border-t border-[var(--semantic-border-soft)] pt-4">
+                      <Link
+                        href={alliedHealthSegmentPath(p.segment)}
+                        className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+                      >
+                        Track prep guide
+                      </Link>
+                      <span className="text-[var(--semantic-text-secondary)]">·</span>
+                      <Link
+                        href={scopedLessons}
+                        className="text-sm font-medium text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-brand)]"
+                      >
+                        Lessons for this track
+                      </Link>
+                    </div>
+                  </article>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
 
       {/* Core study modes — NurseNest study-card vocabulary */}
       <section aria-labelledby="allied-study-modes-heading">
@@ -174,7 +261,15 @@ export function AlliedHealthPathwayHub({
         </h2>
         <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
           Move from concepts to recall to exam-style judgment — the same progression we use across NurseNest hubs, scoped to
-          allied-tier content.
+          allied-tier content
+          {profession ? (
+            <>
+              {" "}
+              for <span className="font-semibold text-[var(--semantic-text-primary)]">{trackChipLabel(profession)}</span>.
+            </>
+          ) : (
+            "."
+          )}
         </p>
         <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <li>
@@ -241,7 +336,7 @@ export function AlliedHealthPathwayHub({
           {categoryShowcase.map((c) => {
             const visual = getLessonHubSystemVisual(hubVisualKeyForCategoryId(c.id));
             const Icon = visual.icon;
-            const href = `${lessonsHref}?${new URLSearchParams({ q: c.title }).toString()}`;
+            const href = mergeMarketingPathQuery(lessonsHref, { q: c.title });
             return (
               <li key={c.id}>
                 <Link

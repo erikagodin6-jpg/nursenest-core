@@ -6,6 +6,7 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { classifyContentItemLesson } from "@/lib/content-quality/classify-lesson";
 import { governContentItemLessonPublish } from "@/lib/content/editorial-publish-policy";
 import { prisma } from "@/lib/db";
+import { pathwayLessonIdFromContentItemTags } from "@/lib/lessons/pathway-lesson-cms-link-tags";
 import { bodyStringFromContentJson, bodyStringToContentJson } from "@/lib/prisma/content-item-body";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import { tierCodeToContentItemTier } from "@/lib/prisma/exam-question-maps";
@@ -67,12 +68,16 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
     prisma.progress.count({ where: { lessonId: id, completed: true } }),
   ]);
 
+  const linkedPathwayLessonId = pathwayLessonIdFromContentItemTags(existing.tags);
+
   return NextResponse.json({
     lesson: existing,
     body,
     lessonQuality,
     publishPreview,
     categoryMatch: category,
+    /** When set, this ContentItem is linked to a canonical pathway row — edit via `/admin/pathway-lessons/{id}` only. */
+    linkedPathwayLessonId,
     linkMapping: {
       generatedQuestionDrafts: qDrafts,
       generatedFlashcardDrafts: fcDrafts,

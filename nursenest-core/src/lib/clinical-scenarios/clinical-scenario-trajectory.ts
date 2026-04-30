@@ -4,11 +4,14 @@ const ALIASES: Record<string, PatientTrajectory> = {
   improved: "improving",
   improving: "improving",
   better: "improving",
+  "patient improves": "improving",
   stable: "stable",
   unchanged: "stable",
+  "patient unchanged": "stable",
   deteriorated: "deteriorating",
   deteriorating: "deteriorating",
   worse: "deteriorating",
+  "patient deteriorates": "deteriorating",
 };
 
 /**

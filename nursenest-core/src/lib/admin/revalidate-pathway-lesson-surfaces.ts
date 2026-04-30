@@ -77,4 +77,16 @@ export function revalidateSurfacesAfterPathwayLessonMutation(args: {
     paths: pathsRevalidated.join("|"),
     catalogResolved: pathway ? 1 : 0,
   });
+
+  console.info("[ADMIN_PUBLISH_REVALIDATE]", {
+    pathwayLessonId: args.pathwayLessonId,
+    pathwayId,
+    slug: slugTrim,
+    previousSlug: prevTrim || null,
+    tags: tagsRevalidated,
+    paths: pathsRevalidated,
+    marketingDetailPath: detailPath,
+    marketingIndexPath: indexPath,
+    catalogResolved: Boolean(pathway),
+  });
 }
