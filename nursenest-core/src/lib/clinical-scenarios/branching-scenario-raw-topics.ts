@@ -40,6 +40,7 @@ type StagePack = {
   lu: Prisma.InputJsonValue | null;
   correct: string;
   optRat: string;
+  /** Stage summary rationale; defaults to optRat when omitted in ST(). */
   stageRat: string;
   /** Optional fourth distractor (dangerous clinical error). */
   badLimit?: { text: string; rationale: string };
@@ -75,17 +76,26 @@ function compactFive(
       assessmentFindings: s.af,
       vitals: s.vit,
       labUpdates: s.lu,
-      rationale: s.stageRat,
+      rationale: s.stageRat || s.optRat,
       options: [
         optCorrect(s.correct, s.optRat),
         wLimitIgnoreVitals(slug),
         wDelayChart(slug),
-        s.badLimit ?? wDelaySocial(slug),
+        s.badLimit ? optWrongLimit(s.badLimit.text, s.badLimit.rationale) : wDelaySocial(slug),
       ],
     })),
   };
 }
 
+type BadOpt = { text: string; rationale: string };
+
+/**
+ * Stage row helper. Variants:
+ * - `ST(..., correct, optRat)` — reuses `optRat` for stage summary
+ * - `ST(..., correct, optRat, stageRat)`
+ * - `ST(..., correct, optRat, stageRat, badLimit)`
+ * - `ST(..., correct, optRat, badLimit)` — `badLimit` object; stage summary stays `optRat`
+ */
 const ST = (
   lead: string,
   stem: string,
@@ -94,9 +104,20 @@ const ST = (
   lu: Prisma.InputJsonValue | null,
   correct: string,
   optRat: string,
-  stageRat: string,
-  badLimit?: { text: string; rationale: string },
-): StagePack => ({ lead, stem, af, vit, lu, correct, optRat, stageRat, badLimit });
+  stageRatOrBad?: string | BadOpt,
+  badLimitMaybe?: BadOpt,
+): StagePack => {
+  if (stageRatOrBad === undefined) {
+    return { lead, stem, af, vit, lu, correct, optRat, stageRat: optRat };
+  }
+  if (typeof stageRatOrBad === "object") {
+    return { lead, stem, af, vit, lu, correct, optRat, stageRat: optRat, badLimit: stageRatOrBad };
+  }
+  if (badLimitMaybe) {
+    return { lead, stem, af, vit, lu, correct, optRat, stageRat: stageRatOrBad, badLimit: badLimitMaybe };
+  }
+  return { lead, stem, af, vit, lu, correct, optRat, stageRat: stageRatOrBad };
+};
 
 const TOPIC_MI_ACS = compactFive(
   "mi-acs",

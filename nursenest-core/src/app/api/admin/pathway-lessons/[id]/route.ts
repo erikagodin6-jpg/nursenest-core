@@ -3,6 +3,7 @@ import { ContentStatus, type Prisma } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { revalidateSurfacesAfterPathwayLessonMutation } from "@/lib/admin/revalidate-pathway-lesson-surfaces";
+import { invalidatePathwayLessonPaidStaleCache } from "@/lib/lessons/invalidate-pathway-lesson-paid-stale-cache";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { governContentItemLessonPublish } from "@/lib/content/editorial-publish-policy";
@@ -221,6 +222,8 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     publishedAt: updated.published_at?.toISOString() ?? null,
     structuralPublicComplete,
   });
+
+  invalidatePathwayLessonPaidStaleCache(updated.id);
 
   const indexingImpact =
     nextStatus === ContentStatus.PUBLISHED &&

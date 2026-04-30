@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { ClinicalScenarioUnfoldingPreview } from "@/components/clinical-scenarios/clinical-scenario-unfolding-preview";
 import { ClinicalScenariosSurfaceClient } from "@/components/scenarios/clinical-scenarios-surface-client";
 import { ScenarioStudyShell } from "@/components/scenarios/ScenarioStudyShell";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getStaffSession } from "@/lib/auth/staff-session";
+import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { mapClinicalNursingScenarioToPreview } from "@/lib/clinical-scenarios/map-clinical-scenario-to-preview";
 import {
   getClinicalNursingScenarioDetailForViewer,
@@ -11,9 +13,21 @@ import {
 } from "@/lib/clinical-scenarios/clinical-nursing-scenarios.server";
 import { isClinicalScenariosPubliclyEnabled } from "@/lib/clinical-scenarios/clinical-scenarios-feature-flag";
 import { pathwayIdFromScenarioSearchParams } from "@/lib/scenarios/scenario-search-params";
-import { SCENARIO_LEARNER_ROUTES, withScenarioPathwayQuery } from "@/lib/scenarios/scenario-routes";
+import {
+  SCENARIO_LEARNER_ROUTES,
+  withScenarioPathwayAndProfessionQuery,
+  withScenarioPathwayQuery,
+} from "@/lib/scenarios/scenario-routes";
+import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
+import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 
-type PageProps = { searchParams: Promise<{ pathwayId?: string | string[]; scenarioId?: string | string[] }> };
+type PageProps = {
+  searchParams: Promise<{
+    pathwayId?: string | string[];
+    scenarioId?: string | string[];
+    alliedProfession?: string | string[];
+  }>;
+};
 
 export default async function ClinicalScenariosPage({ searchParams }: PageProps) {
   const pathwayId = await pathwayIdFromScenarioSearchParams(searchParams);
@@ -26,14 +40,33 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
         ? rawSid[0].trim()
         : null;
 
+  const rawAllied = sp.alliedProfession;
+  const alliedProfessionParam =
+    typeof rawAllied === "string" && rawAllied.trim()
+      ? rawAllied.trim().toLowerCase()
+      : Array.isArray(rawAllied) && typeof rawAllied[0] === "string" && rawAllied[0].trim()
+        ? rawAllied[0].trim().toLowerCase()
+        : "";
+  const alliedProfessionResolved =
+    pathwayId && isAlliedMarketingCorePathwayId(pathwayId) && alliedProfessionParam
+      ? getAlliedProfessionByProfessionKey(alliedProfessionParam)
+      : undefined;
+  const alliedProfessionKey = alliedProfessionResolved?.professionKey ?? "";
+
   const staff = await getStaffSession();
+  const session = await getProtectedRouteSession("(student).app.(learner).clinical-scenarios");
+  const userId = (session?.user as { id?: string })?.id ?? "";
+  const entitlement = userId ? await resolveEntitlementForPage(userId) : "error";
+  const premiumUnlocked = entitlement !== "error" && entitlement.hasAccess;
   /** Drafts never ship to subscribers; staff preview only (layout already blocks non-staff when flag is off). */
   const includeDrafts = Boolean(staff);
 
   if (pathwayId) {
+    const categoryFilter = alliedProfessionResolved?.scenarioCatalogCategoryIds;
     const catalog = await listClinicalNursingScenariosForLearnerCatalog({
       pathwayId,
       includeDraftsForStaff: includeDrafts,
+      ...(categoryFilter?.length ? { canonicalCategoryIds: categoryFilter } : {}),
     });
 
     if (scenarioId) {
@@ -58,7 +91,7 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
               ← Back to list
             </Link>
           </div>
-          <ClinicalScenarioUnfoldingPreview scenario={model} />
+          <ClinicalScenarioUnfoldingPreview scenario={model} premiumUnlocked={premiumUnlocked || includeDrafts} />
         </ScenarioStudyShell>
       );
     }
@@ -97,5 +130,11 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
 
   const showDevSamples =
     process.env.NODE_ENV !== "production" && isClinicalScenariosPubliclyEnabled() && Boolean(staff);
-  return <ClinicalScenariosSurfaceClient pathwayId={pathwayId} showDevSamples={showDevSamples} />;
+  return (
+    <ClinicalScenariosSurfaceClient
+      pathwayId={pathwayId}
+      showDevSamples={showDevSamples}
+      alliedProfessionKey={alliedProfessionKey || null}
+    />
+  );
 }

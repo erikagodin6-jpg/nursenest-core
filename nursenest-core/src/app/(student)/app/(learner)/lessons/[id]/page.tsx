@@ -424,6 +424,15 @@ async function LessonDetailPageInner({ params }: Props) {
       pathwayId: resolvedLesson.pathwayId,
       slug: record.slug,
     });
+    console.info("[PUBLIC_LESSON_RENDER]", {
+      surface: "app_lessons_detail",
+      pathwayLessonId: id,
+      pathwayId: resolvedLesson.pathwayId,
+      slug: record.slug,
+      titlePreview: record.title?.slice(0, 120) ?? null,
+      dataSource: "pathway_lesson_prisma_then_getPublishedPathwayLessonRecordById_or_getPathwayLesson",
+      catalogOverlay: Boolean(record.localeMeta?.isCatalogEnglishSource),
+    });
     const displayTitle = resolvePublicLessonTitle({
       curatedTitle: record.title,
       generatedTitle: record.seoTitle,

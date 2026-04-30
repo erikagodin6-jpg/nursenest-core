@@ -150,10 +150,7 @@ export function ClinicalScenarioUnfoldingPreview({
   );
 
   const branchComplete =
-    branching &&
-    (branchOrderIdx >= scenario.stages.length ||
-      (branchFreeDone && !premiumUnlocked) ||
-      (!premiumUnlocked && branchFreeDone));
+    branching && (branchOrderIdx >= scenario.stages.length || (branchFreeDone && !premiumUnlocked));
 
   const trajectoryLegacy: PatientTrajectory | null = useMemo(() => {
     if (!legacyStage || !legacyPicked) return null;
@@ -168,69 +165,56 @@ export function ClinicalScenarioUnfoldingPreview({
   const categoryLabel =
     CANONICAL_STUDY_CATEGORIES.find((c) => c.id === scenario.canonicalCategoryId)?.label ?? scenario.canonicalCategoryId;
 
-  const sendBranchAnalytics = useCallback(
-    async (args: {
-      stageOrder: number;
-      picked: ParsedBranchingOption;
-      nextOrder: number;
-      completed: boolean;
-    }) => {
-      const { stageOrder, picked, nextOrder, completed } = args;
-      const trajAgg = aggregateTrajectoryLabel(
-        [...branchState.trajectoryPath, patientTrajectoryFromConsequence(picked.trajectory === "improves" ? "patient improves" : picked.trajectory === "deteriorates" ? "patient deteriorates" : "patient unchanged")],
-      );
-      try {
-        await fetch("/api/learner/clinical-scenario-analytics", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            scenarioId: scenario.id,
-            pathwayId: scenario.pathwayId,
-            tierFocus: scenario.tierFocus,
-            stageOrder,
-            optionId: picked.id,
-            isCorrect: picked.isCorrect,
-            incorrectSoFar: branchState.incorrectCount + (picked.isCorrect ? 0 : 1),
-            trajectoryAggregate: trajAgg,
-            reachedStageOrder: Math.min(nextOrder, scenario.stages.length - 1),
-            premiumUnlocked,
-            completedScenario: completed,
-          }),
-        });
-      } catch {
-        // analytics must not break UX
-      }
-    },
-    [aggregateBranchTrajectory, branchState.incorrectCount, branchState.trajectoryPath, premiumUnlocked, scenario],
-  );
-
   const commitBranchChoice = useCallback(() => {
     if (!branchPending || !branchStage) return;
     const picked = branchPending;
-    const viewStage = toBranchingStageView(branchStage);
-    const nextOrder =
-      picked.nextStageOrder != null && Number.isFinite(picked.nextStageOrder)
-        ? picked.nextStageOrder
-        : branchState.currentOrderIndex + 1;
+
+    const trajStr =
+      picked.trajectory === "improves"
+        ? "patient improves"
+        : picked.trajectory === "deteriorates"
+          ? "patient deteriorates"
+          : "patient unchanged";
+
+    const sendAnalytics = (args: {
+      trajectoryPath: PatientTrajectory[];
+      incorrectSoFar: number;
+      reachedStageOrder: number;
+      completed: boolean;
+    }) => {
+      const trajAgg = aggregateTrajectoryLabel(args.trajectoryPath);
+      void fetch("/api/learner/clinical-scenario-analytics", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          scenarioId: scenario.id,
+          pathwayId: scenario.pathwayId,
+          tierFocus: scenario.tierFocus,
+          stageOrder: branchStage.orderIndex,
+          optionId: picked.id,
+          isCorrect: picked.isCorrect,
+          incorrectSoFar: args.incorrectSoFar,
+          trajectoryAggregate: trajAgg,
+          reachedStageOrder: Math.min(args.reachedStageOrder, scenario.stages.length - 1),
+          premiumUnlocked,
+          completedScenario: args.completed,
+        }),
+      }).catch(() => {});
+    };
 
     if (!premiumUnlocked && branchState.currentOrderIndex === 0) {
-      const traj = patientTrajectoryFromConsequence(
-        picked.trajectory === "improves" ? "patient improves" : picked.trajectory === "deteriorates" ? "patient deteriorates" : "patient unchanged",
-      );
+      const traj = patientTrajectoryFromConsequence(trajStr);
+      const incorrect = branchState.incorrectCount + (picked.isCorrect ? 0 : 1);
+      const newPath = [...branchState.trajectoryPath, traj];
       setBranchState((prev) => ({
         ...prev,
-        trajectoryPath: [...prev.trajectoryPath, traj],
+        trajectoryPath: newPath,
         rationaleTrail: [...prev.rationaleTrail, picked.rationale || ""].filter((s) => s.trim().length > 0),
-        incorrectCount: prev.incorrectCount + (picked.isCorrect ? 0 : 1),
+        incorrectCount: incorrect,
       }));
       setBranchFreeDone(true);
       setBranchPending(null);
-      void sendBranchAnalytics({
-        stageOrder: branchStage.orderIndex,
-        picked,
-        nextOrder: 1,
-        completed: false,
-      });
+      sendAnalytics({ trajectoryPath: newPath, incorrectSoFar: incorrect, reachedStageOrder: 0, completed: false });
       return;
     }
 
@@ -242,30 +226,20 @@ export function ClinicalScenarioUnfoldingPreview({
     setBranchState(next);
     setBranchPending(null);
     const completed = next.currentOrderIndex >= scenario.stages.length;
-    void sendBranchAnalytics({
-      stageOrder: branchStage.orderIndex,
-      picked,
-      nextOrder: next.currentOrderIndex,
+    sendAnalytics({
+      trajectoryPath: next.trajectoryPath,
+      incorrectSoFar: next.incorrectCount,
+      reachedStageOrder: next.currentOrderIndex,
       completed,
     });
-  }, [
-    branchPending,
-    branchStage,
-    branchState,
-    branchStages,
-    premiumUnlocked,
-    scenario.stages.length,
-    sendBranchAnalytics,
-  ]);
+  }, [branchPending, branchStage, branchState, branchStages, premiumUnlocked, scenario]);
 
   if (branching) {
-    if (!branchStage && branchOrderIdx >= scenario.stages.length) {
-      // completed all stages
-    } else if (!branchStage && !branchFreeDone) {
+    if (!branchStage && !branchFreeDone && branchOrderIdx < scenario.stages.length) {
       return <p className="text-sm text-[var(--theme-body-text)]">This scenario has no stages yet.</p>;
     }
 
-    const showSummary = branchComplete || (branchFreeDone && !premiumUnlocked);
+    const showSummary = branchComplete;
 
     return (
       <div className="space-y-4">

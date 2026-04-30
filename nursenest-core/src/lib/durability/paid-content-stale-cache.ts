@@ -36,6 +36,19 @@ export class PaidContentStaleCache {
     }
     this.map.set(key, { value, storedAt: Date.now() });
   }
+
+  delete(key: string): void {
+    this.map.delete(key);
+  }
+
+  /** Drop all keys starting with `prefix` (e.g. `lesson:<pathwayLessonId>:` after admin publish). */
+  invalidateKeyPrefix(prefix: string): void {
+    const p = prefix;
+    if (!p) return;
+    for (const key of [...this.map.keys()]) {
+      if (key.startsWith(p)) this.map.delete(key);
+    }
+  }
 }
 
 const GLOBAL_KEY = "__nnPaidContentStaleCache";

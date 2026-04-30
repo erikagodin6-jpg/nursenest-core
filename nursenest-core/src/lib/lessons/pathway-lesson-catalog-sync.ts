@@ -131,6 +131,8 @@ let rnMusculoskeletalExpansionPathwaysCache: Record<string, CatalogShape["pathwa
 let rnFluidsElectrolytesExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 /** RN NCLEX-RN exam-notes integration spine (merged after fluids expansion; deduped by slug). */
 let rnExamNotesIntegrationExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+/** RN NCLEX-RN exam-notes integration batch 3 (merged after batch 1; deduped by slug). */
+let rnExamNotesIntegrationBatch3ExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 let newGradTransitionPathwaysCache: Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> | null = null;
 
 function getCatalogData(): CatalogShape {

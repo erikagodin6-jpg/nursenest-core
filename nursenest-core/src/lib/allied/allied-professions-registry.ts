@@ -38,6 +38,21 @@ export const ALLIED_HUB_CATEGORY_ORDER: AlliedHubCategoryId[] = ["therapy", "lab
  * - Canonical lesson list + detail: pathway `/{country}/allied/allied-health/lessons` (optional `?alliedProfession=`)
  *   and `…/lessons/{slug}`. Legacy `/allied-health/{key}/lessons` 301 to the pathway hub.
  */
+/** Occupation hub hero — optional; defaults derived from title copy via {@link alliedProfessionDefaultRoleHero}. */
+export type AlliedProfessionRoleHero = {
+  whatYouDo: string[];
+  whereYouWork: string[];
+  topSkills: string[];
+};
+
+/** Structured study overlay (not new lesson types) — optional; defaults via {@link alliedProfessionDefaultSkillOverlay}. */
+export type AlliedProfessionSkillOverlay = {
+  commonTasks: string[];
+  clinicalSkills: string[];
+  highRiskSituations: string[];
+  examFocusAreas: string[];
+};
+
 export type AlliedProfessionMarketing = {
   /** Short key for allied profession filters (`?alliedProfession=` on the canonical pathway lessons hub). */
   professionKey: string;
@@ -47,13 +62,66 @@ export type AlliedProfessionMarketing = {
   /** Section on the main allied hub */
   hubCategory: AlliedHubCategoryId;
   topicSlugsIn?: string[];
+  /** When DB scenarios exist, narrow catalog by `canonicalCategoryId` (pathway + publish rules unchanged). */
+  scenarioCatalogCategoryIds?: string[];
   title: string;
   description: string;
   h1: string;
   examOverview: string[];
   features: string[];
   ctaLine: string;
+  roleHero?: AlliedProfessionRoleHero;
+  skillOverlay?: AlliedProfessionSkillOverlay;
+  /** Overrides “Get ready for your … role” band; keep short. */
+  premiumCtaHeadline?: string;
 };
+
+/** Display label for chips / CTAs (drops trailing “exam prep”). */
+export function alliedProfessionTrackChipLabel(p: AlliedProfessionMarketing): string {
+  const fromH1 = p.h1.replace(/\s+exam prep\s*$/i, "").trim();
+  if (fromH1) return fromH1;
+  return p.professionKey
+    .split("-")
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+export function alliedProfessionDefaultRoleHero(p: AlliedProfessionMarketing): AlliedProfessionRoleHero {
+  const label = alliedProfessionTrackChipLabel(p);
+  return (
+    p.roleHero ?? {
+      whatYouDo: [p.description],
+      whereYouWork: [
+        `Work settings depend on region, employer, and scope of practice for ${label}.`,
+        "NurseNest keeps practice items inside your allied pathway authorization — not mixed with RN-only hubs.",
+      ],
+      topSkills: p.features.slice(0, 4),
+    }
+  );
+}
+
+export function alliedProfessionDefaultSkillOverlay(p: AlliedProfessionMarketing): AlliedProfessionSkillOverlay {
+  return (
+    p.skillOverlay ?? {
+      commonTasks: p.examOverview.slice(0, 3),
+      clinicalSkills: p.features.slice(0, 4),
+      highRiskSituations:
+        p.examOverview.length > 2
+          ? p.examOverview.slice(2, 5)
+          : [
+              `Prioritize safety, scope boundaries, and clear reporting when ${p.h1.toLowerCase()} items test judgment under pressure.`,
+            ],
+      examFocusAreas: p.examOverview,
+    }
+  );
+}
+
+export function alliedProfessionPremiumCtaHeadline(p: AlliedProfessionMarketing): string {
+  const custom = p.premiumCtaHeadline?.trim();
+  if (custom) return custom;
+  return `Get ready for your ${alliedProfessionTrackChipLabel(p)} role`;
+}
 
 const US_ALLIED = "us-allied-core";
 
@@ -238,6 +306,45 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
       "Honest readiness language — we never promise pass outcomes.",
     ],
     ctaLine: "Open lessons for your track, then reinforce with practice questions on an allied plan.",
+    roleHero: {
+      whatYouDo: [
+        "Support daily living with dignity: hygiene, mobility, nutrition cues, and restorative care within your role.",
+        "Observe, document, and report changes promptly so the care team can respond before small issues escalate.",
+      ],
+      whereYouWork: [
+        "Long-term care, home care, retirement residences, hospitals (support roles), and community programs.",
+        "Supervision and task lists vary by province/state and employer; exams test safe sequencing and scope.",
+      ],
+      topSkills: [
+        "Safe transfers and mobility assistance",
+        "Infection prevention in shared living settings",
+        "Skin integrity and comfort rounds",
+        "Clear reporting and handoff when status changes",
+      ],
+    },
+    skillOverlay: {
+      commonTasks: [
+        "Bed mobility and positioning plans",
+        "Assisting with meals and hydration monitoring",
+        "Supporting toileting and perineal care with privacy preserved",
+      ],
+      clinicalSkills: [
+        "Gait belt use and lift-team judgment",
+        "Vital sign trends the nurse needs to know",
+        "Dementia-friendly communication",
+        "Documentation that is factual and timely",
+      ],
+      highRiskSituations: [
+        "Falls, confusion, or sudden weakness after a minor bump",
+        "Refusal of care while risk remains",
+        "Aggression or distress where safety is the priority",
+      ],
+      examFocusAreas: [
+        "Ethics, consent, and boundaries in intimate care",
+        "Delegation: what to do yourself vs. escalate",
+        "Infection control in outbreaks and shared equipment",
+      ],
+    },
   },
   {
     professionKey: "community-health-worker",
@@ -301,6 +408,44 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
       "Pair lessons with timed practice and rationales.",
     ],
     ctaLine: "Open paginated lessons, then add questions when you are on an allied plan.",
+    roleHero: {
+      whatYouDo: [
+        "Prepare patients, rooms, and supplies so clinicians can work efficiently and safely.",
+        "Perform authorized tasks such as vitals, point-of-care workflows, and documentation support within MA scope.",
+      ],
+      whereYouWork: [
+        "Primary care clinics, specialty offices, urgent care–style settings, and occupational health programs.",
+        "What you may do depends on state or provincial rules and physician/employer delegation—exams test that judgment.",
+      ],
+      topSkills: [
+        "Accurate vital signs and measurement technique",
+        "Infection control, PPE, and room turnover",
+        "Specimen labeling and chain-of-custody awareness",
+        "Professional boundaries and chaperoning norms",
+      ],
+    },
+    skillOverlay: {
+      commonTasks: [
+        "Rooming patients and chief-complaint capture",
+        "Setting up for minor procedures and sterile fields",
+        "Point-of-care testing logistics and quality checks",
+      ],
+      clinicalSkills: [
+        "Medication reconciliation support (not prescribing)",
+        "ECG lead placement assistance where allowed",
+        "Wound care supplies and dressing changes per protocol",
+      ],
+      highRiskSituations: [
+        "Abnormal vitals with a patient who “looks fine”",
+        "Allergy discrepancies before immunizations",
+        "Tasks that blur into nursing scope—when to stop and escalate",
+      ],
+      examFocusAreas: [
+        "Administrative law and privacy paired with clinical vignettes",
+        "Prioritization when the schedule stacks up",
+        "Communication under time pressure",
+      ],
+    },
   },
   {
     professionKey: "dental-assistant",

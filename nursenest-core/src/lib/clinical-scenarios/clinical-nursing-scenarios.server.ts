@@ -35,11 +35,15 @@ export async function listClinicalNursingScenariosForAdmin(opts: { pathwayId?: s
 export async function listClinicalNursingScenariosForLearnerCatalog(opts: {
   pathwayId: string;
   includeDraftsForStaff: boolean;
+  /** Optional narrow filter — same rows, smaller list when product tags categories per occupation. */
+  canonicalCategoryIds?: string[];
 }) {
   const pid = opts.pathwayId.trim();
+  const catIds = (opts.canonicalCategoryIds ?? []).map((c) => c.trim()).filter(Boolean);
   return prisma.clinicalNursingScenario.findMany({
     where: {
       pathwayId: pid,
+      ...(catIds.length > 0 ? { canonicalCategoryId: { in: catIds } } : {}),
       ...(opts.includeDraftsForStaff ? {} : { publishStatus: "APPROVED" as ClinicalNursingScenarioPublishStatus }),
     },
     orderBy: { updatedAt: "desc" },
