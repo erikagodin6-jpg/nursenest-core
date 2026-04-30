@@ -1,6 +1,13 @@
 import type { ClinicalNursingScenario, ClinicalNursingScenarioStage } from "@prisma/client";
 import type { ClinicalScenarioPreviewModel } from "@/components/clinical-scenarios/clinical-scenario-unfolding-preview";
 
+function clinicalScenarioIsPremiumFromReferences(referencesJson: unknown): boolean {
+  if (!Array.isArray(referencesJson)) return false;
+  return referencesJson.some(
+    (row) => row && typeof row === "object" && (row as { isPremium?: unknown }).isPremium === true,
+  );
+}
+
 function mapStage(s: ClinicalNursingScenarioStage) {
   return {
     id: s.id,
@@ -38,6 +45,7 @@ export function mapClinicalNursingScenarioToPreview(
     assessmentFindings: row.assessmentFindings,
     labsDiagnostics: row.labsDiagnostics,
     publishStatus: row.publishStatus,
+    isPremium: clinicalScenarioIsPremiumFromReferences(row.referencesJson),
     stages: row.stages.map(mapStage),
   };
 }

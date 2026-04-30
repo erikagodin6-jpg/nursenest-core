@@ -91,7 +91,11 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
               ← Back to list
             </Link>
           </div>
-          <ClinicalScenarioUnfoldingPreview scenario={model} premiumUnlocked={premiumUnlocked || includeDrafts} />
+          <ClinicalScenarioUnfoldingPreview
+            scenario={model}
+            premiumUnlocked={premiumUnlocked}
+            allowStaffFullPreview={includeDrafts}
+          />
         </ScenarioStudyShell>
       );
     }

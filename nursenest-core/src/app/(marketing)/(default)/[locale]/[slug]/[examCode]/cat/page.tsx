@@ -11,6 +11,9 @@ import {
 } from "@/lib/exam-pathways/cat-eligibility";
 import { catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
+import { ALLIED_PROFESSION_QUERY_PARAM, isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
+import { mergeMarketingPathQuery, withAlliedProfessionMarketingQuery } from "@/lib/lessons/lesson-routes";
 import {
   pathwayCatLandingSubtitle,
   pathwayCatLandingTitle,
@@ -31,7 +34,10 @@ export const dynamic = "force-dynamic";
 export const dynamicParams = true;
 export const revalidate = 86400;
 
-type Props = { params: Promise<{ locale: string; slug: string; examCode: string }> };
+type Props = {
+  params: Promise<{ locale: string; slug: string; examCode: string }>;
+  searchParams?: Promise<{ alliedProfession?: string }>;
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
@@ -58,11 +64,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   );
 }
 
-export default async function PathwayCatEntryPage({ params }: Props) {
+export default async function PathwayCatEntryPage({ params, searchParams }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
   const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname: `${pathname}/cat` });
   if (!pathway) notFound();
+
+  const spCat = searchParams ? await searchParams : {};
+  const rawAlliedProf =
+    typeof spCat.alliedProfession === "string" ? spCat.alliedProfession.trim().toLowerCase() : "";
+  const alliedProfessionResolved =
+    isAlliedMarketingCorePathwayId(pathway.id) && rawAlliedProf
+      ? getAlliedProfessionByProfessionKey(rawAlliedProf)
+      : null;
+  const alliedProfessionKey = alliedProfessionResolved?.professionKey ?? "";
 
   const { questionSnapshot } = await loadMarketingExamHubOptionalBlocks(pathway, {
     pathname: `${pathname}/cat`,
@@ -84,7 +99,14 @@ export default async function PathwayCatEntryPage({ params }: Props) {
   const { crumbs, schemaItems } = pathwayCatPracticeBreadcrumbs(pathway);
   const overviewHref = hubBase;
   const marketingCatPath = buildExamPathwayPath(pathway, "cat");
-  const signInReturnHref = loginWithCallback(marketingCatPath);
+  const marketingCatPathWithProfession = alliedProfessionKey
+    ? mergeMarketingPathQuery(marketingCatPath, { [ALLIED_PROFESSION_QUERY_PARAM]: alliedProfessionKey })
+    : marketingCatPath;
+  const signInReturnHref = loginWithCallback(marketingCatPathWithProfession);
+  const appCatStartWithProfession = appPathwayCatSessionStartPath(
+    pathway.id,
+    alliedProfessionKey ? { alliedProfession: alliedProfessionKey } : undefined,
+  );
 
   let assessment = assessMarketingCatSurfaceWithoutAuth(pathway, questionSnapshot);
 
@@ -150,8 +172,17 @@ export default async function PathwayCatEntryPage({ params }: Props) {
       ? `You have access to ${questionSnapshot.pathwayScopedCount} practice questions on this pathway.`
       : "You have access to practice questions for this pathway.";
   const lessonsHref = buildExamPathwayPath(pathway, "lessons");
+  const lessonsHrefWithProfession = alliedProfessionKey
+    ? withAlliedProfessionMarketingQuery(lessonsHref, alliedProfessionKey)
+    : lessonsHref;
   const questionsHref = buildExamPathwayPath(pathway, "questions");
+  const questionsHrefWithProfession = alliedProfessionKey
+    ? withAlliedProfessionMarketingQuery(questionsHref, alliedProfessionKey)
+    : questionsHref;
   const pricingHref = buildExamPathwayPath(pathway, "pricing");
+  const marketingAppCatLaunchHref = alliedProfessionKey
+    ? appCatStartWithProfession
+    : (assessment.appCatStartPath ?? appCatStartWithProfession);
   const scoringNote =
     readinessConfig.engineType === "CAT"
       ? `Results compare your estimated ability to a pathway passing-standard band (not a government or board certificate).`
@@ -248,14 +279,14 @@ export default async function PathwayCatEntryPage({ params }: Props) {
                 href={
                   assessment.marketingPrimaryCta === "sign_in_to_cat"
                     ? signInReturnHref
-                    : (assessment.appCatStartPath ?? appPathwayCatSessionStartPath(pathway.id))
+                    : marketingAppCatLaunchHref
                 }
                 className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground shadow-sm"
               >
                 {assessment.marketingPrimaryCta === "sign_in_to_cat" ? "Sign in to start exam simulation" : "Start exam simulation"}
               </Link>
               <Link
-                href={questionsHref}
+                href={questionsHrefWithProfession}
                 className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
               >
                 Practice questions first
@@ -284,13 +315,13 @@ export default async function PathwayCatEntryPage({ params }: Props) {
                 </Link>
               ) : null}
               <Link
-                href={questionsHref}
+                href={questionsHrefWithProfession}
                 className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
               >
                 Open question bank
               </Link>
               <Link
-                href={lessonsHref}
+                href={lessonsHrefWithProfession}
                 className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
               >
                 Browse lessons
@@ -302,13 +333,13 @@ export default async function PathwayCatEntryPage({ params }: Props) {
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
         <Link
-          href={lessonsHref}
+          href={lessonsHrefWithProfession}
           className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
         >
           Lessons
         </Link>
         <Link
-          href={questionsHref}
+          href={questionsHrefWithProfession}
           className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-border px-8 py-3 text-sm font-semibold hover:bg-card"
         >
           Question bank

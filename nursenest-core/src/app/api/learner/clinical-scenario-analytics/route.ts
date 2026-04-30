@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
+import { recordClinicalScenarioSimulationRun } from "@/lib/clinical-scenarios/clinical-scenario-simulation-run.server";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
+
+const trajectoryEnum = z.enum(["improving", "stable", "deteriorating"]);
 
 const bodySchema = z.object({
   scenarioId: z.string().min(1).max(64),
@@ -12,8 +15,11 @@ const bodySchema = z.object({
   optionId: z.string().min(1).max(64),
   isCorrect: z.boolean(),
   incorrectSoFar: z.number().int().min(0).max(50),
-  trajectoryAggregate: z.enum(["improving", "stable", "deteriorating"]),
+  incorrectWeight: z.number().int().min(0).max(99).optional(),
+  trajectoryPath: z.array(trajectoryEnum).optional(),
+  trajectoryAggregate: trajectoryEnum,
   reachedStageOrder: z.number().int().min(0).max(50),
+  maxStageOrderReached: z.number().int().min(0).max(50).optional(),
   premiumUnlocked: z.boolean(),
   completedScenario: z.boolean().optional(),
 });
@@ -39,6 +45,10 @@ export async function POST(req: Request) {
     }
 
     const b = parsed.data;
+    const incorrectWeight = b.incorrectWeight ?? b.incorrectSoFar;
+    const trajectoryPath = b.trajectoryPath ?? [];
+    const maxStageOrderReached = b.maxStageOrderReached ?? b.reachedStageOrder;
+
     await captureServerEvent(analyticsDistinctId(userId), "clinical_scenario_branch", {
       scenario_id: b.scenarioId,
       pathway_id: b.pathwayId,
@@ -47,10 +57,29 @@ export async function POST(req: Request) {
       option_id: b.optionId,
       is_correct: b.isCorrect,
       incorrect_so_far: b.incorrectSoFar,
+      incorrect_weight: incorrectWeight,
       trajectory_aggregate: b.trajectoryAggregate,
+      trajectory_path: trajectoryPath,
       reached_stage_order: b.reachedStageOrder,
+      max_stage_order_reached: maxStageOrderReached,
       premium_unlocked: b.premiumUnlocked,
       completed_scenario: b.completedScenario ?? false,
+    });
+
+    await recordClinicalScenarioSimulationRun({
+      userId,
+      scenarioId: b.scenarioId,
+      pathwayId: b.pathwayId,
+      tierFocus: b.tierFocus,
+      summary: {
+        incorrectCount: b.incorrectSoFar,
+        incorrectWeight,
+        trajectoryPath: trajectoryPath.map(String),
+        maxStageOrderReached,
+        completedScenario: b.completedScenario ?? false,
+        premiumUnlocked: b.premiumUnlocked,
+        trajectoryAggregate: b.trajectoryAggregate,
+      },
     });
 
     return NextResponse.json({ ok: true });

@@ -5,12 +5,16 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import {
   aggregateTrajectoryLabel,
   applyChoiceToBranchingState,
+  BRANCHING_DETERIORATION_BANNER,
   initialBranchingEngineState,
+  narrativeScenarioText,
   optionsJsonUsesBranchingEngine,
+  parseBranchingOptions,
   visibleOptionsForStage,
   type BranchingStageView,
   type ParsedBranchingOption,
 } from "@/lib/clinical-scenarios/branching-scenario-engine";
+import { computeScenarioOutcome } from "@/lib/clinical-scenarios/clinical-scenario-outcome-engine";
 import {
   patientTrajectoryFromConsequence,
   trajectoryLabelText,
@@ -50,6 +54,8 @@ export type ClinicalScenarioPreviewModel = {
   assessmentFindings: string;
   labsDiagnostics: unknown | null;
   publishStatus: string;
+  /** Premium simulation: free tier may preview stage 1 only. */
+  isPremium?: boolean;
   stages: ClinicalScenarioStagePreview[];
 };
 
@@ -85,6 +91,13 @@ function toBranchingStageView(s: ClinicalScenarioStagePreview): BranchingStageVi
   return { ...s };
 }
 
+function correctPathwayLines(stages: ClinicalScenarioStagePreview[]): string[] {
+  return stages.map((s, idx) => {
+    const ok = parseBranchingOptions(s.optionsJson).find((o) => o.isCorrect);
+    return `Stage ${idx + 1}: ${ok?.label ?? s.correctOptionId}`;
+  });
+}
+
 function scenarioUsesBranchingEngine(stages: ClinicalScenarioStagePreview[]): boolean {
   return stages.some((s) => optionsJsonUsesBranchingEngine(s.optionsJson));
 }
@@ -114,13 +127,17 @@ function renderKeyValuePanel(title: string, data: unknown) {
 export function ClinicalScenarioUnfoldingPreview({
   scenario,
   premiumUnlocked = true,
+  allowStaffFullPreview = false,
 }: {
   scenario: ClinicalScenarioPreviewModel;
-  /** When false, learner completes stage 0 only then sees paywall (first-stage teaser). */
   premiumUnlocked?: boolean;
+  /** Staff / admin preview: full multi-stage access even for premium scenarios without a subscription. */
+  allowStaffFullPreview?: boolean;
 }) {
   const branching = useMemo(() => scenarioUsesBranchingEngine(scenario.stages), [scenario.stages]);
   const branchStages = useMemo(() => scenario.stages.map(toBranchingStageView), [scenario.stages]);
+  const isPremiumScenario = scenario.isPremium === true;
+  const fullScenarioAccess = premiumUnlocked || !isPremiumScenario || allowStaffFullPreview;
 
   const [legacyStageIdx, setLegacyStageIdx] = useState(0);
   const [legacyPicked, setLegacyPicked] = useState<string | null>(null);
@@ -150,7 +167,26 @@ export function ClinicalScenarioUnfoldingPreview({
   );
 
   const branchComplete =
-    branching && (branchOrderIdx >= scenario.stages.length || (branchFreeDone && !premiumUnlocked));
+    branching && ((!fullScenarioAccess && branchFreeDone) || branchOrderIdx >= scenario.stages.length);
+
+  const branchOutcome = useMemo(() => {
+    if (!branching || !branchComplete) return null;
+    return computeScenarioOutcome({
+      trajectoryPath: branchState.trajectoryPath,
+      incorrectCount: branchState.incorrectCount,
+      incorrectWeight: branchState.incorrectWeight,
+      totalStages: scenario.stages.length,
+      mistakeLabels: branchState.mistakeLabels,
+    });
+  }, [
+    branching,
+    branchComplete,
+    branchState.trajectoryPath,
+    branchState.incorrectCount,
+    branchState.incorrectWeight,
+    branchState.mistakeLabels,
+    scenario.stages.length,
+  ]);
 
   const trajectoryLegacy: PatientTrajectory | null = useMemo(() => {
     if (!legacyStage || !legacyPicked) return null;
@@ -179,10 +215,12 @@ export function ClinicalScenarioUnfoldingPreview({
     const sendAnalytics = (args: {
       trajectoryPath: PatientTrajectory[];
       incorrectSoFar: number;
+      incorrectWeightSoFar: number;
       reachedStageOrder: number;
       completed: boolean;
     }) => {
       const trajAgg = aggregateTrajectoryLabel(args.trajectoryPath);
+      const reached = Math.min(args.reachedStageOrder, Math.max(0, scenario.stages.length - 1));
       void fetch("/api/learner/clinical-scenario-analytics", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -194,27 +232,53 @@ export function ClinicalScenarioUnfoldingPreview({
           optionId: picked.id,
           isCorrect: picked.isCorrect,
           incorrectSoFar: args.incorrectSoFar,
+          incorrectWeight: args.incorrectWeightSoFar,
+          trajectoryPath: args.trajectoryPath,
           trajectoryAggregate: trajAgg,
-          reachedStageOrder: Math.min(args.reachedStageOrder, scenario.stages.length - 1),
+          reachedStageOrder: reached,
+          maxStageOrderReached: reached,
           premiumUnlocked,
           completedScenario: args.completed,
         }),
       }).catch(() => {});
     };
 
-    if (!premiumUnlocked && branchState.currentOrderIndex === 0) {
-      const traj = patientTrajectoryFromConsequence(trajStr);
+    if (!fullScenarioAccess && branchState.currentOrderIndex === 0) {
+      const wrongW = !picked.isCorrect ? (picked.effect === "delay" ? 2 : 1) : 0;
+      let consequenceStr = trajStr;
+      if (!picked.isCorrect && picked.effect === "delay") {
+        consequenceStr = "patient deteriorates";
+      }
+      const traj = patientTrajectoryFromConsequence(consequenceStr);
       const incorrect = branchState.incorrectCount + (picked.isCorrect ? 0 : 1);
+      const incorrectWeight = branchState.incorrectWeight + wrongW;
       const newPath = [...branchState.trajectoryPath, traj];
-      setBranchState((prev) => ({
-        ...prev,
-        trajectoryPath: newPath,
-        rationaleTrail: [...prev.rationaleTrail, picked.rationale || ""].filter((s) => s.trim().length > 0),
-        incorrectCount: incorrect,
-      }));
+      const nextOrder = 1;
+      setBranchState((prev) => {
+        const deteriorationBannerByStageOrder = { ...prev.deteriorationBannerByStageOrder };
+        if (picked.trajectory === "deteriorates" && scenario.stages.length > nextOrder) {
+          const prevB = deteriorationBannerByStageOrder[nextOrder] ?? "";
+          deteriorationBannerByStageOrder[nextOrder] = prevB ? `${prevB}\n${BRANCHING_DETERIORATION_BANNER}` : BRANCHING_DETERIORATION_BANNER;
+        }
+        return {
+          ...prev,
+          trajectoryPath: newPath,
+          rationaleTrail: [...prev.rationaleTrail, picked.rationale || ""].filter((s) => s.trim().length > 0),
+          incorrectCount: incorrect,
+          incorrectWeight,
+          mistakeLabels: !picked.isCorrect ? [...prev.mistakeLabels, picked.label] : [...prev.mistakeLabels],
+          deteriorationBannerByStageOrder,
+        };
+      });
       setBranchFreeDone(true);
       setBranchPending(null);
-      sendAnalytics({ trajectoryPath: newPath, incorrectSoFar: incorrect, reachedStageOrder: 0, completed: false });
+      sendAnalytics({
+        trajectoryPath: newPath,
+        incorrectSoFar: incorrect,
+        incorrectWeightSoFar: incorrectWeight,
+        reachedStageOrder: 0,
+        completed: false,
+      });
       return;
     }
 
@@ -229,10 +293,11 @@ export function ClinicalScenarioUnfoldingPreview({
     sendAnalytics({
       trajectoryPath: next.trajectoryPath,
       incorrectSoFar: next.incorrectCount,
+      incorrectWeightSoFar: next.incorrectWeight,
       reachedStageOrder: next.currentOrderIndex,
       completed,
     });
-  }, [branchPending, branchStage, branchState, branchStages, premiumUnlocked, scenario]);
+  }, [branchPending, branchStage, branchState, branchStages, fullScenarioAccess, premiumUnlocked, scenario]);
 
   if (branching) {
     if (!branchStage && !branchFreeDone && branchOrderIdx < scenario.stages.length) {
@@ -250,9 +315,9 @@ export function ClinicalScenarioUnfoldingPreview({
             {scenario.pathwayId} · {categoryLabel} · {scenario.tierFocus.replace(/_/g, " ")} · {scenario.difficulty}
           </p>
           <p className="mt-1 text-xs text-[var(--semantic-chart-3)]">Status: {scenario.publishStatus}</p>
-          {!premiumUnlocked ? (
+          {!fullScenarioAccess && isPremiumScenario ? (
             <p className="mt-2 text-xs text-[var(--semantic-warning)]">
-              Free preview: first stage only. Upgrade for the full branching case.
+              Premium simulation: Free includes stage 1 only. Upgrade for the full multi-stage case with branching consequences.
             </p>
           ) : null}
         </header>
@@ -287,17 +352,55 @@ export function ClinicalScenarioUnfoldingPreview({
               Overall trajectory: {trajectoryLabelText(aggregateBranchTrajectory)}
             </p>
             <p className="mt-2 text-sm text-[var(--semantic-text-primary)]">
-              Incorrect decisions: {branchState.incorrectCount}
+              Incorrect decisions: {branchState.incorrectCount} (weighted burden: {branchState.incorrectWeight})
             </p>
-            <div className="mt-3 space-y-2">
-              <p className="text-xs font-semibold uppercase text-[var(--semantic-info)]">Rationale trail</p>
-              <ol className="list-decimal space-y-1 pl-5 text-sm text-[var(--theme-body-text)]">
-                {branchState.rationaleTrail.map((r, i) => (
-                  <li key={i}>{r}</li>
-                ))}
-              </ol>
-            </div>
-            {!premiumUnlocked ? (
+            {branchOutcome ? (
+              <div
+                className="mt-4 space-y-3 rounded-lg border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_10%,var(--bg-card))] p-4"
+                data-testid="clinical-scenario-outcome-screen"
+              >
+                <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-brand)]">Simulation debrief</p>
+                <p className="text-sm font-semibold capitalize text-[var(--semantic-text-primary)]">
+                  Outcome: {branchOutcome.outcome}
+                </p>
+                <p className="text-sm text-[var(--theme-body-text)]">{branchOutcome.summary}</p>
+                <div>
+                  <p className="text-xs font-semibold uppercase text-[var(--semantic-info)]">Rationale highlights</p>
+                  <ol className="mt-1 list-decimal space-y-1 pl-5 text-sm text-[var(--theme-body-text)]">
+                    {branchState.rationaleTrail.map((r, i) => (
+                      <li key={i}>{r}</li>
+                    ))}
+                  </ol>
+                </div>
+                {branchOutcome.keyMistakes.length ? (
+                  <div>
+                    <p className="text-xs font-semibold uppercase text-[var(--semantic-danger)]">Mistakes to review</p>
+                    <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-[var(--theme-body-text)]">
+                      {branchOutcome.keyMistakes.map((m, i) => (
+                        <li key={i}>{m}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+                <div>
+                  <p className="text-xs font-semibold uppercase text-[var(--semantic-success)]">Correct pathway (ideal choices)</p>
+                  <ol className="mt-1 list-decimal space-y-1 pl-5 text-sm text-[var(--semantic-text-primary)]">
+                    {correctPathwayLines(scenario.stages).map((line, i) => (
+                      <li key={i}>{line}</li>
+                    ))}
+                  </ol>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold uppercase text-[var(--semantic-chart-2)]">Clinical pearls</p>
+                  <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-[var(--theme-body-text)]">
+                    {branchOutcome.clinicalPearls.map((p, i) => (
+                      <li key={i}>{p}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ) : null}
+            {!fullScenarioAccess && isPremiumScenario ? (
               <div className="mt-6" data-testid="clinical-scenario-paywall">
                 <SubscriptionPaywall context="lessons" />
               </div>
@@ -323,7 +426,9 @@ export function ClinicalScenarioUnfoldingPreview({
                   Trajectory: {trajectoryLabelText(aggregateBranchTrajectory)}
                 </span>
               </div>
-              <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-primary)]">{branchStage.scenarioText}</p>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--semantic-text-primary)]">
+                {narrativeScenarioText(toBranchingStageView(branchStage), branchState)}
+              </p>
               {renderKeyValuePanel("Vitals (stage)", branchStage.vitals)}
               <p className="mt-3 text-sm text-[var(--semantic-text-primary)]">
                 <span className="font-semibold">Assessment:</span> {branchStage.assessmentFindings}

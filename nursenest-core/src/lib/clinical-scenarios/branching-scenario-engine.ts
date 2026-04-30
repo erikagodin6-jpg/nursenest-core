@@ -147,7 +147,8 @@ function cloneHiddenMap(map: Record<number, Set<string>>): Record<number, Set<st
   return out;
 }
 
-const DETERIORATION_BANNER =
+/** Shown as a prefix on the next stage after a `deteriorates` trajectory choice. */
+export const BRANCHING_DETERIORATION_BANNER =
   "Clinical update: the patient's condition has worsened since your last decision — reassess vitals, monitoring, and escalation thresholds urgently.";
 
 /**
@@ -190,7 +191,7 @@ export function applyChoiceToBranchingState(args: {
 
   if (picked.trajectory === "deteriorates") {
     const prev = deterioration[nextOrder] ?? "";
-    deterioration[nextOrder] = prev ? `${prev}\n${DETERIORATION_BANNER}` : DETERIORATION_BANNER;
+    deterioration[nextOrder] = prev ? `${prev}\n${BRANCHING_DETERIORATION_BANNER}` : BRANCHING_DETERIORATION_BANNER;
   }
 
   let consequenceStr = trajectoryToConsequenceString(picked.trajectory);

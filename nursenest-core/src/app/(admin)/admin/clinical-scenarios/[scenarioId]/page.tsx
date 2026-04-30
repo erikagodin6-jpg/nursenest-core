@@ -42,7 +42,7 @@ export default async function AdminClinicalScenarioDetailPage({ params }: PagePr
         learnerPreviewHref={learnerPreviewHref}
       />
 
-      <ClinicalScenarioUnfoldingPreview scenario={model} />
+      <ClinicalScenarioUnfoldingPreview scenario={model} allowStaffFullPreview />
     </main>
   );
 }

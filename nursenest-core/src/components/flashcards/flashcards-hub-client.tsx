@@ -27,6 +27,7 @@ import { weakAreaFlashcardsHref } from "@/lib/learner/weak-area-flashcards-href"
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import type { FlashcardLessonVirtualDiagnostics } from "@/lib/flashcards/flashcard-custom-session-response";
 import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
+import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 
 const CARD_COUNTS = [10, 20, 30, 50] as const;
 
@@ -42,6 +43,7 @@ function buildCustomSessionQuery(args: {
   starredOnly: boolean;
   notStudiedOnly: boolean;
   includeCards: boolean;
+  alliedProfession?: string | null;
 }): string {
   const q = new URLSearchParams();
   q.set("pathwayId", args.pathwayId);
@@ -62,6 +64,8 @@ function buildCustomSessionQuery(args: {
     if (starredIds.length > 0) q.set("stateIds", starredIds.join(","));
   }
   if (args.notStudiedOnly) q.set("notStudiedOnly", "1");
+  const ap = args.alliedProfession?.trim().toLowerCase();
+  if (ap) q.set("alliedProfession", ap);
   return q.toString();
 }
 
@@ -72,6 +76,7 @@ export function FlashcardsHubClient({
   catHref,
   initialHub,
   lessonsHubHref,
+  alliedProfessionKey = null,
 }: {
   scopedPathwayId: string;
   pathwayDisplayName: string;
@@ -80,11 +85,21 @@ export function FlashcardsHubClient({
   initialHub?: FlashcardsHubServerPayload | null;
   /** Same-pathway lessons hub — mirrors learner lessons IA for every tier/pathway. */
   lessonsHubHref?: string;
+  /** Preserved on allied marketing → app handoffs (`?alliedProfession=`). */
+  alliedProfessionKey?: string | null;
 }) {
   const { t } = useMarketingI18n();
-  const resolvedLessonsHubHref =
-    lessonsHubHref?.trim() ||
-    `/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`;
+  const apForQuery =
+    alliedProfessionKey?.trim() && isAlliedMarketingCorePathwayId(scopedPathwayId)
+      ? alliedProfessionKey.trim().toLowerCase()
+      : "";
+  const resolvedLessonsHubHref = (() => {
+    const base =
+      lessonsHubHref?.trim() || `/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`;
+    if (!apForQuery) return base;
+    const join = base.includes("?") ? "&" : "?";
+    return `${base}${join}alliedProfession=${encodeURIComponent(apForQuery)}`;
+  })();
 
   const [builderCategories, setBuilderCategories] = useState<
     Array<{ id: string; title: string; description?: string; count: number }>
@@ -173,6 +188,7 @@ export function FlashcardsHubClient({
         starredOnly,
         notStudiedOnly,
         includeCards: false,
+        alliedProfession: apForQuery || null,
       });
       const res = await fetch(`/api/flashcards/custom-session?${qs}`, { credentials: "include" });
       let json: unknown;
@@ -220,6 +236,7 @@ export function FlashcardsHubClient({
     incorrectOnly,
     starredOnly,
     notStudiedOnly,
+    apForQuery,
   ]);
 
   useEffect(() => {
@@ -270,6 +287,7 @@ export function FlashcardsHubClient({
         starredOnly,
         notStudiedOnly,
         includeCards: true,
+        alliedProfession: apForQuery || null,
       }),
     [
       scopedPathwayId,
@@ -281,6 +299,7 @@ export function FlashcardsHubClient({
       incorrectOnly,
       starredOnly,
       notStudiedOnly,
+      apForQuery,
     ],
   );
 

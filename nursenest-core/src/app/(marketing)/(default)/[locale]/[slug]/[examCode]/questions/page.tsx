@@ -97,9 +97,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname: `${pathname}/questions` });
   if (!pathway) notFound();
 
-  const spAll = searchParams ? await searchParams : {};
-  const rawAlliedProf =
-    typeof spAll.alliedProfession === "string" ? spAll.alliedProfession.trim().toLowerCase() : "";
+  const rawAlliedProf = typeof sp.alliedProfession === "string" ? sp.alliedProfession.trim().toLowerCase() : "";
   const alliedProfessionResolved =
     isAlliedMarketingCorePathwayId(pathway.id) && rawAlliedProf
       ? getAlliedProfessionByProfessionKey(rawAlliedProf)
@@ -336,7 +334,7 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
           </aside>
           <PathwayQuestionHubRelatedLessons
             topicLabel={displayTopicLabel}
-            lessonsBasePath={marketingPathwayLessonsIndexPath(pathway)}
+            lessonsBasePath={lessonsHrefWithProfession}
             lessons={relatedLessonsForTopic}
           />
         </div>
@@ -351,8 +349,8 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
       {/* Bottom nav */}
       <StudyBottomNav
         relatedLinks={[
-          { label: "Clinical lessons", href: lessonsHref },
-          { label: "Adaptive CAT", href: catHref },
+          { label: "Clinical lessons", href: lessonsHrefWithProfession },
+          { label: "Adaptive CAT", href: catHrefWithProfession },
           { label: "Practice exams", href: HUB.practiceExams },
           { label: "Exam overview", href: overviewHref },
         ]}

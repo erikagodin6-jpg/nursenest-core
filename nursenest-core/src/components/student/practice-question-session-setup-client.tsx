@@ -9,6 +9,7 @@ import {
   type PracticeAdaptiveSelectionBasis,
 } from "@/components/student/pathway-cat-start-payload";
 import { appPathwayCatFullSetupHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 
 // ─────────────────────────────────────────────────────────────────────────────

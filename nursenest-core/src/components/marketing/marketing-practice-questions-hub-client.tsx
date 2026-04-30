@@ -19,6 +19,7 @@ import {
   type PracticeAdaptiveSelectionBasis,
 } from "@/components/student/pathway-cat-start-payload";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { pathwayAppQuestionBankTopicHref } from "@/components/lessons/pathway-lesson-link-practice";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -47,6 +48,8 @@ export type MarketingPracticeQuestionsHubClientProps = {
   topicClusters?: MarketingPracticeQuestionsTopicCluster[];
   lessonsHref: string;
   marketingCatHref: string;
+  /** Canonical allied occupation filter for app question / CAT entry URLs. */
+  alliedProfessionKey?: string;
 };
 
 const cardBase =
@@ -58,23 +61,27 @@ function cardSelected() {
 
 const cardUnselected = `${cardBase} border-[color-mix(in_srgb,var(--semantic-info)_16%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] hover:bg-[var(--semantic-panel-muted)]`;
 
-function appQuestionsBase(pathwayId: string, qs: Record<string, string>) {
+function appQuestionsBase(pathwayId: string, qs: Record<string, string>, alliedProfession?: string) {
   const p = new URLSearchParams({ pathwayId });
   for (const [k, v] of Object.entries(qs)) {
     if (!v) continue;
     if (k === "studyFilter" && v === "all") continue;
     p.set(k, v);
   }
+  const ap = alliedProfession?.trim().toLowerCase();
+  if (ap) p.set("alliedProfession", ap);
   return loginWithCallback(`/app/questions?${p.toString()}`);
 }
 
-function appQuestionsSession(pathwayId: string, qs: Record<string, string>) {
+function appQuestionsSession(pathwayId: string, qs: Record<string, string>, alliedProfession?: string) {
   const p = new URLSearchParams({ pathwayId });
   for (const [k, v] of Object.entries(qs)) {
     if (!v) continue;
     if (k === "studyFilter" && v === "all") continue;
     p.set(k, v);
   }
+  const ap = alliedProfession?.trim().toLowerCase();
+  if (ap) p.set("alliedProfession", ap);
   return loginWithCallback(`/app/questions/session?${p.toString()}`);
 }
 
@@ -110,6 +117,7 @@ export function MarketingPracticeQuestionsHubClient({
   topicClusters = [],
   lessonsHref,
   marketingCatHref,
+  alliedProfessionKey = "",
 }: MarketingPracticeQuestionsHubClientProps) {
   const [selected, setSelected] = useState<Set<PracticeBodySystemHubId>>(new Set());
   const [studyFilter, setStudyFilter] = useState<PracticeSessionStudyFilter>("all");
@@ -118,6 +126,8 @@ export function MarketingPracticeQuestionsHubClient({
   const [adaptiveError, setAdaptiveError] = useState<string | null>(null);
 
   const pid = pathway.id;
+  const apForApp =
+    alliedProfessionKey.trim() && isAlliedMarketingCorePathwayId(pid) ? alliedProfessionKey.trim().toLowerCase() : "";
 
   const hubIdsParam = useMemo(() => [...selected].sort().join(","), [selected]);
 
@@ -131,24 +141,26 @@ export function MarketingPracticeQuestionsHubClient({
     [hubIdsParam, studyFilter],
   );
 
-  const startMixedHref = appQuestionsBase(pid, { preset: "pathway_mixed" });
-  const weakHref = appQuestionsBase(pid, withHubRecord({ preset: "pathway_mixed", studyMode: "weak" }));
+  const startMixedHref = appQuestionsBase(pid, { preset: "pathway_mixed" }, apForApp);
+  const weakHref = appQuestionsBase(pid, withHubRecord({ preset: "pathway_mixed", studyMode: "weak" }), apForApp);
   const incorrectHref = appQuestionsSession(
     pid,
     withHubRecord({ source: "previously_incorrect", count: "20", mode: "tutor", shuffle: "true" }),
+    apForApp,
   );
   const unseenHref = appQuestionsSession(
     pid,
     withHubRecord({ source: "not_studied", count: "20", mode: "tutor", shuffle: "true" }),
+    apForApp,
   );
-  const bookmarkedHref = appQuestionsBase(pid, withHubRecord({ preset: "pathway_mixed", studyFilter: "bookmarked" }));
+  const bookmarkedHref = appQuestionsBase(pid, withHubRecord({ preset: "pathway_mixed", studyFilter: "bookmarked" }), apForApp);
 
   const startPrimaryHref = useMemo(() => {
     if (studyFilter === "incorrect") return incorrectHref;
     if (studyFilter === "unseen") return unseenHref;
     if (studyFilter === "weak") return weakHref;
     if (studyFilter === "bookmarked") return bookmarkedHref;
-    if (selected.size > 0) return appQuestionsBase(pid, withHubRecord({ preset: "pathway_mixed" }));
+    if (selected.size > 0) return appQuestionsBase(pid, withHubRecord({ preset: "pathway_mixed" }), apForApp);
     return startMixedHref;
   }, [
     studyFilter,
@@ -160,9 +172,12 @@ export function MarketingPracticeQuestionsHubClient({
     pid,
     withHubRecord,
     startMixedHref,
+    apForApp,
   ]);
 
-  const catAppHref = loginWithCallback(appPathwayCatSessionStartPath(pid));
+  const catAppHref = loginWithCallback(
+    appPathwayCatSessionStartPath(pid, apForApp ? { alliedProfession: apForApp } : undefined),
+  );
 
   useEffect(() => {
     if (process.env.NODE_ENV !== "development") return;
@@ -517,7 +532,9 @@ export function MarketingPracticeQuestionsHubClient({
                         <p className="font-semibold text-[var(--theme-heading-text)]">{c.label}</p>
                         <p className="text-[var(--theme-muted-text)]">{c.count} questions</p>
                         <Link
-                          href={pathwayAppQuestionBankTopicHref(pathway, c.label, c.topicSlug)}
+                          href={pathwayAppQuestionBankTopicHref(pathway, c.label, c.topicSlug, {
+                            alliedProfession: apForApp || undefined,
+                          })}
                           className="mt-1 inline-block font-semibold text-[var(--semantic-brand)] hover:underline"
                         >
                           Open in question bank

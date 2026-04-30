@@ -86,4 +86,47 @@ test("mapClinicalNursingScenarioToPreview preserves pathway and stages", () => {
   assert.equal(m.pathwayId, "ca-rpn-rex-pn");
   assert.equal(m.stages.length, 1);
   assert.equal(m.stages[0]!.correctOptionId, "a");
+  assert.equal(m.isPremium, false);
+});
+
+test("mapClinicalNursingScenarioToPreview sets isPremium from referencesJson", () => {
+  const stage: ClinicalNursingScenarioStage = {
+    id: "st1",
+    scenarioId: "sc1",
+    orderIndex: 0,
+    scenarioText: "text",
+    vitals: {},
+    assessmentFindings: "af",
+    labUpdates: null,
+    questionStem: "stem?",
+    optionsJson: [{ id: "a", label: "A" }],
+    correctOptionId: "a",
+    rationale: "because",
+    whyWrongByOptionId: {},
+    clinicalJudgmentFocus: "focus",
+    consequencesByOptionId: { a: "stable" },
+    nextStageOrder: null,
+  };
+  const scenario: ClinicalNursingScenario = {
+    id: "sc1",
+    title: "T",
+    pathwayId: "ca-rpn-rex-pn",
+    canonicalCategoryId: "respiratory",
+    tierFocus: "RPN_PN",
+    difficulty: "FOUNDATION",
+    patientAgeContext: "50y",
+    presentingConcern: "cough",
+    briefHistory: "hx",
+    medicationsAllergies: null,
+    initialVitals: { BP: "120/80" },
+    assessmentFindings: "wheeze",
+    labsDiagnostics: null,
+    referencesJson: [{ kind: "premium", isPremium: true }],
+    publishStatus: "DRAFT",
+    createdByUserId: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+  const m = mapClinicalNursingScenarioToPreview({ ...scenario, stages: [stage] });
+  assert.equal(m.isPremium, true);
 });
