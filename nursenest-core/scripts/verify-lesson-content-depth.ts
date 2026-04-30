@@ -21,10 +21,16 @@ import {
   rollupDepthByCohort,
 } from "@/lib/lessons/lesson-content-depth-schema";
 import {
+  isNpExpandPathwayId,
   isRpnPnExpandPathwayId,
   isRnNclexExpandPathwayId,
   validateExpandedLesson,
 } from "@/lib/lessons/rn-expanded-lesson-contract";
+import {
+  buildLegacyNpIndex,
+  findLegacyNpMatch,
+  loadNpPhase2LegacyRecords,
+} from "@/lib/lessons/np-legacy-lesson-merge";
 import {
   getCatalogPathwayLessonsSync,
   listCatalogPathwayIdsWithLessonsSync,
@@ -65,6 +71,22 @@ type SummaryJson = {
     rpnExpandClinicalGapLessons: number;
     rpnExpandMissingClinicalTotal: number;
     rpnExpandFlashcardIssueLessons: number;
+    /** Canadian NP / CNPLE (`ca-np-cnple`) — same spine + NP gates in {@link validateExpandedLesson}. */
+    npExpandLessonsTotal: number;
+    npExpandPassing: number;
+    npExpandWithLegacyMatch: number;
+    npExpandBelow1200Words: number;
+    npExpandMissingRequiredSection: number;
+    npExpandThinSectionLessons: number;
+    npExpandThinSectionsTotal: number;
+    npExpandClinicalGapLessons: number;
+    npExpandMissingClinicalTotal: number;
+    npExpandFlashcardIssueLessons: number;
+    npExpandMissingPathophysiology: number;
+    npExpandMissingDiagnostics: number;
+    npExpandMissingTreatments: number;
+    npExpandMissingPharmacology: number;
+    npExpandMissingDifferentialOrCdm: number;
   };
   byPathway: Record<
     string,
@@ -120,6 +142,26 @@ function main() {
   let rpnExpandMissingClinicalTotal = 0;
   let rpnExpandFlashcardIssueLessons = 0;
 
+  let npExpandLessonsTotal = 0;
+  let npExpandPassing = 0;
+  let npExpandWithLegacyMatch = 0;
+  let npExpandBelow1200 = 0;
+  let npExpandMissingSection = 0;
+  let npExpandThinLessons = 0;
+  let npExpandThinSectionsTotal = 0;
+  let npExpandClinicalGapLessons = 0;
+  let npExpandMissingClinicalTotal = 0;
+  let npExpandFlashcardIssueLessons = 0;
+  let npExpandMissingPathophysiology = 0;
+  let npExpandMissingDiagnostics = 0;
+  let npExpandMissingTreatments = 0;
+  let npExpandMissingPharmacology = 0;
+  let npExpandMissingDifferentialOrCdm = 0;
+
+  const monorepoRoot = path.resolve(pkgRoot, "..");
+  const npLegacyRecords = loadNpPhase2LegacyRecords(monorepoRoot);
+  const npLegacyIndex = npLegacyRecords.length ? buildLegacyNpIndex(npLegacyRecords) : null;
+
   for (const pathwayId of pathwayIds) {
     const lessons = getCatalogPathwayLessonsSync(pathwayId);
     const failingSlugs: string[] = [];
@@ -168,6 +210,47 @@ function main() {
         }
         if (ev.flashcardPromptErrors.length > 0 || ev.flashcardPromptCount < 8) rpnExpandFlashcardIssueLessons += 1;
       }
+      if (isNpExpandPathwayId(pathwayId)) {
+        const ev = validateExpandedLesson(lesson, { pathwayId });
+        npExpandLessonsTotal += 1;
+        if (ev.pass) npExpandPassing += 1;
+        if (npLegacyIndex) {
+          const m = findLegacyNpMatch({
+            slug: lesson.slug,
+            title: lesson.title,
+            topic: lesson.topic,
+            index: npLegacyIndex,
+          });
+          if (m) npExpandWithLegacyMatch += 1;
+        }
+        if (ev.totalWords < LESSON_DEPTH_TOTAL_WORD_MIN) npExpandBelow1200 += 1;
+        if (ev.missingSections.length > 0) npExpandMissingSection += 1;
+        if (ev.thinSections.length > 0) {
+          npExpandThinLessons += 1;
+          npExpandThinSectionsTotal += ev.thinSections.length;
+        }
+        if (ev.missingClinicalRequirements.length > 0) {
+          npExpandClinicalGapLessons += 1;
+          npExpandMissingClinicalTotal += ev.missingClinicalRequirements.length;
+        }
+        if (ev.flashcardPromptErrors.length > 0 || ev.flashcardPromptCount < 8) npExpandFlashcardIssueLessons += 1;
+
+        const weak = (kind: string) =>
+          ev.missingSections.includes(kind) ||
+          ev.thinSections.some((t) => t.kind === kind) ||
+          ev.missingClinicalRequirements.some((m) => m.kind === kind);
+        if (weak("pathophysiology_overview")) npExpandMissingPathophysiology += 1;
+        if (weak("labs_diagnostics")) npExpandMissingDiagnostics += 1;
+        if (weak("treatments")) npExpandMissingTreatments += 1;
+        if (weak("pharmacology")) npExpandMissingPharmacology += 1;
+        if (
+          ev.missingClinicalRequirements.some(
+            (m) => m.kind === "clinical_decision_making" && /differential/i.test(m.requirement),
+          )
+        ) {
+          npExpandMissingDifferentialOrCdm += 1;
+        }
+      }
     }
     byPathway[pathwayId] = {
       lessonCount: lessons.length,
@@ -210,6 +293,21 @@ function main() {
       rpnExpandClinicalGapLessons,
       rpnExpandMissingClinicalTotal,
       rpnExpandFlashcardIssueLessons,
+      npExpandLessonsTotal,
+      npExpandPassing,
+      npExpandWithLegacyMatch,
+      npExpandBelow1200Words: npExpandBelow1200,
+      npExpandMissingRequiredSection: npExpandMissingSection,
+      npExpandThinSectionLessons: npExpandThinLessons,
+      npExpandThinSectionsTotal,
+      npExpandClinicalGapLessons,
+      npExpandMissingClinicalTotal,
+      npExpandFlashcardIssueLessons,
+      npExpandMissingPathophysiology,
+      npExpandMissingDiagnostics,
+      npExpandMissingTreatments,
+      npExpandMissingPharmacology,
+      npExpandMissingDifferentialOrCdm,
     },
     byPathway,
     cohortRollups: rollups,
@@ -247,6 +345,22 @@ function main() {
   console.log(`RPN/PN lessons with any missing clinical requirement: ${summary.totals.rpnExpandClinicalGapLessons}`);
   console.log(`RPN/PN missing clinical requirement rows (sum): ${summary.totals.rpnExpandMissingClinicalTotal}`);
   console.log(`RPN/PN lessons with flashcard prompt issues or <8 prompts: ${summary.totals.rpnExpandFlashcardIssueLessons}`);
+  console.log("\n--- NP expanded-lesson contract (ca-np-cnple) ---");
+  console.log(`NP lessons (total): ${summary.totals.npExpandLessonsTotal}`);
+  console.log(`NP with legacy phase-2 match (slug/title/topic heuristic): ${summary.totals.npExpandWithLegacyMatch}`);
+  console.log(`NP fully passing expanded contract (+ NP gates): ${summary.totals.npExpandPassing}`);
+  console.log(`NP lessons total words < ${LESSON_DEPTH_TOTAL_WORD_MIN}: ${summary.totals.npExpandBelow1200Words}`);
+  console.log(`NP lessons with any missing required section: ${summary.totals.npExpandMissingRequiredSection}`);
+  console.log(`NP lessons with any thin section (<150w): ${summary.totals.npExpandThinSectionLessons}`);
+  console.log(`NP thin section rows (sum across lessons): ${summary.totals.npExpandThinSectionsTotal}`);
+  console.log(`NP lessons with any missing clinical requirement: ${summary.totals.npExpandClinicalGapLessons}`);
+  console.log(`NP missing clinical requirement rows (sum): ${summary.totals.npExpandMissingClinicalTotal}`);
+  console.log(`NP lessons with flashcard prompt issues or <8 prompts: ${summary.totals.npExpandFlashcardIssueLessons}`);
+  console.log(`NP lessons weak/missing pathophysiology: ${summary.totals.npExpandMissingPathophysiology}`);
+  console.log(`NP lessons weak/missing diagnostics/labs: ${summary.totals.npExpandMissingDiagnostics}`);
+  console.log(`NP lessons weak/missing treatments: ${summary.totals.npExpandMissingTreatments}`);
+  console.log(`NP lessons weak/missing pharmacology: ${summary.totals.npExpandMissingPharmacology}`);
+  console.log(`NP lessons missing NP differential gate on clinical decision-making: ${summary.totals.npExpandMissingDifferentialOrCdm}`);
   console.log("\n--- Cohort completion % (strict pass / all lessons in cohort pathways) ---");
   for (const r of rollups) {
     if (r.totalLessons === 0 && r.cohort === "OTHER") continue;
@@ -286,7 +400,14 @@ function main() {
     process.exit(1);
   }
 
-  console.log("\nverify:lesson-content-depth OK (RN + RPN/PN expand contracts satisfied when those lessons are present).");
+  if (summary.totals.npExpandLessonsTotal > 0 && summary.totals.npExpandPassing !== summary.totals.npExpandLessonsTotal) {
+    console.error(
+      `\nNP expanded-lesson contract: ${summary.totals.npExpandPassing}/${summary.totals.npExpandLessonsTotal} lessons pass — exiting 1.`,
+    );
+    process.exit(1);
+  }
+
+  console.log("\nverify:lesson-content-depth OK (RN + RPN/PN + NP expand contracts satisfied when those lessons are present).");
 }
 
 main();

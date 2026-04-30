@@ -105,20 +105,39 @@ export function extractLinkedFlashcardPromptStrings(lesson: LessonLike): { promp
   return { prompts: deduped, errors };
 }
 
-function evalClinical(kind: RNExpandRequiredSectionKind, body: string): Array<{ kind: string; requirement: string }> {
+export type ExpandedLessonValidateOptions = {
+  /** When set to a Canadian NP hub pathway, NP-specific clinical gates apply. */
+  pathwayId?: string;
+};
+
+/** Canadian NP / CNPLE hub: same expanded-lesson spine as RN, with NP-specific validation gates when pathwayId is passed to {@link validateExpandedLesson}. */
+export function isNpExpandPathwayId(pathwayId: string): boolean {
+  return pathwayId === "ca-np-cnple";
+}
+
+function evalClinical(
+  kind: RNExpandRequiredSectionKind,
+  body: string,
+  options?: ExpandedLessonValidateOptions,
+): Array<{ kind: string; requirement: string }> {
   const t = bodyPlainLower(body);
   const miss: Array<{ kind: string; requirement: string }> = [];
   const need = (label: string, ok: boolean) => {
     if (!ok) miss.push({ kind, requirement: label });
   };
+  const npPath = isNpExpandPathwayId(String(options?.pathwayId || ""));
 
   switch (kind) {
     case "pathophysiology_overview":
       need(
         "pathophysiology: mention cellular/receptor/inflammatory/mediator/enzyme/perfusion/oxygenation/acid-base/electrolyte/immune/endocrine/renal",
-        /\b(cellular|receptor|inflammatory|mediator|enzyme|perfusion|oxygenation|acid-base|acid base|electrolyte|immune|endocrine|renal)\b/i.test(
-          body,
-        ),
+        npPath
+          ? /\b(cellular|receptor|inflammatory|mediator|enzyme|perfusion|oxygenation|acid-base|acid base|electrolyte|immune|endocrine|renal|mechanism|pathophysiology|condition|features|inflammation|ischemia|fibrosis)\b/i.test(
+              body,
+            )
+          : /\b(cellular|receptor|inflammatory|mediator|enzyme|perfusion|oxygenation|acid-base|acid base|electrolyte|immune|endocrine|renal)\b/i.test(
+              body,
+            ),
       );
       break;
     case "signs_symptoms":
@@ -145,11 +164,13 @@ function evalClinical(kind: RNExpandRequiredSectionKind, body: string): Array<{ 
     case "pharmacology":
       need(
         "pharmacology: mechanism/inhibits/blocks/stimulates/increases/decreases",
-        /\b(mechanism|inhibits|blocks|stimulates|increases|decreases)\b/i.test(t),
+        npPath
+          ? /\b(mechanism|inhibits|blocks|stimulates|increases|decreases|antibiotic|dose|mg|formulary|renal adjustment|contraindication)\b/i.test(t)
+          : /\b(mechanism|inhibits|blocks|stimulates|increases|decreases)\b/i.test(t),
       );
       need(
         "pharmacology: side effect/adverse/contraindication/monitor",
-        /\b(side effect|adverse|contraindication|monitor)\b/i.test(t),
+        /\b(side effect|adverse|contraindication|monitor|stewardship|resistance)\b/i.test(t),
       );
       need(
         "pharmacology: drug class or medication-like term",
@@ -173,6 +194,12 @@ function evalClinical(kind: RNExpandRequiredSectionKind, body: string): Array<{ 
         /\b(abc|airway|breathing|circulation)\b/i.test(t),
       );
       need("clinical_decision_making: SBAR/rapid response/notify", /\b(sbar|rapid response|notify)\b/i.test(t));
+      if (npPath) {
+        need(
+          "clinical_decision_making (NP): differential/diagnosis/narrow/rule out",
+          /\b(differential|diagnosis|narrow|rule out|most likely|working diagnosis)\b/i.test(t),
+        );
+      }
       break;
     case "complications":
       need("complications: acute", /\bacute\b/i.test(t));
@@ -206,7 +233,11 @@ function evalClinical(kind: RNExpandRequiredSectionKind, body: string): Array<{ 
     case "introduction":
       need(
         "introduction: why it matters/clinically important/nursing priority/exam relevance",
-        /\b(why it matters|clinically important|nursing priority|exam relevance)\b/i.test(t),
+        npPath
+          ? /\b(why it matters|clinically important|nursing priority|exam relevance|np priority|cnple|nurse practitioner|primary care scope|clinical reasoning)\b/i.test(
+              t,
+            )
+          : /\b(why it matters|clinically important|nursing priority|exam relevance)\b/i.test(t),
       );
       break;
     default:
@@ -218,7 +249,7 @@ function evalClinical(kind: RNExpandRequiredSectionKind, body: string): Array<{ 
 /**
  * Validates an RN expanded lesson against total words, per-section floors, clinical cues, and flashcard prompts.
  */
-export function validateExpandedLesson(lesson: LessonLike): ExpandedLessonValidation {
+export function validateExpandedLesson(lesson: LessonLike, options?: ExpandedLessonValidateOptions): ExpandedLessonValidation {
   const sections = lesson.sections ?? [];
   const byKind = sectionMap(sections);
   let totalWords = 0;
@@ -240,7 +271,7 @@ export function validateExpandedLesson(lesson: LessonLike): ExpandedLessonValida
     if (w < RN_EXPAND_SECTION_WORD_MIN) {
       thinSections.push({ kind, words: w });
     }
-    missingClinicalRequirements.push(...evalClinical(kind, sec.body ?? ""));
+    missingClinicalRequirements.push(...evalClinical(kind, sec.body ?? "", options));
   }
 
   const { prompts, errors: flashErrors } = extractLinkedFlashcardPromptStrings(lesson);
@@ -290,5 +321,5 @@ export function isRpnPnExpandPathwayId(pathwayId: string): boolean {
 }
 
 export function isNursingClinicalExpandPathwayId(pathwayId: string): boolean {
-  return isRnNclexExpandPathwayId(pathwayId) || isRpnPnExpandPathwayId(pathwayId);
+  return isRnNclexExpandPathwayId(pathwayId) || isRpnPnExpandPathwayId(pathwayId) || isNpExpandPathwayId(pathwayId);
 }

@@ -10,6 +10,7 @@ import { getLessonOpenAiChatModel } from "@/lib/ai/openai-env";
 import {
   RN_EXPAND_REQUIRED_SECTION_KINDS,
   RN_EXPAND_SECTION_WORD_MIN,
+  isNpExpandPathwayId,
   sectionKindsNeedingRegeneration,
   validateExpandedLesson,
   type ExpandedLessonValidation,
@@ -17,9 +18,10 @@ import {
 } from "@/lib/lessons/rn-expanded-lesson-contract";
 import {
   getExpandCatalogFiles,
-  LESSON_EXPAND_FLASHCARD_TOPIC_MAP,
+  LESSON_AI_EXPAND_NP_PATHWAY_IDS,
   LESSON_EXPAND_PROGRESS_FILENAME,
   LESSON_EXPAND_REQUIRED_KINDS,
+  flashcardTopicMapForTier,
   type LessonExpandSectionKind,
   type LessonExpandTier,
   parseTierCliArg,
@@ -28,6 +30,13 @@ import {
   systemPromptForTier,
   tierForPathwayId,
 } from "@/lib/lessons/lesson-ai-expand-shared";
+import {
+  buildLegacyNpIndex,
+  findLegacyNpMatch,
+  loadNpPhase2LegacyRecords,
+  mapPhase2LessonToCanonicalSections,
+  mergeLegacyBodiesIntoLessonSections,
+} from "@/lib/lessons/np-legacy-lesson-merge";
 
 const SAVE_EVERY = 3;
 const MAX_CLINICAL_REGEN_ROUNDS = 2;
@@ -70,6 +79,16 @@ function lessonForValidation(lesson: {
 interface Progress {
   done: string[];
   failed: string[];
+  /** Optional counters from the most recent NP lesson-library pass (not authoritative for CI). */
+  npLastRun?: {
+    scanned: number;
+    legacyMatched: number;
+    legacyMergedLessons: number;
+    legacyMergedSectionKinds: number;
+    aiExpanded: number;
+    skipped: number;
+    failedValidation: number;
+  };
 }
 
 function loadProgress(progressPath: string, pkgRoot: string): Progress {
@@ -127,9 +146,11 @@ async function generateSection(
 ): Promise<string | null> {
   const meta = sectionMetaForTier(tier)[kind];
   const regionNote =
-    region === "ca"
-      ? " (Canadian context: CNA standards, Canadian terminology where natural, provincial scope for practical nursing)"
-      : " (US context: state Nurse Practice Act boundaries for LPN/LVN where applicable, NCLEX-PN style for PN tier)";
+    tier === "np"
+      ? " (Canadian NP / CNPLE: provincial scope and collaborative practice, SI units where natural, documentation and referral thresholds for primary care)"
+      : region === "ca"
+        ? " (Canadian context: CNA standards, Canadian terminology where natural, provincial scope for practical nursing)"
+        : " (US context: state Nurse Practice Act boundaries for LPN/LVN where applicable, NCLEX-PN style for PN tier)";
   const repairBlock = repairContext?.trim()
     ? `\n\n--- VALIDATION FAILURES (fix all; preserve topic specificity; no headings) ---\n${repairContext.trim()}`
     : "";
@@ -166,8 +187,8 @@ Task: ${meta.prompt}${existingBody.trim() ? `\n\nExisting thin content (expand i
   return null;
 }
 
-function buildFlashcardPrompts(title: string): string[] {
-  return LESSON_EXPAND_FLASHCARD_TOPIC_MAP.map((t) => t.prompt.replace("{title}", title));
+function buildFlashcardPrompts(title: string, tier: LessonExpandTier): string[] {
+  return flashcardTopicMapForTier(tier).map((t) => t.prompt.replace("{title}", title));
 }
 
 function syncLinkedFlashcardSection(lesson: { sections?: unknown[] }, prompts: string[]): void {
@@ -183,6 +204,157 @@ function syncLinkedFlashcardSection(lesson: { sections?: unknown[] }, prompts: s
   if (idx >= 0) sections[idx] = { ...(sections[idx] as object), ...row };
   else sections.push(row);
   lesson.sections = sections;
+}
+
+type MutableLesson = {
+  slug: string;
+  title: string;
+  bodySystem?: string;
+  topic?: string;
+  sections?: { kind?: string; body?: string; heading?: string; id?: string }[];
+  linked_flashcard_prompts?: string[];
+};
+
+async function expandSingleLessonRow(args: {
+  openai: OpenAI;
+  pathwayKey: string;
+  tier: LessonExpandTier;
+  region: "ca" | "us";
+  lesson: MutableLesson;
+  /** When true, merge indexed legacy NP phase-2 drafts before thin-section AI fill. */
+  legacyFirst: boolean;
+  legacyIndex: ReturnType<typeof buildLegacyNpIndex> | null;
+  dryRun: boolean;
+}): Promise<{
+  startWc: number;
+  generated: number;
+  failedGen: number;
+  validation: ExpandedLessonValidation;
+  legacyMatched: boolean;
+  legacyMergedKinds: number;
+}> {
+  const { openai, pathwayKey, tier, region, lesson: L, legacyFirst, legacyIndex, dryRun } = args;
+  const sections = [...(L.sections || [])];
+  L.sections = sections;
+  const startWc = lessonWordCount(sections);
+  const validateOpts = isNpExpandPathwayId(pathwayKey) ? { pathwayId: pathwayKey } : undefined;
+
+  let legacyMatched = false;
+  let legacyMergedKinds = 0;
+  if (dryRun) {
+    if (legacyFirst && tier === "np" && legacyIndex) {
+      const match = findLegacyNpMatch({
+        slug: L.slug,
+        title: L.title,
+        topic: L.topic,
+        index: legacyIndex,
+      });
+      legacyMatched = Boolean(match);
+    }
+    return {
+      startWc,
+      generated: 0,
+      failedGen: 0,
+      validation: validateExpandedLesson(lessonForValidation(L), validateOpts),
+      legacyMatched,
+      legacyMergedKinds: 0,
+    };
+  }
+
+  if (legacyFirst && tier === "np" && legacyIndex) {
+    const match = findLegacyNpMatch({
+      slug: L.slug,
+      title: L.title,
+      topic: L.topic,
+      index: legacyIndex,
+    });
+    if (match) {
+      legacyMatched = true;
+      const bodies = mapPhase2LessonToCanonicalSections(match.record.lesson);
+      const merged = mergeLegacyBodiesIntoLessonSections({ sections: L.sections!, legacyBodies: bodies });
+      legacyMergedKinds = merged.mergedKinds.length;
+    }
+  }
+
+  const thinInitial = getThinSections(L.sections || [], LESSON_EXPAND_REQUIRED_KINDS);
+
+  const sectionMap = new Map<string, { kind?: string; body?: string; heading?: string; id?: string }>(
+    (L.sections || []).map((s) => [String(s.kind), { ...s }]),
+  );
+  let generated = 0;
+  let failedGen = 0;
+  const metaByKind = sectionMetaForTier(tier);
+  const REQUIRED_ORDER = [...RN_EXPAND_REQUIRED_SECTION_KINDS] as readonly string[];
+
+  for (const kind of thinInitial) {
+    const existing = sectionMap.get(kind)?.body || "";
+    const meta = metaByKind[kind];
+    process.stdout.write(`  ↳ [${kind}] generating...`);
+    const body = await generateSection(openai, L.title, L.bodySystem || "General", kind, existing, region, tier);
+    if (!body) {
+      console.log(" ✗ failed");
+      failedGen++;
+      continue;
+    }
+    console.log(` ✓ ${countWords(body)}w`);
+    sectionMap.set(kind, { id: kind, heading: meta.heading, kind, body });
+    generated++;
+  }
+
+  const newSections: NonNullable<MutableLesson["sections"]> = [];
+  for (const k of REQUIRED_ORDER) {
+    if (sectionMap.has(k)) newSections.push(sectionMap.get(k)!);
+  }
+  for (const [k, val] of sectionMap) {
+    if (!REQUIRED_ORDER.includes(k)) newSections.push(val);
+  }
+  L.sections = newSections;
+
+  L.linked_flashcard_prompts = buildFlashcardPrompts(L.title, tier);
+  syncLinkedFlashcardSection(L, L.linked_flashcard_prompts);
+
+  let v = validateExpandedLesson(lessonForValidation(L), validateOpts);
+  for (let regenRound = 0; regenRound < MAX_CLINICAL_REGEN_ROUNDS && !v.pass; regenRound++) {
+    if (v.flashcardPromptCount < 8 || v.flashcardPromptErrors.length > 0) {
+      L.linked_flashcard_prompts = buildFlashcardPrompts(L.title, tier);
+      syncLinkedFlashcardSection(L, L.linked_flashcard_prompts);
+    }
+    v = validateExpandedLesson(lessonForValidation(L), validateOpts);
+    if (v.pass) break;
+
+    const sm = new Map<string, { kind?: string; body?: string; heading?: string; id?: string }>(
+      (L.sections || []).map((s) => [String(s.kind), { ...s }]),
+    );
+    const targetKinds = sectionKindsNeedingRegeneration(v);
+    if (targetKinds.length === 0) break;
+
+    for (const kind of targetKinds) {
+      const existing = sm.get(kind)?.body || "";
+      const meta = metaByKind[kind];
+      const ctx = buildRepairContext(kind, v);
+      process.stdout.write(`  ↳ [repair ${regenRound + 1}] [${kind}] ...`);
+      const body = await generateSection(openai, L.title, L.bodySystem || "General", kind, existing, region, tier, ctx);
+      if (!body) {
+        console.log(" ✗");
+        failedGen++;
+      } else {
+        console.log(` ✓ ${countWords(body)}w`);
+        sm.set(kind, { id: kind, heading: meta.heading, kind, body });
+        generated++;
+      }
+    }
+    const rebuilt: NonNullable<MutableLesson["sections"]> = [];
+    for (const k of REQUIRED_ORDER) {
+      if (sm.has(k)) rebuilt.push(sm.get(k)!);
+    }
+    for (const [k, row] of sm) {
+      if (!REQUIRED_ORDER.includes(k)) rebuilt.push(row);
+    }
+    L.sections = rebuilt;
+    v = validateExpandedLesson(lessonForValidation(L), validateOpts);
+  }
+
+  return { startWc, generated, failedGen, validation: v, legacyMatched, legacyMergedKinds };
 }
 
 function logLessonOutcome(
@@ -230,6 +402,7 @@ export async function runLessonAiExpandMain(
     const i = argv.indexOf("--limit");
     return i !== -1 ? parseInt(argv[i + 1]!, 10) : Infinity;
   })();
+  const LEGACY_FIRST = argv.includes("--legacy-first");
 
   const scriptDir = path.dirname(fileURLToPath(import.meta.url));
   /** This file lives at `src/lib/lessons/` — package root is three levels up. */
@@ -240,7 +413,7 @@ export async function runLessonAiExpandMain(
   const model = getLessonOpenAiChatModel();
   console.log(`Model: ${model}`);
   console.log("═══════════════════════════════════════════════════════");
-  console.log(" Nursing clinical expansion (RN + RPN/PN) — validate / retry / gate");
+  console.log(" Nursing clinical expansion (RN + RPN/PN + NP) — validate / retry / gate");
   console.log("═══════════════════════════════════════════════════════");
   console.log(`  Tiers:      ${[...tiers].sort().join(", ")}`);
   console.log(`  Pathways:   ${[...pathwaySet].sort().join(", ")}`);
@@ -248,6 +421,7 @@ export async function runLessonAiExpandMain(
   console.log(`  Force:      ${FORCE}`);
   console.log(`  Slug:       ${SLUG_FILTER || "(all in scope)"}`);
   console.log(`  Limit:      ${Number.isFinite(LIMIT) ? LIMIT : "none"}`);
+  console.log(`  Legacy 1st: ${LEGACY_FIRST}`);
   console.log(`  Progress:   ${progressPath}`);
   console.log("───────────────────────────────────────────────────────\n");
 
@@ -276,7 +450,25 @@ export async function runLessonAiExpandMain(
   let count = 0;
   let rnScanned = 0;
   let rpnScanned = 0;
-  const REQUIRED_ORDER = [...RN_EXPAND_REQUIRED_SECTION_KINDS] as readonly string[];
+
+  const monorepoRoot = path.resolve(pkgRoot, "..");
+  const npLegacyRecords = tiers.has("np") ? loadNpPhase2LegacyRecords(monorepoRoot) : [];
+  const npLegacyIndex = tiers.has("np") && npLegacyRecords.length ? buildLegacyNpIndex(npLegacyRecords) : null;
+  if (tiers.has("np")) {
+    console.log(
+      `  NP legacy sources: data/phase2/np-advanced-batch-*-lessons.json (${npLegacyRecords.length} topic rows indexed)`,
+    );
+  }
+
+  const npRun = {
+    scanned: 0,
+    legacyMatched: 0,
+    legacyMergedLessons: 0,
+    legacyMergedSectionKinds: 0,
+    aiExpanded: 0,
+    skipped: 0,
+    failedValidation: 0,
+  };
 
   for (const { filePath, fileName } of catalogFiles) {
     if (count >= LIMIT) break;
@@ -303,13 +495,7 @@ export async function runLessonAiExpandMain(
       for (const lesson of lessonList) {
         if (SLUG_FILTER && (lesson as { slug?: string }).slug !== SLUG_FILTER) continue;
 
-        const L = lesson as {
-          slug: string;
-          title: string;
-          bodySystem?: string;
-          sections?: { kind?: string; body?: string; heading?: string; id?: string }[];
-          linked_flashcard_prompts?: string[];
-        };
+        const L = lesson as MutableLesson;
         const sections = L.sections || [];
         if (tier === "rn") rnScanned += 1;
         else rpnScanned += 1;
@@ -343,84 +529,19 @@ export async function runLessonAiExpandMain(
           continue;
         }
 
-        const sectionMap = new Map<string, { kind?: string; body?: string; heading?: string; id?: string }>(
-          sections.map((s) => [String(s.kind), { ...s }]),
-        );
-        let generated = 0;
-        let failedGen = 0;
-        const metaByKind = sectionMetaForTier(tier);
+        const { startWc: startWcOut, generated, validation: v } = await expandSingleLessonRow({
+          openai,
+          pathwayKey: pwKey,
+          tier,
+          region,
+          lesson: L,
+          legacyFirst: false,
+          legacyIndex: null,
+          dryRun: false,
+        });
+        totalSections += generated;
 
-        for (const kind of thinInitial) {
-          const existing = sectionMap.get(kind)?.body || "";
-          const meta = metaByKind[kind];
-          process.stdout.write(`  ↳ [${kind}] generating...`);
-          const body = await generateSection(openai, L.title, L.bodySystem || "General", kind, existing, region, tier);
-          if (!body) {
-            console.log(" ✗ failed");
-            failedGen++;
-            continue;
-          }
-          console.log(` ✓ ${countWords(body)}w`);
-          sectionMap.set(kind, { id: kind, heading: meta.heading, kind, body });
-          generated++;
-          totalSections++;
-        }
-
-        const newSections: typeof sections = [];
-        for (const k of REQUIRED_ORDER) {
-          if (sectionMap.has(k)) newSections.push(sectionMap.get(k)!);
-        }
-        for (const [k, val] of sectionMap) {
-          if (!REQUIRED_ORDER.includes(k)) newSections.push(val);
-        }
-        L.sections = newSections;
-
-        L.linked_flashcard_prompts = buildFlashcardPrompts(L.title);
-        syncLinkedFlashcardSection(L, L.linked_flashcard_prompts);
-
-        let v = validateExpandedLesson(lessonForValidation(L));
-        for (let regenRound = 0; regenRound < MAX_CLINICAL_REGEN_ROUNDS && !v.pass; regenRound++) {
-          if (v.flashcardPromptCount < 8 || v.flashcardPromptErrors.length > 0) {
-            L.linked_flashcard_prompts = buildFlashcardPrompts(L.title);
-            syncLinkedFlashcardSection(L, L.linked_flashcard_prompts);
-          }
-          v = validateExpandedLesson(lessonForValidation(L));
-          if (v.pass) break;
-
-          const sm = new Map<string, { kind?: string; body?: string; heading?: string; id?: string }>(
-            (L.sections || []).map((s) => [String(s.kind), { ...s }]),
-          );
-          const targetKinds = sectionKindsNeedingRegeneration(v);
-          if (targetKinds.length === 0) break;
-
-          for (const kind of targetKinds) {
-            const existing = sm.get(kind)?.body || "";
-            const meta = metaByKind[kind];
-            const ctx = buildRepairContext(kind, v);
-            process.stdout.write(`  ↳ [repair ${regenRound + 1}] [${kind}] ...`);
-            const body = await generateSection(openai, L.title, L.bodySystem || "General", kind, existing, region, tier, ctx);
-            if (!body) {
-              console.log(" ✗");
-              failedGen++;
-            } else {
-              console.log(` ✓ ${countWords(body)}w`);
-              sm.set(kind, { id: kind, heading: meta.heading, kind, body });
-              generated++;
-              totalSections++;
-            }
-          }
-          const rebuilt: typeof sections = [];
-          for (const k of REQUIRED_ORDER) {
-            if (sm.has(k)) rebuilt.push(sm.get(k)!);
-          }
-          for (const [k, row] of sm) {
-            if (!REQUIRED_ORDER.includes(k)) rebuilt.push(row);
-          }
-          L.sections = rebuilt;
-          v = validateExpandedLesson(lessonForValidation(L));
-        }
-
-        logLessonOutcome(pwKey, L, startWc, generated, v);
+        logLessonOutcome(pwKey, L, startWcOut, generated, v);
         fileDirty = true;
 
         if (v.pass) {
@@ -459,9 +580,145 @@ export async function runLessonAiExpandMain(
     }
   }
 
+  for (const npPid of LESSON_AI_EXPAND_NP_PATHWAY_IDS) {
+    if (!pathwaySet.has(npPid)) continue;
+    const lessonLibPath = path.join(pkgRoot, "src/content/lessons/lesson-library.json");
+    if (!fs.existsSync(lessonLibPath)) {
+      console.error(`[lesson-ai-expand] Missing lesson library: ${lessonLibPath}`);
+      continue;
+    }
+
+    const libRaw = JSON.parse(fs.readFileSync(lessonLibPath, "utf8")) as {
+      version?: number;
+      lessons: Array<Record<string, unknown> & MutableLesson & { pathwayIds?: string[] }>;
+    };
+    let libDirty = false;
+
+    console.log(`\n━━━ lesson-library.json (${npPid}) ━━━`);
+
+    for (let li = 0; li < libRaw.lessons.length; li++) {
+      const row = libRaw.lessons[li]!;
+      if (!Array.isArray(row.pathwayIds) || !(row.pathwayIds as string[]).includes(npPid)) continue;
+      if (SLUG_FILTER && row.slug !== SLUG_FILTER) continue;
+
+      npRun.scanned++;
+      const L = row as MutableLesson;
+      const sections = L.sections || [];
+      const key = `${npPid}:${String(L.slug)}`;
+
+      const initialValidation = validateExpandedLesson(lessonForValidation(L), { pathwayId: npPid });
+      if (initialValidation.pass && !FORCE && !SLUG_FILTER) {
+        npRun.skipped++;
+        totalSkipped++;
+        continue;
+      }
+      if (progress.done.includes(key) && !FORCE && !SLUG_FILTER) {
+        if (initialValidation.pass) {
+          npRun.skipped++;
+          totalSkipped++;
+          continue;
+        }
+        progress.done = progress.done.filter((x) => x !== key);
+      }
+
+      if (count >= LIMIT) break;
+
+      count++;
+      const thinPreview = getThinSections(sections, LESSON_EXPAND_REQUIRED_KINDS);
+      console.log(`\n[${count}] [${npPid}] [np] ${L.slug}`);
+      console.log(`  "${L.title}" | ${L.bodySystem || "?"} | ${lessonWordCount(sections)}w | thin: ${thinPreview.join(", ") || "none"}`);
+
+      if (DRY_RUN) {
+        const dv = await expandSingleLessonRow({
+          openai,
+          pathwayKey: npPid,
+          tier: "np",
+          region: "ca",
+          lesson: L,
+          legacyFirst: LEGACY_FIRST,
+          legacyIndex: npLegacyIndex,
+          dryRun: true,
+        });
+        if (dv.legacyMatched) npRun.legacyMatched++;
+        console.log(
+          `  [DRY] Would process; pass=${dv.validation.pass}; legacyMatch=${dv.legacyMatched}; missing=${dv.validation.missingSections.length}`,
+        );
+        totalSkipped++;
+        continue;
+      }
+
+      const { startWc: sw, generated, validation: v, legacyMatched: lm, legacyMergedKinds: lmk } =
+        await expandSingleLessonRow({
+          openai,
+          pathwayKey: npPid,
+          tier: "np",
+          region: "ca",
+          lesson: L,
+          legacyFirst: LEGACY_FIRST,
+          legacyIndex: npLegacyIndex,
+          dryRun: false,
+        });
+      totalSections += generated;
+      if (lm) npRun.legacyMatched++;
+      if (lmk > 0) {
+        npRun.legacyMergedLessons++;
+        npRun.legacyMergedSectionKinds += lmk;
+      }
+      if (generated > 0) npRun.aiExpanded++;
+      logLessonOutcome(npPid, L, sw, generated, v);
+      libDirty = true;
+
+      if (v.pass) {
+        totalExpanded++;
+        if (!progress.done.includes(key)) progress.done.push(key);
+        progress.failed = progress.failed.filter((s) => s !== key);
+      } else {
+        totalFailed++;
+        npRun.failedValidation++;
+        if (!progress.failed.includes(key)) progress.failed.push(key);
+        console.error(
+          JSON.stringify({
+            event: "lesson_expand_validation_failed",
+            pathway: npPid,
+            tier: "np",
+            slug: L.slug,
+            missingSections: v.missingSections,
+            thinSections: v.thinSections,
+            missingClinicalCount: v.missingClinicalRequirements.length,
+            flashcardErrors: v.flashcardPromptErrors.length,
+          }),
+        );
+      }
+
+      if ((totalExpanded + totalFailed) % SAVE_EVERY === 0) {
+        if (libDirty && !DRY_RUN) {
+          fs.writeFileSync(lessonLibPath, JSON.stringify(libRaw, null, 2));
+        }
+        progress.npLastRun = { ...npRun };
+        saveProgress(progressPath, progress);
+        console.log("  [checkpoint saved]");
+      }
+    }
+
+    if (!DRY_RUN && libDirty) {
+      fs.writeFileSync(lessonLibPath, JSON.stringify(libRaw, null, 2));
+      progress.npLastRun = { ...npRun };
+      saveProgress(progressPath, progress);
+      console.log(`\n  Saved: lesson-library.json (${npPid})`);
+    }
+  }
+
+  progress.npLastRun = { ...npRun };
+  saveProgress(progressPath, progress);
+
   console.log("\n═══════════════════════════════════════════════════════");
   console.log(
     ` Summary | RN lessons scanned: ${rnScanned} | RPN/PN lessons scanned: ${rpnScanned} | expanded(valid): ${totalExpanded} | sections written: ${totalSections} | skipped: ${totalSkipped} | failed validation: ${totalFailed}`,
   );
+  if (tiers.has("np")) {
+    console.log(
+      ` NP (ca-np-cnple) | scanned: ${npRun.scanned} | legacy match lessons: ${npRun.legacyMatched} | merged-lesson rows: ${npRun.legacyMergedLessons} | merged section kinds: ${npRun.legacyMergedSectionKinds} | AI section writes (lessons): ${npRun.aiExpanded} | skipped: ${npRun.skipped} | failed validation: ${npRun.failedValidation}`,
+    );
+  }
   console.log("═══════════════════════════════════════════════════════\n");
 }

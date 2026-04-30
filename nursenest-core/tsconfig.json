@@ -42,6 +42,8 @@
     "playwright.config.ts",
     "scripts/blog-ai-generate.ts",
     "scripts/migrate-legacy-study-tools.ts",
+    "scripts/audit-image-backed-missing-lessons.ts",
+    "scripts/create-image-backed-lessons.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
     "prisma/**/*.ts",

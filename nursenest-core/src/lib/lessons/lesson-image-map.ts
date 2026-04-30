@@ -112,6 +112,10 @@ export const LESSON_IMAGE_MAP: readonly LessonImageMapEntry[] = [
       "dvt-nursing",
       "lower-extremity-dvt",
       "deep-vein-thrombosis-nursing",
+      /** Bundled NCLEX-RN hub lessons (canonical catalog slugs) */
+      "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+      "dvt-pe-prevention-nursing",
+      "dvt-pe-nursing-priorities",
     ],
     keywords: [
       "deep vein thrombosis",

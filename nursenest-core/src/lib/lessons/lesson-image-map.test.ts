@@ -117,6 +117,16 @@ test("resolveLessonImage: integrates map slug — deep-vein-thrombosis resolves 
   assert.equal(result.source, "map_slug");
 });
 
+test("resolveLessonImage: bundled NCLEX-RN DVT catalog slug maps to dvt.png (hero image)", () => {
+  const result = resolveLessonImage({
+    slug: "deep-vein-thrombosis-dvt-prevention-and-nursing-management-nclex-rn",
+    title: "DVT: Prevention & Management",
+  });
+  assert.ok(result.url !== null, "expected a URL");
+  assert.ok(result.url!.includes("dvt.png"), `URL should contain dvt.png, got: ${result.url}`);
+  assert.equal(result.source, "map_slug");
+});
+
 test("resolveLessonImage: integrates map keyword — topic keyword resolves image", () => {
   const result = resolveLessonImage({
     slug: "cardiac-monitoring-overview",
