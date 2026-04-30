@@ -98,7 +98,14 @@ describe("Allied health structural completion", () => {
         lesson.premiumOmittedSections = completed.premiumOmittedSections;
         const gate = evaluatePathwayLessonStructuralGate(lesson);
         const premium = validatePathwayLessonPremium(lesson);
+        const bodies = lesson.sections.map((section) => section.body).join("\n\n");
         if (gate.publicComplete) publicComplete += 1;
+        if (gate.publicComplete) {
+          assert.match(bodies, /\/app\/flashcards\?pathwayId=/);
+          assert.match(bodies, /\/app\/practice-tests\?pathwayId=/);
+          assert.match(bodies, /\/app\/cat\?pathwayId=/);
+          assert.ok((lesson.relatedLessonRefs?.length ?? 0) >= 2);
+        }
         if (!gate.publicComplete) {
           const missingFields = summarizeMissingFields(lesson);
           const summary: BlockingSummary = {

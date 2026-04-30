@@ -1,13 +1,26 @@
 # -----------------------------------------------------------------------------
 # Canonical patterns (deploy hygiene — keep nursenest-core/.gitignore aligned)
+# Safe build/cache — never commit (see TASK: no bare `build/` — would ignore src/lib/build)
 # -----------------------------------------------------------------------------
-node_modules/
 .next/
-.next/cache/
-.env
+node_modules/
+dist/
+.cache/
+.tmp/
+*.log
+coverage/
+out/
 .env.local
 .env.*.local
-*.log
+
+# build output dirs only (not nursenest-core/src/lib/build — application source)
+/build/
+nursenest-core/build/
+client/build/
+
+.next/cache/
+.env
+.env.production
 external/
 *.zip
 *.tgz
@@ -15,17 +28,11 @@ external/
 *.gz
 .DS_Store
 # -----------------------------------------------------------------------------
-dist
-build
 server/public
 vite.config.ts.*
 *.tar.gz
 /backups/
 /exports/
-.env
-.env.local
-.env.production
-.env.*.local
 scripts/i18n-scan-report.json
 scripts/replit-import/nursing-audit-samples.json
 migration-results.json
