@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 /**
  * CI-friendly guard: nav / footer nav / breadcrumbs / learner-shell labels in marketing locales
- * must match `en.json` for audited keys (no missing keys, no empty values, no raw English carryover
+ * must match English for audited keys (no missing keys, no empty values, no raw English carryover
  * except allowlist, mustache placeholders must match).
  *
  * Uses `scripts/lib/nav-i18n-audit.mjs` (no translation deps).
+ * Resolves app root: monorepo `nursenest-core/` or legacy repo root; loads flat `en.json` or merged shards.
  *
- * Usage (from nursenest-core/):
+ * Usage (from repo root):
  *   node scripts/validate-nav-i18n.mjs
  *   node scripts/validate-nav-i18n.mjs --json
  */
@@ -15,21 +16,27 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { MARKETING_LOCALE_CODES, auditOneLocale, getAuditedKeys } from "./lib/nav-i18n-audit.mjs";
 import { ensureRequiredEnNavKeys } from "./lib/ensure-en-nav-keys.mjs";
+import { loadLocaleFlatMarketingMap, resolveMarketingI18nAppRoot } from "./lib/i18n-app-root.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.join(__dirname, "..");
-const EN_PATH = path.join(ROOT, "public/i18n", "en.json");
-const I18N_DIR = path.join(ROOT, "public", "i18n");
+const REPO_ROOT = path.join(__dirname, "..");
 
 const jsonMode = process.argv.includes("--json");
 
+function localeSourcePath(appRoot, code) {
+  const flat = path.join(appRoot, "public", "i18n", `${code}.json`);
+  if (fs.existsSync(flat)) return flat;
+  return path.join(appRoot, "public", "i18n", code);
+}
+
 function main() {
   ensureRequiredEnNavKeys();
-  let en;
-  try {
-    en = JSON.parse(fs.readFileSync(EN_PATH, "utf8"));
-  } catch (e) {
-    console.error(`FATAL: cannot parse ${EN_PATH}`, e.message);
+  const appRoot = resolveMarketingI18nAppRoot(REPO_ROOT);
+  const en = loadLocaleFlatMarketingMap(appRoot, "en");
+  if (!en || typeof en !== "object") {
+    console.error(
+      `FATAL: cannot load English marketing i18n under ${path.join(appRoot, "public", "i18n")} (en.json or en/*.json)`,
+    );
     process.exit(1);
   }
 
@@ -38,18 +45,18 @@ function main() {
   const byLocale = {};
 
   for (const code of MARKETING_LOCALE_CODES) {
-    const p = path.join(I18N_DIR, `${code}.json`);
-    if (!fs.existsSync(p)) {
-      failures.push({ code, kind: "file_missing", path: p });
-      byLocale[code] = { error: "file_missing", path: p };
+    const srcPath = localeSourcePath(appRoot, code);
+    const flatExists = fs.existsSync(srcPath) && fs.statSync(srcPath).isFile();
+    const dirExists = fs.existsSync(srcPath) && fs.statSync(srcPath).isDirectory();
+    if (!flatExists && !dirExists) {
+      failures.push({ code, kind: "file_missing", path: srcPath });
+      byLocale[code] = { error: "file_missing", path: srcPath };
       continue;
     }
-    let locMap;
-    try {
-      locMap = JSON.parse(fs.readFileSync(p, "utf8"));
-    } catch (e) {
-      failures.push({ code, kind: "json_parse", path: p, message: e.message });
-      byLocale[code] = { error: "json_parse", path: p, message: e.message };
+    const locMap = loadLocaleFlatMarketingMap(appRoot, code);
+    if (!locMap || typeof locMap !== "object") {
+      failures.push({ code, kind: "json_parse", path: String(srcPath), message: "empty or invalid locale map" });
+      byLocale[code] = { error: "json_parse", path: String(srcPath), message: "empty or invalid locale map" };
       continue;
     }
 
@@ -87,6 +94,7 @@ function main() {
       JSON.stringify(
         {
           ok: failures.length === 0,
+          appRoot,
           auditedKeyCount: auditedCount,
           localeCount: MARKETING_LOCALE_CODES.length,
           failureCount: failures.length,
@@ -101,7 +109,7 @@ function main() {
     return;
   }
 
-  console.log("Nav i18n validation (audited keys vs public/i18n/en.json)\n");
+  console.log(`Nav i18n validation (appRoot=${appRoot}, audited keys vs English)\n`);
   console.log(`Audited string keys: ${auditedCount} | Locales: ${MARKETING_LOCALE_CODES.join(", ")}\n`);
 
   if (failures.length === 0) {
@@ -129,7 +137,7 @@ function main() {
     if (!list?.length) continue;
     console.error(`--- ${kind.replace(/_/g, " ").toUpperCase()} (${list.length}) ---`);
     for (const f of list) {
-      if (kind === "file_missing") console.error(`  [${f.code}] missing file: ${f.path}`);
+      if (kind === "file_missing") console.error(`  [${f.code}] missing file/dir: ${f.path}`);
       else if (kind === "json_parse") console.error(`  [${f.code}] ${f.path}: ${f.message}`);
       else if (kind === "missing") console.error(`  [${f.code}] ${f.key}`);
       else if (kind === "empty") console.error(`  [${f.code}] ${f.key} (empty string)`);
@@ -145,7 +153,7 @@ function main() {
     console.error("");
   }
 
-  console.error("Fix: add/translate keys in public/i18n/<locale>.json, or run:");
+  console.error("Fix: add/translate keys under public/i18n/<locale>/ or public/i18n/<locale>.json, or run:");
   console.error("  npm run i18n:nav-parity-fill");
   console.error("Allowlisted English matches: brand.nurseNest/applyNest, nav.examStrip.*, loanwords — see scripts/lib/nav-i18n-audit.mjs (allowsEnglishParity).");
   process.exit(1);

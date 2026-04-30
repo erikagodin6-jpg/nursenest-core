@@ -26,6 +26,10 @@ import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getPublishedBlogPostBySlug } from "@/lib/blog/safe-blog-queries";
 import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
+import {
+  blogPostPublishedScalars,
+  resolveBlogPostPublishAtExplicitOrExisting,
+} from "@/lib/blog/blog-post-published-state";
 
 const canonicalPublishSelect = {
   ...blogPrePublishValidationSelect,
@@ -374,12 +378,13 @@ export async function publishBlogPostCanonical(
       ? input.setLegacySourceIfEmpty
       : undefined;
 
+  const publishAtFinal = resolveBlogPostPublishAtExplicitOrExisting(input.publishAt, row.publishAt, now);
+  const publishedScalars = blogPostPublishedScalars(publishAtFinal, now);
+
   const data: Prisma.BlogPostUpdateInput = {
     ...mergedRowToPersistedScalars(mergedWithSeoRow),
     ...input.companionUpdate,
-    postStatus: BlogPostStatus.PUBLISHED,
-    workflowStatus: BlogWorkflowStatus.PUBLISHED,
-    publishAt: input.publishAt,
+    ...publishedScalars,
     ...(clearScheduledAt ? { scheduledAt: null } : {}),
     adminPublishLog: nextLog,
     ...(legacySourceNext ? { legacySource: legacySourceNext } : {}),

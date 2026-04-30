@@ -1,9 +1,8 @@
 import type { ContentItem } from "@prisma/client";
 
 /**
- * TODO: TEMPORARY COMPATIBILITY ONLY
- * PathwayLesson is now the source of truth for pathway lessons at runtime and in admin editing.
- * Remove after full ContentItem lesson migration.
+ * TODO: Temporary compatibility bridge. PathwayLesson direct admin editing is now the source of truth for pathway
+ * lessons. Remove this bridge after legacy ContentItem lesson migration is complete.
  *
  * Legacy hook for optional ContentItem → PathwayLesson sync on **ContentItem** publish flows only.
  * PathwayLesson admin `PATCH`/`POST` and `/api/admin/pathway-lessons/*` must **never** call this.

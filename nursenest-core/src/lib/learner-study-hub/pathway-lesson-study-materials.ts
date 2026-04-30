@@ -1,15 +1,13 @@
 import { collectMergedLessonVirtualFlashcardsForPathway } from "@/lib/flashcards/lesson-linked-virtual-flashcards-aggregator";
 import type { FlashcardLessonVirtualDiagnostics } from "@/lib/flashcards/flashcard-custom-session-response";
-import { getCatalogPathwayLessonsSync } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { buildAppLessonsReviewLessonHref } from "@/lib/learner/app-study-internal-links";
-import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
+import type { PathwayLessonQuizItem, PathwayLessonRecord, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
 import type { CheckpointQuestion } from "@/lib/lessons/lesson-recall-types";
 import { pathwayLessonEligibleForLearnerStudyInventory } from "@/lib/learner-study-hub/pathway-lesson-learner-study-guards";
+import { loadPublishedPathwayLessonsForStudyFromDb } from "@/lib/learner-study-hub/load-published-pathway-lessons-for-study-from-db";
 
-export function listPublishedPathwayLessonsForLearnerStudy(pathwayId: string) {
-  const pid = pathwayId?.trim();
-  if (!pid) return [];
-  return getCatalogPathwayLessonsSync(pid).filter(pathwayLessonEligibleForLearnerStudyInventory);
+export async function listPublishedPathwayLessonsForLearnerStudy(pathwayId: string): Promise<PathwayLessonRecord[]> {
+  return loadPublishedPathwayLessonsForStudyFromDb(pathwayId);
 }
 
 function lessonReviewHref(pathwayId: string, lessonSlug: string): string {
@@ -24,6 +22,10 @@ function normStem(s: string): string {
     .slice(0, 240);
 }
 
+function dedupeKey(pathwayId: string, lessonSlug: string, stem: string): string {
+  return `${pathwayId.trim()}|${lessonSlug}|${normStem(stem)}`;
+}
+
 export type PathwayLessonDerivedPracticeQuestion = {
   stem: string;
   options: string[];
@@ -35,7 +37,14 @@ export type PathwayLessonDerivedPracticeQuestion = {
   topicSlug: string;
   bodySystem: string;
   difficulty: number;
-  source: "preTest" | "postTest" | "checkpoint" | "interactive_mini";
+  source:
+    | "preTest"
+    | "postTest"
+    | "checkpoint"
+    | "interactive_mini"
+    | "section_practice"
+    | "exam_trap"
+    | "case_section";
   lessonHref: string;
 };
 
@@ -62,7 +71,7 @@ function pushQuizItems(
     if (stem.length < 6 || opts.length < 2) continue;
     const correct = typeof item.correct === "number" && Number.isFinite(item.correct) ? Math.floor(item.correct) : 0;
     if (correct < 0 || correct >= opts.length) continue;
-    const key = `${lessonSlug}|${normStem(stem)}`;
+    const key = dedupeKey(pathwayId, lessonSlug, stem);
     if (seen.has(key)) continue;
     seen.add(key);
     out.push({
@@ -93,16 +102,21 @@ function pushCheckpoint(
     seen: Set<string>;
     out: PathwayLessonDerivedPracticeQuestion[];
     cap: number;
+    /** Higher difficulty for case-style checkpoints when flagged by caller. */
+    difficulty?: number;
+    source?: PathwayLessonDerivedPracticeQuestion["source"];
   },
 ): void {
   const { pathwayId, lessonSlug, lessonTitle, topicSlug, bodySystem, seen, out, cap } = args;
+  const difficulty = args.difficulty ?? 3;
+  const source = args.source ?? "checkpoint";
   if (out.length >= cap) return;
   const stem = String(cq.question ?? "").trim();
   const opts = cq.options.map((o) => String(o.text ?? "").trim()).filter(Boolean);
   if (stem.length < 6 || opts.length < 2) return;
   const correctIdx = cq.options.findIndex((o) => o.id === cq.correctId);
   if (correctIdx < 0 || correctIdx >= opts.length) return;
-  const key = `${lessonSlug}|${normStem(stem)}`;
+  const key = dedupeKey(pathwayId, lessonSlug, stem);
   if (seen.has(key)) return;
   seen.add(key);
   const href = lessonReviewHref(pathwayId, lessonSlug);
@@ -116,10 +130,117 @@ function pushCheckpoint(
     lessonTitle,
     topicSlug,
     bodySystem,
-    difficulty: 3,
-    source: "checkpoint",
+    difficulty,
+    source,
     lessonHref: href,
   });
+}
+
+function isCaseLikeSection(section: PathwayLessonSection): boolean {
+  const k = String(section.kind);
+  return k === "clinical_scenario" || k === "case_study";
+}
+
+function pushLoosePracticeQuestionObjects(
+  raw: unknown,
+  args: {
+    pathwayId: string;
+    lessonSlug: string;
+    lessonTitle: string;
+    topicSlug: string;
+    bodySystem: string;
+    seen: Set<string>;
+    out: PathwayLessonDerivedPracticeQuestion[];
+    cap: number;
+    source: "section_practice" | "case_section";
+    difficulty: number;
+  },
+): void {
+  if (!Array.isArray(raw)) return;
+  const { pathwayId, lessonSlug, lessonTitle, topicSlug, bodySystem, seen, out, cap, source, difficulty } = args;
+  const href = lessonReviewHref(pathwayId, lessonSlug);
+  for (const item of raw) {
+    if (out.length >= cap) return;
+    if (!item || typeof item !== "object") continue;
+    const o = item as Record<string, unknown>;
+    const stem = String(o.question ?? o.stem ?? "").trim();
+    const optsRaw = o.options;
+    if (!Array.isArray(optsRaw)) continue;
+    const opts = optsRaw.map((x) => String(x ?? "").trim()).filter(Boolean);
+    if (stem.length < 6 || opts.length < 2) continue;
+    const correctRaw = o.correct ?? o.correctIndex;
+    const correct = typeof correctRaw === "number" && Number.isFinite(correctRaw) ? Math.floor(correctRaw) : 0;
+    if (correct < 0 || correct >= opts.length) continue;
+    const key = dedupeKey(pathwayId, lessonSlug, stem);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push({
+      stem,
+      options: opts,
+      correctIndex: correct,
+      rationale: typeof o.rationale === "string" ? o.rationale.trim() || undefined : undefined,
+      pathwayId,
+      lessonSlug,
+      lessonTitle,
+      topicSlug,
+      bodySystem,
+      difficulty,
+      source,
+      lessonHref: href,
+    });
+  }
+}
+
+function pushExamTrapTakeaways(
+  lines: string[],
+  args: {
+    pathwayId: string;
+    lessonSlug: string;
+    lessonTitle: string;
+    topicSlug: string;
+    bodySystem: string;
+    seen: Set<string>;
+    out: PathwayLessonDerivedPracticeQuestion[];
+    cap: number;
+  },
+): void {
+  const { pathwayId, lessonSlug, lessonTitle, topicSlug, bodySystem, seen, out, cap } = args;
+  const href = lessonReviewHref(pathwayId, lessonSlug);
+  const genericOpts = [
+    "Treat it as a high-yield exam pitfall to watch for.",
+    "Assume it is rarely tested — deprioritize.",
+    "Treat it as documentation-only — not clinical priority.",
+  ];
+  for (const raw of lines) {
+    if (out.length >= cap) return;
+    const trap = raw.trim();
+    if (trap.length < 16 || trap.length > 480) continue;
+    const stem = trap.endsWith("?") ? trap : `Exam trap: ${trap.slice(0, 220)}${trap.length > 220 ? "…" : ""}`;
+    const key = dedupeKey(pathwayId, lessonSlug, stem);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push({
+      stem,
+      options: genericOpts,
+      correctIndex: 0,
+      rationale: "High-yield traps are written to steer you away from tempting but unsafe choices.",
+      pathwayId,
+      lessonSlug,
+      lessonTitle,
+      topicSlug,
+      bodySystem,
+      difficulty: 4,
+      source: "exam_trap",
+      lessonHref: href,
+    });
+  }
+}
+
+function splitTrapBlob(blob: string): string[] {
+  return blob
+    .split(/\n+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
 }
 
 export type GetPracticeQuestionsForPathwayOptions = {
@@ -128,23 +249,46 @@ export type GetPracticeQuestionsForPathwayOptions = {
   /** When set, only include lessons whose body/system/topic slug matches one of these (lowercase). */
   bodySystems?: string[];
   topicSlug?: string | null;
+  /**
+   * Test / advanced callers: bypass Prisma and aggregate from this inventory slice.
+   * Live pages should omit this so PathwayLesson rows load from the database.
+   */
+  lessonsOverride?: PathwayLessonRecord[];
 };
 
+export type PracticeQuestionsPathwayAggregation = {
+  pathwayId: string;
+  questions: PathwayLessonDerivedPracticeQuestion[];
+  truncated: boolean;
+  byBodySystem: { bodySystem: string; count: number }[];
+};
+
+function buildBodySystemCounts(questions: PathwayLessonDerivedPracticeQuestion[]): { bodySystem: string; count: number }[] {
+  const m = new Map<string, number>();
+  for (const q of questions) {
+    const k = (q.bodySystem || "general").trim().toLowerCase() || "general";
+    m.set(k, (m.get(k) ?? 0) + 1);
+  }
+  return [...m.entries()]
+    .map(([bodySystem, count]) => ({ bodySystem, count }))
+    .sort((a, b) => b.count - a.count || a.bodySystem.localeCompare(b.bodySystem));
+}
+
 /**
- * Aggregates inline MCQ-style content from published PathwayLesson catalog rows (pre/post checks,
- * section checkpoints, interactive mini-questions). Dedupes by lesson slug + normalized stem.
- * Does not resolve `preTestQuestionIds` / `postTestQuestionIds` (bank ids) — those stay on the exam-question APIs.
+ * Aggregates inline MCQ-style content from normalized PathwayLesson inventory.
+ * Dedupes by pathway + lesson slug + normalized stem.
  */
-export function getPracticeQuestionsForPathway(
+export function aggregatePracticeQuestionsFromInventoryLessons(
   pathwayId: string,
+  lessonsIn: PathwayLessonRecord[],
   opts: GetPracticeQuestionsForPathwayOptions = {},
-): { pathwayId: string; questions: PathwayLessonDerivedPracticeQuestion[]; truncated: boolean } {
+): PracticeQuestionsPathwayAggregation {
   const pid = pathwayId?.trim();
-  if (!pid) return { pathwayId: "", questions: [], truncated: false };
+  if (!pid) return { pathwayId: "", questions: [], truncated: false, byBodySystem: [] };
 
   const maxLessons = Math.min(800, Math.max(1, opts.maxLessons ?? 400));
   const maxQuestions = Math.min(5000, Math.max(1, opts.maxQuestions ?? 2500));
-  const lessons = listPublishedPathwayLessonsForLearnerStudy(pid).slice(0, maxLessons);
+  const lessons = lessonsIn.filter(pathwayLessonEligibleForLearnerStudyInventory).slice(0, maxLessons);
   const systemFilter = (opts.bodySystems ?? [])
     .map((s) => s.trim().toLowerCase())
     .filter(Boolean);
@@ -177,10 +321,28 @@ export function getPracticeQuestionsForPathway(
 
     for (const section of lesson.sections ?? []) {
       if (out.length >= maxQuestions) break;
+      const sec = section as PathwayLessonSection & { practiceQuestions?: unknown };
+      pushLoosePracticeQuestionObjects(sec.practiceQuestions, {
+        ...base,
+        source: isCaseLikeSection(section) ? "case_section" : "section_practice",
+        difficulty: isCaseLikeSection(section) ? 4 : 3,
+      });
+
+      if (section.kind === "exam_focus" && section.examFocus?.commonTraps) {
+        pushExamTrapTakeaways(splitTrapBlob(String(section.examFocus.commonTraps)), base);
+      }
+
       for (const cq of section.checkpointQuestions ?? []) {
-        pushCheckpoint(cq, base);
+        if (out.length >= maxQuestions) break;
+        pushCheckpoint(cq, {
+          ...base,
+          difficulty: isCaseLikeSection(section) ? 4 : 3,
+          source: isCaseLikeSection(section) ? "case_section" : "checkpoint",
+        });
       }
     }
+
+    pushExamTrapTakeaways((lesson.studyCommonTraps ?? []).map((s) => String(s)), base);
 
     for (const mod of lesson.interactiveModules ?? []) {
       if (out.length >= maxQuestions) break;
@@ -193,7 +355,7 @@ export function getPracticeQuestionsForPathway(
         const opts = mq.options.map((o) => String(o ?? "").trim()).filter(Boolean);
         const correct = typeof mq.correctIndex === "number" ? Math.floor(mq.correctIndex) : 0;
         if (stem.length < 6 || correct < 0 || correct >= opts.length) continue;
-        const key = `${lesson.slug}|${normStem(stem)}`;
+        const key = dedupeKey(pid, lesson.slug, stem);
         if (seen.has(key)) continue;
         seen.add(key);
         out.push({
@@ -214,25 +376,40 @@ export function getPracticeQuestionsForPathway(
     }
   }
 
-  return { pathwayId: pid, questions: out, truncated: out.length >= maxQuestions };
+  return {
+    pathwayId: pid,
+    questions: out,
+    truncated: out.length >= maxQuestions,
+    byBodySystem: buildBodySystemCounts(out),
+  };
+}
+
+export async function getPracticeQuestionsForPathway(
+  pathwayId: string,
+  opts: GetPracticeQuestionsForPathwayOptions = {},
+): Promise<PracticeQuestionsPathwayAggregation> {
+  const pid = pathwayId?.trim();
+  if (!pid) return { pathwayId: "", questions: [], truncated: false, byBodySystem: [] };
+
+  const lessons =
+    opts.lessonsOverride ?? (await loadPublishedPathwayLessonsForStudyFromDb(pid, { take: opts.maxLessons ?? 800 }));
+  return aggregatePracticeQuestionsFromInventoryLessons(pid, lessons, opts);
 }
 
 export type StudySystemRow = { id: string; label: string; count: number };
 
-/**
- * Body-system (catalog) counts for published lessons only — used for pathway-scoped study hubs.
- */
-export function getStudySystemsForPathway(pathwayId: string): {
+export async function getStudySystemsForPathway(pathwayId: string): Promise<{
   pathwayId: string;
   systems: StudySystemRow[];
   publishedLessonCount: number;
-} {
+}> {
   const pid = pathwayId?.trim();
   if (!pid) return { pathwayId: "", systems: [], publishedLessonCount: 0 };
 
-  const lessons = listPublishedPathwayLessonsForLearnerStudy(pid);
+  const lessons = await loadPublishedPathwayLessonsForStudyFromDb(pid);
   const counts = new Map<string, number>();
   for (const l of lessons) {
+    if (!pathwayLessonEligibleForLearnerStudyInventory(l)) continue;
     const key = (l.bodySystem || l.system || "general").trim().toLowerCase() || "general";
     counts.set(key, (counts.get(key) ?? 0) + 1);
   }
@@ -255,10 +432,10 @@ export type FlashcardsPathwayStudySummary = {
   pathwayId: string;
   mergedVirtualCount: number;
   diagnostics: ReturnType<typeof collectMergedLessonVirtualFlashcardsForPathway>["diagnostics"];
+  byBodySystem: { bodySystem: string; count: number }[];
 };
 
-/** Summary of catalog-derived flashcard inventory for a pathway (virtual merge + diagnostics). */
-export function getFlashcardsForPathway(pathwayId: string): FlashcardsPathwayStudySummary {
+export async function getFlashcardsForPathway(pathwayId: string): Promise<FlashcardsPathwayStudySummary> {
   const pid = pathwayId?.trim();
   if (!pid) {
     return {
@@ -273,20 +450,38 @@ export function getFlashcardsForPathway(pathwayId: string): FlashcardsPathwayStu
         sectionDerivedVirtualCount: 0,
         genericFillerSourcedSectionCards: 0,
       },
+      byBodySystem: [],
     };
   }
-  const { virtuals, diagnostics } = collectMergedLessonVirtualFlashcardsForPathway(pid);
-  return { pathwayId: pid, mergedVirtualCount: virtuals.length, diagnostics };
+  const lessons = await loadPublishedPathwayLessonsForStudyFromDb(pid);
+  const { virtuals, diagnostics } = collectMergedLessonVirtualFlashcardsForPathway(pid, lessons);
+  const slugToSystem = new Map<string, string>();
+  for (const l of lessons) {
+    slugToSystem.set(
+      l.slug,
+      ((l.bodySystem || l.system || "general").trim().toLowerCase() || "general") as string,
+    );
+  }
+  const counts = new Map<string, number>();
+  for (const v of virtuals) {
+    const sys = slugToSystem.get(v.lessonSlug) ?? "general";
+    counts.set(sys, (counts.get(sys) ?? 0) + 1);
+  }
+  const byBodySystem = [...counts.entries()]
+    .map(([bodySystem, count]) => ({ bodySystem, count }))
+    .sort((a, b) => b.count - a.count || a.bodySystem.localeCompare(b.bodySystem));
+
+  return { pathwayId: pid, mergedVirtualCount: virtuals.length, diagnostics, byBodySystem };
 }
 
-/** Hub / flashcards page: stable diagnostics when the Prisma-backed custom session builder fails. */
-export function flashcardLessonVirtualDiagnosticsForPathway(
+export async function flashcardLessonVirtualDiagnosticsForPathway(
   pathwayId: string,
   filter: { selectedCategories: string[]; filterModeLabel: string },
-): FlashcardLessonVirtualDiagnostics | null {
+): Promise<FlashcardLessonVirtualDiagnostics | null> {
   const pid = pathwayId?.trim();
   if (!pid) return null;
-  const { diagnostics } = collectMergedLessonVirtualFlashcardsForPathway(pid);
+  const lessons = await loadPublishedPathwayLessonsForStudyFromDb(pid);
+  const { diagnostics } = collectMergedLessonVirtualFlashcardsForPathway(pid, lessons);
   return {
     pathwayId: diagnostics.pathwayId,
     catalogLessonCount: diagnostics.catalogLessonCount,
@@ -300,12 +495,13 @@ export function flashcardLessonVirtualDiagnosticsForPathway(
   };
 }
 
-export function getPathwayLessonPracticeHubSnapshot(pathwayId: string) {
-  const practice = getPracticeQuestionsForPathway(pathwayId, { maxQuestions: 4000, maxLessons: 600 });
-  const systems = getStudySystemsForPathway(pathwayId);
-  const flash = getFlashcardsForPathway(pathwayId);
+export async function getPathwayLessonPracticeHubSnapshot(pathwayId: string) {
+  const trimmed = pathwayId.trim();
+  const practice = await getPracticeQuestionsForPathway(trimmed, { maxQuestions: 4000, maxLessons: 600 });
+  const systems = await getStudySystemsForPathway(trimmed);
+  const flash = await getFlashcardsForPathway(trimmed);
   return {
-    pathwayId: pathwayId.trim(),
+    pathwayId: trimmed,
     practiceQuestionCount: practice.questions.length,
     practiceTruncated: practice.truncated,
     publishedLessonCount: systems.publishedLessonCount,
@@ -315,4 +511,4 @@ export function getPathwayLessonPracticeHubSnapshot(pathwayId: string) {
   };
 }
 
-export type PathwayLessonPracticeHubSnapshot = ReturnType<typeof getPathwayLessonPracticeHubSnapshot>;
+export type PathwayLessonPracticeHubSnapshot = Awaited<ReturnType<typeof getPathwayLessonPracticeHubSnapshot>>;

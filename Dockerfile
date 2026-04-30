@@ -21,6 +21,8 @@ WORKDIR /app
 COPY shared ./shared
 COPY client ./client
 COPY nursenest-core ./nursenest-core
+# Monorepo `script/` (build.ts, i18n compile, etc.) lives at repo root; nursenest-core/package.json expects `./script/*`.
+COPY script ./nursenest-core/script
 COPY Dockerfile /app/Dockerfile
 
 WORKDIR /app/nursenest-core

@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { BlogPostStatus, BlogPostTemplate, BlogWorkflowStatus } from "@prisma/client";
 
+import { normalizeBlogPostStatusWriteFields } from "@/lib/blog/blog-post-published-state";
 import { blogPostIsLive } from "@/lib/blog/blog-visibility";
 import type { LegacyBlogPostExportRow, LegacyBlogPostExportV1 } from "@/lib/legacy/legacy-blog-post-export-types";
 import {
@@ -399,6 +400,10 @@ export async function importLegacyBlogPosts(
       if (!opts.apply) continue;
 
       if (row) {
+        const statusWrite = normalizeBlogPostStatusWriteFields({
+          postStatus: preview.postStatus,
+          publishAt: preview.publishAt,
+        });
         await prisma.blogPost.update({
           where: { id: row.id },
           data: {
@@ -408,8 +413,9 @@ export async function importLegacyBlogPosts(
             category: preview.category,
             tags: preview.tags,
             postTemplate: preview.postTemplate,
-            postStatus: preview.postStatus,
-            publishAt: preview.publishAt,
+            postStatus: statusWrite.postStatus,
+            publishAt: statusWrite.publishAt,
+            workflowStatus: statusWrite.workflowStatus,
             legacySource: preview.legacySource,
           },
         });
@@ -429,6 +435,10 @@ export async function importLegacyBlogPosts(
       } else {
         const excerptOut =
           preview.excerpt?.trim() || `${preview.title}`.slice(0, 240) || "Legacy import";
+        const statusWrite = normalizeBlogPostStatusWriteFields({
+          postStatus: preview.postStatus,
+          publishAt: preview.publishAt,
+        });
         const created = await prisma.blogPost.create({
           data: {
             slug: normalizeBlogSlug(legacy.slug) || preview.slug,
@@ -438,8 +448,9 @@ export async function importLegacyBlogPosts(
             category: preview.category,
             tags: preview.tags,
             postTemplate: preview.postTemplate,
-            postStatus: preview.postStatus,
-            publishAt: preview.publishAt,
+            postStatus: statusWrite.postStatus,
+            publishAt: statusWrite.publishAt,
+            workflowStatus: statusWrite.workflowStatus,
             legacySource: preview.legacySource,
           },
         });

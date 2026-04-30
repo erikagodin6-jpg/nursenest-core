@@ -225,7 +225,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
 
   const pathwayLessonPractice =
     defaultPathwayId && defaultPathwayId.trim().length > 0
-      ? getPathwayLessonPracticeHubSnapshot(defaultPathwayId.trim())
+      ? await getPathwayLessonPracticeHubSnapshot(defaultPathwayId.trim())
       : null;
 
   return (
@@ -233,10 +233,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
       <div className="mb-4">
         <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
       </div>
-      <LearnerRenderTraceBanner
-        data-route="practice-tests"
-        label="NN_RENDER_TRACE: practice exams live route (/app/practice-tests)"
-      />
+      <LearnerRenderTraceBanner data-route="practice-tests" label="NN_RENDER_TRACE: practice live route" />
       <div className="nn-learner-page-hero">
         <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.practiceTests.title")}</h1>
         <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.subtitle.subscriber")}</p>

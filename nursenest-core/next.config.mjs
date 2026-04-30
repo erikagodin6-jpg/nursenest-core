@@ -101,6 +101,44 @@ const nextConfig = {
     return [{ source: "/sitemap-index.xml", destination: "/sitemap.xml", permanent: true }];
   },
 
+  /**
+   * do not set a blanket `no-store` on all `/api/*` — authenticated routes set their own Cache-Control;
+   * marketing JSON under `/api/public/*` is allowed to edge-cache.
+   *
+   * no blanket `/api/*` Cache-Control rule; route handlers own other `/api/*` policies.
+   */
+  async headers() {
+    return [
+      {
+        source: "/app",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "private, no-cache, no-store, must-revalidate",
+          },
+        ],
+      },
+      {
+        source: "/app/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "private, no-cache, no-store, must-revalidate",
+          },
+        ],
+      },
+      {
+        source: "/api/public/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=60, s-maxage=120, stale-while-revalidate=600",
+          },
+        ],
+      },
+    ];
+  },
+
   reactStrictMode: true,
 
   eslint: {

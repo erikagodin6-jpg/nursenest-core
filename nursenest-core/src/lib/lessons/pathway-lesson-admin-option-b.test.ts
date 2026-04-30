@@ -141,7 +141,7 @@ describe("Option B — pathway lesson as authoring source of truth", () => {
     const syncPath = join(dir, "../../lib/admin/sync-content-item-to-pathway-lesson.ts");
     const src = readFileSync(syncPath, "utf8");
     assert.match(src, /syncPublishedContentItemToPathwayLessons/);
-    assert.match(src, /TODO: TEMPORARY COMPATIBILITY ONLY/);
+    assert.match(src, /TODO: Temporary compatibility bridge/);
     assert.equal(src.includes("pathwayLesson.update"), false);
     assert.equal(src.includes("prisma."), false);
   });

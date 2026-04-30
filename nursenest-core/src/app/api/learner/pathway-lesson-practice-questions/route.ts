@@ -42,13 +42,13 @@ export async function GET(req: NextRequest) {
       : undefined;
     const topicSlug = req.nextUrl.searchParams.get("topicSlug")?.trim() || null;
 
-    const { questions, truncated } = getPracticeQuestionsForPathway(pathwayId, {
+    const { questions, truncated } = await getPracticeQuestionsForPathway(pathwayId, {
       maxQuestions: 600,
       maxLessons: 400,
       bodySystems,
       topicSlug,
     });
-    const systems = getStudySystemsForPathway(pathwayId);
+    const systems = await getStudySystemsForPathway(pathwayId);
 
     return NextResponse.json({
       pathwayId,

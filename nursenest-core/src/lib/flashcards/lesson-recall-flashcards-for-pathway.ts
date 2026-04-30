@@ -73,11 +73,17 @@ export type LessonRecallFlashcardVirtual = {
  * Deterministic catalog-only flashcards from lesson active-recall (prompts, checkpoints, key facts).
  * Used when published `Flashcard` rows and bank-linked lesson question ids produce an empty deck.
  */
-export function collectLessonRecallFlashcardsForPathway(pathwayId: string): LessonRecallFlashcardVirtual[] {
+export function collectLessonRecallFlashcardsForPathway(
+  pathwayId: string,
+  /** When set, recall virtuals are sourced from these lessons only (e.g. Prisma PathwayLesson). */
+  pathwayLessons?: PathwayLessonRecord[],
+): LessonRecallFlashcardVirtual[] {
   const pid = pathwayId?.trim();
   if (!pid) return [];
 
-  const lessons = getCatalogPathwayLessonsSync(pid);
+  const lessons =
+    pathwayLessons ??
+    getCatalogPathwayLessonsSync(pid).filter((l) => pathwayLessonEligibleForLearnerStudyInventory(l));
   const out: LessonRecallFlashcardVirtual[] = [];
 
   for (const lesson of lessons) {

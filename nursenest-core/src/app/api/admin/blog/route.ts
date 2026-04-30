@@ -11,6 +11,10 @@ import { parseBoundedPageSize } from "@/lib/api/api-pagination-limits";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { BLOG_SLUG_FORMAT_RE, coerceAdminOptionalSlugFromRawInput, generateBlogSlugBaseFromTitle } from "@/lib/blog/blog-optional-slug";
 import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
+import {
+  devAssertPublishedWritePayloadAligned,
+  normalizeBlogPostStatusWriteFields,
+} from "@/lib/blog/blog-post-published-state";
 import { blogPostIsLive } from "@/lib/blog/blog-visibility";
 import { countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import { prisma } from "@/lib/db";
@@ -292,6 +296,17 @@ export async function POST(req: Request) {
     );
   }
   const resolvedPostStatus = d.postStatus ?? (d.publishAt ? BlogPostStatus.SCHEDULED : BlogPostStatus.DRAFT);
+  const publishAtForCreate = d.publishAt ? new Date(d.publishAt) : null;
+  const statusFields = normalizeBlogPostStatusWriteFields({
+    postStatus: resolvedPostStatus,
+    publishAt: publishAtForCreate,
+    workflowFromRequest: d.workflowStatus ?? undefined,
+  });
+  devAssertPublishedWritePayloadAligned({
+    postStatus: statusFields.postStatus,
+    workflowStatus: statusFields.workflowStatus,
+    label: "POST /api/admin/blog create",
+  });
   if (
     (resolvedPostStatus === BlogPostStatus.PUBLISHED || resolvedPostStatus === BlogPostStatus.SCHEDULED) &&
     isPublishBlockedByTaxonomy(blogTax)
@@ -345,7 +360,7 @@ export async function POST(req: Request) {
       postTemplate: d.postTemplate ?? null,
       intent: d.intent ?? null,
       funnelStage: d.funnelStage ?? null,
-      workflowStatus: d.workflowStatus ?? BlogWorkflowStatus.GENERATED,
+      workflowStatus: statusFields.workflowStatus,
       targetKeyword: d.targetKeyword ?? null,
       keywordCluster: d.keywordCluster ?? null,
       coverImage: d.coverImage ?? null,
@@ -354,8 +369,8 @@ export async function POST(req: Request) {
       imageStatus: d.imageStatus ?? BlogImageStatus.NONE,
       apaReferences: d.apaReferences ?? [],
       requiresReferences: d.requiresReferences ?? false,
-      postStatus: resolvedPostStatus,
-      publishAt: d.publishAt ? new Date(d.publishAt) : null,
+      postStatus: statusFields.postStatus,
+      publishAt: statusFields.publishAt,
     },
     select: { id: true, slug: true, postStatus: true, publishAt: true, updatedAt: true },
   });

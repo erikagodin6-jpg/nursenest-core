@@ -1,14 +1,14 @@
 /**
- * Idempotent: merge required marketing `nav.*` strings into `public/i18n/en.json` if absent.
- * Keeps header + learner shell labels audited even when the canonical JSON is regenerated.
+ * Idempotent: merge required marketing `nav.*` strings into English nav i18n if absent.
+ * Supports legacy `public/i18n/en.json` or shard layout `public/i18n/en/nav.json`.
  */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { loadLocaleFlatMarketingMap, resolveMarketingI18nAppRoot } from "./i18n-app-root.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.join(__dirname, "..", "..");
-const EN_PATH = path.join(ROOT, "public", "i18n", "en.json");
+const REPO_ROOT = path.join(__dirname, "..", "..");
 
 export const REQUIRED_EN_NAV_STRINGS = {
   "nav.getStarted": "Get Started",
@@ -20,8 +20,33 @@ export const REQUIRED_EN_NAV_STRINGS = {
   "nav.caseStudiesShort": "Case studies",
 };
 
+function writeJsonStable(p, obj) {
+  fs.writeFileSync(p, `${JSON.stringify(obj, null, 2)}\n`, "utf8");
+}
+
 export function ensureRequiredEnNavKeys() {
-  const en = JSON.parse(fs.readFileSync(EN_PATH, "utf8"));
+  const appRoot = resolveMarketingI18nAppRoot(REPO_ROOT);
+  const flatPath = path.join(appRoot, "public", "i18n", "en.json");
+  const navShardPath = path.join(appRoot, "public", "i18n", "en", "nav.json");
+
+  if (fs.existsSync(navShardPath)) {
+    const nav = JSON.parse(fs.readFileSync(navShardPath, "utf8"));
+    let changed = false;
+    for (const [k, v] of Object.entries(REQUIRED_EN_NAV_STRINGS)) {
+      if (nav[k] === undefined || nav[k] === null) {
+        nav[k] = v;
+        changed = true;
+      }
+    }
+    if (changed) writeJsonStable(navShardPath, nav);
+    return;
+  }
+
+  if (!fs.existsSync(flatPath)) {
+    return;
+  }
+
+  const en = JSON.parse(fs.readFileSync(flatPath, "utf8"));
   let changed = false;
   for (const [k, v] of Object.entries(REQUIRED_EN_NAV_STRINGS)) {
     if (en[k] === undefined || en[k] === null) {
@@ -30,6 +55,6 @@ export function ensureRequiredEnNavKeys() {
     }
   }
   if (changed) {
-    fs.writeFileSync(EN_PATH, JSON.stringify(en));
+    fs.writeFileSync(flatPath, JSON.stringify(en));
   }
 }

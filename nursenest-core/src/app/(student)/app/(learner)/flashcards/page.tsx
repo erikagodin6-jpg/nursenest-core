@@ -208,6 +208,14 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   const scopedPathwayId = pathwayResolution.defaultPathwayId;
 
+  const pathwayLessonFlashDiagnostics =
+    entitlement.hasAccess && scopedPathwayId
+      ? await flashcardLessonVirtualDiagnosticsForPathway(scopedPathwayId, {
+          selectedCategories: [],
+          filterModeLabel: "all cards",
+        })
+      : null;
+
   const catalogPathway = getExamPathwayById(scopedPathwayId);
   const pathwayLabelFromOptions = pathwayOptions.find((p) => p.id === scopedPathwayId)?.label;
   const pathwayDisplayName =
@@ -242,27 +250,22 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
       initialHub = {
         categoryOptions: inv.categoryOptions,
         matchingTotal: inv.summary.matchingCards,
-        lessonVirtualDiagnostics: inv.summary.lessonVirtualDiagnostics ?? null,
+        lessonVirtualDiagnostics:
+          pathwayLessonFlashDiagnostics ?? inv.summary.lessonVirtualDiagnostics ?? null,
       };
     } else {
       /** Pathway skeleton matches lessons hub even when inventory query fails — avoids empty hub + false client errors. */
       initialHub = {
         categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
         matchingTotal: 0,
-        lessonVirtualDiagnostics: flashcardLessonVirtualDiagnosticsForPathway(scopedPathwayId, {
-          selectedCategories: [],
-          filterModeLabel: "all cards",
-        }),
+        lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
       };
     }
   } else if (entitlement.hasAccess) {
     initialHub = {
       categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
       matchingTotal: 0,
-      lessonVirtualDiagnostics: flashcardLessonVirtualDiagnosticsForPathway(scopedPathwayId, {
-        selectedCategories: [],
-        filterModeLabel: "all cards",
-      }),
+      lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
     };
   }
 

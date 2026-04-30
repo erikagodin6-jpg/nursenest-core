@@ -104,7 +104,11 @@ function buildPaddingRow(args: {
  * Merges section-derived + recall-derived catalog virtuals, dedupes by id and near-duplicate stems,
  * then applies per-lesson minimum card targets (8 clinical / 4 workflow or new-grad).
  */
-export function collectMergedLessonVirtualFlashcardsForPathway(pathwayId: string): {
+export function collectMergedLessonVirtualFlashcardsForPathway(
+  pathwayId: string,
+  /** When set, merged virtual inventory uses these PathwayLesson rows only (Prisma-backed hubs). */
+  pathwayLessons?: PathwayLessonRecord[],
+): {
   virtuals: MergedLessonVirtualFlashcard[];
   diagnostics: LessonVirtualInventoryDiagnostics;
 } {
@@ -124,9 +128,11 @@ export function collectMergedLessonVirtualFlashcardsForPathway(pathwayId: string
     };
   }
 
-  const lessons = getCatalogPathwayLessonsSync(pid).filter(pathwayLessonEligibleForLearnerStudyInventory);
-  const sectionList = collectLessonSectionDerivedFlashcardsForPathway(pid);
-  const recallList = collectLessonRecallFlashcardsForPathway(pid);
+  const lessons =
+    pathwayLessons ??
+    getCatalogPathwayLessonsSync(pid).filter(pathwayLessonEligibleForLearnerStudyInventory);
+  const sectionList = collectLessonSectionDerivedFlashcardsForPathway(pid, pathwayLessons);
+  const recallList = collectLessonRecallFlashcardsForPathway(pid, pathwayLessons);
 
   const merged: MergedLessonVirtualFlashcard[] = [];
   const idSeen = new Set<string>();

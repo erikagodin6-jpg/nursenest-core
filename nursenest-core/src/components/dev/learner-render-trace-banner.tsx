@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect } from "react";
 import { shouldShowLearnerRenderTrace } from "@/lib/dev/learner-render-trace";
 
 export function LearnerRenderTraceBanner({
@@ -7,6 +10,13 @@ export function LearnerRenderTraceBanner({
   label: string;
   "data-route": "flashcards" | "practice-tests";
 }) {
+  useEffect(() => {
+    if (!shouldShowLearnerRenderTrace()) return;
+    if (label.includes("NN_RENDER_TRACE:")) {
+      console.info(label);
+    }
+  }, [label]);
+
   if (!shouldShowLearnerRenderTrace()) return null;
   return (
     <p

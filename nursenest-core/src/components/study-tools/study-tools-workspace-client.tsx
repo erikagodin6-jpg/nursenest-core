@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import {
   LearnerCategorySelector,
   LearnerFilterBar,
@@ -48,6 +48,173 @@ function sourceQuestionId(item: StudyToolSessionItem): string | null {
     case "fill_in_the_blank":
     case "lab_drills":
       return item.sourceQuestionId;
+    default:
+      return assertNeverStudyToolSessionItem(item);
+  }
+}
+
+type StudyToolsWorkspaceActiveItemProps = {
+  item: StudyToolSessionItem;
+  idx: number;
+  matchingChoices: string[];
+  fillInput: string;
+  setFillInput: Dispatch<SetStateAction<string>>;
+  labInput: string;
+  setLabInput: Dispatch<SetStateAction<string>>;
+  medInput: string;
+  setMedInput: Dispatch<SetStateAction<string>>;
+  orderPicks: string[];
+  setOrderPicks: Dispatch<SetStateAction<string[]>>;
+  advance: (correct: boolean) => void;
+};
+
+/** Single `switch (item.kind)` render path — avoids IIFE + outer `current` closure confusing exhaustiveness checks. */
+function StudyToolsWorkspaceActiveItem(props: StudyToolsWorkspaceActiveItemProps): ReactNode {
+  const {
+    item,
+    idx,
+    matchingChoices,
+    fillInput,
+    setFillInput,
+    labInput,
+    setLabInput,
+    medInput,
+    setMedInput,
+    orderPicks,
+    setOrderPicks,
+    advance,
+  } = props;
+
+  switch (item.kind) {
+    case "matching":
+      return (
+        <div className="mt-4 space-y-3">
+          <p className="text-base text-foreground">{item.prompt}</p>
+          <p className="text-sm text-muted-foreground">Tap the best match.</p>
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+            {matchingChoices.map((choice) => (
+              <button
+                key={choice}
+                type="button"
+                className="rounded-xl border border-border bg-muted/30 px-4 py-3 text-left text-sm font-medium hover:border-primary"
+                onClick={() => advance(choice.trim() === item.answer.trim())}
+              >
+                {choice}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    case "fill_in_the_blank":
+      return (
+        <div className="mt-4 space-y-3">
+          <p className="text-base text-foreground whitespace-pre-wrap">{item.stemMasked}</p>
+          <input
+            className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+            value={fillInput}
+            onChange={(e) => setFillInput(e.target.value)}
+            placeholder="Type the missing term"
+          />
+          <button
+            type="button"
+            className="nn-btn-secondary rounded-lg px-4 py-2 text-sm font-semibold"
+            onClick={() => {
+              const guess = fillInput.trim().toLowerCase();
+              const ok = item.acceptableAnswers.some((a) => a.trim().toLowerCase() === guess);
+              advance(ok);
+            }}
+          >
+            Check answer
+          </button>
+        </div>
+      );
+    case "lab_drills":
+      return (
+        <div className="mt-4 space-y-3">
+          <p className="text-base text-foreground whitespace-pre-wrap">{item.prompt}</p>
+          {item.rationaleHint ? <p className="text-xs text-muted-foreground">Hint: {item.rationaleHint}</p> : null}
+          <input
+            className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+            value={labInput}
+            onChange={(e) => setLabInput(e.target.value)}
+            placeholder="Enter expected value(s) — numeric when applicable"
+          />
+          <button
+            type="button"
+            className="nn-btn-secondary rounded-lg px-4 py-2 text-sm font-semibold"
+            onClick={() => {
+              const g = labInput.trim().toLowerCase();
+              const ok = item.acceptableAnswers.some((a) => g.includes(a.toLowerCase()));
+              advance(ok);
+            }}
+          >
+            Check answer
+          </button>
+        </div>
+      );
+    case "medication_drills":
+      return (
+        <div className="mt-4 space-y-3">
+          <p className="text-base text-foreground whitespace-pre-wrap">{item.prompt}</p>
+          {item.hint ? <p className="text-xs text-muted-foreground">Topic: {item.hint}</p> : null}
+          <input
+            className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+            value={medInput}
+            onChange={(e) => setMedInput(e.target.value)}
+            placeholder="Key dose / class / monitoring answer"
+          />
+          <button
+            type="button"
+            className="nn-btn-secondary rounded-lg px-4 py-2 text-sm font-semibold"
+            onClick={() => {
+              const g = medInput.trim().toLowerCase();
+              const ok = item.acceptableAnswers.some(
+                (a) => g.includes(a.toLowerCase()) || a.toLowerCase().includes(g),
+              );
+              advance(ok);
+            }}
+          >
+            Check answer
+          </button>
+        </div>
+      );
+    case "ordering":
+      return (
+        <div className="mt-4 space-y-3">
+          <p className="text-base font-semibold text-foreground">{item.title}</p>
+          <p className="text-sm text-muted-foreground">Tap steps in the correct order. Tap “Reset order” to retry.</p>
+          <div className="flex flex-wrap gap-2">
+            {shuffleSeeded([...item.steps], `${item.id}:scramble:${idx}`).map((step) => (
+              <button
+                key={step}
+                type="button"
+                disabled={orderPicks.includes(step)}
+                className="rounded-full border border-border bg-muted/30 px-3 py-1.5 text-sm disabled:opacity-30"
+                onClick={() => setOrderPicks((p) => [...p, step])}
+              >
+                {step}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground">Selected order: {orderPicks.join(" → ") || "—"}</p>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" className="text-sm underline" onClick={() => setOrderPicks([])}>
+              Reset order
+            </button>
+            <button
+              type="button"
+              className="nn-btn-primary rounded-lg px-4 py-2 text-sm font-semibold"
+              onClick={() => {
+                const ok =
+                  orderPicks.length === item.steps.length && orderPicks.every((s, i) => s === item.steps[i]);
+                advance(ok);
+              }}
+            >
+              Lock in order
+            </button>
+          </div>
+        </div>
+      );
     default:
       return assertNeverStudyToolSessionItem(item);
   }
@@ -288,144 +455,20 @@ export function StudyToolsWorkspaceClient({
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Item {idx + 1} / {items.length}
           </p>
-          {(() => {
-            switch (current.kind) {
-              case "matching":
-                return (
-                  <div className="mt-4 space-y-3">
-                    <p className="text-base text-foreground">{current.prompt}</p>
-                    <p className="text-sm text-muted-foreground">Tap the best match.</p>
-                    <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-                      {matchingChoices.map((choice) => (
-                        <button
-                          key={choice}
-                          type="button"
-                          className="rounded-xl border border-border bg-muted/30 px-4 py-3 text-left text-sm font-medium hover:border-primary"
-                          onClick={() => advance(choice.trim() === current.answer.trim())}
-                        >
-                          {choice}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                );
-              case "fill_in_the_blank":
-                return (
-                  <div className="mt-4 space-y-3">
-                    <p className="text-base text-foreground whitespace-pre-wrap">{current.stemMasked}</p>
-                    <input
-                      className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
-                      value={fillInput}
-                      onChange={(e) => setFillInput(e.target.value)}
-                      placeholder="Type the missing term"
-                    />
-                    <button
-                      type="button"
-                      className="nn-btn-secondary rounded-lg px-4 py-2 text-sm font-semibold"
-                      onClick={() => {
-                        const guess = fillInput.trim().toLowerCase();
-                        const ok = current.acceptableAnswers.some((a) => a.trim().toLowerCase() === guess);
-                        advance(ok);
-                      }}
-                    >
-                      Check answer
-                    </button>
-                  </div>
-                );
-              case "lab_drills":
-                return (
-                  <div className="mt-4 space-y-3">
-                    <p className="text-base text-foreground whitespace-pre-wrap">{current.prompt}</p>
-                    {current.rationaleHint ? (
-                      <p className="text-xs text-muted-foreground">Hint: {current.rationaleHint}</p>
-                    ) : null}
-                    <input
-                      className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
-                      value={labInput}
-                      onChange={(e) => setLabInput(e.target.value)}
-                      placeholder="Enter expected value(s) — numeric when applicable"
-                    />
-                    <button
-                      type="button"
-                      className="nn-btn-secondary rounded-lg px-4 py-2 text-sm font-semibold"
-                      onClick={() => {
-                        const g = labInput.trim().toLowerCase();
-                        const ok = current.acceptableAnswers.some((a) => g.includes(a.toLowerCase()));
-                        advance(ok);
-                      }}
-                    >
-                      Check answer
-                    </button>
-                  </div>
-                );
-              case "medication_drills":
-                return (
-                  <div className="mt-4 space-y-3">
-                    <p className="text-base text-foreground whitespace-pre-wrap">{current.prompt}</p>
-                    {current.hint ? <p className="text-xs text-muted-foreground">Topic: {current.hint}</p> : null}
-                    <input
-                      className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
-                      value={medInput}
-                      onChange={(e) => setMedInput(e.target.value)}
-                      placeholder="Key dose / class / monitoring answer"
-                    />
-                    <button
-                      type="button"
-                      className="nn-btn-secondary rounded-lg px-4 py-2 text-sm font-semibold"
-                      onClick={() => {
-                        const g = medInput.trim().toLowerCase();
-                        const ok = current.acceptableAnswers.some(
-                          (a) => g.includes(a.toLowerCase()) || a.toLowerCase().includes(g),
-                        );
-                        advance(ok);
-                      }}
-                    >
-                      Check answer
-                    </button>
-                  </div>
-                );
-              case "ordering":
-                return (
-                  <div className="mt-4 space-y-3">
-                    <p className="text-base font-semibold text-foreground">{current.title}</p>
-                    <p className="text-sm text-muted-foreground">Tap steps in the correct order. Tap “Reset order” to retry.</p>
-                    <div className="flex flex-wrap gap-2">
-                      {shuffleSeeded([...current.steps], `${current.id}:scramble:${idx}`).map((step) => (
-                        <button
-                          key={step}
-                          type="button"
-                          disabled={orderPicks.includes(step)}
-                          className="rounded-full border border-border bg-muted/30 px-3 py-1.5 text-sm disabled:opacity-30"
-                          onClick={() => setOrderPicks((p) => [...p, step])}
-                        >
-                          {step}
-                        </button>
-                      ))}
-                    </div>
-                    <p className="text-xs text-muted-foreground">Selected order: {orderPicks.join(" → ") || "—"}</p>
-                    <div className="flex flex-wrap gap-2">
-                      <button type="button" className="text-sm underline" onClick={() => setOrderPicks([])}>
-                        Reset order
-                      </button>
-                      <button
-                        type="button"
-                        className="nn-btn-primary rounded-lg px-4 py-2 text-sm font-semibold"
-                        onClick={() => {
-                          const ok =
-                            orderPicks.length === current.steps.length &&
-                            orderPicks.every((s, i) => s === current.steps[i]);
-                          advance(ok);
-                        }}
-                      >
-                        Lock in order
-                      </button>
-                    </div>
-                  </div>
-                );
-              default:
-                return assertNeverStudyToolSessionItem(current);
-            }
-          })()}
+          <StudyToolsWorkspaceActiveItem
+            item={current}
+            idx={idx}
+            matchingChoices={matchingChoices}
+            fillInput={fillInput}
+            setFillInput={setFillInput}
+            labInput={labInput}
+            setLabInput={setLabInput}
+            medInput={medInput}
+            setMedInput={setMedInput}
+            orderPicks={orderPicks}
+            setOrderPicks={setOrderPicks}
+            advance={advance}
+          />
         </section>
       ) : null}
     </LearnerStudyPageShell>

@@ -253,11 +253,17 @@ function pushSectionCards(args: {
  * Deterministic catalog-only flashcards derived from canonical lesson sections (and linked_flashcard_prompts).
  * Complements {@link collectLessonRecallFlashcardsForPathway} (recall arrays) and bank-linked lesson questions.
  */
-export function collectLessonSectionDerivedFlashcardsForPathway(pathwayId: string): LessonSectionDerivedVirtual[] {
+export function collectLessonSectionDerivedFlashcardsForPathway(
+  pathwayId: string,
+  /** When provided, inventory is built from these normalized lessons only (e.g. Prisma PathwayLesson). */
+  pathwayLessons?: PathwayLessonRecord[],
+): LessonSectionDerivedVirtual[] {
   const pid = pathwayId?.trim();
   if (!pid) return [];
 
-  const lessons = getCatalogPathwayLessonsSync(pid);
+  const lessons =
+    pathwayLessons ??
+    getCatalogPathwayLessonsSync(pid).filter((l) => pathwayLessonEligibleForLearnerStudyInventory(l));
   const out: LessonSectionDerivedVirtual[] = [];
   const stemSeen = new Set<string>();
 
