@@ -30,6 +30,8 @@ import {
   type CustomSessionSourceKind,
 } from "@/lib/flashcards/custom-session-card-filters";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
+import { loadExamQuestionHubInventoryForPathway } from "@/lib/flashcards/flashcard-exam-bank-hub-inventory";
 
 export type CustomSessionStudyMode = "term_to_definition" | "definition_to_term" | "mixed";
 
@@ -180,6 +182,8 @@ export async function buildFlashcardCustomSession(
   const queryRelaxation: FlashcardCustomSessionQueryRelaxation = "none";
 
   try {
+    const examContext = pathwayId?.trim() ? buildGlobalExamContext(pathwayId.trim(), "en") : null;
+
     const allowLessonQuestionVirtuals =
       sourceKind === "all" || sourceKind === "lesson" || sourceKind === "question";
 
@@ -403,6 +407,28 @@ export async function buildFlashcardCustomSession(
       }
     }
 
+    const examContext = pathwayId?.trim() ? buildGlobalExamContext(pathwayId.trim(), "en") : null;
+    const useExamHub = Boolean(pathwayId?.trim() && examContext) && !lessonId;
+    const examHub = useExamHub
+      ? await loadExamQuestionHubInventoryForPathway(
+          entitlement,
+          pathwayId,
+          examContext,
+          topicCode?.trim() || null,
+        )
+      : { total: 0, countsByBuilderId: {} as Record<string, number> };
+
+    const useExamForHubStats =
+      useExamHub && !includeCards && !needsProgress && !persistenceFiltersActive;
+
+    const matchingCardsForSummary = includeCards
+      ? scoped.length
+      : useExamForHubStats
+        ? selectedCategories.length === 0
+          ? examHub.total
+          : selectedCategories.reduce((s, id) => s + (examHub.countsByBuilderId[id] ?? 0), 0)
+        : scoped.length;
+
     const sessionShuffleSalt = sessionSeed?.trim() || randomUUID();
     const orderingSeed = shuffle
       ? sessionSeed?.trim() || `${userId}:${sessionShuffleSalt}:${selectedCategories.join(",")}:${mode}`
@@ -451,7 +477,7 @@ export async function buildFlashcardCustomSession(
       topicCode,
       lessonId,
       selectedCategories,
-      matchingCards: scoped.length,
+      matchingCards: matchingCardsForSummary,
       returnedCards: plannedCount,
       mode,
       shuffle,
@@ -471,7 +497,9 @@ export async function buildFlashcardCustomSession(
       lessonVirtualDiagnostics,
     };
 
-    const categoryOptions = applyCountsToBuilderCategories(pathwayId, categoryCounts);
+    const categoryOptions = useExamHub
+      ? applyCountsToBuilderCategories(pathwayId, examHub.countsByBuilderId, { listMode: "non_empty_only" })
+      : applyCountsToBuilderCategories(pathwayId, categoryCounts);
     if (process.env.NODE_ENV === "development") {
       let cardsTaggedFromExamMeta = 0;
       let uncategorizedCardRows = 0;
@@ -492,6 +520,72 @@ export async function buildFlashcardCustomSession(
         examQuestionMetaRows: examTopicMetaById.size,
         cardsLinkedToExamWithMeta: cardsTaggedFromExamMeta,
         uncategorizedCardRows,
+        examHubInventory: useExamHub ? { total: examHub.total, builderBuckets: Object.keys(examHub.countsByBuilderId).length } : null,
+      });
+    }
+
+    return {
+      ok: true,
+      queryRelaxation,
+      summary,
+      categoryOptions,
+      cards: cardsForSession,
+    };
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e);
+    return {
+      ok: false,
+      code: "database_error",
+      message: "Flashcards could not be loaded. Please retry.",
+      reason: message.slice(0, 500),
+    };
+  }
+}
+
+export function parseCustomSessionCategories(value: string | null | undefined): string[] {
+  return (value ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+export function parseCustomSessionCardLimit(value: string | null | undefined): number {
+  if (!value || value === "all") return 500;
+  const n = Number(value);
+  if (!Number.isFinite(n) || n < 1) return 20;
+  return Math.min(500, Math.max(10, n));
+}
+
+export function parseCustomSessionStudyMode(value: string | null | undefined): CustomSessionStudyMode {
+  if (value === "definition_to_term") return value;
+  if (value === "term_to_definition") return value;
+  if (value === "mixed") return value;
+  return "mixed";
+}
+ue;
+  if (value === "mixed") return value;
+  return "mixed";
+}
+= 0;
+      let uncategorizedCardRows = 0;
+      for (const c of cardWithCategory) {
+        if (c.examQuestionId) {
+          const m = examTopicMetaById.get(c.examQuestionId);
+          if (m && ((m.bodySystem ?? "").trim().length > 0 || (m.topic ?? "").trim().length > 0)) {
+            cardsTaggedFromExamMeta += 1;
+          }
+        }
+        if (c.builderCategoryId === FLASHCARD_BUILDER_UNCATEGORIZED_ID) uncategorizedCardRows += 1;
+      }
+      safeServerLog("flashcards", "hub_inventory_dev", {
+        pathwayId: pathwayId ?? "",
+        topicRowCount: categoryOptions.length,
+        workingCardCount: cardWithCategory.length,
+        publishedDbFlashcards: cards.length,
+        examQuestionMetaRows: examTopicMetaById.size,
+        cardsLinkedToExamWithMeta: cardsTaggedFromExamMeta,
+        uncategorizedCardRows,
+        examHubInventory: useExamHub ? { total: examHub.total, builderBuckets: Object.keys(examHub.countsByBuilderId).length } : null,
       });
     }
 

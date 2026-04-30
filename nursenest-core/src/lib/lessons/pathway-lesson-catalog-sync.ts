@@ -145,6 +145,8 @@ let rnFluidsElectrolytesExpansionPathwaysCache: Record<string, CatalogShape["pat
 let rnExamNotesIntegrationExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 /** RN NCLEX-RN exam-notes integration batch 3 (merged after batch 1; deduped by slug). */
 let rnExamNotesIntegrationBatch3ExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+/** RN NCLEX-RN exam-notes integration batch 4 (merged after batch 3; deduped by slug). */
+let rnExamNotesIntegrationBatch4ExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 let newGradTransitionPathwaysCache: Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> | null = null;
 
 function getCatalogData(): CatalogShape {
@@ -428,6 +430,20 @@ function getRnExamNotesIntegrationBatch3ExpansionPathways(): Record<string, Cata
 
 function rnExamNotesIntegrationBatch3ExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
   const rows = getRnExamNotesIntegrationBatch3ExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+export function getRnExamNotesIntegrationBatch4ExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rnExamNotesIntegrationBatch4ExpansionPathwaysCache) return rnExamNotesIntegrationBatch4ExpansionPathwaysCache;
+  rnExamNotesIntegrationBatch4ExpansionPathwaysCache =
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-exam-notes-integration-batch4-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rnExamNotesIntegrationBatch4ExpansionPathwaysCache;
+}
+
+function rnExamNotesIntegrationBatch4ExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRnExamNotesIntegrationBatch4ExpansionPathways()[pathwayId];
   return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
 }
 
@@ -1508,6 +1524,7 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
   const fluidsElectrolytesExpansion = rnFluidsElectrolytesExpansionLessonsForPathway(pathwayId);
   const examNotesIntegrationExpansion = rnExamNotesIntegrationExpansionLessonsForPathway(pathwayId);
   const examNotesIntegrationBatch3Expansion = rnExamNotesIntegrationBatch3ExpansionLessonsForPathway(pathwayId);
+  const examNotesIntegrationBatch4Expansion = rnExamNotesIntegrationBatch4ExpansionLessonsForPathway(pathwayId);
   const newGrad = newGradTransitionLessonsForPathway(pathwayId);
   const seen = new Set<string>();
   const merged: LessonInput[] = [];
@@ -1532,6 +1549,7 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
     ...fluidsElectrolytesExpansion,
     ...examNotesIntegrationExpansion,
     ...examNotesIntegrationBatch3Expansion,
+    ...examNotesIntegrationBatch4Expansion,
     ...newGrad,
   ]) {
     if (seen.has(l.slug)) continue;
@@ -1655,6 +1673,12 @@ function buildCatalogLessonsRawUncached(pathwayId: string): LessonInput[] {
         merged.push(extra);
       }
       for (const extra of rnExamNotesIntegrationBatch3ExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of rnExamNotesIntegrationBatch4ExpansionLessonsForPathway(pathwayId)) {
         const s = extra.slug.trim();
         if (!s || seen.has(s)) continue;
         seen.add(s);

@@ -81,7 +81,7 @@ export function LearnerShellUserBar({
   }, []);
 
   useEffect(() => {
-    const onDoc = (e: PointerEvent) => {
+    const onDoc = (e: MouseEvent) => {
       if (!ref.current?.contains(e.target as Node)) closeNow();
     };
     document.addEventListener("click", onDoc);

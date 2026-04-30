@@ -8,7 +8,7 @@ import { isClinicalScenariosPubliclyEnabled } from "@/lib/clinical-scenarios/cli
 /**
  * `/app/clinical-scenarios` shell:
  * - Flag off → DB-backed staff only (preview for authoring).
- * - Flag on → active subscribers may open the catalog; staff retain access to drafts via list/detail rules.
+ * - Flag on → any signed-in learner may open the catalog; premium depth is gated in preview + redaction; staff retain drafts.
  */
 export async function requireClinicalScenariosLearnerShellAccess(): Promise<void> {
   const session = await getProtectedRouteSession("(student).app.(learner).clinical-scenarios.layout");

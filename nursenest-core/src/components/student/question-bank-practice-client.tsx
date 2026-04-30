@@ -844,19 +844,21 @@ export function QuestionBankPracticeClient({
 
   const flashcardsHref = useMemo(() => {
     const pid = pathwayIdFilter?.trim();
-    const tc = typeof g?.topicCode === "string" ? g.topicCode.trim().toLowerCase() : "";
+    const tc =
+      typeof g?.learningLoop?.topicCode === "string" ? g.learningLoop.topicCode.trim().toLowerCase() : "";
     if (pid && tc) return buildAppFlashcardsTopicHref(pid, tc);
     if (g?.learningLoop?.flashcardsHref) return g.learningLoop.flashcardsHref;
     if (pid) return `/app/flashcards?pathwayId=${encodeURIComponent(pid)}`;
     return "/app/flashcards";
-  }, [g?.learningLoop?.flashcardsHref, g?.topicCode, pathwayIdFilter]);
+  }, [g?.learningLoop?.flashcardsHref, g?.learningLoop?.topicCode, pathwayIdFilter]);
 
   const practiceTestsTopicHref = useMemo(() => {
     const pid = pathwayIdFilter?.trim();
-    const tc = typeof g?.topicCode === "string" ? g.topicCode.trim().toLowerCase() : "";
+    const tc =
+      typeof g?.learningLoop?.topicCode === "string" ? g.learningLoop.topicCode.trim().toLowerCase() : "";
     if (!pid || !tc) return null;
     return buildAppPracticeTestsTopicHref(pid, tc);
-  }, [pathwayIdFilter, g?.topicCode]);
+  }, [pathwayIdFilter, g?.learningLoop?.topicCode]);
 
   const topicDrillHref = g?.learningLoop?.topicDrillHref ?? null;
 

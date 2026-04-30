@@ -200,8 +200,8 @@ export async function POST(req: Request) {
     }
 
     try {
-      revalidateTag(MARKETING_PUBLIC_CONTENT_OVERRIDE_CACHE_TAG);
-      revalidateTag(marketingPublicContentOverrideLocaleTag(locale));
+      revalidateTag(MARKETING_PUBLIC_CONTENT_OVERRIDE_CACHE_TAG, "default");
+      revalidateTag(marketingPublicContentOverrideLocaleTag(locale), "default");
       revalidateSurfacesForKey(locale, messageKey);
     } catch (e) {
       logMarketingPublicContentSaveResult({
@@ -324,8 +324,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    revalidateTag(MARKETING_PUBLIC_CONTENT_OVERRIDE_CACHE_TAG);
-    revalidateTag(marketingPublicContentOverrideLocaleTag(locale));
+    revalidateTag(MARKETING_PUBLIC_CONTENT_OVERRIDE_CACHE_TAG, "default");
+    revalidateTag(marketingPublicContentOverrideLocaleTag(locale), "default");
     revalidateSurfacesForKey(locale, messageKey);
   } catch (e) {
     logMarketingPublicContentSaveResult({

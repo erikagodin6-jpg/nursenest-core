@@ -13,7 +13,7 @@ import {
 
 async function expireTag(tag: string): Promise<void> {
   try {
-    revalidateTag(tag);
+    revalidateTag(tag, "default");
   } catch {
     // ignore
   }

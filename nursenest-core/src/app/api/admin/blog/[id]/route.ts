@@ -262,6 +262,7 @@ export async function PATCH(req: Request, { params }: Props) {
       adminPublishLog: true,
       publishAt: true,
       scheduledAt: true,
+      workflowStatus: true,
     },
   });
   if (!current) return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
@@ -514,6 +515,27 @@ export async function PATCH(req: Request, { params }: Props) {
         ? d.postStatus
         : undefined;
 
+  /**
+   * Public `/blog` only treats rows as live when `postStatus` + `workflowStatus` + dates satisfy
+   * {@link blogPostIsLive} (see `blog-visibility.ts`). Direct PATCH `postStatus: PUBLISHED` without
+   * `publish_now` historically left `workflowStatus: GENERATED`, which looks "published" in admin
+   * but never appears on the marketing blog — force the canonical publish path instead.
+   */
+  if (
+    d.action === undefined &&
+    effectivePostStatus === BlogPostStatus.PUBLISHED &&
+    current.postStatus !== BlogPostStatus.PUBLISHED
+  ) {
+    return NextResponse.json(
+      {
+        error:
+          "Setting postStatus to PUBLISHED requires action publish_now (pre-publish validation + workflow alignment).",
+        code: "blog_publish_requires_publish_now",
+      },
+      { status: 422 },
+    );
+  }
+
   let effectivePublishAt: Date | null | undefined;
   if (d.action === "schedule") {
     effectivePublishAt = actionPatch.publishAt;
@@ -666,11 +688,21 @@ export async function PATCH(req: Request, { params }: Props) {
   ]);
   const actionTriggersRevalidate = Boolean(d.action && revalidateActions.has(d.action));
   const wasPublicLive = blogPostIsLive(
-    { postStatus: current.postStatus, publishAt: current.publishAt, scheduledAt: current.scheduledAt },
+    {
+      postStatus: current.postStatus,
+      publishAt: current.publishAt,
+      scheduledAt: current.scheduledAt,
+      workflowStatus: current.workflowStatus,
+    },
     now,
   );
   const nowPublicLive = blogPostIsLive(
-    { postStatus: updated.postStatus, publishAt: updated.publishAt, scheduledAt: updated.scheduledAt },
+    {
+      postStatus: updated.postStatus,
+      publishAt: updated.publishAt,
+      scheduledAt: updated.scheduledAt,
+      workflowStatus: updated.workflowStatus,
+    },
     now,
   );
   const visibilityChanged = wasPublicLive !== nowPublicLive;

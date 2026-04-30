@@ -46,8 +46,8 @@ export async function revalidateSurfacesForContentItemLesson(args: {
     take: 50,
   });
   for (const r of rows) {
-    revalidateTag(cacheTagPathwayLessonsHub(r.pathwayId));
-    revalidateTag(`pathway-lesson:${r.pathwayId}:${r.slug.trim()}`);
+    revalidateTag(cacheTagPathwayLessonsHub(r.pathwayId), "default");
+    revalidateTag(`pathway-lesson:${r.pathwayId}:${r.slug.trim()}`, "default");
     const pathway = getExamPathwayById(r.pathwayId);
     if (!pathway) continue;
     const detail = marketingPathwayLessonDetailPath(pathway, r.slug);

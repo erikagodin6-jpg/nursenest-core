@@ -28,7 +28,9 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getPathwayLessonPracticeHubSnapshot } from "@/lib/learner-study-hub/pathway-lesson-study-materials";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 
-type PageProps = { searchParams: Promise<{ pathwayId?: string | string[] | undefined }> };
+type PageProps = {
+  searchParams: Promise<{ pathwayId?: string | string[] | undefined; topic?: string | string[] | undefined }>;
+};
 
 export default async function PracticeTestsPage({ searchParams }: PageProps) {
   const { t } = await getLearnerMarketingBundle();

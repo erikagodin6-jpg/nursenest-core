@@ -212,7 +212,7 @@ export function FlashcardsHubClient({
       }
       const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
       if (!parsed.ok) {
-        setLoadError(parsed.message);
+        setLoadError(parsed.message.trim() ? parsed.message : "Could not load flashcard topics.");
         setBuilderCategories([]);
         setMatchingCards(null);
         return;

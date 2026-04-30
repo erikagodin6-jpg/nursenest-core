@@ -1,5 +1,6 @@
 import { buildFlashcardExplanationFromSources } from "@/lib/content-quality/controlled-rationale-enrichment";
 import { truncateForPreview } from "@/lib/flashcards/flashcard-access";
+import { flashcardLessonCrossLinkForDeckStudyRow } from "@/lib/flashcards/flashcard-lesson-cross-link";
 import { parseLessonLinkSourceKey } from "@/lib/flashcards/lesson-link-source-key";
 import {
   correctAnswerLine,
@@ -16,6 +17,7 @@ export type FlashcardStudySelectRow = {
   id: string;
   front: string;
   back: string;
+  lessonId?: string | null;
   sourceKey: string | null;
   examItemKind: FlashcardItemKind | null;
   questionStem: string | null;
@@ -42,6 +44,9 @@ export type FlashcardStudyApiCard = {
   lessonLinkSectionKind?: string;
   lessonLinkCardType?: string;
   difficultyRating?: number;
+  /** Resolved catalog pathway lesson (slug + title) — no duplicated bodies. */
+  lessonStudyHref?: string;
+  lessonStudyTitle?: string;
 };
 
 export { parseLessonLinkSourceKey } from "@/lib/flashcards/lesson-link-source-key";
@@ -77,6 +82,7 @@ export function serializeFlashcardForDeckStudy(
         topic: card.category.name,
         subtopic: card.category.topicCode,
       });
+  const lessonLink = flashcardLessonCrossLinkForDeckStudyRow(card.deck?.pathwayId ?? null, card);
   return {
     id: card.id,
     front,
@@ -88,6 +94,7 @@ export function serializeFlashcardForDeckStudy(
     pathwayId: card.deck?.pathwayId ?? null,
     ...(exam ? { examMicroQuestion: exam } : {}),
     ...(!exam && explanation ? { explanation } : {}),
+    ...(lessonLink ? { lessonStudyHref: lessonLink.lessonStudyHref, lessonStudyTitle: lessonLink.lessonStudyTitle } : {}),
   };
 }
 
@@ -125,6 +132,8 @@ export function serializeFlashcardForCustomSession(
         subtopic: card.category.topicCode,
       });
   const link = parseLessonLinkSourceKey(card.sourceKey);
+  const pid = card.deck?.pathwayId ?? opts.pathwayId;
+  const lessonLink = flashcardLessonCrossLinkForDeckStudyRow(pid, card);
   return {
     id: card.id,
     front,
@@ -133,7 +142,7 @@ export function serializeFlashcardForCustomSession(
     subtopic: card.category.topicCode,
     rawTopic: card.category.name,
     sourceKey: card.sourceKey,
-    pathwayId: card.deck?.pathwayId ?? opts.pathwayId,
+    pathwayId: pid,
     ...(exam ? { examMicroQuestion: exam } : {}),
     ...(explanation ? { explanation } : {}),
     ...(link
@@ -143,5 +152,6 @@ export function serializeFlashcardForCustomSession(
           difficultyRating: link.difficulty,
         }
       : {}),
+    ...(lessonLink ? { lessonStudyHref: lessonLink.lessonStudyHref, lessonStudyTitle: lessonLink.lessonStudyTitle } : {}),
   };
 }

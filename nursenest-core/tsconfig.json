@@ -38,7 +38,7 @@
   },
   "include": [
     "next-env.d.ts",
-    "next.config.ts",
+    "next.config.mjs",
     "playwright.config.ts",
     "scripts/blog-ai-generate.ts",
     "scripts/migrate-legacy-study-tools.ts",

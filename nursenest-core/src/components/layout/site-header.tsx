@@ -235,7 +235,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   }, []);
 
   useEffect(() => {
-    const close = (e: PointerEvent) => {
+    const close = (e: MouseEvent) => {
       if (!mobileLangRef.current?.contains(e.target as Node)) setMobileLangOpen(false);
     };
     const onEscape = (e: KeyboardEvent) => {

@@ -56,6 +56,8 @@ test.describe("Clinical scenarios — unpaid RN", () => {
 });
 
 test.describe("Clinical scenarios — staff", () => {
+  test.describe.configure({ mode: "serial" });
+
   test("staff view-as RN unpaid: paywall after stage 1", async ({ page, baseURL }) => {
     const scenarioId = getRnPremiumClinicalScenarioId();
     const staff = getStaffClinicalTestContext();
@@ -63,7 +65,7 @@ test.describe("Clinical scenarios — staff", () => {
     test.skip(!staff, "Set E2E_STAFF_EMAIL, E2E_STAFF_PASSWORD, and E2E_STAFF_USER_ID (user id must match QA cookie sub).");
 
     await loginWithCredentials(page, staff!.email, staff!.password, { enterLearnerApp: true });
-    await expectOnLearnerApp(page, "staff post-login");
+    await expectOnLearnerApp(page);
 
     const exp = Math.floor(Date.now() / 1000) + 7200;
     const signed = buildSignedAdminLearnerQaCookieValue({
@@ -100,7 +102,7 @@ test.describe("Clinical scenarios — staff", () => {
     test.skip(!staff, "Set E2E_STAFF_EMAIL, E2E_STAFF_PASSWORD, and E2E_STAFF_USER_ID.");
 
     await loginWithCredentials(page, staff!.email, staff!.password, { enterLearnerApp: true });
-    await expectOnLearnerApp(page, "staff full preview");
+    await expectOnLearnerApp(page);
 
     await page.goto(scenarioDetailUrl(RN_PATHWAY, scenarioId!), { waitUntil: "domcontentloaded" });
     await waitForBranchingShell(page);

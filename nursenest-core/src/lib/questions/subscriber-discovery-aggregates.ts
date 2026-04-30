@@ -39,7 +39,8 @@ export function examQuestionsDiscoveryWhereSql(entitlement: AccessScope): Prisma
 export type DiscoveryAggregateRow = { topic: string; cnt: bigint };
 export type DiscoveryExamRow = { exam: string | null; cnt: bigint };
 
-function discoveryExamContextScopeSql(ctx: GlobalExamContext | null): Prisma.Sql {
+/** Reused by flashcards hub inventory so category buckets use the same pathway/exam scope as question discovery. */
+export function discoveryExamContextScopeSql(ctx: GlobalExamContext | null): Prisma.Sql {
   if (!ctx) return Prisma.empty;
   const scoped = examQuestionPoolWhereForContext(ctx);
   if (scoped.examIn.length === 0 || scoped.tierMatches.length === 0) return Prisma.sql` AND FALSE`;

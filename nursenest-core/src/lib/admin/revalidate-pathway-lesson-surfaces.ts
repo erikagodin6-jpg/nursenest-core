@@ -27,7 +27,7 @@ export function revalidateSurfacesAfterPathwayLessonMutation(args: {
   const targets = pathwayLessonMutationRevalidationTargets(args);
   const tagsRevalidated = [...targets.cacheTags];
   for (const tag of targets.cacheTags) {
-    revalidateTag(tag);
+    revalidateTag(tag, "default");
   }
 
   const pathsRevalidated: string[] = [];

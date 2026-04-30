@@ -8,9 +8,9 @@ export const SELF_HEAL_REVALIDATION_STEP_LABELS: readonly string[] = [
   'revalidatePath("/pricing")',
   'revalidatePath("/blog")',
   'revalidatePath("/sitemap.xml")',
-  'revalidateTag("pricing")',
-  'revalidateTag("marketing")',
-  'revalidateTag("lessons")',
+  'revalidateTag("pricing", "default")',
+  'revalidateTag("marketing", "default")',
+  'revalidateTag("lessons", "default")',
 ] as const;
 
 export type SelfHealParseResult =
@@ -32,8 +32,8 @@ export async function executeRevalidateCriticalPaths(): Promise<string[]> {
   revalidatePath("/pricing");
   revalidatePath("/blog");
   revalidatePath("/sitemap.xml");
-  revalidateTag("pricing");
-  revalidateTag("marketing");
-  revalidateTag("lessons");
+  revalidateTag("pricing", "default");
+  revalidateTag("marketing", "default");
+  revalidateTag("lessons", "default");
   return [...SELF_HEAL_REVALIDATION_STEP_LABELS];
 }

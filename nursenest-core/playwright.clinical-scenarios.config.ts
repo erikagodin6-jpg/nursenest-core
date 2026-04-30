@@ -46,26 +46,32 @@ function localDevWebServer() {
 
 const paidAuthEnabled = hasPaidTestCredentials();
 const e2eWebServer = localDevWebServer();
-const clinicalSpec = /tests\/e2e\/clinical-scenarios\/clinical-scenario-monetization\.spec\.ts$/;
+const clinicalPaidSpec = /tests\/e2e\/clinical-scenarios\/clinical-scenario-monetization-paid\.spec\.ts$/;
+const clinicalUnpaidStaffSpec = /tests\/e2e\/clinical-scenarios\/clinical-scenario-monetization-unpaid-and-staff\.spec\.ts$/;
 const rootTestMatch = /tests\/e2e\/(clinical-scenarios\/.*\.spec|setup\/auth\.setup)\.ts$/;
 
 const projects = paidAuthEnabled
   ? [
       { name: "setup-paid-auth", testMatch: /tests\/e2e\/setup\/auth\.setup\.ts$/ },
       {
-        name: "chromium-clinical-monetization",
+        name: "chromium-clinical-paid",
         dependencies: ["setup-paid-auth"],
-        testMatch: clinicalSpec,
+        testMatch: clinicalPaidSpec,
         use: {
           ...devices["Desktop Chrome"],
           storageState: PAID_USER_AUTH_FILE,
         },
       },
+      {
+        name: "chromium-clinical-unpaid-staff",
+        testMatch: clinicalUnpaidStaffSpec,
+        use: { ...devices["Desktop Chrome"] },
+      },
     ]
   : [
       {
-        name: "chromium-clinical-monetization",
-        testMatch: clinicalSpec,
+        name: "chromium-clinical-unpaid-staff",
+        testMatch: clinicalUnpaidStaffSpec,
         use: { ...devices["Desktop Chrome"] },
       },
     ];

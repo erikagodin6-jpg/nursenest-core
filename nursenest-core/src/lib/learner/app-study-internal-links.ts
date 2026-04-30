@@ -9,6 +9,12 @@ export function buildAppFlashcardsTopicHref(pathwayId: string, topicSlug: string
   return `/app/flashcards?pathwayId=${encodeURIComponent(pid)}&topic=${encodeURIComponent(t)}`;
 }
 
+/** Flashcards hub scoped to a canonical topic with the **Weak** filter pre-selected via query string. */
+export function buildAppFlashcardsWeakTopicHref(pathwayId: string, topicSlug: string): string {
+  const base = buildAppFlashcardsTopicHref(pathwayId, topicSlug);
+  return `${base}&weakOnly=1`;
+}
+
 export function buildAppPracticeTestsTopicHref(pathwayId: string, topicSlug: string): string {
   const pid = pathwayId.trim();
   const t = topicSlug.trim().toLowerCase();
