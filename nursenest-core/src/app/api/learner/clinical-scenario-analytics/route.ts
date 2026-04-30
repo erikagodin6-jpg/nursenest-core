@@ -59,7 +59,7 @@ export async function POST(req: Request) {
       incorrect_so_far: b.incorrectSoFar,
       incorrect_weight: incorrectWeight,
       trajectory_aggregate: b.trajectoryAggregate,
-      trajectory_path: trajectoryPath,
+      trajectory_path: trajectoryPath.length > 0 ? trajectoryPath.join(",") : undefined,
       reached_stage_order: b.reachedStageOrder,
       max_stage_order_reached: maxStageOrderReached,
       premium_unlocked: b.premiumUnlocked,

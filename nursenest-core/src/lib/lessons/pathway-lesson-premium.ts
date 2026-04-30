@@ -71,6 +71,37 @@ const PREMIUM_KINDS_OPTIONAL_NA: readonly PathwayLessonPremiumSectionKind[] = [
 
 const PREMIUM_KIND_SET = new Set<string>(PREMIUM_SECTION_KINDS);
 
+/**
+ * Plain-text length floor (after {@link stripToPlainText}, whitespace collapsed) for a section to count as
+ * “substantive” for premium commitment and for {@link lessonQualifiesForPremiumNormalization}.
+ */
+export const SUBSTANTIVE_PREMIUM_SECTION_MIN_PLAIN_CHARS = 40;
+
+/** Legacy five-block and pre-normalization archetypes — never count toward premium-normalization spine depth. */
+const LEGACY_SPINE_KINDS_FOR_PREMIUM_QUALIFIER = new Set<string>([
+  "clinical_meaning",
+  "exam_relevance",
+  "core_concept",
+  "clinical_scenario",
+  "takeaways",
+  "intro",
+  "core",
+  "clinical_application",
+  "exam_tips",
+]);
+
+/**
+ * Additional clinical spine kinds (not in {@link PREMIUM_SECTION_KINDS}) that must still opt lessons into
+ * the premium normalization path when three substantive rows exist.
+ */
+const EXTENDED_PREMIUM_NORMALIZATION_SPINE_KINDS = new Set<string>([
+  "exam_focus",
+  "clinical_manifestations",
+  "treatment_management",
+  "nursing_priorities",
+  "complications",
+]);
+
 const LEGACY_KIND_ORDER = [
   "clinical_meaning",
   "exam_relevance",
@@ -103,12 +134,16 @@ const PREMIUM_SPINE_COMMITMENT_KINDS: readonly PathwayLessonPremiumSectionKind[]
   "tier_specific_relevance",
 ] as const;
 
-const PREMIUM_COMMITMENT_MIN_PLAIN_CHARS = 40;
-
 function sectionCommitsToPremiumSpine(sec: PathwayLessonSection | undefined): boolean {
   if (!sec?.body?.trim()) return false;
   const plain = stripToPlainText(sec.body).replace(/\s+/g, " ").trim();
-  return plain.length >= PREMIUM_COMMITMENT_MIN_PLAIN_CHARS;
+  return plain.length >= SUBSTANTIVE_PREMIUM_SECTION_MIN_PLAIN_CHARS;
+}
+
+function sectionKindCountsTowardPremiumNormalizationSpine(kind: string | undefined): boolean {
+  if (!kind) return false;
+  if (LEGACY_SPINE_KINDS_FOR_PREMIUM_QUALIFIER.has(kind)) return false;
+  return isPremiumSectionKind(kind) || EXTENDED_PREMIUM_NORMALIZATION_SPINE_KINDS.has(kind);
 }
 
 export function lessonUsesPremiumStructure(sections: PathwayLessonSection[] | undefined): boolean {
@@ -117,6 +152,29 @@ export function lessonUsesPremiumStructure(sections: PathwayLessonSection[] | un
     const sec = list.find((s) => s.kind === kind);
     return sectionCommitsToPremiumSpine(sec);
   });
+}
+
+/**
+ * Whether {@link normalizeLesson} should run the premium spine (order + catalog hydration) instead of
+ * collapsing into the legacy five-block synthesizer.
+ *
+ * True when {@link lessonUsesPremiumStructure} passes **or** when **≥3** in-spine sections each have
+ * **≥ {@link SUBSTANTIVE_PREMIUM_SECTION_MIN_PLAIN_CHARS}** plain-text characters after
+ * {@link stripToPlainText} (same threshold as premium commitment sections).
+ *
+ * Counted kinds: all {@link PREMIUM_SECTION_KINDS}, plus extended clinical rows
+ * (`exam_focus`, `clinical_manifestations`, `treatment_management`, `nursing_priorities`, `complications`).
+ * Legacy five-block input kinds (`clinical_meaning`, `exam_relevance`, …) never count toward this depth.
+ */
+export function lessonQualifiesForPremiumNormalization(sections: PathwayLessonSection[] | undefined): boolean {
+  if (lessonUsesPremiumStructure(sections)) return true;
+  const list = sections ?? [];
+  let substantiveSpineSections = 0;
+  for (const s of list) {
+    if (!sectionKindCountsTowardPremiumNormalizationSpine(s.kind)) continue;
+    if (sectionCommitsToPremiumSpine(s)) substantiveSpineSections += 1;
+  }
+  return substantiveSpineSections >= 3;
 }
 
 /** Explicit N/A marker for optional sections (no filler prose). */
@@ -310,7 +368,7 @@ export function validatePathwayLessonLegacyStructural(lesson: PathwayLessonRecor
 
 /** Single entry point for admin, CI, and runtime gating. */
 export function evaluatePathwayLessonStructuralGate(lesson: PathwayLessonRecord): PathwayLessonStructuralGate {
-  if (lessonUsesPremiumStructure(lesson.sections)) {
+  if (lessonQualifiesForPremiumNormalization(lesson.sections)) {
     const v = validatePathwayLessonPremium({
       sections: lesson.sections,
       title: lesson.title,

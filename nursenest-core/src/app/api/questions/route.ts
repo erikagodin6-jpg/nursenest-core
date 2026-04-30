@@ -16,6 +16,7 @@ import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sent
 import { withRetry } from "@/lib/resilience/with-retry";
 import type { CountryCode, TierCode } from "@prisma/client";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { prismaWhereForAlliedProfessionExamQuestions } from "@/lib/allied/allied-exam-question-scope";
 import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
@@ -184,6 +185,7 @@ export async function GET(req: NextRequest) {
   const practiceHubIdsParsed = parsePracticeHubIdsParam(searchParams.get("practiceHubIds"));
   const topicCodeFilter = searchParams.get("topicCode")?.trim().toLowerCase();
   const pathwayIdParam = searchParams.get("pathwayId")?.trim();
+  const alliedProfessionParam = searchParams.get("alliedProfession")?.trim().toLowerCase() ?? "";
   const responseMode = parseQuestionListMode(searchParams.get("mode"));
   const sortRaw = searchParams.get("sort")?.trim().toLowerCase() ?? "recent";
   const sort = sortRaw === "random" ? "random" : "recent";
@@ -307,6 +309,10 @@ export async function GET(req: NextRequest) {
         pathway = null;
       }
       const baseWhere = questionAccessWhereWithPathway(gate.entitlement, pathway);
+      const alliedProfessionExamWhere = prismaWhereForAlliedProfessionExamQuestions(
+        pathwayIdParam,
+        alliedProfessionParam || null,
+      );
 
       let practiceHubTopics: string[] = [];
       let practiceHubBodySystems: string[] = [];
@@ -358,6 +364,9 @@ export async function GET(req: NextRequest) {
 
       const buildWhereParts = (includeTopic: boolean): Prisma.ExamQuestionWhereInput => {
         const parts: Prisma.ExamQuestionWhereInput[] = [baseWhere, ...studyModeFilters];
+        if (alliedProfessionExamWhere) {
+          parts.push(alliedProfessionExamWhere);
+        }
         if (includeTopic && practiceHubOrPrisma) {
           parts.push(practiceHubOrPrisma);
         } else if (includeTopic && topicFilterResolved && topicFilterResolved.length > 0) {

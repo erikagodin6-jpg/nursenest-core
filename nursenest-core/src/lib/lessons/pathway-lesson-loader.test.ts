@@ -2,6 +2,10 @@
  * Loads `pathway-lesson-loader` → i18n overlay modules → `import "server-only"`.
  * Eager stub must run before the loader graph loads (tsx can bypass `NODE_OPTIONS --require` alone).
  * `npm run test:pathway-lessons` still sets `NODE_OPTIONS` for the second batch as a belt-and-suspenders guard.
+ *
+ * **Bare `node --import tsx --test pathway-lesson-loader.test.ts`:** can still fail with `server-only` if the stub
+ * does not load first — that is a test-runner harness constraint, not a signal that premium-normalization or
+ * `PathwayLesson` read paths are broken. Prefer `npm run test:pathway-lessons` or run this file only with the stub.
  */
 import "../../../scripts/stub-server-only.cjs";
 import assert from "node:assert/strict";

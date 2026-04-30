@@ -20,6 +20,8 @@ import {
 const createSchema = z.object({
   front: z.string().min(4),
   back: z.string().min(4),
+  /** Optional canonical pathway lesson id — ties the card into the lesson graph (preferred for new decks). */
+  lessonId: z.string().min(8).max(64).optional(),
   country: z.enum(["CA", "US"]),
   tier: z.enum(["RPN", "LVN_LPN", "RN", "NP", "ALLIED", "PRE_NURSING", "NEW_GRAD"]),
   categoryId: z.string().min(3),
@@ -88,6 +90,16 @@ export async function POST(req: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
 
   const d = parsed.data;
+  if (d.lessonId?.trim()) {
+    const pw = await prisma.pathwayLesson.findUnique({
+      where: { id: d.lessonId.trim() },
+      select: { id: true },
+    });
+    if (!pw) {
+      return NextResponse.json({ error: "lessonId must reference an existing PathwayLesson row", code: "lesson_not_found" }, { status: 400 });
+    }
+  }
+
   const examTouched =
     d.examItemKind != null ||
     d.questionStem != null ||
@@ -246,6 +258,7 @@ export async function POST(req: Request) {
     const created = await tx.flashcard.create({
       data: {
         ...restCard,
+        lessonId: d.lessonId?.trim() ? d.lessonId.trim() : null,
         categoryId: resolvedCategory.categoryId,
         front,
         back,

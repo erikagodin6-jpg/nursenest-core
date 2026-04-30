@@ -7,6 +7,9 @@ import { classifyContentItemLesson } from "@/lib/content-quality/classify-lesson
 import { governContentItemLessonPublish } from "@/lib/content/editorial-publish-policy";
 import { prisma } from "@/lib/db";
 import { pathwayLessonIdFromContentItemTags } from "@/lib/lessons/pathway-lesson-cms-link-tags";
+import {
+  pathwayAuthorityBlocksContentItemLessonPatch,
+} from "@/lib/lessons/pathway-lesson-content-item-authority";
 import { bodyStringFromContentJson, bodyStringToContentJson } from "@/lib/prisma/content-item-body";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import { tierCodeToContentItemTier } from "@/lib/prisma/exam-question-maps";
@@ -100,6 +103,18 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const d = parsed.data;
+  const linkedPathwayLessonId = pathwayLessonIdFromContentItemTags(existing.tags);
+  if (pathwayAuthorityBlocksContentItemLessonPatch({ linkedPathwayLessonId, patch: d })) {
+    return NextResponse.json(
+      {
+        error:
+          "This ContentItem is linked to a canonical PathwayLesson (pathway-lesson-id tag). Edit the pathway row via /admin/pathway-lessons instead — ContentItem cannot fork marketing/learner truth.",
+        code: "linked_pathway_lesson_edit_blocked",
+        linkedPathwayLessonId,
+      },
+      { status: 409 },
+    );
+  }
   const payloadForLog = { ...d } as Record<string, unknown>;
   if (typeof payloadForLog.body === "string" && payloadForLog.body.length > 500) {
     payloadForLog.body = `${(payloadForLog.body as string).slice(0, 500)}…`;
@@ -188,6 +203,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     lessonId: lesson.id,
     slug: lesson.slug,
     previousSlug: d.slug !== undefined && d.slug !== previousSlug ? previousSlug : null,
+    skipMarketingPathwayLessonSurfaces: Boolean(pathwayLessonIdFromContentItemTags(lesson.tags ?? [])),
   });
   console.log("[REVALIDATE]", { slug: lesson.slug, contentItemId: lesson.id });
 

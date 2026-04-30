@@ -20,10 +20,18 @@ export async function revalidateSurfacesForContentItemLesson(args: {
   slug: string;
   /** When the slug was renamed, also bust the old marketing lesson URL. */
   previousSlug?: string | null;
+  /**
+   * When a ContentItem row is bridged to a canonical {@link PathwayLesson} (`pathway-lesson-id:` tag),
+   * mutating the ContentItem must not drive marketing `PathwayLesson` cache invalidation — authoring is on
+   * `/admin/pathway-lessons` + {@link revalidateSurfacesAfterPathwayLessonMutation}.
+   */
+  skipMarketingPathwayLessonSurfaces?: boolean;
 }): Promise<void> {
   revalidatePath("/app/lessons");
   revalidatePath(`/app/lessons/${args.lessonId}`);
   revalidatePath(`/admin/lessons/${args.lessonId}`);
+
+  if (args.skipMarketingPathwayLessonSurfaces) return;
 
   const slugs = new Set<string>([args.slug.trim()].filter(Boolean));
   if (args.previousSlug?.trim() && args.previousSlug.trim() !== args.slug.trim()) {

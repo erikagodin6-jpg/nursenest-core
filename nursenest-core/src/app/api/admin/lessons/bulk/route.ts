@@ -5,6 +5,7 @@ import { revalidateSurfacesForContentItemLesson } from "@/lib/admin/revalidate-c
 import { governContentItemLessonPublish, validateLessonForPublish } from "@/lib/content/publish-validation";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
+import { pathwayLessonIdFromContentItemTags } from "@/lib/lessons/pathway-lesson-cms-link-tags";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { bodyStringFromContentJson } from "@/lib/prisma/content-item-body";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
@@ -52,6 +53,16 @@ export async function POST(req: Request) {
     const blocked: { id: string; reasons: string[] }[] = [];
     let updated = 0;
     for (const row of rows) {
+      const bridge = pathwayLessonIdFromContentItemTags(row.tags ?? []);
+      if (bridge) {
+        blocked.push({
+          id: row.id,
+          reasons: [
+            `linked_pathway_lesson_bulk_status_blocked: canonical row ${bridge} — use /admin/pathway-lessons for status`,
+          ],
+        });
+        continue;
+      }
       const bodyStr = bodyStringFromContentJson(row.content);
       const taxonomy = contentItemLessonTaxonomyFromCorpus({
         title: row.title,

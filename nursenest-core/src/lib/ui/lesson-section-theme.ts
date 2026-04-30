@@ -79,6 +79,10 @@ const KIND_TO_ROLE: Record<PathwayLessonSectionKind, LessonSectionRole> = {
   clinical_application: "action",
   exam_tips: "review",
   exam_focus: "review",
+  clinical_manifestations: "warning",
+  treatment_management: "success",
+  nursing_priorities: "action",
+  complications: "danger",
 };
 
 /**

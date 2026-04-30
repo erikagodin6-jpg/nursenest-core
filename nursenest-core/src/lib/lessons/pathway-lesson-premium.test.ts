@@ -3,8 +3,10 @@ import { describe, it } from "node:test";
 import {
   countInternalStudyLinks,
   evaluatePathwayLessonStructuralGate,
+  lessonQualifiesForPremiumNormalization,
   lessonUsesPremiumStructure,
   PREMIUM_SECTION_HEADINGS,
+  SUBSTANTIVE_PREMIUM_SECTION_MIN_PLAIN_CHARS,
   validatePathwayLessonPremium,
 } from "./pathway-lesson-premium";
 import type { PathwayLessonRecord, PathwayLessonSection } from "./pathway-lesson-types";
@@ -80,6 +82,69 @@ describe("pathway-lesson-premium", () => {
         { id: "rf", heading: "RF", kind: "red_flags", body: `${fillerWords(45)}` },
       ]),
       true,
+    );
+  });
+
+  it("lessonQualifiesForPremiumNormalization is true with three substantive premium sections even without commitment kinds", () => {
+    assert.equal(
+      lessonQualifiesForPremiumNormalization([
+        { id: "i", heading: "I", kind: "introduction", body: `${fillerWords(50)}` },
+        { id: "p", heading: "P", kind: "pathophysiology_overview", body: `${fillerWords(50)}` },
+        { id: "ss", heading: "SS", kind: "signs_symptoms", body: `${fillerWords(50)}` },
+      ]),
+      true,
+    );
+    assert.equal(
+      lessonQualifiesForPremiumNormalization([
+        { id: "i", heading: "I", kind: "introduction", body: `${fillerWords(50)}` },
+        { id: "p", heading: "P", kind: "pathophysiology_overview", body: `${fillerWords(50)}` },
+      ]),
+      false,
+    );
+  });
+
+  it("lessonQualifiesForPremiumNormalization: intro + pathophysiology + labs without red_flags", () => {
+    assert.equal(
+      lessonQualifiesForPremiumNormalization([
+        { id: "i", heading: "I", kind: "introduction", body: `${fillerWords(50)}` },
+        { id: "p", heading: "P", kind: "pathophysiology_overview", body: `${fillerWords(50)}` },
+        { id: "l", heading: "L", kind: "labs_diagnostics", body: `${fillerWords(50)}` },
+      ]),
+      true,
+    );
+  });
+
+  it("lessonQualifiesForPremiumNormalization: extended clinical kinds without canonical premium kinds", () => {
+    assert.equal(
+      lessonQualifiesForPremiumNormalization([
+        { id: "a", heading: "A", kind: "clinical_manifestations", body: `${fillerWords(50)}` },
+        { id: "b", heading: "B", kind: "treatment_management", body: `${fillerWords(50)}` },
+        { id: "c", heading: "C", kind: "nursing_priorities", body: `${fillerWords(50)}` },
+      ]),
+      true,
+    );
+  });
+
+  it("lessonQualifiesForPremiumNormalization: substantive legacy five-block alone does not qualify", () => {
+    assert.equal(
+      lessonQualifiesForPremiumNormalization([
+        { id: "1", heading: "H", kind: "clinical_meaning", body: `${fillerWords(50)}` },
+        { id: "2", heading: "H", kind: "exam_relevance", body: `${fillerWords(50)}` },
+        { id: "3", heading: "H", kind: "core_concept", body: `${fillerWords(50)}` },
+      ]),
+      false,
+    );
+  });
+
+  it("lessonQualifiesForPremiumNormalization: three premium headings with bodies under plain-text floor do not qualify", () => {
+    const thin = "x".repeat(Math.max(0, SUBSTANTIVE_PREMIUM_SECTION_MIN_PLAIN_CHARS - 1));
+    assert.equal(
+      lessonQualifiesForPremiumNormalization([
+        { id: "i", heading: "I", kind: "introduction", body: thin },
+        { id: "p", heading: "P", kind: "pathophysiology_overview", body: thin },
+        { id: "l", heading: "L", kind: "labs_diagnostics", body: thin },
+      ]),
+      false,
     );
   });
 

@@ -29,11 +29,22 @@ import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flash
 import { visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
 
-type PageProps = { searchParams: Promise<{ pathwayId?: string | string[] }> };
+type PageProps = { searchParams: Promise<{ pathwayId?: string | string[]; alliedProfession?: string | string[] }> };
 
 export default async function FlashcardsPage({ searchParams }: PageProps) {
   const { t } = await getLearnerMarketingBundle();
   const sp = await searchParams;
+
+  const rawAllied = sp.alliedProfession;
+  const alliedProfessionParam =
+    typeof rawAllied === "string" && rawAllied.trim()
+      ? rawAllied.trim().toLowerCase()
+      : Array.isArray(rawAllied) && typeof rawAllied[0] === "string" && rawAllied[0].trim()
+        ? rawAllied[0].trim().toLowerCase()
+        : "";
+  const alliedProfessionFromQuery = alliedProfessionParam
+    ? getAlliedProfessionByProfessionKey(alliedProfessionParam)?.professionKey ?? ""
+    : "";
 
   const rawPid = sp.pathwayId;
   const pathwayQueryRaw =
@@ -229,12 +240,17 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
   }
 
   const visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
-  const catHref = resolveStudyLoopCatHref({
+  let catHref = resolveStudyLoopCatHref({
     authState: "signed_in",
     pathwayId: scopedPathwayId,
     availablePathwayIds: visiblePathwayIds,
     intent: "start",
   });
+  const alliedKeyForFlashcards =
+    alliedProfessionFromQuery && isAlliedMarketingCorePathwayId(scopedPathwayId) ? alliedProfessionFromQuery : "";
+  if (alliedKeyForFlashcards && catHref.includes("/app/practice-tests/cat-launch")) {
+    catHref = appPathwayCatSessionStartPath(scopedPathwayId, { alliedProfession: alliedKeyForFlashcards });
+  }
 
   return (
     <div className="space-y-2">
@@ -247,6 +263,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
           catHref={catHref}
           initialHub={initialHub}
           lessonsHubHref={`/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`}
+          alliedProfessionKey={alliedKeyForFlashcards || null}
         />
       </Suspense>
     </div>

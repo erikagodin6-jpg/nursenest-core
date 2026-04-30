@@ -3,18 +3,22 @@
  * Split from `pathway-lesson-loader.ts` so CLI audits and tooling can import without the `server-only` graph.
  * Catalog-backed and still heavy enough to keep out of shared layouts, homepage chrome, and nav/header paths.
  */
+import { createRequire } from "node:module";
 import { inferExamAudienceFromPathwayId } from "@/lib/lessons/exam-complete-lesson-template";
 import { buildLessonInteractiveModules } from "@/lib/lessons/lesson-interactive-modules";
 import { deriveLessonHighYieldStudyFields } from "@/lib/lessons/lesson-high-yield-study-fields";
 import { resolveLessonContextForPathwayId } from "@/lib/lessons/lesson-region-exam";
 import {
   evaluatePathwayLessonStructuralGate,
-  lessonUsesPremiumStructure,
+  lessonQualifiesForPremiumNormalization,
   orderPremiumSections,
   PREMIUM_SECTION_KINDS,
   validatePathwayLessonPremium,
 } from "@/lib/lessons/pathway-lesson-premium";
 import { PATHWAY_CATALOG_LIST_HARD_CAP } from "@/lib/lessons/pathway-lesson-scale";
+
+/** JSON bundles use `createRequire` so this module stays loadable under ESM `node:test` / `tsx` (bare `require` throws). */
+const catalogBundleRequire = createRequire(import.meta.url);
 import {
   type PathwayEmbeddedSoundLibraryId,
   type PathwayLessonAudienceTier,
@@ -138,7 +142,7 @@ let newGradTransitionPathwaysCache: Record<string, { lessons?: CatalogShape["pat
 function getCatalogData(): CatalogShape {
   if (catalogDataCache) return catalogDataCache;
   lessonsPerfMark("catalog_build_start", { scope: "bundled_catalog_json" });
-  catalogDataCache = require("@/content/pathway-lessons/catalog.json") as CatalogShape;
+  catalogDataCache = catalogBundleRequire("@/content/pathway-lessons/catalog.json") as CatalogShape;
   lessonsPerfMark("catalog_build_end", { scope: "bundled_catalog_json" });
   const pathwayCount = Object.keys(catalogDataCache.pathways ?? {}).length;
   const lessonRows = Object.values(catalogDataCache.pathways ?? {}).reduce(
@@ -152,7 +156,7 @@ function getCatalogData(): CatalogShape {
 function getAlliedBundledPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (alliedBundledPathwaysCache) return alliedBundledPathwaysCache;
   alliedBundledPathwaysCache =
-    (require("@/content/pathway-lessons/allied-bundled-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/allied-bundled-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return alliedBundledPathwaysCache;
@@ -162,7 +166,7 @@ function getAlliedBundledPathways(): Record<string, CatalogShape["pathways"][str
 function getRnCardiovascularExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnCardiovascularExpansionPathwaysCache) return rnCardiovascularExpansionPathwaysCache;
   rnCardiovascularExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-cardiovascular-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-cardiovascular-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnCardiovascularExpansionPathwaysCache;
@@ -177,7 +181,7 @@ function rnCardiovascularExpansionLessonsForPathway(pathwayId: string): LessonIn
 function getRnNeurologicalExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnNeurologicalExpansionPathwaysCache) return rnNeurologicalExpansionPathwaysCache;
   rnNeurologicalExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-neurological-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-neurological-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnNeurologicalExpansionPathwaysCache;
@@ -192,7 +196,7 @@ function rnNeurologicalExpansionLessonsForPathway(pathwayId: string): LessonInpu
 function getRnHematologyOncologyExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnHematologyOncologyExpansionPathwaysCache) return rnHematologyOncologyExpansionPathwaysCache;
   rnHematologyOncologyExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-hematology-oncology-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-hematology-oncology-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnHematologyOncologyExpansionPathwaysCache;
@@ -207,7 +211,7 @@ function rnHematologyOncologyExpansionLessonsForPathway(pathwayId: string): Less
 function getRnGastrointestinalExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnGastrointestinalExpansionPathwaysCache) return rnGastrointestinalExpansionPathwaysCache;
   rnGastrointestinalExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-gastrointestinal-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-gastrointestinal-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnGastrointestinalExpansionPathwaysCache;
@@ -222,7 +226,7 @@ function rnGastrointestinalExpansionLessonsForPathway(pathwayId: string): Lesson
 function getRnIntegumentaryWoundCareExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnIntegumentaryWoundCareExpansionPathwaysCache) return rnIntegumentaryWoundCareExpansionPathwaysCache;
   rnIntegumentaryWoundCareExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-integumentary-wound-care-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-integumentary-wound-care-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnIntegumentaryWoundCareExpansionPathwaysCache;
@@ -237,7 +241,7 @@ function rnIntegumentaryWoundCareExpansionLessonsForPathway(pathwayId: string): 
 function getRnInfectionControlExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnInfectionControlExpansionPathwaysCache) return rnInfectionControlExpansionPathwaysCache;
   rnInfectionControlExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-infection-control-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-infection-control-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnInfectionControlExpansionPathwaysCache;
@@ -252,7 +256,7 @@ function rnInfectionControlExpansionLessonsForPathway(pathwayId: string): Lesson
 function getRnLeadershipDelegationExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnLeadershipDelegationExpansionPathwaysCache) return rnLeadershipDelegationExpansionPathwaysCache;
   rnLeadershipDelegationExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-leadership-delegation-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-leadership-delegation-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnLeadershipDelegationExpansionPathwaysCache;
@@ -267,7 +271,7 @@ function rnLeadershipDelegationExpansionLessonsForPathway(pathwayId: string): Le
 function getRnMaternalNewbornExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnMaternalNewbornExpansionPathwaysCache) return rnMaternalNewbornExpansionPathwaysCache;
   rnMaternalNewbornExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-maternal-newborn-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-maternal-newborn-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnMaternalNewbornExpansionPathwaysCache;
@@ -281,7 +285,7 @@ function rnMaternalNewbornExpansionLessonsForPathway(pathwayId: string): LessonI
 function getRnProceduresSkillsExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnProceduresSkillsExpansionPathwaysCache) return rnProceduresSkillsExpansionPathwaysCache;
   rnProceduresSkillsExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-procedures-skills-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-procedures-skills-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnProceduresSkillsExpansionPathwaysCache;
@@ -296,7 +300,7 @@ function rnProceduresSkillsExpansionLessonsForPathway(pathwayId: string): Lesson
 function getRnNutritionExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnNutritionExpansionPathwaysCache) return rnNutritionExpansionPathwaysCache;
   rnNutritionExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-nutrition-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-nutrition-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnNutritionExpansionPathwaysCache;
@@ -310,7 +314,7 @@ function rnNutritionExpansionLessonsForPathway(pathwayId: string): LessonInput[]
 function getRnExamStrategyExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnExamStrategyExpansionPathwaysCache) return rnExamStrategyExpansionPathwaysCache;
   rnExamStrategyExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-exam-strategy-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-exam-strategy-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnExamStrategyExpansionPathwaysCache;
@@ -324,7 +328,7 @@ function rnExamStrategyExpansionLessonsForPathway(pathwayId: string): LessonInpu
 function getRnRespiratoryExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnRespiratoryExpansionPathwaysCache) return rnRespiratoryExpansionPathwaysCache;
   rnRespiratoryExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-respiratory-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-respiratory-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnRespiratoryExpansionPathwaysCache;
@@ -338,7 +342,7 @@ function rnRespiratoryExpansionLessonsForPathway(pathwayId: string): LessonInput
 function getRnRenalExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnRenalExpansionPathwaysCache) return rnRenalExpansionPathwaysCache;
   rnRenalExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-renal-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-renal-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnRenalExpansionPathwaysCache;
@@ -352,7 +356,7 @@ function rnRenalExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
 function getRnEndocrineExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnEndocrineExpansionPathwaysCache) return rnEndocrineExpansionPathwaysCache;
   rnEndocrineExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-endocrine-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-endocrine-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnEndocrineExpansionPathwaysCache;
@@ -366,7 +370,7 @@ function rnEndocrineExpansionLessonsForPathway(pathwayId: string): LessonInput[]
 function getRnMusculoskeletalExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnMusculoskeletalExpansionPathwaysCache) return rnMusculoskeletalExpansionPathwaysCache;
   rnMusculoskeletalExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-musculoskeletal-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-musculoskeletal-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnMusculoskeletalExpansionPathwaysCache;
@@ -380,7 +384,7 @@ function rnMusculoskeletalExpansionLessonsForPathway(pathwayId: string): LessonI
 function getRnFluidsElectrolytesExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnFluidsElectrolytesExpansionPathwaysCache) return rnFluidsElectrolytesExpansionPathwaysCache;
   rnFluidsElectrolytesExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-fluids-electrolytes-expansion-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-fluids-electrolytes-expansion-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnFluidsElectrolytesExpansionPathwaysCache;
@@ -394,7 +398,7 @@ function rnFluidsElectrolytesExpansionLessonsForPathway(pathwayId: string): Less
 function getRnExamNotesIntegrationExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnExamNotesIntegrationExpansionPathwaysCache) return rnExamNotesIntegrationExpansionPathwaysCache;
   rnExamNotesIntegrationExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-exam-notes-integration-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-exam-notes-integration-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnExamNotesIntegrationExpansionPathwaysCache;
@@ -408,7 +412,7 @@ function rnExamNotesIntegrationExpansionLessonsForPathway(pathwayId: string): Le
 function getRnExamNotesIntegrationBatch3ExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
   if (rnExamNotesIntegrationBatch3ExpansionPathwaysCache) return rnExamNotesIntegrationBatch3ExpansionPathwaysCache;
   rnExamNotesIntegrationBatch3ExpansionPathwaysCache =
-    (require("@/content/pathway-lessons/rn-nclex-exam-notes-integration-batch3-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/rn-nclex-exam-notes-integration-batch3-catalog.json") as {
       pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
     }).pathways ?? {};
   return rnExamNotesIntegrationBatch3ExpansionPathwaysCache;
@@ -422,7 +426,7 @@ function rnExamNotesIntegrationBatch3ExpansionLessonsForPathway(pathwayId: strin
 function getNewGradTransitionPathways(): Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> {
   if (newGradTransitionPathwaysCache) return newGradTransitionPathwaysCache;
   newGradTransitionPathwaysCache =
-    (require("@/content/pathway-lessons/new-grad-transition-catalog.json") as {
+    (catalogBundleRequire("@/content/pathway-lessons/new-grad-transition-catalog.json") as {
       pathways?: Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }>;
     }).pathways ?? {};
   return newGradTransitionPathwaysCache;
@@ -1288,7 +1292,7 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
     typeof rawPc === "number" && Number.isFinite(rawPc) && rawPc > 0 ? Math.floor(rawPc) : 1;
 
   const incoming = sanitizeIncomingSections(raw.sections as PathwayLessonSection[]);
-  const usePremium = lessonUsesPremiumStructure(incoming);
+  const usePremium = lessonQualifiesForPremiumNormalization(incoming);
   let expanded = usePremium ? finalizePremiumSections(incoming) : expandToStandardFiveSections(incoming);
   const lessonSlugEarly = typeof raw.slug === "string" ? raw.slug : "";
   let premiumOmittedMerged: PathwayLessonOmittedPremiumSection[] | undefined = Array.isArray(
@@ -1430,7 +1434,7 @@ let lessonLibraryCache: LessonLibraryFile | null | undefined;
 function readLessonLibrarySync(): LessonLibraryFile | null {
   if (lessonLibraryCache !== undefined) return lessonLibraryCache;
   try {
-    lessonLibraryCache = require("@/content/lessons/lesson-library.json") as LessonLibraryFile;
+    lessonLibraryCache = catalogBundleRequire("@/content/lessons/lesson-library.json") as LessonLibraryFile;
   } catch {
     lessonLibraryCache = null;
   }

@@ -374,6 +374,8 @@ export function QuestionBankPracticeClient({
         if (practiceHubIds.length > 0) qs.set("practiceHubIds", practiceHubIds.join(","));
         if (topicCodeFilter) qs.set("topicCode", topicCodeFilter);
         if (pathwayIdFilter) qs.set("pathwayId", pathwayIdFilter);
+        const alliedProfessionForApi = searchParams.get("alliedProfession")?.trim().toLowerCase() ?? "";
+        if (alliedProfessionForApi) qs.set("alliedProfession", alliedProfessionForApi);
         if (efficiencyMode) qs.set("studyMode", efficiencyMode);
         const dBounds = difficultyQueryBounds(difficultyBand);
         if (dBounds.min != null) qs.set("difficultyMin", String(dBounds.min));
@@ -526,6 +528,7 @@ export function QuestionBankPracticeClient({
       examShell,
       selectedExamContext,
       pathname,
+      searchParams,
       t,
     ],
   );

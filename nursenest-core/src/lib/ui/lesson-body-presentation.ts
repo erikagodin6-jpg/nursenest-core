@@ -26,6 +26,10 @@ const KIND_TO_BODY_TOKEN: Record<PathwayLessonSectionKind, string> = {
   clinical_application: "application",
   exam_tips: "exam",
   exam_focus: "exam",
+  clinical_manifestations: "presentation",
+  treatment_management: "intervention",
+  nursing_priorities: "action",
+  complications: "trap",
 };
 
 /**

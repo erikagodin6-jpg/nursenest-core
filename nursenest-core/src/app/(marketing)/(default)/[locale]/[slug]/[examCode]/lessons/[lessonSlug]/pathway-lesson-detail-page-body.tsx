@@ -103,6 +103,8 @@ import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { createPathwayLessonDetailTiming } from "@/lib/observability/pathway-lesson-detail-dev-timing";
 import { PathwayLessonThinStudyExpansion } from "@/components/lessons/pathway-lesson-thin-study-expansion";
+import { MarketingPathwayLessonRenderTrace } from "@/components/dev/marketing-pathway-lesson-render-trace";
+import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
 
 /**
  * Paywall: full `PathwayLessonRecord` / `sections[]` stay in this server component. Gate with
@@ -169,6 +171,12 @@ export async function PathwayLessonDetailPageBody({
   const loadedLesson =
     lessonResult.status === "fulfilled" ? lessonResult.value : undefined;
   const lessonLoadFailed = lessonResult.status === "rejected";
+  const sectionsForLog = loadedLesson?.sections ?? [];
+  const firstSectionBody =
+    typeof sectionsForLog[0]?.body === "string" ? sectionsForLog[0].body.replace(/\s+/g, " ").trim() : "";
+  const firstSectionWordCount = firstSectionBody
+    ? countWords(stripToPlainText(sectionsForLog[0]!.body as string))
+    : 0;
   console.info("[PUBLIC_LESSON_RENDER]", {
     pathname: pathname.slice(0, 240),
     pathwayId: pathway.id,
@@ -178,6 +186,11 @@ export async function PathwayLessonDetailPageBody({
     catalogEnglishNarrative: Boolean(loadedLesson?.localeMeta?.isCatalogEnglishSource),
     usedLocaleFallback: Boolean(loadedLesson?.localeMeta?.usedLocaleFallback),
     loaded: Boolean(loadedLesson),
+    sectionsCount: sectionsForLog.length,
+    firstSectionKind: sectionsForLog[0]?.kind ?? null,
+    firstSectionWordCount,
+    firstSectionBodyPreview: firstSectionBody.slice(0, 200),
+    structuralPublicComplete: loadedLesson?.structuralQuality?.publicComplete ?? null,
   });
 
   if (lessonResult.status === "rejected") {
@@ -384,6 +397,15 @@ export async function PathwayLessonDetailPageBody({
       ? "Readiness check → core lesson → reinforcement quiz after you mark this lesson studied."
       : null;
 
+  const firstDisplaySection = displaySections[0];
+  const firstTraceHeading = firstDisplaySection
+    ? pathwayLessonSectionSurfaceHeading(firstDisplaySection, pathway.countryCode, t)
+    : "";
+  const lessonBodyWordCount = displaySections.reduce((acc, s) => {
+    const plain = stripToPlainText(pathwayLessonPremiumSectionBodyText(s, pathway.id, pathway.countryCode));
+    return acc + countWords(plain);
+  }, 0);
+
   return (
     <div className="mx-auto max-w-6xl px-4 pb-4 pt-0 sm:px-6 sm:pb-5 lg:px-8">
       <div
@@ -406,6 +428,14 @@ export async function PathwayLessonDetailPageBody({
           }
           datePublished={contentDates?.datePublished ?? null}
           dateModified={contentDates?.dateModified ?? null}
+        />
+        <MarketingPathwayLessonRenderTrace
+          staffFullLessonAccess={staffFullLessonAccess}
+          pathwayId={pathway.id}
+          lessonSlug={lesson.slug}
+          sectionsCount={displaySections.length}
+          firstSectionHeading={firstTraceHeading}
+          approximateWordCount={lessonBodyWordCount}
         />
         <div className="mb-0.5 opacity-[0.88]">
           <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />

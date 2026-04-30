@@ -158,6 +158,11 @@ export type PathwayLessonSectionKind =
   | "clinical_application"
   | "exam_tips"
   | "exam_focus"
+  /** Authoring / AI pipelines — full-clinical spine; must participate in premium-normalization qualification. */
+  | "clinical_manifestations"
+  | "treatment_management"
+  | "nursing_priorities"
+  | "complications"
   | PathwayLessonPremiumSectionKind;
 
 /** Optional educational figures for a lesson section (HTTPS URLs only after sanitization). */

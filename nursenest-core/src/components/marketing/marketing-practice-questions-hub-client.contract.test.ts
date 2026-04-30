@@ -27,7 +27,8 @@ describe("MarketingPracticeQuestionsHubClient", () => {
     const src = readFileSync(clientPath, "utf8");
     assert.ok(src.includes('data-testid="practice-hub-filter-strip"'));
     assert.ok(src.includes('data-testid="quick-cat-app-link"'));
-    assert.ok(src.includes("appPathwayCatSessionStartPath(pid)"));
+    assert.ok(src.includes("appPathwayCatSessionStartPath(pid"));
+    assert.ok(src.includes("alliedProfession"));
   });
 
   it("includes studyLaunchPayload on adaptive POST", () => {

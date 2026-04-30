@@ -108,6 +108,8 @@ export function PracticeQuestionSessionSetupClient({
     return defaultPathwayId;
   });
 
+  const alliedFromUrl = urlParams.get("alliedProfession")?.trim().toLowerCase() ?? "";
+
   const [selectedSystems, setSelectedSystems] = useState<Set<BodySystemId>>(new Set());
   const [specialFocus, setSpecialFocus] = useState<SpecialFocusId | null>(null);
   const [questionCount, setQuestionCount] = useState<number>(DEFAULT_QUESTION_COUNT);
@@ -121,13 +123,14 @@ export function PracticeQuestionSessionSetupClient({
     [effectivePathwayId],
   );
 
-  const catDirectHref = useMemo(
-    () =>
-      effectivePathwayId
-        ? `/app/practice-tests/cat-launch?pathwayId=${encodeURIComponent(effectivePathwayId)}`
-        : "/app/practice-tests",
-    [effectivePathwayId],
-  );
+  const catDirectHref = useMemo(() => {
+    if (!effectivePathwayId) return "/app/practice-tests";
+    let href = `/app/practice-tests/cat-launch?pathwayId=${encodeURIComponent(effectivePathwayId)}`;
+    if (alliedFromUrl && isAlliedMarketingCorePathwayId(effectivePathwayId)) {
+      href += `&alliedProfession=${encodeURIComponent(alliedFromUrl)}`;
+    }
+    return href;
+  }, [effectivePathwayId, alliedFromUrl]);
 
   const isAllSystems = selectedSystems.size === 0 && specialFocus === null;
   const selectedSystemCount = selectedSystems.size;
