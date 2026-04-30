@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
 
 type WeakCard = {
   id: string;
@@ -16,6 +17,8 @@ type WeakCard = {
   sourceKey: string | null;
   topic: string;
   subtopic: string | null;
+  lessonStudyHref?: string;
+  lessonStudyTitle?: string;
 };
 
 const SIMPLE = ["incorrect", "unsure", "known"] as const;

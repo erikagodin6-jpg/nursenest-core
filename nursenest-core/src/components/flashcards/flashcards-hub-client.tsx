@@ -83,6 +83,7 @@ export function FlashcardsHubClient({
   lessonsHubHref,
   alliedProfessionKey = null,
   hubTopicSlug = null,
+  initialWeakOnly = false,
 }: {
   scopedPathwayId: string;
   pathwayDisplayName: string;
@@ -95,6 +96,8 @@ export function FlashcardsHubClient({
   alliedProfessionKey?: string | null;
   /** Topic slug from `?topic=` — scoped flashcard/practice deep links for this pathway only. */
   hubTopicSlug?: string | null;
+  /** From `?weakOnly=1` — aligns hub with clinical-scenario / weak-area deep links. */
+  initialWeakOnly?: boolean;
 }) {
   const { t } = useMarketingI18n();
   const apForQuery =
@@ -120,7 +123,10 @@ export function FlashcardsHubClient({
   const [selectedCanonicalIds, setSelectedCanonicalIds] = useState<string[]>([]);
   const [cardLimit, setCardLimit] = useState(20);
   const [shuffleOn, setShuffleOn] = useState(true);
-  const [weakOnly, setWeakOnly] = useState(false);
+  const [weakOnly, setWeakOnly] = useState(Boolean(initialWeakOnly));
+  useEffect(() => {
+    setWeakOnly(Boolean(initialWeakOnly));
+  }, [initialWeakOnly]);
   const [incorrectOnly, setIncorrectOnly] = useState(false);
   const [starredOnly, setStarredOnly] = useState(false);
   const [notStudiedOnly, setNotStudiedOnly] = useState(false);
@@ -204,7 +210,7 @@ export function FlashcardsHubClient({
       try {
         json = await res.json();
       } catch {
-        setLoadError("Could not load flashcard topics.");
+        setLoadError("Flashcard inventory returned invalid JSON. Try again or contact support.");
         setBuilderCategories([]);
         setMatchingCards(null);
         setLessonVirtualDiagnostics(null);
@@ -230,12 +236,12 @@ export function FlashcardsHubClient({
           matchingCards: parsed.summary?.matchingCards ?? 0,
         });
       }
-    } catch {
-      setLoadError("Could not load flashcard topics.");
-      setBuilderCategories([]);
-      setMatchingCards(null);
-      setLessonVirtualDiagnostics(null);
-    }
+      } catch {
+        setLoadError("Network error while loading flashcards. Check your connection and try again.");
+        setBuilderCategories([]);
+        setMatchingCards(null);
+        setLessonVirtualDiagnostics(null);
+      }
   }, [
     scopedPathwayId,
     cardLimit,
@@ -382,6 +388,86 @@ export function FlashcardsHubClient({
               screen.
             </span>
           </p>
+        }
+      />
+
+      <section className="space-y-4" data-nn-e2e-flashcards-canonical-grid>
+        <LearnerCategorySelector
+          countsBySystem={countsByCanonical}
+          selectedCanonicalIds={selectedCanonicalIds}
+          onToggleCanonical={toggleCanonical}
+          search={categorySearch}
+          onSearchChange={setCategorySearch}
+          heading={t("learner.flashcards.hub.bodySystemsHeading")}
+          intro="Cards are grouped by canonical exam categories (same grid as practice questions). Builder rows are mapped automatically — you are not picking raw lesson topic cards here."
+        />
+      </section>
+
+      <section className="space-y-5 border-t border-[var(--semantic-border-soft)] pt-4">
+        <details className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3">
+          <summary className="cursor-pointer text-sm font-semibold text-[var(--semantic-text-primary)]">
+            Advanced filters (same flags as the API)
+          </summary>
+          <div className="mt-3 space-y-3">
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
+              Weak areas only
+            </label>
+
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={incorrectOnly} onChange={(e) => setIncorrectOnly(e.target.checked)} />
+              Previously incorrect
+            </label>
+
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={notStudiedOnly} onChange={(e) => setNotStudiedOnly(e.target.checked)} />
+              Not studied
+            </label>
+
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} />
+              Starred only
+            </label>
+          </div>
+        </details>
+
+        <div className="flex flex-wrap items-center gap-2 text-sm">
+          <span className="text-[var(--semantic-text-secondary)]">Deck size:</span>
+          {CARD_COUNTS.map((n) => (
+            <button
+              key={n}
+              type="button"
+              className={`rounded-full border border-[var(--semantic-border-soft)] px-3 py-1 ${
+                cardLimit === n
+                  ? "border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))]"
+                  : ""
+              }`}
+              onClick={() => setCardLimit(n)}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={shuffleOn} onChange={(e) => setShuffleOn(e.target.checked)} />
+          Shuffle order
+        </label>
+      </section>
+
+      <LearnerSessionStartPanel
+        primary={
+          <div>
+            <LearnerCtaLink href={startHref} data-nn-e2e-start-review>
+              {t("flashcards.startSession")}
+            </LearnerCtaLink>
+            <p className="mt-1 text-xs text-muted-foreground">{sessionSummaryLine}</p>
+          </div>
+        }
+        secondary={
+          <Link href={weakAreaFlashcardsHref(scopedPathwayId)} className="text-xs font-medium text-primary underline">
+            Weak areas
+          </Link>
         }
       />
 
@@ -553,86 +639,6 @@ export function FlashcardsHubClient({
           No starred cards yet. Star cards during study ({starredCount} saved in this browser).
         </div>
       ) : null}
-
-      <section className="space-y-4" data-nn-e2e-flashcards-canonical-grid>
-        <LearnerCategorySelector
-          countsBySystem={countsByCanonical}
-          selectedCanonicalIds={selectedCanonicalIds}
-          onToggleCanonical={toggleCanonical}
-          search={categorySearch}
-          onSearchChange={setCategorySearch}
-          heading={t("learner.flashcards.hub.bodySystemsHeading")}
-          intro="Cards are grouped by canonical exam categories (same grid as practice questions). Builder rows are mapped automatically — you are not picking raw lesson topic cards here."
-        />
-      </section>
-
-      <section className="space-y-5 border-t border-[var(--semantic-border-soft)] pt-4">
-        <details className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3">
-          <summary className="cursor-pointer text-sm font-semibold text-[var(--semantic-text-primary)]">
-            Advanced filters (same flags as the API)
-          </summary>
-          <div className="mt-3 space-y-3">
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={weakOnly} onChange={(e) => setWeakOnly(e.target.checked)} />
-              Weak areas only
-            </label>
-
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={incorrectOnly} onChange={(e) => setIncorrectOnly(e.target.checked)} />
-              Previously incorrect
-            </label>
-
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={notStudiedOnly} onChange={(e) => setNotStudiedOnly(e.target.checked)} />
-              Not studied
-            </label>
-
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" checked={starredOnly} onChange={(e) => setStarredOnly(e.target.checked)} />
-              Starred only
-            </label>
-          </div>
-        </details>
-
-        <div className="flex flex-wrap items-center gap-2 text-sm">
-          <span className="text-[var(--semantic-text-secondary)]">Deck size:</span>
-          {CARD_COUNTS.map((n) => (
-            <button
-              key={n}
-              type="button"
-              className={`rounded-full border border-[var(--semantic-border-soft)] px-3 py-1 ${
-                cardLimit === n
-                  ? "border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))]"
-                  : ""
-              }`}
-              onClick={() => setCardLimit(n)}
-            >
-              {n}
-            </button>
-          ))}
-        </div>
-
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={shuffleOn} onChange={(e) => setShuffleOn(e.target.checked)} />
-          Shuffle order
-        </label>
-      </section>
-
-      <LearnerSessionStartPanel
-        primary={
-          <div>
-            <LearnerCtaLink href={startHref} data-nn-e2e-start-review>
-              {t("flashcards.startSession")}
-            </LearnerCtaLink>
-            <p className="mt-1 text-xs text-muted-foreground">{sessionSummaryLine}</p>
-          </div>
-        }
-        secondary={
-          <Link href={weakAreaFlashcardsHref(scopedPathwayId)} className="text-xs font-medium text-primary underline">
-            Weak areas
-          </Link>
-        }
-      />
     </LearnerStudyPageShell>
   );
 }

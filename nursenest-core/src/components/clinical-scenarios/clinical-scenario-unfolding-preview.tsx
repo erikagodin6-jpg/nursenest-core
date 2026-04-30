@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import {
@@ -21,6 +22,7 @@ import {
   type PatientTrajectory,
 } from "@/lib/clinical-scenarios/clinical-scenario-trajectory";
 import { clinicalScenarioTierNarrative } from "@/lib/clinical-scenarios/clinical-scenario-tier-focus";
+import type { ClinicalScenarioCompletionStudyBundle } from "@/lib/clinical-scenarios/clinical-scenario-completion-study-links";
 import { CANONICAL_STUDY_CATEGORIES } from "@/lib/study/normalize-study-category";
 
 export type ClinicalScenarioStagePreview = {
@@ -125,15 +127,54 @@ function renderKeyValuePanel(title: string, data: unknown) {
   );
 }
 
+function ClinicalScenarioStudyFollowupBlock({ links }: { links: ClinicalScenarioCompletionStudyBundle }) {
+  return (
+    <div className="mt-4 space-y-3 rounded-lg border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_8%,var(--bg-card))] p-4">
+      <p className="text-xs font-semibold uppercase tracking-wide text-[var(--semantic-chart-1)]">Continue studying</p>
+      {links.relatedLessons.length > 0 ? (
+        <div>
+          <p className="text-xs font-semibold text-[var(--semantic-info)]">Related lessons (same topic family)</p>
+          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm">
+            {links.relatedLessons.map((l) => (
+              <li key={l.slug}>
+                <Link
+                  href={l.href}
+                  className="text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+                >
+                  {l.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <p className="text-xs text-[var(--theme-body-text)]">No extra catalog lessons matched this case category yet.</p>
+      )}
+      <p className="text-sm">
+        <Link
+          href={links.weakFlashcardsHref}
+          className="font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+        >
+          Flashcards for weak areas in this topic
+        </Link>
+        <span className="text-[var(--theme-body-text)]"> — opens your flashcards hub with the weak filter.</span>
+      </p>
+    </div>
+  );
+}
+
 export function ClinicalScenarioUnfoldingPreview({
   scenario,
   premiumUnlocked = true,
   allowStaffFullPreview = false,
+  studyCompletionLinks = null,
 }: {
   scenario: ClinicalScenarioPreviewModel;
   premiumUnlocked?: boolean;
   /** Staff / admin preview: full multi-stage access even for premium scenarios without a subscription. */
   allowStaffFullPreview?: boolean;
+  /** Catalog lesson slugs + weak flashcards deep link — computed server-side; no duplicated bodies. */
+  studyCompletionLinks?: ClinicalScenarioCompletionStudyBundle | null;
 }) {
   const branching = useMemo(() => scenarioUsesBranchingEngine(scenario.stages), [scenario.stages]);
   const branchStages = useMemo(() => scenario.stages.map(toBranchingStageView), [scenario.stages]);
@@ -415,6 +456,9 @@ export function ClinicalScenarioUnfoldingPreview({
                 </div>
               </div>
             ) : null}
+            {showSummary && studyCompletionLinks ? (
+              <ClinicalScenarioStudyFollowupBlock links={studyCompletionLinks} />
+            ) : null}
             {!fullScenarioAccess && isPremiumScenario ? (
               <div className="mt-6" data-testid="clinical-scenario-paywall">
                 <SubscriptionPaywall context="lessons" />
@@ -608,6 +652,9 @@ export function ClinicalScenarioUnfoldingPreview({
               <p className="text-sm font-medium text-[var(--semantic-success)]">End-of-case — review takeaways with your educator.</p>
             )}
           </div>
+          {legacyStageIdx >= scenario.stages.length - 1 && legacyPicked && studyCompletionLinks ? (
+            <ClinicalScenarioStudyFollowupBlock links={studyCompletionLinks} />
+          ) : null}
         </section>
       ) : null}
 

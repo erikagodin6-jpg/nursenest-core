@@ -13,6 +13,8 @@ import {
 } from "@/lib/flashcards/study-session-persistence";
 import { ExamSessionShell } from "@/components/exam/exam-session-shell";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
+import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
+import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 
 type CardPayload = {
   id: string;
@@ -23,6 +25,10 @@ type CardPayload = {
   examMicroQuestion?: ExamMicroQuestionPayload;
   topic?: string;
   subtopic?: string | null;
+  sourceKey?: string | null;
+  pathwayId?: string | null;
+  lessonStudyHref?: string;
+  lessonStudyTitle?: string;
 };
 
 type StudyResponse = {
@@ -109,13 +115,26 @@ export function FlashcardStudyClient({
 
   const activeCards: ActiveStudyCard[] = useMemo(
     () =>
-      queue.map((c) => ({
-        id: c.id,
-        prompt: c.front,
-        answer: c.back,
-        explanation: c.explanation,
-        examMicroQuestion: c.examMicroQuestion,
-      })),
+      queue.map((c) => {
+        const pid = c.pathwayId?.trim() || null;
+        const topicSlug = c.subtopic?.trim() || null;
+        return {
+          id: c.id,
+          prompt: c.front,
+          answer: c.back,
+          explanation: c.explanation,
+          examMicroQuestion: c.examMicroQuestion,
+          topic: c.topic ?? null,
+          subtopic: c.subtopic ?? null,
+          sourceKey: c.sourceKey ?? null,
+          pathwayId: pid,
+          topicSlug,
+          lessonHref: c.lessonStudyHref?.trim() ? c.lessonStudyHref : null,
+          lessonTitle: c.lessonStudyTitle?.trim() ? c.lessonStudyTitle : null,
+          practiceTopicHref: pid && topicSlug ? pathwayHubAppQuestionsHref(pid, topicSlug) : null,
+          practiceTestsTopicHref: pid && topicSlug ? buildAppPracticeTestsTopicHref(pid, topicSlug) : null,
+        };
+      }),
     [queue],
   );
 

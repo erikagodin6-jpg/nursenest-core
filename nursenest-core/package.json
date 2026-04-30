@@ -8,6 +8,8 @@
     "dev:client": "vite dev --port 5000",
     "dev": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && NODE_ENV=development tsx server/index.ts",
     "postinstall": "prisma generate",
+    "db:generate": "npx tsx scripts/run-prisma-with-env.mts generate",
+    "db:status": "npx tsx scripts/run-prisma-with-env.mts migrate status",
     "prebuild": "node scripts/ensure-build-toolchain.mjs && npm run i18n:compile && node scripts/root-prebuild-i18n-validate.mjs",
     "build": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && npx tsx script/build.ts && node scripts/verify-dist-artifacts.mjs",
     "build:server": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && BUILD_TARGET=server npx tsx script/build.ts && node scripts/verify-dist-artifacts.mjs",

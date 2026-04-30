@@ -503,6 +503,28 @@ const trustedGeneratedLessonIndexByPathway = new Map<string, PathwayLessonGenera
 
 /** Test-only: clear merged catalog slice cache and derived normalized indexes. */
 export function resetCatalogLessonsRawMergeCacheForTests(): void {
+  catalogDataCache = null;
+  alliedBundledPathwaysCache = null;
+  rnCardiovascularExpansionPathwaysCache = null;
+  rnNeurologicalExpansionPathwaysCache = null;
+  rnHematologyOncologyExpansionPathwaysCache = null;
+  rnGastrointestinalExpansionPathwaysCache = null;
+  rnIntegumentaryWoundCareExpansionPathwaysCache = null;
+  rnInfectionControlExpansionPathwaysCache = null;
+  rnLeadershipDelegationExpansionPathwaysCache = null;
+  rnMaternalNewbornExpansionPathwaysCache = null;
+  rnProceduresSkillsExpansionPathwaysCache = null;
+  rnNutritionExpansionPathwaysCache = null;
+  rnExamStrategyExpansionPathwaysCache = null;
+  rnRespiratoryExpansionPathwaysCache = null;
+  rnRenalExpansionPathwaysCache = null;
+  rnEndocrineExpansionPathwaysCache = null;
+  rnMusculoskeletalExpansionPathwaysCache = null;
+  rnFluidsElectrolytesExpansionPathwaysCache = null;
+  rnExamNotesIntegrationExpansionPathwaysCache = null;
+  rnExamNotesIntegrationBatch3ExpansionPathwaysCache = null;
+  rnExamNotesIntegrationBatch4ExpansionPathwaysCache = null;
+  newGradTransitionPathwaysCache = null;
   catalogLessonsRawByPathwayIdCache.clear();
   pathwayNormalizedCatalogRows.clear();
   pathwayNormalizedLessonBySlug.clear();
@@ -512,6 +534,7 @@ export function resetCatalogLessonsRawMergeCacheForTests(): void {
   lessonSummariesIndexByPathway.clear();
   trustedGeneratedLessonIndexByPathway.clear();
   clearGeneratedPathwayLessonIndexCacheForTests();
+  lessonLibraryCache = undefined;
 }
 
 /**

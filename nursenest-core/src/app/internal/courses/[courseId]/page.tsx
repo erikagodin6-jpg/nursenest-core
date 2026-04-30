@@ -5,6 +5,7 @@ import { requireInternalCoursesSurfaceAccess } from "@/lib/auth/guards";
 import { getInternalCourseByIdForSurface } from "@/lib/internal-courses/load-internal-courses";
 import { resolvePathwayLessonAppDetailHref } from "@/lib/internal-courses/resolve-pathway-lesson-app-href";
 import { internalCourseRowVisibleOnInternalSurface } from "@/lib/internal-courses/surface-visibility";
+import { getCatalogPathwayLessonDisplayTitleForSlug } from "@/lib/lessons/pathway-lesson-catalog-sync";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,19 @@ export default async function InternalCourseDetailPage({ params }: Props) {
   const lessonHrefs = await Promise.all(
     course.modules.map((m) => resolvePathwayLessonAppDetailHref(m.pathwayId, m.lessonSlug)),
   );
+
+  const linkedLessonKeys = new Map<string, { pathwayId: string; slug: string; title: string; href: string | null }>();
+  for (let i = 0; i < course.modules.length; i++) {
+    const m = course.modules[i];
+    const pid = m.pathwayId?.trim() ?? "";
+    const slug = m.lessonSlug?.trim() ?? "";
+    if (!pid || !slug) continue;
+    const key = `${pid}:${slug}`;
+    if (linkedLessonKeys.has(key)) continue;
+    const title = getCatalogPathwayLessonDisplayTitleForSlug(pid, slug)?.trim() ?? slug;
+    linkedLessonKeys.set(key, { pathwayId: pid, slug, title, href: lessonHrefs[i] ?? null });
+  }
+  const courseLinkedLessons = [...linkedLessonKeys.values()];
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6">

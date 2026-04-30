@@ -31,7 +31,12 @@ import { visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson
 import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
 
 type PageProps = {
-  searchParams: Promise<{ pathwayId?: string | string[]; alliedProfession?: string | string[]; topic?: string | string[] }>;
+  searchParams: Promise<{
+    pathwayId?: string | string[];
+    alliedProfession?: string | string[];
+    topic?: string | string[];
+    weakOnly?: string | string[];
+  }>;
 };
 
 export default async function FlashcardsPage({ searchParams }: PageProps) {
@@ -64,6 +69,11 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
       : Array.isArray(rawTopic) && typeof rawTopic[0] === "string" && rawTopic[0].trim()
         ? rawTopic[0].trim().toLowerCase()
         : null;
+
+  const rawWeak = sp.weakOnly;
+  const initialWeakOnly =
+    (typeof rawWeak === "string" && rawWeak === "1") ||
+    (Array.isArray(rawWeak) && rawWeak.some((v) => v === "1"));
 
   const session = await getProtectedRouteSession("(student).app.(learner).flashcards");
   const userId = (session?.user as { id?: string })?.id ?? "";
@@ -282,6 +292,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
           lessonsHubHref={`/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`}
           alliedProfessionKey={alliedKeyForFlashcards || null}
           hubTopicSlug={hubTopicFromQuery}
+          initialWeakOnly={initialWeakOnly}
         />
       </Suspense>
     </div>

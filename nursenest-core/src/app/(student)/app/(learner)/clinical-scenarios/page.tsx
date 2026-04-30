@@ -19,6 +19,7 @@ import { pathwayIdFromScenarioSearchParams } from "@/lib/scenarios/scenario-sear
 import { SCENARIO_LEARNER_ROUTES, withScenarioPathwayAndProfessionQuery } from "@/lib/scenarios/scenario-routes";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
+import { buildClinicalScenarioCompletionStudyBundle } from "@/lib/clinical-scenarios/clinical-scenario-completion-study-links";
 
 type PageProps = {
   searchParams: Promise<{
@@ -85,6 +86,10 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
         premiumUnlocked,
         allowStaffFullPreview: allowStaffFullScenarioPreview,
       });
+      const studyCompletionLinks = buildClinicalScenarioCompletionStudyBundle({
+        pathwayId: detail.pathwayId,
+        canonicalCategoryId: detail.canonicalCategoryId,
+      });
       return (
         <ScenarioStudyShell
           eyebrow="Clinical scenarios (preview)"
@@ -108,6 +113,7 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
             scenario={model}
             premiumUnlocked={premiumUnlocked}
             allowStaffFullPreview={allowStaffFullScenarioPreview}
+            studyCompletionLinks={studyCompletionLinks}
           />
         </ScenarioStudyShell>
       );

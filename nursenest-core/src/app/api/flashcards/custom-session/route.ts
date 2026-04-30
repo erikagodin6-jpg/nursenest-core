@@ -33,9 +33,16 @@ export async function GET(req: NextRequest) {
     const pathwayId = pathwayIdRaw
       ? normalizeLearnerFlashcardsPathwayQueryId(pathwayIdRaw, entitlement.country)
       : null;
+    const lessonIdEarly = sp.get("lessonId")?.trim() || null;
+    if (!pathwayId && !lessonIdEarly) {
+      return NextResponse.json(
+        { ok: false, error: "pathwayId is required (or pass lessonId for a lesson-scoped deck)." },
+        { status: 400 },
+      );
+    }
     const topicFromAlias = sp.get("topic")?.trim().toLowerCase() || null;
     const topicCode = sp.get("topicCode")?.trim().toLowerCase() || topicFromAlias || null;
-    const lessonId = sp.get("lessonId")?.trim() || null;
+    const lessonId = lessonIdEarly;
     const selectedCategories = parseCustomSessionCategories(sp.get("categories"));
     const stateIds = parseCustomSessionCategories(sp.get("stateIds"));
     const weakOnly = sp.get("weakOnly") === "1";
