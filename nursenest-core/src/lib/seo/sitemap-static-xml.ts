@@ -49,6 +49,12 @@ import { shouldReduceNonCriticalBuildWork } from "@/lib/build/build-safe-mode";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { collectOsceScenariosMarketingHubUrls } from "@/lib/scenarios/scenario-marketing-sitemap-urls";
 import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
+export {
+  buildSitemapUrlsetFromAbsoluteUrls,
+  minimalUrlsetSingleHome,
+  minimalSitemapXml,
+  type SitemapUrlEntry,
+} from "@/lib/seo/sitemap-urlset-build";
 
 /** Locales included in merged urlset tooling (tier=full only); sorted for deterministic URL lists. */
 const SORTED_SITEMAP_LOCALES = [...getSitemapIncludedLocales()].sort();
@@ -306,52 +312,6 @@ export async function collectPathwayLessonSeoUrls(
   return urls;
 }
 
-function safeLastmodDate(): string {
-  try {
-    return new Date().toISOString().slice(0, 10);
-  } catch {
-    return "1970-01-01";
-  }
-}
-
-function escapeXml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-}
-
-export type SitemapUrlEntry = {
-  loc: string;
-  lastmod?: string;
-};
-
-/** Public: reusable urlset builder from absolute URLs (used by blog sitemap). */
-export function buildSitemapUrlsetFromAbsoluteUrls(urls: string[] | SitemapUrlEntry[]): string {
-  if (urls.length === 0) return minimalUrlsetSingleHome();
-  const defaultLastmod = safeLastmodDate();
-  const body = urls
-    .map((u) => {
-      const locValue = typeof u === "string" ? u : u.loc;
-      const entryLastmod = typeof u === "string" ? defaultLastmod : (u.lastmod?.slice(0, 25) || defaultLastmod);
-      const loc = escapeXml(locValue);
-      const lastmod = escapeXml(entryLastmod);
-      return `  <url>
-    <loc>${loc}</loc>
-    <lastmod>${lastmod}</lastmod>
-  </url>`;
-    })
-    .join("\n");
-
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${body}
-</urlset>
-`;
-}
-
 /**
  * Default-locale “core” slice (merged into `/sitemap.xml` via `collectCoreUrls`).
  *
@@ -577,23 +537,4 @@ export function collectToolsUrls(origin: string): string[] {
     }
   }
   return urls;
-}
-
-export function minimalUrlsetSingleHome(): string {
-  const base = normalizeOrigin(resolveSitemapOrigin());
-  const loc = escapeXml(`${base}/`);
-  const lastmod = safeLastmodDate();
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${loc}</loc>
-    <lastmod>${lastmod}</lastmod>
-  </url>
-</urlset>
-`;
-}
-
-/** @deprecated */
-export function minimalSitemapXml(): string {
-  return minimalUrlsetSingleHome();
 }

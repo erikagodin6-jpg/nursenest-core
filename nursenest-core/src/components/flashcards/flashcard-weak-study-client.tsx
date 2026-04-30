@@ -163,13 +163,24 @@ export function FlashcardWeakStudyClient({
   }
 
   // 🎯 Session cards
-  const activeCards: ActiveStudyCard[] = queue.map((c) => ({
-    id: c.id,
-    prompt: c.front,
-    answer: c.back,
-    topic: c.topic,
-    subtopic: c.subtopic,
-  }));
+  const activeCards: ActiveStudyCard[] = queue.map((c) => {
+    const pid = c.pathwayId?.trim() || null;
+    const topicSlug = c.subtopic?.trim() || null;
+    return {
+      id: c.id,
+      prompt: c.front,
+      answer: c.back,
+      topic: c.topic,
+      subtopic: c.subtopic,
+      sourceKey: c.sourceKey,
+      pathwayId: pid,
+      topicSlug,
+      lessonHref: c.lessonStudyHref?.trim() ? c.lessonStudyHref : null,
+      lessonTitle: c.lessonStudyTitle?.trim() ? c.lessonStudyTitle : null,
+      practiceTopicHref: pid && topicSlug ? pathwayHubAppQuestionsHref(pid, topicSlug) : null,
+      practiceTestsTopicHref: pid && topicSlug ? buildAppPracticeTestsTopicHref(pid, topicSlug) : null,
+    };
+  });
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">

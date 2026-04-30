@@ -27,9 +27,17 @@
     "test:e2e:clinical-scenarios": "npx playwright test -c playwright.clinical-scenarios.config.ts",
     "build:lesson-indexes": "node scripts/build-normalized-lesson-indexes.mjs",
     "verify:lesson-indexes": "node scripts/verify-normalized-lesson-indexes.mjs",
+    "verify:learning-surfaces": "node scripts/verify-learning-surfaces.mjs",
+    "verify:no-cross-tier-leakage": "node scripts/verify-no-cross-tier-leakage.mjs",
     "db:seed-internal-courses": "npx tsx scripts/seed-internal-courses.ts",
-    "test:pathway-lessons": "node --import tsx --test src/lib/lessons/pathway-lesson-admin-option-b.test.ts src/lib/lessons/pathway-lesson-route-access.test.ts src/lib/lessons/pathway-lesson-render-source.test.ts src/lib/lessons/pathway-lesson-premium.test.ts src/lib/marketing/pathway-lessons-hub-page-safety.test.ts src/lib/internal-courses/surface-visibility.test.ts src/lib/lessons/pathway-lesson-content-item-authority.test.ts src/lib/learner-study-hub/pathway-lesson-study-materials.test.ts src/lib/learner/app-study-internal-links.test.ts",
+    "test:pathway-lessons": "node --import tsx --test src/lib/lessons/pathway-lesson-admin-option-b.test.ts src/lib/lessons/pathway-lesson-route-access.test.ts src/lib/lessons/pathway-lesson-render-source.test.ts src/lib/lessons/pathway-lesson-premium.test.ts src/lib/lessons/pathway-lesson-batch4-catalog.contract.test.ts src/lib/marketing/pathway-lessons-hub-page-safety.test.ts src/lib/internal-courses/surface-visibility.test.ts src/lib/lessons/pathway-lesson-content-item-authority.test.ts src/lib/learner-study-hub/pathway-lesson-study-materials.test.ts src/lib/learner/app-study-internal-links.test.ts",
     "validate:internal-links": "npx tsx scripts/validate-internal-links.ts",
+    "verify:seo-indexability": "npx tsx scripts/seo/verify-seo-indexability.ts",
+    "verify:sitemap": "npx tsx scripts/seo/verify-sitemap-urls.ts",
+    "verify:robots": "npx tsx scripts/seo/verify-robots.ts",
+    "verify:public-links": "npx tsx scripts/seo/verify-public-marketing-links.ts",
+    "verify:gsc-export": "npx tsx scripts/seo/verify-gsc-csv.ts",
+    "test:seo-sitemap": "node --import tsx --test src/lib/seo/sitemap-public-index-filter.test.ts src/lib/seo/sitemap-merged-route.test.ts src/lib/seo/robots-route-source.contract.test.ts",
     "seed:clinical-scenarios-real": "npx tsx scripts/seed-clinical-scenarios-real-runner.mts",
     "seed:clinical-nursing-scenarios": "npx tsx scripts/seed-clinical-nursing-scenarios.mts",
     "test:clinical-scenarios": "node --import tsx --test src/lib/clinical-scenarios/branching-scenario-engine.test.ts src/lib/clinical-scenarios/clinical-scenario-outcome-engine.test.ts src/lib/clinical-scenarios/real-clinical-scenarios-twenty.test.ts src/lib/clinical-scenarios/clinical-scenarios-core.contract.test.ts src/lib/clinical-scenarios/clinical-scenario-publish-guard.test.ts src/lib/clinical-scenarios/seed-clinical-nursing-scenarios-pipeline.test.ts src/components/clinical-scenarios/clinical-scenario-unfolding-preview.test.tsx",
@@ -269,6 +277,7 @@
   },
   "overrides": {
     "@opentelemetry/core": "1.30.1",
+    "@opentelemetry/auto-instrumentations-node": "0.55.3",
     "next-auth": {
       "@auth/core": "0.37.2"
     }

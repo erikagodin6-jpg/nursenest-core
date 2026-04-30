@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { buildSitemapUrlsetFromAbsoluteUrls } from "@/lib/seo/sitemap-static-xml";
+import { buildSitemapUrlsetFromAbsoluteUrls } from "@/lib/seo/sitemap-urlset-build";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(here, "..", "..");
@@ -46,13 +46,13 @@ test("sitemap XML has valid structure", () => {
   assert.match(xml, /<loc>https:\/\/www\.nursenest\.ca\/pricing<\/loc>/);
 });
 
-test("sitemap route has try/catch fallback, deduplication, blog entries, and lesson URLs", () => {
+test("sitemap route merges collectCoreUrls + blog, filters indexable URLs, dedupes", () => {
   const routeSrc = readAppFile("app/sitemap.xml/route.ts");
   assert.match(routeSrc, /try\s*\{/, "route must have try block for DB calls");
   assert.match(routeSrc, /\}\s*catch/, "route must have catch block for DB failures");
-  assert.match(routeSrc, /STATIC_SITEMAP_PATHS/, "route must declare static path list");
+  assert.match(routeSrc, /collectCoreUrls/, "route must use collectCoreUrls for marketing + pathway URLs");
   assert.match(routeSrc, /listBlogSitemapEntriesSafe/, "route must fetch live blog entries");
-  assert.match(routeSrc, /collectPathwayLessonSeoUrls/, "route must fetch verified lesson URLs");
+  assert.match(routeSrc, /filterPublicSitemapEntries/, "route must filter ineligible locs");
+  assert.match(routeSrc, /mergeCoreUrlsWithBlogEntries/, "route must merge blog lastmod with core URLs");
   assert.match(routeSrc, /new Set/, "route must deduplicate URLs");
-  assert.match(routeSrc, /normalizeSitemapUrl/, "route must normalize URL whitespace");
 });

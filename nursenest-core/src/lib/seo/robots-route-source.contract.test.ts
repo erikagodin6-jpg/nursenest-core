@@ -13,5 +13,7 @@ describe("robots.txt route source (static gate)", () => {
     assert.match(src, /Disallow:\s*\/app\//);
     assert.match(src, /Sitemap:/);
     assert.match(src, /sitemap\.xml/);
+    assert.match(src, /CANONICAL_PRODUCTION_ORIGIN/);
+    assert.match(src, /Disallow:\s*\/seo\//);
   });
 });

@@ -56,6 +56,33 @@ export default async function InternalCourseDetailPage({ params }: Props) {
         </p>
       </header>
 
+      {courseLinkedLessons.length > 0 ? (
+        <section className="mb-10 rounded-lg border border-border bg-muted/20 p-4">
+          <h2 className="text-sm font-semibold tracking-tight">Linked pathway lessons</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Deduped from module <code className="font-mono text-[11px]">pathwayId</code> +{" "}
+            <code className="font-mono text-[11px]">lessonSlug</code> — titles from the catalog; opens the same learner
+            lesson detail routes as modules below.
+          </p>
+          <ul className="mt-3 list-disc space-y-1 pl-5 text-sm">
+            {courseLinkedLessons.map((row) => (
+              <li key={`${row.pathwayId}:${row.slug}`}>
+                {row.href ? (
+                  <Link href={row.href} className="font-medium text-primary underline-offset-4 hover:underline">
+                    {row.title}
+                  </Link>
+                ) : (
+                  <span className="text-muted-foreground">{row.title}</span>
+                )}
+                <span className="ml-1 font-mono text-[11px] text-muted-foreground">
+                  ({row.pathwayId} · {row.slug})
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
       <ol className="space-y-8">
         {course.modules.map((mod, i) => (
           <li key={mod.id} className="list-none">

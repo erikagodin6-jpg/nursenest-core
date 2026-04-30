@@ -1,6 +1,6 @@
 import { isValidPublicUrl } from "@/lib/seo/public-url-validator";
 import { isEligiblePublicIndexSitemapLoc } from "@/lib/seo/sitemap-marketing-exclusions";
-import type { SitemapUrlEntry } from "@/lib/seo/sitemap-static-xml";
+import type { SitemapUrlEntry } from "@/lib/seo/sitemap-urlset-build";
 
 function normalizeOrigin(origin: string): string {
   return origin.endsWith("/") ? origin.slice(0, -1) : origin;

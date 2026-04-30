@@ -96,6 +96,11 @@ if (isLowMemoryBuild) {
 const nextConfig = {
   output: "standalone",
 
+  /** Legacy crawler bookmarks → single canonical sitemap (avoid duplicate sitemap index signals). */
+  async redirects() {
+    return [{ source: "/sitemap-index.xml", destination: "/sitemap.xml", permanent: true }];
+  },
+
   reactStrictMode: true,
 
   eslint: {
