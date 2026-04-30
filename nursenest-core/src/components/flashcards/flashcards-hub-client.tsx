@@ -28,6 +28,7 @@ import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-l
 import type { FlashcardLessonVirtualDiagnostics } from "@/lib/flashcards/flashcard-custom-session-response";
 import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
+import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
 
 const CARD_COUNTS = [10, 20, 30, 50] as const;
 
@@ -44,6 +45,8 @@ function buildCustomSessionQuery(args: {
   notStudiedOnly: boolean;
   includeCards: boolean;
   alliedProfession?: string | null;
+  /** Catalog topic slug — forwarded as `topic` (alias for `topicCode` on custom-session). */
+  hubTopicSlug?: string | null;
 }): string {
   const q = new URLSearchParams();
   q.set("pathwayId", args.pathwayId);
@@ -66,6 +69,8 @@ function buildCustomSessionQuery(args: {
   if (args.notStudiedOnly) q.set("notStudiedOnly", "1");
   const ap = args.alliedProfession?.trim().toLowerCase();
   if (ap) q.set("alliedProfession", ap);
+  const ts = args.hubTopicSlug?.trim().toLowerCase();
+  if (ts) q.set("topic", ts);
   return q.toString();
 }
 
@@ -77,6 +82,7 @@ export function FlashcardsHubClient({
   initialHub,
   lessonsHubHref,
   alliedProfessionKey = null,
+  hubTopicSlug = null,
 }: {
   scopedPathwayId: string;
   pathwayDisplayName: string;
@@ -87,6 +93,8 @@ export function FlashcardsHubClient({
   lessonsHubHref?: string;
   /** Preserved on allied marketing → app handoffs (`?alliedProfession=`). */
   alliedProfessionKey?: string | null;
+  /** Topic slug from `?topic=` — scoped flashcard/practice deep links for this pathway only. */
+  hubTopicSlug?: string | null;
 }) {
   const { t } = useMarketingI18n();
   const apForQuery =
@@ -189,6 +197,7 @@ export function FlashcardsHubClient({
         notStudiedOnly,
         includeCards: false,
         alliedProfession: apForQuery || null,
+        hubTopicSlug,
       });
       const res = await fetch(`/api/flashcards/custom-session?${qs}`, { credentials: "include" });
       let json: unknown;
@@ -237,6 +246,7 @@ export function FlashcardsHubClient({
     starredOnly,
     notStudiedOnly,
     apForQuery,
+    hubTopicSlug,
   ]);
 
   useEffect(() => {
@@ -288,6 +298,7 @@ export function FlashcardsHubClient({
         notStudiedOnly,
         includeCards: true,
         alliedProfession: apForQuery || null,
+        hubTopicSlug,
       }),
     [
       scopedPathwayId,
@@ -300,6 +311,7 @@ export function FlashcardsHubClient({
       starredOnly,
       notStudiedOnly,
       apForQuery,
+      hubTopicSlug,
     ],
   );
 
@@ -397,6 +409,16 @@ export function FlashcardsHubClient({
         <Link href={resolvedLessonsHubHref} className="font-semibold text-primary underline underline-offset-2">
           Open lessons hub (same pathway)
         </Link>
+        {hubTopicSlug?.trim() ? (
+          <Link
+            href={buildAppPracticeTestsTopicHref(scopedPathwayId, hubTopicSlug)}
+            className="font-semibold text-[var(--semantic-info)] underline underline-offset-2"
+            data-testid="flashcards-hub-link-practice-tests-topic"
+            data-nn-pathway-id={scopedPathwayId}
+          >
+            {t("learner.studyLoop.practiceQuestionsThisTopic")}
+          </Link>
+        ) : null}
         <span aria-hidden>·</span>
         <span>Pick one or more categories below — same grid language as practice questions.</span>
       </div>

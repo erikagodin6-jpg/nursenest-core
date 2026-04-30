@@ -48,6 +48,7 @@ import {
   parseSavedQuestionBankPresetsJson,
 } from "@/lib/questions/question-bank-client-types";
 import { mergeRationaleLessonLinksWithTopicFallback } from "@/lib/questions/merge-rationale-lesson-links";
+import { buildAppFlashcardsTopicHref, buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
 import { parseCommaSeparatedQuestionIds } from "@/lib/questions/question-id-list-param";
 import { parsePracticeHubIdsParam } from "@/lib/questions/normalize-question-body-system";
 import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
@@ -834,16 +835,29 @@ export function QuestionBankPracticeClient({
     const fromRationale = rationaleLessonLinksMerged[0]?.href;
     if (fromRationale) return fromRationale;
     const topicLabel = current?.topic?.trim();
-    if (topicLabel) return `/lessons?q=${encodeURIComponent(topicLabel)}`;
+    const pid = pathwayIdFilter?.trim();
+    if (topicLabel && pid) {
+      return `/app/lessons?pathwayId=${encodeURIComponent(pid)}&q=${encodeURIComponent(topicLabel)}`;
+    }
     return null;
-  }, [g?.learningLoop?.lessonHref, rationaleLessonLinksMerged, current?.topic]);
+  }, [g?.learningLoop?.lessonHref, rationaleLessonLinksMerged, current?.topic, pathwayIdFilter]);
 
   const flashcardsHref = useMemo(() => {
+    const pid = pathwayIdFilter?.trim();
+    const tc = typeof g?.topicCode === "string" ? g.topicCode.trim().toLowerCase() : "";
+    if (pid && tc) return buildAppFlashcardsTopicHref(pid, tc);
     if (g?.learningLoop?.flashcardsHref) return g.learningLoop.flashcardsHref;
-    const topicLabel = current?.topic?.trim();
-    if (topicLabel) return `/app/flashcards?q=${encodeURIComponent(topicLabel)}`;
+    if (pid) return `/app/flashcards?pathwayId=${encodeURIComponent(pid)}`;
     return "/app/flashcards";
-  }, [g?.learningLoop?.flashcardsHref, current?.topic]);
+  }, [g?.learningLoop?.flashcardsHref, g?.topicCode, pathwayIdFilter]);
+
+  const practiceTestsTopicHref = useMemo(() => {
+    const pid = pathwayIdFilter?.trim();
+    const tc = typeof g?.topicCode === "string" ? g.topicCode.trim().toLowerCase() : "";
+    if (!pid || !tc) return null;
+    return buildAppPracticeTestsTopicHref(pid, tc);
+  }, [pathwayIdFilter, g?.topicCode]);
+
   const topicDrillHref = g?.learningLoop?.topicDrillHref ?? null;
 
   async function checkAnswer() {
@@ -1751,17 +1765,30 @@ export function QuestionBankPracticeClient({
                         {reviewLessonHref ? (
                           <Link
                             href={reviewLessonHref}
+                            data-testid="qbank-reinforce-review-lesson"
                             className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
                           >
-                            Review Lesson
+                            {t("learner.studyLoop.reviewLessonCta")}
                           </Link>
                         ) : null}
                         {flashcardsHref ? (
                           <Link
                             href={flashcardsHref}
+                            data-testid="qbank-reinforce-flashcards-topic"
+                            data-nn-pathway-id={pathwayIdFilter ?? ""}
                             className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
                           >
-                            Practice Flashcards
+                            {t("learner.studyLoop.studyFlashcardsThisTopic")}
+                          </Link>
+                        ) : null}
+                        {practiceTestsTopicHref ? (
+                          <Link
+                            href={practiceTestsTopicHref}
+                            data-testid="qbank-reinforce-practice-tests-topic"
+                            data-nn-pathway-id={pathwayIdFilter ?? ""}
+                            className="inline-flex min-h-11 items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-2)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_10%,var(--semantic-surface))] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:opacity-90"
+                          >
+                            {t("learner.studyLoop.practiceQuestionsThisTopic")}
                           </Link>
                         ) : null}
                         {!g.correct && topicDrillHref ? (

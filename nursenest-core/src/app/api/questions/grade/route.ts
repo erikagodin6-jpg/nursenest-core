@@ -20,6 +20,7 @@ import { resolveRationaleLessonLinksForQuestion } from "@/lib/learner/rationale-
 import { skipLearnerBusinessAnalyticsForAccessScope } from "@/lib/observability/admin-learner-qa-analytics";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { buildAppFlashcardsTopicHref } from "@/lib/learner/app-study-internal-links";
 import { incrementBankQuestionsGradedToday } from "@/lib/learner/increment-bank-questions-graded-today";
 import { gradeMatches, normalizeCorrect } from "@/lib/questions/grade-answer-match";
 import { isRemediationEngineEnabled } from "@/lib/remediation/remediation-flag";
@@ -196,7 +197,7 @@ export async function POST(req: Request) {
       stem: displayRow.stem ?? row.stem ?? null,
     });
 
-    const [linkedContentLesson, linkedDeck] = topicCode
+    const [linkedContentLesson, _linkedDeck] = topicCode
       ? await Promise.all([
           prisma.contentItem.findFirst({
             where: { type: "lesson", status: "published", bodySystem: topicCode },
@@ -222,11 +223,12 @@ export async function POST(req: Request) {
     const lessonHrefFromRationale = rationaleLessonLinks[0]?.href ?? null;
     const lessonHrefFromContent = linkedContentLesson ? `/app/lessons/${linkedContentLesson.id}` : null;
     const lessonHref = lessonHrefFromRationale ?? lessonHrefFromContent;
-    const flashcardsHref = topicCode
-      ? linkedDeck
-        ? `/app/flashcards/${linkedDeck.slug}/study?topicCode=${encodeURIComponent(topicCode)}`
-        : `/app/flashcards?topicCode=${encodeURIComponent(topicCode)}`
-      : null;
+    const flashcardsHref =
+      topicCode && effectivePathwayId
+        ? buildAppFlashcardsTopicHref(effectivePathwayId, topicCode)
+        : effectivePathwayId
+          ? `/app/flashcards?pathwayId=${encodeURIComponent(effectivePathwayId)}`
+          : null;
     const topicDrillQs = new URLSearchParams();
     topicDrillQs.set("preset", "topic_drill");
     if (effectivePathwayId) topicDrillQs.set("pathwayId", effectivePathwayId);

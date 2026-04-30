@@ -44,7 +44,8 @@ export type BlogCanonicalPublishContext =
   | "scheduler_recover_overdue"
   | "bulk_chunk_blog_publish"
   | "script_promote_control_panel_drafts"
-  | "recover_missed_blog_batch";
+  | "recover_missed_blog_batch"
+  | "recover_generated_blog_script";
 
 export type PublishBlogPostCanonicalInput = {
   postId: string;

@@ -43,6 +43,10 @@ describe("pathway-lesson-study-materials", () => {
     const stems = new Set<string>();
     for (const q of practice.questions) {
       assert.ok(q.lessonHref.length > 3);
+      assert.ok(
+        q.lessonHref.includes("lessonSlug=") || q.lessonHref.startsWith("/app/lessons/"),
+        "lesson link must use hub lessonSlug or direct lesson id",
+      );
       assert.ok(q.stem.length > 2);
       stems.add(`${q.lessonSlug}|${q.stem.trim().toLowerCase().slice(0, 120)}`);
     }

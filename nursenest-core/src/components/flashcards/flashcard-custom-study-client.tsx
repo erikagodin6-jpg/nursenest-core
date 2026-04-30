@@ -18,6 +18,7 @@ import {
   buildAppQuestionBankTopicDrillHref,
   humanizeTopicSlug,
 } from "@/components/lessons/pathway-lesson-link-practice";
+import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
 
 type ApiCard = {
   id: string;
@@ -62,20 +63,38 @@ export function FlashcardCustomStudyClient() {
   const exitHref = useMemo(() => {
     const q = new URLSearchParams(searchParamString);
     const pid = q.get("pathwayId")?.trim();
-    return pid ? `/app/flashcards?pathwayId=${encodeURIComponent(pid)}` : "/app/flashcards";
+    if (!pid) return "/app/flashcards";
+    const out = new URLSearchParams({ pathwayId: pid });
+    const topicSlug =
+      q.get("topic")?.trim().toLowerCase() || q.get("topicCode")?.trim().toLowerCase() || "";
+    if (topicSlug) out.set("topic", topicSlug);
+    return `/app/flashcards?${out.toString()}`;
+  }, [searchParamString]);
+
+  const sessionTopicSlug = useMemo(() => {
+    const q = new URLSearchParams(searchParamString);
+    return q.get("topic")?.trim().toLowerCase() || q.get("topicCode")?.trim().toLowerCase() || null;
   }, [searchParamString]);
 
   const practiceTopicHref = useMemo(() => {
     const q = new URLSearchParams(searchParamString);
     const pid = q.get("pathwayId")?.trim();
-    const topicCode = q.get("topicCode")?.trim().toLowerCase();
+    const topicCode = sessionTopicSlug;
     if (!pid || !topicCode) return null;
     const pathway = getExamPathwayById(pid);
     if (!pathway) return null;
     const topicParam = q.get("topic")?.trim();
     const topicLabel = topicParam || humanizeTopicSlug(topicCode);
     return buildAppQuestionBankTopicDrillHref(pathway, topicLabel, topicCode);
-  }, [searchParamString]);
+  }, [searchParamString, sessionTopicSlug]);
+
+  const practiceTestsTopicHref = useMemo(() => {
+    const q = new URLSearchParams(searchParamString);
+    const pid = q.get("pathwayId")?.trim();
+    const ts = sessionTopicSlug;
+    if (!pid || !ts) return null;
+    return buildAppPracticeTestsTopicHref(pid, ts);
+  }, [searchParamString, sessionTopicSlug]);
 
   useEffect(() => {
     let cancelled = false;
@@ -132,11 +151,12 @@ export function FlashcardCustomStudyClient() {
         sourceKey: c.sourceKey,
         pathwayId: c.pathwayId,
         topicSlug: c.subtopic,
-        lessonHref: c.lessonHref,
+        lessonHref: c.lessonHref?.trim() ? c.lessonHref : null,
         lessonTitle: c.lessonTitle,
         practiceTopicHref,
+        practiceTestsTopicHref,
       })),
-    [cards, practiceTopicHref],
+    [cards, practiceTopicHref, practiceTestsTopicHref],
   );
 
   const header: ActiveStudyHeader = useMemo(

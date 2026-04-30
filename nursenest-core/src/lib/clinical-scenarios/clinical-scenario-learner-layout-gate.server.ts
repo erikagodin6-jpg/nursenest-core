@@ -2,7 +2,6 @@ import "server-only";
 
 import { notFound } from "next/navigation";
 import { getStaffSession } from "@/lib/auth/staff-session";
-import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { isClinicalScenariosPubliclyEnabled } from "@/lib/clinical-scenarios/clinical-scenarios-feature-flag";
 
@@ -25,6 +24,9 @@ export async function requireClinicalScenariosLearnerShellAccess(): Promise<void
   const staff = await getStaffSession();
   if (staff) return;
 
-  const gate = await requireSubscriberSession();
-  if (!gate.ok) notFound();
+  /**
+   * Public rollout: any signed-in learner may open the catalog and scenario preview shell.
+   * Premium multi-stage access stays gated inside {@link ClinicalScenarioUnfoldingPreview} + server redaction.
+   */
+  return;
 }

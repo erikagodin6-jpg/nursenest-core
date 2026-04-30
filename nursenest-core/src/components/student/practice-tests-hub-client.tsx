@@ -59,6 +59,8 @@ import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exa
 import { ExamPreExamCustomizeModal } from "@/components/exam/exam-study-theme-modal";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import type { StudyLaunchPayload } from "@/lib/practice-tests/types";
+import { buildAppFlashcardsTopicHref } from "@/lib/learner/app-study-internal-links";
+import { humanizeTopicSlug } from "@/components/lessons/pathway-lesson-link-practice";
 
 type TestListRow = {
   id: string;
@@ -104,6 +106,10 @@ export function PracticeTestsHubClient({
   const searchParams = useSearchParams();
   /** Stable dependency so URL-driven effects do not re-fire on unrelated `useSearchParams` identity churn. */
   const searchParamString = useMemo(() => searchParams.toString(), [searchParams]);
+  const topicSlugFromUrl = useMemo(() => {
+    const qp = new URLSearchParams(searchParamString);
+    return qp.get("topic")?.trim().toLowerCase() || null;
+  }, [searchParamString]);
   const [topics, setTopics] = useState<{ topic: string; count: number }[]>([]);
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState<TestListRow[]>([]);
@@ -199,6 +205,31 @@ export function PracticeTestsHubClient({
     review_recent: t("learner.practiceTests.hub.reviewRecentHint"),
   });
   const prevSelectionModeRef = useRef(selectionMode);
+  const bootstrappedHubTopicKeyRef = useRef<string | null>(null);
+  const prevPathwayIdForTopicBootstrapRef = useRef(pathwayId);
+
+  useEffect(() => {
+    if (prevPathwayIdForTopicBootstrapRef.current !== pathwayId) {
+      bootstrappedHubTopicKeyRef.current = null;
+      prevPathwayIdForTopicBootstrapRef.current = pathwayId;
+    }
+  }, [pathwayId]);
+
+  useEffect(() => {
+    const slug = topicSlugFromUrl;
+    if (!slug || topics.length === 0) return;
+    const key = `${pathwayId.trim()}|${slug}`;
+    if (bootstrappedHubTopicKeyRef.current === key) return;
+    const dashed = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "-");
+    const labelHit = humanizeTopicSlug(slug).toLowerCase();
+    const hit =
+      topics.find((b) => dashed(b.topic) === slug) ??
+      topics.find((b) => b.topic.trim().toLowerCase() === labelHit);
+    if (hit) {
+      bootstrappedHubTopicKeyRef.current = key;
+      setTopicPicks((prev) => (prev.includes(hit.topic) ? prev : [...prev, hit.topic]));
+    }
+  }, [topicSlugFromUrl, topics, pathwayId]);
 
   useEffect(() => {
     const prev = prevSelectionModeRef.current;
@@ -520,6 +551,19 @@ export function PracticeTestsHubClient({
           </dl>
         }
       />
+
+      {topicSlugFromUrl && pathwayId.trim() ? (
+        <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+          <Link
+            href={buildAppFlashcardsTopicHref(pathwayId.trim(), topicSlugFromUrl)}
+            className="font-semibold text-[var(--semantic-info)] underline underline-offset-2"
+            data-testid="practice-tests-hub-link-flashcards-topic"
+            data-nn-pathway-id={pathwayId.trim()}
+          >
+            {t("learner.studyLoop.studyFlashcardsThisTopic")}
+          </Link>
+        </div>
+      ) : null}
 
       {pathwayLessonPractice &&
       (pathwayLessonPractice.publishedLessonCount > 0 ||

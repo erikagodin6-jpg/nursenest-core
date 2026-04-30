@@ -30,7 +30,9 @@ import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flash
 import { visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
 import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
 
-type PageProps = { searchParams: Promise<{ pathwayId?: string | string[]; alliedProfession?: string | string[] }> };
+type PageProps = {
+  searchParams: Promise<{ pathwayId?: string | string[]; alliedProfession?: string | string[]; topic?: string | string[] }>;
+};
 
 export default async function FlashcardsPage({ searchParams }: PageProps) {
   const { t } = await getLearnerMarketingBundle();
@@ -54,6 +56,14 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
       : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
       ? rawPid[0].trim()
       : null;
+
+  const rawTopic = sp.topic;
+  const hubTopicFromQuery =
+    typeof rawTopic === "string" && rawTopic.trim()
+      ? rawTopic.trim().toLowerCase()
+      : Array.isArray(rawTopic) && typeof rawTopic[0] === "string" && rawTopic[0].trim()
+        ? rawTopic[0].trim().toLowerCase()
+        : null;
 
   const session = await getProtectedRouteSession("(student).app.(learner).flashcards");
   const userId = (session?.user as { id?: string })?.id ?? "";
@@ -271,6 +281,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
           initialHub={initialHub}
           lessonsHubHref={`/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`}
           alliedProfessionKey={alliedKeyForFlashcards || null}
+          hubTopicSlug={hubTopicFromQuery}
         />
       </Suspense>
     </div>

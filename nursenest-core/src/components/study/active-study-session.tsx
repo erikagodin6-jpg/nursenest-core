@@ -32,6 +32,8 @@ export type ActiveStudyCard = {
   lessonTitle?: string | null;
   /** When the hub URL includes a topic filter, link to the matching bank drill (pathway-scoped). */
   practiceTopicHref?: string | null;
+  /** Practice-tests hub for the same pathway + catalog topic slug (never cross-tier). */
+  practiceTestsTopicHref?: string | null;
 };
 
 export type ActiveStudyHeader = {
@@ -234,27 +236,50 @@ export function ActiveStudySession({
         }}
       />
 
-      {revealed && (current.lessonHref || current.practiceTopicHref) ? (
+      {revealed && (current.lessonHref || current.practiceTopicHref || current.practiceTestsTopicHref) ? (
         <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] p-4 text-sm">
           {current.lessonHref ? (
-            <div className={current.practiceTopicHref ? "mb-3" : ""}>
-              <div className="mb-2 text-xs font-semibold uppercase text-[var(--theme-muted-text)]">Related lesson</div>
+            <div
+              className={
+                current.practiceTopicHref || current.practiceTestsTopicHref ? "mb-3" : ""
+              }
+            >
+              <div className="mb-2 text-xs font-semibold uppercase text-[var(--theme-muted-text)]">
+                {t("learner.qbank.ui.relatedLesson")}
+              </div>
               <Link
                 href={current.lessonHref}
+                data-testid="active-study-review-lesson"
                 className="font-medium text-primary underline underline-offset-2"
               >
-                {current.lessonTitle?.trim() || "Review lesson"}
+                {current.lessonTitle?.trim() || t("learner.studyLoop.reviewLessonCta")}
+              </Link>
+            </div>
+          ) : null}
+          {current.practiceTestsTopicHref ? (
+            <div className={current.practiceTopicHref ? "mb-3" : ""}>
+              <div className="mb-2 text-xs font-semibold uppercase text-[var(--theme-muted-text)]">
+                {t("learner.studyLoop.topicPracticeTestsCta")}
+              </div>
+              <Link
+                href={current.practiceTestsTopicHref}
+                data-testid="active-study-practice-tests-topic"
+                className="font-medium text-[var(--semantic-chart-2)] underline underline-offset-2"
+              >
+                {t("learner.studyLoop.practiceQuestionsThisTopic")}
               </Link>
             </div>
           ) : null}
           {current.practiceTopicHref ? (
             <div>
-              <div className="mb-2 text-xs font-semibold uppercase text-[var(--theme-muted-text)]">Practice questions</div>
+              <div className="mb-2 text-xs font-semibold uppercase text-[var(--theme-muted-text)]">
+                {t("learner.studyLoop.practiceTopic")}
+              </div>
               <Link
                 href={current.practiceTopicHref}
                 className="font-medium text-[var(--semantic-info)] underline underline-offset-2"
               >
-                Drill this topic in the bank
+                {t("learner.qbank.ui.topicDrillSameCode")}
               </Link>
             </div>
           ) : null}

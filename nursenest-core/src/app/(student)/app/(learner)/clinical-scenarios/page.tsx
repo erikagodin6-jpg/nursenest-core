@@ -59,6 +59,13 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
   const premiumUnlocked = entitlement !== "error" && entitlement.hasAccess;
   /** Drafts never ship to subscribers; staff preview only (layout already blocks non-staff when flag is off). */
   const includeDrafts = Boolean(staff);
+  /**
+   * Staff bypass for premium *payload* + UI only when not simulating a learner via QA cookie.
+   * View-as unpaid (`adminLearnerQaSimulation`) must match subscriber monetization (stage 1 + paywall).
+   */
+  const allowStaffFullScenarioPreview =
+    Boolean(staff) &&
+    (entitlement === "error" || entitlement.adminLearnerQaSimulation !== true);
 
   if (pathwayId) {
     const categoryFilter = alliedProfessionResolved?.scenarioCatalogCategoryIds;
@@ -76,7 +83,7 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
       if (!detail || detail.pathwayId !== pathwayId) notFound();
       const model = redactPremiumStagesForFreeLearner(mapClinicalNursingScenarioToPreview(detail), {
         premiumUnlocked,
-        allowStaffFullPreview: includeDrafts,
+        allowStaffFullPreview: allowStaffFullScenarioPreview,
       });
       return (
         <ScenarioStudyShell
@@ -100,7 +107,7 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
           <ClinicalScenarioUnfoldingPreview
             scenario={model}
             premiumUnlocked={premiumUnlocked}
-            allowStaffFullPreview={includeDrafts}
+            allowStaffFullPreview={allowStaffFullScenarioPreview}
           />
         </ScenarioStudyShell>
       );
