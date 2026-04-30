@@ -20,6 +20,7 @@ import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-label";
 import { getServerPremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { resolveSubscribedQuestionBankPathways } from "@/lib/learner/tier-scoped-study-routes";
+import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 
 type SearchParams = Promise<{ pathwayId?: string | string[] }>;
 
@@ -33,7 +34,7 @@ export async function QuestionBankGatedEntry({
   const { t } = await getLearnerMarketingBundle();
   const sp = await searchParams;
   const rawPid = sp.pathwayId;
-  const requestedPathwayId =
+  const pathwayQueryRaw =
     typeof rawPid === "string" && rawPid.trim().length > 2
       ? rawPid.trim()
       : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
@@ -70,6 +71,9 @@ export async function QuestionBankGatedEntry({
         select: { learnerPath: true },
       });
       const lp = u?.learnerPath?.trim() ?? null;
+      const requestedPathwayId = pathwayQueryRaw
+        ? normalizeLearnerFlashcardsPathwayQueryId(pathwayQueryRaw, entitlement.country)
+        : null;
       const resolved = resolveSubscribedQuestionBankPathways({
         requestedPathwayId,
         compatible: compatible.map((p) => ({ id: p.id, shortName: p.shortName })),

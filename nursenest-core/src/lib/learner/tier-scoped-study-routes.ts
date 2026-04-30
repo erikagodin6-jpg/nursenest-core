@@ -79,7 +79,8 @@ export function parseTierScopedAppStudyCallbackPath(raw: string | null): string 
       u.pathname !== "/app/practice-tests/start" &&
       u.pathname !== "/app/practice-tests/cat-launch" &&
       u.pathname !== "/app/practice-exams" &&
-      u.pathname !== "/app/flashcards"
+      u.pathname !== "/app/flashcards" &&
+      u.pathname !== "/app/cat"
     ) {
       return null;
     }

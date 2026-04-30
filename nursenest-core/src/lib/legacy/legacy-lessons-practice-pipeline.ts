@@ -107,6 +107,8 @@ export async function runLegacyLessonsPracticeImport(
     overwriteBody: opts.overwriteBody,
     allowPathwayCorrection: opts.allowPathwayCorrection,
     allowCreateMissingLessons: opts.allowCreateMissingLessons,
+    mergeSections: opts.mergeSections,
+    allowTitleMatch: opts.allowTitleMatch,
   };
   const lessonRes = await runLegacyPublicContentImport(prisma, toLegacyPublicContentExportV1(v2), lessonOpts);
   const combined: LegacyChangeLogEntry[] = [...lessonRes.changes];

@@ -1,5 +1,5 @@
-import type { PrismaClient } from "@prisma/client";
-import { ContentStatus, Prisma } from "@prisma/client";
+import type { Prisma, PrismaClient } from "@prisma/client";
+import { ContentStatus } from "@prisma/client";
 
 import { computeStructuralPublicCompleteFromDbRow } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import {
@@ -8,6 +8,7 @@ import {
   assertPathwayAllowed,
   type PathwayLessonRowShape,
 } from "@/lib/legacy/legacy-public-content-merge";
+import { pickSingleTitleMatch } from "@/lib/legacy/legacy-lesson-match";
 import type {
   LegacyChangeLogEntry,
   LegacyLessonExportRow,
@@ -39,6 +40,42 @@ export const LEGACY_PATHWAY_LESSON_SELECT = {
   sortOrder: true,
 } as const;
 
+type PathwayLessonRow = Prisma.PathwayLessonGetPayload<{ select: typeof LEGACY_PATHWAY_LESSON_SELECT }>;
+
+async function resolvePathwayLessonRowForLegacy(
+  prisma: PrismaClient,
+  leg: LegacyLessonExportRow,
+  opts: LegacyPipelineOptions,
+): Promise<{ row: PathwayLessonRow | null; match: "slug" | "title" | "none" | "title_ambiguous" }> {
+  const slug = normalizeLegacySlug(leg.slug);
+  if (!slug) return { row: null, match: "none" };
+
+  const bySlug = await prisma.pathwayLesson.findUnique({
+    where: {
+      pathwayId_slug_locale: {
+        pathwayId: leg.pathwayId,
+        slug,
+        locale: CANONICAL_LOCALE,
+      },
+    },
+    select: LEGACY_PATHWAY_LESSON_SELECT,
+  });
+  if (bySlug) return { row: bySlug, match: "slug" };
+
+  if (!opts.allowTitleMatch) return { row: null, match: "none" };
+
+  const candidates = await prisma.pathwayLesson.findMany({
+    where: { pathwayId: leg.pathwayId, locale: CANONICAL_LOCALE },
+    select: LEGACY_PATHWAY_LESSON_SELECT,
+    orderBy: { updatedAt: "desc" },
+    take: 400,
+  });
+  const pick = pickSingleTitleMatch(leg.title ?? "", candidates);
+  if (pick.match === "one") return { row: pick.row, match: "title" };
+  if (pick.match === "ambiguous") return { row: null, match: "title_ambiguous" };
+  return { row: null, match: "none" };
+}
+
 /**
  * Pathway lesson upserts from legacy export rows (shared by public-content + lessons/practice pipelines).
  * Does not touch flashcards.
@@ -64,16 +101,10 @@ export async function applyLegacyPathwayLessonsImport(
       continue;
     }
 
-    const row = await prisma.pathwayLesson.findUnique({
-      where: {
-        pathwayId_slug_locale: {
-          pathwayId: leg.pathwayId,
-          slug,
-          locale: CANONICAL_LOCALE,
-        },
-      },
-      select: LEGACY_PATHWAY_LESSON_SELECT,
-    });
+    const { row, match } = await resolvePathwayLessonRowForLegacy(prisma, leg, opts);
+    if (match === "title_ambiguous") {
+      errors.push(`title_match_ambiguous:${leg.pathwayId}:${slug}`);
+    }
 
     if (!row) {
       if (!opts.allowCreateMissingLessons) {
@@ -146,6 +177,8 @@ export async function applyLegacyPathwayLessonsImport(
     const { data, notes } = buildPathwayLessonUpdateFromLegacy(leg, current, {
       overwriteBody: opts.overwriteBody,
       allowPathwayCorrection: opts.allowPathwayCorrection,
+      mergeSections: opts.mergeSections,
+      preserveCanonicalSlug: match === "title",
     });
     if (notes.some((n) => n.startsWith("skip_"))) {
       continue;

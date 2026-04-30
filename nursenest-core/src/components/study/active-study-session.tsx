@@ -30,6 +30,8 @@ export type ActiveStudyCard = {
   /** Deep link to the pathway lesson this card was synthesized from (custom session). */
   lessonHref?: string | null;
   lessonTitle?: string | null;
+  /** When the hub URL includes a topic filter, link to the matching bank drill (pathway-scoped). */
+  practiceTopicHref?: string | null;
 };
 
 export type ActiveStudyHeader = {
@@ -232,15 +234,30 @@ export function ActiveStudySession({
         }}
       />
 
-      {revealed && current.lessonHref ? (
+      {revealed && (current.lessonHref || current.practiceTopicHref) ? (
         <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--theme-card-bg)] p-4 text-sm">
-          <div className="mb-2 text-xs font-semibold uppercase text-[var(--theme-muted-text)]">Related lesson</div>
-          <Link
-            href={current.lessonHref}
-            className="font-medium text-primary underline underline-offset-2"
-          >
-            {current.lessonTitle?.trim() || "Review lesson"}
-          </Link>
+          {current.lessonHref ? (
+            <div className={current.practiceTopicHref ? "mb-3" : ""}>
+              <div className="mb-2 text-xs font-semibold uppercase text-[var(--theme-muted-text)]">Related lesson</div>
+              <Link
+                href={current.lessonHref}
+                className="font-medium text-primary underline underline-offset-2"
+              >
+                {current.lessonTitle?.trim() || "Review lesson"}
+              </Link>
+            </div>
+          ) : null}
+          {current.practiceTopicHref ? (
+            <div>
+              <div className="mb-2 text-xs font-semibold uppercase text-[var(--theme-muted-text)]">Practice questions</div>
+              <Link
+                href={current.practiceTopicHref}
+                className="font-medium text-[var(--semantic-info)] underline underline-offset-2"
+              >
+                Drill this topic in the bank
+              </Link>
+            </div>
+          ) : null}
         </div>
       ) : null}
 

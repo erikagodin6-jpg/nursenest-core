@@ -6,7 +6,6 @@ import { withDatabaseFallback } from "@/lib/db/safe-database";
 import { PRISMA_ID_IN_CHUNK_SIZE, takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import {
   bankExamQuestionRowToFlashcardStudySelectRow,
   type BankExamRowForFlashcard,
@@ -14,11 +13,8 @@ import {
 import type { FlashcardStudySelectRow } from "@/lib/flashcards/flashcard-study-serialize";
 import { getCatalogPathwayLessonsSync } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
-import {
-  appLearnerLessonDetailPath,
-  APP_LEARNER_LESSONS_INDEX_PATH,
-  marketingPathwayLessonDetailPath,
-} from "@/lib/lessons/lesson-routes";
+import { appLearnerLessonDetailPath } from "@/lib/lessons/lesson-routes";
+import { buildAppLessonsReviewLessonHref } from "@/lib/learner/app-study-internal-links";
 
 const MAX_LESSON_QUESTION_LINKS = 4_000;
 
@@ -39,19 +35,10 @@ function regionWhereForCountry(country: CountryCode): Prisma.ExamQuestionWhereIn
   };
 }
 
-function appLessonsFallbackHubHref(pathwayId: string, lessonSlug: string): string {
-  const qs = new URLSearchParams();
-  qs.set("pathwayId", pathwayId);
-  qs.set("q", lessonSlug);
-  return `${APP_LEARNER_LESSONS_INDEX_PATH}?${qs.toString()}`;
-}
-
 function resolveLessonHref(pathwayId: string, lessonSlug: string, idBySlug: ReadonlyMap<string, string>): string {
   const rowId = idBySlug.get(lessonSlug);
   if (rowId) return appLearnerLessonDetailPath(rowId);
-  const pathway = getExamPathwayById(pathwayId);
-  const marketing = pathway ? marketingPathwayLessonDetailPath(pathway, lessonSlug) : null;
-  return marketing ?? appLessonsFallbackHubHref(pathwayId, lessonSlug);
+  return buildAppLessonsReviewLessonHref(pathwayId, lessonSlug);
 }
 
 type WorkItem = { lesson: PathwayLessonRecord; qid: string; source: "pre" | "post" };

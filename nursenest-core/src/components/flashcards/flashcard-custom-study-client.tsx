@@ -13,6 +13,11 @@ import { isSyntheticFlashcardStudyId } from "@/lib/flashcards/flashcard-access";
 import { parseFlashcardCustomSessionResponse } from "@/lib/flashcards/flashcard-custom-session-response";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import {
+  buildAppQuestionBankTopicDrillHref,
+  humanizeTopicSlug,
+} from "@/components/lessons/pathway-lesson-link-practice";
 
 type ApiCard = {
   id: string;
@@ -58,6 +63,18 @@ export function FlashcardCustomStudyClient() {
     const q = new URLSearchParams(searchParamString);
     const pid = q.get("pathwayId")?.trim();
     return pid ? `/app/flashcards?pathwayId=${encodeURIComponent(pid)}` : "/app/flashcards";
+  }, [searchParamString]);
+
+  const practiceTopicHref = useMemo(() => {
+    const q = new URLSearchParams(searchParamString);
+    const pid = q.get("pathwayId")?.trim();
+    const topicCode = q.get("topicCode")?.trim().toLowerCase();
+    if (!pid || !topicCode) return null;
+    const pathway = getExamPathwayById(pid);
+    if (!pathway) return null;
+    const topicParam = q.get("topic")?.trim();
+    const topicLabel = topicParam || humanizeTopicSlug(topicCode);
+    return buildAppQuestionBankTopicDrillHref(pathway, topicLabel, topicCode);
   }, [searchParamString]);
 
   useEffect(() => {
@@ -117,8 +134,9 @@ export function FlashcardCustomStudyClient() {
         topicSlug: c.subtopic,
         lessonHref: c.lessonHref,
         lessonTitle: c.lessonTitle,
+        practiceTopicHref,
       })),
-    [cards],
+    [cards, practiceTopicHref],
   );
 
   const header: ActiveStudyHeader = useMemo(

@@ -47,6 +47,25 @@ describe("learner live study routes import contract", () => {
     assert.match(src, /FlashcardsPathwayPickSurface/);
     assert.match(src, /baseAppPath=\"\/app\/practice-tests\"/);
     assert.match(src, /resolveSubscribedQuestionBankPathways/);
+    assert.match(src, /normalizeLearnerFlashcardsPathwayQueryId/);
+    assert.match(src, /pathwayQueryRaw/);
+  });
+
+  it("question bank gated entry normalizes pathwayId like flashcards hub", () => {
+    const src = read("src/app/(student)/app/(learner)/questions/question-bank-gated-server.tsx");
+    assert.match(src, /normalizeLearnerFlashcardsPathwayQueryId/);
+    assert.match(src, /pathwayQueryRaw/);
+  });
+
+  it("GET /api/flashcards/custom-session normalizes pathwayId", () => {
+    const src = read("src/app/api/flashcards/custom-session/route.ts");
+    assert.match(src, /normalizeLearnerFlashcardsPathwayQueryId/);
+  });
+
+  it("/app/cat alias redirects to practice-tests hub", () => {
+    const src = read("src/app/(student)/app/(learner)/cat/page.tsx");
+    assert.match(src, /redirect\(/);
+    assert.match(src, /\/app\/practice-tests/);
   });
 
   it("practice-tests hub client stabilizes URL sync (avoids searchParams identity churn)", () => {

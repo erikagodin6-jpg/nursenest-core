@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { ContentStatus } from "@prisma/client";
+import { buildAdminPathwayLessonStableEditHref } from "@/lib/admin/pathway-lesson-stable-edit-href";
 
 type ContentRow = {
   id: string;
@@ -573,12 +574,36 @@ export function AdminLessonsLibraryClient() {
                         {new Date(r.updatedAt).toLocaleString()}
                       </td>
                       <td className="px-4 py-3">
-                        <Link
-                          href={`/admin/pathway-lessons/${encodeURIComponent(r.id)}`}
-                          className="text-sm font-semibold text-primary underline"
-                        >
-                          Edit (PathwayLesson)
-                        </Link>
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                          <Link
+                            href={`/admin/pathway-lessons/${encodeURIComponent(r.id)}`}
+                            className="text-sm font-semibold text-primary underline"
+                          >
+                            View
+                          </Link>
+                          <span className="text-xs text-muted-foreground" aria-hidden>
+                            ·
+                          </span>
+                          <Link
+                            href={`/admin/pathway-lessons/open?pathwayId=${encodeURIComponent(r.pathwayId)}&slug=${encodeURIComponent(r.slug)}`}
+                            className="text-sm font-semibold text-primary underline"
+                          >
+                            Open
+                          </Link>
+                          <span className="text-xs text-muted-foreground" aria-hidden>
+                            ·
+                          </span>
+                          <Link
+                            href={buildAdminPathwayLessonStableEditHref({
+                              pathwayId: r.pathwayId,
+                              slug: r.slug,
+                              locale: r.locale,
+                            })}
+                            className="text-sm font-semibold text-primary underline"
+                          >
+                            Edit
+                          </Link>
+                        </div>
                       </td>
                     </tr>
                   ))

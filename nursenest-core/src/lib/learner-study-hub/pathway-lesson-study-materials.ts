@@ -1,8 +1,7 @@
 import { collectMergedLessonVirtualFlashcardsForPathway } from "@/lib/flashcards/lesson-linked-virtual-flashcards-aggregator";
 import type { FlashcardLessonVirtualDiagnostics } from "@/lib/flashcards/flashcard-custom-session-response";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { getCatalogPathwayLessonsSync } from "@/lib/lessons/pathway-lesson-catalog-sync";
-import { marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
+import { buildAppLessonsReviewLessonHref } from "@/lib/learner/app-study-internal-links";
 import type { PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
 import type { CheckpointQuestion } from "@/lib/lessons/lesson-recall-types";
 import { pathwayLessonEligibleForLearnerStudyInventory } from "@/lib/learner-study-hub/pathway-lesson-learner-study-guards";
@@ -14,12 +13,7 @@ export function listPublishedPathwayLessonsForLearnerStudy(pathwayId: string) {
 }
 
 function lessonReviewHref(pathwayId: string, lessonSlug: string): string {
-  const pathway = getExamPathwayById(pathwayId);
-  if (pathway) {
-    const marketing = marketingPathwayLessonDetailPath(pathway, lessonSlug);
-    if (marketing) return marketing;
-  }
-  return `/app/lessons?pathwayId=${encodeURIComponent(pathwayId)}&q=${encodeURIComponent(lessonSlug)}`;
+  return buildAppLessonsReviewLessonHref(pathwayId, lessonSlug);
 }
 
 function normStem(s: string): string {

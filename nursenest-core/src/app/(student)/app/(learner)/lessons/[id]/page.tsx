@@ -96,6 +96,7 @@ import { loadPathwayLessonAdjacent, mapPathwayLessonAdjacentToAppHrefs } from "@
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
+import { AppLessonRelatedReading } from "@/components/linking/app-lesson-related-reading";
 
 /** Bust data cache after admin publishes pathway or ContentItem lessons (see admin PATCH + revalidatePath). */
 export const dynamic = "force-dynamic";
@@ -920,17 +921,30 @@ async function LessonDetailPageInner({ params }: Props) {
             </div>
           ) : null}
           {pathway ? (
-            <PathwayLessonActions
-              pathwayId={pathway.id}
-              lessonSlug={record.slug}
-              topicCode={record.topicSlug}
-              topicLabel={record.topic}
-              userId={userId}
-              canMarkComplete={entitlement.hasAccess}
-              initialProgress={initialProgress}
-              catAdaptiveAvailable={pathwayAllowsCatAdaptiveStart(pathway)}
-              allLessonsHrefOverride={`/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`}
-            />
+            <>
+              <PathwayLessonActions
+                pathwayId={pathway.id}
+                lessonSlug={record.slug}
+                topicCode={record.topicSlug}
+                topicLabel={record.topic}
+                userId={userId}
+                canMarkComplete={entitlement.hasAccess}
+                initialProgress={initialProgress}
+                catAdaptiveAvailable={pathwayAllowsCatAdaptiveStart(pathway)}
+                allLessonsHrefOverride={`/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`}
+              />
+              <AppLessonRelatedReading
+                pathway={pathway}
+                lesson={{
+                  slug: record.slug,
+                  title: record.title,
+                  topic: record.topic,
+                  topicSlug: record.topicSlug,
+                  bodySystem: record.bodySystem,
+                }}
+                locale={marketingLocale}
+              />
+            </>
           ) : null}
         </div>
 

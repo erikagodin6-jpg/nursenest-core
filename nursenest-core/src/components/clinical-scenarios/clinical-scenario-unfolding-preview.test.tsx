@@ -1,9 +1,9 @@
 import "@happy-dom/global-registrator/register";
 
 import assert from "node:assert/strict";
-import { after, afterEach, beforeEach, describe, it } from "node:test";
+import { afterEach, beforeEach, describe, it } from "node:test";
 import React from "react";
-import { SessionProvider } from "next-auth/react";
+import { SessionContext } from "next-auth/react";
 
 (globalThis as unknown as { React?: typeof React }).React = React;
 import { cleanup, render, screen, within } from "@testing-library/react";
@@ -13,13 +13,12 @@ import type { PublicHomeStatsPayload } from "@/lib/marketing/public-home-stats-p
 import type { ClinicalScenarioPreviewModel } from "@/components/clinical-scenarios/clinical-scenario-unfolding-preview";
 import { ClinicalScenarioUnfoldingPreview } from "@/components/clinical-scenarios/clinical-scenario-unfolding-preview";
 
-/** Close Happy DOM after this file so `npm run test:clinical-scenarios` can exit (no dangling handles). */
-after(async () => {
-  const { GlobalRegistrator } = await import("@happy-dom/global-registrator");
-  if (GlobalRegistrator.isRegistered) {
-    await GlobalRegistrator.unregister();
-  }
-});
+/** Avoid real `SessionProvider` (next-auth effects + timers); `SubscriptionPaywall` only needs `useSession` context. */
+const previewSessionContextValue = {
+  data: null,
+  status: "unauthenticated" as const,
+  update: async () => {},
+};
 
 afterEach(() => {
   cleanup();
@@ -44,9 +43,9 @@ const clinicalPreviewHomeStats: PublicHomeStatsPayload = {
 /** SubscriptionPaywall requires SessionProvider + PaywallHomeStatsProvider. */
 function renderWithPreviewProviders(ui: React.ReactElement) {
   return render(
-    <SessionProvider session={null}>
+    <SessionContext.Provider value={previewSessionContextValue}>
       <PaywallHomeStatsProvider value={clinicalPreviewHomeStats}>{ui}</PaywallHomeStatsProvider>
-    </SessionProvider>,
+    </SessionContext.Provider>,
   );
 }
 

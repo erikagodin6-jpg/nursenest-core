@@ -11,6 +11,7 @@ import {
   parseCustomSessionStudyMode,
 } from "@/lib/flashcards/build-flashcard-custom-session";
 import { parseCustomSessionSourceKind } from "@/lib/flashcards/custom-session-card-filters";
+import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 
 export const dynamic = "force-dynamic";
 
@@ -28,8 +29,12 @@ export async function GET(req: NextRequest) {
     }
 
     const sp = req.nextUrl.searchParams;
-    const pathwayId = sp.get("pathwayId")?.trim() || null;
-    const topicCode = sp.get("topicCode")?.trim().toLowerCase() || null;
+    const pathwayIdRaw = sp.get("pathwayId")?.trim() || null;
+    const pathwayId = pathwayIdRaw
+      ? normalizeLearnerFlashcardsPathwayQueryId(pathwayIdRaw, entitlement.country)
+      : null;
+    const topicFromAlias = sp.get("topic")?.trim().toLowerCase() || null;
+    const topicCode = sp.get("topicCode")?.trim().toLowerCase() || topicFromAlias || null;
     const lessonId = sp.get("lessonId")?.trim() || null;
     const selectedCategories = parseCustomSessionCategories(sp.get("categories"));
     const stateIds = parseCustomSessionCategories(sp.get("stateIds"));

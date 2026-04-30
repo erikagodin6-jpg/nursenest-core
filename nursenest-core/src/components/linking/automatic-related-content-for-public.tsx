@@ -31,6 +31,8 @@ type LessonProps = {
   pathway: ExamPathwayDefinition;
   lesson: PathwayLessonAutoLinkSnapshot;
   locale: string;
+  /** Omit auto links that duplicate footer / sibling CTAs on the lesson page. */
+  excludeHrefs?: string[];
 };
 
 type QuestionTopicProps = {
@@ -92,6 +94,7 @@ export async function AutomaticRelatedContentForPublic(props: AutomaticRelatedCo
         lesson: props.lesson,
         locale: props.locale,
         includeLessonBucket: true,
+        excludeHrefs: props.excludeHrefs,
       });
       resolved = (
         await filterResolvedLinksLessonsByPublicMarketingIntegrity({
@@ -121,7 +124,7 @@ export async function AutomaticRelatedContentForPublic(props: AutomaticRelatedCo
             context={context}
             resolvedLinks={resolved}
             heading="Related study on this pathway"
-            showKinds={["lesson", "flashcard", "question", "cat"]}
+            showKinds={["lesson", "flashcard", "question", "blog", "cat"]}
           />
         </div>
       );

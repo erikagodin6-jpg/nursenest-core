@@ -1,24 +1,16 @@
 import type { Prisma } from "@prisma/client";
 import { FlashcardItemKind } from "@prisma/client";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import type { FlashcardStudySelectRow } from "@/lib/flashcards/flashcard-study-serialize";
+import { buildAppLessonsReviewLessonHref } from "@/lib/learner/app-study-internal-links";
 import { pathwayLessonEligibleForLearnerStudyInventory } from "@/lib/learner-study-hub/pathway-lesson-learner-study-guards";
 import { getCatalogPathwayLessonsSync } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
-import { marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
 import type { CheckpointQuestion } from "@/lib/lessons/lesson-recall-types";
 
 const MAX_RECALL_CARDS_PER_PATHWAY = 1_200;
 
 function lessonHrefForCatalogLesson(pathwayId: string, lessonSlug: string): string {
-  const pathway = getExamPathwayById(pathwayId);
-  if (!pathway) {
-    return `/app/lessons?pathwayId=${encodeURIComponent(pathwayId)}&q=${encodeURIComponent(lessonSlug)}`;
-  }
-  return (
-    marketingPathwayLessonDetailPath(pathway, lessonSlug) ??
-    `/app/lessons?pathwayId=${encodeURIComponent(pathwayId)}&q=${encodeURIComponent(lessonSlug)}`
-  );
+  return buildAppLessonsReviewLessonHref(pathwayId, lessonSlug);
 }
 
 function categoryForLesson(lesson: PathwayLessonRecord): { name: string; topicCode: string | null } {

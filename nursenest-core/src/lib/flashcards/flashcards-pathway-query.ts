@@ -2,7 +2,11 @@ import type { CountryCode } from "@prisma/client";
 
 /**
  * Maps short or marketing-style `pathwayId` query values to canonical exam-pathway ids
- * (catalog keys, entitlements, `buildFlashcardCustomSession`).
+ * (catalog keys, entitlements, SQL scopes).
+ *
+ * Use for **every** tier-scoped learner surface that reads `?pathwayId=` — flashcards hub,
+ * practice-tests hub, question bank entry, and APIs that accept the same query param — so
+ * marketing/deep links (`ca-np`, `allied-health`, …) stay aligned with `/app/flashcards`.
  */
 export function normalizeLearnerFlashcardsPathwayQueryId(
   raw: string,

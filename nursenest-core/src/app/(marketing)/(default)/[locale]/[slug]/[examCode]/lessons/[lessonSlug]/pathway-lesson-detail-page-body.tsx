@@ -48,6 +48,7 @@ import { pathwayLessonDetailBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { getPathwayLessonContentDates } from "@/lib/seo/pathway-lesson-content-dates";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import { AutomaticRelatedContentForPublic } from "@/components/linking/automatic-related-content-for-public";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { LessonQualityNotice } from "@/components/lessons/lesson-quality-notice";
 import { classifyPathwayLesson } from "@/lib/content-quality/classify-lesson";
 import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-review";
@@ -337,6 +338,14 @@ export async function PathwayLessonDetailPageBody({
 
   const base = marketingPathwayLessonsIndexPath(pathway);
   const blogHubPath = buildExamPathwayPath(pathway, "blog");
+  const topicTagBlogPath =
+    lesson.topicSlug?.trim().length > 0 ? `/blog/tag/${encodeURIComponent(lesson.topicSlug.trim())}` : null;
+  const automaticRelatedExcludeHrefs = [
+    blogHubPath,
+    withMarketingLocale(lessonContentLocale, blogHubPath),
+    topicTagBlogPath,
+    topicTagBlogPath ? withMarketingLocale(lessonContentLocale, topicTagBlogPath) : null,
+  ].filter(Boolean) as string[];
 
   const lessonProgress: PathwayLessonProgressStatus =
     lessonProgressRes.status === "fulfilled"
@@ -778,6 +787,7 @@ export async function PathwayLessonDetailPageBody({
             bodySystem: lesson.bodySystem,
           }}
           locale={lessonContentLocale}
+          excludeHrefs={automaticRelatedExcludeHrefs}
         />
         <MarketingStudyCrossLinks className="mt-12" />
         {hasLessonSequence ? <PathwayLessonStickySequenceNav adjacent={lessonAdjacentHrefs} /> : null}

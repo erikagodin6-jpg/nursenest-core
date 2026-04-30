@@ -15,6 +15,10 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
 import { pathwayLessonIdFromContentItemTags, PATHWAY_LESSON_LINK_TAG_PREFIX } from "@/lib/lessons/pathway-lesson-cms-link-tags";
 import { resolveMarketingPathwayLessonRouteResolution } from "@/lib/lessons/pathway-lesson-route-access";
+import {
+  buildAdminPathwayLessonStableEditHref,
+  DEFAULT_PATHWAY_LESSON_ADMIN_LOCALE,
+} from "@/lib/admin/pathway-lesson-stable-edit-href";
 
 describe("Option B — pathway lesson as authoring source of truth", () => {
   it("marketing lesson detail path matches buildExamPathwayPath(…, lessons/{slug})", () => {
@@ -165,5 +169,62 @@ describe("Option B — pathway lesson as authoring source of truth", () => {
     const src = readFileSync(routePath, "utf8");
     assert.match(src, /lessonSurface/);
     assert.match(src, /pathway_lesson/);
+  });
+
+  it("stable admin PathwayLesson edit href uses pathwayId + slug (locale only when non-default)", () => {
+    const base = buildAdminPathwayLessonStableEditHref({
+      pathwayId: "us-rn-nclex-rn",
+      slug: "fluid-electrolytes-basics",
+      locale: DEFAULT_PATHWAY_LESSON_ADMIN_LOCALE,
+    });
+    assert.ok(base.startsWith("/admin/pathway-lessons/edit?"));
+    assert.ok(base.includes("pathwayId=us-rn-nclex-rn"));
+    assert.ok(base.includes("slug=fluid-electrolytes-basics"));
+    assert.equal(base.includes("locale="), false);
+
+    const withLocale = buildAdminPathwayLessonStableEditHref({
+      pathwayId: "ca-rpn-nclex-pn",
+      slug: "sample-lesson",
+      locale: "fr",
+    });
+    assert.ok(withLocale.includes("pathwayId=ca-rpn-nclex-pn"));
+    assert.ok(withLocale.includes("slug=sample-lesson"));
+    assert.ok(withLocale.includes("locale=fr"));
+  });
+
+  it("admin pathway lesson list surfaces link to stable edit (not ContentItem row editor)", () => {
+    const dir = fileURLToPath(new URL(".", import.meta.url));
+    const indexPath = join(dir, "../../app/(admin)/admin/pathway-lessons/page.tsx");
+    const libPath = join(dir, "../../components/admin/lessons/admin-lessons-library-client.tsx");
+    const indexSrc = readFileSync(indexPath, "utf8");
+    const libSrc = readFileSync(libPath, "utf8");
+    const stableEditHrefImport =
+      /import\s*\{\s*buildAdminPathwayLessonStableEditHref\s*\}\s*from\s*["']@\/lib\/admin\/pathway-lesson-stable-edit-href["']/;
+    assert.match(indexSrc, stableEditHrefImport);
+    assert.match(libSrc, stableEditHrefImport);
+
+    const indexMapMarker = "rows.map((r) => (";
+    const iStart = indexSrc.indexOf(indexMapMarker);
+    assert.ok(iStart > 0, "pathway index row map not found");
+    const iEnd = indexSrc.indexOf("))}\n      </ul>", iStart);
+    assert.ok(iEnd > iStart, "pathway index row map end not found");
+    const indexRowTemplate = indexSrc.slice(iStart, iEnd);
+    assert.equal(indexRowTemplate.includes("/admin/lessons/"), false);
+    assert.match(indexRowTemplate, /buildAdminPathwayLessonStableEditHref\(\{/);
+    assert.match(indexRowTemplate, /pathwayId:\s*r\.pathwayId/);
+    assert.match(indexRowTemplate, /slug:\s*r\.slug/);
+    assert.match(indexRowTemplate, /locale:\s*r\.locale/);
+
+    const pathwayMapMarker = "pRows.map((r) => (";
+    const pStart = libSrc.indexOf(pathwayMapMarker);
+    assert.ok(pStart > 0, "pathway table row map not found");
+    const pEnd = libSrc.indexOf("))\n                )}", pStart);
+    assert.ok(pEnd > pStart, "pathway table row map end not found");
+    const pathwayRowTemplate = libSrc.slice(pStart, pEnd);
+    assert.equal(pathwayRowTemplate.includes("/admin/lessons/"), false);
+    assert.match(pathwayRowTemplate, /buildAdminPathwayLessonStableEditHref\(\{/);
+    assert.match(pathwayRowTemplate, /pathwayId:\s*r\.pathwayId/);
+    assert.match(pathwayRowTemplate, /slug:\s*r\.slug/);
+    assert.match(pathwayRowTemplate, /locale:\s*r\.locale/);
   });
 });

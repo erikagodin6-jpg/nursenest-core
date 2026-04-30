@@ -26,6 +26,7 @@ import { readPracticeTestsHubBootstrapSnapshot } from "@/lib/study-content-failo
 import { snapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getPathwayLessonPracticeHubSnapshot } from "@/lib/learner-study-hub/pathway-lesson-study-materials";
+import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 
 type PageProps = { searchParams: Promise<{ pathwayId?: string | string[] | undefined }> };
 
@@ -33,7 +34,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
   const { t } = await getLearnerMarketingBundle();
   const sp = await searchParams;
   const rawPid = sp.pathwayId;
-  const requestedPathwayId =
+  const pathwayQueryRaw =
     typeof rawPid === "string" && rawPid.trim().length > 2
       ? rawPid.trim()
       : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
@@ -77,6 +78,10 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
       </div>
     );
   }
+
+  const requestedPathwayId = pathwayQueryRaw
+    ? normalizeLearnerFlashcardsPathwayQueryId(pathwayQueryRaw, entitlement.country)
+    : null;
 
   let pathwayOptions: {
     id: string;

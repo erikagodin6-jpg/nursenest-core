@@ -1,12 +1,10 @@
 import { stripToPlainText } from "@/lib/content-quality/plain-text";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import type { FlashcardStudySelectRow } from "@/lib/flashcards/flashcard-study-serialize";
+import { buildAppLessonsReviewLessonHref } from "@/lib/learner/app-study-internal-links";
 import { lessonBodyHasGenericFiller } from "@/lib/lessons/lesson-content-depth-schema";
 import { pathwayLessonEligibleForLearnerStudyInventory } from "@/lib/learner-study-hub/pathway-lesson-learner-study-guards";
 import { getCatalogPathwayLessonsSync } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import type { PathwayLessonRecord, PathwayLessonSection } from "@/lib/lessons/pathway-lesson-types";
-import { marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
-
 const MAX_SECTION_CARDS_PER_PATHWAY = 2_400;
 
 export type LessonSectionDerivedVirtual = {
@@ -68,14 +66,7 @@ const KIND_TO_DIFFICULTY: Record<string, number> = {
 };
 
 function lessonHrefForCatalogLesson(pathwayId: string, lessonSlug: string): string {
-  const pathway = getExamPathwayById(pathwayId);
-  if (!pathway) {
-    return `/app/lessons?pathwayId=${encodeURIComponent(pathwayId)}&q=${encodeURIComponent(lessonSlug)}`;
-  }
-  return (
-    marketingPathwayLessonDetailPath(pathway, lessonSlug) ??
-    `/app/lessons?pathwayId=${encodeURIComponent(pathwayId)}&q=${encodeURIComponent(lessonSlug)}`
-  );
+  return buildAppLessonsReviewLessonHref(pathwayId, lessonSlug);
 }
 
 function categoryForLesson(lesson: PathwayLessonRecord): { name: string; topicCode: string | null } {

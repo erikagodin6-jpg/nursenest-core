@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { ContentStatus } from "@prisma/client";
 import { Suspense } from "react";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
@@ -92,6 +93,7 @@ type Props = {
     pathwayId?: string;
     limit?: string;
     q?: string;
+    lessonSlug?: string;
   }>;
 };
 
@@ -203,6 +205,9 @@ export default async function LessonsPage({ searchParams }: Props) {
   const pathwayIdFilter =
     typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 0 ? sp.pathwayId.trim() : null;
 
+  const lessonSlugFilter =
+    typeof sp.lessonSlug === "string" && sp.lessonSlug.trim().length > 0 ? sp.lessonSlug.trim() : null;
+
   const learnerPathRow = await withDatabaseFallbackTimeout(
     async () =>
       userId
@@ -219,6 +224,33 @@ export default async function LessonsPage({ searchParams }: Props) {
   const learnerPath = learnerPathRow?.learnerPath ?? null;
   const marketingLocale = await getMarketingLocaleForDefaultRoute();
   const visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+
+  if (
+    lessonSlugFilter &&
+    pathwayIdFilter &&
+    visiblePathwayIds.includes(pathwayIdFilter)
+  ) {
+    const hit = await withDatabaseFallbackTimeout(
+      async () =>
+        prisma.pathwayLesson.findFirst({
+          where: {
+            AND: [
+              { pathwayId: pathwayIdFilter },
+              { slug: lessonSlugFilter },
+              { status: ContentStatus.PUBLISHED },
+              pathwayLessonAppHubSafetyPrismaWhere(),
+            ],
+          },
+          select: { id: true },
+        }),
+      null,
+      LESSONS_PAGE_DB_TIMEOUT_MS,
+      { scope: "page_lessons", label: "lesson_slug_redirect" },
+    );
+    if (hit?.id) {
+      redirect(`/app/lessons/${hit.id}`);
+    }
+  }
 
   const catHref = resolveStudyLoopCatHref({
     authState: "signed_in",

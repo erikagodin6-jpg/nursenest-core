@@ -32,3 +32,8 @@ export async function expectNotPageNotFound(page: Page) {
 export async function seedUsMarketingCookie(page: Page, origin: string) {
   await page.context().addCookies([{ name: GLOBAL_REGION_COOKIE, value: "us", url: origin }]);
 }
+
+/** Align with `resolveDefaultLayoutMarketingExamRegion` — `canada` is the canonical CA slug for `nn_global_region`. */
+export async function seedCaMarketingCookie(page: Page, origin: string) {
+  await page.context().addCookies([{ name: GLOBAL_REGION_COOKIE, value: "canada", url: origin }]);
+}

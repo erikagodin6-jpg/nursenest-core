@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ClipboardList, Layers, Library, LineChart } from "lucide-react";
+import { ClipboardList, Layers, Library, LineChart, ListChecks } from "lucide-react";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import {
   emitPathwayLessonProgress,
@@ -12,6 +12,10 @@ import {
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { SuccessLeaf } from "@/components/ui/success-leaf";
 import { practiceTestsWeakFocusHref } from "@/lib/learner/study-loop-recommendations";
+import {
+  buildAppFlashcardsTopicHref,
+  buildAppPracticeTestsTopicHref,
+} from "@/lib/learner/app-study-internal-links";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import type { MarketingPathwayLessonActionsClientProps } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
@@ -101,9 +105,13 @@ export function PathwayLessonActions({
   const allLessonsHref =
     allLessonsHrefOverride?.trim() ||
     (pathwayDef ? marketingPathwayLessonsIndexPath(pathwayDef) : "/lessons");
-  const flashcardsHref = topicCode?.trim()
-    ? `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}&topicCode=${encodeURIComponent(topicCode.trim())}`
-    : `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}`;
+  const topicSlugForHub = topicCode?.trim().toLowerCase() ?? "";
+  const flashcardsHref =
+    topicSlugForHub.length > 0
+      ? buildAppFlashcardsTopicHref(pathwayId, topicSlugForHub)
+      : `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}`;
+  const practiceTestsTopicHref =
+    topicSlugForHub.length > 0 ? buildAppPracticeTestsTopicHref(pathwayId, topicSlugForHub) : null;
 
   const saving = pending !== "idle";
 
@@ -133,6 +141,17 @@ export function PathwayLessonActions({
           <Layers className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
           {t("learner.studyLoop.sameTopicFlashcards")}
         </Link>
+        {practiceTestsTopicHref ? (
+          <Link
+            href={practiceTestsTopicHref}
+            data-testid="pathway-lesson-cta-practice-tests-topic"
+            data-nn-pathway-id={pathwayId}
+            className="lv-btn-secondary flex-1 sm:min-w-40 sm:flex-none"
+          >
+            <ListChecks className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+            {t("learner.studyLoop.topicPracticeTestsCta")}
+          </Link>
+        ) : null}
         {showCatCta ? (
           <Link
             href={catWeakHref}

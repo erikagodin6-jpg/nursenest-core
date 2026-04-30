@@ -22,6 +22,7 @@ import {
   pathwayCatSurface,
   pathwayFlashcardsSurface,
   pathwayLessonsHubAndSample,
+  pathwayLinearPracticeExamSurface,
   pathwayQuestionBankSurface,
 } from "../helpers/pathway-surface-flows";
 
@@ -107,8 +108,12 @@ for (const row of PATHWAY_CONTENT_ACCESS_MATRIX) {
         await pathwayQuestionBankSurface({ page, pathwayId: row.pathwayId, surfaceTag: tag, observers });
       });
 
-      await test.step("CAT session", async () => {
-        await pathwayCatSurface({ page, pathwayId: row.pathwayId, surfaceTag: tag, observers });
+      await test.step(row.readinessSurface === "linear" ? "Linear practice exam" : "CAT session", async () => {
+        if (row.readinessSurface === "linear") {
+          await pathwayLinearPracticeExamSurface({ page, pathwayId: row.pathwayId, surfaceTag: tag, observers });
+        } else {
+          await pathwayCatSurface({ page, pathwayId: row.pathwayId, surfaceTag: tag, observers });
+        }
       });
 
       const capture: SmokeCapture = {

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/guards";
 import { prisma } from "@/lib/db";
+import { buildAdminPathwayLessonStableEditHref } from "@/lib/admin/pathway-lesson-stable-edit-href";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,7 @@ export default async function AdminPathwayLessonsIndexPage() {
       slug: true,
       title: true,
       status: true,
+      locale: true,
       updatedAt: true,
     },
     orderBy: { updatedAt: "desc" },
@@ -69,9 +71,26 @@ export default async function AdminPathwayLessonsIndexPage() {
         {rows.map((r) => (
           <li key={r.id} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
             <div>
-              <Link href={`/admin/pathway-lessons/${r.id}`} className="font-medium text-primary hover:underline">
-                {r.title}
-              </Link>
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <Link href={`/admin/pathway-lessons/${r.id}`} className="font-medium text-primary hover:underline">
+                  {r.title}
+                </Link>
+                <span className="text-xs text-muted-foreground">·</span>
+                <Link href={`/admin/pathway-lessons/open?pathwayId=${encodeURIComponent(r.pathwayId)}&slug=${encodeURIComponent(r.slug)}`} className="text-xs font-semibold text-primary hover:underline">
+                  Open
+                </Link>
+                <span className="text-xs text-muted-foreground">·</span>
+                <Link
+                  href={buildAdminPathwayLessonStableEditHref({
+                    pathwayId: r.pathwayId,
+                    slug: r.slug,
+                    locale: r.locale,
+                  })}
+                  className="text-xs font-semibold text-primary hover:underline"
+                >
+                  Edit
+                </Link>
+              </div>
               <p className="text-xs text-muted-foreground">
                 {r.pathwayId} · {r.slug} · {r.status}
               </p>

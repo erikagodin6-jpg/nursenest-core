@@ -120,6 +120,15 @@ export type LegacyPipelineOptions = {
   overwriteBody: boolean;
   allowPathwayCorrection: boolean;
   allowCreateMissingLessons: boolean;
+  /**
+   * When true (and `overwriteBody` is false), merge legacy `sections` into the current row:
+   * append missing kinds, strengthen weak sections, dedupe supplemental lines — never replace strong bodies.
+   */
+  mergeSections?: boolean;
+  /**
+   * When slug match misses, try a **strict** title-similarity match within the same pathway (single clear winner only).
+   */
+  allowTitleMatch?: boolean;
 };
 
 const SLUG_SAFE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
