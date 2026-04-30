@@ -846,6 +846,9 @@ export function QuestionBankPracticeClient({
           questionId: current.id,
           answer,
           pathwayId: pathwayIdFilter ?? undefined,
+          ...(studySettings.enableConfidenceTracking && confidence[current.id]
+            ? { selfReportedConfidence: confidence[current.id] }
+            : {}),
         }),
       });
       const data = (await res.json()) as {

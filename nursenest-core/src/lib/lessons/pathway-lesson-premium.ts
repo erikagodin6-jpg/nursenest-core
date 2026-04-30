@@ -77,7 +77,7 @@ const PREMIUM_KIND_SET = new Set<string>(PREMIUM_SECTION_KINDS);
  */
 export const SUBSTANTIVE_PREMIUM_SECTION_MIN_PLAIN_CHARS = 40;
 
-/** Minimum sections + word floor so real authored lessons never run {@link expandToStandardFiveSections}. */
+/** Minimum sections + word floor so real authored lessons never run the legacy five-block expander in `pathway-lesson-catalog-sync.ts`. */
 export const MEANINGFUL_LESSON_MIN_SECTIONS = 3;
 export const MEANINGFUL_LESSON_MIN_TOTAL_WORDS = 400;
 

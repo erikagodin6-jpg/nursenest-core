@@ -41,6 +41,7 @@ import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
 import { LearnerStudySurfaceSection, LearnerSurface } from "@/components/learner-ui";
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
+import { FocusTodayStrip } from "@/components/student/focus-today-strip";
 function RecentGainsBlock({
   trends,
   strongTopics,
@@ -200,6 +201,8 @@ export function LearnerStudyHome({
         entitlement={entitlement}
         includeStudyShortcuts
       />
+
+      <FocusTodayStrip pathwayId={preferredPathwayId} />
 
       {/* Continue + exam pacing (legacy: `continue_where_left_off` + exam context) */}
       <LearnerStudySurfaceSection

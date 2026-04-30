@@ -67,6 +67,16 @@ if (!existsSync(nextBin)) {
   process.exit(1);
 }
 
+const ensureMemScript = path.join(packageRoot, "scripts", "ensure-node-memory.mjs");
+const memGuard = spawnSync(process.execPath, [ensureMemScript], {
+  cwd: packageRoot,
+  stdio: "inherit",
+  env: process.env,
+});
+if ((memGuard.status ?? 1) !== 0) {
+  process.exit(memGuard.status ?? 1);
+}
+
 ensureBuildCacheVersionEnv();
 enforceMarketingSkipDbForCompile();
 removeNextOutputDir();

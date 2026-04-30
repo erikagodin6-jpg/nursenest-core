@@ -276,6 +276,19 @@ export function PracticeQuestionSessionClient({
       practiceSessionMode: mode,
       selectedAnswerSummary: answerSummary(),
     });
+    if (row.correct && confidence === "low" && pathwayId) {
+      void fetch("/api/remediation/capture", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
+        body: JSON.stringify({
+          questionId: current.id,
+          pathwayId,
+          reason: "low_confidence_correct",
+          confidence: "low",
+        }),
+      }).catch(() => undefined);
+    }
     if (typeof window !== "undefined") {
       window.dispatchEvent(new CustomEvent("nn-topic-stats-updated"));
       window.dispatchEvent(new CustomEvent("nn-learner-stats-updated"));

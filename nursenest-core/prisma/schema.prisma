@@ -149,6 +149,8 @@ model User {
   inlineContentEdits            InlineContentEntry[]   @relation("InlineContentUpdatedBy")
   marketingPublicContentOverrides         MarketingPublicContentOverride[]
   marketingPublicContentOverrideRevisions MarketingPublicContentOverrideRevision[]
+  remediationEvents                       UserRemediationEvent[]
+  remediationQueueItems                   UserRemediationQueue[]
 
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
@@ -282,6 +284,66 @@ model UserTopicStat {
 
   @@unique([userId, topic])
   @@index([userId, updatedAt])
+}
+
+/// * Mistake taxonomy for the remediation engine (NN_ENABLE_REMEDIATION_ENGINE).
+enum RemediationMistakeType {
+  knowledge_gap
+  prioritization
+  pharmacology
+  safety
+  delegation
+  misread_question
+}
+
+enum RemediationQueueSource {
+  question
+  lesson
+  flashcard
+}
+
+/// * Captured learner mistakes / low-confidence correct answers for spaced remediation.
+model UserRemediationEvent {
+  id                 String                 @id @default(cuid())
+  userId             String
+  questionId       String                 @db.VarChar(64)
+  pathwayId        String?                @db.VarChar(64)
+  topic            String?                @db.VarChar(200)
+  bodySystem       String?                @db.VarChar(128)
+  examMeta         Json?
+  mistakeType      RemediationMistakeType
+  confidence       String?                @db.VarChar(16)
+  catDifficultyHint Float?
+  createdAt        DateTime               @default(now())
+  user             User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([userId, topic])
+}
+
+/// * Aggregated remediation slots (upserted from events); study plan reads open rows due today.
+model UserRemediationQueue {
+  id              String                 @id @default(cuid())
+  userId          String
+  pathwayId       String?                @db.VarChar(64)
+  topic           String?                @db.VarChar(200)
+  bodySystem      String?                @db.VarChar(128)
+  pathwayKey      String                 @default("") @db.VarChar(64)
+  topicKey        String                 @default("") @db.VarChar(200)
+  bodySystemKey   String                 @default("") @db.VarChar(128)
+  priorityScore   Float                  @default(0)
+  nextReviewAt    DateTime
+  source          RemediationQueueSource @default(question)
+  resolved        Boolean                @default(false)
+  resolvedAt      DateTime?
+  mistakeCount    Int                    @default(0)
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  user            User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, pathwayKey, topicKey, bodySystemKey])
+  @@index([userId, resolved, nextReviewAt])
+  @@index([userId, resolved, priorityScore])
 }
 
 model TrialDeviceBinding {

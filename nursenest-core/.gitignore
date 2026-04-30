@@ -48,6 +48,9 @@ var/study-published-snapshots/
 # Optional precomputed pathway lesson indexes (`npm run build:lesson-indexes`); README + .gitkeep stay tracked.
 src/content/pathway-lessons/generated-indexes/*.json
 
+# Ephemeral shell exports from scripts/ensure-node-memory.mjs (npm dev/build/start)
+scripts/.node-memory-exports.sh
+
 # misc
 .cache/
 .DS_Store

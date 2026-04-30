@@ -22,6 +22,8 @@ import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/pos
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { incrementBankQuestionsGradedToday } from "@/lib/learner/increment-bank-questions-graded-today";
 import { gradeMatches, normalizeCorrect } from "@/lib/questions/grade-answer-match";
+import { isRemediationEngineEnabled } from "@/lib/remediation/remediation-flag";
+import { recordRemediationCapture } from "@/lib/remediation/record-remediation";
 
 export const dynamic = "force-dynamic";
 
@@ -51,9 +53,15 @@ export async function POST(req: Request) {
 
   setSentryServerContext({ route: "/api/questions/grade", feature: SERVER_FEATURE.question, userId: gate.userId });
 
-  let body: { questionId?: string; answer?: unknown; pathwayId?: string };
+  let body: {
+    questionId?: string;
+    answer?: unknown;
+    pathwayId?: string;
+    /** Pre-answer self rating from question bank (optional). */
+    selfReportedConfidence?: "low" | "medium" | "high";
+  };
   try {
-    body = (await req.json()) as { questionId?: string; answer?: unknown; pathwayId?: string };
+    body = (await req.json()) as typeof body;
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
@@ -87,6 +95,10 @@ export async function POST(req: Request) {
           bodySystem: true,
           tags: true,
           images: true,
+          exam: true,
+          difficulty: true,
+          nclexClientNeedsCategory: true,
+          nclexClientNeedsSubcategory: true,
         },
       }),
     );
@@ -94,6 +106,12 @@ export async function POST(req: Request) {
     if (!row) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
+
+    const userPathwayRowEarly = await prisma.user.findUnique({
+      where: { id: gate.userId },
+      select: { learnerPath: true },
+    });
+    const effectivePathwayIdEarly = effectivePathwayIdForGrade(body.pathwayId, userPathwayRowEarly?.learnerPath ?? null);
 
     const expected = normalizeCorrect(row.correctAnswer);
     if (expected.length === 0) {
@@ -104,6 +122,52 @@ export async function POST(req: Request) {
     }
 
     const correct = gradeMatches(row.questionType, expected, body.answer);
+
+    const effectivePathwayId = effectivePathwayIdEarly;
+
+    if (
+      correct &&
+      body.selfReportedConfidence === "low" &&
+      isRemediationEngineEnabled()
+    ) {
+      void recordRemediationCapture(prisma, {
+        userId: gate.userId,
+        questionId: row.id,
+        reason: "low_confidence_correct",
+        pathwayId: effectivePathwayId,
+        topic: row.topic ?? null,
+        subtopic: row.subtopic ?? null,
+        bodySystem: row.bodySystem ?? null,
+        exam: row.exam ?? null,
+        difficulty: row.difficulty ?? null,
+        tags: Array.isArray(row.tags) ? row.tags.map(String) : [],
+        nclexClientNeedsCategory: row.nclexClientNeedsCategory ?? null,
+        nclexClientNeedsSubcategory: row.nclexClientNeedsSubcategory ?? null,
+        questionType: row.questionType,
+        confidence: "low",
+        catDifficultyHint: row.difficulty != null ? Number(row.difficulty) : null,
+      });
+    }
+
+    if (!correct && isRemediationEngineEnabled()) {
+      void recordRemediationCapture(prisma, {
+        userId: gate.userId,
+        questionId: row.id,
+        reason: "incorrect",
+        pathwayId: effectivePathwayId,
+        topic: row.topic ?? null,
+        subtopic: row.subtopic ?? null,
+        bodySystem: row.bodySystem ?? null,
+        exam: row.exam ?? null,
+        difficulty: row.difficulty ?? null,
+        tags: Array.isArray(row.tags) ? row.tags.map(String) : [],
+        nclexClientNeedsCategory: row.nclexClientNeedsCategory ?? null,
+        nclexClientNeedsSubcategory: row.nclexClientNeedsSubcategory ?? null,
+        questionType: row.questionType,
+        confidence: null,
+        catDifficultyHint: row.difficulty != null ? Number(row.difficulty) : null,
+      });
+    }
 
     try {
       await recordTopicOutcomesSequential(gate.userId, [
@@ -122,12 +186,6 @@ export async function POST(req: Request) {
     const teachingMedia = buildTeachingMediaBundle(displayRow);
     const topicCode = deriveTopicCode({ topic: row.topic, subtopic: row.subtopic, bodySystem: row.bodySystem });
     const linkConfidence = topicRoutingConfidence(row);
-
-    const userPathwayRow = await prisma.user.findUnique({
-      where: { id: gate.userId },
-      select: { learnerPath: true },
-    });
-    const effectivePathwayId = effectivePathwayIdForGrade(body.pathwayId, userPathwayRow?.learnerPath ?? null);
 
     const rationaleLessonLinks = await resolveRationaleLessonLinksForQuestion(prisma, {
       pathwayId: effectivePathwayId,
