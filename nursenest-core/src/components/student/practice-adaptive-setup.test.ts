@@ -47,6 +47,26 @@ describe("buildPracticeAdaptiveCreatePayload", () => {
     assert.equal(p.selectionStrictness, "soft");
   });
 
+  it("accepts optional studyLaunchPayload for marketing hub launches", () => {
+    const p = buildPracticeAdaptiveCreatePayload({
+      pathwayId: "ca-rn-nclex-rn",
+      topicNames: ["Pharmacology"],
+      catSelectionBasis: "weak",
+      questionCount: 30,
+      studyLaunchPayload: {
+        pathwayId: "ca-rn-nclex-rn",
+        mode: "adaptive_practice",
+        selectedCategories: ["pharmacology"],
+        filters: { studyFilter: "weak", weakOnly: true },
+        count: 30,
+        shuffle: true,
+      },
+    });
+    assert.equal(p.studyLaunchPayload?.mode, "adaptive_practice");
+    assert.deepEqual(p.studyLaunchPayload?.selectedCategories, ["pharmacology"]);
+    assert.equal(p.studyLaunchPayload?.filters?.studyFilter, "weak");
+  });
+
   it("defaults selectionStrictness to soft for safe adaptive pools", () => {
     const p = buildPracticeAdaptiveCreatePayload({
       pathwayId: "ca-rn-nclex-rn",

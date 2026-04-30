@@ -7,9 +7,11 @@ import {
   PRACTICE_QUESTION_COUNTS,
   PRACTICE_SESSION_MODES,
   PRACTICE_SESSION_SOURCES,
+  PRACTICE_SESSION_STUDY_FILTERS,
   type PracticeCategorySlug,
   type PracticeSessionMode,
   type PracticeSessionSource,
+  type PracticeSessionStudyFilter,
 } from "@/lib/practice-question-session/constants";
 
 export type ParsedPracticeSessionParams = {
@@ -19,6 +21,10 @@ export type ParsedPracticeSessionParams = {
   count: number;
   mode: PracticeSessionMode;
   shuffle: boolean;
+  /** Comma-separated practice hub ids forwarded to `GET /api/questions` when set. */
+  practiceHubIds: string | null;
+  /** Hub filter chip / launch intent (defaults to `all`). */
+  studyFilter: PracticeSessionStudyFilter;
 };
 
 function parseEnum<T extends string>(raw: string | null, allowed: readonly T[], fallback: T): T {
@@ -47,7 +53,13 @@ export function parsePracticeSessionSearchParams(sp: URLSearchParams): ParsedPra
       ? DEFAULT_SHUFFLE
       : shuffleRaw === "1" || shuffleRaw.toLowerCase() === "true";
 
-  return { pathwayId, source, categorySlug, count, mode, shuffle };
+  const practiceHubIdsRaw = sp.get("practiceHubIds")?.trim();
+  const practiceHubIds = practiceHubIdsRaw && practiceHubIdsRaw.length > 0 ? practiceHubIdsRaw : null;
+
+  const studyFilterRaw = sp.get("studyFilter")?.trim().toLowerCase() ?? "";
+  const studyFilter = parseEnum(studyFilterRaw || "all", PRACTICE_SESSION_STUDY_FILTERS, "all");
+
+  return { pathwayId, source, categorySlug, count, mode, shuffle, practiceHubIds, studyFilter };
 }
 
 export function practiceSessionUrl(args: {
@@ -57,6 +69,8 @@ export function practiceSessionUrl(args: {
   count: number;
   mode: PracticeSessionMode;
   shuffle: boolean;
+  practiceHubIds?: string | null;
+  studyFilter?: PracticeSessionStudyFilter;
 }): string {
   const qs = new URLSearchParams();
   if (args.pathwayId) qs.set("pathwayId", args.pathwayId);
@@ -65,5 +79,10 @@ export function practiceSessionUrl(args: {
   qs.set("count", String(args.count));
   qs.set("mode", args.mode);
   qs.set("shuffle", args.shuffle ? "true" : "false");
+  if (args.practiceHubIds && args.practiceHubIds.trim().length > 0) {
+    qs.set("practiceHubIds", args.practiceHubIds.trim());
+  }
+  const sf = args.studyFilter ?? "all";
+  if (sf !== "all") qs.set("studyFilter", sf);
   return `/app/questions/session?${qs.toString()}`;
 }

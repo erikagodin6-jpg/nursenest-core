@@ -194,6 +194,18 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
 
   const topicClustersForDrawer = isTopicNarrowed ? [] : await listTopicClusters(pathway.id, lessonContentLocale);
   const hubAggregates = isTopicNarrowed ? [] : await loadPathwayPracticeBodySystemHubAggregates(pathway.id);
+  if (process.env.NODE_ENV === "development" && !isTopicNarrowed) {
+    const totalQ = hubAggregates.reduce((s, a) => s + a.questionCount, 0);
+    const unc = hubAggregates.find((a) => a.id === "uncategorized")?.questionCount ?? 0;
+    safeServerLog("practice_questions_hub", "hub_inventory_dev", {
+      pathwayId: pathway.id,
+      categoryRowCount: hubAggregates.length,
+      totalQuestionCount: totalQ,
+      uncategorizedCount: unc,
+      normalizedCategoryUsageIds: hubAggregates.filter((a) => a.questionCount > 0).map((a) => a.id),
+      fetchNote: "aggregates_hydrated",
+    });
+  }
   const mixedAllTopicsHref = loginWithCallback(
     `/app/questions?${new URLSearchParams({ pathwayId: pathway.id, preset: "pathway_mixed" }).toString()}`,
   );

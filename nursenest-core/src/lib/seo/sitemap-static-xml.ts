@@ -47,6 +47,7 @@ import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-te
 import { stripForbiddenLocalePrefixedPathwayTopics } from "@/lib/seo/sitemap-locale-prefixed-path-guard";
 import { shouldReduceNonCriticalBuildWork } from "@/lib/build/build-safe-mode";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
+import { collectOsceScenariosMarketingHubUrls } from "@/lib/scenarios/scenario-marketing-sitemap-urls";
 import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
 
 /** Locales included in merged urlset tooling (tier=full only); sorted for deterministic URL lists. */
@@ -447,6 +448,7 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
       collectNpPracticeTestHubUrls(o),
     ]);
     const lessonHubUrls = collectPathwayLessonHubUrlsOnly(o);
+    const osceScenarioHubUrls = collectOsceScenariosMarketingHubUrls(o);
     return [
       ...expandedBase,
       ...examHubUrls,
@@ -455,6 +457,7 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
       ...collectAlliedMarketingUrls(o),
       ...collectPreNursingSitemapHubUrlsOnly(o),
       ...lessonHubUrls,
+      ...osceScenarioHubUrls,
     ];
   }
   /**
@@ -475,6 +478,7 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
     collectNpPracticeTestHubUrls(o),
     collectContentBackedStudyResourceHubUrls(o),
   ]);
+  const osceScenarioHubUrls = collectOsceScenariosMarketingHubUrls(o);
   return [
     ...expandedBase,
     ...examHubUrls,
@@ -484,6 +488,7 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
     ...collectAlliedMarketingUrls(o),
     ...collectPreNursingSeoUrls(o),
     ...lessonUrls,
+    ...osceScenarioHubUrls,
   ];
 }
 

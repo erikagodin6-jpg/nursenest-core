@@ -20,16 +20,29 @@ function modeApiValue(mode: StudyToolSessionMode): string {
 }
 
 function itemKeyForProgress(item: StudyToolSessionItem): string {
-  if (item.kind === "medication_drills") return `st:${item.kind}:${item.sourceId}`;
-  if (item.kind === "ordering") return `st:${item.kind}:${item.id}`;
-  if ("sourceQuestionId" in item) return `st:${item.kind}:${item.sourceQuestionId}`;
-  return `st:${item.kind}:${item.id}`;
+  switch (item.kind) {
+    case "medication_drills":
+      return `st:${item.kind}:${item.sourceId}`;
+    case "ordering":
+      return `st:${item.kind}:${item.id}`;
+    case "matching":
+    case "fill_in_the_blank":
+    case "lab_drills":
+      return `st:${item.kind}:${item.sourceQuestionId}`;
+  }
 }
 
 function sourceQuestionId(item: StudyToolSessionItem): string | null {
-  if (item.kind === "medication_drills") return item.sourceId.startsWith("fc:") ? null : item.sourceId;
-  if (item.kind === "ordering") return null;
-  return item.sourceQuestionId;
+  switch (item.kind) {
+    case "medication_drills":
+      return item.sourceId.startsWith("fc:") ? null : item.sourceId;
+    case "ordering":
+      return null;
+    case "matching":
+    case "fill_in_the_blank":
+    case "lab_drills":
+      return item.sourceQuestionId;
+  }
 }
 
 export function StudyToolsWorkspaceClient({
@@ -245,7 +258,7 @@ export function StudyToolsWorkspaceClient({
           <button
             type="button"
             className="nn-btn-primary inline-flex min-h-[2.5rem] items-center rounded-lg px-5 text-sm font-semibold disabled:opacity-50"
-            disabled={sessionPhase === "loading"}
+            disabled={sessionPhase === "loading" || !userId}
             onClick={() => void startSession()}
           >
             {sessionPhase === "loading" ? "Building session…" : "Start session"}

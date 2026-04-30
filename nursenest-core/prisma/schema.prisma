@@ -133,6 +133,12 @@ model User {
   flashcardProgress             FlashcardProgress[]
   flashcardStudySessions        FlashcardStudySession[]
   flashcardUserStats            FlashcardUserStats?
+  verifiedStudyDecksOwned       VerifiedStudyDeck[]         @relation("VerifiedStudyDeckOwner")
+  verifiedStudyDeckSharesToMe   VerifiedStudyDeckShare[]     @relation("VerifiedStudyDeckShareTarget")
+  verifiedStudyDeckSharesSent   VerifiedStudyDeckShare[]     @relation("VerifiedStudyDeckShareInvitedBy")
+  verifiedStudyCardProgress     VerifiedStudyCardProgress[]
+  verifiedStudyDeckReports      VerifiedStudyDeckReport[]    @relation("VerifiedStudyDeckReporter")
+  clinicalNursingScenariosCreated ClinicalNursingScenario[]  @relation("ClinicalNursingScenarioAuthor")
   mediaAssetsUploaded           MediaAsset[]                @relation("MediaAssetUploadedBy")
   pathway_lessons               PathwayLesson[]
   practiceTests                 PracticeTest[]
@@ -1127,6 +1133,181 @@ model FlashcardUserStats {
   user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("flashcard_user_stats")
+}
+
+/// * Learner-owned verified study card decks (Quizlet-style, NurseNest-governed — not open free-text publishing).
+model VerifiedStudyDeck {
+  id                  String                           @id @default(cuid())
+  title               String                           @db.VarChar(200)
+  description         String?                          @db.VarChar(2000)
+  pathwayId           String                           @map("pathway_id") @db.VarChar(64)
+  professionKey       String?                          @map("profession_key") @db.VarChar(64)
+  canonicalCategoryId String?                          @map("canonical_category_id") @db.VarChar(64)
+  visibility          VerifiedStudyDeckVisibility      @default(PRIVATE)
+  verificationStatus  VerifiedStudyVerificationStatus  @default(UNVERIFIED) @map("verification_status")
+  moderationStatus    VerifiedStudyModerationStatus     @default(APPROVED) @map("moderation_status")
+  sourceType          VerifiedStudySourceType           @default(USER_CREATED) @map("source_type")
+  nurseNestVerified   Boolean                           @default(false) @map("nurse_nest_verified")
+  ownerId             String                            @map("owner_id")
+  publishedAt         DateTime?                         @map("published_at")
+  /// * Secret segment for UNLISTED decks (never user PII).
+  unlistedSlug        String?                           @unique @map("unlisted_slug") @db.VarChar(48)
+  legacyImportBatch   String?                           @map("legacy_import_batch") @db.VarChar(80)
+  duplicateOfDeckId   String?                           @map("duplicate_of_deck_id")
+  createdAt           DateTime                          @default(now()) @map("created_at")
+  updatedAt           DateTime                          @updatedAt @map("updated_at")
+
+  owner        User                      @relation("VerifiedStudyDeckOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  duplicateOf  VerifiedStudyDeck?      @relation("VerifiedStudyDeckDuplicateOf", fields: [duplicateOfDeckId], references: [id], onDelete: SetNull)
+  duplicates   VerifiedStudyDeck[]      @relation("VerifiedStudyDeckDuplicateOf")
+  cards        VerifiedStudyCard[]
+  shares       VerifiedStudyDeckShare[]
+  reports      VerifiedStudyDeckReport[]
+
+  @@index([ownerId, pathwayId])
+  @@index([pathwayId, visibility, moderationStatus])
+  @@index([visibility, moderationStatus, verificationStatus])
+  @@map("verified_study_decks")
+}
+
+model VerifiedStudyDeckShare {
+  id           String                           @id @default(cuid())
+  deckId       String                           @map("deck_id")
+  targetUserId String?                          @map("target_user_id")
+  targetEmail  String?                          @map("target_email") @db.VarChar(320)
+  permission   VerifiedStudyDeckSharePermission @default(VIEW)
+  invitedById  String                           @map("invited_by_id")
+  createdAt    DateTime                         @default(now()) @map("created_at")
+
+  deck       VerifiedStudyDeck @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  targetUser User?             @relation("VerifiedStudyDeckShareTarget", fields: [targetUserId], references: [id], onDelete: Cascade)
+  invitedBy  User              @relation("VerifiedStudyDeckShareInvitedBy", fields: [invitedById], references: [id], onDelete: Cascade)
+
+  @@index([deckId])
+  @@index([targetUserId])
+  @@index([targetEmail])
+  @@map("verified_study_deck_shares")
+}
+
+model VerifiedStudyCard {
+  id                    String                          @id @default(cuid())
+  deckId                String                          @map("deck_id")
+  position              Int                             @default(0)
+  promptFront           String                          @map("prompt_front") @db.Text
+  answerBack            String                          @map("answer_back") @db.Text
+  rationale             String?                         @db.Text
+  clinicalPearl         String?                         @map("clinical_pearl") @db.Text
+  canonicalCategoryId   String?                         @map("canonical_category_id") @db.VarChar(64)
+  relatedLessonSlug     String?                         @map("related_lesson_slug") @db.VarChar(200)
+  relatedExamQuestionId String?                         @map("related_exam_question_id") @db.VarChar(64)
+  referencesJson        Json                            @default("[]") @map("references_json")
+  verificationStatus    VerifiedStudyVerificationStatus @default(UNVERIFIED) @map("verification_status")
+  lastVerifiedAt        DateTime?                       @map("last_verified_at")
+  aiRejectedReason      String?                         @map("ai_rejected_reason") @db.VarChar(500)
+  createdAt             DateTime                        @default(now()) @map("created_at")
+  updatedAt             DateTime                        @updatedAt @map("updated_at")
+
+  deck     VerifiedStudyDeck           @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  progress VerifiedStudyCardProgress[]
+
+  @@index([deckId, position])
+  @@map("verified_study_cards")
+}
+
+model VerifiedStudyCardProgress {
+  id               String    @id @default(cuid())
+  userId           String    @map("user_id")
+  cardId           String    @map("card_id")
+  viewedCount      Int       @default(0) @map("viewed_count")
+  correctCount     Int       @default(0) @map("correct_count")
+  incorrectCount   Int       @default(0) @map("incorrect_count")
+  weak             Boolean   @default(false)
+  starred          Boolean   @default(false)
+  mastered         Boolean   @default(false)
+  lastStudiedAt    DateTime? @map("last_studied_at")
+  confidenceRating Int?      @map("confidence_rating")
+  easeFactor       Float     @default(2.5) @map("ease_factor")
+  intervalDays     Int       @default(0) @map("interval_days")
+  nextReviewAt     DateTime? @map("next_review_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  user User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  card VerifiedStudyCard @relation(fields: [cardId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, cardId])
+  @@index([userId, lastStudiedAt])
+  @@index([userId, nextReviewAt])
+  @@map("verified_study_card_progress")
+}
+
+model VerifiedStudyDeckReport {
+  id          String                           @id @default(cuid())
+  deckId      String                           @map("deck_id")
+  reporterId  String                           @map("reporter_id")
+  reason      String                           @db.VarChar(500)
+  status      VerifiedStudyDeckReportStatus    @default(OPEN)
+  createdAt   DateTime                         @default(now()) @map("created_at")
+  resolvedAt  DateTime?                        @map("resolved_at")
+
+  deck     VerifiedStudyDeck @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  reporter User              @relation("VerifiedStudyDeckReporter", fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@index([deckId, status])
+  @@index([reporterId])
+  @@map("verified_study_deck_reports")
+}
+
+/// * Admin-authored unfolding clinical cases (not public until product enables learner catalog).
+model ClinicalNursingScenario {
+  id                     String                           @id @default(cuid())
+  title                  String                           @db.VarChar(240)
+  pathwayId              String                           @map("pathway_id") @db.VarChar(64)
+  canonicalCategoryId    String                           @map("canonical_category_id") @db.VarChar(64)
+  tierFocus              ClinicalNursingScenarioTier      @map("tier_focus")
+  difficulty             ClinicalNursingScenarioDifficulty
+  patientAgeContext      String                           @map("patient_age_context") @db.VarChar(280)
+  presentingConcern      String                           @map("presenting_concern") @db.Text
+  briefHistory           String                           @map("brief_history") @db.Text
+  medicationsAllergies   String?                          @map("medications_allergies") @db.Text
+  initialVitals          Json                             @map("initial_vitals")
+  assessmentFindings     String                           @map("assessment_findings") @db.Text
+  labsDiagnostics        Json?                            @map("labs_diagnostics")
+  referencesJson         Json                             @default("[]") @map("references_json")
+  publishStatus          ClinicalNursingScenarioPublishStatus @default(DRAFT) @map("publish_status")
+  createdByUserId        String?                          @map("created_by_user_id")
+  createdAt              DateTime                         @default(now()) @map("created_at")
+  updatedAt              DateTime                         @updatedAt @map("updated_at")
+
+  createdBy User?                        @relation("ClinicalNursingScenarioAuthor", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  stages    ClinicalNursingScenarioStage[]
+
+  @@index([pathwayId, publishStatus])
+  @@index([pathwayId, tierFocus])
+  @@map("clinical_nursing_scenarios")
+}
+
+model ClinicalNursingScenarioStage {
+  id                         String   @id @default(cuid())
+  scenarioId                 String   @map("scenario_id")
+  orderIndex                 Int      @map("order_index")
+  scenarioText               String   @map("scenario_text") @db.Text
+  vitals                     Json
+  assessmentFindings         String   @map("assessment_findings") @db.Text
+  labUpdates                 Json?    @map("lab_updates")
+  questionStem               String   @map("question_stem") @db.Text
+  optionsJson                Json     @map("options_json")
+  correctOptionId            String   @map("correct_option_id") @db.VarChar(32)
+  rationale                  String   @db.Text
+  whyWrongByOptionId         Json     @map("why_wrong_by_option_id")
+  clinicalJudgmentFocus      String   @map("clinical_judgment_focus") @db.Text
+  consequencesByOptionId     Json     @map("consequences_by_option_id")
+  nextStageOrder             Int?     @map("next_stage_order")
+
+  scenario ClinicalNursingScenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+
+  @@unique([scenarioId, orderIndex])
+  @@index([scenarioId])
+  @@map("clinical_nursing_scenario_stages")
 }
 
 model Exam {
@@ -2410,6 +2591,65 @@ enum FlashcardItemKind {
   CLINICAL
   PRIORITY
   CONCEPT
+}
+
+/// * Verified study card deck visibility (not the marketing flashcard deck visibility enum).
+enum VerifiedStudyDeckVisibility {
+  PRIVATE
+  SHARED
+  PUBLIC
+  UNLISTED
+}
+
+enum VerifiedStudyVerificationStatus {
+  UNVERIFIED
+  AI_GENERATED
+  VERIFIED
+  REJECTED
+}
+
+enum VerifiedStudyModerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum VerifiedStudySourceType {
+  EXAM_BANK
+  LESSON
+  USER_CREATED
+  AI_GENERATED
+  LEGACY_IMPORT
+}
+
+enum VerifiedStudyDeckSharePermission {
+  VIEW
+  EDIT
+}
+
+enum VerifiedStudyDeckReportStatus {
+  OPEN
+  RESOLVED
+  DISMISSED
+}
+
+enum ClinicalNursingScenarioTier {
+  RN_NCLEX_RN
+  RPN_PN
+  NP
+  NEW_GRAD
+}
+
+enum ClinicalNursingScenarioDifficulty {
+  FOUNDATION
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum ClinicalNursingScenarioPublishStatus {
+  DRAFT
+  IN_REVIEW
+  APPROVED
 }
 
 /// * Learner / visitor product feedback and bug intake (admin triage).

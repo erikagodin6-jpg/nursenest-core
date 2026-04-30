@@ -1,5 +1,9 @@
 export const STUDY_TOOL_ROUTES = {
   hub: "/app/study-tools",
+  decks: "/app/study-tools/decks",
+  createDeck: "/app/study-tools/create",
+  sharedDecks: "/app/study-tools/shared",
+  publicDecks: "/app/study-tools/public",
   matching: "/app/matching",
   fillInTheBlank: "/app/fill-in-the-blank",
   ordering: "/app/ordering",

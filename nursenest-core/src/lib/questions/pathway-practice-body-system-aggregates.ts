@@ -7,6 +7,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   normalizeQuestionBodySystem,
   PRACTICE_BODY_SYSTEM_HUB_META,
+  PRACTICE_BODY_SYSTEM_HUB_IDS,
   type PracticeBodySystemHubId,
 } from "@/lib/questions/normalize-question-body-system";
 
@@ -31,46 +32,52 @@ type HubAccumulator = {
 
 function emptyAccumulators(): Record<PracticeBodySystemHubId, HubAccumulator> {
   const out = {} as Record<PracticeBodySystemHubId, HubAccumulator>;
-  const ids: PracticeBodySystemHubId[] = [
-    "cardiovascular",
-    "respiratory",
-    "neurological",
-    "gastrointestinal",
-    "endocrine",
-    "renal_urinary",
-    "musculoskeletal",
-    "integumentary",
-    "hematology_oncology",
-    "immune_infection",
-    "maternity_reproductive",
-    "pediatrics",
-    "mental_health",
-    "pharmacology",
-    "fundamentals_safety",
-    "leadership_prioritization",
-    "community_public_health",
-    "emergency_critical_care",
-    "uncategorized",
-  ];
-  for (const id of ids) {
+  for (const id of PRACTICE_BODY_SYSTEM_HUB_IDS) {
     out[id] = { count: 0, topics: new Set(), bodySystems: new Set() };
   }
   return out;
 }
 
-async function computeAggregates(pathway: ExamPathwayDefinition): Promise<PracticeBodySystemHubAggregate[]> {
-  const base = pathwayExamQuestionMarketingWhere(pathway);
-  const rows = await prisma.examQuestion.groupBy({
-    by: ["bodySystem", "topic"],
-    where: base,
-    _count: { _all: true },
+/** Full hub_inventory skeleton (lessons / flashcards parity): every canonical hub row, including zero counts. */
+export function buildSkeletonPracticeHubAggregates(): PracticeBodySystemHubAggregate[] {
+  const ordered: PracticeBodySystemHubAggregate[] = PRACTICE_BODY_SYSTEM_HUB_META.map((meta) => ({
+    id: meta.id,
+    label: meta.label,
+    description: meta.description,
+    questionCount: 0,
+    matchingTopics: [],
+    matchingBodySystems: [],
+  }));
+  ordered.push({
+    id: "uncategorized",
+    label: "Other / multi-topic",
+    description: "Items that did not map cleanly to a single body system from current metadata.",
+    questionCount: 0,
+    matchingTopics: [],
+    matchingBodySystems: [],
   });
+  return ordered;
+}
 
+export type PracticeHubGroupByRow = {
+  bodySystem: string | null;
+  topic: string | null;
+  nclexClientNeedsCategory: string | null;
+  _count: { _all: number };
+};
+
+/**
+ * Pure merge of `groupBy` rows into the canonical hub skeleton (for tests and SSR hydration).
+ */
+export function hydratePracticeHubAggregatesFromGroupByRows(
+  rows: readonly PracticeHubGroupByRow[],
+): PracticeBodySystemHubAggregate[] {
   const acc = emptyAccumulators();
   for (const row of rows) {
     const hub = normalizeQuestionBodySystem({
       bodySystem: row.bodySystem,
       topic: row.topic,
+      nclexClientNeedsCategory: row.nclexClientNeedsCategory,
     });
     const bucket = acc[hub];
     bucket.count += row._count._all;
@@ -80,51 +87,51 @@ async function computeAggregates(pathway: ExamPathwayDefinition): Promise<Practi
     if (b) bucket.bodySystems.add(b);
   }
 
-  const ordered: PracticeBodySystemHubAggregate[] = [];
+  const skeleton = buildSkeletonPracticeHubAggregates();
+  const byId = new Map(skeleton.map((s) => [s.id, s]));
 
   for (const meta of PRACTICE_BODY_SYSTEM_HUB_META) {
     const a = acc[meta.id];
-    if (!a || a.count === 0) continue;
-    ordered.push({
-      id: meta.id,
-      label: meta.label,
-      description: meta.description,
-      questionCount: a.count,
-      matchingTopics: [...a.topics],
-      matchingBodySystems: [...a.bodySystems],
-    });
+    const row = byId.get(meta.id)!;
+    row.questionCount = a?.count ?? 0;
+    row.matchingTopics = a ? [...a.topics] : [];
+    row.matchingBodySystems = a ? [...a.bodySystems] : [];
   }
-
+  const unRow = byId.get("uncategorized")!;
   const un = acc.uncategorized;
-  if (un && un.count > 0) {
-    ordered.push({
-      id: "uncategorized",
-      label: "Other / multi-topic",
-      description: "Items that did not map cleanly to a single body system from current metadata.",
-      questionCount: un.count,
-      matchingTopics: [...un.topics],
-      matchingBodySystems: [...un.bodySystems],
-    });
-  }
+  unRow.questionCount = un?.count ?? 0;
+  unRow.matchingTopics = un ? [...un.topics] : [];
+  unRow.matchingBodySystems = un ? [...un.bodySystems] : [];
 
-  return ordered;
+  return skeleton;
+}
+
+async function computeAggregates(pathway: ExamPathwayDefinition): Promise<PracticeBodySystemHubAggregate[]> {
+  const base = pathwayExamQuestionMarketingWhere(pathway);
+  const rows = await prisma.examQuestion.groupBy({
+    by: ["bodySystem", "topic", "nclexClientNeedsCategory"],
+    where: base,
+    _count: { _all: true },
+  });
+  return hydratePracticeHubAggregatesFromGroupByRows(rows);
 }
 
 export async function loadPathwayPracticeBodySystemHubAggregates(
   pathwayId: string,
 ): Promise<PracticeBodySystemHubAggregate[]> {
+  const fallback = buildSkeletonPracticeHubAggregates();
   try {
     return await unstable_cache(
       async () => {
         const pathway = getExamPathwayById(pathwayId);
-        if (!pathway) return [];
+        if (!pathway) return fallback;
         return computeAggregates(pathway);
       },
       ["pathway-practice-body-system-aggregates", pathwayId],
       { revalidate: REVALIDATE_SECONDS, tags: [`pathway-questions:${pathwayId}`] },
     )();
   } catch {
-    return [];
+    return fallback;
   }
 }
 

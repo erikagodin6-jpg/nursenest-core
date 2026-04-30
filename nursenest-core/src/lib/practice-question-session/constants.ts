@@ -74,3 +74,7 @@ export const DEFAULT_PRACTICE_MODE: PracticeSessionMode = "tutor";
 export const DEFAULT_SHUFFLE = true;
 
 export const PRACTICE_QUESTION_COUNTS = [10, 20, 30, 50] as const;
+
+/** Marketing + session URL: intent strip for empty-state copy and analytics (not all API paths consume every value). */
+export const PRACTICE_SESSION_STUDY_FILTERS = ["all", "weak", "incorrect", "unseen", "bookmarked"] as const;
+export type PracticeSessionStudyFilter = (typeof PRACTICE_SESSION_STUDY_FILTERS)[number];

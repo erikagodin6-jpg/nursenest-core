@@ -79,6 +79,7 @@ const GROUPS: NavGroup[] = [
       { href: "/admin/content", label: "Coverage & quality", icon: Layers },
       { href: "/admin/lessons", label: "Lessons", icon: GraduationCap },
       { href: "/admin/questions", label: "Question bank", icon: ClipboardList },
+      { href: "/admin/study-cards", label: "Verified study cards", icon: ListTodo },
       { href: "/admin/media", label: "Media library", icon: ImageIcon },
     ],
   },

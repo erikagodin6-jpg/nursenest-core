@@ -90,6 +90,16 @@ export type PracticeAdaptiveSelectionBasis = "random" | "weak" | "missed" | "sta
  */
 export type PracticeAdaptiveSelectionStrictness = "soft" | "strict";
 
+/** Echoes marketing / hub launch context; validated by `POST /api/practice-tests` when present. */
+export type PracticeAdaptiveStudyLaunchPayload = {
+  pathwayId?: string | null;
+  mode?: string;
+  selectedCategories?: string[];
+  filters?: Record<string, string | number | boolean | null>;
+  count?: number;
+  shuffle?: boolean;
+};
+
 export type PracticeAdaptiveCreatePayload = {
   title: string;
   questionCount: number;
@@ -104,6 +114,7 @@ export type PracticeAdaptiveCreatePayload = {
   timedMode: false;
   timeLimitSec: 0;
   selectionStrictness: PracticeAdaptiveSelectionStrictness;
+  studyLaunchPayload?: PracticeAdaptiveStudyLaunchPayload;
 };
 
 /**
@@ -123,6 +134,7 @@ export function buildPracticeAdaptiveCreatePayload(opts: {
   catSelectionBasis: PracticeAdaptiveSelectionBasis;
   questionCount: number;
   selectionStrictness?: PracticeAdaptiveSelectionStrictness;
+  studyLaunchPayload?: PracticeAdaptiveStudyLaunchPayload;
 }): PracticeAdaptiveCreatePayload {
   return {
     title: "Adaptive Practice Session",
@@ -138,6 +150,7 @@ export function buildPracticeAdaptiveCreatePayload(opts: {
     timedMode: false,
     timeLimitSec: 0,
     selectionStrictness: opts.selectionStrictness ?? "soft",
+    ...(opts.studyLaunchPayload ? { studyLaunchPayload: opts.studyLaunchPayload } : {}),
   };
 }
 

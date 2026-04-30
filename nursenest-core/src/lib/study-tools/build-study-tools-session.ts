@@ -306,7 +306,7 @@ export async function buildStudyToolsSession(args: {
           const canon = pathwayHubCategoryToCanonical(
             pathway.id,
             (c.subtopic ?? "uncategorized").trim() || "uncategorized",
-            (c as { rawTopic?: string }).rawTopic ?? c.topic ?? "",
+            c.rawTopic ?? c.topic ?? "",
           );
           const med: StudyToolMedicationItem = {
             kind: "medication_drills",

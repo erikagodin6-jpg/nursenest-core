@@ -5,6 +5,10 @@ import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/
 
 const NAV_DEF: { key: keyof typeof STUDY_TOOL_ROUTES; label: string }[] = [
   { key: "hub", label: "Study hub" },
+  { key: "decks", label: "Verified decks" },
+  { key: "createDeck", label: "New deck" },
+  { key: "sharedDecks", label: "Shared with me" },
+  { key: "publicDecks", label: "Community" },
   { key: "matching", label: "Matching" },
   { key: "fillInTheBlank", label: "Fill-in-the-blank" },
   { key: "ordering", label: "Ordering" },

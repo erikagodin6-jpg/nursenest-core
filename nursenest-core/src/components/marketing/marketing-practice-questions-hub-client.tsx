@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
+  Bookmark,
   ChevronDown,
   ChevronUp,
-  ClipboardList,
   EyeOff,
   LayoutGrid,
   LineChart,
@@ -14,7 +14,10 @@ import {
   TrendingDown,
   XCircle,
 } from "lucide-react";
-import { buildPracticeAdaptiveCreatePayload } from "@/components/student/pathway-cat-start-payload";
+import {
+  buildPracticeAdaptiveCreatePayload,
+  type PracticeAdaptiveSelectionBasis,
+} from "@/components/student/pathway-cat-start-payload";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { pathwayAppQuestionBankTopicHref } from "@/components/lessons/pathway-lesson-link-practice";
@@ -25,6 +28,10 @@ import {
   type PracticeBodySystemHubId,
 } from "@/lib/questions/normalize-question-body-system";
 import type { PracticeBodySystemHubAggregate } from "@/lib/questions/pathway-practice-body-system-aggregates";
+import {
+  PRACTICE_SESSION_STUDY_FILTERS,
+  type PracticeSessionStudyFilter,
+} from "@/lib/practice-question-session/constants";
 
 export type MarketingPracticeQuestionsTopicCluster = {
   topicSlug: string;
@@ -52,14 +59,48 @@ function cardSelected() {
 const cardUnselected = `${cardBase} border-[color-mix(in_srgb,var(--semantic-info)_16%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] hover:bg-[var(--semantic-panel-muted)]`;
 
 function appQuestionsBase(pathwayId: string, qs: Record<string, string>) {
-  const p = new URLSearchParams({ pathwayId, ...qs });
+  const p = new URLSearchParams({ pathwayId });
+  for (const [k, v] of Object.entries(qs)) {
+    if (!v) continue;
+    if (k === "studyFilter" && v === "all") continue;
+    p.set(k, v);
+  }
   return loginWithCallback(`/app/questions?${p.toString()}`);
 }
 
 function appQuestionsSession(pathwayId: string, qs: Record<string, string>) {
-  const p = new URLSearchParams({ pathwayId, ...qs });
+  const p = new URLSearchParams({ pathwayId });
+  for (const [k, v] of Object.entries(qs)) {
+    if (!v) continue;
+    if (k === "studyFilter" && v === "all") continue;
+    p.set(k, v);
+  }
   return loginWithCallback(`/app/questions/session?${p.toString()}`);
 }
+
+function catBasisFromStudyFilter(sf: PracticeSessionStudyFilter): PracticeAdaptiveSelectionBasis {
+  if (sf === "weak") return "weak";
+  if (sf === "incorrect") return "missed";
+  if (sf === "unseen") return "unseen";
+  if (sf === "bookmarked") return "starred";
+  return "random";
+}
+
+const FILTER_ICONS: Record<PracticeSessionStudyFilter, typeof LayoutGrid> = {
+  all: LayoutGrid,
+  weak: TrendingDown,
+  incorrect: XCircle,
+  unseen: EyeOff,
+  bookmarked: Bookmark,
+};
+
+const FILTER_LABELS: Record<PracticeSessionStudyFilter, string> = {
+  all: "All",
+  weak: "Weak areas",
+  incorrect: "Incorrect review",
+  unseen: "Unseen",
+  bookmarked: "Bookmarked",
+};
 
 export function MarketingPracticeQuestionsHubClient({
   pathway,
@@ -70,11 +111,75 @@ export function MarketingPracticeQuestionsHubClient({
   marketingCatHref,
 }: MarketingPracticeQuestionsHubClientProps) {
   const [selected, setSelected] = useState<Set<PracticeBodySystemHubId>>(new Set());
+  const [studyFilter, setStudyFilter] = useState<PracticeSessionStudyFilter>("all");
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [startingAdaptive, setStartingAdaptive] = useState(false);
   const [adaptiveError, setAdaptiveError] = useState<string | null>(null);
 
   const pid = pathway.id;
+
+  const hubIdsParam = useMemo(() => [...selected].sort().join(","), [selected]);
+
+  const withHubRecord = useCallback(
+    (o: Record<string, string>) => {
+      const next = { ...o };
+      if (hubIdsParam) next.practiceHubIds = hubIdsParam;
+      if (studyFilter !== "all") next.studyFilter = studyFilter;
+      return next;
+    },
+    [hubIdsParam, studyFilter],
+  );
+
+  const startMixedHref = appQuestionsBase(pid, { preset: "pathway_mixed" });
+  const weakHref = appQuestionsBase(pid, withHubRecord({ preset: "pathway_mixed", studyMode: "weak" }));
+  const incorrectHref = appQuestionsSession(
+    pid,
+    withHubRecord({ source: "previously_incorrect", count: "20", mode: "tutor", shuffle: "true" }),
+  );
+  const unseenHref = appQuestionsSession(
+    pid,
+    withHubRecord({ source: "not_studied", count: "20", mode: "tutor", shuffle: "true" }),
+  );
+  const bookmarkedHref = appQuestionsBase(pid, withHubRecord({ preset: "pathway_mixed", studyFilter: "bookmarked" }));
+
+  const startPrimaryHref = useMemo(() => {
+    if (studyFilter === "incorrect") return incorrectHref;
+    if (studyFilter === "unseen") return unseenHref;
+    if (studyFilter === "weak") return weakHref;
+    if (studyFilter === "bookmarked") return bookmarkedHref;
+    if (selected.size > 0) return appQuestionsBase(pid, withHubRecord({ preset: "pathway_mixed" }));
+    return startMixedHref;
+  }, [
+    studyFilter,
+    incorrectHref,
+    unseenHref,
+    weakHref,
+    bookmarkedHref,
+    selected.size,
+    pid,
+    withHubRecord,
+    startMixedHref,
+  ]);
+
+  const catAppHref = loginWithCallback(appPathwayCatSessionStartPath(pid));
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return;
+    const total = aggregates.reduce((s, a) => s + a.questionCount, 0);
+    const unc = aggregates.find((a) => a.id === "uncategorized")?.questionCount ?? 0;
+    const normalized = aggregates.filter((a) => a.questionCount > 0).map((a) => a.id);
+    // eslint-disable-next-line no-console -- dev-only practice hub diagnostics (spec)
+    console.info("[nn-practice-questions-hub]", {
+      pathwayId: pid,
+      categoryRowCount: aggregates.length,
+      totalQuestionCount: total,
+      uncategorizedCount: unc,
+      normalizedCategoryUsage: normalized,
+      studyFilter,
+      selectedCategoryCount: selected.size,
+      hydrationStatus: aggregates.length > 0 ? "ok" : "empty",
+    });
+  }, [pid, aggregates, studyFilter, selected.size]);
 
   const filteredClusters = useMemo(() => {
     if (selected.size !== 1) return [];
@@ -99,47 +204,47 @@ export function MarketingPracticeQuestionsHubClient({
 
   const clearSelection = useCallback(() => setSelected(new Set()), []);
 
-  const hubIdsParam = useMemo(() => [...selected].sort().join(","), [selected]);
-
-  const startMixedHref = appQuestionsBase(pid, { preset: "pathway_mixed" });
-  const startHubDrillHref =
-    selected.size > 0 ? appQuestionsBase(pid, { preset: "pathway_mixed", practiceHubIds: hubIdsParam }) : startMixedHref;
-
-  const weakHref = appQuestionsBase(pid, { preset: "pathway_mixed", studyMode: "weak" });
-  const incorrectHref = appQuestionsSession(pid, {
-    source: "previously_incorrect",
-    count: "20",
-    mode: "tutor",
-    shuffle: "true",
-  });
-  const unseenHref = appQuestionsSession(pid, {
-    source: "not_studied",
-    count: "20",
-    mode: "tutor",
-    shuffle: "true",
-  });
-
-  const catAppHref = loginWithCallback(appPathwayCatSessionStartPath(pid));
-
   async function startAdaptivePractice() {
     if (startingAdaptive) return;
     setAdaptiveError(null);
     setStartingAdaptive(true);
     try {
       const topicNames = practiceHubIdsToCatTopicNames([...selected]);
+      const selectedCategories = [...selected].sort();
       const payload = buildPracticeAdaptiveCreatePayload({
         pathwayId: pid,
         topicNames,
-        catSelectionBasis: "random",
+        catSelectionBasis: catBasisFromStudyFilter(studyFilter),
         questionCount: 30,
         selectionStrictness: "soft",
+        studyLaunchPayload: {
+          pathwayId: pid,
+          mode: "adaptive_practice",
+          selectedCategories,
+          filters: {
+            studyFilter,
+            weakOnly: studyFilter === "weak",
+            incorrectOnly: studyFilter === "incorrect",
+            unseenOnly: studyFilter === "unseen",
+            bookmarkedOnly: studyFilter === "bookmarked",
+          },
+          count: 30,
+          shuffle: true,
+        },
       });
       const res = await fetch("/api/practice-tests", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-nn-study-launch-surface": "marketing_questions_hub" },
         body: JSON.stringify(payload),
       });
-      const data = (await res.json()) as { id?: string; error?: string };
+      const raw = await res.text();
+      let data: { id?: string; error?: string };
+      try {
+        data = JSON.parse(raw) as { id?: string; error?: string };
+      } catch {
+        setAdaptiveError("Invalid server response.");
+        return;
+      }
       if (res.ok && data.id) {
         window.location.href = `/app/practice-tests/${data.id}`;
         return;
@@ -155,11 +260,11 @@ export function MarketingPracticeQuestionsHubClient({
   const modeCards = [
     {
       icon: LayoutGrid,
-      title: "Practice by body system",
-      description: "Select one or more systems below, then start a focused session.",
+      title: "Practice by category",
+      description: "Select one or more body-system hubs below, then start a focused session.",
       href: "#practice-body-systems",
       accent: "success" as const,
-      cta: "Select systems",
+      cta: "Select categories",
     },
     {
       icon: Shuffle,
@@ -210,7 +315,7 @@ export function MarketingPracticeQuestionsHubClient({
           Practice modes
         </h2>
         <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
-          Pick how you want to study. Body-system filters apply to mixed practice and adaptive study sessions.
+          Pick how you want to study. Body-system filters apply to mixed practice, sessions, and adaptive study launches.
         </p>
         <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {modeCards.map((m) => {
@@ -257,11 +362,11 @@ export function MarketingPracticeQuestionsHubClient({
         <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 id="body-systems-heading" className="text-base font-semibold text-[var(--theme-heading-text)]">
-              Body systems
+              Body systems & categories
             </h2>
             <p className="mt-1 max-w-2xl text-sm text-[var(--theme-muted-text)]">
-              Select one or more systems for {examDisplayName}. Counts reflect the published question bank in this
-              pathway&apos;s scope.
+              Select one or more hubs for {examDisplayName}. Counts reflect the published question bank in this
+              pathway&apos;s scope (including zero-count hubs so the grid stays stable).
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -280,6 +385,35 @@ export function MarketingPracticeQuestionsHubClient({
               Clear
             </button>
           </div>
+        </div>
+
+        <div
+          className="mb-4 flex flex-wrap gap-2 rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] p-3"
+          data-testid="practice-hub-filter-strip"
+          role="toolbar"
+          aria-label="Question filters"
+        >
+          {PRACTICE_SESSION_STUDY_FILTERS.map((id) => {
+            const Icon = FILTER_ICONS[id];
+            const on = studyFilter === id;
+            return (
+              <button
+                key={id}
+                type="button"
+                aria-pressed={on}
+                data-testid={`practice-hub-filter-${id}`}
+                onClick={() => setStudyFilter(id)}
+                className={`inline-flex min-h-[36px] items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                  on
+                    ? "border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
+                    : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-panel-muted)]"
+                }`}
+              >
+                <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                {FILTER_LABELS[id]}
+              </button>
+            );
+          })}
         </div>
 
         <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2" data-testid="practice-body-system-cards">
@@ -312,13 +446,27 @@ export function MarketingPracticeQuestionsHubClient({
             })}
         </ul>
 
+        {aggregates.some((a) => a.id === "uncategorized" && a.questionCount > 0) ? (
+          <p className="mt-3 text-xs text-[var(--theme-muted-text)]">
+            Other / multi-topic:{" "}
+            <span className="font-semibold text-[var(--semantic-text-secondary)]">
+              {aggregates.find((a) => a.id === "uncategorized")?.questionCount ?? 0} questions
+            </span>{" "}
+            did not map to a single hub (still available in mixed practice).
+          </p>
+        ) : null}
+
         <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <Link
-            href={startHubDrillHref}
+            href={startPrimaryHref}
             className="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-5 py-2 text-sm font-semibold nn-text-on-solid-fill hover:opacity-90"
             data-testid="start-selected-systems-practice"
           >
-            {selected.size > 0 ? "Start practice (selected systems)" : "Start mixed practice (all systems)"}
+            {studyFilter !== "all"
+              ? `Start practice (${FILTER_LABELS[studyFilter].toLowerCase()})`
+              : selected.size > 0
+                ? "Start practice (selected hubs)"
+                : "Start mixed practice (all hubs)"}
           </Link>
           <button
             type="button"
@@ -332,6 +480,7 @@ export function MarketingPracticeQuestionsHubClient({
           <Link
             href={marketingCatHref}
             className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-5 py-2 text-sm font-semibold text-[var(--semantic-brand)] hover:bg-[var(--semantic-panel-muted)]"
+            data-testid="marketing-cat-overview-link"
           >
             CAT overview (marketing)
           </Link>
@@ -388,7 +537,7 @@ export function MarketingPracticeQuestionsHubClient({
           <Link href={lessonsHref} className="text-[var(--semantic-brand)] hover:underline">
             Browse lessons
           </Link>
-          <Link href={catAppHref} className="text-[var(--semantic-brand)] hover:underline">
+          <Link href={catAppHref} className="text-[var(--semantic-brand)] hover:underline" data-testid="quick-cat-app-link">
             CAT (app)
           </Link>
           <Link href={startMixedHref} className="text-[var(--semantic-brand)] hover:underline">

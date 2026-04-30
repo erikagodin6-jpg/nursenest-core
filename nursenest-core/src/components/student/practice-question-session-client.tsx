@@ -138,10 +138,19 @@ export function PracticeQuestionSessionClient({
       mode,
       shuffle,
       userId,
+      practiceHubIds: parsed.practiceHubIds,
     });
     void fetch(`/api/questions?${qs.toString()}`)
       .then(async (res) => {
-        const data = (await res.json()) as { questions?: QFull[]; error?: string };
+        const rawText = await res.text();
+        let data: { questions?: QFull[]; error?: string };
+        try {
+          data = JSON.parse(rawText) as { questions?: QFull[]; error?: string };
+        } catch {
+          setError("Invalid server response.");
+          setPhase("error");
+          return;
+        }
         if (!res.ok) {
           setError(data.error ?? "Could not load questions.");
           setPhase("error");
@@ -165,7 +174,7 @@ export function PracticeQuestionSessionClient({
         setError("Could not load questions.");
         setPhase("error");
       });
-  }, [pathwayId, source, parsed.categorySlug, count, mode, shuffle, userId]);
+  }, [pathwayId, source, parsed.categorySlug, parsed.practiceHubIds, count, mode, shuffle, userId]);
 
   useEffect(() => {
     reloadParams();
@@ -321,10 +330,31 @@ export function PracticeQuestionSessionClient({
   }
 
   if (phase === "empty") {
+    const sf = parsed.studyFilter ?? "all";
+    const emptyTitle =
+      source === "previously_incorrect" || sf === "incorrect"
+        ? "No incorrect-review items yet"
+        : source === "not_studied" || sf === "unseen"
+          ? "No unseen questions match this scope"
+          : source === "weak_areas" || sf === "weak"
+            ? "No weak-area targets in this slice yet"
+            : sf === "bookmarked"
+              ? "No bookmarked items for this launch"
+              : "No questions match these filters yet";
+    const emptyBody =
+      source === "previously_incorrect" || sf === "incorrect"
+        ? "Answer questions in practice or the bank first — we will pull recent misses here."
+        : source === "not_studied" || sf === "unseen"
+          ? "You may have opened most items already, or the pathway pool is narrow for this filter."
+          : source === "weak_areas" || sf === "weak"
+            ? "Keep practicing — weak targeting improves once you have attempt history."
+            : sf === "bookmarked"
+              ? "Star items during practice or use saved presets in the full question bank."
+              : "Try Mixed Review, widen body-system selection, or adjust filters.";
     return (
       <div className="nn-card space-y-3 p-6 text-sm text-[var(--semantic-text-secondary)]">
-        <p className="font-medium text-[var(--semantic-text-primary)]">No questions match these filters yet.</p>
-        <p>Try Mixed Review or another category.</p>
+        <p className="font-medium text-[var(--semantic-text-primary)]">{emptyTitle}</p>
+        <p>{emptyBody}</p>
         <Link
           href={`/app/questions${pathwayId ? `?pathwayId=${encodeURIComponent(pathwayId)}` : ""}`}
           className="inline-flex font-semibold text-[var(--semantic-brand)] underline"

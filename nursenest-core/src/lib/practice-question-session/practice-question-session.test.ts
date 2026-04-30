@@ -18,6 +18,8 @@ describe("parsePracticeSessionSearchParams", () => {
     assert.equal(p.shuffle, DEFAULT_SHUFFLE);
     assert.equal(p.pathwayId, null);
     assert.equal(p.categorySlug, null);
+    assert.equal(p.practiceHubIds, null);
+    assert.equal(p.studyFilter, "all");
   });
 
   it("parses pathway, source, category, count, mode, shuffle", () => {
@@ -32,6 +34,14 @@ describe("parsePracticeSessionSearchParams", () => {
     assert.equal(p.count, 30);
     assert.equal(p.mode, "exam");
     assert.equal(p.shuffle, false);
+  });
+
+  it("parses practiceHubIds and studyFilter", () => {
+    const p = parsePracticeSessionSearchParams(
+      new URLSearchParams("pathwayId=us-rn-nclex-rn&practiceHubIds=pharmacology,cardiovascular&studyFilter=weak"),
+    );
+    assert.equal(p.practiceHubIds, "pharmacology,cardiovascular");
+    assert.equal(p.studyFilter, "weak");
   });
 });
 
@@ -53,6 +63,24 @@ describe("practiceSessionUrl", () => {
     assert.equal(q.get("mode"), "tutor");
     assert.equal(q.get("shuffle"), "true");
     assert.equal(q.get("category"), null);
+    assert.equal(q.get("practiceHubIds"), null);
+    assert.equal(q.get("studyFilter"), null);
+  });
+
+  it("includes practiceHubIds and studyFilter when provided", () => {
+    const href = practiceSessionUrl({
+      pathwayId: "us-rn-nclex-rn",
+      source: "previously_incorrect",
+      categorySlug: null,
+      count: 20,
+      mode: "tutor",
+      shuffle: true,
+      practiceHubIds: "renal_urinary,pharmacology",
+      studyFilter: "incorrect",
+    });
+    const q = new URLSearchParams(href.split("?")[1] ?? "");
+    assert.equal(q.get("practiceHubIds"), "renal_urinary,pharmacology");
+    assert.equal(q.get("studyFilter"), "incorrect");
   });
 });
 
@@ -98,5 +126,19 @@ describe("buildQuestionListSearchParams", () => {
     });
     assert.equal(qs.get("topic"), "Cardiovascular");
     assert.equal(qs.get("sort"), "recent");
+  });
+
+  it("forwards practiceHubIds to the questions API", () => {
+    const qs = buildQuestionListSearchParams({
+      pathwayId: "us-rn-nclex-rn",
+      source: "mixed_review",
+      categorySlug: null,
+      count: 20,
+      mode: "tutor",
+      shuffle: true,
+      userId: "user_test_1234567890",
+      practiceHubIds: "fundamentals_safety,pharmacology",
+    });
+    assert.equal(qs.get("practiceHubIds"), "fundamentals_safety,pharmacology");
   });
 });

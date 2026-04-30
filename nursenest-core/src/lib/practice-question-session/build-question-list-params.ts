@@ -12,13 +12,15 @@ export type BuildQuestionListParamsInput = {
   mode: PracticeSessionMode;
   shuffle: boolean;
   userId: string;
+  /** Forwarded to `GET /api/questions` to scope the pool to selected body-system hubs. */
+  practiceHubIds?: string | null;
 };
 
 /**
  * Builds `URLSearchParams` for `GET /api/questions` (subscriber preview/full list).
  */
 export function buildQuestionListSearchParams(input: BuildQuestionListParamsInput): URLSearchParams {
-  const { pathwayId, source, categorySlug, count, mode, shuffle, userId } = input;
+  const { pathwayId, source, categorySlug, count, mode, shuffle, userId, practiceHubIds } = input;
   const qs = new URLSearchParams({
     mode: "full",
     page: "1",
@@ -26,6 +28,8 @@ export function buildQuestionListSearchParams(input: BuildQuestionListParamsInpu
     sort: shuffle ? "random" : "recent",
   });
   qs.set("pathwayId", pathwayId);
+  const hub = practiceHubIds?.trim();
+  if (hub && hub.length > 0) qs.set("practiceHubIds", hub);
 
   const topic =
     categorySlug && (source === "body_systems" || source === "nursing_categories")

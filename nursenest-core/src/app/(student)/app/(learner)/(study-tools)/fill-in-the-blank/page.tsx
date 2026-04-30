@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { StudyToolsActivityShell } from "@/components/study-tools/study-tools-activity-shell";
+import { StudyToolsWorkspaceClient } from "@/components/study-tools/study-tools-workspace-client";
 import { buildStudyToolsActivityMetadata } from "@/lib/study-tools/study-tools-metadata";
+import { pathwayIdFromLearnerSearchParams } from "@/lib/study-tools/study-tools-page-params.server";
 
 type PageProps = { searchParams: Promise<{ pathwayId?: string | string[] }> };
 
@@ -8,21 +11,23 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildStudyToolsActivityMetadata("Fill-in-the-blank");
 }
 
-async function pathwayIdFromSearch(sp: PageProps["searchParams"]): Promise<string | null> {
-  const raw = await sp;
-  const pid = raw.pathwayId;
-  if (typeof pid === "string" && pid.trim()) return pid.trim();
-  if (Array.isArray(pid) && typeof pid[0] === "string" && pid[0].trim()) return pid[0].trim();
-  return null;
-}
-
 export default async function FillInTheBlankStudyToolsPage({ searchParams }: PageProps) {
-  const pathwayId = await pathwayIdFromSearch(searchParams);
+  const pathwayId = await pathwayIdFromLearnerSearchParams(searchParams);
+  const session = await getProtectedRouteSession("(student).app.(learner).study-tools.fill-in-the-blank");
+  const userId = (session?.user as { id?: string })?.id ?? "";
   return (
     <StudyToolsActivityShell
       title="Fill-in-the-blank"
-      description="Cloze-style recall for high-yield facts. Draft scaffold — wired to pathwayId for future scoped item banks."
+      description="Cloze-style recall from stems in your pathway-scoped question bank."
       pathwayId={pathwayId}
-    />
+    >
+      <StudyToolsWorkspaceClient
+        userId={userId}
+        pathwayId={pathwayId}
+        mode="fill_in_the_blank"
+        heroTitle="Fill-in-the-blank"
+        heroSubtitle="Blanks are derived from high-signal terms in item stems (bounded, non-destructive)."
+      />
+    </StudyToolsActivityShell>
   );
 }

@@ -3,6 +3,9 @@
  */
 
 import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { SCENARIO_LEARNER_ROUTES, withScenarioPathwayQuery } from "@/lib/scenarios/scenario-routes";
+import { isClinicalScenariosPubliclyEnabled } from "@/lib/clinical-scenarios/clinical-scenarios-feature-flag";
+import { isOsceScenariosPubliclyEnabled } from "@/lib/scenarios/osce-scenarios-feature-flag";
 import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
 import { isStudyToolsPubliclyEnabled } from "@/lib/study-tools/study-tools-feature-flag";
 
@@ -10,6 +13,8 @@ export const CANONICAL_LEARNER_ROUTES = {
   lessons: "/app/lessons",
   practice: "/app/questions",
   flashcards: "/app/flashcards",
+  osce: SCENARIO_LEARNER_ROUTES.osce,
+  clinicalScenarios: SCENARIO_LEARNER_ROUTES.clinicalScenarios,
   /** CAT adaptive entry */
   cat: "/app/practice-tests/start",
   catBuilder: "/app/practice-tests",
@@ -36,7 +41,16 @@ export const LEARNER_PRIMARY_NAV_ITEM_KEY = "practice" as const satisfies Extrac
 /** Appended after flashcards when {@link isStudyToolsPubliclyEnabled} is true. */
 export const STUDY_TOOLS_SHELL_NAV_ID = "study_tools" as const;
 
-export type LearnerShellStudyNavRowId = LearnerPrimaryNavItem["key"] | typeof STUDY_TOOLS_SHELL_NAV_ID;
+/** Appended when {@link isOsceScenariosPubliclyEnabled} is true (nursing OSCE). */
+export const OSCE_SHELL_NAV_ID = "osce" as const;
+/** Appended when {@link isClinicalScenariosPubliclyEnabled} is true (nursing clinical scenarios). */
+export const CLINICAL_SCENARIOS_SHELL_NAV_ID = "clinical_scenarios" as const;
+
+export type LearnerShellStudyNavRowId =
+  | LearnerPrimaryNavItem["key"]
+  | typeof STUDY_TOOLS_SHELL_NAV_ID
+  | typeof OSCE_SHELL_NAV_ID
+  | typeof CLINICAL_SCENARIOS_SHELL_NAV_ID;
 
 /** Whether this nav row is the designated primary study entry (visual emphasis in header + shell). */
 export function isLearnerPrimaryNavKey(key: LearnerShellStudyNavRowId | string): boolean {
@@ -106,5 +120,37 @@ export function buildOptionalStudyToolsShellNavItem(pathwayId: string | null): {
     href: withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.hub, pathwayId),
     matchPrefix: "/app/study-tools",
     labelKey: "learner.shell.nav.studyTools",
+  };
+}
+
+export function buildOptionalOsceScenarioShellNavItems(pathwayId: string | null): Array<{
+  id: typeof OSCE_SHELL_NAV_ID;
+  href: string;
+  matchPrefix: string;
+  labelKey: string;
+}> {
+  if (!isOsceScenariosPubliclyEnabled()) return [];
+  return [
+    {
+      id: OSCE_SHELL_NAV_ID,
+      href: withScenarioPathwayQuery(SCENARIO_LEARNER_ROUTES.osce, pathwayId),
+      matchPrefix: "/app/osce",
+      labelKey: "learner.shell.nav.osce",
+    },
+  ];
+}
+
+export function buildOptionalClinicalScenariosShellNavItem(pathwayId: string | null): {
+  id: typeof CLINICAL_SCENARIOS_SHELL_NAV_ID;
+  href: string;
+  matchPrefix: string;
+  labelKey: string;
+} | null {
+  if (!isClinicalScenariosPubliclyEnabled()) return null;
+  return {
+    id: CLINICAL_SCENARIOS_SHELL_NAV_ID,
+    href: withScenarioPathwayQuery(SCENARIO_LEARNER_ROUTES.clinicalScenarios, pathwayId),
+    matchPrefix: "/app/clinical-scenarios",
+    labelKey: "learner.shell.nav.clinicalScenarios",
   };
 }

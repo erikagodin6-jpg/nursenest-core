@@ -160,8 +160,12 @@ function norm(s: string | null | undefined): string {
     .replace(/\s+/g, " ");
 }
 
-function haystack(bodySystem: string | null | undefined, topic: string | null | undefined): string {
-  return `${norm(bodySystem)} ${norm(topic)}`;
+function haystack(
+  bodySystem: string | null | undefined,
+  topic: string | null | undefined,
+  nclexClientNeedsCategory?: string | null | undefined,
+): string {
+  return `${norm(bodySystem)} ${norm(topic)} ${norm(nclexClientNeedsCategory)}`;
 }
 
 type MatchRule = { hub: PracticeBodySystemHubId; patterns: readonly string[] };
@@ -248,6 +252,8 @@ function hubFromKeywordText(text: string): PracticeBodySystemHubId | null {
 export type NormalizeQuestionBodySystemInput = {
   bodySystem?: string | null;
   topic?: string | null;
+  /** NCLEX client-needs major category label when present (helps delegation / safety routing). */
+  nclexClientNeedsCategory?: string | null;
 };
 
 export type NormalizeQuestionBodySystemLessonHint = {
@@ -272,10 +278,15 @@ export function normalizeQuestionBodySystem(
   const topicExact = hubFromExactKey(question.topic ?? "");
   if (topicExact) return topicExact;
 
-  const fromBsKw = hubFromKeywordText(haystack(question.bodySystem, null));
+  const fromClientNeedKw = hubFromKeywordText(haystack(null, null, question.nclexClientNeedsCategory));
+  if (fromClientNeedKw) return fromClientNeedKw;
+
+  const fromBsKw = hubFromKeywordText(haystack(question.bodySystem, null, question.nclexClientNeedsCategory));
   if (fromBsKw) return fromBsKw;
 
-  const fromTopicKw = hubFromKeywordText(haystack(null, question.topic));
+  const fromTopicKw = hubFromKeywordText(
+    haystack(null, question.topic, question.nclexClientNeedsCategory),
+  );
   if (fromTopicKw) return fromTopicKw;
 
   return "uncategorized";

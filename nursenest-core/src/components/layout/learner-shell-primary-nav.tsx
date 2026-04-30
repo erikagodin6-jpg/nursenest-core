@@ -10,6 +10,8 @@ import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
 import { formatTitleCase } from "@/lib/format/text-case";
 import {
   buildLearnerPrimaryNavItems,
+  buildOptionalClinicalScenariosShellNavItem,
+  buildOptionalOsceScenarioShellNavItems,
   buildOptionalStudyToolsShellNavItem,
   isLearnerPrimaryNavKey,
   learnerPrimaryNavLabelKey,
@@ -71,9 +73,9 @@ function useLearnerNavItems({
       };
     });
     const studyTools = buildOptionalStudyToolsShellNavItem(pathwayId);
+    let insertAt = Math.min(3, rows.length);
     if (studyTools) {
       const label = formatTitleCase(t(studyTools.labelKey), locale);
-      const insertAt = Math.min(3, rows.length);
       rows.splice(insertAt, 0, {
         id: studyTools.id,
         href: studyTools.href,
@@ -81,6 +83,28 @@ function useLearnerNavItems({
         matchPrefixes: STUDY_TOOLS_ACTIVE_PREFIXES,
         label,
       });
+      insertAt += 1;
+    }
+    for (const row of buildOptionalOsceScenarioShellNavItems(pathwayId)) {
+      const label = formatTitleCase(t(row.labelKey), locale);
+      rows.splice(insertAt, 0, {
+        id: row.id,
+        href: row.href,
+        matchPrefix: row.matchPrefix,
+        label,
+      });
+      insertAt += 1;
+    }
+    const clinical = buildOptionalClinicalScenariosShellNavItem(pathwayId);
+    if (clinical) {
+      const label = formatTitleCase(t(clinical.labelKey), locale);
+      rows.splice(insertAt, 0, {
+        id: clinical.id,
+        href: clinical.href,
+        matchPrefix: clinical.matchPrefix,
+        label,
+      });
+      insertAt += 1;
     }
     return rows;
   }, [pathwayId, examsLabel, t, locale]);
