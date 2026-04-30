@@ -2,10 +2,33 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  EyeOff,
+  LayoutGrid,
+  LineChart,
+  Shuffle,
+  Star,
+  TrendingDown,
+  XCircle,
+} from "lucide-react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { formatTitleCase } from "@/lib/format/text-case";
-import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
+import {
+  LearnerCategorySelector,
+  LearnerFilterBar,
+  LearnerSessionStartPanel,
+  LearnerStudyHero,
+  LearnerStudyModeCard,
+  LearnerStudyModeGrid,
+  LearnerStudyPageShell,
+} from "@/components/learner-study-ui";
+import {
+  discoveryTopicsForCanonicalFilters,
+  getQuestionCountsByBodySystem,
+  type CanonicalBodySystemId,
+} from "@/lib/learner-study-hub/body-system-data";
+import { CANONICAL_STUDY_CATEGORIES } from "@/lib/study/normalize-study-category";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import type {
   CatAdaptiveSessionType,
@@ -34,11 +57,7 @@ import {
 import { buildPracticeExamStartPayload } from "@/lib/practice-tests/practice-exam-start-payload";
 import { ExamPreExamCustomizeModal } from "@/components/exam/exam-study-theme-modal";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
-
-function hubVisualKeyForCategory(id: string): string {
-  const s = id.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_");
-  return s.length > 0 ? s : "fundamentals";
-}
+import type { StudyLaunchPayload } from "@/lib/practice-tests/types";
 
 type TestListRow = {
   id: string;
@@ -65,6 +84,7 @@ export function PracticeTestsHubClient({
   defaultPathwayId = null,
   catEligiblePathwayIds = [],
   hubBootstrapSource = "primary",
+  catHref,
 }: {
   examSimulationEnabled?: boolean;
   pathwayOptions?: PracticeTestPathwayOption[];
@@ -73,6 +93,8 @@ export function PracticeTestsHubClient({
   catEligiblePathwayIds?: string[];
   /** When hub pathway bootstrap used a published snapshot (DB degraded). */
   hubBootstrapSource?: "primary" | "secondary";
+  /** Pre-resolved CAT entry URL for this pathway (includes pathwayId when known). */
+  catHref?: string;
 }) {
   const { t } = useMarketingI18n();
   const searchParams = useSearchParams();
@@ -95,6 +117,8 @@ export function PracticeTestsHubClient({
   const [catAdaptiveSessionType, setCatAdaptiveSessionType] = useState<CatAdaptiveSessionType>("cat");
   const [topicPicks, setTopicPicks] = useState<string[]>([]);
   const [topicInput, setTopicInput] = useState("");
+  const [selectedCanonicalIds, setSelectedCanonicalIds] = useState<string[]>([]);
+  const [categorySearch, setCategorySearch] = useState("");
   const [difficultyMin, setDifficultyMin] = useState<number | "">("");
   const [difficultyMax, setDifficultyMax] = useState<number | "">("");
   const [timedMode, setTimedMode] = useState(false);
@@ -125,6 +149,34 @@ export function PracticeTestsHubClient({
     () => buildGlobalExamContext(pathwayId.trim() || defaultPathwayId || null, "en"),
     [defaultPathwayId, pathwayId],
   );
+
+  const countsByCanonical = useMemo(() => {
+    const pid = pathwayId.trim();
+    if (!pid || topics.length === 0) {
+      return Object.fromEntries(CANONICAL_STUDY_CATEGORIES.map((c) => [c.id, 0])) as Record<
+        CanonicalBodySystemId,
+        number
+      >;
+    }
+    return getQuestionCountsByBodySystem(pid, topics);
+  }, [pathwayId, topics]);
+
+  const discoveryStats = useMemo(() => {
+    const totalIndexed = topics.reduce((n, b) => n + b.count, 0);
+    return { topicBuckets: topics.length, totalIndexed };
+  }, [topics]);
+
+  const catExamStartHref = useMemo(() => {
+    if (!catHref?.trim()) return null;
+    try {
+      const u = new URL(catHref.trim(), typeof window !== "undefined" ? window.location.origin : "https://nursenest.local");
+      u.searchParams.set("mode", "cat");
+      if (pathwayId.trim()) u.searchParams.set("pathwayId", pathwayId.trim());
+      return `${u.pathname}${u.search}`;
+    } catch {
+      return catHref.trim();
+    }
+  }, [catHref, pathwayId]);
   const hasInProgressActivity = list.some((row) => row.status === "IN_PROGRESS");
   const hasRecentCompletion = list.some((row) => row.status === "COMPLETED" && isWithinRecentWindow(row.completedAt, nowMs));
   const hasWeakFocus =
@@ -300,6 +352,58 @@ export function PracticeTestsHubClient({
           throw new Error(t("learner.practiceTests.hub.error.pathwayRequired"));
         }
       }
+      const pathwayTrim = pathwayId.trim();
+      const allCanon = CANONICAL_STUDY_CATEGORIES.map((c) => c.id);
+      const canonFilterActive =
+        pathwayTrim &&
+        topics.length > 0 &&
+        selectedCanonicalIds.length > 0 &&
+        selectedCanonicalIds.length < allCanon.length;
+      const allowedTopicSet = canonFilterActive
+        ? new Set(
+            discoveryTopicsForCanonicalFilters(
+              pathwayTrim,
+              topics,
+              new Set(selectedCanonicalIds as CanonicalBodySystemId[]),
+            ),
+          )
+        : null;
+      const effectiveTopicNames =
+        allowedTopicSet && topicPicks.length > 0
+          ? topicPicks.filter((x) => allowedTopicSet.has(x))
+          : allowedTopicSet && topicPicks.length === 0
+            ? Array.from(allowedTopicSet)
+            : topicPicks;
+
+      const filterRecord: NonNullable<StudyLaunchPayload["filters"]> = {
+        hubFilter:
+          selectionMode === "random" && effectiveTopicNames.length === 0 && !canonFilterActive
+            ? "all"
+            : selectionMode === "weak"
+              ? "weak"
+              : selectionMode === "missed"
+                ? "incorrect"
+                : selectionMode === "starred"
+                  ? "bookmarked"
+                  : selectionMode === "unseen"
+                    ? "unseen"
+                    : selectionMode === "targeted"
+                      ? "targeted"
+                      : "mixed",
+      };
+      if (selectionMode === "cat") {
+        filterRecord.catSelectionBasis = catSelectionBasis;
+      }
+      const studyLaunchPayload: StudyLaunchPayload = {
+        pathwayId: pathwayTrim || null,
+        mode: selectionMode === "cat" ? "cat" : linearDeliveryMode === "exam" ? "practice_exam" : "practice_linear",
+        selectedCategories:
+          !canonFilterActive || selectedCanonicalIds.length >= allCanon.length ? [] : [...selectedCanonicalIds],
+        filters: filterRecord,
+        count: questionCount,
+        shuffle: true,
+      };
+
       const linearPayload = buildPracticeExamStartPayload({
         title: title.trim() || null,
         questionCount,
@@ -312,9 +416,11 @@ export function PracticeTestsHubClient({
                 ? "missed"
                 : selectionMode === "starred"
                   ? "starred"
-                  : "random",
-        topicNames: topicPicks,
-        pathwayId: pathwayId.trim() || null,
+                  : selectionMode === "unseen"
+                    ? "unseen"
+                    : "random",
+        topicNames: effectiveTopicNames,
+        pathwayId: pathwayTrim || null,
         timedMode,
         timeLimitSec: timedMode ? Math.round(timeLimitMin * 60) : null,
         difficultyMin: difficultyMin === "" ? null : difficultyMin,
@@ -328,7 +434,7 @@ export function PracticeTestsHubClient({
           ? {
               title: title.trim() || undefined,
               questionCount: Math.max(10, questionCount),
-              topicNames: topicPicks,
+              topicNames: effectiveTopicNames,
               difficultyMin: difficultyMin === "" ? null : difficultyMin,
               difficultyMax: difficultyMax === "" ? null : difficultyMax,
               selectionMode,
@@ -337,11 +443,12 @@ export function PracticeTestsHubClient({
               catExamFeedbackMode:
                 catPresentationMode === "practice" ? catExamFeedbackMode : ("test" satisfies CatExamFeedbackMode),
               catAdaptiveSessionType: catPresentationMode === "practice" ? catAdaptiveSessionType : "cat",
-              pathwayId: pathwayId.trim() || null,
+              pathwayId: pathwayTrim || null,
               timedMode,
               timeLimitSec: timedMode ? Math.round(timeLimitMin * 60) : null,
+              studyLaunchPayload,
             }
-          : linearPayload;
+          : { ...linearPayload, studyLaunchPayload };
       const res = await fetch("/api/practice-tests", {
         method: "POST",
         headers: {
@@ -380,12 +487,35 @@ export function PracticeTestsHubClient({
   }
 
   return (
-    <div className="space-y-8" data-nn-learner-area="practice-tests">
+    <LearnerStudyPageShell data-nn-learner-area="practice-tests">
       {hubBootstrapSource === "secondary" ? (
         <div className="max-w-3xl" data-nn-practice-hub-bootstrap-source="secondary">
           <LearnerStudyLiveSyncBanner />
         </div>
       ) : null}
+      <LearnerStudyHero
+        eyebrow={t("learner.practiceTests.title")}
+        title={t("learner.practiceTests.hub.builderTitle")}
+        subtitle={t("learner.practiceTests.hub.builderIntro")}
+        stats={
+          <dl className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <div className="rounded-xl border border-border bg-muted/20 px-3 py-2">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Bank topics</dt>
+              <dd className="mt-0.5 text-lg font-semibold tabular-nums text-foreground">{discoveryStats.topicBuckets}</dd>
+            </div>
+            <div className="rounded-xl border border-border bg-muted/20 px-3 py-2">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Indexed items</dt>
+              <dd className="mt-0.5 text-lg font-semibold tabular-nums text-foreground">{discoveryStats.totalIndexed}</dd>
+            </div>
+            <div className="rounded-xl border border-border bg-muted/20 px-3 py-2 sm:col-span-2">
+              <dt className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Track</dt>
+              <dd className="mt-0.5 truncate text-sm font-semibold text-foreground">
+                {(selectedPathway?.label ?? pathwayId.trim()) || "—"}
+              </dd>
+            </div>
+          </dl>
+        }
+      />
       <section
         data-nn-e2e-practice-exams-builder
         className={`nn-card nn-student-card-lift p-6 sm:p-7 ${
@@ -394,10 +524,8 @@ export function PracticeTestsHubClient({
             : "border-[var(--semantic-border-soft)]"
         }`}
       >
-        <h2 className="text-xl font-bold tracking-tight text-[var(--theme-heading-text)]">
-          {t("learner.practiceTests.hub.builderTitle")}
-        </h2>
-        <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">{t("learner.practiceTests.hub.builderIntro")}</p>
+        <h2 className="sr-only">{t("learner.practiceTests.hub.builderTitle")}</h2>
+        <p className="mt-0 max-w-3xl text-sm leading-relaxed text-muted-foreground">{t("learner.practiceTests.hub.builderIntro")}</p>
         {isPriorityWinner(hubPriority, "weak_focus") ? (
           <p className="mt-2 text-xs font-medium text-[var(--semantic-warning-contrast)]">
             {t("learner.practiceTests.hub.weakFocusBanner")}
@@ -507,60 +635,99 @@ export function PracticeTestsHubClient({
           </label>
         </div>
 
-        <div className="mt-4">
-          <span className="text-sm text-muted-foreground">{t("learner.practiceTests.hub.selectionLabel")}</span>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {(
-              [
-                ["random", t("learner.practiceTests.hub.selection.random")],
-                ["targeted", t("learner.practiceTests.hub.selection.targeted")],
-                ["weak", t("learner.practiceTests.hub.selection.weak")],
-                ["missed", t("learner.practiceTests.hub.selection.missed")],
-                ["starred", t("learner.practiceTests.hub.selection.starred")],
-                ["cat", t("learner.practiceTests.hub.selection.cat")],
-              ] as const
-            ).map(([v, label]) => (
-              <button
-                key={v}
-                type="button"
-                onClick={() => {
-                  setSelectionMode(v);
-                  if (v !== "cat") {
-                    setCatPresentationMode("practice");
-                    setQuestionCount((q) => (q > 100 ? 100 : q));
-                  } else if (catPresentationMode === "practice") {
-                    setQuestionCount((q) => (q > 75 ? 75 : q));
-                  }
-                }}
-                data-active={selectionMode === v}
-                className="nn-tab-pill px-4 py-1.5 text-sm font-medium"
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-          <p className="mt-2 text-xs text-muted-foreground">
-            {selectionMode === "targeted"
-              ? t("learner.practiceTests.hub.selectionHelp.targeted")
-              : selectionMode === "weak"
-                ? t("learner.practiceTests.hub.selectionHelp.weak")
-                : selectionMode === "missed"
-                  ? t("learner.practiceTests.hub.selectionHelp.missed")
-                  : selectionMode === "starred"
-                    ? t("learner.practiceTests.hub.selectionHelp.starred")
-                    : selectionMode === "cat"
-                      ? catPresentationMode === "exam_simulation"
-                        ? isNpPathway
-                          ? t("learner.practiceTests.hub.selectionHelp.cat.examSim.np")
-                          : t("learner.practiceTests.hub.selectionHelp.cat.examSim.rn")
-                        : t("learner.practiceTests.hub.selectionHelp.cat.practice")
-                      : t("learner.practiceTests.hub.selectionHelp.linear")}
-          </p>
+        <div className="mt-6">
+          <LearnerStudyModeGrid label={t("learner.practiceTests.hub.selectionLabel")}>
+            <LearnerStudyModeCard
+              title="Practice by category"
+              description={t("learner.practiceTests.hub.selectionHelp.targeted")}
+              icon={LayoutGrid}
+              selected={selectionMode === "targeted"}
+              onSelect={() => {
+                setSelectionMode("targeted");
+                setCatPresentationMode("practice");
+                setQuestionCount((q) => (q > 100 ? 100 : q));
+              }}
+            />
+            <LearnerStudyModeCard
+              title="Mixed quiz"
+              description={t("learner.practiceTests.hub.selectionHelp.linear")}
+              icon={Shuffle}
+              selected={selectionMode === "random"}
+              onSelect={() => {
+                setSelectionMode("random");
+                setCatPresentationMode("practice");
+                setQuestionCount((q) => (q > 100 ? 100 : q));
+              }}
+            />
+            <LearnerStudyModeCard
+              title={t("learner.practiceTests.hub.selection.weak")}
+              description={t("learner.practiceTests.hub.selectionHelp.weak")}
+              icon={TrendingDown}
+              selected={selectionMode === "weak"}
+              onSelect={() => {
+                setSelectionMode("weak");
+                setCatPresentationMode("practice");
+                setQuestionCount((q) => (q > 100 ? 100 : q));
+              }}
+            />
+            <LearnerStudyModeCard
+              title="Incorrect review"
+              description={t("learner.practiceTests.hub.selectionHelp.missed")}
+              icon={XCircle}
+              selected={selectionMode === "missed"}
+              onSelect={() => {
+                setSelectionMode("missed");
+                setCatPresentationMode("practice");
+                setQuestionCount((q) => (q > 100 ? 100 : q));
+              }}
+            />
+            <LearnerStudyModeCard
+              title="Unseen questions"
+              description="Prioritizes questions you have not practiced recently in this pathway (linear sessions only)."
+              icon={EyeOff}
+              selected={selectionMode === "unseen"}
+              onSelect={() => {
+                setSelectionMode("unseen");
+                setCatPresentationMode("practice");
+                setQuestionCount((q) => (q > 100 ? 100 : q));
+              }}
+            />
+            <LearnerStudyModeCard
+              title={t("learner.practiceTests.hub.selection.starred")}
+              description={t("learner.practiceTests.hub.selectionHelp.starred")}
+              icon={Star}
+              selected={selectionMode === "starred"}
+              onSelect={() => {
+                setSelectionMode("starred");
+                setCatPresentationMode("practice");
+                setQuestionCount((q) => (q > 100 ? 100 : q));
+              }}
+            />
+            <LearnerStudyModeCard
+              title={t("learner.practiceTests.hub.selection.cat")}
+              description={
+                catPresentationMode === "exam_simulation"
+                  ? isNpPathway
+                    ? t("learner.practiceTests.hub.selectionHelp.cat.examSim.np")
+                    : t("learner.practiceTests.hub.selectionHelp.cat.examSim.rn")
+                  : t("learner.practiceTests.hub.selectionHelp.cat.practice")
+              }
+              icon={LineChart}
+              badge="Adaptive"
+              selected={selectionMode === "cat"}
+              disabled={catOptions.length === 0}
+              onSelect={() => {
+                setSelectionMode("cat");
+                if (catPresentationMode === "practice") {
+                  setQuestionCount((q) => (q > 75 ? 75 : q));
+                }
+              }}
+            />
+          </LearnerStudyModeGrid>
         </div>
 
         {selectionMode !== "cat" ? (
-          <div className="mt-4 space-y-2 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 shadow-sm">
-            <span className="text-sm font-medium text-foreground">{t("learner.practiceTests.hub.questionFocusLabel")}</span>
+          <LearnerFilterBar className="mt-4" title={t("learner.practiceTests.hub.questionFocusLabel")}>
             <div className="flex flex-wrap gap-2" data-nn-e2e-practice-pool-presets>
               <button
                 type="button"
@@ -638,13 +805,12 @@ export function PracticeTestsHubClient({
               ) : null}
             </div>
             <p className="text-xs text-muted-foreground">{t("learner.practiceTests.hub.poolPresetIntro")}</p>
-          </div>
+          </LearnerFilterBar>
         ) : null}
 
         {selectionMode !== "cat" ? (
-          <div className="mt-4 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 shadow-sm">
-            <span className="text-sm font-medium text-foreground">{t("learner.practiceTests.hub.sessionModeLabel")}</span>
-            <div className="mt-2 flex flex-wrap gap-2">
+          <LearnerFilterBar className="mt-4" title={t("learner.practiceTests.hub.sessionModeLabel")}>
+            <div className="flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={() => {
@@ -715,19 +881,37 @@ export function PracticeTestsHubClient({
               </label>
             ) : null}
             <p className="mt-2 text-xs text-muted-foreground">{t("learner.practiceTests.hub.sessionModeHelp")}</p>
-          </div>
+          </LearnerFilterBar>
         ) : null}
 
         {selectionMode !== "cat" && topics.length > 0 ? (
-          <div className="mt-6 space-y-3" data-nn-e2e-practice-topic-grid>
-            <div>
-              <span className="text-sm font-medium text-foreground">Systems and categories</span>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Tap cards to add or remove filters — same multi-select pattern as the lessons hub.
-              </p>
-            </div>
+          <div className="mt-6 space-y-4" data-nn-e2e-practice-canonical-grid>
+            <LearnerCategorySelector
+              countsBySystem={countsByCanonical}
+              selectedCanonicalIds={selectedCanonicalIds}
+              onToggleCanonical={(id) => {
+                const all = CANONICAL_STUDY_CATEGORIES.map((c) => c.id);
+                if (selectedCanonicalIds.length === 0) {
+                  setSelectedCanonicalIds(all.filter((x) => x !== id));
+                  return;
+                }
+                if (selectedCanonicalIds.includes(id)) {
+                  const next = selectedCanonicalIds.filter((x) => x !== id);
+                  setSelectedCanonicalIds(next.length === 0 ? [] : next);
+                } else {
+                  const next = [...selectedCanonicalIds, id];
+                  if (next.length >= all.length) setSelectedCanonicalIds([]);
+                  else setSelectedCanonicalIds(next);
+                }
+              }}
+              search={categorySearch}
+              onSearchChange={setCategorySearch}
+              heading="Exam categories & body systems"
+              intro="Pick canonical categories first. The large lesson-style topic grid is hidden here — use the advanced drawer only when you need bank topic labels."
+            />
             {topicPicks.length > 0 ? (
               <div className="flex flex-wrap gap-2">
+                <span className="w-full text-xs font-medium text-muted-foreground">Refined topic picks (sent to the server)</span>
                 {topicPicks.map((pickedTopic) => (
                   <button
                     key={pickedTopic}
@@ -741,39 +925,41 @@ export function PracticeTestsHubClient({
                 ))}
               </div>
             ) : null}
-            <div className="nn-qa-pathway-lessons-grid grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-              {topics.map((b) => {
-                const picked = topicPicks.includes(b.topic);
-                const visual = getLessonHubSystemVisual(hubVisualKeyForCategory(b.topic));
-                const Icon = visual.icon;
-                const systemStyle = { "--nn-system-accent": `var(${visual.accentVar})` } as CSSProperties;
-                return (
-                  <button
-                    key={b.topic}
-                    type="button"
-                    onClick={() => toggleTopicBucket(b.topic)}
-                    data-selected={picked}
-                    data-nn-e2e-practice-topic-card={b.topic}
-                    style={systemStyle}
-                    className="nn-lesson-system-card text-left transition hover:shadow-[var(--semantic-shadow-soft)] data-[selected=false]:opacity-70 rounded-[1.35rem] border border-[color-mix(in_srgb,var(--nn-system-accent)_16%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-3.5 sm:p-4 data-[selected=true]:ring-2 data-[selected=true]:ring-[color-mix(in_srgb,var(--nn-system-accent)_45%,transparent)]"
-                  >
-                    <div className="flex items-start gap-3">
-                      <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--nn-system-accent)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-system-accent)_9%,var(--semantic-panel-muted))] text-[var(--nn-system-accent)]">
-                        <Icon className="h-4 w-4" aria-hidden />
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <div className="line-clamp-2 text-base font-semibold leading-snug text-[var(--theme-heading-text)]">
-                          {formatTitleCase(b.topic)}
-                        </div>
-                        <p className="mt-2 text-xs font-semibold text-[var(--semantic-text-secondary)]">
-                          {b.count} question{b.count === 1 ? "" : "s"}
-                        </p>
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+            <details className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3 text-sm">
+              <summary className="cursor-pointer font-semibold text-[var(--semantic-text-primary)]">
+                Advanced: refine by exam-bank topic labels (optional)
+              </summary>
+              <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">
+                Topics shown here respect your category selection above. They map directly to `topic` values in the exam
+                bank — not the marketing lesson card list.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {(selectedCanonicalIds.length === 0 || selectedCanonicalIds.length >= CANONICAL_STUDY_CATEGORIES.length
+                  ? topics
+                  : topics.filter((b) =>
+                      discoveryTopicsForCanonicalFilters(
+                        pathwayId.trim(),
+                        topics,
+                        new Set(selectedCanonicalIds as CanonicalBodySystemId[]),
+                      ).includes(b.topic),
+                    )
+                ).map((b) => {
+                  const picked = topicPicks.includes(b.topic);
+                  return (
+                    <button
+                      key={b.topic}
+                      type="button"
+                      data-nn-e2e-practice-topic-chip={b.topic}
+                      data-selected={picked}
+                      onClick={() => toggleTopicBucket(b.topic)}
+                      className="nn-chip px-3 py-1 text-xs font-medium data-[selected=true]:ring-2 data-[selected=true]:ring-[color-mix(in_srgb,var(--semantic-brand)_40%,transparent)]"
+                    >
+                      {formatTitleCase(b.topic)} ({b.count})
+                    </button>
+                  );
+                })}
+              </div>
+            </details>
           </div>
         ) : null}
 
@@ -1015,22 +1201,42 @@ export function PracticeTestsHubClient({
           </div>
         ) : null}
 
-        <button
-          type="button"
-          data-nn-qa-practice-hub-start-test
-          disabled={
-            creating ||
-            hubCatStartBlocked({
-              selectionMode,
-              pathwayId,
-              catEligibleOptionCount: catOptions.length,
-            })
+        <LearnerSessionStartPanel
+          primary={
+            <>
+              {catExamStartHref && catOptions.length > 0 ? (
+                <Link
+                  href={catExamStartHref}
+                  className="nn-premium-action-chip inline-flex min-h-10 items-center rounded-full border border-border px-5 py-2 text-sm font-semibold text-foreground hover:bg-muted"
+                  data-nn-e2e-practice-hub-cat-exam
+                >
+                  CAT exam
+                </Link>
+              ) : null}
+              <button
+                type="button"
+                data-nn-qa-practice-hub-start-test
+                disabled={
+                  creating ||
+                  hubCatStartBlocked({
+                    selectionMode,
+                    pathwayId,
+                    catEligibleOptionCount: catOptions.length,
+                  })
+                }
+                onClick={() => setCustomizeOpen(true)}
+                className="nn-btn-primary px-6 py-2.5 text-sm font-semibold disabled:opacity-50"
+              >
+                {creating ? t("learner.practiceTests.hub.building") : "Start practice"}
+              </button>
+            </>
           }
-          onClick={() => setCustomizeOpen(true)}
-          className="nn-btn-primary mt-6 px-6 py-2.5 text-sm font-semibold disabled:opacity-50"
-        >
-          {creating ? t("learner.practiceTests.hub.building") : t("learner.practiceTests.hub.startCta")}
-        </button>
+          footnote={
+            catExamStartHref
+              ? "CAT exam link keeps your current pathway in the URL when you leave this builder."
+              : undefined
+          }
+        />
 
         <ExamPreExamCustomizeModal
           open={customizeOpen}
@@ -1095,9 +1301,11 @@ export function PracticeTestsHubClient({
                         ? t("learner.practiceTests.hub.selection.missed")
                         : row.selectionMode === "starred"
                           ? t("learner.practiceTests.hub.selection.starred")
-                          : row.selectionMode === "cat"
-                            ? t("learner.practiceTests.hub.selection.cat")
-                            : row.selectionMode ?? t("learner.practiceTests.hub.notApplicable");
+                          : row.selectionMode === "unseen"
+                            ? "Unseen"
+                            : row.selectionMode === "cat"
+                              ? t("learner.practiceTests.hub.selection.cat")
+                              : row.selectionMode ?? t("learner.practiceTests.hub.notApplicable");
               const timedPart = row.timedMode
                 ? `${t("learner.practiceTests.hub.rowTimed")}${row.timeLimitSec ? ` ${Math.round(row.timeLimitSec / 60)} min` : ""}`
                 : t("learner.practiceTests.hub.rowUntimed");
@@ -1173,6 +1381,6 @@ export function PracticeTestsHubClient({
           </ul>
         )}
       </section>
-    </div>
+    </LearnerStudyPageShell>
   );
 }

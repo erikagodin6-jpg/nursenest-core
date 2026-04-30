@@ -549,7 +549,7 @@ export function ExamPracticeClient({
         </p>
         <button
           type="button"
-          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white"
+          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold"
           onClick={() => window.location.reload()}
         >
           {t("learner.examPractice.retry")}

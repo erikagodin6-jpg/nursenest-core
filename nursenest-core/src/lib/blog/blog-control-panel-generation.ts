@@ -51,8 +51,8 @@ import {
   buildStructuredPlanUserPrompt,
 } from "@/lib/blog/blog-article-pipeline-prompts";
 import type { BlogImageSlotAttachment } from "@/lib/blog/blog-image-workflow";
-import { appendBlogAdminPublishLog, seedBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
-import { publishBlogPostCanonical } from "@/lib/blog/publish-blog-post-canonical";
+import { seedBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
+import { publishGeneratedBlogArticle } from "@/lib/blog/publish-generated-blog-article";
 import {
   blogPrePublishValidationSelect,
   validateBlogPrePublish,
@@ -114,6 +114,20 @@ export type ControlPanelGenerateInput = {
    * On validation failure the draft row remains `DRAFT` and the API returns `PRE_PUBLISH_BLOCKED` (422).
    */
   publishImmediately?: boolean;
+  /** CLI/automation only: allow structurally valid generated source stubs to become publishable APA rows. */
+  allowGeneratedSourceStubsForPublish?: boolean;
+  minPublishReferences?: number;
+  minPublishWords?: number;
+  validateInternalLinksBeforePublish?: boolean;
+  publishOnlyIfValid?: boolean;
+  /** When false, skip paywall-safe body copy checks at generated publish time. */
+  paywallSafeLinksBeforePublish?: boolean;
+  /** When false, skip shallow-H2 publish gate for generated articles. */
+  requireClinicalSectionDepthOnPublish?: boolean;
+  /** Standard template body: include dedicated Clinical pearls H2 (default true). */
+  includeClinicalPearlsInBody?: boolean;
+  /** Standard template body: render FAQs as H2 in HTML (default true; long-form pathophysiology omits FAQ H2 regardless). */
+  includeFaqsInBody?: boolean;
 };
 
 /** Thrown when the structured editorial plan cannot be parsed or validated (with machine codes for clients). */
@@ -252,13 +266,20 @@ export async function fetchControlPanelBodyHtml(params: {
   /** Overrides plan.h1 when admin picked a different title option. */
   selectedTitle?: string;
   openAiUser?: string;
+  includeClinicalPearls?: boolean;
+  includeFaqsInBody?: boolean;
 }): Promise<string> {
   if (isLongFormPathophysiologyProfile({ template: params.template, intent: params.intent })) {
     return fetchControlPanelBodyHtmlSectionIsolated(params);
   }
 
   const pageH1 = params.selectedTitle?.trim() || params.plan.h1;
-  const system = buildArticleBodySystemPrompt({ template: params.template, intent: params.intent });
+  const system = buildArticleBodySystemPrompt({
+    template: params.template,
+    intent: params.intent,
+    includeClinicalPearls: params.includeClinicalPearls,
+    includeFaqsInBody: params.includeFaqsInBody,
+  });
   const user = buildArticleBodyUserPrompt({
     plan: params.plan,
     topic: params.topic,
@@ -384,9 +405,12 @@ export async function persistControlPanelDraft(
       : excerptFromBody.length >= 10
         ? excerptFromBody.slice(0, 500)
         : `${pageTitle.slice(0, 200)}. Draft excerpt; edit before publish.`;
-  const adminSupplied = input.sourceRecordsJson ?? [];
   const aiSuggested = coerceBlogSourceRows(plan.apaSourceStubs as unknown[]);
-  const partition = partitionCitationsForBlog(adminSupplied, aiSuggested);
+  const adminSupplied =
+    input.sourceRecordsJson ??
+    (input.allowGeneratedSourceStubsForPublish ? aiSuggested : []);
+  const aiSuggestedForEnvelope = input.allowGeneratedSourceStubsForPublish ? [] : aiSuggested;
+  const partition = partitionCitationsForBlog(adminSupplied, aiSuggestedForEnvelope);
   const citationEnvelope = buildCitationEnvelope(partition);
   const apaReferences = partition.apaLines;
   const sourceCheck = partition.sourceCheck;
@@ -733,25 +757,23 @@ export async function persistControlPanelDraft(
       try {
         await persistHooks?.onPersistStage?.("prepublish_checks");
         await persistHooks?.onPersistStage?.("publishing");
-        await publishBlogPostCanonical({
-          postId: post.id,
+        await publishGeneratedBlogArticle({
+          id: post.id,
+        }, {
           publishAt: publishedNow,
-          clearScheduledAt: true,
           context: "control_panel_immediate",
-          acknowledgePrePublishWarnings: true,
-          setLegacySourceIfEmpty: "control_panel_ai",
-          extraLogEntries: [
-            {
-              level: "info",
-              event: "published_immediate_control_panel",
-              message: "Published immediately after generation (canonical publish + visibility checks).",
-              detail: { publishAt: publishedNow.toISOString() },
-            },
-          ],
+          minWords: input.minPublishWords,
+          minReferences: input.minPublishReferences,
+          requireApaReferences: true,
+          requireInternalLinks: true,
+          validateInternalLinks: input.validateInternalLinksBeforePublish !== false,
+          paywallSafeLinks: input.paywallSafeLinksBeforePublish !== false,
+          requireClinicalSectionDepth: input.requireClinicalSectionDepthOnPublish !== false,
+          publishOnlyIfValid: input.publishOnlyIfValid !== false,
         });
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
-        if (msg.includes("publishBlogPostCanonical: pre-publish")) {
+        if (msg.includes("publishBlogPostCanonical: pre-publish") || msg.includes("publishGeneratedBlogArticle: publish blocked")) {
           const forPre = await prisma.blogPost.findUnique({
             where: { id: post.id },
             select: blogPrePublishValidationSelect,

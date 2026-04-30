@@ -3,6 +3,8 @@
  */
 
 import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
+import { isStudyToolsPubliclyEnabled } from "@/lib/study-tools/study-tools-feature-flag";
 
 export const CANONICAL_LEARNER_ROUTES = {
   lessons: "/app/lessons",
@@ -31,8 +33,13 @@ export const LEARNER_PRIMARY_NAV_ITEM_KEY = "practice" as const satisfies Extrac
   "lessons" | "practice"
 >;
 
+/** Appended after flashcards when {@link isStudyToolsPubliclyEnabled} is true. */
+export const STUDY_TOOLS_SHELL_NAV_ID = "study_tools" as const;
+
+export type LearnerShellStudyNavRowId = LearnerPrimaryNavItem["key"] | typeof STUDY_TOOLS_SHELL_NAV_ID;
+
 /** Whether this nav row is the designated primary study entry (visual emphasis in header + shell). */
-export function isLearnerPrimaryNavKey(key: LearnerPrimaryNavItem["key"]): boolean {
+export function isLearnerPrimaryNavKey(key: LearnerShellStudyNavRowId | string): boolean {
   return key === LEARNER_PRIMARY_NAV_ITEM_KEY;
 }
 
@@ -85,4 +92,19 @@ const LABEL_KEYS: Record<LearnerPrimaryNavItem["key"], string> = {
 
 export function learnerPrimaryNavLabelKey(key: LearnerPrimaryNavItem["key"]): string {
   return LABEL_KEYS[key];
+}
+
+export function buildOptionalStudyToolsShellNavItem(pathwayId: string | null): {
+  id: typeof STUDY_TOOLS_SHELL_NAV_ID;
+  href: string;
+  matchPrefix: string;
+  labelKey: string;
+} | null {
+  if (!isStudyToolsPubliclyEnabled()) return null;
+  return {
+    id: STUDY_TOOLS_SHELL_NAV_ID,
+    href: withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.hub, pathwayId),
+    matchPrefix: "/app/study-tools",
+    labelKey: "learner.shell.nav.studyTools",
+  };
 }

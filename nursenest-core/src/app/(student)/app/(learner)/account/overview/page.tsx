@@ -1,6 +1,14 @@
 import Link from "next/link";
 import { TrialStatus } from "@prisma/client";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import {
+  LearnerAccountPageHero,
+  LearnerAccountShell,
+  LearnerCategoryProgressGrid,
+  LearnerProfileSummaryCard,
+  LearnerRecommendedNextSteps,
+  LearnerWeakAreasPanel,
+} from "@/components/learner-account-ui";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
 import { LearnerInsightEnginePanel } from "@/components/student/learner-insight-engine-panel";
@@ -14,6 +22,7 @@ import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured, withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { buildAdaptiveRecommendations } from "@/lib/learner/adaptive-recommendations";
 import { loadLearnerProfileActivity } from "@/lib/learner/load-learner-profile-activity";
@@ -24,6 +33,7 @@ import {
   remediationWeakModeTestHrefForPathway,
 } from "@/lib/learner/remediation-links";
 import { readinessBandLabel } from "@/lib/learner/readiness-score";
+import { aggregateTopicsByCanonicalStudyCategory } from "@/lib/learner/learner-account-category-aggregate";
 import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import {
   resolveInteractionPriority,
@@ -95,6 +105,13 @@ export default async function LearnerAccountOverviewPage() {
             trialEndsAt: true,
             trialStartedAt: true,
             passwordHash: true,
+            learnerPath: true,
+            createdAt: true,
+            examDate: true,
+            examDatePlanType: true,
+            studyCadencePreference: true,
+            dailyQuestionGoal: true,
+            examFocus: true,
           },
         }),
       null,
@@ -138,13 +155,9 @@ export default async function LearnerAccountOverviewPage() {
     }
     if (premiumSnapshot && topicPerf) {
       try {
-        const userExam = await prisma.user.findUnique({
-          where: { id: userId },
-          select: { examDate: true, examDatePlanType: true, studyCadencePreference: true },
-        });
         adaptive = buildAdaptiveRecommendations({
-          examDatePlanType: userExam?.examDatePlanType,
-          examDate: userExam?.examDate ?? null,
+          examDatePlanType: userRow?.examDatePlanType,
+          examDate: userRow?.examDate ?? null,
           readiness: premiumSnapshot.readiness,
           weakTopics: topicPerf.weakTopics,
           topicTrends: topicPerf.trends,
@@ -152,7 +165,7 @@ export default async function LearnerAccountOverviewPage() {
           lessonPct: premiumSnapshot.overallLessons.pct,
           lessonsCompleted: premiumSnapshot.overallLessons.completed,
           lessonsTotal: premiumSnapshot.overallLessons.total,
-          studyCadencePreference: userExam?.studyCadencePreference,
+          studyCadencePreference: userRow?.studyCadencePreference,
           continueLesson: premiumSnapshot.continueLesson,
           recommendedQuizTopic: premiumSnapshot.recommendedQuizTopic,
           mockCount: premiumSnapshot.mockCount,
@@ -198,6 +211,21 @@ export default async function LearnerAccountOverviewPage() {
   const catNextHref = remediationCatPracticeHref(primaryWeakTopic || undefined, preferredPathwayId);
   const hasInProgressLesson = Boolean(premiumSnapshot?.continueLesson?.href);
   const hasWeakAreasDetected = weakTop3.length > 0;
+
+  const pathwayKeyOverview = userRow?.learnerPath?.trim();
+  const pathwayDisplayOverview = pathwayKeyOverview
+    ? getExamPathwayById(pathwayKeyOverview)?.shortName ??
+      getExamPathwayById(pathwayKeyOverview)?.displayName ??
+      pathwayKeyOverview
+    : null;
+
+  const categoryProgressItems =
+    entitlement !== "error" && entitlement.hasAccess && topicPerf
+      ? aggregateTopicsByCanonicalStudyCategory(preferredPathwayId, [
+          ...topicPerf.weakTopics.map((w) => ({ topic: w.topic, weight: Math.max(1, w.attempted) })),
+          ...topicPerf.strongTopics.map((s) => ({ topic: s.topic, weight: Math.max(1, s.attempted) })),
+        ])
+      : [];
   const hasRecentCompletion = [...activity.mocks.map((m) => m.at), ...activity.practiceTests.map((pt) => pt.at)].some(
     (at) => nowMs - new Date(at).getTime() <= 72 * 60 * 60 * 1000,
   );
@@ -213,20 +241,24 @@ export default async function LearnerAccountOverviewPage() {
   });
 
   return (
-    <div className="space-y-7">
+    <LearnerAccountShell className="py-2">
       <BreadcrumbTrail items={crumbs} />
-      <div>
-        <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("learner.profile.kicker")}</p>
-        <h1 className="mt-1 text-3xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.overview.title")}</h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.overview.intro")}</p>
-      </div>
+      <LearnerAccountPageHero
+        eyebrow={t("learner.profile.kicker")}
+        title={t("learner.account.overview.title")}
+        description={t("learner.account.overview.intro")}
+      />
 
       {entitlement !== "error" && entitlement.hasAccess ? <LearnerAccountToolGrid t={t} /> : null}
 
-      <section className="nn-card nn-student-card-lift p-6">
-        <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.account.heading")}</h2>
-        <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.account.subtitle")}</p>
-        <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+      <LearnerProfileSummaryCard
+        title={t("learner.profile.account.heading")}
+        subtitle={t("learner.profile.account.subtitle")}
+        footer={
+          <LearnerProfileAccountActions hasPassword={hasPassword} showBillingPortal={showBillingPortal} variant="full" />
+        }
+      >
+        <dl className="grid gap-3 text-sm sm:grid-cols-2">
           <div>
             <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.label.email")}</dt>
             <dd className="mt-0.5 font-medium text-foreground">{userRow?.email ?? t("learner.common.notAvailable")}</dd>
@@ -235,19 +267,16 @@ export default async function LearnerAccountOverviewPage() {
             <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.label.name")}</dt>
             <dd className="mt-0.5 font-medium text-foreground">{userRow?.name ?? t("learner.common.notAvailable")}</dd>
           </div>
+          {userRow?.createdAt ? (
+            <div className="sm:col-span-2">
+              <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.account.memberSince")}</dt>
+              <dd className="mt-0.5 font-medium text-foreground">{userRow.createdAt.toLocaleDateString(localeTag)}</dd>
+            </div>
+          ) : null}
         </dl>
-        <div className="mt-6 border-t border-border/60 pt-6">
-          <LearnerProfileAccountActions
-            hasPassword={hasPassword}
-            showBillingPortal={showBillingPortal}
-            variant="full"
-          />
-        </div>
-      </section>
+      </LearnerProfileSummaryCard>
 
-      <section className="nn-card nn-student-card-lift p-6">
-        <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.subscription.heading")}</h2>
-        <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.subscription.subtitle")}</p>
+      <LearnerProfileSummaryCard title={t("learner.profile.subscription.heading")} subtitle={t("learner.profile.subscription.subtitle")}>
         <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
           <div>
             <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.label.access")}</dt>
@@ -319,7 +348,48 @@ export default async function LearnerAccountOverviewPage() {
             </Link>
           ) : null}
         </div>
-      </section>
+      </LearnerProfileSummaryCard>
+
+      <LearnerProfileSummaryCard
+        title={t("learner.profile.studyProfile.title")}
+        subtitle={t("learner.profile.studyProfile.subtitle")}
+        footer={
+          <Link href="/app/account/study-preferences" className="text-sm font-semibold text-primary hover:underline">
+            {t("learner.profile.studyProfile.editPrefs")}
+          </Link>
+        }
+      >
+        <dl className="grid gap-3 text-sm sm:grid-cols-2">
+          <div>
+            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.studyProfile.pathway")}</dt>
+            <dd className="mt-0.5 font-medium text-foreground">{pathwayDisplayOverview ?? t("learner.common.notAvailable")}</dd>
+          </div>
+          <div>
+            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.studyProfile.examDate")}</dt>
+            <dd className="mt-0.5 font-medium text-foreground">
+              {userRow?.examDate ? userRow.examDate.toLocaleDateString(localeTag) : t("learner.common.notAvailable")}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.studyProfile.dailyGoal")}</dt>
+            <dd className="mt-0.5 font-medium text-foreground">
+              {userRow?.dailyQuestionGoal != null ? String(userRow.dailyQuestionGoal) : t("learner.common.notAvailable")}
+            </dd>
+          </div>
+          <div>
+            <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.studyProfile.cadence")}</dt>
+            <dd className="mt-0.5 font-medium text-foreground">
+              {userRow?.studyCadencePreference ? String(userRow.studyCadencePreference) : t("learner.common.notAvailable")}
+            </dd>
+          </div>
+          {userRow?.examFocus ? (
+            <div className="sm:col-span-2">
+              <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("learner.profile.studyProfile.examFocus")}</dt>
+              <dd className="mt-0.5 font-medium text-foreground">{String(userRow.examFocus)}</dd>
+            </div>
+          ) : null}
+        </dl>
+      </LearnerProfileSummaryCard>
 
       {entitlement !== "error" && entitlement.hasAccess ? <ExamPlanSettingsCard /> : null}
 
@@ -453,10 +523,8 @@ export default async function LearnerAccountOverviewPage() {
       ) : null}
 
       {topicPerf && entitlement !== "error" && entitlement.hasAccess ? (
-        <section className="nn-card nn-student-card-lift p-6">
-          <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{t("learner.profile.topics.heading")}</h2>
-          <p className="mt-1 text-sm text-muted-foreground">{t("learner.profile.topics.subtitle")}</p>
-          <div className="mt-4 grid gap-6 lg:grid-cols-2">
+        <LearnerWeakAreasPanel title={t("learner.profile.topics.heading")} subtitle={t("learner.profile.topics.subtitle")}>
+          <div className="grid gap-6 lg:grid-cols-2">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("learner.profile.topics.priorityReview")}</p>
               <ul className="mt-2 space-y-2">
@@ -515,7 +583,16 @@ export default async function LearnerAccountOverviewPage() {
               ) : null}
             </div>
           </div>
-        </section>
+        </LearnerWeakAreasPanel>
+      ) : null}
+
+      {entitlement !== "error" && entitlement.hasAccess && topicPerf ? (
+        <LearnerProfileSummaryCard
+          title={t("learner.profile.categoryProgress.title")}
+          subtitle={t("learner.profile.categoryProgress.subtitle")}
+        >
+          <LearnerCategoryProgressGrid items={categoryProgressItems} emptyHint={t("learner.profile.categoryProgress.empty")} />
+        </LearnerProfileSummaryCard>
       ) : null}
 
       {insights && entitlement !== "error" && entitlement.hasAccess ? (
@@ -649,6 +726,6 @@ export default async function LearnerAccountOverviewPage() {
           </div>
         </section>
       ) : null}
-    </div>
+    </LearnerAccountShell>
   );
 }

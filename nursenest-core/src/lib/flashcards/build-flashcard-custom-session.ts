@@ -3,11 +3,12 @@ import { ContentStatus, type Prisma } from "@prisma/client";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { flashcardAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { prisma } from "@/lib/db";
-import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
+import { PRISMA_ID_IN_CHUNK_SIZE, takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
 import {
   applyCountsToBuilderCategories,
   builderCategoryTitleForId,
+  FLASHCARD_BUILDER_UNCATEGORIZED_ID,
   resolveBuilderCategoryId,
   type BuilderCategoryOption,
 } from "@/lib/flashcards/flashcard-builder-taxonomy";
@@ -28,6 +29,7 @@ import {
   prismaWhereForSourceKind,
   type CustomSessionSourceKind,
 } from "@/lib/flashcards/custom-session-card-filters";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type CustomSessionStudyMode = "term_to_definition" | "definition_to_term" | "mixed";
 
@@ -178,12 +180,53 @@ export async function buildFlashcardCustomSession(
   const queryRelaxation: FlashcardCustomSessionQueryRelaxation = "none";
 
   try {
+    const allowLessonQuestionVirtuals =
+      sourceKind === "all" || sourceKind === "lesson" || sourceKind === "question";
+
     const cards = await prisma.flashcard.findMany({
       where: buildFlashcardWhere(flashcardAccessWhere(entitlement, pathwayOpts)),
       select: flashcardSelect,
       orderBy: { updatedAt: "desc" },
       take: 5000,
     });
+
+    let lessonQuestionVirtuals: Awaited<ReturnType<typeof loadLessonLinkedFlashcardVirtuals>> = [];
+    if (pathwayId?.trim() && allowLessonQuestionVirtuals) {
+      const existingExamQ = new Set(
+        cards
+          .map((c) => c.examQuestionId)
+          .filter((x): x is string => typeof x === "string" && x.trim().length > 0),
+      );
+      lessonQuestionVirtuals = await loadLessonLinkedFlashcardVirtuals({
+        pathwayId: pathwayId.trim(),
+        entitlement,
+        existingExamQuestionIds: existingExamQ,
+      });
+    }
+
+    const examQuestionIdsForMeta = new Set<string>();
+    for (const c of cards) {
+      const id = c.examQuestionId;
+      if (typeof id === "string" && id.trim()) examQuestionIdsForMeta.add(id.trim());
+    }
+    for (const v of lessonQuestionVirtuals) {
+      const id = v.examQuestionId;
+      if (typeof id === "string" && id.trim()) examQuestionIdsForMeta.add(id.trim());
+    }
+    const examTopicMetaById = new Map<string, { bodySystem: string | null; topic: string | null }>();
+    const examQIdList = [...examQuestionIdsForMeta];
+    for (let i = 0; i < examQIdList.length; i += PRISMA_ID_IN_CHUNK_SIZE) {
+      const chunk = examQIdList.slice(i, i + PRISMA_ID_IN_CHUNK_SIZE);
+      if (!chunk.length) break;
+      const rows = await prisma.examQuestion.findMany({
+        where: { id: { in: chunk } },
+        select: { id: true, bodySystem: true, topic: true },
+        take: takeForIdIn(chunk, 5000),
+      });
+      for (const r of rows) {
+        examTopicMetaById.set(r.id, { bodySystem: r.bodySystem, topic: r.topic });
+      }
+    }
 
     const categoryCounts: Record<string, number> = {};
     type DbFlashcardRow = (typeof cards)[number];
@@ -195,7 +238,10 @@ export async function buildFlashcardCustomSession(
       linkedExamQuestionId?: string;
     };
 
-    const cardWithCategory: WorkingCard[] = cards.map((card) => {
+    const cardWithCategory: WorkingCard[] = [];
+
+    for (const card of cards) {
+      const qm = card.examQuestionId ? examTopicMetaById.get(card.examQuestionId) : undefined;
       const categoryId = resolveBuilderCategoryId({
         label: card.category.name,
         topicCode: card.category.topicCode,
@@ -203,25 +249,16 @@ export async function buildFlashcardCustomSession(
         deckTitle: card.deck?.title,
         front: card.front,
         back: card.back,
+        examBodySystem: qm?.bodySystem ?? null,
+        examTopic: qm?.topic ?? null,
       });
       categoryCounts[categoryId] = (categoryCounts[categoryId] ?? 0) + 1;
-      return { ...card, builderCategoryId: categoryId };
-    });
+      cardWithCategory.push({ ...card, builderCategoryId: categoryId });
+    }
 
-    const allowLessonQuestionVirtuals =
-      sourceKind === "all" || sourceKind === "lesson" || sourceKind === "question";
     if (pathwayId?.trim() && allowLessonQuestionVirtuals) {
-      const existingExamQ = new Set(
-        cards
-          .map((c) => c.examQuestionId)
-          .filter((x): x is string => typeof x === "string" && x.trim().length > 0),
-      );
-      const virtuals = await loadLessonLinkedFlashcardVirtuals({
-        pathwayId: pathwayId.trim(),
-        entitlement,
-        existingExamQuestionIds: existingExamQ,
-      });
-      for (const v of virtuals) {
+      for (const v of lessonQuestionVirtuals) {
+        const qm = examTopicMetaById.get(v.examQuestionId);
         const categoryId = resolveBuilderCategoryId({
           label: v.row.category.name,
           topicCode: v.row.category.topicCode,
@@ -229,6 +266,8 @@ export async function buildFlashcardCustomSession(
           deckTitle: null,
           front: v.row.front,
           back: v.row.back,
+          examBodySystem: qm?.bodySystem ?? null,
+          examTopic: qm?.topic ?? null,
         });
         categoryCounts[categoryId] = (categoryCounts[categoryId] ?? 0) + 1;
         const synthetic: DbFlashcardRow = {
@@ -432,11 +471,35 @@ export async function buildFlashcardCustomSession(
       lessonVirtualDiagnostics,
     };
 
+    const categoryOptions = applyCountsToBuilderCategories(pathwayId, categoryCounts);
+    if (process.env.NODE_ENV === "development") {
+      let cardsTaggedFromExamMeta = 0;
+      let uncategorizedCardRows = 0;
+      for (const c of cardWithCategory) {
+        if (c.examQuestionId) {
+          const m = examTopicMetaById.get(c.examQuestionId);
+          if (m && ((m.bodySystem ?? "").trim().length > 0 || (m.topic ?? "").trim().length > 0)) {
+            cardsTaggedFromExamMeta += 1;
+          }
+        }
+        if (c.builderCategoryId === FLASHCARD_BUILDER_UNCATEGORIZED_ID) uncategorizedCardRows += 1;
+      }
+      safeServerLog("flashcards", "hub_inventory_dev", {
+        pathwayId: pathwayId ?? "",
+        topicRowCount: categoryOptions.length,
+        workingCardCount: cardWithCategory.length,
+        publishedDbFlashcards: cards.length,
+        examQuestionMetaRows: examTopicMetaById.size,
+        cardsLinkedToExamWithMeta: cardsTaggedFromExamMeta,
+        uncategorizedCardRows,
+      });
+    }
+
     return {
       ok: true,
       queryRelaxation,
       summary,
-      categoryOptions: applyCountsToBuilderCategories(pathwayId, categoryCounts),
+      categoryOptions,
       cards: cardsForSession,
     };
   } catch (e) {

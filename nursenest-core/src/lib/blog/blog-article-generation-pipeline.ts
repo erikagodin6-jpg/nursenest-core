@@ -67,6 +67,7 @@ import {
   validateLongFormNursingPlanContract,
 } from "@/lib/blog/blog-longform-nursing-contract";
 import { validateBlogTitleForBodyGeneration } from "@/lib/blog/blog-content-quality-gate";
+import { validateBlogTopicForSeoArticleGeneration } from "@/lib/blog/blog-seo-topic-intent";
 import {
   enforceLongFormBodyQuality,
   mergeUniqueNeedsReviewFlags,
@@ -172,6 +173,17 @@ export async function runBlogArticleGenerationPipeline(
     typeof override === "number" && Number.isFinite(override) && override >= BLOG_ARTICLE_MIN_WORDS
       ? Math.max(baseWordMin, Math.floor(override))
       : baseWordMin;
+
+  const topicGate = validateBlogTopicForSeoArticleGeneration(input.topic, input.exam);
+  if (!topicGate.ok) {
+    return {
+      ok: false,
+      stage: "plan",
+      error: `topic_intent_rejected: ${topicGate.reason}`,
+      code: "TOPIC_INTENT_REJECTED",
+      repairPassesUsed: 0,
+    };
+  }
 
   const reportStage = async (stage: string) => {
     await options.onProgressStage?.(stage);
@@ -294,6 +306,8 @@ export async function runBlogArticleGenerationPipeline(
         keywords: input.keywords,
         selectedTitle: options.pageH1Override,
         openAiUser: openAiUserTag(idem, "body", repairPassesUsed),
+        includeClinicalPearls: input.includeClinicalPearlsInBody,
+        includeFaqsInBody: input.includeFaqsInBody,
       });
     }
   } catch (e) {
@@ -510,6 +524,8 @@ export async function runBlogArticleGenerationPipeline(
               keywords: input.keywords,
               selectedTitle: plan.h1,
               openAiUser: openAiUserTag(idem, "body-after-seo", repairPassesUsed),
+              includeClinicalPearls: input.includeClinicalPearlsInBody,
+              includeFaqsInBody: input.includeFaqsInBody,
             });
           } catch (e) {
             const msg = e instanceof Error ? e.message : String(e);

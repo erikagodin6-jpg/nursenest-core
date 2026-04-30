@@ -30,7 +30,7 @@ export function PathwayTopicClusterSiblingNav({
   return (
     <nav aria-label="Other topic clusters in this pathway" className="nn-study-card nn-study-card--wash p-4 sm:p-5">
       <p className="text-xs font-semibold uppercase tracking-wide text-primary">Explore other topics</p>
-      <p className="nn-marketing-caption mt-1 text-muted-foreground">
+      <p className="nn-marketing-caption mt-1 text-[var(--theme-muted-text)]">
         Same exam scope. Jump to another cluster without returning to the full lesson list.
       </p>
       <ul className="mt-3 flex flex-wrap gap-2">
@@ -41,7 +41,7 @@ export function PathwayTopicClusterSiblingNav({
               className="nn-chip inline-flex items-center px-3 py-1.5 text-sm font-medium hover:border-primary/40"
             >
               {t.label}
-              <span className="ml-1.5 tabular-nums text-muted-foreground">({t.count})</span>
+              <span className="ml-1.5 tabular-nums text-[var(--theme-muted-text)]">({t.count})</span>
             </Link>
           </li>
         ))}

@@ -344,10 +344,10 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
                   {item.step}
                 </span>
                 <span className="text-sm font-semibold text-[var(--theme-heading-text)]">{item.label}</span>
-                <span className="mt-0.5 text-xs text-muted">{item.detail}</span>
+                <span className="mt-0.5 text-xs text-[var(--theme-muted-text)]">{item.detail}</span>
               </div>
               {i < arr.length - 1 && (
-                <span className="hidden shrink-0 px-0.5 text-muted sm:block" aria-hidden>
+                <span className="hidden shrink-0 px-0.5 text-[var(--theme-muted-text)] sm:block" aria-hidden>
                   →
                 </span>
               )}

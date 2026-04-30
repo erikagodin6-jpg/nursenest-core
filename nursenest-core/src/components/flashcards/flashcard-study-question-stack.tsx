@@ -126,7 +126,7 @@ export function FlashcardStudyQuestionStack({
 
               <div className="flex items-start gap-2">
                 {exam?.correctLetter ? (
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-600 text-xs text-white">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-600 text-xs nn-text-on-solid-fill">
                     {exam.correctLetter}
                   </span>
                 ) : null}

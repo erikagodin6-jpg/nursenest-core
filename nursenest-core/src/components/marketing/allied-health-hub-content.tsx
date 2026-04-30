@@ -165,6 +165,7 @@ const CATEGORY_ACCENT: Record<AlliedHubCategoryId, string> = {
   lab: "from-primary/65 via-primary/35 to-transparent",
   acute: "from-primary/85 via-primary/45 to-transparent",
   clinical: "from-primary/55 via-primary/30 to-transparent",
+  support: "from-[color-mix(in_srgb,var(--semantic-success)_55%,var(--theme-primary))] via-primary/40 to-transparent",
 };
 
 export function AlliedHubProfessionSections({

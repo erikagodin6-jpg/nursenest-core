@@ -43,7 +43,7 @@ export function PreNursingMilestoneStrip({
   const currentDone = useMemo(() => Boolean(currentSlug && snapshot?.completed.has(currentSlug)), [currentSlug, snapshot]);
 
   if (!snapshot) {
-    return <div className="nn-card mb-6 p-4 text-sm text-muted">Loading progress…</div>;
+    return <div className="nn-card mb-6 p-4 text-sm text-[var(--theme-muted-text)]">Loading progress…</div>;
   }
 
   const nextTitle = snapshot.nextSlug ? moduleTitleForSlug(snapshot.nextSlug) : null;
@@ -57,14 +57,14 @@ export function PreNursingMilestoneStrip({
     <section className="nn-card mb-6 space-y-3 p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <p className="text-sm font-semibold text-[var(--theme-heading-text)]">Pre-Nursing progress</p>
-        <p className="text-xs text-muted">
+        <p className="text-xs text-[var(--theme-muted-text)]">
           {snapshot.completedCount}/{snapshot.totalCount} modules · {snapshot.progressPct}%
         </p>
       </div>
       <div className="h-2 overflow-hidden rounded-full bg-muted">
         <div className="h-full bg-role-success transition-[width] duration-300" style={{ width: `${snapshot.progressPct}%` }} />
       </div>
-      <p className="text-sm text-muted">{milestone}</p>
+      <p className="text-sm text-[var(--theme-muted-text)]">{milestone}</p>
       <div className="flex flex-wrap items-center gap-3 text-sm">
         {snapshot.nextSlug && nextTitle ? (
           <Link
@@ -97,7 +97,7 @@ export function PreNursingMilestoneStrip({
             All complete. Explore exam lesson hubs.
           </Link>
         )}
-        <Link href="/pre-nursing/study-plan" className="text-muted-foreground hover:text-primary hover:underline">
+        <Link href="/pre-nursing/study-plan" className="text-[var(--theme-muted-text)] hover:text-primary hover:underline">
           Personalize pacing
         </Link>
       </div>

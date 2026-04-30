@@ -28,13 +28,13 @@ export function PathwayTopicClusterGroupedNav({ lessonsBasePath, topicClusters, 
   return (
     <section aria-label="Browse by topic" className="nn-study-card nn-study-card--wash p-4 sm:p-5">
       <h2 className="nn-marketing-h4 text-[var(--theme-heading-text)]">Browse by topic cluster</h2>
-      <p className="nn-marketing-caption mt-1 text-muted">
+      <p className="nn-marketing-caption mt-1 text-[var(--theme-muted-text)]">
         Organized by clinical theme. Same lessons as the full list ({pathwayShortName}).
       </p>
       <div className="mt-4 space-y-5">
         {groups.map((g) => (
           <div key={g.groupId}>
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-muted">{g.groupTitle}</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">{g.groupTitle}</h3>
             <ul className="mt-2 flex flex-wrap gap-2">{g.clusters.map((t) => chip(lessonsBasePath, t))}</ul>
           </div>
         ))}

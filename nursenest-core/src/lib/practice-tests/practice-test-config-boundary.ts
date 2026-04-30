@@ -18,7 +18,7 @@ export const DEFAULT_SAFE_PRACTICE_TEST_CONFIG: PracticeTestConfigJson = {
   timeLimitSec: null,
 };
 
-const selectionModeZ = z.enum(["random", "targeted", "weak", "missed", "starred", "cat"]);
+const selectionModeZ = z.enum(["random", "targeted", "weak", "missed", "starred", "unseen", "cat"]);
 const linearDeliveryZ = z.enum(["practice", "exam"]);
 const linearRationaleVisibilityZ = z.enum(["after_each", "end_of_exam"]);
 const catSelectionBasisZ = z.enum(["random", "targeted", "weak", "missed", "starred"]);
@@ -43,6 +43,16 @@ const catFeedbackZ = z.enum(["study", "test"]);
 const catAdaptiveSessionTypeZ = z.enum(["cat", "practice"]);
 const catEngineTypeZ = z.enum(["CAT", "SIMULATION"]);
 const catEngineModeZ = z.enum(["production_ready", "beta", "mini_adaptive", "simulation", "unavailable"]);
+const studyLaunchPayloadZ = z
+  .object({
+    pathwayId: z.union([z.null(), z.string().max(120)]).optional(),
+    mode: z.string().max(40).optional(),
+    selectedCategories: z.array(z.string().max(80)).max(40).optional(),
+    filters: z.record(z.union([z.string(), z.number(), z.boolean(), z.null()])).optional(),
+    count: z.coerce.number().int().min(1).max(200).optional(),
+    shuffle: z.boolean().optional(),
+  })
+  .optional();
 
 /** Defaults on every field so partial persisted JSON still parses; unknown keys stripped. */
 const practiceTestConfigSchema = z.object({
@@ -76,6 +86,7 @@ const practiceTestConfigSchema = z.object({
   catExamConfigId: z.union([z.null(), z.string()]).optional(),
   sessionPickSalt: z.string().min(8).max(128).optional(),
   disableOptionShuffle: z.boolean().optional(),
+  studyLaunchPayload: studyLaunchPayloadZ,
 });
 
 function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
@@ -83,7 +94,15 @@ function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
   const o = raw as Record<string, unknown>;
   const out: Partial<PracticeTestConfigJson> = {};
   const sm = o.selectionMode;
-  if (sm === "random" || sm === "targeted" || sm === "weak" || sm === "missed" || sm === "starred" || sm === "cat") {
+  if (
+    sm === "random" ||
+    sm === "targeted" ||
+    sm === "weak" ||
+    sm === "missed" ||
+    sm === "starred" ||
+    sm === "unseen" ||
+    sm === "cat"
+  ) {
     out.selectionMode = sm;
   }
   if (typeof o.pathwayId === "string" && o.pathwayId.length > 0) out.pathwayId = o.pathwayId;
@@ -129,6 +148,13 @@ function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
     const m = catSelectionAppliedMetaZ.safeParse(appliedMetaRaw);
     if (m.success) {
       out.catSelectionAppliedMeta = m.data;
+    }
+  }
+  const slp = o.studyLaunchPayload;
+  if (slp && typeof slp === "object" && !Array.isArray(slp)) {
+    const m = studyLaunchPayloadZ.safeParse(slp);
+    if (m.success && m.data) {
+      out.studyLaunchPayload = m.data;
     }
   }
   return out;

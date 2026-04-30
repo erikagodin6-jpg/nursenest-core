@@ -49,6 +49,7 @@ import {
 } from "@/lib/questions/question-bank-client-types";
 import { mergeRationaleLessonLinksWithTopicFallback } from "@/lib/questions/merge-rationale-lesson-links";
 import { parseCommaSeparatedQuestionIds } from "@/lib/questions/question-id-list-param";
+import { parsePracticeHubIdsParam } from "@/lib/questions/normalize-question-body-system";
 import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
@@ -236,6 +237,7 @@ export function QuestionBankPracticeClient({
   const [difficultyBand, setDifficultyBand] = useState<QuestionBankDifficultyBand>("");
   const [sessionSize, setSessionSize] = useState(20);
   const [incorrectOnly, setIncorrectOnly] = useState(false);
+  const [practiceHubIds, setPracticeHubIds] = useState<string[]>([]);
   const [examFilter, setExamFilter] = useState<string | null>(null);
   const [savedPresets, setSavedPresets] = useState<SavedQuestionBankPreset[]>([]);
   const [presetNameDraft, setPresetNameDraft] = useState("");
@@ -348,7 +350,7 @@ export function QuestionBankPracticeClient({
       setPhase("loading");
       setError(null);
       try {
-        if (preset === "topic_drill" && !topic && includeIdsFromUrl.length === 0) {
+        if (preset === "topic_drill" && !topic && includeIdsFromUrl.length === 0 && practiceHubIds.length === 0) {
           setQuestions([]);
           setEmptyCopy("pick_topic");
           setPhase("empty");
@@ -369,6 +371,7 @@ export function QuestionBankPracticeClient({
           sort: sortForApi,
         });
         if (topicForApi) qs.set("topic", topicForApi);
+        if (practiceHubIds.length > 0) qs.set("practiceHubIds", practiceHubIds.join(","));
         if (topicCodeFilter) qs.set("topicCode", topicCodeFilter);
         if (pathwayIdFilter) qs.set("pathwayId", pathwayIdFilter);
         if (efficiencyMode) qs.set("studyMode", efficiencyMode);
@@ -456,7 +459,7 @@ export function QuestionBankPracticeClient({
 
           const sk = sessionKey(userId);
           const saved = parsePersistedQuestionBankSessionJson(localStorage.getItem(sk));
-          if (saved) {
+          if (saved && practiceHubIds.length === 0) {
             const listIds = list.map((q) => q.id);
             const bandMatches =
               normalizeQuestionBankDifficultyBand(saved.difficultyBand ?? "") === difficultyBand;
@@ -508,6 +511,7 @@ export function QuestionBankPracticeClient({
       userId,
       preset,
       topicForApi,
+      practiceHubIds,
       topicCodeFilter,
       topic,
       pathwayIdFilter,
@@ -532,6 +536,8 @@ export function QuestionBankPracticeClient({
     const pid = searchParams.get("pathwayId")?.trim();
     const pr = searchParams.get("preset")?.trim();
     const sm = searchParams.get("studyMode")?.trim().toLowerCase();
+    const ph = searchParams.get("practiceHubIds")?.trim();
+    setPracticeHubIds(ph ? parsePracticeHubIdsParam(ph) : []);
     if (tp) setTopic(tp);
     if (tpc) setTopicCodeFilter(tpc);
     if (pid) {

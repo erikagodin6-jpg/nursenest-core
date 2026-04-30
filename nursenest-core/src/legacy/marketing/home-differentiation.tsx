@@ -67,7 +67,7 @@ function WhyNurseNestGrid({ headline, subtitle, context = "general" }: WhyNurseN
               data-testid={`card-why-${item.id}`}
             >
               <div className="nn-theme-gradient-br mb-4 flex h-11 w-11 items-center justify-center rounded-xl shadow-sm">
-                <item.icon className="h-5 w-5 text-white" />
+                <item.icon className="h-5 w-5" />
               </div>
               <h3 className="mb-2 nn-marketing-h3">{t(`components.homeDifferentiation.grid.${item.id}.title`)}</h3>
               <p className="nn-marketing-body-sm leading-relaxed text-muted-foreground">{t(`components.homeDifferentiation.grid.${item.id}.description`)}</p>

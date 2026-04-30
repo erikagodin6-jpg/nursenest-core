@@ -115,7 +115,7 @@ export default async function PreNursingLessonsHubPage({ searchParams }: Props) 
             <Link href="/pre-nursing" className="font-semibold text-primary hover:underline">
               ← Pre-Nursing overview
             </Link>
-            <Link href="/pre-nursing/study-plan" className="font-semibold text-muted-foreground hover:text-primary hover:underline">
+            <Link href="/pre-nursing/study-plan" className="font-semibold text-[var(--theme-muted-text)] hover:text-primary hover:underline">
               Study planning
             </Link>
           </div>
@@ -130,8 +130,8 @@ export default async function PreNursingLessonsHubPage({ searchParams }: Props) 
                 data-testid={`pre-nursing-lesson-${m.slug}`}
               >
                 <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{dict[m.titleKey] ?? m.slug}</h2>
-                <p className="mt-2 text-sm text-muted">{dict[m.subtitleKey] ?? ""}</p>
-                <p className="mt-3 text-xs font-medium text-primary">
+                <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{dict[m.subtitleKey] ?? ""}</p>
+                <p className="mt-3 text-xs font-medium text-[var(--theme-muted-text)]">
                   {m.lessons} {dict["preNursing.interactiveLessons"] ?? "interactive lessons"}
                 </p>
               </Link>

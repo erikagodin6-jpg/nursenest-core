@@ -61,7 +61,7 @@ const createSchema = z
     topicNames: z.array(z.string().min(1).max(200)).max(30).optional().default([]),
     difficultyMin: z.union([z.number().int().min(1).max(5), z.null()]).optional(),
     difficultyMax: z.union([z.number().int().min(1).max(5), z.null()]).optional(),
-    selectionMode: z.enum(["random", "targeted", "weak", "missed", "starred", "cat"]),
+    selectionMode: z.enum(["random", "targeted", "weak", "missed", "starred", "unseen", "cat"]),
     /** Pool strategy when `selectionMode` is `cat`. */
     catSelectionBasis: z.enum(["random", "targeted", "weak", "missed", "starred"]).optional(),
     /** Practice CAT: widen filters server-side when the narrow slice is too small (hub default: soft). */
@@ -86,6 +86,16 @@ const createSchema = z
     /** Linear sessions: rationale timing controls (mirrors tutor vs exam behavior). */
     linearRationaleVisibility: z.enum(["after_each", "end_of_exam"]).optional(),
     linearAllowReviewNavigation: z.boolean().optional(),
+    studyLaunchPayload: z
+      .object({
+        pathwayId: z.union([z.null(), z.string().max(120)]).optional(),
+        mode: z.string().max(40).optional(),
+        selectedCategories: z.array(z.string().max(80)).max(40).optional(),
+        filters: z.record(z.union([z.string(), z.number(), z.boolean(), z.null()])).optional(),
+        count: z.number().int().min(1).max(200).optional(),
+        shuffle: z.boolean().optional(),
+      })
+      .optional(),
   })
   .refine((d) => d.selectionMode !== "cat" || d.catPresentationMode !== "practice" || d.questionCount <= 200, {
     message: "CAT maximum question cap is 200.",
@@ -535,11 +545,24 @@ export async function POST(req: Request) {
             },
           };
         }
+        const catConfigPersisted = {
+          ...cat.config,
+          ...(d.studyLaunchPayload
+            ? {
+                studyLaunchPayload: {
+                  ...d.studyLaunchPayload,
+                  pathwayId: d.studyLaunchPayload.pathwayId ?? pathwayIdForCat,
+                  mode: d.studyLaunchPayload.mode ?? "cat",
+                  count: d.studyLaunchPayload.count ?? enforcedQuestionCount,
+                },
+              }
+            : {}),
+        };
         const row = await tx.practiceTest.create({
           data: {
             userId: gate.userId,
             title: d.title?.trim() || null,
-            config: cat.config as object,
+            config: catConfigPersisted as object,
             questionIds: cat.questionIds,
             adaptiveState: cat.adaptiveState as object,
             status: PracticeTestStatus.IN_PROGRESS,
@@ -601,7 +624,7 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json(
-      { id: row.id, questionCount: cat.questionIds.length, config: cat.config, adaptive: true },
+      { id: row.id, questionCount: cat.questionIds.length, config: row.config, adaptive: true },
       { status: 201 },
     );
   }
@@ -631,6 +654,15 @@ export async function POST(req: Request) {
       },
     ),
     sessionPickSalt,
+    ...(d.studyLaunchPayload
+      ? {
+          studyLaunchPayload: {
+            ...d.studyLaunchPayload,
+            pathwayId: d.studyLaunchPayload.pathwayId ?? d.pathwayId?.trim() ?? null,
+            count: d.studyLaunchPayload.count ?? d.questionCount,
+          },
+        }
+      : {}),
   };
 
   const requestedLinearFingerprint = linearConfigFingerprint(config);

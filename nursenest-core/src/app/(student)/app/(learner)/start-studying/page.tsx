@@ -75,7 +75,7 @@ export default async function StartStudyingPage() {
             Start Studying is temporarily unavailable while your learner profile reloads. Open the dashboard or try again shortly.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
-            <Link href="/app" className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm">
+            <Link href="/app" className="rounded-full bg-primary px-4 py-2 text-sm font-semibold shadow-sm">
               Back to dashboard
             </Link>
             <Link href="/app/lessons" className="rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold">

@@ -147,7 +147,7 @@ export function FlashcardStudyClient({
 
         <div className="flex gap-3 mt-6">
           <button
-            className="flex-1 bg-blue-600 text-white rounded-full py-2 font-semibold"
+            className="flex-1 bg-blue-600 nn-text-on-solid-fill rounded-full py-2 font-semibold"
             onClick={() => {
               setResumeGateOpen(false);
               setSessionKey((k) => k + 1);

@@ -5,7 +5,7 @@ export const BLOG_ARTICLE_MIN_WORDS = 1200;
  * Minimum substantive words before immediate publish (`publishImmediately`) or live `/blog` promotion.
  * Keeps long-form depth above the hard {@link BLOG_ARTICLE_MIN_WORDS} floor used for drafts.
  */
-export const BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH = 1350;
+export const BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH = 1500;
 
 /**
  * When the model lands in this band (thin but not empty), the pipeline runs extra expansion repair

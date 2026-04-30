@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { NursingTierHubPage } from "@/components/marketing/nursing-tier-hub-page";
+import { AlliedHealthPathwayHub } from "@/components/marketing/allied-health-pathway-hub";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { prisma } from "@/lib/db";
@@ -123,7 +124,10 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
     // 🔥 CRITICAL FIX
     let content;
     try {
-      content = buildNursingTierHubContent(pathway);
+      content =
+        pathway.roleTrack === "allied" && pathway.examCode === "allied-health"
+          ? null
+          : buildNursingTierHubContent(pathway);
     } catch (err) {
       console.error("[HOMEPAGE CONTENT ERROR]", err);
       content = null;
@@ -143,7 +147,9 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
 
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
 
-        {content ? (
+        {pathway.roleTrack === "allied" && pathway.examCode === "allied-health" ? (
+          <AlliedHealthPathwayHub pathway={pathway} hubPath={pathname} />
+        ) : content ? (
           <NursingTierHubPage
             pathway={pathway}
             hubPath={pathname}

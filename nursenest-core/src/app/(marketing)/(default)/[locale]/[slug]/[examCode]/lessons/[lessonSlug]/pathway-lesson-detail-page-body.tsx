@@ -331,6 +331,8 @@ export async function PathwayLessonDetailPageBody({
     slug: lesson.slug,
     title: lesson.title,
     topicSlug: lesson.topicSlug,
+    topic: lesson.topic,
+    bodySystem: lesson.bodySystem,
   });
   const requestedNorm = normalizePathwayLessonLocale(lessonContentLocale);
   const marketingUiLocale = lessonContentLocale;

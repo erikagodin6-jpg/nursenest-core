@@ -243,6 +243,7 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
           catEligiblePathwayIds={catEligiblePathwayIds}
           examSimulationEnabled={isCatExamSimulationFeatureEnabled()}
           hubBootstrapSource={hubBootstrapSource}
+          catHref={catHref}
         />
       </Suspense>
     </div>

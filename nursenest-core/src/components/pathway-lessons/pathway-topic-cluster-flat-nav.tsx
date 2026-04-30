@@ -40,7 +40,7 @@ export function PathwayTopicClusterFlatNav({ lessonsBasePath, topicClusters, pat
   return (
     <section aria-label="Browse by topic" className="rounded-xl border border-border bg-card p-4">
       <h2 className="text-sm font-bold text-[var(--theme-heading-text)]">Browse by topic cluster</h2>
-      <p className="mt-1 text-xs text-muted">
+      <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
         Same lessons, alternate index. Useful when you study by organ system or theme ({pathwayShortName}).
       </p>
       <ul className="mt-3 flex flex-wrap gap-2">{visible.map(chip)}</ul>

@@ -271,10 +271,10 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
                   {item.step}
                 </span>
                 <span className="text-sm font-semibold text-[var(--theme-heading-text)]">{item.label}</span>
-                <span className="mt-0.5 text-xs text-muted">{item.detail}</span>
+                <span className="mt-0.5 text-xs text-[var(--theme-muted-text)]">{item.detail}</span>
               </div>
               {i < arr.length - 1 && (
-                <span className="hidden shrink-0 px-0.5 text-muted sm:block" aria-hidden>
+                <span className="hidden shrink-0 px-0.5 text-[var(--theme-muted-text)] sm:block" aria-hidden>
                   →
                 </span>
               )}
@@ -350,7 +350,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
           {mistakeBlocks.map((block) => (
             <div key={block.group}>
               {block.group !== "all" && (
-                <p className="text-xs font-semibold uppercase text-muted">
+                <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">
                   {block.group === "safe" ? "Safe & effective care" : "Physiological integrity"}
                 </p>
               )}
@@ -393,7 +393,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             See your weak areas instantly (after a session)
           </Link>
         </div>
-        <p className="mt-3 text-xs text-muted">
+        <p className="mt-3 text-xs text-[var(--theme-muted-text)]">
           <Link href={examHub} className="font-semibold text-primary">
             {pathway.shortName} hub
           </Link>{" "}

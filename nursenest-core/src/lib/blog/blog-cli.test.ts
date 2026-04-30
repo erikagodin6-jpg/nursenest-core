@@ -7,6 +7,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, it } from "node:test";
 import { getBlogOpenAiChatModel, getLessonOpenAiChatModel } from "@/lib/ai/openai-env";
+import { parseBlogBatchCliArgs, resolveBatchPathway, selectBatchTopics } from "@/lib/blog/blog-batch-cli";
 import { parseBlogCliArgs } from "@/lib/blog/blog-cli-generate-args";
 import {
   BLOG_CLI_PATHOPHYSIOLOGY_CORPUS,
@@ -63,6 +64,63 @@ describe("parseBlogCliArgs", () => {
     const a = parseBlogCliArgs(["node", "x", "--dry-run", "--publish", "true"]);
     assert.equal(a.dryRun, true);
     assert.equal(a.publish, false);
+  });
+});
+
+describe("parseBlogBatchCliArgs", () => {
+  it("parses the explicit batch publish flags and keeps dry-run read only", () => {
+    const a = parseBlogBatchCliArgs([
+      "node",
+      "scripts/run-blog-batch.mjs",
+      "--count=10",
+      "--pathway=ca-rn-nclex-rn",
+      "--strategy=long-tail-nclex",
+      "--minWords=1500",
+      "--publish=true",
+      "--dryRun=true",
+      "--requireApaReferences=true",
+      "--minReferences=4",
+      "--requireInternalLinks=true",
+      "--validateInternalLinks=true",
+      "--paywallSafeLinks=true",
+      "--publishOnlyIfValid=true",
+    ]);
+    assert.equal(a.count, 10);
+    assert.equal(a.pathwayId, "ca-rn-nclex-rn");
+    assert.equal(a.strategy, "long-tail-nclex");
+    assert.equal(a.minWords, 1500);
+    assert.equal(a.publish, false);
+    assert.equal(a.dryRun, true);
+    assert.equal(a.minReferences, 4);
+    assert.equal(a.paywallSafeLinks, true);
+    assert.equal(a.includeFaqs, true);
+    assert.equal(a.includeClinicalPearls, true);
+  });
+
+  it("parses includeFaqs and includeClinicalPearls as false when set", () => {
+    const a = parseBlogBatchCliArgs([
+      "node",
+      "scripts/run-blog-batch.mjs",
+      "--includeFaqs=false",
+      "--includeClinicalPearls=0",
+    ]);
+    assert.equal(a.includeFaqs, false);
+    assert.equal(a.includeClinicalPearls, false);
+  });
+});
+
+describe("blog batch helpers", () => {
+  it("resolves exam pathway metadata for CLI batch routing", () => {
+    const r = resolveBatchPathway("ca-rn-nclex-rn");
+    assert.equal(r.pathwayId, "ca-rn-nclex-rn");
+    assert.equal(r.country, "CA");
+    assert.equal(r.tier, "rn");
+  });
+
+  it("uses the study-strategy topic bank slice for long-tail-nclex", () => {
+    const rows = selectBatchTopics({ count: 3, strategy: "long-tail-nclex" });
+    assert.equal(rows.length, 3);
+    assert.match(rows[0] ?? "", /NCLEX|Study|study/i);
   });
 });
 

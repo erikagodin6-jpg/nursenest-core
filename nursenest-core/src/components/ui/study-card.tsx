@@ -117,7 +117,7 @@ export function MetaRow({ items, className = "" }: { items: CardMetaItem[]; clas
         return (
           <span
             key={i}
-            className="inline-flex items-center gap-1 text-[12px] font-medium text-[var(--theme-muted-text)]"
+            className="inline-flex items-center gap-1 text-[12px] font-medium text-muted-foreground"
           >
             {Icon ? <Icon className="h-3.5 w-3.5 shrink-0 opacity-70" aria-hidden /> : null}
             {item.label}
@@ -259,7 +259,7 @@ function HubCard({
       ) : null}
 
       {description ? (
-        <span className="nn-marketing-body-sm mt-2 flex-1 text-[var(--theme-body-text)]">{description}</span>
+        <span className="nn-marketing-body-sm mt-2 flex-1 text-muted-foreground">{description}</span>
       ) : null}
 
       {footer ?? null}
@@ -364,7 +364,7 @@ function ListCard({
       </h2>
 
       {description ? (
-        <p className="nn-marketing-body-sm mt-2 line-clamp-3 flex-1 text-[var(--theme-muted-text)]">{description}</p>
+        <p className="nn-marketing-body-sm mt-2 line-clamp-3 flex-1 text-muted-foreground">{description}</p>
       ) : null}
 
       {footer ?? null}

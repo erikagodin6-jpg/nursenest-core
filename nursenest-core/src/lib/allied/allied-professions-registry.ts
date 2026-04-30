@@ -2,7 +2,7 @@ import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
 /** Visual grouping on `/allied-health` so learners scan by career area, not one flat list. */
-export type AlliedHubCategoryId = "therapy" | "lab" | "acute" | "clinical";
+export type AlliedHubCategoryId = "therapy" | "lab" | "acute" | "clinical" | "support";
 
 export const ALLIED_HUB_CATEGORY_META: Record<
   AlliedHubCategoryId,
@@ -21,12 +21,16 @@ export const ALLIED_HUB_CATEGORY_META: Record<
     sublabel: "Prehospital and respiratory decision-making",
   },
   clinical: {
-    label: "Clinical and community support",
-    sublabel: "Pharmacy, behavioral health, and licensing contexts",
+    label: "Clinical and desk-side roles",
+    sublabel: "Pharmacy, dental, medical office, and nutrition technician contexts",
+  },
+  support: {
+    label: "Community and personal support",
+    sublabel: "PSW, community health, mental health and addictions foundations",
   },
 };
 
-export const ALLIED_HUB_CATEGORY_ORDER: AlliedHubCategoryId[] = ["therapy", "lab", "acute", "clinical"];
+export const ALLIED_HUB_CATEGORY_ORDER: AlliedHubCategoryId[] = ["therapy", "lab", "acute", "clinical", "support"];
 
 /**
  * Allied marketing + lesson routing.
@@ -198,7 +202,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     professionKey: "social-work",
     segment: "social-work-exam-prep",
     pathwayId: US_ALLIED,
-    hubCategory: "clinical",
+    hubCategory: "support",
     title: "Social work licensing exam prep | NurseNest",
     description:
       "Ethics, assessment, intervention planning, and boundaries for social work exam contexts. allied-tier pathway scope.",
@@ -213,6 +217,237 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
       "Profession-specific recommendations when you set your allied track in settings.",
     ],
     ctaLine: "Browse lessons on paginated hubs, then align questions with your plan.",
+  },
+  {
+    professionKey: "psw-hca",
+    segment: "psw-hca-exam-prep",
+    pathwayId: US_ALLIED,
+    hubCategory: "support",
+    title: "PSW / HCA / CCA exam prep | NurseNest",
+    description:
+      "Personal support, hygiene, mobility, documentation, and delegation for PSW, HCA, and CCA certification contexts. Allied-tier pathway scope.",
+    h1: "PSW, HCA, and CCA exam prep",
+    examOverview: [
+      "Support exams reward safe sequencing, scope boundaries, and clear reporting when something changes.",
+      "Alternate short reading blocks with pathway-scoped questions so rationales stay in your lane.",
+      "Use the lesson hub categories as a map; avoid marathon cram sessions.",
+    ],
+    features: [
+      "Paginated lesson lists as the catalog grows.",
+      "Tier-scoped question bank isolation from RN/PN/NP depth.",
+      "Honest readiness language — we never promise pass outcomes.",
+    ],
+    ctaLine: "Open lessons for your track, then reinforce with practice questions on an allied plan.",
+  },
+  {
+    professionKey: "community-health-worker",
+    segment: "community-health-worker-exam-prep",
+    pathwayId: US_ALLIED,
+    hubCategory: "support",
+    title: "Community health worker exam prep | NurseNest",
+    description:
+      "Outreach, teaching, navigation, and population-health basics for CHW certification study. Allied pathway scope.",
+    h1: "Community health worker exam prep",
+    examOverview: [
+      "CHW exams blend communication, ethics, and practical follow-up. rehearse with scenario-heavy rationales.",
+      "Keep sessions bounded; repeat weak clusters instead of marathon reads.",
+      "Pair lessons with short question bursts to keep context switching realistic.",
+    ],
+    features: [
+      "Canonical URLs and breadcrumbs on public routes.",
+      "404 on unknown lessons instead of soft failures.",
+      "Strict isolation from nursing-only hubs at the data layer.",
+    ],
+    ctaLine: "Browse lessons, then open the question bank on a matching allied plan.",
+  },
+  {
+    professionKey: "mental-health-addictions",
+    segment: "mental-health-addictions-exam-prep",
+    pathwayId: US_ALLIED,
+    hubCategory: "support",
+    title: "Mental health and addictions worker exam prep | NurseNest",
+    description:
+      "Safety, boundaries, de-escalation, and documentation edges for mental health and addictions worker exams. Allied-tier scope.",
+    h1: "Mental health and addictions worker exam prep",
+    examOverview: [
+      "Items often test judgment under ambiguity and therapeutic communication.",
+      "Use rationale-heavy review after each short block.",
+      "Stay inside pathway-scoped content for your subscription lane.",
+    ],
+    features: [
+      "ISR-friendly marketing pages with bounded database reads.",
+      "Paginated lesson hubs so pages stay fast as the library grows.",
+      "Metadata and internal links from hub → profession → lessons.",
+    ],
+    ctaLine: "Start from lessons, then reinforce with pathway-scoped questions.",
+  },
+  {
+    professionKey: "medical-assistant",
+    segment: "medical-assistant-exam-prep",
+    pathwayId: US_ALLIED,
+    hubCategory: "clinical",
+    title: "Medical assistant exam prep | NurseNest",
+    description:
+      "Clinical workflows, vital signs, minor procedures, and office safety for medical assistant certification. Allied pathway scope.",
+    h1: "Medical assistant exam prep",
+    examOverview: [
+      "MA exams mix administrative compliance with hands-on clinical judgment.",
+      "Alternate reading with question blocks to rehearse office-speed decisions.",
+      "Use the lesson hub as a map; avoid cramming every topic in one sitting.",
+    ],
+    features: [
+      "Pathway-scoped content lists. no cross-tier leakage.",
+      "Preview sections stay discoverable; full lesson depth follows your plan.",
+      "Pair lessons with timed practice and rationales.",
+    ],
+    ctaLine: "Open paginated lessons, then add questions when you are on an allied plan.",
+  },
+  {
+    professionKey: "dental-assistant",
+    segment: "dental-assistant-exam-prep",
+    pathwayId: US_ALLIED,
+    hubCategory: "clinical",
+    title: "Dental assistant exam prep | NurseNest",
+    description:
+      "Chairside assistance, infection control, radiography basics, and patient communication for dental assistant certification. Allied scope.",
+    h1: "Dental assistant exam prep",
+    examOverview: [
+      "Dental assistant exams stress infection control, four-handed dentistry flow, and safety sequencing.",
+      "Use short lesson blocks, then return to pathway-scoped questions.",
+      "Keep study loops short and repeatable.",
+    ],
+    features: [
+      "Strict allied-tier isolation from RN/PN/NP depth.",
+      "Honest readiness language. we never promise pass outcomes.",
+      "Internal links from hub → profession → lessons → detail for clear crawling.",
+    ],
+    ctaLine: "Browse lessons below or return to the Allied hub to pick another discipline.",
+  },
+  {
+    professionKey: "dental-hygiene",
+    segment: "dental-hygiene-exam-prep",
+    pathwayId: US_ALLIED,
+    hubCategory: "clinical",
+    title: "Dental hygiene exam prep | NurseNest",
+    description:
+      "Periodontal assessment, prevention education, radiographic judgment, and ethics for dental hygiene boards. Allied pathway scope.",
+    h1: "Dental hygiene exam prep",
+    examOverview: [
+      "Hygiene boards reward prevention teaching, periodontal reasoning, and safe imaging judgment.",
+      "Alternate calculation and rationale review in short bursts.",
+      "Use lessons to anchor protocols, then drill questions in the same topic cluster.",
+    ],
+    features: [
+      "Tier-scoped content. no nursing-only pathways in allied learner views.",
+      "Lesson lists stay paginated as the catalog grows.",
+      "Breadcrumbs and internal links from hub → profession → lessons.",
+    ],
+    ctaLine: "Start with the lesson list, then open the question bank on a matching plan.",
+  },
+  {
+    professionKey: "dietetic-technician",
+    segment: "dietetic-technician-exam-prep",
+    pathwayId: US_ALLIED,
+    hubCategory: "clinical",
+    title: "Dietetic technician exam prep | NurseNest",
+    description:
+      "Medical nutrition therapy support, screening, documentation, and food-service safety for dietetic technician certification. Allied scope.",
+    h1: "Dietetic technician exam prep",
+    examOverview: [
+      "Technician exams blend nutrient knowledge with workflow and documentation.",
+      "Keep sessions short; repeat weak areas until patterns stick.",
+      "Pair lessons with timed practice and rationales.",
+    ],
+    features: [
+      "Metadata and canonical URLs on indexable routes.",
+      "404 on unknown lessons instead of soft failures.",
+      "No cross-profession leakage in learner-scoped views when a profession is set.",
+    ],
+    ctaLine: "Use lessons as your map, then practice under the same allied entitlement.",
+  },
+  {
+    professionKey: "emt",
+    segment: "emt-exam-prep",
+    pathwayId: US_ALLIED,
+    hubCategory: "acute",
+    title: "EMT exam prep | Allied health | NurseNest",
+    description:
+      "Scene safety, assessment, airway basics, and transport decisions for EMT certification study. pathway-scoped allied lessons and practice.",
+    h1: "EMT certification exam prep",
+    examOverview: [
+      "EMT exams reward rapid assessment, scope boundaries, and protocol sequencing.",
+      "Use short lesson blocks, then return to pathway-scoped questions so feedback stays relevant.",
+      "Alternate reading with question blocks to rehearse field-speed decisions.",
+    ],
+    features: [
+      "Lessons and items filtered to the allied subscription tier.",
+      "Preview sections stay discoverable; full lesson depth follows your plan.",
+      "Pair lessons with timed practice and rationales to rehearse decision speed.",
+    ],
+    ctaLine: "Start with the lesson list, then open the question bank on a matching plan.",
+  },
+  {
+    professionKey: "sonography",
+    segment: "sonography-exam-prep",
+    pathwayId: US_ALLIED,
+    hubCategory: "lab",
+    title: "Ultrasound / sonography exam prep | NurseNest",
+    description:
+      "Image optimization, patient positioning, safety, and protocol communication for sonography certification. allied-tier pathway scope.",
+    h1: "Ultrasound and sonography exam prep",
+    examOverview: [
+      "Sonography items often test anatomy correlation, safety, and clear handoffs.",
+      "Use the lesson hub as a map; avoid cramming every topic in one sitting.",
+      "Keep sessions bounded; accuracy matters more than marathon length.",
+    ],
+    features: [
+      "ISR-friendly marketing pages with bounded database reads.",
+      "Canonical URLs on lesson hubs; paginated pages use noindex where appropriate.",
+      "Strict isolation from nursing-only hubs at the data layer.",
+    ],
+    ctaLine: "Open paginated lessons and add questions when you are on an allied plan.",
+  },
+  {
+    professionKey: "radiography",
+    segment: "radiography-exam-prep",
+    pathwayId: US_ALLIED,
+    hubCategory: "lab",
+    title: "Radiography / medical imaging exam prep | NurseNest",
+    description:
+      "Positioning, contrast safety, ALARA thinking, and protocol edges for radiography certification. Content scoped to allied pathways.",
+    h1: "Radiography and medical imaging exam prep",
+    examOverview: [
+      "Radiography exams mix physics judgment with patient safety and communication.",
+      "Alternate reading blocks with pathway-scoped questions so feedback stays in your authorization lane.",
+      "Repeat weak clusters instead of marathon reads.",
+    ],
+    features: [
+      "Pathway-scoped content lists. no cross-tier leakage.",
+      "Paginated lesson hubs so pages stay fast as the library grows.",
+      "Internal links from hub → profession → lessons for clear crawling.",
+    ],
+    ctaLine: "Browse lessons below or return to the Allied hub to pick another discipline.",
+  },
+  {
+    professionKey: "lab-assistant",
+    segment: "lab-assistant-exam-prep",
+    pathwayId: US_ALLIED,
+    hubCategory: "lab",
+    title: "Medical laboratory assistant exam prep | NurseNest",
+    description:
+      "Specimen collection, pre-analytical handling, QC awareness, and safety for MLA / MLT-assistant style exams. Allied pathway scope.",
+    h1: "Medical laboratory assistant exam prep",
+    examOverview: [
+      "Assistant-level exams stress chain-of-custody, safety, and clear escalation.",
+      "Keep sessions short; repeat weak areas until patterns stick.",
+      "Use lessons to anchor workflows, then drill questions in the same topic cluster.",
+    ],
+    features: [
+      "Tier-scoped content. no nursing-only pathways in allied learner views.",
+      "404 on unknown lessons instead of soft errors.",
+      "Honest readiness language. we never promise pass outcomes.",
+    ],
+    ctaLine: "Open paginated lessons, then reinforce with questions on a matching allied plan.",
   },
 ];
 

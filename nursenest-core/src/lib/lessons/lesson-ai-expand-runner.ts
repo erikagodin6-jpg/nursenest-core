@@ -13,6 +13,7 @@ import {
   sectionKindsNeedingRegeneration,
   validateExpandedLesson,
   type ExpandedLessonValidation,
+  type LessonLike,
 } from "@/lib/lessons/rn-expanded-lesson-contract";
 import {
   getExpandCatalogFiles,
@@ -49,6 +50,21 @@ function getThinSections(
 
 function sleep(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
+}
+
+/** Satisfies {@link validateExpandedLesson} `LessonLike` (catalog JSON uses loose section rows). */
+function lessonForValidation(lesson: {
+  slug: string;
+  title: string;
+  sections?: unknown;
+  linked_flashcard_prompts?: unknown;
+}): LessonLike {
+  return {
+    slug: lesson.slug,
+    title: lesson.title,
+    sections: (lesson.sections ?? []) as LessonLike["sections"],
+    linked_flashcard_prompts: lesson.linked_flashcard_prompts,
+  };
 }
 
 interface Progress {
@@ -222,7 +238,7 @@ export async function runLessonAiExpandMain(
   const progressPath = path.join(pkgRoot, "tmp", LESSON_EXPAND_PROGRESS_FILENAME);
 
   const model = getLessonOpenAiChatModel();
-  console.log(`Model: ${model} (LESSON_OPENAI_MODEL / AI_INTEGRATIONS_OPENAI_MODEL → getLessonOpenAiChatModel)`);
+  console.log(`Model: ${model}`);
   console.log("═══════════════════════════════════════════════════════");
   console.log(" Nursing clinical expansion (RN + RPN/PN) — validate / retry / gate");
   console.log("═══════════════════════════════════════════════════════");
@@ -260,7 +276,7 @@ export async function runLessonAiExpandMain(
   let count = 0;
   let rnScanned = 0;
   let rpnScanned = 0;
-  const REQUIRED_ORDER = [...RN_EXPAND_REQUIRED_KINDS] as readonly string[];
+  const REQUIRED_ORDER = [...RN_EXPAND_REQUIRED_SECTION_KINDS] as readonly string[];
 
   for (const { filePath, fileName } of catalogFiles) {
     if (count >= LIMIT) break;
@@ -301,7 +317,7 @@ export async function runLessonAiExpandMain(
         const startWc = lessonWordCount(sections);
         const key = `${pwKey}:${L.slug}`;
 
-        const initialValidation = validateExpandedLesson(L);
+        const initialValidation = validateExpandedLesson(lessonForValidation(L));
         if (initialValidation.pass && !FORCE && !SLUG_FILTER) {
           totalSkipped++;
           continue;
@@ -362,13 +378,13 @@ export async function runLessonAiExpandMain(
         L.linked_flashcard_prompts = buildFlashcardPrompts(L.title);
         syncLinkedFlashcardSection(L, L.linked_flashcard_prompts);
 
-        let v = validateExpandedLesson(L);
+        let v = validateExpandedLesson(lessonForValidation(L));
         for (let regenRound = 0; regenRound < MAX_CLINICAL_REGEN_ROUNDS && !v.pass; regenRound++) {
           if (v.flashcardPromptCount < 8 || v.flashcardPromptErrors.length > 0) {
             L.linked_flashcard_prompts = buildFlashcardPrompts(L.title);
             syncLinkedFlashcardSection(L, L.linked_flashcard_prompts);
           }
-          v = validateExpandedLesson(L);
+          v = validateExpandedLesson(lessonForValidation(L));
           if (v.pass) break;
 
           const sm = new Map<string, { kind?: string; body?: string; heading?: string; id?: string }>(
@@ -401,7 +417,7 @@ export async function runLessonAiExpandMain(
             if (!REQUIRED_ORDER.includes(k)) rebuilt.push(row);
           }
           L.sections = rebuilt;
-          v = validateExpandedLesson(L);
+          v = validateExpandedLesson(lessonForValidation(L));
         }
 
         logLessonOutcome(pwKey, L, startWc, generated, v);

@@ -89,13 +89,13 @@ export function PathwayNclexScalableLessonSection({
         <div className="mt-4 grid gap-3 border-t border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] pt-4 text-sm sm:grid-cols-2">
           <div>
             <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">Scenario focus</p>
-            <p className="mt-0.5">{p.scenarioType}</p>
+            <p className="mt-0.5 text-[var(--theme-body-text)]">{p.scenarioType}</p>
           </div>
           <div>
             <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">
               {variant === "rn" ? "Likely NCLEX item types" : "Likely item types"}
             </p>
-            <p className="mt-0.5">{p.examQuestionTypes}</p>
+            <p className="mt-0.5 text-[var(--theme-body-text)]">{p.examQuestionTypes}</p>
           </div>
           <div className="sm:col-span-2">
             <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">
@@ -123,11 +123,14 @@ export function PathwayNclexScalableLessonSection({
           <Link href={pathwayHubAppQuestionsHref(pathwayId, l.topic)} className="text-sm font-semibold text-primary">
             Practice questions →
           </Link>
-          <Link href={pathwayHubAppFlashcardsHref(pathwayId)} className="text-sm font-semibold text-muted hover:text-primary">
+          <Link
+            href={pathwayHubAppFlashcardsHref(pathwayId)}
+            className="text-sm font-semibold text-[var(--theme-muted-text)] hover:text-primary"
+          >
             Flashcards →
           </Link>
           {catHubHref ? (
-            <Link href={catHubHref} className="text-sm font-semibold text-muted hover:text-primary">
+            <Link href={catHubHref} className="text-sm font-semibold text-[var(--theme-muted-text)] hover:text-primary">
               CAT prep →
             </Link>
           ) : null}
@@ -172,7 +175,7 @@ export function PathwayNclexScalableLessonSection({
                     ) : null}
                     <Link
                       href={pathwayHubAppQuestionsHref(pathwayId, l.topic)}
-                      className="shrink-0 text-xs font-medium text-muted hover:text-primary"
+                      className="shrink-0 text-xs font-medium text-[var(--theme-muted-text)] hover:text-primary"
                     >
                       Questions →
                     </Link>

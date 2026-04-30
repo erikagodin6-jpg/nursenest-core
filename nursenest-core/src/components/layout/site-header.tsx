@@ -59,7 +59,7 @@ const MarketingHeaderUtilityStrip = dynamic(
 );
 
 /** Primary filled header CTAs — white label on theme primary fill for consistent contrast. */
-const HEADER_NAV_PRIMARY_CTA = "nn-nav-cta text-white";
+const HEADER_NAV_PRIMARY_CTA = "nn-nav-cta nn-text-on-solid-fill";
 
 /** Match legacy header rhythm: compact sizing with medium-weight copy, not extra-light pills. */
 const NAV_LINK_CLASS =

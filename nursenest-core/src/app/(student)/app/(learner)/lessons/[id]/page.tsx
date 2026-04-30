@@ -87,6 +87,8 @@ import { PathwayLessonInteractiveModules } from "@/components/lessons/pathway-le
 import { getLessonInteractiveModules } from "@/lib/lessons/lesson-interactive-modules";
 import { loadPathwayLessonAdjacent, mapPathwayLessonAdjacentToAppHrefs } from "@/lib/lessons/pathway-lesson-adjacent";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
+import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
+import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
 
 function LessonBody({
   content,
@@ -635,6 +637,14 @@ async function LessonDetailPageInner({ params }: Props) {
     if (hasCatalogPost) assessmentHintParts.push(`Retention ${bankAssessments.postTest!.length}`);
     const assessmentHint = assessmentHintParts.length > 0 ? assessmentHintParts.join(" · ") : null;
 
+    const matchedLessonImage = resolveLessonImage({
+      slug: record.slug,
+      title: record.title,
+      topicSlug: record.topicSlug,
+      topic: record.topic,
+      bodySystem: record.bodySystem,
+    });
+
     const purposeLine = (() => {
       const tpc = record.topic?.trim();
       const pn = pathway?.shortName?.trim() ?? "your pathway";
@@ -857,6 +867,17 @@ async function LessonDetailPageInner({ params }: Props) {
             purposeLine={purposeLine}
             assessmentHint={assessmentHint}
           />
+          {matchedLessonImage.url ? (
+            <div className="mt-4">
+              <LessonClinicalImageCard
+                url={matchedLessonImage.url}
+                alt={matchedLessonImage.alt}
+                source={matchedLessonImage.source}
+                lessonTitle={displayTitle}
+                className="!mt-0 !mb-2 max-w-[44rem]"
+              />
+            </div>
+          ) : null}
           {pathway ? (
             <PathwayLessonActions
               pathwayId={pathway.id}

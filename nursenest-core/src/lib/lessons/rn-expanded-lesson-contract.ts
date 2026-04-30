@@ -38,7 +38,8 @@ export type ExpandedLessonValidation = {
   flashcardPromptErrors: string[];
 };
 
-type LessonLike = Pick<PathwayLessonRecord, "sections" | "title" | "slug"> & {
+/** Catalog JSON / expand scripts use loose rows; validators normalize internally. */
+export type LessonLike = Pick<PathwayLessonRecord, "sections" | "title" | "slug"> & {
   linked_flashcard_prompts?: unknown;
 };
 

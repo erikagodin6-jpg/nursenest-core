@@ -196,7 +196,7 @@ export async function PublicLessonsPathwaySections({
             <h2 id={`lessons-section-${key}`} className="nn-marketing-h2">
               {sectionTitle[key]}
             </h2>
-            <p className="mt-1 nn-marketing-body-sm text-muted">{sectionLead[key]}</p>
+            <p className="mt-1 nn-marketing-body-sm text-[var(--theme-muted-text)]">{sectionLead[key]}</p>
 
             <ul className="mt-4 flex flex-col gap-3 sm:gap-[var(--nn-rhythm-card-grid-gap)]">
               {rows.map(({ pathway: p, previews }) => (
@@ -209,7 +209,7 @@ export async function PublicLessonsPathwaySections({
                   </p>
 
                   <h3 className="mt-1 nn-marketing-h3">{p.displayName}</h3>
-                  <p className="mt-2 nn-marketing-body-sm text-muted">{p.seoDescription}</p>
+                  <p className="mt-2 nn-marketing-body-sm text-[var(--theme-muted-text)]">{p.seoDescription}</p>
 
                   {previews.length > 0 ? (
                     <div className="mt-3">
@@ -245,7 +245,7 @@ export async function PublicLessonsPathwaySections({
         <h2 id="lessons-blog-latest" className="nn-marketing-h3">
           Latest study articles
         </h2>
-        <p className="mt-1 nn-marketing-body-sm text-muted">
+        <p className="mt-1 nn-marketing-body-sm text-[var(--theme-muted-text)]">
           Recently published guides linked from this public lessons hub.
         </p>
         <MarketingBlogLatestLinks take={3} className="mt-3" />

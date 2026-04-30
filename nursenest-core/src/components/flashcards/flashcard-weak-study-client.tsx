@@ -141,7 +141,7 @@ export function FlashcardWeakStudyClient({
           {pathwayRequired && (
             <Link
               href="/app/account/study-preferences"
-              className="bg-blue-600 text-white rounded-full py-2"
+              className="bg-blue-600 nn-text-on-solid-fill rounded-full py-2"
             >
               Set study preferences
             </Link>

@@ -274,7 +274,7 @@ export function LearnerContextSettingsPanel({
             disabled={!hasChanges || isPending}
             className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-colors ${
               hasChanges && !isPending
-                ? "bg-[var(--theme-primary)] text-white hover:opacity-90"
+                ? "bg-[var(--theme-primary)] nn-text-on-solid-fill hover:opacity-90"
                 : "bg-[var(--surface-strong)] text-[var(--theme-muted-text)] cursor-not-allowed"
             }`}
           >

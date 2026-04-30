@@ -276,7 +276,7 @@ export function ReadinessLockedCard() {
 
           <Link
             href="/pricing"
-            className="mt-1 inline-flex rounded-full bg-[var(--semantic-brand)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:shadow-md hover:brightness-105"
+            className="mt-1 inline-flex rounded-full bg-[var(--semantic-brand)] px-5 py-2.5 text-sm font-semibold nn-text-on-solid-fill shadow-sm transition-all hover:shadow-md hover:brightness-105"
           >
             Start Free Trial
           </Link>

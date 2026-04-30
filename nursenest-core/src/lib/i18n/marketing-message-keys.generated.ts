@@ -6826,6 +6826,7 @@ export const MARKETING_MESSAGE_KEYS = [
   "learner.shell.nav.practice",
   "learner.shell.nav.progress",
   "learner.shell.nav.questions",
+  "learner.shell.nav.studyTools",
   "learner.startStudying.ctaBody",
   "learner.startStudying.ctaPricing",
   "learner.startStudying.ctaTitle",

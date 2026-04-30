@@ -10,10 +10,36 @@ import { useMarketingI18n, useMarketingLocale } from "@/lib/marketing-i18n";
 import { formatTitleCase } from "@/lib/format/text-case";
 import {
   buildLearnerPrimaryNavItems,
+  buildOptionalStudyToolsShellNavItem,
   isLearnerPrimaryNavKey,
   learnerPrimaryNavLabelKey,
+  type LearnerShellStudyNavRowId,
 } from "@/lib/navigation/learner-primary-nav";
 import { SignOutButton } from "@/components/auth/sign-out-button";
+
+const STUDY_TOOLS_ACTIVE_PREFIXES = [
+  "/app/study-tools",
+  "/app/matching",
+  "/app/fill-in-the-blank",
+  "/app/ordering",
+  "/app/lab-drills",
+  "/app/medication-drills",
+] as const;
+
+type LearnerShellNavRow = {
+  id: LearnerShellStudyNavRowId;
+  href: string;
+  matchPrefix: string;
+  matchPrefixes?: readonly string[];
+  label: string;
+};
+
+function isLearnerShellNavActive(pathname: string, item: { matchPrefix: string; matchPrefixes?: readonly string[] }) {
+  if (item.matchPrefixes?.length) {
+    return item.matchPrefixes.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+  }
+  return pathname.startsWith(item.matchPrefix);
+}
 
 export type LearnerShellNavProps = {
   pathwayPillLabel: string | null;
@@ -31,7 +57,7 @@ function useLearnerNavItems({
 
   return useMemo(() => {
     const built = buildLearnerPrimaryNavItems(pathwayId, { examsLabel });
-    return built.map((row) => {
+    const rows: LearnerShellNavRow[] = built.map((row) => {
       const labelKey = learnerPrimaryNavLabelKey(row.key);
       let label = formatTitleCase(t(labelKey), locale);
       if (row.key === "cat" && examsLabel === "Exams") {
@@ -44,6 +70,19 @@ function useLearnerNavItems({
         label,
       };
     });
+    const studyTools = buildOptionalStudyToolsShellNavItem(pathwayId);
+    if (studyTools) {
+      const label = formatTitleCase(t(studyTools.labelKey), locale);
+      const insertAt = Math.min(3, rows.length);
+      rows.splice(insertAt, 0, {
+        id: studyTools.id,
+        href: studyTools.href,
+        matchPrefix: studyTools.matchPrefix,
+        matchPrefixes: STUDY_TOOLS_ACTIVE_PREFIXES,
+        label,
+      });
+    }
+    return rows;
   }, [pathwayId, examsLabel, t, locale]);
 }
 
@@ -92,7 +131,7 @@ export function LearnerShellDesktopStudyLinks({
     >
       <div className="flex w-full flex-wrap items-center justify-center gap-x-1.5 gap-y-2 sm:justify-start sm:gap-x-2 sm:gap-y-2 lg:gap-x-3">
         {items.map((item) => {
-          const active = pathname.startsWith(item.matchPrefix);
+          const active = isLearnerShellNavActive(pathname, item);
           const isPrimarySurface = isLearnerPrimaryNavKey(item.id);
           return (
             <Link
@@ -161,7 +200,7 @@ export function LearnerShellMobileBottomNav({
           {pathwayLabel}
         </Link>
         {items.map((item) => {
-          const active = pathname.startsWith(item.matchPrefix);
+          const active = isLearnerShellNavActive(pathname, item);
           const isPrimarySurface = isLearnerPrimaryNavKey(item.id);
           return (
               <Link

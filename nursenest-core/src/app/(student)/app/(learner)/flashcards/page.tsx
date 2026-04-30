@@ -20,6 +20,7 @@ import { readFlashcardsHubPathwayBootstrapSnapshot } from "@/lib/study-content-f
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { buildFlashcardCustomSession } from "@/lib/flashcards/build-flashcard-custom-session";
+import { builderCategoryOptionsForPathway } from "@/lib/flashcards/flashcard-builder-taxonomy";
 import { parseCustomSessionSourceKind } from "@/lib/flashcards/custom-session-card-filters";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 import { visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
@@ -208,7 +209,20 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
         matchingTotal: inv.summary.matchingCards,
         lessonVirtualDiagnostics: inv.summary.lessonVirtualDiagnostics ?? null,
       };
+    } else {
+      /** Pathway skeleton matches lessons hub even when inventory query fails — avoids empty hub + false client errors. */
+      initialHub = {
+        categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
+        matchingTotal: 0,
+        lessonVirtualDiagnostics: null,
+      };
     }
+  } else if (entitlement.hasAccess) {
+    initialHub = {
+      categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
+      matchingTotal: 0,
+      lessonVirtualDiagnostics: null,
+    };
   }
 
   const visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);

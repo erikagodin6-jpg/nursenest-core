@@ -57,6 +57,13 @@ import {
 import { getWeakTopicTargetsForPractice } from "@/lib/learner/topic-performance";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
+import { parsePracticeHubIdsParam } from "@/lib/questions/normalize-question-body-system";
+import {
+  loadPathwayPracticeBodySystemHubAggregates,
+  mergePracticeHubPoolForApi,
+  practiceHubPoolSql,
+  prismaWhereForPracticeHubPool,
+} from "@/lib/questions/pathway-practice-body-system-aggregates";
 
 export const dynamic = "force-dynamic";
 
@@ -174,6 +181,7 @@ export async function GET(req: NextRequest) {
   const pageSize = pageSizeParsed;
 
   const topicFilter = searchParams.get("topic")?.trim();
+  const practiceHubIdsParsed = parsePracticeHubIdsParam(searchParams.get("practiceHubIds"));
   const topicCodeFilter = searchParams.get("topicCode")?.trim().toLowerCase();
   const pathwayIdParam = searchParams.get("pathwayId")?.trim();
   const responseMode = parseQuestionListMode(searchParams.get("mode"));
@@ -300,17 +308,28 @@ export async function GET(req: NextRequest) {
       }
       const baseWhere = questionAccessWhereWithPathway(gate.entitlement, pathway);
 
+      let practiceHubTopics: string[] = [];
+      let practiceHubBodySystems: string[] = [];
+      let practiceHubOrPrisma: Prisma.ExamQuestionWhereInput | null = null;
+      if (pathway && practiceHubIdsParsed.length > 0) {
+        const ag = await loadPathwayPracticeBodySystemHubAggregates(pathway.id);
+        const merged = mergePracticeHubPoolForApi(ag, practiceHubIdsParsed);
+        practiceHubTopics = merged.topics;
+        practiceHubBodySystems = merged.bodySystems;
+        practiceHubOrPrisma = prismaWhereForPracticeHubPool(practiceHubTopics, practiceHubBodySystems);
+      }
+
       const studyModeRaw = searchParams.get("studyMode")?.trim().toLowerCase() ?? "";
       const STUDY_MODES = new Set(["weak", "high_yield", "rapid", "final_prep"]);
       const studyMode = STUDY_MODES.has(studyModeRaw) ? studyModeRaw : null;
       const effectivePageSize = studyMode === "rapid" ? Math.min(pageSize, 8) : pageSize;
       const skipRowsEff = sort === "random" ? 0 : (page - 1) * effectivePageSize;
 
-      let topicFilterResolved = topicFilter;
+      let topicFilterResolved = practiceHubIdsParsed.length > 0 ? "" : topicFilter ?? "";
       let studyModeNote: string | null = null;
       let weakTopicCodeApplied: string | null = null;
       let weakTopicConfidence: "high" | "medium" | "low" | null = null;
-      if (studyMode === "weak" && !topicFilterResolved) {
+      if (studyMode === "weak" && !topicFilterResolved && practiceHubIdsParsed.length === 0) {
         const targets = await getWeakTopicTargetsForPractice(gate.userId, gate.entitlement, 4);
         const preferred = targets.find((t) => t.confidence !== "low") ?? targets[0];
         if (preferred?.topicCode) {
@@ -339,7 +358,9 @@ export async function GET(req: NextRequest) {
 
       const buildWhereParts = (includeTopic: boolean): Prisma.ExamQuestionWhereInput => {
         const parts: Prisma.ExamQuestionWhereInput[] = [baseWhere, ...studyModeFilters];
-        if (includeTopic && topicFilterResolved && topicFilterResolved.length > 0) {
+        if (includeTopic && practiceHubOrPrisma) {
+          parts.push(practiceHubOrPrisma);
+        } else if (includeTopic && topicFilterResolved && topicFilterResolved.length > 0) {
           parts.push({ topic: topicFilterResolved });
         }
         if (includeTopic && topicCodeFilter && topicCodeFilter.length > 0) {
@@ -377,7 +398,8 @@ export async function GET(req: NextRequest) {
       let questions;
 
       if (sort === "random") {
-        const usePrismaRandomSelection = studyModeFilters.length > 0 || pathway?.examFamily === ExamFamily.NP;
+        const usePrismaRandomSelection =
+          studyModeFilters.length > 0 || pathway?.examFamily === ExamFamily.NP || Boolean(practiceHubOrPrisma);
         if (usePrismaRandomSelection) {
           const pool = await withRetry(() =>
             prisma.examQuestion.findMany({
@@ -391,8 +413,12 @@ export async function GET(req: NextRequest) {
           const accessSql = examQuestionAccessWhereSql(gate.entitlement);
           const pathSql = pathwayExamKeysSql(pathway);
           const exSql = excludeQuestionIdsSql(excludeIds);
-          let topicSql =
-            topicFilterResolved && topicFilterResolved.length > 0 ? topicEqualsSql(topicFilterResolved) : Prisma.empty;
+          const hubSqlActive = practiceHubTopics.length > 0 || practiceHubBodySystems.length > 0;
+          let topicSql = hubSqlActive
+            ? practiceHubPoolSql(practiceHubTopics, practiceHubBodySystems)
+            : topicFilterResolved && topicFilterResolved.length > 0
+              ? topicEqualsSql(topicFilterResolved)
+              : Prisma.empty;
 
           let idRows = await withRetry(() =>
             prisma.$queryRaw<{ id: string }[]>`
@@ -403,7 +429,10 @@ export async function GET(req: NextRequest) {
           `,
           );
 
-          if (idRows.length === 0 && topicFilterResolved && topicFilterResolved.length > 0) {
+          if (
+            idRows.length === 0 &&
+            (hubSqlActive || (topicFilterResolved && topicFilterResolved.length > 0))
+          ) {
             topicSql = Prisma.empty;
             idRows = await withRetry(() =>
               prisma.$queryRaw<{ id: string }[]>`
@@ -438,7 +467,10 @@ export async function GET(req: NextRequest) {
             take: effectivePageSize,
           }),
         );
-        if (questions.length === 0 && topicFilterResolved && topicFilterResolved.length > 0) {
+        if (
+          questions.length === 0 &&
+          (practiceHubOrPrisma || (topicFilterResolved && topicFilterResolved.length > 0))
+        ) {
           questions = await withRetry(() =>
             prisma.examQuestion.findMany({
               where: buildWhereParts(false),

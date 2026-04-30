@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   buildLearnerPrimaryNavItems,
+  buildOptionalStudyToolsShellNavItem,
   CANONICAL_LEARNER_ROUTES,
   isLearnerPrimaryNavKey,
   LEARNER_PRIMARY_NAV_ITEM_KEY,
@@ -28,4 +29,16 @@ test("buildLearnerPrimaryNavItems: primary key maps to canonical route", () => {
     assert.equal(primary!.href, CANONICAL_LEARNER_ROUTES.practice);
     assert.equal(primary!.matchBase, "/app/questions");
   }
+});
+
+test("buildOptionalStudyToolsShellNavItem: hidden unless NEXT_PUBLIC_ENABLE_STUDY_TOOLS=true", (t) => {
+  t.afterEach(() => {
+    delete process.env.NEXT_PUBLIC_ENABLE_STUDY_TOOLS;
+  });
+  assert.equal(buildOptionalStudyToolsShellNavItem("rn-1"), null);
+  process.env.NEXT_PUBLIC_ENABLE_STUDY_TOOLS = "true";
+  const row = buildOptionalStudyToolsShellNavItem("rn-1");
+  assert.ok(row);
+  assert.equal(row!.href, "/app/study-tools?pathwayId=rn-1");
+  assert.equal(row!.matchPrefix, "/app/study-tools");
 });

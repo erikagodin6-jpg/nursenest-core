@@ -67,7 +67,7 @@ export function LessonsToolbar({
           <div className="flex shrink-0 justify-center gap-2 sm:justify-start">
             <button
               type="submit"
-              className="min-h-11 rounded-full bg-[var(--semantic-brand)] px-5 text-sm font-semibold text-white transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
+              className="min-h-11 rounded-full bg-[var(--semantic-brand)] px-5 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_24%,transparent)]"
             >
               Search
             </button>

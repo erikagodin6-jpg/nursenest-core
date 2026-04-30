@@ -43,7 +43,7 @@ export default function MedMathTool() {
         <Button
           type="button"
           unstyled
-          className={`rounded-full px-4 py-2 text-sm font-semibold ${mode === "iv" ? "bg-primary text-white" : "border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)]"}`}
+          className={`rounded-full px-4 py-2 text-sm font-semibold ${mode === "iv" ? "bg-primary" : "border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)]"}`}
           onClick={() => setMode("iv")}
         >
           {t("tools.medMath.tabIv")}
@@ -51,7 +51,7 @@ export default function MedMathTool() {
         <Button
           type="button"
           unstyled
-          className={`rounded-full px-4 py-2 text-sm font-semibold ${mode === "dose" ? "bg-primary text-white" : "border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)]"}`}
+          className={`rounded-full px-4 py-2 text-sm font-semibold ${mode === "dose" ? "bg-primary" : "border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)]"}`}
           onClick={() => setMode("dose")}
         >
           {t("tools.medMath.tabDose")}

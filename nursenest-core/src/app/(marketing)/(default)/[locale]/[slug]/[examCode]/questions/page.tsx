@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { BookOpen, ClipboardList, Layers, LineChart, Timer } from "lucide-react";
+import { BookOpen, ClipboardList, Layers } from "lucide-react";
 import { NpQuestionsHubBoardLinks } from "@/components/exam-pathways/np-questions-hub-board-links";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
@@ -36,12 +36,9 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { ContentEmptyState } from "@/components/ui/content-empty-state";
 import { PathwayHero } from "@/components/study/pathway-hero";
 import { PathwayStatsCards } from "@/components/study/pathway-stats-cards";
-import { StudyModeCards } from "@/components/study/study-mode-cards";
 import { StudyBottomNav } from "@/components/study/study-bottom-nav";
-import {
-  classifyQuestionTopicIntoLessonCategory,
-  questionCategoryStructureForPathway,
-} from "@/lib/questions/pathway-question-category-structure";
+import { MarketingPracticeQuestionsHubClient } from "@/components/marketing/marketing-practice-questions-hub-client";
+import { loadPathwayPracticeBodySystemHubAggregates } from "@/lib/questions/pathway-practice-body-system-aggregates";
 
 export const dynamic = "force-dynamic";
 export const dynamicParams = true;
@@ -175,7 +172,6 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const overviewHref = hubBase;
   const npAliasSegment = getNpPracticeTestLandingCopy(locale, slug, examCode) ? examCode : undefined;
   const boardLinkContext = pathwayMarketingHubLinkContext(pathway, npAliasSegment);
-  const countryLabel = pathway.countrySlug === "canada" ? "Canada" : "US";
   const examName = pathwayRegionAwareExamName(pathway);
   const lessonsHref = marketingPathwayLessonsIndexPath(pathway);
   const catHref = buildExamPathwayPath(pathway, "cat");
@@ -184,7 +180,9 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
 
   const appQuestionsScoped = isTopicNarrowed
     ? pathwayAppQuestionBankTopicHref(pathway, topicFilterTrim, topicSlugFromUrl || clusterSlugForLessons || undefined)
-    : loginWithCallback(`/app/questions?${new URLSearchParams({ pathwayId: pathway.id }).toString()}`);
+    : loginWithCallback(
+        `/app/questions?${new URLSearchParams({ pathwayId: pathway.id, preset: "pathway_mixed" }).toString()}`,
+      );
 
   // Stat card values — use snapshot counts when available
   const questionCount = questionSnapshot?.status === "ok" ? questionSnapshot.pathwayScopedCount : null;
@@ -192,12 +190,12 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
 
   const heroSubtitle = isTopicNarrowed
     ? `Showing questions for ${displayTopicLabel} — same scope and language as ${examName}.`
-    : `Board-style vignettes and rationales written for ${examName} (${countryLabel}). Sign in to practice with your plan.`;
+    : "Choose a practice mode, select body systems, and review rationales after each question.";
 
-  const topicClusters = isTopicNarrowed ? [] : await listTopicClusters(pathway.id, lessonContentLocale);
-  const groupedTopicSets = groupQuestionSetsByLessonCategory(topicClusters, pathway, lessonsHref);
+  const topicClustersForDrawer = isTopicNarrowed ? [] : await listTopicClusters(pathway.id, lessonContentLocale);
+  const hubAggregates = isTopicNarrowed ? [] : await loadPathwayPracticeBodySystemHubAggregates(pathway.id);
   const mixedAllTopicsHref = loginWithCallback(
-    `/app/questions?${new URLSearchParams({ pathwayId: pathway.id }).toString()}`,
+    `/app/questions?${new URLSearchParams({ pathwayId: pathway.id, preset: "pathway_mixed" }).toString()}`,
   );
 
   return (
@@ -210,7 +208,11 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         subtitle={heroSubtitle}
         backLink={{ label: `${pathway.shortName} overview`, href: overviewHref }}
         ctas={[
-          { label: "Start practising", href: appQuestionsScoped, variant: "primary" },
+          {
+            label: isTopicNarrowed ? "Open question bank" : "Start mixed practice",
+            href: isTopicNarrowed ? appQuestionsScoped : mixedAllTopicsHref,
+            variant: "primary",
+          },
           { label: "Browse lessons", href: lessonsHref, variant: "outline" },
           { label: "Create account", href: "/signup", variant: "ghost" },
         ]}
@@ -249,145 +251,21 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
         </div>
       ) : null}
 
-      {/* 3. Study mode cards */}
-      <div className="mt-8">
-        <StudyModeCards
-          heading="Start here"
-          cards={[
-            {
-              icon: Timer,
-              title: "New to studying? Practice by topic",
-              description: "Choose one clinical category and build confidence with focused sets.",
-              cta: "Practice by topic",
-              href: appQuestionsScoped,
-              accent: "success",
-            },
-            {
-              icon: ClipboardList,
-              title: "Want exam-style practice? Take a mixed quiz",
-              description: "Run a mixed question session across categories for broader readiness.",
-              cta: "Take mixed quiz",
-              href: mixedAllTopicsHref,
-              accent: "brand",
-            },
-            {
-              icon: LineChart,
-              title: `Ready for adaptive practice? Run ${catShortLabel}`,
-              description:
-                "Computerized adaptive testing: item difficulty responds to each answer, similar to high-stakes exam delivery.",
-              cta: `Open ${catShortLabel}`,
-              href: catHref,
-              accent: "purple",
-            },
-          ]}
-        />
-      </div>
-
-      {!isTopicNarrowed && groupedTopicSets.length > 0 ? (
-        <section id="question-set-library" className="mt-8" aria-labelledby="question-set-library-heading">
-          <div className="mb-4 flex items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
-            <h2 id="question-set-library-heading" className="text-base font-semibold text-[var(--theme-heading-text)]">
-              Practice by lesson category
-            </h2>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
-              {topicClusters.length} {topicClusters.length === 1 ? "question set" : "question sets"}
-            </span>
-          </div>
-
-          <div className="space-y-6">
-            {groupedTopicSets.map((section) => (
-              <section key={section.id} className="rounded-[1.25rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
-                <h3 className="text-base font-semibold text-[var(--theme-heading-text)]">{section.title}</h3>
-                {section.description ? (
-                  <p className="mt-1 text-sm text-[var(--theme-muted-text)]">{section.description}</p>
-                ) : null}
-
-                {section.topicSets.length > 0 ? (
-                  <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    {section.topicSets.map((topicSet) => (
-                      <li key={topicSet.topicSlug} className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4">
-                        <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{topicSet.label}</p>
-                        <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
-                          {topicSet.count} {topicSet.count === 1 ? "question" : "questions"}
-                        </p>
-                        <div className="mt-3 flex flex-wrap gap-3 text-xs font-semibold">
-                          <a href={topicSet.practiceHref} className="text-[var(--semantic-brand)] hover:underline">
-                            Practice questions
-                          </a>
-                          <a href={topicSet.lessonReviewHref} className="text-[var(--theme-heading-text)] hover:underline">
-                            Review lesson
-                          </a>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-
-                {(section.subsections ?? []).length > 0 ? (
-                  <div className="mt-5 space-y-4">
-                    {section.subsections?.map((sub) => (
-                      <div key={sub.id}>
-                        <h4 className="text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                          {sub.title}
-                        </h4>
-                        {sub.topicSets.length > 0 ? (
-                          <ul className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                            {sub.topicSets.map((topicSet) => (
-                              <li key={topicSet.topicSlug} className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4">
-                                <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{topicSet.label}</p>
-                                <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
-                                  {topicSet.count} {topicSet.count === 1 ? "question" : "questions"}
-                                </p>
-                                <div className="mt-3 flex flex-wrap gap-3 text-xs font-semibold">
-                                  <a href={topicSet.practiceHref} className="text-[var(--semantic-brand)] hover:underline">
-                                    Practice questions
-                                  </a>
-                                  <a href={topicSet.lessonReviewHref} className="text-[var(--theme-heading-text)] hover:underline">
-                                    Review lesson
-                                  </a>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        ) : null}
-                      </div>
-                    ))}
-                  </div>
-                ) : null}
-              </section>
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      {!isTopicNarrowed ? (
-        <section className="mt-8 rounded-[1.25rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
-          <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">All Topics Practice</h2>
-          <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
-            Random mixed questions across all categories to build broad exam readiness.
-          </p>
-          <a
-            href={mixedAllTopicsHref}
-            className="mt-3 inline-flex min-h-[40px] items-center justify-center rounded-full bg-[var(--semantic-brand)] px-5 py-2 text-sm font-semibold text-white hover:opacity-90"
-          >
-            Start mixed practice
-          </a>
-        </section>
-      ) : null}
-
-      {!isTopicNarrowed ? (
-        <section className="mt-6 rounded-[1.25rem] border border-[color-mix(in_srgb,var(--semantic-success)_24%,var(--semantic-border-soft))] bg-[var(--semantic-panel-positive)] p-5">
-          <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{catShortLabel}</h2>
-          <p className="mt-1 text-sm text-[var(--theme-muted-text)]">
-            Full adaptive session: one question at a time, timed delivery, and difficulty that tracks how you perform.
-          </p>
-          <a
-            href={catHref}
-            className="mt-3 inline-flex min-h-[40px] items-center justify-center rounded-full bg-[var(--semantic-success)] px-5 py-2 text-sm font-semibold text-[var(--semantic-success-contrast)] hover:opacity-90"
-          >
-            {`Open ${catShortLabel}`}
-          </a>
-        </section>
+      {!isTopicNarrowed && !(questionSnapshot?.status === "ok" && questionSnapshot.pathwayScopedCount === 0) ? (
+        <div className="mt-8">
+          <MarketingPracticeQuestionsHubClient
+            pathway={pathway}
+            examDisplayName={examName}
+            aggregates={hubAggregates}
+            topicClusters={topicClustersForDrawer.map((c) => ({
+              topicSlug: c.topicSlug,
+              label: c.label,
+              count: c.count,
+            }))}
+            lessonsHref={lessonsHref}
+            marketingCatHref={catHref}
+          />
+        </div>
       ) : null}
 
       {/* 4. Content area — topic-narrowed view or NP board links */}
@@ -430,54 +308,4 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
       />
     </main>
   );
-}
-
-type GroupedTopicSet = {
-  topicSlug: string;
-  label: string;
-  count: number;
-  practiceHref: string;
-  lessonReviewHref: string;
-};
-
-type QuestionCategorySection = {
-  id: string;
-  title: string;
-  description?: string;
-  topicSets: GroupedTopicSet[];
-  subsections?: Array<{ id: string; title: string; topicSets: GroupedTopicSet[] }>;
-};
-
-function groupQuestionSetsByLessonCategory(
-  clusters: Array<{ topicSlug: string; label: string; count: number }>,
-  pathway: ExamPathwayDefinition,
-  lessonsHref: string,
-): QuestionCategorySection[] {
-  const withLinks = clusters.map((cluster) => ({
-    ...cluster,
-    practiceHref: pathwayAppQuestionBankTopicHref(pathway, cluster.label, cluster.topicSlug),
-    lessonReviewHref: `${lessonsHref}?q=${encodeURIComponent(cluster.label)}`,
-  }));
-
-  const structure = questionCategoryStructureForPathway(pathway.id);
-  return structure.map((category) => {
-    const categorySets = withLinks.filter((set) => classifyQuestionTopicIntoLessonCategory(set.label, pathway.id).categoryId === category.id);
-    const subsections = category.subcategories
-      ?.map((sub) => ({
-        id: sub.id,
-        title: sub.title,
-        topicSets: categorySets.filter((set) => classifyQuestionTopicIntoLessonCategory(set.label, pathway.id).subcategoryId === sub.id),
-      }))
-      .filter((sub) => sub.topicSets.length > 0);
-    const topLevelSets = subsections?.length
-      ? categorySets.filter((set) => !classifyQuestionTopicIntoLessonCategory(set.label, pathway.id).subcategoryId)
-      : categorySets;
-    return {
-      id: category.id,
-      title: category.title,
-      description: category.description,
-      topicSets: topLevelSets,
-      ...(subsections?.length ? { subsections } : {}),
-    };
-  }).filter((section) => section.topicSets.length > 0 || (section.subsections?.length ?? 0) > 0);
 }

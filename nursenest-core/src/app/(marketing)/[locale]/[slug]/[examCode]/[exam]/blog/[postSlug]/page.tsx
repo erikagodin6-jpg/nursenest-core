@@ -298,7 +298,7 @@ export default async function LocalizedBlogPostPage({ params }: Props) {
           </p>
           <Link
             href={post.ctaHref}
-            className="inline-block rounded-xl bg-[var(--semantic-brand)] px-6 py-3 text-sm font-bold text-white shadow-md transition-shadow hover:shadow-lg"
+            className="inline-block rounded-xl bg-[var(--semantic-brand)] px-6 py-3 text-sm font-bold nn-text-on-solid-fill shadow-md transition-shadow hover:shadow-lg"
           >
             {post.ctaText}
           </Link>

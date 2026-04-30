@@ -856,6 +856,14 @@ html[data-theme="storm-slate"] {
   }
 
   /**
+   * Copy on solid brand / semantic / chroma fills — avoids ad-hoc `text-white` in TSX.
+   * Pair with `bg-[var(--semantic-brand)]`, `bg-primary`, `bg-green-600`, inline success fills, etc.
+   */
+  .nn-text-on-solid-fill {
+    color: var(--text-on-dark);
+  }
+
+  /**
    * Long marketing hubs: skip layout/paint for off-screen sections when supported
    * (keeps scrolling smoother on mid/low-end phones).
    */
@@ -3193,6 +3201,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   border: 1px solid color-mix(in srgb, var(--theme-primary) 9%, var(--border-subtle));
   background: var(--bg-card);
   box-shadow: var(--shadow-card);
+  color: var(--theme-card-foreground-readable, var(--theme-body-text));
 }
 
 .nn-study-card--wash {
@@ -4912,7 +4921,8 @@ html[data-theme="deep-twilight"] .nn-question-rationale-card__verdict--miss {
   border-radius: 1rem;
   padding: 1.35rem 1.35rem 1.25rem;
   text-decoration: none;
-  color: inherit;
+  /* Pastel/light gradient wash — never inherit pale nav ink; headings still use .nn-marketing-h* tokens */
+  color: var(--theme-card-foreground-readable, var(--theme-body-text));
   border: 1px solid color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle));
   background: linear-gradient(
     155deg,

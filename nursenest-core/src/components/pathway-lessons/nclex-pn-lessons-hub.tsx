@@ -327,7 +327,7 @@ export function NclexPnLessonsHub({
           {commonMistakes.map((block) => (
             <div key={block.group}>
               {block.group !== "all" && (
-                <p className="text-xs font-semibold uppercase text-muted">
+                <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">
                   {block.group === "safe" ? "Safe & coordinated care" : "Physiological integrity"}
                 </p>
               )}

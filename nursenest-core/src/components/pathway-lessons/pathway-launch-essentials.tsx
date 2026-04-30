@@ -75,7 +75,7 @@ export function PathwayLaunchEssentials({ bundle, lessonsBasePath }: Props) {
         })}
       </ul>
 
-      <p className="nn-marketing-caption mt-5 text-muted">
+      <p className="nn-marketing-caption mt-5 text-[var(--theme-muted-text)]">
         Beyond this list: every other published lesson in this pathway — search, topic clusters, and pagination below.
       </p>
     </section>

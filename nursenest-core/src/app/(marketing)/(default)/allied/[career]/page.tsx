@@ -212,7 +212,7 @@ export default async function AlliedCareerHubPage({ params }: Props) {
           <div className="mt-5 flex flex-wrap gap-3">
             <Link
               href={legacyLessonsPath}
-              className="inline-flex min-h-[44px] items-center rounded-full bg-[var(--semantic-brand)] px-6 py-2 text-sm font-semibold text-white transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_30%,transparent)]"
+              className="inline-flex min-h-[44px] items-center rounded-full bg-[var(--semantic-brand)] px-6 py-2 text-sm font-semibold nn-text-on-solid-fill transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--semantic-brand)_30%,transparent)]"
             >
               Browse lessons →
             </Link>

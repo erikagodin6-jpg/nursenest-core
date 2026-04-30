@@ -85,11 +85,12 @@ export async function handleBlogBatchScheduleAdminPost(
     publishMode: d.publishMode,
     startAt,
     cadencePerDay: d.cadencePerDay,
+    exam: d.exam,
   });
   if (!built.ok) {
     return NextResponse.json({ error: built.error }, { status: 400 });
   }
-  const { rows, droppedDuplicateLines } = built;
+  const { rows, droppedDuplicateLines, rejectedTopics } = built;
 
   if (mode === "preview") {
     const preview = rows.slice(0, 8).map((row) => ({
@@ -101,6 +102,8 @@ export async function handleBlogBatchScheduleAdminPost(
       dryRun: true,
       totalTopics: rows.length,
       droppedDuplicateLines,
+      rejectedTopicCount: rejectedTopics.length,
+      rejectedTopics: rejectedTopics.slice(0, 40),
       publishMode: d.publishMode,
       cadencePerDay: d.cadencePerDay,
       slotIntervalMs: interval,
@@ -156,5 +159,11 @@ export async function handleBlogBatchScheduleAdminPost(
     },
   });
 
-  return NextResponse.json({ ok: true, schedule: fresh, droppedDuplicateLines });
+  return NextResponse.json({
+    ok: true,
+    schedule: fresh,
+    droppedDuplicateLines,
+    rejectedTopicCount: rejectedTopics.length,
+    rejectedTopics: rejectedTopics.slice(0, 40),
+  });
 }

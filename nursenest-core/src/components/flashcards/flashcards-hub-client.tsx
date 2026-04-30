@@ -1,10 +1,22 @@
 "use client";
 
-import React, { type CSSProperties } from "react";
+import React from "react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
-import { formatTitleCase } from "@/lib/format/text-case";
+import {
+  LearnerCategorySelector,
+  LearnerFilterBar,
+  LearnerSessionStartPanel,
+  LearnerStudyHero,
+  LearnerStudyPageShell,
+} from "@/components/learner-study-ui";
+import {
+  builderCategoryIdsForCanonicalSelection,
+  getFlashcardCountsByBodySystem,
+  type CanonicalBodySystemId,
+} from "@/lib/learner-study-hub/body-system-data";
+import { CANONICAL_STUDY_CATEGORIES } from "@/lib/study/normalize-study-category";
 import { parseFlashcardCustomSessionResponse } from "@/lib/flashcards/flashcard-custom-session-response";
 import {
   countSavedStudyItems,
@@ -13,7 +25,6 @@ import {
 import { LearnerCtaLink } from "@/components/learner-ui/learner-cta-link";
 import { weakAreaFlashcardsHref } from "@/lib/learner/weak-area-flashcards-href";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
-import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 import type { FlashcardLessonVirtualDiagnostics } from "@/lib/flashcards/flashcard-custom-session-response";
 import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
 
@@ -23,8 +34,9 @@ function buildCustomSessionQuery(args: {
   pathwayId: string;
   cardLimit: number;
   shuffleOn: boolean;
-  selectedBodyIds: string[];
-  allBodyIds: string[];
+  /** Resolved flashcard builder category ids (server `categories` query). */
+  selectedBuilderCategoryIds: string[];
+  allBuilderCategoryIds: string[];
   weakOnly: boolean;
   incorrectOnly: boolean;
   starredOnly: boolean;
@@ -36,8 +48,11 @@ function buildCustomSessionQuery(args: {
   q.set("includeCards", args.includeCards ? "1" : "0");
   q.set("shuffle", args.shuffleOn ? "1" : "0");
   q.set("cardLimit", String(args.cardLimit));
-  if (args.selectedBodyIds.length > 0 && args.selectedBodyIds.length < args.allBodyIds.length) {
-    q.set("categories", args.selectedBodyIds.join(","));
+  if (
+    args.selectedBuilderCategoryIds.length > 0 &&
+    args.selectedBuilderCategoryIds.length < args.allBuilderCategoryIds.length
+  ) {
+    q.set("categories", args.selectedBuilderCategoryIds.join(","));
   }
   if (args.weakOnly) q.set("weakOnly", "1");
   if (args.incorrectOnly) q.set("incorrectOnly", "1");
@@ -48,11 +63,6 @@ function buildCustomSessionQuery(args: {
   }
   if (args.notStudiedOnly) q.set("notStudiedOnly", "1");
   return q.toString();
-}
-
-function hubVisualKeyForCategory(id: string): string {
-  const s = id.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_");
-  return s.length > 0 ? s : "fundamentals";
 }
 
 export function FlashcardsHubClient({
@@ -84,7 +94,7 @@ export function FlashcardsHubClient({
   const [lessonVirtualDiagnostics, setLessonVirtualDiagnostics] = useState<FlashcardLessonVirtualDiagnostics | null>(
     () => initialHub?.lessonVirtualDiagnostics ?? null,
   );
-  const [selectedBodyIds, setSelectedBodyIds] = useState<string[]>([]);
+  const [selectedCanonicalIds, setSelectedCanonicalIds] = useState<string[]>([]);
   const [cardLimit, setCardLimit] = useState(20);
   const [shuffleOn, setShuffleOn] = useState(true);
   const [weakOnly, setWeakOnly] = useState(false);
@@ -101,27 +111,63 @@ export function FlashcardsHubClient({
    * `router.refresh()` / Strict Mode remounts do not stack duplicate inventory requests (felt like a
    * refresh loop on `/app/flashcards?pathwayId=…`).
    */
+  /**
+   * Skip the first client `custom-session` fetch when RSC already shipped usable inventory: any non-zero
+   * per-system count, a positive matching pool, or lesson-derived virtual diagnostics. Pure skeleton rows
+   * (all counts zero, no matches, no virtual diagnostics) still perform one client fetch to hydrate.
+   */
   const skipDuplicateInitialInventoryFetchRef = useRef(
     Boolean(
       initialHub &&
-        ((initialHub.categoryOptions?.length ?? 0) > 0 ||
-          (initialHub.matchingTotal ?? 0) > 0 ||
-          (initialHub.lessonVirtualDiagnostics?.totalGeneratedVirtualCards ?? 0) > 0),
+        ((initialHub.matchingTotal ?? 0) > 0 ||
+          (initialHub.lessonVirtualDiagnostics?.totalGeneratedVirtualCards ?? 0) > 0 ||
+          (initialHub.categoryOptions?.some((c) => c.count > 0) ?? false)),
     ),
   );
 
-  const allBodyIds = useMemo(() => builderCategories.map((c) => c.id), [builderCategories]);
+  const allBuilderCategoryIds = useMemo(() => builderCategories.map((c) => c.id), [builderCategories]);
+
+  const countsByCanonical = useMemo(
+    () => getFlashcardCountsByBodySystem(scopedPathwayId, builderCategories),
+    [scopedPathwayId, builderCategories],
+  );
+
+  const selectedBuilderCategoryIds = useMemo(() => {
+    const allCanon = CANONICAL_STUDY_CATEGORIES.length;
+    if (
+      selectedCanonicalIds.length === 0 ||
+      selectedCanonicalIds.length >= allCanon ||
+      builderCategories.length === 0
+    ) {
+      return [];
+    }
+    return builderCategoryIdsForCanonicalSelection(
+      scopedPathwayId,
+      builderCategories,
+      new Set(selectedCanonicalIds as CanonicalBodySystemId[]),
+    );
+  }, [scopedPathwayId, builderCategories, selectedCanonicalIds]);
 
   const refreshCategories = useCallback(async () => {
     setLoadError(null);
     try {
       const allIds = builderCategoriesRef.current.map((c) => c.id);
+      const allCanon = CANONICAL_STUDY_CATEGORIES.length;
+      const canonSel = selectedCanonicalIds;
+      const resolved =
+        canonSel.length === 0 || canonSel.length >= allCanon
+          ? []
+          : builderCategoryIdsForCanonicalSelection(
+              scopedPathwayId,
+              builderCategoriesRef.current,
+              new Set(canonSel as CanonicalBodySystemId[]),
+            );
       const qs = buildCustomSessionQuery({
         pathwayId: scopedPathwayId,
         cardLimit,
         shuffleOn,
-        selectedBodyIds,
-        allBodyIds: allIds,
+        selectedBuilderCategoryIds: resolved,
+        allBuilderCategoryIds: allIds,
         weakOnly,
         incorrectOnly,
         starredOnly,
@@ -129,7 +175,16 @@ export function FlashcardsHubClient({
         includeCards: false,
       });
       const res = await fetch(`/api/flashcards/custom-session?${qs}`, { credentials: "include" });
-      const json: unknown = await res.json();
+      let json: unknown;
+      try {
+        json = await res.json();
+      } catch {
+        setLoadError("Could not load flashcard topics.");
+        setBuilderCategories([]);
+        setMatchingCards(null);
+        setLessonVirtualDiagnostics(null);
+        return;
+      }
       const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
       if (!parsed.ok) {
         setLoadError(parsed.message);
@@ -140,6 +195,16 @@ export function FlashcardsHubClient({
       setBuilderCategories(parsed.categoryOptions);
       setMatchingCards(parsed.summary?.matchingCards ?? 0);
       setLessonVirtualDiagnostics(parsed.summary?.lessonVirtualDiagnostics ?? null);
+      if (process.env.NODE_ENV === "development") {
+        const totalCards = parsed.categoryOptions.reduce((n, c) => n + c.count, 0);
+        console.debug("[flashcards-hub] inventory", {
+          pathwayId: scopedPathwayId,
+          topicRows: parsed.categoryOptions.length,
+          perSystemCounts: parsed.categoryOptions.filter((c) => c.count > 0).length,
+          sumCounts: totalCards,
+          matchingCards: parsed.summary?.matchingCards ?? 0,
+        });
+      }
     } catch {
       setLoadError("Could not load flashcard topics.");
       setBuilderCategories([]);
@@ -150,7 +215,7 @@ export function FlashcardsHubClient({
     scopedPathwayId,
     cardLimit,
     shuffleOn,
-    selectedBodyIds,
+    selectedCanonicalIds,
     weakOnly,
     incorrectOnly,
     starredOnly,
@@ -165,25 +230,25 @@ export function FlashcardsHubClient({
     void refreshCategories();
   }, [refreshCategories]);
 
-  const toggleBodySystem = (id: string) => {
-    if (allBodyIds.length === 0) return;
-    if (selectedBodyIds.length === 0) {
-      setSelectedBodyIds(allBodyIds.filter((x) => x !== id));
+  const toggleCanonical = (id: CanonicalBodySystemId) => {
+    const all = CANONICAL_STUDY_CATEGORIES.map((c) => c.id);
+    if (selectedCanonicalIds.length === 0) {
+      setSelectedCanonicalIds(all.filter((x) => x !== id));
       return;
     }
-    if (selectedBodyIds.includes(id)) {
-      const next = selectedBodyIds.filter((x) => x !== id);
-      setSelectedBodyIds(next.length === 0 ? [] : next);
+    if (selectedCanonicalIds.includes(id)) {
+      const next = selectedCanonicalIds.filter((x) => x !== id);
+      setSelectedCanonicalIds(next.length === 0 ? [] : next);
     } else {
-      const next = [...selectedBodyIds, id];
-      if (next.length >= allBodyIds.length) setSelectedBodyIds([]);
-      else setSelectedBodyIds(next);
+      const next = [...selectedCanonicalIds, id];
+      if (next.length >= all.length) setSelectedCanonicalIds([]);
+      else setSelectedCanonicalIds(next);
     }
   };
 
   const sessionSummaryLine = [
     `${cardLimit} cards`,
-    selectedBodyIds.length === 0 ? "all systems" : `${selectedBodyIds.length} systems`,
+    selectedCanonicalIds.length === 0 ? "all categories" : `${selectedCanonicalIds.length} categories`,
     shuffleOn ? "shuffle on" : "shuffle off",
     lessonVirtualDiagnostics
       ? `lesson-linked ${lessonVirtualDiagnostics.totalGeneratedVirtualCards} cards · ${lessonVirtualDiagnostics.lessonsWithDerivedCards}/${lessonVirtualDiagnostics.catalogLessonCount} lessons`
@@ -198,8 +263,8 @@ export function FlashcardsHubClient({
         pathwayId: scopedPathwayId,
         cardLimit,
         shuffleOn,
-        selectedBodyIds,
-        allBodyIds,
+        selectedBuilderCategoryIds,
+        allBuilderCategoryIds,
         weakOnly,
         incorrectOnly,
         starredOnly,
@@ -210,8 +275,8 @@ export function FlashcardsHubClient({
       scopedPathwayId,
       cardLimit,
       shuffleOn,
-      selectedBodyIds,
-      allBodyIds,
+      selectedBuilderCategoryIds,
+      allBuilderCategoryIds,
       weakOnly,
       incorrectOnly,
       starredOnly,
@@ -220,10 +285,6 @@ export function FlashcardsHubClient({
   );
 
   const startHref = `/app/flashcards/custom?${startQuery}`;
-
-  const filteredCategories = builderCategories.filter((c) =>
-    categorySearch ? c.title.toLowerCase().includes(categorySearch.toLowerCase()) : true,
-  );
 
   const starredCount = useMemo(() => countSavedStudyItems().starred, []);
 
@@ -266,56 +327,63 @@ export function FlashcardsHubClient({
   };
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6" data-nn-e2e-flashcards-hub>
+    <LearnerStudyPageShell className="py-6" data-nn-e2e-flashcards-hub>
       {pathwayBootstrapSource === "secondary" ? <LearnerStudyLiveSyncBanner /> : null}
 
       {catHref ? (
         <div className="text-sm">
-          <Link href={catHref} className="text-primary underline">
+          <Link href={catHref} className="font-semibold text-primary underline underline-offset-2">
             Continue adaptive (CAT)
           </Link>
         </div>
       ) : null}
 
-      <header className="space-y-2">
-        <h1 className="text-2xl font-semibold">{t("learner.flashcards.hub.title")}</h1>
-        <p className="text-sm text-[var(--semantic-text-secondary)]">{t("learner.flashcards.hub.subtitle")}</p>
-        <p className="text-xs text-[var(--semantic-brand)]">{pathwayDisplayName}</p>
-        <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">{sessionSummaryLine}</p>
-        {lessonVirtualDiagnostics ? (
-          <div
-            className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_6%,var(--semantic-surface))] px-3 py-2 text-xs text-[var(--semantic-text-secondary)]"
-            data-nn-e2e-flashcards-lesson-diagnostics
-          >
-            <p className="font-semibold text-[var(--semantic-text-primary)]">Lesson-linked inventory</p>
-            <ul className="mt-1 list-disc space-y-0.5 pl-4 font-mono leading-relaxed">
-              <li>pathwayId: {lessonVirtualDiagnostics.pathwayId}</li>
-              <li>catalog lessons: {lessonVirtualDiagnostics.catalogLessonCount}</li>
-              <li>lessons with derived cards: {lessonVirtualDiagnostics.lessonsWithDerivedCards}</li>
-              <li>total generated virtual cards: {lessonVirtualDiagnostics.totalGeneratedVirtualCards}</li>
-              <li>recall rows: {lessonVirtualDiagnostics.recallVirtualCount}</li>
-              <li>section-derived rows: {lessonVirtualDiagnostics.sectionDerivedVirtualCount}</li>
-              <li>generic-filler-tagged section rows: {lessonVirtualDiagnostics.genericFillerSectionCardHits}</li>
-              <li>selected systems/categories: {lessonVirtualDiagnostics.selectedCategoryIds.join(", ") || "(all)"}</li>
-              <li>filter mode: {lessonVirtualDiagnostics.filterModeLabel}</li>
-            </ul>
-          </div>
-        ) : null}
-        <div className="flex flex-wrap gap-3 pt-1 text-sm">
-          <Link
-            href={resolvedLessonsHubHref}
-            className="font-semibold text-[var(--semantic-brand)] underline underline-offset-2"
-          >
-            Open lessons hub (same pathway)
-          </Link>
-          <span className="text-[var(--semantic-text-secondary)]">·</span>
-          <span className="text-[var(--semantic-text-secondary)]">
-            Pick one or more body systems below — layout matches your pathway lessons hub.
-          </span>
-        </div>
-      </header>
+      <LearnerStudyHero
+        eyebrow={pathwayDisplayName}
+        title={t("learner.flashcards.hub.title")}
+        subtitle={t("learner.flashcards.hub.subtitle")}
+        stats={
+          <p className="text-sm text-muted-foreground">
+            <span className="font-medium text-foreground">{sessionSummaryLine}</span>
+            {" · "}
+            <span>
+              Cards group by the same canonical exam categories as practice questions — not raw lesson topic cards on this
+              screen.
+            </span>
+          </p>
+        }
+      />
 
-      <div className="flex flex-wrap gap-2" data-nn-e2e-flashcard-filter-presets>
+      <h1 className="sr-only">{t("learner.flashcards.hub.title")}</h1>
+      {lessonVirtualDiagnostics ? (
+        <div
+          className="rounded-2xl border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground"
+          data-nn-e2e-flashcards-lesson-diagnostics
+        >
+          <p className="font-semibold text-foreground">Lesson-linked inventory</p>
+          <ul className="mt-1 list-disc space-y-0.5 pl-4 font-mono leading-relaxed">
+            <li>pathwayId: {lessonVirtualDiagnostics.pathwayId}</li>
+            <li>catalog lessons: {lessonVirtualDiagnostics.catalogLessonCount}</li>
+            <li>lessons with derived cards: {lessonVirtualDiagnostics.lessonsWithDerivedCards}</li>
+            <li>total generated virtual cards: {lessonVirtualDiagnostics.totalGeneratedVirtualCards}</li>
+            <li>recall rows: {lessonVirtualDiagnostics.recallVirtualCount}</li>
+            <li>section-derived rows: {lessonVirtualDiagnostics.sectionDerivedVirtualCount}</li>
+            <li>generic-filler-tagged section rows: {lessonVirtualDiagnostics.genericFillerSectionCardHits}</li>
+            <li>selected systems/categories: {lessonVirtualDiagnostics.selectedCategoryIds.join(", ") || "(all)"}</li>
+            <li>filter mode: {lessonVirtualDiagnostics.filterModeLabel}</li>
+          </ul>
+        </div>
+      ) : null}
+      <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+        <Link href={resolvedLessonsHubHref} className="font-semibold text-primary underline underline-offset-2">
+          Open lessons hub (same pathway)
+        </Link>
+        <span aria-hidden>·</span>
+        <span>Pick one or more categories below — same grid language as practice questions.</span>
+      </div>
+
+      <LearnerFilterBar title="Deck filters">
+        <div className="flex flex-wrap gap-2" data-nn-e2e-flashcard-filter-presets>
         {(
           [
             ["all", "All cards"],
@@ -342,9 +410,10 @@ export function FlashcardsHubClient({
           );
         })}
         {activePreset === "custom" ? (
-          <span className="self-center text-xs text-[var(--semantic-text-secondary)]">Custom mix</span>
+          <span className="self-center text-xs text-muted-foreground">Custom mix</span>
         ) : null}
-      </div>
+        </div>
+      </LearnerFilterBar>
 
       {loadError ? (
         <div className="rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
@@ -356,7 +425,7 @@ export function FlashcardsHubClient({
       matchingCards === 0 &&
       !starredOnly &&
       builderCategories.length > 0 &&
-      (weakOnly || incorrectOnly || notStudiedOnly || starredOnly || selectedBodyIds.length > 0) ? (
+      (weakOnly || incorrectOnly || notStudiedOnly || starredOnly || selectedCanonicalIds.length > 0) ? (
         <div
           className="rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_32%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] px-4 py-3 text-sm text-[var(--semantic-text-secondary)]"
           data-nn-e2e-flashcards-filter-empty
@@ -419,59 +488,16 @@ export function FlashcardsHubClient({
         </div>
       ) : null}
 
-      <section className="space-y-4">
-        <div>
-          <h2 className="text-lg font-semibold">{t("learner.flashcards.hub.bodySystemsHeading")}</h2>
-          <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">
-            Tap to include or exclude systems — same multi-select pattern as the lessons hub category cards.
-          </p>
-        </div>
-
-        <input
-          type="search"
-          placeholder="Search body systems…"
-          value={categorySearch}
-          onChange={(e) => setCategorySearch(e.target.value)}
-          className="w-full rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm"
+      <section className="space-y-4" data-nn-e2e-flashcards-canonical-grid>
+        <LearnerCategorySelector
+          countsBySystem={countsByCanonical}
+          selectedCanonicalIds={selectedCanonicalIds}
+          onToggleCanonical={toggleCanonical}
+          search={categorySearch}
+          onSearchChange={setCategorySearch}
+          heading={t("learner.flashcards.hub.bodySystemsHeading")}
+          intro="Cards are grouped by canonical exam categories (same grid as practice questions). Builder rows are mapped automatically — you are not picking raw lesson topic cards here."
         />
-
-        <div className="nn-qa-pathway-lessons-grid grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-          {filteredCategories.map((c) => {
-            const selected = selectedBodyIds.length === 0 || selectedBodyIds.includes(c.id);
-            const visual = getLessonHubSystemVisual(hubVisualKeyForCategory(c.id));
-            const Icon = visual.icon;
-            const systemStyle = { "--nn-system-accent": `var(${visual.accentVar})` } as CSSProperties;
-
-            return (
-              <button
-                key={c.id}
-                type="button"
-                onClick={() => toggleBodySystem(c.id)}
-                data-selected={selected}
-                data-nn-e2e-body-system-card={c.id}
-                style={systemStyle}
-                className="nn-lesson-system-card text-left transition hover:shadow-[var(--semantic-shadow-soft)] data-[selected=false]:opacity-70 rounded-[1.35rem] border border-[color-mix(in_srgb,var(--nn-system-accent)_16%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-3.5 sm:p-4 data-[selected=true]:ring-2 data-[selected=true]:ring-[color-mix(in_srgb,var(--nn-system-accent)_45%,transparent)]"
-              >
-                <div className="flex items-start gap-3">
-                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-[color-mix(in_srgb,var(--nn-system-accent)_18%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--nn-system-accent)_9%,var(--semantic-panel-muted))] text-[var(--nn-system-accent)]">
-                    <Icon className="h-4 w-4" aria-hidden />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <div className="line-clamp-2 text-base font-semibold leading-snug text-[var(--theme-heading-text)]">
-                      {formatTitleCase(c.title)}
-                    </div>
-                    {c.description ? (
-                      <p className="mt-1 line-clamp-2 text-xs text-[var(--semantic-text-secondary)]">{c.description}</p>
-                    ) : null}
-                    <p className="mt-2 text-xs font-semibold text-[var(--semantic-text-secondary)]">
-                      {c.count} card{c.count === 1 ? "" : "s"} in pool
-                    </p>
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
       </section>
 
       <section className="space-y-5 border-t border-[var(--semantic-border-soft)] pt-4">
@@ -526,20 +552,21 @@ export function FlashcardsHubClient({
         </label>
       </section>
 
-      <div className="sticky bottom-0 z-10 mt-6 border-t bg-[var(--theme-page-bg)] pb-2 pt-3">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <LearnerSessionStartPanel
+        primary={
           <div>
             <LearnerCtaLink href={startHref} data-nn-e2e-start-review>
               {t("flashcards.startSession")}
             </LearnerCtaLink>
-            <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">{sessionSummaryLine}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{sessionSummaryLine}</p>
           </div>
-
-          <Link href={weakAreaFlashcardsHref(scopedPathwayId)} className="text-xs text-primary underline">
+        }
+        secondary={
+          <Link href={weakAreaFlashcardsHref(scopedPathwayId)} className="text-xs font-medium text-primary underline">
             Weak areas
           </Link>
-        </div>
-      </div>
-    </div>
+        }
+      />
+    </LearnerStudyPageShell>
   );
 }

@@ -21,6 +21,7 @@
  * Do NOT import or call `resolveLessonImage` from here.
  */
 
+import * as React from "react";
 import type { LessonImageSource } from "@/lib/content/resolve-lesson-image";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -55,9 +56,12 @@ export type LessonClinicalImageCardProps = {
 // ── Label derivation ──────────────────────────────────────────────────────────
 
 const SOURCE_DEFAULT_LABEL: Partial<Record<LessonImageSource, string>> = {
-  exact_slug: "Clinical image",
-  override:   "Clinical image",
-  topic_slug: "Topic illustration",
+  exact_slug:       "Clinical image",
+  override:         "Clinical image",
+  map_slug:         "Clinical image",
+  map_keyword:      "Topic illustration",
+  map_body_system:  "Topic illustration",
+  topic_slug:       "Topic illustration",
 };
 
 function resolveLabel(
@@ -85,8 +89,8 @@ function deriveCaption(
   lessonTitle: string | null | undefined,
   source: LessonImageSource,
 ): string | null {
-  // Topic-level illustrations should not carry a lesson-specific caption
-  if (source === "topic_slug" || source === "none") return null;
+  // Topic/system-level illustrations should not carry a lesson-specific caption
+  if (source === "topic_slug" || source === "map_keyword" || source === "map_body_system" || source === "none") return null;
   const t = lessonTitle?.trim();
   if (!t) return null;
   return `${t} — visual reference`;

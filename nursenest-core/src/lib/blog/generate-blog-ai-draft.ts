@@ -13,6 +13,7 @@ import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { BLOG_TEMPLATE_TITLE_PATTERNS } from "@/lib/blog/blog-template-copy";
 import { buildApa7References, type BlogSourceRecord, validateSources } from "@/lib/blog/apa7";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
+import { validateBlogTopicForSeoArticleGeneration } from "@/lib/blog/blog-seo-topic-intent";
 import type { BlogLessonLinkRow } from "@/lib/blog/blog-control-panel-schema";
 import { fetchSimpleDraftStudyLinks } from "@/lib/blog/blog-simple-draft-study-links";
 import { blogPrimaryStudyCta } from "@/lib/blog/blog-study-cta";
@@ -141,6 +142,16 @@ function resolvePostStatusForPublishAt(publishAt: Date | undefined, now: Date): 
  * Enforces slug + canonical intent dedupe via {@link findExistingBlogByCanonicalIntent}.
  */
 export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<GenerateBlogAiDraftResult> {
+  const topicGate = validateBlogTopicForSeoArticleGeneration(d.topic, d.exam);
+  if (!topicGate.ok) {
+    return {
+      ok: false,
+      error: `topic_intent_rejected: ${topicGate.reason}`,
+      stage: "plan",
+      code: "TOPIC_INTENT_REJECTED",
+    };
+  }
+
   const prepared = await prepareAdminBlogGenerationInput({
     rawTitle: d.topic,
     exam: d.exam,

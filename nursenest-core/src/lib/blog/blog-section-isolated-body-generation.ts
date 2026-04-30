@@ -30,6 +30,7 @@ Output rules:
 - Teach **clinical** content for this heading only. Do not reuse phrasing from other sections (supplied forbidden list).
 - Use **unique** examples and clinical details. Do not include meta commentary about studying, exams, or "this section".
 - Do not write <h2>FAQs</h2>, <h2>References</h2>, or duplicate structured FAQ content.
+- Where you cite standards or authorities, use parenthetical citations like (Organization Name, Year) so they can align with verified references.
 - No fabricated statistics, trial results, or journal citations.
 - Educational exam-prep framing only — no directive treatment orders for real patients.`;
 
@@ -78,7 +79,7 @@ function clinicalObjectiveForSection(h2: string, topic: string): string {
     return `Bullet **key takeaways** as new prose; bullets must not repeat sentences from earlier sections.`;
   }
   if (/\brelated study|study path|internal link\b/.test(h)) {
-    return `One short paragraph weaving **internal study paths** from the supplied list (marketing paths only). No raw /app/ URLs.`;
+    return `One short paragraph weaving **internal study paths** from the supplied list (marketing paths only). No raw /app/ URLs. Do **not** promise lessons are free; use paywall-safe phrasing ("Review the full lesson inside NurseNest", "Members can continue with the related lesson"). Then add a separate short paragraph that includes: "Want more practice? NurseNest members can review the related lesson, flashcards, and rationale-based questions."`;
   }
   if (/\bclinical pearl|pearls\b/.test(h)) {
     return `**Clinical pearls**: 3–6 tight bullets with bedside pattern recognition for **${topic}**.`;

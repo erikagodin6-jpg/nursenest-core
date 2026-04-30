@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import {
+  LearnerAccountShell,
+  LearnerCategoryProgressGrid,
+  LearnerProfileSummaryCard,
+  LearnerReportCardHero,
+} from "@/components/learner-account-ui";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerPerformanceWorkspaceNav } from "@/components/student/learner-performance-workspace-nav";
@@ -10,6 +16,7 @@ import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { aggregateTopicsByCanonicalStudyCategory } from "@/lib/learner/learner-account-category-aggregate";
 import { loadReportCardData } from "@/lib/learner/load-report-card-data";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
@@ -109,36 +116,52 @@ export default async function AccountReportCardPage() {
     intent: "start",
   });
 
+  const reportCategoryItems = report
+    ? aggregateTopicsByCanonicalStudyCategory(preferredPathwayId, [
+        ...report.weakTopics.map((w) => ({ topic: w.topic, weight: Math.max(1, w.attempted) })),
+        ...report.strongTopics.map((s) => ({ topic: s.topic, weight: Math.max(1, s.attempted) })),
+      ])
+    : [];
+
   if (!report || report.degraded?.active) {
     return (
-      <div className="space-y-6">
+      <LearnerAccountShell className="py-2">
         <BreadcrumbTrail items={crumbs} />
         <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/report-card" />
-        <div className="nn-learner-page-hero">
-          <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.reportCard.title")}</h1>
-          <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">{t("learner.account.reportCard.intro")}</p>
-        </div>
+        <LearnerReportCardHero title={t("learner.account.reportCard.title")} intro={t("learner.account.reportCard.intro")} />
         <LearnerStudyQuickLinksCard t={t} id="report-card-study-quick-links" catHref={catHref} />
+        {report ? (
+          <LearnerProfileSummaryCard
+            title={t("learner.profile.categoryProgress.title")}
+            subtitle={t("learner.profile.categoryProgress.subtitle")}
+          >
+            <LearnerCategoryProgressGrid items={reportCategoryItems} emptyHint={t("learner.profile.categoryProgress.empty")} />
+          </LearnerProfileSummaryCard>
+        ) : null}
         <LearnerSilentSectionDegradedFallback surfaceName="report-card" />
         <LearnerAccountCrossLinks variant="report-card" t={t} weakTopicKey={weakTopicKey} pathwayId={preferredPathwayId} />
-      </div>
+      </LearnerAccountShell>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <LearnerAccountShell className="py-2">
       <BreadcrumbTrail items={crumbs} />
       <LearnerPerformanceWorkspaceNav t={t} pathname="/app/account/report-card" />
-      <div className="nn-learner-page-hero">
-        <h1 className="text-2xl font-bold text-[var(--semantic-text-primary)]">{t("learner.account.reportCard.title")}</h1>
-        <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">{t("learner.account.reportCard.intro")}</p>
-      </div>
+      <LearnerReportCardHero title={t("learner.account.reportCard.title")} intro={t("learner.account.reportCard.intro")} />
 
       <LearnerStudyQuickLinksCard t={t} id="report-card-study-quick-links" catHref={catHref} />
+
+      <LearnerProfileSummaryCard
+        title={t("learner.profile.categoryProgress.title")}
+        subtitle={t("learner.profile.categoryProgress.subtitle")}
+      >
+        <LearnerCategoryProgressGrid items={reportCategoryItems} emptyHint={t("learner.profile.categoryProgress.empty")} />
+      </LearnerProfileSummaryCard>
 
       <LearnerReportCardPremium data={report} t={t} localeTag={localeTag} />
 
       <LearnerAccountCrossLinks variant="report-card" t={t} weakTopicKey={weakTopicKey} pathwayId={preferredPathwayId} />
-    </div>
+    </LearnerAccountShell>
   );
 }

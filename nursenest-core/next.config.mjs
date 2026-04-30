@@ -106,6 +106,19 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
 
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "nursenest-images.tor1.digitaloceanspaces.com",
+      },
+      {
+        protocol: "https",
+        hostname: "nursenest-images.tor1.cdn.digitaloceanspaces.com",
+      },
+    ],
+  },
+
   experimental,
 
   webpack: (config, { dev }) => {

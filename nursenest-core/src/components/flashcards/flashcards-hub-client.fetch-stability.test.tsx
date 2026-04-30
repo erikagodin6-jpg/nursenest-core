@@ -118,6 +118,71 @@ describe("FlashcardsHubClient", () => {
     globalThis.fetch = origFetch;
   });
 
+  it("runs one inventory fetch when initialHub is skeleton-only (zero counts, no matches) so counts hydrate", async () => {
+    const origFetch = globalThis.fetch;
+    let fetchCount = 0;
+
+    globalThis.fetch = async (...args: Parameters<typeof fetch>) => {
+      const url = String(args[0]);
+      if (url.includes("/api/flashcards/custom-session")) {
+        fetchCount += 1;
+        return new Response(
+          JSON.stringify({
+            ok: true,
+            summary: {
+              pathwayId: "ca-rn-nclex-rn",
+              selectedCategories: [],
+              matchingCards: 2,
+              returnedCards: 0,
+              mode: "mixed",
+              shuffle: true,
+              weakOnly: false,
+              incorrectOnly: false,
+              starredOnly: false,
+              savedOnly: false,
+              notesOnly: false,
+              revisitOnly: false,
+              notStudiedOnly: false,
+              recentStudiedOnly: false,
+              recentDays: 7,
+              sourceKind: "all",
+              cardLimit: "20",
+              queryRelaxation: "none",
+              sessionShuffleSalt: "salt",
+            },
+            categoryOptions: [
+              { id: "cardiovascular", title: "Cardiovascular", count: 2 },
+              { id: "respiratory", title: "Respiratory", count: 0 },
+            ],
+          }),
+          { status: 200, headers: { "Content-Type": "application/json" } },
+        );
+      }
+      return origFetch(...args);
+    };
+
+    render(
+      <MarketingI18nProvider locale="en" messages={hubMessages}>
+        <FlashcardsHubClient
+          scopedPathwayId="ca-rn-nclex-rn"
+          pathwayDisplayName="Canada RN (NCLEX-RN)"
+          initialHub={{
+            categoryOptions: [
+              { id: "cardiovascular", title: "Cardiovascular", count: 0 },
+              { id: "respiratory", title: "Respiratory", count: 0 },
+            ],
+            matchingTotal: 0,
+            lessonVirtualDiagnostics: null,
+          }}
+        />
+      </MarketingI18nProvider>,
+    );
+
+    await waitFor(() => assert.equal(fetchCount, 1), { timeout: 4000 });
+
+    globalThis.fetch = origFetch;
+  });
+
   it("skips first fetch when initialHub has matchingTotal only (virtual inventory without category rows yet)", async () => {
     const origFetch = globalThis.fetch;
     let fetchCount = 0;

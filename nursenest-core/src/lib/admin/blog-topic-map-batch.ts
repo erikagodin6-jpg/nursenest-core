@@ -56,14 +56,14 @@ export function loadRnTopicMapBatchRows(limit: number): TopicMapBatchRow[] {
       const slug = `rn-${topic.id}-${slugify(tmpl)}`.slice(0, 120);
       const title =
         tmpl === BlogPostTemplate.HOW_TO_PASS
-          ? `How to pass NCLEX-RN: ${topic.name}`
+          ? `NCLEX questions for ${topic.name} (${cat.name} high-yield)`
           : tmpl === BlogPostTemplate.TOPIC_EXPLAINED
-            ? `${topic.name} for NCLEX-RN (exam-style)`
+            ? `Priority nursing interventions for ${topic.name} on NCLEX-RN (${cat.name})`
             : tmpl === BlogPostTemplate.TOP_MISTAKES
-              ? `Top mistakes: ${topic.name} on NCLEX-RN`
+              ? `${topic.name} vs common NCLEX traps (${cat.name})`
               : tmpl === BlogPostTemplate.PRACTICE_QUESTIONS
-                ? `Practice focus: ${topic.name} (NCLEX-RN)`
-                : `Study plan slice: ${topic.name} (NCLEX-RN)`;
+                ? `NCLEX-style practice stems for ${topic.name} (${cat.name})`
+                : `What should the nurse do first in ${topic.name} scenarios? (NCLEX-RN · ${cat.name})`;
 
       const excerpt = `High-yield ${cat.name} topic: ${topic.name}. Links to lessons and practice. Replace with final copy in admin.`;
       const body = `<p><strong>Scheduled shell.</strong> Replace with structured HTML (H2 sections, traps, prioritization). Do not paste full bank rationales here.</p><h2>What to do first</h2><p>Outline clinical judgment hooks for ${topic.name}.</p>`;

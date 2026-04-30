@@ -1,3 +1,4 @@
+import { LearnerAccountShell } from "@/components/learner-account-ui";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountHub } from "@/components/student/learner-account-hub";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
@@ -21,9 +22,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function LearnerAccountIndexPage() {
   const { t } = await getLearnerMarketingBundle();
   return (
-    <div className="space-y-6">
+    <LearnerAccountShell className="py-2">
       <BreadcrumbTrail items={appAccountHubBreadcrumbs()} />
       <LearnerAccountHub t={t} />
-    </div>
+    </LearnerAccountShell>
   );
 }

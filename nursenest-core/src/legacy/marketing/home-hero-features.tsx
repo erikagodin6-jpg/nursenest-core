@@ -126,7 +126,7 @@ export default function HomeHeroFeatures() {
                 data-testid={`card-learning-area-${area.labelKey.split(".").pop()}`}
               >
                 <div className="nn-theme-gradient-br mb-3 flex h-10 w-10 items-center justify-center rounded-xl shadow-sm transition-transform group-hover:scale-110">
-                  <area.icon className="h-5 w-5 text-white" />
+                  <area.icon className="h-5 w-5" />
                 </div>
                 <h3 className="mb-1 nn-marketing-h4">{t(area.labelKey)}</h3>
                 <div className="flex items-center text-xs font-medium text-primary opacity-0 transition-opacity group-hover:opacity-100">

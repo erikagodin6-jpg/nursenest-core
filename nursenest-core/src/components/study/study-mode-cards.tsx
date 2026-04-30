@@ -33,13 +33,13 @@ const accentStyles = {
   success: {
     iconBg: "bg-[var(--semantic-panel-positive)]",
     icon: "text-[var(--semantic-success)]",
-    btn: "bg-[var(--semantic-success)] text-white hover:opacity-90",
+    btn: "bg-[var(--semantic-success)] nn-text-on-solid-fill hover:opacity-90",
     border: "hover:border-[color-mix(in_srgb,var(--semantic-success)_30%,var(--semantic-border-soft))]",
   },
   brand: {
     iconBg: "bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))]",
     icon: "text-[var(--semantic-brand)]",
-    btn: "bg-[var(--semantic-brand)] text-white hover:opacity-90",
+    btn: "bg-[var(--semantic-brand)] nn-text-on-solid-fill hover:opacity-90",
     border: "hover:border-[color-mix(in_srgb,var(--semantic-brand)_30%,var(--semantic-border-soft))]",
   },
   purple: {

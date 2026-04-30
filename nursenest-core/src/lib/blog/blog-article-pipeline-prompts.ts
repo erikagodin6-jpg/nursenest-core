@@ -114,6 +114,8 @@ export function buildStructuredPlanUserPrompt(params: {
 }): string {
   return `Topic / focus: ${params.topic}
 
+High-intent SEO contract: Titles and H1 options must stay **specific** to nursing exam decisions (prioritization, assessment, interventions, labs, meds, delegation). Do not drift into generic "Understanding…", "Overview of…", or "Guide to…" framing — mirror the query style of the topic line (questions, vs comparisons, nurse-first actions, labs explained for nurses).
+
 ${pathwayEditorialContext(params.exam)}
 
 ${countryEditorialContext(params.country)}
@@ -132,8 +134,19 @@ ${
 }`;
 }
 
-export function buildArticleBodySystemPrompt(ctx?: { template: BlogPostTemplate; intent: BlogPostIntent }): string {
+export type BlogArticleBodyPromptContext = {
+  template: BlogPostTemplate;
+  intent: BlogPostIntent;
+  /** Default true: include a dedicated Clinical pearls H2 in standard (non–long-form) articles. */
+  includeClinicalPearls?: boolean;
+  /** Default true: render FAQs as an H2 in HTML for standard articles (long-form pathophysiology always omits FAQ H2 in body). */
+  includeFaqsInBody?: boolean;
+};
+
+export function buildArticleBodySystemPrompt(ctx?: BlogArticleBodyPromptContext): string {
   const pathophysiologyLongForm = Boolean(ctx && isLongFormPathophysiologyProfile(ctx));
+  const includePearls = ctx?.includeClinicalPearls !== false;
+  const includeFaqsInBody = ctx?.includeFaqsInBody !== false;
   const longformBody = pathophysiologyLongForm
     ? `
 ## Pathophysiology long-form body rules (this article)
@@ -145,11 +158,18 @@ export function buildArticleBodySystemPrompt(ctx?: { template: BlogPostTemplate;
 - Include <h2>Why it matters in nursing practice</h2> **or** an equivalently titled block that is clearly nursing-priority content (if not already an H2 title from the outline, add this H2 once).
 - Vary sentence openings; avoid boilerplate openers ("In today's fast-paced healthcare…", "In conclusion…").
 - Include <h2>Key takeaways</h2> with a bullet list (unique prose; must not repeat paragraphs from other H2 sections).
-- **Do not** embed <h2>FAQs</h2>, <h2>Frequently asked questions</h2>, or <h2>References</h2> in HTML — FAQs live in structured JSON and references render from verified APA lines; duplicating them fails quality review.`
+- **Do not** embed <h2>FAQs</h2>, <h2>Frequently asked questions</h2>, or <h2>References</h2> in HTML — FAQs live in structured JSON and references render from verified APA lines; duplicating them fails quality review.
+- Use **APA-style parenthetical in-text citations** (Organization or lead author, Year) in mechanistic and clinical sections — aim for several across the article.
+- **Paywall-safe lesson language** only (never promise a free full lesson). When linking study paths, include once: "Want more practice? NurseNest members can review the related lesson, flashcards, and rationale-based questions."`
     : "";
   const faqBodyRule = pathophysiologyLongForm
     ? `- Do **not** put FAQ or References headings in the HTML body (see pathophysiology rules above).`
-    : `- Include <h2>Key takeaways</h2> (bullet list) and <h2>FAQs</h2> using the supplied FAQ items (you may tighten wording slightly).`;
+    : includeFaqsInBody
+      ? `- Include <h2>Key takeaways</h2> (bullet list) and <h2>FAQs</h2> using the supplied FAQ items (you may tighten wording slightly).`
+      : `- Include <h2>Key takeaways</h2> (bullet list). Do **not** render <h2>FAQs</h2> in the HTML body (FAQs are stored separately for this run).`;
+  const pearlRule = includePearls
+    ? `- Include a short <h2>Clinical pearls</h2> section with concrete exam-day pattern recognition cues.`
+    : `- Do **not** add a dedicated <h2>Clinical pearls</h2> heading; you may still weave 1–2 pearl bullets inside other sections.`;
   return `You write long-form, SEO-aware HTML for NurseNest nursing licensure exam prep.
 Output valid HTML only: <h2>, <h3>, <p>, <ul>, <li>, <strong>, <table>, <thead>, <tbody>, <tr>, <th>, <td>. No markdown. No <h1>.
 
@@ -161,10 +181,13 @@ Rules:
 - Do **not** output <img> tags or empty image placeholders. Inline visuals are attached later in the CMS; prose may reference concepts only.
 - Follow the outline order; expand each H2 with substantive paragraphs and, where useful, bullets.
 - For comparison topics (X vs Y, differential diagnosis, syndrome contrasts), include at least one concise comparison table.
-- Include a short "Clinical pearls" section with concrete exam-day pattern recognition cues.
-- Include a short "NCLEX-style tips" section with test-taking heuristics tied to this topic.
+${pearlRule}
+- Include a short <h2>NCLEX-style tips</h2> section with test-taking heuristics tied to this topic.
 ${faqBodyRule}
 - Include <h2>Related study paths</h2> — one short paragraph weaving in the internal paths as plain text (lessons, question bank hub, flashcards hub, practice exams directory — never raw /app/ URLs).
+- Use **APA-style parenthetical in-text citations** for substantive clinical claims, e.g. (Centers for Disease Control and Prevention, 2024) or (National Council of State Boards of Nursing, 2023) — organization or lead author + comma + year inside parentheses. Include **several** across the article; prefer names that can align with CDC, WHO, NIH/MedlinePlus, NCBI/StatPearls, or major nursing associations.
+- **Paywall-safe lesson language**: never imply the full lesson is free. Prefer: "Review the full lesson inside NurseNest", "Members can continue with the related lesson", or "Related NurseNest lesson: …". Do not promise unrestricted access to paid pathways.
+- Add **one short paragraph** near the middle or end that includes this member CTA (you may split into two sentences; keep the meaning): "Want more practice? NurseNest members can review the related lesson, flashcards, and rationale-based questions."
 - Educational exam-prep framing only — no directive treatment orders for real patients.
 - No fabricated statistics or pass-rate claims.
 - Do **not** cite specific journals, studies, DOIs, or URLs in the prose unless they will appear in the admin-verified reference list supplied separately to the CMS. Prefer generic phrasing ("clinical practice resources", "accrediting bodies") when no verified source is attached.${longformBody}`;

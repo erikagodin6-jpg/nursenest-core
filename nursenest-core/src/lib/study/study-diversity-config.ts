@@ -39,9 +39,10 @@ export function studyDiversityDebugEnabled(): boolean {
 }
 
 export function practiceRecentSessionLookback(
-  selectionMode: "random" | "weak" | "targeted" | "missed" | "starred",
+  selectionMode: "random" | "weak" | "targeted" | "missed" | "starred" | "unseen",
 ): number {
   if (selectionMode === "weak") return STUDY_DIVERSITY_PRACTICE_RECENT_SESSION_LOOKBACK_WEAK;
   if (selectionMode === "missed") return STUDY_DIVERSITY_PRACTICE_RECENT_SESSION_LOOKBACK_MISSED;
+  if (selectionMode === "unseen") return Math.max(STUDY_DIVERSITY_PRACTICE_RECENT_SESSION_LOOKBACK_DEFAULT, 20);
   return STUDY_DIVERSITY_PRACTICE_RECENT_SESSION_LOOKBACK_DEFAULT;
 }
