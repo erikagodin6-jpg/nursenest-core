@@ -169,6 +169,7 @@ export async function PathwayLessonDetailPageBody({
   const loadedLesson =
     lessonResult.status === "fulfilled" ? lessonResult.value : undefined;
   const lessonLoadFailed = lessonResult.status === "rejected";
+  console.log("[PUBLIC FETCH] slug", lessonSlug, "pathwayId", pathway.id, "table", "pathway_lessons_or_catalog");
 
   if (lessonResult.status === "rejected") {
     rethrowNextNavigationControlFlow(lessonResult.reason);

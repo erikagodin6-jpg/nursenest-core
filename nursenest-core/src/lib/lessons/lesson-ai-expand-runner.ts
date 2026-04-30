@@ -639,10 +639,13 @@ export async function runLessonAiExpandMain(
           legacyIndex: npLegacyIndex,
           dryRun: true,
         });
-        if (dv.legacyMatched) npRun.legacyMatched++;
+        if (dv.legacyMatched) {
+          npRun.legacyMatched++;
+        }
         console.log(
           `  [DRY] Would process; pass=${dv.validation.pass}; legacyMatch=${dv.legacyMatched}; missing=${dv.validation.missingSections.length}`,
         );
+        npRun.skipped++;
         totalSkipped++;
         continue;
       }

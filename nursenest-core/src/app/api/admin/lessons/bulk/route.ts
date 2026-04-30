@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
+import { revalidateSurfacesForContentItemLesson } from "@/lib/admin/revalidate-content-item-lesson-surfaces";
 import { governContentItemLessonPublish, validateLessonForPublish } from "@/lib/content/publish-validation";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
@@ -45,7 +46,7 @@ export async function POST(req: Request) {
   if (body.action === "set_status") {
     const rows = await prisma.contentItem.findMany({
       where: { id: { in: body.ids }, type: "lesson" },
-      select: { id: true, title: true, summary: true, content: true, tags: true, category: true },
+      select: { id: true, slug: true, title: true, summary: true, content: true, tags: true, category: true },
       take: takeForIdIn(body.ids, 500),
     });
     const blocked: { id: string; reasons: string[] }[] = [];
@@ -93,8 +94,17 @@ export async function POST(req: Request) {
       }
       await prisma.contentItem.update({
         where: { id: row.id },
-        data: { status: contentStatusToDb(body.status), bodySystem: taxonomy.bodySystem },
+        data: {
+          status: contentStatusToDb(body.status),
+          bodySystem: taxonomy.bodySystem,
+          ...(body.status === ContentStatus.PUBLISHED ? { publishedAt: new Date() } : {}),
+        },
       });
+      await revalidateSurfacesForContentItemLesson({ lessonId: row.id, slug: row.slug });
+      console.log("[REVALIDATE]", { slug: row.slug, contentItemId: row.id, source: "bulk_set_status" });
+      if (body.status === ContentStatus.PUBLISHED) {
+        console.log("[ADMIN PUBLISH]", { slug: row.slug, published: true });
+      }
       updated += 1;
     }
     if (blocked.length > 0) {

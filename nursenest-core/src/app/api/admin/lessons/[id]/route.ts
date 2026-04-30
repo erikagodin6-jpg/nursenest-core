@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
+import { revalidateSurfacesForContentItemLesson } from "@/lib/admin/revalidate-content-item-lesson-surfaces";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { classifyContentItemLesson } from "@/lib/content-quality/classify-lesson";
 import { governContentItemLessonPublish } from "@/lib/content/editorial-publish-policy";
@@ -94,6 +95,11 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const d = parsed.data;
+  const payloadForLog = { ...d } as Record<string, unknown>;
+  if (typeof payloadForLog.body === "string" && payloadForLog.body.length > 500) {
+    payloadForLog.body = `${(payloadForLog.body as string).slice(0, 500)}…`;
+  }
+  console.log("[ADMIN SAVE] payload", { contentItemId: id, table: "content_items", data: payloadForLog });
   const bodyStr = d.body ?? bodyStringFromContentJson(existing.content);
   const merged = {
     title: d.title ?? existing.title,
@@ -153,6 +159,8 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     }
   }
 
+  const previousSlug = existing.slug;
+  const publishRequested = d.status === ContentStatus.PUBLISHED;
   const lesson = await prisma.contentItem.update({
     where: { id },
     data: {
@@ -167,8 +175,25 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       category: category ?? undefined,
       bodySystem: taxonomy.bodySystem,
       ...(d.versionKey !== undefined ? { versionKey: d.versionKey } : {}),
+      ...(publishRequested ? { publishedAt: new Date() } : {}),
     },
   });
+
+  await revalidateSurfacesForContentItemLesson({
+    lessonId: lesson.id,
+    slug: lesson.slug,
+    previousSlug: d.slug !== undefined && d.slug !== previousSlug ? previousSlug : null,
+  });
+  console.log("[REVALIDATE]", { slug: lesson.slug, contentItemId: lesson.id });
+
+  if (publishRequested) {
+    console.log("[ADMIN PUBLISH]", {
+      slug: lesson.slug,
+      published: true,
+      publishedAt: lesson.publishedAt?.toISOString() ?? null,
+      status: lesson.status,
+    });
+  }
 
   return NextResponse.json({
     lesson,

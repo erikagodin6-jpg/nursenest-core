@@ -1679,6 +1679,8 @@ export function listCatalogPathwayIdsWithLessonsSync(): string[] {
     ...Object.keys(getAlliedBundledPathways()),
     ...Object.keys(getNewGradTransitionPathways()),
   ]);
+  /** Canadian NP hub rows can live only in `lesson-library.json` (no `catalog.json` pathway bucket). */
+  ids.add("ca-np-cnple");
   return [...ids].filter((id) => getCatalogLessonsRaw(id).length > 0);
 }
 

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { isStudyToolsPubliclyEnabled } from "@/lib/study-tools/study-tools-feature-flag";
 import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
@@ -15,10 +16,12 @@ export function StudyToolsActivityShell({
   title,
   description,
   pathwayId,
+  children,
 }: {
   title: string;
   description: string;
   pathwayId: string | null;
+  children?: ReactNode;
 }) {
   const publicOn = isStudyToolsPubliclyEnabled();
   const previewBanner = !publicOn;
@@ -67,10 +70,13 @@ export function StudyToolsActivityShell({
         </ul>
       </nav>
 
-      <section className="rounded-xl border border-dashed border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_10%,var(--semantic-surface))] p-4 text-sm text-[var(--theme-body-text)]">
-        Content wiring (question bank, flashcard rationales, lesson links) lands here incrementally. Migration output stays{" "}
-        <span className="font-semibold text-[var(--semantic-danger)]">draft</span> until approved.
-      </section>
+      {children ? (
+        <div className="space-y-6">{children}</div>
+      ) : (
+        <section className="rounded-xl border border-dashed border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_10%,var(--semantic-surface))] p-4 text-sm text-[var(--theme-body-text)]">
+          Open a specific study mode from the links above to launch a session.
+        </section>
+      )}
     </div>
   );
 }

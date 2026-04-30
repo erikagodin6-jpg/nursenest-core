@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidateSurfacesForContentItemLesson } from "@/lib/admin/revalidate-content-item-lesson-surfaces";
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
 import {
@@ -179,6 +180,11 @@ export async function POST(req: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
 
   const data = parsed.data;
+  const payloadForLog = { ...data } as Record<string, unknown>;
+  if (typeof payloadForLog.body === "string" && payloadForLog.body.length > 500) {
+    payloadForLog.body = `${(payloadForLog.body as string).slice(0, 500)}…`;
+  }
+  console.log("[ADMIN SAVE] payload", { table: "content_items", data: payloadForLog });
   if (data.status === ContentStatus.PUBLISHED) {
     const v = validateLessonForPublish({ title: data.title, summary: data.summary, body: data.body });
     if (!v.ok) return NextResponse.json({ error: "Publish validation failed", reasons: v.reasons }, { status: 400 });
@@ -220,6 +226,7 @@ export async function POST(req: Request) {
     );
   }
 
+  const publishNow = data.status === ContentStatus.PUBLISHED;
   const lesson = await prisma.contentItem.create({
     data: {
       title: data.title,
@@ -234,8 +241,20 @@ export async function POST(req: Request) {
       category: categoryLabel ?? undefined,
       bodySystem: taxonomy.bodySystem,
       versionKey: data.versionKey ?? undefined,
+      ...(publishNow ? { publishedAt: new Date() } : {}),
     },
   });
+
+  await revalidateSurfacesForContentItemLesson({ lessonId: lesson.id, slug: lesson.slug });
+  console.log("[REVALIDATE]", { slug: lesson.slug, contentItemId: lesson.id, source: "admin_lessons_post" });
+  if (publishNow) {
+    console.log("[ADMIN PUBLISH]", {
+      slug: lesson.slug,
+      published: true,
+      publishedAt: lesson.publishedAt?.toISOString() ?? null,
+      status: lesson.status,
+    });
+  }
 
   return NextResponse.json({ lesson }, { status: 201 });
 }

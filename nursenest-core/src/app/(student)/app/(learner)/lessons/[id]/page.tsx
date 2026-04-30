@@ -90,6 +90,9 @@ import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
 
+/** Bust data cache after admin publishes/edits ContentItem lessons (see admin PATCH + revalidatePath). */
+export const dynamic = "force-dynamic";
+
 function LessonBody({
   content,
   t,
@@ -926,6 +929,7 @@ async function LessonDetailPageInner({ params }: Props) {
   }
 
   const row = resolvedLesson.row;
+  console.log("[PUBLIC FETCH] slug", row.slug, "contentItemId", row.id, "table", "content_items");
   const displayTitle = resolvePublicLessonTitle({
     curatedTitle: row.title,
     generatedTitle: row.seoTitle,

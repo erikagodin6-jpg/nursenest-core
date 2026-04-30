@@ -50,6 +50,9 @@ import { snapshotAgeMs as publishedSnapshotAgeMs } from "@/lib/study-content-fai
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 
+/** Align with lesson detail — list should reflect admin publish without stale RSC cache. */
+export const dynamic = "force-dynamic";
+
 type AppLessonListRow = {
   id: string;
   title: string;

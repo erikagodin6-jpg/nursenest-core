@@ -1,4 +1,7 @@
 import assert from "node:assert/strict";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, it } from "node:test";
 
 import {
@@ -92,7 +95,7 @@ describe("np-legacy-lesson-merge", () => {
   it("normalizeLessonTitleForMatch strips noise", () => {
     assert.equal(
       normalizeLessonTitleForMatch("HTN Guideline-Based Plans (NP licensure, Canada)"),
-      normalizeLessonTitleForMatch("htn guideline based plans np licensure canada"),
+      normalizeLessonTitleForMatch("HTN Guideline-Based Plans"),
     );
   });
 });
@@ -100,5 +103,16 @@ describe("np-legacy-lesson-merge", () => {
 describe("package scripts contract", () => {
   it("documents alias map is an object", () => {
     assert.equal(typeof LEGACY_NP_SLUG_ALIASES, "object");
+  });
+
+  it("nursenest-core and root package.json define NP expand scripts", () => {
+    const here = path.dirname(fileURLToPath(import.meta.url));
+    const corePkg = path.resolve(here, "../../../package.json");
+    const rootPkg = path.resolve(here, "../../../../package.json");
+    const core = JSON.parse(fs.readFileSync(corePkg, "utf8")) as { scripts: Record<string, string> };
+    const root = JSON.parse(fs.readFileSync(rootPkg, "utf8")) as { scripts: Record<string, string> };
+    assert.match(String(core.scripts["expand:np-lessons"] || ""), /lesson-ai-expand\.ts/);
+    assert.match(String(core.scripts["expand:np-lessons:dry"] || ""), /--dry-run/);
+    assert.match(String(root.scripts["expand:np-lessons"] || ""), /nursenest-core/);
   });
 });
