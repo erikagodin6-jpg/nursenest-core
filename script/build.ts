@@ -1,5 +1,6 @@
-import { build as esbuild } from "esbuild";
-import { build as viteBuild } from "vite";
+import path from "path";
+import { createRequire } from "node:module";
+import { pathToFileURL } from "node:url";
 import { rm, readFile, readdir, readFile as readFileAsync, writeFile, copyFile, unlink, mkdir } from "fs/promises";
 import { existsSync } from "fs";
 import { gzipSync } from "zlib";
@@ -7,7 +8,9 @@ import { compileI18n } from "./compile-i18n";
 import { execSync } from "child_process";
 import { runI18nScan } from "./scan-hardcoded-strings-lib";
 
-import path from "path";
+const workspaceRequire = createRequire(path.resolve(process.cwd(), "package.json"));
+const { build: esbuild } = workspaceRequire("esbuild") as typeof import("esbuild");
+const { build: viteBuild } = (await import(pathToFileURL(workspaceRequire.resolve("vite")).href)) as typeof import("vite");
 
 const allowlist = [
   "date-fns",

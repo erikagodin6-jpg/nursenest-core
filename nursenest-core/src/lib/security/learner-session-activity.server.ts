@@ -166,19 +166,17 @@ export async function maybeBlockOrTouchAccountSharingAfterSubscriberOk(
       },
     });
 
-    const ipRows = await prisma.learnerSessionIpObservation.findMany({
+    const ipGroups = await prisma.learnerSessionIpObservation.groupBy({
+      by: ["ipHash"],
       where: { userId, lastSeenAt: { gte: ago24h } },
-      select: { ipHash: true },
-      distinct: ["ipHash"],
     });
-    const distinctIps24h = ipRows.length;
+    const distinctIps24h = ipGroups.length;
 
-    const deviceRows = await prisma.learnerSessionActivity.findMany({
+    const deviceGroups = await prisma.learnerSessionActivity.groupBy({
+      by: ["sessionKeyHash"],
       where: { userId, lastSeenAt: { gte: ago7d }, revokedAt: null },
-      select: { sessionKeyHash: true },
-      distinct: ["sessionKeyHash"],
     });
-    const activeDeviceSlots7d = deviceRows.length;
+    const activeDeviceSlots7d = deviceGroups.length;
 
     const regionRows = await prisma.learnerSessionIpObservation.findMany({
       where: { userId, lastSeenAt: { gte: ago2h }, regionHint: { not: null } },

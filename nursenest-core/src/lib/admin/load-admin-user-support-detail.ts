@@ -7,6 +7,7 @@ import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-product-registry";
 import { resolveEntitlement, type AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
+import { isAccountSharingMonitorEnabled } from "@/lib/security/account-sharing-env";
 
 function maskStripeRef(id: string | null | undefined): string | null {
   if (!id?.trim()) return null;
@@ -75,6 +76,18 @@ export type AdminUserSupportDetail =
         credentialVersion: number;
         activePasswordResetTokens: number;
         trialDeviceBindings: number;
+      };
+      accountSharingTelemetry: {
+        monitorEnabled: boolean;
+        activeSessionSlots7d: number;
+        distinctIpHashes24h: number;
+        lastActivityAt: string | null;
+        recentSoftFlags: Array<{
+          createdAt: string;
+          reason: string;
+          score: number;
+          dismissedAt: string | null;
+        }>;
       };
       usage: {
         examAttempts: number;
@@ -180,6 +193,8 @@ export async function loadAdminUserSupportDetail(userId: string): Promise<AdminU
       }
 
       const now = new Date();
+      const ago24h = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+      const ago7d = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
       const entitlement = await resolveEntitlement(user.id);
 
       const [
@@ -202,6 +217,10 @@ export async function loadAdminUserSupportDetail(userId: string): Promise<AdminU
         recentProgress,
         topicTop,
         emailNotifs,
+        sharingIpGroups,
+        sharingDeviceGroups,
+        sharingLastActivity,
+        sharingAbuseReviews,
       ] = await Promise.all([
         prisma.subscription.findMany({
           where: { userId: user.id },
@@ -309,6 +328,25 @@ export async function loadAdminUserSupportDetail(userId: string): Promise<AdminU
           take: 15,
           select: { kind: true, createdAt: true },
         }),
+        prisma.learnerSessionIpObservation.groupBy({
+          by: ["ipHash"],
+          where: { userId: user.id, lastSeenAt: { gte: ago24h } },
+        }),
+        prisma.learnerSessionActivity.groupBy({
+          by: ["sessionKeyHash"],
+          where: { userId: user.id, lastSeenAt: { gte: ago7d }, revokedAt: null },
+        }),
+        prisma.learnerSessionActivity.findFirst({
+          where: { userId: user.id },
+          orderBy: { lastSeenAt: "desc" },
+          select: { lastSeenAt: true },
+        }),
+        prisma.protectionAbuseReview.findMany({
+          where: { userId: user.id, reason: "account_sharing_soft" },
+          orderBy: { createdAt: "desc" },
+          take: 8,
+          select: { createdAt: true, reason: true, score: true, dismissedAt: true },
+        }),
       ]);
 
       let completedProgress = 0;
@@ -384,6 +422,18 @@ export async function loadAdminUserSupportDetail(userId: string): Promise<AdminU
           credentialVersion: user.credentialVersion,
           activePasswordResetTokens: resetTokens,
           trialDeviceBindings: trialBindings,
+        },
+        accountSharingTelemetry: {
+          monitorEnabled: isAccountSharingMonitorEnabled(),
+          activeSessionSlots7d: sharingDeviceGroups.length,
+          distinctIpHashes24h: sharingIpGroups.length,
+          lastActivityAt: sharingLastActivity?.lastSeenAt.toISOString() ?? null,
+          recentSoftFlags: sharingAbuseReviews.map((r) => ({
+            createdAt: r.createdAt.toISOString(),
+            reason: r.reason,
+            score: r.score,
+            dismissedAt: r.dismissedAt?.toISOString() ?? null,
+          })),
         },
         usage: {
           examAttempts: examAttemptsCount,

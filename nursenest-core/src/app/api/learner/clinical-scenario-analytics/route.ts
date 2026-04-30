@@ -2,8 +2,12 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { recordClinicalScenarioSimulationRun } from "@/lib/clinical-scenarios/clinical-scenario-simulation-run.server";
+import { resolveEntitlement } from "@/lib/entitlements/resolve-entitlement";
+import { mergeSubscriberPrivateCacheHeaders } from "@/lib/http/subscriber-api-cache";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
+
+export const dynamic = "force-dynamic";
 
 const trajectoryEnum = z.enum(["improving", "stable", "deteriorating"]);
 
@@ -30,7 +34,10 @@ export async function POST(req: Request) {
     const session = await auth();
     const userId = (session?.user as { id?: string })?.id?.trim();
     if (!userId) {
-      return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { ok: false, error: "unauthorized" },
+        { status: 401, headers: mergeSubscriberPrivateCacheHeaders() },
+      );
     }
 
     let json: unknown;
@@ -46,6 +53,25 @@ export async function POST(req: Request) {
     }
 
     const b = parsed.data;
+
+    if (b.isPremiumScenario || b.premiumUnlocked) {
+      let entitlement;
+      try {
+        entitlement = await resolveEntitlement(userId);
+      } catch {
+        return NextResponse.json(
+          { ok: false, error: "access_verify_failed" },
+          { status: 503, headers: mergeSubscriberPrivateCacheHeaders() },
+        );
+      }
+      if (!entitlement.hasAccess) {
+        return NextResponse.json(
+          { ok: false, code: "not_subscribed", message: "Subscription required" },
+          { status: 403, headers: mergeSubscriberPrivateCacheHeaders() },
+        );
+      }
+    }
+
     const incorrectWeight = b.incorrectWeight ?? b.incorrectSoFar;
     const trajectoryPath = b.trajectoryPath ?? [];
     const maxStageOrderReached = b.maxStageOrderReached ?? b.reachedStageOrder;
@@ -85,6 +111,6 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true }, { headers: mergeSubscriberPrivateCacheHeaders() });
   });
 }
