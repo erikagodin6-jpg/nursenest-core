@@ -101,4 +101,30 @@ describe("Option B — pathway lesson as authoring source of truth", () => {
     assert.equal(src.includes("prisma.contentItem"), false);
     assert.equal(src.includes("content_items"), false);
   });
+
+  it("admin pathway-lesson lookup API reads PathwayLesson by pathwayId+slug only (no ContentItem)", () => {
+    const dir = fileURLToPath(new URL(".", import.meta.url));
+    const routePath = join(dir, "../../app/api/admin/pathway-lessons/lookup/route.ts");
+    const src = readFileSync(routePath, "utf8");
+    assert.match(src, /requireAdmin/);
+    assert.match(src, /pathwayLesson\.findFirst/);
+    assert.equal(src.includes("prisma.contentItem"), false);
+    assert.equal(src.includes("contentItem"), false);
+  });
+
+  it("admin pathway-lesson PATCH blocks publish when structure is not publicly complete", () => {
+    const dir = fileURLToPath(new URL(".", import.meta.url));
+    const routePath = join(dir, "../../app/api/admin/pathway-lessons/[id]/route.ts");
+    const src = readFileSync(routePath, "utf8");
+    assert.match(src, /structural_public_incomplete/);
+    assert.match(src, /structuralPublicComplete/);
+  });
+
+  it("admin pathway-lesson PATCH validates locale on publish", () => {
+    const dir = fileURLToPath(new URL(".", import.meta.url));
+    const routePath = join(dir, "../../app/api/admin/pathway-lessons/[id]/route.ts");
+    const src = readFileSync(routePath, "utf8");
+    assert.match(src, /locale_invalid/);
+    assert.match(src, /mergedLocale/);
+  });
 });

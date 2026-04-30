@@ -3,16 +3,44 @@ import "@happy-dom/global-registrator/register";
 import assert from "node:assert/strict";
 import { afterEach, beforeEach, describe, it } from "node:test";
 import React from "react";
+import { SessionProvider } from "next-auth/react";
 
 (globalThis as unknown as { React?: typeof React }).React = React;
 import { cleanup, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { PaywallHomeStatsProvider } from "@/components/student/paywall-home-stats-context";
+import type { PublicHomeStatsPayload } from "@/lib/marketing/public-home-stats-payload";
 import type { ClinicalScenarioPreviewModel } from "@/components/clinical-scenarios/clinical-scenario-unfolding-preview";
 import { ClinicalScenarioUnfoldingPreview } from "@/components/clinical-scenarios/clinical-scenario-unfolding-preview";
 
 afterEach(() => {
   cleanup();
 });
+
+/** Inline payload avoids importing `getDegradedPublicHomeStatsFallback` (server-only graph) in node tests. */
+const clinicalPreviewHomeStats: PublicHomeStatsPayload = {
+  totalLessons: 0,
+  pathwayLessonsPublished: 0,
+  contentItemsLessonCount: 0,
+  questionCount: 0,
+  totalFlashcards: 0,
+  totalDecks: 0,
+  storeProductCount: 0,
+  registeredLearners: 0,
+  questionsByTier: {},
+  scenarioCount: 0,
+  topicCategoryCount: 0,
+  proofDisplay: "neutral",
+};
+
+/** SubscriptionPaywall requires SessionProvider + PaywallHomeStatsProvider. */
+function renderWithPreviewProviders(ui: React.ReactElement) {
+  return render(
+    <SessionProvider session={null}>
+      <PaywallHomeStatsProvider value={clinicalPreviewHomeStats}>{ui}</PaywallHomeStatsProvider>
+    </SessionProvider>,
+  );
+}
 
 function buildScenario(): ClinicalScenarioPreviewModel {
   return {
@@ -133,7 +161,7 @@ function buildTwoStageBranching(opts: { isPremium?: boolean } = {}): ClinicalSce
 describe("ClinicalScenarioUnfoldingPreview", () => {
   it("shows trajectory from selected answer consequences", async () => {
     const user = userEvent.setup();
-    render(<ClinicalScenarioUnfoldingPreview scenario={buildScenario()} />);
+    renderWithPreviewProviders(<ClinicalScenarioUnfoldingPreview scenario={buildScenario()} />);
 
     const stageCard = screen.getByText(/Case stage 1 of 1/i).closest("section");
     assert.ok(stageCard);
@@ -163,7 +191,7 @@ describe("ClinicalScenarioUnfoldingPreview branching engine UI", () => {
 
   it("premium scenario blocks stage 2 for free users after stage 1 commit", async () => {
     const user = userEvent.setup();
-    render(
+    renderWithPreviewProviders(
       <ClinicalScenarioUnfoldingPreview
         scenario={buildTwoStageBranching({ isPremium: true })}
         premiumUnlocked={false}
@@ -180,7 +208,7 @@ describe("ClinicalScenarioUnfoldingPreview branching engine UI", () => {
 
   it("renders outcome debrief after completing final branching stage", async () => {
     const user = userEvent.setup();
-    render(
+    renderWithPreviewProviders(
       <ClinicalScenarioUnfoldingPreview
         scenario={buildTwoStageBranching({ isPremium: false })}
         premiumUnlocked={true}

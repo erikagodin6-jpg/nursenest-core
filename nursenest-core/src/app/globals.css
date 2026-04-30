@@ -1475,10 +1475,16 @@ article .prose :where(pre) {
 }
 
 .nn-card-interactive:hover {
-  transform: translateY(var(--lift-hover-y));
+  transform: translateY(var(--lift-hover-y)) scale(1.006);
   box-shadow: var(--elevation-hover);
   border-color: var(--border-strong, color-mix(in srgb, var(--theme-primary) 32%, transparent));
   background-color: color-mix(in srgb, var(--accent-soft, transparent) 55%, var(--bg-card, var(--theme-card-bg)));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-card-interactive:hover {
+    transform: translateY(var(--lift-hover-y));
+  }
 }
 
 /* Premium interaction primitives shared across marketing/lessons/auth/dashboard surfaces. */
@@ -2684,6 +2690,12 @@ html[data-theme] .nn-marketing-trust-strip {
 .nn-btn-primary {
   font-weight: var(--nn-font-weight-ui);
   background: var(--role-cta, var(--theme-primary));
+  background-image: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--role-cta-foreground, #ffffff) 10%, var(--role-cta, var(--theme-primary))) 0%,
+    var(--role-cta, var(--theme-primary)) 52%,
+    color-mix(in srgb, var(--role-cta-pressed, var(--accent-pressed)) 18%, var(--role-cta, var(--theme-primary))) 100%
+  );
   color: var(--role-cta-foreground, #ffffff);
   border-radius: 9999px;
   box-shadow: 0 4px 14px var(--role-cta-shadow, color-mix(in srgb, var(--theme-primary) 28%, transparent));
@@ -3499,6 +3511,39 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   .nn-lesson-prose {
     max-width: min(82ch, 100%);
   }
+}
+
+/* Lesson callouts — optional **Exam Tip:** / **Clinical Insight:** paragraph prefixes */
+.nn-lesson-callout {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-radius: var(--radius-xl, 0.875rem);
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-brand));
+  padding: 1rem 1.15rem;
+  box-shadow: var(--shadow-card, var(--elevation-rest));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 35%, var(--semantic-surface));
+}
+.nn-lesson-callout--exam {
+  border-color: color-mix(in srgb, var(--semantic-chart-2) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-chart-2) 08%, var(--semantic-surface));
+}
+.nn-lesson-callout--clinical {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 40%, var(--semantic-surface));
+}
+.nn-lesson-callout__label {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+.nn-lesson-callout__body {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--semantic-text-secondary);
 }
 
 /* ── Prose bullet and numbered lists ───────────────────────────────────────
@@ -4754,6 +4799,95 @@ html[data-theme="deep-twilight"] .nn-qopt-surface--incorrect .nn-qopt-letter {
   .nn-qopt-surface,
   .nn-qopt-letter {
     transition: none;
+  }
+}
+
+/* Post-submit answer strip — subtle verdict motion (CSS-only; respects reduced motion). */
+@keyframes nn-qopt-verdict-success-pulse {
+  0% {
+    box-shadow:
+      0 0 0 0 color-mix(in srgb, var(--role-success) 0%, transparent),
+      0 1px 0 color-mix(in srgb, var(--theme-primary) 4%, transparent);
+  }
+  45% {
+    box-shadow:
+      0 0 0 6px color-mix(in srgb, var(--role-success) 18%, transparent),
+      0 2px 10px color-mix(in srgb, var(--role-success) 12%, transparent);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 transparent,
+      0 1px 0 color-mix(in srgb, var(--theme-primary) 4%, transparent);
+  }
+}
+
+@keyframes nn-qopt-verdict-incorrect-soft {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--semantic-danger) 0%, transparent);
+  }
+  40% {
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--semantic-danger) 14%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-qopt-feedback-phase .nn-qopt-surface--correct {
+    animation: nn-qopt-verdict-success-pulse 0.72s ease-out 1;
+  }
+
+  .nn-qopt-feedback-phase .nn-qopt-surface--incorrect {
+    animation: nn-qopt-verdict-incorrect-soft 0.78s ease-out 1;
+  }
+}
+
+/* Sticky session chrome (question #, timer, session stats, progress) */
+.nn-exam-session.nn-exam-session--immersive .nn-exam-session-sticky-chrome {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  background: color-mix(in srgb, var(--semantic-surface) 92%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-exam-session.nn-exam-session--immersive .nn-exam-session-sticky-chrome {
+    backdrop-filter: none;
+  }
+}
+
+/* Lightweight skeleton + shimmer (no extra JS). */
+.nn-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--semantic-text-primary) 06%, var(--semantic-panel-muted));
+}
+
+.nn-skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--semantic-surface) 55%, transparent),
+    transparent
+  );
+  animation: nn-skeleton-shimmer 1.35s ease-in-out infinite;
+}
+
+@keyframes nn-skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-skeleton-shimmer::after {
+    animation: none;
   }
 }
 

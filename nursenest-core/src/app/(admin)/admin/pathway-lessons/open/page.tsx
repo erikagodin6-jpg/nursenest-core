@@ -15,6 +15,7 @@ function firstString(v: string | string[] | undefined): string {
 /**
  * Resolve a pathway lesson editor URL from stable routing keys (`pathwayId` + `slug`)
  * without requiring the internal `pathway_lessons.id` in bookmarks.
+ * For programmatic reads (same keys), use `GET /api/admin/pathway-lessons/lookup` or `/admin/pathway-lessons/edit?pathwayId=&slug=`.
  */
 export default async function AdminPathwayLessonOpenPage({ searchParams }: PageProps) {
   await requireAdmin();

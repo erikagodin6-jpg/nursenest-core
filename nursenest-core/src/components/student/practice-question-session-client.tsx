@@ -525,10 +525,10 @@ export function PracticeQuestionSessionClient({
                 </ul>
               )
             ) : (
-              <div className={`space-y-3 ${g ? "nn-qopt-feedback-phase" : ""}`}>
+              <div className="space-y-3">
                 <p className="text-sm font-semibold text-[var(--semantic-text-primary)]">{g?.correct ? "Correct" : "Incorrect"}</p>
                 {g && current ? (
-                  <ul className="nn-qopt-list" aria-label="Answer review">
+                  <ul className="nn-qopt-list nn-qopt-feedback-phase" aria-label="Answer review">
                     {optsCanonical.map((canonical, i) => {
                       const label = optsClinical[i] ?? optsDisplay[i] ?? canonical;
                       const raw = answer;

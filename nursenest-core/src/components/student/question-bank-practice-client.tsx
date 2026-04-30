@@ -742,6 +742,7 @@ export function QuestionBankPracticeClient({
   );
 
   const g = current ? graded[current.id] : undefined;
+  const sessionElapsedLabel = `${String(Math.floor(sessionElapsedSec / 60)).padStart(2, "0")}:${String(sessionElapsedSec % 60).padStart(2, "0")}`;
   const gradedRationaleForPanel = useMemo(() => {
     if (!g) return null;
     return {
@@ -1330,52 +1331,59 @@ export function QuestionBankPracticeClient({
 
       <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} telemetrySurface="question_bank">
         <ExamSessionShell neutralPalette immersive className="overflow-hidden shadow-md">
-          <ExamSessionTopBar
-            left={
-              <div className="space-y-1">
-                <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                  {t("learner.qbank.ui.questionOf", { n: idx + 1, total })}
-                </p>
-                {current.topic ? (
-                  <p className="line-clamp-1 nn-marketing-body-sm font-medium text-[var(--theme-heading-text)]">
-                    {current.topic}
+          <ExamSessionStickyChrome>
+            <ExamSessionTopBar
+              left={
+                <div className="space-y-1">
+                  <p className="nn-marketing-caption font-bold uppercase tracking-wide text-[var(--theme-heading-text)]">
+                    {t("learner.qbank.ui.questionOf", { n: idx + 1, total })}
                   </p>
-                ) : null}
-              </div>
-            }
-            center={
-              sessionTotal > 0 ? (
-                <span
-                  className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 nn-marketing-caption font-semibold tabular-nums ${
-                    sessionTotal > 0 && sessionRight / sessionTotal >= 0.8
-                      ? "border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_8%,var(--semantic-surface))] text-[var(--semantic-success-contrast,var(--semantic-success))]"
-                      : sessionTotal > 0 && sessionRight / sessionTotal >= 0.6
-                        ? "border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] text-[var(--semantic-warning-contrast)]"
-                        : "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-muted)]"
-                  }`}
-                  title={`${sessionRight} of ${sessionTotal} correct so far`}
-                >
-                  <span aria-hidden>✓</span>
-                  {sessionRight}/{sessionTotal}
-                </span>
-              ) : (
-                <span className="nn-marketing-caption font-semibold text-[var(--theme-muted-text)]">
-                  {sortForApi === "random" ? t("learner.qbank.ui.sortRandom") : t("learner.qbank.ui.sortRecent")}
-                </span>
-              )
-            }
-            right={
-              <div className="flex flex-wrap items-center justify-end gap-2">
-                <ExamSessionThemeTrigger />
-                {markedForReview[current.id] ? (
-                  <span className="nn-marketing-caption font-semibold text-[var(--semantic-warning-contrast)] uppercase tracking-wide">
-                    Flagged
+                  {current.topic ? (
+                    <p className="line-clamp-1 nn-marketing-body-sm font-medium text-[var(--theme-heading-text)]">
+                      {current.topic}
+                    </p>
+                  ) : null}
+                </div>
+              }
+              center={
+                <div className="flex flex-col items-center gap-1">
+                  <span className="nn-marketing-caption font-semibold tabular-nums tracking-wide text-[var(--semantic-text-muted)]">
+                    {sessionElapsedLabel}
                   </span>
-                ) : null}
-              </div>
-            }
-          />
-          <ExamProgressBar current={idx + 1} total={total} answeredCount={sessionTotal} />
+                  {sessionTotal > 0 ? (
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 nn-marketing-caption font-semibold tabular-nums ${
+                        sessionTotal > 0 && sessionRight / sessionTotal >= 0.8
+                          ? "border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_8%,var(--semantic-surface))] text-[var(--semantic-success-contrast,var(--semantic-success))]"
+                          : sessionTotal > 0 && sessionRight / sessionTotal >= 0.6
+                            ? "border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] text-[var(--semantic-warning-contrast)]"
+                            : "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-muted)]"
+                      }`}
+                      title={`${sessionRight} of ${sessionTotal} correct so far`}
+                    >
+                      <span aria-hidden>✓</span>
+                      {sessionRight}/{sessionTotal}
+                    </span>
+                  ) : (
+                    <span className="nn-marketing-caption font-semibold text-[var(--theme-muted-text)]">
+                      {sortForApi === "random" ? t("learner.qbank.ui.sortRandom") : t("learner.qbank.ui.sortRecent")}
+                    </span>
+                  )}
+                </div>
+              }
+              right={
+                <div className="flex flex-wrap items-center justify-end gap-2">
+                  <ExamSessionThemeTrigger />
+                  {markedForReview[current.id] ? (
+                    <span className="nn-marketing-caption font-semibold text-[var(--semantic-warning-contrast)] uppercase tracking-wide">
+                      Flagged
+                    </span>
+                  ) : null}
+                </div>
+              }
+            />
+            <ExamProgressBar current={idx + 1} total={total} answeredCount={sessionTotal} />
+          </ExamSessionStickyChrome>
 
           <div className="nn-question-session nn-question-session--split">
             <div className="nn-question-session-primary min-h-0 space-y-6 overflow-x-hidden overflow-y-auto">
@@ -1400,7 +1408,11 @@ export function QuestionBankPracticeClient({
                 ) : null}
 
                 {isSata ? (
-                <ul className="nn-qopt-list" role="group" aria-label={t("learner.qbank.examUi.answersHeading")}>
+                <ul
+                  className={`nn-qopt-list${g ? " nn-qopt-feedback-phase" : ""}`}
+                  role="group"
+                  aria-label={t("learner.qbank.examUi.answersHeading")}
+                >
                   {optsCanonical.map((canonical, i) => {
                     const label = optsDisplayClinical[i] ?? optsDisplay[i] ?? canonical;
                     const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
@@ -1461,7 +1473,11 @@ export function QuestionBankPracticeClient({
                   })}
                 </ul>
               ) : (
-                <ul className="nn-qopt-list" role="radiogroup" aria-label={t("learner.qbank.examUi.answersHeading")}>
+                <ul
+                  className={`nn-qopt-list${g ? " nn-qopt-feedback-phase" : ""}`}
+                  role="radiogroup"
+                  aria-label={t("learner.qbank.examUi.answersHeading")}
+                >
                   {optsCanonical.map((canonical, i) => {
                     const label = optsDisplayClinical[i] ?? optsDisplay[i] ?? canonical;
                     const struck = Boolean(strikeOut[canonical]);

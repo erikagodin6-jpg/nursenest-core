@@ -1,6 +1,10 @@
 /**
  * Guardrails for legacy `ContentItem` lessons tagged with `pathway-lesson-id:{cuid}` — canonical authoring
  * stays on `pathway_lessons` / `/admin/pathway-lessons` (see `/api/admin/lessons/[id]` PATCH).
+ *
+ * TODO: Temporary compatibility bridge. PathwayLesson direct admin editing is now the source of truth
+ * for pathway lessons. ContentItem → PathwayLesson sync (tags, revalidation slug-bust, etc.) exists only
+ * for legacy migration — remove this bridge after legacy ContentItem lesson migration is complete.
  */
 /** Keys that would fork “truth” away from {@link PathwayLesson} when a bridge tag is present. */
 const CONTENT_ITEM_PATCH_PATHWAY_AUTHORITY_KEYS = [

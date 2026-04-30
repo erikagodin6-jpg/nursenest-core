@@ -12,8 +12,17 @@ const STATUSES = [
   ContentStatus.ARCHIVED,
 ] as const;
 
-export function AdminPathwayLessonFormClient({ pathwayLessonId }: { pathwayLessonId: string }) {
+export type AdminPathwayLessonFormClientProps =
+  | { pathwayLessonId: string }
+  | { resolve: { pathwayId: string; slug: string; locale?: string } };
+
+export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClientProps) {
   const router = useRouter();
+  const [resolvedPathwayLessonId, setResolvedPathwayLessonId] = useState<string | null>(
+    "pathwayLessonId" in props ? props.pathwayLessonId : null,
+  );
+  const [resolveError, setResolveError] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -28,7 +37,45 @@ export function AdminPathwayLessonFormClient({ pathwayLessonId }: { pathwayLesso
   const [status, setStatus] = useState<ContentStatus>(ContentStatus.DRAFT);
   const [acknowledgeBelowQualityBar, setAcknowledgeBelowQualityBar] = useState(false);
 
+  useEffect(() => {
+    if ("pathwayLessonId" in props) return;
+    const { pathwayId: pid, slug: sl, locale } = props.resolve;
+    if (!pid || !sl) {
+      setResolveError("pathwayId and slug are required (use query string on this page).");
+      setLoading(false);
+      return;
+    }
+    let cancelled = false;
+    void (async () => {
+      setResolveError(null);
+      try {
+        const sp = new URLSearchParams({ pathwayId: pid, slug: sl });
+        if (locale) sp.set("locale", locale);
+        const res = await fetch(`/api/admin/pathway-lessons/lookup?${sp.toString()}`);
+        const j = (await res.json()) as { error?: string; lesson?: { id: string } };
+        if (cancelled) return;
+        if (!res.ok || !j.lesson?.id) {
+          setResolveError(j.error ?? "Could not resolve pathway lesson.");
+          setLoading(false);
+          return;
+        }
+        setResolvedPathwayLessonId(j.lesson.id);
+      } catch {
+        if (!cancelled) {
+          setResolveError("Lookup failed.");
+          setLoading(false);
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [props]);
+
+  const pathwayLessonId = resolvedPathwayLessonId ?? "";
+
   const loadLesson = useCallback(async () => {
+    if (!pathwayLessonId) return;
     setLoading(true);
     setErr(null);
     try {
@@ -62,10 +109,12 @@ export function AdminPathwayLessonFormClient({ pathwayLessonId }: { pathwayLesso
   }, [pathwayLessonId]);
 
   useEffect(() => {
+    if (!pathwayLessonId) return;
     void loadLesson();
-  }, [loadLesson]);
+  }, [loadLesson, pathwayLessonId]);
 
   async function save(nextStatus?: ContentStatus) {
+    if (!pathwayLessonId) return;
     setSaving(true);
     setErr(null);
     setMsg(null);
@@ -104,7 +153,18 @@ export function AdminPathwayLessonFormClient({ pathwayLessonId }: { pathwayLesso
     }
   }
 
-  if (loading) {
+  if (resolveError) {
+    return (
+      <div className="space-y-2">
+        <p className="text-sm text-destructive">{resolveError}</p>
+        <Link href="/admin/pathway-lessons" className="text-sm text-primary underline">
+          Back to pathway lessons
+        </Link>
+      </div>
+    );
+  }
+
+  if (loading || !pathwayLessonId) {
     return <p className="text-sm text-muted-foreground">Loading pathway lesson…</p>;
   }
   if (err && !title) {

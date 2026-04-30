@@ -1,3 +1,7 @@
+/**
+ * Admin PathwayLesson read/write. PathwayLesson is the authoring source of truth for pathway lessons
+ * (Option B). ContentItem → PathwayLesson sync exists only as a temporary legacy compatibility bridge.
+ */
 import { NextResponse } from "next/server";
 import { ContentStatus, type Prisma } from "@prisma/client";
 import { z } from "zod";
@@ -31,6 +35,8 @@ const patchSchema = z
     previewSectionCount: z.number().int().min(0).max(20).optional(),
     categoryId: z.string().optional(),
     acknowledgeBelowQualityBar: z.boolean().optional(),
+    /** BCP 47-style tag; required to be non-empty when publishing (validated against merged row). */
+    locale: z.string().min(2).max(20).optional(),
   })
   .strict();
 
@@ -72,6 +78,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   const mergedSlug = d.slug ?? existing.slug;
   const mergedSeoTitle = d.seoTitle ?? existing.seoTitle;
   const mergedSeoDescription = d.seoDescription ?? existing.seoDescription;
+  const mergedLocale = (d.locale !== undefined ? d.locale : existing.locale).trim();
   const mergedBody =
     d.body !== undefined ? d.body : plainBodyFromPathwaySectionsJson(existing.sections);
   const nextStatus = d.status ?? existing.status;
@@ -114,6 +121,13 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
           category: taxonomy.classification.category,
         },
       },
+      { status: 422 },
+    );
+  }
+
+  if (nextStatus === ContentStatus.PUBLISHED && mergedLocale.length < 2) {
+    return NextResponse.json(
+      { error: "Publish blocked — locale must be a non-empty BCP 47-style tag", code: "locale_invalid" },
       { status: 422 },
     );
   }
@@ -174,6 +188,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     slug: mergedSlug,
     seoTitle: mergedSeoTitle,
     seoDescription: mergedSeoDescription,
+    locale: mergedLocale,
     topic,
     topicSlug,
     bodySystem,
@@ -187,6 +202,16 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     pathwayId: existing.pathwayId,
   });
 
+  if (nextStatus === ContentStatus.PUBLISHED && !structuralPublicComplete) {
+    return NextResponse.json(
+      {
+        error: "Publish blocked — lesson structure does not meet public completeness requirements",
+        code: "structural_public_incomplete",
+      },
+      { status: 422 },
+    );
+  }
+
   let updated;
   try {
     updated = await prisma.pathwayLesson.update({
@@ -196,6 +221,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
         slug: mergedSlug,
         seoTitle: mergedSeoTitle,
         seoDescription: mergedSeoDescription,
+        locale: mergedLocale,
         topic,
         topicSlug,
         bodySystem,

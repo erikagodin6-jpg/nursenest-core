@@ -5,12 +5,18 @@ import type {
   ClinicalNursingScenarioPublishStatus,
   ClinicalNursingScenarioTier,
 } from "@prisma/client";
-import { Prisma } from "@prisma/client";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import {
+  buildClinicalNursingScenarioLearnerCatalogWhere,
+  clinicalNursingScenarioRowVisibleToLearner,
+} from "@/lib/clinical-scenarios/clinical-nursing-scenario-learner-rules";
 import { getExamPathwayById } from "@/lib/exam-pathways";
 import { CANONICAL_STUDY_CATEGORIES } from "@/lib/study/normalize-study-category";
 
 const LIST_TAKE = 60;
+
+export { buildClinicalNursingScenarioLearnerCatalogWhere } from "@/lib/clinical-scenarios/clinical-nursing-scenario-learner-rules";
 
 export async function listClinicalNursingScenariosForAdmin(opts: { pathwayId?: string | null }) {
   const pid = opts.pathwayId?.trim();
@@ -38,14 +44,8 @@ export async function listClinicalNursingScenariosForLearnerCatalog(opts: {
   /** Optional narrow filter — same rows, smaller list when product tags categories per occupation. */
   canonicalCategoryIds?: string[];
 }) {
-  const pid = opts.pathwayId.trim();
-  const catIds = (opts.canonicalCategoryIds ?? []).map((c) => c.trim()).filter(Boolean);
   return prisma.clinicalNursingScenario.findMany({
-    where: {
-      pathwayId: pid,
-      ...(catIds.length > 0 ? { canonicalCategoryId: { in: catIds } } : {}),
-      ...(opts.includeDraftsForStaff ? {} : { publishStatus: "APPROVED" as ClinicalNursingScenarioPublishStatus }),
-    },
+    where: buildClinicalNursingScenarioLearnerCatalogWhere(opts),
     orderBy: { updatedAt: "desc" },
     take: LIST_TAKE,
     select: {
@@ -71,7 +71,7 @@ export async function getClinicalNursingScenarioDetailForViewer(opts: {
     include: { stages: { orderBy: { orderIndex: "asc" } } },
   });
   if (!row) return null;
-  if (!opts.viewerMaySeeDrafts && row.publishStatus !== "APPROVED") return null;
+  if (!clinicalNursingScenarioRowVisibleToLearner(row.publishStatus, opts.viewerMaySeeDrafts)) return null;
   return row;
 }
 

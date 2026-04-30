@@ -8,6 +8,7 @@ import type {
   PathwayLessonSectionKind,
 } from "@/lib/lessons/pathway-lesson-types";
 import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
+import { PathwayLessonCallout } from "@/components/lessons/pathway-lesson-callout";
 import { resolveTierBlocksForViewer } from "@/lib/lessons/tier-block-content";
 import type { MeasurementSystem } from "@/lib/measurements/measurement-system";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
@@ -336,16 +337,11 @@ export function PathwayLessonBody({
         const callout = lessonCalloutFromParagraph(trimmed);
         if (callout) {
           return (
-            <aside
-              key={idx}
-              className={`nn-lesson-callout nn-lesson-callout--${callout.kind}`}
-              aria-label={callout.kind === "exam" ? "Exam tip" : "Clinical insight"}
-            >
-              <p className="nn-lesson-callout__label">{callout.kind === "exam" ? "Exam tip" : "Clinical insight"}</p>
-              <div className="nn-lesson-callout__body whitespace-pre-wrap">
+            <PathwayLessonCallout key={idx} kind={callout.kind}>
+              <div className="whitespace-pre-wrap">
                 {renderParagraphWithLinks(callout.body, lessonWikiBasePath, `para-${idx}-callout`)}
               </div>
-            </aside>
+            </PathwayLessonCallout>
           );
         }
 

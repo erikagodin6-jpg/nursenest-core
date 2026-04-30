@@ -101,6 +101,9 @@ export function AdminLessonFormClient({ lessonId }: { lessonId?: string }) {
       }
       const bridgeId = j.linkedPathwayLessonId ?? pathwayLessonIdFromContentItemTags(j.lesson.tags);
       if (bridgeId) {
+        // Pathway-linked lessons: persistence is PathwayLesson-only (Option B). ContentItem → PathwayLesson
+        // sync remains a temporary compatibility layer for legacy rows — not the publishing path.
+        // TODO: Remove ContentItem → PathwayLesson sync bridge after pathway lesson editing migration is complete.
         router.replace(`/admin/pathway-lessons/${encodeURIComponent(bridgeId)}`);
         return;
       }
