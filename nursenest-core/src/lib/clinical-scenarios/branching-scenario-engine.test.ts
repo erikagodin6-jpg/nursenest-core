@@ -19,7 +19,36 @@ test("optionsJsonUsesBranchingEngine detects rich options", () => {
     ]),
     true,
   );
+  assert.equal(
+    optionsJsonUsesBranchingEngine([
+      {
+        id: "a",
+        text: "x",
+        isCorrect: true,
+        rationale: "r",
+        consequenceMap: { trajectory: "improves", effect: "unlock" },
+      },
+    ]),
+    true,
+  );
   assert.equal(optionsJsonUsesBranchingEngine([{ id: "a", label: "legacy only" }]), false);
+});
+
+test("parseBranchingOptions reads consequenceMap and nextStageMap aliases", () => {
+  const parsed = parseBranchingOptions([
+    {
+      id: "p",
+      label: "Pick",
+      isCorrect: false,
+      rationale: "because",
+      consequenceMap: { trajectory: "deteriorates", effect: "limit" },
+      nextStageMap: 2,
+    },
+  ]);
+  assert.equal(parsed.length, 1);
+  assert.equal(parsed[0]!.trajectory, "deteriorates");
+  assert.equal(parsed[0]!.effect, "limit");
+  assert.equal(parsed[0]!.nextStageOrder, 2);
 });
 
 test("applyChoiceToBranchingState applies limit by hiding next stage correct option", () => {

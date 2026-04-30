@@ -73,9 +73,40 @@ const PREMIUM_KIND_SET = new Set<string>(PREMIUM_SECTION_KINDS);
 
 /**
  * Plain-text length floor (after {@link stripToPlainText}, whitespace collapsed) for a section to count as
- * “substantive” for premium commitment and for {@link lessonQualifiesForPremiumNormalization}.
+ * “substantive” for premium commitment and for {@link lessonQualifiesForPremiumStructuralGate}.
  */
 export const SUBSTANTIVE_PREMIUM_SECTION_MIN_PLAIN_CHARS = 40;
+
+/** Minimum sections + word floor so real authored lessons never run {@link expandToStandardFiveSections}. */
+export const MEANINGFUL_LESSON_MIN_SECTIONS = 3;
+export const MEANINGFUL_LESSON_MIN_TOTAL_WORDS = 400;
+
+/** Total words across section bodies (plain text) — used for meaningful-content gate + QA logs. */
+export function countTotalWordsInLessonSections(sections: PathwayLessonSection[] | undefined): number {
+  const list = sections ?? [];
+  let n = 0;
+  for (const s of list) {
+    n += countWords(stripToPlainText(typeof s.body === "string" ? s.body : ""));
+  }
+  return n;
+}
+
+function sectionCorpusForClinicalKeyword(sec: PathwayLessonSection): string {
+  return `${sec.kind ?? ""}\n${sec.heading ?? ""}\n${sec.body ?? ""}`;
+}
+
+/**
+ * True when the lesson already carries enough real clinical prose that the legacy five-block synthesizer
+ * must not replace it (independent of premium spine commitment rows).
+ * See `expandToStandardFiveSections` in `pathway-lesson-catalog-sync.ts`.
+ */
+export function lessonSectionsHaveMeaningfulClinicalContent(sections: PathwayLessonSection[] | undefined): boolean {
+  const list = sections ?? [];
+  if (list.length < MEANINGFUL_LESSON_MIN_SECTIONS) return false;
+  if (countTotalWordsInLessonSections(list) < MEANINGFUL_LESSON_MIN_TOTAL_WORDS) return false;
+  const clinical = /pathophysiology|treatment|intervention|diagnosis/i;
+  return list.some((s) => clinical.test(sectionCorpusForClinicalKeyword(s)));
+}
 
 /** Legacy five-block and pre-normalization archetypes — never count toward premium-normalization spine depth. */
 const LEGACY_SPINE_KINDS_FOR_PREMIUM_QUALIFIER = new Set<string>([
@@ -155,18 +186,17 @@ export function lessonUsesPremiumStructure(sections: PathwayLessonSection[] | un
 }
 
 /**
- * Whether {@link normalizeLesson} should run the premium spine (order + catalog hydration) instead of
- * collapsing into the legacy five-block synthesizer.
+ * Premium spine / commitment depth only — used for **structural publish gate** (not the meaningful-prose bypass).
  *
  * True when {@link lessonUsesPremiumStructure} passes **or** when **≥3** in-spine sections each have
  * **≥ {@link SUBSTANTIVE_PREMIUM_SECTION_MIN_PLAIN_CHARS}** plain-text characters after
- * {@link stripToPlainText} (same threshold as premium commitment sections).
+ * {@link stripToPlainText}.
  *
  * Counted kinds: all {@link PREMIUM_SECTION_KINDS}, plus extended clinical rows
  * (`exam_focus`, `clinical_manifestations`, `treatment_management`, `nursing_priorities`, `complications`).
  * Legacy five-block input kinds (`clinical_meaning`, `exam_relevance`, …) never count toward this depth.
  */
-export function lessonQualifiesForPremiumNormalization(sections: PathwayLessonSection[] | undefined): boolean {
+export function lessonQualifiesForPremiumStructuralGate(sections: PathwayLessonSection[] | undefined): boolean {
   if (lessonUsesPremiumStructure(sections)) return true;
   const list = sections ?? [];
   let substantiveSpineSections = 0;
@@ -175,6 +205,18 @@ export function lessonQualifiesForPremiumNormalization(sections: PathwayLessonSe
     if (sectionCommitsToPremiumSpine(s)) substantiveSpineSections += 1;
   }
   return substantiveSpineSections >= 3;
+}
+
+/**
+ * Whether `normalizeLesson` should run the premium path (finalize + optional catalog hydrate)
+ * instead of the legacy five-block expander in `pathway-lesson-catalog-sync.ts`.
+ *
+ * True when {@link lessonSectionsHaveMeaningfulClinicalContent} **or**
+ * {@link lessonQualifiesForPremiumStructuralGate}.
+ */
+export function lessonQualifiesForPremiumNormalization(sections: PathwayLessonSection[] | undefined): boolean {
+  if (lessonSectionsHaveMeaningfulClinicalContent(sections)) return true;
+  return lessonQualifiesForPremiumStructuralGate(sections);
 }
 
 /** Explicit N/A marker for optional sections (no filler prose). */
@@ -368,7 +410,7 @@ export function validatePathwayLessonLegacyStructural(lesson: PathwayLessonRecor
 
 /** Single entry point for admin, CI, and runtime gating. */
 export function evaluatePathwayLessonStructuralGate(lesson: PathwayLessonRecord): PathwayLessonStructuralGate {
-  if (lessonQualifiesForPremiumNormalization(lesson.sections)) {
+  if (lessonQualifiesForPremiumStructuralGate(lesson.sections)) {
     const v = validatePathwayLessonPremium({
       sections: lesson.sections,
       title: lesson.title,

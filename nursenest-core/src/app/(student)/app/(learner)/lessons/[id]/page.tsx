@@ -433,6 +433,16 @@ async function LessonDetailPageInner({ params }: Props) {
       dataSource: "pathway_lesson_prisma_then_getPublishedPathwayLessonRecordById_or_getPathwayLesson",
       catalogOverlay: Boolean(record.localeMeta?.isCatalogEnglishSource),
     });
+    const nt = record.normalizeTrace;
+    console.info("[LESSON_RENDER_DECISION]", {
+      slug: record.slug,
+      pathwayId: resolvedLesson.pathwayId,
+      sectionsCount: record.sections?.length ?? 0,
+      wordCount: nt?.totalWordCount ?? null,
+      isPremium: nt?.usedPremiumPath ?? null,
+      usedFallback: nt?.usedLegacyFiveBlockExpander ?? null,
+      meaningfulClinicalBypass: nt?.meaningfulClinicalBypass ?? null,
+    });
     const displayTitle = resolvePublicLessonTitle({
       curatedTitle: record.title,
       generatedTitle: record.seoTitle,

@@ -12,6 +12,8 @@ export type ClinicalScenarioRunSummary = {
   completedScenario: boolean;
   premiumUnlocked: boolean;
   trajectoryAggregate: string;
+  /** Mirrors learner-visible premium flag for downstream weak-area segmentation. */
+  isPremiumScenario?: boolean;
 };
 
 export async function recordClinicalScenarioSimulationRun(opts: {

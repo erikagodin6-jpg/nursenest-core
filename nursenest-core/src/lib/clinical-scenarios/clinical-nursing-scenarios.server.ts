@@ -150,6 +150,7 @@ export async function createClinicalNursingScenarioDraft(opts: {
         initialVitals,
         assessmentFindings: "Replace with focused physical / head-to-toe cues appropriate to the tier and setting.",
         referencesJson: [],
+        isPremium: false,
         publishStatus: "DRAFT",
         createdByUserId: opts.createdByUserId?.trim() || null,
       },

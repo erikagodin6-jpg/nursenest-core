@@ -7,6 +7,7 @@ import {
   getClinicalNursingScenarioDetailForViewer,
   updateClinicalNursingScenarioPublishStatus,
 } from "@/lib/clinical-scenarios/clinical-nursing-scenarios.server";
+import { validateClinicalScenarioReadyToPublish } from "@/lib/clinical-scenarios/clinical-scenario-publish-guard";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 
 export const dynamic = "force-dynamic";
@@ -45,6 +46,17 @@ export async function PATCH(req: NextRequest, ctx: { params: Promise<{ scenarioI
       });
       if (!exists) {
         return NextResponse.json({ ok: false, code: "not_found" }, { status: 404 });
+      }
+
+      if (body.publishStatus === "APPROVED") {
+        const detail = await getClinicalNursingScenarioDetailForViewer({ id, viewerMaySeeDrafts: true });
+        if (!detail) {
+          return NextResponse.json({ ok: false, code: "not_found" }, { status: 404 });
+        }
+        const guard = validateClinicalScenarioReadyToPublish(detail);
+        if (!guard.ok) {
+          return NextResponse.json({ ok: false, code: guard.code, error: guard.message }, { status: 422 });
+        }
       }
 
       await updateClinicalNursingScenarioPublishStatus(id, body.publishStatus);

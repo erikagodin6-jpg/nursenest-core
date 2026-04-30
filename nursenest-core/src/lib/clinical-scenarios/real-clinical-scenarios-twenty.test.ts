@@ -11,6 +11,6 @@ test("realTwentyPremiumSpecs yields 20 premium-flagged branching scenarios", () 
     assert.ok(Array.isArray(s.referencesJson));
     const refs = s.referencesJson as unknown[];
     assert.ok(refs.some((r) => r && typeof r === "object" && (r as { isPremium?: boolean }).isPremium === true));
-    assert.ok(s.stages.length >= 4 && s.stages.length <= 5);
+    assert.equal(s.stages.length, 5);
   }
 });

@@ -1,12 +1,6 @@
 import type { ClinicalNursingScenario, ClinicalNursingScenarioStage } from "@prisma/client";
 import type { ClinicalScenarioPreviewModel } from "@/components/clinical-scenarios/clinical-scenario-unfolding-preview";
-
-function clinicalScenarioIsPremiumFromReferences(referencesJson: unknown): boolean {
-  if (!Array.isArray(referencesJson)) return false;
-  return referencesJson.some(
-    (row) => row && typeof row === "object" && (row as { isPremium?: unknown }).isPremium === true,
-  );
-}
+import { scenarioEffectiveIsPremium } from "@/lib/clinical-scenarios/clinical-scenario-premium";
 
 function mapStage(s: ClinicalNursingScenarioStage) {
   return {
@@ -45,7 +39,21 @@ export function mapClinicalNursingScenarioToPreview(
     assessmentFindings: row.assessmentFindings,
     labsDiagnostics: row.labsDiagnostics,
     publishStatus: row.publishStatus,
-    isPremium: clinicalScenarioIsPremiumFromReferences(row.referencesJson),
+    isPremium: scenarioEffectiveIsPremium(row),
     stages: row.stages.map(mapStage),
   };
+}
+
+/**
+ * Free learners must not receive premium stages 2+ in the HTML payload (defense in depth beside UI gating).
+ */
+export function redactPremiumStagesForFreeLearner(
+  model: ClinicalScenarioPreviewModel,
+  opts: { premiumUnlocked: boolean; allowStaffFullPreview: boolean },
+): ClinicalScenarioPreviewModel {
+  if (opts.allowStaffFullPreview) return model;
+  if (!model.isPremium) return model;
+  if (opts.premiumUnlocked) return model;
+  if (model.stages.length <= 1) return model;
+  return { ...model, stages: [model.stages[0]!] };
 }

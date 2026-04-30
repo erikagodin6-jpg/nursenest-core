@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { normalizeLesson, getCatalogLessonRawBySlug } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import {
+  normalizeLesson,
+  getCatalogLessonRawBySlug,
+  getLessonBySlug,
+} from "@/lib/lessons/pathway-lesson-catalog-sync";
 
 /** Legacy synthesizer default when intro body is empty — must not replace real premium spine rows. */
 const LEGACY_SYNTH_INTRO_DEFAULT =
@@ -94,5 +98,47 @@ describe("pathway lesson live render source (PathwayLesson.sections)", () => {
       !corpus.includes(LEGACY_SYNTH_INTRO_DEFAULT),
       "RN AFib catalog lesson must not inject legacy synthesizer intro default",
     );
+  });
+
+  it("catalog atrial-fibrillation-rate-control: normalizeTrace shows premium path and substantive word count", () => {
+    const n = getLessonBySlug("us-rn-nclex-rn", "atrial-fibrillation-rate-control");
+    if (!n?.normalizeTrace) {
+      assert.ok(false, "expected normalized AFib lesson with normalizeTrace");
+      return;
+    }
+    assert.equal(n.normalizeTrace.usedLegacyFiveBlockExpander, false);
+    assert.ok(
+      n.normalizeTrace.totalWordCount > 400,
+      `expected meaningful word floor (>400), got ${n.normalizeTrace.totalWordCount}`,
+    );
+    assert.ok(n.normalizeTrace.incomingSectionCount > 3, `expected >3 sections, got ${n.normalizeTrace.incomingSectionCount}`);
+  });
+
+  it("real multi-section lesson with diagnosis keyword never runs legacy scaffold (no What this means clinically)", () => {
+    const a = `${filler(160)} diagnosis and stabilization priorities. ${filler(160)}`;
+    const b = filler(170);
+    const c = filler(170);
+    const raw = {
+      slug: "fixture-meaningful-legacy-shaped",
+      title: "Meaningful legacy-shaped fixture",
+      topic: "Cardiac",
+      topicSlug: "cardiac",
+      bodySystem: "cardiovascular",
+      previewSectionCount: 1,
+      seoTitle: "Meaningful legacy-shaped fixture SEO title with enough words for pathway lesson gates",
+      seoDescription:
+        "Fixture seo description with enough words to satisfy catalog description floors for normalization pathway.",
+      sections: [
+        { id: "1", heading: "Assessment block", kind: "clinical_meaning", body: a },
+        { id: "2", heading: "Plan block", kind: "clinical_meaning", body: b },
+        { id: "3", heading: "Teach block", kind: "clinical_meaning", body: c },
+      ],
+    };
+    const n = normalizeLesson(raw as Parameters<typeof normalizeLesson>[0], "us-rn-nclex-rn");
+    assert.equal(n.normalizeTrace?.usedLegacyFiveBlockExpander, false);
+    const blob = n.sections.map((s) => `${s.heading}\n${s.body}`).join("\n");
+    assert.ok(!blob.includes("What this means clinically"), "must not inject legacy scaffold heading");
+    assert.ok(!blob.includes("Why this appears on exams"), "must not inject legacy exam scaffold heading");
+    assert.ok(!blob.includes(LEGACY_SYNTH_INTRO_DEFAULT), "must not inject LEGACY_SYNTH_INTRO_DEFAULT");
   });
 });

@@ -1319,6 +1319,8 @@ model ClinicalNursingScenario {
   assessmentFindings     String                           @map("assessment_findings") @db.Text
   labsDiagnostics        Json?                            @map("labs_diagnostics")
   referencesJson         Json                             @default("[]") @map("references_json")
+  /// * Premium multi-stage simulations: free learners receive stage 0 only (server-redacted payload).
+  isPremium              Boolean                          @default(false) @map("is_premium")
   publishStatus          ClinicalNursingScenarioPublishStatus @default(DRAFT) @map("publish_status")
   createdByUserId        String?                          @map("created_by_user_id")
   createdAt              DateTime                         @default(now()) @map("created_at")

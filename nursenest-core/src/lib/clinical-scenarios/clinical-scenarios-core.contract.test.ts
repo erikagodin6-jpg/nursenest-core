@@ -4,7 +4,10 @@ import { clinicalScenarioMarketingPageBlocked } from "@/lib/clinical-scenarios/c
 import { clinicalScenariosRobotsMetadata } from "@/lib/clinical-scenarios/clinical-scenarios-metadata";
 import { isClinicalScenariosPubliclyEnabled } from "@/lib/clinical-scenarios/clinical-scenarios-feature-flag";
 import { patientTrajectoryFromConsequence } from "@/lib/clinical-scenarios/clinical-scenario-trajectory";
-import { mapClinicalNursingScenarioToPreview } from "@/lib/clinical-scenarios/map-clinical-scenario-to-preview";
+import {
+  mapClinicalNursingScenarioToPreview,
+  redactPremiumStagesForFreeLearner,
+} from "@/lib/clinical-scenarios/map-clinical-scenario-to-preview";
 import type { ClinicalNursingScenario, ClinicalNursingScenarioStage } from "@prisma/client";
 
 afterEach(() => {
@@ -77,6 +80,7 @@ test("mapClinicalNursingScenarioToPreview preserves pathway and stages", () => {
     assessmentFindings: "wheeze",
     labsDiagnostics: null,
     referencesJson: [],
+    isPremium: false,
     publishStatus: "DRAFT",
     createdByUserId: null,
     createdAt: new Date(),
@@ -122,6 +126,7 @@ test("mapClinicalNursingScenarioToPreview sets isPremium from referencesJson", (
     assessmentFindings: "wheeze",
     labsDiagnostics: null,
     referencesJson: [{ kind: "premium", isPremium: true }],
+    isPremium: false,
     publishStatus: "DRAFT",
     createdByUserId: null,
     createdAt: new Date(),
@@ -129,4 +134,92 @@ test("mapClinicalNursingScenarioToPreview sets isPremium from referencesJson", (
   };
   const m = mapClinicalNursingScenarioToPreview({ ...scenario, stages: [stage] });
   assert.equal(m.isPremium, true);
+});
+
+test("mapClinicalNursingScenarioToPreview sets isPremium from column when references omit marker", () => {
+  const stage: ClinicalNursingScenarioStage = {
+    id: "st1",
+    scenarioId: "sc1",
+    orderIndex: 0,
+    scenarioText: "text",
+    vitals: {},
+    assessmentFindings: "af",
+    labUpdates: null,
+    questionStem: "stem?",
+    optionsJson: [{ id: "a", label: "A" }],
+    correctOptionId: "a",
+    rationale: "because",
+    whyWrongByOptionId: {},
+    clinicalJudgmentFocus: "focus",
+    consequencesByOptionId: { a: "stable" },
+    nextStageOrder: null,
+  };
+  const scenario: ClinicalNursingScenario = {
+    id: "sc1",
+    title: "T",
+    pathwayId: "ca-rpn-rex-pn",
+    canonicalCategoryId: "respiratory",
+    tierFocus: "RPN_PN",
+    difficulty: "FOUNDATION",
+    patientAgeContext: "50y",
+    presentingConcern: "cough",
+    briefHistory: "hx",
+    medicationsAllergies: null,
+    initialVitals: { BP: "120/80" },
+    assessmentFindings: "wheeze",
+    labsDiagnostics: null,
+    referencesJson: [],
+    isPremium: true,
+    publishStatus: "DRAFT",
+    createdByUserId: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+  const m = mapClinicalNursingScenarioToPreview({ ...scenario, stages: [stage] });
+  assert.equal(m.isPremium, true);
+});
+
+test("redactPremiumStagesForFreeLearner keeps first stage only for premium + locked", () => {
+  const s0 = {
+    id: "a",
+    orderIndex: 0,
+    scenarioText: "t0",
+    vitals: {},
+    assessmentFindings: "",
+    labUpdates: null,
+    questionStem: "q0",
+    optionsJson: [],
+    correctOptionId: "x",
+    rationale: "",
+    whyWrongByOptionId: {},
+    clinicalJudgmentFocus: "",
+    consequencesByOptionId: {},
+    nextStageOrder: null,
+  };
+  const s1 = { ...s0, id: "b", orderIndex: 1, questionStem: "q1" };
+  const base = mapClinicalNursingScenarioToPreview({
+    id: "sc",
+    title: "T",
+    pathwayId: "p",
+    canonicalCategoryId: "cardiovascular",
+    tierFocus: "RN_NCLEX_RN",
+    difficulty: "ADVANCED",
+    patientAgeContext: "40y",
+    presentingConcern: "c",
+    briefHistory: "h",
+    medicationsAllergies: null,
+    initialVitals: {},
+    assessmentFindings: "",
+    labsDiagnostics: null,
+    referencesJson: [],
+    isPremium: true,
+    publishStatus: "APPROVED",
+    createdByUserId: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    stages: [s0, s1] as ClinicalNursingScenarioStage[],
+  });
+  const redacted = redactPremiumStagesForFreeLearner(base, { premiumUnlocked: false, allowStaffFullPreview: false });
+  assert.equal(redacted.stages.length, 1);
+  assert.equal(redacted.stages[0]!.id, "a");
 });

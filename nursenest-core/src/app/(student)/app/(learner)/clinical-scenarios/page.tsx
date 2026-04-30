@@ -6,7 +6,10 @@ import { ScenarioStudyShell } from "@/components/scenarios/ScenarioStudyShell";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getStaffSession } from "@/lib/auth/staff-session";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { mapClinicalNursingScenarioToPreview } from "@/lib/clinical-scenarios/map-clinical-scenario-to-preview";
+import {
+  mapClinicalNursingScenarioToPreview,
+  redactPremiumStagesForFreeLearner,
+} from "@/lib/clinical-scenarios/map-clinical-scenario-to-preview";
 import {
   getClinicalNursingScenarioDetailForViewer,
   listClinicalNursingScenariosForLearnerCatalog,
@@ -71,7 +74,10 @@ export default async function ClinicalScenariosPage({ searchParams }: PageProps)
         viewerMaySeeDrafts: includeDrafts,
       });
       if (!detail || detail.pathwayId !== pathwayId) notFound();
-      const model = mapClinicalNursingScenarioToPreview(detail);
+      const model = redactPremiumStagesForFreeLearner(mapClinicalNursingScenarioToPreview(detail), {
+        premiumUnlocked,
+        allowStaffFullPreview: includeDrafts,
+      });
       return (
         <ScenarioStudyShell
           eyebrow="Clinical scenarios (preview)"

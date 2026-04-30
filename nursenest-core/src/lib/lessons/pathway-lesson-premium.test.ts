@@ -4,6 +4,8 @@ import {
   countInternalStudyLinks,
   evaluatePathwayLessonStructuralGate,
   lessonQualifiesForPremiumNormalization,
+  lessonQualifiesForPremiumStructuralGate,
+  lessonSectionsHaveMeaningfulClinicalContent,
   lessonUsesPremiumStructure,
   PREMIUM_SECTION_HEADINGS,
   SUBSTANTIVE_PREMIUM_SECTION_MIN_PLAIN_CHARS,
@@ -134,6 +136,20 @@ describe("pathway-lesson-premium", () => {
       ]),
       false,
     );
+  });
+
+  it("meaningful clinical prose bypasses normalization gate without premium spine kinds", () => {
+    const a = `${fillerWords(160)} The nursing diagnosis priority is airway first. ${fillerWords(160)}`;
+    const b = fillerWords(170);
+    const c = fillerWords(170);
+    const sections = [
+      { id: "1", heading: "Block A", kind: "clinical_meaning" as const, body: a },
+      { id: "2", heading: "Block B", kind: "clinical_meaning" as const, body: b },
+      { id: "3", heading: "Block C", kind: "clinical_meaning" as const, body: c },
+    ];
+    assert.equal(lessonSectionsHaveMeaningfulClinicalContent(sections), true);
+    assert.equal(lessonQualifiesForPremiumStructuralGate(sections), false);
+    assert.equal(lessonQualifiesForPremiumNormalization(sections), true);
   });
 
   it("lessonQualifiesForPremiumNormalization: three premium headings with bodies under plain-text floor do not qualify", () => {

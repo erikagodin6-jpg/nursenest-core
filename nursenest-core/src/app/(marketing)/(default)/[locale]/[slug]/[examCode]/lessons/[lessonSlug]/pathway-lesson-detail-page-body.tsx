@@ -193,6 +193,17 @@ export async function PathwayLessonDetailPageBody({
     structuralPublicComplete: loadedLesson?.structuralQuality?.publicComplete ?? null,
   });
 
+  const nt = loadedLesson?.normalizeTrace;
+  console.info("[LESSON_RENDER_DECISION]", {
+    slug: lessonSlug.slice(0, 240),
+    pathwayId: pathway.id,
+    sectionsCount: sectionsForLog.length,
+    wordCount: nt?.totalWordCount ?? null,
+    isPremium: nt?.usedPremiumPath ?? null,
+    usedFallback: nt?.usedLegacyFiveBlockExpander ?? null,
+    meaningfulClinicalBypass: nt?.meaningfulClinicalBypass ?? null,
+  });
+
   if (lessonResult.status === "rejected") {
     rethrowNextNavigationControlFlow(lessonResult.reason);
     const err = lessonResult.reason;

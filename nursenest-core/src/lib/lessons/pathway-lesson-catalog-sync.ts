@@ -9,8 +9,10 @@ import { buildLessonInteractiveModules } from "@/lib/lessons/lesson-interactive-
 import { deriveLessonHighYieldStudyFields } from "@/lib/lessons/lesson-high-yield-study-fields";
 import { resolveLessonContextForPathwayId } from "@/lib/lessons/lesson-region-exam";
 import {
+  countTotalWordsInLessonSections,
   evaluatePathwayLessonStructuralGate,
   lessonQualifiesForPremiumNormalization,
+  lessonSectionsHaveMeaningfulClinicalContent,
   orderPremiumSections,
   PREMIUM_SECTION_KINDS,
   validatePathwayLessonPremium,
@@ -45,6 +47,7 @@ import { enrichLegacyFiveBlockSectionsForSubscriberGates } from "@/lib/lessons/p
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { stripPathwayLessonToHubListShape } from "@/lib/lessons/pathway-lesson-hub-list-shape";
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { hydratePremiumCatalogSectionsForMarketingGate } from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { prependScopedGoldCatalogLessons } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
 import {
@@ -851,6 +854,15 @@ function mergeLessonAudienceMetadata(
 function expandToStandardFiveSections(sections: PathwayLessonSection[]): PathwayLessonSection[] {
   const cleaned = sanitizeIncomingSections(sections);
 
+  if (lessonSectionsHaveMeaningfulClinicalContent(cleaned)) {
+    if (process.env.NODE_ENV === "development") {
+      throw new Error(
+        "[pathway-lesson] expandToStandardFiveSections: blocked — sections already have meaningful clinical content; use the premium normalization path.",
+      );
+    }
+    return cleaned;
+  }
+
   if (cleaned.length >= 5 && hasAllCanonicalKinds(cleaned)) {
     const ordered = CANONICAL_ORDER.map((k) => cleaned.find((s) => s.kind === k)).filter(
       (s): s is PathwayLessonSection => Boolean(s),
@@ -1292,7 +1304,24 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
     typeof rawPc === "number" && Number.isFinite(rawPc) && rawPc > 0 ? Math.floor(rawPc) : 1;
 
   const incoming = sanitizeIncomingSections(raw.sections as PathwayLessonSection[]);
+  const incomingWordCount = countTotalWordsInLessonSections(incoming);
+  const meaningfulBypass = lessonSectionsHaveMeaningfulClinicalContent(incoming);
   const usePremium = lessonQualifiesForPremiumNormalization(incoming);
+  const isPremiumPath = usePremium;
+  const usedFallback = !usePremium;
+
+  if (process.env.PATHWAY_LESSON_RENDER_DECISION === "1") {
+    safeServerLog("pathway_lesson", "[LESSON_RENDER_DECISION]", {
+      slug: (typeof raw.slug === "string" ? raw.slug : "").slice(0, 240),
+      pathwayId: (pathwayId ?? "").slice(0, 120),
+      sectionsCount: incoming.length,
+      wordCount: incomingWordCount,
+      isPremium: isPremiumPath ? "true" : "false",
+      usedFallback: usedFallback ? "true" : "false",
+      meaningfulClinicalBypass: meaningfulBypass ? "true" : "false",
+    });
+  }
+
   let expanded = usePremium ? finalizePremiumSections(incoming) : expandToStandardFiveSections(incoming);
   const lessonSlugEarly = typeof raw.slug === "string" ? raw.slug : "";
   let premiumOmittedMerged: PathwayLessonOmittedPremiumSection[] | undefined = Array.isArray(
@@ -1352,6 +1381,13 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
     seoTitle,
     seoDescription,
     sections: expanded,
+    normalizeTrace: {
+      usedPremiumPath: usePremium,
+      usedLegacyFiveBlockExpander: !usePremium,
+      incomingSectionCount: incoming.length,
+      totalWordCount: incomingWordCount,
+      meaningfulClinicalBypass: meaningfulBypass,
+    },
     ...(premiumOmitted?.length ? { premiumOmittedSections: premiumOmitted } : {}),
     ...(relatedLessonRefs?.length ? { relatedLessonRefs } : {}),
     ...(embeddedSoundLibraries?.length ? { embeddedSoundLibraries } : {}),

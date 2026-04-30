@@ -249,6 +249,15 @@ export type PathwayLessonLocaleMeta = {
   overlayTranslationFallback?: boolean;
 };
 
+/** QA: how `normalizeLesson` chose premium vs legacy five-block expander (always set on normalized rows). */
+export type PathwayLessonNormalizeTrace = {
+  usedPremiumPath: boolean;
+  usedLegacyFiveBlockExpander: boolean;
+  incomingSectionCount: number;
+  totalWordCount: number;
+  meaningfulClinicalBypass: boolean;
+};
+
 export type PathwayLessonRecord = {
   slug: string;
   /**
@@ -266,6 +275,8 @@ export type PathwayLessonRecord = {
   seoTitle: string;
   seoDescription: string;
   sections: PathwayLessonSection[];
+  /** Set by `normalizeLesson` — source-of-truth for whether the legacy expander ran. */
+  normalizeTrace?: PathwayLessonNormalizeTrace;
   /**
    * Bank-backed pre-check: stable `ExamQuestion.id` values only (no inline stems).
    * Authoring: run lists through `sanitizeQuestionIdArray` in `pathway-lesson-catalog-sync` before persisting.

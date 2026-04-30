@@ -22,6 +22,7 @@ const bodySchema = z.object({
   maxStageOrderReached: z.number().int().min(0).max(50).optional(),
   premiumUnlocked: z.boolean(),
   completedScenario: z.boolean().optional(),
+  isPremiumScenario: z.boolean().optional(),
 });
 
 export async function POST(req: Request) {
@@ -64,6 +65,7 @@ export async function POST(req: Request) {
       max_stage_order_reached: maxStageOrderReached,
       premium_unlocked: b.premiumUnlocked,
       completed_scenario: b.completedScenario ?? false,
+      is_premium_scenario: b.isPremiumScenario ?? false,
     });
 
     await recordClinicalScenarioSimulationRun({
@@ -79,6 +81,7 @@ export async function POST(req: Request) {
         completedScenario: b.completedScenario ?? false,
         premiumUnlocked: b.premiumUnlocked,
         trajectoryAggregate: b.trajectoryAggregate,
+        isPremiumScenario: b.isPremiumScenario ?? false,
       },
     });
 

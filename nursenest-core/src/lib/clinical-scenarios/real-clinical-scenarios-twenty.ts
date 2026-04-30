@@ -7,8 +7,11 @@ import type { BranchingSeedScenarioSpec } from "@/lib/clinical-scenarios/branchi
 const TIERS: ClinicalNursingScenarioTier[] = ["RN_NCLEX_RN", "RPN_PN", "NP", "NEW_GRAD"];
 const DIFF_ROTATION: ClinicalNursingScenarioDifficulty[] = ["FOUNDATION", "INTERMEDIATE", "ADVANCED"];
 
-/** Five high-yield domains — each topic already defines 5 rich stages in raw topics. */
-const REAL_SLUGS = ["mi-acs", "hf-exac", "sepsis-shock", "dka", "peds-asthma"] as const;
+/**
+ * Five high-acuity domains (MI, sepsis, respiratory failure, electrolyte crisis, COPD distress).
+ * Each raw topic defines five branching stages aligned with the multi-stage consequence engine.
+ */
+const REAL_SLUGS = ["mi-acs", "sepsis-shock", "ards-vent", "dka", "copd-exac"] as const;
 
 /**
  * 20 premium-flagged branching scenarios (5 topics × 4 tiers) for monetized simulation catalog.

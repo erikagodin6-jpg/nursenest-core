@@ -20,6 +20,7 @@ import {
   trajectoryLabelText,
   type PatientTrajectory,
 } from "@/lib/clinical-scenarios/clinical-scenario-trajectory";
+import { clinicalScenarioTierNarrative } from "@/lib/clinical-scenarios/clinical-scenario-tier-focus";
 import { CANONICAL_STUDY_CATEGORIES } from "@/lib/study/normalize-study-category";
 
 export type ClinicalScenarioStagePreview = {
@@ -200,6 +201,7 @@ export function ClinicalScenarioUnfoldingPreview({
 
   const categoryLabel =
     CANONICAL_STUDY_CATEGORIES.find((c) => c.id === scenario.canonicalCategoryId)?.label ?? scenario.canonicalCategoryId;
+  const tierNarrative = clinicalScenarioTierNarrative(scenario.tierFocus);
 
   const commitBranchChoice = useCallback(() => {
     if (!branchPending || !branchStage) return;
@@ -239,6 +241,7 @@ export function ClinicalScenarioUnfoldingPreview({
           maxStageOrderReached: reached,
           premiumUnlocked,
           completedScenario: args.completed,
+          isPremiumScenario: isPremiumScenario,
         }),
       }).catch(() => {});
     };
@@ -297,7 +300,16 @@ export function ClinicalScenarioUnfoldingPreview({
       reachedStageOrder: next.currentOrderIndex,
       completed,
     });
-  }, [branchPending, branchStage, branchState, branchStages, fullScenarioAccess, premiumUnlocked, scenario]);
+  }, [
+    branchPending,
+    branchStage,
+    branchState,
+    branchStages,
+    fullScenarioAccess,
+    isPremiumScenario,
+    premiumUnlocked,
+    scenario,
+  ]);
 
   if (branching) {
     if (!branchStage && !branchFreeDone && branchOrderIdx < scenario.stages.length) {
@@ -319,6 +331,9 @@ export function ClinicalScenarioUnfoldingPreview({
             <p className="mt-2 text-xs text-[var(--semantic-warning)]">
               Premium simulation: Free includes stage 1 only. Upgrade for the full multi-stage case with branching consequences.
             </p>
+          ) : null}
+          {tierNarrative ? (
+            <p className="mt-2 text-xs leading-relaxed text-[var(--semantic-info)]">{tierNarrative}</p>
           ) : null}
         </header>
 
@@ -502,6 +517,9 @@ export function ClinicalScenarioUnfoldingPreview({
           {scenario.pathwayId} · {categoryLabel} · {scenario.tierFocus.replace(/_/g, " ")} · {scenario.difficulty}
         </p>
         <p className="mt-1 text-xs text-[var(--semantic-chart-3)]">Status: {scenario.publishStatus}</p>
+        {tierNarrative ? (
+          <p className="mt-2 text-xs leading-relaxed text-[var(--semantic-info)]">{tierNarrative}</p>
+        ) : null}
       </header>
 
       <section className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--bg-card)] p-4">

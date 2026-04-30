@@ -88,7 +88,13 @@ export function parseBranchingOptions(raw: unknown): ParsedBranchingOption[] {
     if (!id || !label) continue;
     const isCorrect = o.isCorrect === true;
     const rationale = typeof o.rationale === "string" ? o.rationale : "";
-    const cons = o.consequence && typeof o.consequence === "object" ? (o.consequence as Record<string, unknown>) : {};
+    const consSource =
+      o.consequenceMap && typeof o.consequenceMap === "object"
+        ? o.consequenceMap
+        : o.consequence && typeof o.consequence === "object"
+          ? o.consequence
+          : {};
+    const cons = consSource as Record<string, unknown>;
     const trajectoryRaw = typeof cons.trajectory === "string" ? cons.trajectory : "unchanged";
     const trajectory: ConsequenceTrajectory =
       trajectoryRaw === "improves" || trajectoryRaw === "deteriorates" || trajectoryRaw === "unchanged"
@@ -103,12 +109,18 @@ export function parseBranchingOptions(raw: unknown): ParsedBranchingOption[] {
           : trajectory === "deteriorates"
             ? "limit"
             : "delay";
-    const nextStageOrder =
+    let nextStageOrder: number | null =
       typeof o.nextStageOrder === "number" && Number.isFinite(o.nextStageOrder)
         ? Math.floor(o.nextStageOrder)
         : typeof o.nextStageId === "string" && /^\d+$/.test(o.nextStageId)
           ? Number.parseInt(o.nextStageId, 10)
           : null;
+    const nsm = o.nextStageMap;
+    if (nextStageOrder == null && typeof nsm === "number" && Number.isFinite(nsm)) {
+      nextStageOrder = Math.floor(nsm);
+    } else if (nextStageOrder == null && typeof nsm === "string" && /^\d+$/.test(nsm)) {
+      nextStageOrder = Number.parseInt(nsm, 10);
+    }
     out.push({ id, label, isCorrect, rationale, trajectory, effect, nextStageOrder });
   }
   return out;
@@ -123,6 +135,7 @@ export function optionsJsonUsesBranchingEngine(raw: unknown): boolean {
     return (
       typeof o.rationale === "string" ||
       (o.consequence && typeof o.consequence === "object") ||
+      (o.consequenceMap && typeof o.consequenceMap === "object") ||
       o.isCorrect === true ||
       o.isCorrect === false
     );
