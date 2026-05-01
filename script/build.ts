@@ -10,7 +10,26 @@ import { runI18nScan } from "./scan-hardcoded-strings-lib";
 
 const workspaceRequire = createRequire(path.resolve(process.cwd(), "package.json"));
 const { build: esbuild } = workspaceRequire("esbuild") as typeof import("esbuild");
-const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+
+function findRepoRoot(startDir: string): string {
+  let current = path.resolve(startDir);
+  while (true) {
+    if (
+      existsSync(path.join(current, "server/index.ts")) &&
+      existsSync(path.join(current, "client/src"))
+    ) {
+      return current;
+    }
+    const parent = path.dirname(current);
+    if (parent === current) {
+      throw new Error(`[build] Could not locate repo root from ${startDir}`);
+    }
+    current = parent;
+  }
+}
+
+const scriptDir = path.dirname(fileURLToPath(import.meta.url));
+const repoRoot = findRepoRoot(scriptDir);
 process.chdir(repoRoot);
 
 const allowlist = [
