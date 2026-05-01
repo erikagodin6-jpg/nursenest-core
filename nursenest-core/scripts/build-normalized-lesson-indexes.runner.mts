@@ -89,6 +89,14 @@ async function main(): Promise<void> {
         .join(", ")}`,
     );
   }
+  const exclusionGateFailures = coverage.pathways.filter((pathway) => !pathway.passesExclusionQualityGate);
+  if (exclusionGateFailures.length > 0) {
+    throw new Error(
+      `[build:lesson-indexes] exclusion quality gate failed (>20% unexpected exclusions without allowlist) for: ${exclusionGateFailures
+        .map((p) => `${p.pathwayId}(${(p.unexpectedExclusionRate * 100).toFixed(1)}%)`)
+        .join(", ")}`,
+    );
+  }
   console.info(
     `[build:lesson-indexes] wrote coverage reports json=${lessonNormalizationCoverageJsonPath()} md=${lessonNormalizationCoverageMarkdownPath()}`,
   );

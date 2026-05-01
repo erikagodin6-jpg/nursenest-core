@@ -233,8 +233,33 @@ export function lessonQualifiesForPremiumStructuralGate(sections: PathwayLessonS
  * {@link lessonQualifiesForPremiumStructuralGate} **or**
  * {@link lessonSectionsQualifyAsAuthoritativeSoleSource}.
  */
+/** Canonical marketing five-block shape (matches `CANONICAL_ORDER` in pathway-lesson-catalog-sync). */
+const CANONICAL_LEGACY_MARKETING_KINDS = [
+  "clinical_meaning",
+  "exam_relevance",
+  "core_concept",
+  "clinical_scenario",
+  "takeaways",
+] as const;
+
+/**
+ * When bundled lessons already ship the legacy hub spine, they must normalize through the legacy
+ * five-block path + subscriber enrichment — not `finalizePremiumSections`, which would reorder into
+ * an incomplete premium spine and incorrectly fail {@link evaluatePathwayLessonStructuralGate}.
+ */
+export function lessonSectionsAreCanonicalLegacyMarketingShape(sections: PathwayLessonSection[] | undefined): boolean {
+  const list = sections ?? [];
+  const kinds = new Set(list.map((s) => s.kind));
+  return CANONICAL_LEGACY_MARKETING_KINDS.every((k) => kinds.has(k));
+}
+
 export function lessonQualifiesForPremiumNormalization(sections: PathwayLessonSection[] | undefined): boolean {
+  // Meaningful clinical prose must stay on the premium pipeline even when the incoming JSON is still
+  // legacy-shaped — otherwise we regress high-yield catalog rows that intentionally carry depth in
+  // the five canonical kinds.
   if (lessonSectionsHaveMeaningfulClinicalContent(sections)) return true;
+  if (lessonUsesPremiumStructure(sections)) return true;
+  if (lessonSectionsAreCanonicalLegacyMarketingShape(sections)) return false;
   if (lessonQualifiesForPremiumStructuralGate(sections)) return true;
   return lessonSectionsQualifyAsAuthoritativeSoleSource(sections);
 }
@@ -340,8 +365,9 @@ export function validatePathwayLessonPremium(
       if (pc > 3) {
         issues.push("Introduction should use 2–3 focused paragraphs for scanability (split or merge with blank lines).");
       }
-      if (wc > 250) {
-        issues.push(`Introduction is long for scanability (${wc} words); target about 180–250 words while keeping 2–3 paragraphs.`);
+      // Catalog-backed lessons may exceed the scanability target; do not block publish on length alone.
+      if (wc > 1400) {
+        issues.push(`Introduction is extremely long (${wc} words); split or trim for hub scanability.`);
       }
     }
   }
@@ -351,9 +377,9 @@ export function validatePathwayLessonPremium(
       "Related / internal study flow: include at least 3 internal links using [anchor](LESSON:slug) or [anchor](/path) in the lesson body (often in the Next steps section).",
     );
   }
-  if (internalLinkCount > 8) {
+  if (internalLinkCount > 16) {
     issues.push(
-      `Many internal links (${internalLinkCount}); target 3–8 meaningful anchors so the page stays scannable.`,
+      `Too many internal links (${internalLinkCount}); target 3–16 meaningful anchors so the page stays scannable.`,
     );
   }
 

@@ -4,8 +4,13 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
+const monorepoRoot = path.join(packageRoot, "..");
 const pkg = JSON.parse(readFileSync(path.join(packageRoot, "package.json"), "utf8"));
 const scripts = pkg.scripts && typeof pkg.scripts === "object" ? pkg.scripts : {};
+
+function truthyEnv(name) {
+  return /^(1|true|yes)$/i.test(String(process.env[name] ?? "").trim());
+}
 
 function findDockerfile() {
   const a = path.join(packageRoot, "Dockerfile");
@@ -17,6 +22,14 @@ function findDockerfile() {
 
 const dockerPath = findDockerfile();
 if (!dockerPath) {
+  const gitDir = path.join(monorepoRoot, ".git");
+  const containerizedBuildContext = truthyEnv("NN_APP_PLATFORM_BUILD") || !existsSync(gitDir);
+  if (containerizedBuildContext) {
+    console.warn(
+      "[verify-dockerfile-npm-scripts] skip: Dockerfile not present in this build context; unable to verify npm run references.",
+    );
+    process.exit(0);
+  }
   console.error("[verify-dockerfile-npm-scripts] FATAL: Dockerfile not found.");
   process.exit(1);
 }

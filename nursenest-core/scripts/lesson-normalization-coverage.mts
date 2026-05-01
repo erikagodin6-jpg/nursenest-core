@@ -3,10 +3,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { isNNForcePublishValidRawLessons } from "@/lib/lessons/pathway-lesson-force-publish";
 import {
   getCatalogLessonsRaw,
   getCatalogPathwayLessonsSync,
   listCatalogPathwayIdsWithLessonsSync,
+  resetCatalogLessonsRawMergeCacheForTests,
   sortAndFilterLessonsForPathwayContext,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { alliedHealthLessonsIndexPath, marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
@@ -39,15 +41,20 @@ export type LessonNormalizationExclusion = {
 export type LessonNormalizationPathwayCoverage = {
   pathwayId: string;
   publicLessonsPath: string | null;
+  publicUrlPattern: string | null;
   rawCount: number;
   normalizedCount: number;
   renderableCount: number;
   excludedCount: number;
   rawToRenderableRatio: string;
+  unexpectedExclusionRate: number;
+  passesExclusionQualityGate: boolean;
   topExclusionReasons: Array<{ reasonCode: string; count: number }>;
   exclusions: LessonNormalizationExclusion[];
   unexpectedExclusionCount: number;
   sampleRenderableLessonPath: string | null;
+  forcePublishEnabled: boolean;
+  forcePublishedLessons: Array<{ slug: string; title: string }>;
 };
 
 export type AlliedProfessionCoverage = {
@@ -116,10 +123,27 @@ function ratioString(rawCount: number, renderableCount: number): string {
   return `${renderableCount}/${rawCount} (${Math.round((renderableCount / rawCount) * 100)}%)`;
 }
 
+function strictMarketingRenderableSlugs(pathwayId: string, normalized: PathwayLessonRecord[]): Set<string> {
+  const prev = process.env.NN_FORCE_PUBLISH_VALID_RAW_LESSONS;
+  delete process.env.NN_FORCE_PUBLISH_VALID_RAW_LESSONS;
+  resetCatalogLessonsRawMergeCacheForTests();
+  try {
+    return new Set(sortAndFilterLessonsForPathwayContext(pathwayId, [...normalized]).map((l) => l.slug.trim()));
+  } finally {
+    if (prev === undefined) delete process.env.NN_FORCE_PUBLISH_VALID_RAW_LESSONS;
+    else process.env.NN_FORCE_PUBLISH_VALID_RAW_LESSONS = prev;
+    resetCatalogLessonsRawMergeCacheForTests();
+  }
+}
+
 function buildPathwayCoverage(pathwayId: string): LessonNormalizationPathwayCoverage {
   const raw = getCatalogLessonsRaw(pathwayId);
   const normalized = getCatalogPathwayLessonsSync(pathwayId);
   const renderable = sortAndFilterLessonsForPathwayContext(pathwayId, normalized);
+  const strictSlugs = strictMarketingRenderableSlugs(pathwayId, normalized);
+  const forcePublishedLessons = renderable
+    .filter((lesson) => !strictSlugs.has(lesson.slug.trim()))
+    .map((lesson) => ({ slug: lesson.slug, title: lesson.title }));
   const kept = new Set(renderable.map((lesson) => lesson.slug.trim()));
   const allowlist = LESSON_NORMALIZATION_EXCLUSION_ALLOWLIST[pathwayId] ?? {};
   const reasonCounts = new Map<string, number>();
@@ -142,21 +166,32 @@ function buildPathwayCoverage(pathwayId: string): LessonNormalizationPathwayCove
       } satisfies LessonNormalizationExclusion;
     });
 
+  const unexpectedExclusionCount = exclusions.filter((entry) => !entry.allowed).length;
+  const unexpectedExclusionRate = raw.length > 0 ? unexpectedExclusionCount / raw.length : 0;
+  const sampleDetail = pathway && renderable[0] ? marketingPathwayLessonDetailPath(pathway, renderable[0].slug) : null;
+  const urlTemplate =
+    pathway && marketingPathwayLessonDetailPath(pathway, "__nn_lesson_slug__")
+      ? marketingPathwayLessonDetailPath(pathway, "__nn_lesson_slug__")!.replace("__nn_lesson_slug__", "{lessonSlug}")
+      : null;
   return {
     pathwayId,
     publicLessonsPath: pathway ? marketingPathwayLessonDetailPath(pathway, "")?.replace(/\/$/, "") ?? null : null,
+    publicUrlPattern: urlTemplate,
     rawCount: raw.length,
     normalizedCount: normalized.length,
     renderableCount: renderable.length,
     excludedCount: exclusions.length,
     rawToRenderableRatio: ratioString(raw.length, renderable.length),
+    unexpectedExclusionRate,
+    passesExclusionQualityGate: raw.length === 0 || unexpectedExclusionRate <= 0.2,
     topExclusionReasons: [...reasonCounts.entries()]
       .map(([reasonCode, count]) => ({ reasonCode, count }))
       .sort((a, b) => b.count - a.count || a.reasonCode.localeCompare(b.reasonCode)),
     exclusions,
-    unexpectedExclusionCount: exclusions.filter((entry) => !entry.allowed).length,
-    sampleRenderableLessonPath:
-      pathway && renderable[0] ? marketingPathwayLessonDetailPath(pathway, renderable[0].slug) : null,
+    unexpectedExclusionCount,
+    sampleRenderableLessonPath: sampleDetail,
+    forcePublishEnabled: isNNForcePublishValidRawLessons(),
+    forcePublishedLessons,
   };
 }
 
@@ -222,8 +257,21 @@ function renderPathwayMarkdown(pathway: LessonNormalizationPathwayCoverage): str
     `- Renderable lessons: ${pathway.renderableCount}`,
     `- Excluded lessons: ${pathway.excludedCount}`,
     `- Raw to renderable ratio: ${pathway.rawToRenderableRatio}`,
-    `- Unexpected exclusions: ${pathway.unexpectedExclusionCount}`,
+    `- Unexpected exclusions: ${pathway.unexpectedExclusionCount} (${(pathway.unexpectedExclusionRate * 100).toFixed(1)}% of raw)`,
+    `- Passes exclusion quality gate (≤20% unexpected): ${pathway.passesExclusionQualityGate ? "yes" : "no"}`,
+    `- Public URL pattern: ${pathway.publicUrlPattern ?? "None"}`,
     `- Sample public lesson path: ${pathway.sampleRenderableLessonPath ?? "None"}`,
+    `- Force publish mode: ${pathway.forcePublishEnabled ? "on" : "off"}`,
+    ...(pathway.forcePublishedLessons.length > 0
+      ? [
+          "",
+          "Force-published lessons (included only when NN_FORCE_PUBLISH_VALID_RAW_LESSONS is enabled):",
+          ...pathway.forcePublishedLessons.slice(0, 40).map((l) => `- \`${l.slug}\` — ${l.title}`),
+          ...(pathway.forcePublishedLessons.length > 40
+            ? [`- …and ${pathway.forcePublishedLessons.length - 40} more`]
+            : []),
+        ]
+      : ["", "Force-published lessons: None"]),
     "",
     "Top exclusion reasons:",
     ...(

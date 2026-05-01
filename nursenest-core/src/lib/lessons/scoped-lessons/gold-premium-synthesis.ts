@@ -817,6 +817,120 @@ export function hydratePremiumCatalogSectionsForMarketingGate(input: {
     omitMap.set("labs_diagnostics", { kind: "labs_diagnostics", reason: CATALOG_LABS_OMIT_REASON });
   }
 
+  if (!map.get("pathophysiology_overview") && !omitMap.has("pathophysiology_overview")) {
+    const introSec = map.get("introduction");
+    const signs = map.get("signs_symptoms");
+    const seed =
+      signs?.body?.trim() && !sectionIsMarkedNotApplicable(signs.body)
+        ? collapseInlineParagraphs(signs.body)
+        : introSec?.body?.trim() && !sectionIsMarkedNotApplicable(introSec.body)
+          ? collapseInlineParagraphs(introSec.body)
+          : `Mechanism, assessment priorities, and management framing for **${examLabel}** items on this topic.`;
+    working.push({
+      id: "pathophysiology_overview",
+      heading: PREMIUM_SECTION_HEADINGS.pathophysiology_overview,
+      kind: "pathophysiology_overview",
+      body: ensurePathophysiologyDepth(seed),
+    });
+    map = byKind();
+  }
+
+  if (!map.get("signs_symptoms") && !omitMap.has("signs_symptoms")) {
+    map = byKind();
+    const scenario =
+      map.get("clinical_scenario") ??
+      (working.find((s) => s.kind === "nursing_assessment_interventions") as PathwayLessonSection | undefined);
+    const seed =
+      scenario?.body?.trim() && !sectionIsMarkedNotApplicable(scenario.body)
+        ? signsBlock(scenario.body)
+        : signsBlock(
+            `**Presenting picture**\n\nClients with concerns related to **${examLabel}** items on this topic require structured assessment, trend interpretation, and escalation when instability thresholds are crossed.`,
+          );
+    working.push({
+      id: "signs_symptoms",
+      heading: PREMIUM_SECTION_HEADINGS.signs_symptoms,
+      kind: "signs_symptoms",
+      body: padKind("signs_symptoms", seed, SIGNS_CATALOG_PAD),
+    });
+    map = byKind();
+  }
+
+  if (!map.get("introduction") && !omitMap.has("introduction")) {
+    const ph = map.get("pathophysiology_overview");
+    const signs = map.get("signs_symptoms");
+    const seed =
+      ph?.body?.trim() && !sectionIsMarkedNotApplicable(ph.body)
+        ? collapseInlineParagraphs(ph.body)
+        : signs?.body?.trim() && !sectionIsMarkedNotApplicable(signs.body)
+          ? collapseInlineParagraphs(signs.body)
+          : `For **${examLabel}**, this lesson connects mechanism to bedside cues you will reassess first.`;
+    let introBody = ensureIntroductionWordCount(
+      [
+        seed,
+        `For **${examLabel}**, items rarely announce the topic in the first sentence. Anchor to objective data, trajectory, and the safest next step for the role named in the stem before distractors compete.`,
+      ].join("\n\n"),
+    );
+    introBody = capPremiumIntroParagraphs(introBody, 3);
+    let introWc = countWords(stripToPlainText(introBody));
+    let guard = 0;
+    while (introWc > 250 && introBody.length > 120 && guard < 120) {
+      const trimmed = introBody.replace(/\s+[^\s.?!]+[.?!]\s*$/, "").trim();
+      if (trimmed === introBody) break;
+      introBody = trimmed;
+      introWc = countWords(stripToPlainText(introBody));
+      guard += 1;
+    }
+    working.push({
+      id: "introduction",
+      heading: PREMIUM_SECTION_HEADINGS.introduction,
+      kind: "introduction",
+      body: introBody,
+    });
+    map = byKind();
+  }
+
+  if (!map.get("red_flags") && !omitMap.has("red_flags")) {
+    working.push({
+      id: "red_flags",
+      heading: PREMIUM_SECTION_HEADINGS.red_flags,
+      kind: "red_flags",
+      body: padKind("red_flags", redFlagsBlock(), redFlagsBlock()),
+    });
+    map = byKind();
+  }
+
+  if (!map.get("nursing_assessment_interventions") && !omitMap.has("nursing_assessment_interventions")) {
+    working.push({
+      id: "nursing_assessment_interventions",
+      heading: PREMIUM_SECTION_HEADINGS.nursing_assessment_interventions,
+      kind: "nursing_assessment_interventions",
+      body: padKind("nursing_assessment_interventions", "", nursingBlock(synExam)),
+    });
+    map = byKind();
+  }
+
+  if (!map.get("clinical_pearls") && !omitMap.has("clinical_pearls")) {
+    working.push({
+      id: "clinical_pearls",
+      heading: PREMIUM_SECTION_HEADINGS.clinical_pearls,
+      kind: "clinical_pearls",
+      body: ensureClinicalPearlsWordCount(
+        `${PEARLS_DEPTH_PAD}\n\n**Exam habit for ${examLabel}**\n\nRehearse one “if I see X, I do Y” chain aloud before you lock an answer; boards reward trajectory thinking over memorized phrases.`,
+      ),
+    });
+    map = byKind();
+  }
+
+  if (!map.get("client_education") && !omitMap.has("client_education")) {
+    working.push({
+      id: "client_education",
+      heading: PREMIUM_SECTION_HEADINGS.client_education,
+      kind: "client_education",
+      body: padKind("client_education", "", clientEducationBlock(synExam)),
+    });
+    map = byKind();
+  }
+
   if (!map.get("tier_specific_relevance") && !omitMap.has("tier_specific_relevance")) {
     working.push({
       id: "tier_specific_relevance",

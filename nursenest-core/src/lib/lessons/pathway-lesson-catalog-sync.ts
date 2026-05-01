@@ -53,6 +53,11 @@ import { countWords, stripToPlainText } from "@/lib/content-quality/plain-text";
 import { enrichLegacyFiveBlockSectionsForSubscriberGates } from "@/lib/lessons/pathway-lesson-subscriber-completeness";
 import { pathwayLessonYieldWeight } from "@/lib/lessons/pathway-lesson-yield";
 import { stripPathwayLessonToHubListShape } from "@/lib/lessons/pathway-lesson-hub-list-shape";
+import {
+  dedupePathwayLessonsForForcePublishCollisions,
+  isNNForcePublishValidRawLessons,
+  pathwayLessonPassesMinimumForcedPublishGate,
+} from "@/lib/lessons/pathway-lesson-force-publish";
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { hydratePremiumCatalogSectionsForMarketingGate } from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
@@ -1141,8 +1146,13 @@ export function sortAndFilterLessonsForPathwayContext(
   lessons: PathwayLessonRecord[],
 ): PathwayLessonRecord[] {
   const context = resolveLessonContextForPathwayId(pathwayId);
-  return lessons
-    .filter((lesson) => pathwayLessonEligibleForPublicMarketingSurface(lesson))
+  const force = isNNForcePublishValidRawLessons();
+  const filtered = lessons
+    .filter(
+      (lesson) =>
+        pathwayLessonEligibleForPublicMarketingSurface(lesson) ||
+        (force && pathwayLessonPassesMinimumForcedPublishGate(lesson)),
+    )
     .filter((lesson) => matchesLessonContext(pathwayId, lesson, context))
     .map((lesson) => ({ ...lesson, activeExamMeta: examMetaForContext(lesson, context) }))
     .sort((a, b) => {
@@ -1154,6 +1164,7 @@ export function sortAndFilterLessonsForPathwayContext(
       if (categoryDelta !== 0) return categoryDelta;
       return a.title.localeCompare(b.title);
     });
+  return force ? dedupePathwayLessonsForForcePublishCollisions(filtered) : filtered;
 }
 
 /**

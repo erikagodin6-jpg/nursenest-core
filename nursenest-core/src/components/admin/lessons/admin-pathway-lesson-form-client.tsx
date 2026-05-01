@@ -213,6 +213,20 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
         next <code className="rounded bg-black/5 px-1 dark:bg-white/10">npm run build:lesson-indexes</code> or full deploy build.
       </div>
 
+      {status === ContentStatus.PUBLISHED && publicLessonHref ? (
+        <div className="rounded-lg border border-emerald-300/60 bg-emerald-50 px-4 py-3 text-sm text-emerald-950 dark:border-emerald-800/50 dark:bg-emerald-950/25 dark:text-emerald-50">
+          <span className="font-medium">Live page</span> —{" "}
+          <Link href={publicLessonHref} className="text-primary underline" target="_blank" rel="noreferrer">
+            View published lesson
+          </Link>
+        </div>
+      ) : (
+        <p className="text-sm text-muted-foreground">
+          Non-published rows stay draft in <code className="rounded bg-muted px-1">pathway_lessons</code>; public marketing routes
+          list only structurally complete, published lessons.
+        </p>
+      )}
+
       {err ? <p className="text-sm text-destructive">{err}</p> : null}
       {msg ? <p className="text-sm text-green-600 dark:text-green-400">{msg}</p> : null}
 

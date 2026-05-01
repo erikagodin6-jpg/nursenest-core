@@ -93,6 +93,7 @@ import { LEARNER_APP_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { StaffEditLivePageBanner } from "@/components/staff/staff-edit-live-page-banner";
 import { buildAdminPathwayLessonStableEditHref } from "@/lib/admin/pathway-lesson-stable-edit-href";
+import { HUB } from "@/lib/marketing/marketing-entry-routes";
 
 /**
  * Paywall: full `PathwayLessonRecord` / `sections[]` stay in this server component. Gate with
@@ -507,6 +508,14 @@ export async function PathwayLessonDetailPageBody({
           {" · "}
           <Link href={`/blog/tag/${encodeURIComponent(lesson.topicSlug)}`} className="font-medium text-primary hover:underline">
             {lesson.topic} articles
+          </Link>
+          {" · "}
+          <Link href={HUB.flashcards} className="font-medium text-primary hover:underline">
+            Flashcards hub
+          </Link>
+          {" · "}
+          <Link href={HUB.questionBank} className="font-medium text-primary hover:underline">
+            Practice questions
           </Link>
           {" · "}
           <Link href="/tools" className="font-medium text-primary hover:underline">
