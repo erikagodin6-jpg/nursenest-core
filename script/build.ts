@@ -1,6 +1,6 @@
 import path from "path";
 import { createRequire } from "node:module";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { rm, readFile, readdir, readFile as readFileAsync, writeFile, copyFile, unlink, mkdir } from "fs/promises";
 import { existsSync } from "fs";
 import { gzipSync } from "zlib";
@@ -10,6 +10,8 @@ import { runI18nScan } from "./scan-hardcoded-strings-lib";
 
 const workspaceRequire = createRequire(path.resolve(process.cwd(), "package.json"));
 const { build: esbuild } = workspaceRequire("esbuild") as typeof import("esbuild");
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+process.chdir(repoRoot);
 
 const allowlist = [
   "date-fns",
