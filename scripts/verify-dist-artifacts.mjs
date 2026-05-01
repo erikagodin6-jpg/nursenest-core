@@ -86,7 +86,19 @@ function assertClientArtifacts() {
   if (!fs.existsSync(assets)) {
     die("dist/public/assets is missing.");
   }
-  const js = fs.readdirSync(assets).filter((f) => f.endsWith(".js"));
+  const js = [];
+  const stack = [assets];
+  while (stack.length) {
+    const dir = stack.pop();
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const entryPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        stack.push(entryPath);
+      } else if (entry.isFile() && entry.name.endsWith(".js")) {
+        js.push(entryPath);
+      }
+    }
+  }
   if (js.length === 0) {
     die("dist/public/assets contains no .js bundles.");
   }
