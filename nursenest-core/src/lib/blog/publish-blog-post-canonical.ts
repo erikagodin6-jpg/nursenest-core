@@ -51,7 +51,8 @@ export type BlogCanonicalPublishContext =
   | "recover_missed_blog_batch"
   | "recover_generated_blog_script"
   | "audit_hidden_blogs_apply"
-  | "generate_blog_posts_cli";
+  | "generate_blog_posts_cli"
+  | "generated_blog_publish_cli";
 
 export type PublishBlogPostCanonicalInput = {
   postId: string;

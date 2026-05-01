@@ -1,6 +1,6 @@
 # Blog Hidden Content Audit
 
-Generated: 2026-05-01T07:03:12.550Z
+Generated: 2026-05-01T11:54:50.345Z
 
 ## Scope
 
