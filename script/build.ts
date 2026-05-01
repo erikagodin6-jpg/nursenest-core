@@ -8,10 +8,11 @@ import { compileI18n } from "./compile-i18n";
 import { execSync } from "child_process";
 import { runI18nScan } from "./scan-hardcoded-strings-lib";
 
-async function main() {
-const workspaceRequire = createRequire(path.resolve(process.cwd(), "package.json"));
-const { build: esbuild } = workspaceRequire("esbuild") as typeof import("esbuild");
-const { build: viteBuild } = (await import(pathToFileURL(workspaceRequire.resolve("vite")).href)) as typeof import("vite");
+type EsbuildBuildFn = (typeof import("esbuild"))["build"];
+type ViteBuildFn = (typeof import("vite"))["build"];
+
+let runEsbuild: EsbuildBuildFn;
+let runViteBuild: ViteBuildFn;
 
 const allowlist = [
   "date-fns",
@@ -35,7 +36,7 @@ const CLIENT_ALIAS = {
 };
 
 function buildLessonsData() {
-  return esbuild({
+  return runEsbuild({
     entryPoints: ["client/src/data/lessons/index.ts"],
     platform: "node",
     bundle: true,
@@ -60,7 +61,7 @@ function buildLessonsData() {
 }
 
 function buildNpBatch(i: number) {
-  return esbuild({
+  return runEsbuild({
     entryPoints: [`client/src/data/lessons/np-generated-batch-${i}.ts`],
     platform: "node",
     bundle: true,
@@ -115,7 +116,7 @@ async function getExternals() {
 
 async function buildServer(externalizeHeavyModules: boolean) {
   const externals = await getExternals();
-  const plugins: NonNullable<Parameters<typeof esbuild>[0]["plugins"]> = [];
+  const plugins: NonNullable<Parameters<typeof runEsbuild>[0]["plugins"]> = [];
   plugins.push({
     name: "externalize-career-question-data",
     setup(build) {
@@ -174,7 +175,7 @@ async function buildServer(externalizeHeavyModules: boolean) {
     );
   }
 
-  return esbuild({
+  return runEsbuild({
     entryPoints: ["server/index.ts"],
     platform: "node",
     bundle: true,
@@ -244,7 +245,7 @@ async function buildExternalModules(entries: string[], label: string) {
           .replace(/^server\//, "")
           .replace(/\.ts$/, "")
           .replace(/\//g, "__");
-        return esbuild({
+        return runEsbuild({
           entryPoints: [entry],
           platform: "node",
           bundle: true,
@@ -306,7 +307,7 @@ async function buildClientDataModules() {
 
   const externals = await getExternals();
 
-  await esbuild({
+  await runEsbuild({
     entryPoints: clientDataFiles,
     platform: "node",
     bundle: false,
@@ -609,7 +610,7 @@ async function buildAll() {
   if (target === "all" || target === "client") {
     const viteT = Date.now();
     // Keep CI/Heroku logs concise; huge chunk listings can slow hosted builds.
-    await viteBuild({ logLevel: "warn" });
+    await runViteBuild({ logLevel: "warn" });
     log("client done");
     timing("vite_client", viteT);
   }
@@ -643,7 +644,13 @@ async function buildAll() {
   log(`build complete`);
 }
 
-await buildAll();
+async function main() {
+  const workspaceRequire = createRequire(path.resolve(process.cwd(), "package.json"));
+  runEsbuild = (workspaceRequire("esbuild") as typeof import("esbuild")).build;
+  runViteBuild = (
+    (await import(pathToFileURL(workspaceRequire.resolve("vite")).href)) as typeof import("vite")
+  ).build;
+  await buildAll();
 }
 
 main().catch((err) => {
