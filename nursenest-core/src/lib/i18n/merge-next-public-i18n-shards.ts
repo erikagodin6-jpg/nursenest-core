@@ -4,22 +4,20 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { PUBLIC_I18N_SHARD_FILENAMES, type I18nShardFilename } from "@shared/i18n-shard-policy";
+import {
+  ADMIN_ONLY_I18N_ROOTS,
+  NEXT_PUBLIC_I18N_ROOTS,
+} from "@/lib/i18n/next-public-i18n-roots";
+import {
+  PUBLIC_I18N_SHARD_FILENAMES,
+  type I18nShardFilename,
+} from "@/lib/i18n/i18n-shard-policy";
 import { stripStaffKeysFromPublicMergedBundle } from "@/lib/i18n/strip-staff-i18n-keys";
 import { readCachedI18nJsonFile } from "@/lib/i18n/i18n-translation-cache";
 
 const LOCALE_RE = /^[a-z]{2}(-[a-z]{2})?$/i;
-const PUBLIC_I18N_ALLOWED_ROOTS = Array.from(
-  new Set([
-    path.resolve(/* turbopackIgnore: true */ process.cwd(), "public", "i18n"),
-    path.resolve(/* turbopackIgnore: true */ process.cwd(), "..", "client", "public", "i18n"),
-  ]),
-);
-const ADMIN_I18N_ALLOWED_ROOTS = Array.from(
-  new Set([
-    path.resolve(/* turbopackIgnore: true */ process.cwd(), "i18n-admin-only"),
-  ]),
-);
+const PUBLIC_I18N_ALLOWED_ROOTS = Array.from(new Set(NEXT_PUBLIC_I18N_ROOTS.map((root) => path.resolve(root))));
+const ADMIN_I18N_ALLOWED_ROOTS = Array.from(new Set(ADMIN_ONLY_I18N_ROOTS.map((root) => path.resolve(root))));
 
 function isWithinAllowedRoot(resolvedPath: string, allowedRoot: string): boolean {
   return resolvedPath === allowedRoot || resolvedPath.startsWith(`${allowedRoot}${path.sep}`);
@@ -34,7 +32,7 @@ function resolveAllowedLocaleDir(candidates: readonly string[], locale: string):
   if (!LOCALE_RE.test(locale)) return null;
   for (const root of candidates) {
     if (!existsSync(root)) continue;
-    const localeDir = path.resolve(root, locale);
+    const localeDir = path.resolve(/* turbopackIgnore: true */ root, locale);
     if (!isWithinAllowedRoot(localeDir, root)) continue;
     if (existsSync(localeDir)) return localeDir;
   }
@@ -99,7 +97,7 @@ export function loadMergedMarketingMessagesFromNextPublicDir(
   const publicRoot = resolveAllowedRoot(PUBLIC_I18N_ALLOWED_ROOTS, i18nDir);
   if (!publicRoot) return null;
 
-  const legacy = path.resolve(publicRoot, `${locale}.json`);
+  const legacy = path.resolve(/* turbopackIgnore: true */ publicRoot, `${locale}.json`);
   if (!isWithinAllowedRoot(legacy, publicRoot)) return null;
   if (existsSync(legacy)) {
     if (options?.shardFilenames && options.shardFilenames.length > 0) {
@@ -113,7 +111,7 @@ export function loadMergedMarketingMessagesFromNextPublicDir(
       return normalized;
     }
   }
-  const localeDir = path.resolve(publicRoot, locale);
+  const localeDir = path.resolve(/* turbopackIgnore: true */ publicRoot, locale);
   if (!isWithinAllowedRoot(localeDir, publicRoot)) return null;
   if (!existsSync(localeDir)) return null;
   const merged: MarketingMessages = {};

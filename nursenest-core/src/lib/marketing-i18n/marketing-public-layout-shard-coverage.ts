@@ -1,4 +1,4 @@
-import { i18nShardForKey, type I18nShardFilename } from "@shared/i18n-shard-policy";
+import { i18nShardForKey, type I18nShardFilename } from "@/lib/i18n/i18n-shard-policy";
 import { MARKETING_DEFAULT_LAYOUT_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 
 const DEFAULT_PUBLIC_MARKETING_SHARD_SET = new Set<I18nShardFilename>(

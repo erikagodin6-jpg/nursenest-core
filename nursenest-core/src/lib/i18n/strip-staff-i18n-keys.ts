@@ -1,4 +1,4 @@
-import { isAdminOnlyFlatI18nKey } from "@shared/i18n-admin-key-policy";
+import { isAdminOnlyFlatI18nKey } from "@/lib/i18n/i18n-admin-key-policy";
 
 /** Removes staff-only keys from a flat bundle (e.g. legacy monolith JSON served before shard split). */
 export function stripStaffKeysFromPublicMergedBundle(m: Record<string, string>): Record<string, string> {
