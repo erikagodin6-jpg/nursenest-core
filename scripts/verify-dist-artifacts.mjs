@@ -31,6 +31,8 @@ async function maybeVerifyNextStandalone() {
 
   const standaloneVerifier = await import(pathToFileURL(standaloneVerifierPath).href);
   const standaloneServerPath = standaloneVerifier.verifyStandaloneArtifact(packageRoot);
+  standaloneVerifier.verifyStandaloneStaticAssetsPresent(packageRoot);
+  standaloneVerifier.verifyPathwayLessonGeneratedIndexesArtifact(packageRoot);
   console.log(`[verify-dist] OK standaloneServer=${standaloneServerPath}`);
   console.log(
     `[deploy-timing] verify_dist_total_s=${((Date.now() - verifyT0) / 1000).toFixed(2)}`,
