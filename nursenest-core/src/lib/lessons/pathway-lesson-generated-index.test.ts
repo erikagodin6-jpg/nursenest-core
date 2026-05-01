@@ -86,3 +86,28 @@ test("trusted shape: summaries slugs must exist in merged raw rows", () => {
     assert.ok(rawSlugs.has(row.slug), `summary slug should exist in raw merge: ${row.slug}`);
   }
 });
+
+test("new grad pathway does not collapse to zero rendered lessons when raw lessons exist", () => {
+  const pathwayId = "us-rn-new-grad-transition";
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "nn-new-grad-live-index-"));
+  const prev = process.env.NN_PATHWAY_LESSON_INDEX_DIR;
+  process.env.NN_PATHWAY_LESSON_INDEX_DIR = tmp;
+  try {
+    clearGeneratedPathwayLessonIndexCacheForTests();
+    resetCatalogLessonsRawMergeCacheForTests();
+    const raw = getCatalogLessonsRaw(pathwayId);
+    assert.ok(raw.length > 0, "expected raw New Grad lessons to exist");
+
+    const summaries = getLessonSummariesIndex(pathwayId);
+    assert.ok(
+      summaries.length > 0,
+      `expected renderable New Grad summaries when raw lessons exist (raw=${raw.length}, rendered=${summaries.length})`,
+    );
+  } finally {
+    if (prev === undefined) delete process.env.NN_PATHWAY_LESSON_INDEX_DIR;
+    else process.env.NN_PATHWAY_LESSON_INDEX_DIR = prev;
+    fs.rmSync(tmp, { recursive: true, force: true });
+    clearGeneratedPathwayLessonIndexCacheForTests();
+    resetCatalogLessonsRawMergeCacheForTests();
+  }
+});

@@ -57,6 +57,7 @@ import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pa
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { hydratePremiumCatalogSectionsForMarketingGate } from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { applyAlliedStructuralCompletion } from "@/lib/lessons/allied-pathway-lesson-structural-normalization";
+import { applyNewGradStructuralCompletion } from "@/lib/lessons/new-grad-pathway-lesson-structural-normalization";
 import { prependScopedGoldCatalogLessons } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
 import {
   normalizeLessonCategory,
@@ -1387,6 +1388,13 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
     premiumOmittedMerged = alliedCompleted.premiumOmittedSections;
     seoTitle = alliedCompleted.seoTitle;
     seoDescription = alliedCompleted.seoDescription;
+    const newGradCompleted = applyNewGradStructuralCompletion({
+      lessonSlug: lessonSlugEarly,
+      title,
+      pathwayId: pathwayId ?? "",
+      sections: expanded,
+    });
+    expanded = newGradCompleted.sections;
   }
 
   if (!usePremium) {

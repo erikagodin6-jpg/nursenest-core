@@ -16,6 +16,8 @@ import {
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { parsePathwayLessonGeneratedIndexV1 } from "@/lib/lessons/pathway-lesson-generated-index";
 import { marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
+import { getMarketingLessonsHubCatalogLessons } from "@/lib/lessons/marketing-lessons-hub-category";
+import { buildLessonNormalizationCoverageReport } from "./lesson-normalization-coverage.mts";
 
 const coreRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const realIndexDir = path.join(coreRoot, "src", "content", "pathway-lessons", "generated-indexes");
@@ -133,6 +135,51 @@ async function main(): Promise<void> {
     console.info(`[verify:lesson-indexes] ok pathway=${pathwayId} lessons=${parsed.summaries.length}`);
   }
   console.info(`[verify:lesson-indexes] all ${files.length} file(s) validated.`);
+
+  const coverage = buildLessonNormalizationCoverageReport();
+  for (const pathway of coverage.pathways) {
+    if (pathway.rawCount > 0 && pathway.renderableCount === 0) {
+      throw new Error(
+        `[verify:lesson-indexes] pathway collapsed to zero renderable lessons pathway=${pathway.pathwayId} raw=${pathway.rawCount}`,
+      );
+    }
+    for (const exclusion of pathway.exclusions) {
+      if (!exclusion.reason.trim()) {
+        throw new Error(
+          `[verify:lesson-indexes] exclusion missing reason pathway=${pathway.pathwayId} slug=${exclusion.slug}`,
+        );
+      }
+    }
+
+    for (const lesson of getMarketingLessonsHubCatalogLessons(pathway.pathwayId)) {
+      if (!lesson.slug.trim()) {
+        throw new Error(`[verify:lesson-indexes] lesson missing slug pathway=${pathway.pathwayId}`);
+      }
+      if (!lesson.title.trim()) {
+        throw new Error(`[verify:lesson-indexes] lesson missing title pathway=${pathway.pathwayId} slug=${lesson.slug}`);
+      }
+      if (!lesson.topic.trim() || !lesson.topicSlug.trim()) {
+        throw new Error(
+          `[verify:lesson-indexes] lesson missing topic metadata pathway=${pathway.pathwayId} slug=${lesson.slug}`,
+        );
+      }
+      const pathwayDef = getExamPathwayById(pathway.pathwayId);
+      if (!pathwayDef || !marketingPathwayLessonDetailPath(pathwayDef, lesson.slug)) {
+        throw new Error(
+          `[verify:lesson-indexes] lesson missing public detail route pathway=${pathway.pathwayId} slug=${lesson.slug}`,
+        );
+      }
+    }
+  }
+
+  const unmappedAllied = coverage.alliedProfessionCoverage.filter((entry) => entry.status !== "mapped");
+  if (unmappedAllied.length > 0) {
+    throw new Error(
+      `[verify:lesson-indexes] allied profession pages missing lesson mappings: ${unmappedAllied
+        .map((entry) => entry.professionKey)
+        .join(", ")}`,
+    );
+  }
 }
 
 main().catch((e) => {

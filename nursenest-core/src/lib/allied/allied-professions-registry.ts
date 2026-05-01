@@ -131,6 +131,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "pta-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "therapy",
+    topicSlugsIn: ["patient-assessment", "human-anatomy", "human-physiology", "vital-signs", "patient-communication"],
     title: "Physical therapist assistant (PTA) exam prep | NurseNest",
     description:
       "Therapeutic exercise, mobility, and safety judgment for PTA certification study. pathway-scoped allied lessons and practice.",
@@ -151,6 +152,13 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "ota-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "therapy",
+    topicSlugsIn: [
+      "patient-assessment",
+      "patient-communication",
+      "clinical-documentation",
+      "human-anatomy",
+      "human-physiology",
+    ],
     title: "Occupational therapy assistant (OTA) exam prep | NurseNest",
     description:
       "Activity analysis, ADLs, and safety sequencing for OTA certification prep. allied pathway scope.",
@@ -171,6 +179,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "mlt-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "lab",
+    topicSlugsIn: ["lab-values", "infection-control", "medical-terminology", "clinical-documentation"],
     title: "Medical lab (MLT / MLS) exam prep | NurseNest",
     description:
       "Laboratory reasoning, quality control, and safety edges for medical laboratory certification study. allied-tier scoped.",
@@ -191,6 +200,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "imaging-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "lab",
+    topicSlugsIn: ["imaging-basics", "patient-assessment", "vital-signs", "medical-terminology"],
     title: "Medical imaging exam prep | NurseNest",
     description:
       "Safety, contrast, positioning, and protocol edges for imaging certification contexts. content scoped to allied pathways.",
@@ -211,6 +221,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "rrt-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "acute",
+    topicSlugsIn: ["patient-assessment", "vital-signs", "emergency-response", "infection-control", "human-physiology"],
     title: "Respiratory therapy (RRT) exam prep | NurseNest",
     description:
       "Ventilation, gas exchange, and airway management for respiratory therapy certification prep. scoped to allied pathways and US context where applicable.",
@@ -231,6 +242,13 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "paramedic-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "acute",
+    topicSlugsIn: [
+      "patient-assessment",
+      "vital-signs",
+      "emergency-response",
+      "patient-communication",
+      "clinical-documentation",
+    ],
     title: "Paramedic exam prep | Allied health | NurseNest",
     description:
       "Protocol-first paramedic certification study: prioritization, airway, trauma, and scope-safe judgment. pathway-scoped lessons and practice aligned to allied tier content.",
@@ -251,6 +269,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "pharmacy-tech-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "clinical",
+    topicSlugsIn: ["medication-safety", "pharmacology-basics", "medical-terminology", "clinical-documentation"],
     title: "Pharmacy technician exam prep | NurseNest",
     description:
       "Calculations, high-alert meds, sterile technique, and regulatory edges for pharmacy technician certification. allied pathway scope.",
@@ -271,6 +290,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "social-work-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "support",
+    topicSlugsIn: ["patient-communication", "clinical-documentation", "healthcare-teamwork", "medical-ethics"],
     title: "Social work licensing exam prep | NurseNest",
     description:
       "Ethics, assessment, intervention planning, and boundaries for social work exam contexts. allied-tier pathway scope.",
@@ -291,6 +311,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "psw-hca-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "support",
+    topicSlugsIn: ["patient-assessment", "vital-signs", "patient-communication", "infection-control", "healthcare-teamwork"],
     title: "PSW / HCA / CCA exam prep | NurseNest",
     description:
       "Personal support, hygiene, mobility, documentation, and delegation for PSW, HCA, and CCA certification contexts. Allied-tier pathway scope.",
@@ -372,6 +393,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "mental-health-addictions-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "support",
+    topicSlugsIn: ["patient-communication", "clinical-documentation", "healthcare-teamwork", "medical-ethics"],
     title: "Mental health and addictions worker exam prep | NurseNest",
     description:
       "Safety, boundaries, de-escalation, and documentation edges for mental health and addictions worker exams. Allied-tier scope.",

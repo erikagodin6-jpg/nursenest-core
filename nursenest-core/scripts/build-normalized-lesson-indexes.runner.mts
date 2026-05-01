@@ -16,6 +16,12 @@ import {
   listCatalogPathwayIdsWithLessonsSync,
   resetCatalogLessonsRawMergeCacheForTests,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import {
+  buildLessonNormalizationCoverageReport,
+  lessonNormalizationCoverageJsonPath,
+  lessonNormalizationCoverageMarkdownPath,
+  writeLessonNormalizationCoverageReports,
+} from "./lesson-normalization-coverage.mts";
 
 const SCHEMA_V1 = 1;
 
@@ -73,6 +79,19 @@ async function main(): Promise<void> {
     fs.writeFileSync(path.join(outDir, `${safe}.json`), `${JSON.stringify(payload, null, 2)}\n`, "utf8");
     console.info(`[build:lesson-indexes] wrote ${safe}.json lessons=${summaries.length} raw=${rawCount}`);
   }
+  const coverage = buildLessonNormalizationCoverageReport();
+  writeLessonNormalizationCoverageReports(coverage);
+  const collapsed = coverage.pathways.filter((pathway) => pathway.rawCount > 0 && pathway.renderableCount === 0);
+  if (collapsed.length > 0) {
+    throw new Error(
+      `[build:lesson-indexes] pathway(s) collapsed to zero renderable lessons: ${collapsed
+        .map((pathway) => pathway.pathwayId)
+        .join(", ")}`,
+    );
+  }
+  console.info(
+    `[build:lesson-indexes] wrote coverage reports json=${lessonNormalizationCoverageJsonPath()} md=${lessonNormalizationCoverageMarkdownPath()}`,
+  );
   console.info(`[build:lesson-indexes] done pathways=${ids.length} -> ${outDir}`);
 }
 

@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ContentStatus } from "@prisma/client";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { marketingPathwayLessonDetailPath } from "@/lib/lessons/lesson-routes";
 
 const STATUSES = [
   ContentStatus.DRAFT,
@@ -73,6 +75,11 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
   }, [props]);
 
   const pathwayLessonId = resolvedPathwayLessonId ?? "";
+  const publicLessonHref = (() => {
+    const pathway = pathwayId.trim() ? getExamPathwayById(pathwayId.trim()) : null;
+    if (!pathway || !slug.trim()) return null;
+    return marketingPathwayLessonDetailPath(pathway, slug.trim());
+  })();
 
   const loadLesson = useCallback(async () => {
     if (!pathwayLessonId) return;
@@ -200,6 +207,12 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
         </Link>
       </div>
 
+      <div className="rounded-lg border border-amber-300/60 bg-amber-50 px-4 py-3 text-sm text-amber-950 dark:border-amber-700/60 dark:bg-amber-950/30 dark:text-amber-100">
+        Published saves update <code className="rounded bg-black/5 px-1 dark:bg-white/10">pathway_lessons</code> immediately and
+        request live route revalidation. The generated lesson-index snapshots used for build/cold-start optimization refresh on the
+        next <code className="rounded bg-black/5 px-1 dark:bg-white/10">npm run build:lesson-indexes</code> or full deploy build.
+      </div>
+
       {err ? <p className="text-sm text-destructive">{err}</p> : null}
       {msg ? <p className="text-sm text-green-600 dark:text-green-400">{msg}</p> : null}
 
@@ -289,6 +302,16 @@ export function AdminPathwayLessonFormClient(props: AdminPathwayLessonFormClient
         >
           Publish
         </button>
+        {publicLessonHref ? (
+          <Link
+            href={publicLessonHref}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-md border border-input px-4 py-2 text-sm font-medium"
+          >
+            View live page
+          </Link>
+        ) : null}
       </div>
     </div>
   );

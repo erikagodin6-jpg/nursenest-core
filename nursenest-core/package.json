@@ -37,6 +37,7 @@
     "test:e2e:tier-matrix": "npx playwright test -c playwright.tier-matrix.config.ts",
     "test:e2e:clinical-scenarios": "npx playwright test -c playwright.clinical-scenarios.config.ts",
     "build:lesson-indexes": "node scripts/build-normalized-lesson-indexes.mjs",
+    "content:lesson-coverage": "node scripts/build-normalized-lesson-indexes.mjs",
     "verify:lesson-indexes": "node scripts/verify-normalized-lesson-indexes.mjs",
     "verify:learning-surfaces": "node scripts/verify-learning-surfaces.mjs",
     "verify:no-cross-tier-leakage": "node scripts/verify-no-cross-tier-leakage.mjs",
