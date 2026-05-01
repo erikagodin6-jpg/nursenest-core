@@ -114,7 +114,7 @@ const TRANSITIVE_EXTERNALS = [
 ];
 
 async function getExternals() {
-  const pkg = JSON.parse(await readFile("package.json", "utf-8"));
+  const pkg = JSON.parse(await readFile(path.join(APP_ROOT, "package.json"), "utf-8"));
   const allDeps = [
     ...Object.keys(pkg.dependencies || {}),
     ...Object.keys(pkg.devDependencies || {}),
@@ -408,7 +408,7 @@ async function writeBuildManifest(
   log: (msg: string) => void,
   opts: { gitSha: string; buildTarget: string; runHeavyBuildTasks: boolean },
 ): Promise<void> {
-  const pkg = JSON.parse(await readFile("package.json", "utf-8"));
+  const pkg = JSON.parse(await readFile(path.join(APP_ROOT, "package.json"), "utf-8"));
   const meta = {
     schemaVersion: 1,
     builtAt: new Date().toISOString(),
