@@ -27,6 +27,7 @@ import { blogPostIsLive } from "../../src/lib/blog/blog-visibility";
 import { STATIC_BLOG_POSTS } from "../../src/content/blog-static-posts";
 import { LONG_FORM_BLOG_POSTS, LONG_FORM_BLOG_TOPICS } from "../../src/lib/seo/long-form-seo-blog-posts";
 import { LF2_POSTS, LF2_TOPICS } from "../../src/lib/seo/long-form-seo-blog-posts-chunk2";
+import { loadBlogAuditEnv } from "../../src/lib/db/blog-audit-env-load";
 
 type AuditStatus =
   | "draft"
@@ -184,6 +185,7 @@ const reportJsonPath = path.join(reportsDir, "blog-hidden-content-inventory.json
 function parseArgs(argv: string[]) {
   return {
     apply: argv.includes("--apply"),
+    requireDatabase: argv.includes("--require-database"),
   };
 }
 
@@ -306,24 +308,6 @@ async function readJsonFile<T>(targetPath: string): Promise<T | null> {
     return JSON.parse(raw) as T;
   } catch {
     return null;
-  }
-}
-
-async function loadOptionalEnvFile(envPath: string): Promise<void> {
-  if (!(await exists(envPath))) return;
-  const raw = await fs.readFile(envPath, "utf8");
-  for (const line of raw.split(/\r?\n/)) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("#")) continue;
-    const eqIdx = trimmed.indexOf("=");
-    if (eqIdx < 1) continue;
-    const key = trimmed.slice(0, eqIdx).trim();
-    if (!key || process.env[key] != null) continue;
-    let value = trimmed.slice(eqIdx + 1).trim();
-    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
-      value = value.slice(1, -1);
-    }
-    process.env[key] = value;
   }
 }
 
@@ -1742,15 +1726,18 @@ function toMarkdown(output: InventoryOutput): string {
 }
 
 async function main(): Promise<void> {
-  const { apply } = parseArgs(process.argv.slice(2));
+  const { apply, requireDatabase } = parseArgs(process.argv.slice(2));
   if (apply) {
     throw new Error("Apply mode intentionally disabled until recovery plan is reviewed.");
   }
+  const envLoad = await loadBlogAuditEnv({ appRoot, repoRoot });
+  if (requireDatabase && !envLoad.databaseUrlSet) {
+    console.error("[blog-audit-hidden] --require-database was passed but DATABASE_URL is still missing after env load.");
+    process.exit(1);
+  }
+
   const records: InventoryRecord[] = [];
   const sources: SourceSummary[] = [];
-
-  await loadOptionalEnvFile(path.join(appRoot, ".env.local"));
-  await loadOptionalEnvFile(path.join(repoRoot, ".env.local"));
 
   const topLevelNursenestDirs = await listDirsContaining("/root", "nursenest");
   const corruptDirs = await listMatchingDirs("/root", "nursenest-core-corrupt-");
@@ -1763,10 +1750,13 @@ async function main(): Promise<void> {
     await loadSnapshotJsonSources(snapshotRoot, path.basename(snapshotRoot), records, sources);
   }
 
-  const databaseUrlConfigured = Boolean(process.env.DATABASE_URL?.trim());
-  const prisma = new PrismaClient();
-  const dbStatus = await loadDatabaseSources(prisma, records);
-  await prisma.$disconnect().catch(() => undefined);
+  const databaseUrlConfigured = envLoad.databaseUrlSet;
+  let dbStatus = { queried: false, querySucceeded: false, error: null as string | null };
+  if (databaseUrlConfigured) {
+    const prisma = new PrismaClient();
+    dbStatus = await loadDatabaseSources(prisma, records);
+    await prisma.$disconnect().catch(() => undefined);
+  }
 
   attachDuplicateMetadata(records);
 

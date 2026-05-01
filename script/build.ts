@@ -11,6 +11,12 @@ import { execSync } from "child_process";
 logResolvedPathsOnce();
 process.chdir(REPO_ROOT);
 
+const appRoot = APP_ROOT;
+const pkgPath = path.join(appRoot, "package.json");
+const repoPath = (...parts: string[]) => path.join(REPO_ROOT, ...parts);
+
+console.log("[build-paths] appRoot=", appRoot, "pkgPath=", pkgPath);
+
 type EsbuildBuildFn = (typeof import("esbuild"))["build"];
 type ViteBuildFn = (typeof import("vite"))["build"];
 
@@ -114,7 +120,7 @@ const TRANSITIVE_EXTERNALS = [
 ];
 
 async function getExternals() {
-  const pkg = JSON.parse(await readFile(path.join(APP_ROOT, "package.json"), "utf-8"));
+  const pkg = JSON.parse(await readFile(pkgPath, "utf-8"));
   const allDeps = [
     ...Object.keys(pkg.dependencies || {}),
     ...Object.keys(pkg.devDependencies || {}),
@@ -408,7 +414,7 @@ async function writeBuildManifest(
   log: (msg: string) => void,
   opts: { gitSha: string; buildTarget: string; runHeavyBuildTasks: boolean },
 ): Promise<void> {
-  const pkg = JSON.parse(await readFile(path.join(APP_ROOT, "package.json"), "utf-8"));
+  const pkg = JSON.parse(await readFile(pkgPath, "utf-8"));
   const meta = {
     schemaVersion: 1,
     builtAt: new Date().toISOString(),
@@ -436,9 +442,10 @@ async function generateCoverageReport(log: (msg: string) => void): Promise<void>
   };
 
   for (const rf of reportFiles) {
-    if (existsSync(rf)) {
+    const reportPath = repoPath(rf);
+    if (existsSync(reportPath)) {
       try {
-        const data = JSON.parse(await readFile(rf, "utf-8"));
+        const data = JSON.parse(await readFile(reportPath, "utf-8"));
         const name = path.basename(rf, ".json");
         coverageReport.validators[name] = data;
       } catch {}
@@ -541,7 +548,7 @@ async function buildAll() {
       log("scanning for hardcoded strings (AST)...");
       let scanConfig: Record<string, any> = {};
       try {
-        scanConfig = JSON.parse(await readFile("i18n-scan.config.json", "utf-8"));
+        scanConfig = JSON.parse(await readFile(repoPath("i18n-scan.config.json"), "utf-8"));
       } catch {}
       const { runI18nScan } = await import("./scan-hardcoded-strings-lib");
       const scanPassed = await runI18nScan({
@@ -684,11 +691,10 @@ async function buildAll() {
 }
 
 function resolvePackageJsonForNodeRequire(): string {
-  const appPkg = path.join(APP_ROOT, "package.json");
-  if (existsSync(path.join(APP_ROOT, "node_modules", "esbuild"))) {
-    return appPkg;
+  if (existsSync(path.join(appRoot, "node_modules", "esbuild"))) {
+    return pkgPath;
   }
-  return path.join(REPO_ROOT, "package.json");
+  return repoPath("package.json");
 }
 
 async function main() {

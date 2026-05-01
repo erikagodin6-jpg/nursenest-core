@@ -5,11 +5,12 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const distDir = path.join(root, "dist");
 const verifyT0 = Date.now();
+const cwd = process.cwd();
 
 function die(msg) {
   console.error(`[verify-dist] FAIL: ${msg}`);
@@ -18,6 +19,23 @@ function die(msg) {
 
 function readText(p) {
   return fs.readFileSync(p, "utf8");
+}
+
+async function maybeVerifyNextStandalone() {
+  const packageRoot = cwd;
+  const standaloneVerifierPath = path.join(packageRoot, "scripts", "verify-standalone-artifact.mjs");
+  const standaloneRoot = path.join(packageRoot, ".next", "standalone");
+  if (!fs.existsSync(standaloneVerifierPath) || !fs.existsSync(standaloneRoot)) {
+    return false;
+  }
+
+  const standaloneVerifier = await import(pathToFileURL(standaloneVerifierPath).href);
+  const standaloneServerPath = standaloneVerifier.verifyStandaloneArtifact(packageRoot);
+  console.log(`[verify-dist] OK standaloneServer=${standaloneServerPath}`);
+  console.log(
+    `[deploy-timing] verify_dist_total_s=${((Date.now() - verifyT0) / 1000).toFixed(2)}`,
+  );
+  return true;
 }
 
 /**
@@ -97,6 +115,10 @@ function assertClientArtifacts() {
         "or run a full i18n compile before deploy.",
     );
   }
+}
+
+if (await maybeVerifyNextStandalone()) {
+  process.exit(0);
 }
 
 const metaPath = path.join(distDir, "build-meta.json");

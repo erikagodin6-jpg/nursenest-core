@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 import os from "node:os";
+import { fileURLToPath } from "node:url";
 
 function envTruthy(name) {
   return /^(1|true|yes)$/i.test(String(process.env[name] ?? "").trim());
@@ -12,6 +13,7 @@ function envExplicitlyFalse(name) {
 }
 
 const totalRamMb = Math.max(512, Math.floor(os.totalmem() / 1024 / 1024));
+const packageRoot = fileURLToPath(new URL(".", import.meta.url));
 /** ~9GiB or less → assume webpack/static workers should stay minimal unless opted out. */
 const autoLowMemoryHost = totalRamMb <= 9216;
 
@@ -163,6 +165,15 @@ const nextConfig = {
   },
 
   experimental,
+
+  /**
+   * Next 16 defaults `next build` to Turbopack. Keep an explicit turbopack stanza so
+   * the plain build command remains valid even while we retain a webpack hook for
+   * optional `--webpack` builds and memory tuning on older/explicit webpack paths.
+   */
+  turbopack: {
+    root: packageRoot,
+  },
 
   webpack: (config, { dev }) => {
     config.parallelism = webpackParallelism;

@@ -41,7 +41,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const pkgRoot = path.resolve(__dirname, "..");
 const RN_JSON_CLINICAL_PATHWAY_IDS = ["ca-rn-nclex-rn", "us-rn-nclex-rn"] as const;
 const RPN_JSON_BACKED_PATHWAY_IDS = ["ca-rpn-rex-pn", "us-lpn-nclex-pn"] as const;
-const RN_JSON_CLINICAL_EXCLUDED_TOPICS = new Set(["Exam Strategy", "Leadership & Delegation", "Safety & Prioritization"]);
 const RN_JSON_SKIP_FILES = new Set([
   "rn-nclex-catalog-import-state.json",
   "rn-nclex-master-map.json",
@@ -209,7 +208,6 @@ function loadJsonBackedLessonsForPathwayIds<PathwayId extends string>(opts: {
 function loadRnClinicalJsonLessons(): JsonBackedNormalizedLesson<(typeof RN_JSON_CLINICAL_PATHWAY_IDS)[number]>[] {
   return loadJsonBackedLessonsForPathwayIds({
     pathwayIds: RN_JSON_CLINICAL_PATHWAY_IDS,
-    excludeTopics: RN_JSON_CLINICAL_EXCLUDED_TOPICS,
   });
 }
 
