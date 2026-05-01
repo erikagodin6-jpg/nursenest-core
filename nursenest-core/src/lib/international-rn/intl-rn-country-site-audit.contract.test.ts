@@ -11,15 +11,24 @@ import { auditInternationalRnCountrySites } from "@/lib/international-rn/intl-rn
 import { lintIntlRnMarketCorpus } from "@/lib/international-rn/intl-rn-content-lint";
 import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 
-test("matrix rows cover the three international RN foundation pathway ids", () => {
+const MATRIX_PATHWAY_IDS = [
+  "uk-rn-nmc-test-of-competence",
+  "au-rn-iqnm-pathway",
+  "ph-rn-prc-pnle",
+  "in-rn-state-nursing-council-registration",
+  "ng-rn-nmcn-licensure",
+  "sa-rn-scfhs-licensure",
+] as const;
+
+test("matrix rows cover all international RN foundation pathway ids", () => {
   const ids = new Set(INTL_RN_COUNTRY_SITE_MATRIX.map((r) => r.pathwayId));
-  assert.equal(ids.size, 3);
-  assert.ok(ids.has("uk-rn-nmc-test-of-competence"));
-  assert.ok(ids.has("au-rn-iqnm-pathway"));
-  assert.ok(ids.has("ph-rn-prc-pnle"));
+  assert.equal(ids.size, MATRIX_PATHWAY_IDS.length);
+  for (const id of MATRIX_PATHWAY_IDS) {
+    assert.ok(ids.has(id), id);
+  }
 });
 
-test("UK / Australia / Philippines RN hubs use matrix-specific titles and H1s", () => {
+test("international RN foundation hubs use matrix-specific titles and H1s", () => {
   for (const row of INTL_RN_COUNTRY_SITE_MATRIX) {
     const pathway = EXAM_PATHWAYS.find((p) => p.id === row.pathwayId);
     assert.ok(pathway, row.pathwayId);

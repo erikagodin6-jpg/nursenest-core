@@ -35,10 +35,13 @@ const PLACEHOLDER_COPY_RE =
 export const PATHWAY_IDS_REQUIRED_FOR_COUNTRY_PUBLISH: Record<CountrySlug, readonly string[]> = {
   us: ["us-rn-nclex-rn", "us-lpn-nclex-pn"],
   canada: ["ca-rn-nclex-rn", "ca-rpn-rex-pn"],
-  /** UK / Australia / Philippines use expansion-region + dedicated readiness rules, not this rollup. */
+  /** UK / Australia / Philippines / India / Nigeria / Saudi Arabia use expansion-region + dedicated readiness rules, not this rollup. */
   uk: [],
   australia: [],
   philippines: [],
+  india: [],
+  nigeria: [],
+  "saudi-arabia": [],
 };
 
 /** Marketing foundation hubs for international RN regulators (not NCLEX-primary). */
@@ -46,6 +49,9 @@ export const INTL_RN_FOUNDATION_PATHWAY_IDS = [
   "uk-rn-nmc-test-of-competence",
   "au-rn-iqnm-pathway",
   "ph-rn-prc-pnle",
+  "in-rn-state-nursing-council-registration",
+  "ng-rn-nmcn-licensure",
+  "sa-rn-scfhs-licensure",
 ] as const;
 
 const INTL_RN_FOUNDATION_PATHWAY_ID_SET = new Set<string>(INTL_RN_FOUNDATION_PATHWAY_IDS);
@@ -66,6 +72,12 @@ function globalRegionSlugFromCountrySlug(country: CountrySlug): GlobalRegionSlug
       return "aus";
     case "philippines":
       return "philippines";
+    case "india":
+      return "india";
+    case "nigeria":
+      return "nigeria";
+    case "saudi-arabia":
+      return "saudi-arabia";
   }
 }
 

@@ -19,6 +19,9 @@ function regionForPathway(pathway: ExamPathwayDefinition): GlobalRegionSlug | nu
   if (pathway.countrySlug === "uk") return "uk";
   if (pathway.countrySlug === "australia") return "aus";
   if (pathway.countrySlug === "philippines") return "philippines";
+  if (pathway.countrySlug === "india") return "india";
+  if (pathway.countrySlug === "nigeria") return "nigeria";
+  if (pathway.countrySlug === "saudi-arabia") return "saudi-arabia";
   return null;
 }
 
@@ -26,6 +29,9 @@ function keyPrefixForPathway(pathway: ExamPathwayDefinition): string | null {
   if (pathway.id === "uk-rn-nmc-test-of-competence") return "intlNursing.intlRn.uk";
   if (pathway.id === "au-rn-iqnm-pathway") return "intlNursing.intlRn.au";
   if (pathway.id === "ph-rn-prc-pnle") return "intlNursing.intlRn.ph";
+  if (pathway.id === "in-rn-state-nursing-council-registration") return "intlNursing.intlRn.in";
+  if (pathway.id === "ng-rn-nmcn-licensure") return "intlNursing.intlRn.ng";
+  if (pathway.id === "sa-rn-scfhs-licensure") return "intlNursing.intlRn.sa";
   return null;
 }
 
@@ -57,7 +63,13 @@ export function resolveIntlRnHubSectionCopy(
       ? "/exams/uk"
       : pathway.countrySlug === "australia"
         ? "/exams/australia"
-        : "/exams/philippines";
+        : pathway.countrySlug === "philippines"
+          ? "/exams/philippines"
+          : pathway.countrySlug === "india"
+            ? "/exams/india"
+            : pathway.countrySlug === "nigeria"
+              ? "/exams/nigeria"
+              : "/exams/middle-east";
 
   const regionalHubLabel = pick(messages, `${prefix}.regionalHubLabel`, "Regional licensing guide");
 

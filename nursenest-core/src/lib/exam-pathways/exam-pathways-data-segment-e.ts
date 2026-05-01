@@ -2,7 +2,7 @@ import { CountryCode, ExamFamily, TierCode } from "@prisma/client";
 import type { ExamPathwayDefinition } from "./types";
 
 /**
- * International RN foundation hubs (UK NMC, Australia IQNM, Philippines PNLE).
+ * International RN foundation hubs (UK NMC, Australia IQNM, Philippines PNLE, India, Nigeria, Saudi Arabia).
  * Marketing-only shells: `GENERIC` exam family, empty `contentExamKeys`, `upcoming` + `waitlist`.
  * Readiness treats these via {@link isIntlRnFoundationPathwayId} — not sitemap-`published` until separately approved.
  */
@@ -66,5 +66,65 @@ export const EXAM_PATHWAYS_SEGMENT_E: ExamPathwayDefinition[] = [
     acquisitionMode: "waitlist",
     internalNotes:
       "Foundation hub: not affiliated with PRC. Do not imply a copy of proprietary PNLE item banks.",
+  },
+  {
+    id: "in-rn-state-nursing-council-registration",
+    countrySlug: "india",
+    countryCode: CountryCode.IN,
+    roleTrack: "rn",
+    examCode: "state-nursing-council-registration",
+    examFamily: ExamFamily.GENERIC,
+    examKey: "IN_RN_REG",
+    displayName: "India RN / state nursing council registration (INC-aligned)",
+    shortName: "State nursing council registration (INC aligned)",
+    stripeTier: TierCode.RN,
+    contentExamKeys: [],
+    seoTitle: "India RN Registration Exam Prep | NurseNest",
+    seoDescription:
+      "Independent study context for nurses preparing for Indian state nursing council registration aligned with Indian Nursing Council (INC) expectations: transferable clinical judgement, documentation habits, and safety practice—always confirm circulars and eligibility with your state council.",
+    status: "upcoming",
+    acquisitionMode: "waitlist",
+    internalNotes:
+      "Foundation hub: not affiliated with INC or any state nursing council. Do not imply official examination replication.",
+  },
+  {
+    id: "ng-rn-nmcn-licensure",
+    countrySlug: "nigeria",
+    countryCode: CountryCode.NG,
+    roleTrack: "rn",
+    examCode: "nmcn-licensure",
+    examFamily: ExamFamily.GENERIC,
+    examKey: "NMCN_RN",
+    displayName: "Nigeria RN / NMCN licensure pathway",
+    shortName: "NMCN RN licensure",
+    stripeTier: TierCode.RN,
+    contentExamKeys: [],
+    seoTitle: "Nigeria RN Licensure Exam Prep | NurseNest",
+    seoDescription:
+      "Orientation support for nurses preparing for Nursing and Midwifery Council of Nigeria (NMCN) RN licensure: transferable clinical reasoning and study structure—verify eligibility, documentation, and examination bulletins with NMCN.",
+    status: "upcoming",
+    acquisitionMode: "waitlist",
+    internalNotes:
+      "Foundation hub: not affiliated with NMCN. No proprietary NMCN item bank claims.",
+  },
+  {
+    id: "sa-rn-scfhs-licensure",
+    countrySlug: "saudi-arabia",
+    countryCode: CountryCode.SA,
+    roleTrack: "rn",
+    examCode: "scfhs-licensure",
+    examFamily: ExamFamily.GENERIC,
+    examKey: "SCFHS_RN",
+    displayName: "Saudi Arabia RN / SCFHS licensure pathway",
+    shortName: "SCFHS RN licensure",
+    stripeTier: TierCode.RN,
+    contentExamKeys: [],
+    seoTitle: "Saudi RN Licensure Exam Prep | NurseNest",
+    seoDescription:
+      "Independent preparation context for nurses navigating Saudi Commission for Health Specialties (SCFHS) licensing steps: clinical judgement drills and study planning—always follow official SCFHS communications for your category.",
+    status: "upcoming",
+    acquisitionMode: "waitlist",
+    internalNotes:
+      "Foundation hub: not affiliated with SCFHS. Arabic UI may be layered later; default marketing shell remains English-first.",
   },
 ];

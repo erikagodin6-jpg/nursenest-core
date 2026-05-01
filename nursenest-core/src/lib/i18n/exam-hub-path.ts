@@ -8,7 +8,10 @@ export function isExamPathwayCountrySlug(segment: string): segment is CountrySlu
     segment === "canada" ||
     segment === "uk" ||
     segment === "australia" ||
-    segment === "philippines"
+    segment === "philippines" ||
+    segment === "india" ||
+    segment === "nigeria" ||
+    segment === "saudi-arabia"
   );
 }
 
@@ -57,6 +60,7 @@ export const EXPANSION_EXAM_COUNTRY_SLUGS_WITH_LOCALIZED_SHELL: ReadonlySet<stri
   "korea",
   "mexico",
   "middle-east",
+  "nigeria",
   "portugal",
 ]);
 

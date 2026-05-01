@@ -1,7 +1,7 @@
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-pathways-catalog";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
-import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
+import { isIntlRnFoundationPathwayId, isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { filterPublicHreflangRecord } from "@/lib/seo/public-url-validator";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
@@ -16,12 +16,15 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
  * Not used on auth routes (`/login`, `/signup`) — those are separate route modules.
  */
 export function examPathwayRegionalHreflang(pathway: ExamPathwayDefinition): Record<string, string> {
-  if (pathway.countrySlug === "uk" || pathway.countrySlug === "australia" || pathway.countrySlug === "philippines") {
+  if (isIntlRnFoundationPathwayId(pathway.id)) {
     const selfUrl = absoluteUrl(buildExamPathwayPath(pathway));
     const out: Record<string, string> = { "x-default": selfUrl };
     if (pathway.countrySlug === "uk") out["en-GB"] = selfUrl;
     if (pathway.countrySlug === "australia") out["en-AU"] = selfUrl;
     if (pathway.countrySlug === "philippines") out["en-PH"] = selfUrl;
+    if (pathway.countrySlug === "india") out["en-IN"] = selfUrl;
+    if (pathway.countrySlug === "nigeria") out["en-NG"] = selfUrl;
+    if (pathway.countrySlug === "saudi-arabia") out["ar-SA"] = selfUrl;
     return filterPublicHreflangRecord(out, "seo", "exam_pathway_hreflang_rejected");
   }
 

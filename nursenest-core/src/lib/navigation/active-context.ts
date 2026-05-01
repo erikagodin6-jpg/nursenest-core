@@ -98,6 +98,8 @@ export function resolveActiveCountryCode(args: {
 }): string {
   if (args.globalRegion === "philippines") return "PH";
   if (args.globalRegion === "india") return "IN";
+  if (args.globalRegion === "nigeria") return "NG";
+  if (args.globalRegion === "saudi-arabia") return "SA";
   // Fallback: session country for signed-in users on /app; marketing cookie for site
   if (args.sessionCountry) return args.sessionCountry;
   return regionToCountryCode(args.examRegion);

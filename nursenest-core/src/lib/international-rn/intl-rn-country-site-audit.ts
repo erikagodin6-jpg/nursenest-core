@@ -34,11 +34,14 @@ function loadEnMarketing(): Record<string, string> {
 function regionSlugForRow(row: IntlRnCountrySiteMatrixRow): GlobalRegionSlug {
   if (row.countrySlug === "uk") return "uk";
   if (row.countrySlug === "australia") return "aus";
-  return "philippines";
+  if (row.countrySlug === "philippines") return "philippines";
+  if (row.countrySlug === "india") return "india";
+  if (row.countrySlug === "nigeria") return "nigeria";
+  return "saudi-arabia";
 }
 
 /**
- * Static audit for UK / Australia / Philippines RN foundation hubs (no HTTP, no browser).
+ * Static audit for international RN foundation hubs (no HTTP, no browser).
  * Used by CI script and contract tests.
  */
 export function auditInternationalRnCountrySites(): { errors: IntlRnAuditFinding[]; warnings: IntlRnAuditFinding[] } {

@@ -18,6 +18,9 @@ export function pathwayCountryLabel(pathway: ExamPathwayDefinition): string {
   if (pathway.countrySlug === "uk") return "United Kingdom";
   if (pathway.countrySlug === "australia") return "Australia";
   if (pathway.countrySlug === "philippines") return "Philippines";
+  if (pathway.countrySlug === "india") return "India";
+  if (pathway.countrySlug === "nigeria") return "Nigeria";
+  if (pathway.countrySlug === "saudi-arabia") return "Saudi Arabia";
   return pathway.countrySlug;
 }
 
@@ -86,6 +89,15 @@ export function pathwayLessonHubMetaDescription(pathway: ExamPathwayDefinition):
   if (pathway.countrySlug === "philippines") {
     return `Clinical reasoning support alongside Philippine nursing training; PNLE administration belongs to the PRC. NurseNest does not mirror proprietary PNLE items—use for transferable skills and parallel NCLEX prep when applicable.`;
   }
+  if (pathway.countrySlug === "india") {
+    return `Clinical reasoning lessons and drills that strengthen safe nursing judgement for Indian state nursing council registration preparation. Verify every eligibility and examination rule with your state council and INC notices.`;
+  }
+  if (pathway.countrySlug === "nigeria") {
+    return `Clinical reasoning lessons and practice structure for NMCN RN licensure preparation. NurseNest does not reproduce proprietary NMCN examination items—confirm bulletins and eligibility with the Nursing and Midwifery Council of Nigeria.`;
+  }
+  if (pathway.countrySlug === "saudi-arabia") {
+    return `Clinical reasoning lessons and drills oriented to SCFHS licensing preparation for internationally educated nurses. Follow official SCFHS instructions for your category; English UI is default with room for Arabic overlays later.`;
+  }
   return `Practice ${examName} reasoning with guided clinical lessons, topic drills, and pathway-matched question practice.`;
 }
 
@@ -122,7 +134,13 @@ export function pathwayLessonTopicClusterMetaDescription(
             ? "Australian"
             : pathway.countrySlug === "philippines"
               ? "Philippine"
-              : pathway.countrySlug;
+              : pathway.countrySlug === "india"
+                ? "Indian"
+                : pathway.countrySlug === "nigeria"
+                  ? "Nigerian"
+                  : pathway.countrySlug === "saudi-arabia"
+                    ? "Saudi"
+                    : pathway.countrySlug;
   const exam = pathway.displayName;
   const examName = pathwayRegionAwareExamName(pathway);
   const topic = topicLabel.trim();

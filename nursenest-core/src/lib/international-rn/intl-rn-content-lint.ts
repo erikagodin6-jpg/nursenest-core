@@ -52,6 +52,34 @@ const RULES_PH = [
   ...RULES_ALL_NON_CA,
 ] as const;
 
+/** India: avoid US/Canada exam framing and UK/AU regulator-only labels in standalone copy. */
+const RULES_IN = [
+  { ruleId: "nclex-rn", re: /\bNCLEX-RN\b/i },
+  { ruleId: "ncsbn", re: /\bNCSBN\b/i },
+  { ruleId: "state-board", re: /state board/i },
+  { ruleId: "provincial-college", re: /provincial college/i },
+  { ruleId: "nmc-cbt", re: /\bNMC CBT\b/i },
+  { ruleId: "ahpra-nmba", re: /\bAHPRA\b|\bNMBA\b/i },
+  ...RULES_ALL_NON_CA,
+] as const;
+
+const RULES_NG = [
+  { ruleId: "nclex-rn", re: /\bNCLEX-RN\b/i },
+  { ruleId: "nmc-cbt", re: /\bNMC CBT\b/i },
+  { ruleId: "ahpra-nmba", re: /\bAHPRA\b|\bNMBA\b/i },
+  { ruleId: "state-board", re: /state board/i },
+  { ruleId: "provincial-college", re: /provincial college/i },
+  ...RULES_ALL_NON_CA,
+] as const;
+
+const RULES_SA = [
+  { ruleId: "nclex-rn", re: /\bNCLEX-RN\b/i },
+  { ruleId: "nmc-cbt", re: /\bNMC CBT\b/i },
+  { ruleId: "state-board", re: /state board/i },
+  { ruleId: "provincial-college", re: /provincial college/i },
+  ...RULES_ALL_NON_CA,
+] as const;
+
 function rulesForMarket(market: IntlRnLintMarket): readonly { ruleId: string; re: RegExp }[] {
   switch (market) {
     case "gb":
@@ -60,6 +88,12 @@ function rulesForMarket(market: IntlRnLintMarket): readonly { ruleId: string; re
       return RULES_AU;
     case "ph":
       return RULES_PH;
+    case "in":
+      return RULES_IN;
+    case "ng":
+      return RULES_NG;
+    case "sa":
+      return RULES_SA;
     default:
       return RULES_ALL_NON_CA;
   }
@@ -67,7 +101,14 @@ function rulesForMarket(market: IntlRnLintMarket): readonly { ruleId: string; re
 
 function shouldSuppressForComparisonChunk(ruleId: string, chunk: string): boolean {
   if (!COMPARISON_CONTEXT_RE.test(chunk)) return false;
-  return ruleId === "nclex-rn" || ruleId === "nmc-cbt" || ruleId === "ahpra-nmba";
+  return (
+    ruleId === "nclex-rn" ||
+    ruleId === "nmc-cbt" ||
+    ruleId === "ahpra-nmba" ||
+    ruleId === "ncsbn" ||
+    ruleId === "state-board" ||
+    ruleId === "provincial-college"
+  );
 }
 
 /** Negated mentions ("not the NMC CBT", "not … AHPRA") are regulator-safe disclaimers. */

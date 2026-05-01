@@ -2650,6 +2650,9 @@ enum CountryCode {
   GB
   AU
   PH
+  IN
+  NG
+  SA
 }
 
 enum TierCode {

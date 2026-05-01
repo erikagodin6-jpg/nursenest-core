@@ -99,6 +99,9 @@ function countryLabelFor(pathway: ExamPathwayDefinition): string {
   if (pathway.countrySlug === "uk") return "the United Kingdom";
   if (pathway.countrySlug === "australia") return "Australia";
   if (pathway.countrySlug === "philippines") return "the Philippines";
+  if (pathway.countrySlug === "india") return "India";
+  if (pathway.countrySlug === "nigeria") return "Nigeria";
+  if (pathway.countrySlug === "saudi-arabia") return "Saudi Arabia";
   return pathway.countrySlug;
 }
 
