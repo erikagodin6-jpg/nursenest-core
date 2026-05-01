@@ -58,10 +58,12 @@ import { annotateBlogInternalLinkRowsWithVerification } from "@/lib/blog/blog-in
 import { normalizePlanSuggestedLessonRows } from "@/lib/blog/blog-internal-lesson-links";
 import {
   BLOG_ARTICLE_EXPANSION_REPAIR_FLOOR_WORDS,
-  BLOG_ARTICLE_MIN_WORDS,
-  BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH,
+  BLOG_ARTICLE_METADATA_ONLY_REJECT_UNDER_WORDS,
+  BLOG_ARTICLE_MIN_WORDS_PILLAR_PUBLISH,
+  BLOG_ARTICLE_MIN_WORDS_STANDARD_PUBLISH,
   countWordsFromHtml,
 } from "@/lib/blog/blog-word-count";
+import { isBlogSeoPillarDepthProfile } from "@/lib/blog/blog-seo-depth-profile";
 import {
   isLongFormPathophysiologyProfile,
   validateLongFormNursingPlanContract,
@@ -82,7 +84,7 @@ import {
   repairPlanForLongformContractIssues,
 } from "@/lib/blog/blog-generation-repair-ai";
 
-/** Soft floor on raw HTML size before word counting (word count is authoritative; see {@link BLOG_ARTICLE_MIN_WORDS}). */
+/** Soft floor on raw HTML size before word counting (word count is authoritative; see {@link BLOG_ARTICLE_MIN_WORDS_PILLAR_PUBLISH}). */
 export { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-bounds";
 
 export type BlogArticlePipelineStage = "plan" | "body" | "persist" | "citations";
@@ -131,7 +133,7 @@ export type RunBlogArticlePipelineOptions = {
   /** Pipeline observability (admin job queue + server logs). */
   onProgressStage?: (stage: string) => void | Promise<void>;
   /**
-   * Optional floor for substantive body words (HTML stripped). When set, must be ≥ {@link BLOG_ARTICLE_MIN_WORDS}.
+   * Optional floor for substantive body words (HTML stripped). When set, must exceed {@link BLOG_ARTICLE_METADATA_ONLY_REJECT_UNDER_WORDS}.
    * The pipeline uses max(base draft/publish minimum, this value) for repair targets and body validation.
    */
   substantiveWordMinOverride?: number;
@@ -167,10 +169,11 @@ export async function runBlogArticleGenerationPipeline(
   const persist = options.persist !== false;
   const idem = options.idempotencyKey;
   let repairPassesUsed = 0;
-  const baseWordMin = input.publishImmediately ? BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH : BLOG_ARTICLE_MIN_WORDS;
+  const pillar = isBlogSeoPillarDepthProfile({ template: input.template, intent: input.intent });
+  const baseWordMin = pillar ? BLOG_ARTICLE_MIN_WORDS_PILLAR_PUBLISH : BLOG_ARTICLE_MIN_WORDS_STANDARD_PUBLISH;
   const override = options.substantiveWordMinOverride;
   const substantiveWordMin =
-    typeof override === "number" && Number.isFinite(override) && override >= BLOG_ARTICLE_MIN_WORDS
+    typeof override === "number" && Number.isFinite(override) && override > BLOG_ARTICLE_METADATA_ONLY_REJECT_UNDER_WORDS
       ? Math.max(baseWordMin, Math.floor(override))
       : baseWordMin;
 
@@ -333,8 +336,8 @@ export async function runBlogArticleGenerationPipeline(
         bodyWordCount >= BLOG_ARTICLE_EXPANSION_REPAIR_FLOOR_WORDS && bodyWordCount < substantiveWordMin;
       validationMessages.push(
         inExpansionBand
-          ? `Article body is below publish depth (${bodyWordCount} words; target ${substantiveWordMin} substantive words; hard minimum ${BLOG_ARTICLE_MIN_WORDS}). Running expansion repair.`
-          : `Article body is too short (${bodyWordCount} words; minimum ${BLOG_ARTICLE_MIN_WORDS}). Target at least ${BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH} substantive words before publish.`,
+          ? `Article body is below publish depth (${bodyWordCount} words; target ${substantiveWordMin} substantive words; hard minimum ${baseWordMin}). Running expansion repair.`
+          : `Article body is too short (${bodyWordCount} words; minimum ${baseWordMin}). Target at least ${substantiveWordMin} substantive words before publish.`,
       );
     }
 

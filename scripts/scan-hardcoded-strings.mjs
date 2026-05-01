@@ -1,5 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import { getRepoRoot } from "./lib/resolve-root-paths.mjs";
+
+const repoRoot = getRepoRoot();
 
 const SAFE_PATTERNS = [
   /^[\s]*$/,
@@ -146,7 +149,7 @@ const args = process.argv.slice(2);
 const enforce = args.includes('--enforce');
 const warnOnly = args.includes('--warn');
 
-const clientDir = path.resolve('client/src');
+const clientDir = path.join(repoRoot, "client/src");
 if (!fs.existsSync(clientDir)) {
   console.error('ERROR: client/src directory not found');
   process.exit(1);
@@ -183,7 +186,7 @@ if (allViolations.length === 0) {
   }
 }
 
-const reportPath = path.resolve('scripts/hardcoded-strings-report.json');
+const reportPath = path.join(repoRoot, "scripts/hardcoded-strings-report.json");
 fs.writeFileSync(reportPath, JSON.stringify(allViolations, null, 2));
 console.log(`\nReport saved to: ${reportPath}`);
 

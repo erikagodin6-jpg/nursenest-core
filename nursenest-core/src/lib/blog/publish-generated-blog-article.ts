@@ -21,6 +21,8 @@ import {
 
 export type PublishGeneratedBlogArticleOptions = {
   minWords?: number;
+  /** When omitted, defaults to `pillar` (1200-word floor unless `minWords` overrides higher). */
+  contentDepth?: "standard" | "pillar";
   requireApaReferences?: boolean;
   minReferences?: number;
   requireInternalLinks?: boolean;
@@ -48,6 +50,14 @@ export type GeneratedBlogPublishEligibility = {
 
 const DEFAULT_MIN_REFERENCES = 4;
 const MIN_APA_INTEXT_CITATIONS = 3;
+
+function resolveGeneratedPublishMinWords(options: PublishGeneratedBlogArticleOptions): number {
+  const explicit = Math.floor(options.minWords ?? 0);
+  const depth = options.contentDepth ?? "pillar";
+  const depthMin = depth === "standard" ? BLOG_ARTICLE_MIN_WORDS_STANDARD_PUBLISH : BLOG_ARTICLE_MIN_WORDS_PILLAR_PUBLISH;
+  if (explicit > 0) return Math.max(explicit, depthMin);
+  return depthMin;
+}
 
 function activeInternalLinks(raw: Prisma.JsonValue): ReturnType<typeof parseInternalLinkPlanJson>["lessons"] {
   const parsed = parseInternalLinkPlanJson(raw);
@@ -78,13 +88,17 @@ export async function validateGeneratedBlogPublishEligibility(
   options: PublishGeneratedBlogArticleOptions = {},
 ): Promise<GeneratedBlogPublishEligibility> {
   const prismaClient = options.prisma ?? (await import("@/lib/db")).prisma;
-  const minWords = Math.max(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH, Math.floor(options.minWords ?? 0));
+  const minWords = resolveGeneratedPublishMinWords(options);
   const minReferences = Math.max(0, Math.floor(options.minReferences ?? DEFAULT_MIN_REFERENCES));
   const pre = await validateBlogPrePublish(row, postId, { prisma: prismaClient });
   const reasons = pre.blocking.map((issue) => issue.message);
 
   const wordCount = countWordsFromHtml(row.body);
-  if (wordCount < minWords) {
+  if (wordCount < BLOG_ARTICLE_METADATA_ONLY_REJECT_UNDER_WORDS) {
+    reasons.push(
+      `Article body is too short for publication (${wordCount} words; rejects below ${BLOG_ARTICLE_METADATA_ONLY_REJECT_UNDER_WORDS}).`,
+    );
+  } else if (wordCount < minWords) {
     reasons.push(`Article body is too short (${wordCount} words; minimum ${minWords}).`);
   }
 
@@ -181,6 +195,7 @@ export async function publishGeneratedBlogArticle(
   }
 
   const { publishBlogPostCanonical } = await import("@/lib/blog/publish-blog-post-canonical");
+  const { logBlogGenerationCreated } = await import("@/lib/blog/blog-generation-log");
   const published = await publishBlogPostCanonical({
     postId: article.id,
     publishAt: options.publishAt ?? new Date(),
@@ -190,5 +205,7 @@ export async function publishGeneratedBlogArticle(
     skipRevalidate: options.skipRevalidate,
     setLegacySourceIfEmpty: "control_panel_ai",
   });
+  const publishedAt = options.publishAt ?? new Date();
+  logBlogGenerationCreated(published.slug, published.id, publishedAt);
   return { ...published, eligibility };
 }

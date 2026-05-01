@@ -125,6 +125,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
         requestedPathwayId,
         compatible: compatible.map((p) => ({ id: p.id, shortName: p.shortName })),
         learnerPath: lp,
+        requireExplicitRequestedPathwayId: true,
       });
 
       pathwayOptions = compatible.map((p) => ({
@@ -154,6 +155,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
           requestedPathwayId,
           compatible: snap.payload.compatibleRows,
           learnerPath: null,
+          requireExplicitRequestedPathwayId: true,
         });
       } else {
         return (

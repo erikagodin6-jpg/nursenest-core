@@ -53,6 +53,9 @@ import {
 import type { BlogImageSlotAttachment } from "@/lib/blog/blog-image-workflow";
 import { seedBlogAdminPublishLog } from "@/lib/blog/blog-admin-publish-log";
 import { publishGeneratedBlogArticle } from "@/lib/blog/publish-generated-blog-article";
+import { isBlogSeoPillarDepthProfile } from "@/lib/blog/blog-seo-depth-profile";
+import { evaluateBlogGenerationOutputGate } from "@/lib/blog/blog-generation-output-gate";
+import { logBlogGenerationRejected } from "@/lib/blog/blog-generation-log";
 import {
   blogPrePublishValidationSelect,
   validateBlogPrePublish,
@@ -756,13 +759,39 @@ export async function persistControlPanelDraft(
       const publishedNow = new Date();
       try {
         await persistHooks?.onPersistStage?.("prepublish_checks");
+        const outputGate = evaluateBlogGenerationOutputGate({
+          title: pageTitle,
+          slug: post.slug,
+          seoTitle: seoTitleStored,
+          seoDescription: seoDescriptionStored,
+          bodyHtml: bodyWithRequiredLinks,
+          template: input.template,
+          intent: input.intent,
+          mode: "publish_or_schedule",
+        });
+        if (!outputGate.ok) {
+          const reason = outputGate.reasons.join("; ");
+          logBlogGenerationRejected(post.slug, reason);
+          return {
+            ok: false,
+            code: "QUALITY_GATE",
+            error: `Generated output failed publication safety checks: ${reason}`.slice(0, 2000),
+            post,
+            plan,
+            warnings: [...warnings, ...outputGate.reasons.map((r) => `output_gate:${r}`)],
+          };
+        }
         await persistHooks?.onPersistStage?.("publishing");
+        const contentDepth = isBlogSeoPillarDepthProfile({ template: input.template, intent: input.intent })
+          ? "pillar"
+          : "standard";
         await publishGeneratedBlogArticle({
           id: post.id,
         }, {
           publishAt: publishedNow,
           context: "control_panel_immediate",
           minWords: input.minPublishWords,
+          contentDepth,
           minReferences: input.minPublishReferences,
           requireApaReferences: true,
           requireInternalLinks: true,
@@ -773,6 +802,7 @@ export async function persistControlPanelDraft(
         });
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
+        logBlogGenerationRejected(post.slug, msg);
         if (msg.includes("publishBlogPostCanonical: pre-publish") || msg.includes("publishGeneratedBlogArticle: publish blocked")) {
           const forPre = await prisma.blogPost.findUnique({
             where: { id: post.id },

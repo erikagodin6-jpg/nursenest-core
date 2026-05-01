@@ -26,8 +26,10 @@ export function resolveSubscribedQuestionBankPathways(args: {
   requestedPathwayId: string | null;
   compatible: CompatiblePathwayRow[];
   learnerPath: string | null;
+  /** Study hubs can require an explicit `?pathwayId=` instead of silently inferring one. */
+  requireExplicitRequestedPathwayId?: boolean;
 }): ResolvedQuestionBankPathways {
-  const { requestedPathwayId, compatible, learnerPath } = args;
+  const { requestedPathwayId, compatible, learnerPath, requireExplicitRequestedPathwayId = false } = args;
   const byId = new Map(compatible.map((p) => [p.id, p]));
 
   if (requestedPathwayId?.trim()) {
@@ -35,6 +37,10 @@ export function resolveSubscribedQuestionBankPathways(args: {
     const hit = byId.get(req);
     if (!hit) return { state: "invalid_requested", requestedPathwayId: req };
     return { state: "scoped", defaultPathwayId: hit.id, pathwayOptions: [hit] };
+  }
+
+  if (requireExplicitRequestedPathwayId) {
+    return { state: "no_pathway_context" };
   }
 
   const lp = learnerPath?.trim() || null;

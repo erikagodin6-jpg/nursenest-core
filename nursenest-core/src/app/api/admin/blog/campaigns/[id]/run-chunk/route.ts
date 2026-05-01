@@ -29,6 +29,8 @@ import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/
 import { blogPrimaryStudyCta } from "@/lib/blog/blog-study-cta";
 import { buildOutline, detectRiskFlags, slugify, thinDraftWarning } from "@/lib/blog/seo-campaign-engine";
 import { prisma } from "@/lib/db";
+import { evaluateBlogGenerationOutputGate } from "@/lib/blog/blog-generation-output-gate";
+import { logBlogGenerationRejected } from "@/lib/blog/blog-generation-log";
 
 const schema = z.object({
   limit: z.number().int().min(1).max(10).default(3),
@@ -129,6 +131,31 @@ export async function POST(req: Request, { params }: Props) {
       });
       const seoTitleDb = clampSerpTitle(auto.seoTitle, 70);
       const seoDescDb = clampSerpDescription(auto.metaDescription, 120, 155);
+      if (d.mode === "generate") {
+        const gate = evaluateBlogGenerationOutputGate({
+          title,
+          slug,
+          seoTitle: seoTitleDb,
+          seoDescription: seoDescDb,
+          bodyHtml: body,
+          template,
+          intent,
+          mode: "publish_or_schedule",
+        });
+        if (!gate.ok) {
+          const reason = gate.reasons.join("; ");
+          logBlogGenerationRejected(slug, `campaign_chunk:${reason}`);
+          await prisma.blogCampaignItem.update({
+            where: { id: item.id },
+            data: {
+              status: BlogCampaignItemStatus.FAILED,
+              error: `generation_output_gate:${reason}`.slice(0, 1200),
+            },
+          });
+          out.push({ itemId: item.id, status: "failed", error: "generation_output_gate" });
+          continue;
+        }
+      }
       const primaryKw = (pk || title).trim().slice(0, 160);
       const seoBundle = mergeOpenGraphImageIntoSeoBundle(
         buildSeoBundleForSimpleAiDraft({

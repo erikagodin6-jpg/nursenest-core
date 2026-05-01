@@ -83,6 +83,27 @@ describe("resolveSubscribedQuestionBankPathways", () => {
     });
     assert.equal(r.state, "no_pathway_context");
   });
+
+  it("returns no_pathway_context when explicit pathway selection is required and URL is missing", () => {
+    const r = resolveSubscribedQuestionBankPathways({
+      requestedPathwayId: null,
+      compatible: [{ id: ALLIED, shortName: "Allied" }],
+      learnerPath: ALLIED,
+      requireExplicitRequestedPathwayId: true,
+    });
+    assert.equal(r.state, "no_pathway_context");
+  });
+
+  it("still scopes requested pathway when explicit selection is required", () => {
+    const r = resolveSubscribedQuestionBankPathways({
+      requestedPathwayId: RN,
+      compatible: multi,
+      learnerPath: PN,
+      requireExplicitRequestedPathwayId: true,
+    });
+    assert.equal(r.state, "scoped");
+    if (r.state === "scoped") assert.equal(r.defaultPathwayId, RN);
+  });
 });
 
 describe("hrefForResolvedQuestionBankEntry", () => {

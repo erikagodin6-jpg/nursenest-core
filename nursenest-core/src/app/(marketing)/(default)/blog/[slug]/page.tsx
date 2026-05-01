@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BlogStudyAnchorStrip } from "@/components/blog/blog-study-anchor-strip";
 import { BlogPostDistributionFooter } from "@/components/blog/blog-post-distribution-footer";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { applyAutoLinksToHtml } from "@/lib/blog/blog-auto-link-html";
@@ -9,9 +8,11 @@ import {
   parseInternalLinkPlanJson,
   stripBrokenOrEmptyImagesFromHtml,
 } from "@/lib/blog/blog-image-workflow";
-import { stripDuplicateStructuredModulesFromPublicBlogBodyHtml } from "@/lib/blog/blog-public-body-strip";
-import { isBlogPostMarketingMetaVisible } from "@/lib/blog/blog-visibility";
-import { getBlogPostMetaBySlug, getPublishedBlogPostBySlug } from "@/lib/blog/safe-blog-queries";
+import {
+  getBlogPostMetaBySlug,
+  getPublishedBlogPostBySlug,
+  isBlogPostMetaVisible,
+} from "@/lib/blog/safe-blog-queries";
 import { EeatContentAttribution } from "@/components/seo/eeat-content-attribution";
 import {
   BlogFaqPageJsonLd,
@@ -19,114 +20,54 @@ import {
 } from "@/components/seo/seo-json-ld";
 import { MarketingStudyCrossLinks } from "@/components/seo/marketing-study-cross-links";
 import {
+  blogDisplayCrumbsFromSeo,
+  blogPostSchemaItemsForPublic,
   blogSchemaKeywords,
-  resolveBlogOgImageAbsolute,
   resolveOpenGraphCopy,
   resolvePublicCanonicalUrl,
 } from "@/lib/blog/blog-seo-automation";
 import { withCrawlSurfacePageRender } from "@/lib/observability/crawl-surface-observability";
-import {
-  blogBrowserTitleForPublicPost,
-  blogExamFramingHtml,
-  blogExamGeoParts,
-  blogH1ForPublicPost,
-  blogKeywordStemFromTitles,
-  blogStudyAnchorTargets,
-  mergeBlogFaqItemsForPublicPage,
-} from "@/lib/blog/blog-public-seo-helpers";
-import {
-  autoBreadcrumbsToCrumbs,
-  autoBreadcrumbsToSchemaItems,
-  generateBlogSEOFromPostRow,
-  mergeFaqForSchema,
-  normalizeExamForBlogSeo,
-  studyLinkAnchorsForExam,
-} from "@/lib/blog/blog-generate-seo";
-import { blogCountryFromPrismaTarget } from "@/lib/blog/blog-study-cta";
+import { logBlogSlugPipeline } from "@/lib/observability/content-source-trace";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { mergePublicBlogMetaDescription } from "@/lib/seo/programmatic-seo-engine/blog-public-metadata";
-import { buildProgrammaticBlogContinuationLinks } from "@/lib/seo/programmatic-seo-engine/server-blog-continuation";
-import { ProgrammaticSeoContinuationSection } from "@/components/seo/programmatic-seo-continuation-section";
-import { AutomaticRelatedContentForPublic } from "@/components/linking/automatic-related-content-for-public";
-import { prisma } from "@/lib/db";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { StaffEditLivePageBanner } from "@/components/staff/staff-edit-live-page-banner";
+import { BlogRelatedReadingSection } from "@/components/blog/blog-related-reading-section";
+import { parsePublishingPackage } from "@/lib/blog/blog-publishing-package";
+import { filterRelatedBlogReadingForParentExam } from "@/lib/blog/blog-related-reading-public";
+import { filterMarketingLessonPathsForBlogExam } from "@/lib/blog/blog-marketing-lesson-path-tier";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export const dynamicParams = true;
 
-/** ISR backup; align with `/blog` so pathophysiology hub + lists refresh together after publish. */
-export const revalidate = 180;
-
-function normalizeBlogSlugParam(slug: unknown): string | null {
-  if (typeof slug !== "string") return null;
-  const trimmed = slug.trim();
-  if (!trimmed) return null;
-  try {
-    return decodeURIComponent(trimmed).trim() || null;
-  } catch {
-    return trimmed;
-  }
-}
+/** ISR: slug pages are public; cache publicly for one hour and revalidate in the background. */
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const slug = normalizeBlogSlugParam((await params).slug);
-  if (!slug) return {};
+  const { slug } = await params;
   const pathname = `/blog/${slug}`;
   return safeGenerateMetadata(
     async () => {
+      const visible = await isBlogPostMetaVisible(slug);
+      if (!visible) return {};
       const post = await getBlogPostMetaBySlug(slug);
       if (!post) return {};
-      if (
-        !isBlogPostMarketingMetaVisible({
-          postStatus: post.postStatus,
-          publishAt: post.publishAt,
-          scheduledAt: post.scheduledAt,
-          workflowStatus: post.workflowStatus,
-        })
-      ) {
-        return {};
-      }
       const seo = parseInternalLinkPlanJson(post.internalLinkPlan).seo;
-      const title = blogBrowserTitleForPublicPost({
-        seoTitle: post.seoTitle,
-        title: post.title,
-        exam: post.exam,
-        countryTarget: post.countryTarget,
-        slug,
-        category: post.category,
-        tags: post.tags,
-      });
-      const autoMeta = generateBlogSEOFromPostRow({
-        title: post.title,
-        slug,
-        category: post.category ?? null,
-        tags: post.tags,
-        exam: post.exam ?? null,
-        countryTarget: post.countryTarget ?? null,
-      });
-      const description = mergePublicBlogMetaDescription(post.seoDescription, autoMeta.metaDescription).description;
+      const title = post.seoTitle?.trim() || post.title;
+      const description = (post.seoDescription?.trim() || post.excerpt).slice(
+        0,
+        160,
+      );
       const og = resolveOpenGraphCopy(seo, title, description);
       const canonical = resolvePublicCanonicalUrl(slug, seo);
-      const ogImage = resolveBlogOgImageAbsolute(seo, post.coverImage);
       return {
         title,
         description,
-        robots: { index: true, follow: true },
         alternates: { canonical },
         openGraph: {
           title: og.title,
           description: og.description,
           url: canonical,
           type: "article",
-          ...(ogImage ? { images: [{ url: ogImage }] } : {}),
-        },
-        twitter: {
-          card: "summary_large_image",
-          title: og.title,
-          description: og.description,
-          ...(ogImage ? { images: [ogImage] } : {}),
         },
       };
     },
@@ -135,59 +76,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const slug = normalizeBlogSlugParam((await params).slug);
-  if (!slug) {
-    console.error("[blog-post] missing or invalid slug param", { slug });
-    notFound();
-  }
+  const { slug } = await params;
   const pathname = `/blog/${slug}`;
   return withCrawlSurfacePageRender(
     "marketing.blog_post",
     pathname,
     async () => {
       const post = await getPublishedBlogPostBySlug(slug);
+      logBlogSlugPipeline({ slug, resolved: Boolean(post) });
       if (!post) notFound();
 
       const seo = parseInternalLinkPlanJson(post.internalLinkPlan).seo;
-      const geo = blogExamGeoParts(post.exam, blogCountryFromPrismaTarget(post.countryTarget));
-      const keywordStem = blogKeywordStemFromTitles(post.seoTitle, post.title);
-      const auto = generateBlogSEOFromPostRow({
-        title: post.title,
+      const crumbs = blogDisplayCrumbsFromSeo(
+        seo,
+        post.title,
         slug,
-        category: post.category ?? null,
-        tags: post.tags,
-        exam: post.exam ?? null,
-        countryTarget: post.countryTarget ?? null,
-      });
-      const mergedPublicDescription = mergePublicBlogMetaDescription(post.seoDescription, auto.metaDescription);
-      const h1Text = blogH1ForPublicPost({
-        seoTitle: post.seoTitle,
-        title: post.title,
+        post.category,
+      );
+      const schemaItems = blogPostSchemaItemsForPublic(
+        post.title,
         slug,
-        category: post.category ?? null,
-        tags: post.tags,
-        exam: post.exam ?? null,
-        countryTarget: post.countryTarget ?? null,
-      });
-      const browserTitle = blogBrowserTitleForPublicPost({
-        seoTitle: post.seoTitle,
-        title: post.title,
-        exam: post.exam,
-        countryTarget: post.countryTarget,
-        slug,
-        category: post.category ?? null,
-        tags: post.tags,
-      });
-      const leadSentence = auto.intro;
-      const crumbs = autoBreadcrumbsToCrumbs(auto.breadcrumbs);
-      const schemaItems = autoBreadcrumbsToSchemaItems(auto.breadcrumbs);
-      const studyAnchors = blogStudyAnchorTargets({
-        exam: post.exam,
-        countryTarget: post.countryTarget,
-      });
-      const studyAnchorsText = studyLinkAnchorsForExam(normalizeExamForBlogSeo(post.exam));
+        post.category,
+      );
 
-      const faqItemsRaw =
+      const faqItems =
         post.faqBlock &&
         typeof post.faqBlock === "object" &&
         "items" in post.faqBlock
@@ -196,60 +108,29 @@ export default async function BlogPostPage({ params }: Props) {
               []
             ).filter((x) => x.q?.trim() && x.a?.trim())
           : [];
-      const mergedFaqForSchema = mergeFaqForSchema(
-        mergeBlogFaqItemsForPublicPage(
-          faqItemsRaw.map((x) => ({ q: x.q.trim(), a: x.a.trim() })),
-          {
-            keywordStem,
-            examPlain: geo.examPlain,
-            countryWord: geo.countryWord,
-          },
-        ).map((x) => ({ q: x.q, a: x.a })),
-        auto.faq,
-      );
-      const mergedFaqItems = mergedFaqForSchema.map((x) => ({ q: x.question, a: x.answer }));
       const emitFaqJsonLd =
-        mergedFaqItems.length >= 3 &&
+        faqItems.length >= 2 &&
         (seo === null ? true : seo.emitFaqSchema !== false);
 
       const publishedAt = post.publishAt ?? post.createdAt;
-      const bodyHtmlLinked = stripBrokenOrEmptyImagesFromHtml(
+      const relatedLessonPathsFiltered = filterMarketingLessonPathsForBlogExam(post.exam, post.relatedLessonPaths ?? []);
+      const linkPlanRaw =
+        post.internalLinkPlan && typeof post.internalLinkPlan === "object"
+          ? (post.internalLinkPlan as Record<string, unknown>)
+          : null;
+      const publishingPkg = linkPlanRaw ? parsePublishingPackage(linkPlanRaw.publishingPackage) : null;
+      const relatedReading = filterRelatedBlogReadingForParentExam(post.exam, publishingPkg?.relatedBlogPosts ?? []);
+
+      const bodyHtml = stripBrokenOrEmptyImagesFromHtml(
         applyAutoLinksToHtml(post.body, {
           exam: post.exam,
           countryTarget: post.countryTarget,
-          relatedLessonPaths: post.relatedLessonPaths,
+          relatedLessonPaths: relatedLessonPathsFiltered,
           relatedTools: post.relatedTools,
-          maxTotalAutoLinks: 14,
+          maxTotalAutoLinks: 6,
         }),
       );
-      const hasStructuredFaq = emitFaqJsonLd;
-      const hasStructuredReferences =
-        "apaReferences" in post && Array.isArray(post.apaReferences) && post.apaReferences.length > 0;
-      const bodyHtml = stripDuplicateStructuredModulesFromPublicBlogBodyHtml(bodyHtmlLinked, {
-        hasStructuredFaq,
-        hasStructuredReferences,
-      });
-      let continuationLinks: Awaited<ReturnType<typeof buildProgrammaticBlogContinuationLinks>> = [];
-      try {
-        continuationLinks = await buildProgrammaticBlogContinuationLinks(prisma, {
-          slug,
-          category: post.category,
-          tags: post.tags,
-          exam: post.exam,
-          countryTarget: post.countryTarget,
-        });
-      } catch (e) {
-        safeServerLog("blog", "blog_continuation_links_failed", {
-          slug,
-          detail: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
-        });
-      }
-      const framingHtml = blogExamFramingHtml({
-        keywordStem,
-        examGeo: geo.examGeo,
-        examPlain: geo.examPlain,
-        bodyHtml: post.body,
-      });
+
       const schemaKeywords = blogSchemaKeywords(seo, post.tags);
       const staffBlogAdminHref =
         typeof post.id === "string" && !post.id.startsWith("static:")
@@ -260,8 +141,11 @@ export default async function BlogPostPage({ params }: Props) {
         <article className="mx-auto max-w-3xl px-4 py-12">
           <BlogPostingJsonLd
             slug={slug}
-            title={browserTitle}
-            description={mergedPublicDescription.description.slice(0, 320)}
+            title={post.seoTitle?.trim() || post.title}
+            description={(post.seoDescription?.trim() || post.excerpt).slice(
+              0,
+              320,
+            )}
             datePublished={publishedAt.toISOString()}
             dateModified={post.updatedAt.toISOString()}
             coverImage={post.coverImage ?? null}
@@ -284,7 +168,7 @@ export default async function BlogPostPage({ params }: Props) {
           />
           {emitFaqJsonLd ? (
             <BlogFaqPageJsonLd
-              items={mergedFaqItems.map((f) => ({ question: f.q, answer: f.a }))}
+              items={faqItems.map((f) => ({ question: f.q, answer: f.a }))}
             />
           ) : null}
           <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
@@ -294,14 +178,6 @@ export default async function BlogPostPage({ params }: Props) {
           >
             ← Blog
           </Link>
-          <BlogStudyAnchorStrip
-            {...studyAnchors}
-            practiceAnchorText={studyAnchorsText.practice}
-            adaptiveAnchorText={studyAnchorsText.adaptive}
-            flashcardsAnchorText={studyAnchorsText.flashcards}
-            className="mt-6"
-            labelledById="blog-study-links-top"
-          />
           <header className="mt-6 space-y-2">
             {post.category ? (
               <p className="text-xs font-medium uppercase tracking-wide text-[var(--theme-muted-text)]">
@@ -314,9 +190,8 @@ export default async function BlogPostPage({ params }: Props) {
               </p>
             ) : null}
             <h1 className="text-3xl font-semibold tracking-tight text-[var(--theme-heading-text)]">
-              {h1Text}
+              {post.title}
             </h1>
-            <p className="text-base leading-relaxed text-[var(--theme-muted-text)]">{leadSentence}</p>
             <p className="text-sm text-[var(--theme-muted-text)]">
               {publishedAt.toISOString().slice(0, 10)}
             </p>
@@ -368,56 +243,15 @@ export default async function BlogPostPage({ params }: Props) {
               }
             />
           </div>
-          {framingHtml ? (
-            <div
-              className="mt-8 max-w-none"
-              dangerouslySetInnerHTML={{ __html: framingHtml }}
-            />
-          ) : null}
           <div
             className="prose prose-neutral mt-8 max-w-none dark:prose-invert [&_a]:text-primary [&_h2]:text-[var(--theme-heading-text)] [&_h3]:text-[var(--theme-heading-text)]"
             dangerouslySetInnerHTML={{ __html: bodyHtml }}
           />
-          {emitFaqJsonLd ? (
-            <section
-              className="mt-10 rounded-xl border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)] p-6 not-prose"
-              aria-labelledby="blog-faq-heading"
-            >
-              <h2
-                id="blog-faq-heading"
-                className="text-lg font-semibold text-[var(--theme-heading-text)]"
-              >
-                Frequently asked questions
-              </h2>
-              <dl className="mt-4 space-y-5">
-                {mergedFaqItems.map((f) => (
-                  <div key={f.q.slice(0, 120)}>
-                    <dt className="font-medium text-[var(--theme-heading-text)]">{f.q}</dt>
-                    <dd className="mt-1 text-sm leading-relaxed text-[var(--theme-muted-text)]">{f.a}</dd>
-                  </div>
-                ))}
-              </dl>
-            </section>
-          ) : null}
-          <AutomaticRelatedContentForPublic
-            surface="blog"
-            post={{
-              slug: post.slug,
-              title: post.title,
-              tags: post.tags,
-              category: post.category,
-              exam: post.exam,
-              countryTarget: post.countryTarget,
-              locale: post.locale,
-              relatedLessonPaths: post.relatedLessonPaths,
-            }}
-            excludeHrefs={continuationLinks.map((l) => l.href)}
-          />
-          <ProgrammaticSeoContinuationSection links={continuationLinks} />
+          <BlogRelatedReadingSection items={relatedReading} />
           <BlogPostDistributionFooter
             exam={post.exam}
             countryTarget={post.countryTarget}
-            relatedLessonPaths={post.relatedLessonPaths}
+            relatedLessonPaths={relatedLessonPathsFiltered}
             relatedQuestionIds={post.relatedQuestionIds}
             relatedTools={post.relatedTools}
           />
@@ -452,14 +286,6 @@ export default async function BlogPostPage({ params }: Props) {
               ))}
             </footer>
           ) : null}
-          <BlogStudyAnchorStrip
-            {...studyAnchors}
-            practiceAnchorText={studyAnchorsText.practice}
-            adaptiveAnchorText={studyAnchorsText.adaptive}
-            flashcardsAnchorText={studyAnchorsText.flashcards}
-            className="mt-10"
-            labelledById="blog-study-links-bottom"
-          />
           <MarketingStudyCrossLinks className="mt-12" />
           <StaffEditLivePageBanner adminHref={staffBlogAdminHref} label="Edit this blog post" />
         </article>

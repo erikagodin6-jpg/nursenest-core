@@ -1,5 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import { getRepoRoot } from "./lib/resolve-root-paths.mjs";
+
+const repoRoot = getRepoRoot();
 
 const LANGUAGES = [
   'en', 'fr', 'tl', 'hi', 'es', 'zh', 'zh-tw', 'ar', 'ko',
@@ -155,7 +158,7 @@ const reportOnly = args.includes('--report');
 const enforce = args.includes('--enforce');
 const failOnThreshold = args.includes('--fail-on-threshold');
 
-const libDir = path.resolve('tools/i18n/source');
+const libDir = path.join(repoRoot, "tools/i18n/source");
 
 const enFile = path.join(libDir, 'i18n-en.ts');
 if (!fs.existsSync(enFile)) {
@@ -261,10 +264,10 @@ for (const lang of NON_EN) {
 }
 
 console.log(`\n=== Content Translation Audit ===`);
-const contentDir = path.resolve('client/src/data/translations');
+const contentDir = path.join(repoRoot, "client/src/data/translations");
 let enContentCount = 0;
 try {
-  const enContent = JSON.parse(fs.readFileSync(path.resolve('scripts/english-content.json'), 'utf8'));
+  const enContent = JSON.parse(fs.readFileSync(path.join(repoRoot, "scripts/english-content.json"), "utf8"));
   enContentCount = Object.keys(enContent).length;
   console.log(`English content: ${enContentCount} lessons\n`);
 } catch {
@@ -290,7 +293,7 @@ if (enContentCount > 0) {
   }
 }
 
-const reportPath = path.resolve('scripts/translation-report.json');
+const reportPath = path.join(repoRoot, "scripts/translation-report.json");
 fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
 console.log(`\nDetailed report saved to: ${reportPath}`);
 
