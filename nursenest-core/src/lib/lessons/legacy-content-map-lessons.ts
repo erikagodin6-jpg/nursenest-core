@@ -4,20 +4,9 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 import type { TierCode } from "@prisma/client";
+import type { LessonContent } from "@legacy-client/data/lessons/types";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-
-type LessonContent = {
-  title: unknown;
-  cellular: { content?: string } | string;
-  medications?: unknown[];
-  quiz?: Array<unknown | undefined>;
-  preTest?: Array<unknown | undefined>;
-  postTest?: Array<unknown | undefined>;
-  image?: string;
-  tier?: string;
-  [key: string]: unknown;
-};
 
 type LegacyLessonsModule = {
   contentMap: Record<string, LessonContent>;
