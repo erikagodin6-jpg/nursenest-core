@@ -1,6 +1,6 @@
 import path from "path";
 import { createRequire } from "node:module";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { rm, readFile, readdir, readFile as readFileAsync, writeFile, copyFile, unlink, mkdir } from "fs/promises";
 import { existsSync } from "fs";
 import { gzipSync } from "zlib";
@@ -12,6 +12,9 @@ type ViteBuildFn = (typeof import("vite"))["build"];
 
 let runEsbuild: EsbuildBuildFn;
 let runViteBuild: ViteBuildFn;
+
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const APP_ROOT = path.join(REPO_ROOT, "nursenest-core");
 
 const allowlist = [
   "date-fns",
@@ -30,8 +33,8 @@ const ASSET_LOADER: Record<string, "empty"> = {
 };
 
 const CLIENT_ALIAS = {
-  "@": path.resolve("client/src"),
-  "@shared": path.resolve("shared"),
+  "@": path.join(REPO_ROOT, "client/src"),
+  "@shared": path.join(REPO_ROOT, "shared"),
 };
 
 function buildLessonsData() {
@@ -105,7 +108,7 @@ const TRANSITIVE_EXTERNALS = [
 ];
 
 async function getExternals() {
-  const pkg = JSON.parse(await readFile("package.json", "utf-8"));
+  const pkg = JSON.parse(await readFile(path.join(APP_ROOT, "package.json"), "utf-8"));
   const allDeps = [
     ...Object.keys(pkg.dependencies || {}),
     ...Object.keys(pkg.devDependencies || {}),
@@ -396,7 +399,7 @@ async function writeBuildManifest(
   log: (msg: string) => void,
   opts: { gitSha: string; buildTarget: string; runHeavyBuildTasks: boolean },
 ): Promise<void> {
-  const pkg = JSON.parse(await readFile("package.json", "utf-8"));
+  const pkg = JSON.parse(await readFile(path.join(APP_ROOT, "package.json"), "utf-8"));
   const meta = {
     schemaVersion: 1,
     builtAt: new Date().toISOString(),
@@ -672,7 +675,8 @@ async function buildAll() {
 }
 
 async function main() {
-  const workspaceRequire = createRequire(path.resolve(process.cwd(), "package.json"));
+  process.chdir(REPO_ROOT);
+  const workspaceRequire = createRequire(path.join(APP_ROOT, "package.json"));
   runEsbuild = (workspaceRequire("esbuild") as typeof import("esbuild")).build;
   runViteBuild = (
     (await import(pathToFileURL(workspaceRequire.resolve("vite")).href)) as typeof import("vite")
