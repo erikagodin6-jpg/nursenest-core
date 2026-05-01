@@ -23,8 +23,7 @@ import {
   type HiddenBlogImportPlanFlags,
 } from "../../src/lib/blog/hidden-blog-content-import-plan";
 import { LONG_FORM_BLOG_POSTS } from "../../src/lib/seo/long-form-seo-blog-posts";
-import { LF2_POSTS } from "../../src/lib/seo/long-form-seo-blog-posts-chunk2";
-import { normalizeBlogPostStatusWriteFields } from "../../src/lib/blog/blog-post-published-state";
+import { publishBlogPostCanonical } from "../../src/lib/blog/publish-blog-post-canonical";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const appRoot = path.resolve(__dirname, "..", "..");
@@ -204,29 +203,6 @@ async function resolveCandidateBody(row: InventoryRow): Promise<ResolvedCandidat
     };
   }
 
-  if (st === "long_form_post_ts_chunk2") {
-    const post = LF2_POSTS.find((p) => p.slug === slug);
-    if (!post) return null;
-    const bodyMarkdown = post.sections.map((s) => `${s.heading}\n${s.body}`).join("\n\n");
-    const bodyHtml = longFormSectionsToHtml(post.sections);
-    const wc = countWordsFromMarkdown(bodyMarkdown);
-    return {
-      row,
-      bodyHtml,
-      wordCount: wc,
-      excerpt: post.metaDescription,
-      seoTitle: post.metaTitle,
-      seoDescription: post.metaDescription,
-      category: null,
-      tags: [post.primaryKeyword],
-      careerSlug: post.profession,
-      exam: post.exam,
-      locale: post.locale,
-      apaReferences: post.references.map((r) => r.text),
-      requiresReferences: true,
-      relatedLessonPaths: [],
-    };
-  }
 
   return null;
 }
@@ -253,7 +229,12 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  const env = await loadBlogAuditEnv({ appRoot, repoRoot });
+  const env = await loadBlogAuditEnv({
+    appRoot,
+    repoRoot,
+    whenMissingDatabaseUrlLog:
+      "[blog-audit-env] DATABASE_URL missing; import will skip DB duplicate checks until DATABASE_URL is set",
+  });
   if (args.apply && !env.databaseUrlSet) {
     console.error("[blog:import-hidden] --apply requires DATABASE_URL (load .env files or export in shell).");
     process.exit(1);
@@ -320,6 +301,7 @@ async function main(): Promise<void> {
       workflowStatus: BlogWorkflowStatus;
       publishAt: Date | null;
       scheduledAt: Date | null;
+      legacySource: string | null;
     } | null = null;
     let duplicateNote = "skipped_no_database_url";
     if (prisma) {
@@ -331,6 +313,7 @@ async function main(): Promise<void> {
           workflowStatus: true,
           publishAt: true,
           scheduledAt: true,
+          legacySource: true,
         },
       });
       existing = hit;
@@ -399,35 +382,47 @@ async function main(): Promise<void> {
       apaReferences: resolved.apaReferences,
       requiresReferences: resolved.requiresReferences,
       relatedLessonPaths: resolved.relatedLessonPaths,
-      legacySource: "hidden-content-import",
+      legacySource: existing?.legacySource?.trim() || "hidden-content-import",
     };
 
-    const statusBundle =
-      args.publish && (plan.outcome === "would_publish_new" || plan.outcome === "would_publish_update")
-        ? normalizeBlogPostStatusWriteFields({
-            postStatus: BlogPostStatus.PUBLISHED,
-            publishAt: now,
-            now,
-          })
-        : draftScalars();
-
     if (plan.outcome === "create_draft" || plan.outcome === "would_publish_new") {
-      await prisma.blogPost.create({
+      const created = await prisma.blogPost.create({
         data: {
           slug,
           ...baseData,
-          ...statusBundle,
+          ...draftScalars(),
         },
+        select: { id: true },
       });
+      if (plan.outcome === "would_publish_new" && args.publish) {
+        await publishBlogPostCanonical({
+          postId: created.id,
+          publishAt: now,
+          clearScheduledAt: true,
+          context: "audit_hidden_blogs_apply",
+          acknowledgePrePublishWarnings: true,
+          setLegacySourceIfEmpty: "hidden-content-import",
+        });
+      }
     } else if (plan.outcome === "update_draft" || plan.outcome === "would_publish_update") {
       if (!existing) continue;
       await prisma.blogPost.update({
         where: { id: existing.id },
         data: {
           ...baseData,
-          ...statusBundle,
+          ...draftScalars(),
         },
       });
+      if (plan.outcome === "would_publish_update" && args.publish) {
+        await publishBlogPostCanonical({
+          postId: existing.id,
+          publishAt: now,
+          clearScheduledAt: true,
+          context: "audit_hidden_blogs_apply",
+          acknowledgePrePublishWarnings: true,
+          setLegacySourceIfEmpty: "hidden-content-import",
+        });
+      }
     }
   }
 

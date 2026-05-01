@@ -1,6 +1,6 @@
 #!/usr/bin/env npx tsx
 /**
- * Verifies canonical BlogPost publication rules vs merged blog sitemap slugs (read-only + report).
+ * Verifies canonical BlogPost publication rules for hidden-content recovery imports.
  *
  * Requires DATABASE_URL. Writes `reports/blog-publication-readiness.md`.
  */
@@ -15,7 +15,52 @@ import { getMergedBlogSitemapSlugRows } from "../../src/lib/blog/safe-blog-queri
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const appRoot = path.resolve(__dirname, "..", "..");
 const repoRoot = path.resolve(appRoot, "..");
-const reportPath = path.join(repoRoot, "reports", "blog-publication-readiness.md");
+const reportsDir = path.join(repoRoot, "reports");
+const reportPath = path.join(reportsDir, "blog-publication-readiness.md");
+const importResultPath = path.join(reportsDir, "blog-hidden-content-import-result.json");
+const ssotReportPath = path.join(reportsDir, "blog-admin-public-ssot.md");
+
+const ALLIED_HEALTH_SCOPES = new Set(["paramedic", "respiratory", "mlt", "imaging", "sonography"]);
+
+type ImportResultFile = {
+  args?: { apply?: boolean };
+  results?: Array<{
+    slug?: string;
+    sourceType?: string;
+    outcome?: string;
+  }>;
+};
+
+type ImportedRow = {
+  id: string;
+  slug: string;
+  title: string;
+  postStatus: BlogPostStatus;
+  workflowStatus: BlogWorkflowStatus;
+  publishAt: Date | null;
+  scheduledAt: Date | null;
+  legacySource: string | null;
+  careerSlug: string | null;
+  locale: string;
+  exam: string | null;
+  updatedAt: Date;
+};
+
+function canonicalRouteFor(row: Pick<ImportedRow, "slug" | "careerSlug">): string {
+  const careerSlug = row.careerSlug?.trim().toLowerCase() ?? "";
+  if (!careerSlug) return `/blog/${row.slug}`;
+  if (ALLIED_HEALTH_SCOPES.has(careerSlug)) return `/allied-health/${careerSlug}/blog/${row.slug}`;
+  return `/nursing/${careerSlug}/blog/${row.slug}`;
+}
+
+async function readOptionalJson<T>(targetPath: string): Promise<T | null> {
+  try {
+    const raw = await fs.readFile(targetPath, "utf8");
+    return JSON.parse(raw) as T;
+  } catch {
+    return null;
+  }
+}
 
 async function main(): Promise<void> {
   const env = await loadBlogAuditEnv({ appRoot, repoRoot });
@@ -29,40 +74,71 @@ async function main(): Promise<void> {
 
   try {
     const liveWhere = blogLiveWhere(now);
-    const liveRows = await prisma.blogPost.findMany({
-      where: liveWhere,
-      select: { slug: true, postStatus: true, workflowStatus: true, publishAt: true, scheduledAt: true },
-      orderBy: { slug: "asc" },
-      take: 8000,
-    });
+    const [liveRows, draftRows, publishedButHidden, importResult] = await Promise.all([
+      prisma.blogPost.findMany({
+        where: liveWhere,
+        select: { slug: true, postStatus: true, workflowStatus: true, publishAt: true, scheduledAt: true },
+        orderBy: { slug: "asc" },
+        take: 8000,
+      }),
+      prisma.blogPost.findMany({
+        where: {
+          OR: [{ postStatus: BlogPostStatus.DRAFT }, { postStatus: BlogPostStatus.NEEDS_REVIEW }],
+        },
+        select: { slug: true, postStatus: true, legacySource: true },
+        take: 8000,
+      }),
+      prisma.blogPost.findMany({
+        where: {
+          postStatus: BlogPostStatus.PUBLISHED,
+          OR: [{ workflowStatus: { not: BlogWorkflowStatus.PUBLISHED } }, { publishAt: { gt: now } }],
+        },
+        select: { slug: true, workflowStatus: true, publishAt: true },
+        take: 500,
+      }),
+      readOptionalJson<ImportResultFile>(importResultPath),
+    ]);
 
-    const draftRows = await prisma.blogPost.findMany({
-      where: {
-        OR: [{ postStatus: BlogPostStatus.DRAFT }, { postStatus: BlogPostStatus.NEEDS_REVIEW }],
-      },
-      select: { slug: true, postStatus: true, legacySource: true },
-      take: 8000,
-    });
+    const importedSlugs = [
+      ...new Set(
+        (importResult?.results ?? [])
+          .filter((row) => (row.outcome ?? "") !== "skip")
+          .filter((row) => !(row.outcome ?? "").startsWith("dry_run:"))
+          .map((row) => String(row.slug ?? "").trim())
+          .filter(Boolean),
+      ),
+    ];
 
-    const publishedButHidden = await prisma.blogPost.findMany({
-      where: {
-        postStatus: BlogPostStatus.PUBLISHED,
-        OR: [{ workflowStatus: { not: BlogWorkflowStatus.PUBLISHED } }, { publishAt: { gt: now } }],
-      },
-      select: { slug: true, workflowStatus: true, publishAt: true },
-      take: 500,
-    });
+    const importedRows: ImportedRow[] = importedSlugs.length
+      ? await prisma.blogPost.findMany({
+          where: { slug: { in: importedSlugs } },
+          select: {
+            id: true,
+            slug: true,
+            title: true,
+            postStatus: true,
+            workflowStatus: true,
+            publishAt: true,
+            scheduledAt: true,
+            legacySource: true,
+            careerSlug: true,
+            locale: true,
+            exam: true,
+            updatedAt: true,
+          },
+          orderBy: { slug: "asc" },
+          take: Math.max(importedSlugs.length, 1),
+        })
+      : [];
 
     const sitemapRows = await getMergedBlogSitemapSlugRows();
     const sitemapSlugs = new Set(
-      sitemapRows.map((r) => r.slug.trim()).filter(Boolean).map((s) => decodeURIComponent(s)),
+      sitemapRows.map((row) => row.slug.trim()).filter(Boolean).map((slug) => decodeURIComponent(slug)),
     );
 
-    const liveSlugs = new Set<string>();
     const notLiveInSitemap: string[] = [];
     for (const row of liveRows) {
       const slug = row.slug.trim();
-      liveSlugs.add(slug);
       const live = blogPostIsLive(
         {
           postStatus: row.postStatus,
@@ -75,18 +151,44 @@ async function main(): Promise<void> {
       if (live && !sitemapSlugs.has(slug)) notLiveInSitemap.push(slug);
     }
 
-    const draftsInSitemap: string[] = [];
-    for (const d of draftRows) {
-      const s = d.slug.trim();
-      if (sitemapSlugs.has(s)) draftsInSitemap.push(s);
-    }
+    const draftsInSitemap = draftRows
+      .map((row) => row.slug.trim())
+      .filter(Boolean)
+      .filter((slug) => sitemapSlugs.has(slug));
+
+    const importedSlugSet = new Set(importedSlugs);
+    const importedMissingRows = importedSlugs.filter((slug) => !importedRows.some((row) => row.slug === slug));
+    const importedDraftRows = importedRows.filter(
+      (row) => row.postStatus === BlogPostStatus.DRAFT || row.postStatus === BlogPostStatus.NEEDS_REVIEW,
+    );
+    const importedDraftsInAdmin = importedDraftRows.length;
+    const importedLocaleMismatches = importedRows.filter((row) => row.locale !== "en");
+    const importedLiveMissingSitemap = importedRows.filter((row) => {
+      const live = blogPostIsLive(
+        {
+          postStatus: row.postStatus,
+          publishAt: row.publishAt,
+          scheduledAt: row.scheduledAt,
+          workflowStatus: row.workflowStatus,
+        },
+        now,
+      );
+      return live && !sitemapSlugs.has(row.slug);
+    });
+    const importedDraftsInSitemap = importedDraftRows.filter((row) => sitemapSlugs.has(row.slug));
+    const importedUnreachableSilo = importedRows.filter((row) => {
+      if (!row.id.trim() || !row.slug.trim() || !row.title.trim()) return true;
+      return !importedSlugSet.has(row.slug);
+    });
 
     const lines: string[] = [
       "# Blog publication readiness",
       "",
       `- Generated: ${now.toISOString()}`,
+      `- Hidden import result file: ${importResult ? "present" : "missing"}`,
+      `- Admin/public SSOT report: ${ssotReportPath}`,
       "",
-      "## Summary",
+      "## Global canonical checks",
       "",
       `- Live BlogPost rows (blogLiveWhere): **${liveRows.length}**`,
       `- Merged sitemap slug rows: **${sitemapRows.length}**`,
@@ -94,38 +196,107 @@ async function main(): Promise<void> {
       `- Draft/needs-review slugs present in merged sitemap list: **${draftsInSitemap.length}**`,
       `- PUBLISHED rows not public by visibility (sample cap 500): **${publishedButHidden.length}**`,
       "",
+      "## Hidden-content import checks",
+      "",
+      `- Imported/apply slugs from last result file: **${importedSlugs.length}**`,
+      `- Imported BlogPost rows found in DB: **${importedRows.length}**`,
+      `- Imported slugs missing BlogPost rows: **${importedMissingRows.length}**`,
+      `- Imported draft/needs-review rows visible to admin list source (` + "`prisma.blogPost`" + `): **${importedDraftsInAdmin}**`,
+      `- Imported rows with locale != en: **${importedLocaleMismatches.length}**`,
+      `- Imported live rows missing merged sitemap entry: **${importedLiveMissingSitemap.length}**`,
+      `- Imported draft rows leaking into sitemap: **${importedDraftsInSitemap.length}**`,
+      `- Imported rows hidden in unreachable silo: **${importedUnreachableSilo.length}**`,
+      "",
       "## Rules checked",
       "",
-      "- `blogPostIsLive` matches `blogLiveWhere` for canonical marketing posts.",
-      "- Merged sitemap uses `getMergedBlogSitemapSlugRows` (same visibility rules when DB-backed).",
-      "- Draft and NEEDS_REVIEW posts must not appear as `/blog/{slug}` entries in the merged sitemap slice.",
-      "",
-      "## Admin visibility (manual)",
-      "",
-      "- Draft imports use `BlogPost` rows; admin library reads `prisma.blogPost` — see `reports/blog-admin-public-ssot.md`.",
+      "- `BlogPostStatus.PUBLISHED` + `workflowStatus=PUBLISHED` + `publishAt <= now` must resolve as live and appear in the merged blog sitemap source.",
+      "- Draft / needs-review rows must not appear in the merged blog sitemap source.",
+      "- Imported draft rows stay in `BlogPost`, so the admin library and editor continue to read the same rows as the public canonical blog system.",
+      "- Imported rows must remain canonical `BlogPost` rows, not `ContentItem` or localized-only silos.",
       "",
     ];
 
-    if (notLiveInSitemap.length) {
-      lines.push("## Live slugs not in merged sitemap (investigate)", "");
-      for (const s of notLiveInSitemap.slice(0, 80)) lines.push(`- \`${s}\``);
-      lines.push("");
-    }
-    if (draftsInSitemap.length) {
-      lines.push("## Draft / needs-review slugs found in merged sitemap (should be empty)", "");
-      for (const s of draftsInSitemap.slice(0, 80)) lines.push(`- \`${s}\``);
+    if (importedRows.length) {
+      lines.push("## Imported row surfaces", "");
+      lines.push("| slug | status | workflow | route when live | admin route | in sitemap now |", "| --- | --- | --- | --- | --- | --- |");
+      for (const row of importedRows.slice(0, 120)) {
+        const live = blogPostIsLive(
+          {
+            postStatus: row.postStatus,
+            publishAt: row.publishAt,
+            scheduledAt: row.scheduledAt,
+            workflowStatus: row.workflowStatus,
+          },
+          now,
+        );
+        lines.push(
+          `| ${row.slug} | ${row.postStatus} | ${row.workflowStatus} | ${canonicalRouteFor(row)} | /admin/blog?id=${row.id} | ${live && sitemapSlugs.has(row.slug) ? "yes" : "no"} |`,
+        );
+      }
       lines.push("");
     }
 
-    await fs.mkdir(path.dirname(reportPath), { recursive: true });
+    if (importedMissingRows.length) {
+      lines.push("## Imported slugs missing BlogPost rows", "");
+      for (const slug of importedMissingRows.slice(0, 80)) lines.push(`- \`${slug}\``);
+      lines.push("");
+    }
+
+    if (importedLiveMissingSitemap.length) {
+      lines.push("## Imported live rows missing sitemap entries", "");
+      for (const row of importedLiveMissingSitemap.slice(0, 80)) {
+        lines.push(`- \`${row.slug}\` (${row.postStatus} / ${row.workflowStatus})`);
+      }
+      lines.push("");
+    }
+
+    if (importedDraftsInSitemap.length) {
+      lines.push("## Imported draft rows leaking into sitemap", "");
+      for (const row of importedDraftsInSitemap.slice(0, 80)) {
+        lines.push(`- \`${row.slug}\` (${row.postStatus})`);
+      }
+      lines.push("");
+    }
+
+    if (importedLocaleMismatches.length) {
+      lines.push("## Imported locale mismatches", "");
+      for (const row of importedLocaleMismatches.slice(0, 80)) {
+        lines.push(`- \`${row.slug}\` locale=\`${row.locale}\``);
+      }
+      lines.push("");
+    }
+
+    if (importedUnreachableSilo.length) {
+      lines.push("## Imported unreachable-silo candidates", "");
+      for (const row of importedUnreachableSilo.slice(0, 80)) {
+        lines.push(`- \`${row.slug}\` id=\`${row.id}\``);
+      }
+      lines.push("");
+    }
+
+    await fs.mkdir(reportsDir, { recursive: true });
     await fs.writeFile(reportPath, lines.join("\n"), "utf8");
-    console.log(JSON.stringify({ ok: true, reportPath, notLiveInSitemap: notLiveInSitemap.length, draftsInSitemap: draftsInSitemap.length }, null, 2));
+    console.log(
+      JSON.stringify(
+        {
+          ok: true,
+          reportPath,
+          importedRows: importedRows.length,
+          importedDraftsInAdmin,
+          importedLiveMissingSitemap: importedLiveMissingSitemap.length,
+          importedDraftsInSitemap: importedDraftsInSitemap.length,
+          importedUnreachableSilo: importedUnreachableSilo.length,
+        },
+        null,
+        2,
+      ),
+    );
   } finally {
     await prisma.$disconnect().catch(() => undefined);
   }
 }
 
-main().catch((e) => {
-  console.error(e);
+main().catch((error) => {
+  console.error(error);
   process.exit(1);
 });

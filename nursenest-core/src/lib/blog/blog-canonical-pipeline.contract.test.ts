@@ -55,3 +55,9 @@ test("publishBlogPostCanonical includes audit_hidden_blogs_apply context", () =>
   const pub = readSrc("lib/blog/publish-blog-post-canonical.ts");
   assert.match(pub, /audit_hidden_blogs_apply/);
 });
+
+test("import-hidden-blog-content script only mutates when --apply and Prisma client exist", () => {
+  const script = readScript("scripts/blog/import-hidden-blog-content.mts");
+  assert.match(script, /if \(!args\.apply \|\| !prisma\) continue/);
+  assert.match(script, /--publish requires --apply/);
+});

@@ -47,8 +47,10 @@ function tryLoadEnvFile(filePath: string): void {
 export async function loadBlogAuditEnv(options: {
   appRoot: string;
   repoRoot: string;
+  /** Logged when DATABASE_URL is still unset after file load (never logs secrets). */
+  whenMissingDatabaseUrlLog?: string;
 }): Promise<BlogAuditEnvLoadResult> {
-  const { appRoot, repoRoot } = options;
+  const { appRoot, repoRoot, whenMissingDatabaseUrlLog } = options;
 
   const before = wasDatabaseUrlSet();
   let databaseUrlSource: BlogAuditDatabaseUrlSource = before ? "process" : "missing";
@@ -92,7 +94,9 @@ export async function loadBlogAuditEnv(options: {
   console.log(`[blog-audit-env] DIRECT_URL=${directUrlSet ? "set" : "missing"}`);
 
   if (!databaseUrlSet) {
-    console.log("[blog-audit-env] DATABASE_URL missing; running file-only audit");
+    console.log(
+      whenMissingDatabaseUrlLog ?? "[blog-audit-env] DATABASE_URL missing; running file-only audit",
+    );
   }
 
   return {

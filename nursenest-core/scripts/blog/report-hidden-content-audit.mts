@@ -10,7 +10,9 @@
  * Default mode is read-only. Passing `--apply` throws immediately (no DB writes).
  *
  * Usage:
- *   npx tsx scripts/blog/report-hidden-content-audit.mts
+ *   npm run blog:audit:hidden
+ *   npm run blog:audit:hidden:db   # requires DATABASE_URL after env load
+ *   npx tsx scripts/blog/report-hidden-content-audit.mts [--require-database]
  */
 import { promises as fs } from "node:fs";
 import path from "node:path";
