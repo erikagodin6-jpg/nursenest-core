@@ -1,7 +1,7 @@
 import path from "path";
 import { createRequire } from "node:module";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { rm, readFile, readdir, readFile as readFileAsync, writeFile, copyFile, unlink, mkdir } from "fs/promises";
+import { rm, readFile, readdir, readFile as readFileAsync, writeFile, copyFile, unlink, mkdir, symlink } from "fs/promises";
 import { existsSync } from "fs";
 import { gzipSync } from "zlib";
 import { compileI18n } from "./compile-i18n";
@@ -33,6 +33,12 @@ function findRepoRoot(startDir: string): string {
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = findRepoRoot(scriptDir);
 process.chdir(repoRoot);
+
+async function ensureRepoRootNodeModules(): Promise<void> {
+  const repoNodeModules = path.join(repoRoot, "node_modules");
+  if (existsSync(repoNodeModules) || !existsSync(packageNodeModules)) return;
+  await symlink(packageNodeModules, repoNodeModules, "dir");
+}
 
 const allowlist = [
   "date-fns",
@@ -487,6 +493,7 @@ function applyHerokuStackBuildDefaults(): void {
 }
 
 async function buildAll() {
+  await ensureRepoRootNodeModules();
   applyHerokuStackBuildDefaults();
   const t0 = Date.now();
   const log = (msg: string) => console.log(`[${((Date.now() - t0) / 1000).toFixed(1)}s] ${msg}`);
