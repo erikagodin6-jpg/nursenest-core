@@ -12,6 +12,7 @@
  * - **`NN_BYPASS_BOOTSTRAP`:** deprecated for mode selection; still gates **readiness watchdog bypass**
  *   in `bootstrap_proxy` when not conflicting (see `resolveBootstrapStartupMode`).
  */
+import { readFileSync } from "node:fs";
 import http from "node:http";
 import net from "node:net";
 import { once } from "node:events";
@@ -38,6 +39,14 @@ try {
 
 logRuntimeEnvSnapshot();
 validateRuntimeEnvOrThrow();
+
+try {
+  const metaPath = join(pkgRoot, "public", "nn-build-meta.json");
+  const meta = JSON.parse(readFileSync(metaPath, "utf8"));
+  console.error(`[nursenest-core] build_git_meta ${JSON.stringify(meta)}`);
+} catch {
+  console.error("[nursenest-core] build_git_meta missing_or_invalid");
+}
 
 if (process.env.NODE_ENV !== "production") {
   process.env.NODE_ENV = "production";

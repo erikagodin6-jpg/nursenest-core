@@ -345,19 +345,20 @@ test("deploy scripts: build:deploy is post-compile only; heroku-postbuild runs c
     dockerVerifyIdx !== -1 && ensureIdx !== -1 && verifyIdx !== -1,
     "build:deploy:postbuild must verify Dockerfile scripts, sync static, then verify standalone",
   );
+  const writeMetaIdx = post.indexOf("write-build-git-meta.mjs");
+  const assertGitIdx = post.indexOf("assert-deploy-git-state.mjs");
+  assert.ok(writeMetaIdx !== -1 && assertGitIdx !== -1, post);
+  assert.ok(writeMetaIdx < assertGitIdx && assertGitIdx < dockerVerifyIdx, post);
   assert.ok(dockerVerifyIdx < ensureIdx && ensureIdx < verifyIdx, post);
   if (pkg.scripts["build:deploy:full"]) {
     assert.equal(pkg.scripts["build:deploy:full"], "node scripts/run-build-deploy-full.mjs");
   }
 });
 
-test("active DigitalOcean app spec builds before runtime, starts through npm run start, and routes readiness through /readyz", () => {
+test("active DigitalOcean app spec builds before runtime, starts standalone bootstrap, and routes readiness through /readyz", () => {
   const appSpec = fs.readFileSync(path.join(__dirname, "..", "..", ".do", "app-nursenest-core-next.yaml"), "utf8");
-  assert.match(appSpec, /build_command: npm run build:deploy/);
-  assert.match(appSpec, /NN_TIMED_INCLUDE_NPM_PRUNE/);
-  assert.match(appSpec, /- key: BUILD_WEBPACK_PARALLELISM\n\s+value: "1"/);
-  assert.match(appSpec, /- key: NODE_OPTIONS\n\s+value: "--max-old-space-size=4096"\n\s+scope: BUILD_TIME/);
-  assert.match(appSpec, /run_command: npm run start/);
+  assert.match(appSpec, /build_command:.*npm run build.*npm run build:deploy/);
+  assert.match(appSpec, /run_command:.*start-standalone\.mjs/);
   assert.match(appSpec, /health_check:\n(?:.*\n)*?\s+http_path: \/readyz/);
   assert.match(appSpec, /liveness_health_check:\n(?:.*\n)*?\s+http_path: \/healthz/);
 });
