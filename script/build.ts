@@ -1,7 +1,7 @@
 import path from "path";
 import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
-import { rm, readFile, readdir, readFile as readFileAsync, writeFile, copyFile, unlink, mkdir } from "fs/promises";
+import { rm, readFile, readdir, readFile as readFileAsync, writeFile, copyFile, unlink, mkdir, symlink } from "fs/promises";
 import { existsSync } from "fs";
 import { gzipSync } from "zlib";
 import { compileI18n } from "./compile-i18n";
@@ -40,6 +40,18 @@ const CLIENT_ALIAS = {
 
 /** After `chdir(REPO_ROOT)`, esbuild still resolves allowlisted deps from the app package `node_modules/`. */
 const ESBUILD_NODE_PATHS = [path.join(APP_ROOT, "node_modules")].filter((p) => existsSync(p));
+
+async function ensureRepoNodeModulesForViteBuild(): Promise<(() => Promise<void>) | null> {
+  const repoNodeModules = path.join(REPO_ROOT, "node_modules");
+  const appNodeModules = path.join(APP_ROOT, "node_modules");
+  if (existsSync(repoNodeModules) || !existsSync(appNodeModules) || REPO_ROOT === APP_ROOT) {
+    return null;
+  }
+  await symlink(appNodeModules, repoNodeModules, "dir");
+  return async () => {
+    await unlink(repoNodeModules).catch(() => undefined);
+  };
+}
 
 function buildLessonsData() {
   return runEsbuild({
@@ -649,7 +661,12 @@ async function buildAll() {
   if (target === "all" || target === "client") {
     const viteT = Date.now();
     // Keep CI/Heroku logs concise; huge chunk listings can slow hosted builds.
-    await runViteBuild({ logLevel: "warn" });
+    const cleanupRepoNodeModules = await ensureRepoNodeModulesForViteBuild();
+    try {
+      await runViteBuild({ logLevel: "warn" });
+    } finally {
+      await cleanupRepoNodeModules?.();
+    }
     log("client done");
     timing("vite_client", viteT);
   }
