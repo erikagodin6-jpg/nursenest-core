@@ -55,6 +55,7 @@ const CLIENT_ALIAS = {
 
 function buildLessonsData() {
   return esbuild({
+    absWorkingDir: repoRoot,
     entryPoints: ["client/src/data/lessons/index.ts"],
     platform: "node",
     bundle: true,
@@ -80,6 +81,7 @@ function buildLessonsData() {
 
 function buildNpBatch(i: number) {
   return esbuild({
+    absWorkingDir: repoRoot,
     entryPoints: [`client/src/data/lessons/np-generated-batch-${i}.ts`],
     platform: "node",
     bundle: true,
@@ -194,6 +196,7 @@ async function buildServer(externalizeHeavyModules: boolean) {
   }
 
   return esbuild({
+    absWorkingDir: repoRoot,
     entryPoints: ["server/index.ts"],
     platform: "node",
     bundle: true,
@@ -264,6 +267,7 @@ async function buildExternalModules(entries: string[], label: string) {
           .replace(/\.ts$/, "")
           .replace(/\//g, "__");
         return esbuild({
+          absWorkingDir: repoRoot,
           entryPoints: [entry],
           platform: "node",
           bundle: true,
@@ -326,6 +330,7 @@ async function buildClientDataModules() {
   const externals = await getExternals();
 
   await esbuild({
+    absWorkingDir: repoRoot,
     entryPoints: clientDataFiles,
     platform: "node",
     bundle: false,
