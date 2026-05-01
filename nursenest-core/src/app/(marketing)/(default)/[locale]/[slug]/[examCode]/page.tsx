@@ -23,6 +23,11 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
 import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { withCrawlSurfacePageRender } from "@/lib/observability/crawl-surface-observability";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
+import { InternationalRnHubSections } from "@/components/marketing/international-rn-hub-sections";
+import { intlRnRegulatorDisclaimerText, resolveIntlRnHubSectionCopy } from "@/lib/marketing/intl-rn-pathway-hub-copy";
+import { isIntlRnFoundationPathwayId } from "@/lib/navigation/country-exam-launch-readiness";
 
 export const dynamicParams = true;
 export const dynamic = "force-dynamic";
@@ -137,6 +142,16 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
       hubBasePath: pathname,
     });
 
+    const marketingMessages = isIntlRnFoundationPathwayId(pathway.id)
+      ? await loadMarketingMessageShards(DEFAULT_MARKETING_LOCALE, ["marketing"])
+      : {};
+    const intlSections = isIntlRnFoundationPathwayId(pathway.id)
+      ? resolveIntlRnHubSectionCopy(pathway, marketingMessages)
+      : null;
+    const intlDisclaimer = isIntlRnFoundationPathwayId(pathway.id)
+      ? intlRnRegulatorDisclaimerText(marketingMessages)
+      : "";
+
     return (
       <div className="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
         <WebPageJsonLd
@@ -164,8 +179,26 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
           </div>
         )}
 
-        <section className="mt-8 border-t pt-6">
-          <Link href="/blog">All blog posts</Link>
+        {intlSections ? (
+          <InternationalRnHubSections pathway={pathway} copy={intlSections} disclaimer={intlDisclaimer} />
+        ) : null}
+
+        <section className="mt-8 border-t border-[var(--border-subtle)] pt-6">
+          <div className="nn-card border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] p-4 sm:p-5">
+            <h2 className="nn-marketing-h4">Recommended blog reading</h2>
+            <p className="nn-marketing-body-sm mt-1 text-[var(--theme-body-text)]">
+              Explore exam-focused blog posts to reinforce lessons and question practice.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-3 text-sm">
+              <Link href={buildExamPathwayPath(pathway, "blog")} className="font-semibold text-primary hover:underline">
+                Open {pathway.shortName} blog hub
+              </Link>
+              <Link href="/blog" className="font-medium text-primary hover:underline">
+                All blog posts
+              </Link>
+            </div>
+            <MarketingBlogLatestLinks take={3} className="mt-4 border-t border-[var(--border-subtle)] pt-4" heading="New on the blog" />
+          </div>
         </section>
       </div>
     );
