@@ -1,8 +1,62 @@
+import "server-only";
+
+import path from "node:path";
+import { pathToFileURL } from "node:url";
+
 import type { TierCode } from "@prisma/client";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import type { LessonContent } from "@legacy-client/data/lessons/types";
-import { contentMap, loadNpGeneratedBatches } from "@legacy-client/data/lessons/index";
+
+type LessonContent = {
+  title: unknown;
+  cellular: { content?: string } | string;
+  medications?: unknown[];
+  quiz?: Array<unknown | undefined>;
+  preTest?: Array<unknown | undefined>;
+  postTest?: Array<unknown | undefined>;
+  image?: string;
+  tier?: string;
+  [key: string]: unknown;
+};
+
+type LegacyLessonsModule = {
+  contentMap: Record<string, LessonContent>;
+  loadNpGeneratedBatches?: () => Promise<void>;
+};
+
+let lessonsModulePromise: Promise<LegacyLessonsModule> | null = null;
+
+function importWithoutTsModuleGraph(specifier: string): Promise<unknown> {
+  return new Function("s", "return import(s)")(specifier) as Promise<unknown>;
+}
+
+async function loadLegacyLessonsModule(): Promise<LegacyLessonsModule> {
+  if (lessonsModulePromise) return lessonsModulePromise;
+  lessonsModulePromise = (async () => {
+    const modulePath = path.resolve(
+      /* turbopackIgnore: true */ process.cwd(),
+      "..",
+      "client",
+      "src",
+      "data",
+      "lessons",
+      "index.ts",
+    );
+    const href = pathToFileURL(modulePath).href;
+    const mod = (await importWithoutTsModuleGraph(href)) as Partial<LegacyLessonsModule>;
+    return {
+      contentMap:
+        mod.contentMap && typeof mod.contentMap === "object"
+          ? (mod.contentMap as Record<string, LessonContent>)
+          : {},
+      loadNpGeneratedBatches:
+        typeof mod.loadNpGeneratedBatches === "function"
+          ? mod.loadNpGeneratedBatches.bind(mod)
+          : undefined,
+    };
+  })();
+  return lessonsModulePromise;
+}
 
 /**
  * Mirrors `server/lesson-content-api.ts` deriveTier — slug / optional embedded tier metadata.
@@ -92,7 +146,8 @@ let npBatchesEnsured = false;
 
 async function ensureNpBatchesLoaded(): Promise<void> {
   if (npBatchesEnsured) return;
-  await loadNpGeneratedBatches();
+  const mod = await loadLegacyLessonsModule();
+  await mod.loadNpGeneratedBatches?.();
   npBatchesEnsured = true;
 }
 
@@ -129,6 +184,7 @@ export function canAccessLegacyContentMapLesson(scope: AccessScope, lessonId: st
 /** All list rows for the subscriber tier (sorted by title). */
 export async function listLegacyContentMapLessonsForScope(scope: AccessScope): Promise<LegacyContentMapListRow[]> {
   await ensureNpBatchesLoaded();
+  const { contentMap } = await loadLegacyLessonsModule();
   const userKey = prismaTierToLegacyLessonUserTier(scope);
   const allowed = new Set(allowedLessonContentTiersForUser(userKey));
   const out: LegacyContentMapListRow[] = [];
@@ -171,6 +227,7 @@ export async function paginateLegacyContentMapLessons(
 
 export async function getLegacyContentMapLessonById(id: string): Promise<LessonContent | null> {
   await ensureNpBatchesLoaded();
+  const { contentMap } = await loadLegacyLessonsModule();
   const hit = contentMap[id];
   return hit ?? null;
 }

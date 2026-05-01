@@ -52,13 +52,13 @@ export async function readStudyPublishedSnapshotFile<TPayload>(
       return null;
     }
   }
-  const resolvedBase = path.resolve(base);
-  const filePath = path.resolve(resolvedBase, ...relativePathSegments);
+  const resolvedBase = path.resolve(/* turbopackIgnore: true */ base);
+  const filePath = path.resolve(/* turbopackIgnore: true */ resolvedBase, ...relativePathSegments);
   if (!filePath.startsWith(resolvedBase + path.sep) && filePath !== resolvedBase) {
     return null;
   }
   try {
-    const txt = await readFile(filePath, "utf8");
+    const txt = await readFile(/* turbopackIgnore: true */ filePath, "utf8");
     const parsed: unknown = JSON.parse(txt) as unknown;
     if (!isEnvelope<TPayload>(parsed)) return null;
     return parsed;

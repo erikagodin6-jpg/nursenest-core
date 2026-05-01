@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useRef, useMemo } from "react";
 import { usePreNursingT } from "@/content/pre-nursing/pre-nursing-i18n";
-import { fisherYatesShuffle } from "@shared/shuffle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { SuccessLeaf } from "@/components/ui/success-leaf";
@@ -21,6 +20,15 @@ import {
   Target,
   HelpCircle,
 } from "lucide-react";
+
+function fisherYatesShuffle<T>(array: T[]): T[] {
+  const result = [...array];
+  for (let i = result.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
 
 function cn(...classes: (string | boolean | undefined)[]) {
   return classes.filter(Boolean).join(" ");
