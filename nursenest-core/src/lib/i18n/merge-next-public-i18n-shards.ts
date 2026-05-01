@@ -1,18 +1,42 @@
-import { existsSync } from "fs";
-import path from "path";
+import "server-only";
+
+import { existsSync } from "node:fs";
+import path from "node:path";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { PUBLIC_I18N_SHARD_FILENAMES, type I18nShardFilename } from "@shared/i18n-shard-policy";
 import { stripStaffKeysFromPublicMergedBundle } from "@/lib/i18n/strip-staff-i18n-keys";
 import { readCachedI18nJsonFile } from "@/lib/i18n/i18n-translation-cache";
 
-function resolveAdminOnlyI18nDir(): string | null {
-  const candidates = [
-    path.join(process.cwd(), "nursenest-core", "i18n-admin-only"),
-    path.join(process.cwd(), "i18n-admin-only"),
-  ];
-  for (const p of candidates) {
-    if (existsSync(p)) return p;
+const LOCALE_RE = /^[a-z]{2}(-[a-z]{2})?$/i;
+const PUBLIC_I18N_ALLOWED_ROOTS = Array.from(
+  new Set([
+    path.resolve(/* turbopackIgnore: true */ process.cwd(), "public", "i18n"),
+    path.resolve(/* turbopackIgnore: true */ process.cwd(), "..", "client", "public", "i18n"),
+  ]),
+);
+const ADMIN_I18N_ALLOWED_ROOTS = Array.from(
+  new Set([
+    path.resolve(/* turbopackIgnore: true */ process.cwd(), "i18n-admin-only"),
+  ]),
+);
+
+function isWithinAllowedRoot(resolvedPath: string, allowedRoot: string): boolean {
+  return resolvedPath === allowedRoot || resolvedPath.startsWith(`${allowedRoot}${path.sep}`);
+}
+
+function resolveAllowedRoot(candidates: readonly string[], requestedRoot: string): string | null {
+  const resolvedRequestedRoot = path.resolve(requestedRoot);
+  return candidates.find((root) => root === resolvedRequestedRoot) ?? null;
+}
+
+function resolveAllowedLocaleDir(candidates: readonly string[], locale: string): string | null {
+  if (!LOCALE_RE.test(locale)) return null;
+  for (const root of candidates) {
+    if (!existsSync(root)) continue;
+    const localeDir = path.resolve(root, locale);
+    if (!isWithinAllowedRoot(localeDir, root)) continue;
+    if (existsSync(localeDir)) return localeDir;
   }
   return null;
 }
@@ -66,13 +90,17 @@ export function loadMergedMarketingMessagesFromNextPublicDir(
   locale: string,
   options?: LoadMergedNextPublicOptions,
 ): MarketingMessages | null {
+  if (!LOCALE_RE.test(locale)) return null;
   const includeStaffShards = options?.includeStaffShards === true;
   const shardFilenames: readonly string[] =
     options?.shardFilenames && options.shardFilenames.length > 0
       ? options.shardFilenames
       : PUBLIC_I18N_SHARD_FILENAMES;
+  const publicRoot = resolveAllowedRoot(PUBLIC_I18N_ALLOWED_ROOTS, i18nDir);
+  if (!publicRoot) return null;
 
-  const legacy = path.resolve(path.join(i18nDir, `${locale}.json`));
+  const legacy = path.resolve(publicRoot, `${locale}.json`);
+  if (!isWithinAllowedRoot(legacy, publicRoot)) return null;
   if (existsSync(legacy)) {
     if (options?.shardFilenames && options.shardFilenames.length > 0) {
       /** Per-shard mode: ignore monolithic legacy file so callers can bound I/O during `next build`. */
@@ -85,15 +113,15 @@ export function loadMergedMarketingMessagesFromNextPublicDir(
       return normalized;
     }
   }
-  const localeDir = path.join(i18nDir, locale);
+  const localeDir = path.resolve(publicRoot, locale);
+  if (!isWithinAllowedRoot(localeDir, publicRoot)) return null;
   if (!existsSync(localeDir)) return null;
   const merged: MarketingMessages = {};
   mergeShardJsonFiles(localeDir, shardFilenames, merged, locale);
 
   if (includeStaffShards) {
-    const adminRoot = resolveAdminOnlyI18nDir();
-    if (adminRoot) {
-      const adminLocaleDir = path.join(adminRoot, locale);
+    const adminLocaleDir = resolveAllowedLocaleDir(ADMIN_I18N_ALLOWED_ROOTS, locale);
+    if (adminLocaleDir) {
       mergeShardJsonFiles(adminLocaleDir, ["admin"], merged, locale);
     }
   }

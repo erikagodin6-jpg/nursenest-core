@@ -6,6 +6,11 @@ export const HOME_PERF_DIAG_VERSION = "2026-04-19-a";
 
 const ENV_KEY = "NN_TRACE_HOME_PERF";
 
+export function safeProcessPid(): number | undefined {
+  const proc = typeof process !== "undefined" ? (process as { pid?: unknown }) : undefined;
+  return typeof proc?.pid === "number" ? proc.pid : undefined;
+}
+
 /** BOM-tolerant trim for platform env quirks. */
 export function readNnTraceHomePerfEnvRaw(): string | undefined {
   const v = process.env[ENV_KEY];
@@ -25,8 +30,9 @@ export function emitNnHomePerfDiagLine(payload: Record<string, unknown>): void {
     console.error(JSON.stringify(line));
   } catch {
     try {
+      const pid = safeProcessPid();
       console.error(
-        `nn_home_perf_diag_plain tag=${String(payload.tag)} v=${HOME_PERF_DIAG_VERSION} pid=${typeof process !== "undefined" ? process.pid : "n/a"}`,
+        `nn_home_perf_diag_plain tag=${String(payload.tag)} v=${HOME_PERF_DIAG_VERSION} pid=${pid ?? "n/a"}`,
       );
     } catch {
       /* absolute last resort */

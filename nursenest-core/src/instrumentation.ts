@@ -13,6 +13,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
   emitNnHomePerfDiagLine,
   isNnTraceHomePerfTrue,
+  safeProcessPid,
 } from "@/lib/observability/home-perf-diag";
 
 export async function register() {
@@ -27,7 +28,7 @@ export async function register() {
         if (isNnTraceHomePerfTrue()) {
           emitNnHomePerfDiagLine({
             tag: "nn_home_perf_boot",
-            pid: process.pid,
+            pid: safeProcessPid(),
             next_runtime: runtime,
             pathname: "(boot)",
             nn_trace_home_perf_env_defined: process.env.NN_TRACE_HOME_PERF !== undefined,
