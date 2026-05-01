@@ -7,15 +7,41 @@ import type { TierCode } from "@prisma/client";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 
+type QuizQuestion = {
+  question: string;
+  options: string[];
+  correct: number;
+  rationale: string | string[];
+};
+
+type MedicationEntry =
+  | {
+      name: string;
+      type: string;
+      action: string;
+      sideEffects: string | string[];
+      contra: string | string[];
+      pearl: string;
+    }
+  | { name: string; dose: string; route: string; purpose: string };
+
 type LessonContent = {
-  title: unknown;
-  cellular: { content?: string } | string;
-  medications?: unknown[];
-  quiz?: Array<unknown | undefined>;
-  preTest?: Array<unknown | undefined>;
-  postTest?: Array<unknown | undefined>;
+  title: string;
+  cellular: { title: string; content: string; image?: string } | string;
+  medications?: MedicationEntry[];
+  quiz?: Array<QuizQuestion | undefined>;
+  preTest?: Array<QuizQuestion | undefined>;
+  postTest?: Array<QuizQuestion | undefined>;
   image?: string;
   tier?: string;
+  riskFactors?: string[];
+  diagnostics?: string[];
+  management?: string[];
+  nursingActions?: string[];
+  assessmentFindings?: string[];
+  signs?: { left: string[]; right: string[] } | string[];
+  pearls?: string[];
+  lifespan?: { title: string; content: string };
   [key: string]: unknown;
 };
 
@@ -28,6 +54,65 @@ let lessonsModulePromise: Promise<LegacyLessonsModule> | null = null;
 
 function importWithoutTsModuleGraph(specifier: string): Promise<unknown> {
   return new Function("s", "return import(s)")(specifier) as Promise<unknown>;
+}
+
+function asStringArray(value: unknown): string[] | undefined {
+  return Array.isArray(value) && value.every((entry) => typeof entry === "string") ? value : undefined;
+}
+
+function normalizeLegacyLessonTitle(value: unknown, fallback: string): string {
+  if (typeof value === "string" && value.trim()) return value;
+  if (value && typeof value === "object" && "en" in value && typeof (value as { en?: unknown }).en === "string") {
+    const englishTitle = (value as { en: string }).en.trim();
+    if (englishTitle) return englishTitle;
+  }
+  return fallback;
+}
+
+function normalizeLegacyLessonCellular(value: unknown): LessonContent["cellular"] {
+  if (typeof value === "string") return value;
+  if (value && typeof value === "object") {
+    const record = value as { title?: unknown; content?: unknown; image?: unknown };
+    return {
+      title: typeof record.title === "string" ? record.title : "",
+      content: typeof record.content === "string" ? record.content : "",
+      ...(typeof record.image === "string" ? { image: record.image } : {}),
+    };
+  }
+  return "";
+}
+
+function normalizeLegacyLessonContent(id: string, value: unknown): LessonContent {
+  const source = value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+
+  return {
+    ...source,
+    title: normalizeLegacyLessonTitle(source.title, id),
+    cellular: normalizeLegacyLessonCellular(source.cellular),
+    medications: Array.isArray(source.medications) ? (source.medications as MedicationEntry[]) : undefined,
+    quiz: Array.isArray(source.quiz) ? (source.quiz as Array<QuizQuestion | undefined>) : undefined,
+    preTest: Array.isArray(source.preTest) ? (source.preTest as Array<QuizQuestion | undefined>) : undefined,
+    postTest: Array.isArray(source.postTest) ? (source.postTest as Array<QuizQuestion | undefined>) : undefined,
+    image: typeof source.image === "string" ? source.image : undefined,
+    tier: typeof source.tier === "string" ? source.tier : undefined,
+    riskFactors: asStringArray(source.riskFactors),
+    diagnostics: asStringArray(source.diagnostics),
+    management: asStringArray(source.management),
+    nursingActions: asStringArray(source.nursingActions),
+    assessmentFindings: asStringArray(source.assessmentFindings),
+    signs: source.signs as LessonContent["signs"],
+    pearls: asStringArray(source.pearls),
+    lifespan:
+      source.lifespan && typeof source.lifespan === "object"
+        ? {
+            title: typeof (source.lifespan as { title?: unknown }).title === "string" ? (source.lifespan as { title: string }).title : "",
+            content:
+              typeof (source.lifespan as { content?: unknown }).content === "string"
+                ? (source.lifespan as { content: string }).content
+                : "",
+          }
+        : undefined,
+  };
 }
 
 async function loadLegacyLessonsModule(): Promise<LegacyLessonsModule> {
@@ -44,11 +129,12 @@ async function loadLegacyLessonsModule(): Promise<LegacyLessonsModule> {
     );
     const href = pathToFileURL(modulePath).href;
     const mod = (await importWithoutTsModuleGraph(href)) as Partial<LegacyLessonsModule>;
+    const rawContentMap = mod.contentMap && typeof mod.contentMap === "object" ? (mod.contentMap as Record<string, unknown>) : {};
+    const contentMap = Object.fromEntries(
+      Object.entries(rawContentMap).map(([id, lesson]) => [id, normalizeLegacyLessonContent(id, lesson)]),
+    ) as Record<string, LessonContent>;
     return {
-      contentMap:
-        mod.contentMap && typeof mod.contentMap === "object"
-          ? (mod.contentMap as Record<string, LessonContent>)
-          : {},
+      contentMap,
       loadNpGeneratedBatches:
         typeof mod.loadNpGeneratedBatches === "function"
           ? mod.loadNpGeneratedBatches.bind(mod)
@@ -153,11 +239,7 @@ async function ensureNpBatchesLoaded(): Promise<void> {
 
 /** Display title for a monolith {@link LessonContent} row (supports `title.en` from older bundles). */
 export function legacyContentMapLessonTitle(lesson: LessonContent, id: string): string {
-  const raw = lesson.title as unknown;
-  if (typeof raw === "object" && raw !== null && "en" in (raw as object)) {
-    return String((raw as { en?: string }).en ?? id);
-  }
-  return String(raw ?? id);
+  return lesson.title.trim() || id;
 }
 
 function lessonSummarySnippet(lesson: LessonContent): string | null {
