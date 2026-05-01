@@ -23,16 +23,32 @@ import {
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const sourceStatic = path.join(packageRoot, ".next", "static");
 
-function assertNonEmptyCssDir(staticRoot) {
-  const cssDir = path.join(staticRoot, "css");
-  if (!existsSync(cssDir)) {
-    throw new Error(
-      `[ensure-standalone-static] expected css output at ${cssDir} — is this a Next build?`,
-    );
+function listFilesRecursive(dir, predicate, out = []) {
+  if (!existsSync(dir)) {
+    return out;
   }
-  const files = readdirSync(cssDir).filter((n) => n.endsWith(".css"));
-  if (files.length === 0) {
-    throw new Error(`[ensure-standalone-static] no .css files under ${cssDir}`);
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name.startsWith(".")) {
+      continue;
+    }
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      listFilesRecursive(fullPath, predicate, out);
+      continue;
+    }
+    if (predicate(entry.name, fullPath)) {
+      out.push(fullPath);
+    }
+  }
+  return out;
+}
+
+function assertNonEmptyCssOutput(staticRoot) {
+  const cssFiles = listFilesRecursive(staticRoot, (name) => name.endsWith(".css"));
+  if (cssFiles.length === 0) {
+    throw new Error(
+      `[ensure-standalone-static] no .css files under ${staticRoot} (Next 16 may place them in chunks/)`,
+    );
   }
 }
 
@@ -78,7 +94,7 @@ if (!existsSync(sourceStatic)) {
     `[ensure-standalone-static] missing ${sourceStatic} — run next build before build:deploy.`,
   );
 }
-assertNonEmptyCssDir(sourceStatic);
+assertNonEmptyCssOutput(sourceStatic);
 assertNonEmptyChunksDir(sourceStatic);
 
 verifyStandaloneArtifact(packageRoot);
@@ -145,7 +161,7 @@ function prepareDestDir(destStatic) {
 function copyTree(destStatic, serverPath, mode) {
   prepareDestDir(destStatic);
   cpSync(sourceStatic, destStatic, { recursive: true, force: true });
-  assertNonEmptyCssDir(destStatic);
+  assertNonEmptyCssOutput(destStatic);
   assertNonEmptyChunksDir(destStatic);
   assertMediaSynced(sourceStatic, destStatic);
   console.log(
@@ -167,7 +183,7 @@ for (let i = 1; i < targets.length; i++) {
       );
     }
     symlinkSync(rel, destStatic);
-    assertNonEmptyCssDir(destStatic);
+    assertNonEmptyCssOutput(destStatic);
     assertNonEmptyChunksDir(destStatic);
     assertMediaSynced(sourceStatic, destStatic);
     console.log(

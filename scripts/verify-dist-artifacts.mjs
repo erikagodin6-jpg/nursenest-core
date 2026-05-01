@@ -24,9 +24,14 @@ function readText(p) {
 async function maybeVerifyNextStandalone() {
   const packageRoot = cwd;
   const standaloneVerifierPath = path.join(packageRoot, "scripts", "verify-standalone-artifact.mjs");
+  const ensureStandaloneStaticPath = path.join(packageRoot, "scripts", "ensure-standalone-static.mjs");
   const standaloneRoot = path.join(packageRoot, ".next", "standalone");
   if (!fs.existsSync(standaloneVerifierPath) || !fs.existsSync(standaloneRoot)) {
     return false;
+  }
+
+  if (fs.existsSync(ensureStandaloneStaticPath)) {
+    await import(pathToFileURL(ensureStandaloneStaticPath).href);
   }
 
   const standaloneVerifier = await import(pathToFileURL(standaloneVerifierPath).href);

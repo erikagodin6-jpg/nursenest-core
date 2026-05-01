@@ -90,6 +90,24 @@ export function verifyStandaloneArtifact(root = packageRoot) {
  * (`…/standalone/.next/static`, populated by `ensure-standalone-static.mjs` after `next build`).
  */
 export function verifyStandaloneStaticAssetsPresent(root = packageRoot) {
+  function collectFiles(dir, extension, out = []) {
+    if (!existsSync(dir)) {
+      return out;
+    }
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (entry.name.startsWith(".")) {
+        continue;
+      }
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        collectFiles(fullPath, extension, out);
+      } else if (entry.name.endsWith(extension)) {
+        out.push(fullPath);
+      }
+    }
+    return out;
+  }
+
   const targets = getStandaloneStaticSyncTargets(root);
   if (targets.length === 0) {
     throw new Error(
@@ -105,14 +123,13 @@ export function verifyStandaloneStaticAssetsPresent(root = packageRoot) {
       );
     }
     const chunksDir = path.join(destStatic, "chunks");
-    const cssDir = path.join(destStatic, "css");
-    if (!existsSync(chunksDir) || !existsSync(cssDir)) {
+    if (!existsSync(chunksDir)) {
       throw new Error(
-        `[verify-standalone-static] incomplete static tree under ${destStatic} (expected chunks/ and css/).`,
+        `[verify-standalone-static] incomplete static tree under ${destStatic} (expected chunks/).`,
       );
     }
     const chunkJs = readdirSync(chunksDir).filter((n) => n.endsWith(".js"));
-    const cssFiles = readdirSync(cssDir).filter((n) => n.endsWith(".css"));
+    const cssFiles = collectFiles(destStatic, ".css");
     if (chunkJs.length === 0 || cssFiles.length === 0) {
       throw new Error(
         `[verify-standalone-static] static tree at ${destStatic} is empty or corrupt (js=${chunkJs.length} css=${cssFiles.length}).`,
