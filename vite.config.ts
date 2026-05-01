@@ -1,14 +1,26 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
 import path from "node:path";
-import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
-import circularDependency from "vite-plugin-circular-dependency";
+import { createRequire } from "node:module";
+import { pathToFileURL } from "node:url";
 import { metaImagesPlugin } from "./vite-plugin-meta-images";
 
 const projectRoot = import.meta.dirname;
+const packageRequire = createRequire(
+  path.join(projectRoot, "nursenest-core", "package.json"),
+);
 const isProduction = process.env.NODE_ENV === "production";
 const isReplit = process.env.REPL_ID !== undefined;
+
+async function importPackage<T>(specifier: string): Promise<T> {
+  return import(pathToFileURL(packageRequire.resolve(specifier)).href) as Promise<T>;
+}
+
+const [{ defineConfig }, { default: react }, { default: tailwindcss }, { default: circularDependency }] =
+  await Promise.all([
+    importPackage<typeof import("vite")>("vite"),
+    importPackage<typeof import("@vitejs/plugin-react")>("@vitejs/plugin-react"),
+    importPackage<typeof import("@tailwindcss/vite")>("@tailwindcss/vite"),
+    importPackage<typeof import("vite-plugin-circular-dependency")>("vite-plugin-circular-dependency"),
+  ]);
 
 function vendorChunk(id: string): string | undefined {
   if (id.includes("\0commonjsHelpers") || id.includes("\0commonjs-")) {
@@ -59,7 +71,13 @@ function vendorChunk(id: string): string | undefined {
 
 const plugins = [
   react(),
-  ...(!isProduction ? [runtimeErrorOverlay()] : []),
+  ...(!isProduction
+    ? [
+        (await importPackage<typeof import("@replit/vite-plugin-runtime-error-modal")>(
+          "@replit/vite-plugin-runtime-error-modal",
+        )).default(),
+      ]
+    : []),
   tailwindcss(),
   metaImagesPlugin(),
   ...(isProduction && process.env.VITE_SKIP_CIRCULAR_CHECK !== "1"
@@ -75,8 +93,8 @@ const plugins = [
 
 if (!isProduction && isReplit) {
   const [{ cartographer }, { devBanner }] = await Promise.all([
-    import("@replit/vite-plugin-cartographer"),
-    import("@replit/vite-plugin-dev-banner"),
+    importPackage<typeof import("@replit/vite-plugin-cartographer")>("@replit/vite-plugin-cartographer"),
+    importPackage<typeof import("@replit/vite-plugin-dev-banner")>("@replit/vite-plugin-dev-banner"),
   ]);
 
   plugins.push(cartographer(), devBanner());
