@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
+import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 import { parseBlogSourcesJson } from "@/lib/blog/blog-citation-safety";
@@ -665,7 +665,7 @@ export function AdminBlogControlPanelClient({
         return;
       }
 
-      if (resStatus === 422 && json.code === "QUALITY_GATE") {
+      if (resStatus === 422 && (json.code === "QUALITY_GATE" || json.code === "OUTPUT_GATE")) {
         setGenState("failed");
         if (json.plan) {
           setPlan(json.plan);
@@ -853,7 +853,7 @@ export function AdminBlogControlPanelClient({
           setSaveErr(`${json.message ?? "Still insufficient citations."}${flagStr}`);
           return;
         }
-        if (res.status === 422 && json.code === "QUALITY_GATE") {
+        if (res.status === 422 && (json.code === "QUALITY_GATE" || json.code === "OUTPUT_GATE")) {
           const draftId =
             json.draftPost && typeof json.draftPost === "object" && "id" in json.draftPost
               ? String((json.draftPost as { id: unknown }).id)
@@ -1791,7 +1791,42 @@ export function AdminBlogControlPanelClient({
             </div>
           ) : null}
           {saveMsg ? <p className="text-sm text-emerald-700 dark:text-emerald-300">{saveMsg}</p> : null}
+          {saveMsg === "Published." && post ? (
+            <p className="text-sm">
+              <Link
+                href={`/blog/${encodeURIComponent(post.slug)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-primary underline-offset-4 hover:underline"
+              >
+                View live page
+              </Link>
+              <span className="text-muted-foreground"> — opens the public `/blog` article in a new tab.</span>
+            </p>
+          ) : null}
           {saveErr ? <p className="text-sm text-rose-700 dark:text-rose-300">{saveErr}</p> : null}
+          {post &&
+          post.postStatus !== BlogPostStatus.PUBLISHED &&
+          !(
+            post.postStatus === BlogPostStatus.SCHEDULED &&
+            post.publishAt &&
+            new Date(post.publishAt).getTime() <= Date.now()
+          ) ? (
+            <div
+              className="rounded-xl border p-3 text-xs"
+              style={{
+                borderColor: "color-mix(in srgb, var(--semantic-warning) 35%, var(--semantic-border-soft))",
+                background: "color-mix(in srgb, var(--semantic-panel-warm) 40%, transparent)",
+                color: "var(--semantic-text-secondary)",
+              }}
+            >
+              <p className="font-semibold text-[var(--theme-heading-text)]">Draft — not public yet</p>
+              <p className="mt-1 leading-snug">
+                This post is not guaranteed to appear on the public blog index or sitemap until you publish successfully and
+                it passes live visibility checks.
+              </p>
+            </div>
+          ) : null}
 
           {citationReview && citationReview.kind === "envelope" ? (
             <div className="grid gap-4 lg:grid-cols-2">

@@ -802,7 +802,6 @@ export async function persistControlPanelDraft(
         });
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
-        logBlogGenerationRejected(post.slug, msg);
         if (msg.includes("publishBlogPostCanonical: pre-publish") || msg.includes("publishGeneratedBlogArticle: publish blocked")) {
           const forPre = await prisma.blogPost.findUnique({
             where: { id: post.id },

@@ -164,23 +164,26 @@ export async function POST(req: Request) {
         { status: 422 },
       );
     }
-    if (persistResult.code === "QUALITY_GATE") {
+    if (persistResult.code === "QUALITY_GATE" || persistResult.code === "OUTPUT_GATE") {
       await logControlPanelPersistFailure({
         topic: d.topic,
-        code: "QUALITY_GATE",
+        code: persistResult.code,
         message: persistResult.error,
         createdById: gate.admin.userId,
       });
       return NextResponse.json(
         {
-          error: "quality_gate_blocked",
+          error: persistResult.code === "OUTPUT_GATE" ? "output_gate_blocked" : "quality_gate_blocked",
           code: persistResult.code,
           message: persistResult.error,
           draftPost: persistResult.post ?? null,
           postId: persistResult.post?.id,
           plan: persistResult.plan,
           warnings: persistResult.warnings ?? [],
-          hint: "Draft failed quality review: repeated filler content detected. Edit body/sections or regenerate; post saved as needs review.",
+          hint:
+            persistResult.code === "OUTPUT_GATE"
+              ? "Publication safety checks failed (length, placeholders, or metadata). Draft saved — expand the body, fix SEO fields, then use Publish now."
+              : "Draft failed quality review: repeated filler content detected. Edit body/sections or regenerate; post saved as needs review.",
         },
         { status: 422 },
       );

@@ -1,6 +1,15 @@
 /** Minimum substantive body length for long-form SEO posts (word count, HTML stripped). */
 export const BLOG_ARTICLE_MIN_WORDS = 1200;
 
+/** Below this word count, generated output is treated as metadata-only / too thin to save as published. */
+export const BLOG_ARTICLE_METADATA_ONLY_REJECT_UNDER_WORDS = 300;
+
+/** Minimum words for a normal (non-pillar) generated post to go live. */
+export const BLOG_ARTICLE_MIN_WORDS_STANDARD_PUBLISH = 800;
+
+/** Minimum words for SEO pillar / long-form generated posts to go live. */
+export const BLOG_ARTICLE_MIN_WORDS_PILLAR_PUBLISH = 1200;
+
 /**
  * Minimum substantive words before immediate publish (`publishImmediately`) or live `/blog` promotion.
  * Keeps long-form depth above the hard {@link BLOG_ARTICLE_MIN_WORDS} floor used for drafts.

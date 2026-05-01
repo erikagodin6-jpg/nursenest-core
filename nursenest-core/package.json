@@ -67,7 +67,7 @@
     "verify:public-links": "npx tsx scripts/seo/verify-public-marketing-links.ts",
     "verify:gsc-export": "npx tsx scripts/seo/verify-gsc-csv.ts",
     "test:seo-sitemap": "node --import tsx --test src/lib/seo/sitemap-public-index-filter.test.ts src/lib/seo/sitemap-merged-route.test.ts src/lib/seo/robots-route-source.contract.test.ts src/lib/blog/blog-sitemap-merge.contract.test.ts src/lib/blog/long-tail-seo-trio-blog-seed.contract.test.ts src/lib/observability/content-source-trace.test.ts",
-    "test:blog-recovery": "node --require ./scripts/stub-server-only.cjs --import tsx --test src/lib/blog/blog-recovery-audit.test.ts src/lib/blog/blog-article-generation-job-retry-backoff.test.ts src/lib/blog/blog-canonical-pipeline.contract.test.ts src/lib/blog/recover-blog-visibility.test.ts",
+    "test:blog-recovery": "node --require ./scripts/stub-server-only.cjs --import tsx --test src/lib/blog/blog-recovery-audit.test.ts src/lib/blog/blog-article-generation-job-retry-backoff.test.ts src/lib/blog/blog-canonical-pipeline.contract.test.ts src/lib/blog/recover-blog-visibility.test.ts src/lib/blog/blog-generation-output-gate.test.ts src/lib/blog/blog-related-reading-public.test.ts src/lib/blog/blog-marketing-lesson-path-tier.test.ts src/lib/blog/blog-publish-live-gate.contract.test.ts",
     "blog:seed-seo-trio": "npx tsx scripts/blog/seed-long-tail-seo-trio-blog-posts.mts",
     "seed:clinical-scenarios-real": "npx tsx scripts/seed-clinical-scenarios-real-runner.mts",
     "seed:clinical-nursing-scenarios": "npx tsx scripts/seed-clinical-nursing-scenarios.mts",

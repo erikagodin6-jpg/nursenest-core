@@ -183,7 +183,7 @@ export async function runClaimedBlogArticleGenerationJob(jobId: string): Promise
           bodyHtmlSnapshot: result.bodyHtml ?? undefined,
           blogPostId:
             result.stage === "persist" &&
-            (result.code === "PRE_PUBLISH_BLOCKED" || result.code === "QUALITY_GATE") &&
+            (result.code === "PRE_PUBLISH_BLOCKED" || result.code === "QUALITY_GATE" || result.code === "OUTPUT_GATE") &&
             result.details
               ? (() => {
                   const d = result.details as { draftPost?: { id?: string } | null };

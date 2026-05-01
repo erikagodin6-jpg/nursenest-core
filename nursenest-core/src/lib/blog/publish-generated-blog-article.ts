@@ -2,7 +2,13 @@ import type { Prisma, PrismaClient } from "@prisma/client";
 import { assessStructuralEligibility, parseBlogSourcesJson } from "@/lib/blog/blog-citation-safety";
 import { parseInternalLinkPlanJson } from "@/lib/blog/blog-image-workflow";
 import { blogReferenceLineLooksLikePlaceholder } from "@/lib/blog/blog-cli-publish-sniff";
-import { BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH, countWordsFromHtml } from "@/lib/blog/blog-word-count";
+import {
+  BLOG_ARTICLE_METADATA_ONLY_REJECT_UNDER_WORDS,
+  BLOG_ARTICLE_MIN_WORDS_PILLAR_PUBLISH,
+  BLOG_ARTICLE_MIN_WORDS_STANDARD_PUBLISH,
+  BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH,
+  countWordsFromHtml,
+} from "@/lib/blog/blog-word-count";
 import {
   blogPrePublishValidationSelect,
   validateBlogPrePublish,

@@ -152,7 +152,7 @@ export function classifyBlogPipelineFailureForRepair(
     return { recoverable: false, terminalReason: "citations" };
   }
 
-  if (code === "QUALITY_GATE") {
+  if (code === "QUALITY_GATE" || code === "OUTPUT_GATE") {
     return { recoverable: true };
   }
 
