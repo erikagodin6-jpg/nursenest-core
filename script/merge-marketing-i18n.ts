@@ -69,7 +69,7 @@ function enforcePlaceholderParityToEnglish(
  * maintain a parallel tree under nursenest-core/src/content.
  *
  * Writes canonical merged files to:
- * - `{APP_ROOT}/client/public/i18n/{lang}.json` (Vite monolith SPA)
+ * - `{REPO_ROOT}/client/public/i18n/{lang}.json` (Vite monolith SPA)
  * - `{APP_ROOT}/public/i18n/{lang}/*.json` — domain shards for Next.js (see `shared/i18n-shard-policy.ts`)
  */
 export function mergeMarketingIntoI18n(): void {

@@ -9,24 +9,31 @@ export const REPO_ROOT_FROM_SCRIPT = path.resolve(SCRIPT_DIR, "..");
 
 const I18N_EN_MARKER = path.join("tools", "i18n", "source", "i18n-en.ts");
 
+function hasRepoMarker(dir: string): boolean {
+  return existsSync(path.join(dir, I18N_EN_MARKER));
+}
+
 /**
  * Resolves the monorepo root by locating `tools/i18n/source/i18n-en.ts`.
  * Falls back to `REPO_ROOT_FROM_SCRIPT` when the marker is missing everywhere
  * (so callers still get stable paths for error messages / Docker diagnosis).
+ * Supports `process.cwd()` = `nursenest-core/` (npm --prefix / App Platform).
  */
 function discoverRepoRoot(): string {
   const fromScript = REPO_ROOT_FROM_SCRIPT;
-  if (existsSync(path.join(fromScript, I18N_EN_MARKER))) {
+  if (hasRepoMarker(fromScript)) {
     return fromScript;
   }
   const alternates = [
     path.resolve(fromScript, ".."),
     process.cwd(),
     path.resolve(process.cwd(), ".."),
-  ];
+    path.basename(process.cwd()) === "nursenest-core" ? path.resolve(process.cwd(), "..") : "",
+  ].filter(Boolean) as string[];
+
   for (const alt of alternates) {
     if (alt === fromScript) continue;
-    if (existsSync(path.join(alt, I18N_EN_MARKER))) {
+    if (hasRepoMarker(alt)) {
       console.warn(
         `[repo-root] Using alternate monorepo root (tools/i18n found here, not under script parent): ${alt}`,
       );
@@ -53,8 +60,8 @@ function discoverAppRoot(): string {
 /** Next.js app package (`nursenest-core/`) when present; otherwise the monorepo root. */
 export const APP_ROOT = discoverAppRoot();
 
-/** Vite monolith JSON output: `{appRoot}/client/public/i18n`. */
-export const CLIENT_PUBLIC_I18N_DIR = path.join(APP_ROOT, "client/public/i18n");
+/** Vite monolith JSON output at repo root: `client/public/i18n` (not under `nursenest-core/client/`). */
+export const CLIENT_PUBLIC_I18N_DIR = path.join(REPO_ROOT, "client/public/i18n");
 
 /** Next.js shard tree: `{appRoot}/public/i18n`. */
 export const NEXT_PUBLIC_I18N_SHARD_ROOT = path.join(APP_ROOT, "public/i18n");

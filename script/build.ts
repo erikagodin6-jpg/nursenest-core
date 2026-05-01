@@ -38,8 +38,12 @@ const CLIENT_ALIAS = {
   "@shared": path.resolve("shared"),
 };
 
+/** After `chdir(REPO_ROOT)`, esbuild still resolves allowlisted deps from the app package `node_modules/`. */
+const ESBUILD_NODE_PATHS = [path.join(APP_ROOT, "node_modules")].filter((p) => existsSync(p));
+
 function buildLessonsData() {
   return runEsbuild({
+    nodePaths: ESBUILD_NODE_PATHS,
     entryPoints: ["client/src/data/lessons/index.ts"],
     platform: "node",
     bundle: true,
@@ -65,6 +69,7 @@ function buildLessonsData() {
 
 function buildNpBatch(i: number) {
   return runEsbuild({
+    nodePaths: ESBUILD_NODE_PATHS,
     entryPoints: [`client/src/data/lessons/np-generated-batch-${i}.ts`],
     platform: "node",
     bundle: true,
@@ -179,6 +184,7 @@ async function buildServer(externalizeHeavyModules: boolean) {
   }
 
   return runEsbuild({
+    nodePaths: ESBUILD_NODE_PATHS,
     entryPoints: ["server/index.ts"],
     platform: "node",
     bundle: true,
@@ -249,6 +255,7 @@ async function buildExternalModules(entries: string[], label: string) {
           .replace(/\.ts$/, "")
           .replace(/\//g, "__");
         return runEsbuild({
+          nodePaths: ESBUILD_NODE_PATHS,
           entryPoints: [entry],
           platform: "node",
           bundle: true,
@@ -311,6 +318,7 @@ async function buildClientDataModules() {
   const externals = await getExternals();
 
   await runEsbuild({
+    nodePaths: ESBUILD_NODE_PATHS,
     entryPoints: clientDataFiles,
     platform: "node",
     bundle: false,
