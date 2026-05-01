@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { DM_Sans } from "next/font/google";
 
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
@@ -11,33 +11,12 @@ import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
 import "./globals.css";
 import "./(marketing)/marketing-dark-utilities.css";
 
-/** Self-hosted Latin weights (via @fontsource/dm-sans) — avoids fonts.googleapis.com / fonts.gstatic.com during `next build`. */
-const dmSans = localFont({
-  src: [
-    {
-      path: "../../node_modules/@fontsource/dm-sans/files/dm-sans-latin-400-normal.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../node_modules/@fontsource/dm-sans/files/dm-sans-latin-500-normal.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../../node_modules/@fontsource/dm-sans/files/dm-sans-latin-600-normal.woff2",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../../node_modules/@fontsource/dm-sans/files/dm-sans-latin-700-normal.woff2",
-      weight: "700",
-      style: "normal",
-    },
-  ],
+/** Turbopack-safe font source that preserves the existing CSS variable contract. */
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-dm-sans",
   display: "swap",
-  adjustFontFallback: "Arial",
   preload: true,
 });
 

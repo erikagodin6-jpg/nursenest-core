@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 import os from "node:os";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 function envTruthy(name) {
@@ -14,6 +15,9 @@ function envExplicitlyFalse(name) {
 
 const totalRamMb = Math.max(512, Math.floor(os.totalmem() / 1024 / 1024));
 const packageRoot = fileURLToPath(new URL(".", import.meta.url));
+const workspaceRoot = fileURLToPath(new URL("..", import.meta.url));
+const sharedRoot = path.join(workspaceRoot, "shared");
+const legacyClientRoot = path.join(workspaceRoot, "client", "src");
 /** ~9GiB or less → assume webpack/static workers should stay minimal unless opted out. */
 const autoLowMemoryHost = totalRamMb <= 9216;
 
@@ -169,9 +173,19 @@ const nextConfig = {
    */
   turbopack: {
     root: packageRoot,
+    resolveAlias: {
+      "@shared": sharedRoot,
+      "@legacy-client": legacyClientRoot,
+    },
   },
 
   webpack: (config, { dev }) => {
+    config.resolve = config.resolve || {};
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      "@shared": sharedRoot,
+      "@legacy-client": legacyClientRoot,
+    };
     config.parallelism = webpackParallelism;
     // PackFileCacheStrategy can throw ENOENT under load; disabling persistent cache trims disk + mmap pressure.
     if (!dev) {

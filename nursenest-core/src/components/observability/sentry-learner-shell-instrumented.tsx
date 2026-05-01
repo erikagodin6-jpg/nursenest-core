@@ -1,13 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import * as Sentry from "@sentry/nextjs";
 import { ErrorBoundary } from "@sentry/react";
 import { ProductErrorState } from "@/components/ui/product-error-state";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { getErrorMessageDevLine, shouldShowErrorBoundaryDevDetail } from "@/lib/runtime/error-message";
 import { sentryUserHashClient } from "@/lib/observability/sentry-user-hash-client";
 import { captureUxFailure, enrichSentryScopeWithUx } from "@/lib/observability/frontend-ux-tracking";
+import { setClientTagIfEnabled, setClientUserIfEnabled } from "@/lib/observability/sentry-if-enabled";
 
 function LearnerSentryErrorFallback({
   error,
@@ -73,8 +73,8 @@ export default function SentryLearnerShellInstrumented({
     void (async () => {
       const id = await sentryUserHashClient(userId);
       if (!cancelled) {
-        Sentry.setUser({ id });
-        Sentry.setTag("feature", "learner_app");
+        setClientUserIfEnabled({ id });
+        setClientTagIfEnabled("feature", "learner_app");
       }
     })();
     return () => {

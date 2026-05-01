@@ -43,7 +43,8 @@ export async function register() {
       // Sentry (deferred)
       if (isSentryServerRuntimeEnabled()) {
         try {
-          await import("./sentry.server.config");
+          const mod = await import("./sentry.server.config");
+          await mod.initSentryServerConfig?.();
         } catch {
           // swallow — do not break server boot
         }
@@ -66,7 +67,8 @@ export async function register() {
     if (runtime === "edge") {
       if (isSentryServerRuntimeEnabled()) {
         try {
-          await import("./sentry.edge.config");
+          const mod = await import("./sentry.edge.config");
+          await mod.initSentryEdgeConfig?.();
         } catch {
           // swallow — edge must stay resilient
         }
