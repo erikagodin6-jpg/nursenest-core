@@ -14,7 +14,7 @@
     "db:generate": "npx tsx scripts/run-prisma-with-env.mts generate",
     "db:status": "npx tsx scripts/run-prisma-with-env.mts migrate status",
     "prebuild": "node ../scripts/ensure-build-toolchain.mjs && npm run guard:build-scripts && npm run i18n:compile && node ../scripts/root-prebuild-i18n-validate.mjs && node scripts/write-build-git-meta.mjs",
-    "build": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && next build && node ../scripts/verify-dist-artifacts.mjs",
+    "build": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && next build --webpack && node ../scripts/verify-dist-artifacts.mjs",
     "build:server": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && BUILD_TARGET=server npx tsx ../script/build.ts && node ../scripts/verify-dist-artifacts.mjs",
     "build:client": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && BUILD_TARGET=client npx tsx ../script/build.ts && node ../scripts/verify-dist-artifacts.mjs",
     "build:heavy": "node scripts/ensure-node-memory.mjs && . ./scripts/.node-memory-exports.sh && BUILD_TARGET=heavy RUN_HEAVY_BUILD_TASKS=1 npx tsx ../script/build.ts && node ../scripts/verify-dist-artifacts.mjs",
@@ -157,6 +157,7 @@
   "dependencies": {
     "@auth/core": "0.37.2",
     "@auth/prisma-adapter": "^2.10.0",
+    "@fontsource/dm-sans": "^5.2.8",
     "@google-cloud/storage": "^7.19.0",
     "@hookform/resolvers": "^3.10.0",
     "@opentelemetry/api": "^1.9.0",
