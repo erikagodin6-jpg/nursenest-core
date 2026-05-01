@@ -13,6 +13,8 @@ external
 **/.next
 **/dist
 **/build
+!nursenest-core/src/lib/build
+!nursenest-core/src/lib/build/**
 **/.turbo
 
 # Tests & Playwright (not needed for production image)
