@@ -6,7 +6,6 @@ import { existsSync } from "fs";
 import { gzipSync } from "zlib";
 import { compileI18n } from "./compile-i18n";
 import { execSync } from "child_process";
-import { runI18nScan } from "./scan-hardcoded-strings-lib";
 
 type EsbuildBuildFn = (typeof import("esbuild"))["build"];
 type ViteBuildFn = (typeof import("vite"))["build"];
@@ -439,6 +438,28 @@ async function generateCoverageReport(log: (msg: string) => void): Promise<void>
   log("coverage report written to dist/i18n-coverage-report.json");
 }
 
+function parseExplicitBoolEnv(v: string | undefined): boolean | null {
+  const t = String(v ?? "").trim().toLowerCase();
+  if (t === "1" || t === "true" || t === "yes") return true;
+  if (t === "0" || t === "false" || t === "no") return false;
+  return null;
+}
+
+/**
+ * AST scan pulls `typescript` — skip in production / App Platform unless
+ * `RUN_HARDCODED_STRING_SCAN=true` (e.g. after `npm prune --omit=dev`).
+ */
+function shouldRunAstHardcodedStringScan(): boolean {
+  const explicit = parseExplicitBoolEnv(process.env.RUN_HARDCODED_STRING_SCAN);
+  if (explicit === true) return true;
+  if (explicit === false) return false;
+  if (process.env.NODE_ENV === "production") return false;
+  const nnApp = String(process.env.NN_APP_PLATFORM_BUILD ?? "").trim().toLowerCase();
+  if (nnApp === "1" || nnApp === "true" || nnApp === "yes") return false;
+  if (/^(1|true|yes)$/i.test(String(process.env.NN_LOW_MEMORY_BUILD ?? "").trim())) return false;
+  return true;
+}
+
 function applyHerokuStackBuildDefaults(): void {
   const stack = process.env.STACK || "";
   if (!stack.startsWith("heroku-")) return;
@@ -503,23 +524,29 @@ async function buildAll() {
   }
 
   if (!skipValidation) {
-    log("scanning for hardcoded strings...");
-    let scanConfig: Record<string, any> = {};
-    try {
-      scanConfig = JSON.parse(await readFile("i18n-scan.config.json", "utf-8"));
-    } catch {}
-    const scanPassed = runI18nScan({
-      quiet: true,
-      failOnCritical: scanConfig.failOnCritical ?? false,
-      criticalThreshold: scanConfig.criticalThreshold ?? 0,
-      totalThreshold: scanConfig.totalThreshold ?? 35000,
-    });
-    if (!scanPassed) {
-      console.error("\n❌ Build aborted: hardcoded string violations exceed thresholds.");
-      console.error("   Run 'npm run i18n:scan' for details.\n");
-      process.exit(1);
+    const runAstScan = shouldRunAstHardcodedStringScan();
+    if (runAstScan) {
+      log("scanning for hardcoded strings (AST)...");
+      let scanConfig: Record<string, any> = {};
+      try {
+        scanConfig = JSON.parse(await readFile("i18n-scan.config.json", "utf-8"));
+      } catch {}
+      const { runI18nScan } = await import("./scan-hardcoded-strings-lib");
+      const scanPassed = await runI18nScan({
+        quiet: true,
+        failOnCritical: scanConfig.failOnCritical ?? false,
+        criticalThreshold: scanConfig.criticalThreshold ?? 0,
+        totalThreshold: scanConfig.totalThreshold ?? 35000,
+      });
+      if (!scanPassed) {
+        console.error("\n❌ Build aborted: hardcoded string violations exceed thresholds.");
+        console.error("   Run 'npm run i18n:scan' for details.\n");
+        process.exit(1);
+      }
+      log("i18n scan passed");
+    } else {
+      console.log("[build] skipping hardcoded string scan during production Docker build");
     }
-    log("i18n scan passed");
   }
 
   if (target === "all" || target === "client") {
