@@ -91,6 +91,8 @@ import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import { loadMarketingMessageShardsSync } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { LEARNER_APP_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { StaffEditLivePageBanner } from "@/components/staff/staff-edit-live-page-banner";
+import { buildAdminPathwayLessonStableEditHref } from "@/lib/admin/pathway-lesson-stable-edit-href";
 
 /**
  * Paywall: full `PathwayLessonRecord` / `sections[]` stay in this server component. Gate with
@@ -521,6 +523,14 @@ export async function PathwayLessonDetailPageBody({
         </p>
 
         <MarketingStudyCrossLinks className="mt-12" />
+        <StaffEditLivePageBanner
+          adminHref={buildAdminPathwayLessonStableEditHref({
+            pathwayId: pathway.id,
+            slug: lesson.slug,
+            locale: lessonContentLocale,
+          })}
+          label="Edit this pathway lesson"
+        />
         {hasLessonSequence ? <PathwayLessonStickySequenceNav adjacent={lessonAdjacentHrefs} /> : null}
       </div>
     </div>

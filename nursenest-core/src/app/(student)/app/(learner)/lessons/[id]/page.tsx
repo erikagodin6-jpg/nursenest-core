@@ -100,6 +100,8 @@ import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
 import { AppLessonRelatedReading } from "@/components/linking/app-lesson-related-reading";
+import { StaffEditLivePageBanner } from "@/components/staff/staff-edit-live-page-banner";
+import { buildAdminPathwayLessonStableEditHref } from "@/lib/admin/pathway-lesson-stable-edit-href";
 
 /** Bust data cache after admin publishes pathway or ContentItem lessons (see admin PATCH + revalidatePath). */
 export const dynamic = "force-dynamic";
@@ -879,6 +881,14 @@ async function LessonDetailPageInner({ params }: Props) {
 
     return (
       <div className="nn-lesson-page nn-lesson-page--learner-app">
+        <StaffEditLivePageBanner
+          adminHref={buildAdminPathwayLessonStableEditHref({
+            pathwayId,
+            slug: record.slug,
+            locale: pathwayLessonLocale,
+          })}
+          label="Edit this pathway lesson"
+        />
         <div className="nn-lesson-editorial-rail">
           <LessonPageHeader
             title={displayTitle}
@@ -1019,6 +1029,7 @@ async function LessonDetailPageInner({ params }: Props) {
 
   return (
     <div className="nn-lesson-page">
+      <StaffEditLivePageBanner adminHref={`/admin/lessons/${encodeURIComponent(id)}`} label="Edit this lesson" />
       <header className="nn-lesson-page-header">
         <Link
           href="/app/lessons"

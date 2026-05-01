@@ -50,6 +50,7 @@ import { ProgrammaticSeoContinuationSection } from "@/components/seo/programmati
 import { AutomaticRelatedContentForPublic } from "@/components/linking/automatic-related-content-for-public";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { StaffEditLivePageBanner } from "@/components/staff/staff-edit-live-page-banner";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -250,6 +251,10 @@ export default async function BlogPostPage({ params }: Props) {
         bodyHtml: post.body,
       });
       const schemaKeywords = blogSchemaKeywords(seo, post.tags);
+      const staffBlogAdminHref =
+        typeof post.id === "string" && !post.id.startsWith("static:")
+          ? `/admin/blog?id=${encodeURIComponent(post.id)}`
+          : null;
 
       return (
         <article className="mx-auto max-w-3xl px-4 py-12">
@@ -456,6 +461,7 @@ export default async function BlogPostPage({ params }: Props) {
             labelledById="blog-study-links-bottom"
           />
           <MarketingStudyCrossLinks className="mt-12" />
+          <StaffEditLivePageBanner adminHref={staffBlogAdminHref} label="Edit this blog post" />
         </article>
       );
     },
