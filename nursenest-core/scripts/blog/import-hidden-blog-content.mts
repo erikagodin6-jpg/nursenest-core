@@ -23,6 +23,7 @@ import {
   type HiddenBlogImportPlanFlags,
 } from "../../src/lib/blog/hidden-blog-content-import-plan";
 import { LONG_FORM_BLOG_POSTS } from "../../src/lib/seo/long-form-seo-blog-posts";
+import { LF2_POSTS } from "../../src/lib/seo/long-form-seo-blog-posts-chunk2";
 import { publishBlogPostCanonical } from "../../src/lib/blog/publish-blog-post-canonical";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -203,6 +204,29 @@ async function resolveCandidateBody(row: InventoryRow): Promise<ResolvedCandidat
     };
   }
 
+  if (st === "long_form_post_ts_chunk2") {
+    const post = LF2_POSTS.find((p) => p.slug === slug);
+    if (!post) return null;
+    const bodyMarkdown = post.sections.map((s) => `${s.heading}\n${s.body}`).join("\n\n");
+    const bodyHtml = longFormSectionsToHtml(post.sections);
+    const wc = countWordsFromMarkdown(bodyMarkdown);
+    return {
+      row,
+      bodyHtml,
+      wordCount: wc,
+      excerpt: post.metaDescription,
+      seoTitle: post.metaTitle,
+      seoDescription: post.metaDescription,
+      category: null,
+      tags: [post.primaryKeyword],
+      careerSlug: post.profession,
+      exam: post.exam,
+      locale: post.locale,
+      apaReferences: post.references.map((r) => r.text),
+      requiresReferences: true,
+      relatedLessonPaths: [],
+    };
+  }
 
   return null;
 }
