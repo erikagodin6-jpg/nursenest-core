@@ -1,0 +1,407 @@
+{
+  "generatedAt": "2026-05-01T22:10:43.856Z",
+  "us": [
+    {
+      "pathwayLessonsKey": "us-allied-core",
+      "professionKey": "mlt",
+      "label": "Medical laboratory exam prep",
+      "topicSlugsIn": [
+        "lab-values",
+        "infection-control",
+        "medical-terminology",
+        "clinical-documentation"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-infection-control",
+        "allied-lab-values",
+        "allied-medical-terminology"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "us-allied-core",
+      "professionKey": "paramedic",
+      "label": "Paramedic certification exam prep",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "vital-signs",
+        "emergency-response",
+        "patient-communication",
+        "clinical-documentation"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-emergency-response",
+        "allied-patient-assessment",
+        "allied-patient-communication",
+        "allied-vital-signs"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "us-allied-core",
+      "professionKey": "ota",
+      "label": "Occupational therapy assistant exam prep",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "patient-communication",
+        "clinical-documentation",
+        "human-anatomy",
+        "human-physiology"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-human-anatomy",
+        "allied-human-physiology",
+        "allied-patient-assessment",
+        "allied-patient-communication"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "us-allied-core",
+      "professionKey": "pta",
+      "label": "Physical therapist assistant exam prep",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "human-anatomy",
+        "human-physiology",
+        "vital-signs",
+        "patient-communication"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-human-anatomy",
+        "allied-human-physiology",
+        "allied-patient-assessment",
+        "allied-patient-communication",
+        "allied-vital-signs"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "us-allied-core",
+      "professionKey": "social-work",
+      "label": "Social work exam prep",
+      "topicSlugsIn": [
+        "patient-communication",
+        "clinical-documentation",
+        "healthcare-teamwork",
+        "medical-ethics"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-healthcare-teamwork",
+        "allied-medical-ethics",
+        "allied-patient-communication"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "us-allied-core",
+      "professionKey": "mental-health-addictions",
+      "label": "Mental health and addictions worker exam prep",
+      "topicSlugsIn": [
+        "patient-communication",
+        "clinical-documentation",
+        "healthcare-teamwork",
+        "medical-ethics"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-healthcare-teamwork",
+        "allied-medical-ethics",
+        "allied-patient-communication"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "us-allied-core",
+      "professionKey": "psw-hca",
+      "label": "PSW, HCA, and CCA exam prep",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "vital-signs",
+        "patient-communication",
+        "infection-control",
+        "healthcare-teamwork"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-healthcare-teamwork",
+        "allied-infection-control",
+        "allied-patient-assessment",
+        "allied-patient-communication",
+        "allied-vital-signs"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "us-allied-core",
+      "professionKey": "respiratory",
+      "label": "Respiratory therapy (RRT) exam prep",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "vital-signs",
+        "emergency-response",
+        "infection-control",
+        "human-physiology"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-emergency-response",
+        "allied-human-physiology",
+        "allied-infection-control",
+        "allied-patient-assessment",
+        "allied-vital-signs"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "us-allied-core",
+      "professionKey": "imaging",
+      "label": "Medical imaging exam prep",
+      "topicSlugsIn": [
+        "imaging-basics",
+        "patient-assessment",
+        "vital-signs",
+        "medical-terminology"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-imaging-basics",
+        "allied-medical-terminology",
+        "allied-patient-assessment",
+        "allied-vital-signs"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "us-allied-core",
+      "professionKey": "pharmacy-tech",
+      "label": "Pharmacy technician exam prep",
+      "topicSlugsIn": [
+        "medication-safety",
+        "pharmacology-basics",
+        "medical-terminology",
+        "clinical-documentation"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-medical-terminology",
+        "allied-medication-safety",
+        "allied-pharmacology-basics"
+      ],
+      "status": "mapped"
+    }
+  ],
+  "ca": [
+    {
+      "pathwayLessonsKey": "ca-allied-core",
+      "professionKey": "mlt",
+      "label": "Medical laboratory exam prep",
+      "topicSlugsIn": [
+        "lab-values",
+        "infection-control",
+        "medical-terminology",
+        "clinical-documentation"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-infection-control",
+        "allied-lab-values",
+        "allied-medical-terminology"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "ca-allied-core",
+      "professionKey": "paramedic",
+      "label": "Paramedic certification exam prep",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "vital-signs",
+        "emergency-response",
+        "patient-communication",
+        "clinical-documentation"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-emergency-response",
+        "allied-patient-assessment",
+        "allied-patient-communication",
+        "allied-vital-signs"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "ca-allied-core",
+      "professionKey": "ota",
+      "label": "Occupational therapy assistant exam prep",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "patient-communication",
+        "clinical-documentation",
+        "human-anatomy",
+        "human-physiology"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-human-anatomy",
+        "allied-human-physiology",
+        "allied-patient-assessment",
+        "allied-patient-communication"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "ca-allied-core",
+      "professionKey": "pta",
+      "label": "Physical therapist assistant exam prep",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "human-anatomy",
+        "human-physiology",
+        "vital-signs",
+        "patient-communication"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-human-anatomy",
+        "allied-human-physiology",
+        "allied-patient-assessment",
+        "allied-patient-communication",
+        "allied-vital-signs"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "ca-allied-core",
+      "professionKey": "social-work",
+      "label": "Social work exam prep",
+      "topicSlugsIn": [
+        "patient-communication",
+        "clinical-documentation",
+        "healthcare-teamwork",
+        "medical-ethics"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-healthcare-teamwork",
+        "allied-medical-ethics",
+        "allied-patient-communication"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "ca-allied-core",
+      "professionKey": "mental-health-addictions",
+      "label": "Mental health and addictions worker exam prep",
+      "topicSlugsIn": [
+        "patient-communication",
+        "clinical-documentation",
+        "healthcare-teamwork",
+        "medical-ethics"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-healthcare-teamwork",
+        "allied-medical-ethics",
+        "allied-patient-communication"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "ca-allied-core",
+      "professionKey": "psw-hca",
+      "label": "PSW, HCA, and CCA exam prep",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "vital-signs",
+        "patient-communication",
+        "infection-control",
+        "healthcare-teamwork"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-healthcare-teamwork",
+        "allied-infection-control",
+        "allied-patient-assessment",
+        "allied-patient-communication",
+        "allied-vital-signs"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "ca-allied-core",
+      "professionKey": "respiratory",
+      "label": "Respiratory therapy (RRT) exam prep",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "vital-signs",
+        "emergency-response",
+        "infection-control",
+        "human-physiology"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-emergency-response",
+        "allied-human-physiology",
+        "allied-infection-control",
+        "allied-patient-assessment",
+        "allied-vital-signs"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "ca-allied-core",
+      "professionKey": "imaging",
+      "label": "Medical imaging exam prep",
+      "topicSlugsIn": [
+        "imaging-basics",
+        "patient-assessment",
+        "vital-signs",
+        "medical-terminology"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-imaging-basics",
+        "allied-medical-terminology",
+        "allied-patient-assessment",
+        "allied-vital-signs"
+      ],
+      "status": "mapped"
+    },
+    {
+      "pathwayLessonsKey": "ca-allied-core",
+      "professionKey": "pharmacy-tech",
+      "label": "Pharmacy technician exam prep",
+      "topicSlugsIn": [
+        "medication-safety",
+        "pharmacology-basics",
+        "medical-terminology",
+        "clinical-documentation"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-medical-terminology",
+        "allied-medication-safety",
+        "allied-pharmacology-basics"
+      ],
+      "status": "mapped"
+    }
+  ]
+}

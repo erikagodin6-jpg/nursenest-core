@@ -75,7 +75,7 @@ for (const pathway of coverage.pathways ?? []) {
   }
 }
 
-const v = run(process.execPath, ["node", path.join(coreRoot, "scripts", "verify-normalized-lesson-indexes.mjs")], {
+const v = run("node", [path.join(coreRoot, "scripts", "verify-normalized-lesson-indexes.mjs")], {
   env: { ...process.env },
 });
 if (v.status !== 0) {

@@ -35,3 +35,19 @@
 - Live detail-route revalidation is requested immediately after mutation
 - Generated lesson-index snapshots are rebuild-driven and now explicitly reported in the admin UI
 - `reports/lesson-normalization-coverage.json` and `reports/lesson-normalization-coverage.md` document which raw lessons are renderable vs excluded and why
+
+## Verification commands
+
+- `npm run build:lesson-indexes` — regenerates `generated-indexes/*.json` + coverage reports; fails if raw>0 and live=0 or >20% unexpected exclusions.
+- `npm run verify:lesson-indexes` — compares generated files to live normalization (no stale disk shortcut in verify leg).
+- `npm run content:source-of-truth:verify` — coverage gates + lesson index verify.
+- `npm run content:source-of-truth:audit` — refreshes this file’s companion checklist timestamps (lightweight).
+- `NN_FORCE_PUBLISH_VALID_RAW_LESSONS=1` — optional ops mode to include additional catalog rows that pass minimum safety checks (see `pathway-lesson-force-publish.ts`); collisions get deterministic `__nn-dup-N` slug suffixes.
+
+## Blogs
+
+- See `reports/blog-source-of-truth-audit.md` and `npm run content:report-hidden-blogs`.
+
+## Flashcards / questions
+
+- Learner data remains pathway-scoped; marketing lesson detail pages link to `HUB.flashcards` and `HUB.questionBank` for cross-surface navigation.
