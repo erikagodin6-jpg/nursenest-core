@@ -8,6 +8,7 @@
  * `marketing-entry-routes` / `country-exam-offerings` modules via this file’s re-exports.
  */
 
+import { CountryCode } from "@prisma/client";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { CountryExamOfferingId } from "@/lib/marketing/country-exam-offerings";
 import { defaultPathwayIdForMarketingOffering, marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
@@ -59,12 +60,14 @@ export function offeringIdForTier(tier: NavSessionTier): CountryExamOfferingId {
  */
 export function learnerMarketingPathwayIdFromSession(user: {
   tier?: NavSessionTier | string | null;
-  country?: "US" | "CA" | null;
+  country?: CountryCode | null;
 } | null): string | null {
   if (!user?.tier || !user.country) return null;
+  if (user.country !== CountryCode.US && user.country !== CountryCode.CA) return null;
   const tier = String(user.tier);
   if (tier === "PRE_NURSING" || tier === "NEW_GRAD") return null;
-  return defaultPathwayIdForMarketingOffering(user.country, offeringIdForTier(tier as NavSessionTier));
+  const region = user.country === CountryCode.US ? "US" : "CA";
+  return defaultPathwayIdForMarketingOffering(region, offeringIdForTier(tier as NavSessionTier));
 }
 
 /** Tiers that map to marketing exam hubs / pre-nursing surfaces (header Learn–Practice row). */

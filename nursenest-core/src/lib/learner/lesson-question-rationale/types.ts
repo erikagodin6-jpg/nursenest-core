@@ -4,7 +4,7 @@
  */
 
 import type { CountryCode } from "@prisma/client";
-import type { RoleTrackSlug } from "@/lib/exam-pathways/types";
+import type { CountrySlug, RoleTrackSlug } from "@/lib/exam-pathways/types";
 
 /** Clinical bucket for analytics, filtering, and diversity caps. */
 export type LessonConceptDomain =
@@ -29,7 +29,7 @@ export type RationaleLessonLinkKind =
 export type PathwayRationaleContext = {
   pathwayId: string;
   countryCode: CountryCode;
-  countrySlug: "us" | "canada";
+  countrySlug: CountrySlug;
   roleTrack: RoleTrackSlug;
 };
 

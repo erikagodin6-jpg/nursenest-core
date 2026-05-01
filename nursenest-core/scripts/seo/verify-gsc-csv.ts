@@ -93,4 +93,7 @@ async function main() {
   console.log(`[verify:gsc-export] wrote ${out}`);
 }
 
-await main();
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

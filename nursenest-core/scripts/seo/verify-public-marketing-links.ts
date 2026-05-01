@@ -114,4 +114,7 @@ async function main() {
   console.log(`[verify:public-links] OK checked ${visited.size} pages from ${SEEDS.length} seeds`);
 }
 
-await main();
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

@@ -40,4 +40,7 @@ async function main() {
   console.log(`[verify:robots] OK ${url}`);
 }
 
-await main();
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

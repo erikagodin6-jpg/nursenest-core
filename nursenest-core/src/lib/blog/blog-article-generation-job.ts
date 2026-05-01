@@ -9,6 +9,7 @@ import {
   classifyBlogPipelineFailureForRepair,
 } from "@/lib/blog/blog-generation-repair-classifier";
 import { prisma } from "@/lib/db";
+import { computeBlogGenerationJobRetryBackoffMs } from "@/lib/blog/blog-generation-retry-backoff";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { publishBlogPostCanonical } from "@/lib/blog/publish-blog-post-canonical";
 import { blogPrePublishValidationSelect, validateBlogPrePublish } from "@/lib/blog/blog-pre-publish-validation";
@@ -119,7 +120,7 @@ function failureRepairable(pipeline: {
 export async function claimBlogArticleGenerationJob(jobId: string): Promise<boolean> {
   const out = await prisma.blogArticleGenerationJob.updateMany({
     where: { id: jobId, stage: "queued" },
-    data: { stage: "generating_plan", updatedAt: new Date() },
+    data: { stage: "generating_plan", updatedAt: new Date(), nextAttemptAt: null },
   });
   return out.count === 1;
 }
@@ -417,6 +418,7 @@ export async function retryRepairBlogArticleGenerationJob(jobId: string): Promis
       lastError: null,
       failureCode: null,
       retryCount: { increment: 1 },
+      nextAttemptAt: null,
     },
   });
   safeServerLog("admin", "blog_article_generation_job_retry_queued", { jobId });
@@ -498,6 +500,43 @@ export async function tickBlogArticleGenerationJob(jobId: string): Promise<{
   return { ok: out.ok, claimed: true, ran: true, error: out.error };
 }
 
+export { computeBlogGenerationJobRetryBackoffMs };
+
+/**
+ * Re-queue a **failed, repairable** job without running the pipeline in this invocation.
+ * Sets `nextAttemptAt` so {@link pumpBlogArticleGenerationJobs} will not claim it until the window elapses.
+ */
+export async function scheduleDeferredBlogArticleGenerationJobRetry(jobId: string): Promise<{
+  ok: boolean;
+  reason?: string;
+  nextAttemptAt?: string;
+}> {
+  const row = await prisma.blogArticleGenerationJob.findUnique({
+    where: { id: jobId },
+    select: { id: true, stage: true, repairable: true, retryCount: true },
+  });
+  if (!row) return { ok: false, reason: "not_found" };
+  if (row.stage === "published") return { ok: false, reason: "already_published" };
+  if (row.stage !== "failed" || !row.repairable) {
+    return { ok: false, reason: "not_failed_or_not_repairable" };
+  }
+  const next = new Date(Date.now() + computeBlogGenerationJobRetryBackoffMs(row.retryCount));
+  await prisma.blogArticleGenerationJob.update({
+    where: { id: jobId },
+    data: {
+      stage: "queued",
+      retryCount: { increment: 1 },
+      nextAttemptAt: next,
+    },
+  });
+  safeServerLog("admin", "blog_article_generation_job_deferred_retry", {
+    jobId,
+    nextAttemptAt: next.toISOString(),
+    retryCount: String(row.retryCount + 1),
+  });
+  return { ok: true, nextAttemptAt: next.toISOString() };
+}
+
 /** Cron: process the oldest queued job (one per invocation). */
 export async function pumpBlogArticleGenerationJobs(): Promise<{
   processed: boolean;
@@ -505,8 +544,12 @@ export async function pumpBlogArticleGenerationJobs(): Promise<{
   ok?: boolean;
   error?: string;
 }> {
+  const now = new Date();
   const job = await prisma.blogArticleGenerationJob.findFirst({
-    where: { stage: "queued" },
+    where: {
+      stage: "queued",
+      OR: [{ nextAttemptAt: null }, { nextAttemptAt: { lte: now } }],
+    },
     orderBy: { createdAt: "asc" },
     select: { id: true },
   });

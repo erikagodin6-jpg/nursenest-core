@@ -16,6 +16,15 @@ import { absoluteUrl } from "@/lib/seo/site-origin";
  * Not used on auth routes (`/login`, `/signup`) — those are separate route modules.
  */
 export function examPathwayRegionalHreflang(pathway: ExamPathwayDefinition): Record<string, string> {
+  if (pathway.countrySlug === "uk" || pathway.countrySlug === "australia" || pathway.countrySlug === "philippines") {
+    const selfUrl = absoluteUrl(buildExamPathwayPath(pathway));
+    const out: Record<string, string> = { "x-default": selfUrl };
+    if (pathway.countrySlug === "uk") out["en-GB"] = selfUrl;
+    if (pathway.countrySlug === "australia") out["en-AU"] = selfUrl;
+    if (pathway.countrySlug === "philippines") out["en-PH"] = selfUrl;
+    return filterPublicHreflangRecord(out, "seo", "exam_pathway_hreflang_rejected");
+  }
+
   const siblings = EXAM_PATHWAYS.filter(
     (p) =>
       p.roleTrack === pathway.roleTrack &&

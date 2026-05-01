@@ -39,11 +39,12 @@ export function getLearnerExamFraming(pathwayId: string | null | undefined): Lea
     };
   }
   const isCa = p.countryCode === CountryCode.CA;
+  const isUs = p.countryCode === CountryCode.US;
   const examShortLabel = ctx ? getTerminology("pn_exam_short", ctx) : p.shortName;
   const unlicensedAssistiveLabel = ctx ? getTerminology("unlicensed_assistive", ctx) : isCa ? "unregulated care provider" : "UAP";
   const delegationHint = ctx ? getTerminology("delegation_hint_short", ctx) : null;
   return {
-    region: isCa ? "ca" : "us",
+    region: isCa ? "ca" : isUs ? "us" : "unknown",
     examShortLabel,
     examIdentityLabel: p.displayName,
     passingStandardPhrase: isCa
@@ -54,7 +55,9 @@ export function getLearnerExamFraming(pathwayId: string | null | undefined): Lea
       ? `Review ${delegationHint}.`
       : isCa
         ? "Follow provincial college standards for delegation and scope."
-        : "Follow state scope and facility policy for delegation.",
+        : isUs
+          ? "Follow state scope and facility policy for delegation."
+          : "Follow your regulator’s scope, delegation, and supervision rules.",
     unlicensedAssistiveLabel,
   };
 }

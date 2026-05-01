@@ -50,6 +50,7 @@ import { readPathwayLessonsHubPageSnapshot } from "@/lib/study-content-failover/
 import { snapshotAgeMs as publishedSnapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
+import { logAppLessonsHubListSource } from "@/lib/observability/content-source-trace";
 
 /** Align with lesson detail — list should reflect admin publish without stale RSC cache. */
 export const dynamic = "force-dynamic";
@@ -543,6 +544,13 @@ export default async function LessonsPage({ searchParams }: Props) {
 
     redirect(q ? `/app/lessons${q}` : "/app/lessons");
   }
+
+  logAppLessonsHubListSource({
+    source: lessonsBlock.source,
+    inventory: lessonsHubInventorySource,
+    pathwayId: pathwayIdFilter,
+    page: lessonsBlock.page,
+  });
 
   const resolvedRenderableLessons: AppLessonListRow[] = [...lessonsBlock.rows];
 

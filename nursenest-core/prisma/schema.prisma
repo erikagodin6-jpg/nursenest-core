@@ -822,12 +822,15 @@ model BlogArticleGenerationJob {
   resultSlug       String?   @db.VarChar(200)
   resultTitle      String?   @db.VarChar(300)
   resultPostStatus String?   @db.VarChar(32)
+  /// * When set, `pumpBlogArticleGenerationJobs` must not claim the row until `now >= nextAttemptAt` (retry backoff).
+  nextAttemptAt    DateTime? @map("next_attempt_at")
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   createdBy        User?     @relation(fields: [createdById], references: [id], onDelete: SetNull)
   blogPost         BlogPost? @relation(fields: [blogPostId], references: [id], onDelete: SetNull)
 
   @@index([stage, createdAt])
+  @@index([stage, nextAttemptAt])
   @@map("blog_article_generation_jobs")
 }
 
@@ -2644,6 +2647,9 @@ enum InlineContentKind {
 enum CountryCode {
   CA
   US
+  GB
+  AU
+  PH
 }
 
 enum TierCode {

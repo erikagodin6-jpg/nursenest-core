@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType } from "react";
 import { createPortal } from "react-dom";
+import { CountryCode } from "@prisma/client";
 import { useTheme } from "next-themes";
 import { getNavChromeStyle, getNavChromeVars } from "@/lib/theme/nav-chrome";
 import { ChevronDown, MapPin, Menu, Settings, User, X } from "lucide-react";
@@ -74,7 +75,6 @@ const HEADER_SECONDARY_ACTION_CLASS =
 const HEADER_GUEST_SECONDARY_ACTION_CLASS =
   "nav-item inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
-type LearnerCountry = "CA" | "US";
 type HeaderResumeCta = { href: string; label: string } | null;
 type HeaderNavLink = { key: string; href: string; label: string; matchBase: string };
 
@@ -112,11 +112,22 @@ function isMegaMenuKeyActive(key: ExamMenuKey, strippedPath: string): boolean {
 /** Sync badge line — allied-specific abbreviation is resolved client-side via dynamic import. */
 function examIndicatorLabelSync(
   t: (key: string) => string,
-  country: LearnerCountry,
+  country: CountryCode,
   tier: LearnerTier,
   alliedAbbrev: string | null,
 ): string {
-  const regionShort = country === "CA" ? t("nav.badge.regionCA") : t("nav.badge.regionUS");
+  const regionShort =
+    country === CountryCode.CA
+      ? t("nav.badge.regionCA")
+      : country === CountryCode.US
+        ? t("nav.badge.regionUS")
+        : country === CountryCode.GB
+          ? "UK"
+          : country === CountryCode.AU
+            ? "AU"
+            : country === CountryCode.PH
+              ? "PH"
+              : String(country);
   if (tier === "LVN_LPN") return `${regionShort} ${t("nav.badge.roleLvnLpn")}`;
   if (tier === "RPN") return `${regionShort} ${t("nav.badge.roleRpn")}`;
   if (tier === "ALLIED") {
@@ -180,7 +191,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
         strippedPathname: strippedPath,
         globalRegionCookie: clientGlobalRegion,
         marketingExamRegion: region,
-        sessionCountryUsCa: user?.country,
+        sessionCountryCode: user?.country,
       }),
     [strippedPath, clientGlobalRegion, region, user?.country],
   );
@@ -324,7 +335,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
 
   const learnerExamBadge =
     isMarketingEntitledLearner && user
-      ? examIndicatorLabelSync(t, user.country as LearnerCountry, user.tier as LearnerTier, alliedProfessionAbbrev)
+      ? examIndicatorLabelSync(t, user.country, user.tier as LearnerTier, alliedProfessionAbbrev)
       : null;
   const activeProfession: string = isLearnerRole && user?.tier
     ? (user.tier === "RPN" || user.tier === "LVN_LPN" ? "pn" : user.tier === "NP" ? "np" : user.tier === "ALLIED" ? "allied" : "rn")
@@ -333,7 +344,12 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const marketingFlowDestinations = useMemo(() => {
     const tier: MarketingHeaderFlowTier | null =
       isMarketingEntitledLearner && user?.tier ? (user.tier as MarketingHeaderFlowTier) : null;
-    const country = (user?.country as "US" | "CA" | null) ?? null;
+    const country =
+      user?.country === CountryCode.US || user?.country === CountryCode.CA
+        ? user.country === CountryCode.US
+          ? "US"
+          : "CA"
+        : null;
     return marketingHeaderLearnPracticeFlowDestinations(region, { tier, country });
   }, [isMarketingEntitledLearner, user?.tier, user?.country, region]);
 

@@ -4,6 +4,8 @@
  * - Logs the resolved NODE_OPTIONS (merges default heap when missing).
  * - Writes `scripts/.node-memory-exports.sh` so shells can `source` merged NODE_OPTIONS (npm `dev` / `build` / `start`).
  * - Does not override an existing `--max-old-space-size=…` in NODE_OPTIONS.
+ * - When `NODE_OPTIONS` has no heap flag, uses `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` (MB) if set (e.g. DigitalOcean),
+ *   otherwise defaults to 4096. Never upgrades to 8192 implicitly.
  * - Warn-only when total RAM < 8 GiB (no behavior change).
  *
  * Idempotent: safe to run multiple times.
@@ -18,13 +20,27 @@ const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const exportsPath = path.join(packageRoot, "scripts", ".node-memory-exports.sh");
 
 const HEAP_RE = /--max-old-space-size=\d+/;
-const DEFAULT_HEAP = "--max-old-space-size=4096";
+const DEFAULT_HEAP_MB = 4096;
 const EIGHT_GIB = 8 * 1024 ** 3;
+
+function heapFlagFromBuildEnvMb() {
+  const raw = process.env.BUILD_NODE_MAX_OLD_SPACE_SIZE_MB;
+  if (raw === undefined || raw === "") return null;
+  const n = parseInt(String(raw).trim(), 10);
+  if (!Number.isFinite(n) || n < 256 || n > 65536) return null;
+  return `--max-old-space-size=${n}`;
+}
+
+function defaultHeapFlag() {
+  return heapFlagFromBuildEnvMb() ?? `--max-old-space-size=${DEFAULT_HEAP_MB}`;
+}
 
 function mergeNodeOptions() {
   const raw = String(process.env.NODE_OPTIONS ?? "").trim();
+  /** Respect platform-injected heap (e.g. DO `NODE_OPTIONS=--max-old-space-size=4096`). */
   if (HEAP_RE.test(raw)) return raw;
-  return raw ? `${raw} ${DEFAULT_HEAP}` : DEFAULT_HEAP;
+  const heap = defaultHeapFlag();
+  return raw ? `${raw} ${heap}` : heap;
 }
 
 function shSingleQuoted(value) {

@@ -74,4 +74,7 @@ async function main() {
   console.log(`[validate:production-public-html] OK ${paths.length} paths @ ${base}`);
 }
 
-await main();
+main().catch((err) => {
+  console.error("[validate:production-public-html] fatal error:", err);
+  process.exit(1);
+});

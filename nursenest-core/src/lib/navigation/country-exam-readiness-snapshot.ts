@@ -3,6 +3,8 @@
  * Regenerate via `npm run readiness:emit-snapshot`.
  */
 
+import pathwayReadinessSnapshotJson from "@/config/pathway-readiness-snapshot.json";
+
 type SnapshotRow = { lessons?: number; questions?: number };
 type SnapshotDocument = Record<string, SnapshotRow | string | undefined>;
 
@@ -10,7 +12,7 @@ let pathwayReadinessSnapshotCache: SnapshotDocument | null = null;
 
 function getPathwayReadinessSnapshot(): SnapshotDocument {
   if (pathwayReadinessSnapshotCache) return pathwayReadinessSnapshotCache;
-  pathwayReadinessSnapshotCache = require("@/config/pathway-readiness-snapshot.json") as SnapshotDocument;
+  pathwayReadinessSnapshotCache = pathwayReadinessSnapshotJson as SnapshotDocument;
   return pathwayReadinessSnapshotCache;
 }
 

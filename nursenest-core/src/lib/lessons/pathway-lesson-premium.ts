@@ -430,7 +430,14 @@ export function validatePathwayLessonLegacyStructural(lesson: PathwayLessonRecor
   return { legacyReady, issues, warnings, internalStudyLinkCount };
 }
 
-/** Single entry point for admin, CI, and runtime gating. */
+/**
+ * Single entry point for admin, CI, and runtime gating.
+ *
+ * Uses {@link lessonQualifiesForPremiumStructuralGate} (premium spine: substantive commitment rows **or**
+ * ≥3 substantive spine kinds). That is the same **spine** signal embedded in {@link lessonQualifiesForPremiumNormalization}
+ * alongside meaningful-clinical and authoritative-sole-source expander bypasses — those bypasses still run
+ * {@link validatePathwayLessonLegacyStructural} here because their sections are not full premium-spine shapes.
+ */
 export function evaluatePathwayLessonStructuralGate(lesson: PathwayLessonRecord): PathwayLessonStructuralGate {
   if (lessonQualifiesForPremiumStructuralGate(lesson.sections)) {
     const v = validatePathwayLessonPremium({

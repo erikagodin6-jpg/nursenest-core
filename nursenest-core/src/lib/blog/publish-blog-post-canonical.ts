@@ -49,7 +49,8 @@ export type BlogCanonicalPublishContext =
   | "bulk_chunk_blog_publish"
   | "script_promote_control_panel_drafts"
   | "recover_missed_blog_batch"
-  | "recover_generated_blog_script";
+  | "recover_generated_blog_script"
+  | "audit_hidden_blogs_apply";
 
 export type PublishBlogPostCanonicalInput = {
   postId: string;

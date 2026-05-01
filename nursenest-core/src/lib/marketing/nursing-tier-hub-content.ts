@@ -1,3 +1,4 @@
+import { ExamFamily } from "@prisma/client";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   marketingTierHubStudyActionHref,
@@ -89,7 +90,12 @@ function examLabelFor(pathway: ExamPathwayDefinition): string {
 }
 
 function countryLabelFor(pathway: ExamPathwayDefinition): string {
-  return pathway.countrySlug === "canada" ? "Canada" : "the United States";
+  if (pathway.countrySlug === "canada") return "Canada";
+  if (pathway.countrySlug === "us") return "the United States";
+  if (pathway.countrySlug === "uk") return "the United Kingdom";
+  if (pathway.countrySlug === "australia") return "Australia";
+  if (pathway.countrySlug === "philippines") return "the Philippines";
+  return pathway.countrySlug;
 }
 
 export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): NursingTierHubContent {
@@ -101,16 +107,28 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
     slug: pathway.id,
   });
 
+  const isGenericIntl = pathway.examFamily === ExamFamily.GENERIC;
+
   return {
     audienceLabel,
     examLabel,
     title,
-    intro: `${examLabel} prep for ${countryLabel}: choose lessons, flashcards, practice questions, or adaptive CAT-style exams next.`,
-    description: `This area contains ${examLabel} learning and exam-prep resources for ${audienceLabel} learners in ${countryLabel}.`,
-    includedNote: `Included for this tier: ${examLabel} study resources, pathway-specific lessons, exam-style practice, and CAT readiness work for ${audienceLabel} learners in ${countryLabel}.`,
-    startHere: "Start with Lessons, then move into Practice Questions and Exams as your confidence grows.",
+    intro: isGenericIntl
+      ? `${examLabel} preparation context for ${countryLabel}: start with lessons and drills that strengthen transferable clinical judgement, then confirm every regulatory step with your official body.`
+      : `${examLabel} prep for ${countryLabel}: choose lessons, flashcards, practice questions, or adaptive CAT-style exams next.`,
+    description: isGenericIntl
+      ? `This hub explains how NurseNest can support ${audienceLabel} learners targeting registration in ${countryLabel} without claiming to replace regulator materials.`
+      : `This area contains ${examLabel} learning and exam-prep resources for ${audienceLabel} learners in ${countryLabel}.`,
+    includedNote: isGenericIntl
+      ? `Study tiles link to the same lesson, flashcard, and question surfaces used for North American pathways where noted; formats may include NCLEX-style items for cognitive rehearsal and are not copies of regulator-specific examinations.`
+      : `Included for this tier: ${examLabel} study resources, pathway-specific lessons, exam-style practice, and CAT readiness work for ${audienceLabel} learners in ${countryLabel}.`,
+    startHere: isGenericIntl
+      ? "Begin with Lessons for orientation, add Flashcards for recall, then use Practice Questions for drills. Treat optional adaptive sessions as reasoning practice only."
+      : "Start with Lessons, then move into Practice Questions and Exams as your confidence grows.",
     differenceHeading: "What is the difference?",
-    differenceBody: "Use Lessons for core concepts, Flashcards for recall, Practice Questions for focused drills, and Exams for longer exam-style sessions.",
+    differenceBody: isGenericIntl
+      ? "Lessons summarise concepts, Flashcards speed recall, Practice Questions build judgement under time pressure, and optional adaptive sessions mirror NCLEX-style pacing—not regulator-owned exam designs."
+      : "Use Lessons for core concepts, Flashcards for recall, Practice Questions for focused drills, and Exams for longer exam-style sessions.",
     actions: [
       {
         id: "lessons",
@@ -133,8 +151,14 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
       {
         id: "exams",
         label: resolveMarketingDisplayCopy({ curatedCopy: "Exams" }),
-        description: "Take exam-style sessions.",
+        description: isGenericIntl
+          ? "Optional adaptive sessions (NCLEX-style pacing)."
+          : "Take exam-style sessions.",
         href: marketingTierHubStudyActionHref(pathway, "exams"),
+        disabled: isGenericIntl,
+        disabledNote: isGenericIntl
+          ? "Adaptive sessions use NCLEX-style formats for cognitive rehearsal only. They are not the NMC CBT, AHPRA/NMBA assessments, or PRC PNLE."
+          : undefined,
       },
     ],
   };

@@ -128,4 +128,7 @@ async function main() {
   console.log(`[verify:sitemap] OK ${locs.length} URLs (${sitemapUrl})`);
 }
 
-await main();
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

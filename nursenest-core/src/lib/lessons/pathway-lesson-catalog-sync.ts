@@ -4,9 +4,10 @@
  * Catalog-backed and still heavy enough to keep out of shared layouts, homepage chrome, and nav/header paths.
  *
  * **Expander choice:** `normalizeLesson` uses `lessonQualifiesForPremiumNormalization` (meaningful clinical
- * prose, premium structural spine, **or** authoritative incoming section copy). **Publish / `structuralPublicComplete`:** use
- * `evaluatePathwayLessonStructuralGate` in `pathway-lesson-premium.ts` — structural gate only, not the
- * meaningful-content bypass.
+ * prose, premium structural spine, **or** authoritative incoming section copy). **Structural publish gate**
+ * (`evaluatePathwayLessonStructuralGate`): uses {@link lessonQualifiesForPremiumStructuralGate} (the premium-spine
+ * portion of that union) so meaningful-clinical / authoritative bypasses keep legacy structural validation while
+ * still skipping `expandToStandardFiveSections` in `normalizeLesson`.
  */
 import { createRequire } from "node:module";
 import { inferExamAudienceFromPathwayId } from "@/lib/lessons/exam-complete-lesson-template";

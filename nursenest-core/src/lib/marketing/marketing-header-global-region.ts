@@ -1,3 +1,4 @@
+import type { CountryCode } from "@prisma/client";
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { HUB_BY_REGION } from "@/lib/marketing/global-region-exam-hubs";
 import type { NursenestRegion } from "@/lib/region/use-nursenest-region";
@@ -65,8 +66,8 @@ export type EffectiveDefaultPublicGlobalRegionInput = {
   /** Raw `nn_global_region` cookie value (may include expansion regions). */
   globalRegionCookie: GlobalRegionSlug | null;
   marketingExamRegion: NursenestRegion;
-  /** From session `user.country` when `"US"` | `"CA"` */
-  sessionCountryUsCa: "US" | "CA" | undefined;
+  /** From session `user.country` (Prisma `CountryCode`) — only US/CA influence this resolver. */
+  sessionCountryCode: CountryCode | undefined;
 };
 
 /**
@@ -84,7 +85,7 @@ export type EffectiveDefaultPublicGlobalRegionInput = {
 export function effectiveDefaultPublicGlobalRegion(
   args: EffectiveDefaultPublicGlobalRegionInput,
 ): GlobalRegionSlug {
-  const { strippedPathname, globalRegionCookie, marketingExamRegion, sessionCountryUsCa } = args;
+  const { strippedPathname, globalRegionCookie, marketingExamRegion, sessionCountryCode } = args;
 
   const routeUsCa = usOrCanadaFromMarketingPath(strippedPathname);
   if (routeUsCa) return routeUsCa;
@@ -94,8 +95,8 @@ export function effectiveDefaultPublicGlobalRegion(
   const routeExpansion = expansionRegionFromExamsPath(strippedPathname);
   if (routeExpansion) return routeExpansion;
 
-  if (sessionCountryUsCa === "CA") return "canada";
-  if (sessionCountryUsCa === "US") return "us";
+  if (sessionCountryCode === "CA") return "canada";
+  if (sessionCountryCode === "US") return "us";
 
   if (globalRegionCookie && isUsOrCanadaSlug(globalRegionCookie)) {
     return globalRegionCookie;

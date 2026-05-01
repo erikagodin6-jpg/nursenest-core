@@ -1,7 +1,7 @@
 import type { CountryCode, ExamFamily, TierCode } from "@prisma/client";
 
 /** URL segment for country (not the same as Prisma `CountryCode` string). */
-export type CountrySlug = "canada" | "us";
+export type CountrySlug = "canada" | "us" | "uk" | "australia" | "philippines";
 
 /** License / role track in URLs — kept separate from Prisma `TierCode`. */
 export type RoleTrackSlug = "rpn" | "lpn" | "rn" | "np" | "allied";

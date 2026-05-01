@@ -7,7 +7,7 @@
  *   node scripts/audit-hidden-blog-content.mjs
  *   node scripts/audit-hidden-blog-content.mjs --no-db   (forwarded if implemented upstream)
  *
- * Safety: `--apply` is rejected here; the underlying audit never mutates the database.
+ * Safety: `--apply` throws `Apply disabled until audit approved` (no Prisma run). Audit is read-only.
  */
 import { spawnSync } from "node:child_process";
 import path from "node:path";

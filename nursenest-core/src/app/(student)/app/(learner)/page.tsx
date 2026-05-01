@@ -10,13 +10,13 @@ import { ReadinessLockedCard } from "@/components/student/dashboard/readiness-sc
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
 import { buildLearnerStudySnapshot } from "@/lib/learner/build-learner-study-snapshot";
-import { buildSmartStudyNextRecommendations } from "@/lib/learner/smart-study-next-engine";
-import type { StudyNextRecommendation } from "@/lib/learner/study-next-types";
 import { prisma } from "@/lib/db";
 import {
   buildContinueLearningItems,
   continueLearningItemsToLinks,
 } from "@/lib/learner/build-continue-learning-items";
+import { loadStudyResumeExtras } from "@/lib/learner/load-study-resume-extras";
+import { buildSmartStudyNextRecommendations } from "@/lib/learner/smart-study-next-engine";
 import { loadLearnerRetentionPreferences } from "@/lib/learner/load-learner-retention-preferences";
 import { loadTodayGoalProgress } from "@/lib/learner/load-today-goal-progress";
 import { loadDailyQuestionGoalProgress } from "@/lib/learner/load-daily-question-goal-progress";
@@ -44,12 +44,11 @@ import { resolveDisplayName } from "@/lib/user/resolve-display-name";
 import { resolveDashboardIdentity } from "@/lib/learner/resolve-dashboard-identity";
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { withPathwayScopeHref } from "@/lib/learner/pathway-scoped-href";
-import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { LearnerStudyHomeDurabilityMinimal } from "@/components/student/learner-study-home-durability-minimal";
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
-import { LearnerDashboardUserPanelBand } from "@/components/student/learner-dashboard-user-panel-band";
 
 type DashboardSessionLike = {
   user?: {
@@ -60,7 +59,6 @@ type DashboardSessionLike = {
 
 /** Match learner shell: CAT entry for nursing exam tracks; generic exams hub otherwise. */
 function examsNavLabelFromLearnerContext(
-  getExamPathwayById: (id: string) => ExamPathwayDefinition | undefined,
   learnerPath: string | null | undefined,
   tier: string | null | undefined,
 ): "CAT Exams" | "Exams" {
@@ -156,42 +154,39 @@ async function LearnerDashboardHeavyContent({
   let benchmark: BenchmarkData | null = null;
   const studySettings = await loadStudySettings(userId);
   const skipNonCriticalHome = shouldSkipNonCriticalLearnerWork();
-  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
-  /** Prefer DB-resolved entitlement (includes admin learner QA overlay) over JWT tier for chrome copy. */
-  const tierForDashboardCopy =
-    entitlement.tier != null ? String(entitlement.tier) : session?.user?.tier ?? null;
-  const alliedKeyForDashboardCopy = entitlement.alliedCareer ?? userAlliedProfessionKey;
 
   try {
     const snap = await loadPremiumDashboardSnapshot(userId, entitlement);
-    const [nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, daysSinceLastActivity] = await Promise.all([
-      buildLearnerStudySnapshot(userId, entitlement, undefined, {
-        topicPerformance: snap?.topicPerformance,
-        studyBootstrap: snap
-          ? {
-              alliedProfessionKey: snap.studyBootstrap.alliedProfessionKey,
-              tier: snap.studyBootstrap.tier,
-              learnerPath: snap.studyBootstrap.learnerPath,
-            }
-          : undefined,
-      }),
-      loadRecentLearnerNotesSummary(userId),
-      loadTodayGoalProgress(userId),
-      loadDailyQuestionGoalProgress(userId),
-      loadLearnerRetentionPreferences(userId),
-      skipNonCriticalHome ? Promise.resolve(null) : loadDaysSinceLastActivity(userId),
-    ]);
+    const [nextSnap, notes, todayGoal, questionBankGoal, retentionPrefs, daysSinceLastActivity, resumeExtras] =
+      await Promise.all([
+        buildLearnerStudySnapshot(userId, entitlement, undefined, {
+          topicPerformance: snap?.topicPerformance,
+          studyBootstrap: snap
+            ? {
+                alliedProfessionKey: snap.studyBootstrap.alliedProfessionKey,
+                tier: snap.studyBootstrap.tier,
+                learnerPath: snap.studyBootstrap.learnerPath,
+              }
+            : undefined,
+        }),
+        loadRecentLearnerNotesSummary(userId),
+        loadTodayGoalProgress(userId),
+        loadDailyQuestionGoalProgress(userId),
+        loadLearnerRetentionPreferences(userId),
+        skipNonCriticalHome ? Promise.resolve(null) : loadDaysSinceLastActivity(userId),
+        loadStudyResumeExtras(userId),
+      ]);
     snapshot = snap;
     studySnap = nextSnap;
     weakTopicTitles = studySnap?.weakTopics.map((w) => w.topic) ?? [];
     benchmark = snap && !skipNonCriticalHome ? await computeBenchmarkData(userId, snap.readiness) : null;
     const progressFeedbackLine = studySnap?.topicTrends.find((r) => r.momentum === "improving")?.summary ?? null;
+    let adaptiveStudyNextRecs: Awaited<ReturnType<typeof buildSmartStudyNextRecommendations>> | undefined;
+    if (studySnap && !skipNonCriticalHome) {
+      adaptiveStudyNextRecs = await buildSmartStudyNextRecommendations(userId, studySnap, { maxTotal: 2 });
+    }
     if (snapshot) {
       const premiumSnapshot = snapshot;
-      let adaptiveStudyNextRecs: StudyNextRecommendation[] | undefined;
-      if (studySnap) {
-        adaptiveStudyNextRecs = await buildSmartStudyNextRecommendations(userId, studySnap, { maxTotal: 2 });
-      }
       const resume =
         premiumSnapshot.continueLesson ??
         (premiumSnapshot.lessonContinuations[0]
@@ -201,7 +196,10 @@ async function LearnerDashboardHeavyContent({
             }
           : null);
       const momentumLine = premiumSnapshot.momentumMessages[0] ?? null;
-      const continueLinks = continueLearningItemsToLinks(buildContinueLearningItems(premiumSnapshot), t);
+      const continueLinks = continueLearningItemsToLinks(
+        buildContinueLearningItems(premiumSnapshot, resumeExtras),
+        t,
+      );
       const personalNote = retentionPersonalNote(t, retentionPrefs);
       const streakProtect =
         todayGoal != null && premiumSnapshot.studyStreakDays > 0 && todayGoal.credits < todayGoal.target;
@@ -246,9 +244,9 @@ async function LearnerDashboardHeavyContent({
         premiumSnapshot.studyStreakDays === 0;
 
       const identity = resolveDashboardIdentity({
-        tier: tierForDashboardCopy,
+        tier: session?.user?.tier,
         learnerPathId: userLearnerPath,
-        alliedProfessionKey: alliedKeyForDashboardCopy,
+        alliedProfessionKey: userAlliedProfessionKey,
       });
 
       const coachSummary =
@@ -269,9 +267,8 @@ async function LearnerDashboardHeavyContent({
           crumbs={crumbs}
           t={t}
           locale={locale}
-          examsNavLabel={examsNavLabelFromLearnerContext(getExamPathwayById, userLearnerPath, tierForDashboardCopy)}
+          examsNavLabel={examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier)}
           identity={identity}
-          entitlement={entitlement}
           heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
           snapshot={premiumSnapshot}
           studySnap={studySnap}
@@ -295,13 +292,14 @@ async function LearnerDashboardHeavyContent({
           showCoach={isStudyCoachEnabled()}
           coachSummary={coachSummary}
           studySettings={studySettings}
-          adaptiveStudyNextRecs={adaptiveStudyNextRecs}
           priorityEyebrowKey={
             isNewLearnerPriority
               ? "learner.studyHome.sectionPriorityEyebrowNew"
               : "learner.studyHome.sectionPriorityEyebrow"
           }
           showShell={false}
+          entitlement={entitlement}
+          adaptiveStudyNextRecs={adaptiveStudyNextRecs}
         />
       );
     }
@@ -310,16 +308,16 @@ async function LearnerDashboardHeavyContent({
   }
 
   const identityFallback = resolveDashboardIdentity({
-    tier: tierForDashboardCopy,
+    tier: session?.user?.tier,
     learnerPathId: userLearnerPath,
-    alliedProfessionKey: alliedKeyForDashboardCopy,
+    alliedProfessionKey: userAlliedProfessionKey,
   });
   return (
     <LearnerStudyHomeDurabilityMinimal
       crumbs={crumbs}
       t={t}
       locale={locale}
-      examsNavLabel={examsNavLabelFromLearnerContext(getExamPathwayById, userLearnerPath, tierForDashboardCopy)}
+      examsNavLabel={examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier)}
       identity={identityFallback}
       heroHeading={userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title")}
       pathwayId={userLearnerPath}
@@ -388,39 +386,22 @@ async function LearnerDashboardDeferredContent({
     // DB errors: continue to dashboard rather than blocking
   }
 
-  const tierForDashboardCopy =
-    entitlement !== "error" && entitlement.tier != null
-      ? String(entitlement.tier)
-      : session?.user?.tier ?? null;
-  const alliedKeyForDashboardCopy =
-    entitlement !== "error" && entitlement.alliedCareer != null
-      ? String(entitlement.alliedCareer)
-      : userAlliedProfessionKey;
   const identity = resolveDashboardIdentity({
-    tier: tierForDashboardCopy,
+    tier: session?.user?.tier,
     learnerPathId: userLearnerPath,
-    alliedProfessionKey: alliedKeyForDashboardCopy,
+    alliedProfessionKey: userAlliedProfessionKey,
   });
   const heroHeading = userDisplayName ? `${userDisplayName}\u2019s Study Hub` : t("learner.dashboard.title");
-  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
-  const examsNavLabel = examsNavLabelFromLearnerContext(getExamPathwayById, userLearnerPath, tierForDashboardCopy);
+  const examsNavLabel = examsNavLabelFromLearnerContext(userLearnerPath, session?.user?.tier);
 
   if (entitlement === "error") {
     return (
       <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={heroHeading} identity={identity}>
-        <LearnerDashboardUserPanelBand
-          t={t}
-          locale={locale}
-          pathwayId={userLearnerPath}
-          examsNavLabel={examsNavLabel}
-          entitlement="error"
-          includeStudyShortcuts={false}
-        />
         <PremiumEmptyState
           headline={t("learner.dashboard.title")}
           body={t("learner.entitlement.verifyFailed")}
           tone="default"
-          primaryCta={{ label: t("learner.dashboard.openAccountHub"), href: "/app/account", variant: "primary" }}
+          primaryCta={{ label: t("learner.dashboard.openAccountHub"), href: "/app/account/overview", variant: "primary" }}
           secondaryCtas={[{ label: t("nav.lessons"), href: "/lessons", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
@@ -455,14 +436,6 @@ async function LearnerDashboardDeferredContent({
   if (!entitlement.hasAccess) {
     return (
       <LearnerDashboardPageShell crumbs={crumbs} t={t} heroHeading={heroHeading} identity={identity}>
-        <LearnerDashboardUserPanelBand
-          t={t}
-          locale={locale}
-          pathwayId={userLearnerPath}
-          examsNavLabel={examsNavLabel}
-          entitlement={entitlement}
-          includeStudyShortcuts
-        />
         <section className="nn-dash-section">
           <div className="nn-learner-page-hero">
             <p className="mt-2.5 max-w-2xl text-[0.9375rem] leading-relaxed text-[var(--semantic-text-secondary)]">
@@ -472,7 +445,7 @@ async function LearnerDashboardDeferredContent({
         </section>
 
         <section className="nn-dash-section">
-          <ReadinessLockedCard t={t} />
+          <ReadinessLockedCard />
           <BenchmarkLockedCard />
         </section>
 

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo } from "react";
+import { buildAppFlashcardsWeakTopicHref } from "@/lib/learner/app-study-internal-links";
 import {
   buildAppTopicDrillHref,
   buildSessionTopicRollup,
@@ -101,6 +102,11 @@ export function QuestionSessionStudyLoopPanel({ questions, graded, pathwayId, vi
             {weak.slice(0, 5).map((row) => {
               const drill =
                 row.topicDrillHref ?? buildAppTopicDrillHref({ topic: row.topic, topicCode: row.topicCode, pathwayId });
+              const flashHref =
+                (row.flashcardsHref && row.flashcardsHref.trim()) ||
+                (pathwayId && row.topicCode?.trim()
+                  ? buildAppFlashcardsWeakTopicHref(pathwayId, row.topicCode.trim().toLowerCase())
+                  : null);
               const total = row.wrong + row.right;
               const wrongPct = total > 0 ? Math.round((row.wrong / total) * 100) : 0;
               return (
@@ -124,6 +130,14 @@ export function QuestionSessionStudyLoopPanel({ questions, graded, pathwayId, vi
                         className="inline-flex min-h-9 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3.5 text-xs font-semibold text-[var(--semantic-text-primary)] hover:border-[color-mix(in_srgb,var(--semantic-brand)_28%,var(--semantic-border-soft))] hover:bg-[var(--semantic-panel-muted)]"
                       >
                         {t("learner.studyLoop.openLesson")}
+                      </Link>
+                    ) : null}
+                    {flashHref ? (
+                      <Link
+                        href={flashHref}
+                        className="inline-flex min-h-9 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3.5 text-xs font-semibold text-[var(--semantic-text-primary)] hover:border-[color-mix(in_srgb,var(--semantic-chart-3)_28%,var(--semantic-border-soft))] hover:bg-[var(--semantic-panel-muted)]"
+                      >
+                        {t("learner.studyLoop.sameTopicFlashcards")}
                       </Link>
                     ) : null}
                     <Link

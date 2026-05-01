@@ -95,7 +95,7 @@ export function MarketingHeaderUtilityStrip({
         strippedPathname: strippedPath,
         globalRegionCookie: clientGlobalRegion,
         marketingExamRegion: region,
-        sessionCountryUsCa: user?.country,
+        sessionCountryCode: user?.country,
       }),
     [strippedPath, clientGlobalRegion, region, user?.country],
   );

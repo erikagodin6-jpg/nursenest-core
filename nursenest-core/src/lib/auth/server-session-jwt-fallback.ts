@@ -2,6 +2,7 @@
  * Server-only by usage (`headers()`, React `cache`) — do not import from Client Components.
  * Intentionally no `import "server-only"` so Node unit tests can import {@link sessionHasUserIdentity}.
  */
+import { CountryCode } from "@prisma/client";
 import { cache } from "react";
 import { cookies, headers } from "next/headers";
 import { NextRequest } from "next/server";
@@ -79,7 +80,16 @@ function sessionFromJwtToken(token: JWT): Session | null {
   const expSec = typeof token.exp === "number" ? token.exp : Math.floor(Date.now() / 1000) + 3600;
   const name = typeof token.name === "string" && token.name.length > 0 ? token.name : email || "Learner";
   const role = (token.role ?? "LEARNER") as SessionUserRole;
-  const country = (token.country === "CA" || token.country === "US" ? token.country : "US") as "CA" | "US";
+  const jwtCountry = token.country as CountryCode | undefined;
+  const country = (
+    jwtCountry === CountryCode.CA ||
+    jwtCountry === CountryCode.US ||
+    jwtCountry === CountryCode.GB ||
+    jwtCountry === CountryCode.AU ||
+    jwtCountry === CountryCode.PH
+      ? jwtCountry
+      : CountryCode.US
+  ) as Session["user"]["country"];
   const tier = (token.tier === "RPN" ||
   token.tier === "LVN_LPN" ||
   token.tier === "RN" ||

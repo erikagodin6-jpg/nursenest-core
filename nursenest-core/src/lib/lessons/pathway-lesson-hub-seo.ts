@@ -6,13 +6,19 @@
  * - Rows omit unusable links via `pathwayLessonHasRenderableHubSlug` (pathway-lesson-types).
  * - Public `/lessons` index filters by `pathwayMatchesMarketingRegion` (nursing-tier-public-labels).
  */
+import { ExamFamily } from "@prisma/client";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { resolveLessonContextForPathway } from "@/lib/lessons/lesson-region-exam";
 import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 
 /** Country label for visible copy and meta. */
-export function pathwayCountryLabel(pathway: ExamPathwayDefinition): "Canada" | "United States" {
-  return pathway.countrySlug === "canada" ? "Canada" : "United States";
+export function pathwayCountryLabel(pathway: ExamPathwayDefinition): string {
+  if (pathway.countrySlug === "canada") return "Canada";
+  if (pathway.countrySlug === "us") return "United States";
+  if (pathway.countrySlug === "uk") return "United Kingdom";
+  if (pathway.countrySlug === "australia") return "Australia";
+  if (pathway.countrySlug === "philippines") return "Philippines";
+  return pathway.countrySlug;
 }
 
 /**
@@ -20,6 +26,9 @@ export function pathwayCountryLabel(pathway: ExamPathwayDefinition): "Canada" | 
  * Fallback behavior (missing/unknown region) defaults to NCLEX naming for PN/RN.
  */
 export function pathwayRegionAwareExamName(pathway: ExamPathwayDefinition): string {
+  if (pathway.examFamily === ExamFamily.GENERIC) {
+    return pathway.shortName || pathway.displayName;
+  }
   const { exam } = resolveLessonContextForPathway(pathway);
   if (exam === "REX_PN") return "REx-PN";
   if (exam === "NCLEX_PN") return "NCLEX-PN";
@@ -36,7 +45,10 @@ export function pathwayRegionAwareExamName(pathway: ExamPathwayDefinition): stri
 export function pathwayLessonHubH1(pathway: ExamPathwayDefinition): string {
   const place = pathwayCountryLabel(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
-  const country = pathway.countrySlug === "canada" ? "CA" : "US";
+  const country = pathway.countrySlug === "canada" ? "CA" : pathway.countrySlug === "us" ? "US" : "US";
+  if (pathway.examFamily === ExamFamily.GENERIC && pathway.roleTrack === "rn") {
+    return `${examName} clinical reasoning lessons · ${place}`;
+  }
   switch (pathway.roleTrack) {
     case "rn":
       return `${examName} clinical lessons for ${place}`;
@@ -62,7 +74,19 @@ export function pathwayLessonHubMetaDescription(pathway: ExamPathwayDefinition):
   if (pathway.countrySlug === "canada") {
     return `Practice ${examName} reasoning with guided clinical lessons, topic drills, and links to pathway questions and adaptive tests. Built for Canadian nurses.`;
   }
-  return `Practice ${examName} reasoning with guided clinical lessons, topic drills, and pathway-matched question practice. Built for US nursing candidates.`;
+  if (pathway.countrySlug === "us") {
+    return `Practice ${examName} reasoning with guided clinical lessons, topic drills, and pathway-matched question practice. Built for US nursing candidates.`;
+  }
+  if (pathway.countrySlug === "uk") {
+    return `Clinical reasoning lessons and practice aligned to safe nursing judgement for United Kingdom NMC registration preparation. Verify CBT, OSCE, and eligibility details with the NMC.`;
+  }
+  if (pathway.countrySlug === "australia") {
+    return `Clinical reasoning lessons and drills that strengthen judgement for AHPRA/NMBA internationally qualified nurse pathways. Follow official IQNM, portfolio, and assessment instructions from AHPRA.`;
+  }
+  if (pathway.countrySlug === "philippines") {
+    return `Clinical reasoning support alongside Philippine nursing training; PNLE administration belongs to the PRC. NurseNest does not mirror proprietary PNLE items—use for transferable skills and parallel NCLEX prep when applicable.`;
+  }
+  return `Practice ${examName} reasoning with guided clinical lessons, topic drills, and pathway-matched question practice.`;
 }
 
 export function pathwayLessonTopicClusterMetaTitle(pathway: ExamPathwayDefinition, topicLabel: string): string {
@@ -87,7 +111,18 @@ export function pathwayLessonTopicClusterMetaDescription(
   pathway: ExamPathwayDefinition,
   topicLabel: string,
 ): string {
-  const place = pathway.countrySlug === "canada" ? "Canadian" : "US";
+  const place =
+    pathway.countrySlug === "canada"
+      ? "Canadian"
+      : pathway.countrySlug === "us"
+        ? "US"
+        : pathway.countrySlug === "uk"
+          ? "UK"
+          : pathway.countrySlug === "australia"
+            ? "Australian"
+            : pathway.countrySlug === "philippines"
+              ? "Philippine"
+              : pathway.countrySlug;
   const exam = pathway.displayName;
   const examName = pathwayRegionAwareExamName(pathway);
   const topic = topicLabel.trim();

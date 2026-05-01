@@ -35,7 +35,43 @@ const PLACEHOLDER_COPY_RE =
 export const PATHWAY_IDS_REQUIRED_FOR_COUNTRY_PUBLISH: Record<CountrySlug, readonly string[]> = {
   us: ["us-rn-nclex-rn", "us-lpn-nclex-pn"],
   canada: ["ca-rn-nclex-rn", "ca-rpn-rex-pn"],
+  /** UK / Australia / Philippines use expansion-region + dedicated readiness rules, not this rollup. */
+  uk: [],
+  australia: [],
+  philippines: [],
 };
+
+/** Marketing foundation hubs for international RN regulators (not NCLEX-primary). */
+export const INTL_RN_FOUNDATION_PATHWAY_IDS = [
+  "uk-rn-nmc-test-of-competence",
+  "au-rn-iqnm-pathway",
+  "ph-rn-prc-pnle",
+] as const;
+
+const INTL_RN_FOUNDATION_PATHWAY_ID_SET = new Set<string>(INTL_RN_FOUNDATION_PATHWAY_IDS);
+
+export function isIntlRnFoundationPathwayId(pathwayId: string): boolean {
+  return INTL_RN_FOUNDATION_PATHWAY_ID_SET.has(pathwayId);
+}
+
+function globalRegionSlugFromCountrySlug(country: CountrySlug): GlobalRegionSlug {
+  switch (country) {
+    case "us":
+      return "us";
+    case "canada":
+      return "canada";
+    case "uk":
+      return "uk";
+    case "australia":
+      return "aus";
+    case "philippines":
+      return "philippines";
+  }
+}
+
+function globalRegionSlugForMarketReadiness(pathway: ExamPathwayDefinition): GlobalRegionSlug {
+  return globalRegionSlugFromCountrySlug(pathway.countrySlug);
+}
 
 /**
  * Explicit editorial approval for going live. Without this, max automated status is `ready_for_review`.
@@ -168,8 +204,9 @@ export function evaluatePathwayLaunchReadiness(
   });
 
   const isCaNpCnpleWaitlistShell = pathway.id === CA_NP_CNPLE_PATHWAY_ID;
+  const isIntlFoundation = isIntlRnFoundationPathwayId(pathway.id);
   const isNpFamily = pathway.examFamily === ExamFamily.NP;
-  const minLessonsRequired = isCaNpCnpleWaitlistShell
+  const minLessonsRequired = isIntlFoundation || isCaNpCnpleWaitlistShell
     ? 0
     : isNpFamily
       ? NP_PUBLIC_LESSON_FLOOR
@@ -182,7 +219,7 @@ export function evaluatePathwayLaunchReadiness(
     detail: lessonsOk ? undefined : `Have ${lessons}; target ${minLessonsRequired}+`,
   });
 
-  const minQuestionsRequired = isCaNpCnpleWaitlistShell ? 0 : MIN_PATHWAY_QUESTIONS_PUBLISH;
+  const minQuestionsRequired = isIntlFoundation || isCaNpCnpleWaitlistShell ? 0 : MIN_PATHWAY_QUESTIONS_PUBLISH;
   const questionsOk = questions >= minQuestionsRequired;
   checks.push({
     code: "min_questions",
@@ -207,7 +244,7 @@ export function evaluatePathwayLaunchReadiness(
     detail: seoClean ? undefined : "SEO title or description matches placeholder heuristics",
   });
 
-  const nonEmpty = isCaNpCnpleWaitlistShell || (lessons >= 1 && questions >= 1);
+  const nonEmpty = isIntlFoundation || isCaNpCnpleWaitlistShell || (lessons >= 1 && questions >= 1);
   checks.push({
     code: "inventory_non_empty",
     label: "Non-empty lesson & question inventory",
@@ -238,12 +275,13 @@ export function evaluatePathwayLaunchReadiness(
     detail: seoMetaOk ? undefined : "Fill seoTitle / seoDescription in exam registry",
   });
 
-  const region = pathway.countrySlug === "us" ? "us" : "canada";
+  const region = globalRegionSlugForMarketReadiness(pathway);
   const mr = MARKET_READINESS[region];
-  const locOk =
-    !!mr &&
-    (mr.hasTranslatedContent ||
-      (REGION_CONFIG[region].allowedLocales.length > 0 && REGION_CONFIG[region].defaultLocale === "en"));
+  const locOk = isIntlFoundation
+    ? Boolean(mr?.seoEnabled && REGION_CONFIG[region])
+    : !!mr &&
+      (mr.hasTranslatedContent ||
+        (REGION_CONFIG[region].allowedLocales.length > 0 && REGION_CONFIG[region].defaultLocale === "en"));
   checks.push({
     code: "localization_scope",
     label: "Localization meets launch scope (or English-default with plan)",
@@ -319,7 +357,7 @@ function evaluateCountrySlugLaunch(country: CountrySlug, overrides?: PathwayCoun
     rolled = worstStatus(rolled, ev.status);
   }
 
-  const region: GlobalRegionSlug = country === "us" ? "us" : "canada";
+  const region = globalRegionSlugFromCountrySlug(country);
   if (!marketBaseReady(region)) {
     rolled = worstStatus(rolled, "draft");
   }

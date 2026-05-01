@@ -15,6 +15,7 @@ import {
   buildBlogPublicListWhere,
   isBlogPostMarketingMetaVisible,
 } from "@/lib/blog/blog-visibility";
+import { describeCanonicalBlogNotLiveReason } from "@/lib/blog/blog-public-pipeline-trace";
 import {
   getStaticBlogPost,
   listStaticBlogPostsForIndex,
@@ -33,6 +34,9 @@ export const isBlogDatabaseConfigured = isDatabaseUrlConfigured;
 /**
  * Cold-start / pooled Prisma can be slow; empty `/blog` after a transient timeout is worse than
  * waiting longer on list/detail reads (bounded by `take` / pagination).
+ *
+ * **TEMP trace:** `BLOG_PUBLIC_SKIP_TRACE=1` logs `[BLOG_PUBLIC_SKIP]` when a slug resolves in DB but the
+ * public body loader (`getPublishedBlogPostBySlug`) returns null (career mismatch, not “live”, or scope miss).
  */
 const BLOG_PUBLIC_QUERY_TIMEOUT_MS = 12_000;
 /** Second pass when first list+count both empty — avoids caching/static fallback on cold Prisma timeouts. */
@@ -913,6 +917,47 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
   }
   const row = await resolveScopedBlogPostBySlug(slug, scope);
   if (!row) {
+    if (process.env.BLOG_PUBLIC_SKIP_TRACE === "1") {
+      const bare = await withBlogTimeoutFallback(
+        () =>
+          prisma.blogPost.findUnique({
+            where: { slug },
+            select: {
+              slug: true,
+              postStatus: true,
+              workflowStatus: true,
+              publishAt: true,
+              scheduledAt: true,
+              locale: true,
+              careerSlug: true,
+              exam: true,
+            },
+          }),
+        null,
+        "blog_public_skip_trace_bare_slug",
+      );
+      if (bare) {
+        safeServerLog("blog", "[BLOG_PUBLIC_SKIP]", {
+          context: "getPublishedBlogPostBySlug",
+          slug,
+          scopeLocale: scope?.locale ?? "",
+          scopeCareerSlug: scope?.careerSlug ?? "",
+          scopeExam: scope?.exam ?? "",
+          reason: "scoped_resolve_miss_db_row_exists",
+          postStatus: bare.postStatus,
+          workflowStatus: bare.workflowStatus ?? "",
+          locale: bare.locale ?? "",
+          careerSlug: bare.careerSlug ?? "",
+          exam: bare.exam ?? "",
+        });
+      } else {
+        safeServerLog("blog", "[BLOG_PUBLIC_SKIP]", {
+          context: "getPublishedBlogPostBySlug",
+          slug,
+          reason: "no_db_row_for_slug",
+        });
+      }
+    }
     if (!(await canUseStaticBlogFallback())) return null;
     const s = getStaticBlogPost(slug);
     if (!s) return null;
@@ -923,6 +968,15 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
     row.careerSlug &&
     row.careerSlug !== scope.careerSlug
   ) {
+    if (process.env.BLOG_PUBLIC_SKIP_TRACE === "1") {
+      safeServerLog("blog", "[BLOG_PUBLIC_SKIP]", {
+        context: "getPublishedBlogPostBySlug",
+        slug,
+        reason: "career_slug_mismatch",
+        rowCareerSlug: row.careerSlug ?? "",
+        scopeCareerSlug: scope.careerSlug,
+      });
+    }
     return null;
   }
   /** Align with {@link blogLiveWhere} on index/tag routes: live SCHEDULED rows, not only PUBLISHED. */
@@ -936,8 +990,21 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
       },
       now,
     )
-  )
+  ) {
+    if (process.env.BLOG_PUBLIC_SKIP_TRACE === "1") {
+      safeServerLog("blog", "[BLOG_PUBLIC_SKIP]", {
+        context: "getPublishedBlogPostBySlug",
+        slug,
+        reason: "not_live_for_public_body",
+        detail: describeCanonicalBlogNotLiveReason(row, now),
+        postStatus: row.postStatus,
+        workflowStatus: row.workflowStatus ?? "",
+        publishAt: row.publishAt?.toISOString() ?? "",
+        scheduledAt: row.scheduledAt?.toISOString() ?? "",
+      });
+    }
     return null;
+  }
   return row;
 }
 

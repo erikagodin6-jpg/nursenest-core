@@ -8,6 +8,7 @@ import { compileI18n } from "./compile-i18n";
 import { execSync } from "child_process";
 import { runI18nScan } from "./scan-hardcoded-strings-lib";
 
+async function main() {
 const workspaceRequire = createRequire(path.resolve(process.cwd(), "package.json"));
 const { build: esbuild } = workspaceRequire("esbuild") as typeof import("esbuild");
 const { build: viteBuild } = (await import(pathToFileURL(workspaceRequire.resolve("vite")).href)) as typeof import("vite");
@@ -642,7 +643,10 @@ async function buildAll() {
   log(`build complete`);
 }
 
-buildAll().catch((err) => {
-  console.error(err);
+await buildAll();
+}
+
+main().catch((err) => {
+  console.error("[build] fatal error:", err);
   process.exit(1);
 });

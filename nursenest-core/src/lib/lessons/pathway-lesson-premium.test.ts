@@ -189,6 +189,26 @@ describe("pathway-lesson-premium", () => {
     assert.ok(v.internalLinkCount >= 3);
   });
 
+  it("evaluatePathwayLessonStructuralGate uses premium mode for three substantive premium spine sections without commitment", () => {
+    const lesson: PathwayLessonRecord = {
+      slug: "premium-spine-no-commitment",
+      title: "T",
+      topic: "",
+      topicSlug: "",
+      bodySystem: "",
+      previewSectionCount: 1,
+      seoTitle: "SEO title for premium spine structural gate test",
+      seoDescription: fillerWords(22),
+      sections: [
+        { id: "i", heading: "I", kind: "introduction", body: fillerWords(200) },
+        { id: "p", heading: "P", kind: "pathophysiology_overview", body: fillerWords(200) },
+        { id: "l", heading: "L", kind: "labs_diagnostics", body: fillerWords(200) },
+      ],
+    };
+    const g = evaluatePathwayLessonStructuralGate(lesson);
+    assert.equal(g.structureMode, "premium");
+  });
+
   it("evaluatePathwayLessonStructuralGate marks legacy lesson complete when SEO + spine + scenario pass", () => {
     const scenarioLead =
       "**Vignette — 44-year-old patient presents to the unit with chest pressure.** Nursing assessment includes vitals, pain, and cardiac monitoring. Prioritize airway, breathing, and circulation while notifying the provider per protocol.\n\n";

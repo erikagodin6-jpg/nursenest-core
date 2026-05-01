@@ -32,4 +32,7 @@ async function main() {
   console.log("[verify:seo-indexability] all steps OK");
 }
 
-await main();
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

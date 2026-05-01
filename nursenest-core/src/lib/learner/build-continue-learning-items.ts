@@ -1,21 +1,30 @@
 import type { PremiumDashboardSnapshot } from "@/lib/learner/premium-dashboard-snapshot";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 
-const MAX_ITEMS = 4;
+const MAX_ITEMS = 6;
 
 export type ContinueLearningItem =
   | { kind: "continue"; title: string; href: string }
+  | { kind: "practice_resume"; title: string; href: string }
+  | { kind: "flashcard_resume"; title: string; href: string }
   | { kind: "track"; title: string; href: string; pathwayShortName: string }
   | { kind: "mock"; href: string; examTitle: string; pct: number }
   | { kind: "fallback"; target: "questions" | "lessons" };
 
 export type ContinueLearningLink = { title: string; href: string };
 
+/** Optional resume rows from {@link loadStudyResumeExtras} (flashcards + paused practice tests). */
+export type StudyResumeExtrasForContinue = {
+  practice: { title: string; href: string } | null;
+  flashcard: { title: string; href: string } | null;
+};
+
 /**
- * Bounded list from existing snapshot fields only — no extra queries.
+ * Bounded list from snapshot fields plus optional flashcard / practice-test resume extras.
  */
 export function buildContinueLearningItems(
   snapshot: Pick<PremiumDashboardSnapshot, "continueLesson" | "lessonContinuations" | "recentMocks">,
+  extras?: StudyResumeExtrasForContinue | null,
 ): ContinueLearningItem[] {
   const out: ContinueLearningItem[] = [];
   const seenHref = new Set<string>();
@@ -32,6 +41,22 @@ export function buildContinueLearningItems(
       kind: "continue",
       title: snapshot.continueLesson.title.trim() || "Continue lesson",
       href: snapshot.continueLesson.href,
+    });
+  }
+
+  if (extras?.practice?.href && canPush(extras.practice.href)) {
+    out.push({
+      kind: "practice_resume",
+      title: extras.practice.title.trim() || "Resume practice",
+      href: extras.practice.href,
+    });
+  }
+
+  if (extras?.flashcard?.href && canPush(extras.flashcard.href)) {
+    out.push({
+      kind: "flashcard_resume",
+      title: extras.flashcard.title.trim() || "Resume flashcards",
+      href: extras.flashcard.href,
     });
   }
 
@@ -71,6 +96,10 @@ export function continueLearningItemsToLinks(items: ContinueLearningItem[], t: L
   return items.map((it) => {
     switch (it.kind) {
       case "continue":
+        return { title: it.title, href: it.href };
+      case "practice_resume":
+        return { title: it.title, href: it.href };
+      case "flashcard_resume":
         return { title: it.title, href: it.href };
       case "track":
         return { title: `${it.title} · ${it.pathwayShortName}`, href: it.href };

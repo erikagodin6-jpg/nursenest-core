@@ -98,6 +98,40 @@ describe("pathway lesson live render source (PathwayLesson.sections)", () => {
       !corpus.includes(LEGACY_SYNTH_INTRO_DEFAULT),
       "RN AFib catalog lesson must not inject legacy synthesizer intro default",
     );
+    const legacyLeadKinds = new Set([
+      "clinical_meaning",
+      "exam_relevance",
+      "core_concept",
+      "clinical_scenario",
+      "takeaways",
+    ]);
+    const firstKind = n.sections[0]?.kind;
+    assert.ok(
+      firstKind && !legacyLeadKinds.has(firstKind),
+      `AFib catalog lesson must not collapse to legacy five-block lead (first kind was ${firstKind})`,
+    );
+  });
+
+  it("thin premium-shaped section bodies still use legacy five-block expander", () => {
+    const thin = "x".repeat(20);
+    const raw = {
+      slug: "fixture-thin-premium-spine",
+      title: "Thin spine fixture",
+      topic: "Cardiac",
+      topicSlug: "cardiac",
+      bodySystem: "cardiovascular",
+      previewSectionCount: 1,
+      seoTitle: "Thin premium spine fixture SEO title with enough words for pathway lesson catalog rules",
+      seoDescription:
+        "Fixture seo description with enough words to satisfy catalog description floors for normalization pathway lesson body.",
+      sections: [
+        { id: "1", heading: "I", kind: "introduction", body: thin },
+        { id: "2", heading: "P", kind: "pathophysiology_overview", body: thin },
+        { id: "3", heading: "L", kind: "labs_diagnostics", body: thin },
+      ],
+    };
+    const n = normalizeLesson(raw as Parameters<typeof normalizeLesson>[0], "us-rn-nclex-rn");
+    assert.equal(n.normalizeTrace?.usedLegacyFiveBlockExpander, true);
   });
 
   it("catalog atrial-fibrillation-rate-control: normalizeTrace shows premium path and substantive word count", () => {

@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { TierCode, UserRole } from "@prisma/client";
+import type { CountryCode, TierCode, UserRole } from "@prisma/client";
 import {
   getUserAccess,
   subscriptionStatusForSession,
@@ -12,7 +12,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type SessionIdentityPayload = {
   tier: TierCode | null;
-  country: "CA" | "US" | null;
+  country: CountryCode | null;
   subscriptionStatus: SessionSubscriptionStatus;
   role: SessionUserRole;
   credentialVersion: number;
