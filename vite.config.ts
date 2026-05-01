@@ -1,14 +1,34 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
 import path from "node:path";
-import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
-import circularDependency from "vite-plugin-circular-dependency";
+import { existsSync } from "node:fs";
+import { createRequire } from "node:module";
+import { pathToFileURL } from "node:url";
 import { metaImagesPlugin } from "./vite-plugin-meta-images";
 
 const projectRoot = import.meta.dirname;
 const isProduction = process.env.NODE_ENV === "production";
 const isReplit = process.env.REPL_ID !== undefined;
+const appPackageJson = path.join(projectRoot, "nursenest-core", "package.json");
+const dependencyRequire = createRequire(
+  existsSync(path.join(projectRoot, "nursenest-core", "node_modules"))
+    ? appPackageJson
+    : path.join(projectRoot, "package.json"),
+);
+
+async function importDependency<T = any>(specifier: string): Promise<T> {
+  return (await import(pathToFileURL(dependencyRequire.resolve(specifier)).href)) as T;
+}
+
+const [
+  { default: react },
+  { default: tailwindcss },
+  { default: runtimeErrorOverlay },
+  { default: circularDependency },
+] = await Promise.all([
+  importDependency<typeof import("@vitejs/plugin-react")>("@vitejs/plugin-react"),
+  importDependency<typeof import("@tailwindcss/vite")>("@tailwindcss/vite"),
+  importDependency<typeof import("@replit/vite-plugin-runtime-error-modal")>("@replit/vite-plugin-runtime-error-modal"),
+  importDependency<typeof import("vite-plugin-circular-dependency")>("vite-plugin-circular-dependency"),
+]);
 
 function vendorChunk(id: string): string | undefined {
   if (id.includes("\0commonjsHelpers") || id.includes("\0commonjs-")) {
@@ -75,14 +95,14 @@ const plugins = [
 
 if (!isProduction && isReplit) {
   const [{ cartographer }, { devBanner }] = await Promise.all([
-    import("@replit/vite-plugin-cartographer"),
-    import("@replit/vite-plugin-dev-banner"),
+    importDependency<typeof import("@replit/vite-plugin-cartographer")>("@replit/vite-plugin-cartographer"),
+    importDependency<typeof import("@replit/vite-plugin-dev-banner")>("@replit/vite-plugin-dev-banner"),
   ]);
 
   plugins.push(cartographer(), devBanner());
 }
 
-export default defineConfig({
+export default {
   plugins,
 
   resolve: {
@@ -168,4 +188,4 @@ export default defineConfig({
       deny: ["**/.*"],
     },
   },
-});
+};

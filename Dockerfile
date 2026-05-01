@@ -20,10 +20,12 @@ WORKDIR /app
 
 COPY shared ./shared
 COPY client ./client
+COPY server ./server
 COPY nursenest-core ./nursenest-core
 COPY scripts ./scripts
 COPY script ./script
 COPY tools ./tools
+COPY vite.config.ts vite-plugin-meta-images.ts ./
 
 WORKDIR /app/nursenest-core
 
