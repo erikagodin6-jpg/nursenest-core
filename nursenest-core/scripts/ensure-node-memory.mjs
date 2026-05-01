@@ -3,9 +3,9 @@
  * Lightweight Node heap guard for local npm scripts and CI logs.
  * - Logs the resolved NODE_OPTIONS (merges default heap when missing).
  * - Writes `scripts/.node-memory-exports.sh` so shells can `source` merged NODE_OPTIONS (npm `dev` / `build` / `start`).
- * - Does not override an existing `--max-old-space-size=…` in NODE_OPTIONS.
- * - When `NODE_OPTIONS` has no heap flag, uses `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` (MB) if set (e.g. DigitalOcean),
- *   otherwise defaults to 4096. Never upgrades to 8192 implicitly.
+ * - When `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` is set, it wins: any existing `--max-old-space-size=…` in
+ *   `NODE_OPTIONS` is replaced (DigitalOcean may inject a larger heap; low-memory builds set 4096).
+ * - When `BUILD_NODE_*` is unset, preserves an existing heap flag in `NODE_OPTIONS`; if none, defaults to 4096 MB.
  * - Warn-only when total RAM < 8 GiB (no behavior change).
  *
  * Idempotent: safe to run multiple times.
@@ -31,15 +31,15 @@ function heapFlagFromBuildEnvMb() {
   return `--max-old-space-size=${n}`;
 }
 
-function defaultHeapFlag() {
-  return heapFlagFromBuildEnvMb() ?? `--max-old-space-size=${DEFAULT_HEAP_MB}`;
-}
-
 function mergeNodeOptions() {
   const raw = String(process.env.NODE_OPTIONS ?? "").trim();
-  /** Respect platform-injected heap (e.g. DO `NODE_OPTIONS=--max-old-space-size=4096`). */
+  const buildHeap = heapFlagFromBuildEnvMb();
+  if (buildHeap) {
+    const withoutHeap = raw.replace(HEAP_RE, "").replace(/\s+/g, " ").trim();
+    return withoutHeap ? `${withoutHeap} ${buildHeap}` : buildHeap;
+  }
   if (HEAP_RE.test(raw)) return raw;
-  const heap = defaultHeapFlag();
+  const heap = `--max-old-space-size=${DEFAULT_HEAP_MB}`;
   return raw ? `${raw} ${heap}` : heap;
 }
 

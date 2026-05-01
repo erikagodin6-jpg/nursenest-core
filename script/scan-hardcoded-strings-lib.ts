@@ -1,6 +1,24 @@
-import ts from "typescript";
+import type * as Tst from "typescript";
 import { readFileSync, readdirSync, statSync, writeFileSync } from "fs";
 import path from "path";
+
+type TsApiModule = typeof import("typescript");
+/** Populated at start of {@link runI18nScan} via dynamic import — avoids loading `typescript` when scan is skipped. */
+let tsApi: TsApiModule | null = null;
+
+async function loadTypescriptApi(): Promise<TsApiModule> {
+  if (tsApi) return tsApi;
+  try {
+    const mod = await import("typescript");
+    tsApi = (mod as { default?: TsApiModule }).default ?? (mod as TsApiModule);
+    return tsApi;
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    throw new Error(
+      `[scan-hardcoded-strings] Missing dependency: typescript (${msg}). Install devDependencies or skip the AST scan (e.g. production Docker without RUN_HARDCODED_STRING_SCAN).`,
+    );
+  }
+}
 
 type Severity = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
 
@@ -294,18 +312,18 @@ function generateSuggestion(text: string, parentTag?: string): string {
   return `t("${key}")`;
 }
 
-function getJsxTagName(node: ts.Node): string | undefined {
+function getJsxTagName(node: Tst.Node): string | undefined {
   let current = node.parent;
   while (current) {
-    if (ts.isJsxElement(current)) {
+    if (tsApi!.isJsxElement(current)) {
       const tagName = current.openingElement.tagName;
-      if (ts.isIdentifier(tagName)) return tagName.text;
-      if (ts.isPropertyAccessExpression(tagName) && ts.isIdentifier(tagName.name)) return tagName.name.text;
+      if (tsApi!.isIdentifier(tagName)) return tagName.text;
+      if (tsApi!.isPropertyAccessExpression(tagName) && tsApi!.isIdentifier(tagName.name)) return tagName.name.text;
     }
-    if (ts.isJsxSelfClosingElement(current)) {
+    if (tsApi!.isJsxSelfClosingElement(current)) {
       const tagName = current.tagName;
-      if (ts.isIdentifier(tagName)) return tagName.text;
-      if (ts.isPropertyAccessExpression(tagName) && ts.isIdentifier(tagName.name)) return tagName.name.text;
+      if (tsApi!.isIdentifier(tagName)) return tagName.text;
+      if (tsApi!.isPropertyAccessExpression(tagName) && tsApi!.isIdentifier(tagName.name)) return tagName.name.text;
     }
     current = current.parent;
   }
@@ -330,29 +348,29 @@ function classifySeverity(text: string, parentTag?: string, attrName?: string): 
   return "MEDIUM";
 }
 
-function isInsideTCall(node: ts.Node): boolean {
+function isInsideTCall(node: Tst.Node): boolean {
   let current = node.parent;
   while (current) {
-    if (ts.isCallExpression(current)) {
+    if (tsApi!.isCallExpression(current)) {
       const expr = current.expression;
-      if (ts.isIdentifier(expr) && expr.text === "t") return true;
-      if (ts.isPropertyAccessExpression(expr) && ts.isIdentifier(expr.name) && expr.name.text === "t") return true;
+      if (tsApi!.isIdentifier(expr) && expr.text === "t") return true;
+      if (tsApi!.isPropertyAccessExpression(expr) && tsApi!.isIdentifier(expr.name) && expr.name.text === "t") return true;
     }
-    if (ts.isJsxExpression(current)) break;
-    if (ts.isJsxElement(current) || ts.isJsxSelfClosingElement(current)) break;
+    if (tsApi!.isJsxExpression(current)) break;
+    if (tsApi!.isJsxElement(current) || tsApi!.isJsxSelfClosingElement(current)) break;
     current = current.parent;
   }
   return false;
 }
 
-function isInsideConsoleLog(node: ts.Node): boolean {
+function isInsideConsoleLog(node: Tst.Node): boolean {
   let current = node.parent;
   while (current) {
-    if (ts.isCallExpression(current)) {
+    if (tsApi!.isCallExpression(current)) {
       const expr = current.expression;
       if (
-        ts.isPropertyAccessExpression(expr) &&
-        ts.isIdentifier(expr.expression) &&
+        tsApi!.isPropertyAccessExpression(expr) &&
+        tsApi!.isIdentifier(expr.expression) &&
         expr.expression.text === "console"
       ) {
         return true;
@@ -363,111 +381,111 @@ function isInsideConsoleLog(node: ts.Node): boolean {
   return false;
 }
 
-function isInsideImportOrType(node: ts.Node): boolean {
+function isInsideImportOrType(node: Tst.Node): boolean {
   let current = node.parent;
   while (current) {
-    if (ts.isImportDeclaration(current)) return true;
-    if (ts.isTypeAliasDeclaration(current)) return true;
-    if (ts.isInterfaceDeclaration(current)) return true;
-    if (ts.isEnumDeclaration(current)) return true;
-    if (ts.isTypeReferenceNode(current)) return true;
-    if (ts.isTypeLiteralNode(current)) return true;
+    if (tsApi!.isImportDeclaration(current)) return true;
+    if (tsApi!.isTypeAliasDeclaration(current)) return true;
+    if (tsApi!.isInterfaceDeclaration(current)) return true;
+    if (tsApi!.isEnumDeclaration(current)) return true;
+    if (tsApi!.isTypeReferenceNode(current)) return true;
+    if (tsApi!.isTypeLiteralNode(current)) return true;
     current = current.parent;
   }
   return false;
 }
 
-function isObjectPropertyKey(node: ts.Node): boolean {
-  if (node.parent && ts.isPropertyAssignment(node.parent)) {
+function isObjectPropertyKey(node: Tst.Node): boolean {
+  if (node.parent && tsApi!.isPropertyAssignment(node.parent)) {
     return node.parent.name === node;
   }
   return false;
 }
 
-function isInsideObjectLiteralNotInJSX(node: ts.Node): boolean {
+function isInsideObjectLiteralNotInJSX(node: Tst.Node): boolean {
   let current = node.parent;
   let foundObject = false;
   while (current) {
-    if (ts.isObjectLiteralExpression(current)) foundObject = true;
-    if (ts.isJsxElement(current) || ts.isJsxSelfClosingElement(current) || ts.isJsxExpression(current)) {
+    if (tsApi!.isObjectLiteralExpression(current)) foundObject = true;
+    if (tsApi!.isJsxElement(current) || tsApi!.isJsxSelfClosingElement(current) || tsApi!.isJsxExpression(current)) {
       return false;
     }
-    if (ts.isJsxAttribute(current)) return false;
+    if (tsApi!.isJsxAttribute(current)) return false;
     current = current.parent;
   }
   return foundObject;
 }
 
-function isVariableDeclarationName(node: ts.Node): boolean {
-  if (node.parent && ts.isVariableDeclaration(node.parent)) {
+function isVariableDeclarationName(node: Tst.Node): boolean {
+  if (node.parent && tsApi!.isVariableDeclaration(node.parent)) {
     return node.parent.name === node;
   }
   return false;
 }
 
-function isPartOfStructuredData(node: ts.Node): boolean {
+function isPartOfStructuredData(node: Tst.Node): boolean {
   let current = node.parent;
   while (current) {
-    if (ts.isPropertyAssignment(current) && ts.isIdentifier(current.name)) {
+    if (tsApi!.isPropertyAssignment(current) && tsApi!.isIdentifier(current.name)) {
       const name = current.name.text;
       if (name === "@context" || name === "@type" || name === "structuredData" || name === "additionalStructuredData") {
         return true;
       }
     }
-    if (ts.isCallExpression(current)) {
+    if (tsApi!.isCallExpression(current)) {
       const expr = current.expression;
-      if (ts.isIdentifier(expr) && (expr.text === "fetch" || expr.text === "require")) return true;
+      if (tsApi!.isIdentifier(expr) && (expr.text === "fetch" || expr.text === "require")) return true;
     }
     current = current.parent;
   }
   return false;
 }
 
-function isInSEOComponent(node: ts.Node): boolean {
+function isInSEOComponent(node: Tst.Node): boolean {
   let current = node.parent;
   while (current) {
-    if (ts.isJsxElement(current)) {
+    if (tsApi!.isJsxElement(current)) {
       const tagName = current.openingElement.tagName;
-      if (ts.isIdentifier(tagName) && tagName.text === "SEO") return true;
+      if (tsApi!.isIdentifier(tagName) && tagName.text === "SEO") return true;
     }
-    if (ts.isJsxSelfClosingElement(current)) {
+    if (tsApi!.isJsxSelfClosingElement(current)) {
       const tagName = current.tagName;
-      if (ts.isIdentifier(tagName) && tagName.text === "SEO") return true;
+      if (tsApi!.isIdentifier(tagName) && tagName.text === "SEO") return true;
     }
     current = current.parent;
   }
   return false;
 }
 
-function isInLazyImport(node: ts.Node): boolean {
+function isInLazyImport(node: Tst.Node): boolean {
   let current = node.parent;
   while (current) {
-    if (ts.isCallExpression(current)) {
+    if (tsApi!.isCallExpression(current)) {
       const expr = current.expression;
-      if (ts.isIdentifier(expr) && (expr.text === "lazy" || expr.text === "import")) return true;
-      if (ts.isPropertyAccessExpression(expr) && ts.isIdentifier(expr.name) && expr.name.text === "then") return true;
+      if (tsApi!.isIdentifier(expr) && (expr.text === "lazy" || expr.text === "import")) return true;
+      if (tsApi!.isPropertyAccessExpression(expr) && tsApi!.isIdentifier(expr.name) && expr.name.text === "then") return true;
     }
     current = current.parent;
   }
   return false;
 }
 
-function getJsxAttributeName(node: ts.Node): string | undefined {
+function getJsxAttributeName(node: Tst.Node): string | undefined {
   let current = node.parent;
   while (current) {
-    if (ts.isJsxAttribute(current)) {
-      if (ts.isIdentifier(current.name)) return current.name.text;
+    if (tsApi!.isJsxAttribute(current)) {
+      if (tsApi!.isIdentifier(current.name)) return current.name.text;
     }
-    if (ts.isJsxElement(current) || ts.isJsxSelfClosingElement(current)) break;
+    if (tsApi!.isJsxElement(current) || tsApi!.isJsxSelfClosingElement(current)) break;
     current = current.parent;
   }
   return undefined;
 }
 
-function isInJsxContext(node: ts.Node): boolean {
+function isInJsxContext(node: Tst.Node): boolean {
   let current = node.parent;
   while (current) {
-    if (ts.isJsxElement(current) || ts.isJsxSelfClosingElement(current) || ts.isJsxAttribute(current) || ts.isJsxExpression(current)) {
+    if (tsApi!.isJsxElement(current) || tsApi!.isJsxSelfClosingElement(current) || tsApi!.isJsxAttribute(current) || tsApi!.isJsxExpression(current)) {
       return true;
     }
     current = current.parent;
@@ -475,14 +493,14 @@ function isInJsxContext(node: ts.Node): boolean {
   return false;
 }
 
-function isJsxTextNode(node: ts.Node): node is ts.JsxText {
-  return node.kind === ts.SyntaxKind.JsxText;
+function isJsxTextNode(node: Tst.Node): node is Tst.JsxText {
+  return node.kind === tsApi!.SyntaxKind.JsxText;
 }
 
-function isInsideErrorBoundary(node: ts.Node): boolean {
+function isInsideErrorBoundary(node: Tst.Node): boolean {
   let current = node.parent;
   while (current) {
-    if (ts.isClassDeclaration(current) && current.name && current.name.text === "ErrorBoundary") {
+    if (tsApi!.isClassDeclaration(current) && current.name && current.name.text === "ErrorBoundary") {
       return true;
     }
     current = current.parent;
@@ -490,34 +508,34 @@ function isInsideErrorBoundary(node: ts.Node): boolean {
   return false;
 }
 
-function isInsideStyleProp(node: ts.Node): boolean {
+function isInsideStyleProp(node: Tst.Node): boolean {
   let current = node.parent;
   while (current) {
-    if (ts.isJsxAttribute(current) && ts.isIdentifier(current.name) && current.name.text === "style") {
+    if (tsApi!.isJsxAttribute(current) && tsApi!.isIdentifier(current.name) && current.name.text === "style") {
       return true;
     }
-    if (ts.isJsxElement(current) || ts.isJsxSelfClosingElement(current)) break;
+    if (tsApi!.isJsxElement(current) || tsApi!.isJsxSelfClosingElement(current)) break;
     current = current.parent;
   }
   return false;
 }
 
-function isInsideTechnicalAttribute(node: ts.Node): boolean {
+function isInsideTechnicalAttribute(node: Tst.Node): boolean {
   let current = node.parent;
   while (current) {
-    if (ts.isJsxAttribute(current) && ts.isIdentifier(current.name)) {
+    if (tsApi!.isJsxAttribute(current) && tsApi!.isIdentifier(current.name)) {
       if (TECHNICAL_ATTR_NAMES.has(current.name.text)) return true;
     }
-    if (ts.isJsxElement(current) || ts.isJsxSelfClosingElement(current)) break;
+    if (tsApi!.isJsxElement(current) || tsApi!.isJsxSelfClosingElement(current)) break;
     current = current.parent;
   }
   return false;
 }
 
-function scanFileAST(filePath: string, sourceFile: ts.SourceFile): Violation[] {
+function scanFileAST(filePath: string, sourceFile: Tst.SourceFile): Violation[] {
   const violations: Violation[] = [];
 
-  function visit(node: ts.Node) {
+  function visit(node: Tst.Node) {
     if (isJsxTextNode(node)) {
       const text = node.text.trim();
       if (text && !isNonTextContent(text) && !isInsideTCall(node) && !isInsideErrorBoundary(node)) {
@@ -537,7 +555,7 @@ function scanFileAST(filePath: string, sourceFile: ts.SourceFile): Violation[] {
       }
     }
 
-    if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
+    if (tsApi!.isStringLiteral(node) || tsApi!.isNoSubstitutionTemplateLiteral(node)) {
       const text = node.text.trim();
       if (
         text &&
@@ -563,7 +581,7 @@ function scanFileAST(filePath: string, sourceFile: ts.SourceFile): Violation[] {
             context: lineText.substring(0, 150),
             suggestion: generateSuggestion(text),
           });
-          ts.forEachChild(node, visit);
+          tsApi!.forEachChild(node, visit);
           return;
         }
 
@@ -571,7 +589,7 @@ function scanFileAST(filePath: string, sourceFile: ts.SourceFile): Violation[] {
 
         if (attrName) {
           if (TECHNICAL_ATTR_NAMES.has(attrName)) {
-            ts.forEachChild(node, visit);
+            tsApi!.forEachChild(node, visit);
             return;
           }
           if (USER_FACING_ATTR_NAMES.has(attrName)) {
@@ -611,7 +629,7 @@ function scanFileAST(filePath: string, sourceFile: ts.SourceFile): Violation[] {
       }
     }
 
-    if (ts.isTemplateExpression(node)) {
+    if (tsApi!.isTemplateExpression(node)) {
       const headText = node.head.text.trim();
       if (
         headText &&
@@ -645,7 +663,7 @@ function scanFileAST(filePath: string, sourceFile: ts.SourceFile): Violation[] {
       }
     }
 
-    ts.forEachChild(node, visit);
+    tsApi!.forEachChild(node, visit);
   }
 
   visit(sourceFile);
@@ -691,7 +709,9 @@ export interface ScanOptions {
   quiet?: boolean;
 }
 
-export function runI18nScan(options: ScanOptions = {}): boolean {
+export async function runI18nScan(options: ScanOptions = {}): Promise<boolean> {
+  await loadTypescriptApi();
+
   const config: ScanConfig = {
     ...DEFAULT_CONFIG,
     ...options,
@@ -714,12 +734,12 @@ export function runI18nScan(options: ScanOptions = {}): boolean {
 
   for (const filePath of files) {
     const content = readFileSync(filePath, "utf-8");
-    const sourceFile = ts.createSourceFile(
+    const sourceFile = tsApi!.createSourceFile(
       filePath,
       content,
-      ts.ScriptTarget.Latest,
+      tsApi!.ScriptTarget.Latest,
       true,
-      filePath.endsWith(".tsx") ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
+      filePath.endsWith(".tsx") ? tsApi!.ScriptKind.TSX : tsApi!.ScriptKind.TS,
     );
     const violations = scanFileAST(filePath, sourceFile);
     allViolations.push(...violations);
