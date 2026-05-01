@@ -10,6 +10,8 @@ import { runI18nScan } from "./scan-hardcoded-strings-lib";
 
 const workspaceRequire = createRequire(path.resolve(process.cwd(), "package.json"));
 const { build: esbuild } = workspaceRequire("esbuild") as typeof import("esbuild");
+const packageRoot = process.cwd();
+const packageNodeModules = path.join(packageRoot, "node_modules");
 
 function findRepoRoot(startDir: string): string {
   let current = path.resolve(startDir);
@@ -56,6 +58,7 @@ const CLIENT_ALIAS = {
 function buildLessonsData() {
   return esbuild({
     absWorkingDir: repoRoot,
+    nodePaths: [packageNodeModules],
     entryPoints: ["client/src/data/lessons/index.ts"],
     platform: "node",
     bundle: true,
@@ -82,6 +85,7 @@ function buildLessonsData() {
 function buildNpBatch(i: number) {
   return esbuild({
     absWorkingDir: repoRoot,
+    nodePaths: [packageNodeModules],
     entryPoints: [`client/src/data/lessons/np-generated-batch-${i}.ts`],
     platform: "node",
     bundle: true,
@@ -197,6 +201,7 @@ async function buildServer(externalizeHeavyModules: boolean) {
 
   return esbuild({
     absWorkingDir: repoRoot,
+    nodePaths: [packageNodeModules],
     entryPoints: ["server/index.ts"],
     platform: "node",
     bundle: true,
@@ -268,6 +273,7 @@ async function buildExternalModules(entries: string[], label: string) {
           .replace(/\//g, "__");
         return esbuild({
           absWorkingDir: repoRoot,
+          nodePaths: [packageNodeModules],
           entryPoints: [entry],
           platform: "node",
           bundle: true,
@@ -331,6 +337,7 @@ async function buildClientDataModules() {
 
   await esbuild({
     absWorkingDir: repoRoot,
+    nodePaths: [packageNodeModules],
     entryPoints: clientDataFiles,
     platform: "node",
     bundle: false,
