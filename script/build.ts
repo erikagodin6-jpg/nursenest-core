@@ -114,7 +114,7 @@ const TRANSITIVE_EXTERNALS = [
 ];
 
 async function getExternals() {
-  const pkg = JSON.parse(await readFile("package.json", "utf-8"));
+  const pkg = JSON.parse(await readFile(path.join(APP_ROOT, "package.json"), "utf-8"));
   const allDeps = [
     ...Object.keys(pkg.dependencies || {}),
     ...Object.keys(pkg.devDependencies || {}),
