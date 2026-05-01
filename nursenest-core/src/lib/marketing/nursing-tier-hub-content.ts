@@ -1,5 +1,6 @@
 import { ExamFamily } from "@prisma/client";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { getIntlRnCountrySiteMatrixRow } from "@/lib/international-rn/intl-rn-country-site-matrix";
 import {
   marketingTierHubStudyActionHref,
   resolveMarketingTierHubStudyActionHref,
@@ -12,6 +13,9 @@ import { resolveMarketingDisplayCopy } from "@/lib/public-display-copy";
  * Kept in sync with pathway `seoTitle` patterns in `exam-pathways-data-*`.
  */
 export function nursingTierMarketingHeadline(pathway: ExamPathwayDefinition): string {
+  const matrixH1 = getIntlRnCountrySiteMatrixRow(pathway.id)?.h1Phrase;
+  if (matrixH1) return matrixH1;
+
   const { countrySlug, examCode, shortName, roleTrack } = pathway;
   if (countrySlug === "canada") {
     if (examCode === "rex-pn") return `${shortName} practice questions for Canada`;
