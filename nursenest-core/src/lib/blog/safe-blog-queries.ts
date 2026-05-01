@@ -1084,6 +1084,35 @@ export async function getSitemapPublishedBlogSlugsStrict(): Promise<{ slug: stri
   );
 }
 
+/**
+ * Slugs for `/sitemap.xml` blog URLs: live `BlogPost` rows when Prisma reads are enabled; otherwise the same
+ * bundled static corpus used by public `/blog` during `next build` / no-DB / empty-DB fallbacks.
+ */
+function staticBlogSitemapSlugRows(): { slug: string; updatedAt: Date }[] {
+  const out: { slug: string; updatedAt: Date }[] = [];
+  for (const p of listStaticBlogPostsForIndex()) {
+    const slug = p.slug?.trim();
+    if (!slug) continue;
+    out.push({ slug, updatedAt: new Date(`${p.createdAt}T12:00:00Z`) });
+  }
+  return out;
+}
+
+export async function getMergedBlogSitemapSlugRows(): Promise<{ slug: string; updatedAt: Date }[]> {
+  if (!isDatabaseUrlConfigured() || shouldSkipBlogDbForProductionBuild() || shouldSkipDbBackedSitemapUrlsForBuild()) {
+    return staticBlogSitemapSlugRows();
+  }
+  try {
+    const rows = await getSitemapPublishedBlogSlugsStrict();
+    if (rows.length > 0) return rows;
+    if (await canUseStaticBlogFallback()) return staticBlogSitemapSlugRows();
+    return [];
+  } catch (e) {
+    if (await canUseStaticBlogFallback()) return staticBlogSitemapSlugRows();
+    throw e;
+  }
+}
+
 export async function getSitemapBlogTagRows(): Promise<{ tags: string[] }[]> {
   const now = new Date();
   return withBlogTimeoutFallback(
