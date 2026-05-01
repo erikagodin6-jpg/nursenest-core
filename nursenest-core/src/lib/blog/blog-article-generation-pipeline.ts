@@ -450,7 +450,7 @@ export async function runBlogArticleGenerationPipeline(
             repairPassesUsed,
           };
         }
-        if (persistResult.code === "QUALITY_GATE") {
+        if (persistResult.code === "QUALITY_GATE" || persistResult.code === "OUTPUT_GATE") {
           return {
             ok: false,
             stage: "persist",

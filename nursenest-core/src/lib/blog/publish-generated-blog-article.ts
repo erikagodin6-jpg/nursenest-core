@@ -18,6 +18,7 @@ import {
   collectPaywallUnsafeLessonLabelIssues,
   countApaStyleInTextCitations,
 } from "@/lib/blog/blog-generated-publish-gates";
+import { logBlogGenerationRejected } from "@/lib/blog/blog-generation-log";
 
 export type PublishGeneratedBlogArticleOptions = {
   minWords?: number;
@@ -188,6 +189,7 @@ export async function publishGeneratedBlogArticle(
     prisma: prismaClient,
   });
   if (!eligibility.ok) {
+    logBlogGenerationRejected(row.slug, eligibility.reasons.join("; "));
     if (options.publishOnlyIfValid === false) {
       throw new Error(`publishGeneratedBlogArticle: invalid generated article (${eligibility.reasons.join("; ")})`);
     }

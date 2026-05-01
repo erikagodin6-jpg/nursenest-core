@@ -344,7 +344,7 @@ export type ControlPanelPersistResult =
   | {
       ok: false;
       error: string;
-      code?: "INSUFFICIENT_CITATIONS" | "PRE_PUBLISH_BLOCKED" | "SEO_DUPLICATE_BLOCKED" | "QUALITY_GATE";
+      code?: "INSUFFICIENT_CITATIONS" | "PRE_PUBLISH_BLOCKED" | "SEO_DUPLICATE_BLOCKED" | "QUALITY_GATE" | "OUTPUT_GATE";
       riskFlags?: string[];
       prePublish?: PrePublishValidationResult;
       /** Present when `PRE_PUBLISH_BLOCKED`: draft row was committed; publish step skipped. */
@@ -774,7 +774,7 @@ export async function persistControlPanelDraft(
           logBlogGenerationRejected(post.slug, reason);
           return {
             ok: false,
-            code: "QUALITY_GATE",
+            code: "OUTPUT_GATE",
             error: `Generated output failed publication safety checks: ${reason}`.slice(0, 2000),
             post,
             plan,

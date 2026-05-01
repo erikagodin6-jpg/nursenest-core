@@ -5,8 +5,11 @@ import { rm, readFile, readdir, readFile as readFileAsync, writeFile, copyFile, 
 import { existsSync } from "fs";
 import { gzipSync } from "zlib";
 import { compileI18n } from "./compile-i18n";
+import { APP_ROOT, REPO_ROOT, logResolvedPathsOnce } from "./repo-root";
 import { execSync } from "child_process";
-import { APP_ROOT } from "./repo-root";
+
+logResolvedPathsOnce();
+process.chdir(REPO_ROOT);
 
 type EsbuildBuildFn = (typeof import("esbuild"))["build"];
 type ViteBuildFn = (typeof import("vite"))["build"];
@@ -672,8 +675,16 @@ async function buildAll() {
   log(`build complete`);
 }
 
+function resolvePackageJsonForNodeRequire(): string {
+  const appPkg = path.join(APP_ROOT, "package.json");
+  if (existsSync(path.join(APP_ROOT, "node_modules", "esbuild"))) {
+    return appPkg;
+  }
+  return path.join(REPO_ROOT, "package.json");
+}
+
 async function main() {
-  const workspaceRequire = createRequire(path.resolve(process.cwd(), "package.json"));
+  const workspaceRequire = createRequire(resolvePackageJsonForNodeRequire());
   runEsbuild = (workspaceRequire("esbuild") as typeof import("esbuild")).build;
   runViteBuild = (
     (await import(pathToFileURL(workspaceRequire.resolve("vite")).href)) as typeof import("vite")

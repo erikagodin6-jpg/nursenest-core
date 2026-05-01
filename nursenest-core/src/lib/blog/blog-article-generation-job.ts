@@ -14,7 +14,12 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { publishBlogPostCanonical } from "@/lib/blog/publish-blog-post-canonical";
 import { blogPrePublishValidationSelect, validateBlogPrePublish } from "@/lib/blog/blog-pre-publish-validation";
 import { repairControlPanelArticleBodyHtml } from "@/lib/blog/blog-generation-repair-ai";
-import { BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH, countWordsFromHtml } from "@/lib/blog/blog-word-count";
+import {
+  BLOG_ARTICLE_MIN_WORDS_PILLAR_PUBLISH,
+  BLOG_ARTICLE_MIN_WORDS_STANDARD_PUBLISH,
+  countWordsFromHtml,
+} from "@/lib/blog/blog-word-count";
+import { isBlogSeoPillarDepthProfile } from "@/lib/blog/blog-seo-depth-profile";
 import { safeParseBlogControlPanelPlan } from "@/lib/blog/blog-control-panel-plan-normalize";
 import {
   logControlPanelPipelineFailure,
@@ -324,24 +329,27 @@ export async function retryRepairBlogArticleGenerationJob(jobId: string): Promis
 
     let bodyHtml = post.body;
     const wc = countWordsFromHtml(bodyHtml);
-    if (wc < BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH) {
+    const tpl = post.postTemplate ?? input.template;
+    const int = post.intent ?? input.intent;
+    const targetMin = isBlogSeoPillarDepthProfile({ template: tpl, intent: int })
+      ? BLOG_ARTICLE_MIN_WORDS_PILLAR_PUBLISH
+      : BLOG_ARTICLE_MIN_WORDS_STANDARD_PUBLISH;
+    if (wc < targetMin) {
       await logJobStage(jobId, "repairing_body");
       bodyHtml = await repairControlPanelArticleBodyHtml({
         plan,
         topic: input.topic,
         exam: post.exam,
         country,
-        template: post.postTemplate ?? input.template,
-        intent: post.intent ?? input.intent,
+        template: tpl,
+        intent: int,
         funnelStage: post.funnelStage ?? input.funnelStage,
         tone: input.tone,
         keywords: input.keywords,
         selectedTitle: plan.h1,
         currentHtml: bodyHtml,
-        validationMessages: [
-          `Expand substantive teaching depth to at least ${BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH} words (currently ${wc}).`,
-        ],
-        targetWordMin: BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH,
+        validationMessages: [`Expand substantive teaching depth to at least ${targetMin} words (currently ${wc}).`],
+        targetWordMin: targetMin,
         openAiUser: `${jobId}:retry-repair`,
       });
     }
