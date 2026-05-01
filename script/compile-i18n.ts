@@ -1,7 +1,13 @@
 import { existsSync, writeFileSync, mkdirSync, readFileSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { REPO_ROOT, REPO_ROOT_FROM_SCRIPT } from "./repo-root";
+import {
+  APP_ROOT,
+  CLIENT_PUBLIC_I18N_DIR,
+  NEXT_PUBLIC_I18N_SHARD_ROOT,
+  REPO_ROOT,
+  REPO_ROOT_FROM_SCRIPT,
+} from "./repo-root";
 import { readMergedBundleFromNextPublicI18n } from "./lib/next-public-i18n-bundle";
 
 const LANGUAGES = [
@@ -67,8 +73,8 @@ function tryLoadFromTsSource(root: string, lang: string): Record<string, string>
   }
 }
 
-function tryLoadFromNextPublicShards(root: string, lang: string): Record<string, string> | null {
-  const nextI18nDir = path.join(root, "nursenest-core/public/i18n");
+function tryLoadFromNextPublicShards(lang: string): Record<string, string> | null {
+  const nextI18nDir = NEXT_PUBLIC_I18N_SHARD_ROOT;
   try {
     const merged = readMergedBundleFromNextPublicI18n(nextI18nDir, lang, { adminOnlyRoot: null });
     if (!merged || typeof merged !== "object") return null;
@@ -81,7 +87,6 @@ function tryLoadFromNextPublicShards(root: string, lang: string): Record<string,
 
 export async function compileI18n() {
   const scriptDir = path.dirname(fileURLToPath(import.meta.url));
-  const appRootHint = path.join(REPO_ROOT, "nursenest-core");
   const enPathPrimary = path.join(REPO_ROOT, "tools/i18n/source/i18n-en.ts");
   const shardFb = shardFallbackEnabled();
 
@@ -89,14 +94,14 @@ export async function compileI18n() {
   console.log(`[i18n] compile: repo root (script parent)=${REPO_ROOT_FROM_SCRIPT}`);
   console.log(`[i18n] compile: process.cwd()=${process.cwd()}`);
   console.log(`[i18n] compile: script dir=${scriptDir}`);
-  console.log(`[i18n] compile: app package hint=${appRootHint}`);
+  console.log(`[i18n] compile: appRoot (resolved)=${APP_ROOT}`);
   console.log(`[i18n] compile: English TS source (primary)=${enPathPrimary}`);
   console.log(`[i18n] compile: English TS exists=${existsSync(enPathPrimary)}`);
   console.log(
     `[i18n] compile: ${SHARD_FALLBACK_ENV}=${shardFb ? "1 (shard fallback allowed)" : "unset/false"}`,
   );
 
-  const outDir = path.join(REPO_ROOT, "client/public/i18n");
+  const outDir = CLIENT_PUBLIC_I18N_DIR;
   mkdirSync(outDir, { recursive: true });
   const errors: string[] = [];
   let totalKeys = 0;
@@ -105,7 +110,7 @@ export async function compileI18n() {
   let enSource: "tools-ts" | "next-public-shards" = "tools-ts";
 
   if (!enData && shardFb) {
-    enData = tryLoadFromNextPublicShards(REPO_ROOT, "en");
+    enData = tryLoadFromNextPublicShards("en");
     if (enData) {
       enSource = "next-public-shards";
       console.warn(
@@ -122,7 +127,7 @@ export async function compileI18n() {
     }
     if (shardFb) {
       errors.push(
-        `i18n-en: shard fallback did not yield a bundle (check nursenest-core/public/i18n/en/ or en.json)`,
+        `i18n-en: shard fallback did not yield a bundle (check ${path.join(NEXT_PUBLIC_I18N_SHARD_ROOT, "en")} or en.json)`,
       );
     } else {
       errors.push(
@@ -139,7 +144,7 @@ export async function compileI18n() {
       let data = tryLoadFromTsSource(REPO_ROOT, lang);
       let langSource: "tools-ts" | "next-public-shards" = "tools-ts";
       if (!data && shardFb) {
-        data = tryLoadFromNextPublicShards(REPO_ROOT, lang);
+        data = tryLoadFromNextPublicShards(lang);
         if (data) {
           langSource = "next-public-shards";
           console.warn(
@@ -175,7 +180,19 @@ export async function compileI18n() {
 
   const { mergeMarketingIntoI18n } = await import("./merge-marketing-i18n");
   mergeMarketingIntoI18n();
-  console.log("merged marketing strings into client/public/i18n and nursenest-core/public/i18n");
+  console.log(
+    `[i18n] merged marketing strings into ${path.relative(REPO_ROOT, CLIENT_PUBLIC_I18N_DIR) || "."} and ${path.relative(REPO_ROOT, NEXT_PUBLIC_I18N_SHARD_ROOT) || "."}`,
+  );
+
+  const finalEn = path.join(CLIENT_PUBLIC_I18N_DIR, "en.json");
+  console.log(`[i18n-final] repoRoot=${REPO_ROOT}`);
+  console.log(`[i18n-final] appRoot=${APP_ROOT}`);
+  console.log(`[i18n-final] finalOutputPath=${finalEn}`);
+  if (!existsSync(finalEn)) {
+    throw new Error(
+      `[i18n] compile: expected English bundle missing after merge: ${finalEn} (CLIENT_PUBLIC_I18N_DIR=${CLIENT_PUBLIC_I18N_DIR})`,
+    );
+  }
 }
 
 if (import.meta.url === `file://${process.argv[1]}` || process.argv[1]?.endsWith("compile-i18n.ts")) {

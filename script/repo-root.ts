@@ -41,3 +41,29 @@ function discoverRepoRoot(): string {
  * Prefers the directory that contains `tools/i18n/source/i18n-en.ts` when cwd/layout differs.
  */
 export const REPO_ROOT = discoverRepoRoot();
+
+function discoverAppRoot(): string {
+  const app = path.join(REPO_ROOT, "nursenest-core");
+  if (existsSync(path.join(app, "package.json"))) {
+    return app;
+  }
+  return REPO_ROOT;
+}
+
+/** Next.js app package (`nursenest-core/`) when present; otherwise the monorepo root. */
+export const APP_ROOT = discoverAppRoot();
+
+/** Vite monolith JSON output: `{appRoot}/client/public/i18n`. */
+export const CLIENT_PUBLIC_I18N_DIR = path.join(APP_ROOT, "client/public/i18n");
+
+/** Next.js shard tree: `{appRoot}/public/i18n`. */
+export const NEXT_PUBLIC_I18N_SHARD_ROOT = path.join(APP_ROOT, "public/i18n");
+
+let pathsLogged = false;
+
+/** Log resolved roots once per process (e.g. after `chdir`). */
+export function logResolvedPathsOnce(): void {
+  if (pathsLogged) return;
+  pathsLogged = true;
+  console.log(`[paths] repoRoot=${REPO_ROOT} appRoot=${APP_ROOT}`);
+}

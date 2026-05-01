@@ -6,6 +6,7 @@ import { existsSync } from "fs";
 import { gzipSync } from "zlib";
 import { compileI18n } from "./compile-i18n";
 import { execSync } from "child_process";
+import { APP_ROOT } from "./repo-root";
 
 type EsbuildBuildFn = (typeof import("esbuild"))["build"];
 type ViteBuildFn = (typeof import("vite"))["build"];
@@ -552,10 +553,10 @@ async function buildAll() {
   if (target === "all" || target === "client") {
     const i18nCompileT = Date.now();
     if (skipI18nCompile) {
-      const enPath = path.resolve("client/public/i18n/en.json");
+      const enPath = path.join(APP_ROOT, "client/public/i18n/en.json");
       if (!existsSync(enPath)) {
         console.error(
-          "[build] SKIP_I18N_COMPILE=1 but client/public/i18n/en.json is missing. Commit i18n JSON or run a full build without SKIP_I18N_COMPILE.",
+          `[build] SKIP_I18N_COMPILE=1 but ${enPath} is missing. Commit i18n JSON or run a full build without SKIP_I18N_COMPILE.`,
         );
         process.exit(1);
       }
