@@ -1,11 +1,31 @@
 # Blog Hidden Content Audit
 
-Generated: 2026-05-01T01:08:21.595Z
+Generated: 2026-05-01T07:03:12.550Z
 
 ## Scope
 
 - Repo root: `/root/nursenest-core`
 - App root: `/root/nursenest-core/nursenest-core`
+- Search coverage:
+  - `/root/nursenest-core`
+  - `/root/nursenest-core/nursenest-core`
+  - `data/`
+  - `scripts/`
+  - `script/`
+  - `server/`
+  - `shared/`
+  - `reports/`
+  - `.claude/`
+  - `.cursor/`
+  - `backup-system/`
+  - `migrations/`
+  - `prisma/`
+  - `generated/`
+  - `public/`
+  - `src/`
+  - `app/`
+  - `content/`
+  - `/root/*nursenest*`
 - DATABASE_URL configured: `false`
 - Database queried successfully: `false`
 
@@ -14,7 +34,13 @@ Generated: 2026-05-01T01:08:21.595Z
 - Admin canonical writes:
   - src/app/api/admin/blog/route.ts -> prisma.blogPost.create/findMany
   - src/app/api/admin/blog/[id]/route.ts -> prisma.blogPost.update/delete via canonical publish helper
+  - src/app/api/admin/blog/control-panel/persist-draft/route.ts -> persistControlPanelDraft -> BlogPost
   - src/app/api/admin/blog/localized/*.ts -> prisma.localizedBlogArticle writes
+- Generator writes:
+  - src/lib/blog/blog-control-panel-generation.ts -> BlogPost drafts + canonical publish helper
+  - src/lib/blog/blog-article-generation-job.ts -> BlogArticleGenerationJob snapshots and linked BlogPost rows
+  - src/app/api/admin/blog/campaigns/[id]/run-chunk/route.ts -> prisma.blogPost.create via campaign items
+  - src/app/api/blog/import/route.ts -> BlogPost import path
 - Public canonical reads:
   - src/app/(marketing)/(default)/blog/page.tsx -> getPublishedBlogPostsPage
   - src/app/(marketing)/(default)/blog/[slug]/page.tsx -> getPublishedBlogPostBySlug
@@ -23,11 +49,21 @@ Generated: 2026-05-01T01:08:21.595Z
 - Public localized reads:
   - src/app/(marketing)/[locale]/[slug]/[examCode]/[exam]/blog/page.tsx -> getPublishedLocalizedBlogPostsPage
   - src/app/(marketing)/[locale]/[slug]/[examCode]/[exam]/blog/[postSlug]/page.tsx -> getPublishedLocalizedBlogBySlug
+- Blog index reads:
+  - src/app/(marketing)/(default)/blog/page.tsx -> getPublishedBlogPostsPage
+  - src/app/(marketing)/(default)/nursing/[careerSlug]/blog/page.tsx -> getPublishedBlogPostsPage
+  - src/app/(marketing)/(default)/allied-health/[slug]/blog/page.tsx -> getPublishedBlogPostsPage
+- Tag/category reads:
+  - src/app/(marketing)/(default)/blog/tag/[tag]/page.tsx -> safe-blog-queries tag filters
+  - No dedicated category route found under src/app for BlogPost.category
 - Sitemap reads:
   - src/app/sitemap.xml/route.ts -> listBlogSitemapEntriesSafe -> canonical BlogPost sitemap rows
   - src/lib/seo/sitemap-localized-blog-xml.ts exists, but current route wiring does not clearly call it
+- RSS/feed reads:
+  - No dedicated RSS/feed route found in current app router audit
 - Mismatches:
   - Canonical public blog reads BlogPost, not ContentItem.
+  - Admin and generator pipelines converge on BlogPost, but queue/snapshot models (BlogArticleGenerationJob, BlogDraftGenerationBatchItem, BlogBatchScheduleItem) are not themselves public sources.
   - Localized public blog reads LocalizedBlogArticle, not canonical BlogPost bodies directly.
   - Static fallback TS posts are not the live detail body source when DB-backed BlogPost rows exist.
   - Localized sitemap generation code exists, but current sitemap route appears canonical-only.
@@ -73,8 +109,9 @@ Generated: 2026-05-01T01:08:21.595Z
 
 ## Nearby Checkouts
 
-- `/root/nursenestest-core-reclone`: present
 - `/root/nursenest-core-corrupt-20260430-223920`: present
+- `/root/nursenest-core-git-repair-notes`: present
+- `/root/nursenestest-core-reclone`: present
 
 ## Output Files
 

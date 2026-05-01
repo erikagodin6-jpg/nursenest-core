@@ -1,0 +1,110 @@
+{
+  "generatedAt": "2026-05-01T06:38:34.187Z",
+  "apply": false,
+  "limit": 5,
+  "note": "Dry-run only: no Prisma writes. Use --apply after review (keeps --limit≤5 unless --i-understand-large-apply).",
+  "sampleWordCountProbeHtml": "<p>word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word word </p>",
+  "sampleWordCount": 400,
+  "plannedPosts": [
+    {
+      "ordinal": 1,
+      "topic": "NCLEX pharmacology",
+      "suggestedSlugBase": "nclex-pharmacology",
+      "wouldEnqueuePipeline": false,
+      "outlineSections": [
+        "exam-focused intro",
+        "clinical explanation",
+        "test traps",
+        "practice-style prompts",
+        "key takeaways"
+      ],
+      "internalLinkTargets": [
+        "lessons hub",
+        "practice questions hub",
+        "flashcards hub",
+        "CAT practice entry",
+        "related blog posts"
+      ]
+    },
+    {
+      "ordinal": 2,
+      "topic": "REx-PN pharmacology",
+      "suggestedSlugBase": "rex-pn-pharmacology",
+      "wouldEnqueuePipeline": false,
+      "outlineSections": [
+        "exam-focused intro",
+        "clinical explanation",
+        "test traps",
+        "practice-style prompts",
+        "key takeaways"
+      ],
+      "internalLinkTargets": [
+        "lessons hub",
+        "practice questions hub",
+        "flashcards hub",
+        "CAT practice entry",
+        "related blog posts"
+      ]
+    },
+    {
+      "ordinal": 3,
+      "topic": "medication safety",
+      "suggestedSlugBase": "medication-safety",
+      "wouldEnqueuePipeline": false,
+      "outlineSections": [
+        "exam-focused intro",
+        "clinical explanation",
+        "test traps",
+        "practice-style prompts",
+        "key takeaways"
+      ],
+      "internalLinkTargets": [
+        "lessons hub",
+        "practice questions hub",
+        "flashcards hub",
+        "CAT practice entry",
+        "related blog posts"
+      ]
+    },
+    {
+      "ordinal": 4,
+      "topic": "adverse effects",
+      "suggestedSlugBase": "adverse-effects",
+      "wouldEnqueuePipeline": false,
+      "outlineSections": [
+        "exam-focused intro",
+        "clinical explanation",
+        "test traps",
+        "practice-style prompts",
+        "key takeaways"
+      ],
+      "internalLinkTargets": [
+        "lessons hub",
+        "practice questions hub",
+        "flashcards hub",
+        "CAT practice entry",
+        "related blog posts"
+      ]
+    },
+    {
+      "ordinal": 5,
+      "topic": "cardiac medications nursing",
+      "suggestedSlugBase": "cardiac-medications-nursing",
+      "wouldEnqueuePipeline": false,
+      "outlineSections": [
+        "exam-focused intro",
+        "clinical explanation",
+        "test traps",
+        "practice-style prompts",
+        "key takeaways"
+      ],
+      "internalLinkTargets": [
+        "lessons hub",
+        "practice questions hub",
+        "flashcards hub",
+        "CAT practice entry",
+        "related blog posts"
+      ]
+    }
+  ]
+}

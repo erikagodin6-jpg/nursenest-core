@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-05-01T06:38:34.469Z",
+  "apply": false,
+  "inventoryPath": "/root/nursenest-core/reports/blog-hidden-content-inventory.json",
+  "batchPath": "/root/nursenest-core/data/blog-manifest/batch-01/batch-01-import-ready.json",
+  "counts": {
+    "inventoryTotalApprox": 1616,
+    "inventoryRowsWithWordCountGte800": 130,
+    "inventoryMetadataOnlySignals": 1390,
+    "batchPosts": 10,
+    "batchFullBodyGte800Words": 10
+  },
+  "policy": [
+    "Only rows with full HTML bodies (≥800 words) are importable as canonical BlogPost drafts.",
+    "Metadata-only SEO ideas belong in a generation queue, not public BlogPost.",
+    "Duplicates are skipped at import time (slug unique)."
+  ]
+}

@@ -12,7 +12,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 import {
   analyzeLessonContentDepth,
@@ -34,10 +34,56 @@ import {
 import {
   getCatalogPathwayLessonsSync,
   listCatalogPathwayIdsWithLessonsSync,
+  normalizeLesson,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const pkgRoot = path.resolve(__dirname, "..");
+const RN_JSON_CLINICAL_PATHWAY_IDS = ["ca-rn-nclex-rn", "us-rn-nclex-rn"] as const;
+const RPN_JSON_BACKED_PATHWAY_IDS = ["ca-rpn-rex-pn", "us-lpn-nclex-pn"] as const;
+const RN_JSON_CLINICAL_EXCLUDED_TOPICS = new Set(["Exam Strategy", "Leadership & Delegation", "Safety & Prioritization"]);
+const RN_JSON_SKIP_FILES = new Set([
+  "rn-nclex-catalog-import-state.json",
+  "rn-nclex-master-map.json",
+  "rn-nclex-explicit-inventory-aliases.json",
+  "nclex-rn-source-checklist.json",
+]);
+
+type JsonBackedNormalizedLesson<PathwayId extends string = string> = {
+  pathwayId: PathwayId;
+  lesson: ReturnType<typeof normalizeLesson>;
+  sourceFile: string;
+};
+
+type JsonBackedExpandReport = {
+  pathwayIds: string[];
+  liveCatalogLessonsTotal: number;
+  totalJsonBackedLessons: number;
+  adequate: number;
+  enriched: number;
+  unmatched: number;
+  missingRequiredSections: number;
+  below1200Words: number;
+  thinSectionLessons: number;
+  thinSectionsTotal: number;
+  clinicalGapLessons: number;
+  missingClinicalTotal: number;
+  flashcardIssueLessons: number;
+  scopedGoldExcluded: number;
+  byPathway: Record<
+    string,
+    {
+      liveCatalogLessonsTotal: number;
+      totalJsonBackedLessons: number;
+      adequate: number;
+      enriched: number;
+      unmatched: number;
+      missingRequiredSections: number;
+      below1200Words: number;
+      scopedGoldExcluded: number;
+    }
+  >;
+};
 
 type SummaryJson = {
   generatedAt: string;
@@ -61,16 +107,19 @@ type SummaryJson = {
     rnExpandClinicalGapLessons: number;
     rnExpandMissingClinicalTotal: number;
     rnExpandFlashcardIssueLessons: number;
-    /** RPN/PN (ca-rpn-rex-pn + us-lpn-nclex-pn) — same validateExpandedLesson contract as RN. */
-    rpnExpandLessonsTotal: number;
-    rpnExpandPassing: number;
-    rpnExpandBelow1200Words: number;
-    rpnExpandMissingRequiredSection: number;
-    rpnExpandThinSectionLessons: number;
-    rpnExpandThinSectionsTotal: number;
-    rpnExpandClinicalGapLessons: number;
-    rpnExpandMissingClinicalTotal: number;
-    rpnExpandFlashcardIssueLessons: number;
+    /** RPN/PN JSON-backed live lessons only (`catalog.json` + expansion catalogs; excludes scoped-gold/code-backed rows). */
+    rpnJsonBackedLessonsTotal: number;
+    rpnJsonBackedAdequate: number;
+    rpnJsonBackedEnriched: number;
+    rpnJsonBackedUnmatched: number;
+    rpnJsonBackedBelow1200Words: number;
+    rpnJsonBackedMissingRequiredSection: number;
+    rpnJsonBackedThinSectionLessons: number;
+    rpnJsonBackedThinSectionsTotal: number;
+    rpnJsonBackedClinicalGapLessons: number;
+    rpnJsonBackedMissingClinicalTotal: number;
+    rpnJsonBackedFlashcardIssueLessons: number;
+    rpnJsonBackedScopedGoldExcluded: number;
     /** Canadian NP / CNPLE (`ca-np-cnple`) — same spine + NP gates in {@link validateExpandedLesson}. */
     npExpandLessonsTotal: number;
     npExpandPassing: number;
@@ -87,6 +136,17 @@ type SummaryJson = {
     npExpandMissingTreatments: number;
     npExpandMissingPharmacology: number;
     npExpandMissingDifferentialOrCdm: number;
+    /** JSON-backed RN clinical lessons only: excludes scoped-gold and non-clinical strategy/delegation/safety topics. */
+    rnJsonClinicalLessonsTotal: number;
+    rnJsonClinicalPassing: number;
+    rnJsonClinicalBelow1200Words: number;
+    rnJsonClinicalMissingRequiredSection: number;
+    rnJsonClinicalThinSectionLessons: number;
+    rnJsonClinicalThinSectionsTotal: number;
+    rnJsonClinicalGapLessons: number;
+    rnJsonClinicalMissingClinicalTotal: number;
+    rnJsonClinicalFlashcardIssueLessons: number;
+    rnJsonClinicalLegacySectionLessons: number;
   };
   byPathway: Record<
     string,
@@ -97,6 +157,9 @@ type SummaryJson = {
     }
   >;
   cohortRollups: ReturnType<typeof rollupDepthByCohort>;
+  reports: {
+    rpnJsonBacked: JsonBackedExpandReport;
+  };
   sequentialGateViolations: string[];
   strictExit: boolean;
 };
@@ -108,8 +171,149 @@ function parseArgs(argv: string[]) {
   return { strict, writeJson };
 }
 
-function main() {
-  const { strict, writeJson } = parseArgs(process.argv.slice(2));
+function readJsonBackedPathwayLessons(filePath: string, pathwayId: string): unknown[] {
+  const raw = JSON.parse(fs.readFileSync(filePath, "utf8")) as { pathways?: Record<string, unknown> };
+  const bucket = raw?.pathways?.[pathwayId];
+  if (Array.isArray(bucket)) return bucket;
+  if (bucket && typeof bucket === "object") {
+    const lessons = (bucket as { lessons?: unknown[] }).lessons;
+    return Array.isArray(lessons) ? lessons : [];
+  }
+  return [];
+}
+
+function loadJsonBackedLessonsForPathwayIds<PathwayId extends string>(opts: {
+  pathwayIds: readonly PathwayId[];
+  excludeTopics?: ReadonlySet<string>;
+}): JsonBackedNormalizedLesson<PathwayId>[] {
+  const catalogDir = path.join(pkgRoot, "src/content/pathway-lessons");
+  const out: JsonBackedNormalizedLesson<PathwayId>[] = [];
+  const seen = new Set<string>();
+  for (const fileName of fs.readdirSync(catalogDir).sort()) {
+    if (!fileName.endsWith(".json") || RN_JSON_SKIP_FILES.has(fileName)) continue;
+    const filePath = path.join(catalogDir, fileName);
+    for (const pathwayId of opts.pathwayIds) {
+      for (const rawLesson of readJsonBackedPathwayLessons(filePath, pathwayId)) {
+        const lesson = normalizeLesson(rawLesson as Parameters<typeof normalizeLesson>[0], pathwayId);
+        if (opts.excludeTopics?.has(String(lesson.topic ?? "").trim())) continue;
+        const dedupeKey = `${pathwayId}::${lesson.slug.trim().toLowerCase()}`;
+        if (seen.has(dedupeKey)) continue;
+        seen.add(dedupeKey);
+        out.push({ pathwayId, lesson, sourceFile: fileName });
+      }
+    }
+  }
+  return out;
+}
+
+function loadRnClinicalJsonLessons(): JsonBackedNormalizedLesson<(typeof RN_JSON_CLINICAL_PATHWAY_IDS)[number]>[] {
+  return loadJsonBackedLessonsForPathwayIds({
+    pathwayIds: RN_JSON_CLINICAL_PATHWAY_IDS,
+    excludeTopics: RN_JSON_CLINICAL_EXCLUDED_TOPICS,
+  });
+}
+
+function buildRpnJsonBackedReport(): JsonBackedExpandReport {
+  const rows = loadJsonBackedLessonsForPathwayIds({ pathwayIds: RPN_JSON_BACKED_PATHWAY_IDS });
+  const byPathway = Object.fromEntries(
+    RPN_JSON_BACKED_PATHWAY_IDS.map((pathwayId) => [
+      pathwayId,
+      {
+        liveCatalogLessonsTotal: getCatalogPathwayLessonsSync(pathwayId).length,
+        totalJsonBackedLessons: 0,
+        adequate: 0,
+        enriched: 0,
+        unmatched: 0,
+        missingRequiredSections: 0,
+        below1200Words: 0,
+        scopedGoldExcluded: 0,
+      },
+    ]),
+  ) as JsonBackedExpandReport["byPathway"];
+
+  let adequate = 0;
+  let enriched = 0;
+  let unmatched = 0;
+  let missingRequiredSections = 0;
+  let below1200Words = 0;
+  let thinSectionLessons = 0;
+  let thinSectionsTotal = 0;
+  let clinicalGapLessons = 0;
+  let missingClinicalTotal = 0;
+  let flashcardIssueLessons = 0;
+
+  for (const row of rows) {
+    const pathwayReport = byPathway[row.pathwayId];
+    pathwayReport.totalJsonBackedLessons += 1;
+    const analysis = analyzeLessonContentDepth(row.pathwayId, row.lesson);
+    const isUnmatched = analysis.legacyOnlyKindsPresent.length > 0;
+    if (isUnmatched) {
+      unmatched += 1;
+      pathwayReport.unmatched += 1;
+      continue;
+    }
+
+    const ev = validateExpandedLesson(row.lesson);
+    const isAdequate = ev.totalWords >= LESSON_DEPTH_TOTAL_WORD_MIN && ev.missingSections.length === 0;
+
+    pathwayReport.enriched += 1;
+    enriched += 1;
+    if (isAdequate) {
+      pathwayReport.adequate += 1;
+      adequate += 1;
+    }
+    if (ev.missingSections.length > 0) {
+      pathwayReport.missingRequiredSections += 1;
+      missingRequiredSections += 1;
+    }
+    if (ev.totalWords < LESSON_DEPTH_TOTAL_WORD_MIN) {
+      pathwayReport.below1200Words += 1;
+      below1200Words += 1;
+    }
+    if (ev.thinSections.length > 0) {
+      thinSectionLessons += 1;
+      thinSectionsTotal += ev.thinSections.length;
+    }
+    if (ev.missingClinicalRequirements.length > 0) {
+      clinicalGapLessons += 1;
+      missingClinicalTotal += ev.missingClinicalRequirements.length;
+    }
+    if (ev.flashcardPromptErrors.length > 0 || ev.flashcardPromptCount < 8) flashcardIssueLessons += 1;
+  }
+
+  const liveCatalogLessonsTotal = RPN_JSON_BACKED_PATHWAY_IDS.reduce(
+    (sum, pathwayId) => sum + byPathway[pathwayId].liveCatalogLessonsTotal,
+    0,
+  );
+  const scopedGoldExcluded = Math.max(0, liveCatalogLessonsTotal - rows.length);
+  for (const pathwayId of RPN_JSON_BACKED_PATHWAY_IDS) {
+    const pathwayReport = byPathway[pathwayId];
+    pathwayReport.scopedGoldExcluded = Math.max(
+      0,
+      pathwayReport.liveCatalogLessonsTotal - pathwayReport.totalJsonBackedLessons,
+    );
+  }
+
+  return {
+    pathwayIds: [...RPN_JSON_BACKED_PATHWAY_IDS],
+    liveCatalogLessonsTotal,
+    totalJsonBackedLessons: rows.length,
+    adequate,
+    enriched,
+    unmatched,
+    missingRequiredSections,
+    below1200Words,
+    thinSectionLessons,
+    thinSectionsTotal,
+    clinicalGapLessons,
+    missingClinicalTotal,
+    flashcardIssueLessons,
+    scopedGoldExcluded,
+    byPathway,
+  };
+}
+
+export function buildLessonContentDepthSummary(strict = false): SummaryJson {
   const pathwayIds = listCatalogPathwayIdsWithLessonsSync().sort();
 
   const analyses: ReturnType<typeof analyzeLessonContentDepth>[] = [];
@@ -132,16 +336,6 @@ function main() {
   let rnExpandMissingClinicalTotal = 0;
   let rnExpandFlashcardIssueLessons = 0;
 
-  let rpnExpandLessonsTotal = 0;
-  let rpnExpandPassing = 0;
-  let rpnExpandBelow1200 = 0;
-  let rpnExpandMissingSection = 0;
-  let rpnExpandThinLessons = 0;
-  let rpnExpandThinSectionsTotal = 0;
-  let rpnExpandClinicalGapLessons = 0;
-  let rpnExpandMissingClinicalTotal = 0;
-  let rpnExpandFlashcardIssueLessons = 0;
-
   let npExpandLessonsTotal = 0;
   let npExpandPassing = 0;
   let npExpandWithLegacyMatch = 0;
@@ -157,6 +351,16 @@ function main() {
   let npExpandMissingTreatments = 0;
   let npExpandMissingPharmacology = 0;
   let npExpandMissingDifferentialOrCdm = 0;
+  let rnJsonClinicalLessonsTotal = 0;
+  let rnJsonClinicalPassing = 0;
+  let rnJsonClinicalBelow1200 = 0;
+  let rnJsonClinicalMissingSection = 0;
+  let rnJsonClinicalThinLessons = 0;
+  let rnJsonClinicalThinSectionsTotal = 0;
+  let rnJsonClinicalGapLessons = 0;
+  let rnJsonClinicalMissingClinicalTotal = 0;
+  let rnJsonClinicalFlashcardIssueLessons = 0;
+  let rnJsonClinicalLegacySectionLessons = 0;
 
   const monorepoRoot = path.resolve(pkgRoot, "..");
   const npLegacyRecords = loadNpPhase2LegacyRecords(monorepoRoot);
@@ -193,22 +397,6 @@ function main() {
           rnExpandMissingClinicalTotal += ev.missingClinicalRequirements.length;
         }
         if (ev.flashcardPromptErrors.length > 0 || ev.flashcardPromptCount < 8) rnExpandFlashcardIssueLessons += 1;
-      }
-      if (isRpnPnExpandPathwayId(pathwayId)) {
-        const ev = validateExpandedLesson(lesson);
-        rpnExpandLessonsTotal += 1;
-        if (ev.pass) rpnExpandPassing += 1;
-        if (ev.totalWords < LESSON_DEPTH_TOTAL_WORD_MIN) rpnExpandBelow1200 += 1;
-        if (ev.missingSections.length > 0) rpnExpandMissingSection += 1;
-        if (ev.thinSections.length > 0) {
-          rpnExpandThinLessons += 1;
-          rpnExpandThinSectionsTotal += ev.thinSections.length;
-        }
-        if (ev.missingClinicalRequirements.length > 0) {
-          rpnExpandClinicalGapLessons += 1;
-          rpnExpandMissingClinicalTotal += ev.missingClinicalRequirements.length;
-        }
-        if (ev.flashcardPromptErrors.length > 0 || ev.flashcardPromptCount < 8) rpnExpandFlashcardIssueLessons += 1;
       }
       if (isNpExpandPathwayId(pathwayId)) {
         const ev = validateExpandedLesson(lesson, { pathwayId });
@@ -259,6 +447,27 @@ function main() {
     };
   }
 
+  for (const row of loadRnClinicalJsonLessons()) {
+    const analysis = analyzeLessonContentDepth(row.pathwayId, row.lesson);
+    const ev = validateExpandedLesson(row.lesson);
+    rnJsonClinicalLessonsTotal += 1;
+    if (ev.pass) rnJsonClinicalPassing += 1;
+    if (ev.totalWords < LESSON_DEPTH_TOTAL_WORD_MIN) rnJsonClinicalBelow1200 += 1;
+    if (ev.missingSections.length > 0) rnJsonClinicalMissingSection += 1;
+    if (ev.thinSections.length > 0) {
+      rnJsonClinicalThinLessons += 1;
+      rnJsonClinicalThinSectionsTotal += ev.thinSections.length;
+    }
+    if (ev.missingClinicalRequirements.length > 0) {
+      rnJsonClinicalGapLessons += 1;
+      rnJsonClinicalMissingClinicalTotal += ev.missingClinicalRequirements.length;
+    }
+    if (ev.flashcardPromptErrors.length > 0 || ev.flashcardPromptCount < 8) rnJsonClinicalFlashcardIssueLessons += 1;
+    if (analysis.legacyOnlyKindsPresent.length > 0) rnJsonClinicalLegacySectionLessons += 1;
+  }
+
+  const rpnJsonBackedReport = buildRpnJsonBackedReport();
+
   const passingAll = analyses.filter((a) => a.passesAllSchema).length;
   const rollups = rollupDepthByCohort(analyses);
   const sequentialGateViolations = evaluateLessonDepthSequentialGate(rollups);
@@ -284,15 +493,18 @@ function main() {
       rnExpandClinicalGapLessons,
       rnExpandMissingClinicalTotal,
       rnExpandFlashcardIssueLessons,
-      rpnExpandLessonsTotal,
-      rpnExpandPassing,
-      rpnExpandBelow1200Words: rpnExpandBelow1200,
-      rpnExpandMissingRequiredSection: rpnExpandMissingSection,
-      rpnExpandThinSectionLessons: rpnExpandThinLessons,
-      rpnExpandThinSectionsTotal,
-      rpnExpandClinicalGapLessons,
-      rpnExpandMissingClinicalTotal,
-      rpnExpandFlashcardIssueLessons,
+      rpnJsonBackedLessonsTotal: rpnJsonBackedReport.totalJsonBackedLessons,
+      rpnJsonBackedAdequate: rpnJsonBackedReport.adequate,
+      rpnJsonBackedEnriched: rpnJsonBackedReport.enriched,
+      rpnJsonBackedUnmatched: rpnJsonBackedReport.unmatched,
+      rpnJsonBackedBelow1200Words: rpnJsonBackedReport.below1200Words,
+      rpnJsonBackedMissingRequiredSection: rpnJsonBackedReport.missingRequiredSections,
+      rpnJsonBackedThinSectionLessons: rpnJsonBackedReport.thinSectionLessons,
+      rpnJsonBackedThinSectionsTotal: rpnJsonBackedReport.thinSectionsTotal,
+      rpnJsonBackedClinicalGapLessons: rpnJsonBackedReport.clinicalGapLessons,
+      rpnJsonBackedMissingClinicalTotal: rpnJsonBackedReport.missingClinicalTotal,
+      rpnJsonBackedFlashcardIssueLessons: rpnJsonBackedReport.flashcardIssueLessons,
+      rpnJsonBackedScopedGoldExcluded: rpnJsonBackedReport.scopedGoldExcluded,
       npExpandLessonsTotal,
       npExpandPassing,
       npExpandWithLegacyMatch,
@@ -308,12 +520,31 @@ function main() {
       npExpandMissingTreatments,
       npExpandMissingPharmacology,
       npExpandMissingDifferentialOrCdm,
+      rnJsonClinicalLessonsTotal,
+      rnJsonClinicalPassing,
+      rnJsonClinicalBelow1200Words: rnJsonClinicalBelow1200,
+      rnJsonClinicalMissingRequiredSection: rnJsonClinicalMissingSection,
+      rnJsonClinicalThinSectionLessons: rnJsonClinicalThinLessons,
+      rnJsonClinicalThinSectionsTotal,
+      rnJsonClinicalGapLessons,
+      rnJsonClinicalMissingClinicalTotal,
+      rnJsonClinicalFlashcardIssueLessons,
+      rnJsonClinicalLegacySectionLessons,
     },
     byPathway,
     cohortRollups: rollups,
+    reports: {
+      rpnJsonBacked: rpnJsonBackedReport,
+    },
     sequentialGateViolations,
     strictExit: strict,
   };
+  return summary;
+}
+
+function main() {
+  const { strict, writeJson } = parseArgs(process.argv.slice(2));
+  const summary = buildLessonContentDepthSummary(strict);
 
   console.log("=== verify:lesson-content-depth (bundled catalog) ===\n");
   console.log(`Pathways with lessons: ${summary.totals.pathways}`);
@@ -335,16 +566,47 @@ function main() {
   console.log(`RN lessons with any missing clinical requirement: ${summary.totals.rnExpandClinicalGapLessons}`);
   console.log(`RN missing clinical requirement rows (sum): ${summary.totals.rnExpandMissingClinicalTotal}`);
   console.log(`RN lessons with flashcard prompt issues or <8 prompts: ${summary.totals.rnExpandFlashcardIssueLessons}`);
-  console.log("\n--- RPN/PN expanded-lesson contract (ca-rpn-rex-pn + us-lpn-nclex-pn) ---");
-  console.log(`RPN/PN lessons (total): ${summary.totals.rpnExpandLessonsTotal}`);
-  console.log(`RPN/PN fully passing expanded contract: ${summary.totals.rpnExpandPassing}`);
-  console.log(`RPN/PN lessons total words < ${LESSON_DEPTH_TOTAL_WORD_MIN}: ${summary.totals.rpnExpandBelow1200Words}`);
-  console.log(`RPN/PN lessons with any missing required section: ${summary.totals.rpnExpandMissingRequiredSection}`);
-  console.log(`RPN/PN lessons with any thin section (<150w): ${summary.totals.rpnExpandThinSectionLessons}`);
-  console.log(`RPN/PN thin section rows (sum across lessons): ${summary.totals.rpnExpandThinSectionsTotal}`);
-  console.log(`RPN/PN lessons with any missing clinical requirement: ${summary.totals.rpnExpandClinicalGapLessons}`);
-  console.log(`RPN/PN missing clinical requirement rows (sum): ${summary.totals.rpnExpandMissingClinicalTotal}`);
-  console.log(`RPN/PN lessons with flashcard prompt issues or <8 prompts: ${summary.totals.rpnExpandFlashcardIssueLessons}`);
+  console.log(
+    "\n--- RN JSON clinical gate (JSON-backed only; excludes scoped-gold + Exam Strategy + Leadership & Delegation + Safety & Prioritization) ---",
+  );
+  console.log(`RN JSON clinical lessons (total): ${summary.totals.rnJsonClinicalLessonsTotal}`);
+  console.log(
+    `RN JSON clinical lessons fully passing expanded contract: ${summary.totals.rnJsonClinicalPassing}`,
+  );
+  console.log(
+    `RN JSON clinical lessons >= ${LESSON_DEPTH_TOTAL_WORD_MIN} words: ${summary.totals.rnJsonClinicalLessonsTotal - summary.totals.rnJsonClinicalBelow1200Words}`,
+  );
+  console.log(
+    `RN JSON clinical lessons with any missing required section: ${summary.totals.rnJsonClinicalMissingRequiredSection}`,
+  );
+  console.log(
+    `RN JSON clinical lessons still containing legacy-only sections: ${summary.totals.rnJsonClinicalLegacySectionLessons}`,
+  );
+  console.log(
+    `RN JSON clinical lessons with any thin section (<150w): ${summary.totals.rnJsonClinicalThinSectionLessons}`,
+  );
+  console.log(`RN JSON clinical thin section rows (sum): ${summary.totals.rnJsonClinicalThinSectionsTotal}`);
+  console.log(`RN JSON clinical lessons with any missing clinical requirement: ${summary.totals.rnJsonClinicalGapLessons}`);
+  console.log(`RN JSON clinical missing clinical requirement rows (sum): ${summary.totals.rnJsonClinicalMissingClinicalTotal}`);
+  console.log(
+    `RN JSON clinical lessons with flashcard prompt issues or <8 prompts: ${summary.totals.rnJsonClinicalFlashcardIssueLessons}`,
+  );
+  console.log(
+    "\n--- RPN/PN JSON-backed live gate (catalog.json + expansion catalogs only; scoped-gold/code-backed excluded) ---",
+  );
+  console.log(`RPN/PN live lessons from getCatalogPathwayLessonsSync(): ${summary.reports.rpnJsonBacked.liveCatalogLessonsTotal}`);
+  console.log(`RPN/PN JSON-backed lessons (denominator): ${summary.totals.rpnJsonBackedLessonsTotal}`);
+  console.log(`RPN/PN scoped-gold/code-backed lessons excluded: ${summary.totals.rpnJsonBackedScopedGoldExcluded}`);
+  console.log(`RPN/PN enriched lessons (expanded-section shape, JSON-backed): ${summary.totals.rpnJsonBackedEnriched}`);
+  console.log(`RPN/PN unmatched lessons (legacy JSON shape, not build-fatal): ${summary.totals.rpnJsonBackedUnmatched}`);
+  console.log(`RPN/PN adequate enriched lessons (>= ${LESSON_DEPTH_TOTAL_WORD_MIN} words and no missing required sections): ${summary.totals.rpnJsonBackedAdequate}`);
+  console.log(`RPN/PN enriched lessons total words < ${LESSON_DEPTH_TOTAL_WORD_MIN}: ${summary.totals.rpnJsonBackedBelow1200Words}`);
+  console.log(`RPN/PN enriched lessons with any missing required section: ${summary.totals.rpnJsonBackedMissingRequiredSection}`);
+  console.log(`RPN/PN enriched lessons with any thin section (<150w): ${summary.totals.rpnJsonBackedThinSectionLessons}`);
+  console.log(`RPN/PN enriched thin section rows (sum across lessons): ${summary.totals.rpnJsonBackedThinSectionsTotal}`);
+  console.log(`RPN/PN enriched lessons with any missing clinical requirement: ${summary.totals.rpnJsonBackedClinicalGapLessons}`);
+  console.log(`RPN/PN enriched missing clinical requirement rows (sum): ${summary.totals.rpnJsonBackedMissingClinicalTotal}`);
+  console.log(`RPN/PN enriched lessons with flashcard prompt issues or <8 prompts: ${summary.totals.rpnJsonBackedFlashcardIssueLessons}`);
   console.log("\n--- NP expanded-lesson contract (ca-np-cnple) ---");
   console.log(`NP lessons (total): ${summary.totals.npExpandLessonsTotal}`);
   console.log(`NP with legacy phase-2 match (slug/title/topic heuristic): ${summary.totals.npExpandWithLegacyMatch}`);
@@ -362,17 +624,17 @@ function main() {
   console.log(`NP lessons weak/missing pharmacology: ${summary.totals.npExpandMissingPharmacology}`);
   console.log(`NP lessons missing NP differential gate on clinical decision-making: ${summary.totals.npExpandMissingDifferentialOrCdm}`);
   console.log("\n--- Cohort completion % (strict pass / all lessons in cohort pathways) ---");
-  for (const r of rollups) {
+  for (const r of summary.cohortRollups) {
     if (r.totalLessons === 0 && r.cohort === "OTHER") continue;
     console.log(
       `${r.cohort.padEnd(10)} ${r.completionPct}% (${r.passingLessons}/${r.totalLessons} lessons)  pathways: ${r.pathwayIds.length}`,
     );
   }
   console.log("\n--- Sequential tier gate (RN → PN → NP → Allied → New Grad) ---");
-  if (sequentialGateViolations.length === 0) {
+  if (summary.sequentialGateViolations.length === 0) {
     console.log("PASS: every populated tier ahead of the first deficit is at 100%, or no violations.");
   } else {
-    for (const v of sequentialGateViolations) console.log(`FAIL: ${v}`);
+    for (const v of summary.sequentialGateViolations) console.log(`FAIL: ${v}`);
   }
 
   if (writeJson) {
@@ -381,21 +643,27 @@ function main() {
     console.log(`\nWrote JSON: ${writeJson}`);
   }
 
-  if (strict && sequentialGateViolations.length > 0) {
+  if (strict && summary.sequentialGateViolations.length > 0) {
     console.error("\nStrict mode: exiting with code 1 (sequential gate).");
     process.exit(1);
   }
 
-  if (summary.totals.rnExpandLessonsTotal > 0 && summary.totals.rnExpandPassing !== summary.totals.rnExpandLessonsTotal) {
+  if (
+    summary.totals.rnJsonClinicalLessonsTotal > 0 &&
+    summary.totals.rnJsonClinicalPassing !== summary.totals.rnJsonClinicalLessonsTotal
+  ) {
     console.error(
-      `\nRN expanded-lesson contract: ${summary.totals.rnExpandPassing}/${summary.totals.rnExpandLessonsTotal} lessons pass — exiting 1.`,
+      `\nRN JSON clinical expanded-lesson contract: ${summary.totals.rnJsonClinicalPassing}/${summary.totals.rnJsonClinicalLessonsTotal} lessons pass — exiting 1.`,
     );
     process.exit(1);
   }
 
-  if (summary.totals.rpnExpandLessonsTotal > 0 && summary.totals.rpnExpandPassing !== summary.totals.rpnExpandLessonsTotal) {
+  if (
+    summary.totals.rpnJsonBackedLessonsTotal > 0 &&
+    (summary.totals.rpnJsonBackedMissingRequiredSection > 0 || summary.totals.rpnJsonBackedBelow1200Words > 0)
+  ) {
     console.error(
-      `\nRPN/PN expanded-lesson contract: ${summary.totals.rpnExpandPassing}/${summary.totals.rpnExpandLessonsTotal} lessons pass — exiting 1.`,
+      `\nRPN/PN JSON-backed live gate: ${summary.totals.rpnJsonBackedMissingRequiredSection} lessons with missing required sections, ${summary.totals.rpnJsonBackedBelow1200Words} lessons below ${LESSON_DEPTH_TOTAL_WORD_MIN} words — exiting 1.`,
     );
     process.exit(1);
   }
@@ -407,7 +675,9 @@ function main() {
     process.exit(1);
   }
 
-  console.log("\nverify:lesson-content-depth OK (RN + RPN/PN + NP expand contracts satisfied when those lessons are present).");
+  console.log("\nverify:lesson-content-depth OK (RN + RPN/PN + NP gates satisfied for configured build-failing conditions).");
 }
 
-main();
+if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {
+  main();
+}

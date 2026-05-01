@@ -83,6 +83,7 @@ type InventoryOutput = {
   applyRequested: boolean;
   repoRoot: string;
   appRoot: string;
+  searchCoverage: string[];
   database: {
     urlConfigured: boolean;
     queried: boolean;
@@ -96,9 +97,13 @@ type InventoryOutput = {
   sourceSummaries: SourceSummary[];
   sourceOfTruth: {
     adminCanonicalWrites: string[];
+    generatorWrites: string[];
     publicCanonicalReads: string[];
     publicLocalizedReads: string[];
+    blogIndexReads: string[];
+    tagPageReads: string[];
     sitemapReads: string[];
+    rssReads: string[];
     mismatchFindings: string[];
   };
   summary: {
@@ -175,10 +180,6 @@ const repoRoot = path.resolve(appRoot, "..");
 const reportsDir = path.join(repoRoot, "reports");
 const reportMarkdownPath = path.join(reportsDir, "blog-hidden-content-audit.md");
 const reportJsonPath = path.join(reportsDir, "blog-hidden-content-inventory.json");
-
-const nearbyCheckoutCandidates = [
-  "/root/nursenestest-core-reclone",
-];
 
 function parseArgs(argv: string[]) {
   return {
@@ -331,6 +332,18 @@ async function listMatchingDirs(parent: string, prefix: string): Promise<string[
     const entries = await fs.readdir(parent, { withFileTypes: true });
     return entries
       .filter((entry) => entry.isDirectory() && entry.name.startsWith(prefix))
+      .map((entry) => path.join(parent, entry.name))
+      .sort();
+  } catch {
+    return [];
+  }
+}
+
+async function listDirsContaining(parent: string, needle: string): Promise<string[]> {
+  try {
+    const entries = await fs.readdir(parent, { withFileTypes: true });
+    return entries
+      .filter((entry) => entry.isDirectory() && entry.name.includes(needle))
       .map((entry) => path.join(parent, entry.name))
       .sort();
   } catch {
@@ -1114,7 +1127,7 @@ async function loadDatabaseSources(
         slug: row.slug,
         status,
         sourceType: "db_blog_post",
-        sourceLocation: "BlogPost",
+        sourceLocation: `BlogPost:${row.id}`,
         publicReachable: live,
         expectedPublicUrl: scopedCanonicalBlogUrl(row.careerSlug, row.slug),
         appearsInSitemap: live,
@@ -1137,6 +1150,7 @@ async function loadDatabaseSources(
           tags: row.tags,
           createdAt: row.createdAt.toISOString(),
           updatedAt: row.updatedAt.toISOString(),
+          modelOrTable: "BlogPost",
           bodyPreview: stripHtml(row.body ?? "")
             .replace(/\s+/g, " ")
             .trim()
@@ -1189,7 +1203,7 @@ async function loadDatabaseSources(
         slug: row.localizedSlug,
         status,
         sourceType: "db_localized_blog_article",
-        sourceLocation: "LocalizedBlogArticle",
+        sourceLocation: `LocalizedBlogArticle:${row.id}`,
         publicReachable: live,
         expectedPublicUrl: localizedBlogUrl({
           locale: row.locale,
@@ -1217,6 +1231,7 @@ async function loadDatabaseSources(
           publishedAt: row.publishedAt?.toISOString() ?? null,
           scheduledAt: row.scheduledAt?.toISOString() ?? null,
           updatedAt: row.updatedAt.toISOString(),
+          modelOrTable: "LocalizedBlogArticle",
           bodyPreview: stripHtml(row.localizedBody ?? "")
             .replace(/\s+/g, " ")
             .trim()
@@ -1260,7 +1275,7 @@ async function loadDatabaseSources(
         slug: row.slug,
         status: "orphaned",
         sourceType: "db_content_item",
-        sourceLocation: "ContentItem",
+        sourceLocation: `ContentItem:${row.id}`,
         publicReachable: false,
         expectedPublicUrl: canonicalBlogUrl(row.slug),
         appearsInSitemap: false,
@@ -1277,6 +1292,7 @@ async function loadDatabaseSources(
           publishedAt: row.publishedAt?.toISOString() ?? null,
           scheduledAt: row.scheduledAt?.toISOString() ?? null,
           updatedAt: row.updatedAt.toISOString(),
+          modelOrTable: "ContentItem",
         },
       });
     }
@@ -1306,7 +1322,7 @@ async function loadDatabaseSources(
               ? "failed"
               : "pending",
         sourceType: "db_draft_generation_batch_item",
-        sourceLocation: "BlogDraftGenerationBatchItem",
+        sourceLocation: `BlogDraftGenerationBatchItem:${row.id}`,
         publicReachable: false,
         expectedPublicUrl: row.blogPostId ? canonicalBlogUrl(slug) : null,
         appearsInSitemap: false,
@@ -1323,6 +1339,7 @@ async function loadDatabaseSources(
           ordinal: row.ordinal,
           blogPostId: row.blogPostId,
           status: row.status,
+          modelOrTable: "BlogDraftGenerationBatchItem",
         },
       });
     }
@@ -1357,7 +1374,7 @@ async function loadDatabaseSources(
                 ? "hidden"
                 : "pending",
         sourceType: "db_batch_schedule_item",
-        sourceLocation: "BlogBatchScheduleItem",
+        sourceLocation: `BlogBatchScheduleItem:${row.id}`,
         publicReachable: false,
         expectedPublicUrl: row.blogPostId ? canonicalBlogUrl(slug) : null,
         appearsInSitemap: false,
@@ -1374,6 +1391,7 @@ async function loadDatabaseSources(
           plannedPublishAt: row.plannedPublishAt.toISOString(),
           blogPostId: row.blogPostId,
           status: row.status,
+          modelOrTable: "BlogBatchScheduleItem",
         },
       });
     }
@@ -1407,7 +1425,7 @@ async function loadDatabaseSources(
         slug,
         status: row.stage === "published" ? "published" : row.stage === "failed" ? "failed" : row.blogPostId ? "hidden" : "pending",
         sourceType: "db_article_generation_job",
-        sourceLocation: "BlogArticleGenerationJob",
+        sourceLocation: `BlogArticleGenerationJob:${row.id}`,
         publicReachable: false,
         expectedPublicUrl: row.resultSlug ? canonicalBlogUrl(row.resultSlug) : null,
         appearsInSitemap: false,
@@ -1424,6 +1442,7 @@ async function loadDatabaseSources(
           repairable: row.repairable,
           blogPostId: row.blogPostId,
           resultPostStatus: row.resultPostStatus,
+          modelOrTable: "BlogArticleGenerationJob",
         },
       });
     }
@@ -1531,15 +1550,16 @@ function buildAuditSpecRecord(record: InventoryRecord): AuditSpecRecord {
         : null;
   const region = typeof meta.region === "string" ? meta.region : null;
   const canonicalSlug = typeof meta.canonicalSlug === "string" ? meta.canonicalSlug : null;
-  const modelOrTable =
-    record.sourceLocation === "BlogPost" ||
-    record.sourceLocation === "LocalizedBlogArticle" ||
-    record.sourceLocation === "ContentItem" ||
-    record.sourceLocation === "BlogArticleGenerationJob"
-      ? record.sourceLocation
-      : /^db_/.test(record.sourceType)
-        ? record.sourceLocation
-        : null;
+  const explicitModelOrTable = typeof meta.modelOrTable === "string" ? meta.modelOrTable : null;
+  const sourceLocationHead = record.sourceLocation.includes(":") ? record.sourceLocation.split(":")[0] : record.sourceLocation;
+  const recognizedDbSource =
+    sourceLocationHead === "BlogPost" ||
+    sourceLocationHead === "LocalizedBlogArticle" ||
+    sourceLocationHead === "ContentItem" ||
+    sourceLocationHead === "BlogArticleGenerationJob" ||
+    sourceLocationHead === "BlogDraftGenerationBatchItem" ||
+    sourceLocationHead === "BlogBatchScheduleItem";
+  const modelOrTable = explicitModelOrTable ?? (recognizedDbSource || /^db_/.test(record.sourceType) ? sourceLocationHead : null);
 
   const appearsInBlogIndex =
     record.publicReachable && record.status === "published"
@@ -1644,6 +1664,8 @@ function toMarkdown(output: InventoryOutput): string {
   lines.push("## Scope", "");
   lines.push(`- Repo root: \`${output.repoRoot}\``);
   lines.push(`- App root: \`${output.appRoot}\``);
+  lines.push("- Search coverage:");
+  for (const item of output.searchCoverage) lines.push(`  - \`${item}\``);
   lines.push(`- DATABASE_URL configured: \`${String(output.database.urlConfigured)}\``);
   lines.push(`- Database queried successfully: \`${String(output.database.querySucceeded)}\``);
   if (output.database.error) {
@@ -1653,12 +1675,20 @@ function toMarkdown(output: InventoryOutput): string {
   lines.push("## Source Of Truth", "");
   lines.push("- Admin canonical writes:");
   for (const item of output.sourceOfTruth.adminCanonicalWrites) lines.push(`  - ${item}`);
+  lines.push("- Generator writes:");
+  for (const item of output.sourceOfTruth.generatorWrites) lines.push(`  - ${item}`);
   lines.push("- Public canonical reads:");
   for (const item of output.sourceOfTruth.publicCanonicalReads) lines.push(`  - ${item}`);
   lines.push("- Public localized reads:");
   for (const item of output.sourceOfTruth.publicLocalizedReads) lines.push(`  - ${item}`);
+  lines.push("- Blog index reads:");
+  for (const item of output.sourceOfTruth.blogIndexReads) lines.push(`  - ${item}`);
+  lines.push("- Tag/category reads:");
+  for (const item of output.sourceOfTruth.tagPageReads) lines.push(`  - ${item}`);
   lines.push("- Sitemap reads:");
   for (const item of output.sourceOfTruth.sitemapReads) lines.push(`  - ${item}`);
+  lines.push("- RSS/feed reads:");
+  for (const item of output.sourceOfTruth.rssReads) lines.push(`  - ${item}`);
   lines.push("- Mismatches:");
   for (const item of output.sourceOfTruth.mismatchFindings) lines.push(`  - ${item}`);
   lines.push("");
@@ -1722,11 +1752,11 @@ async function main(): Promise<void> {
   await loadOptionalEnvFile(path.join(appRoot, ".env.local"));
   await loadOptionalEnvFile(path.join(repoRoot, ".env.local"));
 
+  const topLevelNursenestDirs = await listDirsContaining("/root", "nursenest");
   const corruptDirs = await listMatchingDirs("/root", "nursenest-core-corrupt-");
-  const nearbyCheckouts = [
-    ...nearbyCheckoutCandidates,
-    ...corruptDirs,
-  ];
+  const nearbyCheckouts = [...new Set([...topLevelNursenestDirs, ...corruptDirs])]
+    .filter((targetPath) => path.resolve(targetPath) !== repoRoot)
+    .sort();
 
   await loadFileBasedSources(records, sources);
   for (const snapshotRoot of nearbyCheckouts) {
@@ -1750,6 +1780,27 @@ async function main(): Promise<void> {
     applyRequested: false,
     repoRoot,
     appRoot,
+    searchCoverage: [
+      "/root/nursenest-core",
+      "/root/nursenest-core/nursenest-core",
+      "data/",
+      "scripts/",
+      "script/",
+      "server/",
+      "shared/",
+      "reports/",
+      ".claude/",
+      ".cursor/",
+      "backup-system/",
+      "migrations/",
+      "prisma/",
+      "generated/",
+      "public/",
+      "src/",
+      "app/",
+      "content/",
+      "/root/*nursenest*",
+    ],
     database: {
       urlConfigured: databaseUrlConfigured,
       queried: dbStatus.queried,
@@ -1767,7 +1818,14 @@ async function main(): Promise<void> {
       adminCanonicalWrites: [
         "src/app/api/admin/blog/route.ts -> prisma.blogPost.create/findMany",
         "src/app/api/admin/blog/[id]/route.ts -> prisma.blogPost.update/delete via canonical publish helper",
+        "src/app/api/admin/blog/control-panel/persist-draft/route.ts -> persistControlPanelDraft -> BlogPost",
         "src/app/api/admin/blog/localized/*.ts -> prisma.localizedBlogArticle writes",
+      ],
+      generatorWrites: [
+        "src/lib/blog/blog-control-panel-generation.ts -> BlogPost drafts + canonical publish helper",
+        "src/lib/blog/blog-article-generation-job.ts -> BlogArticleGenerationJob snapshots and linked BlogPost rows",
+        "src/app/api/admin/blog/campaigns/[id]/run-chunk/route.ts -> prisma.blogPost.create via campaign items",
+        "src/app/api/blog/import/route.ts -> BlogPost import path",
       ],
       publicCanonicalReads: [
         "src/app/(marketing)/(default)/blog/page.tsx -> getPublishedBlogPostsPage",
@@ -1779,12 +1837,25 @@ async function main(): Promise<void> {
         "src/app/(marketing)/[locale]/[slug]/[examCode]/[exam]/blog/page.tsx -> getPublishedLocalizedBlogPostsPage",
         "src/app/(marketing)/[locale]/[slug]/[examCode]/[exam]/blog/[postSlug]/page.tsx -> getPublishedLocalizedBlogBySlug",
       ],
+      blogIndexReads: [
+        "src/app/(marketing)/(default)/blog/page.tsx -> getPublishedBlogPostsPage",
+        "src/app/(marketing)/(default)/nursing/[careerSlug]/blog/page.tsx -> getPublishedBlogPostsPage",
+        "src/app/(marketing)/(default)/allied-health/[slug]/blog/page.tsx -> getPublishedBlogPostsPage",
+      ],
+      tagPageReads: [
+        "src/app/(marketing)/(default)/blog/tag/[tag]/page.tsx -> safe-blog-queries tag filters",
+        "No dedicated category route found under src/app for BlogPost.category",
+      ],
       sitemapReads: [
         "src/app/sitemap.xml/route.ts -> listBlogSitemapEntriesSafe -> canonical BlogPost sitemap rows",
         "src/lib/seo/sitemap-localized-blog-xml.ts exists, but current route wiring does not clearly call it",
       ],
+      rssReads: [
+        "No dedicated RSS/feed route found in current app router audit",
+      ],
       mismatchFindings: [
         "Canonical public blog reads BlogPost, not ContentItem.",
+        "Admin and generator pipelines converge on BlogPost, but queue/snapshot models (BlogArticleGenerationJob, BlogDraftGenerationBatchItem, BlogBatchScheduleItem) are not themselves public sources.",
         "Localized public blog reads LocalizedBlogArticle, not canonical BlogPost bodies directly.",
         "Static fallback TS posts are not the live detail body source when DB-backed BlogPost rows exist.",
         "Localized sitemap generation code exists, but current sitemap route appears canonical-only.",
