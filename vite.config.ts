@@ -22,23 +22,6 @@ const [{ defineConfig }, { default: react }, { default: tailwindcss }, { default
     importPackage<typeof import("vite-plugin-circular-dependency")>("vite-plugin-circular-dependency"),
   ]);
 
-const BARE_IMPORT_RE = /^(?![./]|[A-Za-z]:|\/|\\|\0)(?!@\/|@shared\/|@assets\/).+/;
-
-function appPackageResolver() {
-  return {
-    name: "app-package-resolver",
-    enforce: "pre" as const,
-    resolveId(source: string) {
-      if (!BARE_IMPORT_RE.test(source)) return null;
-      try {
-        return packageRequire.resolve(source);
-      } catch {
-        return null;
-      }
-    },
-  };
-}
-
 function vendorChunk(id: string): string | undefined {
   if (id.includes("\0commonjsHelpers") || id.includes("\0commonjs-")) {
     return "react-core";
@@ -87,7 +70,6 @@ function vendorChunk(id: string): string | undefined {
 }
 
 const plugins = [
-  appPackageResolver(),
   react(),
   ...(!isProduction
     ? [
