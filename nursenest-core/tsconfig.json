@@ -44,6 +44,7 @@
     "scripts/migrate-legacy-study-tools.ts",
     "scripts/audit-image-backed-missing-lessons.ts",
     "scripts/create-image-backed-lessons.ts",
+    "scripts/generate-blog-posts.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
     "prisma/**/*.ts",

@@ -80,6 +80,7 @@
     "blog:fix-publish": "node scripts/fix-and-publish-generated-blogs.mjs --publish",
     "blog:verify-public": "node scripts/verify-blog-publication-surface.mjs",
     "blog:recover-audit": "npx tsx scripts/audit-and-publish-blogs-runner.ts --dry-run --limit=50",
+    "generate:blog-posts": "npx tsx scripts/generate-blog-posts.ts",
     "seed:local-verify": "node ../scripts/seed-local-verify-data.mjs",
     "seed:career-questions": "npx tsx ../scripts/seed-career-questions.ts",
     "seed:mlt-lessons": "npx tsx ../scripts/seed-mlt-structured-lessons.ts",
