@@ -9,7 +9,8 @@ import { countWordsFromHtml } from "../../src/lib/blog/blog-word-count";
 
 const here = dirname(fileURLToPath(import.meta.url));
 /** Monorepo root (`nursenest-core/reports`, `data/blog-manifest`, …). */
-const repoRoot = join(here, "..", "..", "..", "..");
+/** Git repo root (`reports/`, `data/blog-manifest/`). `here` = `nursenest-core/scripts/blog`. */
+const repoRoot = join(here, "..", "..", "..");
 const reportPath = join(repoRoot, "reports", "seo-blog-generation-report.json");
 
 const TOPIC_CLUSTERS = {

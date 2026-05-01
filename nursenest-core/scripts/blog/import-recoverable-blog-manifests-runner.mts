@@ -7,7 +7,8 @@ import { fileURLToPath } from "node:url";
 import { countWordsFromHtml } from "../../src/lib/blog/blog-word-count";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const repoRoot = join(here, "..", "..", "..", "..");
+/** Git repo root. `here` = `nursenest-core/scripts/blog`. */
+const repoRoot = join(here, "..", "..", "..");
 const inventoryPath = join(repoRoot, "reports", "blog-hidden-content-inventory.json");
 const reportPath = join(repoRoot, "reports", "recoverable-blog-import-report.json");
 const batchPath = join(repoRoot, "data", "blog-manifest", "batch-01", "batch-01-import-ready.json");
