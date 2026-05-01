@@ -10,7 +10,6 @@ import { runI18nScan } from "./scan-hardcoded-strings-lib";
 
 const workspaceRequire = createRequire(path.resolve(process.cwd(), "package.json"));
 const { build: esbuild } = workspaceRequire("esbuild") as typeof import("esbuild");
-const { build: viteBuild } = (await import(pathToFileURL(workspaceRequire.resolve("vite")).href)) as typeof import("vite");
 
 const allowlist = [
   "date-fns",
@@ -607,6 +606,7 @@ async function buildAll() {
 
   if (target === "all" || target === "client") {
     const viteT = Date.now();
+    const { build: viteBuild } = (await import(pathToFileURL(workspaceRequire.resolve("vite")).href)) as typeof import("vite");
     // Keep CI/Heroku logs concise; huge chunk listings can slow hosted builds.
     await viteBuild({ logLevel: "warn" });
     log("client done");

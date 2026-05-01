@@ -1,6 +1,12 @@
-import ts from "typescript";
 import { readFileSync, readdirSync, statSync, writeFileSync } from "fs";
+import { createRequire } from "module";
 import path from "path";
+
+const workspaceRequire = createRequire(path.resolve(process.cwd(), "package.json"));
+const ts = workspaceRequire("typescript") as typeof import("typescript");
+type TsNode = import("typescript").Node;
+type TsJsxText = import("typescript").JsxText;
+type TsSourceFile = import("typescript").SourceFile;
 
 type Severity = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
 
@@ -294,7 +300,7 @@ function generateSuggestion(text: string, parentTag?: string): string {
   return `t("${key}")`;
 }
 
-function getJsxTagName(node: ts.Node): string | undefined {
+function getJsxTagName(node: TsNode): string | undefined {
   let current = node.parent;
   while (current) {
     if (ts.isJsxElement(current)) {
@@ -330,7 +336,7 @@ function classifySeverity(text: string, parentTag?: string, attrName?: string): 
   return "MEDIUM";
 }
 
-function isInsideTCall(node: ts.Node): boolean {
+function isInsideTCall(node: TsNode): boolean {
   let current = node.parent;
   while (current) {
     if (ts.isCallExpression(current)) {
@@ -345,7 +351,7 @@ function isInsideTCall(node: ts.Node): boolean {
   return false;
 }
 
-function isInsideConsoleLog(node: ts.Node): boolean {
+function isInsideConsoleLog(node: TsNode): boolean {
   let current = node.parent;
   while (current) {
     if (ts.isCallExpression(current)) {
@@ -363,7 +369,7 @@ function isInsideConsoleLog(node: ts.Node): boolean {
   return false;
 }
 
-function isInsideImportOrType(node: ts.Node): boolean {
+function isInsideImportOrType(node: TsNode): boolean {
   let current = node.parent;
   while (current) {
     if (ts.isImportDeclaration(current)) return true;
@@ -377,14 +383,14 @@ function isInsideImportOrType(node: ts.Node): boolean {
   return false;
 }
 
-function isObjectPropertyKey(node: ts.Node): boolean {
+function isObjectPropertyKey(node: TsNode): boolean {
   if (node.parent && ts.isPropertyAssignment(node.parent)) {
     return node.parent.name === node;
   }
   return false;
 }
 
-function isInsideObjectLiteralNotInJSX(node: ts.Node): boolean {
+function isInsideObjectLiteralNotInJSX(node: TsNode): boolean {
   let current = node.parent;
   let foundObject = false;
   while (current) {
@@ -398,14 +404,14 @@ function isInsideObjectLiteralNotInJSX(node: ts.Node): boolean {
   return foundObject;
 }
 
-function isVariableDeclarationName(node: ts.Node): boolean {
+function isVariableDeclarationName(node: TsNode): boolean {
   if (node.parent && ts.isVariableDeclaration(node.parent)) {
     return node.parent.name === node;
   }
   return false;
 }
 
-function isPartOfStructuredData(node: ts.Node): boolean {
+function isPartOfStructuredData(node: TsNode): boolean {
   let current = node.parent;
   while (current) {
     if (ts.isPropertyAssignment(current) && ts.isIdentifier(current.name)) {
@@ -423,7 +429,7 @@ function isPartOfStructuredData(node: ts.Node): boolean {
   return false;
 }
 
-function isInSEOComponent(node: ts.Node): boolean {
+function isInSEOComponent(node: TsNode): boolean {
   let current = node.parent;
   while (current) {
     if (ts.isJsxElement(current)) {
@@ -439,7 +445,7 @@ function isInSEOComponent(node: ts.Node): boolean {
   return false;
 }
 
-function isInLazyImport(node: ts.Node): boolean {
+function isInLazyImport(node: TsNode): boolean {
   let current = node.parent;
   while (current) {
     if (ts.isCallExpression(current)) {
@@ -452,7 +458,7 @@ function isInLazyImport(node: ts.Node): boolean {
   return false;
 }
 
-function getJsxAttributeName(node: ts.Node): string | undefined {
+function getJsxAttributeName(node: TsNode): string | undefined {
   let current = node.parent;
   while (current) {
     if (ts.isJsxAttribute(current)) {
@@ -464,7 +470,7 @@ function getJsxAttributeName(node: ts.Node): string | undefined {
   return undefined;
 }
 
-function isInJsxContext(node: ts.Node): boolean {
+function isInJsxContext(node: TsNode): boolean {
   let current = node.parent;
   while (current) {
     if (ts.isJsxElement(current) || ts.isJsxSelfClosingElement(current) || ts.isJsxAttribute(current) || ts.isJsxExpression(current)) {
@@ -475,11 +481,11 @@ function isInJsxContext(node: ts.Node): boolean {
   return false;
 }
 
-function isJsxTextNode(node: ts.Node): node is ts.JsxText {
+function isJsxTextNode(node: TsNode): node is TsJsxText {
   return node.kind === ts.SyntaxKind.JsxText;
 }
 
-function isInsideErrorBoundary(node: ts.Node): boolean {
+function isInsideErrorBoundary(node: TsNode): boolean {
   let current = node.parent;
   while (current) {
     if (ts.isClassDeclaration(current) && current.name && current.name.text === "ErrorBoundary") {
@@ -490,7 +496,7 @@ function isInsideErrorBoundary(node: ts.Node): boolean {
   return false;
 }
 
-function isInsideStyleProp(node: ts.Node): boolean {
+function isInsideStyleProp(node: TsNode): boolean {
   let current = node.parent;
   while (current) {
     if (ts.isJsxAttribute(current) && ts.isIdentifier(current.name) && current.name.text === "style") {
@@ -502,7 +508,7 @@ function isInsideStyleProp(node: ts.Node): boolean {
   return false;
 }
 
-function isInsideTechnicalAttribute(node: ts.Node): boolean {
+function isInsideTechnicalAttribute(node: TsNode): boolean {
   let current = node.parent;
   while (current) {
     if (ts.isJsxAttribute(current) && ts.isIdentifier(current.name)) {
@@ -514,10 +520,10 @@ function isInsideTechnicalAttribute(node: ts.Node): boolean {
   return false;
 }
 
-function scanFileAST(filePath: string, sourceFile: ts.SourceFile): Violation[] {
+function scanFileAST(filePath: string, sourceFile: TsSourceFile): Violation[] {
   const violations: Violation[] = [];
 
-  function visit(node: ts.Node) {
+  function visit(node: TsNode) {
     if (isJsxTextNode(node)) {
       const text = node.text.trim();
       if (text && !isNonTextContent(text) && !isInsideTCall(node) && !isInsideErrorBoundary(node)) {
