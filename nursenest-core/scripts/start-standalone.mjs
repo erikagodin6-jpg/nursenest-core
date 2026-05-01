@@ -83,6 +83,7 @@ const readinessProbePath = "/readyz";
 const childBootstrapProbePath = "/_nn_bootstrap_ready_check__";
 /** Probe the child server bind path directly; public readiness still gates on `handlersReady`. */
 const childHealthProbePath = childBootstrapProbePath;
+const forcedHandlersReadyFallbackMs = 5000;
 const bootstrapReadyTimeoutMs = Number.parseInt(process.env.NN_BOOTSTRAP_READY_TIMEOUT_MS ?? "900000", 10) || 900000;
 const bootstrapReadyMaxAttempts = Math.max(
   1,
@@ -97,6 +98,16 @@ const hasHeapOverride =
   baseNodeOptions.includes("--max-old-space-size") ||
   process.execArgv.some((arg) => arg.startsWith("--max-old-space-size"));
 const childExecArgv = hasHeapOverride ? [...process.execArgv] : [`--max-old-space-size=${memMb}`, ...process.execArgv];
+
+function isForcedReadinessFallbackEnabled(env) {
+  return (
+    env.NN_ENABLE_FORCED_READINESS_FALLBACK === "1" ||
+    env.NN_APP_PLATFORM_BUILD === "true" ||
+    Boolean(String(env.DIGITALOCEAN_APP_ID ?? "").trim())
+  );
+}
+
+const FORCED_READINESS_FALLBACK_ENABLED = isForcedReadinessFallbackEnabled(process.env);
 
 if (BOOTSTRAP_MODE === "direct_standalone") {
   const childArgs = [...childExecArgv, runtimeBootstrap, entry];
@@ -185,6 +196,18 @@ function handleBootstrapRequest(req, res) {
         res.end("bootstrap: request handlers not ready");
       }
       logReadyzTrace("bootstrap_handler_close", { status: 503, handled: true });
+      return true;
+    }
+    if (state.handlersReadyForced) {
+      res.statusCode = 200;
+      res.setHeader("content-type", "text/plain; charset=utf-8");
+      res.setHeader("cache-control", "no-store");
+      if (method === "HEAD") {
+        res.end();
+      } else {
+        res.end("ready");
+      }
+      logReadyzTrace("bootstrap_handler_close", { status: 200, handled: true, forced: true });
       return true;
     }
     res.statusCode = 200;
@@ -278,6 +301,7 @@ function waitForChildReadiness({ state }) {
     emit("child_readiness_watchdog_start", {
       pid: process.pid,
       bypass: BYPASS,
+      forcedReadinessFallbackEnabled: FORCED_READINESS_FALLBACK_ENABLED,
       bootstrapReadyTimeoutMs,
       bootstrapReadyMaxAttempts,
       childHealthProbePath,
@@ -487,6 +511,7 @@ const state = {
   childExitSignal: null,
   childPid: null,
   handlersReady: false,
+  handlersReadyForced: false,
 };
 
 function markHandlersReady(reason) {
@@ -624,6 +649,27 @@ child.stderr?.on("data", (chunk) => process.stderr.write(chunk));
 
 state.childPid = child.pid ?? null;
 
+const forcedHandlersReadyTimer =
+  !BYPASS && FORCED_READINESS_FALLBACK_ENABLED
+    ? setTimeout(() => {
+        if (state.handlersReady || state.childExited || child.exitCode != null || child.killed) {
+          return;
+        }
+        state.handlersReadyForced = true;
+        markHandlersReady("forced_fallback");
+        emit("handlers_ready_forced", {
+          pid: process.pid,
+          childPid: state.childPid,
+          internalPort,
+          publicPort,
+          fallbackAfterMs: forcedHandlersReadyFallbackMs,
+          viaEnv: process.env.NN_ENABLE_FORCED_READINESS_FALLBACK === "1",
+          viaAppPlatformBuild: process.env.NN_APP_PLATFORM_BUILD === "true",
+          viaDigitalOceanRuntime: Boolean(String(process.env.DIGITALOCEAN_APP_ID ?? "").trim()),
+        });
+      }, forcedHandlersReadyFallbackMs)
+    : null;
+
 emit("standalone_spawn", {
   command: process.execPath,
   args: childArgs,
@@ -636,6 +682,7 @@ emit("standalone_spawn", {
   cwd: pkgRoot,
   publicPort,
   internalPort,
+  forcedReadinessFallbackEnabled: FORCED_READINESS_FALLBACK_ENABLED,
 });
 
 emit("handlers_init_start", {
@@ -646,10 +693,12 @@ emit("handlers_init_start", {
 });
 
 child.on("exit", async (code, signal) => {
+  if (forcedHandlersReadyTimer) clearTimeout(forcedHandlersReadyTimer);
   state.childExited = true;
   state.childExitCode = code ?? null;
   state.childExitSignal = signal ?? null;
   state.handlersReady = false;
+  state.handlersReadyForced = false;
   emit("watchdog_child_process_exit", {
     pid: process.pid,
     childPid: state.childPid,

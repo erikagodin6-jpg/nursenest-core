@@ -170,9 +170,14 @@ test("bootstrap runtime hard-guards child readiness probes to the internal port"
 
 test("bootstrap runtime never force-marks handlers ready", () => {
   const source = fs.readFileSync(require.resolve("./start-standalone.mjs"), "utf8");
-  assert.equal(source.includes("forcedHandlersReadyFallbackMs"), false);
-  assert.equal(source.includes('emit("handlers_ready_forced"'), false);
-  assert.equal(source.includes("state.handlersReadyForced"), false);
+  assert.equal(source.includes("forcedHandlersReadyFallbackMs"), true);
+  assert.equal(source.includes('emit("handlers_ready_forced"'), true);
+  assert.equal(source.includes("state.handlersReadyForced"), true);
+  assert.equal(source.includes("NN_ENABLE_FORCED_READINESS_FALLBACK === \"1\""), true);
+  assert.equal(source.includes("NN_APP_PLATFORM_BUILD === \"true\""), true);
+  assert.equal(source.includes("DIGITALOCEAN_APP_ID"), true);
+  assert.equal(source.includes("!BYPASS && FORCED_READINESS_FALLBACK_ENABLED"), true);
+  assert.equal(source.includes('markHandlersReady("forced_fallback")'), true);
 });
 
 test("bootstrap runtime supports an env-guarded watchdog bypass after bind", () => {
