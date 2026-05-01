@@ -140,6 +140,19 @@ export function marketingPathwayLessonsCategoryPath(
   return seg ? `${base}/${encodeURIComponent(seg)}` : base;
 }
 
+/**
+ * Programmatic study SEO surface (not blog): `/{country}/{role}/{exam}/study/{topicSlug}`.
+ * `topicSlug` is the published pathway lesson slug for this row (see programmatic study SEO registry).
+ */
+export function marketingProgrammaticStudySeoPath(
+  pathway: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">,
+  topicSlug: string,
+): string | null {
+  const slug = topicSlug.trim();
+  if (!slug) return null;
+  return buildExamPathwayPath(pathway, `study/${encodeURIComponent(slug)}`);
+}
+
 type MarketingExamHubSubpath = "lessons" | "questions" | "cat";
 
 /**

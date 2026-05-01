@@ -30,6 +30,7 @@ export type SeoUrlEmissionSurface =
   | "sitemap_merged"
   | "sitemap_pathway_lesson_urls"
   | "sitemap_content_backed_study_resources"
+  | "sitemap_programmatic_study_seo"
   | "sitemap_blog"
   | "blog_latest_links"
   | "programmatic_product_links";

@@ -127,6 +127,38 @@ export async function collectContentBackedStudyResourceHubUrls(origin: string): 
   return urls;
 }
 
+/**
+ * Programmatic study SEO pages (`…/study/{lessonSlug}`) — registry + same loader gates as the live route.
+ */
+export async function collectProgrammaticStudySeoUrls(origin: string): Promise<string[]> {
+  const o = normalizeOrigin(origin);
+  if (shouldSkipDbBackedSitemapUrlsForBuild()) return [];
+  const { getProgrammaticStudySeoRegistry, MAX_PROGRAMMATIC_STUDY_SEO_SITEMAP_URLS } = await import(
+    "@/lib/seo/programmatic-study-seo-registry"
+  );
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
+  const { isProgrammaticStudySeoUrlEligibleForSitemap } = await import("@/lib/seo/programmatic-study-seo-load");
+  const { marketingProgrammaticStudySeoPath } = await import("@/lib/lessons/lesson-routes");
+  const { isPathwayPublishedForPublicSite } = await import("@/lib/navigation/country-exam-launch-readiness");
+  const urls: string[] = [];
+  const seen = new Set<string>();
+  for (const row of getProgrammaticStudySeoRegistry()) {
+    if (urls.length >= MAX_PROGRAMMATIC_STUDY_SEO_SITEMAP_URLS) break;
+    const pathway = getExamPathwayById(row.pathwayId);
+    if (!pathway || !isPathwayPublishedForPublicSite(pathway.id)) continue;
+    const path = marketingProgrammaticStudySeoPath(pathway, row.lessonSlug);
+    if (!path) continue;
+    const dedupe = `${row.pathwayId}::${row.lessonSlug}`;
+    if (seen.has(dedupe)) continue;
+    seen.add(dedupe);
+    const ok = await isProgrammaticStudySeoUrlEligibleForSitemap(pathway, row.lessonSlug);
+    if (!ok) continue;
+    urls.push(`${o}${path}`);
+  }
+  logSeoEmittedUrlBatch("sitemap_programmatic_study_seo", urls);
+  return urls;
+}
+
 /** Exam hub URLs: /{country}/{role}/{exam} + pricing + questions landing */
 export async function collectExamPathwayUrls(origin: string): Promise<string[]> {
   const o = normalizeOrigin(origin);
@@ -433,10 +465,11 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
   const pathwayLessonDeadlineMs = Date.now() + pathwayBudgetMs;
   const lessonUrls = await collectPathwayLessonSeoUrls(o, { deadlineEpochMs: pathwayLessonDeadlineMs });
   const pathwayTopicUrls = await collectPathwayTopicProgrammaticUrls(o);
-  const [examHubUrls, npPracticeHubUrls, contentBackedStudyHubUrls] = await Promise.all([
+  const [examHubUrls, npPracticeHubUrls, contentBackedStudyHubUrls, programmaticStudySeoUrls] = await Promise.all([
     collectExamPathwayUrls(o),
     collectNpPracticeTestHubUrls(o),
     collectContentBackedStudyResourceHubUrls(o),
+    collectProgrammaticStudySeoUrls(o),
   ]);
   const osceScenarioHubUrls = collectOsceScenariosMarketingHubUrls(o);
   return [
@@ -445,6 +478,7 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
     ...npPracticeHubUrls,
     ...pathwayTopicUrls,
     ...contentBackedStudyHubUrls,
+    ...programmaticStudySeoUrls,
     ...collectAlliedMarketingUrls(o),
     ...collectPreNursingSeoUrls(o),
     ...lessonUrls,

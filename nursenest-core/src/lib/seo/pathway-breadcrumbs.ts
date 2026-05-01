@@ -267,6 +267,36 @@ export function pathwayQuestionsHubBreadcrumbs(
   return { crumbs, schemaItems };
 }
 
+/** Programmatic study SEO page (`…/study/{topicSlug}`) — hybrid lesson + practice hub. */
+export function pathwayProgrammaticStudySeoBreadcrumbs(
+  pathway: ExamPathwayDefinition,
+  pageLabel: string,
+  topicSlug: string,
+  opts?: PathwayMarketingHubBreadcrumbOpts,
+): {
+  crumbs: BreadcrumbCrumb[];
+  schemaItems: BreadcrumbSchemaItem[];
+} {
+  const hub = opts?.hubBasePath;
+  const p = examPathwaySurfacePrefix(pathway, opts);
+  const selfPath = pathwayHubChildPath(pathway, hub, `study/${encodeURIComponent(topicSlug.trim())}`);
+  const crumbs: BreadcrumbCrumb[] = [
+    HOME,
+    p.countryCrumb(true),
+    p.roleCrumb(true),
+    p.hubCrumb(true),
+    { name: pageLabel, href: undefined },
+  ];
+  const schemaItems: BreadcrumbSchemaItem[] = [
+    HOME_ITEM,
+    p.countrySchema(),
+    p.roleSchema(),
+    p.hubSchema(),
+    { name: pageLabel, item: toAbsoluteSiteUrl(selfPath) },
+  ];
+  return { crumbs, schemaItems };
+}
+
 /** Body-system study resource hub (`…/study-resources/{bodyKey}`) — data-backed SEO surface. */
 export function pathwayStudyResourcesBodyBreadcrumbs(
   pathway: ExamPathwayDefinition,
