@@ -10,7 +10,7 @@ From the **repository root**:
 npm run cursor:clean
 ```
 
-This removes only ephemeral directories (when present): `.next`, `coverage`, `test-results`, `playwright-report`, `blob-report`, and `.turbo` — at the root and under `nursenest-core/`. It does **not** delete application source, `prisma/`, migrations, `public/` assets, lesson content, media uploads, or the `reports/` tree (that folder mixes generated output with tracked audit files).
+This removes only ephemeral directories (when present): `.next`, `coverage`, `test-results`, `playwright-report`, `blob-report`, and `.turbo` — at the root and under `nursenest-core/`. It does **not** delete application source, `prisma/`, migrations, `public/` assets, lesson content, media uploads, or the `reports/` tree (that folder mixes generated output with tracked audit files). If this is a git checkout, the script runs `git restore test-results/.last-run.json` so a tiny tracked Playwright placeholder at the repo root is not left missing.
 
 For a lighter clear that keeps most of `.next` and all of `node_modules`, use the app package’s `clean:light` (see `docs/dev/cursor-stability.md`).
 

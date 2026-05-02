@@ -49,9 +49,7 @@ logs/
 *.log
 **/*.log
 
-# Playwright / E2E artifacts (videos, traces, screenshots)
-**/trace.zip
-**/*.webm
+# Playwright cache (sessions); not app source
 **/playwright/.cache/
 
 # Generated lesson indexes (large JSON)
