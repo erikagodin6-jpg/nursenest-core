@@ -3,8 +3,8 @@
 # Active DigitalOcean App Platform spec for the standalone Next app in `nursenest-core/`.
 # Apply with: doctl apps update --spec .do/app-nursenest-core-next.yaml
 #
-# Deterministic image build (repo-root context): `Dockerfile` + `shared/`, `client/`, `nursenest-core/`.
-# Compile + prune run inside the image (no Heroku Node buildpack — no buildpack cache invalidation).
+# Deterministic source build (repo-root context): `Dockerfile` + `shared/`, `client/`, `nursenest-core/`.
+# Compile + prune run inside the deploy build (no Heroku Node buildpack — no buildpack cache invalidation).
 # See nursenest-core/docs/deploy-deterministic-docker.md.
 #
 name: nursenest-core-next
@@ -13,15 +13,8 @@ region: tor
 services:
   - name: web
     dockerfile_path: Dockerfile
-    # CPU-only autoscaling (App Platform). No memory/RPS/custom metrics — scale-ups follow CPU only.
-    # min=2: never a single instance; max=3: HARD CAP — do not raise without budget review.
-    # Scale-down uses platform defaults (gradual; health_check failure_threshold avoids flapping).
-    autoscaling:
-      min_instance_count: 2
-      max_instance_count: 3
-      metrics:
-        cpu:
-          percent: 60
+    # basic-xs supports one fixed instance only. Upgrade the size before enabling multiple instances or autoscaling.
+    instance_count: 1
     instance_size_slug: basic-xs
     github:
       repo: erikagodin6-jpg/nursenest-core
@@ -30,7 +23,7 @@ services:
     source_dir: .
     # DB: set `DATABASE_URL` (SECRET) to DigitalOcean Managed Postgres URI. Prisma uses this only.
     # Migrations: GitHub Actions → “Prisma migrate” workflow with secret `DATABASE_URL` (same URI as here).
-    # Docker image: same scripts as the former buildpack path — `heroku-postbuild` (hints + bootstrap + `next build`)
+    # Dockerfile build: same scripts as the former buildpack path — `heroku-postbuild` (hints + bootstrap + `next build`)
     # then `build:deploy` (standalone verify + static sync + `post-build-prune.mjs`) + `npm prune --omit=dev`.
     # `.next/cache` is removed in the image after compile to keep the runtime image smaller (layer cache handles deps).
     # Marketing production-surface validate remains in GitHub `verify-build.yml` only.
@@ -73,12 +66,12 @@ services:
       # Without this, platform stack updates can change the default Node line and invalidate `node_modules` / `.next/cache`.
       - key: NODE_VERSION
         value: "22.22.2"
-        scope: BUILD_AND_RUN_TIME
+        scope: RUN_AND_BUILD_TIME
       # Dashboard build env can override YAML. Single-worker forcing is explicit via `NN_FORCE_SINGLE_BUILD_WORKER`
       # (fail-safe) and automatic when `DIGITALOCEAN_APP_ID` is set; opt out only with `NN_ALLOW_MULTI_BUILD_WORKERS=true`.
       - key: NODE_ENV
         value: production
-        scope: BUILD_AND_RUN_TIME
+        scope: RUN_AND_BUILD_TIME
       - key: NEXT_TELEMETRY_DISABLED
         value: "1"
         scope: BUILD_TIME
@@ -111,7 +104,7 @@ services:
         scope: BUILD_TIME
       # Global build heap: applies to npm/node during install + heroku-postbuild (not only the Next child). Must match
       # `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB`. Remove any duplicate `NODE_OPTIONS` from the App UI (especially 6144) or
-      # merge behavior can keep the higher value for BUILD_AND_RUN_TIME.
+      # merge behavior can keep the higher value for RUN_AND_BUILD_TIME.
       #
       # If the build job is still **terminated** (cgroup OOM) after static prerender concurrency fixes in
       # `next.config.ts`, try **3072** here and on `BUILD_NODE_MAX_OLD_SPACE_SIZE_MB` so the parent Node process
@@ -143,7 +136,7 @@ services:
         scope: RUN_TIME
         type: SECRET
       # Canonical production DB connection (DigitalOcean Managed PostgreSQL). Do not set a second conflicting URL.
-      # **RUN_TIME only** — never BUILD_TIME or BUILD_AND_RUN_TIME: a build-visible DATABASE_URL would bake into
+      # **RUN_TIME only** — never BUILD_TIME or RUN_AND_BUILD_TIME: a build-visible DATABASE_URL would bake into
       # the image / build job and can override the real managed DB at runtime (see Dockerfile comments).
       - key: DATABASE_URL
         scope: RUN_TIME
