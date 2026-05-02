@@ -3,7 +3,7 @@
  *
  * Prerequisites:
  * - `BASE_URL` (default http://127.0.0.1:3000) with `npm run dev`
- * - `RUN_HEAVY_BUILD_TASKS=false` if `next.config.ts` dynamic imports fail in dev
+ * - `RUN_HEAVY_BUILD_TASKS=false` if `next.config.mjs` / build-phase dynamic imports fail in dev
  * - `AUTH_SECRET` / `NEXTAUTH_SECRET` set (avoids Auth.js MissingSecret noise)
  *
  * Locators use `.nn-header-animate-in` because the light-theme utility strip is a **sibling** of

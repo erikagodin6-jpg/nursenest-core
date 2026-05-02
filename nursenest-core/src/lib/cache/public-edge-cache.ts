@@ -3,7 +3,7 @@ import "server-only";
 /**
  * HTTP cache headers for **anonymous, non-user-specific** JSON and static marketing data.
  *
- * - **`/app/*` and authenticated APIs** must stay `private, no-store` (see `next.config.ts`).
+ * - **`/app/*` and authenticated APIs** must stay `private, no-store` (see `next.config.mjs`).
  * - **`/api/public/*`** may use `public` so DigitalOcean / CDN edges can cache one payload for many users.
  * - **Locale / country:** Marketing **HTML** is split by route (`/`, `/fr/...`); shared stats JSON is
  *   locale-neutral today. If we add locale-specific counts, add query params + `Vary` and separate

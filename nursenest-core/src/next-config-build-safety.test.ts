@@ -11,13 +11,16 @@ function read(relativePath: string): string {
   return readFileSync(join(root, relativePath), "utf8");
 }
 
-test("next.config stays synchronously loadable by Next's config loader", () => {
-  const nextConfig = read("next.config.ts");
+test("next.config.mjs stays synchronously loadable and enforces single-worker build tuning", () => {
+  const nextConfig = read("next.config.mjs");
 
-  // Do not use async dynamic imports in next.config.ts.
   assert.doesNotMatch(nextConfig, /await\s+import\(\s*["']@sentry\/nextjs["']\s*\)/);
+  assert.doesNotMatch(nextConfig, /\beslint\s*:\s*\{/);
 
-  // Keep Sentry optional and synchronously loaded through createRequire.
-  assert.match(nextConfig, /createRequire\(import\.meta\.url\)/);
-  assert.match(nextConfig, /\brequire\(\s*["']@sentry\/nextjs["']\s*\)/);
+  assert.match(nextConfig, /cpus:\s*1/);
+  assert.match(nextConfig, /workerThreads:\s*false/);
+  assert.match(nextConfig, /webpackBuildWorker:\s*false/);
+  assert.match(nextConfig, /staticGenerationMaxConcurrency:\s*1/);
+  assert.match(nextConfig, /const\s+webpackParallelism\s*=\s*1/);
+  assert.match(nextConfig, /config\.parallelism\s*=\s*webpackParallelism/);
 });

@@ -12,31 +12,30 @@ function readAppFile(relativePath: string): string {
 }
 
 describe("marketing static generation policy", () => {
-  it("keeps default blog and exams route families dynamic at the layout level", () => {
-    const blogLayout = readAppFile("app/(marketing)/(default)/blog/layout.tsx");
+  it("keeps default exams route family dynamic at the layout level", () => {
     const examsLayout = readAppFile("app/(marketing)/(default)/exams/layout.tsx");
-
-    assert.match(blogLayout, /export const dynamic = "force-dynamic"/);
     assert.match(examsLayout, /export const dynamic = "force-dynamic"/);
   });
 
-  it("uses build-phase DB skipping on the default homepage shell", () => {
-    const homePage = readAppFile("app/(marketing)/(default)/page.tsx");
+  it("uses a pass-through default blog layout (pages own dynamic / SEO policy)", () => {
+    const blogLayout = readAppFile("app/(marketing)/(default)/blog/layout.tsx");
+    assert.match(blogLayout, /MarketingBlogLayout/);
+    assert.match(blogLayout, /children/);
+  });
+
+  it("uses build-phase DB skipping on the default public lessons hub", () => {
+    const lessonsPage = readAppFile("app/(marketing)/(default)/lessons/page.tsx");
 
     assert.match(
-      homePage,
+      lessonsPage,
       /process\.env\.NEXT_PHASE === (?:MARKETING_BUILD_PHASE|"phase-production-build")/,
-      "home page should gate optional DB reads on the production build phase",
+      "lessons page should gate optional DB reads on the production build phase",
     );
   });
 
-  it("uses shard-based marketing i18n loaders on fixed default home and lessons surfaces", () => {
-    const homePage = readAppFile("app/(marketing)/(default)/page.tsx");
+  it("uses shard-based marketing i18n loaders on fixed lessons surfaces", () => {
     const lessonsPage = readAppFile("app/(marketing)/(default)/lessons/page.tsx");
     const lessonSections = readAppFile("components/marketing/public-lessons-pathway-sections.tsx");
-
-    assert.match(homePage, /loadMarketingMessageShards/, "home page should use shard loader");
-    assert.doesNotMatch(homePage, /loadMarketingMessages/, "home page should not use merged bundle loader");
 
     assert.match(lessonsPage, /loadMarketingMessageShards/, "lessons page should use shard loader");
     assert.doesNotMatch(lessonsPage, /loadMarketingMessages/, "lessons page should not use merged bundle loader");
@@ -114,7 +113,13 @@ describe("marketing static generation policy", () => {
   });
 
   it("does not use deprecated next eslint build config", () => {
-    const nextConfig = readFileSync(join(appRoot, "..", "next.config.ts"), "utf8");
+    const nextConfig = readFileSync(join(appRoot, "..", "next.config.mjs"), "utf8");
     assert.doesNotMatch(nextConfig, /eslint:\s*\{/);
+    assert.match(nextConfig, /cpus:\s*1/);
+    assert.match(nextConfig, /workerThreads:\s*false/);
+    assert.match(nextConfig, /webpackBuildWorker:\s*false/);
+    assert.match(nextConfig, /staticGenerationMaxConcurrency:\s*1/);
+    assert.match(nextConfig, /const\s+webpackParallelism\s*=\s*1/);
+    assert.match(nextConfig, /config\.parallelism\s*=\s*webpackParallelism/);
   });
 });

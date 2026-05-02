@@ -57,7 +57,7 @@ export function resolvePathwayLessonSlugRedirectChain(pathwayId: string, slug: s
   return seen.size > 0 ? current : null;
 }
 
-/** For `next.config.ts` — static 308s at the edge (same paths the App Router uses). */
+/** For `next.config.mjs` — static 308s at the edge (same paths the App Router uses). */
 export function buildPathwayLessonSlugRedirectsForNextConfig(): Array<{
   source: string;
   destination: string;

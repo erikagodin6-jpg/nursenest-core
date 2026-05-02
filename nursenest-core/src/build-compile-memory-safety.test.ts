@@ -10,9 +10,10 @@ const root = join(dir, "..");
 const emptyGenerateStaticParamsPattern =
   /export\s+(?:async\s+)?function\s+generateStaticParams\([^)]*\)\s*(?::\s*[^{]+)?\s*\{\s*return\s+\[\]\s*;?\s*\}/m;
 
+/** Single-line `import … from "…"` only — avoids false positives across later `export type … from` lines. */
 const eagerImportPattern = (modulePath: string) =>
   new RegExp(
-    String.raw`^import\s+(?!type\b)[\s\S]*?from\s+["']${modulePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["'];?$`,
+    String.raw`^import\s+(?!type\b)[^\n]*?from\s+["']${modulePath.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["'];?$`,
     "m",
   );
 
@@ -71,12 +72,18 @@ const onDemandRouteFiles = [
   "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/[exam]/page.tsx",
 ] as const;
 
-test("next.config avoids async-module and optional static Sentry load during build", () => {
-  const nextConfig = read("next.config.ts");
+test("next.config.mjs avoids async-module and optional static Sentry load during build", () => {
+  const nextConfig = read("next.config.mjs");
 
   assert.doesNotMatch(nextConfig, /await\s+import\(["']@sentry\/nextjs["']\)/);
   assert.doesNotMatch(nextConfig, eagerImportPattern("@sentry/nextjs"));
   assert.doesNotMatch(nextConfig, /\beslint\s*:\s*\{/);
+  assert.match(nextConfig, /cpus:\s*1/);
+  assert.match(nextConfig, /workerThreads:\s*false/);
+  assert.match(nextConfig, /webpackBuildWorker:\s*false/);
+  assert.match(nextConfig, /staticGenerationMaxConcurrency:\s*1/);
+  assert.match(nextConfig, /const\s+webpackParallelism\s*=\s*1/);
+  assert.match(nextConfig, /config\.parallelism\s*=\s*webpackParallelism/);
 });
 
 test("staff-session defers heavy auth and role-source imports", () => {
@@ -89,12 +96,12 @@ test("staff-session defers heavy auth and role-source imports", () => {
   assertHasDynamicImport(staffSession, "@/lib/auth/admin-role-source");
 });
 
-test("auth runtime defers optional Sentry import through opaque helper", () => {
+test("auth runtime avoids direct @sentry/nextjs imports (logging via safeServerLog)", () => {
   const auth = read("src/lib/auth.ts");
 
   assert.doesNotMatch(auth, /^import\s+\*\s+as\s+Sentry\s+from\s+["']@sentry\/nextjs["'];?$/m);
   assert.doesNotMatch(auth, /import\s*\(\s*["']@sentry\/nextjs["']\s*\)/);
-  assert.match(auth, /loadSentryAuthSdk/);
+  assert.match(auth, /safeServerLog/);
 });
 
 test("sentry metrics helper defers core SDK import", () => {
@@ -139,7 +146,8 @@ test("root not-found page defers auth-bound resume imports during build", () => 
 test("shared root layouts avoid eager observability imports during production build", () => {
   const rootLayout = read("src/app/layout.tsx");
   assertNoEagerImport(rootLayout, "@/lib/observability/render-trace");
-  assert.match(rootLayout, /loadRenderTrace/);
+  assertNoEagerImport(rootLayout, "@/lib/observability/sentry-route-observability");
+  assert.doesNotMatch(rootLayout, /loadRenderTrace/);
 
   const marketingLayout = read("src/app/(marketing)/(default)/layout.tsx");
   assertNoEagerImport(marketingLayout, "@/lib/observability/render-trace");
