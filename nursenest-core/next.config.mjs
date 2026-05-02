@@ -18,6 +18,7 @@ const packageRoot = fileURLToPath(new URL(".", import.meta.url));
 const workspaceRoot = fileURLToPath(new URL("..", import.meta.url));
 const sharedRoot = path.join(workspaceRoot, "shared");
 const legacyClientRoot = path.join(workspaceRoot, "client", "src");
+const turbopackRoot = workspaceRoot;
 /** ~9GiB or less — logged for operators; build concurrency stays fixed low regardless. */
 const autoLowMemoryHost = totalRamMb <= 9216;
 
@@ -172,7 +173,7 @@ const nextConfig = {
    * optional `--webpack` builds and memory tuning on older/explicit webpack paths.
    */
   turbopack: {
-    root: packageRoot,
+    root: turbopackRoot,
     resolveAlias: {
       "@shared": sharedRoot,
       "@legacy-client": legacyClientRoot,

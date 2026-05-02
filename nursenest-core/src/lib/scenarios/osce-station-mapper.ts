@@ -58,7 +58,7 @@ export function prismaOsceRowToSkillStation(row: OsceStation): OSCESkillStation 
   const ext = asExtensions(row.extensions);
   const steps = osceStepsFromJson(row.steps);
   const examinerChecklist = Array.isArray(row.examinerChecklist)
-    ? (row.examinerChecklist as OSCESkillStation["examinerChecklist"])
+    ? (row.examinerChecklist as unknown as OSCESkillStation["examinerChecklist"])
     : [];
 
   return {
