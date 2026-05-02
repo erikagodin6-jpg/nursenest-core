@@ -164,6 +164,8 @@ export function buildMedMathPathwaySections(legacySlug: string, lesson: LessonCo
   return enrichLegacyFiveBlockSectionsForSubscriberGates(raw, {
     title: lesson.title,
     topic: MED_MATH_TOPIC,
+    bodySystem: MED_MATH_BODY_SYSTEM,
+    pathwayId: "",
   });
 }
 
@@ -231,6 +233,9 @@ export function buildMedMathMigrationUrls(pathwayId: string, slug: string, lesso
   learnerDetailUrlAfterWrite: string;
 } {
   const pathway = getExamPathwayById(pathwayId);
+  if (!pathway) {
+    throw new Error(`Unknown exam pathway for medication math migration: ${pathwayId}`);
+  }
   const marketingLessonUrl = marketingPathwayLessonDetailPath(pathway, slug) ?? `/lessons`;
   const adminEditUrl = `/admin/pathway-lessons/edit?pathwayId=${encodeURIComponent(pathwayId)}&slug=${encodeURIComponent(slug)}`;
   const learnerDetailUrlAfterWrite = lessonDbId

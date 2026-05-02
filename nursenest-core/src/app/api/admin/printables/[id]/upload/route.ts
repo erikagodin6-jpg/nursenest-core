@@ -94,15 +94,18 @@ export async function POST(req: Request, ctx: { params: Promise<{ id: string }> 
     await prisma.printableProduct.update({
       where: { id },
       data: {
-        fileAssetId: row.id,
+        fileAsset: { connect: { id: row.id } },
         version: { increment: 1 },
-        updatedByUserId: gate.admin.userId,
+        updatedBy: { connect: { id: gate.admin.userId } },
       },
     });
   } else {
     await prisma.printableProduct.update({
       where: { id },
-      data: { thumbnailAssetId: row.id, updatedByUserId: gate.admin.userId },
+      data: {
+        thumbnailAsset: { connect: { id: row.id } },
+        updatedBy: { connect: { id: gate.admin.userId } },
+      },
     });
   }
 

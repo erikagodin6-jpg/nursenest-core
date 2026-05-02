@@ -172,7 +172,7 @@ const nextConfig = {
    * optional `--webpack` builds and memory tuning on older/explicit webpack paths.
    */
   turbopack: {
-    root: packageRoot,
+    root: workspaceRoot,
     resolveAlias: {
       "@shared": sharedRoot,
       "@legacy-client": legacyClientRoot,
