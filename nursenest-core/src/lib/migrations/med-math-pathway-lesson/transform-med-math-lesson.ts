@@ -76,7 +76,7 @@ function quizToCheckpointQuestions(quiz: Array<QuizQuestion | undefined> | undef
  * Maps monolith {@link LessonContent} (med-math bundle) into legacy five-block pathway sections
  * plus objectives, safety, formulas, and worked examples embedded in Markdown bodies.
  */
-export function buildMedMathPathwaySections(legacySlug: string, lesson: LessonContent): PathwayLessonSection[] {
+export function buildMedMathPathwaySections(legacySlug: string, lesson: LessonContent, pathwayId: string): PathwayLessonSection[] {
   const cell = cellularBody(lesson);
   const objectivesBlock = bulletList("Learning objectives", [
     "Apply dimensional analysis and formula methods with **units** at every step.",
@@ -164,6 +164,8 @@ export function buildMedMathPathwaySections(legacySlug: string, lesson: LessonCo
   return enrichLegacyFiveBlockSectionsForSubscriberGates(raw, {
     title: lesson.title,
     topic: MED_MATH_TOPIC,
+    bodySystem: MED_MATH_BODY_SYSTEM,
+    pathwayId,
   });
 }
 
@@ -172,7 +174,7 @@ export function buildMedMathPathwayLessonRecord(args: {
   lesson: LessonContent;
   pathwayId: string;
 }): PathwayLessonRecord {
-  const sections = buildMedMathPathwaySections(args.legacySlug, args.lesson);
+  const sections = buildMedMathPathwaySections(args.legacySlug, args.lesson, args.pathwayId);
   const plainIntro = stripToPlainText(cellularBody(args.lesson)).slice(0, 400);
   const seoDescription =
     `${args.lesson.title}: ${plainIntro}`.slice(0, 320).trim() ||
@@ -231,6 +233,9 @@ export function buildMedMathMigrationUrls(pathwayId: string, slug: string, lesso
   learnerDetailUrlAfterWrite: string;
 } {
   const pathway = getExamPathwayById(pathwayId);
+  if (!pathway) {
+    throw new Error(`Unknown exam pathway: ${pathwayId}`);
+  }
   const marketingLessonUrl = marketingPathwayLessonDetailPath(pathway, slug) ?? `/lessons`;
   const adminEditUrl = `/admin/pathway-lessons/edit?pathwayId=${encodeURIComponent(pathwayId)}&slug=${encodeURIComponent(slug)}`;
   const learnerDetailUrlAfterWrite = lessonDbId
