@@ -42,6 +42,7 @@
     "playwright.config.ts",
     "scripts/blog-ai-generate.ts",
     "scripts/migrate-legacy-study-tools.ts",
+    "scripts/migrate-med-math-pathway-lessons.ts",
     "scripts/audit-image-backed-missing-lessons.ts",
     "scripts/create-image-backed-lessons.ts",
     "scripts/generate-blog-posts.ts",

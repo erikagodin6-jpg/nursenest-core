@@ -21,6 +21,20 @@ export function buildAppPracticeTestsTopicHref(pathwayId: string, topicSlug: str
   return `/app/practice-tests?pathwayId=${encodeURIComponent(pid)}&topic=${encodeURIComponent(t)}`;
 }
 
+/**
+ * Topic-scoped question bank drill (requires `pathwayId` for tier-scoped routing).
+ * Uses `topicCode` = canonical `bidirectionalTopicKey` from {@link PathwayLessonRecord.linkedLearningSignals}.
+ */
+export function buildAppQuestionsTopicDrillHref(pathwayId: string, bidirectionalTopicKey: string): string {
+  const pid = pathwayId.trim();
+  const code = bidirectionalTopicKey.trim().toLowerCase();
+  const qs = new URLSearchParams();
+  qs.set("pathwayId", pid);
+  qs.set("topicCode", code);
+  qs.set("preset", "topic_drill");
+  return `/app/questions?${qs.toString()}`;
+}
+
 /** Hub deep link; `/app/lessons/[id]` is preferred when the lesson row id is already known. */
 export function buildAppLessonsReviewLessonHref(pathwayId: string, lessonSlug: string): string {
   const pid = pathwayId.trim();

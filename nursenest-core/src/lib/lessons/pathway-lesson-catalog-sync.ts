@@ -63,6 +63,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { hydratePremiumCatalogSectionsForMarketingGate } from "@/lib/lessons/scoped-lessons/gold-premium-synthesis";
 import { applyAlliedStructuralCompletion } from "@/lib/lessons/allied-pathway-lesson-structural-normalization";
 import { applyNewGradStructuralCompletion } from "@/lib/lessons/new-grad-pathway-lesson-structural-normalization";
+import { applyNpPremiumStructuralCompletion } from "@/lib/lessons/np-pathway-lesson-structural-normalization";
 import { prependScopedGoldCatalogLessons } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
 import {
   normalizeLessonCategory,
@@ -75,6 +76,10 @@ import {
   getOptionalGeneratedPathwayLessonIndex,
   type PathwayLessonGeneratedIndexFileV1,
 } from "@/lib/lessons/pathway-lesson-generated-index";
+import {
+  computePathwayLessonLinkedLearningSignals,
+  deriveCanonicalStudyTopicSlug,
+} from "@/lib/lessons/pathway-lesson-linked-learning-assets";
 
 type CatalogShape = {
   version: number;
@@ -158,6 +163,8 @@ let rnExamNotesIntegrationBatch3ExpansionPathwaysCache: Record<string, CatalogSh
 let rnExamNotesIntegrationBatch4ExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 /** REx-PN parity expansion rows (merged for Canadian RPN only; deduped by slug). */
 let rpnParityExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+/** NP parity expansion rows (merged for Canadian NP and US NP pathways; deduped by slug). */
+let npParityExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 let newGradTransitionPathwaysCache: Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> | null = null;
 
 function getCatalogData(): CatalogShape {
@@ -472,6 +479,36 @@ function rpnParityExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
   return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
 }
 
+/** NP core lessons (shared across all NP pathways - deduped). */
+let npCoreLessonsCache: CatalogShape["pathways"][string]["lessons"] | null = null;
+/** NP pathway metadata for applying pathway-specific fields to core lessons. */
+const npPathwayMetadata: Record<string, { examName: string; country: string; countryScope: string }> = {
+  "ca-np-cnple": { examName: "CNPLE", country: "CA", countryScope: "ca" },
+  "us-np-fnp": { examName: "FNP (AANP/ANCC)", country: "US", countryScope: "us" },
+};
+
+function getNpCoreLessons(): CatalogShape["pathways"][string]["lessons"] {
+  if (npCoreLessonsCache) return npCoreLessonsCache;
+  const coreData = catalogBundleRequire("@/content/pathway-lessons/np-core-catalog.json") as {
+    lessons?: CatalogShape["pathways"][string]["lessons"];
+  };
+  npCoreLessonsCache = coreData.lessons ?? [];
+  return npCoreLessonsCache;
+}
+
+function npParityExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const metadata = npPathwayMetadata[pathwayId];
+  if (!metadata) return [];
+  const coreLessons = getNpCoreLessons();
+  // Apply pathway-specific metadata to core lessons
+  return coreLessons.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP).map((lesson) => ({
+    ...lesson,
+    seoTitle: `${lesson.title.replace(": NP Diagnosis and Management", "")} - NP Board Review | ${metadata.examName} Preparation | NurseNest`,
+    countries: [metadata.country as PathwayLessonRuntimeCountry],
+    countryScope: metadata.countryScope as CatalogShape["pathways"][string]["lessons"][number]["countryScope"],
+  }));
+}
+
 function getNewGradTransitionPathways(): Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> {
   if (newGradTransitionPathwaysCache) return newGradTransitionPathwaysCache;
   newGradTransitionPathwaysCache =
@@ -550,6 +587,7 @@ export function resetCatalogLessonsRawMergeCacheForTests(): void {
   rnExamNotesIntegrationBatch3ExpansionPathwaysCache = null;
   rnExamNotesIntegrationBatch4ExpansionPathwaysCache = null;
   rpnParityExpansionPathwaysCache = null;
+  npParityExpansionPathwaysCache = null;
   newGradTransitionPathwaysCache = null;
   catalogLessonsRawByPathwayIdCache.clear();
   pathwayNormalizedCatalogRows.clear();
@@ -1315,6 +1353,13 @@ export function sanitizeQuizItems(raw: unknown): PathwayLessonQuizItem[] | undef
 }
 
 function defaultPeerLessonSlugsForPathwayId(pathwayId: string): string[] {
+  if (pathwayId === "ca-np-cnple" || pathwayId === "us-np-fnp") {
+    return [
+      "np-primary-care-foundations-gold",
+      "np-heart-failure-primary-care-gold",
+      "np-type2-diabetes-outpatient-gold",
+    ];
+  }
   if (pathwayId.startsWith("ca-")) {
     return ["fluid-balance-acute-care", "cardiovascular-prioritization", "ca-rn-shock"];
   }
@@ -1423,6 +1468,15 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
       sections: expanded,
     });
     expanded = newGradCompleted.sections;
+    const npCompleted = applyNpPremiumStructuralCompletion({
+      lessonSlug: lessonSlugEarly,
+      title,
+      pathwayId: pathwayId ?? "",
+      sections: expanded,
+      relatedLessonRefs: relatedLessonRefsMerged,
+    });
+    expanded = npCompleted.sections;
+    relatedLessonRefsMerged = npCompleted.relatedLessonRefs;
   }
 
   if (!usePremium) {
@@ -1445,11 +1499,14 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
     (raw as { embeddedSoundLibraries?: unknown }).embeddedSoundLibraries,
   );
 
+  const rawTopicSlug = typeof raw.topicSlug === "string" ? raw.topicSlug.trim().toLowerCase() : "";
+  const topicSlug = rawTopicSlug.length > 0 ? rawTopicSlug : deriveCanonicalStudyTopicSlug(raw);
+
   const base: PathwayLessonRecord = {
     slug: raw.slug,
     title,
     topic: normalizedTopic,
-    topicSlug: typeof raw.topicSlug === "string" ? raw.topicSlug : "",
+    topicSlug,
     system: system || bodySystem,
     bodySystem,
     previewSectionCount: Math.max(1, Math.min(previewCandidate, usePremium ? 11 : 5)),
@@ -1535,12 +1592,17 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
     );
   }
 
-  return {
+  const normalizedOut: PathwayLessonRecord = {
     ...withStudyStrips,
     structuralQuality,
     interactiveModules,
     ...(linked_flashcard_prompts ? { linked_flashcard_prompts } : {}),
     ...(usePremium ? { premiumValidation: validatePathwayLessonPremium(withStudyStrips) } : {}),
+  };
+
+  return {
+    ...normalizedOut,
+    linkedLearningSignals: computePathwayLessonLinkedLearningSignals(pathwayId ?? "", normalizedOut),
   };
 }
 type LessonLibraryRow = LessonInput & { pathwayIds: string[] };
@@ -1591,6 +1653,7 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
   const examNotesIntegrationBatch3Expansion = rnExamNotesIntegrationBatch3ExpansionLessonsForPathway(pathwayId);
   const examNotesIntegrationBatch4Expansion = rnExamNotesIntegrationBatch4ExpansionLessonsForPathway(pathwayId);
   const rpnParityExpansion = rpnParityExpansionLessonsForPathway(pathwayId);
+  const npParityExpansion = npParityExpansionLessonsForPathway(pathwayId);
   const newGrad = newGradTransitionLessonsForPathway(pathwayId);
   const seen = new Set<string>();
   const merged: LessonInput[] = [];
@@ -1617,6 +1680,7 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
     ...examNotesIntegrationBatch3Expansion,
     ...examNotesIntegrationBatch4Expansion,
     ...rpnParityExpansion,
+    ...npParityExpansion,
     ...newGrad,
   ]) {
     if (seen.has(l.slug)) continue;
@@ -1752,6 +1816,12 @@ function buildCatalogLessonsRawUncached(pathwayId: string): LessonInput[] {
         merged.push(extra);
       }
       for (const extra of rpnParityExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of npParityExpansionLessonsForPathway(pathwayId)) {
         const s = extra.slug.trim();
         if (!s || seen.has(s)) continue;
         seen.add(s);

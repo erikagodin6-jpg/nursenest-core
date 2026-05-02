@@ -24,6 +24,7 @@ import { LESSON_IMAGE_OVERRIDES } from "@/lib/content/lesson-image-overrides";
 import { resolveImageFromLessonMap } from "@/lib/lessons/lesson-image-map";
 import { getInventoryKeys } from "@/lib/education-images/inventory";
 import { publicCdnUrlForObjectKey } from "@/lib/education-images/cdn-url";
+import { hasRenderableLessonImageUrl } from "@/lib/lessons/has-renderable-lesson-image";
 
 export type LessonImageSource =
   | "override"          // came from LESSON_IMAGE_OVERRIDES
@@ -44,6 +45,15 @@ export type LessonImageResolution = {
   /** How the image was resolved — useful for audit logging and UI labeling. */
   source: LessonImageSource;
 };
+
+function guardResolution(
+  res: LessonImageResolution,
+  altFallback: string,
+): LessonImageResolution {
+  if (res.url && hasRenderableLessonImageUrl(res.url)) return res;
+  const alt = res.alt?.trim() ? res.alt : altFallback;
+  return { url: null, objectKey: null, alt, source: "none" };
+}
 
 export type LessonImageQuery = {
   /** Canonical lesson slug (URL-safe, hyphenated, lowercase). */
@@ -108,18 +118,21 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
     (query.title?.trim() || slug.replace(/-/g, " ")) + " — clinical illustration";
 
   if (!slug) {
-    return { url: null, objectKey: null, alt, source: "none" };
+    return guardResolution({ url: null, objectKey: null, alt, source: "none" }, alt);
   }
 
   // 1. Manual override — always wins.
   const overrideKey = LESSON_IMAGE_OVERRIDES[slug] ?? LESSON_IMAGE_OVERRIDES[query.slug.trim()];
   if (overrideKey) {
-    return {
-      url: publicCdnUrlForObjectKey(overrideKey),
-      objectKey: overrideKey,
+    return guardResolution(
+      {
+        url: publicCdnUrlForObjectKey(overrideKey),
+        objectKey: overrideKey,
+        alt,
+        source: "override",
+      },
       alt,
-      source: "override",
-    };
+    );
   }
 
   // 2. Lesson image map — exact slug match.
@@ -129,12 +142,15 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
     // topic/bodySystem intentionally omitted: only slug match at this step
   });
   if (mapSlugMatch?.source === "map_slug") {
-    return {
-      url: publicCdnUrlForObjectKey(mapSlugMatch.objectKey),
-      objectKey: mapSlugMatch.objectKey,
+    return guardResolution(
+      {
+        url: publicCdnUrlForObjectKey(mapSlugMatch.objectKey),
+        objectKey: mapSlugMatch.objectKey,
+        alt,
+        source: "map_slug",
+      },
       alt,
-      source: "map_slug",
-    };
+    );
   }
 
   const inventoryKeys = getInventoryKeys();
@@ -142,12 +158,15 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
   // 3. Inventory: exact slug match.
   const slugKey = findKeyForBasename(slug, inventoryKeys);
   if (slugKey) {
-    return {
-      url: publicCdnUrlForObjectKey(slugKey),
-      objectKey: slugKey,
+    return guardResolution(
+      {
+        url: publicCdnUrlForObjectKey(slugKey),
+        objectKey: slugKey,
+        alt,
+        source: "exact_slug",
+      },
       alt,
-      source: "exact_slug",
-    };
+    );
   }
 
   // 4. Inventory: topic-slug fallback.
@@ -156,12 +175,15 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
     if (topicBasename && topicBasename !== slug) {
       const topicKey = findKeyForBasename(topicBasename, inventoryKeys);
       if (topicKey) {
-        return {
-          url: publicCdnUrlForObjectKey(topicKey),
-          objectKey: topicKey,
+        return guardResolution(
+          {
+            url: publicCdnUrlForObjectKey(topicKey),
+            objectKey: topicKey,
+            alt,
+            source: "topic_slug",
+          },
           alt,
-          source: "topic_slug",
-        };
+        );
       }
     }
   }
@@ -174,15 +196,18 @@ export function resolveLessonImage(query: LessonImageQuery): LessonImageResoluti
     bodySystem: query.bodySystem,
   });
   if (mapFuzzyMatch && mapFuzzyMatch.source !== "map_slug") {
-    return {
-      url: publicCdnUrlForObjectKey(mapFuzzyMatch.objectKey),
-      objectKey: mapFuzzyMatch.objectKey,
+    return guardResolution(
+      {
+        url: publicCdnUrlForObjectKey(mapFuzzyMatch.objectKey),
+        objectKey: mapFuzzyMatch.objectKey,
+        alt,
+        source: mapFuzzyMatch.source,
+      },
       alt,
-      source: mapFuzzyMatch.source,
-    };
+    );
   }
 
-  return { url: null, objectKey: null, alt, source: "none" };
+  return guardResolution({ url: null, objectKey: null, alt, source: "none" }, alt);
 }
 
 /**

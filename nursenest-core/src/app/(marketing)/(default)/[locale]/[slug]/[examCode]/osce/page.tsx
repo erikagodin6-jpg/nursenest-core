@@ -5,6 +5,7 @@ import { OsceScenariosDevGate } from "@/components/scenarios/osce-scenarios-dev-
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { isOsceScenariosPubliclyEnabled } from "@/lib/scenarios/osce-scenarios-feature-flag";
+import { getOsceHubListItemsResolved } from "@/lib/scenarios/osce-stations-resolve.server";
 import { resolveOsceScenarioRouteAccessMode } from "@/lib/scenarios/scenario-access";
 import { osceScenariosRobotsMetadata } from "@/lib/scenarios/scenario-seo-metadata";
 import { absoluteUrl } from "@/lib/seo/site-origin";
@@ -52,5 +53,17 @@ export default async function MarketingOscePage({ params }: Props) {
     return <OsceScenariosDevGate surface="osce" pathwayId={pathway.id} />;
   }
   const showDevSamples = process.env.NODE_ENV !== "production" && isOsceScenariosPubliclyEnabled();
-  return <OscePrepSurfaceClient pathwayId={pathway.id} showDevSamples={showDevSamples} />;
+  const legacyListItems = isOsceScenariosPubliclyEnabled()
+    ? (await getOsceHubListItemsResolved()).items
+    : [];
+  const stationDetailHrefPrefix = `/${locale}/${slug}/${examCode}/osce/`;
+  return (
+    <OscePrepSurfaceClient
+      pathwayId={pathway.id}
+      showDevSamples={showDevSamples}
+      legacyListItems={legacyListItems}
+      stationDetailHrefPrefix={stationDetailHrefPrefix}
+      appendPathwayQueryOnDetailLinks={false}
+    />
+  );
 }

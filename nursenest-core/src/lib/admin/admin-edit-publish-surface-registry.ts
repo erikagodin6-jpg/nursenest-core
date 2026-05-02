@@ -283,6 +283,24 @@ export const ADMIN_EDIT_PUBLISH_SURFACES: readonly AdminEditPublishSurfaceRow[] 
     status: "OK",
     notes: "Not public SEO; learner-only canonical DB.",
   },
+  {
+    contentType: "osce_station",
+    adminEditRoute: "/admin/osce-stations | /admin/osce-stations/[id]",
+    saveApi: "POST/PATCH /api/admin/osce-stations | PATCH /api/admin/osce-stations/[id]",
+    publishApi: "PATCH isPublished + fields (same API)",
+    storageSource: "Prisma OsceStation",
+    publicLoader: "getOsceHubListItemsResolved / getOsceSkillStationResolved + GET /api/osce-stations",
+    publicRoute: "/{locale}/{hub}/{exam}/osce/...",
+    learnerRoute: "/app/osce | /app/osce/[stationId]",
+    sitemapOrRevalidate: "revalidatePath /app/osce (on PATCH)",
+    canPreview: true,
+    canPublish: true,
+    revalidatesPublicRoute: true,
+    revalidatesSitemap: false,
+    status: "partial",
+    notes:
+      "DB + is_published is canonical; legacy JSON only when DB empty and OSCE_LEGACY_FALLBACK=1. E2E admin→live proof pending.",
+  },
 ] as const;
 
 export function formatAdminEditPublishMarkdownTable(rows: readonly AdminEditPublishSurfaceRow[]): string {

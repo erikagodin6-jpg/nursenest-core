@@ -8,7 +8,22 @@ export interface MedMathQuestion {
   steps: string[];
   rationale: string;
   safetyNote?: string;
+  /** Per-item rounding (preferred in canonical bank); legacy deck may rely on {@link MED_MATH_LEGACY_CORPUS_ROUNDING_POLICY}. */
+  roundingInstruction?: string;
+  commonError?: string;
+  remediationLessonSlug?: string;
 }
+
+/**
+ * Deck-level rounding policy for the legacy `medMathQuestions` corpus.
+ * Canonical migrated rows should prefer explicit `roundingInstruction` on each item.
+ */
+export const MED_MATH_LEGACY_CORPUS_ROUNDING_POLICY =
+  "Unless the prompt states otherwise: use workable tablet/capsule fractions (multiples of 0.25 tablet); " +
+  "record IV manual drip rates in gtt/min as whole drops (round the final rate to the nearest whole gtt/min); " +
+  "record IV pump rates in mL/hr to at most one decimal when the math does not land on a whole number; " +
+  "record small liquid volumes in mL to the nearest tenth (at most one decimal) unless a stem explicitly requires finer precision; " +
+  "state what you rounded to and why in the worked steps when intermediate values are not administrable as written.";
 
 export const medMathQuestions: MedMathQuestion[] = [
   // ============================================================
@@ -379,15 +394,15 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "iv-1",
     category: "iv-flow",
     statement: "Order: Infuse 1000 mL of 0.9% Normal Saline over 8 hours. Drop factor: 15 gtt/mL. Calculate the drip rate in gtt/min.",
-    answer: 31.25,
+    answer: 31,
     unit: "gtt/min",
     formula: "(Volume × Drop Factor) ÷ (Time in minutes)",
     steps: [
       "Volume: 1000 mL",
       "Time: 8 hours = 480 minutes",
       "Drop factor: 15 gtt/mL",
-      "Calculation: (1000 × 15) ÷ 480 = 31.25 gtt/min",
-      "Round to 31 gtt/min in practice"
+      "Calculation: (1000 × 15) ÷ 480 = 31.25 gtt/min before rounding",
+      "Round to the nearest whole drop → 31 gtt/min for manual counting"
     ],
     rationale: "0.9% NS is the most commonly used isotonic crystalloid. An 8-hour infusion at 125 mL/hr is standard maintenance. With macrodrip tubing (15 gtt/mL), the nurse counts drops to set the rate."
   },
@@ -424,14 +439,14 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "iv-4",
     category: "iv-flow",
     statement: "An IV of 0.9% NS is running at 100 mL/hr. Drop factor: 20 gtt/mL. What is the drip rate in gtt/min?",
-    answer: 33.33,
+    answer: 33,
     unit: "gtt/min",
     formula: "(mL/hr × Drop Factor) ÷ 60",
     steps: [
       "Rate: 100 mL/hr",
       "Drop factor: 20 gtt/mL",
-      "Calculation: (100 × 20) ÷ 60 = 33.33 gtt/min",
-      "Round to 33 gtt/min in practice"
+      "Calculation: (100 × 20) ÷ 60 = 33.33 gtt/min before rounding",
+      "Round to the nearest whole drop → 33 gtt/min"
     ],
     rationale: "Converting from pump rate (mL/hr) to manual drip rate requires multiplying by the drop factor and dividing by 60. This is common when a pump is unavailable."
   },
@@ -496,15 +511,15 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "iv-9",
     category: "iv-flow",
     statement: "Order: Infuse 500 mL of D5W over 6 hours. Drop factor: 10 gtt/mL. Calculate the drip rate in gtt/min.",
-    answer: 13.89,
+    answer: 14,
     unit: "gtt/min",
     formula: "(Volume × Drop Factor) ÷ (Time in minutes)",
     steps: [
       "Volume: 500 mL",
       "Time: 6 hours = 360 minutes",
       "Drop factor: 10 gtt/mL",
-      "Calculation: (500 × 10) ÷ 360 = 13.89 gtt/min",
-      "Round to 14 gtt/min in practice"
+      "Calculation: (500 × 10) ÷ 360 = 13.89 gtt/min before rounding",
+      "Round to the nearest whole drop → 14 gtt/min"
     ],
     rationale: "D5W provides glucose and free water. With a 10 gtt/mL macrodrip set, counting approximately 14 drops per minute achieves the ordered rate."
   },
@@ -526,13 +541,14 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "iv-11",
     category: "iv-flow",
     statement: "Order: Vancomycin 1 g in 250 mL NS to infuse over 90 minutes via IV pump. What rate in mL/hr?",
-    answer: 166.67,
+    answer: 166.7,
     unit: "mL/hr",
     formula: "(Volume ÷ Time in minutes) × 60",
     steps: [
       "Volume: 250 mL",
       "Time: 90 minutes",
-      "Calculation: (250 ÷ 90) × 60 = 166.67 mL/hr"
+      "Calculation: (250 ÷ 90) × 60 = 166.67 mL/hr before rounding",
+      "Round pump display to the nearest tenth → 166.7 mL/hr (follow facility policy)"
     ],
     rationale: "Vancomycin is an antibiotic infused over at least 60 minutes to prevent Red Man Syndrome. 90-minute infusion for 1 g is standard.",
     safetyNote: "⚠️ Infuse vancomycin over at least 60 minutes. Rapid infusion can cause Red Man Syndrome (flushing, hypotension)."

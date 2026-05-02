@@ -160,3 +160,6 @@ Desktop.ini
 
 # JetBrains (optional)
 *.iml
+
+# Next build single-flight mutex (Next app package)
+nursenest-core/.nn-next-build-exclusive.lock

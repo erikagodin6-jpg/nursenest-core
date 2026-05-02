@@ -51,9 +51,12 @@ import { LessonTopicPracticeSection } from "@/components/lessons/lesson-topic-pr
 import { loadLessonTopicLinkedQuizItems } from "@/lib/lessons/load-lesson-topic-linked-quiz-items";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
+import { computePathwayLessonLinkedLearningSignals } from "@/lib/lessons/pathway-lesson-linked-learning-assets";
 import { buildAppQuestionBankTopicDrillHref } from "@/components/lessons/pathway-lesson-link-practice";
 import { PathwayLessonNextStepsCards } from "@/components/lessons/pathway-lesson-next-steps-cards";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { resolveQuizEmbedQuestionsForLessonSlug } from "@/lib/lessons/lesson-quiz-embeds";
+import { PathwayLessonQuizEmbedSection } from "@/components/lessons/pathway-lesson-quiz-embed-section";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import {
   pathwayLessonPremiumSectionBodyText,
@@ -98,6 +101,7 @@ import { getLessonInteractiveModules } from "@/lib/lessons/lesson-interactive-mo
 import { loadPathwayLessonAdjacent, mapPathwayLessonAdjacentToAppHrefs } from "@/lib/lessons/pathway-lesson-adjacent";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
+import { hasRenderableLessonFigure, hasRenderableLessonImageUrl } from "@/lib/lessons/has-renderable-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
 import { AppLessonRelatedReading } from "@/components/linking/app-lesson-related-reading";
 import { StaffEditLivePageBanner } from "@/components/staff/staff-edit-live-page-banner";
@@ -621,6 +625,8 @@ async function LessonDetailPageInner({ params }: Props) {
       ? { title: pathwayAdjacentApp.next.title, href: pathwayAdjacentApp.next.href }
       : null;
 
+    const pathwayLessonQuizEmbed = pathway ? resolveQuizEmbedQuestionsForLessonSlug(record.slug) : null;
+
     const examFramingLabel =
       examFraming.region !== "unknown" ? examFraming.examIdentityLabel : null;
 
@@ -660,6 +666,11 @@ async function LessonDetailPageInner({ params }: Props) {
         : undefined;
 
     const pathwayInteractiveModules = pathway ? getLessonInteractiveModules(record) : [];
+
+    const linkedLearningSignals =
+      pathway != null
+        ? record.linkedLearningSignals ?? computePathwayLessonLinkedLearningSignals(pathway.id, record)
+        : null;
 
     const hasCatalogPre =
       Boolean(pathway) &&
@@ -757,9 +768,10 @@ async function LessonDetailPageInner({ params }: Props) {
                         ? section.body
                         : "";
                   const figs = section.figures;
-                  const sectionLeadFigure = figs?.length ? figs[0] : undefined;
+                  const usableFigs = figs?.filter(hasRenderableLessonFigure) ?? [];
+                  const sectionLeadFigure = usableFigs[0];
                   const sectionFiguresRest =
-                    figs && figs.length > 1 ? figs.slice(1) : undefined;
+                    usableFigs.length > 1 ? usableFigs.slice(1) : undefined;
                   return (
                     <LessonSectionCard
                       key={section.id}
@@ -816,6 +828,19 @@ async function LessonDetailPageInner({ params }: Props) {
                 })
               ) : null}
             </article>
+            {pathway && pathwayLessonQuizEmbed?.length ? (
+              <div className="mt-8 max-w-5xl">
+                <PathwayLessonQuizEmbedSection
+                  lessonSlug={record.slug}
+                  links={{
+                    practiceExamsHref: "/app/exams",
+                    flashcardsHref: pathwayHubAppFlashcardsHref(pathway.id, record.topicSlug),
+                    practiceQuestionsHref: pathwayHubAppQuestionsHref(pathway.id, record.topic),
+                    relatedLessonsHref: `/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`,
+                  }}
+                />
+              </div>
+            ) : null}
             {pathway && pathwayInteractiveModules.length > 0 ? (
               <div className="mt-6 max-w-5xl">
                 <PathwayLessonInteractiveModules
@@ -889,7 +914,7 @@ async function LessonDetailPageInner({ params }: Props) {
           })}
           label="Edit this pathway lesson"
         />
-        <div className="nn-lesson-editorial-rail">
+        <div className="nn-lesson-editorial-rail nn-lesson-editorial-rail--hero">
           <LessonPageHeader
             title={displayTitle}
             topic={record.topic}
@@ -914,7 +939,7 @@ async function LessonDetailPageInner({ params }: Props) {
             purposeLine={purposeLine}
             assessmentHint={assessmentHint}
           />
-          {matchedLessonImage.url ? (
+          {matchedLessonImage.url && hasRenderableLessonImageUrl(matchedLessonImage.url) ? (
             <div className="mt-4">
               <LessonClinicalImageCard
                 url={matchedLessonImage.url}
@@ -937,6 +962,7 @@ async function LessonDetailPageInner({ params }: Props) {
                 initialProgress={initialProgress}
                 catAdaptiveAvailable={pathwayAllowsCatAdaptiveStart(pathway)}
                 allLessonsHrefOverride={`/app/lessons?pathwayId=${encodeURIComponent(pathway.id)}`}
+                linkedLearningSignals={linkedLearningSignals}
               />
               <AppLessonRelatedReading
                 pathway={pathway}
@@ -954,8 +980,9 @@ async function LessonDetailPageInner({ params }: Props) {
         </div>
 
         <div className="nn-lesson-layout">
+          <LessonSectionNav sections={navSections} />
           <div className="nn-lesson-main min-w-0">
-            <div className="nn-lesson-editorial-rail">
+            <div className="nn-lesson-editorial-rail nn-lesson-editorial-rail--main">
               {studyLoopBankActive ? (
                 <PathwayLessonStudyLoopOrchestrator
                   userId={userId}
@@ -978,8 +1005,6 @@ async function LessonDetailPageInner({ params }: Props) {
               )}
             </div>
           </div>
-
-          <LessonSectionNav sections={navSections} />
         </div>
       </div>
     );

@@ -8,6 +8,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { resolveStandaloneServerPath } from "./verify-standalone-artifact.mjs";
+import { acquireExclusiveNextBuildLock, releaseExclusiveNextBuildLock } from "./next-build-exclusive.mjs";
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const require = createRequire(import.meta.url);
@@ -172,16 +173,43 @@ if ((lessonIndexes.status ?? 1) !== 0) {
   process.exit(lessonIndexes.status ?? 1);
 }
 
+if (!String(process.env.NEXT_TELEMETRY_DISABLED ?? "").trim()) {
+  process.env.NEXT_TELEMETRY_DISABLED = "1";
+}
+if (!String(process.env.NN_FORCE_SINGLE_BUILD_WORKER ?? "").trim()) {
+  process.env.NN_FORCE_SINGLE_BUILD_WORKER = "true";
+}
+
+let buildLockHeld = false;
+try {
+  acquireExclusiveNextBuildLock(packageRoot);
+  buildLockHeld = true;
+} catch (e) {
+  if (e && typeof e === "object" && "code" in e && e.code === "ELOCKED") {
+    console.error(String(e.message ?? e));
+    process.exit(1);
+  }
+  throw e;
+}
+
 /**
  * 🔥 CRITICAL FIX:
  * REMOVE "--webpack"
  */
 console.log(`[next-prod-build] next_cli_invocation_start pid=${process.pid}`);
-const r = spawnSync(process.execPath, [nextBin, "build"], {
-  cwd: packageRoot,
-  stdio: "inherit",
-  env: process.env,
-});
+let r;
+try {
+  r = spawnSync(process.execPath, [nextBin, "build"], {
+    cwd: packageRoot,
+    stdio: "inherit",
+    env: process.env,
+  });
+} finally {
+  if (buildLockHeld) {
+    releaseExclusiveNextBuildLock(packageRoot);
+    buildLockHeld = false;
+  }
+}
 console.log(
   `[next-prod-build] next_cli_invocation_end status=${r.status ?? "null"} signal=${r.signal ?? "null"}`,
 );

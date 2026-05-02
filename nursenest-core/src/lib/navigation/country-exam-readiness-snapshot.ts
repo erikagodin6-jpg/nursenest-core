@@ -1,9 +1,10 @@
 /**
  * Committed pathway lesson/question counts for **public** launch checks (no DB).
  * Regenerate via `npm run readiness:emit-snapshot`.
+ *
+ * JSON is loaded on first use via `createRequire` (no module-scope JSON import).
  */
-
-import pathwayReadinessSnapshotJson from "@/config/pathway-readiness-snapshot.json";
+import { createRequire } from "node:module";
 
 type SnapshotRow = { lessons?: number; questions?: number };
 type SnapshotDocument = Record<string, SnapshotRow | string | undefined>;
@@ -12,7 +13,8 @@ let pathwayReadinessSnapshotCache: SnapshotDocument | null = null;
 
 function getPathwayReadinessSnapshot(): SnapshotDocument {
   if (pathwayReadinessSnapshotCache) return pathwayReadinessSnapshotCache;
-  pathwayReadinessSnapshotCache = pathwayReadinessSnapshotJson as SnapshotDocument;
+  const require = createRequire(import.meta.url);
+  pathwayReadinessSnapshotCache = require("@/config/pathway-readiness-snapshot.json") as SnapshotDocument;
   return pathwayReadinessSnapshotCache;
 }
 

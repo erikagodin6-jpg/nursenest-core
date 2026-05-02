@@ -153,6 +153,10 @@ model User {
   remediationQueueItems                   UserRemediationQueue[]
   learnerSessionActivities                LearnerSessionActivity[]
   learnerSessionIpObservations            LearnerSessionIpObservation[]
+  printableProductsCreated                  PrintableProduct[]         @relation("PrintableProductCreatedBy")
+  printableProductsUpdated                  PrintableProduct[]         @relation("PrintableProductUpdatedBy")
+  printableDownloadEvents                   PrintableDownloadEvent[]
+  printableAccesses                         PrintableAccess[]
 
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
@@ -180,11 +184,96 @@ model MediaAsset {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   uploadedBy     User?     @relation("MediaAssetUploadedBy", fields: [uploadedById], references: [id])
+  printableProductsAsFile      PrintableProduct[] @relation("PrintableProductFileAsset")
+  printableProductsAsThumbnail PrintableProduct[] @relation("PrintableProductThumbnailAsset")
 
   @@index([createdAt(sort: Desc)])
   @@index([kind])
   @@index([mimeType])
   @@map("media_assets")
+}
+
+enum PrintableDownloadSource {
+  LEARNER
+  ADMIN_PREVIEW
+  PURCHASE
+  SUBSCRIPTION
+}
+
+enum PrintableAccessSource {
+  PURCHASE
+  SUBSCRIPTION
+  ADMIN_GRANT
+  FREE
+}
+
+/// * Admin-managed downloadable printables (PDF) — binaries live in `MediaAsset` / Spaces, not in DB.
+model PrintableProduct {
+  id                String   @id @default(cuid())
+  slug              String   @unique @db.VarChar(160)
+  title             String   @db.VarChar(512)
+  description       String   @db.Text
+  category          String   @db.VarChar(128)
+  pathwayId         String   @map("pathway_id") @db.VarChar(64)
+  roleTrack         String   @map("role_track") @db.VarChar(64)
+  fileAssetId       String   @map("file_asset_id")
+  thumbnailAssetId  String?  @map("thumbnail_asset_id")
+  priceCents        Int      @default(0) @map("price_cents")
+  currency          String   @default("usd") @db.VarChar(8)
+  isFree            Boolean  @default(false) @map("is_free")
+  isPremiumIncluded Boolean  @default(false) @map("is_premium_included")
+  isPublished       Boolean  @default(false) @map("is_published")
+  version           Int      @default(1)
+  createdByUserId   String?  @map("created_by_user_id")
+  updatedByUserId   String?  @map("updated_by_user_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  fileAsset      MediaAsset @relation("PrintableProductFileAsset", fields: [fileAssetId], references: [id], onDelete: Restrict)
+  thumbnailAsset MediaAsset? @relation("PrintableProductThumbnailAsset", fields: [thumbnailAssetId], references: [id], onDelete: SetNull)
+  createdBy      User?      @relation("PrintableProductCreatedBy", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  updatedBy      User?      @relation("PrintableProductUpdatedBy", fields: [updatedByUserId], references: [id], onDelete: SetNull)
+  downloads      PrintableDownloadEvent[]
+  accesses       PrintableAccess[]
+
+  @@index([pathwayId])
+  @@index([isPublished])
+  @@index([category])
+  @@map("printable_products")
+}
+
+model PrintableDownloadEvent {
+  id                 String                  @id @default(cuid())
+  printableProductId String                  @map("printable_product_id")
+  userId             String?                 @map("user_id")
+  pathwayId          String?                 @map("pathway_id") @db.VarChar(64)
+  source             PrintableDownloadSource
+  downloadedAt       DateTime                @default(now()) @map("downloaded_at")
+  userAgentHash      String?                 @map("user_agent_hash") @db.VarChar(128)
+  ipHash             String?                 @map("ip_hash") @db.VarChar(128)
+
+  product PrintableProduct @relation(fields: [printableProductId], references: [id], onDelete: Cascade)
+  user    User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([printableProductId, downloadedAt])
+  @@index([userId])
+  @@index([source])
+  @@map("printable_download_events")
+}
+
+model PrintableAccess {
+  id                 String                @id @default(cuid())
+  printableProductId String                @map("printable_product_id")
+  userId             String                @map("user_id")
+  source             PrintableAccessSource
+  createdAt          DateTime              @default(now()) @map("created_at")
+
+  product PrintableProduct @relation(fields: [printableProductId], references: [id], onDelete: Cascade)
+  user    User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, printableProductId])
+  @@index([printableProductId, source])
+  @@map("printable_accesses")
 }
 
 /// * Aggregated premium UX telemetry (UTC day; global counts, no user PII).
@@ -1006,6 +1095,43 @@ model PathwayLesson {
   @@index([pathwayId, locale, status, sortOrder], map: "pathway_lessons_pathway_locale_status_sort_idx")
   @@index([pathwayId, topicSlug, locale, status], map: "pathway_lessons_pathway_topic_locale_status_idx")
   @@map("pathway_lessons")
+}
+
+/// * DB-backed OSCE skill stations (single read/write source for `/app/osce` + marketing exam-hub OSCE).
+/// * `slug` is the stable public route key (legacy monolith `OSCESkillStation.id`).
+model OsceStation {
+  id                    String   @id @default(cuid())
+  slug                  String   @unique
+  title                 String
+  /// * Short summary for cards / SEO; full narrative remains in `scenarioIntro`.
+  description           String   @default("") @db.Text
+  scenarioIntro         String   @map("scenario_intro") @db.Text
+  candidateInstructions String?  @map("candidate_instructions") @db.Text
+  patientScript         String?  @map("patient_script") @db.Text
+  isPublished           Boolean  @default(true) @map("is_published")
+  domain                String?  @db.VarChar(120)
+  roleTrack             String?  @map("role_track") @db.VarChar(80)
+  /// * Legacy bundle path or import job id for audit (`migrate-osce-stations`, …).
+  sourceLegacyPath      String?  @map("source_legacy_path") @db.VarChar(512)
+  steps                 Json
+  examinerChecklist     Json     @default("[]") @map("examiner_checklist")
+  criticalFails         String[] @default([]) @map("critical_fails")
+  /// * Teaching rationales / pearls not already encoded in `steps` (JSON array of strings or structured payload).
+  rationales            Json     @default("[]")
+  timeLimit             String?  @map("time_limit")
+  difficulty            String
+  category              String
+  /// * Optional pathway scope; null = shared nursing OSCE bank for all pathways.
+  pathwayId             String?  @map("pathway_id")
+  /// * Parity fields: description, equipment, commonErrors, passingCriteria, clinicalPearls, examinerQuestions, teachingPoints, icon, examLevel, importSource.
+  extensions            Json     @default("{}")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  @@index([pathwayId, category])
+  @@index([category, difficulty])
+  @@index([isPublished])
+  @@map("osce_stations")
 }
 
 /// * Staff-only / feature-gated interactive courses (ECG labs, ABC drills). Never linked from public marketing.

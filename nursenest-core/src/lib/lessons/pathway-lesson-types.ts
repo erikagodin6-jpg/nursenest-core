@@ -86,6 +86,16 @@ export type PathwayLessonRelatedRef = {
   titleHint?: string;
 };
 
+/** Cross-surface study links (flashcards, qbank, CAT) — see `pathway-lesson-linked-learning-assets.ts`. */
+export type PathwayLessonLinkedLearningSignals = {
+  bidirectionalTopicKey: string;
+  flashcardsLinked: boolean;
+  practiceQuestionsLinked: boolean;
+  /** Practice-test / CAT surfaces exist for this pathway (false only when pathway is hidden). */
+  catPoolLinked: boolean;
+  adaptiveLearningReadiness: boolean;
+};
+
 /** Primary exam tier(s) this lesson targets (pathway still scopes catalog rows; this tags cross-surface alignment). */
 export type PathwayLessonAudienceTier = "rn" | "pn" | "np";
 
@@ -355,6 +365,11 @@ export type PathwayLessonRecord = {
     | "partial_content"
     | "pathway_mismatch"
     | "unverified_inventory_fill";
+  /**
+   * Canonical linkage to flashcards, practice questions, and CAT pools (plus adaptive readiness).
+   * Set in {@link normalizeLesson}; used for audits and learner CTAs.
+   */
+  linkedLearningSignals?: PathwayLessonLinkedLearningSignals;
 };
 
 /** Hub cards must not link with empty or whitespace slugs (defensive; DB/catalog should always set slug). */

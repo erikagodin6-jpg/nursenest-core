@@ -120,3 +120,6 @@ storybook-static/
 # -----------------------------------------------------------------------------
 # i18n — same tracked paths as repo root .gitignore (do not ignore bundles under client/ or public/i18n)
 # -----------------------------------------------------------------------------
+
+# Next build single-flight mutex (see scripts/next-build-exclusive.mjs)
+.nn-next-build-exclusive.lock

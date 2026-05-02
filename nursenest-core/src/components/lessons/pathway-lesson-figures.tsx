@@ -1,4 +1,6 @@
 import type { PathwayLessonFigure } from "@/lib/lessons/pathway-lesson-types";
+import { hasRenderableLessonFigure } from "@/lib/lessons/has-renderable-lesson-image";
+import { SafeLessonRemoteImage } from "@/components/lessons/safe-lesson-remote-image";
 
 /**
  * Lazy-loaded figures for pathway lesson sections (HTTPS only; no decorative stock imagery).
@@ -7,17 +9,15 @@ import type { PathwayLessonFigure } from "@/lib/lessons/pathway-lesson-types";
  * are tinted by the section's `--lsc-color` via CSS in globals.css (`.nn-lesson-section-card figure`).
  */
 export function PathwayLessonFigures({ figures }: { figures: PathwayLessonFigure[] }) {
-  if (figures.length === 0) return null;
+  const usable = figures.filter(hasRenderableLessonFigure);
+  if (usable.length === 0) return null;
   return (
     <div className="mt-5 space-y-5">
-      {figures.map((f) => (
+      {usable.map((f) => (
         <figure key={f.id} className="overflow-hidden rounded-2xl border border-border bg-[var(--theme-muted-surface)]/40 shadow-sm">
-          {/* eslint-disable-next-line @next/next/no-img-element -- bounded educational URLs; avoids remotePatterns churn */}
-          <img
+          <SafeLessonRemoteImage
             src={f.url}
-            alt={f.alt}
-            loading="lazy"
-            decoding="async"
+            alt={f.alt?.trim() ? f.alt : "Lesson illustration"}
             className="max-h-[min(65vh,480px)] w-full object-contain p-2"
           />
           {(f.caption || f.kind) ? (

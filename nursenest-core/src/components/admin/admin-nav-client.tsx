@@ -33,6 +33,7 @@ import {
   Crosshair,
   Server,
   TestTube2,
+  FileDown,
   Workflow,
   MessageSquare,
   ShieldCheck,
@@ -82,8 +83,10 @@ const GROUPS: NavGroup[] = [
       { href: "/admin/questions", label: "Question bank", icon: ClipboardList },
       { href: "/admin/study-cards", label: "Verified study cards", icon: ListTodo },
       { href: "/admin/clinical-scenarios", label: "Clinical scenarios", icon: HeartPulse },
+      { href: "/admin/osce-stations", label: "OSCE stations", icon: Stethoscope },
       { href: "/admin/courses", label: "Internal courses", icon: BookMarked },
       { href: "/admin/media", label: "Media library", icon: ImageIcon },
+      { href: "/admin/printables", label: "Printout store", icon: FileDown },
     ],
   },
   {

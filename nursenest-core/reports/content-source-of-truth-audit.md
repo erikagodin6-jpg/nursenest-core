@@ -1,53 +1,32 @@
-# Lesson Source-of-Truth Audit
+# Content source-of-truth audit (generated)
 
-## Canonical pathway lessons
+Generated: 2026-05-02T17:23:32.228Z (`npm run content:source-of-truth:reports`)
 
-- Canonical write path: `PATCH/POST /api/admin/pathway-lessons/[id]`
-- Canonical storage: `pathway_lessons`
-- Canonical admin edit route: `/admin/pathway-lessons/[id]`
-- Canonical public hub route: `/{locale}/{slug}/{examCode}/lessons`
-- Canonical public detail route: `/{locale}/{slug}/{examCode}/lessons/[lessonSlug]`
-- Canonical public read path:
-  - live normalization: `src/lib/lessons/pathway-lesson-catalog-sync.ts`
-  - hub/detail loaders: `src/lib/lessons/pathway-lesson-loader.ts`
-  - optional generated snapshot: `src/content/pathway-lessons/generated-indexes/*.json`
+## Registry summary
 
-## Generated lesson indexes
+| id | verification | canonical storage | admin edit | learner read | legacy OK | generated OK |
+|---|----|----|----|----|----|----|
+| lessons | VERIFIED | PathwayLesson (pathway_lessons) | /admin/pathway-lessons/edit \| /admin/pathway-lessons/[id] | /app/lessons/{pathwayLessonId} | true | true |
+| flashcards | PARTIAL | Flashcard, FlashcardDeck (Prisma) | /admin/ai/flashcards \| /admin/study-cards | /app/flashcards | false | false |
+| practice_questions | VERIFIED | ExamQuestion (exam_questions) | /admin/questions \| /admin/ai/drafts/questions/[id] | /app/questions | false | false |
+| cat_questions | PARTIAL | ExamQuestion pool + CatBlueprintSession / CAT runtime services | /admin/diagnostics/cat-blueprint-sessions | /app/exams (CAT flows) | false | false |
+| osce_stations | PARTIAL | OsceStation (osce_stations) | /admin/osce-stations \| /admin/osce-stations/[id] | /app/osce \| /app/osce/{stationId} | true | false |
+| medication_mastery | NOT_VERIFIED | PathwayLesson + ExamQuestion (target state) | /admin/pathway-lessons/* + /admin/questions | /app/lessons/{pathwayLessonId} | true | false |
+| blogs | VERIFIED | BlogPost | /admin/blog/control-panel \| /admin/blog?id= | — | true | true |
+| new_grad_content | PARTIAL | PathwayLesson (+ pathway catalogs) | /admin/pathway-lessons/* | /app/lessons/{pathwayLessonId} | false | true |
+| allied_health_content | PARTIAL | PathwayLesson (+ allied catalogs) | /admin/pathway-lessons/* | /app/lessons/{pathwayLessonId} | false | true |
+| study_plan_items | NOT_VERIFIED | none (computed from progress + PathwayLesson + planner context) | — | /app/study-plan | false | false |
+| report_card_progress | PARTIAL | Progress* / UserTopicStats / dashboard aggregates (multiple Prisma models) | /admin/analytics/* (read-mostly) | /app (dashboard / report card surfaces) | false | false |
 
-- Build writer: `scripts/build-normalized-lesson-indexes.runner.mts`
-- Build verifier: `scripts/verify-normalized-lesson-indexes.runner.mts`
-- Purpose: optional precomputed marketing/cold-path summaries, not the only runtime source
-- Rebuild behavior: snapshots refresh on `npm run build:lesson-indexes` or full `npm run build`
-- Hidden/orphan risk before this pass:
-  - raw lessons could exist in bundled catalogs while `generated-indexes/*.json` exposed zero public lessons for a pathway
-  - allied profession routes could exist with no `topicSlugsIn` mapping, falling back to a generic hub
+## Legacy / generated inventory (high level)
 
-## ContentItem lesson bridge
+- client/src/data/** (legacy Vite/monolith — migration sources)
+- client/src/pages/** (legacy pages — not Next learner SoT)
+- @legacy-client/** (bundled legacy — gated or migration only)
+- src/content/pathway-lessons/*.json (catalog merge — DB wins when present)
+- src/content/pathway-lessons/generated-indexes (build artifacts)
 
-- Legacy/compatibility write path: `PATCH /api/admin/lessons/[id]`
-- Legacy storage: `content_items` with `type = "lesson"`
-- Important constraint: linked pathway lessons are blocked from editing here and redirected to `/admin/pathway-lessons/[id]`
-- Public impact: content-item lessons are not the canonical source for pathway marketing lesson hubs
+## Next steps
 
-## Publish behavior after this pass
-
-- Admin pathway lesson saves write directly to `pathway_lessons`
-- Live detail-route revalidation is requested immediately after mutation
-- Generated lesson-index snapshots are rebuild-driven and now explicitly reported in the admin UI
-- `reports/lesson-normalization-coverage.json` and `reports/lesson-normalization-coverage.md` document which raw lessons are renderable vs excluded and why
-
-## Verification commands
-
-- `npm run build:lesson-indexes` — regenerates `generated-indexes/*.json` + coverage reports; fails if raw>0 and live=0 or >20% unexpected exclusions.
-- `npm run verify:lesson-indexes` — compares generated files to live normalization (no stale disk shortcut in verify leg).
-- `npm run content:source-of-truth:verify` — coverage gates + lesson index verify.
-- `npm run content:source-of-truth:audit` — refreshes this file’s companion checklist timestamps (lightweight).
-- `NN_FORCE_PUBLISH_VALID_RAW_LESSONS=1` — optional ops mode to include additional catalog rows that pass minimum safety checks (see `pathway-lesson-force-publish.ts`); collisions get deterministic `__nn-dup-N` slug suffixes.
-
-## Blogs
-
-- See `reports/blog-source-of-truth-audit.md` and `npm run content:report-hidden-blogs`.
-
-## Flashcards / questions
-
-- Learner data remains pathway-scoped; marketing lesson detail pages link to `HUB.flashcards` and `HUB.questionBank` for cross-surface navigation.
+- Run domain migrations (OSCE, med-math, simulators MCQs) into canonical tables.
+- Add Playwright proofs for admin PATCH → public/learner HTML where status is PARTIAL.

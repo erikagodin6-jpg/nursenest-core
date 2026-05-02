@@ -9,6 +9,7 @@ import { getMeasurementSystemForCountry } from "@/lib/measurements/measurement-s
 import { PremiumLessonPublishNotice } from "@/components/lessons/premium-lesson-publish-notice";
 import { PathwayLessonLockedSectionsPreview } from "@/components/lessons/pathway-lesson-locked-sections-preview";
 import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-actions";
+import { computePathwayLessonLinkedLearningSignals } from "@/lib/lessons/pathway-lesson-linked-learning-assets";
 import { PathwayLessonProgressBadgeLive } from "@/components/lessons/pathway-lesson-progress-badge-live";
 import { PathwayLessonProgressTracker } from "@/components/lessons/pathway-lesson-progress-tracker";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
@@ -38,6 +39,7 @@ import { buildQuickReviewBullets } from "@/lib/lessons/pathway-lesson-quick-revi
 import { extractExamFocusHighYieldLines, extractSecondaryExamContextLines } from "@/lib/lessons/pathway-lesson-study-extract";
 import { PathwayLessonStudyRail } from "@/components/lessons/pathway-lesson-study-rail";
 import { resolveLessonImage } from "@/lib/content/resolve-lesson-image";
+import { hasRenderableLessonImageUrl } from "@/lib/lessons/has-renderable-lesson-image";
 import { LessonClinicalImageCard } from "@/components/lessons/lesson-clinical-image-card";
 import { LessonAudioCard } from "@/components/lessons/lesson-audio-card";
 import { LessonSectionAudioButton } from "@/components/lessons/lesson-section-audio-button";
@@ -75,6 +77,8 @@ import {
 import { ExamTakeawaysBlock } from "@/components/lessons/exam-takeaways-block";
 import { PathwayLessonMemoryAnchorStrip } from "@/components/lessons/pathway-lesson-study-strips";
 import { lessonHasExamTakeaways } from "@/lib/lessons/exam-takeaways-items";
+import { resolveQuizEmbedQuestionsForLessonSlug } from "@/lib/lessons/lesson-quiz-embeds";
+import { PathwayLessonQuizEmbedSection } from "@/components/lessons/pathway-lesson-quiz-embed-section";
 import { resolvePathwayLessonBankAssessments } from "@/lib/lessons/lesson-bank-assessment-selection";
 import {
   loadPathwayLessonAdjacent,
@@ -155,6 +159,8 @@ export async function PathwayLessonDetailPageBody({
   if (routeResolution.kind === "not_found") notFound();
 
   const { lesson, fullAccess, scope, entitlementError } = routeResolution;
+  const linkedLearningSignals =
+    lesson.linkedLearningSignals ?? computePathwayLessonLinkedLearningSignals(pathway.id, lesson);
   const examName = pathwayRegionAwareExamName(pathway);
   const [bankAssessmentsRes, adjacentSlugsRes, contentDatesRes] = await Promise.allSettled([
     resolvePathwayLessonBankAssessments(pathway, lesson),
@@ -186,6 +192,7 @@ export async function PathwayLessonDetailPageBody({
 
   const base = marketingPathwayLessonsIndexPath(pathway);
   const blogHubPath = buildExamPathwayPath(pathway, "blog");
+  const lessonQuizEmbed = resolveQuizEmbedQuestionsForLessonSlug(lesson.slug);
 
   const lessonProgress =
     userId && fullAccess
@@ -389,7 +396,7 @@ export async function PathwayLessonDetailPageBody({
           </aside>
 
           <div className="min-w-0 xl:order-1 xl:col-start-1 xl:row-start-1">
-        {matchedLessonImage.url ? (
+        {matchedLessonImage.url && hasRenderableLessonImageUrl(matchedLessonImage.url) ? (
           <LessonClinicalImageCard
             url={matchedLessonImage.url}
             alt={matchedLessonImage.alt}
@@ -461,6 +468,19 @@ export async function PathwayLessonDetailPageBody({
                   );
                 })}
               </article>
+              {lessonQuizEmbed?.length ? (
+                <div className="mx-auto mt-8 max-w-5xl">
+                  <PathwayLessonQuizEmbedSection
+                    lessonSlug={lesson.slug}
+                    links={{
+                      practiceExamsHref: buildExamPathwayPath(pathway, "exams"),
+                      flashcardsHref: buildExamPathwayPath(pathway, "flashcards"),
+                      practiceQuestionsHref: buildExamPathwayPath(pathway, "questions"),
+                      relatedLessonsHref: base,
+                    }}
+                  />
+                </div>
+              ) : null}
             </div>
             {fullAccess && lessonHasExamTakeaways(lesson.studyTakeaways) ? (
               <div className="mx-auto mt-6 max-w-5xl">
@@ -484,6 +504,8 @@ export async function PathwayLessonDetailPageBody({
             canMarkComplete={fullAccess}
             initialProgress={lessonProgress}
             catAdaptiveAvailable={pathwayAllowsCatAdaptiveStart(pathway)}
+            linkedLearningSignals={linkedLearningSignals}
+            linkMode="marketing"
           />
         </PathwayLessonAssessmentExperience>
           </div>

@@ -21,8 +21,9 @@
  * Do NOT import or call `resolveLessonImage` from here.
  */
 
-import * as React from "react";
 import type { LessonImageSource } from "@/lib/content/resolve-lesson-image";
+import { hasRenderableLessonImageUrl } from "@/lib/lessons/has-renderable-lesson-image";
+import { SafeLessonRemoteImage } from "@/components/lessons/safe-lesson-remote-image";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -133,7 +134,7 @@ export function LessonClinicalImageCard({
   caption: captionProp,
   className = "",
 }: LessonClinicalImageCardProps) {
-  if (!url) return null;
+  if (!url || !hasRenderableLessonImageUrl(url)) return null;
 
   const label = resolveLabel(labelProp, source);
   const caption = resolveCaption(captionProp, lessonTitle, source);
@@ -176,28 +177,9 @@ export function LessonClinicalImageCard({
             border: "1px solid color-mix(in srgb, var(--lesson-media-border) 55%, transparent)",
           }}
         >
-          {/*
-           * eslint-disable-next-line @next/next/no-img-element
-           * Rationale: CDN URLs from DigitalOcean Spaces already served at edge.
-           * Adding remotePatterns for every Spaces bucket sub-path creates churn;
-           * the resolver ensures only inventory-registered URLs reach here.
-           */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <SafeLessonRemoteImage
             src={url}
             alt={alt}
-            loading="lazy"
-            decoding="async"
-            /*
-             * object-contain: preserves aspect ratio — avoids destructive cropping
-             * for portrait assets (anatomy diagrams, flow charts) and landscape
-             * (clinical procedure illustrations). Both formats are common in
-             * nursing education imagery.
-             *
-             * max-h capped at min(70vh, 520px) mirrors PathwayLessonFigures
-             * convention: large enough to be useful, not so large it dominates
-             * the lesson page on small/medium screens.
-             */
             className="block max-h-[min(70vh,520px)] w-full object-contain object-center"
           />
         </div>

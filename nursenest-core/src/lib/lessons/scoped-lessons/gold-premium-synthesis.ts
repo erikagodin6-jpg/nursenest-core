@@ -691,6 +691,9 @@ const LAB_CATALOG_DEPTH_PAD = `**When the stem prints labs**\nRe-check **units a
 const CLIENT_ED_CATALOG_PAD = `**Teaching that survives item review**\nFavor **specific return precautions** (what to call for, what to track at home when appropriate) over generic reassurance, and keep teaching **inside the role** the stem assigns so you do not drift into out-of-scope prescribing language.`;
 
 function defaultPeerSlugsForPathway(pathwayId: string): string[] {
+  if (pathwayId === "ca-np-cnple" || pathwayId === "us-np-fnp") {
+    return ["np-primary-care-foundations-gold", "np-heart-failure-primary-care-gold", "np-type2-diabetes-outpatient-gold"];
+  }
   if (pathwayId.startsWith("ca-")) {
     return ["fluid-balance-acute-care", "cardiovascular-prioritization"];
   }

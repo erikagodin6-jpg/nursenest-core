@@ -18,7 +18,7 @@ const packageRoot = fileURLToPath(new URL(".", import.meta.url));
 const workspaceRoot = fileURLToPath(new URL("..", import.meta.url));
 const sharedRoot = path.join(workspaceRoot, "shared");
 const legacyClientRoot = path.join(workspaceRoot, "client", "src");
-/** ~9GiB or less → assume webpack/static workers should stay minimal unless opted out. */
+/** ~9GiB or less — logged for operators; build concurrency stays fixed low regardless. */
 const autoLowMemoryHost = totalRamMb <= 9216;
 
 const lowMemoryOptOut = envExplicitlyFalse("NN_LOW_MEMORY_BUILD");
@@ -46,7 +46,8 @@ const isLowMemoryBuild =
  *
  * Note: Next.js 14.2 resolves `next.config.js` / `next.config.mjs` only (not `next.config.ts`).
  */
-const webpackParallelism = isLowMemoryBuild ? 1 : 2;
+/** Fixed low parallelism for all environments (local, CI, production compile) — avoids RAM spikes and duplicate workers. */
+const webpackParallelism = 1;
 
 function shouldEmitBuildConfigDiagnostics() {
   if (String(process.env.NN_NEXT_BUILD_CONFIG_LOG ?? "").trim() === "0") return false;
@@ -60,22 +61,23 @@ if (shouldEmitBuildConfigDiagnostics()) {
   console.log(
     "[nn-next-build-config]",
     JSON.stringify({
-      lowMemoryMode: isLowMemoryBuild,
+      lowMemoryHeuristic: isLowMemoryBuild,
       totalRamMb,
       autoLowMemoryHost,
       NN_LOW_MEMORY_BUILD: process.env.NN_LOW_MEMORY_BUILD ?? null,
       CI: process.env.CI ?? null,
       GITHUB_ACTIONS: process.env.GITHUB_ACTIONS ?? null,
       NN_APP_PLATFORM_BUILD: process.env.NN_APP_PLATFORM_BUILD ?? null,
-      experimentalCpus: isLowMemoryBuild ? 1 : "(Next default — not overridden)",
+      NN_FORCE_SINGLE_BUILD_WORKER: process.env.NN_FORCE_SINGLE_BUILD_WORKER ?? null,
+      experimentalCpus: 1,
       webpackParallelism,
       webpackPersistentCache: false,
-      webpackBuildWorker: isLowMemoryBuild ? false : true,
+      webpackBuildWorker: false,
+      workerThreads: false,
       memoryBasedWorkersCount: false,
       parallelServerCompiles: false,
       parallelServerBuildTraces: false,
-      staticGenerationMaxConcurrency:
-        "(not a Next 14.2 config key — worker pool size follows experimental.cpus when set)",
+      experimentalStaticGenerationMaxConcurrency: 1,
       skipNextIntegratedLintAndTypes: true,
     }),
   );
@@ -83,21 +85,19 @@ if (shouldEmitBuildConfigDiagnostics()) {
 
 const experimental = {
   externalDir: true,
+  cpus: 1,
   /** Prevents Next from scaling static workers from free RAM (can overshoot on small VMs). */
   memoryBasedWorkersCount: false,
   parallelServerCompiles: false,
   parallelServerBuildTraces: false,
   workerThreads: false,
+  /** Next 16 reads this under `experimental` (see `next/dist/server/config-schema.js`). */
+  staticGenerationMaxConcurrency: 1,
   /**
-   * `true`: run webpack in a child process (can help peak RSS on large hosts; adds a second Node heap).
-   * `false` for low-memory profile: single process + `parallelism` cap to reduce total RSS during compile.
+   * `false`: keep webpack in the main Node process (avoids a second heap during `next build`).
    */
-  webpackBuildWorker: isLowMemoryBuild ? false : true,
+  webpackBuildWorker: false,
 };
-
-if (isLowMemoryBuild) {
-  experimental.cpus = 1;
-}
 
 const nextConfig = {
   output: "standalone",

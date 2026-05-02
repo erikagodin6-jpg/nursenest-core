@@ -3890,11 +3890,18 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   background: color-mix(in srgb, var(--semantic-panel-muted) 35%, var(--theme-page-bg) 65%);
 }
 
-.nn-lesson-page--learner-app .nn-lesson-editorial-rail {
+.nn-lesson-page--learner-app .nn-lesson-editorial-rail--hero {
   width: 100%;
   max-width: min(48rem, 100%);
   margin-inline: auto;
   padding-inline: clamp(1rem, 3vw, 1.5rem);
+}
+
+.nn-lesson-page--learner-app .nn-lesson-editorial-rail--main {
+  width: 100%;
+  max-width: min(60rem, 100%);
+  margin-inline: 0;
+  padding-inline: clamp(0.5rem, 1.2vw, 1rem);
 }
 
 .nn-lesson-page--learner-app .nn-lesson-page-header {
@@ -3916,17 +3923,19 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 .nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--editorial {
   padding-top: 1rem;
   padding-bottom: 1.1rem;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
   scroll-margin-top: 4.5rem;
 }
 
 .nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout {
-  border-radius: 0.625rem;
+  border-radius: 0.75rem;
   border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--lsc-color) 12%);
   border-left-width: 3px;
   border-left-color: color-mix(in srgb, var(--lsc-color) 48%, var(--semantic-border-soft));
   background: color-mix(in srgb, var(--lsc-soft) 14%, var(--bg-card, var(--theme-card-bg)) 86%);
   box-shadow: none;
-  padding: 1rem 1rem 1.15rem 1.05rem;
+  padding: 1rem 0.95rem 1.15rem 0.95rem;
   scroll-margin-top: 4.5rem;
 }
 
@@ -3961,16 +3970,17 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   line-height: 1.28;
 }
 
-.nn-lesson-page--learner-app .nn-lesson-content.nn-lesson-prose,
-.nn-lesson-page--learner-app .nn-lesson-prose {
-  max-width: min(52ch, 100%);
+.nn-lesson-page--learner-app .nn-lesson-editorial-rail--main .nn-lesson-content.nn-lesson-prose,
+.nn-lesson-page--learner-app .nn-lesson-editorial-rail--main .nn-lesson-prose {
+  max-width: min(72ch, 100%);
+  width: 100%;
   font-size: 0.9375rem;
   line-height: 1.62;
 }
 
 @media (min-width: 768px) {
-  .nn-lesson-page--learner-app .nn-lesson-content.nn-lesson-prose,
-  .nn-lesson-page--learner-app .nn-lesson-prose {
+  .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main .nn-lesson-content.nn-lesson-prose,
+  .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main .nn-lesson-prose {
     font-size: 0.96875rem;
     line-height: 1.64;
   }
@@ -3997,8 +4007,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 @media (min-width: 1024px) {
   .nn-lesson-layout {
     display: grid;
-    grid-template-columns: 1fr 15rem;
-    gap: 2.5rem;
+    grid-template-columns: min(15.75rem, 26vw) minmax(0, 1fr);
+    gap: clamp(1.25rem, 2.2vw, 2.25rem);
     align-items: start;
   }
 }
@@ -4014,8 +4024,47 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 }
 
 /* ==========================================================================
- * Lesson quick-jump nav sidebar
+ * Lesson quick-jump nav — mobile drawer + desktop left rail
  * ========================================================================== */
+
+.nn-lesson-section-nav-mobile {
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 90%, var(--semantic-brand) 10%);
+  background: var(--bg-card);
+  box-shadow: var(--elevation-rest);
+}
+
+.nn-lesson-section-nav-mobile__summary {
+  display: flex;
+  cursor: pointer;
+  list-style: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+}
+
+.nn-lesson-section-nav-mobile__summary::-webkit-details-marker {
+  display: none;
+}
+
+.nn-lesson-section-nav-mobile[open] .nn-lesson-section-nav-mobile__chevron {
+  transform: rotate(180deg);
+}
+
+.nn-lesson-section-nav-mobile__chevron {
+  transition: transform var(--motion-base, 150ms) ease;
+}
+
+.nn-lesson-section-nav-mobile__panel {
+  border-top: 1px solid color-mix(in srgb, var(--semantic-border-soft) 92%, var(--semantic-brand) 8%);
+  padding: 0.5rem 0.35rem 0.65rem;
+  max-height: min(50vh, 22rem);
+  overflow-y: auto;
+}
 
 .nn-lesson-section-nav {
   display: none;

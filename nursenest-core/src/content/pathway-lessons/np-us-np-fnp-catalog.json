@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "generatedAt": "2026-05-02T07:13:05.149Z",
+  "source": "scripts/generate-np-parity-expansion-catalog.mjs",
+  "metadata": {
+    "description": "NP lessons for us-np-fnp (references core + pathway-specific metadata)",
+    "pathwayId": "us-np-fnp",
+    "examName": "FNP (AANP/ANCC)"
+  },
+  "pathwayMetadata": {
+    "examName": "FNP (AANP/ANCC)",
+    "country": "US",
+    "countryScope": "us"
+  },
+  "lessons": []
+}

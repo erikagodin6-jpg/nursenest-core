@@ -6,6 +6,7 @@ import {
   AlertTriangle,
   BookOpen,
   BriefcaseMedical,
+  ChevronDown,
   FlaskConical,
   GraduationCap,
   HeartPulse,
@@ -38,8 +39,8 @@ const ROLE_ICON = {
 } as const;
 
 /**
- * Sticky quick-jump sidebar for lesson sections.
- * Desktop only (hidden on mobile via CSS). Uses IntersectionObserver for active tracking.
+ * Sticky quick-jump sidebar (desktop, left column) + collapsible contents (mobile).
+ * Uses IntersectionObserver for active tracking on large screens.
  */
 export function LessonSectionNav({ sections }: { sections: SectionEntry[] }) {
   const [activeId, setActiveId] = useState<string | null>(sections[0]?.id ?? null);
@@ -48,7 +49,6 @@ export function LessonSectionNav({ sections }: { sections: SectionEntry[] }) {
   useEffect(() => {
     if (typeof window === "undefined" || sections.length === 0) return;
 
-    // Track which sections are visible; use the highest one in view as active.
     const sectionIdToY = new Map<string, number>();
 
     observerRef.current = new IntersectionObserver(
@@ -61,7 +61,6 @@ export function LessonSectionNav({ sections }: { sections: SectionEntry[] }) {
           }
         }
         if (sectionIdToY.size === 0) return;
-        // Pick the visible section closest to top of viewport.
         let best: string | null = null;
         let bestY = Infinity;
         for (const [id, y] of sectionIdToY) {
@@ -83,63 +82,77 @@ export function LessonSectionNav({ sections }: { sections: SectionEntry[] }) {
     return () => observerRef.current?.disconnect();
   }, [sections]);
 
+  const goTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      setActiveId(id);
+    }
+  };
+
   if (sections.length === 0) return null;
 
-  return (
-    <aside
-      className="nn-lesson-section-nav"
-      aria-label="Lesson sections"
-    >
-      <p
-        className="mb-3 text-xs font-semibold uppercase tracking-wider"
-        style={{ color: "var(--semantic-text-muted)" }}
-      >
-        Contents
-      </p>
-      <nav>
-        <ol className="space-y-1">
-          {sections.map((section) => {
-            const { role, chipLabel } = getLessonSectionTheme(section.kind ?? null);
-            const Icon = ROLE_ICON[role];
-            const isActive = activeId === section.id;
+  const navList = (
+    <ol className="space-y-1">
+      {sections.map((section) => {
+        const { role, chipLabel } = getLessonSectionTheme(section.kind ?? null);
+        const Icon = ROLE_ICON[role];
+        const isActive = activeId === section.id;
 
-            return (
-              <li key={section.id}>
-                <a
-                  href={`#${section.id}`}
-                  className="nn-lesson-nav-item"
-                  data-active={isActive ? "true" : undefined}
-                  aria-label={`Go to section: ${section.heading || chipLabel}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const el = document.getElementById(section.id);
-                    if (el) {
-                      el.scrollIntoView({ behavior: "smooth", block: "start" });
-                      setActiveId(section.id);
-                    }
-                  }}
-                >
-                  {/* Role color dot */}
-                  <span
-                    className="nn-lesson-nav-dot flex-shrink-0"
-                    data-role={role}
-                    aria-hidden="true"
-                  />
-                  <span className="flex min-w-0 flex-col gap-0.5">
-                    <span className="nn-lesson-nav-label line-clamp-2">
-                      {section.heading?.trim() || chipLabel}
-                    </span>
-                    <span className="nn-lesson-nav-chip flex items-center gap-1">
-                      <Icon className="h-2.5 w-2.5 flex-shrink-0" aria-hidden="true" />
-                      {chipLabel}
-                    </span>
-                  </span>
-                </a>
-              </li>
-            );
-          })}
-        </ol>
-      </nav>
-    </aside>
+        return (
+          <li key={section.id}>
+            <a
+              href={`#${section.id}`}
+              className="nn-lesson-nav-item"
+              data-active={isActive ? "true" : undefined}
+              aria-current={isActive ? "location" : undefined}
+              aria-label={`Go to section: ${section.heading || chipLabel}`}
+              onClick={(e) => {
+                e.preventDefault();
+                goTo(section.id);
+              }}
+            >
+              <span className="nn-lesson-nav-dot flex-shrink-0" data-role={role} aria-hidden="true" />
+              <span className="flex min-w-0 flex-col gap-0.5">
+                <span className="nn-lesson-nav-label line-clamp-2">
+                  {section.heading?.trim() || chipLabel}
+                </span>
+                <span className="nn-lesson-nav-chip flex items-center gap-1">
+                  <Icon className="h-2.5 w-2.5 flex-shrink-0" aria-hidden="true" />
+                  {chipLabel}
+                </span>
+              </span>
+            </a>
+          </li>
+        );
+      })}
+    </ol>
+  );
+
+  return (
+    <>
+      <details className="nn-lesson-section-nav-mobile lg:hidden">
+        <summary className="nn-lesson-section-nav-mobile__summary">
+          <span className="flex items-center gap-2">
+            <BookOpen className="h-4 w-4 shrink-0 opacity-80" aria-hidden />
+            Lesson contents
+          </span>
+          <ChevronDown className="nn-lesson-section-nav-mobile__chevron h-4 w-4 shrink-0 opacity-70" aria-hidden />
+        </summary>
+        <div className="nn-lesson-section-nav-mobile__panel">
+          <nav aria-label="Lesson sections (mobile)">{navList}</nav>
+        </div>
+      </details>
+
+      <aside className="nn-lesson-section-nav" aria-label="Lesson sections">
+        <p
+          className="mb-3 text-xs font-semibold uppercase tracking-wider"
+          style={{ color: "var(--semantic-text-muted)" }}
+        >
+          Contents
+        </p>
+        <nav>{navList}</nav>
+      </aside>
+    </>
   );
 }

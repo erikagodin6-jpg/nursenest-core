@@ -1,0 +1,25 @@
+# Reduce Cursor indexing / file-watcher load (see docs/dev/cursor-stability.md)
+.next/
+nursenest-core/.next/
+node_modules/
+nursenest-core/node_modules/
+reports/
+nursenest-core/reports/
+scripts/
+nursenest-core/scripts/
+dist/
+nursenest-core/dist/
+build/
+nursenest-core/build/
+coverage/
+nursenest-core/coverage/
+*.log
+**/*.log
+*.json
+**/*.json
+src/content/pathway-lessons/generated-indexes/
+nursenest-core/src/content/pathway-lessons/generated-indexes/
+blog-output/
+nursenest-core/blog-output/
+blog-temp/
+nursenest-core/blog-temp/
