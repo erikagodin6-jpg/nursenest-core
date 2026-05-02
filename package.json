@@ -19,6 +19,7 @@
     "verify:dist": "node scripts/verify-dist-artifacts.mjs",
     "production:build": "bash scripts/production-build.sh",
     "check": "tsc",
+    "cursor:clean": "node scripts/cursor-clean.mjs",
     "check:server": "tsc --noEmit -p tsconfig.server.json",
     "check:bundle-size": "node scripts/check-bundle-size.mjs",
     "migrate:flashcards": "tsx scripts/migrate-flashcards-to-postgres.ts",

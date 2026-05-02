@@ -1,6 +1,6 @@
 {
   "git.ignoreLimitWarning": true,
-  "typescript.tsserver.maxTsServerMemory": 8192,
+  "typescript.tsserver.maxTsServerMemory": 12288,
   "typescript.disableAutomaticTypeAcquisition": true,
   "files.watcherExclude": {
     "**/.git/objects/**": true,
@@ -19,7 +19,19 @@
     "**/nursenest-core/.next/**": true,
     "**/client/public/**": true,
     "**/client/src/data/translations/**": true,
-    "**/client/src/assets/**": true
+    "**/client/src/assets/**": true,
+    "**/reports/**": true,
+    "**/test-results/**": true,
+    "**/playwright-report/**": true,
+    "**/blob-report/**": true,
+    "**/tmp/**": true,
+    "**/temp/**": true,
+    "**/.tmp/**": true,
+    "**/logs/**": true,
+    "**/blog-output/**": true,
+    "**/blog-temp/**": true,
+    "**/src/content/pathway-lessons/generated-indexes/**": true,
+    "**/nursenest-core/src/content/pathway-lessons/generated-indexes/**": true
   },
   "search.exclude": {
     "**/node_modules": true,
@@ -32,7 +44,28 @@
     "**/replit-export": true,
     "**/nursenest-core/data": true,
     "**/nursenest-core/public": true,
-    "**/client/src/data/translations": true
+    "**/client/src/data/translations": true,
+    "**/reports": true,
+    "**/test-results": true,
+    "**/playwright-report": true,
+    "**/blob-report": true,
+    "**/tmp": true,
+    "**/temp": true,
+    "**/.tmp": true,
+    "**/logs": true,
+    "**/blog-output": true,
+    "**/blog-temp": true,
+    "**/src/content/pathway-lessons/generated-indexes": true,
+    "**/nursenest-core/src/content/pathway-lessons/generated-indexes": true
+  },
+  "files.exclude": {
+    "**/.next": true,
+    "**/node_modules": true,
+    "**/coverage": true,
+    "**/test-results": true,
+    "**/playwright-report": true,
+    "**/blob-report": true,
+    "**/.turbo": true
   },
   "vibecheck.watchMode": true
 }

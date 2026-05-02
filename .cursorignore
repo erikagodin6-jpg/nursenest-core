@@ -1,25 +1,65 @@
-# Reduce Cursor indexing / file-watcher load (see docs/dev/cursor-stability.md)
-.next/
-nursenest-core/.next/
+# Cursor indexing / file-watcher load (see docs/cursor-stability.md)
+# Do NOT list app source (src/app, src/components, src/lib, prisma, build scripts).
+
+# Dependencies and SCM
+.git/
+**/.git/
 node_modules/
-nursenest-core/node_modules/
-reports/
-nursenest-core/reports/
-scripts/
-nursenest-core/scripts/
+**/node_modules/
+
+# Next.js / bundler output
+.next/
+**/.next/
+out/
+**/out/
 dist/
-nursenest-core/dist/
+**/dist/
 build/
-nursenest-core/build/
+**/build/
+
+# Tests and coverage
 coverage/
-nursenest-core/coverage/
+**/coverage/
+test-results/
+**/test-results/
+playwright-report/
+**/playwright-report/
+blob-report/
+**/blob-report/
+
+# Heavy generated / audit output trees (local churn; some paths may also be tracked)
+reports/
+**/reports/
+
+# Temp and caches
+.tmp/
+**/.tmp/
+tmp/
+**/tmp/
+temp/
+**/temp/
+.cache/
+**/.cache/
+.turbo/
+**/.turbo/
+
+# Logs
+logs/
+**/logs/
 *.log
 **/*.log
-*.json
-**/*.json
+
+# Playwright / E2E artifacts (videos, traces, screenshots)
+**/trace.zip
+**/*.webm
+**/playwright/.cache/
+
+# Generated lesson indexes (large JSON)
 src/content/pathway-lessons/generated-indexes/
-nursenest-core/src/content/pathway-lessons/generated-indexes/
+**/src/content/pathway-lessons/generated-indexes/
+
+# Generated blog output / manifests (not lesson MD source of truth)
 blog-output/
-nursenest-core/blog-output/
+**/blog-output/
 blog-temp/
-nursenest-core/blog-temp/
+**/blog-temp/

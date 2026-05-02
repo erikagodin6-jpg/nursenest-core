@@ -1,3 +1,8 @@
+/**
+ * DB-backed printables checks. When `printable_products` exists (migration applied), these run fully.
+ * Otherwise `integrationDbAvailable()` is false and tests skip — same condition as
+ * `printables-production-readiness.mts` without `PRINTABLES_READINESS_SKIP_DB=1`.
+ */
 import assert from "node:assert/strict";
 import { randomBytes } from "node:crypto";
 import test from "node:test";

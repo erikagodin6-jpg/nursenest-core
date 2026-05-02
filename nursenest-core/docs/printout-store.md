@@ -16,14 +16,32 @@ Spaces upload/download requires existing Spaces env vars used elsewhere (`SPACES
 
 From the `nursenest-core` app directory (where `prisma/schema.prisma` lives):
 
+**Required env (no secrets committed here):** Prisma reads **`DATABASE_URL`** and **`DIRECT_URL`** from `.env.local` / shell (see `prisma/schema.prisma` datasource). If either is missing, `prisma validate` / `migrate` will fail — fix local env files; do not hardcode credentials in the repo.
+
+Use the same loader as CI and local DB scripts:
+
 ```bash
-npx prisma validate
-npx prisma migrate status
-# production / CI:
-npx prisma migrate deploy
+npx tsx scripts/run-prisma-with-env.mts validate
+npx tsx scripts/run-prisma-with-env.mts migrate status
+npx tsx scripts/run-prisma-with-env.mts migrate deploy
 ```
 
+`src/lib/db/env-bootstrap.ts` may infer a direct connection when `DIRECT_URL` is omitted but `DATABASE_URL` points at a pooled host (see CLI logs: `DIRECT_URL present`).
+
 Migration folder: `prisma/migrations/20260515120000_printable_store/`.
+
+**Target database must be the real app Postgres** (with `users`, `media_assets`, etc.). Applying migrations to an empty or wrong database can fail mid-chain (e.g. `relation "users" does not exist` on FK creation) and leave Prisma in **`P3018`** — resolve using [Prisma migrate troubleshooting](https://www.prisma.io/docs/guides/migrate/troubleshooting-development) (mark rolled-back / repair) before retrying.
+
+### Production readiness check
+
+Static + optional DB verification (tables exist):
+
+```bash
+cd nursenest-core
+npx tsx src/lib/printables/printables-production-readiness.mts
+# CI without DB:
+PRINTABLES_READINESS_SKIP_DB=1 npx tsx src/lib/printables/printables-production-readiness.mts
+```
 
 ## Storage requirements
 
