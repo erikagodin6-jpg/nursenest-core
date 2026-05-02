@@ -70,4 +70,4 @@ COPY --from=builder /app/nursenest-core/node_modules ./node_modules
 
 EXPOSE 8080
 
-CMD ["npm", "run", "start"]
+CMD ["node", "scripts/start-standalone.mjs"]

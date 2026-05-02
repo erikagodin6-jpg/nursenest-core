@@ -28,7 +28,7 @@ services:
     # `.next/cache` is removed in the image after compile to keep the runtime image smaller (layer cache handles deps).
     # Marketing production-surface validate remains in GitHub `verify-build.yml` only.
     # Standalone server only (next.config output:standalone). Do not use `next start`.
-    run_command: npm run start
+    run_command: node scripts/start-standalone.mjs
     http_port: 8080
     routes:
       - path: /

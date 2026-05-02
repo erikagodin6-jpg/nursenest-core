@@ -15,6 +15,7 @@
     "content:export:question-banks": "tsx scripts/export-question-bank-json.ts",
     "start": "node --import ./instrumentation.node.ts scripts/start-production.mjs",
     "heroku:local": "node scripts/start-production.mjs",
+    "verify:do-runtime": "node scripts/verify-digitalocean-runtime.mjs",
     "verify:dist": "node scripts/verify-dist-artifacts.mjs",
     "production:build": "bash scripts/production-build.sh",
     "check": "tsc",

@@ -294,4 +294,3 @@ Exclusions:
 - Mapped lesson count: 4
 - Mapped lesson slugs: allied-clinical-documentation, allied-medical-terminology, allied-medication-safety, allied-pharmacology-basics
 - Notes: Profession page has a live lesson-source mapping through allied topic filters.
-
