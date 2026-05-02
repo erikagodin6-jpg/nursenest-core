@@ -106,6 +106,10 @@ if (!keys.has("AUTH_SECRET") && !keys.has("NEXTAUTH_SECRET")) {
   fail("app spec must document AUTH_SECRET and/or NEXTAUTH_SECRET as a runtime secret");
 }
 
+if (!keys.has("NODE_MAX_OLD_SPACE_SIZE_MB")) {
+  fail("app spec must set NODE_MAX_OLD_SPACE_SIZE_MB for standalone child runtime heap");
+}
+
 if (!keys.has("AUTH_SECRET")) {
   console.warn("[verify:do-runtime] warning: AUTH_SECRET is preferred over legacy NEXTAUTH_SECRET");
 }
@@ -124,6 +128,7 @@ for (const requiredCopy of [
 }
 
 assertIncludes(dockerfile, "EXPOSE 8080", "Dockerfile");
+assertIncludes(dockerfile, "NODE_MAX_OLD_SPACE_SIZE_MB=768", "Dockerfile runner ENV");
 
 if (!/(CMD|ENTRYPOINT)\s+\[/.test(dockerfile)) {
   fail("Dockerfile runner stage must define CMD or ENTRYPOINT");

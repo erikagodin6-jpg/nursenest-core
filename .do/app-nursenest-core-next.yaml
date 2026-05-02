@@ -129,6 +129,11 @@ services:
       - key: HOSTNAME
         value: "0.0.0.0"
         scope: RUN_TIME
+      # Heap for the standalone child server. The bootstrap parent reads this when NODE_OPTIONS has no heap flag.
+      # basic-xs is 1 GiB; 512 MiB OOMs during standalone startup, while 768 MiB leaves headroom for the parent.
+      - key: NODE_MAX_OLD_SPACE_SIZE_MB
+        value: "768"
+        scope: RUN_TIME
       - key: AUTH_TRUST_HOST
         value: "true"
         scope: RUN_TIME
