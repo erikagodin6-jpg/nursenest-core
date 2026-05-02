@@ -7,7 +7,6 @@
  * @see PATHWAY_LAUNCH_APPROVED — human sign-off for `published`.
  */
 
-import { ExamFamily } from "@prisma/client";
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import { REGION_CONFIG } from "@/lib/i18n/global-regions";
 import type { CountrySlug } from "@/lib/exam-pathways/types";
@@ -217,7 +216,7 @@ export function evaluatePathwayLaunchReadiness(
 
   const isCaNpCnpleWaitlistShell = pathway.id === CA_NP_CNPLE_PATHWAY_ID;
   const isIntlFoundation = isIntlRnFoundationPathwayId(pathway.id);
-  const isNpFamily = pathway.examFamily === ExamFamily.NP;
+  const isNpFamily = pathway.examFamily === "NP";
   const minLessonsRequired = isIntlFoundation || isCaNpCnpleWaitlistShell
     ? 0
     : isNpFamily
