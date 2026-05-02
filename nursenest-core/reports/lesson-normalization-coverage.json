@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-01T22:07:22.861Z",
+  "generatedAt": "2026-05-02T04:55:52.052Z",
   "pathways": [
     {
       "pathwayId": "ca-allied-core",
@@ -59,17 +59,17 @@
       "pathwayId": "ca-rpn-rex-pn",
       "publicLessonsPath": null,
       "publicUrlPattern": "/canada/pn/rex-pn/lessons/{lessonSlug}",
-      "rawCount": 150,
-      "normalizedCount": 150,
-      "renderableCount": 150,
+      "rawCount": 478,
+      "normalizedCount": 478,
+      "renderableCount": 478,
       "excludedCount": 0,
-      "rawToRenderableRatio": "150/150 (100%)",
+      "rawToRenderableRatio": "478/478 (100%)",
       "unexpectedExclusionRate": 0,
       "passesExclusionQualityGate": true,
       "topExclusionReasons": [],
       "exclusions": [],
       "unexpectedExclusionCount": 0,
-      "sampleRenderableLessonPath": "/canada/pn/rex-pn/lessons/acute-coronary-syndrome-gold",
+      "sampleRenderableLessonPath": "/canada/pn/rex-pn/lessons/rpn-anticoagulant-safety-teaching",
       "forcePublishEnabled": false,
       "forcePublishedLessons": []
     },

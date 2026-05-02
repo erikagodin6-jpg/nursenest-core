@@ -156,6 +156,8 @@ let rnExamNotesIntegrationExpansionPathwaysCache: Record<string, CatalogShape["p
 let rnExamNotesIntegrationBatch3ExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 /** RN NCLEX-RN exam-notes integration batch 4 (merged after batch 3; deduped by slug). */
 let rnExamNotesIntegrationBatch4ExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
+/** REx-PN parity expansion rows (merged for Canadian RPN only; deduped by slug). */
+let rpnParityExpansionPathwaysCache: Record<string, CatalogShape["pathways"][string]["lessons"]> | null = null;
 let newGradTransitionPathwaysCache: Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> | null = null;
 
 function getCatalogData(): CatalogShape {
@@ -456,6 +458,20 @@ function rnExamNotesIntegrationBatch4ExpansionLessonsForPathway(pathwayId: strin
   return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
 }
 
+function getRpnParityExpansionPathways(): Record<string, CatalogShape["pathways"][string]["lessons"]> {
+  if (rpnParityExpansionPathwaysCache) return rpnParityExpansionPathwaysCache;
+  rpnParityExpansionPathwaysCache =
+    (catalogBundleRequire("@/content/pathway-lessons/rpn-rex-pn-parity-expansion-catalog.json") as {
+      pathways?: Record<string, CatalogShape["pathways"][string]["lessons"]>;
+    }).pathways ?? {};
+  return rpnParityExpansionPathwaysCache;
+}
+
+function rpnParityExpansionLessonsForPathway(pathwayId: string): LessonInput[] {
+  const rows = getRpnParityExpansionPathways()[pathwayId];
+  return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
 function getNewGradTransitionPathways(): Record<string, { lessons?: CatalogShape["pathways"][string]["lessons"] }> {
   if (newGradTransitionPathwaysCache) return newGradTransitionPathwaysCache;
   newGradTransitionPathwaysCache =
@@ -533,6 +549,7 @@ export function resetCatalogLessonsRawMergeCacheForTests(): void {
   rnExamNotesIntegrationExpansionPathwaysCache = null;
   rnExamNotesIntegrationBatch3ExpansionPathwaysCache = null;
   rnExamNotesIntegrationBatch4ExpansionPathwaysCache = null;
+  rpnParityExpansionPathwaysCache = null;
   newGradTransitionPathwaysCache = null;
   catalogLessonsRawByPathwayIdCache.clear();
   pathwayNormalizedCatalogRows.clear();
@@ -1573,6 +1590,7 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
   const examNotesIntegrationExpansion = rnExamNotesIntegrationExpansionLessonsForPathway(pathwayId);
   const examNotesIntegrationBatch3Expansion = rnExamNotesIntegrationBatch3ExpansionLessonsForPathway(pathwayId);
   const examNotesIntegrationBatch4Expansion = rnExamNotesIntegrationBatch4ExpansionLessonsForPathway(pathwayId);
+  const rpnParityExpansion = rpnParityExpansionLessonsForPathway(pathwayId);
   const newGrad = newGradTransitionLessonsForPathway(pathwayId);
   const seen = new Set<string>();
   const merged: LessonInput[] = [];
@@ -1598,6 +1616,7 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
     ...examNotesIntegrationExpansion,
     ...examNotesIntegrationBatch3Expansion,
     ...examNotesIntegrationBatch4Expansion,
+    ...rpnParityExpansion,
     ...newGrad,
   ]) {
     if (seen.has(l.slug)) continue;
@@ -1727,6 +1746,12 @@ function buildCatalogLessonsRawUncached(pathwayId: string): LessonInput[] {
         merged.push(extra);
       }
       for (const extra of rnExamNotesIntegrationBatch4ExpansionLessonsForPathway(pathwayId)) {
+        const s = extra.slug.trim();
+        if (!s || seen.has(s)) continue;
+        seen.add(s);
+        merged.push(extra);
+      }
+      for (const extra of rpnParityExpansionLessonsForPathway(pathwayId)) {
         const s = extra.slug.trim();
         if (!s || seen.has(s)) continue;
         seen.add(s);

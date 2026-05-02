@@ -1,6 +1,6 @@
 # Lesson Normalization Coverage
 
-Generated at: 2026-05-01T22:07:22.861Z
+Generated at: 2026-05-02T04:55:52.052Z
 
 ## Pathway Coverage
 
@@ -69,15 +69,15 @@ Exclusions:
 
 ### `ca-rpn-rex-pn`
 
-- Raw lessons: 150
-- Normalized lessons: 150
-- Renderable lessons: 150
+- Raw lessons: 478
+- Normalized lessons: 478
+- Renderable lessons: 478
 - Excluded lessons: 0
-- Raw to renderable ratio: 150/150 (100%)
+- Raw to renderable ratio: 478/478 (100%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
 - Public URL pattern: /canada/pn/rex-pn/lessons/{lessonSlug}
-- Sample public lesson path: /canada/pn/rex-pn/lessons/acute-coronary-syndrome-gold
+- Sample public lesson path: /canada/pn/rex-pn/lessons/rpn-anticoagulant-safety-teaching
 - Force publish mode: off
 
 Force-published lessons: None
@@ -294,3 +294,4 @@ Exclusions:
 - Mapped lesson count: 4
 - Mapped lesson slugs: allied-clinical-documentation, allied-medical-terminology, allied-medication-safety, allied-pharmacology-basics
 - Notes: Profession page has a live lesson-source mapping through allied topic filters.
+
