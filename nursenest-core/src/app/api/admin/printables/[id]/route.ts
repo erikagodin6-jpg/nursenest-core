@@ -59,7 +59,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   const existing = await prisma.printableProduct.findUnique({ where: { id } });
   if (!existing) return NextResponse.json({ ok: false, code: "not_found" }, { status: 404, headers: PRIVATE.headers });
 
-  const patch: Prisma.PrintableProductUpdateInput = { updatedByUserId: gate.admin.userId };
+  const patch: Prisma.PrintableProductUncheckedUpdateInput = { updatedByUserId: gate.admin.userId };
 
   if (typeof data.title === "string") patch.title = data.title.trim().slice(0, 512);
   if (typeof data.description === "string") patch.description = data.description.trim();
