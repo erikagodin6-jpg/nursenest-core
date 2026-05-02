@@ -93,6 +93,21 @@ export function collectPaywallSafeCtaIssues(html: string): string[] {
 }
 
 /**
+ * Long-form SEO posts should open from exam-style or bedside framing (not encyclopedia-only).
+ */
+export function collectClinicalScenarioSurfaceIssues(html: string): string[] {
+  const plain = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  const scenarioLike =
+    /\b(patient|client)\b.{0,160}\b(presents|reports|arrives|is brought|complains of)\b|\bclinical (scenario|vignette)\b|\bexam[-\s]?style\b|\b(NCLEX|REx[-\s]?PN|REX[-\s]?PN)\b.{0,100}\b(question|stem|item)\b|\bpractice question\b|\bwhich (finding|intervention|action)\b|\bstem:\b|\bcase study\b/i;
+  if (!scenarioLike.test(plain)) {
+    return [
+      "Clinical or exam-style scenario framing is required (e.g., patient stem, vignette, NCLEX/REx-PN-style question setup, or explicit practice question).",
+    ];
+  }
+  return [];
+}
+
+/**
  * For generated articles: require several clinical teaching arcs visible in H2 headings (not only intro/conclusion).
  */
 export function collectGenericClinicalSurfaceIssues(body: string): string[] {

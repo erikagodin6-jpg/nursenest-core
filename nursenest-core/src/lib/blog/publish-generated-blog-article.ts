@@ -17,6 +17,7 @@ import {
 } from "@/lib/blog/blog-pre-publish-validation";
 import type { BlogCanonicalPublishContext, PublishBlogPostCanonicalResult } from "@/lib/blog/publish-blog-post-canonical";
 import {
+  collectClinicalScenarioSurfaceIssues,
   collectGeneratedBlogInternalLinkCoverageIssues,
   collectGenericClinicalSurfaceIssues,
   collectPaywallSafeCtaIssues,
@@ -24,6 +25,11 @@ import {
   collectPaywallUnsafeLessonLabelIssues,
   countApaStyleInTextCitations,
 } from "@/lib/blog/blog-generated-publish-gates";
+import {
+  collectVerifiedSourceRecencyIssues,
+  minimumPublicationYearForBlogReferences,
+} from "@/lib/blog/blog-citation-recency";
+import type { BlogSourceRecord } from "@/lib/blog/apa7";
 import { logBlogGenerationRejected } from "@/lib/blog/blog-generation-log";
 
 export type PublishGeneratedBlogArticleOptions = {
@@ -89,6 +95,17 @@ function verifiedReferenceCount(row: BlogPostPrePublishPayload): number {
   return row.apaReferences.filter((line) => line.trim()).length;
 }
 
+function structuredSourcesForRecencyCheck(row: BlogPostPrePublishPayload): BlogSourceRecord[] {
+  const parsed = parseBlogSourcesJson(row.sourcesJson);
+  if (parsed.envelope?.verified.length) {
+    return parsed.envelope.verified.map((v) => {
+      const { provenance: _p, ...rest } = v;
+      return rest as BlogSourceRecord;
+    });
+  }
+  return parsed.legacyRecords;
+}
+
 export async function validateGeneratedBlogPublishEligibility(
   row: BlogPostPrePublishPayload,
   postId: string,
@@ -127,9 +144,16 @@ export async function validateGeneratedBlogPublishEligibility(
         `APA-style in-text citations are required for substantive clinical claims (found ${intext}; minimum ${MIN_APA_INTEXT_CITATIONS} parenthetical citations with a year, e.g., (National Institute of Nursing Research, 2021)).`,
       );
     }
+    const structured = structuredSourcesForRecencyCheck(row);
+    if (structured.length > 0) {
+      reasons.push(
+        ...collectVerifiedSourceRecencyIssues(structured, minimumPublicationYearForBlogReferences()),
+      );
+    }
   }
 
   if (options.requireClinicalSectionDepth !== false) {
+    reasons.push(...collectClinicalScenarioSurfaceIssues(row.body));
     reasons.push(...collectGenericClinicalSurfaceIssues(row.body));
   }
 

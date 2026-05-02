@@ -26,6 +26,9 @@ function longWords(n: number): string {
   return `<p>${Array.from({ length: n }, (_, index) => `term${index}`).join(" ")}</p>`;
 }
 
+const SCENARIO_LEAD =
+  "<p>NCLEX-style question: a patient presents for evaluation and needs a safe, prioritized teaching plan before discharge.</p>";
+
 const CLINICAL_DEPTH_TAIL =
   "<h2>Pathophysiology</h2><p>Mechanism (National Council of State Boards of Nursing, 2023).</p>" +
   "<h2>Signs and symptoms</h2><p>Presentation (Centers for Disease Control and Prevention, 2024).</p>" +
@@ -43,7 +46,7 @@ function baseRow(overrides: Partial<BlogPostPrePublishRow> = {}): BlogPostPrePub
     slug,
     title: "How to study for NCLEX with structured question review",
     excerpt: "A concrete study-strategy article preview with enough substance for public blog cards and validation.",
-    body: `${longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 60)}${CLINICAL_DEPTH_TAIL}`,
+    body: `${SCENARIO_LEAD}${longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 60)}${CLINICAL_DEPTH_TAIL}`,
     exam: "NCLEX-RN",
     category: "Exam strategy",
     tags: ["nclex", "study strategy"],
@@ -275,7 +278,7 @@ describe("validateGeneratedBlogPublishEligibility", () => {
       "<h2>NCLEX relevance and clinical pearls</h2><p>Trap text.</p>" +
       "<p>Want more practice? NurseNest members can review the related lesson, flashcards, and rationale-based questions.</p>";
     const row = baseRow({
-      body: longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 80) + noIntextTail,
+      body: SCENARIO_LEAD + longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 80) + noIntextTail,
     });
     const res = await validateGeneratedBlogPublishEligibility(row, row.id, options());
     assert.equal(res.ok, false);
@@ -319,9 +322,34 @@ describe("validateGeneratedBlogPublishEligibility", () => {
     assert.ok(res.reasons.some((reason) => reason.includes("flashcards") || reason.includes("questions")));
   });
 
+  it("blocks when structured sources include a year before the rolling recency window", async () => {
+    const verified = (baseRow().sourcesJson as { verified: object[] }).verified.map((v) => ({ ...v }));
+    verified[0] = { ...verified[0], year: "2010", foundational: false };
+    const row = baseRow({
+      sourcesJson: {
+        version: 2,
+        verified,
+        excluded: [],
+        generatedAt: new Date().toISOString(),
+      },
+    });
+    const res = await validateGeneratedBlogPublishEligibility(row, row.id, options());
+    assert.equal(res.ok, false);
+    assert.ok(res.reasons.some((reason) => reason.includes("2010") || reason.includes("window")));
+  });
+
+  it("blocks when clinical scenario framing is missing", async () => {
+    const row = baseRow({
+      body: `${longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 60)}${CLINICAL_DEPTH_TAIL}`,
+    });
+    const res = await validateGeneratedBlogPublishEligibility(row, row.id, options());
+    assert.equal(res.ok, false);
+    assert.ok(res.reasons.some((reason) => reason.includes("scenario") || reason.includes("exam-style")));
+  });
+
   it("blocks generic surface-level sectioning", async () => {
     const thin =
-      `${longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 40)}` +
+      `${SCENARIO_LEAD}${longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 40)}` +
       "<h2>Study tips</h2><p>Generic advice.</p>" +
       "<h2>Overview</h2><p>More generic advice.</p>" +
       "<h2>Keywords</h2><p>Filler.</p>" +
