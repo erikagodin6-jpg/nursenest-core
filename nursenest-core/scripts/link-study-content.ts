@@ -13,6 +13,7 @@
 import "dotenv/config";
 import { ContentStatus } from "@prisma/client";
 import { prisma } from "./lib/prisma-script-client";
+import { assertStudyLinkSchemaReady } from "./lib/schema-readiness-guard";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-pathways-catalog";
 import {
   indexLessonsByPathwayTopic,
@@ -63,6 +64,11 @@ async function main() {
     console.log("[STUDY_LINK_PLAN] DATABASE_URL not configured — exiting.");
     process.exit(0);
   }
+
+  // Schema readiness guard: fail early if migration columns are missing.
+  // This prevents partial writes and cryptic Prisma errors when the DB
+  // schema hasn't been migrated yet.
+  await assertStudyLinkSchemaReady();
 
   const pathways = pathwayFilter
     ? EXAM_PATHWAYS.filter((p) => p.id === pathwayFilter)

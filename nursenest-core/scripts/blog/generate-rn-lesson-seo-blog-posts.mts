@@ -54,12 +54,13 @@ async function main(): Promise<void> {
     whenMissingDatabaseUrlLog:
       "[rn-lesson-seo] DATABASE_URL missing; run with configured DB to read lessons and write blog posts.",
   });
-  if (!env.databaseUrlSet) {
-    console.error("[rn-lesson-seo] DATABASE_URL is required.");
+  const needsDatabase = args.apply || args.source === "db";
+  if (needsDatabase && !env.databaseUrlSet) {
+    console.error("[rn-lesson-seo] DATABASE_URL is required for DB lesson reads or writes.");
     process.exit(1);
   }
 
-  const prisma = new PrismaClient();
+  const prisma = env.databaseUrlSet ? new PrismaClient() : null;
   const now = new Date();
   const CAREER_SLUG_RN = "rn" as const;
   try {
@@ -82,6 +83,9 @@ async function main(): Promise<void> {
       }
       lessons = merged;
     } else {
+      if (!prisma) {
+        throw new Error("DATABASE_URL is required when --source=db is used.");
+      }
       const rows = await prisma.pathwayLesson.findMany({
         where: {
           pathwayId: { in: [...RN_LESSON_BLOG_PATHWAY_IDS] },
@@ -116,13 +120,15 @@ async function main(): Promise<void> {
         const draft = buildRnLessonSeoDraft({ lesson, variant });
         const keywordCluster = keywordClusterFromDuplicateHash(draft.hash);
 
-        const existing = await prisma.blogPost.findFirst({
-          where: {
-            careerSlug: CAREER_SLUG_RN,
-            OR: [{ keywordCluster }, { slug: draft.slug }],
-          },
-          select: { id: true, slug: true, title: true, careerSlug: true },
-        });
+        const existing = prisma
+          ? await prisma.blogPost.findFirst({
+              where: {
+                careerSlug: CAREER_SLUG_RN,
+                OR: [{ keywordCluster }, { slug: draft.slug }],
+              },
+              select: { id: true, slug: true, title: true, careerSlug: true },
+            })
+          : null;
 
         if (existing) {
           skipped += 1;
@@ -169,6 +175,9 @@ async function main(): Promise<void> {
         };
 
         if (args.apply) {
+          if (!prisma) {
+            throw new Error("DATABASE_URL is required when --apply is used.");
+          }
           await prisma.blogPost.create({ data: row });
         }
         created += 1;
@@ -189,6 +198,7 @@ async function main(): Promise<void> {
         {
           mode: args.apply ? "apply" : "dry_run",
           source: args.source,
+          databaseBackedDedupe: prisma ? "enabled" : "skipped",
           generatedAt: now.toISOString(),
           publishDate: toIsoDateOnly(now),
           pathways: RN_LESSON_BLOG_PATHWAY_IDS,
@@ -203,7 +213,7 @@ async function main(): Promise<void> {
       ),
     );
   } finally {
-    await prisma.$disconnect();
+    if (prisma) await prisma.$disconnect();
   }
 }
 
@@ -211,4 +221,3 @@ main().catch((error) => {
   console.error("[rn-lesson-seo] failed", error);
   process.exit(1);
 });
-
