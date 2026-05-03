@@ -1,6 +1,6 @@
 {
   "batchId": "example-pathophys-pharm-mix-01",
-  "notes": "Copy to pathophys-pharm-seo-batch.json (gitignored locally if preferred). Generate with: cd nursenest-core && npx tsx scripts/generate-blog-posts.ts --topics-file=./scripts/blog/your-topics.txt --pathway=<id> --min-words=1800 --publish (after review). Canonical storage: Postgres BlogPost via existing pipeline — not files under reports/.",
+  "notes": "Copy to pathophys-pharm-seo-batch.json (gitignored locally if preferred). Split per pathway: npx tsx scripts/blog/export-batch-topics.mts --file=./scripts/blog/pathophys-pharm-seo-batch.example.json. Then: cd nursenest-core && npx tsx scripts/generate-blog-posts.ts --topics-file=./path/to/<pathway>.topics.txt --pathway=<id> --min-words=1800 [--publish after review]. Canonical storage: Postgres BlogPost via publishBlogPostCanonical — not reports/ or ad-hoc hidden dirs.",
   "items": [
     {
       "topic": "Why does hyperkalemia widen the QRS on the monitor — mechanism and first nursing actions (NCLEX-style)",
@@ -64,6 +64,13 @@
       "tier": "Allied",
       "occupation": "Social Work",
       "domains": ["pharmacology", "medication safety"]
+    },
+    {
+      "topic": "Psychotherapy exam prep: when should you hold or adjust MAOIs relative to other antidepressants — mechanism and safety",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": ["pharmacology", "contraindications", "medication safety"]
     },
     {
       "topic": "PSW exam question: insulin timing with meals — hypoglycemia prevention and observation priorities",

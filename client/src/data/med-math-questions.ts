@@ -571,15 +571,15 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "iv-13",
     category: "iv-flow",
     statement: "Order: Infuse 1000 mL of 0.9% NS over 12 hours. Drop factor: 15 gtt/mL. Calculate gtt/min.",
-    answer: 20.83,
+    answer: 21,
     unit: "gtt/min",
     formula: "(Volume × Drop Factor) ÷ (Time in minutes)",
     steps: [
       "Volume: 1000 mL",
       "Time: 12 hours = 720 minutes",
       "Drop factor: 15 gtt/mL",
-      "Calculation: (1000 × 15) ÷ 720 = 20.83 gtt/min",
-      "Round to 21 gtt/min in practice"
+      "Calculation: (1000 × 15) ÷ 720 = 20.83 gtt/min before rounding",
+      "Round to the nearest whole drop → 21 gtt/min"
     ],
     rationale: "A 12-hour NS infusion is common overnight or for patients on fluid restriction. Approximately 83 mL/hr is a moderate maintenance rate."
   },
@@ -602,15 +602,15 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "iv-15",
     category: "iv-flow",
     statement: "Order: Infuse 250 mL of 0.9% NS over 1 hour. Drop factor: 10 gtt/mL. What is the drip rate?",
-    answer: 41.67,
+    answer: 42,
     unit: "gtt/min",
     formula: "(Volume × Drop Factor) ÷ (Time in minutes)",
     steps: [
       "Volume: 250 mL",
       "Time: 1 hour = 60 minutes",
       "Drop factor: 10 gtt/mL",
-      "Calculation: (250 × 10) ÷ 60 = 41.67 gtt/min",
-      "Round to 42 gtt/min in practice"
+      "Calculation: (250 × 10) ÷ 60 = 41.67 gtt/min before rounding",
+      "Round to the nearest whole drop → 42 gtt/min"
     ],
     rationale: "Rapid 1-hour infusions are common for fluid boluses. With 10 gtt/mL tubing, counting 42 drops per minute achieves 250 mL/hr."
   },
@@ -618,14 +618,14 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "iv-16",
     category: "iv-flow",
     statement: "An IV pump is set at 83 mL/hr infusing 0.45% NaCl. The tubing drop factor is 15 gtt/mL. If the pump fails, what manual drip rate should you set?",
-    answer: 20.75,
+    answer: 21,
     unit: "gtt/min",
     formula: "(mL/hr × Drop Factor) ÷ 60",
     steps: [
       "Pump rate: 83 mL/hr",
       "Drop factor: 15 gtt/mL",
-      "Calculation: (83 × 15) ÷ 60 = 20.75 gtt/min",
-      "Round to 21 gtt/min"
+      "Calculation: (83 × 15) ÷ 60 = 20.75 gtt/min before rounding",
+      "Round to the nearest whole drop → 21 gtt/min"
     ],
     rationale: "When an IV pump fails, nurses must quickly convert to gravity flow. Knowing this formula is critical for maintaining the correct infusion rate while waiting for a replacement pump."
   },
@@ -633,13 +633,12 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "iv-17",
     category: "iv-flow",
     statement: "Order: Infuse 1000 mL of Lactated Ringer's over 6 hours using microdrip tubing (60 gtt/mL). Calculate the drip rate in gtt/min.",
-    answer: 166.67,
+    answer: 167,
     unit: "gtt/min",
     formula: "With microdrip: gtt/min = mL/hr",
     steps: [
-      "mL/hr: 1000 ÷ 6 = 166.67 mL/hr",
-      "With microdrip (60 gtt/mL), gtt/min = mL/hr",
-      "Answer: 166.67 gtt/min"
+      "mL/hr: 1000 ÷ 6 = 166.67 mL/hr before rounding",
+      "With microdrip (60 gtt/mL), gtt/min equals mL/hr in theory — round to a countable whole drip rate → 167 gtt/min"
     ],
     rationale: "With microdrip tubing, the gtt/min always equals the mL/hr rate. This simplifies calculations but results in a fast drip that can be hard to count manually."
   },
@@ -647,15 +646,15 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "iv-18",
     category: "iv-flow",
     statement: "Order: Infuse 200 mL of 0.9% NS over 2 hours. Drop factor: 20 gtt/mL. Calculate gtt/min.",
-    answer: 33.33,
+    answer: 33,
     unit: "gtt/min",
     formula: "(Volume × Drop Factor) ÷ (Time in minutes)",
     steps: [
       "Volume: 200 mL",
       "Time: 2 hours = 120 minutes",
       "Drop factor: 20 gtt/mL",
-      "Calculation: (200 × 20) ÷ 120 = 33.33 gtt/min",
-      "Round to 33 gtt/min"
+      "Calculation: (200 × 20) ÷ 120 = 33.33 gtt/min before rounding",
+      "Round to the nearest whole drop → 33 gtt/min"
     ],
     rationale: "A 200 mL NS infusion over 2 hours is common for medication piggybacks or small-volume fluid replacement. About 33 drops per minute with 20 gtt/mL tubing."
   },
@@ -712,13 +711,13 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "wb-2",
     category: "weight-based",
     statement: "Order: Gentamicin 1.5 mg/kg IV q8h. Patient weighs 70 kg. Available: Gentamicin 40 mg/mL. Calculate the dose in mg and the volume in mL.",
-    answer: 2.63,
+    answer: 2.6,
     unit: "mL",
     formula: "Dose = Weight × mg/kg, then Volume = Dose ÷ Concentration",
     steps: [
       "Dose: 70 × 1.5 = 105 mg",
       "Available: 40 mg/mL",
-      "Volume: 105 ÷ 40 = 2.63 mL"
+      "Volume: 105 ÷ 40 = 2.625 mL → round to the nearest tenth → 2.6 mL"
     ],
     rationale: "Gentamicin is an aminoglycoside dosed by weight. 105 mg for a 70 kg patient is within the therapeutic range. The volume is drawn up from a multi-dose vial."
   },
@@ -852,13 +851,13 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "wb-12",
     category: "weight-based",
     statement: "Order: Methotrexate 3.3 mg/kg IV. Patient weighs 60 kg. Available: Methotrexate 25 mg/mL. Calculate the volume.",
-    answer: 7.92,
+    answer: 7.9,
     unit: "mL",
     formula: "Dose = Weight × mg/kg, then Volume = Dose ÷ Concentration",
     steps: [
       "Dose: 60 × 3.3 = 198 mg",
       "Available: 25 mg/mL",
-      "Volume: 198 ÷ 25 = 7.92 mL"
+      "Volume: 198 ÷ 25 = 7.92 mL → round to the nearest tenth → 7.9 mL"
     ],
     rationale: "Methotrexate is an antimetabolite used in oncology. Precise weight-based dosing is critical for efficacy and to minimize toxicity. Verify dose with pharmacist before administration."
   },
@@ -1067,31 +1066,29 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "inf-7",
     category: "infusion",
     statement: "A Dopamine drip is running at 22.5 mL/hr. Concentration: 400 mg in 250 mL D5W. Patient weighs 75 kg. How many mcg/kg/min is the patient receiving?",
-    answer: 4,
+    answer: 8,
     unit: "mcg/kg/min",
     formula: "(mL/hr × mg/mL × 1000) ÷ 60 ÷ weight",
     steps: [
       "Concentration: 400 mg / 250 mL = 1.6 mg/mL",
       "mg/hr: 22.5 × 1.6 = 36 mg/hr",
       "mcg/min: (36 × 1000) ÷ 60 = 600 mcg/min",
-      "mcg/kg/min: 600 ÷ 75 = 8 mcg/kg/min... wait",
-      "Let me recalculate: mg/hr: 22.5 × 1.6 = 36, mcg/min: 36000/60 = 600, per kg: 600/75 = 8"
+      "mcg/kg/min: 600 ÷ 75 = 8 mcg/kg/min (round to a sensible precision for handoff documentation)"
     ],
-    answer: 8,
     rationale: "Reverse-calculating mcg/kg/min from mL/hr is essential for shift change assessments and verifying that the infusion rate matches the ordered dose."
   },
   {
     id: "inf-8",
     category: "infusion",
     statement: "Order: Norepinephrine 0.1 mcg/kg/min IV. Patient weighs 70 kg. Available: Norepinephrine 4 mg in 250 mL D5W. Calculate mL/hr.",
-    answer: 26.25,
+    answer: 26.3,
     unit: "mL/hr",
     formula: "(Weight × mcg/kg/min × 60) ÷ (Concentration in mcg/mL)",
     steps: [
       "mcg/min: 70 × 0.1 = 7 mcg/min",
       "Concentration: 4 mg / 250 mL = 0.016 mg/mL = 16 mcg/mL",
       "mL/min: 7 ÷ 16 = 0.4375 mL/min",
-      "mL/hr: 0.4375 × 60 = 26.25 mL/hr"
+      "mL/hr: 0.4375 × 60 = 26.25 mL/hr → round pump rate to the nearest tenth → 26.3 mL/hr"
     ],
     rationale: "Norepinephrine (Levophed) is a first-line vasopressor for septic shock. It is always given IV via central line. Standard concentration is 4 mg/250 mL."
   },
@@ -1129,13 +1126,13 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "inf-11",
     category: "infusion",
     statement: "Order: Amiodarone 1 mg/min IV for 6 hours. Available: Amiodarone 450 mg in 250 mL D5W. What pump rate?",
-    answer: 33.33,
+    answer: 33.3,
     unit: "mL/hr",
     formula: "(mg/min × 60) ÷ (mg/mL)",
     steps: [
       "Rate: 1 mg/min = 60 mg/hr",
       "Concentration: 450 mg / 250 mL = 1.8 mg/mL",
-      "mL/hr: 60 ÷ 1.8 = 33.33 mL/hr"
+      "mL/hr: 60 ÷ 1.8 = 33.33 mL/hr → round pump rate to the nearest tenth → 33.3 mL/hr"
     ],
     rationale: "Amiodarone is an antiarrhythmic. After the initial bolus (150 mg/10 min), it infuses at 1 mg/min for 6 hours, then 0.5 mg/min for 18 hours.",
     safetyNote: "⚠️ Use a volumetric pump and non-PVC tubing. Monitor for hypotension and bradycardia. ECG monitoring required."
@@ -1217,14 +1214,14 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "inf-17",
     category: "infusion",
     statement: "Order: Dopamine 10 mcg/kg/min IV. Patient weighs 90 kg. Available: 800 mg in 500 mL D5W. Calculate mL/hr.",
-    answer: 33.75,
+    answer: 33.8,
     unit: "mL/hr",
     formula: "(Weight × mcg/kg/min × 60) ÷ (Concentration in mcg/mL)",
     steps: [
       "mcg/min: 90 × 10 = 900 mcg/min",
       "Concentration: 800 mg / 500 mL = 1.6 mg/mL = 1600 mcg/mL",
       "mL/min: 900 ÷ 1600 = 0.5625 mL/min",
-      "mL/hr: 0.5625 × 60 = 33.75 mL/hr"
+      "mL/hr: 0.5625 × 60 = 33.75 mL/hr → round pump rate to the nearest tenth → 33.8 mL/hr"
     ],
     rationale: "At 10 mcg/kg/min, dopamine has both beta-1 (cardiac) and alpha (vasopressor) effects. Higher doses (>10) primarily cause vasoconstriction."
   },
@@ -1282,13 +1279,13 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "ped-1",
     category: "pediatric",
     statement: "Pediatric patient weighing 15 kg has a fever. Order: Acetaminophen 15 mg/kg PO. Available: Acetaminophen 160 mg/5 mL. How many mL per dose?",
-    answer: 7.03,
+    answer: 7.0,
     unit: "mL",
     formula: "(Weight × mg/kg) ÷ Concentration × Volume",
     steps: [
       "Dose: 15 × 15 = 225 mg",
       "Available: 160 mg per 5 mL",
-      "Volume: (225 ÷ 160) × 5 = 7.03 mL"
+      "Volume: (225 ÷ 160) × 5 = 7.03125 mL → round to the nearest tenth → 7.0 mL"
     ],
     rationale: "Acetaminophen (Tylenol) at 15 mg/kg is the standard pediatric antipyretic dose. The 160 mg/5 mL concentration is the standard children's liquid formulation. Max single dose is 1000 mg."
   },
@@ -1324,21 +1321,21 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "ped-4",
     category: "pediatric",
     statement: "Child weighing 25 kg. Order: Azithromycin 10 mg/kg PO on day 1. Available: Azithromycin 200 mg/5 mL. How many mL?",
-    answer: 6.25,
+    answer: 6.3,
     unit: "mL",
     formula: "(Weight × mg/kg) ÷ Concentration × Volume",
     steps: [
       "Dose: 25 × 10 = 250 mg",
       "Available: 200 mg per 5 mL",
-      "Volume: (250 ÷ 200) × 5 = 6.25 mL"
+      "Volume: (250 ÷ 200) × 5 = 6.25 mL → round to the nearest tenth → 6.3 mL"
     ],
-    rationale: "Azithromycin (Zithromax) Z-pack: 10 mg/kg on day 1, then 5 mg/kg on days 2-5. 6.25 mL can be measured with an oral syringe."
+    rationale: "Azithromycin (Zithromax) Z-pack: 10 mg/kg on day 1, then 5 mg/kg on days 2-5. Measure with an oral syringe to the nearest tenth mL."
   },
   {
     id: "ped-5",
     category: "pediatric",
     statement: "Calculate 24-hour maintenance IV fluids for a child weighing 22 kg using the Holliday-Segar method. What is the hourly rate?",
-    answer: 60.83,
+    answer: 64.2,
     unit: "mL/hr",
     formula: "Holliday-Segar: 100/50/20 rule, then ÷ 24",
     steps: [
@@ -1346,10 +1343,8 @@ export const medMathQuestions: MedMathQuestion[] = [
       "Next 10 kg: 10 × 50 = 500 mL",
       "Over 20 kg: 2 × 20 = 40 mL",
       "Total daily: 1000 + 500 + 40 = 1540 mL/day",
-      "Hourly: 1540 ÷ 24 = 64.17... let me recalculate",
-      "Actually: 1540 ÷ 24 = 64.17 mL/hr"
+      "Hourly: 1540 ÷ 24 = 64.166… mL/hr → round pump rate to the nearest tenth → 64.2 mL/hr"
     ],
-    answer: 64.17,
     rationale: "The Holliday-Segar method (4-2-1 rule simplified) calculates pediatric maintenance fluids: 100 mL/kg for first 10 kg, 50 mL/kg for next 10 kg, 20 mL/kg for each additional kg."
   },
   {
@@ -1384,16 +1379,16 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "ped-8",
     category: "pediatric",
     statement: "Child weighing 30 kg has a fever. Order: Acetaminophen 15 mg/kg PO. Max single dose: 1000 mg. Available: 325 mg tablets. Calculate the dose and number of tablets.",
-    answer: 1.38,
+    answer: 1.5,
     unit: "tablet(s)",
     formula: "Weight × mg/kg (cap at max), then Desired ÷ Have",
     steps: [
       "Dose: 30 × 15 = 450 mg",
       "450 mg is within the 1000 mg max",
-      "Tablets: 450 ÷ 325 = 1.38 → round to 1 tablet (325 mg)",
-      "Or give 1.5 tablets (487.5 mg) if scored"
+      "Tablets: 450 ÷ 325 = 1.38 tablets mathematically",
+      "Use scored tablets and round to a workable fraction → 1.5 tablets = 487.5 mg (closest workable dose to 450 mg with 325 mg tabs)"
     ],
-    rationale: "For a 30 kg child, the calculated dose is 450 mg. In practice, you would give either 1 tablet (325 mg, slightly under) or 1.5 scored tablets (487.5 mg), based on provider preference."
+    rationale: "For a 30 kg child, the calculated dose is 450 mg. With 325 mg scored tablets, 1.5 tablets is a common workable administration when policy allows splitting."
   },
   {
     id: "ped-9",
@@ -1413,42 +1408,41 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "ped-10",
     category: "pediatric",
     statement: "Child weighing 18 kg. Order: Cephalexin 25 mg/kg/day divided q6h. Available: Cephalexin 250 mg/5 mL. How many mL per dose?",
-    answer: 4.5,
+    answer: 2.3,
     unit: "mL per dose",
     formula: "(Daily dose ÷ doses) ÷ concentration × volume",
     steps: [
       "Daily: 18 × 25 = 450 mg/day",
       "Per dose: 450 ÷ 4 = 112.5 mg",
-      "Volume: (112.5 ÷ 250) × 5 = 2.25 mL"
+      "Volume: (112.5 ÷ 250) × 5 = 2.25 mL → round to the nearest tenth → 2.3 mL"
     ],
-    answer: 2.25,
-    rationale: "Cephalexin (Keflex) divided q6h means 4 doses per day. Each dose of 112.5 mg requires 2.25 mL of the suspension, measured with an oral syringe."
+    rationale: "Cephalexin (Keflex) divided q6h means 4 doses per day. Each dose of 112.5 mg is drawn to the nearest tenth mL with an oral syringe."
   },
   {
     id: "ped-11",
     category: "pediatric",
     statement: "Child weighing 10 kg. Order: Prednisolone 2 mg/kg/day PO in 2 divided doses. Available: Prednisolone 15 mg/5 mL. How many mL per dose?",
-    answer: 3.33,
+    answer: 3.3,
     unit: "mL per dose",
     formula: "(Daily dose ÷ doses) ÷ concentration × volume",
     steps: [
       "Daily: 10 × 2 = 20 mg/day",
       "Per dose: 20 ÷ 2 = 10 mg",
-      "Volume: (10 ÷ 15) × 5 = 3.33 mL"
+      "Volume: (10 ÷ 15) × 5 = 3.33 mL → round to the nearest tenth → 3.3 mL"
     ],
-    rationale: "Prednisolone is a liquid corticosteroid for pediatric patients. 2 mg/kg/day is used for asthma exacerbations and croup. 3.33 mL is measured with an oral syringe."
+    rationale: "Prednisolone is a liquid corticosteroid for pediatric patients. 2 mg/kg/day is used for asthma exacerbations and croup. Measure with an oral syringe to the nearest tenth mL."
   },
   {
     id: "ped-12",
     category: "pediatric",
     statement: "Neonate weighing 2.5 kg. Order: Ampicillin 50 mg/kg IV q12h. Available: Ampicillin reconstituted to 100 mg/mL. How many mL?",
-    answer: 1.25,
+    answer: 1.3,
     unit: "mL",
     formula: "(Weight × mg/kg) ÷ Concentration",
     steps: [
       "Dose: 2.5 × 50 = 125 mg",
       "Available: 100 mg/mL",
-      "Volume: 125 ÷ 100 = 1.25 mL"
+      "Volume: 125 ÷ 100 = 1.25 mL → round to the nearest tenth → 1.3 mL"
     ],
     rationale: "Ampicillin is a first-line antibiotic for neonatal sepsis (combined with gentamicin). q12h dosing is appropriate for neonates < 7 days old.",
     safetyNote: "⚠️ Neonatal doses are very small. Use a syringe pump. Verify all calculations with a second nurse."
@@ -1457,13 +1451,13 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "ped-13",
     category: "pediatric",
     statement: "Child weighing 14 kg. Order: Clindamycin 10 mg/kg IV q8h. Available: Clindamycin 150 mg/mL. How many mL per dose?",
-    answer: 0.93,
+    answer: 0.9,
     unit: "mL",
     formula: "(Weight × mg/kg) ÷ Concentration",
     steps: [
       "Dose: 14 × 10 = 140 mg",
       "Available: 150 mg/mL",
-      "Volume: 140 ÷ 150 = 0.93 mL"
+      "Volume: 140 ÷ 150 = 0.933… mL → round to the nearest tenth → 0.9 mL"
     ],
     rationale: "Clindamycin is used for bone and soft tissue infections in penicillin-allergic children. 10 mg/kg q8h is within the standard range (20-40 mg/kg/day)."
   },
@@ -1471,13 +1465,13 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "ped-14",
     category: "pediatric",
     statement: "Infant weighing 5 kg. Order: Gentamicin 2.5 mg/kg IV q8h. Available: Gentamicin 10 mg/mL. How many mL?",
-    answer: 1.25,
+    answer: 1.3,
     unit: "mL",
     formula: "(Weight × mg/kg) ÷ Concentration",
     steps: [
       "Dose: 5 × 2.5 = 12.5 mg",
       "Available: 10 mg/mL",
-      "Volume: 12.5 ÷ 10 = 1.25 mL"
+      "Volume: 12.5 ÷ 10 = 1.25 mL → round to the nearest tenth → 1.3 mL"
     ],
     rationale: "Gentamicin in neonates/infants is dosed at 2.5 mg/kg per dose. Peak and trough levels are essential to prevent nephrotoxicity and ototoxicity."
   },
@@ -1541,12 +1535,12 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "ped-19",
     category: "pediatric",
     statement: "Child weighing 8 kg, height 70 cm. Calculate BSA using the Mosteller formula: BSA = √(height cm × weight kg ÷ 3600). Then calculate the dose if the order is Methotrexate 12 mg/m².",
-    answer: 4.73,
+    answer: 4.7,
     unit: "mg",
     formula: "BSA = √(H × W ÷ 3600), then Dose = BSA × mg/m²",
     steps: [
       "BSA: √(70 × 8 ÷ 3600) = √(0.1556) = 0.394 m²",
-      "Dose: 0.394 × 12 = 4.73 mg"
+      "Dose: 0.394 × 12 = 4.728 mg → round to the nearest tenth → 4.7 mg"
     ],
     rationale: "BSA-based dosing is used for chemotherapy agents in pediatric oncology. The Mosteller formula is the most commonly used method. This ensures dosing accuracy adjusted for body size."
   },
@@ -1554,13 +1548,13 @@ export const medMathQuestions: MedMathQuestion[] = [
     id: "ped-20",
     category: "pediatric",
     statement: "Calculate 24-hour maintenance IV fluids for a 7 kg infant using the Holliday-Segar method. What is the hourly rate?",
-    answer: 29.17,
+    answer: 29.2,
     unit: "mL/hr",
     formula: "Holliday-Segar: 100 mL/kg for first 10 kg, then ÷ 24",
     steps: [
       "Weight: 7 kg (all within first 10 kg bracket)",
       "Daily: 7 × 100 = 700 mL/day",
-      "Hourly: 700 ÷ 24 = 29.17 mL/hr"
+      "Hourly: 700 ÷ 24 = 29.166… mL/hr → round pump rate to the nearest tenth → 29.2 mL/hr"
     ],
     rationale: "For infants under 10 kg, the Holliday-Segar method is simply 100 mL/kg/day. This translates to about 4 mL/kg/hr as a quick estimate."
   },

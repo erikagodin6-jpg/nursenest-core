@@ -5,6 +5,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import type { StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failover/study-published-snapshot-types";
+import type { MarketingHubLessonsListOptions } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import { noteStudyPublishedSnapshotReadAttemptWithoutDir } from "@/lib/study-content-failover/study-snapshot-runtime-diagnostics";
 
 function snapshotBaseDir(): string | null {
@@ -67,11 +68,12 @@ export async function readStudyPublishedSnapshotFile<TPayload>(
   }
 }
 
-export function stableListOptsKey(listOpts: { q?: string; topicSlugsIn?: string[] } | undefined): string {
+export function stableListOptsKey(listOpts: MarketingHubLessonsListOptions | undefined): string {
   if (!listOpts) return "all";
   const q = (listOpts.q ?? "").trim().toLowerCase();
   const topics = [...(listOpts.topicSlugsIn ?? [])].map((s) => s.trim().toLowerCase()).filter(Boolean).sort();
-  const raw = JSON.stringify({ q, topics });
+  const alliedProfessionKey = (listOpts.alliedProfessionKey ?? "").trim().toLowerCase();
+  const raw = JSON.stringify({ q, topics, alliedProfessionKey });
   if (raw.length <= 64) return raw.replace(/[^a-z0-9_-]+/gi, "_").slice(0, 64) || "all";
   return createHash("sha256").update(raw).digest("hex").slice(0, 24);
 }

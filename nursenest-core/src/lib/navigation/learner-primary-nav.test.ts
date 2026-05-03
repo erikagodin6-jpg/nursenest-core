@@ -4,6 +4,7 @@ import {
   buildLearnerPrimaryNavItems,
   buildOptionalClinicalScenariosShellNavItem,
   buildOptionalOsceScenarioShellNavItems,
+  buildOptionalPrintablesShellNavItem,
   buildOptionalStudyToolsShellNavItem,
   CANONICAL_LEARNER_ROUTES,
   isLearnerPrimaryNavKey,
@@ -31,6 +32,17 @@ test("buildLearnerPrimaryNavItems: primary key maps to canonical route", () => {
     assert.equal(primary!.href, CANONICAL_LEARNER_ROUTES.practice);
     assert.equal(primary!.matchBase, "/app/questions");
   }
+});
+
+test("buildOptionalPrintablesShellNavItem: hidden when navVisible is false", () => {
+  assert.equal(buildOptionalPrintablesShellNavItem("us-rn-nclex-rn", false), null);
+});
+
+test("buildOptionalPrintablesShellNavItem: visible when navVisible is true", () => {
+  const row = buildOptionalPrintablesShellNavItem("us-rn-nclex-rn", true);
+  assert.ok(row);
+  assert.equal(row!.href, `${CANONICAL_LEARNER_ROUTES.printables}?pathwayId=us-rn-nclex-rn`);
+  assert.equal(row!.matchPrefix, "/app/printables");
 });
 
 test("buildOptionalStudyToolsShellNavItem: hidden unless NEXT_PUBLIC_ENABLE_STUDY_TOOLS=true", (t) => {

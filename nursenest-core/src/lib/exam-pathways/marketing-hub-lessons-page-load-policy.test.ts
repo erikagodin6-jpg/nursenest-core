@@ -8,6 +8,7 @@ import assert from "node:assert/strict";
 import { loadPathwayLessonsHubPageWithTelemetry } from "@/lib/exam-pathways/marketing-hub-lessons-page-fetch";
 import { HubLessonsListDatabaseError } from "@/lib/lessons/hub-lessons-database-error";
 import type { PathwayLessonsPageResult } from "@/lib/lessons/pathway-lesson-loader";
+import type { MarketingHubLessonsListOptions } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 
 const ctx = {
@@ -23,7 +24,7 @@ const args = {
   pageRequested: 1,
   pageSizeRequested: 24,
   lessonContentLocale: "en",
-  listOpts: undefined as { q?: string; topicSlugsIn?: string[] } | undefined,
+  listOpts: undefined as MarketingHubLessonsListOptions | undefined,
 };
 
 test("slow lessons page fetch (>1s) still resolves ok with real payload (no silent empty)", async () => {

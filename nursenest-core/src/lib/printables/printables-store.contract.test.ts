@@ -17,6 +17,18 @@ describe("printable store (contract)", () => {
     assert.match(src, /isPrintableStoreEnabledForLearners/);
   });
 
+  it("learner printables page notFound when store disabled", () => {
+    const src = read("app/(student)/app/(learner)/printables/page.tsx");
+    assert.match(src, /isPrintableStoreEnabledForLearners/);
+    assert.match(src, /notFound/);
+  });
+
+  it("learner shell nav includes optional printouts when layout passes visibility", () => {
+    const src = read("components/layout/learner-shell-primary-nav.tsx");
+    assert.match(src, /buildOptionalPrintablesShellNavItem/);
+    assert.match(src, /printablesNavVisible/);
+  });
+
   it("learner download records privacy hashes and uses entitlement helpers", () => {
     const src = read("app/api/printables/[id]/download/route.ts");
     assert.match(src, /hashPrintablePrivacyPart/);

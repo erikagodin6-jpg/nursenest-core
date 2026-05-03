@@ -1,3 +1,4 @@
+import type { MarketingHubLessonsListOptions } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import type { PathwayLessonsPageResult } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import type { StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failover/study-published-snapshot-types";
@@ -9,13 +10,16 @@ import type { StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failove
 export function appLessonsHubListOptsForSnapshot(args: {
   qEffective: string | null;
   topicSlugFilter: string | null;
-}): { q?: string; topicSlugsIn?: string[] } | undefined {
+  alliedProfessionKey?: string | null;
+}): MarketingHubLessonsListOptions | undefined {
   const q = args.qEffective?.trim();
   const ts = args.topicSlugFilter?.trim().toLowerCase();
-  if (q && ts) return { q, topicSlugsIn: [ts] };
-  if (q) return { q };
-  if (ts) return { topicSlugsIn: [ts] };
-  return undefined;
+  const ap = args.alliedProfessionKey?.trim().toLowerCase();
+  const allied = ap ? { alliedProfessionKey: ap } as const : {};
+  if (q && ts) return { q, topicSlugsIn: [ts], ...allied };
+  if (q) return { q, ...allied };
+  if (ts) return { topicSlugsIn: [ts], ...allied };
+  return ap ? { alliedProfessionKey: ap } : undefined;
 }
 
 export type AppLessonsHubSnapshotLessonsBlock = {

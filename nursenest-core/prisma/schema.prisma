@@ -157,6 +157,7 @@ model User {
   printableProductsUpdated                  PrintableProduct[]         @relation("PrintableProductUpdatedBy")
   printableDownloadEvents                   PrintableDownloadEvent[]
   printableAccesses                         PrintableAccess[]
+  examQuestionPracticeAnswerAttempts        ExamQuestionPracticeAnswerAttempt[]
 
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
@@ -1247,6 +1248,9 @@ model ExamQuestion {
   nclexClientNeedsSubcategory String?   @map("nclex_client_needs_subcategory") @db.VarChar(128)
   published_by_user_id        String?
   User                        User?     @relation(fields: [published_by_user_id], references: [id])
+  practiceAnswerAttempts      ExamQuestionPracticeAnswerAttempt[]
+  answerOptionAggregates      ExamQuestionAnswerOptionAggregate[]
+  performanceAggregate        ExamQuestionPerformanceAggregate?
 
   @@index([status, tier])
   @@index([exam])
@@ -1256,6 +1260,55 @@ model ExamQuestion {
   @@index([status, exam, topic])
   @@index([status, exam, tier, countryCode], map: "exam_questions_status_exam_tier_country_idx")
   @@map("exam_questions")
+}
+
+/// * Learner practice question attempts for aggregate “class performance” analytics (no PII in aggregates).
+enum PracticeQuestionAnswerMode {
+  practice
+  cat
+  quiz
+  remediation
+}
+
+model ExamQuestionPracticeAnswerAttempt {
+  id                 String                     @id @default(cuid())
+  userId             String                     @map("user_id")
+  questionId         String                     @map("question_id") @db.VarChar
+  selectedOptionKey  String                     @map("selected_option_key") @db.Text
+  isCorrect          Boolean                    @map("is_correct")
+  mode               PracticeQuestionAnswerMode @default(practice) @map("mode")
+  pathwayId          String?                    @map("pathway_id") @db.VarChar(64)
+  createdAt          DateTime                   @default(now()) @map("created_at")
+
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question ExamQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId, createdAt])
+  @@index([userId, questionId])
+  @@map("exam_question_practice_answer_attempts")
+}
+
+model ExamQuestionAnswerOptionAggregate {
+  questionId     String   @map("question_id") @db.VarChar
+  optionKey      String   @map("option_key") @db.Text
+  selectionCount Int      @default(0) @map("selection_count")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  question ExamQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@id([questionId, optionKey])
+  @@map("exam_question_answer_option_aggregates")
+}
+
+model ExamQuestionPerformanceAggregate {
+  questionId        String   @id @map("question_id") @db.VarChar
+  totalAttempts     Int      @default(0) @map("total_attempts")
+  correctAttempts   Int      @default(0) @map("correct_attempts")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  question ExamQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@map("exam_question_performance_aggregates")
 }
 
 /// *

@@ -31,6 +31,7 @@ import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { emitClientStructuredLog } from "@/lib/observability/structured-client-log";
 import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
+import { QuestionBankPeerPerformancePanel } from "@/components/student/question-bank-peer-performance-panel";
 import { QuestionSessionStudyLoopPanel } from "@/components/student/question-session-study-loop-panel";
 import { ExamProgressBar, ExamSessionShell, ExamSessionStickyChrome, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
@@ -38,6 +39,7 @@ import type {
   QuestionBankDifficultyBand,
   QuestionBankDiscoveryResponse,
   QuestionBankGradedStateMap,
+  QuestionBankPeerStatsClient,
   QuestionBankPreset,
   RationaleLessonLinkClient,
   SavedQuestionBankPreset,
@@ -908,6 +910,7 @@ export function QuestionBankPracticeClient({
           questionId: current.id,
           answer,
           pathwayId: pathwayIdFilter ?? undefined,
+          attemptMode: "practice",
           ...(studySettings.enableConfidenceTracking && confidence[current.id]
             ? { selfReportedConfidence: confidence[current.id] }
             : {}),
@@ -931,6 +934,7 @@ export function QuestionBankPracticeClient({
           flashcardsHref: string | null;
           topicDrillHref: string | null;
         } | null;
+        peerStats?: QuestionBankPeerStatsClient | null;
         error?: string;
       };
       if (!res.ok) {
@@ -958,6 +962,7 @@ export function QuestionBankPracticeClient({
             ? { topicCode: data.learningLoop.topicCode }
             : {}),
           rationaleLessonLinks: data.rationaleLessonLinks ?? null,
+          ...(data.peerStats && typeof data.peerStats === "object" ? { peerStats: data.peerStats } : {}),
         },
       }));
       const opened = questionOpenedAtMsRef.current;
@@ -1777,6 +1782,13 @@ export function QuestionBankPracticeClient({
                       recommendationsSlot={learningLoopRecommendations}
                     />
                   )}
+                  {rationaleVisible && g.peerStats ? (
+                    <QuestionBankPeerPerformancePanel
+                      peerStats={g.peerStats}
+                      optionCanonicals={optsCanonical}
+                      optionDisplays={optsDisplayClinical}
+                    />
+                  ) : null}
                   {rationaleVisible && g.clinicalPearl ? (
                     <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] px-4 py-3 sm:px-5">
                       <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-info)]">

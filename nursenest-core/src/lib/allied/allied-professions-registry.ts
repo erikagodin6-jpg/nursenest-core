@@ -62,6 +62,11 @@ export type AlliedProfessionMarketing = {
   /** Section on the main allied hub */
   hubCategory: AlliedHubCategoryId;
   topicSlugsIn?: string[];
+  /**
+   * Optional JSON filename under `src/content/pathway-lessons/allied-professions/`.
+   * Merged after the shared allied bundle; same `slug` replaces the prior catalog row.
+   */
+  dedicatedCatalogFile?: string;
   /** When DB scenarios exist, narrow catalog by `canonicalCategoryId` (pathway + publish rules unchanged). */
   scenarioCatalogCategoryIds?: string[];
   title: string;
@@ -372,6 +377,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "community-health-worker-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "support",
+    topicSlugsIn: ["healthcare-teamwork", "patient-communication", "medical-ethics", "patient-assessment"],
     title: "Community health worker exam prep | NurseNest",
     description:
       "Outreach, teaching, navigation, and population-health basics for CHW certification study. Allied pathway scope.",
@@ -415,6 +421,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "medical-assistant-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "clinical",
+    topicSlugsIn: ["medication-safety", "vital-signs", "clinical-documentation", "patient-assessment"],
     title: "Medical assistant exam prep | NurseNest",
     description:
       "Clinical workflows, vital signs, minor procedures, and office safety for medical assistant certification. Allied pathway scope.",
@@ -474,6 +481,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "dental-assistant-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "clinical",
+    topicSlugsIn: ["infection-control", "patient-communication", "medical-terminology", "vital-signs"],
     title: "Dental assistant exam prep | NurseNest",
     description:
       "Chairside assistance, infection control, radiography basics, and patient communication for dental assistant certification. Allied scope.",
@@ -495,6 +503,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "dental-hygiene-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "clinical",
+    topicSlugsIn: ["medical-ethics", "human-anatomy", "pharmacology-basics", "infection-control"],
     title: "Dental hygiene exam prep | NurseNest",
     description:
       "Periodontal assessment, prevention education, radiographic judgment, and ethics for dental hygiene boards. Allied pathway scope.",
@@ -516,6 +525,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "dietetic-technician-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "clinical",
+    topicSlugsIn: ["healthcare-teamwork", "human-physiology", "medical-terminology", "clinical-documentation"],
     title: "Dietetic technician exam prep | NurseNest",
     description:
       "Medical nutrition therapy support, screening, documentation, and food-service safety for dietetic technician certification. Allied scope.",
@@ -537,6 +547,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "emt-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "acute",
+    topicSlugsIn: ["emergency-response", "patient-assessment", "vital-signs", "human-anatomy"],
     title: "EMT exam prep | Allied health | NurseNest",
     description:
       "Scene safety, assessment, airway basics, and transport decisions for EMT certification study. pathway-scoped allied lessons and practice.",
@@ -558,6 +569,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "sonography-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "lab",
+    topicSlugsIn: ["imaging-basics", "patient-assessment", "human-physiology", "medical-terminology"],
     title: "Ultrasound / sonography exam prep | NurseNest",
     description:
       "Image optimization, patient positioning, safety, and protocol communication for sonography certification. allied-tier pathway scope.",
@@ -579,6 +591,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "radiography-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "lab",
+    topicSlugsIn: ["imaging-basics", "lab-values", "human-physiology", "infection-control"],
     title: "Radiography / medical imaging exam prep | NurseNest",
     description:
       "Positioning, contrast safety, ALARA thinking, and protocol edges for radiography certification. Content scoped to allied pathways.",
@@ -600,6 +613,7 @@ export const ALLIED_PROFESSIONS: AlliedProfessionMarketing[] = [
     segment: "lab-assistant-exam-prep",
     pathwayId: US_ALLIED,
     hubCategory: "lab",
+    topicSlugsIn: ["lab-values", "infection-control", "clinical-documentation", "medical-terminology"],
     title: "Medical laboratory assistant exam prep | NurseNest",
     description:
       "Specimen collection, pre-analytical handling, QC awareness, and safety for MLA / MLT-assistant style exams. Allied pathway scope.",

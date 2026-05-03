@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { ContentStatus } from "@prisma/client";
+import { ContentStatus, TierCode } from "@prisma/client";
 import { Suspense } from "react";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
@@ -47,6 +47,7 @@ import {
   lessonsListBlockFromPathwayHubSnapshot,
 } from "@/lib/lessons/app-lessons-hub-published-snapshot-fallback";
 import { readPathwayLessonsHubPageSnapshot } from "@/lib/study-content-failover/pathway-lessons-hub-snapshot-read";
+import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { snapshotAgeMs as publishedSnapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
@@ -214,7 +215,7 @@ export default async function LessonsPage({ searchParams }: Props) {
       userId
         ? prisma.user.findUnique({
             where: { id: userId },
-            select: { learnerPath: true },
+            select: { learnerPath: true, alliedProfessionKey: true, tier: true },
           })
         : null,
     null,
@@ -223,6 +224,14 @@ export default async function LessonsPage({ searchParams }: Props) {
   );
 
   const learnerPath = learnerPathRow?.learnerPath ?? null;
+  const effectivePathwayForAlliedScope = (pathwayIdFilter ?? learnerPath ?? "").trim();
+  const alliedProfessionForAppList =
+    learnerPathRow?.tier === TierCode.ALLIED &&
+    learnerPathRow.alliedProfessionKey?.trim() &&
+    effectivePathwayForAlliedScope &&
+    isAlliedMarketingCorePathwayId(effectivePathwayForAlliedScope)
+      ? learnerPathRow.alliedProfessionKey.trim().toLowerCase()
+      : null;
   const marketingLocale = await getMarketingLocaleForDefaultRoute();
   const visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
 
@@ -297,6 +306,7 @@ export default async function LessonsPage({ searchParams }: Props) {
         topic: topicFilter,
         topicSlug: topicSlugFilter,
         pathwayId: pathwayIdFilter,
+        alliedProfessionKey: alliedProfessionForAppList,
       });
 
       const pathwayWhereWithSafety = {
@@ -465,6 +475,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     const listOptsSnap = appLessonsHubListOptsForSnapshot({
       qEffective,
       topicSlugFilter,
+      alliedProfessionKey: alliedProfessionForAppList,
     });
 
     const snap = pathwayForSnap

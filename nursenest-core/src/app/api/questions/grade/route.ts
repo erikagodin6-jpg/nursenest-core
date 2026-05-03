@@ -25,6 +25,10 @@ import { incrementBankQuestionsGradedToday } from "@/lib/learner/increment-bank-
 import { gradeMatches, normalizeCorrect } from "@/lib/questions/grade-answer-match";
 import { isRemediationEngineEnabled } from "@/lib/remediation/remediation-flag";
 import { recordRemediationCapture } from "@/lib/remediation/record-remediation";
+import {
+  parseGradeAttemptMode,
+  recordQuestionPeerAnalyticsAndBuildPayload,
+} from "@/lib/questions/question-peer-analytics";
 
 export const dynamic = "force-dynamic";
 
@@ -58,6 +62,8 @@ export async function POST(req: Request) {
     questionId?: string;
     answer?: unknown;
     pathwayId?: string;
+    /** practice | quiz | remediation — never `cat` for bank; CAT surfaces should omit or use cat to skip peer recording. */
+    attemptMode?: unknown;
     /** Pre-answer self rating from question bank (optional). */
     selfReportedConfidence?: "low" | "medium" | "high";
   };
@@ -123,6 +129,7 @@ export async function POST(req: Request) {
     }
 
     const correct = gradeMatches(row.questionType, expected, body.answer);
+    const attemptMode = parseGradeAttemptMode(body.attemptMode);
 
     const effectivePathwayId = effectivePathwayIdEarly;
 
@@ -248,6 +255,22 @@ export async function POST(req: Request) {
 
     void incrementBankQuestionsGradedToday(gate.userId);
 
+    let peerStats: Awaited<ReturnType<typeof recordQuestionPeerAnalyticsAndBuildPayload>> = null;
+    try {
+      peerStats = await recordQuestionPeerAnalyticsAndBuildPayload(prisma, {
+        userId: gate.userId,
+        questionId: row.id,
+        questionType: row.questionType,
+        pathwayId: effectivePathwayId,
+        answer: body.answer,
+        isCorrect: correct,
+        correctKeys: expected,
+        attemptMode,
+      });
+    } catch (e) {
+      safeServerLogCritical("api_questions_grade", "peer_analytics_failed", { questionId: row.id }, e);
+    }
+
     /** ~5% sample for PostHog volume/accuracy trends — no question id, no stem content. */
     if (Math.random() < 0.05 && !skipLearnerBusinessAnalyticsForAccessScope(gate.entitlement)) {
       void captureServerEvent(analyticsDistinctId(gate.userId), PH.learnerQuestionGradedSample, {
@@ -288,6 +311,7 @@ export async function POST(req: Request) {
         ctaKey: l.ctaKey,
       })),
       topicStatsUpdated: true,
+      ...(peerStats ? { peerStats } : {}),
     });
   } catch (e) {
     safeServerLogCritical("api_questions_grade", "failed", { questionId }, e);

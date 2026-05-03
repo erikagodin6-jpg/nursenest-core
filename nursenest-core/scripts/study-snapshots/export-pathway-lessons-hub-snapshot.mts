@@ -16,11 +16,14 @@ import { getPathwayLessonsPageFresh } from "../../src/lib/lessons/pathway-lesson
 import type { PathwayLessonsPageResult } from "../../src/lib/lessons/pathway-lesson-loader";
 import { touchStudySnapshotManifest } from "./study-snapshot-manifest-touch.mts";
 
-function stableListOptsKey(listOpts: { q?: string; topicSlugsIn?: string[] } | undefined): string {
+function stableListOptsKey(
+  listOpts: { q?: string; topicSlugsIn?: string[]; alliedProfessionKey?: string } | undefined,
+): string {
   if (!listOpts) return "all";
   const q = (listOpts.q ?? "").trim().toLowerCase();
   const topics = [...(listOpts.topicSlugsIn ?? [])].map((s) => s.trim().toLowerCase()).filter(Boolean).sort();
-  const raw = JSON.stringify({ q, topics });
+  const alliedProfessionKey = (listOpts.alliedProfessionKey ?? "").trim().toLowerCase();
+  const raw = JSON.stringify({ q, topics, alliedProfessionKey });
   if (raw.length <= 64) return raw.replace(/[^a-z0-9_-]+/gi, "_").slice(0, 64) || "all";
   return createHash("sha256").update(raw).digest("hex").slice(0, 24);
 }

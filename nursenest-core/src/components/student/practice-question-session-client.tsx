@@ -235,6 +235,7 @@ export function PracticeQuestionSessionClient({
           questionId: current.id,
           answer,
           pathwayId: pathwayId ?? undefined,
+          attemptMode: mode === "exam" ? "quiz" : mode === "weak_area" ? "remediation" : "practice",
         }),
       });
       const data = (await res.json()) as {

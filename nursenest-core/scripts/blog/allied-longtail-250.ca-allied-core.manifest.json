@@ -1,0 +1,2756 @@
+{
+  "batchId": "allied-longtail-25x-ten-roles-ca-allied-core",
+  "notes": "Generated 250 items (25 each × 10 occupations). pathwayId=ca-allied-core. Regenerate: npx tsx scripts/blog/generate-allied-25x-longtail-manifest.mts [--pathway=ca-allied-core]. Publish via generate-blog-posts + publishBlogPostCanonical only.",
+  "items": [
+    {
+      "topic": "RT exam question: why does auto-PEEP develop during mechanical ventilation — mechanism, waveform clues, and first vent changes",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Respiratory therapy board prep: how do you calculate desired minute ventilation from PaCO2 and dead space assumptions",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you escalate from high-flow nasal cannula to NIV — clinical decision criteria and contraindications on exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of bronchodilator-induced tremor versus hypokalemia after high-dose beta-agonist therapy",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "ABG interpretation: why does pure hypoventilation raise PaCO2 without changing the anion gap",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "RT credential question: how does inverse-ratio ventilation alter mean airway pressure and oxygenation trade-offs",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does mucus plugging worsen V/Q mismatch after extubation — pathophysiology and nursing/RT co-monitoring",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Mechanical ventilation: what is the difference between pressure control and volume control for peak inspiratory pressure patterns",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you hold MDIs before certain cardiac stress protocols — scope-safe rationale items testing RT judgment",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Exam-style: why does left-to-right shunt physiology cause refractory hypoxemia that PEEP may partially improve",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "High-alert respiratory meds: what is the mechanism of magnesium sulfate in severe asthma exacerbation and monitoring priorities",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "RT board question: how do you troubleshoot high-pressure alarms on volume AC versus pressure support",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does metabolic alkalosis shift the oxyhemoglobin dissociation curve — clinical pearl for gas exchange teaching",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you suspect tension pneumothorax versus mainstem intubation from sudden desaturation",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Pathophysiology deep dive: why does pulmonary embolism produce sudden hypoxemia with a normal chest film early on",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "RT exam: how do you select initial FiO2 in COPD patients at risk of CO2 retention without omitting safety margins",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the difference between shunt and dead space as causes of increased A-a gradient on exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does salbutamol/albuterol lower serum potassium — mechanism, ECG relevance, and repeat assessment timing",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "NIV failure criteria on RT exams: tachypnea, accessory muscle use, and pH thresholds explained stepwise",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Ventilator-associated events: why does subglottic suctioning reduce contamination risk — infection control rationale",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "RT question: how does helium-oxygen mixture change laminar flow assumptions in upper airway obstruction teaching items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should RT recommend bronchoscopy timing in massive hemoptysis scenarios — exam prioritization frameworks",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does flail chest impair ventilation mechanics — pathophysiology link to pain control and pulmonary toilet",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Exam trap: why does compensatory hyperventilation in metabolic acidosis lower PaCO2 predictably on ABG drills",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "RT pharmacology: rocuronium versus succinylcholine considerations for RSI adjacent roles — mechanism and adverse effect contrast",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Respiratory Therapy",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "OT board-style question: anticholinergic burden scales — how medications alter attention, ADLs, and fall risk in older adults",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "Occupational therapy exam: why does dopaminergic fluctuation change handwriting and meal setup tasks across the day",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "When should OT flag serotonin syndrome versus anticholinergic toxicity in polypharmacy scenarios",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "OT credential prep: what is the difference between compensatory and restorative approaches after stroke for medication timing windows",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "How do you calculate safe reach envelopes for hemiparesis when pain medications reduce proprioceptive feedback",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "OT exam question: why does peripheral neuropathy from chemotherapy alter grip strategy and hot-surface judgment",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of steroid-induced myopathy affecting proximal strength — OT implications for grading and pacing",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "Occupational therapy licensing: benzodiazepine effects on dual-tasking during community mobility simulations",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "Why does orthostatic hypotension from alpha-blockers change kitchen safety sequencing on exam vignettes",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "OT item: when should you collaborate before recommending home med changes — scope, documentation, and escalation",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "Exam-style: how SSRIs can blunt emotional expression in depression — OT assessment nuance without diagnosing",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "OT board: why does lithium tremor interfere with fine motor ADL tasks and what accommodations are exam-appropriate",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "What is the difference between fatigue from anemia versus deconditioning for grading energy conservation education",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "Occupational therapy question: opioid sedation effects on cooking safety — cue hierarchy and caregiver handoffs",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "Why does uncontrolled hyperglycemia impair wound healing on the hand — OT splinting and infection prevention rationale",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "OT prep: antipsychotic metabolic syndrome cues that change community mobility teaching priorities",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "When should OT defer driving decisions — red flags from sedating antihistamines and muscle relaxants in case stems",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "How stimulant medications for ADHD change sustained attention tasks — school-based OT exam framing",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "OT exam: why does diuretic-induced nocturia increase night fall risk and what environmental modifications are prioritized",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of cyclobenzaprine sedation overlapping with concussion recovery pacing on test items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "Occupational therapy: high-dose NSAID GI risk — when exam items expect referral versus education-only boundaries",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "Why does carbidopa-levodopa timing matter for shaving and buttoning tasks — OT exam mechanism link",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "OT board question: contrast sensitivity changes with antimalarial retinopathy risk — screening roles across disciplines",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "Exam vignette: why does alcohol withdrawal tremor confound fine motor assessment timing in acute care OT",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "Pediatric OT item: stimulant appetite suppression effects on mealtime participation and growth monitoring handoffs",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "OT",
+      "domains": [
+        "pharmacology",
+        "clinical decision making",
+        "pathophysiology"
+      ]
+    },
+    {
+      "topic": "MSW licensing exam: when should you screen for alcohol use disorder before starting buprenorphine collaboration cases",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Social work exam question: why does trauma-informed care change motivational interviewing pacing with PTSD medications in play",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the difference between duty to warn and mandated reporting — psychopharm-related aggression vignettes",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "LCSW-style item: SSRIs and akathisia — how to document risk, collaborate, and avoid practicing medicine on exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should social work escalate serotonin syndrome suspicion versus anxiety exacerbation in emergency department handoffs",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Social work board prep: lithium toxicity cues in older adults — assessment boundaries and interdisciplinary communication",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does stimulant diversion complicate ADHD treatment plans — ethics, confidentiality, and safety documentation items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Exam question: how antipsychotic metabolic monitoring expectations show up in integrated care case management stems",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Social work licensing: benzodiazepine deprescribing conversations — motivational interviewing without prescribing language",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of naltrexone for alcohol use disorder — how items test referral and adherence barriers",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you involve psychiatry urgently versus outpatient follow-up for medication nonadherence in depression cases",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "MSW exam: why does polypharmacy increase delirium risk in hospital social work assessments and discharge planning",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Social work vignette: MAOI dietary teaching scope — what the exam expects you to coordinate versus defer",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "How do you document capacity concerns when anticholinergics contribute to confusion without overstepping scope",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Licensing item: why does pregnancy change antidepressant risk–benefit framing in collaborative care scenarios",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Social work exam: clozapine monitoring requirements as a case manager coordination topic, not prescriptive authority",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should social work prioritize elder financial exploitation screening with cognitive impact from sedating medications",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the difference between medication adherence barriers from cost versus health literacy on exam case plans",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Social work board: opioid use disorder and housing instability — contingency management boundaries in test rationales",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does gabapentin misuse appear in chronic pain social work cases — safety planning without diagnosing substance use",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Exam-style: how to navigate cultural beliefs about psychiatric medication in family meetings within SW ethics codes",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "MSW question: when sleep medications mask untreated sleep apnea — referral language social workers use on tests",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Social work prep: ketamine clinic access inequities — policy questions versus clinical dosing (scope trap items)",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does stimulant use disorder in adolescents change confidentiality rules in exam multi-step stems",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "LCSW exam: antidepressant sexual side effects — couples counseling boundaries and medical referral timing",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Social Work",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Paramedic exam question: ketamine versus etomidate for RSI in shock — hemodynamic mechanisms and contraindication review",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you give calcium chloride versus gluconate for hyperkalemia with ECG changes in prehospital protocols",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of epinephrine in cardiac arrest dosing rationale and common exam dose-error traps",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Paramedic board prep: why does nitroglycerin precipitate hypotension in RV infarct vignettes",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "How do you calculate dopamine infusion rates from mcg/kg/min when pumps use mL/hr on certification exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Prehospital pharmacology: atropine versus pacing for symptomatic bradycardia — algorithm forks that tests love",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does sodium bicarbonate appear in tricyclic overdose teaching — sodium channel blockade mechanism on exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Paramedic item: when should you withhold fluids in trauma resuscitation — permissive hypotension nuance and updates",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the difference between anaphylaxis and vasovagal syncope for IM epinephrine decisions in field scenarios",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Exam question: why does amiodarone prolong QT — implications for polymorphic VT recognition in case stems",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Paramedic credential: magnesium for torsades — mechanism, dosing pattern, and reassessment endpoints",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you choose needle decompression site and depth assumptions on test questions versus real protocol variance",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does aspirin dosing matter in suspected ACS for EMS items — platelet inhibition mechanism recap",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Paramedic pharmacology: naloxone partial agonist concepts when buprenorphine is present — precipitated withdrawal teaching",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of albuterol-induced tachycardia versus true ACS pain patterns in noisy field presentations",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Prehospital exam: calcium channel blocker overdose — hyperinsulinemia-euglycemia therapy as advanced item recognition",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does sepsis alter antibiotic timing ethics in EMS — scope and hospital notification items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Paramedic question: push-dose phenylephrine versus epinephrine for peri-intubation hypotension mechanisms",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you suspect preeclampsia progression to eclampsia — magnesium indications adjacent to transport priorities",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Exam-style: why does carbon monoxide poisoning produce false-normal SpO2 on standard pulse oximetry items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Paramedic board: rocuronium dosing and sugammadex awareness as recognition-only versus scope-of-practice traps",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does drowning physiology produce metabolic acidosis with respiratory compensation patterns on ABG teaching",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Prehospital pain control: fentanyl versus morphine PK differences tested on paramedic pharmacology sections",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you withhold NTG if phosphodiesterase inhibitor use is suspected — exam stem clue patterns",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Trauma exam question: TXA mechanism and timing windows — contraindications that show up as distractors",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Paramedic",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "MLT exam question: why does hemolysis falsely elevate or depress potassium depending on assay method teaching points",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "When should you reject a specimen for coagulation testing — pre-analytical errors that certification exams emphasize",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of EDTA-induced platelet clumping falsely lowering automated platelet counts",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "Medical laboratory science item: lactate dehydrogenase isoenzyme patterns in hemolysis versus tissue injury vignettes",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "How do you interpret corrected sodium for hyperglycemia on chemistry panels — calculation items on MLS exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "MLT board prep: why does lipemia interfere with spectrophotometric assays — blanking strategies and limitations",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "When should you suspect a specimen mix-up from impossible lab combinations — delta check reasoning on tests",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "What is the difference between Type 1 and Type 2 von Willebrand panel patterns at a recognition level for MLT items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "Exam question: why does high-dose IV vitamin C interfere with certain glucose meters — mechanism and safety reporting",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "MLT credential: peripheral smear schistocytes versus spherocytes — pathophysiology links to TTP versus hereditary spherocytosis teaching",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "Why does potassium shift falsely low if plasma is separated late from cells in uncentrifuged tubes",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "Medical lab exam: troponin serial testing rationale — hook effect recognition at conceptual level",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "When should QC Westgard rules trigger investigation versus repeat — exam algorithms for laboratory scientists",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of cryoprecipitate composition relevant to fibrinogen replacement recognition items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "MLT question: why does urobilinogen change in hemolytic versus obstructive jaundice patterns on urinalysis teaching",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "Exam-style: ANA patterns as screening limitations — what MLT exams expect versus rheumatology depth boundaries",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "Why does cold agglutinin disease affect automated CBC results — warming steps and validation concepts",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "MLS prep: procalcitonin as bacterial sepsis adjunct — interpretation limits on certification stems",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "When should you suspect heterophile antibody interference in immunoassays — false positive/negative mechanism items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "What is the difference between GFR estimating equations for creatinine versus cystatin C in lab reporting questions",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "MLT exam: why does methemoglobinemia produce chocolate-colored blood and abnormal SpO2 on co-oximetry teaching",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "Medical laboratory item: D-dimer specificity limitations — when exams pair with Wells score narrative",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "Why does specimen hemolysis affect troponin assays differently by platform — high-level exam concept questions",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "When should you call a critical potassium — policy versus physiology thresholds in case-based items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "MLS board: iron studies pattern in anemia of chronic disease versus iron deficiency — ferritin interpretation pearls",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "MLT",
+      "domains": [
+        "lab interpretation",
+        "pathophysiology",
+        "medication safety"
+      ]
+    },
+    {
+      "topic": "PT board prep: why does prolonged corticosteroid use increase tendon rupture risk during eccentric loading programs",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Physical therapy exam question: beta-blocker effects on max HR estimation — exercise prescription exam traps",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should PT defer progression after starting ACE inhibitors due to orthostasis in older adult case stems",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of statin-associated myalgia affecting strength retesting schedules on licensing items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "PT exam: anticoagulation implications for manual therapy timing — INR concepts at collaborative decision level",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does opioid sedation change gait variability measures — safety teaching in neurologic PT vignettes",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Physical therapy item: bisphosphonate-related atypical femur stress fractures — load management exam language",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you screen for red flags before spinal manipulation cases involving antiplatelet medications",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "PT credential question: diuretic-induced electrolyte loss and muscle cramping — referral versus education boundaries",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the difference between central and peripheral vertigo medication responses on exam differentiation tables",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Physical therapy licensing: gabapentinoids and fall risk — home exercise program modifications tested",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does insulin timing matter for exercise-induced hypoglycemia prevention in diabetes mellitus PT scenarios",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "PT exam-style: SSRIs and hyponatremia risk during heat exposure in outdoor sports rehab case stems",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should PT coordinate with cardiology before high-intensity intervals in post-MI patients on multiple antianginals",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of nitrates reducing preload — implications for orthostatic symptoms after mat exercises",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Physical therapy board: benzodiazepines and balance — objective test selection rationales without diagnosing",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does caffeine withdrawal headache confound post-concussion symptom tracking in RTP protocols on exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "PT question: NSAID renal risk during dehydration in athletic training adjacent case management items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should weight-bearing restrictions after certain osteoporosis medications influence gait training plans on tests",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of claudication from PAD versus spinal stenosis pseudo-claudication medication responses",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Physical therapy exam: antipsychotic EPS mimicking Parkinson disease — referral cues within PT scope items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does metformin-associated B12 deficiency matter for endurance complaints in long-term diabetes rehab cases",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "PT prep: SGLT2 inhibitors and euglycemic DKA risk during illness — exercise counseling recognition questions",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should PT pause progression if new peripheral edema appears after calcium channel blocker titration vignettes",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Exam trap: fluoroquinolone tendonopathy timing — explosive plyometric progression errors on PT tests",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "PSW exam question: insulin timing with meals — hypoglycemia recognition, 15-15 rule, and observation reporting priorities",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you hold oral fluids before swallowing assessment — scope boundaries versus nursing delegation on tests",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of sliding-scale insulin limitations — why exams push basal-bolus awareness for PSWs at education level",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "PSW credential prep: opioid-induced constipation cues — safe prompting and documentation without medication changes",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "How do you calculate mL of juice for mild hypoglycemia when a care plan specifies carbohydrate amounts",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does metformin GI upset improve with meals — PSW meal assistance sequencing items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "PSW board-style: anticholinergic dry mouth and aspiration risk during feeding assistance vignettes",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should PSW report sudden confusion after new antibiotics — delirium versus infection progression exam stems",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the difference between PRN anxiolytic sedation and normal fatigue during evening care scenarios",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "PSW exam: warfarin and fall risk — bleeding precautions without interpreting INR numbers on items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does nitroglycerin patch removal timing matter for PSW shower assistance safety teaching",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Personal support worker item: topical glycopyrrolate for sweating — indirect care and skin observation expectations",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should PSW escalate missed antiseizure doses versus watchful waiting per care plan exam language",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of laxative overuse causing electrolyte disturbance recognition at PSW reporting depth",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "PSW prep: SGLT2 genital infection education — dignity-preserving observation cues without diagnosing",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does aspirin allergy history matter when assisting with OTC purchases in community PSW exam traps",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Exam question: PSW role in medication reminder apps versus administering — scope-of-practice distractors",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you report patchy rash after new antibiotics — allergy communication chain items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "PSW licensing: dopamine agonist impulse-control topics as observation-and-report scenarios, not counseling depth",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the difference between side effect reporting and diagnosing in PSW documentation case studies",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does insulin pen priming errors cause hyperglycemia patterns PSWs observe before nurse review",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "PSW exam: naloxone community availability — what PSWs are expected to know versus administer by region items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should mealtime insulin be held per nurse instruction — PSW exam prioritization of orders over habit",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Personal support worker vignette: polypharmacy and pill organizers — tampering signs and reporting ethics",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does alcohol use increase bleeding risk on anticoagulants — simple mechanism for PSW safety teaching exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "PSW",
+      "domains": [
+        "medication safety",
+        "dosage calculation",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Pharmacy technician exam: high-alert LASA pairs in inpatient carts — verification steps and tall-man lettering items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "When should you involve pharmacists for look-alike vial errors — tech scope questions on certification exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of potassium chloride concentrate dangers — dilution requirements tested as safety scenarios",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "Pharm tech board prep: how do you calculate tablets needed for a 10-day supply with BID dosing and partial tablets rules",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "Why does insulin concentration mix-ups (U-100 vs U-500) appear as sentinel event teaching on PTCE-style items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "Pharmacy technician question: beyond-use dating for compounded nonsterile preparations — USP concept recognition",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "When should refrigerated chain breaks trigger quarantine procedures — exam workflow sequencing questions",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "What is the difference between generic substitution laws and therapeutic substitution authority on tests",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "Pharm tech exam: chemotherapy Spill kit steps — PPE order and surface decontamination rationale items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "How do you calculate IV flow rate from gtt/mL and mL/hr when an order uses both on exam math",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "Why does grapefruit juice affect certain statins — CYP3A4 interaction depth appropriate for pharmacy technicians",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "Pharmacy technician item: DEA controlled substance inventory discrepancies — reporting timelines on exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "When should you refuse to release a prescription early for controlled substances — policy versus judgment stems",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of reconstituted antibiotic stability windows affecting auxiliary labels on test items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "Pharm tech credential: narrow therapeutic index drugs — why digoxin and warfarin appear in counseling adjunct questions",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "Why does barcode scanning reduce wrong-patient errors — medication safety technology questions for technicians",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "Pharmacy technician board: hazardous drug handling in retail versus hospital — PPE differences on exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "When should partial fills for opioids follow state law patterns tested as multiple true/false clusters",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "What is the difference between formulary tiers and prior authorization from a technician workflow perspective",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "Pharm tech exam: vaccine storage excursions — documentation and pharmacist notification sequences",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "Why does isotonic versus hypertonic saline concentration matter for IV admixture checks on calculation exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "Pharmacy technician prep: USP <797> basics at recognition level — not sterile compounding certification depth traps",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "When should you use a filter needle with glass ampules — exam rationale and waste minimization items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of methotrexate weekly versus daily fatal error patterns in case-based technician exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "Pharm tech question: pediatric liquid measurement with oral syringes — rounding rules and device selection",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Pharmacy Technician",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "dosage calculation"
+      ]
+    },
+    {
+      "topic": "Psychotherapy licensing exam: when should you postpone exposure therapy if benzodiazepines blunt habituation on case stems",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of SSRI delayed onset — how exam items test psychoeducation without medication management",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Psychotherapy board prep: MAOI dietary restrictions — collaborative care language versus prescriptive traps",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should therapists escalate suicidal ideation with recent antidepressant initiation — black box warning teaching",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does bupropion lower seizure threshold — group therapy environment planning items for licensing exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Psychotherapy exam: lithium toxicity mild tremor versus anxiety — scope-appropriate referral phrasing",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the difference between medication-induced akathisia and agitated depression in session observation vignettes",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you document capacity concerns after high-dose antipsychotic sedation in crisis counseling cases",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Psychotherapy credential question: stimulant appetite suppression in adolescents — family systems items paired with medical collaboration",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does abrupt SSRI discontinuation cause discontinuation syndrome — psychoeducation points tested on exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Licensing item: ketamine-assisted therapy settings — what psychotherapy exams treat as out-of-scope dosing detail",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Psychotherapy prep: naltrexone for alcohol use disorder as adjunct to CBT — adherence barriers without prescribing",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should sleep medication effects on memory consolidation change homework design in CBT-I adjacent items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of prazosin for PTSD nightmares — informed consent boundaries for non-prescribing therapists",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Psychotherapy exam question: valproate teratogenicity — couples counseling ethics when pregnancy is possible",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does anticholinergic burden worsen cognitive scores in therapy intake — differential referral language",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you coordinate with psychiatry before behavioral activation if severe anhedonia and weight loss appear",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Psychotherapy board: gabapentin misuse in chronic pain clients — motivational interviewing without diagnosing SUD",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the difference between therapeutic relationship ruptures and emergent mania from antidepressant activation items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Psychotherapy licensing: clozapine sialorrhea as a distress topic — containment versus medical management referral",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should digital therapeutics for depression integrate with medication adherence tracking — privacy exam questions",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does propranolol performance anxiety dosing appear as off-label awareness items for therapists not prescribers",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Psychotherapy exam: peripartum depression medication decisions — supportive therapy boundaries in vignettes",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you screen for bipolar disorder before interpreting SSRI failure in CBT case conceptualizations",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of thyroid hormone correction improving mood — biopsychosocial integration questions on tests",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "Psychotherapy",
+      "domains": [
+        "pharmacology",
+        "medication safety",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "EMT exam question: epinephrine auto-injector versus IM dosing assumptions in anaphylaxis recognition drills",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should BLS withhold assisted ventilation in obvious death criteria — exam ethics versus trauma vignettes",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of hypoglycemia producing seizure-like activity — field differentiation items for EMT tests",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "EMT board prep: aspirin administration for suspected ACS — contraindications and scope limitations on exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does naloxone precipitate withdrawal — mechanism tested at BLS recognition depth adjacent to safety",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "EMT item: spinal motion restriction updates — exam questions reflecting contemporary evidence-based practice",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you assist with nitroglycerin administration checks — blood pressure prerequisites on test algorithms",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the difference between heat exhaustion and heat stroke for cooling interventions on certification exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "EMT exam: opioid respiratory depression assessment — ventilatory rate versus pulse oximetry pitfalls in the field",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does carbon monoxide exposure produce headache with normal SpO2 on basic monitoring teaching items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "EMT credential question: pediatric bradycardia with poor perfusion — CPR integration and AED use exam paths",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you prioritize epinephrine in unstable bradycardia versus pacing-capable transport decisions at EMT scope",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of simple pneumothorax progression to tension in exam pathophysiology stems",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "EMT prep: stroke scales and last-known-well time — thrombectomy window recognition without hospital dosing",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does glucose paste administration timing matter in altered mental status algorithm questions",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "EMT exam-style: epinephrine routes for cardiac arrest in adult BLS — chain of survival ordering items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you suspect pulmonary edema from flash pulmonary hypertension in pregnancy field scenarios at recognition level",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the difference between allergic reaction and anaphylaxis for epinephrine IM decisions on EMT tests",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "EMT question: trauma triage destination criteria — mechanism severity cues without hospital capability lists",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does atropine dosing change in organophosphate exposure teaching at advanced recognition tiers on some exams",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "EMT board: burn fluid resuscitation initiation — what BLS exams expect versus paramedic scope boundaries",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "When should you apply pelvic binder for suspected pelvic fracture — exam indications and contraindication recognition",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "What is the mechanism of vasovagal syncope bradycardia patterns on simple monitor strips in EMT items",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "EMT licensing: epinephrine for croup in interfacility transport questions — scope-of-practice regional variance traps",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    },
+    {
+      "topic": "Why does drowning resuscitation emphasize oxygenation and ventilation first in BLS exam answer keys",
+      "pathwayId": "ca-allied-core",
+      "tier": "Allied",
+      "occupation": "EMT",
+      "domains": [
+        "pharmacology",
+        "pathophysiology",
+        "clinical decision making"
+      ]
+    }
+  ]
+}

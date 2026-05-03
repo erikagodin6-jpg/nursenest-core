@@ -65,6 +65,7 @@ import { applyAlliedStructuralCompletion } from "@/lib/lessons/allied-pathway-le
 import { applyNewGradStructuralCompletion } from "@/lib/lessons/new-grad-pathway-lesson-structural-normalization";
 import { applyNpPremiumStructuralCompletion } from "@/lib/lessons/np-pathway-lesson-structural-normalization";
 import { prependScopedGoldCatalogLessons } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
+import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
 import {
   normalizeLessonCategory,
   premiumizeLessonDisplayTitle,
@@ -119,6 +120,8 @@ type CatalogShape = {
         priority?: PathwayLessonPriority;
         examMeta?: PathwayLessonExamMeta[];
         embeddedSoundLibraries?: PathwayEmbeddedSoundLibraryId[];
+        /** When set, marketing allied hubs can list this row only for matching `?alliedProfession=`. */
+        alliedProfessionKey?: string;
       }>;
     }
   >;
@@ -527,6 +530,48 @@ function newGradTransitionLessonsForPathway(pathwayId: string): LessonInput[] {
   const bucket = getNewGradTransitionPathways()[pathwayId];
   const rows = bucket?.lessons;
   return Array.isArray(rows) ? rows.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP) : [];
+}
+
+function loadAlliedProfessionDedicatedLessonsForPathway(pathwayId: string): LessonInput[] {
+  const out: LessonInput[] = [];
+  for (const p of ALLIED_PROFESSIONS) {
+    if (p.pathwayId !== pathwayId) continue;
+    const file = p.dedicatedCatalogFile?.trim();
+    if (!file) continue;
+    try {
+      const mod = catalogBundleRequire(`@/content/pathway-lessons/allied-professions/${file}`) as {
+        lessons?: LessonInput[];
+      };
+      for (const row of mod.lessons ?? []) {
+        const slug = typeof row.slug === "string" ? row.slug.trim() : "";
+        if (!slug) continue;
+        out.push({
+          ...row,
+          alliedProfessionKey: (row.alliedProfessionKey ?? p.professionKey).trim().toLowerCase(),
+        });
+      }
+    } catch {
+      // Optional per-profession shard — omit when file is absent or invalid.
+    }
+  }
+  return out.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP);
+}
+
+/** Dedicated allied shards replace shared rows by `slug` before scoped-gold prepend. */
+function mergeDedicatedAlliedCatalogOverlay(pathwayId: string, merged: LessonInput[]): LessonInput[] {
+  const dedicated = loadAlliedProfessionDedicatedLessonsForPathway(pathwayId);
+  if (dedicated.length === 0) return merged;
+  const bySlug = new Map<string, LessonInput>();
+  for (const row of merged) {
+    const s = row.slug.trim();
+    if (s) bySlug.set(s, row);
+  }
+  for (const row of dedicated) {
+    const s = row.slug.trim();
+    if (!s) continue;
+    bySlug.set(s, row);
+  }
+  return Array.from(bySlug.values());
 }
 
 export type LessonInput = CatalogShape["pathways"][string]["lessons"][number];
@@ -1687,7 +1732,7 @@ export function getCatalogLessonsRawFromBundledOnly(pathwayId: string): LessonIn
     seen.add(l.slug);
     merged.push(l);
   }
-  return prependScopedGoldCatalogLessons(pathwayId, merged);
+  return prependScopedGoldCatalogLessons(pathwayId, mergeDedicatedAlliedCatalogOverlay(pathwayId, merged));
 }
 
 function buildCatalogLessonsRawUncached(pathwayId: string): LessonInput[] {
@@ -1827,7 +1872,10 @@ function buildCatalogLessonsRawUncached(pathwayId: string): LessonInput[] {
         seen.add(s);
         merged.push(extra);
       }
-      return prependScopedGoldCatalogLessons(pathwayId, merged);
+      return prependScopedGoldCatalogLessons(
+        pathwayId,
+        mergeDedicatedAlliedCatalogOverlay(pathwayId, merged),
+      );
     }
   }
   return getCatalogLessonsRawFromBundledOnly(pathwayId);

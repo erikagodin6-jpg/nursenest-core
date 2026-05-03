@@ -1,5 +1,7 @@
 import type { Prisma } from "@prisma/client";
-import { ContentStatus, type CountryCode, type TierCode } from "@prisma/client";
+import { ContentStatus, type CountryCode, TierCode } from "@prisma/client";
+import { exclusiveTopicSlugsForAlliedProfession } from "@/lib/allied/allied-profession-lesson-exclusive-scope";
+import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { prismaTierCodesForProfileTier } from "@/lib/entitlements/accessible-tiers";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
@@ -58,28 +60,58 @@ export async function pathwayLessonsAppListWhere(
 /**
  * Narrows pathway lessons by catalog topic, topicSlug, or pathwayId.
  * Used by weak-area and post-test links.
+ * When `alliedProfessionKey` is set with an allied marketing core pathway, restricts rows to that
+ * profession's exclusive topic bank (same rules as marketing hubs).
  */
 export async function pathwayLessonsAppListWhereWithTopicFilter(
   scope: AccessScope,
   learnerPath: string | null | undefined,
-  filter: { topic?: string | null; topicSlug?: string | null; pathwayId?: string | null },
+  filter: {
+    topic?: string | null;
+    topicSlug?: string | null;
+    pathwayId?: string | null;
+    alliedProfessionKey?: string | null;
+    /** When true, apply allied profession topic scope even if tier is not ALLIED (tests / tooling). */
+    forceAlliedProfessionTopicScope?: boolean;
+  },
 ): Promise<Prisma.PathwayLessonWhereInput> {
   const base = await pathwayLessonsAppListWhere(scope, learnerPath);
 
   const topicSlug = normalizeSlug(filter.topicSlug);
   const topic = normalizeText(filter.topic);
   const pathwayId = normalizeText(filter.pathwayId);
+  const allied = filter.alliedProfessionKey?.trim().toLowerCase() ?? "";
+  const scopedPathwayId = pathwayId ?? normalizeText(learnerPath);
+  const tier = scope.tier as TierCode | null;
+  const applyAlliedScope =
+    Boolean(allied && scopedPathwayId && isAlliedMarketingCorePathwayId(scopedPathwayId)) &&
+    (filter.forceAlliedProfessionTopicScope === true || tier === TierCode.ALLIED);
 
   const extraClauses: Prisma.PathwayLessonWhereInput[] = [];
 
-  if (topicSlug) {
-    extraClauses.push({ topicSlug });
-  } else if (topic) {
-    extraClauses.push({ topic: { equals: topic, mode: "insensitive" } });
-  }
-
   if (pathwayId) {
     extraClauses.push({ pathwayId });
+  }
+
+  if (applyAlliedScope) {
+    const owned = exclusiveTopicSlugsForAlliedProfession(scopedPathwayId, allied);
+    if (owned.length === 0) {
+      return mergeAndWhere(base, [{ id: { in: [] } }]);
+    }
+    if (topicSlug) {
+      if (!owned.includes(topicSlug)) {
+        return mergeAndWhere(base, [{ id: { in: [] } }]);
+      }
+      extraClauses.push({ topicSlug });
+    } else {
+      extraClauses.push({ topicSlug: { in: owned } });
+    }
+  } else {
+    if (topicSlug) {
+      extraClauses.push({ topicSlug });
+    } else if (topic) {
+      extraClauses.push({ topic: { equals: topic, mode: "insensitive" } });
+    }
   }
 
   if (extraClauses.length === 0) {

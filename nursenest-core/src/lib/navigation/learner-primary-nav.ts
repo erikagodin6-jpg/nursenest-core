@@ -13,6 +13,8 @@ export const CANONICAL_LEARNER_ROUTES = {
   lessons: "/app/lessons",
   practice: "/app/questions",
   flashcards: "/app/flashcards",
+  /** Gated by server + public nav flag; route 404s when the learner store is off. */
+  printables: "/app/printables",
   osce: SCENARIO_LEARNER_ROUTES.osce,
   clinicalScenarios: SCENARIO_LEARNER_ROUTES.clinicalScenarios,
   /** CAT adaptive entry */
@@ -46,9 +48,13 @@ export const OSCE_SHELL_NAV_ID = "osce" as const;
 /** Appended when {@link isClinicalScenariosPubliclyEnabled} is true (nursing clinical scenarios). */
 export const CLINICAL_SCENARIOS_SHELL_NAV_ID = "clinical_scenarios" as const;
 
+/** Shown only when {@link isPrintableStorePublicNavEnabled} is true (passed from learner layout). */
+export const PRINTOUTS_SHELL_NAV_ID = "printouts" as const;
+
 export type LearnerShellStudyNavRowId =
   | LearnerPrimaryNavItem["key"]
   | typeof STUDY_TOOLS_SHELL_NAV_ID
+  | typeof PRINTOUTS_SHELL_NAV_ID
   | typeof OSCE_SHELL_NAV_ID
   | typeof CLINICAL_SCENARIOS_SHELL_NAV_ID;
 
@@ -152,5 +158,27 @@ export function buildOptionalClinicalScenariosShellNavItem(pathwayId: string | n
     href: withScenarioPathwayQuery(SCENARIO_LEARNER_ROUTES.clinicalScenarios, pathwayId),
     matchPrefix: "/app/clinical-scenarios",
     labelKey: "learner.shell.nav.clinicalScenarios",
+  };
+}
+
+/**
+ * When `navVisible` is true (typically from `isPrintableStorePublicNavEnabled()` in the learner layout),
+ * both server and public printable flags are on — keep in sync with `printable-store-flags.ts`.
+ */
+export function buildOptionalPrintablesShellNavItem(
+  pathwayId: string | null,
+  navVisible: boolean,
+): {
+  id: typeof PRINTOUTS_SHELL_NAV_ID;
+  href: string;
+  matchPrefix: string;
+  labelKey: string;
+} | null {
+  if (!navVisible) return null;
+  return {
+    id: PRINTOUTS_SHELL_NAV_ID,
+    href: withPathwayQuery(CANONICAL_LEARNER_ROUTES.printables, pathwayId),
+    matchPrefix: "/app/printables",
+    labelKey: "learner.shell.nav.printouts",
   };
 }

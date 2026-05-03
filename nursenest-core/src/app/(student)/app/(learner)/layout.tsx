@@ -35,6 +35,7 @@ import {
   LearnerShellMobileBottomNav,
   LearnerShellPathwayPill,
 } from "@/components/layout/learner-shell-primary-nav";
+import { isPrintableStorePublicNavEnabled } from "@/lib/printables/printable-store-flags";
 import { LearnerStudyPathStrip } from "@/components/student/learner-study-path-strip";
 import { LearnerPathwayContextBar } from "@/components/student/learner-pathway-context-bar";
 import { LearnerShellBrandHomeLink } from "@/components/student/learner-shell-brand-home-link";
@@ -185,6 +186,8 @@ export default async function LearnerShellLayout({ children }: { children: React
       ? { pathwayId, pathwayLabel: pathwayShortLabel }
       : null;
 
+  const printablesNavVisible = isPrintableStorePublicNavEnabled();
+
   let paywalledRouteBody: ReactNode = (
     <LearnerSilentSectionBoundary name="route_body">{children}</LearnerSilentSectionBoundary>
   );
@@ -289,7 +292,11 @@ export default async function LearnerShellLayout({ children }: { children: React
                     ) : null}
                   </div>
                   <div className="nn-learner-shell-nav-row rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-2 shadow-[0_1px_0_0_color-mix(in_srgb,var(--semantic-text-primary)_06%,transparent)] sm:px-3">
-                    <LearnerShellDesktopStudyLinks pathwayId={pathwayId} examsLabel={examsLabel} />
+                    <LearnerShellDesktopStudyLinks
+                      pathwayId={pathwayId}
+                      examsLabel={examsLabel}
+                      printablesNavVisible={printablesNavVisible}
+                    />
                   </div>
                   <LearnerStudyPathStrip pathwayId={pathwayId} />
                 </div>
@@ -298,6 +305,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                   pathwayId={pathwayId}
                   pathwayHubHref={pathwayHubHref}
                   examsLabel={examsLabel}
+                  printablesNavVisible={printablesNavVisible}
                 />
               </div>
               {studyNextBlock ? (

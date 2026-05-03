@@ -7,6 +7,7 @@ import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { loadPathwayLessonsHubAggregates } from "@/lib/exam-pathways/marketing-hub-optional-data";
+import type { MarketingHubLessonsListOptions } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import {
@@ -77,7 +78,11 @@ import {
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
-import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
+import {
+  alliedProfessionTrackChipLabel,
+  getAlliedProfessionByProfessionKey,
+} from "@/lib/allied/allied-professions-registry";
+import { exclusiveTopicSlugsForAlliedProfession } from "@/lib/allied/allied-profession-lesson-exclusive-scope";
 import {
   ALLIED_PROFESSION_QUERY_PARAM,
   isAlliedMarketingCorePathwayId,
@@ -306,12 +311,20 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
   const isDefaultUnfilteredMarketingLessonsHub =
     !qEffective && !topicSlugNorm && !alliedProfessionKey;
 
-  let listOpts: { q?: string; topicSlugsIn?: string[] } | undefined;
-  const alliedTopics = alliedProfessionResolved?.topicSlugsIn;
-  if (alliedTopics && alliedTopics.length > 0) {
-    const narrowed =
-      topicSlugNorm && alliedTopics.includes(topicSlugNorm) ? [topicSlugNorm] : alliedTopics;
-    listOpts = qEffective ? { q: qEffective, topicSlugsIn: narrowed } : { topicSlugsIn: narrowed };
+  let listOpts: MarketingHubLessonsListOptions | undefined;
+  if (alliedProfessionResolved && isAlliedMarketingCorePathwayId(pathway.id)) {
+    const exclusive = exclusiveTopicSlugsForAlliedProfession(pathway.id, alliedProfessionResolved.professionKey);
+    const drill =
+      topicSlugNorm && exclusive.includes(topicSlugNorm.trim().toLowerCase())
+        ? [topicSlugNorm.trim().toLowerCase()]
+        : undefined;
+    listOpts = qEffective
+      ? {
+          q: qEffective,
+          alliedProfessionKey: alliedProfessionResolved.professionKey,
+          ...(drill ? { topicSlugsIn: drill } : {}),
+        }
+      : { alliedProfessionKey: alliedProfessionResolved.professionKey, ...(drill ? { topicSlugsIn: drill } : {}) };
   } else {
     listOpts =
       qEffective && topicSlugNorm
@@ -455,7 +468,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         ? pathwayTopicClusterBreadcrumbs(pathway, topicSlugNorm, topicClusterFallbackLabel)
         : pathwayLessonsHubBreadcrumbs(pathway);
     const examName = pathwayRegionAwareExamName(pathway);
-    const pageTitle = "Lessons";
+    const pageTitle =
+      alliedProfessionResolved && isAlliedMarketingCorePathwayId(pathway.id)
+        ? `${alliedProfessionTrackChipLabel(alliedProfessionResolved)} lessons`
+        : "Lessons";
     const headerDescription =
       alliedProfessionResolved && !topicSlugNorm
         ? `Browse ${alliedProfessionResolved.h1} lessons for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`
@@ -923,7 +939,10 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       ? pathwayTopicClusterBreadcrumbs(pathway, topicSlugNorm, topicClusterLabel)
       : pathwayLessonsHubBreadcrumbs(pathway);
   const examName = pathwayRegionAwareExamName(pathway);
-  const pageTitle = "Lessons";
+  const pageTitle =
+    alliedProfessionResolved && isAlliedMarketingCorePathwayId(pathway.id)
+      ? `${alliedProfessionTrackChipLabel(alliedProfessionResolved)} lessons`
+      : "Lessons";
   const headerDescription =
     alliedProfessionResolved && !topicSlugNorm
       ? `Browse ${alliedProfessionResolved.h1} lessons for ${pathway.shortName} in ${pathwayCountryLabel(pathway)}.`
@@ -969,7 +988,11 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       initialQuery={qEffective ?? undefined}
       preservedTopicSlug={topicSlugNorm ?? undefined}
       preservedAlliedProfession={alliedProfessionKey || undefined}
-      totalCount={hubListCountForChrome}
+      totalCount={
+        alliedProfessionResolved && isAlliedMarketingCorePathwayId(pathway.id)
+          ? pageResult.total
+          : hubListCountForChrome
+      }
       countryOptions={[
         { label: "Canada", href: canadaHref, active: pathway.countrySlug === "canada" },
         { label: "US", href: usHref, active: pathway.countrySlug === "us" },
@@ -1263,12 +1286,64 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         {/* Section toolbar: heading + count badge */}
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--semantic-border-soft)] pb-4">
           <h2 id="lesson-library-heading" className="text-base font-semibold text-[var(--theme-heading-text)]">
-            Lesson library
+            {alliedProfessionResolved && isAlliedMarketingCorePathwayId(pathway.id)
+              ? `${alliedProfessionTrackChipLabel(alliedProfessionResolved)} lesson library`
+              : "Lesson library"}
           </h2>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1 text-xs font-semibold text-[var(--theme-muted-text)]">
-            {hubListCountForChrome.toLocaleString()} {hubListCountForChrome === 1 ? "lesson" : "lessons"}
+            {(
+              alliedProfessionResolved && isAlliedMarketingCorePathwayId(pathway.id)
+                ? pageResult.total
+                : hubListCountForChrome
+            ).toLocaleString()}{" "}
+            {(
+              alliedProfessionResolved && isAlliedMarketingCorePathwayId(pathway.id)
+                ? pageResult.total
+                : hubListCountForChrome
+            ) === 1
+              ? "lesson"
+              : "lessons"}
           </span>
         </div>
+        {alliedProfessionResolved && isAlliedMarketingCorePathwayId(pathway.id) ? (
+          <div className="mb-4 flex flex-wrap items-center gap-2">
+            <span className="w-full text-xs font-semibold uppercase tracking-wide text-[var(--theme-muted-text)] sm:w-auto">
+              Topics for this track
+            </span>
+            <Link
+              href={`${base}?${new URLSearchParams({ [ALLIED_PROFESSION_QUERY_PARAM]: alliedProfessionResolved.professionKey }).toString()}`}
+              className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+                !topicSlugNorm
+                  ? "border-[color-mix(in_srgb,var(--semantic-brand)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,transparent)] text-[var(--theme-heading-text)]"
+                  : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--theme-muted-text)] hover:bg-[var(--semantic-panel-muted)]"
+              }`}
+            >
+              All topics
+            </Link>
+            {exclusiveTopicSlugsForAlliedProfession(pathway.id, alliedProfessionResolved.professionKey).map(
+              (slug) => {
+                const active = topicSlugNorm === slug;
+                const href = `${base}?${new URLSearchParams({
+                  [ALLIED_PROFESSION_QUERY_PARAM]: alliedProfessionResolved.professionKey,
+                  topicSlug: slug,
+                }).toString()}`;
+                return (
+                  <Link
+                    key={slug}
+                    href={href}
+                    className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+                      active
+                        ? "border-[color-mix(in_srgb,var(--semantic-info)_50%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_14%,transparent)] text-[var(--theme-heading-text)]"
+                        : "border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] text-[var(--theme-muted-text)] hover:bg-[var(--semantic-panel-muted)]"
+                    }`}
+                  >
+                    {slug.replace(/-/g, " ")}
+                  </Link>
+                );
+              },
+            )}
+          </div>
+        ) : null}
         <PathwayLessonsCurriculumHub
           lessons={hubPageLessons}
           preparedLessons={hubPageLessons}

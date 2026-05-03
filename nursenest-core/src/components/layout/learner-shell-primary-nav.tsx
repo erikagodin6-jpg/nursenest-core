@@ -12,6 +12,7 @@ import {
   buildLearnerPrimaryNavItems,
   buildOptionalClinicalScenariosShellNavItem,
   buildOptionalOsceScenarioShellNavItems,
+  buildOptionalPrintablesShellNavItem,
   buildOptionalStudyToolsShellNavItem,
   isLearnerPrimaryNavKey,
   learnerPrimaryNavLabelKey,
@@ -48,12 +49,15 @@ export type LearnerShellNavProps = {
   pathwayId: string | null;
   pathwayHubHref: string | null;
   examsLabel: "CAT Exams" | "Exams";
+  /** When true, show Printouts in learner shell nav (server: printable store + public flag). */
+  printablesNavVisible?: boolean;
 };
 
 function useLearnerNavItems({
   pathwayId,
   examsLabel,
-}: Pick<LearnerShellNavProps, "pathwayId" | "examsLabel">) {
+  printablesNavVisible = false,
+}: Pick<LearnerShellNavProps, "pathwayId" | "examsLabel" | "printablesNavVisible">) {
   const { t } = useMarketingI18n();
   const locale = useMarketingLocale();
 
@@ -85,6 +89,17 @@ function useLearnerNavItems({
       });
       insertAt += 1;
     }
+    const printables = buildOptionalPrintablesShellNavItem(pathwayId, printablesNavVisible);
+    if (printables) {
+      const label = formatTitleCase(t(printables.labelKey), locale);
+      rows.splice(insertAt, 0, {
+        id: printables.id,
+        href: printables.href,
+        matchPrefix: printables.matchPrefix,
+        label,
+      });
+      insertAt += 1;
+    }
     for (const row of buildOptionalOsceScenarioShellNavItems(pathwayId)) {
       const label = formatTitleCase(t(row.labelKey), locale);
       rows.splice(insertAt, 0, {
@@ -107,7 +122,7 @@ function useLearnerNavItems({
       insertAt += 1;
     }
     return rows;
-  }, [pathwayId, examsLabel, t, locale]);
+  }, [pathwayId, examsLabel, printablesNavVisible, t, locale]);
 }
 
 /** Pathway hub pill — sits in the top chrome row next to the logo. */
@@ -142,9 +157,10 @@ export function LearnerShellPathwayPill({
 export function LearnerShellDesktopStudyLinks({
   pathwayId,
   examsLabel,
-}: Pick<LearnerShellNavProps, "pathwayId" | "examsLabel">) {
+  printablesNavVisible,
+}: Pick<LearnerShellNavProps, "pathwayId" | "examsLabel" | "printablesNavVisible">) {
   const pathname = usePathname();
-  const items = useLearnerNavItems({ pathwayId, examsLabel });
+  const items = useLearnerNavItems({ pathwayId, examsLabel, printablesNavVisible });
 
   // `max-md:hidden` — avoid Tailwind v4 `hidden` + `md:block` display ordering bugs (desktop nav stuck display:none).
   return (
@@ -193,9 +209,10 @@ export function LearnerShellMobileBottomNav({
   pathwayId,
   pathwayHubHref,
   examsLabel,
+  printablesNavVisible,
 }: LearnerShellNavProps) {
   const pathname = usePathname();
-  const items = useLearnerNavItems({ pathwayId, examsLabel });
+  const items = useLearnerNavItems({ pathwayId, examsLabel, printablesNavVisible });
   const pathwayHref = pathwayHubHref ?? "/app";
   const pathwayLabel = pathwayPillLabel ?? "Pathway";
 

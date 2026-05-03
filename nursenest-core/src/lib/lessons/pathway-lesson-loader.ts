@@ -87,6 +87,14 @@ import {
   RELATED_PATHWAY_LESSONS_LIMIT,
 } from "@/lib/lessons/pathway-lesson-loader-config";
 import type { LessonInput } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import { filterCatalogLessonsForAlliedProfessionHub } from "@/lib/allied/allied-profession-catalog-hub-filter";
+import {
+  catalogLessonInputBelongsToAlliedProfession,
+  exclusiveTopicSlugsForAlliedProfession,
+  logAlliedHubProfessionScopeContaminationIfNeeded,
+} from "@/lib/allied/allied-profession-lesson-exclusive-scope";
+import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
+import type { MarketingHubLessonsListOptions } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import {
   getCatalogLessonRawBySlug,
   getCatalogLessonsRaw,
@@ -173,10 +181,38 @@ function filterCatalogLessonsByTopicSlugs(
   rows: LessonInput[],
   topicSlugsIn: string[] | undefined,
 ): LessonInput[] {
-  if (!topicSlugsIn?.length) return rows;
+  if (topicSlugsIn === undefined) return rows;
   const set = new Set(topicSlugsIn.map((s) => s.trim()).filter(Boolean));
-  if (set.size === 0) return rows;
+  if (set.size === 0) return [];
   return rows.filter((row) => set.has(typeof row.topicSlug === "string" ? row.topicSlug.trim() : ""));
+}
+
+function enforceAlliedProfessionMarketingHubRenderableRows(
+  pathwayId: string,
+  alliedProfessionKey: string | undefined,
+  rows: PathwayLessonRecord[],
+): PathwayLessonRecord[] {
+  const key = alliedProfessionKey?.trim().toLowerCase();
+  if (!key || !isAlliedMarketingCorePathwayId(pathwayId)) return rows;
+  logAlliedHubProfessionScopeContaminationIfNeeded({
+    pathwayId,
+    alliedProfessionKey: key,
+    rows: rows.map((r) => ({
+      topicSlug: r.topicSlug,
+      alliedProfessionKey: (r as { alliedProfessionKey?: string | null }).alliedProfessionKey ?? null,
+    })),
+    surface: "marketing_hub_renderable",
+  });
+  return rows.filter((lesson) =>
+    catalogLessonInputBelongsToAlliedProfession(
+      {
+        topicSlug: lesson.topicSlug,
+        alliedProfessionKey: (lesson as { alliedProfessionKey?: string }).alliedProfessionKey,
+      },
+      pathwayId,
+      key,
+    ),
+  );
 }
 
 function pathwayLessonHubSearchWhere(q: string): Prisma.PathwayLessonWhereInput {
@@ -651,7 +687,7 @@ async function loadPublishedLessonInputsAllChunked(
 async function resolveMarketingHubRenderableLessonList(
   pathwayId: string,
   marketingLocale: string | undefined,
-  listOptions?: { topicSlugsIn?: string[]; q?: string },
+  listOptions?: MarketingHubLessonsListOptions,
 ): Promise<{
   renderableAll: PathwayLessonRecord[];
   locale: PathwayLessonListLocaleInfo;
@@ -661,6 +697,19 @@ async function resolveMarketingHubRenderableLessonList(
   const requested = normalizePathwayLessonLocale(marketingLocale);
   const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(requested);
   const topicSlugsIn = listOptions?.topicSlugsIn;
+  const alliedProfessionKey = listOptions?.alliedProfessionKey;
+  const alliedKeyNorm = alliedProfessionKey?.trim().toLowerCase() ?? "";
+  let effectiveTopicSlugsIn: string[] | undefined = topicSlugsIn;
+  if (alliedKeyNorm && isAlliedMarketingCorePathwayId(pathwayId)) {
+    const exclusive = exclusiveTopicSlugsForAlliedProfession(pathwayId, alliedKeyNorm);
+    if (topicSlugsIn?.length) {
+      const allow = new Set(exclusive.map((s) => s.trim().toLowerCase()));
+      const narrowed = topicSlugsIn.filter((s) => allow.has(s.trim().toLowerCase()));
+      effectiveTopicSlugsIn = narrowed.length > 0 ? narrowed : exclusive;
+    } else {
+      effectiveTopicSlugsIn = exclusive;
+    }
+  }
   const qRaw = normalizePathwayHubSearchQuery(listOptions?.q);
   const qLower = qRaw ? qRaw.toLowerCase() : "";
 
@@ -686,13 +735,13 @@ async function resolveMarketingHubRenderableLessonList(
   if (dbAny) {
     const tDbQuery0 = performance.now();
     const effective = await effectiveLocaleForPathwayLessonDbRows(pathwayId, requested);
-    const missingGolds = await listMissingScopedGoldHubRows(pathwayId, effective, topicSlugsIn);
+    const missingGolds = await listMissingScopedGoldHubRows(pathwayId, effective, effectiveTopicSlugsIn);
     const goldsFiltered = qRaw ? missingGolds.filter((row) => lessonInputMatchesHubSearch(row, qLower)) : missingGolds;
-    const sqlDbOnly = await countPublishedLessonRows(pathwayId, effective, topicSlugsIn, qRaw);
+    const sqlDbOnly = await countPublishedLessonRows(pathwayId, effective, effectiveTopicSlugsIn, qRaw);
     const dbChunked = await loadPublishedLessonInputsAllChunked(
       pathwayId,
       effective,
-      topicSlugsIn,
+      effectiveTopicSlugsIn,
       qRaw,
       PATHWAY_CATALOG_LIST_HARD_CAP,
     );
@@ -736,7 +785,11 @@ const afterPathwayContext = sortPathwayLessonsForPublicPreview(
       devLog: true,
     });
     const dedupeMs = Math.round(performance.now() - tDedupe0);
-    const renderableAll = deduped.items;
+    const renderableAll = enforceAlliedProfessionMarketingHubRenderableRows(
+      pathwayId,
+      alliedProfessionKey,
+      deduped.items,
+    );
 
     safeServerLog("pathway_lessons", "hub_list_pipeline_stages", {
       pathwayId,
@@ -821,7 +874,9 @@ const afterPathwayContext = sortPathwayLessonsForPublicPreview(
   }
 
   const tCat0 = performance.now();
-  const allRaw = filterCatalogLessonsByTopicSlugs(getCatalogLessonsRaw(pathwayId), topicSlugsIn);
+  const rawCatalog = getCatalogLessonsRaw(pathwayId);
+  const professionScoped = filterCatalogLessonsForAlliedProfessionHub(rawCatalog, alliedProfessionKey, pathwayId);
+  const allRaw = filterCatalogLessonsByTopicSlugs(professionScoped, effectiveTopicSlugsIn);
   const filteredRaw = qRaw ? allRaw.filter((row) => lessonInputMatchesHubSearch(row, qLower)) : allRaw;
   const catMeta = lessonLocaleMeta(marketingLocale, "en", requested !== "en", true);
   const tNormCat0 = performance.now();
@@ -849,11 +904,15 @@ const afterPathwayContext = sortPathwayLessonsForPublicPreview(
   const contextDropSummaryCat = summarizePathwayContextPipelineDrops(pathwayId, afterSafeSlugCat, afterContextCat);
   logHubListPipelineDropSamples(pathwayId, afterSafeSlugCat, afterContextCat, 24);
   const tDedupeCat0 = performance.now();
-  const renderableAll = dedupePathwayLessonsForLibrary(afterContextCat, {
-    pathwayIdHint: pathwayId,
-    source: `hub_page:${pathwayId}:catalog`,
-    devLog: true,
-  }).items;
+  const renderableAll = enforceAlliedProfessionMarketingHubRenderableRows(
+    pathwayId,
+    alliedProfessionKey,
+    dedupePathwayLessonsForLibrary(afterContextCat, {
+      pathwayIdHint: pathwayId,
+      source: `hub_page:${pathwayId}:catalog`,
+      devLog: true,
+    }).items,
+  );
   const dedupeCatMs = Math.round(performance.now() - tDedupeCat0);
   const catalogLoadMs = Math.round(performance.now() - tCat0);
 
@@ -924,7 +983,7 @@ async function getPathwayLessonsPageImpl(
   page: number = 1,
   pageSize: number = PATHWAY_HUB_PAGE_SIZE_DEFAULT,
   marketingLocale?: string,
-  listOptions?: { topicSlugsIn?: string[]; q?: string },
+  listOptions?: MarketingHubLessonsListOptions,
 ): Promise<PathwayLessonsPageResult> {
   const ps = clampPageSize(pageSize);
   const p = Math.min(clampPage(page), maxSafeOffsetPage(ps));
@@ -981,10 +1040,11 @@ async function getPathwayLessonsPageWithDataCache(
   page: number,
   pageSize: number,
   marketingLocale?: string,
-  listOptions?: { topicSlugsIn?: string[]; q?: string },
+  listOptions?: MarketingHubLessonsListOptions,
 ): Promise<PathwayLessonsPageResult> {
   const topicKey = JSON.stringify(listOptions?.topicSlugsIn?.slice().sort() ?? []);
   const qKey = listOptions?.q ?? "";
+  const alliedProfessionKey = listOptions?.alliedProfessionKey ?? "";
   return unstable_cache(
     async () => {
       const r = await getPathwayLessonsPageImpl(pathwayId, page, pageSize, marketingLocale, listOptions);
@@ -1004,6 +1064,7 @@ async function getPathwayLessonsPageWithDataCache(
       marketingLocale ?? "",
       topicKey,
       qKey,
+      alliedProfessionKey,
     ],
     { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [cacheTagPathwayLessonsHub(pathwayId)] },
   )();
@@ -1020,7 +1081,7 @@ export const getPathwayLessonsPageFresh = pathwayLoaderAsyncMemo(async function 
   page: number,
   pageSize: number,
   marketingLocale?: string,
-  listOptions?: { topicSlugsIn?: string[]; q?: string },
+  listOptions?: MarketingHubLessonsListOptions,
 ): Promise<PathwayLessonsPageResult> {
   return getPathwayLessonsPageImpl(pathwayId, page, pageSize, marketingLocale, listOptions);
 });

@@ -45,6 +45,7 @@
     "db:seed-rpn-parity-lessons": "npx tsx scripts/seed-rpn-parity-lessons.mts",
     "migrate:med-math:dry": "npx tsx scripts/migrate-med-math-pathway-lessons.ts --dry-run --pathwayId=us-rn-nclex-rn",
     "migrate:med-math:write": "npx tsx scripts/migrate-med-math-pathway-lessons.ts --write --pathwayId=us-rn-nclex-rn",
+    "content:orphan:audit": "node scripts/audit-content-orphans.mjs",
     "content:source-of-truth:verify": "node scripts/verify-content-source-of-truth.mjs",
     "content:source-of-truth:audit": "node scripts/verify-content-source-of-truth.mjs --audit",
     "content:allied-coverage": "npx tsx scripts/allied-lesson-coverage.mts",
@@ -174,7 +175,8 @@
     "test:content-source-of-truth": "node --import tsx --test src/lib/content-source-of-truth/content-source-of-truth.contract.test.ts",
     "audit:legacy-features": "node src/lib/legacy-feature-inventory/audit-legacy-feature-inventory.mjs",
     "test:legacy-feature-inventory": "node --import tsx --test src/lib/content-source-of-truth/legacy-feature-inventory.contract.test.ts",
-    "content:audit": "npm run audit:legacy-features"
+    "content:audit": "npm run audit:legacy-features",
+    "test:med-math-realism": "node --import tsx --test src/lib/med-math/validate-med-math-answer-realism.contract.test.ts"
   },
   "dependencies": {
     "@auth/core": "0.37.2",
