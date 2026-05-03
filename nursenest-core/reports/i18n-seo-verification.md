@@ -1,6 +1,6 @@
 # I18n SEO Verification
 
-Generated: 2026-05-03T19:02:24.694Z
+Generated: 2026-05-03T19:09:29.156Z
 
 - French indexed while incomplete: 0
 - French hreflang candidates blocked by noindex: 0

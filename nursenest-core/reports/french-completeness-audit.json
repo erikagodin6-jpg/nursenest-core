@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-03T19:02:24.173Z",
+  "generatedAt": "2026-05-03T19:09:28.673Z",
   "locale": "fr",
   "minIndexableScore": 100,
   "results": [
@@ -634,7 +634,7 @@
       "jsonLdIssues": [],
       "indexable": false,
       "shouldNoindex": false,
-      "recommendedFix": "Ready for French indexing under the current static audit.",
+      "recommendedFix": "Non-indexable learner/auth/tooling surface; keep noindex.",
       "totals": {
         "requiredKeys": 216,
         "missing": 0,
@@ -932,7 +932,7 @@
       "jsonLdIssues": [],
       "indexable": false,
       "shouldNoindex": false,
-      "recommendedFix": "Ready for French indexing under the current static audit.",
+      "recommendedFix": "Non-indexable learner/auth/tooling surface; keep noindex.",
       "totals": {
         "requiredKeys": 1720,
         "missing": 17,
@@ -964,7 +964,7 @@
       "jsonLdIssues": [],
       "indexable": false,
       "shouldNoindex": false,
-      "recommendedFix": "Ready for French indexing under the current static audit.",
+      "recommendedFix": "Non-indexable learner/auth/tooling surface; keep noindex.",
       "totals": {
         "requiredKeys": 174,
         "missing": 0,
@@ -1207,7 +1207,7 @@
       "jsonLdIssues": [],
       "indexable": false,
       "shouldNoindex": false,
-      "recommendedFix": "Ready for French indexing under the current static audit.",
+      "recommendedFix": "Non-indexable learner/auth/tooling surface; keep noindex.",
       "totals": {
         "requiredKeys": 251,
         "missing": 0,

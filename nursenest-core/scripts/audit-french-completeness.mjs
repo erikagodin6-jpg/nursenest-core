@@ -117,9 +117,11 @@ function auditSurface(surface, en, fr) {
     jsonLdIssues: issueList(40, jsonLdIssues),
     indexable: surface.indexable && !shouldNoindex,
     shouldNoindex,
-    recommendedFix: shouldNoindex
-      ? "Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion."
-      : "Ready for French indexing under the current static audit.",
+    recommendedFix: !surface.indexable
+      ? "Non-indexable learner/auth/tooling surface; keep noindex."
+      : shouldNoindex
+        ? "Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion."
+        : "Ready for French indexing under the current static audit.",
     totals: { requiredKeys: keys.length, missing: missingKeys.length, untranslated: untranslatedFields.length, englishLeaks: englishLeakSuspicions.length },
   };
 }

@@ -8,13 +8,17 @@ function localWebServer() {
   const u = new URL(baseURL);
   if (!["127.0.0.1", "localhost"].includes(u.hostname)) return undefined;
   return {
-    command: `npx next dev --hostname ${u.hostname} --port ${u.port || "3000"}`,
+    command: `npx next dev --webpack --hostname ${u.hostname} --port ${u.port || "3000"}`,
     url: baseURL,
     reuseExistingServer: true,
     timeout: 180_000,
     env: {
       ...process.env,
       NEXT_PUBLIC_ENABLE_MARKETING_LOCALES: "true",
+      AUTH_SECRET: process.env.AUTH_SECRET ?? "i18n-route-test-secret-do-not-use",
+      NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET ?? process.env.AUTH_SECRET ?? "i18n-route-test-secret-do-not-use",
+      AI_ADMIN_GENERATION_ENABLED: process.env.AI_ADMIN_GENERATION_ENABLED ?? "false",
+      AI_INTEGRATIONS_OPENAI_API_KEY: process.env.AI_INTEGRATIONS_OPENAI_API_KEY ?? "not-used-in-i18n-route-tests",
     },
   };
 }

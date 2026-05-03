@@ -1,6 +1,6 @@
 # French Completeness Audit
 
-Generated: 2026-05-03T19:02:24.176Z
+Generated: 2026-05-03T19:09:28.675Z
 
 French status: 15 audited surfaces require noindex
 REx-PN French status: blocked from indexing until complete

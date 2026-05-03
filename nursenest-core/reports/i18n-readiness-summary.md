@@ -1,6 +1,6 @@
 # I18n Readiness Summary
 
-Generated: 2026-05-03T19:02:24.299Z
+Generated: 2026-05-03T19:09:28.792Z
 
 English status: pass
 French status: 15 surfaces blocked from indexing
@@ -41,15 +41,15 @@ REx-PN French status: noindex until translations pass
 - /canada/pn/rex-pn/lessons: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
 - /canada/pn/rex-pn/lessons/sample: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
 - /canada/pn/rex-pn/questions: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
-- /canada/pn/rex-pn/cat: noindex (Ready for French indexing under the current static audit.)
+- /canada/pn/rex-pn/cat: noindex (Non-indexable learner/auth/tooling surface; keep noindex.)
 - /fr/question-bank: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
 - /fr/practice-exams: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
-- /app: noindex (Ready for French indexing under the current static audit.)
-- /app/account/progress: noindex (Ready for French indexing under the current static audit.)
+- /app: noindex (Non-indexable learner/auth/tooling surface; keep noindex.)
+- /app/account/progress: noindex (Non-indexable learner/auth/tooling surface; keep noindex.)
 - /fr/store: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
 - /fr/blog: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
 - /fr/blog/sample: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
-- /fr/login: noindex (Ready for French indexing under the current static audit.)
+- /fr/login: noindex (Non-indexable learner/auth/tooling surface; keep noindex.)
 - /fr/rn: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
 - /fr/np: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
 - /fr/allied: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
