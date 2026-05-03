@@ -60,14 +60,14 @@ export async function getPrintableAnalyticsSummary(where?: Prisma.PrintableDownl
       by: ["printableProductId"],
       where,
       _count: { _all: true },
-      orderBy: { _count: { _all: "desc" } },
+      orderBy: { _count: { id: "desc" } },
       take: 40,
     }),
     prisma.printableDownloadEvent.groupBy({
       by: ["pathwayId"],
       where,
       _count: { _all: true },
-      orderBy: { _count: { _all: "desc" } },
+      orderBy: { _count: { id: "desc" } },
       take: 40,
     }),
     prisma.printableDownloadEvent.groupBy({
@@ -115,19 +115,23 @@ export async function getPrintableAnalyticsSummary(where?: Prisma.PrintableDownl
     })),
     mostDownloaded: byProduct.map((r) => ({
       printableProductId: r.printableProductId,
-      downloads: r._count._all,
+      downloads: countAll(r),
       title: titleById.get(r.printableProductId)?.title ?? null,
       slug: titleById.get(r.printableProductId)?.slug ?? null,
     })),
     downloadsByPathway: byPathway.map((r) => ({
       pathwayId: r.pathwayId,
-      downloads: r._count._all,
+      downloads: countAll(r),
     })),
     downloadsBySource: Object.fromEntries(bySource.map((r) => [r.source, r._count._all])) as Record<
       string,
       number
     >,
   };
+}
+
+function countAll(row: { _count?: true | { _all?: number } }): number {
+  return typeof row._count === "object" ? (row._count._all ?? 0) : 0;
 }
 
 function extractDownloadedAtRange(

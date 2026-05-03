@@ -22,8 +22,8 @@ export function appLessonsHubListOptsForSnapshot(args: {
     ap && args.alliedTaxonomyFilter?.trim()
       ? normalizeAlliedTaxonomySlugForProfession(ap, args.alliedTaxonomyFilter)
       : null;
-  const allied = ap ? { alliedProfessionKey: ap } as const : {};
-  const tax = taxNorm ? { taxonomySlugsIn: [taxNorm] } as const : {};
+  const allied = ap ? { alliedProfessionKey: ap } : {};
+  const tax = taxNorm ? { taxonomySlugsIn: [taxNorm] } : {};
   if (q && ts) return { q, topicSlugsIn: [ts], ...allied, ...tax };
   if (q) return { q, ...allied, ...tax };
   if (ts) return { topicSlugsIn: [ts], ...allied, ...tax };
