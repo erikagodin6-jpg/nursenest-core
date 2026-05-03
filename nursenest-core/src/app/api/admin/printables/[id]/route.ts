@@ -59,7 +59,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   const existing = await prisma.printableProduct.findUnique({ where: { id } });
   if (!existing) return NextResponse.json({ ok: false, code: "not_found" }, { status: 404, headers: PRIVATE.headers });
 
-  const patch: Prisma.PrintableProductUpdateInput = { updatedByUserId: gate.admin.userId };
+  const patch: Prisma.PrintableProductUpdateInput = { updatedBy: { connect: { id: gate.admin.userId } } };
 
   if (typeof data.title === "string") patch.title = data.title.trim().slice(0, 512);
   if (typeof data.description === "string") patch.description = data.description.trim();
@@ -88,12 +88,12 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     if (!pdfCheck.ok) {
       return NextResponse.json({ ok: false, code: pdfCheck.code, error: pdfCheck.message }, { status: 400, headers: PRIVATE.headers });
     }
-    patch.fileAssetId = fileAsset.id;
+    patch.fileAsset = { connect: { id: fileAsset.id } };
     patch.version = existing.version + 1;
   }
 
   if (data.thumbnailAssetId === null) {
-    patch.thumbnailAssetId = null;
+    patch.thumbnailAsset = { disconnect: true };
   } else if (typeof data.thumbnailAssetId === "string" && data.thumbnailAssetId.trim()) {
     const thumb = await prisma.mediaAsset.findUnique({ where: { id: data.thumbnailAssetId.trim() } });
     if (!thumb || thumb.kind !== "image") {
@@ -106,7 +106,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     if (!thumbCheck.ok) {
       return NextResponse.json({ ok: false, code: thumbCheck.code, error: thumbCheck.message }, { status: 400, headers: PRIVATE.headers });
     }
-    patch.thumbnailAssetId = thumb.id;
+    patch.thumbnailAsset = { connect: { id: thumb.id } };
   }
 
   const mergedForCheck = {
