@@ -26,6 +26,7 @@ import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getPublishedBlogPostBySlug } from "@/lib/blog/safe-blog-queries";
 import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
+import { isAlliedBlogProfessionCareerSlug, isNursingScopedCareerSlug } from "@/lib/blog/blog-scoped-career-hubs";
 import {
   blogPostPublishedScalars,
   resolveBlogPostPublishAtExplicitOrExisting,
@@ -249,24 +250,27 @@ function runRevalidateSafe(input: PublishBlogPostCanonicalInput, slug: string, t
     });
     return;
   }
+  const cs = careerSlug?.trim() ?? null;
   try {
-    revalidateBlogPublishingSurfaces({
-      slug,
-      alliedProfessionKey: careerSlug,
-      tags,
-    });
+    if (cs && isAlliedBlogProfessionCareerSlug(cs)) {
+      revalidateBlogPublishingSurfaces({ slug, alliedProfessionKey: cs, tags });
+    } else if (cs && isNursingScopedCareerSlug(cs)) {
+      revalidateBlogPublishingSurfaces({ slug, nursingCareerSlug: cs, tags });
+    } else {
+      revalidateBlogPublishingSurfaces({ slug, tags });
+    }
     safeServerLog("blog_publish", "blog_revalidate_published_surfaces", {
       context: input.context,
       postId: input.postId,
       slug,
-      paths: ["/blog", `/blog/${slug}`].join(","),
+      paths: ["/blog", slug ? `(scoped or /blog/${slug})` : ""].filter(Boolean).join(","),
     });
   } catch (e) {
     safeServerLog("blog_publish", "blog_revalidate_deferred", {
       context: input.context,
       postId: input.postId,
       slug,
-      targets: ["/blog", `/blog/${slug}`].join(","),
+      targets: "/blog + scoped detail paths",
       error: e instanceof Error ? e.message : String(e),
       hint: "Call GET /api/revalidate?path=/blog and /api/revalidate?path=/blog/{slug} from an authorized context if needed.",
     });

@@ -2,11 +2,11 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { expectedGeneratedBlogPaths, isNursingScopedCareerSlug } from "./blog-scoped-career-hubs";
 
-test("expectedGeneratedBlogPaths: RN uses /nursing/rn/blog hub", () => {
+test("expectedGeneratedBlogPaths: RN uses /blog/rn hub", () => {
   const p = expectedGeneratedBlogPaths({ slug: "my-post-slug", careerSlug: "rn" });
-  assert.equal(p.expectedPublicBlogPath, "/nursing/rn/blog");
-  assert.equal(p.expectedDetailPath, "/nursing/rn/blog/my-post-slug");
-  assert.equal(p.scopedListPath, "/nursing/rn/blog");
+  assert.equal(p.expectedPublicBlogPath, "/blog/rn");
+  assert.equal(p.expectedDetailPath, "/blog/rn/my-post-slug");
+  assert.equal(p.scopedListPath, "/blog/rn");
 });
 
 test("expectedGeneratedBlogPaths: PN and NP hubs", () => {

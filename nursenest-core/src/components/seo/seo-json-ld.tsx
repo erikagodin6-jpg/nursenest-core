@@ -174,6 +174,7 @@ export function PathwayLessonMedicalEducationJsonLd({
   datePublished,
   dateModified,
   inLanguage = "en",
+  aboutOccupation,
 }: {
   path: string;
   headline: string;
@@ -181,8 +182,11 @@ export function PathwayLessonMedicalEducationJsonLd({
   datePublished?: string | null;
   dateModified?: string | null;
   inLanguage?: string;
+  /** When set (e.g. allied profession track), narrows `about` for duplicate-sensitive SERP clarity. */
+  aboutOccupation?: string | null;
 }) {
   const url = absoluteUrl(path);
+  const occ = aboutOccupation?.trim();
   return (
     <JsonLd
       data={{
@@ -198,6 +202,14 @@ export function PathwayLessonMedicalEducationJsonLd({
         author: { "@id": ORG_ID },
         educationalLevel: "Professional nursing and allied health licensure preparation",
         learningResourceType: "Study guide",
+        ...(occ
+          ? {
+              about: {
+                "@type": "Occupation",
+                name: occ,
+              },
+            }
+          : {}),
         ...(datePublished?.trim() ? { datePublished: datePublished.trim() } : {}),
         ...(dateModified?.trim() ? { dateModified: dateModified.trim() } : {}),
         ...(inLanguage ? { inLanguage } : {}),

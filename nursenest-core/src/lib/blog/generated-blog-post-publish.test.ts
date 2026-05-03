@@ -175,9 +175,10 @@ slug: hello-world
     assert.match(s, /path=\/tmp\/post\.json/);
   });
 
-  it("expectedCanonicalBlogPath matches global and scoped nursing", () => {
+  it("expectedCanonicalBlogPath matches global, RN hub, and other scoped nursing", () => {
     assert.equal(expectedCanonicalBlogPath("abc", null), "/blog/abc");
-    assert.equal(expectedCanonicalBlogPath("abc", "rn"), "/nursing/rn/blog/abc");
+    assert.equal(expectedCanonicalBlogPath("abc", "rn"), "/blog/rn/abc");
+    assert.equal(expectedCanonicalBlogPath("abc", "pn"), "/nursing/pn/blog/abc");
   });
 });
 

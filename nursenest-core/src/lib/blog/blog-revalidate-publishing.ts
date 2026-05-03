@@ -14,10 +14,12 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 
 export type BlogPublishingRevalidateOptions = {
-  /** Canonical marketing slug — invalidates `/blog/[slug]` */
+  /** Canonical marketing slug — invalidates `/blog/[slug]` (global posts) or scoped detail paths when nursing/allied set */
   slug?: string | null;
   /** When set with `slug`, also invalidates `/allied-health/{key}/blog/{slug}` */
   alliedProfessionKey?: string | null;
+  /** Nursing hub career (`rn`, `pn`, `np`). `rn` uses `/blog/rn/{slug}`; others use `/nursing/{career}/blog/{slug}`. */
+  nursingCareerSlug?: string | null;
   /** Revalidates `/blog/tag/{tag}` for each value (bounded). */
   tags?: readonly string[] | null;
   /** Revalidates `/blog/{slug}` for each (e.g. cron batch publish; bounded). */
@@ -39,11 +41,21 @@ export function revalidateBlogPublishingSurfaces(options?: BlogPublishingRevalid
   revalidatePath("/sitemap.xml");
 
   const slug = options?.slug?.trim();
+  const nursing = options?.nursingCareerSlug?.trim().toLowerCase();
+  const allied = options?.alliedProfessionKey?.trim();
+
   if (slug) {
-    revalidatePath(`/blog/${slug}`);
+    if (nursing === "rn") {
+      revalidatePath(`/blog/rn/${slug}`);
+      revalidatePath("/blog/rn");
+    } else if (nursing && nursing !== "rn") {
+      revalidatePath(`/nursing/${nursing}/blog/${slug}`);
+      revalidatePath(`/nursing/${nursing}/blog`);
+    } else {
+      revalidatePath(`/blog/${slug}`);
+    }
   }
 
-  const allied = options?.alliedProfessionKey?.trim();
   if (slug && allied) {
     revalidatePath(`/allied-health/${allied}/blog/${slug}`);
   }

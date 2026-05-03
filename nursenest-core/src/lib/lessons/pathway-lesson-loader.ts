@@ -192,6 +192,69 @@ function filterCatalogLessonsByTopicSlugs(
   return rows.filter((row) => set.has(typeof row.topicSlug === "string" ? row.topicSlug.trim() : ""));
 }
 
+function logAlliedHubRenderableDatasetDebug(args: {
+  pathwayId: string;
+  alliedProfessionKey: string | undefined;
+  preProfessionFilterRows: PathwayLessonRecord[];
+  finalRows: PathwayLessonRecord[];
+  runtimeSource: "database" | "catalog" | "none";
+}): void {
+  if (process.env.NN_ALLIED_HUB_DATA_DEBUG !== "1") return;
+  const keyNorm = args.alliedProfessionKey?.trim().toLowerCase() ?? "";
+  const preCount = args.preProfessionFilterRows.length;
+  const finalCount = args.finalRows.length;
+  let preMatching = 0;
+  let finalMatching = 0;
+  if (keyNorm) {
+    for (const r of args.preProfessionFilterRows) {
+      if (
+        catalogLessonInputBelongsToAlliedProfession(
+          { topicSlug: r.topicSlug, alliedProfessionKey: r.alliedProfessionKey },
+          args.pathwayId,
+          keyNorm,
+        )
+      ) {
+        preMatching++;
+      }
+    }
+    for (const r of args.finalRows) {
+      if (
+        catalogLessonInputBelongsToAlliedProfession(
+          { topicSlug: r.topicSlug, alliedProfessionKey: r.alliedProfessionKey },
+          args.pathwayId,
+          keyNorm,
+        )
+      ) {
+        finalMatching++;
+      }
+    }
+  }
+  const pctPre =
+    keyNorm && preCount > 0 ? Math.round((100 * preMatching) / preCount) : keyNorm ? 0 : null;
+  const pctFinal =
+    keyNorm && finalCount > 0 ? Math.round((100 * finalMatching) / finalCount) : keyNorm ? 0 : null;
+
+  safeServerLog("pathway_lessons", "allied_hub_data_debug", {
+    pathway_id: args.pathwayId,
+    allied_profession_key: keyNorm || "(none)",
+    lesson_count_pre_profession_filter: String(preCount),
+    lesson_count_final: String(finalCount),
+    ...(pctPre !== null ? { pct_matching_profession_pre_filter: String(pctPre) } : {}),
+    ...(pctFinal !== null ? { pct_matching_profession_final: String(pctFinal) } : {}),
+    runtime_source: args.runtimeSource,
+  });
+
+  if (keyNorm && finalCount > 0 && finalMatching !== finalCount) {
+    safeServerLog("pathway_lessons", "allied_hub_data_debug_invariant_failed", {
+      pathway_id: args.pathwayId,
+      allied_profession_key: keyNorm,
+      lesson_count_final: String(finalCount),
+      matching_final_rows: String(finalMatching),
+      detail: "final_hub_rows_include_lessons_not_matching_selected_profession",
+    });
+  }
+}
+
 function enforceAlliedProfessionMarketingHubRenderableRows(
   pathwayId: string,
   alliedProfessionKey: string | undefined,
@@ -805,6 +868,13 @@ const afterPathwayContext = sortPathwayLessonsForPublicPreview(
     if (alliedKeyNorm && taxonomySlugsIn?.length && isAlliedMarketingCorePathwayId(pathwayId)) {
       renderableAll = renderableAll.filter((r) => lessonMatchesAlliedTaxonomyFilter(alliedKeyNorm, r, taxonomySlugsIn));
     }
+    logAlliedHubRenderableDatasetDebug({
+      pathwayId,
+      alliedProfessionKey,
+      preProfessionFilterRows: deduped.items,
+      finalRows: renderableAll,
+      runtimeSource: "database",
+    });
 
     safeServerLog("pathway_lessons", "hub_list_pipeline_stages", {
       pathwayId,
@@ -919,18 +989,27 @@ const afterPathwayContext = sortPathwayLessonsForPublicPreview(
   const contextDropSummaryCat = summarizePathwayContextPipelineDrops(pathwayId, afterSafeSlugCat, afterContextCat);
   logHubListPipelineDropSamples(pathwayId, afterSafeSlugCat, afterContextCat, 24);
   const tDedupeCat0 = performance.now();
+  const dedupedCat = dedupePathwayLessonsForLibrary(afterContextCat, {
+    pathwayIdHint: pathwayId,
+    source: `hub_page:${pathwayId}:catalog`,
+    devLog: true,
+  });
   let renderableAll = enforceAlliedProfessionMarketingHubRenderableRows(
     pathwayId,
     alliedProfessionKey,
-    dedupePathwayLessonsForLibrary(afterContextCat, {
-      pathwayIdHint: pathwayId,
-      source: `hub_page:${pathwayId}:catalog`,
-      devLog: true,
-    }).items,
+    dedupedCat.items,
   );
   if (alliedKeyNorm && taxonomySlugsIn?.length && isAlliedMarketingCorePathwayId(pathwayId)) {
     renderableAll = renderableAll.filter((r) => lessonMatchesAlliedTaxonomyFilter(alliedKeyNorm, r, taxonomySlugsIn));
   }
+  const catalogRuntime: "catalog" | "none" = renderableAll.length > 0 ? "catalog" : "none";
+  logAlliedHubRenderableDatasetDebug({
+    pathwayId,
+    alliedProfessionKey,
+    preProfessionFilterRows: dedupedCat.items,
+    finalRows: renderableAll,
+    runtimeSource: catalogRuntime,
+  });
   const dedupeCatMs = Math.round(performance.now() - tDedupeCat0);
   const catalogLoadMs = Math.round(performance.now() - tCat0);
 
@@ -1820,22 +1899,26 @@ export async function getPathwayLessonForMarketingHubVerify(
 
 export type PathwayLessonSeoMeta = {
   slug: string;
+  title: string;
   seoTitle: string;
   seoDescription: string;
   topic: string;
   topicSlug: string;
   bodySystem: string;
+  alliedProfessionKey?: string | null;
   publicComplete: boolean;
 };
 
 function pathwayLessonSeoMetaFromRecord(record: PathwayLessonRecord): PathwayLessonSeoMeta {
   return {
     slug: record.slug,
+    title: record.title,
     seoTitle: record.seoTitle,
     seoDescription: record.seoDescription,
     topic: record.topic,
     topicSlug: record.topicSlug,
     bodySystem: record.bodySystem,
+    alliedProfessionKey: record.alliedProfessionKey ?? null,
     publicComplete: Boolean(record.structuralQuality?.publicComplete),
   };
 }
@@ -1855,11 +1938,13 @@ async function getPathwayLessonSeoMetaImpl(pathwayId: string, slug: string): Pro
           },
           select: {
             slug: true,
+            title: true,
             seoTitle: true,
             seoDescription: true,
             topic: true,
             topicSlug: true,
             bodySystem: true,
+            alliedProfessionKey: true,
             ...(structuralCol ? { structuralPublicComplete: true as const } : {}),
             status: true,
           },
@@ -1874,11 +1959,13 @@ async function getPathwayLessonSeoMetaImpl(pathwayId: string, slug: string): Pro
     if (structurallyComplete) {
       return {
         slug: rowEn.slug,
+        title: rowEn.title,
         seoTitle: rowEn.seoTitle,
         seoDescription: rowEn.seoDescription,
         topic: rowEn.topic,
         topicSlug: rowEn.topicSlug,
         bodySystem: rowEn.bodySystem,
+        alliedProfessionKey: rowEn.alliedProfessionKey ?? null,
         publicComplete: true,
       };
     }
@@ -1897,11 +1984,13 @@ async function getPathwayLessonSeoMetaImpl(pathwayId: string, slug: string): Pro
 
     return {
       slug: rowEn.slug,
+      title: rowEn.title,
       seoTitle: rowEn.seoTitle,
       seoDescription: rowEn.seoDescription,
       topic: rowEn.topic,
       topicSlug: rowEn.topicSlug,
       bodySystem: rowEn.bodySystem,
+      alliedProfessionKey: rowEn.alliedProfessionKey ?? null,
       publicComplete: false,
     };
   }

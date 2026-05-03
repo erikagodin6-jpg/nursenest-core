@@ -104,7 +104,12 @@ const nextConfig = {
 
   /** Legacy crawler bookmarks → single canonical sitemap (avoid duplicate sitemap index signals). */
   async redirects() {
-    return [{ source: "/sitemap-index.xml", destination: "/sitemap.xml", permanent: true }];
+    return [
+      { source: "/sitemap-index.xml", destination: "/sitemap.xml", permanent: true },
+      /** RN blog hub canonical path is `/blog/rn/*` (lesson-derived SEO posts). */
+      { source: "/nursing/rn/blog", destination: "/blog/rn", permanent: true },
+      { source: "/nursing/rn/blog/:slug", destination: "/blog/rn/:slug", permanent: true },
+    ];
   },
 
   /**

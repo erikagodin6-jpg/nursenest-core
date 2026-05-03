@@ -7,21 +7,29 @@ import {
   buildRnLessonSeoVariants,
   keywordClusterFromDuplicateHash,
   lessonHasHighQualityBody,
+  type RnLessonSource,
 } from "../../src/lib/blog/rn-lesson-seo-blog-generator";
 import { adminBlogPublicUrl } from "../../src/lib/blog/admin-blog-generation-service";
+import { getCatalogPathwayLessonsSync } from "../../src/lib/lessons/pathway-lesson-catalog-sync";
+
+type LessonSourceMode = "db" | "catalog";
 
 type CliArgs = {
   apply: boolean;
   limit: number;
   minLessonWords: number;
+  source: LessonSourceMode;
 };
 
 function parseArgs(argv: string[]): CliArgs {
   let apply = false;
   let limit = 12;
   let minLessonWords = 700;
+  let source: LessonSourceMode = "db";
   for (const arg of argv) {
     if (arg === "--apply") apply = true;
+    if (arg === "--source=catalog") source = "catalog";
+    if (arg === "--source=db") source = "db";
     if (arg.startsWith("--limit=")) {
       const n = Number(arg.slice("--limit=".length));
       if (Number.isFinite(n) && n > 0) limit = Math.floor(n);
@@ -31,7 +39,7 @@ function parseArgs(argv: string[]): CliArgs {
       if (Number.isFinite(n) && n > 0) minLessonWords = Math.floor(n);
     }
   }
-  return { apply, limit, minLessonWords };
+  return { apply, limit, minLessonWords, source };
 }
 
 function toIsoDateOnly(value: Date): string {
@@ -53,26 +61,48 @@ async function main(): Promise<void> {
 
   const prisma = new PrismaClient();
   const now = new Date();
+  const CAREER_SLUG_RN = "rn" as const;
   try {
-    const lessons = await prisma.pathwayLesson.findMany({
-      where: {
-        pathwayId: { in: [...RN_LESSON_BLOG_PATHWAY_IDS] },
-        status: ContentStatus.PUBLISHED,
-        structuralPublicComplete: true,
-        locale: "en",
-      },
-      orderBy: [{ updatedAt: "desc" }],
-      select: {
-        pathwayId: true,
-        slug: true,
-        title: true,
-        topic: true,
-        topicSlug: true,
-        bodySystem: true,
-        sections: true,
-      },
-      take: Math.max(args.limit * 5, 60),
-    });
+    let lessons: RnLessonSource[];
+    if (args.source === "catalog") {
+      const merged: RnLessonSource[] = [];
+      for (const pathwayId of RN_LESSON_BLOG_PATHWAY_IDS) {
+        for (const l of getCatalogPathwayLessonsSync(pathwayId)) {
+          if (!l.structuralQuality?.publicComplete) continue;
+          merged.push({
+            pathwayId,
+            slug: l.slug,
+            title: l.title,
+            topic: l.topic,
+            topicSlug: l.topicSlug,
+            bodySystem: l.bodySystem,
+            sections: l.sections,
+          });
+        }
+      }
+      lessons = merged;
+    } else {
+      const rows = await prisma.pathwayLesson.findMany({
+        where: {
+          pathwayId: { in: [...RN_LESSON_BLOG_PATHWAY_IDS] },
+          status: ContentStatus.PUBLISHED,
+          structuralPublicComplete: true,
+          locale: "en",
+        },
+        orderBy: [{ updatedAt: "desc" }],
+        select: {
+          pathwayId: true,
+          slug: true,
+          title: true,
+          topic: true,
+          topicSlug: true,
+          bodySystem: true,
+          sections: true,
+        },
+        take: Math.max(args.limit * 5, 60),
+      });
+      lessons = rows;
+    }
 
     const highQuality = lessons.filter((lesson) => lessonHasHighQualityBody(lesson.sections, args.minLessonWords));
     const plannedRows: Array<Record<string, string>> = [];
@@ -88,12 +118,10 @@ async function main(): Promise<void> {
 
         const existing = await prisma.blogPost.findFirst({
           where: {
-            OR: [
-              { keywordCluster },
-              { slug: draft.slug },
-            ],
+            careerSlug: CAREER_SLUG_RN,
+            OR: [{ keywordCluster }, { slug: draft.slug }],
           },
-          select: { id: true, slug: true, title: true },
+          select: { id: true, slug: true, title: true, careerSlug: true },
         });
 
         if (existing) {
@@ -104,7 +132,7 @@ async function main(): Promise<void> {
             title: draft.title,
             slug: existing.slug,
             lesson: lesson.slug,
-            url: adminBlogPublicUrl(existing.slug),
+            url: adminBlogPublicUrl(existing.slug, existing.careerSlug ?? CAREER_SLUG_RN),
           });
           continue;
         }
@@ -135,7 +163,7 @@ async function main(): Promise<void> {
           ctaText: "Start free trial",
           ctaHref: "/pricing",
           legacySource: "rn-lesson-seo-auto-v1",
-          careerSlug: "rn",
+          careerSlug: CAREER_SLUG_RN,
           locale: "en",
           sourceLocale: "en",
         };
@@ -160,6 +188,7 @@ async function main(): Promise<void> {
       JSON.stringify(
         {
           mode: args.apply ? "apply" : "dry_run",
+          source: args.source,
           generatedAt: now.toISOString(),
           publishDate: toIsoDateOnly(now),
           pathways: RN_LESSON_BLOG_PATHWAY_IDS,

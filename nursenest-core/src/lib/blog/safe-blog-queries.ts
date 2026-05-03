@@ -1078,16 +1078,22 @@ export async function getPublishedBlogPostsByTagPage(
 const SITEMAP_BLOG_ROW_CAP = 50_000;
 const SITEMAP_BLOG_SLUG_PAGE_SIZE = 2_000;
 
-export async function getSitemapPublishedBlogSlugs(): Promise<{ slug: string; updatedAt: Date }[]> {
+export type BlogSitemapSlugRow = {
+  slug: string;
+  careerSlug: string | null;
+  updatedAt: Date;
+};
+
+export async function getSitemapPublishedBlogSlugs(): Promise<BlogSitemapSlugRow[]> {
   const now = new Date();
   return withBlogTimeoutFallback(
     async () => {
-      const out: { slug: string; updatedAt: Date }[] = [];
+      const out: BlogSitemapSlugRow[] = [];
       let cursor: { slug: string } | undefined;
       for (;;) {
         const page = await prisma.blogPost.findMany({
           where: blogLiveWhere(now),
-          select: { slug: true, updatedAt: true },
+          select: { slug: true, updatedAt: true, careerSlug: true },
           orderBy: { slug: "asc" },
           take: SITEMAP_BLOG_SLUG_PAGE_SIZE,
           ...(cursor ? { cursor, skip: 1 } : {}),
@@ -1095,7 +1101,7 @@ export async function getSitemapPublishedBlogSlugs(): Promise<{ slug: string; up
         if (page.length === 0) break;
         for (const r of page) {
           const s = r.slug?.trim();
-          if (s) out.push({ slug: s, updatedAt: r.updatedAt });
+          if (s) out.push({ slug: s, careerSlug: r.careerSlug?.trim() ?? null, updatedAt: r.updatedAt });
         }
         if (out.length >= SITEMAP_BLOG_ROW_CAP) break;
         if (page.length < SITEMAP_BLOG_SLUG_PAGE_SIZE) break;
@@ -1116,19 +1122,19 @@ export async function getSitemapPublishedBlogSlugs(): Promise<{ slug: string; up
  * when a database URL is configured (so sitemap generation cannot silently omit every `/blog/{slug}` row).
  * Returns `[]` only when DB-backed sitemap queries are intentionally skipped (build / no URL / static-only blog build).
  */
-export async function getSitemapPublishedBlogSlugsStrict(): Promise<{ slug: string; updatedAt: Date }[]> {
+export async function getSitemapPublishedBlogSlugsStrict(): Promise<BlogSitemapSlugRow[]> {
   if (!isDatabaseUrlConfigured() || shouldSkipBlogDbForProductionBuild() || shouldSkipDbBackedSitemapUrlsForBuild()) {
     return [];
   }
   const now = new Date();
   return withDatabaseFallbackTimeoutOrThrow(
     async () => {
-      const out: { slug: string; updatedAt: Date }[] = [];
+      const out: BlogSitemapSlugRow[] = [];
       let cursor: { slug: string } | undefined;
       for (;;) {
         const page = await prisma.blogPost.findMany({
           where: blogLiveWhere(now),
-          select: { slug: true, updatedAt: true },
+          select: { slug: true, updatedAt: true, careerSlug: true },
           orderBy: { slug: "asc" },
           take: SITEMAP_BLOG_SLUG_PAGE_SIZE,
           ...(cursor ? { cursor, skip: 1 } : {}),
@@ -1136,7 +1142,7 @@ export async function getSitemapPublishedBlogSlugsStrict(): Promise<{ slug: stri
         if (page.length === 0) break;
         for (const r of page) {
           const s = r.slug?.trim();
-          if (s) out.push({ slug: s, updatedAt: r.updatedAt });
+          if (s) out.push({ slug: s, careerSlug: r.careerSlug?.trim() ?? null, updatedAt: r.updatedAt });
         }
         if (out.length >= SITEMAP_BLOG_ROW_CAP) break;
         if (page.length < SITEMAP_BLOG_SLUG_PAGE_SIZE) break;
@@ -1155,17 +1161,17 @@ export async function getSitemapPublishedBlogSlugsStrict(): Promise<{ slug: stri
  * Slugs for `/sitemap.xml` blog URLs: live `BlogPost` rows when Prisma reads are enabled; otherwise the same
  * bundled static corpus used by public `/blog` during `next build` / no-DB / empty-DB fallbacks.
  */
-function staticBlogSitemapSlugRows(): { slug: string; updatedAt: Date }[] {
-  const out: { slug: string; updatedAt: Date }[] = [];
+function staticBlogSitemapSlugRows(): BlogSitemapSlugRow[] {
+  const out: BlogSitemapSlugRow[] = [];
   for (const p of listStaticBlogPostsForIndex()) {
     const slug = p.slug?.trim();
     if (!slug) continue;
-    out.push({ slug, updatedAt: new Date(`${p.createdAt}T12:00:00Z`) });
+    out.push({ slug, careerSlug: null, updatedAt: new Date(`${p.createdAt}T12:00:00Z`) });
   }
   return out;
 }
 
-export async function getMergedBlogSitemapSlugRows(): Promise<{ slug: string; updatedAt: Date }[]> {
+export async function getMergedBlogSitemapSlugRows(): Promise<BlogSitemapSlugRow[]> {
   if (!isDatabaseUrlConfigured() || shouldSkipBlogDbForProductionBuild() || shouldSkipDbBackedSitemapUrlsForBuild()) {
     return staticBlogSitemapSlugRows();
   }

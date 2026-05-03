@@ -12,7 +12,7 @@ import {
 import { loadPathwayLessonSeoMetaWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
-import { mergePathwayLessonPublicMetadata } from "@/lib/seo/programmatic-seo-engine/lesson-public-metadata";
+import { buildAlliedAwareLessonPublicSeoSurface } from "@/lib/allied/allied-lesson-seo-differentiation";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 import { withCrawlSurfacePageRender } from "@/lib/observability/crawl-surface-observability";
 import { PathwayLessonDetailPageBody } from "./pathway-lesson-detail-page-body";
@@ -70,35 +70,33 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
         const path = pathwayLessonPublicDetailPath(pathway, lesson.slug);
         if (!path) return {};
         const canonical = absoluteUrl(path);
-        const merged = mergePathwayLessonPublicMetadata({
-          pathway,
-          lesson: {
-            title: lesson.seoTitle.trim() || lesson.topic,
-            topic: lesson.topic,
-            bodySystem: lesson.bodySystem,
-            seoTitle: lesson.seoTitle,
-            seoDescription: lesson.seoDescription,
-          },
+        const surface = buildAlliedAwareLessonPublicSeoSurface(pathway, {
+          title: lesson.title.trim() || lesson.seoTitle.trim() || lesson.topic,
+          topic: lesson.topic,
+          bodySystem: lesson.bodySystem,
+          seoTitle: lesson.seoTitle,
+          seoDescription: lesson.seoDescription,
+          alliedProfessionKey: lesson.alliedProfessionKey,
         });
         const twDesc =
-          merged.description.description.length > 160
-            ? `${merged.description.description.slice(0, 157)}…`
-            : merged.description.description;
+          surface.metaDescription.length > 160
+            ? `${surface.metaDescription.slice(0, 157)}…`
+            : surface.metaDescription;
         return {
-          title: merged.title.title,
-          description: merged.description.description,
-          keywords: merged.keywords,
+          title: surface.metaTitle,
+          description: surface.metaDescription,
+          keywords: surface.keywords,
           alternates: { canonical },
           openGraph: {
-            title: merged.title.title,
-            description: merged.description.description,
+            title: surface.metaTitle,
+            description: surface.metaDescription,
             url: canonical,
             type: "article",
             siteName: "NurseNest",
           },
           twitter: {
             card: "summary_large_image",
-            title: merged.title.title,
+            title: surface.metaTitle,
             description: twDesc,
           },
           robots: { index: true, follow: true },

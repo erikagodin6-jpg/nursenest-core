@@ -1,5 +1,6 @@
 import "server-only";
 
+import { expectedCanonicalBlogPath } from "@/lib/blog/generated-blog-post-publish";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { getMergedBlogSitemapSlugRows } from "@/lib/blog/safe-blog-queries";
 import {
@@ -23,6 +24,7 @@ export async function listBlogSitemapUrlsSafe(): Promise<string[]> {
 export async function listBlogSitemapEntriesSafe(): Promise<SitemapUrlEntry[]> {
   const origin = normalizeOrigin(resolveSitemapOrigin());
   const entries: SitemapUrlEntry[] = [{ loc: `${origin}/blog` }];
+  const seenLoc = new Set<string>([`${origin}/blog`]);
 
   /** Sitemaps support at most ~50k URLs per file; split into multiple sitemaps if you exceed this. */
   const SITEMAP_BLOG_CAP = 50_000;
@@ -30,13 +32,26 @@ export async function listBlogSitemapEntriesSafe(): Promise<SitemapUrlEntry[]> {
   if (rows.length >= SITEMAP_BLOG_CAP) {
     safeServerLog("seo", "sitemap_blog_url_cap_reached", { cap: SITEMAP_BLOG_CAP });
   }
+  let rnHubLastMod: Date | null = null;
   for (const r of rows) {
-    if (r.slug?.trim()) {
-      entries.push({
-        loc: `${origin}/blog/${encodeURIComponent(r.slug.trim())}`,
-        lastmod: r.updatedAt.toISOString(),
-      });
+    const slug = r.slug?.trim();
+    if (!slug) continue;
+    const career = r.careerSlug?.trim().toLowerCase() ?? null;
+    if (career === "rn") {
+      rnHubLastMod = !rnHubLastMod || r.updatedAt > rnHubLastMod ? r.updatedAt : rnHubLastMod;
     }
+    const path = expectedCanonicalBlogPath(slug, r.careerSlug);
+    const loc = `${origin}${path}`;
+    if (seenLoc.has(loc)) continue;
+    seenLoc.add(loc);
+    entries.push({
+      loc,
+      lastmod: r.updatedAt.toISOString(),
+    });
+  }
+  const rnHub = `${origin}/blog/rn`;
+  if (rnHubLastMod && !seenLoc.has(rnHub)) {
+    entries.push({ loc: rnHub, lastmod: rnHubLastMod.toISOString() });
   }
 
   logSeoEmittedUrlBatch("sitemap_blog", entries.map((e) => e.loc), {

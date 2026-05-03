@@ -26,6 +26,8 @@ import {
 } from "@/lib/learner/premium-dashboard-snapshot";
 import { loadRecentLearnerNotesSummary } from "@/lib/learner/load-recent-learner-notes-summary";
 import { LearnerStudyHome } from "@/components/student/learner-study-home";
+import { inferContinueStudyFromActivity } from "@/lib/learner/infer-continue-study-from-activity";
+import { buildLearnerReportCardViewModel } from "@/lib/learner/learner-report-card-model";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
@@ -210,6 +212,19 @@ async function LearnerDashboardHeavyContent({
         premiumSnapshot.pathways.find((p) => p.lessonsTotal > 0)?.pathwayId ??
         premiumSnapshot.pathways[0]?.pathwayId ??
         null;
+      const continueCheckpoint =
+        preferredPathwayId && !skipNonCriticalHome
+          ? await inferContinueStudyFromActivity(userId, preferredPathwayId)
+          : null;
+      const reportCard =
+        preferredPathwayId && studySnap
+          ? buildLearnerReportCardViewModel({
+              pathwayId: preferredPathwayId,
+              snapshot: premiumSnapshot,
+              studySnap,
+              continueCheckpoint,
+            })
+          : null;
       const scopedContinueLinks = continueLinks.map((link) => ({
         ...link,
         href: withPathwayScopeHref(link.href, preferredPathwayId),
@@ -300,6 +315,7 @@ async function LearnerDashboardHeavyContent({
           showShell={false}
           entitlement={entitlement}
           adaptiveStudyNextRecs={adaptiveStudyNextRecs}
+          reportCard={reportCard}
         />
       );
     }

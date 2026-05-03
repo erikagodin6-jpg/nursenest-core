@@ -42,6 +42,8 @@ import { LearnerStudySurfaceSection, LearnerSurface } from "@/components/learner
 import { BrandLeafIcon } from "@/components/brand/brand-leaf-icon";
 import { LearnerDashboardPageShell } from "@/components/student/learner-dashboard-page-shell";
 import { FocusTodayStrip } from "@/components/student/focus-today-strip";
+import { LearnerReportCard } from "@/components/student/learner-report-card";
+import type { LearnerReportCardViewModel } from "@/lib/learner/learner-report-card-model";
 function RecentGainsBlock({
   trends,
   strongTopics,
@@ -135,6 +137,8 @@ export type LearnerStudyHomeProps = {
   entitlement: AccessScope;
   /** Smart study-next row (suppression-aware); when empty/omitted the adaptive card uses base ranking. */
   adaptiveStudyNextRecs?: StudyNextRecommendation[] | null;
+  /** Pathway-scoped progress summary (subscriber surfaces only). */
+  reportCard?: LearnerReportCardViewModel | null;
 };
 
 export function LearnerStudyHome({
@@ -170,6 +174,7 @@ export function LearnerStudyHome({
   showShell = true,
   entitlement,
   adaptiveStudyNextRecs,
+  reportCard,
 }: LearnerStudyHomeProps) {
   const trends = studySnap?.topicTrends ?? [];
   const strongHighlight = studySnap?.strongTopicsHighlight ?? [];
@@ -207,6 +212,12 @@ export function LearnerStudyHome({
         weakTopicFallback={weakTopicTitles}
         weakPracticeHref={withPathwayScopeHref("/app/questions?studyFilter=weak", preferredPathwayId)}
       />
+
+      {reportCard ? (
+        <div className="nn-dash-band">
+          <LearnerReportCard model={reportCard} />
+        </div>
+      ) : null}
 
       {/* Continue + exam pacing (legacy: `continue_where_left_off` + exam context) */}
       <LearnerStudySurfaceSection

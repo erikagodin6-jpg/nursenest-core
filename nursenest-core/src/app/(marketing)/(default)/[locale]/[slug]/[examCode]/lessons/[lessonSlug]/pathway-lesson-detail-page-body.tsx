@@ -70,6 +70,7 @@ import { MarketingPathwayLessonDetailViewBeacon } from "@/components/observabili
 import { loadStudySettings } from "@/lib/learner/load-study-settings";
 import { DEFAULT_STUDY_SETTINGS } from "@/lib/learner/study-settings";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
+import { buildAlliedAwareLessonPublicSeoSurface } from "@/lib/allied/allied-lesson-seo-differentiation";
 import {
   pathwayLessonSectionPrefersWideColumn,
   shouldRenderPathwayLessonSection,
@@ -208,7 +209,15 @@ export async function PathwayLessonDetailPageBody({
           .filter((s) => shouldRenderPathwayLessonSection(s.kind))
           .map(({ id, heading }) => ({ id, heading }))
       : [];
-  const displayLessonTitle = cleanLessonTitleForDisplay(lesson.title);
+  const seoSurface = buildAlliedAwareLessonPublicSeoSurface(pathway, {
+    title: lesson.title,
+    topic: lesson.topic,
+    bodySystem: lesson.bodySystem,
+    seoTitle: lesson.seoTitle,
+    seoDescription: lesson.seoDescription,
+    alliedProfessionKey: lesson.alliedProfessionKey,
+  });
+  const displayLessonTitle = cleanLessonTitleForDisplay(seoSurface.displayTitle);
   const { crumbs, schemaItems } = pathwayLessonDetailBreadcrumbs(pathway, lesson.slug, displayLessonTitle);
   const lessonQuality = classifyPathwayLesson(lesson);
   const contentDates = contentDatesRes.status === "fulfilled" ? contentDatesRes.value : null;
@@ -270,14 +279,15 @@ export async function PathwayLessonDetailPageBody({
         />
         <PathwayLessonMedicalEducationJsonLd
           path={jsonLdLessonPath}
-          headline={lesson.seoTitle}
+          headline={seoSurface.jsonLdHeadline}
           description={
             fullAccess
-              ? lesson.seoDescription.slice(0, 320)
-              : `${lesson.seoDescription.slice(0, 200)}${lesson.seoDescription.length > 200 ? "…" : ""}`
+              ? seoSurface.jsonLdDescription.slice(0, 320)
+              : `${seoSurface.jsonLdDescription.slice(0, 200)}${seoSurface.jsonLdDescription.length > 200 ? "…" : ""}`
           }
           datePublished={contentDates?.datePublished ?? null}
           dateModified={contentDates?.dateModified ?? null}
+          aboutOccupation={seoSurface.structuredAboutOccupation}
         />
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} navClassName="nn-marketing-caption text-[var(--theme-muted-text)]" />
         <PathwayLessonSequenceNavBar adjacent={lessonAdjacentHrefs} className="mb-4 hidden md:grid" />

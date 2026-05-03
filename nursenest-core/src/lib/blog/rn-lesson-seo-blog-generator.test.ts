@@ -24,7 +24,7 @@ test("buildRnLessonSeoVariants creates required long-tail trio", () => {
   assert.equal(out[2]?.title, "NCLEX practice questions heart failure");
 });
 
-test("buildRnLessonSeoDraft includes lesson backlink, 3 practice questions, and free trial CTA", () => {
+test("buildRnLessonSeoDraft includes lesson backlink, five practice questions, and free trial CTA", () => {
   const lessonPath = pathwayLessonPublicPath("us-rn-nclex-rn", "heart-failure-basics");
   assert.equal(lessonPath, "/us/rn/nclex-rn/lessons/heart-failure-basics");
   const draft = buildRnLessonSeoDraft({
@@ -40,7 +40,8 @@ test("buildRnLessonSeoDraft includes lesson backlink, 3 practice questions, and 
     variant: { intent: "nclex_topic_questions", title: "NCLEX heart failure questions" },
   });
   assert.match(draft.body, /<ol>/);
-  assert.match(draft.body, /<li>/);
+  const liMatches = draft.body.match(/<li>/g);
+  assert.equal(liMatches?.length ?? 0, 5);
   assert.match(draft.body, /Start free trial/i);
   assert.match(draft.body, /\/us\/rn\/nclex-rn\/lessons\/heart-failure-basics/);
 });

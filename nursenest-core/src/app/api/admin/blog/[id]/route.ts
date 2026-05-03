@@ -35,6 +35,7 @@ import {
   publishBlogPostCanonical,
 } from "@/lib/blog/publish-blog-post-canonical";
 import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
+import { isAlliedBlogProfessionCareerSlug, isNursingScopedCareerSlug } from "@/lib/blog/blog-scoped-career-hubs";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { classifyBlogCorpus, collectClassificationViolations } from "@/lib/taxonomy/content-write-taxonomy";
@@ -737,11 +738,24 @@ export async function PATCH(req: Request, { params }: Props) {
 
   if (shouldRevalidateSurfaces) {
     try {
-      revalidateBlogPublishingSurfaces({
-        slug: updated.slug,
-        alliedProfessionKey: updated.careerSlug ?? null,
-        tags: updated.tags,
-      });
+      (() => {
+        const cs = updated.careerSlug?.trim() ?? null;
+        if (cs && isAlliedBlogProfessionCareerSlug(cs)) {
+          revalidateBlogPublishingSurfaces({
+            slug: updated.slug,
+            alliedProfessionKey: cs,
+            tags: updated.tags,
+          });
+        } else if (cs && isNursingScopedCareerSlug(cs)) {
+          revalidateBlogPublishingSurfaces({
+            slug: updated.slug,
+            nursingCareerSlug: cs,
+            tags: updated.tags,
+          });
+        } else {
+          revalidateBlogPublishingSurfaces({ slug: updated.slug, tags: updated.tags });
+        }
+      })();
     } catch (e) {
       safeServerLog("admin", "blog_patch_revalidate_failed", {
         message: e instanceof Error ? e.message : String(e),

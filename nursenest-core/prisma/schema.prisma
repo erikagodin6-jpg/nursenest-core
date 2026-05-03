@@ -1249,6 +1249,9 @@ model ExamQuestion {
   /// Optional subcategory / content area label for audits (not required for CAT balancing).
   nclexClientNeedsSubcategory String?   @map("nclex_client_needs_subcategory") @db.VarChar(128)
   published_by_user_id        String?
+  /// * Optional study-loop link: canonical pathway + pathway lesson `slug` (never cross-tier; set by `scripts/link-study-content.ts`).
+  studyLinkPathwayId          String?   @map("study_link_pathway_id") @db.VarChar(64)
+  studyLinkLessonSlug         String?   @map("study_link_lesson_slug") @db.VarChar(200)
   User                        User?     @relation(fields: [published_by_user_id], references: [id])
   practiceAnswerAttempts      ExamQuestionPracticeAnswerAttempt[]
   answerOptionAggregates      ExamQuestionAnswerOptionAggregate[]
@@ -1260,6 +1263,7 @@ model ExamQuestion {
   @@index([status, updatedAt])
   @@index([status, exam, tier, countryCode])
   @@index([status, exam, topic])
+  @@index([studyLinkPathwayId, studyLinkLessonSlug])
   @@index([status, exam, tier, countryCode], map: "exam_questions_status_exam_tier_country_idx")
   @@map("exam_questions")
 }
@@ -1604,6 +1608,8 @@ model ClinicalNursingScenario {
   /// * Premium multi-stage simulations: free learners receive stage 0 only (server-redacted payload).
   isPremium              Boolean                          @default(false) @map("is_premium")
   publishStatus          ClinicalNursingScenarioPublishStatus @default(DRAFT) @map("publish_status")
+  /// * Optional deep link to a pathway lesson `slug` within the same `pathwayId` (study-loop linker).
+  studyLinkLessonSlug    String?                          @map("study_link_lesson_slug") @db.VarChar(200)
   createdByUserId        String?                          @map("created_by_user_id")
   createdAt              DateTime                         @default(now()) @map("created_at")
   updatedAt              DateTime                         @updatedAt @map("updated_at")

@@ -2,6 +2,7 @@ import { BlogPostStatus } from "@prisma/client";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
 import { BLOG_SLUG_FORMAT_RE } from "@/lib/blog/blog-optional-slug";
 import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
+import { expectedCanonicalBlogPath } from "@/lib/blog/generated-blog-post-publish";
 import {
   normalizeBlogGenerationInput,
   sanitizeAiReturnedSlug,
@@ -67,8 +68,11 @@ export function adminBlogEditUrl(postId: string | null | undefined): string | nu
   return postId ? `/admin/blog?id=${encodeURIComponent(postId)}` : null;
 }
 
-export function adminBlogPublicUrl(slug: string): string {
-  return `/blog/${encodeURIComponent(slug)}`;
+export function adminBlogPublicUrl(slug: string, careerSlug?: string | null): string {
+  const path = expectedCanonicalBlogPath(slug, careerSlug ?? null);
+  const trimmed = path.replace(/^\/+/, "").split("/");
+  /** Encode each segment; path always starts with `/`. */
+  return `/${trimmed.map((s) => encodeURIComponent(s)).join("/")}`;
 }
 
 export function adminBlogStructuredFieldError(

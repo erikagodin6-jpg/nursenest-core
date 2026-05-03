@@ -59,6 +59,8 @@ export function expectedCanonicalBlogPath(slug: string, careerSlug: string | nul
   if (["paramedic", "respiratory", "mlt", "imaging", "sonography"].includes(scoped)) {
     return `/allied-health/${scoped}/blog/${slug}`;
   }
+  /** RN lesson-derived SEO posts and RN hub — canonical under `/blog/rn` for organic landing URLs. */
+  if (scoped === "rn") return `/blog/rn/${slug}`;
   return `/nursing/${scoped}/blog/${slug}`;
 }
 

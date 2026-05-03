@@ -69,11 +69,14 @@ export function lessonHasHighQualityBody(sections: unknown, minWords: number = 7
   return totalWords >= minWords;
 }
 
-function practiceQuestionSet(topicLabel: string): string[] {
+/** Three to five NCLEX-style prompts per article (deterministic set). */
+export function practiceQuestionSet(topicLabel: string): string[] {
   return [
     `1. A client with ${topicLabel} has a sudden change in assessment findings. Which cue should the nurse prioritize first, and why?`,
     `2. Which intervention is most appropriate as the initial nursing action for ${topicLabel} in an NCLEX-style scenario?`,
-    `3. Which finding indicates the current plan of care for ${topicLabel} is effective, and which finding requires escalation?`,
+    `3. Which finding suggests the current plan of care for ${topicLabel} is effective, and which finding requires escalation?`,
+    `4. When reviewing labs or diagnostics related to ${topicLabel}, which trend should prompt the nurse to reassess and notify the provider?`,
+    `5. In a prioritization question about ${topicLabel}, which option best reflects safe sequencing (assessment → intervention → evaluation)?`,
   ];
 }
 
