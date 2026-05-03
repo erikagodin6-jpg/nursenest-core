@@ -20,7 +20,7 @@ export type MarketingLanguage = {
 
 export const MARKETING_LANGUAGES: MarketingLanguage[] = [
   { code: "en", name: "English", flag: "\uD83C\uDDEC\uD83C\uDDE7", tier: "full" },
-  { code: "fr", name: "Fran\u00e7ais", flag: "\uD83C\uDDEB\uD83C\uDDF7", tier: "full" },
+  { code: "fr", name: "Fran\u00e7ais", flag: "\uD83C\uDDEB\uD83C\uDDF7", tier: "partial" },
   { code: "es", name: "Espa\u00f1ol", flag: "\uD83C\uDDEA\uD83C\uDDF8", tier: "full" },
   { code: "tl", name: "Tagalog", flag: "\uD83C\uDDF5\uD83C\uDDED", tier: "partial" },
   { code: "hi", name: "\u0939\u093f\u0928\u094d\u0926\u0940", flag: "\uD83C\uDDEE\uD83C\uDDF3", tier: "partial" },

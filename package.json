@@ -85,7 +85,12 @@
     "nursing:audit:db": "npx tsx scripts/replit-import/nursing-pre-import-audit.ts --check-db",
     "clean:generated": "node scripts/clean-generated-artifacts.mjs",
     "backfill:question-bank-content-tier": "npx tsx scripts/backfill-question-bank-content-tier.ts",
-    "audit:legacy-features": "node nursenest-core/src/lib/legacy-feature-inventory/audit-legacy-feature-inventory.mjs"
+    "audit:legacy-features": "node nursenest-core/src/lib/legacy-feature-inventory/audit-legacy-feature-inventory.mjs",
+    "db:migrate:status:safe": "npm --prefix nursenest-core run db:migrate:status:safe",
+    "db:migrate:deploy:safe": "npm --prefix nursenest-core run db:migrate:deploy:safe",
+    "db:generate:safe": "npm --prefix nursenest-core run db:generate:safe",
+    "db:schema:check:safe": "npm --prefix nursenest-core run db:schema:check:safe",
+    "production:preflight": "npm --prefix nursenest-core run production:preflight"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.19.0",

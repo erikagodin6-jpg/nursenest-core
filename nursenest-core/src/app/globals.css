@@ -16,8 +16,8 @@ body {
  * Mobile UX (≤768px): iOS safe areas are applied at component level (header, learner shell, drawers).
  * Touch targets: prefer min-h-11 (2.75rem) for primary actions; WCAG 2.5.5 recommends ~44×44 CSS px.
  *
- * Fonts: DM Sans is loaded via `next/font/local` in `app/layout.tsx` (self-hosted files from
- * `@fontsource/dm-sans`) with `display: "swap"`, `adjustFontFallback: "Arial"`, and `preload: true`.
+ * Fonts: keep the `--font-dm-sans` variable local so production builds do not fetch remote Google font CSS.
+ * The family falls back to any installed DM Sans, then system UI.
  * Do not add orphan `@font-face { font-display: swap }` rules without `src:` — they are invalid CSS.
  */
 
@@ -34,6 +34,7 @@ body {
  * prevented theme switching from changing page colors.
  */
 :root {
+  --font-dm-sans: "DM Sans", system-ui, sans-serif;
   --font-sans: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
   /* Slightly rounder global radius → calmer cards without “chunky” mobile tiles */
   --radius: 0.8125rem;

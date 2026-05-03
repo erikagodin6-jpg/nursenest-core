@@ -7,6 +7,7 @@ import {
   buildRnLessonSeoVariants,
   keywordClusterFromDuplicateHash,
   lessonHasHighQualityBody,
+  rnLessonBlogPublicPath,
   type RnLessonSource,
 } from "../../src/lib/blog/rn-lesson-seo-blog-generator";
 import { adminBlogPublicUrl } from "../../src/lib/blog/admin-blog-generation-service";
@@ -187,7 +188,7 @@ async function main(): Promise<void> {
           title: draft.title,
           slug: draft.slug,
           lesson: lesson.slug,
-          url: `/blog/rn/${draft.slug}`,
+          url: rnLessonBlogPublicPath(draft.slug),
         });
       }
       if (created >= args.limit) break;

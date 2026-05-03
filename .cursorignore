@@ -1,6 +1,32 @@
 # Cursor indexing / file-watcher load (see docs/cursor-stability.md)
 # Do NOT list app source (src/app, src/components, src/lib, prisma, build scripts).
 
+# Massive folders
+node_modules
+.next
+dist
+build
+coverage
+
+# Your repo specifics
+reports
+migrations
+data
+backup-system
+
+# Dev / test artifacts
+playwright-report
+test-results
+*.log
+
+# Git internals
+.git
+
+# Large configs / generated
+.env*
+*.sqlite
+*.db
+
 # Dependencies and SCM
 .git/
 **/.git/

@@ -7,6 +7,7 @@ import {
   keywordClusterFromDuplicateHash,
   lessonHasHighQualityBody,
   pathwayLessonPublicPath,
+  rnLessonBlogPublicPath,
 } from "@/lib/blog/rn-lesson-seo-blog-generator";
 
 test("buildRnLessonBlogDuplicateHash is deterministic for title+topicSlug", () => {
@@ -27,6 +28,7 @@ test("buildRnLessonSeoVariants creates required long-tail trio", () => {
 test("buildRnLessonSeoDraft includes lesson backlink, five practice questions, and free trial CTA", () => {
   const lessonPath = pathwayLessonPublicPath("us-rn-nclex-rn", "heart-failure-basics");
   assert.equal(lessonPath, "/us/rn/nclex-rn/lessons/heart-failure-basics");
+  assert.equal(rnLessonBlogPublicPath("sample-post"), "/blog/rn/sample-post");
   const draft = buildRnLessonSeoDraft({
     lesson: {
       pathwayId: "us-rn-nclex-rn",
@@ -53,4 +55,3 @@ test("lessonHasHighQualityBody enforces section and word floor", () => {
   assert.equal(ok, true);
   assert.equal(no, false);
 });
-

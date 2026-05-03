@@ -51,6 +51,10 @@ export function pathwayLessonPublicPath(pathwayId: string, lessonSlug: string): 
   return `${routeBase}/${encodeURIComponent(lessonSlug)}`;
 }
 
+export function rnLessonBlogPublicPath(slug: string): string {
+  return `/blog/rn/${encodeURIComponent(slug.trim())}`;
+}
+
 function lessonSectionBodies(sections: unknown): string[] {
   if (!Array.isArray(sections)) return [];
   const out: string[] = [];
@@ -143,4 +147,3 @@ export function buildRnLessonSeoDraft(input: {
     hash,
   };
 }
-

@@ -11,7 +11,9 @@ describe("isLocalePrefixedPathnameExcludedFromSitemap", () => {
     assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/canada/rn/nclex-rn"), false);
   });
 
-  it("excludes partial-tier marketing locale prefixes (e.g. Tagalog, Hindi)", () => {
+  it("excludes partial-tier marketing locale prefixes (e.g. French, Tagalog, Hindi)", () => {
+    assert.equal(isLocaleSitemapIncluded("fr"), false);
+    assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/fr/pricing"), true);
     assert.equal(isLocaleSitemapIncluded("tl"), false);
     assert.equal(isLocaleSitemapIncluded("hi"), false);
     assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/tl/pricing"), true);
@@ -23,8 +25,8 @@ describe("isLocalePrefixedPathnameExcludedFromSitemap", () => {
     assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/de/pricing"), true);
   });
 
-  it("does not exclude full-tier locale prefixes", () => {
-    assert.equal(isLocaleSitemapIncluded("fr"), true);
-    assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/fr/pricing"), false);
+  it("does not exclude the default locale policy", () => {
+    assert.equal(isLocaleSitemapIncluded("en"), true);
+    assert.equal(isLocalePrefixedPathnameExcludedFromSitemap("/pricing"), false);
   });
 });

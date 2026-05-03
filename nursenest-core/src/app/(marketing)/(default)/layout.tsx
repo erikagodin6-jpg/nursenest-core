@@ -35,9 +35,7 @@ import {
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 import { loadMarketingLayoutObservability } from "@/lib/observability/deferred-marketing-layout-observability";
 import { loadRenderTrace } from "@/lib/observability/deferred-render-trace";
-import { getStaffSession } from "@/lib/auth/staff-session";
 import { MarketingPublicContentEditProvider } from "@/components/marketing/marketing-public-content-edit-provider";
-import { loadMarketingPublicContentOverridesForLocale } from "@/lib/marketing/load-marketing-public-content-overrides";
 import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-main-error-boundary";
 import type { CountryCode } from "@/lib/marketing/countries/types";
 
@@ -94,6 +92,26 @@ async function readNarrowViewportHintSafe(): Promise<boolean> {
       error: err instanceof Error ? err.message : String(err),
     });
     return false;
+  }
+}
+
+async function loadPublicContentOverridesForLocaleSafe(locale: string): Promise<Record<string, string>> {
+  try {
+    const { loadMarketingPublicContentOverridesForLocale } = await import(
+      "@/lib/marketing/load-marketing-public-content-overrides"
+    );
+    return await loadMarketingPublicContentOverridesForLocale(locale);
+  } catch {
+    return {};
+  }
+}
+
+async function getStaffSessionSafe() {
+  try {
+    const { getStaffSession } = await import("@/lib/auth/staff-session");
+    return await getStaffSession();
+  } catch {
+    return null;
   }
 }
 
@@ -387,8 +405,8 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       );
 
       const [publicContentOverrides, staffSession] = await Promise.all([
-        loadMarketingPublicContentOverridesForLocale(resolvedLocale).catch(() => ({} as Record<string, string>)),
-        getStaffSession().catch(() => null),
+        loadPublicContentOverridesForLocaleSafe(resolvedLocale),
+        getStaffSessionSafe(),
       ]);
 
       return (

@@ -1,24 +1,13 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
 
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
 
-import { auth } from "@/lib/auth";
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
 import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
 
 import "./globals.css";
 import "./(marketing)/marketing-dark-utilities.css";
-
-/** Turbopack-safe font source that preserves the existing CSS variable contract. */
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-dm-sans",
-  display: "swap",
-  preload: true,
-});
 
 const siteUrl = MARKETING_SITE_ORIGIN || "https://www.nursenest.ca";
 
@@ -69,6 +58,7 @@ async function getSessionSafe() {
   if (process.env.NEXT_PHASE === "phase-production-build") return null;
 
   try {
+    const { auth } = await import("@/lib/auth");
     return await auth();
   } catch (error) {
     console.error("[root-layout] auth failed; continuing without session", error);
@@ -100,7 +90,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} h-full antialiased`}
+      className="h-full antialiased"
       data-theme={NURSENEST_DEFAULT_THEME}
       suppressHydrationWarning
     >
