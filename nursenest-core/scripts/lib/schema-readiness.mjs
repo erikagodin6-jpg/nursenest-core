@@ -1,5 +1,4 @@
 import pg from "pg";
-
 const { Client } = pg;
 
 export const PRODUCTION_REQUIRED_COLUMNS = Object.freeze([
@@ -21,7 +20,7 @@ export const ALLIED_AUDIT_REQUIRED_COLUMNS = Object.freeze([
 
 export class SchemaReadinessError extends Error {
   constructor(missingColumns, message = "Required database schema columns are missing.") {
-    super(`SCHEMA_NOT_READY: ${message}\n${formatMissingColumns(missingColumns)}`);
+    super("SCHEMA_NOT_READY: " + message + "\n" + formatMissingColumns(missingColumns));
     this.name = "SchemaReadinessError";
     this.code = "SCHEMA_NOT_READY";
     this.missingColumns = missingColumns;
@@ -30,48 +29,49 @@ export class SchemaReadinessError extends Error {
 
 export function formatMissingColumns(missingColumns) {
   if (!missingColumns?.length) return "(none)";
-  return missingColumns.map(({ table, column }) => `- ${table}.${column}`).join("\n");
+  return missingColumns.map(function(c) { return "- " + c.table + "." + c.column; }).join("\n");
 }
 
-export async function checkRequiredColumnsWithQuery(query, requiredColumns = PRODUCTION_REQUIRED_COLUMNS) {
-  const missingColumns = [];
-
-  for (const { table, column } of requiredColumns) {
-    const result = await query(
-      `SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = $1 AND column_name = $2 LIMIT 1`,
-      [table, column],
+export async function checkRequiredColumnsWithQuery(query, requiredColumns) {
+  if (!requiredColumns) requiredColumns = PRODUCTION_REQUIRED_COLUMNS;
+  var missingColumns = [];
+  for (var i = 0; i < requiredColumns.length; i++) {
+    var col = requiredColumns[i];
+    var result = await query(
+      "SELECT 1 FROM information_schema.columns WHERE table_schema = 'public' AND table_name = $1 AND column_name = $2 LIMIT 1",
+      [col.table, col.column],
     );
-    const rowCount = Array.isArray(result?.rows) ? result.rows.length : Number(result?.rowCount ?? 0);
-    if (rowCount < 1) missingColumns.push({ table, column });
+    var rowCount = Array.isArray(result?.rows) ? result.rows.length : Number(result?.rowCount ?? 0);
+    if (rowCount < 1) missingColumns.push(col);
   }
-
-  return { ready: missingColumns.length === 0, missingColumns };
+  return { ready: missingColumns.length === 0, missingColumns: missingColumns };
 }
 
-export async function checkRequiredColumns(client, requiredColumns = PRODUCTION_REQUIRED_COLUMNS) {
-  return checkRequiredColumnsWithQuery((text, params) => client.query(text, params), requiredColumns);
+export async function checkRequiredColumns(client, requiredColumns) {
+  if (!requiredColumns) requiredColumns = PRODUCTION_REQUIRED_COLUMNS;
+  return checkRequiredColumnsWithQuery(function(text, params) { return client.query(text, params); }, requiredColumns);
 }
 
-export async function assertRequiredColumns(client, requiredColumns = PRODUCTION_REQUIRED_COLUMNS) {
-  const result = await checkRequiredColumns(client, requiredColumns);
-  if (!result.ready) {
-    throw new SchemaReadinessError(result.missingColumns);
-  }
+export async function assertRequiredColumns(client, requiredColumns) {
+  if (!requiredColumns) requiredColumns = PRODUCTION_REQUIRED_COLUMNS;
+  var result = await checkRequiredColumns(client, requiredColumns);
+  if (!result.ready) throw new SchemaReadinessError(result.missingColumns);
   return result;
 }
 
 export async function withPgClient(databaseUrl, fn) {
-  const client = new Client({ connectionString: databaseUrl });
+  var client = new Client({
+    connectionString: databaseUrl,
+    ssl: { rejectUnauthorized: false },
+  });
   await client.connect();
-  try {
-    return await fn(client);
-  } finally {
-    await client.end().catch(() => undefined);
-  }
+  try { return await fn(client); }
+  finally { await client.end().catch(function() {}); }
 }
 
-export async function assertRequiredColumnsFromDatabaseUrl(databaseUrl, requiredColumns = PRODUCTION_REQUIRED_COLUMNS) {
-  return withPgClient(databaseUrl, (client) => assertRequiredColumns(client, requiredColumns));
+export async function assertRequiredColumnsFromDatabaseUrl(databaseUrl, requiredColumns) {
+  if (!requiredColumns) requiredColumns = PRODUCTION_REQUIRED_COLUMNS;
+  return withPgClient(databaseUrl, function(client) { return assertRequiredColumns(client, requiredColumns); });
 }
 
 export function isSchemaReadinessError(error) {

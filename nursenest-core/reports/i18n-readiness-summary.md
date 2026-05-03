@@ -1,10 +1,12 @@
 # I18n Readiness Summary
 
-Generated: 2026-05-03T19:09:28.792Z
+Generated: 2026-05-03T20:37:48.019Z
 
 English status: pass
 French status: 15 surfaces blocked from indexing
+Spanish status: pass
 REx-PN French status: noindex until translations pass
+Spanish coverage: 100% (17563/17563)
 
 ## Missing French Keys
 
@@ -25,6 +27,10 @@ REx-PN French status: noindex until translations pass
 - /app: learner.printables.download
 - /app: learner.printables.badgeFree
 - /app: learner.printables.badgeProIncluded
+
+## Missing Spanish Keys
+
+- None.
 
 ## English Regression Findings
 
@@ -54,6 +60,17 @@ REx-PN French status: noindex until translations pass
 - /fr/np: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
 - /fr/allied: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
 - /fr/new-grad: noindex (Keep noindex,follow and complete/review French translations before sitemap or hreflang inclusion.)
+- /es: indexable (Spanish surface is structurally complete.)
+- /es/pricing: indexable (Spanish surface is structurally complete.)
+- /es/rn: indexable (Spanish surface is structurally complete.)
+- /es/rex-pn: indexable (Spanish surface is structurally complete.)
+- /es/np: indexable (Spanish surface is structurally complete.)
+- /es/allied: indexable (Spanish surface is structurally complete.)
+- /es/lessons: indexable (Spanish keys are structurally complete; review English-identical strings for translation quality.)
+- /es/question-bank: indexable (Spanish surface is structurally complete.)
+- /app/flashcards: noindex (Spanish keys are structurally complete; review English-identical strings for translation quality.)
+- /app/practice-tests/cat-launch: noindex (Spanish surface is structurally complete.)
+- /es/login: noindex (Spanish surface is structurally complete.)
 
 ## Next Required Translations
 

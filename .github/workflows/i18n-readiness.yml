@@ -8,7 +8,10 @@ on:
       - "nursenest-core/src/lib/seo/**"
       - "nursenest-core/scripts/audit-*-i18n*.mjs"
       - "nursenest-core/scripts/audit-french-completeness.mjs"
+      - "nursenest-core/scripts/audit-spanish-completeness.mjs"
       - "nursenest-core/scripts/translate-fr-missing.mjs"
+      - "nursenest-core/scripts/translate-es-missing.mjs"
+      - "nursenest-core/scripts/translate-es-critical-identical.mjs"
       - "nursenest-core/tests/e2e/i18n/**"
       - "nursenest-core/playwright.i18n-routes.config.ts"
       - ".github/workflows/i18n-readiness.yml"
@@ -35,6 +38,8 @@ jobs:
         run: npm run i18n:audit:en
       - name: French completeness audit
         run: npm run i18n:audit:fr
+      - name: Spanish completeness audit
+        run: npm run i18n:audit:es
       - name: SEO i18n verification
         run: npm run i18n:seo:verify
       - name: Route rendering verification

@@ -4,23 +4,34 @@ import { dismissMarketingScrims } from "../helpers/marketing-smoke-scrims";
 const RAW_KEYISH = /\b(?:pages|nav|footer|brand|components|common|billing|learner|auth)\.[a-z0-9_.-]+/i;
 const MISSING_OR_PLACEHOLDER = /\[missing[:\]]|\{\{missing|TODO\b|TBD\b|lorem ipsum|translate this|content unavailable right now/i;
 const FRENCH_UI = /\b(Tarifs|Connexion|Accueil|Leçons|Questions d'entraînement|Cartes mémoire)\b/i;
+const SPANISH_UI = /\b(Precios|Iniciar sesión|Inicio|Lecciones|Preguntas de práctica|Tarjetas de memoria)\b/i;
 const ENGLISH_FALLBACK = /\b(Sign In|Sign Up|Get Started|Pricing|Practice questions|Flashcards|My Dashboard|Subscribe|Lessons)\b/i;
 
 const ROUTES = [
   { path: "/", locale: "en", indexable: true },
   { path: "/fr", locale: "fr", indexableWhenComplete: true },
+  { path: "/es", locale: "es", indexable: true },
   { path: "/rex-pn", locale: "en", indexable: true, allow404: true },
   { path: "/fr/rex-pn", locale: "fr", indexableWhenComplete: true, allow404: true },
+  { path: "/es/rex-pn", locale: "es", indexable: true, allow404: true },
+  { path: "/es/rn", locale: "es", indexable: true, allow404: true },
+  { path: "/es/np", locale: "es", indexable: true, allow404: true },
   { path: "/pricing", locale: "en", indexable: true },
   { path: "/fr/pricing", locale: "fr", indexableWhenComplete: true },
+  { path: "/es/pricing", locale: "es", indexable: true },
+  { path: "/es/allied-health", locale: "es", indexable: true },
   { path: "/canada/pn/rex-pn/lessons", locale: "en", indexable: true },
   { path: "/fr/canada/rex-pn/lessons", locale: "fr", indexableWhenComplete: true, allow404: true },
+  { path: "/es/canada/rex-pn/lessons", locale: "es", indexable: true, allow404: true },
   { path: "/canada/pn/rex-pn/lessons/clinical-judgment-prioritization-gold", locale: "en", indexable: true, allow404: true },
   { path: "/fr/canada/rex-pn/lessons/clinical-judgment-prioritization-gold", locale: "fr", indexableWhenComplete: true, allow404: true },
+  { path: "/es/canada/rex-pn/lessons/clinical-judgment-prioritization-gold", locale: "es", indexable: true, allow404: true },
   { path: "/canada/pn/rex-pn/questions", locale: "en", indexable: true },
   { path: "/fr/question-bank", locale: "fr", indexableWhenComplete: true },
+  { path: "/es/question-bank", locale: "es", indexable: true },
   { path: "/app/flashcards", locale: "en", indexable: false, allowRedirect: true },
   { path: "/fr/practice-exams", locale: "fr", indexableWhenComplete: true },
+  { path: "/es/practice-exams", locale: "es", indexable: true },
 ];
 
 function hasNoindex(content: string | null): boolean {
@@ -45,11 +56,16 @@ test.describe("i18n route readiness", () => {
 
       if (route.locale === "en") {
         expect(body, "English page does not contain French UI labels").not.toMatch(FRENCH_UI);
+        expect(body, "English page does not contain Spanish UI labels").not.toMatch(SPANISH_UI);
       } else {
         const robots = await page.locator('meta[name="robots"]').first().getAttribute("content").catch(() => null);
         const xRobots = response?.headers()["x-robots-tag"] ?? null;
-        if (ENGLISH_FALLBACK.test(body)) {
+        if (route.locale === "fr" && ENGLISH_FALLBACK.test(body)) {
           expect(hasNoindex(robots) || hasNoindex(xRobots), "French pages with obvious English fallback must be noindex").toBeTruthy();
+        }
+        if (route.locale === "es") {
+          expect(body, "Spanish page does not contain obvious English fallback labels").not.toMatch(ENGLISH_FALLBACK);
+          expect(hasNoindex(robots) || hasNoindex(xRobots), "Spanish completed pages should be indexable").toBeFalsy();
         }
       }
 
@@ -67,6 +83,9 @@ test.describe("i18n route readiness", () => {
         if (hasNoindex(robots) || hasNoindex(xRobots)) {
           expect(hreflangValues.includes("fr-CA"), "incomplete French noindex pages are not completed hreflang alternates").toBeFalsy();
         }
+      }
+      if (route.locale === "es" && route.indexable) {
+        expect(hreflangValues.includes("es"), "Spanish completed pages include Spanish hreflang").toBeTruthy();
       }
     });
   }

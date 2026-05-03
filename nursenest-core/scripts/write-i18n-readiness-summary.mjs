@@ -15,10 +15,14 @@ function readJson(name) {
 
 const en = readJson("english-i18n-regression-audit.json");
 const fr = readJson("french-completeness-audit.json");
+const es = readJson("spanish-completeness-audit.json");
 const frResults = fr?.results ?? [];
+const esResults = es?.surfaces ?? [];
 const rex = frResults.filter((r) => /rex-pn|canada\/pn/.test(r.route));
 const missingFrenchKeys = frResults.flatMap((r) => (r.missingKeys ?? []).map((key) => `${r.route}: ${key}`)).slice(0, 50);
+const missingSpanishKeys = (es?.missingKeys ?? []).slice(0, 50);
 const blocked = frResults.filter((r) => r.shouldNoindex);
+const blockedEs = esResults.filter((r) => r.shouldNoindex);
 
 const md = [
   "# I18n Readiness Summary",
@@ -27,11 +31,17 @@ const md = [
   "",
   `English status: ${en ? (en.summary.missingKeys + en.summary.frenchLeaks + en.summary.malformedTitles + en.summary.changedCriticalEnglishCopy === 0 ? "pass" : "blocked") : "not run"}`,
   `French status: ${fr ? (blocked.length === 0 ? "complete for audited indexable surfaces" : `${blocked.length} surfaces blocked from indexing`) : "not run"}`,
+  `Spanish status: ${es ? (es.summary.missingKeys + es.summary.extraKeys + es.summary.placeholders + es.summary.englishLeakSuspicions === 0 ? "pass" : "blocked") : "not run"}`,
   `REx-PN French status: ${rex.length > 0 && rex.every((r) => !r.shouldNoindex) ? "indexable" : "noindex until translations pass"}`,
+  `Spanish coverage: ${es ? `${es.coveragePct}% (${es.totalSpanishKeys}/${es.totalEnglishKeys})` : "not run"}`,
   "",
   "## Missing French Keys",
   "",
   ...(missingFrenchKeys.length ? missingFrenchKeys.map((x) => `- ${x}`) : ["- None in audited required key set."]),
+  "",
+  "## Missing Spanish Keys",
+  "",
+  ...(missingSpanishKeys.length ? missingSpanishKeys.map((x) => `- ${x}`) : ["- None."]),
   "",
   "## English Regression Findings",
   "",
@@ -40,10 +50,13 @@ const md = [
   "## Indexability Decisions",
   "",
   ...(frResults.length ? frResults.map((r) => `- ${r.route}: ${r.indexable ? "indexable" : "noindex"} (${r.recommendedFix})`) : ["- French audit has not run."]),
+  ...(esResults.length ? esResults.map((r) => `- ${r.route}: ${r.indexable ? "indexable" : "noindex"} (${r.recommendedFix})`) : ["- Spanish audit has not run."]),
   "",
   "## Next Required Translations",
   "",
-  ...(blocked.length ? blocked.slice(0, 20).map((r) => `- ${r.route}: ${r.surfaceType}`) : ["- None from current static audit."]),
+  ...(blocked.length || blockedEs.length
+    ? [...blocked, ...blockedEs].slice(0, 20).map((r) => `- ${r.route}: ${r.surfaceType}`)
+    : ["- None from current static audit."]),
   "",
 ].join("\n");
 

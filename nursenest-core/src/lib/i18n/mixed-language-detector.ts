@@ -1,7 +1,14 @@
-export type MixedLanguageLocale = "en" | "fr";
+export type MixedLanguageLocale = "en" | "fr" | "es";
 
 export type MixedLanguageFinding = {
-  kind: "english-in-french" | "french-in-english" | "placeholder" | "missing-key" | "machine-leftover";
+  kind:
+    | "english-in-french"
+    | "english-in-spanish"
+    | "french-in-english"
+    | "spanish-in-english"
+    | "placeholder"
+    | "missing-key"
+    | "machine-leftover";
   sample: string;
   score: number;
 };
@@ -34,8 +41,8 @@ const PLACEHOLDER_PATTERNS = [
   /\b(nav|footer|brand|components|common|billing|learner|auth)\.[a-z0-9_.-]+/i,
   /\[missing[:\]]/i,
   /\{\{missing/i,
-  /\bTODO\b/i,
-  /\bTBD\b/i,
+  /\bTODO\b/,
+  /\bTBD\b/,
   /lorem ipsum/i,
   /translate this/i,
   /translation needed/i,
@@ -52,6 +59,11 @@ const ENGLISH_MARKERS = [
 const FRENCH_MARKERS = [
   /\b(le|la|les|des|avec|votre|vous|apprendre|questions|tarifs|connexion|compte|soins|infirmier|infirmière|abonnement)\b/i,
   /[éèêëàâùûîïôçœ]/i,
+] as const;
+
+const SPANISH_MARKERS = [
+  /\b(el|la|los|las|con|para|tu|usted|aprender|preguntas|tarifas|iniciar sesión|cuenta|enfermería|paciente|preparación|estudio|lecciones)\b/i,
+  /[áéíóúñ¿¡]/i,
 ] as const;
 
 function stripProtectedTerms(input: string): string {
@@ -100,10 +112,21 @@ export function detectMixedLanguageText(
       if (hasEnglishSignal && (mostlyAscii || !hasFrenchSignal)) {
         pushFinding(findings, "english-in-french", line, mostlyAscii ? 3 : 2);
       }
+    } else if (locale === "es") {
+      const hasSpanishSignal = SPANISH_MARKERS.some((pattern) => pattern.test(line));
+      const hasEnglishSignal = ENGLISH_MARKERS.some((pattern) => pattern.test(line));
+      const mostlyAscii = /^[\x00-\x7F\s.,;:!?'"()/$%&+-]+$/.test(line);
+      if (hasEnglishSignal && (mostlyAscii || !hasSpanishSignal)) {
+        pushFinding(findings, "english-in-spanish", line, mostlyAscii ? 3 : 2);
+      }
     } else {
       const hasFrenchSignal = FRENCH_MARKERS.some((pattern) => pattern.test(line));
+      const hasSpanishSignal = SPANISH_MARKERS.some((pattern) => pattern.test(line));
       if (hasFrenchSignal) {
         pushFinding(findings, "french-in-english", line, /[éèêëàâùûîïôçœ]/i.test(line) ? 4 : 2);
+      }
+      if (hasSpanishSignal) {
+        pushFinding(findings, "spanish-in-english", line, /[áéíóúñ¿¡]/i.test(line) ? 4 : 2);
       }
     }
   }
@@ -114,7 +137,7 @@ export function detectMixedLanguageText(
     locale,
     findings: capped,
     score,
-    hasBlockingLeak: score >= (locale === "fr" ? 8 : 4) || capped.some((f) => f.kind === "missing-key" || f.kind === "placeholder"),
+    hasBlockingLeak: score >= (locale === "fr" || locale === "es" ? 3 : 4) || capped.some((f) => f.kind === "missing-key" || f.kind === "placeholder"),
   };
 }
 
