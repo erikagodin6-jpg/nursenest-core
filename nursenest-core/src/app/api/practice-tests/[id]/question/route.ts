@@ -32,6 +32,10 @@ const previewSelect = {
   difficulty: true,
   exam: true,
   bodySystem: true,
+  tags: true,
+  questionFormat: true,
+  exhibitData: true,
+  images: true,
 } as const;
 
 function asIdList(raw: unknown): string[] {

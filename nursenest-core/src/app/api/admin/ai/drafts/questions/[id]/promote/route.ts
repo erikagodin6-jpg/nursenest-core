@@ -1,4 +1,4 @@
-import { ContentStatus, DraftReviewStatus, QuestionType } from "@prisma/client";
+import { ContentStatus, DraftReviewStatus, Prisma, QuestionType } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
@@ -58,6 +58,7 @@ export async function POST(req: Request, ctx: Props) {
   const wrongLines = meta?.wrongAnswerRationales?.filter((x) => String(x).trim().length > 0);
   const distractorRationales = wrongLines && wrongLines.length > 0 ? wrongLines : undefined;
   const draftTags = meta?.tags?.length ? meta.tags : [];
+  const ecgVideo = (meta as unknown as { ecgVideo?: unknown } | undefined)?.ecgVideo;
   const diffLabel = meta?.difficultyLabel?.toUpperCase();
   const difficultyInt =
     diffLabel === "FOUNDATION" || diffLabel === "INTERMEDIATE" || diffLabel === "ADVANCED"
@@ -71,6 +72,9 @@ export async function POST(req: Request, ctx: Props) {
       questionType: n.questionType as QuestionType,
       options: n.options,
       answerKey: n.answerKey,
+      questionFormat: ecgVideo ? "ecg_video" : undefined,
+      exhibitData: ecgVideo,
+      tags: draftTags,
     },
     { acknowledgeBelowQualityBar: false },
   );
@@ -128,6 +132,12 @@ export async function POST(req: Request, ctx: Props) {
       regionScope: "BOTH",
       stemHash: hash,
       tags: draftTags,
+      ...(ecgVideo
+        ? {
+            questionFormat: "ecg_video",
+            exhibitData: ecgVideo as Prisma.InputJsonValue,
+          }
+        : {}),
       bodySystem: taxonomy.bodySystem,
       ...(difficultyInt !== undefined ? { difficulty: difficultyInt } : {}),
       ...(distractorRationales ? { distractorRationales } : {}),

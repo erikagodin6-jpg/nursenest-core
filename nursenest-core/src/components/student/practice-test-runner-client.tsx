@@ -60,6 +60,7 @@ import {
   mcqAnswerSelectsCanonical,
 } from "@/lib/practice-tests/practice-mcq-selection";
 import { PracticeTestPerItemRationale } from "@/components/study/practice-test-per-item-rationale";
+import { EcgVideoQuestionMedia } from "@/components/study/ecg-video-question-media";
 import { shouldShowLinearPerItemRationale } from "@/lib/practice-tests/practice-test-linear-inline-rationale";
 import {
   ConfidenceSelector,
@@ -98,6 +99,9 @@ type QRow = {
   subtopic?: string | null;
   difficulty?: number | null;
   exam?: string | null;
+  questionFormat?: string | null;
+  exhibitData?: unknown;
+  images?: unknown;
 };
 
 function parseOptions(raw: unknown): string[] {
@@ -2161,6 +2165,12 @@ export function PracticeTestRunnerClient({
                                   )
                                 : "\u00a0"}
                         </p>
+                        <EcgVideoQuestionMedia
+                          exhibitData={current.exhibitData}
+                          images={current.images}
+                          mode="cat"
+                          phase="pre_submit"
+                        />
                         {timedMode && timeLimitSec != null ? (
                           <div className="nn-cat-exam-timing-alert mb-2 sm:mb-3" role="alert">
                             {tx(
@@ -2344,6 +2354,12 @@ export function PracticeTestRunnerClient({
                               />
                             </div>
                           )}
+                          <EcgVideoQuestionMedia
+                            exhibitData={current.exhibitData}
+                            images={current.images}
+                            mode={isExamStyle ? "cat" : "practice"}
+                            phase={catStudyFeedback ? "post_submit" : "pre_submit"}
+                          />
                           <p className="nn-cat-options-label">
                             {isSata
                               ? tx("learner.practiceTests.run.selectAllThatApply", "Select all that apply")
@@ -2517,6 +2533,12 @@ export function PracticeTestRunnerClient({
             <img src={legacyClinicalSrc} alt="" className="max-h-[min(36vh,20rem)] w-auto max-w-full object-contain" />
           </div>
         ) : null}
+        <EcgVideoQuestionMedia
+          exhibitData={current.exhibitData}
+          images={current.images}
+          mode={isExamStyle ? "cat" : "practice"}
+          phase="pre_submit"
+        />
         {timedMode && timeLimitSec != null ? (
           <div className="nn-cat-exam-timing-alert mb-4" role="alert">
             {tx(
@@ -2806,6 +2828,12 @@ export function PracticeTestRunnerClient({
           />
         </div>
       ) : null}
+      <EcgVideoQuestionMedia
+        exhibitData={current.exhibitData}
+        images={current.images}
+        mode={linearIsExamShell ? "cat" : "practice"}
+        phase={showLinearPerItemRationale ? "post_submit" : "pre_submit"}
+      />
       {timedMode && timeLimitSec != null ? (
         <div className="nn-cat-exam-timing-alert mb-4" role="alert">
           {tx(

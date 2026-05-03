@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ContentStatus, QuestionType } from "@prisma/client";
+import { ContentStatus, Prisma, QuestionType } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { stemHash } from "@/lib/content/stem-hash";
@@ -36,6 +36,9 @@ const createSchema = z.object({
   topicTag: z.string().optional(),
   systemTag: z.string().optional(),
   tags: z.array(z.string()).optional(),
+  questionFormat: z.string().max(80).optional(),
+  exhibitData: z.unknown().optional(),
+  images: z.unknown().optional(),
   lessonId: z.string().optional(),
   sourceNotes: z.string().optional(),
   generationBatchId: z.string().optional(),
@@ -136,6 +139,10 @@ export async function POST(req: Request) {
         questionType: data.questionType as QuestionType,
         options: data.options,
         answerKey: data.answerKey,
+        questionFormat: data.questionFormat,
+        exhibitData: data.exhibitData,
+        images: data.images,
+        tags: data.tags ?? [],
       },
       {
         acknowledgeBelowQualityBar: data.acknowledgeBelowQualityBar === true,
@@ -196,6 +203,9 @@ export async function POST(req: Request) {
       topic: topic ?? undefined,
       subtopic: data.systemTag,
       tags: data.tags ?? [],
+      questionFormat: data.questionFormat,
+      exhibitData: data.exhibitData === undefined ? undefined : (data.exhibitData as Prisma.InputJsonValue),
+      images: data.images === undefined ? undefined : (data.images as Prisma.InputJsonValue),
       careerType: "nursing",
       regionScope: "BOTH",
       stemHash: hash,

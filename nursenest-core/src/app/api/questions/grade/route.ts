@@ -20,7 +20,7 @@ import { resolveRationaleLessonLinksForQuestion } from "@/lib/learner/rationale-
 import { skipLearnerBusinessAnalyticsForAccessScope } from "@/lib/observability/admin-learner-qa-analytics";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { PH } from "@/lib/observability/posthog-conversion-events";
-import { buildAppFlashcardsTopicHref, buildAppLessonsReviewLessonHref } from "@/lib/learner/app-study-internal-links";
+import { buildAppFlashcardsTopicHref } from "@/lib/learner/app-study-internal-links";
 import { incrementBankQuestionsGradedToday } from "@/lib/learner/increment-bank-questions-graded-today";
 import { gradeMatches, normalizeCorrect } from "@/lib/questions/grade-answer-match";
 import { isRemediationEngineEnabled } from "@/lib/remediation/remediation-flag";
@@ -102,12 +102,12 @@ export async function POST(req: Request) {
           bodySystem: true,
           tags: true,
           images: true,
+          questionFormat: true,
+          exhibitData: true,
           exam: true,
           difficulty: true,
           nclexClientNeedsCategory: true,
           nclexClientNeedsSubcategory: true,
-          studyLinkPathwayId: true,
-          studyLinkLessonSlug: true,
         },
       }),
     );
@@ -229,15 +229,9 @@ export async function POST(req: Request) {
         ])
       : [null, null];
 
-    const lessonHrefFromStudyLink =
-      effectivePathwayId &&
-      row.studyLinkPathwayId?.trim() === effectivePathwayId &&
-      row.studyLinkLessonSlug?.trim()
-        ? buildAppLessonsReviewLessonHref(effectivePathwayId, row.studyLinkLessonSlug.trim())
-        : null;
     const lessonHrefFromRationale = rationaleLessonLinks[0]?.href ?? null;
     const lessonHrefFromContent = linkedContentLesson ? `/app/lessons/${linkedContentLesson.id}` : null;
-    const lessonHref = lessonHrefFromStudyLink ?? lessonHrefFromRationale ?? lessonHrefFromContent;
+    const lessonHref = lessonHrefFromRationale ?? lessonHrefFromContent;
     const flashcardsHref =
       topicCode && effectivePathwayId
         ? buildAppFlashcardsTopicHref(effectivePathwayId, topicCode)

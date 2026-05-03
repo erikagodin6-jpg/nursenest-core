@@ -290,6 +290,10 @@ export async function GET(req: NextRequest) {
         topic: true,
         subtopic: true,
         bodySystem: true,
+        tags: true,
+        questionFormat: true,
+        exhibitData: true,
+        images: true,
       } as const;
       const fullSelect = {
         id: true,
@@ -300,6 +304,10 @@ export async function GET(req: NextRequest) {
         topic: true,
         subtopic: true,
         exam: true,
+        tags: true,
+        questionFormat: true,
+        exhibitData: true,
+        images: true,
       } as const;
 
       let pathway: ExamPathwayDefinition | null = pathwayIdParam

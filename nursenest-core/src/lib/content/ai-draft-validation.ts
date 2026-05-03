@@ -7,6 +7,7 @@ import {
 } from "@/lib/content/generated-question-auto-validation";
 import { validateQuestionForPublish } from "@/lib/content/publish-validation";
 import { validateQuestionPayload } from "@/lib/content/question-schema";
+import type { EcgVideoQuestionExhibit } from "@/lib/ecg-video-quiz/ecg-video-question";
 
 export type { GeneratedQuestionExpectedTags };
 
@@ -60,6 +61,8 @@ export type QuestionDraftMetadata = {
   /** One entry per option index; may be empty for correct option slots. */
   wrongAnswerRationales?: string[];
   lessonLinkSuggestions?: LessonLinkSuggestion[];
+  /** Draft-only ECG video metadata. Promotion keeps the question in DRAFT until clinical review. */
+  ecgVideo?: EcgVideoQuestionExhibit;
 };
 
 export type NormalizedQuestionDraft = {

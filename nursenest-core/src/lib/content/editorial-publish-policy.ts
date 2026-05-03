@@ -4,6 +4,7 @@ import { classifyRationaleWordCount, totalRationaleWordCount } from "@/lib/conte
 import type { ContentQualityTier } from "@/lib/content-quality/standards";
 import { RATIONALE_MIN_WORDS } from "@/lib/content-quality/standards";
 import { validateQuestionPayload } from "@/lib/content/question-schema";
+import { validateEcgVideoQuestionForPublish } from "@/lib/ecg-video-quiz/ecg-video-question";
 import { bodyStringToContentJson } from "@/lib/prisma/content-item-body";
 
 /**
@@ -42,6 +43,12 @@ export function governExamQuestionPublish(
     questionType: QuestionType;
     options: unknown;
     answerKey: unknown;
+    questionFormat?: string | null;
+    exhibitData?: unknown;
+    images?: unknown;
+    tags?: string[] | null;
+    studyLinkPathwayId?: string | null;
+    studyLinkLessonSlug?: string | null;
   },
   opts: { acknowledgeBelowQualityBar?: boolean; acknowledgeSevereQualityIssue?: boolean },
 ): ExamQuestionGovernanceResult {
@@ -51,6 +58,13 @@ export function governExamQuestionPublish(
   if (input.stem.trim().length < 10) reasons.push("Stem too short");
   const shape = validateQuestionPayload(input.questionType, input.options, input.answerKey);
   if (shape) reasons.push(shape);
+
+  const ecg = validateEcgVideoQuestionForPublish({
+    ...input,
+    correctAnswer: input.answerKey,
+  });
+  reasons.push(...ecg.reasons);
+  warnings.push(...ecg.warnings);
 
   const wc = rationalePartsForCount(input.rationale, [
     input.correctAnswerExplanation,

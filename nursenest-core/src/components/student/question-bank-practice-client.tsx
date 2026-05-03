@@ -62,6 +62,7 @@ import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens"
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examContextAnalyticsProps } from "@/lib/exam-context/global-exam-context";
 import type { StudySettings } from "@/lib/learner/study-settings";
+import { EcgVideoQuestionMedia } from "@/components/study/ecg-video-question-media";
 
 export type { QuestionBankDifficultyBand, QuestionBankPreset, SavedQuestionBankPreset } from "@/lib/questions/question-bank-client-types";
 
@@ -76,6 +77,9 @@ type QFull = {
   topic?: string | null;
   subtopic?: string | null;
   exam?: string | null;
+  questionFormat?: string | null;
+  exhibitData?: unknown;
+  images?: unknown;
 };
 
 function parseOptions(raw: unknown): string[] {
@@ -1457,6 +1461,13 @@ export function QuestionBankPracticeClient({
                 <div className="nn-question-stem-wrap">
                   <p className="nn-question-stem">{stemDisplay}</p>
                 </div>
+                <EcgVideoQuestionMedia
+                  exhibitData={current.exhibitData}
+                  images={current.images}
+                  mode="practice"
+                  phase={rationaleVisible ? "post_submit" : "pre_submit"}
+                  className="mt-4"
+                />
               </div>
 
               <div>
