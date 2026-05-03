@@ -64,6 +64,8 @@ export type EcgVideoQuestionLike = {
   answerKey?: unknown;
   rationale?: string | null;
   tags?: string[] | null;
+  level?: string | null;
+  mode?: string | null;
   studyLinkPathwayId?: string | null;
   studyLinkLessonSlug?: string | null;
 };
@@ -169,6 +171,12 @@ export function validateEcgVideoQuestionForPublish(row: EcgVideoQuestionLike): E
   const answerKeys = Array.isArray(answer) ? answer.filter((x) => String(x ?? "").trim().length > 0) : [];
   if (answerKeys.length < 1) reasons.push("ECG video question requires a correct answer.");
   if (!String(row.rationale ?? "").trim()) reasons.push("ECG video question requires rationale before publish.");
+  if (!["basic", "advanced"].includes(String(row.level ?? ""))) {
+    reasons.push("ECG video question level must be basic or advanced.");
+  }
+  if (!["lesson", "quiz", "drill"].includes(String(row.mode ?? ""))) {
+    reasons.push("ECG video question mode must be lesson, quiz, or drill.");
+  }
 
   const exhibit = parseEcgVideoExhibit(row.exhibitData, row.images);
   if (!exhibit) {

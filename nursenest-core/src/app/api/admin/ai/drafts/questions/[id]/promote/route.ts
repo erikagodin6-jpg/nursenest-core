@@ -59,6 +59,8 @@ export async function POST(req: Request, ctx: Props) {
   const distractorRationales = wrongLines && wrongLines.length > 0 ? wrongLines : undefined;
   const draftTags = meta?.tags?.length ? meta.tags : [];
   const ecgVideo = (meta as unknown as { ecgVideo?: unknown } | undefined)?.ecgVideo;
+  const ecgLevel = meta?.ecgLevel;
+  const ecgMode = meta?.ecgMode;
   const diffLabel = meta?.difficultyLabel?.toUpperCase();
   const difficultyInt =
     diffLabel === "FOUNDATION" || diffLabel === "INTERMEDIATE" || diffLabel === "ADVANCED"
@@ -73,6 +75,8 @@ export async function POST(req: Request, ctx: Props) {
       options: n.options,
       answerKey: n.answerKey,
       questionFormat: ecgVideo ? "ecg_video" : undefined,
+      level: ecgVideo ? ecgLevel : undefined,
+      mode: ecgVideo ? ecgMode : undefined,
       exhibitData: ecgVideo,
       tags: draftTags,
     },
@@ -135,6 +139,8 @@ export async function POST(req: Request, ctx: Props) {
       ...(ecgVideo
         ? {
             questionFormat: "ecg_video",
+            level: ecgLevel ?? "basic",
+            mode: ecgMode ?? "quiz",
             exhibitData: ecgVideo as Prisma.InputJsonValue,
           }
         : {}),

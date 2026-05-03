@@ -12,6 +12,8 @@ function validQuestion(overrides: Record<string, unknown> = {}) {
     stem: "Watch the telemetry strip and identify the rhythm.",
     questionType: "MCQ",
     questionFormat: ECG_VIDEO_QUESTION_FORMAT,
+    level: "basic",
+    mode: "quiz",
     options: ["Atrial fibrillation", "Normal sinus rhythm", "SVT", "Ventricular tachycardia"],
     correctAnswer: ["Atrial fibrillation"],
     rationale:
@@ -54,6 +56,13 @@ test("malformed answer options are rejected", () => {
   const result = validateEcgVideoQuestionForPublish(validQuestion({ options: ["Atrial fibrillation"] }));
   assert.equal(result.ok, false);
   assert.match(result.reasons.join("\n"), /answer options/i);
+});
+
+test("ECG mastery level and mode are required for publish", () => {
+  const result = validateEcgVideoQuestionForPublish(validQuestion({ level: undefined, mode: undefined }));
+  assert.equal(result.ok, false);
+  assert.match(result.reasons.join("\n"), /level must be basic or advanced/i);
+  assert.match(result.reasons.join("\n"), /mode must be lesson, quiz, or drill/i);
 });
 
 test("CAT mode hides ECG teaching during active exam", () => {

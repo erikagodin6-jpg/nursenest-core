@@ -9,7 +9,7 @@ import { buildPricingFaqJsonLdItems } from "@/lib/marketing/pricing-faq-jsonld";
 import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-marketing-route-shard-bundles";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
 import { MARKETING_PAGE_BODY_MESSAGE_SHARDS } from "@/lib/marketing-i18n/marketing-i18n-shard-groups";
-import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
+import { localizeBreadcrumbResolutionForLocale } from "@/lib/seo/breadcrumb-i18n";
 import { marketingPricingBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { buildMarketingWebPageJsonLdProps } from "@/lib/seo/marketing-webpage-jsonld";
 
@@ -67,7 +67,7 @@ export async function PricingDeferredSeoDefault() {
 export async function PricingDeferredSeoLocalized({ locale }: { locale: string }) {
   const raw = marketingPricingBreadcrumbs();
   const messages = await loadMarketingLayoutShardsOverlay(locale);
-  const { crumbs, schemaItems } = localizeBreadcrumbResolution(raw, messages);
+  const { crumbs, schemaItems } = localizeBreadcrumbResolutionForLocale(raw, messages, locale);
   const pricingFaqJsonLd = buildPricingFaqJsonLdItems(messages);
   return (
     <>

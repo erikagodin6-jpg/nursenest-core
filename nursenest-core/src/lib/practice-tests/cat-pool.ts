@@ -16,12 +16,16 @@ import { getWeakTopicNamesForPractice } from "@/lib/learner/topic-performance";
 import { difficultyWhere } from "@/lib/practice-tests/practice-pool-shared";
 import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
 import { seededIndexInRange, shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
+import { ECG_QUESTION_FORMAT } from "@/lib/ecg-module/ecg-module-config";
 
 const MAX_POOL = 4000;
 export const CAT_MIN_COMPLETE_POOL = 30;
 
 /** Soft practice widens filters when the strict slice is too thin for {@link validatePracticeCatPool}. */
 const CAT_SOFT_MIN_COMPLETE_ROWS = 8;
+const NON_ECG_PRACTICE_EXAM_WHERE: Prisma.ExamQuestionWhereInput = {
+  NOT: [{ questionFormat: ECG_QUESTION_FORMAT }, { tags: { has: "ecg-video" } }],
+};
 
 function hasValidStem(stem: string | null | undefined): boolean {
   return typeof stem === "string" && stem.trim().length > 0;
@@ -242,14 +246,14 @@ export async function fetchCatPracticePool(
   }
 
   const secondaryStrict = await buildSecondaryFilterParts(userId, entitlement, input, false);
-  const whereStrict: Prisma.ExamQuestionWhereInput = { AND: [base, ...secondaryStrict] };
+  const whereStrict: Prisma.ExamQuestionWhereInput = { AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, ...secondaryStrict] };
   let completeRows = await queryShuffledCompletePool(whereStrict, input);
   const strictCount = completeRows.length;
   let usedRelaxedFilters = false;
 
   if (strictness === "soft" && completeRows.length < CAT_SOFT_MIN_COMPLETE_ROWS) {
     const secondaryRelaxed = await buildSecondaryFilterParts(userId, entitlement, input, true);
-    const whereRelaxed: Prisma.ExamQuestionWhereInput = { AND: [base, ...secondaryRelaxed] };
+    const whereRelaxed: Prisma.ExamQuestionWhereInput = { AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, ...secondaryRelaxed] };
     completeRows = await queryShuffledCompletePool(whereRelaxed, input);
     usedRelaxedFilters = true;
   }

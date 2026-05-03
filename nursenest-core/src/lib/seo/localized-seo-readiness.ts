@@ -1,4 +1,5 @@
 import { getHreflangEligibleLocales, isLocaleSeoIndexable, isLocaleSitemapIncluded } from "@/lib/i18n/language-readiness";
+import { MARKETING_LANGUAGES } from "@/lib/i18n/marketing-languages";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import {
   absoluteMarketingCanonical,
@@ -105,7 +106,7 @@ export const LOCALIZED_SEO_SURFACES: readonly LocalizedSeoSurface[] = [
     internalRouteId: "marketing.allied-health",
     indexable: true,
     supportsLocalizedSlug: false,
-    supportsLocalizedRoute: true,
+    supportsLocalizedRoute: false,
     requiredMetadataFields: ["title", "description", "openGraph.title", "openGraph.description"],
     requiredJsonLdFields: ["name", "description", "BreadcrumbList.itemListElement.name"],
   },
@@ -154,7 +155,6 @@ export const LOCALIZED_SEO_SURFACES: readonly LocalizedSeoSurface[] = [
 export const LOCALIZED_SLUG_TRANSLATIONS: Record<string, Record<string, string>> = {
   fr: {
     "practice-questions": "questions-pratiques",
-    "question-bank": "questions-pratiques",
     flashcards: "cartes-memoire",
     lessons: "lecons",
     pricing: "tarifs",
@@ -162,7 +162,6 @@ export const LOCALIZED_SLUG_TRANSLATIONS: Record<string, Record<string, string>>
   },
   es: {
     "practice-questions": "preguntas-de-practica",
-    "question-bank": "preguntas-de-practica",
     flashcards: "tarjetas-de-memoria",
     lessons: "lecciones",
     pricing: "precios",
@@ -217,7 +216,8 @@ function pathLeaf(path: string): string {
 }
 
 export function localizedSlugFor(locale: string, englishSlug: string): string | null {
-  return LOCALIZED_SLUG_TRANSLATIONS[locale]?.[englishSlug] ?? null;
+  const slugKey = englishSlug === "question-bank" ? "practice-questions" : englishSlug;
+  return LOCALIZED_SLUG_TRANSLATIONS[locale]?.[slugKey] ?? null;
 }
 
 export function localizedBreadcrumbsFor(locale: string, surface: LocalizedSeoSurface): Array<{ label: string; href: string }> {
@@ -235,8 +235,12 @@ export function buildLocalizedSeoAuditItem(locale: string, surface: LocalizedSeo
   const localizedSlug = localizedSlugFor(locale, pathLeaf(surface.englishPath)) ?? undefined;
   const localeIsDefault = locale === DEFAULT_MARKETING_LOCALE;
   const localeIndexable = isLocaleSeoIndexable(locale);
+  const hasLocalizedBreadcrumbLabels = localeIsDefault || LOCALIZED_BREADCRUMB_LABELS[locale] != null;
   const issues: string[] = [];
 
+  if (!hasLocalizedBreadcrumbLabels) {
+    issues.push("missing localized breadcrumb labels; falling back to English would create mixed-language SEO");
+  }
   if (!localeIsDefault && surface.supportsLocalizedSlug && !localizedSlug) {
     issues.push(`missing localized slug mapping for ${pathLeaf(surface.englishPath)}`);
   }
@@ -276,8 +280,15 @@ export function buildLocalizedSeoAuditItem(locale: string, surface: LocalizedSeo
   };
 }
 
-export function buildLocalizedSeoAudit(locales: readonly string[] = ["en", "fr", "es"]): LocalizedSeoAuditItem[] {
+export function buildLocalizedSeoAudit(locales: readonly string[] = getLocalizedSeoAuditLocales()): LocalizedSeoAuditItem[] {
   return locales.flatMap((locale) => LOCALIZED_SEO_SURFACES.map((surface) => buildLocalizedSeoAuditItem(locale, surface)));
+}
+
+export function getLocalizedSeoAuditLocales(): readonly string[] {
+  const supported = MARKETING_LANGUAGES.filter((language) => language.tier === "full" || language.tier === "partial").map(
+    (language) => language.code,
+  );
+  return supported.includes(DEFAULT_MARKETING_LOCALE) ? supported : [DEFAULT_MARKETING_LOCALE, ...supported];
 }
 
 export function duplicateLocalizedSlugs(locale: string): string[] {

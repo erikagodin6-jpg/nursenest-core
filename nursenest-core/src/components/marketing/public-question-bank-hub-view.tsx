@@ -16,6 +16,7 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { localizeBreadcrumbResolutionForLocale } from "@/lib/seo/breadcrumb-i18n";
 import { getMarketingRegionFromCookies } from "@/lib/region/marketing-region-server";
 
 type CardKey =
@@ -58,7 +59,8 @@ export async function PublicQuestionBankHubView({ locale }: { locale: string }) 
   const regionLabel = (r: MarketingRegionToggle) =>
     r === "CA" ? t("pages.publicQuestionBank.regionCanada") : t("pages.publicQuestionBank.regionUnitedStates");
 
-  const { crumbs, schemaItems } = questionBankIndexBreadcrumbs();
+  const rawBreadcrumbs = questionBankIndexBreadcrumbs();
+  const { crumbs, schemaItems } = localizeBreadcrumbResolutionForLocale(rawBreadcrumbs, m, locale, en);
 
   return (
     <>

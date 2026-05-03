@@ -38,6 +38,8 @@ const bodySchema = z.object({
   tier: z.enum(["free", "rpn", "rn", "np"]).default("rn"),
   country: z.enum(["CA", "US"]).default("CA"),
   examFamily: z.enum(["NCLEX_RN", "NCLEX_PN", "REX_PN", "NP", "GENERIC"]).default("GENERIC"),
+  level: z.enum(["basic", "advanced"]).default("basic"),
+  mode: z.enum(["lesson", "quiz", "drill"]).default("quiz"),
   rhythmCategory: z.string().trim().min(2).max(120),
   stem: z.string().trim().min(10).max(2000),
   options: z.array(z.string().trim().min(1).max(240)).min(2).max(8),
@@ -84,7 +86,7 @@ export async function POST(req: Request) {
   const job = await prisma.aiGenerationJob.create({
     data: {
       tool: ADMIN_AI_ECG_VIDEO_QUESTION_TOOL,
-      status: JobStatus.SUCCEEDED,
+      status: JobStatus.COMPLETED,
       model: "admin-supplied-draft",
       sourcePrompt,
       inputPayload: input,
@@ -99,6 +101,8 @@ export async function POST(req: Request) {
     rationale: input.rationale,
     topicTag: input.rhythmCategory,
     difficultyLabel: input.difficulty,
+    level: input.level,
+    mode: input.mode,
     tags: input.tags,
     exhibit: {
       kind: ECG_VIDEO_QUESTION_FORMAT,
@@ -120,6 +124,8 @@ export async function POST(req: Request) {
     options: normalized.options,
     answerKey: normalized.answerKey,
     questionFormat: ECG_VIDEO_QUESTION_FORMAT,
+    level: normalized.metadata?.ecgLevel,
+    mode: normalized.metadata?.ecgMode,
     exhibitData: normalized.metadata?.ecgVideo,
     tags: normalized.metadata?.tags,
   });

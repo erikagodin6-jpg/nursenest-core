@@ -277,6 +277,22 @@ model PrintableAccess {
   @@map("printable_accesses")
 }
 
+/// * ECG worksheet catalog metadata. Runtime downloads are still authorized and tracked through PrintableProduct.
+model EcgWorksheet {
+  id           String   @id @default(cuid())
+  title        String
+  description  String?
+  pdfUrl       String   @map("pdf_url")
+  thumbnailUrl String?  @map("thumbnail_url")
+  level        String
+  tags         String[]
+  isPremium    Boolean  @default(true) @map("is_premium")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([level])
+  @@map("ecg_worksheets")
+}
+
 /// * Aggregated premium UX telemetry (UTC day; global counts, no user PII).
 model PremiumProtectionRollup {
   id        String   @id @default(cuid())
@@ -1220,6 +1236,10 @@ model ExamQuestion {
   languageCode                String?   @default("en") @map("language_code")
   cognitiveLevel              String?   @map("cognitive_level")
   questionFormat              String?   @map("question_format")
+  /// ECG mastery level for `question_format = ecg_video`: "basic" | "advanced".
+  level                       String?   @map("ecg_level") @db.VarChar(16)
+  /// ECG mastery mode for `question_format = ecg_video`: "lesson" | "quiz" | "drill".
+  mode                        String?   @map("ecg_mode") @db.VarChar(16)
   isScenario                  Boolean   @default(false) @map("is_scenario")
   isMockExamEligible          Boolean   @default(true) @map("is_mock_exam_eligible")
   isAdaptiveEligible          Boolean   @default(true) @map("is_adaptive_eligible")
@@ -1263,6 +1283,7 @@ model ExamQuestion {
   @@index([status, updatedAt])
   @@index([status, exam, tier, countryCode])
   @@index([status, exam, topic])
+  @@index([questionFormat, level, mode])
   @@index([studyLinkPathwayId, studyLinkLessonSlug])
   @@index([status, exam, tier, countryCode], map: "exam_questions_status_exam_tier_country_idx")
   @@map("exam_questions")

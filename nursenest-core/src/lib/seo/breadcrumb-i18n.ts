@@ -1,5 +1,8 @@
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
+import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { withMarketingLocale } from "@/lib/i18n/marketing-path";
+import { toAbsoluteSiteUrl } from "@/lib/seo/breadcrumb-utils";
 import type {
   BreadcrumbCrumb,
   BreadcrumbResolution,
@@ -52,5 +55,40 @@ export function localizeBreadcrumbResolution(
   return {
     crumbs: localizeBreadcrumbCrumbs(res.crumbs, primary, fallback),
     schemaItems: localizeBreadcrumbSchemaItems(res.schemaItems, primary, fallback),
+  };
+}
+
+function localizeBreadcrumbHref(locale: string, href: string | undefined): string | undefined {
+  if (!href || locale === DEFAULT_MARKETING_LOCALE) return href;
+  return withMarketingLocale(locale, href);
+}
+
+function localizeBreadcrumbSchemaItem(locale: string, item: string): string {
+  if (locale === DEFAULT_MARKETING_LOCALE) return item;
+  try {
+    const url = new URL(item);
+    const localizedPath = withMarketingLocale(locale, `${url.pathname}${url.search}${url.hash}`);
+    return toAbsoluteSiteUrl(localizedPath);
+  } catch {
+    return toAbsoluteSiteUrl(withMarketingLocale(locale, item));
+  }
+}
+
+export function localizeBreadcrumbResolutionForLocale(
+  res: BreadcrumbResolution,
+  primary: MarketingMessages,
+  locale: string,
+  fallback?: MarketingMessages,
+): BreadcrumbResolution {
+  const localized = localizeBreadcrumbResolution(res, primary, fallback);
+  return {
+    crumbs: localized.crumbs.map((crumb) => ({
+      ...crumb,
+      href: localizeBreadcrumbHref(locale, crumb.href),
+    })),
+    schemaItems: localized.schemaItems.map((item) => ({
+      ...item,
+      item: localizeBreadcrumbSchemaItem(locale, item.item),
+    })),
   };
 }

@@ -44,6 +44,8 @@ export function governExamQuestionPublish(
     options: unknown;
     answerKey: unknown;
     questionFormat?: string | null;
+    level?: string | null;
+    mode?: string | null;
     exhibitData?: unknown;
     images?: unknown;
     tags?: string[] | null;

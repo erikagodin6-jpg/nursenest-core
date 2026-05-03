@@ -27,6 +27,8 @@ test("ECG admin draft helper creates draft-only normalized question metadata", (
   assert.equal(draft.questionType, QuestionType.MCQ);
   assert.equal(draft.metadata?.difficultyLabel, "INTERMEDIATE");
   assert.equal(draft.metadata?.ecgVideo?.kind, ECG_VIDEO_QUESTION_FORMAT);
+  assert.equal(draft.metadata?.ecgLevel, "basic");
+  assert.equal(draft.metadata?.ecgMode, "quiz");
   assert.ok(draft.metadata?.tags?.includes("ecg-video"));
   assert.equal(draft.metadata?.lessonLinkSuggestions?.[0]?.confidence, "required");
 });

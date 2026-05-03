@@ -427,6 +427,7 @@ export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOpti
   }
   const expandedBase = [
     ...base,
+    ...SORTED_SITEMAP_LOCALES.flatMap((loc) => collectLocaleMarketingSitemapSafeUrls(o, loc)),
     ...getAllProgrammaticQuestionTopicSlugs().map((s) => add(`/questions/${s}`)),
     add("/tools"),
     add("/case-studies"),

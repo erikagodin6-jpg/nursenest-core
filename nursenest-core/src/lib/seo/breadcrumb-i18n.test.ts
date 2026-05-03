@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
-import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
+import { localizeBreadcrumbResolution, localizeBreadcrumbResolutionForLocale } from "@/lib/seo/breadcrumb-i18n";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { pathwayLessonsHubBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 
@@ -29,4 +29,30 @@ test("localizeBreadcrumbResolution applies i18nKey crumbs using primary bundle",
   assert.equal(loc.crumbs[0]?.name, "Inicio");
   assert.equal(loc.crumbs[loc.crumbs.length - 1]?.name, "Lecciones");
   assert.equal(loc.schemaItems[0]?.name, "Inicio");
+});
+
+test("localizeBreadcrumbResolutionForLocale localizes visible and JSON-LD breadcrumb URLs", () => {
+  const primary: MarketingMessages = {
+    "breadcrumbs.home": "Inicio",
+    "breadcrumbs.questionBank": "Preguntas de práctica",
+  };
+  const loc = localizeBreadcrumbResolutionForLocale(
+    {
+      crumbs: [
+        { name: "Home", href: "/", i18nKey: "breadcrumbs.home" },
+        { name: "Question bank", href: undefined, i18nKey: "breadcrumbs.questionBank" },
+      ],
+      schemaItems: [
+        { name: "Home", item: "https://www.nursenest.ca/", i18nKey: "breadcrumbs.home" },
+        { name: "Question bank", item: "https://www.nursenest.ca/question-bank", i18nKey: "breadcrumbs.questionBank" },
+      ],
+    },
+    primary,
+    "es",
+  );
+  assert.equal(loc.crumbs[0]?.name, "Inicio");
+  assert.equal(loc.crumbs[0]?.href, "/es");
+  assert.equal(loc.schemaItems[0]?.item, "https://www.nursenest.ca/es");
+  assert.equal(loc.schemaItems[1]?.name, "Preguntas de práctica");
+  assert.equal(loc.schemaItems[1]?.item, "https://www.nursenest.ca/es/question-bank");
 });

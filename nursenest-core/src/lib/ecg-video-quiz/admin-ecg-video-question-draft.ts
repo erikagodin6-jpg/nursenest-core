@@ -12,6 +12,8 @@ export function buildEcgVideoQuestionDraft(args: {
   topicTag?: string;
   difficultyLabel?: string;
   exhibit: EcgVideoQuestionExhibit;
+  level?: "basic" | "advanced";
+  mode?: "lesson" | "quiz" | "drill";
   tags?: string[];
 }): NormalizedQuestionDraft {
   const tags = [...new Set([...(args.tags ?? []), ECG_VIDEO_TAG, args.exhibit.rhythmCategory].filter(Boolean))];
@@ -25,6 +27,8 @@ export function buildEcgVideoQuestionDraft(args: {
     metadata: {
       difficultyLabel: args.difficultyLabel,
       tags,
+      ecgLevel: args.level ?? "basic",
+      ecgMode: args.mode ?? "quiz",
       ecgVideo: {
         ...args.exhibit,
         kind: ECG_VIDEO_QUESTION_FORMAT,

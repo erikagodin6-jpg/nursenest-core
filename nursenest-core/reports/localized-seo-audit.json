@@ -1,0 +1,2176 @@
+{
+  "summary": {
+    "generatedAt": "2026-05-03T21:57:23.861Z",
+    "supportedLocalesAudited": [
+      "en",
+      "fr",
+      "es",
+      "tl",
+      "hi"
+    ],
+    "routesAudited": 50,
+    "surfacesAudited": 10,
+    "localizedSlugsConfigured": 8,
+    "breadcrumbIssues": 0,
+    "metadataIssues": 5,
+    "hreflangIssues": 0,
+    "canonicalIssues": 0,
+    "sitemapExpected": 8,
+    "jsonLdIssues": 0,
+    "duplicateLocalizedSlugs": {
+      "en": [],
+      "fr": [],
+      "es": [],
+      "tl": [],
+      "hi": []
+    },
+    "blockedItems": 36
+  },
+  "items": [
+    {
+      "locale": "en",
+      "surfaceType": "homepage",
+      "englishPath": "/",
+      "localizedPath": "/",
+      "canonical": "https://www.nursenest.ca/",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": true,
+      "sitemapExpected": true,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/",
+        "en-CA": "https://www.nursenest.ca/",
+        "es": "https://www.nursenest.ca/es"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description",
+        "twitter.title",
+        "twitter.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage"
+      ],
+      "issues": [],
+      "recommendedFix": "Localized SEO policy passed for this surface.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "en",
+      "surfaceType": "pricing",
+      "englishPath": "/pricing",
+      "localizedPath": "/pricing",
+      "canonical": "https://www.nursenest.ca/pricing",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": true,
+      "sitemapExpected": true,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/pricing",
+        "en-CA": "https://www.nursenest.ca/pricing",
+        "es": "https://www.nursenest.ca/es/pricing"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/"
+        },
+        {
+          "label": "Pricing",
+          "href": "/pricing"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [],
+      "recommendedFix": "Localized SEO policy passed for this surface.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "en",
+      "surfaceType": "rn-hub",
+      "englishPath": "/canada/rn/nclex-rn",
+      "localizedPath": "/canada/rn/nclex-rn",
+      "canonical": "https://www.nursenest.ca/canada/rn/nclex-rn",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/rn/nclex-rn",
+        "en-CA": "https://www.nursenest.ca/canada/rn/nclex-rn"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/"
+        },
+        {
+          "label": "RN",
+          "href": "/canada/rn/nclex-rn"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [],
+      "recommendedFix": "Localized SEO policy passed for this surface.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "en",
+      "surfaceType": "rex-pn-hub",
+      "englishPath": "/canada/pn/rex-pn",
+      "localizedPath": "/canada/pn/rex-pn",
+      "canonical": "https://www.nursenest.ca/canada/pn/rex-pn",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/pn/rex-pn",
+        "en-CA": "https://www.nursenest.ca/canada/pn/rex-pn"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/"
+        },
+        {
+          "label": "REx-PN",
+          "href": "/canada/pn/rex-pn"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [],
+      "recommendedFix": "Localized SEO policy passed for this surface.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "en",
+      "surfaceType": "np-hub",
+      "englishPath": "/canada/np/cnple",
+      "localizedPath": "/canada/np/cnple",
+      "canonical": "https://www.nursenest.ca/canada/np/cnple",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/np/cnple",
+        "en-CA": "https://www.nursenest.ca/canada/np/cnple"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/"
+        },
+        {
+          "label": "NP",
+          "href": "/canada/np/cnple"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [],
+      "recommendedFix": "Localized SEO policy passed for this surface.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "en",
+      "surfaceType": "allied-hub",
+      "englishPath": "/allied-health",
+      "localizedPath": "/allied-health",
+      "canonical": "https://www.nursenest.ca/allied-health",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/allied-health",
+        "en-CA": "https://www.nursenest.ca/allied-health",
+        "es": "https://www.nursenest.ca/es/allied-health"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/"
+        },
+        {
+          "label": "Allied Health",
+          "href": "/allied-health"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [],
+      "recommendedFix": "Localized SEO policy passed for this surface.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "en",
+      "surfaceType": "new-grad-hub",
+      "englishPath": "/new-grad",
+      "localizedPath": "/new-grad",
+      "canonical": "https://www.nursenest.ca/new-grad",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/new-grad",
+        "en-CA": "https://www.nursenest.ca/new-grad",
+        "es": "https://www.nursenest.ca/es/new-grad"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/"
+        },
+        {
+          "label": "New Grad",
+          "href": "/new-grad"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [],
+      "recommendedFix": "Localized SEO policy passed for this surface.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "en",
+      "surfaceType": "lessons-hub",
+      "englishPath": "/lessons",
+      "localizedPath": "/lessons",
+      "canonical": "https://www.nursenest.ca/lessons",
+      "localizedSlugSupported": true,
+      "localizedRouteSupported": true,
+      "sitemapExpected": true,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/lessons",
+        "en-CA": "https://www.nursenest.ca/lessons",
+        "es": "https://www.nursenest.ca/es/lessons"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/"
+        },
+        {
+          "label": "Lessons",
+          "href": "/lessons"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [],
+      "recommendedFix": "Localized SEO policy passed for this surface.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "en",
+      "surfaceType": "practice-questions-hub",
+      "englishPath": "/question-bank",
+      "localizedPath": "/question-bank",
+      "canonical": "https://www.nursenest.ca/question-bank",
+      "localizedSlugSupported": true,
+      "localizedRouteSupported": true,
+      "sitemapExpected": true,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/question-bank",
+        "en-CA": "https://www.nursenest.ca/question-bank",
+        "es": "https://www.nursenest.ca/es/question-bank"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/"
+        },
+        {
+          "label": "Practice Questions",
+          "href": "/question-bank"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [],
+      "recommendedFix": "Localized SEO policy passed for this surface.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "en",
+      "surfaceType": "flashcards-hub",
+      "englishPath": "/flashcards",
+      "localizedPath": "/flashcards",
+      "canonical": "https://www.nursenest.ca/flashcards",
+      "localizedSlugSupported": true,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/flashcards",
+        "en-CA": "https://www.nursenest.ca/flashcards",
+        "es": "https://www.nursenest.ca/es/flashcards"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/"
+        },
+        {
+          "label": "Flashcards",
+          "href": "/flashcards"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [],
+      "recommendedFix": "Localized SEO policy passed for this surface.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "fr",
+      "surfaceType": "homepage",
+      "englishPath": "/",
+      "localizedPath": "/fr",
+      "canonical": "https://www.nursenest.ca/fr",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": true,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/",
+        "en-CA": "https://www.nursenest.ca/",
+        "es": "https://www.nursenest.ca/es"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Accueil",
+          "href": "/fr"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description",
+        "twitter.title",
+        "twitter.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage"
+      ],
+      "issues": [
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap",
+        "translation readiness requires noindex",
+        "mixed-language SEO/content suspicions: 40",
+        "SEO field issues: 7"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": true
+    },
+    {
+      "locale": "fr",
+      "surfaceType": "pricing",
+      "englishPath": "/pricing",
+      "localizedPath": "/fr/pricing",
+      "canonical": "https://www.nursenest.ca/fr/pricing",
+      "localizedSlugSupported": false,
+      "localizedSlug": "tarifs",
+      "localizedRouteSupported": true,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/pricing",
+        "en-CA": "https://www.nursenest.ca/pricing",
+        "es": "https://www.nursenest.ca/es/pricing"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Accueil",
+          "href": "/fr"
+        },
+        {
+          "label": "Tarifs",
+          "href": "/fr/pricing"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap",
+        "translation readiness requires noindex",
+        "mixed-language SEO/content suspicions: 40",
+        "SEO field issues: 31"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": true
+    },
+    {
+      "locale": "fr",
+      "surfaceType": "rn-hub",
+      "englishPath": "/canada/rn/nclex-rn",
+      "localizedPath": "/canada/rn/nclex-rn",
+      "canonical": "https://www.nursenest.ca/canada/rn/nclex-rn",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/rn/nclex-rn",
+        "en-CA": "https://www.nursenest.ca/canada/rn/nclex-rn"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Accueil",
+          "href": "/fr"
+        },
+        {
+          "label": "IA",
+          "href": "/canada/rn/nclex-rn"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "fr",
+      "surfaceType": "rex-pn-hub",
+      "englishPath": "/canada/pn/rex-pn",
+      "localizedPath": "/canada/pn/rex-pn",
+      "canonical": "https://www.nursenest.ca/canada/pn/rex-pn",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/pn/rex-pn",
+        "en-CA": "https://www.nursenest.ca/canada/pn/rex-pn"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Accueil",
+          "href": "/fr"
+        },
+        {
+          "label": "REx-PN",
+          "href": "/canada/pn/rex-pn"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap",
+        "translation readiness requires noindex",
+        "mixed-language SEO/content suspicions: 22",
+        "SEO field issues: 4"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": true
+    },
+    {
+      "locale": "fr",
+      "surfaceType": "np-hub",
+      "englishPath": "/canada/np/cnple",
+      "localizedPath": "/canada/np/cnple",
+      "canonical": "https://www.nursenest.ca/canada/np/cnple",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/np/cnple",
+        "en-CA": "https://www.nursenest.ca/canada/np/cnple"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Accueil",
+          "href": "/fr"
+        },
+        {
+          "label": "IPS",
+          "href": "/canada/np/cnple"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "fr",
+      "surfaceType": "allied-hub",
+      "englishPath": "/allied-health",
+      "localizedPath": "/fr/allied-health",
+      "canonical": "https://www.nursenest.ca/fr/allied-health",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/allied-health",
+        "en-CA": "https://www.nursenest.ca/allied-health",
+        "es": "https://www.nursenest.ca/es/allied-health"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Accueil",
+          "href": "/fr"
+        },
+        {
+          "label": "Santé alliée",
+          "href": "/fr/allied-health"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "fr",
+      "surfaceType": "new-grad-hub",
+      "englishPath": "/new-grad",
+      "localizedPath": "/fr/new-grad",
+      "canonical": "https://www.nursenest.ca/fr/new-grad",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/new-grad",
+        "en-CA": "https://www.nursenest.ca/new-grad",
+        "es": "https://www.nursenest.ca/es/new-grad"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Accueil",
+          "href": "/fr"
+        },
+        {
+          "label": "Nouvelle diplômée",
+          "href": "/fr/new-grad"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap",
+        "translation readiness requires noindex",
+        "mixed-language SEO/content suspicions: 27",
+        "SEO field issues: 6"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": true
+    },
+    {
+      "locale": "fr",
+      "surfaceType": "lessons-hub",
+      "englishPath": "/lessons",
+      "localizedPath": "/fr/lessons",
+      "canonical": "https://www.nursenest.ca/fr/lessons",
+      "localizedSlugSupported": true,
+      "localizedSlug": "lecons",
+      "localizedRouteSupported": true,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/lessons",
+        "en-CA": "https://www.nursenest.ca/lessons",
+        "es": "https://www.nursenest.ca/es/lessons"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Accueil",
+          "href": "/fr"
+        },
+        {
+          "label": "Leçons",
+          "href": "/fr/lessons"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap",
+        "no translation-readiness audit row for localized route"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "fr",
+      "surfaceType": "practice-questions-hub",
+      "englishPath": "/question-bank",
+      "localizedPath": "/fr/question-bank",
+      "canonical": "https://www.nursenest.ca/fr/question-bank",
+      "localizedSlugSupported": true,
+      "localizedSlug": "questions-pratiques",
+      "localizedRouteSupported": true,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/question-bank",
+        "en-CA": "https://www.nursenest.ca/question-bank",
+        "es": "https://www.nursenest.ca/es/question-bank"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Accueil",
+          "href": "/fr"
+        },
+        {
+          "label": "Questions pratiques",
+          "href": "/fr/question-bank"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap",
+        "translation readiness requires noindex",
+        "mixed-language SEO/content suspicions: 9",
+        "SEO field issues: 4"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": true
+    },
+    {
+      "locale": "fr",
+      "surfaceType": "flashcards-hub",
+      "englishPath": "/flashcards",
+      "localizedPath": "/fr/flashcards",
+      "canonical": "https://www.nursenest.ca/fr/flashcards",
+      "localizedSlugSupported": true,
+      "localizedSlug": "cartes-memoire",
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/flashcards",
+        "en-CA": "https://www.nursenest.ca/flashcards",
+        "es": "https://www.nursenest.ca/es/flashcards"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Accueil",
+          "href": "/fr"
+        },
+        {
+          "label": "Cartes mémoire",
+          "href": "/fr/flashcards"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "localized slug translation exists but the route does not safely support translated slugs yet",
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "es",
+      "surfaceType": "homepage",
+      "englishPath": "/",
+      "localizedPath": "/es",
+      "canonical": "https://www.nursenest.ca/es",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": true,
+      "sitemapExpected": true,
+      "hreflangExpected": true,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/",
+        "en-CA": "https://www.nursenest.ca/",
+        "es": "https://www.nursenest.ca/es"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Inicio",
+          "href": "/es"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description",
+        "twitter.title",
+        "twitter.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage"
+      ],
+      "issues": [],
+      "recommendedFix": "Localized SEO policy passed for this surface.",
+      "readinessMatched": true
+    },
+    {
+      "locale": "es",
+      "surfaceType": "pricing",
+      "englishPath": "/pricing",
+      "localizedPath": "/es/pricing",
+      "canonical": "https://www.nursenest.ca/es/pricing",
+      "localizedSlugSupported": false,
+      "localizedSlug": "precios",
+      "localizedRouteSupported": true,
+      "sitemapExpected": true,
+      "hreflangExpected": true,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/pricing",
+        "en-CA": "https://www.nursenest.ca/pricing",
+        "es": "https://www.nursenest.ca/es/pricing"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Inicio",
+          "href": "/es"
+        },
+        {
+          "label": "Precios",
+          "href": "/es/pricing"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [],
+      "recommendedFix": "Localized SEO policy passed for this surface.",
+      "readinessMatched": true
+    },
+    {
+      "locale": "es",
+      "surfaceType": "rn-hub",
+      "englishPath": "/canada/rn/nclex-rn",
+      "localizedPath": "/canada/rn/nclex-rn",
+      "canonical": "https://www.nursenest.ca/canada/rn/nclex-rn",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/rn/nclex-rn",
+        "en-CA": "https://www.nursenest.ca/canada/rn/nclex-rn"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Inicio",
+          "href": "/es"
+        },
+        {
+          "label": "RN",
+          "href": "/canada/rn/nclex-rn"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "es",
+      "surfaceType": "rex-pn-hub",
+      "englishPath": "/canada/pn/rex-pn",
+      "localizedPath": "/canada/pn/rex-pn",
+      "canonical": "https://www.nursenest.ca/canada/pn/rex-pn",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/pn/rex-pn",
+        "en-CA": "https://www.nursenest.ca/canada/pn/rex-pn"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Inicio",
+          "href": "/es"
+        },
+        {
+          "label": "REx-PN",
+          "href": "/canada/pn/rex-pn"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "es",
+      "surfaceType": "np-hub",
+      "englishPath": "/canada/np/cnple",
+      "localizedPath": "/canada/np/cnple",
+      "canonical": "https://www.nursenest.ca/canada/np/cnple",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/np/cnple",
+        "en-CA": "https://www.nursenest.ca/canada/np/cnple"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Inicio",
+          "href": "/es"
+        },
+        {
+          "label": "NP",
+          "href": "/canada/np/cnple"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "es",
+      "surfaceType": "allied-hub",
+      "englishPath": "/allied-health",
+      "localizedPath": "/es/allied-health",
+      "canonical": "https://www.nursenest.ca/es/allied-health",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/allied-health",
+        "en-CA": "https://www.nursenest.ca/allied-health",
+        "es": "https://www.nursenest.ca/es/allied-health"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Inicio",
+          "href": "/es"
+        },
+        {
+          "label": "Salud aliada",
+          "href": "/es/allied-health"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "es",
+      "surfaceType": "new-grad-hub",
+      "englishPath": "/new-grad",
+      "localizedPath": "/es/new-grad",
+      "canonical": "https://www.nursenest.ca/es/new-grad",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/new-grad",
+        "en-CA": "https://www.nursenest.ca/new-grad",
+        "es": "https://www.nursenest.ca/es/new-grad"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Inicio",
+          "href": "/es"
+        },
+        {
+          "label": "Recién graduado/a",
+          "href": "/es/new-grad"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "es",
+      "surfaceType": "lessons-hub",
+      "englishPath": "/lessons",
+      "localizedPath": "/es/lessons",
+      "canonical": "https://www.nursenest.ca/es/lessons",
+      "localizedSlugSupported": true,
+      "localizedSlug": "lecciones",
+      "localizedRouteSupported": true,
+      "sitemapExpected": true,
+      "hreflangExpected": true,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/lessons",
+        "en-CA": "https://www.nursenest.ca/lessons",
+        "es": "https://www.nursenest.ca/es/lessons"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Inicio",
+          "href": "/es"
+        },
+        {
+          "label": "Lecciones",
+          "href": "/es/lessons"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [],
+      "recommendedFix": "Localized SEO policy passed for this surface.",
+      "readinessMatched": true
+    },
+    {
+      "locale": "es",
+      "surfaceType": "practice-questions-hub",
+      "englishPath": "/question-bank",
+      "localizedPath": "/es/question-bank",
+      "canonical": "https://www.nursenest.ca/es/question-bank",
+      "localizedSlugSupported": true,
+      "localizedSlug": "preguntas-de-practica",
+      "localizedRouteSupported": true,
+      "sitemapExpected": true,
+      "hreflangExpected": true,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/question-bank",
+        "en-CA": "https://www.nursenest.ca/question-bank",
+        "es": "https://www.nursenest.ca/es/question-bank"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Inicio",
+          "href": "/es"
+        },
+        {
+          "label": "Preguntas de práctica",
+          "href": "/es/question-bank"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [],
+      "recommendedFix": "Localized SEO policy passed for this surface.",
+      "readinessMatched": true
+    },
+    {
+      "locale": "es",
+      "surfaceType": "flashcards-hub",
+      "englishPath": "/flashcards",
+      "localizedPath": "/es/flashcards",
+      "canonical": "https://www.nursenest.ca/es/flashcards",
+      "localizedSlugSupported": true,
+      "localizedSlug": "tarjetas-de-memoria",
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/flashcards",
+        "en-CA": "https://www.nursenest.ca/flashcards",
+        "es": "https://www.nursenest.ca/es/flashcards"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Inicio",
+          "href": "/es"
+        },
+        {
+          "label": "Tarjetas de memoria",
+          "href": "/es/flashcards"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "localized slug translation exists but the route does not safely support translated slugs yet",
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "tl",
+      "surfaceType": "homepage",
+      "englishPath": "/",
+      "localizedPath": "/tl",
+      "canonical": "https://www.nursenest.ca/tl",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": true,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/",
+        "en-CA": "https://www.nursenest.ca/",
+        "es": "https://www.nursenest.ca/es"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/tl"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description",
+        "twitter.title",
+        "twitter.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap",
+        "no translation-readiness audit row for localized route"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "tl",
+      "surfaceType": "pricing",
+      "englishPath": "/pricing",
+      "localizedPath": "/tl/pricing",
+      "canonical": "https://www.nursenest.ca/tl/pricing",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": true,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/pricing",
+        "en-CA": "https://www.nursenest.ca/pricing",
+        "es": "https://www.nursenest.ca/es/pricing"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/tl"
+        },
+        {
+          "label": "Pricing",
+          "href": "/tl/pricing"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap",
+        "no translation-readiness audit row for localized route"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "tl",
+      "surfaceType": "rn-hub",
+      "englishPath": "/canada/rn/nclex-rn",
+      "localizedPath": "/canada/rn/nclex-rn",
+      "canonical": "https://www.nursenest.ca/canada/rn/nclex-rn",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/rn/nclex-rn",
+        "en-CA": "https://www.nursenest.ca/canada/rn/nclex-rn"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/tl"
+        },
+        {
+          "label": "RN",
+          "href": "/canada/rn/nclex-rn"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "tl",
+      "surfaceType": "rex-pn-hub",
+      "englishPath": "/canada/pn/rex-pn",
+      "localizedPath": "/canada/pn/rex-pn",
+      "canonical": "https://www.nursenest.ca/canada/pn/rex-pn",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/pn/rex-pn",
+        "en-CA": "https://www.nursenest.ca/canada/pn/rex-pn"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/tl"
+        },
+        {
+          "label": "REx-PN",
+          "href": "/canada/pn/rex-pn"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "tl",
+      "surfaceType": "np-hub",
+      "englishPath": "/canada/np/cnple",
+      "localizedPath": "/canada/np/cnple",
+      "canonical": "https://www.nursenest.ca/canada/np/cnple",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/np/cnple",
+        "en-CA": "https://www.nursenest.ca/canada/np/cnple"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/tl"
+        },
+        {
+          "label": "NP",
+          "href": "/canada/np/cnple"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "tl",
+      "surfaceType": "allied-hub",
+      "englishPath": "/allied-health",
+      "localizedPath": "/tl/allied-health",
+      "canonical": "https://www.nursenest.ca/tl/allied-health",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/allied-health",
+        "en-CA": "https://www.nursenest.ca/allied-health",
+        "es": "https://www.nursenest.ca/es/allied-health"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/tl"
+        },
+        {
+          "label": "Allied Health",
+          "href": "/tl/allied-health"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "tl",
+      "surfaceType": "new-grad-hub",
+      "englishPath": "/new-grad",
+      "localizedPath": "/tl/new-grad",
+      "canonical": "https://www.nursenest.ca/tl/new-grad",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/new-grad",
+        "en-CA": "https://www.nursenest.ca/new-grad",
+        "es": "https://www.nursenest.ca/es/new-grad"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/tl"
+        },
+        {
+          "label": "New Grad",
+          "href": "/tl/new-grad"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "tl",
+      "surfaceType": "lessons-hub",
+      "englishPath": "/lessons",
+      "localizedPath": "/tl/lessons",
+      "canonical": "https://www.nursenest.ca/tl/lessons",
+      "localizedSlugSupported": true,
+      "localizedRouteSupported": true,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/lessons",
+        "en-CA": "https://www.nursenest.ca/lessons",
+        "es": "https://www.nursenest.ca/es/lessons"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/tl"
+        },
+        {
+          "label": "Lessons",
+          "href": "/tl/lessons"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "missing localized slug mapping for lessons",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap",
+        "no translation-readiness audit row for localized route"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "tl",
+      "surfaceType": "practice-questions-hub",
+      "englishPath": "/question-bank",
+      "localizedPath": "/tl/question-bank",
+      "canonical": "https://www.nursenest.ca/tl/question-bank",
+      "localizedSlugSupported": true,
+      "localizedRouteSupported": true,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/question-bank",
+        "en-CA": "https://www.nursenest.ca/question-bank",
+        "es": "https://www.nursenest.ca/es/question-bank"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/tl"
+        },
+        {
+          "label": "Practice Questions",
+          "href": "/tl/question-bank"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "missing localized slug mapping for question-bank",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap",
+        "no translation-readiness audit row for localized route"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "tl",
+      "surfaceType": "flashcards-hub",
+      "englishPath": "/flashcards",
+      "localizedPath": "/tl/flashcards",
+      "canonical": "https://www.nursenest.ca/tl/flashcards",
+      "localizedSlugSupported": true,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/flashcards",
+        "en-CA": "https://www.nursenest.ca/flashcards",
+        "es": "https://www.nursenest.ca/es/flashcards"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/tl"
+        },
+        {
+          "label": "Flashcards",
+          "href": "/tl/flashcards"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "missing localized slug mapping for flashcards",
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "hi",
+      "surfaceType": "homepage",
+      "englishPath": "/",
+      "localizedPath": "/hi",
+      "canonical": "https://www.nursenest.ca/hi",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": true,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/",
+        "en-CA": "https://www.nursenest.ca/",
+        "es": "https://www.nursenest.ca/es"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/hi"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description",
+        "twitter.title",
+        "twitter.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap",
+        "no translation-readiness audit row for localized route"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "hi",
+      "surfaceType": "pricing",
+      "englishPath": "/pricing",
+      "localizedPath": "/hi/pricing",
+      "canonical": "https://www.nursenest.ca/hi/pricing",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": true,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/pricing",
+        "en-CA": "https://www.nursenest.ca/pricing",
+        "es": "https://www.nursenest.ca/es/pricing"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/hi"
+        },
+        {
+          "label": "Pricing",
+          "href": "/hi/pricing"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap",
+        "no translation-readiness audit row for localized route"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "hi",
+      "surfaceType": "rn-hub",
+      "englishPath": "/canada/rn/nclex-rn",
+      "localizedPath": "/canada/rn/nclex-rn",
+      "canonical": "https://www.nursenest.ca/canada/rn/nclex-rn",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/rn/nclex-rn",
+        "en-CA": "https://www.nursenest.ca/canada/rn/nclex-rn"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/hi"
+        },
+        {
+          "label": "RN",
+          "href": "/canada/rn/nclex-rn"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "hi",
+      "surfaceType": "rex-pn-hub",
+      "englishPath": "/canada/pn/rex-pn",
+      "localizedPath": "/canada/pn/rex-pn",
+      "canonical": "https://www.nursenest.ca/canada/pn/rex-pn",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/pn/rex-pn",
+        "en-CA": "https://www.nursenest.ca/canada/pn/rex-pn"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/hi"
+        },
+        {
+          "label": "REx-PN",
+          "href": "/canada/pn/rex-pn"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "hi",
+      "surfaceType": "np-hub",
+      "englishPath": "/canada/np/cnple",
+      "localizedPath": "/canada/np/cnple",
+      "canonical": "https://www.nursenest.ca/canada/np/cnple",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/canada/np/cnple",
+        "en-CA": "https://www.nursenest.ca/canada/np/cnple"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/hi"
+        },
+        {
+          "label": "NP",
+          "href": "/canada/np/cnple"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "hi",
+      "surfaceType": "allied-hub",
+      "englishPath": "/allied-health",
+      "localizedPath": "/hi/allied-health",
+      "canonical": "https://www.nursenest.ca/hi/allied-health",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/allied-health",
+        "en-CA": "https://www.nursenest.ca/allied-health",
+        "es": "https://www.nursenest.ca/es/allied-health"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/hi"
+        },
+        {
+          "label": "Allied Health",
+          "href": "/hi/allied-health"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "hi",
+      "surfaceType": "new-grad-hub",
+      "englishPath": "/new-grad",
+      "localizedPath": "/hi/new-grad",
+      "canonical": "https://www.nursenest.ca/hi/new-grad",
+      "localizedSlugSupported": false,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/new-grad",
+        "en-CA": "https://www.nursenest.ca/new-grad",
+        "es": "https://www.nursenest.ca/es/new-grad"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/hi"
+        },
+        {
+          "label": "New Grad",
+          "href": "/hi/new-grad"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "hi",
+      "surfaceType": "lessons-hub",
+      "englishPath": "/lessons",
+      "localizedPath": "/hi/lessons",
+      "canonical": "https://www.nursenest.ca/hi/lessons",
+      "localizedSlugSupported": true,
+      "localizedRouteSupported": true,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/lessons",
+        "en-CA": "https://www.nursenest.ca/lessons",
+        "es": "https://www.nursenest.ca/es/lessons"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/hi"
+        },
+        {
+          "label": "Lessons",
+          "href": "/hi/lessons"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "missing localized slug mapping for lessons",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap",
+        "no translation-readiness audit row for localized route"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "hi",
+      "surfaceType": "practice-questions-hub",
+      "englishPath": "/question-bank",
+      "localizedPath": "/hi/question-bank",
+      "canonical": "https://www.nursenest.ca/hi/question-bank",
+      "localizedSlugSupported": true,
+      "localizedRouteSupported": true,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/question-bank",
+        "en-CA": "https://www.nursenest.ca/question-bank",
+        "es": "https://www.nursenest.ca/es/question-bank"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/hi"
+        },
+        {
+          "label": "Practice Questions",
+          "href": "/hi/question-bank"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "missing localized slug mapping for question-bank",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap",
+        "no translation-readiness audit row for localized route"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    },
+    {
+      "locale": "hi",
+      "surfaceType": "flashcards-hub",
+      "englishPath": "/flashcards",
+      "localizedPath": "/hi/flashcards",
+      "canonical": "https://www.nursenest.ca/hi/flashcards",
+      "localizedSlugSupported": true,
+      "localizedRouteSupported": false,
+      "sitemapExpected": false,
+      "hreflangExpected": false,
+      "hreflangLanguages": {
+        "x-default": "https://www.nursenest.ca/flashcards",
+        "en-CA": "https://www.nursenest.ca/flashcards",
+        "es": "https://www.nursenest.ca/es/flashcards"
+      },
+      "breadcrumbs": [
+        {
+          "label": "Home",
+          "href": "/hi"
+        },
+        {
+          "label": "Flashcards",
+          "href": "/hi/flashcards"
+        }
+      ],
+      "metadataFields": [
+        "title",
+        "description",
+        "openGraph.title",
+        "openGraph.description"
+      ],
+      "jsonLdFields": [
+        "name",
+        "description",
+        "inLanguage",
+        "BreadcrumbList.itemListElement.name"
+      ],
+      "issues": [
+        "missing localized breadcrumb labels; falling back to English would create mixed-language SEO",
+        "missing localized slug mapping for flashcards",
+        "localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface",
+        "locale is not SEO-indexable yet; keep noindex and omit from sitemap"
+      ],
+      "recommendedFix": "Complete translations and add route-level localized slug support before exposing this page as indexable.",
+      "readinessMatched": false
+    }
+  ]
+}

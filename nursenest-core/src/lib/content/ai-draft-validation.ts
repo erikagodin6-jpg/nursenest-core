@@ -63,6 +63,8 @@ export type QuestionDraftMetadata = {
   lessonLinkSuggestions?: LessonLinkSuggestion[];
   /** Draft-only ECG video metadata. Promotion keeps the question in DRAFT until clinical review. */
   ecgVideo?: EcgVideoQuestionExhibit;
+  ecgLevel?: "basic" | "advanced";
+  ecgMode?: "lesson" | "quiz" | "drill";
 };
 
 export type NormalizedQuestionDraft = {
