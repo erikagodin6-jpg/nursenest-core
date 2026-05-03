@@ -93,7 +93,7 @@ export async function pathwayLessonsAppListWhereWithTopicFilter(
     extraClauses.push({ pathwayId });
   }
 
-  if (applyAlliedScope) {
+  if (applyAlliedScope && scopedPathwayId) {
     const owned = exclusiveTopicSlugsForAlliedProfession(scopedPathwayId, allied);
     if (owned.length === 0) {
       return mergeAndWhere(base, [{ id: { in: [] } }]);
