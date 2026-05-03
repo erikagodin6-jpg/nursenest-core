@@ -6,6 +6,7 @@ import { getCatalogPathwayLessonsSync } from "@/lib/lessons/pathway-lesson-catal
 import {
   evaluatePathwayLessonStructuralGate,
   lessonSectionsHaveMeaningfulClinicalContent,
+  lessonSectionsHaveMeaningfulClinicalContentLegacy,
 } from "@/lib/lessons/pathway-lesson-premium";
 import { buildNpStructuralFailureAudit, categorizeNpStructuralIssue } from "@/lib/lessons/np-pathway-lesson-structural-normalization";
 
@@ -14,6 +15,7 @@ const PATHWAYS = ["ca-np-cnple", "us-np-fnp"] as const;
 let total = 0;
 let publicComplete = 0;
 let publicCompleteMeaningful = 0;
+let publicCompleteMeaningfulLegacy = 0;
 const failed: Array<{ slug: string; issues: string[] }> = [];
 const issueTally = new Map<string, number>();
 const catTally = new Map<string, number>();
@@ -25,6 +27,9 @@ for (const pid of PATHWAYS) {
     const gate = evaluatePathwayLessonStructuralGate(lesson);
     if (gate.publicComplete) {
       publicComplete += 1;
+      if (lessonSectionsHaveMeaningfulClinicalContentLegacy(lesson.sections)) {
+        publicCompleteMeaningfulLegacy += 1;
+      }
       if (lessonSectionsHaveMeaningfulClinicalContent(lesson.sections)) {
         publicCompleteMeaningful += 1;
       }
@@ -56,6 +61,9 @@ console.log(
       publicCompletePct: `${((publicComplete / total) * 100).toFixed(1)}%`,
       publicCompleteAndMeaningful: publicCompleteMeaningful,
       publicCompleteAndMeaningfulPct: `${((publicCompleteMeaningful / total) * 100).toFixed(1)}%`,
+      publicCompleteAndMeaningfulLegacy: publicCompleteMeaningfulLegacy,
+      publicCompleteAndMeaningfulLegacyPct: `${((publicCompleteMeaningfulLegacy / total) * 100).toFixed(1)}%`,
+      deltaMeaningfulVsLegacy: publicCompleteMeaningful - publicCompleteMeaningfulLegacy,
       structuralFailures: failed.length,
       structuralFailurePct: `${((failed.length / total) * 100).toFixed(2)}%`,
       failureCategoryShareAmongFailures: catPct,

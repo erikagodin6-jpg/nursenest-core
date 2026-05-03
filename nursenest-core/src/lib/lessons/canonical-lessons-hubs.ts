@@ -4,7 +4,8 @@
  * - **Nursing (RN / PN / NP):** exactly one hub per published pathway: `/{country}/{role}/{exam}/lessons`.
  *   Topic/body-system scoping uses `?topicSlug=` (and search via `?q=`) on that same URL — never a second hub route.
  * - **Allied Health:** one hub per country pathway (`us-allied-core` / `ca-allied-core`). Profession-scoped lists
- *   use `?alliedProfession={professionKey}` on that same pathway URL. Legacy `/allied-health/{key}/lessons` 301s here.
+ *   use `?alliedProfession={professionKey}` on that same pathway URL; profession-specific SEO taxonomy drills use
+ *   `?alliedTaxonomy={slug}` (see `allied-profession-taxonomy.ts`). Legacy `/allied-health/{key}/lessons` 301s here.
  * - **New grad / pre-nursing:** `PRE_NURSING_LESSONS_INDEX_PATH` (separate product module; not mixed with exam pathways).
  * - **`/lessons`:** directory of pathway hubs (not a tier-scoped lesson library); links from here must land on
  *   a specific pathway hub above, not duplicate hub chrome.

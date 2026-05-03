@@ -77,9 +77,26 @@ const PREMIUM_KIND_SET = new Set<string>(PREMIUM_SECTION_KINDS);
  */
 export const SUBSTANTIVE_PREMIUM_SECTION_MIN_PLAIN_CHARS = 40;
 
-/** Minimum sections + word floor so real authored lessons never run the legacy five-block expander in `pathway-lesson-catalog-sync.ts`. */
-export const MEANINGFUL_LESSON_MIN_SECTIONS = 3;
-export const MEANINGFUL_LESSON_MIN_TOTAL_WORDS = 400;
+/**
+ * Previous meaningful-clinical gate (≥3 sections, ≥400 words, one clinical-keyword hit in any section).
+ * Kept for audits, migration deltas, and tests that assert historical baselines.
+ */
+export const MEANINGFUL_LESSON_LEGACY_MIN_SECTIONS = 3;
+export const MEANINGFUL_LESSON_LEGACY_MIN_TOTAL_WORDS = 400;
+
+/**
+ * Upgraded meaningful-clinical bar: ≥800 words, four clinical pillars each with a substantive section,
+ * explicit scenario + decision-making signals, and light anti-glossary / anti-listicle guards.
+ */
+export const MEANINGFUL_LESSON_MIN_SECTIONS = 4;
+export const MEANINGFUL_LESSON_MIN_TOTAL_WORDS = 800;
+export const MEANINGFUL_BUCKET_SECTION_MIN_WORDS = 50;
+
+export type MeaningfulClinicalContentBucket =
+  | "pathophysiology"
+  | "assessment_diagnosis"
+  | "interventions_treatment"
+  | "clinical_application";
 
 /** Total words across section bodies (plain text) — used for meaningful-content gate + QA logs. */
 export function countTotalWordsInLessonSections(sections: PathwayLessonSection[] | undefined): number {
@@ -96,23 +113,162 @@ function sectionCorpusForClinicalKeyword(sec: PathwayLessonSection): string {
 }
 
 /**
+ * Legacy meaningful-clinical check (pre–pillar upgrade). Prefer {@link lessonSectionsHaveMeaningfulClinicalContent}
+ * for product gates; use this only for migration reporting.
+ */
+export function lessonSectionsHaveMeaningfulClinicalContentLegacy(
+  sections: PathwayLessonSection[] | undefined,
+): boolean {
+  const list = sections ?? [];
+  if (list.length < MEANINGFUL_LESSON_LEGACY_MIN_SECTIONS) return false;
+  if (countTotalWordsInLessonSections(list) < MEANINGFUL_LESSON_LEGACY_MIN_TOTAL_WORDS) return false;
+  const clinical = /pathophysiology|treatment|intervention|diagnosis/i;
+  return list.some((s) => clinical.test(sectionCorpusForClinicalKeyword(s)));
+}
+
+function sectionWordCount(sec: PathwayLessonSection): number {
+  return countWords(stripToPlainText(typeof sec.body === "string" ? sec.body : ""));
+}
+
+/**
+ * Maps catalog / premium / legacy section kinds to one of four clinical pillars for the meaningful-clinical gate.
+ * Navigation-only rows (`related_next_steps`, `country_specific_notes`) return null.
+ */
+export function meaningfulClinicalBucketForSectionKind(
+  kind: string | undefined,
+): MeaningfulClinicalContentBucket | null {
+  const normalizedKind = typeof kind === "string" ? kind.trim().toLowerCase() : "";
+  switch (normalizedKind) {
+    case "pathophysiology_overview":
+    case "core_concept":
+    case "clinical_meaning":
+    case "core":
+    case "introduction":
+    case "intro":
+      return "pathophysiology";
+    case "signs_symptoms":
+    case "labs_diagnostics":
+    case "exam_focus":
+    case "clinical_manifestations":
+    case "red_flags":
+      return "assessment_diagnosis";
+    case "nursing_assessment_interventions":
+    case "treatment_management":
+    case "nursing_priorities":
+    case "client_education":
+    case "complications":
+      return "interventions_treatment";
+    case "clinical_scenario":
+    case "clinical_application":
+    case "exam_relevance":
+    case "takeaways":
+    case "clinical_pearls":
+    case "tier_specific_relevance":
+    case "exam_tips":
+      return "clinical_application";
+    default:
+      return null;
+  }
+}
+
+function lessonCorpusForSignals(sections: PathwayLessonSection[]): string {
+  return sections.map((s) => `${s.heading ?? ""}\n${s.body ?? ""}`).join("\n\n");
+}
+
+/** Vignette / presentation / case framing (scenario or example). */
+const MEANINGFUL_SCENARIO_SIGNAL =
+  /clinical scenario|case study|vignette|patient presents|presentation:|case:\s|scenario:|sbar|\d{1,2}\s*[-–]\s*year\s*[-–]\s*old|year-old|y\/o|you are (the )?nurse|nursing student.*assigned|arrives (at|in) (the )?(ed|er|clinic)/i;
+
+/** Decision-making, prioritization, branching, or when-to-act reasoning. */
+const MEANINGFUL_DECISION_SIGNAL =
+  /when to|whether to|choose between|prioritiz(e|ing)|clinical decision|nursing judgment|if (the )?patient|if you (see|note|identify|suspect)|differential (diagnosis)?|escalate|first[- ]line|second[- ]line|stepwise|algorithm|monitor for|reassess|next (step|action)|weigh the risks|clinical reasoning/i;
+
+function corpusHasScenarioSignal(corpus: string): boolean {
+  return MEANINGFUL_SCENARIO_SIGNAL.test(corpus);
+}
+
+function corpusHasDecisionSignal(corpus: string): boolean {
+  return MEANINGFUL_DECISION_SIGNAL.test(corpus);
+}
+
+/** Many short "Term is a …" sentences — glossary / definitional stack without applied clinical reasoning. */
+function corpusLooksLikeDefinitionalStack(corpus: string): boolean {
+  const plain = stripToPlainText(corpus).replace(/\s+/g, " ").trim();
+  if (plain.length < 500) return false;
+  const sentences = plain.split(/(?<=[.!?])\s+/).map((t) => t.trim()).filter((t) => t.length > 24);
+  if (sentences.length < 12) return false;
+  let defLike = 0;
+  for (const s of sentences) {
+    if (/^(the\s+)?([A-Z][a-z]+\s+){0,5}(is|are)\s+(a|an|the)\b/i.test(s)) defLike += 1;
+  }
+  return defLike / sentences.length > 0.48;
+}
+
+/** Mostly bullets / list lines with limited paragraph prose — shallow summary wall. */
+function corpusLooksLikeShallowListicle(corpus: string): boolean {
+  const lines = corpus.split("\n").map((l) => l.trim()).filter(Boolean);
+  if (lines.length < 14) return false;
+  const bulletish = lines.filter((l) => /^\s*([-*•]|\d+[.)])\s+/.test(l)).length;
+  const ratio = bulletish / lines.length;
+  const words = countWords(stripToPlainText(corpus));
+  return ratio > 0.62 && words < 1100;
+}
+
+function meaningfulClinicalBucketsSatisfied(sections: PathwayLessonSection[]): Set<MeaningfulClinicalContentBucket> {
+  const satisfied = new Set<MeaningfulClinicalContentBucket>();
+  for (const s of sections) {
+    const bucket = meaningfulClinicalBucketForSectionKind(s.kind);
+    if (!bucket) continue;
+    if (sectionWordCount(s) < MEANINGFUL_BUCKET_SECTION_MIN_WORDS) continue;
+    satisfied.add(bucket);
+  }
+  return satisfied;
+}
+
+/**
  * True when the lesson already carries enough real clinical prose that the legacy five-block synthesizer
  * must not replace it (independent of premium spine commitment rows).
  * See `expandToStandardFiveSections` in `pathway-lesson-catalog-sync.ts`.
+ *
+ * Requirements (all must hold):
+ * - ≥ {@link MEANINGFUL_LESSON_MIN_TOTAL_WORDS} words across section bodies
+ * - ≥ {@link MEANINGFUL_LESSON_MIN_SECTIONS} total sections
+ * - Each of {@link MeaningfulClinicalContentBucket} represented by ≥1 mapped section with
+ *   ≥ {@link MEANINGFUL_BUCKET_SECTION_MIN_WORDS} words (kinds mapped in {@link meaningfulClinicalBucketForSectionKind})
+ * - At least one clinical scenario / example signal and one decision-making signal in headings + bodies
+ * - Reject dominant definitional-stack or shallow listicle heuristics when triggered
  */
 export function lessonSectionsHaveMeaningfulClinicalContent(sections: PathwayLessonSection[] | undefined): boolean {
   const list = sections ?? [];
   if (list.length < MEANINGFUL_LESSON_MIN_SECTIONS) return false;
-  if (countTotalWordsInLessonSections(list) < MEANINGFUL_LESSON_MIN_TOTAL_WORDS) return false;
-  const clinical = /pathophysiology|treatment|intervention|diagnosis/i;
-  return list.some((s) => clinical.test(sectionCorpusForClinicalKeyword(s)));
+  const totalWords = countTotalWordsInLessonSections(list);
+  if (totalWords < MEANINGFUL_LESSON_MIN_TOTAL_WORDS) return false;
+
+  const buckets = meaningfulClinicalBucketsSatisfied(list);
+  const need: MeaningfulClinicalContentBucket[] = [
+    "pathophysiology",
+    "assessment_diagnosis",
+    "interventions_treatment",
+    "clinical_application",
+  ];
+  for (const b of need) {
+    if (!buckets.has(b)) return false;
+  }
+
+  const corpus = lessonCorpusForSignals(list);
+  if (!corpusHasScenarioSignal(corpus)) return false;
+  if (!corpusHasDecisionSignal(corpus)) return false;
+  if (corpusLooksLikeDefinitionalStack(corpus)) return false;
+  if (corpusLooksLikeShallowListicle(corpus)) return false;
+
+  return true;
 }
 
 /**
  * True when incoming `sections[]` already carry non-trivial authored copy — the legacy five-block
  * synthesizer must not replace or pad them (PathwayLesson.sections remain the sole render source).
  *
- * Looser than {@link lessonSectionsHaveMeaningfulClinicalContent} (no clinical-keyword / 3-section floor)
+ * Looser than {@link lessonSectionsHaveMeaningfulClinicalContent} (no four-pillar / 800-word / scenario bar)
  * so multi-section catalog lessons (e.g. AFib rate control) still route through the premium normalization path.
  */
 export function lessonSectionsQualifyAsAuthoritativeSoleSource(sections: PathwayLessonSection[] | undefined): boolean {

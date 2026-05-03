@@ -9,6 +9,8 @@ type Props = {
   preservedTopicSlug?: string;
   /** Preserved on allied pathway hub (`?alliedProfession=`). */
   preservedAlliedProfession?: string;
+  /** Preserved on allied pathway hub taxonomy drill (`?alliedTaxonomy=`). */
+  preservedAlliedTaxonomy?: string;
   countryOptions?: CountrySwitcherOption[];
   /** Optional total lesson count shown as a result indicator. */
   totalCount?: number;
@@ -19,6 +21,7 @@ export function LessonsToolbar({
   initialQuery,
   preservedTopicSlug,
   preservedAlliedProfession,
+  preservedAlliedTaxonomy,
   countryOptions,
   totalCount,
 }: Props) {
@@ -44,6 +47,9 @@ export function LessonsToolbar({
           {preservedTopicSlug ? <input type="hidden" name="topicSlug" value={preservedTopicSlug} /> : null}
           {preservedAlliedProfession ? (
             <input type="hidden" name="alliedProfession" value={preservedAlliedProfession} />
+          ) : null}
+          {preservedAlliedTaxonomy ? (
+            <input type="hidden" name="alliedTaxonomy" value={preservedAlliedTaxonomy} />
           ) : null}
           <label htmlFor="lessons-toolbar-q" className="sr-only">
             Search lessons
@@ -77,6 +83,7 @@ export function LessonsToolbar({
                   const qs = new URLSearchParams();
                   if (preservedTopicSlug) qs.set("topicSlug", preservedTopicSlug);
                   if (preservedAlliedProfession) qs.set("alliedProfession", preservedAlliedProfession);
+                  if (preservedAlliedTaxonomy) qs.set("alliedTaxonomy", preservedAlliedTaxonomy);
                   const s = qs.toString();
                   return s ? `${searchBasePath.replace(/\/$/, "")}?${s}` : searchBasePath;
                 })()}

@@ -6,6 +6,8 @@ import {
   lessonQualifiesForPremiumNormalization,
   lessonQualifiesForPremiumStructuralGate,
   lessonSectionsHaveMeaningfulClinicalContent,
+  lessonSectionsHaveMeaningfulClinicalContentLegacy,
+  meaningfulClinicalBucketForSectionKind,
   lessonUsesPremiumStructure,
   PREMIUM_SECTION_HEADINGS,
   SUBSTANTIVE_PREMIUM_SECTION_MIN_PLAIN_CHARS,
@@ -139,6 +141,22 @@ describe("pathway-lesson-premium", () => {
   });
 
   it("meaningful clinical prose bypasses normalization gate without premium spine kinds", () => {
+    const patho = `${fillerWords(120)} Mechanism and tissue injury cascade. ${fillerWords(120)}`;
+    const assess = `${fillerWords(120)} Physical exam clusters and diagnostic criteria. ${fillerWords(120)}`;
+    const intervene = `${fillerWords(100)} When to escalate if the patient worsens. ${fillerWords(100)}`;
+    const app = `**Vignette — 62-year-old patient presents with progressive dyspnea.** ${fillerWords(200)} Prioritize airway and circulation while gathering history. ${fillerWords(200)}`;
+    const sections = [
+      { id: "1", heading: "Pathophysiology", kind: "clinical_meaning" as const, body: patho },
+      { id: "2", heading: "Assessment", kind: "labs_diagnostics" as const, body: assess },
+      { id: "3", heading: "Care", kind: "nursing_assessment_interventions" as const, body: intervene },
+      { id: "4", heading: "Application", kind: "clinical_scenario" as const, body: app },
+    ];
+    assert.equal(lessonSectionsHaveMeaningfulClinicalContent(sections), true);
+    assert.equal(lessonQualifiesForPremiumStructuralGate(sections), false);
+    assert.equal(lessonQualifiesForPremiumNormalization(sections), true);
+  });
+
+  it("legacy meaningful gate still passes three thin clinical_meaning blocks (new gate rejects)", () => {
     const a = `${fillerWords(160)} The nursing diagnosis priority is airway first. ${fillerWords(160)}`;
     const b = fillerWords(170);
     const c = fillerWords(170);
@@ -147,9 +165,15 @@ describe("pathway-lesson-premium", () => {
       { id: "2", heading: "Block B", kind: "clinical_meaning" as const, body: b },
       { id: "3", heading: "Block C", kind: "clinical_meaning" as const, body: c },
     ];
-    assert.equal(lessonSectionsHaveMeaningfulClinicalContent(sections), true);
-    assert.equal(lessonQualifiesForPremiumStructuralGate(sections), false);
+    assert.equal(lessonSectionsHaveMeaningfulClinicalContentLegacy(sections), true);
+    assert.equal(lessonSectionsHaveMeaningfulClinicalContent(sections), false);
     assert.equal(lessonQualifiesForPremiumNormalization(sections), true);
+  });
+
+  it("meaningfulClinicalBucketForSectionKind normalizes whitespace and casing", () => {
+    assert.equal(meaningfulClinicalBucketForSectionKind("  Labs_Diagnostics "), "assessment_diagnosis");
+    assert.equal(meaningfulClinicalBucketForSectionKind(" CLINICAL_SCENARIO"), "clinical_application");
+    assert.equal(meaningfulClinicalBucketForSectionKind("   "), null);
   });
 
   it("lessonQualifiesForPremiumNormalization: three premium headings with bodies under plain-text floor do not qualify", () => {
@@ -168,6 +192,9 @@ describe("pathway-lesson-premium", () => {
     const sections = minimalPremiumSections({
       signs_symptoms: {
         body: `**Vignette — 58-year-old patient presents with progressive dyspnea.** ${fillerWords(130)} Nursing assessment includes vitals, work of breathing, and oxygenation. Prioritize airway and circulation while gathering history.\n\n${fillerWords(90)}`,
+      },
+      nursing_assessment_interventions: {
+        body: `${fillerWords(80)} When to escalate if the patient shows altered mental status or rising work of breathing. ${fillerWords(110)}`,
       },
       related_next_steps: {
         body: `${fillerWords(45)}\n\n- [One](LESSON:a)\n- [Two](LESSON:b)\n- [Three](/tools)`,

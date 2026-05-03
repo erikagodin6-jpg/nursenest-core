@@ -1083,6 +1083,8 @@ model PathwayLesson {
   priority             String        @default("medium")
   /// * Exam-specific yield metadata: [{ exam, yieldLevel, clinicalPriority? }].
   examMeta             Json          @default("[]") @map("exam_meta")
+  /// * Allied profession discriminator for marketing / learner hubs (null = shared or registry-owned topic scope).
+  alliedProfessionKey  String?       @map("allied_profession_key") @db.VarChar(64)
   content_version      Int           @default(1)
   published_at         DateTime?
   published_by_user_id String?

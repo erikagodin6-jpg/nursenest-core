@@ -3,8 +3,9 @@
  * Split from `pathway-lesson-loader.ts` so CLI audits and tooling can import without the `server-only` graph.
  * Catalog-backed and still heavy enough to keep out of shared layouts, homepage chrome, and nav/header paths.
  *
- * **Expander choice:** `normalizeLesson` uses `lessonQualifiesForPremiumNormalization` (meaningful clinical
- * prose, premium structural spine, **or** authoritative incoming section copy). **Structural publish gate**
+ * **Expander choice:** `normalizeLesson` uses `lessonQualifiesForPremiumNormalization` (upgraded meaningful clinical
+ * depth — ≥800 words, four pillars, scenario + decision signals — premium structural spine, **or** authoritative
+ * incoming section copy). **Structural publish gate**
  * (`evaluatePathwayLessonStructuralGate`): uses {@link lessonQualifiesForPremiumStructuralGate} (the premium-spine
  * portion of that union) so meaningful-clinical / authoritative bypasses keep legacy structural validation while
  * still skipping `expandToStandardFiveSections` in `normalizeLesson`.
@@ -1547,6 +1548,10 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
   const rawTopicSlug = typeof raw.topicSlug === "string" ? raw.topicSlug.trim().toLowerCase() : "";
   const topicSlug = rawTopicSlug.length > 0 ? rawTopicSlug : deriveCanonicalStudyTopicSlug(raw);
 
+  const rawAlliedKey =
+    typeof (raw as { alliedProfessionKey?: unknown }).alliedProfessionKey === "string"
+      ? (raw as { alliedProfessionKey: string }).alliedProfessionKey.trim().toLowerCase()
+      : "";
   const base: PathwayLessonRecord = {
     slug: raw.slug,
     title,
@@ -1568,6 +1573,7 @@ export function normalizeLesson(raw: LessonInput, pathwayId?: string): PathwayLe
     ...(premiumOmitted?.length ? { premiumOmittedSections: premiumOmitted } : {}),
     ...(relatedLessonRefs?.length ? { relatedLessonRefs } : {}),
     ...(embeddedSoundLibraries?.length ? { embeddedSoundLibraries } : {}),
+    ...(rawAlliedKey ? { alliedProfessionKey: rawAlliedKey } : {}),
     ...mergeLessonAudienceMetadata(raw, pathwayId),
   };
 
@@ -2042,8 +2048,11 @@ export function pathwayLessonRowToInput(row: {
   countries?: string[];
   priority?: string;
   examMeta?: unknown;
+  alliedProfessionKey?: string | null;
 }): LessonInput {
   const unwrapped = unwrapPathwayLessonDbSections(row.sections);
+  const alliedKey =
+    typeof row.alliedProfessionKey === "string" ? row.alliedProfessionKey.trim().toLowerCase() : "";
   return {
     slug: row.slug,
     title: row.title,
@@ -2058,6 +2067,7 @@ export function pathwayLessonRowToInput(row: {
     ...(Array.isArray(row.countries) ? { countries: row.countries as PathwayLessonRuntimeCountry[] } : {}),
     ...(typeof row.priority === "string" ? { priority: row.priority as PathwayLessonPriority } : {}),
     ...(Array.isArray(row.examMeta) ? { examMeta: row.examMeta as PathwayLessonExamMeta[] } : {}),
+    ...(alliedKey ? { alliedProfessionKey: alliedKey } : {}),
     ...(unwrapped.preTestQuestionIds ? { preTestQuestionIds: unwrapped.preTestQuestionIds } : {}),
     ...(unwrapped.postTestQuestionIds ? { postTestQuestionIds: unwrapped.postTestQuestionIds } : {}),
     ...(unwrapped.preTest ? { preTest: unwrapped.preTest } : {}),

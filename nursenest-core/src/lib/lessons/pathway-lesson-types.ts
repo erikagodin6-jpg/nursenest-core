@@ -310,6 +310,10 @@ export type PathwayLessonRecord = {
   structuralQuality?: PathwayLessonStructuralGate;
   /** Present when lesson uses premium section kinds; filled in {@link normalizeLesson}. */
   premiumValidation?: PathwayLessonPremiumValidation;
+  /**
+   * Marketing allied hubs / dedicated shards: profession registry key (lowercase), when authored on catalog or DB.
+   */
+  alliedProfessionKey?: string;
   /** Optional catalog metadata for filtering and hub labeling (when present on `LessonInput`). */
   audienceTiers?: PathwayLessonAudienceTier[];
   countryScope?: PathwayLessonCountryScope;

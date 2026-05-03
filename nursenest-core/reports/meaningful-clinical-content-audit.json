@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-05-03T02:31:07.014Z",
+  "gateNew": {
+    "minSections": 4,
+    "minTotalWords": 800,
+    "description": "Four clinical pillars (pathophysiology, assessment/diagnosis, interventions/treatment, clinical application), scenario + decision signals, anti-glossary/listicle heuristics."
+  },
+  "gateLegacy": {
+    "minSections": 3,
+    "minTotalWords": 400,
+    "description": "≥3 sections, ≥400 words, one clinical-keyword hit in any section."
+  },
+  "totals": {
+    "pathwayCount": 5,
+    "lessons": 2797,
+    "meaningfulNew": 2273,
+    "meaningfulLegacy": 2448,
+    "meaningfulNewPct": "81.27",
+    "meaningfulLegacyPct": "87.52",
+    "deltaMeaningfulCount": -175,
+    "deltaMeaningfulPctPoints": "-6.26"
+  },
+  "perPathway": [
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "lessons": 797,
+      "meaningfulNew": 680,
+      "meaningfulLegacy": 717,
+      "deltaVsLegacy": -37
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "lessons": 478,
+      "meaningfulNew": 377,
+      "meaningfulLegacy": 386,
+      "deltaVsLegacy": -9
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "lessons": 150,
+      "meaningfulNew": 49,
+      "meaningfulLegacy": 53,
+      "deltaVsLegacy": -4
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "lessons": 576,
+      "meaningfulNew": 486,
+      "meaningfulLegacy": 576,
+      "deltaVsLegacy": -90
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "lessons": 796,
+      "meaningfulNew": 681,
+      "meaningfulLegacy": 716,
+      "deltaVsLegacy": -35
+    }
+  ]
+}

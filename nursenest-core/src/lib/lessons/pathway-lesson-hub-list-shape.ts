@@ -31,5 +31,6 @@ export function stripPathwayLessonToHubListShape(full: PathwayLessonRecord): Pat
     ...(full.examMeta?.length ? { examMeta: full.examMeta } : {}),
     ...(full.activeExamMeta ? { activeExamMeta: full.activeExamMeta } : {}),
     ...(full.premiumValidation ? { premiumValidation: full.premiumValidation } : {}),
+    ...(full.alliedProfessionKey ? { alliedProfessionKey: full.alliedProfessionKey } : {}),
   };
 }

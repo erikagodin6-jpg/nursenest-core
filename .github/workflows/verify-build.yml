@@ -29,6 +29,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Guard production reliability workflow (secrets + log safety)
+        run: node ../scripts/ci/assert-production-reliability-workflow-guard.mjs
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:

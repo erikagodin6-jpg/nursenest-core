@@ -1,6 +1,7 @@
 # Production reliability monitor (read-only checks + bounded Next.js revalidate hints).
 # Required repo secrets: NURSENEST_PRODUCTION_BASE_URL, NURSENEST_RELIABILITY_SECRET
-# App env: NURSENEST_RELIABILITY_SECRET must match the workflow secret.
+# Production env: NURSENEST_RELIABILITY_SECRET must match the workflow secret (DigitalOcean).
+# Do not add `set -x` or `curl -v` here; never echo secret values to logs.
 
 name: Production reliability check
 
@@ -15,15 +16,18 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Verify secrets are configured
+        id: secrets
         env:
           BASE_URL: ${{ secrets.NURSENEST_PRODUCTION_BASE_URL }}
           SECRET: ${{ secrets.NURSENEST_RELIABILITY_SECRET }}
         run: |
           set -euo pipefail
           if [ -z "${BASE_URL:-}" ] || [ -z "${SECRET:-}" ]; then
-            echo "::error::Missing NURSENEST_PRODUCTION_BASE_URL or NURSENEST_RELIABILITY_SECRET repository secrets."
+            echo '::error title=GitHub Actions configuration::Production reliability workflow is missing required repository secrets. This is a CI/CD configuration problem — it does not indicate that production (nursenest.ca) is down or unreachable.'
+            echo '::notice::Add Actions secrets: NURSENEST_PRODUCTION_BASE_URL (e.g. https://www.nursenest.ca) and NURSENEST_RELIABILITY_SECRET (must match production NURSENEST_RELIABILITY_SECRET on DigitalOcean). See nursenest-core/docs/github-actions-production-reliability-check.md'
             exit 1
           fi
+          echo '::notice::Repository secrets for production reliability are present. Any failure after this step reflects production reachability or in-app checks, not missing Actions secrets.'
 
       - name: Initial reliability check
         id: initial
@@ -102,6 +106,10 @@ jobs:
         if: always()
         run: |
           set -euo pipefail
+          if [ "${{ steps.secrets.outcome }}" != "success" ]; then
+            echo '::error title=GitHub Actions configuration::Job stopped because required repository secrets were missing or the verify step failed. This is not evidence of a production outage — configure Actions secrets and re-run.'
+            exit 1
+          fi
           if [ "${{ steps.initial.outputs.ok }}" = "true" ]; then
             echo "Healthy on first check."
             exit 0
@@ -110,5 +118,5 @@ jobs:
             echo "Recovered after self-heal."
             exit 0
           fi
-          echo "::error::Production reliability check failed (see prior steps)."
+          echo "::error::Production reliability check failed after secrets were present (see prior steps for HTTP or ok=false — possible production or auth mismatch, not missing Actions secrets)."
           exit 1

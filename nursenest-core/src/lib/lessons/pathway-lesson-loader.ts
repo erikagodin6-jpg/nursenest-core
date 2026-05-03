@@ -93,6 +93,11 @@ import {
   exclusiveTopicSlugsForAlliedProfession,
   logAlliedHubProfessionScopeContaminationIfNeeded,
 } from "@/lib/allied/allied-profession-lesson-exclusive-scope";
+import {
+  alliedTaxonomyClustersFromLessons,
+  lessonMatchesAlliedTaxonomyFilter,
+  type AlliedTaxonomyCluster,
+} from "@/lib/allied/allied-profession-taxonomy";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import type { MarketingHubLessonsListOptions } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import {
@@ -193,26 +198,31 @@ function enforceAlliedProfessionMarketingHubRenderableRows(
   rows: PathwayLessonRecord[],
 ): PathwayLessonRecord[] {
   const key = alliedProfessionKey?.trim().toLowerCase();
-  if (!key || !isAlliedMarketingCorePathwayId(pathwayId)) return rows;
+  if (!key) return rows;
+  const filterRows = (): PathwayLessonRecord[] =>
+    rows.filter((lesson) =>
+      catalogLessonInputBelongsToAlliedProfession(
+        {
+          topicSlug: lesson.topicSlug,
+          alliedProfessionKey: lesson.alliedProfessionKey,
+        },
+        pathwayId,
+        key,
+      ),
+    );
+  if (!isAlliedMarketingCorePathwayId(pathwayId)) {
+    return filterRows();
+  }
   logAlliedHubProfessionScopeContaminationIfNeeded({
     pathwayId,
     alliedProfessionKey: key,
     rows: rows.map((r) => ({
       topicSlug: r.topicSlug,
-      alliedProfessionKey: (r as { alliedProfessionKey?: string | null }).alliedProfessionKey ?? null,
+      alliedProfessionKey: r.alliedProfessionKey ?? null,
     })),
     surface: "marketing_hub_renderable",
   });
-  return rows.filter((lesson) =>
-    catalogLessonInputBelongsToAlliedProfession(
-      {
-        topicSlug: lesson.topicSlug,
-        alliedProfessionKey: (lesson as { alliedProfessionKey?: string }).alliedProfessionKey,
-      },
-      pathwayId,
-      key,
-    ),
-  );
+  return filterRows();
 }
 
 function pathwayLessonHubSearchWhere(q: string): Prisma.PathwayLessonWhereInput {
@@ -529,6 +539,7 @@ const PATHWAY_LESSON_HUB_LIST_SELECT = {
   priority: true,
   examMeta: true,
   locale: true,
+  alliedProfessionKey: true,
 } as const;
 
 const PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS = {
@@ -699,6 +710,7 @@ async function resolveMarketingHubRenderableLessonList(
   const topicSlugsIn = listOptions?.topicSlugsIn;
   const alliedProfessionKey = listOptions?.alliedProfessionKey;
   const alliedKeyNorm = alliedProfessionKey?.trim().toLowerCase() ?? "";
+  const taxonomySlugsIn = listOptions?.taxonomySlugsIn;
   let effectiveTopicSlugsIn: string[] | undefined = topicSlugsIn;
   if (alliedKeyNorm && isAlliedMarketingCorePathwayId(pathwayId)) {
     const exclusive = exclusiveTopicSlugsForAlliedProfession(pathwayId, alliedKeyNorm);
@@ -785,11 +797,14 @@ const afterPathwayContext = sortPathwayLessonsForPublicPreview(
       devLog: true,
     });
     const dedupeMs = Math.round(performance.now() - tDedupe0);
-    const renderableAll = enforceAlliedProfessionMarketingHubRenderableRows(
+    let renderableAll = enforceAlliedProfessionMarketingHubRenderableRows(
       pathwayId,
       alliedProfessionKey,
       deduped.items,
     );
+    if (alliedKeyNorm && taxonomySlugsIn?.length && isAlliedMarketingCorePathwayId(pathwayId)) {
+      renderableAll = renderableAll.filter((r) => lessonMatchesAlliedTaxonomyFilter(alliedKeyNorm, r, taxonomySlugsIn));
+    }
 
     safeServerLog("pathway_lessons", "hub_list_pipeline_stages", {
       pathwayId,
@@ -904,7 +919,7 @@ const afterPathwayContext = sortPathwayLessonsForPublicPreview(
   const contextDropSummaryCat = summarizePathwayContextPipelineDrops(pathwayId, afterSafeSlugCat, afterContextCat);
   logHubListPipelineDropSamples(pathwayId, afterSafeSlugCat, afterContextCat, 24);
   const tDedupeCat0 = performance.now();
-  const renderableAll = enforceAlliedProfessionMarketingHubRenderableRows(
+  let renderableAll = enforceAlliedProfessionMarketingHubRenderableRows(
     pathwayId,
     alliedProfessionKey,
     dedupePathwayLessonsForLibrary(afterContextCat, {
@@ -913,6 +928,9 @@ const afterPathwayContext = sortPathwayLessonsForPublicPreview(
       devLog: true,
     }).items,
   );
+  if (alliedKeyNorm && taxonomySlugsIn?.length && isAlliedMarketingCorePathwayId(pathwayId)) {
+    renderableAll = renderableAll.filter((r) => lessonMatchesAlliedTaxonomyFilter(alliedKeyNorm, r, taxonomySlugsIn));
+  }
   const dedupeCatMs = Math.round(performance.now() - tDedupeCat0);
   const catalogLoadMs = Math.round(performance.now() - tCat0);
 
@@ -968,6 +986,23 @@ const afterPathwayContext = sortPathwayLessonsForPublicPreview(
       },
     },
   };
+}
+
+/**
+ * Profession-scoped taxonomy clusters for allied marketing hubs (counts from the full profession
+ * inventory — not the taxonomy-drilled subset).
+ */
+export async function listAlliedProfessionTaxonomyClustersForPublicHub(
+  pathwayId: string,
+  professionKey: string,
+  marketingLocale?: string,
+): Promise<AlliedTaxonomyCluster[]> {
+  const pk = professionKey.trim().toLowerCase();
+  if (!pk || !isAlliedMarketingCorePathwayId(pathwayId)) return [];
+  const { renderableAll } = await resolveMarketingHubRenderableLessonList(pathwayId, marketingLocale, {
+    alliedProfessionKey: pk,
+  });
+  return alliedTaxonomyClustersFromLessons(pk, renderableAll);
 }
 
 function clampPageSize(pageSize: number): number {
@@ -1045,6 +1080,7 @@ async function getPathwayLessonsPageWithDataCache(
   const topicKey = JSON.stringify(listOptions?.topicSlugsIn?.slice().sort() ?? []);
   const qKey = listOptions?.q ?? "";
   const alliedProfessionKey = listOptions?.alliedProfessionKey ?? "";
+  const taxonomyKey = JSON.stringify(listOptions?.taxonomySlugsIn?.slice().sort() ?? []);
   return unstable_cache(
     async () => {
       const r = await getPathwayLessonsPageImpl(pathwayId, page, pageSize, marketingLocale, listOptions);
@@ -1065,6 +1101,7 @@ async function getPathwayLessonsPageWithDataCache(
       topicKey,
       qKey,
       alliedProfessionKey,
+      taxonomyKey,
     ],
     { revalidate: PATHWAY_LESSON_PUBLIC_REVALIDATE_SECONDS, tags: [cacheTagPathwayLessonsHub(pathwayId)] },
   )();

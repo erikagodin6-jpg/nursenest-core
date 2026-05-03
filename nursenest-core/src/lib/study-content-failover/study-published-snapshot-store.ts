@@ -72,8 +72,9 @@ export function stableListOptsKey(listOpts: MarketingHubLessonsListOptions | und
   if (!listOpts) return "all";
   const q = (listOpts.q ?? "").trim().toLowerCase();
   const topics = [...(listOpts.topicSlugsIn ?? [])].map((s) => s.trim().toLowerCase()).filter(Boolean).sort();
+  const taxonomy = [...(listOpts.taxonomySlugsIn ?? [])].map((s) => s.trim().toLowerCase()).filter(Boolean).sort();
   const alliedProfessionKey = (listOpts.alliedProfessionKey ?? "").trim().toLowerCase();
-  const raw = JSON.stringify({ q, topics, alliedProfessionKey });
+  const raw = JSON.stringify({ q, topics, taxonomy, alliedProfessionKey });
   if (raw.length <= 64) return raw.replace(/[^a-z0-9_-]+/gi, "_").slice(0, 64) || "all";
   return createHash("sha256").update(raw).digest("hex").slice(0, 24);
 }

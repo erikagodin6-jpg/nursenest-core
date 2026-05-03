@@ -20,6 +20,13 @@ test("stableListOptsKey distinguishes allied profession filter", () => {
   );
 });
 
+test("stableListOptsKey distinguishes allied taxonomy drill", () => {
+  assert.notEqual(
+    stableListOptsKey({ alliedProfessionKey: "pta" }),
+    stableListOptsKey({ alliedProfessionKey: "pta", taxonomySlugsIn: ["therapeutic-exercise"] }),
+  );
+});
+
 test("readStudyPublishedSnapshotFile returns envelope from disk", async () => {
   const dir = await mkdtemp(path.join(tmpdir(), "nn-study-snap-"));
   const prev = process.env.STUDY_PUBLISHED_SNAPSHOT_DIR;

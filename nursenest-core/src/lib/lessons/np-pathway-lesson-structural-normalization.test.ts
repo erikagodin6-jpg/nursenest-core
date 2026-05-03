@@ -13,6 +13,7 @@ import {
 import {
   evaluatePathwayLessonStructuralGate,
   lessonSectionsHaveMeaningfulClinicalContent,
+  lessonSectionsHaveMeaningfulClinicalContentLegacy,
 } from "@/lib/lessons/pathway-lesson-premium";
 import { categorizeNpStructuralIssue } from "@/lib/lessons/np-pathway-lesson-structural-normalization";
 
@@ -35,7 +36,16 @@ describe("NP premium structural completion", () => {
     const rec = normalizeLesson(raw, "ca-np-cnple");
     const gate = evaluatePathwayLessonStructuralGate(rec);
     assert.equal(gate.publicComplete, true, gate.issues.join(" | "));
-    assert.equal(lessonSectionsHaveMeaningfulClinicalContent(rec.sections), true);
+    assert.equal(
+      lessonSectionsHaveMeaningfulClinicalContentLegacy(rec.sections),
+      true,
+      "legacy meaningful baseline for NP hypertension row",
+    );
+    assert.equal(
+      lessonSectionsHaveMeaningfulClinicalContent(rec.sections),
+      true,
+      "upgraded meaningful-clinical pillars for NP hypertension row",
+    );
   });
 
   it("makes a previously failing US FNP coronary row publicComplete", () => {
@@ -53,7 +63,8 @@ describe("NP premium structural completion", () => {
     "raises NP publicComplete coverage to the expansion target (catalog merge)",
     { timeout: 360_000 },
     () => {
-      let publicCompleteMeaningful = 0;
+      let publicCompleteMeaningfulNew = 0;
+      let publicCompleteMeaningfulLegacy = 0;
       let structuralFailures = 0;
       const issueTally = new Map<string, number>();
 
@@ -66,8 +77,11 @@ describe("NP premium structural completion", () => {
             for (const iss of gate.issues) issueTally.set(iss, (issueTally.get(iss) ?? 0) + 1);
             continue;
           }
+          if (lessonSectionsHaveMeaningfulClinicalContentLegacy(lesson.sections)) {
+            publicCompleteMeaningfulLegacy += 1;
+          }
           if (lessonSectionsHaveMeaningfulClinicalContent(lesson.sections)) {
-            publicCompleteMeaningful += 1;
+            publicCompleteMeaningfulNew += 1;
           }
         }
       }
@@ -75,8 +89,12 @@ describe("NP premium structural completion", () => {
       const topIssues = [...issueTally.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5);
 
       assert.ok(
-        publicCompleteMeaningful >= 700,
-        `expected >=700 publicComplete+meaningful NP lessons, got ${publicCompleteMeaningful}; structuralFailures=${structuralFailures}; topIssues=${JSON.stringify(topIssues)}`,
+        publicCompleteMeaningfulLegacy >= 700,
+        `expected >=700 publicComplete+legacy-meaningful NP lessons, got ${publicCompleteMeaningfulLegacy}; structuralFailures=${structuralFailures}; topIssues=${JSON.stringify(topIssues)}`,
+      );
+      assert.ok(
+        publicCompleteMeaningfulNew >= 1,
+        `expected at least one publicComplete+upgraded-meaningful NP lesson for smoke coverage, got ${publicCompleteMeaningfulNew}; legacy=${publicCompleteMeaningfulLegacy}; delta=${publicCompleteMeaningfulNew - publicCompleteMeaningfulLegacy}`,
       );
       assert.ok(
         structuralFailures <= 50,

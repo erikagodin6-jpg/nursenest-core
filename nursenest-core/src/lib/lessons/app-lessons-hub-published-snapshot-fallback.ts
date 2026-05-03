@@ -1,4 +1,5 @@
 import type { MarketingHubLessonsListOptions } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
+import { normalizeAlliedTaxonomySlugForProfession } from "@/lib/allied/allied-profession-taxonomy";
 import type { PathwayLessonsPageResult } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import type { StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failover/study-published-snapshot-types";
@@ -11,15 +12,22 @@ export function appLessonsHubListOptsForSnapshot(args: {
   qEffective: string | null;
   topicSlugFilter: string | null;
   alliedProfessionKey?: string | null;
+  /** Must match marketing hub `alliedTaxonomy` when snapshot parity is required. */
+  alliedTaxonomyFilter?: string | null;
 }): MarketingHubLessonsListOptions | undefined {
   const q = args.qEffective?.trim();
   const ts = args.topicSlugFilter?.trim().toLowerCase();
   const ap = args.alliedProfessionKey?.trim().toLowerCase();
+  const taxNorm =
+    ap && args.alliedTaxonomyFilter?.trim()
+      ? normalizeAlliedTaxonomySlugForProfession(ap, args.alliedTaxonomyFilter)
+      : null;
   const allied = ap ? { alliedProfessionKey: ap } as const : {};
-  if (q && ts) return { q, topicSlugsIn: [ts], ...allied };
-  if (q) return { q, ...allied };
-  if (ts) return { topicSlugsIn: [ts], ...allied };
-  return ap ? { alliedProfessionKey: ap } : undefined;
+  const tax = taxNorm ? { taxonomySlugsIn: [taxNorm] } as const : {};
+  if (q && ts) return { q, topicSlugsIn: [ts], ...allied, ...tax };
+  if (q) return { q, ...allied, ...tax };
+  if (ts) return { topicSlugsIn: [ts], ...allied, ...tax };
+  return ap ? { alliedProfessionKey: ap, ...tax } : undefined;
 }
 
 export type AppLessonsHubSnapshotLessonsBlock = {
