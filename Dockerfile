@@ -38,7 +38,7 @@ ENV NODE_ENV=production \
   BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=4096 \
   NODE_OPTIONS=--max-old-space-size=4096
 
-RUN DATABASE_URL="postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public" npm run db:generate
+RUN npm run db:generate
 
 RUN rm -rf .next node_modules/.cache \
   && npm run heroku-postbuild \

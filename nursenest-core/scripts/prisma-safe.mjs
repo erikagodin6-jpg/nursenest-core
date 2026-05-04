@@ -15,6 +15,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(__dirname, "..");
 
 const COMMANDS = new Set(["status", "deploy", "generate", "check-schema"]);
+const PRISMA_CODEGEN_DATABASE_URL = "postgresql://prisma:prisma@127.0.0.1:65432/prisma_codegen?schema=public";
 
 function usage() {
   console.error(`Usage: node scripts/prisma-safe.mjs <status|deploy|generate|check-schema>
@@ -45,6 +46,15 @@ function runPrisma(args) {
   return result.status === null ? 1 : result.status;
 }
 
+function ensureCodegenDatabaseUrls() {
+  if (!process.env.DATABASE_URL?.trim()) {
+    process.env.DATABASE_URL = PRISMA_CODEGEN_DATABASE_URL;
+  }
+  if (!process.env.DIRECT_URL?.trim()) {
+    process.env.DIRECT_URL = process.env.DATABASE_URL;
+  }
+}
+
 async function main() {
   const command = process.argv[2];
   if (!COMMANDS.has(command)) {
@@ -53,7 +63,10 @@ async function main() {
   }
 
   try {
-    loadRuntimeEnv({ purpose: `prisma-safe:${command}` });
+    loadRuntimeEnv({ purpose: `prisma-safe:${command}`, validate: command !== "generate" });
+    if (command === "generate") {
+      ensureCodegenDatabaseUrls();
+    }
   } catch (error) {
     if (isRuntimeEnvError(error)) {
       console.error(`[prisma-safe] ${error.message}`);
