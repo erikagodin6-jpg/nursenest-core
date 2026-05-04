@@ -53,7 +53,12 @@ async function main() {
   }
 
   try {
-    loadRuntimeEnv({ purpose: `prisma-safe:${command}` });
+    loadRuntimeEnv({
+      purpose: `prisma-safe:${command}`,
+      // Prisma client generation is an install/build-time step and does not
+      // need a live database URL; migration/schema commands still validate it.
+      validate: command !== "generate",
+    });
   } catch (error) {
     if (isRuntimeEnvError(error)) {
       console.error(`[prisma-safe] ${error.message}`);
