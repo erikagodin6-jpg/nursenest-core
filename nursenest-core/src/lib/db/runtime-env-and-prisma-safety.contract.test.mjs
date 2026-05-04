@@ -128,6 +128,15 @@ describe("allied audit Prisma error handling", () => {
 });
 
 describe("package Prisma safety scripts", () => {
+  it("allows Prisma client generation without database credentials", () =>
+    withCleanDbEnv(() =>
+      withTempEnv({}, (envRoot) => {
+        const telemetry = loadRuntimeEnv({ envRoot, quiet: true, validate: false });
+        assert.equal(telemetry.databaseUrlPresent, false);
+        assert.equal(telemetry.directUrlPresent, false);
+      }),
+    ));
+
   it("nursenest-core package exposes safe Prisma scripts and no raw npx prisma commands", () => {
     const pkg = JSON.parse(readFileSync(resolve("package.json"), "utf8"));
     assert.equal(pkg.scripts["db:migrate:status:safe"], "node scripts/prisma-safe.mjs status");
