@@ -1,6 +1,6 @@
 import "server-only";
 import type Stripe from "stripe";
-import { Prisma, SubscriptionStatus } from "@prisma/client";
+import { Prisma, SubscriptionStatus, type TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
@@ -35,6 +35,10 @@ import {
   scheduleOwnerPaidSubscriptionInvoicePaymentSucceededNotification,
 } from "@/lib/stripe/subscription-owner-notify";
 import {
+  adminPaidSubscriptionSmsInputFromSubscription,
+  sendAdminPaidSubscriptionSms,
+} from "@/lib/notifications/admin-paid-subscription-sms";
+import {
   persistStripeSubscriptionMirrorForUser,
   resolveUserIdForOrphanStripeSubscription,
 } from "@/lib/subscriptions/stripe-subscription-reconcile";
@@ -44,6 +48,48 @@ type LifecycleData = ReturnType<typeof billingLifecycleFields>;
 export type ApplyStripeWebhookContext = {
   correlation?: string;
 };
+
+async function resolveStripeCustomerEmail(stripe: Stripe, customerId: string | null | undefined): Promise<string | null> {
+  const id = customerId?.trim();
+  if (!id) return null;
+  try {
+    const customer = await stripe.customers.retrieve(id);
+    if (customer.deleted || !("email" in customer)) return null;
+    return typeof customer.email === "string" && customer.email.trim() ? customer.email.trim() : null;
+  } catch {
+    return null;
+  }
+}
+
+async function notifyAdminPaidSubscriptionSms(args: {
+  stripe: Stripe;
+  event: Stripe.Event;
+  userId: string | null | undefined;
+  email: string | null | undefined;
+  customerId: string | null | undefined;
+  subscription: Stripe.Subscription | null | undefined;
+  planName?: string | null;
+  planTier?: TierCode | null;
+}): Promise<void> {
+  try {
+    const input = adminPaidSubscriptionSmsInputFromSubscription(args);
+    if (!input) return;
+    const result = await sendAdminPaidSubscriptionSms(input);
+    if (result.status === "failed") {
+      safeServerLog("stripe_webhook", "admin_paid_subscription_sms_failed_non_blocking", {
+        eventIdPrefix: args.event.id.slice(0, 12),
+        reason: result.reason.slice(0, 160),
+        severity: "warning",
+      });
+    }
+  } catch (e) {
+    safeServerLog("stripe_webhook", "admin_paid_subscription_sms_exception_non_blocking", {
+      eventIdPrefix: args.event.id.slice(0, 12),
+      reason: e instanceof Error ? e.message.slice(0, 160) : "unknown",
+      severity: "warning",
+    });
+  }
+}
 
 /**
  * **Source of truth (billing state)**
@@ -120,6 +166,7 @@ async function applyCustomerSubscriptionUpsert(
       planTier: true,
       planCountry: true,
       stripeCustomerId: true,
+      user: { select: { email: true } },
     },
   });
   const priceId = firstSubscriptionPriceId(sub);
@@ -170,6 +217,7 @@ async function applyCustomerSubscriptionUpsert(
         planTier: true,
         planCountry: true,
         stripeCustomerId: true,
+        user: { select: { email: true } },
       },
     });
     if (!fresh) return;
@@ -206,6 +254,19 @@ async function applyCustomerSubscriptionUpsert(
       source: "webhook",
       stripeEventType,
       stripeEventIdPrefix: eventIdPrefix,
+    });
+    const customerIdFromFresh =
+      fresh.stripeCustomerId ??
+      (typeof sub.customer === "string" ? sub.customer : sub.customer && "id" in sub.customer ? sub.customer.id : null);
+    await notifyAdminPaidSubscriptionSms({
+      stripe: await getStripeClientForNotification(),
+      event: { id: "", type: stripeEventType, created: Math.floor(Date.now() / 1000) } as Stripe.Event,
+      userId: fresh.userId,
+      email: fresh.user.email ?? (await resolveStripeCustomerEmail(await getStripeClientForNotification(), customerIdFromFresh)),
+      customerId: customerIdFromFresh,
+      subscription: sub,
+      planName: fresh.planTier != null ? String(fresh.planTier) : null,
+      planTier: fresh.planTier,
     });
     return;
   }
@@ -527,6 +588,23 @@ export async function applyStripeWebhookEvent(
         planCountryLabel: plan?.country != null ? String(plan.country) : null,
         billingRegionSlug: billingRegionMeta,
         correlation,
+      });
+
+      const checkoutEmail =
+        session.customer_email ??
+        (session.customer_details && typeof session.customer_details === "object"
+          ? (session.customer_details as { email?: string | null }).email
+          : null) ??
+        (customerId ? await resolveStripeCustomerEmail(stripe, customerId) : null);
+      await notifyAdminPaidSubscriptionSms({
+        stripe,
+        event,
+        userId,
+        email: checkoutEmail,
+        customerId,
+        subscription: stripeSubscription,
+        planName: plan?.tier != null ? String(plan.tier) : null,
+        planTier: plan?.tier,
       });
     }
     productEvent("stripe_webhook_ok", { eventType: event.type });
