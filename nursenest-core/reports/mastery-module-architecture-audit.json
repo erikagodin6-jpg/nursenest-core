@@ -1,0 +1,319 @@
+{
+  "generatedAt": "2026-05-04T21:41:11.398Z",
+  "pass": true,
+  "summary": {
+    "modulesRegistered": 22,
+    "sharedPrismaModelsPresent": true,
+    "hiddenModules": 22,
+    "publicModules": 0,
+    "exposureIssues": 0,
+    "catPracticeMasteryQuestionLeakage": false,
+    "mediaImportIssues": false,
+    "adminPaginationPresent": true
+  },
+  "modules": [
+    {
+      "id": "ecg-mastery",
+      "slug": "ecg",
+      "title": "ECG Mastery",
+      "route": "/modules/ecg",
+      "moduleType": "ecg",
+      "professionKeys": [
+        "RN",
+        "NP"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ECG_MASTERY_PAID",
+      "issues": []
+    },
+    {
+      "id": "lab-values-basics",
+      "slug": "basics",
+      "title": "Lab Values Basics",
+      "route": "/modules/lab-values/basics",
+      "moduleType": "lab-values",
+      "professionKeys": [],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "LAB_VALUES_BASICS_FREE",
+      "issues": []
+    },
+    {
+      "id": "lab-values-basic",
+      "slug": "basic",
+      "title": "Lab Values Basic Mastery",
+      "route": "/modules/lab-values/basic",
+      "moduleType": "lab-values",
+      "professionKeys": [],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "LAB_VALUES_MASTERY_PAID",
+      "issues": []
+    },
+    {
+      "id": "lab-values-advanced",
+      "slug": "advanced",
+      "title": "Lab Values Advanced Mastery",
+      "route": "/modules/lab-values/advanced",
+      "moduleType": "lab-values",
+      "professionKeys": [],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "LAB_VALUES_MASTERY_PAID",
+      "issues": []
+    },
+    {
+      "id": "respiratory-abg-mastery",
+      "slug": "abg",
+      "title": "ABG Interpretation Mastery",
+      "route": "/allied/respiratory-therapy/modules/abg",
+      "moduleType": "abg",
+      "professionKeys": [
+        "respiratory"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_ABG_MASTERY_PAID",
+      "issues": []
+    },
+    {
+      "id": "respiratory-ventilator-basics",
+      "slug": "ventilator-basics",
+      "title": "Ventilator Basics",
+      "route": "/allied/respiratory-therapy/modules/ventilator-basics",
+      "moduleType": "ventilator-management",
+      "professionKeys": [
+        "respiratory"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_VENTILATOR_BASICS_PAID",
+      "issues": []
+    },
+    {
+      "id": "respiratory-ventilator-management",
+      "slug": "ventilator-management",
+      "title": "Ventilator Management",
+      "route": "/allied/respiratory-therapy/modules/ventilator-management",
+      "moduleType": "ventilator-management",
+      "professionKeys": [
+        "respiratory"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_VENTILATOR_MANAGEMENT_PAID",
+      "issues": []
+    },
+    {
+      "id": "respiratory-paramedic-oxygen-delivery",
+      "slug": "oxygen-delivery",
+      "title": "Oxygen Delivery Systems",
+      "route": "/allied/respiratory-therapy/modules/oxygen-delivery",
+      "moduleType": "oxygen-delivery",
+      "professionKeys": [
+        "respiratory"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_OXYGEN_DELIVERY_PAID",
+      "issues": []
+    },
+    {
+      "id": "paramedic-oxygen-delivery",
+      "slug": "oxygen-delivery",
+      "title": "Oxygen Delivery Systems",
+      "route": "/allied/paramedic/modules/oxygen-delivery",
+      "moduleType": "oxygen-delivery",
+      "professionKeys": [
+        "paramedic"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_OXYGEN_DELIVERY_PAID",
+      "issues": []
+    },
+    {
+      "id": "respiratory-paramedic-respiratory-distress",
+      "slug": "respiratory-distress",
+      "title": "Respiratory Distress Recognition",
+      "route": "/allied/respiratory-therapy/modules/respiratory-distress",
+      "moduleType": "respiratory-distress",
+      "professionKeys": [
+        "respiratory"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_RESPIRATORY_DISTRESS_PAID",
+      "issues": []
+    },
+    {
+      "id": "paramedic-respiratory-distress",
+      "slug": "respiratory-distress",
+      "title": "Respiratory Distress Recognition",
+      "route": "/allied/paramedic/modules/respiratory-distress",
+      "moduleType": "respiratory-distress",
+      "professionKeys": [
+        "paramedic"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_RESPIRATORY_DISTRESS_PAID",
+      "issues": []
+    },
+    {
+      "id": "paramedic-trauma-triage",
+      "slug": "trauma-triage",
+      "title": "Trauma & Triage",
+      "route": "/allied/paramedic/modules/trauma-triage",
+      "moduleType": "trauma-triage",
+      "professionKeys": [
+        "paramedic"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_TRAUMA_TRIAGE_PAID",
+      "issues": []
+    },
+    {
+      "id": "pharmacy-tech-iv-infusion-safety",
+      "slug": "iv-infusion-safety",
+      "title": "IV Therapy + Infusion Safety",
+      "route": "/allied/pharmacy-tech/modules/iv-infusion-safety",
+      "moduleType": "iv-infusion-safety",
+      "professionKeys": [
+        "pharmacy-tech"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_IV_INFUSION_SAFETY_PAID",
+      "issues": []
+    },
+    {
+      "id": "paramedic-iv-infusion-safety",
+      "slug": "iv-infusion-safety",
+      "title": "IV Therapy + Infusion Safety",
+      "route": "/allied/paramedic/modules/iv-infusion-safety",
+      "moduleType": "iv-infusion-safety",
+      "professionKeys": [
+        "paramedic"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_IV_INFUSION_SAFETY_PAID",
+      "issues": []
+    },
+    {
+      "id": "mlt-advanced-lab-interpretation",
+      "slug": "advanced-lab-interpretation",
+      "title": "Advanced Lab Interpretation",
+      "route": "/allied/medical-lab-technology/modules/advanced-lab-interpretation",
+      "moduleType": "advanced-lab-interpretation",
+      "professionKeys": [
+        "mlt"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_ADVANCED_LAB_INTERPRETATION_PAID",
+      "issues": []
+    },
+    {
+      "id": "pharmacy-tech-pharmacology-patterns",
+      "slug": "pharmacology-patterns",
+      "title": "Pharmacology Pattern Recognition",
+      "route": "/allied/pharmacy-tech/modules/pharmacology-patterns",
+      "moduleType": "pharmacy",
+      "professionKeys": [
+        "pharmacy-tech"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_PHARMACOLOGY_PATTERNS_PAID",
+      "issues": []
+    },
+    {
+      "id": "pharmacy-tech-dosage-calculations",
+      "slug": "dosage-calculations",
+      "title": "Dosage Calculations",
+      "route": "/allied/pharmacy-tech/modules/dosage-calculations",
+      "moduleType": "pharmacy",
+      "professionKeys": [
+        "pharmacy-tech"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_DOSAGE_CALCULATIONS_PAID",
+      "issues": []
+    },
+    {
+      "id": "ota-adl-functional-assessment",
+      "slug": "adl-functional-assessment",
+      "title": "ADL + Functional Assessment Mastery",
+      "route": "/allied/ota/modules/adl-functional-assessment",
+      "moduleType": "functional-assessment",
+      "professionKeys": [
+        "ota"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_ADL_FUNCTIONAL_ASSESSMENT_PAID",
+      "issues": []
+    },
+    {
+      "id": "pta-msk-rehab-assessment",
+      "slug": "msk-rehab-assessment",
+      "title": "Musculoskeletal Rehab + Movement Assessment",
+      "route": "/allied/pta/modules/msk-rehab-assessment",
+      "moduleType": "msk-rehab",
+      "professionKeys": [
+        "pta"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_MSK_REHAB_ASSESSMENT_PAID",
+      "issues": []
+    },
+    {
+      "id": "imaging-image-recognition",
+      "slug": "image-recognition",
+      "title": "Image Recognition Basics",
+      "route": "/allied/imaging/modules/image-recognition",
+      "moduleType": "image-recognition",
+      "professionKeys": [
+        "imaging"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_IMAGE_RECOGNITION_PAID",
+      "issues": []
+    },
+    {
+      "id": "sonography-ecg-cardiac-patterns",
+      "slug": "ecg-cardiac-patterns",
+      "title": "ECG + Cardiac Pattern Recognition",
+      "route": "/allied/sonography/modules/ecg-cardiac-patterns",
+      "moduleType": "cardiac-pattern-recognition",
+      "professionKeys": [
+        "sonography"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_CARDIAC_PATTERN_RECOGNITION_PAID",
+      "issues": []
+    },
+    {
+      "id": "paramedic-emergency-pattern-recognition",
+      "slug": "emergency-pattern-recognition",
+      "title": "Emergency Pattern Recognition",
+      "route": "/allied/paramedic/modules/emergency-pattern-recognition",
+      "moduleType": "emergency-pattern-recognition",
+      "professionKeys": [
+        "paramedic"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_EMERGENCY_PATTERN_RECOGNITION_PAID",
+      "issues": []
+    }
+  ]
+}

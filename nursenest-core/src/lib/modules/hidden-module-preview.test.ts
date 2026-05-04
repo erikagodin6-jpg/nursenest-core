@@ -79,6 +79,33 @@ test("admin preview access helper fails closed for signed-out and non-admin user
   assert.deepEqual(admin, { ok: true, mode: "admin-preview", userId: "admin-1" });
 });
 
+test("required hidden module learner routes are covered by 404/admin-preview guards", () => {
+  const guardedRoutes = [
+    "src/app/modules/lab-values/page.tsx",
+    "src/app/modules/lab-values/basics/page.tsx",
+    "src/app/modules/lab-values/basic/page.tsx",
+    "src/app/modules/lab-values/advanced/page.tsx",
+    "src/app/modules/ecg/page.tsx",
+    "src/app/modules/ecg/basic/page.tsx",
+    "src/app/modules/ecg/advanced/page.tsx",
+  ];
+  for (const route of guardedRoutes) {
+    assert.equal(existsSync(join(process.cwd(), route)), true, route);
+  }
+
+  const labLayout = readFileSync(join(process.cwd(), "src/app/modules/lab-values/layout.tsx"), "utf8");
+  const ecgLayout = readFileSync(join(process.cwd(), "src/app/modules/ecg/layout.tsx"), "utf8");
+  const labAccess = readFileSync(join(process.cwd(), "src/lib/lab-values/lab-values-module.server.ts"), "utf8");
+  const ecgAccess = readFileSync(join(process.cwd(), "src/lib/ecg-module/ecg-module.server.ts"), "utf8");
+
+  assert.match(labLayout, /requireLabValuesModuleAccess/);
+  assert.match(ecgLayout, /requireEcgModuleAccess/);
+  assert.match(labAccess, /notFound\(\)/);
+  assert.match(ecgAccess, /notFound\(\)/);
+  assert.match(labAccess, /getAdminModulePreviewAccess/);
+  assert.match(ecgAccess, /getAdminModulePreviewAccess/);
+});
+
 test("hidden module routes fail closed and emit noindex nofollow", () => {
   const ecgLayouts = [
     readFileSync(join(process.cwd(), "src/app/modules/ecg/layout.tsx"), "utf8"),
@@ -110,6 +137,18 @@ test("admin preview pages exist for hidden ECG and lab values modules", () => {
     "src/app/modules/ecg/advanced/page.tsx",
   ]) {
     assert.equal(existsSync(join(process.cwd(), route)), true, route);
+  }
+});
+
+test("hidden module admin preview pages are admin guarded", () => {
+  for (const route of [
+    "src/app/(admin)/admin/modules/page.tsx",
+    "src/app/(admin)/admin/modules/ecg/page.tsx",
+    "src/app/(admin)/admin/modules/lab-values/page.tsx",
+  ]) {
+    const source = readFileSync(join(process.cwd(), route), "utf8");
+    assert.match(source, /requireAdmin/);
+    assert.match(source, /Not visible to public users|Hidden module previews|ECG Module/);
   }
 });
 

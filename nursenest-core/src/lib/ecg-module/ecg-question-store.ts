@@ -10,6 +10,7 @@ import {
   type EcgMode,
   type EcgRouteKind,
 } from "@/lib/ecg-module/ecg-module-config";
+import type { EcgWaveformConfig } from "@/lib/ecg-module/ecg-waveform-generator";
 
 type EcgAccess = {
   userId: string;
@@ -22,6 +23,8 @@ type EcgOption = { id: string; text: string };
 export type EcgQuestionListItem = {
   id: string;
   videoUrl: string;
+  mediaType: string;
+  mediaConfig: EcgWaveformConfig | null;
   thumbnailUrl: string | null;
   durationSeconds: number | null;
   questionText: string;
@@ -163,6 +166,8 @@ export async function listEcgQuestionsForAccess(
     select: {
       id: true,
       videoUrl: true,
+      mediaType: true,
+      mediaConfig: true,
       thumbnailUrl: true,
       durationSeconds: true,
       questionText: true,
@@ -184,6 +189,10 @@ export async function listEcgQuestionsForAccess(
     return {
       id: row.id,
       videoUrl: row.videoUrl,
+      mediaType: row.mediaType,
+      mediaConfig: row.mediaConfig && typeof row.mediaConfig === "object" && !Array.isArray(row.mediaConfig)
+        ? (row.mediaConfig as unknown as EcgWaveformConfig)
+        : null,
       thumbnailUrl: row.thumbnailUrl,
       durationSeconds: row.durationSeconds,
       questionText: row.questionText,

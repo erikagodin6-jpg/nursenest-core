@@ -67,3 +67,37 @@ test("hidden ECG routes are admin-preview-only and emit noindex nofollow", () =>
   assert.match(access, /auth\.ecg_module_preview/);
   assert.match(access, /notFound\(\)/);
 });
+
+test("ECG module publish route is admin-only and refuses failed readiness gates", () => {
+  const src = read("src/app/api/admin/modules/ecg/publish/route.ts");
+  assert.match(src, /requireAdmin/);
+  assert.match(src, /assertEcgModuleCanPublish/);
+  assert.match(src, /ecg_publish_blocked/);
+  assert.match(src, /setEcgModuleStatus\("published"\)/);
+});
+
+test("ECG readiness enforces minimum content, generation loops, deduped inserts, and clinical strip gates", () => {
+  const readiness = read("src/lib/ecg-module/ecg-module-readiness.ts");
+  const generation = read("src/lib/ecg-module/ecg-question-generation.ts");
+  const dedup = read("src/lib/ecg-module/ecg-question-dedup.ts");
+  const validation = read("src/lib/ecg-module/ecg-strip-clinical-validation.ts");
+  assert.match(readiness, /totalQuestions:\s*300/);
+  assert.match(readiness, /for \(let loop = 0; loop < 5/);
+  assert.match(readiness, /remaining = 100/);
+  assert.match(generation, /filterDuplicateGeneratedQuestions/);
+  assert.match(generation, /createMany/);
+  assert.match(generation, /skipDuplicates:\s*true/);
+  assert.match(dedup, /normalizeQuestionText/);
+  assert.match(validation, /Atrial fibrillation cannot be regular/);
+  assert.match(validation, /requires manual staff review/);
+});
+
+test("ECG deterministic strip media replaces AI image source of truth", () => {
+  const media = read("src/components/study/ecg-video-question-media.tsx");
+  const client = read("src/components/ecg-module/ecg-module-client.tsx");
+  const draft = read("src/lib/ecg-video-quiz/admin-ecg-video-question-draft.ts");
+  assert.match(media, /EcgLiveStrip/);
+  assert.match(client, /EcgLiveStrip/);
+  assert.match(draft, /ecgVideo/);
+  assert.doesNotMatch(read("src/lib/ecg-module/ecg-waveform-generator.ts"), /prompt|image generation|dall-e|gpt-image/i);
+});

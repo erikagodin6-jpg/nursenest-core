@@ -663,6 +663,11 @@ export function getAlliedProfessionByProfessionKey(key: string): AlliedProfessio
   return ALLIED_PROFESSIONS.find((p) => p.professionKey === k);
 }
 
+const ALLIED_ROUTE_PROFESSION_KEY_ALIASES: Record<string, string> = {
+  "medical-lab-technology": "mlt",
+  "respiratory-therapy": "respiratory",
+};
+
 export function isAlliedHeroExamPrepSlug(slug: string): boolean {
   return slug.endsWith("-exam-prep");
 }
@@ -674,7 +679,7 @@ export function resolveAlliedProfessionFromRouteSlug(slug: string): AlliedProfes
   const s = slug.trim();
   if (!s) return undefined;
   if (isAlliedHeroExamPrepSlug(s)) return getAlliedProfessionByHeroSegment(s);
-  return getAlliedProfessionByProfessionKey(s);
+  return getAlliedProfessionByProfessionKey(ALLIED_ROUTE_PROFESSION_KEY_ALIASES[s] ?? s);
 }
 
 export function getPathwayOrThrow(pathwayId: string): ExamPathwayDefinition | undefined {

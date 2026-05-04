@@ -108,6 +108,53 @@ export default async function AlliedMasteryModulePreviewPage({ params }: Props) 
         </ul>
       </section>
 
+      {module.visualQuestionSupport ? (
+        <section className="mt-8">
+          <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Visual question support</h2>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 text-sm">
+              <h3 className="font-semibold text-[var(--theme-heading-text)]">Question types</h3>
+              <ul className="mt-2 space-y-1 text-[var(--theme-muted-text)]">
+                {module.visualQuestionSupport.questionTypes.map((type) => (
+                  <li key={type}>{type.replaceAll("_", " ")}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 text-sm">
+              <h3 className="font-semibold text-[var(--theme-heading-text)]">Media fields</h3>
+              <ul className="mt-2 space-y-1 text-[var(--theme-muted-text)]">
+                <li>imageUrl</li>
+                <li>secondaryImageUrl optional</li>
+                <li>highlightOverlay optional</li>
+                {module.visualQuestionSupport.cardiacSupport ? (
+                  <>
+                    <li>videoUrl</li>
+                    <li>framePreviewImageUrl</li>
+                    <li>functionalInterpretationPrompt</li>
+                  </>
+                ) : null}
+              </ul>
+            </div>
+            <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 text-sm">
+              <h3 className="font-semibold text-[var(--theme-heading-text)]">Required question structure</h3>
+              <ul className="mt-2 space-y-1 text-[var(--theme-muted-text)]">
+                {module.visualQuestionSupport.requiredQuestionStructure.map((field) => (
+                  <li key={field}>{field}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 py-3 text-sm">
+              <h3 className="font-semibold text-[var(--theme-heading-text)]">Rapid drill mode</h3>
+              <ul className="mt-2 space-y-1 text-[var(--theme-muted-text)]">
+                <li>fast image recognition</li>
+                <li>minimal text</li>
+                <li>delayed rationale</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section className="mt-8">
         <h2 className="text-xl font-semibold text-[var(--theme-heading-text)]">Clinical action layer</h2>
         <ul className="mt-4 grid gap-3 sm:grid-cols-2">

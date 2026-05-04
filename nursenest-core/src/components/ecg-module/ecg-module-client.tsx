@@ -2,10 +2,15 @@
 
 import { useEffect, useState } from "react";
 import type { EcgLevel, EcgMode, EcgRouteKind } from "@/lib/ecg-module/ecg-module-config";
+import { EcgLiveStrip } from "@/components/study/ecg-live-strip";
+import { isEcgLiveStripMediaConfig } from "@/lib/ecg-module/ecg-strip-clinical-validation";
+import { ECG_LIVE_STRIP_MEDIA_TYPE } from "@/lib/ecg-video-quiz/ecg-video-question";
 
 type EcgQuestion = {
   id: string;
   videoUrl: string;
+  mediaType: string;
+  mediaConfig: unknown;
   thumbnailUrl: string | null;
   durationSeconds: number | null;
   questionText: string;
@@ -176,11 +181,18 @@ export function EcgQuestionList({
               <h2 className="text-base font-semibold text-[var(--semantic-text-primary)]">{item.questionText}</h2>
               <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">{item.rhythmTag}</p>
               <VideoPreview
-                videoUrl={item.videoUrl}
+                videoUrl={item.mediaType === ECG_LIVE_STRIP_MEDIA_TYPE ? "" : item.videoUrl}
                 thumbnailUrl={item.thumbnailUrl}
                 autoplay={kind === "video-drills"}
                 slow={level === "basic" && kind === "lessons"}
               />
+              {item.mediaType === ECG_LIVE_STRIP_MEDIA_TYPE && isEcgLiveStripMediaConfig(item.mediaConfig) ? (
+                <EcgLiveStrip
+                  className="mt-3"
+                  config={item.mediaConfig}
+                  mode={kind === "video-drills" ? "live" : "static"}
+                />
+              ) : null}
               {item.options.length > 0 ? (
                 <div className="mt-3 grid gap-2 sm:grid-cols-2">
                   {item.options.map((option) => (

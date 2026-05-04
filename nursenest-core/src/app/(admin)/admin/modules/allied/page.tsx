@@ -4,9 +4,18 @@ import { groupedAlliedMasteryModules } from "@/lib/allied/allied-mastery-modules
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminAlliedModulesPage() {
+const ADMIN_ALLIED_MODULES_PAGE_SIZE = 12;
+
+type Props = { searchParams?: Promise<{ page?: string }> };
+
+export default async function AdminAlliedModulesPage({ searchParams }: Props) {
   await requireAdmin();
   const groups = groupedAlliedMasteryModules();
+  const pageRaw = Number((await searchParams)?.page ?? "1");
+  const page = Number.isFinite(pageRaw) && pageRaw > 0 ? Math.floor(pageRaw) : 1;
+  const allCards = groups.flatMap((group) => group.modules.map((module) => ({ group, module })));
+  const totalPages = Math.max(1, Math.ceil(allCards.length / ADMIN_ALLIED_MODULES_PAGE_SIZE));
+  const visibleCards = allCards.slice((page - 1) * ADMIN_ALLIED_MODULES_PAGE_SIZE, page * ADMIN_ALLIED_MODULES_PAGE_SIZE);
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8" data-testid="admin-allied-mastery-modules">
@@ -21,17 +30,24 @@ export default async function AdminAlliedModulesPage() {
         </p>
       </header>
 
+      <div className="mt-8 rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 text-sm text-[var(--semantic-text-secondary)]">
+        Paginated admin preview: page {Math.min(page, totalPages)} of {totalPages}, {ADMIN_ALLIED_MODULES_PAGE_SIZE} modules per page.
+      </div>
+
       <div className="mt-8 space-y-8">
-        {groups.map((group) => (
+        {groups.map((group) => {
+          const modules = visibleCards.filter((card) => card.group.professionKey === group.professionKey).map((card) => card.module);
+          if (modules.length === 0) return null;
+          return (
           <section key={group.professionKey} className="space-y-3">
             <h2 className="text-xl font-semibold text-[var(--semantic-text-primary)]">{group.professionLabel}</h2>
-            {group.modules.length === 0 ? (
+            {modules.length === 0 ? (
               <p className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-4 text-sm text-[var(--semantic-text-secondary)]">
                 No hidden mastery modules registered yet.
               </p>
             ) : (
               <div className="grid gap-4 md:grid-cols-2">
-                {group.modules.map((module) => (
+                {modules.map((module) => (
                   <article
                     key={module.id}
                     className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]"
@@ -73,8 +89,14 @@ export default async function AdminAlliedModulesPage() {
               </div>
             )}
           </section>
-        ))}
+          );
+        })}
       </div>
+
+      <nav className="mt-8 flex flex-wrap gap-3" aria-label="Allied mastery module pages">
+        {page > 1 ? <Link href={`/admin/modules/allied?page=${page - 1}`} className="text-sm font-semibold underline">Previous</Link> : null}
+        {page < totalPages ? <Link href={`/admin/modules/allied?page=${page + 1}`} className="text-sm font-semibold underline">Next</Link> : null}
+      </nav>
     </main>
   );
 }

@@ -3,11 +3,14 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
+  ECG_LIVE_STRIP_MEDIA_TYPE,
   ecgQuestionTeachingVisible,
   parseEcgVideoExhibit,
   type EcgVideoQuestionMode,
   type EcgVideoQuestionPhase,
 } from "@/lib/ecg-video-quiz/ecg-video-question";
+import { EcgLiveStrip } from "@/components/study/ecg-live-strip";
+import { isEcgLiveStripMediaConfig } from "@/lib/ecg-module/ecg-strip-clinical-validation";
 
 export function EcgVideoQuestionMedia({
   exhibitData,
@@ -42,7 +45,13 @@ export function EcgVideoQuestionMedia({
         <p className="m-0 text-xs font-semibold text-[var(--semantic-text-muted)]">{exhibit.rhythmCategory}</p>
       </div>
 
-      {source && !failed ? (
+      {exhibit.mediaType === ECG_LIVE_STRIP_MEDIA_TYPE && isEcgLiveStripMediaConfig(exhibit.mediaConfig) ? (
+        <EcgLiveStrip
+          className="mt-3"
+          config={exhibit.mediaConfig}
+          mode={mode === "cat" ? "static" : "live"}
+        />
+      ) : source && !failed ? (
         <video
           className="mt-3 aspect-video w-full rounded-lg border border-[var(--semantic-border-soft)] bg-black object-contain"
           controls

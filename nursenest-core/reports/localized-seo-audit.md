@@ -1,6 +1,6 @@
 # Localized SEO Audit
 
-Generated: 2026-05-04T09:17:36.205Z
+Generated: 2026-05-04T20:27:34.155Z
 
 ## Summary
 

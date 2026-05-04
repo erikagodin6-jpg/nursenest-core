@@ -10,6 +10,7 @@ import {
   isEcgModuleEnabled,
   type EcgLevel,
 } from "@/lib/ecg-module/ecg-module-config";
+import { getEcgModuleStatus } from "@/lib/ecg-module/ecg-module-status";
 
 export type EcgModuleAccess =
   | { ok: true; mode: "public"; userId: string; tier: "RN" | "NP"; pathwayId: string | null; hasPremium: boolean }
@@ -24,10 +25,14 @@ async function getAdminPreviewAccess(): Promise<AdminModulePreviewAccess> {
 }
 
 export async function getCurrentEcgModuleAccess(): Promise<EcgModuleAccess> {
-  if (!isEcgModuleEnabled()) {
+  const [enabled, status] = [isEcgModuleEnabled(), await getEcgModuleStatus()];
+  if (!enabled || status !== "published") {
     const preview = await getAdminPreviewAccess();
     if (!preview.ok) {
-      return { ok: false, reason: preview.reason === "module-disabled" ? "disabled" : preview.reason === "not-admin" ? "not-admin" : "unauthorized" };
+      return {
+        ok: false,
+        reason: !enabled || status === "archived" ? "disabled" : preview.reason === "not-admin" ? "not-admin" : "unauthorized",
+      };
     }
     return {
       ok: true,

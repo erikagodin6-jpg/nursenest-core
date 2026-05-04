@@ -1,6 +1,11 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { ensureAlliedMasteryScaffolds, ALLIED_MASTERY_SCAFFOLDS_PATH } from "./generate-allied-mastery-scaffolds";
+import {
+  evaluateAlliedMasteryScaffold,
+  type AlliedMasteryScaffoldMap,
+} from "../src/lib/allied/allied-mastery-module-scaffolding";
 import {
   ALLIED_MASTERY_MODULES,
   ALLIED_MASTERY_PROFESSION_LABELS,
@@ -33,6 +38,17 @@ type ModuleAuditItem = {
   pricingExposure: boolean;
   navExposure: boolean;
   leakageCheck: "pass" | "fail";
+  scaffoldStatus: "complete" | "incomplete";
+  scaffoldMissing: string[];
+  scaffoldCounts: {
+    lessonOutlines: number;
+    quizPlaceholders: number;
+    caseScenarioTitles: number;
+    rapidDrillSets: number;
+    worksheetPlaceholders: number;
+    patternMapDefinitions: number;
+    visualQuestionPlaceholders: number;
+  };
   issues: string[];
 };
 
@@ -85,15 +101,27 @@ function exposureChecks(route: string, entitlementKey: string): ExposureCheck {
   };
 }
 
-function auditModules(): ModuleAuditItem[] {
+function readScaffoldMap(): AlliedMasteryScaffoldMap {
+  if (!existsSync(ALLIED_MASTERY_SCAFFOLDS_PATH)) return {};
+  const raw = readFileSync(ALLIED_MASTERY_SCAFFOLDS_PATH, "utf8").trim();
+  if (!raw) return {};
+  return JSON.parse(raw) as AlliedMasteryScaffoldMap;
+}
+
+function auditModules(scaffolds: AlliedMasteryScaffoldMap): ModuleAuditItem[] {
   const items: ModuleAuditItem[] = [];
   for (const group of groupedAlliedMasteryModules()) {
     for (const module of group.modules) {
       const exposure = exposureChecks(module.route, module.entitlementKey);
+      const scaffold = scaffolds[module.id];
+      const scaffoldCompleteness = evaluateAlliedMasteryScaffold(scaffold, module);
       const issues: string[] = [];
       if (module.isPublic) issues.push("module is public");
       if (!module.adminPreviewOnly) issues.push("module is not adminPreviewOnly");
       if (module.access !== "admin_preview_only") issues.push("module access is not admin_preview_only");
+      if (scaffoldCompleteness.status === "incomplete") {
+        issues.push(`module scaffold incomplete: ${scaffoldCompleteness.missing.join(", ")}`);
+      }
       if (exposure.sitemap) issues.push("route appears in sitemap source");
       if (exposure.localizedSeo) issues.push("route appears in localized SEO source/report");
       if (exposure.publicNav) issues.push("route appears in public navigation/marketing source");
@@ -118,6 +146,17 @@ function auditModules(): ModuleAuditItem[] {
         pricingExposure: exposure.pricing,
         navExposure: exposure.publicNav,
         leakageCheck: exposure.questionPoolLeakage ? "fail" : "pass",
+        scaffoldStatus: scaffoldCompleteness.status,
+        scaffoldMissing: scaffoldCompleteness.missing,
+        scaffoldCounts: {
+          lessonOutlines: scaffold?.lessonOutlines?.length ?? 0,
+          quizPlaceholders: scaffold?.quizPlaceholders?.length ?? 0,
+          caseScenarioTitles: scaffold?.caseScenarioTitles?.length ?? 0,
+          rapidDrillSets: scaffold?.rapidDrillSets?.length ?? 0,
+          worksheetPlaceholders: scaffold?.worksheetPlaceholders?.length ?? 0,
+          patternMapDefinitions: scaffold?.patternMapDefinitions?.length ?? 0,
+          visualQuestionPlaceholders: scaffold?.visualQuestionPlaceholders?.length ?? 0,
+        },
         issues,
       });
     }
@@ -125,7 +164,7 @@ function auditModules(): ModuleAuditItem[] {
   return items;
 }
 
-function markdownReport(items: ModuleAuditItem[]): string {
+function markdownReport(items: ModuleAuditItem[], generation: Awaited<ReturnType<typeof ensureAlliedMasteryScaffolds>>): string {
   const pass = items.every((item) => item.issues.length === 0);
   const lines: string[] = [
     "# Allied Mastery Modules Readiness",
@@ -140,7 +179,19 @@ function markdownReport(items: ModuleAuditItem[]): string {
     `- Modules configured: ${ALLIED_MASTERY_MODULES.length}`,
     `- Hidden modules: ${items.filter((item) => item.hiddenStatus === "hidden").length}`,
     `- Public modules: ${items.filter((item) => item.publicEnabled).length}`,
+    `- Complete scaffolds: ${items.filter((item) => item.scaffoldStatus === "complete").length}`,
+    `- Incomplete scaffolds: ${items.filter((item) => item.scaffoldStatus === "incomplete").length}`,
     `- Exposure issues: ${items.reduce((sum, item) => sum + item.issues.length, 0)}`,
+    "",
+    "## Scaffold Generation",
+    "",
+    `- Scaffold path: ${generation.path}`,
+    `- Modules checked: ${generation.modulesChecked}`,
+    `- Modules generated or completed this run: ${generation.modulesGenerated}`,
+    `- Modules complete after generation: ${generation.modulesCompleted}`,
+    `- Incomplete before generation: ${generation.incompleteBefore.length}`,
+    `- Incomplete after generation: ${generation.incompleteAfter.length}`,
+    `- Generated module IDs: ${generation.generatedModuleIds.length ? generation.generatedModuleIds.join(", ") : "None"}`,
     "",
     "## Modules",
     "",
@@ -154,6 +205,11 @@ function markdownReport(items: ModuleAuditItem[]): string {
     lines.push(`- Public enabled: ${item.publicEnabled}`);
     lines.push(`- Entitlement key: ${item.entitlementKey}`);
     lines.push(`- Content types: ${item.contentTypes.join(", ")}`);
+    lines.push(`- Scaffold status: ${item.scaffoldStatus}`);
+    lines.push(
+      `- Scaffold counts: ${item.scaffoldCounts.lessonOutlines} lesson outlines, ${item.scaffoldCounts.quizPlaceholders} quiz placeholders, ${item.scaffoldCounts.caseScenarioTitles} case titles, ${item.scaffoldCounts.rapidDrillSets} rapid drill sets, ${item.scaffoldCounts.worksheetPlaceholders} worksheet placeholders, ${item.scaffoldCounts.patternMapDefinitions} pattern maps, ${item.scaffoldCounts.visualQuestionPlaceholders} visual question placeholders`,
+    );
+    lines.push(`- Scaffold missing: ${item.scaffoldMissing.length ? item.scaffoldMissing.join(", ") : "None"}`);
     lines.push(`- Sitemap exposure: ${item.sitemapExposure}`);
     lines.push(`- Localized SEO exposure: ${item.seoExposure}`);
     lines.push(`- Pricing exposure: ${item.pricingExposure}`);
@@ -167,16 +223,21 @@ function markdownReport(items: ModuleAuditItem[]): string {
 }
 
 async function main() {
-  const items = auditModules();
+  const generation = await ensureAlliedMasteryScaffolds();
+  const scaffolds = readScaffoldMap();
+  const items = auditModules(scaffolds);
   const pass = items.every((item) => item.issues.length === 0);
   const report = {
     generatedAt: new Date().toISOString(),
     pass,
+    scaffoldGeneration: generation,
     summary: {
       occupationsConfigured: Object.keys(ALLIED_MASTERY_PROFESSION_LABELS).length,
       modulesConfigured: ALLIED_MASTERY_MODULES.length,
       hiddenModules: items.filter((item) => item.hiddenStatus === "hidden").length,
       publicModules: items.filter((item) => item.publicEnabled).length,
+      completeScaffolds: items.filter((item) => item.scaffoldStatus === "complete").length,
+      incompleteScaffolds: items.filter((item) => item.scaffoldStatus === "incomplete").length,
       exposureIssues: items.reduce((sum, item) => sum + item.issues.length, 0),
     },
     modules: items,
@@ -184,7 +245,7 @@ async function main() {
 
   await mkdir("reports", { recursive: true });
   await writeFile("reports/allied-mastery-modules-readiness.json", `${JSON.stringify(report, null, 2)}\n`);
-  await writeFile("reports/allied-mastery-modules-readiness.md", markdownReport(items));
+  await writeFile("reports/allied-mastery-modules-readiness.md", markdownReport(items, generation));
 
   if (!pass) {
     process.exitCode = 1;

@@ -300,6 +300,8 @@ model EcgVideoQuestion {
   videoUrl         String   @map("video_url")
   thumbnailUrl     String?  @map("thumbnail_url")
   durationSeconds  Int?     @map("duration_seconds")
+  mediaType        String   @default("video_url") @map("media_type") @db.VarChar(32)
+  mediaConfig      Json?    @map("media_config")
   questionText     String   @map("question_text")
   answerOptions    Json     @default("[]") @map("answer_options")
   correctAnswerId  String   @map("correct_answer_id") @db.VarChar(64)
@@ -311,6 +313,11 @@ model EcgVideoQuestion {
   isPremium        Boolean  @default(true) @map("is_premium")
   level            String   @db.VarChar(16)
   mode             String   @db.VarChar(16)
+  topicTags        String[] @default([]) @map("topic_tags")
+  lessonLinkCount  Int      @default(0) @map("lesson_link_count")
+  medicalQaStatus  String   @default("pending") @map("medical_qa_status") @db.VarChar(32)
+  manualReviewedAt DateTime? @map("manual_reviewed_at")
+  manualReviewedBy String?  @map("manual_reviewed_by")
   createdAt        DateTime @default(now()) @map("created_at")
 
   practiceAnswerAttempts EcgVideoQuestionPracticeAnswerAttempt[]
@@ -319,7 +326,114 @@ model EcgVideoQuestion {
 
   @@index([level, mode])
   @@index([rhythmTag])
+  @@index([mediaType])
+  @@index([medicalQaStatus])
   @@map("ecg_video_questions")
+}
+
+/// * Shared hidden/admin-preview mastery module catalog. All premium mastery systems should register here instead of creating one-off module tables.
+model MasteryModule {
+  id               String   @id @default(cuid())
+  slug             String   @unique @db.VarChar(128)
+  moduleType       String   @map("module_type") @db.VarChar(64)
+  title            String
+  description      String?
+  professionKeys   String[] @default([]) @map("profession_keys")
+  route            String   @db.VarChar(240)
+  entitlementKey   String?  @map("entitlement_key") @db.VarChar(120)
+  isPublic         Boolean  @default(false) @map("is_public")
+  adminPreviewOnly Boolean  @default(true) @map("admin_preview_only")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  lessons          MasteryLesson[]
+  questions        MasteryQuestion[]
+  caseScenarios    MasteryCaseScenario[]
+  patternMaps      MasteryPatternMap[]
+
+  @@index([moduleType])
+  @@index([isPublic, adminPreviewOnly])
+  @@map("mastery_modules")
+}
+
+model MasteryLesson {
+  id               String        @id @default(cuid())
+  moduleId         String        @map("module_id")
+  title            String
+  slug             String        @db.VarChar(140)
+  level            String?       @db.VarChar(32)
+  content          Json          @default("{}")
+  tags             String[]      @default([])
+  isPublic         Boolean       @default(false) @map("is_public")
+  adminPreviewOnly Boolean       @default(true) @map("admin_preview_only")
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+  module           MasteryModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([moduleId, slug])
+  @@index([moduleId, level])
+  @@map("mastery_lessons")
+}
+
+model MasteryQuestion {
+  id               String        @id @default(cuid())
+  moduleId         String        @map("module_id")
+  prompt           String
+  answerOptions    Json          @default("[]") @map("answer_options")
+  correctAnswerId  String?       @map("correct_answer_id") @db.VarChar(80)
+  rationale        String?
+  modalityData     Json          @default("{}") @map("modality_data")
+  media            Json          @default("{}")
+  difficulty       String?       @db.VarChar(32)
+  mode             String?       @db.VarChar(32)
+  tags             String[]      @default([])
+  isPublic         Boolean       @default(false) @map("is_public")
+  adminPreviewOnly Boolean       @default(true) @map("admin_preview_only")
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+  module           MasteryModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@index([moduleId, mode])
+  @@index([isPublic, adminPreviewOnly])
+  @@map("mastery_questions")
+}
+
+model MasteryCaseScenario {
+  id               String        @id @default(cuid())
+  moduleId         String        @map("module_id")
+  title            String
+  slug             String        @db.VarChar(140)
+  scenario         Json          @default("{}")
+  rationale        String?
+  modalityData     Json          @default("{}") @map("modality_data")
+  actionLayer      Json          @default("{}") @map("action_layer")
+  isPublic         Boolean       @default(false) @map("is_public")
+  adminPreviewOnly Boolean       @default(true) @map("admin_preview_only")
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+  module           MasteryModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([moduleId, slug])
+  @@index([moduleId])
+  @@map("mastery_case_scenarios")
+}
+
+model MasteryPatternMap {
+  id               String        @id @default(cuid())
+  moduleId         String        @map("module_id")
+  title            String
+  slug             String        @db.VarChar(140)
+  nodes            Json          @default("[]")
+  edges            Json          @default("[]")
+  isPublic         Boolean       @default(false) @map("is_public")
+  adminPreviewOnly Boolean       @default(true) @map("admin_preview_only")
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+  module           MasteryModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([moduleId, slug])
+  @@index([moduleId])
+  @@map("mastery_pattern_maps")
 }
 
 /// * Aggregated premium UX telemetry (UTC day; global counts, no user PII).

@@ -1,4 +1,5 @@
 export const ECG_VIDEO_QUESTION_FORMAT = "ecg_video" as const;
+export const ECG_LIVE_STRIP_MEDIA_TYPE = "ecg_live_strip" as const;
 
 export const ECG_VIDEO_TAG = "ecg-video" as const;
 
@@ -37,6 +38,8 @@ export type EcgVideoAsset = {
   durationSeconds?: number;
 };
 
+export type EcgJsonValue = string | number | boolean | null | EcgJsonValue[] | { [key: string]: EcgJsonValue };
+
 export type EcgLinkedLesson = {
   pathwayId?: string;
   slug?: string;
@@ -47,6 +50,8 @@ export type EcgLinkedLesson = {
 export type EcgVideoQuestionExhibit = {
   kind: typeof ECG_VIDEO_QUESTION_FORMAT;
   asset: EcgVideoAsset;
+  mediaType?: typeof ECG_LIVE_STRIP_MEDIA_TYPE | "video_url";
+  mediaConfig?: EcgJsonValue;
   rhythmCategory: string;
   recognitionClues?: string[];
   linkedLesson?: EcgLinkedLesson;
@@ -66,6 +71,8 @@ export type EcgVideoQuestionLike = {
   tags?: string[] | null;
   level?: string | null;
   mode?: string | null;
+  mediaType?: string | null;
+  mediaConfig?: unknown;
   studyLinkPathwayId?: string | null;
   studyLinkLessonSlug?: string | null;
 };
@@ -128,8 +135,10 @@ export function isEcgVideoQuestion(row: Pick<EcgVideoQuestionLike, "questionForm
 export function parseEcgVideoExhibit(exhibitData: unknown, images?: unknown): EcgVideoQuestionExhibit | null {
   const root = asRecord(exhibitData);
   const candidate = asRecord(root?.ecgVideo) ?? root;
+  const mediaConfig = asRecord(candidate?.mediaConfig) ?? asRecord(candidate?.stripConfig);
+  const mediaType = stringValue(candidate?.mediaType) ?? stringValue(mediaConfig?.mediaType);
   const asset = assetFromRecord(candidate?.asset) ?? assetFromRecord(candidate?.video) ?? firstVideoAssetFromImages(images);
-  if (!asset) return null;
+  if (!asset && mediaType !== ECG_LIVE_STRIP_MEDIA_TYPE) return null;
   const rhythmCategory =
     stringValue(candidate?.rhythmCategory) ??
     stringValue(candidate?.category) ??
@@ -137,7 +146,9 @@ export function parseEcgVideoExhibit(exhibitData: unknown, images?: unknown): Ec
     "ECG rhythm recognition";
   return {
     kind: ECG_VIDEO_QUESTION_FORMAT,
-    asset,
+    asset: asset ?? {},
+    mediaType: mediaType === ECG_LIVE_STRIP_MEDIA_TYPE ? ECG_LIVE_STRIP_MEDIA_TYPE : "video_url",
+    mediaConfig: mediaConfig ? (mediaConfig as EcgJsonValue) : undefined,
     rhythmCategory,
     recognitionClues: stringArray(candidate?.recognitionClues ?? candidate?.clues),
     linkedLesson: asRecord(candidate?.linkedLesson)
@@ -150,7 +161,7 @@ export function parseEcgVideoExhibit(exhibitData: unknown, images?: unknown): Ec
       : undefined,
     safeFallbackText:
       stringValue(candidate?.safeFallbackText) ??
-      "ECG clip could not load. Use the written rhythm description and answer options to continue.",
+      "ECG strip could not load. Use the written rhythm description and answer options to continue.",
   };
 }
 
@@ -179,13 +190,16 @@ export function validateEcgVideoQuestionForPublish(row: EcgVideoQuestionLike): E
   }
 
   const exhibit = parseEcgVideoExhibit(row.exhibitData, row.images);
-  if (!exhibit) {
-    reasons.push("ECG video question requires a video asset.");
-  } else {
+  const deterministicMediaType = row.mediaType === ECG_LIVE_STRIP_MEDIA_TYPE || exhibit?.mediaType === ECG_LIVE_STRIP_MEDIA_TYPE;
+  if (!exhibit && !deterministicMediaType) {
+    reasons.push("ECG video question requires a deterministic ECG strip mediaConfig or reviewed video asset.");
+  } else if (deterministicMediaType && !row.mediaConfig && !exhibit?.mediaConfig) {
+    reasons.push("ECG live strip question requires deterministic mediaConfig.");
+  } else if (exhibit) {
     const mime = exhibit.asset.mimeType?.toLowerCase();
-    if (mime && !SUPPORTED_MIME.has(mime)) reasons.push(`Unsupported ECG video MIME type: ${mime}.`);
-    if (!exhibit.rhythmCategory.trim()) reasons.push("ECG video question requires an ECG rhythm/category.");
-    if (!exhibit.asset.alt?.trim() && !exhibit.asset.caption?.trim()) {
+    if (!deterministicMediaType && mime && !SUPPORTED_MIME.has(mime)) reasons.push(`Unsupported ECG video MIME type: ${mime}.`);
+    if (exhibit && !exhibit.rhythmCategory.trim()) reasons.push("ECG video question requires an ECG rhythm/category.");
+    if (!deterministicMediaType && exhibit && !exhibit.asset.alt?.trim() && !exhibit.asset.caption?.trim()) {
       warnings.push("Add accessible ECG clip alt text or caption for learners who cannot load video.");
     }
   }

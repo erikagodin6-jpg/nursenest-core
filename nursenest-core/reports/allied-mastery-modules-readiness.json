@@ -1,11 +1,49 @@
 {
-  "generatedAt": "2026-05-04T08:42:48.165Z",
+  "generatedAt": "2026-05-04T21:41:12.590Z",
   "pass": true,
+  "scaffoldGeneration": {
+    "path": "src/content/allied-mastery/generated-scaffolds.json",
+    "generatedAt": "2026-05-04T21:41:12.293Z",
+    "modulesChecked": 18,
+    "modulesGenerated": 2,
+    "modulesCompleted": 18,
+    "generatedModuleIds": [
+      "pharmacy-tech-iv-infusion-safety",
+      "paramedic-iv-infusion-safety"
+    ],
+    "incompleteBefore": [
+      {
+        "moduleId": "pharmacy-tech-iv-infusion-safety",
+        "missing": [
+          "lessonOutlines",
+          "quizPlaceholders",
+          "caseScenarioTitles",
+          "rapidDrillSets",
+          "worksheetPlaceholders",
+          "patternMapDefinitions"
+        ]
+      },
+      {
+        "moduleId": "paramedic-iv-infusion-safety",
+        "missing": [
+          "lessonOutlines",
+          "quizPlaceholders",
+          "caseScenarioTitles",
+          "rapidDrillSets",
+          "worksheetPlaceholders",
+          "patternMapDefinitions"
+        ]
+      }
+    ],
+    "incompleteAfter": []
+  },
   "summary": {
     "occupationsConfigured": 8,
-    "modulesConfigured": 10,
-    "hiddenModules": 10,
+    "modulesConfigured": 18,
+    "hiddenModules": 18,
     "publicModules": 0,
+    "completeScaffolds": 18,
+    "incompleteScaffolds": 0,
     "exposureIssues": 0
   },
   "modules": [
@@ -15,12 +53,12 @@
       "id": "respiratory-abg-mastery",
       "slug": "abg",
       "title": "ABG Interpretation Mastery",
-      "route": "/allied/respiratory/modules/abg",
+      "route": "/allied/respiratory-therapy/modules/abg",
       "hiddenStatus": "hidden",
       "publicEnabled": false,
       "adminPreviewOnly": true,
       "entitlementKey": "ALLIED_ABG_MASTERY_PAID",
-      "adminPreviewRoute": "/allied/respiratory/modules/abg",
+      "adminPreviewRoute": "/allied/respiratory-therapy/modules/abg",
       "contentTypes": [
         "lessons",
         "quizzes",
@@ -35,6 +73,17 @@
       "pricingExposure": false,
       "navExposure": false,
       "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 13,
+        "quizPlaceholders": 6,
+        "caseScenarioTitles": 5,
+        "rapidDrillSets": 2,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 2,
+        "visualQuestionPlaceholders": 0
+      },
       "issues": []
     },
     {
@@ -43,12 +92,12 @@
       "id": "respiratory-ventilator-basics",
       "slug": "ventilator-basics",
       "title": "Ventilator Basics",
-      "route": "/allied/respiratory/modules/ventilator-basics",
+      "route": "/allied/respiratory-therapy/modules/ventilator-basics",
       "hiddenStatus": "hidden",
       "publicEnabled": false,
       "adminPreviewOnly": true,
       "entitlementKey": "ALLIED_VENTILATOR_BASICS_PAID",
-      "adminPreviewRoute": "/allied/respiratory/modules/ventilator-basics",
+      "adminPreviewRoute": "/allied/respiratory-therapy/modules/ventilator-basics",
       "contentTypes": [
         "lessons",
         "quizzes",
@@ -63,6 +112,134 @@
       "pricingExposure": false,
       "navExposure": false,
       "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 5,
+        "quizPlaceholders": 5,
+        "caseScenarioTitles": 1,
+        "rapidDrillSets": 1,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 1,
+        "visualQuestionPlaceholders": 0
+      },
+      "issues": []
+    },
+    {
+      "occupation": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "id": "respiratory-ventilator-management",
+      "slug": "ventilator-management",
+      "title": "Ventilator Management",
+      "route": "/allied/respiratory-therapy/modules/ventilator-management",
+      "hiddenStatus": "hidden",
+      "publicEnabled": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_VENTILATOR_MANAGEMENT_PAID",
+      "adminPreviewRoute": "/allied/respiratory-therapy/modules/ventilator-management",
+      "contentTypes": [
+        "lessons",
+        "quizzes",
+        "case_scenarios",
+        "rapid_drills",
+        "worksheets",
+        "pattern_maps",
+        "clinical_action_layer"
+      ],
+      "sitemapExposure": false,
+      "seoExposure": false,
+      "pricingExposure": false,
+      "navExposure": false,
+      "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 8,
+        "quizPlaceholders": 6,
+        "caseScenarioTitles": 6,
+        "rapidDrillSets": 10,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 4,
+        "visualQuestionPlaceholders": 0
+      },
+      "issues": []
+    },
+    {
+      "occupation": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "id": "respiratory-paramedic-oxygen-delivery",
+      "slug": "oxygen-delivery",
+      "title": "Oxygen Delivery Systems",
+      "route": "/allied/respiratory-therapy/modules/oxygen-delivery",
+      "hiddenStatus": "hidden",
+      "publicEnabled": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_OXYGEN_DELIVERY_PAID",
+      "adminPreviewRoute": "/allied/respiratory-therapy/modules/oxygen-delivery",
+      "contentTypes": [
+        "lessons",
+        "quizzes",
+        "case_scenarios",
+        "rapid_drills",
+        "worksheets",
+        "pattern_maps",
+        "clinical_action_layer"
+      ],
+      "sitemapExposure": false,
+      "seoExposure": false,
+      "pricingExposure": false,
+      "navExposure": false,
+      "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 6,
+        "quizPlaceholders": 6,
+        "caseScenarioTitles": 6,
+        "rapidDrillSets": 10,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 3,
+        "visualQuestionPlaceholders": 0
+      },
+      "issues": []
+    },
+    {
+      "occupation": "Respiratory Therapy",
+      "professionKey": "respiratory",
+      "id": "respiratory-paramedic-respiratory-distress",
+      "slug": "respiratory-distress",
+      "title": "Respiratory Distress Recognition",
+      "route": "/allied/respiratory-therapy/modules/respiratory-distress",
+      "hiddenStatus": "hidden",
+      "publicEnabled": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_RESPIRATORY_DISTRESS_PAID",
+      "adminPreviewRoute": "/allied/respiratory-therapy/modules/respiratory-distress",
+      "contentTypes": [
+        "lessons",
+        "quizzes",
+        "case_scenarios",
+        "rapid_drills",
+        "worksheets",
+        "pattern_maps",
+        "clinical_action_layer"
+      ],
+      "sitemapExposure": false,
+      "seoExposure": false,
+      "pricingExposure": false,
+      "navExposure": false,
+      "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 8,
+        "quizPlaceholders": 6,
+        "caseScenarioTitles": 7,
+        "rapidDrillSets": 13,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 5,
+        "visualQuestionPlaceholders": 0
+      },
       "issues": []
     },
     {
@@ -71,12 +248,12 @@
       "id": "mlt-advanced-lab-interpretation",
       "slug": "advanced-lab-interpretation",
       "title": "Advanced Lab Interpretation",
-      "route": "/allied/mlt/modules/advanced-lab-interpretation",
+      "route": "/allied/medical-lab-technology/modules/advanced-lab-interpretation",
       "hiddenStatus": "hidden",
       "publicEnabled": false,
       "adminPreviewOnly": true,
       "entitlementKey": "ALLIED_ADVANCED_LAB_INTERPRETATION_PAID",
-      "adminPreviewRoute": "/allied/mlt/modules/advanced-lab-interpretation",
+      "adminPreviewRoute": "/allied/medical-lab-technology/modules/advanced-lab-interpretation",
       "contentTypes": [
         "lessons",
         "quizzes",
@@ -91,6 +268,56 @@
       "pricingExposure": false,
       "navExposure": false,
       "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 2,
+        "quizPlaceholders": 2,
+        "caseScenarioTitles": 6,
+        "rapidDrillSets": 3,
+        "worksheetPlaceholders": 3,
+        "patternMapDefinitions": 3,
+        "visualQuestionPlaceholders": 0
+      },
+      "issues": []
+    },
+    {
+      "occupation": "Pharmacy Technician",
+      "professionKey": "pharmacy-tech",
+      "id": "pharmacy-tech-iv-infusion-safety",
+      "slug": "iv-infusion-safety",
+      "title": "IV Therapy + Infusion Safety",
+      "route": "/allied/pharmacy-tech/modules/iv-infusion-safety",
+      "hiddenStatus": "hidden",
+      "publicEnabled": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_IV_INFUSION_SAFETY_PAID",
+      "adminPreviewRoute": "/allied/pharmacy-tech/modules/iv-infusion-safety",
+      "contentTypes": [
+        "lessons",
+        "quizzes",
+        "case_scenarios",
+        "rapid_drills",
+        "worksheets",
+        "pattern_maps",
+        "clinical_action_layer"
+      ],
+      "sitemapExposure": false,
+      "seoExposure": false,
+      "pricingExposure": false,
+      "navExposure": false,
+      "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 11,
+        "quizPlaceholders": 6,
+        "caseScenarioTitles": 6,
+        "rapidDrillSets": 12,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 5,
+        "visualQuestionPlaceholders": 0
+      },
       "issues": []
     },
     {
@@ -119,6 +346,17 @@
       "pricingExposure": false,
       "navExposure": false,
       "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 5,
+        "quizPlaceholders": 5,
+        "caseScenarioTitles": 1,
+        "rapidDrillSets": 1,
+        "worksheetPlaceholders": 3,
+        "patternMapDefinitions": 1,
+        "visualQuestionPlaceholders": 0
+      },
       "issues": []
     },
     {
@@ -147,6 +385,17 @@
       "pricingExposure": false,
       "navExposure": false,
       "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 5,
+        "quizPlaceholders": 5,
+        "caseScenarioTitles": 1,
+        "rapidDrillSets": 1,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 1,
+        "visualQuestionPlaceholders": 0
+      },
       "issues": []
     },
     {
@@ -175,6 +424,17 @@
       "pricingExposure": false,
       "navExposure": false,
       "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 5,
+        "quizPlaceholders": 5,
+        "caseScenarioTitles": 1,
+        "rapidDrillSets": 1,
+        "worksheetPlaceholders": 3,
+        "patternMapDefinitions": 1,
+        "visualQuestionPlaceholders": 0
+      },
       "issues": []
     },
     {
@@ -203,6 +463,17 @@
       "pricingExposure": false,
       "navExposure": false,
       "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 6,
+        "quizPlaceholders": 6,
+        "caseScenarioTitles": 1,
+        "rapidDrillSets": 1,
+        "worksheetPlaceholders": 3,
+        "patternMapDefinitions": 1,
+        "visualQuestionPlaceholders": 0
+      },
       "issues": []
     },
     {
@@ -231,6 +502,17 @@
       "pricingExposure": false,
       "navExposure": false,
       "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 9,
+        "quizPlaceholders": 8,
+        "caseScenarioTitles": 2,
+        "rapidDrillSets": 2,
+        "worksheetPlaceholders": 6,
+        "patternMapDefinitions": 1,
+        "visualQuestionPlaceholders": 4
+      },
       "issues": []
     },
     {
@@ -259,6 +541,173 @@
       "pricingExposure": false,
       "navExposure": false,
       "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 10,
+        "quizPlaceholders": 8,
+        "caseScenarioTitles": 2,
+        "rapidDrillSets": 2,
+        "worksheetPlaceholders": 6,
+        "patternMapDefinitions": 1,
+        "visualQuestionPlaceholders": 4
+      },
+      "issues": []
+    },
+    {
+      "occupation": "Paramedic / EMS",
+      "professionKey": "paramedic",
+      "id": "paramedic-oxygen-delivery",
+      "slug": "oxygen-delivery",
+      "title": "Oxygen Delivery Systems",
+      "route": "/allied/paramedic/modules/oxygen-delivery",
+      "hiddenStatus": "hidden",
+      "publicEnabled": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_OXYGEN_DELIVERY_PAID",
+      "adminPreviewRoute": "/allied/paramedic/modules/oxygen-delivery",
+      "contentTypes": [
+        "lessons",
+        "quizzes",
+        "case_scenarios",
+        "rapid_drills",
+        "worksheets",
+        "pattern_maps",
+        "clinical_action_layer"
+      ],
+      "sitemapExposure": false,
+      "seoExposure": false,
+      "pricingExposure": false,
+      "navExposure": false,
+      "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 6,
+        "quizPlaceholders": 6,
+        "caseScenarioTitles": 6,
+        "rapidDrillSets": 10,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 3,
+        "visualQuestionPlaceholders": 0
+      },
+      "issues": []
+    },
+    {
+      "occupation": "Paramedic / EMS",
+      "professionKey": "paramedic",
+      "id": "paramedic-respiratory-distress",
+      "slug": "respiratory-distress",
+      "title": "Respiratory Distress Recognition",
+      "route": "/allied/paramedic/modules/respiratory-distress",
+      "hiddenStatus": "hidden",
+      "publicEnabled": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_RESPIRATORY_DISTRESS_PAID",
+      "adminPreviewRoute": "/allied/paramedic/modules/respiratory-distress",
+      "contentTypes": [
+        "lessons",
+        "quizzes",
+        "case_scenarios",
+        "rapid_drills",
+        "worksheets",
+        "pattern_maps",
+        "clinical_action_layer"
+      ],
+      "sitemapExposure": false,
+      "seoExposure": false,
+      "pricingExposure": false,
+      "navExposure": false,
+      "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 8,
+        "quizPlaceholders": 6,
+        "caseScenarioTitles": 7,
+        "rapidDrillSets": 13,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 5,
+        "visualQuestionPlaceholders": 0
+      },
+      "issues": []
+    },
+    {
+      "occupation": "Paramedic / EMS",
+      "professionKey": "paramedic",
+      "id": "paramedic-trauma-triage",
+      "slug": "trauma-triage",
+      "title": "Trauma & Triage",
+      "route": "/allied/paramedic/modules/trauma-triage",
+      "hiddenStatus": "hidden",
+      "publicEnabled": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_TRAUMA_TRIAGE_PAID",
+      "adminPreviewRoute": "/allied/paramedic/modules/trauma-triage",
+      "contentTypes": [
+        "lessons",
+        "quizzes",
+        "case_scenarios",
+        "rapid_drills",
+        "worksheets",
+        "pattern_maps",
+        "clinical_action_layer"
+      ],
+      "sitemapExposure": false,
+      "seoExposure": false,
+      "pricingExposure": false,
+      "navExposure": false,
+      "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 5,
+        "quizPlaceholders": 5,
+        "caseScenarioTitles": 4,
+        "rapidDrillSets": 4,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 3,
+        "visualQuestionPlaceholders": 0
+      },
+      "issues": []
+    },
+    {
+      "occupation": "Paramedic / EMS",
+      "professionKey": "paramedic",
+      "id": "paramedic-iv-infusion-safety",
+      "slug": "iv-infusion-safety",
+      "title": "IV Therapy + Infusion Safety",
+      "route": "/allied/paramedic/modules/iv-infusion-safety",
+      "hiddenStatus": "hidden",
+      "publicEnabled": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_IV_INFUSION_SAFETY_PAID",
+      "adminPreviewRoute": "/allied/paramedic/modules/iv-infusion-safety",
+      "contentTypes": [
+        "lessons",
+        "quizzes",
+        "case_scenarios",
+        "rapid_drills",
+        "worksheets",
+        "pattern_maps",
+        "clinical_action_layer"
+      ],
+      "sitemapExposure": false,
+      "seoExposure": false,
+      "pricingExposure": false,
+      "navExposure": false,
+      "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 11,
+        "quizPlaceholders": 6,
+        "caseScenarioTitles": 6,
+        "rapidDrillSets": 12,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 5,
+        "visualQuestionPlaceholders": 0
+      },
       "issues": []
     },
     {
@@ -287,6 +736,17 @@
       "pricingExposure": false,
       "navExposure": false,
       "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 7,
+        "quizPlaceholders": 6,
+        "caseScenarioTitles": 1,
+        "rapidDrillSets": 1,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 1,
+        "visualQuestionPlaceholders": 0
+      },
       "issues": []
     }
   ]
