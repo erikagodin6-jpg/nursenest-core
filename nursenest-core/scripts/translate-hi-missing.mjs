@@ -44,9 +44,11 @@ const PROTECTED_TERMS = [
   "Klarna",
   "Afterpay",
   "Affirm",
+  "LinkedIn",
 ];
 
 const HINDI_OVERRIDES = {
+  "common:nursenest.ca": "nursenest.ca",
   "breadcrumbs.home": "होम",
   "breadcrumbs.pricing": "कीमतें",
   "breadcrumbs.lessons": "पाठ",
@@ -68,6 +70,31 @@ const HINDI_OVERRIDES = {
   "pages.publicQuestionBank.metaDescriptionCA": "कनाडा-केंद्रित नर्सिंग और हेल्थकेयर परीक्षा तैयारी के लिए प्रैक्टिस प्रश्न, rationales और कमजोर टॉपिक की समीक्षा।",
   "pages.publicQuestionBank.metaTitleUS": "प्रैक्टिस प्रश्न | NCLEX-RN, NCLEX-PN, NP और Allied Health",
   "pages.publicQuestionBank.metaDescriptionUS": "नर्सिंग और हेल्थकेयर परीक्षा तैयारी के लिए प्रैक्टिस प्रश्न, rationales और कमजोर टॉपिक की समीक्षा।",
+  "pages.publicQuestionBank.metaTitle": "NCLEX और REx-PN प्रैक्टिस प्रश्न | NurseNest",
+  "pages.publicQuestionBank.metaDescription": "NurseNest question bank का सार्वजनिक अवलोकन: NCLEX-RN, NCLEX-PN, REx-PN और NP tracks के लिए प्रैक्टिस प्रश्न। ऐप में अभ्यास करने के लिए साइन अप करें।",
+  "pages.publicQuestionBank.h1": "नर्सिंग प्रैक्टिस प्रश्न",
+  "pages.publicQuestionBank.intro": "अपने exam pathway के अनुसार प्रश्न चुनें, rationale पढ़ें, और कमजोर topics पर दोबारा अभ्यास करें।",
+  "pages.home.finalCta.headline": "आत्मविश्वास के साथ अपनी नर्सिंग परीक्षा पास करें",
+  "pages.home.finalCta.subheading": "पाठों से सीखें, प्रैक्टिस प्रश्नों से अभ्यास करें, और अपनी प्रगति एक ही जगह ट्रैक करें।",
+  "pages.home.finalCta.pricingLink": "कीमतें देखें",
+  "pages.home.globalRegions.us.title": "संयुक्त राज्य (NCLEX-RN / NCLEX-PN)",
+  "marketing:home.heroFeatures.pathophysiology": "रोग-प्रक्रिया",
+  "marketing:npExamHub.pathophysiology": "रोग-प्रक्रिया",
+  "marketing:rexPnHub.pathophysiology": "रोग-प्रक्रिया",
+  "pages:pages.clinicalSeo.conditionPage.pathophysiology": "रोग-प्रक्रिया",
+  "pages:pages.conditionPage.pathophysiology": "रोग-प्रक्रिया",
+  "pages:pages.lessonDetail.pathophysiology": "रोग-प्रक्रिया",
+  "pages:pages.lessonDetail.pathophysiology2": "रोग-प्रक्रिया",
+  "pages:pages.nclexRnContentHub.pathophysiology": "रोग-प्रक्रिया",
+  "pages:pages.rexPnContentHub.pathophysiology": "रोग-प्रक्रिया",
+  "pages:pages.seoLessonDetail.pathophysiology": "रोग-प्रक्रिया",
+  "pages:pages.imagingPositioningDetail.collimation": "कोलिमेशन",
+  "pages:pages.orderOfTheDraw.additive2": "एडिटिव",
+  "pages:pages.preNursing.tachycardia": "टैकीकार्डिया",
+  "allied:allied.physicsVisuals.formula": "सूत्र",
+  "components:components.ngnRenderersCalculationNumericRenderer.formula": "सूत्र",
+  "pages:pages.clinicalCalculators.formula3": "सूत्र",
+  "pages:pages.productBuilder.radius": "त्रिज्या",
 };
 
 function readJson(file) {
@@ -89,9 +116,16 @@ function writeJson(file, data) {
 function isProtectedIdentical(value) {
   const text = String(value).trim();
   if (!text) return true;
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)) return true;
+  if (/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(text)) return true;
+  if (/^[A-Z][A-Z0-9 _-]{2,}$/.test(text)) return true;
+  const withoutPlaceholders = text.replace(/\{\{[^}]+\}\}/g, "").trim();
+  if (!withoutPlaceholders) return true;
+  if (/^[\s%.,:;()/+&·–—×μµ³⁻₀-₉→✓✗-]+$/.test(withoutPlaceholders)) return true;
   if (PROTECTED_TERMS.includes(text)) return true;
   if (/^[\d\s%.,:;()/+&·–—-]+$/.test(text)) return true;
-  const words = text.match(/[A-Za-z][A-Za-z0-9-]*/g) ?? [];
+  if (/^[\d\s%.,:;()/+&·–—×μµ³⁻₀-₉A-Za-z]+$/.test(text) && /(?:mmHg|mEq|mol|L|dL|PaCO|PaO|SaO|HCO|PLT|WBC)/i.test(text)) return true;
+  const words = withoutPlaceholders.match(/[A-Za-z][A-Za-z0-9-]*/g) ?? [];
   return words.length > 0 && words.every((word) => PROTECTED_TERMS.includes(word) || /^[A-Z0-9]{2,}$/.test(word));
 }
 
@@ -197,15 +231,16 @@ async function main() {
     for (const [key, enValue] of Object.entries(en)) {
       if (typeof enValue !== "string") continue;
       const current = hi[key];
-      const proposedOverride = HINDI_OVERRIDES[key];
-      if (proposedOverride || shouldTranslate(enValue, current)) {
+      const proposedOverride = HINDI_OVERRIDES[`${shard}:${key}`] ?? HINDI_OVERRIDES[key];
+      const hasPendingOverride = proposedOverride && current !== proposedOverride;
+      if (hasPendingOverride || shouldTranslate(enValue, current)) {
         planned.push({
           shard,
           key,
           english: enValue,
           current: typeof current === "string" ? current : "",
-          proposed: proposedOverride ?? null,
-          reason: proposedOverride ? "curated-override" : current == null || String(current).trim() === "" ? "missing" : "english-identical-or-leak",
+          proposed: hasPendingOverride ? proposedOverride : null,
+          reason: hasPendingOverride ? "curated-override" : current == null || String(current).trim() === "" ? "missing" : "english-identical-or-leak",
         });
       }
     }

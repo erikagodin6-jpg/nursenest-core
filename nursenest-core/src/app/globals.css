@@ -36,6 +36,7 @@ body {
 :root {
   --font-dm-sans: "DM Sans", system-ui, sans-serif;
   --font-sans: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
+  --font-devanagari: "Noto Sans Devanagari", "Mangal", "Kohinoor Devanagari", "Nirmala UI", var(--font-sans);
   /* Slightly rounder global radius → calmer cards without “chunky” mobile tiles */
   --radius: 0.8125rem;
   --color-warmwhite: #fdfcfa;
@@ -887,6 +888,10 @@ body {
   font-weight: 400;
   line-height: 1.6;
   text-rendering: optimizeLegibility;
+}
+
+:where(html[lang="hi"], html[lang="hi"] body, [data-locale="hi"], [lang="hi"]) {
+  font-family: var(--font-devanagari);
 }
 
 :where(p, li, dd) {

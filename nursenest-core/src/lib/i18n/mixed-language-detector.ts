@@ -1,9 +1,12 @@
-export type MixedLanguageLocale = "en" | "fr" | "es";
+export type MixedLanguageLocale = "en" | "fr" | "es" | "hi" | "tl" | "pt";
 
 export type MixedLanguageFinding = {
   kind:
     | "english-in-french"
     | "english-in-spanish"
+    | "english-in-hindi"
+    | "english-in-tagalog"
+    | "english-in-portuguese"
     | "french-in-english"
     | "spanish-in-english"
     | "placeholder"
@@ -66,6 +69,17 @@ const SPANISH_MARKERS = [
   /[áéíóúñ¿¡]/i,
 ] as const;
 
+const HINDI_MARKERS = [/\p{Script=Devanagari}/u] as const;
+
+const TAGALOG_MARKERS = [
+  /\b(ang|ng|mga|para|sa|nasa|gamit|kung|kapag|hindi|iyong|natin|ninyo|mo|ko|ka|nang|mayroon|pasyente|aralin|paghahanda|tanong|sagot|pagsasanay|pag-aaral|bayad|presyo|bagong|subukan|libre|kailangang|kinakailangan|naka|aking|ginagamit|buuin|inirerekomenda|mag-sign|nagsa-sign|mag-subscribe)\b/i,
+] as const;
+
+const PORTUGUESE_MARKERS = [
+  /\b(o|a|os|as|com|para|seu|sua|aprender|questões|preços|entrar|conta|enfermagem|paciente|preparação|estudo|lições|cuidados)\b/i,
+  /[áàâãéêíóôõúç]/i,
+] as const;
+
 function stripProtectedTerms(input: string): string {
   let out = input;
   for (const term of PROTECTED_TERMS) {
@@ -119,6 +133,27 @@ export function detectMixedLanguageText(
       if (hasEnglishSignal && (mostlyAscii || !hasSpanishSignal)) {
         pushFinding(findings, "english-in-spanish", line, mostlyAscii ? 3 : 2);
       }
+    } else if (locale === "hi") {
+      const hasHindiSignal = HINDI_MARKERS.some((pattern) => pattern.test(line));
+      const hasEnglishSignal = ENGLISH_MARKERS.some((pattern) => pattern.test(line));
+      const mostlyAscii = /^[\x00-\x7F\s.,;:!?'"()/$%&+-]+$/.test(line);
+      if (hasEnglishSignal && (mostlyAscii || !hasHindiSignal)) {
+        pushFinding(findings, "english-in-hindi", line, mostlyAscii ? 3 : 2);
+      }
+    } else if (locale === "tl") {
+      const hasTagalogSignal = TAGALOG_MARKERS.some((pattern) => pattern.test(line));
+      const hasEnglishSignal = ENGLISH_MARKERS.some((pattern) => pattern.test(line));
+      const mostlyAscii = /^[\x00-\x7F\s.,;:!?'"()/$%&+-]+$/.test(line);
+      if (hasEnglishSignal && mostlyAscii && !hasTagalogSignal) {
+        pushFinding(findings, "english-in-tagalog", line, 3);
+      }
+    } else if (locale === "pt") {
+      const hasPortugueseSignal = PORTUGUESE_MARKERS.some((pattern) => pattern.test(line));
+      const hasEnglishSignal = ENGLISH_MARKERS.some((pattern) => pattern.test(line));
+      const mostlyAscii = /^[\x00-\x7F\s.,;:!?'"()/$%&+-]+$/.test(line);
+      if (hasEnglishSignal && (mostlyAscii || !hasPortugueseSignal)) {
+        pushFinding(findings, "english-in-portuguese", line, mostlyAscii ? 3 : 2);
+      }
     } else {
       const hasFrenchSignal = FRENCH_MARKERS.some((pattern) => pattern.test(line));
       const hasSpanishSignal = SPANISH_MARKERS.some((pattern) => pattern.test(line));
@@ -137,7 +172,7 @@ export function detectMixedLanguageText(
     locale,
     findings: capped,
     score,
-    hasBlockingLeak: score >= (locale === "fr" || locale === "es" ? 3 : 4) || capped.some((f) => f.kind === "missing-key" || f.kind === "placeholder"),
+    hasBlockingLeak: score >= (locale === "fr" || locale === "es" || locale === "hi" || locale === "tl" || locale === "pt" ? 3 : 4) || capped.some((f) => f.kind === "missing-key" || f.kind === "placeholder"),
   };
 }
 

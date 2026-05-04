@@ -4,12 +4,21 @@ const routes = [
   { locale: "en", path: "/", crumb: "Home" },
   { locale: "fr", path: "/fr", crumb: "Accueil" },
   { locale: "es", path: "/es", crumb: "Inicio" },
+  { locale: "hi", path: "/hi", crumb: "होम" },
+  { locale: "tl", path: "/tl", crumb: "Home" },
+  { locale: "pt", path: "/pt", crumb: "Início" },
   { locale: "en", path: "/pricing", crumb: "Pricing" },
   { locale: "fr", path: "/fr/pricing", crumb: "Tarifs" },
   { locale: "es", path: "/es/pricing", crumb: "Precios" },
+  { locale: "hi", path: "/hi/pricing", crumb: "कीमतें" },
+  { locale: "tl", path: "/tl/pricing", crumb: "Presyo" },
+  { locale: "pt", path: "/pt/pricing", crumb: "Preços" },
   { locale: "en", path: "/question-bank", crumb: "Practice Questions" },
   { locale: "fr", path: "/fr/question-bank", crumb: "Questions pratiques" },
   { locale: "es", path: "/es/question-bank", crumb: "Preguntas de práctica" },
+  { locale: "hi", path: "/hi/question-bank", crumb: "प्रैक्टिस प्रश्न" },
+  { locale: "tl", path: "/tl/question-bank", crumb: "Mga practice questions" },
+  { locale: "pt", path: "/pt/question-bank", crumb: "Questões de prática" },
 ] as const;
 
 test.describe("localized SEO metadata", () => {

@@ -1,12 +1,18 @@
 # I18n Readiness Summary
 
-Generated: 2026-05-03T20:37:48.019Z
+Generated: 2026-05-04T00:31:35.009Z
 
 English status: pass
 French status: 15 surfaces blocked from indexing
 Spanish status: pass
+Hindi status: pass
+Tagalog status: pass
+Portuguese status: pass
 REx-PN French status: noindex until translations pass
 Spanish coverage: 100% (17563/17563)
+Hindi coverage: 100% (17563/17563)
+Tagalog coverage: 100% (17563/17563)
+Portuguese coverage: 100% (17563/17563)
 
 ## Missing French Keys
 
@@ -29,6 +35,18 @@ Spanish coverage: 100% (17563/17563)
 - /app: learner.printables.badgeProIncluded
 
 ## Missing Spanish Keys
+
+- None.
+
+## Missing Hindi Keys
+
+- None.
+
+## Missing Tagalog Keys
+
+- None.
+
+## Missing Portuguese Keys
 
 - None.
 
@@ -71,6 +89,41 @@ Spanish coverage: 100% (17563/17563)
 - /app/flashcards: noindex (Spanish keys are structurally complete; review English-identical strings for translation quality.)
 - /app/practice-tests/cat-launch: noindex (Spanish surface is structurally complete.)
 - /es/login: noindex (Spanish surface is structurally complete.)
+- /hi: indexable (Hindi surface is structurally complete.)
+- /hi/pricing: indexable (Hindi surface is structurally complete.)
+- /hi/rn: indexable (Hindi surface is structurally complete.)
+- /hi/rex-pn: indexable (Hindi surface is structurally complete.)
+- /hi/np: indexable (Hindi surface is structurally complete.)
+- /hi/allied: indexable (Hindi surface is structurally complete.)
+- /hi/lessons: indexable (Hindi surface is structurally complete.)
+- /hi/question-bank: indexable (Hindi surface is structurally complete.)
+- /app/flashcards: noindex (Hindi surface is structurally complete.)
+- /app/practice-tests/cat-launch: noindex (Hindi surface is structurally complete.)
+- /hi/login: noindex (Hindi surface is structurally complete.)
+- /tl: indexable (Tagalog surface is structurally complete.)
+- /tl/pricing: indexable (Tagalog surface is structurally complete.)
+- /tl/rn: indexable (Tagalog surface is structurally complete.)
+- /tl/rex-pn: indexable (Tagalog surface is structurally complete.)
+- /tl/np: indexable (Tagalog surface is structurally complete.)
+- /tl/allied: indexable (Tagalog surface is structurally complete.)
+- /tl/new-grad: indexable (Tagalog surface is structurally complete.)
+- /tl/lessons: indexable (Tagalog surface is structurally complete.)
+- /tl/question-bank: indexable (Tagalog surface is structurally complete.)
+- /app/flashcards: noindex (Tagalog surface is structurally complete.)
+- /app/practice-tests/cat-launch: noindex (Tagalog surface is structurally complete.)
+- /tl/login: noindex (Tagalog surface is structurally complete.)
+- /pt: indexable (Portuguese surface is structurally complete.)
+- /pt/pricing: indexable (Portuguese surface is structurally complete.)
+- /pt/rn: indexable (Portuguese surface is structurally complete.)
+- /pt/rex-pn: indexable (Portuguese surface is structurally complete.)
+- /pt/np: indexable (Portuguese surface is structurally complete.)
+- /pt/allied: indexable (Portuguese surface is structurally complete.)
+- /pt/new-grad: indexable (Portuguese surface is structurally complete.)
+- /pt/lessons: indexable (Portuguese surface is structurally complete.)
+- /pt/question-bank: indexable (Portuguese surface is structurally complete.)
+- /app/flashcards: noindex (Portuguese surface is structurally complete.)
+- /app/practice-tests/cat-launch: noindex (Portuguese surface is structurally complete.)
+- /pt/login: noindex (Portuguese surface is structurally complete.)
 
 ## Next Required Translations
 

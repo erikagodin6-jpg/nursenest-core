@@ -9,15 +9,52 @@ import type {
   BreadcrumbSchemaItem,
 } from "@/lib/seo/breadcrumb-types";
 
+const BREADCRUMB_LABEL_FALLBACKS: Record<string, Record<string, string>> = {
+  hi: {
+    "breadcrumbs.home": "होम",
+    "breadcrumbs.pricing": "कीमतें",
+    "breadcrumbs.lessons": "पाठ",
+    "breadcrumbs.questionBank": "प्रैक्टिस प्रश्न",
+  },
+  tl: {
+    "breadcrumbs.home": "Home",
+    "breadcrumbs.pricing": "Presyo",
+    "breadcrumbs.lessons": "Mga aralin",
+    "breadcrumbs.questionBank": "Mga practice questions",
+  },
+  pt: {
+    "breadcrumbs.home": "Início",
+    "breadcrumbs.pricing": "Preços",
+    "breadcrumbs.lessons": "Lições",
+    "breadcrumbs.questionBank": "Questões de prática",
+  },
+};
+
+function localizeBreadcrumbLabel(
+  locale: string | null,
+  key: string | undefined,
+  structuralName: string,
+  primary: MarketingMessages,
+  fallback?: MarketingMessages,
+  params?: Record<string, string | number>,
+): string {
+  if (!key) return structuralName;
+  const localized = formatMarketingMessage(primary, key, params, fallback).trim();
+  if (localized && localized !== key) return localized;
+  const mapped = locale ? BREADCRUMB_LABEL_FALLBACKS[locale]?.[key] : undefined;
+  if (mapped) return mapped;
+  return localized || structuralName.trim();
+}
+
 export function localizeBreadcrumbCrumbs(
   crumbs: BreadcrumbCrumb[],
   primary: MarketingMessages,
   fallback?: MarketingMessages,
+  locale?: string,
 ): BreadcrumbCrumb[] {
   return crumbs.map((c) => {
     if (!c.i18nKey) return { name: c.name, href: c.href };
-    const localized = formatMarketingMessage(primary, c.i18nKey, c.i18nParams, fallback).trim();
-    const name = localized || c.name.trim();
+    const name = localizeBreadcrumbLabel(locale ?? null, c.i18nKey, c.name, primary, fallback, c.i18nParams);
     if (!name && process.env.NODE_ENV !== "production") {
       throw new Error(`[breadcrumb-i18n] empty crumb label for key "${c.i18nKey}" (no structural name fallback).`);
     }
@@ -32,11 +69,11 @@ export function localizeBreadcrumbSchemaItems(
   items: BreadcrumbSchemaItem[],
   primary: MarketingMessages,
   fallback?: MarketingMessages,
+  locale?: string,
 ): BreadcrumbSchemaItem[] {
   return items.map((s) => {
     if (!s.i18nKey) return { name: s.name, item: s.item };
-    const localized = formatMarketingMessage(primary, s.i18nKey, s.i18nParams, fallback).trim();
-    const name = localized || s.name.trim();
+    const name = localizeBreadcrumbLabel(locale ?? null, s.i18nKey, s.name, primary, fallback, s.i18nParams);
     if (!name && process.env.NODE_ENV !== "production") {
       throw new Error(`[breadcrumb-i18n] empty schema item name for key "${s.i18nKey}" (no structural name fallback).`);
     }
@@ -80,7 +117,10 @@ export function localizeBreadcrumbResolutionForLocale(
   locale: string,
   fallback?: MarketingMessages,
 ): BreadcrumbResolution {
-  const localized = localizeBreadcrumbResolution(res, primary, fallback);
+  const localized = {
+    crumbs: localizeBreadcrumbCrumbs(res.crumbs, primary, fallback, locale),
+    schemaItems: localizeBreadcrumbSchemaItems(res.schemaItems, primary, fallback, locale),
+  };
   return {
     crumbs: localized.crumbs.map((crumb) => ({
       ...crumb,

@@ -26,15 +26,22 @@ test("localized breadcrumb labels and URLs use the selected language", () => {
     { label: "Inicio", href: "/es" },
     { label: "Precios", href: "/es/pricing" },
   ]);
+  assert.deepEqual(localizedBreadcrumbsFor("tl", pricing), [
+    { label: "Home", href: "/tl" },
+    { label: "Presyo", href: "/tl/pricing" },
+  ]);
 });
 
-test("localized slug map provides URL-safe French and Spanish slugs without duplicates", () => {
+test("localized slug map provides URL-safe slugs without duplicates", () => {
   assert.equal(localizedSlugFor("fr", "practice-questions"), "questions-pratiques");
   assert.equal(localizedSlugFor("es", "practice-questions"), "preguntas-de-practica");
+  assert.equal(localizedSlugFor("tl", "practice-questions"), "mga-practice-questions");
   assert.equal(localizedSlugFor("fr", "nursing-exam-prep"), "preparation-examens-soins-infirmiers");
   assert.equal(localizedSlugFor("es", "nursing-exam-prep"), "preparacion-examenes-enfermeria");
+  assert.equal(localizedSlugFor("tl", "nursing-exam-prep"), "paghahanda-nursing-exams");
   assert.deepEqual(duplicateLocalizedSlugs("fr"), []);
   assert.deepEqual(duplicateLocalizedSlugs("es"), []);
+  assert.deepEqual(duplicateLocalizedSlugs("tl"), []);
 });
 
 test("localized SEO audit locales follow the supported marketing language registry", () => {
@@ -42,7 +49,9 @@ test("localized SEO audit locales follow the supported marketing language regist
   assert.ok(locales.includes("en"));
   assert.ok(locales.includes("fr"));
   assert.ok(locales.includes("es"));
-  assert.ok(locales.includes("tl"), "partial supported locales should be audited for future SEO readiness");
+  assert.ok(locales.includes("hi"));
+  assert.ok(locales.includes("pt"));
+  assert.ok(locales.includes("tl"));
 });
 
 test("shared localized marketing pages get localized canonical and hreflang policy", () => {
@@ -61,11 +70,34 @@ test("French remains blocked from indexing until translation readiness is comple
   assert.ok(item.issues.some((issue) => issue.includes("not SEO-indexable")));
 });
 
-test("supported locales without localized SEO assets fail closed instead of falling back to English", () => {
+test("Tagalog has localized SEO breadcrumbs and slug mappings for shared pages", () => {
   const item = buildLocalizedSeoAuditItem("tl", surface("practice-questions-hub"));
-  assert.ok(item.issues.some((issue) => issue.includes("missing localized breadcrumb labels")));
-  assert.ok(item.issues.some((issue) => issue.includes("missing localized slug mapping")));
-  assert.equal(item.sitemapExpected, false);
+  assert.equal(item.localizedPath, "/tl/question-bank");
+  assert.equal(item.localizedSlug, "mga-practice-questions");
+  assert.equal(item.breadcrumbs[0]?.label, "Home");
+  assert.equal(item.breadcrumbs[1]?.label, "Mga practice questions");
+  assert.equal(item.sitemapExpected, true);
+  assert.equal(item.hreflangExpected, true);
+});
+
+test("Hindi has localized SEO breadcrumbs and slug mappings for shared pages", () => {
+  const item = buildLocalizedSeoAuditItem("hi", surface("practice-questions-hub"));
+  assert.equal(item.localizedPath, "/hi/question-bank");
+  assert.equal(item.localizedSlug, "practice-prashn");
+  assert.equal(item.breadcrumbs[0]?.label, "होम");
+  assert.equal(item.breadcrumbs[1]?.label, "प्रैक्टिस प्रश्न");
+  assert.equal(item.sitemapExpected, true);
+});
+
+test("Portuguese has localized SEO breadcrumbs and slug mappings for shared pages", () => {
+  const item = buildLocalizedSeoAuditItem("pt", surface("practice-questions-hub"));
+  assert.equal(item.localizedPath, "/pt/question-bank");
+  assert.equal(item.localizedSlug, "questoes-de-pratica");
+  assert.equal(item.breadcrumbs[0]?.label, "Início");
+  assert.equal(item.breadcrumbs[1]?.label, "Questões de prática");
+  assert.equal(item.sitemapExpected, true);
+  assert.equal(item.hreflangExpected, true);
+  assert.match(item.hreflangLanguages["pt-BR"] ?? "", /\/pt\/question-bank$/);
 });
 
 test("exam pathway hubs do not claim translated route slugs before routing supports them", () => {
@@ -89,4 +121,20 @@ test("sitemap safe URL collector includes indexable Spanish localized hubs", () 
   assert.ok(urls.includes("https://www.nursenest.ca/es/pricing"));
   assert.ok(urls.includes("https://www.nursenest.ca/es/lessons"));
   assert.ok(urls.includes("https://www.nursenest.ca/es/question-bank"));
+});
+
+test("sitemap safe URL collector includes indexable Portuguese localized hubs", () => {
+  const urls = collectLocaleMarketingSitemapSafeUrls("https://www.nursenest.ca", "pt");
+  assert.ok(urls.includes("https://www.nursenest.ca/pt"));
+  assert.ok(urls.includes("https://www.nursenest.ca/pt/pricing"));
+  assert.ok(urls.includes("https://www.nursenest.ca/pt/lessons"));
+  assert.ok(urls.includes("https://www.nursenest.ca/pt/question-bank"));
+});
+
+test("sitemap safe URL collector includes indexable Tagalog localized hubs", () => {
+  const urls = collectLocaleMarketingSitemapSafeUrls("https://www.nursenest.ca", "tl");
+  assert.ok(urls.includes("https://www.nursenest.ca/tl"));
+  assert.ok(urls.includes("https://www.nursenest.ca/tl/pricing"));
+  assert.ok(urls.includes("https://www.nursenest.ca/tl/lessons"));
+  assert.ok(urls.includes("https://www.nursenest.ca/tl/question-bank"));
 });

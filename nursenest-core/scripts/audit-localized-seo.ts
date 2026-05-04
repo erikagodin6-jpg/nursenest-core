@@ -42,10 +42,15 @@ function completenessReportCandidates(locale: string): string[] {
   const languageNames: Record<string, string> = {
     fr: "french",
     es: "spanish",
+    hi: "hindi",
+    tl: "tagalog",
+    pt: "portuguese",
   };
   return [
     `${locale}-completeness-audit.json`,
     `${locale}-readiness-audit.json`,
+    locale === "tl" ? "i18n-tl-audit-after.json" : "",
+    locale === "pt" ? "i18n-pt-audit-after.json" : "",
     languageNames[locale] ? `${languageNames[locale]}-completeness-audit.json` : "",
   ].filter(Boolean);
 }

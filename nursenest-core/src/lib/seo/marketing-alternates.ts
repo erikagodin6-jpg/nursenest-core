@@ -84,7 +84,7 @@ export function marketingHreflangLanguagesForEnPath(enPath: string): Record<stri
   };
   for (const code of getHreflangEligibleLocales()) {
     const localized = path === "/" ? `/${code}` : `/${code}${path}`;
-    out[code === "fr" ? "fr-CA" : code] = absoluteUrl(localized);
+    out[code === "fr" ? "fr-CA" : code === "pt" ? "pt-BR" : code] = absoluteUrl(localized);
   }
   return filterPublicHreflangRecord(out, "seo", "marketing_hreflang_rejected");
 }

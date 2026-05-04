@@ -1,1 +1,8 @@
-{"brand.applyNest":"ApplyNest","brand.homeAriaLabel":"Simula ng NurseNest","brand.nurseNest":"NurseNest","brand.trust.checkout":"Secure checkout · Cancel anytime · Nurse-built content","brand.trust.prep":"Built for licensing exams · Evidence-informed rationales · Full banks with a subscription","brand.trust.pricing":"Transparent pricing · No surprise fees · Trusted by nursing students"}
+{
+  "brand.applyNest": "ApplyNest",
+  "brand.homeAriaLabel": "Simula ng NurseNest",
+  "brand.nurseNest": "NurseNest",
+  "brand.trust.checkout": "Secure checkout · Kanselahin anumang oras · Nurse-built content",
+  "brand.trust.prep": "Ginawa para sa mga pagsusulit sa paglilisensya · Mga katwiran na may kaalaman sa ebidensya · Mga buong bangko na may subscription",
+  "brand.trust.pricing": "Transparent na pagpepresyo · Walang surpresang bayarin · Pinagkakatiwalaan ng mga mag-aaral ng nursing"
+}

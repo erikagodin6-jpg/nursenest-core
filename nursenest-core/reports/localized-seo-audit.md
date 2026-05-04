@@ -1,19 +1,19 @@
 # Localized SEO Audit
 
-Generated: 2026-05-03T21:57:23.861Z
+Generated: 2026-05-04T00:27:40.694Z
 
 ## Summary
 
-- Locales audited: en, fr, es, tl, hi
-- Localized routes audited: 50
-- Localized slug mappings configured: 8
+- Locales audited: en, fr, es, tl, hi, pt
+- Localized routes audited: 60
+- Localized slug mappings configured: 20
 - Breadcrumb issues: 0
 - Metadata issues: 5
 - Hreflang issues: 0
 - Canonical issues: 0
-- Sitemap-eligible localized URLs: 8
+- Sitemap-eligible localized URLs: 20
 - JSON-LD issues: 0
-- Blocked items: 36
+- Blocked items: 34
 
 ## Duplicate Localized Slugs
 
@@ -22,6 +22,7 @@ Generated: 2026-05-03T21:57:23.861Z
 - es: None
 - tl: None
 - hi: None
+- pt: None
 
 ## Blockers
 
@@ -225,32 +226,6 @@ Recommended fix: Complete translations and add route-level localized slug suppor
 
 Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
 
-### tl homepage
-
-- Path: /tl
-- Canonical: https://www.nursenest.ca/tl
-- Sitemap expected: no
-- Hreflang expected: no
-
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
-- no translation-readiness audit row for localized route
-
-Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
-
-### tl pricing
-
-- Path: /tl/pricing
-- Canonical: https://www.nursenest.ca/tl/pricing
-- Sitemap expected: no
-- Hreflang expected: no
-
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
-- no translation-readiness audit row for localized route
-
-Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
-
 ### tl rn-hub
 
 - Path: /canada/rn/nclex-rn
@@ -258,9 +233,7 @@ Recommended fix: Complete translations and add route-level localized slug suppor
 - Sitemap expected: no
 - Hreflang expected: no
 
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
 - localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
 
 Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
 
@@ -271,9 +244,7 @@ Recommended fix: Complete translations and add route-level localized slug suppor
 - Sitemap expected: no
 - Hreflang expected: no
 
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
 - localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
 
 Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
 
@@ -284,9 +255,7 @@ Recommended fix: Complete translations and add route-level localized slug suppor
 - Sitemap expected: no
 - Hreflang expected: no
 
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
 - localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
 
 Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
 
@@ -297,9 +266,7 @@ Recommended fix: Complete translations and add route-level localized slug suppor
 - Sitemap expected: no
 - Hreflang expected: no
 
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
 - localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
 
 Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
 
@@ -310,37 +277,7 @@ Recommended fix: Complete translations and add route-level localized slug suppor
 - Sitemap expected: no
 - Hreflang expected: no
 
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
 - localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
-
-Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
-
-### tl lessons-hub
-
-- Path: /tl/lessons
-- Canonical: https://www.nursenest.ca/tl/lessons
-- Sitemap expected: no
-- Hreflang expected: no
-
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
-- missing localized slug mapping for lessons
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
-- no translation-readiness audit row for localized route
-
-Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
-
-### tl practice-questions-hub
-
-- Path: /tl/question-bank
-- Canonical: https://www.nursenest.ca/tl/question-bank
-- Sitemap expected: no
-- Hreflang expected: no
-
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
-- missing localized slug mapping for question-bank
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
-- no translation-readiness audit row for localized route
 
 Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
 
@@ -351,36 +288,8 @@ Recommended fix: Complete translations and add route-level localized slug suppor
 - Sitemap expected: no
 - Hreflang expected: no
 
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
-- missing localized slug mapping for flashcards
+- localized slug translation exists but the route does not safely support translated slugs yet
 - localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
-
-Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
-
-### hi homepage
-
-- Path: /hi
-- Canonical: https://www.nursenest.ca/hi
-- Sitemap expected: no
-- Hreflang expected: no
-
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
-- no translation-readiness audit row for localized route
-
-Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
-
-### hi pricing
-
-- Path: /hi/pricing
-- Canonical: https://www.nursenest.ca/hi/pricing
-- Sitemap expected: no
-- Hreflang expected: no
-
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
-- no translation-readiness audit row for localized route
 
 Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
 
@@ -391,9 +300,7 @@ Recommended fix: Complete translations and add route-level localized slug suppor
 - Sitemap expected: no
 - Hreflang expected: no
 
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
 - localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
 
 Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
 
@@ -404,9 +311,7 @@ Recommended fix: Complete translations and add route-level localized slug suppor
 - Sitemap expected: no
 - Hreflang expected: no
 
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
 - localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
 
 Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
 
@@ -417,9 +322,7 @@ Recommended fix: Complete translations and add route-level localized slug suppor
 - Sitemap expected: no
 - Hreflang expected: no
 
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
 - localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
 
 Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
 
@@ -430,9 +333,7 @@ Recommended fix: Complete translations and add route-level localized slug suppor
 - Sitemap expected: no
 - Hreflang expected: no
 
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
 - localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
 
 Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
 
@@ -443,37 +344,7 @@ Recommended fix: Complete translations and add route-level localized slug suppor
 - Sitemap expected: no
 - Hreflang expected: no
 
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
 - localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
-
-Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
-
-### hi lessons-hub
-
-- Path: /hi/lessons
-- Canonical: https://www.nursenest.ca/hi/lessons
-- Sitemap expected: no
-- Hreflang expected: no
-
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
-- missing localized slug mapping for lessons
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
-- no translation-readiness audit row for localized route
-
-Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
-
-### hi practice-questions-hub
-
-- Path: /hi/question-bank
-- Canonical: https://www.nursenest.ca/hi/question-bank
-- Sitemap expected: no
-- Hreflang expected: no
-
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
-- missing localized slug mapping for question-bank
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
-- no translation-readiness audit row for localized route
 
 Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
 
@@ -484,10 +355,75 @@ Recommended fix: Complete translations and add route-level localized slug suppor
 - Sitemap expected: no
 - Hreflang expected: no
 
-- missing localized breadcrumb labels; falling back to English would create mixed-language SEO
-- missing localized slug mapping for flashcards
+- localized slug translation exists but the route does not safely support translated slugs yet
 - localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
-- locale is not SEO-indexable yet; keep noindex and omit from sitemap
+
+Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
+
+### pt rn-hub
+
+- Path: /canada/rn/nclex-rn
+- Canonical: https://www.nursenest.ca/canada/rn/nclex-rn
+- Sitemap expected: no
+- Hreflang expected: no
+
+- localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
+
+Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
+
+### pt rex-pn-hub
+
+- Path: /canada/pn/rex-pn
+- Canonical: https://www.nursenest.ca/canada/pn/rex-pn
+- Sitemap expected: no
+- Hreflang expected: no
+
+- localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
+
+Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
+
+### pt np-hub
+
+- Path: /canada/np/cnple
+- Canonical: https://www.nursenest.ca/canada/np/cnple
+- Sitemap expected: no
+- Hreflang expected: no
+
+- localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
+
+Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
+
+### pt allied-hub
+
+- Path: /pt/allied-health
+- Canonical: https://www.nursenest.ca/pt/allied-health
+- Sitemap expected: no
+- Hreflang expected: no
+
+- localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
+
+Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
+
+### pt new-grad-hub
+
+- Path: /pt/new-grad
+- Canonical: https://www.nursenest.ca/pt/new-grad
+- Sitemap expected: no
+- Hreflang expected: no
+
+- localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
+
+Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
+
+### pt flashcards-hub
+
+- Path: /pt/flashcards
+- Canonical: https://www.nursenest.ca/pt/flashcards
+- Sitemap expected: no
+- Hreflang expected: no
+
+- localized slug translation exists but the route does not safely support translated slugs yet
+- localized route not supported; do not emit locale-prefixed canonical/sitemap URL for this surface
 
 Recommended fix: Complete translations and add route-level localized slug support before exposing this page as indexable.
 
