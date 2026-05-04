@@ -7,22 +7,22 @@ These career-specific allied mastery modules are hidden admin-preview shells onl
 ## Summary
 
 - Occupations configured: 8
-- Modules configured: 18
-- Hidden modules: 18
+- Modules configured: 22
+- Hidden modules: 22
 - Public modules: 0
-- Complete scaffolds: 18
+- Complete scaffolds: 22
 - Incomplete scaffolds: 0
 - Exposure issues: 0
 
 ## Scaffold Generation
 
 - Scaffold path: src/content/allied-mastery/generated-scaffolds.json
-- Modules checked: 18
-- Modules generated or completed this run: 2
-- Modules complete after generation: 18
-- Incomplete before generation: 2
+- Modules checked: 22
+- Modules generated or completed this run: 0
+- Modules complete after generation: 22
+- Incomplete before generation: 0
 - Incomplete after generation: 0
-- Generated module IDs: pharmacy-tech-iv-infusion-safety, paramedic-iv-infusion-safety
+- Generated module IDs: None
 
 ## Modules
 
@@ -196,6 +196,40 @@ These career-specific allied mastery modules are hidden admin-preview shells onl
 - CAT/practice leakage check: pass
 - Issues: None
 
+### Occupational Therapy - Neurological Assessment + Stroke Recognition
+
+- Route: /allied/occupational-therapy/modules/neuro-stroke-recognition
+- Status: hidden / Admin Preview Only
+- Public enabled: false
+- Entitlement key: ALLIED_NEURO_STROKE_RECOGNITION_PAID
+- Content types: lessons, quizzes, case_scenarios, rapid_drills, worksheets, pattern_maps, clinical_action_layer
+- Scaffold status: complete
+- Scaffold counts: 11 lesson outlines, 6 quiz placeholders, 24 case titles, 11 rapid drill sets, 2 worksheet placeholders, 15 pattern maps, 0 visual question placeholders
+- Scaffold missing: None
+- Sitemap exposure: false
+- Localized SEO exposure: false
+- Pricing exposure: false
+- Public nav exposure: false
+- CAT/practice leakage check: pass
+- Issues: None
+
+### Occupational Therapy - Functional Assessment + ADL Safety
+
+- Route: /allied/occupational-therapy/modules/functional-assessment-adl-safety
+- Status: hidden / Admin Preview Only
+- Public enabled: false
+- Entitlement key: ALLIED_FUNCTIONAL_ASSESSMENT_ADL_SAFETY_PAID
+- Content types: lessons, quizzes, case_scenarios, rapid_drills, worksheets, pattern_maps, clinical_action_layer
+- Scaffold status: complete
+- Scaffold counts: 11 lesson outlines, 6 quiz placeholders, 59 case titles, 14 rapid drill sets, 2 worksheet placeholders, 25 pattern maps, 0 visual question placeholders
+- Scaffold missing: None
+- Sitemap exposure: false
+- Localized SEO exposure: false
+- Pricing exposure: false
+- Public nav exposure: false
+- CAT/practice leakage check: pass
+- Issues: None
+
 ### Physiotherapy - Musculoskeletal Rehab + Movement Assessment
 
 - Route: /allied/pta/modules/msk-rehab-assessment
@@ -205,6 +239,23 @@ These career-specific allied mastery modules are hidden admin-preview shells onl
 - Content types: lessons, quizzes, case_scenarios, rapid_drills, worksheets, pattern_maps, clinical_action_layer
 - Scaffold status: complete
 - Scaffold counts: 6 lesson outlines, 6 quiz placeholders, 1 case titles, 1 rapid drill sets, 3 worksheet placeholders, 1 pattern maps, 0 visual question placeholders
+- Scaffold missing: None
+- Sitemap exposure: false
+- Localized SEO exposure: false
+- Pricing exposure: false
+- Public nav exposure: false
+- CAT/practice leakage check: pass
+- Issues: None
+
+### Physiotherapy - Movement + Injury Mechanics
+
+- Route: /allied/physiotherapy/modules/movement-injury-mechanics
+- Status: hidden / Admin Preview Only
+- Public enabled: false
+- Entitlement key: ALLIED_MOVEMENT_INJURY_MECHANICS_PAID
+- Content types: lessons, quizzes, case_scenarios, rapid_drills, worksheets, pattern_maps, clinical_action_layer
+- Scaffold status: complete
+- Scaffold counts: 13 lesson outlines, 6 quiz placeholders, 54 case titles, 13 rapid drill sets, 2 worksheet placeholders, 21 pattern maps, 0 visual question placeholders
 - Scaffold missing: None
 - Sitemap exposure: false
 - Localized SEO exposure: false
@@ -307,6 +358,23 @@ These career-specific allied mastery modules are hidden admin-preview shells onl
 - Content types: lessons, quizzes, case_scenarios, rapid_drills, worksheets, pattern_maps, clinical_action_layer
 - Scaffold status: complete
 - Scaffold counts: 11 lesson outlines, 6 quiz placeholders, 6 case titles, 12 rapid drill sets, 2 worksheet placeholders, 5 pattern maps, 0 visual question placeholders
+- Scaffold missing: None
+- Sitemap exposure: false
+- Localized SEO exposure: false
+- Pricing exposure: false
+- Public nav exposure: false
+- CAT/practice leakage check: pass
+- Issues: None
+
+### Paramedic / EMS - Neurological Assessment + Stroke Recognition
+
+- Route: /allied/paramedic/modules/neuro-stroke-recognition
+- Status: hidden / Admin Preview Only
+- Public enabled: false
+- Entitlement key: ALLIED_NEURO_STROKE_RECOGNITION_PAID
+- Content types: lessons, quizzes, case_scenarios, rapid_drills, worksheets, pattern_maps, clinical_action_layer
+- Scaffold status: complete
+- Scaffold counts: 11 lesson outlines, 6 quiz placeholders, 30 case titles, 12 rapid drill sets, 2 worksheet placeholders, 17 pattern maps, 0 visual question placeholders
 - Scaffold missing: None
 - Sitemap exposure: false
 - Localized SEO exposure: false

@@ -1,48 +1,22 @@
 {
-  "generatedAt": "2026-05-04T21:41:12.590Z",
+  "generatedAt": "2026-05-04T23:12:30.255Z",
   "pass": true,
   "scaffoldGeneration": {
     "path": "src/content/allied-mastery/generated-scaffolds.json",
-    "generatedAt": "2026-05-04T21:41:12.293Z",
-    "modulesChecked": 18,
-    "modulesGenerated": 2,
-    "modulesCompleted": 18,
-    "generatedModuleIds": [
-      "pharmacy-tech-iv-infusion-safety",
-      "paramedic-iv-infusion-safety"
-    ],
-    "incompleteBefore": [
-      {
-        "moduleId": "pharmacy-tech-iv-infusion-safety",
-        "missing": [
-          "lessonOutlines",
-          "quizPlaceholders",
-          "caseScenarioTitles",
-          "rapidDrillSets",
-          "worksheetPlaceholders",
-          "patternMapDefinitions"
-        ]
-      },
-      {
-        "moduleId": "paramedic-iv-infusion-safety",
-        "missing": [
-          "lessonOutlines",
-          "quizPlaceholders",
-          "caseScenarioTitles",
-          "rapidDrillSets",
-          "worksheetPlaceholders",
-          "patternMapDefinitions"
-        ]
-      }
-    ],
+    "generatedAt": "2026-05-04T23:12:29.905Z",
+    "modulesChecked": 22,
+    "modulesGenerated": 0,
+    "modulesCompleted": 22,
+    "generatedModuleIds": [],
+    "incompleteBefore": [],
     "incompleteAfter": []
   },
   "summary": {
     "occupationsConfigured": 8,
-    "modulesConfigured": 18,
-    "hiddenModules": 18,
+    "modulesConfigured": 22,
+    "hiddenModules": 22,
     "publicModules": 0,
-    "completeScaffolds": 18,
+    "completeScaffolds": 22,
     "incompleteScaffolds": 0,
     "exposureIssues": 0
   },
@@ -438,6 +412,84 @@
       "issues": []
     },
     {
+      "occupation": "Occupational Therapy",
+      "professionKey": "ota",
+      "id": "ota-neuro-stroke-recognition",
+      "slug": "neuro-stroke-recognition",
+      "title": "Neurological Assessment + Stroke Recognition",
+      "route": "/allied/occupational-therapy/modules/neuro-stroke-recognition",
+      "hiddenStatus": "hidden",
+      "publicEnabled": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_NEURO_STROKE_RECOGNITION_PAID",
+      "adminPreviewRoute": "/allied/occupational-therapy/modules/neuro-stroke-recognition",
+      "contentTypes": [
+        "lessons",
+        "quizzes",
+        "case_scenarios",
+        "rapid_drills",
+        "worksheets",
+        "pattern_maps",
+        "clinical_action_layer"
+      ],
+      "sitemapExposure": false,
+      "seoExposure": false,
+      "pricingExposure": false,
+      "navExposure": false,
+      "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 11,
+        "quizPlaceholders": 6,
+        "caseScenarioTitles": 24,
+        "rapidDrillSets": 11,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 15,
+        "visualQuestionPlaceholders": 0
+      },
+      "issues": []
+    },
+    {
+      "occupation": "Occupational Therapy",
+      "professionKey": "ota",
+      "id": "ota-functional-assessment-adl-safety",
+      "slug": "functional-assessment-adl-safety",
+      "title": "Functional Assessment + ADL Safety",
+      "route": "/allied/occupational-therapy/modules/functional-assessment-adl-safety",
+      "hiddenStatus": "hidden",
+      "publicEnabled": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_FUNCTIONAL_ASSESSMENT_ADL_SAFETY_PAID",
+      "adminPreviewRoute": "/allied/occupational-therapy/modules/functional-assessment-adl-safety",
+      "contentTypes": [
+        "lessons",
+        "quizzes",
+        "case_scenarios",
+        "rapid_drills",
+        "worksheets",
+        "pattern_maps",
+        "clinical_action_layer"
+      ],
+      "sitemapExposure": false,
+      "seoExposure": false,
+      "pricingExposure": false,
+      "navExposure": false,
+      "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 11,
+        "quizPlaceholders": 6,
+        "caseScenarioTitles": 59,
+        "rapidDrillSets": 14,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 25,
+        "visualQuestionPlaceholders": 0
+      },
+      "issues": []
+    },
+    {
       "occupation": "Physiotherapy",
       "professionKey": "pta",
       "id": "pta-msk-rehab-assessment",
@@ -472,6 +524,45 @@
         "rapidDrillSets": 1,
         "worksheetPlaceholders": 3,
         "patternMapDefinitions": 1,
+        "visualQuestionPlaceholders": 0
+      },
+      "issues": []
+    },
+    {
+      "occupation": "Physiotherapy",
+      "professionKey": "pta",
+      "id": "pta-movement-injury-mechanics",
+      "slug": "movement-injury-mechanics",
+      "title": "Movement + Injury Mechanics",
+      "route": "/allied/physiotherapy/modules/movement-injury-mechanics",
+      "hiddenStatus": "hidden",
+      "publicEnabled": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_MOVEMENT_INJURY_MECHANICS_PAID",
+      "adminPreviewRoute": "/allied/physiotherapy/modules/movement-injury-mechanics",
+      "contentTypes": [
+        "lessons",
+        "quizzes",
+        "case_scenarios",
+        "rapid_drills",
+        "worksheets",
+        "pattern_maps",
+        "clinical_action_layer"
+      ],
+      "sitemapExposure": false,
+      "seoExposure": false,
+      "pricingExposure": false,
+      "navExposure": false,
+      "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 13,
+        "quizPlaceholders": 6,
+        "caseScenarioTitles": 54,
+        "rapidDrillSets": 13,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 21,
         "visualQuestionPlaceholders": 0
       },
       "issues": []
@@ -706,6 +797,45 @@
         "rapidDrillSets": 12,
         "worksheetPlaceholders": 2,
         "patternMapDefinitions": 5,
+        "visualQuestionPlaceholders": 0
+      },
+      "issues": []
+    },
+    {
+      "occupation": "Paramedic / EMS",
+      "professionKey": "paramedic",
+      "id": "paramedic-neuro-stroke-recognition",
+      "slug": "neuro-stroke-recognition",
+      "title": "Neurological Assessment + Stroke Recognition",
+      "route": "/allied/paramedic/modules/neuro-stroke-recognition",
+      "hiddenStatus": "hidden",
+      "publicEnabled": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_NEURO_STROKE_RECOGNITION_PAID",
+      "adminPreviewRoute": "/allied/paramedic/modules/neuro-stroke-recognition",
+      "contentTypes": [
+        "lessons",
+        "quizzes",
+        "case_scenarios",
+        "rapid_drills",
+        "worksheets",
+        "pattern_maps",
+        "clinical_action_layer"
+      ],
+      "sitemapExposure": false,
+      "seoExposure": false,
+      "pricingExposure": false,
+      "navExposure": false,
+      "leakageCheck": "pass",
+      "scaffoldStatus": "complete",
+      "scaffoldMissing": [],
+      "scaffoldCounts": {
+        "lessonOutlines": 11,
+        "quizPlaceholders": 6,
+        "caseScenarioTitles": 30,
+        "rapidDrillSets": 12,
+        "worksheetPlaceholders": 2,
+        "patternMapDefinitions": 17,
         "visualQuestionPlaceholders": 0
       },
       "issues": []

@@ -4,9 +4,9 @@ PASS/FAIL: PASS
 
 ## Summary
 
-- Modules registered: 22
+- Modules registered: 26
 - Shared Prisma models present: true
-- Hidden modules: 22
+- Hidden modules: 26
 - Public modules: 0
 - Exposure issues: 0
 - CAT/practice MasteryQuestion leakage: false
@@ -159,6 +159,34 @@ PASS/FAIL: PASS
 - id: sonography-ecg-cardiac-patterns
 - moduleType: cardiac-pattern-recognition
 - route: /allied/sonography/modules/ecg-cardiac-patterns
+- hidden/adminPreviewOnly: true/true
+- issues: None
+
+### Neurological Assessment + Stroke Recognition
+- id: paramedic-neuro-stroke-recognition
+- moduleType: neuro-stroke-recognition
+- route: /allied/paramedic/modules/neuro-stroke-recognition
+- hidden/adminPreviewOnly: true/true
+- issues: None
+
+### Neurological Assessment + Stroke Recognition
+- id: ota-neuro-stroke-recognition
+- moduleType: neuro-stroke-recognition
+- route: /allied/occupational-therapy/modules/neuro-stroke-recognition
+- hidden/adminPreviewOnly: true/true
+- issues: None
+
+### Movement + Injury Mechanics
+- id: pta-movement-injury-mechanics
+- moduleType: movement-injury-mechanics
+- route: /allied/physiotherapy/modules/movement-injury-mechanics
+- hidden/adminPreviewOnly: true/true
+- issues: None
+
+### Functional Assessment + ADL Safety
+- id: ota-functional-assessment-adl-safety
+- moduleType: functional-assessment-adl-safety
+- route: /allied/occupational-therapy/modules/functional-assessment-adl-safety
 - hidden/adminPreviewOnly: true/true
 - issues: None
 

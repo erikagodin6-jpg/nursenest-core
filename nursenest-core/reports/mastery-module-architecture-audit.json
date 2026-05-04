@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-05-04T21:41:11.398Z",
+  "generatedAt": "2026-05-04T23:12:29.161Z",
   "pass": true,
   "summary": {
-    "modulesRegistered": 22,
+    "modulesRegistered": 26,
     "sharedPrismaModelsPresent": true,
-    "hiddenModules": 22,
+    "hiddenModules": 26,
     "publicModules": 0,
     "exposureIssues": 0,
     "catPracticeMasteryQuestionLeakage": false,
@@ -299,6 +299,62 @@
       "isPublic": false,
       "adminPreviewOnly": true,
       "entitlementKey": "ALLIED_CARDIAC_PATTERN_RECOGNITION_PAID",
+      "issues": []
+    },
+    {
+      "id": "paramedic-neuro-stroke-recognition",
+      "slug": "neuro-stroke-recognition",
+      "title": "Neurological Assessment + Stroke Recognition",
+      "route": "/allied/paramedic/modules/neuro-stroke-recognition",
+      "moduleType": "neuro-stroke-recognition",
+      "professionKeys": [
+        "paramedic"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_NEURO_STROKE_RECOGNITION_PAID",
+      "issues": []
+    },
+    {
+      "id": "ota-neuro-stroke-recognition",
+      "slug": "neuro-stroke-recognition",
+      "title": "Neurological Assessment + Stroke Recognition",
+      "route": "/allied/occupational-therapy/modules/neuro-stroke-recognition",
+      "moduleType": "neuro-stroke-recognition",
+      "professionKeys": [
+        "ota"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_NEURO_STROKE_RECOGNITION_PAID",
+      "issues": []
+    },
+    {
+      "id": "pta-movement-injury-mechanics",
+      "slug": "movement-injury-mechanics",
+      "title": "Movement + Injury Mechanics",
+      "route": "/allied/physiotherapy/modules/movement-injury-mechanics",
+      "moduleType": "movement-injury-mechanics",
+      "professionKeys": [
+        "pta"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_MOVEMENT_INJURY_MECHANICS_PAID",
+      "issues": []
+    },
+    {
+      "id": "ota-functional-assessment-adl-safety",
+      "slug": "functional-assessment-adl-safety",
+      "title": "Functional Assessment + ADL Safety",
+      "route": "/allied/occupational-therapy/modules/functional-assessment-adl-safety",
+      "moduleType": "functional-assessment-adl-safety",
+      "professionKeys": [
+        "ota"
+      ],
+      "isPublic": false,
+      "adminPreviewOnly": true,
+      "entitlementKey": "ALLIED_FUNCTIONAL_ASSESSMENT_ADL_SAFETY_PAID",
       "issues": []
     },
     {

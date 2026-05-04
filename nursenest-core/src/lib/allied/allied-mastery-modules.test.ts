@@ -42,7 +42,7 @@ function readFiles(relativePaths: string[]): string {
 }
 
 test("all allied mastery modules are hidden admin-preview shells", () => {
-  assert.equal(ALLIED_MASTERY_MODULES.length, 20);
+  assert.equal(ALLIED_MASTERY_MODULES.length, 22);
   for (const module of ALLIED_MASTERY_MODULES) {
     assert.equal(module.isPublic, false, module.id);
     assert.equal(module.adminPreviewOnly, true, module.id);
@@ -114,6 +114,10 @@ test("occupation mapping keeps modules profession-specific", () => {
   assert.equal(findAlliedMasteryModule("pta", "advanced-lab-interpretation"), null);
   assert.equal(findAlliedMasteryModule("pta", "adl-functional-assessment"), null);
   assert.equal(findAlliedMasteryModule("ota", "msk-rehab-assessment"), null);
+  assert.ok(findAlliedMasteryModule("pta", "movement-injury-mechanics"));
+  assert.ok(findAlliedMasteryModule("ota", "functional-assessment-adl-safety"));
+  assert.equal(findAlliedMasteryModule("ota", "movement-injury-mechanics"), null);
+  assert.equal(findAlliedMasteryModule("pta", "functional-assessment-adl-safety"), null);
   assert.equal(findAlliedMasteryModule("imaging", "abg"), null);
   for (const professionKey of ALLIED_PROFESSION_KEYS.filter((key) => key !== "respiratory")) {
     assert.equal(findAlliedMasteryModule(professionKey, "abg"), null, `${professionKey} should not receive ABG`);
@@ -160,6 +164,8 @@ test("required allied mastery modules use canonical profession keys and routes",
     ["ota", "neuro-stroke-recognition", "ALLIED_NEURO_STROKE_RECOGNITION_PAID", "/allied/occupational-therapy/modules/neuro-stroke-recognition"],
     ["paramedic", "trauma-triage", "ALLIED_TRAUMA_TRIAGE_PAID", "/allied/paramedic/modules/trauma-triage"],
     ["paramedic", "emergency-pattern-recognition", "ALLIED_EMERGENCY_PATTERN_RECOGNITION_PAID", "/allied/paramedic/modules/emergency-pattern-recognition"],
+    ["pta", "movement-injury-mechanics", "ALLIED_MOVEMENT_INJURY_MECHANICS_PAID", "/allied/physiotherapy/modules/movement-injury-mechanics"],
+    ["ota", "functional-assessment-adl-safety", "ALLIED_FUNCTIONAL_ASSESSMENT_ADL_SAFETY_PAID", "/allied/occupational-therapy/modules/functional-assessment-adl-safety"],
   ] as const;
 
   for (const [professionKey, slug, entitlementKey, route] of expected) {
@@ -728,6 +734,251 @@ test("visual allied modules generate image, comparison, scenario, rapid, and car
     assert.ok(question.framePreviewImageUrl);
     assert.ok(question.functionalInterpretationPrompt);
   }
+});
+
+test("Emergency Pattern Recognition module is hidden and mapped only to Paramedic with required content", () => {
+  const module = findAlliedMasteryModule("paramedic", "emergency-pattern-recognition");
+  assert.ok(module, "emergency-pattern-recognition module must exist");
+  assert.equal(module.route, "/allied/paramedic/modules/emergency-pattern-recognition");
+  assert.equal(module.entitlementKey, "ALLIED_EMERGENCY_PATTERN_RECOGNITION_PAID");
+  assert.deepEqual(module.professionKeys, ["paramedic"]);
+  assert.equal(module.isPublic, false);
+  assert.equal(module.adminPreviewOnly, true);
+  assert.equal(module.access, "admin_preview_only");
+
+  // Module maps ONLY to paramedic — all other professions get null
+  for (const professionKey of ALLIED_PROFESSION_KEYS.filter((key) => key !== "paramedic")) {
+    assert.equal(
+      findAlliedMasteryModule(professionKey, "emergency-pattern-recognition"),
+      null,
+      `${professionKey} must not receive Emergency Pattern Recognition`,
+    );
+  }
+
+  const sections = module.sections.join("\n");
+
+  // Required lessons are present
+  for (const expected of [
+    "scene size-up",
+    "primary survey",
+    "shock pattern recognition",
+    "respiratory emergency",
+    "cardiac emergency",
+    "altered LOC",
+    "trauma red flags",
+    "sepsis",
+    "pediatric",
+    "transport",
+  ]) {
+    assert.match(sections, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), `Missing lesson content: ${expected}`);
+  }
+
+  // Required minimum 8 case scenarios are present
+  for (const expected of [
+    "anaphylaxis",
+    "septic shock",
+    "STEMI",
+    "opioid overdose",
+    "tension pneumothorax",
+    "stroke",
+    "hypovolemic shock",
+    "pediatric respiratory",
+  ]) {
+    assert.match(sections, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), `Missing case scenario: ${expected}`);
+  }
+
+  // Paramedic cases must include vitals (enforced in section text)
+  assert.match(sections, /HR \d+/, "Cases must include HR vitals");
+  assert.match(sections, /BP \d+/, "Cases must include BP vitals");
+  assert.match(sections, /RR \d+/, "Cases must include RR vitals");
+  assert.match(sections, /SpO2 \d+/, "Cases must include SpO2 vitals");
+
+  // Lung sound cases require ClinicalMedia audio reference
+  assert.match(sections, /ClinicalMedia audio/i, "Lung sound cases must reference ClinicalMedia audio");
+
+  // ECG interpretation cases require ClinicalMedia ECG-compatible reference
+  assert.match(sections, /ClinicalMedia ECG/i, "ECG/STEMI cases must reference ClinicalMedia ECG");
+
+  // Stroke and hypoglycemia mimic cases must include glucose value
+  assert.match(sections, /glucose/i, "Stroke/hypoglycemia mimic cases must include glucose value");
+
+  // At least 15 rapid drills
+  const rapidDrills = module.sections.filter((section) => /^Rapid drills:/i.test(section));
+  assert.ok(rapidDrills.length >= 15, `Expected ≥15 rapid drills, got ${rapidDrills.length}`);
+
+  // At least 6 pattern maps (shock, respiratory, cardiac, altered LOC, trauma, transport)
+  const patternMaps = module.sections.filter((section) => /^Pattern maps:/i.test(section));
+  assert.ok(patternMaps.length >= 6, `Expected ≥6 pattern maps, got ${patternMaps.length}`);
+
+  // Admin preview route uses correct admin path — not public nav/pricing/sitemap
+  const adminPreviewSources = readWorkspaceFile("src/app/(admin)/admin/modules/allied/page.tsx");
+  assert.match(adminPreviewSources, /requireAdmin\(\)/);
+
+  // Module not exposed in sitemap or public SEO
+  const sitemapSource = readWorkspaceFile("src/app/sitemap.xml/route.ts");
+  assert.doesNotMatch(sitemapSource, /emergency-pattern-recognition/);
+  assert.doesNotMatch(sitemapSource, /ALLIED_EMERGENCY_PATTERN_RECOGNITION_PAID/);
+});
+
+test("Movement + Injury Mechanics module is hidden and mapped only to Physiotherapy with required content", () => {
+  const module = findAlliedMasteryModule("pta", "movement-injury-mechanics");
+  assert.ok(module, "movement-injury-mechanics module must exist");
+  assert.equal(module.route, "/allied/physiotherapy/modules/movement-injury-mechanics");
+  assert.equal(module.entitlementKey, "ALLIED_MOVEMENT_INJURY_MECHANICS_PAID");
+  assert.deepEqual(module.professionKeys, ["pta"]);
+  assert.equal(module.isPublic, false);
+  assert.equal(module.adminPreviewOnly, true);
+  assert.equal(module.access, "admin_preview_only");
+
+  // Maps ONLY to pta — all other professions get null
+  for (const professionKey of ALLIED_PROFESSION_KEYS.filter((key) => key !== "pta")) {
+    assert.equal(
+      findAlliedMasteryModule(professionKey, "movement-injury-mechanics"),
+      null,
+      `${professionKey} must not receive Movement + Injury Mechanics`,
+    );
+  }
+
+  const sections = module.sections.join("\n");
+
+  // Required lesson topics
+  for (const expected of [
+    "Movement assessment",
+    "ROM",
+    "Strength grading",
+    "Gait",
+    "pain vs weakness",
+    "ankle sprain",
+    "ACL",
+    "rotator cuff",
+    "low back",
+    "hip fracture",
+    "red flags",
+    "rehab progression",
+  ]) {
+    assert.match(sections, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), `Missing lesson: ${expected}`);
+  }
+
+  // Required case scenarios
+  for (const expected of [
+    "ankle inversion",
+    "ACL",
+    "shoulder",
+    "hip fracture",
+    "low back",
+    "gait",
+  ]) {
+    assert.match(sections, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), `Missing case: ${expected}`);
+  }
+
+  // PT case questions require movementFindings Json
+  assert.match(sections, /movementFindings/i, "PT cases must include movementFindings Json");
+
+  // Gait recognition cases require videoUrl
+  assert.match(sections, /videoUrl/i, "Gait recognition cases must include videoUrl");
+
+  // ROM/posture recognition cases require imageUrl
+  assert.match(sections, /imageUrl/i, "ROM/posture recognition cases must include imageUrl");
+
+  // At least 10 rapid drills
+  const rapidDrills = module.sections.filter((section) => /^Rapid drills:/i.test(section));
+  assert.ok(rapidDrills.length >= 10, `Expected ≥10 rapid drills, got ${rapidDrills.length}`);
+
+  // At least 5 pattern maps (injury mechanism, gait abnormality, ROM limitation, red flag, rehab progression)
+  const patternMaps = module.sections.filter((section) => /^Pattern maps:/i.test(section));
+  assert.ok(patternMaps.length >= 5, `Expected ≥5 pattern maps, got ${patternMaps.length}`);
+
+  // Admin preview route is admin guarded
+  const adminPreviewSources = readWorkspaceFile("src/app/(admin)/admin/modules/allied/page.tsx");
+  assert.match(adminPreviewSources, /requireAdmin\(\)/);
+
+  // Module not exposed in sitemap or public SEO
+  const sitemapSource = readWorkspaceFile("src/app/sitemap.xml/route.ts");
+  assert.doesNotMatch(sitemapSource, /movement-injury-mechanics/);
+  assert.doesNotMatch(sitemapSource, /ALLIED_MOVEMENT_INJURY_MECHANICS_PAID/);
+});
+
+test("Functional Assessment + ADL Safety module is hidden and mapped only to Occupational Therapy with required content", () => {
+  const module = findAlliedMasteryModule("ota", "functional-assessment-adl-safety");
+  assert.ok(module, "functional-assessment-adl-safety module must exist");
+  assert.equal(module.route, "/allied/occupational-therapy/modules/functional-assessment-adl-safety");
+  assert.equal(module.entitlementKey, "ALLIED_FUNCTIONAL_ASSESSMENT_ADL_SAFETY_PAID");
+  assert.deepEqual(module.professionKeys, ["ota"]);
+  assert.equal(module.isPublic, false);
+  assert.equal(module.adminPreviewOnly, true);
+  assert.equal(module.access, "admin_preview_only");
+
+  // Maps ONLY to ota — all other professions get null
+  for (const professionKey of ALLIED_PROFESSION_KEYS.filter((key) => key !== "ota")) {
+    assert.equal(
+      findAlliedMasteryModule(professionKey, "functional-assessment-adl-safety"),
+      null,
+      `${professionKey} must not receive Functional Assessment + ADL Safety`,
+    );
+  }
+
+  const sections = module.sections.join("\n");
+
+  // Required lesson topics
+  for (const expected of [
+    "ADL",
+    "IADL",
+    "bathing",
+    "dressing",
+    "meal preparation",
+    "medication management",
+    "cognition",
+    "visual neglect",
+    "falls risk",
+    "adaptive equipment",
+    "energy conservation",
+    "goal-writing",
+    "discharge planning",
+  ]) {
+    assert.match(sections, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), `Missing lesson: ${expected}`);
+  }
+
+  // Required case scenarios
+  for (const expected of [
+    "post-stroke",
+    "fall risk",
+    "COPD",
+    "cognitive",
+    "hip fracture",
+    "low vision",
+    "discharge planning",
+  ]) {
+    assert.match(sections, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i"), `Missing case: ${expected}`);
+  }
+
+  // OT case questions require functionalTaskData Json
+  assert.match(sections, /functionalTaskData/i, "OT cases must include functionalTaskData Json");
+
+  // Cognition questions require cognitiveFindings Json
+  assert.match(sections, /cognitiveFindings/i, "Cognition cases must include cognitiveFindings Json");
+
+  // Home safety questions require environmentFindings Json
+  assert.match(sections, /environmentFindings/i, "Home safety cases must include environmentFindings Json");
+
+  // Visual task performance questions require videoUrl
+  assert.match(sections, /videoUrl/i, "Visual task performance cases must include videoUrl");
+
+  // At least 10 rapid drills
+  const rapidDrills = module.sections.filter((section) => /^Rapid drills:/i.test(section));
+  assert.ok(rapidDrills.length >= 10, `Expected ≥10 rapid drills, got ${rapidDrills.length}`);
+
+  // At least 5 pattern maps (ADL/IADL, deficit/intervention, cognition/safety, home hazard, discharge planning)
+  const patternMaps = module.sections.filter((section) => /^Pattern maps:/i.test(section));
+  assert.ok(patternMaps.length >= 5, `Expected ≥5 pattern maps, got ${patternMaps.length}`);
+
+  // Admin preview route is admin guarded
+  const adminPreviewSources = readWorkspaceFile("src/app/(admin)/admin/modules/allied/page.tsx");
+  assert.match(adminPreviewSources, /requireAdmin\(\)/);
+
+  // Module not exposed in sitemap or public SEO
+  const sitemapSource = readWorkspaceFile("src/app/sitemap.xml/route.ts");
+  assert.doesNotMatch(sitemapSource, /functional-assessment-adl-safety/);
+  assert.doesNotMatch(sitemapSource, /ALLIED_FUNCTIONAL_ASSESSMENT_ADL_SAFETY_PAID/);
 });
 
 test("allied mastery scaffold generator does not overwrite existing scaffold content", () => {

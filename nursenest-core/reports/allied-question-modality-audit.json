@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-05-04T21:41:13.702Z",
-  "pass": true,
+  "generatedAt": "2026-05-04T22:48:13.614Z",
+  "pass": false,
   "summary": {
-    "modulesAudited": 18,
-    "questionCount": 271,
-    "readyModules": 18,
-    "invalidModules": 0,
-    "averageModalityCompliancePct": 100,
-    "missingAudio": 0,
+    "modulesAudited": 20,
+    "questionCount": 419,
+    "readyModules": 19,
+    "invalidModules": 1,
+    "averageModalityCompliancePct": 95,
+    "missingAudio": 48,
     "missingImage": 0,
     "missingVideo": 0,
     "accuracyIssues": 0
@@ -303,11 +303,334 @@
       "issues": []
     },
     {
+      "moduleId": "paramedic-neuro-stroke-recognition",
+      "moduleTitle": "Neurological Assessment + Stroke Recognition",
+      "professionKey": "paramedic",
+      "profession": "Paramedic / EMS",
+      "questionCount": 48,
+      "modalityCompliancePct": 0,
+      "missingAudio": 48,
+      "missingImage": 0,
+      "missingVideo": 0,
+      "accuracyIssues": 0,
+      "rationaleIssues": 0,
+      "decisionLayerIssues": 0,
+      "rapidRecognitionIssues": 0,
+      "readinessStatus": "invalid",
+      "issues": [
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-quiz-basic-neuro-assessment-loc-orientation-pupil-response-motor-and-sensory-exam-spe",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-quiz-fast-be-fast-tool-facial-droop-arm-drift-speech-eyes-balance-time-to-call",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-quiz-gcs-basics-eye-verbal-motor-scoring-and-total-score-interpretation",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-quiz-stroke-recognition-fast-positive-sudden-onset-symptoms-cortical-vs-non-cortical-",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-quiz-stroke-mimics-hypoglycemia-seizure-post-ictal-todd-s-paralysis-migraine-increase",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-quiz-altered-loc-differential-aeiou-tips-hypoglycemia-overdose-trauma-metabolic-cause",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-acute-facial-droop",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-arm-drift",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-slurred-speech-fast-positive",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-glucose-5-2-mmol-l",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-onset-45-min-ago",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-altered-loc-with-low-glucose-glucose-1-8-mmol-l",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-diaphoresis",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-confusion",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-priority-intervention",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-increased-icp-pattern-cushing-s-triad",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-hr-48",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-bp-178-102",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-rr-8",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-decreasing-gcs",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-stroke-vs-hypoglycemia-mimic-glucose-required-to-differentiate",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-unilateral-weakness",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-altered-loc",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-unilateral-neglect-post-stroke-ot-functional-deficit-pattern",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-hemiplegia",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-left-sided-neglect",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-seizure-with-post-ictal-altered-loc-todd-s-paralysis",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-focal-findings",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-differentiate-from-stroke",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-pediatric-first-seizure-with-altered-loc-age-appropriate-assessment",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-fever",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-meningismus",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-hemorrhagic-stroke-cues-sudden-severe-headache",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-vomiting",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-rapid-gcs-decline",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-case-elevated-bp-186-104",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-rapid-drill-fast-positive-plus-onset-30-minutes-ago-priority-action",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-rapid-drill-gcs-10-glucose-1-9-mmol-l-diaphoresis-first-intervention",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-rapid-drill-cushing-s-triad-hr-48-bp-180-100-rr-6-concern",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-rapid-drill-unilateral-arm-drift-facial-droop-glucose-normal-priority",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-rapid-drill-post-ictal-patient-focal-weakness-stroke-or-todd-s-paralysis",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-rapid-drill-sudden-worst-headache-of-life-vomiting-suspect",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-rapid-drill-befast-positive-time-unknown-transport-decision",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-rapid-drill-altered-loc-glucose-not-checked-safe-assumption-to-proceed",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-rapid-drill-unilateral-neglect-post-stroke-ot-functional-deficit-pattern-identified",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-rapid-drill-infant-bulging-fontanelle-altered-loc-concern",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-rapid-drill-gcs-14-drops-to-10-in-10-minutes-urgency-level",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        },
+        {
+          "questionId": "paramedic-neuro-stroke-recognition-rapid-drill-pupils-unequal-gcs-8-immediate-concern",
+          "severity": "invalid",
+          "code": "audio_required",
+          "message": "Paramedic lung-sound questions require audioUrl."
+        }
+      ]
+    },
+    {
+      "moduleId": "ota-neuro-stroke-recognition",
+      "moduleTitle": "Neurological Assessment + Stroke Recognition",
+      "professionKey": "ota",
+      "profession": "Occupational Therapy",
+      "questionCount": 41,
+      "modalityCompliancePct": 100,
+      "missingAudio": 0,
+      "missingImage": 0,
+      "missingVideo": 0,
+      "accuracyIssues": 0,
+      "rationaleIssues": 0,
+      "decisionLayerIssues": 0,
+      "rapidRecognitionIssues": 0,
+      "readinessStatus": "ready",
+      "issues": []
+    },
+    {
       "moduleId": "paramedic-emergency-pattern-recognition",
       "moduleTitle": "Emergency Pattern Recognition",
       "professionKey": "paramedic",
       "profession": "Paramedic / EMS",
-      "questionCount": 8,
+      "questionCount": 67,
       "modalityCompliancePct": 100,
       "missingAudio": 0,
       "missingImage": 0,

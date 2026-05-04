@@ -18,7 +18,18 @@ export type MasteryModuleType =
   | "msk-rehab"
   | "image-recognition"
   | "cardiac-pattern-recognition"
-  | "emergency-pattern-recognition";
+  | "emergency-pattern-recognition"
+  | "movement-injury-mechanics"
+  | "functional-assessment-adl-safety";
+
+export type MasteryRequiredModalities = {
+  lungSound?: "audio";
+  ecg?: "image" | "video" | "ecg" | ("image" | "video")[];
+  traumaImage?: "image";
+  glucose?: "numeric";
+  vitals?: "required";
+  abg?: ("pH" | "PaCO2" | "HCO3" | "PaO2")[];
+};
 
 export type MasteryModuleRegistryEntry = {
   id: string;
@@ -30,6 +41,36 @@ export type MasteryModuleRegistryEntry = {
   isPublic: false;
   adminPreviewOnly: true;
   entitlementKey: string;
+  requiredModalities?: MasteryRequiredModalities;
+};
+
+/** Per-module-type required modality declarations. */
+export const MASTERY_REQUIRED_MODALITIES: Partial<Record<MasteryModuleType, MasteryRequiredModalities>> = {
+  "emergency-pattern-recognition": {
+    lungSound: "audio",
+    ecg: ["image", "video"],
+    traumaImage: "image",
+    glucose: "numeric",
+    vitals: "required",
+  },
+  "respiratory-distress": {
+    lungSound: "audio",
+    vitals: "required",
+  },
+  "abg": {
+    abg: ["pH", "PaCO2", "HCO3", "PaO2"],
+    vitals: "required",
+  },
+  "ventilator-management": {
+    vitals: "required",
+  },
+  "oxygen-delivery": {
+    vitals: "required",
+  },
+  "cardiac-pattern-recognition": {
+    ecg: ["image", "video"],
+    vitals: "required",
+  },
 };
 
 function alliedModuleType(id: string, slug: string): MasteryModuleType {
@@ -48,6 +89,8 @@ function alliedModuleType(id: string, slug: string): MasteryModuleType {
   if (slug === "image-recognition") return "image-recognition";
   if (slug === "ecg-cardiac-patterns") return "cardiac-pattern-recognition";
   if (slug === "emergency-pattern-recognition") return "emergency-pattern-recognition";
+  if (slug === "movement-injury-mechanics") return "movement-injury-mechanics";
+  if (slug === "functional-assessment-adl-safety") return "functional-assessment-adl-safety";
   throw new Error(`Unknown allied mastery module type for ${id}/${slug}`);
 }
 
