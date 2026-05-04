@@ -231,14 +231,14 @@ test("remaining pre-nursing and interactive content modules avoid top-level JSON
 });
 
 test("server-facing readiness and inventory helpers avoid top-level JSON imports", () => {
-  const sourcePaths = [
-    "lib/navigation/country-exam-readiness-snapshot.ts",
-    "lib/education-images/inventory.ts",
-  ];
+  const inventorySource = readAppFile("lib/education-images/inventory.ts");
+  assert.doesNotMatch(inventorySource, /import\s+.+\s+from\s+["']@\/(config|content|data)\/.+\.json["']/);
+  assert.match(inventorySource, /require\(["']@\/config\/.+\.json["']\)/);
+});
 
-  for (const sourcePath of sourcePaths) {
-    const source = readAppFile(sourcePath);
-    assert.doesNotMatch(source, /import\s+.+\s+from\s+["']@\/(config|content|data)\/.+\.json["']/);
-    assert.match(source, /require\(["']@\/config\/.+\.json["']\)/);
-  }
+test("country exam readiness snapshot stays bundler-safe for route rendering", () => {
+  const source = readAppFile("lib/navigation/country-exam-readiness-snapshot.ts");
+  assert.doesNotMatch(source, /node:module/);
+  assert.doesNotMatch(source, /createRequire/);
+  assert.match(source, /import\s+.+\s+from\s+["']@\/config\/pathway-readiness-snapshot\.json["']/);
 });

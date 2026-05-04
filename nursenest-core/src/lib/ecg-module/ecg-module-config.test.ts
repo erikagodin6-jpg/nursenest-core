@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   ECG_ROUTE_CONFIGS,
+  assertNoEcgForRpn,
   canAccessEcgModuleForTier,
   ecgQuestionTierFilterForTier,
   isEcgModuleEnabled,
@@ -29,6 +30,13 @@ test("ECG question pools are scoped by RN/NP tier and never expose RPN", () => {
   assert.deepEqual(ecgQuestionTierFilterForTier("NP"), ["rn", "np"]);
 });
 
+test("assertNoEcgForRpn blocks RPN and rex-pn access paths", () => {
+  assert.throws(() => assertNoEcgForRpn("RPN", "ca-rpn-rex-pn"));
+  assert.throws(() => assertNoEcgForRpn("RN", "ca-rpn-rex-pn"));
+  assert.doesNotThrow(() => assertNoEcgForRpn("RN", "us-rn-nclex-rn"));
+  assert.doesNotThrow(() => assertNoEcgForRpn("NP", "us-np-fnp"));
+});
+
 test("basic and advanced route configs remain separate", () => {
   assert.equal(ECG_ROUTE_CONFIGS["/modules/ecg/basic/lessons"].level, "basic");
   assert.equal(ECG_ROUTE_CONFIGS["/modules/ecg/basic/quizzes"].questionMode, "quiz");
@@ -46,4 +54,3 @@ test("ECG level and mode normalization is strict", () => {
   assert.equal(normalizeEcgMode("drill"), "drill");
   assert.equal(normalizeEcgMode("scenario"), null);
 });
-

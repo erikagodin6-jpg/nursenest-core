@@ -158,6 +158,7 @@ model User {
   printableDownloadEvents                   PrintableDownloadEvent[]
   printableAccesses                         PrintableAccess[]
   examQuestionPracticeAnswerAttempts        ExamQuestionPracticeAnswerAttempt[]
+  ecgVideoQuestionPracticeAnswerAttempts    EcgVideoQuestionPracticeAnswerAttempt[]
 
   @@index([alliedProfessionKey])
   @@index([normalizedEmail])
@@ -291,6 +292,34 @@ model EcgWorksheet {
 
   @@index([level])
   @@map("ecg_worksheets")
+}
+
+/// * Premium ECG video-based learning questions. Intentionally isolated from the core `exam_questions` bank.
+model EcgVideoQuestion {
+  id               String   @id @default(cuid())
+  videoUrl         String   @map("video_url")
+  thumbnailUrl     String?  @map("thumbnail_url")
+  durationSeconds  Int?     @map("duration_seconds")
+  questionText     String   @map("question_text")
+  answerOptions    Json     @default("[]") @map("answer_options")
+  correctAnswerId  String   @map("correct_answer_id") @db.VarChar(64)
+  rationale        String
+  difficulty       String   @db.VarChar(16)
+  rhythmTag        String   @map("rhythm_tag") @db.VarChar(64)
+  clinicalPriority String?  @map("clinical_priority") @db.VarChar(64)
+  allowedTiers     String[] @map("allowed_tiers")
+  isPremium        Boolean  @default(true) @map("is_premium")
+  level            String   @db.VarChar(16)
+  mode             String   @db.VarChar(16)
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  practiceAnswerAttempts EcgVideoQuestionPracticeAnswerAttempt[]
+  answerOptionAggregates EcgVideoQuestionAnswerOptionAggregate[]
+  performanceAggregate   EcgVideoQuestionPerformanceAggregate?
+
+  @@index([level, mode])
+  @@index([rhythmTag])
+  @@map("ecg_video_questions")
 }
 
 /// * Aggregated premium UX telemetry (UTC day; global counts, no user PII).
@@ -1315,6 +1344,24 @@ model ExamQuestionPracticeAnswerAttempt {
   @@map("exam_question_practice_answer_attempts")
 }
 
+model EcgVideoQuestionPracticeAnswerAttempt {
+  id               String                     @id @default(cuid())
+  userId           String                     @map("user_id")
+  questionId       String                     @map("question_id")
+  selectedOptionId String                     @map("selected_option_id") @db.Text
+  isCorrect        Boolean                    @map("is_correct")
+  mode             PracticeQuestionAnswerMode @default(practice) @map("mode")
+  pathwayId        String?                    @map("pathway_id") @db.VarChar(64)
+  createdAt        DateTime                   @default(now()) @map("created_at")
+
+  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  question EcgVideoQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId, createdAt])
+  @@index([userId, questionId])
+  @@map("ecg_video_question_practice_answer_attempts")
+}
+
 model ExamQuestionAnswerOptionAggregate {
   questionId     String   @map("question_id") @db.VarChar
   optionKey      String   @map("option_key") @db.Text
@@ -1327,6 +1374,18 @@ model ExamQuestionAnswerOptionAggregate {
   @@map("exam_question_answer_option_aggregates")
 }
 
+model EcgVideoQuestionAnswerOptionAggregate {
+  questionId     String   @map("question_id")
+  optionId       String   @map("option_id") @db.Text
+  selectionCount Int      @default(0) @map("selection_count")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  question EcgVideoQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@id([questionId, optionId])
+  @@map("ecg_video_question_answer_option_aggregates")
+}
+
 model ExamQuestionPerformanceAggregate {
   questionId        String   @id @map("question_id") @db.VarChar
   totalAttempts     Int      @default(0) @map("total_attempts")
@@ -1336,6 +1395,17 @@ model ExamQuestionPerformanceAggregate {
   question ExamQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@map("exam_question_performance_aggregates")
+}
+
+model EcgVideoQuestionPerformanceAggregate {
+  questionId      String   @id @map("question_id")
+  totalAttempts   Int      @default(0) @map("total_attempts")
+  correctAttempts Int      @default(0) @map("correct_attempts")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  question EcgVideoQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@map("ecg_video_question_performance_aggregates")
 }
 
 /// *

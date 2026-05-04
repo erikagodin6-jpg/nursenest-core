@@ -15,6 +15,10 @@ const PRIMARY_LINKS = [
 export function EcgModulePage({ config }: { config: EcgRouteConfig }) {
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
+      <div className="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950">
+        <strong>Hidden / Admin Preview Only.</strong> Not visible to public users. Not in sitemap, hreflang, public
+        navigation, pricing, or checkout.
+      </div>
       <header className="space-y-3">
         <p className="text-xs font-bold uppercase tracking-wide text-[var(--semantic-text-muted)]">
           ECG mastery / {config.level}
@@ -57,4 +61,3 @@ export function EcgModulePage({ config }: { config: EcgRouteConfig }) {
     </main>
   );
 }
-

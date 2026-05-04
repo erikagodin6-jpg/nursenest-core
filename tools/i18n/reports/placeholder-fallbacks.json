@@ -1,26 +1,26 @@
 {
-  "generatedAt": "2026-05-01T21:58:09.795Z",
-  "totalFallbacks": 87,
+  "generatedAt": "2026-05-04T09:08:48.962Z",
+  "totalFallbacks": 81,
   "byLocale": {
     "fr": 3,
-    "tl": 4,
+    "tl": 3,
     "hi": 4,
     "es": 3,
     "zh": 4,
     "zh-tw": 4,
-    "ar": 4,
+    "ar": 3,
     "ko": 5,
     "pt": 4,
     "pa": 4,
     "vi": 4,
     "ht": 5,
     "ur": 4,
-    "ja": 4,
+    "ja": 3,
     "fa": 5,
     "de": 3,
     "th": 4,
     "tr": 5,
-    "id": 6,
+    "id": 3,
     "it": 4,
     "ru": 4
   },
@@ -52,18 +52,6 @@
       "englishValue": "Open {{exam}} CAT intro",
       "placeholdersInEnglish": [
         "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "tl",
-      "key": "upgrade.usageNote",
-      "localizedValue": "You",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
-      "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
       ],
       "placeholdersInLocalized": []
     },
@@ -250,18 +238,6 @@
       "englishValue": "Open {{exam}} CAT intro",
       "placeholdersInEnglish": [
         "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "ar",
-      "key": "upgrade.usageNote",
-      "localizedValue": "You",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
-      "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
       ],
       "placeholdersInLocalized": []
     },
@@ -565,18 +541,6 @@
     },
     {
       "locale": "ja",
-      "key": "upgrade.usageNote",
-      "localizedValue": "You",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
-      "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "ja",
       "key": "components.examPathwayHub.studyModes.practiceCatBody",
       "localizedValue": "Simulate pacing and adaptive exam pressure",
       "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
@@ -774,38 +738,6 @@
       "englishValue": "Open {{exam}} CAT intro",
       "placeholdersInEnglish": [
         "exam"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "id",
-      "key": "pricing.save",
-      "localizedValue": "Hemat",
-      "englishValue": "Save {{percent}}%",
-      "placeholdersInEnglish": [
-        "percent"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "id",
-      "key": "upgrade.title",
-      "localizedValue": "Tingkatkan ke NurseNest Pro",
-      "englishValue": "Pass Your NCLEX or {{examName}} With Structured Exam-Level Practice",
-      "placeholdersInEnglish": [
-        "examName"
-      ],
-      "placeholdersInLocalized": []
-    },
-    {
-      "locale": "id",
-      "key": "upgrade.usageNote",
-      "localizedValue": "Catatan penggunaan",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
-      "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
       ],
       "placeholdersInLocalized": []
     },

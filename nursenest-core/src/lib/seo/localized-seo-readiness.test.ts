@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
 import test from "node:test";
 import {
   buildLocalizedSeoAuditItem,
@@ -137,4 +139,33 @@ test("sitemap safe URL collector includes indexable Tagalog localized hubs", () 
   assert.ok(urls.includes("https://www.nursenest.ca/tl/pricing"));
   assert.ok(urls.includes("https://www.nursenest.ca/tl/lessons"));
   assert.ok(urls.includes("https://www.nursenest.ca/tl/question-bank"));
+});
+
+test("country exam readiness snapshot helper stays free of node:module and createRequire", () => {
+  const source = fs.readFileSync(
+    path.join(process.cwd(), "src/lib/navigation/country-exam-readiness-snapshot.ts"),
+    "utf8",
+  );
+  assert.doesNotMatch(source, /node:module/);
+  assert.doesNotMatch(source, /createRequire/);
+});
+
+test("database url drift audit helper stays free of node:crypto for webpack route boot", () => {
+  const source = fs.readFileSync(
+    path.join(process.cwd(), "src/lib/db/database-url-drift-audit.ts"),
+    "utf8",
+  );
+  assert.doesNotMatch(source, /node:crypto/);
+});
+
+test("study snapshot startup diagnostics helper stays free of node:fs scheme imports for webpack route boot", () => {
+  const source = fs.readFileSync(
+    path.join(process.cwd(), "src/lib/study-content-failover/study-snapshot-runtime-diagnostics.ts"),
+    "utf8",
+  );
+  assert.doesNotMatch(source, /node:fs/);
+  assert.doesNotMatch(source, /node:path/);
+  assert.doesNotMatch(source, /import\s+.+\s+from\s+["']fs(?:\/promises)?["']/);
+  assert.doesNotMatch(source, /import\s+.+\s+from\s+["']path["']/);
+  assert.match(source, /webpackIgnore:\s*true/);
 });

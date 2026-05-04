@@ -1,9 +1,11 @@
 import type { TierCode } from "@prisma/client";
+import { ECG_MASTERY_PAID } from "@/lib/modules/module-entitlement-placeholders";
 
 export const ECG_LEVELS = ["basic", "advanced"] as const;
 export const ECG_MODES = ["lesson", "quiz", "drill"] as const;
 export const ECG_QUESTION_FORMAT = "ecg_video" as const;
 export const ECG_PRINTABLE_CATEGORY_PREFIX = "ecg:" as const;
+export const ECG_MASTERY_ENTITLEMENT = ECG_MASTERY_PAID;
 
 export type EcgLevel = (typeof ECG_LEVELS)[number];
 export type EcgMode = (typeof ECG_MODES)[number];
@@ -92,6 +94,13 @@ export function normalizeEcgMode(value: string | null | undefined): EcgMode | nu
 
 export function canAccessEcgModuleForTier(tier: TierCode | string | null | undefined): boolean {
   return tier === "RN" || tier === "NP";
+}
+
+export function assertNoEcgForRpn(tier: TierCode | string | null | undefined, pathwayId: string | null | undefined): void {
+  const normalizedPathwayId = pathwayId?.trim().toLowerCase() ?? "";
+  if (tier === "RPN" || normalizedPathwayId.includes("rex-pn")) {
+    throw new Error("ECG module access is blocked for RPN and REx-PN pathways.");
+  }
 }
 
 export function ecgQuestionTierFilterForTier(tier: TierCode | string | null | undefined): string[] {

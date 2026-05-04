@@ -1,35 +1,54 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type { EcgLevel, EcgMode, EcgRouteKind } from "@/lib/ecg-module/ecg-module-config";
 
 type EcgQuestion = {
   id: string;
-  stem: string;
-  options: string[];
-  correctAnswer: string[];
+  videoUrl: string;
+  thumbnailUrl: string | null;
+  durationSeconds: number | null;
+  questionText: string;
+  options: { id: string; text: string }[];
   rationale: string | null;
-  topic: string | null;
-  scenario: string | null;
-  exhibitData: unknown;
+  rhythmTag: string;
+  clinicalPriority: string | null;
+  percentCorrect: number | null;
+  commonWrongAnswers: string[];
 };
 
 type EcgWorksheet = {
   id: string;
   title: string;
   description: string | null;
-  accessState: "free" | "premium_included" | "unlocked" | "locked";
+  accessState: "free" | "premium_included" | "unlocked" | "locked" | "admin_preview";
   previewBlurred: boolean;
   downloadUrl: string | null;
 };
 
-function JsonVideoPreview({ exhibitData, autoplay, slow }: { exhibitData: unknown; autoplay?: boolean; slow?: boolean }) {
-  const asset = useMemo(() => {
-    if (!exhibitData || typeof exhibitData !== "object") return null;
-    const root = exhibitData as { asset?: { url?: unknown; thumbnailUrl?: unknown; mimeType?: unknown } };
-    return root.asset ?? null;
-  }, [exhibitData]);
-  const source = typeof asset?.url === "string" ? asset.url : null;
+type AnswerResult = {
+  questionId: string;
+  selectedOptionId: string;
+  isCorrect: boolean;
+  correctRhythm: string;
+  correctAnswerId: string;
+  rationale: string | null;
+  percentCorrect: number | null;
+  commonWrongAnswers: string[];
+};
+
+function VideoPreview({
+  videoUrl,
+  thumbnailUrl,
+  autoplay,
+  slow,
+}: {
+  videoUrl: string;
+  thumbnailUrl: string | null;
+  autoplay?: boolean;
+  slow?: boolean;
+}) {
+  const source = videoUrl.trim();
   if (!source) return null;
 
   return (
@@ -40,12 +59,12 @@ function JsonVideoPreview({ exhibitData, autoplay, slow }: { exhibitData: unknow
       muted={autoplay}
       loop={autoplay}
       preload="metadata"
-      poster={typeof asset?.thumbnailUrl === "string" ? asset.thumbnailUrl : undefined}
+      poster={thumbnailUrl ?? undefined}
       onLoadedMetadata={(event) => {
         if (slow) event.currentTarget.playbackRate = 0.75;
       }}
     >
-      <source src={source} type={typeof asset?.mimeType === "string" ? asset.mimeType : undefined} />
+      <source src={source} />
     </video>
   );
 }
@@ -61,8 +80,10 @@ export function EcgQuestionList({
 }) {
   const [items, setItems] = useState<EcgQuestion[]>([]);
   const [selected, setSelected] = useState<Record<string, string>>({});
+  const [results, setResults] = useState<Record<string, AnswerResult>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [submittingId, setSubmittingId] = useState<string | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -95,9 +116,30 @@ export function EcgQuestionList({
 
   const quizItems = kind === "quizzes" ? items : [];
   const answeredQuizItems = quizItems.filter((item) => selected[item.id]);
-  const correctQuizItems = answeredQuizItems.filter((item) => item.correctAnswer.includes(selected[item.id] ?? ""));
-  const wrongQuizItems = answeredQuizItems.filter((item) => !item.correctAnswer.includes(selected[item.id] ?? ""));
+  const correctQuizItems = answeredQuizItems.filter((item) => results[item.id]?.isCorrect);
+  const wrongQuizItems = answeredQuizItems.filter((item) => !results[item.id]?.isCorrect);
   const percentCorrect = answeredQuizItems.length > 0 ? Math.round((correctQuizItems.length / answeredQuizItems.length) * 100) : null;
+
+  async function submitAnswer(item: EcgQuestion, optionId: string) {
+    setSelected((prev) => ({ ...prev, [item.id]: optionId }));
+    setSubmittingId(item.id);
+    try {
+      const attemptMode = kind === "video-drills" ? "practice" : "quiz";
+      const res = await fetch(`/api/modules/ecg/questions/${encodeURIComponent(item.id)}/answer`, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ selectedOptionId: optionId, attemptMode }),
+      });
+      const data = (await res.json()) as { ok?: boolean; result?: AnswerResult };
+      if (!res.ok || !data.ok || !data.result) throw new Error("answer_failed");
+      setResults((prev) => ({ ...prev, [item.id]: data.result! }));
+    } catch {
+      setError("Unable to grade this ECG question right now.");
+    } finally {
+      setSubmittingId(null);
+    }
+  }
 
   return (
     <div className="space-y-4">
@@ -108,7 +150,10 @@ export function EcgQuestionList({
           </p>
           {wrongQuizItems.length > 0 ? (
             <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">
-              Wrong answers: {wrongQuizItems.map((item) => selected[item.id]).join(", ")}
+              Wrong answers: {wrongQuizItems.map((item) => {
+                const selectedId = selected[item.id];
+                return item.options.find((option) => option.id === selectedId)?.text ?? selectedId;
+              }).join(", ")}
             </p>
           ) : null}
         </div>
@@ -116,45 +161,63 @@ export function EcgQuestionList({
       <ul className="grid gap-4">
         {items.map((item) => {
           const chosen = selected[item.id];
-          const isAnswered = Boolean(chosen);
-          const isCorrect = isAnswered && item.correctAnswer.includes(chosen);
+          const result = results[item.id];
+          const isAnswered = Boolean(result);
+          const isCorrect = result?.isCorrect ?? false;
+          const correctOptionLabel =
+            item.options.find((option) => option.id === result?.correctAnswerId)?.text ?? result?.correctAnswerId ?? "";
           return (
             <li key={item.id} className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
-              {item.scenario ? (
-                <p className="mb-2 text-sm font-semibold text-[var(--semantic-text-primary)]">{item.scenario}</p>
+              {item.clinicalPriority ? (
+                <p className="mb-2 text-sm font-semibold text-[var(--semantic-text-primary)]">
+                  Clinical priority: {item.clinicalPriority}
+                </p>
               ) : null}
-              <h2 className="text-base font-semibold text-[var(--semantic-text-primary)]">{item.stem}</h2>
-              {item.topic ? <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">{item.topic}</p> : null}
-              <JsonVideoPreview
-                exhibitData={item.exhibitData}
+              <h2 className="text-base font-semibold text-[var(--semantic-text-primary)]">{item.questionText}</h2>
+              <p className="mt-1 text-xs text-[var(--semantic-text-muted)]">{item.rhythmTag}</p>
+              <VideoPreview
+                videoUrl={item.videoUrl}
+                thumbnailUrl={item.thumbnailUrl}
                 autoplay={kind === "video-drills"}
                 slow={level === "basic" && kind === "lessons"}
               />
-              {kind === "quizzes" && item.options.length > 0 ? (
+              {item.options.length > 0 ? (
                 <div className="mt-3 grid gap-2 sm:grid-cols-2">
                   {item.options.map((option) => (
                     <button
-                      key={option}
+                      key={option.id}
                       type="button"
-                      onClick={() => setSelected((prev) => ({ ...prev, [item.id]: option }))}
+                      onClick={() => void submitAnswer(item, option.id)}
+                      disabled={submittingId === item.id}
                       className={`rounded-md border px-3 py-2 text-left text-sm ${
-                        chosen === option
+                        chosen === option.id
                           ? "border-[var(--semantic-info)] bg-[var(--semantic-panel-cool)] text-[var(--semantic-text-primary)]"
                           : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)]"
                       }`}
                     >
-                      {option}
+                      {option.text}
                     </button>
                   ))}
                 </div>
               ) : null}
-              {kind === "quizzes" && isAnswered ? (
+              {isAnswered ? (
                 <p className="mt-3 text-sm font-semibold text-[var(--semantic-text-primary)]">
-                  {isCorrect ? "Correct" : `Correct answer: ${item.correctAnswer.join(", ")}`}
+                  {isCorrect ? `Correct rhythm: ${result?.correctRhythm ?? item.rhythmTag}` : `Correct answer: ${correctOptionLabel}`}
                 </p>
               ) : null}
-              {kind === "quizzes" && isAnswered && item.rationale ? (
-                <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{item.rationale}</p>
+              {isAnswered && kind !== "video-drills" && result?.rationale ? (
+                <p className="mt-2 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{result.rationale}</p>
+              ) : null}
+              {isAnswered ? (
+                <div className="mt-3 space-y-1 text-sm text-[var(--semantic-text-secondary)]">
+                  <p>{result?.percentCorrect == null ? "Not enough attempts yet." : `${result.percentCorrect}% answered correctly`}</p>
+                  {result?.commonWrongAnswers.length ? (
+                    <p>Most common wrong answers: {result.commonWrongAnswers.join(", ")}</p>
+                  ) : null}
+                </div>
+              ) : null}
+              {!isAnswered && item.percentCorrect != null ? (
+                <p className="mt-3 text-sm text-[var(--semantic-text-secondary)]">{item.percentCorrect}% answered correctly</p>
               ) : null}
             </li>
           );
@@ -242,11 +305,11 @@ export function EcgWorksheetList({ level }: { level: EcgLevel }) {
               </button>
             ) : (
               <span className="rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-[var(--semantic-text-secondary)]">
-                Unlock worksheet
+                {item.accessState === "admin_preview" ? "Admin preview" : "Unlock worksheet"}
               </span>
             )}
             <span className="text-xs text-[var(--semantic-text-muted)]">
-              {item.accessState === "locked" ? "Free preview" : "Unlocked"}
+              {item.accessState === "admin_preview" ? "Download remains hidden until launch." : item.accessState === "locked" ? "Free preview" : "Unlocked"}
             </span>
           </div>
         </li>

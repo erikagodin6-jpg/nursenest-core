@@ -56,6 +56,11 @@ export const metadata: Metadata = {
 
 async function getSessionSafe() {
   if (process.env.NEXT_PHASE === "phase-production-build") return null;
+  const hasSecret = Boolean(
+    (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
+      (process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.trim().length > 0),
+  );
+  if (!hasSecret) return null;
 
   try {
     const { auth } = await import("@/lib/auth");

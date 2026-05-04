@@ -2,7 +2,6 @@
  * Production-safe DATABASE_URL drift signals: redacted connection facts + stable fingerprint.
  * Never logs or returns the password.
  */
-import { createHash } from "node:crypto";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type DatabaseConnectionModeGuess = "likely_pooler" | "likely_direct" | "unknown";
@@ -54,11 +53,16 @@ export function guessDatabaseConnectionMode(
 }
 
 /**
- * SHA-256 fingerprint of the **full** connection string (includes password) for drift detection only.
- * Truncate to 10 hex characters for compact logs — do not treat as a cryptographic secret.
+ * Stable, non-cryptographic fingerprint of the **full** connection string (includes password)
+ * for drift detection only. Truncate to 10 hex characters for compact logs.
  */
 export function fingerprintDatabaseUrlPrefix10(raw: string): string {
-  return createHash("sha256").update(raw, "utf8").digest("hex").slice(0, 10);
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < raw.length; i += 1) {
+    hash ^= raw.charCodeAt(i);
+    hash = Math.imul(hash, 0x01000193) >>> 0;
+  }
+  return hash.toString(16).padStart(8, "0").slice(0, 10);
 }
 
 /**
