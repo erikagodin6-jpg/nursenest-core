@@ -1,13 +1,10 @@
-// 🔥 ONLY CHANGE: wrap content builder in try/catch
-
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, permanentRedirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { NursingTierHubPage } from "@/components/marketing/nursing-tier-hub-page";
 import { AlliedHealthPathwayHub } from "@/components/marketing/allied-health-pathway-hub";
-import { buildAlliedGlobalHubPath } from "@/lib/allied/allied-global-pathway";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { prisma } from "@/lib/db";
@@ -19,7 +16,11 @@ import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway
 import { loadPathwayHubResumePayload, type PathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import { buildNursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
-import { loadAlliedPathwayHubOverview } from "@/lib/marketing/allied-pathway-hub-overview";
+import {
+  fallbackAlliedPathwayHubOverview,
+  loadAlliedPathwayHubOverview,
+  type AlliedPathwayHubOverview,
+} from "@/lib/marketing/allied-pathway-hub-overview";
 import { examPathwayRegionalHreflang } from "@/lib/seo/exam-pathway-hub-alternates";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
@@ -83,34 +84,47 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (!pathway) notFound();
   const isAlliedHub = pathway.roleTrack === "allied" && pathway.examCode === "allied-health";
-  if (isAlliedHub) {
-    permanentRedirect(buildAlliedGlobalHubPath());
-  }
+  /** Canada main allied URL is an occupation directory only (no inventory strip, labs, ECG category grid, or study-mode tiles). */
+  const alliedCanadaOccupationDirectoryHub = isAlliedHub && pathname === "/canada/allied/allied-health";
 
-  const alliedOverview = isAlliedHub
-    ? await loadAlliedPathwayHubOverview(pathway, {
+  let alliedOverview: AlliedPathwayHubOverview | null = null;
+  if (isAlliedHub && !alliedCanadaOccupationDirectoryHub) {
+    try {
+      alliedOverview = await loadAlliedPathwayHubOverview(pathway, {
         pathname,
         locale,
         examCode,
         roleTrack: slug,
-      })
-    : null;
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      safeServerLog("exam_pathway_hub", "allied_hub_overview_failed", {
+        pathname,
+        pathway_id: pathway.id,
+        error_message: message.slice(0, 500),
+      });
+      alliedOverview = fallbackAlliedPathwayHubOverview();
+    }
+  }
 
-  if (process.env.NODE_ENV !== "production" || process.env.VITEST === "true" || process.env.NODE_ENV === "test") {
+  const logAlliedHubDiag =
+    isAlliedHub &&
+    (process.env.NODE_ENV !== "production" || process.env.VITEST === "true" || process.env.NODE_ENV === "test");
+  if (logAlliedHubDiag) {
     safeServerLog("exam_pathway_hub", "allied_hub_route_diagnostic", {
       pathname,
       country: locale,
       role_track: slug,
       pathway_id: pathway.id,
       exam_slug: examCode,
-      loader_result: isAlliedHub
-        ? JSON.stringify({
+      loader_result: alliedCanadaOccupationDirectoryHub
+        ? "occupation_directory_hub_skipped_inventory"
+        : JSON.stringify({
             lessonCount: alliedOverview?.lessonCount ?? 0,
             questionSnapshotStatus: alliedOverview?.questionSnapshot.status ?? "none",
             flashcardDeckCount: alliedOverview?.flashcardDeckCount ?? null,
             moduleCardCount: alliedOverview?.moduleCards.length ?? 0,
-          })
-        : "non_allied_hub",
+          }),
     });
   }
 
@@ -160,13 +174,9 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   return withCrawlSurfacePageRender("marketing.exam_hub", pathname, async () => {
     const npPracticeSeo = getNpPracticeTestLandingCopy(locale, slug, examCode) ?? null;
 
-    // 🔥 CRITICAL FIX
     let content;
     try {
-      content =
-        pathway.roleTrack === "allied" && pathway.examCode === "allied-health"
-          ? null
-          : buildNursingTierHubContent(pathway);
+      content = isAlliedHub ? null : buildNursingTierHubContent(pathway);
     } catch (err) {
       console.error("[HOMEPAGE CONTENT ERROR]", err);
       content = null;
@@ -197,7 +207,12 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
 
         {isAlliedHub ? (
-          <AlliedHealthPathwayHub pathway={pathway} hubPath={pathname} overview={alliedOverview} />
+          <AlliedHealthPathwayHub
+            pathway={pathway}
+            hubPath={pathname}
+            overview={alliedOverview}
+            occupationDirectoryHub={alliedCanadaOccupationDirectoryHub}
+          />
         ) : content ? (
           <NursingTierHubPage
             pathway={pathway}

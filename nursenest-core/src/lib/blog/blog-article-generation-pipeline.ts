@@ -137,6 +137,11 @@ export type RunBlogArticlePipelineOptions = {
    * The pipeline uses max(base draft/publish minimum, this value) for repair targets and body validation.
    */
   substantiveWordMinOverride?: number;
+  /**
+   * Relaxes {@link normalizeBlogTopicIntent} for broad-but-safe nursing topics and enables one editorial-plan
+   * schema/JSON retry (see {@link fetchControlPanelPlan}). Intended for CLI/batch tooling — keep default strict for admin UI.
+   */
+  legacyCompatible?: boolean;
 };
 
 const MIN_BODY_CHARS = BLOG_ARTICLE_MIN_BODY_CHARS;
@@ -166,7 +171,9 @@ export async function runBlogArticleGenerationPipeline(
   input: ControlPanelGenerateInput,
   options: RunBlogArticlePipelineOptions = {},
 ): Promise<BlogArticlePipelineResult> {
-  const topicIntent = normalizeBlogTopicIntent(input.topic, input.exam);
+  const topicIntent = normalizeBlogTopicIntent(input.topic, input.exam, {
+    legacyCompatible: options.legacyCompatible === true,
+  });
   if (!topicIntent.accepted) {
     return {
       ok: false,
@@ -217,7 +224,10 @@ export async function runBlogArticleGenerationPipeline(
           plan = planSeed;
           planSeed = null;
         } else {
-          plan = await fetchControlPanelPlan(effectiveInput, { openAiUser: openAiUserTag(idem, "plan", repairPassesUsed) });
+          plan = await fetchControlPanelPlan(effectiveInput, {
+            openAiUser: openAiUserTag(idem, "plan", repairPassesUsed),
+            enablePlanSchemaRetry: options.legacyCompatible === true,
+          });
         }
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);

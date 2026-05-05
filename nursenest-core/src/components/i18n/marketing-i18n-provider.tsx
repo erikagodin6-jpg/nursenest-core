@@ -58,7 +58,9 @@ const DEGRADED_MARKETING_I18N: MarketingI18nContextValue = {
   t: (key: string) => humanizedMarketingKeyFallback(key),
 };
 
-const RENDERED_I18N_KEY_PREFIX_PATTERN = /\b(?:pages|footer|blog)\.[A-Za-z0-9_.-]+/;
+/** Matches dotted message keys that should never appear verbatim in rendered marketing HTML. */
+const RENDERED_I18N_KEY_PREFIX_PATTERN =
+  /\b(?:pages|footer|blog|admin|content|learner|app|nav|components|marketing|errors|forms)\.[A-Za-z0-9_.-]+/;
 
 function hasNonEmptyMarketingCatalog(messages: MarketingMessages, fallback?: MarketingMessages): boolean {
   return Object.keys(messages).length > 0 || Boolean(fallback && Object.keys(fallback).length > 0);

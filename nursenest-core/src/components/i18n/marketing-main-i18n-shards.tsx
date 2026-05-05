@@ -84,15 +84,22 @@ async function loadPrimaryAndFallback(locale: string): Promise<{
  * `{children}` in both the fallback and the deferred branch, which could duplicate
  * the homepage (and other routes) in streamed HTML / hydration. Loads are awaited
  * here once, then one `MarketingI18nShardLayer` wraps the segment page.
+ *
+ * **`trailingChrome`:** Pass `SiteFooter` here (not as a layout sibling after `<main>`)
+ * so the footer does not stream in HTML before deferred main content — fixes `/`
+ * showing footer blocks above the hero during RSC streaming.
  */
 export async function MarketingMainI18nShards({
   locale,
   children,
   publicContentOverrides,
+  trailingChrome,
 }: {
   locale: string;
   children: ReactNode;
   publicContentOverrides?: Record<string, string>;
+  /** e.g. `<SiteFooter />` — rendered only after shard load, after `{children}`. */
+  trailingChrome?: ReactNode;
 }) {
   const { primary, fallback } = await loadPrimaryAndFallback(locale);
 
@@ -102,6 +109,7 @@ export async function MarketingMainI18nShards({
       fallbackMessages={fallback ? safeMerge(fallback, publicContentOverrides) : undefined}
     >
       {children}
+      {trailingChrome}
     </MarketingI18nShardLayer>
   );
 }

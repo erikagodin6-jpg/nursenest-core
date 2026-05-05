@@ -14,6 +14,7 @@ import { getMarketingLocaleFromRequestCookie } from "@/lib/i18n/marketing-locale
 import { QUESTION_PAYLOAD_WARN_BYTES } from "@/lib/questions/question-api-limits";
 import { estimateJsonUtf8Bytes } from "@/lib/questions/question-payload-metrics";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
 import { parsePracticeTestConfigAtBoundary } from "@/lib/practice-tests/practice-test-config-boundary";
 import {
   assessPracticeTestSessionHydrateContract,
@@ -146,8 +147,24 @@ export async function GET(req: NextRequest, ctx: { params: Promise<unknown> }) {
 
     const educationalLocale = getMarketingLocaleFromRequestCookie(req);
     const questionOverlayBundle = await resolveMergedQuestionOverlayBundle(educationalLocale);
+    const isCat = cfg.selectionMode === "cat";
+    const catStripTeaching =
+      isCat &&
+      (cfg.catPresentationMode === "exam_simulation" ||
+        (cfg.catExamFeedbackMode ?? "test") === "test");
+    const teachingExposure = catStripTeaching ? ("none" as const) : ("full" as const);
+    logCoreApiStudyDiagnostic({
+      endpoint: "GET /api/practice-tests/[id]/question",
+      pathwayId: cfg.pathwayId ?? null,
+      selectionMode: cfg.selectionMode ?? null,
+      catPresentationMode: cfg.catPresentationMode ?? null,
+      catExamFeedbackMode: cfg.catExamFeedbackMode ?? null,
+      teachingExposure,
+      questionIdPrefix: qid.slice(0, 12),
+      index,
+    });
     const merged = mergeQuestionApiPayload({ ...q } as Record<string, unknown>, educationalLocale, questionOverlayBundle, {
-      teachingExposure: "none",
+      teachingExposure,
     });
     const stem = String(merged.stem ?? "");
     const question = {

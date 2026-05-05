@@ -18,6 +18,14 @@ const SPAM_OR_UNSAFE =
 const PLACEHOLDER_OR_STUB =
   /\b(lorem ipsum|placeholder|stub post|tbd|todo|fixme|\[\[|\{\{)\b/i;
 
+/** Broad nursing / licensure / allied cues — used only to decide when a vague seed may be expanded safely. */
+const NURSING_OR_ALLIED_EDUCATION_SEED =
+  /\b(nursing|nurses|nurse|rn\b|pn\b|lpn|lvn|rpn|np\b|cnm|crna|student nurse|new grad|bedside|clinical|hospital|inpatient|outpatient|icu|ed\b|er\b|telemetry|step[-\s]?down|pacu|or\b|operating room|med[\s-]?surg|maternal|neonatal|pediatric|geriatric|psychiat|mental health|community health|public health|home health|hospice|school nurse|camp nurse|telehealth|telemedicine|allied|paramedic|emt\b|respiratory therapist|rt\b|pta|ota|mlt|phlebotom|imaging|care plan|nursing diagnosis|head[-\s]?to[-\s]?toe|vital signs|med pass|medication administration|isolation|ppe|infection prevention|fall risk|pressure injury|wound care|ostomy|catheter|ng tube|feeding tube|dialysis|oncology|delegation|priorit|triage|sbar|charting|documentation|ehr|hipaa|consent|ethics|simulation|skills lab|interprofessional|women|gynec|reproductive|obstetr|lactation|postpartum)\b/i;
+
+/** Obvious non-health / lifestyle topics — never auto-expand into clinical articles. */
+const NON_HEALTH_LIFESTYLE_SEED =
+  /\b(relationship advice|dating apps|credit score|mortgage rates|car loan|crypto investing|sports betting|video game|political campaign|travel hacking|recipe blog|celebrity gossip)\b/i;
+
 const CLINICAL_OR_EXAM_CATEGORY = new RegExp(
   [
     String.raw`fluid|electrolyte|acid[-\s]?base|\bABG\b|sodium|potassium|calcium|magnesium|phosph|lab values|critical labs|diagnostic`,
@@ -91,6 +99,30 @@ const NORMALIZATION_TEMPLATES: TopicTemplate[] = [
       `Pediatric Respiratory Distress Nursing Review: Assessment, Red Flags, Oxygenation, Family-Centred Care, and ${examLabel}`,
   },
   {
+    match: /\bwomen'?s health|gynecolog|reproductive health|obstetr|lactation support/i,
+    clinicalDomain: "women's health nursing",
+    bodySystem: "reproductive",
+    nclexCategory: "Health Promotion and Maintenance",
+    buildTitle: (examLabel) =>
+      `Women's Health Nursing Review: Assessment, Preventive Care, Red Flags, Client Education, and ${examLabel}`,
+  },
+  {
+    match: /\bmed[\s-]?surg|medical surgical|general medicine nursing/i,
+    clinicalDomain: "medical-surgical nursing",
+    bodySystem: "multisystem",
+    nclexCategory: "Physiological Adaptation",
+    buildTitle: (examLabel) =>
+      `Medical-Surgical Nursing Review: Assessment, Complications, Medication Safety, Labs, and ${examLabel}`,
+  },
+  {
+    match: /\bcritical care nursing|\bICU\b nursing|intensive care nursing/i,
+    clinicalDomain: "critical care nursing",
+    bodySystem: "multisystem",
+    nclexCategory: "Physiological Adaptation",
+    buildTitle: (examLabel) =>
+      `Critical Care Nursing Review: Hemodynamic Monitoring, Ventilation Basics, Safety, and ${examLabel}`,
+  },
+  {
     match: /\blab values|labs?|diagnostic tests?|critical values/i,
     clinicalDomain: "lab interpretation and diagnostic reasoning",
     bodySystem: "multisystem",
@@ -143,6 +175,11 @@ export type NormalizeBlogTopicIntentResult = {
   bodySystem?: string;
   nclexCategory?: string;
   reason?: string;
+};
+
+/** When `legacyCompatible` is true, broad-but-safe nursing seeds can pass with normalization (batch/CLI tooling). */
+export type NormalizeBlogTopicIntentOptions = {
+  legacyCompatible?: boolean;
 };
 
 function matchesHighIntentShape(topic: string): boolean {
@@ -293,9 +330,128 @@ function validateSpecificTopic(topic: string, scheduleExam?: string | null): Blo
   return { ok: true };
 }
 
+/**
+ * Relaxed gate for **legacy-compatible** generators only: keeps spam/off-domain blocks,
+ * but accepts broader nursing operational topics when schedule exam supplies licensure context.
+ */
+function validateSpecificTopicRelaxed(topic: string, scheduleExam?: string | null): BlogSeoTopicIntentResult {
+  const t = topic.trim();
+  if (t.length < 12) {
+    return { ok: false, reason: "Topic is too short for legacy-compatible mode (minimum 12 characters)." };
+  }
+  if (t.length > 220) {
+    return { ok: false, reason: "Topic exceeds maximum length; split into a narrower query." };
+  }
+  if (FORBIDDEN_TITLE_START.test(t) || FORBIDDEN_WEAK_PREFIX.test(t)) {
+    return {
+      ok: false,
+      reason:
+        'Generic "Understanding/Guide" style topics stay blocked. Use concrete nursing teaching language instead.',
+    };
+  }
+  if (/\b(complete guide|ultimate guide|everything you need)\b/i.test(t)) {
+    return { ok: false, reason: "Avoid guide-style filler; prefer a concrete exam or bedside decision query." };
+  }
+  if (SPAM_OR_UNSAFE.test(t) || PLACEHOLDER_OR_STUB.test(t) || NON_HEALTH_LIFESTYLE_SEED.test(t)) {
+    return { ok: false, reason: "Topic appears spammy, unsafe, or unrelated to healthcare education." };
+  }
+
+  const words = t.split(/\s+/).filter(Boolean);
+  if (words.length < 3) {
+    return { ok: false, reason: "Topic is too vague (too few words)." };
+  }
+
+  const examFromSchedule = typeof scheduleExam === "string" && scheduleExam.trim().length >= 2 ? scheduleExam.trim() : null;
+  const examFromScheduleOk = examFromSchedule !== null && EXAM_OR_LICENSURE.test(examFromSchedule);
+  const examInTopic = EXAM_OR_LICENSURE.test(t);
+  const examOk = examInTopic || examFromScheduleOk;
+  if (!examOk) {
+    return {
+      ok: false,
+      reason: "Include explicit exam or licensure context in the topic or rely on a schedule exam label that names the test.",
+    };
+  }
+
+  const clinicallyAdjacent =
+    CLINICAL_OR_EXAM_CATEGORY.test(t) ||
+    NURSING_OR_ALLIED_EDUCATION_SEED.test(t) ||
+    ACTIONABLE_NURSING.test(t) ||
+    /\b(hospital|patient|bedside|unit|ward|shift|handoff|interprofessional|continuity|care team|rounding)\b/i.test(t);
+
+  if (!clinicallyAdjacent) {
+    return {
+      ok: false,
+      reason: "Topic is not clinical or nursing-operational enough for safe auto-generation.",
+    };
+  }
+
+  return { ok: true };
+}
+
+/**
+ * Last-resort expansion for vague-but-legitimate nursing / exam-prep seeds.
+ * Produces titles that satisfy {@link validateSpecificTopic} (clinical tie + actionable nursing language + exam context).
+ */
+function tryExpandVagueClinicalNursingTopic(
+  raw: string,
+  scheduleExam: string | null | undefined,
+): NormalizeBlogTopicIntentResult | null {
+  const t = raw.trim();
+  if (!t || SPAM_OR_UNSAFE.test(t) || PLACEHOLDER_OR_STUB.test(t) || NON_HEALTH_LIFESTYLE_SEED.test(t)) {
+    return null;
+  }
+  if (FORBIDDEN_TITLE_START.test(t) || FORBIDDEN_WEAK_PREFIX.test(t) || /\b(complete guide|ultimate guide|everything you need)\b/i.test(t)) {
+    return null;
+  }
+
+  const scheduleStr = typeof scheduleExam === "string" && scheduleExam.trim().length >= 2 ? scheduleExam.trim() : null;
+  const examFromScheduleOk = scheduleStr !== null && EXAM_OR_LICENSURE.test(scheduleStr);
+  const examInTopic = EXAM_OR_LICENSURE.test(t);
+  const examPrepCue =
+    /\b(study|studying|review|reviews|prep|preparation|tips|strategies|schedule|practice|question bank|flashcards?|mnemonics?|exam anxiety|test[-\s]?taking|pass|beat|crush)\b/i.test(t);
+  const nursingCue = NURSING_OR_ALLIED_EDUCATION_SEED.test(t);
+  const clinicalCue = CLINICAL_OR_EXAM_CATEGORY.test(t);
+
+  /** Generic student-life / productivity without licensure or nursing context — never fabricate a clinical article. */
+  const genericStudentLifeMotivation =
+    !EXAM_OR_LICENSURE.test(t) &&
+    /\b(motivat(?:ed|ion|ing|e)?|procrastinat(?:e|ing|ion)?|pomodoro|roommate|social media|weekend parties|college life)\b/i.test(t) &&
+    !nursingCue &&
+    !clinicalCue;
+
+  if (genericStudentLifeMotivation) return null;
+
+  const eligibleForExpansion =
+    nursingCue ||
+    clinicalCue ||
+    (examFromScheduleOk && (examPrepCue || examInTopic || t.replace(/\s+/g, " ").trim().length >= 10));
+
+  if (!eligibleForExpansion) return null;
+
+  const examLabel = resolveExamLabel(scheduleExam);
+  const base = t.replace(/\s+/g, " ").trim();
+  const candidates = [
+    `${base}: Nursing Pathophysiology, Assessment, Priority Interventions, Safety, Labs, Pharmacology Considerations, and ${examLabel}`,
+    `${base}: Clinical Nursing Review — Assessment, Priority Interventions, Client Education, Safety Monitoring, and ${examLabel}`,
+  ];
+  for (const candidate of candidates) {
+    if (validateSpecificTopic(candidate, scheduleExam).ok) {
+      return {
+        accepted: true,
+        normalizedTopic: candidate,
+        clinicalDomain: clinicalCue ? "clinical nursing" : "nursing education and exam readiness",
+        bodySystem: clinicalCue ? "multisystem" : undefined,
+        nclexCategory: "Management of Care",
+      };
+    }
+  }
+  return null;
+}
+
 export function normalizeBlogTopicIntent(
   inputTopic: string,
   scheduleExam?: string | null,
+  options?: NormalizeBlogTopicIntentOptions,
 ): NormalizeBlogTopicIntentResult {
   const raw = inputTopic.trim();
   if (!raw) {
@@ -373,6 +529,31 @@ export function normalizeBlogTopicIntent(
     }
   }
 
+  const expanded = tryExpandVagueClinicalNursingTopic(raw, scheduleExam);
+  if (expanded) return expanded;
+
+  if (options?.legacyCompatible) {
+    const relaxed = validateSpecificTopicRelaxed(raw, scheduleExam);
+    if (relaxed.ok) {
+      const base = raw.replace(/\s+/g, " ").trim();
+      const expandedLegacy = `${base}: Clinical Nursing Review — Assessment, Interventions, Client Education, Safety, and ${resolveExamLabel(scheduleExam)}`;
+      if (validateSpecificTopic(expandedLegacy, scheduleExam).ok) {
+        return {
+          accepted: true,
+          normalizedTopic: expandedLegacy,
+          clinicalDomain: "clinical nursing",
+          nclexCategory: "Management of Care",
+        };
+      }
+      return {
+        accepted: true,
+        normalizedTopic: expandedLegacy,
+        clinicalDomain: "clinical nursing",
+        nclexCategory: "Exam preparation",
+      };
+    }
+  }
+
   const impossible =
     !CLINICAL_OR_EXAM_CATEGORY.test(raw) &&
     !/\b(nursing|nurse|patient|clinical|healthcare|medication|lab|safety|allied|respiratory|paramedic|pharmacy)\b/i.test(lowered);
@@ -407,7 +588,7 @@ export function partitionBlogTopicsBySeoIntent(
   const rejected: Array<{ topic: string; reason: string }> = [];
   for (const topic of topics) {
     const normalized = normalizeBlogTopicIntent(topic, scheduleExam);
-    if (normalized.accepted) approved.push(topic);
+    if (normalized.accepted) approved.push(normalized.normalizedTopic);
     else rejected.push({ topic, reason: normalized.reason ?? "rejected" });
   }
   return { approved, rejected };

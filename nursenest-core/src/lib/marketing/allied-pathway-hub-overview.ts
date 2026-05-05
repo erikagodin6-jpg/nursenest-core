@@ -70,6 +70,17 @@ function buildAlliedModuleCards(): AlliedHubModuleCard[] {
   return cards;
 }
 
+/** Safe empty shell when hub inventory loaders fail (never generic homepage fallback). */
+export function fallbackAlliedPathwayHubOverview(): AlliedPathwayHubOverview {
+  return {
+    lessonCount: 0,
+    flashcardDeckCount: null,
+    questionSnapshot: { status: "unavailable" },
+    practiceExamReady: false,
+    moduleCards: buildAlliedModuleCards(),
+  };
+}
+
 export async function loadAlliedPathwayHubOverview(
   pathway: ExamPathwayDefinition,
   _ctx: {

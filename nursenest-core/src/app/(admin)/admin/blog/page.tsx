@@ -13,6 +13,7 @@ import { AdminBlogControlPanelClient } from "@/components/admin/admin-blog-contr
 import { getAdminBlogOperationsStatus } from "@/lib/blog/admin-blog-operations-status";
 import { parseBlogBatchItemRepairMeta } from "@/lib/blog/blog-generation-repair-classifier";
 import { AdminBlogRepairRetryButton } from "@/components/admin/admin-blog-repair-retry-button";
+import { formatDisplayLabel, formatPrismaEnumLabel, humanizeAdminOperationalMessage } from "@/lib/ui/format-display-label";
 
 export const dynamic = "force-dynamic";
 
@@ -220,7 +221,9 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
                   {post.title}
                 </Link>
                 <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                  <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(post.postStatus)}`}>{post.postStatus}</span>
+                  <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(post.postStatus)}`}>
+                    {formatPrismaEnumLabel(post.postStatus)}
+                  </span>
                   <span>{fmtDate(post.publishAt ?? post.updatedAt)}</span>
                   <span className="font-mono">{post.slug}</span>
                 </p>
@@ -233,9 +236,13 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
               <li key={item.id} className="border-b border-border/40 py-2 last:border-0">
                 <p className="font-medium">{item.plannedTitle ?? item.plannedKeyword ?? item.plannedSlug ?? "Untitled campaign item"}</p>
                 <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                  <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.status)}`}>{item.status}</span>
+                  <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.status)}`}>
+                    {formatPrismaEnumLabel(item.status)}
+                  </span>
                   <span>{fmtDate(item.plannedPublishAt)}</span>
-                  {item.error ? <span className="text-rose-700 dark:text-rose-300">{item.error}</span> : null}
+                  {item.error ? (
+                    <span className="text-rose-700 dark:text-rose-300">{humanizeAdminOperationalMessage(item.error)}</span>
+                  ) : null}
                 </p>
               </li>
             ))}
@@ -250,7 +257,9 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
                 <li key={item.id} className="border-b border-border/40 py-2 last:border-0">
                   <p className="font-medium">{item.topicRaw}</p>
                   <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                    <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.status)}`}>{item.status}</span>
+                    <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.status)}`}>
+                      {formatPrismaEnumLabel(item.status)}
+                    </span>
                     <span>{fmtDate(item.plannedPublishAt)}</span>
                     {item.blogPostId ? <Link href={`/admin/blog?id=${encodeURIComponent(item.blogPostId)}`} className="text-primary underline">Open draft</Link> : null}
                     {repairMeta ? (
@@ -270,7 +279,9 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
                         ) : null}
                       </>
                     ) : item.failureReason ? (
-                      <span className="text-rose-700 dark:text-rose-300">{item.failureReason}</span>
+                      <span className="text-rose-700 dark:text-rose-300">
+                        {humanizeAdminOperationalMessage(item.failureReason)}
+                      </span>
                     ) : null}
                   </p>
                   {item.status === BlogBatchScheduleItemStatus.FAILED && repairMeta?.terminal !== true ? (
@@ -294,7 +305,9 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
                 <li key={item.id} className="border-b border-border/40 py-2 last:border-0">
                   <p className="font-medium">{item.topicRaw}</p>
                   <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                    <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.status)}`}>{item.status}</span>
+                    <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(item.status)}`}>
+                      {formatPrismaEnumLabel(item.status)}
+                    </span>
                     <span>{fmtDate(item.updatedAt)}</span>
                     {item.blogPostId ? <Link href={`/admin/blog?id=${encodeURIComponent(item.blogPostId)}`} className="text-primary underline">Open draft</Link> : null}
                     {repairMeta ? (
@@ -314,7 +327,7 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
                         ) : null}
                       </>
                     ) : item.error ? (
-                      <span className="text-rose-700 dark:text-rose-300">{item.error}</span>
+                      <span className="text-rose-700 dark:text-rose-300">{humanizeAdminOperationalMessage(item.error)}</span>
                     ) : null}
                   </p>
                   {item.status === BlogDraftGenerationBatchItemStatus.FAILED && repairMeta?.terminal !== true ? (
@@ -342,7 +355,9 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
                   {post.title}
                 </Link>
                 <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                  <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(post.postStatus)}`}>{post.postStatus}</span>
+                  <span className={`rounded-full px-2 py-0.5 font-medium ${statusBadgeClass(post.postStatus)}`}>
+                    {formatPrismaEnumLabel(post.postStatus)}
+                  </span>
                   <span>{fmtDate(post.updatedAt)}</span>
                   <span className="font-mono">{post.slug}</span>
                 </p>
@@ -352,13 +367,19 @@ export default async function AdminBlogConsolePage({ searchParams }: { searchPar
           <StatusList title="Automation failures">
             {failedActivity.map((item) => (
               <li key={item.id} className="border-b border-border/40 py-2 last:border-0">
-                <p className="font-medium">{item.jobType}</p>
+                <p className="font-medium">{formatDisplayLabel(item.jobType)}</p>
                 <p className="mt-1 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                  <span className={`rounded-full px-2 py-0.5 font-medium ${automationBadgeClass(item.status)}`}>{item.status}</span>
+                  <span className={`rounded-full px-2 py-0.5 font-medium ${automationBadgeClass(item.status)}`}>
+                    {formatPrismaEnumLabel(item.status)}
+                  </span>
                   <span>{fmtDate(item.createdAt)}</span>
                   {item.blogPostId ? <Link href={`/admin/blog?id=${encodeURIComponent(item.blogPostId)}`} className="text-primary underline">Open draft</Link> : null}
                 </p>
-                <p className="mt-1 text-xs text-rose-800 dark:text-rose-200">{item.error ?? item.summary ?? item.topic ?? "No failure message recorded."}</p>
+                <p className="mt-1 text-xs text-rose-800 dark:text-rose-200">
+                  {item.error
+                    ? humanizeAdminOperationalMessage(item.error)
+                    : item.summary ?? item.topic ?? "No failure message recorded."}
+                </p>
               </li>
             ))}
           </StatusList>

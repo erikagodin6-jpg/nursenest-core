@@ -63,7 +63,14 @@ function forwardRequest(request: NextRequest): NextResponse {
 /** Public probes and crawler assets must not run auth/session work. */
 export function isPublicProbeOrCrawlerBypassPath(pathname: string): boolean {
   if (pathname === "/healthz" || pathname === "/readyz") return true;
-  if (pathname === "/sitemap.xml" || pathname === "/robots.txt") return true;
+  if (
+    pathname === "/sitemap.xml" ||
+    pathname === "/sitemap-allied.xml" ||
+    pathname === "/sitemap-new-grad.xml" ||
+    pathname === "/robots.txt"
+  ) {
+    return true;
+  }
   if (pathname === "/api/health" || pathname.startsWith("/api/health/")) return true;
   return false;
 }

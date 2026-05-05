@@ -15,7 +15,7 @@ describe("top-tier marketing nav hub routes", () => {
     assert.notEqual(hubs.rn, GENERIC_LESSONS_INDEX);
     assert.equal(hubs.rn, "/us/rn/nclex-rn");
     assert.equal(hubs.np, "/us/np/fnp");
-    assert.equal(hubs.allied, "/allied/allied-health");
+    assert.equal(hubs.allied, "/us/allied/allied-health");
     assert.equal(hubs.pn, "/us/pn/nclex-pn");
     const strip = buildMarketingTierHubStrip("US", (k) => k);
     assert.equal(strip.find((r) => r.key === "rn")?.hubHref, hubs.rn);
@@ -30,7 +30,7 @@ describe("top-tier marketing nav hub routes", () => {
     assert.notEqual(hubs.rn, GENERIC_LESSONS_INDEX);
     assert.equal(hubs.rn, "/canada/rn/nclex-rn");
     assert.equal(hubs.np, "/canada/np/cnple");
-    assert.equal(hubs.allied, "/allied/allied-health");
+    assert.equal(hubs.allied, "/canada/allied/allied-health");
     assert.equal(hubs.pn, "/canada/pn/rex-pn");
     const strip = buildMarketingTierHubStrip("CA", (k) => k);
     for (const row of strip) {

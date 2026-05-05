@@ -23,7 +23,8 @@ export const CAT_MIN_COMPLETE_POOL = 30;
 
 /** Soft practice widens filters when the strict slice is too thin for {@link validatePracticeCatPool}. */
 const CAT_SOFT_MIN_COMPLETE_ROWS = 8;
-const NON_ECG_PRACTICE_EXAM_WHERE: Prisma.ExamQuestionWhereInput = {
+/** Shared with marketing snapshots and flashcard exam-bank SQL — keep CAT / linear / hub counts aligned. */
+export const NON_ECG_PRACTICE_EXAM_WHERE: Prisma.ExamQuestionWhereInput = {
   NOT: [{ questionFormat: ECG_QUESTION_FORMAT }, { tags: { has: "ecg-video" } }],
 };
 

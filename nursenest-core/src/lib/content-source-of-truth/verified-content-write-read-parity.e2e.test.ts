@@ -120,7 +120,7 @@ describe("VERIFIED content admin write → same canonical store (marketing + lea
         countryCode: "US",
         tier: "rn",
         status: DB_PUBLISHED,
-        exam: "NCLEX_RN",
+        exam: "NCLEX-RN",
         topic: "Fundamentals",
         bodySystem: "Fundamentals",
         careerType: "nursing",

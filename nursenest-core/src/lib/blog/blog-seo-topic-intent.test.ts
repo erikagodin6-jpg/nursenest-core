@@ -73,6 +73,31 @@ describe("validateBlogTopicForSeoArticleGeneration", () => {
     assert.match(normalized.normalizedTopic, /Allied Health Relevance/i);
   });
 
+  it("normalizes vague med-surg and women's health seeds for PN (REx-PN)", () => {
+    const medSurg = normalizeBlogTopicIntent("med surg", "REx-PN");
+    assert.equal(medSurg.accepted, true);
+    assert.match(medSurg.normalizedTopic, /Medical-Surgical Nursing Review/i);
+    assert.match(medSurg.normalizedTopic, /REx-PN Priorities/i);
+
+    const wh = normalizeBlogTopicIntent("women's health", "REx-PN");
+    assert.equal(wh.accepted, true);
+    assert.match(wh.normalizedTopic, /Women's Health Nursing Review/i);
+  });
+
+  it("normalizes exam-prep-only lines when schedule exam supplies licensure context", () => {
+    const n = normalizeBlogTopicIntent("NCLEX study strategies for first-time testers", "NCLEX-RN");
+    assert.equal(n.accepted, true);
+    assert.match(n.normalizedTopic, /Priority Interventions|Clinical Nursing Review/i);
+    assert.match(n.normalizedTopic, /NCLEX Priorities/i);
+  });
+
+  it("normalizes telehealth nursing without a dedicated template", () => {
+    const n = normalizeBlogTopicIntent("telehealth nursing", "NCLEX-RN");
+    assert.equal(n.accepted, true);
+    assert.match(n.normalizedTopic, /telehealth nursing/i);
+    assert.match(n.normalizedTopic, /Priority Interventions|Clinical Nursing Review/i);
+  });
+
   it("rejects generic Understanding prefix", () => {
     const r = validateBlogTopicForSeoArticleGeneration(
       "Understanding fluid balance for nursing students in the hospital",
@@ -100,6 +125,18 @@ describe("validateBlogTopicForSeoArticleGeneration", () => {
     assert.match(spam.reason ?? "", /spammy|placeholder|unrelated/i);
   });
 
+  it("rejects non-medical lifestyle seeds even with an exam schedule", () => {
+    const n = normalizeBlogTopicIntent("best travel hacking credit card offers for nurses' days off", "NCLEX-RN");
+    assert.equal(n.accepted, false);
+  });
+
+  it("rejects non-medical lifestyle seeds even in legacy-compatible mode", () => {
+    const n = normalizeBlogTopicIntent("best travel hacking credit card offers for nurses' days off", "NCLEX-RN", {
+      legacyCompatible: true,
+    });
+    assert.equal(n.accepted, false);
+  });
+
   it("allows exam wording from schedule when topic is clinically grounded", () => {
     const r = validateBlogTopicForSeoArticleGeneration(
       "Priority nursing interventions for acute asthma exacerbation in the ED",
@@ -125,6 +162,7 @@ describe("partitionBlogTopicsBySeoIntent", () => {
     );
     assert.equal(approved.length, 2);
     assert.equal(rejected.length, 1);
+    assert.match(approved[1]!, /Heart Failure Nursing Care/i);
   });
 });
 

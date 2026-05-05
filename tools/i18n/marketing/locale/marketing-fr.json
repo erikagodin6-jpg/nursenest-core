@@ -3976,6 +3976,8 @@
   "tools.labValues.metaDescription": "Parcourez des intervalles de référence adultes en chimie et hématologie.",
   "tools.labValues.metaTitle": "Valeurs de laboratoire | NurseNest",
   "tools.labValues.note": "Les intervalles varient selon le laboratoire et le contexte patient ; vérifiez les plages de votre établissement.",
+  "tools.labValues.quickRefBanner": "This page is a quick reference table only. For full clinical lessons, NCLEX-style questions, flashcards, and practice-test integration, use the Labs hub in your study area.",
+  "tools.labValues.quickRefCta": "Open Labs learning hub (sign in)",
   "tools.labValues.row.bun.name": "Urée (BUN)",
   "tools.labValues.row.bun.range": "7–20",
   "tools.labValues.row.bun.unit": "mg/dL",

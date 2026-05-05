@@ -33,7 +33,9 @@ test("each lab topic has full structured content plus questions and flashcards",
     assert.ok(lesson.trendInterpretation.length >= 1, `${lesson.slug} missing trend section`);
     assert.ok(lesson.patternRecognition.length >= 1, `${lesson.slug} missing pattern section`);
     assert.ok(lesson.microScenarios.length >= 1, `${lesson.slug} missing micro scenarios`);
-    assert.ok(getLabLessonQuestions(lesson).length >= 5, `${lesson.slug} missing question inventory`);
+    const qs = getLabLessonQuestions(lesson);
+    assert.ok(qs.length >= 6, `${lesson.slug} missing question inventory`);
+    assert.ok(qs.every((q) => q.answerDistribution && q.answerDistribution.length === q.options.length), `${lesson.slug} missing distractor bands`);
     assert.ok(getLabLessonFlashcards(lesson).length >= 5, `${lesson.slug} missing flashcard inventory`);
   }
 });
@@ -48,14 +50,23 @@ test("study links wire into flashcards, questions, CAT, and lab drills", () => {
   const links = buildLabsStudyLinks("ca-rn-nclex-rn", "potassium");
   assert.equal(links.flashcardsHref, "/app/flashcards?pathwayId=ca-rn-nclex-rn&topicCode=potassium");
   assert.equal(links.questionBankHref, "/app/questions?pathwayId=ca-rn-nclex-rn&topic=potassium");
+  assert.equal(links.practiceTestsTopicHref, "/app/practice-tests?pathwayId=ca-rn-nclex-rn&topic=potassium");
+  assert.equal(links.lessonsHubHref, "/app/lessons?pathwayId=ca-rn-nclex-rn&topicSlug=potassium");
+  assert.equal(links.catLaunchHref, "/app/practice-tests/cat-launch?pathwayId=ca-rn-nclex-rn");
   assert.match(links.catHref, /\/app\/practice-tests\?/);
   assert.equal(links.labDrillsHref, "/app/lab-drills?pathwayId=ca-rn-nclex-rn");
+});
+
+test("study links fall back safely when pathway is unknown", () => {
+  const links = buildLabsStudyLinks(null, null);
+  assert.equal(links.lessonsHubHref, "/app/lessons");
+  assert.equal(links.catLaunchHref, "/app/practice-tests/start");
 });
 
 test("inventory counts remain non-empty so paid labs does not surface empty states", () => {
   const inventory = countLabsInventoryForTrack("rn");
   assert.ok(inventory.lessonCount >= 7);
-  assert.ok(inventory.questionCount >= inventory.lessonCount * 5);
+  assert.ok(inventory.questionCount >= inventory.lessonCount * 6);
   assert.ok(inventory.flashcardCount >= inventory.lessonCount * 5);
 });
 

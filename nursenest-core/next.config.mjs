@@ -106,6 +106,32 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/sitemap-index.xml", destination: "/sitemap.xml", permanent: true },
+      /** Legacy allied host bookmarked sitemap → canonical www HTTPS urlset. */
+      {
+        source: "/sitemap-allied.xml",
+        has: [{ type: "host", value: "allied.nursenest.ca" }],
+        destination: "https://www.nursenest.ca/sitemap-allied.xml",
+        permanent: true,
+      },
+      /** Production HTTP bookmarks → canonical HTTPS www (requires `x-forwarded-proto` from the edge). */
+      {
+        source: "/:path*",
+        has: [
+          { type: "header", key: "x-forwarded-proto", value: "http" },
+          { type: "host", value: "www.nursenest.ca" },
+        ],
+        destination: "https://www.nursenest.ca/:path*",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [
+          { type: "header", key: "x-forwarded-proto", value: "http" },
+          { type: "host", value: "nursenest.ca" },
+        ],
+        destination: "https://www.nursenest.ca/:path*",
+        permanent: true,
+      },
       /** RN blog hub canonical path is `/blog/rn/*` (lesson-derived SEO posts). */
       { source: "/nursing/rn/blog", destination: "/blog/rn", permanent: true },
       { source: "/nursing/rn/blog/:slug", destination: "/blog/rn/:slug", permanent: true },

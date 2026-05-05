@@ -1,13 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo, useState } from "react";
 import { MeasurementSystemToggle } from "@/components/measurements/measurement-system-toggle";
+import { PathwayLessonQuizSet } from "@/components/lessons/pathway-lesson-quiz-set";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
+import { labQuestionsToPathwayQuizItems } from "@/lib/labs/lab-quiz-pathway-bridge";
 import type {
   LabFlashcard,
   LabLessonDefinition,
   LabQuestion,
+  LabTrack,
   LabsStudyLinks,
 } from "@/lib/labs/labs-engine";
 
@@ -15,6 +19,7 @@ export type LabLessonPageProps = {
   lesson: LabLessonDefinition;
   hasAccess: boolean;
   trackLabel: string;
+  labTrack: LabTrack;
   questions: LabQuestion[];
   flashcards: LabFlashcard[];
   studyLinks: LabsStudyLinks;
@@ -39,6 +44,19 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
+function tierDepthLabel(track: LabTrack): string {
+  switch (track) {
+    case "allied":
+      return "Allied health lens";
+    case "np":
+      return "NP diagnostic depth";
+    case "pn":
+      return "PN / LVN clinical emphasis";
+    default:
+      return "RN readiness depth";
+  }
+}
+
 function labNormalRangeForSystem(lesson: LabLessonDefinition, measurementSystem: "US" | "SI"): string {
   switch (lesson.slug) {
     case "creatinine-bun-aki-patterns":
@@ -60,10 +78,12 @@ function labNormalRangeForSystem(lesson: LabLessonDefinition, measurementSystem:
 
 export function LabLessonArticle({
   lesson,
-  questions,
   flashcards,
+  labTrack,
   measurementSystem = "SI",
-}: Pick<LabLessonPageProps, "lesson" | "questions" | "flashcards"> & { measurementSystem?: "US" | "SI" }) {
+}: Pick<LabLessonPageProps, "lesson" | "flashcards" | "labTrack"> & { measurementSystem?: "US" | "SI" }) {
+  const primaryTierLines = lesson.tierFocus[labTrack] ?? [];
+  const otherTierKeys = (Object.keys(lesson.tierFocus) as LabTrack[]).filter((k) => k !== labTrack);
   return (
     <div className="space-y-5">
       <Section title="Normal range and physiology">
@@ -182,49 +202,42 @@ export function LabLessonArticle({
       </Section>
 
       <Section title="Tier-specific focus">
-        <div className="grid gap-4 lg:grid-cols-2">
-          {Object.entries(lesson.tierFocus).map(([track, items]) => (
-            <article key={track} className="rounded-lg border border-[var(--semantic-border-soft)] p-3">
-              <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-[var(--semantic-text-primary)]">{track}</h3>
-              <BulletList items={items} />
-            </article>
-          ))}
-        </div>
+        <article
+          className="mb-4 rounded-lg border p-4"
+          style={{
+            borderColor: "color-mix(in srgb, var(--semantic-chart-2) 35%, var(--semantic-border-soft))",
+            background: "color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--semantic-surface))",
+          }}
+        >
+          <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-[var(--semantic-text-primary)]">
+            {labTrack} · your track ({tierDepthLabel(labTrack)})
+          </h3>
+          <BulletList items={primaryTierLines} />
+        </article>
+        {otherTierKeys.length > 0 ? (
+          <div className="grid gap-4 lg:grid-cols-2">
+            {otherTierKeys.map((track) => (
+              <article
+                key={track}
+                className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface-muted)] p-3"
+              >
+                <h3 className="text-sm font-semibold uppercase tracking-[0.08em] text-[var(--semantic-text-primary)]">{track}</h3>
+                <BulletList items={lesson.tierFocus[track] ?? []} />
+              </article>
+            ))}
+          </div>
+        ) : null}
       </Section>
 
-      <Section title="Practice and flashcard inventory">
-        <div className="grid gap-4 lg:grid-cols-2">
-          <div className="space-y-2">
-            <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">Question set</h3>
-            <div className="space-y-3">
-              {questions.map((question) => (
-                <article key={question.id} className="rounded-lg border border-[var(--semantic-border-soft)] p-3">
-                  <p className="text-sm font-medium text-[var(--semantic-text-primary)]">{question.stem}</p>
-                  <p className="mt-1 text-xs uppercase tracking-[0.08em] text-[var(--semantic-text-muted)]">
-                    {question.type.replaceAll("_", " ")} · {question.difficulty}
-                  </p>
-                  <ol className="mt-2 list-[upper-alpha] space-y-1 pl-5 text-sm text-[var(--semantic-text-secondary)]">
-                    {question.options.map((option) => (
-                      <li key={option}>{option}</li>
-                    ))}
-                  </ol>
-                  <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{question.rationale}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-          <div className="space-y-2">
-            <h3 className="text-sm font-semibold text-[var(--semantic-text-primary)]">Generated flashcards</h3>
-            <div className="space-y-3">
-              {flashcards.map((card) => (
-                <article key={card.id} className="rounded-lg border border-[var(--semantic-border-soft)] p-3">
-                  <p className="text-sm font-medium text-[var(--semantic-text-primary)]">{card.prompt}</p>
-                  <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{card.answer}</p>
-                  <p className="mt-2 text-xs text-[var(--semantic-text-muted)]">{card.rationale}</p>
-                </article>
-              ))}
-            </div>
-          </div>
+      <Section title="Flashcard inventory (auto-generated from this lesson)">
+        <div className="space-y-3">
+          {flashcards.map((card) => (
+            <article key={card.id} className="rounded-lg border border-[var(--semantic-border-soft)] p-3">
+              <p className="text-sm font-medium text-[var(--semantic-text-primary)]">{card.prompt}</p>
+              <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{card.answer}</p>
+              <p className="mt-2 text-xs text-[var(--semantic-text-muted)]">{card.rationale}</p>
+            </article>
+          ))}
         </div>
       </Section>
     </div>
@@ -277,8 +290,11 @@ export function LabLessonPreview({
   );
 }
 
-export function LabLessonPage({ lesson, hasAccess, trackLabel, questions, flashcards, studyLinks }: LabLessonPageProps) {
+export function LabLessonPage({ lesson, hasAccess, trackLabel, labTrack, questions, flashcards, studyLinks }: LabLessonPageProps) {
   const { measurementSystem, preference } = useMeasurementPreference("SI");
+  const [postMode, setPostMode] = useState<"practice" | "exam">("practice");
+  const quizItemsFull = useMemo(() => labQuestionsToPathwayQuizItems(questions), [questions]);
+  const quizItemsPreview = useMemo(() => labQuestionsToPathwayQuizItems(questions.slice(0, 3)), [questions]);
   return (
     <div className="space-y-6">
       <header className="nn-learner-page-hero">
@@ -309,23 +325,58 @@ export function LabLessonPage({ lesson, hasAccess, trackLabel, questions, flashc
           <Link href="/app/labs" className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
             Back to labs hub
           </Link>
+          <Link href={studyLinks.lessonsHubHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
+            Pathway lessons
+          </Link>
           <Link href={studyLinks.flashcardsHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
             Flashcards
           </Link>
           <Link href={studyLinks.questionBankHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
-            Practice
+            Question bank
+          </Link>
+          <Link
+            href={studyLinks.practiceTestsTopicHref}
+            className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]"
+          >
+            Practice tests
+          </Link>
+          <Link href={studyLinks.catLaunchHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
+            Start CAT
           </Link>
           <Link href={studyLinks.catHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
-            CAT focus
+            CAT builder
           </Link>
         </div>
       </header>
 
       {hasAccess ? (
-        <LabLessonArticle lesson={lesson} questions={questions} flashcards={flashcards} measurementSystem={measurementSystem} />
+        <>
+          <LabLessonArticle lesson={lesson} flashcards={flashcards} labTrack={labTrack} measurementSystem={measurementSystem} />
+          <section className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+            <PathwayLessonQuizSet
+              title="Lesson practice questions"
+              subtitle="Same interactive format as pathway lessons — vignettes, traps, rationales, and illustrative distractor bands."
+              items={quizItemsFull}
+              fullAccess
+              variant="post"
+              postMode={postMode}
+              onPostModeChange={setPostMode}
+            />
+          </section>
+        </>
       ) : (
         <div className="space-y-5">
           <LabLessonPreview lesson={lesson} questions={questions} flashcards={flashcards} measurementSystem={measurementSystem} />
+          <section className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5">
+            <PathwayLessonQuizSet
+              title="Try three preview questions"
+              subtitle="Upgrade to unlock the full bank, rationales, and answer distribution teaching notes."
+              items={quizItemsPreview}
+              fullAccess={false}
+              variant="post"
+              postMode="practice"
+            />
+          </section>
           <SubscriptionPaywall context="lessons" />
         </div>
       )}

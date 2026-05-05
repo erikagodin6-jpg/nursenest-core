@@ -146,16 +146,19 @@ export default async function MarketingLocaleLayout({
                 <CheckoutGlobalRegionContextPathStamp />
                 <div className="nn-marketing-surface flex min-h-screen flex-col">
                   <SiteHeader serverHasStaffSession={staffSession != null} />
-                  <main className="flex-1">
-                    <MarketingMainI18nShards locale={locale} publicContentOverrides={publicContentOverrides}>
+                  <MarketingMainI18nShards
+                    locale={locale}
+                    publicContentOverrides={publicContentOverrides}
+                    trailingChrome={<SiteFooter serverHasStaffSession={staffSession != null} />}
+                  >
+                    <main className="flex min-h-0 flex-1 flex-col">
                       <MarketingMainErrorBoundary name="marketing_locale_main">
                         <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
                           {children}
                         </MarketingMobileMotionShell>
                       </MarketingMainErrorBoundary>
-                    </MarketingMainI18nShards>
-                  </main>
-                  <SiteFooter serverHasStaffSession={staffSession != null} />
+                    </main>
+                  </MarketingMainI18nShards>
                 </div>
               </MarketingHeaderGlobalRegionServerBridge>
             </MarketingFeedbackShell>

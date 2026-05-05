@@ -4,7 +4,16 @@ import test from "node:test";
 import { isPublicProbeOrCrawlerBypassPath } from "@/proxy";
 
 test("proxy bypasses public crawler and health endpoints", () => {
-  for (const pathname of ["/sitemap.xml", "/robots.txt", "/healthz", "/readyz", "/api/health", "/api/health/ready"]) {
+  for (const pathname of [
+    "/sitemap.xml",
+    "/sitemap-allied.xml",
+    "/sitemap-new-grad.xml",
+    "/robots.txt",
+    "/healthz",
+    "/readyz",
+    "/api/health",
+    "/api/health/ready",
+  ]) {
     assert.equal(isPublicProbeOrCrawlerBypassPath(pathname), true, pathname);
   }
 });

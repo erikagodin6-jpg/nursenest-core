@@ -11,6 +11,7 @@ import { LearnerAccountCrossLinks } from "@/components/student/learner-account-c
 import { LearnerPerformanceWorkspaceNav } from "@/components/student/learner-performance-workspace-nav";
 import { LearnerReportCardPremium } from "@/components/student/learner-report-card-premium";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
+import { MedCalcReportCardInset } from "@/components/med-calculations/med-calc-report-card-inset";
 import { StudyToolsReportCardInset } from "@/components/study-tools/study-tools-report-card-inset";
 import { VerifiedStudyReportCardDigest } from "@/components/verified-study/verified-study-report-card-digest";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
@@ -133,6 +134,7 @@ export default async function AccountReportCardPage() {
         <LearnerReportCardHero title={t("learner.account.reportCard.title")} intro={t("learner.account.reportCard.intro")} />
         <LearnerStudyQuickLinksCard t={t} id="report-card-study-quick-links" catHref={catHref} />
         <StudyToolsReportCardInset userId={userId} />
+        <MedCalcReportCardInset userId={userId} />
         <VerifiedStudyReportCardDigest userId={userId} />
         {report ? (
           <LearnerProfileSummaryCard
@@ -157,6 +159,7 @@ export default async function AccountReportCardPage() {
       <LearnerStudyQuickLinksCard t={t} id="report-card-study-quick-links" catHref={catHref} />
 
       <StudyToolsReportCardInset userId={userId} />
+      <MedCalcReportCardInset userId={userId} />
       <VerifiedStudyReportCardDigest userId={userId} />
 
       <LearnerProfileSummaryCard

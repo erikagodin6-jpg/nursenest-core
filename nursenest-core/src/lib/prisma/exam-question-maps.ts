@@ -24,8 +24,26 @@ export function tierCodeToContentItemTier(tier: TierCode): string {
 }
 
 export function examFamilyToExamColumn(family: ExamFamily | string | undefined): string {
-  if (!family || family === "GENERIC") return "NCLEX_RN";
-  return String(family);
+  if (!family || family === "GENERIC") return "NCLEX-RN";
+  const f = String(family);
+  switch (f) {
+    case "NCLEX_RN":
+    case "NCLEX-RN":
+      return "NCLEX-RN";
+    case "NCLEX_PN":
+    case "NCLEX-PN":
+      return "NCLEX-PN";
+    case "REX_PN":
+    case "REX-PN":
+    case "REx-PN":
+      return "REx-PN";
+    case "NP":
+      return "NP";
+    case "ALLIED":
+      return "ALLIED";
+    default:
+      return f;
+  }
 }
 
 /** Map free-form `exam_questions.question_type` strings to Prisma enum for validation. */

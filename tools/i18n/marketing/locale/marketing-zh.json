@@ -3976,6 +3976,8 @@
   "tools.labValues.metaDescription": "浏览常见成人化学与血液学参考范围。",
   "tools.labValues.metaTitle": "实验室参考 | NurseNest",
   "tools.labValues.note": "参考区间因实验室与患者情境而异；请以本院范围为准。",
+  "tools.labValues.quickRefBanner": "This page is a quick reference table only. For full clinical lessons, NCLEX-style questions, flashcards, and practice-test integration, use the Labs hub in your study area.",
+  "tools.labValues.quickRefCta": "Open Labs learning hub (sign in)",
   "tools.labValues.row.bun.name": "尿素氮",
   "tools.labValues.row.bun.range": "7–20",
   "tools.labValues.row.bun.unit": "mg/dL",

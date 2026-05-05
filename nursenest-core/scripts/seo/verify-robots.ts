@@ -24,7 +24,25 @@ async function main() {
   if (!lines.some((l) => /^Disallow:\s*\/admin\/\s*$/i.test(l))) failures.push("missing Disallow: /admin/");
   if (!lines.some((l) => /^Disallow:\s*\/api\/\s*$/i.test(l))) failures.push("missing Disallow: /api/");
   const sitemapLines = lines.filter((l) => /^\s*Sitemap:\s*/i.test(l));
-  if (sitemapLines.length !== 1) failures.push(`expected exactly one Sitemap line, got ${sitemapLines.length}`);
+  if (sitemapLines.length !== 3) failures.push(`expected exactly three Sitemap lines, got ${sitemapLines.length}`);
+  const expectedLocs = new Set([
+    `${base}/sitemap.xml`,
+    `${base}/sitemap-allied.xml`,
+    `${base}/sitemap-new-grad.xml`,
+  ]);
+  const seenLocs = new Set<string>();
+  for (const sl of sitemapLines) {
+    if (/\bhttp:\/\//i.test(sl)) failures.push(`Sitemap line must be HTTPS-only, got: ${sl}`);
+    if (/allied\.nursenest\.ca/i.test(sl)) failures.push(`Sitemap line must not use allied.nursenest.ca: ${sl}`);
+    const m = sl.match(/^\s*Sitemap:\s*(.+?)\s*$/i);
+    const loc = m?.[1]?.trim() ?? "";
+    if (!loc.startsWith("https://")) failures.push(`Sitemap URL must use https://, got: ${sl}`);
+    if (!expectedLocs.has(loc)) failures.push(`unexpected Sitemap URL (want main + allied + new-grad on same host): ${loc}`);
+    seenLocs.add(loc);
+  }
+  for (const loc of expectedLocs) {
+    if (!seenLocs.has(loc)) failures.push(`missing expected Sitemap URL: ${loc}`);
+  }
 
   const blocked = ["/pricing", "/blog", "/lessons", "/us/", "/canada/"];
   for (const p of blocked) {

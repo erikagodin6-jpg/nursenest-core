@@ -1,6 +1,7 @@
 import { randomUUID } from "crypto";
 import type { Prisma } from "@prisma/client";
 import { stemHash } from "@/lib/content/stem-hash";
+import { normalizeExamQuestionExamForStorage } from "@/lib/content-quality/exam-question-exam-normalization";
 import { adminQuestionTypeToDb } from "@/lib/prisma/exam-question-maps";
 import { inferCountryFromRaw, inferTrackFromRaw, mapTrackAndCountryToExamFields } from "./replit-exam-country-map";
 import type { ImportCountry, NormalizedExamQuestion, ProductTrack } from "./replit-question-types";
@@ -162,6 +163,7 @@ export function toPrismaCreateInput(
   row: NormalizedExamQuestion,
   statusDb: "draft" | "published",
 ): Prisma.ExamQuestionCreateManyInput {
+  const exam = normalizeExamQuestionExamForStorage(row.exam) ?? row.exam;
   return {
     id: randomUUID(),
     stem: row.stem,
@@ -169,7 +171,7 @@ export function toPrismaCreateInput(
     correctAnswer: row.correctAnswer,
     questionType: row.questionType,
     tier: row.tier,
-    exam: row.exam,
+    exam,
     status: statusDb,
     regionScope: row.regionScope,
     stemHash: row.stemHash,

@@ -90,6 +90,10 @@ export type GenerateBlogAiDraftInput = {
   allowDuplicateCanonicalTopic?: boolean;
   /** OpenAI `user` / trace id (e.g. batchId:itemId). */
   generationIdempotencyKey?: string;
+  /**
+   * When true, uses {@link normalizeBlogTopicIntent} legacy-compatible broad-topic normalization (batch/CLI).
+   */
+  legacyCompatible?: boolean;
 };
 
 export type GenerateBlogAiDraftResult =
@@ -146,7 +150,7 @@ function resolvePostStatusForPublishAt(publishAt: Date | undefined, now: Date): 
  * Enforces slug + canonical intent dedupe via {@link findExistingBlogByCanonicalIntent}.
  */
 export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<GenerateBlogAiDraftResult> {
-  const topicIntent = normalizeBlogTopicIntent(d.topic, d.exam);
+  const topicIntent = normalizeBlogTopicIntent(d.topic, d.exam, { legacyCompatible: d.legacyCompatible === true });
   if (!topicIntent.accepted) {
     return {
       ok: false,

@@ -2,7 +2,7 @@
 
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, type ReactNode } from "react";
+import { useEffect, useMemo, type PropsWithChildren } from "react";
 
 import { MarketingTrackedLink } from "@/components/marketing/marketing-tracked-link";
 import { HomeConversionHero } from "@/components/marketing/home-conversion-hero";
@@ -71,18 +71,17 @@ function HomeStableMarketingPlaceholder({
 
 /* ------------------ TYPES ------------------ */
 
-export type HomeRestoredClientProps = {
+export type HomeRestoredClientProps = PropsWithChildren<{
   homeMarketingStats?: HomeMarketingStats | null;
   publishedGlobalRegionCardIds?: readonly string[] | null;
-  introAfterHero?: ReactNode;
-};
+}>;
 
 /* ------------------ COMPONENT ------------------ */
 
 export default function HomeRestoredClient({
   homeMarketingStats,
   publishedGlobalRegionCardIds: _publishedGlobalRegionCardIds,
-  introAfterHero,
+  children,
 }: HomeRestoredClientProps) {
   const { locale, t } = useMarketingI18n();
   const { region } = useNursenestRegion();
@@ -217,9 +216,6 @@ export default function HomeRestoredClient({
         linkLabel={safeHomepageMarketingT(t, "pages.home.stablePlaceholder.support.link", "Compare plans")}
       />
 
-      {/* HUB STRIP */}
-      {introAfterHero}
-
       {/* AUDIENCE CARDS */}
       <section className="nn-section-block nn-home-pathways-band border-b border-[var(--border-subtle)]">
         <div className="nn-section-shell">
@@ -258,6 +254,10 @@ export default function HomeRestoredClient({
           </div>
         </div>
       </section>
+
+      {/* Global hub strip — after pathway cards (supporting marketing, not above hero).
+          Pass as `children` from the server page so RSC streaming keeps DOM order under the hero. */}
+      {children}
 
       {/* FINAL CTA */}
       <HomeFinalStudyCta />

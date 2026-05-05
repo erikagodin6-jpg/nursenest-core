@@ -9,6 +9,8 @@ import {
   getMedCalcLessonByCategoryAndSlug,
   getMedCalcQuestions,
   listMedCalcCategoriesForTrack,
+  listMedCalcCategoryInventoryRows,
+  medCalcProductionReadiness,
   medCalcTrackFromTier,
   validateMedCalcInventory,
 } from "@/lib/med-calculations/med-calculations-engine";
@@ -26,10 +28,10 @@ test("every med calculations lesson has question inventory and realism passes", 
       assert.ok(lesson.dimensionalAnalysisMethod.length >= 1);
       assert.ok(lesson.ratioProportionMethod.length >= 1);
       assert.ok(lesson.formulaMethod.length >= 1);
-      assert.ok(lesson.equationManipulation.length >= 1);
+      assert.ok(lesson.equationManipulation.length >= 2);
       assert.ok(lesson.unitConversions.length >= 1);
       assert.ok(lesson.workedExamples.length >= 1);
-      assert.ok(getMedCalcQuestions(lesson).length >= 4);
+      assert.ok(getMedCalcQuestions(lesson).length >= 5);
     }
   }
 });
@@ -72,9 +74,33 @@ test("inventory counts are non-empty and tier mapping remains stable", () => {
   const inventory = countMedCalcInventoryForTrack("rn");
   assert.ok(inventory.categoryCount >= 10);
   assert.ok(inventory.lessonCount >= 10);
-  assert.ok(inventory.questionCount >= 40);
+  assert.ok(inventory.questionCount >= 50);
 
   assert.equal(medCalcTrackFromTier(TierCode.RN), "rn");
   assert.equal(medCalcTrackFromTier(TierCode.RPN), "pn");
   assert.equal(medCalcTrackFromTier(TierCode.NP), "np");
+});
+
+test("category inventory rows reconcile with aggregate totals", () => {
+  const inventory = countMedCalcInventoryForTrack("rn");
+  const rows = listMedCalcCategoryInventoryRows("rn");
+  assert.equal(rows.length, inventory.categoryCount);
+  const sumQuestions = rows.reduce((s, r) => s + r.questionCount, 0);
+  const sumFlash = rows.reduce((s, r) => s + r.flashcardCount, 0);
+  assert.equal(sumQuestions, inventory.questionCount);
+  assert.equal(sumFlash, inventory.flashcardCount);
+  assert.ok(rows.every((r) => r.questionCount >= 5 && r.lessonCount >= 1));
+});
+
+test("production readiness passes for RN inventory", () => {
+  const readiness = medCalcProductionReadiness("rn");
+  assert.equal(readiness.ok, true);
+  assert.deepEqual(readiness.realismIssues, []);
+});
+
+test("production readiness passes for PN and NP inventory", () => {
+  for (const track of ["pn", "np"] as const) {
+    const readiness = medCalcProductionReadiness(track);
+    assert.equal(readiness.ok, true, `${track} realism: ${readiness.realismIssues.join("; ")}`);
+  }
 });

@@ -56,3 +56,15 @@ test("sitemap route merges collectCoreUrls + blog, filters indexable URLs, dedup
   assert.match(routeSrc, /mergeCoreUrlsWithBlogEntries/, "route must merge blog lastmod with core URLs");
   assert.match(routeSrc, /new Set/, "route must deduplicate URLs");
 });
+
+test("sitemap-allied route exists alongside merged sitemap", () => {
+  const routeSrc = readAppFile("app/sitemap-allied.xml/route.ts");
+  assert.match(routeSrc, /collectAlliedMarketingUrls/);
+  assert.match(routeSrc, /filterPublicSitemapEntries/);
+});
+
+test("sitemap-new-grad route exists alongside merged sitemap", () => {
+  const routeSrc = readAppFile("app/sitemap-new-grad.xml/route.ts");
+  assert.match(routeSrc, /collectNewGradMarketingUrls/);
+  assert.match(routeSrc, /filterPublicSitemapEntries/);
+});

@@ -8,7 +8,7 @@ import { npPathwaySpecialtyWhere } from "@/lib/exam-pathways/np-question-special
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { isCompleteCatQuestionRow } from "@/lib/practice-tests/cat-pool";
+import { isCompleteCatQuestionRow, NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-pool";
 
 const SNAPSHOT_TIMEOUT_MS = 1000;
 const REVALIDATE_SECONDS = 3600;
@@ -50,9 +50,10 @@ async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition
   return withDatabaseFallbackTimeout<PathwayQuestionBankSnapshot>(
     async (): Promise<PathwayQuestionBankSnapshot> => {
       const base = pathwayExamQuestionMarketingWhere(pathway);
+      const baseNonEcg: Prisma.ExamQuestionWhereInput = { AND: [base, NON_ECG_PRACTICE_EXAM_WHERE] };
       const counts = await Promise.allSettled([
         withDatabaseFallbackTimeout(
-          () => prisma.examQuestion.count({ where: base }),
+          () => prisma.examQuestion.count({ where: baseNonEcg }),
           0,
           SNAPSHOT_TIMEOUT_MS,
           { scope: "exam_pathway_hub", label: `question_snapshot_count:${pathway.id}` },
@@ -60,7 +61,7 @@ async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition
         withDatabaseFallbackTimeout(
           () =>
             prisma.examQuestion.findMany({
-              where: { AND: [base, { isAdaptiveEligible: true }] },
+              where: { AND: [baseNonEcg, { isAdaptiveEligible: true }] },
               select: {
                 stem: true,
                 options: true,

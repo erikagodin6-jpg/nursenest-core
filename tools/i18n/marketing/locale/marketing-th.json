@@ -3976,6 +3976,8 @@
   "tools.labValues.metaDescription": "ดูช่วงอ้างอิงผู้ใหญ่ทั่วไปในชีวเคมีและฮีมาโทโลยี",
   "tools.labValues.metaTitle": "อ้างอิงค่าห้องปฏิบัติการ | NurseNest",
   "tools.labValues.note": "ช่วงอ้างอิงแตกต่างตามห้องปฏิบัติการและบริบท ตรวจสอบกับสถาบันของคุณ",
+  "tools.labValues.quickRefBanner": "This page is a quick reference table only. For full clinical lessons, NCLEX-style questions, flashcards, and practice-test integration, use the Labs hub in your study area.",
+  "tools.labValues.quickRefCta": "Open Labs learning hub (sign in)",
   "tools.labValues.row.bun.name": "BUN",
   "tools.labValues.row.bun.range": "7–20",
   "tools.labValues.row.bun.unit": "mg/dL",

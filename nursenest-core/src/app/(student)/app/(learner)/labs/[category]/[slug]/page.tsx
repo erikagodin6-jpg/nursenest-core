@@ -56,6 +56,7 @@ export default async function LabLessonRoute({ params }: Props) {
         lesson={lesson}
         hasAccess={context.hasAccess}
         trackLabel={context.trackLabel}
+        labTrack={context.track}
         questions={questions}
         flashcards={flashcards}
         studyLinks={studyLinks}

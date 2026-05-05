@@ -21180,6 +21180,8 @@ export const MARKETING_MESSAGE_KEYS = [
   "tools.labValues.metaDescription",
   "tools.labValues.metaTitle",
   "tools.labValues.note",
+  "tools.labValues.quickRefBanner",
+  "tools.labValues.quickRefCta",
   "tools.labValues.row.bun.name",
   "tools.labValues.row.bun.range",
   "tools.labValues.row.bun.unit",

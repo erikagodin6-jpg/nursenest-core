@@ -26,7 +26,15 @@ const reportPath = path.join(reportsDir, "blog-regeneration-report.md");
 
 type Args = {
   apply: boolean;
-  limit: number;
+  /** Max published posts to scan for quality issues (pagination cap). */
+  maxScan: number;
+  /** Max flagged posts to run normalization / pipeline against (after scanning). */
+  processLimit: number;
+  /**
+   * Relaxed topic normalization + one editorial-plan schema retry (see {@link runBlogArticleGenerationPipeline}).
+   * Can also set `BLOG_REGENERATE_LEGACY_COMPAT=true`.
+   */
+  legacyCompatible: boolean;
 };
 
 type ReportRow = {
@@ -37,30 +45,50 @@ type ReportRow = {
   reason: string;
 };
 
+type ScanStats = {
+  totalScanned: number;
+  totalFlagged: number;
+};
+
 function parseArgs(argv: string[]): Args {
   let apply = false;
-  let limit = 50;
+  let processLimit = 50;
+  let maxScan = 3000;
+  let legacyCompatible = process.env.BLOG_REGENERATE_LEGACY_COMPAT?.trim().toLowerCase() === "true";
   for (const arg of argv.slice(2)) {
     if (arg === "--apply") apply = true;
-    const match = arg.match(/^--limit=(\d+)$/);
-    if (match) limit = Math.max(1, Math.min(500, Number.parseInt(match[1]!, 10)));
+    if (arg === "--dry-run") apply = false;
+    if (arg === "--legacy-compatible") legacyCompatible = true;
+    const proc = arg.match(/^--process-limit=(\d+)$/);
+    if (proc) processLimit = Math.max(1, Math.min(500, Number.parseInt(proc[1]!, 10)));
+    const lim = arg.match(/^--limit=(\d+)$/);
+    if (lim) processLimit = Math.max(1, Math.min(500, Number.parseInt(lim[1]!, 10)));
+    const scan = arg.match(/^--max-scan=(\d+)$/);
+    if (scan) maxScan = Math.max(50, Math.min(50_000, Number.parseInt(scan[1]!, 10)));
   }
-  return { apply, limit };
+  return { apply, processLimit, maxScan, legacyCompatible };
 }
 
-function markdownReport(rows: ReportRow[], scanned: number, args: Args): string {
+function markdownReport(rows: ReportRow[], stats: ScanStats, args: Args): string {
   const regenerated = rows.filter((row) => row.action === "regenerated").length;
   const skipped = rows.filter((row) => row.action === "skipped").length;
+  const would = rows.filter((row) => row.action === "would_regenerate").length;
   const failures = rows.filter((row) => row.action === "failed").length;
   const lines = [
     "# Blog Regeneration Report",
     "",
     `Generated at: ${new Date().toISOString()}`,
     `Mode: ${args.apply ? "apply" : "dry-run"}`,
-    `Total scanned: ${scanned}`,
-    `Total regenerated: ${regenerated}`,
-    `Total skipped: ${skipped}`,
-    `Failures: ${failures}`,
+    `Legacy-compatible topic gate + plan retry: ${args.legacyCompatible ? "yes" : "no"}`,
+    "",
+    "## Summary",
+    "",
+    `- **Total scanned** (published rows read): ${stats.totalScanned}`,
+    `- **Total flagged** by publish-quality gate: ${stats.totalFlagged}`,
+    `- **Total regenerated** (apply): ${regenerated}`,
+    `- **Would regenerate** (dry-run): ${would}`,
+    `- **Total skipped** (intent normalization declined): ${skipped}`,
+    `- **Failures** (pipeline or post-check): ${failures}`,
     "",
     "| Slug | Action | Normalized topic | Reason |",
     "| --- | --- | --- | --- |",
@@ -84,59 +112,89 @@ async function main(): Promise<void> {
 
   const prisma = new PrismaClient();
   const rows: ReportRow[] = [];
+  const stats: ScanStats = { totalScanned: 0, totalFlagged: 0 };
+
+  const select = {
+    id: true,
+    slug: true,
+    title: true,
+    body: true,
+    excerpt: true,
+    exam: true,
+    tags: true,
+    targetKeyword: true,
+    keywordCluster: true,
+    countryTarget: true,
+    intent: true,
+    funnelStage: true,
+    postTemplate: true,
+    sourcesJson: true,
+    apaReferences: true,
+    faqBlock: true,
+    adminPublishLog: true,
+  } as const;
+
+  type ScannedPost = Prisma.BlogPostGetPayload<{ select: typeof select }>;
 
   try {
-    const posts = await prisma.blogPost.findMany({
-      where: { postStatus: BlogPostStatus.PUBLISHED },
-      orderBy: { updatedAt: "asc" },
-      take: args.limit,
-      select: {
-        id: true,
-        slug: true,
-        title: true,
-        body: true,
-        excerpt: true,
-        exam: true,
-        tags: true,
-        targetKeyword: true,
-        keywordCluster: true,
-        countryTarget: true,
-        intent: true,
-        funnelStage: true,
-        postTemplate: true,
-        sourcesJson: true,
-        apaReferences: true,
-        faqBlock: true,
-        adminPublishLog: true,
-      },
-    });
+    const flaggedPosts: ScannedPost[] = [];
+    let cursor: string | undefined;
 
-    const flagged = posts.filter((post) => {
-      const quality = validateBlogPublishQuality({
-        title: post.title,
-        body: post.body,
-        targetKeyword: post.targetKeyword,
-        tags: post.tags,
-        faqBlock: post.faqBlock,
-        apaReferences: post.apaReferences,
-        sourcesJson: post.sourcesJson,
+    scan: while (stats.totalScanned < args.maxScan && flaggedPosts.length < args.processLimit) {
+      const batch = await prisma.blogPost.findMany({
+        where: { postStatus: BlogPostStatus.PUBLISHED, ...(cursor ? { id: { gt: cursor } } : {}) },
+        orderBy: { id: "asc" },
+        take: 100,
+        select,
       });
-      return quality.blocking.length > 0;
-    });
+      if (batch.length === 0) break;
 
-    for (const post of flagged) {
+      for (const post of batch) {
+        if (stats.totalScanned >= args.maxScan) break scan;
+        stats.totalScanned += 1;
+
+        const quality = validateBlogPublishQuality({
+          title: post.title,
+          body: post.body,
+          targetKeyword: post.targetKeyword,
+          tags: post.tags,
+          faqBlock: post.faqBlock,
+          apaReferences: post.apaReferences,
+          sourcesJson: post.sourcesJson,
+        });
+        if (quality.blocking.length > 0) {
+          stats.totalFlagged += 1;
+          flaggedPosts.push(post);
+          if (flaggedPosts.length >= args.processLimit) break scan;
+        }
+      }
+
+      cursor = batch[batch.length - 1]!.id;
+      if (batch.length < 100) break;
+    }
+
+    for (const post of flaggedPosts) {
       const topicSeed = post.targetKeyword?.trim() || post.title.trim();
-      const normalized = normalizeBlogTopicIntent(topicSeed, post.exam);
+      const normalized = normalizeBlogTopicIntent(topicSeed, post.exam, {
+        legacyCompatible: args.legacyCompatible,
+      });
       if (!normalized.accepted) {
+        console.info("[blog:regenerate:poor] topic_not_normalized", { slug: post.slug, rawTopic: topicSeed, reason: normalized.reason });
         rows.push({
           slug: post.slug,
           title: post.title,
           normalizedTopic: null,
-          action: "failed",
+          action: "skipped",
           reason: normalized.reason ?? "topic_intent_rejected",
         });
         continue;
       }
+
+      console.info("[blog:regenerate:poor] topic_normalized", {
+        slug: post.slug,
+        rawTopic: topicSeed,
+        normalizedTopic: normalized.normalizedTopic,
+      });
 
       if (!args.apply) {
         rows.push({
@@ -168,7 +226,7 @@ async function main(): Promise<void> {
             sourceRecordsJson: coerceBlogSourceRows(Array.isArray(post.sourcesJson) ? post.sourcesJson : []),
             allowInsufficientCitations: true,
           },
-          { persist: false },
+          { persist: false, legacyCompatible: args.legacyCompatible },
         );
 
         if (!pipeline.ok) {
@@ -229,7 +287,10 @@ async function main(): Promise<void> {
             titleAlternates: pipeline.plan.titleOptions.slice(0, 8),
             keyQuestions: pipeline.plan.faqs.map((faq) => faq.q).slice(0, 8),
             keywordPlan: pipeline.plan.seoFocusKeywords?.slice(0, 8) ?? [normalized.normalizedTopic],
-            relatedLessonPaths: lessonRowsToRelatedPaths(pipeline.plan.suggestedInternalLessons, post.countryTarget === "CA" ? "CA" : post.countryTarget === "US" ? "US" : "unspecified"),
+            relatedLessonPaths: lessonRowsToRelatedPaths(
+              pipeline.plan.suggestedInternalLessons,
+              post.countryTarget === "CA" ? "CA" : post.countryTarget === "US" ? "US" : "unspecified",
+            ),
             featuredSnippet: pipeline.plan.featuredSnippetHint ?? null,
             adminPublishLog: nextLog as Prisma.InputJsonValue,
           },
@@ -254,9 +315,9 @@ async function main(): Promise<void> {
     }
 
     await fs.mkdir(reportsDir, { recursive: true });
-    await fs.writeFile(reportPath, markdownReport(rows, posts.length, args));
+    await fs.writeFile(reportPath, markdownReport(rows, stats, args));
     console.log(
-      `[blog:regenerate:poor] scanned=${posts.length} flagged=${flagged.length} mode=${args.apply ? "apply" : "dry-run"}`,
+      `[blog:regenerate:poor] scanned=${stats.totalScanned} flagged=${stats.totalFlagged} processedRows=${rows.length} mode=${args.apply ? "apply" : "dry-run"}`,
     );
     console.log(`[blog:regenerate:poor] wrote ${path.relative(repoRoot, reportPath)}`);
   } finally {

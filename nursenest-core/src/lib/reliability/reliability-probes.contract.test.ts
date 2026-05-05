@@ -97,6 +97,8 @@ describe("self-heal body parsing", () => {
       'revalidatePath("/pricing")',
       'revalidatePath("/blog")',
       'revalidatePath("/sitemap.xml")',
+      'revalidatePath("/sitemap-allied.xml")',
+      'revalidatePath("/sitemap-new-grad.xml")',
       'revalidateTag("pricing", "default")',
       'revalidateTag("marketing", "default")',
       'revalidateTag("lessons", "default")',

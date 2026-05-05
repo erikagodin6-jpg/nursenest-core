@@ -27,25 +27,12 @@ async function safeRegionCards(): Promise<string[]> {
   }
 }
 
-async function safeIntro() {
-  try {
-    return await GlobalMarketingHomeIntro();
-  } catch {
-    return null;
-  }
-}
-
 async function safeStats(props: HomeRestoredWithDeferredStatsProps) {
   try {
     return await HomeRestoredWithDeferredStats(props);
   } catch (err) {
     console.error("[homepage] stats failed", err);
-    return (
-      <>
-        {props.introAfterHero}
-        <MarketingHomeEmergencyFallback />
-      </>
-    );
+    return <MarketingHomeEmergencyFallback />;
   }
 }
 
@@ -57,13 +44,21 @@ async function safeBlog() {
   }
 }
 
+/** Server slot so global intro streams as client `children` (not a named prop) — preserves DOM order vs hero. */
+async function HomepageGlobalIntroSlot() {
+  try {
+    return await GlobalMarketingHomeIntro();
+  } catch {
+    return null;
+  }
+}
+
 /**
  * HOMEPAGE
  */
 export default async function HomePage() {
   try {
     const cards = await safeRegionCards();
-    const intro = await safeIntro();
     const blogSection = await safeBlog();
 
     return (
@@ -71,7 +66,7 @@ export default async function HomePage() {
         {await safeStats({
           skipOptionalDbReads: false,
           publishedGlobalRegionCardIds: cards,
-          introAfterHero: intro,
+          children: <HomepageGlobalIntroSlot />,
         })}
 
         {blogSection}

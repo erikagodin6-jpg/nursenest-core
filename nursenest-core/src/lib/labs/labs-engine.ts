@@ -1,6 +1,7 @@
 import { TierCode } from "@prisma/client";
+import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
-import { resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
+import { appPathwayCatSessionStartPath, resolveStudySurfaceCatHref } from "@/lib/exam-pathways/pathway-cat-flow";
 import { STUDY_TOOL_ROUTES, withStudyToolPathwayQuery } from "@/lib/study-tools/study-tool-routes";
 
 export type LabCategorySlug =
@@ -50,6 +51,13 @@ export type LabMicroScenario = {
   rationale: string;
 };
 
+/** Educational “NCLEX-style” distractor bands — illustrative, not live analytics. */
+export type LabAnswerDistributionEntry = {
+  optionIndex: number;
+  shareBand: string;
+  distractorRationale: string;
+};
+
 export type LabQuestion = {
   id: string;
   type: LabQuestionType;
@@ -58,6 +66,10 @@ export type LabQuestion = {
   options: string[];
   correctIndex: number;
   rationale: string;
+  /** When true, stem is written as a multi-sentence clinical vignette. */
+  isClinicalScenario?: boolean;
+  /** Typical trap pick patterns learners confuse under exam pressure. */
+  answerDistribution?: LabAnswerDistributionEntry[];
 };
 
 export type LabFlashcard = {
@@ -99,6 +111,12 @@ export type LabLessonDefinition = {
 export type LabsStudyLinks = {
   flashcardsHref: string;
   questionBankHref: string;
+  /** Topic-scoped practice-test builder (same contract as pathway lesson study loops). */
+  practiceTestsTopicHref: string;
+  /** Pathway-scoped RN/PN/NP lesson hub; optional topic alignment with lab `practiceQuestionTopic`. */
+  lessonsHubHref: string;
+  /** CAT adaptive session start when pathway is known; otherwise generic practice-test entry. */
+  catLaunchHref: string;
   catHref: string;
   labDrillsHref: string;
 };
@@ -964,86 +982,179 @@ const LESSONS: readonly LabLessonDefinition[] = [
   },
 ] as const;
 
-function questionId(topic: LabLessonDefinition, type: LabQuestionType) {
-  return `${topic.slug}:${type}`;
+function questionId(topic: LabLessonDefinition, type: LabQuestionType, suffix?: string) {
+  return suffix ? `${topic.slug}:${type}:${suffix}` : `${topic.slug}:${type}`;
+}
+
+function scenarioStem(m: LabMicroScenario): string {
+  return `${m.stem}\n\nFindings: ${m.findings.join("; ")}.\n\n${m.question}`;
+}
+
+function scenarioMcqOptions(topic: LabLessonDefinition, scenario: LabMicroScenario): string[] {
+  const correct = scenario.answer;
+  const traps = topic.nclexTraps.filter((t) => t.length > 0 && t !== correct);
+  const wrong: string[] = [
+    traps[0] ?? "Observe without reassessment because the charted value is only mildly abnormal.",
+    traps[1] ?? "Wait for a repeat lab before any bedside priority decisions.",
+    topic.priorityDecisionMaking.find((p) => p.length > 0 && p !== correct) ??
+      "Treat the numeric reference interval as the sole determinant of urgency.",
+  ];
+  return [correct, wrong[0]!, wrong[1]!, wrong[2]!];
+}
+
+/** Illustrative pick-rate bands for teaching (not live exam analytics). */
+function illustrativeAnswerDistribution(
+  topic: LabLessonDefinition,
+  options: string[],
+  correctIndex: number,
+): LabAnswerDistributionEntry[] {
+  const wrongBands = ["18–24%", "14–20%", "8–12%"] as const;
+  let wrongBandIdx = 0;
+  return options.map((_, optionIndex) => {
+    if (optionIndex === correctIndex) {
+      return {
+        optionIndex,
+        shareBand: "34–42%",
+        distractorRationale:
+          "Strong performers integrate labs with perfusion, trend, medications, and the fastest-changing safety threat.",
+      };
+    }
+    const band = wrongBands[wrongBandIdx % wrongBands.length]!;
+    const trap = topic.nclexTraps[wrongBandIdx % Math.max(topic.nclexTraps.length, 1)]!;
+    wrongBandIdx += 1;
+    return {
+      optionIndex,
+      shareBand: band,
+      distractorRationale: trap.length > 0 ? trap : "Classic prioritization trap: delays recognition of instability.",
+    };
+  });
+}
+
+function patternScenarioQuestion(topic: LabLessonDefinition, pattern = topic.patternRecognition[1] ?? topic.patternRecognition[0]!): LabQuestion {
+  const stem = `A nurse is reviewing a patient whose presentation matches this pattern: ${pattern.pattern.join("; ")}. Which interpretation best drives next actions?`;
+  const options = [
+    pattern.interpretation,
+    "The pattern is chronic and reassuring if any single value is near the reference range.",
+    "This is too nonspecific to report; wait for imaging before notifying the provider.",
+    "The safest action is to repeat the lab tomorrow without changing monitoring frequency.",
+  ];
+  const correctIndex = 0;
+  return {
+    id: questionId(topic, "clinical_scenario", "pattern-vignette"),
+    type: "clinical_scenario",
+    difficulty: "intermediate",
+    stem,
+    options,
+    correctIndex,
+    isClinicalScenario: true,
+    rationale: `${pattern.interpretation} First action mindset: ${pattern.firstAction}`,
+    answerDistribution: illustrativeAnswerDistribution(topic, options, correctIndex),
+  };
 }
 
 function buildQuestions(topic: LabLessonDefinition): LabQuestion[] {
   const [thresholdA, thresholdB] = topic.priorityThresholds;
-  const firstScenario = topic.microScenarios[0];
-  const firstPattern = topic.patternRecognition[0];
-  return [
-    {
-      id: questionId(topic, "multiple_choice"),
-      type: "multiple_choice",
-      difficulty: "beginner",
-      stem: `Which statement best reflects the core clinical meaning of ${topic.shortTitle.toLowerCase()} interpretation?`,
-      options: [
-        `Interpret ${topic.shortTitle.toLowerCase()} in isolation from symptoms and trend.`,
-        `Match ${topic.shortTitle.toLowerCase()} to physiology, bedside findings, and likely cause before acting.`,
-        `Use the lab only after all vital signs are normal.`,
-        `Ignore medication effects unless the value is critical.`,
-      ],
-      correctIndex: 1,
-      rationale: `${topic.shortTitle} becomes clinically useful only when linked to physiology, symptoms, medications, and trend direction.`,
-    },
-    {
-      id: questionId(topic, "clinical_scenario"),
-      type: "clinical_scenario",
-      difficulty: "intermediate",
-      stem: `${firstScenario.stem} Which interpretation is strongest?`,
-      options: [
-        firstScenario.answer,
-        "The lab abnormality is probably chronic and low priority because only one data point is abnormal.",
-        "The safest next step is to wait for the next routine lab draw before reassessing the patient.",
-        "The value matters only if the patient also reports pain.",
-      ],
-      correctIndex: 0,
-      rationale: firstScenario.rationale,
-    },
-    {
-      id: questionId(topic, "prioritization"),
-      type: "prioritization",
-      difficulty: "advanced",
-      stem: `Which finding requires the most urgent escalation in the ${topic.shortTitle.toLowerCase()} workflow?`,
-      options: [
-        `${thresholdA.label}: ${thresholdA.threshold}`,
-        `${thresholdB.label}: ${thresholdB.threshold}`,
-        "A mild abnormality without symptoms that is improving on repeat trend",
-        "A chronic baseline abnormality with no change from prior results",
-      ],
-      correctIndex: 1,
-      rationale: thresholdB.whyItMatters,
-    },
-    {
-      id: questionId(topic, "trend"),
-      type: "trend",
-      difficulty: "advanced",
-      stem: `Which trend interpretation best fits ${topic.shortTitle.toLowerCase()} clinical reasoning?`,
-      options: [
-        topic.trendInterpretation[0]!,
-        "A single improved value always overrules worsening symptoms.",
-        "Trend data matters less than whether the value is inside the reference range.",
-        "Once a lab improves, related assessment findings no longer matter.",
-      ],
-      correctIndex: 0,
-      rationale: `Trend interpretation is central here: ${topic.trendInterpretation[0]}`,
-    },
-    {
-      id: questionId(topic, "pattern"),
-      type: "pattern",
-      difficulty: "advanced",
-      stem: `A patient shows this pattern: ${firstPattern.pattern.join("; ")}. What is the best interpretation?`,
-      options: [
-        firstPattern.interpretation,
-        "This pattern is too nonspecific to guide bedside priorities.",
-        "The pattern is reassuring if the patient had one normal value earlier in the shift.",
-        "This pattern should be ignored until imaging is completed.",
-      ],
-      correctIndex: 0,
-      rationale: `${firstPattern.interpretation} The first nursing action is to ${firstPattern.firstAction.toLowerCase()}.`,
-    },
+  const firstScenario = topic.microScenarios[0]!;
+  const secondScenario = topic.microScenarios[1];
+  const firstPattern = topic.patternRecognition[0]!;
+
+  const scenarioOneOptions = scenarioMcqOptions(topic, firstScenario);
+  const scenarioOne: LabQuestion = {
+    id: questionId(topic, "clinical_scenario", "vignette-a"),
+    type: "clinical_scenario",
+    difficulty: "intermediate",
+    stem: scenarioStem(firstScenario),
+    options: scenarioOneOptions,
+    correctIndex: 0,
+    isClinicalScenario: true,
+    rationale: firstScenario.rationale,
+    answerDistribution: illustrativeAnswerDistribution(topic, scenarioOneOptions, 0),
+  };
+
+  const scenarioTwoOptions = secondScenario ? scenarioMcqOptions(topic, secondScenario) : null;
+  const scenarioTwo: LabQuestion = secondScenario
+    ? {
+        id: questionId(topic, "clinical_scenario", "vignette-b"),
+        type: "clinical_scenario",
+        difficulty: "advanced",
+        stem: scenarioStem(secondScenario),
+        options: scenarioTwoOptions!,
+        correctIndex: 0,
+        isClinicalScenario: true,
+        rationale: secondScenario.rationale,
+        answerDistribution: illustrativeAnswerDistribution(topic, scenarioTwoOptions!, 0),
+      }
+    : patternScenarioQuestion(topic);
+
+  const prioritizationOptions = [
+    `${thresholdA.label}: ${thresholdA.threshold}`,
+    `${thresholdB.label}: ${thresholdB.threshold}`,
+    "A mild abnormality without symptoms that is improving on repeat trend",
+    "A chronic baseline abnormality with no change from prior results",
   ];
+  const prioritization: LabQuestion = {
+    id: questionId(topic, "prioritization"),
+    type: "prioritization",
+    difficulty: "advanced",
+    stem: `Which finding requires the most urgent escalation in the ${topic.shortTitle.toLowerCase()} workflow?`,
+    options: prioritizationOptions,
+    correctIndex: 1,
+    rationale: thresholdB.whyItMatters,
+    answerDistribution: illustrativeAnswerDistribution(topic, prioritizationOptions, 1),
+  };
+
+  const trendOptions = [
+    topic.trendInterpretation[0]!,
+    "A single improved value always overrules worsening symptoms.",
+    "Trend data matters less than whether the value is inside the reference range.",
+    "Once a lab improves, related assessment findings no longer matter.",
+  ];
+  const trendQ: LabQuestion = {
+    id: questionId(topic, "trend"),
+    type: "trend",
+    difficulty: "advanced",
+    stem: `Which trend interpretation best fits ${topic.shortTitle.toLowerCase()} clinical reasoning?`,
+    options: trendOptions,
+    correctIndex: 0,
+    rationale: `Trend interpretation is central here: ${topic.trendInterpretation[0]}`,
+    answerDistribution: illustrativeAnswerDistribution(topic, trendOptions, 0),
+  };
+
+  const patternOptions = [
+    firstPattern.interpretation,
+    "This pattern is too nonspecific to guide bedside priorities.",
+    "The pattern is reassuring if the patient had one normal value earlier in the shift.",
+    "This pattern should be ignored until imaging is completed.",
+  ];
+  const patternQ: LabQuestion = {
+    id: questionId(topic, "pattern"),
+    type: "pattern",
+    difficulty: "advanced",
+    stem: `A patient shows this pattern: ${firstPattern.pattern.join("; ")}. What is the best interpretation?`,
+    options: patternOptions,
+    correctIndex: 0,
+    rationale: `${firstPattern.interpretation} The first nursing action is to ${firstPattern.firstAction.toLowerCase()}.`,
+    answerDistribution: illustrativeAnswerDistribution(topic, patternOptions, 0),
+  };
+
+  const bridgeOptions = [
+    `Match ${topic.shortTitle.toLowerCase()} to physiology, bedside findings, medications, and trend before choosing an action.`,
+    `Interpret ${topic.shortTitle.toLowerCase()} in isolation from symptoms and trend.`,
+    "Use the lab only after all vital signs are normal.",
+    "Ignore medication effects unless the value is critical.",
+  ];
+  const bridgeQ: LabQuestion = {
+    id: questionId(topic, "multiple_choice"),
+    type: "multiple_choice",
+    difficulty: "beginner",
+    stem: `Which approach best reflects NCLEX-style prioritization for ${topic.shortTitle.toLowerCase()}?`,
+    options: bridgeOptions,
+    correctIndex: 0,
+    rationale: `${topic.shortTitle} items reward linking labs to the fastest-changing patient threat, not memorizing a single reference interval.`,
+    answerDistribution: illustrativeAnswerDistribution(topic, bridgeOptions, 0),
+  };
+
+  return [scenarioOne, scenarioTwo, prioritization, trendQ, patternQ, bridgeQ];
 }
 
 function buildFlashcards(topic: LabLessonDefinition): LabFlashcard[] {
@@ -1137,16 +1248,31 @@ export function getLabLessonFlashcards(topic: LabLessonDefinition): LabFlashcard
 
 export function buildLabsStudyLinks(pathwayId: string | null, topicCode: string | null = null): LabsStudyLinks {
   const trimmedPathway = pathwayId?.trim() || null;
-  const flashcardsHref = trimmedPathway ? pathwayHubAppFlashcardsHref(trimmedPathway, topicCode) : "/app/flashcards";
-  const questionBankHref = trimmedPathway ? pathwayHubAppQuestionsHref(trimmedPathway, topicCode ?? undefined) : "/app/questions";
+  const topic = topicCode?.trim() || null;
+  const flashcardsHref = trimmedPathway ? pathwayHubAppFlashcardsHref(trimmedPathway, topic) : "/app/flashcards";
+  const questionBankHref = trimmedPathway ? pathwayHubAppQuestionsHref(trimmedPathway, topic ?? undefined) : "/app/questions";
+  const practiceTestsTopicHref =
+    trimmedPathway && topic ? buildAppPracticeTestsTopicHref(trimmedPathway, topic) : "/app/practice-tests";
+  const lessonsHubHref = trimmedPathway
+    ? `/app/lessons?pathwayId=${encodeURIComponent(trimmedPathway)}${topic ? `&topicSlug=${encodeURIComponent(topic)}` : ""}`
+    : "/app/lessons";
+  const catLaunchHref = trimmedPathway ? appPathwayCatSessionStartPath(trimmedPathway) : "/app/practice-tests/start";
   const catHref = resolveStudySurfaceCatHref({
     pathwayId: trimmedPathway,
     availablePathwayIds: trimmedPathway ? [trimmedPathway] : [],
-    topic: topicCode,
+    topic,
     preferWeakFocus: true,
   });
   const labDrillsHref = withStudyToolPathwayQuery(STUDY_TOOL_ROUTES.labDrills, trimmedPathway);
-  return { flashcardsHref, questionBankHref, catHref, labDrillsHref };
+  return {
+    flashcardsHref,
+    questionBankHref,
+    practiceTestsTopicHref,
+    lessonsHubHref,
+    catLaunchHref,
+    catHref,
+    labDrillsHref,
+  };
 }
 
 export function countLabsInventoryForTrack(track: LabTrack) {

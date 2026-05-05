@@ -14,6 +14,7 @@ const NAV_DEF: { key: keyof typeof STUDY_TOOL_ROUTES; label: string }[] = [
   { key: "ordering", label: "Ordering" },
   { key: "labDrills", label: "Lab drills" },
   { key: "medicationDrills", label: "Medication drills" },
+  { key: "medCalculations", label: "Med calculations" },
 ];
 
 export function StudyToolsActivityShell({

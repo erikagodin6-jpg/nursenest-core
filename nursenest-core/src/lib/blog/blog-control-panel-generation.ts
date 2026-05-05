@@ -195,12 +195,23 @@ export function appendRequiredStudyLinksBlock(params: {
   return `${params.bodyHtml.trim()}\n<h2>Study next in NurseNest</h2><ul>${listHtml}</ul>`;
 }
 
-export async function fetchControlPanelPlan(
+export type FetchControlPanelPlanOptions = {
+  openAiUser?: string;
+  /**
+   * When true, a single follow-up completion is attempted if the first plan fails JSON/Zod/normalize coercion.
+   * Used with legacy-compatible batch generators (see `runBlogArticleGenerationPipeline` options).
+   */
+  enablePlanSchemaRetry?: boolean;
+  /** Appended to the user prompt (schema repair pass). */
+  planRepairHint?: string;
+};
+
+async function completeControlPanelPlanFromModel(
   input: ControlPanelGenerateInput,
-  opts?: { openAiUser?: string },
+  opts?: FetchControlPanelPlanOptions,
 ): Promise<BlogControlPanelPlan> {
   const system = buildStructuredPlanSystemPrompt({ template: input.template, intent: input.intent });
-  const user = `${buildStructuredPlanUserPrompt({
+  let user = `${buildStructuredPlanUserPrompt({
     topic: input.topic,
     exam: input.exam,
     country: input.country,
@@ -212,6 +223,10 @@ export async function fetchControlPanelPlan(
     targetKeyword: input.targetKeyword,
     keywordCluster: input.keywordCluster,
   })}\n\n${getBlogInternalLinkPathHintsForPrompt(input.exam, input.country)}`;
+
+  if (opts?.planRepairHint?.trim()) {
+    user = `${user}\n\n---\nSCHEMA REPAIR (required)\n${opts.planRepairHint.trim()}`;
+  }
 
   const res = await openAiChatCompletion({
     useBlogOpenAiApiKey: true,
@@ -253,7 +268,32 @@ export async function fetchControlPanelPlan(
     }
     throw new BlogControlPanelPlanError("PLAN_ZOD", "Editorial plan validation failed for an unknown reason.", null);
   }
-  return await repairMaterializedPlanSectionsOnce(plan.data, input, opts);
+  return await repairMaterializedPlanSectionsOnce(plan.data, input, { openAiUser: opts?.openAiUser });
+}
+
+export async function fetchControlPanelPlan(
+  input: ControlPanelGenerateInput,
+  opts?: FetchControlPanelPlanOptions,
+): Promise<BlogControlPanelPlan> {
+  try {
+    return await completeControlPanelPlanFromModel(input, opts);
+  } catch (e) {
+    if (!opts?.enablePlanSchemaRetry || opts.planRepairHint) {
+      throw e;
+    }
+    if (!BlogControlPanelPlanError.is(e)) throw e;
+    if (e.code !== "PLAN_ZOD" && e.code !== "PLAN_NORMALIZE" && e.code !== "PLAN_INVALID_JSON") {
+      throw e;
+    }
+    const detail =
+      typeof e.details === "object" && e.details != null ? JSON.stringify(e.details).slice(0, 1200) : "";
+    const hint = `The previous editorial plan was rejected (${e.code}). ${e.message.slice(0, 700)} ${detail}\nRegenerate ONE JSON object only (no markdown fences) that fully satisfies the schema: required arrays populated, outline sections materialized, FAQs present, and slug/meta fields within stated length limits.`;
+    return await completeControlPanelPlanFromModel(input, {
+      openAiUser: `${opts.openAiUser ?? "blog"}:plan-schema-retry`.slice(0, 120),
+      enablePlanSchemaRetry: false,
+      planRepairHint: hint,
+    });
+  }
 }
 
 export async function fetchControlPanelBodyHtml(params: {

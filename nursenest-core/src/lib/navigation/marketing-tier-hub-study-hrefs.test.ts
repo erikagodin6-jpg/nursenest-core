@@ -18,7 +18,7 @@ describe("marketingTierHubStudyActionHref", () => {
     assert.equal(marketingTierHubStudyActionHref(usRn!, "lessons"), "/us/rn/nclex-rn/lessons");
     assert.equal(marketingTierHubStudyActionHref(caRpn!, "lessons"), "/canada/pn/rex-pn/lessons");
     assert.equal(marketingTierHubStudyActionHref(usNp!, "lessons"), "/us/np/fnp/lessons");
-    assert.equal(marketingTierHubStudyActionHref(usAllied!, "lessons"), "/allied/allied-health/lessons");
+    assert.equal(marketingTierHubStudyActionHref(usAllied!, "lessons"), "/us/allied/allied-health/lessons");
     assert.equal(marketingTierHubStudyActionHref(usNewGrad!, "lessons"), "/us/rn/new-grad-transition/lessons");
   });
 

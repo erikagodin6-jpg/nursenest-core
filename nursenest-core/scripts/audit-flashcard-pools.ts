@@ -18,6 +18,10 @@
  */
 
 import { PrismaClient } from "@prisma/client";
+import {
+  EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL,
+  EXAM_QUESTION_STATUS_PUBLISHED_SQL,
+} from "../src/lib/questions/exam-question-bank-sql";
 
 const prisma = new PrismaClient();
 
@@ -75,7 +79,7 @@ async function auditOne(pw: typeof AUDIT_PATHWAYS[number]): Promise<AuditResult>
 
   // 1. All published
   const [totalRow] = await prisma.$queryRaw<CountRow[]>`
-    SELECT COUNT(*)::bigint AS n FROM exam_questions WHERE status = 'PUBLISHED'
+    SELECT COUNT(*)::bigint AS n FROM exam_questions WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
   `;
   const totalPublished = Number(totalRow?.n ?? 0);
   console.log(`  All published questions               : ${fmt(totalPublished)}`);
@@ -83,12 +87,10 @@ async function auditOne(pw: typeof AUDIT_PATHWAYS[number]): Promise<AuditResult>
   // 2. Usable (no ECG/video, has stem + correct_answer)
   const [usableRow] = await prisma.$queryRaw<CountRow[]>`
     SELECT COUNT(*)::bigint AS n FROM exam_questions
-    WHERE status = 'PUBLISHED'
+    WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
       AND coalesce(trim(stem), '') <> ''
       AND correct_answer IS NOT NULL
-      AND (question_format IS NULL
-           OR lower(trim(question_format))
-              NOT IN ('ecg','ekg','video','video_case','media','image_only'))
+      AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
   `;
   const usableTotal = Number(usableRow?.n ?? 0);
   console.log(`  Usable for flashcards                : ${fmt(usableTotal)}`);
@@ -103,12 +105,10 @@ async function auditOne(pw: typeof AUDIT_PATHWAYS[number]): Promise<AuditResult>
   const scopedRow = await prisma.$queryRaw<CountRow[]>(
     Prisma.sql`
       SELECT COUNT(*)::bigint AS n FROM exam_questions
-      WHERE status = 'PUBLISHED'
+      WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
         AND coalesce(trim(stem), '') <> ''
         AND correct_answer IS NOT NULL
-        AND (question_format IS NULL
-             OR lower(trim(question_format))
-                NOT IN ('ecg','ekg','video','video_case','media','image_only'))
+        AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
         AND lower(coalesce(exam, '')) IN (${Prisma.join(examLower)})
     `,
   );
@@ -122,7 +122,7 @@ async function auditOne(pw: typeof AUDIT_PATHWAYS[number]): Promise<AuditResult>
       lower(coalesce(tier,  '(null)')) AS tier_val,
       COUNT(*)::bigint                 AS cnt
     FROM exam_questions
-    WHERE status = 'PUBLISHED'
+    WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
     GROUP BY 1, 2
     ORDER BY cnt DESC
     LIMIT 20
@@ -151,12 +151,10 @@ async function auditOne(pw: typeof AUDIT_PATHWAYS[number]): Promise<AuditResult>
       coalesce(nullif(trim(topic), ''), nullif(trim(body_system), ''), 'Uncategorized') AS grp_value,
       COUNT(*)::bigint AS cnt
     FROM exam_questions
-    WHERE status = 'PUBLISHED'
+    WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
       AND coalesce(trim(stem), '') <> ''
       AND correct_answer IS NOT NULL
-      AND (question_format IS NULL
-           OR lower(trim(question_format))
-              NOT IN ('ecg','ekg','video','video_case','media','image_only'))
+      AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
     GROUP BY 1
     ORDER BY cnt DESC
     LIMIT 50

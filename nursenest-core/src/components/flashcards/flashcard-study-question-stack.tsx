@@ -23,8 +23,17 @@ export function splitPromptLeadingImage(prompt: string | null | undefined): Prom
     return { imageHtml: null, remainingPrompt: raw };
   }
 
+  const tag = leadingImageMatch[0].trim();
+  const srcEmpty =
+    /\ssrc\s*=\s*["']\s*["']/i.test(tag) ||
+    /\ssrc\s*=\s*["']?\s*["']?\s*$/i.test(tag) ||
+    !/\ssrc\s*=/i.test(tag);
+  if (srcEmpty) {
+    return { imageHtml: null, remainingPrompt: raw };
+  }
+
   return {
-    imageHtml: leadingImageMatch[0].trim(),
+    imageHtml: tag,
     remainingPrompt: raw.slice(leadingImageMatch[0].length).trim(),
   };
 }

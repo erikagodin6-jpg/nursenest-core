@@ -270,6 +270,7 @@ const LESSONS: readonly MedCalcLessonDefinition[] = [
     ],
     equationManipulation: [
       "If you know desired gtt/min and volume, isolate minutes to back-check an answer.",
+      "From gtt/min = (mL x gtt/mL) / min, multiply both sides by min, then divide by (mL x gtt/mL) to isolate minutes.",
     ],
     unitConversions: [
       "Hours must become minutes before using the formula.",
@@ -373,6 +374,7 @@ const LESSONS: readonly MedCalcLessonDefinition[] = [
     ],
     equationManipulation: [
       "Rearrange to solve allowable mg/kg if given a max dose and patient weight.",
+      "If dose = mg/kg x kg, then mg/kg = dose ÷ kg — use this to audit whether an order implies an unsafe mg/kg.",
     ],
     unitConversions: [
       "1 kg = 2.2 lb",
@@ -424,6 +426,7 @@ const LESSONS: readonly MedCalcLessonDefinition[] = [
     ],
     equationManipulation: [
       "Solve backwards to find the mg/kg implied by an order and compare it with the reference range.",
+      "If daily max = mg/kg/day x kg, divide by doses per day before comparing a single scheduled dose to a daily range.",
     ],
     unitConversions: [
       "lb to kg conversion must be exact enough to preserve safety.",
@@ -474,6 +477,7 @@ const LESSONS: readonly MedCalcLessonDefinition[] = [
     ],
     equationManipulation: [
       "Back-solve the expected time if the counted drip rate is known and you need to verify a manual setup.",
+      "If gtt/min = mL/min x gtt/mL, then mL/min = gtt/min ÷ gtt/mL — rearrange before plugging unknowns.",
     ],
     unitConversions: [
       "Microdrip is often 60 gtt/mL.",
@@ -526,6 +530,7 @@ const LESSONS: readonly MedCalcLessonDefinition[] = [
     ],
     equationManipulation: [
       "Rearrange concentration equations to isolate either final volume or withdrawal volume.",
+      "If concentration = total mg / total mL, then withdrawal mL = ordered mg ÷ concentration — treat concentration as the conversion factor.",
     ],
     unitConversions: [
       "Keep total drug unit consistent with the order before solving.",
@@ -575,6 +580,7 @@ const LESSONS: readonly MedCalcLessonDefinition[] = [
     ],
     equationManipulation: [
       "Back-solve expected units from a drawn volume when checking another nurse's setup.",
+      "If mL = units ÷ (units/mL), then units = mL x (units/mL) — multiply both sides by concentration to audit a draw.",
     ],
     unitConversions: [
       "U-100 means 100 units per 1 mL.",
@@ -627,6 +633,7 @@ const LESSONS: readonly MedCalcLessonDefinition[] = [
     ],
     equationManipulation: [
       "Back-solve units per hour from a pump rate to verify another nurse's programming.",
+      "If mL/hr = units/hr ÷ units/mL, then units/hr = mL/hr x units/mL — multiply pump rate by bag concentration to audit programming.",
     ],
     unitConversions: [
       "Pounds must become kilograms before using units/kg/hr.",
@@ -695,8 +702,16 @@ function mcq(
   options: string[],
   correctIndex: number,
   rationale: string,
-  difficulty: MedCalcDifficulty = "beginner",
+  opts?: { difficulty?: MedCalcDifficulty; solutionSteps?: string[] },
 ): MedCalcQuestion {
+  const difficulty = opts?.difficulty ?? "beginner";
+  const solutionSteps =
+    opts?.solutionSteps ??
+    [
+      "Restate what the question is asking (safety, setup, or interpretation).",
+      "Eliminate distractors that violate administration realism or policy.",
+      "Confirm the remaining option matches the rationale before selecting.",
+    ];
   return {
     id,
     type: "multiple_choice",
@@ -710,7 +725,7 @@ function mcq(
       decimals: 0,
       roundingText: "Choose the safest interpretation.",
     },
-    solutionSteps: [],
+    solutionSteps,
     rationale,
     safetyNote: "Use the method that preserves safety and a realistic administration form.",
   };
@@ -723,70 +738,241 @@ function buildQuestions(lesson: MedCalcLessonDefinition): MedCalcQuestion[] {
         numericQuestion(`${lesson.slug}:q1`, "Order 750 mg. Supply 250 mg/tablet. How many tablets?", 3, "tablet(s)", 2, ["750 / 250 = 3 tablets"], "Match ordered mg to mg per tablet, then confirm the fraction is workable.", "Tablet answers must be clinically splittable.", { increment: 0.25, type: "multi_step" }),
         numericQuestion(`${lesson.slug}:q2`, "Order 0.125 g. Supply 250 mg/tablet. How many tablets?", 0.5, "tablet(s)", 2, ["0.125 g = 125 mg", "125 / 250 = 0.5 tablets"], "Convert grams to milligrams before dividing.", "Unit conversion errors create wrong tablet counts.", { increment: 0.25, type: "unit_conversion", difficulty: "advanced" }),
         numericQuestion(`${lesson.slug}:q3`, "Order 37.5 mg. Supply 25 mg/tablet. How many tablets?", 1.5, "tablet(s)", 2, ["37.5 / 25 = 1.5 tablets"], "The final fraction is workable, so the order is calculable.", "Stop if the final tablet fraction is not workable.", { increment: 0.25 }),
-        mcq(`${lesson.slug}:q4`, "Which tablet answer should trigger clarification instead of administration?", ["1 tablet", "1.25 tablets", "1.33 tablets", "0.5 tablet"], 2, "1.33 tablets is not a workable fraction for routine administration and should be clarified.", "intermediate"),
+        mcq(`${lesson.slug}:q4`, "Which tablet answer should trigger clarification instead of administration?", ["1 tablet", "1.25 tablets", "1.33 tablets", "0.5 tablet"], 2, "1.33 tablets is not a workable fraction for routine administration and should be clarified.", {
+          difficulty: "intermediate",
+          solutionSteps: [
+            "Identify that the question targets administration feasibility, not the largest number.",
+            "0.5 and 1.25 tablets can be workable with scored tablets or policy; 1 tablet is ordinary.",
+            "1.33 tablets is not a standard splittable increment — select that option as the clarification trigger.",
+          ],
+        }),
+        numericQuestion(
+          `${lesson.slug}:q5`,
+          "Clinical scenario: Postoperative adult with order acetaminophen 650 mg PO once for pain. Stock: 325 mg per tablet. How many tablets?",
+          2,
+          "tablet(s)",
+          2,
+          ["650 mg ordered", "325 mg per tablet", "650 / 325 = 2 tablets", "2.0 is a whole-tablet answer — workable"],
+          "Same-units division; confirm whole tablets match common scored products.",
+          "Verify maximum daily acetaminophen limits across all sources before administering.",
+          { increment: 0.25, type: "clinical_scenario", difficulty: "beginner" },
+        ),
       ];
     case "liquid-medications":
       return [
         numericQuestion(`${lesson.slug}:q1`, "Order 375 mg PO. Supply 250 mg per 5 mL. How many mL?", 7.5, "mL", 1, ["375/250 = 1.5", "1.5 x 5 = 7.5 mL"], "Convert concentration to the volume that contains the ordered dose.", "Use the smallest practical syringe for accuracy.", { type: "multi_step" }),
         numericQuestion(`${lesson.slug}:q2`, "Order 125 mcg. Supply 0.25 mg per 5 mL. How many mL?", 2.5, "mL", 1, ["0.25 mg = 250 mcg", "125/250 = 0.5", "0.5 x 5 = 2.5 mL"], "Microgram-to-milligram conversion must happen before the ratio step.", "Tiny volumes need precise devices.", { type: "unit_conversion", difficulty: "advanced" }),
         numericQuestion(`${lesson.slug}:q3`, "Order 650 mg. Supply 160 mg per 5 mL. How many mL?", 20.3, "mL", 1, ["650/160 = 4.0625", "4.0625 x 5 = 20.3125 mL", "Round to 20.3 mL"], "Keep one decimal place for liquid volume unless policy says otherwise.", "Large oral volumes may need route or formulation review."),
-        mcq(`${lesson.slug}:q4`, "What should you do first if a pediatric liquid dose calculates to a very tiny volume?", ["Round up generously", "Check the concentration and the measuring device", "Convert it to tablets", "Ignore the dose"], 1, "Small pediatric doses need concentration and measuring-device verification before administration."),
+        mcq(`${lesson.slug}:q4`, "What should you do first if a pediatric liquid dose calculates to a very tiny volume?", ["Round up generously", "Check the concentration and the measuring device", "Convert it to tablets", "Ignore the dose"], 1, "Small pediatric doses need concentration and measuring-device verification before administration.", {
+          solutionSteps: [
+            "Tiny volumes amplify measurement error — rounding up without verification is unsafe.",
+            "Converting to tablets is usually wrong unless the order and formulation allow it.",
+            "The safest first step is to verify concentration and the measuring device before drawing.",
+          ],
+        }),
+        numericQuestion(
+          `${lesson.slug}:q5`,
+          "Clinical scenario: Heart failure patient ordered furosemide 40 mg PO now. Oral solution is labeled 10 mg/mL. How many mL?",
+          4,
+          "mL",
+          1,
+          ["Dose on hand: 10 mg per 1 mL", "40 / 10 = 4 mL", "Round to one decimal: 4.0 mL (often charted as 4 mL)"],
+          "Liquid volume = ordered dose ÷ concentration when both use the same drug unit.",
+          "Confirm renal status, electrolytes, and orthostasis precautions per protocol.",
+          { type: "clinical_scenario", difficulty: "beginner" },
+        ),
       ];
     case "iv-flow-rates":
       return [
         numericQuestion(`${lesson.slug}:q1`, "Infuse 1000 mL over 8 hr with 15 gtt/mL tubing. gtt/min?", 31, "gtt/min", 0, ["8 hr = 480 min", "(1000 x 15)/480 = 31.25", "Round to 31 gtt/min"], "Gravity sets use whole-drop rounding.", "A decimal gtt/min is not a deliverable bedside answer.", { exactInteger: true, type: "multi_step", difficulty: "advanced" }),
         numericQuestion(`${lesson.slug}:q2`, "Infuse 50 mL over 30 min with 20 gtt/mL tubing. gtt/min?", 33, "gtt/min", 0, ["(50 x 20)/30 = 33.3", "Round to 33 gtt/min"], "Convert the calculated rate to a whole drop count.", "Recount drips after patient movement.", { exactInteger: true }),
         numericQuestion(`${lesson.slug}:q3`, "Infuse 125 mL over 2 hr with 10 gtt/mL tubing. gtt/min?", 10, "gtt/min", 0, ["2 hr = 120 min", "(125 x 10)/120 = 10.4", "Round to 10 gtt/min"], "Minor rounding still follows whole-drop rules.", "Question extreme results before starting.", { exactInteger: true, type: "unit_conversion" }),
-        mcq(`${lesson.slug}:q4`, "Which mistake most often creates an unsafe gravity-flow answer?", ["Using minutes instead of hours", "Forgetting to convert hours to minutes", "Rounding to a whole drop", "Reading the tubing factor"], 1, "Leaving time in hours inside a gtt/min formula creates a major overestimation."),
+        mcq(`${lesson.slug}:q4`, "Which mistake most often creates an unsafe gravity-flow answer?", ["Using minutes instead of hours", "Forgetting to convert hours to minutes", "Rounding to a whole drop", "Reading the tubing factor"], 1, "Leaving time in hours inside a gtt/min formula creates a major overestimation.", {
+          solutionSteps: [
+            "The gtt/min formula requires minutes in the denominator — hours must be converted.",
+            "Rounding to whole drops is clinically required, not a mistake.",
+            "The distractor that causes massive over-rate is leaving hours unconverted.",
+          ],
+        }),
+        numericQuestion(
+          `${lesson.slug}:q5`,
+          "Clinical scenario: Antibiotic IVPB 250 mL to run over 90 minutes by gravity. Macrodrip tubing 15 gtt/mL. What is the flow rate in gtt/min (whole drops)?",
+          42,
+          "gtt/min",
+          0,
+          ["90 min is already in minutes", "(250 x 15) / 90 = 41.67 gtt/min", "Round to nearest whole drop = 42 gtt/min"],
+          "Apply (mL x gtt/mL) / min, then round to a countable drip rate.",
+          "Recount after repositioning; consider pump for narrow therapeutic index drugs.",
+          { exactInteger: true, type: "clinical_scenario", difficulty: "intermediate" },
+        ),
       ];
     case "iv-pump-ml-hr":
       return [
         numericQuestion(`${lesson.slug}:q1`, "Infuse 500 mL over 4 hr. What pump rate?", 125, "mL/hr", 1, ["500/4 = 125 mL/hr"], "Pump rates are expressed in mL/hr.", "Back-check total infusion time before starting."),
         numericQuestion(`${lesson.slug}:q2`, "Infuse 150 mL over 45 min. What pump rate?", 200, "mL/hr", 1, ["45 min = 0.75 hr", "150/0.75 = 200 mL/hr"], "Time must be converted to hours before dividing.", "High rates need a reasonableness check.", { type: "unit_conversion", difficulty: "advanced" }),
         numericQuestion(`${lesson.slug}:q3`, "Infuse 90 mL over 1.5 hr. What pump rate?", 60, "mL/hr", 1, ["90/1.5 = 60 mL/hr"], "Fractional hours are valid once converted correctly.", "Do not round away a suspicious rate without checking the order."),
-        mcq(`${lesson.slug}:q4`, "What is the best back-check after programming a pump?", ["Confirm the bag will finish at the expected time", "Count drops per minute", "Convert mL/hr to tablets", "Ignore the infusion purpose"], 0, "Completion-time back-check is a quick safety screen for pump programming."),
+        mcq(`${lesson.slug}:q4`, "What is the best back-check after programming a pump?", ["Confirm the bag will finish at the expected time", "Count drops per minute", "Convert mL/hr to tablets", "Ignore the infusion purpose"], 0, "Completion-time back-check is a quick safety screen for pump programming.", {
+          solutionSteps: [
+            "Pump programming errors often show up as impossible completion times or volumes.",
+            "Drop counting is for gravity sets, not primary pump verification.",
+            "Matching expected finish time to the order is a fast secondary check.",
+          ],
+        }),
+        numericQuestion(
+          `${lesson.slug}:q5`,
+          "Clinical scenario: Maintenance IV 1000 mL D5W to infuse over 10 hours on a pump. What rate in mL/hr?",
+          100,
+          "mL/hr",
+          1,
+          ["Total volume 1000 mL", "Total time 10 hr", "1000 / 10 = 100 mL/hr"],
+          "mL/hr = total mL ÷ total hours for straight continuous orders.",
+          "Confirm fluid type and cardiac/renal cautions before starting maintenance fluids.",
+          { type: "clinical_scenario", difficulty: "beginner" },
+        ),
       ];
     case "weight-based-dosing":
       return [
         numericQuestion(`${lesson.slug}:q1`, "Order 8 mg/kg for a patient weighing 70 kg. Total dose?", 560, "mg", 1, ["8 x 70 = 560 mg"], "Multiply the ordered mg/kg by the patient's weight in kg.", "Weight-based math often needs a second conversion step before administration."),
         numericQuestion(`${lesson.slug}:q2`, "Order 5 mg/kg for a patient weighing 154 lb. Total dose?", 350, "mg", 1, ["154/2.2 = 70 kg", "5 x 70 = 350 mg"], "Convert pounds to kilograms first.", "Using pounds instead of kilograms can double the error.", { type: "unit_conversion", difficulty: "advanced" }),
         numericQuestion(`${lesson.slug}:q3`, "Order 2 mg/kg. Patient 44 kg. Supply 4 mg/mL. How many mL?", 22, "mL", 1, ["2 x 44 = 88 mg", "88/4 = 22 mL"], "Weight-based problems often continue into a concentration conversion.", "Large final volumes need a route/formulation reasonableness check.", { type: "multi_step", difficulty: "advanced" }),
-        mcq(`${lesson.slug}:q4`, "Before giving a calculated mg/kg dose, what additional safety check is most important?", ["Whether the answer is an even number", "Whether the dose exceeds any maximum dose cap", "Whether the patient prefers tablets", "Whether the label is colorful"], 1, "A numerically correct mg/kg dose can still be unsafe if it exceeds a dose cap."),
+        mcq(`${lesson.slug}:q4`, "Before giving a calculated mg/kg dose, what additional safety check is most important?", ["Whether the answer is an even number", "Whether the dose exceeds any maximum dose cap", "Whether the patient prefers tablets", "Whether the label is colorful"], 1, "A numerically correct mg/kg dose can still be unsafe if it exceeds a dose cap.", {
+          solutionSteps: [
+            "Even numbers are not a safety standard for drug dosing.",
+            "Maximum dose caps, organ function, and indication often determine safety after mg/kg math.",
+            "Select the cap check as the highest-yield safety gate.",
+          ],
+        }),
+        numericQuestion(
+          `${lesson.slug}:q5`,
+          "Clinical scenario: IV antibiotic ordered 15 mg/kg once. Patient weight 60 kg. What total dose in mg?",
+          900,
+          "mg",
+          1,
+          ["15 mg/kg x 60 kg = 900 mg", "Round to one decimal if policy requires; 900 mg is already a whole number"],
+          "Total mg = mg/kg x weight in kg with consistent units.",
+          "Verify renal adjustment, infusion duration, and pharmacy dilution instructions before administration.",
+          { type: "clinical_scenario", difficulty: "intermediate" },
+        ),
       ];
     case "pediatric-dosing":
       return [
         numericQuestion(`${lesson.slug}:q1`, "Child weighs 18 kg. Safe range is 10-15 mg/kg/day in 3 divided doses. Maximum safe dose per dose?", 90, "mg", 1, ["Daily max = 15 x 18 = 270 mg/day", "270/3 = 90 mg per dose"], "Compare single-dose orders against the divided per-dose safe range.", "Do not compare a daily range directly to a single-dose order.", { type: "multi_step", difficulty: "advanced" }),
         numericQuestion(`${lesson.slug}:q2`, "Child weighs 22 lb. Ordered 8 mg/kg. Total dose?", 80, "mg", 1, ["22/2.2 = 10 kg", "8 x 10 = 80 mg"], "Convert weight first, then calculate total mg.", "Updated weights matter in children.", { type: "unit_conversion" }),
         numericQuestion(`${lesson.slug}:q3`, "Safe range is 5-7 mg/kg/day for a 12 kg child in 2 doses. Minimum safe dose per dose?", 30, "mg", 1, ["Daily min = 5 x 12 = 60 mg/day", "60/2 = 30 mg per dose"], "Use the low end of the daily range and divide correctly.", "Daily vs per-dose confusion is a classic pediatric error.", { type: "multi_step" }),
-        mcq(`${lesson.slug}:q4`, "An ordered pediatric dose is above the safe range. What is the correct action?", ["Round it down and give it", "Hold and clarify before administration", "Convert it to micrograms and retry", "Give half now and half later"], 1, "An unsafe pediatric order must be clarified, not rounded into compliance."),
+        mcq(`${lesson.slug}:q4`, "An ordered pediatric dose is above the safe range. What is the correct action?", ["Round it down and give it", "Hold and clarify before administration", "Convert it to micrograms and retry", "Give half now and half later"], 1, "An unsafe pediatric order must be clarified, not rounded into compliance.", {
+          solutionSteps: [
+            "Out-of-range pediatric doses are prescriber problems until clarified.",
+            "Rounding into compliance can hide a tenfold error.",
+            "Holding and clarifying preserves safety and professional accountability.",
+          ],
+        }),
+        numericQuestion(
+          `${lesson.slug}:q5`,
+          "Clinical scenario: Child 16 kg. Reference lists 12 mg/kg/day max in 4 divided doses. What is the maximum safe amount per individual dose in mg?",
+          48,
+          "mg",
+          1,
+          ["Daily max = 12 x 16 = 192 mg/day", "192 / 4 = 48 mg per dose"],
+          "Divide daily maximum by the number of doses to compare to a single order.",
+          "Always use current weight; involve parents and pharmacy for high-alert meds.",
+          { type: "clinical_scenario", difficulty: "intermediate" },
+        ),
       ];
     case "drip-factor-gtt-min":
       return [
         numericQuestion(`${lesson.slug}:q1`, "Infuse 60 mL/hr with microdrip tubing. gtt/min?", 60, "gtt/min", 0, ["60 mL/hr = 1 mL/min", "1 x 60 = 60 gtt/min"], "Microdrip often lets you read gtt/min directly from mL/hr when the rate is hourly.", "Microdrip and macrodrip cannot be interchanged.", { exactInteger: true }),
         numericQuestion(`${lesson.slug}:q2`, "Infuse 60 mL/hr with 15 gtt/mL tubing. gtt/min?", 15, "gtt/min", 0, ["60 mL/hr = 1 mL/min", "1 x 15 = 15 gtt/min"], "The tubing factor changes the final answer completely.", "Always read the tubing packaging.", { exactInteger: true }),
         numericQuestion(`${lesson.slug}:q3`, "Infuse 80 mL over 40 min with 20 gtt/mL tubing. gtt/min?", 40, "gtt/min", 0, ["(80 x 20)/40 = 40 gtt/min"], "The tubing factor travels with the volume.", "Manual rates need monitoring after setup.", { exactInteger: true, type: "multi_step" }),
-        mcq(`${lesson.slug}:q4`, "Which pairing is correct?", ["Microdrip = any tubing used with a pump", "Microdrip = 60 gtt/mL in many standard sets", "Macrodrip answers can be decimals", "Drop factor does not affect the answer"], 1, "Microdrip sets are commonly 60 gtt/mL and create a different whole-drop answer than macrodrip sets."),
+        mcq(`${lesson.slug}:q4`, "Which pairing is correct?", ["Microdrip = any tubing used with a pump", "Microdrip = 60 gtt/mL in many standard sets", "Macrodrip answers can be decimals", "Drop factor does not affect the answer"], 1, "Microdrip sets are commonly 60 gtt/mL and create a different whole-drop answer than macrodrip sets.", {
+          solutionSteps: [
+            "Pumps deliver mL/hr; microdrip is a tubing calibration, not a pump brand.",
+            "Microdrip is classically 60 gtt/mL — it changes the drop count per mL.",
+            "Macrodrip still requires whole-drop answers at the bedside.",
+          ],
+        }),
+        numericQuestion(
+          `${lesson.slug}:q5`,
+          "Clinical scenario: Manual secondary line 100 mL to run in 25 minutes. Tubing 15 gtt/mL. Whole-drop gtt/min?",
+          60,
+          "gtt/min",
+          0,
+          ["(100 x 15) / 25 = 60 gtt/min", "Already a whole number — no fractional drops"],
+          "Secondary infusions still use the same gravity relationship with explicit minutes.",
+          "Secure line height; verify compatibility with primary fluid.",
+          { exactInteger: true, type: "clinical_scenario", difficulty: "intermediate" },
+        ),
       ];
     case "reconstitution":
       return [
         numericQuestion(`${lesson.slug}:q1`, "Vial contains 1 g powder. Final volume after reconstitution is 4 mL. Order 250 mg. How many mL withdraw?", 1, "mL", 1, ["1 g = 1000 mg", "1000/4 = 250 mg/mL", "250/250 = 1 mL"], "The final concentration is determined after reconstitution.", "Read the final concentration line, not just the dry-vial amount.", { type: "multi_step", difficulty: "advanced" }),
         numericQuestion(`${lesson.slug}:q2`, "Vial contains 500 mg in 2 mL after reconstitution. Order 125 mg. How many mL withdraw?", 0.5, "mL", 1, ["500/2 = 250 mg/mL", "125/250 = 0.5 mL"], "Once concentration is known, it becomes a standard volume-to-give question.", "Tiny withdrawn volumes require precise syringes."),
         numericQuestion(`${lesson.slug}:q3`, "Vial contains 2 g in 10 mL after reconstitution. Order 600 mg. How many mL withdraw?", 3, "mL", 1, ["2 g = 2000 mg", "2000/10 = 200 mg/mL", "600/200 = 3 mL"], "Convert grams to milligrams before finding final concentration.", "Do not skip the final concentration step.", { type: "unit_conversion" }),
-        mcq(`${lesson.slug}:q4`, "What is the key first step in any reconstitution calculation?", ["Convert the answer to drops/min", "Determine the final concentration after dilution", "Assume the dry vial already lists mg/mL", "Ignore the diluent instructions"], 1, "Reconstitution problems are solved from the final concentration, not the dry-powder label alone."),
+        mcq(`${lesson.slug}:q4`, "What is the key first step in any reconstitution calculation?", ["Convert the answer to drops/min", "Determine the final concentration after dilution", "Assume the dry vial already lists mg/mL", "Ignore the diluent instructions"], 1, "Reconstitution problems are solved from the final concentration, not the dry-powder label alone.", {
+          solutionSteps: [
+            "Drops/min belongs to gravity IV math, not powder reconstitution first steps.",
+            "Final concentration uses total drug and final total volume after diluent.",
+            "Select determining final concentration after dilution as the key first step.",
+          ],
+        }),
+        numericQuestion(
+          `${lesson.slug}:q5`,
+          "Clinical scenario: Cefazolin 1 g vial reconstituted with 2.5 mL diluent yielding 330 mg/mL (per label). Order 450 mg IM. How many mL to withdraw?",
+          1.4,
+          "mL",
+          1,
+          ["450 mg / 330 mg per mL = 1.3636… mL", "Round to one decimal per measurable syringe policy = 1.4 mL"],
+          "Volume = ordered dose ÷ final concentration after reconstitution.",
+          "IM volumes and site limits matter — confirm with pharmacy if near maximum volume.",
+          { type: "clinical_scenario", difficulty: "advanced" },
+        ),
       ];
     case "insulin-dosing":
       return [
         numericQuestion(`${lesson.slug}:q1`, "Order 8 units regular insulin from U-100 insulin. What volume in mL?", 0.08, "mL", 2, ["100 units = 1 mL", "8/100 = 0.08 mL"], "Insulin volume conversions come from units per mL, not mg.", "Insulin requires an independent double check.", { type: "multi_step", difficulty: "advanced" }),
         numericQuestion(`${lesson.slug}:q2`, "Sliding scale orders 4 units for glucose in the target range. What dose is administered?", 4, "units", 0, ["Identify the correct range", "Administer 4 units"], "Scale questions still demand exact unit reading.", "Check the glucose time, insulin type, and nutrition plan.", { exactInteger: true }),
         numericQuestion(`${lesson.slug}:q3`, "Order 12 units from U-100 insulin. What volume?", 0.12, "mL", 2, ["12/100 = 0.12 mL"], "Convert units directly against U-100 concentration.", "Use the correct insulin syringe scale.", { difficulty: "beginner" }),
-        mcq(`${lesson.slug}:q4`, "Which action is required even after the insulin math is correct?", ["Skip the glucose recheck", "Independent double check per policy", "Convert units to mg", "Ignore meal timing"], 1, "Insulin is high-alert and needs safety checks beyond arithmetic."),
+        mcq(`${lesson.slug}:q4`, "Which action is required even after the insulin math is correct?", ["Skip the glucose recheck", "Independent double check per policy", "Convert units to mg", "Ignore meal timing"], 1, "Insulin is high-alert and needs safety checks beyond arithmetic.", {
+          solutionSteps: [
+            "Glucose rechecks and meal context still matter, but policy usually mandates an independent double check.",
+            "Insulin units are not converted to mg for routine U-100 administration.",
+            "Select the independent double check as the non-negotiable safety action.",
+          ],
+        }),
+        numericQuestion(
+          `${lesson.slug}:q5`,
+          "Clinical scenario: Correction order reads 6 units of U-100 regular insulin subcut. How many mL should be drawn?",
+          0.06,
+          "mL",
+          2,
+          ["U-100 supplies 100 units per 1 mL", "6 / 100 = 0.06 mL", "Verify with second nurse per policy before administration"],
+          "Divide ordered units by units per mL on the insulin label.",
+          "Never confuse U-100 with U-500 or concentrated pens — always read the vial/pen label aloud.",
+          { type: "clinical_scenario", difficulty: "intermediate" },
+        ),
       ];
     case "heparin-protocols":
       return [
         numericQuestion(`${lesson.slug}:q1`, "Protocol 18 units/kg/hr. Patient 80 kg. Bag 25,000 units in 500 mL. What mL/hr?", 28.8, "mL/hr", 1, ["18 x 80 = 1440 units/hr", "25,000/500 = 50 units/mL", "1440/50 = 28.8 mL/hr"], "Heparin protocols require units/hr first, then pump conversion.", "Heparin is high-alert and always needs protocol verification.", { type: "multi_step", difficulty: "advanced" }),
         numericQuestion(`${lesson.slug}:q2`, "Bolus 80 units/kg for an 80 kg patient. How many units?", 6400, "units", 0, ["80 x 80 = 6400 units"], "Bolus calculations use the patient's weight directly.", "Check for protocol max bolus limits.", { exactInteger: true }),
         numericQuestion(`${lesson.slug}:q3`, "Protocol 12 units/kg/hr. Patient weighs 154 lb. Bag 25,000 units in 250 mL. What mL/hr?", 8.4, "mL/hr", 1, ["154/2.2 = 70 kg", "12 x 70 = 840 units/hr", "25,000/250 = 100 units/mL", "840/100 = 8.4 mL/hr"], "Convert weight before applying the protocol, then convert units/hr to mL/hr.", "Do not let pounds slip into a units/kg protocol.", { type: "unit_conversion", difficulty: "advanced" }),
-        mcq(`${lesson.slug}:q4`, "Which safety pairing belongs with a heparin start?", ["No lab follow-up needed if the math is right", "Check protocol, weight, and follow-up coagulation timing", "Only the pump rate matters", "Heparin math never needs a second check"], 1, "Heparin math lives inside a larger protocol that includes labs and bleeding assessment."),
+        mcq(`${lesson.slug}:q4`, "Which safety pairing belongs with a heparin start?", ["No lab follow-up needed if the math is right", "Check protocol, weight, and follow-up coagulation timing", "Only the pump rate matters", "Heparin math never needs a second check"], 1, "Heparin math lives inside a larger protocol that includes labs and bleeding assessment.", {
+          solutionSteps: [
+            "Math correctness does not remove bleeding risk or lab-guided titration.",
+            "Protocol version and actual body weight must match the order set.",
+            "Select the option that bundles protocol, weight, and coagulation follow-up.",
+          ],
+        }),
+        numericQuestion(
+          `${lesson.slug}:q5`,
+          "Clinical scenario: Weight-based bolus 60 units/kg for a 75 kg patient (protocol allows this dose). Total bolus units?",
+          4500,
+          "units",
+          0,
+          ["60 units/kg x 75 kg = 4500 units", "Verify protocol maximum bolus and prescriber authorization before administration"],
+          "Bolus units = units/kg x weight in kg with consistent protocol definitions.",
+          "High-alert: independent double check with second clinician per policy.",
+          { exactInteger: true, type: "clinical_scenario", difficulty: "advanced" },
+        ),
       ];
   }
 }
@@ -865,6 +1051,30 @@ export function countMedCalcInventoryForTrack(track: MedCalcTrack) {
     flashcardCount: lessons.reduce((sum, lesson) => sum + getMedCalcFlashcards(lesson).length, 0),
     categoryCount: listMedCalcCategoriesForTrack(track).length,
   };
+}
+
+/** Per-category counts for admin dashboards and audits (sums match {@link countMedCalcInventoryForTrack}). */
+export type MedCalcCategoryInventoryRow = {
+  categorySlug: MedCalcCategorySlug;
+  categoryTitle: string;
+  lessonCount: number;
+  questionCount: number;
+  flashcardCount: number;
+};
+
+export function listMedCalcCategoryInventoryRows(track: MedCalcTrack): MedCalcCategoryInventoryRow[] {
+  return listMedCalcCategoriesForTrack(track).map((category) => ({
+    categorySlug: category.slug,
+    categoryTitle: category.title,
+    lessonCount: category.lessons.length,
+    questionCount: category.lessons.reduce((sum, lesson) => sum + getMedCalcQuestions(lesson).length, 0),
+    flashcardCount: category.lessons.reduce((sum, lesson) => sum + getMedCalcFlashcards(lesson).length, 0),
+  }));
+}
+
+export function medCalcProductionReadiness(track: MedCalcTrack): { ok: boolean; realismIssues: string[] } {
+  const realismIssues = validateMedCalcInventory(track);
+  return { ok: realismIssues.length === 0, realismIssues };
 }
 
 export type EvaluatedMedCalcAnswer = {

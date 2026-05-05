@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { MeasurementSystemToggle } from "@/components/measurements/measurement-system-toggle";
-import type { LabCategoryDefinition, LabLessonDefinition, LabsStudyLinks } from "@/lib/labs/labs-engine";
+import type { LabCategoryDefinition, LabLessonDefinition, LabTrack, LabsStudyLinks } from "@/lib/labs/labs-engine";
 import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 
 export type LabsHubPageProps = {
   trackLabel: string;
+  labTrack: LabTrack;
   hasAccess: boolean;
   categories: Array<LabCategoryDefinition & { lessons: LabLessonDefinition[] }>;
   inventory: { lessonCount: number; questionCount: number; flashcardCount: number; categoryCount: number };
@@ -22,7 +23,8 @@ function SummaryChip({ label, value }: { label: string; value: string | number }
   );
 }
 
-function TopicCard({ lesson, hasAccess }: { lesson: LabLessonDefinition; hasAccess: boolean }) {
+function TopicCard({ lesson, hasAccess, labTrack }: { lesson: LabLessonDefinition; hasAccess: boolean; labTrack: LabTrack }) {
+  const tierLines = lesson.tierFocus[labTrack] ?? [];
   return (
     <article className="rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-4">
       <div className="flex items-start justify-between gap-3">
@@ -40,6 +42,18 @@ function TopicCard({ lesson, hasAccess }: { lesson: LabLessonDefinition; hasAcce
           {lesson.supportedTracks.map((track) => track.toUpperCase()).join(" / ")}
         </span>
       </div>
+      {tierLines.length > 0 ? (
+        <div className="mt-3 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_18%,var(--semantic-surface))] px-3 py-2">
+          <p className="text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-[var(--semantic-text-muted)]">
+            {labTrack.toUpperCase()} focus
+          </p>
+          <ul className="mt-1 list-disc space-y-0.5 pl-4 text-sm text-[var(--semantic-text-secondary)]">
+            {tierLines.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
       <ul className="mt-4 space-y-1 text-sm text-[var(--semantic-text-secondary)]">
         <li>Trend interpretation</li>
         <li>Pattern recognition</li>
@@ -56,7 +70,7 @@ function TopicCard({ lesson, hasAccess }: { lesson: LabLessonDefinition; hasAcce
   );
 }
 
-export function LabsHubPage({ trackLabel, hasAccess, categories, inventory, studyLinks }: LabsHubPageProps) {
+export function LabsHubPage({ trackLabel, labTrack, hasAccess, categories, inventory, studyLinks }: LabsHubPageProps) {
   const { measurementSystem, preference } = useMeasurementPreference("SI");
   return (
     <div className="space-y-8">
@@ -64,10 +78,10 @@ export function LabsHubPage({ trackLabel, hasAccess, categories, inventory, stud
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-3xl space-y-2">
             <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--semantic-brand)]">Labs</p>
-            <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">Clinical lab learning and decision-making</h1>
+            <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">Labs clinical reasoning engine</h1>
             <p className="text-sm text-[var(--semantic-text-secondary)]">
-              Premium lab interpretation for {trackLabel}: trend recognition, pattern matching, first-action reasoning,
-              and linked study loops into flashcards, practice, CAT, and drills.
+              Premium lab vertical for {trackLabel}: prioritization, trend and pattern recognition, first-action algorithms,
+              and wired study loops into pathway lessons, flashcards, practice tests, CAT, and drills.
             </p>
             <p className="text-xs text-[var(--semantic-text-secondary)]">
               Current lab display: <span className="font-semibold text-[var(--semantic-text-primary)]">{measurementSystem === "US" ? "imperial / US customary" : "metric / SI"}</span>
@@ -90,14 +104,26 @@ export function LabsHubPage({ trackLabel, hasAccess, categories, inventory, stud
           />
         </div>
         <div className="mt-4 flex flex-wrap gap-3 text-sm">
+          <Link href={studyLinks.lessonsHubHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
+            Pathway lessons
+          </Link>
           <Link href={studyLinks.flashcardsHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
             Flashcards
           </Link>
           <Link href={studyLinks.questionBankHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
             Practice questions
           </Link>
+          <Link
+            href={studyLinks.practiceTestsTopicHref}
+            className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]"
+          >
+            Practice tests
+          </Link>
+          <Link href={studyLinks.catLaunchHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
+            Start CAT
+          </Link>
           <Link href={studyLinks.catHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
-            CAT focus
+            CAT builder
           </Link>
           <Link href={studyLinks.labDrillsHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
             Lab drills
@@ -115,12 +141,19 @@ export function LabsHubPage({ trackLabel, hasAccess, categories, inventory, stud
         {categories.map((category) => (
           <section key={category.slug} className="space-y-3">
             <div className="space-y-1">
-              <h2 className="text-xl font-semibold text-[var(--semantic-text-primary)]">{category.title}</h2>
+              <h2 className="text-xl font-semibold text-[var(--semantic-text-primary)]">
+                <Link href={`/app/labs/${category.slug}`} className="hover:text-primary hover:underline">
+                  {category.title}
+                </Link>
+              </h2>
               <p className="text-sm text-[var(--semantic-text-secondary)]">{category.description}</p>
+              <Link href={`/app/labs/${category.slug}`} className="text-xs font-semibold text-primary hover:underline">
+                View {category.title.toLowerCase()} lessons
+              </Link>
             </div>
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {category.lessons.map((lesson) => (
-                <TopicCard key={lesson.slug} lesson={lesson} hasAccess={hasAccess} />
+                <TopicCard key={lesson.slug} lesson={lesson} hasAccess={hasAccess} labTrack={labTrack} />
               ))}
             </div>
           </section>

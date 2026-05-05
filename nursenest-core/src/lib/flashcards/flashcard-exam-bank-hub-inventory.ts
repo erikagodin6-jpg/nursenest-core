@@ -26,6 +26,7 @@ const EXAM_FLASHCARD_SESSION_POOL_CAP = 4000;
  */
 const FLASHCARD_USABILITY_SQL = Prisma.sql`
   AND (question_format IS NULL OR lower(trim(question_format)) NOT IN ('ecg', 'ekg', 'video', 'video_case', 'media', 'image_only'))
+  AND NOT ('ecg-video' = ANY(tags))
   AND coalesce(trim(stem), '') <> ''
   AND correct_answer IS NOT NULL
 `;

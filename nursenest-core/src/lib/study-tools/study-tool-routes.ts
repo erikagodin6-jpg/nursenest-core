@@ -9,6 +9,8 @@ export const STUDY_TOOL_ROUTES = {
   ordering: "/app/ordering",
   labDrills: "/app/lab-drills",
   medicationDrills: "/app/medication-drills",
+  /** High-stakes nursing medication math (lessons + strict practice). */
+  medCalculations: "/app/med-calculations",
 } as const;
 
 export type StudyToolRouteKey = keyof typeof STUDY_TOOL_ROUTES;

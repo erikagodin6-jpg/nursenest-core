@@ -250,10 +250,13 @@ async function executeOneAdminBlogGeneration(params: {
     localized: result.localized,
     seoReadiness: result.seoReadiness,
   };
+  const publicUrlPath = `/blog/${saved.slug}`;
   console.info("[admin_blog_generate] success", {
     topic,
-    postId: result.post.id,
-    slug: result.post.slug,
+    blogPostId: saved.id,
+    slug: saved.slug,
+    postStatus: saved.postStatus,
+    publicPath: publicUrlPath,
     localizedCount: result.localized.length,
     localizationErrors: result.localizationErrors.length,
   });

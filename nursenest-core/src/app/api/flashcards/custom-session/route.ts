@@ -12,6 +12,7 @@ import {
 } from "@/lib/flashcards/build-flashcard-custom-session";
 import { parseCustomSessionSourceKind } from "@/lib/flashcards/custom-session-card-filters";
 import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
+import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
 
 export const dynamic = "force-dynamic";
 
@@ -134,6 +135,19 @@ export async function GET(req: NextRequest) {
       rawCount: String(built.summary.matchingCards),
       relaxation: built.queryRelaxation,
       includeCards: includeCards ? "1" : "0",
+    });
+    logCoreApiStudyDiagnostic({
+      endpoint: "GET /api/flashcards/custom-session",
+      pathwayId: pathwayId ?? null,
+      tier: String(entitlement.tier ?? ""),
+      includeCards,
+      sourceKind,
+      rowsReturned: built.summary.returnedCards,
+      matchingTotal: built.summary.matchingCards,
+      reasonIfZero:
+        built.summary.matchingCards === 0
+          ? "no_cards_after_filters_or_empty_bank"
+          : undefined,
     });
 
     return NextResponse.json({

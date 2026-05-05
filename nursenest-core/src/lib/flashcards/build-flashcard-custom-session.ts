@@ -486,16 +486,18 @@ export async function buildFlashcardCustomSession(
     const examHubBucketsNonEmpty = Object.values(examCountsCoalescedForHub).some(
       (n) => typeof n === "number" && Number.isFinite(n) && n > 0,
     );
-    /** Avoid matchingTotal from COUNT(*) when grouped buckets failed or never mapped — keeps totals aligned with category rows. */
-    const useExamHubForSummaryAndOptions =
-      useExamForHubStats && examHub.total > 0 && examHubBucketsNonEmpty;
+    /** Use live exam-bank COUNT when rows exist, even if GROUP BY→taxonomy mapping yields no buckets (avoid false zero hub). */
+    const useExamHubForSummaryAndOptions = useExamForHubStats && examHub.total > 0;
 
+    const selectedCategorySum = selectedCategories.reduce((s, id) => s + (examCountsCoalescedForHub[id] ?? 0), 0);
     const matchingCardsForSummary = includeCards
       ? scoped.length
       : useExamHubForSummaryAndOptions
         ? selectedCategories.length === 0
           ? examHub.total
-          : selectedCategories.reduce((s, id) => s + (examCountsCoalescedForHub[id] ?? 0), 0)
+          : examHubBucketsNonEmpty && selectedCategorySum > 0
+            ? selectedCategorySum
+            : examHub.total
         : scoped.length;
 
     const sessionShuffleSalt = sessionSeed?.trim() || randomUUID();
@@ -566,9 +568,13 @@ export async function buildFlashcardCustomSession(
       lessonVirtualDiagnostics,
     };
 
-    const categoryCountsForOptions = useExamHubForSummaryAndOptions
-      ? { ...examCountsCoalescedForHub }
-      : categoryCounts;
+    let categoryCountsForOptions = useExamHubForSummaryAndOptions ? { ...examCountsCoalescedForHub } : categoryCounts;
+    if (useExamHubForSummaryAndOptions && examHub.total > 0 && !examHubBucketsNonEmpty) {
+      categoryCountsForOptions = {
+        ...categoryCountsForOptions,
+        [FLASHCARD_BUILDER_UNCATEGORIZED_ID]: examHub.total,
+      };
+    }
     const categoryOptions = applyCountsToBuilderCategories(pathwayId, categoryCountsForOptions);
     if (process.env.NODE_ENV === "development") {
       let cardsTaggedFromExamMeta = 0;

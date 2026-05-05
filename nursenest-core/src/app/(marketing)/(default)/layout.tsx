@@ -426,23 +426,28 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                     <CheckoutGlobalRegionContextPathStamp />
                     <div className="nn-marketing-surface flex min-h-screen flex-col">
                       <SiteHeader serverHasStaffSession={staffSession != null} />
-                      <main className="flex min-h-0 flex-1 flex-col">
-                        {shouldLayerMainPageShards() ? (
-                          <MarketingMainI18nShards
-                            locale={resolvedLocale}
-                            publicContentOverrides={publicContentOverrides}
-                          >
+                      {shouldLayerMainPageShards() ? (
+                        <MarketingMainI18nShards
+                          locale={resolvedLocale}
+                          publicContentOverrides={publicContentOverrides}
+                          trailingChrome={<SiteFooter serverHasStaffSession={staffSession != null} />}
+                        >
+                          <main className="flex min-h-0 flex-1 flex-col">
                             <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
                               {children}
                             </MarketingDefaultMainMotionSlot>
-                          </MarketingMainI18nShards>
-                        ) : (
-                          <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
-                            {children}
-                          </MarketingDefaultMainMotionSlot>
-                        )}
-                      </main>
-                      <SiteFooter serverHasStaffSession={staffSession != null} />
+                          </main>
+                        </MarketingMainI18nShards>
+                      ) : (
+                        <>
+                          <main className="flex min-h-0 flex-1 flex-col">
+                            <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
+                              {children}
+                            </MarketingDefaultMainMotionSlot>
+                          </main>
+                          <SiteFooter serverHasStaffSession={staffSession != null} />
+                        </>
+                      )}
                     </div>
                   </MarketingHeaderGlobalRegionServerBridge>
                 </MarketingFeedbackShell>

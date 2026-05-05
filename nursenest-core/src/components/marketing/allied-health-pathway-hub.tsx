@@ -54,6 +54,7 @@ export function AlliedHealthPathwayHub({
   sampleQuestionStem = null,
   overview = null,
   initialMeasurementPreference = null,
+  occupationDirectoryHub = false,
 }: {
   pathway: ExamPathwayDefinition;
   hubPath: string;
@@ -64,8 +65,14 @@ export function AlliedHealthPathwayHub({
   /** Pathway-scoped inventory + optional module visibility for public hub routes. */
   overview?: AlliedPathwayHubOverview | null;
   initialMeasurementPreference?: MeasurementPreference | null;
+  /**
+   * Canada main hub (`/canada/allied/allied-health`): occupation directory only.
+   * Hides study-mode tiles, lesson category grid (incl. ECG-adjacent rows), labs module cards, and inventory strip.
+   */
+  occupationDirectoryHub?: boolean;
 }) {
   const isGlobalAlliedHub = hubPath === buildAlliedGlobalHubPath();
+  const isOccupationDirectoryHub = Boolean(occupationDirectoryHub && !profession);
   const countryLine = isGlobalAlliedHub ? "Global" : pathway.countrySlug === "canada" ? "Canada" : "United States";
   const profKey = profession?.professionKey?.trim() ?? "";
 
@@ -118,7 +125,11 @@ export function AlliedHealthPathwayHub({
   const scenarioPrimaryHref = clinicalScenariosHref ?? questionsHref;
 
   return (
-    <div className="space-y-[var(--nn-rhythm-section-y)]" data-nn-allied-pathway-hub="1">
+    <div
+      className="space-y-[var(--nn-rhythm-section-y)]"
+      data-nn-allied-pathway-hub="1"
+      data-nn-allied-occupation-directory-hub={isOccupationDirectoryHub ? "1" : undefined}
+    >
       <FunnelExamHubViewBeacon pathway={pathway} hubPath={hubPath} />
 
       {/* Hero */}
@@ -145,18 +156,29 @@ export function AlliedHealthPathwayHub({
           >
             View plans and pricing
           </Link>
-          <Link
-            href={profession ? "/allied-health" : "/allied-health#allied-professions-heading"}
-            className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[var(--semantic-panel-muted)]"
-          >
-            {profession ? "All occupation tracks" : "Choose your occupation track"}
-          </Link>
-          <Link
-            href={lessonsHref}
-            className="inline-flex min-h-11 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-info)] transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))]"
-          >
-            {profession ? "Lessons for this track" : "Browse lessons hub"}
-          </Link>
+          {isOccupationDirectoryHub ? (
+            <Link
+              href="#allied-occupation-tracks"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[var(--semantic-panel-muted)]"
+            >
+              Explore occupation tracks
+            </Link>
+          ) : (
+            <>
+              <Link
+                href={profession ? "/allied-health" : "/allied-health#allied-professions-heading"}
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[var(--semantic-panel-muted)]"
+              >
+                {profession ? "All occupation tracks" : "Choose your occupation track"}
+              </Link>
+              <Link
+                href={lessonsHref}
+                className="inline-flex min-h-11 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_35%,var(--semantic-border-soft))] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-info)] transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_8%,var(--semantic-surface))]"
+              >
+                {profession ? "Lessons for this track" : "Browse lessons hub"}
+              </Link>
+            </>
+          )}
         </div>
         {isGlobalAlliedHub ? (
           <div className="mt-6 max-w-sm">
@@ -171,7 +193,7 @@ export function AlliedHealthPathwayHub({
         ) : null}
       </header>
 
-      {overview ? (
+      {!isOccupationDirectoryHub && overview ? (
         <section
           className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 sm:p-8"
           aria-labelledby="allied-pathway-live-heading"
@@ -360,21 +382,49 @@ export function AlliedHealthPathwayHub({
         </section>
       ) : null}
 
+      {isOccupationDirectoryHub ? (
+        <section
+          className="rounded-[1.5rem] border border-[color-mix(in_srgb,var(--semantic-info)_18%,var(--semantic-border-soft))] bg-[var(--semantic-surface)] p-6 sm:p-8"
+          aria-labelledby="allied-prep-includes-heading"
+        >
+          <h2 id="allied-prep-includes-heading" className="text-xl font-bold text-[var(--theme-heading-text)]">
+            What Allied Health prep includes
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+            NurseNest groups study tools by occupation so content stays scoped to your licensing context. After you pick a
+            track, you can open lessons, practice questions, flashcards, and longer exam-style sets on that lane. Free previews
+            appear where published; paid plans unlock the full allied pathway for your region.
+          </p>
+          <ul className="mt-5 list-inside list-disc space-y-2 text-sm text-[var(--semantic-text-secondary)]">
+            <li>Occupation-specific hubs link to the lessons and practice surfaces for that track.</li>
+            <li>Checkout stays career-lane aware — compare plans when you are ready to subscribe.</li>
+            <li>Specialized add-on modules only surface on tracks where they apply.</li>
+          </ul>
+        </section>
+      ) : null}
+
       {!profession ? (
-        <section className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 sm:p-8" aria-labelledby="allied-tracks-heading">
+        <section
+          id="allied-occupation-tracks"
+          className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 sm:p-8"
+          aria-labelledby="allied-tracks-heading"
+        >
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <h2 id="allied-tracks-heading" className="text-xl font-bold text-[var(--theme-heading-text)]">
                 Choose your Allied Health track
               </h2>
               <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
-                Every track opens the same pathway-scoped lessons and question bank, with optional profession filters so study
-                stays aligned to your licensing context.
+                {isOccupationDirectoryHub
+                  ? "Pick the role that matches your exam. Each card links to a focused prep guide, then into lessons and practice scoped with your occupation filter."
+                  : "Every track opens the same pathway-scoped lessons and question bank, with optional profession filters so study stays aligned to your licensing context."}
               </p>
             </div>
-            <Link href="/allied-health" className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
-              Full allied marketing hub →
-            </Link>
+            {!isOccupationDirectoryHub ? (
+              <Link href="/allied-health" className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline">
+                Full allied marketing hub →
+              </Link>
+            ) : null}
           </div>
           <p className="nn-marketing-label mt-6 text-[var(--semantic-text-secondary)]">Quick scan</p>
           <div className="mt-3 flex flex-wrap gap-2">
@@ -410,16 +460,21 @@ export function AlliedHealthPathwayHub({
                       <Link
                         href={alliedHealthSegmentPath(p.segment)}
                         className="text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+                        data-nn-allied-occupation-card-primary="1"
                       >
                         Track prep guide
                       </Link>
-                      <span className="text-[var(--semantic-text-secondary)]">·</span>
-                      <Link
-                        href={scopedLessons}
-                        className="text-sm font-medium text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-brand)]"
-                      >
-                        Lessons for this track
-                      </Link>
+                      {!isOccupationDirectoryHub ? (
+                        <>
+                          <span className="text-[var(--semantic-text-secondary)]">·</span>
+                          <Link
+                            href={scopedLessons}
+                            className="text-sm font-medium text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-brand)]"
+                          >
+                            Lessons for this track
+                          </Link>
+                        </>
+                      ) : null}
                     </div>
                   </article>
                 </li>
@@ -429,8 +484,10 @@ export function AlliedHealthPathwayHub({
         </section>
       ) : null}
 
-      {/* Core study modes — NurseNest study-card vocabulary */}
-      <section aria-labelledby="allied-study-modes-heading">
+      {!isOccupationDirectoryHub ? (
+        <>
+          {/* Core study modes — NurseNest study-card vocabulary */}
+          <section aria-labelledby="allied-study-modes-heading">
         <h2 id="allied-study-modes-heading" className="text-xl font-bold text-[var(--theme-heading-text)]">
           Study modes
         </h2>
@@ -510,7 +567,7 @@ export function AlliedHealthPathwayHub({
         </ul>
       </section>
 
-      {overview && overview.moduleCards.length > 0 ? (
+      {!isOccupationDirectoryHub && overview && overview.moduleCards.length > 0 ? (
         <section aria-labelledby="allied-module-addons-heading">
           <h2 id="allied-module-addons-heading" className="text-xl font-bold text-[var(--theme-heading-text)]">
             Specialized modules
@@ -705,6 +762,35 @@ export function AlliedHealthPathwayHub({
           </Link>
         </div>
       </section>
+        </>
+      ) : (
+        <section
+          className="rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-positive)] p-6 text-center sm:p-8"
+          aria-labelledby="allied-directory-pricing-heading"
+        >
+          <h2 id="allied-directory-pricing-heading" className="text-lg font-bold text-[var(--theme-heading-text)] sm:text-xl">
+            Plans and free previews
+          </h2>
+          <p className="mx-auto mt-2 max-w-xl text-sm text-[var(--semantic-text-secondary)]">
+            Compare Canada allied plans after you choose an occupation track. Free previews appear where content is published
+            for that lane.
+          </p>
+          <div className="mt-5 flex flex-wrap justify-center gap-3">
+            <Link
+              href={pricingHref}
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-[var(--semantic-success)] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-success-contrast)] transition hover:opacity-95"
+            >
+              View plans and pricing
+            </Link>
+            <Link
+              href="/signup"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-6 py-2.5 text-sm font-semibold text-[var(--semantic-text-primary)] transition hover:bg-[var(--semantic-panel-muted)]"
+            >
+              Create account
+            </Link>
+          </div>
+        </section>
+      )}
     </div>
   );
 }

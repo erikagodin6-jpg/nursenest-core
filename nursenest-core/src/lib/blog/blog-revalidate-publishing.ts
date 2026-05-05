@@ -39,6 +39,8 @@ export function revalidateBlogPublishingSurfaces(options?: BlogPublishingRevalid
   revalidatePath("/lessons");
   revalidatePath("/flashcards");
   revalidatePath("/sitemap.xml");
+  revalidatePath("/sitemap-allied.xml");
+  revalidatePath("/sitemap-new-grad.xml");
 
   const slug = options?.slug?.trim();
   const nursing = options?.nursingCareerSlug?.trim().toLowerCase();

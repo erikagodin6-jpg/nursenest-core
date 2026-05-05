@@ -3976,6 +3976,8 @@
   "tools.labValues.metaDescription": "वयस्क रसायन और रक्त विज्ञान के सामान्य संदर्भ सीमाएँ देखें।",
   "tools.labValues.metaTitle": "लैब संदर्भ | NurseNest",
   "tools.labValues.note": "संदर्भ सीमाएँ लैब और संदर्भ के अनुसार भिन्न होती हैं; अपनी संस्था की सीमाएँ जाँचें।",
+  "tools.labValues.quickRefBanner": "This page is a quick reference table only. For full clinical lessons, NCLEX-style questions, flashcards, and practice-test integration, use the Labs hub in your study area.",
+  "tools.labValues.quickRefCta": "Open Labs learning hub (sign in)",
   "tools.labValues.row.bun.name": "BUN",
   "tools.labValues.row.bun.range": "7–20",
   "tools.labValues.row.bun.unit": "mg/dL",

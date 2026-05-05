@@ -64,13 +64,13 @@ describe("marketing route integrity", () => {
         rn: "/us/rn/nclex-rn",
         pn: "/us/pn/nclex-pn",
         np: "/us/np/fnp",
-        allied: "/allied/allied-health",
+        allied: "/us/allied/allied-health",
       },
       CA: {
         rn: "/canada/rn/nclex-rn",
         pn: "/canada/pn/rex-pn",
         np: "/canada/np/cnple",
-        allied: "/allied/allied-health",
+        allied: "/canada/allied/allied-health",
       },
     } as const;
 

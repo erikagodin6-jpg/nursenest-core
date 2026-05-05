@@ -16,7 +16,6 @@ import {
   type GlobalLocaleCode,
   type GlobalRegionSlug,
 } from "@/lib/i18n/global-regions";
-import { ALLIED_GLOBAL_HUB_PATH, isAlliedHealthPathway } from "@/lib/allied/allied-global-pathway";
 import { getExamHubForGlobalRegion } from "@/lib/marketing/global-region-exam-hubs";
 import { buildExamPathwayPath, type ExamPathwayDefinition } from "@/lib/exam-pathways";
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
@@ -221,7 +220,7 @@ export function resolveCountrySwitch(
   );
 
   if (matchingPathway) {
-    const hubPath = isAlliedHealthPathway(matchingPathway) ? ALLIED_GLOBAL_HUB_PATH : buildExamPathwayPath(matchingPathway);
+    const hubPath = buildExamPathwayPath(matchingPathway);
     return { href: hubPath, context: newContext, preservedPage: false };
   }
 

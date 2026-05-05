@@ -10,7 +10,7 @@ import { loadLabsRouteContext } from "@/lib/labs/labs-route-loader";
 
 export const metadata: Metadata = {
   title: "Labs | NurseNest",
-  description: "Clinical lab interpretation, trend recognition, and scenario-based nursing study.",
+  description: "Clinical lab reasoning engine: prioritization, trends, patterns, and integrated study loops.",
 };
 
 export default async function LabsHubRoute() {
@@ -32,6 +32,7 @@ export default async function LabsHubRoute() {
       </div>
       <LabsHubPage
         trackLabel={context.trackLabel}
+        labTrack={context.track}
         hasAccess={context.hasAccess}
         categories={categories}
         inventory={inventory}

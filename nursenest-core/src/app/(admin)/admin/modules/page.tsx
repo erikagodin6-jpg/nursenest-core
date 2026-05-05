@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/auth/guards";
 import { ECG_ROUTE_CONFIGS, ECG_MASTERY_ENTITLEMENT } from "@/lib/ecg-module/ecg-module-config";
 import { LAB_VALUES_MODULES } from "@/lib/lab-values/lab-values-module";
+import { listMedCalcCategoryInventoryRows } from "@/lib/med-calculations/med-calculations-engine";
 
 export const dynamic = "force-dynamic";
 
@@ -10,6 +11,7 @@ export default async function AdminModulesPage() {
 
   const ecgCount = Object.keys(ECG_ROUTE_CONFIGS).filter((route) => route.startsWith("/modules/ecg/")).length;
   const labCount = LAB_VALUES_MODULES.length;
+  const medCalcCategoryCount = listMedCalcCategoryInventoryRows("rn").length;
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8" data-testid="admin-hidden-modules">
@@ -21,7 +23,7 @@ export default async function AdminModulesPage() {
         </p>
       </header>
 
-      <div className="mt-8 grid gap-4 lg:grid-cols-3">
+      <div className="mt-8 grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
         <PreviewCard
           title="ECG Mastery System"
           status="Hidden / Admin Preview Only"
@@ -45,6 +47,14 @@ export default async function AdminModulesPage() {
           countLabel="Career-specific module set"
           entitlementKey="Allied entitlement placeholders"
           previewHref="/admin/modules/allied"
+        />
+        <PreviewCard
+          title="Medication calculations (learner)"
+          status="Production learner route"
+          publicFlag="auth required"
+          countLabel={`${medCalcCategoryCount} RN categories · inventory + realism audit`}
+          entitlementKey="resolveEntitlementForPage (paid = full pool + strict + timed)"
+          previewHref="/admin/modules/med-calculations"
         />
       </div>
     </main>

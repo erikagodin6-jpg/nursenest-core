@@ -117,13 +117,13 @@ export function MedCalculationsLessonPage({
   const { measurementSystem, preference } = useMeasurementPreference("SI");
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-6">
       <header className="nn-learner-page-hero">
-        <div className="space-y-2">
+        <div className="min-w-0 space-y-2">
           <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--semantic-brand)]">
             Medication calculations / {lesson.shortTitle}
           </p>
-          <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{lesson.title}</h1>
+          <h1 className="break-words text-3xl font-bold text-[var(--semantic-text-primary)]">{lesson.title}</h1>
           <p className="text-sm text-[var(--semantic-text-secondary)]">{lesson.description}</p>
           <p className="text-sm text-[var(--semantic-text-secondary)]">
             Built for {trackLabel}. This topic teaches the setup, the rounding rule, the worked steps, and the safety check
@@ -144,17 +144,29 @@ export function MedCalculationsLessonPage({
             compact
           />
         </div>
-        <div className="mt-4 flex flex-wrap gap-3 text-sm">
-          <Link href="/app/med-calculations" className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
+        <div className="mt-4 flex min-w-0 flex-wrap gap-3 text-sm">
+          <Link
+            href="/app/med-calculations"
+            className="inline-flex min-h-10 touch-manipulation items-center rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]"
+          >
             Back to hub
           </Link>
-          <Link href={studyLinks.flashcardsHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
+          <Link
+            href={studyLinks.flashcardsHref}
+            className="inline-flex min-h-10 touch-manipulation items-center rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]"
+          >
             Flashcards
           </Link>
-          <Link href={studyLinks.questionsHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
+          <Link
+            href={studyLinks.questionsHref}
+            className="inline-flex min-h-10 touch-manipulation items-center rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]"
+          >
             Practice questions
           </Link>
-          <Link href={studyLinks.catHref} className="rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]">
+          <Link
+            href={studyLinks.catHref}
+            className="inline-flex min-h-10 touch-manipulation items-center rounded-md border px-3 py-2 font-medium hover:bg-[var(--semantic-surface-muted)]"
+          >
             Practice tests
           </Link>
         </div>

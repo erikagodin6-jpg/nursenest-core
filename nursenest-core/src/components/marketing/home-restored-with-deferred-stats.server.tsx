@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { ReactNode } from "react";
+import type { PropsWithChildren } from "react";
 
 import HomeRestoredClient from "@/components/marketing/home-restored-client";
 import {
@@ -9,11 +9,10 @@ import {
 } from "@/lib/marketing/public-home-stats-payload";
 import type { HomeMarketingStats } from "@/components/marketing/home-marketing-stats";
 
-export type HomeRestoredWithDeferredStatsProps = {
+export type HomeRestoredWithDeferredStatsProps = PropsWithChildren<{
   skipOptionalDbReads: boolean;
   publishedGlobalRegionCardIds?: readonly string[] | null;
-  introAfterHero?: ReactNode;
-};
+}>;
 
 function safeNumber(value: unknown): number {
   return Number.isFinite(value) ? Number(value) : 0;
@@ -53,7 +52,7 @@ async function getStatsSafe(): Promise<PublicHomeStatsPayload> {
 export async function HomeRestoredWithDeferredStats({
   skipOptionalDbReads,
   publishedGlobalRegionCardIds,
-  introAfterHero,
+  children,
 }: HomeRestoredWithDeferredStatsProps) {
   const safeCardIds = safeRegionCardIds(publishedGlobalRegionCardIds);
 
@@ -65,7 +64,8 @@ export async function HomeRestoredWithDeferredStats({
     <HomeRestoredClient
       homeMarketingStats={homeMarketingStatsFromPayload(stats)}
       publishedGlobalRegionCardIds={safeCardIds}
-      introAfterHero={introAfterHero}
-    />
+    >
+      {children}
+    </HomeRestoredClient>
   );
 }

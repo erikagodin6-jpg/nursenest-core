@@ -12,17 +12,12 @@
  * **Mitigations today:** `MAX_PATHWAY_DERIVED_SITEMAP_URLS` caps pathway-derived URLs; blog uses `take` cap.
  *
  * **If splitting becomes necessary:** introduce additional **sitemap index + chunk urlsets** only if required by size
- * or timeouts; keep `/sitemap.xml` as the one crawler entry in `robots.txt` and GSC.
+ * or timeouts; `robots.txt` lists the merged `/sitemap.xml` plus focused urlsets (e.g. allied, new grad) on the same origin.
  */
 export const SITEMAP_SINGLE_URLSET_SOFT_WARN_URLS = 45_000;
 
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
-import {
-  alliedHealthLessonsIndexPath,
-  alliedHealthSegmentPath,
-  preNursingLessonDetailPath,
-  PRE_NURSING_LESSONS_INDEX_PATH,
-} from "@/lib/lessons/lesson-routes";
+import { alliedHealthSegmentPath, preNursingLessonDetailPath, PRE_NURSING_LESSONS_INDEX_PATH } from "@/lib/lessons/lesson-routes";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import { getPreNursingOverlaySlugsForLocale } from "@/lib/i18n/pre-nursing-content-overlay";
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programmatic-slug-redirects";
@@ -172,15 +167,46 @@ export async function collectExamPathwayUrls(origin: string): Promise<string[]> 
   return urls;
 }
 
-/** Allied marketing hub + profession guides + lesson index pages (not every paginated query string). */
+/**
+ * Allied marketing hub + per-occupation hero segments (`/allied-health/{segment}-exam-prep`).
+ * Pathway lesson indexes use `?alliedProfession=` and are intentionally omitted here — they fail
+ * {@link isValidPublicUrl} (`has_query_or_hash`) and never survived `/sitemap.xml` filtering anyway.
+ */
 export function collectAlliedMarketingUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
   const urls: string[] = [`${o}/allied-health`];
   for (const p of ALLIED_PROFESSIONS) {
     urls.push(`${o}${alliedHealthSegmentPath(p.segment)}`);
-    urls.push(`${o}${alliedHealthLessonsIndexPath(p.professionKey)}`);
   }
   return urls;
+}
+
+/**
+ * Root-relative public New Grad marketing URLs (`/new-grad`, `/new-grad/{unit}`).
+ * Single source for `/sitemap-new-grad.xml` — no `/app`, no query/hash, no learner shell paths.
+ */
+export const NEW_GRAD_MARKETING_SITEMAP_PATHS = [
+  "/new-grad",
+  "/new-grad/icu",
+  "/new-grad/med-surg",
+  "/new-grad/emergency",
+  "/new-grad/pediatrics",
+  "/new-grad/picu",
+  "/new-grad/cardiac-icu",
+  "/new-grad/neuro-icu",
+  "/new-grad/trauma",
+  "/new-grad/surgery",
+  "/new-grad/renal-dialysis",
+  "/new-grad/long-term-care",
+  "/new-grad/community-health",
+  "/new-grad/hem-onc",
+  "/new-grad/clinics",
+] as const;
+
+/** New Grad marketing hub + unit landing paths for the dedicated sitemap only. */
+export function collectNewGradMarketingUrls(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  return NEW_GRAD_MARKETING_SITEMAP_PATHS.map((p) => `${o}${p}`);
 }
 
 /**

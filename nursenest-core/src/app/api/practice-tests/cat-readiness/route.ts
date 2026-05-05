@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { enforcePracticeTestsCatReadinessProtection } from "@/lib/http/api-protection";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
 import { assessCatPracticeReadinessForPathway } from "@/lib/practice-tests/cat-practice-readiness";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 
@@ -27,6 +28,15 @@ export async function GET(req: NextRequest) {
   }
 
   const result = await assessCatPracticeReadinessForPathway(gate.userId, gate.entitlement, pathwayId);
+  logCoreApiStudyDiagnostic({
+    endpoint: "GET /api/practice-tests/cat-readiness",
+    pathwayId,
+    tier: String(gate.entitlement.tier ?? ""),
+    ok: result.ok,
+    availableQuestions: result.ok ? result.availableQuestions : result.availableQuestions ?? null,
+    code: result.ok ? undefined : result.code,
+    reasonIfZero: result.ok ? undefined : result.message,
+  });
   if (!result.ok) {
     safeServerLog("cat_readiness", "preflight_not_ready", {
       code: result.code,

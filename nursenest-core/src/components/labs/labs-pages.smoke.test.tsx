@@ -17,6 +17,7 @@ test("labs hub renders categories and study-loop entry points", () => {
   const html = renderToStaticMarkup(
     <LabsHubPage
       trackLabel="RN"
+      labTrack="rn"
       hasAccess
       categories={listLabCategoriesForTrack("rn")}
       inventory={countLabsInventoryForTrack("rn")}
@@ -24,12 +25,16 @@ test("labs hub renders categories and study-loop entry points", () => {
     />,
   );
 
-  assert.match(html, /Clinical lab learning and decision-making/);
+  assert.match(html, /Labs clinical reasoning engine/);
   assert.match(html, />Electrolytes</);
   assert.match(html, />ABGs</);
+  assert.match(html, /Pathway lessons/);
   assert.match(html, /Flashcards/);
   assert.match(html, /Practice questions/);
+  assert.match(html, /Practice tests/);
+  assert.match(html, /Start CAT/);
   assert.match(html, /Lab drills/);
+  assert.match(html, /RN focus/);
 });
 
 test("lab lesson article renders full premium structure", () => {
@@ -37,12 +42,7 @@ test("lab lesson article renders full premium structure", () => {
   assert.ok(lesson);
 
   const html = renderToStaticMarkup(
-    <LabLessonArticle
-      lesson={lesson!}
-      questions={getLabLessonQuestions(lesson!)}
-      flashcards={getLabLessonFlashcards(lesson!)}
-      measurementSystem="US"
-    />,
+    <LabLessonArticle lesson={lesson!} flashcards={getLabLessonFlashcards(lesson!)} labTrack="rn" measurementSystem="US" />,
   );
 
   assert.match(html, /Normal range and physiology/);
@@ -50,7 +50,7 @@ test("lab lesson article renders full premium structure", () => {
   assert.match(html, /Trend interpretation/);
   assert.match(html, /Pattern recognition/);
   assert.match(html, /Case-based micro scenarios/);
-  assert.match(html, /Practice and flashcard inventory/);
+  assert.match(html, /Flashcard inventory/);
   assert.match(html, /0\.5-1\.2 mg\/dL/);
 });
 

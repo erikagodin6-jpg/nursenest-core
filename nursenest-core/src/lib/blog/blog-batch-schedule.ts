@@ -7,7 +7,11 @@ import {
   BlogPostTemplate,
 } from "@prisma/client";
 import { normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import { partitionBlogTopicsBySeoIntent, validateBlogTopicForSeoArticleGeneration } from "@/lib/blog/blog-seo-topic-intent";
+import {
+  normalizeBlogTopicIntent,
+  partitionBlogTopicsBySeoIntent,
+  validateBlogTopicForSeoArticleGeneration,
+} from "@/lib/blog/blog-seo-topic-intent";
 import { generateBlogPost } from "@/lib/blog/generate-blog-ai-draft";
 import { prepareAdminBlogGenerationInput } from "@/lib/blog/admin-blog-generation-service";
 import { runBlogBatchLocalizedFollowup } from "@/lib/blog/blog-batch-localized-followup";
@@ -142,10 +146,12 @@ export function buildBlogBatchScheduleItemRows(
         rejectedTopics.push({ topic: r.topic, reason: gate.reason });
         continue;
       }
+      const normalized = normalizeBlogTopicIntent(r.topic, examForIntent);
+      const topicForSchedule = normalized.accepted ? normalized.normalizedTopic : r.topic;
       rows.push({
-        topic: r.topic,
+        topic: topicForSchedule,
         plannedPublishAt: r.at,
-        canonicalTopicKey: normalizeBlogTopicKey(r.topic),
+        canonicalTopicKey: normalizeBlogTopicKey(topicForSchedule),
       });
     }
     if (rows.length === 0) {
@@ -556,13 +562,14 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
         data: { status: BlogBatchScheduleItemStatus.GENERATING },
       });
 
-      const topicGate = validateBlogTopicForSeoArticleGeneration(item.topicRaw, schedule.exam);
-      if (!topicGate.ok) {
+      const legacyCompat = process.env.BLOG_LEGACY_COMPAT_TOPIC_INTENT?.trim().toLowerCase() === "true";
+      const topicIntent = normalizeBlogTopicIntent(item.topicRaw, schedule.exam, { legacyCompatible: legacyCompat });
+      if (!topicIntent.accepted) {
         await prisma.blogBatchScheduleItem.update({
           where: { id: item.id },
           data: {
             status: BlogBatchScheduleItemStatus.FAILED,
-            failureReason: `topic_intent_rejected: ${topicGate.reason}`.slice(0, 4000),
+            failureReason: `topic_intent_rejected: ${topicIntent.reason ?? "rejected"}`.slice(0, 4000),
           },
         });
         processedItems += 1;
@@ -575,9 +582,9 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
 
       const publishAt = effectivePublishAtForBatchItem(schedule.publishMode, item.plannedPublishAt, now);
       const prepared = await prepareAdminBlogGenerationInput({
-        rawTitle: item.topicRaw,
+        rawTitle: topicIntent.normalizedTopic,
         exam: schedule.exam,
-        targetKeyword: item.topicRaw,
+        targetKeyword: topicIntent.normalizedTopic,
         publishMode: publishAt ? (publishAt <= now ? "publish_now" : "schedule") : "draft",
         scheduledAt: publishAt,
       });
@@ -593,6 +600,7 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
         slug: prepared.uniqueSlug,
         publishAt,
         generationIdempotencyKey: `batch-schedule:${schedule.id}:${item.id}`,
+        legacyCompatible: legacyCompat,
       });
 
       if (!result.ok) {
