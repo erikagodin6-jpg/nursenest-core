@@ -4,7 +4,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
-import { loadRuntimeEnv, isRuntimeEnvError } from "./lib/load-runtime-env.mjs";
+import { loadRuntimeEnv, isRuntimeEnvError, maskedPostgresTarget } from "./lib/load-runtime-env.mjs";
 import {
   assertRequiredColumnsFromDatabaseUrl,
   formatMissingColumns,
@@ -15,6 +15,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(__dirname, "..");
 
 const COMMANDS = new Set(["status", "deploy", "generate", "check-schema"]);
+const BUILD_TIME_GENERATE_MESSAGE =
+  "[prisma-safe] Build-time Prisma generate detected; DIRECT_URL requirement skipped.";
 
 function usage() {
   console.error(`Usage: node scripts/prisma-safe.mjs <status|deploy|generate|check-schema>
@@ -45,6 +47,44 @@ function runPrisma(args) {
   return result.status === null ? 1 : result.status;
 }
 
+export function isPrismaGenerateCommand(command, argv = process.argv) {
+  if (command === "generate") return true;
+  const joined = argv.join(" ");
+  return /\bprisma(?:-safe\.mjs)?\s+generate\b/i.test(joined);
+}
+
+export function isBuildSafePrismaGenerateContext({ command, argv = process.argv, env = process.env } = {}) {
+  if (!isPrismaGenerateCommand(command, argv)) return false;
+  return env.NN_APP_PLATFORM_BUILD === "true" || env.NN_LOW_MEMORY_BUILD === "1";
+}
+
+export function assertDatabaseUrlForBuildGenerate(env = process.env) {
+  maskedPostgresTarget(env.DATABASE_URL?.trim(), "DATABASE_URL");
+}
+
+export function loadPrismaSafeEnvForCommand(
+  command,
+  { argv = process.argv, env = process.env, logger = console, envRoot } = {},
+) {
+  const buildSafeGenerate = isBuildSafePrismaGenerateContext({ command, argv, env });
+  const telemetry = loadRuntimeEnv({
+    purpose: `prisma-safe:${command}`,
+    validate: !buildSafeGenerate,
+    logger,
+    ...(envRoot ? { envRoot } : {}),
+  });
+
+  if (buildSafeGenerate) {
+    assertDatabaseUrlForBuildGenerate(env);
+    if (!process.env.DIRECT_URL?.trim()) {
+      process.env.DIRECT_URL = process.env.DATABASE_URL;
+    }
+    logger.log(BUILD_TIME_GENERATE_MESSAGE);
+  }
+
+  return { telemetry, buildSafeGenerate };
+}
+
 async function main() {
   const command = process.argv[2];
   if (!COMMANDS.has(command)) {
@@ -53,7 +93,7 @@ async function main() {
   }
 
   try {
-    loadRuntimeEnv({ purpose: `prisma-safe:${command}` });
+    loadPrismaSafeEnvForCommand(command);
   } catch (error) {
     if (isRuntimeEnvError(error)) {
       console.error(`[prisma-safe] ${error.message}`);
@@ -103,8 +143,10 @@ async function main() {
   process.exit(0);
 }
 
-main().catch((error) => {
-  console.error("[prisma-safe] failed:");
-  console.error(error?.stack ?? error);
-  process.exit(1);
-});
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((error) => {
+    console.error("[prisma-safe] failed:");
+    console.error(error?.stack ?? error);
+    process.exit(1);
+  });
+}

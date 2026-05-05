@@ -9,6 +9,10 @@ import {
   loadRuntimeEnv,
 } from "../../../scripts/lib/load-runtime-env.mjs";
 import {
+  isBuildSafePrismaGenerateContext,
+  loadPrismaSafeEnvForCommand,
+} from "../../../scripts/prisma-safe.mjs";
+import {
   ALLIED_AUDIT_REQUIRED_COLUMNS,
   PRODUCTION_REQUIRED_COLUMNS,
   SchemaReadinessError,
@@ -19,7 +23,7 @@ const VALID_DATABASE_URL = "postgresql://user:secret@example-do-user-1.db.ondigi
 const VALID_DIRECT_URL = "postgresql://direct:secret@example-do-user-1.db.ondigitalocean.com:25060/defaultdb?sslmode=require";
 
 function withCleanDbEnv(fn) {
-  const keys = ["DATABASE_URL", "DIRECT_URL", "DATABASE_DIRECT_URL"];
+  const keys = ["DATABASE_URL", "DIRECT_URL", "DATABASE_DIRECT_URL", "NN_APP_PLATFORM_BUILD", "NN_LOW_MEMORY_BUILD"];
   const previous = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
   for (const key of keys) delete process.env[key];
   try {
@@ -92,6 +96,79 @@ describe("runtime env loader", () => {
           assert.equal(process.env.DATABASE_URL, VALID_DATABASE_URL);
         },
       ),
+    ));
+});
+
+describe("prisma-safe build-time generate env policy", () => {
+  it("allows DigitalOcean build Prisma generate with DATABASE_URL only", () =>
+    withCleanDbEnv(() =>
+      withTempEnv({}, (envRoot) => {
+        process.env.NN_APP_PLATFORM_BUILD = "true";
+        process.env.DATABASE_URL = "postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public";
+        const logs = [];
+        const result = loadPrismaSafeEnvForCommand("generate", {
+          envRoot,
+          logger: { log: (line) => logs.push(line) },
+          argv: ["node", "scripts/prisma-safe.mjs", "generate"],
+        });
+        assert.equal(result.buildSafeGenerate, true);
+        assert.equal(process.env.DIRECT_URL, process.env.DATABASE_URL);
+        assert.equal(logs.some((line) => line.includes("Build-time Prisma generate detected; DIRECT_URL requirement skipped.")), true);
+      }),
+    ));
+
+  it("does not treat non-build generate as DIRECT_URL-optional", () =>
+    withCleanDbEnv(() =>
+      withTempEnv({}, (envRoot) => {
+        process.env.DATABASE_URL = VALID_DATABASE_URL;
+        assert.equal(
+          isBuildSafePrismaGenerateContext({
+            command: "generate",
+            argv: ["node", "scripts/prisma-safe.mjs", "generate"],
+            env: process.env,
+          }),
+          false,
+        );
+        assert.throws(
+          () =>
+            loadPrismaSafeEnvForCommand("generate", {
+              envRoot,
+              logger: { log() {} },
+              argv: ["node", "scripts/prisma-safe.mjs", "generate"],
+            }),
+          (error) => error instanceof RuntimeEnvError && error.code === "ENV_MISSING" && error.message.includes("DIRECT_URL"),
+        );
+      }),
+    ));
+
+  it("requires DIRECT_URL for migrate/status/deploy/check-schema commands even during build", () =>
+    withCleanDbEnv(() =>
+      withTempEnv({}, (envRoot) => {
+        process.env.NN_APP_PLATFORM_BUILD = "true";
+        process.env.DATABASE_URL = VALID_DATABASE_URL;
+        for (const command of ["status", "deploy", "check-schema"]) {
+          assert.throws(
+            () =>
+              loadPrismaSafeEnvForCommand(command, {
+                envRoot,
+                logger: { log() {} },
+                argv: ["node", "scripts/prisma-safe.mjs", command],
+              }),
+            (error) => error instanceof RuntimeEnvError && error.code === "ENV_MISSING" && error.message.includes("DIRECT_URL"),
+          );
+        }
+      }),
+    ));
+
+  it("runtime database scripts still require DIRECT_URL", () =>
+    withCleanDbEnv(() =>
+      withTempEnv({}, (envRoot) => {
+        process.env.DATABASE_URL = VALID_DATABASE_URL;
+        assert.throws(
+          () => loadRuntimeEnv({ envRoot, quiet: true, purpose: "runtime-script" }),
+          (error) => error instanceof RuntimeEnvError && error.code === "ENV_MISSING" && error.message.includes("DIRECT_URL"),
+        );
+      }),
     ));
 });
 
