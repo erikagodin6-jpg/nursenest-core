@@ -7,6 +7,7 @@
 
 import { stemHash } from "@/lib/content/stem-hash";
 import { examQuestionNaturalKey, stablePathwayLessonKey } from "@/lib/content-pipeline/stable-ids";
+import { assertCanonicalExamQuestionExam } from "@/lib/exam-questions/exam-question-exam-key";
 
 export { stemHash, examQuestionNaturalKey, stablePathwayLessonKey };
 
@@ -22,7 +23,7 @@ export function examQuestionImportDedupeKey(parts: {
 }): string {
   const h = stemHash(parts.stem);
   return examQuestionNaturalKey({
-    exam: parts.exam,
+    exam: assertCanonicalExamQuestionExam(parts.exam),
     tier: parts.tier,
     countryCode: parts.countryCode,
     stemHash: h,

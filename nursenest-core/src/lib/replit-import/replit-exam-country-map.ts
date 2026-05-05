@@ -1,3 +1,4 @@
+import { assertCanonicalExamQuestionExam } from "@/lib/exam-questions/exam-question-exam-key";
 import type { ImportCountry, NormalizedExamQuestion, ProductTrack } from "./replit-question-types";
 
 function normTrack(s: string): string {
@@ -23,7 +24,7 @@ export function mapTrackAndCountryToExamFields(
     case "ALLIED":
       return {
         tier: "allied",
-        exam: "ALLIED",
+        exam: assertCanonicalExamQuestionExam("ALLIED"),
         regionScope,
         countryCode: cc,
         careerType: "allied",
@@ -31,7 +32,7 @@ export function mapTrackAndCountryToExamFields(
     case "NP":
       return {
         tier: "np",
-        exam: "NP",
+        exam: assertCanonicalExamQuestionExam("NP"),
         regionScope,
         countryCode: cc,
         careerType: "nursing",
@@ -39,7 +40,7 @@ export function mapTrackAndCountryToExamFields(
     case "RN":
       return {
         tier: "rn",
-        exam: "NCLEX-RN",
+        exam: assertCanonicalExamQuestionExam("NCLEX-RN"),
         regionScope,
         countryCode: cc,
         careerType: "nursing",
@@ -47,7 +48,7 @@ export function mapTrackAndCountryToExamFields(
     case "PN":
       return {
         tier: country === "CA" ? "rpn" : "lvn",
-        exam: "NCLEX-PN",
+        exam: assertCanonicalExamQuestionExam(country === "CA" ? "REx-PN" : "NCLEX-PN"),
         regionScope,
         countryCode: cc,
         careerType: "nursing",
@@ -55,7 +56,7 @@ export function mapTrackAndCountryToExamFields(
     default:
       return {
         tier: "rn",
-        exam: "NCLEX-RN",
+        exam: assertCanonicalExamQuestionExam("NCLEX-RN"),
         regionScope,
         countryCode: cc,
         careerType: "nursing",

@@ -4,6 +4,7 @@ import {
   IMPORT_MAX_RATIONALE_CHARS,
   IMPORT_MAX_STEM_CHARS,
 } from "@/lib/content-pipeline/import-safeguards";
+import { canonicalizeExamQuestionExam } from "@/lib/exam-questions/exam-question-exam-key";
 
 /**
  * Bulk import / JSONL shape for exam questions.
@@ -18,7 +19,21 @@ export const examQuestionImportRecordSchema = z.object({
   correctAnswer: z.array(z.union([z.string(), z.number()])).min(1),
   questionType: z.string().min(1).max(64),
   tier: z.string().min(1).max(32),
-  exam: z.string().min(1).max(64),
+  exam: z
+    .string()
+    .min(1)
+    .max(64)
+    .transform((exam, ctx) => {
+      const canonical = canonicalizeExamQuestionExam(exam);
+      if (!canonical) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `Invalid ExamQuestion.exam value "${exam}"`,
+        });
+        return z.NEVER;
+      }
+      return canonical;
+    }),
   countryCode: z.string().min(2).max(8),
   status: z.enum(["draft", "in_review", "published", "archived"]).default("draft"),
   tags: z.array(z.string()).optional(),

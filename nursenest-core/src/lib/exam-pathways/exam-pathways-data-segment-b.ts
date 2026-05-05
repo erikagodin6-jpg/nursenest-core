@@ -15,7 +15,7 @@ export const EXAM_PATHWAYS_SEGMENT_B: ExamPathwayDefinition[] = [
     displayName: "NCLEX-RN (United States)",
     shortName: "NCLEX-RN",
     stripeTier: TierCode.RN,
-    contentExamKeys: ["NCLEX-RN", "NCLEX_RN"],
+    contentExamKeys: ["NCLEX-RN"],
     seoTitle: "NCLEX-RN Exam Prep | United States | NurseNest",
     seoDescription:
       "US RN prep: clinical judgment practice, NGN-style items where available, and full-length mocks filtered for US candidates.",
@@ -34,7 +34,7 @@ export const EXAM_PATHWAYS_SEGMENT_B: ExamPathwayDefinition[] = [
     displayName: "New Grad RN: transition to practice",
     shortName: "New Grad",
     stripeTier: TierCode.NEW_GRAD,
-    contentExamKeys: ["NCLEX-RN", "NCLEX_RN"],
+    contentExamKeys: ["NCLEX-RN"],
     seoTitle: "New Grad RN Transition | First Year on the Floor | NurseNest",
     seoDescription:
       "Practical lessons for new graduate RNs: prioritization, delegation, communication, and time management for your first year of practice.",

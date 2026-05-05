@@ -4,7 +4,7 @@ import { assertExamQuestionContextForPublish } from "@/lib/content-quality/exam-
 
 test("publish validation throws when exam context fields are missing", () => {
   assert.throws(
-    () => assertExamQuestionContextForPublish({ tier: "", exam: "NCLEX_RN", countryCode: "US" }),
+    () => assertExamQuestionContextForPublish({ tier: "", exam: "NCLEX-RN", countryCode: "US" }),
     /tier is required/i,
   );
   assert.throws(
@@ -12,14 +12,21 @@ test("publish validation throws when exam context fields are missing", () => {
     /exam is required/i,
   );
   assert.throws(
-    () => assertExamQuestionContextForPublish({ tier: "rn", exam: "NCLEX_RN", countryCode: "" }),
+    () => assertExamQuestionContextForPublish({ tier: "rn", exam: "NCLEX-RN", countryCode: "" }),
     /country_code is required/i,
   );
 });
 
 test("publish validation accepts complete context", () => {
   assert.doesNotThrow(() =>
-    assertExamQuestionContextForPublish({ tier: "rn", exam: "NCLEX_RN", countryCode: "US" }),
+    assertExamQuestionContextForPublish({ tier: "rn", exam: "NCLEX-RN", countryCode: "US" }),
+  );
+});
+
+test("publish validation rejects non-canonical exam values", () => {
+  assert.throws(
+    () => assertExamQuestionContextForPublish({ tier: "rn", exam: "NCLEX_RN", countryCode: "US" }),
+    /canonical exam key/i,
   );
 });
 
