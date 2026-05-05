@@ -13,6 +13,8 @@ import {
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(__dirname, "..");
+const PRISMA_CODEGEN_DATABASE_URL =
+  "postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public";
 
 const COMMANDS = new Set(["status", "deploy", "generate", "check-schema"]);
 
@@ -45,6 +47,20 @@ function runPrisma(args) {
   return result.status === null ? 1 : result.status;
 }
 
+function ensureGenerateEnv() {
+  if (!process.env.DATABASE_URL?.trim()) {
+    process.env.DATABASE_URL = PRISMA_CODEGEN_DATABASE_URL;
+    console.warn(
+      "[prisma-safe] DATABASE_URL unset for prisma generate — using local codegen stub (no network).",
+    );
+  }
+
+  if (!process.env.DIRECT_URL?.trim()) {
+    process.env.DIRECT_URL = process.env.DATABASE_URL;
+    console.warn("[prisma-safe] DIRECT_URL unset for prisma generate — reusing DATABASE_URL for codegen.");
+  }
+}
+
 async function main() {
   const command = process.argv[2];
   if (!COMMANDS.has(command)) {
@@ -53,13 +69,17 @@ async function main() {
   }
 
   try {
-    loadRuntimeEnv({ purpose: `prisma-safe:${command}` });
+    loadRuntimeEnv({ purpose: `prisma-safe:${command}`, validate: command !== "generate" });
   } catch (error) {
     if (isRuntimeEnvError(error)) {
       console.error(`[prisma-safe] ${error.message}`);
       process.exit(1);
     }
     throw error;
+  }
+
+  if (command === "generate") {
+    ensureGenerateEnv();
   }
 
   if (command === "check-schema") {

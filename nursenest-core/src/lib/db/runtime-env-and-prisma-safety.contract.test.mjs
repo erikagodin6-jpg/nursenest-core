@@ -128,6 +128,13 @@ describe("allied audit Prisma error handling", () => {
 });
 
 describe("package Prisma safety scripts", () => {
+  it("allows Prisma generate to use a local codegen URL without weakening migrate/deploy validation", () => {
+    const source = readFileSync(resolve("scripts/prisma-safe.mjs"), "utf8");
+    assert.match(source, /loadRuntimeEnv\(\{ purpose: `prisma-safe:\$\{command\}`, validate: command !== "generate" \}\)/);
+    assert.match(source, /if \(command === "generate"\) \{\s*ensureGenerateEnv\(\);/);
+    assert.doesNotMatch(source, /if \(command === "deploy"\) \{\s*ensureGenerateEnv\(\);/);
+  });
+
   it("nursenest-core package exposes safe Prisma scripts and no raw npx prisma commands", () => {
     const pkg = JSON.parse(readFileSync(resolve("package.json"), "utf8"));
     assert.equal(pkg.scripts["db:migrate:status:safe"], "node scripts/prisma-safe.mjs status");
