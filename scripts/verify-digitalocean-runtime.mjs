@@ -63,6 +63,12 @@ const pkg = read(packagePath);
 const standaloneStart = read(standaloneStartPath);
 const lines = activeLines(spec);
 const keys = envKeys(lines);
+let appPackage = null;
+try {
+  appPackage = pkg ? JSON.parse(pkg) : null;
+} catch {
+  fail("nursenest-core/package.json must be valid JSON");
+}
 
 console.log("[verify:do-runtime] checking DigitalOcean Dockerfile runtime contract");
 
@@ -157,6 +163,40 @@ for (const requiredSnippet of [
 
 if (!pkg.includes("\"verify:standalone-artifact\"")) {
   fail("nursenest-core/package.json must expose verify:standalone-artifact");
+}
+
+const packageStartScript = appPackage?.scripts?.start;
+if (typeof packageStartScript !== "string" || !packageStartScript.trim()) {
+  fail("nursenest-core/package.json must expose a non-empty start script");
+} else {
+  if (!packageStartScript.includes("scripts/start-standalone.mjs")) {
+    fail("package.json start must use scripts/start-standalone.mjs for the standalone Docker runtime");
+  }
+  if (packageStartScript.includes("--import ./instrumentation.node.ts")) {
+    fail("package.json start must not preload ./instrumentation.node.ts; it is not copied into the Docker runtime image");
+  }
+  if (packageStartScript.includes("start-production.mjs")) {
+    fail("package.json start must not use start-production.mjs in the standalone Docker runtime");
+  }
+  const relativePreloads = [...packageStartScript.matchAll(/--import\s+(\.{1,2}\/\S+)/g)].map((m) =>
+    m[1].replace(/^["']|["']$/g, ""),
+  );
+  for (const preload of relativePreloads) {
+    const sourcePath = path.resolve(appRoot, preload);
+    if (!existsSync(sourcePath)) {
+      fail(`package.json start references missing preload ${preload}`);
+    }
+    if (preload.startsWith("./") && !preload.startsWith("./scripts/")) {
+      fail(`package.json start preload ${preload} is not under a Docker-copied app runtime directory`);
+    }
+    if (preload.startsWith("../scripts/")) {
+      assertIncludes(
+        dockerfile,
+        "COPY --from=builder /app/scripts ../scripts",
+        `Dockerfile runner stage for package.json start preload ${preload}`,
+      );
+    }
+  }
 }
 
 if (failures.length > 0) {
