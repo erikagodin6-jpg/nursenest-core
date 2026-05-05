@@ -48,14 +48,16 @@ function runPrisma(args) {
 }
 
 export function isPrismaGenerateCommand(command, argv = process.argv) {
-  if (command === "generate") return true;
-  const joined = argv.join(" ");
-  return /\bprisma(?:-safe\.mjs)?\s+generate\b/i.test(joined);
+  const commandString = argv.join(" ");
+  return command === "generate" || commandString.includes("generate");
 }
 
 export function isBuildSafePrismaGenerateContext({ command, argv = process.argv, env = process.env } = {}) {
-  if (!isPrismaGenerateCommand(command, argv)) return false;
-  return env.NN_APP_PLATFORM_BUILD === "true" || env.NN_LOW_MEMORY_BUILD === "1";
+  const commandString = argv.join(" ");
+  const isGenerate = command === "generate" || commandString.includes("generate");
+  const isBuild = env.NN_APP_PLATFORM_BUILD === "true" || env.NN_LOW_MEMORY_BUILD === "1";
+  const isBuildGenerate = isBuild && isGenerate;
+  return isBuildGenerate;
 }
 
 export function assertDatabaseUrlForBuildGenerate(env = process.env) {
