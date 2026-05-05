@@ -23,7 +23,14 @@ const VALID_DATABASE_URL = "postgresql://user:secret@example-do-user-1.db.ondigi
 const VALID_DIRECT_URL = "postgresql://direct:secret@example-do-user-1.db.ondigitalocean.com:25060/defaultdb?sslmode=require";
 
 function withCleanDbEnv(fn) {
-  const keys = ["DATABASE_URL", "DIRECT_URL", "DATABASE_DIRECT_URL", "NN_APP_PLATFORM_BUILD", "NN_LOW_MEMORY_BUILD"];
+  const keys = [
+    "DATABASE_URL",
+    "DIRECT_URL",
+    "DATABASE_DIRECT_URL",
+    "NN_APP_PLATFORM_BUILD",
+    "NN_LOW_MEMORY_BUILD",
+    "npm_lifecycle_event",
+  ];
   const previous = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
   for (const key of keys) delete process.env[key];
   try {
@@ -100,6 +107,27 @@ describe("runtime env loader", () => {
 });
 
 describe("prisma-safe build-time generate env policy", () => {
+  it("treats npm postinstall Prisma generate as safe codegen without database secrets", () =>
+    withCleanDbEnv(() =>
+      withTempEnv({}, (envRoot) => {
+        process.env.npm_lifecycle_event = "postinstall";
+        try {
+          const logs = [];
+          const result = loadPrismaSafeEnvForCommand("generate", {
+            envRoot,
+            logger: { log: (line) => logs.push(line) },
+            argv: ["node", "scripts/prisma-safe.mjs", "generate"],
+          });
+          assert.equal(result.buildSafeGenerate, true);
+          assert.match(process.env.DATABASE_URL, /nn_prisma_codegen/);
+          assert.equal(process.env.DIRECT_URL, process.env.DATABASE_URL);
+          assert.equal(logs.some((line) => line.includes("Build-time Prisma generate detected; DIRECT_URL requirement skipped.")), true);
+        } finally {
+          delete process.env.npm_lifecycle_event;
+        }
+      }),
+    ));
+
   it("allows DigitalOcean build Prisma generate with DATABASE_URL only", () =>
     withCleanDbEnv(() =>
       withTempEnv({}, (envRoot) => {

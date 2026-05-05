@@ -15,6 +15,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(__dirname, "..");
 
 const COMMANDS = new Set(["status", "deploy", "generate", "check-schema"]);
+const CODEGEN_PLACEHOLDER_DATABASE_URL =
+  "postgresql://postgres:postgres@127.0.0.1:65432/nn_prisma_codegen?schema=public";
 const BUILD_TIME_GENERATE_MESSAGE =
   "[prisma-safe] Build-time Prisma generate detected; DIRECT_URL requirement skipped.";
 
@@ -56,13 +58,21 @@ export function isBuildSafePrismaGenerateContext({ command, argv = process.argv,
   void command;
   const commandString = argv.join(" ");
   const isGenerate = commandString.includes("generate");
-  const isBuild = env.NN_APP_PLATFORM_BUILD === "true" || env.NN_LOW_MEMORY_BUILD === "1";
+  const isInstallTimeCodegen = env.npm_lifecycle_event === "postinstall";
+  const isBuild = env.NN_APP_PLATFORM_BUILD === "true" || env.NN_LOW_MEMORY_BUILD === "1" || isInstallTimeCodegen;
   const isBuildGenerate = isBuild && isGenerate;
   return isBuildGenerate;
 }
 
 export function assertDatabaseUrlForBuildGenerate(env = process.env) {
   maskedPostgresTarget(env.DATABASE_URL?.trim(), "DATABASE_URL");
+}
+
+function ensureDatabaseUrlForBuildGenerate(env = process.env) {
+  if (!env.DATABASE_URL?.trim()) {
+    env.DATABASE_URL = CODEGEN_PLACEHOLDER_DATABASE_URL;
+  }
+  assertDatabaseUrlForBuildGenerate(env);
 }
 
 export function loadPrismaSafeEnvForCommand(
@@ -78,7 +88,7 @@ export function loadPrismaSafeEnvForCommand(
   });
 
   if (buildSafeGenerate) {
-    assertDatabaseUrlForBuildGenerate(env);
+    ensureDatabaseUrlForBuildGenerate(env);
     if (!process.env.DIRECT_URL?.trim()) {
       process.env.DIRECT_URL = process.env.DATABASE_URL;
     }
