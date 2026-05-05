@@ -3,10 +3,33 @@ import { after, describe, it } from "node:test";
 
 import { prisma } from "@/lib/db";
 import { legacyOsceSkillStationToPrismaCreate } from "@/lib/scenarios/osce-station-mapper";
-import { getMergedLegacyOsceSkillStations } from "@/lib/scenarios/legacy-osce-stations-runtime";
+import type { OSCESkillStation } from "@/lib/scenarios/legacy-osce-stations-runtime";
 import { loadPublicOsceStationsDtos } from "@/lib/scenarios/osce-stations-resolve.server";
 
 const SLUG = "__contract_osce_sot__";
+
+const TEMPLATE: OSCESkillStation = {
+  id: "contract-osce-template",
+  title: "OSCE contract template",
+  category: "Assessment",
+  difficulty: "Foundational",
+  icon: "ClipboardList",
+  description: "Contract test OSCE station template.",
+  scenarioIntro: "A learner completes a focused assessment for a standardized client.",
+  equipment: [],
+  steps: [{ label: "Introduce self" }, { label: "Verify identity" }],
+  commonErrors: [],
+  passingCriteria: "Completes safety-critical assessment steps.",
+  clinicalPearls: ["Keep the station focused."],
+  examLevel: "Foundational",
+  timeLimit: "10 minutes",
+  candidateInstructions: "Complete the focused station.",
+  patientActorScript: "Answer learner questions consistently.",
+  examinerChecklist: [{ action: "Introduces self", marks: 1 }],
+  criticalFailCriteria: [],
+  examinerQuestions: [],
+  teachingPoints: [],
+};
 
 describe("OSCE DB source of truth (admin write → public read)", () => {
   it("PATCH semantics via Prisma: public loader reflects title change", async () => {
@@ -21,14 +44,10 @@ describe("OSCE DB source of truth (admin write → public read)", () => {
       throw e;
     }
 
-    const merged = getMergedLegacyOsceSkillStations();
-    const template = merged.find((s) => s.id === "head-to-toe-assessment");
-    assert.ok(template);
-
     await prisma.osceStation.deleteMany({ where: { slug: SLUG } });
 
     const base = legacyOsceSkillStationToPrismaCreate(
-      { ...template, id: SLUG, title: "OSCE SOT contract seed" },
+      { ...TEMPLATE, id: SLUG, title: "OSCE SOT contract seed" },
       "contract-test",
     );
     await prisma.osceStation.create({ data: base });

@@ -1,24 +1,33 @@
-import type { OSCECategory, OSCESkillStation } from "@legacy-client/data/osce-skills-data";
-import { osceSkillStations } from "@legacy-client/data/osce-skills-data";
-import { osceSkillStations2 } from "@legacy-client/data/osce-skills-data-2";
-import { osceSkillStations3 } from "@legacy-client/data/osce-skills-data-3";
-import { osceSkillStations4 } from "@legacy-client/data/osce-skills-data-4";
-import { osceSkillStations5 } from "@legacy-client/data/osce-skills-data-5";
-import { osceSkillStations6 } from "@legacy-client/data/osce-skills-data-6";
-import { osceSkillStations7 } from "@legacy-client/data/osce-skills-data-7";
-
 import type { OsceStationFamily } from "@/lib/scenarios/osce-station-kinds";
 
-/** Bundled legacy monolith files → live Next OSCE surfaces (read path). */
-export const LEGACY_OSCE_SKILL_DATA_SOURCES = [
-  "@legacy-client/data/osce-skills-data",
-  "@legacy-client/data/osce-skills-data-2",
-  "@legacy-client/data/osce-skills-data-3",
-  "@legacy-client/data/osce-skills-data-4",
-  "@legacy-client/data/osce-skills-data-5",
-  "@legacy-client/data/osce-skills-data-6",
-  "@legacy-client/data/osce-skills-data-7",
-] as const;
+export type OSCECategory = string;
+
+export type OSCESkillStation = {
+  id: string;
+  title: string;
+  category: string;
+  difficulty: string;
+  icon?: string;
+  description?: string;
+  scenarioIntro: string;
+  equipment?: string[];
+  steps: unknown[];
+  commonErrors?: string[];
+  passingCriteria?: string;
+  clinicalPearls?: string[];
+  examLevel?: string;
+  timeLimit?: string;
+  candidateInstructions?: string;
+  patientActorScript?: string;
+  examinerChecklist?: unknown[];
+  criticalFailCriteria?: string[];
+  examinerQuestions?: unknown[];
+  teachingPoints?: string[];
+};
+
+/** Legacy OSCE bundle imports are disabled for production build stability. */
+export const LEGACY_OSCE_SKILL_DATA_SOURCES = [] as const;
+export const osceSkillStations: OSCESkillStation[] = [];
 
 export type LegacyOsceStationListItem = {
   id: string;
@@ -65,15 +74,7 @@ export function parseOsceTimeLimitMinutes(raw?: string): number | undefined {
 }
 
 export function getMergedLegacyOsceSkillStations(): OSCESkillStation[] {
-  return [
-    ...osceSkillStations,
-    ...osceSkillStations2,
-    ...osceSkillStations3,
-    ...osceSkillStations4,
-    ...osceSkillStations5,
-    ...osceSkillStations6,
-    ...osceSkillStations7,
-  ];
+  return osceSkillStations;
 }
 
 export function getLegacyOsceSkillStationById(id: string): OSCESkillStation | null {

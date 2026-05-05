@@ -539,20 +539,22 @@ function loadAlliedProfessionDedicatedLessonsForPathway(pathwayId: string): Less
     if (p.pathwayId !== pathwayId) continue;
     const file = p.dedicatedCatalogFile?.trim();
     if (!file) continue;
+    let mod: { lessons?: LessonInput[] };
     try {
-      const mod = catalogBundleRequire(`@/content/pathway-lessons/allied-professions/${file}`) as {
+      mod = catalogBundleRequire(`@/content/pathway-lessons/allied-professions/${file}`) as {
         lessons?: LessonInput[];
       };
-      for (const row of mod.lessons ?? []) {
-        const slug = typeof row.slug === "string" ? row.slug.trim() : "";
-        if (!slug) continue;
-        out.push({
-          ...row,
-          alliedProfessionKey: (row.alliedProfessionKey ?? p.professionKey).trim().toLowerCase(),
-        });
-      }
     } catch {
-      // Optional per-profession shard — omit when file is absent or invalid.
+      // Optional per-profession shard — omit when file is absent from a build.
+      continue;
+    }
+    for (const row of mod.lessons ?? []) {
+      const slug = typeof row.slug === "string" ? row.slug.trim() : "";
+      if (!slug) continue;
+      out.push({
+        ...row,
+        alliedProfessionKey: (row.alliedProfessionKey ?? p.professionKey).trim().toLowerCase(),
+      });
     }
   }
   return out.slice(0, PATHWAY_CATALOG_LIST_HARD_CAP);
