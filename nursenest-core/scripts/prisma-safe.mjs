@@ -16,7 +16,10 @@ const packageRoot = resolve(__dirname, "..");
 
 const COMMANDS = new Set(["status", "deploy", "generate", "check-schema"]);
 const BUILD_TIME_GENERATE_MESSAGE =
-  "[prisma-safe] Build-time Prisma generate detected; DIRECT_URL requirement skipped.";
+  "[prisma-safe] Build-time Prisma generate detected; runtime database validation skipped.";
+const INSTALL_TIME_GENERATE_MESSAGE =
+  "[prisma-safe] Install-time Prisma generate detected; DATABASE_URL/DIRECT_URL validation skipped.";
+const CODEGEN_DATABASE_URL = "postgresql://prisma:prisma@127.0.0.1:65432/nn_prisma_codegen?schema=public";
 
 function usage() {
   console.error(`Usage: node scripts/prisma-safe.mjs <status|deploy|generate|check-schema>
@@ -61,8 +64,28 @@ export function isBuildSafePrismaGenerateContext({ command, argv = process.argv,
   return isBuildGenerate;
 }
 
+export function isInstallSafePrismaGenerateContext({ command, argv = process.argv, env = process.env } = {}) {
+  void command;
+  const commandString = argv.join(" ");
+  const isGenerate = commandString.includes("generate");
+  const isInstall = env.npm_lifecycle_event === "postinstall" || env.npm_command === "ci" || env.npm_command === "install";
+  return isGenerate && isInstall;
+}
+
 export function assertDatabaseUrlForBuildGenerate(env = process.env) {
   maskedPostgresTarget(env.DATABASE_URL?.trim(), "DATABASE_URL");
+}
+
+export function ensureCodegenDatabaseEnv(env = process.env) {
+  if (env.DATABASE_URL?.trim()) {
+    maskedPostgresTarget(env.DATABASE_URL.trim(), "DATABASE_URL");
+  } else {
+    process.env.DATABASE_URL = CODEGEN_DATABASE_URL;
+  }
+
+  if (!process.env.DIRECT_URL?.trim()) {
+    process.env.DIRECT_URL = process.env.DATABASE_URL;
+  }
 }
 
 export function loadPrismaSafeEnvForCommand(
@@ -70,22 +93,26 @@ export function loadPrismaSafeEnvForCommand(
   { argv = process.argv, env = process.env, logger = console, envRoot } = {},
 ) {
   const buildSafeGenerate = isBuildSafePrismaGenerateContext({ command, argv, env });
+  const installSafeGenerate = isInstallSafePrismaGenerateContext({ command, argv, env });
   const telemetry = loadRuntimeEnv({
     purpose: `prisma-safe:${command}`,
-    validate: !buildSafeGenerate,
+    validate: !buildSafeGenerate && !installSafeGenerate,
     logger,
+    quiet: installSafeGenerate,
     ...(envRoot ? { envRoot } : {}),
   });
 
   if (buildSafeGenerate) {
-    assertDatabaseUrlForBuildGenerate(env);
-    if (!process.env.DIRECT_URL?.trim()) {
-      process.env.DIRECT_URL = process.env.DATABASE_URL;
-    }
+    ensureCodegenDatabaseEnv(env);
     logger.log(BUILD_TIME_GENERATE_MESSAGE);
   }
 
-  return { telemetry, buildSafeGenerate };
+  if (installSafeGenerate) {
+    ensureCodegenDatabaseEnv(env);
+    logger.log(INSTALL_TIME_GENERATE_MESSAGE);
+  }
+
+  return { telemetry, buildSafeGenerate, installSafeGenerate };
 }
 
 async function main() {
