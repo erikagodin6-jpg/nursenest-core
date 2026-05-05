@@ -3,6 +3,7 @@ import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/
 import { BLOG_SLUG_FORMAT_RE } from "@/lib/blog/blog-optional-slug";
 import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
 import { expectedCanonicalBlogPath } from "@/lib/blog/generated-blog-post-publish";
+import { normalizeBlogTopicIntent } from "@/lib/blog/blog-seo-topic-intent";
 import {
   normalizeBlogGenerationInput,
   sanitizeAiReturnedSlug,
@@ -133,14 +134,19 @@ export async function prepareAdminBlogGenerationInput(
     );
   }
 
+  const topicIntent = normalizeBlogTopicIntent(
+    args.targetKeyword?.trim() || normalized.cleanTitle,
+    args.exam,
+  );
+  const effectiveTopic = topicIntent.accepted ? topicIntent.normalizedTopic : normalized.cleanTitle;
   const seo = sanitizeAiSeoOutput({
-    title: args.aiTitle ?? normalized.cleanTitle,
+    title: args.aiTitle ?? effectiveTopic,
     seoTitle: args.aiSeoTitle ?? normalized.seoTitle,
     metaDescription: args.aiMetaDescription ?? normalized.metaDescription,
     category: args.aiCategory,
     tags: args.aiTags ?? normalized.topicKeywords,
   });
-  const fallbackTitle = seo.title ?? normalized.cleanTitle;
+  const fallbackTitle = seo.title ?? effectiveTopic;
   const slugBase = sanitizeAiReturnedSlug(args.fixedSlug ?? args.aiSlug ?? normalized.slug, fallbackTitle);
   if (!BLOG_SLUG_FORMAT_RE.test(slugBase)) {
     throwAdminBlogFieldError(
@@ -151,13 +157,13 @@ export async function prepareAdminBlogGenerationInput(
     );
   }
   const uniqueSlug = await ensureUniqueBlogPostSlug(slugBase);
-  const targetKeyword = args.targetKeyword?.trim() || normalized.topicKeywords[0] || normalized.cleanTitle;
-  const normalizedTopic = normalizeBlogTopicKey(targetKeyword || normalized.cleanTitle) || "";
+  const targetKeyword = effectiveTopic;
+  const normalizedTopic = normalizeBlogTopicKey(effectiveTopic) || "";
   const publish = resolveAdminBlogPublishIntent({ publishMode: args.publishMode, scheduledAt: args.scheduledAt });
 
   return {
     normalized,
-    topic: normalized.cleanTitle,
+    topic: effectiveTopic,
     targetKeyword,
     normalizedTopic,
     slugBase,

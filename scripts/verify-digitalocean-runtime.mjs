@@ -2,12 +2,14 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { verifyOptionalContentDirectories } from "./verify-optional-content-directories.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const appRoot = path.join(root, "nursenest-core");
 const specPath = path.join(root, ".do", "app-nursenest-core-next.yaml");
 const dockerfilePath = path.join(root, "Dockerfile");
 const packagePath = path.join(appRoot, "package.json");
+const rootPackagePath = path.join(root, "package.json");
 const standaloneStartPath = path.join(appRoot, "scripts", "start-standalone.mjs");
 
 const failures = [];
@@ -60,6 +62,7 @@ function assertIncludes(haystack, needle, context) {
 const spec = read(specPath);
 const dockerfile = read(dockerfilePath);
 const pkg = read(packagePath);
+const rootPkg = read(rootPackagePath);
 const standaloneStart = read(standaloneStartPath);
 const lines = activeLines(spec);
 const keys = envKeys(lines);
@@ -68,6 +71,61 @@ try {
   appPackage = pkg ? JSON.parse(pkg) : null;
 } catch {
   fail("nursenest-core/package.json must be valid JSON");
+}
+let rootPackage = null;
+try {
+  rootPackage = rootPkg ? JSON.parse(rootPkg) : null;
+} catch {
+  fail("package.json must be valid JSON");
+}
+
+function verifyStartScript({ label, command, baseDir, allowRootStandalone = false }) {
+  if (typeof command !== "string" || !command.trim()) {
+    fail(`${label} must expose a non-empty start command`);
+    return;
+  }
+  if (command.includes("--import ./instrumentation.node.ts")) {
+    fail(`${label} must not preload ./instrumentation.node.ts; it is optional and not copied into the Docker runtime image`);
+  }
+  if (command.includes("start-production.mjs")) {
+    fail(`${label} must not use start-production.mjs in the standalone Docker runtime`);
+  }
+  if (!command.includes("scripts/start-standalone.mjs")) {
+    fail(`${label} must use scripts/start-standalone.mjs for production startup`);
+  }
+
+  const relativeRefs = [
+    ...command.matchAll(/(?:^|\s)(?:node|--import|\.)\s+(\.{1,2}\/\S+|scripts\/\S+|nursenest-core\/\S+)/g),
+  ].map((m) => m[1].replace(/^["']|["']$/g, ""));
+
+  for (const ref of relativeRefs) {
+    if (ref === "./scripts/.node-memory-exports.sh" && command.includes("scripts/ensure-node-memory.mjs")) {
+      continue;
+    }
+    const sourcePath = path.resolve(baseDir, ref);
+    if (!existsSync(sourcePath)) {
+      fail(`${label} references missing file ${ref}`);
+    }
+    if (ref.includes("instrumentation.node.ts")) {
+      fail(`${label} references optional instrumentation preload ${ref}`);
+    }
+    if (ref === "nursenest-core/scripts/start-standalone.mjs" && allowRootStandalone) {
+      continue;
+    }
+    if (ref.startsWith("scripts/")) {
+      continue;
+    }
+    if (ref.startsWith("./") && !ref.startsWith("./scripts/")) {
+      fail(`${label} references ${ref}, which is not under a Docker-copied app runtime directory`);
+    }
+    if (ref.startsWith("../scripts/")) {
+      assertIncludes(
+        dockerfile,
+        "COPY --from=builder /app/scripts ../scripts",
+        `Dockerfile runner stage for ${label} reference ${ref}`,
+      );
+    }
+  }
 }
 
 console.log("[verify:do-runtime] checking DigitalOcean Dockerfile runtime contract");
@@ -166,37 +224,27 @@ if (!pkg.includes("\"verify:standalone-artifact\"")) {
 }
 
 const packageStartScript = appPackage?.scripts?.start;
-if (typeof packageStartScript !== "string" || !packageStartScript.trim()) {
-  fail("nursenest-core/package.json must expose a non-empty start script");
-} else {
-  if (!packageStartScript.includes("scripts/start-standalone.mjs")) {
-    fail("package.json start must use scripts/start-standalone.mjs for the standalone Docker runtime");
+verifyStartScript({ label: "nursenest-core/package.json start", command: packageStartScript, baseDir: appRoot });
+
+const rootPackageStartScript = rootPackage?.scripts?.start;
+verifyStartScript({
+  label: "package.json start",
+  command: rootPackageStartScript,
+  baseDir: root,
+  allowRootStandalone: true,
+});
+
+for (const specFile of [".do/app-nursenest-core-next.yaml", ".do/app.yaml"]) {
+  const specText = read(path.join(root, specFile));
+  const specRunCommand = scalar(activeLines(specText), "run_command");
+  if (specRunCommand) {
+    verifyStartScript({ label: `${specFile} run_command`, command: specRunCommand, baseDir: appRoot });
   }
-  if (packageStartScript.includes("--import ./instrumentation.node.ts")) {
-    fail("package.json start must not preload ./instrumentation.node.ts; it is not copied into the Docker runtime image");
-  }
-  if (packageStartScript.includes("start-production.mjs")) {
-    fail("package.json start must not use start-production.mjs in the standalone Docker runtime");
-  }
-  const relativePreloads = [...packageStartScript.matchAll(/--import\s+(\.{1,2}\/\S+)/g)].map((m) =>
-    m[1].replace(/^["']|["']$/g, ""),
-  );
-  for (const preload of relativePreloads) {
-    const sourcePath = path.resolve(appRoot, preload);
-    if (!existsSync(sourcePath)) {
-      fail(`package.json start references missing preload ${preload}`);
-    }
-    if (preload.startsWith("./") && !preload.startsWith("./scripts/")) {
-      fail(`package.json start preload ${preload} is not under a Docker-copied app runtime directory`);
-    }
-    if (preload.startsWith("../scripts/")) {
-      assertIncludes(
-        dockerfile,
-        "COPY --from=builder /app/scripts ../scripts",
-        `Dockerfile runner stage for package.json start preload ${preload}`,
-      );
-    }
-  }
+}
+
+const contentDirectoryResult = verifyOptionalContentDirectories({ root });
+for (const message of contentDirectoryResult.failures) {
+  fail(message);
 }
 
 if (failures.length > 0) {

@@ -6,15 +6,29 @@ import type { BankExamRowForFlashcard } from "@/lib/flashcards/bank-exam-questio
 import { resolveBuilderCategoryId } from "@/lib/flashcards/flashcard-builder-taxonomy";
 import {
   DISCOVERY_STATEMENT_TIMEOUT_MS,
-  discoveryExamContextScopeSql,
+  discoveryExamContextScopeForFlashcardFallback,
   examQuestionsDiscoveryWhereSql,
 } from "@/lib/questions/subscriber-discovery-aggregates";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /** Match discovery-style caps — only affects grouped rows, not the total COUNT(*). */
 const EXAM_HUB_GROUP_ROW_LIMIT = 320;
 
 /** Cap rows pulled when building learner sessions from the live exam bank (bounded query). */
 const EXAM_FLASHCARD_SESSION_POOL_CAP = 4000;
+
+/**
+ * SQL fragment that excludes question formats unsuitable for normal flashcard study:
+ * - ECG / EKG / rhythm strip questions (separate premium module)
+ * - Video / media-only questions (require player, not displayable as text cards)
+ * - Questions with no stem text (cannot render a card front)
+ * - Questions with no correct answer (cannot render a card back)
+ */
+const FLASHCARD_USABILITY_SQL = Prisma.sql`
+  AND (question_format IS NULL OR lower(trim(question_format)) NOT IN ('ecg', 'ekg', 'video', 'video_case', 'media', 'image_only'))
+  AND coalesce(trim(stem), '') <> ''
+  AND correct_answer IS NOT NULL
+`;
 
 export type ExamQuestionHubInventory = {
   total: number;
@@ -26,6 +40,14 @@ type GroupRow = { grp_kind: string; grp_value: string; cnt: bigint };
 /**
  * Pathway-scoped exam question counts grouped once per question (topic preferred, else body_system, else uncategorized),
  * then mapped through {@link resolveBuilderCategoryId} so flashcards hub rows match practice-question taxonomy.
+ *
+ * Fallback behaviour:
+ * - If the exam context scope would produce `AND FALSE` (e.g., pathway has empty contentExamKeys),
+ *   the scope is skipped — entitlement WHERE (tier + region) does the scoping.
+ * - If the scoped query returns 0 rows despite a non-empty scope, the function retries without the
+ *   exam scope. This handles pathways where ExamQuestion rows have mismatched `exam` column values.
+ *
+ * ECG / video / media question formats are always excluded from the flashcard pool.
  */
 function topicOrBodySystemMatchSql(topicFilter: string | null | undefined): Prisma.Sql {
   const t = topicFilter?.trim();
@@ -36,6 +58,46 @@ function topicOrBodySystemMatchSql(topicFilter: string | null | undefined): Pris
   )`;
 }
 
+async function runHubInventoryQuery(
+  tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0],
+  w: Prisma.Sql,
+  contextScope: Prisma.Sql,
+  topicScope: Prisma.Sql,
+): Promise<{ total: number; groupRows: GroupRow[] }> {
+  const [totalRows, rows] = await Promise.all([
+    tx.$queryRaw<[{ n: bigint }]>`
+      SELECT COUNT(*)::bigint AS n
+      FROM exam_questions
+      WHERE ${w}${contextScope}${topicScope}${FLASHCARD_USABILITY_SQL}
+    `,
+    tx.$queryRaw<GroupRow[]>`
+      SELECT
+        (CASE
+          WHEN coalesce(trim(topic), '') <> '' THEN 'topic'
+          WHEN coalesce(trim(body_system), '') <> '' THEN 'body'
+          WHEN coalesce(trim(nclex_client_needs_category), '') <> '' THEN 'exam_cat'
+          ELSE 'none'
+        END)::text AS grp_kind,
+        (CASE
+          WHEN coalesce(trim(topic), '') <> '' THEN trim(topic)
+          WHEN coalesce(trim(body_system), '') <> '' THEN trim(body_system)
+          WHEN coalesce(trim(nclex_client_needs_category), '') <> '' THEN trim(nclex_client_needs_category)
+          ELSE 'Uncategorized'
+        END)::text AS grp_value,
+        COUNT(*)::bigint AS cnt
+      FROM exam_questions
+      WHERE ${w}${contextScope}${topicScope}${FLASHCARD_USABILITY_SQL}
+      GROUP BY 1, 2
+      ORDER BY cnt DESC
+      LIMIT ${EXAM_HUB_GROUP_ROW_LIMIT}
+    `,
+  ]);
+
+  const rawTotal = totalRows[0]?.n;
+  const countedTotal = typeof rawTotal === "bigint" ? Number(rawTotal) : Number(rawTotal ?? 0);
+  return { total: countedTotal, groupRows: rows };
+}
+
 export async function loadExamQuestionHubInventoryForPathway(
   entitlement: AccessScope,
   pathwayId: string | null | undefined,
@@ -43,46 +105,44 @@ export async function loadExamQuestionHubInventoryForPathway(
   topicFilter: string | null = null,
 ): Promise<ExamQuestionHubInventory> {
   const pid = pathwayId?.trim();
-  if (!pid || !examContext) {
+  if (!pid || !entitlement.hasAccess) {
     return { total: 0, countsByBuilderId: {} };
   }
 
   const w = examQuestionsDiscoveryWhereSql(entitlement);
-  const contextScope = discoveryExamContextScopeSql(examContext);
   const topicScope = topicOrBodySystemMatchSql(topicFilter);
+
+  // Use the flashcard-specific fallback scope: returns Prisma.empty (not AND FALSE) when
+  // the pathway has no contentExamKeys configured.
+  const { sql: contextScope, hasScopeFilter } = discoveryExamContextScopeForFlashcardFallback(examContext);
 
   const { total, groupRows } = await prisma.$transaction(
     async (tx) => {
       await tx.$executeRawUnsafe(`SET LOCAL statement_timeout = '${DISCOVERY_STATEMENT_TIMEOUT_MS}ms'`);
 
-      const [totalRows, rows] = await Promise.all([
-        tx.$queryRaw<[{ n: bigint }]>`SELECT COUNT(*)::bigint AS n FROM exam_questions WHERE ${w}${contextScope}${topicScope}`,
-        tx.$queryRaw<GroupRow[]>`
-          SELECT
-            (CASE
-              WHEN coalesce(trim(topic), '') <> '' THEN 'topic'
-              WHEN coalesce(trim(body_system), '') <> '' THEN 'body'
-              WHEN coalesce(trim(nclex_client_needs_category), '') <> '' THEN 'exam_cat'
-              ELSE 'none'
-            END)::text AS grp_kind,
-            (CASE
-              WHEN coalesce(trim(topic), '') <> '' THEN trim(topic)
-              WHEN coalesce(trim(body_system), '') <> '' THEN trim(body_system)
-              WHEN coalesce(trim(nclex_client_needs_category), '') <> '' THEN trim(nclex_client_needs_category)
-              ELSE 'Uncategorized'
-            END)::text AS grp_value,
-            COUNT(*)::bigint AS cnt
-          FROM exam_questions
-          WHERE ${w}${contextScope}${topicScope}
-          GROUP BY 1, 2
-          ORDER BY cnt DESC
-          LIMIT ${EXAM_HUB_GROUP_ROW_LIMIT}
-        `,
-      ]);
+      const result = await runHubInventoryQuery(tx, w, contextScope, topicScope);
 
-      const rawTotal = totalRows[0]?.n;
-      const countedTotal = typeof rawTotal === "bigint" ? Number(rawTotal) : Number(rawTotal ?? 0);
-      return { total: countedTotal, groupRows: rows };
+      // Fallback: if the scoped query returned 0 rows but we had an active exam scope,
+      // retry without the scope. This handles cases where ExamQuestion rows have exam/tier
+      // values that do not exactly match the pathway's contentExamKeys (e.g. 'nclex-rn' vs 'NCLEX-RN').
+      if (result.total === 0 && hasScopeFilter) {
+        safeServerLog("flashcards", "hub_inventory_exam_scope_zero_fallback", {
+          pathwayId: pid,
+          topicFilter: topicFilter?.slice(0, 80) ?? "",
+          reason: "scoped_query_returned_zero_retrying_without_exam_scope",
+        });
+        const fallback = await runHubInventoryQuery(tx, w, Prisma.empty, topicScope);
+        if (fallback.total > 0) {
+          safeServerLog("flashcards", "hub_inventory_exam_scope_fallback_success", {
+            pathwayId: pid,
+            total: fallback.total,
+            groupCount: fallback.groupRows.length,
+          });
+          return fallback;
+        }
+      }
+
+      return result;
     },
     { maxWait: 8_000, timeout: 12_000 },
   );
@@ -110,6 +170,29 @@ export async function loadExamQuestionHubInventoryForPathway(
     countsByBuilderId[id] = (countsByBuilderId[id] ?? 0) + n;
   }
 
+  // Debug log: report categories that resolved to zero despite total > 0
+  if (process.env.NODE_ENV === "development" && total > 0) {
+    const zeroBuckets = groupRows
+      .filter((r) => {
+        const n = typeof r.cnt === "bigint" ? Number(r.cnt) : Number(r.cnt ?? 0);
+        return n > 0;
+      })
+      .map((r) => r.grp_value)
+      .filter((v) => {
+        // Check if this group value resolved to a builder bucket that actually got a count
+        return false; // Only log if something went wrong — rely on overall countsByBuilderId check
+      });
+    void zeroBuckets;
+    if (Object.keys(countsByBuilderId).length === 0 && total > 0) {
+      safeServerLog("flashcards", "hub_inventory_zero_buckets_despite_total", {
+        pathwayId: pid,
+        total,
+        groupCount: groupRows.length,
+        sampleGroups: groupRows.slice(0, 5).map((r) => `${r.grp_kind}:${r.grp_value}`).join(", "),
+      });
+    }
+  }
+
   return { total, countsByBuilderId };
 }
 
@@ -121,6 +204,9 @@ export type ExamQuestionFlashcardPoolRow = BankExamRowForFlashcard & {
 /**
  * Loads a bounded slice of subscriber-scoped exam questions for the same pathway + entitlement scope
  * as {@link loadExamQuestionHubInventoryForPathway}, for flashcard sessions that must mirror the bank pool.
+ *
+ * ECG / video / media questions are always excluded. Falls back to no-exam-scope when the scoped query
+ * returns 0 rows (same fallback logic as hub inventory).
  */
 export async function loadExamQuestionRowsForFlashcardPool(
   entitlement: AccessScope,
@@ -130,34 +216,47 @@ export async function loadExamQuestionRowsForFlashcardPool(
   take: number,
 ): Promise<ExamQuestionFlashcardPoolRow[]> {
   const pid = pathwayId?.trim();
-  if (!pid || !examContext) return [];
+  if (!pid || !entitlement.hasAccess) return [];
 
   const w = examQuestionsDiscoveryWhereSql(entitlement);
-  const contextScope = discoveryExamContextScopeSql(examContext);
   const topicScope = topicOrBodySystemMatchSql(topicFilter);
   const cap = Math.min(Math.max(Math.floor(take), 1), EXAM_FLASHCARD_SESSION_POOL_CAP);
+
+  const { sql: contextScope, hasScopeFilter } = discoveryExamContextScopeForFlashcardFallback(examContext);
+
+  const queryPool = async (
+    tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0],
+    scope: Prisma.Sql,
+  ) =>
+    tx.$queryRaw<ExamQuestionFlashcardPoolRow[]>`
+      SELECT
+        q.id,
+        q.stem,
+        q.options,
+        q.correct_answer AS "correctAnswer",
+        q.question_type AS "questionType",
+        q.rationale,
+        q.distractor_rationales AS "distractorRationales",
+        q.incorrect_answer_rationale AS "incorrectAnswerRationale",
+        q.correct_answer_explanation AS "correctAnswerExplanation",
+        q.topic,
+        q.body_system AS "bodySystem"
+      FROM exam_questions q
+      WHERE ${w}${scope}${topicScope}${FLASHCARD_USABILITY_SQL}
+      ORDER BY q.id
+      LIMIT ${cap}
+    `;
 
   const rows = await prisma.$transaction(
     async (tx) => {
       await tx.$executeRawUnsafe(`SET LOCAL statement_timeout = '${DISCOVERY_STATEMENT_TIMEOUT_MS}ms'`);
-      return tx.$queryRaw<ExamQuestionFlashcardPoolRow[]>`
-        SELECT
-          q.id,
-          q.stem,
-          q.options,
-          q.correct_answer AS "correctAnswer",
-          q.question_type AS "questionType",
-          q.rationale,
-          q.distractor_rationales AS "distractorRationales",
-          q.incorrect_answer_rationale AS "incorrectAnswerRationale",
-          q.correct_answer_explanation AS "correctAnswerExplanation",
-          q.topic,
-          q.body_system AS "bodySystem"
-        FROM exam_questions q
-        WHERE ${w}${contextScope}${topicScope}
-        ORDER BY q.id
-        LIMIT ${cap}
-      `;
+      const result = await queryPool(tx, contextScope);
+
+      // Fallback: retry without exam scope if scoped query returned nothing
+      if (result.length === 0 && hasScopeFilter) {
+        return queryPool(tx, Prisma.empty);
+      }
+      return result;
     },
     { maxWait: 8_000, timeout: 12_000 },
   );

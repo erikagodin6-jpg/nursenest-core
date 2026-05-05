@@ -1,47 +1,149 @@
 /**
  * NCLEX-style, high-intent nursing SEO topic validation.
- * Used before expensive article generation so vague / generic titles never hit the AI pipeline.
+ * Broad but valid nursing topics are normalized into clinically specific article prompts
+ * before the strict generation gate runs.
  */
 
-/** Titles that read like textbook chapter intros, not search queries. */
 const FORBIDDEN_TITLE_START =
   /^(understanding|overview of|the overview of|a quick overview of|guide to|a guide to|complete guide to|the complete guide to|introduction to|an introduction to|exploring|discovering|everything about|all about)\b/i;
 
-/** Banned anywhere as leading filler when followed by colon-style academic phrasing. */
 const FORBIDDEN_WEAK_PREFIX = /^(tips for|things to know about|important information about)\b/i;
 
 const EXAM_OR_LICENSURE =
-  /\b(NCLEX|NGN|next[-\s]?generation nclex|REx[-\s]?PN|REX[-\s]?PN|NCLEX[-\s]?RN|NCLEX[-\s]?PN|CAT adaptive|clinical judgment|board exam|licensure exam|exam prep|test day)\b/i;
+  /\b(NCLEX|NGN|next[-\s]?generation nclex|REx[-\s]?PN|REX[-\s]?PN|NCLEX[-\s]?RN|NCLEX[-\s]?PN|CAT adaptive|clinical judgment|board exam|licensure exam|exam prep|test day|nurse practitioner|\bNP\b|AANP|ANCC|CNPLE|allied health|allied)\b/i;
 
-/**
- * Body systems, NCLEX client-need buckets, and concrete clinical anchors.
- * Keeps topics tied to bedside / exam decisions (not generic “wellness”).
- */
+const SPAM_OR_UNSAFE =
+  /\b(bitcoin|crypto|casino|sportsbook|porn|escort|viagra|essay writer|seo agency|backlinks|guest post|payday loan|forex|dropshipping|weight loss gummies)\b/i;
+
+const PLACEHOLDER_OR_STUB =
+  /\b(lorem ipsum|placeholder|stub post|tbd|todo|fixme|\[\[|\{\{)\b/i;
+
 const CLINICAL_OR_EXAM_CATEGORY = new RegExp(
   [
-    String.raw`fluid|electrolyte|acid[-\s]?base|\bABG\b|sodium|potassium|calcium|magnesium|phosph`,
+    String.raw`fluid|electrolyte|acid[-\s]?base|\bABG\b|sodium|potassium|calcium|magnesium|phosph|lab values|critical labs|diagnostic`,
     String.raw`cardiac|cardio|heart|STEMI|NSTEMI|MI\b|ACS|arrhythm|ECG|EKG|HF\b|heart failure|hypertension|shock|pulmonary embol|embolism|\bPE\b|DVT`,
-    String.raw`respiratory|pneumonia|COPD|asthma|ARDS|ventilat|oxygen|airway|chest tube|pneumothorax|pleural|obstructive pulmonary|chronic obstructive|fibrosis|interstitial`,
+    String.raw`respiratory|pneumonia|COPD|asthma|ARDS|ventilat|oxygen|airway|chest tube|pneumothorax|pleural|bronchiolitis|croup`,
     String.raw`renal|kidney|dialysis|AKI|CKD|urinary|catheter|UTI|prostatic|prostate|BPH|hyperplasia`,
     String.raw`GI\b|gastro|liver|hepat|cirrhosis|pancrea|bowel|IBD|GI bleed|peptic|cholecystitis|cholangitis|celiac|gluten`,
     String.raw`endocrine|diabetes|insulin|DKA|HHS|thyroid|adrenal|cortisol|SIADH|cushing|addison`,
     String.raw`neuro|stroke|seizure|ICP|mening|Parkinson|Alzheimer|spinal|GBS\b|dysreflexia|multiple sclerosis|\bMS\b`,
     String.raw`hemat|anemia|sickle|transfusion|coagul|platelet|HIT\b|INR`,
-    String.raw`immune|HIV|TB\b|MRSA|C\.?\s*diff|isolation|infection control|sepsis`,
+    String.raw`immune|HIV|TB\b|MRSA|C\.?\s*diff|isolation|infection control|sepsis|ppe|precaution`,
     String.raw`MSK|fracture|cast|compartment|arthritis|joint replacement|\bgout\b`,
-    String.raw`maternal|OB\b|labor|postpartum|neonatal|pediatric|preeclampsia|HELLP`,
+    String.raw`maternal|OB\b|labor|postpartum|neonatal|pediatric|preeclampsia|HELLP|family[-\s]?centred`,
     String.raw`psychiat|mental health|suicide|delirium|dementia|therapeutic communication`,
-    String.raw`pharmac|medication|drug|antibio|opioid|anticoag|insulin|chemo|\bIV\b|intravenous`,
-    String.raw`delegation|scope of practice|priorit|triage|safety|restraint|fall`,
+    String.raw`pharmac|medication|drug|antibio|opioid|anticoag|diuretic|beta blocker|ace inhibitor|insulin|\bIV\b|intravenous`,
+    String.raw`delegation|scope of practice|priorit|triage|safety|restraint|fall|fundamentals|isolation`,
     String.raw`legal|ethical|HIPAA|consent|advocacy|documentation`,
-    String.raw`palliative|hospice|discharge|home health|school nurse`,
+    String.raw`palliative|hospice|discharge|home health|school nurse|allied|respiratory therapist|paramedic|pta|ota|mlt|imaging`,
     String.raw`burn|wound|pressure injury|oncology|radiation|dialysis|\bcancer\b|colorectal|lymphoma|leukemia|hepatocellular`,
-    String.raw`lab values|vital signs|assessment findings|nursing interventions|patient teaching|malnutrition|obesity|bariatric|nutritional support|textbook|NurseNest`,
-    String.raw`study plan|study schedule|practice test|question bank|flashcard|mnemonic|test anxiety|retake|rationale|prep\b|readiness|recall|retention|memory|\bclinical\b|concepts?`,
-    String.raw`ICU|med[\s-]?surg|perioperative|emergency department|trauma|travel nursing|staff nursing|nurse practitioner|\bNP\b|\bPA\b|CNS\b|union|staffing`,
   ].join("|"),
   "i",
 );
+
+type TopicTemplate = {
+  match: RegExp;
+  clinicalDomain: string;
+  bodySystem?: string;
+  nclexCategory: string;
+  buildTitle: (examLabel: string) => string;
+};
+
+const NORMALIZATION_TEMPLATES: TopicTemplate[] = [
+  {
+    match: /\bheart failure|cardiac failure|\bCHF\b/i,
+    clinicalDomain: "cardiovascular nursing",
+    bodySystem: "cardiovascular",
+    nclexCategory: "Physiological Adaptation",
+    buildTitle: (examLabel) =>
+      `Heart Failure Nursing Care: Pathophysiology, Assessment, Medications, Labs, and ${examLabel}`,
+  },
+  {
+    match: /\bdiabetes|diabetes mellitus|dka|hhs|insulin/i,
+    clinicalDomain: "endocrine nursing",
+    bodySystem: "endocrine",
+    nclexCategory: "Pharmacological and Parenteral Therapies",
+    buildTitle: (examLabel) =>
+      `Diabetes Mellitus Nursing Review: Insulin Safety, DKA/HHS, Labs, Complications, and ${examLabel}`,
+  },
+  {
+    match: /\binfection control|isolation|ppe|precautions|sepsis prevention/i,
+    clinicalDomain: "infection prevention and safety",
+    bodySystem: "immune / infectious disease",
+    nclexCategory: "Safety and Infection Control",
+    buildTitle: (examLabel) =>
+      `Infection Control for Nursing Exams: Isolation Precautions, PPE, Transmission-Based Precautions, and ${examLabel}`,
+  },
+  {
+    match: /\belectrolyte|sodium|potassium|calcium|magnesium|fluid balance/i,
+    clinicalDomain: "fluids, electrolytes, and acid-base nursing",
+    bodySystem: "renal / endocrine",
+    nclexCategory: "Physiological Adaptation",
+    buildTitle: (examLabel) =>
+      `Electrolyte Imbalances Nursing Review: Sodium, Potassium, Calcium, Magnesium, ECG Changes, and ${examLabel}`,
+  },
+  {
+    match: /\bpediatric nursing|pediatrics|pediatric care/i,
+    clinicalDomain: "pediatric nursing",
+    bodySystem: "respiratory",
+    nclexCategory: "Health Promotion and Maintenance",
+    buildTitle: (examLabel) =>
+      `Pediatric Respiratory Distress Nursing Review: Assessment, Red Flags, Oxygenation, Family-Centred Care, and ${examLabel}`,
+  },
+  {
+    match: /\blab values|labs?|diagnostic tests?|critical values/i,
+    clinicalDomain: "lab interpretation and diagnostic reasoning",
+    bodySystem: "multisystem",
+    nclexCategory: "Reduction of Risk Potential",
+    buildTitle: (examLabel) =>
+      `Lab Values for Nursing Exams: Critical Ranges, Trending Abnormal Results, Reporting Priorities, and ${examLabel}`,
+  },
+  {
+    match: /\bpharmacology|medications?|drug class|drug safety/i,
+    clinicalDomain: "pharmacology nursing",
+    bodySystem: "multisystem",
+    nclexCategory: "Pharmacological and Parenteral Therapies",
+    buildTitle: (examLabel) =>
+      `Pharmacology for Nursing Exams: High-Risk Medications, Drug Classes, Monitoring, and ${examLabel}`,
+  },
+  {
+    match: /\ballied|respiratory therapy|paramedic|pta|ota|mlt|imaging|pharmacy tech/i,
+    clinicalDomain: "allied health clinical practice",
+    bodySystem: "profession-specific",
+    nclexCategory: "Allied clinical readiness",
+    buildTitle: (examLabel) =>
+      `Allied Health Clinical Review: Assessment Priorities, Safety Checks, Diagnostics, and ${examLabel}`,
+  },
+  {
+    match: /\bnurse practitioner|\bNP\b|advanced practice/i,
+    clinicalDomain: "advanced practice nursing",
+    bodySystem: "multisystem",
+    nclexCategory: "NP clinical management",
+    buildTitle: (examLabel) =>
+      `Nurse Practitioner Clinical Review: Differential Diagnosis, Prescribing Safety, Follow-Up, and ${examLabel}`,
+  },
+  {
+    match: /\bdelegation|prioritization|triage|fundamentals|patient safety|scope of practice/i,
+    clinicalDomain: "nursing fundamentals and safety",
+    bodySystem: "multisystem",
+    nclexCategory: "Management of Care",
+    buildTitle: (examLabel) =>
+      `Nursing Fundamentals Review: Delegation, Prioritization, Safety Checks, and ${examLabel}`,
+  },
+];
+
+export type BlogSeoTopicIntentResult =
+  | { ok: true }
+  | { ok: false; reason: string };
+
+export type NormalizeBlogTopicIntentResult = {
+  accepted: boolean;
+  normalizedTopic: string;
+  clinicalDomain: string;
+  bodySystem?: string;
+  nclexCategory?: string;
+  reason?: string;
+};
 
 function matchesHighIntentShape(topic: string): boolean {
   for (const re of [
@@ -66,24 +168,26 @@ function matchesHighIntentShape(topic: string): boolean {
   return false;
 }
 
-/** Nursing decision / action language (not pure encyclopedia). */
 const ACTIONABLE_NURSING =
-  /\b(nursing care|nursing assessment|nursing management|nursing interventions|nursing priorities|nursing actions|nursing responsibilities|bedside|monitoring|administration|delegation|teaching|escalat|report|hold|contraindicat|toxicity|precautions|bundle|protocol|anticoagulation|post-op|postoperative|exacerbation management)\b/i;
+  /\b(nursing care|nursing assessment|nursing management|nursing interventions|nursing priorities|nursing actions|nursing responsibilities|bedside|monitoring|administration|delegation|teaching|escalat|report|hold|contraindicat|toxicity|precautions|bundle|protocol|anticoagulation|post-op|postoperative|exacerbation management|clinical reasoning)\b/i;
 
-export type BlogSeoTopicIntentResult =
-  | { ok: true }
-  | { ok: false; reason: string };
+function resolveExamLabel(scheduleExam?: string | null): string {
+  const exam = String(scheduleExam ?? "").trim();
+  if (/rex-?pn/i.test(exam)) return "REx-PN Priorities";
+  if (/\bnp\b|nurse practitioner|aanp|ancc|cnple/i.test(exam)) return "NP Clinical Reasoning";
+  if (/allied/i.test(exam)) return "Allied Health Relevance";
+  if (/nclex/i.test(exam)) return "NCLEX Priorities";
+  return "Nursing Priorities";
+}
 
-/**
- * Validates a blog article topic for NCLEX-style search intent and clinical specificity.
- *
- * @param topic Raw topic / title line
- * @param scheduleExam When provided (e.g. from batch schedule), satisfies “exam relevance” without repeating NCLEX in every line.
- */
-export function validateBlogTopicForSeoArticleGeneration(
-  topic: string,
-  scheduleExam?: string | null,
-): BlogSeoTopicIntentResult {
+function detectTemplate(topic: string): TopicTemplate | null {
+  for (const template of NORMALIZATION_TEMPLATES) {
+    if (template.match.test(topic)) return template;
+  }
+  return null;
+}
+
+function validateSpecificTopic(topic: string, scheduleExam?: string | null): BlogSeoTopicIntentResult {
   const t = topic.trim();
   if (t.length < 22) {
     return { ok: false, reason: "Topic is too short to be a specific, high-intent query." };
@@ -91,32 +195,28 @@ export function validateBlogTopicForSeoArticleGeneration(
   if (t.length > 220) {
     return { ok: false, reason: "Topic exceeds maximum length; split into a narrower query." };
   }
-
   if (FORBIDDEN_TITLE_START.test(t) || FORBIDDEN_WEAK_PREFIX.test(t)) {
     return {
       ok: false,
       reason:
-        'Title uses a generic pattern (e.g. "Understanding…", "Overview of…", "Guide to…"). Use NCLEX-style intent: questions, priorities, vs comparisons, labs for nurses, first sign, or "what should the nurse do first".',
+        'Title uses a generic pattern (e.g. "Understanding…", "Overview of…", "Guide to…"). Use a concrete nursing teaching title with mechanism, assessment, interventions, labs, or safety priorities.',
     };
   }
   if (/\:\s*Understanding\b/i.test(t)) {
     return {
       ok: false,
       reason:
-        'Avoid "Understanding …" phrasing in titles (including after a colon). Prefer mechanism + nursing decision language (e.g. compensation cues, assessment priorities, NCLEX traps).',
+        'Avoid "Understanding …" phrasing in titles (including after a colon). Prefer mechanism + nursing decision language.',
     };
   }
-
   if (/\b(complete guide|ultimate guide|everything you need)\b/i.test(t)) {
     return { ok: false, reason: "Avoid guide-style filler; prefer a concrete exam or bedside decision query." };
   }
-
   const words = t.split(/\s+/).filter(Boolean);
   if (words.length < 4) {
     return { ok: false, reason: "Topic is too vague (too few words)." };
   }
 
-  /** "NCLEX Questions on …" / "REx-PN Questions on …" already implies exam-scoped clinical content. */
   const examQuestionBankStem = /\b(nclex|rex-?pn)\s+questions\b/i.test(t);
   const caseStudyExamStem = /\b(ngn|case study questions|bow[\s-]?tie|matrix questions)\b/i.test(t) && /\bnclex\b/i.test(t);
   const examTrackComparison = /\s+vs\.?\s+/i.test(t) && /\b(nclex|rex-?pn|pn|rn)\b/i.test(t) && t.length >= 24;
@@ -129,49 +229,43 @@ export function validateBlogTopicForSeoArticleGeneration(
     };
   }
 
-  const examFromSchedule =
-    typeof scheduleExam === "string" && scheduleExam.trim().length >= 2 ?
-      scheduleExam.trim()
-    : null;
+  const examFromSchedule = typeof scheduleExam === "string" && scheduleExam.trim().length >= 2 ? scheduleExam.trim() : null;
   const examInTopic = EXAM_OR_LICENSURE.test(t);
   const examFromScheduleOk = examFromSchedule !== null && EXAM_OR_LICENSURE.test(examFromSchedule);
   const examOk = examInTopic || examFromScheduleOk;
 
   const intentShape = matchesHighIntentShape(t);
   const nursingActionCue = ACTIONABLE_NURSING.test(t);
-  /** Long, exam-anchored clinical titles (bank / editorial) without awkward “NCLEX questions for …” prefixes. */
   const examGroundedClinical =
-    examOk && CLINICAL_OR_EXAM_CATEGORY.test(t) && t.length >= 32 && /\b(questions|strategies|nursing care|management|assessment|interventions|differentiation|comparison|priorities|protocol|safety)\b/i.test(t);
-  /** NCLEX/REx study-strategy lines that still name exam prep mechanics (not lifestyle fluff). */
+    examOk &&
+    CLINICAL_OR_EXAM_CATEGORY.test(t) &&
+    t.length >= 32 &&
+    /\b(questions|strategies|nursing care|management|assessment|interventions|differentiation|comparison|priorities|protocol|safety|review)\b/i.test(t);
   const examPrepStudyLine =
     examOk &&
     t.length >= 32 &&
-    /\b(study|review|schedule|plan|practice|question bank|flashcard|mnemonic|mapping|recall|retention|anxiety|simulation|rationales?|readiness|calculations|drip|blueprint|calendar|timeline|mistakes|avoid|lessons?|textbooks|textbook|weekend|second-career|content|sub-categories|categories|multiple response|EMR|knowledge gaps|intervention level|Maslow|ABCs|CABs|deterioration|review list|80\/20|physiological integrity|health promotion|preparation timeline|practice from day one|family responsibilities|building|first-year|efficiently)\b/i.test(
+    /\b(study|review|schedule|plan|practice|question bank|flashcard|mnemonic|mapping|recall|retention|anxiety|simulation|rationales?|readiness|calculations|drip|blueprint|timeline|mistakes|lessons?|content)\b/i.test(
       t,
     ) &&
-    (CLINICAL_OR_EXAM_CATEGORY.test(t) || /\b(nclex|rex-?pn)\b/i.test(t));
-
-  /** Safety / operations topics with explicit bedside or systems hooks (QSEN-style bank rows). */
+    (CLINICAL_OR_EXAM_CATEGORY.test(t) || /\b(nclex|rex-?pn|np|allied)\b/i.test(t));
   const safetyOpsTitle =
     examOk &&
     t.length >= 28 &&
-    /\b(SBAR|BLS|ACLS|code blue|hand hygiene|patient identification|critical value|smart pump|DERS|handoff|elopement|sentinel event|just culture|wrong-site|staffing ratio|nurse-to-patient|mandatory reporting|pulse oximetry|oximetry|disaster|evacuation|rapid response|turning and repositioning|central line bundle|infection prevention|safe patient handling|body mechanics|pain scales|scope and safe referral)\b/i.test(
+    /\b(SBAR|BLS|ACLS|code blue|hand hygiene|patient identification|critical value|smart pump|DERS|handoff|elopement|sentinel event|just culture|wrong-site|staffing ratio|rapid response|infection prevention|safe patient handling|body mechanics)\b/i.test(
       t,
     ) &&
-    /\b(nursing|nurse|nurses|patient|safe|safety|reporting|compliance|evidence|WHO)\b/i.test(t);
-
-  /** Category-B style pathophysiology / management deep dives with explicit nursing anchor words. */
+    /\b(nursing|nurse|nurses|patient|safe|safety|reporting|compliance|evidence)\b/i.test(t);
   const clinicalTeachingTitle =
     CLINICAL_OR_EXAM_CATEGORY.test(t) &&
     t.length >= 34 &&
-    /\b(nursing|nurses|pathophysiology|assessment|management|interventions|prevention|recognition|implications|rehab|surveillance|exacerbation|post-op|postoperative|differentiation)\b/i.test(t);
-
-  /** Mechanism / etiology structure lines (still clinically specific) when schedule supplies exam context. */
+    /\b(nursing|nurses|pathophysiology|assessment|management|interventions|prevention|recognition|implications|rehab|surveillance|exacerbation|post-op|differentiation|client education)\b/i.test(
+      t,
+    );
   const pathologyStructureTitle =
     examOk &&
     CLINICAL_OR_EXAM_CATEGORY.test(t) &&
     t.length >= 36 &&
-    /\b(causes|classification|staging|subtypes|prerenal|intrarenal|postrenal|hypovolemic|cardiogenic|distributive|obstructive|depth classification|fluid resuscitation|embolization|carcinoma|treatment modalities|uric acid|hydroxyurea|vaso-occlusive|opportunistic infections|H\.?\s*pylori)\b/i.test(t);
+    /\b(causes|classification|staging|subtypes|fluid resuscitation|treatment modalities|opportunistic infections|monitoring)\b/i.test(t);
 
   if (
     !intentShape &&
@@ -185,7 +279,7 @@ export function validateBlogTopicForSeoArticleGeneration(
     return {
       ok: false,
       reason:
-        "Topic is not clearly actionable for nursing decisions. Prefer NCLEX-style stems (questions, priorities, vs, labs for nurses, first sign, nurse do first), or a concrete exam + clinical teaching line (not generic overview copy).",
+        "Topic is not clearly actionable for nursing decisions. Prefer mechanism, assessment, interventions, labs, safety priorities, or exam reasoning in the title.",
     };
   }
 
@@ -199,6 +293,112 @@ export function validateBlogTopicForSeoArticleGeneration(
   return { ok: true };
 }
 
+export function normalizeBlogTopicIntent(
+  inputTopic: string,
+  scheduleExam?: string | null,
+): NormalizeBlogTopicIntentResult {
+  const raw = inputTopic.trim();
+  if (!raw) {
+    return {
+      accepted: false,
+      normalizedTopic: raw,
+      clinicalDomain: "unknown",
+      reason: "Topic is empty.",
+    };
+  }
+  if (SPAM_OR_UNSAFE.test(raw)) {
+    return {
+      accepted: false,
+      normalizedTopic: raw,
+      clinicalDomain: "rejected",
+      reason: "Topic appears spammy, unsafe, or unrelated to healthcare education.",
+    };
+  }
+  if (PLACEHOLDER_OR_STUB.test(raw)) {
+    return {
+      accepted: false,
+      normalizedTopic: raw,
+      clinicalDomain: "rejected",
+      reason: "Placeholder or stub topics are not allowed.",
+    };
+  }
+  if (FORBIDDEN_TITLE_START.test(raw) || FORBIDDEN_WEAK_PREFIX.test(raw) || /\b(complete guide|ultimate guide|everything you need)\b/i.test(raw)) {
+    return {
+      accepted: false,
+      normalizedTopic: raw,
+      clinicalDomain: "rejected",
+      reason:
+        'Generic "Understanding/Guide" style topics are blocked. Start with a real condition, lab, medication, safety category, or bedside priority instead.',
+    };
+  }
+
+  const specific = validateSpecificTopic(raw, scheduleExam);
+  if (specific.ok) {
+    const template = detectTemplate(raw);
+    return {
+      accepted: true,
+      normalizedTopic: raw,
+      clinicalDomain: template?.clinicalDomain ?? "clinical nursing",
+      bodySystem: template?.bodySystem,
+      nclexCategory: template?.nclexCategory,
+    };
+  }
+
+  const template = detectTemplate(raw);
+  if (template) {
+    const normalizedTopic = template.buildTitle(resolveExamLabel(scheduleExam));
+    const normalizedCheck = validateSpecificTopic(normalizedTopic, scheduleExam);
+    if (normalizedCheck.ok) {
+      return {
+        accepted: true,
+        normalizedTopic,
+        clinicalDomain: template.clinicalDomain,
+        bodySystem: template.bodySystem,
+        nclexCategory: template.nclexCategory,
+      };
+    }
+  }
+
+  const lowered = raw.toLowerCase();
+  if (CLINICAL_OR_EXAM_CATEGORY.test(raw)) {
+    const normalizedTopic = `${raw.replace(/\s+/g, " ").trim()}: Nursing Assessment, Interventions, Safety Priorities, and ${resolveExamLabel(scheduleExam)}`;
+    const normalizedCheck = validateSpecificTopic(normalizedTopic, scheduleExam);
+    if (normalizedCheck.ok) {
+      return {
+        accepted: true,
+        normalizedTopic,
+        clinicalDomain: "clinical nursing",
+        nclexCategory: "Exam preparation",
+      };
+    }
+  }
+
+  const impossible =
+    !CLINICAL_OR_EXAM_CATEGORY.test(raw) &&
+    !/\b(nursing|nurse|patient|clinical|healthcare|medication|lab|safety|allied|respiratory|paramedic|pharmacy)\b/i.test(lowered);
+
+  return {
+    accepted: false,
+    normalizedTopic: raw,
+    clinicalDomain: impossible ? "non-medical" : "unresolved clinical topic",
+    reason:
+      impossible
+        ? "Topic is not clinical, nursing, or allied-health relevant enough to normalize safely."
+        : specific.reason,
+  };
+}
+
+export function validateBlogTopicForSeoArticleGeneration(
+  topic: string,
+  scheduleExam?: string | null,
+): BlogSeoTopicIntentResult {
+  const normalized = normalizeBlogTopicIntent(topic, scheduleExam);
+  if (!normalized.accepted) {
+    return { ok: false, reason: normalized.reason ?? "Topic could not be normalized into a clinical nursing article." };
+  }
+  return validateSpecificTopic(normalized.normalizedTopic, scheduleExam);
+}
+
 export function partitionBlogTopicsBySeoIntent(
   topics: string[],
   scheduleExam?: string | null,
@@ -206,9 +406,9 @@ export function partitionBlogTopicsBySeoIntent(
   const approved: string[] = [];
   const rejected: Array<{ topic: string; reason: string }> = [];
   for (const topic of topics) {
-    const r = validateBlogTopicForSeoArticleGeneration(topic, scheduleExam);
-    if (r.ok) approved.push(topic);
-    else rejected.push({ topic, reason: r.reason });
+    const normalized = normalizeBlogTopicIntent(topic, scheduleExam);
+    if (normalized.accepted) approved.push(topic);
+    else rejected.push({ topic, reason: normalized.reason ?? "rejected" });
   }
   return { approved, rejected };
 }

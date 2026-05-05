@@ -4,11 +4,25 @@ import { REVIEW_REQUIRED, TAXONOMY } from "@/lib/taxonomy/taxonomy";
 /**
  * Exam-bank / classifier buckets use taxonomy leaf ids; RN/PN/RPN hub rows use stable catalog ids.
  * Coalesce counts onto hub row ids so `applyCountsToBuilderCategories` fills the same rows the learner grid maps.
+ *
+ * IMPORTANT: keep this map aligned with `mapTaxonomyLeafToRnPnHubCategory` in lesson-taxonomy.ts and
+ * `TAXONOMY_LEAF_TO_CANONICAL` in normalize-study-category.ts so canonical category grids always reflect
+ * exam-bank counts, even when the Flashcard table is empty.
  */
 const CLASSIFIER_COUNT_KEY_TO_RN_PN_HUB_ROW_ID: Record<string, string> = {
+  // Clinical taxonomy → hub aliases
   renal_genitourinary: "renal_urinary",
   reproductive_obstetrics: "reproductive_maternal_newborn",
   immune_infectious: "infection_control",
+  // hematology_oncology, musculoskeletal, integumentary stay as-is:
+  // they resolve via `isTaxonomyLeafOrReview` → canonical mapping on the client.
+  // Pharmacology drug sub-leaves → collapsed hub row
+  cardiovascular_drugs: "pharmacology",
+  cns_drugs: "pharmacology",
+  endocrine_drugs: "pharmacology",
+  anti_infectives: "pharmacology",
+  pain_sedation: "pharmacology",
+  // Professional practice sub-leaves → collapsed hub row
   ethics: "professional_practice",
   legal_regulation: "professional_practice",
   documentation: "professional_practice",
@@ -16,12 +30,9 @@ const CLASSIFIER_COUNT_KEY_TO_RN_PN_HUB_ROW_ID: Record<string, string> = {
   scope_of_practice: "professional_practice",
   delegation_supervision: "professional_practice",
   leadership_management: "professional_practice",
-  patient_safety_quality: "professional_practice",
-  cardiovascular_drugs: "pharmacology",
-  cns_drugs: "pharmacology",
-  endocrine_drugs: "pharmacology",
-  anti_infectives: "pharmacology",
-  pain_sedation: "pharmacology",
+  // FIX: patient_safety_quality belongs in Safety & Prioritization, NOT Professional Practice.
+  patient_safety_quality: "fundamentals_safety",
+  // Exam-meta taxonomy → hub row
   test_taking: "exam_strategy",
   study_strategy: "exam_strategy",
 };

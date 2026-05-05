@@ -1,29 +1,7 @@
 import type { OsceStationFamily } from "@/lib/scenarios/osce-station-kinds";
+import type { OSCESkillStation } from "@/lib/scenarios/osce-station-types";
 
 export type OSCECategory = string;
-
-export type OSCESkillStation = {
-  id: string;
-  title: string;
-  category: string;
-  difficulty: string;
-  icon?: string;
-  description?: string;
-  scenarioIntro: string;
-  equipment?: string[];
-  steps: unknown[];
-  commonErrors?: string[];
-  passingCriteria?: string;
-  clinicalPearls?: string[];
-  examLevel?: string;
-  timeLimit?: string;
-  candidateInstructions?: string;
-  patientActorScript?: string;
-  examinerChecklist?: unknown[];
-  criticalFailCriteria?: string[];
-  examinerQuestions?: unknown[];
-  teachingPoints?: string[];
-};
 
 /** Legacy OSCE bundle imports are disabled for production build stability. */
 export const LEGACY_OSCE_SKILL_DATA_SOURCES = [] as const;

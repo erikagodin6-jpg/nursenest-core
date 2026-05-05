@@ -49,12 +49,13 @@ function runPrisma(args) {
 
 export function isPrismaGenerateCommand(command, argv = process.argv) {
   const commandString = argv.join(" ");
-  return command === "generate" || commandString.includes("generate");
+  return commandString.includes("generate");
 }
 
 export function isBuildSafePrismaGenerateContext({ command, argv = process.argv, env = process.env } = {}) {
+  void command;
   const commandString = argv.join(" ");
-  const isGenerate = command === "generate" || commandString.includes("generate");
+  const isGenerate = commandString.includes("generate");
   const isBuild = env.NN_APP_PLATFORM_BUILD === "true" || env.NN_LOW_MEMORY_BUILD === "1";
   const isBuildGenerate = isBuild && isGenerate;
   return isBuildGenerate;

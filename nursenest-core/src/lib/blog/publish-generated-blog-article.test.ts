@@ -150,8 +150,14 @@ function baseRow(overrides: Partial<BlogPostPrePublishRow> = {}): BlogPostPrePub
     outlineJson: [],
     faqBlock: {
       items: [
-        { q: "How should I review questions?", a: "Use rationales and spaced review, not only score-chasing." },
-        { q: "What internal links are safe?", a: "Use public hubs, questions, flashcards, or sign-up CTAs." },
+        {
+          q: "How should I review NCLEX questions?",
+          a: "Use each NCLEX rationale to name the missed cue, connect it to the nursing priority, and schedule spaced review instead of only tracking the score.",
+        },
+        {
+          q: "Which NurseNest links are safe for NCLEX study strategy articles?",
+          a: "Use public lesson hubs, practice questions, flashcards, and sign-up CTAs so the post supports NCLEX study strategy without exposing member-only lesson content.",
+        },
       ],
     },
     schemaSummary: JSON.stringify({ emitFaqSchema: false }),
@@ -244,6 +250,25 @@ describe("validateGeneratedBlogPublishEligibility", () => {
     const res = await validateGeneratedBlogPublishEligibility(row, row.id, options());
     assert.equal(res.ok, false);
     assert.ok(res.reasons.some((reason) => reason.includes("placeholder") || reason.includes("fake")));
+  });
+
+  it("blocks placeholder-style repeated section copy before publish", async () => {
+    const repeated =
+      "This section connects the clinical question to safe nursing action. It gives learners a clinically relevant way to think about the topic while keeping exam-aligned framing without overcomplicating the review.";
+    const row = baseRow({
+      body:
+        "<p>NCLEX-style question: a patient presents with a safety concern.</p>" +
+        `<h2>Pathophysiology</h2><p>${repeated}</p>` +
+        `<h2>Assessment priorities</h2><p>${repeated}</p>` +
+        `<h2>Nursing interventions</h2><p>${repeated}</p>` +
+        `<h2>Patient teaching</h2><p>${repeated}</p>` +
+        `<h2>NCLEX exam reasoning</h2><p>${repeated}</p>` +
+        longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 80) +
+        "<p>Want more practice? NurseNest members can review the related lesson, flashcards, and rationale-based questions.</p>",
+    });
+    const res = await validateGeneratedBlogPublishEligibility(row, row.id, options());
+    assert.equal(res.ok, false);
+    assert.ok(res.reasons.some((reason) => reason.includes("placeholder") || reason.includes("repeated")));
   });
 
   it("blocks when paywall-unsafe copy appears in the body", async () => {

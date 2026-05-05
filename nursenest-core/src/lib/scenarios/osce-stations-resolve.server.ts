@@ -15,7 +15,7 @@ import {
 import type { OsceStationPublicDto } from "@/lib/scenarios/osce-station-types";
 
 import type { LegacyOsceStationListItem } from "./legacy-osce-stations-runtime";
-import type { OSCESkillStation } from "@legacy-client/data/osce-skills-data";
+import type { OSCESkillStation } from "@/lib/scenarios/osce-station-types";
 
 export type OsceStationReadSource = "db" | "legacy" | "empty";
 

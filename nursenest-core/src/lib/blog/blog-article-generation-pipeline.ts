@@ -69,7 +69,7 @@ import {
   validateLongFormNursingPlanContract,
 } from "@/lib/blog/blog-longform-nursing-contract";
 import { validateBlogTitleForBodyGeneration } from "@/lib/blog/blog-content-quality-gate";
-import { validateBlogTopicForSeoArticleGeneration } from "@/lib/blog/blog-seo-topic-intent";
+import { normalizeBlogTopicIntent } from "@/lib/blog/blog-seo-topic-intent";
 import {
   enforceLongFormBodyQuality,
   mergeUniqueNeedsReviewFlags,
@@ -166,27 +166,42 @@ export async function runBlogArticleGenerationPipeline(
   input: ControlPanelGenerateInput,
   options: RunBlogArticlePipelineOptions = {},
 ): Promise<BlogArticlePipelineResult> {
+  const topicIntent = normalizeBlogTopicIntent(input.topic, input.exam);
+  if (!topicIntent.accepted) {
+    return {
+      ok: false,
+      stage: "plan",
+      error: `topic_intent_rejected: ${topicIntent.reason}`,
+      code: "TOPIC_INTENT_REJECTED",
+      repairPassesUsed: 0,
+    };
+  }
+  const effectiveInput: ControlPanelGenerateInput =
+    topicIntent.normalizedTopic === input.topic
+      ? input
+      : {
+          ...input,
+          topic: topicIntent.normalizedTopic,
+          targetKeyword: topicIntent.normalizedTopic,
+        };
+  console.info("[blog_topic_normalized]", {
+    rawTopic: input.topic,
+    normalizedTopic: effectiveInput.topic,
+    clinicalDomain: topicIntent.clinicalDomain,
+    bodySystem: topicIntent.bodySystem ?? null,
+    nclexCategory: topicIntent.nclexCategory ?? null,
+  });
+
   const persist = options.persist !== false;
   const idem = options.idempotencyKey;
   let repairPassesUsed = 0;
-  const pillar = isBlogSeoPillarDepthProfile({ template: input.template, intent: input.intent });
+  const pillar = isBlogSeoPillarDepthProfile({ template: effectiveInput.template, intent: effectiveInput.intent });
   const baseWordMin = pillar ? BLOG_ARTICLE_MIN_WORDS_PILLAR_PUBLISH : BLOG_ARTICLE_MIN_WORDS_STANDARD_PUBLISH;
   const override = options.substantiveWordMinOverride;
   const substantiveWordMin =
     typeof override === "number" && Number.isFinite(override) && override > BLOG_ARTICLE_METADATA_ONLY_REJECT_UNDER_WORDS
       ? Math.max(baseWordMin, Math.floor(override))
       : baseWordMin;
-
-  const topicGate = validateBlogTopicForSeoArticleGeneration(input.topic, input.exam);
-  if (!topicGate.ok) {
-    return {
-      ok: false,
-      stage: "plan",
-      error: `topic_intent_rejected: ${topicGate.reason}`,
-      code: "TOPIC_INTENT_REJECTED",
-      repairPassesUsed: 0,
-    };
-  }
 
   const reportStage = async (stage: string) => {
     await options.onProgressStage?.(stage);
@@ -202,7 +217,7 @@ export async function runBlogArticleGenerationPipeline(
           plan = planSeed;
           planSeed = null;
         } else {
-          plan = await fetchControlPanelPlan(input, { openAiUser: openAiUserTag(idem, "plan", repairPassesUsed) });
+          plan = await fetchControlPanelPlan(effectiveInput, { openAiUser: openAiUserTag(idem, "plan", repairPassesUsed) });
         }
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
@@ -213,14 +228,14 @@ export async function runBlogArticleGenerationPipeline(
       }
 
       const verifiedLessons = normalizePlanSuggestedLessonRows(
-        await annotateBlogInternalLinkRowsWithVerification(plan.suggestedInternalLessons, input.country),
+        await annotateBlogInternalLinkRowsWithVerification(plan.suggestedInternalLessons, effectiveInput.country),
       );
       plan = {
         ...plan,
         suggestedInternalLessons: verifiedLessons as BlogControlPanelPlan["suggestedInternalLessons"],
       };
 
-      const longCheck = validateLongFormNursingPlanContract(plan, { template: input.template, intent: input.intent });
+      const longCheck = validateLongFormNursingPlanContract(plan, { template: effectiveInput.template, intent: effectiveInput.intent });
       if (longCheck.ok) break;
 
       const synthetic = {
@@ -243,18 +258,18 @@ export async function runBlogArticleGenerationPipeline(
 
       plan = await repairPlanForLongformContractIssues({
         plan,
-        topic: input.topic,
-        exam: input.exam,
-        country: input.country,
-        template: input.template,
-        intent: input.intent,
-        funnelStage: input.funnelStage,
-        tone: input.tone,
-        keywords: input.keywords,
+        topic: effectiveInput.topic,
+        exam: effectiveInput.exam,
+        country: effectiveInput.country,
+        template: effectiveInput.template,
+        intent: effectiveInput.intent,
+        funnelStage: effectiveInput.funnelStage,
+        tone: effectiveInput.tone,
+        keywords: effectiveInput.keywords,
         issuesJoined: longCheck.issues.join(" "),
       });
       const reVerified = normalizePlanSuggestedLessonRows(
-        await annotateBlogInternalLinkRowsWithVerification(plan.suggestedInternalLessons, input.country),
+        await annotateBlogInternalLinkRowsWithVerification(plan.suggestedInternalLessons, effectiveInput.country),
       );
       plan = { ...plan, suggestedInternalLessons: reVerified as BlogControlPanelPlan["suggestedInternalLessons"] };
       repairPassesUsed += 1;
@@ -272,12 +287,12 @@ export async function runBlogArticleGenerationPipeline(
   try {
     const skipBodyLlm =
       typeof options.initialBodyHtml === "string" && options.initialBodyHtml.trim().length > 0;
-    if (!skipBodyLlm && isLongFormPathophysiologyProfile({ template: input.template, intent: input.intent })) {
+    if (!skipBodyLlm && isLongFormPathophysiologyProfile({ template: effectiveInput.template, intent: effectiveInput.intent })) {
       const pageTitle = (
         options.pageH1Override?.trim() ||
         plan.h1 ||
         plan.titleOptions[0] ||
-        input.topic
+        effectiveInput.topic
       ).trim();
       const tv = validateBlogTitleForBodyGeneration(pageTitle);
       if (!tv.ok) {
@@ -299,18 +314,18 @@ export async function runBlogArticleGenerationPipeline(
     } else {
       bodyHtml = await fetchControlPanelBodyHtml({
         plan,
-        topic: input.topic,
-        exam: input.exam,
-        country: input.country,
-        template: input.template,
-        intent: input.intent,
-        funnelStage: input.funnelStage,
-        tone: input.tone,
-        keywords: input.keywords,
+        topic: effectiveInput.topic,
+        exam: effectiveInput.exam,
+        country: effectiveInput.country,
+        template: effectiveInput.template,
+        intent: effectiveInput.intent,
+        funnelStage: effectiveInput.funnelStage,
+        tone: effectiveInput.tone,
+        keywords: effectiveInput.keywords,
         selectedTitle: options.pageH1Override,
         openAiUser: openAiUserTag(idem, "body", repairPassesUsed),
-        includeClinicalPearls: input.includeClinicalPearlsInBody,
-        includeFaqsInBody: input.includeFaqsInBody,
+        includeClinicalPearls: effectiveInput.includeClinicalPearlsInBody,
+        includeFaqsInBody: effectiveInput.includeFaqsInBody,
       });
     }
   } catch (e) {
@@ -344,8 +359,8 @@ export async function runBlogArticleGenerationPipeline(
     const longformBody = enforceLongFormBodyQuality({
       plan,
       bodyHtml,
-      template: input.template,
-      intent: input.intent,
+      template: effectiveInput.template,
+      intent: effectiveInput.intent,
     });
     if (!longformBody.ok) {
       validationMessages.push(...longformBody.errors);
@@ -380,14 +395,14 @@ export async function runBlogArticleGenerationPipeline(
     try {
       bodyHtml = await repairControlPanelArticleBodyHtml({
         plan,
-        topic: input.topic,
-        exam: input.exam,
-        country: input.country,
-        template: input.template,
-        intent: input.intent,
-        funnelStage: input.funnelStage,
-        tone: input.tone,
-        keywords: input.keywords,
+        topic: effectiveInput.topic,
+        exam: effectiveInput.exam,
+        country: effectiveInput.country,
+        template: effectiveInput.template,
+        intent: effectiveInput.intent,
+        funnelStage: effectiveInput.funnelStage,
+        tone: effectiveInput.tone,
+        keywords: effectiveInput.keywords,
         selectedTitle: options.pageH1Override,
         currentHtml: bodyHtml,
         validationMessages,
@@ -403,8 +418,8 @@ export async function runBlogArticleGenerationPipeline(
     const longformAfter = enforceLongFormBodyQuality({
       plan,
       bodyHtml,
-      template: input.template,
-      intent: input.intent,
+      template: effectiveInput.template,
+      intent: effectiveInput.intent,
     });
     if (longformAfter.flags.length > 0) {
       plan = mergeUniqueNeedsReviewFlags(plan, longformAfter.flags);
@@ -417,7 +432,7 @@ export async function runBlogArticleGenerationPipeline(
 
   while (true) {
     try {
-      const persistResult = await persistControlPanelDraft(input, plan, bodyHtml, {
+      const persistResult = await persistControlPanelDraft(effectiveInput, plan, bodyHtml, {
         onPersistStage: async (s) => {
           await reportStage(s);
         },
@@ -484,14 +499,14 @@ export async function runBlogArticleGenerationPipeline(
           }
           const repairedPlan = await repairBlogPlanHeadlinesForSeoDistinctness({
             plan,
-            topic: input.topic,
-            exam: input.exam,
-            country: input.country,
-            template: input.template,
-            intent: input.intent,
-            funnelStage: input.funnelStage,
-            tone: input.tone,
-            keywords: input.keywords,
+            topic: effectiveInput.topic,
+            exam: effectiveInput.exam,
+            country: effectiveInput.country,
+            template: effectiveInput.template,
+            intent: effectiveInput.intent,
+            funnelStage: effectiveInput.funnelStage,
+            tone: effectiveInput.tone,
+            keywords: effectiveInput.keywords,
             blockedReason: persistResult.error,
             openAiUser: openAiUserTag(idem, "repair-seo", repairPassesUsed),
           });
@@ -508,7 +523,7 @@ export async function runBlogArticleGenerationPipeline(
           }
           plan = repairedPlan;
           const reVerified = normalizePlanSuggestedLessonRows(
-            await annotateBlogInternalLinkRowsWithVerification(plan.suggestedInternalLessons, input.country),
+            await annotateBlogInternalLinkRowsWithVerification(plan.suggestedInternalLessons, effectiveInput.country),
           );
           plan = { ...plan, suggestedInternalLessons: reVerified as BlogControlPanelPlan["suggestedInternalLessons"] };
           repairPassesUsed += 1;
@@ -517,18 +532,18 @@ export async function runBlogArticleGenerationPipeline(
           try {
             bodyHtml = await fetchControlPanelBodyHtml({
               plan,
-              topic: input.topic,
-              exam: input.exam,
-              country: input.country,
-              template: input.template,
-              intent: input.intent,
-              funnelStage: input.funnelStage,
-              tone: input.tone,
-              keywords: input.keywords,
+              topic: effectiveInput.topic,
+              exam: effectiveInput.exam,
+              country: effectiveInput.country,
+              template: effectiveInput.template,
+              intent: effectiveInput.intent,
+              funnelStage: effectiveInput.funnelStage,
+              tone: effectiveInput.tone,
+              keywords: effectiveInput.keywords,
               selectedTitle: plan.h1,
               openAiUser: openAiUserTag(idem, "body-after-seo", repairPassesUsed),
-              includeClinicalPearls: input.includeClinicalPearlsInBody,
-              includeFaqsInBody: input.includeFaqsInBody,
+              includeClinicalPearls: effectiveInput.includeClinicalPearlsInBody,
+              includeFaqsInBody: effectiveInput.includeFaqsInBody,
             });
           } catch (e) {
             const msg = e instanceof Error ? e.message : String(e);
@@ -543,14 +558,14 @@ export async function runBlogArticleGenerationPipeline(
               await reportStage("repairing_body");
               bodyHtml = await repairControlPanelArticleBodyHtml({
                 plan,
-                topic: input.topic,
-                exam: input.exam,
-                country: input.country,
-                template: input.template,
-                intent: input.intent,
-                funnelStage: input.funnelStage,
-                tone: input.tone,
-                keywords: input.keywords,
+                topic: effectiveInput.topic,
+                exam: effectiveInput.exam,
+                country: effectiveInput.country,
+                template: effectiveInput.template,
+                intent: effectiveInput.intent,
+                funnelStage: effectiveInput.funnelStage,
+                tone: effectiveInput.tone,
+                keywords: effectiveInput.keywords,
                 selectedTitle: plan.h1,
                 currentHtml: bodyHtml,
                 validationMessages: msgs,
@@ -566,8 +581,8 @@ export async function runBlogArticleGenerationPipeline(
           const lf = enforceLongFormBodyQuality({
             plan,
             bodyHtml,
-            template: input.template,
-            intent: input.intent,
+            template: effectiveInput.template,
+            intent: effectiveInput.intent,
           });
           if (!lf.ok) {
             return {

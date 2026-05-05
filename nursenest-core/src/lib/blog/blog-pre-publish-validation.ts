@@ -23,6 +23,7 @@ import {
   blogIntentForQualityGate,
   collectBlogContentQualityIssues,
 } from "@/lib/blog/blog-content-quality-gate";
+import { validateBlogPublishQuality } from "@/lib/blog/blog-publish-quality-validator";
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -56,7 +57,8 @@ export type PrePublishCheckId =
   | "schema_contract_notes"
   | "faq_content_when_required"
   | "apa_verification_gating"
-  | "blog_content_quality_gate";
+  | "blog_content_quality_gate"
+  | "blog_publish_quality_gate";
 
 export type PrePublishSeverity = "block" | "warn";
 
@@ -610,6 +612,24 @@ export async function validateBlogPrePublish(
   })) {
     push(issues, {
       id: "blog_content_quality_gate",
+      severity: q.severity,
+      message: q.message,
+      fix: q.fix,
+    });
+  }
+
+  for (const q of validateBlogPublishQuality({
+    title: row.title,
+    body: row.body,
+    targetKeyword: row.targetKeyword,
+    category: row.category,
+    tags: row.tags,
+    faqBlock: row.faqBlock,
+    apaReferences: row.apaReferences,
+    sourcesJson: row.sourcesJson,
+  }).issues) {
+    push(issues, {
+      id: "blog_publish_quality_gate",
       severity: q.severity,
       message: q.message,
       fix: q.fix,

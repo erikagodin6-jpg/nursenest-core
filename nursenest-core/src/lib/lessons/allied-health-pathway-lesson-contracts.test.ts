@@ -68,6 +68,12 @@ describe("Allied health — bundled catalog + URL contracts", () => {
     }
   });
 
+  it("uses an explicit allied profession catalog manifest instead of dynamic shard imports", () => {
+    const src = readFileSync(join(coreRoot, "src", "lib", "lessons", "pathway-lesson-catalog-sync.ts"), "utf8");
+    assert.doesNotMatch(src, /allied-professions\/\$\{file\}/);
+    assert.match(src, /ALLIED_PROFESSION_DEDICATED_CATALOGS/);
+  });
+
   it("getLessonBySlug matches normalizeLesson(getCatalogLessonRawBySlug) for a sample US allied slug", () => {
     const pathwayId = "us-allied-core";
     const slug = getCatalogPathwayLessonsSync(pathwayId)[0]?.slug;

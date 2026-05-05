@@ -1,0 +1,269 @@
+#!/usr/bin/env tsx
+/**
+ * nursenest-core/scripts/audit-flashcard-pools.ts
+ *
+ * Audits flashcard pool data for all active pathways and reports:
+ * - pathwayId / tier / exam
+ * - total ExamQuestion count (all published)
+ * - usable flashcard-derived count (excl. ECG/video, requires stem + correct_answer)
+ * - count by raw topic/body_system category
+ * - categories returning zero
+ * - whether Flashcard table is empty
+ * - suspected reason for zero pools
+ *
+ * Usage (from nursenest-core/ directory):
+ *   npx tsx scripts/audit-flashcard-pools.ts
+ *   npx tsx scripts/audit-flashcard-pools.ts --pathway ca-rn-nclex-rn
+ *   npx tsx scripts/audit-flashcard-pools.ts --verbose
+ */
+
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+const AUDIT_PATHWAYS = [
+  { pathwayId: "ca-rn-nclex-rn",   tier: "RN",     examKeys: ["NCLEX-RN", "NCLEX_RN"],           region: "CA" },
+  { pathwayId: "us-rn-nclex-rn",   tier: "RN",     examKeys: ["NCLEX-RN", "NCLEX_RN"],           region: "US" },
+  { pathwayId: "ca-rpn-rex-pn",    tier: "RPN",    examKeys: ["NCLEX-PN", "REx-PN", "REX-PN"],   region: "CA" },
+  { pathwayId: "us-lpn-nclex-pn",  tier: "LVN/LPN",examKeys: ["NCLEX-PN", "NCLEX_PN"],           region: "US" },
+  { pathwayId: "us-np-fnp",        tier: "NP",     examKeys: ["NP", "FNP", "NP-FNP"],            region: "US" },
+  { pathwayId: "ca-np-cnple",      tier: "NP",     examKeys: ["NP", "CNPLE", "CAN-NP"],          region: "CA" },
+];
+
+const VERBOSE = process.argv.includes("--verbose");
+const PATHWAY_FILTER = (() => {
+  const idx = process.argv.indexOf("--pathway");
+  return idx !== -1 ? process.argv[idx + 1] : null;
+})();
+
+type CountRow   = { n: bigint };
+type CatRow     = { grp_value: string; cnt: bigint };
+type ExamDbRow  = { exam_val: string; tier_val: string; cnt: bigint };
+
+type AuditResult =
+  | { ok: true;  pathwayId: string; totalPublished: number; usableTotal: number; scopedTotal: number; flashcardTableCount: number; categoryCount: number; reason: string }
+  | { ok: false; pathwayId: string; reason: string };
+
+function fmt(n: number | bigint): string {
+  return Number(n).toLocaleString();
+}
+
+function inferReason(p: {
+  totalPublished: number;
+  usableTotal: number;
+  scopedTotal: number;
+  flashcardTableCount: number;
+  zeroCategoryCount: number;
+  totalCategoryCount: number;
+}): string {
+  if (p.totalPublished === 0) return "NO_PUBLISHED_EXAM_QUESTIONS_IN_DB";
+  if (p.usableTotal === 0)    return "ALL_QUESTIONS_ECG_VIDEO_OR_MISSING_STEM_ANSWER";
+  if (p.scopedTotal === 0)    return "EXAM_KEY_OR_TIER_MISMATCH_SCOPE_FILTERS_ALL_OUT";
+  if (p.zeroCategoryCount > 0 && p.zeroCategoryCount === p.totalCategoryCount) return "CATEGORY_MAPPING_ALL_FAILED";
+  if (p.zeroCategoryCount > 0) return "SOME_CATEGORIES_UNRESOLVED_CHECK_TOPIC_BODY_SYSTEM";
+  if (p.flashcardTableCount === 0 && p.scopedTotal > 0) return "FLASHCARD_TABLE_EMPTY_BUT_EXAM_QUESTIONS_EXIST_OK";
+  return "OK";
+}
+
+async function auditOne(pw: typeof AUDIT_PATHWAYS[number]): Promise<AuditResult> {
+  const { pathwayId, tier, examKeys, region } = pw;
+
+  console.log(`\n${"═".repeat(68)}`);
+  console.log(`  PATHWAY : ${pathwayId}`);
+  console.log(`  Tier    : ${tier}  |  Exam Keys : ${examKeys.join(", ")}  |  Region : ${region}`);
+  console.log("═".repeat(68));
+
+  // 1. All published
+  const [totalRow] = await prisma.$queryRaw<CountRow[]>`
+    SELECT COUNT(*)::bigint AS n FROM exam_questions WHERE status = 'PUBLISHED'
+  `;
+  const totalPublished = Number(totalRow?.n ?? 0);
+  console.log(`  All published questions               : ${fmt(totalPublished)}`);
+
+  // 2. Usable (no ECG/video, has stem + correct_answer)
+  const [usableRow] = await prisma.$queryRaw<CountRow[]>`
+    SELECT COUNT(*)::bigint AS n FROM exam_questions
+    WHERE status = 'PUBLISHED'
+      AND coalesce(trim(stem), '') <> ''
+      AND correct_answer IS NOT NULL
+      AND (question_format IS NULL
+           OR lower(trim(question_format))
+              NOT IN ('ecg','ekg','video','video_case','media','image_only'))
+  `;
+  const usableTotal = Number(usableRow?.n ?? 0);
+  console.log(`  Usable for flashcards                : ${fmt(usableTotal)}`);
+  console.log(`  Excluded (ECG/video/no-stem/no-ans)  : ${fmt(totalPublished - usableTotal)}`);
+
+  // 3. Scoped by exam keys (case-insensitive lower comparison)
+  const examLower = examKeys.map((k) => k.toLowerCase());
+  // Build a literal IN list — safe because examLower is a static const array of known strings
+  const examInSql = examLower.map(() => "?").join(", ");
+  void examInSql; // constructed above for docs — use Prisma.sql for actual query below
+  const { Prisma } = await import("@prisma/client");
+  const scopedRow = await prisma.$queryRaw<CountRow[]>(
+    Prisma.sql`
+      SELECT COUNT(*)::bigint AS n FROM exam_questions
+      WHERE status = 'PUBLISHED'
+        AND coalesce(trim(stem), '') <> ''
+        AND correct_answer IS NOT NULL
+        AND (question_format IS NULL
+             OR lower(trim(question_format))
+                NOT IN ('ecg','ekg','video','video_case','media','image_only'))
+        AND lower(coalesce(exam, '')) IN (${Prisma.join(examLower)})
+    `,
+  );
+  const scopedTotal = Number(scopedRow[0]?.n ?? 0);
+  console.log(`  Scoped by exam keys (case-ins.)      : ${fmt(scopedTotal)}`);
+
+  // 4. Exam-key distribution in DB
+  const examDbRows = await prisma.$queryRaw<ExamDbRow[]>`
+    SELECT
+      lower(coalesce(exam,  '(null)')) AS exam_val,
+      lower(coalesce(tier,  '(null)')) AS tier_val,
+      COUNT(*)::bigint                 AS cnt
+    FROM exam_questions
+    WHERE status = 'PUBLISHED'
+    GROUP BY 1, 2
+    ORDER BY cnt DESC
+    LIMIT 20
+  `;
+
+  if (VERBOSE) {
+    console.log(`\n  Exam/tier distribution in DB (top 20):`);
+    for (const r of examDbRows) {
+      console.log(`    exam=${String(r.exam_val).padEnd(20)} tier=${String(r.tier_val).padEnd(12)} count=${fmt(r.cnt)}`);
+    }
+  }
+
+  const matched = examDbRows.filter((r) => examLower.includes(r.exam_val));
+  if (matched.length === 0 && scopedTotal === 0 && totalPublished > 0) {
+    console.log(`\n  ⚠️  NO DB ROWS MATCH contentExamKeys — exam key mismatch!`);
+    console.log(`     Expected (lowercase) : ${examLower.join(", ")}`);
+    const found = [...new Set(examDbRows.map((r) => r.exam_val))].slice(0, 8).join(", ");
+    console.log(`     Found in DB          : ${found || "(none)"}`);
+    console.log(`     FALLBACK ACTIVE      : flashcard hub will skip exam scope and use entitlement WHERE only.`);
+    console.log(`     PERMANENT FIX        : re-seed ExamQuestion rows with exam matching one of the exam keys above.`);
+  }
+
+  // 5. Category breakdown
+  const catRows = await prisma.$queryRaw<CatRow[]>`
+    SELECT
+      coalesce(nullif(trim(topic), ''), nullif(trim(body_system), ''), 'Uncategorized') AS grp_value,
+      COUNT(*)::bigint AS cnt
+    FROM exam_questions
+    WHERE status = 'PUBLISHED'
+      AND coalesce(trim(stem), '') <> ''
+      AND correct_answer IS NOT NULL
+      AND (question_format IS NULL
+           OR lower(trim(question_format))
+              NOT IN ('ecg','ekg','video','video_case','media','image_only'))
+    GROUP BY 1
+    ORDER BY cnt DESC
+    LIMIT 50
+  `;
+
+  console.log(`\n  Category breakdown (top 50, by usable count):`);
+  let withCount = 0;
+  let zeroCount = 0;
+  for (const r of catRows) {
+    const n = Number(r.cnt);
+    if (n > 0) withCount++;
+    else zeroCount++;
+    if (VERBOSE || n > 0) {
+      console.log(`    ${String(r.grp_value).padEnd(44)} ${fmt(n).padStart(6)}`);
+    }
+  }
+  console.log(`  Categories with count > 0  : ${withCount}`);
+  if (zeroCount > 0) console.log(`  Categories with count = 0  : ${zeroCount}`);
+
+  // 6. Flashcard table
+  let flashcardTableCount = 0;
+  try {
+    const [fcRow] = await prisma.$queryRaw<CountRow[]>`SELECT COUNT(*)::bigint AS n FROM flashcards`;
+    flashcardTableCount = Number(fcRow?.n ?? 0);
+  } catch {
+    flashcardTableCount = -1;
+  }
+  const fcDisplay = flashcardTableCount === -1 ? "TABLE NOT FOUND" : fmt(flashcardTableCount);
+  console.log(`\n  Flashcard table rows (all pathways) : ${fcDisplay}`);
+
+  // 7. Diagnosis
+  const reason = inferReason({
+    totalPublished,
+    usableTotal,
+    scopedTotal,
+    flashcardTableCount: Math.max(flashcardTableCount, 0),
+    zeroCategoryCount: zeroCount,
+    totalCategoryCount: catRows.length,
+  });
+  const icon = reason === "OK" || reason.endsWith("_OK") ? "✅" : "❌";
+  console.log(`\n  ${icon}  Diagnosis : ${reason}`);
+
+  return {
+    ok: true,
+    pathwayId,
+    totalPublished,
+    usableTotal,
+    scopedTotal,
+    flashcardTableCount: Math.max(flashcardTableCount, 0),
+    categoryCount: withCount,
+    reason,
+  };
+}
+
+async function main() {
+  console.log("╔══════════════════════════════════════════════════════════════════════╗");
+  console.log("║         NurseNest — Flashcard Pool Audit                            ║");
+  console.log("╚══════════════════════════════════════════════════════════════════════╝");
+  console.log(`  ${new Date().toISOString()}`);
+  if (PATHWAY_FILTER) console.log(`  Filter  : ${PATHWAY_FILTER}`);
+  if (VERBOSE)        console.log(`  Verbose : ON`);
+
+  const targets = PATHWAY_FILTER
+    ? AUDIT_PATHWAYS.filter((p) => p.pathwayId === PATHWAY_FILTER)
+    : AUDIT_PATHWAYS;
+
+  if (targets.length === 0) {
+    console.error(`\n  ERROR: No pathway matching "${PATHWAY_FILTER}"`);
+    console.error(`  Valid : ${AUDIT_PATHWAYS.map((p) => p.pathwayId).join(", ")}`);
+    process.exit(1);
+  }
+
+  const results: AuditResult[] = [];
+  for (const entry of targets) {
+    try {
+      results.push(await auditOne(entry));
+    } catch (err) {
+      console.error(`\n  ERROR auditing ${entry.pathwayId}:`, err);
+      results.push({ ok: false, pathwayId: entry.pathwayId, reason: "AUDIT_ERROR" });
+    }
+  }
+
+  console.log(`\n${"═".repeat(68)}`);
+  console.log("  SUMMARY");
+  console.log("═".repeat(68));
+  for (const r of results) {
+    const icon = r.reason === "OK" || r.reason.endsWith("_OK") ? "✅" : "❌";
+    if (r.ok) {
+      console.log(
+        `  ${icon} ${r.pathwayId.padEnd(28)}` +
+        `  usable=${fmt(r.usableTotal).padStart(6)}` +
+        `  scoped=${fmt(r.scopedTotal).padStart(6)}` +
+        `  ${r.reason}`,
+      );
+    } else {
+      console.log(`  ❌ ${r.pathwayId.padEnd(28)}  ${r.reason}`);
+    }
+  }
+
+  const hasIssues = results.some((r) => r.reason !== "OK" && !r.reason.endsWith("_OK"));
+  if (hasIssues) {
+    console.log(`\n  ❌  Action required — review individual pathway reports above.`);
+    process.exit(1);
+  }
+  console.log(`\n  ✅  All audited pathways have usable flashcard question pools.`);
+}
+
+main()
+  .catch((err) => { console.error(err); process.exit(1); })
+  .finally(() => prisma.$disconnect());

@@ -13,7 +13,7 @@ import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { BLOG_TEMPLATE_TITLE_PATTERNS } from "@/lib/blog/blog-template-copy";
 import { buildApa7References, type BlogSourceRecord, validateSources } from "@/lib/blog/apa7";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import { validateBlogTopicForSeoArticleGeneration } from "@/lib/blog/blog-seo-topic-intent";
+import { normalizeBlogTopicIntent } from "@/lib/blog/blog-seo-topic-intent";
 import type { BlogLessonLinkRow } from "@/lib/blog/blog-control-panel-schema";
 import { fetchSimpleDraftStudyLinks } from "@/lib/blog/blog-simple-draft-study-links";
 import { blogPrimaryStudyCta } from "@/lib/blog/blog-study-cta";
@@ -146,36 +146,44 @@ function resolvePostStatusForPublishAt(publishAt: Date | undefined, now: Date): 
  * Enforces slug + canonical intent dedupe via {@link findExistingBlogByCanonicalIntent}.
  */
 export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<GenerateBlogAiDraftResult> {
-  const topicGate = validateBlogTopicForSeoArticleGeneration(d.topic, d.exam);
-  if (!topicGate.ok) {
+  const topicIntent = normalizeBlogTopicIntent(d.topic, d.exam);
+  if (!topicIntent.accepted) {
     return {
       ok: false,
-      error: `topic_intent_rejected: ${topicGate.reason}`,
+      error: `topic_intent_rejected: ${topicIntent.reason}`,
       stage: "plan",
       code: "TOPIC_INTENT_REJECTED",
     };
   }
+  const effectiveTopic = topicIntent.normalizedTopic;
+  console.info("[blog_topic_normalized]", {
+    rawTopic: d.topic,
+    normalizedTopic: effectiveTopic,
+    clinicalDomain: topicIntent.clinicalDomain,
+    bodySystem: topicIntent.bodySystem ?? null,
+    nclexCategory: topicIntent.nclexCategory ?? null,
+  });
 
   const prepared = await prepareAdminBlogGenerationInput({
-    rawTitle: d.topic,
+    rawTitle: effectiveTopic,
     exam: d.exam,
-    targetKeyword: d.targetKeyword ?? d.topic,
+    targetKeyword: effectiveTopic,
     fixedSlug: d.slug,
     publishMode: d.publishAt ? "schedule" : "draft",
     scheduledAt: d.publishAt,
   });
-  const normalizedTopic = prepared.normalizedTopic || normalizeBlogTopicKey(d.targetKeyword ?? d.topic);
+  const normalizedTopic = prepared.normalizedTopic || normalizeBlogTopicKey(effectiveTopic);
   const now = new Date();
 
   const titleFn = BLOG_TEMPLATE_TITLE_PATTERNS[d.template];
-  const templateTitle = titleFn({ exam: d.exam, topic: d.topic });
+  const templateTitle = titleFn({ exam: d.exam, topic: effectiveTopic });
   const countryTargetResolved =
     d.countryTarget ??
     (d.country === "CA" ? CountryCode.CA : d.country === "US" ? CountryCode.US : null);
 
   const classified = classifyStrings({
     title: templateTitle,
-    content: `${d.topic}\n${d.keywords ?? ""}\n${d.keywordCluster ?? ""}`,
+    content: `${effectiveTopic}\n${d.keywords ?? ""}\n${d.keywordCluster ?? ""}`,
   });
   let taxonomyCategory = classified.category;
   if (taxonomyCategory === REVIEW_REQUIRED) {
@@ -185,7 +193,7 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
   const tier = mapExamStringToSeoTier(d.exam);
   const kwList = d.keywords
     ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean)
-    : [d.targetKeyword ?? d.topic].filter(Boolean);
+    : [effectiveTopic].filter(Boolean);
   const taxonomySeo = generateSeo({
     title: templateTitle,
     category: taxonomyCategory,
@@ -204,7 +212,7 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
   const explicit = explicitRaw ? coerceAdminOptionalSlugFromRawInput(prepared.uniqueSlug) : null;
   const base = explicit ?? prepared.uniqueSlug ?? taxonomySeo.slug;
   if (!explicit) {
-    console.info("[blog] slug auto-generated", { base, topic: d.topic, exam: d.exam });
+    console.info("[blog] slug auto-generated", { base, topic: effectiveTopic, exam: d.exam });
   }
   const slug = explicit
     ? await ensureUniqueBlogPostSlug(base)
@@ -224,7 +232,7 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
         return { ok: false, error: msg, repairPassesUsed: seoRepairPasses, stage: "seo_title", code: "SEO_DUPLICATE_BLOCKED" };
       }
       const repaired = await repairSimpleAiDraftHeadlines({
-        topic: d.topic,
+        topic: effectiveTopic,
         exam: d.exam,
         template: d.template,
         country: d.country,
@@ -247,7 +255,7 @@ export async function generateBlogAiDraft(d: GenerateBlogAiDraftInput): Promise<
 
   const autoSeo = generateBlogSEO({
     title: templateTitle,
-    topic: d.topic,
+    topic: effectiveTopic,
     exam: normalizeExamForBlogSeo(d.exam),
     country: normalizeCountryForBlogSeo(countryTargetResolved),
     existingSlug: slug,
@@ -282,9 +290,9 @@ Intent: ${d.intent ?? "EXAM_PREP"}
 Funnel stage: ${d.funnelStage ?? "CONSIDERATION"}
 Exam focus: ${d.exam}
 ${d.country && d.country !== "unspecified" ? `Country context: ${d.country}` : ""}
-Topic: ${d.topic}
+Topic: ${effectiveTopic}
 ${d.keywords ? `Keywords / phrases: ${d.keywords}` : ""}
-${d.targetKeyword ? `Primary target keyword: ${d.targetKeyword}` : ""}
+Primary target keyword: ${effectiveTopic}
 ${d.keywordCluster ? `Keyword cluster: ${d.keywordCluster}` : ""}
 Tone: ${d.tone ?? "professional"}
 
@@ -339,10 +347,10 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
   let studyRelatedPaths: string[] = [];
   try {
     const study = await fetchSimpleDraftStudyLinks({
-      topic: d.topic,
+      topic: effectiveTopic,
       exam: d.exam,
       country: countryForLinks,
-      targetKeyword: d.targetKeyword,
+      targetKeyword: effectiveTopic,
       keywords: d.keywords,
       bodyPreview: bodyHtml,
     });
@@ -365,14 +373,14 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
     bodyRepairPasses += 1;
     try {
       const expandedMain = await repairSimpleAiDraftBodyHtml({
-        topic: d.topic,
+        topic: effectiveTopic,
         exam: d.exam,
         template: d.template,
         intent: d.intent,
         funnelStage: d.funnelStage,
         country: d.country,
         keywords: d.keywords,
-        targetKeyword: d.targetKeyword,
+        targetKeyword: effectiveTopic,
         keywordCluster: d.keywordCluster,
         tone: d.tone,
         currentHtml: bodyHtml,
@@ -406,8 +414,8 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
   if (excerpt.length < 80) {
     excerpt = `${autoSeo.intro} ${excerpt}`.replace(/\s+/g, " ").trim().slice(0, 480);
   }
-  const primaryKw = (d.targetKeyword ?? d.topic).trim().slice(0, 160);
-  const fallbackTopicTag = normalizeBlogTopicKey(d.targetKeyword ?? d.topic)?.replace(/-/g, " ") ?? d.topic;
+  const primaryKw = effectiveTopic.trim().slice(0, 160);
+  const fallbackTopicTag = normalizeBlogTopicKey(effectiveTopic)?.replace(/-/g, " ") ?? effectiveTopic;
   const tags = normalizeBlogTagsForStorage(
     d.keywords ? d.keywords.split(",").map((s) => s.trim()).filter(Boolean) : [d.exam, fallbackTopicTag],
     [d.exam, primaryKw],
@@ -429,7 +437,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
   const sourceCheck = validateSources(sources);
   const outline = buildOutline({
     title,
-    targetKeyword: d.targetKeyword ?? d.topic,
+    targetKeyword: effectiveTopic,
     intent: d.intent ?? BlogPostIntent.EXAM_PREP,
     template: d.template,
   });
@@ -441,7 +449,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
     funnel: d.funnelStage,
     template: d.template,
   });
-  const riskFlags = detectRiskFlags({ template: d.template, keyword: d.targetKeyword ?? d.topic });
+  const riskFlags = detectRiskFlags({ template: d.template, keyword: effectiveTopic });
   const thinWarning = thinDraftWarning(bodyWithStudy);
   const workflowStatusBase =
     !seoDescription || !title ? BlogWorkflowStatus.NEEDS_METADATA :
@@ -487,7 +495,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
         excerpt: excerpt.length >= 10 ? excerpt : `${title.slice(0, 200)}. Draft excerpt; edit before publish.`,
         body: bodyWithStudy,
         exam: d.exam,
-        targetKeyword: primaryKw || normalizedTopic || (d.targetKeyword ?? d.topic),
+        targetKeyword: primaryKw || normalizedTopic || effectiveTopic,
         keywordCluster: d.keywordCluster ?? null,
         category: categoryAssigned,
         countryTarget: countryTargetResolved,
@@ -525,7 +533,7 @@ Title (for context only, do not repeat as H1 in body): ${title}`;
         sourceReliabilityScore: sourceCheck.reliabilityScore,
         medicalRiskFlags: riskFlags,
         imageStatus: d.includeImage ? (d.includeAiImage ? BlogImageStatus.REQUESTED : BlogImageStatus.NONE) : BlogImageStatus.NONE,
-        coverImagePrompt: d.includeAiImage ? `Educational nursing blog hero image about ${d.topic}. Focus keyword: ${d.targetKeyword ?? d.topic}.` : null,
+        coverImagePrompt: d.includeAiImage ? `Educational nursing blog hero image about ${effectiveTopic}. Focus keyword: ${effectiveTopic}.` : null,
         shortSummary: excerpt.slice(0, 220),
         socialCaption: `${title}. ${excerpt.slice(0, 120)}...`,
         promoBlurb: cta.text,

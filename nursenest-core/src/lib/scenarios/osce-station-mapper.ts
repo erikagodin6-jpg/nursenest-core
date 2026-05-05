@@ -1,8 +1,7 @@
 import type { Prisma } from "@prisma/client";
-import type { OSCESkillStation } from "@legacy-client/data/osce-skills-data";
 import type { OsceStation } from "@prisma/client";
 
-import type { OsceStationExtensionsV1, OsceStationPublicDto } from "./osce-station-types";
+import type { OSCESkillStation, OsceStationExtensionsV1, OsceStationPublicDto } from "./osce-station-types";
 import { osceStepsFromJson } from "./osce-station-types";
 
 function asExtensions(raw: unknown): OsceStationExtensionsV1 {

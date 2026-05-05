@@ -1,4 +1,4 @@
-import type { OSCESkillStation } from "@legacy-client/data/osce-skills-data";
+import type { OSCESkillStation } from "@/lib/scenarios/osce-station-types";
 import { OsceChecklist } from "@/components/scenarios/OsceChecklist";
 import { ScenarioRationalePanel } from "@/components/scenarios/ScenarioRationalePanel";
 

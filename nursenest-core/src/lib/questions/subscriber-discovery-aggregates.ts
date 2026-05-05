@@ -50,6 +50,33 @@ export function discoveryExamContextScopeSql(ctx: GlobalExamContext | null): Pri
   `;
 }
 
+/**
+ * Like {@link discoveryExamContextScopeSql} but returns `Prisma.empty` (no filter) rather than `AND FALSE`
+ * when the exam context has no content keys — used by the flashcard hub fallback so that pathways with
+ * empty `contentExamKeys` (e.g., international shells) can still see available exam questions rather
+ * than always showing zero. Returns `{ sql, hasScope }` so callers know whether a scope was applied.
+ *
+ * Use in flashcard-specific paths only — do NOT replace the main `discoveryExamContextScopeSql` call
+ * in practice/CAT routes, which intentionally short-circuit with AND FALSE for unregistered keys.
+ */
+export function discoveryExamContextScopeForFlashcardFallback(ctx: GlobalExamContext | null): {
+  sql: Prisma.Sql;
+  /** True when non-empty examIn + tierMatches produced an active WHERE fragment. */
+  hasScopeFilter: boolean;
+} {
+  if (!ctx) return { sql: Prisma.empty, hasScopeFilter: false };
+  const scoped = examQuestionPoolWhereForContext(ctx);
+  if (scoped.examIn.length === 0 || scoped.tierMatches.length === 0) {
+    // No content keys configured — skip exam scope entirely (let entitlement WHERE do the scoping).
+    return { sql: Prisma.empty, hasScopeFilter: false };
+  }
+  const sql = Prisma.sql`
+    AND exam IN (${Prisma.join(scoped.examIn)})
+    AND lower(coalesce(tier, '')) IN (${Prisma.join(scoped.tierMatches.map((t) => t.toLowerCase()))})
+  `;
+  return { sql, hasScopeFilter: true };
+}
+
 export async function loadSubscriberDiscoveryAggregates(
   entitlement: AccessScope,
   examContext: GlobalExamContext | null = null,

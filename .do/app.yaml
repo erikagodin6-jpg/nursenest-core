@@ -9,7 +9,7 @@ services:
     # Use Dockerfile build (not a buildpack slug — environment_slug is for node-js, go, etc.)
     dockerfile_path: Dockerfile
     source_dir: /
-    run_command: node scripts/start-production.mjs
+    run_command: node scripts/start-standalone.mjs
     http_port: 8080
     internal_ports:
       - 8080

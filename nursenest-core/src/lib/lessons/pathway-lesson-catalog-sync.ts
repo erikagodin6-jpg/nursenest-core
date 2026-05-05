@@ -67,6 +67,7 @@ import { applyNewGradStructuralCompletion } from "@/lib/lessons/new-grad-pathway
 import { applyNpPremiumStructuralCompletion } from "@/lib/lessons/np-pathway-lesson-structural-normalization";
 import { prependScopedGoldCatalogLessons } from "@/lib/lessons/scoped-lessons/scoped-gold-registry";
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
+import { ALLIED_PROFESSION_DEDICATED_CATALOGS } from "@/content/pathway-lessons/allied-professions/registry";
 import {
   normalizeLessonCategory,
   premiumizeLessonDisplayTitle,
@@ -539,15 +540,9 @@ function loadAlliedProfessionDedicatedLessonsForPathway(pathwayId: string): Less
     if (p.pathwayId !== pathwayId) continue;
     const file = p.dedicatedCatalogFile?.trim();
     if (!file) continue;
-    let mod: { lessons?: LessonInput[] };
-    try {
-      mod = catalogBundleRequire(`@/content/pathway-lessons/allied-professions/${file}`) as {
-        lessons?: LessonInput[];
-      };
-    } catch {
-      // Optional per-profession shard — omit when file is absent from a build.
-      continue;
-    }
+    const mod = ALLIED_PROFESSION_DEDICATED_CATALOGS[file] as { lessons?: LessonInput[] } | undefined;
+    // Optional per-profession shard — omit when file is absent from a build.
+    if (!mod) continue;
     for (const row of mod.lessons ?? []) {
       const slug = typeof row.slug === "string" ? row.slug.trim() : "";
       if (!slug) continue;

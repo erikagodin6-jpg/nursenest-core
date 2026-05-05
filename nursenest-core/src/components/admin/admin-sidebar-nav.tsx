@@ -49,6 +49,7 @@ const sections: NavSection[] = [
       { href: "/admin/lessons", label: "Lessons", icon: GraduationCap },
       { href: "/admin/questions", label: "Question bank", icon: ClipboardList },
       { href: "/admin/questions/import", label: "Bulk question import", icon: Upload },
+      { href: "/admin/content-overview", label: "Content & modules", icon: Layers },
       { href: "/admin/content", label: "Pathway coverage", icon: Layers },
       { href: "/admin/content-coverage", label: "Content coverage", icon: BarChart3 },
     ],

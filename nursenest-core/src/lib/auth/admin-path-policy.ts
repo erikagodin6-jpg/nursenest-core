@@ -56,6 +56,7 @@ const SUPPORT_ALLOWED_PREFIXES = [
   "/admin/content-bulk",
   "/admin/generation",
   "/admin/modules",
+  "/admin/content-overview",
   "/admin/content-coverage",
   "/admin/eeat-editorial",
   "/admin/queue",
