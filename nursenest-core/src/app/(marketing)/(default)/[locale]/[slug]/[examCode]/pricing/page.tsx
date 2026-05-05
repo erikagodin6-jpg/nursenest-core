@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
+import { buildAlliedGlobalHubPath, isAlliedHealthPathway } from "@/lib/allied/allied-global-pathway";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
@@ -41,6 +42,9 @@ export default async function ExamPathwayPricingPage({ params }: Props) {
   const { locale, slug, examCode } = await params;
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname: `/${locale}/${slug}/${examCode}/pricing` });
   if (!pathway) notFound();
+  if (isAlliedHealthPathway(pathway)) {
+    permanentRedirect(buildAlliedGlobalHubPath("pricing"));
+  }
 
   const { crumbs, schemaItems } = pathwayPricingBreadcrumbs(pathway);
   const waitlist = pathway.acquisitionMode === "waitlist" || pathway.status === "upcoming";

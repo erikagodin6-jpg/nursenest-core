@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { permanentRedirect, redirect } from "next/navigation";
 import { LESSON_SYSTEM_HUB_CARD_PREVIEW_MAX } from "@/components/pathway-lessons/lesson-system-card";
 import { LessonsPageShell } from "@/components/pathway-lessons/lessons-page-shell";
 import { LessonsToolbar } from "@/components/pathway-lessons/lessons-toolbar";
@@ -83,6 +83,7 @@ import {
   alliedProfessionTrackChipLabel,
   getAlliedProfessionByProfessionKey,
 } from "@/lib/allied/allied-professions-registry";
+import { buildAlliedGlobalHubPath, isAlliedHealthPathway } from "@/lib/allied/allied-global-pathway";
 import { exclusiveTopicSlugsForAlliedProfession } from "@/lib/allied/allied-profession-lesson-exclusive-scope";
 import {
   ALLIED_PROFESSION_QUERY_PARAM,
@@ -210,6 +211,30 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     async () => {
       const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
       if (!pathway) return {};
+      if (isAlliedHealthPathway(pathway)) {
+        const alliedQs = new URLSearchParams();
+        if (topicSlugNorm) alliedQs.set("topicSlug", topicSlugNorm);
+        if (q) alliedQs.set("q", q);
+        if (page > 1) alliedQs.set("page", String(page));
+        const apRaw = typeof sp.alliedProfession === "string" ? sp.alliedProfession.trim().toLowerCase() : "";
+        if (apRaw) alliedQs.set(ALLIED_PROFESSION_QUERY_PARAM, apRaw);
+        const taxRaw = typeof sp.alliedTaxonomy === "string" ? sp.alliedTaxonomy.trim().toLowerCase() : "";
+        if (taxRaw) alliedQs.set(ALLIED_TAXONOMY_QUERY_PARAM, taxRaw);
+        const canonicalPath = buildAlliedGlobalHubPath("lessons");
+        const canonicalHref = alliedQs.toString() ? `${canonicalPath}?${alliedQs.toString()}` : canonicalPath;
+        return {
+          title: "Allied Health lessons | NurseNest",
+          description: "Occupation-scoped Allied Health lessons with global unit switching and shared study surfaces.",
+          alternates: { canonical: absoluteUrl(canonicalHref) },
+          openGraph: {
+            title: "Allied Health lessons | NurseNest",
+            description: "Occupation-scoped Allied Health lessons with global unit switching and shared study surfaces.",
+            url: absoluteUrl(canonicalHref),
+            type: "website",
+          },
+          ...(q ? { robots: { index: false, follow: true } } : {}),
+        };
+      }
       const pathOnly = buildExamPathwayPath(pathway, "lessons");
       const qs = new URLSearchParams();
       if (topicSlugNorm) qs.set("topicSlug", topicSlugNorm);
@@ -264,10 +289,20 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
   );
 }
 
+function buildAlliedLessonsRedirectUrl(searchParams: Awaited<Props["searchParams"]>): string {
+  const qs = new URLSearchParams();
+  for (const [key, value] of Object.entries(searchParams)) {
+    if (typeof value === "string" && value.trim()) qs.set(key, value);
+  }
+  const dest = buildAlliedGlobalHubPath("lessons");
+  return qs.size > 0 ? `${dest}?${qs.toString()}` : dest;
+}
+
 export default async function PathwayLessonsHubPage({ params, searchParams }: Props) {
   const { locale: countrySlug, slug: roleTrack, examCode } = await params;
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
   const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
+  const sp = await searchParams;
   const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname });
   if (!pathway) {
     safeServerLog("pathway_lessons", "marketing_lessons_hub_pathway_unresolved", {
@@ -308,12 +343,14 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
       </main>
     );
   }
+  if (isAlliedHealthPathway(pathway)) {
+    permanentRedirect(buildAlliedLessonsRedirectUrl(sp));
+  }
 
   const hubRouteT0 = performance.now();
   lessonsPerfMark("route_start", { pathwayId: pathway.id, surface: "pathway_lessons_hub_page" });
   try {
   const base = marketingPathwayLessonsIndexPath(pathway);
-  const sp = await searchParams;
   const pageRequested = Math.max(1, Number(sp.page ?? "1") || 1);
   const rawSize = Number(sp.pageSize ?? String(PATHWAY_HUB_PAGE_SIZE_DEFAULT)) || PATHWAY_HUB_PAGE_SIZE_DEFAULT;
   const pageSizeRequested = Math.min(PATHWAY_HUB_PAGE_SIZE_MAX, Math.max(8, Math.floor(rawSize)));

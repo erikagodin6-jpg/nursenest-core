@@ -2,11 +2,12 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { NursingTierHubPage } from "@/components/marketing/nursing-tier-hub-page";
 import { AlliedHealthPathwayHub } from "@/components/marketing/allied-health-pathway-hub";
+import { buildAlliedGlobalHubPath } from "@/lib/allied/allied-global-pathway";
 import { MarketingBlogLatestLinks } from "@/components/marketing/marketing-blog-latest-links";
 import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { prisma } from "@/lib/db";
@@ -18,10 +19,12 @@ import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway
 import { loadPathwayHubResumePayload, type PathwayHubResumePayload } from "@/lib/learner/pathway-lesson-continuation";
 import { canViewFullPathwayLesson } from "@/lib/lessons/pathway-lesson-access";
 import { buildNursingTierHubContent } from "@/lib/marketing/nursing-tier-hub-content";
+import { loadAlliedPathwayHubOverview } from "@/lib/marketing/allied-pathway-hub-overview";
 import { examPathwayRegionalHreflang } from "@/lib/seo/exam-pathway-hub-alternates";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { pathwayOverviewBreadcrumbs } from "@/lib/seo/pathway-breadcrumbs";
 import { withCrawlSurfacePageRender } from "@/lib/observability/crawl-surface-observability";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-message-shards";
@@ -79,6 +82,37 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
 
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (!pathway) notFound();
+  const isAlliedHub = pathway.roleTrack === "allied" && pathway.examCode === "allied-health";
+  if (isAlliedHub) {
+    permanentRedirect(buildAlliedGlobalHubPath());
+  }
+
+  const alliedOverview = isAlliedHub
+    ? await loadAlliedPathwayHubOverview(pathway, {
+        pathname,
+        locale,
+        examCode,
+        roleTrack: slug,
+      })
+    : null;
+
+  if (process.env.NODE_ENV !== "production" || process.env.VITEST === "true" || process.env.NODE_ENV === "test") {
+    safeServerLog("exam_pathway_hub", "allied_hub_route_diagnostic", {
+      pathname,
+      country: locale,
+      role_track: slug,
+      pathway_id: pathway.id,
+      exam_slug: examCode,
+      loader_result: isAlliedHub
+        ? JSON.stringify({
+            lessonCount: alliedOverview?.lessonCount ?? 0,
+            questionSnapshotStatus: alliedOverview?.questionSnapshot.status ?? "none",
+            flashcardDeckCount: alliedOverview?.flashcardDeckCount ?? null,
+            moduleCardCount: alliedOverview?.moduleCards.length ?? 0,
+          })
+        : "non_allied_hub",
+    });
+  }
 
   let hubResume: PathwayHubResumePayload | null = null;
   let viewerSignedIn = false;
@@ -162,8 +196,8 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
 
         <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
 
-        {pathway.roleTrack === "allied" && pathway.examCode === "allied-health" ? (
-          <AlliedHealthPathwayHub pathway={pathway} hubPath={pathname} />
+        {isAlliedHub ? (
+          <AlliedHealthPathwayHub pathway={pathway} hubPath={pathname} overview={alliedOverview} />
         ) : content ? (
           <NursingTierHubPage
             pathway={pathway}

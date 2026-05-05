@@ -58,6 +58,7 @@ import {
 import { parseCommaSeparatedQuestionIds } from "@/lib/questions/question-id-list-param";
 import { parsePracticeHubIdsParam } from "@/lib/questions/normalize-question-body-system";
 import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
+import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examContextAnalyticsProps } from "@/lib/exam-context/global-exam-context";
@@ -297,10 +298,11 @@ export function QuestionBankPracticeClient({
     return examBuckets.filter((b) => b.exam != null && pathwayExamKeySet.has(b.exam));
   }, [examBuckets, pathwayExamKeySet]);
 
-  const measurementSystem = useMemo(
+  const fallbackMeasurementSystem = useMemo(
     () => resolveMeasurementSystemForLearnerPathway(pathwayIdFilter ?? defaultPathwayId, pathwayCountryByPathwayId),
     [pathwayIdFilter, defaultPathwayId, pathwayCountryByPathwayId],
   );
+  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
 
   const current = questions[idx];
   const total = questions.length;

@@ -13,7 +13,9 @@ import {
   Target,
 } from "lucide-react";
 import { FunnelExamHubViewBeacon } from "@/components/marketing/funnel-analytics-beacons";
+import { MeasurementSystemToggle } from "@/components/measurements/measurement-system-toggle";
 import { StudyCard } from "@/components/ui/study-card";
+import { PathwayLiveInventoryStrip } from "@/components/exam-pathways/pathway-live-inventory-strip";
 import { getLessonHubSystemVisual } from "@/components/pathway-lessons/lesson-system-hub-visuals";
 import {
   alliedProfessionDefaultRoleHero,
@@ -31,11 +33,14 @@ import {
 } from "@/lib/lessons/lesson-routes";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { buildAlliedGlobalHubPath } from "@/lib/allied/allied-global-pathway";
 import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { marketingTierHubStudyActionHref } from "@/lib/navigation/marketing-tier-hub-study-hrefs";
 import { ALLIED_PROFESSION_QUERY_PARAM, isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { SCENARIO_LEARNER_ROUTES, withScenarioPathwayAndProfessionQuery } from "@/lib/scenarios/scenario-routes";
+import type { AlliedPathwayHubOverview } from "@/lib/marketing/allied-pathway-hub-overview";
+import type { MeasurementPreference } from "@/lib/measurements/measurement-preference";
 
 function hubVisualKeyForCategoryId(id: string): string {
   const s = id.trim().toLowerCase().replace(/[^a-z0-9]+/g, "_");
@@ -47,6 +52,8 @@ export function AlliedHealthPathwayHub({
   hubPath,
   profession = null,
   sampleQuestionStem = null,
+  overview = null,
+  initialMeasurementPreference = null,
 }: {
   pathway: ExamPathwayDefinition;
   hubPath: string;
@@ -54,20 +61,23 @@ export function AlliedHealthPathwayHub({
   profession?: AlliedProfessionMarketing | null;
   /** Optional preview line for occupation hubs (bounded stem text). */
   sampleQuestionStem?: string | null;
+  /** Pathway-scoped inventory + optional module visibility for public hub routes. */
+  overview?: AlliedPathwayHubOverview | null;
+  initialMeasurementPreference?: MeasurementPreference | null;
 }) {
-  const countryLine = pathway.countrySlug === "canada" ? "Canada" : "United States";
+  const isGlobalAlliedHub = hubPath === buildAlliedGlobalHubPath();
+  const countryLine = isGlobalAlliedHub ? "Global" : pathway.countrySlug === "canada" ? "Canada" : "United States";
   const profKey = profession?.professionKey?.trim() ?? "";
 
-  const lessonsHref = profKey
-    ? alliedHealthLessonsIndexPath(profKey)
-    : marketingTierHubStudyActionHref(pathway, "lessons");
-  const questionsBase = buildExamPathwayPath(pathway, "questions");
+  const lessonsBase = isGlobalAlliedHub ? buildAlliedGlobalHubPath("lessons") : marketingTierHubStudyActionHref(pathway, "lessons");
+  const lessonsHref = profKey ? alliedHealthLessonsIndexPath(profKey) : lessonsBase;
+  const questionsBase = isGlobalAlliedHub ? buildAlliedGlobalHubPath("questions") : buildExamPathwayPath(pathway, "questions");
   const questionsHref = profKey ? withAlliedProfessionMarketingQuery(questionsBase, profKey) : questionsBase;
   const flashcardsBase = marketingTierHubStudyActionHref(pathway, "flashcards");
   const flashcardsHref = profKey ? withAlliedProfessionMarketingQuery(flashcardsBase, profKey) : flashcardsBase;
-  const catBase = buildExamPathwayPath(pathway, "cat");
+  const catBase = isGlobalAlliedHub ? buildAlliedGlobalHubPath("cat") : buildExamPathwayPath(pathway, "cat");
   const catHref = profKey ? withAlliedProfessionMarketingQuery(catBase, profKey) : catBase;
-  const pricingHref = buildExamPathwayPath(pathway, "pricing");
+  const pricingHref = isGlobalAlliedHub ? buildAlliedGlobalHubPath("pricing") : buildExamPathwayPath(pathway, "pricing");
   const examPlanHref = loginWithCallback(`/app/exam-plan`);
   const practiceTestsHref = profKey
     ? loginWithCallback(
@@ -91,7 +101,17 @@ export function AlliedHealthPathwayHub({
   const heroBody = profession ? profession.description : pathway.seoDescription;
   const heroKicker = profession
     ? `${countryLine} · ${pathway.shortName} · ${alliedProfessionTrackChipLabel(profession)}`
-    : `${countryLine} · Allied health`;
+    : isGlobalAlliedHub
+      ? "Allied health · Global pathway"
+      : `${countryLine} · Allied health`;
+  const flashcardDeckLine =
+    typeof overview?.flashcardDeckCount === "number"
+      ? `${overview.flashcardDeckCount} published flashcard deck${overview.flashcardDeckCount === 1 ? "" : "s"}`
+      : null;
+  const questionCountLine =
+    overview?.questionSnapshot.status === "ok"
+      ? `${overview.questionSnapshot.pathwayScopedCount} practice questions`
+      : null;
 
   const roleHero = profession ? alliedProfessionDefaultRoleHero(profession) : null;
   const skillOverlay = profession ? alliedProfessionDefaultSkillOverlay(profession) : null;
@@ -138,7 +158,66 @@ export function AlliedHealthPathwayHub({
             {profession ? "Lessons for this track" : "Browse lessons hub"}
           </Link>
         </div>
+        {isGlobalAlliedHub ? (
+          <div className="mt-6 max-w-sm">
+            <MeasurementSystemToggle
+              fallbackSystem="SI"
+              initialPreference={initialMeasurementPreference}
+              title="Units for allied study"
+              description="Allied study is global. Switch units without swapping pathways."
+              compact
+            />
+          </div>
+        ) : null}
       </header>
+
+      {overview ? (
+        <section
+          className="rounded-[1.5rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-6 sm:p-8"
+          aria-labelledby="allied-pathway-live-heading"
+        >
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h2 id="allied-pathway-live-heading" className="text-xl font-bold text-[var(--theme-heading-text)]">
+                {isGlobalAlliedHub ? "Allied Health global hub" : `${countryLine} Allied Health hub`}
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[var(--semantic-text-secondary)]">
+                This pathway now resolves to the actual Allied Health hub shell{isGlobalAlliedHub ? "" : ` for ${countryLine}`}, with occupation-track links,
+                lesson inventory, question-bank readiness, and paid-study entry points scoped to{" "}
+                <span className="font-semibold text-[var(--semantic-text-primary)]">{pathway.shortName}</span>.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2 text-xs text-[var(--semantic-text-secondary)]">
+              {overview.lessonCount > 0 ? (
+                <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1.5">
+                  {overview.lessonCount} lessons
+                </span>
+              ) : null}
+              {questionCountLine ? (
+                <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1.5">
+                  {questionCountLine}
+                </span>
+              ) : null}
+              {flashcardDeckLine ? (
+                <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-3 py-1.5">
+                  {flashcardDeckLine}
+                </span>
+              ) : null}
+              {overview.practiceExamReady ? (
+                <span className="rounded-full border border-[color-mix(in_srgb,var(--semantic-success)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_10%,var(--semantic-surface))] px-3 py-1.5 text-[var(--semantic-success)]">
+                  Practice exam ready
+                </span>
+              ) : null}
+            </div>
+          </div>
+          <PathwayLiveInventoryStrip
+            pathway={pathway}
+            questionSnapshot={overview.questionSnapshot}
+            lessonCount={overview.lessonCount}
+            variant="hub"
+          />
+        </section>
+      ) : null}
 
       {profession && roleHero ? (
         <section
@@ -367,7 +446,7 @@ export function AlliedHealthPathwayHub({
             "."
           )}
         </p>
-        <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
           <li>
             <StudyCard
               surface="hub"
@@ -408,6 +487,18 @@ export function AlliedHealthPathwayHub({
             <StudyCard
               surface="hub"
               variant="featured"
+              href={practiceTestsHref}
+              className="nn-qa-allied-hub-practice-exams"
+              icon={ClipboardCheck}
+              title="Practice exams"
+              description="Longer exam-style sets with pathway-aware pacing and sign-in callbacks that keep the allied tier in scope."
+              cta="Open practice exams"
+            />
+          </li>
+          <li>
+            <StudyCard
+              surface="hub"
+              variant="featured"
               href={catHref}
               className="nn-qa-allied-hub-cat"
               icon={Activity}
@@ -418,6 +509,39 @@ export function AlliedHealthPathwayHub({
           </li>
         </ul>
       </section>
+
+      {overview && overview.moduleCards.length > 0 ? (
+        <section aria-labelledby="allied-module-addons-heading">
+          <h2 id="allied-module-addons-heading" className="text-xl font-bold text-[var(--theme-heading-text)]">
+            Specialized modules
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
+            Modules only appear here when their public routes are enabled. Hidden or admin-preview-only surfaces stay out of the
+            marketing hub.
+          </p>
+          <ul className="mt-6 grid gap-4 md:grid-cols-2">
+            {overview.moduleCards.map((card) => (
+              <li key={card.id}>
+                <article className="flex h-full flex-col rounded-[1.35rem] border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-5 shadow-[var(--semantic-shadow-soft)]">
+                  <div className="flex items-center justify-between gap-3">
+                    <h3 className="text-base font-semibold text-[var(--theme-heading-text)]">{card.title}</h3>
+                    <span className="rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--semantic-text-secondary)]">
+                      {card.access === "free" ? "Free preview" : "Paid"}
+                    </span>
+                  </div>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{card.description}</p>
+                  <Link
+                    href={card.href}
+                    className="mt-4 inline-flex text-sm font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+                  >
+                    Open module →
+                  </Link>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       {/* Lessons by category — mirrors lesson hub system cards */}
       <section aria-labelledby="allied-lesson-cats-heading">

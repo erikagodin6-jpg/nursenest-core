@@ -14,6 +14,7 @@
  */
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { ALLIED_GLOBAL_HUB_PATH, isAlliedHealthPathway } from "@/lib/allied/allied-global-pathway";
 import { isPathwayPublishedForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
@@ -71,7 +72,7 @@ export function marketingExamHubPath(region: MarketingRegionToggle, id: CountryE
   const p = getExamPathwayById(pathwayId);
   let href: string;
   if (p) {
-    href = buildExamPathwayPath(p);
+    href = isAlliedHealthPathway(p) ? ALLIED_GLOBAL_HUB_PATH : buildExamPathwayPath(p);
   } else {
     switch (id) {
       case "rn":

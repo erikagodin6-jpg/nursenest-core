@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
+import { buildAlliedGlobalHubPath, isAlliedHealthPathway } from "@/lib/allied/allied-global-pathway";
 import { BookOpen, ClipboardList, Layers } from "lucide-react";
 import { NpQuestionsHubBoardLinks } from "@/components/exam-pathways/np-questions-hub-board-links";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
@@ -96,6 +97,15 @@ export default async function ExamPathwayQuestionsHubPage({ params, searchParams
   const topicSlugFromUrl = sp.topicSlug?.trim().toLowerCase() ?? "";
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname: `${pathname}/questions` });
   if (!pathway) notFound();
+  if (isAlliedHealthPathway(pathway)) {
+    const spEntries = searchParams ? await searchParams : {};
+    const qs = new URLSearchParams();
+    for (const [key, value] of Object.entries(spEntries)) {
+      if (typeof value === "string" && value.trim()) qs.set(key, value);
+    }
+    const dest = buildAlliedGlobalHubPath("questions");
+    permanentRedirect(qs.size > 0 ? `${dest}?${qs.toString()}` : dest);
+  }
 
   const rawAlliedProf = typeof sp.alliedProfession === "string" ? sp.alliedProfession.trim().toLowerCase() : "";
   const alliedProfessionResolved =

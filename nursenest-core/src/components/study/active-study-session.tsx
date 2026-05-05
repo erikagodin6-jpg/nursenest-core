@@ -12,6 +12,8 @@ import { FlashcardRichContent } from "@/components/flashcards/flashcard-rich-con
 import { FlashcardExamMcqAnswerList } from "@/components/flashcards/flashcard-exam-mcq-answer-list";
 import { firstTeachingLine, FlashcardStudyQuestionStack } from "@/components/flashcards/flashcard-study-question-stack";
 import type { ExamMicroQuestionPayload } from "@/lib/flashcards/flashcard-exam-style";
+import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
+import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 
 /* ================= TYPES ================= */
 
@@ -114,6 +116,7 @@ export function ActiveStudySession({
   const [, bumpPins] = useReducer((x: number) => x + 1, 0);
 
   const deduped = useMemo(() => dedupeCardsById(cards), [cards]);
+  const { measurementSystem } = useMeasurementPreference("US");
 
   const [sessionCards, setSessionCards] = useState(deduped);
   const [index, setIndex] = useState(0);
@@ -220,9 +223,9 @@ export function ActiveStudySession({
         sessionModeLabel={header.modeLabel}
         topicLine={current.topic}
         examMicroQuestion={current.examMicroQuestion}
-        prompt={current.prompt}
-        answer={current.answer}
-        explanation={current.explanation ?? current.examMicroQuestion?.rationaleCorrect}
+        prompt={resolveMeasurementTokens(current.prompt, measurementSystem)}
+        answer={resolveMeasurementTokens(current.answer, measurementSystem)}
+        explanation={resolveMeasurementTokens(current.explanation ?? current.examMicroQuestion?.rationaleCorrect ?? "", measurementSystem)}
         pearl={buildClinicalPearl(current, "No clinical pearl available.")}
         revealed={revealed}
         onReveal={() => setRevealed(true)}

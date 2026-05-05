@@ -1,4 +1,5 @@
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
+import { ALLIED_GLOBAL_HUB_PATH } from "@/lib/allied/allied-global-pathway";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
@@ -9,6 +10,7 @@ const KNOWN_SHORT_MARKETING_DESTINATIONS = new Set([
   "/flashcards",
   "/tools",
   "/pricing",
+  ALLIED_GLOBAL_HUB_PATH,
 ]);
 
 /**
@@ -19,6 +21,9 @@ export function isWellFormedExamHubPath(href: string): boolean {
   const raw = href.trim().split("?")[0]?.split("#")[0] ?? href.trim();
   const path = raw.startsWith("/") ? raw : `/${raw}`;
   if (KNOWN_SHORT_MARKETING_DESTINATIONS.has(path)) return true;
+  if (path === `${ALLIED_GLOBAL_HUB_PATH}/lessons` || path === `${ALLIED_GLOBAL_HUB_PATH}/questions` || path === `${ALLIED_GLOBAL_HUB_PATH}/cat` || path === `${ALLIED_GLOBAL_HUB_PATH}/pricing` || path === `${ALLIED_GLOBAL_HUB_PATH}/clinical-scenarios`) {
+    return true;
+  }
   const parts = path.split("/").filter(Boolean);
   if (parts.length < 3) return false;
   const country = parts[0]!.toLowerCase();

@@ -14,6 +14,7 @@ import {
   recordQuestionPerformanceEvent,
 } from "@/lib/learner/question-performance-events";
 import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
+import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
 import { buildQuestionListSearchParams } from "@/lib/practice-question-session/build-question-list-params";
 import {
@@ -96,10 +97,11 @@ export function PracticeQuestionSessionClient({
   const parsed = useMemo(() => parsePracticeSessionSearchParams(new URLSearchParams(spKey)), [spKey]);
 
   const pathwayId = parsed.pathwayId ?? defaultPathwayId;
-  const measurementSystem = useMemo(
+  const fallbackMeasurementSystem = useMemo(
     () => resolveMeasurementSystemForLearnerPathway(pathwayId, pathwayCountryByPathwayId),
     [pathwayId, pathwayCountryByPathwayId],
   );
+  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
 
   const [phase, setPhase] = useState<"loading" | "ready" | "empty" | "error" | "summary">("loading");
   const [error, setError] = useState<string | null>(null);

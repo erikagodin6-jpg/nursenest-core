@@ -6,6 +6,7 @@
  */
 
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
+import { ALLIED_GLOBAL_HUB_PATH } from "@/lib/allied/allied-global-pathway";
 
 export type MarketingRegionToggle = "US" | "CA";
 
@@ -71,10 +72,10 @@ export const NP = {
 export const ALLIED = {
   /** Core allied marketing index (unchanged from prior `mapLegacyMarketingHref("/allied-health")` — allied paths stay on Core). */
   marketingLanding: () => "/allied-health",
-  usHub: "/us/allied/allied-health",
-  usQuestions: "/us/allied/allied-health/questions",
-  caHub: "/canada/allied/allied-health",
-  caQuestions: "/canada/allied/allied-health/questions",
+  usHub: ALLIED_GLOBAL_HUB_PATH,
+  usQuestions: `${ALLIED_GLOBAL_HUB_PATH}/questions`,
+  caHub: ALLIED_GLOBAL_HUB_PATH,
+  caQuestions: `${ALLIED_GLOBAL_HUB_PATH}/questions`,
 } as const;
 
 export function loginWithCallback(path: string): string {

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { loadMarketingExamHubOptionalBlocks } from "@/lib/exam-pathways/marketing-hub-optional-data";
@@ -12,6 +12,7 @@ import {
 import { catPathwayShortCatLabel } from "@/lib/exam-pathways/cat-pathway-labels";
 import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
 import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
+import { buildAlliedGlobalHubPath, isAlliedHealthPathway } from "@/lib/allied/allied-global-pathway";
 import { ALLIED_PROFESSION_QUERY_PARAM, isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { mergeMarketingPathQuery, withAlliedProfessionMarketingQuery } from "@/lib/lessons/lesson-routes";
 import {
@@ -69,6 +70,15 @@ export default async function PathwayCatEntryPage({ params, searchParams }: Prop
   const pathname = `/${countrySlug}/${roleTrack}/${examCode}`;
   const pathway = await resolveExamPathwaySafe(countrySlug, roleTrack, examCode, { pathname: `${pathname}/cat` });
   if (!pathway) notFound();
+  if (isAlliedHealthPathway(pathway)) {
+    const spCat = searchParams ? await searchParams : {};
+    const qs = new URLSearchParams();
+    if (typeof spCat.alliedProfession === "string" && spCat.alliedProfession.trim()) {
+      qs.set("alliedProfession", spCat.alliedProfession.trim());
+    }
+    const dest = buildAlliedGlobalHubPath("cat");
+    permanentRedirect(qs.size > 0 ? `${dest}?${qs.toString()}` : dest);
+  }
 
   const spCat = searchParams ? await searchParams : {};
   const rawAlliedProf =

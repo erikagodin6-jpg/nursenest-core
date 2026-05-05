@@ -219,6 +219,8 @@
     "test:content-source-of-truth": "node --import tsx --test src/lib/content-source-of-truth/content-source-of-truth.contract.test.ts",
     "audit:legacy-features": "node src/lib/legacy-feature-inventory/audit-legacy-feature-inventory.mjs",
     "test:legacy-feature-inventory": "node --import tsx --test src/lib/content-source-of-truth/legacy-feature-inventory.contract.test.ts",
+    "test:labs": "node --import tsx --test src/lib/labs/labs-engine.test.ts src/components/labs/labs-pages.smoke.test.tsx",
+    "test:med-calculations": "node --import tsx --test src/lib/med-calculations/med-calculations-engine.test.ts src/components/med-calculations/med-calculations-pages.smoke.test.tsx",
     "content:audit": "npm run audit:legacy-features",
     "test:med-math-realism": "node --import tsx --test src/lib/med-math/validate-med-math-answer-realism.contract.test.ts",
     "audit:allied-completeness": "tsx scripts/audit-allied-profession-completeness.ts --markdown --json",
