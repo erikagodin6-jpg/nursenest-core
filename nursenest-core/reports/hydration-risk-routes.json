@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-05-06T17:05:42.260Z",
+  "generatedAt": "2026-05-06T23:34:35.856Z",
   "rows": [
     {
       "rel": "src/components/student/practice-test-runner-client.tsx",
       "lines": 3126,
-      "bytes": 142738,
+      "bytes": 142794,
       "useClient": true,
       "riskScore": 3594.9,
       "risk": "medium"

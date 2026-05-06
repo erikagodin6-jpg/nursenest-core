@@ -18,7 +18,7 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
 
 | Rank | File | Lines | Bytes | use client | Risk |
 | --- | --- | ---: | ---: | --- | --- |
-| 1 | `src/components/student/practice-test-runner-client.tsx` | 3126 | 142738 | yes | medium |
+| 1 | `src/components/student/practice-test-runner-client.tsx` | 3126 | 142794 | yes | medium |
 | 2 | `src/components/admin/admin-blog-control-panel-client.tsx` | 2859 | 126702 | yes | medium |
 | 3 | `src/components/student/question-bank-practice-client.tsx` | 1898 | 86711 | yes | lower |
 | 4 | `src/components/student/practice-tests-hub-client.tsx` | 1512 | 69494 | yes | lower |
@@ -220,4 +220,4 @@ Run `npm run test:learner-shell-imports` for blocked static imports.
   - `@/lib/marketing/load-paywall-home-stats-for-shell`
 
 
-*Generated 2026-05-06T17:05:42.257Z*
+*Generated 2026-05-06T23:34:35.855Z*
