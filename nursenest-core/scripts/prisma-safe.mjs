@@ -16,7 +16,7 @@ const packageRoot = resolve(__dirname, "..");
 
 const COMMANDS = new Set(["status", "deploy", "generate", "check-schema"]);
 const BUILD_TIME_GENERATE_MESSAGE =
-  "[prisma-safe] Build-time Prisma generate detected; DIRECT_URL requirement skipped.";
+  "[prisma-safe] Build-time Prisma generate detected; DIRECT_URL requirement skipped; using local placeholder DATABASE_URL for code generation only when unset.";
 const INSTALL_TIME_GENERATE_MESSAGE =
   "[prisma-safe] Install-time Prisma generate detected; using local placeholder DATABASE_URL for code generation only.";
 const INSTALL_TIME_GENERATE_DATABASE_URL =
