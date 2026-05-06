@@ -6,11 +6,11 @@ import { useCallback, useEffect, useState } from "react";
 import {
   Activity,
   BarChart3,
-  BookOpen,
   BookMarked,
   ClipboardList,
   CircleDollarSign,
   GraduationCap,
+  HeartPulse,
   FileText,
   Globe,
   ImageIcon,
@@ -25,7 +25,6 @@ import {
   Stethoscope,
   Users,
   Wrench,
-  Wand2,
   X,
   Package,
   Megaphone,
@@ -34,9 +33,12 @@ import {
   Crosshair,
   Server,
   TestTube2,
+  FileDown,
   Workflow,
   MessageSquare,
   ShieldCheck,
+  SquarePen,
+  Radar,
 } from "lucide-react";
 import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import { SignOutButton } from "@/components/auth/sign-out-button";
@@ -52,6 +54,7 @@ const GROUPS: NavGroup[] = [
     title: "Overview",
     items: [
       { href: "/admin", label: "Command center", icon: LayoutDashboard },
+      { href: "/admin/observability", label: "Observability hub", icon: Radar },
       { href: "/admin/access", label: "Access & roles", icon: Shield },
       { href: "/admin/learner-qa", label: "Learner QA view", icon: GraduationCap },
     ],
@@ -78,10 +81,16 @@ const GROUPS: NavGroup[] = [
     items: [
       { href: "/admin/inventory", label: "Inventory drill-down", icon: Package },
       { href: "/admin/content-coverage", label: "Content coverage", icon: BarChart3 },
+      { href: "/admin/content/page-copy", label: "Page copy editor", icon: SquarePen },
       { href: "/admin/content", label: "Coverage & quality", icon: Layers },
       { href: "/admin/lessons", label: "Lessons", icon: GraduationCap },
       { href: "/admin/questions", label: "Question bank", icon: ClipboardList },
+      { href: "/admin/study-cards", label: "Verified study cards", icon: ListTodo },
+      { href: "/admin/clinical-scenarios", label: "Clinical scenarios", icon: HeartPulse },
+      { href: "/admin/osce-stations", label: "OSCE stations", icon: Stethoscope },
+      { href: "/admin/courses", label: "Internal courses", icon: BookMarked },
       { href: "/admin/media", label: "Media library", icon: ImageIcon },
+      { href: "/admin/printables", label: "Printout store", icon: FileDown },
     ],
   },
   {
@@ -89,12 +98,8 @@ const GROUPS: NavGroup[] = [
     title: "Publishing & SEO",
     items: [
       { href: "/admin/hub/publishing", label: "Publishing hub", icon: Megaphone },
-      { href: "/admin/blog/studio", label: "Article studio", icon: Sparkles },
       { href: "/admin/content-bulk", label: "Bulk automation", icon: Workflow },
-      { href: "/admin/blog", label: "Blog posts", icon: FileText },
-      { href: "/admin/blog/control-panel", label: "Blog AI panel", icon: Wand2 },
-      { href: "/admin/blog/generate", label: "Blog generator", icon: Sparkles },
-      { href: "/admin/blog/scheduler", label: "Scheduler", icon: BookOpen },
+      { href: "/admin/blog", label: "Blog", icon: FileText },
       { href: "/admin/seo", label: "SEO & internal links", icon: Search },
       { href: "/admin/eeat-editorial", label: "E-E-A-T editorial", icon: ShieldCheck },
     ],

@@ -83,6 +83,30 @@ describe("authorization & entitlement policy (static)", () => {
     assert.match(audit, /admin-types/);
   });
 
+  it("subscriber gate wires soft account-sharing hook after entitlement ok", () => {
+    const src = readFileSync(
+      join(nursenestCoreRoot, "src", "lib", "entitlements", "require-subscriber-session.ts"),
+      "utf8",
+    );
+    assert.match(src, /maybeBlockOrTouchAccountSharingAfterSubscriberOk/);
+    assert.match(src, /mergeSubscriberPrivateCacheHeaders/);
+  });
+
+  it("sync-session returns private no-store cache headers", () => {
+    const src = readFileSync(join(nursenestCoreRoot, "src", "app", "api", "auth", "sync-session", "route.ts"), "utf8");
+    assert.match(src, /mergeSubscriberPrivateCacheHeaders/);
+  });
+
+  it("clinical scenario analytics gates premium paths with resolveEntitlement", () => {
+    const src = readFileSync(
+      join(nursenestCoreRoot, "src", "app", "api", "learner", "clinical-scenario-analytics", "route.ts"),
+      "utf8",
+    );
+    assert.match(src, /resolveEntitlement/);
+    assert.match(src, /isPremiumScenario/);
+    assert.match(src, /premiumUnlocked/);
+  });
+
   it("admin user lookup and support routes pass req into requireAdmin for RBAC path", () => {
     const lookup = readFileSync(
       join(nursenestCoreRoot, "src", "app", "api", "admin", "users", "lookup", "route.ts"),

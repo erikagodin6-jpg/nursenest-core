@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ActiveStudySession, type ActiveStudyCard } from "@/components/study/active-study-session";
 import type { PremiumProtectionFlags } from "@/lib/premium-protection/config";
 import { pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
 
 type WeakCard = {
   id: string;
@@ -16,6 +17,8 @@ type WeakCard = {
   sourceKey: string | null;
   topic: string;
   subtopic: string | null;
+  lessonStudyHref?: string;
+  lessonStudyTitle?: string;
 };
 
 const SIMPLE = ["incorrect", "unsure", "known"] as const;
@@ -141,7 +144,7 @@ export function FlashcardWeakStudyClient({
           {pathwayRequired && (
             <Link
               href="/app/account/study-preferences"
-              className="bg-blue-600 text-white rounded-full py-2"
+              className="bg-blue-600 nn-text-on-solid-fill rounded-full py-2"
             >
               Set study preferences
             </Link>
@@ -160,13 +163,24 @@ export function FlashcardWeakStudyClient({
   }
 
   // 🎯 Session cards
-  const activeCards: ActiveStudyCard[] = queue.map((c) => ({
-    id: c.id,
-    prompt: c.front,
-    answer: c.back,
-    topic: c.topic,
-    subtopic: c.subtopic,
-  }));
+  const activeCards: ActiveStudyCard[] = queue.map((c) => {
+    const pid = c.pathwayId?.trim() || null;
+    const topicSlug = c.subtopic?.trim() || null;
+    return {
+      id: c.id,
+      prompt: c.front,
+      answer: c.back,
+      topic: c.topic,
+      subtopic: c.subtopic,
+      sourceKey: c.sourceKey,
+      pathwayId: pid,
+      topicSlug,
+      lessonHref: c.lessonStudyHref?.trim() ? c.lessonStudyHref : null,
+      lessonTitle: c.lessonStudyTitle?.trim() ? c.lessonStudyTitle : null,
+      practiceTopicHref: pid && topicSlug ? pathwayHubAppQuestionsHref(pid, topicSlug) : null,
+      practiceTestsTopicHref: pid && topicSlug ? buildAppPracticeTestsTopicHref(pid, topicSlug) : null,
+    };
+  });
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">

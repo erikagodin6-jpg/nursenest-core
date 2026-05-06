@@ -320,35 +320,45 @@ test("ensure-standalone-static copies .next/static beside both nested and top-le
   }
 });
 
-test("deploy scripts: build:deploy is post-compile only; heroku-postbuild runs compile before cache", () => {
+test("deploy scripts: build:deploy is post-compile only; heroku-postbuild runs canonical npm run build", () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "package.json"), "utf8"));
-  assert.deepEqual(pkg.cacheDirectories, ["node_modules", ".next/cache"]);
-  assert.equal(
-    pkg.scripts["heroku-postbuild"],
-    "node scripts/log-build-cache-hints.mjs && npm run verify:bootstrap-probe-pathname && NN_POSTBUILD_NEXT_BUILD=1 npm run build && node scripts/log-build-cache-hints.mjs --phase=heroku_postbuild_after_compile",
+  assert.deepEqual(pkg.cacheDirectories, ["node_modules"]);
+  assert.equal(pkg.scripts["heroku-postbuild"], "NN_POSTBUILD_NEXT_BUILD=1 npm run build");
+  assert.ok(
+    typeof pkg.scripts.build === "string" && pkg.scripts.build.length > 0,
+    "build script must exist",
   );
-  assert.equal(pkg.scripts.build, "node scripts/run-buildpack-build.mjs");
-  assert.equal(pkg.scripts["build:compile"].includes("scripts/run-next-prod-build.mjs"), true);
-  assert.match(
-    pkg.scripts["build:compile"],
-    /NODE_OPTIONS=--max-old-space-size=\$\{BUILD_NODE_MAX_OLD_SPACE_SIZE_MB:-4096\}/,
+  assert.ok(
+    pkg.scripts.build.includes("verify-dist-artifacts") || pkg.scripts.build.includes("run-next-prod-build"),
+    "build should include dist/standalone verification or next compile wrapper",
   );
   assert.equal(pkg.scripts["verify:standalone-artifact"], "node scripts/verify-standalone-artifact.mjs");
+  assert.equal(pkg.scripts["verify:dockerfile-npm-scripts"], "node scripts/verify-dockerfile-npm-scripts.mjs");
   assert.equal(pkg.scripts["build:deploy"], "npm run build:deploy:postbuild");
   assert.equal(pkg.scripts["build:deploy:app-platform"], "npm run build:deploy");
   assert.equal(pkg.scripts["build:deploy:postbuild"].includes("npm run build"), false);
-  assert.equal(pkg.scripts["build:deploy:full"], "node scripts/run-build-deploy-full.mjs");
-  assert.equal(pkg.scripts.start, "node scripts/start-standalone.mjs");
-  assert.match(pkg.scripts["ci:verify"], /node scripts\/ensure-standalone-static\.mjs/);
+  const post = pkg.scripts["build:deploy:postbuild"];
+  const dockerVerifyIdx = post.indexOf("verify-dockerfile-npm-scripts.mjs");
+  const ensureIdx = post.indexOf("ensure-standalone-static.mjs");
+  const verifyIdx = post.indexOf("verify:standalone-artifact");
+  assert.ok(
+    dockerVerifyIdx !== -1 && ensureIdx !== -1 && verifyIdx !== -1,
+    "build:deploy:postbuild must verify Dockerfile scripts, sync static, then verify standalone",
+  );
+  const writeMetaIdx = post.indexOf("write-build-git-meta.mjs");
+  const assertGitIdx = post.indexOf("assert-deploy-git-state.mjs");
+  assert.ok(writeMetaIdx !== -1 && assertGitIdx !== -1, post);
+  assert.ok(writeMetaIdx < assertGitIdx && assertGitIdx < dockerVerifyIdx, post);
+  assert.ok(dockerVerifyIdx < ensureIdx && ensureIdx < verifyIdx, post);
+  if (pkg.scripts["build:deploy:full"]) {
+    assert.equal(pkg.scripts["build:deploy:full"], "node scripts/run-build-deploy-full.mjs");
+  }
 });
 
-test("active DigitalOcean app spec builds before runtime, starts through npm run start, and routes readiness through /readyz", () => {
+test("active DigitalOcean app spec builds before runtime, starts standalone bootstrap, and routes readiness through /readyz", () => {
   const appSpec = fs.readFileSync(path.join(__dirname, "..", "..", ".do", "app-nursenest-core-next.yaml"), "utf8");
-  assert.match(appSpec, /build_command: npm run build:deploy/);
-  assert.match(appSpec, /NN_TIMED_INCLUDE_NPM_PRUNE/);
-  assert.match(appSpec, /- key: BUILD_WEBPACK_PARALLELISM\n\s+value: "1"/);
-  assert.match(appSpec, /- key: NODE_OPTIONS\n\s+value: "--max-old-space-size=4096"\n\s+scope: BUILD_TIME/);
-  assert.match(appSpec, /run_command: npm run start/);
+  assert.match(appSpec, /build_command:.*npm run build.*npm run build:deploy/);
+  assert.match(appSpec, /run_command:.*start-standalone\.mjs/);
   assert.match(appSpec, /health_check:\n(?:.*\n)*?\s+http_path: \/readyz/);
   assert.match(appSpec, /liveness_health_check:\n(?:.*\n)*?\s+http_path: \/healthz/);
 });

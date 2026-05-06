@@ -113,6 +113,8 @@ const FORBIDDEN_EXACT = new Set([
   "lead",
   "kicker",
   "label",
+  "link",
+  "body",
   "description",
   "subtitle",
   "cta",
@@ -217,6 +219,16 @@ function assertNoPricingStubPhrasesAnywhereInEnPages(pages) {
   return errors;
 }
 
+function assertNoHomepagePlaceholderCopyAnywhereInEnPages(pages) {
+  const errors = [];
+  for (const [key, value] of Object.entries(pages)) {
+    if (typeof value !== "string" || !key.startsWith("pages.home.")) continue;
+    const err = validateValue(key, value);
+    if (err) errors.push(err);
+  }
+  return errors;
+}
+
 function readJson(filePath) {
   if (!fs.existsSync(filePath)) {
     throw new Error(`missing file: ${path.relative(pkgRoot, filePath)}`);
@@ -277,6 +289,7 @@ function main() {
   for (const line of validatePricingConversionClarityKeys(pages)) errors.push(line);
 
   for (const line of assertNoPricingStubPhrasesAnywhereInEnPages(pages)) errors.push(line);
+  for (const line of assertNoHomepagePlaceholderCopyAnywhereInEnPages(pages)) errors.push(line);
 
   if (errors.length) {
     console.error("[validate-marketing-production-surface] FAILED:");

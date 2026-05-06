@@ -2,6 +2,7 @@ import "server-only";
 
 import { BlogAdaptationType, LocalizedBlogStatus, Prisma } from "@prisma/client";
 import { z } from "zod";
+import { getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import {
   buildAdaptationSystemPrompt,
@@ -163,6 +164,8 @@ export async function runBlogBatchLocalizedFollowup(params: {
       const userPrompt = buildAdaptationUserPrompt(brief);
 
       const completion = await openAiChatCompletion({
+        useBlogOpenAiApiKey: true,
+        model: getBlogOpenAiChatModel(),
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },

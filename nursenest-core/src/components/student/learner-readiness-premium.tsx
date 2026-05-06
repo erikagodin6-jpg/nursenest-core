@@ -350,7 +350,7 @@ export function LearnerReadinessPremium({
             {t("learner.profile.readiness.ctaCat")}
           </Link>
           <Link
-            href="/app/account/report-card"
+            href="/app/account/report"
             className="inline-flex rounded-full border border-border px-4 py-2.5 text-sm font-semibold hover:bg-muted/80"
           >
             {t("learner.readinessPage.linkReportCard")}

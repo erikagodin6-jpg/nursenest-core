@@ -1,20 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  type AlliedHealthHubCopy,
-  AlliedHealthRegionStrip,
-  AlliedHealthTrustStrip,
-  AlliedHeroProfessionScan,
-  AlliedHubProfessionSections,
-} from "@/components/marketing/allied-health-hub-content";
+import { type AlliedHealthHubCopy, AlliedHealthTrustStrip, AlliedHubProfessionSections } from "@/components/marketing/allied-health-hub-content";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { alliedProfessionsGroupedForHub } from "@/lib/allied/allied-professions-registry";
+import { ALLIED_GLOBAL_HUB_PATH, getCanonicalAlliedPathway } from "@/lib/allied/allied-global-pathway";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
-import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
-import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { loadMarketingMessages } from "@/lib/marketing-i18n/load-marketing-messages";
 import { formatMarketingMessage } from "@/lib/marketing-i18n-core";
 import {
@@ -98,9 +91,8 @@ function buildHubCopy(t: (key: string) => string): AlliedHealthHubCopy {
 }
 
 export default async function AlliedHealthHubPage() {
-  const usAllied = getExamPathwayById("us-allied-core");
-  const caAllied = getExamPathwayById("ca-allied-core");
-  if (!usAllied || !caAllied) {
+  const alliedPathway = getCanonicalAlliedPathway();
+  if (!alliedPathway) {
     notFound();
   }
 
@@ -109,11 +101,6 @@ export default async function AlliedHealthHubPage() {
   const en = await loadMarketingMessages(DEFAULT_MARKETING_LOCALE);
   const t = (key: string, params?: Record<string, string | number>) => formatMarketingMessage(m, key, params, en);
   const hubCopy = buildHubCopy((key) => t(key));
-
-  const usOverview = buildExamPathwayPath(usAllied);
-  const caOverview = buildExamPathwayPath(caAllied);
-  const usQuestions = buildExamPathwayPath(usAllied, "questions");
-  const caQuestions = buildExamPathwayPath(caAllied, "questions");
 
   const grouped = alliedProfessionsGroupedForHub();
   const { crumbs, schemaItems } = alliedHubBreadcrumbs();
@@ -163,13 +150,12 @@ export default async function AlliedHealthHubPage() {
                 {t("pages.alliedHealthHub.ctaSeeAlliedPlans")}
               </Link>
               <a
-                href="#allied-region-heading"
+                href="#allied-professions-heading"
                 className="inline-flex rounded-full border border-[var(--border-medium)] bg-[color-mix(in_srgb,var(--theme-primary)_5%,var(--theme-card-bg))] px-6 py-2.5 text-sm font-semibold text-foreground shadow-sm transition hover:border-primary/35 hover:bg-[var(--surface-interactive-hover)]"
               >
                 {t("pages.alliedHealthHub.ctaPickCountryProfession")}
               </a>
             </div>
-            <AlliedHeroProfessionScan grouped={grouped} scanTracksLabel={hubCopy.scanTracksLabel} />
           </div>
         </header>
 
@@ -185,23 +171,19 @@ export default async function AlliedHealthHubPage() {
           </p>
         </section>
 
-        <AlliedHealthRegionStrip
-          us={{
-            label: t("pages.alliedHealthHub.regionUnitedStatesHubLabel"),
-            countryLine: t("pages.alliedHealthHub.regionUnitedStatesCountryLine"),
-            overviewHref: usOverview,
-            questionsHref: usQuestions,
-            pricingHint: t("pages.alliedHealthHub.regionUnitedStatesPricingHint"),
-          }}
-          ca={{
-            label: t("pages.alliedHealthHub.regionCanadaHubLabel"),
-            countryLine: t("pages.alliedHealthHub.regionCanadaCountryLine"),
-            overviewHref: caOverview,
-            questionsHref: caQuestions,
-            pricingHint: t("pages.alliedHealthHub.regionCanadaPricingHint"),
-          }}
-          copy={hubCopy.region}
-        />
+        <section
+          className="nn-card px-5 py-5 sm:px-8 sm:py-6"
+          aria-label={t("pages.alliedHealthHub.regionH2")}
+        >
+          <p className="text-sm leading-relaxed text-[var(--theme-muted-text)]">
+            After you pick an occupation track below, open the{" "}
+            <Link href={ALLIED_GLOBAL_HUB_PATH} className="font-semibold text-primary underline-offset-4 hover:underline">
+              global allied pathway hub
+            </Link>{" "}
+            for the shared Allied Health surface: occupation-scoped lessons, flashcards, practice questions, labs, and adaptive readiness
+            entry points without a country fork.
+          </p>
+        </section>
 
         <AlliedHubProfessionSections grouped={grouped} copy={hubCopy.professions} />
 

@@ -81,20 +81,21 @@ const blogControlPanelPlanBase = z.object({
     )
     .max(12)
     .default([]),
+  /** At least one placement after `normalizeBlogEditorialPlanCandidate` / `normalizeBlogControlPanelPlanJson` fallbacks (hero pipeline + SEO). */
   imagePlacements: z
     .array(
       z.object({
         /** Stable key for admin attachments (e.g. hero, inline_1). */
         slotKey: z.string().min(2).max(48).optional(),
         role: z.enum(["hero", "inline"]).optional(),
-        section: z.string().min(2).max(200),
-        promptIdea: z.string().min(10).max(500),
-        altIdea: z.string().min(5).max(240),
+        section: z.string().min(1).max(200),
+        promptIdea: z.string().min(1).max(500),
+        altIdea: z.string().min(1).max(240),
         captionIdea: z.string().max(300).optional(),
       }),
     )
-    .max(10)
-    .default([]),
+    .min(1)
+    .max(10),
   apaSourceStubs: z.array(z.record(z.string(), z.unknown())).max(20).default([]),
   keyTakeaways: z.array(z.string().min(5).max(400)).max(10).default([]),
   featuredSnippetHint: z.string().max(400).optional(),

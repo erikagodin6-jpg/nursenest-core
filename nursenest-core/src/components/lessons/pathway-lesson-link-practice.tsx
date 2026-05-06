@@ -28,6 +28,8 @@ export function pathwayMarketingQuestionBankTopicHref(
 export type AppQuestionBankDrillOpts = {
   /** Narrow the bank session to specific question ids (comma-separated in URL; max 16). */
   includeIds?: string[];
+  /** Preserved for allied marketing → app deep links (`?alliedProfession=`). */
+  alliedProfession?: string;
 };
 
 /**
@@ -44,6 +46,8 @@ export function buildAppQuestionBankTopicDrillHref(
   if (topic.trim()) qs.set("topic", topic.trim());
   if (topicCode?.trim()) qs.set("topicCode", topicCode.trim().toLowerCase());
   qs.set("preset", "topic_drill");
+  const ap = opts?.alliedProfession?.trim().toLowerCase();
+  if (ap) qs.set("alliedProfession", ap);
   const ids = (opts?.includeIds ?? []).map((id) => id.trim()).filter((id) => id.length >= 8);
   if (ids.length > 0) qs.set("includeIds", ids.slice(0, 16).join(","));
   return `/app/questions?${qs.toString()}`;

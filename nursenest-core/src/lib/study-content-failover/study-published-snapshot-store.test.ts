@@ -13,6 +13,20 @@ test("stableListOptsKey is deterministic", () => {
   assert.equal(stableListOptsKey({ q: " A ", topicSlugsIn: ["b", "a"] }), stableListOptsKey({ q: "a", topicSlugsIn: ["a", "b"] }));
 });
 
+test("stableListOptsKey distinguishes allied profession filter", () => {
+  assert.notEqual(
+    stableListOptsKey({ topicSlugsIn: ["a"] }),
+    stableListOptsKey({ topicSlugsIn: ["a"], alliedProfessionKey: "pta" }),
+  );
+});
+
+test("stableListOptsKey distinguishes allied taxonomy drill", () => {
+  assert.notEqual(
+    stableListOptsKey({ alliedProfessionKey: "pta" }),
+    stableListOptsKey({ alliedProfessionKey: "pta", taxonomySlugsIn: ["therapeutic-exercise"] }),
+  );
+});
+
 test("readStudyPublishedSnapshotFile returns envelope from disk", async () => {
   const dir = await mkdtemp(path.join(tmpdir(), "nn-study-snap-"));
   const prev = process.env.STUDY_PUBLISHED_SNAPSHOT_DIR;

@@ -62,7 +62,7 @@ export function PracticeExamLauncherClient({ pathwayId }: { pathwayId: string | 
         difficultyMin: null,
         difficultyMax: null,
         sessionMode: "tutor",
-        rationaleVisibility: "immediate",
+        rationaleVisibilityMode: "immediate",
       });
 
       const res = await fetch("/api/practice-tests", {

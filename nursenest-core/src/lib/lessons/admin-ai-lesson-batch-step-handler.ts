@@ -19,7 +19,7 @@ import {
   buildDraftNormalized,
   generateAdminAiLesson,
 } from "@/lib/lessons/admin-ai-lesson-pipeline";
-import { getOpenAiChatModel } from "@/lib/ai/openai-env";
+import { getLessonOpenAiChatModel } from "@/lib/ai/openai-env";
 
 export type LessonBatchStepResult = Record<string, unknown>;
 
@@ -108,7 +108,7 @@ export async function executeLessonBatchItemForClaimedRow(params: {
 
     const { lesson, rawTokens } = await generateAdminAiLesson(genInput);
     const normalized = buildDraftNormalized(genInput, lesson);
-    const model = getOpenAiChatModel();
+    const model = getLessonOpenAiChatModel();
 
     const createdDraftId = await db.$transaction(async (tx) => {
       const draft = await tx.generatedLessonDraft.create({

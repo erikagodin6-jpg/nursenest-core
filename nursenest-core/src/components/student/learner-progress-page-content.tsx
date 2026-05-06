@@ -321,7 +321,7 @@ export function LearnerProgressPageContent({
       </ProgressCardShell>
 
       <p className="text-center text-sm text-muted-foreground">
-        <Link href="/app/account/report-card" className="font-semibold text-primary underline-offset-2 hover:underline">
+        <Link href="/app/account/report" className="font-semibold text-primary underline-offset-2 hover:underline">
           {t("learner.progressPage.linkReportCard")}
         </Link>
         {" · "}

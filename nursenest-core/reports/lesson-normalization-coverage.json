@@ -1,0 +1,394 @@
+{
+  "generatedAt": "2026-05-03T17:06:20.229Z",
+  "pathways": [
+    {
+      "pathwayId": "ca-allied-core",
+      "publicLessonsPath": null,
+      "publicUrlPattern": "/canada/allied/allied-health/lessons/{lessonSlug}",
+      "rawCount": 15,
+      "normalizedCount": 15,
+      "renderableCount": 15,
+      "excludedCount": 0,
+      "rawToRenderableRatio": "15/15 (100%)",
+      "unexpectedExclusionRate": 0,
+      "passesExclusionQualityGate": true,
+      "topExclusionReasons": [],
+      "exclusions": [],
+      "unexpectedExclusionCount": 0,
+      "sampleRenderableLessonPath": "/canada/allied/allied-health/lessons/allied-clinical-documentation",
+      "forcePublishEnabled": false,
+      "forcePublishedLessons": []
+    },
+    {
+      "pathwayId": "ca-np-cnple",
+      "publicLessonsPath": null,
+      "publicUrlPattern": "/canada/np/cnple/lessons/{lessonSlug}",
+      "rawCount": 436,
+      "normalizedCount": 436,
+      "renderableCount": 436,
+      "excludedCount": 0,
+      "rawToRenderableRatio": "436/436 (100%)",
+      "unexpectedExclusionRate": 0,
+      "passesExclusionQualityGate": true,
+      "topExclusionReasons": [],
+      "exclusions": [],
+      "unexpectedExclusionCount": 0,
+      "sampleRenderableLessonPath": "/canada/np/cnple/lessons/np-acute-coronary-syndrome-recognition-and-initial-management",
+      "forcePublishEnabled": false,
+      "forcePublishedLessons": []
+    },
+    {
+      "pathwayId": "ca-rn-nclex-rn",
+      "publicLessonsPath": null,
+      "publicUrlPattern": "/canada/rn/nclex-rn/lessons/{lessonSlug}",
+      "rawCount": 797,
+      "normalizedCount": 797,
+      "renderableCount": 797,
+      "excludedCount": 0,
+      "rawToRenderableRatio": "797/797 (100%)",
+      "unexpectedExclusionRate": 0,
+      "passesExclusionQualityGate": true,
+      "topExclusionReasons": [],
+      "exclusions": [],
+      "unexpectedExclusionCount": 0,
+      "sampleRenderableLessonPath": "/canada/rn/nclex-rn/lessons/exam-strat-abcs-nclex-rn",
+      "forcePublishEnabled": false,
+      "forcePublishedLessons": []
+    },
+    {
+      "pathwayId": "ca-rpn-rex-pn",
+      "publicLessonsPath": null,
+      "publicUrlPattern": "/canada/pn/rex-pn/lessons/{lessonSlug}",
+      "rawCount": 478,
+      "normalizedCount": 478,
+      "renderableCount": 478,
+      "excludedCount": 0,
+      "rawToRenderableRatio": "478/478 (100%)",
+      "unexpectedExclusionRate": 0,
+      "passesExclusionQualityGate": true,
+      "topExclusionReasons": [],
+      "exclusions": [],
+      "unexpectedExclusionCount": 0,
+      "sampleRenderableLessonPath": "/canada/pn/rex-pn/lessons/rpn-anticoagulant-safety-teaching",
+      "forcePublishEnabled": false,
+      "forcePublishedLessons": []
+    },
+    {
+      "pathwayId": "us-allied-core",
+      "publicLessonsPath": null,
+      "publicUrlPattern": "/us/allied/allied-health/lessons/{lessonSlug}",
+      "rawCount": 15,
+      "normalizedCount": 15,
+      "renderableCount": 15,
+      "excludedCount": 0,
+      "rawToRenderableRatio": "15/15 (100%)",
+      "unexpectedExclusionRate": 0,
+      "passesExclusionQualityGate": true,
+      "topExclusionReasons": [],
+      "exclusions": [],
+      "unexpectedExclusionCount": 0,
+      "sampleRenderableLessonPath": "/us/allied/allied-health/lessons/allied-clinical-documentation",
+      "forcePublishEnabled": false,
+      "forcePublishedLessons": []
+    },
+    {
+      "pathwayId": "us-lpn-nclex-pn",
+      "publicLessonsPath": null,
+      "publicUrlPattern": "/us/pn/nclex-pn/lessons/{lessonSlug}",
+      "rawCount": 150,
+      "normalizedCount": 150,
+      "renderableCount": 150,
+      "excludedCount": 0,
+      "rawToRenderableRatio": "150/150 (100%)",
+      "unexpectedExclusionRate": 0,
+      "passesExclusionQualityGate": true,
+      "topExclusionReasons": [],
+      "exclusions": [],
+      "unexpectedExclusionCount": 0,
+      "sampleRenderableLessonPath": "/us/pn/nclex-pn/lessons/acute-coronary-syndrome-gold",
+      "forcePublishEnabled": false,
+      "forcePublishedLessons": []
+    },
+    {
+      "pathwayId": "us-np-fnp",
+      "publicLessonsPath": null,
+      "publicUrlPattern": "/us/np/fnp/lessons/{lessonSlug}",
+      "rawCount": 576,
+      "normalizedCount": 576,
+      "renderableCount": 576,
+      "excludedCount": 0,
+      "rawToRenderableRatio": "576/576 (100%)",
+      "unexpectedExclusionRate": 0,
+      "passesExclusionQualityGate": true,
+      "topExclusionReasons": [],
+      "exclusions": [],
+      "unexpectedExclusionCount": 0,
+      "sampleRenderableLessonPath": "/us/np/fnp/lessons/np-acute-coronary-syndrome-recognition-and-initial-management",
+      "forcePublishEnabled": false,
+      "forcePublishedLessons": []
+    },
+    {
+      "pathwayId": "us-rn-nclex-rn",
+      "publicLessonsPath": null,
+      "publicUrlPattern": "/us/rn/nclex-rn/lessons/{lessonSlug}",
+      "rawCount": 796,
+      "normalizedCount": 796,
+      "renderableCount": 796,
+      "excludedCount": 0,
+      "rawToRenderableRatio": "796/796 (100%)",
+      "unexpectedExclusionRate": 0,
+      "passesExclusionQualityGate": true,
+      "topExclusionReasons": [],
+      "exclusions": [],
+      "unexpectedExclusionCount": 0,
+      "sampleRenderableLessonPath": "/us/rn/nclex-rn/lessons/exam-strat-abcs-nclex-rn",
+      "forcePublishEnabled": false,
+      "forcePublishedLessons": []
+    },
+    {
+      "pathwayId": "us-rn-new-grad-transition",
+      "publicLessonsPath": null,
+      "publicUrlPattern": "/us/rn/new-grad-transition/lessons/{lessonSlug}",
+      "rawCount": 40,
+      "normalizedCount": 40,
+      "renderableCount": 39,
+      "excludedCount": 1,
+      "rawToRenderableRatio": "39/40 (98%)",
+      "unexpectedExclusionRate": 0,
+      "passesExclusionQualityGate": true,
+      "topExclusionReasons": [
+        {
+          "reasonCode": "not_public_complete",
+          "count": 1
+        }
+      ],
+      "exclusions": [
+        {
+          "id": "ngn-first-hour-reality",
+          "slug": "ngn-first-hour-reality",
+          "title": "The first hour: Textbook vs. real",
+          "reason": "Lesson text contains development or placeholder phrasing that must be removed before publish.",
+          "reasonCode": "not_public_complete",
+          "allowed": true,
+          "allowlistComment": "Contains explicit development/placeholder phrasing and must stay excluded until editorial cleanup."
+        }
+      ],
+      "unexpectedExclusionCount": 0,
+      "sampleRenderableLessonPath": "/us/rn/new-grad-transition/lessons/ngn-abcs-in-context",
+      "forcePublishEnabled": false,
+      "forcePublishedLessons": []
+    }
+  ],
+  "alliedProfessionCoverage": [
+    {
+      "professionKey": "mlt",
+      "label": "Medical laboratory exam prep",
+      "route": "/us/allied/allied-health/lessons?alliedProfession=mlt",
+      "topicSlugsIn": [
+        "lab-values",
+        "infection-control",
+        "medical-terminology",
+        "clinical-documentation"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-infection-control",
+        "allied-lab-values",
+        "allied-medical-terminology"
+      ],
+      "status": "mapped",
+      "notes": "Profession page has a live lesson-source mapping through allied topic filters."
+    },
+    {
+      "professionKey": "paramedic",
+      "label": "Paramedic certification exam prep",
+      "route": "/us/allied/allied-health/lessons?alliedProfession=paramedic",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "vital-signs",
+        "emergency-response",
+        "patient-communication",
+        "clinical-documentation"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-emergency-response",
+        "allied-patient-assessment",
+        "allied-patient-communication",
+        "allied-vital-signs"
+      ],
+      "status": "mapped",
+      "notes": "Profession page has a live lesson-source mapping through allied topic filters."
+    },
+    {
+      "professionKey": "ota",
+      "label": "Occupational therapy assistant exam prep",
+      "route": "/us/allied/allied-health/lessons?alliedProfession=ota",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "patient-communication",
+        "clinical-documentation",
+        "human-anatomy",
+        "human-physiology"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-human-anatomy",
+        "allied-human-physiology",
+        "allied-patient-assessment",
+        "allied-patient-communication"
+      ],
+      "status": "mapped",
+      "notes": "Profession page has a live lesson-source mapping through allied topic filters."
+    },
+    {
+      "professionKey": "pta",
+      "label": "Physical therapist assistant exam prep",
+      "route": "/us/allied/allied-health/lessons?alliedProfession=pta",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "human-anatomy",
+        "human-physiology",
+        "vital-signs",
+        "patient-communication"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-human-anatomy",
+        "allied-human-physiology",
+        "allied-patient-assessment",
+        "allied-patient-communication",
+        "allied-vital-signs"
+      ],
+      "status": "mapped",
+      "notes": "Profession page has a live lesson-source mapping through allied topic filters."
+    },
+    {
+      "professionKey": "social-work",
+      "label": "Social work exam prep",
+      "route": "/us/allied/allied-health/lessons?alliedProfession=social-work",
+      "topicSlugsIn": [
+        "patient-communication",
+        "clinical-documentation",
+        "healthcare-teamwork",
+        "medical-ethics"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-healthcare-teamwork",
+        "allied-medical-ethics",
+        "allied-patient-communication"
+      ],
+      "status": "mapped",
+      "notes": "Profession page has a live lesson-source mapping through allied topic filters."
+    },
+    {
+      "professionKey": "mental-health-addictions",
+      "label": "Mental health and addictions worker exam prep",
+      "route": "/us/allied/allied-health/lessons?alliedProfession=mental-health-addictions",
+      "topicSlugsIn": [
+        "patient-communication",
+        "clinical-documentation",
+        "healthcare-teamwork",
+        "medical-ethics"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-healthcare-teamwork",
+        "allied-medical-ethics",
+        "allied-patient-communication"
+      ],
+      "status": "mapped",
+      "notes": "Profession page has a live lesson-source mapping through allied topic filters."
+    },
+    {
+      "professionKey": "psw-hca",
+      "label": "PSW, HCA, and CCA exam prep",
+      "route": "/us/allied/allied-health/lessons?alliedProfession=psw-hca",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "vital-signs",
+        "patient-communication",
+        "infection-control",
+        "healthcare-teamwork"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-healthcare-teamwork",
+        "allied-infection-control",
+        "allied-patient-assessment",
+        "allied-patient-communication",
+        "allied-vital-signs"
+      ],
+      "status": "mapped",
+      "notes": "Profession page has a live lesson-source mapping through allied topic filters."
+    },
+    {
+      "professionKey": "respiratory",
+      "label": "Respiratory therapy (RRT) exam prep",
+      "route": "/us/allied/allied-health/lessons?alliedProfession=respiratory",
+      "topicSlugsIn": [
+        "patient-assessment",
+        "vital-signs",
+        "emergency-response",
+        "infection-control",
+        "human-physiology"
+      ],
+      "mappedLessonCount": 5,
+      "mappedLessonSlugs": [
+        "allied-emergency-response",
+        "allied-human-physiology",
+        "allied-infection-control",
+        "allied-patient-assessment",
+        "allied-vital-signs"
+      ],
+      "status": "mapped",
+      "notes": "Profession page has a live lesson-source mapping through allied topic filters."
+    },
+    {
+      "professionKey": "imaging",
+      "label": "Medical imaging exam prep",
+      "route": "/us/allied/allied-health/lessons?alliedProfession=imaging",
+      "topicSlugsIn": [
+        "imaging-basics",
+        "patient-assessment",
+        "vital-signs",
+        "medical-terminology"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-imaging-basics",
+        "allied-medical-terminology",
+        "allied-patient-assessment",
+        "allied-vital-signs"
+      ],
+      "status": "mapped",
+      "notes": "Profession page has a live lesson-source mapping through allied topic filters."
+    },
+    {
+      "professionKey": "pharmacy-tech",
+      "label": "Pharmacy technician exam prep",
+      "route": "/us/allied/allied-health/lessons?alliedProfession=pharmacy-tech",
+      "topicSlugsIn": [
+        "medication-safety",
+        "pharmacology-basics",
+        "medical-terminology",
+        "clinical-documentation"
+      ],
+      "mappedLessonCount": 4,
+      "mappedLessonSlugs": [
+        "allied-clinical-documentation",
+        "allied-medical-terminology",
+        "allied-medication-safety",
+        "allied-pharmacology-basics"
+      ],
+      "status": "mapped",
+      "notes": "Profession page has a live lesson-source mapping through allied topic filters."
+    }
+  ]
+}

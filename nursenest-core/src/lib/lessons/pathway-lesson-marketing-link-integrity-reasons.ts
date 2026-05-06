@@ -44,8 +44,12 @@ export type MarketingHubLessonVerifyDiagnostics = {
   droppedRowCount: number;
   /** Count of **unique slugs** failing detail resolution. */
   excludedUniqueSlugCount: number;
-  /** Resolver invocations (one per unique slug in current verify implementation). */
+  /** Resolver invocations (detail reads executed for this verify pass). */
   verifyResolverCallCount: number;
+  /** Present when verify capped unique-slug detail reads (see {@link verifyMarketingHubLessonRowsResolve}). */
+  verifyUniqueSlugCap?: number;
+  /** Count of unique slugs not detail-verified on this pass (inventory kept as degraded). */
+  verifyUniqueSlugSkippedCount?: number;
   excludedByReason: Partial<Record<HubMarketingLessonDetailFailureReason, number>>;
   /**
    * Same data as `excludedByReason`, sorted by descending count for structured logs / dashboards.

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { headers } from "next/headers";
 import { MarketingCountryChromeProvider } from "@/components/marketing/marketing-country-chrome-context";
 import { getEffectiveMarketingCountry } from "@/lib/marketing/get-effective-country";
@@ -34,14 +35,31 @@ import {
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
 import { loadMarketingLayoutObservability } from "@/lib/observability/deferred-marketing-layout-observability";
 import { loadRenderTrace } from "@/lib/observability/deferred-render-trace";
-import { getStaffSession } from "@/lib/auth/staff-session";
 import { MarketingPublicContentEditProvider } from "@/components/marketing/marketing-public-content-edit-provider";
-import { loadMarketingPublicContentOverridesForLocale } from "@/lib/marketing/load-marketing-public-content-overrides";
+import { MarketingMainErrorBoundary } from "@/components/marketing/marketing-main-error-boundary";
 import type { CountryCode } from "@/lib/marketing/countries/types";
 
 export const dynamic = "force-dynamic";
 
 const MARKETING_LAYOUT_SENTRY_IMPORT_BUDGET_MS = 2000;
+
+/**
+ * Single slot for default marketing main: motion perf + main-column error isolation.
+ * Keeps exactly one `{children}` (the segment page) under `MarketingMobileMotionShell` per call site.
+ */
+function MarketingDefaultMainMotionSlot({
+  serverNarrowViewportHint,
+  children,
+}: {
+  serverNarrowViewportHint: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
+      <MarketingMainErrorBoundary name="marketing_default_main">{children}</MarketingMainErrorBoundary>
+    </MarketingMobileMotionShell>
+  );
+}
 
 function safeNowMs(): number {
   try {
@@ -77,6 +95,26 @@ async function readNarrowViewportHintSafe(): Promise<boolean> {
   }
 }
 
+async function loadPublicContentOverridesForLocaleSafe(locale: string): Promise<Record<string, string>> {
+  try {
+    const { loadMarketingPublicContentOverridesForLocale } = await import(
+      "@/lib/marketing/load-marketing-public-content-overrides"
+    );
+    return await loadMarketingPublicContentOverridesForLocale(locale);
+  } catch {
+    return {};
+  }
+}
+
+async function getStaffSessionSafe() {
+  try {
+    const { getStaffSession } = await import("@/lib/auth/staff-session");
+    return await getStaffSession();
+  } catch {
+    return null;
+  }
+}
+
 async function getHeaderPathnameSafe(): Promise<string> {
   try {
     return (await headers()).get("x-nn-request-pathname")?.trim() ?? "/";
@@ -93,7 +131,7 @@ function marketingDefaultLayoutStaticShellForHome({
   marketingCountry,
   serverNarrowViewportHint,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   serverRegion: MarketingRegionToggle;
   trustClientPersistedRegion: boolean;
   serverGlobalRegion: GlobalRegionSlug | null;
@@ -115,9 +153,9 @@ function marketingDefaultLayoutStaticShellForHome({
             <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={serverGlobalRegion}>
               <CheckoutGlobalRegionContextPathStamp />
               <MarketingDefaultLayoutChromeFailsafeShell>
-                <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
+                <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
                   {children}
-                </MarketingMobileMotionShell>
+                </MarketingDefaultMainMotionSlot>
               </MarketingDefaultLayoutChromeFailsafeShell>
             </MarketingHeaderGlobalRegionServerBridge>
           </MarketingFeedbackShell>
@@ -127,7 +165,7 @@ function marketingDefaultLayoutStaticShellForHome({
   );
 }
 
-export default async function MarketingDefaultLocaleLayout({ children }: { children: React.ReactNode }) {
+export default async function MarketingDefaultLocaleLayout({ children }: { children: ReactNode }) {
   const layoutBootT0 = safeNowMs();
 
   try {
@@ -367,8 +405,8 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
       );
 
       const [publicContentOverrides, staffSession] = await Promise.all([
-        loadMarketingPublicContentOverridesForLocale(resolvedLocale).catch(() => ({} as Record<string, string>)),
-        getStaffSession().catch(() => null),
+        loadPublicContentOverridesForLocaleSafe(resolvedLocale),
+        getStaffSessionSafe(),
       ]);
 
       return (
@@ -388,23 +426,28 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                     <CheckoutGlobalRegionContextPathStamp />
                     <div className="nn-marketing-surface flex min-h-screen flex-col">
                       <SiteHeader serverHasStaffSession={staffSession != null} />
-                      <main className="flex min-h-0 flex-1 flex-col">
-                        {shouldLayerMainPageShards() ? (
-                          <MarketingMainI18nShards
-                            locale={resolvedLocale}
-                            publicContentOverrides={publicContentOverrides}
-                          >
-                            <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
+                      {shouldLayerMainPageShards() ? (
+                        <MarketingMainI18nShards
+                          locale={resolvedLocale}
+                          publicContentOverrides={publicContentOverrides}
+                          trailingChrome={<SiteFooter serverHasStaffSession={staffSession != null} />}
+                        >
+                          <main className="flex min-h-0 flex-1 flex-col">
+                            <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
                               {children}
-                            </MarketingMobileMotionShell>
-                          </MarketingMainI18nShards>
-                        ) : (
-                          <MarketingMobileMotionShell serverNarrowViewportHint={serverNarrowViewportHint}>
-                            {children}
-                          </MarketingMobileMotionShell>
-                        )}
-                      </main>
-                      <SiteFooter serverHasStaffSession={staffSession != null} />
+                            </MarketingDefaultMainMotionSlot>
+                          </main>
+                        </MarketingMainI18nShards>
+                      ) : (
+                        <>
+                          <main className="flex min-h-0 flex-1 flex-col">
+                            <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
+                              {children}
+                            </MarketingDefaultMainMotionSlot>
+                          </main>
+                          <SiteFooter serverHasStaffSession={staffSession != null} />
+                        </>
+                      )}
                     </div>
                   </MarketingHeaderGlobalRegionServerBridge>
                 </MarketingFeedbackShell>
@@ -471,9 +514,9 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                 <MarketingHeaderGlobalRegionServerBridge serverGlobalRegion={failsafeGlobalRegion}>
                   <CheckoutGlobalRegionContextPathStamp />
                   <MarketingDefaultLayoutChromeFailsafeShell>
-                    <MarketingMobileMotionShell serverNarrowViewportHint={failsafeNarrowHint}>
+                    <MarketingDefaultMainMotionSlot serverNarrowViewportHint={failsafeNarrowHint}>
                       {children}
-                    </MarketingMobileMotionShell>
+                    </MarketingDefaultMainMotionSlot>
                   </MarketingDefaultLayoutChromeFailsafeShell>
                 </MarketingHeaderGlobalRegionServerBridge>
               </MarketingFeedbackShell>

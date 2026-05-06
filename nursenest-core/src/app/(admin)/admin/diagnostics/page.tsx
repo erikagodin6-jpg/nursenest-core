@@ -8,6 +8,7 @@ import { readPriorReadinessScore, writePriorReadinessScore } from "@/lib/admin/r
 import { loadAdminDiagnostics } from "@/lib/admin/load-admin-diagnostics";
 import { loadCatBlueprintDiagnosticsSummary } from "@/lib/admin/load-cat-blueprint-diagnostics-summary";
 import { loadQuestionBankRemediationIntelligence } from "@/lib/questions/load-question-bank-remediation-intelligence";
+import { formatDisplayLabel, formatHealthStatusLabel } from "@/lib/ui/format-display-label";
 
 export const dynamic = "force-dynamic";
 
@@ -60,7 +61,7 @@ export default async function AdminDiagnosticsPage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Operations</p>
-          <h1 className="mt-1 text-2xl font-bold text-[var(--theme-heading-text)]">Diagnostics dashboard</h1>
+          <h1 className="mt-1 text-2xl font-bold text-[var(--theme-heading-text)]">Diagnostics Dashboard</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
             Prioritized actions and readiness on top; full system snapshot below (unchanged fields).
           </p>
@@ -160,7 +161,7 @@ export default async function AdminDiagnosticsPage() {
           <p className="mt-3 text-sm font-medium leading-snug text-[var(--theme-heading-text)]">{ops.readinessExplanation}</p>
           {ops.readinessTrend.available ? (
             <p className={`mt-2 text-sm font-medium ${trendStyles(ops.readinessTrend.direction)}`}>
-              Trend: {ops.readinessTrend.direction}
+              Trend: {formatDisplayLabel(ops.readinessTrend.direction)}
               {ops.readinessTrend.delta === 0
                 ? " (unchanged)"
                 : ` (${ops.readinessTrend.delta > 0 ? "+" : ""}${ops.readinessTrend.delta} vs prior ${ops.readinessTrend.priorScore})`}
@@ -191,16 +192,16 @@ export default async function AdminDiagnosticsPage() {
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-full bg-background/80 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
-                        {issue.severity}
+                      <span className="rounded-full bg-background/80 px-2 py-0.5 text-[10px] font-bold tracking-wide text-[var(--theme-heading-text)]">
+                        {formatDisplayLabel(issue.severity)}
                       </span>
                       {issue.conversionRisk ? (
                         <span className="rounded-full bg-rose-500/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-rose-800 dark:text-rose-200">
                           Conversion / trust risk
                         </span>
                       ) : null}
-                      <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                        {issue.category.replace("_", " ")}
+                      <span className="text-[10px] font-medium tracking-wide text-muted-foreground">
+                        {formatDisplayLabel(issue.category)}
                       </span>
                     </div>
                     <p className="mt-1 font-semibold text-[var(--theme-heading-text)]">{issue.title}</p>
@@ -251,8 +252,8 @@ export default async function AdminDiagnosticsPage() {
                     <span className="min-w-0 font-medium text-[var(--theme-heading-text)]">{d.label}</span>
                     <span className="flex shrink-0 items-center gap-2 tabular-nums">
                       <span className="text-muted-foreground">−{d.weight} pts</span>
-                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${driverSeverityPill(d.severity)}`}>
-                        {d.severity}
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${driverSeverityPill(d.severity)}`}>
+                        {formatDisplayLabel(d.severity)}
                       </span>
                     </span>
                   </li>
@@ -274,8 +275,8 @@ export default async function AdminDiagnosticsPage() {
                     <span className="min-w-0 font-medium text-[var(--theme-heading-text)]">{d.label}</span>
                     <span className="flex shrink-0 items-center gap-2 tabular-nums">
                       <span className="text-muted-foreground">weight {d.weight}</span>
-                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${driverSeverityPill(d.severity)}`}>
-                        {d.severity}
+                      <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${driverSeverityPill(d.severity)}`}>
+                        {formatDisplayLabel(d.severity)}
                       </span>
                     </span>
                   </li>
@@ -291,11 +292,11 @@ export default async function AdminDiagnosticsPage() {
         <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
           <div>
             <dt className="text-muted-foreground">Configured</dt>
-            <dd className="font-semibold">{diagnostics.dbHealth.configured ? "yes" : "no"}</dd>
+            <dd className="font-semibold">{diagnostics.dbHealth.configured ? "Yes" : "No"}</dd>
           </div>
           <div>
             <dt className="text-muted-foreground">Status</dt>
-            <dd className="font-semibold">{diagnostics.dbHealth.status}</dd>
+            <dd className="font-semibold">{formatHealthStatusLabel(diagnostics.dbHealth.status)}</dd>
           </div>
           {diagnostics.dbHealth.latencyMs != null ? (
             <div>
@@ -323,7 +324,7 @@ export default async function AdminDiagnosticsPage() {
           <div>
             <dt className="text-muted-foreground">{diagnostics.apiHealth.liveness.path}</dt>
             <dd className="font-semibold">
-              {diagnostics.apiHealth.liveness.ok ? "ok" : "fail"}{" "}
+              {diagnostics.apiHealth.liveness.ok ? "OK" : "Failed"}{" "}
               {diagnostics.apiHealth.liveness.status != null ? `(${diagnostics.apiHealth.liveness.status})` : ""}
             </dd>
             {diagnostics.apiHealth.liveness.error ? (
@@ -333,7 +334,7 @@ export default async function AdminDiagnosticsPage() {
           <div>
             <dt className="text-muted-foreground">{diagnostics.apiHealth.readiness.path}</dt>
             <dd className="font-semibold">
-              {diagnostics.apiHealth.readiness.ok ? "ok" : "fail"}{" "}
+              {diagnostics.apiHealth.readiness.ok ? "OK" : "Failed"}{" "}
               {diagnostics.apiHealth.readiness.status != null ? `(${diagnostics.apiHealth.readiness.status})` : ""}
             </dd>
             {diagnostics.apiHealth.readiness.error ? (

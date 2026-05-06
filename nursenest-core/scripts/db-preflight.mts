@@ -14,7 +14,7 @@ const PREFIX = "[db-preflight]";
 
 const raw = process.env.DATABASE_URL!.trim();
 const t = parsePostgresUrlTargetSafe(raw);
-console.log(`${PREFIX} OK: databaseUrlSource=${databaseUrlSource}`);
+console.log(`${PREFIX} OK: databaseUrlSource=${databaseUrlSource.value}`);
 console.log(`${PREFIX} cwd=${process.cwd()} (informational; env files are resolved from package root)`);
 console.log(`${PREFIX} packageRoot=${cliDotenvTelemetry.packageRoot}`);
 console.log(`${PREFIX} DATABASE_URL inferred from: ${cliDotenvTelemetry.sourceDatabaseUrl}`);

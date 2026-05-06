@@ -1,3 +1,4 @@
+import { getLessonOpenAiChatModel } from "@/lib/ai/openai-env";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { getBlogInternalLinkPathHintsForPrompt } from "@/lib/blog/blog-internal-lesson-links";
 import type {
@@ -156,6 +157,7 @@ export async function generateAdminAiLesson(
   input: AdminAiLessonGenerateInput,
 ): Promise<{ lesson: AdminAiGeneratedLesson; rawTokens?: number }> {
   const res = await openAiChatCompletion({
+    model: getLessonOpenAiChatModel(),
     messages: [
       { role: "system", content: buildSystemPrompt() },
       { role: "user", content: buildUserPrompt(input) },
@@ -237,6 +239,7 @@ export async function regenerateAdminAiLessonSection(
 ): Promise<AdminAiGeneratedLesson> {
   const section = adminAiLessonRegenerateSectionSchema.parse(sectionRaw);
   const res = await openAiChatCompletion({
+    model: getLessonOpenAiChatModel(),
     messages: [
       { role: "system", content: buildSystemPrompt() },
       { role: "user", content: partialRegenUserPrompt(normalized, section) },

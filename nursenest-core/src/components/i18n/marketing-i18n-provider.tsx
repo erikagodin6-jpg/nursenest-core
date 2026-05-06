@@ -1,10 +1,13 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, type ReactNode } from "react";
+import React, { createContext, useContext, useEffect, useMemo, type ReactNode } from "react";
 import { formatMarketingMessage, type MarketingMessages } from "@/lib/marketing-i18n-core";
 import { isRtlMarketingLocale, localePrimarySubtag, DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 import { validateMarketingHeroNavCriticalKeys } from "@/lib/marketing/marketing-hero-nav-critical-keys";
 import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
+import { humanizedMarketingKeyFallback } from "@/lib/marketing-i18n/marketing-message-value-policy";
+import { warnMissingMarketingMessageKeyDev } from "@/lib/marketing-i18n/marketing-missing-key-dev-warn";
+import { looksLikeRawI18nKey } from "@/lib/ui/format-display-label";
 
 type Params = Record<string, string | number | undefined>;
 
@@ -27,9 +30,31 @@ function safeFormat(
   locale?: string
 ): string {
   try {
-    return formatMarketingMessage(messages, key, params, fallback, { locale }).trim();
-  } catch {
-    return key; // fallback to key instead of crashing
+    const resolved = formatMarketingMessage(messages, key, params, fallback, { locale }).trim();
+    if (!resolved) {
+      const fb = humanizedMarketingKeyFallback(key);
+      warnMissingMarketingMessageKeyDev(key, fb, {
+        hasCatalog: hasNonEmptyMarketingCatalog(messages, fallback),
+      });
+      return fb;
+    }
+    if (process.env.NODE_ENV === "development" && looksLikeRawI18nKey(resolved)) {
+      console.warn("[MarketingI18n] Resolved copy looks like a raw message key — check catalog value", {
+        key,
+        resolved: resolved.slice(0, 120),
+      });
+    }
+    return resolved;
+  } catch (e) {
+    const fb = humanizedMarketingKeyFallback(key);
+    const isMissingRequiredCopy =
+      e instanceof Error && e.message.includes("missing required marketing copy");
+    if (isMissingRequiredCopy) {
+      warnMissingMarketingMessageKeyDev(key, fb, {
+        hasCatalog: hasNonEmptyMarketingCatalog(messages, fallback),
+      });
+    }
+    return fb;
   }
 }
 
@@ -37,8 +62,16 @@ const DEGRADED_MARKETING_I18N: MarketingI18nContextValue = {
   locale: DEFAULT_MARKETING_LOCALE,
   messages: {},
   fallbackMessages: undefined,
-  t: (key: string) => key,
+  t: (key: string) => humanizedMarketingKeyFallback(key),
 };
+
+/** Matches dotted message keys that should never appear verbatim in rendered marketing HTML. */
+const RENDERED_I18N_KEY_PREFIX_PATTERN =
+  /\b(?:pages|footer|blog|admin|content|learner|app|nav|components|marketing|errors|forms)\.[A-Za-z0-9_.-]+/;
+
+function hasNonEmptyMarketingCatalog(messages: MarketingMessages, fallback?: MarketingMessages): boolean {
+  return Object.keys(messages).length > 0 || Boolean(fallback && Object.keys(fallback).length > 0);
+}
 
 function HtmlLangSync({ locale }: { locale: string }) {
   useEffect(() => {
@@ -51,6 +84,34 @@ function HtmlLangSync({ locale }: { locale: string }) {
       document.documentElement.dir = "ltr";
     }
   }, [locale]);
+
+  return null;
+}
+
+function RenderedI18nKeyLeakGuard() {
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return undefined;
+    let lastLogged = "";
+
+    function checkRenderedText() {
+      try {
+        const renderedText = document.body?.innerText ?? "";
+        const match = renderedText.match(RENDERED_I18N_KEY_PREFIX_PATTERN)?.[0] ?? "";
+        if (match && match !== lastLogged) {
+          lastLogged = match;
+          console.warn("[MarketingI18n] Rendered text matches a dotted message key pattern", { key: match });
+        }
+      } catch {
+        // never break app rendering
+      }
+    }
+
+    checkRenderedText();
+    if (!document.body) return undefined;
+    const observer = new MutationObserver(checkRenderedText);
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+    return () => observer.disconnect();
+  }, []);
 
   return null;
 }
@@ -117,6 +178,7 @@ export function MarketingI18nProvider({
   return (
     <MarketingI18nContext.Provider value={value}>
       <HtmlLangSync locale={locale} />
+      <RenderedI18nKeyLeakGuard />
       {children}
     </MarketingI18nContext.Provider>
   );

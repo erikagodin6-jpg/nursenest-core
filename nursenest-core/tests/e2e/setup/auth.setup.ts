@@ -9,7 +9,8 @@ import path from "path";
 import { expect, test as setup } from "@playwright/test";
 import { PAID_USER_AUTH_FILE } from "../helpers/auth-state-paths";
 import { attachPageObservers } from "../helpers/attach-observers";
-import { describeAuthFailureSurface } from "../helpers/auth-diagnostics";
+import { describeAuthFailureSurface, redactAuthDiagnosticsUrl } from "../helpers/auth-diagnostics";
+import { paidFlashcardsHubUrl } from "../helpers/paid-content-discovery";
 import { loginWithCredentials } from "../helpers/learner-login";
 import {
   describePaidCredentialResolution,
@@ -18,7 +19,7 @@ import {
 import { learnerAppMainLandmark } from "../helpers/paid-learner-shell";
 import { expectNoSubscriptionPaywall } from "../helpers/paid-surface-assertions";
 
-setup("authenticate paid test account and save storage state", async ({ page }, testInfo) => {
+setup("authenticate paid test account and save storage state", async ({ page, request }, testInfo) => {
   const creds = getPaidTestCredentials();
   if (!creds) {
     throw new Error(
@@ -31,10 +32,42 @@ setup("authenticate paid test account and save storage state", async ({ page }, 
   }
 
   const credResolution = describePaidCredentialResolution();
+  const baseURL = process.env.BASE_URL?.trim() || "http://127.0.0.1:3000";
+  console.log("[setup-paid-auth] --- env (no secrets) ---");
+  console.log(
+    `[setup-paid-auth] baseURL=${baseURL} AUTH_URL=${process.env.AUTH_URL?.trim() ? "set" : "unset"} NEXTAUTH_URL=${process.env.NEXTAUTH_URL?.trim() ? "set" : "unset"}`,
+  );
+  console.log(
+    `[setup-paid-auth] AUTH_SECRET=${process.env.AUTH_SECRET?.trim() ? "set" : "unset"} NEXTAUTH_SECRET=${process.env.NEXTAUTH_SECRET?.trim() ? "set" : "unset"} DATABASE_URL=${process.env.DATABASE_URL?.trim() ? "set" : "unset"}`,
+  );
+  console.log(
+    "[setup-paid-auth] auth URL hint: local webServer injects AUTH_URL/NEXTAUTH_URL=origin from playwright.learning-routes.config.ts; Playwright worker may show AUTH_URL unset unless exported in shell — browser still targets baseURL.",
+  );
+  console.log(`[setup-paid-auth] credentialSource=${credResolution.source} maskedEmail=${credResolution.maskedEmail ?? "n/a"}`);
+
+  /** Warm Auth.js routes so `signIn()`'s internal `getProviders()` + CSRF fetches are not blocked behind first-compile. */
+  try {
+    const warmCsrf = await request.get("/api/auth/csrf", { timeout: 120_000 });
+    const warmProviders = await request.get("/api/auth/providers", { timeout: 120_000 });
+    console.log(
+      `[setup-paid-auth] warmup GET /api/auth/csrf → ${warmCsrf.status()} GET /api/auth/providers → ${warmProviders.status()}`,
+    );
+  } catch (e) {
+    console.warn("[setup-paid-auth] warmup request failed (non-fatal):", e instanceof Error ? e.message : String(e));
+  }
+
   const observers = attachPageObservers(page, { profile: "public", probeAuthApi: true, captureConsoleContext: true });
 
   try {
-    await loginWithCredentials(page, creds.email, creds.password, { enterLearnerApp: false });
+    await loginWithCredentials(page, creds.email, creds.password, {
+      enterLearnerApp: false,
+      onCredentialsSuccess: (info) => {
+        console.log(
+          `[setup-paid-auth] credentials POST httpStatus=${info.httpStatus} callbackRedirect=${info.callbackRedirectRedacted} pageUrl=${info.pageUrlRedacted}`,
+        );
+      },
+    });
+    console.log(`[setup-paid-auth] credentials flow completed browser url=${redactAuthDiagnosticsUrl(page.url())}`);
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     const diag = await describeAuthFailureSurface(page).catch(() => "");
@@ -49,7 +82,7 @@ setup("authenticate paid test account and save storage state", async ({ page }, 
       credentialEmailPresent: credResolution.emailPresent,
       credentialPasswordPresent: credResolution.passwordPresent,
       maskedEmail: credResolution.maskedEmail,
-      finalUrl: page.url(),
+      finalUrl: redactAuthDiagnosticsUrl(page.url()),
       thrownMessage: msg,
       describeAuthFailureSurface: diag,
       consoleErrors: observers.consoleErrors,
@@ -99,10 +132,13 @@ setup("authenticate paid test account and save storage state", async ({ page }, 
       "Learner shell main landmark missing on /app — session invalid, auth gate, or layout error. See waitForAuthenticatedLearnerShell diagnostics in paid-learner-shell.ts.",
   });
 
-  // Confirm premium path without going through Stripe (lessons hub must not be paywalled).
-  await page.goto("/app/lessons", { waitUntil: "domcontentloaded" });
-  await expectNoSubscriptionPaywall(page, "setup-paid-auth /app/lessons (premium seed required)");
+  // Confirm premium path without going through Stripe — use flashcards hub (same pathway as learning-routes E2E).
+  await page.goto(paidFlashcardsHubUrl(), { waitUntil: "domcontentloaded" });
+  await expectNoSubscriptionPaywall(page, "setup-paid-auth /app/flashcards (premium seed required)");
 
   fs.mkdirSync(path.dirname(PAID_USER_AUTH_FILE), { recursive: true });
   await page.context().storageState({ path: PAID_USER_AUTH_FILE });
+  console.log(
+    `[setup-paid-auth] saved storageState path=${PAID_USER_AUTH_FILE} finalUrl=${redactAuthDiagnosticsUrl(page.url())}`,
+  );
 });

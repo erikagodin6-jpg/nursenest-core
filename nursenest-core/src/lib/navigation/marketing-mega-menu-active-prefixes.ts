@@ -14,5 +14,5 @@ export const MEGA_MENU_STRIPPED_ACTIVE_PREFIXES: Record<MarketingPathwayMegaMenu
   pn: ["/us/pn/", "/canada/pn/"],
   np: ["/us/np/", "/canada/np/"],
   newgrad: ["/us/rn/new-grad-transition", "/us/rn/new-grad-transition/", "/us/new-grad", "/canada/new-grad"],
-  allied: ["/us/allied/", "/canada/allied/"],
+  allied: ["/allied/allied-health", "/allied/allied-health/", "/us/allied/", "/canada/allied/"],
 } as const;

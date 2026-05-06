@@ -7,19 +7,19 @@ import {
   BlogWorkflowStatus,
   CountryCode,
 } from "@prisma/client";
-import { BLOG_ARTICLE_MIN_WORDS } from "@/lib/blog/blog-word-count";
+import { BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH } from "@/lib/blog/blog-word-count";
 import { blogLiveWhere } from "@/lib/blog/blog-visibility";
 import { publishBlogPostCanonical } from "@/lib/blog/publish-blog-post-canonical";
 import { prisma } from "@/lib/db";
 import { getPublishedBlogPostBySlug } from "@/lib/blog/safe-blog-queries";
 
 function longWords(n: number): string {
-  return `<p>${Array.from({ length: n }, () => "term").join(" ")}</p>`;
+  return `<p>${Array.from({ length: n }, (_, index) => `term${index}`).join(" ")}</p>`;
 }
 
 function buildPublishableBody(): string {
   return (
-    `${longWords(BLOG_ARTICLE_MIN_WORDS + 40)}` +
+    `${longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 40)}` +
     "<h2>Pathophysiology</h2><p>Mechanism explanation for clinical depth.</p>" +
     "<h2>Nursing implications</h2><p>Practice and safety considerations.</p>"
   );
@@ -102,8 +102,14 @@ describe("publishBlogPostCanonical", () => {
         outlineJson: [],
         faqBlock: {
           items: [
-            { q: "First common question for learners?", a: "Answer with enough substance for FAQ validation." },
-            { q: "Second question about clinical judgment?", a: "Another substantive answer for schema checks." },
+            {
+              q: "Which fluid balance cue matters first?",
+              a: "A sudden oxygen change with new crackles matters first because fluid balance problems can threaten breathing before routine teaching is useful.",
+            },
+            {
+              q: "How should learners connect fluid balance to clinical judgment?",
+              a: "Learners should compare intake, output, daily weight, edema, lung sounds, and blood pressure before choosing the safest nursing priority.",
+            },
           ],
         },
         schemaSummary: JSON.stringify({
@@ -205,8 +211,14 @@ describe("publishBlogPostCanonical", () => {
         outlineJson: [],
         faqBlock: {
           items: [
-            { q: "First common question for learners?", a: "Answer with enough substance for FAQ validation." },
-            { q: "Second question about clinical judgment?", a: "Another substantive answer for schema checks." },
+            {
+              q: "Which fluid balance cue matters first?",
+              a: "A sudden oxygen change with new crackles matters first because fluid balance problems can threaten breathing before routine teaching is useful.",
+            },
+            {
+              q: "How should learners connect fluid balance to clinical judgment?",
+              a: "Learners should compare intake, output, daily weight, edema, lung sounds, and blood pressure before choosing the safest nursing priority.",
+            },
           ],
         },
         schemaSummary: JSON.stringify({

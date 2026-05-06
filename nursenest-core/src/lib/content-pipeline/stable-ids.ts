@@ -2,7 +2,7 @@
  * Stable identifiers for content pipelines (imports, dedup reports, upserts).
  * Keep deterministic and documented—avoid inferring identity from display text alone.
  */
-import { assertCanonicalExamQuestionExam } from "@/lib/exam-questions/exam-question-exam-key";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 
 /** BCP 47-style tag; pathway lessons default to `en` in DB. */
 export type PathwayLessonLocale = string;
@@ -26,5 +26,5 @@ export function examQuestionNaturalKey(parts: {
   stemHash: string;
 }): string {
   const cc = (parts.countryCode ?? "").trim().toUpperCase() || "XX";
-  return `${assertCanonicalExamQuestionExam(parts.exam)}:${parts.tier.trim()}:${cc}:${parts.stemHash}`;
+  return `${canonicalExamQuestionExamForDbWrite(parts.exam)}:${parts.tier.trim()}:${cc}:${parts.stemHash}`;
 }

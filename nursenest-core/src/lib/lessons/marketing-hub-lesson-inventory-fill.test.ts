@@ -288,9 +288,9 @@ test("US Allied hub prefilter drops pure nursing exam stamps (no NCLEX-only leak
   };
   const { diagnostics } = await fillMarketingHubLessonInventoryToMinimum({
     pathway: pathwayUsAllied,
-    routePathname: "/us/allied/allied-health/lessons",
+    routePathname: "/allied/allied-health/lessons",
     lessonContentLocale: "en",
-    lessonsBasePath: "/us/allied/allied-health/lessons",
+    lessonsBasePath: "/allied/allied-health/lessons",
     minVisible: 12,
     verifiedKept: verified,
     hubCurriculumPrepared: [],

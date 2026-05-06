@@ -3,6 +3,7 @@ import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
 import { getAdminLocalizedBlogList } from "@/lib/blog/safe-localized-blog-queries";
+import { normalizeSlugPreprocess } from "@/lib/blog/blog-optional-slug";
 
 // @ts-expect-error — available after prisma generate + migration
 const localizedModel = () => prisma.localizedBlogArticle as Record<string, (...args: unknown[]) => Promise<unknown>>;
@@ -19,7 +20,13 @@ const createSchema = z.object({
   localizedExcerpt: z.string().min(10).max(500),
   localizedBody: z.string().min(20),
   canonicalSlug: z.string().min(3).max(200),
-  localizedSlug: z.string().min(3).max(200).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  localizedSlug: z.preprocess(
+    (v) => normalizeSlugPreprocess(v, 200) ?? v,
+    z.string().min(3).max(200).regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      "localizedSlug must be lowercase letters, numbers, and hyphens only (e.g. heart-failure-canada). Special characters are stripped automatically — provide a clean slug if normalization yields nothing.",
+    ),
+  ),
   localizedMetaTitle: z.string().max(220).nullable().optional(),
   localizedMetaDescription: z.string().max(500).nullable().optional(),
   seoKeywordPrimary: z.string().max(200).nullable().optional(),

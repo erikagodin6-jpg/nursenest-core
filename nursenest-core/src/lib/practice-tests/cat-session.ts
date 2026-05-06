@@ -51,10 +51,14 @@ import {
   nclexBlueprintWeightMap,
   NCLEX_RN_US_EXAM_CONFIG,
 } from "@/lib/exams/exam-config";
-import { loadMissedQuestionSignals } from "@/lib/learner/study-question-signals";
+import {
+  loadMissedQuestionSignals,
+  loadSavedRationaleQuestionIdsForPoolFilter,
+} from "@/lib/learner/study-question-signals";
 import { loadWeakTopicPracticePlan } from "@/lib/learner/topic-performance";
 import { normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
+import { buildCatSelectionAppliedMeta } from "@/lib/practice-tests/cat-selection-applied-meta";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import { normalizedAdaptiveCatRunBounds, practiceCatBounds } from "@/lib/practice-tests/cat-practice-config";
 import { configFromInput, type PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
@@ -299,7 +303,10 @@ export async function createCatPracticeTestPayload(
 
   const pathwayReadiness = await readinessConfigForPathwayId(pathway?.id ?? input.pathwayId ?? null);
 
-  const effectiveBasis: CatSelectionBasis = sim ? "random" : catBasis;
+  const poolStrictness = input.selectionStrictness ?? "strict";
+  /** Original POST `catSelectionBasis` before soft coercion / exam-simulation normalization. */
+  const requestedCatBasisForMeta: CatSelectionBasis = catBasis;
+  let poolBasis: CatSelectionBasis = sim ? "random" : catBasis;
 
   const weakPlan = sim
     ? { dbTopicNames: [] as string[], priorityByCanonical: new Map<string, number>() }
@@ -307,24 +314,48 @@ export async function createCatPracticeTestPayload(
   const catWeakCategories = weakPlan.dbTopicNames;
   const catWeakPriorityByCanonical = Object.fromEntries(weakPlan.priorityByCanonical);
 
-  if (!sim && effectiveBasis === "weak" && weakPlan.priorityByCanonical.size === 0) {
-    return {
-      ok: false,
-      code: PRACTICE_TEST_CAT_CREATE_CODE.cat_weak_areas_empty,
-      message:
-        "No weak areas yet. Use the question bank, complete a mock, or finish a practice test. Then try weak adaptive mode.",
-    };
-  }
-
-  if (!sim && effectiveBasis === "missed") {
-    const missed = await loadMissedQuestionSignals(userId);
-    if (missed.size === 0) {
+  if (!sim && poolBasis === "weak" && weakPlan.priorityByCanonical.size === 0) {
+    if (poolStrictness === "soft") {
+      poolBasis = "random";
+    } else {
       return {
         ok: false,
-        code: PRACTICE_TEST_CAT_CREATE_CODE.cat_missed_items_empty,
+        code: PRACTICE_TEST_CAT_CREATE_CODE.cat_weak_areas_empty,
         message:
-          "No missed questions found yet. Finish a graded practice session with incorrect answers, then try missed-pool adaptive mode again.",
+          "No weak areas yet. Use the question bank, complete a mock, or finish a practice test. Then try weak adaptive mode.",
       };
+    }
+  }
+
+  if (!sim && poolBasis === "missed") {
+    const missed = await loadMissedQuestionSignals(userId);
+    if (missed.size === 0) {
+      if (poolStrictness === "soft") {
+        poolBasis = "random";
+      } else {
+        return {
+          ok: false,
+          code: PRACTICE_TEST_CAT_CREATE_CODE.cat_missed_items_empty,
+          message:
+            "No missed questions found yet. Finish a graded practice session with incorrect answers, then try missed-pool adaptive mode again.",
+        };
+      }
+    }
+  }
+
+  if (!sim && poolBasis === "starred") {
+    const starred = await loadSavedRationaleQuestionIdsForPoolFilter(userId, 80);
+    if (starred.length === 0) {
+      if (poolStrictness === "soft") {
+        poolBasis = "random";
+      } else {
+        return {
+          ok: false,
+          code: PRACTICE_TEST_CAT_CREATE_CODE.cat_starred_items_empty,
+          message:
+            "No saved rationales yet. Save a rationale from the question bank or practice review, then try Starred Questions again.",
+        };
+      }
     }
   }
 
@@ -344,11 +375,12 @@ export async function createCatPracticeTestPayload(
   const poolInput: PickQuestionsInput = {
     ...input,
     questionCount: bounds.max,
-    selectionMode: effectiveBasis,
+    selectionMode: poolBasis,
     sessionPickSalt,
+    selectionStrictness: poolStrictness,
   };
 
-  const pool = await fetchCatPracticePool(userId, entitlement, poolInput);
+  const { pool, buildMeta } = await fetchCatPracticePool(userId, entitlement, poolInput);
   const pathwayIdForRecent = requestedPathwayId ?? input.pathwayId ?? null;
   const recentPack = await recentPracticeQuestionIdsForPathway({
     userId,
@@ -358,6 +390,17 @@ export async function createCatPracticeTestPayload(
   });
   const recentFiltered = filterPoolRemovingRecentQuestions(pool, recentPack.ids);
   const poolForSelection = recentFiltered.pool;
+  const topicNamesForMeta = [...(input.topicNames ?? [])];
+  const catSelectionAppliedMeta = buildCatSelectionAppliedMeta({
+    sim,
+    requestedCatBasis: requestedCatBasisForMeta,
+    appliedPoolBasis: poolBasis,
+    poolStrictness,
+    topicNames: topicNamesForMeta,
+    buildMeta,
+    finalPoolSize: pool.length,
+    candidatePoolSize: poolForSelection.length,
+  });
   let v = sim
     ? validateCatQuestionPool(pool, { minPoolSize: bounds.min })
     : validatePracticeCatPool(pool);
@@ -437,7 +480,7 @@ export async function createCatPracticeTestPayload(
     const config: PracticeTestConfigJson = {
       ...configFromInput(guidedPickInput, timedMode, timeLimitSec),
       selectionMode: "cat",
-      catSelectionBasis: effectiveBasis,
+      catSelectionBasis: poolBasis,
       catMinQuestions: runLength,
       catMaxQuestions: runLength,
       catPassingThreshold: pathwayReadiness?.passingThreshold ?? 0,
@@ -450,6 +493,8 @@ export async function createCatPracticeTestPayload(
       catAdaptiveSessionType: "practice",
       catExamConfigId: examCfg.id,
       sessionPickSalt,
+      catPoolSelectionStrictness: poolStrictness,
+      catSelectionAppliedMeta,
     };
 
     return {
@@ -491,7 +536,7 @@ export async function createCatPracticeTestPayload(
     const fixedConfig: PracticeTestConfigJson = {
       ...configFromInput(poolInput, timedMode, timeLimitSec),
       selectionMode: "cat",
-      catSelectionBasis: effectiveBasis,
+      catSelectionBasis: poolBasis,
       catMinQuestions: bounds.min,
       catMaxQuestions: bounds.max,
       catPassingThreshold: pathwayReadiness?.passingThreshold ?? 0,
@@ -504,6 +549,8 @@ export async function createCatPracticeTestPayload(
       catAdaptiveSessionType: sessionTypeResolved,
       catExamConfigId: examCfg.id,
       sessionPickSalt,
+      catPoolSelectionStrictness: poolStrictness,
+      catSelectionAppliedMeta,
     };
     return {
       ok: true,
@@ -555,7 +602,7 @@ export async function createCatPracticeTestPayload(
   const config: PracticeTestConfigJson = {
     ...configFromInput(poolInput, timedMode, timeLimitSec),
     selectionMode: "cat",
-    catSelectionBasis: effectiveBasis,
+    catSelectionBasis: poolBasis,
     catMinQuestions: bounds.min,
     catMaxQuestions: bounds.max,
     catPassingThreshold: pathwayReadiness?.passingThreshold ?? 0,
@@ -568,6 +615,8 @@ export async function createCatPracticeTestPayload(
     catAdaptiveSessionType: sessionTypeResolved,
     catExamConfigId: examCfg.id,
     sessionPickSalt,
+    catPoolSelectionStrictness: poolStrictness,
+    catSelectionAppliedMeta,
   };
 
   return {
@@ -645,11 +694,12 @@ async function catPoolAndSelectOpts(
     difficultyMax: config.difficultyMax ?? null,
     selectionMode: basis,
     pathwayId: config.pathwayId ?? null,
+    selectionStrictness: config.catPoolSelectionStrictness,
     ...(typeof config.sessionPickSalt === "string" && config.sessionPickSalt.length >= 8
       ? { sessionPickSalt: config.sessionPickSalt }
       : {}),
   };
-  const pool = await fetchCatPracticePool(userId, entitlement, pickInput);
+  const { pool } = await fetchCatPracticePool(userId, entitlement, pickInput);
   const recentPack = await recentPracticeQuestionIdsForPathway({
     userId,
     pathwayId: config.pathwayId ?? null,
@@ -658,6 +708,7 @@ async function catPoolAndSelectOpts(
   });
   const { pool: poolForSelection } = filterPoolRemovingRecentQuestions(pool, recentPack.ids);
   const saltOk = typeof config.sessionPickSalt === "string" && config.sessionPickSalt.trim().length >= 8;
+  const presentationMode = config.catPresentationMode ?? "practice";
   if (!sim && !saltOk) {
     safeServerLog("practice_test", "cat_adaptive_pick_missing_session_pick_salt", {
       feature_surface: "cat_adaptive",
@@ -674,7 +725,7 @@ async function catPoolAndSelectOpts(
     pool: poolForSelection,
     selectOpts,
     bounds,
-    presentationMode: config.catPresentationMode ?? "practice",
+    presentationMode,
   };
 }
 

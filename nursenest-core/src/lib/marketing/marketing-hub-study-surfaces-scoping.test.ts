@@ -12,8 +12,8 @@ const CASES = [
   { id: "ca-rpn-rex-pn", lessons: "/canada/pn/rex-pn/lessons", questions: "/canada/pn/rex-pn/questions", cat: "/canada/pn/rex-pn/cat" },
   { id: "us-np-fnp", lessons: "/us/np/fnp/lessons", questions: "/us/np/fnp/questions", cat: "/us/np/fnp/cat" },
   { id: "ca-np-cnple", lessons: "/canada/np/cnple/lessons", questions: "/canada/np/cnple/questions", cat: "/canada/np/cnple/cat" },
-  { id: "us-allied-core", lessons: "/us/allied/allied-health/lessons", questions: "/us/allied/allied-health/questions", cat: "/us/allied/allied-health/cat" },
-  { id: "ca-allied-core", lessons: "/canada/allied/allied-health/lessons", questions: "/canada/allied/allied-health/questions", cat: "/canada/allied/allied-health/cat" },
+  { id: "us-allied-core", lessons: "/allied/allied-health/lessons", questions: "/allied/allied-health/questions", cat: "/allied/allied-health/cat" },
+  { id: "ca-allied-core", lessons: "/allied/allied-health/lessons", questions: "/allied/allied-health/questions", cat: "/allied/allied-health/cat" },
   { id: "us-rn-new-grad-transition", lessons: "/us/rn/new-grad-transition/lessons", questions: "/us/rn/new-grad-transition/questions", cat: "/us/rn/new-grad-transition/cat" },
 ] as const;
 
@@ -26,8 +26,13 @@ describe("marketing hub study surfaces stay tier + country scoped", () => {
       assert.equal(buildExamPathwayPath(p!, "questions"), row.questions);
       assert.equal(buildExamPathwayPath(p!, "cat"), row.cat);
       assert.notEqual(buildExamPathwayPath(p!, "lessons"), "/lessons");
-      assert.equal(p!.countrySlug === "canada", row.lessons.startsWith("/canada/"));
-      assert.equal(p!.countrySlug === "us", row.lessons.startsWith("/us/"));
+      const alliedGlobal = p!.roleTrack === "allied" && p!.examCode === "allied-health";
+      if (alliedGlobal) {
+        assert.ok(row.lessons.startsWith("/allied/allied-health"));
+      } else {
+        assert.equal(p!.countrySlug === "canada", row.lessons.startsWith("/canada/"));
+        assert.equal(p!.countrySlug === "us", row.lessons.startsWith("/us/"));
+      }
     });
   }
 

@@ -23,8 +23,8 @@ export default async function AdminContentBulkPage() {
           <Link href="/admin/automation-logs" className="text-primary underline">
             Automation logs
           </Link>
-          <Link href="/admin/blog/studio" className="text-primary underline">
-            Article studio
+          <Link href="/admin/blog" className="text-primary underline">
+            Blog console
           </Link>
           <Link href="/admin" className="text-primary underline">
             Admin home

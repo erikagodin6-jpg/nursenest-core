@@ -8,6 +8,7 @@ import assert from "node:assert/strict";
 import { loadPathwayLessonsHubPageWithTelemetry } from "@/lib/exam-pathways/marketing-hub-lessons-page-fetch";
 import { HubLessonsListDatabaseError } from "@/lib/lessons/hub-lessons-database-error";
 import type { PathwayLessonsPageResult } from "@/lib/lessons/pathway-lesson-loader";
+import type { MarketingHubLessonsListOptions } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 
 const ctx = {
@@ -23,7 +24,7 @@ const args = {
   pageRequested: 1,
   pageSizeRequested: 24,
   lessonContentLocale: "en",
-  listOpts: undefined as { q?: string; topicSlugsIn?: string[] } | undefined,
+  listOpts: undefined as MarketingHubLessonsListOptions | undefined,
 };
 
 test("slow lessons page fetch (>1s) still resolves ok with real payload (no silent empty)", async () => {
@@ -367,4 +368,17 @@ test("primary payload missing renderableAll while total exceeds items is invalid
     assert.equal(lessonsPageLoad.reason, "invalid_payload");
   }
   assert.equal(pageResult.total, 0);
+});
+
+test("NEXT_REDIRECT from primary lessons fetch is rethrown (not treated as hub load failure)", async () => {
+  const { getRedirectError, isRedirectError, RedirectType } = await import("next/dist/client/components/redirect");
+  const redirectErr = getRedirectError("/us/rn/nclex-rn/lessons?n=1", RedirectType.replace);
+  const mockFetch = async () => {
+    throw redirectErr;
+  };
+
+  await assert.rejects(
+    () => loadPathwayLessonsHubPageWithTelemetry(ctx.pathwayId, args, ctx, mockFetch),
+    (e: unknown) => isRedirectError(e),
+  );
 });

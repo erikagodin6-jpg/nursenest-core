@@ -19,12 +19,16 @@ export default async function OnboardingPage() {
 
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { onboardingCompletedAt: true },
+    select: { onboardingCompletedAt: true, country: true },
   });
 
-  if (user?.onboardingCompletedAt) {
+  if (!user) {
+    redirect("/login?callbackUrl=/app/onboarding");
+  }
+
+  if (user.onboardingCompletedAt) {
     redirect("/app/start-studying");
   }
 
-  return <OnboardingPageClient userId={userId} />;
+  return <OnboardingPageClient userId={userId} accountCountry={user.country} />;
 }

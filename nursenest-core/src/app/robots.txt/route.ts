@@ -7,8 +7,9 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
 /**
  * Explicit `text/plain` robots.txt — no DB; always 200 for crawlers.
  *
- * **Sitemap:** exactly one `Sitemap:` line pointing at `${CANONICAL_PRODUCTION_ORIGIN}/sitemap.xml`
- * (single GSC / crawler entry; no sitemap index or child sitemap URLs here).
+ * **Sitemap:** three `Sitemap:` lines — merged marketing/urlset at `/sitemap.xml`, allied occupation hubs at
+ * `/sitemap-allied.xml`, and New Grad marketing at `/sitemap-new-grad.xml`. All use `${CANONICAL_PRODUCTION_ORIGIN}`
+ * (https `www` in production). No `http:`, no legacy hostnames.
  *
  * SEO indexing policy per language status:
  * - active (full tier): allowed — Google indexes the locale pages normally; locale URLs may appear in `/sitemap.xml`.
@@ -17,7 +18,7 @@ import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
  * - disabled (incomplete tier): `Disallow: /{code}/` plus `noindex`; excluded from hreflang and sitemaps.
  *   Routes may still return 200 for humans.
  *
- * **Authenticated / internal surfaces:** `Disallow: /app/`, `/admin/`, `/api/` — learner shell and gated flows;
+ * **Authenticated / internal surfaces:** `Disallow: /app/`, `/admin/`, `/internal/`, `/api/` — learner shell and gated flows;
  * these are also blocked from sitemap emission via URL validation (see `public-url-validator`).
  *
  * Internal `/seo/*` rewrite targets are disallowed to avoid duplicate indexing
@@ -46,30 +47,45 @@ function buildDisallowedLocaleLines(): string {
   return lines.join("\n");
 }
 
-const CANONICAL_SITEMAP_LINE = `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap.xml` as const;
+const CANONICAL_SITEMAP_LINES = [
+  `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap.xml`,
+  `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap-allied.xml`,
+  `Sitemap: ${CANONICAL_PRODUCTION_ORIGIN}/sitemap-new-grad.xml`,
+] as const;
 
 const FALLBACK_BODY = [
   "User-agent: *",
   "Allow: /",
   "Disallow: /app/",
   "Disallow: /admin/",
+  "Disallow: /internal/",
   "Disallow: /api/",
   "Disallow: /seo/",
   "",
-  CANONICAL_SITEMAP_LINE,
+  ...CANONICAL_SITEMAP_LINES,
 ].join("\n");
 
 const ROBOTS_PATHNAME = "/robots.txt";
 
-function assertSingleCanonicalSitemapDirective(body: string): void {
+function assertCanonicalSitemapDirectives(body: string): void {
   const lines = body.split(/\r?\n/);
-  const sitemapLines = lines.filter((l) => /^\s*Sitemap:\s*/i.test(l));
-  if (sitemapLines.length !== 1) {
-    throw new Error(`robots.txt must contain exactly one Sitemap directive, got ${sitemapLines.length}`);
+  const sitemapLines = lines.filter((l) => /^\s*Sitemap:\s*/i.test(l)).map((l) => l.trim());
+  if (sitemapLines.length !== CANONICAL_SITEMAP_LINES.length) {
+    throw new Error(`robots.txt must contain exactly ${CANONICAL_SITEMAP_LINES.length} Sitemap directives, got ${sitemapLines.length}`);
   }
-  const expected = CANONICAL_SITEMAP_LINE.trim();
-  if (sitemapLines[0].trim() !== expected) {
-    throw new Error(`robots.txt Sitemap must be exactly: ${expected}`);
+  for (let i = 0; i < CANONICAL_SITEMAP_LINES.length; i++) {
+    const expected = CANONICAL_SITEMAP_LINES[i].trim();
+    if (sitemapLines[i] !== expected) {
+      throw new Error(`robots.txt Sitemap line ${i + 1} must be exactly: ${expected} (got ${sitemapLines[i]})`);
+    }
+  }
+  for (const l of sitemapLines) {
+    if (/\bhttp:\/\//i.test(l)) {
+      throw new Error("robots.txt Sitemap directives must not use http://");
+    }
+    if (/allied\.nursenest\.ca/i.test(l)) {
+      throw new Error("robots.txt must not advertise allied.nursenest.ca sitemap URLs");
+    }
   }
 }
 
@@ -83,14 +99,15 @@ export async function GET() {
       "Allow: /",
       "Disallow: /app/",
       "Disallow: /admin/",
+      "Disallow: /internal/",
       "Disallow: /api/",
       "Disallow: /seo/",
       ...(disallowedLocales ? [disallowedLocales] : []),
       "",
-      CANONICAL_SITEMAP_LINE,
+      ...CANONICAL_SITEMAP_LINES,
     ].join("\n");
 
-    assertSingleCanonicalSitemapDirective(body);
+    assertCanonicalSitemapDirectives(body);
 
     return new Response(body, { status: 200, headers: ROBOTS_HEADERS });
   } catch (e) {

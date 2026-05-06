@@ -73,6 +73,17 @@ export function isEnglishCarryoverAllowlisted(key) {
 export function allowsEnglishParity(key, enVal) {
   if (isEnglishCarryoverAllowlisted(key)) return true;
   const v = String(enVal ?? "").trim();
+  const fixedCredentialLabels = new Set([
+    "nav.badge.roleLvnLpn",
+    "nav.badge.roleNp",
+    "nav.badge.roleRn",
+    "nav.badge.roleRpn",
+    "nav.mega.np.label",
+    "nav.mega.pn.labelCA",
+    "nav.mega.pn.labelUS",
+    "nav.mega.rn.label",
+  ]);
+  if (fixedCredentialLabels.has(key)) return true;
   if (key.startsWith("nav.examStrip.")) return true;
   if (v.startsWith("ApplyNest")) return true;
   if (v.includes("NurseNest")) return true;

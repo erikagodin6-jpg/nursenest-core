@@ -5,6 +5,8 @@
 import { marketingCatPathForPathwayId } from "@/lib/exam-pathways/practice-exams-cat-start";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
+import { defaultPathwayIdForMarketingOffering } from "@/lib/marketing/country-exam-offerings";
+import { marketingPathwaySubpathBesideExamHub } from "@/lib/lessons/lesson-routes";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
@@ -43,10 +45,11 @@ export function publicNewGradStudyDestinations(
   if (region === "US") {
     const pathway = getExamPathwayById(US_NEW_GRAD_TRANSITION_PATHWAY_ID);
     if (!pathway) {
+      const rnPathway = getExamPathwayById(defaultPathwayIdForMarketingOffering(region, "rn"));
       return {
         hubHref: rnHub,
-        lessons: `${rnHub}/lessons`,
-        questions: `${rnHub}/questions`,
+        lessons: marketingPathwaySubpathBesideExamHub(rnHub, rnPathway, "lessons"),
+        questions: marketingPathwaySubpathBesideExamHub(rnHub, rnPathway, "questions"),
         cat: publicMarketingCatHrefForOffering(region, "rn"),
         flashcards,
         practiceExams,
@@ -68,10 +71,11 @@ export function publicNewGradStudyDestinations(
     };
   }
 
+  const rnPathway = getExamPathwayById(defaultPathwayIdForMarketingOffering(region, "rn"));
   return {
     hubHref: rnHub,
-    lessons: `${rnHub}/lessons`,
-    questions: `${rnHub}/questions`,
+    lessons: marketingPathwaySubpathBesideExamHub(rnHub, rnPathway, "lessons"),
+    questions: marketingPathwaySubpathBesideExamHub(rnHub, rnPathway, "questions"),
     cat: publicMarketingCatHrefForOffering(region, "rn"),
     flashcards,
     practiceExams,

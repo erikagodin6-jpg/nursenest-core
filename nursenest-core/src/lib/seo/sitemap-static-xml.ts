@@ -2,7 +2,7 @@
  * Mostly synchronous sitemap URL lists (no filesystem i18n, no network).
  * Pathway lesson URLs may query Postgres via the shared loader (DB-first, catalog fallback).
  *
- * **Public surface:** a single merged urlset is served at `/sitemap.xml` (see `sitemap-all-xml.ts`).
+ * **Public surface:** `/sitemap.xml` is served by `src/app/sitemap.xml/route.ts` (static url list + canonical origin).
  *
  * ## When URL volume forces a split (not urgent until thresholds hit)
  *
@@ -12,17 +12,14 @@
  * **Mitigations today:** `MAX_PATHWAY_DERIVED_SITEMAP_URLS` caps pathway-derived URLs; blog uses `take` cap.
  *
  * **If splitting becomes necessary:** introduce additional **sitemap index + chunk urlsets** only if required by size
- * or timeouts; keep `/sitemap.xml` as the one crawler entry in `robots.txt` and GSC.
+ * or timeouts; `robots.txt` lists the merged `/sitemap.xml` plus focused urlsets (e.g. allied, new grad) on the same origin.
  */
 export const SITEMAP_SINGLE_URLSET_SOFT_WARN_URLS = 45_000;
 
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
-import {
-  alliedHealthLessonsIndexPath,
-  alliedHealthSegmentPath,
-  preNursingLessonDetailPath,
-  PRE_NURSING_LESSONS_INDEX_PATH,
-} from "@/lib/lessons/lesson-routes";
+import { ALLIED_GLOBAL_HUB_PATH } from "@/lib/allied/allied-global-hub-path";
+import { isAlliedHealthPathway } from "@/lib/allied/allied-global-pathway";
+import { alliedHealthSegmentPath, preNursingLessonDetailPath, PRE_NURSING_LESSONS_INDEX_PATH } from "@/lib/lessons/lesson-routes";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import { getPreNursingOverlaySlugsForLocale } from "@/lib/i18n/pre-nursing-content-overlay";
 import { PROGRAMMATIC_SLUG_TO_PATHWAY_PATH } from "@/lib/exam-pathways/programmatic-slug-redirects";
@@ -46,6 +43,15 @@ import {
 import { getNpPracticeTestLandingCopy } from "@/lib/exam-pathways/np-practice-test-segments";
 import { stripForbiddenLocalePrefixedPathwayTopics } from "@/lib/seo/sitemap-locale-prefixed-path-guard";
 import { shouldReduceNonCriticalBuildWork } from "@/lib/build/build-safe-mode";
+import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
+import { collectOsceScenariosMarketingHubUrls } from "@/lib/scenarios/scenario-marketing-sitemap-urls";
+import { collectPathwayTopicProgrammaticPublicPaths } from "@/lib/seo/pathway-topic-programmatic-registry";
+export {
+  buildSitemapUrlsetFromAbsoluteUrls,
+  minimalUrlsetSingleHome,
+  minimalSitemapXml,
+  type SitemapUrlEntry,
+} from "@/lib/seo/sitemap-urlset-build";
 
 /** Locales included in merged urlset tooling (tier=full only); sorted for deterministic URL lists. */
 const SORTED_SITEMAP_LOCALES = [...getSitemapIncludedLocales()].sort();
@@ -118,12 +124,49 @@ export async function collectContentBackedStudyResourceHubUrls(origin: string): 
   return urls;
 }
 
+/**
+ * Programmatic study SEO pages (`…/study/{lessonSlug}`) — registry + same loader gates as the live route.
+ */
+export async function collectProgrammaticStudySeoUrls(origin: string): Promise<string[]> {
+  const o = normalizeOrigin(origin);
+  if (shouldSkipDbBackedSitemapUrlsForBuild()) return [];
+  const { getProgrammaticStudySeoRegistry, MAX_PROGRAMMATIC_STUDY_SEO_SITEMAP_URLS } = await import(
+    "@/lib/seo/programmatic-study-seo-registry"
+  );
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
+  const { isProgrammaticStudySeoUrlEligibleForSitemap } = await import("@/lib/seo/programmatic-study-seo-load");
+  const { marketingProgrammaticStudySeoPath } = await import("@/lib/lessons/lesson-routes");
+  const { isPathwayPublishedForPublicSite } = await import("@/lib/navigation/country-exam-launch-readiness");
+  const urls: string[] = [];
+  const seen = new Set<string>();
+  for (const row of getProgrammaticStudySeoRegistry()) {
+    if (urls.length >= MAX_PROGRAMMATIC_STUDY_SEO_SITEMAP_URLS) break;
+    const pathway = getExamPathwayById(row.pathwayId);
+    if (!pathway || !isPathwayPublishedForPublicSite(pathway.id)) continue;
+    const path = marketingProgrammaticStudySeoPath(pathway, row.lessonSlug);
+    if (!path) continue;
+    const dedupe = `${row.pathwayId}::${row.lessonSlug}`;
+    if (seen.has(dedupe)) continue;
+    seen.add(dedupe);
+    const ok = await isProgrammaticStudySeoUrlEligibleForSitemap(pathway, row.lessonSlug);
+    if (!ok) continue;
+    urls.push(`${o}${path}`);
+  }
+  logSeoEmittedUrlBatch("sitemap_programmatic_study_seo", urls);
+  return urls;
+}
+
 /** Exam hub URLs: /{country}/{role}/{exam} + pricing + questions landing */
 export async function collectExamPathwayUrls(origin: string): Promise<string[]> {
   const o = normalizeOrigin(origin);
   const { listPublishedExamPathwaysForPublicSite } = await import("@/lib/navigation/country-exam-launch-readiness");
   const urls: string[] = [];
+  let alliedHealthGlobalEmitted = false;
   for (const p of listPublishedExamPathwaysForPublicSite()) {
+    if (isAlliedHealthPathway(p)) {
+      if (alliedHealthGlobalEmitted) continue;
+      alliedHealthGlobalEmitted = true;
+    }
     urls.push(`${o}${buildExamPathwayPath(p)}`);
     urls.push(`${o}${buildExamPathwayPath(p, "pricing")}`);
     urls.push(`${o}${buildExamPathwayPath(p, "questions")}`);
@@ -131,16 +174,115 @@ export async function collectExamPathwayUrls(origin: string): Promise<string[]> 
   return urls;
 }
 
-/** Allied marketing hub + profession guides + lesson index pages (not every paginated query string). */
+/**
+ * Allied marketing hub + per-occupation hero segments (`/allied-health/{segment}-exam-prep`).
+ * Pathway lesson indexes use `?alliedProfession=` and are intentionally omitted here — they fail
+ * {@link isValidPublicUrl} (`has_query_or_hash`) and never survived `/sitemap.xml` filtering anyway.
+ */
 export function collectAlliedMarketingUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
-  const urls: string[] = [`${o}/allied-health`];
+  const urls: string[] = [`${o}${ALLIED_GLOBAL_HUB_PATH}`, `${o}/allied-health`];
   for (const p of ALLIED_PROFESSIONS) {
     urls.push(`${o}${alliedHealthSegmentPath(p.segment)}`);
-    urls.push(`${o}${alliedHealthLessonsIndexPath(p.professionKey)}`);
   }
   return urls;
 }
+
+/**
+ * Root-relative public New Grad marketing URLs (`/new-grad`, `/new-grad/{unit}`).
+ * Single source for `/sitemap-new-grad.xml` — no `/app`, no query/hash, no learner shell paths.
+ */
+export const NEW_GRAD_MARKETING_SITEMAP_PATHS = [
+  "/new-grad",
+  "/new-grad/icu",
+  "/new-grad/med-surg",
+  "/new-grad/emergency",
+  "/new-grad/pediatrics",
+  "/new-grad/picu",
+  "/new-grad/cardiac-icu",
+  "/new-grad/neuro-icu",
+  "/new-grad/trauma",
+  "/new-grad/surgery",
+  "/new-grad/renal-dialysis",
+  "/new-grad/long-term-care",
+  "/new-grad/community-health",
+  "/new-grad/hem-onc",
+  "/new-grad/clinics",
+] as const;
+
+/** New Grad marketing hub + unit landing paths for the dedicated sitemap only. */
+export function collectNewGradMarketingUrls(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  return NEW_GRAD_MARKETING_SITEMAP_PATHS.map((p) => `${o}${p}`);
+}
+
+/**
+ * Pathway lesson **hub/index** URLs only (launch snapshot; no Postgres, no per-lesson detail URLs).
+ */
+export function collectPathwayLessonHubUrlsOnly(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  const urls: string[] = [`${o}/lessons`];
+  let alliedHealthGlobalEmitted = false;
+  for (const p of listPublishedExamPathwaysForPublicSite()) {
+    if (isAlliedHealthPathway(p)) {
+      if (alliedHealthGlobalEmitted) continue;
+      alliedHealthGlobalEmitted = true;
+    }
+    urls.push(`${o}${buildExamPathwayPath(p, "lessons")}`);
+  }
+  return urls;
+}
+
+/** Pre-nursing hub + lesson index + study plan (no per-module lesson detail URLs). */
+export function collectPreNursingSitemapHubUrlsOnly(origin: string): string[] {
+  const o = normalizeOrigin(origin);
+  return [`${o}/pre-nursing`, `${o}${PRE_NURSING_LESSONS_INDEX_PATH}`, `${o}/pre-nursing/study-plan`];
+}
+
+/**
+ * Locale marketing URLs for sitemap without DB: no localized pre-nursing lesson slugs, no `/{locale}/{programmatic}` fan-out.
+ */
+export function collectLocaleMarketingSitemapSafeUrls(origin: string, locale: string): string[] {
+  const o = normalizeOrigin(origin);
+  const add = (path: string) => {
+    const p = path.startsWith("/") ? path : `/${path}`;
+    return `${o}${p}`;
+  };
+  const urls: string[] = [
+    add(`/${locale}`),
+    add(`/${locale}/pricing`),
+    add(`/${locale}/lessons`),
+    add(`/${locale}/question-bank`),
+    add(`/${locale}/practice-exams`),
+    add(`/${locale}/pre-nursing`),
+    add(`/${locale}/for-institutions`),
+    add(`/${locale}/faq`),
+    add(`/${locale}/terms`),
+    add(`/${locale}/privacy`),
+    add(`/${locale}/refund-policy`),
+    add(`/${locale}/acceptable-use`),
+    add(`/${locale}/disclaimer`),
+    add(`/${locale}/editorial-policy`),
+    add(`/${locale}/content-review-policy`),
+    add(`/${locale}/contact`),
+  ];
+  const pathwayTopicPublicPaths = collectPathwayTopicProgrammaticPublicPaths();
+  const stripped = stripForbiddenLocalePrefixedPathwayTopics(urls, o, locale, pathwayTopicPublicPaths);
+  if (stripped.removed > 0) {
+    safeServerLog("seo", "sitemap_locale_strip_prefixed_pathway_topics", {
+      locale,
+      removed: stripped.removed,
+    });
+  }
+  return stripped.urls;
+}
+
+export type CollectCoreUrlsOptions = {
+  /**
+   * Merged `/sitemap.xml` mode: no Prisma, no pathway lesson detail URLs, no content-backed study hub DB slice.
+   */
+  productionSafeStatic?: boolean;
+};
 
 /** Pre-Nursing public hub, lesson index, study planning, and module pages (registry-backed). */
 export function collectPreNursingSeoUrls(origin: string): string[] {
@@ -240,60 +382,14 @@ export async function collectPathwayLessonSeoUrls(
   return urls;
 }
 
-function safeLastmodDate(): string {
-  try {
-    return new Date().toISOString().slice(0, 10);
-  } catch {
-    return "1970-01-01";
-  }
-}
-
-function escapeXml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
-}
-
-export type SitemapUrlEntry = {
-  loc: string;
-  lastmod?: string;
-};
-
-/** Public: reusable urlset builder from absolute URLs (used by blog sitemap). */
-export function buildSitemapUrlsetFromAbsoluteUrls(urls: string[] | SitemapUrlEntry[]): string {
-  if (urls.length === 0) return minimalUrlsetSingleHome();
-  const defaultLastmod = safeLastmodDate();
-  const body = urls
-    .map((u) => {
-      const locValue = typeof u === "string" ? u : u.loc;
-      const entryLastmod = typeof u === "string" ? defaultLastmod : (u.lastmod?.slice(0, 25) || defaultLastmod);
-      const loc = escapeXml(locValue);
-      const lastmod = escapeXml(entryLastmod);
-      return `  <url>
-    <loc>${loc}</loc>
-    <lastmod>${lastmod}</lastmod>
-  </url>`;
-    })
-    .join("\n");
-
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${body}
-</urlset>
-`;
-}
-
 /**
  * Default-locale “core” slice (merged into `/sitemap.xml` via `collectCoreUrls`).
  *
- * Omits auth/account routes (`/login`, `/signup`, …) — they are `noindex` (see
- * `sitemap-marketing-exclusions.ts` and merge-time filtering in `sitemap-all-xml.ts`).
+ * Unless {@link CollectCoreUrlsOptions.productionSafeStatic} is set, omits `/login` (noindex auth surface).
  */
-export async function collectCoreUrls(origin: string): Promise<string[]> {
+export async function collectCoreUrls(origin: string, opts?: CollectCoreUrlsOptions): Promise<string[]> {
   const o = normalizeOrigin(origin);
+  const productionSafe = opts?.productionSafeStatic === true;
   const add = (path: string) => {
     const p = path.startsWith("/") ? path : `/${path}`;
     return `${o}${p}`;
@@ -359,6 +455,7 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
     add("/editorial-policy"),
     add("/content-review-policy"),
     add("/contact"),
+    ...(productionSafe ? [add("/login")] : []),
   ];
   if (reduceForBuildSafeMode) {
     safeServerLog("seo", "sitemap_build_safe_mode_core_only", {
@@ -368,15 +465,35 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
   }
   const expandedBase = [
     ...base,
+    ...SORTED_SITEMAP_LOCALES.flatMap((loc) => collectLocaleMarketingSitemapSafeUrls(o, loc)),
     ...getAllProgrammaticQuestionTopicSlugs().map((s) => add(`/questions/${s}`)),
     add("/tools"),
     add("/case-studies"),
     ...listPublishedExpansionExamMarketingPaths().map((p) => add(p)),
     ...regionalTopicPaths.map((p) => add(p)),
   ];
+  if (productionSafe) {
+    const pathwayTopicUrls = await collectPathwayTopicProgrammaticUrls(o);
+    const [examHubUrls, npPracticeHubUrls] = await Promise.all([
+      collectExamPathwayUrls(o),
+      collectNpPracticeTestHubUrls(o),
+    ]);
+    const lessonHubUrls = collectPathwayLessonHubUrlsOnly(o);
+    const osceScenarioHubUrls = collectOsceScenariosMarketingHubUrls(o);
+    return [
+      ...expandedBase,
+      ...examHubUrls,
+      ...npPracticeHubUrls,
+      ...pathwayTopicUrls,
+      ...collectAlliedMarketingUrls(o),
+      ...collectPreNursingSitemapHubUrlsOnly(o),
+      ...lessonHubUrls,
+      ...osceScenarioHubUrls,
+    ];
+  }
   /**
    * Pathway lesson URLs are the dominant sitemap cost. Cap wall time (override via `SITEMAP_PATHWAY_BUDGET_MS`).
-   * Blog URLs are merged separately in `sitemap-all-xml.ts` and are not dropped when this budget elapses.
+   * Blog index and posts are not emitted from this heavy pathway path; `/sitemap.xml` lists `/blog` in the static route.
    */
   const pathwayBudgetMs = (() => {
     const raw = process.env.SITEMAP_PATHWAY_BUDGET_MS?.trim();
@@ -387,20 +504,24 @@ export async function collectCoreUrls(origin: string): Promise<string[]> {
   const pathwayLessonDeadlineMs = Date.now() + pathwayBudgetMs;
   const lessonUrls = await collectPathwayLessonSeoUrls(o, { deadlineEpochMs: pathwayLessonDeadlineMs });
   const pathwayTopicUrls = await collectPathwayTopicProgrammaticUrls(o);
-  const [examHubUrls, npPracticeHubUrls, contentBackedStudyHubUrls] = await Promise.all([
+  const [examHubUrls, npPracticeHubUrls, contentBackedStudyHubUrls, programmaticStudySeoUrls] = await Promise.all([
     collectExamPathwayUrls(o),
     collectNpPracticeTestHubUrls(o),
     collectContentBackedStudyResourceHubUrls(o),
+    collectProgrammaticStudySeoUrls(o),
   ]);
+  const osceScenarioHubUrls = collectOsceScenariosMarketingHubUrls(o);
   return [
     ...expandedBase,
     ...examHubUrls,
     ...npPracticeHubUrls,
     ...pathwayTopicUrls,
     ...contentBackedStudyHubUrls,
+    ...programmaticStudySeoUrls,
     ...collectAlliedMarketingUrls(o),
     ...collectPreNursingSeoUrls(o),
     ...lessonUrls,
+    ...osceScenarioHubUrls,
   ];
 }
 
@@ -489,23 +610,4 @@ export function collectToolsUrls(origin: string): string[] {
     }
   }
   return urls;
-}
-
-export function minimalUrlsetSingleHome(): string {
-  const base = normalizeOrigin(resolveSitemapOrigin());
-  const loc = escapeXml(`${base}/`);
-  const lastmod = safeLastmodDate();
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${loc}</loc>
-    <lastmod>${lastmod}</lastmod>
-  </url>
-</urlset>
-`;
-}
-
-/** @deprecated */
-export function minimalSitemapXml(): string {
-  return minimalUrlsetSingleHome();
 }

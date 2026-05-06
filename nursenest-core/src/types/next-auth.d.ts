@@ -1,3 +1,4 @@
+import type { CountryCode, TierCode } from "@prisma/client";
 import "next-auth";
 
 /** Mirrors Prisma `UserRole` string values exposed on the JWT/session. */
@@ -19,8 +20,8 @@ declare module "next-auth" {
       email: string;
       name: string;
       role: SessionUserRole;
-      country: "CA" | "US";
-      tier: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED" | "PRE_NURSING" | "NEW_GRAD";
+      country: CountryCode;
+      tier: TierCode;
       /** For ALLIED tier users: their specific profession key (e.g. "paramedic", "mlt"). */
       alliedProfessionKey?: string | null;
       /** Mirrors last login; server routes still use resolveEntitlement — never trust alone for gating. */
@@ -33,11 +34,13 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
   interface JWT {
+    /** Stable per-login / backfilled id for soft session telemetry (never exposed on Session). */
+    jti?: string;
     email?: string | null;
     name?: string | null;
     role?: SessionUserRole;
-    country?: "CA" | "US";
-    tier?: "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED" | "PRE_NURSING" | "NEW_GRAD";
+    country?: CountryCode;
+    tier?: TierCode;
     /** For ALLIED tier users: their specific profession key. */
     alliedProfessionKey?: string | null;
     subscriptionStatus?: "active" | "grace" | "past_due_grace" | "past_due" | "none";

@@ -97,3 +97,46 @@ test("support staff can GET /api/debug/db-env (Prisma env flags, no secrets)", (
   assert.equal(isPathAllowedForStaffTier("support", "/api/debug/db-env"), true);
   assert.equal(isPathAllowedForStaffTier("content", "/api/debug/db-env"), true);
 });
+
+test("support and content staff can access clinical nursing scenario admin surfaces", () => {
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/clinical-scenarios"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/clinical-scenarios/abc123"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/clinical-nursing-scenarios"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/clinical-nursing-scenarios/abc/publish-status"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/admin/clinical-scenarios"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/api/admin/clinical-nursing-scenarios"), true);
+});
+
+test("support and content staff can access pathway lesson admin surfaces", () => {
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/pathway-lessons"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/pathway-lessons/open"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/pathway-lessons/abc"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/pathway-lessons"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/pathway-lessons/xyz"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/admin/pathway-lessons/pl1"), true);
+});
+
+test("support and content staff can access internal courses admin surfaces", () => {
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/courses"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/internal-courses"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/internal-courses/x/status"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/admin/courses"), true);
+});
+
+test("support staff can access page copy editor and marketing public content API", () => {
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/content/page-copy"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/marketing-public-content"), true);
+});
+
+test("content staff can access page copy editor (not support-only)", () => {
+  assert.equal(isPathAllowedForStaffTier("content", "/admin/content/page-copy"), true);
+});
+
+test("observability hub: support + content can open UI; learner roster API blocked for content", () => {
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/observability"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/observability/hub"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/observability/learners"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/admin/observability"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/api/admin/observability/hub"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/api/admin/observability/learners"), false);
+});

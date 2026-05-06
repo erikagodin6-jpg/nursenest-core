@@ -1,6 +1,5 @@
-import path from "path";
+import { existsSync, readFileSync } from "node:fs";
 import { NextResponse } from "next/server";
-import { loadMergedMarketingMessagesFromNextPublicDir } from "@/lib/i18n/merge-next-public-i18n-shards";
 
 /** Must match `script/compile-i18n.ts` / `script/merge-marketing-i18n.ts`. */
 const ALLOWED = new Set<string>([
@@ -9,11 +8,20 @@ const ALLOWED = new Set<string>([
 ]);
 
 /** Scoped to `public/i18n` under the app root (matches `source_dir` / `process.cwd()` on DO App Platform). */
-const I18N_DIR = path.join(/* turbopackIgnore: true */ process.cwd(), "public", "i18n");
+const I18N_DIR = /* turbopackIgnore: true */ `${process.cwd()}/public/i18n`;
 
 function resolveMergedBundle(lang: string): Record<string, string> | null {
   if (!ALLOWED.has(lang)) return null;
-  return loadMergedMarketingMessagesFromNextPublicDir(I18N_DIR, lang);
+  const file = `${I18N_DIR}/${lang}.json`;
+  try {
+    if (!existsSync(file)) return null;
+    const parsed = JSON.parse(readFileSync(file, "utf8"));
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? (parsed as Record<string, string>)
+      : null;
+  } catch {
+    return null;
+  }
 }
 
 /**

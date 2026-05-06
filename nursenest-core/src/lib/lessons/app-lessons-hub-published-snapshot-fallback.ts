@@ -1,3 +1,5 @@
+import type { MarketingHubLessonsListOptions } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
+import { normalizeAlliedTaxonomySlugForProfession } from "@/lib/allied/allied-profession-taxonomy";
 import type { PathwayLessonsPageResult } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import type { StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failover/study-published-snapshot-types";
@@ -9,13 +11,24 @@ import type { StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failove
 export function appLessonsHubListOptsForSnapshot(args: {
   qEffective: string | null;
   topicSlugFilter: string | null;
-}): { q?: string; topicSlugsIn?: string[] } | undefined {
+  alliedProfessionKey?: string | null;
+  /** Must match marketing hub `alliedTaxonomy` when snapshot parity is required. */
+  alliedTaxonomyFilter?: string | null;
+}): MarketingHubLessonsListOptions | undefined {
   const q = args.qEffective?.trim();
   const ts = args.topicSlugFilter?.trim().toLowerCase();
-  if (q && ts) return { q, topicSlugsIn: [ts] };
-  if (q) return { q };
-  if (ts) return { topicSlugsIn: [ts] };
-  return undefined;
+  const ap = args.alliedProfessionKey?.trim().toLowerCase();
+  const taxNorm =
+    ap && args.alliedTaxonomyFilter?.trim()
+      ? normalizeAlliedTaxonomySlugForProfession(ap, args.alliedTaxonomyFilter)
+      : null;
+  const allied = ap ? { alliedProfessionKey: ap } as const : {};
+  /** Mutable `string[]` — avoid `as const` tuple (`readonly [string]`) for `MarketingHubLessonsListOptions`. */
+  const tax = taxNorm ? { taxonomySlugsIn: [taxNorm] } : {};
+  if (q && ts) return { q, topicSlugsIn: [ts], ...allied, ...tax };
+  if (q) return { q, ...allied, ...tax };
+  if (ts) return { topicSlugsIn: [ts], ...allied, ...tax };
+  return ap ? { alliedProfessionKey: ap, ...tax } : undefined;
 }
 
 export type AppLessonsHubSnapshotLessonsBlock = {
@@ -56,9 +69,9 @@ export function lessonsListBlockFromPathwayHubSnapshot(
   const rows: AppLessonsHubSnapshotLessonsBlock["rows"] = [];
   for (const raw of p.items) {
     const r = raw as PathwayLessonRecord;
-    if (!r?.id || !r.slug || !r.title) continue;
+    if (!r?.slug || !r.title) continue;
     rows.push({
-      id: r.id,
+      id: r.slug,
       title: r.title,
       summary: pathwayLessonCardSummary({
         seoDescription: r.seoDescription ?? "",

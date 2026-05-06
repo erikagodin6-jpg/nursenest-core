@@ -95,7 +95,7 @@ export function MarketingHeaderUtilityStrip({
         strippedPathname: strippedPath,
         globalRegionCookie: clientGlobalRegion,
         marketingExamRegion: region,
-        sessionCountryUsCa: user?.country,
+        sessionCountryCode: user?.country,
       }),
     [strippedPath, clientGlobalRegion, region, user?.country],
   );
@@ -137,6 +137,7 @@ export function MarketingHeaderUtilityStrip({
 
   return (
     <div
+      data-nn-header-band={variant === "dark-bar" ? "utility" : undefined}
       className={`top-bar relative z-[25] w-full ${variant === "dark-bar" ? "nn-header-utility-dark" : "nn-header-utility"}`}
     >
       <div

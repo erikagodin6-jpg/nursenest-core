@@ -7,14 +7,28 @@ import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entit
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { CatPoolRow } from "@/lib/exams/cat-engine";
-import { loadMissedQuestionIdsForPoolFilter } from "@/lib/learner/study-question-signals";
+import type { CatPracticePoolBuildMeta } from "@/lib/practice-tests/types";
+import {
+  loadMissedQuestionIdsForPoolFilter,
+  loadSavedRationaleQuestionIdsForPoolFilter,
+} from "@/lib/learner/study-question-signals";
 import { getWeakTopicNamesForPractice } from "@/lib/learner/topic-performance";
 import { difficultyWhere } from "@/lib/practice-tests/practice-pool-shared";
 import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
 import { seededIndexInRange, shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
+import { ECG_QUESTION_FORMAT } from "@/lib/ecg-module/ecg-module-config";
+import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
+import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 
 const MAX_POOL = 4000;
 export const CAT_MIN_COMPLETE_POOL = 30;
+
+/** Soft practice widens filters when the strict slice is too thin for {@link validatePracticeCatPool}. */
+const CAT_SOFT_MIN_COMPLETE_ROWS = 8;
+/** Shared with marketing snapshots and flashcard exam-bank SQL — keep CAT / linear / hub counts aligned. */
+export const NON_ECG_PRACTICE_EXAM_WHERE: Prisma.ExamQuestionWhereInput = {
+  NOT: [{ questionFormat: ECG_QUESTION_FORMAT }, { tags: { has: "ecg-video" } }],
+};
 
 function hasValidStem(stem: string | null | undefined): boolean {
   return typeof stem === "string" && stem.trim().length > 0;
@@ -48,14 +62,26 @@ function hasValidCorrectAnswer(correctAnswer: Prisma.JsonValue | null | undefine
   return typeof correctAnswer === "object";
 }
 
-export type CompleteCatQuestionRow = {
+/** Fields required for {@link isCompleteCatQuestionRow} (subset of Prisma `ExamQuestion` selects). */
+export type CatQuestionCompletenessFields = {
+  /** Matches required `ExamQuestion.stem` from Prisma selects. */
   stem: string;
   options: Prisma.JsonValue | null;
   correctAnswer: Prisma.JsonValue | null;
   rationale: string | null;
 };
 
-export function isCompleteCatQuestionRow(row: CompleteCatQuestionRow): boolean {
+/** Row shape from {@link queryShuffledCompletePool} `select` after completeness filter. */
+export type CompleteCatQuestionRow = CatQuestionCompletenessFields & {
+  id: string;
+  difficulty: number | null;
+  bodySystem: string | null;
+  topic: string | null;
+  nclexClientNeedsCategory: string | null;
+  nclexClientNeedsSubcategory: string | null;
+};
+
+export function isCompleteCatQuestionRow(row: CatQuestionCompletenessFields): boolean {
   return (
     hasValidStem(row.stem) &&
     hasValidOptions(row.options) &&
@@ -64,57 +90,78 @@ export function isCompleteCatQuestionRow(row: CompleteCatQuestionRow): boolean {
   );
 }
 
-/**
- * Tier-scoped pool for adaptive practice (same gates as linear practice tests).
- * With `pathwayId`, RN / PN / NP isolation uses `questionAccessWhereWithPathway` (`exam` in pathway keys).
- * Narrative spec: `src/lib/exams/cat-adaptive-policy.ts`.
- */
-export async function fetchCatPracticePool(
+async function buildSecondaryFilterParts(
   userId: string,
   entitlement: AccessScope,
   input: PickQuestionsInput,
-): Promise<CatPoolRow[]> {
-  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
-  const pathwayIdTrim = input.pathwayId?.trim() ?? "";
-  let pathway: ExamPathwayDefinition | null = pathwayIdTrim ? getExamPathwayById(pathwayIdTrim) ?? null : null;
-  if (pathwayIdTrim && !pathway) {
-    return [];
-  }
-  if (pathway && !subscriptionCoversPathwayBase(entitlement, pathway)) {
-    // Fail closed when a pathway was requested: never widen to a broader tier pool.
-    return [];
-  }
-
-  const base: Prisma.ExamQuestionWhereInput = pathway
-    ? questionAccessWhereWithPathway(entitlement, pathway)
-    : questionAccessWhere(entitlement);
-
-  const parts: Prisma.ExamQuestionWhereInput[] = [base];
-
+  relaxed: boolean,
+): Promise<Prisma.ExamQuestionWhereInput[]> {
+  const parts: Prisma.ExamQuestionWhereInput[] = [];
   const diff = difficultyWhere(input.difficultyMin, input.difficultyMax);
   if (diff) parts.push(diff);
+  if (relaxed) return parts;
 
   if (input.selectionMode === "targeted") {
     if (input.topicNames.length > 0) {
       parts.push({ OR: input.topicNames.map((t) => ({ topic: t })) });
     }
-  } else if (input.selectionMode === "weak") {
-    const names = await getWeakTopicNamesForPractice(userId, entitlement, 16);
-    if (names.length > 0) {
-      parts.push({ topic: { in: names } });
-    }
-  } else if (input.selectionMode === "missed") {
-    const missedIds = await loadMissedQuestionIdsForPoolFilter(userId, 200);
-    if (missedIds.length === 0) {
-      return [];
-    }
-    parts.push({ id: { in: missedIds } });
-  } else if (input.topicNames.length > 0) {
-    parts.push({ OR: input.topicNames.map((t) => ({ topic: t })) });
+    return parts;
   }
 
-  const where: Prisma.ExamQuestionWhereInput = { AND: parts };
+  if (input.selectionMode === "weak") {
+    const names = await getWeakTopicNamesForPractice(userId, entitlement, 16);
+    let narrowed = names;
+    if (input.topicNames.length > 0) {
+      const want = new Set(input.topicNames);
+      const inter = names.filter((n) => want.has(n));
+      if (inter.length > 0) narrowed = inter;
+    }
+    if (narrowed.length > 0) {
+      parts.push({ topic: { in: narrowed } });
+    }
+    return parts;
+  }
 
+  if (input.selectionMode === "missed") {
+    let missedIds = await loadMissedQuestionIdsForPoolFilter(userId, 200);
+    if (missedIds.length === 0) {
+      return parts;
+    }
+    if (input.topicNames.length > 0) {
+      const rows = await prisma.examQuestion.findMany({
+        where: {
+          AND: [{ id: { in: missedIds } }, { OR: input.topicNames.map((t) => ({ topic: t })) }],
+        },
+        select: { id: true },
+        take: 220,
+      });
+      const filtered = rows.map((r) => r.id);
+      if (filtered.length > 0) {
+        missedIds = filtered;
+      }
+    }
+    parts.push({ id: { in: missedIds } });
+    return parts;
+  }
+
+  if (input.selectionMode === "starred") {
+    const starredIds = await loadSavedRationaleQuestionIdsForPoolFilter(userId, 200);
+    if (starredIds.length > 0) {
+      parts.push({ id: { in: starredIds } });
+    }
+    return parts;
+  }
+
+  if (input.topicNames.length > 0) {
+    parts.push({ OR: input.topicNames.map((t) => ({ topic: t })) });
+  }
+  return parts;
+}
+
+async function queryShuffledCompletePool(
+  where: Prisma.ExamQuestionWhereInput,
+  input: PickQuestionsInput,
+): Promise<CompleteCatQuestionRow[]> {
   const total = await prisma.examQuestion.count({ where });
   const takeN = Math.min(MAX_POOL, Math.max(1, total));
   let skip = 0;
@@ -146,21 +193,120 @@ export async function fetchCatPracticePool(
     take: takeN,
   });
 
-  const completeRows = rows.filter((r) => isCompleteCatQuestionRow(r));
+  const completeRows = rows.filter((r): r is CompleteCatQuestionRow => isCompleteCatQuestionRow(r));
   const salt = input.sessionPickSalt?.trim();
-  const ordered =
-    salt && salt.length >= 8
-      ? shuffleSeeded(completeRows, `${salt}:cat-pool-row-order-v1`)
-      : shuffleSeeded(completeRows, `ephemeral-cat-pool:${randomUUID()}`);
+  return salt && salt.length >= 8
+    ? shuffleSeeded(completeRows, `${salt}:cat-pool-row-order-v1`)
+    : shuffleSeeded(completeRows, `ephemeral-cat-pool:${randomUUID()}`);
+}
 
-  return ordered.map((r) => ({
-    id: r.id,
-    difficulty: typeof r.difficulty === "number" && Number.isFinite(r.difficulty) ? Math.round(r.difficulty) : 3,
-    bodySystem: r.bodySystem,
-    topic: r.topic,
-    nclexClientNeedsCategory: r.nclexClientNeedsCategory,
-    nclexClientNeedsSubcategory: r.nclexClientNeedsSubcategory,
-  }));
+/**
+ * Tier-scoped pool for adaptive practice (same gates as linear practice tests).
+ * With `pathwayId`, RN / PN / NP isolation uses `questionAccessWhereWithPathway` (`exam` in pathway keys).
+ * Narrative spec: `src/lib/exams/cat-adaptive-policy.ts`.
+ */
+export async function fetchCatPracticePool(
+  userId: string,
+  entitlement: AccessScope,
+  input: PickQuestionsInput,
+): Promise<{ pool: CatPoolRow[]; buildMeta: CatPracticePoolBuildMeta }> {
+  const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
+  const pathwayIdTrim = input.pathwayId?.trim() ?? "";
+  let pathway: ExamPathwayDefinition | null = pathwayIdTrim ? getExamPathwayById(pathwayIdTrim) ?? null : null;
+  const emptyMeta = (strict = 0): CatPracticePoolBuildMeta => ({
+    strictCompleteRowCount: strict,
+    usedRelaxedFilters: false,
+    finalCompleteRowCount: 0,
+  });
+
+  if (pathwayIdTrim && !pathway) {
+    return { pool: [], buildMeta: emptyMeta() };
+  }
+  if (pathway && !subscriptionCoversPathwayBase(entitlement, pathway)) {
+    // Fail closed when a pathway was requested: never widen to a broader tier pool.
+    return { pool: [], buildMeta: emptyMeta() };
+  }
+
+  const base: Prisma.ExamQuestionWhereInput = pathway
+    ? questionAccessWhereWithPathway(entitlement, pathway)
+    : questionAccessWhere(entitlement);
+
+  const strictness = input.selectionStrictness ?? "strict";
+
+  if (strictness !== "soft") {
+    if (input.selectionMode === "missed") {
+      const missedIds = await loadMissedQuestionIdsForPoolFilter(userId, 200);
+      if (missedIds.length === 0) {
+        return { pool: [], buildMeta: emptyMeta() };
+      }
+    }
+    if (input.selectionMode === "starred") {
+      const starredIds = await loadSavedRationaleQuestionIdsForPoolFilter(userId, 200);
+      if (starredIds.length === 0) {
+        return { pool: [], buildMeta: emptyMeta() };
+      }
+    }
+  }
+
+  const secondaryStrict = await buildSecondaryFilterParts(userId, entitlement, input, false);
+  const whereStrict: Prisma.ExamQuestionWhereInput = {
+    AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere(), ...secondaryStrict],
+  };
+  let completeRows = await queryShuffledCompletePool(whereStrict, input);
+  const strictCount = completeRows.length;
+  let usedRelaxedFilters = false;
+
+  if (strictness === "soft" && completeRows.length < CAT_SOFT_MIN_COMPLETE_ROWS) {
+    const secondaryRelaxed = await buildSecondaryFilterParts(userId, entitlement, input, true);
+    const whereRelaxed: Prisma.ExamQuestionWhereInput = {
+      AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere(), ...secondaryRelaxed],
+    };
+    completeRows = await queryShuffledCompletePool(whereRelaxed, input);
+    usedRelaxedFilters = true;
+  }
+
+  const buildMeta: CatPracticePoolBuildMeta = {
+    strictCompleteRowCount: strictCount,
+    usedRelaxedFilters,
+    finalCompleteRowCount: completeRows.length,
+  };
+
+  logCoreApiStudyDiagnostic({
+    endpoint: "fetchCatPracticePool",
+    pathwayId: pathwayIdTrim || null,
+    tier: String(entitlement.tier ?? ""),
+    country: String(entitlement.country ?? ""),
+    hasAccess: entitlement.hasAccess,
+    examKeys: pathway ? [...pathway.contentExamKeys].join(",") : "",
+    selectionMode: input.selectionMode,
+    selectionStrictness: strictness,
+    rowsFoundStrict: strictCount,
+    rowsReturned: completeRows.length,
+    usedRelaxedFilters,
+    reasonIfZero:
+      completeRows.length === 0
+        ? pathwayIdTrim && !pathway
+          ? "unknown_pathway_id"
+          : pathway && !subscriptionCoversPathwayBase(entitlement, pathway)
+            ? "pathway_not_covered_by_entitlement"
+            : strictness !== "soft" &&
+                (input.selectionMode === "missed" || input.selectionMode === "starred")
+              ? "empty_missed_or_starred_ids"
+              : "no_complete_non_ecg_rows_for_filters"
+        : undefined,
+  });
+
+  return {
+    pool: completeRows.map((r) => ({
+      id: r.id,
+      difficulty: typeof r.difficulty === "number" && Number.isFinite(r.difficulty) ? Math.round(r.difficulty) : 3,
+      bodySystem: r.bodySystem,
+      topic: r.topic,
+      nclexClientNeedsCategory: r.nclexClientNeedsCategory,
+      nclexClientNeedsSubcategory: r.nclexClientNeedsSubcategory,
+    })),
+    buildMeta,
+  };
 }
 
 export async function countCompleteCatPracticePool(
@@ -168,6 +314,6 @@ export async function countCompleteCatPracticePool(
   entitlement: AccessScope,
   input: PickQuestionsInput,
 ): Promise<number> {
-  const pool = await fetchCatPracticePool(userId, entitlement, input);
+  const { pool } = await fetchCatPracticePool(userId, entitlement, input);
   return pool.length;
 }

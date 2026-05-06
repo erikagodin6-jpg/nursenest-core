@@ -55,7 +55,6 @@ export async function getTaxonomyWriteHealthSummary(db: PrismaClient): Promise<T
       topicSlug: true,
       bodySystem: true,
       seoDescription: true,
-      system: true,
       sections: true,
     },
   });

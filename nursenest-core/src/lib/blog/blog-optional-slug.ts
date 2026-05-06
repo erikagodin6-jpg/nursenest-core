@@ -1,5 +1,3 @@
-import { prisma } from "@/lib/db";
-
 /** URL segment: lowercase alphanumeric, single hyphens between groups. */
 export const BLOG_SLUG_FORMAT_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -16,15 +14,24 @@ export class BlogInvalidSlugError extends Error {
   }
 }
 
-/** Normalize for storage / comparison (trim, lower, strip junk, collapse hyphens). */
+/**
+ * Normalize for storage / comparison.
+ * Handles emojis, Unicode accents, &→and, special punctuation, and collapses hyphens.
+ * Safe to call with any admin input including clinical abbreviations, titles, and emojis.
+ */
 export function cleanBlogSlugInput(raw: string): string {
   return String(raw ?? "")
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")  // strip combining diacritics
+    .replace(/[^\x00-\x7F]/g, " ")    // non-ASCII (emojis, CJK, etc.) → space
     .trim()
     .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
+    .replace(/\s*&\s*/g, " and ")     // & → and
+    .replace(/[/:\\—–]/g, " ")        // /, :, \, em-dash, en-dash → space
+    .replace(/[^a-z0-9\s-]/g, "")    // strip remaining special chars
+    .replace(/\s+/g, "-")             // spaces → hyphens
+    .replace(/-+/g, "-")              // collapse hyphens
+    .replace(/^-|-$/g, "");           // strip leading/trailing hyphens
 }
 
 /**
@@ -49,22 +56,45 @@ export function parseOptionalBlogSlug(raw: string | null | undefined): string | 
   return cleaned.slice(0, 180);
 }
 
+/**
+ * Admin-only: accept pasted article titles or loose text in an optional slug field.
+ * Returns a slug that always matches {@link BLOG_SLUG_FORMAT_RE} (never throws).
+ * Empty / whitespace-only input → `null` (caller should omit / auto-generate).
+ */
+export function coerceAdminOptionalSlugFromRawInput(raw: string | null | undefined, maxLen = 180): string | null {
+  if (raw == null) return null;
+  const trimmed = String(raw).trim();
+  if (trimmed.length === 0) return null;
+
+  const cleaned = cleanBlogSlugInput(trimmed).slice(0, maxLen);
+  if (cleaned.length >= 3 && BLOG_SLUG_FORMAT_RE.test(cleaned)) {
+    return cleaned;
+  }
+  return generateBlogSlugBaseFromTitle(trimmed, Math.min(100, maxLen)).slice(0, maxLen);
+}
+
 export function generateBlogSlugBaseFromTitle(title: string, maxLen = 100): string {
   const t = cleanBlogSlugInput(title).slice(0, maxLen);
   if (t.length >= 3 && BLOG_SLUG_FORMAT_RE.test(t)) return t;
-  const fallback = title
-    .trim()
+  // Fallback: aggressively strip everything non-alphanumeric
+  const fallback = String(title ?? "")
+    .normalize("NFKD")
+    .replace(/[^\x00-\x7F]/g, " ")
     .toLowerCase()
+    .replace(/\s*&\s*/g, " and ")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
     .slice(0, maxLen);
   if (fallback.length >= 3 && BLOG_SLUG_FORMAT_RE.test(fallback)) return fallback;
-  return "blog-post";
+  return `blog-post-${Date.now()}`;
 }
 
 export function generateBlogSlugBaseFromExamTopic(exam: string, topic: string, maxLen = 100): string {
   const base = `${exam}-${topic}`
+    .normalize("NFKD")
+    .replace(/[^\x00-\x7F]/g, " ")
     .toLowerCase()
+    .replace(/\s*&\s*/g, " and ")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
     .slice(0, maxLen);
@@ -72,21 +102,14 @@ export function generateBlogSlugBaseFromExamTopic(exam: string, topic: string, m
   return generateBlogSlugBaseFromTitle(topic || exam || "blog", maxLen);
 }
 
-/** First free slug: `base`, `base-1`, `base-2`, … (bounded by DB checks). */
-export async function ensureUniqueBlogPostSlug(baseSlug: string, maxTotalLength = 120): Promise<string> {
-  const base = cleanBlogSlugInput(baseSlug).slice(0, maxTotalLength) || "blog-post";
-  let slug = base.slice(0, maxTotalLength);
-  let i = 1;
-  while (await prisma.blogPost.findUnique({ where: { slug }, select: { id: true } })) {
-    slug = `${base}-${i++}`.slice(0, maxTotalLength);
-  }
-  return slug;
-}
-
 /** Live typing helper for admin inputs (does not throw). */
 export function liveNormalizeBlogSlugInputValue(value: string): string {
-  return value
+  return String(value ?? "")
+    .normalize("NFKD")
+    .replace(/[^\x00-\x7F]/g, " ")  // non-ASCII (emojis) → space
     .toLowerCase()
+    .replace(/\s*&\s*/g, " and ")
+    .replace(/[/:\\—–]/g, " ")
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
@@ -100,4 +123,18 @@ export function blogSlugCustomValidityMessage(normalized: string): string {
     return "Use lowercase letters, numbers, and hyphens only.";
   }
   return "";
+}
+
+/**
+ * Normalize a Zod preprocess value for slug fields.
+ * Returns the cleaned slug string (min 3 chars) or undefined (triggers auto-generation).
+ * Safe to use directly in `z.preprocess(normalizeSlugPreprocess, z.string()...optional())`.
+ */
+export function normalizeSlugPreprocess(v: unknown, maxLen = 180): string | undefined {
+  if (v === undefined || v === null) return undefined;
+  if (typeof v !== "string") return undefined;
+  const t = v.trim();
+  if (!t) return undefined;
+  const cleaned = cleanBlogSlugInput(t).slice(0, maxLen);
+  return cleaned.length >= 3 ? cleaned : undefined;
 }

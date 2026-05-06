@@ -28,6 +28,12 @@
             "body": "- Crepitus indicating bone fragment movement at fracture sites or gas in subcutaneous tissues\n- Deformity or asymmetry suggesting dislocation, fracture displacement, or skeletal abnormality\n- Limited range of motion indicating joint pathology, muscle contracture, or neurological deficit\n- Palpable bony landmarks shifted from expected positions suggesting displacement or swelling\n- Muscle atrophy visible as decreased bulk compared to contralateral limb indicating disuse or denervation\n- Edema and ecchymosis at anatomical sites suggesting underlying tissue injury or vascular compromise"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Treat the following as urgent escalation triggers while applying anatomy to bedside care: new neurovascular compromise after injury or casting (pain out of proportion, pulselessness, pallor, paresthesia, paralysis), rapidly expanding hematoma or tense compartment pain suggesting compartment syndrome, midline neck tenderness or step-offs after trauma before cervical spine is cleared, sudden shortness of breath with tracheal deviation or absent breath sounds suggesting tension physiology, and any acute confusion with focal deficits suggesting intracranial catastrophe. When landmarks do not match expected anatomy after trauma, assume occult injury until advanced imaging and surgical consultation guide next steps.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -44,6 +50,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- The anatomical position is the universal reference standard -- all directional terms assume the body is in this position regardless of actual patient positioning\n- The ventrogluteal site is the preferred intramuscular injection site in adults because it has no major nerves or blood vessels and consistent muscle depth\n- The phrenic nerve originates from C3-C5 -- remember 'C3, 4, 5 keeps the diaphragm alive' for understanding cervical spinal cord injury respiratory complications\n- Surface anatomy landmarks can be unreliable in obese patients -- use ultrasound guidance for vascular access and procedural safety\n- The right main bronchus is shorter, wider, and more vertical than the left, making it the more common site for aspirated foreign bodies\n- Understanding dermatome maps (C3-T1 upper extremity, T4 nipple line, T10 umbilicus, L1-S2 lower extremity) is essential for neurological assessment"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Explain to patients and families that directional terms and surface landmarks help the whole team communicate precisely about pain, wounds, and procedures. Teach them to report numbness, tingling, coolness, or color change distal to a splint or brace immediately, and why you compare both sides for symmetry. Describe how imaging and examination together protect them when anatomy is altered by obesity, prior surgery, or congenital variation. Reinforce safe movement and transfer basics using neutral spine and hip hinge patterns, and encourage questions about injection sites or wound mapping so instructions match what they will see at home.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -202,6 +214,12 @@
             "body": "- Tachycardia as a compensatory response to decreased cardiac output, hypovolemia, or hypoxia\n- Hypotension indicating inadequate cardiac output or decreased systemic vascular resistance\n- Tachypnea reflecting respiratory compensation for metabolic acidosis or primary respiratory disease\n- Oliguria (urine output less than 0.5 mL/kg/hr) indicating decreased renal perfusion or intrinsic renal disease\n- Altered mental status reflecting inadequate cerebral perfusion or metabolic encephalopathy\n- Peripheral edema indicating fluid overload, venous insufficiency, or decreased oncotic pressure"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Escalate promptly when physiology crosses into instability: sustained altered mental status with falling blood pressure, new oxygen requirements with fatigue or accessory muscle use, chest pain with diaphoresis or radiation, oliguria or anuria with peripheral edema, uncontrolled bleeding with tachycardia, and fever with rigors in a central line or immunocompromised host. Bradypnea, irregular gasping patterns, or sudden cyanosis demand immediate airway support. Any potassium or glucose extreme paired with ECG changes, seizures, or weakness should trigger rapid protocol-driven treatment rather than watchful waiting.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -218,6 +236,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- MAP is the best single indicator of organ perfusion -- maintain above 65 mmHg; MAP = DBP + 1/3(SBP - DBP)\n- The body will sacrifice peripheral perfusion (cold extremities, weak pulses) to maintain central organ perfusion -- by the time hypotension develops, significant compensation has already occurred\n- In metabolic acidosis, calculate the anion gap (Na - Cl - HCO3, normal 8-12) to narrow the differential diagnosis: elevated in DKA, lactic acidosis, renal failure, and toxic ingestions\n- The Na+/K+ ATPase pump is the foundation of cellular physiology -- it maintains resting membrane potential, drives secondary active transport, and is essential for nerve and muscle function\n- Respiratory compensation is fast (minutes) but limited; renal compensation is slow (days) but more powerful -- always identify whether compensation is appropriate for the primary disorder\n- Urine output is the most reliable bedside indicator of renal perfusion -- target at least 0.5 mL/kg/hr in adults"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Use plain language to connect organ systems to what patients feel day to day: hydration and salt balance with energy and dizziness, heart and lung workload with walking tolerance, kidneys with swelling and urine color when appropriate to mention. Teach warning symptoms that should prompt a call: worsening breathlessness at rest, fainting, black stools, fever that does not improve, or inability to keep fluids down. Emphasize medication timing, food interactions when relevant, and home monitoring devices only with clear thresholds. Invite teach-back so you can correct misunderstandings early and document education goals consistently.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -376,6 +400,12 @@
             "body": "- Recurring documentation errors involving medical terminology indicating need for additional training\n- Near-miss events traced to abbreviation misinterpretation (e.g., U read as 0, QD read as QID)\n- Patient complaints about unclear communication suggesting inadequate terminology translation\n- Medication errors linked to look-alike/sound-alike drug name confusion\n- Procedural errors related to incorrect anatomical terminology usage in orders or documentation\n- Communication breakdowns during interdisciplinary rounds due to inconsistent terminology usage"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Terminology errors can mask risk: never dismiss a critical value or order clarification because abbreviations look similar; verify drug names, units, and laterality (left versus right) out loud during procedures. Red-flag situations include inconsistent history versus chart language, conflicting allergy documentation, duplicate patient identifiers, and verbal orders during emergencies without timely read-back confirmation. If a label, consent, or specimen container does not match identifiers, stop the line immediately. Sudden team confusion about dose, route, or frequency should trigger a structured pause rather than assumptions.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -392,6 +422,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Break unfamiliar medical terms into component parts (prefix + root + suffix) to deduce meaning -- this works for approximately 90% of medical terms\n- The suffix -itis always means inflammation: appendicitis (appendix inflammation), cholecystitis (gallbladder inflammation), meningitis (meningeal inflammation)\n- Know the difference between -otomy (incision into), -ectomy (removal of), and -ostomy (creating a permanent or semi-permanent opening): thoracotomy vs. pneumonectomy vs. tracheostomy\n- Never abbreviate 'units' as U -- it can be misread as 0, causing a 10-fold dosing error with insulin\n- The combining vowel 'o' is dropped when the suffix begins with a vowel: gastr + itis = gastritis (not gastroitis)\n- Learn root words by body system rather than alphabetically for better clinical application and recall"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Help patients decode common terms on paperwork and portals without overwhelming them: explain prefixes and roots for their diagnosis once, then use consistent lay labels. Offer written glossaries for scheduled procedures and teach them how to ask clinicians to slow down or spell unfamiliar words. Encourage bringing a list of home medications and questions, and model how to read after-visit summaries for accuracy. When patients speak English as an additional language, offer qualified interpreters for safety-critical discussions rather than relying on family alone.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -550,6 +586,12 @@
             "body": "- Drug toxicity presenting as organ-specific symptoms (nephrotoxicity: rising creatinine; hepatotoxicity: elevated AST/ALT; ototoxicity: tinnitus/hearing loss)\n- Allergic reactions ranging from mild rash to life-threatening anaphylaxis (urticaria, angioedema, bronchospasm, hypotension)\n- Therapeutic failure indicated by persistent symptoms despite adherence, suggesting inadequate dosing or drug resistance\n- Drug withdrawal symptoms (tremor, tachycardia, seizures) from abrupt discontinuation of dependent medications\n- Serotonin syndrome (hyperthermia, clonus, agitation, diaphoresis) from excessive serotonergic drug combinations\n- QT prolongation on ECG from drugs affecting cardiac repolarization (fluoroquinolones, antipsychotics, antiemetics)"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Treat as emergencies signs of anaphylaxis (airway swelling, wheeze, hypotension, widespread hives), angioedema with tongue or lip swelling, serotonin syndrome with clonus and agitation, severe bleeding on anticoagulants, and suspected opioid overdose with pinpoint pupils and respiratory depression. Watch for nephrotoxic combinations, QT-prolonging stacks, and duplicate ingredients across brand and generic products. Any pediatric dosing that does not match weight-based norms requires pharmacist or prescriber verification before administration.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -566,6 +608,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- It takes 4-5 half-lives to reach steady state -- do not check drug levels before steady state is achieved unless toxicity is suspected\n- IV medications have 100% bioavailability; oral medications must survive first-pass hepatic metabolism, so oral doses are often higher than IV doses for the same drug\n- Grapefruit juice inhibits CYP3A4 in the intestinal wall, increasing bioavailability of drugs metabolized by this enzyme (statins, calcium channel blockers, some immunosuppressants)\n- Never crush extended-release (ER/XR), enteric-coated (EC), or sublingual medications -- this can cause dose dumping with potentially lethal consequences\n- Peak levels assess efficacy (drawn 30-60 minutes after IV infusion); trough levels assess toxicity risk (drawn immediately before the next dose)\n- The elderly are particularly susceptible to adverse drug reactions due to decreased renal clearance, reduced hepatic metabolism, increased body fat, and decreased serum albumin affecting protein binding"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Teach patients to use one pharmacy when possible, carry an updated allergy list, and never share prescription medications. Explain why finishing certain courses matters while others are as-needed, and how food, grapefruit, or dairy can change absorption. Review common side effects that are expected versus those that require urgent care. Demonstrate measurement tools for liquids and describe safe storage away from heat and children. Encourage reading inserts for black-box warnings and using teach-back for timing, dose, and missed-dose instructions.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -724,6 +772,12 @@
             "body": "- Altered vital sign trends (rising heart rate, falling blood pressure, increasing respiratory rate) indicating clinical deterioration\n- New onset confusion or decreased level of consciousness suggesting neurological compromise or metabolic derangement\n- Abnormal breath sounds (crackles, wheezing, stridor, absent breath sounds) indicating respiratory pathology\n- Abnormal heart sounds (S3 gallop, new murmur, irregularly irregular rhythm) suggesting cardiac dysfunction\n- Unilateral weakness, facial droop, or speech difficulty suggesting acute stroke requiring emergent intervention\n- Cool, mottled, or cyanotic extremities with diminished pulses indicating poor peripheral perfusion"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Assessment must trigger rapid escalation when you find non-blanching rash with fever, thunderclap headache, unequal pupils with trauma, hemodynamic instability with unclear source, acute abdomen with rigidity, or stroke symptoms within the treatment window. New hypoxia, stridor, or inability to handle secretions are airway red flags. In pregnancy, severe headache with visual changes and epigastric pain demand obstetric evaluation. Always reassess after interventions; deterioration despite treatment warrants senior notification and expanded diagnostics.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -740,6 +794,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Vital sign trends are more valuable than single measurements -- always compare to baseline and identify trajectories of change over time\n- The ABCDE approach prioritizes life-threatening conditions: never move to the next letter until the current one is addressed or determined to be intact\n- A normal SpO2 does not exclude respiratory distress -- always correlate with respiratory rate, work of breathing, and clinical appearance\n- The Glasgow Coma Scale score should be reported as individual components (E3V4M5 = 12) rather than just the total, as the components have different prognostic significance\n- Use the 'look-listen-feel' approach for each body system: inspect before palpating, percuss before auscultating (except abdomen: inspect, auscultate, percuss, palpate to avoid altering bowel sounds)\n- Document what you find, not what you interpret -- write 'bilateral crackles in lung bases' rather than 'sounds like fluid overload'"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Prepare patients for what assessment steps involve and why each matters: vitals trends, pain scales, lung sounds, abdominal palpation, or neurologic checks. Teach them to report symptom onset, triggers, associated factors, and medications taken today. Explain privacy, draping, and consent for sensitive exams. For home monitoring, set explicit parameters for when to call the clinic versus emergency services. Use return demonstrations for inhaler technique, brace wear, or glucose checks when those are part of the plan.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -898,6 +958,12 @@
             "body": "**Signs (stable / early):**\n- Fever greater than 38.3°C or hypothermia less than 36°C indicating systemic infection\n- Purulent drainage from wounds, catheter sites, or surgical incisions\n- Erythema, warmth, and edema at device insertion sites suggesting local infection\n\n**Signs (unstable / late):**\n- Leukocytosis with left shift or leukopenia in severe sepsis\n- Tachycardia and hypotension as signs of systemic inflammatory response\n- New-onset confusion or altered mental status especially in elderly patients with infection"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Immediate concerns include clusters of respiratory symptoms on a unit, suspected CRE or Candida auris colonization or infection, needlestick with high-risk source, splash to mucosa from bloodborne pathogen exposure, and any breach of sterile technique during central line or surgical procedures. Patient-level red flags are sepsis criteria, rapidly spreading cellulitis, necrotizing skin changes, meningismus, and post-operative fever with purulent drainage. Environmental cues like standing water, soiled supplies, or broken hand hygiene dispensers should be reported for rapid remediation.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -914,6 +980,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Hand hygiene compliance remains below 50% in many healthcare settings despite being the single most effective infection prevention measure\n- C. difficile spores are not killed by alcohol-based hand rubs; soap and water with mechanical friction is required for removal\n- Contact time is critical for surface disinfection; most hospital-grade disinfectants require 1-10 minutes of wet contact to achieve efficacy\n- N95 respirators must be fit-tested annually and user seal-checked before each use to ensure adequate protection against airborne pathogens\n- Antibiotic stewardship reduces not only antimicrobial resistance but also the incidence of C. difficile infection by 50-70%\n- The subclavian vein is the preferred central line insertion site for infection prevention due to lowest CLABSI rates compared to femoral or internal jugular sites"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Explain standard, contact, droplet, and airborne precautions in terms patients can act on: hand hygiene before eating, covering coughs, keeping wounds dry and clean, and isolation expectations without stigma. Teach family when masks or gowns are needed and when they are not. Discuss vaccination benefits honestly within scope. Reinforce completing antibiotics as directed when prescribed for bacterial illness, and symptom thresholds for seeking care if wounds redden, drain, or smell unusual. Encourage questions about home equipment cleaning intervals.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -1072,6 +1144,12 @@
             "body": "**Signs (stable / early):**\n- Patient unable to articulate treatment choice or demonstrate understanding of medical information\n- Signs of coercion or undue influence from family members or others during consent process\n- Evidence of healthcare disparities in treatment access or outcomes based on demographic factors\n\n**Signs (unstable / late):**\n- Patient or family expressing distress about treatment decisions or perceived lack of information\n- Healthcare team disagreement about appropriateness of continued aggressive treatment\n- Moral distress symptoms in staff including burnout, emotional exhaustion, and desire to leave profession"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Ethical crises often overlap safety: suspected abuse or neglect of a vulnerable adult or child, impaired colleague behavior risking patients, coercion around consent, research misconduct, or conflicts where financial incentives distort clinical recommendations. Capacity fluctuation with high-stakes decisions, surrogate disputes, and do-not-resuscitate misunderstandings need ethics consultation early. If a patient expresses intent to harm self or others, follow organizational and legal reporting pathways immediately while preserving therapeutic rapport where possible.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -1088,6 +1166,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Decision-making capacity is clinical and situation-specific; a patient may have capacity for some decisions but not others\n- There is no ethical distinction between withholding and withdrawing life-sustaining treatment; both are permissible when aligned with patient wishes\n- HIPAA permits disclosure of PHI without patient authorization for treatment, payment, healthcare operations, and specific public health and safety exceptions\n- The informed consent process is a conversation, not merely a signature on a form; documentation of the discussion is as important as the signed consent\n- Moral distress is a recognized occupational hazard in healthcare; institutional support systems and ethics consultation can help mitigate its effects\n- Advance care planning is an ongoing process that should be revisited as the patient's clinical status and preferences evolve over time"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Clarify that ethics supports shared decision-making, not rationing in secret: patients should know they can request a second opinion, an ethics consult, or a patient advocate. Explain advance directives, surrogate roles, and how consent can be withdrawn. Teach privacy rights and how complaints are handled fairly. When discussing limits of treatment, use compassionate pacing and document values-based conversations. Encourage questions about research participation, including voluntariness and alternatives.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -1246,6 +1330,12 @@
             "body": "**Signs (stable / early):**\n- Missing or incomplete documentation of assessments, interventions, or patient responses in the medical record\n- Discrepancies between documented medications and actual medications being administered\n- Delayed documentation creating gaps between care delivery and medical record entries\n\n**Signs (unstable / late):**\n- Copy-forward errors with outdated clinical information persisting in current notes\n- Lack of documentation for critical communications between providers during patient deterioration\n- Inconsistent use of standardized terminology leading to ambiguous clinical descriptions"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Documentation gaps that create immediate risk include missing allergies, absent code status in acute settings, unclear medication reconciliation after transfer, contradictory procedure consent, and late entries that obscure timing of deterioration. Copy-forward errors that propagate wrong laterality, weight, or inactive problems should be corrected and annotated. Suspected tampering with records, fraudulent billing cues, or harassment documented in notes should be escalated per policy. Any sentinel event narrative must be factual, contemporaneous, and free of blame language that obscures systems learning.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -1262,6 +1352,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- If it was not documented, it was not done: this legal principle means that undocumented care may be considered unperformed in malpractice proceedings\n- Never use prohibited abbreviations including 'U' for units, 'QD' for daily, trailing zeros after decimal points, or lack of leading zeros before decimal points per Joint Commission Do Not Use list\n- Late entries are acceptable when clearly labeled with current date/time and the date/time of the event being documented; avoid backdating\n- Incident reports should never be referenced in the patient's medical record as this may compromise quality improvement privilege protection\n- The SBAR framework reduces communication errors during handoffs by providing a standardized structure that ensures critical information is consistently transmitted\n- Copy-forward functionality should be used cautiously; always review and update all copied information to reflect the current patient status before signing the note"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Tell patients what you chart and why: visit summaries, problem lists, and patient instructions should align. Teach them to review portals for accuracy in medications, diagnoses, and follow-up dates. Explain how secure messaging works and expected response times. Encourage reporting discrepancies promptly. For consent conversations, confirm they understand what will be recorded and who can access it. Reinforce that respectful, concise patient quotes improve coordinated care without unnecessary sensitive detail.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -1420,6 +1516,12 @@
             "body": "**Signs (stable / early):**\n- Tachycardia with weak, thready pulse suggesting hypovolemia or cardiogenic compromise\n- Tachypnea with accessory muscle use indicating respiratory distress and increased work of breathing\n- Widening pulse pressure (difference between systolic and diastolic) suggesting increased intracranial pressure or aortic regurgitation\n\n**Signs (unstable / late):**\n- Hypotension with tachycardia indicating compensatory shock before decompensation\n- Cushing triad (hypertension, bradycardia, irregular respirations) signaling critical intracranial hypertension\n- Pulsus paradoxus (systolic BP drop greater than 10 mmHg during inspiration) indicating cardiac tamponade or severe asthma"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Vital sign clusters that demand urgent evaluation include fever with hypotension, respiratory rate sustained in the high twenties or thirties at rest, new oxygen need, pulse pressure narrowing with tachycardia, acute confusion with glucose or oxygen shifts, and pediatric capillary refill delays with mottling. Post-operative pain out of proportion with rising heart rate may signal bleeding. Any automated cuff reading that conflicts with clinical appearance warrants manual confirmation and reassessment. Do not anchor on a single normal value if the trajectory is worsening.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -1436,6 +1538,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Respiratory rate is the most sensitive early indicator of clinical deterioration and should never be estimated; count for a full 60 seconds\n- An SpO2 of 90% corresponds to a PaO2 of approximately 60 mmHg, representing the steep portion of the oxyhemoglobin dissociation curve where further small drops cause rapid desaturation\n- Blood pressure cuff size matters: a cuff that is too small (most common error in obese patients) will yield falsely elevated readings\n- Pulse oximetry reads falsely normal in carbon monoxide poisoning because carboxyhemoglobin absorbs light similarly to oxyhemoglobin\n- Cushing triad (hypertension, bradycardia, irregular respirations) is a late and ominous sign of critically elevated intracranial pressure requiring immediate intervention\n- The Modified Early Warning Score (MEWS) integrates multiple vital signs into a single score to standardize escalation criteria and trigger rapid response team activation"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Show patients and caregivers how measurements are taken and what numbers mean for their condition, including when home cuffs or thermometers need calibration. Teach symptom-linked reporting: dizziness when standing, palpitations with fainting, or breathlessness with minimal exertion. Explain orthostatic checks when indicated and safety with falls risk. Provide written thresholds for calling the care team versus calling emergency services. Emphasize bringing device logs to appointments for trend review.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -1594,6 +1702,12 @@
             "body": "**Signs (stable / early):**\n- Unresponsiveness with absent or abnormal (agonal) breathing indicating cardiac arrest\n- Sudden onset chest pain with diaphoresis, dyspnea, and jaw or arm radiation suggesting acute coronary syndrome\n- Stridor with urticaria, tongue or lip swelling, and hypotension indicating anaphylaxis\n\n**Signs (unstable / late):**\n- Sudden-onset facial droop, arm weakness, and speech difficulty indicating acute stroke\n- Tracheal deviation away from affected side with absent breath sounds suggesting tension pneumothorax\n- Massive hemorrhage with signs of hemorrhagic shock (tachycardia, hypotension, pallor, altered mental status)"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Activate emergency response for cardiac arrest, choking with ineffective cough, sudden collapse, stroke symptoms, anaphylaxis, major hemorrhage, airway obstruction, seizures lasting more than five minutes or repeating without recovery, and any unconscious person with unknown cause. For trauma, open fractures with neurovascular compromise, evisceration, impalement, or signs of tension pneumothorax require immediate team mobilization. Chemical exposure with eye pain or breathing difficulty needs decontamination and rapid evaluation. Trust structured early warning scores but never ignore gut clinical concern.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -1610,6 +1724,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- High-quality CPR is the single most important intervention in cardiac arrest; even brief interruptions in compressions significantly reduce coronary perfusion pressure and survival\n- Epinephrine in anaphylaxis should never be delayed: antihistamines and corticosteroids are adjunctive treatments, not first-line therapy\n- For every minute that defibrillation is delayed in witnessed VF, survival decreases by approximately 7-10%\n- The Hs and Ts mnemonic identifies reversible causes of cardiac arrest: Hypovolemia, Hypoxia, Hydrogen ion (acidosis), Hypo/Hyperkalemia, Hypothermia, Tension pneumothorax, Tamponade, Toxins, Thrombosis (pulmonary and coronary)\n- End-tidal CO2 monitoring during CPR provides real-time feedback on compression quality; ETCO2 less than 10 mmHg after 20 minutes of CPR is associated with very low likelihood of ROSC\n- Time is brain in stroke: every 15-minute reduction in door-to-needle time for tPA administration is associated with measurable improvement in functional outcomes"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Train lay responders to call emergency services first, start compressions when trained, use AEDs confidently, and control bleeding with firm pressure. Explain when not to move someone with suspected spinal injury unless the environment is unsafe. Teach recognition of stroke FAST equivalents in plain language. For workplaces, review evacuation maps, eyewash stations, and chemical spill basics. Encourage debrief participation after events because psychological recovery matters for sustained readiness.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -1768,6 +1888,12 @@
             "body": "- Elevated WBC with left shift indicating acute bacterial infection requiring antibiotic intervention\n- Critically low potassium below 3.0 mEq/L causing ECG changes and risk of cardiac dysrhythmias\n- Elevated troponin indicating myocardial injury requiring urgent cardiology consultation\n- INR above 4.0 indicating supratherapeutic anticoagulation with increased bleeding risk\n- Hemoglobin below 7.0 g/dL indicating severe anemia potentially requiring transfusion\n- Blood glucose below 40 mg/dL indicating severe hypoglycemia requiring immediate intervention"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Critical patterns include rising troponins with symptoms, acute kidney injury with hyperkalemia, INR supratherapeutic with bleeding, platelets under ten thousand with bleeding risk, white count extremes with fever, lactate elevation with hypotension, and glucose extremes with altered consciousness. Any unexpected critical result must be closed-looped with read-back and provider notification. Hemolysis, lipemia, or delayed processing can falsely alter values; repeat testing when the picture does not fit. Pediatric reference ranges differ; never apply adult norms blindly.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -1784,6 +1910,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Hemoglobin and hematocrit may not accurately reflect acute blood loss for 6-24 hours until fluid shifts restore plasma volume\n- Potassium values from hemolyzed specimens should never be used for clinical decision-making -- always recollect\n- A normal anion gap metabolic acidosis (hyperchloremic) suggests GI bicarbonate loss or renal tubular acidosis\n- Troponin elevation without typical chest pain can occur in renal failure, sepsis, and pulmonary embolism\n- BUN-to-creatinine ratio greater than 20:1 with elevated BUN suggests prerenal azotemia from dehydration or decreased renal perfusion\n- Critically abnormal lab values may be the first indication of a life-threatening condition before clinical signs become apparent"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Explain fasting and timing requirements clearly, including water-only policies when appropriate. Teach patients how specimen collection works and why hemolysis might require redraw. Use teach-back for anticoagulation goals and monitoring intervals. Discuss lifestyle factors that skew lipids or glucose if relevant. Encourage keeping a personal log of results and symptoms to correlate trends. Emphasize when same-day follow-up is mandatory after certain outpatient draws.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -1942,6 +2074,12 @@
             "body": "- Contrast extravasation at injection site causing local swelling, pain, and potential compartment syndrome\n- Anaphylactoid reaction signs including urticaria, bronchospasm, hypotension, and angioedema after contrast\n- Nephrogenic systemic fibrosis presenting as skin thickening and fibrosis after gadolinium in renal failure\n- Radiation dermatitis with erythema and desquamation after high-dose fluoroscopy or repeated CT imaging\n- Claustrophobic panic response during MRI manifesting as tachycardia, diaphoresis, and agitation\n- Thermal injury from monitoring cables or conductive loops during MRI creating radiofrequency burns"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Contrast reactions with airway compromise, urticaria with hypotension, or new oliguria after contrast need urgent pathways. Pregnancy status must be clarified before ionizing radiation when clinically feasible; shielding is not a substitute for appropriateness. Metal in unsafe locations, pacemaker restrictions without MRI-conditional verification, and agitated patients who cannot remain still elevate risk of missed injury. Incidental findings suggesting malignancy or acute vascular pathology require timely communication loops to ordering clinicians.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -1958,6 +2096,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- The five radiographic densities from most to least radiopaque are metal, bone, soft tissue/fluid, fat, and air\n- CT radiation dose is 100-500 times greater than a single chest X-ray -- always justify the clinical indication\n- MRI is contraindicated with non-MRI-conditional pacemakers, ferromagnetic implants, and metallic foreign bodies\n- Ultrasound and MRI deliver no ionizing radiation and are preferred in pregnant patients and pediatric populations\n- The inverse square law means doubling your distance from a radiation source reduces your exposure to one-quarter\n- Point-of-care ultrasound FAST exam assesses four areas for free fluid: perihepatic, perisplenic, pelvic, and pericardial"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Prepare patients for sensations during MRI, length of CT scans, and why contrast may be used or withheld. Explain radiation in relative terms without false reassurance, emphasizing benefit when ordered thoughtfully. Teach hydration guidance when prescribed post-contrast and symptom reporting for delayed reactions. For ultrasound, describe gel, positioning, and breathing holds. Encourage questions about claustrophobia options and hearing protection. Reinforce bringing prior outside CDs or links when follow-up comparisons matter.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -2116,6 +2260,12 @@
             "body": "- Anaphylaxis presenting with urticaria, angioedema, bronchospasm, and hypotension after drug administration\n- Serotonin syndrome with hyperthermia, clonus, agitation, and diaphoresis from serotonergic drug combinations\n- Digoxin toxicity manifesting as visual disturbances, nausea, bradycardia, and dysrhythmias\n- Warfarin supratherapeutic effect with easy bruising, gingival bleeding, hematuria, or frank hemorrhage\n- Opioid overdose with respiratory depression, pinpoint pupils, and decreased level of consciousness\n- Hypoglycemia from insulin or sulfonylurea excess causing diaphoresis, tremor, confusion, and seizures"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "High-alert medication errors near misses include insulin ten-fold overdoses, concentrated electrolyte lines without pumps, chemotherapy verification failures, neuromuscular blocker mix-ups, and epidural versus IV route confusion. Pediatric weight entry errors and decimal point mistakes are recurring harm patterns. Any patient-reported allergy not honored, or barcode mismatch at bedside, should halt administration. Sudden sedation after narcotic stacking or benzodiazepine co-administration requires airway readiness and reversal protocols per policy.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -2132,6 +2282,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- The most common cause of medication errors is not individual carelessness but system failures that create conditions for error\n- Never crush extended-release or enteric-coated medications -- doing so can release the entire dose at once causing toxicity\n- The trailing zero rule: write 5 mg, never 5.0 mg -- a misread decimal could result in a 10-fold overdose\n- Insulin and heparin are the two most common medications involved in serious inpatient medication errors\n- Medication reconciliation is required at every transition of care -- admission, transfer, and discharge\n- Read-back verification of verbal orders reduces transcription errors by confirming drug name, dose, route, and frequency"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Coach patients to verify name and birthday before every medication, ask what each new pill is for, and bring bottles or photos to visits. Teach reading labels for concentration changes after hospital discharge. Explain high-alert home meds like insulin and anticoagulants with explicit symptom thresholds. Discuss safe disposal of unused opioids and locked storage. Use teach-back for taper plans and when to involve a pharmacist for med sync reviews.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -2290,6 +2446,12 @@
             "body": "- Patient unable to repeat back key instructions indicating inadequate comprehension of education provided\n- Repeated non-adherence to medication regimen suggesting possible health literacy or communication barrier\n- Patient nodding and saying yes without asking questions which may indicate social desirability rather than understanding\n- Family member consistently answering questions directed at the patient suggesting possible communication issue\n- Patient avoiding eye contact or appearing withdrawn which may indicate cultural difference, discomfort, or fear\n- Frequent emergency department visits for same condition suggesting poor understanding of self-management plan"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Communication breakdowns that threaten safety include language barriers without qualified interpreters, dismissive responses to patient concerns that delay diagnosis, conflicting messages between team members, and consent obtained without capacity assessment. Threats, bias, or harassment must be addressed per human resources and patient experience policies. Sudden withdrawal or flat affect in a suicidal-risk patient requires immediate safety screening. If a patient cannot repeat back critical instructions after education, do not assume understanding; adjust approach and involve advocates.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -2306,6 +2468,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Teach-back is the single most effective method to verify patient understanding -- ask patients to explain in their own words\n- Never use family members as interpreters -- they may filter, add, or omit information and create liability\n- Patients retain only 40-80% of medical information provided, and nearly half of what is retained is incorrect\n- Sitting at the patient's eye level increases perceived empathy and improves patient satisfaction scores\n- The Ask Me 3 framework empowers patients: What is my main problem? What do I need to do? Why is it important?\n- SBAR reduces communication errors during handoffs by providing a predictable, structured format for critical information"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Model active listening: summarize what you heard, validate emotions, then share the plan in chunks. Teach patients the SBAR-style structure for calling clinicians about changes at home when appropriate. Encourage written questions and teach-back after every new diagnosis or medication change. Explain how interpreters protect accuracy and privacy. For health literacy limits, use teach-back with drawings or teach-back with demonstration devices. Reinforce that asking questions improves outcomes, not annoyance.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -2464,6 +2632,12 @@
             "body": "- Repeated communication breakdowns during handoffs indicating lack of standardized handoff process\n- Team members not speaking up about concerns suggesting low psychological safety or authority gradient issues\n- Conflicting care orders from different disciplines indicating inadequate interprofessional care coordination\n- Increased adverse events and near-misses correlating with staff transitions and handoff periods\n- Patient complaints about receiving contradictory information from different healthcare providers\n- High staff turnover and burnout related to interprofessional conflict and poor team dynamics"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Team failures cluster around unclear leadership during codes, silence after two challenges without escalation, handoff omissions of pending results or isolation status, and fixation errors during complex lines or surgery. Fatigue-related near misses, bullying that silences junior voices, and missing escalation when early warning scores climb are systemic red flags. Any perceived retaliation for safety reporting must be escalated. Sudden changes in staffing ratios with unstable patients warrant huddle and resource reallocation discussions immediately.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -2480,6 +2654,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Communication failures are the leading root cause of sentinel events -- effective teamwork is a patient safety intervention\n- The two-challenge rule requires stating your concern at least twice; if not acknowledged, take the concern up the chain of command\n- Psychological safety does not mean absence of conflict -- it means team members feel safe to take interpersonal risks\n- Structured handoff tools like I-PASS have been shown to reduce preventable adverse events by up to 30%\n- Just culture distinguishes between human error (console), at-risk behavior (coach), and reckless behavior (discipline)\n- High-reliability organizations defer to expertise -- the person closest to the problem often has the best information regardless of rank"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Patients benefit when teams model closed-loop communication: introduce roles, state the plan aloud, and confirm who owns next steps. Explain to families how rounding works, how to reach the covering provider after hours, and how bedside shift report protects continuity without oversharing sensitive details. Teach respectful ways to raise concerns using two-step escalation. Encourage participation in care conferences and written summaries. Reinforce that structured teamwork reduces errors and speeds recovery when everyone speaks up early.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -2640,6 +2820,12 @@
             "body": "- Crepitus indicating bone fragment movement at fracture sites or gas in subcutaneous tissues\n- Deformity or asymmetry suggesting dislocation, fracture displacement, or skeletal abnormality\n- Limited range of motion indicating joint pathology, muscle contracture, or neurological deficit\n- Palpable bony landmarks shifted from expected positions suggesting displacement or swelling\n- Muscle atrophy visible as decreased bulk compared to contralateral limb indicating disuse or denervation\n- Edema and ecchymosis at anatomical sites suggesting underlying tissue injury or vascular compromise"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Treat the following as urgent escalation triggers while applying anatomy to bedside care: new neurovascular compromise after injury or casting (pain out of proportion, pulselessness, pallor, paresthesia, paralysis), rapidly expanding hematoma or tense compartment pain suggesting compartment syndrome, midline neck tenderness or step-offs after trauma before cervical spine is cleared, sudden shortness of breath with tracheal deviation or absent breath sounds suggesting tension physiology, and any acute confusion with focal deficits suggesting intracranial catastrophe. When landmarks do not match expected anatomy after trauma, assume occult injury until advanced imaging and surgical consultation guide next steps.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -2656,6 +2842,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- The anatomical position is the universal reference standard -- all directional terms assume the body is in this position regardless of actual patient positioning\n- The ventrogluteal site is the preferred intramuscular injection site in adults because it has no major nerves or blood vessels and consistent muscle depth\n- The phrenic nerve originates from C3-C5 -- remember 'C3, 4, 5 keeps the diaphragm alive' for understanding cervical spinal cord injury respiratory complications\n- Surface anatomy landmarks can be unreliable in obese patients -- use ultrasound guidance for vascular access and procedural safety\n- The right main bronchus is shorter, wider, and more vertical than the left, making it the more common site for aspirated foreign bodies\n- Understanding dermatome maps (C3-T1 upper extremity, T4 nipple line, T10 umbilicus, L1-S2 lower extremity) is essential for neurological assessment"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Explain to patients and families that directional terms and surface landmarks help the whole team communicate precisely about pain, wounds, and procedures. Teach them to report numbness, tingling, coolness, or color change distal to a splint or brace immediately, and why you compare both sides for symmetry. Describe how imaging and examination together protect them when anatomy is altered by obesity, prior surgery, or congenital variation. Reinforce safe movement and transfer basics using neutral spine and hip hinge patterns, and encourage questions about injection sites or wound mapping so instructions match what they will see at home.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -2814,6 +3006,12 @@
             "body": "- Tachycardia as a compensatory response to decreased cardiac output, hypovolemia, or hypoxia\n- Hypotension indicating inadequate cardiac output or decreased systemic vascular resistance\n- Tachypnea reflecting respiratory compensation for metabolic acidosis or primary respiratory disease\n- Oliguria (urine output less than 0.5 mL/kg/hr) indicating decreased renal perfusion or intrinsic renal disease\n- Altered mental status reflecting inadequate cerebral perfusion or metabolic encephalopathy\n- Peripheral edema indicating fluid overload, venous insufficiency, or decreased oncotic pressure"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Escalate promptly when physiology crosses into instability: sustained altered mental status with falling blood pressure, new oxygen requirements with fatigue or accessory muscle use, chest pain with diaphoresis or radiation, oliguria or anuria with peripheral edema, uncontrolled bleeding with tachycardia, and fever with rigors in a central line or immunocompromised host. Bradypnea, irregular gasping patterns, or sudden cyanosis demand immediate airway support. Any potassium or glucose extreme paired with ECG changes, seizures, or weakness should trigger rapid protocol-driven treatment rather than watchful waiting.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -2830,6 +3028,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- MAP is the best single indicator of organ perfusion -- maintain above 65 mmHg; MAP = DBP + 1/3(SBP - DBP)\n- The body will sacrifice peripheral perfusion (cold extremities, weak pulses) to maintain central organ perfusion -- by the time hypotension develops, significant compensation has already occurred\n- In metabolic acidosis, calculate the anion gap (Na - Cl - HCO3, normal 8-12) to narrow the differential diagnosis: elevated in DKA, lactic acidosis, renal failure, and toxic ingestions\n- The Na+/K+ ATPase pump is the foundation of cellular physiology -- it maintains resting membrane potential, drives secondary active transport, and is essential for nerve and muscle function\n- Respiratory compensation is fast (minutes) but limited; renal compensation is slow (days) but more powerful -- always identify whether compensation is appropriate for the primary disorder\n- Urine output is the most reliable bedside indicator of renal perfusion -- target at least 0.5 mL/kg/hr in adults"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Use plain language to connect organ systems to what patients feel day to day: hydration and salt balance with energy and dizziness, heart and lung workload with walking tolerance, kidneys with swelling and urine color when appropriate to mention. Teach warning symptoms that should prompt a call: worsening breathlessness at rest, fainting, black stools, fever that does not improve, or inability to keep fluids down. Emphasize medication timing, food interactions when relevant, and home monitoring devices only with clear thresholds. Invite teach-back so you can correct misunderstandings early and document education goals consistently.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -2988,6 +3192,12 @@
             "body": "- Recurring documentation errors involving medical terminology indicating need for additional training\n- Near-miss events traced to abbreviation misinterpretation (e.g., U read as 0, QD read as QID)\n- Patient complaints about unclear communication suggesting inadequate terminology translation\n- Medication errors linked to look-alike/sound-alike drug name confusion\n- Procedural errors related to incorrect anatomical terminology usage in orders or documentation\n- Communication breakdowns during interdisciplinary rounds due to inconsistent terminology usage"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Terminology errors can mask risk: never dismiss a critical value or order clarification because abbreviations look similar; verify drug names, units, and laterality (left versus right) out loud during procedures. Red-flag situations include inconsistent history versus chart language, conflicting allergy documentation, duplicate patient identifiers, and verbal orders during emergencies without timely read-back confirmation. If a label, consent, or specimen container does not match identifiers, stop the line immediately. Sudden team confusion about dose, route, or frequency should trigger a structured pause rather than assumptions.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -3004,6 +3214,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Break unfamiliar medical terms into component parts (prefix + root + suffix) to deduce meaning -- this works for approximately 90% of medical terms\n- The suffix -itis always means inflammation: appendicitis (appendix inflammation), cholecystitis (gallbladder inflammation), meningitis (meningeal inflammation)\n- Know the difference between -otomy (incision into), -ectomy (removal of), and -ostomy (creating a permanent or semi-permanent opening): thoracotomy vs. pneumonectomy vs. tracheostomy\n- Never abbreviate 'units' as U -- it can be misread as 0, causing a 10-fold dosing error with insulin\n- The combining vowel 'o' is dropped when the suffix begins with a vowel: gastr + itis = gastritis (not gastroitis)\n- Learn root words by body system rather than alphabetically for better clinical application and recall"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Help patients decode common terms on paperwork and portals without overwhelming them: explain prefixes and roots for their diagnosis once, then use consistent lay labels. Offer written glossaries for scheduled procedures and teach them how to ask clinicians to slow down or spell unfamiliar words. Encourage bringing a list of home medications and questions, and model how to read after-visit summaries for accuracy. When patients speak English as an additional language, offer qualified interpreters for safety-critical discussions rather than relying on family alone.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -3162,6 +3378,12 @@
             "body": "- Drug toxicity presenting as organ-specific symptoms (nephrotoxicity: rising creatinine; hepatotoxicity: elevated AST/ALT; ototoxicity: tinnitus/hearing loss)\n- Allergic reactions ranging from mild rash to life-threatening anaphylaxis (urticaria, angioedema, bronchospasm, hypotension)\n- Therapeutic failure indicated by persistent symptoms despite adherence, suggesting inadequate dosing or drug resistance\n- Drug withdrawal symptoms (tremor, tachycardia, seizures) from abrupt discontinuation of dependent medications\n- Serotonin syndrome (hyperthermia, clonus, agitation, diaphoresis) from excessive serotonergic drug combinations\n- QT prolongation on ECG from drugs affecting cardiac repolarization (fluoroquinolones, antipsychotics, antiemetics)"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Treat as emergencies signs of anaphylaxis (airway swelling, wheeze, hypotension, widespread hives), angioedema with tongue or lip swelling, serotonin syndrome with clonus and agitation, severe bleeding on anticoagulants, and suspected opioid overdose with pinpoint pupils and respiratory depression. Watch for nephrotoxic combinations, QT-prolonging stacks, and duplicate ingredients across brand and generic products. Any pediatric dosing that does not match weight-based norms requires pharmacist or prescriber verification before administration.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -3178,6 +3400,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- It takes 4-5 half-lives to reach steady state -- do not check drug levels before steady state is achieved unless toxicity is suspected\n- IV medications have 100% bioavailability; oral medications must survive first-pass hepatic metabolism, so oral doses are often higher than IV doses for the same drug\n- Grapefruit juice inhibits CYP3A4 in the intestinal wall, increasing bioavailability of drugs metabolized by this enzyme (statins, calcium channel blockers, some immunosuppressants)\n- Never crush extended-release (ER/XR), enteric-coated (EC), or sublingual medications -- this can cause dose dumping with potentially lethal consequences\n- Peak levels assess efficacy (drawn 30-60 minutes after IV infusion); trough levels assess toxicity risk (drawn immediately before the next dose)\n- The elderly are particularly susceptible to adverse drug reactions due to decreased renal clearance, reduced hepatic metabolism, increased body fat, and decreased serum albumin affecting protein binding"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Teach patients to use one pharmacy when possible, carry an updated allergy list, and never share prescription medications. Explain why finishing certain courses matters while others are as-needed, and how food, grapefruit, or dairy can change absorption. Review common side effects that are expected versus those that require urgent care. Demonstrate measurement tools for liquids and describe safe storage away from heat and children. Encourage reading inserts for black-box warnings and using teach-back for timing, dose, and missed-dose instructions.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -3336,6 +3564,12 @@
             "body": "- Altered vital sign trends (rising heart rate, falling blood pressure, increasing respiratory rate) indicating clinical deterioration\n- New onset confusion or decreased level of consciousness suggesting neurological compromise or metabolic derangement\n- Abnormal breath sounds (crackles, wheezing, stridor, absent breath sounds) indicating respiratory pathology\n- Abnormal heart sounds (S3 gallop, new murmur, irregularly irregular rhythm) suggesting cardiac dysfunction\n- Unilateral weakness, facial droop, or speech difficulty suggesting acute stroke requiring emergent intervention\n- Cool, mottled, or cyanotic extremities with diminished pulses indicating poor peripheral perfusion"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Assessment must trigger rapid escalation when you find non-blanching rash with fever, thunderclap headache, unequal pupils with trauma, hemodynamic instability with unclear source, acute abdomen with rigidity, or stroke symptoms within the treatment window. New hypoxia, stridor, or inability to handle secretions are airway red flags. In pregnancy, severe headache with visual changes and epigastric pain demand obstetric evaluation. Always reassess after interventions; deterioration despite treatment warrants senior notification and expanded diagnostics.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -3352,6 +3586,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Vital sign trends are more valuable than single measurements -- always compare to baseline and identify trajectories of change over time\n- The ABCDE approach prioritizes life-threatening conditions: never move to the next letter until the current one is addressed or determined to be intact\n- A normal SpO2 does not exclude respiratory distress -- always correlate with respiratory rate, work of breathing, and clinical appearance\n- The Glasgow Coma Scale score should be reported as individual components (E3V4M5 = 12) rather than just the total, as the components have different prognostic significance\n- Use the 'look-listen-feel' approach for each body system: inspect before palpating, percuss before auscultating (except abdomen: inspect, auscultate, percuss, palpate to avoid altering bowel sounds)\n- Document what you find, not what you interpret -- write 'bilateral crackles in lung bases' rather than 'sounds like fluid overload'"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Prepare patients for what assessment steps involve and why each matters: vitals trends, pain scales, lung sounds, abdominal palpation, or neurologic checks. Teach them to report symptom onset, triggers, associated factors, and medications taken today. Explain privacy, draping, and consent for sensitive exams. For home monitoring, set explicit parameters for when to call the clinic versus emergency services. Use return demonstrations for inhaler technique, brace wear, or glucose checks when those are part of the plan.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -3510,6 +3750,12 @@
             "body": "**Signs (stable / early):**\n- Fever greater than 38.3°C or hypothermia less than 36°C indicating systemic infection\n- Purulent drainage from wounds, catheter sites, or surgical incisions\n- Erythema, warmth, and edema at device insertion sites suggesting local infection\n\n**Signs (unstable / late):**\n- Leukocytosis with left shift or leukopenia in severe sepsis\n- Tachycardia and hypotension as signs of systemic inflammatory response\n- New-onset confusion or altered mental status especially in elderly patients with infection"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Immediate concerns include clusters of respiratory symptoms on a unit, suspected CRE or Candida auris colonization or infection, needlestick with high-risk source, splash to mucosa from bloodborne pathogen exposure, and any breach of sterile technique during central line or surgical procedures. Patient-level red flags are sepsis criteria, rapidly spreading cellulitis, necrotizing skin changes, meningismus, and post-operative fever with purulent drainage. Environmental cues like standing water, soiled supplies, or broken hand hygiene dispensers should be reported for rapid remediation.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -3526,6 +3772,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Hand hygiene compliance remains below 50% in many healthcare settings despite being the single most effective infection prevention measure\n- C. difficile spores are not killed by alcohol-based hand rubs; soap and water with mechanical friction is required for removal\n- Contact time is critical for surface disinfection; most hospital-grade disinfectants require 1-10 minutes of wet contact to achieve efficacy\n- N95 respirators must be fit-tested annually and user seal-checked before each use to ensure adequate protection against airborne pathogens\n- Antibiotic stewardship reduces not only antimicrobial resistance but also the incidence of C. difficile infection by 50-70%\n- The subclavian vein is the preferred central line insertion site for infection prevention due to lowest CLABSI rates compared to femoral or internal jugular sites"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Explain standard, contact, droplet, and airborne precautions in terms patients can act on: hand hygiene before eating, covering coughs, keeping wounds dry and clean, and isolation expectations without stigma. Teach family when masks or gowns are needed and when they are not. Discuss vaccination benefits honestly within scope. Reinforce completing antibiotics as directed when prescribed for bacterial illness, and symptom thresholds for seeking care if wounds redden, drain, or smell unusual. Encourage questions about home equipment cleaning intervals.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -3684,6 +3936,12 @@
             "body": "**Signs (stable / early):**\n- Patient unable to articulate treatment choice or demonstrate understanding of medical information\n- Signs of coercion or undue influence from family members or others during consent process\n- Evidence of healthcare disparities in treatment access or outcomes based on demographic factors\n\n**Signs (unstable / late):**\n- Patient or family expressing distress about treatment decisions or perceived lack of information\n- Healthcare team disagreement about appropriateness of continued aggressive treatment\n- Moral distress symptoms in staff including burnout, emotional exhaustion, and desire to leave profession"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Ethical crises often overlap safety: suspected abuse or neglect of a vulnerable adult or child, impaired colleague behavior risking patients, coercion around consent, research misconduct, or conflicts where financial incentives distort clinical recommendations. Capacity fluctuation with high-stakes decisions, surrogate disputes, and do-not-resuscitate misunderstandings need ethics consultation early. If a patient expresses intent to harm self or others, follow organizational and legal reporting pathways immediately while preserving therapeutic rapport where possible.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -3700,6 +3958,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Decision-making capacity is clinical and situation-specific; a patient may have capacity for some decisions but not others\n- There is no ethical distinction between withholding and withdrawing life-sustaining treatment; both are permissible when aligned with patient wishes\n- HIPAA permits disclosure of PHI without patient authorization for treatment, payment, healthcare operations, and specific public health and safety exceptions\n- The informed consent process is a conversation, not merely a signature on a form; documentation of the discussion is as important as the signed consent\n- Moral distress is a recognized occupational hazard in healthcare; institutional support systems and ethics consultation can help mitigate its effects\n- Advance care planning is an ongoing process that should be revisited as the patient's clinical status and preferences evolve over time"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Clarify that ethics supports shared decision-making, not rationing in secret: patients should know they can request a second opinion, an ethics consult, or a patient advocate. Explain advance directives, surrogate roles, and how consent can be withdrawn. Teach privacy rights and how complaints are handled fairly. When discussing limits of treatment, use compassionate pacing and document values-based conversations. Encourage questions about research participation, including voluntariness and alternatives.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -3858,6 +4122,12 @@
             "body": "**Signs (stable / early):**\n- Missing or incomplete documentation of assessments, interventions, or patient responses in the medical record\n- Discrepancies between documented medications and actual medications being administered\n- Delayed documentation creating gaps between care delivery and medical record entries\n\n**Signs (unstable / late):**\n- Copy-forward errors with outdated clinical information persisting in current notes\n- Lack of documentation for critical communications between providers during patient deterioration\n- Inconsistent use of standardized terminology leading to ambiguous clinical descriptions"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Documentation gaps that create immediate risk include missing allergies, absent code status in acute settings, unclear medication reconciliation after transfer, contradictory procedure consent, and late entries that obscure timing of deterioration. Copy-forward errors that propagate wrong laterality, weight, or inactive problems should be corrected and annotated. Suspected tampering with records, fraudulent billing cues, or harassment documented in notes should be escalated per policy. Any sentinel event narrative must be factual, contemporaneous, and free of blame language that obscures systems learning.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -3874,6 +4144,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- If it was not documented, it was not done: this legal principle means that undocumented care may be considered unperformed in malpractice proceedings\n- Never use prohibited abbreviations including 'U' for units, 'QD' for daily, trailing zeros after decimal points, or lack of leading zeros before decimal points per Joint Commission Do Not Use list\n- Late entries are acceptable when clearly labeled with current date/time and the date/time of the event being documented; avoid backdating\n- Incident reports should never be referenced in the patient's medical record as this may compromise quality improvement privilege protection\n- The SBAR framework reduces communication errors during handoffs by providing a standardized structure that ensures critical information is consistently transmitted\n- Copy-forward functionality should be used cautiously; always review and update all copied information to reflect the current patient status before signing the note"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Tell patients what you chart and why: visit summaries, problem lists, and patient instructions should align. Teach them to review portals for accuracy in medications, diagnoses, and follow-up dates. Explain how secure messaging works and expected response times. Encourage reporting discrepancies promptly. For consent conversations, confirm they understand what will be recorded and who can access it. Reinforce that respectful, concise patient quotes improve coordinated care without unnecessary sensitive detail.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -4032,6 +4308,12 @@
             "body": "**Signs (stable / early):**\n- Tachycardia with weak, thready pulse suggesting hypovolemia or cardiogenic compromise\n- Tachypnea with accessory muscle use indicating respiratory distress and increased work of breathing\n- Widening pulse pressure (difference between systolic and diastolic) suggesting increased intracranial pressure or aortic regurgitation\n\n**Signs (unstable / late):**\n- Hypotension with tachycardia indicating compensatory shock before decompensation\n- Cushing triad (hypertension, bradycardia, irregular respirations) signaling critical intracranial hypertension\n- Pulsus paradoxus (systolic BP drop greater than 10 mmHg during inspiration) indicating cardiac tamponade or severe asthma"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Vital sign clusters that demand urgent evaluation include fever with hypotension, respiratory rate sustained in the high twenties or thirties at rest, new oxygen need, pulse pressure narrowing with tachycardia, acute confusion with glucose or oxygen shifts, and pediatric capillary refill delays with mottling. Post-operative pain out of proportion with rising heart rate may signal bleeding. Any automated cuff reading that conflicts with clinical appearance warrants manual confirmation and reassessment. Do not anchor on a single normal value if the trajectory is worsening.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -4048,6 +4330,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Respiratory rate is the most sensitive early indicator of clinical deterioration and should never be estimated; count for a full 60 seconds\n- An SpO2 of 90% corresponds to a PaO2 of approximately 60 mmHg, representing the steep portion of the oxyhemoglobin dissociation curve where further small drops cause rapid desaturation\n- Blood pressure cuff size matters: a cuff that is too small (most common error in obese patients) will yield falsely elevated readings\n- Pulse oximetry reads falsely normal in carbon monoxide poisoning because carboxyhemoglobin absorbs light similarly to oxyhemoglobin\n- Cushing triad (hypertension, bradycardia, irregular respirations) is a late and ominous sign of critically elevated intracranial pressure requiring immediate intervention\n- The Modified Early Warning Score (MEWS) integrates multiple vital signs into a single score to standardize escalation criteria and trigger rapid response team activation"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Show patients and caregivers how measurements are taken and what numbers mean for their condition, including when home cuffs or thermometers need calibration. Teach symptom-linked reporting: dizziness when standing, palpitations with fainting, or breathlessness with minimal exertion. Explain orthostatic checks when indicated and safety with falls risk. Provide written thresholds for calling the care team versus calling emergency services. Emphasize bringing device logs to appointments for trend review.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -4206,6 +4494,12 @@
             "body": "**Signs (stable / early):**\n- Unresponsiveness with absent or abnormal (agonal) breathing indicating cardiac arrest\n- Sudden onset chest pain with diaphoresis, dyspnea, and jaw or arm radiation suggesting acute coronary syndrome\n- Stridor with urticaria, tongue or lip swelling, and hypotension indicating anaphylaxis\n\n**Signs (unstable / late):**\n- Sudden-onset facial droop, arm weakness, and speech difficulty indicating acute stroke\n- Tracheal deviation away from affected side with absent breath sounds suggesting tension pneumothorax\n- Massive hemorrhage with signs of hemorrhagic shock (tachycardia, hypotension, pallor, altered mental status)"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Activate emergency response for cardiac arrest, choking with ineffective cough, sudden collapse, stroke symptoms, anaphylaxis, major hemorrhage, airway obstruction, seizures lasting more than five minutes or repeating without recovery, and any unconscious person with unknown cause. For trauma, open fractures with neurovascular compromise, evisceration, impalement, or signs of tension pneumothorax require immediate team mobilization. Chemical exposure with eye pain or breathing difficulty needs decontamination and rapid evaluation. Trust structured early warning scores but never ignore gut clinical concern.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -4222,6 +4516,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- High-quality CPR is the single most important intervention in cardiac arrest; even brief interruptions in compressions significantly reduce coronary perfusion pressure and survival\n- Epinephrine in anaphylaxis should never be delayed: antihistamines and corticosteroids are adjunctive treatments, not first-line therapy\n- For every minute that defibrillation is delayed in witnessed VF, survival decreases by approximately 7-10%\n- The Hs and Ts mnemonic identifies reversible causes of cardiac arrest: Hypovolemia, Hypoxia, Hydrogen ion (acidosis), Hypo/Hyperkalemia, Hypothermia, Tension pneumothorax, Tamponade, Toxins, Thrombosis (pulmonary and coronary)\n- End-tidal CO2 monitoring during CPR provides real-time feedback on compression quality; ETCO2 less than 10 mmHg after 20 minutes of CPR is associated with very low likelihood of ROSC\n- Time is brain in stroke: every 15-minute reduction in door-to-needle time for tPA administration is associated with measurable improvement in functional outcomes"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Train lay responders to call emergency services first, start compressions when trained, use AEDs confidently, and control bleeding with firm pressure. Explain when not to move someone with suspected spinal injury unless the environment is unsafe. Teach recognition of stroke FAST equivalents in plain language. For workplaces, review evacuation maps, eyewash stations, and chemical spill basics. Encourage debrief participation after events because psychological recovery matters for sustained readiness.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -4380,6 +4680,12 @@
             "body": "- Elevated WBC with left shift indicating acute bacterial infection requiring antibiotic intervention\n- Critically low potassium below 3.0 mEq/L causing ECG changes and risk of cardiac dysrhythmias\n- Elevated troponin indicating myocardial injury requiring urgent cardiology consultation\n- INR above 4.0 indicating supratherapeutic anticoagulation with increased bleeding risk\n- Hemoglobin below 7.0 g/dL indicating severe anemia potentially requiring transfusion\n- Blood glucose below 40 mg/dL indicating severe hypoglycemia requiring immediate intervention"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Critical patterns include rising troponins with symptoms, acute kidney injury with hyperkalemia, INR supratherapeutic with bleeding, platelets under ten thousand with bleeding risk, white count extremes with fever, lactate elevation with hypotension, and glucose extremes with altered consciousness. Any unexpected critical result must be closed-looped with read-back and provider notification. Hemolysis, lipemia, or delayed processing can falsely alter values; repeat testing when the picture does not fit. Pediatric reference ranges differ; never apply adult norms blindly.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -4396,6 +4702,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Hemoglobin and hematocrit may not accurately reflect acute blood loss for 6-24 hours until fluid shifts restore plasma volume\n- Potassium values from hemolyzed specimens should never be used for clinical decision-making -- always recollect\n- A normal anion gap metabolic acidosis (hyperchloremic) suggests GI bicarbonate loss or renal tubular acidosis\n- Troponin elevation without typical chest pain can occur in renal failure, sepsis, and pulmonary embolism\n- BUN-to-creatinine ratio greater than 20:1 with elevated BUN suggests prerenal azotemia from dehydration or decreased renal perfusion\n- Critically abnormal lab values may be the first indication of a life-threatening condition before clinical signs become apparent"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Explain fasting and timing requirements clearly, including water-only policies when appropriate. Teach patients how specimen collection works and why hemolysis might require redraw. Use teach-back for anticoagulation goals and monitoring intervals. Discuss lifestyle factors that skew lipids or glucose if relevant. Encourage keeping a personal log of results and symptoms to correlate trends. Emphasize when same-day follow-up is mandatory after certain outpatient draws.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -4554,6 +4866,12 @@
             "body": "- Contrast extravasation at injection site causing local swelling, pain, and potential compartment syndrome\n- Anaphylactoid reaction signs including urticaria, bronchospasm, hypotension, and angioedema after contrast\n- Nephrogenic systemic fibrosis presenting as skin thickening and fibrosis after gadolinium in renal failure\n- Radiation dermatitis with erythema and desquamation after high-dose fluoroscopy or repeated CT imaging\n- Claustrophobic panic response during MRI manifesting as tachycardia, diaphoresis, and agitation\n- Thermal injury from monitoring cables or conductive loops during MRI creating radiofrequency burns"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Contrast reactions with airway compromise, urticaria with hypotension, or new oliguria after contrast need urgent pathways. Pregnancy status must be clarified before ionizing radiation when clinically feasible; shielding is not a substitute for appropriateness. Metal in unsafe locations, pacemaker restrictions without MRI-conditional verification, and agitated patients who cannot remain still elevate risk of missed injury. Incidental findings suggesting malignancy or acute vascular pathology require timely communication loops to ordering clinicians.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -4570,6 +4888,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- The five radiographic densities from most to least radiopaque are metal, bone, soft tissue/fluid, fat, and air\n- CT radiation dose is 100-500 times greater than a single chest X-ray -- always justify the clinical indication\n- MRI is contraindicated with non-MRI-conditional pacemakers, ferromagnetic implants, and metallic foreign bodies\n- Ultrasound and MRI deliver no ionizing radiation and are preferred in pregnant patients and pediatric populations\n- The inverse square law means doubling your distance from a radiation source reduces your exposure to one-quarter\n- Point-of-care ultrasound FAST exam assesses four areas for free fluid: perihepatic, perisplenic, pelvic, and pericardial"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Prepare patients for sensations during MRI, length of CT scans, and why contrast may be used or withheld. Explain radiation in relative terms without false reassurance, emphasizing benefit when ordered thoughtfully. Teach hydration guidance when prescribed post-contrast and symptom reporting for delayed reactions. For ultrasound, describe gel, positioning, and breathing holds. Encourage questions about claustrophobia options and hearing protection. Reinforce bringing prior outside CDs or links when follow-up comparisons matter.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -4728,6 +5052,12 @@
             "body": "- Anaphylaxis presenting with urticaria, angioedema, bronchospasm, and hypotension after drug administration\n- Serotonin syndrome with hyperthermia, clonus, agitation, and diaphoresis from serotonergic drug combinations\n- Digoxin toxicity manifesting as visual disturbances, nausea, bradycardia, and dysrhythmias\n- Warfarin supratherapeutic effect with easy bruising, gingival bleeding, hematuria, or frank hemorrhage\n- Opioid overdose with respiratory depression, pinpoint pupils, and decreased level of consciousness\n- Hypoglycemia from insulin or sulfonylurea excess causing diaphoresis, tremor, confusion, and seizures"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "High-alert medication errors near misses include insulin ten-fold overdoses, concentrated electrolyte lines without pumps, chemotherapy verification failures, neuromuscular blocker mix-ups, and epidural versus IV route confusion. Pediatric weight entry errors and decimal point mistakes are recurring harm patterns. Any patient-reported allergy not honored, or barcode mismatch at bedside, should halt administration. Sudden sedation after narcotic stacking or benzodiazepine co-administration requires airway readiness and reversal protocols per policy.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -4744,6 +5074,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- The most common cause of medication errors is not individual carelessness but system failures that create conditions for error\n- Never crush extended-release or enteric-coated medications -- doing so can release the entire dose at once causing toxicity\n- The trailing zero rule: write 5 mg, never 5.0 mg -- a misread decimal could result in a 10-fold overdose\n- Insulin and heparin are the two most common medications involved in serious inpatient medication errors\n- Medication reconciliation is required at every transition of care -- admission, transfer, and discharge\n- Read-back verification of verbal orders reduces transcription errors by confirming drug name, dose, route, and frequency"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Coach patients to verify name and birthday before every medication, ask what each new pill is for, and bring bottles or photos to visits. Teach reading labels for concentration changes after hospital discharge. Explain high-alert home meds like insulin and anticoagulants with explicit symptom thresholds. Discuss safe disposal of unused opioids and locked storage. Use teach-back for taper plans and when to involve a pharmacist for med sync reviews.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -4902,6 +5238,12 @@
             "body": "- Patient unable to repeat back key instructions indicating inadequate comprehension of education provided\n- Repeated non-adherence to medication regimen suggesting possible health literacy or communication barrier\n- Patient nodding and saying yes without asking questions which may indicate social desirability rather than understanding\n- Family member consistently answering questions directed at the patient suggesting possible communication issue\n- Patient avoiding eye contact or appearing withdrawn which may indicate cultural difference, discomfort, or fear\n- Frequent emergency department visits for same condition suggesting poor understanding of self-management plan"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Communication breakdowns that threaten safety include language barriers without qualified interpreters, dismissive responses to patient concerns that delay diagnosis, conflicting messages between team members, and consent obtained without capacity assessment. Threats, bias, or harassment must be addressed per human resources and patient experience policies. Sudden withdrawal or flat affect in a suicidal-risk patient requires immediate safety screening. If a patient cannot repeat back critical instructions after education, do not assume understanding; adjust approach and involve advocates.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -4918,6 +5260,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Teach-back is the single most effective method to verify patient understanding -- ask patients to explain in their own words\n- Never use family members as interpreters -- they may filter, add, or omit information and create liability\n- Patients retain only 40-80% of medical information provided, and nearly half of what is retained is incorrect\n- Sitting at the patient's eye level increases perceived empathy and improves patient satisfaction scores\n- The Ask Me 3 framework empowers patients: What is my main problem? What do I need to do? Why is it important?\n- SBAR reduces communication errors during handoffs by providing a predictable, structured format for critical information"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Model active listening: summarize what you heard, validate emotions, then share the plan in chunks. Teach patients the SBAR-style structure for calling clinicians about changes at home when appropriate. Encourage written questions and teach-back after every new diagnosis or medication change. Explain how interpreters protect accuracy and privacy. For health literacy limits, use teach-back with drawings or teach-back with demonstration devices. Reinforce that asking questions improves outcomes, not annoyance.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [
@@ -5076,6 +5424,12 @@
             "body": "- Repeated communication breakdowns during handoffs indicating lack of standardized handoff process\n- Team members not speaking up about concerns suggesting low psychological safety or authority gradient issues\n- Conflicting care orders from different disciplines indicating inadequate interprofessional care coordination\n- Increased adverse events and near-misses correlating with staff transitions and handoff periods\n- Patient complaints about receiving contradictory information from different healthcare providers\n- High staff turnover and burnout related to interprofessional conflict and poor team dynamics"
           },
           {
+            "id": "red_flags",
+            "heading": "Red Flags / Danger Signs",
+            "kind": "red_flags",
+            "body": "Team failures cluster around unclear leadership during codes, silence after two challenges without escalation, handoff omissions of pending results or isolation status, and fixation errors during complex lines or surgery. Fatigue-related near misses, bullying that silences junior voices, and missing escalation when early warning scores climb are systemic red flags. Any perceived retaliation for safety reporting must be escalated. Sudden changes in staffing ratios with unstable patients warrant huddle and resource reallocation discussions immediately.\n\nUse closed-loop communication, repeat-back critical orders and results, and escalate per local policy whenever any criterion above is met or strongly suspected."
+          },
+          {
             "id": "labs_diagnostics",
             "heading": "Diagnostics / Labs",
             "kind": "labs_diagnostics",
@@ -5092,6 +5446,12 @@
             "heading": "Clinical Pearls",
             "kind": "clinical_pearls",
             "body": "- Communication failures are the leading root cause of sentinel events -- effective teamwork is a patient safety intervention\n- The two-challenge rule requires stating your concern at least twice; if not acknowledged, take the concern up the chain of command\n- Psychological safety does not mean absence of conflict -- it means team members feel safe to take interpersonal risks\n- Structured handoff tools like I-PASS have been shown to reduce preventable adverse events by up to 30%\n- Just culture distinguishes between human error (console), at-risk behavior (coach), and reckless behavior (discipline)\n- High-reliability organizations defer to expertise -- the person closest to the problem often has the best information regardless of rank"
+          },
+          {
+            "id": "client_education",
+            "heading": "Client Education",
+            "kind": "client_education",
+            "body": "Patients benefit when teams model closed-loop communication: introduce roles, state the plan aloud, and confirm who owns next steps. Explain to families how rounding works, how to reach the covering provider after hours, and how bedside shift report protects continuity without oversharing sensitive details. Teach respectful ways to raise concerns using two-step escalation. Encourage participation in care conferences and written summaries. Reinforce that structured teamwork reduces errors and speeds recovery when everyone speaks up early.\n\nReinforce written instructions when appropriate, match explanations to health literacy, invite questions until understanding is clear, and document teach-back or return demonstration when your organization requires verification. Offer qualified interpreter services, accessible formats, and bedside handouts when they improve comprehension and safety."
           }
         ],
         "preTest": [

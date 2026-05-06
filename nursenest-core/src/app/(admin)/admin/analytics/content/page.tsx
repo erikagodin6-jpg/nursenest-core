@@ -165,8 +165,8 @@ export default async function AdminContentAnalyticsPage({
         <Link href="/admin/ai/flashcards" className="text-primary underline">
           AI · Flashcards
         </Link>
-        <Link href="/admin/blog/studio" className="text-primary underline">
-          Blog / SEO studio
+        <Link href="/admin/blog" className="text-primary underline">
+          Blog console
         </Link>
         <Link href="/admin/seo" className="text-primary underline">
           SEO hub

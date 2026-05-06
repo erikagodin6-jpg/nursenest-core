@@ -1,9 +1,10 @@
 import type { ContentStatus, Prisma, TierCode } from "@prisma/client";
 
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-pathways-catalog";
-import { computeStructuralPublicCompleteFromDbRow } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import { computeStructuralPublicCompleteFromDbRow, pathwayLessonRowToInput } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import type { LegacyLessonExportRow } from "@/lib/legacy/legacy-public-content-types";
 import { normalizeLegacySlug } from "@/lib/legacy/legacy-public-content-types";
+import { mergeLegacySectionsIntoCurrent } from "@/lib/legacy/legacy-pathway-lesson-section-merge";
 
 const CANONICAL_LOCALE = "en" as const;
 
@@ -61,6 +62,9 @@ export function buildPathwayLessonUpdateFromLegacy(
   opts: {
     overwriteBody: boolean;
     allowPathwayCorrection: boolean;
+    mergeSections?: boolean;
+    /** When true, do not rename the DB row from legacy slug (used for title-resolved matches). */
+    preserveCanonicalSlug?: boolean;
   },
 ): { data: Prisma.PathwayLessonUpdateInput; notes: string[] } {
   assertPathwayAllowed(legacy.pathwayId);
@@ -75,9 +79,11 @@ export function buildPathwayLessonUpdateFromLegacy(
     notes.push("skip_invalid_legacy_slug");
     return { data: {}, notes };
   }
-  if (nextSlug !== current.slug) {
+  if (!opts.preserveCanonicalSlug && nextSlug !== current.slug) {
     data.slug = nextSlug;
     notes.push(`slug: ${current.slug} -> ${nextSlug}`);
+  } else if (opts.preserveCanonicalSlug && nextSlug !== current.slug) {
+    notes.push(`slug_preserved_title_match:${current.slug}`);
   }
 
   if (opts.allowPathwayCorrection && legacy.pathwayId !== current.pathwayId) {
@@ -121,6 +127,12 @@ export function buildPathwayLessonUpdateFromLegacy(
   if (opts.overwriteBody && legacy.sections !== undefined && legacy.sections !== null) {
     data.sections = legacy.sections as Prisma.InputJsonValue;
     notes.push("sections_overwritten");
+  } else if (opts.mergeSections && legacy.sections !== undefined && legacy.sections !== null) {
+    const merged = mergeLegacySectionsIntoCurrent(current.sections, legacy.sections);
+    if (merged.changed) {
+      data.sections = merged.sections as unknown as Prisma.InputJsonValue;
+      notes.push("sections_merged", ...merged.notes);
+    }
   }
 
   const mergedPreview: PathwayLessonRowShape = {

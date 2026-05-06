@@ -223,8 +223,8 @@ export function AdminSeoHubClient() {
           <ul className="text-sm text-muted-foreground">
             <li>
               • Fix metadata and slugs in{" "}
-              <Link className="font-semibold text-primary underline" href="/admin/blog/control-panel">
-                Blog control panel
+              <Link className="font-semibold text-primary underline" href="/admin/blog">
+                Blog console
               </Link>{" "}
               or{" "}
               <Link className="font-semibold text-primary underline" href="/admin/lessons">

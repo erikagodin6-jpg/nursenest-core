@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-05-03T22:35:28.483Z",
+  "dryRun": true,
+  "applied": false,
+  "locale": "hi",
+  "plannedChanges": 0,
+  "changedKeys": 0,
+  "protectedLocales": [
+    "en",
+    "fr",
+    "es"
+  ],
+  "changes": []
+}

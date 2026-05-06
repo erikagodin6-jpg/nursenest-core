@@ -8,9 +8,12 @@
  * `marketing-entry-routes` / `country-exam-offerings` modules via this file’s re-exports.
  */
 
+import { CountryCode } from "@prisma/client";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { CountryExamOfferingId } from "@/lib/marketing/country-exam-offerings";
 import { defaultPathwayIdForMarketingOffering, marketingExamHubPath } from "@/lib/marketing/country-exam-offerings";
 import { HUB, type MarketingRegionToggle, rnQuestions } from "@/lib/marketing/marketing-entry-routes";
+import { marketingPathwaySubpathBesideExamHub } from "@/lib/lessons/lesson-routes";
 import {
   defaultNursingExamMarketingHub as defaultNursingExamMarketingHubFromNav,
   marketingExamPrepHubs,
@@ -57,12 +60,14 @@ export function offeringIdForTier(tier: NavSessionTier): CountryExamOfferingId {
  */
 export function learnerMarketingPathwayIdFromSession(user: {
   tier?: NavSessionTier | string | null;
-  country?: "US" | "CA" | null;
+  country?: CountryCode | null;
 } | null): string | null {
   if (!user?.tier || !user.country) return null;
+  if (user.country !== CountryCode.US && user.country !== CountryCode.CA) return null;
   const tier = String(user.tier);
   if (tier === "PRE_NURSING" || tier === "NEW_GRAD") return null;
-  return defaultPathwayIdForMarketingOffering(user.country, offeringIdForTier(tier as NavSessionTier));
+  const region = user.country === CountryCode.US ? "US" : "CA";
+  return defaultPathwayIdForMarketingOffering(region, offeringIdForTier(tier as NavSessionTier));
 }
 
 /** Tiers that map to marketing exam hubs / pre-nursing surfaces (header Learn–Practice row). */
@@ -104,19 +109,22 @@ export function marketingHeaderLearnPracticeFlowDestinations(
   }
 
   if (ctx.tier && ctx.country) {
-    const hub = marketingExamHubPath(region, offeringIdForTier(ctx.tier as NavSessionTier));
+    const offering = offeringIdForTier(ctx.tier as NavSessionTier);
+    const hub = marketingExamHubPath(region, offering);
+    const pathway = getExamPathwayById(defaultPathwayIdForMarketingOffering(region, offering));
     return {
-      learnHref: `${hub}/lessons`,
-      practiceHref: `${hub}/questions`,
+      learnHref: marketingPathwaySubpathBesideExamHub(hub, pathway, "lessons"),
+      practiceHref: marketingPathwaySubpathBesideExamHub(hub, pathway, "questions"),
       learnMatchBase: hub,
       practiceMatchBase: hub,
     };
   }
 
   const hub = marketingExamHubPath(region, "rn");
+  const rnPathway = getExamPathwayById(defaultPathwayIdForMarketingOffering(region, "rn"));
   return {
-    learnHref: `${hub}/lessons`,
-    practiceHref: `${hub}/questions`,
+    learnHref: marketingPathwaySubpathBesideExamHub(hub, rnPathway, "lessons"),
+    practiceHref: marketingPathwaySubpathBesideExamHub(hub, rnPathway, "questions"),
     learnMatchBase: hub,
     practiceMatchBase: hub,
   };

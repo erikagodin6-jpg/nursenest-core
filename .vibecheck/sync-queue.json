@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "id": "7ce4003b-c132-4d95-a259-b0f1bc42d1ec",
+      "scanHash": "27b5874fcb30bc3c7c138acb6eae468365d2597c5e6b9ebe1c85a17cfab1835e",
+      "projectId": "afd0dc1c0733fb17",
+      "result": {
+        "schemaVersion": "scan-report.v1",
+        "projectPath": "/root/nursenest-core-reclone",
+        "projectName": "nursenest-core-reclone",
+        "scanType": "full",
+        "status": "completed",
+        "source": "vscode",
+        "sourceMetadata": {
+          "version": "30.0.2"
+        },
+        "findings": [],
+        "summary": {
+          "critical": 0,
+          "high": 0,
+          "medium": 0,
+          "low": 0,
+          "info": 0,
+          "total": 0,
+          "durationMs": 5967,
+          "healthScore": 100,
+          "verdict": "SHIP",
+          "source": "vscode",
+          "sourceMetadata": {
+            "version": "30.0.2"
+          }
+        },
+        "artifacts": [],
+        "warnings": [],
+        "errors": [],
+        "timestamp": "2026-04-28T18:32:55.518Z",
+        "completedAt": "2026-04-28T18:32:55.518Z"
+      },
+      "enqueuedAt": "2026-04-28T18:32:55.695Z",
+      "retryCount": 0,
+      "status": "pending"
+    }
+  ],
+  "updatedAt": "2026-04-30T20:19:08.764Z"
+}

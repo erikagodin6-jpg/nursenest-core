@@ -3,15 +3,17 @@ import { describe, it } from "node:test";
 import {
   collectMarketingDomPlaceholderViolations,
   normalizeMarketingDomText,
-} from "./forbidden-marketing-placeholders";
+} from "@/lib/validation/forbidden-production-text";
 
 describe("forbidden-marketing-placeholders (unit)", () => {
   it("flags standalone placeholder lines and shouty tokens", () => {
-    const body = ["Real headline", "Title", "More copy", "KICKER"].join("\n");
+    const body = ["Real headline", "Title", "More copy", "KICKER", "Body", "Link"].join("\n");
     const v = collectMarketingDomPlaceholderViolations(body);
     const kinds = new Set(v.map((x) => x.kind));
     assert.equal(kinds.has("standalone_line"), true);
     assert.equal(kinds.has("shouty_token"), true);
+    assert.ok(v.some((x) => x.kind === "standalone_line" && x.line === "Body"));
+    assert.ok(v.some((x) => x.kind === "standalone_line" && x.line === "Link"));
   });
 
   it("flags leaked flat i18n key as its own line", () => {

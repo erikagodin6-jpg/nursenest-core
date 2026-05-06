@@ -5,8 +5,10 @@ import {
   assertNoPublicPlaceholderCopy,
   isForbiddenAuthoredMarketingLeafValue,
   isKeyContentMirrorStub,
+  marketingShardUsesStrictPublicPageLeafPolicy,
   missingMarketingCopyFallback,
   normalizeResolvedMarketingLeaf,
+  scanFlatMarketingMessagesForForbiddenValues,
 } from "@/lib/marketing-i18n/marketing-message-value-policy";
 
 describe("marketing-message-value-policy", () => {
@@ -69,5 +71,28 @@ describe("marketing-message-value-policy", () => {
     assert.equal(normalizeResolvedMarketingLeaf("Title", "marketing.globalRoot.headline"), undefined);
     assert.equal(normalizeResolvedMarketingLeaf("KICKER", "pages.home.hero.headline"), undefined);
     assert.equal(normalizeResolvedMarketingLeaf("Real headline", "marketing.globalRoot.headline"), "Real headline");
+  });
+
+  it("scanFlatMarketingMessagesForForbiddenValues applies mirror + singleton bans only to en/pages.json", () => {
+    assert.equal(marketingShardUsesStrictPublicPageLeafPolicy("en/pages.json"), true);
+    assert.equal(marketingShardUsesStrictPublicPageLeafPolicy("en/components.json"), false);
+
+    const pagesHits = scanFlatMarketingMessagesForForbiddenValues("en/pages.json", {
+      "pages.example.title": "Title",
+    });
+    assert.equal(pagesHits.length, 1);
+
+    const componentHits = scanFlatMarketingMessagesForForbiddenValues("en/components.json", {
+      "components.example.title": "Title",
+    });
+    assert.equal(componentHits.length, 0);
+  });
+
+  it("scanFlatMarketingMessagesForForbiddenValues still flags lorem substrings on all shards", () => {
+    const hits = scanFlatMarketingMessagesForForbiddenValues("en/components.json", {
+      "components.example.body": "Intro lorem ipsum tail",
+    });
+    assert.equal(hits.length, 1);
+    assert.ok(hits[0]?.reason.includes("lorem ipsum"));
   });
 });

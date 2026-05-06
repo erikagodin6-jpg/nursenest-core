@@ -1,5 +1,5 @@
 import type { ContentStatus, ExamFamily, QuestionType, TierCode } from "@prisma/client";
-import { assertCanonicalExamQuestionExam } from "@/lib/exam-questions/exam-question-exam-key";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 
 export function tierCodeToExamDbTier(tier: TierCode): string {
@@ -25,8 +25,8 @@ export function tierCodeToContentItemTier(tier: TierCode): string {
 }
 
 export function examFamilyToExamColumn(family: ExamFamily | string | undefined): string {
-  if (!family || family === "GENERIC") return assertCanonicalExamQuestionExam("NCLEX-RN");
-  return assertCanonicalExamQuestionExam(String(family));
+  if (!family || family === "GENERIC") return "NCLEX-RN";
+  return canonicalExamQuestionExamForDbWrite(String(family));
 }
 
 /** Map free-form `exam_questions.question_type` strings to Prisma enum for validation. */

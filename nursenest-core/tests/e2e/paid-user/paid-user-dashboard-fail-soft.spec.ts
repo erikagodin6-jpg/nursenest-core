@@ -1,7 +1,7 @@
 /**
  * Fail-soft dashboard: optional client refresh fails with 500 while the shell and SSR snapshot stay up.
  *
- * **Note on `/api/report-card`:** the learner report card is loaded on `/app/account/report-card` via server
+ * **Note on `/api/report-card`:** the learner report card is loaded on `/app/account/report` via server
  * data (`loadReportCardData`), not a `/api/report-card` fetch from `/app`. The dashboard **Topic performance**
  * panel calls **`GET /api/learner/weak-areas`** (see `WeakAreasDashboardClient`) and shows inline fallback copy
  * when refresh fails — that is what we intercept here.

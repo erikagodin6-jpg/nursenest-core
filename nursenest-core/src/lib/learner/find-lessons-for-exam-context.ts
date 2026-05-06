@@ -4,6 +4,7 @@
  */
 import type { PrismaClient } from "@prisma/client";
 import { ContentStatus } from "@prisma/client";
+import { pathwayLessonStructuralCompleteWhereInput } from "@/lib/db/pathway-lesson-structural-column-runtime";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { pathwayLessonWhere } from "@/lib/exam-context/query-scope";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
@@ -69,12 +70,13 @@ export async function findLessonsForExamContext(
   }
 
   const pathwayCtx = pathwayRationaleContextFromId(pathwayId);
+  const structuralWhere = await pathwayLessonStructuralCompleteWhereInput();
   const completeRows = await prisma.pathwayLesson.findMany({
     where: {
       ...pathwayLessonWhere(examContext),
       topicSlug,
       status: ContentStatus.PUBLISHED,
-      structuralPublicComplete: true,
+      ...structuralWhere,
     },
     select: {
       id: true,

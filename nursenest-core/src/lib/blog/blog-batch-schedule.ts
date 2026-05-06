@@ -7,11 +7,22 @@ import {
   BlogPostTemplate,
 } from "@prisma/client";
 import { normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
+import {
+  normalizeBlogTopicIntent,
+  partitionBlogTopicsBySeoIntent,
+  validateBlogTopicForSeoArticleGeneration,
+} from "@/lib/blog/blog-seo-topic-intent";
 import { generateBlogPost } from "@/lib/blog/generate-blog-ai-draft";
+import { prepareAdminBlogGenerationInput } from "@/lib/blog/admin-blog-generation-service";
 import { runBlogBatchLocalizedFollowup } from "@/lib/blog/blog-batch-localized-followup";
 import { getAdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  classifyBlogPipelineFailureForRepair,
+  formatBlogBatchItemFailureMessage,
+  isTransientBlogProviderError,
+} from "@/lib/blog/blog-generation-repair-classifier";
 
 /** Min interval between slots: 1 post per day max spacing when cadence is 1. */
 export function slotIntervalMs(cadencePerDay: number): number {
@@ -105,6 +116,8 @@ export type BlogBatchScheduleRowInput = {
   publishMode: BlogBatchPublishMode;
   startAt: Date;
   cadencePerDay: number;
+  /** Used to validate NCLEX-style topic intent (recommended — matches schedule exam). */
+  exam?: string | null;
 };
 
 export type BlogBatchScheduleBuiltRow = {
@@ -113,20 +126,44 @@ export type BlogBatchScheduleBuiltRow = {
   canonicalTopicKey: string | null;
 };
 
+export type BlogBatchTopicIntentRejection = { topic: string; reason: string };
+
 export function buildBlogBatchScheduleItemRows(
   input: BlogBatchScheduleRowInput,
 ):
-  | { ok: true; rows: BlogBatchScheduleBuiltRow[]; droppedDuplicateLines: number }
+  | { ok: true; rows: BlogBatchScheduleBuiltRow[]; droppedDuplicateLines: number; rejectedTopics: BlogBatchTopicIntentRejection[] }
   | { ok: false; error: string } {
+  const examForIntent = input.exam ?? null;
+
   if (input.publishMode === BlogBatchPublishMode.CUSTOM_DATES) {
     const parsed = parseCustomDateTopicLines(input.topicsText);
     if ("error" in parsed) return { ok: false, error: parsed.error };
-    const rows = parsed.rows.map((r) => ({
-      topic: r.topic,
-      plannedPublishAt: r.at,
-      canonicalTopicKey: normalizeBlogTopicKey(r.topic),
-    }));
-    return { ok: true, rows, droppedDuplicateLines: parsed.droppedDuplicateLines };
+    const rejectedTopics: BlogBatchTopicIntentRejection[] = [];
+    const rows: BlogBatchScheduleBuiltRow[] = [];
+    for (const r of parsed.rows) {
+      const gate = validateBlogTopicForSeoArticleGeneration(r.topic, examForIntent);
+      if (!gate.ok) {
+        rejectedTopics.push({ topic: r.topic, reason: gate.reason });
+        continue;
+      }
+      const normalized = normalizeBlogTopicIntent(r.topic, examForIntent);
+      const topicForSchedule = normalized.accepted ? normalized.normalizedTopic : r.topic;
+      rows.push({
+        topic: topicForSchedule,
+        plannedPublishAt: r.at,
+        canonicalTopicKey: normalizeBlogTopicKey(topicForSchedule),
+      });
+    }
+    if (rows.length === 0) {
+      return {
+        ok: false,
+        error:
+          parsed.rows.length > 0 ?
+            "All dated topics failed nursing SEO intent validation. Fix titles to be NCLEX-style (questions, priorities, vs, labs, nurse-first stems) and include exam context."
+          : "No valid dated topic lines.",
+      };
+    }
+    return { ok: true, rows, droppedDuplicateLines: parsed.droppedDuplicateLines, rejectedTopics };
   }
 
   const { topics, droppedDuplicateLines } = parseTopicLines(input.topicsText);
@@ -137,24 +174,33 @@ export function buildBlogBatchScheduleItemRows(
     return { ok: false, error: "Too many topics (max 500 after dedupe)." };
   }
 
+  const { approved, rejected } = partitionBlogTopicsBySeoIntent(topics, examForIntent);
+  if (approved.length === 0) {
+    return {
+      ok: false,
+      error:
+        "All topics failed nursing SEO intent validation. Use high-intent stems (e.g. NCLEX questions for…, priority nursing interventions for…, condition A vs B nursing differences) and tie each line to a clinical domain plus exam context.",
+    };
+  }
+
   const interval = slotIntervalMs(input.cadencePerDay);
 
   if (input.publishMode === BlogBatchPublishMode.PUBLISH_IMMEDIATE) {
     const slot = input.startAt;
-    const rows = topics.map((topic) => ({
+    const rows = approved.map((topic) => ({
       topic,
       plannedPublishAt: slot,
       canonicalTopicKey: normalizeBlogTopicKey(topic),
     }));
-    return { ok: true, rows, droppedDuplicateLines };
+    return { ok: true, rows, droppedDuplicateLines, rejectedTopics: rejected };
   }
 
-  const rows = topics.map((topic, i) => ({
+  const rows = approved.map((topic, i) => ({
     topic,
     plannedPublishAt: new Date(input.startAt.getTime() + i * interval),
     canonicalTopicKey: normalizeBlogTopicKey(topic),
   }));
-  return { ok: true, rows, droppedDuplicateLines };
+  return { ok: true, rows, droppedDuplicateLines, rejectedTopics: rejected };
 }
 
 function effectivePublishAtForBatchItem(
@@ -229,20 +275,27 @@ function configuredDailyCadence(): number {
 }
 
 function buildAutopilotTopic(index: number, exam: string): string {
-  const type = index % 4;
   const symptom = AUTOPILOT_SYMPTOM_TOPICS[index % AUTOPILOT_SYMPTOM_TOPICS.length];
   const clinical = AUTOPILOT_CLINICAL_TOPICS[index % AUTOPILOT_CLINICAL_TOPICS.length];
   const comparison = AUTOPILOT_COMPARISON_TOPICS[index % AUTOPILOT_COMPARISON_TOPICS.length];
-  if (type === 0) return `${exam} guide: ${clinical}`;
-  if (type === 1) return `${exam} comparison: ${comparison}`;
-  if (type === 2) return `Symptom explanation for nursing exams: ${symptom}`;
-  return `Clinical breakdown for nursing exam prep: ${clinical}`;
+  const kind = index % 5;
+  if (kind === 0) return `NCLEX questions for ${clinical} (${exam})`;
+  if (kind === 1) return `Priority nursing interventions for ${symptom} (${exam})`;
+  if (kind === 2) return `${comparison} for ${exam} clinical judgment`;
+  if (kind === 3) return `Labs for ${clinical.split(/\s+/).slice(0, 6).join(" ")} explained for nurses (${exam})`;
+  return `What should the nurse do first in ${clinical}? (${exam})`;
 }
 
 export async function ensureDailyBlogQueue(now: Date = new Date()): Promise<DailyBlogAutopilotResult> {
   const cadence = configuredDailyCadence();
   const notes: string[] = [];
-  const contentTypes = ["NCLEX guides", "X vs Y comparisons", "symptom explanations", "clinical breakdowns"];
+  const contentTypes = [
+    "NCLEX-style question stems",
+    "priority intervention drills",
+    "vs comparison judgment",
+    "labs-for-nurses explainers",
+    "nurse-do-first triage stems",
+  ];
 
   const [queueSize, existingActiveSchedule] = await Promise.all([
     prisma.blogBatchScheduleItem.count({
@@ -494,6 +547,11 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
     },
   });
 
+  let providerThrottleBackoffMs = Math.min(
+    60_000,
+    Math.max(2000, Number(process.env.BLOG_BG_DRAFT_THROTTLE_BACKOFF_MS?.trim()) || 10_000),
+  );
+
   for (const item of due) {
     const { schedule } = item;
     schedulesTouched.add(schedule.id);
@@ -504,32 +562,78 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
         data: { status: BlogBatchScheduleItemStatus.GENERATING },
       });
 
+      const legacyCompat = process.env.BLOG_LEGACY_COMPAT_TOPIC_INTENT?.trim().toLowerCase() === "true";
+      const topicIntent = normalizeBlogTopicIntent(item.topicRaw, schedule.exam, { legacyCompatible: legacyCompat });
+      if (!topicIntent.accepted) {
+        await prisma.blogBatchScheduleItem.update({
+          where: { id: item.id },
+          data: {
+            status: BlogBatchScheduleItemStatus.FAILED,
+            failureReason: `topic_intent_rejected: ${topicIntent.reason ?? "rejected"}`.slice(0, 4000),
+          },
+        });
+        processedItems += 1;
+        await refreshBlogBatchScheduleStats(schedule.id);
+        continue;
+      }
+
       const template = schedule.defaultTemplate ?? BlogPostTemplate.TOPIC_EXPLAINED;
       const intent = schedule.defaultIntent ?? BlogPostIntent.EXAM_PREP;
 
       const publishAt = effectivePublishAtForBatchItem(schedule.publishMode, item.plannedPublishAt, now);
+      const prepared = await prepareAdminBlogGenerationInput({
+        rawTitle: topicIntent.normalizedTopic,
+        exam: schedule.exam,
+        targetKeyword: topicIntent.normalizedTopic,
+        publishMode: publishAt ? (publishAt <= now ? "publish_now" : "schedule") : "draft",
+        scheduledAt: publishAt,
+      });
 
       const result = await generateBlogPost({
-        topic: item.topicRaw,
+        topic: prepared.topic,
         exam: schedule.exam,
         country: schedule.country === "US" || schedule.country === "CA" ? schedule.country : "unspecified",
         template,
         intent,
         funnelStage: BlogFunnelStage.CONSIDERATION,
-        targetKeyword: item.topicRaw,
+        targetKeyword: prepared.targetKeyword,
+        slug: prepared.uniqueSlug,
         publishAt,
+        generationIdempotencyKey: `batch-schedule:${schedule.id}:${item.id}`,
+        legacyCompatible: legacyCompat,
       });
 
       if (!result.ok) {
+        const cl = classifyBlogPipelineFailureForRepair({
+          stage: result.stage ?? "body",
+          error: result.error,
+          code: result.code,
+          details: result.details,
+        });
+        const repairPasses = result.repairPassesUsed ?? 0;
+        const failureReason = formatBlogBatchItemFailureMessage({
+          originalError: result.error,
+          repairAttempts: repairPasses,
+          terminal: !cl.recoverable,
+        });
         await prisma.blogBatchScheduleItem.update({
           where: { id: item.id },
           data: {
             status: BlogBatchScheduleItemStatus.FAILED,
-            failureReason: result.error.slice(0, 4000),
+            failureReason: failureReason.slice(0, 4000),
           },
         });
         processedItems += 1;
         await refreshBlogBatchScheduleStats(schedule.id);
+        if (isTransientBlogProviderError(result.error)) {
+          safeServerLog("blog_batch_schedule", "provider_throttle_backoff", {
+            scheduleId: schedule.id,
+            itemId: item.id,
+            backoffMs: providerThrottleBackoffMs,
+          });
+          await new Promise((r) => setTimeout(r, providerThrottleBackoffMs));
+          providerThrottleBackoffMs = Math.min(60_000, Math.floor(providerThrottleBackoffMs * 1.5));
+        }
         continue;
       }
 
@@ -592,16 +696,26 @@ export async function processDueBlogBatchScheduleItems(now: Date = new Date()): 
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       errors.push(`${item.id}: ${msg}`);
+      const clCatch = classifyBlogPipelineFailureForRepair({ stage: "body", error: msg });
+      const failureReason = formatBlogBatchItemFailureMessage({
+        originalError: msg,
+        repairAttempts: 0,
+        terminal: !clCatch.recoverable,
+      });
       await prisma.blogBatchScheduleItem
         .update({
           where: { id: item.id },
           data: {
             status: BlogBatchScheduleItemStatus.FAILED,
-            failureReason: msg.slice(0, 4000),
+            failureReason: failureReason.slice(0, 4000),
           },
         })
         .catch(() => {});
       await refreshBlogBatchScheduleStats(schedule.id);
+      if (isTransientBlogProviderError(msg)) {
+        await new Promise((r) => setTimeout(r, providerThrottleBackoffMs));
+        providerThrottleBackoffMs = Math.min(60_000, Math.floor(providerThrottleBackoffMs * 1.5));
+      }
     }
   }
 

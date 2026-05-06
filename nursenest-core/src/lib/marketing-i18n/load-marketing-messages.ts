@@ -1,34 +1,31 @@
 import "server-only";
 
-import path from "path";
-import { existsSync } from "fs";
+import { existsSync, readFileSync } from "node:fs";
+import path from "node:path";
 
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
+import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
 
 const DEFAULT_LOCALE = "en";
+const MARKETING_LOCALE_RE = /^[a-z]{2}(-[a-z]{2})?$/i;
+const KNOWN_I18N_ROOTS = Array.from(
+  new Set([
+    path.resolve(/* turbopackIgnore: true */ process.cwd(), "public", "i18n"),
+    path.resolve(/* turbopackIgnore: true */ process.cwd(), ".next", "static", "i18n"),
+    path.resolve(/* turbopackIgnore: true */ process.cwd(), "..", "client", "public", "i18n"),
+  ]),
+);
+
+function isWithinAllowedRoot(resolvedPath: string, allowedRoot: string): boolean {
+  return resolvedPath === allowedRoot || resolvedPath.startsWith(`${allowedRoot}${path.sep}`);
+}
 
 /**
  * SAFE: resolve i18n dir across environments
  */
 function resolveI18nDir(): string | null {
   try {
-    const env = process.env.NN_MARKETING_I18N_DIR;
-    if (env && existsSync(env)) return env;
-
-    const candidates = [
-      path.join(process.cwd(), "public", "i18n"),
-      path.join(process.cwd(), ".next", "static", "i18n"),
-      path.join(process.cwd(), "i18n"),
-    ];
-
-    const main = process.argv[1];
-    if (main) {
-      const entry = path.dirname(main);
-      candidates.push(path.join(entry, "public", "i18n"));
-      candidates.push(path.join(entry, ".next", "static", "i18n"));
-    }
-
-    for (const p of candidates) {
+    for (const p of KNOWN_I18N_ROOTS) {
       try {
         if (existsSync(p)) return p;
       } catch {}
@@ -45,11 +42,30 @@ function resolveI18nDir(): string | null {
 /**
  * SAFE: load full locale bundle
  */
+function readJsonFileSafe(file: string): Record<string, unknown> {
+  try {
+    const resolved = path.resolve(file);
+    if (!KNOWN_I18N_ROOTS.some((root) => isWithinAllowedRoot(resolved, root))) {
+      return {};
+    }
+    if (!existsSync(resolved)) return {};
+    const parsed = JSON.parse(readFileSync(resolved, "utf8"));
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+      ? (parsed as Record<string, unknown>)
+      : {};
+  } catch {
+    return {};
+  }
+}
+
 function loadLocaleBundle(dir: string, locale: string): MarketingMessages {
   try {
-    const file = path.join(dir, `${locale}.json`);
-    if (!existsSync(file)) return {};
-    return require(file);
+    if (!MARKETING_LOCALE_RE.test(locale)) return {};
+    const resolvedDir = path.resolve(dir);
+    if (!KNOWN_I18N_ROOTS.includes(resolvedDir)) return {};
+    const file = path.resolve(resolvedDir, `${locale}.json`);
+    if (!isWithinAllowedRoot(file, resolvedDir)) return {};
+    return normalizeMarketingMessagesRecord(readJsonFileSafe(file));
   } catch {
     return {};
   }

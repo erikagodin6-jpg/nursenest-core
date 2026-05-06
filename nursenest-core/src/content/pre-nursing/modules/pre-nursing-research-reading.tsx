@@ -120,19 +120,19 @@ export function ResearchReadingModule() {
           <p className="text-xs font-semibold text-indigo-700 mb-2">Evidence Pyramid (Highest to Lowest)</p>
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">1</div>
+              <div className="w-6 h-6 rounded-full bg-indigo-600 nn-text-on-solid-fill text-xs flex items-center justify-center font-bold">1</div>
               <span className="text-xs text-indigo-700 font-medium">Systematic Reviews & Meta-Analyses, synthesize all available evidence on a topic</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-indigo-500 text-white text-xs flex items-center justify-center font-bold">2</div>
+              <div className="w-6 h-6 rounded-full bg-indigo-500 nn-text-on-solid-fill text-xs flex items-center justify-center font-bold">2</div>
               <span className="text-xs text-indigo-600 font-medium">Randomized Controlled Trials (RCTs), gold standard for testing interventions</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-indigo-400 text-white text-xs flex items-center justify-center font-bold">3</div>
+              <div className="w-6 h-6 rounded-full bg-indigo-400 text-[var(--theme-heading-text)] text-xs flex items-center justify-center font-bold">3</div>
               <span className="text-xs text-indigo-600">Cohort Studies, follow groups over time to observe outcomes</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-indigo-300 text-white text-xs flex items-center justify-center font-bold">4</div>
+              <div className="w-6 h-6 rounded-full bg-indigo-300 text-[var(--theme-heading-text)] text-xs flex items-center justify-center font-bold">4</div>
               <span className="text-xs text-indigo-500">Case-Control Studies, compare cases with controls retrospectively</span>
             </div>
             <div className="flex items-center gap-2">

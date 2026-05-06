@@ -13,14 +13,15 @@ function readAppFile(relativePath: string): string {
 
 test("sitemap builders gate long-tail SEO fan-out behind build safe mode", () => {
   const staticXml = readAppFile("lib/seo/sitemap-static-xml.ts");
-  const mergedXml = readAppFile("lib/seo/sitemap-all-xml.ts");
+  const routeSrc = readAppFile("app/sitemap.xml/route.ts");
 
   assert.match(staticXml, /shouldReduceNonCriticalBuildWork/);
   assert.match(staticXml, /sitemap_build_safe_mode_core_only/);
   assert.match(staticXml, /return base;/);
   assert.match(staticXml, /getAllProgrammaticQuestionTopicSlugs\(\)/);
+  assert.match(staticXml, /productionSafeStatic/);
 
-  assert.match(mergedXml, /shouldReduceNonCriticalBuildWork/);
-  assert.match(mergedXml, /if \(!reduceForBuildSafeMode\)/);
-  assert.match(mergedXml, /buildSafeMode: reduceForBuildSafeMode \? "1" : "0"/);
+  assert.match(routeSrc, /STATIC_SITEMAP_PATHS/);
+  assert.match(routeSrc, /resolveCanonicalSiteOrigin/);
+  assert.match(routeSrc, /application\/xml/);
 });

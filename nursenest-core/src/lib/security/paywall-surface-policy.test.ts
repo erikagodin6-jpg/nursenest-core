@@ -16,7 +16,7 @@ const nursenestCoreRoot = join(here, "..", "..", "..");
 
 describe("paywall surface policy (static checks)", () => {
   it("next.config production headers include private no-cache no-store for /app routes", () => {
-    const nextConfig = readFileSync(join(nursenestCoreRoot, "next.config.ts"), "utf8");
+    const nextConfig = readFileSync(join(nursenestCoreRoot, "next.config.mjs"), "utf8");
     assert.match(nextConfig, /private,\s*no-cache,\s*no-store,\s*must-revalidate/);
     assert.match(nextConfig, /["']\/app["']/);
     assert.match(nextConfig, /["']\/app\/:path\*["']/);
@@ -55,7 +55,7 @@ describe("paywall surface policy (static checks)", () => {
   });
 
   it("production next.config does not blanket no-store all /api/* (allows /api/public edge cache); sets explicit /api/public policy", () => {
-    const nextConfig = readFileSync(join(nursenestCoreRoot, "next.config.ts"), "utf8");
+    const nextConfig = readFileSync(join(nursenestCoreRoot, "next.config.mjs"), "utf8");
     assert.match(nextConfig, /do not set a blanket `no-store` on all `\/api\/\*`/);
     assert.match(nextConfig, /source:\s*"\/api\/public\/:path\*"/);
     assert.match(

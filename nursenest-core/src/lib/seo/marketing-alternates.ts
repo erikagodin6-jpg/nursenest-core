@@ -69,22 +69,22 @@ export function marketingHreflangLanguagesForEnPath(enPath: string): Record<stri
   const enUrl = absoluteUrl(path === "/" ? "/" : path);
   /** US/CA exam product URLs: only one indexable URL shape; regional hreflang is handled per-page (en-US/en-CA). */
   if (isExamHubMarketingPath(path)) {
-    return filterPublicHreflangRecord({ "x-default": enUrl, en: enUrl }, "seo", "marketing_hreflang_rejected");
+    return filterPublicHreflangRecord({ "x-default": enUrl, "en-CA": enUrl }, "seo", "marketing_hreflang_rejected");
   }
   /**
    * Expansion hubs: many countries have `(marketing)/[locale]/exams/:country` — emit full hreflang.
    * Default-only hubs (e.g. philippines, canada, uk) must not list `/{lang}/exams/...` alternates (404).
    */
   if (isExpansionExamMarketingPath(path) && !expansionExamPathSupportsLocalizedMarketingShell(path)) {
-    return filterPublicHreflangRecord({ "x-default": enUrl, en: enUrl }, "seo", "marketing_hreflang_rejected");
+    return filterPublicHreflangRecord({ "x-default": enUrl, "en-CA": enUrl }, "seo", "marketing_hreflang_rejected");
   }
   const out: Record<string, string> = {
     "x-default": enUrl,
-    en: enUrl,
+    "en-CA": enUrl,
   };
   for (const code of getHreflangEligibleLocales()) {
     const localized = path === "/" ? `/${code}` : `/${code}${path}`;
-    out[code] = absoluteUrl(localized);
+    out[code === "fr" ? "fr-CA" : code === "pt" ? "pt-BR" : code] = absoluteUrl(localized);
   }
   return filterPublicHreflangRecord(out, "seo", "marketing_hreflang_rejected");
 }

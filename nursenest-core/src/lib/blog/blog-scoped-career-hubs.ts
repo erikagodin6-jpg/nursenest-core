@@ -60,6 +60,14 @@ export function expectedGeneratedBlogPaths(row: { slug: string; careerSlug: stri
   const slug = row.slug.trim();
   const cs = row.careerSlug?.trim().toLowerCase() ?? null;
 
+  if (cs === "rn") {
+    const base = "/blog/rn";
+    return {
+      expectedPublicBlogPath: base,
+      expectedDetailPath: `${base}/${encodeURIComponent(slug)}`,
+      scopedListPath: base,
+    };
+  }
   if (cs && isNursingScopedCareerSlug(cs)) {
     const base = `/nursing/${cs}/blog`;
     return {

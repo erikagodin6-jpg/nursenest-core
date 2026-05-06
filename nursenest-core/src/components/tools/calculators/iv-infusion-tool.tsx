@@ -60,7 +60,7 @@ export default function IvInfusionTool() {
             type="button"
             onClick={() => setMode(k)}
             className={`rounded-full px-4 py-2 text-sm font-semibold ${
-              mode === k ? "bg-primary text-white" : "border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)]"
+              mode === k ? "bg-primary" : "border border-[var(--theme-card-border)] bg-[var(--theme-card-bg)]"
             }`}
           >
             {label}

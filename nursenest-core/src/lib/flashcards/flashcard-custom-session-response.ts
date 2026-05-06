@@ -2,6 +2,19 @@ import type { BuilderCategoryOption } from "@/lib/flashcards/flashcard-builder-t
 
 export type FlashcardCustomSessionQueryRelaxation = "none" | "dropped_pathway_scope" | "dropped_country_match";
 
+/** Hub + API transparency for catalog-derived lesson-linked virtual inventory. */
+export type FlashcardLessonVirtualDiagnostics = {
+  pathwayId: string;
+  catalogLessonCount: number;
+  lessonsWithDerivedCards: number;
+  totalGeneratedVirtualCards: number;
+  recallVirtualCount: number;
+  sectionDerivedVirtualCount: number;
+  genericFillerSectionCardHits: number;
+  selectedCategoryIds: string[];
+  filterModeLabel: string;
+};
+
 export type FlashcardCustomSessionSummary = {
   pathwayId: string | null;
   topicCode?: string | null;
@@ -26,6 +39,7 @@ export type FlashcardCustomSessionSummary = {
   queryRelaxation?: FlashcardCustomSessionQueryRelaxation;
   /** Opaque per-response salt used for MCQ option shuffle (and echoed for client debugging). */
   sessionShuffleSalt?: string;
+  lessonVirtualDiagnostics?: FlashcardLessonVirtualDiagnostics | null;
 };
 
 export type ParsedCustomSessionSuccess = {
@@ -47,6 +61,44 @@ export function flashcardBodySystemsUiOutcomeFromParsed(
 ): FlashcardBodySystemsUiOutcome {
   if (!parsed.ok) return "error";
   return parsed.categoryOptions.length > 0 ? "populated" : "empty";
+}
+
+function parseLessonVirtualDiagnostics(
+  raw: unknown,
+): FlashcardLessonVirtualDiagnostics | null | undefined {
+  if (raw === undefined) return undefined;
+  if (raw === null) return null;
+  if (typeof raw !== "object") return null;
+  const d = raw as Record<string, unknown>;
+  const pathwayId = typeof d.pathwayId === "string" ? d.pathwayId.trim() : "";
+  if (!pathwayId) return null;
+  return {
+    pathwayId,
+    catalogLessonCount:
+      typeof d.catalogLessonCount === "number" && Number.isFinite(d.catalogLessonCount) ? d.catalogLessonCount : 0,
+    lessonsWithDerivedCards:
+      typeof d.lessonsWithDerivedCards === "number" && Number.isFinite(d.lessonsWithDerivedCards)
+        ? d.lessonsWithDerivedCards
+        : 0,
+    totalGeneratedVirtualCards:
+      typeof d.totalGeneratedVirtualCards === "number" && Number.isFinite(d.totalGeneratedVirtualCards)
+        ? d.totalGeneratedVirtualCards
+        : 0,
+    recallVirtualCount:
+      typeof d.recallVirtualCount === "number" && Number.isFinite(d.recallVirtualCount) ? d.recallVirtualCount : 0,
+    sectionDerivedVirtualCount:
+      typeof d.sectionDerivedVirtualCount === "number" && Number.isFinite(d.sectionDerivedVirtualCount)
+        ? d.sectionDerivedVirtualCount
+        : 0,
+    genericFillerSectionCardHits:
+      typeof d.genericFillerSectionCardHits === "number" && Number.isFinite(d.genericFillerSectionCardHits)
+        ? d.genericFillerSectionCardHits
+        : 0,
+    selectedCategoryIds: Array.isArray(d.selectedCategoryIds)
+      ? d.selectedCategoryIds.filter((x): x is string => typeof x === "string")
+      : [],
+    filterModeLabel: typeof d.filterModeLabel === "string" ? d.filterModeLabel : "",
+  };
 }
 
 /**
@@ -86,7 +138,14 @@ export function parseFlashcardCustomSessionResponse(
     const r = row as Record<string, unknown>;
     const id = typeof r.id === "string" ? r.id.trim() : "";
     const title = typeof r.title === "string" ? r.title : "";
-    const count = typeof r.count === "number" && Number.isFinite(r.count) ? Math.max(0, r.count) : 0;
+    const rawCount = r.count;
+    const parsedCount =
+      typeof rawCount === "number" && Number.isFinite(rawCount)
+        ? rawCount
+        : typeof rawCount === "string" && rawCount.trim()
+          ? Number(rawCount)
+          : NaN;
+    const count = Number.isFinite(parsedCount) ? Math.max(0, Math.floor(parsedCount)) : 0;
     if (!id) continue;
     categoryOptions.push({
       id,
@@ -128,6 +187,7 @@ export function parseFlashcardCustomSessionResponse(
           ? s.queryRelaxation
           : undefined,
       sessionShuffleSalt: typeof s.sessionShuffleSalt === "string" ? s.sessionShuffleSalt : undefined,
+      lessonVirtualDiagnostics: parseLessonVirtualDiagnostics(s.lessonVirtualDiagnostics),
     };
   }
 

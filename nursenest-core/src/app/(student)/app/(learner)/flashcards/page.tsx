@@ -1,6 +1,8 @@
 import { Suspense } from "react";
 import { TierCode } from "@prisma/client";
+import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner";
 import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-client";
+import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
 import { ContentEmptyState } from "@/components/ui/content-empty-state";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
@@ -15,21 +17,63 @@ import {
 } from "@/lib/learner/tier-scoped-study-routes";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { readFlashcardsHubPathwayBootstrapSnapshot } from "@/lib/study-content-failover/flashcards-hub-bootstrap-snapshot-read";
-import { snapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
+import { appPathwayCatSessionStartPath } from "@/lib/exam-pathways/pathway-cat-flow";
+import { getAlliedProfessionByProfessionKey } from "@/lib/allied/allied-professions-registry";
+import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
+import { buildFlashcardCustomSession } from "@/lib/flashcards/build-flashcard-custom-session";
+import { builderCategoryOptionsForPathway } from "@/lib/flashcards/flashcard-builder-taxonomy";
+import { flashcardLessonVirtualDiagnosticsForPathway } from "@/lib/learner-study-hub/pathway-lesson-study-materials";
+import { parseCustomSessionSourceKind } from "@/lib/flashcards/custom-session-card-filters";
+import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
+import { visiblePathwayIdsForAppLessons } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
 
-type PageProps = { searchParams: Promise<{ pathwayId?: string | string[] }> };
+type PageProps = {
+  searchParams: Promise<{
+    pathwayId?: string | string[];
+    alliedProfession?: string | string[];
+    topic?: string | string[];
+    weakOnly?: string | string[];
+  }>;
+};
 
 export default async function FlashcardsPage({ searchParams }: PageProps) {
   const { t } = await getLearnerMarketingBundle();
   const sp = await searchParams;
 
+  const rawAllied = sp.alliedProfession;
+  const alliedProfessionParam =
+    typeof rawAllied === "string" && rawAllied.trim()
+      ? rawAllied.trim().toLowerCase()
+      : Array.isArray(rawAllied) && typeof rawAllied[0] === "string" && rawAllied[0].trim()
+        ? rawAllied[0].trim().toLowerCase()
+        : "";
+  const alliedProfessionFromQuery = alliedProfessionParam
+    ? getAlliedProfessionByProfessionKey(alliedProfessionParam)?.professionKey ?? ""
+    : "";
+
   const rawPid = sp.pathwayId;
-  const requestedPathwayId =
+  const pathwayQueryRaw =
     typeof rawPid === "string" && rawPid.trim().length > 2
       ? rawPid.trim()
       : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
       ? rawPid[0].trim()
       : null;
+
+  const rawTopic = sp.topic;
+  const hubTopicFromQuery =
+    typeof rawTopic === "string" && rawTopic.trim()
+      ? rawTopic.trim().toLowerCase()
+      : Array.isArray(rawTopic) && typeof rawTopic[0] === "string" && rawTopic[0].trim()
+        ? rawTopic[0].trim().toLowerCase()
+        : null;
+
+  const rawWeak = sp.weakOnly;
+  const initialWeakOnly =
+    (typeof rawWeak === "string" && rawWeak === "1") ||
+    (Array.isArray(rawWeak) && rawWeak.some((v) => v === "1"));
 
   const session = await getProtectedRouteSession("(student).app.(learner).flashcards");
   const userId = (session?.user as { id?: string })?.id ?? "";
@@ -46,7 +90,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   if (!entitlement.hasAccess) {
     return (
-      <div className="space-y-4">
+      <div className="mx-auto max-w-3xl space-y-4 px-4 sm:px-6">
         <h1 className="text-3xl font-bold">{t("learner.flashcards.page.title")}</h1>
         <p className="text-sm text-muted-foreground">
           {t("learner.flashcards.page.subtitle.locked")}
@@ -56,9 +100,14 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
     );
   }
 
+  const requestedPathwayId = pathwayQueryRaw
+    ? normalizeLearnerFlashcardsPathwayQueryId(pathwayQueryRaw, entitlement.country)
+    : null;
+
   let pathwayOptions: { id: string; label: string }[] = [];
   let pathwayResolution: ResolvedQuestionBankPathways | null = null;
   let pathwayBootstrapSource: "primary" | "secondary" = "primary";
+  let learnerPath: string | null = null;
 
   if (userId && isDatabaseUrlConfigured()) {
     try {
@@ -70,11 +119,13 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
       });
 
       const lp = u?.learnerPath?.trim() ?? null;
+      learnerPath = lp;
 
       pathwayResolution = resolveSubscribedQuestionBankPathways({
         requestedPathwayId,
         compatible: compatible.map((p) => ({ id: p.id, shortName: p.shortName })),
         learnerPath: lp,
+        requireExplicitRequestedPathwayId: true,
       });
 
       pathwayOptions = compatible.map((p) => ({
@@ -104,6 +155,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
           requestedPathwayId,
           compatible: snap.payload.compatibleRows,
           learnerPath: null,
+          requireExplicitRequestedPathwayId: true,
         });
       } else {
         return (
@@ -131,18 +183,20 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   if (pathwayResolution?.state === "no_pathway_context") {
     return (
-      <ContentEmptyState
-        variant="generic"
-        headline={t("learner.flashcards.page.noPathwayHeadline") ?? "Choose your exam track"}
-        body={
-          t("learner.flashcards.page.noPathwayBody") ??
-          "Select a pathway in Study preferences so flashcards stay aligned with your subscription."
-        }
-        primaryCta={{
-          label: t("learner.flashcards.page.studyPreferencesCta") ?? "Study preferences",
-          href: "/app/account/study-preferences",
-        }}
-      />
+      <div className="space-y-2">
+        <LearnerRenderTraceBanner
+          data-route="flashcards"
+          label="NN_RENDER_TRACE: flashcards live route (pathway picker)"
+        />
+        <FlashcardsPathwayPickSurface
+          title={t("learner.flashcards.page.noPathwayHeadline") ?? t("learner.flashcards.page.title")}
+          subtitle={
+            t("learner.flashcards.page.noPathwayBody") ??
+            "Choose an exam track for flashcards. Your selection is applied via the URL — no redirects."
+          }
+          pathways={pathwayOptions}
+        />
+      </div>
     );
   }
 
@@ -156,13 +210,96 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   const scopedPathwayId = pathwayResolution.defaultPathwayId;
 
+  const pathwayLessonFlashDiagnostics =
+    entitlement.hasAccess && scopedPathwayId
+      ? await flashcardLessonVirtualDiagnosticsForPathway(scopedPathwayId, {
+          selectedCategories: [],
+          filterModeLabel: "all cards",
+        })
+      : null;
+
+  const catalogPathway = getExamPathwayById(scopedPathwayId);
+  const pathwayLabelFromOptions = pathwayOptions.find((p) => p.id === scopedPathwayId)?.label;
+  const pathwayDisplayName =
+    catalogPathway?.displayName ?? catalogPathway?.shortName ?? pathwayLabelFromOptions ?? scopedPathwayId;
+
+  let initialHub: FlashcardsHubServerPayload | null = null;
+  if (userId && isDatabaseUrlConfigured() && entitlement.hasAccess) {
+    const inv = await buildFlashcardCustomSession({
+      userId,
+      entitlement,
+      pathwayId: scopedPathwayId,
+      selectedCategories: [],
+      stateIds: [],
+      weakOnly: false,
+      incorrectOnly: false,
+      starredOnly: false,
+      savedOnly: false,
+      notesOnly: false,
+      revisitOnly: false,
+      notStudiedOnly: false,
+      recentStudiedOnly: false,
+      recentDays: 7,
+      shuffle: false,
+      mode: "mixed",
+      limit: 20,
+      includeCards: false,
+      sourceKind: parseCustomSessionSourceKind("all"),
+      sessionSeed: null,
+      cardLimitRaw: "20",
+    });
+    if (inv.ok) {
+      initialHub = {
+        categoryOptions: inv.categoryOptions,
+        matchingTotal: inv.summary.matchingCards,
+        lessonVirtualDiagnostics:
+          pathwayLessonFlashDiagnostics ?? inv.summary.lessonVirtualDiagnostics ?? null,
+      };
+    } else {
+      /** Pathway skeleton matches lessons hub even when inventory query fails — avoids empty hub + false client errors. */
+      initialHub = {
+        categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
+        matchingTotal: 0,
+        lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
+      };
+    }
+  } else if (entitlement.hasAccess) {
+    initialHub = {
+      categoryOptions: builderCategoryOptionsForPathway(scopedPathwayId),
+      matchingTotal: 0,
+      lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
+    };
+  }
+
+  const visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+  let catHref = resolveStudyLoopCatHref({
+    authState: "signed_in",
+    pathwayId: scopedPathwayId,
+    availablePathwayIds: visiblePathwayIds,
+    intent: "start",
+  });
+  const alliedKeyForFlashcards =
+    alliedProfessionFromQuery && isAlliedMarketingCorePathwayId(scopedPathwayId) ? alliedProfessionFromQuery : "";
+  if (alliedKeyForFlashcards && catHref.includes("/app/practice-tests/cat-launch")) {
+    catHref = appPathwayCatSessionStartPath(scopedPathwayId, { alliedProfession: alliedKeyForFlashcards });
+  }
+
   return (
-    <Suspense fallback={<div className="p-4">{t("learner.loading.flashcards")}</div>}>
-      <FlashcardsHubClient
-        scopedPathwayId={scopedPathwayId}
-        pathwayDisplayName={scopedPathwayId}
-        pathwayBootstrapSource={pathwayBootstrapSource}
-      />
-    </Suspense>
+    <div className="space-y-2">
+      <LearnerRenderTraceBanner data-route="flashcards" label="NN_RENDER_TRACE: flashcards live route" />
+      <Suspense fallback={<div className="p-4">{t("learner.loading.flashcards")}</div>}>
+        <FlashcardsHubClient
+          scopedPathwayId={scopedPathwayId}
+          pathwayDisplayName={pathwayDisplayName}
+          pathwayBootstrapSource={pathwayBootstrapSource}
+          catHref={catHref}
+          initialHub={initialHub}
+          lessonsHubHref={`/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`}
+          alliedProfessionKey={alliedKeyForFlashcards || null}
+          hubTopicSlug={hubTopicFromQuery}
+          initialWeakOnly={initialWeakOnly}
+        />
+      </Suspense>
+    </div>
   );
 }

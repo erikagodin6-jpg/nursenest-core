@@ -1,5 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import { getRepoRoot } from "./lib/resolve-root-paths.mjs";
+
+const repoRoot = getRepoRoot();
 
 const LANGUAGES = [
   'en', 'fr', 'tl', 'hi', 'es', 'zh', 'zh-tw', 'ar', 'ko',
@@ -31,7 +34,7 @@ function getAllKeys(obj, prefix = '') {
 
 const args = process.argv.slice(2);
 const enforce = args.includes('--enforce');
-const i18nDir = path.resolve('client/public/i18n');
+const i18nDir = path.join(repoRoot, "client/public/i18n");
 
 if (!fs.existsSync(i18nDir)) {
   console.error('ERROR: i18n directory not found at', i18nDir);
@@ -105,7 +108,7 @@ for (const lang of NON_EN) {
   }
 }
 
-const reportPath = path.resolve('scripts/locale-completeness-report.json');
+const reportPath = path.join(repoRoot, "scripts/locale-completeness-report.json");
 fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
 console.log(`\nReport saved to: ${reportPath}`);
 

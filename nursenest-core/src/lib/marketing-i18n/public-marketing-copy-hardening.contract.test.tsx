@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { createElement } from "react";
+import React, { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { LearnerKickerHeading } from "@/components/learner-ui/learner-kicker-heading";
 import { assertKeysLoadedByDefaultPublicMarketingLayout } from "@/lib/marketing-i18n/marketing-public-layout-shard-coverage";
@@ -12,17 +12,20 @@ import {
 } from "@/lib/marketing-i18n-core";
 
 describe("public marketing copy hardening (contract)", () => {
-  it("formatMarketingMessage never emits humanized missing-key tails in development", () => {
+  it("formatMarketingMessage returns empty for missing copy (MarketingI18nProvider humanizes for t())", () => {
     const prev = process.env.NODE_ENV;
     Object.assign(process.env, { NODE_ENV: "development" });
     try {
-      assert.equal(formatMarketingMessage({}, "pages.home.hero.intentionallyMissing", undefined, undefined), "");
+      assert.equal(
+        formatMarketingMessage({}, "pages.home.hero.intentionallyMissing", undefined, undefined),
+        "",
+      );
     } finally {
       Object.assign(process.env, { NODE_ENV: prev });
     }
   });
 
-  it("getOptionalPublicMessage returns empty for missing keys and scrubs shouty tokens", () => {
+  it("getOptionalPublicMessage returns empty for missing keys and scrubs forbidden shouty tokens in production", () => {
     assert.equal(getOptionalPublicMessage({}, "pages.any.optional"), "");
     const m: MarketingMessages = { "x.y": "KICKER" };
     const prev = process.env.NODE_ENV;
@@ -36,7 +39,7 @@ describe("public marketing copy hardening (contract)", () => {
 
   it("getRequiredPublicMessage throws when the bundle only contains a mirror stub title", () => {
     const m: MarketingMessages = { "pages.shop.title": "Title" };
-    assert.throws(() => getRequiredPublicMessage(m, "pages.shop.title"), /missing or forbidden/);
+    assert.throws(() => getRequiredPublicMessage(m, "pages.shop.title"), /missing key|missing or forbidden/i);
   });
 
   it("default public marketing layout merge covers a representative homepage key shard", () => {

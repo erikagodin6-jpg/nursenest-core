@@ -97,3 +97,28 @@ export async function requireAdmin() {
   }
   return session;
 }
+
+/**
+ * Gated internal course lab (`/internal/courses/*`): **DB-backed staff** **or** signed-in learner when
+ * `NN_INTERNAL_COURSES_DEV=1` (staging / QA only — do not enable in production without intent).
+ *
+ * Published-status rows stay **staff-only** on this surface (see {@link internalCourseRowVisibleOnInternalSurface}).
+ */
+export async function requireInternalCoursesSurfaceAccess(callbackPath = "/internal/courses") {
+  const session = await getProtectedRouteSession("auth.internal_courses");
+  const u = session?.user as { id?: string; email?: string | null; sub?: string } | undefined;
+  const signedIn =
+    Boolean(session?.user) &&
+    ((typeof u?.id === "string" && u.id.trim()) ||
+      (typeof u?.email === "string" && u.email.trim()) ||
+      (typeof u?.sub === "string" && u.sub.trim()));
+  if (!signedIn) {
+    redirect(loginRedirectWithCallback(callbackPath));
+  }
+  const staff = await getStaffSession();
+  if (staff) return { session, staff };
+  if (process.env.NN_INTERNAL_COURSES_DEV === "1") {
+    return { session, staff: null };
+  }
+  redirect("/app");
+}

@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
+import { revalidateSurfacesForContentItemLesson } from "@/lib/admin/revalidate-content-item-lesson-surfaces";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { classifyContentItemLesson } from "@/lib/content-quality/classify-lesson";
 import { governContentItemLessonPublish } from "@/lib/content/editorial-publish-policy";
 import { prisma } from "@/lib/db";
+import { pathwayLessonIdFromContentItemTags } from "@/lib/lessons/pathway-lesson-cms-link-tags";
+import {
+  pathwayAuthorityBlocksContentItemLessonPatch,
+} from "@/lib/lessons/pathway-lesson-content-item-authority";
 import { bodyStringFromContentJson, bodyStringToContentJson } from "@/lib/prisma/content-item-body";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import { tierCodeToContentItemTier } from "@/lib/prisma/exam-question-maps";
@@ -66,12 +71,19 @@ export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }
     prisma.progress.count({ where: { lessonId: id, completed: true } }),
   ]);
 
+  const linkedPathwayLessonId = pathwayLessonIdFromContentItemTags(existing.tags);
+  /** Option B: canonical pathway authoring is `pathway_lessons` — use PathwayLesson admin API only when pathway. */
+  const lessonSurface = linkedPathwayLessonId ? ("pathway_lesson" as const) : ("content_item" as const);
+
   return NextResponse.json({
     lesson: existing,
     body,
     lessonQuality,
     publishPreview,
     categoryMatch: category,
+    /** When set, this ContentItem is linked to a canonical pathway row — edit via `/admin/pathway-lessons/{id}` only. */
+    linkedPathwayLessonId,
+    lessonSurface,
     linkMapping: {
       generatedQuestionDrafts: qDrafts,
       generatedFlashcardDrafts: fcDrafts,
@@ -94,6 +106,23 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const d = parsed.data;
+  const linkedPathwayLessonId = pathwayLessonIdFromContentItemTags(existing.tags);
+  if (pathwayAuthorityBlocksContentItemLessonPatch({ linkedPathwayLessonId, patch: d })) {
+    return NextResponse.json(
+      {
+        error:
+          "This ContentItem is linked to a canonical PathwayLesson (pathway-lesson-id tag). Edit the pathway row via /admin/pathway-lessons instead — ContentItem cannot fork marketing/learner truth.",
+        code: "linked_pathway_lesson_edit_blocked",
+        linkedPathwayLessonId,
+      },
+      { status: 409 },
+    );
+  }
+  const payloadForLog = { ...d } as Record<string, unknown>;
+  if (typeof payloadForLog.body === "string" && payloadForLog.body.length > 500) {
+    payloadForLog.body = `${(payloadForLog.body as string).slice(0, 500)}…`;
+  }
+  console.log("[ADMIN SAVE] payload", { contentItemId: id, table: "content_items", data: payloadForLog });
   const bodyStr = d.body ?? bodyStringFromContentJson(existing.content);
   const merged = {
     title: d.title ?? existing.title,
@@ -153,6 +182,8 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     }
   }
 
+  const previousSlug = existing.slug;
+  const publishRequested = d.status === ContentStatus.PUBLISHED;
   const lesson = await prisma.contentItem.update({
     where: { id },
     data: {
@@ -167,8 +198,26 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       category: category ?? undefined,
       bodySystem: taxonomy.bodySystem,
       ...(d.versionKey !== undefined ? { versionKey: d.versionKey } : {}),
+      ...(publishRequested ? { publishedAt: new Date() } : {}),
     },
   });
+
+  await revalidateSurfacesForContentItemLesson({
+    lessonId: lesson.id,
+    slug: lesson.slug,
+    previousSlug: d.slug !== undefined && d.slug !== previousSlug ? previousSlug : null,
+    skipMarketingPathwayLessonSurfaces: Boolean(pathwayLessonIdFromContentItemTags(lesson.tags ?? [])),
+  });
+  console.log("[REVALIDATE]", { slug: lesson.slug, contentItemId: lesson.id });
+
+  if (publishRequested) {
+    console.log("[ADMIN PUBLISH]", {
+      slug: lesson.slug,
+      published: true,
+      publishedAt: lesson.publishedAt?.toISOString() ?? null,
+      status: lesson.status,
+    });
+  }
 
   return NextResponse.json({
     lesson,

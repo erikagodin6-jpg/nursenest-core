@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { ContentStatus } from "@prisma/client";
 import { z } from "zod";
+import { revalidateSurfacesForContentItemLesson } from "@/lib/admin/revalidate-content-item-lesson-surfaces";
 import { governContentItemLessonPublish, validateLessonForPublish } from "@/lib/content/publish-validation";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { prisma } from "@/lib/db";
+import { pathwayLessonIdFromContentItemTags } from "@/lib/lessons/pathway-lesson-cms-link-tags";
 import { takeForIdIn } from "@/lib/db/prisma-find-many-bounds";
 import { bodyStringFromContentJson } from "@/lib/prisma/content-item-body";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
@@ -45,12 +47,22 @@ export async function POST(req: Request) {
   if (body.action === "set_status") {
     const rows = await prisma.contentItem.findMany({
       where: { id: { in: body.ids }, type: "lesson" },
-      select: { id: true, title: true, summary: true, content: true, tags: true, category: true },
+      select: { id: true, slug: true, title: true, summary: true, content: true, tags: true, category: true },
       take: takeForIdIn(body.ids, 500),
     });
     const blocked: { id: string; reasons: string[] }[] = [];
     let updated = 0;
     for (const row of rows) {
+      const bridge = pathwayLessonIdFromContentItemTags(row.tags ?? []);
+      if (bridge) {
+        blocked.push({
+          id: row.id,
+          reasons: [
+            `linked_pathway_lesson_bulk_status_blocked: canonical row ${bridge} — use /admin/pathway-lessons for status`,
+          ],
+        });
+        continue;
+      }
       const bodyStr = bodyStringFromContentJson(row.content);
       const taxonomy = contentItemLessonTaxonomyFromCorpus({
         title: row.title,
@@ -93,8 +105,17 @@ export async function POST(req: Request) {
       }
       await prisma.contentItem.update({
         where: { id: row.id },
-        data: { status: contentStatusToDb(body.status), bodySystem: taxonomy.bodySystem },
+        data: {
+          status: contentStatusToDb(body.status),
+          bodySystem: taxonomy.bodySystem,
+          ...(body.status === ContentStatus.PUBLISHED ? { publishedAt: new Date() } : {}),
+        },
       });
+      await revalidateSurfacesForContentItemLesson({ lessonId: row.id, slug: row.slug });
+      console.log("[REVALIDATE]", { slug: row.slug, contentItemId: row.id, source: "bulk_set_status" });
+      if (body.status === ContentStatus.PUBLISHED) {
+        console.log("[ADMIN PUBLISH]", { slug: row.slug, published: true });
+      }
       updated += 1;
     }
     if (blocked.length > 0) {

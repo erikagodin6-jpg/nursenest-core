@@ -16,11 +16,16 @@ import { persistControlPanelDraft } from "@/lib/blog/blog-control-panel-generati
 import { annotateBlogInternalLinkRowsWithVerification } from "@/lib/blog/blog-internal-link-verify";
 import { normalizePlanSuggestedLessonRows } from "@/lib/blog/blog-internal-lesson-links";
 import { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-generation-pipeline";
-import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
+import {
+  AdminBlogValidationError,
+  findDuplicateAdminBlogIntent,
+  prepareAdminBlogGenerationInput,
+} from "@/lib/blog/admin-blog-generation-service";
+import { BLOG_SLUG_FORMAT_RE, coerceAdminOptionalSlugFromRawInput } from "@/lib/blog/blog-optional-slug";
 import { prisma } from "@/lib/db";
 
 const bodySchema = z.object({
-  topic: z.string().min(3).max(200),
+  topic: z.string().trim().min(3, "Topic must be at least 3 non-whitespace characters.").max(500),
   exam: z.string().min(2).max(80),
   country: z.enum(["US", "CA", "unspecified"]).default("unspecified"),
   keywords: z.string().max(500).optional(),
@@ -33,12 +38,12 @@ const bodySchema = z.object({
   includeImage: z.boolean().optional(),
   includeAiImage: z.boolean().optional(),
   sourceRecords: z.array(z.unknown()).max(30).optional(),
-  fixedSlug: z
-    .string()
-    .min(3)
-    .max(180)
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
-    .optional(),
+  fixedSlug: z.preprocess((v): string | undefined => {
+    if (v === undefined || v === null) return undefined;
+    if (typeof v !== "string") return undefined;
+    const coerced = coerceAdminOptionalSlugFromRawInput(v, 180);
+    return coerced ?? undefined;
+  }, z.string().min(3).max(180).regex(BLOG_SLUG_FORMAT_RE).optional()),
   allowInsufficientCitations: z.boolean().optional(),
   plan: z.unknown(),
   bodyHtml: z.string().min(BLOG_ARTICLE_MIN_BODY_CHARS),
@@ -57,7 +62,10 @@ export async function POST(req: Request) {
   }
   const d = parsed.data;
 
-  const planParsed = safeParseBlogControlPanelPlan(d.plan);
+  const planParsed = safeParseBlogControlPanelPlan(d.plan, {
+    title: d.topic,
+    ...(d.fixedSlug ? { slug: d.fixedSlug } : {}),
+  });
   if (!planParsed.success) {
     await logControlPanelPersistFailure({
       topic: d.topic,
@@ -75,34 +83,47 @@ export async function POST(req: Request) {
     );
   }
 
-  const normalizedTopic = normalizeBlogTopicKey(d.targetKeyword ?? d.topic);
-  if (normalizedTopic) {
-    const dup = await findExistingBlogByCanonicalIntent({ exam: d.exam, normalizedTopic });
-    if (dup) {
-      await logPipelineDuplicateTopic({
-        topic: d.topic,
-        existingSlug: dup.slug,
-        createdById: gate.admin.userId,
-        source: "persist_draft",
-      });
-      return NextResponse.json(
-        {
-          error: "duplicate_topic",
-          existingSlug: dup.slug,
-          normalizedTopic,
-          hint: "Open the existing post or change topic / primary keyword.",
-        },
-        { status: 409 },
-      );
+  let prepared;
+  try {
+    prepared = await prepareAdminBlogGenerationInput({
+      rawTitle: d.topic,
+      exam: d.exam,
+      targetKeyword: d.targetKeyword,
+      fixedSlug: d.fixedSlug,
+      publishMode: "draft",
+    });
+  } catch (error) {
+    if (error instanceof AdminBlogValidationError) {
+      return NextResponse.json({ error: "validation_error", fieldErrors: [error.fieldError] }, { status: 400 });
     }
+    throw error;
+  }
+
+  const dup = await findDuplicateAdminBlogIntent({ exam: d.exam, normalizedTopic: prepared.normalizedTopic });
+  if (dup) {
+    await logPipelineDuplicateTopic({
+      topic: prepared.topic,
+      existingSlug: dup.slug,
+      createdById: gate.admin.userId,
+      source: "persist_draft",
+    });
+    return NextResponse.json(
+      {
+        error: "duplicate_topic",
+        existingSlug: dup.slug,
+        normalizedTopic: prepared.normalizedTopic,
+        hint: "Open the existing post or change topic / primary keyword.",
+      },
+      { status: 409 },
+    );
   }
 
   const input = {
-    topic: d.topic,
+    topic: prepared.topic,
     exam: d.exam,
     country: d.country,
     keywords: d.keywords,
-    targetKeyword: d.targetKeyword,
+    targetKeyword: prepared.targetKeyword,
     keywordCluster: d.keywordCluster,
     template: d.template,
     intent: d.intent ?? BlogPostIntent.EXAM_PREP,
@@ -111,7 +132,7 @@ export async function POST(req: Request) {
     includeImage: d.includeImage ?? true,
     includeAiImage: d.includeAiImage ?? false,
     sourceRecordsJson: d.sourceRecords?.length ? coerceBlogSourceRows(d.sourceRecords) : undefined,
-    fixedSlug: d.fixedSlug,
+    fixedSlug: prepared.uniqueSlug,
     allowInsufficientCitations: d.allowInsufficientCitations,
   };
 
@@ -139,6 +160,30 @@ export async function POST(req: Request) {
           code: persistResult.code,
           message: persistResult.error,
           riskFlags: persistResult.riskFlags ?? [],
+        },
+        { status: 422 },
+      );
+    }
+    if (persistResult.code === "QUALITY_GATE" || persistResult.code === "OUTPUT_GATE") {
+      await logControlPanelPersistFailure({
+        topic: d.topic,
+        code: persistResult.code,
+        message: persistResult.error,
+        createdById: gate.admin.userId,
+      });
+      return NextResponse.json(
+        {
+          error: persistResult.code === "OUTPUT_GATE" ? "output_gate_blocked" : "quality_gate_blocked",
+          code: persistResult.code,
+          message: persistResult.error,
+          draftPost: persistResult.post ?? null,
+          postId: persistResult.post?.id,
+          plan: persistResult.plan,
+          warnings: persistResult.warnings ?? [],
+          hint:
+            persistResult.code === "OUTPUT_GATE"
+              ? "Publication safety checks failed (length, placeholders, or metadata). Draft saved — expand the body, fix SEO fields, then use Publish now."
+              : "Draft failed quality review: repeated filler content detected. Edit body/sections or regenerate; post saved as needs review.",
         },
         { status: 422 },
       );

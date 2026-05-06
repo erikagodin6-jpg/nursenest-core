@@ -320,7 +320,7 @@ async function loadProgressPagePayloadUncached(userId: string, entitlement: Acce
     prisma.practiceTest.count({ where: { userId, status: PracticeTestStatus.COMPLETED } }),
     prisma.practiceTest.findMany({
       where: { userId, status: PracticeTestStatus.COMPLETED, completedAt: { not: null } },
-      orderBy: [{ completedAt: "desc" }, { createdAt: "desc" }],
+      orderBy: [{ completedAt: "desc" }],
       take: 12,
       select: { id: true, title: true, completedAt: true, config: true, results: true },
     }),

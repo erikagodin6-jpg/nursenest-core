@@ -4,8 +4,11 @@
  */
 
 import { ALLIED_HUB_CATEGORY_ORDER, ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
+import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { alliedHub, HUB, NP, npNpQuestionsForRegion, signupWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { defaultPathwayIdForMarketingOffering } from "@/lib/marketing/country-exam-offerings";
 import { publicMarketingCatHrefForOffering } from "@/lib/marketing/marketing-exam-navigation";
+import { marketingPathwaySubpathBesideExamHub } from "@/lib/lessons/lesson-routes";
 import { publicExamPrepHubDestinations } from "@/lib/navigation/canonical-destinations";
 import type { MarketingPathwayMegaMenuKey } from "@/lib/navigation/marketing-mega-menu-active-prefixes";
 import { publicNewGradStudyDestinations } from "@/lib/navigation/marketing-pathway-nav-destinations";
@@ -46,6 +49,8 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
   const studyPlanSignupHref = signupWithCallback("/pre-nursing/study-plan");
   const newGrad = publicNewGradStudyDestinations(region, rnHub);
   const newGradStudyPlanHref = signupWithCallback(newGrad.lessons);
+  const rnPathway = getExamPathwayById(defaultPathwayIdForMarketingOffering(region, "rn"));
+  const pnPathway = getExamPathwayById(defaultPathwayIdForMarketingOffering(region, "pn"));
 
   const gl = () => t("nav.mega.group.learn");
   const gp = () => t("nav.mega.group.practice");
@@ -69,7 +74,7 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
           key: "learn",
           heading: gl(),
           links: [
-            { key: "rn-lessons", label: ll(), href: `${rnHub}/lessons` },
+            { key: "rn-lessons", label: ll(), href: marketingPathwaySubpathBesideExamHub(rnHub, rnPathway, "lessons") },
             { key: "rn-flashcards", label: lf(), href: HUB.flashcards },
           ],
         },
@@ -77,7 +82,7 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
           key: "practice",
           heading: gp(),
           links: [
-            { key: "rn-questions", label: lq(), href: `${rnHub}/questions` },
+            { key: "rn-questions", label: lq(), href: marketingPathwaySubpathBesideExamHub(rnHub, rnPathway, "questions") },
             { key: "rn-readiness", label: lcat(), href: publicMarketingCatHrefForOffering(region, "rn") },
           ],
         },
@@ -99,7 +104,7 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
           key: "learn",
           heading: gl(),
           links: [
-            { key: "pn-lessons", label: ll(), href: `${pnHub}/lessons` },
+            { key: "pn-lessons", label: ll(), href: marketingPathwaySubpathBesideExamHub(pnHub, pnPathway, "lessons") },
             { key: "pn-flashcards", label: lf(), href: HUB.flashcards },
           ],
         },
@@ -107,7 +112,7 @@ export function buildMarketingMegaMenus(region: "US" | "CA", t: TFn): MegaMenuCo
           key: "practice",
           heading: gp(),
           links: [
-            { key: "pn-questions", label: lq(), href: `${pnHub}/questions` },
+            { key: "pn-questions", label: lq(), href: marketingPathwaySubpathBesideExamHub(pnHub, pnPathway, "questions") },
             { key: "pn-readiness", label: lcat(), href: publicMarketingCatHrefForOffering(region, "pn") },
           ],
         },

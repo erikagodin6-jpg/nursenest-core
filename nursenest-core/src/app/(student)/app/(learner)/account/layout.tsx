@@ -8,7 +8,9 @@ export default function LearnerAccountLayout({ children }: { children: React.Rea
     <div className="space-y-6">
       <LearnerAccountShellHeader />
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-        <LearnerAccountNav />
+        <aside className="shrink-0 lg:sticky lg:top-20 lg:w-56 xl:w-64">
+          <LearnerAccountNav />
+        </aside>
         <div className="min-w-0 flex-1">{children}</div>
       </div>
     </div>

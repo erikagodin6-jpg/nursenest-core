@@ -2,7 +2,9 @@ import "server-only";
 
 import type Stripe from "stripe";
 import { Prisma, SubscriptionStatus, type TierCode } from "@prisma/client";
-import { after } from "next/server";
+function after(fn: () => void | Promise<void>): void {
+  void Promise.resolve().then(fn);
+}
 import { prisma } from "@/lib/db";
 import { sendTransactionalEmailHtml, htmlEmailShell } from "@/lib/email/resend-transactional";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -243,5 +245,140 @@ async function runOwnerPaidSubscriptionCheckoutNotificationsJob(
     }
   } else {
     safeServerLog(LOG_SCOPE, "sms_skipped", { reason: "ADMIN_SUBSCRIPTION_NOTIFY_PHONE unset", severity: "warning" });
+  }
+}
+
+export type ScheduleInvoicePaymentSucceededArgs = {
+  stripe: Stripe;
+  event: Stripe.Event;
+  invoice: Stripe.Invoice;
+  userId: string | null;
+  subscriptionId: string;
+  customerId: string | null;
+  stripeSubscription: Stripe.Subscription | null;
+  subscriptionStatus: string | null;
+  planTierLabel: string | null;
+  planCountryLabel: string | null;
+  billingRegionSlug: string | null;
+  correlation: string;
+  paymentKind: string;
+};
+
+/**
+ * Owner email/SMS after `invoice.payment_succeeded` (first subscription charge path in webhook).
+ * Mirrors checkout notify: dedupes by Stripe event id, never throws to webhook handler.
+ */
+export function scheduleOwnerPaidSubscriptionInvoicePaymentSucceededNotification(args: ScheduleInvoicePaymentSucceededArgs): void {
+  if (!args.userId) return;
+  const amountPaid =
+    typeof args.invoice.amount_paid === "number" && args.invoice.amount_paid > 0 ? args.invoice.amount_paid : null;
+  if (amountPaid == null) return;
+  if (!args.event.livemode && !shouldIncludeTestModeOwnerNotifies()) return;
+  if (args.subscriptionStatus && args.subscriptionStatus !== "active" && args.subscriptionStatus !== "trialing") {
+    return;
+  }
+
+  after(async () => {
+    try {
+      await runOwnerInvoicePaymentSucceededNotificationsJob(args, amountPaid);
+    } catch (e) {
+      safeServerLog(LOG_SCOPE, "invoice_job_unhandled_error", {
+        message: e instanceof Error ? e.message.slice(0, 240) : String(e),
+        eventIdPrefix: args.event.id.slice(0, 12),
+        correlation: args.correlation,
+      });
+    }
+  });
+}
+
+function shouldIncludeTestModeOwnerNotifies(): boolean {
+  const v = process.env.ADMIN_SUBSCRIPTION_NOTIFY_INCLUDE_TEST_MODE?.trim().toLowerCase();
+  return v === "1" || v === "true" || v === "yes";
+}
+
+async function runOwnerInvoicePaymentSucceededNotificationsJob(
+  args: ScheduleInvoicePaymentSucceededArgs,
+  amountPaid: number,
+): Promise<void> {
+  const userId = args.userId;
+  if (!userId) return;
+
+  const notifyEmail = process.env.ADMIN_SUBSCRIPTION_NOTIFY_EMAIL?.trim();
+  const notifyPhone = process.env.ADMIN_SUBSCRIPTION_NOTIFY_PHONE?.trim();
+
+  if (!notifyEmail && !notifyPhone) {
+    safeServerLog(LOG_SCOPE, "invoice_skipped_no_recipients", {
+      severity: "warning",
+      eventIdPrefix: args.event.id.slice(0, 12),
+    });
+    return;
+  }
+
+  const claim = await claimStripeOwnerPaidSubscriptionNotifyOrDuplicate(args.event.id);
+  if (claim === "duplicate") {
+    safeServerLog(LOG_SCOPE, "invoice_skipped_duplicate_event", { eventIdPrefix: args.event.id.slice(0, 12) });
+    return;
+  }
+
+  const currency = args.invoice.currency ?? "usd";
+  const amountLabel = formatMoney(amountPaid, currency);
+  const ts = new Date(args.event.created * 1000).toISOString();
+  const lines = [
+    `Paid subscription invoice (Stripe) — ${args.paymentKind}`,
+    ``,
+    `User id: ${userId}`,
+    `Amount paid: ${amountLabel}`,
+    `Plan tier: ${args.planTierLabel ?? "—"}`,
+    `Plan country: ${args.planCountryLabel ?? "—"}`,
+    `Region: ${args.billingRegionSlug ?? "—"}`,
+    `Subscription id: ${args.subscriptionId}`,
+    `Customer id: ${args.customerId ?? "—"}`,
+    `Stripe subscription status: ${args.subscriptionStatus ?? "—"}`,
+    `Stripe event: ${args.event.id} (${args.event.type})`,
+    `Livemode: ${args.event.livemode ? "live" : "test"}`,
+    `Event time (UTC): ${ts}`,
+  ];
+  const textBody = lines.join("\n");
+  const htmlBody = `<pre style="white-space:pre-wrap;font-family:system-ui,monospace;font-size:14px;">${textBody
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")}</pre>`;
+
+  const smsBody = `NurseNest invoice paid: ${amountLabel} | user ${userId.slice(0, 8)}… | sub ${args.subscriptionId.slice(0, 12)}…`;
+
+  if (notifyEmail) {
+    try {
+      const r = await sendTransactionalEmailHtml({
+        to: notifyEmail,
+        subject: `[NurseNest] Subscription invoice paid — ${amountLabel} (${args.subscriptionId.slice(0, 10)}…)`,
+        html: htmlEmailShell("Subscription invoice paid", htmlBody),
+        text: textBody,
+      });
+      safeServerLog(LOG_SCOPE, "invoice_email_result", {
+        ok: r.ok,
+        skippedReason: r.skippedReason,
+        eventIdPrefix: args.event.id.slice(0, 12),
+      });
+    } catch (e) {
+      safeServerLog(LOG_SCOPE, "invoice_email_exception", {
+        message: e instanceof Error ? e.message.slice(0, 200) : String(e),
+        eventIdPrefix: args.event.id.slice(0, 12),
+      });
+    }
+  }
+
+  if (notifyPhone) {
+    try {
+      const r = await sendTwilioSmsIfConfigured(notifyPhone, smsBody);
+      safeServerLog(LOG_SCOPE, "invoice_sms_result", {
+        ok: r.ok,
+        skippedReason: r.skippedReason,
+        eventIdPrefix: args.event.id.slice(0, 12),
+      });
+    } catch (e) {
+      safeServerLog(LOG_SCOPE, "invoice_sms_exception", {
+        message: e instanceof Error ? e.message.slice(0, 200) : String(e),
+        eventIdPrefix: args.event.id.slice(0, 12),
+      });
+    }
   }
 }

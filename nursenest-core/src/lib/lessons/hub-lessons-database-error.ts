@@ -1,3 +1,5 @@
+import "server-only";
+
 import { classifyHubDbFailure, type HubDbFailureCategory } from "@/lib/db/safe-database";
 
 /**

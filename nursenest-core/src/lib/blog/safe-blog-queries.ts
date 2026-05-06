@@ -15,6 +15,7 @@ import {
   buildBlogPublicListWhere,
   isBlogPostMarketingMetaVisible,
 } from "@/lib/blog/blog-visibility";
+import { describeCanonicalBlogNotLiveReason } from "@/lib/blog/blog-public-pipeline-trace";
 import {
   getStaticBlogPost,
   listStaticBlogPostsForIndex,
@@ -33,6 +34,9 @@ export const isBlogDatabaseConfigured = isDatabaseUrlConfigured;
 /**
  * Cold-start / pooled Prisma can be slow; empty `/blog` after a transient timeout is worse than
  * waiting longer on list/detail reads (bounded by `take` / pagination).
+ *
+ * **TEMP trace:** `BLOG_PUBLIC_SKIP_TRACE=1` logs `[BLOG_PUBLIC_SKIP]` when a slug resolves in DB but the
+ * public body loader (`getPublishedBlogPostBySlug`) returns null (career mismatch, not “live”, or scope miss).
  */
 const BLOG_PUBLIC_QUERY_TIMEOUT_MS = 12_000;
 /** Second pass when first list+count both empty — avoids caching/static fallback on cold Prisma timeouts. */
@@ -104,7 +108,7 @@ async function resolveBlogStaticFallbackProbe(): Promise<BlogStaticFallbackProbe
   if (shouldSkipBlogDbForProductionBuild()) return { kind: "use_static" };
   if (!isDatabaseUrlConfigured()) return { kind: "use_static" };
   const now = new Date();
-  const probe = await withBlogTimeoutFallback(
+  const probe = await withBlogTimeoutFallback<{ ok: true; liveCount: number } | { ok: false }>(
     async () => ({ ok: true as const, liveCount: await prisma.blogPost.count({ where: blogLiveWhere(now) }) }),
     { ok: false as const },
     "blog_static_fallback_probe",
@@ -165,6 +169,8 @@ export const BLOG_LIST_PAGE_SIZE = 50;
 
 /** Matches `import-pathophysiology-nursing-blog-seeds.mts` upserts. */
 export const PATHOPHYSIOLOGY_SEED_LEGACY_SOURCE = "pathophysiology-nursing-blog-seed" as const;
+/** Matches `scripts/blog/seed-long-tail-patho-blog-posts.mts` published rows. */
+export const PATHOPHYSIOLOGY_LONG_TAIL_200_LEGACY_SOURCE = "pathophysiology-long-tail-200-seed" as const;
 /** Primary tag on seeded pathophysiology posts; powers `/blog/tag/pathophysiology`. */
 export const PATHOPHYSIOLOGY_HUB_PRIMARY_TAG = "pathophysiology" as const;
 const PATHOPHYSIOLOGY_HUB_DEFAULT_TAKE = 12;
@@ -199,6 +205,7 @@ export async function getPathophysiologyBlogHubPosts(take: number = PATHOPHYSIOL
       {
         OR: [
           { legacySource: PATHOPHYSIOLOGY_SEED_LEGACY_SOURCE },
+          { legacySource: PATHOPHYSIOLOGY_LONG_TAIL_200_LEGACY_SOURCE },
           { slug: { startsWith: "pp-" } },
           { tags: { has: PATHOPHYSIOLOGY_HUB_PRIMARY_TAG } },
         ],
@@ -237,7 +244,7 @@ async function logBlogIndexDiagnosticsIfEnabled(args: {
   }, {});
   type StatusAgg = { postStatus: BlogPostStatus; _count: { _all: number } };
   const dbAllStatuses = await withBlogTimeoutFallback<StatusAgg[]>(
-    () => prisma.blogPost.groupBy({ by: ["postStatus"], _count: { _all: true } }),
+    async () => (await prisma.blogPost.groupBy({ by: ["postStatus"], _count: { _all: true } })) as unknown as StatusAgg[],
     [],
     "blog_index_diag_groupby_all",
   );
@@ -910,6 +917,47 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
   }
   const row = await resolveScopedBlogPostBySlug(slug, scope);
   if (!row) {
+    if (process.env.BLOG_PUBLIC_SKIP_TRACE === "1") {
+      const bare = await withBlogTimeoutFallback(
+        () =>
+          prisma.blogPost.findUnique({
+            where: { slug },
+            select: {
+              slug: true,
+              postStatus: true,
+              workflowStatus: true,
+              publishAt: true,
+              scheduledAt: true,
+              locale: true,
+              careerSlug: true,
+              exam: true,
+            },
+          }),
+        null,
+        "blog_public_skip_trace_bare_slug",
+      );
+      if (bare) {
+        safeServerLog("blog", "[BLOG_PUBLIC_SKIP]", {
+          context: "getPublishedBlogPostBySlug",
+          slug,
+          scopeLocale: scope?.locale ?? "",
+          scopeCareerSlug: scope?.careerSlug ?? "",
+          scopeExam: scope?.exam ?? "",
+          reason: "scoped_resolve_miss_db_row_exists",
+          postStatus: bare.postStatus,
+          workflowStatus: bare.workflowStatus ?? "",
+          locale: bare.locale ?? "",
+          careerSlug: bare.careerSlug ?? "",
+          exam: bare.exam ?? "",
+        });
+      } else {
+        safeServerLog("blog", "[BLOG_PUBLIC_SKIP]", {
+          context: "getPublishedBlogPostBySlug",
+          slug,
+          reason: "no_db_row_for_slug",
+        });
+      }
+    }
     if (!(await canUseStaticBlogFallback())) return null;
     const s = getStaticBlogPost(slug);
     if (!s) return null;
@@ -920,6 +968,15 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
     row.careerSlug &&
     row.careerSlug !== scope.careerSlug
   ) {
+    if (process.env.BLOG_PUBLIC_SKIP_TRACE === "1") {
+      safeServerLog("blog", "[BLOG_PUBLIC_SKIP]", {
+        context: "getPublishedBlogPostBySlug",
+        slug,
+        reason: "career_slug_mismatch",
+        rowCareerSlug: row.careerSlug ?? "",
+        scopeCareerSlug: scope.careerSlug,
+      });
+    }
     return null;
   }
   /** Align with {@link blogLiveWhere} on index/tag routes: live SCHEDULED rows, not only PUBLISHED. */
@@ -933,8 +990,21 @@ export async function getPublishedBlogPostBySlug(slug: string, scope?: BlogQuery
       },
       now,
     )
-  )
+  ) {
+    if (process.env.BLOG_PUBLIC_SKIP_TRACE === "1") {
+      safeServerLog("blog", "[BLOG_PUBLIC_SKIP]", {
+        context: "getPublishedBlogPostBySlug",
+        slug,
+        reason: "not_live_for_public_body",
+        detail: describeCanonicalBlogNotLiveReason(row, now),
+        postStatus: row.postStatus,
+        workflowStatus: row.workflowStatus ?? "",
+        publishAt: row.publishAt?.toISOString() ?? "",
+        scheduledAt: row.scheduledAt?.toISOString() ?? "",
+      });
+    }
     return null;
+  }
   return row;
 }
 
@@ -1008,16 +1078,22 @@ export async function getPublishedBlogPostsByTagPage(
 const SITEMAP_BLOG_ROW_CAP = 50_000;
 const SITEMAP_BLOG_SLUG_PAGE_SIZE = 2_000;
 
-export async function getSitemapPublishedBlogSlugs(): Promise<{ slug: string; updatedAt: Date }[]> {
+export type BlogSitemapSlugRow = {
+  slug: string;
+  careerSlug: string | null;
+  updatedAt: Date;
+};
+
+export async function getSitemapPublishedBlogSlugs(): Promise<BlogSitemapSlugRow[]> {
   const now = new Date();
   return withBlogTimeoutFallback(
     async () => {
-      const out: { slug: string; updatedAt: Date }[] = [];
+      const out: BlogSitemapSlugRow[] = [];
       let cursor: { slug: string } | undefined;
       for (;;) {
         const page = await prisma.blogPost.findMany({
           where: blogLiveWhere(now),
-          select: { slug: true, updatedAt: true },
+          select: { slug: true, updatedAt: true, careerSlug: true },
           orderBy: { slug: "asc" },
           take: SITEMAP_BLOG_SLUG_PAGE_SIZE,
           ...(cursor ? { cursor, skip: 1 } : {}),
@@ -1025,7 +1101,7 @@ export async function getSitemapPublishedBlogSlugs(): Promise<{ slug: string; up
         if (page.length === 0) break;
         for (const r of page) {
           const s = r.slug?.trim();
-          if (s) out.push({ slug: s, updatedAt: r.updatedAt });
+          if (s) out.push({ slug: s, careerSlug: r.careerSlug?.trim() ?? null, updatedAt: r.updatedAt });
         }
         if (out.length >= SITEMAP_BLOG_ROW_CAP) break;
         if (page.length < SITEMAP_BLOG_SLUG_PAGE_SIZE) break;
@@ -1046,19 +1122,19 @@ export async function getSitemapPublishedBlogSlugs(): Promise<{ slug: string; up
  * when a database URL is configured (so sitemap generation cannot silently omit every `/blog/{slug}` row).
  * Returns `[]` only when DB-backed sitemap queries are intentionally skipped (build / no URL / static-only blog build).
  */
-export async function getSitemapPublishedBlogSlugsStrict(): Promise<{ slug: string; updatedAt: Date }[]> {
+export async function getSitemapPublishedBlogSlugsStrict(): Promise<BlogSitemapSlugRow[]> {
   if (!isDatabaseUrlConfigured() || shouldSkipBlogDbForProductionBuild() || shouldSkipDbBackedSitemapUrlsForBuild()) {
     return [];
   }
   const now = new Date();
   return withDatabaseFallbackTimeoutOrThrow(
     async () => {
-      const out: { slug: string; updatedAt: Date }[] = [];
+      const out: BlogSitemapSlugRow[] = [];
       let cursor: { slug: string } | undefined;
       for (;;) {
         const page = await prisma.blogPost.findMany({
           where: blogLiveWhere(now),
-          select: { slug: true, updatedAt: true },
+          select: { slug: true, updatedAt: true, careerSlug: true },
           orderBy: { slug: "asc" },
           take: SITEMAP_BLOG_SLUG_PAGE_SIZE,
           ...(cursor ? { cursor, skip: 1 } : {}),
@@ -1066,7 +1142,7 @@ export async function getSitemapPublishedBlogSlugsStrict(): Promise<{ slug: stri
         if (page.length === 0) break;
         for (const r of page) {
           const s = r.slug?.trim();
-          if (s) out.push({ slug: s, updatedAt: r.updatedAt });
+          if (s) out.push({ slug: s, careerSlug: r.careerSlug?.trim() ?? null, updatedAt: r.updatedAt });
         }
         if (out.length >= SITEMAP_BLOG_ROW_CAP) break;
         if (page.length < SITEMAP_BLOG_SLUG_PAGE_SIZE) break;
@@ -1079,6 +1155,35 @@ export async function getSitemapPublishedBlogSlugsStrict(): Promise<{ slug: stri
     BLOG_SITEMAP_SLUG_LIST_TIMEOUT_MS,
     { scope: "blog", label: "blog_sitemap.slugs_batched_strict" },
   );
+}
+
+/**
+ * Slugs for `/sitemap.xml` blog URLs: live `BlogPost` rows when Prisma reads are enabled; otherwise the same
+ * bundled static corpus used by public `/blog` during `next build` / no-DB / empty-DB fallbacks.
+ */
+function staticBlogSitemapSlugRows(): BlogSitemapSlugRow[] {
+  const out: BlogSitemapSlugRow[] = [];
+  for (const p of listStaticBlogPostsForIndex()) {
+    const slug = p.slug?.trim();
+    if (!slug) continue;
+    out.push({ slug, careerSlug: null, updatedAt: new Date(`${p.createdAt}T12:00:00Z`) });
+  }
+  return out;
+}
+
+export async function getMergedBlogSitemapSlugRows(): Promise<BlogSitemapSlugRow[]> {
+  if (!isDatabaseUrlConfigured() || shouldSkipBlogDbForProductionBuild() || shouldSkipDbBackedSitemapUrlsForBuild()) {
+    return staticBlogSitemapSlugRows();
+  }
+  try {
+    const rows = await getSitemapPublishedBlogSlugsStrict();
+    if (rows.length > 0) return rows;
+    if (await canUseStaticBlogFallback()) return staticBlogSitemapSlugRows();
+    return [];
+  } catch (e) {
+    if (await canUseStaticBlogFallback()) return staticBlogSitemapSlugRows();
+    throw e;
+  }
 }
 
 export async function getSitemapBlogTagRows(): Promise<{ tags: string[] }[]> {

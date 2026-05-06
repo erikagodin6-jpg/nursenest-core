@@ -15,5 +15,11 @@
   "us-np-whnp": { "lessons": 100, "questions": 240 },
   "us-np-pnp-pc": { "lessons": 95, "questions": 230 },
   "ca-allied-core": { "lessons": 60, "questions": 150 },
-  "us-allied-core": { "lessons": 65, "questions": 160 }
+  "us-allied-core": { "lessons": 65, "questions": 160 },
+  "uk-rn-nmc-test-of-competence": { "lessons": 0, "questions": 0 },
+  "au-rn-iqnm-pathway": { "lessons": 0, "questions": 0 },
+  "ph-rn-prc-pnle": { "lessons": 0, "questions": 0 },
+  "in-rn-state-nursing-council-registration": { "lessons": 0, "questions": 0 },
+  "ng-rn-nmcn-licensure": { "lessons": 0, "questions": 0 },
+  "sa-rn-scfhs-licensure": { "lessons": 0, "questions": 0 }
 }

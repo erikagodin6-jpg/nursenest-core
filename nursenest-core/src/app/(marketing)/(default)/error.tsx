@@ -1,7 +1,13 @@
 "use client";
 
+import { useEffect } from "react";
 import { NnErrorCard } from "@/components/error/nn-error-card";
 import { MarketingHomeSafeMode } from "@/components/marketing/marketing-home-safe-mode";
+import {
+  logMarketingRouteErrorClient,
+  shouldUseMarketingHomeSafeModeFromError,
+} from "@/lib/marketing/marketing-home-safe-mode-triggers";
+import { errorBoundaryDescription, isLikelyTransientBoundaryError } from "@/lib/runtime/error-boundary-copy";
 
 export default function MarketingDefaultSegmentError({
   error,
@@ -10,24 +16,50 @@ export default function MarketingDefaultSegmentError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const message = `${error?.message ?? ""} ${error?.digest ?? ""}`.toLowerCase();
+  useEffect(() => {
+    const shouldLog =
+      process.env.NODE_ENV !== "production" ||
+      process.env.NEXT_PUBLIC_NN_DEBUG_HOMEPAGE === "1";
+    if (shouldLog) {
+      try {
+        console.error(
+          "[NN_HOMEPAGE_REAL_CRASH]",
+          JSON.stringify({
+            boundary: "marketing_default_segment_error_tsx",
+            pathname: typeof window !== "undefined" ? window.location.pathname : null,
+            name: error?.name,
+            message: error?.message,
+            digest: error?.digest,
+            stack: error?.stack,
+            componentStack: null,
+          }),
+        );
+      } catch {
+        /* ignore */
+      }
+    }
+    logMarketingRouteErrorClient("marketing_default_segment_error_tsx", error);
+  }, [error]);
 
-  const likelyHomeCrash =
-    message.includes("marketing_home") ||
-    message.includes("home") ||
-    message.includes("homepage");
-
-  if (likelyHomeCrash) {
+  if (shouldUseMarketingHomeSafeModeFromError(error)) {
     return <MarketingHomeSafeMode layout="embedded" onRetry={reset} />;
   }
+
+  const isTransient = isLikelyTransientBoundaryError(error);
 
   return (
     <NnErrorCard
       error={error}
       reset={reset}
       surface="marketing_default"
-      title="Just a moment"
-      description="We’re loading this page. If it doesn’t appear, try again in a moment — or pick a study track below."
+      marketingErrorTelemetry
+      title={isTransient ? "Just a moment" : "Page could not load"}
+      description={errorBoundaryDescription({
+        error,
+        fallback: isTransient
+          ? "We’re loading this page. If it doesn’t appear, try again in a moment, or pick a study track below."
+          : "This page hit an unexpected error. It has been logged so we can fix it.",
+      })}
       primaryAction={{ label: "Go home", href: "/" }}
       secondaryAction={{ label: "Browse exam pathways", href: "/lessons" }}
     />

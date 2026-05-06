@@ -1,3 +1,4 @@
+import { CountryCode } from "@prisma/client";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { effectiveDefaultPublicGlobalRegion } from "./marketing-header-global-region";
@@ -8,7 +9,7 @@ test("no cookie: defaults to marketing CA → canada", () => {
       strippedPathname: "/pricing",
       globalRegionCookie: null,
       marketingExamRegion: "CA",
-      sessionCountryUsCa: undefined,
+      sessionCountryCode: undefined,
     }),
     "canada",
   );
@@ -20,7 +21,7 @@ test("no cookie: defaults to marketing US → us", () => {
       strippedPathname: "/pricing",
       globalRegionCookie: null,
       marketingExamRegion: "US",
-      sessionCountryUsCa: undefined,
+      sessionCountryCode: undefined,
     }),
     "us",
   );
@@ -32,7 +33,7 @@ test("no cookie: session US/CA wins over marketing toggle", () => {
       strippedPathname: "/pricing",
       globalRegionCookie: null,
       marketingExamRegion: "US",
-      sessionCountryUsCa: "CA",
+      sessionCountryCode: CountryCode.CA,
     }),
     "canada",
   );
@@ -44,7 +45,7 @@ test("stale expansion cookie on neutral path does not default to philippines", (
       strippedPathname: "/pricing",
       globalRegionCookie: "philippines",
       marketingExamRegion: "US",
-      sessionCountryUsCa: "US",
+      sessionCountryCode: CountryCode.US,
     }),
     "us",
   );
@@ -56,7 +57,7 @@ test("US route wins over stale philippines cookie", () => {
       strippedPathname: "/us/rn/nclex-rn",
       globalRegionCookie: "philippines",
       marketingExamRegion: "CA",
-      sessionCountryUsCa: undefined,
+      sessionCountryCode: undefined,
     }),
     "us",
   );
@@ -68,7 +69,7 @@ test("Canada route wins over stale philippines cookie", () => {
       strippedPathname: "/canada/rn/rex-rn",
       globalRegionCookie: "philippines",
       marketingExamRegion: "US",
-      sessionCountryUsCa: undefined,
+      sessionCountryCode: undefined,
     }),
     "canada",
   );
@@ -80,7 +81,7 @@ test("expansion exams path resolves to that region", () => {
       strippedPathname: "/exams/philippines",
       globalRegionCookie: null,
       marketingExamRegion: "US",
-      sessionCountryUsCa: undefined,
+      sessionCountryCode: undefined,
     }),
     "philippines",
   );
@@ -92,7 +93,7 @@ test("allied-health marketing path prefers Canada", () => {
       strippedPathname: "/allied-health",
       globalRegionCookie: null,
       marketingExamRegion: "US",
-      sessionCountryUsCa: undefined,
+      sessionCountryCode: undefined,
     }),
     "canada",
   );
@@ -104,7 +105,7 @@ test("nn_global_region us is honored on neutral path", () => {
       strippedPathname: "/blog",
       globalRegionCookie: "us",
       marketingExamRegion: "CA",
-      sessionCountryUsCa: undefined,
+      sessionCountryCode: undefined,
     }),
     "us",
   );
@@ -116,7 +117,7 @@ test("invalid or empty cookie is ignored — session US wins over marketing CA",
       strippedPathname: "/faq",
       globalRegionCookie: null,
       marketingExamRegion: "CA",
-      sessionCountryUsCa: "US",
+      sessionCountryCode: CountryCode.US,
     }),
     "us",
   );
@@ -128,7 +129,7 @@ test("invalid or empty cookie is ignored — marketing CA when no session", () =
       strippedPathname: "/",
       globalRegionCookie: null,
       marketingExamRegion: "CA",
-      sessionCountryUsCa: undefined,
+      sessionCountryCode: undefined,
     }),
     "canada",
   );

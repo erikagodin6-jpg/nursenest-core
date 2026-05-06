@@ -1,6 +1,7 @@
-import { BlogPostStatus, BlogWorkflowStatus } from "@prisma/client";
+import { BlogPostStatus } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { normalizeBlogPostStatusWriteFields } from "@/lib/blog/blog-post-published-state";
 import { verifyBlogPublishSchemaColumns } from "@/lib/blog/blog-publish-db-guard";
 import { prisma } from "@/lib/db";
 import { classifyBlogCorpus, collectClassificationViolations, isPublishBlockedByTaxonomy } from "@/lib/taxonomy/content-write-taxonomy";
@@ -104,17 +105,16 @@ export async function POST(req: Request) {
       skipped.push({ slug: row.slug, reason: `taxonomy_invalid:${taxonomyViolations[0]?.slice(0, 120)}` });
       continue;
     }
-    let workflowStatus: BlogWorkflowStatus =
-      postStatus === BlogPostStatus.PUBLISHED ? BlogWorkflowStatus.PUBLISHED : BlogWorkflowStatus.GENERATED;
     if (
       (postStatus === BlogPostStatus.PUBLISHED || postStatus === BlogPostStatus.SCHEDULED) &&
       isPublishBlockedByTaxonomy(blogTax)
     ) {
       postStatus = BlogPostStatus.DRAFT;
       publishAt = null;
-      workflowStatus = BlogWorkflowStatus.GENERATED;
       taxonomyHeldAsDraft += 1;
     }
+
+    const statusWrite = normalizeBlogPostStatusWriteFields({ postStatus, publishAt });
 
     if (dryRun) {
       if (existing) updated += 1;
@@ -129,10 +129,10 @@ export async function POST(req: Request) {
       category: blogTax.category,
       exam: row.exam ?? null,
       tags: row.tags ?? [],
-      postStatus,
+      postStatus: statusWrite.postStatus,
       scheduledAt,
-      publishAt,
-      workflowStatus,
+      publishAt: statusWrite.publishAt,
+      workflowStatus: statusWrite.workflowStatus,
     };
 
     if (existing) {

@@ -8,7 +8,7 @@ import { marketingLessonsTopicClusterPath } from "@/lib/lessons/lesson-routes";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import {
-  pathwayLessonMarketingDetailHref,
+  pathwayLessonMarketingHubVerifiedCardHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import { StudyCard } from "@/components/ui/study-card";
@@ -103,7 +103,7 @@ function relatedLessonsForCard(
   const pool = sameTopic.length > 0 ? sameTopic : groupLessons.filter((x) => x.slug !== current.slug);
   const out: { href: string; title: string }[] = [];
   for (const x of pool) {
-    const href = pathwayLessonMarketingDetailHref(lessonsBasePath, x.slug);
+    const href = pathwayLessonMarketingHubVerifiedCardHref(lessonsBasePath, x);
     if (href) out.push({ href, title: cleanLessonTitleForDisplay(x.title) });
     if (out.length >= max) break;
   }
@@ -201,7 +201,7 @@ export function PathwayLessonsGroupedHub({
 
             <ul className="mt-6 grid list-none gap-4 p-0 sm:grid-cols-1">
               {group.lessons.map((l, idx) => {
-                const href = pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug);
+                const href = pathwayLessonMarketingHubVerifiedCardHref(lessonsBasePath, l);
                 if (!href) return null;
                 const ps = progressMap[l.slug] ?? "not_started";
                 const related = isNp ? relatedLessonsForCard(group.lessons, l, lessonsBasePath, 3) : [];

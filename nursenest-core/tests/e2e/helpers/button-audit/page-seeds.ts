@@ -64,7 +64,7 @@ export const PAID_LEARNER_SEEDS: SeedSet = {
     "/app/flashcards",
     "/app/account",
     "/app/account/subscription",
-    "/app/account/report-card",
+    "/app/account/report",
     "/app/account/readiness",
     "/app/study-planner",
   ],

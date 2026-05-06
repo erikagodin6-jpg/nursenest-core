@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { BLOG_SLUG_FORMAT_RE, coerceAdminOptionalSlugFromRawInput } from "@/lib/blog/blog-optional-slug";
 import { ADMIN_BLOG_GENERATE_AI_MAX_TOPICS_PER_RUN } from "./blog-generate-ai-constants";
 import { blogGenerateByTopicRequestSchema } from "./blog-simple-ai-draft-schema";
 
@@ -20,6 +21,37 @@ test("accepts multi-topic batch within cap", () => {
     template: "TOPIC_EXPLAINED",
   });
   assert.equal(parsed.success, true);
+});
+
+test("accepts normal article titles as topics without slug validation", () => {
+  const titles = [
+    "Nephrotic Syndrome and Low Urine Output: What Nurses Need to Know",
+    "Why does COPD cause CO2 retention?",
+    "CABG: Priority Nursing Assessments After Surgery",
+    "Parkinson’s Disease: Nursing Priorities & Red Flags",
+  ];
+
+  for (const topic of titles) {
+    const parsed = blogGenerateByTopicRequestSchema.safeParse({
+      topic,
+      exam: "nclex-rn",
+      template: "TOPIC_EXPLAINED",
+    });
+    assert.equal(parsed.success, true, topic);
+  }
+});
+
+test("rejects whitespace-only topic clearly", () => {
+  const parsed = blogGenerateByTopicRequestSchema.safeParse({
+    topic: "   \n\t   ",
+    exam: "nclex-rn",
+    template: "TOPIC_EXPLAINED",
+  });
+  assert.equal(parsed.success, false);
+  if (!parsed.success) {
+    assert.equal(parsed.error.issues[0]?.path.join("."), "topic");
+    assert.match(parsed.error.issues[0]?.message ?? "", /Topic must be at least 3/);
+  }
 });
 
 test("rejects topic and topics together", () => {
@@ -71,6 +103,20 @@ test("accepts sourceRecords with empty url string (treated as omitted)", () => {
   if (parsed.success) {
     assert.equal(parsed.data.sourceRecords?.[0]?.url, undefined);
   }
+});
+
+test("accepts article-like optional slug in payload (Zod trim only; server coerces to kebab slug)", () => {
+  const raw = "Why does COPD cause CO2 retention?";
+  const parsed = blogGenerateByTopicRequestSchema.safeParse({
+    topic: "one two thr",
+    exam: "nclex-rn",
+    template: "TOPIC_EXPLAINED",
+    slug: raw,
+  });
+  assert.equal(parsed.success, true);
+  const coerced = coerceAdminOptionalSlugFromRawInput(raw);
+  assert.ok(coerced && BLOG_SLUG_FORMAT_RE.test(coerced));
+  assert.equal(coerced, "why-does-copd-cause-co2-retention");
 });
 
 test("accepts slug with leading/trailing spaces (trim only; server normalizes case)", () => {

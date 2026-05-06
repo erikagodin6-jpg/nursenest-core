@@ -89,7 +89,7 @@ export function MobileContextDrawer({
       {/* Backdrop */}
       <button
         type="button"
-        className="absolute inset-0 bg-black/56"
+        className="absolute inset-0 touch-manipulation bg-black/56"
         aria-label="Close settings"
         onClick={onClose}
       />
@@ -107,7 +107,7 @@ export function MobileContextDrawer({
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg text-[var(--theme-muted-text)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--theme-heading-text)]"
+            className="inline-flex min-h-11 min-w-11 touch-manipulation items-center justify-center rounded-lg text-[var(--theme-muted-text)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--theme-heading-text)]"
             aria-label="Close settings"
           >
             <X className="h-5 w-5" aria-hidden />

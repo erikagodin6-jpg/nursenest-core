@@ -201,7 +201,7 @@ function PostAssessmentIdleCard({
         <button
           type="button"
           onClick={onStart}
-          className="inline-flex min-h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:opacity-92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--semantic-success)] focus-visible:ring-offset-2"
+          className="inline-flex min-h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-semibold nn-text-on-solid-fill shadow-sm transition hover:opacity-92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--semantic-success)] focus-visible:ring-offset-2"
           style={{ background: "var(--semantic-success)" }}
         >
           Start retention check
@@ -228,7 +228,7 @@ function PostAssessmentRunningCard({
     <div className="nn-lesson-quiz-module p-4 sm:p-5">
       <div className="mb-4 flex flex-wrap items-center gap-2 border-b border-[var(--semantic-border-soft)] pb-3">
         <span
-          className="flex h-8 w-8 items-center justify-center rounded-md text-white"
+          className="flex h-8 w-8 items-center justify-center rounded-md nn-text-on-solid-fill"
           style={{ background: "var(--semantic-success)" }}
           aria-hidden="true"
         >
@@ -283,7 +283,7 @@ function PostAssessmentCompleteCard({
     <div className="nn-lesson-quiz-module p-4 sm:p-5">
       <div className="flex items-center gap-2">
         <span
-          className="flex h-8 w-8 items-center justify-center rounded-md text-sm text-white"
+          className="flex h-8 w-8 items-center justify-center rounded-md text-sm nn-text-on-solid-fill"
           style={{ background: "var(--semantic-success)" }}
           aria-hidden="true"
         >

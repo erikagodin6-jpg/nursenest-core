@@ -7,19 +7,22 @@ import {
   BlogPostTemplate,
 } from "@prisma/client";
 import { generateAutomatedBlogPost } from "@/lib/blog/blog-automation-engine";
+import { prepareAdminBlogGenerationInput } from "@/lib/blog/admin-blog-generation-service";
 import { getAdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
 import { logDraftBatchItemRun } from "@/lib/admin/blog-content-automation-log";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
-import {
-  BlogInvalidSlugError,
-  ensureUniqueBlogPostSlug,
-  generateBlogSlugBaseFromTitle,
-  parseOptionalBlogSlug,
-} from "@/lib/blog/blog-optional-slug";
+import { coerceAdminOptionalSlugFromRawInput, generateBlogSlugBaseFromTitle } from "@/lib/blog/blog-optional-slug";
+import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
 import { prisma } from "@/lib/db";
 import { isRnTopicMapShellGenerationBatch, RN_TOPIC_MAP_SHELL_MAX_ITEMS } from "@/lib/blog/blog-topic-map-shell-batch-constants";
 import { DRAFT_BATCH_MAX_ITEMS_PER_PROCESS } from "@/lib/blog/blog-draft-generation-batch-constants";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import {
+  classifyBlogPipelineFailureForRepair,
+  formatBlogBatchItemFailureMessage,
+  isTransientBlogProviderError,
+  parseBlogBatchItemRepairMeta,
+} from "@/lib/blog/blog-generation-repair-classifier";
 
 const STALE_GENERATING_MS = 25 * 60 * 1000;
 
@@ -27,23 +30,12 @@ function sleepMs(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-/** Heuristic for OpenAI / upstream overload — used to slow the batch loop (no retry storm). */
-export function isLikelyTransientProviderOverload(errorText: string): boolean {
-  const m = errorText.toLowerCase();
-  return (
-    m.includes("429") ||
-    m.includes("rate limit") ||
-    m.includes("too many requests") ||
-    m.includes("throttl") ||
-    m.includes("overloaded") ||
-    m.includes("slow down") ||
-    m.includes("resource exhausted") ||
-    m.includes("temporarily unavailable") ||
-    m.includes("econnreset") ||
-    m.includes("socket hang up") ||
-    m.includes("timed out")
-  );
-}
+/**
+ * Re-exported for callers that imported this from the batch module.
+ * Canonical implementation lives in {@link blog-generation-repair-classifier}.
+ */
+/** @deprecated Use {@link isTransientBlogProviderError} from blog-generation-repair-classifier. */
+export { isTransientBlogProviderError as isLikelyTransientProviderOverload } from "@/lib/blog/blog-generation-repair-classifier";
 
 export async function refreshDraftGenerationBatchStats(batchId: string): Promise<void> {
   const batch = await prisma.blogDraftGenerationBatch.findUnique({
@@ -181,27 +173,10 @@ async function processRnTopicMapShellBatchItems(batchId: string, limit: number):
         continue;
       }
 
-      let slug: string;
-      try {
-        const normalizedSlug = parseOptionalBlogSlug(row.slug) ?? undefined;
-        const base = normalizedSlug ?? generateBlogSlugBaseFromTitle(row.title);
-        slug = await ensureUniqueBlogPostSlug(base);
-      } catch (e) {
-        const msg = BlogInvalidSlugError.is(e) ? e.message : e instanceof Error ? e.message : String(e);
-        await prisma.blogDraftGenerationBatchItem.update({
-          where: { id: item.id },
-          data: { status: BlogDraftGenerationBatchItemStatus.FAILED, error: `invalid_slug:${msg.slice(0, 200)}` },
-        });
-        results.push({
-          itemId: item.id,
-          ordinal: item.ordinal,
-          topicRaw: item.topicRaw,
-          outcome: "failed",
-          message: msg,
-        });
-        await refreshDraftGenerationBatchStats(batchId);
-        continue;
-      }
+      const normalizedSlug =
+        typeof row.slug === "string" && row.slug.trim() ? coerceAdminOptionalSlugFromRawInput(row.slug) : null;
+      const base = normalizedSlug ?? generateBlogSlugBaseFromTitle(row.title);
+      const slug = await ensureUniqueBlogPostSlug(base);
 
       const normalizedTopic = normalizeBlogTopicKey(row.tags[1] ?? row.title);
       if (normalizedTopic) {
@@ -287,7 +262,7 @@ async function processRnTopicMapShellBatchItems(batchId: string, limit: number):
         message: msg,
       });
       await refreshDraftGenerationBatchStats(batchId);
-      if (isLikelyTransientProviderOverload(msg)) {
+      if (isTransientBlogProviderError(msg)) {
         safeServerLog("blog", "shell_batch_db_throttle_backoff", {
           batchId,
           itemOrdinal: item.ordinal,
@@ -357,13 +332,38 @@ export async function processDraftGenerationBatchItems(
 
   for (const item of items) {
     try {
+      const claimed = await prisma.blogDraftGenerationBatchItem.updateMany({
+        where: { id: item.id, status: BlogDraftGenerationBatchItemStatus.PENDING },
+        data: { status: BlogDraftGenerationBatchItemStatus.GENERATING, error: null },
+      });
+      if (claimed.count === 0) {
+        results.push({
+          itemId: item.id,
+          ordinal: item.ordinal,
+          topicRaw: item.topicRaw,
+          outcome: "skipped",
+          message: "already_claimed_or_not_pending",
+        });
+        continue;
+      }
+
+      const prepared = await prepareAdminBlogGenerationInput({
+        rawTitle: item.topicRaw,
+        exam: batch.exam,
+        targetKeyword: item.topicRaw,
+        publishMode: "draft",
+      });
+
+      const idemKey = `${batchId}:${item.id}`;
       await prisma.blogDraftGenerationBatchItem.update({
         where: { id: item.id },
-        data: { status: BlogDraftGenerationBatchItemStatus.GENERATING, error: null },
+        data: {
+          error: `[NN_REPAIRING] ${item.topicRaw.slice(0, 200)}`.slice(0, 4000),
+        },
       });
 
       const result = await generateAutomatedBlogPost({
-        topic: item.topicRaw,
+        topic: prepared.topic,
         keywords: batch.keywords ?? undefined,
         exam: batch.exam,
         country,
@@ -373,17 +373,31 @@ export async function processDraftGenerationBatchItems(
         tone,
         includeImage: batch.includeImage,
         includeAiImage: batch.includeAiImage,
-        targetKeyword: item.topicRaw,
+        targetKeyword: prepared.targetKeyword,
         keywordCluster: batch.keywordCluster ?? undefined,
-        autoPublish: true,
+        fixedSlug: prepared.uniqueSlug,
+        autoPublish: false,
+        generationIdempotencyKey: idemKey,
       });
 
       if (!result.ok) {
+        const cl = classifyBlogPipelineFailureForRepair({
+          stage: result.stage ?? "body",
+          error: result.error,
+          code: result.code,
+          details: result.details,
+        });
+        const repairPasses = result.repairPassesUsed ?? 0;
+        const errText = formatBlogBatchItemFailureMessage({
+          originalError: result.error,
+          repairAttempts: repairPasses,
+          terminal: !cl.recoverable,
+        });
         await prisma.blogDraftGenerationBatchItem.update({
           where: { id: item.id },
           data: {
             status: BlogDraftGenerationBatchItemStatus.FAILED,
-            error: result.error.slice(0, 4000),
+            error: errText.slice(0, 4000),
           },
         });
         results.push({
@@ -394,16 +408,22 @@ export async function processDraftGenerationBatchItems(
           message: result.error,
         });
         await refreshDraftGenerationBatchStats(batchId);
+        const parsed = parseBlogBatchItemRepairMeta(errText);
         await logDraftBatchItemRun({
           batchId,
           itemId: item.id,
           ordinal: item.ordinal,
           topicRaw: item.topicRaw,
           outcome: "failed",
-          message: result.error,
+          message: parsed.message || result.error,
           createdById: batch.createdById,
+          extraMetadata: {
+            repairAttempts: parsed.repairAttempts,
+            terminal: parsed.terminal,
+            idempotencyKey: idemKey,
+          },
         });
-        if (isLikelyTransientProviderOverload(result.error)) {
+        if (isTransientBlogProviderError(result.error)) {
           safeServerLog("blog", "draft_batch_provider_throttle_backoff", {
             batchId,
             itemOrdinal: item.ordinal,
@@ -479,6 +499,10 @@ export async function processDraftGenerationBatchItems(
         outcome: "completed",
         blogPostId: result.post.id,
         createdById: batch.createdById,
+        extraMetadata: {
+          repairPassesUsed: result.repairPassesUsed ?? 0,
+          idempotencyKey: idemKey,
+        },
       });
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
@@ -509,7 +533,7 @@ export async function processDraftGenerationBatchItems(
         message: msg,
         createdById: batch.createdById,
       });
-      if (isLikelyTransientProviderOverload(msg)) {
+      if (isTransientBlogProviderError(msg)) {
         safeServerLog("blog", "draft_batch_provider_throttle_backoff", {
           batchId,
           itemOrdinal: item.ordinal,

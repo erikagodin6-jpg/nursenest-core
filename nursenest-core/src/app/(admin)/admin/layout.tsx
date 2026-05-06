@@ -5,6 +5,7 @@ import { requireAdmin } from "@/lib/auth/guards";
 import { getStaffSession } from "@/lib/auth/staff-session";
 import type { StaffTier } from "@/lib/auth/staff-roles";
 import { getAdminAiGenerationGate, warnAdminAiGenerationMisconfigurationIfNeeded } from "@/lib/ai/admin-ai-policy";
+import { AdminRenderedI18nKeyDevGuard } from "@/components/admin/admin-rendered-i18n-key-dev-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,7 @@ export default async function AdminSubLayout({ children }: { children: React.Rea
 
   return (
     <div className="flex min-h-[70vh] min-w-0 flex-col bg-[var(--theme-bg)] lg:min-h-screen">
+      <AdminRenderedI18nKeyDevGuard />
       <AdminNavClient staffTier={tier} />
       <AdminAiGenerationProvider value={aiGate}>
         {!aiGate.runnable ? (

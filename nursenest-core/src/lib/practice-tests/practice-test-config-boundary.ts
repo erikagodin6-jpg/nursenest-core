@@ -18,15 +18,41 @@ export const DEFAULT_SAFE_PRACTICE_TEST_CONFIG: PracticeTestConfigJson = {
   timeLimitSec: null,
 };
 
-const selectionModeZ = z.enum(["random", "targeted", "weak", "missed", "cat"]);
+const selectionModeZ = z.enum(["random", "targeted", "weak", "missed", "starred", "unseen", "cat"]);
 const linearDeliveryZ = z.enum(["practice", "exam"]);
 const linearRationaleVisibilityZ = z.enum(["after_each", "end_of_exam"]);
-const catSelectionBasisZ = z.enum(["random", "targeted", "weak", "missed"]);
+const catSelectionBasisZ = z.enum(["random", "targeted", "weak", "missed", "starred"]);
+const catPoolSelectionStrictnessZ = z.enum(["soft", "strict"]);
+const catSelectionExpansionTierZ = z.enum(["exact", "soft", "broad"]);
+const catSelectionFilterBlockZ = z.object({
+  topicNames: z.array(z.string()).default([]),
+  catSelectionBasis: catSelectionBasisZ,
+  poolRequestStrictness: catPoolSelectionStrictnessZ,
+});
+const catSelectionAppliedMetaZ = z.object({
+  selectionStrictness: catSelectionExpansionTierZ,
+  requestedFilters: catSelectionFilterBlockZ,
+  appliedFilters: catSelectionFilterBlockZ,
+  matchedCountBeforeExpansion: z.coerce.number().int().min(0),
+  finalPoolSize: z.coerce.number().int().min(0),
+  candidatePoolSize: z.coerce.number().int().min(0).optional(),
+  fallbackReason: z.string().max(600).optional(),
+});
 const catPresentationZ = z.enum(["practice", "exam_simulation"]);
 const catFeedbackZ = z.enum(["study", "test"]);
 const catAdaptiveSessionTypeZ = z.enum(["cat", "practice"]);
 const catEngineTypeZ = z.enum(["CAT", "SIMULATION"]);
 const catEngineModeZ = z.enum(["production_ready", "beta", "mini_adaptive", "simulation", "unavailable"]);
+const studyLaunchPayloadZ = z
+  .object({
+    pathwayId: z.union([z.null(), z.string().max(120)]).optional(),
+    mode: z.string().max(40).optional(),
+    selectedCategories: z.array(z.string().max(80)).max(40).optional(),
+    filters: z.record(z.union([z.string(), z.number(), z.boolean(), z.null()])).optional(),
+    count: z.coerce.number().int().min(1).max(200).optional(),
+    shuffle: z.boolean().optional(),
+  })
+  .optional();
 
 /** Defaults on every field so partial persisted JSON still parses; unknown keys stripped. */
 const practiceTestConfigSchema = z.object({
@@ -54,10 +80,13 @@ const practiceTestConfigSchema = z.object({
   catWeakPriorityByCanonical: z.record(z.coerce.number()).optional(),
   catPresentationMode: catPresentationZ.optional(),
   catExamFeedbackMode: catFeedbackZ.optional(),
+  catPoolSelectionStrictness: catPoolSelectionStrictnessZ.optional(),
+  catSelectionAppliedMeta: catSelectionAppliedMetaZ.optional(),
   catAdaptiveSessionType: catAdaptiveSessionTypeZ.optional(),
   catExamConfigId: z.union([z.null(), z.string()]).optional(),
   sessionPickSalt: z.string().min(8).max(128).optional(),
   disableOptionShuffle: z.boolean().optional(),
+  studyLaunchPayload: studyLaunchPayloadZ,
 });
 
 function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
@@ -65,7 +94,15 @@ function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
   const o = raw as Record<string, unknown>;
   const out: Partial<PracticeTestConfigJson> = {};
   const sm = o.selectionMode;
-  if (sm === "random" || sm === "targeted" || sm === "weak" || sm === "missed" || sm === "cat") {
+  if (
+    sm === "random" ||
+    sm === "targeted" ||
+    sm === "weak" ||
+    sm === "missed" ||
+    sm === "starred" ||
+    sm === "unseen" ||
+    sm === "cat"
+  ) {
     out.selectionMode = sm;
   }
   if (typeof o.pathwayId === "string" && o.pathwayId.length > 0) out.pathwayId = o.pathwayId;
@@ -88,8 +125,12 @@ function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
     }
   }
   const basis = o.catSelectionBasis;
-  if (basis === "random" || basis === "targeted" || basis === "weak" || basis === "missed") {
+  if (basis === "random" || basis === "targeted" || basis === "weak" || basis === "missed" || basis === "starred") {
     out.catSelectionBasis = basis;
+  }
+  const pss = o.catPoolSelectionStrictness;
+  if (pss === "soft" || pss === "strict") {
+    out.catPoolSelectionStrictness = pss;
   }
   const pm = o.catPresentationMode;
   if (pm === "practice" || pm === "exam_simulation") out.catPresentationMode = pm;
@@ -102,6 +143,20 @@ function loosePickFromRaw(raw: unknown): Partial<PracticeTestConfigJson> {
   const examCfg = o.catExamConfigId;
   if (examCfg === null) out.catExamConfigId = null;
   else if (typeof examCfg === "string" && examCfg.length > 0) out.catExamConfigId = examCfg.slice(0, 120);
+  const appliedMetaRaw = o.catSelectionAppliedMeta;
+  if (appliedMetaRaw && typeof appliedMetaRaw === "object" && !Array.isArray(appliedMetaRaw)) {
+    const m = catSelectionAppliedMetaZ.safeParse(appliedMetaRaw);
+    if (m.success) {
+      out.catSelectionAppliedMeta = m.data;
+    }
+  }
+  const slp = o.studyLaunchPayload;
+  if (slp && typeof slp === "object" && !Array.isArray(slp)) {
+    const m = studyLaunchPayloadZ.safeParse(slp);
+    if (m.success && m.data) {
+      out.studyLaunchPayload = m.data;
+    }
+  }
   return out;
 }
 

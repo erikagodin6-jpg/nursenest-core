@@ -5,6 +5,7 @@
 @import "../../styles/tokens.css";
 @import "../../styles/learner-ds.css";
 @import "./learner-surface-primitives.css";
+@import "./mobile-ux-standards.css";
 
 html,
 body {
@@ -16,8 +17,8 @@ body {
  * Mobile UX (≤768px): iOS safe areas are applied at component level (header, learner shell, drawers).
  * Touch targets: prefer min-h-11 (2.75rem) for primary actions; WCAG 2.5.5 recommends ~44×44 CSS px.
  *
- * Fonts: DM Sans is loaded via `next/font/google` in `app/layout.tsx` with `display: "swap"`
- * (see `font-display` on generated `@font-face`), `adjustFontFallback: true`, and `preload: true`.
+ * Fonts: keep the `--font-dm-sans` variable local so production builds do not fetch remote Google font CSS.
+ * The family falls back to any installed DM Sans, then system UI.
  * Do not add orphan `@font-face { font-display: swap }` rules without `src:` — they are invalid CSS.
  */
 
@@ -34,7 +35,9 @@ body {
  * prevented theme switching from changing page colors.
  */
 :root {
+  --font-dm-sans: "DM Sans", system-ui, sans-serif;
   --font-sans: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
+  --font-devanagari: "Noto Sans Devanagari", "Mangal", "Kohinoor Devanagari", "Nirmala UI", var(--font-sans);
   /* Slightly rounder global radius → calmer cards without “chunky” mobile tiles */
   --radius: 0.8125rem;
   --color-warmwhite: #fdfcfa;
@@ -187,7 +190,7 @@ body {
  *            .nn-surface-bubble, .nn-surface-bubble-strong, .nn-surface-accent-soft,
  *            .nn-surface-accent-strong, .nn-text-accent, .nn-ring-accent, .nn-callout-accent
  */
-html([data-theme]) {
+html[data-theme] {
   --theme-luminance: light;
   /*
    * Surfaces: neutral by default — theme color is concentrated on bubble/accent surfaces below.
@@ -317,7 +320,16 @@ html([data-theme]) {
    * --header-nav-border        main nav bottom border (stronger than utility)
    * --header-nav-shadow        nav drop shadow — separates it from hero below
    * --footer-surface           footer background, slightly heavier than page sections
+   *
+   * Marketing SiteHeader (light group): utility + tier bands share one fixed chrome surface so
+   * `[data-theme]` personality does not tint those rows independently. Middle row stays neutral paper.
+   * (Exception: documented fixed sRGB anchors — see semantic-color-guardrails.mdc for product chrome.)
    */
+  --nn-header-utility-bg: var(--theme-header-top-bg, var(--theme-nav-background, #0f172a));
+  --nn-header-tier-bg: var(--theme-header-main-bg, var(--nn-header-utility-bg));
+  --nn-header-primary-bg: var(--theme-header-secondary-bg, #ffffff);
+  --nn-header-primary-fg: var(--theme-header-secondary-fg, #0f172a);
+  --nn-header-on-accent-fg: var(--theme-nav-foreground, #f8fafc);
   --header-utility-surface: color-mix(in srgb, var(--palette-top-bar-background, var(--theme-topbar-bg)) 16%, var(--bg-page));
   --header-utility-border: color-mix(in srgb, var(--palette-top-bar-background, var(--theme-topbar-bg)) 35%, var(--border-subtle));
   --header-utility-text: color-mix(in srgb, var(--palette-top-bar-text, var(--theme-heading-text)) 82%, var(--palette-text-muted, var(--theme-muted-text)));
@@ -847,6 +859,14 @@ html[data-theme="storm-slate"] {
   }
 
   /**
+   * Copy on solid brand / semantic / chroma fills — avoids ad-hoc `text-white` in TSX.
+   * Pair with `bg-[var(--semantic-brand)]`, `bg-primary`, `bg-green-600`, inline success fills, etc.
+   */
+  .nn-text-on-solid-fill {
+    color: var(--text-on-dark);
+  }
+
+  /**
    * Long marketing hubs: skip layout/paint for off-screen sections when supported
    * (keeps scrolling smoother on mid/low-end phones).
    */
@@ -869,6 +889,10 @@ body {
   font-weight: 400;
   line-height: 1.6;
   text-rendering: optimizeLegibility;
+}
+
+:where(html[lang="hi"], html[lang="hi"] body, [data-locale="hi"], [lang="hi"]) {
+  font-family: var(--font-devanagari);
 }
 
 :where(p, li, dd) {
@@ -1458,10 +1482,16 @@ article .prose :where(pre) {
 }
 
 .nn-card-interactive:hover {
-  transform: translateY(var(--lift-hover-y));
+  transform: translateY(var(--lift-hover-y)) scale(1.006);
   box-shadow: var(--elevation-hover);
   border-color: var(--border-strong, color-mix(in srgb, var(--theme-primary) 32%, transparent));
   background-color: color-mix(in srgb, var(--accent-soft, transparent) 55%, var(--bg-card, var(--theme-card-bg)));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-card-interactive:hover {
+    transform: translateY(var(--lift-hover-y));
+  }
 }
 
 /* Premium interaction primitives shared across marketing/lessons/auth/dashboard surfaces. */
@@ -1505,6 +1535,113 @@ html[data-theme] .nn-marketing-surface {
 /* Homepage hero: flat canvas — theme accents live in CTAs / links */
 .nn-hero-pastel-layers {
   background-image: none;
+}
+
+/*
+ * Homepage marketing richness (recovery) — opt-in utilities; token / color-mix only.
+ */
+.nn-home-marketing-root {
+  background-image: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-brand) 3.5%, var(--page-bg, var(--bg-page))) 0%,
+    var(--page-bg, var(--bg-page)) 22%,
+    color-mix(in srgb, var(--semantic-panel-cool) 8%, var(--page-bg, var(--bg-page))) 100%
+  );
+}
+
+.nn-home-marketing-rich-hero.nn-hero-bridge {
+  background-color: var(--page-bg, var(--bg-page));
+  background-image:
+    radial-gradient(
+      ellipse 120% 85% at 100% -20%,
+      color-mix(in srgb, var(--semantic-chart-5) 12%, transparent),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 90% 70% at 0% 105%,
+      color-mix(in srgb, var(--semantic-chart-3) 14%, transparent),
+      transparent 50%
+    ),
+    linear-gradient(
+      168deg,
+      color-mix(in srgb, var(--semantic-brand) 8%, var(--page-bg, var(--bg-page))) 0%,
+      color-mix(in srgb, var(--semantic-panel-cool) 10%, var(--page-bg, var(--bg-page))) 40%,
+      var(--page-bg, var(--bg-page)) 100%
+    );
+  background-repeat: no-repeat;
+}
+
+.nn-home-hero-product-band {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-info) 5%, var(--page-bg, var(--bg-page))) 0%,
+    var(--page-bg, var(--bg-page)) 55%,
+    color-mix(in srgb, var(--semantic-brand) 4%, var(--page-bg, var(--bg-page))) 100%
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-warm {
+  background: linear-gradient(
+    185deg,
+    color-mix(in srgb, var(--semantic-panel-warm) 14%, var(--page-bg, var(--bg-page))) 0%,
+    var(--page-bg, var(--bg-page)) 100%
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-positive {
+  background: linear-gradient(
+    188deg,
+    color-mix(in srgb, var(--semantic-panel-positive) 12%, var(--page-bg, var(--bg-page))) 0%,
+    var(--page-bg, var(--bg-page)) 100%
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-cool {
+  background: linear-gradient(
+    182deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 13%, var(--page-bg, var(--bg-page))) 0%,
+    var(--page-bg, var(--bg-page)) 100%
+  );
+}
+
+.nn-home-rich-placeholder-card {
+  box-shadow: var(--shadow-elevated, var(--elevation-overlay));
+}
+
+.nn-home-rich-placeholder-band--tone-warm .nn-home-rich-placeholder-card {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 1, var(--semantic-warning));
+  background: linear-gradient(
+    200deg,
+    color-mix(in srgb, var(--semantic-panel-warm) 16%, var(--surface-base, var(--bg-card))) 0%,
+    color-mix(in srgb, var(--semantic-chart-4) 7%, var(--surface-base, var(--bg-card))) 100%
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-positive .nn-home-rich-placeholder-card {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 1, var(--semantic-success));
+  background: linear-gradient(
+    205deg,
+    color-mix(in srgb, var(--semantic-panel-positive) 14%, var(--surface-base, var(--bg-card))) 0%,
+    color-mix(in srgb, var(--semantic-chart-2) 8%, var(--surface-base, var(--bg-card))) 100%
+  );
+}
+
+.nn-home-rich-placeholder-band--tone-cool .nn-home-rich-placeholder-card {
+  border-color: color-mix(in srgb, var(--semantic-border-soft) 1, var(--semantic-info));
+  background: linear-gradient(
+    205deg,
+    color-mix(in srgb, var(--semantic-panel-cool) 18%, var(--surface-base, var(--bg-card))) 0%,
+    color-mix(in srgb, var(--semantic-panel-muted) 12%, var(--surface-base, var(--bg-card))) 100%
+  );
+}
+
+.nn-home-pathways-band {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--semantic-brand) 4%, var(--bg-section-alt, var(--semantic-bg-soft))) 0%,
+    var(--bg-section-alt, var(--semantic-bg-soft)) 45%,
+    color-mix(in srgb, var(--semantic-success) 5%, var(--bg-section-alt, var(--semantic-bg-soft))) 100%
+  );
 }
 
 /* Optional: full-width section band on page canvas */
@@ -2107,57 +2244,62 @@ html[data-theme] .nn-marketing-surface {
 
 /* === Light-theme 3-layer header ===
  *
- * Dark themes use a single unified dark header (nn-header-nav, unchanged above).
+ * Dark themes use a single unified dark header (nn-header-dark-surface).
  * Light themes use three stacked bands:
- *   1. nn-header-utility-dark  – top preferences rail on brand/nav background
- *   2. nn-header-logo-row      – logo + nav links + CTA on page background
- *   3. nn-header-accent-bar    – thin bottom strip on brand/nav background
+ *   1. nn-header-utility-dark  – top preferences rail (fixed --nn-header-utility-bg, not per-theme nav chrome)
+ *   2. nn-header-logo-row      – logo + nav links + CTA on --nn-header-primary-bg
+ *   3. nn-header-nav-row (direct child) – exam tier strip, same surface as utility
  */
 
-/* Top brand bar — uses nn-nav-bg from the sticky wrapper's CSS vars (set by getNavChromeVars) */
+/* Top preferences rail — fixed navy slate; independent of getNavChromeVars / theme chrome */
 .nn-header-utility-dark {
-  background: var(--nn-nav-bg, var(--theme-nav-background, var(--nav-bg)));
-  color: #ffffff;
-  border-bottom: 1px solid var(--nn-nav-border, color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 18%, transparent));
-  --header-utility-text: #ffffff;
-  --header-utility-border: var(--nn-nav-border, color-mix(in srgb, var(--nn-nav-fg, var(--nav-fg)) 18%, transparent));
-  --nav-fg: #ffffff;
-  --nav-link: #ffffff;
-  --nav-link-hover: #ffffff;
-  --nav-link-active: #ffffff;
-  --nav-muted: color-mix(in srgb, #ffffff 70%, transparent);
-  --nav-border: color-mix(in srgb, #ffffff 22%, transparent);
-  --nav-hover: color-mix(in srgb, #ffffff 12%, transparent);
-  --nav-active: color-mix(in srgb, #ffffff 18%, transparent);
+  background: var(--nn-header-utility-bg);
+  color: var(--nn-header-on-accent-fg);
+  border-bottom: 1px solid color-mix(in srgb, var(--nn-header-on-accent-fg) 18%, transparent);
+  --header-utility-text: var(--nn-header-on-accent-fg);
+  --header-utility-border: color-mix(in srgb, var(--nn-header-on-accent-fg) 22%, transparent);
+  --nav-fg: var(--nn-header-on-accent-fg);
+  --nav-link: var(--nn-header-on-accent-fg);
+  --nav-link-hover: var(--nn-header-on-accent-fg);
+  --nav-link-active: var(--nn-header-on-accent-fg);
+  --nav-muted: color-mix(in srgb, var(--nn-header-on-accent-fg) 72%, transparent);
+  --nav-border: color-mix(in srgb, var(--nn-header-on-accent-fg) 22%, transparent);
+  --nav-hover: color-mix(in srgb, var(--nn-header-on-accent-fg) 14%, transparent);
+  --nav-active: color-mix(in srgb, var(--nn-header-on-accent-fg) 20%, transparent);
   /* --nav-active is a light translucency on the brand bar; keep chrome links white but use dark text on selected chips. */
-  --nav-on-active-fg: var(--theme-heading-text, #0f172a);
+  --nav-on-active-fg: var(--nn-header-primary-fg);
 }
 
-/* Logo/content row — sits on white/near-white surface, visually above the tinted page canvas */
+/* Logo/content row — neutral paper; theme personality stays in link hovers / CTAs, not the band wash */
 .nn-header-logo-row {
-  background: var(--theme-header-surface, var(--palette-surface, #ffffff));
-  color: var(--theme-heading-text);
+  background: var(--nn-header-primary-bg);
+  color: var(--nn-header-primary-fg);
   border-bottom: none;
   box-shadow: none;
   isolation: isolate;
   transition: box-shadow var(--motion-base) var(--motion-ease);
+  /* Sticky wrapper still injects per-theme --nn-nav-*; rebind for this subtree (mobile icons + middle row). */
+  --nn-nav-fg: var(--nn-header-primary-fg);
+  --nn-nav-border: color-mix(in srgb, var(--nn-header-primary-fg) 16%, var(--nn-header-primary-bg));
+  --nn-nav-hover-bg: color-mix(in srgb, var(--nn-header-primary-fg) 10%, var(--nn-header-primary-bg));
+  --nn-nav-hover-fg: var(--nn-header-primary-fg);
   /* Override header link tokens to work on a light page surface */
-  --header-link: var(--theme-heading-text);
+  --header-link: var(--nn-header-primary-fg);
   --header-link-hover: var(--theme-brand-strong, var(--theme-primary));
   --header-link-active: var(--theme-brand-strong, var(--theme-primary));
-  --header-background: var(--theme-header-surface, var(--palette-surface, #ffffff));
-  --header-text: var(--theme-heading-text);
-  --header-border: color-mix(in srgb, var(--theme-border, var(--border)) 50%, transparent);
+  --header-background: var(--nn-header-primary-bg);
+  --header-text: var(--nn-header-primary-fg);
+  --header-border: color-mix(in srgb, var(--nn-header-primary-fg) 14%, var(--nn-header-primary-bg));
   /* Override nav surface tokens to work on light page surface */
-  --nav-fg: var(--theme-heading-text);
-  --nav-link: var(--theme-heading-text);
+  --nav-fg: var(--nn-header-primary-fg);
+  --nav-link: var(--nn-header-primary-fg);
   --nav-link-hover: var(--theme-brand-strong, var(--theme-primary));
-  --nav-hover: color-mix(in srgb, var(--theme-primary) 8%, var(--theme-header-surface, #ffffff));
-  --nav-active: color-mix(in srgb, var(--theme-primary) 10%, var(--theme-header-surface, #ffffff));
+  --nav-hover: color-mix(in srgb, var(--nn-header-primary-fg) 8%, var(--nn-header-primary-bg));
+  --nav-active: color-mix(in srgb, var(--theme-primary) 12%, var(--nn-header-primary-bg));
   /* Match header-link-active: dark emphasis on a light selected tint (avoids inheriting white --nav-link-active from dark themes). */
   --nav-link-active: var(--theme-brand-strong, var(--theme-primary));
   --nav-on-active-fg: var(--nav-link-active);
-  --nav-border: var(--theme-border, var(--border));
+  --nav-border: color-mix(in srgb, var(--nn-header-primary-fg) 14%, var(--nn-header-primary-bg));
   --nav-muted: var(--theme-muted-text, var(--text-muted));
 }
 
@@ -2192,9 +2334,8 @@ html[data-theme] .nn-marketing-surface {
   --header-border: var(--nn-nav-border, rgba(255, 255, 255, 0.18));
 }
 
-/* Nav row — bottom product-nav strip in light-theme 3-row headers.
- * Child of nn-header-logo-row; re-asserts dark-bar surface tokens so links read
- * white-on-dark instead of inheriting the light page-surface overrides above. */
+/* Nav row — bottom exam-tier strip (desktop). Under `.nn-header-logo-row` the tier surface is
+ * overridden to `--nn-header-tier-bg`; dark unified headers keep theme nav chrome here. */
 .nn-header-nav-row {
   background: var(--nn-nav-bg, var(--theme-nav-background, var(--nav-bg)));
   color: #ffffff;
@@ -2223,6 +2364,24 @@ html[data-theme] .nn-marketing-surface {
     transform: none;
     opacity: 1;
   }
+}
+
+/* Light public header: RN/PN/NP tier strip matches utility band (fixed chrome, not theme-tinted middle). */
+.nn-header-logo-row > .nn-header-nav-row {
+  background: var(--nn-header-tier-bg);
+  color: var(--nn-header-on-accent-fg);
+  border-top: 1px solid color-mix(in srgb, var(--nn-header-on-accent-fg) 16%, transparent);
+  --nav-fg: var(--nn-header-on-accent-fg);
+  --nav-link: var(--nn-header-on-accent-fg);
+  --nav-link-hover: var(--nn-header-on-accent-fg);
+  --nav-link-active: #ffffff;
+  --nav-hover: color-mix(in srgb, var(--nn-header-on-accent-fg) 14%, transparent);
+  --nav-active: color-mix(in srgb, var(--nn-header-on-accent-fg) 20%, transparent);
+  --nav-on-active-fg: var(--nn-header-primary-fg);
+  --nav-border: color-mix(in srgb, var(--nn-header-on-accent-fg) 22%, transparent);
+  --nav-muted: color-mix(in srgb, var(--nn-header-on-accent-fg) 70%, transparent);
+  --header-background: var(--nn-header-tier-bg);
+  --header-border: color-mix(in srgb, var(--nn-header-on-accent-fg) 20%, transparent);
 }
 
 /* Bottom accent strip separating logo row from page content (light themes) */
@@ -2538,6 +2697,12 @@ html[data-theme] .nn-marketing-trust-strip {
 .nn-btn-primary {
   font-weight: var(--nn-font-weight-ui);
   background: var(--role-cta, var(--theme-primary));
+  background-image: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--role-cta-foreground, #ffffff) 10%, var(--role-cta, var(--theme-primary))) 0%,
+    var(--role-cta, var(--theme-primary)) 52%,
+    color-mix(in srgb, var(--role-cta-pressed, var(--accent-pressed)) 18%, var(--role-cta, var(--theme-primary))) 100%
+  );
   color: var(--role-cta-foreground, #ffffff);
   border-radius: 9999px;
   box-shadow: 0 4px 14px var(--role-cta-shadow, color-mix(in srgb, var(--theme-primary) 28%, transparent));
@@ -3055,6 +3220,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   border: 1px solid color-mix(in srgb, var(--theme-primary) 9%, var(--border-subtle));
   background: var(--bg-card);
   box-shadow: var(--shadow-card);
+  color: var(--theme-card-foreground-readable, var(--theme-body-text));
 }
 
 .nn-study-card--wash {
@@ -3092,10 +3258,11 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 
 /* Pathway lesson: editorial title scale — stronger hierarchy, comfortable long reads. */
 .nn-lesson-page-title {
-  font-size: clamp(1.5rem, 2.4vw, 2.0625rem);
+  /* Slightly larger floor on phones for clinical scan hierarchy; cap unchanged on wide viewports. */
+  font-size: clamp(1.375rem, 0.65rem + 2.8vw, 2.0625rem);
   font-weight: 600;
   letter-spacing: -0.028em;
-  line-height: 1.18;
+  line-height: 1.2;
   color: var(--theme-heading-text, var(--palette-heading));
 }
 
@@ -3105,8 +3272,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   max-width: min(48.75rem, 100%);
   margin-left: auto;
   margin-right: auto;
-  padding-left: clamp(0.75rem, 2vw, 1.25rem);
-  padding-right: clamp(0.75rem, 2vw, 1.25rem);
+  padding-left: clamp(1rem, 3vw, 1.25rem);
+  padding-right: clamp(1rem, 3vw, 1.25rem);
 }
 
 /* Premium embedded assessment modules (pre/post) — distinct from article prose. */
@@ -3164,7 +3331,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   font-size: clamp(1.125rem, 0.55vw + 1rem, 1.35rem);
   font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.28;
+  line-height: 1.32;
 }
 
 .nn-lesson-support-card {
@@ -3331,12 +3498,21 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
  */
 .nn-lesson-content.nn-lesson-prose,
 .nn-lesson-prose {
+  box-sizing: border-box;
+  min-width: 0;
   font-size: 0.9375rem;
   font-weight: 400;
   line-height: 1.62;
   letter-spacing: -0.006em;
   color: var(--theme-body-text, var(--semantic-text-primary, var(--palette-text)));
-  max-width: min(62ch, 100%);
+  max-width: min(68ch, 100%);
+}
+
+@media (max-width: 767.98px) {
+  .nn-lesson-content.nn-lesson-prose,
+  .nn-lesson-prose {
+    line-height: 1.68;
+  }
 }
 
 @media (min-width: 768px) {
@@ -3345,6 +3521,56 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
     font-size: 1rem;
     line-height: 1.6;
   }
+}
+
+@media (min-width: 1024px) {
+  .nn-lesson-content.nn-lesson-prose,
+  .nn-lesson-prose {
+    max-width: min(82ch, 100%);
+  }
+}
+
+/* Wide clinical artifacts: keep within viewport on phones (no horizontal page scroll). */
+.nn-lesson-content.nn-lesson-prose pre,
+.nn-lesson-prose pre,
+.nn-lesson-content.nn-lesson-prose table,
+.nn-lesson-prose table {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Lesson callouts — optional **Exam Tip:** / **Clinical Insight:** paragraph prefixes */
+.nn-lesson-callout {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  border-radius: var(--radius-xl, 0.875rem);
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--semantic-brand));
+  padding: 1rem 1.15rem;
+  box-shadow: var(--shadow-card, var(--elevation-rest));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 35%, var(--semantic-surface));
+}
+.nn-lesson-callout--exam {
+  border-color: color-mix(in srgb, var(--semantic-chart-2) 28%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-chart-2) 08%, var(--semantic-surface));
+}
+.nn-lesson-callout--clinical {
+  border-color: color-mix(in srgb, var(--semantic-chart-3) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 40%, var(--semantic-surface));
+}
+.nn-lesson-callout__label {
+  margin: 0 0 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--semantic-text-muted);
+}
+.nn-lesson-callout__body {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--semantic-text-secondary);
 }
 
 /* ── Prose bullet and numbered lists ───────────────────────────────────────
@@ -3504,8 +3730,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   --lsc-surface: color-mix(in srgb, var(--lsc-soft) 38%, var(--bg-card, var(--theme-card-bg)) 62%);
 
   border-radius: 0.875rem;
-  border: 1px solid color-mix(in srgb, var(--lsc-color) 14%, var(--semantic-border-soft));
-  border-left: 3px solid color-mix(in srgb, var(--lsc-color) 42%, var(--semantic-border-soft));
+  border: 1px solid color-mix(in srgb, var(--lsc-color) 11%, var(--semantic-border-soft));
+  border-left: 2px solid color-mix(in srgb, var(--lsc-color) 34%, var(--semantic-border-soft));
   background: var(--lsc-surface);
   padding: 1.125rem 1.125rem 1.25rem 1.25rem;
   box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 80%, transparent);
@@ -3630,6 +3856,19 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   line-height: 1.5;
 }
 
+/* Lead figure under section heading — inherits section role tint from `.nn-lesson-section-card`. */
+.nn-lesson-section-card .nn-lesson-section-lead-figure {
+  border-color: color-mix(in srgb, var(--lsc-color) 16%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--lsc-color) 5%, var(--bg-card, var(--theme-card-bg)));
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 68%, transparent);
+}
+
+.lv-section[data-lsc-role] .nn-lesson-section-lead-figure {
+  border-color: color-mix(in srgb, var(--semantic-brand) 18%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 14%, var(--bg-card, var(--theme-card-bg)));
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--semantic-border-soft) 68%, transparent);
+}
+
 /* ── Quiz rationale panels ───────────────────────────────────────────────────
  * Green-tinted inset block beneath each question when answers are revealed.
  * Clear visual separation from options; sized for comfortable reading.
@@ -3678,11 +3917,25 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   background: color-mix(in srgb, var(--semantic-panel-muted) 35%, var(--theme-page-bg) 65%);
 }
 
-.nn-lesson-page--learner-app .nn-lesson-editorial-rail {
+.nn-lesson-page--learner-app .nn-lesson-editorial-rail--hero {
   width: 100%;
   max-width: min(48rem, 100%);
   margin-inline: auto;
   padding-inline: clamp(1rem, 3vw, 1.5rem);
+}
+
+.nn-lesson-page--learner-app .nn-lesson-editorial-rail--main {
+  width: 100%;
+  max-width: min(60rem, 100%);
+  margin-inline: 0;
+  /* ~16px mobile gutter (matches Tailwind px-4); widen smoothly on larger phones / tablets. */
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main {
+    padding-inline: clamp(1rem, 2.4vw, 1.5rem);
+  }
 }
 
 .nn-lesson-page--learner-app .nn-lesson-page-header {
@@ -3704,17 +3957,19 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 .nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--editorial {
   padding-top: 1rem;
   padding-bottom: 1.1rem;
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
   scroll-margin-top: 4.5rem;
 }
 
 .nn-lesson-page--learner-app .nn-lesson-section-card.nn-lesson-section-card--callout {
-  border-radius: 0.625rem;
+  border-radius: 0.75rem;
   border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 88%, var(--lsc-color) 12%);
   border-left-width: 3px;
   border-left-color: color-mix(in srgb, var(--lsc-color) 48%, var(--semantic-border-soft));
   background: color-mix(in srgb, var(--lsc-soft) 14%, var(--bg-card, var(--theme-card-bg)) 86%);
   box-shadow: none;
-  padding: 1rem 1rem 1.15rem 1.05rem;
+  padding: 1rem 0.95rem 1.15rem 0.95rem;
   scroll-margin-top: 4.5rem;
 }
 
@@ -3749,16 +4004,17 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   line-height: 1.28;
 }
 
-.nn-lesson-page--learner-app .nn-lesson-content.nn-lesson-prose,
-.nn-lesson-page--learner-app .nn-lesson-prose {
-  max-width: min(52ch, 100%);
+.nn-lesson-page--learner-app .nn-lesson-editorial-rail--main .nn-lesson-content.nn-lesson-prose,
+.nn-lesson-page--learner-app .nn-lesson-editorial-rail--main .nn-lesson-prose {
+  max-width: min(72ch, 100%);
+  width: 100%;
   font-size: 0.9375rem;
   line-height: 1.62;
 }
 
 @media (min-width: 768px) {
-  .nn-lesson-page--learner-app .nn-lesson-content.nn-lesson-prose,
-  .nn-lesson-page--learner-app .nn-lesson-prose {
+  .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main .nn-lesson-content.nn-lesson-prose,
+  .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main .nn-lesson-prose {
     font-size: 0.96875rem;
     line-height: 1.64;
   }
@@ -3785,8 +4041,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 @media (min-width: 1024px) {
   .nn-lesson-layout {
     display: grid;
-    grid-template-columns: 1fr 15rem;
-    gap: 2.5rem;
+    grid-template-columns: min(15.75rem, 26vw) minmax(0, 1fr);
+    gap: clamp(1.25rem, 2.2vw, 2.25rem);
     align-items: start;
   }
 }
@@ -3802,8 +4058,47 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 }
 
 /* ==========================================================================
- * Lesson quick-jump nav sidebar
+ * Lesson quick-jump nav — mobile drawer + desktop left rail
  * ========================================================================== */
+
+.nn-lesson-section-nav-mobile {
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--semantic-border-soft) 90%, var(--semantic-brand) 10%);
+  background: var(--bg-card);
+  box-shadow: var(--elevation-rest);
+}
+
+.nn-lesson-section-nav-mobile__summary {
+  display: flex;
+  cursor: pointer;
+  list-style: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--semantic-text-primary);
+}
+
+.nn-lesson-section-nav-mobile__summary::-webkit-details-marker {
+  display: none;
+}
+
+.nn-lesson-section-nav-mobile[open] .nn-lesson-section-nav-mobile__chevron {
+  transform: rotate(180deg);
+}
+
+.nn-lesson-section-nav-mobile__chevron {
+  transition: transform var(--motion-base, 150ms) ease;
+}
+
+.nn-lesson-section-nav-mobile__panel {
+  border-top: 1px solid color-mix(in srgb, var(--semantic-border-soft) 92%, var(--semantic-brand) 8%);
+  padding: 0.5rem 0.35rem 0.65rem;
+  max-height: min(50vh, 22rem);
+  overflow-y: auto;
+}
 
 .nn-lesson-section-nav {
   display: none;
@@ -3906,7 +4201,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   z-index: 0;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.125rem, 2.2vw, 1.65rem);
+  gap: clamp(0.65rem, 1.2vw, 1.05rem);
 }
 
 .nn-lesson-article-flow::before {
@@ -3929,6 +4224,32 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 
 .nn-lesson-article-flow > .nn-lesson-section-card.nn-lesson-section-card--callout {
   border-radius: 1rem;
+}
+
+/* Canonical nursing spine — distinct left accents (token-driven). */
+.nn-lesson-article-flow .nn-lesson-section-card.nn-lesson-section-card--spine-clinical-meaning {
+  border-left: 3px solid color-mix(in srgb, var(--semantic-info) 34%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-cool) 16%, var(--bg-card, var(--theme-card-bg)) 84%);
+}
+
+.nn-lesson-article-flow .nn-lesson-section-card.nn-lesson-section-card--spine-exam-relevance {
+  border-left: 3px solid color-mix(in srgb, var(--semantic-chart-2) 38%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-chart-2) 9%, var(--bg-card, var(--theme-card-bg)) 91%);
+}
+
+.nn-lesson-article-flow .nn-lesson-section-card.nn-lesson-section-card--spine-core-concept {
+  border-left: 3px solid color-mix(in srgb, var(--semantic-brand) 30%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-muted) 12%, var(--bg-card, var(--theme-card-bg)) 88%);
+}
+
+.nn-lesson-article-flow .nn-lesson-section-card.nn-lesson-section-card--spine-clinical-scenario {
+  border-left: 3px solid color-mix(in srgb, var(--semantic-chart-3) 36%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-warm) 14%, var(--bg-card, var(--theme-card-bg)) 86%);
+}
+
+.nn-lesson-article-flow .nn-lesson-section-card.nn-lesson-section-card--spine-takeaways {
+  border-left: 3px solid color-mix(in srgb, var(--semantic-success) 34%, var(--semantic-border-soft));
+  background: color-mix(in srgb, var(--semantic-panel-positive) 16%, var(--bg-card, var(--theme-card-bg)) 84%);
 }
 
 /* Editorial bands alternate only inside article flow (controlled variation). */
@@ -4180,7 +4501,10 @@ html[data-theme="storm-slate"] .nn-lesson-article-flow .nn-lesson-section-card.n
 .nn-question-session {
   margin-left: auto;
   margin-right: auto;
-  max-width: 42rem;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: min(42rem, 100%);
+  min-width: 0;
   padding: 1.25rem 1rem 1.75rem;
 }
 
@@ -4194,7 +4518,10 @@ html[data-theme="storm-slate"] .nn-lesson-article-flow .nn-lesson-section-card.n
 .nn-question-session--split {
   margin-left: auto;
   margin-right: auto;
+  box-sizing: border-box;
+  width: 100%;
   max-width: min(112rem, 100%);
+  overflow-x: clip;
   display: grid;
   gap: 1.25rem;
   align-items: start;
@@ -4300,6 +4627,8 @@ html[data-theme="storm-slate"] .nn-lesson-article-flow .nn-lesson-section-card.n
   box-shadow: var(--semantic-shadow-soft, 0 1px 3px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent));
   position: relative;
   z-index: 1;
+  min-width: 0;
+  max-width: 100%;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
@@ -4564,6 +4893,95 @@ html[data-theme="deep-twilight"] .nn-qopt-surface--incorrect .nn-qopt-letter {
   }
 }
 
+/* Post-submit answer strip — subtle verdict motion (CSS-only; respects reduced motion). */
+@keyframes nn-qopt-verdict-success-pulse {
+  0% {
+    box-shadow:
+      0 0 0 0 color-mix(in srgb, var(--role-success) 0%, transparent),
+      0 1px 0 color-mix(in srgb, var(--theme-primary) 4%, transparent);
+  }
+  45% {
+    box-shadow:
+      0 0 0 6px color-mix(in srgb, var(--role-success) 18%, transparent),
+      0 2px 10px color-mix(in srgb, var(--role-success) 12%, transparent);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 transparent,
+      0 1px 0 color-mix(in srgb, var(--theme-primary) 4%, transparent);
+  }
+}
+
+@keyframes nn-qopt-verdict-incorrect-soft {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--semantic-danger) 0%, transparent);
+  }
+  40% {
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--semantic-danger) 14%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nn-qopt-feedback-phase .nn-qopt-surface--correct {
+    animation: nn-qopt-verdict-success-pulse 0.72s ease-out 1;
+  }
+
+  .nn-qopt-feedback-phase .nn-qopt-surface--incorrect {
+    animation: nn-qopt-verdict-incorrect-soft 0.78s ease-out 1;
+  }
+}
+
+/* Sticky session chrome (question #, timer, session stats, progress) */
+.nn-exam-session.nn-exam-session--immersive .nn-exam-session-sticky-chrome {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  background: color-mix(in srgb, var(--semantic-surface) 92%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-exam-session.nn-exam-session--immersive .nn-exam-session-sticky-chrome {
+    backdrop-filter: none;
+  }
+}
+
+/* Lightweight skeleton + shimmer (no extra JS). */
+.nn-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--semantic-text-primary) 06%, var(--semantic-panel-muted));
+}
+
+.nn-skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--semantic-surface) 55%, transparent),
+    transparent
+  );
+  animation: nn-skeleton-shimmer 1.35s ease-in-out infinite;
+}
+
+@keyframes nn-skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nn-skeleton-shimmer::after {
+    animation: none;
+  }
+}
+
 .nn-qopt-tool {
   display: flex;
   min-height: 2.75rem;
@@ -4728,7 +5146,8 @@ html[data-theme="deep-twilight"] .nn-question-rationale-card__verdict--miss {
   border-radius: 1rem;
   padding: 1.35rem 1.35rem 1.25rem;
   text-decoration: none;
-  color: inherit;
+  /* Pastel/light gradient wash — never inherit pale nav ink; headings still use .nn-marketing-h* tokens */
+  color: var(--theme-card-foreground-readable, var(--theme-body-text));
   border: 1px solid color-mix(in srgb, var(--theme-primary) 14%, var(--border-subtle));
   background: linear-gradient(
     155deg,
@@ -6659,6 +7078,51 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   }
 }
 
+/*
+ * Narrow phones (including landscape): short-height exam compaction above must not shrink
+ * answer rows below comfortable touch targets or crush vertical spacing between choices.
+ */
+@media (max-width: 639.98px) {
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt-list,
+  .nn-cat-question-card--exam-stack .nn-cat-opt-list {
+    gap: 12px;
+  }
+
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt,
+  .nn-cat-question-card--exam-stack .nn-cat-opt {
+    min-height: 3rem;
+    padding: 0.875rem 1rem;
+  }
+
+  .nn-cat-opt {
+    min-height: 3rem;
+  }
+
+  .nn-practice-opt-list {
+    gap: 12px;
+  }
+
+  .nn-practice-opt {
+    min-height: 3rem;
+    padding: 0.875rem 1rem;
+  }
+
+  .nn-practice-rationale-panel__scroll {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .nn-practice-rationale-section__body {
+    font-size: clamp(15px, 3.8vw, 16px);
+    line-height: 1.55;
+  }
+
+  .nn-cat-opt--interactive,
+  .nn-practice-opt {
+    touch-action: manipulation;
+  }
+}
+
 @media (min-width: 1024px) and (max-height: 900px) {
   .nn-practice-session {
     height: calc(100dvh - 88px);
@@ -6833,6 +7297,9 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   border: 1px solid var(--semantic-border-soft);
   background: var(--semantic-surface-elevated, var(--semantic-surface));
   padding: 32px;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
 }
 
 @media (max-width: 639px) {
@@ -6865,8 +7332,11 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   font-weight: 400;
   letter-spacing: -0.014em;
   color: var(--semantic-text-primary);
-  max-width: 72ch;
+  max-width: min(72ch, 100%);
+  min-width: 0;
   margin-bottom: 28px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 @media (max-width: 639px) {
@@ -6901,10 +7371,11 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 /* Option row — 16px padding, horizontal flex */
 .nn-cat-opt {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   padding: 16px;
   width: 100%;
+  min-width: 0;
   text-align: left;
   border-radius: 0.75rem;
   border: 1px solid var(--semantic-border-soft);
@@ -7015,6 +7486,8 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   font-size: 0.9375rem;
   line-height: 1.56;
   color: var(--semantic-text-primary);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* Focus ring */
@@ -7847,7 +8320,8 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   font-size: clamp(16px, 1.5vw, 20px);
   line-height: 1.42;
   color: var(--semantic-text-primary);
-  max-width: 65ch;
+  max-width: min(65ch, 100%);
+  min-width: 0;
   overflow-wrap: anywhere;
   word-break: break-word;
   flex-shrink: 0;

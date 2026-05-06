@@ -93,12 +93,20 @@ export async function pathwayFlashcardsSurface(args: {
   const main = learnerAppMainLandmark(page);
   await expect(main).toBeVisible({ timeout: 120_000 });
 
-  const learnFirst = page.locator('a[href*="/app/flashcards/"][href*="mode=learn"]').first();
-  await expect(learnFirst).toBeVisible({ timeout: 120_000 });
-  const deckHref = await learnFirst.getAttribute("href");
+  const hub = page.locator("[data-nn-e2e-flashcards-hub]").first();
+  await expect(hub).toBeVisible({ timeout: 120_000 });
+
+  const bodyCard = page.locator("[data-nn-e2e-body-system-card]").first();
+  if (await bodyCard.isVisible().catch(() => false)) {
+    await bodyCard.click();
+  }
+
+  const startReview = page.locator('[data-nn-e2e-start-review], a[href*="/app/flashcards/custom"]').first();
+  await expect(startReview).toBeVisible({ timeout: 120_000 });
+  const deckHref = await startReview.getAttribute("href");
   expect(deckHref).toBeTruthy();
 
-  await page.goto(deckHref!, { waitUntil: "domcontentloaded" });
+  await page.goto(new URL(deckHref!, page.url()).toString(), { waitUntil: "domcontentloaded" });
   await dismissFlashcardResumeIfPresent(page);
 
   const cardSurface = page.locator(".nn-learner-app main, main").first();

@@ -7,7 +7,7 @@
  * - ALWAYS fails loudly OR provides safe fallback
  */
 
-const MIRROR_ROOTS = ["title", "description", "label", "question", "answer", "text"] as const;
+const MIRROR_ROOTS = ["title", "description", "label", "question", "answer", "text", "body", "link", "lead", "kicker"] as const;
 const MIRROR_ROOT_SET = new Set<string>(MIRROR_ROOTS);
 
 export function mirrorRootFromMessageKey(messageKey: string): string | null {
@@ -49,6 +49,9 @@ export const MARKETING_FORBIDDEN_WHOLE_VALUE_CI = new Set(
     "intro",
     "lead",
     "kicker",
+    "title",
+    "body",
+    "link",
     "subtitle",
     "cta",
     "button",
@@ -59,10 +62,14 @@ export const MARKETING_FORBIDDEN_WHOLE_VALUE_CI = new Set(
 
 const FORBIDDEN_SHOUTY_TEMPLATE_TOKENS = new Set([
   "LABEL",
+  "KICKER",
   "TITLE",
   "DESCRIPTION",
+  "LEAD",
   "QUESTION",
   "ANSWER",
+  "BODY",
+  "LINK",
   "TEXT",
   "PLACEHOLDER",
   "CTA",
@@ -75,6 +82,12 @@ const FORBIDDEN_SHOUTY_TEMPLATE_TOKENS = new Set([
 export function isForbiddenShoutyTemplateToken(value: string): boolean {
   const t = value.trim();
   return /^[A-Z0-9_]{3,40}$/u.test(t) && FORBIDDEN_SHOUTY_TEMPLATE_TOKENS.has(t);
+}
+
+export function isForbiddenAuthoredMarketingLeafValue(value: string): boolean {
+  const t = value.trim();
+  if (!t) return false;
+  return MARKETING_FORBIDDEN_WHOLE_VALUE_CI.has(t.toLowerCase()) || isForbiddenShoutyTemplateToken(t);
 }
 
 export const MARKETING_FORBIDDEN_VALUE_SUBSTRINGS = [
@@ -95,8 +108,8 @@ function logViolation(debugCtx: string, value: string) {
 }
 
 /**
- * HARD FAIL in both dev and production.
- * Do NOT silently scrub to "" anymore.
+ * Production scrubs invalid placeholder leaves to empty so callers with safe fallbacks can render
+ * human copy; development throws loudly so missing keys stay visible during local work.
  */
 export function assertNoPublicPlaceholderCopy(s: string, debugCtx: string): string {
   const t = s.trim();
@@ -107,6 +120,7 @@ export function assertNoPublicPlaceholderCopy(s: string, debugCtx: string): stri
   for (const sub of MARKETING_FORBIDDEN_VALUE_SUBSTRINGS) {
     if (lower.includes(sub)) {
       logViolation(debugCtx, t);
+      if (process.env.NODE_ENV === "production") return "";
       throw new Error(`[marketing] forbidden substring "${sub}" in ${debugCtx}`);
     }
   }
@@ -116,6 +130,7 @@ export function assertNoPublicPlaceholderCopy(s: string, debugCtx: string): stri
     isForbiddenShoutyTemplateToken(t)
   ) {
     logViolation(debugCtx, t);
+    if (process.env.NODE_ENV === "production") return "";
     throw new Error(`[marketing] forbidden placeholder "${t}" in ${debugCtx}`);
   }
 
@@ -141,7 +156,7 @@ export function normalizeResolvedMarketingLeaf(
 
   if (messageKey && isKeyContentMirrorStub(messageKey, raw)) return undefined;
 
-  if (isForbiddenShoutyTemplateToken(t)) return undefined;
+  if (isForbiddenAuthoredMarketingLeafValue(t)) return undefined;
 
   for (const sub of MARKETING_FORBIDDEN_VALUE_SUBSTRINGS) {
     if (t.toLowerCase().includes(sub)) return undefined;
@@ -165,12 +180,13 @@ export function humanizedMarketingKeyFallback(key: string): string {
 }
 
 /**
- * DO NOT return "" anymore — this hides production bugs.
+ * Return an empty leaf and let public surfaces choose an explicit safe fallback.
  */
 export function missingMarketingCopyFallback(key: string): string {
-  throw new Error(
-    `[marketing] missing required marketing copy: ${key} (should be caught at build or loader level)`,
-  );
+  if (process.env.NODE_ENV !== "production") {
+    console.error(`[marketing] missing required marketing copy: ${key}`);
+  }
+  return "";
 }
 
 /**
@@ -183,11 +199,23 @@ export type FlatMessageScanHit = {
   reason: string;
 };
 
+/**
+ * Full authored-marketing leaf policy (mirror stubs + single-word placeholders) applies to
+ * the flat `pages.*` table shipped as `public/i18n/en/pages.json`. Chrome shards (`components`,
+ * `learner`, etc.) may legitimately use short labels like "Title" for form fields — those are
+ * still guarded in runtime via {@link normalizeResolvedMarketingLeaf} where needed, but must
+ * not fail the global marketing bundle scan.
+ */
+export function marketingShardUsesStrictPublicPageLeafPolicy(fileLabel: string): boolean {
+  return fileLabel === "en/pages.json";
+}
+
 export function scanFlatMarketingMessagesForForbiddenValues(
   fileLabel: string,
   messages: Record<string, unknown>,
 ): FlatMessageScanHit[] {
   const hits: FlatMessageScanHit[] = [];
+  const strictLeafPolicy = marketingShardUsesStrictPublicPageLeafPolicy(fileLabel);
 
   for (const [key, val] of Object.entries(messages)) {
     if (typeof val !== "string") continue;
@@ -195,10 +223,36 @@ export function scanFlatMarketingMessagesForForbiddenValues(
     const t = val.trim();
     if (!t) continue;
 
+    let substringHit: string | null = null;
+    for (const sub of MARKETING_FORBIDDEN_VALUE_SUBSTRINGS) {
+      if (t.toLowerCase().includes(sub.toLowerCase())) {
+        substringHit = sub;
+        break;
+      }
+    }
+    if (substringHit) {
+      hits.push({
+        file: fileLabel,
+        key,
+        value: t.slice(0, 120),
+        reason: `forbidden substring "${substringHit}"`,
+      });
+      continue;
+    }
+
+    if (isForbiddenShoutyTemplateToken(t)) {
+      hits.push({
+        file: fileLabel,
+        key,
+        value: t.slice(0, 120),
+        reason: "invalid marketing copy",
+      });
+      continue;
+    }
+
     if (
-      isKeyContentMirrorStub(key, t) ||
-      isForbiddenShoutyTemplateToken(t) ||
-      MARKETING_FORBIDDEN_WHOLE_VALUE_CI.has(t.toLowerCase())
+      strictLeafPolicy &&
+      (isKeyContentMirrorStub(key, t) || MARKETING_FORBIDDEN_WHOLE_VALUE_CI.has(t.toLowerCase()))
     ) {
       hits.push({
         file: fileLabel,

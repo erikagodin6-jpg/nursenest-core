@@ -7,6 +7,7 @@ import {
   type Prisma,
 } from "@prisma/client";
 import { z } from "zod";
+import { getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { runBlogArticleGenerationPipeline } from "@/lib/blog/blog-article-generation-pipeline";
 import {
@@ -16,6 +17,7 @@ import {
   postProcessAiOutput,
 } from "@/lib/blog/generate-localized-blog";
 import type { LocalizedBlogAiOutput } from "@/lib/blog/blog-localization-types";
+import { normalizeBlogPostStatusWriteFields } from "@/lib/blog/blog-post-published-state";
 import { prisma } from "@/lib/db";
 import type { BlogSourceRecord } from "@/lib/blog/apa7";
 import { coerceBlogSourceRows } from "@/lib/blog/apa7";
@@ -46,6 +48,8 @@ type AutomationInput = {
   includeAiImage?: boolean;
   sourceRecords?: Prisma.JsonValue;
   fixedSlug?: string;
+  /** Passed to OpenAI `user` and pipeline repair idempotency (e.g. batchId:itemId). */
+  generationIdempotencyKey?: string;
   autoPublish?: boolean;
   publishAt?: Date;
   generateTranslations?: boolean;
@@ -92,8 +96,23 @@ export type AutomationResult =
       localized: Array<{ locale: string; region: string; localizedSlug: string; mode: "created" | "updated" }>;
       localizationErrors: string[];
       seoReadiness: BlogAutomationSeoReadiness;
+      /** Control-panel pipeline repair rounds used before a successful persist. */
+      repairPassesUsed?: number;
     }
-  | { ok: false; error: string };
+  | {
+      ok: false;
+      error: string;
+      repairPassesUsed?: number;
+      /** Pipeline stage where failure occurred — used for failure classification. */
+      stage?: string;
+      /** Machine-readable failure code — used for failure classification. */
+      code?: string;
+      /**
+       * Structured failure details propagated from the pipeline.
+       * For PRE_PUBLISH_BLOCKED contains `{ prePublish: PrePublishValidationResult }`.
+       */
+      details?: unknown;
+    };
 
 const localizedAiOutputSchema = z.object({
   localizedTitle: z.string().min(10),
@@ -225,6 +244,8 @@ async function upsertLocalizedVariant(params: {
   });
 
   const ai = await openAiChatCompletion({
+    useBlogOpenAiApiKey: true,
+    model: getBlogOpenAiChatModel(),
     messages: [
       { role: "system", content: buildAdaptationSystemPrompt(brief) },
       { role: "user", content: buildAdaptationUserPrompt(brief) },
@@ -327,7 +348,12 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
       fixedSlug: input.fixedSlug,
       allowInsufficientCitations: true,
     },
-    { persist: true },
+    {
+      persist: true,
+      idempotencyKey: input.generationIdempotencyKey,
+      /** Align with admin prepare: broaden safe nursing seeds; spam/off-domain gates remain in {@link normalizeBlogTopicIntent}. */
+      legacyCompatible: true,
+    },
   );
 
   if (!pipelineResult.ok) {
@@ -335,8 +361,18 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
       topic: input.topic,
       exam: input.exam,
       error: pipelineResult.error,
+      stage: pipelineResult.stage,
+      code: pipelineResult.code,
+      repairPassesUsed: pipelineResult.repairPassesUsed,
     });
-    return { ok: false, error: pipelineResult.error };
+    return {
+      ok: false,
+      error: pipelineResult.error,
+      repairPassesUsed: pipelineResult.repairPassesUsed,
+      stage: pipelineResult.stage,
+      code: pipelineResult.code,
+      details: pipelineResult.details,
+    };
   }
   if (pipelineResult.persistSkipped) {
     console.info("[blog_automation] generation_skipped", {
@@ -410,12 +446,17 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
     }
     post = loaded;
   } else {
+    const statusWrite = normalizeBlogPostStatusWriteFields({
+      postStatus: finalPublish.postStatus,
+      publishAt: finalPublish.publishAt,
+      workflowFromRequest: finalPublish.workflowStatus,
+    });
     post = await prisma.blogPost.update({
       where: { id: persisted.post.id },
       data: {
-        postStatus: finalPublish.postStatus,
-        publishAt: finalPublish.publishAt,
-        workflowStatus: finalPublish.workflowStatus,
+        postStatus: statusWrite.postStatus,
+        publishAt: statusWrite.publishAt,
+        workflowStatus: statusWrite.workflowStatus,
       },
       select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
     });
@@ -494,6 +535,7 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
     localized,
     localizationErrors,
     seoReadiness,
+    repairPassesUsed: pipelineResult.repairPassesUsed,
   };
 }
 

@@ -249,5 +249,6 @@ export async function answerOneQuestionBankItem(page: Page): Promise<void> {
   }
 }
 
-export { expectOnLearnerApp, expectNoSubscriptionPaywall, expectNoSubscriberPaywallSurface };
+/** Re-export assertion helpers; `expectNoSubscriberPaywallSurface` is defined above (do not duplicate here). */
+export { expectOnLearnerApp, expectNoSubscriptionPaywall };
 export type { PageObservers };

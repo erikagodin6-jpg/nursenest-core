@@ -13,19 +13,19 @@ export function LearnerContinueLearningCard({
 
   return (
     <section
-      className="nn-card border border-border/70 bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-card-bg))] p-5 sm:p-6"
+      className="nn-card nn-card-interactive rounded-xl border border-border/70 bg-[color-mix(in_srgb,var(--theme-primary)_4%,var(--theme-card-bg))] p-5 shadow-[var(--shadow-card)] transition-[transform,box-shadow] duration-200 ease-out sm:p-6"
       aria-labelledby="continue-learning-heading"
     >
-      <h2 id="continue-learning-heading" className="text-base font-semibold text-[var(--theme-heading-text)]">
-        {t("learner.retention.continueHeading")}
+      <h2 id="continue-learning-heading" className="text-lg font-bold tracking-tight text-[var(--theme-heading-text)]">
+        {t("learner.retention.continueStudyingHeading")}
       </h2>
-      <p className="mt-1 text-sm text-muted-foreground">{t("learner.retention.continueSub")}</p>
+      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{t("learner.retention.continueSub")}</p>
       <ul className="mt-4 space-y-2">
         {links.map((l) => (
           <li key={l.href}>
             <Link
               href={l.href}
-              className="block rounded-lg border border-border/60 bg-card px-4 py-3 text-sm font-medium text-primary transition-colors hover:bg-muted/50 [overflow-wrap:anywhere]"
+              className="block rounded-xl border border-border/60 bg-card px-4 py-3 text-sm font-medium text-primary shadow-sm transition-[transform,background-color,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:bg-muted/50 hover:shadow-md [overflow-wrap:anywhere]"
             >
               {l.title}
             </Link>

@@ -3,7 +3,16 @@ import { DEFAULT_MARKETING_LOCALE, isMarketingLocaleCode } from "@/lib/i18n/mark
 
 /** First URL segment for marketing exam pathway hubs (`/{country}/{role}/{exam}/…`). */
 export function isExamPathwayCountrySlug(segment: string): segment is CountrySlug {
-  return segment === "us" || segment === "canada";
+  return (
+    segment === "us" ||
+    segment === "canada" ||
+    segment === "uk" ||
+    segment === "australia" ||
+    segment === "philippines" ||
+    segment === "india" ||
+    segment === "nigeria" ||
+    segment === "saudi-arabia"
+  );
 }
 
 /**
@@ -51,6 +60,7 @@ export const EXPANSION_EXAM_COUNTRY_SLUGS_WITH_LOCALIZED_SHELL: ReadonlySet<stri
   "korea",
   "mexico",
   "middle-east",
+  "nigeria",
   "portugal",
 ]);
 

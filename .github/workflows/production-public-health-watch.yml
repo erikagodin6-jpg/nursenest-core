@@ -1,11 +1,15 @@
-# Optional external synthetic checks against production public (and optional origin) URLs.
-# Catches edge/origin splits: e.g. /healthz OK through CDN but GET / stalls.
+# Scheduled public HTTP probes against the canonical marketing origin only.
 #
-# Configure repository secrets (Settings → Secrets and variables → Actions):
-#   PRODUCTION_VERIFY_BASE_URL          — e.g. https://www.nursenest.ca (unset = job skips)
-#   PRODUCTION_VERIFY_ORIGIN_BASE_URL   — optional; default *.ondigitalocean.app host from DO UI
+# Checks (no repository secrets required for the primary step):
+#   GET https://www.nursenest.ca/healthz
+#   GET https://www.nursenest.ca/readyz
+#   GET https://www.nursenest.ca/api/health
 #
-# Notifications: enable workflow failure alerts in GitHub repo settings / watch rules, or forward to Slack.
+# Optional: set PRODUCTION_VERIFY_ORIGIN_BASE_URL (e.g. https://your-app.ondigitalocean.app)
+# to repeat the same three paths on a second host (edge/origin split); omit to skip.
+#
+# Deprecated for this workflow: PRODUCTION_VERIFY_BASE_URL (previously drove verify-deploy-health.mjs
+# with homepage + marketing sentinels — noisy for a lightweight watch). Not read anymore.
 name: production-public-health-watch
 
 on:
@@ -21,28 +25,79 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Public + origin HTTP verification
-        env:
-          BASE_URL: ${{ secrets.PRODUCTION_VERIFY_BASE_URL }}
-          ORIGIN_BASE_URL: ${{ secrets.PRODUCTION_VERIFY_ORIGIN_BASE_URL }}
-          VERIFY_CANONICAL_HOME: "1"
-          VERIFY_MARKETING_SENTINELS: "1"
-          VERIFY_HTTP_TIMEOUT_MS: "20000"
-          VERIFY_HOME_TIMEOUT_MS: "45000"
+      - name: GET /healthz, /readyz, /api/health (www.nursenest.ca)
         run: |
           set -euo pipefail
-          if [[ -z "${BASE_URL:-}" ]]; then
-            echo "PRODUCTION_VERIFY_BASE_URL not set — skipping (configure secret to enable)."
+          probe() {
+            local base="$1"
+            local path="$2"
+            local host="${base#*//}"
+            host="${host%%/*}"
+            echo "GET host=${host} path=${path}"
+            local code=""
+            if ! code="$(curl -sS --connect-timeout 15 --max-time 60 -o /tmp/nn-health.body -w "%{http_code}" "${base}${path}")"; then
+              echo "::error::curl transport error (DNS/TLS/timeout) for host=${host} path=${path}"
+              exit 1
+            fi
+            echo "HTTP status: ${code}"
+            if [ "${code}" != "200" ]; then
+              echo "::error::Expected HTTP 200 for ${path}, got ${code} (host=${host})"
+              echo "Body (first 600 bytes):"
+              head -c 600 /tmp/nn-health.body 2>/dev/null || true
+              echo ""
+              exit 1
+            fi
+          }
+          BASE="https://www.nursenest.ca"
+          probe "${BASE}" "/healthz"
+          probe "${BASE}" "/readyz"
+          probe "${BASE}" "/api/health"
+          echo "OK — all primary public health probes returned 200."
+
+      - name: Optional — same paths on alternate origin
+        env:
+          ORIGIN: ${{ secrets.PRODUCTION_VERIFY_ORIGIN_BASE_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ORIGIN:-}" ]; then
+            echo "PRODUCTION_VERIFY_ORIGIN_BASE_URL not set — skipping alternate-origin probes."
             exit 0
           fi
-          node nursenest-core/scripts/verify-deploy-health.mjs
-          echo "--- optional IPv6 /healthz (informational) ---"
+          base="${ORIGIN%/}"
+          probe() {
+            local b="$1"
+            local path="$2"
+            local host="${b#*//}"
+            host="${host%%/*}"
+            echo "GET host=${host} path=${path}"
+            local code=""
+            if ! code="$(curl -sS --connect-timeout 15 --max-time 60 -o /tmp/nn-health.body -w "%{http_code}" "${b}${path}")"; then
+              echo "::error::curl transport error for host=${host} path=${path}"
+              exit 1
+            fi
+            echo "HTTP status: ${code}"
+            if [ "${code}" != "200" ]; then
+              echo "::error::Expected HTTP 200 for ${path}, got ${code} (host=${host})"
+              head -c 600 /tmp/nn-health.body 2>/dev/null || true
+              echo ""
+              exit 1
+            fi
+          }
+          probe "${base}" "/healthz"
+          probe "${base}" "/readyz"
+          probe "${base}" "/api/health"
+          echo "OK — alternate origin health probes returned 200."
+
+      - name: Optional — IPv6 HEAD /healthz (informational)
+        run: |
+          set -euo pipefail
+          echo "Target (no secrets): www.nursenest.ca/healthz (IPv6)"
           set +e
-          curl -6 --http1.1 -m 15 -I -sS "${BASE_URL}/healthz" -w "ipv6 http:%{http_code} time:%{time_total}\n" -o /dev/null
+          code="$(curl -6 --http1.1 -m 15 -o /dev/null -sS -w "%{http_code}" -I "https://www.nursenest.ca/healthz" 2>/tmp/nn-ipv6.err)"
           v6=$?
           set -e
+          echo "HTTP status: ${code:-n/a} curl_exit=${v6}"
           if [[ "$v6" -ne 0 ]]; then
-            echo "IPv6 curl exited $v6 (runner may lack IPv6). Manually test from an IPv6-capable network if users report issues."
+            echo "IPv6 probe failed (runner may lack IPv6). Not a required gate."
+            cat /tmp/nn-ipv6.err 2>/dev/null || true
           fi

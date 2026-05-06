@@ -1,19 +1,24 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { accessScopeFromUserAccess, getUserAccess, type AccessScope, type UserAccess } from "@/lib/entitlements/get-user-access";
+import { mergeSubscriberPrivateCacheHeaders } from "@/lib/http/subscriber-api-cache";
 import { correlationIdFromHeaders } from "@/lib/observability/request-correlation-headers";
 import { recordEntitlementResolveFailureSignal } from "@/lib/observability/production-signal-metrics";
 import { productEvent } from "@/lib/observability/product-events";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
+import { maybeBlockOrTouchAccountSharingAfterSubscriberOk } from "@/lib/security/learner-session-activity.server";
 
 export type SubscriberSessionOk = { ok: true; userId: string; entitlement: AccessScope; userAccess: UserAccess };
 export type SubscriberSessionFail = { ok: false; response: NextResponse };
 export type SubscriberSessionResult = SubscriberSessionOk | SubscriberSessionFail;
 
 export function notSubscribedResponse() {
-  return NextResponse.json({ code: "not_subscribed", message: "Subscription required" }, { status: 403 });
+  return NextResponse.json(
+    { code: "not_subscribed", message: "Subscription required" },
+    { status: 403, headers: mergeSubscriberPrivateCacheHeaders() },
+  );
 }
 
 /**
@@ -32,7 +37,10 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
     });
     return {
       ok: false,
-      response: NextResponse.json({ error: "Unauthorized", code: "unauthorized" }, { status: 401 }),
+      response: NextResponse.json(
+        { error: "Unauthorized", code: "unauthorized" },
+        { status: 401, headers: mergeSubscriberPrivateCacheHeaders() },
+      ),
     };
   }
 
@@ -62,7 +70,7 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
       ok: false,
       response: NextResponse.json(
         { error: "Unable to verify access. Try again shortly.", code: "access_verify_failed" },
-        { status: 503 },
+        { status: 503, headers: mergeSubscriberPrivateCacheHeaders() },
       ),
     };
   }
@@ -83,6 +91,11 @@ export async function requireSubscriberSession(): Promise<SubscriberSessionResul
       ok: false,
       response: notSubscribedResponse(),
     };
+  }
+
+  const block = await maybeBlockOrTouchAccountSharingAfterSubscriberOk(userId, userAccess);
+  if (block) {
+    return { ok: false, response: block };
   }
 
   return { ok: true, userId, entitlement, userAccess };

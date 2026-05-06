@@ -1,12 +1,14 @@
-import { ContentStatus, DraftReviewStatus, QuestionType } from "@prisma/client";
+import { ContentStatus, DraftReviewStatus, Prisma, QuestionType } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import type { NormalizedQuestionDraft } from "@/lib/content/ai-draft-validation";
 import { governExamQuestionPublish } from "@/lib/content/editorial-publish-policy";
 import { assertExamQuestionContextForPublish } from "@/lib/content-quality/exam-question-context-validation";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 import { stemHash } from "@/lib/content/stem-hash";
 import { prisma } from "@/lib/db";
+import { assertNoEcgForRpn } from "@/lib/ecg-module/ecg-module-config";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import {
   adminQuestionTypeToDb,
@@ -58,6 +60,9 @@ export async function POST(req: Request, ctx: Props) {
   const wrongLines = meta?.wrongAnswerRationales?.filter((x) => String(x).trim().length > 0);
   const distractorRationales = wrongLines && wrongLines.length > 0 ? wrongLines : undefined;
   const draftTags = meta?.tags?.length ? meta.tags : [];
+  const ecgVideo = (meta as unknown as { ecgVideo?: unknown } | undefined)?.ecgVideo;
+  const ecgLevel = meta?.ecgLevel;
+  const ecgMode = meta?.ecgMode;
   const diffLabel = meta?.difficultyLabel?.toUpperCase();
   const difficultyInt =
     diffLabel === "FOUNDATION" || diffLabel === "INTERMEDIATE" || diffLabel === "ADVANCED"
@@ -71,6 +76,11 @@ export async function POST(req: Request, ctx: Props) {
       questionType: n.questionType as QuestionType,
       options: n.options,
       answerKey: n.answerKey,
+      questionFormat: ecgVideo ? "ecg_video" : undefined,
+      level: ecgVideo ? ecgLevel : undefined,
+      mode: ecgVideo ? ecgMode : undefined,
+      exhibitData: ecgVideo,
+      tags: draftTags,
     },
     { acknowledgeBelowQualityBar: false },
   );
@@ -84,6 +94,15 @@ export async function POST(req: Request, ctx: Props) {
       },
       { status: 422 },
     );
+  }
+
+  if (ecgVideo) {
+    try {
+      assertNoEcgForRpn(draft.tier, draft.examFamily === "REX_PN" ? "rex-pn" : null);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "ECG content cannot be promoted into RPN/REx-PN flows.";
+      return NextResponse.json({ error: message, code: "ecg_tier_blocked" }, { status: 422 });
+    }
   }
 
   const hash = stemHash(n.stem);
@@ -104,7 +123,7 @@ export async function POST(req: Request, ctx: Props) {
   try {
     assertExamQuestionContextForPublish({
       tier: tierCodeToExamDbTier(draft.tier),
-      exam: examFamilyToExamColumn(draft.examFamily),
+      exam: canonicalExamQuestionExamForDbWrite(examFamilyToExamColumn(draft.examFamily)),
       countryCode: draft.country,
     });
   } catch (error) {
@@ -112,36 +131,78 @@ export async function POST(req: Request, ctx: Props) {
     return NextResponse.json({ error: message, code: "missing_exam_context" }, { status: 422 });
   }
 
-  const q = await prisma.examQuestion.create({
-    data: {
-      stem: n.stem,
-      rationale: n.rationale,
-      options: n.options,
-      correctAnswer: n.answerKey,
-      questionType: adminQuestionTypeToDb(String(n.questionType)),
-      countryCode: draft.country,
-      tier: tierCodeToExamDbTier(draft.tier),
-      status: contentStatusToDb(ContentStatus.DRAFT),
-      exam: examFamilyToExamColumn(draft.examFamily),
-      topic,
-      careerType: "nursing",
-      regionScope: "BOTH",
-      stemHash: hash,
-      tags: draftTags,
-      bodySystem: taxonomy.bodySystem,
-      ...(difficultyInt !== undefined ? { difficulty: difficultyInt } : {}),
-      ...(distractorRationales ? { distractorRationales } : {}),
-    },
-  });
+  let promotedEntityId: string;
+  if (ecgVideo) {
+    const options = Array.isArray(n.options) ? n.options.map((option) => String(option).trim()).filter(Boolean) : [];
+    const answerKeys = Array.isArray(n.answerKey) ? n.answerKey.map((answer) => String(answer).trim()).filter(Boolean) : [];
+    const answerOptions = options.map((text, index) => ({ id: String.fromCharCode(65 + index), text }));
+    const answerLookup = new Map(answerOptions.map((option) => [option.text, option.id]));
+    const correctAnswerId = answerKeys.map((answer) => answerLookup.get(answer)).find(Boolean);
+    if (!correctAnswerId) {
+      return NextResponse.json(
+        { error: "ECG draft answer key must match one of the answer option labels exactly.", code: "ecg_answer_key_invalid" },
+        { status: 422 },
+      );
+    }
+
+    const exhibitRecord = ecgVideo as { asset?: { url?: unknown; thumbnailUrl?: unknown; durationSeconds?: unknown }; rhythmCategory?: unknown };
+    const question = await prisma.ecgVideoQuestion.create({
+      data: {
+        videoUrl: typeof exhibitRecord.asset?.url === "string" ? exhibitRecord.asset.url : "",
+        thumbnailUrl: typeof exhibitRecord.asset?.thumbnailUrl === "string" ? exhibitRecord.asset.thumbnailUrl : null,
+        durationSeconds:
+          typeof exhibitRecord.asset?.durationSeconds === "number" && Number.isFinite(exhibitRecord.asset.durationSeconds)
+            ? exhibitRecord.asset.durationSeconds
+            : null,
+        questionText: n.stem,
+        answerOptions: answerOptions as Prisma.InputJsonValue,
+        correctAnswerId,
+        rationale: n.rationale,
+        difficulty: diffLabel?.toLowerCase() ?? "intermediate",
+        rhythmTag:
+          typeof exhibitRecord.rhythmCategory === "string" && exhibitRecord.rhythmCategory.trim().length > 0
+            ? exhibitRecord.rhythmCategory.trim()
+            : n.topicTag?.trim() || "ecg",
+        clinicalPriority: null,
+        allowedTiers: ["RN", "NP"],
+        level: ecgLevel ?? "basic",
+        mode: ecgMode ?? "quiz",
+      },
+    });
+    promotedEntityId = question.id;
+  } else {
+    const q = await prisma.examQuestion.create({
+      data: {
+        stem: n.stem,
+        rationale: n.rationale,
+        options: n.options,
+        correctAnswer: n.answerKey,
+        questionType: adminQuestionTypeToDb(String(n.questionType)),
+        countryCode: draft.country,
+        tier: tierCodeToExamDbTier(draft.tier),
+        status: contentStatusToDb(ContentStatus.DRAFT),
+        exam: canonicalExamQuestionExamForDbWrite(examFamilyToExamColumn(draft.examFamily)),
+        topic,
+        careerType: "nursing",
+        regionScope: "BOTH",
+        stemHash: hash,
+        tags: draftTags,
+        bodySystem: taxonomy.bodySystem,
+        ...(difficultyInt !== undefined ? { difficulty: difficultyInt } : {}),
+        ...(distractorRationales ? { distractorRationales } : {}),
+      },
+    });
+    promotedEntityId = q.id;
+  }
 
   await prisma.generatedQuestionDraft.update({
     where: { id },
     data: {
       reviewStatus: DraftReviewStatus.PROMOTED,
-      promotedEntityId: q.id,
+      promotedEntityId,
       promotedAt: new Date(),
     },
   });
 
-  return NextResponse.json({ ok: true, questionId: q.id });
+  return NextResponse.json({ ok: true, questionId: promotedEntityId });
 }

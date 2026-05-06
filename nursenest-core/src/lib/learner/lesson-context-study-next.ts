@@ -16,8 +16,11 @@ import { loadUnifiedTopicPerformance } from "@/lib/learner/topic-performance";
 import { formatTopicLabelForDisplay, normalizeTopicKey } from "@/lib/learner/topic-normalize";
 import { resolveTopicRemediationLinks } from "@/lib/learner/topic-remediation-links";
 import type { WeakTopicRow } from "@/lib/learner/weak-topics-from-sessions";
+import {
+  pathwayLessonMetadataListSelectForReads,
+  pathwayLessonStructuralCompleteWhereInput,
+} from "@/lib/db/pathway-lesson-structural-column-runtime";
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
-import { PATHWAY_LESSON_METADATA_LIST_SELECT } from "@/lib/lessons/pathway-lesson-metadata-select";
 
 export type LessonContinueContext =
   | { variant: "pathway"; lessonId: string; pathwayId: string; topicSlug: string }
@@ -41,10 +44,12 @@ async function findNextPathwayLessonInAppOrder(
   learnerPath: string | null,
 ): Promise<{ id: string; title: string } | null> {
   const baseWhere = await pathwayLessonsAppListWhere(entitlement, learnerPath);
+  const structuralWhere = await pathwayLessonStructuralCompleteWhereInput();
+  const select = await pathwayLessonMetadataListSelectForReads();
   const rows = await prisma.pathwayLesson.findMany({
-    where: { AND: [baseWhere, { pathwayId, structuralPublicComplete: true }] },
+    where: { AND: [baseWhere, { pathwayId, ...structuralWhere }] },
     orderBy: [{ sortOrder: "asc" }, { id: "asc" }],
-    select: PATHWAY_LESSON_METADATA_LIST_SELECT,
+    select,
   });
   const idx = rows.findIndex((r) => r.id === currentLessonId);
   if (idx < 0 || idx >= rows.length - 1) return null;

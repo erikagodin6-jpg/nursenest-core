@@ -44,7 +44,15 @@ export type CatStudyFeedbackPayload = {
   layers?: CatStudyFeedbackLayers;
 };
 
-export type PracticeTestSelectionMode = "random" | "targeted" | "weak" | "missed" | "cat";
+export type PracticeTestSelectionMode =
+  | "random"
+  | "targeted"
+  | "weak"
+  | "missed"
+  | "starred"
+  /** Linear pool only — bias toward questions with little/no recent pathway exposure. */
+  | "unseen"
+  | "cat";
 
 /** Serialized pathway row for the practice-test builder (server → client). */
 export type PracticeTestPathwayOption = {
@@ -69,7 +77,55 @@ export type PracticeTestPathwayClientShell = Pick<
 >;
 
 /** Pool basis when `selectionMode === "cat"` (how items are filtered before adaptive selection). */
-export type CatSelectionBasis = "random" | "targeted" | "weak" | "missed";
+export type CatSelectionBasis = "random" | "targeted" | "weak" | "missed" | "starred";
+
+/** Echo of hub launch choices (optional; persisted for analytics / resume context). */
+export type StudyLaunchPayload = {
+  pathwayId?: string | null;
+  mode?: string;
+  selectedCategories?: string[];
+  filters?: Record<string, string | number | boolean | null>;
+  count?: number;
+  shuffle?: boolean;
+};
+
+/** Practice hub: bias/narrow pools without hard-failing when filters are too tight (server-side expansion). */
+export type CatPoolSelectionStrictness = "soft" | "strict";
+
+/** How aggressively the server widened the CAT practice pool vs the learner’s requested filters. */
+export type CatSelectionExpansionTier = "exact" | "soft" | "broad";
+
+/**
+ * Echo of create-time filters + pool expansion (persisted on `PracticeTest.config` and returned on POST)
+ * so clients can surface “silent” widenings as explicit UX copy.
+ */
+export type CatSelectionAppliedMeta = {
+  selectionStrictness: CatSelectionExpansionTier;
+  requestedFilters: {
+    topicNames: string[];
+    catSelectionBasis: CatSelectionBasis;
+    poolRequestStrictness: CatPoolSelectionStrictness;
+  };
+  appliedFilters: {
+    topicNames: string[];
+    catSelectionBasis: CatSelectionBasis;
+    poolRequestStrictness: CatPoolSelectionStrictness;
+  };
+  /** Complete eligible rows matching strict secondary filters (before soft relaxation). */
+  matchedCountBeforeExpansion: number;
+  /** Rows in the built pool before recent-session exclusion. */
+  finalPoolSize: number;
+  /** Rows available to the first pick after recent exclusion (when computed at create). */
+  candidatePoolSize?: number;
+  fallbackReason?: string;
+};
+
+/** Internal: `fetchCatPracticePool` instrumentation for {@link CatSelectionAppliedMeta}. */
+export type CatPracticePoolBuildMeta = {
+  strictCompleteRowCount: number;
+  usedRelaxedFilters: boolean;
+  finalCompleteRowCount: number;
+};
 export type CatEngineType = "CAT" | "SIMULATION";
 export type CatEngineMode = "production_ready" | "beta" | "mini_adaptive" | "simulation" | "unavailable";
 
@@ -100,6 +156,8 @@ export type PracticeTestConfigJson = {
    * rationales (review navigation). Default false — forward-only until explicitly enabled.
    */
   linearAllowReviewNavigation?: boolean;
+  /** Optional hub echo: canonical categories, filters, and delivery hints (does not replace topicNames for selection). */
+  studyLaunchPayload?: StudyLaunchPayload;
   /** When mode is CAT: which pool strategy to use for tier-scoped draws. */
   catSelectionBasis?: CatSelectionBasis;
   catMinQuestions?: number;
@@ -113,6 +171,10 @@ export type PracticeTestConfigJson = {
   catWeakPriorityByCanonical?: Record<string, number>;
   /** Practice CAT vs NCLEX-style exam simulation (bounds, copy, pool validation). */
   catPresentationMode?: CatPresentationMode;
+  /** When `soft`, pathway pool may widen if filtered eligible items fall below engine minimums. */
+  catPoolSelectionStrictness?: CatPoolSelectionStrictness;
+  /** Create-time record of requested vs applied filters + pool expansion tier (practice CAT). */
+  catSelectionAppliedMeta?: CatSelectionAppliedMeta;
   /**
    * Instant rationales vs end-only explanations for CAT (`selectionMode === "cat"`).
    * Exam simulation coerces to `test` on the server.

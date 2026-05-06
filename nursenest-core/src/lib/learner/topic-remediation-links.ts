@@ -2,10 +2,13 @@ import "server-only";
 
 import { ContentStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import {
+  pathwayLessonMetadataListSelectForReads,
+  pathwayLessonStructuralCompleteWhereInput,
+} from "@/lib/db/pathway-lesson-structural-column-runtime";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { pathwayLessonsAppListWhere } from "@/lib/lessons/app-pathway-lesson-list-scope";
-import { PATHWAY_LESSON_METADATA_LIST_SELECT } from "@/lib/lessons/pathway-lesson-metadata-select";
 
 function appendTopicCodeToDrillHref(href: string, topicCode: string): string {
   if (!topicCode || href.includes("topicCode=")) return href;
@@ -39,6 +42,8 @@ export async function resolveTopicRemediationLinks(
   if (code) {
     const pathwayScope = await pathwayLessonsAppListWhere(entitlement, learnerPath);
     const contentScope = lessonAccessWhere(entitlement);
+    const structuralWhere = await pathwayLessonStructuralCompleteWhereInput();
+    const select = await pathwayLessonMetadataListSelectForReads();
 
     const [pathwayLessonRows, contentLesson] = await Promise.all([
       prisma.pathwayLesson.findMany({
@@ -49,11 +54,11 @@ export async function resolveTopicRemediationLinks(
               topicSlug: code,
               status: ContentStatus.PUBLISHED,
               locale: "en",
-              structuralPublicComplete: true,
+              ...structuralWhere,
             },
           ],
         },
-        select: PATHWAY_LESSON_METADATA_LIST_SELECT,
+        select,
         orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
         take: 24,
       }),

@@ -8,11 +8,24 @@
  *
  * Usage: `npm run db:validate-url-shape`
  */
-import "../../src/lib/db/script-env-bootstrap";
+import fs from "node:fs";
+import path from "node:path";
+import { config } from "dotenv";
 import {
   evaluateDatabaseUrlShape,
   runDatabaseUrlShapeGuardForProcess,
 } from "../../src/lib/db/database-url-drift-audit";
+
+const explicitDotenvPath = process.env.DOTENV_CONFIG_PATH?.trim();
+const dotenvPath = explicitDotenvPath
+  ? path.isAbsolute(explicitDotenvPath)
+    ? explicitDotenvPath
+    : path.resolve(process.cwd(), explicitDotenvPath)
+  : path.join(process.cwd(), ".env.local");
+
+if (fs.existsSync(dotenvPath)) {
+  config({ path: dotenvPath, override: false, quiet: true });
+}
 
 const outcome = runDatabaseUrlShapeGuardForProcess();
 if (outcome === "fail") {

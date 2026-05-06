@@ -1,30 +1,43 @@
+import * as React from "react";
 import type { ContentQualityTier } from "@/lib/content-quality/standards";
 
-/** Subtle, honest notice when lesson body is below internal teaching-depth targets. */
+/** `hidden`: learners and anonymous visitors never see depth diagnostics. `staff_qa`: internal copy only. */
+export type LessonQualityNoticeMode = "hidden" | "staff_qa";
+
+/**
+ * Teaching-depth diagnostics for pathway lessons. Customer-facing routes should default to `hidden`.
+ * Use `staff_qa` only for staff sessions or local development.
+ */
 export function LessonQualityNotice({
   tier,
   wordCount,
+  mode = "hidden",
 }: {
   tier: ContentQualityTier;
   wordCount: number;
+  mode?: LessonQualityNoticeMode;
 }) {
+  if (mode === "hidden") return null;
   if (tier !== "thin" && tier !== "missing") return null;
+
+  const isDev = process.env.NODE_ENV === "development";
   return (
     <aside
-      className="rounded-xl border px-4 py-3.5 text-xs font-medium leading-relaxed"
+      data-testid="lesson-quality-notice-internal"
+      className="rounded-xl border border-dashed px-4 py-3.5 text-xs font-medium leading-relaxed"
       style={{
-        borderStyle: "dashed",
         background: "color-mix(in srgb, var(--semantic-warning) 6%, var(--bg-card))",
         borderColor: "color-mix(in srgb, var(--semantic-warning) 28%, var(--border-subtle))",
         color: "var(--semantic-text-secondary)",
       }}
     >
       {tier === "missing" ? (
-        <p>Lesson body is still being assembled for this topic.</p>
+        <p>Internal QA: lesson body registers as empty in the quality scan — verify publishing and spine blocks.</p>
       ) : (
         <p>
-          This lesson is shorter than our full teaching-depth target. We show what&apos;s published and keep improving
-          depth over time{wordCount > 0 ? ` (~${wordCount} words in the full lesson)` : ""}.
+          Internal QA: teaching depth is below our preferred range for this surface. Published learner copy is
+          unchanged.
+          {isDev && wordCount > 0 ? ` Word-count signal: ~${wordCount}.` : null}
         </p>
       )}
     </aside>

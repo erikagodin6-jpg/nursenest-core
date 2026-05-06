@@ -50,7 +50,7 @@ export async function POST(req: Request) {
 
   let currentPlan: BlogControlPanelPlan | undefined;
   if (d.currentPlan !== undefined) {
-    const pr = safeParseBlogControlPanelPlan(d.currentPlan);
+    const pr = safeParseBlogControlPanelPlan(d.currentPlan, { title: d.topic });
     if (!pr.success) {
       return NextResponse.json(
         {

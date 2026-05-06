@@ -7,6 +7,7 @@ import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { setSentryServerContext, SERVER_FEATURE } from "@/lib/observability/sentry-server-context";
 import { safeServerLogCritical } from "@/lib/observability/safe-server-log";
+import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
 
 export const dynamic = "force-dynamic";
 
@@ -28,12 +29,23 @@ export async function GET(req: NextRequest) {
   setSentryServerContext({ route: "/api/flashcards/due-summary", feature: SERVER_FEATURE.flashcard, userId });
 
   if (!isDatabaseUrlConfigured()) {
-    return NextResponse.json({
-      dueToday: 0,
-      overdue: 0,
-      learning: 0,
-      degraded: true,
+    logCoreApiStudyDiagnostic({
+      endpoint: "GET /api/flashcards/due-summary",
+      pathwayId: null,
+      tier: String(entitlement.tier ?? ""),
+      reasonIfZero: "database_url_unset",
     });
+    return NextResponse.json(
+      {
+        error: "Due summary is unavailable (database not configured in this environment).",
+        code: "db_unavailable",
+        dueToday: 0,
+        overdue: 0,
+        learning: 0,
+        degraded: true,
+      },
+      { status: 503 },
+    );
   }
 
   const now = new Date();
@@ -66,6 +78,13 @@ export async function GET(req: NextRequest) {
       }),
     ]);
 
+    logCoreApiStudyDiagnostic({
+      endpoint: "GET /api/flashcards/due-summary",
+      pathwayId: null,
+      tier: String(entitlement.tier ?? ""),
+      rowsReturned: dueToday + overdue + learning,
+      matchingTotal: dueToday + overdue + learning,
+    });
     return NextResponse.json({
       dueToday,
       overdue,
@@ -74,7 +93,13 @@ export async function GET(req: NextRequest) {
     });
   } catch (e) {
     safeServerLogCritical("api_flashcards_due_summary", "query_failed", {}, e);
-    return NextResponse.json({ error: "Unable to load due summary" }, { status: 503 });
+    logCoreApiStudyDiagnostic({
+      endpoint: "GET /api/flashcards/due-summary",
+      pathwayId: null,
+      tier: String(entitlement.tier ?? ""),
+      reasonIfZero: "due_summary_query_failed",
+    });
+    return NextResponse.json({ error: "Unable to load due summary", code: "query_failed" }, { status: 503 });
   }
   });
 }

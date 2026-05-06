@@ -30,6 +30,9 @@ export type ThemeOption = {
   label: string;
   /** Swatch color shown in the theme picker (matches --theme-primary). */
   color: string;
+  /** Optional extra picker swatches (secondary / accent hues) — never show token names in UI. */
+  swatchSecondary?: string;
+  swatchAccent?: string;
   group: ThemeGroup;
   /** Logo variant for this theme — used to select branded logo asset. */
   logoVariant: ThemeLogoVariant;
@@ -37,9 +40,51 @@ export type ThemeOption = {
   named?: boolean;
 };
 
-/** Theme list — 15 named themes listed first, then legacy themes grouped by family. */
+/** Theme list — named premium palettes first, then legacy themes grouped by family. */
 export const THEME_OPTIONS: ThemeOption[] = [
-  /* ── Named production themes (15) ── */
+  /* ── Premium clinical palettes ── */
+  {
+    id: "blossom",
+    label: "Blossom",
+    color: "#E75480",
+    swatchSecondary: "#3A86FF",
+    swatchAccent: "#FFD166",
+    group: "light",
+    logoVariant: "rose",
+    named: true,
+  },
+  {
+    id: "sunset",
+    label: "Sunset",
+    color: "#F97361",
+    swatchSecondary: "#7C8CFF",
+    swatchAccent: "#F6C453",
+    group: "light",
+    logoVariant: "rose",
+    named: true,
+  },
+  {
+    id: "ocean-air",
+    label: "Ocean",
+    color: "#2F80ED",
+    swatchSecondary: "#2EC4B6",
+    swatchAccent: "#90E0EF",
+    group: "light",
+    logoVariant: "blue",
+    named: true,
+  },
+  {
+    id: "meadow",
+    label: "Garden",
+    color: "#52B788",
+    swatchSecondary: "#48A6E8",
+    swatchAccent: "#F6D365",
+    group: "light",
+    logoVariant: "mint",
+    named: true,
+  },
+
+  /* ── Named production themes ── */
   { id: "blueberry-sherbet", label: "Blueberry Sherbet", color: "#3852B4", group: "light", logoVariant: "blue", named: true },
   { id: "strawberry-cream", label: "Strawberry Cream", color: "#EA7B7B", group: "light", logoVariant: "rose", named: true },
   { id: "ocean-mist", label: "Ocean Mist", color: "#1D546D", group: "light", logoVariant: "blue", named: true },

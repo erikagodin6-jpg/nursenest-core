@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 
 import type { PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 import type { LegacyChangeLogEntry } from "@/lib/legacy/legacy-public-content-types";
 import {
@@ -126,7 +127,7 @@ export async function applyLegacyExamQuestionsImport(
       continue;
     }
 
-    let existing = null as null | Awaited<ReturnType<typeof prisma.examQuestion.findUnique>>;
+    let existing: Prisma.ExamQuestionGetPayload<{ select: typeof EXISTING_SELECT }> | null = null;
     if (row.legacyId?.trim()) {
       existing = await prisma.examQuestion.findUnique({
         where: { id: row.legacyId.trim() },

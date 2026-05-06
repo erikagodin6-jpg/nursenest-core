@@ -21,7 +21,9 @@ WORKDIR /app
 COPY shared ./shared
 COPY client ./client
 COPY nursenest-core ./nursenest-core
-COPY Dockerfile /app/Dockerfile
+COPY scripts ./scripts
+COPY script ./script
+COPY tools ./tools
 
 WORKDIR /app/nursenest-core
 
@@ -31,6 +33,7 @@ ENV NODE_ENV=production \
   RUN_HEAVY_BUILD_TASKS=false \
   SKIP_I18N_PREBUILD=1 \
   NN_APP_PLATFORM_BUILD=true \
+  NN_LOW_MEMORY_BUILD=1 \
   SENTRY_ENABLED=false \
   BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=4096 \
   NODE_OPTIONS=--max-old-space-size=4096
@@ -54,15 +57,18 @@ WORKDIR /app/nursenest-core
 ENV NODE_ENV=production \
   PORT=8080 \
   HOSTNAME=0.0.0.0 \
+  NODE_MAX_OLD_SPACE_SIZE_MB=768 \
   NEXT_TELEMETRY_DISABLED=1
 
 COPY --from=builder /app/nursenest-core/.next ./.next
 COPY --from=builder /app/nursenest-core/public ./public
 COPY --from=builder /app/nursenest-core/scripts ./scripts
+COPY --from=builder /app/scripts ../scripts
+COPY --from=builder /app/script ../script
 COPY --from=builder /app/nursenest-core/package.json ./package.json
 COPY --from=builder /app/nursenest-core/package-lock.json ./package-lock.json
 COPY --from=builder /app/nursenest-core/node_modules ./node_modules
 
 EXPOSE 8080
 
-CMD ["npm", "run", "start"]
+CMD ["node", "scripts/start-standalone.mjs"]

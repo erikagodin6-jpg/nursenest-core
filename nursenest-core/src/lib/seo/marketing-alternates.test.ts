@@ -10,27 +10,27 @@ test("marketingHreflangLanguagesForEnPath does not emit /{locale}/us/… for exa
   const langs = marketingHreflangLanguagesForEnPath(path);
   assert.equal(Object.keys(langs).length, 2);
   assert.ok(langs["x-default"]?.includes("/us/np/fnp"));
-  assert.ok(langs.en?.includes("/us/np/fnp"));
-  assert.equal(langs.fr, undefined);
+  assert.ok(langs["en-CA"]?.includes("/us/np/fnp"));
+  assert.equal(langs["fr-CA"], undefined);
 });
 
 test("marketingHreflangLanguagesForEnPath strips a mistaken /fr prefix before detecting exam hubs", () => {
   const langs = marketingHreflangLanguagesForEnPath("/fr/us/np/fnp");
   assert.equal(Object.keys(langs).length, 2);
-  assert.ok(!langs.fr?.includes("/fr/us/"));
+  assert.ok(!langs["fr-CA"]?.includes("/fr/us/"));
 });
 
 test("marketingHreflangLanguagesForEnPath emits localized alternates only when a localized /exams shell exists", () => {
   const india = marketingHreflangLanguagesForEnPath("/exams/india");
-  assert.ok(india.fr?.includes("/fr/exams/india"));
+  assert.equal(india["fr-CA"], undefined);
 
   const philippines = marketingHreflangLanguagesForEnPath("/exams/philippines");
   assert.equal(Object.keys(philippines).length, 2);
   assert.ok(philippines["x-default"]?.includes("/exams/philippines"));
-  assert.equal(philippines.fr, undefined);
+  assert.equal(philippines["fr-CA"], undefined);
 
   const canada = marketingHreflangLanguagesForEnPath("/exams/canada");
-  assert.equal(canada.fr, undefined);
+  assert.equal(canada["fr-CA"], undefined);
 });
 
 test("marketingCanonicalPathForLocale never prefixes exam hub paths with locale", () => {

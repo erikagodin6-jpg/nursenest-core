@@ -2,6 +2,7 @@ import "../../../scripts/stub-server-only.cjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import type { PathwayLessonsPageResult } from "@/lib/lessons/pathway-lesson-loader";
+import type { MarketingHubLessonsListOptions } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import { loadPathwayLessonsHubPageWithTelemetry } from "@/lib/exam-pathways/marketing-hub-lessons-page-fetch";
 import type { StudyPublishedSnapshotEnvelope } from "@/lib/study-content-failover/study-published-snapshot-types";
 
@@ -18,7 +19,7 @@ const args = {
   pageRequested: 1,
   pageSizeRequested: 24,
   lessonContentLocale: "en",
-  listOpts: undefined as { q?: string; topicSlugsIn?: string[] } | undefined,
+  listOpts: undefined as MarketingHubLessonsListOptions | undefined,
 };
 
 test("primary failure uses secondary snapshot with same page contract", async () => {

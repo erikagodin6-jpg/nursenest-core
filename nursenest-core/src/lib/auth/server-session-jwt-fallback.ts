@@ -2,6 +2,7 @@
  * Server-only by usage (`headers()`, React `cache`) — do not import from Client Components.
  * Intentionally no `import "server-only"` so Node unit tests can import {@link sessionHasUserIdentity}.
  */
+import { CountryCode } from "@prisma/client";
 import { cache } from "react";
 import { cookies, headers } from "next/headers";
 import { NextRequest } from "next/server";
@@ -28,7 +29,8 @@ function adminJwtReadDebug(): boolean {
   return process.env.ADMIN_ACCESS_DEBUG === "1" || process.env.ADMIN_ACCESS_DEBUG === "true";
 }
 
-async function incomingRequestForJwtRead(pathname: string): Promise<{
+/** Build a {@link NextRequest} for JWT reads from the current App Router request (headers + cookies). */
+export async function buildIncomingRequestForJwtRead(pathname: string): Promise<{
   req: NextRequest;
   cookieMeta: { hadIncomingCookieHeader: boolean; synthesizedFromJar: boolean };
 }> {
@@ -78,7 +80,16 @@ function sessionFromJwtToken(token: JWT): Session | null {
   const expSec = typeof token.exp === "number" ? token.exp : Math.floor(Date.now() / 1000) + 3600;
   const name = typeof token.name === "string" && token.name.length > 0 ? token.name : email || "Learner";
   const role = (token.role ?? "LEARNER") as SessionUserRole;
-  const country = (token.country === "CA" || token.country === "US" ? token.country : "US") as "CA" | "US";
+  const jwtCountry = token.country as CountryCode | undefined;
+  const country = (
+    jwtCountry === CountryCode.CA ||
+    jwtCountry === CountryCode.US ||
+    jwtCountry === CountryCode.GB ||
+    jwtCountry === CountryCode.AU ||
+    jwtCountry === CountryCode.PH
+      ? jwtCountry
+      : CountryCode.US
+  ) as Session["user"]["country"];
   const tier = (token.tier === "RPN" ||
   token.tier === "LVN_LPN" ||
   token.tier === "RN" ||
@@ -130,7 +141,7 @@ export const getAuthSessionWithJwtCookieFallback = cache(async (): Promise<Sessi
   const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
   if (!secret?.trim()) return null;
   try {
-    const { req, cookieMeta } = await incomingRequestForJwtRead("/admin");
+    const { req, cookieMeta } = await buildIncomingRequestForJwtRead("/admin");
     const token = await getAuthSessionJwtFromRequest(req, secret);
     const jwtIdentityOk = sessionJwtHasUserIdentity(token);
 

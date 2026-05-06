@@ -7,16 +7,16 @@ on:
   push:
     paths:
       - "nursenest-core/src/**"
-      - "nursenest-core/scripts/audit-internal-links.ts"
-      - "nursenest-core/scripts/audit-internal-links.test.ts"
+      - "scripts/audit-internal-links.ts"
+      - "scripts/audit-internal-links.test.ts"
       - "nursenest-core/next.config.ts"
       - "nursenest-core/package.json"
       - ".github/workflows/internal-links-audit.yml"
   pull_request:
     paths:
       - "nursenest-core/src/**"
-      - "nursenest-core/scripts/audit-internal-links.ts"
-      - "nursenest-core/scripts/audit-internal-links.test.ts"
+      - "scripts/audit-internal-links.ts"
+      - "scripts/audit-internal-links.test.ts"
       - "nursenest-core/next.config.ts"
       - "nursenest-core/package.json"
       - ".github/workflows/internal-links-audit.yml"
@@ -31,10 +31,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: npm
           cache-dependency-path: nursenest-core/package-lock.json
       - run: npm ci
+      - name: CI environment diagnostics
+        run: node ../scripts/ci/diagnose-actions-environment.mjs
+        env:
+          CI_DIAGNOSE_REQUIRED_SCRIPTS: "audit:internal-links test:internal-links-audit"
       - name: Internal link audit
         run: npm run audit:internal-links
       - name: Internal link audit unit tests

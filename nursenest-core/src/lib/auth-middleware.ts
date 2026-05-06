@@ -2,7 +2,7 @@ import "./auth-trust-env";
 
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import type { NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 import { authCallbacks } from "@/lib/auth-callbacks";
 import { PINNED_AUTH_BASE_PATH } from "@/lib/auth/auth-base-path";
 import {
@@ -75,6 +75,11 @@ function isAdminPath(pathname: string): boolean {
   );
 }
 
+/** Staff-gated internal product surfaces (interactive course lab — not public marketing). */
+function isInternalGatedPath(pathname: string): boolean {
+  return pathname === "/internal" || pathname.startsWith("/internal/");
+}
+
 /**
  * Edge-only NextAuth instance.
  *
@@ -114,6 +119,11 @@ export const { auth: middlewareAuth } = NextAuth({
       }
 
       if (isAdminPath(pathname)) {
+        if (signedInFromAuth) return true;
+        return hasReadableSessionJwt(request as NextRequest);
+      }
+
+      if (isInternalGatedPath(pathname)) {
         if (signedInFromAuth) return true;
         return hasReadableSessionJwt(request as NextRequest);
       }

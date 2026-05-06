@@ -87,7 +87,9 @@ test("generated-like posts: main /blog, scoped nursing + allied hubs, detail slu
       const n = await prisma.blogPost.count({ where: { AND: [scoped, { slug: s }] } });
       assert.equal(n, 1, `scoped list should include ${career} post ${s}`);
       const paths = expectedGeneratedBlogPaths({ slug: s, careerSlug: career });
-      assert.ok(paths.scopedListPath?.startsWith("/nursing/"));
+      assert.ok(
+        career === "rn" ? paths.scopedListPath === "/blog/rn" : paths.scopedListPath?.startsWith("/nursing/"),
+      );
       const row = await getPublishedBlogPostBySlug(s, {
         locale: "en",
         sourceLocale: "en",

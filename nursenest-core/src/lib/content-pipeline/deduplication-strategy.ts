@@ -7,7 +7,7 @@
 
 import { stemHash } from "@/lib/content/stem-hash";
 import { examQuestionNaturalKey, stablePathwayLessonKey } from "@/lib/content-pipeline/stable-ids";
-import { assertCanonicalExamQuestionExam } from "@/lib/exam-questions/exam-question-exam-key";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 
 export { stemHash, examQuestionNaturalKey, stablePathwayLessonKey };
 
@@ -23,7 +23,7 @@ export function examQuestionImportDedupeKey(parts: {
 }): string {
   const h = stemHash(parts.stem);
   return examQuestionNaturalKey({
-    exam: assertCanonicalExamQuestionExam(parts.exam),
+    exam: canonicalExamQuestionExamForDbWrite(parts.exam),
     tier: parts.tier,
     countryCode: parts.countryCode,
     stemHash: h,

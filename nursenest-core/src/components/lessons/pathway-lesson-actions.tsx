@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ClipboardList, Layers, Library, LineChart } from "lucide-react";
+import { ClipboardList, Layers, Library, LineChart, ListChecks } from "lucide-react";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import {
   emitPathwayLessonProgress,
@@ -11,12 +11,23 @@ import {
 } from "@/lib/lessons/pathway-lesson-progress-events";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import { SuccessLeaf } from "@/components/ui/success-leaf";
-import { practiceTestsWeakFocusHref } from "@/lib/learner/study-loop-recommendations";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
 import type { MarketingPathwayLessonActionsClientProps } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
+import {
+  buildLegacyLessonActionHrefs,
+  buildLinkedLearningHrefPack,
+} from "@/lib/lessons/pathway-lesson-linked-learning-hrefs";
 
-/** Ids + flags only — no lesson bodies (contract: `marketing-pathway-lesson-client-contract.ts`). */
+function disabledCtaClass(kind: "primary" | "secondary") {
+  const base =
+    "inline-flex min-h-11 cursor-not-allowed items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold opacity-60";
+  if (kind === "primary") {
+    return `${base} border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] text-[var(--semantic-text-secondary)]`;
+  }
+  return `${base} border-[var(--semantic-border-soft)] bg-transparent text-[var(--semantic-text-secondary)]`;
+}
+
 export function PathwayLessonActions({
   pathwayId,
   lessonSlug,
@@ -27,6 +38,8 @@ export function PathwayLessonActions({
   initialProgress = "not_started",
   catAdaptiveAvailable,
   allLessonsHrefOverride,
+  linkedLearningSignals = null,
+  linkMode = "learner",
 }: MarketingPathwayLessonActionsClientProps) {
   const { t } = useMarketingI18n();
   const [progress, setProgress] = useState<PathwayLessonProgressStatus>(initialProgress);
@@ -92,58 +105,222 @@ export function PathwayLessonActions({
     }
   }
 
-  const topicCodeParam = topicCode?.trim() ? `&topicCode=${encodeURIComponent(topicCode.trim())}` : "";
-  const topicLabelParam = topicLabel?.trim() ? `&topic=${encodeURIComponent(topicLabel.trim())}` : "";
-  const qbHref = `/app/questions?pathwayId=${encodeURIComponent(pathwayId)}${topicCodeParam}${topicLabelParam}&preset=topic_drill`;
-  const catWeakHref = practiceTestsWeakFocusHref(pathwayId);
-  const showCatCta = catAdaptiveAvailable;
-  const pathwayDef = getExamPathwayById(pathwayId);
+  const hrefBudget = useMemo(() => {
+    const pathwayDef = getExamPathwayById(pathwayId);
+    if (!pathwayId.trim()) {
+      return { mode: "none" as const, pathwayDef, pack: null };
+    }
+    if (linkedLearningSignals) {
+      return {
+        mode: "linked" as const,
+        pathwayDef,
+        pack: buildLinkedLearningHrefPack({
+          pathwayId,
+          pathwayDef,
+          topicLabel,
+          signals: linkedLearningSignals,
+          catAdaptiveAvailable,
+          linkMode,
+        }),
+      };
+    }
+    return {
+      mode: "legacy" as const,
+      pathwayDef,
+      pack: buildLegacyLessonActionHrefs({
+        pathwayId,
+        pathwayDef,
+        topicCode,
+        topicLabel,
+        catAdaptiveAvailable,
+      }),
+    };
+  }, [pathwayId, linkedLearningSignals, topicCode, topicLabel, catAdaptiveAvailable, linkMode]);
+
+  const pathwayDef = hrefBudget.pathwayDef;
+  const pack = hrefBudget.pack;
+  const mode = hrefBudget.mode;
+
   const allLessonsHref =
     allLessonsHrefOverride?.trim() ||
     (pathwayDef ? marketingPathwayLessonsIndexPath(pathwayDef) : "/lessons");
-  const flashcardsHref = topicCode?.trim()
-    ? `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}&topicCode=${encodeURIComponent(topicCode.trim())}`
-    : `/app/flashcards?pathwayId=${encodeURIComponent(pathwayId)}`;
 
   const saving = pending !== "idle";
+
+  if (!pathwayId.trim()) return null;
+
+  const primaryLinkedActive =
+    mode === "linked" &&
+    linkedLearningSignals?.practiceQuestionsLinked === true &&
+    Boolean(pack?.questionsHref);
+  const primaryLegacyActive = mode === "legacy" && Boolean(pack?.questionsHref);
 
   return (
     <section className="lv-lesson-actions" aria-label="Continue studying">
       <p className="nn-lesson-module-eyebrow">{t("learner.lessons.detail.studyActionsEyebrow")}</p>
 
       <div className="lv-lesson-actions__primary">
-        <Link
-          href={qbHref}
-          data-testid="pathway-lesson-cta-practice-topic"
-          data-nn-pathway-id={pathwayId}
-          className="lv-btn-primary w-full sm:w-auto sm:min-w-48"
-        >
-          <ClipboardList className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
-          {t("learner.studyLoop.practiceThisTopicCta")}
-        </Link>
+        {primaryLinkedActive && pack?.questionsHref ? (
+          <Link
+            href={pack.questionsHref}
+            data-testid="pathway-lesson-linked-cta-questions"
+            data-nn-pathway-id={pathwayId}
+            className="lv-btn-primary w-full sm:w-auto sm:min-w-48"
+          >
+            <ClipboardList className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+            {t("learner.studyLoop.practiceThisTopicCta")}
+          </Link>
+        ) : mode === "linked" ? (
+          <button
+            type="button"
+            disabled
+            title="Topic-scoped question drill is not linked for this lesson yet."
+            className={`${disabledCtaClass("primary")} w-full sm:w-auto sm:min-w-48`}
+            data-testid="pathway-lesson-linked-cta-questions-disabled"
+          >
+            <ClipboardList className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+            {t("learner.studyLoop.practiceThisTopicCta")}
+          </button>
+        ) : primaryLegacyActive && pack?.questionsHref ? (
+          <Link
+            href={pack.questionsHref}
+            data-testid="pathway-lesson-cta-practice-topic"
+            data-nn-pathway-id={pathwayId}
+            className="lv-btn-primary w-full sm:w-auto sm:min-w-48"
+          >
+            <ClipboardList className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+            {t("learner.studyLoop.practiceThisTopicCta")}
+          </Link>
+        ) : (
+          <button
+            type="button"
+            disabled
+            title="Question bank requires a valid pathway."
+            className={`${disabledCtaClass("primary")} w-full sm:w-auto sm:min-w-48`}
+            data-testid="pathway-lesson-cta-practice-topic-disabled"
+          >
+            <ClipboardList className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+            {t("learner.studyLoop.practiceThisTopicCta")}
+          </button>
+        )}
       </div>
 
-      <div className="lv-lesson-actions__secondary">
-        <Link
-          href={flashcardsHref}
-          data-testid="pathway-lesson-cta-flashcards"
-          data-nn-pathway-id={pathwayId}
-          className="lv-btn-secondary flex-1 sm:min-w-40 sm:flex-none"
-        >
-          <Layers className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
-          {t("learner.studyLoop.sameTopicFlashcards")}
-        </Link>
-        {showCatCta ? (
-          <Link
-            href={catWeakHref}
-            data-testid="pathway-lesson-cta-cat-practice"
-            data-nn-pathway-id={pathwayId}
-            className="lv-btn-secondary lv-lesson-actions__btn--cool flex-1 sm:min-w-40 sm:flex-none"
-          >
-            <LineChart className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
-            {t("learner.studyLoop.catFromLesson")}
-          </Link>
-        ) : null}
+      <div
+        className="lv-lesson-actions__secondary"
+        {...(mode === "linked" ? { "data-testid": "pathway-lesson-linked-practice-panel" } : {})}
+      >
+        {mode === "linked" && linkedLearningSignals ? (
+          <>
+            {linkedLearningSignals.flashcardsLinked && pack?.flashcardsHref ? (
+              <Link
+                href={pack.flashcardsHref}
+                data-testid="pathway-lesson-linked-cta-flashcards"
+                data-nn-pathway-id={pathwayId}
+                className="lv-btn-secondary flex-1 sm:min-w-40 sm:flex-none"
+              >
+                <Layers className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+                {t("learner.studyLoop.sameTopicFlashcards")}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                disabled
+                title="Flashcards are not linked for this lesson topic yet."
+                className={`${disabledCtaClass("secondary")} flex-1 sm:min-w-40 sm:flex-none`}
+                data-testid="pathway-lesson-linked-cta-flashcards-disabled"
+              >
+                <Layers className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+                {t("learner.studyLoop.sameTopicFlashcards")}
+              </button>
+            )}
+            {linkedLearningSignals.catPoolLinked && pack?.practiceTestsHref ? (
+              <Link
+                href={pack.practiceTestsHref}
+                data-testid="pathway-lesson-linked-cta-practice-tests"
+                data-nn-pathway-id={pathwayId}
+                className="lv-btn-secondary flex-1 sm:min-w-40 sm:flex-none"
+              >
+                <ListChecks className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+                {t("learner.studyLoop.topicPracticeTestsCta")}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                disabled
+                title="This pathway does not expose topic-scoped practice tests, or the lesson is not linked."
+                className={`${disabledCtaClass("secondary")} flex-1 sm:min-w-40 sm:flex-none`}
+                data-testid="pathway-lesson-linked-cta-practice-tests-disabled"
+              >
+                <ListChecks className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+                {t("learner.studyLoop.topicPracticeTestsCta")}
+              </button>
+            )}
+            {linkedLearningSignals.adaptiveLearningReadiness &&
+            catAdaptiveAvailable &&
+            pack?.adaptiveHref ? (
+              <Link
+                href={pack.adaptiveHref}
+                data-testid="pathway-lesson-linked-cta-adaptive"
+                data-nn-pathway-id={pathwayId}
+                className="lv-btn-secondary lv-lesson-actions__btn--cool flex-1 sm:min-w-40 sm:flex-none"
+              >
+                <LineChart className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+                {t("learner.studyLoop.catFromLesson")}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                disabled
+                title={
+                  !catAdaptiveAvailable
+                    ? "Adaptive CAT start is not available for this pathway yet (e.g. waitlist or info-only)."
+                    : "Add lesson depth or bank-linked checks to unlock adaptive practice shortcuts."
+                }
+                className={`${disabledCtaClass("secondary")} lv-lesson-actions__btn--cool flex-1 sm:min-w-40 sm:flex-none`}
+                data-testid="pathway-lesson-linked-cta-adaptive-disabled"
+              >
+                <LineChart className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+                {t("learner.studyLoop.catFromLesson")}
+              </button>
+            )}
+          </>
+        ) : (
+          <>
+            {pack?.flashcardsHref ? (
+              <Link
+                href={pack.flashcardsHref}
+                data-testid="pathway-lesson-cta-flashcards"
+                data-nn-pathway-id={pathwayId}
+                className="lv-btn-secondary flex-1 sm:min-w-40 sm:flex-none"
+              >
+                <Layers className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+                {t("learner.studyLoop.sameTopicFlashcards")}
+              </Link>
+            ) : null}
+            {pack?.practiceTestsHref ? (
+              <Link
+                href={pack.practiceTestsHref}
+                data-testid="pathway-lesson-cta-practice-tests-topic"
+                data-nn-pathway-id={pathwayId}
+                className="lv-btn-secondary flex-1 sm:min-w-40 sm:flex-none"
+              >
+                <ListChecks className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+                {t("learner.studyLoop.topicPracticeTestsCta")}
+              </Link>
+            ) : null}
+            {pack?.adaptiveHref ? (
+              <Link
+                href={pack.adaptiveHref}
+                data-testid="pathway-lesson-cta-cat-practice"
+                data-nn-pathway-id={pathwayId}
+                className="lv-btn-secondary lv-lesson-actions__btn--cool flex-1 sm:min-w-40 sm:flex-none"
+              >
+                <LineChart className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
+                {t("learner.studyLoop.catFromLesson")}
+              </Link>
+            ) : null}
+          </>
+        )}
         <Link href={allLessonsHref} data-testid="pathway-lesson-cta-all-lessons" className="lv-btn-secondary flex-1 sm:min-w-40 sm:flex-none">
           <Library className="lv-lesson-actions__icon h-4 w-4 shrink-0" aria-hidden />
           {t("learner.lessons.detail.allLessons")}
@@ -159,28 +336,28 @@ export function PathwayLessonActions({
         </p>
       ) : canMarkComplete ? (
         <div className="lv-lesson-actions__meta flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-3">
-            {progress === "completed" ? (
-              <button
-                type="button"
-                disabled={saving}
-                onClick={() => void markUncomplete()}
-                className="lv-lesson-actions__meta-btn"
-              >
-                <SuccessLeaf show size={16} />
-                <span className="ml-1.5">
-                  {pending === "uncomplete" ? t("learner.studyLoop.markStudiedUndoSaving") : t("learner.studyLoop.markStudiedUndo")}
-                </span>
-              </button>
-            ) : (
-              <button type="button" disabled={saving} onClick={() => void markComplete()} className="lv-lesson-actions__meta-btn lv-lesson-actions__meta-btn--outline">
-                {pending === "complete" ? t("learner.studyLoop.markStudiedSaving") : t("learner.studyLoop.markStudied")}
-              </button>
-            )}
-            {error ? <span className="lv-lesson-actions__meta-error">{t("learner.studyLoop.markStudiedError")}</span> : null}
-          </div>
-        ) : (
-          <p className="mt-3 text-sm text-lv-text-secondary">{t("learner.studyLoop.subscribePathwayHint")}</p>
-        )}
+          {progress === "completed" ? (
+            <button
+              type="button"
+              disabled={saving}
+              onClick={() => void markUncomplete()}
+              className="lv-lesson-actions__meta-btn"
+            >
+              <SuccessLeaf show size={16} />
+              <span className="ml-1.5">
+                {pending === "uncomplete" ? t("learner.studyLoop.markStudiedUndoSaving") : t("learner.studyLoop.markStudiedUndo")}
+              </span>
+            </button>
+          ) : (
+            <button type="button" disabled={saving} onClick={() => void markComplete()} className="lv-lesson-actions__meta-btn lv-lesson-actions__meta-btn--outline">
+              {pending === "complete" ? t("learner.studyLoop.markStudiedSaving") : t("learner.studyLoop.markStudied")}
+            </button>
+          )}
+          {error ? <span className="lv-lesson-actions__meta-error">{t("learner.studyLoop.markStudiedError")}</span> : null}
+        </div>
+      ) : (
+        <p className="mt-3 text-sm text-lv-text-secondary">{t("learner.studyLoop.subscribePathwayHint")}</p>
+      )}
     </section>
   );
 }

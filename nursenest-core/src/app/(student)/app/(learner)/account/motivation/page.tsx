@@ -176,7 +176,7 @@ export default async function AccountMotivationPage() {
           { label: "Review queue", href: "/app/review" },
           { label: "Analytics", href: "/app/account/analytics" },
           { label: "Guided study", href: "/app/guided" },
-          { label: "Practice", href: "/app/practice" },
+          { label: "Practice", href: "/app/questions" },
         ].map(({ label, href }) => (
           <a
             key={href}

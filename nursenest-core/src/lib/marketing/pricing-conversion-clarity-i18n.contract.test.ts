@@ -17,7 +17,43 @@ function humanizedKeyFallback(key: string): string {
   return t.length > 80 ? `${t.slice(0, 77)}…` : t;
 }
 
+/** Explicit checklist (subset of contract JSON) for pricing conversion clarity section. */
+const REQUIRED_PRICING_CONVERSION_CLARITY_KEYS = [
+  "pages.pricing.conversionClarity.heading",
+  "pages.pricing.conversionClarity.intro",
+  "pages.pricing.conversionClarity.value1Title",
+  "pages.pricing.conversionClarity.value1Body",
+  "pages.pricing.conversionClarity.value2Title",
+  "pages.pricing.conversionClarity.value2Body",
+  "pages.pricing.conversionClarity.value3Title",
+  "pages.pricing.conversionClarity.value3Body",
+  "pages.pricing.conversionClarity.includedHeading",
+  "pages.pricing.conversionClarity.included1",
+  "pages.pricing.conversionClarity.included2",
+  "pages.pricing.conversionClarity.included3",
+  "pages.pricing.conversionClarity.included4",
+  "pages.pricing.conversionClarity.included5",
+  "pages.pricing.conversionClarity.notIncludedHeading",
+  "pages.pricing.conversionClarity.notIncluded1",
+  "pages.pricing.conversionClarity.notIncluded2",
+  "pages.pricing.conversionClarity.notIncluded3",
+] as const;
+
 describe("pricing conversion clarity i18n contract", () => {
+  it("required conversion clarity keys exist in en pages.json with real copy", () => {
+    const pages = JSON.parse(fs.readFileSync(PAGES_EN, "utf8")) as Record<string, string>;
+    for (const key of REQUIRED_PRICING_CONVERSION_CLARITY_KEYS) {
+      const v = pages[key];
+      assert.equal(typeof v, "string", `missing string for ${key}`);
+      assert.ok(v.trim().length > 0, `empty value for ${key}`);
+      assert.notEqual(
+        v.trim().toLowerCase(),
+        humanizedKeyFallback(key).toLowerCase(),
+        `value for ${key} must not equal humanized missing-key fallback`,
+      );
+    }
+  });
+
   it("canonical English pages.json defines every contract key with non-humanized copy", () => {
     const keys = JSON.parse(fs.readFileSync(CONTRACT, "utf8")) as string[];
     const pages = JSON.parse(fs.readFileSync(PAGES_EN, "utf8")) as Record<string, string>;

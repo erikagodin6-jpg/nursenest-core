@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { getSession, signIn } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -52,6 +52,8 @@ export function SignupForm({
   const [error, setError] = useState<string | null>(null);
   const [errorHelp, setErrorHelp] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
+  /** Prevents native POST to `/signup` before React `onSubmit` is attached (same pattern as {@link LoginForm}). */
+  const [clientReady, setClientReady] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [country, setCountry] = useState<"CA" | "US">("CA");
   const [examFocus, setExamFocus] = useState<SignupExamFocusValue>("nclex_rn");
@@ -60,6 +62,10 @@ export function SignupForm({
   const turnstileGateActive = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim());
 
   const examOptions = useMemo(() => signupExamFocusOptions(country, t), [country, t]);
+
+  useEffect(() => {
+    setClientReady(true);
+  }, []);
 
   function signupErrorMessage(data: { error?: string; code?: string }): string {
     if (typeof data.error === "string" && data.error.length > 0) return data.error;
@@ -214,6 +220,7 @@ export function SignupForm({
   return (
     <form
       className="mt-6 space-y-4"
+      method="post"
       onSubmit={(e) => {
         e.preventDefault();
         if (pending) return;
@@ -366,7 +373,7 @@ export function SignupForm({
       <button
         className="nn-btn-primary w-full px-4 py-3 text-base font-semibold disabled:pointer-events-none disabled:opacity-60"
         type="submit"
-        disabled={pending || (turnstileGateActive && !captchaToken?.trim())}
+        disabled={pending || !clientReady || (turnstileGateActive && !captchaToken?.trim())}
       >
         {pending ? t("pages.signup.creatingAccount") : t("pages.signup.createAccount")}
       </button>

@@ -1,3 +1,4 @@
+import React from "react";
 import { LessonSystemCard } from "@/components/pathway-lessons/lesson-system-card";
 import { PremiumEmptyState } from "@/components/ui/premium-empty-state";
 import {
@@ -5,7 +6,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-body-system-groups";
 import {
   pathwayLessonHasRenderableHubSlug,
-  pathwayLessonMarketingDetailHref,
+  pathwayLessonMarketingHubVerifiedCardHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
@@ -50,7 +51,7 @@ export function prepareLessonsForHubCurriculumWithDiagnostics(
   });
   const droppedOrganizeShrink = Math.max(0, beforeOrganize - organized.length);
   const afterHrefFiltered = organized.filter(
-    (l) => pathwayLessonMarketingDetailHref(args.lessonsBasePath, l.slug) != null,
+    (l) => pathwayLessonMarketingHubVerifiedCardHref(args.lessonsBasePath, l) != null,
   );
   const droppedNoMarketingHref = organized.length - afterHrefFiltered.length;
 
@@ -68,7 +69,7 @@ export function prepareLessonsForHubCurriculumWithDiagnostics(
 
   if (process.env.NN_MARKETING_HUB_PIPELINE_DEBUG === "1") {
     const droppedHrefSlugs = organized
-      .filter((l) => pathwayLessonMarketingDetailHref(args.lessonsBasePath, l.slug) == null)
+      .filter((l) => pathwayLessonMarketingHubVerifiedCardHref(args.lessonsBasePath, l) == null)
       .map((l) => String(l.slug ?? "").slice(0, 160));
     safeServerLog("pathway_lessons", "hub_prepare_pipeline_debug", {
       pathway_id: args.pathwayId ?? "",
@@ -133,28 +134,33 @@ export function PathwayLessonsCurriculumHub({
         reasons_json: JSON.stringify(hubVerifyDiagnostics.excludedByReason),
       });
     }
+    const zeroPathwayCopy = "No lessons are available for this pathway yet.";
     return (
-      <PremiumEmptyState
-        data-nn-empty="curriculum-hub-empty"
-        tone="growth"
-        density="compact"
-        visualLayout="stack"
-        headline={thinInventoryCopy.headline}
-        body={
-          verifyPipelineDroppedAll && diagSummary
-            ? diagSummary
-            : hadIncoming
-              ? "Some rows were removed because they could not be matched to a live public lesson for this pathway (stale slug, incomplete publish, or pathway metadata mismatch). Open Browse lessons to retry the full library."
-              : "No lessons are available in this pathway yet. The curriculum hub will expand here as more indexed sections go live."
-        }
-        hint={thinInventoryCopy.hint}
-        primaryCta={{ label: "Browse lessons", href: lessonsBasePath, variant: "primary" }}
-      />
+      <div className="nn-qa-pathway-lessons-empty" data-nn-qa-pathway-lessons-empty="true">
+        <PremiumEmptyState
+          data-nn-empty="curriculum-hub-empty"
+          tone="growth"
+          density="compact"
+          visualLayout="stack"
+          headline={!hadIncoming && !verifyPipelineDroppedAll ? zeroPathwayCopy : thinInventoryCopy.headline}
+          body={
+            verifyPipelineDroppedAll && diagSummary
+              ? diagSummary
+              : hadIncoming
+                ? "Some rows were removed because they could not be matched to a live public lesson for this pathway (stale slug, incomplete publish, or pathway metadata mismatch). Open Browse lessons to retry the full library."
+                : verifyPipelineDroppedAll
+                  ? thinInventoryCopy.body
+                  : `${zeroPathwayCopy} The curriculum hub will expand here as more indexed sections go live.`
+          }
+          hint={thinInventoryCopy.hint}
+          primaryCta={{ label: "Browse lessons", href: lessonsBasePath, variant: "primary" }}
+        />
+      </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+    <div className="nn-qa-pathway-lessons-grid grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
       {sections.map((section) => (
         <LessonSystemCard
           key={section.id}

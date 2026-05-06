@@ -1,4 +1,15 @@
-import { getOpenAiApiKey, getOpenAiBaseUrl, getOpenAiChatModel } from "@/lib/ai/openai-env";
+import {
+  getBlogOpenAiApiKey,
+  getOpenAiApiKey,
+  getOpenAiBaseUrl,
+  getOpenAiChatModel,
+} from "@/lib/ai/openai-env";
+
+function resolveChatModel(explicit?: string): string {
+  const t = explicit?.trim();
+  if (t) return t;
+  return getOpenAiChatModel();
+}
 
 type ChatMessage = { role: "system" | "user" | "assistant"; content: string };
 
@@ -15,15 +26,30 @@ export async function openAiChatCompletion(params: {
   messages: ChatMessage[];
   temperature: number;
   maxTokens: number;
+  /** OpenAI `user` field — stable per generation attempt for tracing / abuse signals. */
+  user?: string;
+  /**
+   * When set, overrides {@link getOpenAiChatModel} (use {@link getBlogOpenAiChatModel} / {@link getLessonOpenAiChatModel} for those pipelines).
+   */
+  model?: string;
+  /**
+   * When true, resolve API key with {@link getBlogOpenAiApiKey} (`BLOG_OPENAI_API_KEY` first).
+   * Blog pipelines should set this; other callers use shared {@link getOpenAiApiKey}.
+   */
+  useBlogOpenAiApiKey?: boolean;
 }): Promise<ChatCompletionResult> {
-  const key = getOpenAiApiKey();
+  const key = params.useBlogOpenAiApiKey ? getBlogOpenAiApiKey() : getOpenAiApiKey();
   if (!key) {
-    throw new Error("Missing AI_INTEGRATIONS_OPENAI_API_KEY (or OPENAI_API_KEY)");
+    throw new Error(
+      params.useBlogOpenAiApiKey
+        ? "Missing BLOG_OPENAI_API_KEY (or AI_INTEGRATIONS_OPENAI_API_KEY / OPENAI_API_KEY)"
+        : "Missing AI_INTEGRATIONS_OPENAI_API_KEY (or OPENAI_API_KEY)",
+    );
   }
 
   const base = getOpenAiBaseUrl().replace(/\/$/, "");
   const url = `${base}/chat/completions`;
-  const model = getOpenAiChatModel();
+  const model = resolveChatModel(params.model);
 
   const res = await fetch(url, {
     method: "POST",
@@ -36,6 +62,7 @@ export async function openAiChatCompletion(params: {
       messages: params.messages,
       temperature: params.temperature,
       max_tokens: params.maxTokens,
+      ...(params.user ? { user: String(params.user).slice(0, 128) } : {}),
     }),
   });
 

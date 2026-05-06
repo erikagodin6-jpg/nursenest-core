@@ -1,21 +1,9 @@
-import { databaseUrlSource } from "@/lib/db/env-bootstrap";
+import "server-only";
 
-/**
- * Masked logging for operators. Only `DATABASE_URL` is used (see `env-bootstrap.ts`).
- */
+import { databaseUrlSource } from "@/lib/db/database-url-source";
+import { maskDatabaseUrl } from "@/lib/env/mask-database-url";
 
-export function maskDatabaseUrl(url: string): string {
-  try {
-    const u = new URL(url);
-    const host = u.hostname;
-    const port = u.port ? `:${u.port}` : "";
-    const db = u.pathname.replace(/^\//, "") || "(no database name)";
-    const search = u.search || "";
-    return `${u.protocol}//***:***@${host}${port}/${db}${search}`;
-  } catch {
-    return "(unparseable connection string)";
-  }
-}
+export { maskDatabaseUrl } from "@/lib/env/mask-database-url";
 
 /** Log once per Node process in production so platform log drains show which env wins. */
 let logged = false;
@@ -27,7 +15,7 @@ export function logDatabaseEnvOnce(): void {
   const db = process.env.DATABASE_URL?.trim();
 
   console.error(
-    `[nursenest-core] prisma: effectiveConnection masked=${db ? maskDatabaseUrl(db) : "(MISSING)"} source=${databaseUrlSource}`,
+    `[nursenest-core] prisma: effectiveConnection masked=${db ? maskDatabaseUrl(db) : "(MISSING)"} source=${databaseUrlSource.value}`,
   );
 
   if (process.env.PROD_DATABASE_URL?.trim()) {

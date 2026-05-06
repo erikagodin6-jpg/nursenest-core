@@ -13,21 +13,42 @@
 import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, symlinkSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getStandaloneStaticSyncTargets, verifyStandaloneArtifact } from "./verify-standalone-artifact.mjs";
+import { isNNSkipLessonIndexBuild } from "./run-lesson-indexes-for-build.mjs";
+import {
+  discoverStandaloneServerJsPaths,
+  getStandaloneStaticSyncTargets,
+  verifyStandaloneArtifact,
+} from "./verify-standalone-artifact.mjs";
 
 const packageRoot = fileURLToPath(new URL("..", import.meta.url));
 const sourceStatic = path.join(packageRoot, ".next", "static");
 
-function assertNonEmptyCssDir(staticRoot) {
-  const cssDir = path.join(staticRoot, "css");
-  if (!existsSync(cssDir)) {
-    throw new Error(
-      `[ensure-standalone-static] expected css output at ${cssDir} — is this a Next build?`,
-    );
+function listFilesRecursive(dir, predicate, out = []) {
+  if (!existsSync(dir)) {
+    return out;
   }
-  const files = readdirSync(cssDir).filter((n) => n.endsWith(".css"));
-  if (files.length === 0) {
-    throw new Error(`[ensure-standalone-static] no .css files under ${cssDir}`);
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name.startsWith(".")) {
+      continue;
+    }
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      listFilesRecursive(fullPath, predicate, out);
+      continue;
+    }
+    if (predicate(entry.name, fullPath)) {
+      out.push(fullPath);
+    }
+  }
+  return out;
+}
+
+function assertNonEmptyCssOutput(staticRoot) {
+  const cssFiles = listFilesRecursive(staticRoot, (name) => name.endsWith(".css"));
+  if (cssFiles.length === 0) {
+    throw new Error(
+      `[ensure-standalone-static] no .css files under ${staticRoot} (Next 16 may place them in chunks/)`,
+    );
   }
 }
 
@@ -73,10 +94,50 @@ if (!existsSync(sourceStatic)) {
     `[ensure-standalone-static] missing ${sourceStatic} — run next build before build:deploy.`,
   );
 }
-assertNonEmptyCssDir(sourceStatic);
+assertNonEmptyCssOutput(sourceStatic);
 assertNonEmptyChunksDir(sourceStatic);
 
 verifyStandaloneArtifact(packageRoot);
+
+/**
+ * Standalone traces server chunks under `.next/standalone/...`; `pathway-lesson-generated-index` resolves
+ * the package root as three levels above `src/lib/lessons`, so indexes must live at
+ * `…/standalone/<app>/src/content/pathway-lessons/generated-indexes/*.json`.
+ */
+function syncPathwayLessonIndexesIntoStandaloneRoots(root) {
+  if (isNNSkipLessonIndexBuild()) {
+    console.log("[lesson-indexes] copy-to-standalone skipped reason=NN_SKIP_LESSON_INDEX_BUILD");
+    return;
+  }
+  const srcDir = path.join(root, "src", "content", "pathway-lessons", "generated-indexes");
+  if (!existsSync(srcDir)) {
+    throw new Error(`[lesson-indexes] FATAL: missing source index dir ${srcDir}`);
+  }
+  const files = readdirSync(srcDir).filter((n) => n.endsWith(".json"));
+  if (files.length === 0) {
+    throw new Error(
+      `[lesson-indexes] FATAL: no *.json under ${srcDir} — lesson index build did not run (or set NN_SKIP_LESSON_INDEX_BUILD).`,
+    );
+  }
+  const servers = discoverStandaloneServerJsPaths(root);
+  if (servers.length === 0) {
+    throw new Error("[lesson-indexes] FATAL: no standalone server.js under .next/standalone");
+  }
+  for (const serverPath of servers) {
+    const appRoot = path.dirname(serverPath);
+    const destDir = path.join(appRoot, "src", "content", "pathway-lessons", "generated-indexes");
+    mkdirSync(destDir, { recursive: true });
+    for (const name of files) {
+      cpSync(path.join(srcDir, name), path.join(destDir, name), { force: true });
+    }
+    console.log(
+      `[lesson-indexes] copied ${files.length} index file(s) -> ${destDir} (server=${serverPath})`,
+    );
+  }
+}
+
+syncPathwayLessonIndexesIntoStandaloneRoots(packageRoot);
+
 const targets = getStandaloneStaticSyncTargets(packageRoot);
 if (targets.length === 0) {
   throw new Error(
@@ -100,7 +161,7 @@ function prepareDestDir(destStatic) {
 function copyTree(destStatic, serverPath, mode) {
   prepareDestDir(destStatic);
   cpSync(sourceStatic, destStatic, { recursive: true, force: true });
-  assertNonEmptyCssDir(destStatic);
+  assertNonEmptyCssOutput(destStatic);
   assertNonEmptyChunksDir(destStatic);
   assertMediaSynced(sourceStatic, destStatic);
   console.log(
@@ -122,7 +183,7 @@ for (let i = 1; i < targets.length; i++) {
       );
     }
     symlinkSync(rel, destStatic);
-    assertNonEmptyCssDir(destStatic);
+    assertNonEmptyCssOutput(destStatic);
     assertNonEmptyChunksDir(destStatic);
     assertMediaSynced(sourceStatic, destStatic);
     console.log(

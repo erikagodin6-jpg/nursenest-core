@@ -20,8 +20,15 @@ import { resolveRationaleLessonLinksForQuestion } from "@/lib/learner/rationale-
 import { skipLearnerBusinessAnalyticsForAccessScope } from "@/lib/observability/admin-learner-qa-analytics";
 import { analyticsDistinctId, captureServerEvent } from "@/lib/observability/posthog-server";
 import { PH } from "@/lib/observability/posthog-conversion-events";
+import { buildAppFlashcardsTopicHref } from "@/lib/learner/app-study-internal-links";
 import { incrementBankQuestionsGradedToday } from "@/lib/learner/increment-bank-questions-graded-today";
 import { gradeMatches, normalizeCorrect } from "@/lib/questions/grade-answer-match";
+import { isRemediationEngineEnabled } from "@/lib/remediation/remediation-flag";
+import { recordRemediationCapture } from "@/lib/remediation/record-remediation";
+import {
+  parseGradeAttemptMode,
+  recordQuestionPeerAnalyticsAndBuildPayload,
+} from "@/lib/questions/question-peer-analytics";
 
 export const dynamic = "force-dynamic";
 
@@ -51,9 +58,17 @@ export async function POST(req: Request) {
 
   setSentryServerContext({ route: "/api/questions/grade", feature: SERVER_FEATURE.question, userId: gate.userId });
 
-  let body: { questionId?: string; answer?: unknown; pathwayId?: string };
+  let body: {
+    questionId?: string;
+    answer?: unknown;
+    pathwayId?: string;
+    /** practice | quiz | remediation — never `cat` for bank; CAT surfaces should omit or use cat to skip peer recording. */
+    attemptMode?: unknown;
+    /** Pre-answer self rating from question bank (optional). */
+    selfReportedConfidence?: "low" | "medium" | "high";
+  };
   try {
-    body = (await req.json()) as { questionId?: string; answer?: unknown; pathwayId?: string };
+    body = (await req.json()) as typeof body;
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
@@ -87,6 +102,12 @@ export async function POST(req: Request) {
           bodySystem: true,
           tags: true,
           images: true,
+          questionFormat: true,
+          exhibitData: true,
+          exam: true,
+          difficulty: true,
+          nclexClientNeedsCategory: true,
+          nclexClientNeedsSubcategory: true,
         },
       }),
     );
@@ -94,6 +115,12 @@ export async function POST(req: Request) {
     if (!row) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
+
+    const userPathwayRowEarly = await prisma.user.findUnique({
+      where: { id: gate.userId },
+      select: { learnerPath: true },
+    });
+    const effectivePathwayIdEarly = effectivePathwayIdForGrade(body.pathwayId, userPathwayRowEarly?.learnerPath ?? null);
 
     const expected = normalizeCorrect(row.correctAnswer);
     if (expected.length === 0) {
@@ -104,6 +131,53 @@ export async function POST(req: Request) {
     }
 
     const correct = gradeMatches(row.questionType, expected, body.answer);
+    const attemptMode = parseGradeAttemptMode(body.attemptMode);
+
+    const effectivePathwayId = effectivePathwayIdEarly;
+
+    if (
+      correct &&
+      body.selfReportedConfidence === "low" &&
+      isRemediationEngineEnabled()
+    ) {
+      void recordRemediationCapture(prisma, {
+        userId: gate.userId,
+        questionId: row.id,
+        reason: "low_confidence_correct",
+        pathwayId: effectivePathwayId,
+        topic: row.topic ?? null,
+        subtopic: row.subtopic ?? null,
+        bodySystem: row.bodySystem ?? null,
+        exam: row.exam ?? null,
+        difficulty: row.difficulty ?? null,
+        tags: Array.isArray(row.tags) ? row.tags.map(String) : [],
+        nclexClientNeedsCategory: row.nclexClientNeedsCategory ?? null,
+        nclexClientNeedsSubcategory: row.nclexClientNeedsSubcategory ?? null,
+        questionType: row.questionType,
+        confidence: "low",
+        catDifficultyHint: row.difficulty != null ? Number(row.difficulty) : null,
+      });
+    }
+
+    if (!correct && isRemediationEngineEnabled()) {
+      void recordRemediationCapture(prisma, {
+        userId: gate.userId,
+        questionId: row.id,
+        reason: "incorrect",
+        pathwayId: effectivePathwayId,
+        topic: row.topic ?? null,
+        subtopic: row.subtopic ?? null,
+        bodySystem: row.bodySystem ?? null,
+        exam: row.exam ?? null,
+        difficulty: row.difficulty ?? null,
+        tags: Array.isArray(row.tags) ? row.tags.map(String) : [],
+        nclexClientNeedsCategory: row.nclexClientNeedsCategory ?? null,
+        nclexClientNeedsSubcategory: row.nclexClientNeedsSubcategory ?? null,
+        questionType: row.questionType,
+        confidence: null,
+        catDifficultyHint: row.difficulty != null ? Number(row.difficulty) : null,
+      });
+    }
 
     try {
       await recordTopicOutcomesSequential(gate.userId, [
@@ -123,12 +197,6 @@ export async function POST(req: Request) {
     const topicCode = deriveTopicCode({ topic: row.topic, subtopic: row.subtopic, bodySystem: row.bodySystem });
     const linkConfidence = topicRoutingConfidence(row);
 
-    const userPathwayRow = await prisma.user.findUnique({
-      where: { id: gate.userId },
-      select: { learnerPath: true },
-    });
-    const effectivePathwayId = effectivePathwayIdForGrade(body.pathwayId, userPathwayRow?.learnerPath ?? null);
-
     const rationaleLessonLinks = await resolveRationaleLessonLinksForQuestion(prisma, {
       pathwayId: effectivePathwayId,
       topic: row.topic ?? null,
@@ -138,7 +206,7 @@ export async function POST(req: Request) {
       stem: displayRow.stem ?? row.stem ?? null,
     });
 
-    const [linkedContentLesson, linkedDeck] = topicCode
+    const [linkedContentLesson, _linkedDeck] = topicCode
       ? await Promise.all([
           prisma.contentItem.findFirst({
             where: { type: "lesson", status: "published", bodySystem: topicCode },
@@ -164,11 +232,12 @@ export async function POST(req: Request) {
     const lessonHrefFromRationale = rationaleLessonLinks[0]?.href ?? null;
     const lessonHrefFromContent = linkedContentLesson ? `/app/lessons/${linkedContentLesson.id}` : null;
     const lessonHref = lessonHrefFromRationale ?? lessonHrefFromContent;
-    const flashcardsHref = topicCode
-      ? linkedDeck
-        ? `/app/flashcards/${linkedDeck.slug}/study?topicCode=${encodeURIComponent(topicCode)}`
-        : `/app/flashcards?topicCode=${encodeURIComponent(topicCode)}`
-      : null;
+    const flashcardsHref =
+      topicCode && effectivePathwayId
+        ? buildAppFlashcardsTopicHref(effectivePathwayId, topicCode)
+        : effectivePathwayId
+          ? `/app/flashcards?pathwayId=${encodeURIComponent(effectivePathwayId)}`
+          : null;
     const topicDrillQs = new URLSearchParams();
     topicDrillQs.set("preset", "topic_drill");
     if (effectivePathwayId) topicDrillQs.set("pathwayId", effectivePathwayId);
@@ -187,6 +256,22 @@ export async function POST(req: Request) {
     const topicDrillHref = topicDrillBase;
 
     void incrementBankQuestionsGradedToday(gate.userId);
+
+    let peerStats: Awaited<ReturnType<typeof recordQuestionPeerAnalyticsAndBuildPayload>> = null;
+    try {
+      peerStats = await recordQuestionPeerAnalyticsAndBuildPayload(prisma, {
+        userId: gate.userId,
+        questionId: row.id,
+        questionType: row.questionType,
+        pathwayId: effectivePathwayId,
+        answer: body.answer,
+        isCorrect: correct,
+        correctKeys: expected,
+        attemptMode,
+      });
+    } catch (e) {
+      safeServerLogCritical("api_questions_grade", "peer_analytics_failed", { questionId: row.id }, e);
+    }
 
     /** ~5% sample for PostHog volume/accuracy trends — no question id, no stem content. */
     if (Math.random() < 0.05 && !skipLearnerBusinessAnalyticsForAccessScope(gate.entitlement)) {
@@ -228,6 +313,7 @@ export async function POST(req: Request) {
         ctaKey: l.ctaKey,
       })),
       topicStatsUpdated: true,
+      ...(peerStats ? { peerStats } : {}),
     });
   } catch (e) {
     safeServerLogCritical("api_questions_grade", "failed", { questionId }, e);

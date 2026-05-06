@@ -23,10 +23,10 @@ test("publish validation accepts complete context", () => {
   );
 });
 
-test("publish validation rejects non-canonical exam values", () => {
+test("publish validation rejects unknown exam labels", () => {
   assert.throws(
-    () => assertExamQuestionContextForPublish({ tier: "rn", exam: "NCLEX_RN", countryCode: "US" }),
-    /canonical exam key/i,
+    () => assertExamQuestionContextForPublish({ tier: "rn", exam: "NOT_A_REAL_EXAM_KEY", countryCode: "US" }),
+    /contentExamKey/i,
   );
 });
 

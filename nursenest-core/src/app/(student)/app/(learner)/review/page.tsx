@@ -168,7 +168,7 @@ export default async function ReviewQueuePage() {
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             <Link
-              href="/app/practice"
+              href="/app/questions"
               className="inline-flex min-h-[2.25rem] items-center rounded-full px-5 text-sm font-semibold transition-opacity hover:opacity-85"
               style={{
                 background: "var(--theme-primary)",
@@ -213,7 +213,7 @@ export default async function ReviewQueuePage() {
           ← Dashboard
         </Link>
         <Link
-          href="/app/practice"
+          href="/app/questions"
           className="font-medium hover:underline"
           style={{ color: "var(--theme-primary)" }}
         >

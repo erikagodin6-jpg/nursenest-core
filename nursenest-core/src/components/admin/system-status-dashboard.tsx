@@ -233,8 +233,8 @@ export function SystemStatusDashboard({ initial }: { initial: SystemStatusPayloa
             </Link>
           </li>
           <li>
-            <Link href="/admin/blog/studio" className="underline-offset-4 hover:underline">
-              Blog article studio
+            <Link href="/admin/blog" className="underline-offset-4 hover:underline">
+              Blog console
             </Link>
           </li>
           <li>

@@ -1,3 +1,5 @@
+import "server-only";
+
 import "./db/env-bootstrap";
 
 import { PrismaClient, type Prisma } from "@prisma/client";

@@ -34,6 +34,14 @@ export function ExamSessionShell({
   );
 }
 
+/**
+ * Sticky header stack for practice / question-bank sessions (question chrome + progress).
+ * Keeps question number and session stats visible while scrolling the stem.
+ */
+export function ExamSessionStickyChrome({ children }: { children: ReactNode }) {
+  return <div className="nn-exam-session-sticky-chrome">{children}</div>;
+}
+
 export function ExamSessionTopBar({
   left,
   center,

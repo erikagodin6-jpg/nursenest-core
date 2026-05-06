@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useMarketingMobilePerfIsMobile } from "@/lib/ui/marketing-mobile-perf-context";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
 import type { HomeHeroSlide } from "@/config/home-hero-carousel";
@@ -64,6 +64,39 @@ const sectionFrameChromeClass =
 const defaultFrameChromeClass =
   "rounded-2xl border border-[var(--border-subtle)] bg-[var(--theme-card-bg)] shadow-sm";
 
+/** Public CDN URL used by `next/image` for hero carousel slides (`HomeHeroSlide.publicUrl`). */
+function slideHasRenderablePublicUrl(s: HomeHeroSlide): boolean {
+  return typeof s.publicUrl === "string" && s.publicUrl.trim().length > 0;
+}
+
+function slideHasRenderableObjectKey(s: HomeHeroSlide): boolean {
+  return typeof s.objectKey === "string" && s.objectKey.trim().length > 0;
+}
+
+/**
+ * Harden carousel input: never map/render raw `slides` without validation.
+ * Keeps only slides with real image source fields used by `getMarketingHeroImageUrlChain` / `next/image`.
+ */
+export function buildSafeMarketingHeroSlides(
+  slides: readonly HomeHeroSlide[] | null | undefined,
+): HomeHeroSlide[] {
+  if (!Array.isArray(slides)) {
+    if (process.env.NODE_ENV !== "production") {
+      console.error("[MarketingHeroCarousel] Invalid slides prop (expected array)", { slides });
+    }
+    return [];
+  }
+  const raw = slides.filter(Boolean) as HomeHeroSlide[];
+  const safe = raw.filter((s) => slideHasRenderablePublicUrl(s) && slideHasRenderableObjectKey(s));
+  if (process.env.NODE_ENV !== "production" && safe.length !== raw.length) {
+    console.error("[MarketingHeroCarousel] Dropped invalid carousel slides", {
+      incoming: raw.length,
+      kept: safe.length,
+    });
+  }
+  return safe;
+}
+
 function MarketingHeroCarouselInteractive({
   slides,
   onMediaUnavailable,
@@ -106,7 +139,17 @@ function MarketingHeroCarouselInteractive({
     });
   }, [slideFingerprint, slides.length]);
 
-  const currentSlide = slides[current];
+  /** Keep active index within `slides` (caller passes pre-sanitized `safeSlides` only). */
+  useEffect(() => {
+    if (slides.length === 0) {
+      queueMicrotask(() => setCurrent(0));
+      return;
+    }
+    setCurrent((c) => Math.min(Math.max(0, c), slides.length - 1));
+  }, [slides.length, slideFingerprint]);
+
+  const activeIndex = slides.length > 0 ? Math.min(Math.max(0, current), slides.length - 1) : 0;
+  const currentSlide = slides.length > 0 ? slides[activeIndex] : undefined;
 
   useEffect(() => {
     if (!onActiveSlideAnalytics || !currentSlide || !hasLoaded) return;
@@ -169,15 +212,15 @@ function MarketingHeroCarouselInteractive({
   }, [slideFingerprint]);
 
   useEffect(() => {
-    if (slides.length === 0 || !failed.has(current)) return;
+    if (slides.length === 0 || !failed.has(activeIndex)) return;
     for (let step = 0; step < slides.length; step++) {
-      const idx = (current + step) % slides.length;
+      const idx = (activeIndex + step) % slides.length;
       if (!failed.has(idx)) {
         queueMicrotask(() => setCurrent(idx));
         return;
       }
     }
-  }, [failed, current, slides.length]);
+  }, [failed, activeIndex, slides.length]);
 
   useLayoutEffect(() => {
     if (slides.length === 0) return;
@@ -199,15 +242,37 @@ function MarketingHeroCarouselInteractive({
     }
   }, []);
 
+  useLayoutEffect(() => {
+    if (slides.length === 0) return;
+    const missing: number[] = [];
+    slides.forEach((slide, index) => {
+      const chain = getMarketingHeroImageUrlChain({
+        objectKey: slide.objectKey,
+        publicCdnUrl: slide.publicUrl,
+      });
+      const maxTier = Math.max(0, chain.length - 1);
+      const tier = Math.min(Math.max(0, heroTierByIndex[index] ?? 0), maxTier);
+      const rawSrc = chain[tier];
+      if (!chain.length || typeof rawSrc !== "string" || !rawSrc.trim()) {
+        missing.push(index);
+      }
+    });
+    if (missing.length === 0) return;
+    setFailed((prev) => {
+      let changed = false;
+      const next = new Set(prev);
+      for (const i of missing) {
+        if (!next.has(i)) {
+          next.add(i);
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+  }, [slideFingerprint, heroTierByIndex, slides.length]);
+
   if (slides.length === 0) {
-    return (
-      <div
-        className="mx-auto max-w-md rounded-xl border border-dashed border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-5 text-center text-sm leading-relaxed text-muted-foreground"
-        data-testid={`${testIdPrefix}-empty`}
-      >
-        {t("components.homeConversionSections.platformCarouselEmpty")}
-      </div>
-    );
+    return null;
   }
 
   const captionTestId = testIdPrefix === "hero-carousel" ? "hero-carousel-caption" : `${testIdPrefix}-caption`;
@@ -291,9 +356,22 @@ function MarketingHeroCarouselInteractive({
             objectKey: slide.objectKey,
             publicCdnUrl: slide.publicUrl,
           });
-          const tier = Math.min(heroTierByIndex[index] ?? 0, chain.length - 1);
-          const src = chain[tier];
-          const active = index === current;
+          const maxTier = Math.max(0, chain.length - 1);
+          const tier = Math.min(Math.max(0, heroTierByIndex[index] ?? 0), maxTier);
+          const rawSrc = chain[tier];
+          const src =
+            typeof rawSrc === "string" && rawSrc.trim() ? rawSrc.trim() : null;
+          if (!src) {
+            if (process.env.NODE_ENV !== "production") {
+              console.error("[MarketingHeroCarousel] Missing carousel image src", {
+                index,
+                tier,
+                chainLength: chain.length,
+              });
+            }
+            return null;
+          }
+          const active = index === activeIndex;
           const lcp = mediaFrame === "hero" && index === 0;
           const loadLazy = isBelowFoldSection ? index > 0 : !lcp && index > 0;
           const slideMotionClass = isBelowFoldSection
@@ -341,7 +419,7 @@ function MarketingHeroCarouselInteractive({
           >
             <div className="bg-gradient-to-t from-[color-mix(in_srgb,var(--palette-heading)_55%,transparent)] via-[color-mix(in_srgb,var(--palette-heading)_22%,transparent)] to-transparent px-3 pb-2.5 pt-7 sm:px-4 sm:pb-3 sm:pt-9">
               {currentSlide.label ? (
-                <p className="mb-1 line-clamp-1 text-left text-[10px] font-semibold uppercase leading-tight tracking-wide text-[color-mix(in_srgb,var(--text-on-accent)_88%,transparent)] sm:text-[11px]">
+                <p className="mb-1 line-clamp-1 text-left text-xs font-semibold uppercase leading-tight tracking-wide text-[color-mix(in_srgb,var(--text-on-accent)_88%,transparent)] sm:text-[11px]">
                   {currentSlide.label}
                 </p>
               ) : null}
@@ -408,20 +486,27 @@ function MarketingHeroCarouselInteractive({
                       onClick={() => {
                         if (!failed.has(index)) setCurrent(index);
                       }}
-                      className={`rounded-full transition-all duration-[var(--brand-motion-normal)] ease-[var(--brand-motion-ease-luxury)] ${
-                        isBelowFoldSection
-                          ? index === current
-                            ? "h-1.5 w-5 bg-role-cta opacity-100"
-                            : "h-1.5 w-1.5 bg-[var(--theme-muted-text)]/28 hover:bg-[var(--theme-muted-text)]/45"
-                          : index === current
-                            ? "h-2 w-6 bg-role-cta"
-                            : "h-2 w-2 bg-[var(--theme-muted-text)]/35 hover:bg-[var(--theme-muted-text)]/55"
-                      } ${failed.has(index) ? "cursor-not-allowed opacity-40" : ""}`}
+                      className={`group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-opacity duration-[var(--brand-motion-normal)] ease-[var(--brand-motion-ease-luxury)] ${
+                        failed.has(index) ? "cursor-not-allowed opacity-40" : ""
+                      }`}
                       aria-label={t("components.marketingHeroCarousel.goToSlide", { n: index + 1 })}
                       data-testid={
                         testIdPrefix === "hero-carousel" ? `button-carousel-dot-${index}` : `button-${testIdPrefix}-dot-${index}`
                       }
-                    />
+                    >
+                      <span
+                        className={`block rounded-full transition-all duration-[var(--brand-motion-normal)] ease-[var(--brand-motion-ease-luxury)] ${
+                          isBelowFoldSection
+                            ? index === activeIndex
+                              ? "h-1.5 w-5 bg-role-cta opacity-100"
+                              : "h-1.5 w-1.5 bg-[var(--theme-muted-text)]/28 group-hover:bg-[var(--theme-muted-text)]/45"
+                            : index === activeIndex
+                              ? "h-2 w-6 bg-role-cta"
+                              : "h-2 w-2 bg-[var(--theme-muted-text)]/35 group-hover:bg-[var(--theme-muted-text)]/55"
+                        }`}
+                        aria-hidden
+                      />
+                    </button>
                   ))}
                 </div>
               ) : null}
@@ -444,7 +529,6 @@ function MarketingHeroCarouselMobileLite({
   captionOverlay = false,
   onActiveSlideAnalytics,
 }: MarketingHeroCarouselProps) {
-  const { t } = useMarketingI18n();
   const [tier, setTier] = useState(0);
   const [heroFallback, setHeroFallback] = useState(false);
   const slide0 = slides[0];
@@ -455,14 +539,7 @@ function MarketingHeroCarouselMobileLite({
   }, [heroFallback, onActiveSlideAnalytics, slide0]);
 
   if (slides.length === 0) {
-    return (
-      <div
-        className="mx-auto max-w-md rounded-xl border border-dashed border-[var(--theme-card-border)] bg-[var(--theme-muted-surface)] px-4 py-5 text-center text-sm leading-relaxed text-muted-foreground"
-        data-testid={`${testIdPrefix}-empty`}
-      >
-        {t("components.homeConversionSections.platformCarouselEmpty")}
-      </div>
-    );
+    return null;
   }
 
   const captionTestId = testIdPrefix === "hero-carousel" ? "hero-carousel-caption" : `${testIdPrefix}-caption`;
@@ -512,36 +589,47 @@ function MarketingHeroCarouselMobileLite({
     objectKey: slide0.objectKey,
     publicCdnUrl: slide0.publicUrl,
   });
-  const tierClamped = Math.min(tier, chain.length - 1);
-  const src = chain[tierClamped];
+  const maxTier = Math.max(0, chain.length - 1);
+  const tierClamped = Math.min(Math.max(0, tier), maxTier);
+  const rawSrc = chain[tierClamped];
+  const src =
+    typeof rawSrc === "string" && rawSrc.trim() ? rawSrc.trim() : null;
+  if (!src && process.env.NODE_ENV !== "production") {
+    console.error("[MarketingHeroCarousel] MobileLite missing carousel image src", {
+      tierClamped,
+      chainLength: chain.length,
+    });
+  }
   const lcp = mediaFrame === "hero";
 
   return (
     <div className={`relative flex min-h-0 w-full min-w-0 flex-col ${className ?? ""}`} data-testid={testIdPrefix}>
       <div className={`${frameShell} relative overflow-hidden ${frameChromeClass}`}>
-        <Image
-          key={`${slide0.objectKey}-m-${tierClamped}`}
-          src={src}
-          alt={slide0.alt}
-          fill
-          sizes={carouselSizes}
-          quality={photoQuality}
-          priority={lcp}
-          loading={isBelowFoldSection ? "lazy" : undefined}
-          fetchPriority={isBelowFoldSection ? "low" : undefined}
-          unoptimized={marketingImageShouldUnoptimize(src)}
-          className={`pointer-events-none object-contain ${slideImageBgClass}`}
-          data-testid={`img-${imgTestIdPrefix}-slide-0`}
-          referrerPolicy="no-referrer"
-          onError={() => {
-            if (tierClamped < chain.length - 1) {
-              setTier((v) => v + 1);
-              return;
-            }
-            setHeroFallback(true);
-            onMediaUnavailable?.();
-          }}
-        />
+        {src ? (
+          <Image
+            key={`${slide0.objectKey}-m-${tierClamped}`}
+            src={src}
+            alt={slide0.alt}
+            fill
+            sizes={carouselSizes}
+            quality={photoQuality}
+            priority={lcp}
+            loading={isBelowFoldSection ? "lazy" : undefined}
+            fetchPriority={isBelowFoldSection ? "low" : undefined}
+            unoptimized={marketingImageShouldUnoptimize(src)}
+            className={`pointer-events-none object-contain ${slideImageBgClass}`}
+            data-testid={`img-${imgTestIdPrefix}-slide-0`}
+            referrerPolicy="no-referrer"
+            onError={() => {
+              if (tierClamped < chain.length - 1) {
+                setTier((v) => v + 1);
+                return;
+              }
+              setHeroFallback(true);
+              onMediaUnavailable?.();
+            }}
+          />
+        ) : null}
         {shouldOverlayCaption ? (
           <div
             className="pointer-events-none absolute inset-x-0 bottom-0 z-10"
@@ -550,7 +638,7 @@ function MarketingHeroCarouselMobileLite({
           >
             <div className="bg-gradient-to-t from-[color-mix(in_srgb,var(--palette-heading)_55%,transparent)] via-[color-mix(in_srgb,var(--palette-heading)_22%,transparent)] to-transparent px-3 pb-2.5 pt-7 sm:px-4 sm:pb-3 sm:pt-9">
               {slide0.label ? (
-                <p className="mb-1 line-clamp-1 text-left text-[10px] font-semibold uppercase leading-tight tracking-wide text-[color-mix(in_srgb,var(--text-on-accent)_88%,transparent)] sm:text-[11px]">
+                <p className="mb-1 line-clamp-1 text-left text-xs font-semibold uppercase leading-tight tracking-wide text-[color-mix(in_srgb,var(--text-on-accent)_88%,transparent)] sm:text-[11px]">
                   {slide0.label}
                 </p>
               ) : null}
@@ -605,9 +693,11 @@ function MarketingHeroCarouselMobileLite({
 }
 
 export function MarketingHeroCarousel(props: MarketingHeroCarouselProps) {
+  const safeSlides = useMemo(() => buildSafeMarketingHeroSlides(props.slides), [props.slides]);
   const marketingMobile = useMarketingMobilePerfIsMobile();
+  const nextProps = { ...props, slides: safeSlides };
   if (marketingMobile === true) {
-    return <MarketingHeroCarouselMobileLite {...props} />;
+    return <MarketingHeroCarouselMobileLite {...nextProps} />;
   }
-  return <MarketingHeroCarouselInteractive {...props} />;
+  return <MarketingHeroCarouselInteractive {...nextProps} />;
 }

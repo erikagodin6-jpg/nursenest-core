@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
+import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner";
+import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
 import { PracticeTestsHubClient } from "@/components/student/practice-tests-hub-client";
 import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";
 import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
@@ -8,11 +10,14 @@ import { ContentEmptyState } from "@/components/ui/content-empty-state";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { catPathwayExamCodeLabel, catPathwayRegionalExamLine } from "@/lib/exam-pathways/cat-pathway-labels";
-import { defaultPracticeTestPathwayId, listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
+import {
+  resolveSubscribedQuestionBankPathways,
+  type ResolvedQuestionBankPathways,
+} from "@/lib/learner/tier-scoped-study-routes";
 import { LearnerStudyQuickLinksCard } from "@/components/student/learner-study-quick-links-card";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
@@ -20,9 +25,24 @@ import { appShellBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { readPracticeTestsHubBootstrapSnapshot } from "@/lib/study-content-failover/practice-tests-hub-bootstrap-snapshot-read";
 import { snapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { getPathwayLessonPracticeHubSnapshot } from "@/lib/learner-study-hub/pathway-lesson-study-materials";
+import { normalizeLearnerFlashcardsPathwayQueryId } from "@/lib/flashcards/flashcards-pathway-query";
 
-export default async function PracticeTestsPage() {
+type PageProps = {
+  searchParams: Promise<{ pathwayId?: string | string[] | undefined; topic?: string | string[] | undefined }>;
+};
+
+export default async function PracticeTestsPage({ searchParams }: PageProps) {
   const { t } = await getLearnerMarketingBundle();
+  const sp = await searchParams;
+  const rawPid = sp.pathwayId;
+  const pathwayQueryRaw =
+    typeof rawPid === "string" && rawPid.trim().length > 2
+      ? rawPid.trim()
+      : Array.isArray(rawPid) && typeof rawPid[0] === "string" && rawPid[0].trim().length > 2
+        ? rawPid[0].trim()
+        : null;
+
   const session = await getProtectedRouteSession("(student).app.(learner).practice-tests");
   const userId = (session?.user as { id?: string })?.id ?? "";
   const entitlement = await resolveEntitlementForPage(userId);
@@ -61,6 +81,10 @@ export default async function PracticeTestsPage() {
     );
   }
 
+  const requestedPathwayId = pathwayQueryRaw
+    ? normalizeLearnerFlashcardsPathwayQueryId(pathwayQueryRaw, entitlement.country)
+    : null;
+
   let pathwayOptions: {
     id: string;
     label: string;
@@ -70,17 +94,14 @@ export default async function PracticeTestsPage() {
   let defaultPathwayId: string | null = null;
   let catEligiblePathwayIds: string[] = [];
   let hubBootstrapSource: "primary" | "secondary" = "primary";
+  let pathwayResolution: ResolvedQuestionBankPathways | null = null;
 
   try {
     const compatiblePathways = await listPathwaysCompatibleWithSubscription(entitlement);
     const learnerPathRow = userId
       ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
       : null;
-    defaultPathwayId = await defaultPracticeTestPathwayId(
-      compatiblePathways,
-      learnerPathRow?.learnerPath,
-      entitlement.country,
-    );
+    const learnerLp = learnerPathRow?.learnerPath?.trim() ?? null;
     pathwayOptions = compatiblePathways.map((p) => ({
       id: p.id,
       label: `${p.shortName} — ${p.displayName}`,
@@ -88,6 +109,15 @@ export default async function PracticeTestsPage() {
       examCodeLabel: p.shortName.trim(),
     }));
     catEligiblePathwayIds = compatiblePathways.filter(pathwayAllowsCatAdaptiveStart).map((p) => p.id);
+    pathwayResolution = resolveSubscribedQuestionBankPathways({
+      requestedPathwayId,
+      compatible: compatiblePathways.map((p) => ({ id: p.id, shortName: p.shortName })),
+      learnerPath: learnerLp,
+      requireExplicitRequestedPathwayId: true,
+    });
+    if (pathwayResolution.state === "scoped") {
+      defaultPathwayId = pathwayResolution.defaultPathwayId;
+    }
   } catch (e) {
     safeServerLog("learner_practice_tests", "hub_bootstrap_primary_failed", {
       user_id_prefix: userId.slice(0, 8),
@@ -99,8 +129,21 @@ export default async function PracticeTestsPage() {
     if (snap?.payload) {
       hubBootstrapSource = "secondary";
       pathwayOptions = snap.payload.pathwayOptions;
-      defaultPathwayId = snap.payload.defaultPathwayId;
       catEligiblePathwayIds = snap.payload.catEligiblePathwayIds;
+      pathwayResolution = resolveSubscribedQuestionBankPathways({
+        requestedPathwayId,
+        compatible: snap.payload.pathwayOptions.map((p) => ({
+          id: p.id,
+          shortName: p.examCodeLabel?.trim() || p.id,
+        })),
+        learnerPath: null,
+        requireExplicitRequestedPathwayId: true,
+      });
+      if (pathwayResolution.state === "scoped") {
+        defaultPathwayId = pathwayResolution.defaultPathwayId;
+      } else {
+        defaultPathwayId = snap.payload.defaultPathwayId;
+      }
       const age = snapshotAgeMs(snap.capturedAt);
       safeServerLog("learner_practice_tests", "study_content_failover", {
         event: "study_content_failover",
@@ -127,6 +170,54 @@ export default async function PracticeTestsPage() {
       );
     }
   }
+
+  if (pathwayResolution?.state === "invalid_requested") {
+    return (
+      <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
+        <div className="mb-4">
+          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+        </div>
+        <ContentEmptyState
+          variant="generic"
+          headline="This study track is not on your account"
+          body="Choose an exam you are subscribed to."
+          primaryCta={{ label: "Study preferences", href: "/app/account/study-preferences" }}
+        />
+      </div>
+    );
+  }
+
+  if (pathwayResolution?.state === "no_pathway_context") {
+    return (
+      <div className="space-y-4">
+        <div className="mb-4">
+          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+        </div>
+        <LearnerRenderTraceBanner
+          data-route="practice-tests"
+          label="NN_RENDER_TRACE: practice exams live route (pathway picker)"
+        />
+        <FlashcardsPathwayPickSurface
+          baseAppPath="/app/practice-tests"
+          title={t("learner.practiceTests.title")}
+          subtitle="Choose an exam track for practice exams. Your selection opens this hub with the same pathway in the URL — no redirect loop."
+          pathways={pathwayOptions.map((p) => ({ id: p.id, label: p.label }))}
+        />
+      </div>
+    );
+  }
+
+  if (pathwayResolution?.state !== "scoped") {
+    return (
+      <div className="mx-auto max-w-3xl space-y-6 px-4 py-8">
+        <div className="mb-4">
+          <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
+        </div>
+        <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
+      </div>
+    );
+  }
+
   const catHref = resolveStudyLoopCatHref({
     authState: "signed_in",
     pathwayId: defaultPathwayId,
@@ -134,11 +225,17 @@ export default async function PracticeTestsPage() {
     intent: "start",
   });
 
+  const pathwayLessonPractice =
+    defaultPathwayId && defaultPathwayId.trim().length > 0
+      ? await getPathwayLessonPracticeHubSnapshot(defaultPathwayId.trim())
+      : null;
+
   return (
     <div className="space-y-6">
       <div className="mb-4">
         <BreadcrumbTrail items={appShellBreadcrumbs("practice-tests")} />
       </div>
+      <LearnerRenderTraceBanner data-route="practice-tests" label="NN_RENDER_TRACE: practice live route" />
       <div className="nn-learner-page-hero">
         <h1 className="text-3xl font-bold text-[var(--semantic-text-primary)]">{t("learner.practiceTests.title")}</h1>
         <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">{t("learner.practiceTests.subtitle.subscriber")}</p>
@@ -158,6 +255,8 @@ export default async function PracticeTestsPage() {
           catEligiblePathwayIds={catEligiblePathwayIds}
           examSimulationEnabled={isCatExamSimulationFeatureEnabled()}
           hubBootstrapSource={hubBootstrapSource}
+          catHref={catHref}
+          pathwayLessonPractice={pathwayLessonPractice}
         />
       </Suspense>
     </div>

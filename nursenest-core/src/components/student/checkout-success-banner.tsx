@@ -95,7 +95,7 @@ function Inner() {
           className={
             isIssue
               ? "rounded-full bg-[color-mix(in_srgb,var(--semantic-warning)_85%,var(--semantic-brand))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:opacity-95"
-              : "rounded-full bg-[var(--semantic-success)] px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:opacity-95"
+              : "rounded-full bg-[var(--semantic-success)] px-3 py-1.5 text-xs font-semibold nn-text-on-solid-fill shadow-sm hover:opacity-95"
           }
           href="/app/account/overview"
         >

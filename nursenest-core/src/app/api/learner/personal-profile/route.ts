@@ -31,6 +31,7 @@ const patchSchema = z
     studyGoal: z.union([z.string().max(2000), z.null()]).optional(),
     examFocus: z.union([z.string().max(240), z.null()]).optional(),
     dailyQuestionGoal: z.union([z.number().int().min(5).max(120), z.null()]).optional(),
+    measurementPreference: z.union([z.literal("metric"), z.literal("imperial"), z.null()]).optional(),
   })
   .refine((o) => Object.keys(o).length > 0, { message: "At least one field is required." });
 
@@ -163,6 +164,9 @@ export async function PATCH(req: Request) {
     if (body.examFocus !== undefined) data.examFocus = body.examFocus === null ? null : body.examFocus.trim() || null;
     if (body.dailyQuestionGoal !== undefined) {
       data.dailyQuestionGoal = body.dailyQuestionGoal;
+    }
+    if (body.measurementPreference !== undefined) {
+      data.measurementPreference = body.measurementPreference;
     }
 
     await prisma.user.update({

@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useMemo, useRef, useState, type ComponentType } from "react";
 import { createPortal } from "react-dom";
+import { CountryCode } from "@prisma/client";
 import { useTheme } from "next-themes";
 import { getNavChromeStyle, getNavChromeVars } from "@/lib/theme/nav-chrome";
 import { ChevronDown, MapPin, Menu, Settings, User, X } from "lucide-react";
@@ -59,7 +60,7 @@ const MarketingHeaderUtilityStrip = dynamic(
 );
 
 /** Primary filled header CTAs — white label on theme primary fill for consistent contrast. */
-const HEADER_NAV_PRIMARY_CTA = "nn-nav-cta text-white";
+const HEADER_NAV_PRIMARY_CTA = "nn-nav-cta nn-text-on-solid-fill";
 
 /** Match legacy header rhythm: compact sizing with medium-weight copy, not extra-light pills. */
 const NAV_LINK_CLASS =
@@ -74,7 +75,6 @@ const HEADER_SECONDARY_ACTION_CLASS =
 const HEADER_GUEST_SECONDARY_ACTION_CLASS =
   "nav-item inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-4 py-2 text-sm font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]";
 type LearnerTier = "RPN" | "LVN_LPN" | "RN" | "NP" | "ALLIED";
-type LearnerCountry = "CA" | "US";
 type HeaderResumeCta = { href: string; label: string } | null;
 type HeaderNavLink = { key: string; href: string; label: string; matchBase: string };
 
@@ -112,11 +112,22 @@ function isMegaMenuKeyActive(key: ExamMenuKey, strippedPath: string): boolean {
 /** Sync badge line — allied-specific abbreviation is resolved client-side via dynamic import. */
 function examIndicatorLabelSync(
   t: (key: string) => string,
-  country: LearnerCountry,
+  country: CountryCode,
   tier: LearnerTier,
   alliedAbbrev: string | null,
 ): string {
-  const regionShort = country === "CA" ? t("nav.badge.regionCA") : t("nav.badge.regionUS");
+  const regionShort =
+    country === CountryCode.CA
+      ? t("nav.badge.regionCA")
+      : country === CountryCode.US
+        ? t("nav.badge.regionUS")
+        : country === CountryCode.GB
+          ? "UK"
+          : country === CountryCode.AU
+            ? "AU"
+            : country === CountryCode.PH
+              ? "PH"
+              : String(country);
   if (tier === "LVN_LPN") return `${regionShort} ${t("nav.badge.roleLvnLpn")}`;
   if (tier === "RPN") return `${regionShort} ${t("nav.badge.roleRpn")}`;
   if (tier === "ALLIED") {
@@ -180,7 +191,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
         strippedPathname: strippedPath,
         globalRegionCookie: clientGlobalRegion,
         marketingExamRegion: region,
-        sessionCountryUsCa: user?.country,
+        sessionCountryCode: user?.country,
       }),
     [strippedPath, clientGlobalRegion, region, user?.country],
   );
@@ -235,13 +246,22 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   }, []);
 
   useEffect(() => {
-    const close = (e: PointerEvent) => {
+    const close = (e: MouseEvent) => {
       if (!mobileLangRef.current?.contains(e.target as Node)) setMobileLangOpen(false);
     };
     const onEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setMobileLangOpen(false);
+      if (e.key !== "Escape") return;
+      if (mobileOpen) {
+        e.preventDefault();
+        setMobileOpen(false);
+        return;
       }
+      if (mobileContextOpen) {
+        e.preventDefault();
+        setMobileContextOpen(false);
+        return;
+      }
+      setMobileLangOpen(false);
     };
     document.addEventListener("click", close);
     document.addEventListener("keydown", onEscape);
@@ -249,7 +269,16 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
       document.removeEventListener("click", close);
       document.removeEventListener("keydown", onEscape);
     };
-  }, []);
+  }, [mobileOpen, mobileContextOpen]);
+
+  useEffect(() => {
+    if (!mobileOpen && !mobileContextOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileOpen, mobileContextOpen]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -324,7 +353,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
 
   const learnerExamBadge =
     isMarketingEntitledLearner && user
-      ? examIndicatorLabelSync(t, user.country as LearnerCountry, user.tier as LearnerTier, alliedProfessionAbbrev)
+      ? examIndicatorLabelSync(t, user.country, user.tier as LearnerTier, alliedProfessionAbbrev)
       : null;
   const activeProfession: string = isLearnerRole && user?.tier
     ? (user.tier === "RPN" || user.tier === "LVN_LPN" ? "pn" : user.tier === "NP" ? "np" : user.tier === "ALLIED" ? "allied" : "rn")
@@ -333,7 +362,12 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
   const marketingFlowDestinations = useMemo(() => {
     const tier: MarketingHeaderFlowTier | null =
       isMarketingEntitledLearner && user?.tier ? (user.tier as MarketingHeaderFlowTier) : null;
-    const country = (user?.country as "US" | "CA" | null) ?? null;
+    const country =
+      user?.country === CountryCode.US || user?.country === CountryCode.CA
+        ? user.country === CountryCode.US
+          ? "US"
+          : "CA"
+        : null;
     return marketingHeaderLearnPracticeFlowDestinations(region, { tier, country });
   }, [isMarketingEntitledLearner, user?.tier, user?.country, region]);
 
@@ -463,9 +497,9 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             includeUnpublishedRegions={isAdminAuthenticated}
           />
         </div>
-        <div className="nn-section-shell flex flex-col overflow-visible">
+        <div className="nn-section-shell flex flex-col overflow-visible" data-nn-header-band="primary">
           {/* ── Mobile brand row ── */}
-          <div className="top-bar nn-header-mobile-only-flex min-h-[4.5rem] items-center gap-2 overflow-visible border-b border-[var(--header-border)] pt-[env(safe-area-inset-top,0px)] sm:gap-4">
+          <div className="top-bar nn-header-mobile-only-flex min-h-0 items-center gap-2 overflow-visible border-b border-[var(--header-border)] py-1.5 pt-[max(0.25rem,env(safe-area-inset-top,0px))] sm:min-h-[4.5rem] sm:gap-4 sm:py-0">
             <div className="flex min-w-0 shrink items-center gap-2 overflow-hidden">
               <Link
                 href={localizeHref("/")}
@@ -519,7 +553,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               <button
                 type="button"
                 onClick={() => setMobileContextOpen(true)}
-                className="nn-skip-mobile-touch-target nn-header-mobile-only-inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--nn-nav-border)] bg-transparent p-0 text-[var(--nn-nav-fg)] transition-colors hover:bg-[var(--nn-nav-hover-bg)]"
+                className="nn-header-mobile-only-inline-flex h-11 w-11 shrink-0 touch-manipulation items-center justify-center rounded-xl border border-[var(--nn-nav-border)] bg-transparent p-0 text-[var(--nn-nav-fg)] transition-colors hover:bg-[var(--nn-nav-hover-bg)]"
                 aria-label="Region and language settings"
                 aria-expanded={mobileContextOpen}
               >
@@ -528,7 +562,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               <Button
                 type="button"
                 variant="ghost"
-                className="nn-skip-mobile-touch-target h-10 w-10 shrink-0 rounded-xl border border-[var(--nn-nav-border)] p-0 text-[var(--nn-nav-fg)] hover:bg-[var(--nn-nav-hover-bg)]"
+                className="h-11 w-11 shrink-0 touch-manipulation rounded-xl border border-[var(--nn-nav-border)] p-0 text-[var(--nn-nav-fg)] hover:bg-[var(--nn-nav-hover-bg)]"
                 aria-label={t("nav.openMenu")}
                 aria-expanded={mobileOpen}
                 onClick={() => setMobileOpen(true)}
@@ -540,7 +574,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
 
           {/* Mobile/tablet: signed-in CTAs (learners/staff) — guests use the top row above */}
           {isAuthenticated ? (
-            <div className="nn-header-mobile-only-flex relative z-[130] items-center justify-end gap-2 border-b border-[var(--header-border)] bg-[var(--nav-bg)] px-4 py-2.5">
+            <div className="nn-header-mobile-only-flex relative z-[1] items-center justify-end gap-2 border-b border-[var(--header-border)] bg-[var(--nav-bg)] px-3 py-2 sm:px-4 sm:py-2.5">
               {isAdminAuthenticated ? (
                 <div className="flex w-full min-w-0 items-center justify-end gap-2">
                   <Link
@@ -729,7 +763,10 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             </div>
           </div>{/* /nav-row */}
         </div>{/* /shell */}
-        <div className="nn-header-hide-until-xl w-full border-t border-[var(--nn-nav-border)] nn-header-nav-row">
+        <div
+          className="nn-header-hide-until-xl w-full nn-header-nav-row"
+          data-nn-header-band="tier"
+        >
           <div className="nn-section-shell flex min-h-[30px] flex-wrap items-center gap-x-0.5 gap-y-0 py-0 md:min-h-[32px] md:py-0 lg:gap-x-0.5">
             <nav
               aria-label={t("nav.marketingExplore")}
@@ -813,12 +850,12 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             <div className="nn-header-overlay-mobile-only fixed inset-0 z-[200] animate-[nn-overlay-enter_0.24s_ease_forwards]">
           <button
             type="button"
-            className="nn-skip-mobile-touch-target absolute inset-0 bg-black/56"
+            className="nn-skip-mobile-touch-target absolute inset-0 touch-manipulation bg-black/56"
             aria-label={t("nav.closeMenu")}
             onClick={scheduleMobileDrawerClose}
           />
           <div className="absolute inset-x-0 top-0 flex h-[100dvh] max-h-[100dvh] flex-col border-b border-[var(--nav-border)] bg-[var(--nav-bg)] text-[var(--nav-fg)] shadow-[var(--shadow-elevated)] animate-[nn-drawer-slide-in_0.28s_cubic-bezier(0.25,0.1,0.25,1)_forwards]">
-            <div className="flex h-16 shrink-0 items-center justify-between border-b border-[var(--header-border)] px-4 pt-[max(0.5rem,env(safe-area-inset-top))]">
+            <div className="flex min-h-14 shrink-0 items-center justify-between border-b border-[var(--header-border)] px-3 pt-[max(0.35rem,env(safe-area-inset-top))] sm:min-h-16 sm:px-4 sm:pt-[max(0.5rem,env(safe-area-inset-top))]">
               <Link
                 href={localizeHref("/")}
                 className="flex min-w-0 shrink-0 items-center overflow-visible bg-transparent"
@@ -830,16 +867,16 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               <Button
                 type="button"
                 variant="ghost"
-                className="nn-skip-mobile-touch-target h-10 w-10 shrink-0 rounded-xl border border-[var(--nav-border)] p-0 text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                className="h-11 w-11 shrink-0 touch-manipulation rounded-xl border border-[var(--nav-border)] p-0 text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                 aria-label={t("nav.closeMenu")}
                 onClick={scheduleMobileDrawerClose}
               >
                 <X className="h-5 w-5" />
               </Button>
             </div>
-            <div className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-y-contain px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-5">
+            <div className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-y-contain px-3 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:px-4 sm:pt-5">
               <div className="space-y-1">
-                <p className="px-2 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
+                <p className="px-2 text-xs font-medium uppercase tracking-widest text-[var(--nav-muted)] sm:text-[11px]">
                   {t("nav.marketingExplore")}
                 </p>
                 <>
@@ -853,7 +890,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                               key={flowPractice.key}
                               href={localizeHref(flowPractice.href)}
                               aria-current={isActivePath(strippedPath, flowPractice.matchBase) ? "page" : undefined}
-                              className={`nav-item ${HEADER_NAV_PRIMARY_CTA} mb-2 flex min-h-[48px] w-full items-center justify-center rounded-xl px-4 py-3 text-[15px] font-semibold`}
+                              className={`nav-item ${HEADER_NAV_PRIMARY_CTA} mb-2 flex min-h-12 w-full touch-manipulation items-center justify-center rounded-xl px-4 py-3 text-[15px] font-semibold`}
                               onClick={() => {
                                 trackClientEvent(PH.marketingNavClick, {
                                   actor: navActor,
@@ -867,13 +904,13 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                               {flowPractice.label}
                             </Link>
                           ) : null}
-                          <div className="mb-3 grid grid-cols-2 gap-2">
+                          <div className="mb-3 grid grid-cols-1 gap-2.5 min-[400px]:grid-cols-2">
                             {flowRest.map((item) => (
                               <Link
                                 key={item.key}
                                 href={localizeHref(item.href)}
                                 aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                                className={`nav-item flex min-h-[44px] items-center justify-center rounded-xl border border-[var(--nav-border)] px-2 py-2.5 text-center text-[13px] font-medium leading-snug text-[var(--nav-muted)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)] ${isActivePath(strippedPath, item.matchBase) ? "border-[var(--text-accent)] text-[var(--nav-link-active)]" : ""}`}
+                                className={`nav-item flex min-h-12 touch-manipulation items-center justify-center rounded-xl border border-[var(--nav-border)] px-3 py-2.5 text-center text-sm font-medium leading-snug text-[var(--nav-muted)] transition-colors hover:bg-[var(--nav-hover)] hover:text-[var(--nav-fg)] ${isActivePath(strippedPath, item.matchBase) ? "border-[var(--text-accent)] text-[var(--nav-link-active)]" : ""}`}
                                 onClick={() => {
                                   trackClientEvent(PH.marketingNavClick, {
                                     actor: navActor,
@@ -897,7 +934,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                         href={localizeHref(menu.hubHref)}
                         aria-current={isMegaMenuKeyActive(menu.key, strippedPath) ? "page" : undefined}
                         data-active={isMegaMenuKeyActive(menu.key, strippedPath) || undefined}
-                        className={`nav-item flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-medium transition-colors ${isMegaMenuKeyActive(menu.key, strippedPath) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                        className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 rounded-xl px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${isMegaMenuKeyActive(menu.key, strippedPath) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
                         onClick={() => {
                           trackClientEvent(PH.marketingNavClick, {
                             actor: navActor,
@@ -916,7 +953,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                       </Link>
                     ))}
                     <div className="space-y-1 border-t border-[var(--header-border)] pt-3">
-                      <p className="px-2 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
+                      <p className="px-2 text-xs font-medium uppercase tracking-widest text-[var(--nav-muted)] sm:text-[11px]">
                         {formatTitleCase(t("nav.marketingMore"), locale)}
                       </p>
                       {marketingMoreLinks.map((item) => (
@@ -924,7 +961,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                           key={item.key}
                           href={localizeHref(item.href)}
                           aria-current={isActivePath(strippedPath, item.matchBase) ? "page" : undefined}
-                          className={`nav-item flex items-center gap-2 rounded-xl px-3 py-3 text-[15px] font-medium transition-colors ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
+                          className={`nav-item flex min-h-11 touch-manipulation items-center gap-2 rounded-xl px-3 py-2.5 text-[15px] font-medium transition-colors sm:py-3 ${isActivePath(strippedPath, item.matchBase) ? "font-semibold text-[var(--nav-link-active)]" : "font-medium text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"}`}
                           onClick={() => {
                             trackClientEvent(PH.marketingNavClick, {
                               actor: navActor,

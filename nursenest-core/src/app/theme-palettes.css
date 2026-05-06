@@ -658,6 +658,7 @@
   [data-theme="arctic-frost"],
   [data-theme="berry"],
   [data-theme="berry-bonbon"],
+  [data-theme="blossom"],
   [data-theme="blueberry-sherbet"],
   [data-theme="bluebird"],
   [data-theme="blush"],
@@ -674,12 +675,14 @@
   [data-theme="lavender"],
   [data-theme="lavender-dream"],
   [data-theme="mint"],
+  [data-theme="meadow"],
   [data-theme="mint-breeze"],
   [data-theme="multi-pastel"],
   [data-theme="neutral-sand"],
   [data-theme="neutral-slate"],
   [data-theme="north-sea"],
   [data-theme="ocean"],
+  [data-theme="ocean-air"],
   [data-theme="ocean-mist"],
   [data-theme="pastel-blush"],
   [data-theme="pastel-lavender"],
@@ -699,6 +702,7 @@
   [data-theme="soft-sage"],
   [data-theme="strawberry"],
   [data-theme="strawberry-cream"],
+  [data-theme="sunset"],
   [data-theme="sunny-lilac"],
   [data-theme="teal"],
   [data-theme="violet-night"]
@@ -712,6 +716,17 @@
    */
   --theme-page-bg: #ffffff;
   --theme-nav-bg: #ffffff;
+  --theme-brand-accent: var(--logo-primary, var(--theme-primary));
+  --theme-brand-strong: var(--logo-primary, var(--theme-primary));
+  --theme-nav-background: var(--theme-primary);
+  --theme-nav-foreground: #ffffff;
+  --theme-nav-hover: color-mix(in srgb, #ffffff 14%, var(--theme-primary));
+  --theme-nav-hover-foreground: #ffffff;
+  --theme-header-top-bg: var(--theme-nav-background);
+  --theme-header-main-bg: var(--theme-nav-background);
+  --theme-header-secondary-bg: #ffffff;
+  --theme-header-secondary-fg: #0f172a;
+  --theme-header-divider: color-mix(in srgb, var(--theme-primary) 26%, #e5e7eb);
   /* gray-50 — alternating sections / muted bands (no hue from --theme-primary) */
   --theme-surface-strong: #f9fafb;
   --theme-nav-text: #6b7280;
@@ -806,6 +821,17 @@
   --logo-primary: #9B8EC7;
   --logo-accent: #F2EAE0;
   --logo-text: #5A4878;
+  --theme-brand-accent: #9B8EC7;
+  --theme-brand-strong: #7C5FB0;
+  --theme-nav-background: #7C5FB0;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.16);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #7C5FB0;
+  --theme-header-main-bg: #7C5FB0;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #251D35;
+  --theme-header-divider: rgba(124, 95, 176, 0.24);
 }
 
 /* ── Named themes (production) ────────────────────────────────────── */
@@ -845,6 +871,17 @@
   --logo-primary: #5068CC;
   --logo-accent: #F3BE7A;
   --logo-text: #30405E;
+  --theme-brand-accent: #5068CC;
+  --theme-brand-strong: #3B4DC8;
+  --theme-nav-background: #3B4DC8;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.16);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #3B4DC8;
+  --theme-header-main-bg: #3B4DC8;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #0F172A;
+  --theme-header-divider: rgba(59, 77, 200, 0.24);
 }
 
 [data-theme="strawberry-cream"] {
@@ -882,6 +919,17 @@
   --logo-primary: #ECA0A0;
   --logo-accent: #FFEAD3;
   --logo-text: #644040;
+  --theme-brand-accent: #ECA0A0;
+  --theme-brand-strong: #C2314D;
+  --theme-nav-background: #C2314D;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.15);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #C2314D;
+  --theme-header-main-bg: #C2314D;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #2F1D1D;
+  --theme-header-divider: rgba(194, 49, 77, 0.24);
 }
 
 [data-theme="ocean-mist"] {
@@ -919,6 +967,17 @@
   --logo-primary: #1D546D;
   --logo-accent: #B0E4CC;
   --logo-text: #0F2E3A;
+  --theme-brand-accent: #1D546D;
+  --theme-brand-strong: #0E7490;
+  --theme-nav-background: #0E7490;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.15);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #0E7490;
+  --theme-header-main-bg: #0E7490;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #0F2E3A;
+  --theme-header-divider: rgba(14, 116, 144, 0.24);
 }
 
 /* ── 6. Mint Breeze ── */
@@ -957,6 +1016,17 @@
   --logo-primary: #3A9E8F;
   --logo-accent: #F7D9A4;
   --logo-text: #1A3A34;
+  --theme-brand-accent: #3A9E8F;
+  --theme-brand-strong: #08776B;
+  --theme-nav-background: #08776B;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.15);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #08776B;
+  --theme-header-main-bg: #08776B;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #123A35;
+  --theme-header-divider: rgba(8, 119, 107, 0.24);
 }
 
 /* ── 7. Rose Quartz ── */
@@ -1420,6 +1490,200 @@
   --theme-page-bg: #ffffff;
 }
 
+/* ── Premium clinical palettes (Blossom, Sunset, Ocean, Garden) ── */
+
+[data-theme="blossom"] {
+  --theme-primary: #e75480;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #3a86ff;
+  --theme-secondary-foreground: #1e3a8a;
+  --theme-accent: #ffd166;
+  --theme-accent-foreground: #7c5a12;
+  --theme-border: #e5e7eb;
+  --theme-ring: #d9436a;
+  --theme-page-bg: #f8fafc;
+  --theme-heading-text: #1f2937;
+  --theme-body-text: #4b5563;
+  --theme-muted-text: #6b7280;
+
+  --lesson-summary: #fce4ec;
+  --lesson-key-concepts: #eaf2ff;
+  --lesson-signs-symptoms: #fff0f3;
+  --lesson-assessment: #e6f4ea;
+  --lesson-diagnostics: #eaf2ff;
+  --lesson-interventions: #e6faf7;
+  --lesson-medications: #fff6da;
+  --lesson-patient-teaching: #e8f7f0;
+  --lesson-exam-tips: #fff6da;
+  --lesson-red-flags: #fde8ec;
+  --lesson-clinical-pearls: #f3e8ff;
+  --lesson-notes: #f1f5f9;
+
+  --state-success: #e6f4ea;
+  --state-warning: #fff6da;
+  --state-info: #eaf2ff;
+  --state-danger-soft: #fde8ec;
+
+  --logo-primary: #e75480;
+  --logo-accent: #3a86ff;
+  --logo-text: #1f2937;
+  --theme-brand-accent: #e75480;
+  --theme-brand-strong: #D9436A;
+  --theme-nav-background: #D9436A;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.16);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #D9436A;
+  --theme-header-main-bg: #D9436A;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #111827;
+  --theme-header-divider: rgba(217, 67, 106, 0.24);
+}
+
+[data-theme="sunset"] {
+  --theme-primary: #f97361;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #7c8cff;
+  --theme-secondary-foreground: #3730a3;
+  --theme-accent: #f6c453;
+  --theme-accent-foreground: #78350f;
+  --theme-border: #eadfd8;
+  --theme-ring: #e85d4c;
+  --theme-page-bg: #fff9f5;
+  --theme-heading-text: #3f2d28;
+  --theme-body-text: #5c4a42;
+  --theme-muted-text: #6b5b54;
+
+  --lesson-summary: #ffe7df;
+  --lesson-key-concepts: #eef0ff;
+  --lesson-signs-symptoms: #fdece8;
+  --lesson-assessment: #e7f6ee;
+  --lesson-diagnostics: #e8ecff;
+  --lesson-interventions: #e8f7f0;
+  --lesson-medications: #fff4d6;
+  --lesson-patient-teaching: #f2ebe6;
+  --lesson-exam-tips: #fff4d6;
+  --lesson-red-flags: #fcdede;
+  --lesson-clinical-pearls: #f0ecff;
+  --lesson-notes: #faf6f3;
+
+  --state-success: #e7f6ee;
+  --state-warning: #fff4d6;
+  --state-info: #eef0ff;
+  --state-danger-soft: #fdece8;
+
+  --logo-primary: #f97361;
+  --logo-accent: #7c8cff;
+  --logo-text: #3f2d28;
+  --theme-brand-accent: #f97361;
+  --theme-brand-strong: #E85D4C;
+  --theme-nav-background: #E85D4C;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.16);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #E85D4C;
+  --theme-header-main-bg: #E85D4C;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #2D1D18;
+  --theme-header-divider: rgba(232, 93, 76, 0.24);
+}
+
+[data-theme="ocean-air"] {
+  --theme-primary: #2f80ed;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #2ec4b6;
+  --theme-secondary-foreground: #0f766e;
+  --theme-accent: #90e0ef;
+  --theme-accent-foreground: #0c4a6e;
+  --theme-border: #ddeaf3;
+  --theme-ring: #1f6fd1;
+  --theme-page-bg: #f6fbff;
+  --theme-heading-text: #0f172a;
+  --theme-body-text: #334155;
+  --theme-muted-text: #64748b;
+
+  --lesson-summary: #eaf4ff;
+  --lesson-key-concepts: #e6faf7;
+  --lesson-signs-symptoms: #fdeef0;
+  --lesson-assessment: #e6f4ea;
+  --lesson-diagnostics: #e8f0ff;
+  --lesson-interventions: #e9fbff;
+  --lesson-medications: #fff6e6;
+  --lesson-patient-teaching: #e6f4ea;
+  --lesson-exam-tips: #e9fbff;
+  --lesson-red-flags: #fde2e4;
+  --lesson-clinical-pearls: #e4ecff;
+  --lesson-notes: #f0f4f8;
+
+  --state-success: #e6f4ea;
+  --state-warning: #fff6e6;
+  --state-info: #eaf4ff;
+  --state-danger-soft: #fdeef0;
+
+  --logo-primary: #2f80ed;
+  --logo-accent: #2ec4b6;
+  --logo-text: #0f172a;
+  --theme-brand-accent: #2f80ed;
+  --theme-brand-strong: #2563EB;
+  --theme-nav-background: #2563EB;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.16);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #2563EB;
+  --theme-header-main-bg: #2563EB;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #0F172A;
+  --theme-header-divider: rgba(37, 99, 235, 0.24);
+}
+
+[data-theme="meadow"] {
+  --theme-primary: #52b788;
+  --theme-primary-foreground: #ffffff;
+  --theme-secondary: #48a6e8;
+  --theme-secondary-foreground: #0c4a6e;
+  --theme-accent: #f6d365;
+  --theme-accent-foreground: #713f12;
+  --theme-border: #ddebe1;
+  --theme-ring: #40916c;
+  --theme-page-bg: #f8fcf9;
+  --theme-heading-text: #1a2e24;
+  --theme-body-text: #3d5348;
+  --theme-muted-text: #5a6b62;
+
+  --lesson-summary: #e6f4ea;
+  --lesson-key-concepts: #eaf7ff;
+  --lesson-signs-symptoms: #fdeeed;
+  --lesson-assessment: #e5f7f0;
+  --lesson-diagnostics: #e0ecf8;
+  --lesson-interventions: #dff3eb;
+  --lesson-medications: #fff6d8;
+  --lesson-patient-teaching: #e8f5e8;
+  --lesson-exam-tips: #fff6d8;
+  --lesson-red-flags: #fad4d4;
+  --lesson-clinical-pearls: #e6eef8;
+  --lesson-notes: #eef6f0;
+
+  --state-success: #e5f7f0;
+  --state-warning: #fff6d8;
+  --state-info: #eaf7ff;
+  --state-danger-soft: #fdeeed;
+
+  --logo-primary: #52b788;
+  --logo-accent: #48a6e8;
+  --logo-text: #1a2e24;
+  --theme-brand-accent: #52b788;
+  --theme-brand-strong: #3D9A72;
+  --theme-nav-background: #3D9A72;
+  --theme-nav-foreground: #FFFFFF;
+  --theme-nav-hover: rgba(255, 255, 255, 0.15);
+  --theme-nav-hover-foreground: #FFFFFF;
+  --theme-header-top-bg: #3D9A72;
+  --theme-header-main-bg: #3D9A72;
+  --theme-header-secondary-bg: #FFFFFF;
+  --theme-header-secondary-fg: #10251A;
+  --theme-header-divider: rgba(61, 154, 114, 0.24);
+}
+
 /*
  * Button / pill foreground contrast — light-primary themes need dark text.
  * Rule: if the primary colour has high luminance (pastels, light mid-tones),
@@ -1435,7 +1699,8 @@
 [data-theme="coral"],
 [data-theme="rose-quartz"],
 [data-theme="dusty-rose"],
-[data-theme="coral-sunset"] {
+[data-theme="coral-sunset"],
+[data-theme="sunset"] {
   --theme-primary-foreground: #3d0a1a;
 }
 
@@ -1449,6 +1714,7 @@
 }
 
 /* Teal / mint / sage / green family */
+[data-theme="meadow"],
 [data-theme="mint"],
 [data-theme="pastel-mint"],
 [data-theme="soft-sage"],
@@ -1485,6 +1751,7 @@
   [data-theme="arctic-frost"],
   [data-theme="berry"],
   [data-theme="berry-bonbon"],
+  [data-theme="blossom"],
   [data-theme="blueberry-sherbet"],
   [data-theme="bluebird"],
   [data-theme="blush"],
@@ -1501,12 +1768,14 @@
   [data-theme="lavender"],
   [data-theme="lavender-dream"],
   [data-theme="mint"],
+  [data-theme="meadow"],
   [data-theme="mint-breeze"],
   [data-theme="multi-pastel"],
   [data-theme="neutral-sand"],
   [data-theme="neutral-slate"],
   [data-theme="north-sea"],
   [data-theme="ocean"],
+  [data-theme="ocean-air"],
   [data-theme="ocean-mist"],
   [data-theme="pastel-blush"],
   [data-theme="pastel-lavender"],
@@ -1526,6 +1795,7 @@
   [data-theme="soft-sage"],
   [data-theme="strawberry"],
   [data-theme="strawberry-cream"],
+  [data-theme="sunset"],
   [data-theme="sunny-lilac"],
   [data-theme="teal"],
   [data-theme="violet-night"]

@@ -2,10 +2,12 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import test from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const appRoot = join(here, "..", "..");
+/** Next app package root (`nursenest-core/` — contains `next.config.mjs`, `src/`). */
+const packageRoot = join(here, "..", "..", "..");
 
 function readAppFile(relativePath: string): string {
   return readFileSync(join(appRoot, relativePath), "utf8");
@@ -55,15 +57,26 @@ test("fixed home and lessons surfaces use page-body shards during production bui
   assert.match(lessonSections, /MARKETING_PAGE_BODY_MESSAGE_SHARDS/);
 });
 
-test("next config keeps webpack memory guards enabled and disables forked build worker for persistent .next/cache", () => {
-  const nextConfig = readAppFile("../next.config.ts");
+test("next config pins low-memory compile settings (next.config.mjs)", async () => {
+  const href = pathToFileURL(join(packageRoot, "next.config.mjs")).href;
+  const { default: nextConfig } = await import(href);
+  assert.ok(nextConfig && typeof nextConfig === "object");
 
-  assert.match(nextConfig, /webpackBuildWorker:\s*false/);
-  assert.match(nextConfig, /webpackMemoryOptimizations:\s*true/);
-  assert.match(nextConfig, /memoryBasedWorkersCount:\s*false/);
-  assert.match(nextConfig, /resolveBuildWebpackParallelism/);
-  assert.match(nextConfig, /cpus:\s*effectiveParallelism/);
-  assert.match(nextConfig, /config\.parallelism = effectiveParallelism/);
+  const exp = nextConfig.experimental;
+  assert.ok(exp && typeof exp === "object");
+  assert.equal(exp.cpus, 1);
+  assert.equal(exp.workerThreads, false);
+  assert.equal(exp.webpackBuildWorker, false);
+  assert.equal(exp.staticGenerationMaxConcurrency, 1);
+  assert.equal(exp.memoryBasedWorkersCount, false);
+  assert.equal(exp.parallelServerCompiles, false);
+  assert.equal(exp.parallelServerBuildTraces, false);
+
+  assert.equal(typeof nextConfig.webpack, "function");
+  const mock = { resolve: {} };
+  const out = nextConfig.webpack(mock, { dev: false });
+  assert.equal(out.parallelism, 1, "webpack hook must force parallelism=1 for production builds");
+  assert.equal(out.cache, false, "webpack persistent cache disabled for production builds");
 });
 
 test("pre-nursing i18n provider avoids top-level JSON imports", () => {
@@ -218,14 +231,14 @@ test("remaining pre-nursing and interactive content modules avoid top-level JSON
 });
 
 test("server-facing readiness and inventory helpers avoid top-level JSON imports", () => {
-  const sourcePaths = [
-    "lib/navigation/country-exam-readiness-snapshot.ts",
-    "lib/education-images/inventory.ts",
-  ];
+  const inventorySource = readAppFile("lib/education-images/inventory.ts");
+  assert.doesNotMatch(inventorySource, /import\s+.+\s+from\s+["']@\/(config|content|data)\/.+\.json["']/);
+  assert.match(inventorySource, /require\(["']@\/config\/.+\.json["']\)/);
+});
 
-  for (const sourcePath of sourcePaths) {
-    const source = readAppFile(sourcePath);
-    assert.doesNotMatch(source, /import\s+.+\s+from\s+["']@\/(config|content|data)\/.+\.json["']/);
-    assert.match(source, /require\(["']@\/config\/.+\.json["']\)/);
-  }
+test("country exam readiness snapshot stays bundler-safe for route rendering", () => {
+  const source = readAppFile("lib/navigation/country-exam-readiness-snapshot.ts");
+  assert.doesNotMatch(source, /node:module/);
+  assert.doesNotMatch(source, /createRequire/);
+  assert.match(source, /import\s+.+\s+from\s+["']@\/config\/pathway-readiness-snapshot\.json["']/);
 });

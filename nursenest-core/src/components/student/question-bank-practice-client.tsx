@@ -31,13 +31,15 @@ import { trackClientEvent } from "@/lib/observability/posthog-client";
 import { PH } from "@/lib/observability/posthog-conversion-events";
 import { emitClientStructuredLog } from "@/lib/observability/structured-client-log";
 import { QuestionChoiceLetter } from "@/components/student/question-choice-letter";
+import { QuestionBankPeerPerformancePanel } from "@/components/student/question-bank-peer-performance-panel";
 import { QuestionSessionStudyLoopPanel } from "@/components/student/question-session-study-loop-panel";
-import { ExamProgressBar, ExamSessionShell, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
+import { ExamProgressBar, ExamSessionShell, ExamSessionStickyChrome, ExamSessionTopBar } from "@/components/exam/exam-session-shell";
 import { ExamSessionThemeTrigger } from "@/components/exam/exam-session-theme-trigger";
 import type {
   QuestionBankDifficultyBand,
   QuestionBankDiscoveryResponse,
   QuestionBankGradedStateMap,
+  QuestionBankPeerStatsClient,
   QuestionBankPreset,
   RationaleLessonLinkClient,
   SavedQuestionBankPreset,
@@ -48,12 +50,20 @@ import {
   parseSavedQuestionBankPresetsJson,
 } from "@/lib/questions/question-bank-client-types";
 import { mergeRationaleLessonLinksWithTopicFallback } from "@/lib/questions/merge-rationale-lesson-links";
+import {
+  buildAppFlashcardsTopicHref,
+  buildAppPracticeTestsTopicHref,
+  createStudyLinkHrefDeduper,
+} from "@/lib/learner/app-study-internal-links";
 import { parseCommaSeparatedQuestionIds } from "@/lib/questions/question-id-list-param";
+import { parsePracticeHubIdsParam } from "@/lib/questions/normalize-question-body-system";
 import { resolveMeasurementSystemForLearnerPathway } from "@/lib/measurements/measurement-system";
+import { useMeasurementPreference } from "@/lib/measurements/use-measurement-preference";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examContextAnalyticsProps } from "@/lib/exam-context/global-exam-context";
 import type { StudySettings } from "@/lib/learner/study-settings";
+import { EcgVideoQuestionMedia } from "@/components/study/ecg-video-question-media";
 
 export type { QuestionBankDifficultyBand, QuestionBankPreset, SavedQuestionBankPreset } from "@/lib/questions/question-bank-client-types";
 
@@ -68,6 +78,9 @@ type QFull = {
   topic?: string | null;
   subtopic?: string | null;
   exam?: string | null;
+  questionFormat?: string | null;
+  exhibitData?: unknown;
+  images?: unknown;
 };
 
 function parseOptions(raw: unknown): string[] {
@@ -236,6 +249,7 @@ export function QuestionBankPracticeClient({
   const [difficultyBand, setDifficultyBand] = useState<QuestionBankDifficultyBand>("");
   const [sessionSize, setSessionSize] = useState(20);
   const [incorrectOnly, setIncorrectOnly] = useState(false);
+  const [practiceHubIds, setPracticeHubIds] = useState<string[]>([]);
   const [examFilter, setExamFilter] = useState<string | null>(null);
   const [savedPresets, setSavedPresets] = useState<SavedQuestionBankPreset[]>([]);
   const [presetNameDraft, setPresetNameDraft] = useState("");
@@ -259,6 +273,7 @@ export function QuestionBankPracticeClient({
   const [confidence, setConfidence] = useState<Record<string, "low" | "medium" | "high" | undefined>>({});
   const feedbackAnchorRef = useRef<HTMLDivElement | null>(null);
   const feedbackScrollMarkerRef = useRef<string | null>(null);
+  const [sessionElapsedSec, setSessionElapsedSec] = useState(0);
 
   const incorrectMistakeIds = useMemo(() => {
     void graded;
@@ -283,10 +298,11 @@ export function QuestionBankPracticeClient({
     return examBuckets.filter((b) => b.exam != null && pathwayExamKeySet.has(b.exam));
   }, [examBuckets, pathwayExamKeySet]);
 
-  const measurementSystem = useMemo(
+  const fallbackMeasurementSystem = useMemo(
     () => resolveMeasurementSystemForLearnerPathway(pathwayIdFilter ?? defaultPathwayId, pathwayCountryByPathwayId),
     [pathwayIdFilter, defaultPathwayId, pathwayCountryByPathwayId],
   );
+  const { measurementSystem } = useMeasurementPreference(fallbackMeasurementSystem);
 
   const current = questions[idx];
   const total = questions.length;
@@ -294,6 +310,16 @@ export function QuestionBankPracticeClient({
   useEffect(() => {
     if (current?.id) questionOpenedAtMsRef.current = Date.now();
   }, [current?.id]);
+
+  useEffect(() => {
+    if (phase !== "ready" || total === 0) {
+      setSessionElapsedSec(0);
+      return;
+    }
+    setSessionElapsedSec(0);
+    const id = window.setInterval(() => setSessionElapsedSec((s) => s + 1), 1000);
+    return () => window.clearInterval(id);
+  }, [phase, total, questions[0]?.id]);
 
   useEffect(() => {
     const d = readLearnerStudyDefaults(userId);
@@ -348,7 +374,7 @@ export function QuestionBankPracticeClient({
       setPhase("loading");
       setError(null);
       try {
-        if (preset === "topic_drill" && !topic && includeIdsFromUrl.length === 0) {
+        if (preset === "topic_drill" && !topic && includeIdsFromUrl.length === 0 && practiceHubIds.length === 0) {
           setQuestions([]);
           setEmptyCopy("pick_topic");
           setPhase("empty");
@@ -369,8 +395,11 @@ export function QuestionBankPracticeClient({
           sort: sortForApi,
         });
         if (topicForApi) qs.set("topic", topicForApi);
+        if (practiceHubIds.length > 0) qs.set("practiceHubIds", practiceHubIds.join(","));
         if (topicCodeFilter) qs.set("topicCode", topicCodeFilter);
         if (pathwayIdFilter) qs.set("pathwayId", pathwayIdFilter);
+        const alliedProfessionForApi = searchParams.get("alliedProfession")?.trim().toLowerCase() ?? "";
+        if (alliedProfessionForApi) qs.set("alliedProfession", alliedProfessionForApi);
         if (efficiencyMode) qs.set("studyMode", efficiencyMode);
         const dBounds = difficultyQueryBounds(difficultyBand);
         if (dBounds.min != null) qs.set("difficultyMin", String(dBounds.min));
@@ -456,7 +485,7 @@ export function QuestionBankPracticeClient({
 
           const sk = sessionKey(userId);
           const saved = parsePersistedQuestionBankSessionJson(localStorage.getItem(sk));
-          if (saved) {
+          if (saved && practiceHubIds.length === 0) {
             const listIds = list.map((q) => q.id);
             const bandMatches =
               normalizeQuestionBankDifficultyBand(saved.difficultyBand ?? "") === difficultyBand;
@@ -508,6 +537,7 @@ export function QuestionBankPracticeClient({
       userId,
       preset,
       topicForApi,
+      practiceHubIds,
       topicCodeFilter,
       topic,
       pathwayIdFilter,
@@ -522,6 +552,7 @@ export function QuestionBankPracticeClient({
       examShell,
       selectedExamContext,
       pathname,
+      searchParams,
       t,
     ],
   );
@@ -532,6 +563,8 @@ export function QuestionBankPracticeClient({
     const pid = searchParams.get("pathwayId")?.trim();
     const pr = searchParams.get("preset")?.trim();
     const sm = searchParams.get("studyMode")?.trim().toLowerCase();
+    const ph = searchParams.get("practiceHubIds")?.trim();
+    setPracticeHubIds(ph ? parsePracticeHubIdsParam(ph) : []);
     if (tp) setTopic(tp);
     if (tpc) setTopicCodeFilter(tpc);
     if (pid) {
@@ -722,6 +755,8 @@ export function QuestionBankPracticeClient({
   );
 
   const g = current ? graded[current.id] : undefined;
+  const studyLinkDedupe = useMemo(() => createStudyLinkHrefDeduper(), [current?.id]);
+  const sessionElapsedLabel = `${String(Math.floor(sessionElapsedSec / 60)).padStart(2, "0")}:${String(sessionElapsedSec % 60).padStart(2, "0")}`;
   const gradedRationaleForPanel = useMemo(() => {
     if (!g) return null;
     return {
@@ -776,27 +811,31 @@ export function QuestionBankPracticeClient({
     const ll = g.learningLoop;
     const showLesson = Boolean(ll.lessonHref && rationaleLessonLinksMerged.length === 0);
     if (!showLesson && !ll.flashcardsHref && !ll.topicDrillHref) return null;
+    const lessonH = showLesson && ll.lessonHref ? studyLinkDedupe(ll.lessonHref) : null;
+    const flashH = ll.flashcardsHref ? studyLinkDedupe(ll.flashcardsHref) : null;
+    const drillH = ll.topicDrillHref ? studyLinkDedupe(ll.topicDrillHref) : null;
+    if (!lessonH && !flashH && !drillH) return null;
     return (
       <div className="flex flex-wrap gap-2">
-        {showLesson && ll.lessonHref ? (
+        {lessonH ? (
           <Link
-            href={ll.lessonHref}
+            href={lessonH}
             className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
           >
             {t("learner.qbank.ui.relatedLesson")}
           </Link>
         ) : null}
-        {ll.flashcardsHref ? (
+        {flashH ? (
           <Link
-            href={ll.flashcardsHref}
+            href={flashH}
             className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
           >
             {t("learner.qbank.ui.reviewFlashcards")}
           </Link>
         ) : null}
-        {ll.topicDrillHref ? (
+        {drillH ? (
           <Link
-            href={ll.topicDrillHref}
+            href={drillH}
             className="inline-flex min-h-11 items-center rounded-full px-4 text-xs font-semibold text-[var(--role-cta-foreground)]"
             style={{ background: "var(--role-cta)" }}
           >
@@ -805,7 +844,7 @@ export function QuestionBankPracticeClient({
         ) : null}
       </div>
     );
-  }, [g?.learningLoop, rationaleLessonLinksMerged.length, t]);
+  }, [g?.learningLoop, rationaleLessonLinksMerged.length, studyLinkDedupe, t]);
 
   const reviewLessonHref = useMemo(() => {
     const fromLoop = g?.learningLoop?.lessonHref;
@@ -813,17 +852,57 @@ export function QuestionBankPracticeClient({
     const fromRationale = rationaleLessonLinksMerged[0]?.href;
     if (fromRationale) return fromRationale;
     const topicLabel = current?.topic?.trim();
-    if (topicLabel) return `/lessons?q=${encodeURIComponent(topicLabel)}`;
+    const pid = pathwayIdFilter?.trim();
+    if (topicLabel && pid) {
+      return `/app/lessons?pathwayId=${encodeURIComponent(pid)}&q=${encodeURIComponent(topicLabel)}`;
+    }
     return null;
-  }, [g?.learningLoop?.lessonHref, rationaleLessonLinksMerged, current?.topic]);
+  }, [g?.learningLoop?.lessonHref, rationaleLessonLinksMerged, current?.topic, pathwayIdFilter]);
+
+  const gradedTopicSlugLower = useMemo(() => {
+    if (!g) return "";
+    const tc =
+      typeof g.learningLoop?.topicCode === "string"
+        ? g.learningLoop.topicCode.trim().toLowerCase()
+        : typeof g.topicCode === "string"
+          ? g.topicCode.trim().toLowerCase()
+          : "";
+    return tc;
+  }, [g]);
 
   const flashcardsHref = useMemo(() => {
-    if (g?.learningLoop?.flashcardsHref) return g.learningLoop.flashcardsHref;
-    const topicLabel = current?.topic?.trim();
-    if (topicLabel) return `/app/flashcards?q=${encodeURIComponent(topicLabel)}`;
-    return "/app/flashcards";
-  }, [g?.learningLoop?.flashcardsHref, current?.topic]);
+    const pid = pathwayIdFilter?.trim();
+    if (!pid) return null;
+    const tc = gradedTopicSlugLower;
+    if (tc) return buildAppFlashcardsTopicHref(pid, tc);
+    if (g?.learningLoop?.flashcardsHref) return g.learningLoop.flashcardsHref.trim() || null;
+    return `/app/flashcards?pathwayId=${encodeURIComponent(pid)}`;
+  }, [g?.learningLoop?.flashcardsHref, gradedTopicSlugLower, pathwayIdFilter]);
+
+  const practiceTestsTopicHref = useMemo(() => {
+    const pid = pathwayIdFilter?.trim();
+    if (!pid) return null;
+    const tc = gradedTopicSlugLower;
+    if (!tc) return null;
+    return buildAppPracticeTestsTopicHref(pid, tc);
+  }, [pathwayIdFilter, gradedTopicSlugLower]);
+
   const topicDrillHref = g?.learningLoop?.topicDrillHref ?? null;
+
+  const dedupedRationaleFooterLinks = useMemo(() => {
+    const reviewLesson = reviewLessonHref ? studyLinkDedupe(reviewLessonHref) : null;
+    const flashcards = flashcardsHref ? studyLinkDedupe(flashcardsHref) : null;
+    const practiceTests = practiceTestsTopicHref ? studyLinkDedupe(practiceTestsTopicHref) : null;
+    const topicDrill = !g?.correct && topicDrillHref ? studyLinkDedupe(topicDrillHref) : null;
+    return { reviewLesson, flashcards, practiceTests, topicDrill };
+  }, [
+    reviewLessonHref,
+    flashcardsHref,
+    practiceTestsTopicHref,
+    topicDrillHref,
+    g?.correct,
+    studyLinkDedupe,
+  ]);
 
   async function checkAnswer() {
     if (!current) return;
@@ -837,6 +916,10 @@ export function QuestionBankPracticeClient({
           questionId: current.id,
           answer,
           pathwayId: pathwayIdFilter ?? undefined,
+          attemptMode: "practice",
+          ...(studySettings.enableConfidenceTracking && confidence[current.id]
+            ? { selfReportedConfidence: confidence[current.id] }
+            : {}),
         }),
       });
       const data = (await res.json()) as {
@@ -857,6 +940,7 @@ export function QuestionBankPracticeClient({
           flashcardsHref: string | null;
           topicDrillHref: string | null;
         } | null;
+        peerStats?: QuestionBankPeerStatsClient | null;
         error?: string;
       };
       if (!res.ok) {
@@ -880,7 +964,11 @@ export function QuestionBankPracticeClient({
           teaching: data.teaching ?? null,
           teachingMedia: data.teachingMedia ?? null,
           learningLoop: data.learningLoop ?? null,
+          ...(typeof data.learningLoop?.topicCode === "string"
+            ? { topicCode: data.learningLoop.topicCode }
+            : {}),
           rationaleLessonLinks: data.rationaleLessonLinks ?? null,
+          ...(data.peerStats && typeof data.peerStats === "object" ? { peerStats: data.peerStats } : {}),
         },
       }));
       const opened = questionOpenedAtMsRef.current;
@@ -1307,55 +1395,62 @@ export function QuestionBankPracticeClient({
 
       <ProtectedPremiumContent userLabel={userLabel} flags={protectionFlags} telemetrySurface="question_bank">
         <ExamSessionShell neutralPalette immersive className="overflow-hidden shadow-md">
-          <ExamSessionTopBar
-            left={
-              <div className="space-y-1">
-                <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">
-                  {t("learner.qbank.ui.questionOf", { n: idx + 1, total })}
-                </p>
-                {current.topic ? (
-                  <p className="line-clamp-1 nn-marketing-body-sm font-medium text-[var(--theme-heading-text)]">
-                    {current.topic}
+          <ExamSessionStickyChrome>
+            <ExamSessionTopBar
+              left={
+                <div className="space-y-1">
+                  <p className="nn-marketing-caption font-bold uppercase tracking-wide text-[var(--theme-heading-text)]">
+                    {t("learner.qbank.ui.questionOf", { n: idx + 1, total })}
                   </p>
-                ) : null}
-              </div>
-            }
-            center={
-              sessionTotal > 0 ? (
-                <span
-                  className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 nn-marketing-caption font-semibold tabular-nums ${
-                    sessionTotal > 0 && sessionRight / sessionTotal >= 0.8
-                      ? "border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_8%,var(--semantic-surface))] text-[var(--semantic-success-contrast,var(--semantic-success))]"
-                      : sessionTotal > 0 && sessionRight / sessionTotal >= 0.6
-                        ? "border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] text-[var(--semantic-warning-contrast)]"
-                        : "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-muted)]"
-                  }`}
-                  title={`${sessionRight} of ${sessionTotal} correct so far`}
-                >
-                  <span aria-hidden>✓</span>
-                  {sessionRight}/{sessionTotal}
-                </span>
-              ) : (
-                <span className="nn-marketing-caption font-semibold text-[var(--theme-muted-text)]">
-                  {sortForApi === "random" ? t("learner.qbank.ui.sortRandom") : t("learner.qbank.ui.sortRecent")}
-                </span>
-              )
-            }
-            right={
-              <div className="flex flex-wrap items-center justify-end gap-2">
-                <ExamSessionThemeTrigger />
-                {markedForReview[current.id] ? (
-                  <span className="nn-marketing-caption font-semibold text-[var(--semantic-warning-contrast)] uppercase tracking-wide">
-                    Flagged
+                  {current.topic ? (
+                    <p className="line-clamp-1 nn-marketing-body-sm font-medium text-[var(--theme-heading-text)]">
+                      {current.topic}
+                    </p>
+                  ) : null}
+                </div>
+              }
+              center={
+                <div className="flex flex-col items-center gap-1">
+                  <span className="nn-marketing-caption font-semibold tabular-nums tracking-wide text-[var(--semantic-text-muted)]">
+                    {sessionElapsedLabel}
                   </span>
-                ) : null}
-              </div>
-            }
-          />
-          <ExamProgressBar current={idx + 1} total={total} answeredCount={sessionTotal} />
+                  {sessionTotal > 0 ? (
+                    <span
+                      className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 nn-marketing-caption font-semibold tabular-nums ${
+                        sessionTotal > 0 && sessionRight / sessionTotal >= 0.8
+                          ? "border-[color-mix(in_srgb,var(--semantic-success)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_8%,var(--semantic-surface))] text-[var(--semantic-success-contrast,var(--semantic-success))]"
+                          : sessionTotal > 0 && sessionRight / sessionTotal >= 0.6
+                            ? "border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_8%,var(--semantic-surface))] text-[var(--semantic-warning-contrast)]"
+                            : "border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] text-[var(--semantic-text-muted)]"
+                      }`}
+                      title={`${sessionRight} of ${sessionTotal} correct so far`}
+                    >
+                      <span aria-hidden>✓</span>
+                      {sessionRight}/{sessionTotal}
+                    </span>
+                  ) : (
+                    <span className="nn-marketing-caption font-semibold text-[var(--theme-muted-text)]">
+                      {sortForApi === "random" ? t("learner.qbank.ui.sortRandom") : t("learner.qbank.ui.sortRecent")}
+                    </span>
+                  )}
+                </div>
+              }
+              right={
+                <div className="flex flex-wrap items-center justify-end gap-2">
+                  <ExamSessionThemeTrigger />
+                  {markedForReview[current.id] ? (
+                    <span className="nn-marketing-caption font-semibold text-[var(--semantic-warning-contrast)] uppercase tracking-wide">
+                      Flagged
+                    </span>
+                  ) : null}
+                </div>
+              }
+            />
+            <ExamProgressBar current={idx + 1} total={total} answeredCount={sessionTotal} />
+          </ExamSessionStickyChrome>
 
           <div className="nn-question-session nn-question-session--split">
-            <div className="nn-question-session-primary min-h-0 space-y-6 overflow-x-hidden overflow-y-auto">
+            <div className="nn-question-session-primary min-h-0 space-y-6 overflow-x-auto overflow-y-auto">
               <div className="nn-question-stem-card">
                 <div className="mb-2 flex flex-wrap items-center gap-2">
                   {current.questionType ? (
@@ -1368,6 +1463,13 @@ export function QuestionBankPracticeClient({
                 <div className="nn-question-stem-wrap">
                   <p className="nn-question-stem">{stemDisplay}</p>
                 </div>
+                <EcgVideoQuestionMedia
+                  exhibitData={current.exhibitData}
+                  images={current.images}
+                  mode="practice"
+                  phase={rationaleVisible ? "post_submit" : "pre_submit"}
+                  className="mt-4"
+                />
               </div>
 
               <div>
@@ -1377,7 +1479,11 @@ export function QuestionBankPracticeClient({
                 ) : null}
 
                 {isSata ? (
-                <ul className="nn-qopt-list" role="group" aria-label={t("learner.qbank.examUi.answersHeading")}>
+                <ul
+                  className={`nn-qopt-list${g ? " nn-qopt-feedback-phase" : ""}`}
+                  role="group"
+                  aria-label={t("learner.qbank.examUi.answersHeading")}
+                >
                   {optsCanonical.map((canonical, i) => {
                     const label = optsDisplayClinical[i] ?? optsDisplay[i] ?? canonical;
                     const selected = Array.isArray(raw) ? raw.includes(canonical) : false;
@@ -1438,7 +1544,11 @@ export function QuestionBankPracticeClient({
                   })}
                 </ul>
               ) : (
-                <ul className="nn-qopt-list" role="radiogroup" aria-label={t("learner.qbank.examUi.answersHeading")}>
+                <ul
+                  className={`nn-qopt-list${g ? " nn-qopt-feedback-phase" : ""}`}
+                  role="radiogroup"
+                  aria-label={t("learner.qbank.examUi.answersHeading")}
+                >
                   {optsCanonical.map((canonical, i) => {
                     const label = optsDisplayClinical[i] ?? optsDisplay[i] ?? canonical;
                     const struck = Boolean(strikeOut[canonical]);
@@ -1628,7 +1738,7 @@ export function QuestionBankPracticeClient({
                   </p>
                 </div>
               ) : (
-                <div ref={feedbackAnchorRef} className="min-h-0 flex-1 space-y-4 overflow-x-hidden overflow-y-auto overscroll-contain">
+                <div ref={feedbackAnchorRef} className="min-h-0 flex-1 space-y-4 overflow-x-auto overflow-y-auto overscroll-contain">
                   {examShell && !examShowExplanation ? (
                     <div className="nn-question-rationale-card">
                       <div
@@ -1685,6 +1795,13 @@ export function QuestionBankPracticeClient({
                       recommendationsSlot={learningLoopRecommendations}
                     />
                   )}
+                  {rationaleVisible && g.peerStats ? (
+                    <QuestionBankPeerPerformancePanel
+                      peerStats={g.peerStats}
+                      optionCanonicals={optsCanonical}
+                      optionDisplays={optsDisplayClinical}
+                    />
+                  ) : null}
                   {rationaleVisible && g.clinicalPearl ? (
                     <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-info)_24%,var(--semantic-border-soft))] bg-[var(--semantic-panel-cool)] px-4 py-3 sm:px-5">
                       <p className="text-[11px] font-bold uppercase tracking-widest text-[var(--semantic-info)]">
@@ -1697,9 +1814,7 @@ export function QuestionBankPracticeClient({
                     <div className="rounded-xl border border-[color-mix(in_srgb,var(--semantic-warning)_24%,var(--semantic-border-soft))] bg-[var(--semantic-warning-soft)] px-4 py-3 sm:px-5">
                       <p className="text-sm font-semibold text-[var(--theme-heading-text)]">
                         You may need to review:{" "}
-                        <Link href={reviewLessonHref} className="underline underline-offset-2 hover:no-underline">
-                          {current.topic?.trim() || "this topic"}
-                        </Link>
+                        <strong className="font-semibold">{current.topic?.trim() || "this topic"}</strong>
                       </p>
                     </div>
                   ) : null}
@@ -1709,25 +1824,38 @@ export function QuestionBankPracticeClient({
                         Reinforce this question
                       </p>
                       <div className="mt-3 flex flex-wrap gap-2">
-                        {reviewLessonHref ? (
+                        {dedupedRationaleFooterLinks.reviewLesson ? (
                           <Link
-                            href={reviewLessonHref}
+                            href={dedupedRationaleFooterLinks.reviewLesson}
+                            data-testid="qbank-reinforce-review-lesson"
                             className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
                           >
-                            Review Lesson
+                            {t("learner.studyLoop.reviewLessonCta")}
                           </Link>
                         ) : null}
-                        {flashcardsHref ? (
+                        {dedupedRationaleFooterLinks.flashcards ? (
                           <Link
-                            href={flashcardsHref}
+                            href={dedupedRationaleFooterLinks.flashcards}
+                            data-testid="qbank-reinforce-flashcards-topic"
+                            data-nn-pathway-id={pathwayIdFilter ?? ""}
                             className="inline-flex min-h-11 items-center rounded-full border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:bg-[var(--semantic-panel-muted)]"
                           >
-                            Practice Flashcards
+                            {t("learner.studyLoop.studyFlashcardsThisTopic")}
                           </Link>
                         ) : null}
-                        {!g.correct && topicDrillHref ? (
+                        {dedupedRationaleFooterLinks.practiceTests ? (
                           <Link
-                            href={topicDrillHref}
+                            href={dedupedRationaleFooterLinks.practiceTests}
+                            data-testid="qbank-reinforce-practice-tests-topic"
+                            data-nn-pathway-id={pathwayIdFilter ?? ""}
+                            className="inline-flex min-h-11 items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-chart-2)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-chart-2)_10%,var(--semantic-surface))] px-4 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-sm hover:opacity-90"
+                          >
+                            {t("learner.studyLoop.practiceQuestionsThisTopic")}
+                          </Link>
+                        ) : null}
+                        {dedupedRationaleFooterLinks.topicDrill ? (
+                          <Link
+                            href={dedupedRationaleFooterLinks.topicDrill}
                             className="inline-flex min-h-11 items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-info)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] px-4 text-xs font-semibold text-[var(--semantic-info)] shadow-sm hover:opacity-90"
                           >
                             Try more questions like this

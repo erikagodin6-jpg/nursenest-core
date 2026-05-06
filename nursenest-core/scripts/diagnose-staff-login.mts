@@ -16,7 +16,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import "./load-dotenv-for-cli.mts";
 import "../src/lib/db/script-env-bootstrap";
 import { databaseUrlSource } from "../src/lib/db/env-bootstrap";
-import { maskDatabaseUrl } from "../src/lib/db/database-env";
+import { maskDatabaseUrl } from "../src/lib/env/mask-database-url";
 import { isStaffRole, staffTierFromRole } from "../src/lib/auth/staff-roles";
 
 const prisma = new PrismaClient();
@@ -36,7 +36,7 @@ async function main(): Promise<void> {
   const email = emailRaw.toLowerCase();
 
   console.log("--- NurseNest staff login diagnostics ---");
-  console.log(`databaseUrlSource: ${databaseUrlSource}`);
+  console.log(`databaseUrlSource: ${databaseUrlSource.value}`);
   const dbUrl = process.env.DATABASE_URL?.trim() ?? "";
   console.log(`database_target_masked: ${dbUrl ? maskDatabaseUrl(dbUrl) : "(MISSING)"}`);
   console.log(`lookup (case-insensitive): ${email.slice(0, 3)}***@${email.split("@")[1] ?? "?"}`);

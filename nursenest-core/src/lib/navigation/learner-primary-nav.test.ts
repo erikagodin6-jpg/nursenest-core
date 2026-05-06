@@ -2,6 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   buildLearnerPrimaryNavItems,
+  buildOptionalClinicalScenariosShellNavItem,
+  buildOptionalOsceScenarioShellNavItems,
+  buildOptionalPrintablesShellNavItem,
+  buildOptionalStudyToolsShellNavItem,
   CANONICAL_LEARNER_ROUTES,
   isLearnerPrimaryNavKey,
   LEARNER_PRIMARY_NAV_ITEM_KEY,
@@ -28,4 +32,49 @@ test("buildLearnerPrimaryNavItems: primary key maps to canonical route", () => {
     assert.equal(primary!.href, CANONICAL_LEARNER_ROUTES.practice);
     assert.equal(primary!.matchBase, "/app/questions");
   }
+});
+
+test("buildOptionalPrintablesShellNavItem: hidden when navVisible is false", () => {
+  assert.equal(buildOptionalPrintablesShellNavItem("us-rn-nclex-rn", false), null);
+});
+
+test("buildOptionalPrintablesShellNavItem: visible when navVisible is true", () => {
+  const row = buildOptionalPrintablesShellNavItem("us-rn-nclex-rn", true);
+  assert.ok(row);
+  assert.equal(row!.href, `${CANONICAL_LEARNER_ROUTES.printables}?pathwayId=us-rn-nclex-rn`);
+  assert.equal(row!.matchPrefix, "/app/printables");
+});
+
+test("buildOptionalStudyToolsShellNavItem: hidden unless NEXT_PUBLIC_ENABLE_STUDY_TOOLS=true", (t) => {
+  t.afterEach(() => {
+    delete process.env.NEXT_PUBLIC_ENABLE_STUDY_TOOLS;
+  });
+  assert.equal(buildOptionalStudyToolsShellNavItem("rn-1"), null);
+  process.env.NEXT_PUBLIC_ENABLE_STUDY_TOOLS = "true";
+  const row = buildOptionalStudyToolsShellNavItem("rn-1");
+  assert.ok(row);
+  assert.equal(row!.href, "/app/study-tools?pathwayId=rn-1");
+  assert.equal(row!.matchPrefix, "/app/study-tools");
+});
+
+test("buildOptionalOsceScenarioShellNavItems: OSCE row hidden unless NEXT_PUBLIC_ENABLE_OSCE_SCENARIOS=true", (t) => {
+  t.afterEach(() => {
+    delete process.env.NEXT_PUBLIC_ENABLE_OSCE_SCENARIOS;
+  });
+  assert.equal(buildOptionalOsceScenarioShellNavItems("us-rn-nclex-rn").length, 0);
+  process.env.NEXT_PUBLIC_ENABLE_OSCE_SCENARIOS = "true";
+  const rows = buildOptionalOsceScenarioShellNavItems("us-rn-nclex-rn");
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0]!.href, "/app/osce?pathwayId=us-rn-nclex-rn");
+});
+
+test("buildOptionalClinicalScenariosShellNavItem: hidden unless NEXT_PUBLIC_ENABLE_CLINICAL_SCENARIOS=true", (t) => {
+  t.afterEach(() => {
+    delete process.env.NEXT_PUBLIC_ENABLE_CLINICAL_SCENARIOS;
+  });
+  assert.equal(buildOptionalClinicalScenariosShellNavItem("us-rn-nclex-rn"), null);
+  process.env.NEXT_PUBLIC_ENABLE_CLINICAL_SCENARIOS = "true";
+  const row = buildOptionalClinicalScenariosShellNavItem("us-rn-nclex-rn");
+  assert.ok(row);
+  assert.equal(row!.href, "/app/clinical-scenarios?pathwayId=us-rn-nclex-rn");
 });

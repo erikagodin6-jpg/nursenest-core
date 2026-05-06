@@ -5,6 +5,7 @@
  * Note: No Unicode em dashes in user-facing copy that references these (use hyphens or colons).
  */
 
+import { ALLIED_GLOBAL_HUB_PATH, buildAlliedGlobalHubPath } from "@/lib/allied/allied-global-hub-path";
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
 
 export type MarketingRegionToggle = "US" | "CA";
@@ -24,7 +25,7 @@ export const HUB = {
 
 /** RN / NCLEX-RN */
 export const RN = {
-  /** Legacy name: canonical public RN entry (retired `/us/rn/nclex-rn` overview). */
+  /** Canonical public RN pathway hub root (same as {@link CANONICAL_PATHWAY_HUB.usRn}). */
   practiceProgrammatic: CANONICAL_PATHWAY_HUB.usRn,
   usLessons: HUB.examLessons,
   caLessons: HUB.examLessons,
@@ -71,10 +72,11 @@ export const NP = {
 export const ALLIED = {
   /** Core allied marketing index (unchanged from prior `mapLegacyMarketingHref("/allied-health")` — allied paths stay on Core). */
   marketingLanding: () => "/allied-health",
-  usHub: "/us/allied/allied-health",
-  usQuestions: "/us/allied/allied-health/questions",
-  caHub: "/canada/allied/allied-health",
-  caQuestions: "/canada/allied/allied-health/questions",
+  /** Global pathway hub (US/CA country-prefixed URLs 301 here). */
+  usHub: ALLIED_GLOBAL_HUB_PATH,
+  usQuestions: buildAlliedGlobalHubPath("questions"),
+  caHub: ALLIED_GLOBAL_HUB_PATH,
+  caQuestions: buildAlliedGlobalHubPath("questions"),
 } as const;
 
 export function loginWithCallback(path: string): string {

@@ -143,7 +143,7 @@ export default async function CoachPage() {
           </p>
           <div className="mt-4 flex justify-center gap-3">
             <a
-              href="/app/practice"
+              href="/app/questions"
               className="rounded-xl px-5 py-2 text-sm font-semibold"
               style={{
                 background: "var(--semantic-brand)",

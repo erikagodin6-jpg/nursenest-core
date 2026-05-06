@@ -27,7 +27,7 @@ import { HUB, loginWithCallback, signupWithCallback } from "@/lib/marketing/mark
 import { resolveMarketingAuthRedirectTarget } from "@/lib/auth/post-login-resume-path";
 import { CONTINUE_STUDYING_CTA, PRIMARY_CTA } from "@/lib/copy/cta-copy";
 import { formatSentenceCase, formatTitleCase } from "@/lib/format/text-case";
-import { SiteFooterFeedbackTrigger } from "@/components/layout/site-footer-feedback-trigger";
+import { SUPPORT_RESPONSE_TIME_COPY, supportMailtoHref } from "@/lib/support/support-policy";
 import { getNursingRoleLabel } from "@/lib/labels/nursing-role-labels";
 import { useActiveNavContext } from "@/lib/navigation/use-active-nav-context";
 import { useMarketingChromeCountry } from "@/components/marketing/marketing-country-chrome-context";
@@ -35,6 +35,11 @@ import { getCountryNavConfig } from "@/lib/marketing/countries/registry";
 
 function formatFooterNode(children: React.ReactNode, locale: string): React.ReactNode {
   return typeof children === "string" ? formatTitleCase(children, locale) : children;
+}
+
+function footerCopyWithFallback(value: string, fallback: string): string {
+  const trimmed = value.trim();
+  return !trimmed || trimmed.startsWith("footer.") ? fallback : trimmed;
 }
 
 function FLink({
@@ -64,6 +69,21 @@ function FLink({
   );
 }
 
+function FooterAccountSupportEmailBlock() {
+  return (
+    <li>
+      <a
+        href={supportMailtoHref()}
+        className="nn-footer-link break-words text-sm leading-relaxed [overflow-wrap:anywhere]"
+      >
+        Email support
+      </a>
+      <span className="mt-1 block max-w-[18rem] text-xs leading-snug text-[var(--footer-muted)]">
+        {SUPPORT_RESPONSE_TIME_COPY}
+      </span>
+    </li>
+  );
+}
 
 function FooterLeafWatermark() {
   const { url, kind } = useThemeLogo("leaf");
@@ -121,6 +141,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
     learnerPathwayId != null
       ? `/app/lessons?pathwayId=${encodeURIComponent(learnerPathwayId)}`
       : "/app";
+  const regionalHubLinksLabel = footerCopyWithFallback(t("footer.regionalHubLinks"), "Regional hubs");
 
   return (
     <footer
@@ -193,7 +214,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
 
               <div>
                 <h3 className="mb-3 text-sm font-semibold text-[var(--footer-fg)]">
-                  {formatTitleCase(t("footer.regionalHubLinks"), locale)}
+                  {formatTitleCase(regionalHubLinksLabel, locale)}
                 </h3>
                 <ul className="space-y-2 text-sm text-[var(--footer-fg)]">
                   {countryNav.footerFeatured.map((item) => (
@@ -212,10 +233,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                       <li>
                         <FLink href={learnerSignInHref}>{formatTitleCase(t("nav.logIn"), locale)}</FLink>
                       </li>
-                      <li>
-                        <FLink href="/contact">Contact Support</FLink>
-                      </li>
-                      <SiteFooterFeedbackTrigger />
+                      <FooterAccountSupportEmailBlock />
                       <li className="pt-1">
                         <Link
                           href={startPracticingHref}
@@ -245,10 +263,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                           {formatTitleCase("Dashboard", locale)}
                         </Link>
                       </li>
-                      <li>
-                        <FLink href="/contact">Contact Support</FLink>
-                      </li>
-                      <SiteFooterFeedbackTrigger />
+                      <FooterAccountSupportEmailBlock />
                     </>
                   ) : isEntitledLearner ? (
                     <>
@@ -268,10 +283,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                           {formatTitleCase("Account", locale)}
                         </Link>
                       </li>
-                      <li>
-                        <FLink href="/contact">Contact Support</FLink>
-                      </li>
-                      <SiteFooterFeedbackTrigger />
+                      <FooterAccountSupportEmailBlock />
                       <li className="pt-1">
                         <Link
                           href={learnerContinueHref}
@@ -294,10 +306,7 @@ export function SiteFooter({ serverHasStaffSession }: SiteFooterProps = {}) {
                       <li>
                         <FLink href={explore.pricing}>{formatTitleCase("Pricing", locale)}</FLink>
                       </li>
-                      <li>
-                        <FLink href="/contact">Contact Support</FLink>
-                      </li>
-                      <SiteFooterFeedbackTrigger />
+                      <FooterAccountSupportEmailBlock />
                       <li className="pt-1">
                         <Link
                           href={startPracticingHref}

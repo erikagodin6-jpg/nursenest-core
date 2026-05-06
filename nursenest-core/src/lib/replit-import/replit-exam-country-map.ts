@@ -1,4 +1,4 @@
-import { assertCanonicalExamQuestionExam } from "@/lib/exam-questions/exam-question-exam-key";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 import type { ImportCountry, NormalizedExamQuestion, ProductTrack } from "./replit-question-types";
 
 function normTrack(s: string): string {
@@ -24,7 +24,7 @@ export function mapTrackAndCountryToExamFields(
     case "ALLIED":
       return {
         tier: "allied",
-        exam: assertCanonicalExamQuestionExam("ALLIED"),
+        exam: canonicalExamQuestionExamForDbWrite("ALLIED"),
         regionScope,
         countryCode: cc,
         careerType: "allied",
@@ -32,7 +32,7 @@ export function mapTrackAndCountryToExamFields(
     case "NP":
       return {
         tier: "np",
-        exam: assertCanonicalExamQuestionExam("NP"),
+        exam: canonicalExamQuestionExamForDbWrite("NP"),
         regionScope,
         countryCode: cc,
         careerType: "nursing",
@@ -40,7 +40,7 @@ export function mapTrackAndCountryToExamFields(
     case "RN":
       return {
         tier: "rn",
-        exam: assertCanonicalExamQuestionExam("NCLEX-RN"),
+        exam: canonicalExamQuestionExamForDbWrite("NCLEX-RN"),
         regionScope,
         countryCode: cc,
         careerType: "nursing",
@@ -48,7 +48,7 @@ export function mapTrackAndCountryToExamFields(
     case "PN":
       return {
         tier: country === "CA" ? "rpn" : "lvn",
-        exam: assertCanonicalExamQuestionExam(country === "CA" ? "REx-PN" : "NCLEX-PN"),
+        exam: canonicalExamQuestionExamForDbWrite(country === "CA" ? "REx-PN" : "NCLEX-PN"),
         regionScope,
         countryCode: cc,
         careerType: "nursing",
@@ -56,7 +56,7 @@ export function mapTrackAndCountryToExamFields(
     default:
       return {
         tier: "rn",
-        exam: assertCanonicalExamQuestionExam("NCLEX-RN"),
+        exam: canonicalExamQuestionExamForDbWrite("NCLEX-RN"),
         regionScope,
         countryCode: cc,
         careerType: "nursing",

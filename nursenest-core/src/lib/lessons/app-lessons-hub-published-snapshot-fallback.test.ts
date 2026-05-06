@@ -20,6 +20,27 @@ test("appLessonsHubListOptsForSnapshot matches q + topic slug pairing", () => {
   assert.equal(appLessonsHubListOptsForSnapshot({ qEffective: null, topicSlugFilter: null }), undefined);
 });
 
+test("appLessonsHubListOptsForSnapshot forwards allied taxonomy when profession matches", () => {
+  assert.deepEqual(
+    appLessonsHubListOptsForSnapshot({
+      qEffective: null,
+      topicSlugFilter: null,
+      alliedProfessionKey: "pta",
+      alliedTaxonomyFilter: "therapeutic-exercise",
+    }),
+    { alliedProfessionKey: "pta", taxonomySlugsIn: ["therapeutic-exercise"] },
+  );
+  assert.deepEqual(
+    appLessonsHubListOptsForSnapshot({
+      qEffective: null,
+      topicSlugFilter: null,
+      alliedProfessionKey: "pta",
+      alliedTaxonomyFilter: "not-a-real-slug",
+    }),
+    { alliedProfessionKey: "pta" },
+  );
+});
+
 test("lessonsListBlockFromPathwayHubSnapshot maps rows for app hub", () => {
   const item = {
     id: "pl_1",

@@ -1,9 +1,14 @@
 import { QuestionType } from "@prisma/client";
 import { classifyContentItemLesson } from "@/lib/content-quality/classify-lesson";
+import {
+  collectEducationalPlaceholderIds,
+  hasEducationalAiDisclaimerLanguage,
+} from "@/lib/education/educational-content-placeholder-guard";
 import { classifyRationaleWordCount, totalRationaleWordCount } from "@/lib/content-quality/classify-rationale";
 import type { ContentQualityTier } from "@/lib/content-quality/standards";
 import { RATIONALE_MIN_WORDS } from "@/lib/content-quality/standards";
 import { validateQuestionPayload } from "@/lib/content/question-schema";
+import { validateEcgVideoQuestionForPublish } from "@/lib/ecg-video-quiz/ecg-video-question";
 import { bodyStringToContentJson } from "@/lib/prisma/content-item-body";
 
 /**
@@ -42,6 +47,14 @@ export function governExamQuestionPublish(
     questionType: QuestionType;
     options: unknown;
     answerKey: unknown;
+    questionFormat?: string | null;
+    level?: string | null;
+    mode?: string | null;
+    exhibitData?: unknown;
+    images?: unknown;
+    tags?: string[] | null;
+    studyLinkPathwayId?: string | null;
+    studyLinkLessonSlug?: string | null;
   },
   opts: { acknowledgeBelowQualityBar?: boolean; acknowledgeSevereQualityIssue?: boolean },
 ): ExamQuestionGovernanceResult {
@@ -51,6 +64,13 @@ export function governExamQuestionPublish(
   if (input.stem.trim().length < 10) reasons.push("Stem too short");
   const shape = validateQuestionPayload(input.questionType, input.options, input.answerKey);
   if (shape) reasons.push(shape);
+
+  const ecg = validateEcgVideoQuestionForPublish({
+    ...input,
+    correctAnswer: input.answerKey,
+  });
+  reasons.push(...ecg.reasons);
+  warnings.push(...ecg.warnings);
 
   const wc = rationalePartsForCount(input.rationale, [
     input.correctAnswerExplanation,
@@ -133,6 +153,15 @@ export function governContentItemLessonPublish(
   if (input.title.trim().length < 4) reasons.push("Title required");
   if (input.summary.trim().length < 10) reasons.push("Summary required");
   if (input.body.trim().length < 10) reasons.push("Body required");
+
+  const stubBundle = `${input.title}\n${input.summary}\n${input.body}`;
+  const stubIds = collectEducationalPlaceholderIds(stubBundle);
+  if (stubIds.length > 0) {
+    reasons.push(`Placeholder or stub language detected: ${stubIds.join(", ")}`);
+  }
+  if (hasEducationalAiDisclaimerLanguage(stubBundle)) {
+    reasons.push("AI meta-disclaimer phrasing is not allowed in published lesson copy");
+  }
 
   const content = bodyStringToContentJson(input.body);
   const q = classifyContentItemLesson(content);

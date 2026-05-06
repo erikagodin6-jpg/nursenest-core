@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 import { relativeLuminanceFromHex } from "@/lib/color/hex-luminance";
+import { getNavChrome } from "@/lib/theme/nav-chrome";
 import {
   NURSENEST_DEFAULT_THEME,
   THEME_OPTIONS,
@@ -68,10 +69,32 @@ export function ThemeStateHydration() {
   const didSync = useRef(false);
 
   const applyPaletteRoles = (themeId: string) => {
+    const root = document.documentElement;
     const palette = getThemePaletteTokens(themeId);
     const semantic = getThemeSurfaceContrastTokens(themeId);
-    if (!palette || !semantic) return;
-    const root = document.documentElement;
+
+    const INLINE_HEADER_CHROME = [
+      "--theme-header-top-bg",
+      "--theme-header-main-bg",
+      "--theme-header-secondary-bg",
+      "--theme-header-secondary-fg",
+      "--theme-topbar-bg",
+      "--theme-topbar-text",
+    ] as const;
+
+    if (!palette || !semantic) {
+      for (const prop of INLINE_HEADER_CHROME) {
+        root.style.removeProperty(prop);
+      }
+      const navChrome = getNavChrome(themeId);
+      root.style.setProperty("--nn-nav-bg", navChrome.chrome);
+      root.style.setProperty("--nn-nav-fg", navChrome.foreground);
+      root.style.setProperty("--nn-nav-border", navChrome.border);
+      root.style.setProperty("--nn-nav-hover-bg", navChrome.hoverBg);
+      root.style.setProperty("--nn-nav-hover-fg", navChrome.hoverFg);
+      root.style.setProperty("--nn-nav-panel", navChrome.panel);
+      return;
+    }
     const toCssVar = (key: string) =>
       `--palette-${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`;
     for (const key of PALETTE_ROLE_KEYS) {
@@ -153,6 +176,33 @@ export function ThemeStateHydration() {
     setIfHex("--theme-pill-border", semantic.pillBorder);
     setIfHex("--theme-logo-on-light", semantic.logoOnLight);
     setIfHex("--theme-logo-on-dark", semantic.logoOnDark);
+
+    // Legacy --nn-nav-* + marketing header chrome (utility / tier / topbar) share semantic nav band.
+    const navChrome = getNavChrome(themeId);
+    root.style.setProperty("--nn-nav-bg", navChrome.chrome);
+    root.style.setProperty("--nn-nav-fg", navChrome.foreground);
+    root.style.setProperty("--nn-nav-border", navChrome.border);
+    root.style.setProperty("--nn-nav-hover-bg", navChrome.hoverBg);
+    root.style.setProperty("--nn-nav-hover-fg", navChrome.hoverFg);
+    root.style.setProperty("--nn-nav-panel", navChrome.panel);
+
+    const themeGroup = THEME_OPTIONS.find((o) => o.id === themeId)?.group ?? "light";
+    const headerChrome = semantic.navBackground;
+    if (themeGroup === "light") {
+      setIfHex("--theme-header-top-bg", headerChrome);
+      setIfHex("--theme-header-main-bg", headerChrome);
+      setIfHex("--theme-header-secondary-bg", "#ffffff");
+      setIfHex("--theme-header-secondary-fg", semantic.heading);
+      setIfHex("--theme-topbar-bg", headerChrome);
+      setIfHex("--theme-topbar-text", semantic.navForeground);
+    } else {
+      setIfHex("--theme-header-top-bg", headerChrome);
+      setIfHex("--theme-header-main-bg", headerChrome);
+      setIfHex("--theme-header-secondary-bg", semantic.surface);
+      setIfHex("--theme-header-secondary-fg", semantic.heading);
+      setIfHex("--theme-topbar-bg", headerChrome);
+      setIfHex("--theme-topbar-text", semantic.navForeground);
+    }
 
     // CTA role system now inherits directly from canonical theme interactive tokens.
     root.style.setProperty("--role-cta", semantic.primaryButtonBg);

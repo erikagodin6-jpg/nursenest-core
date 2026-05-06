@@ -13,6 +13,7 @@ import {
   mapWithConcurrency,
 } from "@/lib/lessons/pathway-lesson-hub-link-integrity";
 import { PATHWAY_LESSON_CANONICAL_DB_LOCALE } from "@/lib/lessons/pathway-lesson-locale";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 /** Minimum structural-complete lessons sharing a body system before a hub is eligible. */
 export const MIN_LESSONS_PER_BODY_SYSTEM = 3;
@@ -49,17 +50,28 @@ async function resolveCanonicalBodySystemForKey(
   pathwayId: string,
   bodyKey: string,
 ): Promise<string | null> {
-  const rows = await prisma.pathwayLesson.findMany({
-    where: {
-      pathwayId,
-      status: ContentStatus.PUBLISHED,
-      structuralPublicComplete: true,
-      locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
-      bodySystem: { not: "" },
-    },
-    select: { bodySystem: true },
-    distinct: ["bodySystem"],
-  });
+  let rows: { bodySystem: string }[];
+  try {
+    rows = await prisma.pathwayLesson.findMany({
+      where: {
+        pathwayId,
+        status: ContentStatus.PUBLISHED,
+        locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+        bodySystem: { not: "" },
+      },
+      select: { bodySystem: true },
+      distinct: ["bodySystem"],
+    });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    safeServerLog("content_backed_hub", "resolve_body_system_db_error", {
+      route: "resolveCanonicalBodySystemForKey",
+      query_name: "pathwayLesson.findMany",
+      error_code: (e as { code?: string })?.code ?? "unknown",
+      error_message: msg.slice(0, 300),
+    });
+    return null;
+  }
   for (const r of rows) {
     if (normalizeBodySystemUrlKey(r.bodySystem) === bodyKey) return r.bodySystem.trim();
   }
@@ -99,38 +111,56 @@ export async function loadContentBackedStudyResourceHubPayload(
   const lessonWhere = {
     pathwayId: pathway.id,
     status: ContentStatus.PUBLISHED,
-    structuralPublicComplete: true,
     locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
     bodySystem: { equals: bodySystemLabel, mode: Prisma.QueryMode.insensitive },
   };
 
-  const [lessonTotal, lessons, questionCount, flashcardDecks] = await Promise.all([
-    prisma.pathwayLesson.count({ where: lessonWhere }),
-    prisma.pathwayLesson.findMany({
-      where: lessonWhere,
-      orderBy: [{ sortOrder: "asc" }, { id: "asc" }],
-      take: MAX_LESSON_LINKS,
-      select: { slug: true, title: true, topic: true },
-    }),
-    prisma.examQuestion.count({
-      where: {
-        AND: [
-          pathwayExamQuestionMarketingWhere(pathway),
-          { bodySystem: { equals: bodySystemLabel, mode: Prisma.QueryMode.insensitive } },
-        ],
-      },
-    }),
-    prisma.flashcardDeck.findMany({
-      where: {
-        pathwayId: pathway.id,
-        status: ContentStatus.PUBLISHED,
-        visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW,
-      },
-      orderBy: [{ sortOrder: "asc" }, { id: "asc" }],
-      take: MAX_FLASHCARD_DECK_LINKS,
-      select: { slug: true, title: true },
-    }),
-  ]);
+  let lessonTotal: number;
+  let lessons: { slug: string; title: string; topic: string }[];
+  let questionCount: number;
+  let flashcardDecks: { slug: string; title: string }[];
+  try {
+    const results = await Promise.all([
+      prisma.pathwayLesson.count({ where: lessonWhere }),
+      prisma.pathwayLesson.findMany({
+        where: lessonWhere,
+        orderBy: [{ sortOrder: "asc" }, { id: "asc" }],
+        take: MAX_LESSON_LINKS,
+        select: { slug: true, title: true, topic: true },
+      }),
+      prisma.examQuestion.count({
+        where: {
+          AND: [
+            pathwayExamQuestionMarketingWhere(pathway),
+            { bodySystem: { equals: bodySystemLabel, mode: Prisma.QueryMode.insensitive } },
+          ],
+        },
+      }),
+      prisma.flashcardDeck.findMany({
+        where: {
+          pathwayId: pathway.id,
+          status: ContentStatus.PUBLISHED,
+          visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW,
+        },
+        orderBy: [{ sortOrder: "asc" }, { id: "asc" }],
+        take: MAX_FLASHCARD_DECK_LINKS,
+        select: { slug: true, title: true },
+      }),
+    ]);
+    lessonTotal = results[0];
+    lessons = results[1];
+    questionCount = results[2];
+    flashcardDecks = results[3];
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    safeServerLog("content_backed_hub", "load_hub_payload_db_error", {
+      route: "loadContentBackedStudyResourceHubPayload",
+      query_name: "Promise.all(pathwayLesson.count+findMany)",
+      error_code: (e as { code?: string })?.code ?? "unknown",
+      error_message: msg.slice(0, 300),
+    });
+    return null;
+  }
 
   const introPlainText = INTRO_TEMPLATE(pathway.displayName, bodySystemLabel);
   const renderableLinks = lessonTotal + flashcardDecks.length + 3;
@@ -175,17 +205,30 @@ export async function listContentBackedStudyResourceHubSitemapRows(
   pathway: ExamPathwayDefinition,
 ): Promise<ContentBackedStudyResourceSitemapRow[]> {
   if (!isDatabaseUrlConfigured()) return [];
-  const groups = await prisma.pathwayLesson.groupBy({
-    by: ["bodySystem"],
-    where: {
-      pathwayId: pathway.id,
-      status: ContentStatus.PUBLISHED,
-      structuralPublicComplete: true,
-      locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
-      bodySystem: { not: "" },
-    },
-    _count: { _all: true },
-  });
+  let groups: { bodySystem: string; _count: { _all: number } }[];
+  try {
+    // Prisma 6.x: `groupBy` overload inference can intersect the args object with the result array type;
+    // cast keeps runtime behavior identical while satisfying the compiler.
+    groups = (await prisma.pathwayLesson.groupBy({
+      by: ["bodySystem"],
+      where: {
+        pathwayId: pathway.id,
+        status: ContentStatus.PUBLISHED,
+        locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+        bodySystem: { not: "" },
+      },
+      _count: { _all: true },
+    } as never)) as { bodySystem: string; _count: { _all: number } }[];
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    safeServerLog("content_backed_hub", "sitemap_rows_db_error", {
+      route: "listContentBackedStudyResourceHubSitemapRows",
+      query_name: "pathwayLesson.groupBy",
+      error_code: (e as { code?: string })?.code ?? "unknown",
+      error_message: msg.slice(0, 300),
+    });
+    return [];
+  }
 
   const out: ContentBackedStudyResourceSitemapRow[] = [];
   const baseQ = pathwayExamQuestionMarketingWhere(pathway);

@@ -8,6 +8,7 @@ import {
 } from "@/lib/env/central-env-validation";
 import { runProductionEnvGuard } from "@/lib/env/production-env-guard";
 import { logRuntimeEnvSnapshot, validateRuntimeEnvOrThrow } from "@/lib/env/runtime-env-guard";
+import { emitEnvDiagnosticsBootSummary } from "@/lib/env/env-diagnostics";
 import { logStartupContext } from "@/lib/env/server-env";
 import { logHighMemory } from "@/lib/observability/perf-log-core";
 import { logMemoryPressureSample } from "@/lib/observability/perf-log-host-memory";
@@ -32,6 +33,13 @@ async function captureSentryProcessException(
 
 export async function registerNodeInstrumentation(): Promise<void> {
   logStartupContext();
+  if (process.env.NN_ENV_BOOT_DIAGNOSTICS === "1") {
+    try {
+      emitEnvDiagnosticsBootSummary();
+    } catch {
+      /* never block boot */
+    }
+  }
   assertNextPublicSurfaceHasNoSecrets();
   warnIfStripeLiveKeyOutsideProduction();
   logDatabaseEnvOnce();

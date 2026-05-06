@@ -6,7 +6,14 @@ import {
   STUDY_LINEAR_PRIORITIZE_MIN_SPARE,
 } from "@/lib/study/study-diversity-config";
 
-export type LinearStudyPrioritizerMode = "random" | "targeted" | "weak" | "missed";
+export type LinearStudyPrioritizerMode =
+  | "random"
+  | "targeted"
+  | "weak"
+  | "missed"
+  | "starred"
+  /** Prefer items with little/no recent exposure in this pathway (linear pool only). */
+  | "unseen";
 
 /** Shape-compatible with {@link MissedQuestionSignal} from study-question-signals (pure module). */
 export type MissedSignalLite = { missCount: number; lastMissedAtMs: number };
@@ -75,6 +82,10 @@ export function buildPrioritizedLinearPickBand(input: LinearStudyPrioritizerInpu
     } else if (input.mode === "targeted") {
       const fresh = inRecentSessions ? -500_000 : 500_000;
       score = fresh + Math.min(80_000, daysSince * 200) + weakP * 20_000 + (tieSalt(`${salt}:tgt`, id) % 800);
+    } else if (input.mode === "unseen") {
+      const never = last == null ? 12_000_000 : 0;
+      const fresh = inRecentSessions ? -2_000_000 : 2_000_000;
+      score = never + fresh + Math.min(500_000, daysSince * 800) + weakP * 5_000 + (tieSalt(`${salt}:unseen`, id) % 4000);
     } else {
       const fresh = inRecentSessions ? -800_000 : 800_000;
       score = fresh + Math.min(120_000, daysSince * 300) + weakP * 25_000 + (tieSalt(`${salt}:rnd`, id) % 2000);

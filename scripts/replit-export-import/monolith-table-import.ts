@@ -4,6 +4,7 @@
  */
 import type pg from "pg";
 import * as path from "path";
+import { canonicalExamQuestionExamForDbWrite } from "../../nursenest-core/src/lib/content-quality/exam-question-exam-normalization";
 import {
   bumpSkip,
   createStats,
@@ -138,6 +139,8 @@ export async function importExamQuestionsMonolith(
     for (const row of batch) {
       const id = String(row.id);
       const stem = str(row, "stem").trim();
+      const examRaw = str(row, "exam").trim();
+      const examCanon = examRaw ? canonicalExamQuestionExamForDbWrite(examRaw) : examRaw;
       const wasThere = existing.has(id);
       try {
         await pool.query(
@@ -189,7 +192,7 @@ export async function importExamQuestionsMonolith(
           [
             id,
             str(row, "tier"),
-            str(row, "exam"),
+            examCanon,
             str(row, "question_type"),
             str(row, "status", "draft"),
             parseTimestamp(rowVal(row, "publish_at")),

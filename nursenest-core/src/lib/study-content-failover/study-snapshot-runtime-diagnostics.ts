@@ -1,11 +1,29 @@
 import "server-only";
 
-import { access, readdir } from "node:fs/promises";
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-import { constants as fsConstants } from "node:fs";
-
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
+
+type FsPromisesModule = typeof import("fs/promises");
+type FsModule = typeof import("fs");
+type PathModule = typeof import("path");
+
+let fsPromisesModulePromise: Promise<FsPromisesModule> | null = null;
+let fsModulePromise: Promise<FsModule> | null = null;
+let pathModulePromise: Promise<PathModule> | null = null;
+
+function loadFsPromisesModule(): Promise<FsPromisesModule> {
+  fsPromisesModulePromise ??= import(/* webpackIgnore: true */ "fs/promises");
+  return fsPromisesModulePromise;
+}
+
+function loadFsModule(): Promise<FsModule> {
+  fsModulePromise ??= import(/* webpackIgnore: true */ "fs");
+  return fsModulePromise;
+}
+
+function loadPathModule(): Promise<PathModule> {
+  pathModulePromise ??= import(/* webpackIgnore: true */ "path");
+  return pathModulePromise;
+}
 
 function snapshotDirFromEnv(): string | null {
   const raw = process.env.STUDY_PUBLISHED_SNAPSHOT_DIR?.trim();
@@ -46,7 +64,8 @@ export async function readStudySnapshotManifestLastRefreshedAt(): Promise<string
   const base = snapshotDirFromEnv();
   if (!base) return null;
   try {
-    const txt = await readFile(path.join(base, "manifest.json"), "utf8");
+    const [{ readFile }, pathModule] = await Promise.all([loadFsPromisesModule(), loadPathModule()]);
+    const txt = await readFile(pathModule.join(base, "manifest.json"), "utf8");
     const raw: unknown = JSON.parse(txt) as unknown;
     if (!raw || typeof raw !== "object") return null;
     const last = (raw as Record<string, unknown>).lastRefreshedAt;
@@ -68,23 +87,36 @@ export async function probeStudyPublishedSnapshotDir(): Promise<StudyPublishedSn
       manifestLastRefreshedAt: null,
     };
   }
-  const resolved = path.resolve(base);
   let readable = false;
   let readError: string | undefined;
+  const pathModule = await loadPathModule();
+  const resolved = pathModule.resolve(base);
   try {
+    const [{ access }, { constants: fsConstants }] = await Promise.all([
+      loadFsPromisesModule(),
+      loadFsModule(),
+    ]);
     await access(resolved, fsConstants.R_OK);
     readable = true;
+    const manifestLastRefreshedAt = await readStudySnapshotManifestLastRefreshedAt();
+    return {
+      configured: true,
+      failoverRequired,
+      path: resolved,
+      readable,
+      readError,
+      manifestLastRefreshedAt,
+    };
   } catch (e) {
     readError = e instanceof Error ? e.message.slice(0, 240) : String(e).slice(0, 240);
   }
-  const manifestLastRefreshedAt = readable ? await readStudySnapshotManifestLastRefreshedAt() : null;
   return {
     configured: true,
     failoverRequired,
     path: resolved,
     readable,
     readError,
-    manifestLastRefreshedAt,
+    manifestLastRefreshedAt: null,
   };
 }
 
@@ -105,19 +137,19 @@ async function collectJsonStats(
 ): Promise<{ count: number; newestMtimeMs: number | null }> {
   let count = 0;
   let newestMtimeMs: number | null = null;
-  const { stat } = await import("node:fs/promises");
+  const [{ readdir, stat }, pathModule] = await Promise.all([loadFsPromisesModule(), loadPathModule()]);
 
   async function walk(dir: string, depth: number): Promise<void> {
     if (count >= opts.maxFiles || depth > opts.maxDepth) return;
-    let entries: Awaited<ReturnType<typeof readdir>>;
+    let entries: import("fs").Dirent<string>[];
     try {
-      entries = await readdir(dir, { withFileTypes: true });
+      entries = (await readdir(dir, { withFileTypes: true })) as import("fs").Dirent<string>[];
     } catch {
       return;
     }
     for (const ent of entries) {
       if (count >= opts.maxFiles) return;
-      const full = path.join(dir, ent.name);
+      const full = pathModule.join(dir, ent.name);
       if (ent.isDirectory()) {
         await walk(full, depth + 1);
       } else if (ent.isFile() && ent.name.endsWith(".json") && ent.name !== "manifest.json") {
@@ -165,6 +197,7 @@ export async function runStudyPublishedSnapshotHealthScan(params?: {
   const root = probe.path;
   let topLevelDirs: string[] = [];
   try {
+    const { readdir } = await loadFsPromisesModule();
     const dirents = await readdir(root, { withFileTypes: true });
     topLevelDirs = dirents.filter((d) => d.isDirectory()).map((d) => d.name);
   } catch {

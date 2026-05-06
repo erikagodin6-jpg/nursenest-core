@@ -19,6 +19,9 @@ export default async function AdminLessonsLibraryPage() {
         <Link href="/admin/lessons/blueprint-coverage" className="text-muted-foreground underline">
           Lesson blueprint coverage
         </Link>
+        <Link href="/admin/pathway-lessons" className="text-primary underline">
+          Pathway lessons (canonical)
+        </Link>
       </div>
       <AdminLessonsLibraryClient />
     </main>

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { formatDisplayLabel } from "@/lib/ui/format-display-label";
 
 const COUNTRIES = [
   { value: "ALL", label: "All countries" },
@@ -23,7 +24,7 @@ const EXAM_OPTIONS = (() => {
   const keys = new Set<string>();
   for (const p of EXAM_PATHWAYS) for (const k of p.contentExamKeys) keys.add(k);
   const sorted = [...keys].sort((a, b) => a.localeCompare(b));
-  return [{ value: "ALL", label: "All exams (keys)" }, ...sorted.map((k) => ({ value: k, label: k }))];
+  return [{ value: "ALL", label: "All exams" }, ...sorted.map((k) => ({ value: k, label: formatDisplayLabel(k) }))];
 })();
 
 export function AdminContentCoverageFilters({

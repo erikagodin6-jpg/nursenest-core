@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/auth/guards";
 import { AdminContentCoverageFilters } from "@/components/admin/admin-content-coverage-filters";
 import { loadAdminContentCoverageDashboard } from "@/lib/admin/load-admin-content-coverage-dashboard";
 import { RELATED_EXAM_QUESTIONS_MIN_TARGET } from "@/lib/lessons/lesson-question-cross-links";
+import { formatDisplayLabel, formatPrismaEnumLabel } from "@/lib/ui/format-display-label";
 
 export const dynamic = "force-dynamic";
 
@@ -160,7 +161,7 @@ export default async function AdminContentCoveragePage({
               ) : (
                 data.questionsByTopic.map((r) => (
                   <tr key={r.topic} className="border-b border-border/50">
-                    <td className="px-4 py-2 font-mono text-xs">{r.topic}</td>
+                    <td className="px-4 py-2 text-sm text-[var(--semantic-text-primary)]">{formatDisplayLabel(r.topic)}</td>
                     <td className="px-4 py-2 text-right tabular-nums">{r.count}</td>
                   </tr>
                 ))
@@ -194,7 +195,7 @@ export default async function AdminContentCoveragePage({
                 <tr key={r.pathwayId} className="border-b border-border/50">
                   <td className="px-4 py-2 font-medium">{r.displayName}</td>
                   <td className="px-4 py-2 text-muted-foreground">{r.countryCode}</td>
-                  <td className="px-4 py-2 text-muted-foreground">{r.stripeTier}</td>
+                  <td className="px-4 py-2 text-muted-foreground">{formatPrismaEnumLabel(r.stripeTier)}</td>
                   <td className="px-4 py-2 text-right tabular-nums">{r.publishedLessonsEn}</td>
                   <td className="px-4 py-2 text-right tabular-nums">{r.effectiveLessons}</td>
                   <td className="px-4 py-2 text-right tabular-nums">{r.pathwayPublishedQuestions}</td>
@@ -202,7 +203,7 @@ export default async function AdminContentCoveragePage({
                     {r.pctLessonsMeetingMinQuestions != null ? `${r.pctLessonsMeetingMinQuestions}%` : "—"}
                   </td>
                   <td className="px-4 py-2 text-right font-semibold tabular-nums">{r.readinessScore}</td>
-                  <td className="px-4 py-2 capitalize">{r.readinessLabel}</td>
+                  <td className="px-4 py-2 text-[var(--semantic-text-secondary)]">{formatDisplayLabel(r.readinessLabel)}</td>
                 </tr>
               ))}
             </tbody>

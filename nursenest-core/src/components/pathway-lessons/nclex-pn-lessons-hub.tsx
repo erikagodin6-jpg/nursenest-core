@@ -5,7 +5,7 @@ import { PathwayNclexScalableLessonSection } from "@/components/pathway-lessons/
 import { PathwayTopicClusterGroupedNav } from "@/components/pathway-lessons/pathway-topic-cluster-grouped-nav";
 import {
   pathwayLessonHasRenderableHubSlug,
-  pathwayLessonMarketingDetailHref,
+  pathwayLessonMarketingHubVerifiedCardHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import {
@@ -63,6 +63,9 @@ export function NclexPnLessonsHub({
   const sections = buildNclexPnUsLessonSections(safeLessons);
   const navLinks = sections.filter((s) => s.count > 0);
   const featured = safeLessons.length > 0 ? [...safeLessons].sort((a, b) => a.slug.localeCompare(b.slug))[0] : null;
+  const featuredDetailHref = featured
+    ? pathwayLessonMarketingHubVerifiedCardHref(lessonsBasePath, featured)
+    : null;
   const featuredPreview = featured ? nclexPnLessonExamPreview(featured, previewFraming) : null;
   const questionsHub = buildExamPathwayPath(pathway, "questions");
   const examHub = buildExamPathwayPath(pathway);
@@ -176,13 +179,15 @@ export function NclexPnLessonsHub({
             </div>
           </div>
           <div className="mt-5 flex flex-wrap gap-2">
-            <Link
-              href={pathwayLessonMarketingDetailHref(lessonsBasePath, featured.slug)!}
-              data-nn-qa-primary-lesson="true"
-              className="inline-flex rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
-            >
-              Open lesson
-            </Link>
+            {featuredDetailHref ? (
+              <Link
+                href={featuredDetailHref}
+                data-nn-qa-primary-lesson="true"
+                className="inline-flex rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
+              >
+                Open lesson
+              </Link>
+            ) : null}
             <Link
               href={pathwayHubAppQuestionsHref(pathway.id, featured.topic)}
               className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold"
@@ -322,7 +327,7 @@ export function NclexPnLessonsHub({
           {commonMistakes.map((block) => (
             <div key={block.group}>
               {block.group !== "all" && (
-                <p className="text-xs font-semibold uppercase text-muted">
+                <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">
                   {block.group === "safe" ? "Safe & coordinated care" : "Physiological integrity"}
                 </p>
               )}

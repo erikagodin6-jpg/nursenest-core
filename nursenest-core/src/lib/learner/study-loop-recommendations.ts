@@ -29,6 +29,8 @@ export type SessionTopicRollup = {
   wrong: number;
   right: number;
   lessonHref: string | null;
+  /** From grade API remediation when present. */
+  flashcardsHref: string | null;
   topicDrillHref: string | null;
   topicCode: string | null;
 };
@@ -38,7 +40,10 @@ function pickBetterLoop(
   b: NonNullable<GradedLearningLoop>,
 ): NonNullable<GradedLearningLoop> {
   const score = (x: NonNullable<GradedLearningLoop>) =>
-    (x.lessonHref ? 4 : 0) + (x.topicDrillHref ? 2 : 0) + (x.confidence === "high" ? 2 : x.confidence === "medium" ? 1 : 0);
+    (x.lessonHref ? 4 : 0) +
+    (x.flashcardsHref ? 3 : 0) +
+    (x.topicDrillHref ? 2 : 0) +
+    (x.confidence === "high" ? 2 : x.confidence === "medium" ? 1 : 0);
   return score(b) > score(a) ? b : a;
 }
 
@@ -81,6 +86,7 @@ export function buildSessionTopicRollup(
       wrong: v.wrong,
       right: v.right,
       lessonHref: v.loop?.lessonHref ?? null,
+      flashcardsHref: v.loop?.flashcardsHref ?? null,
       topicDrillHref: v.loop?.topicDrillHref ?? null,
       topicCode: v.loop?.topicCode ?? null,
     }))

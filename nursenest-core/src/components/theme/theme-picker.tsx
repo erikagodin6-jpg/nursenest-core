@@ -24,6 +24,30 @@ type ThemePickerProps = {
   dropdownPortal?: boolean;
 };
 
+function ThemeSwatches({ opt }: { opt: (typeof THEME_OPTIONS)[number] }) {
+  const hasExtra = Boolean(opt.swatchSecondary || opt.swatchAccent);
+  if (!hasExtra) {
+    return <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: opt.color }} />;
+  }
+  return (
+    <span className="flex shrink-0 items-center gap-0.5" aria-hidden>
+      <span className="h-2.5 w-2.5 rounded-full ring-1 ring-black/10 dark:ring-white/15" style={{ background: opt.color }} />
+      {opt.swatchSecondary ? (
+        <span
+          className="h-2.5 w-2.5 rounded-full ring-1 ring-black/10 dark:ring-white/15"
+          style={{ background: opt.swatchSecondary }}
+        />
+      ) : null}
+      {opt.swatchAccent ? (
+        <span
+          className="h-2.5 w-2.5 rounded-full ring-1 ring-black/10 dark:ring-white/15"
+          style={{ background: opt.swatchAccent }}
+        />
+      ) : null}
+    </span>
+  );
+}
+
 function ThemeMenuList({
   current,
   currentLabel,
@@ -33,7 +57,7 @@ function ThemeMenuList({
 }: {
   current: string;
   currentLabel: string;
-  L: typeof DEFAULT_THEME_LABELS;
+  L: Record<keyof typeof DEFAULT_THEME_LABELS, string>;
   setTheme: (id: string) => void;
   setOpen: (v: boolean) => void;
 }) {
@@ -59,8 +83,8 @@ function ThemeMenuList({
                   opt.id === current ? "font-semibold text-[var(--palette-accent)]" : "text-[var(--palette-nav-text)]"
                 }`}
               >
-                <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: opt.color }} />
-                {opt.label}
+                <ThemeSwatches opt={opt} />
+                <span className="min-w-0 flex-1 leading-snug">{opt.label}</span>
               </button>
             ))}
           </div>
@@ -86,8 +110,8 @@ function ThemeMenuList({
                 opt.id === current ? "font-semibold text-[var(--palette-accent)]" : "text-[var(--palette-nav-text)]"
               }`}
             >
-              <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: opt.color }} />
-              {opt.label}
+              <ThemeSwatches opt={opt} />
+              <span className="min-w-0 flex-1 leading-snug">{opt.label}</span>
             </button>
           ))}
         </div>

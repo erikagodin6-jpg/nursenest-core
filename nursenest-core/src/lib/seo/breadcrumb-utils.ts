@@ -13,6 +13,12 @@ export function toAbsoluteSiteUrl(pathOrUrl: string): string {
 export function countryLabelFromSlug(countrySlug: string): string {
   if (countrySlug === "canada") return "Canada";
   if (countrySlug === "us") return "United States";
+  if (countrySlug === "uk") return "United Kingdom";
+  if (countrySlug === "australia") return "Australia";
+  if (countrySlug === "philippines") return "Philippines";
+  if (countrySlug === "india") return "India";
+  if (countrySlug === "nigeria") return "Nigeria";
+  if (countrySlug === "saudi-arabia") return "Saudi Arabia";
   return countrySlug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
@@ -24,6 +30,12 @@ export function countryExamGuideHref(countrySlug: string): string {
   const c = countrySlug.trim().toLowerCase();
   if (c === "canada") return "/exams/canada";
   if (c === "us") return "/practice-exams";
+  if (c === "uk") return "/exams/uk";
+  if (c === "australia") return "/exams/australia";
+  if (c === "philippines") return "/exams/philippines";
+  if (c === "india") return "/exams/india";
+  if (c === "nigeria") return "/exams/nigeria";
+  if (c === "saudi-arabia") return "/exams/middle-east";
   return "/";
 }
 

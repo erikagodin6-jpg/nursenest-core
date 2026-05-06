@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { enforceDiscoveryProtection } from "@/lib/http/api-protection";
 import { requireSubscriberSession } from "@/lib/entitlements/require-subscriber-session";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
+import { normalizePathwayIdForStudySurfaces } from "@/lib/study-question-pool/study-pathway-normalize";
 import { diagnoseDiscoveryEmpty } from "@/lib/questions/discovery-empty-diagnostics";
 import {
   DISCOVERY_SQL_EXAM_LIMIT,
@@ -32,7 +33,10 @@ export async function GET(req: NextRequest) {
   return runWithApiTelemetry(req, "GET /api/questions/discovery", "content", async () => {
   const gate = await requireSubscriberSession();
   if (!gate.ok) return gate.response;
-  const requestedPathwayId = req.nextUrl.searchParams.get("pathwayId");
+  const requestedPathwayIdRaw = req.nextUrl.searchParams.get("pathwayId");
+  const requestedPathwayId = requestedPathwayIdRaw
+    ? normalizePathwayIdForStudySurfaces(requestedPathwayIdRaw, gate.entitlement.country)
+    : null;
   const requestedLanguage = req.nextUrl.searchParams.get("language")?.trim() || "en";
   const examContext = requestedPathwayId ? buildGlobalExamContext(requestedPathwayId, requestedLanguage) : null;
 

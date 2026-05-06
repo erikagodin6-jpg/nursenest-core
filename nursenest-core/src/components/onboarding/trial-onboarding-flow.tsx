@@ -17,9 +17,10 @@
  */
 
 import Link from "next/link";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { CheckCircle2, BookOpen, Target, Brain, Calendar, ArrowRight } from "lucide-react";
 import { trackClientEvent } from "@/lib/observability/posthog-client";
+import { examGoalRowsForCountry, normalizeOnboardingCountry } from "@/lib/onboarding/exam-goal-rows-for-country";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -34,13 +35,6 @@ interface OnboardingState {
 }
 
 // ── Step config ────────────────────────────────────────────────────────────
-
-const EXAM_OPTIONS: { id: ExamGoal; label: string; description: string }[] = [
-  { id: "rn", label: "RN", description: "NCLEX-RN or REx-RN" },
-  { id: "rpn", label: "RPN / LPN", description: "REx-PN or NCLEX-PN" },
-  { id: "np", label: "NP", description: "Nurse Practitioner certification" },
-  { id: "allied", label: "Allied Health", description: "Allied health profession exams" },
-];
 
 const STUDY_STYLE_OPTIONS: { id: StudyStyle; label: string; description: string; icon: React.ReactNode }[] = [
   {
@@ -67,9 +61,12 @@ const STUDY_STYLE_OPTIONS: { id: StudyStyle; label: string; description: string;
 
 export function TrialOnboardingFlow({
   userId,
+  accountCountry,
   onComplete,
 }: {
   userId: string;
+  /** Prisma `User.country` at page load (ISO-2). Used only for PN/RPN exam-goal copy. */
+  accountCountry?: string | null;
   onComplete?: () => void;
 }) {
   const [step, setStep] = useState(0);
@@ -80,6 +77,11 @@ export function TrialOnboardingFlow({
     studyStyle: null,
   });
   const [saving, setSaving] = useState(false);
+
+  const examGoalRows = useMemo(
+    () => examGoalRowsForCountry(normalizeOnboardingCountry(accountCountry)),
+    [accountCountry],
+  );
 
   useEffect(() => {
     trackClientEvent("onboarding_started", { user_id: userId });
@@ -203,6 +205,7 @@ export function TrialOnboardingFlow({
       <div className="nn-onboarding-step">
         {step === 0 && (
           <StepExamGoal
+            options={examGoalRows}
             value={state.examGoal}
             onChange={(v) => setState((s) => ({ ...s, examGoal: v }))}
           />
@@ -239,6 +242,7 @@ export function TrialOnboardingFlow({
           {step === 0 && state.examGoal ? (
             <button
               type="button"
+              data-testid="onboarding-start-studying-now"
               onClick={() => void completeFast()}
               disabled={saving}
               className="nn-btn-primary inline-flex min-h-[2.75rem] w-full items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold shadow-none disabled:opacity-50"
@@ -279,9 +283,11 @@ export function TrialOnboardingFlow({
 // ── Step 1: Exam Goal ─────────────────────────────────────────────────────
 
 function StepExamGoal({
+  options,
   value,
   onChange,
 }: {
+  options: { id: ExamGoal; label: string; description: string }[];
   value: ExamGoal;
   onChange: (v: ExamGoal) => void;
 }) {
@@ -292,10 +298,11 @@ function StepExamGoal({
         We'll tailor your study experience to your specific exam.
       </p>
       <div className="mt-6 grid gap-3">
-        {EXAM_OPTIONS.map((opt) => (
+        {options.map((opt) => (
           <button
             key={opt.id}
             type="button"
+            data-testid={opt.id ? `onboarding-exam-goal-${opt.id}` : undefined}
             onClick={() => onChange(opt.id)}
             className={`nn-onboarding-option ${value === opt.id ? "nn-onboarding-option--selected" : ""}`}
           >

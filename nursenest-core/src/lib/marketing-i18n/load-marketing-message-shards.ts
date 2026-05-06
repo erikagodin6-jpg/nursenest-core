@@ -1,10 +1,9 @@
 import "server-only";
 
-import path from "path";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync } from "node:fs";
 
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
-import type { I18nShardFilename } from "@shared/i18n-shard-policy";
+import type { I18nShardFilename } from "@/lib/i18n/i18n-shard-policy";
 
 /**
  * VERY SAFE i18n loader
@@ -16,40 +15,7 @@ import type { I18nShardFilename } from "@shared/i18n-shard-policy";
 
 const DEFAULT_LOCALE = "en";
 
-/**
- * Resolve i18n directory safely across environments
- */
-function resolveI18nDir(): string | null {
-  try {
-    const env = process.env.NN_MARKETING_I18N_DIR;
-    if (env && existsSync(env)) return env;
-
-    const candidates = [
-      path.join(process.cwd(), "public", "i18n"),
-      path.join(process.cwd(), ".next", "static", "i18n"),
-      path.join(process.cwd(), "i18n"),
-    ];
-
-    const main = process.argv[1];
-    if (main) {
-      const entry = path.dirname(main);
-      candidates.push(path.join(entry, "public", "i18n"));
-      candidates.push(path.join(entry, ".next", "static", "i18n"));
-    }
-
-    for (const p of candidates) {
-      try {
-        if (existsSync(p)) return p;
-      } catch {}
-    }
-
-    console.warn("[i18n] directory not found, fallback to empty");
-    return null;
-  } catch (err) {
-    console.error("[i18n] resolve failed", err);
-    return null;
-  }
-}
+const I18N_DIR = /* turbopackIgnore: true */ `${process.cwd()}/public/i18n`;
 
 /**
  * Load shard file safely
@@ -60,7 +26,7 @@ function readShard(
   shard: I18nShardFilename
 ): Record<string, string> {
   try {
-    const file = path.join(baseDir, locale, `${shard}.json`);
+    const file = `${baseDir}/${locale}/${shard}.json`;
     if (!existsSync(file)) return {};
     const parsed = JSON.parse(readFileSync(file, "utf8"));
     return parsed && typeof parsed === "object" && !Array.isArray(parsed)
@@ -97,16 +63,13 @@ export function loadMarketingMessageShardsSync(
   shards: readonly I18nShardFilename[]
 ): MarketingMessages {
   try {
-    const dir = resolveI18nDir();
-    if (!dir) return {};
-
     const safeLocale = locale || DEFAULT_LOCALE;
 
-    const merged = mergeShards(dir, safeLocale, shards);
+    const merged = mergeShards(I18N_DIR, safeLocale, shards);
 
     // fallback to default locale if empty
     if (Object.keys(merged).length === 0 && safeLocale !== DEFAULT_LOCALE) {
-      return mergeShards(dir, DEFAULT_LOCALE, shards);
+      return mergeShards(I18N_DIR, DEFAULT_LOCALE, shards);
     }
 
     return merged;

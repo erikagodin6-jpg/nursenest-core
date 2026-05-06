@@ -1,5 +1,6 @@
 import { ExamFamily } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { isPathwayLessonStructuralPublicCompleteColumnPresent } from "@/lib/db/pathway-lesson-structural-column-runtime";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
@@ -30,18 +31,29 @@ export async function getLastTouchedPathwayLesson(
   if (!row) return null;
   const slug = row.lessonId.startsWith(prefix) ? row.lessonId.slice(prefix.length) : "";
   if (!slug?.trim()) return null;
+  const structuralCol = await isPathwayLessonStructuralPublicCompleteColumnPresent();
   const lesson = await prisma.pathwayLesson.findFirst({
     where: { pathwayId, slug, status: "PUBLISHED" },
-    select: {
-      title: true,
-      slug: true,
-      structuralPublicComplete: true,
-    },
+    select: structuralCol
+      ? {
+          title: true,
+          slug: true,
+          structuralPublicComplete: true,
+        }
+      : {
+          title: true,
+          slug: true,
+        },
   });
-  if (!lesson?.structuralPublicComplete) {
+  if (
+    structuralCol &&
+    lesson &&
+    "structuralPublicComplete" in lesson &&
+    lesson.structuralPublicComplete !== true
+  ) {
     return null;
   }
-  const title = lesson.title?.trim() || slug;
+  const title = lesson?.title?.trim() || slug;
   return { title, slug, completed: row.completed };
 }
 
@@ -89,15 +101,21 @@ export async function loadPathwayHubSubscriberData(
 
   let lastTouched: PathwayHubResumePayload["lastTouched"] = null;
   if (batch.lastForResume) {
+    const structuralColResume = await isPathwayLessonStructuralPublicCompleteColumnPresent();
     const titleRow = await prisma.pathwayLesson.findFirst({
       where: { pathwayId: pathway.id, slug: batch.lastForResume.slug, status: "PUBLISHED" },
-      select: {
-        title: true,
-        structuralPublicComplete: true,
-      },
+      select: structuralColResume
+        ? {
+            title: true,
+            structuralPublicComplete: true,
+          }
+        : { title: true },
     });
-    const title =
-      titleRow?.structuralPublicComplete === true ? (titleRow.title?.trim() ?? batch.lastForResume.slug) : null;
+    const title = !structuralColResume
+      ? (titleRow?.title?.trim() ?? batch.lastForResume.slug)
+      : titleRow && "structuralPublicComplete" in titleRow && titleRow.structuralPublicComplete === true
+        ? (titleRow.title?.trim() ?? batch.lastForResume.slug)
+        : null;
     if (!title) {
       return { resume: emptyResume, progressMap: batch.progressMap };
     }

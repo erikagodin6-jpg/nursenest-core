@@ -1,6 +1,9 @@
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import type { MarketingHubDataLoadContext } from "@/lib/exam-pathways/marketing-hub-data-context";
-import type { LoadPathwayLessonsHubPageArgs } from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
+import type {
+  LoadPathwayLessonsHubPageArgs,
+  MarketingHubLessonsListOptions,
+} from "@/lib/exam-pathways/marketing-hub-lessons-page-args";
 import {
   loadPathwayLessonsHubPageWithTelemetry,
   type LessonsHubSnapshotDiagnostics,
@@ -172,7 +175,7 @@ export async function loadPathwayLessonsHubAggregates(
     pageRequested: number;
     pageSizeRequested: number;
     lessonContentLocale: string;
-    listOpts: { q?: string; topicSlugsIn?: string[] } | undefined;
+    listOpts: MarketingHubLessonsListOptions | undefined;
     qEffective: string;
     skipLaunchBundle: boolean;
     includeLessonCount?: boolean;

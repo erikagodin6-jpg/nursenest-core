@@ -10,6 +10,11 @@ import {
   pastDueSubscriptionGrantsPremium,
   readPastDueEntitlementPolicy,
 } from "@/lib/entitlements/past-due-policy";
+import {
+  activeLikePaidWindowOpen,
+  cancelledPaidThroughActive,
+  subscriptionEntitlementEndMs,
+} from "@/lib/entitlements/subscription-paid-access";
 import { effectiveTierCountryForAccess } from "@/lib/entitlements/subscription-plan";
 import type { AlliedCareerKey } from "@/lib/pricing/display-catalog";
 import type { AccessScope, SubscriptionPlanStatus, UserAccess } from "./user-access-types";
@@ -236,8 +241,13 @@ async function getUserAccessCore(
   );
   telemetry.subscriptionRowsRead = subscriptionRows.length;
 
+  const now = Date.now();
   let activeSubscription =
-    subscriptionRows.find((s) => ACTIVE_LIKE.includes(s.status)) ?? null;
+    subscriptionRows.find((s) => {
+      if (!ACTIVE_LIKE.includes(s.status)) return false;
+      if (s.status === SubscriptionStatus.PAST_DUE) return true;
+      return activeLikePaidWindowOpen(s, now);
+    }) ?? null;
   const latestSubscription: SubscriptionSelect | null = subscriptionRows[0] ?? null;
 
   if (subscriptionRows.length === SUBSCRIPTION_HISTORY_WINDOW && activeSubscription === null) {
@@ -246,15 +256,24 @@ async function getUserAccessCore(
       prisma.subscription.findMany({
         where: { userId, status: { in: ACTIVE_LIKE } },
         orderBy: { createdAt: "desc" },
-        take: 1,
+        take: 8,
         select: SUBSCRIPTION_ENTITLEMENT_SELECT,
       }),
     );
-    const fallbackActive = fallbackRows[0] ?? null;
+    const fallbackActive =
+      fallbackRows.find((s) => {
+        if (s.status === SubscriptionStatus.PAST_DUE) return true;
+        return activeLikePaidWindowOpen(s, now);
+      }) ?? null;
     if (fallbackActive) {
       activeSubscription = fallbackActive;
     }
   }
+
+  const cancelledPaidThrough =
+    subscriptionRows
+      .filter((s) => cancelledPaidThroughActive(s, now))
+      .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())[0] ?? null;
 
   const planRow: SubscriptionSelect | null = activeSubscription ?? latestSubscription;
   const billingRegionSlug = planRow?.billingRegionSlug?.trim() || null;
@@ -363,6 +382,40 @@ async function getUserAccessCore(
         user,
       );
     }
+  }
+
+  if (cancelledPaidThrough) {
+    const endMs = subscriptionEntitlementEndMs(cancelledPaidThrough);
+    const { tier: canceledTier, country: canceledCountry } = effectiveTierCountryForAccess(user, cancelledPaidThrough);
+    const effectiveAlliedFromCanceled =
+      (cancelledPaidThrough.alliedCareer as AlliedCareerKey | null) ??
+      (user.alliedProfessionKey as AlliedCareerKey) ??
+      null;
+    const canceledExpiresAt = endMs != null ? new Date(endMs) : null;
+    return withSessionJwt(
+      {
+        userId,
+        hasPremium: true,
+        reason: "canceled_paid_through",
+        allowedRegion: {
+          country: canceledCountry,
+          billingRegionSlug: cancelledPaidThrough.billingRegionSlug?.trim() || null,
+        },
+        allowedProfession: {
+          tier: canceledTier,
+          alliedCareer: canceledTier === "ALLIED" ? effectiveAlliedFromCanceled : null,
+        },
+        allowedExam: { pathwayId },
+        plan: {
+          planCode: cancelledPaidThrough.planCode?.trim() || planCode,
+          duration: cancelledPaidThrough.planDuration ?? planDuration,
+          status: "canceled",
+          expiresAt: canceledExpiresAt,
+          cancelAtPeriodEnd: cancelledPaidThrough.cancelAtPeriodEnd ?? true,
+        },
+      },
+      user,
+    );
   }
 
   if (

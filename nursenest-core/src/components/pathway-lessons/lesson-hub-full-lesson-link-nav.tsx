@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
-import { pathwayLessonMarketingDetailHref } from "@/lib/lessons/pathway-lesson-types";
+import { pathwayLessonMarketingHubVerifiedCardHref } from "@/lib/lessons/pathway-lesson-types";
+import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 
 /**
  * Screen-reader + crawler full index of lesson detail links (not limited to per-section card previews).
@@ -25,13 +26,12 @@ export function LessonHubFullLessonLinkNav(props: {
 
           if (!slug) return null;
 
-          const href = pathwayLessonMarketingDetailHref(lessonsBasePath, slug);
+          const href = pathwayLessonMarketingHubVerifiedCardHref(lessonsBasePath, lesson);
           if (!href) return null;
 
-          const title =
-            typeof lesson.title === "string" && lesson.title.trim().length > 0
-              ? lesson.title.trim()
-              : slug;
+          const raw =
+            typeof lesson.title === "string" && lesson.title.trim().length > 0 ? lesson.title.trim() : "";
+          const title = raw.length > 0 ? cleanLessonTitleForDisplay(raw) || raw : slug;
 
           return (
             <li key={`${slug}-${index}`}>

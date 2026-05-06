@@ -2,8 +2,8 @@
  * Marketing lessons hub — cross-checks list rows with a **fresh** {@link getPathwayLessonForMarketingHubVerify} load
  * (no `unstable_cache` lag vs the hub list). **Strict** rows match the historical contract (publicComplete + pathway context).
  * **Soft** failures (`detail_not_public_complete`, `pathway_context_mismatch`, `detail_loader_miss`) still hydrate/recover — those rows are kept
- * with {@link PathwayLessonRecord.hubMarketingDegraded} so the grid does not silently empty while the detail route
- * can still render preview/quality states (see {@link resolveMarketingPathwayLessonRouteResolution}).
+ * with {@link PathwayLessonRecord.hubMarketingDegraded} so the grid does not silently empty. Hub **cards** must use
+ * {@link pathwayLessonMarketingHubVerifiedCardHref} so those rows stay visible but **not** as lesson detail links.
  *
  * Intentionally **does not** re-apply professional-practice corpus suppression or `REVIEW_REQUIRED` hub taxonomy —
  * those are not part of marketing detail `not_found` resolution and caused silent “0 lessons” when list rows
@@ -27,6 +27,7 @@ import type {
 } from "@/lib/lessons/pathway-lesson-marketing-link-integrity-reasons";
 import { pathwayLessonMatchesMarketingPathwayContext } from "@/lib/lessons/pathway-lesson-catalog-sync";
 import { normalizePathwayLessonLocale } from "@/lib/lessons/pathway-lesson-locale";
+import { rethrowNextNavigationControlFlow } from "@/lib/next/navigation-abort";
 import { getPathwayLessonForMarketingHubVerify } from "@/lib/lessons/pathway-lesson-loader";
 import { pathwayLessonEligibleForPublicMarketingSurface } from "@/lib/lessons/pathway-lesson-route-access";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
@@ -138,7 +139,8 @@ export async function evaluatePublicMarketingLessonCrossLinkIntegrity(
   let loaded: PathwayLessonRecord | undefined;
   try {
     loaded = await resolveLessonDetail(pathway.id, slug, hubMarketingLocale, dbShard);
-  } catch {
+  } catch (e) {
+    rethrowNextNavigationControlFlow(e);
     safeServerLog("pathway_lessons", "hub_lesson_detail_verify_loader_error", {
       pathway_id: pathway.id,
       slug: slug.slice(0, 200),
@@ -230,7 +232,8 @@ function ensureNonEmptyHubResult(
 }
 
 export async function verifyMarketingHubLessonRowsResolve(
-  pathway: Pick<ExamPathwayDefinition, "id">,
+  pathway: Pick<ExamPathwayDefinition, "id"> &
+    Partial<Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">>,
   lessons: readonly PathwayLessonRecord[],
   lessonContentLocale: string,
   options?: {
@@ -239,6 +242,8 @@ export async function verifyMarketingHubLessonRowsResolve(
     listWarehouseLocale?: string;
     skipZeroKeptPipelineInvariant?: boolean;
     prepareStages?: HubCurriculumPrepareStageDiagnostics;
+    /** When set, only the first N unique slugs run detail verify; remaining rows are kept as inventory (degraded). */
+    maxUniqueSlugsToVerify?: number;
   },
 ): Promise<{
   kept: PathwayLessonRecord[];
@@ -261,7 +266,15 @@ export async function verifyMarketingHubLessonRowsResolve(
   const uniqueSlugs = [...new Set(safe.map((l) => l.slug.trim()))];
   const listWarehouseLocale = options?.listWarehouseLocale?.trim();
 
-  const pairs = await mapWithConcurrency(uniqueSlugs, concurrency, async (slug) => {
+  const capRaw = options?.maxUniqueSlugsToVerify;
+  const verifyCap =
+    typeof capRaw === "number" && Number.isFinite(capRaw) && capRaw > 0
+      ? Math.max(1, Math.floor(capRaw))
+      : uniqueSlugs.length;
+  const slugsToVerify = uniqueSlugs.length > verifyCap ? uniqueSlugs.slice(0, verifyCap) : uniqueSlugs;
+  const unverifiedSlugSet = new Set(uniqueSlugs.length > verifyCap ? uniqueSlugs.slice(verifyCap) : []);
+
+  const pairs = await mapWithConcurrency(slugsToVerify, concurrency, async (slug) => {
     const detailLocale =
       slugToListDetailLocale.get(slug) ??
       (listWarehouseLocale ? normalizePathwayLessonLocale(listWarehouseLocale) : undefined) ??
@@ -340,6 +353,26 @@ export async function verifyMarketingHubLessonRowsResolve(
     }
   }
 
+  if (unverifiedSlugSet.size > 0) {
+    safeServerLog("pathway_lessons", "marketing_hub_verify_slug_cap_applied", {
+      pathway_id: pathway.id,
+      lesson_content_locale: lessonContentLocale,
+      unique_slug_total: String(uniqueSlugs.length),
+      verify_slug_cap: String(verifyCap),
+      skipped_unique_slugs: String(unverifiedSlugSet.size),
+    });
+    for (const lesson of lessons) {
+      if (!pathwayLessonHasRenderableHubSlug(lesson)) continue;
+      const slug = lesson.slug.trim();
+      if (!unverifiedSlugSet.has(slug)) continue;
+      kept.push({
+        ...lesson,
+        hubMarketingDegraded: true,
+        hubMarketingDegradedReason: "unverified_inventory_fill",
+      });
+    }
+  }
+
   const degradedHubRowCount = Math.max(0, kept.length - strictVerifiedRowCount);
 
   const preparedRowBySlug = new Map<string, PathwayLessonRecord>();
@@ -391,6 +424,7 @@ export async function verifyMarketingHubLessonRowsResolve(
 
     const s = lesson.slug.trim();
     if (okSlugSet.has(s)) continue;
+    if (unverifiedSlugSet.has(s)) continue;
 
     const r = slugFailureReason.get(s) ?? "detail_loader_miss";
     if (isSoftHubVerifyRecoveryReason(r)) continue;
@@ -419,7 +453,9 @@ export async function verifyMarketingHubLessonRowsResolve(
     degradedHubRowCount,
     droppedRowCount: Math.max(0, renderablePreparedRows - kept.length),
     excludedUniqueSlugCount: verifyExcluded.length,
-    verifyResolverCallCount: uniqueSlugs.length,
+    verifyResolverCallCount: slugsToVerify.length,
+    verifyUniqueSlugCap: verifyCap < uniqueSlugs.length ? verifyCap : undefined,
+    verifyUniqueSlugSkippedCount: unverifiedSlugSet.size > 0 ? unverifiedSlugSet.size : undefined,
     excludedByReason,
     exclusionReasonsRanked: lessons.length > 0 ? exclusionReasonsRanked : undefined,
     excludedSlugSamples: verifyExcluded.slice(0, excludedSlugSampleCap).map((e) => ({
@@ -459,6 +495,21 @@ export async function verifyMarketingHubLessonRowsResolve(
       lesson_content_locale: lessonContentLocale,
       dropped_prepared_row_samples_json: JSON.stringify(droppedPreparedRowSamples.slice(0, 12)).slice(0, 6000),
     });
+
+    const countrySlug = pathway.countrySlug ?? "";
+    const roleTrack = pathway.roleTrack ?? "";
+    const examCode = pathway.examCode ?? "";
+    for (const e of verifyExcluded.slice(0, 40)) {
+      safeServerLog("pathway_lessons", "marketing_hub_lesson_detail_verify_mismatch", {
+        pathway_id: pathway.id,
+        country_slug: countrySlug,
+        role_track: roleTrack,
+        exam_code: examCode,
+        lesson_content_locale: lessonContentLocale,
+        slug: e.slug.slice(0, 200),
+        failure_reason: e.reason,
+      });
+    }
   }
 
   if (lessons.length > 0 && kept.length === 0) {

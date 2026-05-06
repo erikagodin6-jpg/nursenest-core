@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-05-03T21:21:02.911Z",
+  "summary": {
+    "totalEcgVideoQuestions": 0,
+    "publicEcgVideoQuestions": 0,
+    "draftEcgVideoQuestions": 0,
+    "missingVideoAsset": 0,
+    "missingRationale": 0,
+    "missingCorrectAnswer": 0,
+    "missingLinkedLesson": 0,
+    "malformedAnswerOptions": 0,
+    "publicReadyCount": 0
+  },
+  "items": []
+}

@@ -13,6 +13,7 @@ import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
   emitNnHomePerfDiagLine,
   isNnTraceHomePerfTrue,
+  safeProcessPid,
 } from "@/lib/observability/home-perf-diag";
 
 export async function register() {
@@ -27,7 +28,7 @@ export async function register() {
         if (isNnTraceHomePerfTrue()) {
           emitNnHomePerfDiagLine({
             tag: "nn_home_perf_boot",
-            pid: process.pid,
+            pid: safeProcessPid(),
             next_runtime: runtime,
             pathname: "(boot)",
             nn_trace_home_perf_env_defined: process.env.NN_TRACE_HOME_PERF !== undefined,
@@ -42,7 +43,8 @@ export async function register() {
       // Sentry (deferred)
       if (isSentryServerRuntimeEnabled()) {
         try {
-          await import("./sentry.server.config");
+          const mod = await import("./sentry.server.config");
+          await mod.initSentryServerConfig?.();
         } catch {
           // swallow — do not break server boot
         }
@@ -65,7 +67,8 @@ export async function register() {
     if (runtime === "edge") {
       if (isSentryServerRuntimeEnabled()) {
         try {
-          await import("./sentry.edge.config");
+          const mod = await import("./sentry.edge.config");
+          await mod.initSentryEdgeConfig?.();
         } catch {
           // swallow — edge must stay resilient
         }
@@ -102,7 +105,8 @@ export async function onRequestError(...args: unknown[]) {
       | undefined;
 
     if (capture) {
-      return capture(...args);
+      const [arg0, arg1, ...rest] = args;
+      return capture(arg0, arg1, ...rest);
     }
   } catch {
     // never throw from error handler

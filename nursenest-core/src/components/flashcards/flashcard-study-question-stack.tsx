@@ -23,8 +23,17 @@ export function splitPromptLeadingImage(prompt: string | null | undefined): Prom
     return { imageHtml: null, remainingPrompt: raw };
   }
 
+  const tag = leadingImageMatch[0].trim();
+  const srcEmpty =
+    /\ssrc\s*=\s*["']\s*["']/i.test(tag) ||
+    /\ssrc\s*=\s*["']?\s*["']?\s*$/i.test(tag) ||
+    !/\ssrc\s*=/i.test(tag);
+  if (srcEmpty) {
+    return { imageHtml: null, remainingPrompt: raw };
+  }
+
   return {
-    imageHtml: leadingImageMatch[0].trim(),
+    imageHtml: tag,
     remainingPrompt: raw.slice(leadingImageMatch[0].length).trim(),
   };
 }
@@ -46,6 +55,7 @@ export function FlashcardStudyQuestionStack({
   topicLine,
   examMicroQuestion = null,
   itemKindCaption = null,
+  clinicalImageUrl = null,
   prompt,
   answer,
   explanation,
@@ -95,6 +105,17 @@ export function FlashcardStudyQuestionStack({
           </div>
         ) : null}
 
+        {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
+          <div className="mb-4">
+            <img
+              src={clinicalImageUrl}
+              alt=""
+              className="max-h-72 w-auto max-w-full rounded-lg border border-[var(--semantic-border-soft)] object-contain"
+              loading="lazy"
+            />
+          </div>
+        ) : null}
+
         <div className="mb-4 text-lg font-semibold">
           <FlashcardRichContent text={String(prompt ?? "")} />
         </div>
@@ -126,7 +147,7 @@ export function FlashcardStudyQuestionStack({
 
               <div className="flex items-start gap-2">
                 {exam?.correctLetter ? (
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-600 text-xs text-white">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-green-600 text-xs nn-text-on-solid-fill">
                     {exam.correctLetter}
                   </span>
                 ) : null}
@@ -135,14 +156,20 @@ export function FlashcardStudyQuestionStack({
               </div>
             </div>
 
-            {explanation ? (
-              <div className="rounded-xl border p-4">
-                <div className="mb-1 text-xs font-semibold uppercase text-gray-500">
-                  {labels?.whyCorrectHeading ?? "Why this is correct"}
+            {(() => {
+              const whyCorrect =
+                (explanation && String(explanation).trim()) ||
+                (exam?.rationaleCorrect && String(exam.rationaleCorrect).trim()) ||
+                "";
+              return whyCorrect ? (
+                <div className="rounded-xl border p-4">
+                  <div className="mb-1 text-xs font-semibold uppercase text-gray-500">
+                    {labels?.whyCorrectHeading ?? "Why this is correct"}
+                  </div>
+                  <FlashcardRichContent text={whyCorrect} />
                 </div>
-                <FlashcardRichContent text={String(explanation)} />
-              </div>
-            ) : null}
+              ) : null;
+            })()}
 
             {exam?.rationaleIncorrect?.length ? (
               <div className="rounded-xl border p-4">
@@ -157,6 +184,18 @@ export function FlashcardStudyQuestionStack({
                     </div>
                   ))}
                 </div>
+              </div>
+            ) : null}
+
+            {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
+              <div className="rounded-xl border p-4">
+                <div className="mb-1 text-xs font-semibold uppercase text-gray-500">Figure</div>
+                <img
+                  src={clinicalImageUrl}
+                  alt=""
+                  className="max-h-64 w-auto max-w-full rounded-md border border-[var(--semantic-border-soft)] object-contain"
+                  loading="lazy"
+                />
               </div>
             ) : null}
 

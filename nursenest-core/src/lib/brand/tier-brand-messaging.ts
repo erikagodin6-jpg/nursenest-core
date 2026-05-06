@@ -1,4 +1,5 @@
 import type { TierCode } from "@prisma/client";
+import { buildAlliedGlobalHubPath } from "@/lib/allied/allied-global-hub-path";
 import {
   ALLIED,
   NP,
@@ -20,9 +21,10 @@ export function paywallTierLineI18nKey(tier: BrandingSessionTier): string {
   return "paywall.tierLine.default";
 }
 
+const ALLIED_LESSONS_HUB = buildAlliedGlobalHubPath("lessons");
 const ALLIED_LESSONS: Record<MarketingRegionToggle, string> = {
-  US: "/us/allied/allied-health/lessons",
-  CA: "/canada/allied/allied-health/lessons",
+  US: ALLIED_LESSONS_HUB,
+  CA: ALLIED_LESSONS_HUB,
 };
 
 export function sampleLessonHref(region: MarketingRegionToggle, tier: BrandingSessionTier): string {

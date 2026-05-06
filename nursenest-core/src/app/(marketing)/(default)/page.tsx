@@ -1,6 +1,7 @@
-import { Suspense } from "react";
-
-import { HomeRestoredWithDeferredStats } from "@/components/marketing/home-restored-with-deferred-stats.server";
+import {
+  HomeRestoredWithDeferredStats,
+  type HomeRestoredWithDeferredStatsProps,
+} from "@/components/marketing/home-restored-with-deferred-stats.server";
 import { GlobalMarketingHomeIntro } from "@/components/marketing/global-marketing-home-intro.server";
 import { MarketingHomeEmergencyFallback } from "@/components/marketing/marketing-home-emergency-fallback";
 
@@ -17,17 +18,6 @@ import { listPublishedHomeGlobalRegionCardIds } from "@/lib/marketing/published-
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-/**
- * Safe helpers
- */
-function safeNow() {
-  try {
-    return Date.now();
-  } catch {
-    return 0;
-  }
-}
-
 async function safeRegionCards(): Promise<string[]> {
   try {
     const cards = listPublishedHomeGlobalRegionCardIds();
@@ -37,25 +27,12 @@ async function safeRegionCards(): Promise<string[]> {
   }
 }
 
-async function safeIntro() {
-  try {
-    return await GlobalMarketingHomeIntro();
-  } catch {
-    return null;
-  }
-}
-
-async function safeStats(props: any) {
+async function safeStats(props: HomeRestoredWithDeferredStatsProps) {
   try {
     return await HomeRestoredWithDeferredStats(props);
   } catch (err) {
     console.error("[homepage] stats failed", err);
-    return (
-      <>
-        {props.introAfterHero}
-        <MarketingHomeEmergencyFallback />
-      </>
-    );
+    return <MarketingHomeEmergencyFallback />;
   }
 }
 
@@ -67,30 +44,32 @@ async function safeBlog() {
   }
 }
 
+/** Server slot so global intro streams as client `children` (not a named prop) — preserves DOM order vs hero. */
+async function HomepageGlobalIntroSlot() {
+  try {
+    return await GlobalMarketingHomeIntro();
+  } catch {
+    return null;
+  }
+}
+
 /**
  * HOMEPAGE
  */
 export default async function HomePage() {
-  const t0 = safeNow();
-
   try {
     const cards = await safeRegionCards();
-    const intro = await safeIntro();
+    const blogSection = await safeBlog();
 
     return (
       <>
-        {/* MAIN HOMEPAGE */}
         {await safeStats({
           skipOptionalDbReads: false,
           publishedGlobalRegionCardIds: cards,
-          skipOptionalDbPerfSegmentT0: t0,
-          introAfterHero: intro,
+          children: <HomepageGlobalIntroSlot />,
         })}
 
-        {/* BLOG SECTION */}
-        <Suspense fallback={<HomeBlogTeaserSectionShell m={{}} posts={[]} />}>
-          {await safeBlog()}
-        </Suspense>
+        {blogSection}
       </>
     );
   } catch (err) {

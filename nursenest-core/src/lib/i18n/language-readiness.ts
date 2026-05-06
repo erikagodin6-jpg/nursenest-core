@@ -9,11 +9,11 @@
  * | status   | tier       | indexed | hreflang | sitemap | switcher        |
  * |----------|------------|---------|----------|---------|-----------------|
  * | active   | full       | ✓       | ✓        | ✓       | yes, no label   |
- * | partial  | partial    | ✗       | ✓        | ✗       | yes, "(partial)"|
+ * | partial  | partial    | ✗       | ✗        | ✗       | yes, "(partial)"|
  * | disabled | incomplete | ✗       | ✗        | ✗       | hidden          |
  *
- * Routes for every locale remain accessible (no 404). `partial` uses `noindex` but stays in hreflang;
- * `disabled` uses `noindex`, `Disallow` in robots.txt, and drops hreflang — neither tier is listed in sitemaps.
+ * Routes for every locale remain accessible (no 404). `partial` uses `noindex` and stays out of completed
+ * hreflang clusters; `disabled` uses `noindex`, `Disallow` in robots.txt, and drops hreflang — neither tier is listed in sitemaps.
  *
  * ## Adding a new language (safe workflow)
  *
@@ -23,8 +23,8 @@
  *    (`npm run i18n:compile` — see `docs/i18n-architecture.md`).
  * 3. Run `language-completeness.ts` checks to measure key coverage.
  * 4. Once navigation + core pages (home, pricing, faq) are translated, promote to `tier: "partial"`.
- *    The locale enters hreflang clusters (not `/sitemap.xml`), appears in the switcher with "(partial)"
- *    label, and keeps `noindex` until promoted to full.
+ *    The locale appears in the switcher with "(partial)" label, but stays out of sitemap and completed
+ *    hreflang clusters while keeping `noindex` until promoted to full.
  * 5. Complete remaining gaps. Publish at least one localized blog post.
  * 6. Pass all items in `LANGUAGE_PROMOTION_CHECKLIST`.
  * 7. Promote to `tier: "full"` → full SEO indexing activates automatically.
@@ -55,7 +55,7 @@ interface LocaleSeoPolicy {
 
 const TIER_POLICY: Record<MarketingLanguageTier, LocaleSeoPolicy> = {
   full: { status: "active", seoIndexable: true, hreflangEligible: true, sitemapIncluded: true },
-  partial: { status: "partial", seoIndexable: false, hreflangEligible: true, sitemapIncluded: false },
+  partial: { status: "partial", seoIndexable: false, hreflangEligible: false, sitemapIncluded: false },
   incomplete: { status: "disabled", seoIndexable: false, hreflangEligible: false, sitemapIncluded: false },
 };
 
@@ -169,12 +169,12 @@ export function isLocaleRobotsPathDisallowed(localeCode: string): boolean {
 export const LANGUAGE_PROMOTION_CHECKLIST = [
   "UI bundle: all CRITICAL_KEY_PREFIXES present with ≥80% key coverage vs English",
   "Navigation: language switcher renders without placeholder [missing:…] keys",
-  "Core pages: home, pricing, faq, lessons, question-bank render localized copy",
+  "Core pages: home, pricing, faq, lessons, question-bank render localized copy without English fallback leakage",
   "Legal pages: terms, privacy, refund-policy, acceptable-use, disclaimer localized",
   "Blog: at least one published localized blog post exists for this locale",
   "Internal links: no broken /{locale}/… href references in navigation or footer",
   "Routing: /{locale} → 200, /{locale}/pricing → 200 (smoke test)",
-  "hreflang: validate with Google Search Console or a tag inspector tool",
+  "hreflang: validate en-CA, fr-CA, and x-default only after the locale is complete",
   "Canonical: /{locale} canonical resolves correctly; no conflict with English /",
   "Sitemap: full-tier locale marketing URLs appear in merged /sitemap.xml with correct paths",
 ] as const;

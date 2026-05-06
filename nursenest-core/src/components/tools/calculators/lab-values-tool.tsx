@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { Input } from "@/components/ui/input";
 
 type Row = { id: string; nameKey: string; rangeKey: string; unitKey: string };
@@ -31,6 +33,18 @@ export default function LabValuesTool() {
 
   return (
     <div className="space-y-4">
+      <div
+        className="rounded-lg border px-4 py-3 text-sm"
+        style={{
+          borderColor: "color-mix(in srgb, var(--semantic-info) 28%, var(--theme-card-border))",
+          background: "color-mix(in srgb, var(--semantic-panel-cool) 22%, var(--theme-page-bg))",
+        }}
+      >
+        <p className="text-[var(--theme-heading-text)]">{t("tools.labValues.quickRefBanner")}</p>
+        <Link href={loginWithCallback("/app/labs")} className="mt-2 inline-block font-semibold text-primary hover:underline">
+          {t("tools.labValues.quickRefCta")}
+        </Link>
+      </div>
       <label className="block text-sm">
         <span className="font-medium text-[var(--theme-heading-text)]">{t("tools.labValues.search")}</span>
         <Input className="mt-1" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("tools.labValues.searchPlaceholder")} />

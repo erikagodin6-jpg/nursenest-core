@@ -229,7 +229,7 @@ export function QuestionCard({
   }
 
   return (
-    <div className="nn-cat-question-card">
+    <div className="nn-cat-question-card min-w-0 max-w-full">
       {meta}
       {stemBlock}
       {children}

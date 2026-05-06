@@ -168,7 +168,7 @@ function ReadinessScoreCard({
         {label}
       </p>
       <Link
-        href="/app/account/report-card"
+        href="/app/account/report"
         className="mt-1 w-fit text-xs font-medium underline underline-offset-2"
         style={{ color: "var(--semantic-text-muted)" }}
       >

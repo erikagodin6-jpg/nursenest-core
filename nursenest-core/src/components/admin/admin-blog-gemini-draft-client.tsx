@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
+import { formatDisplayLabel } from "@/lib/ui/format-display-label";
 
 type ApiResult =
   | {
@@ -105,10 +106,10 @@ export function AdminBlogGeminiDraftClient() {
             value={template}
             onChange={(e) => setTemplate(e.target.value as BlogPostTemplate)}
           >
-            <option value={BlogPostTemplate.TOPIC_EXPLAINED}>TOPIC_EXPLAINED</option>
-            <option value={BlogPostTemplate.EXAM_GUIDE}>EXAM_GUIDE</option>
-            <option value={BlogPostTemplate.STUDY_PLAN}>STUDY_PLAN</option>
-            <option value={BlogPostTemplate.COMPARISON_ARTICLE}>COMPARISON_ARTICLE</option>
+            <option value={BlogPostTemplate.TOPIC_EXPLAINED}>{formatDisplayLabel("TOPIC_EXPLAINED")}</option>
+            <option value={BlogPostTemplate.EXAM_GUIDE}>{formatDisplayLabel("EXAM_GUIDE")}</option>
+            <option value={BlogPostTemplate.STUDY_PLAN}>{formatDisplayLabel("STUDY_PLAN")}</option>
+            <option value={BlogPostTemplate.COMPARISON_ARTICLE}>{formatDisplayLabel("COMPARISON_ARTICLE")}</option>
           </select>
         </label>
 

@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { loadSessionIdentityResult } from "@/lib/auth/session-identity-from-db";
+import { mergeSubscriberPrivateCacheHeaders } from "@/lib/http/subscriber-api-cache";
 import { runWithApiTelemetry } from "@/lib/observability/api-route-telemetry";
 import { emitStructuredLog } from "@/lib/observability/structured-log";
 import { correlationIdFromRequest } from "@/lib/observability/request-correlation";
+import { loadAccountSharingSessionHealth } from "@/lib/security/learner-session-activity.server";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +18,10 @@ export async function GET(req: Request) {
     const session = await auth();
     const userId = (session?.user as { id?: string } | undefined)?.id;
     if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401, headers: mergeSubscriberPrivateCacheHeaders() },
+      );
     }
 
     const identity = await loadSessionIdentityResult(userId);
@@ -32,21 +37,32 @@ export async function GET(req: Request) {
       });
       return NextResponse.json(
         { error: "Unable to verify billing state. Try again shortly.", code: "access_verify_failed" },
-        { status: 503 },
+        { status: 503, headers: mergeSubscriberPrivateCacheHeaders() },
       );
     }
     if (identity.status === "not_found") {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Not found" },
+        { status: 404, headers: mergeSubscriberPrivateCacheHeaders() },
+      );
     }
 
     const { payload } = identity;
-    return NextResponse.json({
-      tier: payload.tier,
-      country: payload.country,
-      subscriptionStatus: payload.subscriptionStatus,
-      role: payload.role,
-      credentialVersion: payload.credentialVersion,
-      subscription: payload.subscription,
-    });
+    const sessionHealth = await loadAccountSharingSessionHealth(userId);
+    return NextResponse.json(
+      {
+        tier: payload.tier,
+        country: payload.country,
+        subscriptionStatus: payload.subscriptionStatus,
+        role: payload.role,
+        credentialVersion: payload.credentialVersion,
+        subscription: payload.subscription,
+        sessionHealth: {
+          suggestReauth: sessionHealth.suggestReauth,
+          reasons: sessionHealth.reasons,
+        },
+      },
+      { headers: mergeSubscriberPrivateCacheHeaders() },
+    );
   });
 }

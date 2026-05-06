@@ -1,5 +1,7 @@
 import { buildFlashcardExplanationFromSources } from "@/lib/content-quality/controlled-rationale-enrichment";
 import { truncateForPreview } from "@/lib/flashcards/flashcard-access";
+import { flashcardLessonCrossLinkForDeckStudyRow } from "@/lib/flashcards/flashcard-lesson-cross-link";
+import { parseLessonLinkSourceKey } from "@/lib/flashcards/lesson-link-source-key";
 import {
   correctAnswerLine,
   parseExamMicroQuestionFromDbFields,
@@ -15,6 +17,7 @@ export type FlashcardStudySelectRow = {
   id: string;
   front: string;
   back: string;
+  lessonId?: string | null;
   sourceKey: string | null;
   examItemKind: FlashcardItemKind | null;
   questionStem: string | null;
@@ -23,7 +26,11 @@ export type FlashcardStudySelectRow = {
   rationaleCorrect: string | null;
   rationaleIncorrect: Prisma.JsonValue | null;
   category: { name: string; topicCode: string | null };
-  deck: { pathwayId: string | null } | null;
+  deck: { pathwayId: string | null; title?: string | null } | null;
+  /** First HTTPS image from exam bank `images` JSON — render only when present (no placeholder). */
+  clinicalImageUrl?: string | null;
+  clinicalPearl?: string | null;
+  keyTakeaway?: string | null;
 };
 
 export type FlashcardStudyApiCard = {
@@ -37,7 +44,18 @@ export type FlashcardStudyApiCard = {
   pathwayId: string | null;
   explanation?: string;
   examMicroQuestion?: ExamMicroQuestionPayload;
+  /** Present on `lessonlink:v1|…` catalog-derived custom-session cards. */
+  lessonLinkSectionKind?: string;
+  lessonLinkCardType?: string;
+  difficultyRating?: number;
+  /** Resolved catalog pathway lesson (slug + title) — no duplicated bodies. */
+  lessonStudyHref?: string;
+  lessonStudyTitle?: string;
+  /** Exam-bank clinical image — omit from JSON when absent so clients render no image chrome. */
+  clinicalImageUrl?: string | null;
 };
+
+export { parseLessonLinkSourceKey } from "@/lib/flashcards/lesson-link-source-key";
 
 export function serializeFlashcardForDeckStudy(
   card: FlashcardStudySelectRow,
@@ -70,6 +88,7 @@ export function serializeFlashcardForDeckStudy(
         topic: card.category.name,
         subtopic: card.category.topicCode,
       });
+  const lessonLink = flashcardLessonCrossLinkForDeckStudyRow(card.deck?.pathwayId ?? null, card);
   return {
     id: card.id,
     front,
@@ -81,6 +100,7 @@ export function serializeFlashcardForDeckStudy(
     pathwayId: card.deck?.pathwayId ?? null,
     ...(exam ? { examMicroQuestion: exam } : {}),
     ...(!exam && explanation ? { explanation } : {}),
+    ...(lessonLink ? { lessonStudyHref: lessonLink.lessonStudyHref, lessonStudyTitle: lessonLink.lessonStudyTitle } : {}),
   };
 }
 
@@ -104,14 +124,24 @@ export function serializeFlashcardForCustomSession(
     front = exam.questionStem;
     back = correctAnswerLine(exam);
   }
+  const authoredRecall =
+    !exam && typeof card.rationaleCorrect === "string" && card.rationaleCorrect.trim().length >= 8
+      ? card.rationaleCorrect.trim()
+      : null;
+  const examTeachingExtra = [card.clinicalPearl?.trim(), card.keyTakeaway?.trim()].filter(Boolean).join("\n\n");
   const explanation = exam
-    ? undefined
-    : buildFlashcardExplanationFromSources({
+    ? examTeachingExtra || undefined
+    : authoredRecall ??
+      buildFlashcardExplanationFromSources({
         front,
         back,
         topic: opts.topic,
         subtopic: card.category.topicCode,
       });
+  const link = parseLessonLinkSourceKey(card.sourceKey);
+  const pid = card.deck?.pathwayId ?? opts.pathwayId;
+  const lessonLink = flashcardLessonCrossLinkForDeckStudyRow(pid, card);
+  const img = card.clinicalImageUrl?.trim();
   return {
     id: card.id,
     front,
@@ -120,8 +150,17 @@ export function serializeFlashcardForCustomSession(
     subtopic: card.category.topicCode,
     rawTopic: card.category.name,
     sourceKey: card.sourceKey,
-    pathwayId: card.deck?.pathwayId ?? opts.pathwayId,
+    pathwayId: pid,
     ...(exam ? { examMicroQuestion: exam } : {}),
     ...(explanation ? { explanation } : {}),
+    ...(img && img.startsWith("https://") ? { clinicalImageUrl: img } : {}),
+    ...(link
+      ? {
+          lessonLinkSectionKind: link.sectionKind,
+          lessonLinkCardType: link.cardType,
+          difficultyRating: link.difficulty,
+        }
+      : {}),
+    ...(lessonLink ? { lessonStudyHref: lessonLink.lessonStudyHref, lessonStudyTitle: lessonLink.lessonStudyTitle } : {}),
   };
 }

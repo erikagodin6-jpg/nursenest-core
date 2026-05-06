@@ -34,6 +34,7 @@ import {
 } from "@/lib/linking/automatic-internal-links-scoring";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { getMarketingLocaleForDefaultRoute } from "@/lib/i18n/marketing-locale-server";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const MARKETING_BUILD_PHASE = "phase-production-build";
 
@@ -162,6 +163,108 @@ async function manualLessonCandidatesFromBlog(
   return dedupeCandidates(out);
 }
 
+/**
+ * Related blog posts for a published pathway lesson — same tier gate as {@link pathwayIdForBlogPost}
+ * on each candidate row (no cross-pathway blog links).
+ */
+async function fetchRelatedBlogCandidatesForPathwayLesson(input: {
+  pathway: ExamPathwayDefinition;
+  lesson: PathwayLessonAutoLinkSnapshot;
+  locale: string;
+  exclude: Set<string>;
+}): Promise<LinkCandidate[]> {
+  if (shouldSkipBlogDbForAutoLinks() || !isDatabaseUrlConfigured()) return [];
+  const { pathway, lesson, locale, exclude } = input;
+  const pathwayId = pathway.id;
+  const syntheticTags: string[] = [];
+  if (lesson.topicSlug?.trim()) syntheticTags.push(lesson.topicSlug.trim());
+  if (lesson.topic?.trim()) syntheticTags.push(lesson.topic.trim());
+  if (lesson.bodySystem?.trim()) syntheticTags.push(lesson.bodySystem.trim());
+  const slugHints = slugHintsFromTags(syntheticTags);
+  const or: Prisma.BlogPostWhereInput[] = [];
+  if (slugHints.length) {
+    or.push({ tags: { hasSome: slugHints.slice(0, 20) } });
+  }
+  if (lesson.bodySystem?.trim()) {
+    const c = lesson.bodySystem.trim();
+    or.push({ category: c });
+    or.push({ tags: { has: c } });
+  }
+  if (or.length === 0) return [];
+
+  const now = new Date();
+  const rows = await prisma.blogPost.findMany({
+    where: {
+      AND: [blogLiveWhere(now), { OR: or }],
+    },
+    orderBy: { updatedAt: "desc" },
+    take: 28,
+    select: {
+      slug: true,
+      title: true,
+      seoTitle: true,
+      exam: true,
+      tags: true,
+      category: true,
+      countryTarget: true,
+    },
+  });
+
+  const leaf =
+    lesson.bodySystem?.trim() && isTaxonomyLeafForSeo(lesson.bodySystem.trim())
+      ? lesson.bodySystem.trim()
+      : null;
+  const out: LinkCandidate[] = [];
+  for (const r of rows) {
+    const inferredPathwayId = pathwayIdForBlogPost({ exam: r.exam, countryTarget: r.countryTarget });
+    if (inferredPathwayId !== pathwayId) continue;
+    const overlap = tagOverlapCount(syntheticTags, r.tags);
+    const taxonomyLeafMatch = Boolean(leaf && (r.category === leaf || r.tags.includes(leaf)));
+    const categoryMatch = Boolean(lesson.bodySystem?.trim() && r.category === lesson.bodySystem.trim());
+    const { rank, strength } = scoreBlogRelatedness({
+      postTags: syntheticTags,
+      candidateTags: r.tags,
+      categoryMatch,
+      taxonomyLeafMatch,
+    });
+    if (strength === "weak" && overlap < 2 && !taxonomyLeafMatch) continue;
+    const href = withMarketingLocale(locale, `/blog/${r.slug}`);
+    if (exclude.has(href)) continue;
+    out.push({
+      kind: "blog",
+      topicKey: r.slug,
+      href,
+      anchorText: (r.seoTitle ?? r.title).trim().slice(0, 90) || r.slug,
+      score: rank,
+      strength,
+      localeMatch: true,
+      pathwayMatch: true,
+      debugReason: "pathway_lesson_topic_match",
+    });
+  }
+  return dedupeCandidates(out);
+}
+
+/** Compact public blog links for authenticated lesson surfaces (no duplicate CTAs vs PathwayLessonActions). */
+export async function fetchRelatedBlogReadingLinksForPathwayLesson(args: {
+  pathway: ExamPathwayDefinition;
+  lesson: PathwayLessonAutoLinkSnapshot;
+  locale: string;
+  excludeHrefs?: string[];
+  max?: number;
+}): Promise<Array<{ href: string; title: string }>> {
+  const exclude = new Set((args.excludeHrefs ?? []).filter(Boolean));
+  const cands = await fetchRelatedBlogCandidatesForPathwayLesson({
+    pathway: args.pathway,
+    lesson: args.lesson,
+    locale: args.locale,
+    exclude,
+  });
+  cands.sort((a, b) => a.score - b.score);
+  const cap = Math.max(1, Math.min(4, args.max ?? 2));
+  return cands.slice(0, cap).map((c) => ({ href: c.href, title: c.anchorText }));
+}
+
 async function fetchRelatedBlogRows(post: {
   slug: string;
   exam: string | null;
@@ -225,19 +328,29 @@ async function fetchRelatedLessonRows(input: {
     }
   }
   if (or.length === 0) return [];
-  return prisma.pathwayLesson.findMany({
-    where: {
-      pathwayId: input.pathwayId,
-      locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
-      status: ContentStatus.PUBLISHED,
-      structuralPublicComplete: true,
-      ...(input.excludeSlug ? { slug: { not: input.excludeSlug } } : {}),
-      OR: or,
-    },
-    orderBy: { sortOrder: "asc" },
-    take: 14,
-    select: { slug: true, title: true, topic: true, topicSlug: true, bodySystem: true },
-  });
+  try {
+    return await prisma.pathwayLesson.findMany({
+      where: {
+        pathwayId: input.pathwayId,
+        locale: PATHWAY_LESSON_CANONICAL_DB_LOCALE,
+        status: ContentStatus.PUBLISHED,
+        ...(input.excludeSlug ? { slug: { not: input.excludeSlug } } : {}),
+        OR: or,
+      },
+      orderBy: { sortOrder: "asc" },
+      take: 14,
+      select: { slug: true, title: true, topic: true, topicSlug: true, bodySystem: true },
+    });
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    safeServerLog("automatic_links", "fetch_related_lessons_db_error", {
+      route: "fetchRelatedLessonRows",
+      query_name: "pathwayLesson.findMany",
+      error_code: (e as { code?: string })?.code ?? "unknown",
+      error_message: msg.slice(0, 300),
+    });
+    return [];
+  }
 }
 
 async function fetchRelatedFlashcardDecks(input: {
@@ -454,6 +567,8 @@ export async function resolveAutomaticRelatedBundleForPathwayLesson(input: {
   locale: string;
   /** When false, only flashcards + practice entry points (avoids duplicating adjacent lesson nav). */
   includeLessonBucket?: boolean;
+  /** Extra hrefs to omit (e.g. footer strip links on the lesson page). */
+  excludeHrefs?: string[];
 }): Promise<ResolvedLinks> {
   const { pathway, lesson, locale } = input;
   const lessonContentLocale = await getMarketingLocaleForDefaultRoute();
@@ -461,7 +576,9 @@ export async function resolveAutomaticRelatedBundleForPathwayLesson(input: {
   const topicKey = normalizeTopicKey(lesson.topicSlug) ?? normalizeTopicKey(lesson.topic) ?? lesson.topicSlug;
   const excludeHref = pathwayLessonPublicDetailPath(pathway, lesson.slug);
   const exclude = new Set(
-    [excludeHref, excludeHref ? withMarketingLocale(locale, excludeHref) : null].filter(Boolean) as string[],
+    [excludeHref, excludeHref ? withMarketingLocale(locale, excludeHref) : null, ...(input.excludeHrefs ?? [])].filter(
+      Boolean,
+    ) as string[],
   );
 
   const ctx: LinkContext = {
@@ -537,12 +654,18 @@ export async function resolveAutomaticRelatedBundleForPathwayLesson(input: {
   });
   const dbFlashOk = dbFlash.filter((c) => c.strength !== "weak");
   const hubExtras = pathwayHubCandidates(pathway);
+  const dbLessonBlogs = await fetchRelatedBlogCandidatesForPathwayLesson({
+    pathway,
+    lesson,
+    locale,
+    exclude,
+  });
 
   return mergeResolvedForSurface("lesson", {
     lessons: includeLesson ? [dbLessons, registry.lessons] : [registry.lessons],
     flashcards: [dbFlashOk, registry.flashcards],
     questions: [registry.questions, hubExtras.filter((c) => c.kind === "question")],
-    blogs: [registry.blogs],
+    blogs: [dbLessonBlogs, registry.blogs],
     cat: [registry.cat, hubExtras.filter((c) => c.kind === "cat")],
   });
 }

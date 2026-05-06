@@ -39,6 +39,8 @@ export function MarketingHomeSafeMode({ layout = "embedded", onRetry }: Marketin
 
   return (
     <section
+      data-nn-app-error-screen="1"
+      data-nn-error-boundary="marketing"
       data-nn-home-safe-mode="1"
       data-nn-home-safe-mode-layout={layout}
       className="border-b border-[color-mix(in_srgb,var(--semantic-border-soft)_1,var(--border-subtle))] bg-[var(--page-bg)] text-[var(--semantic-text-primary)]"

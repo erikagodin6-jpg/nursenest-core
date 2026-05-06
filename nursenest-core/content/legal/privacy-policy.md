@@ -196,7 +196,7 @@ We may update this Privacy Policy from time to time. The updated version will be
 
 ## Contact Us
 
-For privacy questions or requests, contact:
+For privacy questions or requests, email NurseNest at support@nursenest.ca. Please allow up to 4 business days for a response.
 
 NurseNest
 

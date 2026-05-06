@@ -1,36 +1,87 @@
 {
-  "generatedAt": "2026-04-26T08:42:44.336Z",
-  "totalFallbacks": 24,
+  "generatedAt": "2026-05-06T00:36:11.560Z",
+  "totalFallbacks": 81,
   "byLocale": {
-    "tl": 1,
-    "hi": 1,
-    "zh": 1,
-    "zh-tw": 1,
-    "ar": 1,
-    "ko": 2,
-    "pt": 1,
-    "pa": 1,
-    "vi": 1,
-    "ht": 2,
-    "ur": 1,
-    "ja": 1,
-    "fa": 2,
-    "th": 1,
-    "tr": 2,
+    "fr": 3,
+    "tl": 3,
+    "hi": 4,
+    "es": 3,
+    "zh": 4,
+    "zh-tw": 4,
+    "ar": 3,
+    "ko": 5,
+    "pt": 4,
+    "pa": 4,
+    "vi": 4,
+    "ht": 5,
+    "ur": 4,
+    "ja": 3,
+    "fa": 5,
+    "de": 3,
+    "th": 4,
+    "tr": 5,
     "id": 3,
-    "it": 1,
-    "ru": 1
+    "it": 4,
+    "ru": 4
   },
   "events": [
     {
-      "locale": "tl",
-      "key": "upgrade.usageNote",
-      "localizedValue": "You",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
+      "locale": "fr",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
       "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "fr",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "fr",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "tl",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "tl",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "tl",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
       ],
       "placeholdersInLocalized": []
     },
@@ -47,6 +98,66 @@
       "placeholdersInLocalized": []
     },
     {
+      "locale": "hi",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "hi",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "hi",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "es",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "es",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "es",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
       "locale": "zh",
       "key": "upgrade.usageNote",
       "localizedValue": "You",
@@ -55,6 +166,36 @@
         "limit",
         "percentage",
         "used"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "zh",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "zh",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "zh",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
       ],
       "placeholdersInLocalized": []
     },
@@ -71,14 +212,62 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "ar",
-      "key": "upgrade.usageNote",
-      "localizedValue": "You",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
+      "locale": "zh-tw",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
       "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "zh-tw",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "zh-tw",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ar",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ar",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ar",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
       ],
       "placeholdersInLocalized": []
     },
@@ -103,6 +292,36 @@
       "placeholdersInLocalized": []
     },
     {
+      "locale": "ko",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ko",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ko",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
       "locale": "pt",
       "key": "upgrade.usageNote",
       "localizedValue": "You",
@@ -111,6 +330,36 @@
         "limit",
         "percentage",
         "used"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pt",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pt",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pt",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
       ],
       "placeholdersInLocalized": []
     },
@@ -127,6 +376,36 @@
       "placeholdersInLocalized": []
     },
     {
+      "locale": "pa",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pa",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "pa",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
       "locale": "vi",
       "key": "upgrade.usageNote",
       "localizedValue": "You",
@@ -135,6 +414,36 @@
         "limit",
         "percentage",
         "used"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "vi",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "vi",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "vi",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
       ],
       "placeholdersInLocalized": []
     },
@@ -159,6 +468,36 @@
       "placeholdersInLocalized": []
     },
     {
+      "locale": "ht",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ht",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ht",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
       "locale": "ur",
       "key": "upgrade.usageNote",
       "localizedValue": "You",
@@ -171,14 +510,62 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "ja",
-      "key": "upgrade.usageNote",
-      "localizedValue": "You",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
+      "locale": "ur",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
       "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ur",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ur",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ja",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ja",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ja",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
       ],
       "placeholdersInLocalized": []
     },
@@ -203,12 +590,102 @@
       "placeholdersInLocalized": []
     },
     {
+      "locale": "fa",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "fa",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "fa",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "de",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "de",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "de",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
       "locale": "th",
       "key": "pricing.save",
       "localizedValue": "ประหยัด",
       "englishValue": "Save {{percent}}%",
       "placeholdersInEnglish": [
         "percent"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "th",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "th",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "th",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
       ],
       "placeholdersInLocalized": []
     },
@@ -235,34 +712,62 @@
       "placeholdersInLocalized": []
     },
     {
-      "locale": "id",
-      "key": "pricing.save",
-      "localizedValue": "Hemat",
-      "englishValue": "Save {{percent}}%",
+      "locale": "tr",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
       "placeholdersInEnglish": [
-        "percent"
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "tr",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "tr",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
       ],
       "placeholdersInLocalized": []
     },
     {
       "locale": "id",
-      "key": "upgrade.title",
-      "localizedValue": "Tingkatkan ke NurseNest Pro",
-      "englishValue": "Pass Your NCLEX or {{examName}} With Structured Exam-Level Practice",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
       "placeholdersInEnglish": [
-        "examName"
+        "pathwayLine"
       ],
       "placeholdersInLocalized": []
     },
     {
       "locale": "id",
-      "key": "upgrade.usageNote",
-      "localizedValue": "Catatan penggunaan",
-      "englishValue": "You've used {{used}} of {{limit}} free cards ({{percentage}}%)",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
       "placeholdersInEnglish": [
-        "limit",
-        "percentage",
-        "used"
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "id",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
       ],
       "placeholdersInLocalized": []
     },
@@ -279,6 +784,36 @@
       "placeholdersInLocalized": []
     },
     {
+      "locale": "it",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "it",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "it",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
       "locale": "ru",
       "key": "upgrade.usageNote",
       "localizedValue": "You",
@@ -287,6 +822,36 @@
         "limit",
         "percentage",
         "used"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ru",
+      "key": "components.examPathwayHub.studyModes.practiceCatBody",
+      "localizedValue": "Simulate pacing and adaptive exam pressure",
+      "englishValue": "Adaptive sessions for {{pathwayLine}}: one question at a time, with timing and reports tied back into lessons and the question bank.",
+      "placeholdersInEnglish": [
+        "pathwayLine"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ru",
+      "key": "components.examPathwayHub.studyModes.practiceCatTitle",
+      "localizedValue": "CAT practice tests",
+      "englishValue": "{{exam}} CAT",
+      "placeholdersInEnglish": [
+        "exam"
+      ],
+      "placeholdersInLocalized": []
+    },
+    {
+      "locale": "ru",
+      "key": "components.examPathwayHub.studyModes.practiceCta",
+      "localizedValue": "Sign in to practice",
+      "englishValue": "Open {{exam}} CAT intro",
+      "placeholdersInEnglish": [
+        "exam"
       ],
       "placeholdersInLocalized": []
     }

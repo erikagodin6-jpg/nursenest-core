@@ -21,6 +21,43 @@ export const PRE_NURSING_LESSONS_INDEX_PATH = "/pre-nursing/lessons" as const;
 
 const ALLIED_HEALTH_ROOT = "/allied-health" as const;
 
+/** Parse relative marketing URLs for safe query merging (pathname + search + hash only). */
+const ALLIED_MARKETING_QUERY_ORIGIN = "http://nn.allied-marketing.invalid" as const;
+
+/**
+ * Adds or replaces `alliedProfession` on internal marketing links from occupation-specific allied hubs
+ * so practice / CAT / flashcard entry points preserve the learner's track where the destination supports it.
+ */
+export function withAlliedProfessionMarketingQuery(href: string, professionKey: string): string {
+  const k = professionKey.trim().toLowerCase();
+  if (!k) return href;
+  const raw = href.trim();
+  if (!raw) return href;
+  try {
+    const u = new URL(raw, ALLIED_MARKETING_QUERY_ORIGIN);
+    u.searchParams.set(ALLIED_PROFESSION_QUERY_PARAM, k);
+    return `${u.pathname}${u.search}${u.hash}`;
+  } catch {
+    return raw;
+  }
+}
+
+/** Merge extra query keys onto an internal href (preserves existing params). */
+export function mergeMarketingPathQuery(href: string, params: Record<string, string>): string {
+  const raw = href.trim();
+  if (!raw) return raw;
+  try {
+    const u = new URL(raw, ALLIED_MARKETING_QUERY_ORIGIN);
+    for (const [key, value] of Object.entries(params)) {
+      const v = value.trim();
+      if (v) u.searchParams.set(key, v);
+    }
+    return `${u.pathname}${u.search}${u.hash}`;
+  } catch {
+    return raw;
+  }
+}
+
 /** `/allied-health/{segment}` — profession hero or canonical slug segment. */
 export function alliedHealthSegmentPath(segment: string): string {
   return `${ALLIED_HEALTH_ROOT}/${encodeURIComponent(segment.trim())}`;
@@ -86,6 +123,56 @@ export function marketingPathwayLessonsIndexPath(
   pathway: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">,
 ): string {
   return buildExamPathwayPath(pathway, "lessons");
+}
+
+/**
+ * Marketing category hub: `/{country}/{role}/{exam}/lessons/{categorySlug}`.
+ * {@link marketingLessonDetailHref} uses the same base + segment; category slugs are reserved via
+ * {@link resolveMarketingLessonsHubDynamicSegment} in `marketing-lessons-hub-category-resolve` so lesson detail wins when a slug collides.
+ * The Fundamentals display category uses `nursing-fundamentals` (see {@link lessonCategoryToSlug}) to avoid clashing with lesson slug `fundamentals`.
+ */
+export function marketingPathwayLessonsCategoryPath(
+  pathway: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">,
+  categorySlug: string,
+): string {
+  const base = marketingPathwayLessonsIndexPath(pathway).replace(/\/$/, "");
+  const seg = categorySlug.trim().toLowerCase();
+  return seg ? `${base}/${encodeURIComponent(seg)}` : base;
+}
+
+/**
+ * Programmatic study SEO surface (not blog): `/{country}/{role}/{exam}/study/{topicSlug}`.
+ * `topicSlug` is the published pathway lesson slug for this row (see programmatic study SEO registry).
+ */
+export function marketingProgrammaticStudySeoPath(
+  pathway: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode">,
+  topicSlug: string,
+): string | null {
+  const slug = topicSlug.trim();
+  if (!slug) return null;
+  return buildExamPathwayPath(pathway, `study/${encodeURIComponent(slug)}`);
+}
+
+type MarketingExamHubSubpath = "lessons" | "questions" | "cat";
+
+/**
+ * Resolves `…/{subpath}` next to a marketing exam **hub root** without duplicating `/lessons` when the hub
+ * already *is* the short canonical `/lessons` fallback (see {@link marketingExamHubPath} + `CANONICAL_PATHWAY_HUB`).
+ * When a registry pathway is available, always use {@link buildExamPathwayPath}.
+ */
+export function marketingPathwaySubpathBesideExamHub(
+  examHubRoot: string,
+  pathway: Pick<ExamPathwayDefinition, "countrySlug" | "roleTrack" | "examCode"> | null | undefined,
+  subpath: MarketingExamHubSubpath,
+): string {
+  if (pathway) return buildExamPathwayPath(pathway, subpath);
+  const hub = examHubRoot.replace(/\/$/, "");
+  if (hub === "/lessons") {
+    if (subpath === "lessons") return "/lessons";
+    if (subpath === "questions") return "/question-bank";
+    return "/practice-exams";
+  }
+  return `${hub}/${subpath}`;
 }
 
 /**

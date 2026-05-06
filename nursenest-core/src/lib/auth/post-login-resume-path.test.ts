@@ -91,6 +91,18 @@ describe("resolveMarketingAuthRedirectTarget", () => {
     assert.equal(resolveMarketingAuthRedirectTarget("/login", sp, "en"), "/app/questions?pathwayId=us-rn-nclex-rn");
   });
 
+  it("honors tier-scoped /app/questions/session?pathwayId=… callback after login", () => {
+    const sp = new URLSearchParams();
+    sp.set(
+      "callbackUrl",
+      "/app/questions/session?pathwayId=us-rn-nclex-rn&source=mixed_review&count=20&mode=tutor&shuffle=true",
+    );
+    assert.equal(
+      resolveMarketingAuthRedirectTarget("/login", sp, "en"),
+      "/app/questions/session?pathwayId=us-rn-nclex-rn&source=mixed_review&count=20&mode=tutor&shuffle=true",
+    );
+  });
+
   it("honors tier-scoped /app/practice-tests/start?pathwayId=… callback after login", () => {
     const sp = new URLSearchParams();
     sp.set("callbackUrl", "/app/practice-tests/start?pathwayId=us-lpn-nclex-pn");

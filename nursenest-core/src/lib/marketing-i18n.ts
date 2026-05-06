@@ -41,3 +41,9 @@ export {
   useMarketingI18n,
   useMarketingLocale,
 } from "@/components/i18n/marketing-i18n-provider";
+
+export {
+  isUntranslatedHomepageMarketingCopy,
+  resolveHomepageMarketingVisibleCopy,
+  safeHomepageMarketingT,
+} from "@/lib/marketing/homepage-marketing-visible-copy";

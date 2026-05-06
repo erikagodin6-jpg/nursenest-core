@@ -93,12 +93,15 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
       "en",
       { resolveLessonDetail },
     );
-    assert.equal(kept.length, 2);
-    assert.equal(diagnostics.keptRowCount, 2);
+    // Soft verify recovery keeps `detail_loader_miss` rows as hubMarketingDegraded so the grid does not empty.
+    assert.equal(kept.length, 3);
+    assert.equal(diagnostics.keptRowCount, 3);
     assert.equal(diagnostics.incomingPreparedRowCount, 3);
     assert.ok(Array.isArray(diagnostics.exclusionReasonsRanked));
     assert.equal(diagnostics.exclusionReasonsRanked?.[0]?.reason, "detail_loader_miss");
     assert.equal(diagnostics.exclusionReasonsRanked?.[0]?.count, 1);
+    assert.equal(kept.find((r) => r.slug === "missing")?.hubMarketingDegraded, true);
+    assert.equal(kept.filter((r) => r.slug !== "missing").every((r) => !r.hubMarketingDegraded), true);
   });
 
   it("calls resolveLessonDetail once per unique slug (duplicate rows do not multiply verify work)", async () => {
@@ -126,7 +129,8 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
       "en",
       { resolveLessonDetail },
     );
-    assert.equal(kept.length, 2);
+    assert.equal(kept.length, 3);
+    assert.equal(kept.find((r) => r.slug === "x")?.hubMarketingDegraded, true);
   });
 
   it("reports diagnostics when every slug fails the resolver", async () => {
@@ -137,8 +141,9 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
       "en",
       { resolveLessonDetail, skipZeroKeptPipelineInvariant: true },
     );
-    assert.equal(kept.length, 0);
-    assert.equal(diagnostics.keptRowCount, 0);
+    assert.equal(kept.length, 2);
+    assert.equal(diagnostics.keptRowCount, 2);
+    assert.ok(kept.every((r) => r.hubMarketingDegraded));
     assert.ok((diagnostics.excludedByReason.detail_loader_miss ?? 0) >= 1);
   });
 
@@ -162,6 +167,28 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
     assert.equal(diagnostics.strictVerifiedRowCount, 0);
   });
 
+  it("maxUniqueSlugsToVerify caps detail resolver calls but keeps remaining rows as degraded inventory", async () => {
+    let slugResolveCalls = 0;
+    const resolveLessonDetail = async (pathwayId: string, slug: string) => {
+      if (pathwayId !== "ca-rn-nclex-rn") return undefined;
+      slugResolveCalls += 1;
+      return hubRow(slug);
+    };
+    const rows = ["s1", "s2", "s3", "s4"].map((s) => hubRow(s));
+    const { kept, diagnostics } = await verifyMarketingHubLessonRowsResolve({ id: "ca-rn-nclex-rn" }, rows, "en", {
+      resolveLessonDetail,
+      maxUniqueSlugsToVerify: 2,
+    });
+    assert.equal(kept.length, 4);
+    assert.equal(slugResolveCalls, 2);
+    assert.equal(diagnostics.verifyResolverCallCount, 2);
+    assert.equal(diagnostics.verifyUniqueSlugCap, 2);
+    assert.equal(diagnostics.verifyUniqueSlugSkippedCount, 2);
+    const degraded = kept.filter((r) => r.hubMarketingDegraded);
+    assert.equal(degraded.length, 2);
+    assert.ok(degraded.every((r) => r.hubMarketingDegradedReason === "unverified_inventory_fill"));
+  });
+
   it("returns empty kept without throwing when every slug fails (recoverable inventory shrink)", async () => {
     const resolveLessonDetail = async () => undefined;
     const { kept, diagnostics } = await verifyMarketingHubLessonRowsResolve(
@@ -170,8 +197,9 @@ describe("verifyMarketingHubLessonRowsResolve", () => {
       "en",
       { resolveLessonDetail },
     );
-    assert.equal(kept.length, 0);
-    assert.equal(diagnostics.keptRowCount, 0);
+    assert.equal(kept.length, 1);
+    assert.equal(diagnostics.keptRowCount, 1);
+    assert.equal(kept[0]?.hubMarketingDegraded, true);
     assert.ok((diagnostics.excludedByReason.detail_loader_miss ?? 0) >= 1);
   });
 });

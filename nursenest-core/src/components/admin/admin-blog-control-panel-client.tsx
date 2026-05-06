@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostTemplate } from "@prisma/client";
+import { BlogFunnelStage, BlogImageStatus, BlogPostIntent, BlogPostStatus, BlogPostTemplate } from "@prisma/client";
 import { ADMIN_BLOG_TARGET_EXAM_OPTIONS } from "@/lib/marketing/blog-admin-exam-options";
 import type { BlogControlPanelPlan } from "@/lib/blog/blog-control-panel-schema";
 import { parseBlogSourcesJson } from "@/lib/blog/blog-citation-safety";
@@ -42,6 +42,7 @@ import { AdminBlogDraftEditorShell, DraftSectionCard } from "@/components/admin/
 import { AdminBlogHtmlPreview } from "@/components/admin/blog/admin-blog-html-preview";
 import { AdminMediaPickerDialog } from "@/components/admin/media/admin-media-picker-dialog";
 import { formatAdminRateLimitMessageFromJson } from "@/lib/admin/format-admin-rate-limit-message";
+import { parseAdminJsonResponse } from "@/lib/admin/parse-admin-json-response";
 import { blogSlugCustomValidityMessage, liveNormalizeBlogSlugInputValue } from "@/lib/blog/blog-optional-slug";
 import { iso8601ToDatetimeLocalInputValue } from "@/lib/datetime/datetime-local-input";
 
@@ -273,6 +274,9 @@ export function AdminBlogControlPanelClient({
   const [genState, setGenState] = useState<GenState>("idle");
   const [genError, setGenError] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<string[]>([]);
+  const [generationJobId, setGenerationJobId] = useState<string | null>(null);
+  const [generationJobStatus, setGenerationJobStatus] = useState<string | null>(null);
+  const [lastJobRepairable, setLastJobRepairable] = useState(false);
 
   const [postId, setPostId] = useState<string | null>(initialPostId ?? null);
   const [post, setPost] = useState<AdminPostPayload | null>(null);
@@ -472,6 +476,9 @@ export function AdminBlogControlPanelClient({
     setSaveMsg(null);
     setSaveErr(null);
     setCitationRecoveryMode(false);
+    setGenerationJobId(null);
+    setGenerationJobStatus(null);
+    setLastJobRepairable(false);
     try {
       const res = await fetch("/api/admin/blog/control-panel/generate", {
         ...ADMIN_BLOG_COOKIE_FETCH,
@@ -496,7 +503,9 @@ export function AdminBlogControlPanelClient({
           publishImmediately: publishToLiveBlog,
         }),
       });
-      let json: {
+      type GenerateJson = {
+        jobId?: string;
+        status?: string;
         ok?: boolean;
         error?: string;
         message?: string;
@@ -514,15 +523,81 @@ export function AdminBlogControlPanelClient({
         hint?: string;
         riskFlags?: string[];
       };
-      try {
-        json = (await res.json()) as typeof json;
-      } catch {
+      const parsed = await parseAdminJsonResponse<GenerateJson>(res);
+      if (!parsed.ok) {
         setGenState("failed");
-        setGenError(`Server returned an unreadable response (HTTP ${res.status}).`);
+        setGenError(parsed.errorMessage);
+        return;
+      }
+      const json = parsed.json;
+      const resStatus = parsed.status;
+
+      if (resStatus === 202 && typeof json.jobId === "string" && json.status === "queued") {
+        setGenerationJobId(json.jobId);
+        setGenerationJobStatus("queued");
+        const jobBase = `/api/admin/blog/control-panel/article-jobs/${json.jobId}`;
+        const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+        for (let attempt = 0; attempt < 4; attempt++) {
+          const tickRes = await fetch(`${jobBase}/tick`, {
+            ...ADMIN_BLOG_COOKIE_FETCH,
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: "{}",
+            signal: AbortSignal.timeout(320_000),
+          });
+          const tickParsed = await parseAdminJsonResponse<{
+            ok?: boolean;
+            job?: {
+              status: string;
+              blogPostId?: string | null;
+              resultWarnings?: string[] | null;
+              lastError?: string | null;
+              repairable?: boolean;
+            };
+            error?: string;
+          }>(tickRes);
+          if (!tickParsed.ok) {
+            setGenState("failed");
+            setGenError(tickParsed.errorMessage);
+            return;
+          }
+          const job = tickParsed.json.job;
+          if (job?.status) setGenerationJobStatus(job.status);
+          if (job?.status === "published" && job.blogPostId) {
+            const g = await fetch(`/api/admin/blog/${job.blogPostId}`, ADMIN_BLOG_COOKIE_FETCH);
+            const gParsed = await parseAdminJsonResponse<{ post?: AdminPostPayload }>(g);
+            if (!gParsed.ok) {
+              setGenState("failed");
+              setGenError(gParsed.errorMessage);
+              return;
+            }
+            if (gParsed.json.post) {
+              hydrateFromPost(gParsed.json.post);
+              setWarnings(Array.isArray(job.resultWarnings) ? job.resultWarnings : []);
+              setGenState("success");
+              setLastJobRepairable(false);
+              return;
+            }
+            setGenState("failed");
+            setGenError("Job finished but the post could not be loaded.");
+            return;
+          }
+          if (job?.status === "failed") {
+            setGenState("failed");
+            setLastJobRepairable(Boolean(job.repairable));
+            setGenError(job.lastError ?? tickParsed.json.error ?? "Generation failed.");
+            return;
+          }
+          await sleep(attempt < 3 ? 1500 : 0);
+        }
+        setGenState("failed");
+        setGenError(
+          "The background job did not reach a terminal state after several attempts. Check cron or try Tick again from the API.",
+        );
         return;
       }
 
-      if (res.status === 409) {
+      if (resStatus === 409) {
         setGenState("failed");
         setGenError(
           json.hint
@@ -532,7 +607,7 @@ export function AdminBlogControlPanelClient({
         return;
       }
 
-      if (res.status === 422 && (json.error === "insufficient_citations" || json.code === "INSUFFICIENT_CITATIONS")) {
+      if (resStatus === 422 && (json.error === "insufficient_citations" || json.code === "INSUFFICIENT_CITATIONS")) {
         setGenState("failed");
         setCitationRecoveryMode(true);
         if (json.plan) {
@@ -557,7 +632,7 @@ export function AdminBlogControlPanelClient({
         return;
       }
 
-      if (res.status === 422 && (json.error === "pre_publish_blocked" || json.code === "PRE_PUBLISH_BLOCKED")) {
+      if (resStatus === 422 && (json.error === "pre_publish_blocked" || json.code === "PRE_PUBLISH_BLOCKED")) {
         setGenState("failed");
         if (json.plan) {
           setPlan(json.plan);
@@ -590,9 +665,49 @@ export function AdminBlogControlPanelClient({
         return;
       }
 
-      if (!res.ok) {
+      if (resStatus === 422 && (json.code === "QUALITY_GATE" || json.code === "OUTPUT_GATE")) {
         setGenState("failed");
-        setGenError(httpErr(res, json, json.message ?? json.error ?? `Generation failed (HTTP ${res.status})`));
+        if (json.plan) {
+          setPlan(json.plan);
+          setImageAttachments((prev) => mergeAttachmentRowsForPlan(json.plan!, prev));
+        }
+        if (typeof json.bodyHtml === "string") {
+          setBody(json.bodyHtml);
+          const plain = json.bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);
+          setExcerpt(plain.length >= 10 ? plain : "");
+        }
+        const draftId =
+          json.draftPost && typeof json.draftPost === "object" && "id" in json.draftPost
+            ? String((json.draftPost as { id: unknown }).id)
+            : null;
+        if (draftId) {
+          const g = await fetch(`/api/admin/blog/${draftId}`, ADMIN_BLOG_COOKIE_FETCH);
+          const gj = (await g.json()) as { post?: AdminPostPayload };
+          if (g.ok && gj.post) {
+            hydrateFromPost(gj.post);
+            if (json.plan) setPlan(json.plan);
+          }
+        }
+        setGenError(
+          formatAdminApiError(
+            json,
+            json.message ??
+              "Draft failed quality review: repeated filler content detected. Post saved as needs review — edit or regenerate.",
+          ),
+        );
+        return;
+      }
+
+      if (resStatus < 200 || resStatus >= 400) {
+        setGenState("failed");
+        setGenError(
+          resStatus === 429
+            ? formatAdminRateLimitMessageFromJson(json)
+            : formatAdminApiError(
+                json,
+                json.message ?? json.error ?? `Generation failed (HTTP ${resStatus})`,
+              ),
+        );
         if (json.plan) {
           setPlan(json.plan);
           setImageAttachments((prev) => mergeAttachmentRowsForPlan(json.plan!, prev));
@@ -646,6 +761,63 @@ export function AdminBlogControlPanelClient({
     }
   }
 
+  async function retryGenerationJobRepair() {
+    if (!generationJobId) return;
+    setGenState("generating");
+    setGenError(null);
+    try {
+      const r = await fetch(`/api/admin/blog/control-panel/article-jobs/${generationJobId}/retry-repair`, {
+        ...ADMIN_BLOG_COOKIE_FETCH,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "{}",
+        signal: AbortSignal.timeout(320_000),
+      });
+      const pr = await parseAdminJsonResponse<{
+        ok?: boolean;
+        error?: string;
+        job?: {
+          status: string;
+          blogPostId?: string | null;
+          repairable?: boolean;
+          lastError?: string | null;
+          resultWarnings?: string[] | null;
+        };
+      }>(r);
+      if (!pr.ok) {
+        setGenState("failed");
+        setGenError(pr.errorMessage);
+        return;
+      }
+      if (!pr.json.ok) {
+        setGenState("failed");
+        setGenError(pr.json.error ?? "Retry repair failed.");
+        setLastJobRepairable(Boolean(pr.json.job?.repairable));
+        if (pr.json.job?.status) setGenerationJobStatus(pr.json.job.status);
+        return;
+      }
+      const job = pr.json.job;
+      if (job?.status) setGenerationJobStatus(job.status);
+      if (job?.status === "published" && job.blogPostId) {
+        const g = await fetch(`/api/admin/blog/${job.blogPostId}`, ADMIN_BLOG_COOKIE_FETCH);
+        const gParsed = await parseAdminJsonResponse<{ post?: AdminPostPayload }>(g);
+        if (gParsed.ok && gParsed.json.post) {
+          hydrateFromPost(gParsed.json.post);
+          setWarnings(Array.isArray(job.resultWarnings) ? job.resultWarnings : []);
+          setGenState("success");
+          setLastJobRepairable(false);
+          return;
+        }
+      }
+      setGenState("failed");
+      setGenError(job?.lastError ?? "Retry finished without a published post.");
+      setLastJobRepairable(Boolean(job?.repairable));
+    } catch (e) {
+      setGenState("failed");
+      setGenError(e instanceof Error ? e.message : String(e));
+    }
+  }
+
   async function saveDraft() {
     setSaveMsg(null);
     setSaveErr(null);
@@ -669,6 +841,7 @@ export function AdminBlogControlPanelClient({
           message?: string;
           post?: AdminPostPayload | null;
           postId?: string;
+          draftPost?: { id?: string } | null;
           warnings?: string[];
           plan?: BlogControlPanelPlan;
           code?: string;
@@ -678,6 +851,36 @@ export function AdminBlogControlPanelClient({
         if (res.status === 422 && json.code === "INSUFFICIENT_CITATIONS") {
           const flagStr = json.riskFlags?.length ? ` ${json.riskFlags.join(", ")}` : "";
           setSaveErr(`${json.message ?? "Still insufficient citations."}${flagStr}`);
+          return;
+        }
+        if (res.status === 422 && (json.code === "QUALITY_GATE" || json.code === "OUTPUT_GATE")) {
+          const draftId =
+            json.draftPost && typeof json.draftPost === "object" && "id" in json.draftPost
+              ? String((json.draftPost as { id: unknown }).id)
+              : typeof json.postId === "string"
+                ? json.postId
+                : null;
+          if (draftId) {
+            const g = await fetch(`/api/admin/blog/${draftId}`, ADMIN_BLOG_COOKIE_FETCH);
+            const gj = (await g.json()) as { post?: AdminPostPayload };
+            if (g.ok && gj.post) {
+              hydrateFromPost(gj.post);
+              if (json.plan) setPlan(json.plan);
+            }
+          } else if (json.plan) {
+            setPlan(json.plan);
+          }
+          setCitationRecoveryMode(false);
+          setGenState("failed");
+          setGenError(
+            json.message ??
+              json.hint ??
+              "Draft failed quality review: repeated filler content detected. Edit sections or regenerate the body.",
+          );
+          setSaveErr(
+            json.message ??
+              "Draft failed quality review: repeated filler content detected. Post saved as needs review.",
+          );
           return;
         }
         if (!res.ok) {
@@ -1282,10 +1485,13 @@ export function AdminBlogControlPanelClient({
 
   const statusBadge = useMemo(() => {
     if (genState === "idle") return { label: "Idle", className: "bg-muted text-muted-foreground" };
-    if (genState === "generating") return { label: "Generating…", className: "bg-amber-500/20 text-amber-900 dark:text-amber-100" };
+    if (genState === "generating") {
+      const sub = generationJobStatus ? ` (${generationJobStatus})` : "";
+      return { label: `Generating…${sub}`, className: "bg-amber-500/20 text-amber-900 dark:text-amber-100" };
+    }
     if (genState === "success") return { label: "Ready", className: "bg-emerald-500/15 text-emerald-900 dark:text-emerald-100" };
     return { label: "Failed", className: "bg-rose-500/15 text-rose-900 dark:text-rose-100" };
-  }, [genState]);
+  }, [genState, generationJobStatus]);
 
   const publishBlockedByValidation = Boolean(prePublish && !prePublish.okToPublish);
 
@@ -1443,16 +1649,16 @@ export function AdminBlogControlPanelClient({
           </label>
           <label className="block space-y-1 sm:col-span-2">
             <span className="text-xs font-medium text-muted-foreground">
-              Optional fixed slug (leave blank to auto-generate). Use lowercase letters and hyphens only.
+              Optional URL slug hint (leave blank to auto-generate). You can paste a full article title — the server
+              normalizes it to a valid slug.
             </span>
             <input
               ref={fixedGenSlugInputRef}
               className="w-full rounded-lg border border-border px-3 py-2 font-mono text-sm"
               value={fixedSlug}
               onChange={(e) => {
-                const normalized = liveNormalizeBlogSlugInputValue(e.target.value);
-                setFixedSlug(normalized);
-                fixedGenSlugInputRef.current?.setCustomValidity(blogSlugCustomValidityMessage(normalized));
+                setFixedSlug(e.target.value);
+                fixedGenSlugInputRef.current?.setCustomValidity("");
               }}
               disabled={formDisabled}
               placeholder="leave blank to auto-generate"
@@ -1512,7 +1718,22 @@ export function AdminBlogControlPanelClient({
               ? "Generate and publish to /blog"
               : "Generate draft only"}
         </button>
+        {generationJobStatus && genState === "generating" ? (
+          <p className="text-xs text-muted-foreground">Job status: {generationJobStatus}</p>
+        ) : null}
         {genError ? <p className="text-sm text-rose-700 dark:text-rose-300">{genError}</p> : null}
+        {genState === "failed" && generationJobId && lastJobRepairable ? (
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              className="rounded-lg border border-border bg-[var(--theme-card-bg)] px-4 py-2 text-sm font-semibold hover:bg-muted/60"
+              onClick={() => void retryGenerationJobRepair()}
+            >
+              Retry repair (reuse plan / draft)
+            </button>
+            <span className="text-xs text-muted-foreground">Job id: {generationJobId.slice(0, 12)}…</span>
+          </div>
+        ) : null}
       </form>
 
       {warnings.length > 0 ? (
@@ -1570,7 +1791,42 @@ export function AdminBlogControlPanelClient({
             </div>
           ) : null}
           {saveMsg ? <p className="text-sm text-emerald-700 dark:text-emerald-300">{saveMsg}</p> : null}
+          {saveMsg === "Published." && post ? (
+            <p className="text-sm">
+              <Link
+                href={`/blog/${encodeURIComponent(post.slug)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-primary underline-offset-4 hover:underline"
+              >
+                View live page
+              </Link>
+              <span className="text-muted-foreground"> — opens the public `/blog` article in a new tab.</span>
+            </p>
+          ) : null}
           {saveErr ? <p className="text-sm text-rose-700 dark:text-rose-300">{saveErr}</p> : null}
+          {post &&
+          post.postStatus !== BlogPostStatus.PUBLISHED &&
+          !(
+            post.postStatus === BlogPostStatus.SCHEDULED &&
+            post.publishAt &&
+            new Date(post.publishAt).getTime() <= Date.now()
+          ) ? (
+            <div
+              className="rounded-xl border p-3 text-xs"
+              style={{
+                borderColor: "color-mix(in srgb, var(--semantic-warning) 35%, var(--semantic-border-soft))",
+                background: "color-mix(in srgb, var(--semantic-panel-warm) 40%, transparent)",
+                color: "var(--semantic-text-secondary)",
+              }}
+            >
+              <p className="font-semibold text-[var(--theme-heading-text)]">Draft — not public yet</p>
+              <p className="mt-1 leading-snug">
+                This post is not guaranteed to appear on the public blog index or sitemap until you publish successfully and
+                it passes live visibility checks.
+              </p>
+            </div>
+          ) : null}
 
           {citationReview && citationReview.kind === "envelope" ? (
             <div className="grid gap-4 lg:grid-cols-2">

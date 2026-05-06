@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { LearnerAccountPageHero, LearnerAccountShell } from "@/components/learner-account-ui";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerStudySettingsHub } from "@/components/student/learner-study-settings-hub";
@@ -75,12 +76,9 @@ export default async function AccountStudyPreferencesPage() {
   const studySettings = await loadStudySettings(userId);
 
   return (
-    <div className="space-y-6">
+    <LearnerAccountShell className="py-2">
       <BreadcrumbTrail items={crumbs} />
-      <div>
-        <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.studyPreferences.title")}</h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.studyPreferences.intro")}</p>
-      </div>
+      <LearnerAccountPageHero title={t("learner.account.studyPreferences.title")} description={t("learner.account.studyPreferences.intro")} />
 
       {verifyFailed ? (
         <PremiumEmptyState
@@ -123,6 +121,6 @@ export default async function AccountStudyPreferencesPage() {
       ) : null}
 
       <LearnerAccountCrossLinks variant="settings" t={t} />
-    </div>
+    </LearnerAccountShell>
   );
 }

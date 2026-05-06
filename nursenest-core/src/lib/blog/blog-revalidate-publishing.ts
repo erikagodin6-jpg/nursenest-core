@@ -14,10 +14,12 @@ import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-pat
 import { listPublishedExamPathwaysForPublicSite } from "@/lib/navigation/country-exam-launch-readiness";
 
 export type BlogPublishingRevalidateOptions = {
-  /** Canonical marketing slug — invalidates `/blog/[slug]` */
+  /** Canonical marketing slug — invalidates `/blog/[slug]` (global posts) or scoped detail paths when nursing/allied set */
   slug?: string | null;
   /** When set with `slug`, also invalidates `/allied-health/{key}/blog/{slug}` */
   alliedProfessionKey?: string | null;
+  /** Nursing hub career (`rn`, `pn`, `np`). `rn` uses `/blog/rn/{slug}`; others use `/nursing/{career}/blog/{slug}`. */
+  nursingCareerSlug?: string | null;
   /** Revalidates `/blog/tag/{tag}` for each value (bounded). */
   tags?: readonly string[] | null;
   /** Revalidates `/blog/{slug}` for each (e.g. cron batch publish; bounded). */
@@ -37,13 +39,25 @@ export function revalidateBlogPublishingSurfaces(options?: BlogPublishingRevalid
   revalidatePath("/lessons");
   revalidatePath("/flashcards");
   revalidatePath("/sitemap.xml");
+  revalidatePath("/sitemap-allied.xml");
+  revalidatePath("/sitemap-new-grad.xml");
 
   const slug = options?.slug?.trim();
+  const nursing = options?.nursingCareerSlug?.trim().toLowerCase();
+  const allied = options?.alliedProfessionKey?.trim();
+
   if (slug) {
-    revalidatePath(`/blog/${slug}`);
+    if (nursing === "rn") {
+      revalidatePath(`/blog/rn/${slug}`);
+      revalidatePath("/blog/rn");
+    } else if (nursing && nursing !== "rn") {
+      revalidatePath(`/nursing/${nursing}/blog/${slug}`);
+      revalidatePath(`/nursing/${nursing}/blog`);
+    } else {
+      revalidatePath(`/blog/${slug}`);
+    }
   }
 
-  const allied = options?.alliedProfessionKey?.trim();
   if (slug && allied) {
     revalidatePath(`/allied-health/${allied}/blog/${slug}`);
   }
@@ -70,11 +84,11 @@ export function revalidateBlogPublishingSurfaces(options?: BlogPublishingRevalid
    * Bust marketing `unstable_cache` layers that may have cached empty payloads during DB outages
    * (flashcard tag list + per-pathway lesson hub lists used by sitemap/ISR surfaces).
    */
-  revalidateTag(CACHE_TAG_MARKETING_BLOG_SURFACES, "max");
-  revalidateTag(CACHE_TAG_MARKETING_PUBLIC_FLASHCARD_TAGS, "max");
-  revalidateTag(CACHE_TAG_PATHWAY_LESSON_INDEX, "max");
+  revalidateTag(CACHE_TAG_MARKETING_BLOG_SURFACES, "default");
+  revalidateTag(CACHE_TAG_MARKETING_PUBLIC_FLASHCARD_TAGS, "default");
+  revalidateTag(CACHE_TAG_PATHWAY_LESSON_INDEX, "default");
   for (const pathway of listPublishedExamPathwaysForPublicSite()) {
     revalidatePath(buildExamPathwayPath(pathway, "lessons"));
-    revalidateTag(cacheTagPathwayLessonsHub(pathway.id), "max");
+    revalidateTag(cacheTagPathwayLessonsHub(pathway.id), "default");
   }
 }

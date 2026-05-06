@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { loadMissedQuestionSignals } from "@/lib/learner/study-question-signals";
+import { loadMissedQuestionSignals, loadSavedRationaleQuestionIdsForPoolFilter } from "@/lib/learner/study-question-signals";
 import { loadWeakTopicPracticePlan } from "@/lib/learner/topic-performance";
 import type {
   LinearDeliveryMode,
@@ -22,6 +22,7 @@ import {
 import { buildPrioritizedLinearPickBand } from "@/lib/study/learner-study-prioritizer";
 import { practiceRecentSessionLookback, STUDY_DIVERSITY_PRACTICE_RECENT_MIN_REMAINING_DEFAULT } from "@/lib/study/study-diversity-config";
 import { logStudyDiversity } from "@/lib/study/study-diversity-log";
+import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
 
 /** Linear pool selection — CAT uses {@link createCatPracticeTestPayload} instead. */
 export type LinearPoolSelectionMode = Exclude<PracticeTestSelectionMode, "cat">;
@@ -37,6 +38,8 @@ export type PickQuestionsInput = {
   pathwayId: string | null;
   /** When set, shuffles the eligible pool deterministically (stable across retries for the same session). */
   sessionPickSalt?: string;
+  /** CAT / shared pool: widen filters when the narrow slice is too small (practice hub default). */
+  selectionStrictness?: "soft" | "strict";
 };
 
 export type LinearPracticeSessionPickDebug = {
@@ -57,6 +60,17 @@ export async function pickPracticeQuestionIds(
   | { ok: false; message: string }
 > {
   const n = Math.min(PRACTICE_TEST_MAX_Q, Math.max(PRACTICE_TEST_MIN_Q, Math.floor(input.questionCount)));
+
+  if (input.selectionMode === "starred") {
+    const starredIds = await loadSavedRationaleQuestionIdsForPoolFilter(userId, 200);
+    if (starredIds.length === 0) {
+      return {
+        ok: false,
+        message:
+          "No starred questions yet. Star items in the question bank or during review, then try a saved-questions practice exam.",
+      };
+    }
+  }
 
   if (input.selectionMode === "targeted" && input.topicNames.length === 0) {
     return { ok: false, message: "Targeted mode requires at least one topic." };
@@ -84,7 +98,7 @@ export async function pickPracticeQuestionIds(
   }
 
   // Linear practice now reuses the same pathway-safe, rationale-complete CAT pool gates.
-  const pool = await fetchCatPracticePool(userId, entitlement, input);
+  const { pool } = await fetchCatPracticePool(userId, entitlement, input);
   if (pool.length < n) {
     return {
       ok: false,
@@ -136,6 +150,15 @@ export async function pickPracticeQuestionIds(
     questionCount: n,
     hasSalt: saltTrim && saltTrim.length >= 8 ? 1 : 0,
     prioritizedBand: bandIds.length,
+  });
+  logCoreApiStudyDiagnostic({
+    endpoint: "pickPracticeQuestionIds",
+    pathwayId: pathwayIdForRecent,
+    tier: String(entitlement.tier ?? ""),
+    selectionMode: input.selectionMode,
+    rowsFound: pool.length,
+    rowsReturned: ids.length,
+    poolAfterRecent: recentFiltered.pool.length,
   });
   return {
     ok: true,

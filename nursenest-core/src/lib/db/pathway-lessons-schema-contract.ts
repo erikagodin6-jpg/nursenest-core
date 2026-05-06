@@ -17,16 +17,23 @@ export const PATHWAY_LESSONS_STRUCTURAL_PUBLIC_COMPLETE_MIGRATION_DIR =
 export async function pathwayLessonsStructuralPublicCompleteColumnPresent(
   prisma: Pick<PrismaClient, "$queryRaw">,
 ): Promise<boolean> {
-  const rows = await prisma.$queryRaw<{ exists: boolean }[]>`
-    SELECT EXISTS (
-      SELECT 1
-      FROM information_schema.columns AS c
-      WHERE c.table_schema = 'public'
-        AND c.table_name = 'pathway_lessons'
-        AND c.column_name = 'structural_public_complete'
-    ) AS "exists"
-  `;
-  return Boolean(rows[0]?.exists);
+  try {
+    const rows = await prisma.$queryRaw<{ exists: boolean }[]>`
+      SELECT EXISTS (
+        SELECT 1
+        FROM information_schema.columns AS c
+        WHERE c.table_schema = 'public'
+          AND c.table_name = 'pathway_lessons'
+          AND c.column_name = 'structural_public_complete'
+      ) AS "exists"
+    `;
+    if (!rows[0]?.exists) return false;
+    /** Prove the column is readable — avoids false positives when metadata and live DDL diverge. */
+    await prisma.$queryRaw`SELECT "structural_public_complete" FROM "pathway_lessons" LIMIT 1`;
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export type PathwayLessonsSchemaDriftCode = "missing_structural_public_complete";
@@ -56,4 +63,15 @@ export function pathwayLessonsSchemaDriftFromPrismaErrorMessage(message: string)
     };
   }
   return null;
+}
+
+/** Same as {@link pathwayLessonsSchemaDriftFromPrismaErrorMessage} but accepts thrown Prisma / unknown values. */
+export function pathwayLessonsSchemaDriftFromUnknown(e: unknown): PathwayLessonsSchemaDrift | null {
+  const msg =
+    e instanceof Error
+      ? e.message
+      : typeof e === "object" && e !== null && "message" in e
+        ? String((e as { message?: unknown }).message ?? "")
+        : String(e);
+  return pathwayLessonsSchemaDriftFromPrismaErrorMessage(msg);
 }

@@ -3,6 +3,7 @@ import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerAccountCrossLinks } from "@/components/student/learner-account-cross-links";
 import { LearnerSilentSectionDegradedFallback } from "@/components/student/learner-silent-section-degraded-fallback";
+import { MedCalcReportCardInset } from "@/components/med-calculations/med-calc-report-card-inset";
 import { LearnerProgressPageContent } from "@/components/student/learner-progress-page-content";
 import { LockedStudyNextPreview } from "@/components/student/locked-study-next-preview";
 import { SubscriptionPaywall } from "@/components/student/subscription-paywall";
@@ -101,6 +102,7 @@ export default async function AccountProgressPage() {
           <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.progress.title")}</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.progress.intro")}</p>
         </div>
+        <MedCalcReportCardInset userId={userId} />
         <LearnerSilentSectionDegradedFallback surfaceName="progress-page" />
         <LearnerAccountCrossLinks variant="progress" t={t} continueLesson={null} />
       </div>
@@ -114,6 +116,7 @@ export default async function AccountProgressPage() {
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.progress.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.progress.intro")}</p>
       </div>
+      <MedCalcReportCardInset userId={userId} />
       {payload.degraded?.active ? <LearnerSilentSectionDegradedFallback surfaceName="progress-page" /> : null}
       <LearnerProgressPageContent data={payload} t={t} localeTag={localeTag} />
 

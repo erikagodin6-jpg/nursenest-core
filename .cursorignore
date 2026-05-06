@@ -1,0 +1,102 @@
+# Cursor indexing / AI context (reduces extensionHost + fileWatcher load over SSH)
+# See reports/cursor-remote-stability.md — open the repo root folder only, not /root.
+# Do not list primary app source (src/, app/, components/, prisma/schema.prisma, scripts/, tests/).
+
+# Dependencies & SCM
+node_modules/
+**/node_modules/
+.git/
+**/.git/
+
+# Next.js / bundler / Turbo output
+.next/
+**/.next/
+out/
+**/out/
+.turbo/
+**/.turbo/
+.cache/
+**/.cache/
+
+# Build output (explicit paths — avoid bare **/build which can match source trees)
+/build/
+nursenest-core/build/
+client/build/
+dist/
+**/dist/
+
+# Tests & coverage
+coverage/
+**/coverage/
+test-results/
+**/test-results/
+playwright-report/
+**/playwright-report/
+blob-report/
+**/blob-report/
+.nyc_output/
+**/.nyc_output/
+
+# Logs & temp
+logs/
+**/logs/
+*.log
+**/*.log
+.tmp/
+**/.tmp/
+tmp/
+**/tmp/
+temp/
+**/temp/
+
+# Large local trees (imports, backups — not needed for IDE intelligence)
+data/
+**/data/
+backup-system/
+**/backup-system/
+replit-export/
+**/replit-export/
+
+# Reports & generated audits
+reports/
+**/reports/
+
+# Prisma migrations (many files); schema remains available at prisma/schema.prisma
+**/prisma/migrations/
+
+# Generated client / deploy metadata
+.prisma/
+**/.prisma/
+.vercel/
+**/.vercel/
+.digitalocean/
+**/.digitalocean/
+
+# i18n shards (large JSON)
+public/i18n/
+**/public/i18n/
+nursenest-core/public/i18n/
+**/nursenest-core/public/i18n/
+client/public/i18n/
+**/client/public/i18n/
+
+# Lesson / content generated indexes (large JSON)
+**/generated-indexes/
+src/content/pathway-lessons/generated-indexes/
+**/src/content/pathway-lessons/generated-indexes/
+nursenest-core/src/content/pathway-lessons/generated-indexes/
+
+# Blog / content generation scratch
+blog-output/
+**/blog-output/
+blog-temp/
+**/blog-temp/
+
+# Playwright browser cache
+**/playwright/.cache/
+
+# Env & local DB blobs
+.env*
+*.sqlite
+*.sqlite3
+*.db

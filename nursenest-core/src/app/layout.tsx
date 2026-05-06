@@ -1,26 +1,13 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
 
 import { AuthSessionProvider } from "@/components/auth/auth-session-provider";
 import { AppThemeProvider } from "@/components/theme/app-theme-provider";
-import { AnalyticsProvider } from "@/components/providers/analytics-provider";
 
-import { auth } from "@/lib/auth";
 import { MARKETING_SITE_ORIGIN } from "@/lib/seo/site-origin";
 import { NURSENEST_DEFAULT_THEME } from "@/lib/theme/theme-registry";
 
 import "./globals.css";
 import "./(marketing)/marketing-dark-utilities.css";
-
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal"],
-  display: "swap",
-  adjustFontFallback: true,
-  preload: true,
-});
 
 const siteUrl = MARKETING_SITE_ORIGIN || "https://www.nursenest.ca";
 
@@ -36,12 +23,9 @@ export const metadata: Metadata = {
   description:
     "NurseNest offers Canada-first, globally relevant nursing and allied health exam prep with practice questions, clinical lessons, flashcards, and mock exams for RN, RPN, NP, NCLEX, and more.",
   icons: {
-    icon: [
-      { url: "/logos/arctic-frost-leaf.svg", type: "image/svg+xml" },
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/icon.png", type: "image/png", sizes: "512x512" },
-    ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    icon: "/icon.svg",
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon.png",
   },
   openGraph: {
     type: "website",
@@ -72,8 +56,14 @@ export const metadata: Metadata = {
 
 async function getSessionSafe() {
   if (process.env.NEXT_PHASE === "phase-production-build") return null;
+  const hasSecret = Boolean(
+    (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
+      (process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.trim().length > 0),
+  );
+  if (!hasSecret) return null;
 
   try {
+    const { auth } = await import("@/lib/auth");
     return await auth();
   } catch (error) {
     console.error("[root-layout] auth failed; continuing without session", error);
@@ -90,9 +80,7 @@ function SafeProviders({
 }) {
   return (
     <AppThemeProvider>
-      <AuthSessionProvider session={session}>
-        <AnalyticsProvider>{children}</AnalyticsProvider>
-      </AuthSessionProvider>
+      <AuthSessionProvider session={session}>{children}</AuthSessionProvider>
     </AppThemeProvider>
   );
 }
@@ -107,7 +95,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} h-full antialiased`}
+      className="h-full antialiased"
       data-theme={NURSENEST_DEFAULT_THEME}
       suppressHydrationWarning
     >

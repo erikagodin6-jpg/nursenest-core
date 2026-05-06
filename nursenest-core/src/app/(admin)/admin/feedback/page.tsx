@@ -25,7 +25,9 @@ export default async function AdminUserFeedbackPage({
     return (
       <main className="mx-auto w-full max-w-[1400px] px-4 py-8 sm:px-6 lg:px-8">
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">Feedback inbox</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Database is not configured in this environment.</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Database connection is unavailable in this environment (no DATABASE_URL).
+        </p>
       </main>
     );
   }

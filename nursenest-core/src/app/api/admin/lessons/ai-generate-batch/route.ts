@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
-import { getOpenAiChatModel } from "@/lib/ai/openai-env";
+import { getLessonOpenAiChatModel } from "@/lib/ai/openai-env";
 import {
   ADMIN_LESSON_BATCH_TOOL,
   lessonBatchTopicKey,
@@ -89,7 +89,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const model = getOpenAiChatModel();
+  const model = getLessonOpenAiChatModel();
 
   const { jobId, summary } = await prisma.$transaction(async (tx) => {
     const job = await tx.aiGenerationJob.create({

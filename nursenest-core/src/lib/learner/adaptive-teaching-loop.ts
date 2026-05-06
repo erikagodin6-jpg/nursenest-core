@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { pathwayLessonStructuralCompleteWhereInput } from "@/lib/db/pathway-lesson-structural-column-runtime";
 import {
   buildNormalizedTeachingPayload,
   buildTeachingMediaBundle,
@@ -131,10 +132,11 @@ export async function buildAdaptiveTeachingLoopFromPerformance(args: {
     .sort((a, b) => Number(b.strongTeachingPayload) - Number(a.strongTeachingPayload) || Number(b.conceptImageAvailable) - Number(a.conceptImageAvailable))
     .slice(0, 4);
 
+  const structuralWhere = await pathwayLessonStructuralCompleteWhereInput();
   const lessonRows = await prisma.pathwayLesson.findMany({
     where: {
       status: "PUBLISHED",
-      structuralPublicComplete: true,
+      ...structuralWhere,
       OR: [
         prioritizedTopic ? { topic: { contains: prioritizedTopic, mode: "insensitive" } } : undefined,
         prioritizedSubtopic ? { topicSlug: { contains: prioritizedSubtopic.toLowerCase(), mode: "insensitive" } } : undefined,

@@ -1,6 +1,6 @@
 import "server-only";
 import type Stripe from "stripe";
-import { Prisma, SubscriptionStatus } from "@prisma/client";
+import { Prisma, SubscriptionStatus, type TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
@@ -25,14 +25,72 @@ import {
   syncUserFromCheckoutSessionMetadata,
   syncUserFromStripePriceId,
 } from "@/lib/stripe/sync-user-from-stripe-subscription";
+import {
+  mergeSubscriptionCurrentPeriodEnds,
+  subscriptionEntitlementEndMs,
+} from "@/lib/entitlements/subscription-paid-access";
 import { pastDueSinceForStatusTransition } from "@/lib/stripe/subscription-past-due-since";
-import { scheduleOwnerPaidSubscriptionCheckoutNotificationsIfEligible } from "@/lib/stripe/subscription-owner-notify";
+import {
+  scheduleOwnerPaidSubscriptionCheckoutNotificationsIfEligible,
+  scheduleOwnerPaidSubscriptionInvoicePaymentSucceededNotification,
+} from "@/lib/stripe/subscription-owner-notify";
+import {
+  adminPaidSubscriptionSmsInputFromSubscription,
+  sendAdminPaidSubscriptionSms,
+} from "@/lib/notifications/admin-paid-subscription-sms";
+import {
+  persistStripeSubscriptionMirrorForUser,
+  resolveUserIdForOrphanStripeSubscription,
+} from "@/lib/subscriptions/stripe-subscription-reconcile";
+import { getStripeClient } from "@/lib/stripe/stripe-client";
 
 type LifecycleData = ReturnType<typeof billingLifecycleFields>;
 
 export type ApplyStripeWebhookContext = {
   correlation?: string;
 };
+
+async function resolveStripeCustomerEmail(stripe: Stripe, customerId: string | null | undefined): Promise<string | null> {
+  const id = customerId?.trim();
+  if (!id) return null;
+  try {
+    const customer = await stripe.customers.retrieve(id);
+    if (customer.deleted || !("email" in customer)) return null;
+    return typeof customer.email === "string" && customer.email.trim() ? customer.email.trim() : null;
+  } catch {
+    return null;
+  }
+}
+
+async function notifyAdminPaidSubscriptionSms(args: {
+  stripe: Stripe;
+  event: Stripe.Event;
+  userId: string | null | undefined;
+  email: string | null | undefined;
+  customerId: string | null | undefined;
+  subscription: Stripe.Subscription | null | undefined;
+  planName?: string | null;
+  planTier?: TierCode | null;
+}): Promise<void> {
+  try {
+    const input = adminPaidSubscriptionSmsInputFromSubscription(args);
+    if (!input) return;
+    const result = await sendAdminPaidSubscriptionSms(input);
+    if (result.status === "failed") {
+      safeServerLog("stripe_webhook", "admin_paid_subscription_sms_failed_non_blocking", {
+        eventIdPrefix: args.event.id.slice(0, 12),
+        reason: result.reason.slice(0, 160),
+        severity: "warning",
+      });
+    }
+  } catch (e) {
+    safeServerLog("stripe_webhook", "admin_paid_subscription_sms_exception_non_blocking", {
+      eventIdPrefix: args.event.id.slice(0, 12),
+      reason: e instanceof Error ? e.message.slice(0, 160) : "unknown",
+      severity: "warning",
+    });
+  }
+}
 
 /**
  * **Source of truth (billing state)**
@@ -109,6 +167,7 @@ async function applyCustomerSubscriptionUpsert(
       planTier: true,
       planCountry: true,
       stripeCustomerId: true,
+      user: { select: { email: true } },
     },
   });
   const priceId = firstSubscriptionPriceId(sub);
@@ -124,22 +183,113 @@ async function applyCustomerSubscriptionUpsert(
     await syncUserFromStripePriceId(row.userId, priceId);
   }
   if (!row) {
-    safeServerLog("billing_sync", "subscription_webhook_no_local_row", {
-      stripeSubscriptionIdPrefix: sub.id.slice(0, 14),
+    const resolvedUserId = await resolveUserIdForOrphanStripeSubscription(sub);
+    if (!resolvedUserId) {
+      safeServerLog("billing_sync", "subscription_webhook_no_local_row", {
+        stripeSubscriptionIdPrefix: sub.id.slice(0, 14),
+        stripeStatus: sub.status,
+        eventIdPrefix,
+        correlation: ctx.correlation ?? "",
+        hint: "No metadata userId or customer-linked Subscription row to attach this Stripe subscription",
+      });
+      return;
+    }
+    const persisted = await persistStripeSubscriptionMirrorForUser(resolvedUserId, sub);
+    if (!persisted) {
+      safeServerLog("billing_sync", "subscription_webhook_orphan_persist_skipped", {
+        stripeSubscriptionIdPrefix: sub.id.slice(0, 14),
+        resolvedUserIdPrefix: resolvedUserId.slice(0, 8),
+        stripeStatus: sub.status,
+        eventIdPrefix,
+        correlation: ctx.correlation ?? "",
+        severity: "info",
+      });
+      return;
+    }
+    const fresh = await prisma.subscription.findUnique({
+      where: { stripeSubscriptionId: sub.id },
+      select: {
+        id: true,
+        userId: true,
+        status: true,
+        updatedAt: true,
+        currentPeriodEnd: true,
+        pastDueSince: true,
+        planTier: true,
+        planCountry: true,
+        stripeCustomerId: true,
+        user: { select: { email: true } },
+      },
+    });
+    if (!fresh) return;
+    logBillingTransition({
+      kind: "customer_subscription_upsert_orphan",
+      stripeSubscriptionId: sub.id,
+      userId: fresh.userId,
+      fromStatus: undefined,
+      toStatus: fresh.status,
       stripeStatus: sub.status,
       eventIdPrefix,
       correlation: ctx.correlation ?? "",
-      hint: "checkout.session.completed normally creates the row first",
+      stripeEventType,
+      stripeCustomerId: fresh.stripeCustomerId ?? undefined,
     });
+    emitEntitlementShiftFromRowTransition({
+      correlationId: ctx.correlation,
+      userId: fresh.userId,
+      stripeSubscriptionId: sub.id,
+      country: fresh.planCountry != null ? String(fresh.planCountry) : undefined,
+      tier: tierToAuditString(fresh.planTier),
+      before: {
+        status: SubscriptionStatus.CANCELLED,
+        updatedAt: new Date(0),
+        currentPeriodEnd: null,
+        pastDueSince: null,
+      },
+      after: {
+        status: fresh.status,
+        updatedAt: fresh.updatedAt,
+        currentPeriodEnd: fresh.currentPeriodEnd,
+        pastDueSince: fresh.pastDueSince,
+      },
+      source: "webhook",
+      stripeEventType,
+      stripeEventIdPrefix: eventIdPrefix,
+    });
+    const customerIdFromFresh =
+      fresh.stripeCustomerId ??
+      (typeof sub.customer === "string" ? sub.customer : sub.customer && "id" in sub.customer ? sub.customer.id : null);
+    /** Same SDK instance as the rest of webhook handling; `getStripeClient` returns null when billing is not configured. */
+    const stripeForNotify = await getStripeClient();
+    if (stripeForNotify) {
+      await notifyAdminPaidSubscriptionSms({
+        stripe: stripeForNotify,
+        event: { id: "", type: stripeEventType, created: Math.floor(Date.now() / 1000) } as Stripe.Event,
+        userId: fresh.userId,
+        email:
+          fresh.user.email ?? (await resolveStripeCustomerEmail(stripeForNotify, customerIdFromFresh)),
+        customerId: customerIdFromFresh,
+        subscription: sub,
+        planName: fresh.planTier != null ? String(fresh.planTier) : null,
+        planTier: fresh.planTier,
+      });
+    }
     return;
   }
 
   const lifecycle = billingLifecycleFields(sub);
+  const customerIdFromSub =
+    typeof sub.customer === "string" ? sub.customer : sub.customer && "id" in sub.customer ? sub.customer.id : null;
   const data: Prisma.SubscriptionUpdateInput = {
-    currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
-    trialEnd: lifecycle.trialEnd ?? null,
     cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
+    ...(customerIdFromSub?.trim() ? { stripeCustomerId: customerIdFromSub.trim() } : {}),
   };
+  if (lifecycle.currentPeriodEnd != null) {
+    data.currentPeriodEnd = lifecycle.currentPeriodEnd;
+  }
+  if (lifecycle.trialEnd != null) {
+    data.trialEnd = lifecycle.trialEnd;
+  }
   if (mappedStatus !== null) {
     data.status = mappedStatus;
     const pastPatch = pastDueSinceForStatusTransition(mappedStatus, row.status);
@@ -158,10 +308,30 @@ async function applyCustomerSubscriptionUpsert(
       status: true,
       updatedAt: true,
       currentPeriodEnd: true,
+      trialEnd: true,
       pastDueSince: true,
       planTier: true,
       planCountry: true,
     },
+  });
+
+  const entitlementEndMs = subscriptionEntitlementEndMs({
+    currentPeriodEnd: updated.currentPeriodEnd,
+    trialEnd: updated.trialEnd,
+  });
+  const nowMs = Date.now();
+  safeServerLog("billing_sync", "customer_subscription_upsert_entitlement_snapshot", {
+    stripeCustomerIdPrefix: row.stripeCustomerId?.trim().slice(0, 12) ?? "",
+    stripeSubscriptionIdPrefix: sub.id.slice(0, 14),
+    stripeStatus: sub.status,
+    cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd ? 1 : 0,
+    currentPeriodEndIso: updated.currentPeriodEnd?.toISOString() ?? "",
+    trialEndIso: updated.trialEnd?.toISOString() ?? "",
+    dbStatus: String(updated.status),
+    entitlementEndIso: entitlementEndMs != null ? new Date(entitlementEndMs).toISOString() : "",
+    paidAccessWindowOpen: entitlementEndMs == null ? 1 : entitlementEndMs > nowMs ? 1 : 0,
+    correlation: ctx.correlation ?? "",
+    eventIdPrefix,
   });
 
   logBillingTransition({
@@ -298,6 +468,7 @@ export async function applyStripeWebhookEvent(
           update: {
             status: statusForDb,
             pastDueSince: null,
+            ...(customerId.trim() ? { stripeCustomerId: customerId.trim() } : {}),
             ...(plan?.tier ? { planTier: plan.tier } : {}),
             ...(plan?.country != null ? { planCountry: plan.country } : {}),
             ...(durationMeta ? { planDuration: durationMeta } : {}),
@@ -424,6 +595,23 @@ export async function applyStripeWebhookEvent(
         billingRegionSlug: billingRegionMeta,
         correlation,
       });
+
+      const checkoutEmail =
+        session.customer_email ??
+        (session.customer_details && typeof session.customer_details === "object"
+          ? (session.customer_details as { email?: string | null }).email
+          : null) ??
+        (customerId ? await resolveStripeCustomerEmail(stripe, customerId) : null);
+      await notifyAdminPaidSubscriptionSms({
+        stripe,
+        event,
+        userId,
+        email: checkoutEmail,
+        customerId,
+        subscription: stripeSubscription,
+        planName: plan?.tier != null ? String(plan.tier) : null,
+        planTier: plan?.tier,
+      });
     }
     productEvent("stripe_webhook_ok", { eventType: event.type });
     return;
@@ -447,6 +635,7 @@ export async function applyStripeWebhookEvent(
         userId: true,
         updatedAt: true,
         currentPeriodEnd: true,
+        trialEnd: true,
         pastDueSince: true,
         planTier: true,
         planCountry: true,
@@ -455,23 +644,46 @@ export async function applyStripeWebhookEvent(
     });
     if (existing) {
       const pastPatch = pastDueSinceForStatusTransition(SubscriptionStatus.CANCELLED, existing.status);
+      const mergedPeriodEnd = mergeSubscriptionCurrentPeriodEnds(lifecycle.currentPeriodEnd, existing.currentPeriodEnd);
+      const deletedUpdate: Prisma.SubscriptionUpdateInput = {
+        status: SubscriptionStatus.CANCELLED,
+        cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
+        currentPeriodEnd: mergedPeriodEnd,
+        ...(pastPatch ?? {}),
+      };
+      if (lifecycle.trialEnd != null) {
+        deletedUpdate.trialEnd = lifecycle.trialEnd;
+      }
       const updated = await prisma.subscription.update({
         where: { id: existing.id },
-        data: {
-          status: SubscriptionStatus.CANCELLED,
-          cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
-          currentPeriodEnd: lifecycle.currentPeriodEnd ?? null,
-          trialEnd: lifecycle.trialEnd ?? null,
-          ...(pastPatch ?? {}),
-        },
+        data: deletedUpdate,
         select: {
           status: true,
           updatedAt: true,
           currentPeriodEnd: true,
+          trialEnd: true,
           pastDueSince: true,
           planTier: true,
           planCountry: true,
         },
+      });
+      const delEntitlementEndMs = subscriptionEntitlementEndMs({
+        currentPeriodEnd: updated.currentPeriodEnd,
+        trialEnd: updated.trialEnd,
+      });
+      const delNow = Date.now();
+      safeServerLog("billing_sync", "customer_subscription_deleted_entitlement_snapshot", {
+        stripeCustomerIdPrefix: existing.stripeCustomerId?.trim().slice(0, 12) ?? "",
+        stripeSubscriptionIdPrefix: sub.id.slice(0, 14),
+        stripeStatus: sub.status,
+        cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd ? 1 : 0,
+        currentPeriodEndIso: updated.currentPeriodEnd?.toISOString() ?? "",
+        trialEndIso: updated.trialEnd?.toISOString() ?? "",
+        dbStatus: String(updated.status),
+        entitlementEndIso: delEntitlementEndMs != null ? new Date(delEntitlementEndMs).toISOString() : "",
+        paidAccessWindowOpen: delEntitlementEndMs == null ? 0 : delEntitlementEndMs > delNow ? 1 : 0,
+        correlation,
+        eventIdPrefix,
       });
       logBillingTransition({
         kind: "customer_subscription_deleted",
@@ -518,6 +730,7 @@ export async function applyStripeWebhookEvent(
     const subRaw = (invoice as unknown as { subscription?: string | { id: string } | null }).subscription;
     const subId = typeof subRaw === "string" ? subRaw : subRaw?.id;
     if (subId) {
+      let invoiceStripeSubscription: Stripe.Subscription | null = null;
       const row = await prisma.subscription.findUnique({
         where: { stripeSubscriptionId: subId },
         select: {
@@ -529,22 +742,111 @@ export async function applyStripeWebhookEvent(
           pastDueSince: true,
           planTier: true,
           planCountry: true,
+          billingRegionSlug: true,
           stripeCustomerId: true,
         },
       });
       let invoiceSucceededSkippedCancelled = false;
       if (row) {
         if (row.status === SubscriptionStatus.CANCELLED) {
-          invoiceSucceededSkippedCancelled = true;
-          safeServerLog("billing_sync", "invoice_payment_succeeded_skipped_cancelled_row", {
-            stripeSubscriptionIdPrefix: subId.slice(0, 14),
-            userIdPrefix: row.userId.slice(0, 8),
-            eventIdPrefix,
-            correlation,
-            severity: "info",
-            hint: "Avoid resurrecting ACTIVE after refund/cancel; wait for subscription.updated or reconcile",
-          });
+          try {
+            invoiceStripeSubscription = await stripe.subscriptions.retrieve(subId);
+          } catch (e) {
+            safeServerLog("billing_sync", "invoice_payment_succeeded_stripe_retrieve_failed", {
+              stripeSubscriptionIdPrefix: subId.slice(0, 14),
+              userIdPrefix: row.userId.slice(0, 8),
+              eventIdPrefix,
+              correlation,
+              severity: "warning",
+              message: e instanceof Error ? e.message.slice(0, 160) : "unknown",
+            });
+          }
+          const mappedFromStripe = invoiceStripeSubscription ? mapStripeSubscriptionStatus(invoiceStripeSubscription.status) : null;
+          const canResurrect =
+            Boolean(invoiceStripeSubscription) &&
+            mappedFromStripe !== null &&
+            mappedFromStripe !== SubscriptionStatus.CANCELLED;
+
+          if (!canResurrect) {
+            invoiceSucceededSkippedCancelled = true;
+            safeServerLog("billing_sync", "invoice_payment_succeeded_skipped_cancelled_row", {
+              stripeSubscriptionIdPrefix: subId.slice(0, 14),
+              userIdPrefix: row.userId.slice(0, 8),
+              eventIdPrefix,
+              correlation,
+              severity: "info",
+              stripeStatus: invoiceStripeSubscription?.status,
+              hint: "DB row was cancelled and Stripe subscription is not in a paying/active state",
+            });
+          } else {
+            const lifecycle = billingLifecycleFields(invoiceStripeSubscription!);
+            const pastPatch = pastDueSinceForStatusTransition(mappedFromStripe!, row.status);
+            const updated = await prisma.subscription.update({
+              where: { id: row.id },
+              data: {
+                status: mappedFromStripe!,
+                currentPeriodEnd: lifecycle.currentPeriodEnd ?? undefined,
+                trialEnd: lifecycle.trialEnd ?? null,
+                cancelAtPeriodEnd: lifecycle.cancelAtPeriodEnd,
+                ...(pastPatch ?? {}),
+              },
+              select: {
+                status: true,
+                updatedAt: true,
+                currentPeriodEnd: true,
+                pastDueSince: true,
+                planTier: true,
+                planCountry: true,
+              },
+            });
+            logBillingTransition({
+              kind: "invoice_payment_succeeded_resurrect",
+              stripeSubscriptionId: subId,
+              userId: row.userId,
+              fromStatus: row.status,
+              toStatus: mappedFromStripe!,
+              stripeStatus: invoiceStripeSubscription!.status,
+              eventIdPrefix,
+              correlation,
+              stripeEventType: event.type,
+              stripeCustomerId: row.stripeCustomerId,
+            });
+            emitEntitlementShiftFromRowTransition({
+              correlationId: correlation,
+              userId: row.userId,
+              stripeSubscriptionId: subId,
+              country: updated.planCountry != null ? String(updated.planCountry) : undefined,
+              tier: tierToAuditString(updated.planTier),
+              before: {
+                status: row.status,
+                updatedAt: row.updatedAt,
+                currentPeriodEnd: row.currentPeriodEnd,
+                pastDueSince: row.pastDueSince,
+              },
+              after: {
+                status: updated.status,
+                updatedAt: updated.updatedAt,
+                currentPeriodEnd: updated.currentPeriodEnd,
+                pastDueSince: updated.pastDueSince,
+              },
+              source: "webhook",
+              stripeEventType: event.type,
+              stripeEventIdPrefix: eventIdPrefix,
+            });
+          }
         } else {
+          try {
+            invoiceStripeSubscription = await stripe.subscriptions.retrieve(subId);
+          } catch (e) {
+            safeServerLog("billing_sync", "invoice_payment_succeeded_stripe_retrieve_failed", {
+              stripeSubscriptionIdPrefix: subId.slice(0, 14),
+              userIdPrefix: row.userId.slice(0, 8),
+              eventIdPrefix,
+              correlation,
+              severity: "warning",
+              message: e instanceof Error ? e.message.slice(0, 160) : "unknown",
+            });
+          }
           const pastPatch = pastDueSinceForStatusTransition(SubscriptionStatus.ACTIVE, row.status);
           const updated = await prisma.subscription.update({
             where: { id: row.id },
@@ -595,6 +897,49 @@ export async function applyStripeWebhookEvent(
             stripeEventIdPrefix: eventIdPrefix,
           });
         }
+      }
+      const invoiceCustomerId =
+        typeof invoice.customer === "string"
+          ? invoice.customer
+          : invoice.customer && typeof invoice.customer === "object" && "id" in invoice.customer
+            ? invoice.customer.id
+            : row?.stripeCustomerId ?? null;
+      if (billingReason === "subscription_create" && !invoiceSucceededSkippedCancelled) {
+        if (!invoiceStripeSubscription) {
+          try {
+            invoiceStripeSubscription = await stripe.subscriptions.retrieve(subId);
+          } catch (e) {
+            safeServerLog("billing_sync", "invoice_payment_succeeded_notification_subscription_fetch_failed", {
+              stripeSubscriptionIdPrefix: subId.slice(0, 14),
+              eventIdPrefix,
+              correlation,
+              severity: "warning",
+              message: e instanceof Error ? e.message.slice(0, 160) : "unknown",
+            });
+          }
+        }
+        scheduleOwnerPaidSubscriptionInvoicePaymentSucceededNotification({
+          stripe,
+          event,
+          invoice,
+          userId: row?.userId ?? null,
+          subscriptionId: subId,
+          customerId: invoiceCustomerId,
+          stripeSubscription: invoiceStripeSubscription,
+          subscriptionStatus: invoiceStripeSubscription?.status ?? (row ? String(row.status) : null),
+          planTierLabel: row?.planTier != null ? String(row.planTier) : null,
+          planCountryLabel: row?.planCountry != null ? String(row.planCountry) : null,
+          billingRegionSlug: row?.billingRegionSlug ?? null,
+          correlation,
+          paymentKind: "first_payment",
+        });
+      } else if (billingReason === "subscription_cycle") {
+        safeServerLog("stripe_owner_subscription_notify", "invoice_notification_skipped", {
+          reason: "renewal_invoice",
+          eventIdPrefix,
+          customerEmail: "unknown",
+          severity: "info",
+        });
       }
       if (billingReason === "subscription_cycle" && !invoiceSucceededSkippedCancelled && row?.userId) {
         void captureServerEvent(analyticsDistinctId(row.userId), PH.funnelSubscriptionRenewed, {

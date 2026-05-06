@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { LearnerAccountSettingsPanel } from "@/components/student/learner-account-settings-panel";
 import { ExamPlanSettingsCard } from "@/components/student/exam-plan-settings-card";
+import { MeasurementSystemToggle } from "@/components/measurements/measurement-system-toggle";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 import type { StudySettings } from "@/lib/learner/study-settings";
 import {
@@ -102,8 +103,15 @@ export function LearnerStudySettingsHub({
           <h2 className="text-base font-semibold text-[var(--theme-heading-text)]">{t("learner.studySettings.section.appearance")}</h2>
           <p className="mt-1 text-xs text-muted-foreground">{t("learner.studySettings.section.appearanceSub")}</p>
         </div>
-        <div className="p-5">
+        <div className="space-y-5 p-5">
           <LearnerAccountSettingsPanel />
+          <div className="rounded-2xl border border-border/60 bg-background/70 p-4">
+            <MeasurementSystemToggle
+              fallbackSystem="SI"
+              title="Measurement units"
+              description="Choose how lab values, medication math, and allied study examples display across study surfaces on this device."
+            />
+          </div>
         </div>
       </section>
 

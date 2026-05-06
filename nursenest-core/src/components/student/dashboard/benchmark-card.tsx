@@ -109,7 +109,7 @@ export function BenchmarkLockedCard() {
 
         <Link
           href="/pricing"
-          className="inline-flex rounded-full bg-[var(--semantic-brand)] px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:shadow-md hover:brightness-105"
+          className="inline-flex rounded-full bg-[var(--semantic-brand)] px-4 py-2 text-xs font-semibold nn-text-on-solid-fill shadow-sm transition-all hover:shadow-md hover:brightness-105"
         >
           Unlock Full Performance Insights
         </Link>

@@ -51,7 +51,7 @@ export const ROLE_LESSON_TOKEN: Record<LessonSectionRole, string> = {
   cta: "--lesson-notes",
 };
 
-const KIND_TO_ROLE: Record<PathwayLessonSectionKind, LessonSectionRole> = {
+const KIND_TO_ROLE = {
   // Premium spine sections
   introduction: "info",
   pathophysiology_overview: "concept",
@@ -79,7 +79,11 @@ const KIND_TO_ROLE: Record<PathwayLessonSectionKind, LessonSectionRole> = {
   clinical_application: "action",
   exam_tips: "review",
   exam_focus: "review",
-};
+  clinical_manifestations: "warning",
+  treatment_management: "success",
+  nursing_priorities: "action",
+  complications: "danger",
+} as const satisfies Record<PathwayLessonSectionKind, LessonSectionRole>;
 
 /**
  * Chip/eyebrow labels — short enough to fit inline without wrapping.

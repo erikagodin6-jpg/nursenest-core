@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import { ContentStatus, QuestionType } from "@prisma/client";
+import { ContentStatus, Prisma, QuestionType } from "@prisma/client";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { stemHash } from "@/lib/content/stem-hash";
 import { governExamQuestionPublish } from "@/lib/content/editorial-publish-policy";
 import { assertExamQuestionContextForPublish } from "@/lib/content-quality/exam-question-context-validation";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 import { prisma } from "@/lib/db";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import {
@@ -33,6 +34,9 @@ const patchSchema = z
     topicTag: z.string().nullable().optional(),
     systemTag: z.string().nullable().optional(),
     tags: z.array(z.string()).optional(),
+    questionFormat: z.string().max(80).nullable().optional(),
+    exhibitData: z.unknown().optional(),
+    images: z.unknown().optional(),
     acknowledgeBelowQualityBar: z.boolean().optional(),
     acknowledgeSevereQualityIssue: z.boolean().optional(),
   })
@@ -68,6 +72,10 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     questionType: qtForValidation,
     options: d.options ?? (existing.options as unknown[]),
     answerKey: d.answerKey ?? (existing.correctAnswer as unknown[]),
+    questionFormat: d.questionFormat !== undefined ? d.questionFormat : existing.questionFormat,
+    exhibitData: d.exhibitData !== undefined ? d.exhibitData : existing.exhibitData,
+    images: d.images !== undefined ? d.images : existing.images,
+    tags: d.tags ?? existing.tags ?? [],
   };
 
   const nextStatusDb = d.status ? contentStatusToDb(d.status) : existing.status;
@@ -76,7 +84,9 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     try {
       assertExamQuestionContextForPublish({
         tier: d.tier ? tierCodeToExamDbTier(d.tier) : existing.tier,
-        exam: d.examFamily ? examFamilyToExamColumn(d.examFamily) : existing.exam,
+        exam: d.examFamily
+          ? canonicalExamQuestionExamForDbWrite(examFamilyToExamColumn(d.examFamily))
+          : canonicalExamQuestionExamForDbWrite(existing.exam),
         countryCode: d.country ?? existing.countryCode,
       });
     } catch (error) {
@@ -158,11 +168,14 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       countryCode: d.country,
       tier: d.tier ? tierCodeToExamDbTier(d.tier) : undefined,
       status: d.status ? nextStatusDb : undefined,
-      exam: d.examFamily ? examFamilyToExamColumn(d.examFamily) : undefined,
+      exam: d.examFamily ? canonicalExamQuestionExamForDbWrite(examFamilyToExamColumn(d.examFamily)) : undefined,
       difficulty: d.difficulty !== undefined ? difficultyBandToInt(d.difficulty) : undefined,
       topic: topic ?? undefined,
       subtopic: d.systemTag ?? undefined,
       tags: d.tags,
+      questionFormat: d.questionFormat,
+      exhibitData: d.exhibitData === undefined ? undefined : (d.exhibitData as Prisma.InputJsonValue),
+      images: d.images === undefined ? undefined : (d.images as Prisma.InputJsonValue),
       bodySystem: taxonomy.bodySystem,
       ...(d.stem !== undefined ? { stemHash: stemHash(d.stem) } : {}),
     },

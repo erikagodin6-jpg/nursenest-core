@@ -14,7 +14,7 @@ import { ADMIN_DASHBOARD_HREF, navigateAdminDashboardHard } from "@/lib/auth/adm
 import { shouldShowAdminDashboardNav } from "@/lib/auth/staff-roles";
 import { formatTitleCase } from "@/lib/format/text-case";
 import { getNavChromeStyle } from "@/lib/theme/nav-chrome";
-import { UserFeedbackAccountMenuItem } from "@/components/feedback/user-feedback-account-menu-item";
+import { SupportEmailAccountMenuLink } from "@/components/support/support-email-account-menu-link";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 
 const SIGN_IN_CLASS =
@@ -160,7 +160,7 @@ export function MarketingHeaderAuthDesktop({
               {formatTitleCase(t("nav.admin"), locale)}
             </Link>
           ) : null}
-          <UserFeedbackAccountMenuItem
+          <SupportEmailAccountMenuLink
             onActivate={() => setOpen(false)}
             className="block w-full border-t border-[var(--nav-border)] px-3 py-2 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
           />
@@ -252,7 +252,7 @@ export function MarketingHeaderAuthMobile({
           {formatTitleCase(t("nav.admin"), locale)}
         </Link>
       ) : null}
-      <UserFeedbackAccountMenuItem
+      <SupportEmailAccountMenuLink
         onActivate={onNavigate}
         className="w-full rounded-xl border border-[var(--nav-border)] px-3 py-2.5 text-start nn-marketing-body-sm font-medium tracking-normal text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
       />

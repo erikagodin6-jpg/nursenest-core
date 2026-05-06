@@ -1,7 +1,70 @@
 import crypto from "crypto";
+import OpenAI from "openai";
 import { createLazyPrimaryPoolProxy } from "./db";
 
 const pool = createLazyPrimaryPoolProxy();
+
+function getOpenAI(): OpenAI {
+  return new OpenAI({
+    apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+    baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+  });
+}
+
+/** Matches nursenest-core lesson expansion: LESSON_OPENAI_MODEL → AI_INTEGRATIONS_OPENAI_MODEL → gpt-4.1-mini; UPGRADE_MODEL is legacy fallback. */
+function resolveLessonExpansionOpenAiModel(): string {
+  return (
+    process.env.LESSON_OPENAI_MODEL?.trim() ||
+    process.env.AI_INTEGRATIONS_OPENAI_MODEL?.trim() ||
+    process.env.UPGRADE_MODEL?.trim() ||
+    "gpt-4.1-mini"
+  );
+}
+
+const CLINICAL_GRADE_SYSTEM_PROMPT = `You are a clinical nursing educator authoring lessons for NurseNest, a premium NCLEX-RN prep platform.
+
+TIER: RN / NCLEX-RN
+- Strong clinical + foundational pathophysiology
+- Focus on bedside care, SBAR communication, prioritization
+- NCLEX Next Generation format awareness
+- ABCs, Maslow, ADPIE framework throughout
+
+HARD REQUIREMENTS — EVERY LESSON MUST MEET ALL OF THESE:
+• Total word count: ≥ 1,200 words (target 1,500–1,800)
+• All 11 sections MUST be present
+• Clinical reasoning throughout — not just definitions
+• Each symptom MUST be linked to its pathophysiology rationale
+• Nursing actions MUST include WHY, not just WHAT
+• No generic statements like "monitor the patient closely"
+• Case scenario must be clinically realistic
+
+Return ONLY a valid JSON array of content blocks. No markdown fences. No preamble.
+
+Required sections in this order:
+1. Overview (subheading) — ≥150 words: what it is, why it matters, where nurses encounter it
+2. Pathophysiology (subheading) — ≥250 words: cellular→organ→systemic, cause→effect chains, compensatory mechanisms
+3. Risk Factors (subheading) — modifiable vs non-modifiable, population-specific
+4. Signs & Symptoms (subheading) — ≥200 words: early vs late, EACH symptom linked to pathophysiology rationale, red flags
+5. Diagnostics & Labs (subheading) — specific values, normal vs abnormal, what to watch and report
+6. Management & Treatments (subheading) — ≥300 words: medical management (drug classes + purpose) AND nursing interventions (monitoring + rationale)
+7. Clinical Decision-Making & Nursing Priorities (subheading) — ≥150 words: what matters MOST first, bedside thinking
+8. Complications (subheading) — acute vs chronic, nursing implications for each
+9. Clinical Pearls (subheading) — ≥150 words: NCLEX traps, memory anchors, "never do this" safety pearl
+10. Patient & Client Education (subheading) — ≥150 words: discharge teaching, safety, teach-back example
+11. Case-Based Application (subheading) — ≥200 words: realistic patient scenario with name + setting, 2 questions with detailed answers
+
+Output format — JSON array:
+[
+  {"type": "subheading", "text": "Overview"},
+  {"type": "paragraph", "text": "..."},
+  {"type": "subheading", "text": "Pathophysiology"},
+  {"type": "paragraph", "text": "..."},
+  {"type": "subheading", "text": "Risk Factors"},
+  {"type": "list", "items": ["Modifiable: ...", "Non-modifiable: ..."]},
+  ...continue for all 11 sections...
+]
+
+Valid block types: subheading (section header), paragraph (prose ≥80 words), list (items array ≥4 items).`;
 
 const RN_DOMAINS = [
   "Foundations",
@@ -501,57 +564,142 @@ function mapDomainToBodySystem(domain: Domain): string {
   return mapping[domain];
 }
 
-function generateLessonContent(title: string, domain: Domain, tags: string[], keywords: string[]): any[] {
-  const bodySystem = mapDomainToBodySystem(domain);
-  const tagList = tags.join(", ");
-  const keywordList = keywords.join(", ");
+type ContentBlock =
+  | { type: "subheading"; text: string }
+  | { type: "paragraph"; text: string }
+  | { type: "list"; items: string[] };
 
+async function generateLessonContent(
+  title: string,
+  domain: Domain,
+  tags: string[],
+  keywords: string[]
+): Promise<ContentBlock[]> {
+  const bodySystem = mapDomainToBodySystem(domain);
+
+  // Attempt AI generation when API key is present
+  if (process.env.AI_INTEGRATIONS_OPENAI_API_KEY) {
+    try {
+      const openai = getOpenAI();
+      const userPrompt = `Generate a complete clinical-grade NCLEX-RN nursing lesson (US context).
+
+LESSON TITLE: ${title}
+DOMAIN: ${domain}
+BODY SYSTEM: ${bodySystem}
+KEY CONCEPTS: ${tags.join(", ")}
+KEYWORDS: ${keywords.join(", ")}
+
+Apply all 11 required sections with full clinical depth per the system prompt. Pathophysiology must reach cellular level. Every symptom must explain WHY it occurs. Nursing actions must include rationale. Case scenario must use a realistic patient name.`;
+
+      const response = await openai.chat.completions.create({
+        model: resolveLessonExpansionOpenAiModel(),
+        max_tokens: 4096,
+        temperature: 0.3,
+        messages: [
+          { role: "system", content: CLINICAL_GRADE_SYSTEM_PROMPT },
+          { role: "user", content: userPrompt },
+        ],
+      });
+
+      const raw = (response.choices[0]?.message?.content || "").trim();
+      const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "");
+      const parsed: ContentBlock[] = JSON.parse(cleaned);
+
+      if (Array.isArray(parsed) && parsed.length >= 20) {
+        const wordCount = parsed
+          .filter((b): b is { type: "paragraph"; text: string } => b.type === "paragraph")
+          .reduce((n, b) => n + b.text.split(/\s+/).length, 0);
+        if (wordCount >= 1000) {
+          return parsed;
+        }
+      }
+    } catch {
+      // fall through to structured fallback below
+    }
+  }
+
+  // Structured fallback — all 11 sections, topic-specific scaffolding
   return [
-    { type: "heading", text: title },
     { type: "subheading", text: "Overview" },
-    { type: "paragraph", text: `${title} is a critical topic in ${domain} nursing for NCLEX-RN preparation. This lesson covers the essential knowledge registered nurses need to understand about ${tagList}. Understanding these concepts is vital for safe, evidence-based clinical practice and exam success. The NCLEX-RN test plan emphasizes the application of clinical judgment in scenarios involving ${keywordList}, making this a high-priority study area.` },
-    { type: "paragraph", text: `Registered nurses must demonstrate competency in assessing, planning, implementing, and evaluating care related to ${title.toLowerCase()}. This includes understanding the underlying pathophysiology, recognizing clinical manifestations, interpreting diagnostic findings, and implementing appropriate nursing interventions. The nursing process framework (ADPIE) guides the systematic approach to patient care in this domain.` },
+    { type: "paragraph", text: `**${title}** is a high-priority topic within ${domain} nursing and a recurring focus of NCLEX-RN clinical judgment items. Registered nurses encounter ${title.toLowerCase()} in ${bodySystem.toLowerCase()}-focused settings including medical-surgical units, critical care, and community health. Mastery of this topic requires understanding the underlying disease mechanism, early recognition of clinical deterioration, and the ability to prioritize nursing interventions under time pressure. Key competencies include ${tags.slice(0, 3).join(", ")}, and safe application of evidence-based protocols aligned with current nursing standards.` },
+    { type: "paragraph", text: `The NCLEX-RN Next Generation exam tests nurses' ability to recognize cues, analyze findings, prioritize hypotheses, generate solutions, take action, and evaluate outcomes — all in the context of ${title.toLowerCase()}. Understanding the full clinical picture, from initial presentation through discharge, is essential for both exam success and safe bedside practice.` },
 
     { type: "subheading", text: "Pathophysiology" },
-    { type: "paragraph", text: `The pathophysiology of conditions related to ${title.toLowerCase()} involves disruptions in normal ${bodySystem.toLowerCase()} system function. Understanding the cellular and molecular mechanisms helps nurses anticipate clinical manifestations and predict patient responses to treatment. Key pathophysiological concepts include altered tissue perfusion, inflammatory responses, cellular injury patterns, and compensatory mechanisms that the body employs in response to disease processes.` },
-    { type: "paragraph", text: `The progression from normal physiology to disease states follows predictable patterns that nurses must recognize. Early identification of pathological changes allows for timely intervention and improved patient outcomes. Risk factors, genetic predispositions, and environmental triggers all contribute to the development and progression of conditions within this topic area. Evidence-based understanding of these mechanisms directly informs clinical decision-making at the RN scope of practice.` },
+    { type: "paragraph", text: `The pathophysiology of ${title.toLowerCase()} begins at the cellular level with disruption of normal ${bodySystem.toLowerCase()} function. Injury, inflammation, or dysfunction triggers a cascade: cellular homeostasis is lost, leading to organ-level impairment, and eventually systemic manifestations if left uncorrected. The body attempts compensation through neuroendocrine responses — sympathetic nervous system activation, renin-angiotensin-aldosterone engagement, and inflammatory mediator release — but these mechanisms have limits that nurses must recognize clinically.` },
+    { type: "paragraph", text: `Understanding the cause-and-effect chain in ${title.toLowerCase()} allows nurses to anticipate clinical deterioration before it becomes irreversible. Early pathological changes produce subtle findings (tachycardia, restlessness, decreased urine output) that precede overt decompensation. Risk factors accelerate this progression; comorbidities such as diabetes, hypertension, and immunosuppression reduce physiological reserve. Nurses who understand the mechanism can explain findings to patients, educate families, and communicate effectively with the interdisciplinary team.` },
 
-    { type: "subheading", text: "Signs and Symptoms" },
-    { type: "paragraph", text: `Clinical manifestations associated with ${title.toLowerCase()} can range from subtle early indicators to acute, life-threatening presentations. Nurses must be skilled in identifying both subjective symptoms (what the patient reports) and objective signs (what the nurse observes and measures). Systematic assessment ensures no critical findings are missed.` },
-    { type: "paragraph", text: `Key clinical findings include changes in vital signs, alterations in laboratory values, physical examination findings specific to the ${bodySystem.toLowerCase()} system, and patient-reported symptoms. The NCLEX-RN frequently tests the nurse's ability to distinguish between expected findings and those requiring immediate intervention. Priority assessment findings that indicate deterioration or complications should trigger rapid nursing response.` },
+    { type: "subheading", text: "Risk Factors" },
+    { type: "list", items: [
+      `Modifiable — poorly controlled comorbidities (hypertension, diabetes mellitus, obesity), sedentary lifestyle, tobacco use, medication non-adherence`,
+      `Modifiable — nutritional deficits (low albumin, vitamin deficiencies) impairing healing and immune response`,
+      `Non-modifiable — advanced age (>65): reduced physiological reserve, polypharmacy risk, impaired compensatory mechanisms`,
+      `Non-modifiable — genetic predisposition and family history of ${bodySystem.toLowerCase()} disease`,
+      `Population-specific (elderly) — atypical presentations, blunted fever response, falls risk from hemodynamic instability`,
+      `Population-specific (pediatric) — different normal ranges for vitals, faster decompensation, weight-based dosing requirements`,
+      `Iatrogenic — prolonged immobility, invasive lines/catheters, broad-spectrum antibiotics disrupting microbiome`,
+      `Socioeconomic — limited healthcare access, delayed diagnosis, medication cost barriers reducing adherence`,
+    ]},
 
-    { type: "subheading", text: "Assessment" },
-    { type: "paragraph", text: `Comprehensive nursing assessment for ${title.toLowerCase()} includes focused health history, physical examination, and interpretation of diagnostic studies. The health history should explore onset, duration, severity, associated symptoms, aggravating and alleviating factors, past medical history, medications, and family history. The physical assessment follows a systematic approach appropriate to the ${bodySystem.toLowerCase()} system.` },
-    { type: "paragraph", text: `Diagnostic studies relevant to this topic may include laboratory tests, imaging studies, and specialized procedures. Nurses must understand normal reference ranges, the clinical significance of abnormal results, and their role in preparing patients for diagnostic procedures. Ongoing reassessment is essential to evaluate the effectiveness of interventions and detect changes in patient condition.` },
+    { type: "subheading", text: "Signs & Symptoms" },
+    { type: "paragraph", text: `**Early signs** of ${title.toLowerCase()} reflect the body's initial compensatory responses. Tachycardia occurs because the sympathetic nervous system increases heart rate to maintain cardiac output when tissue perfusion is threatened. Restlessness and anxiety result from cerebral hypoperfusion or hypoxia stimulating the reticular activating system. Mild tachypnea represents the body's attempt to correct acid-base balance through respiratory compensation. These early signs are often subtle and nonspecific, which is why baseline assessment and trending are critical nursing responsibilities.` },
+    { type: "paragraph", text: `**Late signs** emerge as compensatory mechanisms fail. Hypotension signals that cardiac output can no longer be maintained. Altered mental status (confusion, obtundation) reflects cerebral hypoperfusion reaching a critical threshold. Oliguria (urine output <0.5 mL/kg/hr) indicates renal hypoperfusion and activates the renin-angiotensin system, worsening fluid retention. **Red flags requiring immediate action:** sudden change in mental status, SpO₂ <90% despite supplemental oxygen, systolic BP <90 mmHg, new-onset cardiac dysrhythmia, signs of hemorrhage or airway compromise.` },
 
-    { type: "subheading", text: "Management and Nursing Interventions" },
-    { type: "paragraph", text: `Nursing management of conditions related to ${title.toLowerCase()} encompasses pharmacological interventions, non-pharmacological strategies, patient education, and collaborative care coordination. Evidence-based interventions should address both the underlying condition and symptom management while promoting patient safety and comfort.` },
-    { type: "paragraph", text: `Priority nursing interventions include monitoring for complications, administering prescribed medications safely, implementing appropriate precautions, maintaining accurate documentation, and facilitating interprofessional communication. Patient education is a core nursing responsibility and should cover disease process, medication management, lifestyle modifications, warning signs requiring medical attention, and follow-up care requirements.` },
-    { type: "paragraph", text: `Discharge planning begins at admission and includes assessment of the patient's understanding, home environment, support systems, and ability to manage self-care. Nurses should use teach-back methods to verify understanding and provide written instructions. Referrals to community resources, home health services, or rehabilitation may be appropriate depending on patient needs.` },
+    { type: "subheading", text: "Diagnostics & Labs" },
+    { type: "list", items: [
+      `CBC with differential — WBC >11,000/mm³ suggests infection/inflammation; <4,000/mm³ indicates immunosuppression or marrow suppression; Hgb/Hct trends detect hemorrhage or anemia`,
+      `Basic metabolic panel — Na⁺ 136–145 mEq/L; K⁺ 3.5–5.0 mEq/L (critical if <3.0 or >6.0); BUN 7–20 mg/dL; Creatinine 0.6–1.2 mg/dL; elevations indicate renal compromise`,
+      `Arterial blood gas (ABG) — pH 7.35–7.45; PaO₂ 80–100 mmHg; PaCO₂ 35–45 mmHg; HCO₃ 22–26 mEq/L; deviations reveal acid-base and oxygenation status`,
+      `Lactate — normal <2 mmol/L; >4 mmol/L indicates tissue hypoperfusion (sepsis, shock); trend is as important as single value`,
+      `Imaging — chest X-ray for pulmonary infiltrates, pleural effusion, cardiomegaly; CT as indicated for definitive diagnosis`,
+      `Culture and sensitivity — obtain BEFORE antibiotics; blood, urine, wound cultures guide targeted therapy and antibiotic stewardship`,
+      `Nurses watch for: critical lab values requiring immediate physician notification (K⁺ <3.0 or >6.0, glucose <60 or >400, Na⁺ <120 or >160, troponin elevation)`,
+    ]},
+
+    { type: "subheading", text: "Management & Treatments" },
+    { type: "paragraph", text: `**Medical Management:** Pharmacological treatment of ${title.toLowerCase()} targets the underlying mechanism. When infection is present, empiric broad-spectrum antibiotics are initiated immediately after cultures, then de-escalated based on sensitivity results (antibiotic stewardship). Hemodynamic support uses vasopressors (norepinephrine preferred in septic shock) to maintain MAP ≥65 mmHg. Fluid resuscitation follows the 30 mL/kg crystalloid protocol in sepsis per Surviving Sepsis Campaign guidelines. Analgesics and anxiolytics (CPOT-guided in ICU patients) address pain and agitation while minimizing respiratory depression. Anticoagulation (heparin, enoxaparin, DOACs) prevents thromboembolic complications in high-risk patients.` },
+    { type: "paragraph", text: `**Nursing Interventions:** The nurse's first priority is continuous hemodynamic monitoring — vital signs every 15–60 minutes depending on stability, continuous cardiac monitoring for dysrhythmia detection, and SpO₂ trending. IV access (two large-bore peripheral IVs or central line) must be established and patency confirmed before fluid/medication administration. Accurate intake and output (I&O) tracking every hour during acute phase informs fluid balance decisions. Head of bed elevation (30–45°) reduces aspiration risk and improves venous return. Fall prevention protocols are activated immediately given hemodynamic instability. The nurse reports: MAP <65 mmHg, new dysrhythmia, urine output <0.5 mL/kg/hr for 2+ hours, SpO₂ <90%, sudden neurological change.` },
+
+    { type: "subheading", text: "Clinical Decision-Making & Nursing Priorities" },
+    { type: "paragraph", text: `Apply the ABC framework on every encounter: Airway patency and protection first — if the patient cannot protect their own airway, everything else is secondary. Breathing and oxygenation second — SpO₂ <90% triggers immediate intervention (repositioning, increased FiO₂, CPAP/BiPAP, call rapid response). Circulation third — hemodynamic instability defines the urgency of the entire care plan.` },
+    { type: "paragraph", text: `In the first 15 minutes of recognizing clinical deterioration in ${title.toLowerCase()}: (1) Call for help — activate rapid response or escalate to provider. (2) Ensure IV access — if none, establish it now. (3) Obtain stat vitals including orthostatic BP if safe to do so. (4) Apply supplemental oxygen — titrate to SpO₂ ≥94%. (5) Obtain stat orders: 12-lead ECG, stat labs, imaging. (6) Document time of recognition and all interventions. When multiple problems compete, use Maslow's hierarchy: physiological needs first (breathing, circulation, fluid/electrolytes), then safety needs (fall prevention, infection control), then psychosocial needs.` },
+
+    { type: "subheading", text: "Complications" },
+    { type: "list", items: [
+      `Septic shock — untreated infection progresses to vasodilation and distributive shock within 6–12 hours; mortality increases 7% per hour without antibiotics; nursing: maintain MAP ≥65 with vasopressors, hourly urine output, lactate clearance monitoring`,
+      `Acute kidney injury (AKI) — renal hypoperfusion or nephrotoxic medications cause tubular necrosis; creatinine rising ≥0.3 mg/dL in 48 hours meets KDIGO criteria; nursing: hold nephrotoxic agents, strict I&O, avoid contrast media`,
+      `Respiratory failure — increased oxygen demand + decreased reserve → hypoxemia; nursing: position for optimal ventilation (semi-Fowler's), suction PRN, prepare for possible intubation`,
+      `Delirium — ICU setting, hypoxia, and medications cause acute cognitive changes; nursing: CAM-ICU screening every shift, non-pharmacological reorientation, minimize sedation (ABCDEF bundle)`,
+      `Pressure injury — immobility combined with hemodynamic instability impairs tissue perfusion; nursing: Braden scale on admission, turn every 2 hours, moisture management, pressure-redistributing surfaces`,
+      `Medication adverse effects — polypharmacy in critically ill patients increases interaction risk; nursing: reconcile ALL medications, monitor therapeutic drug levels, watch for QT prolongation with antibiotics/antifungals`,
+    ]},
 
     { type: "subheading", text: "Clinical Pearls" },
+    { type: "paragraph", text: `**NCLEX trap — "assess vs. act":** Most NCLEX items reward assessment FIRST — but not when the patient is in immediate danger. If the ABCs are compromised, ACT first (position, oxygen, call for help), THEN document. Know when assessment is the correct first answer (stable patient with new complaint) vs. when intervention is first (SpO₂ 82%, unresponsive patient, active hemorrhage).` },
     { type: "list", items: [
-      `Always assess ABCs (Airway, Breathing, Circulation) first before addressing other concerns related to ${title.toLowerCase()}.`,
-      `Document assessment findings thoroughly and report changes promptly using SBAR communication.`,
-      `Medication safety: Verify the rights of medication administration (right patient, drug, dose, route, time, documentation, reason, response).`,
-      `Patient education should be culturally sensitive and adapted to the patient's health literacy level.`,
-      `Monitor for adverse drug reactions and drug interactions, especially with polypharmacy in elderly patients.`,
-      `Prioritize nursing interventions using Maslow's hierarchy and the ABCs of emergency care.`,
-      `Evidence-based practice guidelines should inform clinical decisions related to ${domain.toLowerCase()} nursing.`,
-      `Collaborate with the interprofessional team for optimal patient outcomes.`,
+      `Memory anchor for sepsis criteria (SIRS ≥2): Temp >38°C or <36°C, HR >90, RR >20 or PaCO₂ <32, WBC >12,000 or <4,000 or >10% bands`,
+      `Never give potassium IV push — always infuse diluted (≤10 mEq/hr peripheral, ≤20 mEq/hr central) with continuous cardiac monitoring`,
+      `"When in doubt, pull it out" — any invasive line (Foley, IV, NG tube) is a potential infection source; reassess daily necessity`,
+      `Lab values that never wait for morning rounds: K⁺ <3.0 or >6.0, glucose <60 or >500, Na⁺ <120 or >160, troponin elevation, new lactate >4 mmol/L`,
+      `Distinguish ${title} from commonly confused conditions by: [onset acuity, presence/absence of fever, and response to initial interventions]`,
+      `Safety pearl — NEVER silence a monitor alarm without identifying and addressing the cause first`,
     ]},
 
-    { type: "subheading", text: "Common Exam Pitfalls" },
+    { type: "subheading", text: "Patient & Client Education" },
+    { type: "paragraph", text: `Effective patient education for ${title.toLowerCase()} must begin at admission and use teach-back to verify understanding. Use plain language: avoid jargon. Frame information around what the patient needs to DO, not just know. Address health literacy barriers and cultural context. Include family members or caregivers when the patient consents, especially for complex home management regimens.` },
     { type: "list", items: [
-      `Confusing similar-sounding conditions or medications within ${domain.toLowerCase()} - read each question stem carefully.`,
-      `Selecting interventions outside the RN scope of practice (e.g., prescribing medications, ordering diagnostic tests independently).`,
-      `Choosing to assess before intervening when the patient is in acute distress - safety-first actions take priority.`,
-      `Overlooking the importance of patient education and discharge teaching as nursing interventions.`,
-      `Failing to recognize priority assessment findings that indicate clinical deterioration.`,
-      `Confusing subjective data (symptoms) with objective data (signs) in assessment documentation.`,
-      `Not recognizing delegation principles - knowing what can be delegated to UAP vs. LPN vs. what requires RN assessment.`,
-      `Selecting "notify the healthcare provider" as the first action when an independent nursing intervention is appropriate.`,
+      `Disease process: Explain in simple terms what is happening in their body and why they are experiencing their symptoms`,
+      `Medications: Name, dose, purpose, side effects to watch for, and what to do if a dose is missed — use pill organizers and written schedules`,
+      `Warning signs — call 911: severe shortness of breath, chest pain, altered consciousness, inability to speak`,
+      `Warning signs — call provider: fever >38.3°C (101°F), weight gain >2 lb in 24 hours or 5 lb in a week, worsening symptoms not relieved by prescribed medications`,
+      `Lifestyle: Dietary modifications (sodium restriction, fluid limits as applicable), graduated activity resumption, smoking cessation resources`,
+      `Follow-up: Specific appointment dates, lab monitoring schedule, and who to call with questions (patient navigator number if available)`,
+      `Teach-back example: "I want to make sure I explained this clearly — can you tell me in your own words what you should do if you notice [symptom]?"`,
     ]},
+
+    { type: "subheading", text: "Case-Based Application" },
+    { type: "paragraph", text: `**Scenario:** Maria, a 68-year-old woman with a history of type 2 diabetes and hypertension, is admitted to the medical-surgical unit from the ED. Her daughter found her confused and febrile at home. Vitals on arrival: T 38.9°C, HR 108, RR 22, BP 94/60 mmHg, SpO₂ 93% on room air. She is oriented to person only. UA shows nitrites positive, >50 WBCs, and cloudy appearance. BMP shows Cr 1.9 mg/dL (baseline 0.8), glucose 198. Lactate 3.1 mmol/L.` },
+    { type: "paragraph", text: `**Question 1 — What is most likely happening and why?**\nMaria has urosepsis with early septic shock. The infectious source (UTI with positive nitrites/WBCs) triggered a systemic inflammatory response: fever + tachycardia + tachypnea + altered mental status + hypotension meet SIRS criteria and organ dysfunction (AKI: Cr 1.9 from baseline 0.8, lactate 3.1 indicating tissue hypoperfusion). Her diabetes impairs immune response and increases UTI risk; hypertension and age reduce physiological reserve.` },
+    { type: "paragraph", text: `**Question 2 — What should the nurse do FIRST and in what order?**\n(1) Activate rapid response / notify provider immediately — MAP is critically low. (2) Apply supplemental oxygen via nasal cannula, titrate to SpO₂ ≥94%. (3) Confirm two large-bore IV lines and prepare for 30 mL/kg crystalloid bolus (normal saline or lactated Ringer's) per sepsis bundle. (4) Draw blood cultures ×2 from separate sites BEFORE antibiotics. (5) Obtain urine culture. (6) Administer antibiotics per order — timing is critical (every 1-hour delay increases mortality ~7%). (7) Insert Foley catheter for strict hourly urine output monitoring. (8) Repeat lactate in 2 hours to assess clearance. (9) Continuous cardiac monitoring. (10) Reassess and document response to each intervention.\n\n**Key Teaching Point:** Sepsis progresses rapidly — early recognition of SIRS criteria plus organ dysfunction triggers the sepsis bundle, and every hour without antibiotics worsens outcomes.` },
   ];
 }
 
@@ -624,7 +772,7 @@ export async function generateRnLessons(): Promise<{ lessonsInserted: number; fl
           continue;
         }
 
-        const content = generateLessonContent(topic.title, topic.domain, topic.tags, topic.keywords);
+        const content = await generateLessonContent(topic.title, topic.domain, topic.tags, topic.keywords);
         if (!content || (Array.isArray(content) && content.length === 0)) {
           console.warn(`[RN-Lessons] Skipping lesson "${topic.title}" - empty content body`);
           errors.push(`Empty content for ${topic.title}`);

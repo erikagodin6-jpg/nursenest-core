@@ -1,136 +1,84 @@
-import {
-  crawlSurfaceErrorCode,
-  logCrawlSurfaceEvent,
-} from "@/lib/observability/crawl-surface-observability";
 import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
-import { buildSingleSitemapXmlSafe } from "@/lib/seo/sitemap-all-xml";
-import { SeoHttpValidationStrictError } from "@/lib/seo/seo-http-emit-validation";
-import { safeServerLog } from "@/lib/observability/safe-server-log";
-import { sitemapXmlResponse } from "@/lib/seo/sitemap-xml-http";
+import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
+import {
+  buildSitemapUrlsetFromAbsoluteUrls,
+  collectCoreUrls,
+  normalizeOrigin,
+  type SitemapUrlEntry,
+} from "@/lib/seo/sitemap-static-xml";
+import { filterPublicSitemapEntries, mergeCoreUrlsWithBlogEntries } from "@/lib/seo/sitemap-public-index-filter";
+import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
 
 /**
- * Single sitemap urlset at `/sitemap.xml` (canonical crawler entrypoint).
- *
- * Force runtime generation. On generation failure (DB unreachable, merge invariants, etc.) this route
- * returns **503** with a short plain-text body — it does **not** fall back to a misleading home-only
- * urlset (crawlers must see failure, not a false “single URL” success).
+ * Public sitemap: {@link collectCoreUrls} (marketing + pathway hubs + verified lessons, etc.) plus
+ * published blog URLs. DB failures fall back to a minimal static urlset — never 503.
+ * Every `loc` is filtered with {@link filterPublicSitemapEntries} (no `/login`, `/app`, `/api`, `/seo/`, …).
+ * Origin follows {@link resolveCanonicalSiteOrigin}. Returns valid `application/xml` (200 or 304).
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-/** Large merged urlsets (pathway lessons + locales + blog) can exceed default platform limits. */
-export const maxDuration = 120;
 
-/** Log when generation crosses this — sitemap work includes optional Prisma (blog + pathway URLs). */
-const SITEMAP_SLOW_MS = 1500;
+/** Minimal fallback when DB / heavy collectors fail — indexable marketing only (no auth noindex paths). */
+const FALLBACK_SITEMAP_PATHS = [
+  "/",
+  "/pricing",
+  "/blog",
+  "/about",
+  "/question-bank",
+  "/practice-exams",
+  "/lessons",
+  "/us/rn/nclex-rn",
+  "/us/rn/nclex-rn/lessons",
+  "/us/pn/nclex-pn",
+  "/us/pn/nclex-pn/lessons",
+  "/us/np/fnp",
+  "/us/np/fnp/lessons",
+  "/canada/rn/nclex-rn",
+  "/canada/rn/nclex-rn/lessons",
+  "/canada/pn/rex-pn",
+  "/canada/pn/rex-pn/lessons",
+  "/canada/np/cnple",
+  "/canada/np/cnple/lessons",
+] as const;
 
-const SITEMAP_PATHNAME = "/sitemap.xml";
+export async function GET(request: Request): Promise<Response> {
+  const origin = normalizeOrigin(resolveCanonicalSiteOrigin());
 
-function sitemapFailureResponse(status: number, body: string): Response {
-  return new Response(body, {
-    status,
-    headers: {
-      "Content-Type": "text/plain; charset=utf-8",
-      "Cache-Control": "private, no-store, must-revalidate",
-    },
-  });
-}
+  let xml: string;
 
-function cachedSitemapXmlResponse(req: Request, xml: string): Response {
-  const response = sitemapXmlResponse(xml);
-  const headers = new Headers(response.headers);
-  const etag = buildPublicResponseEtag(xml);
-  headers.set("ETag", etag);
-  if (requestMatchesEtag(req, etag)) {
-    return new Response(null, { status: 304, headers });
-  }
-  return new Response(xml, { status: 200, headers });
-}
-
-export async function GET(req: Request) {
-  const t0 = Date.now();
   try {
-    const xml = await buildSingleSitemapXmlSafe();
-    const ms = Date.now() - t0;
-    const approxLen = typeof xml === "string" ? xml.length : 0;
-    safeServerLog("seo", "sitemap_xml_request_complete", {
-      durationMs: String(ms),
-      approxLen: String(approxLen),
+    const { listBlogSitemapEntriesSafe } = await import("@/lib/seo/sitemap-blog-xml");
+
+    const [coreUrls, blogEntries] = await Promise.all([collectCoreUrls(origin), listBlogSitemapEntriesSafe()]);
+
+    const merged: SitemapUrlEntry[] = mergeCoreUrlsWithBlogEntries(coreUrls, blogEntries);
+    const filtered = filterPublicSitemapEntries(merged, origin);
+
+    const seen = new Set<string>();
+    const unique = filtered.filter((e) => {
+      if (!e.loc || seen.has(e.loc)) return false;
+      seen.add(e.loc);
+      return true;
     });
-    if (ms > SITEMAP_SLOW_MS) {
-      logCrawlSurfaceEvent({
-        routeType: "marketing.sitemap_xml",
-        pathname: SITEMAP_PATHNAME,
-        durationMs: ms,
-        outcome: "ok_slow",
-        httpStatus: 200,
-        approxResponseLen: approxLen,
-        slow: true,
-      });
-    }
-    if (!xml || typeof xml !== "string" || xml.length < 80) {
-      safeServerLog("seo", "sitemap_xml_invalid_body", { approxLen: String(approxLen) });
-      logCrawlSurfaceEvent({
-        routeType: "marketing.sitemap_xml",
-        pathname: SITEMAP_PATHNAME,
-        durationMs: ms,
-        outcome: "error",
-        httpStatus: 503,
-        fallback: false,
-        approxResponseLen: approxLen,
-        errorCode: "sitemap_degenerate_body",
-      });
-      return sitemapFailureResponse(
-        503,
-        "Sitemap generation produced an empty or truncated body. See logs (sitemap_degenerate_body).",
-      );
-    }
-    return cachedSitemapXmlResponse(req, xml);
-  } catch (e) {
-    if (e instanceof SeoHttpValidationStrictError) {
-      const ms = Date.now() - t0;
-      safeServerLog("seo", "sitemap_xml_strict_validation_failed", {
-        count: String(e.failures.length),
-        firstUrl: e.failures[0]?.url?.slice(0, 500) ?? "",
-        firstStatus: String(e.failures[0]?.status ?? ""),
-      });
-      logCrawlSurfaceEvent({
-        routeType: "marketing.sitemap_xml",
-        pathname: SITEMAP_PATHNAME,
-        durationMs: ms,
-        outcome: "error",
-        httpStatus: 503,
-        fallback: false,
-        errorCode: "seo_http_validation_strict",
-      });
-      return new Response(
-        `Sitemap withheld: HTTP validation failed for ${e.failures.length} URL(s). See logs (seo_http_validation_strict).`,
-        {
-          status: 503,
-          headers: {
-            "Content-Type": "text/plain; charset=utf-8",
-            "Cache-Control": "private, no-store",
-          },
-        },
-      );
-    }
-    const ms = Date.now() - t0;
-    const detail = e instanceof Error ? e.message : String(e);
-    safeServerLog("seo", "sitemap_xml_generation_failed", {
-      detail: detail.slice(0, 800),
-      code: crawlSurfaceErrorCode(e),
-    });
-    logCrawlSurfaceEvent({
-      routeType: "marketing.sitemap_xml",
-      pathname: SITEMAP_PATHNAME,
-      durationMs: ms,
-      outcome: "error",
-      httpStatus: 503,
-      fallback: false,
-      errorCode: crawlSurfaceErrorCode(e),
-    });
-    return sitemapFailureResponse(
-      503,
-      `Sitemap generation failed: ${detail.slice(0, 500)}. See server logs (sitemap_xml_generation_failed / sitemap_merged_build_failed).`,
+
+    xml = buildSitemapUrlsetFromAbsoluteUrls(unique);
+  } catch {
+    const fallbackEntries: SitemapUrlEntry[] = FALLBACK_SITEMAP_PATHS.map((path) => ({
+      loc: `${origin}${path === "/" ? "" : path}`,
+    }));
+    const filteredFallback = filterPublicSitemapEntries(fallbackEntries, origin);
+    xml = buildSitemapUrlsetFromAbsoluteUrls(
+      filteredFallback.length > 0 ? filteredFallback : [{ loc: `${origin}/` }],
     );
   }
+
+  const etag = buildPublicResponseEtag(xml);
+  const headers = new Headers(SITEMAP_XML_HEADERS);
+  headers.set("ETag", etag);
+
+  if (requestMatchesEtag(request, etag)) {
+    return new Response(null, { status: 304, headers });
+  }
+
+  return new Response(xml, { status: 200, headers });
 }

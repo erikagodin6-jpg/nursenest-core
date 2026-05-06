@@ -1,13 +1,27 @@
-import { build as esbuild } from "esbuild";
-import { build as viteBuild } from "vite";
+import path from "path";
+import { createRequire } from "node:module";
+import { pathToFileURL } from "node:url";
 import { rm, readFile, readdir, readFile as readFileAsync, writeFile, copyFile, unlink, mkdir } from "fs/promises";
 import { existsSync } from "fs";
 import { gzipSync } from "zlib";
 import { compileI18n } from "./compile-i18n";
+import { APP_ROOT, REPO_ROOT, logResolvedPathsOnce } from "./repo-root";
 import { execSync } from "child_process";
-import { runI18nScan } from "./scan-hardcoded-strings-lib";
 
-import path from "path";
+logResolvedPathsOnce();
+process.chdir(REPO_ROOT);
+
+const appRoot = APP_ROOT;
+const pkgPath = path.join(appRoot, "package.json");
+const repoPath = (...parts: string[]) => path.join(REPO_ROOT, ...parts);
+
+console.log("[build-paths] appRoot=", appRoot, "pkgPath=", pkgPath);
+
+type EsbuildBuildFn = (typeof import("esbuild"))["build"];
+type ViteBuildFn = (typeof import("vite"))["build"];
+
+let runEsbuild: EsbuildBuildFn;
+let runViteBuild: ViteBuildFn;
 
 const allowlist = [
   "date-fns",
@@ -30,8 +44,12 @@ const CLIENT_ALIAS = {
   "@shared": path.resolve("shared"),
 };
 
+/** After `chdir(REPO_ROOT)`, esbuild still resolves allowlisted deps from the app package `node_modules/`. */
+const ESBUILD_NODE_PATHS = [path.join(APP_ROOT, "node_modules")].filter((p) => existsSync(p));
+
 function buildLessonsData() {
-  return esbuild({
+  return runEsbuild({
+    nodePaths: ESBUILD_NODE_PATHS,
     entryPoints: ["client/src/data/lessons/index.ts"],
     platform: "node",
     bundle: true,
@@ -56,7 +74,8 @@ function buildLessonsData() {
 }
 
 function buildNpBatch(i: number) {
-  return esbuild({
+  return runEsbuild({
+    nodePaths: ESBUILD_NODE_PATHS,
     entryPoints: [`client/src/data/lessons/np-generated-batch-${i}.ts`],
     platform: "node",
     bundle: true,
@@ -101,7 +120,7 @@ const TRANSITIVE_EXTERNALS = [
 ];
 
 async function getExternals() {
-  const pkg = JSON.parse(await readFile("package.json", "utf-8"));
+  const pkg = JSON.parse(await readFile(pkgPath, "utf-8"));
   const allDeps = [
     ...Object.keys(pkg.dependencies || {}),
     ...Object.keys(pkg.devDependencies || {}),
@@ -111,7 +130,7 @@ async function getExternals() {
 
 async function buildServer(externalizeHeavyModules: boolean) {
   const externals = await getExternals();
-  const plugins: NonNullable<Parameters<typeof esbuild>[0]["plugins"]> = [];
+  const plugins: NonNullable<Parameters<typeof runEsbuild>[0]["plugins"]> = [];
   plugins.push({
     name: "externalize-career-question-data",
     setup(build) {
@@ -170,7 +189,8 @@ async function buildServer(externalizeHeavyModules: boolean) {
     );
   }
 
-  return esbuild({
+  return runEsbuild({
+    nodePaths: ESBUILD_NODE_PATHS,
     entryPoints: ["server/index.ts"],
     platform: "node",
     bundle: true,
@@ -240,7 +260,8 @@ async function buildExternalModules(entries: string[], label: string) {
           .replace(/^server\//, "")
           .replace(/\.ts$/, "")
           .replace(/\//g, "__");
-        return esbuild({
+        return runEsbuild({
+          nodePaths: ESBUILD_NODE_PATHS,
           entryPoints: [entry],
           platform: "node",
           bundle: true,
@@ -302,7 +323,8 @@ async function buildClientDataModules() {
 
   const externals = await getExternals();
 
-  await esbuild({
+  await runEsbuild({
+    nodePaths: ESBUILD_NODE_PATHS,
     entryPoints: clientDataFiles,
     platform: "node",
     bundle: false,
@@ -392,7 +414,7 @@ async function writeBuildManifest(
   log: (msg: string) => void,
   opts: { gitSha: string; buildTarget: string; runHeavyBuildTasks: boolean },
 ): Promise<void> {
-  const pkg = JSON.parse(await readFile("package.json", "utf-8"));
+  const pkg = JSON.parse(await readFile(pkgPath, "utf-8"));
   const meta = {
     schemaVersion: 1,
     builtAt: new Date().toISOString(),
@@ -420,9 +442,10 @@ async function generateCoverageReport(log: (msg: string) => void): Promise<void>
   };
 
   for (const rf of reportFiles) {
-    if (existsSync(rf)) {
+    const reportPath = repoPath(rf);
+    if (existsSync(reportPath)) {
       try {
-        const data = JSON.parse(await readFile(rf, "utf-8"));
+        const data = JSON.parse(await readFile(reportPath, "utf-8"));
         const name = path.basename(rf, ".json");
         coverageReport.validators[name] = data;
       } catch {}
@@ -432,6 +455,28 @@ async function generateCoverageReport(log: (msg: string) => void): Promise<void>
   await mkdir("dist", { recursive: true });
   await writeFile("dist/i18n-coverage-report.json", JSON.stringify(coverageReport, null, 2));
   log("coverage report written to dist/i18n-coverage-report.json");
+}
+
+function parseExplicitBoolEnv(v: string | undefined): boolean | null {
+  const t = String(v ?? "").trim().toLowerCase();
+  if (t === "1" || t === "true" || t === "yes") return true;
+  if (t === "0" || t === "false" || t === "no") return false;
+  return null;
+}
+
+/**
+ * AST scan pulls `typescript` — skip in production / App Platform unless
+ * `RUN_HARDCODED_STRING_SCAN=true` (e.g. after `npm prune --omit=dev`).
+ */
+function shouldRunAstHardcodedStringScan(): boolean {
+  const explicit = parseExplicitBoolEnv(process.env.RUN_HARDCODED_STRING_SCAN);
+  if (explicit === true) return true;
+  if (explicit === false) return false;
+  if (process.env.NODE_ENV === "production") return false;
+  const nnApp = String(process.env.NN_APP_PLATFORM_BUILD ?? "").trim().toLowerCase();
+  if (nnApp === "1" || nnApp === "true" || nnApp === "yes") return false;
+  if (/^(1|true|yes)$/i.test(String(process.env.NN_LOW_MEMORY_BUILD ?? "").trim())) return false;
+  return true;
 }
 
 function applyHerokuStackBuildDefaults(): void {
@@ -498,32 +543,38 @@ async function buildAll() {
   }
 
   if (!skipValidation) {
-    log("scanning for hardcoded strings...");
-    let scanConfig: Record<string, any> = {};
-    try {
-      scanConfig = JSON.parse(await readFile("i18n-scan.config.json", "utf-8"));
-    } catch {}
-    const scanPassed = runI18nScan({
-      quiet: true,
-      failOnCritical: scanConfig.failOnCritical ?? false,
-      criticalThreshold: scanConfig.criticalThreshold ?? 0,
-      totalThreshold: scanConfig.totalThreshold ?? 35000,
-    });
-    if (!scanPassed) {
-      console.error("\n❌ Build aborted: hardcoded string violations exceed thresholds.");
-      console.error("   Run 'npm run i18n:scan' for details.\n");
-      process.exit(1);
+    const runAstScan = shouldRunAstHardcodedStringScan();
+    if (runAstScan) {
+      log("scanning for hardcoded strings (AST)...");
+      let scanConfig: Record<string, any> = {};
+      try {
+        scanConfig = JSON.parse(await readFile(repoPath("i18n-scan.config.json"), "utf-8"));
+      } catch {}
+      const { runI18nScan } = await import("./scan-hardcoded-strings-lib");
+      const scanPassed = await runI18nScan({
+        quiet: true,
+        failOnCritical: scanConfig.failOnCritical ?? false,
+        criticalThreshold: scanConfig.criticalThreshold ?? 0,
+        totalThreshold: scanConfig.totalThreshold ?? 35000,
+      });
+      if (!scanPassed) {
+        console.error("\n❌ Build aborted: hardcoded string violations exceed thresholds.");
+        console.error("   Run 'npm run i18n:scan' for details.\n");
+        process.exit(1);
+      }
+      log("i18n scan passed");
+    } else {
+      console.log("[build] skipping hardcoded string scan during production Docker build");
     }
-    log("i18n scan passed");
   }
 
   if (target === "all" || target === "client") {
     const i18nCompileT = Date.now();
     if (skipI18nCompile) {
-      const enPath = path.resolve("client/public/i18n/en.json");
+      const enPath = path.join(APP_ROOT, "client/public/i18n/en.json");
       if (!existsSync(enPath)) {
         console.error(
-          "[build] SKIP_I18N_COMPILE=1 but client/public/i18n/en.json is missing. Commit i18n JSON or run a full build without SKIP_I18N_COMPILE.",
+          `[build] SKIP_I18N_COMPILE=1 but ${enPath} is missing. Commit i18n JSON or run a full build without SKIP_I18N_COMPILE.`,
         );
         process.exit(1);
       }
@@ -605,7 +656,7 @@ async function buildAll() {
   if (target === "all" || target === "client") {
     const viteT = Date.now();
     // Keep CI/Heroku logs concise; huge chunk listings can slow hosted builds.
-    await viteBuild({ logLevel: "warn" });
+    await runViteBuild({ logLevel: "warn" });
     log("client done");
     timing("vite_client", viteT);
   }
@@ -639,7 +690,23 @@ async function buildAll() {
   log(`build complete`);
 }
 
-buildAll().catch((err) => {
-  console.error(err);
+function resolvePackageJsonForNodeRequire(): string {
+  if (existsSync(path.join(appRoot, "node_modules", "esbuild"))) {
+    return pkgPath;
+  }
+  return repoPath("package.json");
+}
+
+async function main() {
+  const workspaceRequire = createRequire(resolvePackageJsonForNodeRequire());
+  runEsbuild = (workspaceRequire("esbuild") as typeof import("esbuild")).build;
+  runViteBuild = (
+    (await import(pathToFileURL(workspaceRequire.resolve("vite")).href)) as typeof import("vite")
+  ).build;
+  await buildAll();
+}
+
+main().catch((err) => {
+  console.error("[build] fatal error:", err);
   process.exit(1);
 });

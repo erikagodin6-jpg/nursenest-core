@@ -22,7 +22,7 @@ export const MARKETING_TERTIARY_LINK_CLASS =
 
 /** Header, banners, dense toolbars — same brand pill as primary without full section min-heights. */
 export const MARKETING_PRIMARY_CTA_COMPACT_CLASS =
-  "nn-btn-primary inline-flex min-h-[40px] items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition-[filter] hover:bg-role-cta-hover sm:min-h-0" as const;
+  "nn-btn-primary inline-flex min-h-11 items-center justify-center rounded-full px-4 py-2 text-sm font-semibold transition-[filter] hover:bg-role-cta-hover sm:min-h-0" as const;
 
 export const MARKETING_SECONDARY_CTA_COMPACT_CLASS =
-  "nn-btn-secondary inline-flex min-h-[40px] items-center justify-center rounded-full px-4 py-2 text-sm font-semibold sm:min-h-0" as const;
+  "nn-btn-secondary inline-flex min-h-11 items-center justify-center rounded-full px-4 py-2 text-sm font-semibold sm:min-h-0" as const;

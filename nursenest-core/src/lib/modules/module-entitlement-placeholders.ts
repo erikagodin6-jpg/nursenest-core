@@ -1,0 +1,3 @@
+export const ECG_MASTERY_PAID = "ECG_MASTERY_PAID" as const;
+export const LAB_VALUES_BASICS_FREE = "LAB_VALUES_BASICS_FREE" as const;
+export const LAB_VALUES_MASTERY_PAID = "LAB_VALUES_MASTERY_PAID" as const;

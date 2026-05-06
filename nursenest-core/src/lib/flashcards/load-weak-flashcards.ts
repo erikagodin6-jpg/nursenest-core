@@ -12,6 +12,8 @@ import {
 } from "@/lib/learner/tier-scoped-study-routes";
 import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/flashcard-pathway-scope";
+import { flashcardLessonCrossLinkForDeckStudyRow } from "@/lib/flashcards/flashcard-lesson-cross-link";
+import type { FlashcardStudySelectRow } from "@/lib/flashcards/flashcard-study-serialize";
 
 const MAX_WEAK_TOPIC_TERMS = 8;
 const FETCH_CAP = 96;
@@ -27,6 +29,9 @@ export type WeakFlashcardRow = {
   topic: string;
   subtopic: string | null;
   confidence: RecommendationConfidence;
+  /** Catalog lesson review link when resolvable from `lessonId` / `sourceKey` — no duplicated bodies. */
+  lessonStudyHref?: string;
+  lessonStudyTitle?: string;
 };
 
 const PRE_NURSING_PATHWAY_SENTINEL = "pre-nursing" as const;
@@ -124,6 +129,7 @@ export async function loadWeakAreaFlashcardsForUser(
       id: true,
       front: true,
       back: true,
+      lessonId: true,
       deck: { select: { slug: true, pathwayId: true } },
       sourceKey: true,
       category: { select: { name: true, topicCode: true } },
@@ -135,6 +141,22 @@ export async function loadWeakAreaFlashcardsForUser(
   const cards: WeakFlashcardRow[] = [];
   for (const c of shuffledRows) {
     if (!c.deck?.slug) continue;
+    const studyRow: FlashcardStudySelectRow = {
+      id: c.id,
+      front: c.front,
+      back: c.back,
+      lessonId: c.lessonId,
+      sourceKey: c.sourceKey,
+      examItemKind: null,
+      questionStem: null,
+      answerOptions: null,
+      correctAnswer: null,
+      rationaleCorrect: null,
+      rationaleIncorrect: null,
+      category: c.category,
+      deck: c.deck,
+    };
+    const lessonLink = flashcardLessonCrossLinkForDeckStudyRow(c.deck.pathwayId, studyRow);
     cards.push({
       id: c.id,
       front: c.front,
@@ -145,6 +167,9 @@ export async function loadWeakAreaFlashcardsForUser(
       topic: c.category.name,
       subtopic: c.category.topicCode,
       confidence: confidenceByCode.get(c.category.topicCode ?? "") ?? "low",
+      ...(lessonLink
+        ? { lessonStudyHref: lessonLink.lessonStudyHref, lessonStudyTitle: lessonLink.lessonStudyTitle }
+        : {}),
     });
     if (cards.length >= RETURN_CAP) break;
   }

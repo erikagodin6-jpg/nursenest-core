@@ -28,21 +28,26 @@ import {
   type PrePublishPatch,
   validateBlogPrePublish,
 } from "@/lib/blog/blog-pre-publish-validation";
+import { warnIfPublishedPostWorkflowNotAligned } from "@/lib/blog/blog-post-published-state";
 import { blogPostIsLive } from "@/lib/blog/blog-visibility";
 import {
   isCanonicalBlogPublishVisibilityError,
   publishBlogPostCanonical,
 } from "@/lib/blog/publish-blog-post-canonical";
 import { revalidateBlogPublishingSurfaces } from "@/lib/blog/blog-revalidate-publishing";
+import { isAlliedBlogProfessionCareerSlug, isNursingScopedCareerSlug } from "@/lib/blog/blog-scoped-career-hubs";
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { classifyBlogCorpus, collectClassificationViolations } from "@/lib/taxonomy/content-write-taxonomy";
+import { normalizeSlugPreprocess } from "@/lib/blog/blog-optional-slug";
 
-const slugSchema = z
-  .string()
-  .min(3)
-  .max(120)
-  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use kebab-case (lowercase letters, numbers, hyphens)");
+const slugSchema = z.preprocess(
+  (v) => normalizeSlugPreprocess(v, 120) ?? v,
+  z.string().min(3).max(120).regex(
+    /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+    "Slug must be lowercase letters, numbers, and hyphens only (e.g. heart-failure-nclex). Special characters are stripped automatically — if slug is empty after stripping, provide a clean slug manually.",
+  ),
+);
 
 const patchSchema = z.object({
   /** URL slug; must stay unique. */
@@ -259,9 +264,20 @@ export async function PATCH(req: Request, { params }: Props) {
       adminPublishLog: true,
       publishAt: true,
       scheduledAt: true,
+      workflowStatus: true,
     },
   });
   if (!current) return NextResponse.json({ error: "Blog post not found" }, { status: 404 });
+
+  warnIfPublishedPostWorkflowNotAligned(
+    {
+      id: current.id,
+      slug: current.slug,
+      postStatus: current.postStatus,
+      workflowStatus: current.workflowStatus,
+    },
+    "PATCH /api/admin/blog/[id] load",
+  );
 
   let bodyForUpdate: string | undefined;
   if (d.action === "publish_now") {
@@ -511,6 +527,27 @@ export async function PATCH(req: Request, { params }: Props) {
         ? d.postStatus
         : undefined;
 
+  /**
+   * Public `/blog` only treats rows as live when `postStatus` + `workflowStatus` + dates satisfy
+   * {@link blogPostIsLive} (see `blog-visibility.ts`). Direct PATCH `postStatus: PUBLISHED` without
+   * `publish_now` historically left `workflowStatus: GENERATED`, which looks "published" in admin
+   * but never appears on the marketing blog — force the canonical publish path instead.
+   */
+  if (
+    d.action === undefined &&
+    effectivePostStatus === BlogPostStatus.PUBLISHED &&
+    current.postStatus !== BlogPostStatus.PUBLISHED
+  ) {
+    return NextResponse.json(
+      {
+        error:
+          "Setting postStatus to PUBLISHED requires action publish_now (pre-publish validation + workflow alignment).",
+        code: "blog_publish_requires_publish_now",
+      },
+      { status: 422 },
+    );
+  }
+
   let effectivePublishAt: Date | null | undefined;
   if (d.action === "schedule") {
     effectivePublishAt = actionPatch.publishAt;
@@ -663,11 +700,21 @@ export async function PATCH(req: Request, { params }: Props) {
   ]);
   const actionTriggersRevalidate = Boolean(d.action && revalidateActions.has(d.action));
   const wasPublicLive = blogPostIsLive(
-    { postStatus: current.postStatus, publishAt: current.publishAt, scheduledAt: current.scheduledAt },
+    {
+      postStatus: current.postStatus,
+      publishAt: current.publishAt,
+      scheduledAt: current.scheduledAt,
+      workflowStatus: current.workflowStatus,
+    },
     now,
   );
   const nowPublicLive = blogPostIsLive(
-    { postStatus: updated.postStatus, publishAt: updated.publishAt, scheduledAt: updated.scheduledAt },
+    {
+      postStatus: updated.postStatus,
+      publishAt: updated.publishAt,
+      scheduledAt: updated.scheduledAt,
+      workflowStatus: updated.workflowStatus,
+    },
     now,
   );
   const visibilityChanged = wasPublicLive !== nowPublicLive;
@@ -679,13 +726,36 @@ export async function PATCH(req: Request, { params }: Props) {
     visibilityChanged ||
     (publishAtChanged && (updated.postStatus === BlogPostStatus.SCHEDULED || current.postStatus === BlogPostStatus.SCHEDULED));
 
+  warnIfPublishedPostWorkflowNotAligned(
+    {
+      id: updated.id,
+      slug: updated.slug,
+      postStatus: updated.postStatus,
+      workflowStatus: updated.workflowStatus,
+    },
+    "PATCH /api/admin/blog/[id] after update",
+  );
+
   if (shouldRevalidateSurfaces) {
     try {
-      revalidateBlogPublishingSurfaces({
-        slug: updated.slug,
-        alliedProfessionKey: updated.careerSlug ?? null,
-        tags: updated.tags,
-      });
+      (() => {
+        const cs = updated.careerSlug?.trim() ?? null;
+        if (cs && isAlliedBlogProfessionCareerSlug(cs)) {
+          revalidateBlogPublishingSurfaces({
+            slug: updated.slug,
+            alliedProfessionKey: cs,
+            tags: updated.tags,
+          });
+        } else if (cs && isNursingScopedCareerSlug(cs)) {
+          revalidateBlogPublishingSurfaces({
+            slug: updated.slug,
+            nursingCareerSlug: cs,
+            tags: updated.tags,
+          });
+        } else {
+          revalidateBlogPublishingSurfaces({ slug: updated.slug, tags: updated.tags });
+        }
+      })();
     } catch (e) {
       safeServerLog("admin", "blog_patch_revalidate_failed", {
         message: e instanceof Error ? e.message : String(e),

@@ -54,15 +54,15 @@ describe("normalizeBlogControlPanelGenerateRequestBody", () => {
     assert.equal(r.data.template, BlogPostTemplate.TOPIC_EXPLAINED);
   });
 
-  it("returns INVALID_SLUG for unusable fixedSlug", () => {
+  it("coerces unusable fixedSlug to a valid fallback slug", () => {
     const r = normalizeBlogControlPanelGenerateRequestBody({
       topic: "Enough length here for topic xx",
       exam: "NCLEX",
       fixedSlug: "###",
     });
-    assert.equal(r.ok, false);
-    if (r.ok) return;
-    assert.equal(r.code, "INVALID_SLUG");
+    assert.equal(r.ok, true);
+    if (!r.ok) return;
+    assert.match(String(r.data.fixedSlug), /^blog-post-\d+$/);
   });
 
   it("normalizes fixedSlug to kebab-case", () => {
@@ -74,5 +74,16 @@ describe("normalizeBlogControlPanelGenerateRequestBody", () => {
     assert.equal(r.ok, true);
     if (!r.ok) return;
     assert.equal(r.data.fixedSlug, "hello-world");
+  });
+
+  it("normalizes a pasted article title in fixedSlug before schema validation", () => {
+    const r = normalizeBlogControlPanelGenerateRequestBody({
+      topic: "Enough length here for topic xx",
+      exam: "NCLEX",
+      fixedSlug: "Parkinson’s Disease: Nursing Priorities & Red Flags",
+    });
+    assert.equal(r.ok, true);
+    if (!r.ok) return;
+    assert.equal(r.data.fixedSlug, "parkinson-s-disease-nursing-priorities-and-red-flags");
   });
 });

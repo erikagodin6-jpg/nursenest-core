@@ -30,7 +30,7 @@ const DEFAULT_STUDY_LINKS: {
   { href: "/app/lessons", labelKey: "learner.profile.quickLinks.lessons", icon: BookOpen, accent: "lessons" },
   { href: "/app/flashcards", labelKey: "learner.profile.quickLinks.flashcards", icon: Brain, accent: "flashcards" },
   { href: "/app/study-plan", labelKey: "learner.profile.quickLinks.studyPlanner", icon: ListTodo, accent: "planner" },
-  { href: "/app/account/report-card", labelKey: "learner.account.nav.reportCard", icon: BarChart3, accent: "report" },
+  { href: "/app/account/report", labelKey: "learner.account.nav.report", icon: BarChart3, accent: "report" },
   { href: "/app/account/readiness", labelKey: "learner.account.nav.readiness", icon: Target, accent: "readiness" },
   { href: "/app/account/review-queue", labelKey: "learner.account.nav.reviewQueue", icon: ClipboardList, accent: "review" },
 ];
@@ -39,15 +39,22 @@ export function LearnerStudyQuickLinksCard({
   t,
   id = "learner-study-quick-links",
   catHref,
+  flashcardsHrefOverride,
 }: {
   t: LearnerMarketingT;
   /** Optional anchor id for skip links / aria */
   id?: string;
   catHref?: string;
+  /** When set, the Flashcards quick link targets this pathway-scoped hub URL. */
+  flashcardsHrefOverride?: string | null;
 }) {
-  const studyLinks = DEFAULT_STUDY_LINKS.map((link) =>
-    link.accent === "cat" && catHref?.trim() ? { ...link, href: catHref.trim() } : link,
-  );
+  const studyLinks = DEFAULT_STUDY_LINKS.map((link) => {
+    if (link.accent === "cat" && catHref?.trim()) return { ...link, href: catHref.trim() };
+    if (link.accent === "flashcards" && flashcardsHrefOverride?.trim()) {
+      return { ...link, href: flashcardsHrefOverride.trim() };
+    }
+    return link;
+  });
 
   return (
     <section

@@ -23,9 +23,7 @@ export function onRouterTransitionStart(...args: unknown[]): void {
 
   void importSentryNextjs()
     .then((Sentry) => {
-      const captureRouterTransitionStart = Sentry.captureRouterTransitionStart as
-        | ((...routerArgs: unknown[]) => void)
-        | undefined;
+      const captureRouterTransitionStart = (Sentry as unknown as { captureRouterTransitionStart?: (...routerArgs: unknown[]) => void }).captureRouterTransitionStart;
 
       captureRouterTransitionStart?.(...args);
     })

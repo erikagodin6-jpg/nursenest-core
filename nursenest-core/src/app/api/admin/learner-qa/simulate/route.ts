@@ -15,7 +15,7 @@ import { productEvent } from "@/lib/observability/product-events";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const payloadSchema = z.object({
-  track: z.enum(["RN", "RPN", "LVN_LPN", "NP", "ALLIED", "NEW_GRAD"]),
+  track: z.enum(["RN", "RPN", "LVN_LPN", "NP", "ALLIED", "NEW_GRAD", "PRE_NURSING"]),
   lifecycle: z.enum(["paid_active", "none", "expired", "trial"]),
   country: z.enum(["US", "CA"]).default("US"),
   npSpecialty: z.enum(["FNP", "AGPCNP", "PMHNP", "WHNP", "PNP_PC"]).optional(),
@@ -101,6 +101,7 @@ export async function POST(req: Request) {
     country: d.country,
     userIdPrefix: gate.admin.userId.slice(0, 8),
     admin_learner_qa_simulated: 1,
+    adminViewAs: 1,
     npSpecialty: d.npSpecialty,
     alliedCareer: d.alliedCareer,
     planVariant: d.planVariant,
@@ -111,6 +112,7 @@ export async function POST(req: Request) {
     lifecycle: d.lifecycle,
     country: d.country,
     admin_learner_qa_simulated: 1,
+    adminViewAs: 1,
     npSpecialty: d.npSpecialty,
     alliedCareer: d.alliedCareer,
     planVariant: d.planVariant,

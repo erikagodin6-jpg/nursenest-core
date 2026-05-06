@@ -1,0 +1,51 @@
+[1mdiff --git a/.do/app-nursenest-core-next.yaml b/.do/app-nursenest-core-next.yaml[m
+[1mindex e9637253d..3130f7ca2 100644[m
+[1m--- a/.do/app-nursenest-core-next.yaml[m
+[1m+++ b/.do/app-nursenest-core-next.yaml[m
+[36m@@ -129,6 +129,11 @@[m [mservices:[m
+       - key: HOSTNAME[m
+         value: "0.0.0.0"[m
+         scope: RUN_TIME[m
+[32m+[m[32m      # Heap for the standalone child server. The bootstrap parent reads this when NODE_OPTIONS has no heap flag.[m
+[32m+[m[32m      # basic-xs is 1 GiB; 512 MiB OOMs during standalone startup, while 768 MiB leaves headroom for the parent.[m
+[32m+[m[32m      - key: NODE_MAX_OLD_SPACE_SIZE_MB[m
+[32m+[m[32m        value: "768"[m
+[32m+[m[32m        scope: RUN_TIME[m
+       - key: AUTH_TRUST_HOST[m
+         value: "true"[m
+         scope: RUN_TIME[m
+[1mdiff --git a/Dockerfile b/Dockerfile[m
+[1mindex f0927be11..da8ea4621 100644[m
+[1m--- a/Dockerfile[m
+[1m+++ b/Dockerfile[m
+[36m@@ -57,6 +57,7 @@[m [mWORKDIR /app/nursenest-core[m
+ ENV NODE_ENV=production \[m
+   PORT=8080 \[m
+   HOSTNAME=0.0.0.0 \[m
+[32m+[m[32m  NODE_MAX_OLD_SPACE_SIZE_MB=768 \[m
+   NEXT_TELEMETRY_DISABLED=1[m
+ [m
+ COPY --from=builder /app/nursenest-core/.next ./.next[m
+[1mdiff --git a/scripts/verify-digitalocean-runtime.mjs b/scripts/verify-digitalocean-runtime.mjs[m
+[1mindex 8eea263e5..2eb504d90 100755[m
+[1m--- a/scripts/verify-digitalocean-runtime.mjs[m
+[1m+++ b/scripts/verify-digitalocean-runtime.mjs[m
+[36m@@ -106,6 +106,10 @@[m [mif (!keys.has("AUTH_SECRET") && !keys.has("NEXTAUTH_SECRET")) {[m
+   fail("app spec must document AUTH_SECRET and/or NEXTAUTH_SECRET as a runtime secret");[m
+ }[m
+ [m
+[32m+[m[32mif (!keys.has("NODE_MAX_OLD_SPACE_SIZE_MB")) {[m
+[32m+[m[32m  fail("app spec must set NODE_MAX_OLD_SPACE_SIZE_MB for standalone child runtime heap");[m
+[32m+[m[32m}[m
+[32m+[m
+ if (!keys.has("AUTH_SECRET")) {[m
+   console.warn("[verify:do-runtime] warning: AUTH_SECRET is preferred over legacy NEXTAUTH_SECRET");[m
+ }[m
+[36m@@ -124,6 +128,7 @@[m [mfor (const requiredCopy of [[m
+ }[m
+ [m
+ assertIncludes(dockerfile, "EXPOSE 8080", "Dockerfile");[m
+[32m+[m[32massertIncludes(dockerfile, "NODE_MAX_OLD_SPACE_SIZE_MB=768", "Dockerfile runner ENV");[m
+ [m
+ if (!/(CMD|ENTRYPOINT)\s+\[/.test(dockerfile)) {[m
+   fail("Dockerfile runner stage must define CMD or ENTRYPOINT");[m

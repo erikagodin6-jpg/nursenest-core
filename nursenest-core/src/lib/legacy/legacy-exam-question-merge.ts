@@ -1,6 +1,7 @@
 import type { Prisma } from "@prisma/client";
 
 import { stemHash } from "@/lib/content/stem-hash";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { examQuestionPoolWhereForContext } from "@/lib/exam-context/query-scope";
 import { assertPathwayAllowed } from "@/lib/legacy/legacy-public-content-merge";
@@ -253,8 +254,9 @@ export function buildExamQuestionPatchFromLegacy(
     data.publishedAt = nextStatus === "published" ? new Date() : null;
   }
 
-  if (scope.exam.toLowerCase() !== existing.exam.toLowerCase()) {
-    data.exam = scope.exam;
+  const scopeExamCanon = canonicalExamQuestionExamForDbWrite(scope.exam);
+  if (scopeExamCanon.toLowerCase() !== (existing.exam ?? "").toLowerCase()) {
+    data.exam = scopeExamCanon;
     notes.push("exam_aligned_to_pathway");
   }
   if (scope.tier.toLowerCase() !== existing.tier.toLowerCase()) {
@@ -288,7 +290,7 @@ export function buildExamQuestionCreateData(
     data: {
       id,
       tier: scope.tier,
-      exam: scope.exam,
+      exam: canonicalExamQuestionExamForDbWrite(scope.exam),
       questionType: adminQuestionTypeToDb(qTypeUpper),
       status,
       stem,

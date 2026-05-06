@@ -112,7 +112,7 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
   return (
     <div id="fnp-explorer" className="scroll-mt-24 space-y-5">
       <div className="nn-study-card nn-study-card--wash p-4 sm:p-5">
-        <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-muted">Filter lessons</p>
+        <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-muted-text)]">Filter lessons</p>
         <p className="mt-1 text-xs text-[var(--theme-muted-text)]">
           Combine a <strong className="text-foreground">population</strong> lane with a{" "}
           <strong className="text-foreground">competency</strong> lane: mirrors how board items layer age and task.
@@ -185,13 +185,13 @@ export function FnpLessonExplorer({ pathway, lessonsBasePath, explorerLessons, e
               placeholder="Title, topic, or slug (min 2 characters)"
               autoComplete="off"
               maxLength={80}
-              className="mt-2 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground shadow-sm placeholder:text-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+              className="mt-2 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground shadow-sm placeholder:text-[var(--theme-muted-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
             />
-            <p className="mt-1 text-[11px] text-muted">Filters the current page of lessons only; use topic clusters or pagination for the full library.</p>
+            <p className="mt-1 text-[11px] text-[var(--theme-muted-text)]">Filters the current page of lessons only; use topic clusters or pagination for the full library.</p>
           </div>
         </div>
 
-        <p className="mt-3 text-xs text-muted" aria-live="polite">
+        <p className="mt-3 text-xs text-[var(--theme-muted-text)]" aria-live="polite">
           Showing <strong className="text-foreground">{filtered.length}</strong> lesson
           {filtered.length === 1 ? "" : "s"}
           {lifespan !== "all" || domain !== "all" || textQ.trim().length >= 2 ? " (filtered)" : ""}.
@@ -328,15 +328,15 @@ function FnpLessonCard({
 
       <div className="mt-4 grid gap-3 border-t border-border pt-4 text-sm sm:grid-cols-2">
         <div className="sm:col-span-2">
-          <p className="text-xs font-semibold uppercase text-muted">What this lesson prepares you to do clinically</p>
+          <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">What this lesson prepares you to do clinically</p>
           <p className="mt-1 text-foreground">{p.providerTasks}</p>
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase text-muted">Likely item styles</p>
+          <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">Likely item styles</p>
           <p className="mt-0.5 text-[var(--theme-muted-text)]">{p.likelyQuestionTypes}</p>
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase text-muted">Why it appears on boards</p>
+          <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">Why it appears on boards</p>
           <p className="mt-0.5 text-[var(--theme-muted-text)]">{p.whyBoards}</p>
         </div>
         <div className="sm:col-span-2 rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-info-soft)] p-3">
@@ -348,7 +348,7 @@ function FnpLessonCard({
           <p className="mt-1 text-foreground">{p.sampleDecision}</p>
         </div>
         <div className="sm:col-span-2 nn-surface-inset rounded-xl p-3">
-          <p className="text-xs font-semibold text-muted">Rationale snippet</p>
+          <p className="text-xs font-semibold text-[var(--theme-muted-text)]">Rationale snippet</p>
           <p className="mt-1 italic text-[var(--theme-muted-text)]">&ldquo;{p.rationaleSnippet}&rdquo;</p>
         </div>
         <div className="sm:col-span-2 flex flex-wrap gap-1.5">

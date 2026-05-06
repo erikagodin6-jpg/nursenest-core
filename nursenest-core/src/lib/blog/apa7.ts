@@ -8,6 +8,11 @@ export type BlogSourceRecord = {
   doi?: string;
   accessedAt?: string;
   authority?: "regulator" | "guideline_body" | "peer_reviewed" | "academic_hospital" | "association" | "general_web" | "low_authority";
+  /**
+   * When true, skips the rolling publication-year window at publish time (seminal guideline, classic physiology, etc.).
+   * Prefer recent sources; use sparingly and only with admin verification.
+   */
+  foundational?: boolean;
 };
 
 function compact(s: string | undefined): string {
@@ -81,6 +86,8 @@ export function coerceBlogSourceRows(raw: unknown[]): BlogSourceRecord[] {
     if (!row || typeof row !== "object") continue;
     const o = row as Record<string, unknown>;
     const authors = Array.isArray(o.authors) ? o.authors.filter((a): a is string => typeof a === "string") : undefined;
+    const foundational =
+      o.foundational === true || o.historicalReference === true || o.isFoundational === true || o.seminal === true;
     out.push({
       authors,
       year: typeof o.year === "string" ? o.year : undefined,
@@ -91,6 +98,7 @@ export function coerceBlogSourceRows(raw: unknown[]): BlogSourceRecord[] {
       doi: typeof o.doi === "string" ? o.doi : undefined,
       accessedAt: typeof o.accessedAt === "string" ? o.accessedAt : undefined,
       authority: coerceAuthorityLoose(o.authority),
+      foundational: foundational ? true : undefined,
     });
   }
   return out;

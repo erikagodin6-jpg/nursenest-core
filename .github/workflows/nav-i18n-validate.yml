@@ -1,15 +1,16 @@
 # Fails if marketing locale JSON is missing audited nav/footer/breadcrumb/shell keys,
 # has empty values, raw English carryover (except allowlist), or placeholder mismatches vs en.json.
-# See nursenest-core/scripts/validate-nav-i18n.mjs and scripts/lib/nav-i18n-audit.mjs.
+# See scripts/validate-nav-i18n.mjs and scripts/lib/nav-i18n-audit.mjs (invoked from nursenest-core via npm script).
 name: nav-i18n-validate
 
 on:
   push:
     paths:
       - "nursenest-core/public/i18n/**"
-      - "nursenest-core/scripts/lib/nav-i18n-audit.mjs"
-      - "nursenest-core/scripts/lib/ensure-en-nav-keys.mjs"
-      - "nursenest-core/scripts/validate-nav-i18n.mjs"
+      - "scripts/lib/nav-i18n-audit.mjs"
+      - "scripts/lib/ensure-en-nav-keys.mjs"
+      - "scripts/lib/i18n-app-root.mjs"
+      - "scripts/validate-nav-i18n.mjs"
       - "nursenest-core/scripts/nav-i18n-parity.mjs"
       - "nursenest-core/scripts/nav-i18n-manual-overrides.mjs"
       - "nursenest-core/scripts/sync-required-nav-keys-all-locales.mjs"
@@ -19,9 +20,10 @@ on:
   pull_request:
     paths:
       - "nursenest-core/public/i18n/**"
-      - "nursenest-core/scripts/lib/nav-i18n-audit.mjs"
-      - "nursenest-core/scripts/lib/ensure-en-nav-keys.mjs"
-      - "nursenest-core/scripts/validate-nav-i18n.mjs"
+      - "scripts/lib/nav-i18n-audit.mjs"
+      - "scripts/lib/ensure-en-nav-keys.mjs"
+      - "scripts/lib/i18n-app-root.mjs"
+      - "scripts/validate-nav-i18n.mjs"
       - "nursenest-core/scripts/nav-i18n-parity.mjs"
       - "nursenest-core/scripts/nav-i18n-manual-overrides.mjs"
       - "nursenest-core/scripts/sync-required-nav-keys-all-locales.mjs"
@@ -39,9 +41,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: npm
           cache-dependency-path: nursenest-core/package-lock.json
       - run: npm ci
+      - name: CI environment diagnostics
+        run: node ../scripts/ci/diagnose-actions-environment.mjs
+        env:
+          CI_DIAGNOSE_REQUIRED_SCRIPTS: "i18n:validate-nav"
       - name: Nav / footer / shell i18n guard
         run: npm run i18n:validate-nav

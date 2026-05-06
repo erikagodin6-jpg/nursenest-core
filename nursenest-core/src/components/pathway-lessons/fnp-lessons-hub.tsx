@@ -38,11 +38,12 @@ import {
 } from "@/lib/lessons/fnp-us-lesson-enrichment";
 import {
   pathwayLessonHasRenderableHubSlug,
-  pathwayLessonMarketingDetailHref,
+  pathwayLessonMarketingHubVerifiedCardHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import type { TopicCluster } from "@/lib/lessons/pathway-lesson-loader";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
+import { PathwayLessonProgressBadge } from "@/components/lessons/pathway-lesson-progress-badge";
 import { pathwayHubAppFlashcardsHref, pathwayHubAppQuestionsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 
 type Props = {
@@ -67,6 +68,9 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
   const explorerPayload = buildFnpExplorerPayload(safeLessons);
   const { countsLife, countsDom } = fnpExplorerCounts(explorerPayload);
   const featured = safeLessons.length > 0 ? [...safeLessons].sort((a, b) => a.slug.localeCompare(b.slug))[0] : null;
+  const featuredDetailHref = featured
+    ? pathwayLessonMarketingHubVerifiedCardHref(lessonsBasePath, featured)
+    : null;
   const featuredPreview = featured ? fnpLessonClinicalPreview(featured) : null;
   const questionsHub = buildExamPathwayPath(pathway, "questions");
   const examHub = buildExamPathwayPath(pathway);
@@ -169,9 +173,14 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
       {/* Featured clinical case */}
       {featured && featured.slug?.trim() && featuredPreview && (
         <section className="nn-study-card bg-gradient-to-b from-[var(--bg-card)] to-[var(--nn-presentation-wash)] p-5 sm:p-7">
-          <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-primary)]">
-            Featured clinical case
-          </p>
+          <div className="flex flex-wrap items-start justify-between gap-2">
+            <p className="nn-marketing-caption font-semibold uppercase tracking-wide text-[var(--theme-primary)]">
+              Featured clinical case
+            </p>
+            {Object.keys(progressMap).length > 0 ? (
+              <PathwayLessonProgressBadge status={progressMap[featured.slug] ?? "not_started"} />
+            ) : null}
+          </div>
           <h3 className="nn-marketing-h2 mt-2">{featured.title}</h3>
           <div className="mt-4 grid gap-3 border-t border-border/80 pt-4 sm:grid-cols-2">
             <div className="sm:col-span-2">
@@ -196,13 +205,15 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
             </div>
           </div>
           <div className="mt-5 flex flex-wrap gap-2">
-            <Link
-              href={pathwayLessonMarketingDetailHref(lessonsBasePath, featured.slug)!}
-              data-nn-qa-primary-lesson="true"
-              className="inline-flex rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
-            >
-              Open lesson
-            </Link>
+            {featuredDetailHref ? (
+              <Link
+                href={featuredDetailHref}
+                data-nn-qa-primary-lesson="true"
+                className="inline-flex rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
+              >
+                Open lesson
+              </Link>
+            ) : null}
             <Link
               href={pathwayHubAppQuestionsHref(pathway.id, featured.topic)}
               className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold"
@@ -333,10 +344,10 @@ export function FnpLessonsHub({ pathway, lessons, lessonsBasePath, topicClusters
                   {item.step}
                 </span>
                 <span className="text-sm font-semibold text-[var(--theme-heading-text)]">{item.label}</span>
-                <span className="mt-0.5 text-xs text-muted">{item.detail}</span>
+                <span className="mt-0.5 text-xs text-[var(--theme-muted-text)]">{item.detail}</span>
               </div>
               {i < arr.length - 1 && (
-                <span className="hidden shrink-0 px-0.5 text-muted sm:block" aria-hidden>
+                <span className="hidden shrink-0 px-0.5 text-[var(--theme-muted-text)] sm:block" aria-hidden>
                   →
                 </span>
               )}

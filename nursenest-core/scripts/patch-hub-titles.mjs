@@ -35,9 +35,14 @@ const learnerPatches = {
   "learner.practiceTests.hub.selection.random": "Mixed quiz",
   "learner.practiceTests.hub.selection.targeted": "Targeted topics",
   "learner.practiceTests.hub.selection.weak": "Weak areas",
+  "learner.practiceTests.hub.selection.missed": "Wrong answers",
+  "learner.practiceTests.hub.selection.starred": "Starred / saved",
   "learner.practiceTests.hub.selection.cat": "Adaptive Test",
   "learner.practiceTests.hub.selectionHelp.targeted": "Pick one or more topics below (required).",
   "learner.practiceTests.hub.selectionHelp.weak": "Uses topics you’ve missed on recent scored practice.",
+  "learner.practiceTests.hub.selectionHelp.missed": "Prioritizes questions you answered incorrectly on recent scored practice.",
+  "learner.practiceTests.hub.selectionHelp.starred":
+    "Uses questions you starred or saved for review in this pathway’s bank.",
   "learner.practiceTests.hub.selectionHelp.cat.examSim.np":
     "AANP-style readiness simulation: 75–150 items, four-domain blueprint when questions are tagged, adaptive stops. Not the live AANP format.",
   "learner.practiceTests.hub.selectionHelp.cat.examSim.rn":
@@ -64,6 +69,11 @@ const learnerPatches = {
   "learner.practiceTests.hub.poolFiltered": "Filtered topics",
   "learner.practiceTests.hub.poolWeakFirst": "Weak areas first",
   "learner.practiceTests.hub.poolHelp": "Same tier rules apply. Weak-area mode needs prior scored practice history.",
+  "learner.practiceTests.hub.poolPresetIntro":
+    "Linear modes draw from the question bank with your filters. Starred uses saved items for this pathway. The adaptive shortcut opens the CAT builder when your plan includes it.",
+  "learner.practiceTests.hub.poolPresetAllQuestions": "All questions",
+  "learner.practiceTests.hub.poolPresetFreshMix": "Fresh mix",
+  "learner.practiceTests.hub.catSavedPoolChip": "Adaptive · starred pool",
   "learner.practiceTests.hub.catFeedbackHeading": "During adaptive practice",
   "learner.practiceTests.hub.catFeedbackIntro": "Same adaptive engine—choose how rationales appear.",
   "learner.practiceTests.hub.catCardLearnTitle": "Learn while answering",
@@ -86,6 +96,7 @@ const learnerPatches = {
   "learner.practiceTests.hub.weakFocusBanner": "Weak-area focus is active so recommendations stay targeted.",
   "learner.practiceTests.hub.resumeHint": "You have an in-progress session ready to resume.",
   "learner.practiceTests.hub.reviewRecentHint": "Recent completions are highlighted for quick review.",
+  "learner.practiceTests.hub.questionFocusLabel": "Question focus",
   "learner.practiceTests.hub.topicsLabel": "Topics (optional unless targeted)",
   "learner.practiceTests.hub.addFromBank": "Add from bank…",
   "learner.practiceTests.hub.customTopicPlaceholder": "Custom topic label",

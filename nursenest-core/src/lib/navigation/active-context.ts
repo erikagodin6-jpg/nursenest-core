@@ -3,7 +3,7 @@
  * All nav rendering should derive from {@link ActiveContext} (no scattered auth/tier checks).
  */
 
-import type { TierCode } from "@prisma/client";
+import type { CountryCode, TierCode } from "@prisma/client";
 import type { SessionUserRole } from "@/types/next-auth";
 import type { GlobalRegionSlug } from "@/lib/i18n/global-regions";
 import type { NursenestRegion } from "@/lib/region/use-nursenest-region";
@@ -94,10 +94,12 @@ function regionToCountryCode(region: NursenestRegion): string {
 export function resolveActiveCountryCode(args: {
   examRegion: NursenestRegion;
   globalRegion: GlobalRegionSlug | null;
-  sessionCountry: "US" | "CA" | undefined;
+  sessionCountry: CountryCode | undefined;
 }): string {
   if (args.globalRegion === "philippines") return "PH";
   if (args.globalRegion === "india") return "IN";
+  if (args.globalRegion === "nigeria") return "NG";
+  if (args.globalRegion === "saudi-arabia") return "SA";
   // Fallback: session country for signed-in users on /app; marketing cookie for site
   if (args.sessionCountry) return args.sessionCountry;
   return regionToCountryCode(args.examRegion);

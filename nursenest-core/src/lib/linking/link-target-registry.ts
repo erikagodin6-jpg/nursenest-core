@@ -474,7 +474,7 @@ const REGISTRY_ENTRIES: LinkTarget[] = [
   {
     kind: "question",
     topicKey: "medical-laboratory-technology",
-    href: "/us/allied/allied-health/questions",
+    href: "/allied/allied-health/questions",
     anchorText: "practice allied health questions",
     anchorVariants: ["try allied health exam questions", "allied health question bank"],
     examFamily: "ALLIED",

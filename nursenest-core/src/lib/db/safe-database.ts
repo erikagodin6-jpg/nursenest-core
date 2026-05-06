@@ -1,4 +1,5 @@
-import "@/lib/db/env-bootstrap";
+import "server-only";
+
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { isRuntimeSafeMode } from "@/lib/runtime/safe-mode";
 

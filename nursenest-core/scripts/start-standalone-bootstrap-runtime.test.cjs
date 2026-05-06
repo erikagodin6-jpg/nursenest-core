@@ -1,6 +1,6 @@
 const assert = require("node:assert/strict");
 const { spawn } = require("node:child_process");
-const { existsSync } = require("node:fs");
+const { existsSync, readFileSync, writeFileSync } = require("node:fs");
 const net = require("node:net");
 const path = require("node:path");
 const test = require("node:test");
@@ -57,12 +57,29 @@ function extractStartupWatchdogMeta(logs, event) {
   return match ? JSON.parse(match[1]) : null;
 }
 
-test("standalone runtime reaches ready without bypass via the internal bootstrap probe", async (t) => {
+function resolveStandaloneEntry(t) {
   const standaloneEntry = STANDALONE_CANDIDATES.find((candidate) => existsSync(candidate));
   if (!standaloneEntry) {
     t.skip(`Missing standalone build entry. Checked:\n${STANDALONE_CANDIDATES.join("\n")}`);
-    return;
+    return null;
   }
+  return standaloneEntry;
+}
+
+function withTemporaryStandaloneEntry(t, contents) {
+  const standaloneEntry = resolveStandaloneEntry(t);
+  if (!standaloneEntry) return null;
+  const originalSource = readFileSync(standaloneEntry, "utf8");
+  writeFileSync(standaloneEntry, contents, "utf8");
+  t.after(() => {
+    writeFileSync(standaloneEntry, originalSource, "utf8");
+  });
+  return standaloneEntry;
+}
+
+test("standalone runtime reaches ready without bypass via the internal bootstrap probe", async (t) => {
+  const standaloneEntry = resolveStandaloneEntry(t);
+  if (!standaloneEntry) return;
 
   const port = await allocatePort();
   const combined = [];
@@ -156,6 +173,7 @@ test("standalone runtime reaches ready without bypass via the internal bootstrap
 
   const logsAfterReady = combined.join("");
   assert.doesNotMatch(logsAfterReady, /startup_watchdog watchdog_bypass_enabled/);
+  assert.doesNotMatch(logsAfterReady, /startup_watchdog handlers_ready_forced/);
   assert.match(
     logsAfterReady,
     new RegExp(`"probeUrl":"http://127\\.0\\.0\\.1:${serverListeningMeta.internalPort}/_nn_bootstrap_ready_check__"`),
@@ -168,11 +186,8 @@ test("standalone runtime reaches ready without bypass via the internal bootstrap
 });
 
 test("standalone runtime can bypass bootstrap watchdog readiness gating after bind outside production", async (t) => {
-  const standaloneEntry = STANDALONE_CANDIDATES.find((candidate) => existsSync(candidate));
-  if (!standaloneEntry) {
-    t.skip(`Missing standalone build entry. Checked:\n${STANDALONE_CANDIDATES.join("\n")}`);
-    return;
-  }
+  const standaloneEntry = resolveStandaloneEntry(t);
+  if (!standaloneEntry) return;
 
   const port = await allocatePort();
   const combined = [];
@@ -226,6 +241,7 @@ test("standalone runtime can bypass bootstrap watchdog readiness gating after bi
   assert.match(logsAfterReady, /startup_watchdog handlers_ready/);
   assert.doesNotMatch(logsAfterReady, /startup_watchdog internal_probe_attempt/);
   assert.doesNotMatch(logsAfterReady, /startup_watchdog internal_probe_response/);
+  assert.doesNotMatch(logsAfterReady, /startup_watchdog handlers_ready_forced/);
 
   const healthRes = await fetch(`http://127.0.0.1:${port}/healthz`);
   assert.equal(healthRes.status, 200);
@@ -234,4 +250,136 @@ test("standalone runtime can bypass bootstrap watchdog readiness gating after bi
   const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
   assert.equal(readyRes.status, 200);
   assert.equal(await readyRes.text(), "ok");
+});
+
+test("standalone runtime can force readyz after five seconds only when forced fallback is enabled and child stays alive", async (t) => {
+  const standaloneEntry = withTemporaryStandaloneEntry(
+    t,
+    [
+      'const http = require("node:http");',
+      'const host = process.env.HOSTNAME || "127.0.0.1";',
+      'const port = Number(process.env.PORT || "3000");',
+      "const server = http.createServer((_req, _res) => {});",
+      'server.listen(port, host, () => {',
+      '  console.log("✓ Ready in 0ms");',
+      "});",
+      "setInterval(() => {}, 1000);",
+    ].join("\n"),
+  );
+  if (!standaloneEntry) return;
+
+  const port = await allocatePort();
+  const combined = [];
+  const server = spawn(process.execPath, ["scripts/start-standalone.mjs"], {
+    cwd: APP_ROOT,
+    env: {
+      ...process.env,
+      NODE_ENV: "production",
+      PORT: String(port),
+      HOSTNAME: "127.0.0.1",
+      NN_STRICT_PRODUCTION_ENV: "0",
+      NN_ENABLE_FORCED_READINESS_FALLBACK: "1",
+      AUTH_SECRET: "test-secret",
+      AUTH_URL: "https://example.com",
+      NEXT_PUBLIC_APP_URL: "https://example.com",
+      DATABASE_URL: "postgresql://user:pass@127.0.0.1:5432/testdb",
+      STRIPE_SECRET_KEY: "sk_test_123",
+      STRIPE_WEBHOOK_SECRET: "whsec_123",
+      SPACES_KEY: "spaces-key",
+      SPACES_SECRET: "spaces-secret",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  const capture = (chunk) => {
+    combined.push(chunk.toString());
+  };
+  server.stdout.on("data", capture);
+  server.stderr.on("data", capture);
+
+  const stopServer = async () => {
+    if (server.exitCode != null || server.killed) return;
+    server.kill("SIGTERM");
+    await new Promise((resolve) => server.once("exit", resolve));
+  };
+  const waitForLog = async (snippet, timeoutMs = 10_000) => {
+    await waitFor(() => combined.join("").includes(snippet), { timeoutMs, intervalMs: 50 }).catch((error) => {
+      const detail = `${error.message}\n\nCaptured logs:\n${combined.join("")}`;
+      throw new Error(detail);
+    });
+  };
+
+  t.after(stopServer);
+
+  await waitForLog("startup_watchdog server_listening");
+  const notReadyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
+  assert.equal(notReadyRes.status, 503);
+  assert.equal(await notReadyRes.text(), "bootstrap: request handlers not ready");
+
+  await waitForLog("startup_watchdog internal_probe_error");
+  await waitForLog("startup_watchdog handlers_ready_forced", 10_000);
+
+  const logsAfterForced = combined.join("");
+  assert.match(logsAfterForced, /startup_watchdog handlers_ready/);
+  assert.match(logsAfterForced, /"viaEnv":true/);
+  assert.doesNotMatch(logsAfterForced, /startup_watchdog watchdog_bypass_enabled/);
+
+  const readyRes = await fetch(`http://127.0.0.1:${port}/readyz`);
+  assert.equal(readyRes.status, 200);
+  assert.equal(await readyRes.text(), "ready");
+});
+
+test("standalone runtime never forces readiness after the child exits", async (t) => {
+  const standaloneEntry = withTemporaryStandaloneEntry(
+    t,
+    [
+      'const http = require("node:http");',
+      'const host = process.env.HOSTNAME || "127.0.0.1";',
+      'const port = Number(process.env.PORT || "3000");',
+      'const server = http.createServer((_req, res) => {',
+      '  res.statusCode = 503;',
+      '  res.end("not-ready");',
+      "});",
+      'server.listen(port, host, () => {',
+      '  console.log("✓ Ready in 0ms");',
+      "  setTimeout(() => process.exit(0), 250);",
+      "});",
+    ].join("\n"),
+  );
+  if (!standaloneEntry) return;
+
+  const port = await allocatePort();
+  const combined = [];
+  const server = spawn(process.execPath, ["scripts/start-standalone.mjs"], {
+    cwd: APP_ROOT,
+    env: {
+      ...process.env,
+      NODE_ENV: "production",
+      PORT: String(port),
+      HOSTNAME: "127.0.0.1",
+      NN_STRICT_PRODUCTION_ENV: "0",
+      NN_ENABLE_FORCED_READINESS_FALLBACK: "1",
+      AUTH_SECRET: "test-secret",
+      AUTH_URL: "https://example.com",
+      NEXT_PUBLIC_APP_URL: "https://example.com",
+      DATABASE_URL: "postgresql://user:pass@127.0.0.1:5432/testdb",
+      STRIPE_SECRET_KEY: "sk_test_123",
+      STRIPE_WEBHOOK_SECRET: "whsec_123",
+      SPACES_KEY: "spaces-key",
+      SPACES_SECRET: "spaces-secret",
+    },
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+
+  const capture = (chunk) => {
+    combined.push(chunk.toString());
+  };
+  server.stdout.on("data", capture);
+  server.stderr.on("data", capture);
+
+  const exitCode = await new Promise((resolve) => server.once("exit", resolve));
+  assert.equal(exitCode, 0);
+  const logs = combined.join("");
+  assert.match(logs, /startup_watchdog watchdog_child_process_exit/);
+  assert.doesNotMatch(logs, /startup_watchdog handlers_ready_forced/);
 });

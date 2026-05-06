@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 
 const WORKSPACE_LINKS: readonly { href: string; labelKey: string }[] = [
-  { href: "/app/account/report-card", labelKey: "learner.account.nav.reportCard" },
+  { href: "/app/account/report", labelKey: "learner.account.nav.report" },
   { href: "/app/account/readiness", labelKey: "learner.account.nav.readiness" },
   { href: "/app/account/progress", labelKey: "learner.account.nav.progress" },
   { href: "/app/account/question-bank-performance", labelKey: "learner.account.nav.questionBankPerf" },
@@ -37,7 +37,11 @@ export function LearnerPerformanceWorkspaceNav({
       </p>
       <ul className="flex flex-wrap gap-2">
         {WORKSPACE_LINKS.map(({ href, labelKey }) => {
-          const current = pathname === href || (href !== "/app" && pathname.startsWith(href));
+          const current =
+            pathname === href ||
+            (href !== "/app" && pathname.startsWith(href)) ||
+            (href === "/app/account/report" &&
+              (pathname === "/app/account/report-card" || pathname.startsWith("/app/account/report-card")));
           return (
             <li key={href}>
               <Link

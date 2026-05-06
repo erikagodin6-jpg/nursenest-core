@@ -86,6 +86,16 @@ export type PathwayLessonRelatedRef = {
   titleHint?: string;
 };
 
+/** Cross-surface study links (flashcards, qbank, CAT) — see `pathway-lesson-linked-learning-assets.ts`. */
+export type PathwayLessonLinkedLearningSignals = {
+  bidirectionalTopicKey: string;
+  flashcardsLinked: boolean;
+  practiceQuestionsLinked: boolean;
+  /** Practice-test / CAT surfaces exist for this pathway (false only when pathway is hidden). */
+  catPoolLinked: boolean;
+  adaptiveLearningReadiness: boolean;
+};
+
 /** Primary exam tier(s) this lesson targets (pathway still scopes catalog rows; this tags cross-surface alignment). */
 export type PathwayLessonAudienceTier = "rn" | "pn" | "np";
 
@@ -158,6 +168,11 @@ export type PathwayLessonSectionKind =
   | "clinical_application"
   | "exam_tips"
   | "exam_focus"
+  /** Authoring / AI pipelines — full-clinical spine; must participate in premium-normalization qualification. */
+  | "clinical_manifestations"
+  | "treatment_management"
+  | "nursing_priorities"
+  | "complications"
   | PathwayLessonPremiumSectionKind;
 
 /** Optional educational figures for a lesson section (HTTPS URLs only after sanitization). */
@@ -244,8 +259,22 @@ export type PathwayLessonLocaleMeta = {
   overlayTranslationFallback?: boolean;
 };
 
+/** QA: how `normalizeLesson` chose premium vs legacy five-block expander (always set on normalized rows). */
+export type PathwayLessonNormalizeTrace = {
+  usedPremiumPath: boolean;
+  usedLegacyFiveBlockExpander: boolean;
+  incomingSectionCount: number;
+  totalWordCount: number;
+  meaningfulClinicalBypass: boolean;
+};
+
 export type PathwayLessonRecord = {
   slug: string;
+  /**
+   * Canonical public display title. `catalog.json` authors curate this value; generated scripts may add
+   * metadata but must not overwrite it from older registries, SEO helpers, or slug fallbacks. Regression
+   * tests intentionally fail when known old public titles return.
+   */
   title: string;
   topic: string;
   topicSlug: string;
@@ -256,6 +285,8 @@ export type PathwayLessonRecord = {
   seoTitle: string;
   seoDescription: string;
   sections: PathwayLessonSection[];
+  /** Set by `normalizeLesson` — source-of-truth for whether the legacy expander ran. */
+  normalizeTrace?: PathwayLessonNormalizeTrace;
   /**
    * Bank-backed pre-check: stable `ExamQuestion.id` values only (no inline stems).
    * Authoring: run lists through `sanitizeQuestionIdArray` in `pathway-lesson-catalog-sync` before persisting.
@@ -279,6 +310,10 @@ export type PathwayLessonRecord = {
   structuralQuality?: PathwayLessonStructuralGate;
   /** Present when lesson uses premium section kinds; filled in {@link normalizeLesson}. */
   premiumValidation?: PathwayLessonPremiumValidation;
+  /**
+   * Marketing allied hubs / dedicated shards: profession registry key (lowercase), when authored on catalog or DB.
+   */
+  alliedProfessionKey?: string;
   /** Optional catalog metadata for filtering and hub labeling (when present on `LessonInput`). */
   audienceTiers?: PathwayLessonAudienceTier[];
   countryScope?: PathwayLessonCountryScope;
@@ -305,6 +340,13 @@ export type PathwayLessonRecord = {
   studyCommonTraps?: string[];
   /** “If you only remember one thing” — optional single line when authored. */
   memoryAnchor?: string;
+  /**
+   * RN expansion / authoring: human-readable flashcard stems mirrored into the
+   * `linked_flashcard_prompts` section for depth checks. Kept as `string[]` for catalog compatibility.
+   * TODO: migrate to structured objects `{ id, sourceSection, prompt, kind }` when the flashcard
+   * pipeline and loaders accept a stable object shape end-to-end.
+   */
+  linked_flashcard_prompts?: string[];
   /** Section ids skipped in the article when takeaways bullets were hoisted to strips. */
   omitHighYieldSectionIds?: string[];
   /**
@@ -327,6 +369,11 @@ export type PathwayLessonRecord = {
     | "partial_content"
     | "pathway_mismatch"
     | "unverified_inventory_fill";
+  /**
+   * Canonical linkage to flashcards, practice questions, and CAT pools (plus adaptive readiness).
+   * Set in {@link normalizeLesson}; used for audits and learner CTAs.
+   */
+  linkedLearningSignals?: PathwayLessonLinkedLearningSignals;
 };
 
 /** Hub cards must not link with empty or whitespace slugs (defensive; DB/catalog should always set slug). */
@@ -344,6 +391,19 @@ export function pathwayLessonMarketingDetailHref(
 ): string | null {
   if (!pathwayLessonHasRenderableHubSlug({ slug: slug ?? "" })) return null;
   return marketingLessonDetailHref(lessonsBasePath, slug);
+}
+
+/**
+ * Hub lesson **card** link only after strict {@link verifyMarketingHubLessonRowsResolve} success.
+ * Rows marked {@link PathwayLessonRecord.hubMarketingDegraded} (soft recovery, verify cap, or pipeline bypass)
+ * must not render a marketing detail `href` — same contract as “detail loader would not treat as strict public link”.
+ */
+export function pathwayLessonMarketingHubVerifiedCardHref(
+  lessonsBasePath: string,
+  lesson: Pick<PathwayLessonRecord, "slug" | "hubMarketingDegraded">,
+): string | null {
+  if (lesson.hubMarketingDegraded) return null;
+  return pathwayLessonMarketingDetailHref(lessonsBasePath, lesson.slug);
 }
 
 /**

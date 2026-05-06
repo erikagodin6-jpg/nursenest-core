@@ -36,6 +36,8 @@ function modeFromScope(scope: AccessScope): EducationalEntitlementMode {
   switch (scope.reason) {
     case "active_subscription":
       return "active_subscription";
+    case "canceled_paid_through":
+      return "active_subscription";
     case "grace_period":
       return "grace_period";
     case "past_due_grace":

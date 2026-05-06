@@ -1,10 +1,13 @@
 import type { PathwayLessonSectionKind } from "@/lib/lessons/pathway-lesson-types";
 
+/** Matches {@link KIND_TO_BODY_TOKEN.core_concept} — safe default when a runtime kind string is not in the map. */
+const DEFAULT_BODY_TOKEN = "concept";
+
 /**
  * Stable BEM tokens for `.nn-lesson-body--*` on lesson prose roots.
  * Pairs with `data-lsc-kind` on pathway lesson section cards for section-scoped CSS.
  */
-const KIND_TO_BODY_TOKEN: Record<PathwayLessonSectionKind, string> = {
+const KIND_TO_BODY_TOKEN = {
   introduction: "intro",
   pathophysiology_overview: "mechanism",
   signs_symptoms: "presentation",
@@ -26,7 +29,11 @@ const KIND_TO_BODY_TOKEN: Record<PathwayLessonSectionKind, string> = {
   clinical_application: "application",
   exam_tips: "exam",
   exam_focus: "exam",
-};
+  clinical_manifestations: "presentation",
+  treatment_management: "intervention",
+  nursing_priorities: "action",
+  complications: "trap",
+} as const satisfies Record<PathwayLessonSectionKind, string>;
 
 /**
  * Returns a single extra class for the lesson body root (e.g. `nn-lesson-body--tier`), or null.
@@ -35,6 +42,6 @@ export function lessonBodyPresentationClass(
   kind: PathwayLessonSectionKind | null | undefined,
 ): string | null {
   if (kind == null) return null;
-  const token = KIND_TO_BODY_TOKEN[kind];
+  const token = KIND_TO_BODY_TOKEN[kind] ?? DEFAULT_BODY_TOKEN;
   return token ? `nn-lesson-body--${token}` : null;
 }

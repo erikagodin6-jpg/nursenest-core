@@ -2,7 +2,7 @@
  * Redact secrets and credential-bearing strings before logs or telemetry.
  * Prefer structured fields; never pass raw Authorization cookies to console.
  */
-import { maskDatabaseUrl } from "@/lib/db/database-env";
+import { maskDatabaseUrl } from "@/lib/env/mask-database-url";
 
 const SENSITIVE_KEY_SUBSTRINGS = [
   "secret",

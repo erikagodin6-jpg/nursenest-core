@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { filterPoolRemovingRecentQuestions } from "@/lib/practice-tests/recent-practice-question-ids";
+import { filterPoolRemovingRecentQuestions } from "@/lib/practice-tests/recent-practice-question-ids-filter";
 import { shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 import { practiceRecentSessionLookback } from "@/lib/study/study-diversity-config";
 

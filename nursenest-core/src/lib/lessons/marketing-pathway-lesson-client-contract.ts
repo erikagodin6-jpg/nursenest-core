@@ -18,7 +18,11 @@
  */
 
 import type { ReactNode } from "react";
-import type { PathwayLessonRecord, PathwayLessonQuizItem } from "@/lib/lessons/pathway-lesson-types";
+import type {
+  PathwayLessonLinkedLearningSignals,
+  PathwayLessonRecord,
+  PathwayLessonQuizItem,
+} from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 
 /** Chips row: metadata only — no `sections`, no bodies. */
@@ -59,6 +63,16 @@ export type MarketingPathwayLessonActionsClientProps = {
   catAdaptiveAvailable: boolean;
   /** Learner app should pass `/app/lessons?pathwayId=…`; marketing omits for public lesson hub. */
   allLessonsHrefOverride?: string | null;
+  /**
+   * When set (normalized pathway lessons), CTAs follow verified linkage — no topic-scoped URLs when the
+   * corresponding signal is false.
+   */
+  linkedLearningSignals?: PathwayLessonLinkedLearningSignals | null;
+  /**
+   * Marketing lesson detail wraps `/app/*` study hrefs with login callback; learner app uses direct links.
+   * @default "learner"
+   */
+  linkMode?: "marketing" | "learner";
 };
 
 /** Pre/post quiz payloads only — not full lesson sections. */

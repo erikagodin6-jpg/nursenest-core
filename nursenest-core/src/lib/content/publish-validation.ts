@@ -1,6 +1,11 @@
 import { QuestionType } from "@prisma/client";
 import { governExamQuestionPublish } from "@/lib/content/editorial-publish-policy";
 import { validateQuestionPayload } from "@/lib/content/question-schema";
+import {
+  collectEducationalPlaceholderIds,
+  hasEducationalAiDisclaimerLanguage,
+  hasLargeDuplicateParagraphBlock,
+} from "@/lib/education/educational-content-placeholder-guard";
 
 export type PublishValidation = { ok: true } | { ok: false; reasons: string[] };
 
@@ -31,8 +36,21 @@ export function validateQuestionForPublishStrict(
 export function validateLessonForPublish(input: { title: string; summary: string; body: string }): PublishValidation {
   const reasons: string[] = [];
   if (input.title.trim().length < 4) reasons.push("Title required");
-  if (input.summary.trim().length < 10) reasons.push("Summary required");
+  if (input.summary.trim().length < 25) reasons.push("Summary required (substantive meta description for publish)");
   if (input.body.trim().length < 10) reasons.push("Body required");
+
+  const bundle = `${input.title}\n${input.summary}\n${input.body}`;
+  const stubIds = collectEducationalPlaceholderIds(bundle);
+  if (stubIds.length > 0) {
+    reasons.push(`Placeholder or stub language detected: ${stubIds.join(", ")}`);
+  }
+  if (hasEducationalAiDisclaimerLanguage(bundle)) {
+    reasons.push("AI meta-disclaimer phrasing is not allowed in published lesson copy");
+  }
+  if (input.body.trim().length > 2400 && hasLargeDuplicateParagraphBlock(input.body)) {
+    reasons.push("Lesson body contains a repeated substantive paragraph block (likely copy-paste filler)");
+  }
+
   return reasons.length ? { ok: false, reasons } : { ok: true };
 }
 

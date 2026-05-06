@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import { BlogPostStatus, BlogPostTemplate, BlogWorkflowStatus } from "@prisma/client";
 
+import { normalizeBlogPostStatusWriteFields } from "@/lib/blog/blog-post-published-state";
 import { blogPostIsLive } from "@/lib/blog/blog-visibility";
 import type { LegacyBlogPostExportRow, LegacyBlogPostExportV1 } from "@/lib/legacy/legacy-blog-post-export-types";
 import {
@@ -31,7 +32,6 @@ export type BlogPostImportIndexRow = {
   publishAt: Date | null;
   scheduledAt: Date | null;
   legacySource: string | null;
-  legacyUrl: string | null;
   workflowStatus: BlogWorkflowStatus;
 };
 
@@ -112,7 +112,6 @@ async function loadBlogPostIndex(prisma: PrismaClient): Promise<{
       publishAt: true,
       scheduledAt: true,
       legacySource: true,
-      legacyUrl: true,
       workflowStatus: true,
     },
   });
@@ -171,7 +170,6 @@ export type MergePreview = {
   publishAt: Date | null;
   scheduledAt: Date | null;
   legacySource: string | null;
-  legacyUrl: string | null;
 };
 
 export function buildMergedBlogPostPreview(input: {
@@ -238,7 +236,6 @@ export function buildMergedBlogPostPreview(input: {
   }
 
   const legacySource = mergeLegacyBlogPostSource(existing?.legacySource, legacy.legacyId, legacy.legacySource);
-  const legacyUrl = existing?.legacyUrl?.trim() || legacy.legacyUrl?.trim() || null;
 
   return {
     slug,
@@ -252,7 +249,6 @@ export function buildMergedBlogPostPreview(input: {
     publishAt,
     scheduledAt,
     legacySource,
-    legacyUrl,
   };
 }
 
@@ -404,6 +400,10 @@ export async function importLegacyBlogPosts(
       if (!opts.apply) continue;
 
       if (row) {
+        const statusWrite = normalizeBlogPostStatusWriteFields({
+          postStatus: preview.postStatus,
+          publishAt: preview.publishAt,
+        });
         await prisma.blogPost.update({
           where: { id: row.id },
           data: {
@@ -413,10 +413,10 @@ export async function importLegacyBlogPosts(
             category: preview.category,
             tags: preview.tags,
             postTemplate: preview.postTemplate,
-            postStatus: preview.postStatus,
-            publishAt: preview.publishAt,
+            postStatus: statusWrite.postStatus,
+            publishAt: statusWrite.publishAt,
+            workflowStatus: statusWrite.workflowStatus,
             legacySource: preview.legacySource,
-            legacyUrl: preview.legacyUrl,
           },
         });
         summary.updated += 1;
@@ -431,11 +431,14 @@ export async function importLegacyBlogPosts(
           postStatus: preview.postStatus,
           publishAt: preview.publishAt,
           legacySource: preview.legacySource,
-          legacyUrl: preview.legacyUrl,
         });
       } else {
         const excerptOut =
           preview.excerpt?.trim() || `${preview.title}`.slice(0, 240) || "Legacy import";
+        const statusWrite = normalizeBlogPostStatusWriteFields({
+          postStatus: preview.postStatus,
+          publishAt: preview.publishAt,
+        });
         const created = await prisma.blogPost.create({
           data: {
             slug: normalizeBlogSlug(legacy.slug) || preview.slug,
@@ -445,10 +448,10 @@ export async function importLegacyBlogPosts(
             category: preview.category,
             tags: preview.tags,
             postTemplate: preview.postTemplate,
-            postStatus: preview.postStatus,
-            publishAt: preview.publishAt,
+            postStatus: statusWrite.postStatus,
+            publishAt: statusWrite.publishAt,
+            workflowStatus: statusWrite.workflowStatus,
             legacySource: preview.legacySource,
-            legacyUrl: preview.legacyUrl,
           },
         });
         summary.created += 1;
@@ -465,7 +468,7 @@ export async function importLegacyBlogPosts(
           publishAt: created.publishAt,
           scheduledAt: created.scheduledAt,
           legacySource: created.legacySource,
-          legacyUrl: created.legacyUrl,
+          workflowStatus: created.workflowStatus,
         });
       }
     } catch (e) {

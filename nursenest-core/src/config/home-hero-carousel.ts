@@ -83,6 +83,55 @@ export const HOME_HERO_PRIMARY_CAROUSEL_INDICES = [9, 0, 6, 2, 8] as const;
 
 const HOME_HERO_SLIDE_KEY_PREFIX = "components.homeHeroCarousel";
 
+const HOME_HERO_SLIDE_COPY_FALLBACKS: Record<number, { label: string; title: string; caption: string }> = {
+  1: { label: "Question Bank", title: "Practice with exam-style questions", caption: "Build confidence with rationales and focused review." },
+  2: { label: "RN Prep", title: "Study by pathway and topic", caption: "Keep NCLEX-RN practice tied to the skills you are reviewing." },
+  3: { label: "Clinical Judgment", title: "Work through safer next steps", caption: "See how cues, priorities, and rationales connect." },
+  4: { label: "Lessons", title: "Review the concept before you test", caption: "Use concise lessons to close gaps before another question set." },
+  5: { label: "Progress", title: "Track what needs attention", caption: "Follow your study activity across questions, lessons, and review." },
+  6: { label: "Flashcards", title: "Reinforce high-yield facts", caption: "Turn weak points into short review sessions." },
+  7: { label: "NP Prep", title: "Keep advanced practice review organized", caption: "Move between study modes without losing your pathway context." },
+  8: { label: "Rationales", title: "Learn why each answer works", caption: "Review explanations that connect safety, priority, and scope." },
+  9: { label: "Study Modes", title: "Choose the right practice mode", caption: "Mix quick sessions, focused review, and longer exam-style work." },
+  10: { label: "Dashboard", title: "Return to what matters next", caption: "Pick up with the lessons and practice areas still needing work." },
+  11: { label: "Readiness", title: "Keep your prep moving", caption: "Use visible progress signals to plan the next study session." },
+  12: { label: "Review", title: "Strengthen weaker topics", caption: "Use focused practice to revisit concepts before test day." },
+  13: { label: "Mobile Study", title: "Study from any device", caption: "Open quick practice and review whenever you have a few minutes." },
+  14: { label: "Exam Prep", title: "Stay inside your exam lane", caption: "Keep RN, PN, NP, and allied prep surfaces clearly scoped." },
+  15: { label: "NurseNest", title: "Practice, review, and keep going", caption: "A lightweight preview of the study tools available inside." },
+};
+
+function looksLikeUnsafeSlideCopy(value: string, key: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed) return true;
+  if (trimmed === key) return true;
+  if (/^(KICKER|LEAD|TITLE|BODY|LINK|LABEL|HEADING|CTA|BUTTON)$/u.test(trimmed)) return true;
+  if (/^(kicker|lead|title|body|link|label|heading|cta|button)$/iu.test(trimmed)) return true;
+  if (/^(pages|components|home|nav|footer)\.[a-z0-9_.-]+$/iu.test(trimmed)) return true;
+  return false;
+}
+
+function safeSlideCopy(
+  t: (key: string) => string,
+  key: string,
+  fallback: string,
+): string {
+  let raw = "";
+  try {
+    raw = t(key);
+  } catch {
+    raw = "";
+  }
+  if (!looksLikeUnsafeSlideCopy(raw, key)) return raw.trim();
+  if (process.env.NODE_ENV === "development") {
+    console.error("[home-hero-carousel] missing or placeholder slide copy", {
+      key,
+      resolved: raw.slice(0, 120),
+    });
+  }
+  return fallback;
+}
+
 export function homeHeroSlideTitleKey(index1To15: number): string {
   return `${HOME_HERO_SLIDE_KEY_PREFIX}.slide${String(index1To15).padStart(2, "0")}.title`;
 }
@@ -105,11 +154,10 @@ function buildAlt(label: string, title: string, caption: string): string {
 
 function slideFromMeta(t: (key: string) => string, meta: HomeHeroSlideMetadata): HomeHeroSlide {
   const labelKey = homeHeroSlideLabelKey(meta.index);
-  const rawLabel = t(labelKey);
-  const label =
-    rawLabel === labelKey || rawLabel.startsWith(`${HOME_HERO_SLIDE_KEY_PREFIX}.`) ? "" : rawLabel.trim();
-  const title = t(homeHeroSlideTitleKey(meta.index));
-  const caption = t(homeHeroSlideCaptionKey(meta.index));
+  const fallback = HOME_HERO_SLIDE_COPY_FALLBACKS[meta.index] ?? HOME_HERO_SLIDE_COPY_FALLBACKS[15]!;
+  const label = safeSlideCopy(t, labelKey, fallback.label);
+  const title = safeSlideCopy(t, homeHeroSlideTitleKey(meta.index), fallback.title);
+  const caption = safeSlideCopy(t, homeHeroSlideCaptionKey(meta.index), fallback.caption);
   return {
     index: meta.index,
     objectKey: meta.objectKey,

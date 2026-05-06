@@ -179,7 +179,7 @@ export default async function AccountQuestionBankPerformancePage() {
           {t("learner.profile.quickLinks.questionBank")}
         </Link>
         <Link
-          href="/app/account/report-card"
+          href="/app/account/report"
           className="inline-flex rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-muted/80"
         >
           {t("learner.account.nav.reportCard")}

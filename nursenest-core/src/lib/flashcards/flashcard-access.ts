@@ -21,6 +21,21 @@ export function truncateForPreview(back: string): string {
   return `${t.slice(0, FLASHCARD_PREVIEW_BACK_MAX_CHARS).trim()}…`;
 }
 
+/** Lesson-linked or catalog-derived study rows — not persisted `Flashcard` PKs (skip spaced-repetition POST). */
+export function isSyntheticFlashcardStudyId(id: string): boolean {
+  if (!id || typeof id !== "string") return false;
+  return (
+    id.startsWith("lq:") ||
+    id.startsWith("lrp:") ||
+    id.startsWith("lrf:") ||
+    id.startsWith("lrc:") ||
+    id.startsWith("ltk:") ||
+    id.startsWith("lta:") ||
+    id.startsWith("lls:") ||
+    id.startsWith("llp:")
+  );
+}
+
 /**
  * Subscriber / admin access to a deck (not individual card ladder — cards checked separately).
  */

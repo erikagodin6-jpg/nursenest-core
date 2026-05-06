@@ -7,6 +7,7 @@ import {
 import { prisma } from "@/lib/db";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { processDraftGenerationBatchItems } from "@/lib/blog/blog-draft-generation-batch";
+import { parseBlogBatchItemRepairMeta } from "@/lib/blog/blog-generation-repair-classifier";
 import { DRAFT_BATCH_MAX_ITEMS_PER_PROCESS } from "@/lib/blog/blog-draft-generation-batch-constants";
 import { isRnTopicMapShellGenerationBatch } from "@/lib/blog/blog-topic-map-shell-batch-constants";
 
@@ -52,6 +53,8 @@ export type BlogGenerationJobItemPayload = Pick<
   "id" | "ordinal" | "topicRaw" | "status" | "blogPostId" | "error"
 > & {
   blogPost: { id: string; slug: string; title: string } | null;
+  /** Parsed from `error` when present (repair attempts, terminal flag). */
+  repairMeta: { repairAttempts: number | null; terminal: boolean | null; message: string };
 };
 
 export type BlogGenerationJobPayload = {
@@ -135,6 +138,7 @@ function serializeJob(
       blogPostId: i.blogPostId,
       error: i.error,
       blogPost: i.blogPost,
+      repairMeta: parseBlogBatchItemRepairMeta(i.error),
     })),
   };
 }

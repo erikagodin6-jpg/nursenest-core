@@ -1,0 +1,3008 @@
+{
+  "generatedAt": "2026-05-03T20:29:52.454Z",
+  "applied": true,
+  "targetKeys": 1530,
+  "changedKeys": 1319,
+  "changes": [
+    {
+      "key": "app.App.componentStack",
+      "shard": "auth",
+      "before": "Component Stack",
+      "after": "Pila de componentes"
+    },
+    {
+      "key": "app.App.diagnosticContext",
+      "shard": "auth",
+      "before": "Diagnostic Context",
+      "after": "Contexto diagnóstico"
+    },
+    {
+      "key": "app.App.reloadPage",
+      "shard": "auth",
+      "before": "Reload Page",
+      "after": "Recargar página"
+    },
+    {
+      "key": "app.App.somethingWentWrong",
+      "shard": "auth",
+      "before": "Something went wrong",
+      "after": "algo salió mal"
+    },
+    {
+      "key": "app.App.unexpectedError",
+      "shard": "auth",
+      "before": "An unexpected error occurred. Please try reloading the page.",
+      "after": "Se produjo un error inesperado. Intente recargar la página."
+    },
+    {
+      "key": "login.signupTitle",
+      "shard": "auth",
+      "before": "Create Account",
+      "after": "Crear una cuenta"
+    },
+    {
+      "key": "login.signupSubtitle",
+      "shard": "auth",
+      "before": "Start your nursing exam prep today",
+      "after": "Comience su preparación para el examen de enfermería hoy"
+    },
+    {
+      "key": "login.signUpNow",
+      "shard": "auth",
+      "before": "Sign up",
+      "after": "Inscribirse"
+    },
+    {
+      "key": "login.welcomeSubtitle",
+      "shard": "auth",
+      "before": "Continue your exam prep journey",
+      "after": "Continúe su viaje de preparación para el examen"
+    },
+    {
+      "key": "login.forgotPassword",
+      "shard": "auth",
+      "before": "Forgot password?",
+      "after": "¿Has olvidado tu contraseña?"
+    },
+    {
+      "key": "login.forgotEmailHelp",
+      "shard": "auth",
+      "before": "Forgot email?",
+      "after": "¿Olvidaste el correo electrónico?"
+    },
+    {
+      "key": "login.forgotEmailHelpTitle",
+      "shard": "auth",
+      "before": "Recover account email",
+      "after": "Recuperar correo electrónico de cuenta"
+    },
+    {
+      "key": "login.passwordResetTitle",
+      "shard": "auth",
+      "before": "Password Reset",
+      "after": "Restablecer contraseña"
+    },
+    {
+      "key": "login.passwordResetDescription",
+      "shard": "auth",
+      "before": "Use “Forgot password?” to get a reset link, or contact support if you no longer have access to your email.",
+      "after": "Utilice \"¿Olvidó su contraseña?\" para obtener un enlace de reinicio, o comuníquese con el soporte si ya no tiene acceso a su correo electrónico."
+    },
+    {
+      "key": "account.idPrefix",
+      "shard": "auth",
+      "before": "ID",
+      "after": "IDENTIFICACIÓN"
+    },
+    {
+      "key": "account.role.admin",
+      "shard": "auth",
+      "before": "Admin",
+      "after": "Administración"
+    },
+    {
+      "key": "nursenest.ca",
+      "shard": "common",
+      "before": "nursenest.ca",
+      "after": "enfermeranest.ca"
+    },
+    {
+      "key": "report.attachScreenshot",
+      "shard": "common",
+      "before": "Attach Screenshot",
+      "after": "Adjuntar captura de pantalla"
+    },
+    {
+      "key": "report.buttonLabel",
+      "shard": "common",
+      "before": "Report Problem",
+      "after": "Informar problema"
+    },
+    {
+      "key": "report.contactPermission",
+      "shard": "common",
+      "before": "You may contact me about this report",
+      "after": "Puede contactarme sobre este informe."
+    },
+    {
+      "key": "report.descriptionLabel",
+      "shard": "common",
+      "before": "Description",
+      "after": "Descripción"
+    },
+    {
+      "key": "report.descriptionPlaceholder",
+      "shard": "common",
+      "before": "Describe the issue you encountered...",
+      "after": "Describe el problema que encontraste..."
+    },
+    {
+      "key": "report.emailLabel",
+      "shard": "common",
+      "before": "Email (optional)",
+      "after": "Correo electrónico (opcional)"
+    },
+    {
+      "key": "report.emailPlaceholder",
+      "shard": "common",
+      "before": "your@email.com",
+      "after": "tu@correo electrónico.com"
+    },
+    {
+      "key": "report.errorDescription",
+      "shard": "common",
+      "before": "Something went wrong. Please try again.",
+      "after": "Algo salió mal. Por favor inténtalo de nuevo."
+    },
+    {
+      "key": "report.errorTitle",
+      "shard": "common",
+      "before": "Submission Failed",
+      "after": "Envío fallido"
+    },
+    {
+      "key": "report.pageInfo",
+      "shard": "common",
+      "before": "Page information will be included automatically.",
+      "after": "La información de la página se incluirá automáticamente."
+    },
+    {
+      "key": "report.problemTypeLabel",
+      "shard": "common",
+      "before": "Problem Type",
+      "after": "Tipo de problema"
+    },
+    {
+      "key": "report.problemTypePlaceholder",
+      "shard": "common",
+      "before": "Select a problem type",
+      "after": "Seleccione un tipo de problema"
+    },
+    {
+      "key": "report.screenshotError",
+      "shard": "common",
+      "before": "Failed to capture screenshot",
+      "after": "No se pudo realizar la captura de pantalla"
+    },
+    {
+      "key": "report.screenshotLabel",
+      "shard": "common",
+      "before": "Screenshot",
+      "after": "Captura de pantalla"
+    },
+    {
+      "key": "report.screenshotTooLarge",
+      "shard": "common",
+      "before": "Screenshot is too large",
+      "after": "La captura de pantalla es demasiado grande"
+    },
+    {
+      "key": "report.severityLabel",
+      "shard": "common",
+      "before": "Severity",
+      "after": "Gravedad"
+    },
+    {
+      "key": "report.submitButton",
+      "shard": "common",
+      "before": "Submit Report",
+      "after": "Enviar informe"
+    },
+    {
+      "key": "report.submitting",
+      "shard": "common",
+      "before": "Submitting...",
+      "after": "Sumisión..."
+    },
+    {
+      "key": "report.subtitle",
+      "shard": "common",
+      "before": "Help us improve by reporting issues you encounter.",
+      "after": "Ayúdanos a mejorar informando los problemas que encuentres."
+    },
+    {
+      "key": "report.successDescription",
+      "shard": "common",
+      "before": "Thank you for your feedback. We will review your report.",
+      "after": "Gracias por tus comentarios. Revisaremos su informe."
+    },
+    {
+      "key": "report.successTitle",
+      "shard": "common",
+      "before": "Report Submitted",
+      "after": "Informe enviado"
+    },
+    {
+      "key": "report.title",
+      "shard": "common",
+      "before": "Report a Problem",
+      "after": "Informar un problema"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.11OrganSystemsOverview",
+      "shard": "learner",
+      "before": "11 Organ Systems Overview",
+      "after": "11 Descripción general de los sistemas de órganos"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.actionPotentialSteps",
+      "shard": "learner",
+      "before": "Action Potential Steps",
+      "after": "Pasos potenciales de acción"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.actionPotentialSynapticTransmission",
+      "shard": "learner",
+      "before": "Action Potential & Synaptic Transmission",
+      "after": "Potencial de acción y transmisión sináptica"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.airwayBranchingConductingZoneRespiratory",
+      "shard": "learner",
+      "before": "Airway Branching (Conducting Zone → Respiratory Zone)",
+      "after": "Ramificación de las vías respiratorias (zona de conducción → zona respiratoria)"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.airwaysAnatomyGasExchange",
+      "shard": "learner",
+      "before": "Airways Anatomy & Gas Exchange",
+      "after": "Anatomía de las vías respiratorias e intercambio de gases"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.anatomicalPositionDirectionalTerms",
+      "shard": "learner",
+      "before": "Anatomical Position & Directional Terms",
+      "after": "Posición anatómica y términos direccionales"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.axialVsAppendicularSkeleton",
+      "shard": "learner",
+      "before": "Axial vs Appendicular Skeleton",
+      "after": "Esqueleto axial versus apendicular"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.bloodFlowSequence",
+      "shard": "learner",
+      "before": "Blood Flow Sequence",
+      "after": "Secuencia del flujo sanguíneo"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.boneJointConcepts",
+      "shard": "learner",
+      "before": "Bone & Joint Concepts",
+      "after": "Conceptos de huesos y articulaciones"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.boneStructureFunction",
+      "shard": "learner",
+      "before": "Bone Structure & Function",
+      "after": "Estructura y función ósea"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.calciumHomeostasisBoneTypes",
+      "shard": "learner",
+      "before": "Calcium Homeostasis & Bone Types",
+      "after": "Homeostasis del calcio y tipos de huesos"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.cardiacCycleBloodVesselTypes",
+      "shard": "learner",
+      "before": "Cardiac Cycle & Blood Vessel Types",
+      "after": "Ciclo cardíaco y tipos de vasos sanguíneos"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.cardiacOutput",
+      "shard": "learner",
+      "before": "Cardiac Output",
+      "after": "Gasto cardíaco"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.cardiovascularRespiratoryDigestiveUrinar",
+      "shard": "learner",
+      "before": "Cardiovascular, Respiratory, Digestive & Urinary Systems Check",
+      "after": "Revisión de los sistemas cardiovascular, respiratorio, digestivo y urinario"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.cellMembraneStructure",
+      "shard": "learner",
+      "before": "Cell Membrane Structure",
+      "after": "Estructura de la membrana celular"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.cellTissueBiologyCheck",
+      "shard": "learner",
+      "before": "Cell & Tissue Biology Check",
+      "after": "Verificación de biología celular y tisular"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.cellularCommunicationBasics",
+      "shard": "learner",
+      "before": "Cellular Communication Basics",
+      "after": "Conceptos básicos de comunicación celular"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.cellularInjuryAdaptation",
+      "shard": "learner",
+      "before": "Cellular Injury & Adaptation",
+      "after": "Lesión celular y adaptación"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.chemicalMessengersAndHowThe",
+      "shard": "learner",
+      "before": "Chemical messengers and how the body regulates them",
+      "after": "Mensajeros químicos y cómo el cuerpo los regula."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.clinicalCommunication",
+      "shard": "learner",
+      "before": "Clinical Communication",
+      "after": "Comunicación clínica"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.clinicalConnection",
+      "shard": "learner",
+      "before": "Clinical Connection",
+      "after": "Conexión clínica"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.clinicalImplicationsOfCortisol",
+      "shard": "learner",
+      "before": "Clinical Implications of Cortisol",
+      "after": "Implicaciones clínicas del cortisol"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.cnsPnsTheAutonomicNervous",
+      "shard": "learner",
+      "before": "CNS, PNS & the Autonomic Nervous System",
+      "after": "SNC, SNP y el sistema nervioso autónomo"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.criticalMetabolicAndStressResponse",
+      "shard": "learner",
+      "before": "Critical metabolic and stress response pathways",
+      "after": "Vías críticas metabólicas y de respuesta al estrés."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.directionalTerms",
+      "shard": "learner",
+      "before": "Directional Terms",
+      "after": "Términos direccionales"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.drugreceptorInteractions",
+      "shard": "learner",
+      "before": "Drug-Receptor Interactions",
+      "after": "Interacciones fármaco-receptor"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.electrochemicalGradients",
+      "shard": "learner",
+      "before": "Electrochemical Gradients",
+      "after": "gradientes electroquímicos"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.endocrineConcepts",
+      "shard": "learner",
+      "before": "Endocrine Concepts",
+      "after": "Conceptos endocrinos"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.endocrineSystemCheck",
+      "shard": "learner",
+      "before": "Endocrine System Check",
+      "after": "Revisión del sistema endocrino"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.epithelialConnectiveMuscleAndNervous",
+      "shard": "learner",
+      "before": "Epithelial, connective, muscle, and nervous tissue",
+      "after": "Tejido epitelial, conectivo, muscular y nervioso."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.feedbackComponents",
+      "shard": "learner",
+      "before": "Feedback Components",
+      "after": "Componentes de retroalimentación"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.fourChambersFourValvesTwo",
+      "shard": "learner",
+      "before": "Four chambers, four valves, two circuits",
+      "after": "Cuatro cámaras, cuatro válvulas, dos circuitos"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.fromAtomsToTheComplete",
+      "shard": "learner",
+      "before": "From atoms to the complete organism",
+      "after": "De los átomos al organismo completo"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.fromMouthToAnusMechanical",
+      "shard": "learner",
+      "before": "From mouth to anus — mechanical and chemical breakdown",
+      "after": "De la boca al ano: degradación mecánica y química"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.fromNasalCavityToAlveolar",
+      "shard": "learner",
+      "before": "From nasal cavity to alveolar diffusion",
+      "after": "De la cavidad nasal a la difusión alveolar"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.giTractAnatomyDigestion",
+      "shard": "learner",
+      "before": "GI Tract Anatomy & Digestion",
+      "after": "Anatomía y digestión del tracto gastrointestinal"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.giTractOrgansInSequence",
+      "shard": "learner",
+      "before": "GI Tract Organs in Sequence",
+      "after": "Órganos del tracto gastrointestinal en secuencia"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.heartAnatomyBloodFlowPathway",
+      "shard": "learner",
+      "before": "Heart Anatomy & Blood Flow Pathway",
+      "after": "Anatomía del corazón y vía del flujo sanguíneo"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.homeostasisFeedbackMechanisms",
+      "shard": "learner",
+      "before": "Homeostasis & Feedback Mechanisms",
+      "after": "Homeostasis y mecanismos de retroalimentación"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.hormonalRegulationAndSkeletalClassificat",
+      "shard": "learner",
+      "before": "Hormonal regulation and skeletal classification",
+      "after": "Regulación hormonal y clasificación esquelética."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.hormoneSignalingNegativeFeedback",
+      "shard": "learner",
+      "before": "Hormone Signaling & Negative Feedback",
+      "after": "Señalización hormonal y retroalimentación negativa"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.howAnatomyDictatesPhysiology",
+      "shard": "learner",
+      "before": "How anatomy dictates physiology",
+      "after": "Cómo la anatomía dicta la fisiología"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.howCellsReceiveAndRespond",
+      "shard": "learner",
+      "before": "How cells receive and respond to chemical messages",
+      "after": "Cómo reciben y responden las células a los mensajes químicos"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.howMusclesContractAtThe",
+      "shard": "learner",
+      "before": "How muscles contract at the molecular level",
+      "after": "Cómo se contraen los músculos a nivel molecular"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.howNerveCellsGenerateAnd",
+      "shard": "learner",
+      "before": "How nerve cells generate and transmit impulses",
+      "after": "Cómo las células nerviosas generan y transmiten impulsos."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.howTheBodyMaintainsInternal",
+      "shard": "learner",
+      "before": "How the body maintains internal stability",
+      "after": "Cómo el cuerpo mantiene la estabilidad interna"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.insulinGlucoseRegulationStressHormones",
+      "shard": "learner",
+      "before": "Insulin, Glucose Regulation & Stress Hormones",
+      "after": "Insulina, regulación de la glucosa y hormonas del estrés"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.integumentarySystemCheck",
+      "shard": "learner",
+      "before": "Integumentary System Check",
+      "after": "Verificación del sistema tegumentario"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.jointsTheSkeleton",
+      "shard": "learner",
+      "before": "Joints & the Skeleton",
+      "after": "Las articulaciones y el esqueleto"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.keyAnatomicalFacts",
+      "shard": "learner",
+      "before": "Key Anatomical Facts",
+      "after": "Datos anatómicos clave"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.keyNeurotransmitters",
+      "shard": "learner",
+      "before": "Key Neurotransmitters",
+      "after": "Neurotransmisores clave"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.kidneyFunctionsBeyondUrineFormation",
+      "shard": "learner",
+      "before": "Kidney Functions Beyond Urine Formation",
+      "after": "Funciones renales más allá de la formación de orina"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.kidneyStructureUrineFormation",
+      "shard": "learner",
+      "before": "Kidney Structure & Urine Formation",
+      "after": "Estructura del riñón y formación de orina"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.levelsOfOrganization",
+      "shard": "learner",
+      "before": "Levels of Organization",
+      "after": "Niveles de organización"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.livingTissueThatSupportsProtects",
+      "shard": "learner",
+      "before": "Living tissue that supports, protects, and stores minerals",
+      "after": "Tejido vivo que sostiene, protege y almacena minerales."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.matchEachConceptToIts",
+      "shard": "learner",
+      "before": "Match each concept to its description",
+      "after": "Relaciona cada concepto con su descripción."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.matchEachDirectionalTermTo",
+      "shard": "learner",
+      "before": "Match each directional term to its meaning",
+      "after": "Relaciona cada término direccional con su significado"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.matchEachHormoneToIts",
+      "shard": "learner",
+      "before": "Match each hormone to its primary action",
+      "after": "Relaciona cada hormona con su acción principal"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.matchEachOrganSystemTo",
+      "shard": "learner",
+      "before": "Match each organ system to its primary function",
+      "after": "Relacionar cada sistema de órganos con su función principal"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.matchEachTermToIts",
+      "shard": "learner",
+      "before": "Match each term to its description",
+      "after": "Relaciona cada término con su descripción"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.mechanicalVsChemicalDigestion",
+      "shard": "learner",
+      "before": "Mechanical vs. Chemical Digestion",
+      "after": "Digestión mecánica versus química"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.membraneTransport",
+      "shard": "learner",
+      "before": "Membrane Transport",
+      "after": "Transporte de membrana"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.muscleTissueCharacteristics",
+      "shard": "learner",
+      "before": "Muscle Tissue Characteristics",
+      "after": "Características del tejido muscular"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.muscularSystemCheck",
+      "shard": "learner",
+      "before": "Muscular System Check",
+      "after": "Revisión del sistema muscular"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.negativeFeedbackControlsMostHormones",
+      "shard": "learner",
+      "before": "Negative Feedback Controls Most Hormones",
+      "after": "La retroalimentación negativa controla la mayoría de las hormonas"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.nephronPhysiologyFiltrationReabsorptionS",
+      "shard": "learner",
+      "before": "Nephron physiology — filtration, reabsorption, secretion",
+      "after": "Fisiología de la nefrona: filtración, reabsorción, secreción."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.nervousSystemCheck",
+      "shard": "learner",
+      "before": "Nervous System Check",
+      "after": "Revisión del sistema nervioso"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.nervousSystemConcepts",
+      "shard": "learner",
+      "before": "Nervous System Concepts",
+      "after": "Conceptos del sistema nervioso"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.neuronStructureElectricalSignaling",
+      "shard": "learner",
+      "before": "Neuron Structure & Electrical Signaling",
+      "after": "Estructura neuronal y señalización eléctrica"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.organSystemsKeyFunctions",
+      "shard": "learner",
+      "before": "Organ Systems & Key Functions",
+      "after": "Sistemas de órganos y funciones clave"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.oxygenTransport",
+      "shard": "learner",
+      "before": "Oxygen Transport",
+      "after": "Transporte de oxígeno"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.passiveVsActiveTransportAcross",
+      "shard": "learner",
+      "before": "Passive vs active transport across the cell membrane",
+      "after": "Transporte pasivo versus activo a través de la membrana celular."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.receptorsCellSignaling",
+      "shard": "learner",
+      "before": "Receptors & Cell Signaling",
+      "after": "Receptores y señalización celular"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.skeletalSystemCheck",
+      "shard": "learner",
+      "before": "Skeletal System Check",
+      "after": "Revisión del sistema esquelético"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.skinIntegrityWoundHealingFluid",
+      "shard": "learner",
+      "before": "Skin Integrity, Wound Healing & Fluid Loss",
+      "after": "Integridad de la piel, curación de heridas y pérdida de líquidos"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.skinStructureProtectiveFunctions",
+      "shard": "learner",
+      "before": "Skin Structure & Protective Functions",
+      "after": "Estructura de la piel y funciones protectoras"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.skinTurgorFluidAssessment",
+      "shard": "learner",
+      "before": "Skin Turgor & Fluid Assessment",
+      "after": "Evaluación de turgencia y líquidos de la piel"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.slidingFilamentTheoryNeuromuscularJuncti",
+      "shard": "learner",
+      "before": "Sliding Filament Theory & Neuromuscular Junction",
+      "after": "Teoría del filamento deslizante y unión neuromuscular"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.structuralAndFunctionalDivisionsOf",
+      "shard": "learner",
+      "before": "Structural and functional divisions of the nervous system",
+      "after": "Divisiones estructurales y funcionales del sistema nervioso."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.structuralOrganizationCheck",
+      "shard": "learner",
+      "before": "Structural Organization Check",
+      "after": "Verificación de organización estructural"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.structurefunctionRelationshipsOrganSyste",
+      "shard": "learner",
+      "before": "Structure-Function Relationships & Organ Systems",
+      "after": "Relaciones estructura-función y sistemas de órganos"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.synapticTransmission",
+      "shard": "learner",
+      "before": "Synaptic Transmission",
+      "after": "Transmisión sináptica"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.systoleDiastoleAndTheVascular",
+      "shard": "learner",
+      "before": "Systole, diastole, and the vascular tree",
+      "after": "Sístole, diástole y árbol vascular."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.theFourPrimaryTissueTypes",
+      "shard": "learner",
+      "before": "The Four Primary Tissue Types",
+      "after": "Los cuatro tipos de tejidos primarios"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.theMasterGlandControllingOther",
+      "shard": "learner",
+      "before": "The master gland controlling other endocrine organs",
+      "after": "La glándula maestra que controla otros órganos endocrinos."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.theNerveImpulseFromGeneration",
+      "shard": "learner",
+      "before": "The nerve impulse from generation to communication",
+      "after": "El impulso nervioso de la generación a la comunicación."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.thePhospholipidBilayerAndMembrane",
+      "shard": "learner",
+      "before": "The phospholipid bilayer and membrane proteins",
+      "after": "La bicapa de fosfolípidos y las proteínas de membrana."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.thePituitaryGland",
+      "shard": "learner",
+      "before": "The Pituitary Gland",
+      "after": "La glándula pituitaria"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.theUniversalLanguageOfAnatomy",
+      "shard": "learner",
+      "before": "The universal language of anatomy",
+      "after": "El lenguaje universal de la anatomía."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.threeProcessesOfUrineFormation",
+      "shard": "learner",
+      "before": "Three Processes of Urine Formation",
+      "after": "Tres procesos de formación de orina"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.threeTypesOfMuscleAnd",
+      "shard": "learner",
+      "before": "Three types of muscle and their unique properties",
+      "after": "Tres tipos de músculos y sus propiedades únicas."
+    },
+    {
+      "key": "data.pre_nursing_anatomy.tissueTypes",
+      "shard": "learner",
+      "before": "Tissue Types",
+      "after": "Tipos de tejidos"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.transportMechanisms",
+      "shard": "learner",
+      "before": "Transport Mechanisms",
+      "after": "Mecanismos de transporte"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.typesOfBones",
+      "shard": "learner",
+      "before": "Types of Bones",
+      "after": "tipos de huesos"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.typesOfContractionsMuscleFatigue",
+      "shard": "learner",
+      "before": "Types of Contractions & Muscle Fatigue",
+      "after": "Tipos de contracciones y fatiga muscular"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.ventilationMechanics",
+      "shard": "learner",
+      "before": "Ventilation Mechanics",
+      "after": "Mecánica de ventilación"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.whereBonesMeetAndHow",
+      "shard": "learner",
+      "before": "Where bones meet and how the skeleton is organized",
+      "after": "Dónde se unen los huesos y cómo se organiza el esqueleto"
+    },
+    {
+      "key": "data.pre_nursing_anatomy.woundHealingPhases",
+      "shard": "learner",
+      "before": "Wound Healing Phases",
+      "after": "Fases de curación de heridas"
+    },
+    {
+      "key": "data.pre_nursing_atp_pathway.atpAsUniversalEnergyCurrency",
+      "shard": "learner",
+      "before": "ATP as Universal Energy Currency",
+      "after": "ATP como moneda energética universal"
+    },
+    {
+      "key": "data.pre_nursing_atp_pathway.atpCellularEnergyPathwaysQuiz",
+      "shard": "learner",
+      "before": "ATP & Cellular Energy Pathways Quiz",
+      "after": "Cuestionario sobre rutas de energía celular y ATP"
+    },
+    {
+      "key": "data.pre_nursing_atp_pathway.dkaFatMetabolismWhenGlucose",
+      "shard": "learner",
+      "before": "DKA: Fat Metabolism When Glucose Is Unavailable",
+      "after": "CAD: metabolismo de las grasas cuando la glucosa no está disponible"
+    },
+    {
+      "key": "data.pre_nursing_atp_pathway.glycolysisStepByStep",
+      "shard": "learner",
+      "before": "Glycolysis Step by Step",
+      "after": "Glucólisis paso a paso"
+    },
+    {
+      "key": "data.pre_nursing_atp_pathway.matchTheEnergyPathwayConcepts",
+      "shard": "learner",
+      "before": "Match the Energy Pathway Concepts",
+      "after": "Haga coincidir los conceptos del camino energético"
+    },
+    {
+      "key": "data.pre_nursing_atp_pathway.whyAnaerobicMetabolismIsDangerous",
+      "shard": "learner",
+      "before": "Why Anaerobic Metabolism Is Dangerous",
+      "after": "Por qué el metabolismo anaeróbico es peligroso"
+    },
+    {
+      "key": "data.pre_nursing_cellular_injury.cellularInjuryAdaptationQuiz",
+      "shard": "learner",
+      "before": "Cellular Injury & Adaptation Quiz",
+      "after": "Prueba de adaptación y lesión celular"
+    },
+    {
+      "key": "data.pre_nursing_cellular_injury.compensationVsDecompensation",
+      "shard": "learner",
+      "before": "Compensation vs Decompensation",
+      "after": "Compensación vs Descompensación"
+    },
+    {
+      "key": "data.pre_nursing_cellular_injury.freeRadicalsOxidativeStress",
+      "shard": "learner",
+      "before": "Free Radicals & Oxidative Stress",
+      "after": "Radicales libres y estrés oxidativo"
+    },
+    {
+      "key": "data.pre_nursing_cellular_injury.matchTheCellularAdaptation",
+      "shard": "learner",
+      "before": "Match the Cellular Adaptation",
+      "after": "Combina la adaptación celular"
+    },
+    {
+      "key": "data.pre_nursing_cellular_injury.reversibleVsIrreversibleInjuryMarkers",
+      "shard": "learner",
+      "before": "Reversible vs Irreversible Injury Markers",
+      "after": "Marcadores de lesiones reversibles versus irreversibles"
+    },
+    {
+      "key": "data.pre_nursing_cellular_injury.typesOfNecrosis",
+      "shard": "learner",
+      "before": "Types of Necrosis",
+      "after": "Tipos de necrosis"
+    },
+    {
+      "key": "data.pre_nursing_chemistry.blood735745",
+      "shard": "learner",
+      "before": "Blood: 7.35–7.45",
+      "after": "Sangre: 7,35–7,45"
+    },
+    {
+      "key": "data.pre_nursing_chemistry.bufferSystems",
+      "shard": "learner",
+      "before": "Buffer Systems",
+      "after": "Sistemas de amortiguación"
+    },
+    {
+      "key": "data.pre_nursing_chemistry.chemistryFoundationsQuiz",
+      "shard": "learner",
+      "before": "Chemistry Foundations Quiz",
+      "after": "Prueba de fundamentos de química"
+    },
+    {
+      "key": "data.pre_nursing_chemistry.hclGastricAcid2",
+      "shard": "learner",
+      "before": "HCl, Gastric acid (~2)",
+      "after": "HCl, ácido gástrico (~2)"
+    },
+    {
+      "key": "data.pre_nursing_chemistry.matchTheChemistryConcept",
+      "shard": "learner",
+      "before": "Match the Chemistry Concept",
+      "after": "Haga coincidir el concepto de química"
+    },
+    {
+      "key": "data.pre_nursing_chemistry.naohBleach13",
+      "shard": "learner",
+      "before": "NaOH, Bleach (~13)",
+      "after": "NaOH, lejía (~13)"
+    },
+    {
+      "key": "data.pre_nursing_chemistry.typesOfChemicalBonds",
+      "shard": "learner",
+      "before": "Types of Chemical Bonds",
+      "after": "Tipos de enlaces químicos"
+    },
+    {
+      "key": "data.pre_nursing_chemistry.waterAsASolvent",
+      "shard": "learner",
+      "before": "Water as a Solvent",
+      "after": "Agua como solvente"
+    },
+    {
+      "key": "data.pre_nursing_chemistry.whyBondTypeMattersIn",
+      "shard": "learner",
+      "before": "Why Bond Type Matters in Healthcare",
+      "after": "Por qué el tipo de bono es importante en el sector sanitario"
+    },
+    {
+      "key": "data.pre_nursing_communication.communicationFoundationsQuiz",
+      "shard": "learner",
+      "before": "Communication Foundations Quiz",
+      "after": "Prueba de fundamentos de la comunicación"
+    },
+    {
+      "key": "data.pre_nursing_communication.justCulture",
+      "shard": "learner",
+      "before": "Just Culture",
+      "after": "Cultura Justa"
+    },
+    {
+      "key": "data.pre_nursing_communication.matchTheCommunicationConcept",
+      "shard": "learner",
+      "before": "Match the Communication Concept",
+      "after": "Haga coincidir el concepto de comunicación"
+    },
+    {
+      "key": "data.pre_nursing_communication.nontherapeuticResponsesToAvoid",
+      "shard": "learner",
+      "before": "Non-Therapeutic Responses to Avoid",
+      "after": "Respuestas no terapéuticas que se deben evitar"
+    },
+    {
+      "key": "data.pre_nursing_communication.therapeuticTechniques",
+      "shard": "learner",
+      "before": "Therapeutic Techniques",
+      "after": "Técnicas Terapéuticas"
+    },
+    {
+      "key": "data.pre_nursing_communication.whySbarWorks",
+      "shard": "learner",
+      "before": "Why SBAR Works",
+      "after": "Por qué funciona SBAR"
+    },
+    {
+      "key": "data.pre_nursing_cultural_competency.culturalCompetencySdohQuiz",
+      "shard": "learner",
+      "before": "Cultural Competency & SDOH Quiz",
+      "after": "Prueba de competencia cultural y SDOH"
+    },
+    {
+      "key": "data.pre_nursing_cultural_competency.matchTheCulturalCompetencyConcept",
+      "shard": "learner",
+      "before": "Match the Cultural Competency Concept",
+      "after": "Coincidir con el concepto de competencia cultural"
+    },
+    {
+      "key": "data.pre_nursing_cultural_competency.recognizingAndMitigatingImplicitBias",
+      "shard": "learner",
+      "before": "Recognizing and Mitigating Implicit Bias",
+      "after": "Reconocer y mitigar el sesgo implícito"
+    },
+    {
+      "key": "data.pre_nursing_cultural_competency.sdohImpactOnHealth",
+      "shard": "learner",
+      "before": "SDOH Impact on Health",
+      "after": "Impacto de SDOH en la salud"
+    },
+    {
+      "key": "data.pre_nursing_cultural_competency.traumainformedNursingPractice",
+      "shard": "learner",
+      "before": "Trauma-Informed Nursing Practice",
+      "after": "Práctica de enfermería informada sobre el trauma"
+    },
+    {
+      "key": "data.pre_nursing_cultural_competency.typesOfBiasInHealthcare",
+      "shard": "learner",
+      "before": "Types of Bias in Healthcare",
+      "after": "Tipos de sesgos en la atención sanitaria"
+    },
+    {
+      "key": "data.pre_nursing_diagnostics.clinicalApplicationOfSensitivityAnd",
+      "shard": "learner",
+      "before": "Clinical Application of Sensitivity and Specificity",
+      "after": "Aplicación clínica de sensibilidad y especificidad"
+    },
+    {
+      "key": "data.pre_nursing_diagnostics.contrastMediaSafety",
+      "shard": "learner",
+      "before": "Contrast Media Safety",
+      "after": "Seguridad de los medios de contraste"
+    },
+    {
+      "key": "data.pre_nursing_diagnostics.diagnosticsImagingQuiz",
+      "shard": "learner",
+      "before": "Diagnostics & Imaging Quiz",
+      "after": "Prueba de diagnóstico e imágenes"
+    },
+    {
+      "key": "data.pre_nursing_diagnostics.matchTheDiagnosticTest",
+      "shard": "learner",
+      "before": "Match the Diagnostic Test",
+      "after": "Coincide con la prueba de diagnóstico"
+    },
+    {
+      "key": "data.pre_nursing_diagnostics.pointofcareTestingPoct",
+      "shard": "learner",
+      "before": "Point-of-Care Testing (POCT)",
+      "after": "Pruebas en el lugar de atención (POCT)"
+    },
+    {
+      "key": "data.pre_nursing_ethics_legal.ethicsLegalFoundationsQuiz",
+      "shard": "learner",
+      "before": "Ethics & Legal Foundations Quiz",
+      "after": "Cuestionario de fundamentos jurídicos y de ética"
+    },
+    {
+      "key": "data.pre_nursing_ethics_legal.mandatoryReportingExceptions",
+      "shard": "learner",
+      "before": "Mandatory Reporting Exceptions",
+      "after": "Excepciones de informes obligatorios"
+    },
+    {
+      "key": "data.pre_nursing_ethics_legal.matchTheEthicsLegalConcept",
+      "shard": "learner",
+      "before": "Match the Ethics & Legal Concept",
+      "after": "Haga coincidir el concepto de ética y legal"
+    },
+    {
+      "key": "data.pre_nursing_ethics_legal.theFourPrinciples",
+      "shard": "learner",
+      "before": "The Four Principles",
+      "after": "Los cuatro principios"
+    },
+    {
+      "key": "data.pre_nursing_ethics_legal.whenPrinciplesConflict",
+      "shard": "learner",
+      "before": "When Principles Conflict",
+      "after": "Cuando los principios entran en conflicto"
+    },
+    {
+      "key": "data.pre_nursing_fluids_electrolytes.fluidsElectrolytesQuiz",
+      "shard": "learner",
+      "before": "Fluids & Electrolytes Quiz",
+      "after": "Prueba de líquidos y electrolitos"
+    },
+    {
+      "key": "data.pre_nursing_fluids_electrolytes.matchFluidElectrolyteConcepts",
+      "shard": "learner",
+      "before": "Match Fluid & Electrolyte Concepts",
+      "after": "Combina conceptos de fluidos y electrolitos"
+    },
+    {
+      "key": "data.pre_nursing_fluids_electrolytes.osmoticVsOncoticPressure",
+      "shard": "learner",
+      "before": "Osmotic vs Oncotic Pressure",
+      "after": "Presión osmótica vs oncótica"
+    },
+    {
+      "key": "data.pre_nursing_fluids_electrolytes.theBicarbonateEquation",
+      "shard": "learner",
+      "before": "The Bicarbonate Equation",
+      "after": "La ecuación del bicarbonato"
+    },
+    {
+      "key": "data.pre_nursing_fluids_electrolytes.theNakGradient",
+      "shard": "learner",
+      "before": "The Na⁺/K⁺ Gradient",
+      "after": "El gradiente Na⁺/K⁺"
+    },
+    {
+      "key": "data.pre_nursing_fluids_electrolytes.tonicityOfSolutions",
+      "shard": "learner",
+      "before": "Tonicity of Solutions",
+      "after": "Tonicidad de las soluciones"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.bloodPressure",
+      "shard": "learner",
+      "before": "Blood Pressure:",
+      "after": "Presión arterial:"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.documentationMethods",
+      "shard": "learner",
+      "before": "Documentation Methods",
+      "after": "Métodos de documentación"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.healthAssessmentQuiz",
+      "shard": "learner",
+      "before": "Health Assessment Quiz",
+      "after": "Prueba de evaluación de la salud"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.heartSoundsS1s2RhythmPmi",
+      "shard": "learner",
+      "before": "Heart sounds (S1/S2), rhythm, PMI, peripheral pulses, capillary refill, edema",
+      "after": "Ruidos cardíacos (S1/S2), ritmo, PMI, pulsos periféricos, llenado capilar, edema"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.inspectAuscultatePercussPalpateBowel",
+      "shard": "learner",
+      "before": "Inspect → Auscultate → Percuss → Palpate; bowel sounds, distention, tenderness",
+      "after": "Inspeccionar → Auscultar → Percutir → Palpar; ruidos intestinales, distensión, sensibilidad"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.locGlasgowComaScaleOrientation",
+      "shard": "learner",
+      "before": "LOC (Glasgow Coma Scale), orientation (person/place/time/situation), pupil response (PERRLA), cranial nerves, sensation, motor strength",
+      "after": "LOC (Escala de Coma de Glasgow), orientación (persona/lugar/tiempo/situación), respuesta pupilar (PERRLA), nervios craneales, sensación, fuerza motora"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.lymphNodesThyroidJugularVein",
+      "shard": "learner",
+      "before": "Lymph nodes, thyroid, jugular vein distention (JVD), carotid pulses, tracheal midline",
+      "after": "Ganglios linfáticos, tiroides, distensión de la vena yugular (JVD), pulsos carotídeos, línea media traqueal"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.matchTheAssessmentConcept",
+      "shard": "learner",
+      "before": "Match the Assessment Concept",
+      "after": "Haga coincidir el concepto de evaluación"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.overallAppearanceBodyHabitusHygiene",
+      "shard": "learner",
+      "before": "Overall appearance, body habitus, hygiene, level of consciousness, gait",
+      "after": "Apariencia general, hábitos corporales, higiene, nivel de conciencia, forma de andar."
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.pain",
+      "shard": "learner",
+      "before": "Pain:",
+      "after": "Dolor:"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.pulse",
+      "shard": "learner",
+      "before": "Pulse:",
+      "after": "Legumbres:"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.pulsesEdemaSensationSkinIntegrity",
+      "shard": "learner",
+      "before": "Pulses, edema, sensation, skin integrity, IV sites",
+      "after": "Pulsos, edema, sensación, integridad de la piel, sitios intravenosos."
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.redFlagsRequiringImmediateAction",
+      "shard": "learner",
+      "before": "Red Flags Requiring Immediate Action",
+      "after": "Señales de alerta que requieren acción inmediata"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.respirations",
+      "shard": "learner",
+      "before": "Respirations:",
+      "after": "Respiraciones:"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.respiratoryEffortBreathSoundsAll",
+      "shard": "learner",
+      "before": "Respiratory effort, breath sounds all fields, chest expansion symmetry",
+      "after": "Esfuerzo respiratorio, ruidos respiratorios en todos los campos, simetría de expansión torácica."
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.romStrengthGaitJointSwelling",
+      "shard": "learner",
+      "before": "ROM, strength, gait, joint swelling or deformity",
+      "after": "ROM, fuerza, marcha, hinchazón o deformidad de las articulaciones"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.skinColorTurgorMoistureLesions",
+      "shard": "learner",
+      "before": "Skin color, turgor, moisture, lesions, wound assessment, pressure injury risk",
+      "after": "Color de la piel, turgencia, humedad, lesiones, evaluación de la herida, riesgo de lesión por presión."
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.skullSymmetryFacialExpressionTmj",
+      "shard": "learner",
+      "before": "Skull symmetry, facial expression, TMJ, sinuses",
+      "after": "Simetría del cráneo, expresión facial, ATM, senos paranasales."
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.subjectiveVsObjectiveDistinction",
+      "shard": "learner",
+      "before": "Subjective vs Objective Distinction",
+      "after": "Distinción subjetiva versus objetiva"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.systolicLt120DiastolicLt80Mmhg",
+      "shard": "learner",
+      "before": "Systolic &lt;120 / Diastolic &lt;80 mmHg",
+      "after": "Sistólica <120 / Diastólica <80 mmHg"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.temperature",
+      "shard": "learner",
+      "before": "Temperature:",
+      "after": "Temperatura:"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.theFourAssessmentTechniques",
+      "shard": "learner",
+      "before": "The Four Assessment Techniques",
+      "after": "Las cuatro técnicas de evaluación"
+    },
+    {
+      "key": "data.pre_nursing_health_assessment.visualAcuityHearingNasalPatency",
+      "shard": "learner",
+      "before": "Visual acuity, hearing, nasal patency, oral mucosa, tonsils",
+      "after": "Agudeza visual, audición, permeabilidad nasal, mucosa oral, amígdalas."
+    },
+    {
+      "key": "data.pre_nursing_healthcare_structure.healthcareDeliveryModels",
+      "shard": "learner",
+      "before": "Healthcare Delivery Models",
+      "after": "Modelos de prestación de atención médica"
+    },
+    {
+      "key": "data.pre_nursing_healthcare_structure.healthcareStructureQuiz",
+      "shard": "learner",
+      "before": "Healthcare Structure Quiz",
+      "after": "Prueba de estructura sanitaria"
+    },
+    {
+      "key": "data.pre_nursing_healthcare_structure.levelsOfCare",
+      "shard": "learner",
+      "before": "Levels of Care",
+      "after": "Niveles de atención"
+    },
+    {
+      "key": "data.pre_nursing_healthcare_structure.matchTheHealthcareRole",
+      "shard": "learner",
+      "before": "Match the Healthcare Role",
+      "after": "Haga coincidir el rol de atención médica"
+    },
+    {
+      "key": "data.pre_nursing_healthcare_structure.patientRightsACoreNursing",
+      "shard": "learner",
+      "before": "Patient Rights — A Core Nursing Responsibility",
+      "after": "Derechos del paciente: una responsabilidad fundamental de la enfermería"
+    },
+    {
+      "key": "data.pre_nursing_healthcare_structure.scopeOfPracticeKnowYour",
+      "shard": "learner",
+      "before": "Scope of Practice — Know Your Boundaries",
+      "after": "Alcance de la práctica: conozca sus límites"
+    },
+    {
+      "key": "data.pre_nursing_human_factors.commonCognitiveBiasesInClinical",
+      "shard": "learner",
+      "before": "Common Cognitive Biases in Clinical Practice",
+      "after": "Sesgos cognitivos comunes en la práctica clínica"
+    },
+    {
+      "key": "data.pre_nursing_human_factors.humanFactorsPatientSafetyQuiz",
+      "shard": "learner",
+      "before": "Human Factors & Patient Safety Quiz",
+      "after": "Cuestionario sobre factores humanos y seguridad del paciente"
+    },
+    {
+      "key": "data.pre_nursing_human_factors.justCultureVsBlameCulture",
+      "shard": "learner",
+      "before": "Just Culture vs Blame Culture",
+      "after": "Cultura justa versus cultura de la culpa"
+    },
+    {
+      "key": "data.pre_nursing_human_factors.matchTheHumanFactorsConcept",
+      "shard": "learner",
+      "before": "Match the Human Factors Concept",
+      "after": "Coincidir con el concepto de factores humanos"
+    },
+    {
+      "key": "data.pre_nursing_human_factors.structuredCommunication",
+      "shard": "learner",
+      "before": "Structured Communication",
+      "after": "Comunicación estructurada"
+    },
+    {
+      "key": "data.pre_nursing_human_factors.theSwissCheeseModel",
+      "shard": "learner",
+      "before": "The Swiss Cheese Model",
+      "after": "El modelo del queso suizo"
+    },
+    {
+      "key": "data.pre_nursing_infection_control.infectionControlQuiz",
+      "shard": "learner",
+      "before": "Infection Control Quiz",
+      "after": "Prueba de control de infecciones"
+    },
+    {
+      "key": "data.pre_nursing_infection_control.matchThePrecautionType",
+      "shard": "learner",
+      "before": "Match the Precaution Type",
+      "after": "Haga coincidir el tipo de precaución"
+    },
+    {
+      "key": "data.pre_nursing_infection_control.ppeDonningDoffingOrder",
+      "shard": "learner",
+      "before": "PPE Donning & Doffing Order",
+      "after": "Orden de colocación y retirada del EPP"
+    },
+    {
+      "key": "data.pre_nursing_infection_control.the5MomentsForHand",
+      "shard": "learner",
+      "before": "The 5 Moments for Hand Hygiene (WHO)",
+      "after": "Los 5 momentos para la higiene de manos (OMS)"
+    },
+    {
+      "key": "data.pre_nursing_infection_control.theSixLinks",
+      "shard": "learner",
+      "before": "The Six Links",
+      "after": "Los seis eslabones"
+    },
+    {
+      "key": "data.pre_nursing_inflammation.fourPhasesOfWoundHealing",
+      "shard": "learner",
+      "before": "Four Phases of Wound Healing",
+      "after": "Cuatro fases de la curación de heridas"
+    },
+    {
+      "key": "data.pre_nursing_inflammation.inflammationWoundHealingQuiz",
+      "shard": "learner",
+      "before": "Inflammation & Wound Healing Quiz",
+      "after": "Prueba de inflamación y curación de heridas"
+    },
+    {
+      "key": "data.pre_nursing_inflammation.inflammatoryMediatorsAndDrugTargets",
+      "shard": "learner",
+      "before": "Inflammatory Mediators and Drug Targets",
+      "after": "Mediadores inflamatorios y objetivos farmacológicos"
+    },
+    {
+      "key": "data.pre_nursing_inflammation.keyInflammatoryMediators",
+      "shard": "learner",
+      "before": "Key Inflammatory Mediators",
+      "after": "Mediadores inflamatorios clave"
+    },
+    {
+      "key": "data.pre_nursing_inflammation.matchTheInflammationConcept",
+      "shard": "learner",
+      "before": "Match the Inflammation Concept",
+      "after": "Haga coincidir el concepto de inflamación"
+    },
+    {
+      "key": "data.pre_nursing_inflammation.theFiveCardinalSignsOf",
+      "shard": "learner",
+      "before": "The Five Cardinal Signs of Inflammation",
+      "after": "Los cinco signos cardinales de inflamación"
+    },
+    {
+      "key": "data.pre_nursing_inflammation.woundHealingFundamentals",
+      "shard": "learner",
+      "before": "Wound Healing Fundamentals",
+      "after": "Fundamentos de curación de heridas"
+    },
+    {
+      "key": "data.pre_nursing_microbiology.colonizationVsInfection",
+      "shard": "learner",
+      "before": "Colonization vs Infection",
+      "after": "Colonización versus infección"
+    },
+    {
+      "key": "data.pre_nursing_microbiology.criticalDistinction",
+      "shard": "learner",
+      "before": "Critical Distinction",
+      "after": "Distinción crítica"
+    },
+    {
+      "key": "data.pre_nursing_microbiology.matchTheMicrobiologyConcept",
+      "shard": "learner",
+      "before": "Match the Microbiology Concept",
+      "after": "Coincide con el concepto de microbiología"
+    },
+    {
+      "key": "data.pre_nursing_microbiology.microbiologyFoundationsQuiz",
+      "shard": "learner",
+      "before": "Microbiology Foundations Quiz",
+      "after": "Prueba de fundamentos de microbiología"
+    },
+    {
+      "key": "data.pre_nursing_microbiology.theFiveCategoriesOfMicroorganisms",
+      "shard": "learner",
+      "before": "The Five Categories of Microorganisms",
+      "after": "Las cinco categorías de microorganismos"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.allValuesArePerServing",
+      "shard": "learner",
+      "before": "All values are per serving — check the number of servings per container.",
+      "after": "Todos los valores son por porción; verifique la cantidad de porciones por envase."
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.antioxidantProtectsCellMembranesSources",
+      "shard": "learner",
+      "before": "Antioxidant, protects cell membranes. Sources: nuts, seeds, vegetable oils. Deficiency: rare, causes hemolytic anemia.",
+      "after": "Antioxidante, protege las membranas celulares. Fuentes: nueces, semillas, aceites vegetales. Deficiencia: rara, causa anemia hemolítica."
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.b12Cobalamin",
+      "shard": "learner",
+      "before": "B12 (Cobalamin):",
+      "after": "B12 (cobalamina):"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.b1Thiamine",
+      "shard": "learner",
+      "before": "B1 (Thiamine):",
+      "after": "B1 (tiamina):"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.b9Folate",
+      "shard": "learner",
+      "before": "B9 (Folate):",
+      "after": "B9 (folato):"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.basedOn2000CalorieDiet",
+      "shard": "learner",
+      "before": "Based on 2,000 calorie diet. 5% DV or less = low, 20% DV or more = high.",
+      "after": "Basado en una dieta de 2.000 calorías. 5 % del VD o menos = bajo, 20 % del VD o más = alto."
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.bloodClottingSynthesizesClottingFactors",
+      "shard": "learner",
+      "before": "Blood clotting (synthesizes clotting factors II, VII, IX, X). Sources: leafy greens, liver. Deficiency: bleeding disorders. Note: interacts with warfarin.",
+      "after": "Coagulación sanguínea (sintetiza los factores de coagulación II, VII, IX, X). Fuentes: verduras de hojas verdes, hígado. Deficiencia: trastornos hemorrágicos. Nota: interactúa con warfarina."
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.bmiAndMalnutritionScreening",
+      "shard": "learner",
+      "before": "BMI and Malnutrition Screening",
+      "after": "IMC y detección de desnutrición"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.calciumAbsorptionBoneHealthImmune",
+      "shard": "learner",
+      "before": "Calcium absorption, bone health, immune modulation. Sources: sunlight, fortified milk, fatty fish. Deficiency: rickets (children), osteomalacia (adults).",
+      "after": "Absorción de calcio, salud ósea, modulación inmune. Fuentes: luz solar, leche fortificada, pescado graso. Deficiencia: raquitismo (niños), osteomalacia (adultos)."
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.calories",
+      "shard": "learner",
+      "before": "Calories:",
+      "after": "Calorías:"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.collagenSynthesisWoundHealingImmune",
+      "shard": "learner",
+      "before": "Collagen synthesis, wound healing, immune function, iron absorption. Deficiency: scurvy (bleeding gums, poor wound healing).",
+      "after": "Síntesis de colágeno, cicatrización de heridas, función inmune, absorción de hierro. Deficiencia: escorbuto (encías sangrantes, mala cicatrización de heridas)."
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.commonTherapeuticDiets",
+      "shard": "learner",
+      "before": "Common Therapeutic Diets",
+      "after": "Dietas terapéuticas comunes"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.dietaryElectrolytes",
+      "shard": "learner",
+      "before": "Dietary Electrolytes",
+      "after": "Electrolitos dietéticos"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.dnaSynthesisRbcFormationCritical",
+      "shard": "learner",
+      "before": "DNA synthesis, RBC formation. Critical in pregnancy — deficiency causes neural tube defects.",
+      "after": "Síntesis de ADN, formación de glóbulos rojos. Crítico durante el embarazo: la deficiencia causa defectos del tubo neural."
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.energyMetabolismDeficiencyWernickekorsak",
+      "shard": "learner",
+      "before": "Energy metabolism. Deficiency: Wernicke-Korsakoff syndrome (alcoholism).",
+      "after": "Metabolismo energético. Deficiencia: síndrome de Wernicke-Korsakoff (alcoholismo)."
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.fiberVitaminDCalciumIron",
+      "shard": "learner",
+      "before": "Fiber, vitamin D, calcium, iron, potassium.",
+      "after": "Fibra, vitamina D, calcio, hierro, potasio."
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.getEnoughOf",
+      "shard": "learner",
+      "before": "Get enough of:",
+      "after": "Obtenga suficiente de:"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.ingredientList",
+      "shard": "learner",
+      "before": "Ingredient list:",
+      "after": "Lista de ingredientes:"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.limitThese",
+      "shard": "learner",
+      "before": "Limit these:",
+      "after": "Limite estos:"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.listedByWeightInDescending",
+      "shard": "learner",
+      "before": "Listed by weight in descending order — first ingredient is present in the greatest amount.",
+      "after": "Enumerados por peso en orden descendente: el primer ingrediente está presente en mayor cantidad."
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.macronutrientFunctionsAndEnergy",
+      "shard": "learner",
+      "before": "Macronutrient Functions and Energy",
+      "after": "Funciones de macronutrientes y energía"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.matchTheNutritionConcept",
+      "shard": "learner",
+      "before": "Match the Nutrition Concept",
+      "after": "Haga coincidir el concepto de nutrición"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.nerveFunctionRbcMaturationDeficiency",
+      "shard": "learner",
+      "before": "Nerve function, RBC maturation. Deficiency: pernicious/megaloblastic anemia, neuropathy.",
+      "after": "Función nerviosa, maduración de glóbulos rojos. Deficiencia: anemia perniciosa/megaloblástica, neuropatía."
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.nutritionFoundationsQuiz",
+      "shard": "learner",
+      "before": "Nutrition Foundations Quiz",
+      "after": "Prueba de fundamentos de nutrición"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.saturatedFatTransFatSodium",
+      "shard": "learner",
+      "before": "Saturated fat, trans fat, sodium, added sugars.",
+      "after": "Grasas saturadas, grasas trans, sodio, azúcares añadidos."
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.servingSize",
+      "shard": "learner",
+      "before": "Serving size:",
+      "after": "Tamaño de la porción:"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.totalEnergyPerServingGeneral",
+      "shard": "learner",
+      "before": "Total energy per serving. General guide: 40 calories = low, 100 = moderate, 400+ = high.",
+      "after": "Energía total por ración. Guía general: 40 calorías = baja, 100 = moderada, 400+ = alta."
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.visionEspeciallyNightVisionImmune",
+      "shard": "learner",
+      "before": "Vision (especially night vision), immune function, skin integrity. Sources: liver, carrots, sweet potatoes. Deficiency: night blindness, xerophthalmia.",
+      "after": "Visión (especialmente visión nocturna), función inmune, integridad de la piel. Fuentes: hígado, zanahorias, batatas. Deficiencia: ceguera nocturna, xeroftalmia."
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.vitaminA",
+      "shard": "learner",
+      "before": "Vitamin A:",
+      "after": "Vitamina A:"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.vitaminC",
+      "shard": "learner",
+      "before": "Vitamin C:",
+      "after": "Vitamina C:"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.vitaminD",
+      "shard": "learner",
+      "before": "Vitamin D:",
+      "after": "Vitamina D:"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.vitaminE",
+      "shard": "learner",
+      "before": "Vitamin E:",
+      "after": "Vitamina E:"
+    },
+    {
+      "key": "data.pre_nursing_nutrition_foundations.vitaminK",
+      "shard": "learner",
+      "before": "Vitamin K:",
+      "after": "Vitamina K:"
+    },
+    {
+      "key": "data.pre_nursing_oxygenation.abgInterpretationFramework",
+      "shard": "learner",
+      "before": "ABG Interpretation Framework",
+      "after": "Marco de interpretación ABG"
+    },
+    {
+      "key": "data.pre_nursing_oxygenation.acidosisAlkalosis",
+      "shard": "learner",
+      "before": "Acidosis ← → Alkalosis",
+      "after": "Acidosis ← → Alcalosis"
+    },
+    {
+      "key": "data.pre_nursing_oxygenation.cardiacOutputHrSv",
+      "shard": "learner",
+      "before": "Cardiac Output = HR × SV",
+      "after": "Gasto cardíaco = FC × VS"
+    },
+    {
+      "key": "data.pre_nursing_oxygenation.matchTheOxygenationConcept",
+      "shard": "learner",
+      "before": "Match the Oxygenation Concept",
+      "after": "Coincide con el concepto de oxigenación"
+    },
+    {
+      "key": "data.pre_nursing_oxygenation.metabolicComponent",
+      "shard": "learner",
+      "before": "Metabolic component",
+      "after": "Componente metabólico"
+    },
+    {
+      "key": "data.pre_nursing_oxygenation.organspecificHypoxiaEffects",
+      "shard": "learner",
+      "before": "Organ-Specific Hypoxia Effects",
+      "after": "Efectos de la hipoxia específicos de órganos"
+    },
+    {
+      "key": "data.pre_nursing_oxygenation.oxygenInPlasma",
+      "shard": "learner",
+      "before": "Oxygen in plasma",
+      "after": "Oxígeno en plasma"
+    },
+    {
+      "key": "data.pre_nursing_oxygenation.oxygenationO2DeliveryQuiz",
+      "shard": "learner",
+      "before": "Oxygenation & O2 Delivery Quiz",
+      "after": "Prueba de oxigenación y suministro de O2"
+    },
+    {
+      "key": "data.pre_nursing_oxygenation.respiratoryComponent",
+      "shard": "learner",
+      "before": "Respiratory component",
+      "after": "Componente respiratorio"
+    },
+    {
+      "key": "data.pre_nursing_oxygenation.theOxyhemoglobinDissociationCurve",
+      "shard": "learner",
+      "before": "The Oxyhemoglobin Dissociation Curve",
+      "after": "La curva de disociación de la oxihemoglobina"
+    },
+    {
+      "key": "data.pre_nursing_research.aSystematicApproachForBusy",
+      "shard": "learner",
+      "before": "A systematic approach for busy nurses",
+      "after": "Un enfoque sistemático para enfermeras ocupadas"
+    },
+    {
+      "key": "data.pre_nursing_research.advancedResearchConcepts",
+      "shard": "learner",
+      "before": "Advanced Research Concepts",
+      "after": "Conceptos de investigación avanzada"
+    },
+    {
+      "key": "data.pre_nursing_research.appliedInterpretationMatching",
+      "shard": "learner",
+      "before": "Applied Interpretation Matching",
+      "after": "Emparejamiento de interpretación aplicada"
+    },
+    {
+      "key": "data.pre_nursing_research.canWeTrustTheResults",
+      "shard": "learner",
+      "before": "Can we trust the results?",
+      "after": "¿Podemos confiar en los resultados?"
+    },
+    {
+      "key": "data.pre_nursing_research.clinicalExample",
+      "shard": "learner",
+      "before": "Clinical Example",
+      "after": "Ejemplo clínico"
+    },
+    {
+      "key": "data.pre_nursing_research.clinicalScenario",
+      "shard": "learner",
+      "before": "Clinical Scenario",
+      "after": "Escenario clínico"
+    },
+    {
+      "key": "data.pre_nursing_research.clinicalVsStatisticalSignificance",
+      "shard": "learner",
+      "before": "Clinical vs Statistical Significance",
+      "after": "Importancia clínica versus estadística"
+    },
+    {
+      "key": "data.pre_nursing_research.commonThreatsToValidity",
+      "shard": "learner",
+      "before": "Common Threats to Validity",
+      "after": "Amenazas comunes a la validez"
+    },
+    {
+      "key": "data.pre_nursing_research.commonTricksAndPitfallsIn",
+      "shard": "learner",
+      "before": "Common tricks and pitfalls in data presentation",
+      "after": "Trucos y trampas comunes en la presentación de datos"
+    },
+    {
+      "key": "data.pre_nursing_research.confidenceIntervals",
+      "shard": "learner",
+      "before": "Confidence Intervals",
+      "after": "Intervalos de confianza"
+    },
+    {
+      "key": "data.pre_nursing_research.coreConceptsThatUnderpinAll",
+      "shard": "learner",
+      "before": "Core concepts that underpin all research",
+      "after": "Conceptos centrales que sustentan toda investigación."
+    },
+    {
+      "key": "data.pre_nursing_research.dataVisualizationInterpretation",
+      "shard": "learner",
+      "before": "Data Visualization & Interpretation",
+      "after": "Visualización e interpretación de datos"
+    },
+    {
+      "key": "data.pre_nursing_research.descriptiveVsInferentialStatistics",
+      "shard": "learner",
+      "before": "Descriptive vs Inferential Statistics",
+      "after": "Estadística descriptiva versus inferencial"
+    },
+    {
+      "key": "data.pre_nursing_research.ethicalConsiderationsInResearch",
+      "shard": "learner",
+      "before": "Ethical Considerations in Research",
+      "after": "Consideraciones éticas en la investigación"
+    },
+    {
+      "key": "data.pre_nursing_research.followThisSequenceWhenEvaluating",
+      "shard": "learner",
+      "before": "Follow this sequence when evaluating any research article",
+      "after": "Siga esta secuencia al evaluar cualquier artículo de investigación."
+    },
+    {
+      "key": "data.pre_nursing_research.howASystematicReviewIs",
+      "shard": "learner",
+      "before": "How a Systematic Review Is Conducted",
+      "after": "Cómo se realiza una revisión sistemática"
+    },
+    {
+      "key": "data.pre_nursing_research.howParticipantsAreSelectedShapes",
+      "shard": "learner",
+      "before": "How participants are selected shapes the entire study",
+      "after": "La forma en que se seleccionan los participantes da forma a todo el estudio."
+    },
+    {
+      "key": "data.pre_nursing_research.howToReadAResearch",
+      "shard": "learner",
+      "before": "How to Read a Research Paper",
+      "after": "Cómo leer un artículo de investigación"
+    },
+    {
+      "key": "data.pre_nursing_research.integratingEvidenceExpertiseAndPatient",
+      "shard": "learner",
+      "before": "Integrating evidence, expertise, and patient values",
+      "after": "Integración de evidencia, experiencia y valores del paciente"
+    },
+    {
+      "key": "data.pre_nursing_research.interpretingGraphsKeyQuestions",
+      "shard": "learner",
+      "before": "Interpreting Graphs: Key Questions",
+      "after": "Interpretación de gráficos: preguntas clave"
+    },
+    {
+      "key": "data.pre_nursing_research.knowledgeCheckAdvancedResearchTopics",
+      "shard": "learner",
+      "before": "Knowledge Check: Advanced Research Topics",
+      "after": "Verificación de conocimientos: temas de investigación avanzada"
+    },
+    {
+      "key": "data.pre_nursing_research.knowledgeCheckClinicalInterpretation",
+      "shard": "learner",
+      "before": "Knowledge Check: Clinical Interpretation",
+      "after": "Verificación de conocimientos: interpretación clínica"
+    },
+    {
+      "key": "data.pre_nursing_research.knowledgeCheckCoreStatistics",
+      "shard": "learner",
+      "before": "Knowledge Check: Core Statistics",
+      "after": "Verificación de conocimientos: estadísticas básicas"
+    },
+    {
+      "key": "data.pre_nursing_research.knowledgeCheckCriticalAppraisal",
+      "shard": "learner",
+      "before": "Knowledge Check: Critical Appraisal",
+      "after": "Verificación de conocimientos: evaluación crítica"
+    },
+    {
+      "key": "data.pre_nursing_research.knowledgeCheckEvidencebasedPractice",
+      "shard": "learner",
+      "before": "Knowledge Check: Evidence-Based Practice",
+      "after": "Verificación de conocimientos: práctica basada en evidencia"
+    },
+    {
+      "key": "data.pre_nursing_research.knowledgeCheckResearchDesign",
+      "shard": "learner",
+      "before": "Knowledge Check: Research Design",
+      "after": "Verificación de conocimientos: diseño de investigación"
+    },
+    {
+      "key": "data.pre_nursing_research.knowledgeCheckResearchFoundations",
+      "shard": "learner",
+      "before": "Knowledge Check: Research Foundations",
+      "after": "Verificación de conocimientos: fundamentos de la investigación"
+    },
+    {
+      "key": "data.pre_nursing_research.levelsOfEvidencePyramid",
+      "shard": "learner",
+      "before": "Levels of Evidence Pyramid",
+      "after": "Pirámide de niveles de evidencia"
+    },
+    {
+      "key": "data.pre_nursing_research.matchEachClinicalResearchConcept",
+      "shard": "learner",
+      "before": "Match each clinical research concept to its application",
+      "after": "Relacione cada concepto de investigación clínica con su aplicación"
+    },
+    {
+      "key": "data.pre_nursing_research.matchEachResearchConceptTo",
+      "shard": "learner",
+      "before": "Match each research concept to its correct definition",
+      "after": "Relacione cada concepto de investigación con su definición correcta"
+    },
+    {
+      "key": "data.pre_nursing_research.matchEachResearchTermTo",
+      "shard": "learner",
+      "before": "Match each research term to its definition",
+      "after": "Relaciona cada término de investigación con su definición"
+    },
+    {
+      "key": "data.pre_nursing_research.matchEachStatisticalConceptTo",
+      "shard": "learner",
+      "before": "Match each statistical concept to its meaning",
+      "after": "Relaciona cada concepto estadístico con su significado"
+    },
+    {
+      "key": "data.pre_nursing_research.meanMedianModeVariability",
+      "shard": "learner",
+      "before": "Mean, Median, Mode & Variability",
+      "after": "Media, mediana, moda y variabilidad"
+    },
+    {
+      "key": "data.pre_nursing_research.nntRiskCommunicationClinicalDecisionmaki",
+      "shard": "learner",
+      "before": "NNT, Risk Communication & Clinical Decision-Making",
+      "after": "NNT, comunicación de riesgos y toma de decisiones clínicas"
+    },
+    {
+      "key": "data.pre_nursing_research.notEverySignificantPvalueMatters",
+      "shard": "learner",
+      "before": "Not every significant p-value matters at the bedside",
+      "after": "No todos los valores p significativos son importantes al lado de la cama"
+    },
+    {
+      "key": "data.pre_nursing_research.numberNeededToTreatNnt",
+      "shard": "learner",
+      "before": "Number Needed to Treat (NNT)",
+      "after": "Número necesario a tratar (NNT)"
+    },
+    {
+      "key": "data.pre_nursing_research.protectingParticipantsIsANonnegotiable",
+      "shard": "learner",
+      "before": "Protecting participants is a non-negotiable foundation",
+      "after": "Proteger a los participantes es una base no negociable"
+    },
+    {
+      "key": "data.pre_nursing_research.pvaluesSignificanceConfidenceIntervals",
+      "shard": "learner",
+      "before": "P-Values, Significance & Confidence Intervals",
+      "after": "Valores P, significancia e intervalos de confianza"
+    },
+    {
+      "key": "data.pre_nursing_research.quantitativeVsQualitativeResearch",
+      "shard": "learner",
+      "before": "Quantitative vs Qualitative Research",
+      "after": "Investigación cuantitativa versus cualitativa"
+    },
+    {
+      "key": "data.pre_nursing_research.readingGraphsCorrectlyIsA",
+      "shard": "learner",
+      "before": "Reading graphs correctly is a critical research literacy skill",
+      "after": "Leer gráficos correctamente es una habilidad fundamental para la alfabetización en investigación"
+    },
+    {
+      "key": "data.pre_nursing_research.recognizingMisleadingStatistics",
+      "shard": "learner",
+      "before": "Recognizing Misleading Statistics",
+      "after": "Reconocer estadísticas engañosas"
+    },
+    {
+      "key": "data.pre_nursing_research.reliabilityVsValidity",
+      "shard": "learner",
+      "before": "Reliability vs Validity",
+      "after": "Fiabilidad vs Validez"
+    },
+    {
+      "key": "data.pre_nursing_research.researchTerminology",
+      "shard": "learner",
+      "before": "Research Terminology",
+      "after": "Terminología de investigación"
+    },
+    {
+      "key": "data.pre_nursing_research.samplingBias",
+      "shard": "learner",
+      "before": "Sampling Bias",
+      "after": "Sesgo de muestreo"
+    },
+    {
+      "key": "data.pre_nursing_research.samplingMethods",
+      "shard": "learner",
+      "before": "Sampling Methods",
+      "after": "Métodos de muestreo"
+    },
+    {
+      "key": "data.pre_nursing_research.sensitivitySpecificityPredictiveValues",
+      "shard": "learner",
+      "before": "Sensitivity, Specificity & Predictive Values",
+      "after": "Sensibilidad, especificidad y valores predictivos"
+    },
+    {
+      "key": "data.pre_nursing_research.snoutSpin",
+      "shard": "learner",
+      "before": "SNout & SPin",
+      "after": "Hocico y giro"
+    },
+    {
+      "key": "data.pre_nursing_research.standardDeviationSd",
+      "shard": "learner",
+      "before": "Standard Deviation (SD)",
+      "after": "Desviación estándar (DE)"
+    },
+    {
+      "key": "data.pre_nursing_research.statisticsConceptMatching",
+      "shard": "learner",
+      "before": "Statistics Concept Matching",
+      "after": "Coincidencia de conceptos estadísticos"
+    },
+    {
+      "key": "data.pre_nursing_research.stepsForAppraisingAStudy",
+      "shard": "learner",
+      "before": "Steps for Appraising a Study",
+      "after": "Pasos para evaluar un estudio"
+    },
+    {
+      "key": "data.pre_nursing_research.studyDesignHierarchy",
+      "shard": "learner",
+      "before": "Study Design Hierarchy",
+      "after": "Jerarquía de diseño del estudio"
+    },
+    {
+      "key": "data.pre_nursing_research.systematicReviewsMetaanalysis",
+      "shard": "learner",
+      "before": "Systematic Reviews & Meta-Analysis",
+      "after": "Revisiones sistemáticas y metaanálisis"
+    },
+    {
+      "key": "data.pre_nursing_research.theBelmontReportThreeCore",
+      "shard": "learner",
+      "before": "The Belmont Report: Three Core Principles",
+      "after": "El Informe Belmont: tres principios básicos"
+    },
+    {
+      "key": "data.pre_nursing_research.theDifference",
+      "shard": "learner",
+      "before": "The Difference",
+      "after": "La diferencia"
+    },
+    {
+      "key": "data.pre_nursing_research.theMostMisunderstoodConceptsIn",
+      "shard": "learner",
+      "before": "The most misunderstood concepts in statistics",
+      "after": "Los conceptos más incomprendidos en estadística."
+    },
+    {
+      "key": "data.pre_nursing_research.thePinnacleOfTheEvidence",
+      "shard": "learner",
+      "before": "The pinnacle of the evidence hierarchy",
+      "after": "El pináculo de la jerarquía de pruebas"
+    },
+    {
+      "key": "data.pre_nursing_research.theThreePillarsOfEbp",
+      "shard": "learner",
+      "before": "The Three Pillars of EBP",
+      "after": "Los tres pilares de la PBE"
+    },
+    {
+      "key": "data.pre_nursing_research.translatingNumbersIntoPatientCare",
+      "shard": "learner",
+      "before": "Translating numbers into patient care",
+      "after": "Traducir números en atención al paciente"
+    },
+    {
+      "key": "data.pre_nursing_research.twoComplementaryApproachesToKnowing",
+      "shard": "learner",
+      "before": "Two complementary approaches to knowing",
+      "after": "Dos enfoques complementarios para conocer"
+    },
+    {
+      "key": "data.pre_nursing_research.twoFundamentalApproachesToAnalyzing",
+      "shard": "learner",
+      "before": "Two fundamental approaches to analyzing data",
+      "after": "Dos enfoques fundamentales para analizar datos"
+    },
+    {
+      "key": "data.pre_nursing_research.understandingCentralTendencyAndSpread",
+      "shard": "learner",
+      "before": "Understanding central tendency and spread",
+      "after": "Comprender la tendencia central y la propagación"
+    },
+    {
+      "key": "data.pre_nursing_research.understandingDiagnosticTestPerformance",
+      "shard": "learner",
+      "before": "Understanding diagnostic test performance",
+      "after": "Comprender el rendimiento de las pruebas de diagnóstico"
+    },
+    {
+      "key": "data.pre_nursing_research.understandingThePurposeAndScope",
+      "shard": "learner",
+      "before": "Understanding the purpose and scope of research in nursing",
+      "after": "Comprender el propósito y alcance de la investigación en enfermería"
+    },
+    {
+      "key": "data.pre_nursing_research.validityInResearchDesign",
+      "shard": "learner",
+      "before": "Validity in Research Design",
+      "after": "Validez en el diseño de la investigación"
+    },
+    {
+      "key": "data.pre_nursing_research.variablesReliabilityValidity",
+      "shard": "learner",
+      "before": "Variables, Reliability & Validity",
+      "after": "Variables, confiabilidad y validez"
+    },
+    {
+      "key": "data.pre_nursing_research.vulnerablePopulations",
+      "shard": "learner",
+      "before": "Vulnerable Populations",
+      "after": "Poblaciones vulnerables"
+    },
+    {
+      "key": "data.pre_nursing_research.whatAPvalueActuallyMeans",
+      "shard": "learner",
+      "before": "What a P-Value Actually Means",
+      "after": "Lo que realmente significa un valor P"
+    },
+    {
+      "key": "data.pre_nursing_research.whatIsNursingResearch",
+      "shard": "learner",
+      "before": "What Is Nursing Research?",
+      "after": "¿Qué es la investigación en enfermería?"
+    },
+    {
+      "key": "data.pre_nursing_research.whenToUseEach",
+      "shard": "learner",
+      "before": "When to Use Each",
+      "after": "Cuándo usar cada uno"
+    },
+    {
+      "key": "data.pre_nursing_research.whySampleSizeMatters",
+      "shard": "learner",
+      "before": "Why Sample Size Matters",
+      "after": "Por qué es importante el tamaño de la muestra"
+    },
+    {
+      "key": "data.pre_nursing_research.whySystematicReviewsArePowerful",
+      "shard": "learner",
+      "before": "Why Systematic Reviews Are Powerful",
+      "after": "Por qué las revisiones sistemáticas son poderosas"
+    },
+    {
+      "key": "data.pre_nursing_research.whyThisMatters",
+      "shard": "learner",
+      "before": "Why This Matters",
+      "after": "Por qué esto importa"
+    },
+    {
+      "key": "data.pre_nursing_research_reading.matchTheResearchConcept",
+      "shard": "learner",
+      "before": "Match the Research Concept",
+      "after": "Haga coincidir el concepto de investigación"
+    },
+    {
+      "key": "data.pre_nursing_research_reading.researchReadingQuiz",
+      "shard": "learner",
+      "before": "Research Reading Quiz",
+      "after": "Prueba de lectura de investigación"
+    },
+    {
+      "key": "data.pre_nursing_research_reading.sectionsOfAResearchArticle",
+      "shard": "learner",
+      "before": "Sections of a Research Article",
+      "after": "Secciones de un artículo de investigación"
+    },
+    {
+      "key": "data.pre_nursing_research_reading.statisticalVsClinicalSignificance",
+      "shard": "learner",
+      "before": "Statistical vs Clinical Significance",
+      "after": "Importancia estadística versus clínica"
+    },
+    {
+      "key": "data.pre_nursing_research_reading.thePicoFramework",
+      "shard": "learner",
+      "before": "The PICO Framework",
+      "after": "El marco PICO"
+    },
+    {
+      "key": "data.pre_nursing_research_reading.understandingBiasInResearch",
+      "shard": "learner",
+      "before": "Understanding Bias in Research",
+      "after": "Comprender el sesgo en la investigación"
+    },
+    {
+      "key": "data.pre_nursing_science.advancedScienceConceptsMatching",
+      "shard": "learner",
+      "before": "Advanced Science Concepts Matching",
+      "after": "Emparejamiento de conceptos científicos avanzados"
+    },
+    {
+      "key": "data.pre_nursing_science.advancedScienceFoundationsCheck",
+      "shard": "learner",
+      "before": "Advanced Science Foundations Check",
+      "after": "Verificación de fundamentos científicos avanzados"
+    },
+    {
+      "key": "data.pre_nursing_science.antibodyLogicVaccination",
+      "shard": "learner",
+      "before": "Antibody Logic & Vaccination",
+      "after": "Lógica de anticuerpos y vacunación"
+    },
+    {
+      "key": "data.pre_nursing_science.antimicrobialResistance",
+      "shard": "learner",
+      "before": "Antimicrobial Resistance",
+      "after": "Resistencia a los antimicrobianos"
+    },
+    {
+      "key": "data.pre_nursing_science.biomoleculeFunctionMatching",
+      "shard": "learner",
+      "before": "Biomolecule Function Matching",
+      "after": "Coincidencia de funciones de biomoléculas"
+    },
+    {
+      "key": "data.pre_nursing_science.biomoleculesMetabolismCheck",
+      "shard": "learner",
+      "before": "Biomolecules & Metabolism Check",
+      "after": "Comprobación de biomoléculas y metabolismo"
+    },
+    {
+      "key": "data.pre_nursing_science.cellStructureCheck",
+      "shard": "learner",
+      "before": "Cell Structure Check",
+      "after": "Verificación de la estructura celular"
+    },
+    {
+      "key": "data.pre_nursing_science.chemistryCheck",
+      "shard": "learner",
+      "before": "Chemistry Check",
+      "after": "Verificación de química"
+    },
+    {
+      "key": "data.pre_nursing_science.chemistryConceptsMatching",
+      "shard": "learner",
+      "before": "Chemistry Concepts Matching",
+      "after": "Emparejamiento de conceptos de química"
+    },
+    {
+      "key": "data.pre_nursing_science.chromosomalIntegrity",
+      "shard": "learner",
+      "before": "Chromosomal Integrity",
+      "after": "Integridad cromosómica"
+    },
+    {
+      "key": "data.pre_nursing_science.dehydrationSynthesisHydrolysis",
+      "shard": "learner",
+      "before": "Dehydration Synthesis & Hydrolysis",
+      "after": "Síntesis e hidrólisis por deshidratación"
+    },
+    {
+      "key": "data.pre_nursing_science.dehydrationWaterBalance",
+      "shard": "learner",
+      "before": "Dehydration & Water Balance",
+      "after": "Deshidratación y equilibrio hídrico"
+    },
+    {
+      "key": "data.pre_nursing_science.dimensionalAnalysis",
+      "shard": "learner",
+      "before": "Dimensional Analysis",
+      "after": "Análisis dimensional"
+    },
+    {
+      "key": "data.pre_nursing_science.diseaseAsHomeostaticFailure",
+      "shard": "learner",
+      "before": "Disease as Homeostatic Failure",
+      "after": "La enfermedad como fallo homeostático"
+    },
+    {
+      "key": "data.pre_nursing_science.electrolytesIonization",
+      "shard": "learner",
+      "before": "Electrolytes & Ionization",
+      "after": "Electrolitos e ionización"
+    },
+    {
+      "key": "data.pre_nursing_science.energyTransfer",
+      "shard": "learner",
+      "before": "Energy Transfer",
+      "after": "Transferencia de energía"
+    },
+    {
+      "key": "data.pre_nursing_science.essentialMathConcepts",
+      "shard": "learner",
+      "before": "Essential Math Concepts",
+      "after": "Conceptos matemáticos esenciales"
+    },
+    {
+      "key": "data.pre_nursing_science.evidencebasedThinking",
+      "shard": "learner",
+      "before": "Evidence-Based Thinking",
+      "after": "Pensamiento basado en evidencia"
+    },
+    {
+      "key": "data.pre_nursing_science.geneticsCellDivisionCheck",
+      "shard": "learner",
+      "before": "Genetics & Cell Division Check",
+      "after": "Verificación de genética y división celular"
+    },
+    {
+      "key": "data.pre_nursing_science.keyOrganellesAndTheirFunctions",
+      "shard": "learner",
+      "before": "Key Organelles and Their Functions",
+      "after": "Organelos clave y sus funciones"
+    },
+    {
+      "key": "data.pre_nursing_science.matchEachBiomoleculeToIts",
+      "shard": "learner",
+      "before": "Match each biomolecule to its primary role",
+      "after": "Relaciona cada biomolécula con su función principal"
+    },
+    {
+      "key": "data.pre_nursing_science.matchEachChemistryConceptTo",
+      "shard": "learner",
+      "before": "Match each chemistry concept to its clinical relevance",
+      "after": "Relacione cada concepto de química con su relevancia clínica"
+    },
+    {
+      "key": "data.pre_nursing_science.matchEachConceptToIts",
+      "shard": "learner",
+      "before": "Match each concept to its description",
+      "after": "Relaciona cada concepto con su descripción."
+    },
+    {
+      "key": "data.pre_nursing_science.matchEachOrganelleToIts",
+      "shard": "learner",
+      "before": "Match each organelle to its primary role",
+      "after": "Relaciona cada orgánulo con su función principal."
+    },
+    {
+      "key": "data.pre_nursing_science.mathSkillsCheck",
+      "shard": "learner",
+      "before": "Math Skills Check",
+      "after": "Verificación de habilidades matemáticas"
+    },
+    {
+      "key": "data.pre_nursing_science.metabolismWaterPropertiesCheck",
+      "shard": "learner",
+      "before": "Metabolism & Water Properties Check",
+      "after": "Verificación del metabolismo y las propiedades del agua"
+    },
+    {
+      "key": "data.pre_nursing_science.microbiologyImmunityCheck",
+      "shard": "learner",
+      "before": "Microbiology & Immunity Check",
+      "after": "Control de microbiología e inmunidad"
+    },
+    {
+      "key": "data.pre_nursing_science.mutationsDisease",
+      "shard": "learner",
+      "before": "Mutations & Disease",
+      "after": "Mutaciones y enfermedades"
+    },
+    {
+      "key": "data.pre_nursing_science.organelleDysfunctionDisease",
+      "shard": "learner",
+      "before": "Organelle Dysfunction & Disease",
+      "after": "Disfunción y enfermedad de los orgánulos"
+    },
+    {
+      "key": "data.pre_nursing_science.organelleFunctionMatching",
+      "shard": "learner",
+      "before": "Organelle Function Matching",
+      "after": "Coincidencia de funciones de orgánulos"
+    },
+    {
+      "key": "data.pre_nursing_science.oxygenDeprivationCellDeath",
+      "shard": "learner",
+      "before": "Oxygen Deprivation & Cell Death",
+      "after": "Privación de oxígeno y muerte celular"
+    },
+    {
+      "key": "data.pre_nursing_science.pathogenCategories",
+      "shard": "learner",
+      "before": "Pathogen Categories",
+      "after": "Categorías de patógenos"
+    },
+    {
+      "key": "data.pre_nursing_science.scientificLiteracyCheck",
+      "shard": "learner",
+      "before": "Scientific Literacy Check",
+      "after": "Verificación de alfabetización científica"
+    },
+    {
+      "key": "data.pre_nursing_science.theFourBiomolecules",
+      "shard": "learner",
+      "before": "The Four Biomolecules",
+      "after": "Las cuatro biomoléculas"
+    },
+    {
+      "key": "data.pre_nursing_science.theThreeStagesOfAerobic",
+      "shard": "learner",
+      "before": "The Three Stages of Aerobic Respiration",
+      "after": "Las tres etapas de la respiración aeróbica"
+    },
+    {
+      "key": "data.pre_nursing_science.whyThisMattersForNursing",
+      "shard": "learner",
+      "before": "Why This Matters for Nursing",
+      "after": "Por qué esto es importante para la enfermería"
+    },
+    {
+      "key": "data.pre_nursing_study_strategies.commonFailurePatterns",
+      "shard": "learner",
+      "before": "Common Failure Patterns",
+      "after": "Patrones de falla comunes"
+    },
+    {
+      "key": "data.pre_nursing_study_strategies.matchTheStudyStrategy",
+      "shard": "learner",
+      "before": "Match the Study Strategy",
+      "after": "Haga coincidir la estrategia de estudio"
+    },
+    {
+      "key": "data.pre_nursing_study_strategies.questionAttackStrategy",
+      "shard": "learner",
+      "before": "Question Attack Strategy",
+      "after": "Estrategia de ataque de preguntas"
+    },
+    {
+      "key": "data.pre_nursing_study_strategies.studyStrategiesQuiz",
+      "shard": "learner",
+      "before": "Study Strategies Quiz",
+      "after": "Prueba de estrategias de estudio"
+    },
+    {
+      "key": "data.pre_nursing_study_strategies.theTestingEffect",
+      "shard": "learner",
+      "before": "The Testing Effect",
+      "after": "El efecto de prueba"
+    },
+    {
+      "key": "data.pre_nursing_study_strategies.whyCrammingFailsForNursing",
+      "shard": "learner",
+      "before": "Why Cramming Fails for Nursing",
+      "after": "Por qué estudiar fracasa en enfermería"
+    },
+    {
+      "key": "data.pre_nursing_terminology.commonConfusionOtomyVsOstomy",
+      "shard": "learner",
+      "before": "Common Confusion: -otomy vs -ostomy vs -ectomy",
+      "after": "Confusión común: -otomía versus -ostomía versus -ectomía"
+    },
+    {
+      "key": "data.pre_nursing_terminology.decodingInAction",
+      "shard": "learner",
+      "before": "Decoding in Action",
+      "after": "Decodificación en acción"
+    },
+    {
+      "key": "data.pre_nursing_terminology.deep",
+      "shard": "learner",
+      "before": "Deep",
+      "after": "Profundo"
+    },
+    {
+      "key": "data.pre_nursing_terminology.distal",
+      "shard": "learner",
+      "before": "Distal",
+      "after": "distal"
+    },
+    {
+      "key": "data.pre_nursing_terminology.epi",
+      "shard": "learner",
+      "before": "Epi-",
+      "after": "epi-"
+    },
+    {
+      "key": "data.pre_nursing_terminology.frontalCoronalPlane",
+      "shard": "learner",
+      "before": "Frontal (coronal) plane",
+      "after": "Plano frontal (coronal)"
+    },
+    {
+      "key": "data.pre_nursing_terminology.hgb",
+      "shard": "learner",
+      "before": "Hgb",
+      "after": "hgb"
+    },
+    {
+      "key": "data.pre_nursing_terminology.inter",
+      "shard": "learner",
+      "before": "Inter-",
+      "after": "Enterrar-"
+    },
+    {
+      "key": "data.pre_nursing_terminology.intra",
+      "shard": "learner",
+      "before": "Intra-",
+      "after": "intra-"
+    },
+    {
+      "key": "data.pre_nursing_terminology.matchTheRootToIts",
+      "shard": "learner",
+      "before": "Match the Root to Its Meaning",
+      "after": "Relaciona la raíz con su significado"
+    },
+    {
+      "key": "data.pre_nursing_terminology.medial",
+      "shard": "learner",
+      "before": "Medial",
+      "after": "Medio"
+    },
+    {
+      "key": "data.pre_nursing_terminology.medicalTerminologyQuiz",
+      "shard": "learner",
+      "before": "Medical Terminology Quiz",
+      "after": "Prueba de terminología médica"
+    },
+    {
+      "key": "data.pre_nursing_terminology.peri",
+      "shard": "learner",
+      "before": "Peri-",
+      "after": "peri-"
+    },
+    {
+      "key": "data.pre_nursing_terminology.proximal",
+      "shard": "learner",
+      "before": "Proximal",
+      "after": "proximal"
+    },
+    {
+      "key": "data.pre_nursing_terminology.sagittalPlane",
+      "shard": "learner",
+      "before": "Sagittal plane",
+      "after": "Plano sagital"
+    },
+    {
+      "key": "data.pre_nursing_terminology.systembysystemRootWords",
+      "shard": "learner",
+      "before": "System-by-System Root Words",
+      "after": "Palabras raíz sistema por sistema"
+    },
+    {
+      "key": "data.pre_nursing_terminology.transverseHorizontalPlane",
+      "shard": "learner",
+      "before": "Transverse (horizontal) plane",
+      "after": "Plano transversal (horizontal)"
+    },
+    {
+      "key": "examHub.contentHubDesc",
+      "shard": "learner",
+      "before": "Comprehensive, medically reviewed study guides covering conditions, lab values, medications, clinical comparisons, and exam strategies for NCLEX-RN preparation.",
+      "after": "Guías de estudio completas y revisadas médicamente que cubren condiciones, valores de laboratorio, medicamentos, comparaciones clínicas y estrategias de exámenes para la preparación de NCLEX-RN."
+    },
+    {
+      "key": "examHub.contentHubTitle",
+      "shard": "learner",
+      "before": "NCLEX-RN Content Hub",
+      "after": "NCLEX-RN Centro de contenido"
+    },
+    {
+      "key": "flashcards.categoryGI",
+      "shard": "learner",
+      "before": "GI",
+      "after": "soldado americano"
+    },
+    {
+      "key": "flashcards.categoryMaternal",
+      "shard": "learner",
+      "before": "Maternal",
+      "after": "Materno"
+    },
+    {
+      "key": "flashcards.premiumDeck",
+      "shard": "learner",
+      "before": "Premium",
+      "after": "De primera calidad"
+    },
+    {
+      "key": "lessons.lesson.bartholinitis",
+      "shard": "learner",
+      "before": "Bartholinitis",
+      "after": "bartolinitis"
+    },
+    {
+      "key": "lessons.lesson.bartholinitis-rpn",
+      "shard": "learner",
+      "before": "Bartholinitis",
+      "after": "bartolinitis"
+    },
+    {
+      "key": "lessons.lesson.cervicitis",
+      "shard": "learner",
+      "before": "Cervicitis",
+      "after": "cervicitis"
+    },
+    {
+      "key": "lessons.lesson.cervicitis-rpn",
+      "shard": "learner",
+      "before": "Cervicitis",
+      "after": "cervicitis"
+    },
+    {
+      "key": "lessons.lesson.diverticulitis-rpn",
+      "shard": "learner",
+      "before": "Diverticulitis",
+      "after": "diverticulitis"
+    },
+    {
+      "key": "lessons.lesson.endometriosis",
+      "shard": "learner",
+      "before": "Endometriosis",
+      "after": "endometriosis"
+    },
+    {
+      "key": "lessons.lesson.galactosemia-rpn",
+      "shard": "learner",
+      "before": "Galactosemia",
+      "after": "galactosemia"
+    },
+    {
+      "key": "lessons.lesson.herpes-simplex-rpn",
+      "shard": "learner",
+      "before": "Herpes Simplex",
+      "after": "Herpes simple"
+    },
+    {
+      "key": "lessons.lesson.hiv-management",
+      "shard": "learner",
+      "before": "HIV",
+      "after": "VIH"
+    },
+    {
+      "key": "lessons.lesson.impetigo",
+      "shard": "learner",
+      "before": "Impetigo",
+      "after": "Impétigo"
+    },
+    {
+      "key": "lessons.lesson.mrsa-management",
+      "shard": "learner",
+      "before": "MRSA",
+      "after": "SARM"
+    },
+    {
+      "key": "lessons.lesson.oxybutynin-rpn",
+      "shard": "learner",
+      "before": "Oxybutynin (Ditropan)",
+      "after": "Oxibutinina (Ditropan)"
+    },
+    {
+      "key": "lessons.lesson.tinnitus-rpn",
+      "shard": "learner",
+      "before": "Tinnitus",
+      "after": "tinnitus"
+    },
+    {
+      "key": "lessons.lesson.vitiligo-rpn",
+      "shard": "learner",
+      "before": "Vitiligo",
+      "after": "vitíligo"
+    },
+    {
+      "key": "lessons.sys.neonatal-np",
+      "shard": "learner",
+      "before": "Neonatal",
+      "after": "neonatal"
+    },
+    {
+      "key": "lessons.sys.neonatal-rn",
+      "shard": "learner",
+      "before": "Neonatal",
+      "after": "neonatal"
+    },
+    {
+      "key": "lessons.sys.neonatal-rpn",
+      "shard": "learner",
+      "before": "Neonatal",
+      "after": "neonatal"
+    },
+    {
+      "key": "licensingExams.hub.badge",
+      "shard": "learner",
+      "before": "Exam Database",
+      "after": "Base de datos de exámenes"
+    },
+    {
+      "key": "licensingExams.hub.ctaDescription",
+      "shard": "learner",
+      "before": "NurseNest provides comprehensive exam prep resources to help you pass your nursing licensing exam on the first attempt.",
+      "after": "NurseNest proporciona recursos integrales de preparación para exámenes para ayudarlo a aprobar su examen de licencia de enfermería en el primer intento."
+    },
+    {
+      "key": "licensingExams.hub.ctaTitle",
+      "shard": "learner",
+      "before": "Ready to Start Preparing?",
+      "after": "¿Listo para comenzar a prepararse?"
+    },
+    {
+      "key": "licensingExams.hub.description",
+      "shard": "learner",
+      "before": "Your comprehensive guide to nursing licensing examinations around the world. Compare exam formats, eligibility requirements, costs, and preparation strategies to plan your nursing career path.",
+      "after": "Su guía completa para los exámenes de licencia de enfermería en todo el mundo. Compare formatos de exámenes, requisitos de elegibilidad, costos y estrategias de preparación para planificar su carrera profesional en enfermería."
+    },
+    {
+      "key": "licensingExams.hub.exploreDescription",
+      "shard": "learner",
+      "before": "Select an exam to view detailed information including format, requirements, preparation strategies, and FAQs.",
+      "after": "Seleccione un examen para ver información detallada, incluido el formato, los requisitos, las estrategias de preparación y las preguntas frecuentes."
+    },
+    {
+      "key": "licensingExams.hub.exploreTitle",
+      "shard": "learner",
+      "before": "Explore Licensing Exams",
+      "after": "Explorar exámenes de licencia"
+    },
+    {
+      "key": "licensingExams.hub.faqTitle",
+      "shard": "learner",
+      "before": "Frequently Asked Questions",
+      "after": "Preguntas frecuentes"
+    },
+    {
+      "key": "licensingExams.hub.howToChooseTitle",
+      "shard": "learner",
+      "before": "How to Choose Your Exam",
+      "after": "Cómo elegir su examen"
+    },
+    {
+      "key": "licensingExams.hub.seoDescription",
+      "shard": "learner",
+      "before": "Comprehensive database of nursing licensing examinations worldwide. Compare exam formats, requirements, and preparation strategies for NCLEX, REx-PN, NMC CBT, AHPRA, Prometric, IELTS, and OET.",
+      "after": "Base de datos completa de exámenes de licencia de enfermería en todo el mundo. Compare formatos de exámenes, requisitos y estrategias de preparación para NCLEX, REx-PN, NMC CBT, AHPRA, Prometric, IELTS y OET."
+    },
+    {
+      "key": "licensingExams.hub.seoTitle",
+      "shard": "learner",
+      "before": "Nursing Licensing Exams Database – NCLEX, REx-PN, NMC CBT, AHPRA & More | NurseNest",
+      "after": "Base de datos de exámenes de licencia de enfermería: NCLEX, REx-PN, NMC CBT, AHPRA y más | NurseNest"
+    },
+    {
+      "key": "licensingExams.hub.step1Desc",
+      "shard": "learner",
+      "before": "Identify which country you want to practice nursing in. Each country has specific licensing requirements and examinations.",
+      "after": "Identifique en qué país desea ejercer la enfermería. Cada país tiene requisitos de licencia y exámenes específicos."
+    },
+    {
+      "key": "licensingExams.hub.step1Title",
+      "shard": "learner",
+      "before": "1. Choose Your Country",
+      "after": "1. Elige tu país"
+    },
+    {
+      "key": "licensingExams.hub.step2Desc",
+      "shard": "learner",
+      "before": "Review eligibility criteria, language requirements, and credential evaluation processes for your target country.",
+      "after": "Revise los criterios de elegibilidad, los requisitos de idioma y los procesos de evaluación de credenciales para su país de destino."
+    },
+    {
+      "key": "licensingExams.hub.step2Title",
+      "shard": "learner",
+      "before": "2. Check Requirements",
+      "after": "2. Verificar requisitos"
+    },
+    {
+      "key": "licensingExams.hub.step3Title",
+      "shard": "learner",
+      "before": "3. Start Preparing",
+      "after": "3. Comience a prepararse"
+    },
+    {
+      "key": "licensingExams.hub.title",
+      "shard": "learner",
+      "before": "Global Nursing Licensing Exam Database",
+      "after": "Base de datos global de exámenes de licencia de enfermería"
+    },
+    {
+      "key": "medAbbreviations.all",
+      "shard": "learner",
+      "before": "All Categories",
+      "after": "Todas las categorías"
+    },
+    {
+      "key": "medAbbreviations.backToHub",
+      "shard": "learner",
+      "before": "Back to Medical Abbreviations",
+      "after": "Volver a Abreviaturas Médicas"
+    },
+    {
+      "key": "medAbbreviations.badge",
+      "shard": "learner",
+      "before": "Clinical Reference",
+      "after": "Referencia clínica"
+    },
+    {
+      "key": "medAbbreviations.breadcrumb",
+      "shard": "learner",
+      "before": "Medical Abbreviations",
+      "after": "Abreviaturas médicas"
+    },
+    {
+      "key": "medAbbreviations.clinicalExamples",
+      "shard": "learner",
+      "before": "Clinical Examples",
+      "after": "Ejemplos clínicos"
+    },
+    {
+      "key": "medAbbreviations.commonMistakes",
+      "shard": "learner",
+      "before": "Common Mistakes to Avoid",
+      "after": "Errores comunes a evitar"
+    },
+    {
+      "key": "medAbbreviations.ctaDesc",
+      "shard": "learner",
+      "before": "Test your knowledge of medical abbreviations with NCLEX-style questions.",
+      "after": "Pon a prueba tus conocimientos sobre abreviaturas médicas con preguntas al estilo NCLEX."
+    },
+    {
+      "key": "medAbbreviations.ctaFlashcards",
+      "shard": "learner",
+      "before": "Study Flashcards",
+      "after": "Tarjetas didácticas de estudio"
+    },
+    {
+      "key": "medAbbreviations.ctaPractice",
+      "shard": "learner",
+      "before": "Practice Questions",
+      "after": "Preguntas de práctica"
+    },
+    {
+      "key": "medAbbreviations.ctaTitle",
+      "shard": "learner",
+      "before": "Ready to Test Your Knowledge?",
+      "after": "¿Listo para poner a prueba tus conocimientos?"
+    },
+    {
+      "key": "medAbbreviations.description",
+      "shard": "learner",
+      "before": "Master {{count}} essential medical abbreviations used in clinical nursing practice, charting, medication orders, and NCLEX exam preparation.",
+      "after": "Domine {{count}} las abreviaturas médicas esenciales utilizadas en la práctica clínica de enfermería, gráficos, órdenes de medicamentos y NCLEX preparación de exámenes."
+    },
+    {
+      "key": "medAbbreviations.examRelevance",
+      "shard": "learner",
+      "before": "NCLEX Exam Relevance",
+      "after": "NCLEX Relevancia del examen"
+    },
+    {
+      "key": "medAbbreviations.faqTitle",
+      "shard": "learner",
+      "before": "Frequently Asked Questions",
+      "after": "Preguntas frecuentes"
+    },
+    {
+      "key": "medAbbreviations.linkChecklists",
+      "shard": "learner",
+      "before": "Nursing Skill Checklists",
+      "after": "Listas de verificación de habilidades de enfermería"
+    },
+    {
+      "key": "medAbbreviations.linkChecklistsDesc",
+      "shard": "learner",
+      "before": "Step-by-step clinical procedure guides",
+      "after": "Guías de procedimientos clínicos paso a paso."
+    },
+    {
+      "key": "medAbbreviations.linkExamPrep",
+      "shard": "learner",
+      "before": "Exam Preparation",
+      "after": "Preparación para el examen"
+    },
+    {
+      "key": "medAbbreviations.linkExamPrepDesc",
+      "shard": "learner",
+      "before": "NCLEX-style practice questions",
+      "after": "NCLEXpreguntas de práctica estilo"
+    },
+    {
+      "key": "medAbbreviations.linkGlossary",
+      "shard": "learner",
+      "before": "Nursing Glossary",
+      "after": "Glosario de enfermería"
+    },
+    {
+      "key": "medAbbreviations.linkGlossaryDesc",
+      "shard": "learner",
+      "before": "Complete nursing terminology reference",
+      "after": "Referencia completa de terminología de enfermería."
+    },
+    {
+      "key": "medAbbreviations.linkLessons",
+      "shard": "learner",
+      "before": "Clinical Lessons",
+      "after": "Lecciones clínicas"
+    },
+    {
+      "key": "medAbbreviations.linkLessonsDesc",
+      "shard": "learner",
+      "before": "In-depth pathophysiology content",
+      "after": "Contenido en profundidad sobre fisiopatología."
+    },
+    {
+      "key": "medAbbreviations.noResults",
+      "shard": "learner",
+      "before": "No abbreviations found",
+      "after": "No se encontraron abreviaturas"
+    },
+    {
+      "key": "medAbbreviations.noResultsDesc",
+      "shard": "learner",
+      "before": "Try a different search term or category",
+      "after": "Pruebe con un término o categoría de búsqueda diferente"
+    },
+    {
+      "key": "medAbbreviations.notFound",
+      "shard": "learner",
+      "before": "Abbreviation Not Found",
+      "after": "Abreviatura no encontrada"
+    },
+    {
+      "key": "medAbbreviations.notFoundDesc",
+      "shard": "learner",
+      "before": "This medical abbreviation does not exist in our database.",
+      "after": "Esta abreviatura médica no existe en nuestra base de datos."
+    },
+    {
+      "key": "medAbbreviations.relatedAbbreviations",
+      "shard": "learner",
+      "before": "Related Abbreviations",
+      "after": "Abreviaturas relacionadas"
+    },
+    {
+      "key": "medAbbreviations.relatedLessons",
+      "shard": "learner",
+      "before": "Related Lessons",
+      "after": "Lecciones relacionadas"
+    },
+    {
+      "key": "medAbbreviations.relatedResources",
+      "shard": "learner",
+      "before": "Related Resources",
+      "after": "Recursos relacionados"
+    },
+    {
+      "key": "medAbbreviations.searchPlaceholder",
+      "shard": "learner",
+      "before": "Search abbreviations...",
+      "after": "Buscar abreviaturas..."
+    },
+    {
+      "key": "medAbbreviations.showing",
+      "shard": "learner",
+      "before": "Showing {{filtered}} of {{total}} abbreviations",
+      "after": "Mostrando {{filtered}} de {{total}} abreviaturas"
+    },
+    {
+      "key": "medAbbreviations.title",
+      "shard": "learner",
+      "before": "Medical Abbreviations for Nurses",
+      "after": "Abreviaturas médicas para enfermeras"
+    },
+    {
+      "key": "medAbbreviations.usageContext",
+      "shard": "learner",
+      "before": "Clinical Usage Context",
+      "after": "Contexto de uso clínico"
+    },
+    {
+      "key": "mockExams.extendedTime",
+      "shard": "learner",
+      "before": "~90 min",
+      "after": "~90 minutos"
+    },
+    {
+      "key": "mockExams.fullLengthTime",
+      "shard": "learner",
+      "before": "~60 min",
+      "after": "~60 minutos"
+    },
+    {
+      "key": "mockExams.min",
+      "shard": "learner",
+      "before": "min",
+      "after": "mín."
+    },
+    {
+      "key": "mockExams.quickReviewTime",
+      "shard": "learner",
+      "before": "~15 min",
+      "after": "~15 minutos"
+    },
+    {
+      "key": "mockExams.standardTime",
+      "shard": "learner",
+      "before": "~45 min",
+      "after": "~45 minutos"
+    },
+    {
+      "key": "qbank.showingPreview",
+      "shard": "learner",
+      "before": "Showing {{shown}} preview questions. Subscribe to unlock all {{total}} questions.",
+      "after": "Mostrando {{shown}} preguntas de vista previa. Suscríbete para desbloquear todas las preguntas de {{total}}."
+    },
+    {
+      "key": "skillChecklists.backToHub",
+      "shard": "learner",
+      "before": "Back to Skill Checklists",
+      "after": "Volver a las listas de verificación de habilidades"
+    },
+    {
+      "key": "skillChecklists.badge",
+      "shard": "learner",
+      "before": "Clinical Skills Library",
+      "after": "Biblioteca de habilidades clínicas"
+    },
+    {
+      "key": "skillChecklists.breadcrumb",
+      "shard": "learner",
+      "before": "Nursing Skill Checklists",
+      "after": "Listas de verificación de habilidades de enfermería"
+    },
+    {
+      "key": "skillChecklists.complications",
+      "shard": "learner",
+      "before": "Potential Complications",
+      "after": "Posibles complicaciones"
+    },
+    {
+      "key": "skillChecklists.contraindications",
+      "shard": "learner",
+      "before": "Contraindications",
+      "after": "Contraindicaciones"
+    },
+    {
+      "key": "skillChecklists.ctaDesc",
+      "shard": "learner",
+      "before": "Test your knowledge of clinical procedures with NCLEX-style questions.",
+      "after": "Pon a prueba tus conocimientos sobre procedimientos clínicos con preguntas estilo NCLEX."
+    }
+  ]
+}

@@ -163,6 +163,37 @@ export function pathwayTopicClusterBreadcrumbs(
   return { crumbs, schemaItems };
 }
 
+/** Display category hub: … → Lessons (linked) → category label (current). */
+export function pathwayLessonsDisplayCategoryBreadcrumbs(
+  pathway: ExamPathwayDefinition,
+  categoryLabel: string,
+  categoryUrlSegment: string,
+  opts?: PathwayMarketingHubBreadcrumbOpts,
+): { crumbs: BreadcrumbCrumb[]; schemaItems: BreadcrumbSchemaItem[] } {
+  const hub = opts?.hubBasePath;
+  const p = examPathwaySurfacePrefix(pathway, opts);
+  const lessonsPath = pathwayHubChildPath(pathway, hub, "lessons");
+  const seg = categoryUrlSegment.trim().toLowerCase();
+  const categoryPath = seg ? `${lessonsPath}/${encodeURIComponent(seg)}` : lessonsPath;
+  const crumbs: BreadcrumbCrumb[] = [
+    HOME,
+    p.countryCrumb(true),
+    p.roleCrumb(true),
+    p.hubCrumb(true),
+    { name: "Lessons", href: lessonsPath, i18nKey: LESSONS_KEY },
+    { name: categoryLabel, href: undefined },
+  ];
+  const schemaItems: BreadcrumbSchemaItem[] = [
+    HOME_ITEM,
+    p.countrySchema(),
+    p.roleSchema(),
+    p.hubSchema(),
+    { name: "Lessons", item: toAbsoluteSiteUrl(lessonsPath), i18nKey: LESSONS_KEY },
+    { name: categoryLabel, item: toAbsoluteSiteUrl(categoryPath) },
+  ];
+  return { crumbs, schemaItems };
+}
+
 /** Single lesson page: Home → … → Lessons → lesson title (current). */
 export function pathwayLessonDetailBreadcrumbs(
   pathway: ExamPathwayDefinition,
@@ -232,6 +263,36 @@ export function pathwayQuestionsHubBreadcrumbs(
     p.roleSchema(),
     p.hubSchema(),
     { name: "Question bank", item: toAbsoluteSiteUrl(qPath), i18nKey: qbKey },
+  ];
+  return { crumbs, schemaItems };
+}
+
+/** Programmatic study SEO page (`…/study/{topicSlug}`) — hybrid lesson + practice hub. */
+export function pathwayProgrammaticStudySeoBreadcrumbs(
+  pathway: ExamPathwayDefinition,
+  pageLabel: string,
+  topicSlug: string,
+  opts?: PathwayMarketingHubBreadcrumbOpts,
+): {
+  crumbs: BreadcrumbCrumb[];
+  schemaItems: BreadcrumbSchemaItem[];
+} {
+  const hub = opts?.hubBasePath;
+  const p = examPathwaySurfacePrefix(pathway, opts);
+  const selfPath = pathwayHubChildPath(pathway, hub, `study/${encodeURIComponent(topicSlug.trim())}`);
+  const crumbs: BreadcrumbCrumb[] = [
+    HOME,
+    p.countryCrumb(true),
+    p.roleCrumb(true),
+    p.hubCrumb(true),
+    { name: pageLabel, href: undefined },
+  ];
+  const schemaItems: BreadcrumbSchemaItem[] = [
+    HOME_ITEM,
+    p.countrySchema(),
+    p.roleSchema(),
+    p.hubSchema(),
+    { name: pageLabel, item: toAbsoluteSiteUrl(selfPath) },
   ];
   return { crumbs, schemaItems };
 }

@@ -1,3 +1,5 @@
+import { validateBlogTopicForSeoArticleGeneration } from "@/lib/blog/blog-seo-topic-intent";
+
 /**
  * Long-term blog topic bank for NurseNest.
  *
@@ -160,23 +162,23 @@ const CATEGORY_A: readonly string[] = [
 ] as const;
 
 // ── Category B: Clinical topic deep dives ─────────────────────────────────────
-// Pattern: "Complete Guide to [Topic] for Nursing Students"
+// Pattern: exam-grounded teaching lines (avoid generic "Guide to…" / "Understanding…" titles)
 
 const CATEGORY_B: readonly string[] = [
-  "Complete Guide to Fluid and Electrolyte Balance for Nursing Students",
-  "Understanding Sodium Imbalances: Hyponatremia and Hypernatremia Nursing Care",
+  "NCLEX questions for fluid and electrolyte balance traps (hyponatremia vs hypernatremia)",
+  "Priority nursing interventions for hyponatremia and hypernatremia on NCLEX-RN",
   "Potassium Imbalances in Clinical Practice: Hypokalemia and Hyperkalemia",
   "Calcium and Phosphorus Imbalances: Clinical Significance and Nursing Management",
   "Magnesium Imbalances: Assessment Findings and Nursing Interventions",
   "Acid-Base Disorders: Step-by-Step ABG Interpretation for Nurses",
   "Respiratory Acidosis and Alkalosis: Causes, Assessment, and Nursing Care",
-  "Metabolic Acidosis and Alkalosis: Understanding Compensation Mechanisms",
-  "Complete Guide to Cardiac Output and Hemodynamic Monitoring",
+  "How to recognize acid-base compensation patterns early for NCLEX (metabolic acidosis vs alkalosis)",
+  "NCLEX questions for cardiac output and hemodynamic monitoring priorities",
   "Heart Failure: Pathophysiology, Assessment, and Evidence-Based Nursing Care",
   "Acute Coronary Syndrome: STEMI vs NSTEMI — Nursing Priorities",
   "Dysrhythmia Recognition: Reading ECGs and Priority Nursing Actions",
   "Atrial Fibrillation: Anticoagulation, Rate Control, and Stroke Risk",
-  "Complete Guide to Hypertension: Pathophysiology and Nursing Management",
+  "Priority nursing interventions for hypertension management on NCLEX-RN",
   "Shock States: Hypovolemic, Cardiogenic, Distributive, and Obstructive",
   "Sepsis and Septic Shock: Early Recognition and Bundle Implementation",
   "Disseminated Intravascular Coagulation: Nursing Assessment and Management",
@@ -494,7 +496,7 @@ const CATEGORY_D: readonly string[] = [
   "How to Study Fluids and Electrolytes Without Getting Overwhelmed",
   "Decision Trees for NCLEX: When to Intervene vs Assess vs Educate",
   "How to Identify the Correct Level of Nursing Intervention on NCLEX",
-  "Understanding Maslow's Hierarchy for NCLEX Prioritization Questions",
+  "NCLEX prioritization: Maslow vs ABC when both seem right (exam-style decision rules)",
   "ABCs and CABs: When to Use Airway-Breathing-Circulation on NCLEX",
   "How to Study Infection Control for NCLEX in Under 5 Hours",
   "Clinical Judgment Model: How NCLEX NGN Uses It and How to Study",
@@ -662,11 +664,17 @@ export const TOPIC_CATEGORY_RANGES = {
  * @param offset   Starting index in the bank (use different offsets per language to diversify).
  * @returns        Array of topic strings, cycling through the bank as needed.
  */
-export function getBlogTopicsForSchedule(count: number, offset = 0): string[] {
+export function getBlogTopicsForSchedule(count: number, offset = 0, examLabel = "NCLEX-RN"): string[] {
   const bank = BLOG_TOPIC_BANK;
   const result: string[] = [];
-  for (let i = 0; i < count; i++) {
-    result.push(bank[(offset + i) % bank.length]);
+  let scanned = 0;
+  const maxScan = Math.max(bank.length * 4, count * 4);
+  while (result.length < count && scanned < maxScan) {
+    const t = bank[(offset + scanned) % bank.length]!;
+    scanned += 1;
+    if (validateBlogTopicForSeoArticleGeneration(t, examLabel).ok) {
+      result.push(t);
+    }
   }
   return result;
 }
@@ -675,6 +683,6 @@ export function getBlogTopicsForSchedule(count: number, offset = 0): string[] {
  * Returns a text block (one topic per line) ready for the batch-schedule API.
  * Deduplication within the block is handled by the API.
  */
-export function getBlogTopicsText(count: number, offset = 0): string {
-  return getBlogTopicsForSchedule(count, offset).join("\n");
+export function getBlogTopicsText(count: number, offset = 0, examLabel = "NCLEX-RN"): string {
+  return getBlogTopicsForSchedule(count, offset, examLabel).join("\n");
 }

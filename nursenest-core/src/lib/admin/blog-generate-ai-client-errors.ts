@@ -19,7 +19,7 @@ export function formatBlogGenerateAiFlattenedErrors(f: BlogGenerateAiValidationF
     const first = msgs.find((m): m is string => typeof m === "string" && m.trim().length > 0);
     if (first) fieldLines.push(`${key}: ${first}`);
   }
-  const form = Array.isArray(f.formErrors) ? f.formErrors.filter((m): m is string => typeof m === "string" && m.trim()) : [];
+  const form = Array.isArray(f.formErrors) ? f.formErrors.filter((m): m is string => typeof m === "string" && m.trim() !== "") : [];
   if (fieldLines.length > 0) {
     return joinNonEmpty([...fieldLines, ...form.map((m) => m)]);
   }

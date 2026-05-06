@@ -1,6 +1,6 @@
 import Link from "next/link";
 import {
-  pathwayLessonMarketingDetailHref,
+  pathwayLessonMarketingHubVerifiedCardHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
@@ -60,11 +60,14 @@ export function PathwayNclexScalableLessonSection({
   const useCollapsedRich = display.length > NCLEX_HUB_RICH_PREVIEWS_COLLAPSE_AFTER;
 
   const richCard = (l: PathwayLessonRecord) => {
+    const detailHref = pathwayLessonMarketingHubVerifiedCardHref(lessonsBasePath, l);
     const p =
       variant === "rn"
         ? nclexRnLessonExamPreview(l, rnRegion)
         : nclexPnLessonExamPreview(l, pnPreviewFraming);
     const showProgress = Object.keys(progressMap).length > 0;
+    const titleClassName =
+      "mt-1 block text-lg font-semibold leading-snug text-[var(--theme-heading-text)] underline-offset-4 transition hover:text-primary hover:underline";
     return (
       <li
         key={l.slug}
@@ -74,22 +77,25 @@ export function PathwayNclexScalableLessonSection({
           <PathwayLessonRecordChips lesson={l} className="min-w-0 flex-1" />
           {showProgress ? <PathwayLessonProgressBadge status={progressMap[l.slug] ?? "not_started"} /> : null}
         </div>
-        <Link
-          href={pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug)!}
-          className="mt-1 block text-lg font-semibold leading-snug text-[var(--theme-heading-text)] underline-offset-4 transition hover:text-primary hover:underline"
-        >
-          {cleanLessonTitleForDisplay(l.title)}
-        </Link>
+        {detailHref ? (
+          <Link href={detailHref} className={titleClassName}>
+            {cleanLessonTitleForDisplay(l.title)}
+          </Link>
+        ) : (
+          <span className={`${titleClassName} cursor-default hover:no-underline`}>
+            {cleanLessonTitleForDisplay(l.title)}
+          </span>
+        )}
         <div className="mt-4 grid gap-3 border-t border-[color-mix(in_srgb,var(--theme-primary)_10%,var(--border-subtle))] pt-4 text-sm sm:grid-cols-2">
           <div>
             <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">Scenario focus</p>
-            <p className="mt-0.5">{p.scenarioType}</p>
+            <p className="mt-0.5 text-[var(--theme-body-text)]">{p.scenarioType}</p>
           </div>
           <div>
             <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">
               {variant === "rn" ? "Likely NCLEX item types" : "Likely item types"}
             </p>
-            <p className="mt-0.5">{p.examQuestionTypes}</p>
+            <p className="mt-0.5 text-[var(--theme-body-text)]">{p.examQuestionTypes}</p>
           </div>
           <div className="sm:col-span-2">
             <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">
@@ -109,20 +115,22 @@ export function PathwayNclexScalableLessonSection({
           </div>
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
-          <Link
-            href={pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug)!}
-            className="text-sm font-semibold text-primary"
-          >
-            Read lesson →
-          </Link>
+          {detailHref ? (
+            <Link href={detailHref} className="text-sm font-semibold text-primary">
+              Read lesson →
+            </Link>
+          ) : null}
           <Link href={pathwayHubAppQuestionsHref(pathwayId, l.topic)} className="text-sm font-semibold text-primary">
             Practice questions →
           </Link>
-          <Link href={pathwayHubAppFlashcardsHref(pathwayId)} className="text-sm font-semibold text-muted hover:text-primary">
+          <Link
+            href={pathwayHubAppFlashcardsHref(pathwayId)}
+            className="text-sm font-semibold text-[var(--theme-muted-text)] hover:text-primary"
+          >
             Flashcards →
           </Link>
           {catHubHref ? (
-            <Link href={catHubHref} className="text-sm font-semibold text-muted hover:text-primary">
+            <Link href={catHubHref} className="text-sm font-semibold text-[var(--theme-muted-text)] hover:text-primary">
               CAT prep →
             </Link>
           ) : null}
@@ -146,7 +154,7 @@ export function PathwayNclexScalableLessonSection({
         <>
           <ul className="mt-4 space-y-2">
             {display.map((l) => {
-              const href = pathwayLessonMarketingDetailHref(lessonsBasePath, l.slug);
+              const href = pathwayLessonMarketingHubVerifiedCardHref(lessonsBasePath, l);
               if (!href) return null;
               const showProgress = Object.keys(progressMap).length > 0;
               return (
@@ -167,7 +175,7 @@ export function PathwayNclexScalableLessonSection({
                     ) : null}
                     <Link
                       href={pathwayHubAppQuestionsHref(pathwayId, l.topic)}
-                      className="shrink-0 text-xs font-medium text-muted hover:text-primary"
+                      className="shrink-0 text-xs font-medium text-[var(--theme-muted-text)] hover:text-primary"
                     >
                       Questions →
                     </Link>

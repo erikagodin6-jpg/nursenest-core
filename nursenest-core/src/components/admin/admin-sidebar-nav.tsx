@@ -31,6 +31,7 @@ import {
   Workflow,
   Upload,
   TestTube2,
+  Radar,
 } from "lucide-react";
 import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import type { StaffTier } from "@/lib/auth/staff-roles";
@@ -44,12 +45,13 @@ const sections: NavSection[] = [
     title: "Command",
     items: [
       { href: "/admin", label: "Overview", icon: LayoutDashboard },
+      { href: "/admin/observability", label: "Observability", icon: Radar },
       { href: "/admin/generation", label: "Content generation", icon: Sparkles },
-      { href: "/admin/blog", label: "Blog library", icon: BookOpen },
-      { href: "/admin/blog/control-panel", label: "Blog AI panel", icon: Sparkles },
+      { href: "/admin/blog", label: "Blog", icon: BookOpen },
       { href: "/admin/lessons", label: "Lessons", icon: GraduationCap },
       { href: "/admin/questions", label: "Question bank", icon: ClipboardList },
       { href: "/admin/questions/import", label: "Bulk question import", icon: Upload },
+      { href: "/admin/content-overview", label: "Content & modules", icon: Layers },
       { href: "/admin/content", label: "Pathway coverage", icon: Layers },
       { href: "/admin/content-coverage", label: "Content coverage", icon: BarChart3 },
     ],

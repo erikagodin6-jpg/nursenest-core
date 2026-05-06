@@ -88,7 +88,7 @@ export function PathwayLessonAssessmentExperience({
 
   return (
     <div className="space-y-4">
-      <section className="rounded-lg border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--theme-page-bg)_96%,var(--semantic-panel-muted)_4%)] px-3 py-2.5 sm:px-4 sm:py-3">
+      <section className="rounded-lg border border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--theme-page-bg)_96%,var(--semantic-panel-muted)_4%)] px-4 py-2.5 sm:px-4 sm:py-3">
         <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           <div className="min-w-0">
             <p className="nn-lesson-module-eyebrow">Lesson checks</p>

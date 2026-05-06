@@ -83,6 +83,27 @@ describe("resolveSubscribedQuestionBankPathways", () => {
     });
     assert.equal(r.state, "no_pathway_context");
   });
+
+  it("returns no_pathway_context when explicit pathway selection is required and URL is missing", () => {
+    const r = resolveSubscribedQuestionBankPathways({
+      requestedPathwayId: null,
+      compatible: [{ id: ALLIED, shortName: "Allied" }],
+      learnerPath: ALLIED,
+      requireExplicitRequestedPathwayId: true,
+    });
+    assert.equal(r.state, "no_pathway_context");
+  });
+
+  it("still scopes requested pathway when explicit selection is required", () => {
+    const r = resolveSubscribedQuestionBankPathways({
+      requestedPathwayId: RN,
+      compatible: multi,
+      learnerPath: PN,
+      requireExplicitRequestedPathwayId: true,
+    });
+    assert.equal(r.state, "scoped");
+    if (r.state === "scoped") assert.equal(r.defaultPathwayId, RN);
+  });
 });
 
 describe("hrefForResolvedQuestionBankEntry", () => {
@@ -121,6 +142,11 @@ describe("parseTierScopedAppStudyCallbackPath", () => {
     );
   });
 
+  it("allows /app/questions/session with pathwayId", () => {
+    const u = `/app/questions/session?pathwayId=${encodeURIComponent(RN)}&source=mixed_review&count=20&mode=tutor&shuffle=true`;
+    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
+  });
+
   it("allows /app/practice-tests/start with pathwayId", () => {
     const u = `/app/practice-tests/start?pathwayId=${encodeURIComponent(PN)}`;
     assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
@@ -136,8 +162,26 @@ describe("parseTierScopedAppStudyCallbackPath", () => {
     assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
   });
 
+  it("allows /app/cat with pathwayId (post-login resume to CAT hub alias)", () => {
+    const u = `/app/cat?pathwayId=${encodeURIComponent(RN)}`;
+    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
+  });
+
+  it("rejects /app/cat without pathwayId", () => {
+    assert.equal(parseTierScopedAppStudyCallbackPath("/app/cat"), null);
+  });
+
+  it("allows /app/practice-exams alias with pathwayId (resumes to hub after login)", () => {
+    const u = `/app/practice-exams?pathwayId=${encodeURIComponent(RN)}`;
+    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
+  });
+
   it("rejects /app/questions without pathwayId", () => {
     assert.equal(parseTierScopedAppStudyCallbackPath("/app/questions"), null);
+  });
+
+  it("rejects /app/questions/session without pathwayId", () => {
+    assert.equal(parseTierScopedAppStudyCallbackPath("/app/questions/session?source=mixed_review"), null);
   });
 
   it("rejects /app/flashcards without pathwayId", () => {

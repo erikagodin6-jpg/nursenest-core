@@ -61,6 +61,14 @@ async function loadNotFoundAuthContextSafe(): Promise<{
     return { isAuthenticated: false, resumeStudying: null };
   }
 
+  const hasSecret = Boolean(
+    (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
+      (process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.trim().length > 0),
+  );
+  if (!hasSecret) {
+    return { isAuthenticated: false, resumeStudying: null };
+  }
+
   try {
     const [{ auth }, { loadResumeStudyingForNotFound }] = await Promise.all([
       import("@/lib/auth"),

@@ -11,8 +11,13 @@ export type ResolveStudySurfaceCatHrefArgs = {
 };
 
 /** Pathway-scoped CAT entry: `/app/practice-tests/cat-launch` verifies readiness and starts the exam shell immediately. */
-export function appPathwayCatSessionStartPath(pathwayId: string): string {
+export function appPathwayCatSessionStartPath(
+  pathwayId: string,
+  opts?: { alliedProfession?: string | null },
+): string {
   const q = new URLSearchParams({ pathwayId: pathwayId.trim() });
+  const ap = opts?.alliedProfession?.trim();
+  if (ap) q.set("alliedProfession", ap);
   return `/app/practice-tests/cat-launch?${q.toString()}`;
 }
 

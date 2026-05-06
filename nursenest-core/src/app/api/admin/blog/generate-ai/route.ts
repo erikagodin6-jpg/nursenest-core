@@ -17,7 +17,12 @@ import {
   type AutomationResult,
   type BlogAutomationSeoReadiness,
 } from "@/lib/blog/blog-automation-engine";
-import { BlogInvalidSlugError, parseOptionalBlogSlug } from "@/lib/blog/blog-optional-slug";
+import {
+  AdminBlogValidationError,
+  adminBlogPublicUrl,
+  prepareAdminBlogGenerationInput,
+} from "@/lib/blog/admin-blog-generation-service";
+import { coerceAdminOptionalSlugFromRawInput } from "@/lib/blog/blog-optional-slug";
 import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
@@ -75,6 +80,8 @@ type AdminBlogGenerateRowResult =
         bodyWordCount: number;
         isFullLength: boolean;
         postStatus: string;
+        publicUrl: string;
+        adminEditUrl: string;
       };
       warnings: string[];
       localized: Array<{ locale: string; region: string; localizedSlug: string; mode: "created" | "updated" }>;
@@ -101,8 +108,23 @@ async function executeOneAdminBlogGeneration(params: {
   publishNow: boolean;
 }): Promise<AdminBlogGenerateRowResult> {
   const { topic, topicIndex, topicTotal, topics, d, adminUserId, runAt, publishNow } = params;
+  let prepared;
+  try {
+    prepared = await prepareAdminBlogGenerationInput({
+      rawTitle: topic,
+      exam: d.exam,
+      targetKeyword: d.targetKeyword ?? topic,
+      fixedSlug: topics.length === 1 ? d.slug : undefined,
+      publishMode: publishNow ? "publish_now" : "draft",
+    });
+  } catch (error) {
+    if (error instanceof AdminBlogValidationError) {
+      return { ok: false, topic, error: `${error.fieldError.field}: ${error.fieldError.message} ${error.fieldError.suggestedFix}` };
+    }
+    throw error;
+  }
   console.info("[admin_blog_generate] start", {
-    topic,
+    topic: prepared.topic,
     topicIndex: topicIndex + 1,
     topicTotal,
     exam: d.exam,
@@ -111,7 +133,7 @@ async function executeOneAdminBlogGeneration(params: {
   });
 
   const result = await generateAutomatedBlogPostWithRetries({
-    topic,
+    topic: prepared.topic,
     keywords: d.keywords,
     exam: d.exam,
     country: d.country ?? "unspecified",
@@ -121,10 +143,10 @@ async function executeOneAdminBlogGeneration(params: {
     tone: d.tone,
     includeImage: d.includeImage,
     includeAiImage: d.includeAiImage,
-    targetKeyword: d.targetKeyword ?? topic,
+    targetKeyword: prepared.targetKeyword,
     keywordCluster: d.keywordCluster,
     sourceRecords: d.sourceRecords as Prisma.JsonValue | undefined,
-    fixedSlug: topics.length === 1 ? d.slug : undefined,
+    fixedSlug: topics.length === 1 ? prepared.uniqueSlug : undefined,
     autoPublish: publishNow,
     publishAt: publishNow ? runAt : undefined,
     generateTranslations: d.generateTranslations === true,
@@ -135,7 +157,7 @@ async function executeOneAdminBlogGeneration(params: {
   });
 
   const bodyForLog: BlogSimpleAiDraftBody = {
-    topic,
+    topic: prepared.topic,
     keywords: d.keywords,
     exam: d.exam,
     country: d.country,
@@ -145,11 +167,11 @@ async function executeOneAdminBlogGeneration(params: {
     tone: d.tone,
     includeImage: d.includeImage,
     includeAiImage: d.includeAiImage,
-    targetKeyword: d.targetKeyword ?? topic,
+    targetKeyword: prepared.targetKeyword,
     keywordCluster: d.keywordCluster,
     countryTarget: d.countryTarget,
     sourceRecords: d.sourceRecords,
-    slug: topics.length === 1 ? d.slug : undefined,
+    slug: topics.length === 1 ? prepared.uniqueSlug : undefined,
     allowDuplicateCanonicalTopic: d.allowDuplicateCanonicalTopic,
     publishNow,
     generateTranslations: d.generateTranslations,
@@ -209,19 +231,21 @@ async function executeOneAdminBlogGeneration(params: {
     ok: true,
     skipped: false,
     topic,
-    post: {
-      id: saved.id,
-      slug: saved.slug,
-      title: saved.title,
-      excerpt: saved.excerpt,
-      tags: saved.tags,
-      seoTitle: saved.seoTitle,
-      seoDescription: saved.seoDescription,
-      structuredContent,
-      bodyWordCount,
-      isFullLength: bodyWordCount >= BLOG_ARTICLE_MIN_WORDS,
-      postStatus: saved.postStatus,
-    },
+      post: {
+        id: saved.id,
+        slug: saved.slug,
+        title: saved.title,
+        excerpt: saved.excerpt,
+        tags: saved.tags,
+        seoTitle: saved.seoTitle,
+        seoDescription: saved.seoDescription,
+        structuredContent,
+        bodyWordCount,
+        isFullLength: bodyWordCount >= BLOG_ARTICLE_MIN_WORDS,
+        postStatus: saved.postStatus,
+        publicUrl: adminBlogPublicUrl(saved.slug),
+        adminEditUrl: `/admin/blog?id=${encodeURIComponent(saved.id)}`,
+      },
     warnings: [
       ...result.warnings,
       ...(result.localizationErrors.length > 0
@@ -231,10 +255,13 @@ async function executeOneAdminBlogGeneration(params: {
     localized: result.localized,
     seoReadiness: result.seoReadiness,
   };
+  const publicUrlPath = `/blog/${saved.slug}`;
   console.info("[admin_blog_generate] success", {
     topic,
-    postId: result.post.id,
-    slug: result.post.slug,
+    blogPostId: saved.id,
+    slug: saved.slug,
+    postStatus: saved.postStatus,
+    publicPath: publicUrlPath,
     localizedCount: result.localized.length,
     localizationErrors: result.localizationErrors.length,
   });
@@ -319,15 +346,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid payload", details: parsed.error.flatten() }, { status: 400 });
   }
   const dRaw = parsed.data;
-  let slugResolved: string | undefined;
-  try {
-    slugResolved = parseOptionalBlogSlug(dRaw.slug) ?? undefined;
-  } catch (e) {
-    if (BlogInvalidSlugError.is(e)) {
-      return NextResponse.json({ error: e.message, code: "INVALID_SLUG" }, { status: 400 });
-    }
-    throw e;
-  }
+  const rawSlug = typeof dRaw.slug === "string" ? dRaw.slug.trim() : "";
+  const slugResolved = rawSlug ? coerceAdminOptionalSlugFromRawInput(rawSlug) ?? undefined : undefined;
   const d = { ...dRaw, slug: slugResolved };
   const rawTopics =
     d.topics && d.topics.length > 0 ? d.topics : d.topic ? [d.topic] : [];

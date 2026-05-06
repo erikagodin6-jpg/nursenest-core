@@ -5,7 +5,7 @@ import { PathwayNclexScalableLessonSection } from "@/components/pathway-lessons/
 import { PathwayTopicClusterGroupedNav } from "@/components/pathway-lessons/pathway-topic-cluster-grouped-nav";
 import {
   pathwayLessonHasRenderableHubSlug,
-  pathwayLessonMarketingDetailHref,
+  pathwayLessonMarketingHubVerifiedCardHref,
   type PathwayLessonRecord,
 } from "@/lib/lessons/pathway-lesson-types";
 import {
@@ -37,6 +37,9 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
   const sections = buildNclexRnUsLessonSections(safeLessons);
   const navLinks = sections.filter((s) => s.count > 0);
   const featured = safeLessons.length > 0 ? [...safeLessons].sort((a, b) => a.slug.localeCompare(b.slug))[0] : null;
+  const featuredDetailHref = featured
+    ? pathwayLessonMarketingHubVerifiedCardHref(lessonsBasePath, featured)
+    : null;
   const featuredPreview = featured ? nclexRnLessonExamPreview(featured, region) : null;
   const mistakeBlocks = nclexRnCommonMistakeBlocks(region);
   const questionsHub = buildExamPathwayPath(pathway, "questions");
@@ -169,13 +172,15 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             </div>
           </div>
           <div className="mt-5 flex flex-wrap gap-2">
-            <Link
-              href={pathwayLessonMarketingDetailHref(lessonsBasePath, featured.slug)!}
-              data-nn-qa-primary-lesson="true"
-              className="inline-flex rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
-            >
-              Open lesson
-            </Link>
+            {featuredDetailHref ? (
+              <Link
+                href={featuredDetailHref}
+                data-nn-qa-primary-lesson="true"
+                className="inline-flex rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
+              >
+                Open lesson
+              </Link>
+            ) : null}
             <Link
               href={pathwayHubAppQuestionsHref(pathway.id, featured.topic)}
               className="inline-flex rounded-full nn-btn-secondary bg-card px-4 py-2 text-sm font-semibold"
@@ -266,10 +271,10 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
                   {item.step}
                 </span>
                 <span className="text-sm font-semibold text-[var(--theme-heading-text)]">{item.label}</span>
-                <span className="mt-0.5 text-xs text-muted">{item.detail}</span>
+                <span className="mt-0.5 text-xs text-[var(--theme-muted-text)]">{item.detail}</span>
               </div>
               {i < arr.length - 1 && (
-                <span className="hidden shrink-0 px-0.5 text-muted sm:block" aria-hidden>
+                <span className="hidden shrink-0 px-0.5 text-[var(--theme-muted-text)] sm:block" aria-hidden>
                   →
                 </span>
               )}
@@ -345,7 +350,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
           {mistakeBlocks.map((block) => (
             <div key={block.group}>
               {block.group !== "all" && (
-                <p className="text-xs font-semibold uppercase text-muted">
+                <p className="text-xs font-semibold uppercase text-[var(--theme-muted-text)]">
                   {block.group === "safe" ? "Safe & effective care" : "Physiological integrity"}
                 </p>
               )}
@@ -388,7 +393,7 @@ export function NclexRnLessonsHub({ pathway, lessons, lessonsBasePath, topicClus
             See your weak areas instantly (after a session)
           </Link>
         </div>
-        <p className="mt-3 text-xs text-muted">
+        <p className="mt-3 text-xs text-[var(--theme-muted-text)]">
           <Link href={examHub} className="font-semibold text-primary">
             {pathway.shortName} hub
           </Link>{" "}

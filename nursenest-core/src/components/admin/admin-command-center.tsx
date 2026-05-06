@@ -6,6 +6,7 @@ import type { StaffTier } from "@/lib/auth/staff-roles";
 import { AdminQuickActions } from "@/components/admin/admin-quick-actions";
 import { AdminSimpleBarChart } from "@/components/admin/admin-simple-bar-chart";
 import { RATIONALE_MIN_WORDS } from "@/lib/content-quality/standards";
+import { formatDisplayLabel } from "@/lib/ui/format-display-label";
 
 function fmt(n: number) {
   return n.toLocaleString();
@@ -183,9 +184,13 @@ export function AdminCommandCenter({ data, staffTier = "super" }: { data: AdminC
               <ul className="mt-2 space-y-1 font-mono text-[11px] text-foreground/90">
                 {data.premiumProtection.todayRollups.slice(0, 6).map((r) => (
                   <li key={`${r.metricKey}-${r.segment}`} className="flex justify-between gap-2">
-                    <span className="min-w-0 truncate">
-                      {r.metricKey}
-                      {r.segment ? <span className="text-muted-foreground"> · {r.segment}</span> : null}
+                    <span className="min-w-0 truncate" title={`${r.metricKey}${r.segment ? ` · ${r.segment}` : ""}`}>
+                      <span className="font-sans text-[11px] font-medium text-foreground/95">
+                        {formatDisplayLabel(r.metricKey)}
+                      </span>
+                      {r.segment ? (
+                        <span className="text-muted-foreground"> · {formatDisplayLabel(r.segment)}</span>
+                      ) : null}
                     </span>
                     <span className="shrink-0 tabular-nums">{fmt(r.count)}</span>
                   </li>

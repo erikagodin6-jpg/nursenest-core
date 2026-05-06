@@ -20,6 +20,8 @@ type Props = {
   topicSlug?: string;
   /** Allied pathway hub: preserve profession filter. */
   alliedProfession?: string;
+  /** Allied pathway hub: preserve profession taxonomy drill (`alliedTaxonomy`). */
+  alliedTaxonomy?: string;
   /** App lessons: pathway filter. */
   pathwayId?: string;
   /** App lessons: page size (`limit` query); omit when equal to default. */
@@ -34,6 +36,7 @@ function hubQuery(
   topic: string | undefined,
   topicSlug: string | undefined,
   alliedProfession: string | undefined,
+  alliedTaxonomy: string | undefined,
   pathwayId: string | undefined,
   limit: number | undefined,
   q: string | undefined,
@@ -48,6 +51,8 @@ function hubQuery(
   else if (topic?.trim()) qs.set("topic", topic.trim());
   const ap = alliedProfession?.trim().toLowerCase();
   if (ap) qs.set("alliedProfession", ap);
+  const at = alliedTaxonomy?.trim().toLowerCase();
+  if (at) qs.set("alliedTaxonomy", at);
   if (pathwayId?.trim()) qs.set("pathwayId", pathwayId.trim());
   if (limit != null && limit !== defaultLimit) qs.set("limit", String(limit));
   const s = qs.toString();
@@ -88,13 +93,14 @@ export function PathwayLessonPagination({
   topic,
   topicSlug,
   alliedProfession,
+  alliedTaxonomy,
   pathwayId,
   limit,
   q,
 }: Props) {
   const defaultLimit = LEARNER_APP_LESSONS_PAGE_SIZE_DEFAULT;
   const href = (p: number) =>
-    `${basePath}${hubQuery(p, hubSearch, topic, topicSlug, alliedProfession, pathwayId, limit, q, defaultLimit)}`;
+    `${basePath}${hubQuery(p, hubSearch, topic, topicSlug, alliedProfession, alliedTaxonomy, pathwayId, limit, q, defaultLimit)}`;
   const nominalFrom = total === 0 ? 0 : (page - 1) * pageSize + 1;
   const nominalTo = Math.min(page * pageSize, total);
   const from =

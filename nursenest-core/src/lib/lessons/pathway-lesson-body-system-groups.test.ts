@@ -4,6 +4,7 @@ import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 import { learningConfigForPathwayId } from "@/lib/pathways/pathway-learning-structure";
 import {
   buildPathwayLessonSystemSections,
+  classifyLessonForHub,
   normalizePathwayLessonSystemLabel,
   PATHWAY_LESSON_SYSTEM_ORDER,
 } from "@/lib/lessons/pathway-lesson-body-system-groups";
@@ -45,7 +46,7 @@ test("normalizes lesson system values: taxonomy ids resolve exactly; empty uses 
   assert.equal(normalizePathwayLessonSystemLabel("Pulmonary / Airway"), "respiratory");
   assert.equal(normalizePathwayLessonSystemLabel("Vital signs"), REVIEW_REQUIRED);
   assert.equal(normalizePathwayLessonSystemLabel("Neuro"), "neurological");
-  assert.equal(normalizePathwayLessonSystemLabel("Rapid response / unstable"), REVIEW_REQUIRED);
+  assert.equal(normalizePathwayLessonSystemLabel("Rapid response / unstable"), "patient_safety_quality");
   assert.equal(normalizePathwayLessonSystemLabel("Infection control"), "immune_infectious");
   assert.equal(normalizePathwayLessonSystemLabel("Medication safety"), "patient_safety_quality");
   assert.equal(normalizePathwayLessonSystemLabel("Pediatric"), "pediatrics");
@@ -88,16 +89,16 @@ test("buildPathwayLessonSystemSections preserves config order and only emits non
     [
       "Cardiovascular",
       "Respiratory",
-      "Neurology",
+      "Neurological",
       "Gastrointestinal",
-      "Immune / Infectious",
-      "Reproductive / OB",
-      "Patient safety & quality",
+      "Maternal & Newborn",
+      "Infection Control",
+      "Safety & Prioritization",
     ],
   );
   assert.deepEqual(
     sections.flatMap((section) => section.lessons.map((entry) => entry.slug)),
-    ["cardio-1", "resp-1", "neuro-1", "fund-1", "infect-1", "maternal-1", "med-1"],
+    ["cardio-1", "resp-1", "neuro-1", "fund-1", "maternal-1", "infect-1", "med-1"],
     );
 });
 
@@ -119,9 +120,9 @@ test("classifies lessons into separate buckets when bodySystem is an explicit ta
   assert.deepEqual(
     sections.map((section) => [section.id, section.lessons.map((l) => l.slug)]),
     [
-      ["reproductive_obstetrics", ["postpartum-care"]],
+      ["reproductive_maternal_newborn", ["postpartum-care"]],
       ["pediatrics", ["peds-fever"]],
-      ["cns_drugs", ["cns-pharm"]],
+      ["pharmacology", ["cns-pharm"]],
     ],
   );
 });
@@ -137,4 +138,180 @@ test("lessons missing optional bodySystem/system stay in the review sentinel buc
   const rr = sections.find((s) => s.id === REVIEW_REQUIRED);
   assert.ok(rr, "expected REVIEW_REQUIRED section");
   assert.equal(rr!.lessons.length, 2);
+});
+
+test("RN hub classification uses approved professional and fundamentals/safety categories", () => {
+  assert.equal(
+    classifyLessonForHub(
+      lesson({
+        title: "Assignment vs Delegation (NCLEX-RN, Canada)",
+        bodySystem: "General",
+        system: "General",
+      }),
+      "ca-rn-nclex-rn",
+    ),
+    "professional_practice",
+  );
+  assert.equal(
+    classifyLessonForHub(
+      lesson({
+        title: "Transfusion Reaction Recognition (NCLEX-RN, Canada)",
+        bodySystem: "Hematologic",
+        system: "Hematologic",
+      }),
+      "ca-rn-nclex-rn",
+    ),
+    "fundamentals_safety",
+  );
+});
+
+test("PN/RPN hub classification groups clinically specific lessons into approved buckets", () => {
+  const sections = buildPathwayLessonSystemSections(
+    [
+      lesson({ slug: "pn-copd", title: "COPD oxygen titration", bodySystem: "General", system: "General" }),
+      lesson({
+        slug: "rpn-infection",
+        title: "Standard precautions and isolation",
+        bodySystem: "General",
+        system: "General",
+      }),
+    ],
+    "ca-rpn-rex-pn",
+  );
+  assert.deepEqual(
+    sections.map((section) => section.systemLabel),
+    ["respiratory", "infection_control"],
+  );
+});
+
+test("New Grad hub classification uses transition-to-practice categories instead of NCLEX body-system buckets", () => {
+  const sections = buildPathwayLessonSystemSections(
+    [
+      lesson({
+        slug: "first-call",
+        title: "Your first phone call to a physician as a new nurse",
+        topic: "Communication",
+        topicSlug: "communication",
+        bodySystem: "Professional Practice",
+      }),
+      lesson({
+        slug: "charting",
+        title: "Documentation: Keeping up without staying late",
+        topic: "Time Management",
+        topicSlug: "time-management",
+        bodySystem: "Professional Practice",
+      }),
+      lesson({
+        slug: "delegation",
+        title: "What can and can't be delegated to CNAs and PCTs",
+        topic: "Delegation",
+        topicSlug: "delegation",
+        bodySystem: "Professional Practice",
+      }),
+      lesson({
+        slug: "post-op",
+        title: "Post-op return patients: What to watch first",
+        topic: "Prioritization",
+        topicSlug: "prioritization",
+        bodySystem: "Professional Practice",
+      }),
+    ],
+    "us-rn-new-grad-transition",
+  );
+
+  assert.deepEqual(
+    sections.map((section) => [section.id, section.label, section.lessons.map((l) => l.slug)]),
+    [
+      ["pacu", "PACU", ["post-op"]],
+      ["assessments-documentation", "Assessments and Documentation", ["charting"]],
+      ["prioritization-delegation", "Prioritization and Delegation", ["delegation"]],
+      ["communication-escalation", "Communication and Escalation", ["first-call"]],
+    ],
+  );
+});
+
+test("NP hub classification keeps unique clinical signals and sends unsafe multi-system overlays to review", () => {
+  assert.equal(
+    classifyLessonForHub(
+      lesson({
+        title: "ABG & acid-base - NP interpretation (FNP)",
+        bodySystem: "General",
+        system: "General",
+      }),
+      "us-np-fnp",
+    ),
+    "diagnostics_clinical_reasoning",
+  );
+  assert.equal(
+    classifyLessonForHub(
+      lesson({
+        title: "Differential, prescribing & chronic care - NP core (FNP)",
+        bodySystem: "General",
+        system: "General",
+      }),
+      "us-np-fnp",
+    ),
+    REVIEW_REQUIRED,
+  );
+});
+
+test("Allied Health hub classification groups lessons by occupation instead of nursing body systems", () => {
+  const sections = buildPathwayLessonSystemSections(
+    [
+      lesson({
+        slug: "allied-imaging",
+        title: "Imaging Basics for new technologists",
+        topic: "Fundamentals",
+        topicSlug: "fundamentals",
+        bodySystem: "Professional Practice",
+      }),
+      lesson({
+        slug: "allied-labs",
+        title: "Lab Values and specimen quality control",
+        topic: "Fundamentals",
+        topicSlug: "fundamentals",
+        bodySystem: "Professional Practice",
+      }),
+      lesson({
+        slug: "allied-meds",
+        title: "Medication Safety for allied staff",
+        topic: "Pharmacology",
+        topicSlug: "pharmacology",
+        bodySystem: "Professional Practice",
+      }),
+      lesson({
+        slug: "allied-assessment",
+        title: "Patient Assessment and Vital Signs in urgent response",
+        topic: "Fundamentals",
+        topicSlug: "fundamentals",
+        bodySystem: "Professional Practice",
+      }),
+    ],
+    "us-allied-core",
+  );
+
+  assert.deepEqual(
+    sections.map((section) => [section.id, section.label, section.lessons.map((l) => l.slug)]),
+    [
+      ["radiologic-technology", "Radiologic Technologist / X-ray", ["allied-imaging"]],
+      ["mlt", "Medical Laboratory Technologist", ["allied-labs"]],
+      ["pharmacy-tech", "Pharmacy Technician", ["allied-meds"]],
+      ["paramedic", "Paramedic", ["allied-assessment"]],
+    ],
+  );
+});
+
+test("public hub sections never display an unknown category label", () => {
+  const sections = buildPathwayLessonSystemSections(
+    [
+      lesson({ slug: "rn-qI", title: "QI & Incident Reporting", bodySystem: "General", system: "General" }),
+      lesson({ slug: "ambiguous", title: "MI and COPD combined management", bodySystem: "General", system: "General" }),
+    ],
+    "us-rn-nclex-rn",
+  );
+  assert.ok(sections.length > 0);
+  assert.ok(sections.every((section) => !section.id.toLowerCase().includes("unknown")));
+  assert.ok(sections.every((section) => !section.label.toLowerCase().includes("unknown")));
+  assert.ok(sections.some((section) => section.systemLabel === "fundamentals_safety"));
+  assert.ok(sections.some((section) => section.systemLabel === REVIEW_REQUIRED));
 });

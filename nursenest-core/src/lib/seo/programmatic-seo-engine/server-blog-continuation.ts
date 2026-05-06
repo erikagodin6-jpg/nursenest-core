@@ -10,6 +10,7 @@ import { resolveRelatedInternalLinks } from "@/lib/seo/internal-links";
 import { sanitizeProgrammaticInternalLinks } from "@/lib/seo/programmatic-seo-engine/link-plan";
 import type { ProgrammaticInternalLink } from "@/lib/seo/programmatic-seo-engine/types";
 import { primaryTaxonomyLeafForBlogPost } from "@/lib/seo/programmatic-seo-engine/blog-taxonomy";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 function marketingRegionForBlog(country: ReturnType<typeof blogCountryFromPrismaTarget>): MarketingRegionToggle {
   return country === "US" ? "US" : "CA";
@@ -65,21 +66,29 @@ export async function buildProgrammaticBlogContinuationLinks(
     const domain = seoDomainForTaxonomyCategory(leaf);
     const tier = mapExamStringToSeoTier(post.exam);
     const pathwayId = pathwayIdForBlogExam(post.exam, country);
-    const fromDb = await resolveRelatedInternalLinks(prisma, {
-      category: leaf,
-      domain,
-      tier,
-      pathwayId,
-      locale: "en",
-      limit: 5,
-    });
-    semantic = fromDb.map(
-      (l): ProgrammaticInternalLink => ({
-        href: l.href,
-        anchor: l.anchor,
-        kind: l.kind,
-      }),
-    );
+    try {
+      const fromDb = await resolveRelatedInternalLinks(prisma, {
+        category: leaf,
+        domain,
+        tier,
+        pathwayId,
+        locale: "en",
+        limit: 5,
+      });
+      semantic = fromDb.map(
+        (l): ProgrammaticInternalLink => ({
+          href: l.href,
+          anchor: l.anchor,
+          kind: l.kind,
+        }),
+      );
+    } catch (e) {
+      safeServerLog("blog", "programmatic_continuation_links_degraded", {
+        slug: post.slug.slice(0, 200),
+        detail: e instanceof Error ? e.message.slice(0, 400) : String(e).slice(0, 400),
+      });
+      semantic = [];
+    }
   }
 
   return sanitizeProgrammaticInternalLinks([...structural, ...semantic], {

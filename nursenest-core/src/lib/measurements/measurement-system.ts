@@ -1,3 +1,7 @@
+import { isAlliedGlobalPathwayId } from "@/lib/allied/allied-global-pathway";
+import type { MeasurementPreference } from "@/lib/measurements/measurement-preference";
+import { resolveMeasurementSystemPreference } from "@/lib/measurements/measurement-preference";
+
 /**
  * Region-aware measurement system selection (clinical display).
  * US uses customary US clinical units; most other regions (CA, UK, AU, …) use SI / international conventions.
@@ -21,10 +25,13 @@ export function getMeasurementSystemForCountry(country: string | null | undefine
 export function resolveMeasurementSystemForLearnerPathway(
   pathwayId: string | null | undefined,
   countryByPathwayId: Record<string, string> | undefined,
+  preference?: MeasurementPreference | null,
 ): MeasurementSystem {
   const pid = pathwayId?.trim();
-  if (!pid || !countryByPathwayId) return "US";
-  const cc = countryByPathwayId[pid];
-  if (!cc) return "US";
-  return getMeasurementSystemForCountry(cc);
+  /** Allied pathways are global; canonical content is metric-first — do not tie units to account country. */
+  if (pid && isAlliedGlobalPathwayId(pid)) {
+    return resolveMeasurementSystemPreference("SI", preference);
+  }
+  const fallback = !pid || !countryByPathwayId ? "US" : getMeasurementSystemForCountry(countryByPathwayId[pid]);
+  return resolveMeasurementSystemPreference(fallback, preference);
 }

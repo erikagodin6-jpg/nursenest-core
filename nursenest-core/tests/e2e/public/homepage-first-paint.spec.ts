@@ -48,15 +48,17 @@ async function assertVerticalOrder(page: Page) {
     const header = document.querySelector("header.nn-header-animate-in");
     const hero = document.querySelector('[data-testid="hero-section"]');
     const screenshots = document.querySelector('[data-testid="home-hero-screenshot-section"]');
+    const pathways = document.querySelector(".nn-home-pathways-band");
     const intro = document.querySelector('section[aria-label="Global marketing overview"]');
     const footer = document.querySelector("footer");
-    if (!header || !hero || !screenshots || !intro || !footer) {
+    if (!header || !hero || !screenshots || !pathways || !intro || !footer) {
       return {
         ok: false,
         missing: {
           header: !header,
           hero: !hero,
           screenshots: !screenshots,
+          pathways: !pathways,
           intro: !intro,
           footer: !footer,
         },
@@ -65,10 +67,16 @@ async function assertVerticalOrder(page: Page) {
     const tHeader = header.getBoundingClientRect().top;
     const tHero = hero.getBoundingClientRect().top;
     const tShots = screenshots.getBoundingClientRect().top;
+    const tPathways = pathways.getBoundingClientRect().top;
     const tIntro = intro.getBoundingClientRect().top;
     const tFooter = footer.getBoundingClientRect().top;
-    const ok = tHeader <= tHero && tHero <= tShots && tShots <= tIntro && tIntro <= tFooter;
-    return { ok, tHeader, tHero, tShots, tIntro, tFooter };
+    const ok =
+      tHeader <= tHero &&
+      tHero <= tShots &&
+      tShots <= tPathways &&
+      tPathways <= tIntro &&
+      tIntro <= tFooter;
+    return { ok, tHeader, tHero, tShots, tPathways, tIntro, tFooter };
   });
   expect(order.ok, `DOM vertical order: ${JSON.stringify(order)}`).toBe(true);
 }

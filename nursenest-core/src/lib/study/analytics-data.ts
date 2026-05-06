@@ -181,15 +181,29 @@ function parseReadinessScore(results: unknown): number | null {
   return null;
 }
 
+/** Parsed row from `ExamAttempt.results` (and nested `items` / `questions` arrays). */
+export type ParsedAttemptItem = {
+  questionId: string;
+  isCorrect: boolean;
+  confidence: "high" | "medium" | "low" | null;
+  /** Client-reported time on item when present (ms). */
+  timeSpentMs: number | null;
+};
+
+const MAX_ITEM_TIME_MS = 30 * 60 * 1000;
+
+function readItemTimeSpentMs(r: Record<string, unknown>): number | null {
+  const timeRaw = r.timeSpentMs ?? r.durationMs ?? r.elapsedItemMs ?? r.timeMs;
+  if (typeof timeRaw !== "number" || !Number.isFinite(timeRaw)) return null;
+  if (timeRaw < 0 || timeRaw > MAX_ITEM_TIME_MS) return null;
+  return Math.round(timeRaw);
+}
+
 /**
  * Parse ExamAttempt.results JSON into confidence/correctness arrays.
  * Defensively typed — skips malformed rows.
  */
-function parseAttemptResults(raw: unknown): {
-  questionId: string;
-  isCorrect: boolean;
-  confidence: "high" | "medium" | "low" | null;
-}[] {
+function parseAttemptResults(raw: unknown): ParsedAttemptItem[] {
   if (raw && typeof raw === "object" && !Array.isArray(raw)) {
     const o = raw as Record<string, unknown>;
     if (Array.isArray(o.items)) return parseAttemptResults(o.items);
@@ -197,7 +211,7 @@ function parseAttemptResults(raw: unknown): {
     if (Array.isArray(o.results)) return parseAttemptResults(o.results);
   }
   if (!Array.isArray(raw)) return [];
-  const out: { questionId: string; isCorrect: boolean; confidence: "high" | "medium" | "low" | null }[] = [];
+  const out: ParsedAttemptItem[] = [];
   for (const item of raw) {
     if (!item || typeof item !== "object") continue;
     const r = item as Record<string, unknown>;
@@ -207,7 +221,7 @@ function parseAttemptResults(raw: unknown): {
     const conf = r.confidence;
     const confidence: "high" | "medium" | "low" | null =
       conf === "high" || conf === "medium" || conf === "low" ? conf : null;
-    out.push({ questionId: qid, isCorrect, confidence });
+    out.push({ questionId: qid, isCorrect, confidence, timeSpentMs: readItemTimeSpentMs(r) });
   }
   return out;
 }
@@ -933,6 +947,219 @@ export async function loadQuestionTypeBreakdown(
   } catch {
     logAnalyticsFailure("question_type_block_failed", userId);
     return analyticsError("question_type_load_failed");
+  }
+}
+
+export type BodySystemAccuracyRow = {
+  bodySystem: string;
+  correctCount: number;
+  wrongCount: number;
+  accuracyPct: number;
+};
+
+/**
+ * Aggregate graded accuracy by `ExamQuestion.body_system` from recent ExamAttempt rows.
+ * Mirrors {@link loadQuestionTypeBreakdown} — bounded sessions + batched question lookups.
+ */
+export async function loadBodySystemAccuracyBreakdown(
+  userId: string,
+  sessionLimit = 40,
+): Promise<AnalyticsLoadResult<BodySystemAccuracyRow[]>> {
+  if (!userId) return analyticsError("missing_user_id");
+  if (!isDatabaseUrlConfigured()) return analyticsError("database_not_configured");
+
+  try {
+    const recentSessions = await withRetry(() =>
+      prisma.examAttempt.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        take: 60,
+        select: { results: true },
+      }),
+    );
+    const sessions = recentSessions.slice(0, sessionLimit);
+
+    type Item = { qid: string; isCorrect: boolean };
+    const allItems: Item[] = [];
+    for (const s of sessions) {
+      for (const row of parseAttemptResults(s.results)) {
+        if (!row.questionId) continue;
+        allItems.push({ qid: row.questionId, isCorrect: row.isCorrect });
+      }
+    }
+
+    const uniqueIds = [...new Set(allItems.map((i) => i.qid))];
+    if (uniqueIds.length === 0) return analyticsOk([]);
+
+    const systemById = new Map<string, string>();
+    const CHUNK = 200;
+    for (let i = 0; i < uniqueIds.length; i += CHUNK) {
+      const chunk = uniqueIds.slice(i, i + CHUNK);
+      const rows = await withRetry(() =>
+        prisma.examQuestion.findMany({
+          where: { id: { in: chunk } },
+          select: { id: true, bodySystem: true },
+        }),
+      );
+      for (const r of rows) {
+        const label = (r.bodySystem ?? "").trim() || "Unspecified";
+        systemById.set(r.id, label);
+      }
+    }
+
+    const tallies = new Map<string, { c: number; w: number }>();
+    for (const row of allItems) {
+      const sys = systemById.get(row.qid);
+      if (!sys) continue;
+      const t = tallies.get(sys) ?? { c: 0, w: 0 };
+      if (row.isCorrect) t.c++;
+      else t.w++;
+      tallies.set(sys, t);
+    }
+
+    return analyticsOk(
+      [...tallies.entries()]
+        .map(([bodySystem, { c, w }]) => {
+          const total = c + w;
+          return {
+            bodySystem,
+            correctCount: c,
+            wrongCount: w,
+            accuracyPct: total > 0 ? Math.round((c / total) * 100) : 0,
+          };
+        })
+        .filter((r) => r.correctCount + r.wrongCount >= 2)
+        .sort((a, b) => b.correctCount + b.wrongCount - (a.correctCount + a.wrongCount)),
+    );
+  } catch {
+    logAnalyticsFailure("body_system_block_failed", userId);
+    return analyticsError("body_system_load_failed");
+  }
+}
+
+/**
+ * Average per-question time (ms) from graded attempt items that include `timeSpentMs` (or aliases).
+ * Returns null when fewer than {@link minSamples} timed items exist.
+ */
+export async function loadItemLevelAverageResponseTimeMs(
+  userId: string,
+  sessionLimit = 45,
+  minSamples = 5,
+): Promise<AnalyticsLoadResult<{ averageMs: number | null; timedItems: number; gradedItems: number }>> {
+  if (!userId) return analyticsError("missing_user_id");
+  if (!isDatabaseUrlConfigured()) return analyticsError("database_not_configured");
+
+  try {
+    const recentSessions = await withRetry(() =>
+      prisma.examAttempt.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        take: 60,
+        select: { results: true },
+      }),
+    );
+    const sessions = recentSessions.slice(0, sessionLimit);
+
+    let sum = 0;
+    let timed = 0;
+    let graded = 0;
+    for (const s of sessions) {
+      for (const row of parseAttemptResults(s.results)) {
+        graded++;
+        if (row.timeSpentMs != null) {
+          sum += row.timeSpentMs;
+          timed++;
+        }
+      }
+    }
+
+    const averageMs = timed >= minSamples ? Math.round(sum / timed) : null;
+    return analyticsOk({ averageMs, timedItems: timed, gradedItems: graded });
+  } catch {
+    logAnalyticsFailure("item_timing_block_failed", userId);
+    return analyticsError("item_timing_load_failed");
+  }
+}
+
+export type RecentQuestionTagCoverage = {
+  /** Distinct question IDs seen in the sampled attempts. */
+  questionsSampled: number;
+  withBodySystem: number;
+  withTopic: number;
+  withDifficulty: number;
+  /** Uses `nclexClientNeedsCategory` as exam blueprint category (e.g. NCLEX client needs). */
+  withExamCategory: number;
+};
+
+/**
+ * Tagging completeness for questions the learner recently graded (not the full bank).
+ * Helps spot gaps without scanning the entire `exam_questions` table.
+ */
+export async function loadRecentAttemptQuestionTagCoverage(
+  userId: string,
+  sessionLimit = 40,
+): Promise<AnalyticsLoadResult<RecentQuestionTagCoverage>> {
+  if (!userId) return analyticsError("missing_user_id");
+  if (!isDatabaseUrlConfigured()) return analyticsError("database_not_configured");
+
+  try {
+    const recentSessions = await withRetry(() =>
+      prisma.examAttempt.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        take: 60,
+        select: { results: true },
+      }),
+    );
+    const sessions = recentSessions.slice(0, sessionLimit);
+    const qids = new Set<string>();
+    for (const s of sessions) {
+      for (const row of parseAttemptResults(s.results)) {
+        if (row.questionId) qids.add(row.questionId);
+      }
+    }
+    if (qids.size === 0) {
+      return analyticsOk({
+        questionsSampled: 0,
+        withBodySystem: 0,
+        withTopic: 0,
+        withDifficulty: 0,
+        withExamCategory: 0,
+      });
+    }
+
+    const ids = [...qids];
+    let withBodySystem = 0;
+    let withTopic = 0;
+    let withDifficulty = 0;
+    let withExamCategory = 0;
+    const CHUNK = 200;
+    for (let i = 0; i < ids.length; i += CHUNK) {
+      const chunk = ids.slice(i, i + CHUNK);
+      const rows = await withRetry(() =>
+        prisma.examQuestion.findMany({
+          where: { id: { in: chunk } },
+          select: { bodySystem: true, topic: true, difficulty: true, nclexClientNeedsCategory: true },
+        }),
+      );
+      for (const r of rows) {
+        if ((r.bodySystem ?? "").trim().length > 0) withBodySystem++;
+        if ((r.topic ?? "").trim().length > 0) withTopic++;
+        if (r.difficulty != null) withDifficulty++;
+        if ((r.nclexClientNeedsCategory ?? "").trim().length > 0) withExamCategory++;
+      }
+    }
+
+    return analyticsOk({
+      questionsSampled: qids.size,
+      withBodySystem,
+      withTopic,
+      withDifficulty,
+      withExamCategory,
+    });
+  } catch {
+    logAnalyticsFailure("tag_coverage_block_failed", userId);
+    return analyticsError("tag_coverage_load_failed");
   }
 }
 

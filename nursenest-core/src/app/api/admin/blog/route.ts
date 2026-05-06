@@ -9,12 +9,14 @@ import {
 } from "@/lib/blog/blog-admin-library-query";
 import { parseBoundedPageSize } from "@/lib/api/api-pagination-limits";
 import { findExistingBlogByCanonicalIntent, normalizeBlogTopicKey } from "@/lib/blog/blog-intent-dedupe";
+import { BLOG_SLUG_FORMAT_RE, coerceAdminOptionalSlugFromRawInput, generateBlogSlugBaseFromTitle } from "@/lib/blog/blog-optional-slug";
+import { ensureUniqueBlogPostSlug } from "@/lib/blog/blog-optional-slug.server";
 import {
-  BlogInvalidSlugError,
-  ensureUniqueBlogPostSlug,
-  generateBlogSlugBaseFromTitle,
-  parseOptionalBlogSlug,
-} from "@/lib/blog/blog-optional-slug";
+  devAssertPublishedWritePayloadAligned,
+  normalizeBlogPostStatusWriteFields,
+} from "@/lib/blog/blog-post-published-state";
+import { blogPostIsLive } from "@/lib/blog/blog-visibility";
+import { countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import { prisma } from "@/lib/db";
 import { classifyBlogCorpus, collectClassificationViolations, isPublishBlockedByTaxonomy } from "@/lib/taxonomy/content-write-taxonomy";
 
@@ -40,12 +42,19 @@ const adminBlogListSelect = {
   requiresReferences: true,
   postStatus: true,
   publishAt: true,
+  scheduledAt: true,
+  body: true,
   updatedAt: true,
   createdAt: true,
   countryTarget: true,
   legacySource: true,
   campaignId: true,
 } as const;
+
+const adminBlogTitleSchema = z.preprocess(
+  (v) => (typeof v === "string" ? v.replace(/\s+/g, " ").trim() : v),
+  z.string().min(3, "Title must be at least 3 characters.").max(220),
+);
 
 const createSchema = z.object({
   slug: z.preprocess((v) => {
@@ -54,7 +63,7 @@ const createSchema = z.object({
     const t = v.trim();
     return t === "" ? undefined : t;
   }, z.string().max(500).optional()),
-  title: z.string().min(3).max(220),
+  title: adminBlogTitleSchema,
   excerpt: z.string().min(10).max(500),
   body: z.string().min(20),
   exam: z.string().max(80).optional().nullable(),
@@ -140,7 +149,53 @@ export async function GET(req: NextRequest) {
       }),
     ]);
 
-  const warnings = posts
+  const now = new Date();
+  const postsWithPublicSurface = posts.map((p) => {
+    const bodyWordCount = countWordsFromHtml(p.body ?? "");
+    const visibleOnPublicBlog = blogPostIsLive(
+      {
+        postStatus: p.postStatus,
+        publishAt: p.publishAt,
+        scheduledAt: p.scheduledAt,
+        workflowStatus: p.workflowStatus,
+      },
+      now,
+    );
+
+    let publicBlogBlockReason: string | null = null;
+    if (!visibleOnPublicBlog) {
+      if (!p.title?.trim()) publicBlogBlockReason = "unclear_title";
+      else if (!p.slug?.trim() || p.slug.length < 3 || !BLOG_SLUG_FORMAT_RE.test(p.slug)) publicBlogBlockReason = "invalid_slug";
+      else if (!p.body?.trim() || p.body.trim().length < 20) publicBlogBlockReason = "missing_body";
+      else if (bodyWordCount < 50) publicBlogBlockReason = "body_too_short";
+      else if (p.postStatus === BlogPostStatus.DRAFT) publicBlogBlockReason = "draft";
+      else if (p.postStatus === BlogPostStatus.NEEDS_REVIEW) publicBlogBlockReason = "needs_review";
+      else if (p.postStatus === BlogPostStatus.FAILED) publicBlogBlockReason = "failed_status";
+      else if (p.workflowStatus === BlogWorkflowStatus.FAILED_GENERATION || p.workflowStatus === BlogWorkflowStatus.FAILED_IMAGE) {
+        publicBlogBlockReason = "workflow_failed";
+      } else if (p.postStatus === BlogPostStatus.PUBLISHED && p.workflowStatus !== BlogWorkflowStatus.PUBLISHED) {
+        publicBlogBlockReason = "published_row_but_workflow_not_published";
+      } else if (p.publishAt && p.publishAt.getTime() > now.getTime()) {
+        publicBlogBlockReason = "future_publish_at";
+      } else if (p.postStatus === BlogPostStatus.SCHEDULED) {
+        publicBlogBlockReason = "scheduled_not_released_or_pipeline_incomplete";
+      } else if (!p.seoTitle?.trim() || !p.seoDescription?.trim()) {
+        publicBlogBlockReason = "missing_seo";
+      } else {
+        publicBlogBlockReason = "not_live_per_visibility_rules";
+      }
+    }
+
+    const { body: _body, ...rest } = p;
+    return {
+      ...rest,
+      bodyWordCount,
+      visibleOnPublicBlog,
+      publicBlogBlockReason,
+    };
+  });
+
+  const warnings = postsWithPublicSurface
     .filter((p) => !p.title.trim() || !p.excerpt.trim() || !p.seoTitle?.trim() || !p.seoDescription?.trim() || (p.requiresReferences && p.apaReferences.length === 0))
     .map((p) => ({
       id: p.id,
@@ -153,7 +208,7 @@ export async function GET(req: NextRequest) {
       altTextMissing: Boolean(p.coverImage) && !p.coverImageAlt?.trim(),
     }));
 
-  const keywordCounts = posts.reduce<Record<string, number>>((acc, p) => {
+  const keywordCounts = postsWithPublicSurface.reduce<Record<string, number>>((acc, p) => {
     const k = p.targetKeyword?.trim().toLowerCase();
     if (!k) return acc;
     acc[k] = (acc[k] ?? 0) + 1;
@@ -164,7 +219,7 @@ export async function GET(req: NextRequest) {
     .map(([keyword, count]) => ({ keyword, count }));
 
   return NextResponse.json({
-    posts,
+    posts: postsWithPublicSurface,
     total,
     page: legacyMode ? 1 : page,
     pageSize: effectiveTake,
@@ -219,20 +274,13 @@ export async function POST(req: Request) {
   }
   const d = parsed.data;
 
-  let finalSlug: string;
-  try {
-    const explicit = parseOptionalBlogSlug(d.slug ?? "");
-    const base = explicit ?? generateBlogSlugBaseFromTitle(d.title);
-    if (!explicit) {
-      console.info("[blog] slug auto-generated", { title: d.title });
-    }
-    finalSlug = await ensureUniqueBlogPostSlug(base);
-  } catch (e) {
-    if (BlogInvalidSlugError.is(e)) {
-      return NextResponse.json({ error: e.message, code: "INVALID_SLUG" }, { status: 400 });
-    }
-    throw e;
+  const explicitRaw = typeof d.slug === "string" ? d.slug.trim() : "";
+  const explicit = explicitRaw ? coerceAdminOptionalSlugFromRawInput(d.slug) : null;
+  const base = explicit ?? generateBlogSlugBaseFromTitle(d.title);
+  if (!explicit) {
+    console.info("[blog] slug auto-generated", { title: d.title });
   }
+  const finalSlug = await ensureUniqueBlogPostSlug(base);
 
   const blogTax = classifyBlogCorpus({
     title: d.title,
@@ -248,6 +296,17 @@ export async function POST(req: Request) {
     );
   }
   const resolvedPostStatus = d.postStatus ?? (d.publishAt ? BlogPostStatus.SCHEDULED : BlogPostStatus.DRAFT);
+  const publishAtForCreate = d.publishAt ? new Date(d.publishAt) : null;
+  const statusFields = normalizeBlogPostStatusWriteFields({
+    postStatus: resolvedPostStatus,
+    publishAt: publishAtForCreate,
+    workflowFromRequest: d.workflowStatus ?? undefined,
+  });
+  devAssertPublishedWritePayloadAligned({
+    postStatus: statusFields.postStatus,
+    workflowStatus: statusFields.workflowStatus,
+    label: "POST /api/admin/blog create",
+  });
   if (
     (resolvedPostStatus === BlogPostStatus.PUBLISHED || resolvedPostStatus === BlogPostStatus.SCHEDULED) &&
     isPublishBlockedByTaxonomy(blogTax)
@@ -301,7 +360,7 @@ export async function POST(req: Request) {
       postTemplate: d.postTemplate ?? null,
       intent: d.intent ?? null,
       funnelStage: d.funnelStage ?? null,
-      workflowStatus: d.workflowStatus ?? BlogWorkflowStatus.GENERATED,
+      workflowStatus: statusFields.workflowStatus,
       targetKeyword: d.targetKeyword ?? null,
       keywordCluster: d.keywordCluster ?? null,
       coverImage: d.coverImage ?? null,
@@ -310,8 +369,8 @@ export async function POST(req: Request) {
       imageStatus: d.imageStatus ?? BlogImageStatus.NONE,
       apaReferences: d.apaReferences ?? [],
       requiresReferences: d.requiresReferences ?? false,
-      postStatus: resolvedPostStatus,
-      publishAt: d.publishAt ? new Date(d.publishAt) : null,
+      postStatus: statusFields.postStatus,
+      publishAt: statusFields.publishAt,
     },
     select: { id: true, slug: true, postStatus: true, publishAt: true, updatedAt: true },
   });

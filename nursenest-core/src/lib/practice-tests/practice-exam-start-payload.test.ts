@@ -71,6 +71,18 @@ describe("buildPracticeExamStartPayload", () => {
     assert.equal(payload.timeLimitSec, null);
   });
 
+  it("passes through linear starred selection mode", () => {
+    const payload = buildPracticeExamStartPayload({
+      questionCount: 15,
+      selectionMode: "starred",
+      timedMode: false,
+      sessionMode: "tutor",
+      rationaleVisibilityMode: "immediate",
+    });
+    assert.equal(payload.selectionMode, "starred");
+    assert.equal(payload.questionCount, 15);
+  });
+
   it("clamps question count to supported linear bounds", () => {
     const low = buildPracticeExamStartPayload({
       questionCount: 2,

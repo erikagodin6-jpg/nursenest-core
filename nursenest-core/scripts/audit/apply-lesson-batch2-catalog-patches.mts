@@ -1,6 +1,9 @@
 /**
  * Applies editorial patches from batch2-catalog-patches.ts to pathway lessons in catalog.json.
  * Run from nursenest-core/: npx tsx scripts/audit/apply-lesson-batch2-catalog-patches.mts
+ *
+ * **Titles:** this script only replaces `sections`. Public `title` / `seoTitle` are curated display copy;
+ * do not add writes that overwrite them from generated or legacy sources.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";

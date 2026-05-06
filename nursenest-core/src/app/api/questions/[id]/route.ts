@@ -80,6 +80,10 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
         exam: true,
         topic: true,
         bodySystem: true,
+        tags: true,
+        questionFormat: true,
+        exhibitData: true,
+        images: true,
       } as const;
       const q = await withRetry(() =>
         prisma.examQuestion.findFirst({

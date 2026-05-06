@@ -7,7 +7,7 @@ import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { MARKETING_HOME_FAQ_JSONLD } from "@/lib/seo/marketing-home-faq-schema";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { isCoreHostedNonDefaultLocale } from "@/lib/i18n/marketing-locale-policy";
-import { localizeBreadcrumbResolution } from "@/lib/seo/breadcrumb-i18n";
+import { localizeBreadcrumbResolutionForLocale } from "@/lib/seo/breadcrumb-i18n";
 import { loadMarketingLayoutShardsOverlay } from "@/lib/marketing-i18n/load-marketing-route-shard-bundles";
 import { marketingHomeSurfaceBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
@@ -98,7 +98,7 @@ export default async function LocalizedHomePage({ params }: Props) {
     undefined,
     defaultHomeMetaDescription(marketingRegion),
   );
-  const { crumbs, schemaItems } = localizeBreadcrumbResolution(raw, messages);
+  const { crumbs, schemaItems } = localizeBreadcrumbResolutionForLocale(raw, messages, locale);
   return (
     <>
       <WebPageJsonLd

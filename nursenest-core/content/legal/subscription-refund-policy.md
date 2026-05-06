@@ -30,7 +30,7 @@ You may cancel at any time by:
 
 using the cancellation settings in your account, if available, or
 
-contacting support@nursenest.ca
+emailing support@nursenest.ca (please allow up to 4 business days for a response)
 
 Cancellation stops future renewals. Unless required by law or otherwise stated in writing, cancellation does not retroactively reverse charges already incurred.
 
@@ -50,7 +50,7 @@ we do not provide refunds because you forgot to cancel
 
 we do not provide refunds based on dissatisfaction with study outcome, exam result, schedule, or preference changes
 
-chargebacks should not be used as a substitute for contacting support
+chargebacks should not be used as a substitute for emailing support@nursenest.ca first
 
 That said, we reserve the right, in our sole discretion, to issue a courtesy refund, account credit, or exception in individual cases.
 
@@ -68,4 +68,4 @@ We may change pricing for future billing periods by providing notice as required
 
 ## Contact
 
-Questions about billing, cancellation, or refunds should be sent to support@nursenest.ca.
+Questions about billing, cancellation, or refunds should be sent to support@nursenest.ca. Please allow up to 4 business days for a response.

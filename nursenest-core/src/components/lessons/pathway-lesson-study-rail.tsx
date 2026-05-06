@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { MarketingPathwayLessonQuickReviewClientProps } from "@/lib/lessons/marketing-pathway-lesson-client-contract";
+import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 
 type SectionProps = {
   title: string;
@@ -59,18 +60,22 @@ export function PathwayLessonStudyRail({
   commonMistakes,
   fullAccess,
   relatedQuestionsSlot,
+  progressSummary,
 }: MarketingPathwayLessonQuickReviewClientProps & {
   examFocusLines: readonly string[];
   commonMistakes?: readonly string[] | null;
   fullAccess: boolean;
   /** Suspense boundary for related stems — keeps initial HTML light. */
   relatedQuestionsSlot?: ReactNode;
+  /** Optional signed-in progress line — does not block the main article when omitted. */
+  progressSummary?: { status: PathwayLessonProgressStatus; label: string } | null;
 }) {
   const summary = [...quickReviewLines].filter(Boolean).slice(0, 10);
   const focus = [...examFocusLines].filter(Boolean).slice(0, 6);
   const traps = fullAccess ? (commonMistakes ?? []).filter(Boolean).slice(0, 6) : [];
 
-  const hasStatic = summary.length > 0 || focus.length > 0 || traps.length > 0;
+  const hasStatic =
+    summary.length > 0 || focus.length > 0 || traps.length > 0 || Boolean(progressSummary?.label);
   if (!hasStatic && !relatedQuestionsSlot) return null;
 
   /** Wider screens: related stems stream into the rail; narrow viewports use the full-width block in the footer. */
@@ -84,6 +89,12 @@ export function PathwayLessonStudyRail({
 
   return (
     <div className="space-y-4" data-nn-lesson-study-rail>
+      {progressSummary?.label ? (
+        <RailSection title="Study progress" subtitle={`Status: ${progressSummary.status.replace(/_/g, " ")}`} accent="brand">
+          <p className="text-sm leading-relaxed text-[var(--theme-body-text)]">{progressSummary.label}</p>
+        </RailSection>
+      ) : null}
+
       {summary.length > 0 ? (
         <RailSection
           title="Quick clinical summary"

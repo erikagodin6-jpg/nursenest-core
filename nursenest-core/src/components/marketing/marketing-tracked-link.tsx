@@ -20,6 +20,8 @@ type Props = {
   /** Stable QA hooks for homepage exam grid (region + card id) — HTTP/Playwright regression. */
   "data-nn-marketing-region"?: "US" | "CA";
   "data-nn-exam-card-id"?: string;
+  /** Homepage tier pathway cards (RN, PN, NP, …) for routing integrity tests. */
+  "data-nn-home-tier-card"?: string;
 };
 
 /**

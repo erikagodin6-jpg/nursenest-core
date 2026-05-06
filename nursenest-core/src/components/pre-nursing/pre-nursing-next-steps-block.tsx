@@ -50,7 +50,7 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
   return (
     <section className="nn-card mt-8 border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">What comes after Pre-Nursing</h3>
+        <h3 className="text-lg font-semibold text-foreground">What comes after Pre-Nursing</h3>
         <span className="text-xs text-gray-700 dark:text-gray-300">Your hint: {hint === "unsure" ? "Not set yet" : prioritizedTitle}</span>
       </div>
       <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
@@ -76,7 +76,7 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
                 })
               }
             >
-              <p className="text-sm font-semibold text-gray-900 dark:text-white">{route.title}</p>
+              <p className="text-sm font-semibold text-foreground">{route.title}</p>
               <p className="mt-1 text-xs text-gray-700 dark:text-gray-300">{route.whoFor}</p>
               <p className="mt-2 text-xs text-gray-700 dark:text-gray-300">{route.note}</p>
             </Link>

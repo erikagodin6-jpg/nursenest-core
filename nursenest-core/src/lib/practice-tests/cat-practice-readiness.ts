@@ -78,7 +78,7 @@ export async function assessCatPracticeReadinessForPathway(
     pathwayId: trimmed,
   };
 
-  const pool = await fetchCatPracticePool(userId, entitlement, poolInput);
+  const { pool } = await fetchCatPracticePool(userId, entitlement, poolInput);
   if (pool.length < CAT_MIN_COMPLETE_POOL) {
     return {
       ok: false,

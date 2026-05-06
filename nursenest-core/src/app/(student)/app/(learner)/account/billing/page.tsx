@@ -11,6 +11,7 @@ import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-serve
 import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import { appAccountBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
+import { BillingSupportEmailNotice } from "@/components/student/billing-support-email-notice";
 
 export async function generateMetadata(): Promise<Metadata> {
   return safeGenerateMetadata(
@@ -58,7 +59,7 @@ export default async function AccountBillingPage() {
           headline={t("learner.account.billing.title")}
           body={t("learner.account.loadFailed")}
           tone="default"
-          primaryCta={{ label: t("learner.account.nav.overview"), href: "/app/account/overview", variant: "primary" }}
+          primaryCta={{ label: t("learner.account.nav.accountHome"), href: "/app/account", variant: "primary" }}
           secondaryCtas={[{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"
@@ -74,6 +75,7 @@ export default async function AccountBillingPage() {
       <div>
         <h1 className="text-2xl font-bold text-[var(--theme-heading-text)]">{t("learner.account.billing.title")}</h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t("learner.account.billing.intro")}</p>
+        <BillingSupportEmailNotice />
       </div>
       <LearnerBillingPageContent payload={payload} t={t} localeTag={localeTag} />
 

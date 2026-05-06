@@ -111,14 +111,14 @@ export function StudyPlannerShell({ ctx }: { ctx: StudyPlannerContext }) {
           {weak[0] ? (
             <Link
               href={remediationTopicDrillHref(weak[0].topic)}
-              className="inline-flex items-center rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)] hover:bg-role-cta-hover"
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)] hover:bg-role-cta-hover"
             >
               Start priority review drill
             </Link>
           ) : null}
           <Link
             href="/app/lessons"
-            className="inline-flex items-center rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
+            className="inline-flex min-h-11 items-center justify-center rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold hover:bg-muted/80"
           >
             Open lessons
           </Link>

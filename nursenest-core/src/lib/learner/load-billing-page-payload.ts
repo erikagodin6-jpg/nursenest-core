@@ -1,5 +1,6 @@
 import "server-only";
 
+import type Stripe from "stripe";
 import { SubscriptionStatus, TrialStatus, type CountryCode, type TierCode } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
@@ -16,6 +17,16 @@ import {
 import { effectiveTierCountryForAccess } from "@/lib/entitlements/subscription-plan";
 import { getVerifiedAdminLearnerQaSimulation } from "@/lib/admin/admin-learner-qa-simulation";
 import { isLearnerEntitlementStaffBypassRole } from "@/lib/auth/staff-roles";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { getStripeClient } from "@/lib/stripe/stripe-client";
+import {
+  billingSubscriptionRowFromStripeSubscription,
+  mergeBillingSubscriptionRowWithStripe,
+} from "@/lib/subscriptions/stripe-subscription-billing-display";
+import {
+  canUserCancelStripeSubscription,
+  reconcileUserSubscriptionFromStripe,
+} from "@/lib/subscriptions/stripe-subscription-reconcile";
 
 export type { BillingStatusSurface, BillingSubscriptionRow, BillingUserRow };
 
@@ -36,6 +47,8 @@ export type BillingPagePayload = {
   stripeRenewal: StripeRenewalSnapshot | null;
   surface: BillingStatusSurface;
   showBillingPortal: boolean;
+  /** End-of-period cancel from Account/Billing when Stripe shows an active manageable subscription. */
+  showCancelSubscription: boolean;
   effectiveTier: TierCode;
   effectiveCountry: CountryCode | null;
   /** Trial end callout when trial is active, not expired, and no paid ACTIVE row. */
@@ -69,36 +82,55 @@ export function formatBillingTierLabel(tier: TierCode, country: CountryCode | st
   return c ? `${t} · ${c}` : t;
 }
 
+function stripeRenewalSnapshotFromSubscription(sub: Stripe.Subscription): StripeRenewalSnapshot {
+  const item = sub.items.data[0];
+  const rawInterval = item?.price?.recurring?.interval ?? (item?.plan as { interval?: string } | undefined)?.interval;
+  const billingInterval =
+    rawInterval === "day" || rawInterval === "week" || rawInterval === "month" || rawInterval === "year"
+      ? rawInterval
+      : null;
+  const endSec = item?.current_period_end;
+  const currentPeriodEnd = typeof endSec === "number" && endSec > 0 ? new Date(endSec * 1000) : null;
+  return {
+    billingInterval,
+    currentPeriodEnd,
+    cancelAtPeriodEnd: Boolean(sub.cancel_at_period_end),
+  };
+}
+
 async function loadStripeRenewalSnapshot(stripeSubscriptionId: string | null | undefined): Promise<StripeRenewalSnapshot | null> {
   const sid = stripeSubscriptionId?.trim();
   if (!sid) return null;
   try {
-    const { getStripeClient } = await import("@/lib/stripe/stripe-client");
     const stripe = await getStripeClient();
     if (!stripe) return null;
     const sub = await stripe.subscriptions.retrieve(sid);
-    const item = sub.items.data[0];
-    const rawInterval = item?.price?.recurring?.interval ?? (item?.plan as { interval?: string } | undefined)?.interval;
-    const billingInterval =
-      rawInterval === "day" || rawInterval === "week" || rawInterval === "month" || rawInterval === "year"
-        ? rawInterval
-        : null;
-    const endSec = item?.current_period_end;
-    const currentPeriodEnd = typeof endSec === "number" && endSec > 0 ? new Date(endSec * 1000) : null;
-    return {
-      billingInterval,
-      currentPeriodEnd,
-      cancelAtPeriodEnd: Boolean(sub.cancel_at_period_end),
-    };
+    return stripeRenewalSnapshotFromSubscription(sub);
   } catch {
     return null;
   }
 }
 
+const SUBSCRIPTION_SELECT = {
+  status: true,
+  stripeSubscriptionId: true,
+  stripeCustomerId: true,
+  planTier: true,
+  planCountry: true,
+  alliedCareer: true,
+  planDuration: true,
+  currentPeriodEnd: true,
+  trialEnd: true,
+  cancelAtPeriodEnd: true,
+  createdAt: true,
+  updatedAt: true,
+  pastDueSince: true,
+} as const;
+
 export async function loadBillingPagePayload(userId: string): Promise<BillingPagePayload | null> {
   if (!userId || !isDatabaseUrlConfigured()) return null;
 
-  const [userRow, subscriptionRow, entitlement, qaSim] = await Promise.all([
+  const [userRow, subscriptionRowBefore, qaSim] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
       select: {
@@ -115,27 +147,51 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     prisma.subscription.findFirst({
       where: { userId },
       orderBy: { createdAt: "desc" },
-      select: {
-        status: true,
-        stripeSubscriptionId: true,
-        stripeCustomerId: true,
-        planTier: true,
-        planCountry: true,
-        alliedCareer: true,
-        planDuration: true,
-        currentPeriodEnd: true,
-        trialEnd: true,
-        cancelAtPeriodEnd: true,
-        createdAt: true,
-        updatedAt: true,
-        pastDueSince: true,
-      },
+      select: SUBSCRIPTION_SELECT,
     }),
-    resolveEntitlementForPage(userId),
     getVerifiedAdminLearnerQaSimulation(userId),
   ]);
 
   if (!userRow) return null;
+
+  const qaStaffSim = Boolean(qaSim && isLearnerEntitlementStaffBypassRole(userRow.role));
+
+  let subscriptionRow = subscriptionRowBefore;
+  let reconcileLiveSub: Stripe.Subscription | null = null;
+
+  if (!qaStaffSim) {
+    const stripe = await getStripeClient();
+    /** Reconcile whenever Stripe is configured so stale/missing DB ids still resolve via customer list. */
+    if (stripe) {
+      const localSample = subscriptionRowBefore
+        ? {
+            stripeSubscriptionIdPrefix: subscriptionRowBefore.stripeSubscriptionId.slice(0, 12),
+            stripeCustomerIdPrefix: subscriptionRowBefore.stripeCustomerId?.trim().slice(0, 10) ?? "",
+            status: subscriptionRowBefore.status,
+            cancelAtPeriodEnd: subscriptionRowBefore.cancelAtPeriodEnd,
+          }
+        : null;
+      safeServerLog("subscription_reconcile", "billing_page_reconcile_enter", {
+        userIdPrefix: userId.slice(0, 8),
+        localBeforeJson: localSample ? JSON.stringify(localSample).slice(0, 400) : "no_local_row",
+        severity: "info",
+      });
+      const r = await reconcileUserSubscriptionFromStripe(userId, { surface: "billing_page" });
+      reconcileLiveSub = r.stripeSubscription;
+      if (r.dbUpdated) {
+        subscriptionRow = await prisma.subscription.findFirst({
+          where: { userId },
+          orderBy: { createdAt: "desc" },
+          select: SUBSCRIPTION_SELECT,
+        });
+      }
+    }
+  }
+
+  const entitlement = await resolveEntitlementForPage(userId);
+  const hasAccess = entitlement !== "error" && entitlement.hasAccess;
+  const entitlementReason: AccessScope["reason"] | "error" =
+    entitlement === "error" ? "error" : entitlement.reason;
 
   const user: BillingUserRow = {
     tier: userRow.tier,
@@ -148,7 +204,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     passwordHash: userRow.passwordHash,
   };
 
-  const subscription: BillingSubscriptionRow | null = subscriptionRow
+  let subscription: BillingSubscriptionRow | null = subscriptionRow
     ? {
         status: subscriptionRow.status,
         stripeSubscriptionId: subscriptionRow.stripeSubscriptionId,
@@ -162,9 +218,46 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
       }
     : null;
 
+  if (reconcileLiveSub) {
+    if (subscription) {
+      const beforeStatus = subscription.status;
+      const beforeCancel = subscription.cancelAtPeriodEnd;
+      subscription = mergeBillingSubscriptionRowWithStripe(subscription, reconcileLiveSub);
+      if (
+        beforeStatus !== subscription.status ||
+        beforeCancel !== subscription.cancelAtPeriodEnd ||
+        (subscriptionRowBefore &&
+          subscriptionRowBefore.stripeCustomerId?.trim() !== subscription.stripeCustomerId?.trim())
+      ) {
+        safeServerLog("subscription_reconcile", "billing_page_subscription_display_merged_from_stripe", {
+          userIdPrefix: userId.slice(0, 8),
+          dbStatus: subscriptionRowBefore?.status,
+          displayStatus: subscription.status,
+          cancelAtPeriodEndStripe: reconcileLiveSub.cancel_at_period_end ? 1 : 0,
+          severity: "info",
+        });
+      }
+    } else {
+      const synthetic = billingSubscriptionRowFromStripeSubscription(reconcileLiveSub);
+      if (synthetic) {
+        subscription = synthetic;
+        safeServerLog("subscription_reconcile", "billing_page_subscription_synthetic_from_stripe", {
+          userIdPrefix: userId.slice(0, 8),
+          displayStatus: synthetic.status,
+          stripeSubscriptionIdPrefix: synthetic.stripeSubscriptionId.slice(0, 14),
+          severity: "info",
+        });
+      }
+    }
+  }
+
   const subForEffective =
     subscription &&
-    (subscription.status === SubscriptionStatus.ACTIVE || subscription.status === SubscriptionStatus.GRACE)
+    (subscription.status === SubscriptionStatus.ACTIVE ||
+      subscription.status === SubscriptionStatus.GRACE ||
+      (subscription.status === SubscriptionStatus.CANCELLED &&
+        hasAccess &&
+        entitlementReason === "canceled_paid_through"))
       ? {
           planTier: subscription.planTier,
           planCountry: subscription.planCountry,
@@ -175,19 +268,19 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
   let effectiveTier = tierCountry.tier;
   let effectiveCountry = tierCountry.country;
 
-  const qaStaffSim = Boolean(qaSim && isLearnerEntitlementStaffBypassRole(userRow.role));
   if (qaStaffSim && entitlement !== "error") {
     if (entitlement.tier) effectiveTier = entitlement.tier;
     if (entitlement.country) effectiveCountry = entitlement.country;
   }
 
-  const hasAccess = entitlement !== "error" && entitlement.hasAccess;
   const pathwayLabels =
     entitlement !== "error" && entitlement.hasAccess
       ? (await listPathwaysCompatibleWithSubscription(entitlement)).map((p) => p.shortName || p.displayName)
       : [];
 
-  let stripeRenewal = await loadStripeRenewalSnapshot(subscription?.stripeSubscriptionId);
+  let stripeRenewal: StripeRenewalSnapshot | null = reconcileLiveSub
+    ? stripeRenewalSnapshotFromSubscription(reconcileLiveSub)
+    : await loadStripeRenewalSnapshot(subscription?.stripeSubscriptionId);
   if (!stripeRenewal && subscriptionRow?.currentPeriodEnd) {
     stripeRenewal = {
       billingInterval: null,
@@ -201,9 +294,6 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
 
   const billingPeriodEndDisplay =
     stripeRenewal?.currentPeriodEnd ?? subscriptionRow?.currentPeriodEnd ?? null;
-
-  const entitlementReason: AccessScope["reason"] | "error" =
-    entitlement === "error" ? "error" : entitlement.reason;
 
   const surface = deriveBillingSurface({
     user,
@@ -239,10 +329,14 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
       subscription.status === SubscriptionStatus.GRACE ||
       subscription.status === SubscriptionStatus.PAST_DUE ||
       subscription.status === SubscriptionStatus.CANCELLED);
-  let showBillingPortal = Boolean(portalEligibleSub && subscription.stripeCustomerId?.trim());
+  let showBillingPortal = Boolean(portalEligibleSub && subscription?.stripeCustomerId?.trim());
   if (qaStaffSim) {
     showBillingPortal = false;
   }
+
+  const showCancelSubscription = Boolean(
+    !qaStaffSim && reconcileLiveSub && canUserCancelStripeSubscription(reconcileLiveSub),
+  );
 
   const now = Date.now();
   let showTrialEndCallout =
@@ -261,6 +355,7 @@ export async function loadBillingPagePayload(userId: string): Promise<BillingPag
     stripeRenewal,
     surface,
     showBillingPortal,
+    showCancelSubscription,
     effectiveTier,
     effectiveCountry,
     showTrialEndCallout,

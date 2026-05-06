@@ -19,13 +19,7 @@ export default async function AdminBlogLibraryPage() {
         </div>
         <div className="flex flex-wrap gap-3 text-sm font-semibold">
           <Link href="/admin/blog" className="text-primary underline">
-            ← Blog hub
-          </Link>
-          <Link href="/admin/blog/control-panel" className="text-primary underline">
-            AI control panel
-          </Link>
-          <Link href="/admin/blog/scheduler" className="text-muted-foreground underline">
-            Scheduler
+            ← Blog console
           </Link>
         </div>
       </div>

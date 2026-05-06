@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight, CheckCircle } from "lucide-react";
-import { useMarketingI18n } from "@/lib/marketing-i18n";
+import { safeHomepageMarketingT, useMarketingI18n } from "@/lib/marketing-i18n";
 import { withMarketingLocale } from "@/lib/i18n/marketing-path";
 import { HUB } from "@/lib/navigation/canonical-destinations";
 import { useNursenestRegion } from "@/lib/region/use-nursenest-region";
@@ -11,15 +11,6 @@ import {
   MARKETING_PRIMARY_CTA_CLASS,
   MARKETING_SECONDARY_CTA_CLASS,
 } from "@/lib/theme/marketing-hero-pattern";
-
-function safeT(t: ((k: string) => string) | undefined, key: string, fallback: string) {
-  try {
-    const v = t?.(key);
-    return typeof v === "string" && v.trim() ? v : fallback;
-  } catch {
-    return fallback;
-  }
-}
 
 function safeLocale(l?: string) {
   return l || "en";
@@ -67,11 +58,11 @@ export function HomeFinalStudyCta() {
     >
       <div className="mx-auto max-w-2xl text-center px-4">
         <h2 className="text-2xl font-bold">
-          {safeT(t, "pages.home.finalCta.headline", "Start preparing with confidence")}
+          {safeHomepageMarketingT(t, "pages.home.finalCta.headline", "Start preparing with confidence")}
         </h2>
 
         <p className="mt-3 text-[var(--theme-muted-text)]">
-          {safeT(
+          {safeHomepageMarketingT(
             t,
             "pages.home.finalCta.subheading",
             "Practice questions, lessons, and readiness tools designed for real exams."
@@ -94,7 +85,7 @@ export function HomeFinalStudyCta() {
             eventProps={{ region }}
             className={`${MARKETING_PRIMARY_CTA_CLASS} rounded-xl`}
           >
-            {safeT(t, "pages.home.hero.primaryCta", "Start practice questions")}
+            {safeHomepageMarketingT(t, "pages.home.hero.primaryCta", "Start practice questions")}
             <ArrowRight className="ml-2 h-4 w-4" />
           </MarketingTrackedLink>
 
@@ -104,19 +95,19 @@ export function HomeFinalStudyCta() {
             eventProps={{ region }}
             className={`${MARKETING_SECONDARY_CTA_CLASS} rounded-xl`}
           >
-            {safeT(t, "pages.home.hero.secondaryCta", "Browse lessons")}
+            {safeHomepageMarketingT(t, "pages.home.hero.secondaryCta", "Browse lessons")}
           </MarketingTrackedLink>
         </div>
 
         <p className="mt-6 text-sm text-[var(--theme-muted-text)]">
-          {safeT(t, "pages.home.finalCta.pricingLead", "See full pricing")}{" "}
+          {safeHomepageMarketingT(t, "pages.home.finalCta.pricingLead", "See full pricing")}{" "}
           <MarketingTrackedLink
             href={loc(HUB.pricing)}
             event={PH.marketingHomeFinalCta}
             eventProps={{ region }}
             className="font-semibold underline"
           >
-            {safeT(t, "pages.home.finalCta.pricingLink", "here")}
+            {safeHomepageMarketingT(t, "pages.home.finalCta.pricingLink", "here")}
           </MarketingTrackedLink>
         </p>
       </div>

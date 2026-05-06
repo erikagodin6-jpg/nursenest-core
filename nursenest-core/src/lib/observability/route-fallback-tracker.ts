@@ -1,4 +1,4 @@
-import { cache } from "react";
+import * as React from "react";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 const HEAVILY_DEGRADED_THRESHOLD = 3;
@@ -9,11 +9,24 @@ type FallbackState = {
   heavyLogged: boolean;
 };
 
-const getRouteFallbackState = cache((): FallbackState => ({
-  count: 0,
-  types: [],
-  heavyLogged: false,
-}));
+function createRouteFallbackState(): FallbackState {
+  return { count: 0, types: [], heavyLogged: false };
+}
+
+/**
+ * React `cache` scopes this object per RSC request when available.
+ * Under plain `tsx` / Node test runners, `cache` is missing — use a process-local singleton so telemetry still loads.
+ */
+const getRouteFallbackState: () => FallbackState =
+  typeof React.cache === "function"
+    ? (React.cache(createRouteFallbackState) as () => FallbackState)
+    : (() => {
+        let st: FallbackState | undefined;
+        return (): FallbackState => {
+          if (!st) st = createRouteFallbackState();
+          return st;
+        };
+      })();
 
 export type RouteRenderFallbackMeta = {
   /** Stable enum-like label for dashboards (e.g. `empty_question_snapshot`). */

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { stripBrokenOrEmptyImagesFromHtml } from "@/lib/blog/blog-image-workflow";
+import { stripDuplicateStructuredModulesFromPublicBlogBodyHtml } from "@/lib/blog/blog-public-body-strip";
 import {
   getPublishedLocalizedBlogBySlug,
   getPublishedVariantsForCanonical,
@@ -158,7 +159,6 @@ export default async function LocalizedBlogPostPage({ params }: Props) {
     variants: hreflangVariants,
   });
 
-  const bodyHtml = stripBrokenOrEmptyImagesFromHtml(post.localizedBody);
   const blogListHref = buildLocalizedBlogHref({ locale, region, profession, exam });
   const geo = blogExamGeoParts(exam, blogCountryFromRegionSlug(region));
   const keywordStem = blogKeywordStemFromTitles(post.localizedMetaTitle, post.localizedTitle);
@@ -200,6 +200,10 @@ export default async function LocalizedBlogPostPage({ params }: Props) {
     countryWord: geo.countryWord,
   });
   const emitFaqJsonLd = mergedFaqItems.length >= 3;
+  const bodyHtml = stripDuplicateStructuredModulesFromPublicBlogBodyHtml(
+    stripBrokenOrEmptyImagesFromHtml(post.localizedBody),
+    { hasStructuredFaq: emitFaqJsonLd, hasStructuredReferences: false },
+  );
   const studyAnchors = blogStudyAnchorTargetsForLocalizedRegion({ exam, regionSlug: region });
 
   return (
@@ -294,7 +298,7 @@ export default async function LocalizedBlogPostPage({ params }: Props) {
           </p>
           <Link
             href={post.ctaHref}
-            className="inline-block rounded-xl bg-[var(--semantic-brand)] px-6 py-3 text-sm font-bold text-white shadow-md transition-shadow hover:shadow-lg"
+            className="inline-block rounded-xl bg-[var(--semantic-brand)] px-6 py-3 text-sm font-bold nn-text-on-solid-fill shadow-md transition-shadow hover:shadow-lg"
           >
             {post.ctaText}
           </Link>

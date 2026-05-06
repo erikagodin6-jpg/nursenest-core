@@ -16,6 +16,8 @@ export type NnErrorCardProps = {
   showDigest?: boolean;
   autoRetryAfterMs?: number;
   disableAutoRetry?: boolean;
+  /** Tags app-owned error UI (e.g. vs Cloudflare) on marketing routes. */
+  marketingErrorTelemetry?: boolean;
 };
 
 export function NnErrorCard({
@@ -29,6 +31,7 @@ export function NnErrorCard({
   showDigest = true,
   autoRetryAfterMs = 2200,
   disableAutoRetry = false,
+  marketingErrorTelemetry = false,
 }: NnErrorCardProps) {
   const autoRetry = useErrorBoundaryAutoRetry(reset ?? (() => {}), {
     errorKey: error.digest,
@@ -49,7 +52,15 @@ export function NnErrorCard({
   const digest = showDigest ? error.digest : undefined;
 
   return (
-    <div className="flex min-h-[50vh] flex-col items-center justify-center px-6 py-16">
+    <div
+      className="flex min-h-[50vh] flex-col items-center justify-center px-6 py-16"
+      {...(marketingErrorTelemetry
+        ? {
+            "data-nn-app-error-screen": "1",
+            "data-nn-error-boundary": "marketing",
+          }
+        : {})}
+    >
       <div className="nn-card w-full max-w-md p-8 text-center">
         {/* SINGLE LOGO ONLY */}
         <a

@@ -51,6 +51,17 @@ export type RationaleLessonLinkClient = {
     | "learner.qbank.rationaleLinks.openTopicLessons";
 };
 
+/** Peer stats returned only after POST /api/questions/grade (never before submit). */
+export type QuestionBankPeerStatsClient = {
+  totalAttempts: number;
+  correctPercentage: number | null;
+  optionPercentages: Record<string, number> | null;
+  selectedOptionKeys: string[];
+  correctOptionKeys: string[];
+  insufficientSample: boolean;
+  insufficientSampleMessage: string | null;
+};
+
 /** Matches graded map values in `QuestionBankPracticeClient` state. */
 export type QuestionBankGradedStateEntry = {
   correct: boolean;
@@ -66,7 +77,11 @@ export type QuestionBankGradedStateEntry = {
   /** Optional concise clinical pearl surfaced in post-answer review. */
   clinicalPearl?: string | null;
   learningLoop?: QuestionBankLearningLoopPersisted | null;
+  /** Legacy / rehydrated graded rows may carry topic slug here without `learningLoop`. */
+  topicCode?: string | null;
   rationaleLessonLinks?: RationaleLessonLinkClient[] | null;
+  /** UWorld-style aggregate distribution; omitted until graded + flag on. */
+  peerStats?: QuestionBankPeerStatsClient | null;
 };
 
 export type QuestionBankGradedStateMap = Record<string, QuestionBankGradedStateEntry>;
@@ -242,6 +257,37 @@ const RATIONALE_CTA_KEYS = new Set<string>([
   "learner.qbank.rationaleLinks.browseTopicHub",
 ]);
 
+function parsePeerStatsPersisted(raw: unknown): QuestionBankPeerStatsClient | null {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
+  const o = raw as Record<string, unknown>;
+  if (typeof o.totalAttempts !== "number" || !Number.isFinite(o.totalAttempts)) return null;
+  if (typeof o.insufficientSample !== "boolean") return null;
+  const sk = o.selectedOptionKeys;
+  const ck = o.correctOptionKeys;
+  if (!Array.isArray(sk) || !sk.every((x) => typeof x === "string")) return null;
+  if (!Array.isArray(ck) || !ck.every((x) => typeof x === "string")) return null;
+  const cp = o.correctPercentage;
+  const op = o.optionPercentages;
+  let optionPercentages: Record<string, number> | null = null;
+  if (op && typeof op === "object" && !Array.isArray(op)) {
+    const m: Record<string, number> = {};
+    for (const [k, v] of Object.entries(op as Record<string, unknown>)) {
+      if (typeof v === "number" && Number.isFinite(v)) m[k] = v;
+    }
+    optionPercentages = m;
+  }
+  const msg = o.insufficientSampleMessage;
+  return {
+    totalAttempts: Math.floor(o.totalAttempts),
+    correctPercentage: typeof cp === "number" && Number.isFinite(cp) ? cp : null,
+    optionPercentages,
+    selectedOptionKeys: sk as string[],
+    correctOptionKeys: ck as string[],
+    insufficientSample: o.insufficientSample,
+    insufficientSampleMessage: typeof msg === "string" ? msg : null,
+  };
+}
+
 function parseRationaleLessonLinksPersisted(raw: unknown): RationaleLessonLinkClient[] | null {
   if (!Array.isArray(raw)) return null;
   const out: RationaleLessonLinkClient[] = [];
@@ -300,6 +346,8 @@ export function parseQuestionBankGradedStateMap(raw: unknown): QuestionBankGrade
     if ("teachingMedia" in e) {
       entry.teachingMedia = parseTeachingMediaBundlePersisted(e.teachingMedia);
     }
+    const peer = parsePeerStatsPersisted(e.peerStats);
+    if (peer) entry.peerStats = peer;
     out[id] = entry;
   }
   return Object.keys(out).length > 0 ? out : undefined;

@@ -12,7 +12,7 @@ import {
 import { buildOperationalSummaryFromChecks } from "@/lib/admin/system-status-operational-summary";
 import type { SystemCheckId, SystemCheckResult, SystemStatusPayload } from "@/lib/admin/system-status-types";
 import { getAdminAiGenerationGate } from "@/lib/ai/admin-ai-policy";
-import { assertOpenAiKeyConfigured } from "@/lib/ai/openai-env";
+import { getBlogOpenAiApiKey } from "@/lib/ai/openai-env";
 import { STALE_GENERATING_MS } from "@/lib/lessons/admin-ai-lesson-batch";
 import { boundedSelectOne, checkDatabaseReadiness } from "@/lib/db/prisma-readiness";
 import { prisma } from "@/lib/db";
@@ -391,7 +391,7 @@ async function probeConfigSanity(): Promise<SystemCheckResult> {
     const authSecret =
       Boolean(process.env.AUTH_SECRET?.trim()) || Boolean(process.env.NEXTAUTH_SECRET?.trim());
     const authUrlPresent = Boolean(process.env.AUTH_URL?.trim() || process.env.NEXTAUTH_URL?.trim());
-    const openaiKeyPresent = assertOpenAiKeyConfigured().ok;
+    const openaiKeyPresent = Boolean(getBlogOpenAiApiKey());
     const stripeSecretPresent = Boolean(process.env.STRIPE_SECRET_KEY?.trim());
     const stripeWebhookPresent = Boolean(process.env.STRIPE_WEBHOOK_SECRET?.trim());
     const spacesCredsPresent =

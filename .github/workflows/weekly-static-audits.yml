@@ -20,6 +20,10 @@ jobs:
           cache: npm
           cache-dependency-path: nursenest-core/package-lock.json
       - run: npm ci
+      - name: CI environment diagnostics
+        run: node ../scripts/ci/diagnose-actions-environment.mjs
+        env:
+          CI_DIAGNOSE_REQUIRED_SCRIPTS: "audit:internal-links audit:paywall-security"
       - name: Internal link audit
         run: npm run audit:internal-links
       - name: Paywall surface audit

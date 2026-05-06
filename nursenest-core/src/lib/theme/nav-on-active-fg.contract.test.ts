@@ -16,7 +16,7 @@ describe("nav-on-active-fg (header selected-state contrast)", () => {
     const css = fs.readFileSync(globalsCss, "utf8");
     assert.match(css, /--nav-on-active-fg:\s*var\(--nav-link-active\)/, "base pairing should chain to nav-link-active");
     assert.ok(
-      /\.nn-header-utility-dark\s*\{[^}]*--nav-on-active-fg:\s*var\(--theme-heading-text/s.test(css),
+      /\.nn-header-utility-dark\s*\{[^}]*--nav-on-active-fg:\s*var\(--nn-header-primary-fg/s.test(css),
       "utility-dark must force dark foreground on light selected chips",
     );
     assert.ok(

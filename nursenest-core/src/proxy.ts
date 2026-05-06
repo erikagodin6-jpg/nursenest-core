@@ -60,8 +60,19 @@ function forwardRequest(request: NextRequest): NextResponse {
   return res;
 }
 
-function isHealthRoute(pathname: string) {
-  return pathname.startsWith("/api/health");
+/** Public probes and crawler assets must not run auth/session work. */
+export function isPublicProbeOrCrawlerBypassPath(pathname: string): boolean {
+  if (pathname === "/healthz" || pathname === "/readyz") return true;
+  if (
+    pathname === "/sitemap.xml" ||
+    pathname === "/sitemap-allied.xml" ||
+    pathname === "/sitemap-new-grad.xml" ||
+    pathname === "/robots.txt"
+  ) {
+    return true;
+  }
+  if (pathname === "/api/health" || pathname.startsWith("/api/health/")) return true;
+  return false;
 }
 
 /**
@@ -74,7 +85,7 @@ async function enforceAdmin(request: NextRequest): Promise<NextResponse | null> 
   try {
     const pathname = request.nextUrl.pathname;
 
-    if (!pathname.startsWith("/admin")) return null;
+    if (!pathname.startsWith("/admin") && !pathname.startsWith("/internal")) return null;
 
     const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
     if (!secret) return null;
@@ -110,8 +121,7 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     const req = ensureCorrelationId(request);
     const pathname = req.nextUrl.pathname;
 
-    // Health bypass (critical)
-    if (isHealthRoute(pathname)) {
+    if (isPublicProbeOrCrawlerBypassPath(pathname)) {
       return forwardRequest(req);
     }
 
@@ -128,7 +138,7 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
     let res: Response | null = null;
 
     try {
-      res = await runAuthMiddleware(forwarded, event);
+      res = (await runAuthMiddleware(forwarded, event)) ?? null;
     } catch {
       // Auth failure must not break app
       res = null;
@@ -180,6 +190,8 @@ export const config = {
     "/app/:path*",
     "/admin",
     "/admin/:path*",
+    "/internal",
+    "/internal/:path*",
     "/api",
     "/api/:path*",
   ],

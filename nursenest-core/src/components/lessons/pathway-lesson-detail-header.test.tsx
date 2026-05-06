@@ -31,7 +31,7 @@ test("PathwayLessonDetailHeader: no lg flex split when trailing is absent", () =
   assert.equal(html.includes("lg:flex"), false);
 });
 
-test("PathwayLessonDetailHeader: lg flex split when trailing is present", () => {
+test("PathwayLessonDetailHeader: lg flex split when trailing is present (default hero)", () => {
   const html = renderToStaticMarkup(
     <PathwayLessonDetailHeader
       pathway={pathway}
@@ -43,4 +43,19 @@ test("PathwayLessonDetailHeader: lg flex split when trailing is present", () => 
     />,
   );
   assert.equal(html.includes("lg:flex"), true);
+});
+
+test("PathwayLessonDetailHeader: centered hero exposes landmark and centers title", () => {
+  const html = renderToStaticMarkup(
+    <PathwayLessonDetailHeader
+      pathway={pathway}
+      lessonsBasePath="/canada/rn/juris/lessons"
+      lessonTitle="Sample lesson"
+      lessonTopic="Cardiovascular"
+      bodySystem="Cardiovascular"
+      heroLayout="centered"
+    />,
+  );
+  assert.equal(html.includes('data-nn-lesson-hero-centered="true"'), true);
+  assert.equal(html.includes("text-center"), true);
 });

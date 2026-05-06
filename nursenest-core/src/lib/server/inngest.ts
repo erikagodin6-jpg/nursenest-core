@@ -16,8 +16,8 @@ const sendWelcomeEmailFunction = inngest.createFunction(
   {
     id: "send-welcome-email",
     retries: 2,
-    triggers: [{ event: INNGEST_EVENT.welcomeEmailRequested }],
   },
+  { event: INNGEST_EVENT.welcomeEmailRequested },
   async ({ event, step }) => {
     await step.run("send-welcome-email-if-needed", async () => {
       await sendWelcomeEmailIfNeeded(event.data.userId);

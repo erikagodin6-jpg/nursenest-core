@@ -1,3 +1,7 @@
+"use client";
+
+import { useCallback, useState } from "react";
+
 /**
  * LessonClinicalImageCard — dedicated presentation component for matched lesson images.
  *
@@ -22,6 +26,8 @@
  */
 
 import type { LessonImageSource } from "@/lib/content/resolve-lesson-image";
+import { hasRenderableLessonImageUrl } from "@/lib/lessons/has-renderable-lesson-image";
+import { SafeLessonRemoteImage } from "@/components/lessons/safe-lesson-remote-image";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -55,9 +61,12 @@ export type LessonClinicalImageCardProps = {
 // ── Label derivation ──────────────────────────────────────────────────────────
 
 const SOURCE_DEFAULT_LABEL: Partial<Record<LessonImageSource, string>> = {
-  exact_slug: "Clinical image",
-  override:   "Clinical image",
-  topic_slug: "Topic illustration",
+  exact_slug:       "Clinical image",
+  override:         "Clinical image",
+  map_slug:         "Clinical image",
+  map_keyword:      "Topic illustration",
+  map_body_system:  "Topic illustration",
+  topic_slug:       "Topic illustration",
 };
 
 function resolveLabel(
@@ -85,8 +94,8 @@ function deriveCaption(
   lessonTitle: string | null | undefined,
   source: LessonImageSource,
 ): string | null {
-  // Topic-level illustrations should not carry a lesson-specific caption
-  if (source === "topic_slug" || source === "none") return null;
+  // Topic/system-level illustrations should not carry a lesson-specific caption
+  if (source === "topic_slug" || source === "map_keyword" || source === "map_body_system" || source === "none") return null;
   const t = lessonTitle?.trim();
   if (!t) return null;
   return `${t} — visual reference`;
@@ -129,7 +138,10 @@ export function LessonClinicalImageCard({
   caption: captionProp,
   className = "",
 }: LessonClinicalImageCardProps) {
-  if (!url) return null;
+  const [hidden, setHidden] = useState(false);
+  const onHidden = useCallback(() => setHidden(true), []);
+
+  if (!url || !hasRenderableLessonImageUrl(url) || hidden) return null;
 
   const label = resolveLabel(labelProp, source);
   const caption = resolveCaption(captionProp, lessonTitle, source);
@@ -137,7 +149,7 @@ export function LessonClinicalImageCard({
   return (
     <aside
       aria-label={label ?? "Clinical image for this lesson"}
-      className={`mx-auto mt-8 mb-2 max-w-[44rem] overflow-hidden rounded-2xl${className ? ` ${className}` : ""}`}
+      className={`mx-auto mt-8 mb-2 w-full max-w-[min(44rem,100%)] overflow-hidden rounded-2xl${className ? ` ${className}` : ""}`}
       style={{
         background: "var(--lesson-media-surface)",
         border: "1px solid var(--lesson-media-border)",
@@ -146,7 +158,7 @@ export function LessonClinicalImageCard({
       }}
     >
       {/* ── Inner padding wrapper ─────────────────────────────────────────── */}
-      <div className="p-5 sm:p-6">
+      <div className="p-4 sm:p-6">
         {/* ── Eyebrow label ──────────────────────────────────────────────── */}
         {label ? (
           <p
@@ -172,29 +184,11 @@ export function LessonClinicalImageCard({
             border: "1px solid color-mix(in srgb, var(--lesson-media-border) 55%, transparent)",
           }}
         >
-          {/*
-           * eslint-disable-next-line @next/next/no-img-element
-           * Rationale: CDN URLs from DigitalOcean Spaces already served at edge.
-           * Adding remotePatterns for every Spaces bucket sub-path creates churn;
-           * the resolver ensures only inventory-registered URLs reach here.
-           */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <SafeLessonRemoteImage
             src={url}
             alt={alt}
-            loading="lazy"
-            decoding="async"
-            /*
-             * object-contain: preserves aspect ratio — avoids destructive cropping
-             * for portrait assets (anatomy diagrams, flow charts) and landscape
-             * (clinical procedure illustrations). Both formats are common in
-             * nursing education imagery.
-             *
-             * max-h capped at min(70vh, 520px) mirrors PathwayLessonFigures
-             * convention: large enough to be useful, not so large it dominates
-             * the lesson page on small/medium screens.
-             */
-            className="block max-h-[min(70vh,520px)] w-full object-contain object-center"
+            className="block h-auto max-h-[min(70vh,520px)] w-full max-w-full object-contain object-center"
+            onHidden={onHidden}
           />
         </div>
 

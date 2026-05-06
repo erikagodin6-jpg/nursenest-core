@@ -8,6 +8,7 @@ import type {
   PathwayLessonSectionKind,
 } from "@/lib/lessons/pathway-lesson-types";
 import { PathwayLessonFigures } from "@/components/lessons/pathway-lesson-figures";
+import { PathwayLessonCallout } from "@/components/lessons/pathway-lesson-callout";
 import { resolveTierBlocksForViewer } from "@/lib/lessons/tier-block-content";
 import type { MeasurementSystem } from "@/lib/measurements/measurement-system";
 import { resolveMeasurementTokens } from "@/lib/measurements/measurement-tokens";
@@ -15,6 +16,21 @@ import { lessonBodyPresentationClass } from "@/lib/ui/lesson-body-presentation";
 
 /** Markdown-style internal links: `LESSON:slug` wiki or root-relative `/path`. */
 const MD_INTERNAL_LINK = /(\[[^\]]+\]\((?:LESSON:[^)]+|\/[^)]+)\))/g;
+
+/** Optional author prefixes — rendered as premium callouts (labels match `learner.lesson.callout.*` EN strings). */
+const LESSON_CALLOUT_EXAM = /^\s*\*{0,2}\s*Exam\s*Tip\s*:?\s*\*{0,2}\s*/i;
+const LESSON_CALLOUT_CLINICAL = /^\s*\*{0,2}\s*Clinical\s*Insight\s*:?\s*\*{0,2}\s*/i;
+
+function lessonCalloutFromParagraph(raw: string): { kind: "exam" | "clinical"; body: string } | null {
+  const t = raw.trim();
+  if (LESSON_CALLOUT_EXAM.test(t)) {
+    return { kind: "exam", body: t.replace(LESSON_CALLOUT_EXAM, "").trim() };
+  }
+  if (LESSON_CALLOUT_CLINICAL.test(t)) {
+    return { kind: "clinical", body: t.replace(LESSON_CALLOUT_CLINICAL, "").trim() };
+  }
+  return null;
+}
 
 function inlineBold(text: string): ReactNode {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
@@ -317,9 +333,21 @@ export function PathwayLessonBody({
           );
         }
 
+        const trimmed = p.trim();
+        const callout = lessonCalloutFromParagraph(trimmed);
+        if (callout) {
+          return (
+            <PathwayLessonCallout key={idx} kind={callout.kind}>
+              <div className="whitespace-pre-wrap">
+                {renderParagraphWithLinks(callout.body, lessonWikiBasePath, `para-${idx}-callout`)}
+              </div>
+            </PathwayLessonCallout>
+          );
+        }
+
         return (
           <p key={idx} className="whitespace-pre-wrap">
-            {renderParagraphWithLinks(p.trim(), lessonWikiBasePath, `para-${idx}`)}
+            {renderParagraphWithLinks(trimmed, lessonWikiBasePath, `para-${idx}`)}
           </p>
         );
       })}
@@ -339,6 +367,8 @@ export function PathwayLessonSectionContent({
   sectionKind,
   emptyBodyMessage,
   figuresVisualLeadMessage,
+  /** When the parent renders the first figure as a lead image in the section card, avoid empty-body panel. */
+  hasSectionLeadFigure = false,
 }: {
   text: string;
   figures?: PathwayLessonFigure[] | undefined;
@@ -352,6 +382,7 @@ export function PathwayLessonSectionContent({
   emptyBodyMessage: string;
   /** Short line when prose is empty but figures carry the teaching. */
   figuresVisualLeadMessage: string;
+  hasSectionLeadFigure?: boolean;
 }) {
   const paragraphs = pathwayLessonResolvedParagraphs(text, {
     viewerTier,
@@ -384,7 +415,7 @@ export function PathwayLessonSectionContent({
   const figuresEl = hasFigures ? <PathwayLessonFigures figures={figures!} /> : null;
 
   const showFiguresLead = !bodyEl && !examEl && hasFigures;
-  const showEmptyPanel = !bodyEl && !examEl && !hasFigures;
+  const showEmptyPanel = !bodyEl && !examEl && !hasFigures && !hasSectionLeadFigure;
 
   return (
     <div className="space-y-3">

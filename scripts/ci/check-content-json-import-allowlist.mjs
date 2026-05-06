@@ -18,6 +18,22 @@ const PATHWAY_LESSONS_ALLOW = new Set([
   "allied-bundled-catalog.json",
   "new-grad-transition-catalog.json",
   "rn-nclex-master-map.json",
+  "rn-nclex-cardiovascular-expansion-catalog.json",
+  "rn-nclex-neurological-expansion-catalog.json",
+  "rn-nclex-hematology-oncology-expansion-catalog.json",
+  "rn-nclex-gastrointestinal-expansion-catalog.json",
+  "rn-nclex-integumentary-wound-care-expansion-catalog.json",
+  "rn-nclex-infection-control-expansion-catalog.json",
+  "rn-nclex-leadership-delegation-expansion-catalog.json",
+  "rn-nclex-maternal-newborn-expansion-catalog.json",
+  "rn-nclex-procedures-skills-expansion-catalog.json",
+  "rn-nclex-nutrition-expansion-catalog.json",
+  "rn-nclex-exam-strategy-expansion-catalog.json",
+  "rn-nclex-respiratory-expansion-catalog.json",
+  "rn-nclex-renal-expansion-catalog.json",
+  "rn-nclex-endocrine-expansion-catalog.json",
+  "rn-nclex-musculoskeletal-expansion-catalog.json",
+  "rn-nclex-fluids-electrolytes-expansion-catalog.json",
 ]);
 
 /** topic-maps/ — keep tiny; expand allowlist deliberately if adding files. */

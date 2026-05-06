@@ -1,28 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 const QUERY = "(prefers-reduced-motion: reduce)";
 
-function getInitial(): boolean {
+/**
+ * `useState(() => window.matchMedia(...))` hydrates incorrectly: the server always
+ * sees `false` (no `window`), while the client can be `true` on the first paint,
+ * which changes trees under {@link PageTransitionShell} / {@link FadeUp} and
+ * triggers a recoverable hydration failure → marketing error boundary.
+ *
+ * `useSyncExternalStore` + `getServerSnapshot: () => false` keeps SSR + first
+ * client paint aligned; after hydration the real preference syncs via subscribe.
+ */
+function subscribe(onStoreChange: () => void): () => void {
+  if (typeof window === "undefined") return () => {};
+  const mql = window.matchMedia(QUERY);
+  const handler = () => onStoreChange();
+  mql.addEventListener("change", handler);
+  return () => mql.removeEventListener("change", handler);
+}
+
+function getSnapshot(): boolean {
   if (typeof window === "undefined") return false;
   return window.matchMedia(QUERY).matches;
 }
 
-/**
- * Reactively tracks the user's `prefers-reduced-motion` preference.
- * Returns `true` when the user has requested reduced motion.
- */
+function getServerSnapshot(): boolean {
+  return false;
+}
+
 export function useReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(getInitial);
-
-  useEffect(() => {
-    const mql = window.matchMedia(QUERY);
-    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mql.addEventListener("change", handler);
-    queueMicrotask(() => setReduced(mql.matches));
-    return () => mql.removeEventListener("change", handler);
-  }, []);
-
-  return reduced;
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }

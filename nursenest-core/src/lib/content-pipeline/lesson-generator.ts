@@ -1,6 +1,7 @@
 import "server-only";
 
 import { z } from "zod";
+import { getLessonOpenAiChatModel } from "@/lib/ai/openai-env";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import type {
   TopicSpec,
@@ -16,6 +17,10 @@ import {
   examCodeToTier,
   sectionId,
 } from "./pipeline-hashes";
+import {
+  assertPipelineLessonSpineHeadings,
+  pipelineFiveSpineInstructionBlock,
+} from "./clinical-lesson-fifteen-spine";
 
 // ---------------------------------------------------------------------------
 // AI output schema (PathwayLesson-shaped)
@@ -24,8 +29,11 @@ import {
 const aiSectionSchema = z.object({
   kind: z.enum(["overview", "pathophysiology", "assessment", "interventions", "exam_tips"]),
   heading: z.string().min(4).max(120),
-  /** HTML-safe content. No <script>, no <iframe>. Min 120 words to avoid thin content. */
-  body: z.string().min(200).max(18_000),
+  /**
+   * HTML-safe content. No <script>, no <iframe>.
+   * Each body must embed the fifteen-point spine <h2> titles for its kind (see clinical-lesson-fifteen-spine).
+   */
+  body: z.string().min(400).max(18_000),
 });
 
 const aiInternalLinkSchema = z.object({
@@ -54,14 +62,15 @@ const SYSTEM_PROMPT = `You are a senior nursing education content writer produci
 
 Rules:
 - Output JSON ONLY — no prose, no markdown fences, no commentary.
-- Every lesson MUST have exactly five sections in this exact order:
-  1. overview        — what this condition is, epidemiology, quick facts
-  2. pathophysiology — mechanism of disease, cellular/organ-level changes
-  3. assessment      — focused nursing assessment, priority signs/symptoms, lab/diagnostic cues
-  4. interventions   — SBAR-aligned nursing actions, delegation notes, priority order
-  5. exam_tips       — NCLEX/exam strategy cues, common distractors, memory hooks
-- Each section body MUST be substantive teaching content (≥ 3 paragraphs or equivalent bullet content).
-- Use plain HTML only: <p>, <ul>, <li>, <strong>, <em>. No <script>, no <iframe>, no images.
+- Every lesson MUST have exactly five sections in this exact order and kinds:
+  1. overview        — epidemiology, scope, and how the topic shows up in acute/community care
+  2. pathophysiology — mechanism of disease or injury, plus modifiable risk factors
+  3. assessment      — signs/symptoms by acuity, focused nursing assessment, diagnostics, labs/imaging cues
+  4. interventions   — medical management framing nurses must know, nursing interventions, complications, teaching
+  5. exam_tips       — pearls, board-style decision rules, safety escalations, then a tight high-yield summary
+- Each section body MUST embed the required <h2> numbered headings (exact titles) listed in the user message spine block, in order, with clinically specific paragraphs or lists under each heading.
+- Use plain HTML only: <p>, <ul>, <li>, <strong>, <em>, <h2>. No <script>, no <iframe>, no images.
+- Do not substitute generic test-taking essays for pathophysiology, assessment, labs, or interventions.
 - No invented statistics, no PHI, no specific patient names.
 - seoTitle must be 10–70 characters.
 - seoDescription must be 50–160 characters and describe exam-prep value.
@@ -112,17 +121,20 @@ CONTEXT:
 - ${examNote}
 - ${countryNote}
 
+SPINE (follow exactly — each section "body" must include these <h2> titles as plain text inside the tags):
+${pipelineFiveSpineInstructionBlock()}
+
 OUTPUT JSON SCHEMA (return exactly this structure, no extra keys):
 {
   "title": "string (8–200 chars)",
   "seoTitle": "string (10–70 chars)",
   "seoDescription": "string (50–160 chars)",
   "sections": [
-    { "kind": "overview",        "heading": "string", "body": "HTML string ≥ 200 chars" },
-    { "kind": "pathophysiology", "heading": "string", "body": "HTML string ≥ 200 chars" },
-    { "kind": "assessment",      "heading": "string", "body": "HTML string ≥ 200 chars" },
-    { "kind": "interventions",   "heading": "string", "body": "HTML string ≥ 200 chars" },
-    { "kind": "exam_tips",       "heading": "string", "body": "HTML string ≥ 200 chars" }
+    { "kind": "overview",        "heading": "string", "body": "HTML string ≥ 400 chars" },
+    { "kind": "pathophysiology", "heading": "string", "body": "HTML string ≥ 400 chars" },
+    { "kind": "assessment",      "heading": "string", "body": "HTML string ≥ 400 chars" },
+    { "kind": "interventions",   "heading": "string", "body": "HTML string ≥ 400 chars" },
+    { "kind": "exam_tips",       "heading": "string", "body": "HTML string ≥ 400 chars" }
   ],
   "internalLinkHints": [
     { "label": "string", "suggestedPath": "/app/lessons/...", "rationale": "string" }
@@ -163,6 +175,7 @@ export async function generatePathwayLesson(
   const resolvedCountry = topic.country ?? country;
 
   const result = await openAiChatCompletion({
+    model: getLessonOpenAiChatModel(),
     messages: [
       { role: "system", content: SYSTEM_PROMPT },
       { role: "user", content: buildLessonUserPrompt(topic, exam, country) },
@@ -178,6 +191,13 @@ export async function generatePathwayLesson(
   } catch (e) {
     throw new Error(
       `Lesson schema validation failed for "${topic.topicSlug}": ${e instanceof Error ? e.message : String(e)}`,
+    );
+  }
+  try {
+    assertPipelineLessonSpineHeadings(parsed.sections);
+  } catch (e) {
+    throw new Error(
+      `Lesson clinical spine check failed for "${topic.topicSlug}": ${e instanceof Error ? e.message : String(e)}`,
     );
   }
 

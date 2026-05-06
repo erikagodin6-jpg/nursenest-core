@@ -250,10 +250,7 @@ export function AdminOperationsConsole({
             </p>
             <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-sm">
               <Link href="/admin/blog" className="text-primary underline">
-                Blog hub
-              </Link>
-              <Link href="/admin/blog/scheduler" className="text-primary underline">
-                Scheduler
+                Blog console
               </Link>
             </div>
           </div>
@@ -394,7 +391,7 @@ export function AdminOperationsConsole({
                       </Link>
                       {r.blogPostId ? (
                         <Link
-                          href={`/admin/blog/control-panel?id=${encodeURIComponent(r.blogPostId)}`}
+                          href={`/admin/blog?id=${encodeURIComponent(r.blogPostId)}`}
                           className="ml-2 text-primary underline"
                         >
                           Post

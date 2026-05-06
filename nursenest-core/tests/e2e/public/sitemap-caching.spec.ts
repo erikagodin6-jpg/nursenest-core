@@ -25,9 +25,12 @@ test.describe("Public — sitemap caching", () => {
     const firstElapsedMs = Date.now() - t0;
 
     const firstStatus = first.status();
-    expect([200, 503], "sitemap.xml should return 200 when generation succeeds, or 503 when merge/DB fails (no false home-only XML)").toContain(
-      firstStatus,
-    );
+    expect(firstStatus, "sitemap.xml must return HTTP 200 with valid XML (no 503)").toBe(200);
+    const ct = first.headers()["content-type"] ?? "";
+    expect(ct.toLowerCase(), "sitemap.xml must be application/xml").toContain("xml");
+    const body = await first.text();
+    expect(body.trim().startsWith("<?xml") || body.trim().startsWith("<urlset")).toBe(true);
+    expect(body.toLowerCase().includes("<html")).toBe(false);
     expect(firstElapsedMs, `sitemap.xml exceeded ${SITEMAP_SLA_MS}ms`).toBeLessThanOrEqual(SITEMAP_SLA_MS);
 
     let cacheControl: string | null = null;
@@ -37,31 +40,25 @@ test.describe("Public — sitemap caching", () => {
     let conditionalCacheControl: string | null = null;
     let conditionalAge: string | null = null;
 
-    if (firstStatus === 503) {
-      warnings.push(
-        "sitemap.xml returned 503 — merged generation failed (DATABASE_URL, origin validation, or merge invariants). Fix env/DB; caching assertions skipped.",
-      );
-    } else {
-      cacheControl = first.headers()["cache-control"] ?? null;
-      etag = first.headers().etag ?? null;
-      lastModified = first.headers()["last-modified"] ?? null;
-      const directives = parseCacheControlDirectives(cacheControl);
-      const sMaxAge = typeof directives["s-maxage"] === "string" ? Number(directives["s-maxage"]) : NaN;
+    cacheControl = first.headers()["cache-control"] ?? null;
+    etag = first.headers().etag ?? null;
+    lastModified = first.headers()["last-modified"] ?? null;
+    const directives = parseCacheControlDirectives(cacheControl);
+    const sMaxAge = typeof directives["s-maxage"] === "string" ? Number(directives["s-maxage"]) : NaN;
 
-      expect(cacheControl, "sitemap.xml must send Cache-Control").toBeTruthy();
-      expect(Number.isFinite(sMaxAge) && sMaxAge > 0, "sitemap.xml must send positive s-maxage").toBe(true);
-      expect(Boolean(etag || lastModified), "sitemap.xml must send ETag or Last-Modified").toBe(true);
+    expect(cacheControl, "sitemap.xml must send Cache-Control").toBeTruthy();
+    expect(Number.isFinite(sMaxAge) && sMaxAge > 0, "sitemap.xml must send positive s-maxage").toBe(true);
+    expect(Boolean(etag || lastModified), "sitemap.xml must send ETag or Last-Modified").toBe(true);
 
-      if (etag) {
-        const conditional = await request.get("/sitemap.xml", {
-          failOnStatusCode: false,
-          headers: { "If-None-Match": etag },
-        });
-        conditionalStatus = conditional.status();
-        conditionalCacheControl = conditional.headers()["cache-control"] ?? null;
-        conditionalAge = conditional.headers().age ?? null;
-        expect(conditional.status(), "Conditional sitemap request should revalidate").toBe(304);
-      }
+    if (etag) {
+      const conditional = await request.get("/sitemap.xml", {
+        failOnStatusCode: false,
+        headers: { "If-None-Match": etag },
+      });
+      conditionalStatus = conditional.status();
+      conditionalCacheControl = conditional.headers()["cache-control"] ?? null;
+      conditionalAge = conditional.headers().age ?? null;
+      expect(conditional.status(), "Conditional sitemap request should revalidate").toBe(304);
     }
 
     await testInfo.attach("sitemap-caching.json", {

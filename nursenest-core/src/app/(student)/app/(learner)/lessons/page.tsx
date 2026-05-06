@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { ContentStatus, TierCode } from "@prisma/client";
 import { Suspense } from "react";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
@@ -16,6 +17,7 @@ import {
   pathwayLessonsAppListWhereWithTopicFilter,
   visiblePathwayIdsForAppLessons,
 } from "@/lib/lessons/app-pathway-lesson-list-scope";
+import { pathwayLessonAppHubSafetyPrismaWhere } from "@/lib/lessons/app-lessons-hub-pathway-safety-where";
 import { buildLearnerAppLessonsHubSummary } from "@/lib/lessons/learner-app-lessons-hub-summary";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { FreemiumCrossTrackNudge } from "@/components/student/freemium-cross-track-nudge";
@@ -45,8 +47,14 @@ import {
   lessonsListBlockFromPathwayHubSnapshot,
 } from "@/lib/lessons/app-lessons-hub-published-snapshot-fallback";
 import { readPathwayLessonsHubPageSnapshot } from "@/lib/study-content-failover/pathway-lessons-hub-snapshot-read";
+import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { snapshotAgeMs as publishedSnapshotAgeMs } from "@/lib/study-content-failover/study-published-snapshot-store";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
+import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
+import { logAppLessonsHubListSource } from "@/lib/observability/content-source-trace";
+
+/** Align with lesson detail — list should reflect admin publish without stale RSC cache. */
+export const dynamic = "force-dynamic";
 
 type AppLessonListRow = {
   id: string;
@@ -79,29 +87,6 @@ function pathwayLessonCardSummary(row: {
   return parts.length ? parts.join(" · ") : null;
 }
 
-function pathwayLessonSafetyGateWhere() {
-  return {
-    AND: [
-      { title: { not: "" } },
-      { slug: { not: "" } },
-      { topic: { not: "" } },
-      { topicSlug: { not: "" } },
-      { previewSectionCount: { gt: 0 } },
-      {
-        OR: [{ seoDescription: { not: "" } }, { seoTitle: { not: "" } }],
-      },
-      {
-        NOT: [
-          { title: { contains: "placeholder", mode: "insensitive" as const } },
-          { title: { contains: "tbd", mode: "insensitive" as const } },
-          { slug: { startsWith: "tmp-" } },
-          { slug: { startsWith: "draft-" } },
-        ],
-      },
-    ],
-  };
-}
-
 type Props = {
   searchParams: Promise<{
     page?: string;
@@ -110,6 +95,7 @@ type Props = {
     pathwayId?: string;
     limit?: string;
     q?: string;
+    lessonSlug?: string;
   }>;
 };
 
@@ -200,6 +186,8 @@ export default async function LessonsPage({ searchParams }: Props) {
     );
   }
 
+  lessonsPerfMark("route_start", { route: "app_lessons_hub" });
+  try {
   const sp = await searchParams;
   const limitParsed = parseLessonLibraryLimit(typeof sp.limit === "string" ? sp.limit : undefined);
 
@@ -219,12 +207,15 @@ export default async function LessonsPage({ searchParams }: Props) {
   const pathwayIdFilter =
     typeof sp.pathwayId === "string" && sp.pathwayId.trim().length > 0 ? sp.pathwayId.trim() : null;
 
+  const lessonSlugFilter =
+    typeof sp.lessonSlug === "string" && sp.lessonSlug.trim().length > 0 ? sp.lessonSlug.trim() : null;
+
   const learnerPathRow = await withDatabaseFallbackTimeout(
     async () =>
       userId
         ? prisma.user.findUnique({
             where: { id: userId },
-            select: { learnerPath: true },
+            select: { learnerPath: true, alliedProfessionKey: true, tier: true },
           })
         : null,
     null,
@@ -233,8 +224,43 @@ export default async function LessonsPage({ searchParams }: Props) {
   );
 
   const learnerPath = learnerPathRow?.learnerPath ?? null;
+  const effectivePathwayForAlliedScope = (pathwayIdFilter ?? learnerPath ?? "").trim();
+  const alliedProfessionForAppList =
+    learnerPathRow?.tier === TierCode.ALLIED &&
+    learnerPathRow.alliedProfessionKey?.trim() &&
+    effectivePathwayForAlliedScope &&
+    isAlliedMarketingCorePathwayId(effectivePathwayForAlliedScope)
+      ? learnerPathRow.alliedProfessionKey.trim().toLowerCase()
+      : null;
   const marketingLocale = await getMarketingLocaleForDefaultRoute();
   const visiblePathwayIds = await visiblePathwayIdsForAppLessons(entitlement, learnerPath);
+
+  if (
+    lessonSlugFilter &&
+    pathwayIdFilter &&
+    visiblePathwayIds.includes(pathwayIdFilter)
+  ) {
+    const hit = await withDatabaseFallbackTimeout(
+      async () =>
+        prisma.pathwayLesson.findFirst({
+          where: {
+            AND: [
+              { pathwayId: pathwayIdFilter },
+              { slug: lessonSlugFilter },
+              { status: ContentStatus.PUBLISHED },
+              pathwayLessonAppHubSafetyPrismaWhere(),
+            ],
+          },
+          select: { id: true },
+        }),
+      null,
+      LESSONS_PAGE_DB_TIMEOUT_MS,
+      { scope: "page_lessons", label: "lesson_slug_redirect" },
+    );
+    if (hit?.id) {
+      redirect(`/app/lessons/${hit.id}`);
+    }
+  }
 
   const catHref = resolveStudyLoopCatHref({
     authState: "signed_in",
@@ -280,12 +306,13 @@ export default async function LessonsPage({ searchParams }: Props) {
         topic: topicFilter,
         topicSlug: topicSlugFilter,
         pathwayId: pathwayIdFilter,
+        alliedProfessionKey: alliedProfessionForAppList,
       });
 
       const pathwayWhereWithSafety = {
         AND: [
           pathwayWhere,
-          pathwayLessonSafetyGateWhere(),
+          pathwayLessonAppHubSafetyPrismaWhere(),
           ...(qEffective
             ? [
                 {
@@ -448,6 +475,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     const listOptsSnap = appLessonsHubListOptsForSnapshot({
       qEffective,
       topicSlugFilter,
+      alliedProfessionKey: alliedProfessionForAppList,
     });
 
     const snap = pathwayForSnap
@@ -528,8 +556,16 @@ export default async function LessonsPage({ searchParams }: Props) {
     redirect(q ? `/app/lessons${q}` : "/app/lessons");
   }
 
+  logAppLessonsHubListSource({
+    source: lessonsBlock.source,
+    inventory: lessonsHubInventorySource,
+    pathwayId: pathwayIdFilter,
+    page: lessonsBlock.page,
+  });
+
   const resolvedRenderableLessons: AppLessonListRow[] = [...lessonsBlock.rows];
 
+  lessonsPerfMark("summary_index_start", { route: "app_lessons_hub" });
   const lessonsHub = buildLearnerAppLessonsHubSummary<AppLessonListRow>({
     rows: resolvedRenderableLessons,
     catalogMatchTotal: lessonsBlock.total,
@@ -538,6 +574,7 @@ export default async function LessonsPage({ searchParams }: Props) {
     topicSlugFilter,
     pathwayIdFilter,
   });
+  lessonsPerfMark("summary_index_end", { route: "app_lessons_hub" });
 
   if (process.env.NODE_ENV !== "production") {
     safeServerLog("page_lessons", "app_lessons_hub_render", {
@@ -551,6 +588,7 @@ export default async function LessonsPage({ searchParams }: Props) {
   const progressByRowId: Record<string, PathwayLessonProgressStatus> = {};
 
   if (userId && lessonsBlock.source === "pathway_lessons") {
+    lessonsPerfMark("personalization_start", { route: "app_lessons_hub" });
     const byPathway = new Map<string, string[]>();
 
     for (const row of resolvedRenderableLessons) {
@@ -573,6 +611,7 @@ export default async function LessonsPage({ searchParams }: Props) {
         }
       }
     }
+    lessonsPerfMark("personalization_end", { route: "app_lessons_hub" });
   }
 
   const listSummaryLine =
@@ -634,4 +673,7 @@ export default async function LessonsPage({ searchParams }: Props) {
       <LearnerStudyQuickLinksCard t={t} id="lessons-study-quick-links" catHref={catHref} />
     </div>
   );
+  } finally {
+    lessonsPerfMark("route_end", { route: "app_lessons_hub" });
+  }
 }

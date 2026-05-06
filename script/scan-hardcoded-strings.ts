@@ -39,5 +39,7 @@ for (let i = 0; i < args.length; i++) {
   }
 }
 
-const passed = runI18nScan(options);
-process.exit(passed ? 0 : 1);
+void (async () => {
+  const passed = await runI18nScan(options);
+  process.exit(passed ? 0 : 1);
+})();

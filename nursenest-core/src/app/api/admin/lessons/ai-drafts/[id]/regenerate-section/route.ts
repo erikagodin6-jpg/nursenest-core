@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin/ensure-admin";
-import { getOpenAiChatModel } from "@/lib/ai/openai-env";
+import { getLessonOpenAiChatModel } from "@/lib/ai/openai-env";
 import { adminAiGenerationHttpBlock } from "@/lib/ai/admin-ai-policy";
 import { checkAdminAiGenerateLimit } from "@/lib/ai/admin-rate-limit";
 import { adminAiLessonRegenerateSectionSchema } from "@/lib/lessons/admin-ai-lesson-schema";
@@ -51,7 +51,7 @@ export async function POST(req: Request, ctx: RouteContext) {
       lastSectionRegenAt: new Date().toISOString(),
     };
 
-    const model = getOpenAiChatModel();
+    const model = getLessonOpenAiChatModel();
     const prevVal =
       typeof draft.validationJson === "object" && draft.validationJson !== null && !Array.isArray(draft.validationJson)
         ? (draft.validationJson as Record<string, unknown>)

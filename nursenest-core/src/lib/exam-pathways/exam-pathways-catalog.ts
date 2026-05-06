@@ -7,12 +7,14 @@ import { EXAM_PATHWAYS_SEGMENT_A } from "./exam-pathways-data-segment-a";
 import { EXAM_PATHWAYS_SEGMENT_B } from "./exam-pathways-data-segment-b";
 import { EXAM_PATHWAYS_SEGMENT_C } from "./exam-pathways-data-segment-c";
 import { EXAM_PATHWAYS_SEGMENT_D } from "./exam-pathways-data-segment-d";
+import { EXAM_PATHWAYS_SEGMENT_E } from "./exam-pathways-data-segment-e";
 
 export const EXAM_PATHWAYS: ExamPathwayDefinition[] = [
   ...EXAM_PATHWAYS_SEGMENT_A,
   ...EXAM_PATHWAYS_SEGMENT_B,
   ...EXAM_PATHWAYS_SEGMENT_C,
   ...EXAM_PATHWAYS_SEGMENT_D,
+  ...EXAM_PATHWAYS_SEGMENT_E,
 ];
 
 const byId = new Map<string, ExamPathwayDefinition>();

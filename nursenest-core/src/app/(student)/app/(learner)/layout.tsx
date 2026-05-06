@@ -35,6 +35,7 @@ import {
   LearnerShellMobileBottomNav,
   LearnerShellPathwayPill,
 } from "@/components/layout/learner-shell-primary-nav";
+import { isPrintableStorePublicNavEnabled } from "@/lib/printables/printable-store-flags";
 import { LearnerStudyPathStrip } from "@/components/student/learner-study-path-strip";
 import { LearnerPathwayContextBar } from "@/components/student/learner-pathway-context-bar";
 import { LearnerShellBrandHomeLink } from "@/components/student/learner-shell-brand-home-link";
@@ -44,8 +45,7 @@ import {
   learnerShellShouldDisablePageTransition,
 } from "@/lib/motion/page-transition-shell";
 import { isLearnerTutorShellEnabled } from "@/lib/learner/tutor/learner-tutor-policy";
-import { LearnerFeedbackShell } from "@/components/feedback/learner-feedback-shell";
-import { UserFeedbackNavPill } from "@/components/feedback/user-feedback-nav-pill";
+import { SupportEmailHeaderLink } from "@/components/support/support-email-header-link";
 import { LearnerExamStudyProviders } from "@/components/exam/learner-exam-study-providers";
 import { isCoreOnlyEmergencyMode, shouldSkipNonCriticalLearnerWork } from "@/lib/durability/durability-flags";
 import { layoutStderrTrace } from "@/lib/observability/layout-stderr-trace";
@@ -55,15 +55,15 @@ import { loadPaywallHomeStatsForShell } from "@/lib/marketing/load-paywall-home-
 import { LearnerDegradedModeBanner } from "@/components/student/learner-degraded-mode-banner";
 import { LearnerMainLandmarkAudit } from "@/components/observability/learner-main-landmark-audit";
 
-import { getStaffSession } from "@/lib/auth/staff-session";
 import {
   bannerTitleForPayload,
-  getVerifiedAdminLearnerQaSimulation,
   learnerPathwayNavFromQaPayload,
   learnerQaChromeTierFallbackString,
   learnerQaUserBarOverlayFromPayload,
+  publicQaStateFromPayload,
 } from "@/lib/admin/admin-learner-qa-simulation";
-import { AdminLearnerQaBanner } from "@/components/admin/admin-learner-qa-banner";
+import { getAdminViewAsLearnerContext } from "@/lib/admin/admin-view-as-learner-context";
+import { AdminLearnerQaAppToolbar } from "@/components/admin/admin-learner-qa-app-toolbar";
 import { AdminLearnerQaPosthogSuppressor } from "@/components/admin/admin-learner-qa-posthog-suppressor";
 /** Auth is enforced in `src/proxy.ts` (Next.js 16+) so this layout never calls `redirect()` for missing session. Locale + i18n: `app/(student)/app/layout.tsx`. */
 export const dynamic = "force-dynamic";
@@ -81,12 +81,12 @@ export default async function LearnerShellLayout({ children }: { children: React
     return <LearnerUnauthenticatedGate />;
   }
 
-  const [entitlement, paywallHomeStats, staffSession, qaPayload] = await Promise.all([
+  const [entitlement, paywallHomeStats, viewAsCtx] = await Promise.all([
     resolveEntitlementForPage(userId),
     loadPaywallHomeStatsForShell(),
-    getStaffSession().catch(() => null),
-    getVerifiedAdminLearnerQaSimulation(userId),
+    getAdminViewAsLearnerContext(userId),
   ]);
+  const { staffSession, simulation: qaShell } = viewAsCtx;
 
   const skipNonCritical = shouldSkipNonCriticalLearnerWork();
   const coreOnlyEmergency = isCoreOnlyEmergencyMode();
@@ -101,8 +101,8 @@ export default async function LearnerShellLayout({ children }: { children: React
   const cachedNav =
     entitlement !== "error" ? getLearnerFallback(userId, entitlement, isLearnerPathwayNavMetadata) : null;
 
-  const pathwayNav = qaPayload
-    ? learnerPathwayNavFromQaPayload(qaPayload)
+  const pathwayNav = qaShell
+    ? learnerPathwayNavFromQaPayload(qaShell)
     : await safeOptional(
         async () => {
           const fresh = await loadLearnerPathwayNavMetadata(userId);
@@ -130,7 +130,7 @@ export default async function LearnerShellLayout({ children }: { children: React
 
   if (!pathwayHubHref) {
     const tier = (
-      qaPayload ? learnerQaChromeTierFallbackString(qaPayload.track) : (session?.user as { tier?: string | null })?.tier ?? ""
+      qaShell ? learnerQaChromeTierFallbackString(qaShell.track) : (session?.user as { tier?: string | null })?.tier ?? ""
     ).toUpperCase();
     const tierHub = await learnerPathwayHubChromeHrefForTierFallback(tier);
     if (tierHub) {
@@ -147,7 +147,7 @@ export default async function LearnerShellLayout({ children }: { children: React
     }
     if (!pathwayContextBar && pathwayHubHref) {
       const tier = (
-        qaPayload ? learnerQaChromeTierFallbackString(qaPayload.track) : (session?.user as { tier?: string | null })?.tier ?? ""
+        qaShell ? learnerQaChromeTierFallbackString(qaShell.track) : (session?.user as { tier?: string | null })?.tier ?? ""
       ).toUpperCase();
       const fallbackPathwayId =
         tier === "RN"
@@ -186,6 +186,8 @@ export default async function LearnerShellLayout({ children }: { children: React
       ? { pathwayId, pathwayLabel: pathwayShortLabel }
       : null;
 
+  const printablesNavVisible = isPrintableStorePublicNavEnabled();
+
   let paywalledRouteBody: ReactNode = (
     <LearnerSilentSectionBoundary name="route_body">{children}</LearnerSilentSectionBoundary>
   );
@@ -219,11 +221,10 @@ export default async function LearnerShellLayout({ children }: { children: React
 
   return (
     <SentryLearnerShell userId={userId}>
-      <AdminLearnerQaPosthogSuppressor active={Boolean(qaPayload)} />
+      <AdminLearnerQaPosthogSuppressor active={Boolean(qaShell)} />
       <PaywallHomeStatsProvider value={paywallHomeStats}>
         <LearnerExamStudyProviders>
           <LearnerExamChromeGate>
-            <LearnerFeedbackShell pathwayId={pathwayId}>
             <div
               className="nn-learner-app mx-auto w-full max-w-6xl px-4 pt-[var(--nn-rhythm-shell-y)] pb-[calc(var(--nn-rhythm-shell-y)+5rem+env(safe-area-inset-bottom,0px))] sm:px-6 md:pb-[var(--nn-rhythm-shell-y)]"
               data-nn-learner-ds
@@ -238,36 +239,50 @@ export default async function LearnerShellLayout({ children }: { children: React
               {entitlement !== "error" &&
               entitlement.hasAccess &&
               entitlement.reason === "admin_override" &&
-              !qaPayload &&
+              !qaShell &&
               !entitlement.adminLearnerQaSimulation ? (
                 <div
                   role="region"
                   aria-label="Staff access override"
-                  className="mb-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-info)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-cool)_14%,var(--semantic-surface))] px-3 py-2 text-sm text-[var(--semantic-text-primary)] shadow-sm sm:px-4"
+                  data-nn-staff-access-banner
+                  className="mb-2 rounded-lg border border-[color-mix(in_srgb,var(--semantic-warning)_42%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-panel-warm)_18%,var(--semantic-surface))] px-3 py-2.5 text-sm text-[var(--semantic-text-primary)] shadow-sm ring-1 ring-[color-mix(in_srgb,var(--semantic-warning)_14%,transparent)] sm:px-4"
                 >
-                  <p className="m-0 font-semibold leading-snug">
-                    Staff access override: you have full learner access from your staff role. This is not a paid
-                    subscription and is separate from simulated learner QA.
+                  <div className="mb-1.5 flex flex-wrap items-center gap-2">
+                    <span className="nn-badge-semantic-warning inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                      Staff access
+                    </span>
+                    <span className="text-[11px] font-semibold uppercase tracking-wide text-[var(--semantic-text-muted)]">
+                      Admin / QA — not a subscription
+                    </span>
+                  </div>
+                  <p className="m-0 text-sm leading-snug text-[var(--semantic-text-primary)]">
+                    You have full learner access from your staff role. This is not paid billing or a subscriber
+                    entitlement, and it is separate from simulated learner QA.
                   </p>
                 </div>
               ) : null}
-              {qaPayload ? <AdminLearnerQaBanner title={bannerTitleForPayload(qaPayload)} /> : null}
-              {!skipNonCritical && !qaPayload ? <LearnerAppSectionAnalytics /> : null}
-              <div className="nn-learner-exam-chrome-target nn-learner-shell-sticky sticky top-0 z-50 mb-[var(--nn-rhythm-tight-y)] bg-[var(--semantic-bg-base)] pt-1">
-                <div className="flex flex-col gap-2">
-                  <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 shadow-sm sm:px-4 sm:py-2.5">
-                    <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+              {qaShell ? (
+                <AdminLearnerQaAppToolbar
+                  bannerTitle={bannerTitleForPayload(qaShell)}
+                  initialPublicState={publicQaStateFromPayload(qaShell)}
+                />
+              ) : null}
+              {!skipNonCritical && !qaShell ? <LearnerAppSectionAnalytics /> : null}
+              <div className="nn-learner-exam-chrome-target nn-learner-shell-sticky sticky top-0 z-50 mb-[var(--nn-rhythm-tight-y)] overflow-x-clip bg-[var(--semantic-bg-base)] pt-0.5 md:pt-1">
+                <div className="flex flex-col gap-1.5 md:gap-2">
+                  <div className="rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-1.5 shadow-sm sm:px-4 sm:py-2.5">
+                    <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-2 sm:gap-x-3">
                       <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
                         <LearnerShellBrandHomeLink />
                         <LearnerShellPathwayPill pathwayPillLabel={pathwayShortLabel} pathwayHubHref={pathwayHubHref} />
                       </div>
-                      <div className="flex flex-shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-2.5">
+                      <div className="flex min-w-0 flex-shrink-0 flex-wrap items-center justify-end gap-1.5 sm:gap-2.5">
                         <LearnerShellUserBar
                           pathwayShortLabel={pathwayShortLabel}
-                          serverHasStaffSession={staffSession != null && !qaPayload}
-                          learnerQaOverlay={qaPayload ? learnerQaUserBarOverlayFromPayload(qaPayload) : null}
+                          serverHasStaffSession={staffSession != null && !qaShell}
+                          learnerQaOverlay={qaShell ? learnerQaUserBarOverlayFromPayload(qaShell) : null}
                         />
-                        {!coreOnlyEmergency ? <UserFeedbackNavPill /> : null}
+                        {!coreOnlyEmergency ? <SupportEmailHeaderLink /> : null}
                         <LearnerShellLanguageControl />
                         <LearnerThemeControl />
                       </div>
@@ -276,8 +291,12 @@ export default async function LearnerShellLayout({ children }: { children: React
                       <LearnerPathwayContextBar label={pathwayContextBar} hubHref={pathwayHubHref} />
                     ) : null}
                   </div>
-                  <div className="nn-learner-shell-nav-row rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-2 shadow-[0_1px_0_0_color-mix(in_srgb,var(--semantic-text-primary)_06%,transparent)] sm:px-3">
-                    <LearnerShellDesktopStudyLinks pathwayId={pathwayId} examsLabel={examsLabel} />
+                  <div className="nn-learner-shell-nav-row rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-2 py-1.5 shadow-[0_1px_0_0_color-mix(in_srgb,var(--semantic-text-primary)_06%,transparent)] sm:px-3 sm:py-2">
+                    <LearnerShellDesktopStudyLinks
+                      pathwayId={pathwayId}
+                      examsLabel={examsLabel}
+                      printablesNavVisible={printablesNavVisible}
+                    />
                   </div>
                   <LearnerStudyPathStrip pathwayId={pathwayId} />
                 </div>
@@ -286,6 +305,7 @@ export default async function LearnerShellLayout({ children }: { children: React
                   pathwayId={pathwayId}
                   pathwayHubHref={pathwayHubHref}
                   examsLabel={examsLabel}
+                  printablesNavVisible={printablesNavVisible}
                 />
               </div>
               {studyNextBlock ? (
@@ -329,7 +349,6 @@ export default async function LearnerShellLayout({ children }: { children: React
                 </LearnerSilentSectionBoundary>
               ) : null}
             </div>
-          </LearnerFeedbackShell>
         </LearnerExamChromeGate>
       </LearnerExamStudyProviders>
       </PaywallHomeStatsProvider>

@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { LearnerMarketingT } from "@/lib/learner/learner-marketing-server";
 
 const LINKS: { href: string; labelKey: string }[] = [
-  { href: "/app/account/report-card", labelKey: "learner.account.nav.reportCard" },
+  { href: "/app/account/report", labelKey: "learner.account.nav.report" },
   { href: "/app/account/readiness", labelKey: "learner.account.nav.readiness" },
   { href: "/app/account/progress", labelKey: "learner.account.nav.progress" },
   { href: "/app/account/question-bank-performance", labelKey: "learner.account.nav.questionBankPerf" },

@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { permanentRedirect } from "next/navigation";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -9,11 +10,7 @@ import {
 import { resolvePathwayLessonSlugRedirectChain } from "@/lib/lessons/pathway-lesson-slug-redirects";
 import type { PathwayLessonRecord } from "@/lib/lessons/pathway-lesson-types";
 
-/**
- * Load a pathway lesson by URL slug; if the slug was renamed, **permanentRedirect** to the canonical lesson URL.
- * Use from marketing lesson detail + metadata so legacy bookmarks and external links stay valid.
- */
-export async function loadPathwayLessonWithLegacySlugRedirect(
+async function loadPathwayLessonWithLegacySlugRedirectImpl(
   pathway: ExamPathwayDefinition,
   lessonSlug: string,
   contentLocale: string | undefined,
@@ -38,8 +35,13 @@ export async function loadPathwayLessonWithLegacySlugRedirect(
   permanentRedirect(buildExamPathwayPath(pathway, `lessons/${canon}`));
 }
 
-/** Metadata-only variant to avoid hydrating the full lesson document during SEO generation. */
-export async function loadPathwayLessonSeoMetaWithLegacySlugRedirect(
+/**
+ * Load a pathway lesson by URL slug; if the slug was renamed, **permanentRedirect** to the canonical lesson URL.
+ * Wrapped with React `cache()` for request-level dedupe with metadata + body in the same render.
+ */
+export const loadPathwayLessonWithLegacySlugRedirect = cache(loadPathwayLessonWithLegacySlugRedirectImpl);
+
+async function loadPathwayLessonSeoMetaWithLegacySlugRedirectImpl(
   pathway: ExamPathwayDefinition,
   lessonSlug: string,
 ): Promise<PathwayLessonSeoMeta | undefined> {
@@ -62,3 +64,6 @@ export async function loadPathwayLessonSeoMetaWithLegacySlugRedirect(
   if (!resolved) return undefined;
   permanentRedirect(buildExamPathwayPath(pathway, `lessons/${canon}`));
 }
+
+/** Metadata-only variant to avoid hydrating the full lesson document during SEO generation. */
+export const loadPathwayLessonSeoMetaWithLegacySlugRedirect = cache(loadPathwayLessonSeoMetaWithLegacySlugRedirectImpl);

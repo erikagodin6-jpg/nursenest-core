@@ -3,6 +3,7 @@
  */
 
 import { z } from "zod";
+import { getBlogOpenAiChatModel } from "@/lib/ai/openai-env";
 import { openAiChatCompletion } from "@/lib/ai/openai-chat-completions";
 import { blogLessonLinkRowSchema } from "@/lib/blog/blog-control-panel-schema";
 import type { BlogLessonLinkRow } from "@/lib/blog/blog-control-panel-schema";
@@ -101,6 +102,8 @@ Hard rules:
 - Never output /app/*, /api/*, or external URLs.`;
 
   const res = await openAiChatCompletion({
+    useBlogOpenAiApiKey: true,
+    model: getBlogOpenAiChatModel(),
     messages: [
       {
         role: "system",

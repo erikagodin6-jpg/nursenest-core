@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import { examPathwayRegionalHreflang, examPathwayTopicRegionalHreflang } from "@/lib/seo/exam-pathway-hub-alternates";
+import { getPathwayTopicProgrammaticRow } from "@/lib/seo/pathway-topic-programmatic-registry";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 
 describe("examPathwayRegionalHreflang", () => {
@@ -23,6 +24,16 @@ describe("examPathwayRegionalHreflang", () => {
     assert.ok(lang["en-CA"]?.includes("/canada/pn/rex-pn"));
     assert.equal(lang["x-default"], lang["en-CA"]);
   });
+
+  it("emits only x-default for allied health (single global hub)", () => {
+    const usAllied = getExamPathwayById("us-allied-core");
+    assert.ok(usAllied);
+    const lang = examPathwayRegionalHreflang(usAllied);
+    assert.deepEqual(Object.keys(lang).sort(), ["x-default"]);
+    assert.ok(lang["x-default"]?.includes("/allied/allied-health"));
+    assert.ok(!lang["en-US"]);
+    assert.ok(!lang["en-CA"]);
+  });
 });
 
 describe("examPathwayTopicRegionalHreflang", () => {
@@ -37,5 +48,18 @@ describe("examPathwayTopicRegionalHreflang", () => {
     assert.equal(lang["x-default"], lang["en-US"]);
     const frTrap = absoluteUrl(`/fr${buildExamPathwayPath(usRn!, topic)}`);
     assert.ok(!Object.values(lang).includes(frTrap));
+  });
+
+  it("emits only x-default for allied health topic pages (no duplicate regional alternates)", async () => {
+    const usAllied = getExamPathwayById("us-allied-core");
+    assert.ok(usAllied);
+    const topicSegment = "rn-lessons-cardiovascular";
+    assert.ok(
+      getPathwayTopicProgrammaticRow("us-allied-core", topicSegment),
+      "expected allied lessons-angle topic in programmatic registry",
+    );
+    const lang = await examPathwayTopicRegionalHreflang(usAllied, topicSegment);
+    assert.deepEqual(Object.keys(lang).sort(), ["x-default"]);
+    assert.equal(lang["x-default"], absoluteUrl(buildExamPathwayPath(usAllied, topicSegment)));
   });
 });

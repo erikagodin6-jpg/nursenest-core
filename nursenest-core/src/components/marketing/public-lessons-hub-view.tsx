@@ -70,7 +70,7 @@ export async function PublicLessonsHubView({ locale }: { locale: string }) {
       >
         <PublicLessonsPathwaySections locale={locale} region={marketingRegion} />
 
-        <p className="nn-marketing-body-sm text-muted">
+        <p className="nn-marketing-body-sm text-[var(--theme-muted-text)]">
           {t("pages.examLessons.appLessonsLead")}{" "}
           <Link href={loginWithCallback(HUB.examLessons)} className="font-semibold text-primary">
             {t("pages.examLessons.appLessonsLink")}

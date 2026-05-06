@@ -1,19 +1,33 @@
 import type {
   BlogImageStatus,
+  BlogPostIntent,
   BlogPostStatus,
   BlogPostTemplate,
   CountryCode,
   Prisma,
+  PrismaClient,
 } from "@prisma/client";
 import { collectBlogGeneratedDraftQualityIssues } from "@/lib/blog/blog-generated-draft-quality";
 import { BLOG_ARTICLE_MIN_BODY_CHARS } from "@/lib/blog/blog-article-bounds";
 import { generateBlogSEOFromPostRow } from "@/lib/blog/blog-generate-seo";
-import { BLOG_ARTICLE_MIN_WORDS, countWordsFromHtml } from "@/lib/blog/blog-word-count";
+import {
+  BLOG_ARTICLE_MIN_WORDS,
+  BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH,
+  countWordsFromHtml,
+} from "@/lib/blog/blog-word-count";
 import { coerceBlogSourceRows, validateSources } from "@/lib/blog/apa7";
 import { parseInternalLinkPlanJson } from "@/lib/blog/blog-image-workflow";
-import { parseMarketingLessonDetailPath } from "@/lib/blog/blog-internal-link-verify";
-import { prisma } from "@/lib/db";
+import { parseMarketingLessonDetailPath } from "@/lib/blog/blog-marketing-lesson-detail-path";
 import { classifyBlogCorpus, collectClassificationViolations, isPublishBlockedByTaxonomy } from "@/lib/taxonomy/content-write-taxonomy";
+import {
+  blogIntentForQualityGate,
+  collectBlogContentQualityIssues,
+} from "@/lib/blog/blog-content-quality-gate";
+import { validateBlogPublishQuality } from "@/lib/blog/blog-publish-quality-validator";
+import {
+  collectEducationalPlaceholderIds,
+  hasEducationalAiDisclaimerLanguage,
+} from "@/lib/education/educational-content-placeholder-guard";
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -46,7 +60,10 @@ export type PrePublishCheckId =
   | "schema_summary_opportunities"
   | "schema_contract_notes"
   | "faq_content_when_required"
-  | "apa_verification_gating";
+  | "apa_verification_gating"
+  | "blog_content_quality_gate"
+  | "blog_publish_quality_gate"
+  | "educational_stub_language";
 
 export type PrePublishSeverity = "block" | "warn";
 
@@ -94,6 +111,7 @@ export type BlogPostPrePublishRow = {
   countryTarget: CountryCode | null;
   postStatus: BlogPostStatus;
   postTemplate: BlogPostTemplate | null;
+  intent: BlogPostIntent | null;
   targetKeyword: string | null;
   medicalRiskFlags: string[];
 };
@@ -127,6 +145,7 @@ export const blogPrePublishValidationSelect = {
   countryTarget: true,
   postStatus: true,
   postTemplate: true,
+  intent: true,
   targetKeyword: true,
   medicalRiskFlags: true,
 } as const;
@@ -159,6 +178,7 @@ export type PrePublishPatch = {
   imageStatus?: BlogImageStatus;
   countryTarget?: CountryCode | null;
   postTemplate?: BlogPostTemplate | null;
+  intent?: BlogPostIntent | null;
   targetKeyword?: string | null;
   medicalRiskFlags?: string[];
 };
@@ -203,6 +223,7 @@ export function mergeBlogPostForPrePublishPatch(
     countryTarget: patch.countryTarget !== undefined ? patch.countryTarget : current.countryTarget,
     postStatus: current.postStatus,
     postTemplate: patch.postTemplate !== undefined ? patch.postTemplate : current.postTemplate,
+    intent: patch.intent !== undefined ? patch.intent : current.intent,
     targetKeyword: patch.targetKeyword !== undefined ? patch.targetKeyword : current.targetKeyword,
     medicalRiskFlags: patch.medicalRiskFlags !== undefined ? patch.medicalRiskFlags : current.medicalRiskFlags,
   };
@@ -236,6 +257,14 @@ function schemaSummaryParsed(row: BlogPostPrePublishRow): {
   }
 }
 
+export type ValidateBlogPrePublishOptions = {
+  /**
+   * Optional Prisma client for scripts and tooling that cannot import `server-only` `@/lib/db`.
+   * When omitted, the default app singleton is loaded dynamically.
+   */
+  prisma?: PrismaClient;
+};
+
 /**
  * Validates a blog post before publish or schedule. Does not mutate.
  * Slug uniqueness uses `postId` to exclude the current row.
@@ -243,7 +272,9 @@ function schemaSummaryParsed(row: BlogPostPrePublishRow): {
 export async function validateBlogPrePublish(
   row: BlogPostPrePublishRow,
   postId: string,
+  options?: ValidateBlogPrePublishOptions,
 ): Promise<PrePublishValidationResult> {
+  const prismaClient = options?.prisma ?? (await import("@/lib/db")).prisma;
   const issues: PrePublishIssue[] = [];
 
   const autoSeo = generateBlogSEOFromPostRow({
@@ -274,7 +305,7 @@ export async function validateBlogPrePublish(
       fix: "Use lowercase letters, numbers, and hyphens only (e.g. nclex-fluid-balance). Save draft to persist.",
     });
   } else {
-    const clash = await prisma.blogPost.findFirst({
+    const clash = await prismaClient.blogPost.findFirst({
       where: { slug, NOT: { id: postId } },
       select: { id: true },
     });
@@ -366,8 +397,34 @@ export async function validateBlogPrePublish(
     push(issues, {
       id: "body_word_count",
       severity: "block",
-      message: `Article body is too short for publish (${bodyWords} words; minimum ${BLOG_ARTICLE_MIN_WORDS}).`,
+      message: `Article body is too short for publish (${bodyWords} words; hard minimum ${BLOG_ARTICLE_MIN_WORDS}).`,
       fix: "Expand the article body or regenerate with the long-form blog generator until it meets the word minimum.",
+    });
+  } else if (bodyWords < BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH) {
+    push(issues, {
+      id: "body_word_count",
+      severity: "block",
+      message: `Article body is too short for publish (${bodyWords} words; target at least ${BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH} substantive words before going live).`,
+      fix: "Expand thin sections with clinically substantive depth (not filler), or run Repair from the admin blog job queue.",
+    });
+  }
+
+  const stubScanBundle = [title, excerpt, body, metaTitle, metaDesc, row.schemaSummary ?? ""].join("\n");
+  const stubIds = collectEducationalPlaceholderIds(stubScanBundle);
+  if (stubIds.length > 0) {
+    push(issues, {
+      id: "educational_stub_language",
+      severity: "block",
+      message: `Placeholder or stub language detected (${stubIds.slice(0, 10).join(", ")}${stubIds.length > 10 ? " …" : ""}).`,
+      fix: "Remove template stubs, bracket TODOs, lorem ipsum, “content goes here”, and similar authoring markers before publishing.",
+    });
+  }
+  if (hasEducationalAiDisclaimerLanguage(stubScanBundle)) {
+    push(issues, {
+      id: "educational_stub_language",
+      severity: "block",
+      message: "Meta-disclaimer or model-role phrasing detected (e.g. “as an AI…”) — not acceptable in live clinical education copy.",
+      fix: "Rewrite in neutral clinical-educator voice; remove AI self-reference entirely.",
     });
   }
 
@@ -560,6 +617,43 @@ export async function validateBlogPrePublish(
   })) {
     push(issues, {
       id: q.id,
+      severity: q.severity,
+      message: q.message,
+      fix: q.fix,
+    });
+  }
+
+  const pathophysiologyQualityIntent = blogIntentForQualityGate(row.postTemplate, row.intent ?? undefined);
+  for (const q of collectBlogContentQualityIssues({
+    title: row.title,
+    body: row.body,
+    targetKeyword: row.targetKeyword,
+    postTemplate: row.postTemplate,
+    intent: pathophysiologyQualityIntent,
+    faqBlock: row.faqBlock,
+    apaReferences: row.apaReferences,
+    sourcesJson: row.sourcesJson,
+  })) {
+    push(issues, {
+      id: "blog_content_quality_gate",
+      severity: q.severity,
+      message: q.message,
+      fix: q.fix,
+    });
+  }
+
+  for (const q of validateBlogPublishQuality({
+    title: row.title,
+    body: row.body,
+    targetKeyword: row.targetKeyword,
+    category: row.category,
+    tags: row.tags,
+    faqBlock: row.faqBlock,
+    apaReferences: row.apaReferences,
+    sourcesJson: row.sourcesJson,
+  }).issues) {
+    push(issues, {
+      id: "blog_publish_quality_gate",
       severity: q.severity,
       message: q.message,
       fix: q.fix,

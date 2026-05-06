@@ -67,7 +67,7 @@ export function MarketingUtilityFloatingPanel({
 
   return createPortal(
     <div
-      ref={panelRef}
+      ref={panelRef as RefObject<HTMLDivElement>}
       className="pointer-events-auto max-h-[min(70vh,22rem)] overflow-y-auto"
       style={{
         position: "fixed",

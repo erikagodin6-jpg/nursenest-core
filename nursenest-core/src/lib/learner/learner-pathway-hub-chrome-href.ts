@@ -32,6 +32,7 @@ export async function learnerPathwayHubChromeHrefForTierFallback(tier: string): 
     const p = getExamPathwayById("us-np-fnp");
     return p ? learnerPathwayHubChromeHref(p) : "/us/np/fnp";
   }
-  if (t === "ALLIED") return "/us/allied/allied-health";
+  if (t === "ALLIED") return "/allied/allied-health";
+  if (t === "PRE_NURSING") return "/pre-nursing";
   return null;
 }

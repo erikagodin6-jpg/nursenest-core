@@ -48,6 +48,18 @@ export function professionKeyToCareerKey(professionKey: string): AlliedCareerKey
     ota: "ota_pta",
     "pharmacy-tech": "pharmtech",
     "social-work": "socialwork",
+    /** Marketing tracks map onto the closest billed allied career (shared Stripe prices). */
+    "psw-hca": "socialwork",
+    "community-health-worker": "socialwork",
+    "mental-health-addictions": "socialwork",
+    "medical-assistant": "ota_pta",
+    "dental-assistant": "imaging",
+    "dental-hygiene": "imaging",
+    "dietetic-technician": "pharmtech",
+    emt: "paramedic",
+    sonography: "imaging",
+    radiography: "imaging",
+    "lab-assistant": "mlt",
   };
   return map[professionKey.toLowerCase().trim()];
 }
