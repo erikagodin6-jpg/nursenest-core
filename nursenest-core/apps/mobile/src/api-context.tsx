@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useMemo } from "react";
 import {
-  createCatNpApi,
   createFlashcardsApi,
   createMobileApiClient,
+  createNpCatApi,
   createPracticeTestsApi,
 } from "@nursenest/mobile-shared";
 import { usePathway } from "./pathway-context";
@@ -11,7 +11,7 @@ export type ApiBundle = {
   raw: ReturnType<typeof createMobileApiClient>;
   flashcards: ReturnType<typeof createFlashcardsApi>;
   practice: ReturnType<typeof createPracticeTestsApi>;
-  npCat: ReturnType<typeof createCatNpApi>;
+  npCat: ReturnType<typeof createNpCatApi>;
 };
 
 const ApiCtx = createContext<ApiBundle | null>(null);
@@ -31,7 +31,7 @@ export function ApiProvider({ children }: { children: React.ReactNode }) {
       raw,
       flashcards: createFlashcardsApi(raw),
       practice: createPracticeTestsApi(raw),
-      npCat: createCatNpApi(raw),
+      npCat: createNpCatApi(raw),
     };
   }, [pathwayId]);
 

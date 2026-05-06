@@ -1,6 +1,7 @@
 import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { log } from "../lib/logging";
 import { NurseNestColors } from "../lib/theme";
 
 type Props = { readonly children: ReactNode; readonly scope?: string };
@@ -18,9 +19,11 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   override componentDidCatch(error: Error, info: ErrorInfo) {
-    if (__DEV__) {
-      console.warn("[ErrorBoundary]", this.props.scope ?? "root", error.message, info.componentStack);
-    }
+    log.error("react_error_boundary", {
+      scope: this.props.scope ?? "root",
+      message: error.message,
+      componentStack: __DEV__ ? info.componentStack : undefined,
+    });
   }
 
   private reset = () => {
