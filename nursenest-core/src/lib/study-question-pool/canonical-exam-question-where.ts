@@ -1,9 +1,7 @@
-import "server-only";
-
 import type { Prisma } from "@prisma/client";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
-import { NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-pool";
+import { NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/non-ecg-practice-exam-where";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 
 /**

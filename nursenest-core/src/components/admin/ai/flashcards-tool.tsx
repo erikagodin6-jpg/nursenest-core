@@ -14,6 +14,7 @@ export function FlashcardsTool() {
   const [lessonId, setLessonId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [balancing, setBalancing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<string | null>(null);
 
@@ -47,6 +48,30 @@ export function FlashcardsTool() {
       setError("Network error");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function generateMissingFlashcards() {
+    setError(null);
+    setResult(null);
+    setBalancing(true);
+    try {
+      const res = await fetch("/api/admin/generate-flashcards", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ minimumPerCategory: 50 }),
+      });
+      const data = (await res.json().catch(() => ({}))) as Record<string, unknown>;
+      if (!res.ok) {
+        setError(String(data.error ?? res.status));
+        return;
+      }
+      setResult(JSON.stringify(data, null, 2));
+    } catch {
+      setError("Network error");
+    } finally {
+      setBalancing(false);
     }
   }
 
@@ -147,6 +172,21 @@ export function FlashcardsTool() {
       >
         {loading ? "Generating…" : "Generate drafts"}
       </button>
+      <div className="rounded-lg border border-border/60 bg-muted/20 p-4">
+        <p className="text-sm font-semibold">ExamQuestion-derived flashcards</p>
+        <p className="mt-1 text-xs text-muted">
+          Deterministically fills weak flashcard categories from the canonical question bank. Manual cards are never
+          overwritten.
+        </p>
+        <button
+          type="button"
+          className="mt-3 rounded-lg border border-border bg-background px-4 py-2 text-sm font-semibold hover:bg-muted/50 disabled:opacity-50"
+          disabled={balancing}
+          onClick={() => void generateMissingFlashcards()}
+        >
+          {balancing ? "Generating missing flashcards…" : "Generate Missing Flashcards"}
+        </button>
+      </div>
       {error ? <p className="text-sm text-red-600">{error}</p> : null}
       {result ? (
         <textarea readOnly className="h-48 w-full rounded border border-border bg-black/[0.03] p-2 font-mono text-xs" value={result} />
