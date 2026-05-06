@@ -15426,6 +15426,7 @@ export const MARKETING_MESSAGE_KEYS = [
   "pages.home.blogTeaser.title",
   "pages.home.blogTeaser.viewAll",
   "pages.home.canadianFlag",
+  "pages.home.carouselHandoff.fallbackCta",
   "pages.home.carouselHandoff.kicker",
   "pages.home.carouselHandoff.lead",
   "pages.home.differentiation.card0.body",
