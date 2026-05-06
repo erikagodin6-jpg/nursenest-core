@@ -109,3 +109,6 @@ Release / mobile smoke: unchanged (no routes touched).
 - [x] No entitlement bypass.
 - [x] Deterministic fallback reporting preserved by architecture notes.
 - [x] Avoid overcollection — research classes explicit.
+
+**See also:** [Phase 14 governance & autonomous network](./phase-14-governance-autonomous-network.md) — platform governance, autonomous ops intelligence, global infra, interoperability, trust.
+
