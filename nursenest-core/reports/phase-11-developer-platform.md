@@ -142,3 +142,6 @@ Release / mobile smoke: unchanged (no Playwright or route edits in this phase).
 - [x] APIs not coupled to current UI DTOs (contract-level only).
 - [x] Institutional isolation preserved (explicit `institutionKey` + docs).
 - [x] SEO / marketing routes untouched.
+
+**See also:** [Phase 12 platform intelligence](./phase-12-platform-intelligence.md) — observability intelligence, predictive analytics direction, content quality automation, governance.
+
