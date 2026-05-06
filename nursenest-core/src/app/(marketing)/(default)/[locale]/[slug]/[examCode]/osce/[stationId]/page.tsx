@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       }
       const canonicalPath = `${buildExamPathwayPath(pathway, "osce")}/${encodeURIComponent(station.id)}`;
       const title = `${station.title} · OSCE prep · ${pathway.displayName} | NurseNest`;
-      const description = station.description.slice(0, 160);
+      const description = (station.description ?? station.scenarioIntro ?? station.title).slice(0, 160);
       return {
         title,
         description,

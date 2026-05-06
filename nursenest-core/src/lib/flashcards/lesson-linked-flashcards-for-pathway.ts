@@ -115,10 +115,30 @@ async function loadExamRowsByIds(
           },
           take: takeForIdIn(chunk),
         }),
-      [] as BankExamRowForFlashcard[],
+      [] as Array<{
+        id: string;
+        stem: string;
+        options: Prisma.JsonValue | null;
+        correctAnswer: Prisma.JsonValue | null;
+        questionType: string;
+        rationale: string | null;
+        distractorRationales: Prisma.JsonValue | null;
+        incorrectAnswerRationale: Prisma.JsonValue | null;
+        correctAnswerExplanation: string | null;
+      }>,
     );
     for (const r of rows) {
-      out.set(r.id, r as BankExamRowForFlashcard);
+      out.set(r.id, {
+        id: r.id,
+        stem: r.stem,
+        options: r.options,
+        correctAnswer: r.correctAnswer,
+        questionType: r.questionType,
+        rationale: r.rationale,
+        distractorRationales: r.distractorRationales ?? null,
+        incorrectAnswerRationale: r.incorrectAnswerRationale,
+        correctAnswerExplanation: r.correctAnswerExplanation,
+      });
     }
   }
   return out;

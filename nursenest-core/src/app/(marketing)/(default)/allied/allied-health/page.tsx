@@ -43,7 +43,7 @@ export default async function GlobalAlliedHealthHubPage() {
     roleTrack: "allied",
   });
 
-  if (process.env.NODE_ENV !== "production" || process.env.VITEST === "true" || process.env.NODE_ENV === "test") {
+  if (process.env.NODE_ENV !== "production" || process.env.VITEST === "true") {
     safeServerLog("exam_pathway_hub", "allied_hub_route_diagnostic", {
       pathname: ALLIED_GLOBAL_HUB_PATH,
       country: "global",

@@ -621,7 +621,7 @@ export async function buildFlashcardCustomSession(
       }
       safeServerLog("flashcards", "hub_inventory_dev", {
         pathwayId: pathwayScopeId ?? pathwayId ?? "",
-        studyQuestionPool: poolDiag,
+        ...(poolDiag ? { studyQuestionPoolJson: JSON.stringify(poolDiag).slice(0, 1200) } : {}),
         topicRowCount: categoryOptions.length,
         workingCardCount: cardWithCategory.length,
         publishedDbFlashcards: cards.length,

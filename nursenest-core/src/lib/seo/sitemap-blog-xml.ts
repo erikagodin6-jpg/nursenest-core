@@ -37,8 +37,9 @@ export async function listBlogSitemapEntriesSafe(): Promise<SitemapUrlEntry[]> {
     const slug = r.slug?.trim();
     if (!slug) continue;
     const career = r.careerSlug?.trim().toLowerCase() ?? null;
+    const updatedAt = r.updatedAt instanceof Date ? r.updatedAt : new Date(r.updatedAt);
     if (career === "rn") {
-      rnHubLastMod = !rnHubLastMod || r.updatedAt > rnHubLastMod ? r.updatedAt : rnHubLastMod;
+      rnHubLastMod = !rnHubLastMod || updatedAt > rnHubLastMod ? updatedAt : rnHubLastMod;
     }
     const path = expectedCanonicalBlogPath(slug, r.careerSlug);
     const loc = `${origin}${path}`;
@@ -46,7 +47,7 @@ export async function listBlogSitemapEntriesSafe(): Promise<SitemapUrlEntry[]> {
     seenLoc.add(loc);
     entries.push({
       loc,
-      lastmod: r.updatedAt.toISOString(),
+      lastmod: updatedAt.toISOString(),
     });
   }
   const rnHub = `${origin}/blog/rn`;

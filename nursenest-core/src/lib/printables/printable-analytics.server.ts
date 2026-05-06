@@ -49,7 +49,7 @@ export async function getPrintableProductAnalytics(productId: string) {
 }
 
 export async function getPrintableAnalyticsSummary(where?: Prisma.PrintableDownloadEventWhereInput) {
-  const [total, uniqueUserGroups, byProduct, byPathway, bySource] = await Promise.all([
+  const [total, uniqueUserGroups, byProductRaw, byPathwayRaw, bySource] = await Promise.all([
     prisma.printableDownloadEvent.count({ where }),
     prisma.printableDownloadEvent.groupBy({
       by: ["userId"],
@@ -60,15 +60,11 @@ export async function getPrintableAnalyticsSummary(where?: Prisma.PrintableDownl
       by: ["printableProductId"],
       where,
       _count: { _all: true },
-      orderBy: { _count: { _all: "desc" } },
-      take: 40,
     }),
     prisma.printableDownloadEvent.groupBy({
       by: ["pathwayId"],
       where,
       _count: { _all: true },
-      orderBy: { _count: { _all: "desc" } },
-      take: 40,
     }),
     prisma.printableDownloadEvent.groupBy({
       by: ["source"],
@@ -76,6 +72,8 @@ export async function getPrintableAnalyticsSummary(where?: Prisma.PrintableDownl
       _count: { _all: true },
     }),
   ]);
+  const byProduct = [...byProductRaw].sort((a, b) => (b._count?._all ?? 0) - (a._count?._all ?? 0)).slice(0, 40);
+  const byPathway = [...byPathwayRaw].sort((a, b) => (b._count?._all ?? 0) - (a._count?._all ?? 0)).slice(0, 40);
 
   const productTitles =
     byProduct.length > 0
@@ -115,13 +113,13 @@ export async function getPrintableAnalyticsSummary(where?: Prisma.PrintableDownl
     })),
     mostDownloaded: byProduct.map((r) => ({
       printableProductId: r.printableProductId,
-      downloads: r._count._all,
+      downloads: r._count?._all ?? 0,
       title: titleById.get(r.printableProductId)?.title ?? null,
       slug: titleById.get(r.printableProductId)?.slug ?? null,
     })),
     downloadsByPathway: byPathway.map((r) => ({
       pathwayId: r.pathwayId,
-      downloads: r._count._all,
+      downloads: r._count?._all ?? 0,
     })),
     downloadsBySource: Object.fromEntries(bySource.map((r) => [r.source, r._count._all])) as Record<
       string,

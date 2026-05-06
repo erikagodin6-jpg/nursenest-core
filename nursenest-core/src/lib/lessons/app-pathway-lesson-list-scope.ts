@@ -94,6 +94,9 @@ export async function pathwayLessonsAppListWhereWithTopicFilter(
   }
 
   if (applyAlliedScope) {
+    if (!scopedPathwayId) {
+      return mergeAndWhere(base, [{ id: { in: [] } }]);
+    }
     const owned = exclusiveTopicSlugsForAlliedProfession(scopedPathwayId, allied);
     if (owned.length === 0) {
       return mergeAndWhere(base, [{ id: { in: [] } }]);

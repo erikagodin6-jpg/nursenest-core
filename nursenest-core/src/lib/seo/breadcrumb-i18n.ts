@@ -46,6 +46,14 @@ function localizeBreadcrumbLabel(
   return localized || structuralName.trim();
 }
 
+function stripUndefinedBreadcrumbParams(
+  params: Record<string, string | number | undefined> | undefined,
+): Record<string, string | number> | undefined {
+  if (!params) return undefined;
+  const entries = Object.entries(params).filter((entry): entry is [string, string | number] => entry[1] !== undefined);
+  return entries.length ? Object.fromEntries(entries) : undefined;
+}
+
 export function localizeBreadcrumbCrumbs(
   crumbs: BreadcrumbCrumb[],
   primary: MarketingMessages,
@@ -54,7 +62,14 @@ export function localizeBreadcrumbCrumbs(
 ): BreadcrumbCrumb[] {
   return crumbs.map((c) => {
     if (!c.i18nKey) return { name: c.name, href: c.href };
-    const name = localizeBreadcrumbLabel(locale ?? null, c.i18nKey, c.name, primary, fallback, c.i18nParams);
+    const name = localizeBreadcrumbLabel(
+      locale ?? null,
+      c.i18nKey,
+      c.name,
+      primary,
+      fallback,
+      stripUndefinedBreadcrumbParams(c.i18nParams),
+    );
     if (!name && process.env.NODE_ENV !== "production") {
       throw new Error(`[breadcrumb-i18n] empty crumb label for key "${c.i18nKey}" (no structural name fallback).`);
     }
@@ -73,7 +88,14 @@ export function localizeBreadcrumbSchemaItems(
 ): BreadcrumbSchemaItem[] {
   return items.map((s) => {
     if (!s.i18nKey) return { name: s.name, item: s.item };
-    const name = localizeBreadcrumbLabel(locale ?? null, s.i18nKey, s.name, primary, fallback, s.i18nParams);
+    const name = localizeBreadcrumbLabel(
+      locale ?? null,
+      s.i18nKey,
+      s.name,
+      primary,
+      fallback,
+      stripUndefinedBreadcrumbParams(s.i18nParams),
+    );
     if (!name && process.env.NODE_ENV !== "production") {
       throw new Error(`[breadcrumb-i18n] empty schema item name for key "${s.i18nKey}" (no structural name fallback).`);
     }

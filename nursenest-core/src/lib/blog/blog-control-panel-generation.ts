@@ -279,7 +279,7 @@ async function completeControlPanelPlanFromModel(
     const hints = jsonParse.warnings.join(" | ").slice(0, 800);
     safeServerLog("blog-editorial-plan-json", "editorial_plan_parse_failed", {
       error: jsonParse.error,
-      warnings: jsonParse.warnings,
+      warnings: hints,
       preview: res.content.slice(0, 900),
     });
     throw new BlogControlPanelPlanError(

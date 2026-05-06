@@ -23,7 +23,9 @@ export function OsceStationDetailBody({ station }: { station: OSCESkillStation }
           {station.category} · {station.difficulty}
           {station.timeLimit ? ` · ${station.timeLimit}` : ""}
         </p>
-        <p className="text-sm leading-relaxed text-[var(--semantic-text-primary)]">{station.description}</p>
+        {station.description ? (
+          <p className="text-sm leading-relaxed text-[var(--semantic-text-primary)]">{station.description}</p>
+        ) : null}
       </header>
 
       <section className="space-y-2">
@@ -105,7 +107,7 @@ export function OsceStationDetailBody({ station }: { station: OSCESkillStation }
         <section className="space-y-4">
           <h2 className="text-lg font-semibold text-[var(--semantic-text-primary)]">Examiner questions</h2>
           {station.examinerQuestions.map((q, i) => (
-            <ScenarioRationalePanel key={i} title={q.question} body={q.answer} />
+            <ScenarioRationalePanel key={i} title={q.question} body={q.expectedAnswer ?? q.rationale ?? ""} />
           ))}
         </section>
       ) : null}
