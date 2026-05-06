@@ -96,3 +96,6 @@ Location: `src/lib/platform/phase10/`
 | `src/lib/rbac/institutional-capabilities.ts` | Staff capability matrix (already Phase-10-aligned) |
 | `src/lib/entitlements/get-user-access.ts` | Source of truth for paid access |
 | `src/lib/adaptive-learning/` | Recommendation engine boundaries |
+
+**See also:** [Phase 11 developer platform](./phase-11-developer-platform.md) — public API strategy, gateway auth, observability.
+
