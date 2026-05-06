@@ -1319,7 +1319,7 @@ async function getLessonsForTopicPageImpl(
           where: { pathwayId, status: ContentStatus.PUBLISHED, topicSlug, locale: effective },
           orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
           take: 200,
-          select: { ...PATHWAY_LESSON_HUB_LIST_SELECT, sections: true },
+          select: PATHWAY_LESSON_HUB_LIST_SELECT_WITH_SECTIONS,
         }),
       [],
     );
@@ -2430,6 +2430,34 @@ export async function listPathwayLessonSlugBatch(
       pathwayLessonRuntimeSource: dbHas ? "database" : catN > 0 ? "catalog" : "none",
       restrictToPublicMarketingSurface: surfaceOnly,
     });
+  }
+
+  /** Sitemap URLs only need slug/topicSlug; when SQL already enforces `structuralPublicComplete`, skip sections JSON + normalize. */
+  const sitemapDbSlugOnly =
+    surfaceOnly &&
+    typeof publicSurfaceStructuralWhere === "object" &&
+    publicSurfaceStructuralWhere !== null &&
+    "structuralPublicComplete" in publicSurfaceStructuralWhere &&
+    (publicSurfaceStructuralWhere as { structuralPublicComplete?: boolean }).structuralPublicComplete === true;
+
+  if (dbHas && sitemapDbSlugOnly) {
+    const rows = await dbCall(
+      () =>
+        prisma.pathwayLesson.findMany({
+          where: {
+            pathwayId,
+            status: ContentStatus.PUBLISHED,
+            locale: loc,
+            ...publicSurfaceStructuralWhere,
+          },
+          select: { slug: true, topicSlug: true },
+          orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
+          skip: sk,
+          take,
+        }),
+      [],
+    );
+    return rows.map((r) => ({ slug: r.slug, topicSlug: r.topicSlug }));
   }
 
   const lessonDbOverlays = await fetchPublishedLessonOverlaysForMarketingLocale(loc);
