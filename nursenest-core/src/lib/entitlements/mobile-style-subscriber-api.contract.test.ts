@@ -66,7 +66,7 @@ describe("mobile-style subscriber API (contract)", () => {
   });
 
   describe("GET /api/learner/command-center", () => {
-    it("returns 401 unauthorized when auth resolves no session (Cookie alone does not bypass gate)", async () => {
+    it("returns 401 unauthorized when auth resolves no session (anonymous / signed-out; cookie jar alone does not bypass gate)", async () => {
       wireSubscriberDeps();
       mock.method(requireSubscriberSessionDeps, "auth", async () => null);
 

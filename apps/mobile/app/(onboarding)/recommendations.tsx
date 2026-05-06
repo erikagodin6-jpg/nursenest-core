@@ -3,15 +3,20 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useMemo } from "react";
 import { Alert, Pressable, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import * as SecureStore from "expo-secure-store";
 import { apiJson, apiPatchJson, ApiError } from "../../lib/api";
+import { HIT_TARGET_MIN, useLearnerHorizontalPadding } from "../../lib/layout";
 import { useAuth } from "../../lib/auth-context";
 import { usePathwayStore } from "../../lib/pathway-store";
 import { secureKeys } from "../../lib/secure-keys";
+import { useAppTheme } from "../../lib/theme-provider";
 
 export default function RecommendationsScreen() {
   const router = useRouter();
   const qc = useQueryClient();
+  const { palette } = useAppTheme();
+  const horizontalPad = useLearnerHorizontalPadding();
   const { origin, cookieJar, signOut } = useAuth();
   const pathwayId = usePathwayStore((s) => s.pathwayId);
 
@@ -39,7 +44,9 @@ export default function RecommendationsScreen() {
     }
     const data = commandCenter.data as { studyNext?: { primary?: { title?: string } } } | null;
     const title = data?.studyNext?.primary?.title;
-    return title ? `Next up: ${title}` : "Open the web app for your full study hub — mobile picks will deepen as we wire more surfaces.";
+    return title
+      ? `Next up: ${title}`
+      : "Open the web app for your full study hub — mobile picks will deepen as we wire more surfaces.";
   }, [commandCenter.data, commandCenter.error, commandCenter.isLoading]);
 
   async function finish() {
@@ -58,20 +65,34 @@ export default function RecommendationsScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>First-study recommendations</Text>
-      <Text style={styles.body}>{headline}</Text>
-      <Pressable style={styles.button} onPress={() => void finish()}>
-        <Text style={styles.buttonLabel}>Go to home</Text>
-      </Pressable>
-    </View>
+    <SafeAreaView style={[styles.flex, { backgroundColor: palette.semanticBgBase }]} edges={["top", "left", "right"]}>
+      <View style={[styles.container, { paddingHorizontal: horizontalPad }]}>
+        <Text style={[styles.title, { color: palette.semanticTextPrimary }]} allowFontScaling>
+          First-study recommendations
+        </Text>
+        <Text style={[styles.body, { color: palette.semanticTextSecondary }]} allowFontScaling>
+          {headline}
+        </Text>
+        <Pressable
+          style={[styles.button, { backgroundColor: palette.semanticBrand, minHeight: HIT_TARGET_MIN }]}
+          onPress={() => void finish()}
+          accessibilityRole="button"
+          accessibilityLabel="Go to home tab"
+        >
+          <Text style={[styles.buttonLabel, { color: palette.semanticOnBrand }]} allowFontScaling>
+            Go to home
+          </Text>
+        </Pressable>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, gap: 12, justifyContent: "center" },
+  flex: { flex: 1 },
+  container: { flex: 1, paddingVertical: 20, gap: 12, justifyContent: "center" },
   title: { fontSize: 22, fontWeight: "700" },
-  body: { fontSize: 16, opacity: 0.9 },
-  button: { backgroundColor: "#1d4ed8", padding: 14, borderRadius: 8, alignItems: "center", marginTop: 12 },
-  buttonLabel: { color: "#fff", fontWeight: "600", fontSize: 16 },
+  body: { fontSize: 16, lineHeight: 24 },
+  button: { padding: 14, borderRadius: 10, alignItems: "center", justifyContent: "center", marginTop: 12 },
+  buttonLabel: { fontWeight: "600", fontSize: 16 },
 });
