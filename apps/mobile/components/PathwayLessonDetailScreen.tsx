@@ -24,6 +24,7 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "../lib/auth-context";
 import { useAppTheme } from "../lib/theme-provider";
 import type { NurseNestPalette } from "../lib/theme";
@@ -145,6 +146,8 @@ const LessonRelatedBlock = memo(function LessonRelatedBlock({
           key={r.slug}
           onPress={() => onSelect(r.slug)}
           style={{ minHeight: 44, justifyContent: "center" }}
+          accessibilityRole="button"
+          accessibilityLabel={`Related lesson, ${r.title}`}
         >
           <Text style={{ color: palette.semanticBrand, fontWeight: "600" }} allowFontScaling numberOfLines={2}>
             {r.title}
@@ -166,6 +169,7 @@ export function PathwayLessonDetailScreen() {
 
   const { origin, cookieJar } = useAuth();
   const { palette } = useAppTheme();
+  const insets = useSafeAreaInsets();
   const router = useRouter();
   const queryClient = useQueryClient();
   const lastPersistedScrollY = useRef(-1);
@@ -314,7 +318,7 @@ export function PathwayLessonDetailScreen() {
       <Stack.Screen options={{ title: data?.record?.title ?? "Lesson" }} />
       <ScrollView
         style={{ flex: 1, backgroundColor: palette.semanticBgBase }}
-        contentContainerStyle={styles.scroll}
+        contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + 32 }]}
         onScroll={({ nativeEvent }) => {
           const y = Math.round(nativeEvent.contentOffset.y);
           onScrollPersist(y);
@@ -361,7 +365,12 @@ export function PathwayLessonDetailScreen() {
                   : errMsg || "Something went wrong."}
             </Text>
             {retryable ? (
-              <Pressable onPress={() => void detailQuery.refetch()} style={{ marginTop: 12, minHeight: 44, justifyContent: "center" }}>
+              <Pressable
+                onPress={() => void detailQuery.refetch()}
+                style={{ marginTop: 12, minHeight: 44, justifyContent: "center" }}
+                accessibilityRole="button"
+                accessibilityLabel="Try loading lesson again"
+              >
                 <Text style={{ color: palette.semanticBrand, fontWeight: "700" }} allowFontScaling>
                   Try again
                 </Text>
@@ -425,7 +434,12 @@ export function PathwayLessonDetailScreen() {
           </>
         ) : null}
 
-        <Pressable onPress={() => router.back()} style={styles.backBtn}>
+        <Pressable
+          onPress={() => router.back()}
+          style={styles.backBtn}
+          accessibilityRole="button"
+          accessibilityLabel="Go back"
+        >
           <Text style={{ color: palette.semanticBrand, fontWeight: "700", fontSize: 16 }} allowFontScaling>
             Back
           </Text>
@@ -437,7 +451,7 @@ export function PathwayLessonDetailScreen() {
 
 const styles = StyleSheet.create({
   center: { flex: 1, padding: 24, justifyContent: "center" },
-  scroll: { padding: 12, paddingBottom: 40, gap: 12 },
+  scroll: { padding: 12, gap: 12 },
   title: { fontSize: 24, fontWeight: "800" },
   examLine: { fontSize: 13, fontWeight: "600" },
   sub: { fontSize: 14 },

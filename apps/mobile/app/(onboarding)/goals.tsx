@@ -1,11 +1,25 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import * as SecureStore from "expo-secure-store";
+import { HIT_TARGET_MIN, useLearnerHorizontalPadding } from "../../lib/layout";
 import { secureKeys } from "../../lib/secure-keys";
+import { useAppTheme } from "../../lib/theme-provider";
 
 export default function GoalsScreen() {
   const router = useRouter();
+  const { palette } = useAppTheme();
+  const horizontalPad = useLearnerHorizontalPadding();
+  const insets = useSafeAreaInsets();
   const [goal, setGoal] = useState("");
 
   async function next() {
@@ -14,35 +28,64 @@ export default function GoalsScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Study goal</Text>
-      <Text style={styles.sub}>Optional — stored locally for now; can sync to your profile in the next step.</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="e.g. Pass NCLEX in 90 days"
-        value={goal}
-        onChangeText={setGoal}
-        multiline
-      />
-      <Pressable style={styles.button} onPress={() => void next()}>
-        <Text style={styles.buttonLabel}>Next</Text>
-      </Pressable>
-    </View>
+    <SafeAreaView style={[styles.flex, { backgroundColor: palette.semanticBgBase }]} edges={["top", "left", "right"]}>
+      <KeyboardAvoidingView
+        style={styles.flex}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={Platform.OS === "ios" ? insets.top + 8 : 0}
+      >
+        <View style={[styles.container, { paddingHorizontal: horizontalPad, paddingBottom: insets.bottom + 16 }]}>
+          <Text style={[styles.title, { color: palette.semanticTextPrimary }]} allowFontScaling>
+            Study goal
+          </Text>
+          <Text style={[styles.sub, { color: palette.semanticTextSecondary }]} allowFontScaling>
+            Optional — stored locally for now; can sync to your profile in the next step.
+          </Text>
+          <TextInput
+            style={[
+              styles.input,
+              {
+                color: palette.semanticTextPrimary,
+                borderColor: palette.semanticBorderSoft,
+                backgroundColor: palette.semanticSurfaceElevated,
+              },
+            ]}
+            placeholder="e.g. Pass NCLEX in 90 days"
+            placeholderTextColor={palette.semanticTextMuted}
+            value={goal}
+            onChangeText={setGoal}
+            multiline
+            textAlignVertical="top"
+            accessibilityLabel="Study goal"
+          />
+          <Pressable
+            style={[styles.button, { backgroundColor: palette.semanticBrand, minHeight: HIT_TARGET_MIN }]}
+            onPress={() => void next()}
+            accessibilityRole="button"
+            accessibilityLabel="Next onboarding step"
+          >
+            <Text style={[styles.buttonLabel, { color: palette.semanticOnBrand }]} allowFontScaling>
+              Next
+            </Text>
+          </Pressable>
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, gap: 12 },
+  flex: { flex: 1 },
+  container: { flex: 1, paddingTop: 20, gap: 12 },
   title: { fontSize: 22, fontWeight: "700" },
-  sub: { opacity: 0.8 },
+  sub: { lineHeight: 22 },
   input: {
     minHeight: 100,
-    borderWidth: 1,
-    borderRadius: 8,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 10,
     padding: 12,
     fontSize: 16,
-    textAlignVertical: "top",
   },
-  button: { backgroundColor: "#1d4ed8", padding: 14, borderRadius: 8, alignItems: "center" },
-  buttonLabel: { color: "#fff", fontWeight: "600", fontSize: 16 },
+  button: { padding: 14, borderRadius: 10, alignItems: "center", justifyContent: "center" },
+  buttonLabel: { fontWeight: "600", fontSize: 16 },
 });

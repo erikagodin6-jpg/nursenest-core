@@ -17,6 +17,8 @@ export const NurseNestColors = {
   semanticWarning: "#d97706",
   semanticDanger: "#e11d48",
   semanticInfo: "#76b6c4",
+  /** High-contrast label on `semanticBrand` fills (primary buttons). */
+  semanticOnBrand: "#ffffff",
 } as const;
 
 export const NurseNestDarkColors = {
@@ -34,6 +36,7 @@ export const NurseNestDarkColors = {
   semanticWarning: "#fbbf24",
   semanticDanger: "#fb7185",
   semanticInfo: "#7dd3fc",
+  semanticOnBrand: "#ffffff",
 } as const;
 
 export type NurseNestPalette = typeof NurseNestColors;

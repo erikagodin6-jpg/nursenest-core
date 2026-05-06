@@ -1,10 +1,11 @@
 import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { NurseNestColors } from "../lib/theme";
+import { useAppTheme } from "../lib/theme-provider";
 
 export function LoadingFallback() {
+  const { palette } = useAppTheme();
   return (
-    <View style={styles.wrap}>
-      <ActivityIndicator size="large" color={NurseNestColors.semanticBrand} />
+    <View style={[styles.wrap, { backgroundColor: palette.semanticBgBase }]}>
+      <ActivityIndicator size="large" color={palette.semanticBrand} accessibilityLabel="Loading" />
     </View>
   );
 }
@@ -15,6 +16,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 24,
-    backgroundColor: NurseNestColors.semanticBgBase,
   },
 });

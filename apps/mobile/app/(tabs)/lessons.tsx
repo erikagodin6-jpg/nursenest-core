@@ -30,8 +30,10 @@ import {
   Text,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import type { NurseNestPalette } from "../../lib/theme";
 import { LoadingFallback } from "../../components/LoadingFallback";
+import { HIT_TARGET_MIN, useLearnerHorizontalPadding } from "../../lib/layout";
 import { emitEngagementEvent } from "../../hooks/useAnalytics";
 import { useAuth } from "../../lib/auth-context";
 import { usePathwayStore } from "../../lib/pathway-store";
@@ -64,6 +66,8 @@ const LessonListRow = memo(function LessonListRow({ item, pill, palette, onPress
   return (
     <Pressable
       onPress={() => void onPressLesson(item)}
+      accessibilityRole="button"
+      accessibilityLabel={`Lesson, ${item.title}`}
       style={({ pressed }) => [
         styles.card,
         {
@@ -99,6 +103,7 @@ const LessonListRow = memo(function LessonListRow({ item, pill, palette, onPress
 
 function LessonsHubInner() {
   const { palette } = useAppTheme();
+  const horizontalPad = useLearnerHorizontalPadding();
   const { origin, cookieJar, session } = useAuth();
   const client = useMobileApiClient();
   const router = useRouter();
@@ -186,32 +191,45 @@ function LessonsHubInner() {
 
   if (!origin || !cookieJar) {
     return (
-      <View style={[styles.center, { backgroundColor: palette.semanticBgBase }]}>
-        <Text style={{ color: palette.semanticTextSecondary }}>Sign in and set web origin to load lessons.</Text>
-      </View>
+      <SafeAreaView style={[styles.center, { backgroundColor: palette.semanticBgBase }]} edges={["top", "left", "right"]}>
+        <Text style={{ color: palette.semanticTextSecondary }} allowFontScaling>
+          Sign in and set web origin to load lessons.
+        </Text>
+      </SafeAreaView>
     );
   }
 
   if (!session?.user?.id) {
     return (
-      <View style={[styles.center, { backgroundColor: palette.semanticBgBase }]}>
-        <Text style={{ color: palette.semanticTextSecondary }}>Session required.</Text>
-      </View>
+      <SafeAreaView style={[styles.center, { backgroundColor: palette.semanticBgBase }]} edges={["top", "left", "right"]}>
+        <Text style={{ color: palette.semanticTextSecondary }} allowFontScaling>
+          Session required.
+        </Text>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={[styles.root, { backgroundColor: palette.semanticBgBase }]}>
-      <Text style={[styles.title, { color: palette.semanticTextPrimary }]} allowFontScaling>
-        Lessons
-      </Text>
-      <Text style={[styles.pathwayLine, { color: palette.semanticTextMuted }]} allowFontScaling numberOfLines={2}>
-        Pathway: {pathwayId}
-      </Text>
+    <SafeAreaView style={[styles.root, { backgroundColor: palette.semanticBgBase }]} edges={["top", "left", "right"]}>
+      <View style={{ paddingHorizontal: horizontalPad }}>
+        <Text style={[styles.title, { color: palette.semanticTextPrimary }]} allowFontScaling>
+          Lessons
+        </Text>
+        <Text style={[styles.pathwayLine, { color: palette.semanticTextMuted }]} allowFontScaling numberOfLines={2}>
+          Pathway: {pathwayId}
+        </Text>
+      </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.topicStrip}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={[styles.topicStrip, { paddingHorizontal: horizontalPad }]}
+      >
         <Pressable
           onPress={() => setTopicSlug(null)}
+          accessibilityRole="button"
+          accessibilityState={{ selected: topicSlug == null }}
+          accessibilityLabel="Filter lessons, all topics"
           style={({ pressed }) => [
             styles.topicChip,
             {
@@ -229,6 +247,9 @@ function LessonsHubInner() {
           <Pressable
             key={t.topicSlug}
             onPress={() => setTopicSlug(t.topicSlug === topicSlug ? null : t.topicSlug)}
+            accessibilityRole="button"
+            accessibilityState={{ selected: topicSlug === t.topicSlug }}
+            accessibilityLabel={`Filter topic, ${t.label}`}
             style={({ pressed }) => [
               styles.topicChip,
               {
@@ -247,37 +268,54 @@ function LessonsHubInner() {
       </ScrollView>
 
       {topicsQuery.isLoading ? (
-        <View style={styles.skeletonRow}>
+        <View style={[styles.skeletonRow, { paddingHorizontal: horizontalPad }]}>
           <View style={[styles.skel, { backgroundColor: palette.semanticBorderSoft }]} />
           <View style={[styles.skel, { backgroundColor: palette.semanticBorderSoft }]} />
         </View>
       ) : null}
 
       {topicsQuery.isError ? (
-        <View style={styles.inlineError}>
+        <View style={[styles.inlineError, { paddingHorizontal: horizontalPad }]}>
           <Text style={{ color: palette.semanticDanger, flex: 1 }} allowFontScaling>
             {(topicsQuery.error as Error)?.message ?? "Topics unavailable."}
           </Text>
           <Pressable
             onPress={() => void topicsQuery.refetch()}
-            style={({ pressed }) => [styles.retryBtn, { opacity: pressed ? 0.75 : 1 }]}
+            accessibilityRole="button"
+            accessibilityLabel="Retry loading topics"
+            style={({ pressed }) => [styles.retryBtn, { opacity: pressed ? 0.75 : 1, minHeight: HIT_TARGET_MIN, justifyContent: "center" }]}
           >
-            <Text style={{ color: palette.semanticBrand, fontWeight: "700" }}>Retry</Text>
+            <Text style={{ color: palette.semanticBrand, fontWeight: "700" }} allowFontScaling>
+              Retry
+            </Text>
           </Pressable>
         </View>
       ) : null}
 
       {listQuery.isError ? (
-        <View style={[styles.listErrorBox, { borderColor: palette.semanticBorderSoft, backgroundColor: palette.semanticSurfaceElevated }]}>
+        <View
+          style={[
+            styles.listErrorBox,
+            {
+              borderColor: palette.semanticBorderSoft,
+              backgroundColor: palette.semanticSurfaceElevated,
+              marginHorizontal: horizontalPad,
+            },
+          ]}
+        >
           <Text style={{ color: listLocked ? palette.semanticTextSecondary : palette.semanticDanger }} allowFontScaling>
             {listLocked ? neutralLessonLockedBodyForSurface("list") : listErrorMessage || "Could not load lessons."}
           </Text>
           {listRetryable ? (
             <Pressable
               onPress={() => void listQuery.refetch()}
-              style={({ pressed }) => [styles.retryBtnWide, { opacity: pressed ? 0.85 : 1 }]}
+              accessibilityRole="button"
+              accessibilityLabel="Try loading lessons again"
+              style={({ pressed }) => [styles.retryBtnWide, { opacity: pressed ? 0.85 : 1, minHeight: HIT_TARGET_MIN, justifyContent: "center" }]}
             >
-              <Text style={{ color: palette.semanticBrand, fontWeight: "700" }}>Try again</Text>
+              <Text style={{ color: palette.semanticBrand, fontWeight: "700" }} allowFontScaling>
+                Try again
+              </Text>
             </Pressable>
           ) : null}
         </View>
@@ -286,8 +324,11 @@ function LessonsHubInner() {
       <FlatList
         data={flatRows}
         keyExtractor={keyExtractor}
-        contentContainerStyle={styles.listPad}
+        contentContainerStyle={[styles.listPad, { paddingHorizontal: horizontalPad }]}
         windowSize={7}
+        initialNumToRender={8}
+        maxToRenderPerBatch={8}
+        updateCellsBatchingPeriod={50}
         removeClippedSubviews
         refreshControl={
           <RefreshControl
@@ -320,7 +361,7 @@ function LessonsHubInner() {
         }
         renderItem={renderItem}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -333,16 +374,16 @@ export default function LessonsTab() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, paddingTop: 8 },
+  root: { flex: 1, paddingTop: 4 },
   center: { flex: 1, alignItems: "center", justifyContent: "center", padding: 20 },
-  title: { fontSize: 22, fontWeight: "700", paddingHorizontal: 12, marginBottom: 4 },
-  pathwayLine: { fontSize: 12, paddingHorizontal: 12, marginBottom: 8 },
-  topicStrip: { paddingHorizontal: 10, gap: 8, paddingBottom: 8, alignItems: "center" },
+  title: { fontSize: 22, fontWeight: "700", marginBottom: 4 },
+  pathwayLine: { fontSize: 12, marginBottom: 8 },
+  topicStrip: { gap: 8, paddingBottom: 8, alignItems: "center" },
   topicChip: {
     borderRadius: 999,
     borderWidth: StyleSheet.hairlineWidth,
     paddingHorizontal: 14,
-    minHeight: 44,
+    minHeight: HIT_TARGET_MIN,
     justifyContent: "center",
   },
   topicChipText: { fontSize: 14, fontWeight: "600", maxWidth: 200 },
@@ -359,11 +400,11 @@ const styles = StyleSheet.create({
   pillText: { fontSize: 11, fontWeight: "700" },
   cardSum: { fontSize: 14, lineHeight: 20 },
   meta: { fontSize: 12 },
-  skeletonRow: { flexDirection: "row", gap: 8, paddingHorizontal: 12, marginBottom: 6 },
+  skeletonRow: { flexDirection: "row", gap: 8, marginBottom: 6 },
   skel: { height: 12, flex: 1, borderRadius: 6, opacity: 0.5 },
   cardSkel: { height: 88, borderRadius: 12, opacity: 0.35 },
-  inlineError: { flexDirection: "row", alignItems: "center", gap: 10, paddingHorizontal: 12, marginBottom: 8 },
+  inlineError: { flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 8 },
   retryBtn: { paddingVertical: 8, paddingHorizontal: 10 },
-  listErrorBox: { marginHorizontal: 10, marginBottom: 8, padding: 12, borderRadius: 12, borderWidth: StyleSheet.hairlineWidth, gap: 10 },
+  listErrorBox: { marginBottom: 8, padding: 12, borderRadius: 12, borderWidth: StyleSheet.hairlineWidth, gap: 10 },
   retryBtnWide: { alignSelf: "flex-start", paddingVertical: 10, paddingHorizontal: 4 },
 });

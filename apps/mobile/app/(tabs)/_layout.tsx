@@ -11,6 +11,7 @@ export default function TabsLayout() {
         headerTintColor: palette.semanticTextPrimary,
         tabBarActiveTintColor: palette.semanticBrand,
         tabBarInactiveTintColor: palette.semanticTextMuted,
+        tabBarHideOnKeyboard: true,
         tabBarStyle: { backgroundColor: palette.semanticSurfaceElevated, borderTopColor: palette.semanticBorderSoft },
       }}
     >
