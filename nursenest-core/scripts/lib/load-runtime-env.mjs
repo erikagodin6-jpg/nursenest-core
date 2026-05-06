@@ -131,7 +131,7 @@ export function loadRuntimeEnv(options = {}) {
   let directTarget = null;
   if (validate) {
     databaseTarget = maskedPostgresTarget(databaseUrl, "DATABASE_URL");
-    directTarget = maskedPostgresTarget(directUrl, "DIRECT_URL");
+    if (isTruthyString(directUrl)) directTarget = maskedPostgresTarget(directUrl, "DIRECT_URL");
   } else {
     if (isTruthyString(databaseUrl)) databaseTarget = maskedPostgresTarget(databaseUrl, "DATABASE_URL");
     if (isTruthyString(directUrl)) directTarget = maskedPostgresTarget(directUrl, "DIRECT_URL");

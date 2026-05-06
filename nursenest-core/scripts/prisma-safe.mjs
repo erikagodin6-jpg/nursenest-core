@@ -75,6 +75,9 @@ export function loadPrismaSafeEnvForCommand(
     requireDatabaseUrl: !buildSafeGenerate,
     prefix: `[prisma-safe:${command}:env]`,
   });
+  if (!env.DIRECT_URL?.trim() && env.DATABASE_URL?.trim()) {
+    env.DIRECT_URL = env.DATABASE_URL;
+  }
   const telemetry = loadRuntimeEnv({
     purpose: `prisma-safe:${command}`,
     validate: !buildSafeGenerate,
