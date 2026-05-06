@@ -80,6 +80,32 @@ describe("require-database-env", () => {
     }
   });
 
+  it("requireDatabaseEnv throws when DATABASE_URL is not a PostgreSQL URL", () => {
+    const snap = snapshotEnv();
+    try {
+      process.env.DATABASE_URL = "mysql://user:pass@localhost:3306/db";
+      delete process.env.NN_SKIP_DATABASE_ENV_CONTRACT;
+      assert.throws(() => requireDatabaseEnv({ context: "test" }), /postgresql:\/\//);
+    } finally {
+      restoreEnv(snap);
+    }
+  });
+
+  it("requireDatabaseEnv throws when DATABASE_URL is malformed", () => {
+    const snap = snapshotEnv();
+    try {
+      process.env.DATABASE_URL = "not-a-url";
+      delete process.env.NN_SKIP_DATABASE_ENV_CONTRACT;
+      assert.throws(
+        () => requireDatabaseEnv({ context: "test" }),
+        (err: unknown) =>
+          /parseable PostgreSQL|postgresql:\/\//.test(err instanceof Error ? err.message : String(err)),
+      );
+    } finally {
+      restoreEnv(snap);
+    }
+  });
+
   it("maskDatabaseUrlHostForLog does not include password", () => {
     const u = "postgresql://secretuser:secretpass@db.prod.example.com:25061/mydb?sslmode=require";
     const { host, port } = maskDatabaseUrlHostForLog(u);

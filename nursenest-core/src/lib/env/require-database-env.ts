@@ -101,6 +101,28 @@ export function isProductionLikeDatabaseHost(urlString: string): boolean {
 }
 
 /** Masks middle labels; keeps port for ops correlation without exposing user/password. */
+/**
+ * Ensures `DATABASE_URL` parses as PostgreSQL (`postgres:` / `postgresql:`) with a hostname.
+ * Does not log the URL. Keep aligned with `scripts/runtime-env-guard-bootstrap.mjs`.
+ */
+export function assertPostgresConnectionStringShape(urlString: string): void {
+  const trimmed = urlString.trim();
+  const lowered = trimmed.toLowerCase();
+  if (!lowered.startsWith("postgresql:") && !lowered.startsWith("postgres:")) {
+    throw new Error("DATABASE_URL must use postgresql:// or postgres://.");
+  }
+  let u: URL;
+  try {
+    const httpish = trimmed.replace(/^postgresql:/i, "http:").replace(/^postgres:/i, "http:");
+    u = new URL(httpish);
+  } catch {
+    throw new Error("DATABASE_URL is not a parseable PostgreSQL connection string.");
+  }
+  if (!u.hostname) {
+    throw new Error("DATABASE_URL is missing a database host.");
+  }
+}
+
 export function maskDatabaseUrlHostForLog(urlString: string): { host: string; port: string } {
   try {
     const u = new URL(urlString);
@@ -145,6 +167,8 @@ export function requireDatabaseEnv(options?: RequireDatabaseEnvOptions): string 
     );
   }
 
+  assertPostgresConnectionStringShape(raw);
+
   if (isRejectedRuntimePlaceholderDatabaseUrl(raw)) {
     throw new Error(
       "DATABASE_URL matches a localhost placeholder (Docker default or postgres:postgres@127.0.0.1). Refusing to connect.",
@@ -188,6 +212,8 @@ export function assertRuntimeDatabaseEnvContract(): void {
     }
     return;
   }
+
+  assertPostgresConnectionStringShape(raw);
 
   const { host, port } = maskDatabaseUrlHostForLog(raw);
   logDatabaseContractLine({

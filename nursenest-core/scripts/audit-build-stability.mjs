@@ -74,5 +74,5 @@ console.log(`  NN_SKIP_LESSON_INDEX_BUILD=${process.env.NN_SKIP_LESSON_INDEX_BUI
 console.log(`  BUILD_NODE_MAX_OLD_SPACE_SIZE_MB=${process.env.BUILD_NODE_MAX_OLD_SPACE_SIZE_MB ?? "(unset)"}`);
 console.log(`  NODE_OPTIONS=${(process.env.NODE_OPTIONS ?? "").slice(0, 120)}${(process.env.NODE_OPTIONS?.length ?? 0) > 120 ? "…" : ""}`);
 
-console.log("\nSee ../reports/build-instability-audit.md (repo root) for narrative + DigitalOcean notes.\n");
+console.log("\nSee ../../reports/production-stability-audit.md (repo root) for narrative + DigitalOcean notes.\n");
 if (process.exitCode) process.exit(process.exitCode);

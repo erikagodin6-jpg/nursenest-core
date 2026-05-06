@@ -39,6 +39,7 @@
     "mobile:start": "npm --prefix apps/mobile run start",
     "mobile:ios": "npm --prefix apps/mobile run ios",
     "mobile:android": "npm --prefix apps/mobile run android",
+    "diagnostics:build-env": "npm --prefix nursenest-core run diagnostics:build-env",
     "audit:build-stability": "npm --prefix nursenest-core run audit:build-stability",
     "env:validate": "npm --prefix nursenest-core run env:validate",
     "env:validate:production": "npm --prefix nursenest-core run env:validate:production",

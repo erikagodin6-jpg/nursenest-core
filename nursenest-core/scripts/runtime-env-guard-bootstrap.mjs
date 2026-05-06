@@ -73,6 +73,25 @@ function isRejectedRuntimePlaceholderDatabaseUrl(url) {
   return false;
 }
 
+/** Keep aligned with `assertPostgresConnectionStringShape` in `require-database-env.ts`. */
+function assertPostgresConnectionStringShape(urlString) {
+  const trimmed = String(urlString).trim();
+  const lowered = trimmed.toLowerCase();
+  if (!lowered.startsWith("postgresql:") && !lowered.startsWith("postgres:")) {
+    throw new Error("DATABASE_URL must use postgresql:// or postgres://.");
+  }
+  let u;
+  try {
+    const httpish = trimmed.replace(/^postgresql:/i, "http:").replace(/^postgres:/i, "http:");
+    u = new URL(httpish);
+  } catch {
+    throw new Error("DATABASE_URL is not a parseable PostgreSQL connection string.");
+  }
+  if (!u.hostname) {
+    throw new Error("DATABASE_URL is missing a database host.");
+  }
+}
+
 function isProductionLikeDatabaseHost(urlString) {
   try {
     const u = new URL(urlString);
@@ -131,6 +150,8 @@ function assertRuntimeDatabaseEnvContractMjs() {
     }
     return;
   }
+
+  assertPostgresConnectionStringShape(raw);
 
   const { host, port } = maskDatabaseUrlHostForLog(raw);
   logDatabaseContractLine({
