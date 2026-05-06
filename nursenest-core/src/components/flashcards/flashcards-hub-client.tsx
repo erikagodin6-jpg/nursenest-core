@@ -28,7 +28,7 @@ import { LearnerCtaLink } from "@/components/learner-ui/learner-cta-link";
 import { weakAreaFlashcardsHref } from "@/lib/learner/weak-area-flashcards-href";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import type { FlashcardLessonVirtualDiagnostics } from "@/lib/flashcards/flashcard-custom-session-response";
-import type { FlashcardsHubServerPayload } from "@/lib/flashcards/flashcards-hub-types";
+import type { FlashcardsHubServerPayload, FlashcardsPoolInventoryDiagnostics } from "@/lib/flashcards/flashcards-hub-types";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { buildAppPracticeTestsTopicHref } from "@/lib/learner/app-study-internal-links";
 
@@ -82,6 +82,7 @@ export function FlashcardsHubClient({
   pathwayBootstrapSource = "primary",
   catHref,
   initialHub,
+  initialPoolDiagnostics = null,
   lessonsHubHref,
   alliedProfessionKey = null,
   hubTopicSlug = null,
@@ -92,6 +93,8 @@ export function FlashcardsHubClient({
   pathwayBootstrapSource?: "primary" | "secondary";
   catHref?: string;
   initialHub?: FlashcardsHubServerPayload | null;
+  /** Server inventory diagnostics (exam SQL vs Flashcard table). */
+  initialPoolDiagnostics?: FlashcardsPoolInventoryDiagnostics | null;
   /** Same-pathway lessons hub — mirrors learner lessons IA for every tier/pathway. */
   lessonsHubHref?: string;
   /** Preserved on allied marketing → app handoffs (`?alliedProfession=`). */
@@ -122,6 +125,12 @@ export function FlashcardsHubClient({
   const [lessonVirtualDiagnostics, setLessonVirtualDiagnostics] = useState<FlashcardLessonVirtualDiagnostics | null>(
     () => initialHub?.lessonVirtualDiagnostics ?? null,
   );
+  const [poolDiagnostics, setPoolDiagnostics] = useState<FlashcardsPoolInventoryDiagnostics | null>(
+    () => initialPoolDiagnostics ?? initialHub?.poolDiagnostics ?? null,
+  );
+  useEffect(() => {
+    setPoolDiagnostics(initialPoolDiagnostics ?? initialHub?.poolDiagnostics ?? null);
+  }, [initialPoolDiagnostics, initialHub?.poolDiagnostics]);
   const [selectedCanonicalIds, setSelectedCanonicalIds] = useState<string[]>([]);
   const [cardLimit, setCardLimit] = useState(20);
   const [shuffleOn, setShuffleOn] = useState(true);
@@ -138,7 +147,7 @@ export function FlashcardsHubClient({
   builderCategoriesRef.current = builderCategories;
 
   /**
-   * Skip the first client `custom-session` fetch only when RSC already shipped **per-row** inventory counts.
+   * Skip the first client `/api/flashcards/inventory` fetch only when RSC already shipped **per-row** counts.
    * A positive `matchingTotal` without bucket counts (exam hub / aggregation mismatch) must still refetch so
    * the hub does not stick on "0 items in pool" while advertising a non-zero pool.
    */
@@ -177,11 +186,12 @@ export function FlashcardsHubClient({
 
   const refreshCategories = useCallback(async () => {
     setLoadError(null);
-    const needsFilteredPool =
-      weakOnly || incorrectOnly || notStudiedOnly || starredOnly;
 
     try {
-      if (needsFilteredPool) {
+      const progressFiltersActive =
+        weakOnly || incorrectOnly || notStudiedOnly || starredOnly;
+
+      if (progressFiltersActive) {
         const allIds = builderCategoriesRef.current.map((c) => c.id);
         const allCanon = CANONICAL_STUDY_CATEGORIES.length;
         const canonSel = selectedCanonicalIds;
@@ -193,65 +203,59 @@ export function FlashcardsHubClient({
                 builderCategoriesRef.current,
                 new Set(canonSel as CanonicalBodySystemId[]),
               );
-      const qs = buildCustomSessionQuery({
-        pathwayId: scopedPathwayId,
-        cardLimit,
-        shuffleOn,
-        selectedBuilderCategoryIds: resolved,
-        allBuilderCategoryIds: allIds,
-        weakOnly,
-        incorrectOnly,
-        starredOnly,
-        notStudiedOnly,
-        includeCards: false,
-        alliedProfession: apForQuery || null,
-        hubTopicSlug,
-      });
-      const progressFiltersActive = weakOnly || incorrectOnly || starredOnly || notStudiedOnly;
-      const invUrl = `/api/flashcards/inventory?pathwayId=${encodeURIComponent(scopedPathwayId)}`;
-      const sessionUrl = `/api/flashcards/custom-session?${qs}`;
-      const fetchUrl = progressFiltersActive ? sessionUrl : invUrl;
-      const res = await fetch(fetchUrl, { credentials: "include" });
-      let json: unknown;
-      try {
-        json = await res.json();
-      } catch {
-        const base = "Flashcard inventory returned invalid JSON. Try again or contact support.";
-        setLoadError(
-          process.env.NODE_ENV === "development"
-            ? `${base} (pathwayId=${scopedPathwayId}, url=${fetchUrl})`
-            : base,
-        );
-        setBuilderCategories([]);
-        setMatchingCards(null);
-        setLessonVirtualDiagnostics(null);
-        return;
-      }
-      const parsed = progressFiltersActive
-        ? parseFlashcardCustomSessionResponse(res.ok, json)
-        : parseFlashcardInventoryResponse(res.ok, json);
-      if (!parsed.ok) {
-        const base = parsed.message.trim() ? parsed.message : "Could not load flashcard topics.";
-        setLoadError(
-          process.env.NODE_ENV === "development"
-            ? `${base} (pathwayId=${scopedPathwayId}, httpStatus=${res.status}, url=${fetchUrl})`
-            : base,
-        );
-        setBuilderCategories([]);
-        setMatchingCards(null);
-        return;
-      }
-      setBuilderCategories(parsed.categoryOptions);
-      setMatchingCards(parsed.summary?.matchingCards ?? 0);
-      if (progressFiltersActive) {
+        const qs = buildCustomSessionQuery({
+          pathwayId: scopedPathwayId,
+          cardLimit,
+          shuffleOn,
+          selectedBuilderCategoryIds: resolved,
+          allBuilderCategoryIds: allIds,
+          weakOnly,
+          incorrectOnly,
+          starredOnly,
+          notStudiedOnly,
+          includeCards: false,
+          alliedProfession: apForQuery || null,
+          hubTopicSlug,
+        });
+        const res = await fetch(`/api/flashcards/custom-session?${qs}`, { credentials: "include" });
+        let json: unknown;
+        try {
+          json = await res.json();
+        } catch {
+          const base = "Flashcard inventory returned invalid JSON. Try again or contact support.";
+          setLoadError(
+            process.env.NODE_ENV === "development"
+              ? `${base} (pathwayId=${scopedPathwayId}, url=/api/flashcards/custom-session)`
+              : base,
+          );
+          setBuilderCategories([]);
+          setMatchingCards(null);
+          setLessonVirtualDiagnostics(null);
+          setPoolDiagnostics(null);
+          return;
+        }
+        const parsed = parseFlashcardCustomSessionResponse(res.ok, json);
+        if (!parsed.ok) {
+          const base = parsed.message.trim() ? parsed.message : "Could not load flashcard topics.";
+          setLoadError(
+            process.env.NODE_ENV === "development"
+              ? `${base} (pathwayId=${scopedPathwayId}, httpStatus=${res.status})`
+              : base,
+          );
+          setBuilderCategories([]);
+          setMatchingCards(null);
+          setPoolDiagnostics(null);
+          return;
+        }
+        setBuilderCategories(parsed.categoryOptions);
+        setMatchingCards(parsed.summary?.matchingCards ?? 0);
         setLessonVirtualDiagnostics(parsed.summary?.lessonVirtualDiagnostics ?? null);
-      }
+        setPoolDiagnostics(parsed.summary?.poolInventoryDiagnostics ?? null);
         return;
       }
 
-      const invQs = new URLSearchParams();
-      invQs.set("pathwayId", scopedPathwayId);
-      const res = await fetch(`/api/flashcards/inventory?${invQs.toString()}`, { credentials: "include" });
+      const invUrl = `/api/flashcards/inventory?pathwayId=${encodeURIComponent(scopedPathwayId)}`;
+      const res = await fetch(invUrl, { credentials: "include" });
       let json: unknown;
       try {
         json = await res.json();
@@ -264,33 +268,51 @@ export function FlashcardsHubClient({
         );
         setBuilderCategories([]);
         setMatchingCards(null);
-        setLessonVirtualDiagnostics(null);
+        setPoolDiagnostics(null);
         return;
       }
-      const body = json as {
-        success?: boolean;
-        categoryOptions?: Array<{ id: string; title: string; description?: string; count: number }>;
-        total?: number;
-        code?: string;
-        message?: string;
-      };
-      if (!res.ok || body.success !== true) {
-        const base =
-          typeof body.message === "string" && body.message.trim()
-            ? body.message.trim()
-            : "Could not load flashcard pool counts.";
+      const parsed = parseFlashcardInventoryResponse(res.ok, json);
+      if (!parsed.ok) {
+        const base = parsed.message.trim() ? parsed.message : "Could not load flashcard pool counts.";
         setLoadError(
           process.env.NODE_ENV === "development"
-            ? `${base} (pathwayId=${scopedPathwayId}, httpStatus=${res.status}, code=${String(body.code ?? "")})`
+            ? `${base} (pathwayId=${scopedPathwayId}, httpStatus=${res.status})`
             : base,
         );
         setBuilderCategories([]);
         setMatchingCards(null);
+        setPoolDiagnostics(null);
         return;
       }
-      const opts = Array.isArray(body.categoryOptions) ? body.categoryOptions : [];
+      const opts = parsed.categoryOptions;
       setBuilderCategories(opts);
-      const total = typeof body.total === "number" && Number.isFinite(body.total) ? body.total : 0;
+      const invRoot = json as Record<string, unknown>;
+      const totalFromBody =
+        typeof invRoot.total === "number" && Number.isFinite(invRoot.total)
+          ? Math.max(0, Math.floor(invRoot.total))
+          : undefined;
+      const totalFromSummary =
+        parsed.summary != null &&
+        typeof parsed.summary.matchingCards === "number" &&
+        Number.isFinite(parsed.summary.matchingCards)
+          ? parsed.summary.matchingCards
+          : undefined;
+      const total = totalFromSummary ?? totalFromBody;
+      if (typeof total !== "number" || !Number.isFinite(total)) {
+        const base =
+          process.env.NODE_ENV === "development"
+            ? "Flashcards inventory response missing total count"
+            : "Could not load flashcard pool counts.";
+        setLoadError(
+          process.env.NODE_ENV === "development"
+            ? `${base} (pathwayId=${scopedPathwayId}, httpStatus=${res.status})`
+            : base,
+        );
+        setBuilderCategories([]);
+        setMatchingCards(null);
+        setPoolDiagnostics(null);
+        return;
+      }
       const allCanon = CANONICAL_STUDY_CATEGORIES.length;
       const sel = selectedCanonicalIds;
       const match =
@@ -306,6 +328,7 @@ export function FlashcardsHubClient({
               return sum > 0 ? sum : total;
             })();
       setMatchingCards(match);
+      setPoolDiagnostics(parsed.summary?.poolInventoryDiagnostics ?? null);
       if (process.env.NODE_ENV === "development") {
         const totalCards = opts.reduce((n, c) => n + (typeof c.count === "number" ? c.count : 0), 0);
         console.debug("[flashcards-hub] inventory", {
@@ -324,6 +347,7 @@ export function FlashcardsHubClient({
       setBuilderCategories([]);
       setMatchingCards(null);
       setLessonVirtualDiagnostics(null);
+      setPoolDiagnostics(null);
     }
   }, [
     scopedPathwayId,
@@ -615,6 +639,25 @@ export function FlashcardsHubClient({
                 <li>generic-filler-tagged section rows: {lessonVirtualDiagnostics.genericFillerSectionCardHits}</li>
                 <li>selected systems/categories: {lessonVirtualDiagnostics.selectedCategoryIds.join(", ") || "(all)"}</li>
                 <li>filter mode: {lessonVirtualDiagnostics.filterModeLabel}</li>
+              </ul>
+            </div>
+          ) : null}
+          {poolDiagnostics ? (
+            <div
+              className="rounded-lg border border-border bg-muted/30 px-3 py-2 text-xs text-muted-foreground"
+              data-nn-e2e-flashcards-pool-diagnostics
+            >
+              <p className="font-semibold text-foreground">Pool diagnostics (exam bank vs Flashcard table)</p>
+              <ul className="mt-1 list-disc space-y-0.5 pl-4 font-mono leading-relaxed">
+                <li>pathwayId: {poolDiagnostics.pathwayId}</li>
+                <li>exam_question SQL pool: {poolDiagnostics.examQuestionSqlPoolCount}</li>
+                <li>dedicated Flashcard rows (deck pathway): {poolDiagnostics.dedicatedFlashcardRowCount}</li>
+                <li>tier / country scope: {poolDiagnostics.tier ?? "—"} / {poolDiagnostics.country ?? "—"}</li>
+                <li>pool source: {poolDiagnostics.poolSource}</li>
+                {poolDiagnostics.legacyCanonicalPrismaPoolCount != null ? (
+                  <li>legacy Prisma exam IN() count: {poolDiagnostics.legacyCanonicalPrismaPoolCount}</li>
+                ) : null}
+                {poolDiagnostics.zeroHint ? <li className="text-[var(--semantic-warning)]">{poolDiagnostics.zeroHint}</li> : null}
               </ul>
             </div>
           ) : null}
