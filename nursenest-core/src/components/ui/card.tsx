@@ -5,7 +5,8 @@ import * as React from "react";
  * so drop-in usage picks up the design system; explicit `className` stays in full control.
  */
 export function Card({ className = "", ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  const base = className.trim() ? "" : "nn-card";
+  const trimmed = className.trim();
+  const base = trimmed ? "nn-card-ink" : "nn-card";
   return <div className={[base, className].filter(Boolean).join(" ")} {...props} />;
 }
 

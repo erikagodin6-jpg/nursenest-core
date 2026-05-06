@@ -29,7 +29,14 @@ export type MobileNativeApiErrorKind =
 
 export type MobileNativeApiResult<T> =
   | { readonly ok: true; readonly status: number; readonly data: T }
-  | { readonly ok: false; readonly kind: MobileNativeApiErrorKind; readonly status?: number; readonly message: string };
+  | {
+      readonly ok: false;
+      readonly kind: MobileNativeApiErrorKind;
+      readonly status?: number;
+      readonly message: string;
+      /** Parsed JSON body when the server returned JSON (diagnostics / paywall codes). */
+      readonly errorBody?: unknown;
+    };
 
 export type MobileNativeApiClient = {
   readonly executeJson: <T>(req: MobileNativePreparedRequest) => Promise<MobileNativeApiResult<T>>;

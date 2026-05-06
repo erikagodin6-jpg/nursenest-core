@@ -1,9 +1,14 @@
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
-import { ALLIED_GLOBAL_HUB_PATH, buildAlliedGlobalHubPath } from "@/lib/allied/allied-global-hub-path";
+import {
+  ALLIED_GLOBAL_HUB_PATH,
+  buildAlliedGlobalHubPath,
+  buildAlliedOccupationMarketingHubPath,
+  isMarketingAlliedHealthTopLevelHubPath,
+} from "@/lib/allied/allied-global-hub-path";
 
-export { ALLIED_GLOBAL_HUB_PATH, buildAlliedGlobalHubPath };
+export { ALLIED_GLOBAL_HUB_PATH, buildAlliedGlobalHubPath, buildAlliedOccupationMarketingHubPath, isMarketingAlliedHealthTopLevelHubPath };
 
 export const ALLIED_GLOBAL_PATHWAY_IDS = ["us-allied-core", "ca-allied-core"] as const;
 export const ALLIED_CANONICAL_PATHWAY_ID = "us-allied-core" as const;

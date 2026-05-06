@@ -16,6 +16,7 @@ import { expectNotPageNotFound, gotoExpectOk, requireOrigin, seedUsMarketingCook
 
 /** Stable hooks on tier hub study tiles — see {@link NursingTierHubPage}. */
 const TIER_HUB_LESSONS_CARD = "a.nn-qa-nursing-tier-hub-lessons-card";
+const TIER_HUB_FLASHCARDS_CARD = "a.nn-qa-nursing-tier-hub-flashcards-card";
 const TIER_HUB_PRACTICE_CARD = "a.nn-qa-nursing-tier-hub-practice-card";
 const TIER_HUB_EXAMS_CARD = "a.nn-qa-nursing-tier-hub-exams-card";
 
@@ -51,6 +52,22 @@ test.describe("Nursing tier hub — Lessons card destinations", () => {
     await expectLessonsHubSurfaceVisible(page);
   });
 
+  test("US RN hub — Flashcards card href carries pathway (guests: login callback or direct app)", async ({
+    page,
+    baseURL,
+  }) => {
+    const origin = requireOrigin(baseURL);
+    await seedUsMarketingCookie(page, origin);
+    await gotoExpectOk(page, "/us/rn/nclex-rn");
+    await expectNotPageNotFound(page);
+    const section = page.locator("section").filter({ has: page.getByRole("heading", { level: 1 }) });
+    const flash = section.locator(TIER_HUB_FLASHCARDS_CARD);
+    await expect(flash).toBeVisible({ timeout: 60_000 });
+    const h = await flash.getAttribute("href");
+    expect(h).toBeTruthy();
+    expect(h!.includes("flashcards") && h!.includes("us-rn-nclex-rn")).toBe(true);
+  });
+
   test("US RN hub — Practice Questions card opens pathway question bank", async ({ page, baseURL }) => {
     const origin = requireOrigin(baseURL);
     await seedUsMarketingCookie(page, origin);
@@ -67,7 +84,10 @@ test.describe("Nursing tier hub — Lessons card destinations", () => {
     await expect(page.getByRole("heading", { name: /practice questions/i }).first()).toBeVisible({ timeout: 30_000 });
   });
 
-  test("US RN hub — Exams card opens pathway CAT hub", async ({ page, baseURL }) => {
+  test("US RN hub — Practice Exam card href carries pathway (guests: login callback or direct app)", async ({
+    page,
+    baseURL,
+  }) => {
     const origin = requireOrigin(baseURL);
     await seedUsMarketingCookie(page, origin);
     await gotoExpectOk(page, "/us/rn/nclex-rn");
@@ -75,14 +95,9 @@ test.describe("Nursing tier hub — Lessons card destinations", () => {
     const section = page.locator("section").filter({ has: page.getByRole("heading", { level: 1 }) });
     const exams = section.locator(TIER_HUB_EXAMS_CARD);
     await expect(exams).toBeVisible({ timeout: 60_000 });
-    await expect(exams).toHaveAttribute("href", /\/us\/rn\/nclex-rn\/cat/);
-    await exams.click();
-    await page.waitForLoadState("domcontentloaded");
-    await expect(page).toHaveURL(/\/us\/rn\/nclex-rn\/cat/, { timeout: 20_000 });
-    await expectNotPageNotFound(page);
-    await expect(page.getByRole("heading", { name: /session setup|CAT|adaptive/i }).first()).toBeVisible({
-      timeout: 30_000,
-    });
+    const h = await exams.getAttribute("href");
+    expect(h).toBeTruthy();
+    expect(h!.includes("practice-tests") && h!.includes("us-rn-nclex-rn")).toBe(true);
   });
 
   test("US PN hub — Lessons card opens PN pathway lessons index", async ({ page, baseURL }) => {

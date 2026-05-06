@@ -1,52 +1,19 @@
-import { useLocalSearchParams, Link } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { Image } from "expo-image";
+import { useLocalSearchParams } from "expo-router";
+import { PathwayLessonDetailScreen } from "@/components/PathwayLessonDetailScreen";
 import { ScreenErrorBoundary } from "@/components/ScreenErrorBoundary";
-import { evictionLimitForBucket, storageKeyForLesson, type OfflineContentDomain } from "@nursenest/mobile-shared";
 
 /**
- * Lesson surface placeholder — full lesson payload stays one-request-per-slug (web parity).
- * Deep link: nursenest://lesson/&lt;slug&gt;
- *
- * List windowing: use FlashList or virtualized lists for large catalogs; tune `windowSize`/`maxToRenderPerBatch` on FlatList.
+ * Native pathway lesson detail — `GET /api/learner/pathway-lesson` (see `buildPathwayLessonDetailPath` in mobile-shared).
+ * Params: `slug` (path), optional `pathwayId`, optional `lessonId` (row id — skips pathway resolution).
+ * Deep link examples: `nursenest:///(learner)/lesson/<slug>?pathwayId=<id>` or legacy id-only slugs.
  */
-export default function LessonScreen() {
+export default function LearnerLessonBySlugRoute() {
   const { slug } = useLocalSearchParams<{ slug: string }>();
-  const key = storageKeyForLesson(String(slug));
-  const limit = evictionLimitForBucket("lessons");
-  const domain: OfflineContentDomain = "lesson";
+  const screen = `lesson:${String(slug ?? "")}`;
 
   return (
-    <ScreenErrorBoundary screen={`lesson:${String(slug)}`}>
-      <View style={styles.box}>
-        <Text style={styles.title}>Lesson</Text>
-        <Text style={styles.mono}>slug: {slug}</Text>
-        <Text style={styles.muted}>
-          Offline key: {key} · eviction cap: {limit} · domain: {domain}
-        </Text>
-        <Image
-          accessibilityIgnoresInvertColors
-          source={{ uri: "https://docs.expo.dev/static/images/tutorial/background-image.png" }}
-          style={styles.hero}
-          cachePolicy="memory-disk"
-          contentFit="cover"
-        />
-        <Link href="/(tabs)" asChild>
-          <Pressable style={styles.back}>
-            <Text style={styles.backText}>Home</Text>
-          </Pressable>
-        </Link>
-      </View>
+    <ScreenErrorBoundary screen={screen}>
+      <PathwayLessonDetailScreen />
     </ScreenErrorBoundary>
   );
 }
-
-const styles = StyleSheet.create({
-  box: { flex: 1, padding: 24, gap: 10 },
-  title: { fontSize: 22, fontWeight: "700" },
-  mono: { fontFamily: "monospace", fontSize: 13 },
-  muted: { opacity: 0.8, fontSize: 12 },
-  hero: { width: "100%", height: 160, borderRadius: 12, marginVertical: 8 },
-  back: { alignSelf: "flex-start", marginTop: 8 },
-  backText: { color: "#2563eb", fontWeight: "600" },
-});

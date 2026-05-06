@@ -6,6 +6,7 @@ import { resolveAlliedProfessionFromRouteSlug } from "@/lib/allied/allied-profes
 import { professionKeyToCareerKey } from "@/lib/pricing/display-catalog";
 
 const appRoot = join(process.cwd(), "src/app/(marketing)/(default)/allied-health");
+const alliedCareerPage = join(process.cwd(), "src/app/(marketing)/(default)/allied/[career]/page.tsx");
 
 describe("allied health occupation hub routing (marketing)", () => {
   it("main /allied-health page is an occupation chooser (cards), not a regional mega-strip", () => {
@@ -21,6 +22,14 @@ describe("allied health occupation hub routing (marketing)", () => {
     assert.ok(src.includes("AlliedHealthPathwayHub"));
     assert.ok(src.includes("profession={prof}"));
     assert.ok(src.includes("resolveAlliedProfessionFromRouteSlug"));
+  });
+
+  it("canonical /allied/[career] occupation hub uses AlliedHealthPathwayHub with resilient overview loading", () => {
+    const src = readFileSync(alliedCareerPage, "utf8");
+    assert.ok(src.includes("AlliedHealthPathwayHub"));
+    assert.ok(src.includes("profession={prof}"));
+    assert.ok(src.includes("fallbackAlliedPathwayHubOverview"));
+    assert.ok(src.includes("/allied/${prof.professionKey}"));
   });
 
   it("resolves known exam-prep segments and rejects unknown slugs", () => {

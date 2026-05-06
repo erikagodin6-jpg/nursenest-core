@@ -6,6 +6,7 @@
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
+import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 
 export const MARKETING_TIER_HUB_STUDY_ACTION_IDS = ["lessons", "flashcards", "practice_questions", "exams"] as const;
 
@@ -49,11 +50,12 @@ export function marketingTierHubStudyActionHref(pathway: ExamPathwayDefinition, 
     case "lessons":
       return marketingPathwayLessonsIndexPath(pathway);
     case "flashcards":
-      return `/app/flashcards?pathwayId=${encodeURIComponent(pathway.id)}`;
+      return pathwayHubAppFlashcardsHref(pathway.id);
     case "practice_questions":
       return buildExamPathwayPath(pathway, "questions");
     case "exams":
-      return buildExamPathwayPath(pathway, "cat");
+      /** Practice Exam tile — learner timed/linear sets hub (CAT launch is a sub-route from there). */
+      return pathwayHubAppPracticeTestsHref(pathway.id);
     default: {
       const _never: never = actionId;
       return _never;
@@ -105,6 +107,17 @@ export function resolveMarketingTierHubStudyActionHref(
       }
     }
 
+    if (actionId === "exams") {
+      try {
+        const u = new URL(raw, RESOLVE_URL_BASE);
+        if (u.pathname !== "/app/practice-tests") return canonical;
+        if (u.searchParams.get("pathwayId") !== pathway.id) return canonical;
+        return raw;
+      } catch {
+        return canonical;
+      }
+    }
+
     const hubBasePath = pathnameOf(buildExamPathwayPath(pathway));
     if (!hubBasePath) return canonical;
     const underThisTierHub =
@@ -124,13 +137,6 @@ export function resolveMarketingTierHubStudyActionHref(
       const qRoot = pathnameOf(buildExamPathwayPath(pathway, "questions"));
       if (!qRoot) return canonical;
       if (candidatePath === qRoot || candidatePath.startsWith(`${qRoot}/`)) return canonical;
-      return canonical;
-    }
-
-    if (actionId === "exams") {
-      const catRoot = pathnameOf(buildExamPathwayPath(pathway, "cat"));
-      if (!catRoot) return canonical;
-      if (candidatePath === catRoot || candidatePath.startsWith(`${catRoot}/`)) return canonical;
       return canonical;
     }
 

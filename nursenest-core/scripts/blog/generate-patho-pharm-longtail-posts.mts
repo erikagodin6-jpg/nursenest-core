@@ -27,6 +27,8 @@ import {
   semanticMechanismDuplicateKey,
 } from "../../src/lib/blog/patho-pharm-longtail-topic-registry";
 import { validateClinicalTopicCoherence } from "../../src/lib/blog/patho-pharm-longtail-topic-coherence";
+import { collectBlogContentQualityIssues } from "../../src/lib/blog/blog-content-quality-gate";
+import { validateBlogPublishQuality } from "../../src/lib/blog/blog-publish-quality-validator";
 import { blogLiveWhere, blogPostIsLive } from "../../src/lib/blog/blog-visibility";
 import {
   sqlBlogLiveWhere,
@@ -301,7 +303,7 @@ async function main(): Promise<void> {
       const { html: internalHtml, slugs: internalSlugs, insufficient } = pickInternalLinks(topic, pool, 3);
       if (insufficient) internalLinksInsufficientCount += 1;
 
-      const body = buildLongTailBody(topic, internalHtml);
+      const body = buildLongTailBody(topic, internalHtml, accessDate);
       const v = validateGeneratedBody(body, topic.title);
       if (!v.ok) {
         rejectedCount += 1;
@@ -311,6 +313,59 @@ async function main(): Promise<void> {
         for (const r of v.reasons) {
           if (rejectedTopicsWithReasonSample.length >= 10) break;
           rejectedTopicsWithReasonSample.push({ title: topic.title, reason: r });
+        }
+        continue;
+      }
+
+      const faqPreview = buildFaq(topic);
+      const apaPreview = buildApaReferences(topic, accessDate);
+      const faqBlockPreview: Prisma.InputJsonValue = {
+        items: [
+          { q: faqPreview.q1, a: faqPreview.a1 },
+          { q: faqPreview.q2, a: faqPreview.a2 },
+          { q: faqPreview.q3, a: faqPreview.a3 },
+        ],
+      };
+      const sourcesPreview = {
+        families: ["CDC", "NIH/NIDDK", "MedlinePlus", "WHO", "FDA", "NCSBN"],
+        retrieved: now.toISOString(),
+      } as Prisma.JsonValue;
+
+      const publishQuality = validateBlogPublishQuality({
+        title: topic.title.slice(0, 200),
+        body,
+        targetKeyword: topic.targetKeyword,
+        category: topic.category,
+        tags: tagsForTopic(topic),
+        faqBlock: faqBlockPreview as Prisma.JsonValue,
+        apaReferences: apaPreview,
+        sourcesJson: sourcesPreview,
+      });
+      const contentQuality = collectBlogContentQualityIssues({
+        title: topic.title.slice(0, 200),
+        body,
+        targetKeyword: topic.targetKeyword,
+        postTemplate: topic.postTemplate,
+        intent: null,
+        faqBlock: faqBlockPreview as Prisma.JsonValue,
+        apaReferences: apaPreview,
+        sourcesJson: sourcesPreview,
+      });
+      const qualityBlocks = [
+        ...publishQuality.blocking,
+        ...contentQuality.filter((i) => i.severity === "block"),
+      ];
+      if (qualityBlocks.length > 0) {
+        rejectedCount += 1;
+        const reasons = qualityBlocks.map((i) => i.id);
+        batchRejectionReasons.push(...reasons);
+        bumpReason(reasons);
+        if (rejectedTopicsSample.length < 10) rejectedTopicsSample.push(topic.title);
+        if (rejectedTopicsWithReasonSample.length < 10) {
+          rejectedTopicsWithReasonSample.push({
+            title: topic.title,
+            reason: `publish_quality:${reasons.slice(0, 4).join(",")}`,
+          });
         }
         continue;
       }
@@ -329,13 +384,14 @@ async function main(): Promise<void> {
         continue;
       }
 
+      const faq = faqPreview;
+      const apa = apaPreview;
+
       attemptedNew += 1;
 
       const excerpt = excerptFromHtml(body, topic.title);
       const metaTitle = clampMetaTitle(topic.title, 60);
       const metaDescription = clampMetaDescription(excerpt, 155);
-      const faq = buildFaq(topic);
-      const apa = buildApaReferences(accessDate);
       const origin = resolveSiteOrigin();
       const publishedIso = now.toISOString();
       const schemaSummary = buildSchemaSummaryJson({
@@ -346,14 +402,6 @@ async function main(): Promise<void> {
         faq,
         origin,
       });
-
-      const faqBlock: Prisma.InputJsonValue = {
-        items: [
-          { q: faq.q1, a: faq.a1 },
-          { q: faq.q2, a: faq.a2 },
-          { q: faq.q3, a: faq.a3 },
-        ],
-      };
 
       const keyQuestions = [faq.q1, faq.q2, faq.q3];
       const internalLinkPlan: Prisma.InputJsonValue = { slugs: internalSlugs, kind: "patho-pharm-longtail" };
@@ -381,7 +429,7 @@ async function main(): Promise<void> {
         apaReferences: apa,
         requiresReferences: true,
         schemaSummary,
-        faqBlock,
+        faqBlock: faqBlockPreview,
         keyQuestions,
         internalLinkPlan,
         sourcesJson: {

@@ -3,7 +3,7 @@
  * Blocks repetitive filler, duplicated modules, weak titles, and off-topic references.
  */
 
-import type { BlogPostIntent, BlogPostTemplate, Prisma } from "@prisma/client";
+import { BlogPostTemplate, type BlogPostIntent, type Prisma } from "@prisma/client";
 import { isLongFormPathophysiologyProfile } from "@/lib/blog/blog-longform-nursing-contract";
 import { countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import { coerceBlogSourceRows } from "@/lib/blog/apa7";
@@ -20,11 +20,15 @@ export type BlogContentQualityIssue = {
 /** Filler / meta-instruction phrases that must not appear in learner-facing clinical prose. */
 export const BLOG_BANNED_FILLER_PHRASES: readonly string[] = [
   "this section connects the clinical question",
+  "this section connects",
   "keyword framing for study",
   "language here is intentionally cautious",
   "mechanistic reasoning rather than isolated memorization",
   "this paragraph intentionally",
   "exam-aligned framing without",
+  "clinically relevant way to think about the topic",
+  "without overcomplicating the review",
+  "gives learners a clinically relevant",
   "study-surface alignment",
 ] as const;
 
@@ -98,6 +102,13 @@ const STOP = new Set([
   "care",
   "clinical",
 ]);
+
+/**
+ * H2 teaching-section similarity gates (word-set Jaccard on HTML under each heading).
+ * @see docs/blog-quality-thresholds.md — section similarity (embedding-free).
+ */
+export const BLOG_SECTION_JACCARD_SOFT_THRESHOLD = 0.52;
+export const BLOG_SECTION_JACCARD_HARD_THRESHOLD = 0.78;
 
 function normalizeParagraphText(s: string): string {
   return s
@@ -185,6 +196,29 @@ export function maxJaccardOfNewSectionVsPriorSections(newSectionHtml: string, pr
     const priorPlain = normalizeParagraphText(proseAfterFirstH2(seg.html));
     const priorWords = wordSet(priorPlain);
     max = Math.max(max, jaccard(newWords, priorWords));
+  }
+  return max;
+}
+
+/**
+ * Max pairwise Jaccard word overlap between prose under each top-level {@link splitBlogBodyByH2} segment.
+ * Used at publish time to block articles where many H2 sections share the same boilerplate.
+ */
+export function maxPairwiseH2SectionJaccard(html: string): number {
+  const segments = splitBlogBodyByH2(html);
+  if (segments.length < 2) return 0;
+  const sets: Set<string>[] = [];
+  for (const seg of segments) {
+    const plain = normalizeParagraphText(proseAfterFirstH2(seg.html));
+    const ws = wordSet(plain);
+    if (ws.size >= 12) sets.push(ws);
+  }
+  if (sets.length < 2) return 0;
+  let max = 0;
+  for (let i = 0; i < sets.length; i++) {
+    for (let j = i + 1; j < sets.length; j++) {
+      max = Math.max(max, jaccard(sets[i]!, sets[j]!));
+    }
   }
   return max;
 }
@@ -372,20 +406,35 @@ export function collectBlogContentQualityIssues(input: BlogContentQualityGateInp
     return true;
   });
   let similarPairs = 0;
+  let maxPairJaccard = 0;
   for (let i = 0; i < teachingSegments.length; i++) {
     for (let j = i + 1; j < teachingSegments.length; j++) {
       const a = wordSet(teachingSegments[i]!.html);
       const b = wordSet(teachingSegments[j]!.html);
       if (a.size < 12 || b.size < 12) continue;
-      if (jaccard(a, b) > 0.52) similarPairs += 1;
+      const jac = jaccard(a, b);
+      maxPairJaccard = Math.max(maxPairJaccard, jac);
+      if (jac > BLOG_SECTION_JACCARD_SOFT_THRESHOLD) similarPairs += 1;
     }
   }
-  if (similarPairs > 2) {
+  const similarPairLimit = pathophysiologyStrict ? 1 : 2;
+  if (similarPairs > similarPairLimit) {
     issues.push({
       id: "blog_section_text_similarity",
       severity: "block",
-      message: `More than two pairs of H2 sections share substantially overlapping text (likely copy-pasted boilerplate).`,
+      message:
+        pathophysiologyStrict && similarPairLimit === 1
+          ? `Pathophysiology long-form: more than one pair of H2 sections overlaps heavily (Jaccard > ${BLOG_SECTION_JACCARD_SOFT_THRESHOLD}) — likely duplicated boilerplate.`
+          : `More than ${similarPairLimit} pairs of H2 sections share substantially overlapping text (likely copy-pasted boilerplate).`,
       fix: "Draft failed quality review: repeated filler content detected. Regenerate so each H2 has unique mechanistic and nursing content.",
+    });
+  }
+  if (teachingSegments.length >= 5 && maxPairJaccard >= BLOG_SECTION_JACCARD_HARD_THRESHOLD) {
+    issues.push({
+      id: "blog_section_pair_similarity_peak",
+      severity: "block",
+      message: `Highest pairwise Jaccard similarity between major H2 sections is ${maxPairJaccard.toFixed(2)} (threshold ${BLOG_SECTION_JACCARD_HARD_THRESHOLD}).`,
+      fix: "Rewrite or regenerate so sections diverge in vocabulary and teaching focus; see docs/blog-quality-thresholds.md (section similarity).",
     });
   }
 
@@ -519,7 +568,10 @@ export function blogIntentForQualityGate(
   template: BlogPostTemplate | null,
   intent: BlogPostIntent | null | undefined,
 ): "pathophysiology_strict" | null {
-  if (!template || intent == null) return null;
+  if (!template) return null;
+  /** Disease-process explainers use strict long-form gates even when legacy rows omit `intent`. */
+  if (template === BlogPostTemplate.DISEASE_PROCESS_EXPLAINER) return "pathophysiology_strict";
+  if (intent == null) return null;
   if (isLongFormPathophysiologyProfile({ template, intent })) return "pathophysiology_strict";
   return null;
 }

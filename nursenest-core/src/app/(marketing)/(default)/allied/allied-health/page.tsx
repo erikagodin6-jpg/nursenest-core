@@ -8,7 +8,10 @@ import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { getCanonicalAlliedPathway, ALLIED_GLOBAL_HUB_PATH } from "@/lib/allied/allied-global-pathway";
 import { prisma } from "@/lib/db";
 import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { loadAlliedPathwayHubOverview } from "@/lib/marketing/allied-pathway-hub-overview";
+import {
+  fallbackAlliedPathwayHubOverview,
+  loadAlliedPathwayHubOverview,
+} from "@/lib/marketing/allied-pathway-hub-overview";
 import {
   parseMeasurementPreference,
   readMeasurementPreferenceFromCookieStore,
@@ -72,12 +75,23 @@ export default async function GlobalAlliedHealthHubPage() {
     // ignore
   }
 
-  const overview = await loadAlliedPathwayHubOverview(pathway, {
-    pathname: ALLIED_GLOBAL_HUB_PATH,
-    locale: "en",
-    examCode: "allied-health",
-    roleTrack: "allied",
-  });
+  let overview;
+  try {
+    overview = await loadAlliedPathwayHubOverview(pathway, {
+      pathname: ALLIED_GLOBAL_HUB_PATH,
+      locale: "en",
+      examCode: "allied-health",
+      roleTrack: "allied",
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    safeServerLog("exam_pathway_hub", "allied_hub_overview_failed", {
+      pathname: ALLIED_GLOBAL_HUB_PATH,
+      pathway_id: pathway.id,
+      error_message: message.slice(0, 500),
+    });
+    overview = fallbackAlliedPathwayHubOverview();
+  }
 
   if (process.env.VITEST === "true" || process.env.NODE_ENV !== "production") {
     safeServerLog("exam_pathway_hub", "allied_hub_route_diagnostic", {

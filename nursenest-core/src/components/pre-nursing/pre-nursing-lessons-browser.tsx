@@ -96,17 +96,21 @@ export function PreNursingLessonsBrowser({ modules, initialQuery, initialSort = 
 
       <section className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] p-3 sm:p-4">
         <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--theme-heading-text)]">Module library</h2>
-        <ul className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-3 grid list-none grid-cols-1 items-stretch gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((module) => (
-            <li key={module.slug}>
+            <li key={module.slug} className="flex min-h-[11.5rem] sm:min-h-[12.5rem]">
               <Link
                 href={`/pre-nursing/lessons/${module.slug}`}
-                className="block rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3 transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] hover:bg-[var(--semantic-surface)]"
+                className="group flex w-full flex-1 flex-col rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-muted)] p-3 transition hover:border-[color-mix(in_srgb,var(--semantic-brand)_35%,var(--semantic-border-soft))] hover:bg-[var(--semantic-surface)]"
                 data-testid={`pre-nursing-lesson-${module.slug}`}
               >
-                <h3 className="line-clamp-2 text-sm font-semibold text-[var(--theme-heading-text)]">{module.title}</h3>
-                <p className="mt-1 line-clamp-2 text-xs text-[var(--theme-muted-text)]">{module.subtitle}</p>
-                <p className="mt-2 text-xs font-semibold text-[var(--semantic-brand)]">
+                <h3 className="line-clamp-2 shrink-0 text-sm font-semibold text-[var(--theme-heading-text)] group-hover:text-primary">
+                  {module.title}
+                </h3>
+                <p className="mt-1 min-h-0 flex-1 text-xs font-normal leading-relaxed text-[var(--theme-muted-text)] line-clamp-3">
+                  {module.subtitle}
+                </p>
+                <p className="mt-auto border-t border-[var(--semantic-border-soft)] pt-2 text-xs font-normal text-[var(--semantic-brand)]">
                   {module.lessons} {module.lessons === 1 ? "interactive lesson" : "interactive lessons"}
                 </p>
               </Link>

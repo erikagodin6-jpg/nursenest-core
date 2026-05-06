@@ -4,8 +4,9 @@
  */
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { BlogPostTemplate } from "@prisma/client";
+import { BlogPostIntent, BlogPostTemplate } from "@prisma/client";
 import {
+  blogIntentForQualityGate,
   collectBlogContentQualityIssues,
   maxJaccardOfNewSectionVsPriorSections,
   validateBlogTitleForBodyGeneration,
@@ -165,6 +166,25 @@ describe("maxJaccardOfNewSectionVsPriorSections", () => {
       "<h2>Assessment</h2><p>monofilament vibration achilles reflex stocking glove sensory loss gait instability uniquelytwo</p>";
     const score = maxJaccardOfNewSectionVsPriorSections(next, prior);
     assert.ok(score < 0.35, `expected low similarity, got ${score}`);
+  });
+});
+
+describe("blogIntentForQualityGate", () => {
+  it("treats disease-process explainer as strict pathophysiology even when intent is null", () => {
+    assert.equal(
+      blogIntentForQualityGate(BlogPostTemplate.DISEASE_PROCESS_EXPLAINER, null),
+      "pathophysiology_strict",
+    );
+    assert.equal(blogIntentForQualityGate(BlogPostTemplate.DISEASE_PROCESS_EXPLAINER, undefined), "pathophysiology_strict");
+  });
+  it("does not infer strict profile for unrelated templates with null intent", () => {
+    assert.equal(blogIntentForQualityGate(BlogPostTemplate.FAQ_STYLE, null), null);
+  });
+  it("still enables strict profile for concept explainer on long-form templates", () => {
+    assert.equal(
+      blogIntentForQualityGate(BlogPostTemplate.TOPIC_EXPLAINED, BlogPostIntent.CONCEPT_EXPLAINER),
+      "pathophysiology_strict",
+    );
   });
 });
 

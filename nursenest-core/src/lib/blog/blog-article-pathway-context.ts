@@ -4,6 +4,9 @@
  */
 export function pathwayEditorialContext(exam: string): string {
   const e = exam.trim();
+  if (/\bnew\s*grad|student\s*nurse|pre[-\s]*licensure|early\s*practice|residency\s*prep\b/i.test(e)) {
+    return "New graduate / transition to practice: prioritize safety systems, delegation questions, time management, common first-shift errors, escalation judgment, and NCLEX-to-bedside translation — still exam-style reasoning, not workplace policy manuals.";
+  }
   const map: Record<string, string> = {
     "NCLEX-RN":
       "US RN (NCLEX-RN): prioritize safety, ABCs, therapeutic communication, pharm/toxicity, delegation rules, and clinical judgment. Frame as NCLEX-style prioritization and elimination — not ward management memoirs.",

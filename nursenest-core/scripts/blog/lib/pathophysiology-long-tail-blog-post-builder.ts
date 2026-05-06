@@ -18,53 +18,49 @@ export function esc(s: string): string {
 
 export type PeerBlogStub = { slug: string; title: string; excerpt: string };
 
-function sectionEntropyPhrase(topic: PathophysiologyLongTailTopicPlan, label: string, depth: string): string {
-  const raw = `${topic.slug}:${label}:${depth}:${topic.targetKeyword}:${topic.bodySystem}`;
-  const parts = raw
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim()
-    .split(/\s+/)
-    .filter((w) => w.length > 2);
-  const a = parts.slice(0, 18).join(" ");
-  const b = parts.slice(8, 26).reverse().join(" ");
-  return `${a} ${b}`.trim();
-}
-
-/** Long unique token tail so automated similarity / repetition gates do not flag templated seed HTML. */
-function editorialScaffoldTokens(
-  topic: PathophysiologyLongTailTopicPlan,
-  label: string,
-  depth: string,
-  start: number,
-): string {
-  const seed = `${topic.slug}|${label}|${depth}|${topic.tier}|${topic.category}|${topic.anchorFocus}|${start}`;
-  const chunks = seed
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean);
-  const out: string[] = [];
-  for (let i = start; i < start + 160; i += 1) {
-    const c = chunks[i % chunks.length] ?? "term";
-    out.push(`${c}_slot${i}_${depth.replace(/\W+/g, "").slice(0, 6) || "x"}`);
-  }
-  return esc(out.join(" "));
-}
-
-function paragraphBlock(topic: PathophysiologyLongTailTopicPlan, label: string, depth: string, tokenStart: number): string {
+/** Single rich block per H2 — topic-specific framing only (no token padding to game quality gates). */
+function paragraphBlock(topic: PathophysiologyLongTailTopicPlan, label: string): string {
   const t = esc(topic.title);
   const sys = esc(topic.bodySystem);
   const kw = esc(topic.targetKeyword);
   const af = esc(topic.anchorFocus);
-  const entropy = esc(sectionEntropyPhrase(topic, label, depth));
-  const scaffold = editorialScaffoldTokens(topic, label, depth, tokenStart);
-  return `<p><strong>${esc(label)}.</strong> Learners mapping “${t}” through ${sys} should keep ${af} visible while studying ${kw}; tie each cue to physiology, monitoring, and escalation appropriate to ${esc(topic.exam ?? "licensure exams")}. Educational only—follow local policy.</p><p>Section discriminator tokens: ${entropy}.</p><p><em>Editorial scaffold (seed metadata, not clinical guidance):</em> ${scaffold}</p>`;
+  const exam = esc(topic.exam ?? "licensure exams");
+  const L = esc(label);
+  if (/orientation|clinical problem/i.test(label)) {
+    return `<p><strong>${L}.</strong> Frame “${t}” as a ${exam} story: onset, setting, risk factors, and what the stem is likely testing about ${af} within ${sys}. Use <strong>${kw}</strong> as the phrase you can trace through assessment → action without generic motivation lines.</p>`;
+  }
+  if (/mechanistic|mechanism/i.test(label)) {
+    return `<p><strong>${L}.</strong> Walk compensation versus injury for “${t}” in ${sys}: triggers, adaptive responses, and the bedside cues that shift first when the course worsens. Keep ${af} visible so mechanism paragraphs are not interchangeable across topics.</p>`;
+  }
+  if (/presentation|patterns/i.test(label)) {
+    return `<p><strong>${L}.</strong> Tie subjective complaints and objective findings for “${t}” back to the pathophysiology block—especially patterns exam writers reuse for <strong>${kw}</strong> on ${exam}.</p>`;
+  }
+  if (/objective data|interpretation/i.test(label)) {
+    return `<p><strong>${L}.</strong> Practice interpreting trends (not single numbers) for “${t}”: paired vitals, device data, and labs nurses repeat after therapy changes, scoped to ${sys} and ${af}.</p>`;
+  }
+  if (/evidence|prescribing/i.test(label)) {
+    return `<p><strong>${L}.</strong> Stay in educational scope for “${t}”: describe monitoring and collaboration points without patient-specific orders; when evidence is uncertain, say so instead of implying trial data you cannot cite.</p>`;
+  }
+  if (/priorities|monitoring|collaboration/i.test(label)) {
+    return `<p><strong>${L}.</strong> Translate “${t}” into nurse-owned reassessment and escalation: what you watch after interventions change, what you teach about ${af}, and what you report when ${sys} data diverge from the expected trajectory.</p>`;
+  }
+  if (/high-yield|connections/i.test(label)) {
+    return `<p><strong>${L}.</strong> Link prior sections for “${t}” into one bedside narrative: mechanism → assessment change → priority action, using <strong>${kw}</strong> as the through-line for ${exam} items.</p>`;
+  }
+  if (/distractor|discrimination/i.test(label)) {
+    return `<p><strong>${L}.</strong> For “${t}”, compare answer options by the pathophysiology each assumes—especially traps that swap chronic baselines for acute instability in ${sys} stems featuring ${af}.</p>`;
+  }
+  if (/teach-back|language/i.test(label)) {
+    return `<p><strong>${L}.</strong> Give patient-ready phrasing for “${t}”: warning symptoms, adherence hooks, and when to seek care—grounded in ${af} so teaching is not copy-paste from another ${sys} diagnosis.</p>`;
+  }
+  if (/takeaway|consolidated/i.test(label)) {
+    return `<p><strong>${L}.</strong> Summarize “${t}” as three decisions an ${exam} candidate should be able to defend aloud: what to assess first, what to monitor, and when to escalate—each tied to ${af} and <strong>${kw}</strong>.</p>`;
+  }
+  return `<p><strong>${L}.</strong> Learners mapping “${t}” through ${sys} should keep ${af} visible while studying ${kw}; tie cues to physiology, monitoring, and escalation appropriate to ${exam}. Educational only—follow local policy.</p>`;
 }
 
-function pad(topic: PathophysiologyLongTailTopicPlan, label: string, baseStart: number): string {
-  return `${paragraphBlock(topic, label, "layer-a", baseStart)}${paragraphBlock(topic, `${label} (deeper)`, "layer-b", baseStart + 200)}${paragraphBlock(topic, `${label} (application)`, "layer-c", baseStart + 400)}`;
+function pad(topic: PathophysiologyLongTailTopicPlan, label: string): string {
+  return paragraphBlock(topic, label);
 }
 
 export function buildFaqItems(topic: PathophysiologyLongTailTopicPlan): { q: string; a: string }[] {
@@ -202,25 +198,25 @@ export function buildLongTailPathophysiologyBody(topic: PathophysiologyLongTailT
     disclaimer,
     internal,
     `<h2>Introduction</h2>`,
-    pad(topic, "Orientation to the clinical problem", 10_000),
+    pad(topic, "Orientation to the clinical problem"),
     `<h2>Pathophysiology mechanism</h2>`,
-    pad(topic, "Mechanistic explanation", 20_000),
+    pad(topic, "Mechanistic explanation"),
     `<h2>Signs and symptoms</h2>`,
-    pad(topic, "Clinical presentation patterns", 30_000),
+    pad(topic, "Clinical presentation patterns"),
     `<h2>Diagnostics, laboratories, and imaging</h2>`,
-    pad(topic, "Objective data interpretation", 40_000),
+    pad(topic, "Objective data interpretation"),
     `<h2>Treatment overview</h2>`,
-    pad(topic, "Evidence-informed direction without prescribing", 50_000),
+    pad(topic, "Evidence-informed direction without prescribing"),
     `<h2>Nursing implications for practice</h2>`,
-    pad(topic, "Priorities, monitoring, and collaboration", 60_000),
+    pad(topic, "Priorities, monitoring, and collaboration"),
     `<h2>Clinical pearls</h2>`,
-    pad(topic, "High-yield connections", 70_000),
+    pad(topic, "High-yield connections"),
     `<h2>Common exam traps</h2>`,
-    pad(topic, "Distractors and discrimination", 80_000),
+    pad(topic, "Distractors and discrimination"),
     `<h2>Patient and client education</h2>`,
-    pad(topic, "Teach-back friendly language", 90_000),
+    pad(topic, "Teach-back friendly language"),
     `<h2>Summary</h2>`,
-    paragraphBlock(topic, "Consolidated takeaways", "summary", 100_000),
+    paragraphBlock(topic, "Consolidated takeaways"),
     `<p><strong>Canonical URL path:</strong> <code>${esc(`/blog/${topic.slug}`)}</code></p>`,
   ]
     .join("\n")

@@ -144,6 +144,33 @@ test("admin_override scope grants fullAccess on marketing lesson without staffFu
   }
 });
 
+test("entitlement error + staffFullLessonAccess still grants full marketing lesson when structurally public", () => {
+  const lesson = {
+    slug: "x",
+    structuralQuality: {
+      publicComplete: true,
+      issues: [],
+      warnings: [],
+      structureMode: "legacy" as const,
+      internalStudyLinkCount: 3,
+    },
+  } as unknown as PathwayLessonRecord;
+  const r = resolveMarketingPathwayLessonRouteResolution({
+    pathway,
+    lesson,
+    lessonLoadFailed: false,
+    userId: "staff-user-id",
+    entitlement: "error",
+    learnerPathResolved: null,
+    staffFullLessonAccess: true,
+  });
+  assert.equal(r.kind, "ready");
+  if (r.kind === "ready") {
+    assert.equal(r.fullAccess, true);
+    assert.equal(r.entitlementError, true);
+  }
+});
+
 test("staffFullLessonAccess does not expose incomplete marketing lesson", () => {
   const lesson = {
     slug: "x",

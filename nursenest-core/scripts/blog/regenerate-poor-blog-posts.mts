@@ -1,4 +1,15 @@
 #!/usr/bin/env npx tsx
+/**
+ * Retroactive repair / audit for **low-quality published** posts (template spam, duplication, weak refs).
+ *
+ * - **Default: dry-run** — logs and writes `reports/blog-regeneration-report.md`; no DB writes.
+ * - **Apply:** `npm run blog:regenerate:poor:apply` (or `--apply`) — reruns {@link runBlogArticleGenerationPipeline} per flagged row,
+ *   **preserves `slug` and `fixedSlug`**, refreshes body/SEO fields from the new pipeline output when post-checks pass.
+ *
+ * **Flagging:** combines {@link validateBlogPublishQuality} (paragraph/sentence/Jaccard/FAQ/ref heuristics) with
+ * {@link collectBlogContentQualityIssues} (banned filler, section similarity, pathophysiology depth) so posts that
+ * only fail one layer are still surfaced.
+ */
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -12,9 +23,19 @@ import {
 } from "@prisma/client";
 import { coerceBlogSourceRows } from "../../src/lib/blog/apa7";
 import { appendBlogAdminPublishLog } from "../../src/lib/blog/blog-admin-publish-log";
-import { lessonRowsToRelatedPaths } from "../../src/lib/blog/blog-internal-lesson-links";
+import { assembleRegenerationBlogPostFields } from "../../src/lib/blog/blog-control-panel-generation";
+import {
+  blogPrePublishValidationSelect,
+  mergeBlogPostForPrePublishPatch,
+  validateBlogPrePublish,
+  type PrePublishPatch,
+} from "../../src/lib/blog/blog-pre-publish-validation";
 import { normalizeBlogTopicIntent } from "../../src/lib/blog/blog-seo-topic-intent";
 import { validateBlogPublishQuality } from "../../src/lib/blog/blog-publish-quality-validator";
+import {
+  blogIntentForQualityGate,
+  collectBlogContentQualityIssues,
+} from "../../src/lib/blog/blog-content-quality-gate";
 import { runBlogArticleGenerationPipeline } from "../../src/lib/blog/blog-article-generation-pipeline";
 import { loadBlogAuditEnv } from "../../src/lib/db/blog-audit-env-load";
 
@@ -155,7 +176,7 @@ async function main(): Promise<void> {
         if (stats.totalScanned >= args.maxScan) break scan;
         stats.totalScanned += 1;
 
-        const quality = validateBlogPublishQuality({
+        const publishQ = validateBlogPublishQuality({
           title: post.title,
           body: post.body,
           targetKeyword: post.targetKeyword,
@@ -164,6 +185,18 @@ async function main(): Promise<void> {
           apaReferences: post.apaReferences,
           sourcesJson: post.sourcesJson,
         });
+        const strictIntent = blogIntentForQualityGate(post.postTemplate, post.intent ?? undefined);
+        const contentQ = collectBlogContentQualityIssues({
+          title: post.title,
+          body: post.body,
+          targetKeyword: post.targetKeyword,
+          postTemplate: post.postTemplate,
+          intent: strictIntent,
+          faqBlock: post.faqBlock,
+          apaReferences: post.apaReferences,
+          sourcesJson: post.sourcesJson,
+        });
+        const quality = { blocking: [...publishQ.blocking, ...contentQ.filter((i) => i.severity === "block")] };
         if (quality.blocking.length > 0) {
           stats.totalFlagged += 1;
           flaggedPosts.push(post);
@@ -242,27 +275,76 @@ async function main(): Promise<void> {
           continue;
         }
 
-        const regeneratedQuality = validateBlogPublishQuality({
-          title: pipeline.plan.h1 || post.title,
-          body: pipeline.bodyHtml,
-          targetKeyword: normalized.normalizedTopic,
-          tags: post.tags,
-          faqBlock: { items: pipeline.plan.faqs },
-          apaReferences: post.apaReferences,
-          sourcesJson: post.sourcesJson,
+        const currentRow = await prisma.blogPost.findUnique({
+          where: { id: post.id },
+          select: blogPrePublishValidationSelect,
         });
-        if (regeneratedQuality.blocking.length > 0) {
+        if (!currentRow) {
           rows.push({
             slug: post.slug,
             title: post.title,
             normalizedTopic: normalized.normalizedTopic,
             action: "failed",
-            reason: regeneratedQuality.blocking.map((item) => item.message).join(" "),
+            reason: "post_missing_before_regeneration_write",
           });
           continue;
         }
 
-        const nextExcerpt = pipeline.bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().slice(0, 480);
+        const pageTitle = (pipeline.plan.h1 || post.title).trim().slice(0, 220) || post.title;
+        const assembled = await assembleRegenerationBlogPostFields({
+          input: {
+            topic: normalized.normalizedTopic,
+            exam: post.exam ?? "NCLEX-RN",
+            country: post.countryTarget === "CA" ? "CA" : post.countryTarget === "US" ? "US" : "unspecified",
+            keywords: post.tags.join(", "),
+            targetKeyword: normalized.normalizedTopic,
+            keywordCluster: post.keywordCluster ?? undefined,
+            template: post.postTemplate ?? BlogPostTemplate.TOPIC_EXPLAINED,
+            intent: post.intent ?? BlogPostIntent.EXAM_PREP,
+            funnelStage: post.funnelStage ?? BlogFunnelStage.CONSIDERATION,
+            tone: "professional",
+            includeImage: false,
+            includeAiImage: false,
+            fixedSlug: post.slug,
+            sourceRecordsJson: coerceBlogSourceRows(Array.isArray(post.sourcesJson) ? post.sourcesJson : []),
+            allowInsufficientCitations: true,
+          },
+          plan: pipeline.plan,
+          bodyHtml: pipeline.bodyHtml,
+          slug: post.slug,
+          postId: post.id,
+          pageTitle,
+        });
+
+        const patch: Partial<PrePublishPatch> = {
+          title: pageTitle,
+          excerpt: assembled.excerpt,
+          body: assembled.body,
+          seoTitle: assembled.seoTitle,
+          seoDescription: assembled.seoDescription,
+          metaTitleVariant: assembled.metaTitleVariant,
+          metaDescriptionVariant: assembled.metaDescriptionVariant,
+          targetKeyword: assembled.targetKeyword,
+          category: assembled.category,
+          tags: assembled.tags,
+          internalLinkPlan: assembled.internalLinkPlan,
+          outlineJson: assembled.outlineJson,
+          faqBlock: assembled.faqBlock,
+          schemaSummary: assembled.schemaSummary,
+        };
+        const merged = mergeBlogPostForPrePublishPatch(currentRow, patch);
+        const pre = await validateBlogPrePublish(merged, post.id, { prisma });
+        if (!pre.okToPublish) {
+          rows.push({
+            slug: post.slug,
+            title: post.title,
+            normalizedTopic: normalized.normalizedTopic,
+            action: "failed",
+            reason: `full_pre_publish_blocked: ${pre.blocking.map((b) => b.message).join("; ")}`,
+          });
+          continue;
+        }
+
         const nextLog = appendBlogAdminPublishLog(post.adminPublishLog, {
           level: "info",
           event: "blog_regeneration_apply",
@@ -278,22 +360,26 @@ async function main(): Promise<void> {
           where: { id: post.id },
           data: {
             slug: post.slug,
-            title: (pipeline.plan.h1 || post.title).slice(0, 220),
-            excerpt: nextExcerpt.length >= 40 ? nextExcerpt : post.excerpt,
-            body: pipeline.bodyHtml,
-            seoTitle: pipeline.plan.metaTitle.slice(0, 200),
-            seoDescription: pipeline.plan.metaDescription.slice(0, 500),
-            targetKeyword: normalized.normalizedTopic,
-            outlineJson: pipeline.plan.outline as Prisma.InputJsonValue,
-            faqBlock: { items: pipeline.plan.faqs } as Prisma.InputJsonValue,
-            titleAlternates: pipeline.plan.titleOptions.slice(0, 8),
-            keyQuestions: pipeline.plan.faqs.map((faq) => faq.q).slice(0, 8),
-            keywordPlan: pipeline.plan.seoFocusKeywords?.slice(0, 8) ?? [normalized.normalizedTopic],
-            relatedLessonPaths: lessonRowsToRelatedPaths(
-              pipeline.plan.suggestedInternalLessons,
-              post.countryTarget === "CA" ? "CA" : post.countryTarget === "US" ? "US" : "unspecified",
-            ),
-            featuredSnippet: pipeline.plan.featuredSnippetHint ?? null,
+            title: pageTitle,
+            excerpt: assembled.excerpt,
+            body: assembled.body,
+            seoTitle: assembled.seoTitle,
+            seoDescription: assembled.seoDescription,
+            metaTitleVariant: assembled.metaTitleVariant,
+            metaDescriptionVariant: assembled.metaDescriptionVariant,
+            targetKeyword: assembled.targetKeyword,
+            category: assembled.category,
+            tags: assembled.tags,
+            outlineJson: assembled.outlineJson,
+            faqBlock: assembled.faqBlock,
+            internalLinkPlan: assembled.internalLinkPlan,
+            schemaSummary: assembled.schemaSummary,
+            titleAlternates: assembled.titleAlternates,
+            keyQuestions: assembled.keyQuestions,
+            keywordPlan: assembled.keywordPlan,
+            relatedLessonPaths: assembled.relatedLessonPaths,
+            featuredSnippet: assembled.featuredSnippet,
+            keyTakeaways: assembled.keyTakeaways,
             adminPublishLog: nextLog as Prisma.InputJsonValue,
           },
         });
@@ -324,6 +410,14 @@ async function main(): Promise<void> {
     console.log(`[blog:regenerate:poor] wrote ${path.relative(repoRoot, reportPath)}`);
   } finally {
     await prisma.$disconnect().catch(() => undefined);
+  }
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
+ undefined);
   }
 }
 

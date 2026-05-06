@@ -1,7 +1,9 @@
 import { Suspense } from "react";
+import { ExamFamily, TierCode } from "@prisma/client";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
 import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner.dynamic";
 import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
+import { LearnerNpExamPracticePickSurface } from "@/components/student/learner-np-exam-practice-pick-surface";
 import { PracticeTestsHubClient } from "@/components/student/practice-tests-hub-client";
 import { isCatExamSimulationFeatureEnabled } from "@/lib/exams/cat-exam-simulation";
 import { FreemiumPreviewExhaustedSurface } from "@/components/student/freemium-preview-exhausted-surface";
@@ -10,7 +12,10 @@ import { ContentEmptyState } from "@/components/ui/content-empty-state";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
-import { listPathwaysCompatibleWithSubscription } from "@/lib/exam-pathways/pathway-entitlements";
+import {
+  examPathwaysForStudyHubSubscription,
+  listPathwaysCompatibleWithSubscription,
+} from "@/lib/exam-pathways/pathway-entitlements";
 import { pathwayAllowsCatAdaptiveStart } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { resolveStudyLoopCatHref } from "@/lib/exam-pathways/study-loop-cat-routing";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
@@ -97,7 +102,8 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
   let pathwayResolution: ResolvedQuestionBankPathways | null = null;
 
   try {
-    const compatiblePathways = await listPathwaysCompatibleWithSubscription(entitlement);
+    const rawCompatible = await listPathwaysCompatibleWithSubscription(entitlement);
+    const compatiblePathways = examPathwaysForStudyHubSubscription(entitlement, rawCompatible);
     const learnerPathRow = userId
       ? await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } })
       : null;
@@ -128,14 +134,15 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
     const snap = tier && country ? await readPracticeTestsHubBootstrapSnapshot({ tier, country }) : null;
     if (snap?.payload) {
       hubBootstrapSource = "secondary";
-      pathwayOptions = snap.payload.pathwayOptions;
-      catEligiblePathwayIds = snap.payload.catEligiblePathwayIds;
+      pathwayOptions =
+        entitlement.tier === TierCode.NP
+          ? snap.payload.pathwayOptions.filter((p) => p.examFamily === ExamFamily.NP)
+          : snap.payload.pathwayOptions;
+      const npIds = new Set(pathwayOptions.map((p) => p.id));
+      catEligiblePathwayIds = snap.payload.catEligiblePathwayIds.filter((id) => npIds.has(id));
       pathwayResolution = resolveSubscribedQuestionBankPathways({
         requestedPathwayId,
-        compatible: snap.payload.pathwayOptions.map((p) => ({
-          id: p.id,
-          shortName: p.examCodeLabel?.trim() || p.id,
-        })),
+        compatible: pathwayOptions.map((p) => ({ id: p.id, shortName: p.examCodeLabel?.trim() || p.id })),
         learnerPath: null,
         requireExplicitRequestedPathwayId: true,
       });
@@ -197,12 +204,24 @@ export default async function PracticeTestsPage({ searchParams }: PageProps) {
           data-route="practice-tests"
           label="NN_RENDER_TRACE: practice exams live route (pathway picker)"
         />
-        <FlashcardsPathwayPickSurface
-          baseAppPath="/app/practice-tests"
-          title={t("learner.practiceTests.title")}
-          subtitle="Choose an exam track for practice exams. Your selection opens this hub with the same pathway in the URL — no redirect loop."
-          pathways={pathwayOptions.map((p) => ({ id: p.id, label: p.label }))}
-        />
+        {entitlement.tier === TierCode.NP ? (
+          <LearnerNpExamPracticePickSurface
+            title={t("learner.practiceTests.title")}
+            subtitle="Choose your NP board track. Each exam uses its own question scope — CNPLE, FNP, PMHNP, and other specialties are not interchangeable."
+            pathways={pathwayOptions.map((p) => ({
+              id: p.id,
+              title: p.examCodeLabel?.trim() || p.label.split("—")[0]?.trim() || p.id,
+              subtitle: p.label.includes("—") ? p.label.split("—").slice(1).join("—").trim() : p.label,
+            }))}
+          />
+        ) : (
+          <FlashcardsPathwayPickSurface
+            baseAppPath="/app/practice-tests"
+            title={t("learner.practiceTests.title")}
+            subtitle="Choose an exam track for practice exams. Your selection opens this hub with the same pathway in the URL — no redirect loop."
+            pathways={pathwayOptions.map((p) => ({ id: p.id, label: p.label }))}
+          />
+        )}
       </div>
     );
   }

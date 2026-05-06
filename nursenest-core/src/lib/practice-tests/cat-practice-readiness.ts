@@ -6,7 +6,7 @@ import {
 import { readinessConfigForPathwayId } from "@/lib/exam-pathways/pathway-readiness-config";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { accessScopeIsStaffLearnerEntitlementBypass } from "@/lib/entitlements/staff-learner-bypass";
-import { CAT_MIN_COMPLETE_POOL, fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
+import { catReadinessMinCompletePoolRows, fetchCatPracticePool } from "@/lib/practice-tests/cat-pool";
 import { PRACTICE_TEST_CAT_CREATE_CODE } from "@/lib/practice-tests/practice-test-cat-create-codes";
 import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
 
@@ -60,11 +60,13 @@ export async function assessCatPracticeReadinessForPathway(
     };
   }
 
+  const minPool = catReadinessMinCompletePoolRows(trimmed);
+
   if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
     return {
       ok: true,
-      availableQuestions: CAT_MIN_COMPLETE_POOL,
-      requiredQuestions: CAT_MIN_COMPLETE_POOL,
+      availableQuestions: minPool,
+      requiredQuestions: minPool,
     };
   }
 
@@ -79,13 +81,13 @@ export async function assessCatPracticeReadinessForPathway(
   };
 
   const { pool } = await fetchCatPracticePool(userId, entitlement, poolInput);
-  if (pool.length < CAT_MIN_COMPLETE_POOL) {
+  if (pool.length < minPool) {
     return {
       ok: false,
       code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid,
-      message: `Adaptive exam not available yet for this pathway. We currently have ${pool.length} complete questions; at least ${CAT_MIN_COMPLETE_POOL} are required.`,
+      message: `Adaptive exam not available yet for this pathway. We currently have ${pool.length} complete questions; at least ${minPool} are required.`,
       availableQuestions: pool.length,
-      requiredQuestions: CAT_MIN_COMPLETE_POOL,
+      requiredQuestions: minPool,
     };
   }
 
@@ -96,9 +98,9 @@ export async function assessCatPracticeReadinessForPathway(
       code: PRACTICE_TEST_CAT_CREATE_CODE.cat_pool_invalid,
       message: "Adaptive exam not available yet for this pathway. Keep practicing complete lessons and questions, then try again.",
       availableQuestions: pool.length,
-      requiredQuestions: CAT_MIN_COMPLETE_POOL,
+      requiredQuestions: minPool,
     };
   }
 
-  return { ok: true, availableQuestions: pool.length, requiredQuestions: CAT_MIN_COMPLETE_POOL };
+  return { ok: true, availableQuestions: pool.length, requiredQuestions: minPool };
 }

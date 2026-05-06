@@ -157,6 +157,11 @@ describe("parseTierScopedAppStudyCallbackPath", () => {
     assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
   });
 
+  it("allows /app/practice-tests hub with pathwayId (tier hub resume after login)", () => {
+    const u = `/app/practice-tests?pathwayId=${encodeURIComponent(RN)}`;
+    assert.equal(parseTierScopedAppStudyCallbackPath(u), u);
+  });
+
   it("allows /app/flashcards with pathwayId", () => {
     const u = `/app/flashcards?pathwayId=${encodeURIComponent(RN)}`;
     assert.equal(parseTierScopedAppStudyCallbackPath(u), u);

@@ -27,7 +27,7 @@ test.describe("Tier matrix — public marketing + anonymous gates", () => {
 
     const practice = page.locator("a.nn-qa-nursing-tier-hub-practice-card");
     await expect(practice).toBeVisible({ timeout: 30_000 });
-    await expect(practice).toHaveAttribute("href", /\/us\/rn\/nclex-rn\/questions|practice/);
+    await expect(practice).toHaveAttribute("href", /\/us\/rn\/nclex-rn\/questions/);
   });
 
   test("anonymous cannot load paid learner lessons hub HTML body", async ({ page, baseURL }) => {

@@ -11,10 +11,14 @@ export function normalizePathwayIdForStudySurfaces(
 ): string {
   const id = raw?.trim() ?? "";
   if (!id) return id;
+  const countryIsCa = String(country ?? "").toUpperCase() === "CA";
+  /** Marketing + hubs use stable `pre-nursing`; catalog rows are country-scoped like NCLEX tracks. */
+  if (id.toLowerCase() === "pre-nursing") {
+    return countryIsCa ? "pre-nursing-ca" : "pre-nursing";
+  }
   if (getExamPathwayById(id)) return id;
 
   const key = id.toLowerCase();
-  const countryIsCa = String(country ?? "").toUpperCase() === "CA";
 
   const aliases: Record<string, string> = {
     "ca-np": "ca-np-cnple",

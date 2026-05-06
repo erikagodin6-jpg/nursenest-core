@@ -18,6 +18,7 @@ import type { CountryCode, TierCode } from "@prisma/client";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { prismaWhereForAlliedProfessionExamQuestions } from "@/lib/allied/allied-exam-question-scope";
 import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
+import { resolveNpSubscriberQuestionPathway } from "@/lib/exam-pathways/np-subscriber-question-pathway";
 import { subscriptionCoversPathwayBase } from "@/lib/exam-pathways/pathway-entitlements-policy";
 import { seedMinimalQuestionBankIfEmpty } from "@/lib/exams/seed-minimal-question-bank";
 import { allowRuntimeMinimalQuestionBankSeed } from "@/lib/jobs/runtime-heavy-work-policy";
@@ -316,7 +317,20 @@ export async function GET(req: NextRequest) {
       if (pathway && !subscriptionCoversPathwayBase(gate.entitlement, pathway)) {
         pathway = null;
       }
-      const baseWhere = questionAccessWhereWithPathway(gate.entitlement, pathway);
+      if (gate.entitlement.tier === "NP") {
+        const userHints = await prisma.user.findUnique({
+          where: { id: gate.userId },
+          select: { learnerPath: true, targetExamPathwayId: true },
+        });
+        pathway = resolveNpSubscriberQuestionPathway({
+          tier: gate.entitlement.tier,
+          pathwayIdParam,
+          pathwayResolved: pathway,
+          pathwayHintIds: [userHints?.learnerPath, userHints?.targetExamPathwayId, gate.userAccess.allowedExam.pathwayId],
+          entitlement: gate.entitlement,
+          getExamPathwayById,
+        });
+      }
       const alliedProfessionExamWhere = prismaWhereForAlliedProfessionExamQuestions(
         pathwayIdParam,
         alliedProfessionParam || null,
@@ -357,6 +371,32 @@ export async function GET(req: NextRequest) {
           studyModeNote = "weak_topic_unavailable";
         }
       }
+
+      if (gate.entitlement.tier === "NP" && !pathway) {
+        const code =
+          pathwayIdParam && pathwayIdParam.trim().length > 0 ? "np_pathway_context_invalid" : "np_pathway_id_required";
+        return jsonResponseGuarded("/api/questions", {
+          page,
+          pageSize,
+          studyMode: studyMode ?? null,
+          studyModeNote,
+          weakTopicCodeApplied,
+          weakTopicConfidence,
+          questions: [],
+          mode: "subscriber" as const,
+          fields: responseMode,
+          sort,
+          excludeIdsCount: excludeIds.length,
+          pathwayIdApplied: null,
+          pathwayIdRequested: pathwayIdParam && pathwayIdParam.length > 0 ? pathwayIdParam : null,
+          topicRequested: topicFilterResolved && topicFilterResolved.length > 0 ? topicFilterResolved : null,
+          topicCodeRequested: topicCodeFilter ?? null,
+          topicRelaxed: false,
+          npListGate: code,
+        });
+      }
+
+      const baseWhere = questionAccessWhereWithPathway(gate.entitlement, pathway);
 
       const studyModeFilters: Prisma.ExamQuestionWhereInput[] = [];
       if (studyMode === "high_yield") {

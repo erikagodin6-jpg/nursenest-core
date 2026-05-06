@@ -81,6 +81,7 @@ export function createJsonApiClient(options: CreateJsonApiClientOptions): Mobile
             kind: classifyError(res.status),
             status: res.status,
             message: errMsg,
+            errorBody: data,
           };
         }
 

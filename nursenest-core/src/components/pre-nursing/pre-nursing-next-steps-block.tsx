@@ -48,12 +48,14 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
   const prioritizedTitle = useMemo(() => ROUTES.find((r) => r.key === hint)?.title ?? "General exam prep", [hint]);
 
   return (
-    <section className="nn-card mt-8 border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+    <section className="nn-card mt-8 p-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-lg font-semibold text-foreground">What comes after Pre-Nursing</h3>
-        <span className="text-xs text-gray-700 dark:text-gray-300">Your hint: {hint === "unsure" ? "Not set yet" : prioritizedTitle}</span>
+        <h3 className="text-lg font-semibold text-[var(--theme-heading-text)]">What comes after Pre-Nursing</h3>
+        <span className="text-xs text-[var(--semantic-text-secondary)]">
+          Your hint: {hint === "unsure" ? "Not set yet" : prioritizedTitle}
+        </span>
       </div>
-      <p className="mt-2 text-sm text-gray-700 dark:text-gray-300">
+      <p className="mt-2 text-sm text-[var(--semantic-text-secondary)]">
         Pre-Nursing stays free. When you want exam-style prep, compare the pathways below and choose a route that matches your
         goal and location.
       </p>
@@ -65,8 +67,8 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
             <Link
               key={route.key}
               href={href}
-              className={`rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:hover:bg-gray-800 ${
-                highlighted ? "border-primary dark:border-primary" : ""
+              className={`rounded-xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface-elevated)] p-4 shadow-sm transition-colors hover:bg-[color-mix(in_srgb,var(--semantic-brand)_6%,var(--semantic-surface-elevated))] ${
+                highlighted ? "border-[color-mix(in_srgb,var(--semantic-brand)_45%,var(--semantic-border-soft))]" : ""
               }`}
               onClick={() =>
                 trackClientEvent(PH.preNursingPathwayCtaClicked, {
@@ -76,9 +78,9 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
                 })
               }
             >
-              <p className="text-sm font-semibold text-foreground">{route.title}</p>
-              <p className="mt-1 text-xs text-gray-700 dark:text-gray-300">{route.whoFor}</p>
-              <p className="mt-2 text-xs text-gray-700 dark:text-gray-300">{route.note}</p>
+              <p className="text-sm font-semibold text-[var(--theme-heading-text)]">{route.title}</p>
+              <p className="mt-1 text-xs text-[var(--semantic-text-secondary)]">{route.whoFor}</p>
+              <p className="mt-2 text-xs text-[var(--semantic-text-secondary)]">{route.note}</p>
             </Link>
           );
         })}
@@ -109,12 +111,18 @@ export function PreNursingNextStepsBlock({ sourceSurface }: { sourceSurface: "hu
           Browse exam lesson hubs
         </Link>
         {prioritizedHref ? (
-          <Link href={prioritizedHref} className="text-gray-700 hover:text-primary hover:underline dark:text-gray-300">
+          <Link
+            href={prioritizedHref}
+            className="font-medium text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-brand)] hover:underline"
+          >
             Open suggested pathway
           </Link>
         ) : null}
         {secondaryHref ? (
-          <Link href={secondaryHref} className="text-gray-700 hover:text-primary hover:underline dark:text-gray-300">
+          <Link
+            href={secondaryHref}
+            className="font-medium text-[var(--semantic-text-secondary)] hover:text-[var(--semantic-brand)] hover:underline"
+          >
             Canada RN option
           </Link>
         ) : null}

@@ -162,7 +162,10 @@ function LessonsHubInner() {
       await SecureStore.setItemAsync(LESSON_RESUME_SLUG_KEY, row.pathwayMeta.slug);
       await SecureStore.setItemAsync(LESSON_RESUME_LESSON_ID_KEY, row.id);
       await SecureStore.setItemAsync(LESSON_RESUME_SCROLL_KEY, "0");
-      router.push({ pathname: "/lesson/[lessonId]", params: { lessonId: row.id } });
+      router.push({
+        pathname: "/(learner)/lesson/[slug]",
+        params: { slug: row.pathwayMeta.slug, pathwayId: row.pathwayMeta.pathwayId },
+      });
     },
     [router],
   );

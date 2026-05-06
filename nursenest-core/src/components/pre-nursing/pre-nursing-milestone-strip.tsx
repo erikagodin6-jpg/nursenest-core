@@ -69,7 +69,7 @@ export function PreNursingMilestoneStrip({
         {snapshot.nextSlug && nextTitle ? (
           <Link
             href={`/pre-nursing/lessons/${snapshot.nextSlug}`}
-            className="font-semibold text-primary hover:underline"
+            className="font-medium text-primary hover:underline"
             onClick={() =>
               trackClientEvent(PH.preNursingNextModuleClicked, {
                 source_surface: sourceSurface,
@@ -84,7 +84,7 @@ export function PreNursingMilestoneStrip({
         ) : (
           <Link
             href="/lessons"
-            className="font-semibold text-primary hover:underline"
+            className="font-medium text-primary hover:underline"
             onClick={() =>
               trackClientEvent(PH.preNursingExamLessonsHubClicked, {
                 source_surface: sourceSurface,

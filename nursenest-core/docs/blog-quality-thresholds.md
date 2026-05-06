@@ -16,3 +16,7 @@ Do **not** duplicate the numeric table here; it drifts from code. For a quick lo
 # From this package root (`nursenest-core/` where `package.json` lives)
 rg "BLOG_GOVERNANCE_|DIMENSION_WEIGHTS" src/lib/blog/blog-quality-score.ts
 ```
+
+## H2 section similarity (publish gate)
+
+Embedding-free pairwise Jaccard on word sets (length ≥4, stopwords stripped) between **teaching** H2 segments: soft clustering counts pairs above `BLOG_SECTION_JACCARD_SOFT_THRESHOLD`; a **hard block** fires when the single worst pair reaches `BLOG_SECTION_JACCARD_HARD_THRESHOLD` (see exports in `src/lib/blog/blog-content-quality-gate.ts`). Documented here by symbol name only so values stay canonical in TypeScript.

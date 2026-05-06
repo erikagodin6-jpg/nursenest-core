@@ -11,11 +11,11 @@ export function EmailSignupBanner() {
   const [msg, setMsg] = useState<string | null>(null);
 
   return (
-    <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-4 shadow-[var(--semantic-shadow-soft)] sm:p-6">
+    <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-4 text-[var(--theme-heading-text)] shadow-[var(--semantic-shadow-soft)] sm:p-6">
       <div className="mx-auto flex max-w-3xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="nn-marketing-h3">{t("footer.emailBannerTitle")}</h3>
-          <p className="nn-marketing-body-sm mt-1 text-[var(--theme-muted-text)]">{t("footer.emailBannerSubtitle")}</p>
+          <p className="mt-1 text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{t("footer.emailBannerSubtitle")}</p>
         </div>
         <form
           className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center"

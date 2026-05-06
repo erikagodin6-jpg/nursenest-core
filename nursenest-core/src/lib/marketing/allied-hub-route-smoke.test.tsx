@@ -6,6 +6,7 @@ import React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { AlliedHealthPathwayHub } from "@/components/marketing/allied-health-pathway-hub";
 import { ALLIED_GLOBAL_HUB_PATH } from "@/lib/allied/allied-global-pathway";
+import { resolveAlliedProfessionFromRouteSlug } from "@/lib/allied/allied-professions-registry";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-pathways-catalog";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
@@ -83,27 +84,45 @@ describe("allied health pathway hub route smoke", () => {
       />,
     );
 
-    assert.match(html, /Allied Health global hub/);
     assert.match(html, /Choose your Allied Health track/);
-    assert.match(html, /Practice exams/);
-    assert.match(html, /Flashcards/);
-    assert.match(html, /Lab values and interpretation/);
+    assert.doesNotMatch(html, /Practice exams/);
+    assert.doesNotMatch(html, /nn-qa-allied-hub-practice-exams/);
+    assert.match(html, /Open study hub/);
+    assert.match(html, /href="\/allied\/[^"]+"/);
     assert.match(html, /Units for allied study/);
     assert.doesNotMatch(html, /Homepage content failed to load/);
     assert.doesNotMatch(html, /Go home/);
   });
 
-  it("non-global hubPath still renders full hub shell (bookmarks; marketing redirects prefer global)", () => {
+  it("locale-prefixed allied hub mirrors global occupation chooser (no study mode strip)", () => {
     const pathway = getExamPathwayById("us-allied-core");
     assert.ok(pathway);
     const html = renderToStaticMarkup(
       <AlliedHealthPathwayHub pathway={pathway!} hubPath="/us/allied/allied-health" overview={labsModuleOverview} />,
     );
-    assert.match(html, /United States Allied Health hub/);
     assert.match(html, /Choose your Allied Health track/);
-    assert.match(html, /Study modes/);
-    assert.match(html, /Lab values and interpretation/);
+    assert.doesNotMatch(html, /Study modes/);
+    assert.match(html, /Open study hub/);
+    assert.doesNotMatch(html, /nn-qa-allied-hub-lessons/);
     assert.doesNotMatch(html, /Homepage content failed to load/);
+  });
+
+  it("occupation-scoped allied hub renders study modes and module strip", () => {
+    const pathway = getExamPathwayById("us-allied-core");
+    assert.ok(pathway);
+    const prof = resolveAlliedProfessionFromRouteSlug("medical-assistant-exam-prep");
+    assert.ok(prof);
+    const html = renderToStaticMarkup(
+      <AlliedHealthPathwayHub
+        pathway={pathway!}
+        hubPath={`/allied/${prof.professionKey}`}
+        profession={prof}
+        overview={labsModuleOverview}
+      />,
+    );
+    assert.match(html, /Study modes/);
+    assert.match(html, /nn-qa-allied-hub-lessons/);
+    assert.match(html, /Lab values and interpretation/);
   });
 
   it("allied exam hub + global hub pages load overview and measurement wiring (no Canada-only directory fork)", () => {
@@ -113,6 +132,7 @@ describe("allied health pathway hub route smoke", () => {
     const layoutSrc = readFileSync(layoutPath, "utf8");
     const nextConfig = readFileSync(join(process.cwd(), "next.config.mjs"), "utf8");
     assert.match(globalSrc, /ALLIED_GLOBAL_HUB_PATH/);
+    assert.match(globalSrc, /fallbackAlliedPathwayHubOverview/);
     assert.match(globalSrc, /syncMeasurementPreferenceToProfile/);
     assert.match(src, /loadAlliedPathwayHubOverview/);
     assert.match(src, /const isAlliedHub = pathway\.roleTrack === "allied" && pathway\.examCode === "allied-health"/);

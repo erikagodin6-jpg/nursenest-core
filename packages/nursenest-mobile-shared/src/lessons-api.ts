@@ -1,9 +1,21 @@
-import type { MobileNativeApiClient, MobileNativePreparedRequest } from "./contracts.js";
+import type { MobileNativeApiClient, MobileNativeApiResult, MobileNativePreparedRequest } from "./contracts.js";
 import type {
   MobilePathwayLessonDetailResponse,
   MobilePathwayLessonsListResponse,
   MobilePathwayLessonTopicsResponse,
 } from "./lesson-types.js";
+
+/** Thrown when `fetchPathwayLessonDetail` receives a non-2xx JSON response — carries HTTP status + body for paywall UX. */
+export class MobileLessonDetailFetchError extends Error {
+  readonly status?: number;
+  readonly errorBody?: unknown;
+  constructor(message: string, init?: { readonly status?: number; readonly errorBody?: unknown }) {
+    super(message);
+    this.name = "MobileLessonDetailFetchError";
+    this.status = init?.status;
+    this.errorBody = init?.errorBody;
+  }
+}
 
 export type PathwayLessonsListParams = {
   readonly pathwayId?: string | null;
@@ -77,9 +89,15 @@ export async function fetchPathwayLessonDetail(
     path: buildPathwayLessonDetailPath(args),
   };
   const res = await client.executeJson<MobilePathwayLessonDetailResponse>(req);
-  if (!res.ok) throw new Error(res.message);
+  if (!res.ok) {
+    const r = res as Extract<MobileNativeApiResult<MobilePathwayLessonDetailResponse>, { ok: false }>;
+    throw new MobileLessonDetailFetchError(r.message, { status: r.status, errorBody: r.errorBody });
+  }
   return res.data;
 }
+
+/** Alias for `fetchPathwayLessonDetail` — same `GET /api/learner/pathway-lesson` contract. */
+export const fetchPathwayLesson = fetchPathwayLessonDetail;
 
 /** React Query cache keys — keep stable; persist layer may filter to hub/detail only (no full catalog). */
 export type PathwayLessonProgressPostBody = {

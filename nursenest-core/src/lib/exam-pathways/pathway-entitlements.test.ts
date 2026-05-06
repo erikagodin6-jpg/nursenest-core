@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { listPathwaysCompatibleWithSubscription } from "./pathway-entitlements";
+import { ExamFamily } from "@prisma/client";
+import { defaultPracticeTestPathwayId, examPathwaysForStudyHubSubscription, listPathwaysCompatibleWithSubscription } from "./pathway-entitlements";
+import { resolveNpSubscriberQuestionPathway } from "./np-subscriber-question-pathway";
 import { subscriptionCoversPathwayBase } from "./pathway-entitlements-policy";
 
 function scope(
@@ -98,5 +100,87 @@ describe("listPathwaysCompatibleWithSubscription", () => {
     const usRn = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(usRn);
     assert.ok(list.some((p) => p.id === usRn!.id));
+  });
+});
+
+describe("examPathwaysForStudyHubSubscription", () => {
+  it("keeps RN-only lists unchanged for RN subscribers", () => {
+    const s = scope({ hasAccess: true, reason: "active_subscription", tier: "RN", country: "US" });
+    const usRn = getExamPathwayById("us-rn-nclex-rn")!;
+    const usNp = getExamPathwayById("us-np-fnp")!;
+    const out = examPathwaysForStudyHubSubscription(s, [usRn, usNp]);
+    assert.equal(out.length, 2);
+  });
+
+  it("filters NP subscriber study hubs to NP exam pathways only (no RN cards)", () => {
+    const s = scope({ hasAccess: true, reason: "active_subscription", tier: "NP", country: "US" });
+    const usRn = getExamPathwayById("us-rn-nclex-rn")!;
+    const usNpFnp = getExamPathwayById("us-np-fnp")!;
+    const usNpPmhnp = getExamPathwayById("us-np-pmhnp")!;
+    const out = examPathwaysForStudyHubSubscription(s, [usRn, usNpFnp, usNpPmhnp]);
+    assert.deepEqual(
+      out.map((p) => p.id).sort(),
+      ["us-np-fnp", "us-np-pmhnp"],
+    );
+    assert.ok(out.every((p) => p.examFamily === ExamFamily.NP));
+  });
+
+  it("does not filter staff bypass lists", () => {
+    const s = scope({ hasAccess: true, reason: "admin_override", tier: "NP", country: "US" });
+    const usRn = getExamPathwayById("us-rn-nclex-rn")!;
+    const usNp = getExamPathwayById("us-np-fnp")!;
+    const out = examPathwaysForStudyHubSubscription(s, [usRn, usNp]);
+    assert.equal(out.length, 2);
+  });
+});
+
+describe("defaultPracticeTestPathwayId", () => {
+  it("picks a stable NP id when every compatible pathway is NP (no NCLEX-RN default)", async () => {
+    const usNpFnp = getExamPathwayById("us-np-fnp")!;
+    const usNpPmhnp = getExamPathwayById("us-np-pmhnp")!;
+    const id = await defaultPracticeTestPathwayId([usNpPmhnp, usNpFnp], null, "US");
+    assert.equal(id, "us-np-fnp");
+  });
+});
+
+describe("resolveNpSubscriberQuestionPathway", () => {
+  it("fills missing pathwayId from first NP hint for NP tier", () => {
+    const s = scope({ hasAccess: true, reason: "active_subscription", tier: "NP", country: "US" });
+    const usNp = getExamPathwayById("us-np-fnp")!;
+    const out = resolveNpSubscriberQuestionPathway({
+      tier: "NP",
+      pathwayIdParam: null,
+      pathwayResolved: null,
+      pathwayHintIds: ["us-np-fnp"],
+      entitlement: s,
+      getExamPathwayById: (id) => getExamPathwayById(id),
+    });
+    assert.equal(out?.id, usNp.id);
+  });
+
+  it("ignores RN hints when pathwayId is absent (no silent RN pool)", () => {
+    const s = scope({ hasAccess: true, reason: "active_subscription", tier: "NP", country: "US" });
+    const out = resolveNpSubscriberQuestionPathway({
+      tier: "NP",
+      pathwayIdParam: null,
+      pathwayResolved: null,
+      pathwayHintIds: ["us-rn-nclex-rn", "us-np-fnp"],
+      entitlement: s,
+      getExamPathwayById: (id) => getExamPathwayById(id),
+    });
+    assert.equal(out?.id, "us-np-fnp");
+  });
+
+  it("does not substitute hints when pathwayId param is present", () => {
+    const s = scope({ hasAccess: true, reason: "active_subscription", tier: "NP", country: "US" });
+    const out = resolveNpSubscriberQuestionPathway({
+      tier: "NP",
+      pathwayIdParam: "us-rn-nclex-rn",
+      pathwayResolved: null,
+      pathwayHintIds: ["us-np-fnp"],
+      entitlement: s,
+      getExamPathwayById: (id) => getExamPathwayById(id),
+    });
+    assert.equal(out, null);
   });
 });

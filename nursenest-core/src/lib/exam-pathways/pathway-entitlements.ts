@@ -27,6 +27,21 @@ export async function listPathwaysCompatibleWithSubscription(scope: AccessScope)
 }
 
 /**
+ * Practice-tests / learner practice pickers: NP subscribers must choose an **NP exam** pathway, not
+ * RN/NCLEX marketing tracks that happen to sit on the same Stripe ladder.
+ */
+export function examPathwaysForStudyHubSubscription(
+  scope: AccessScope,
+  compatible: ExamPathwayDefinition[],
+): ExamPathwayDefinition[] {
+  if (!scope.hasAccess || scope.reason === "no_access") return compatible;
+  if (accessScopeIsStaffLearnerEntitlementBypass(scope)) return compatible;
+  if (scope.tier !== "NP") return compatible;
+  const npOnly = compatible.filter((p) => p.examFamily === ExamFamily.NP);
+  return npOnly.length > 0 ? npOnly : compatible;
+}
+
+/**
  * When User.learnerPath is set to a registry id, scope NP (and other) content to that track.
  * Returns null if unset or unknown id.
  */
@@ -50,6 +65,11 @@ export async function defaultPracticeTestPathwayId(
   const fromLp = await pathwayFromLearnerPath(learnerPath);
   if (fromLp && compatible.some((p) => p.id === fromLp.id)) {
     return fromLp.id;
+  }
+  const onlyNpTracks = compatible.length > 0 && compatible.every((p) => p.examFamily === ExamFamily.NP);
+  if (onlyNpTracks) {
+    const sorted = [...compatible].sort((a, b) => a.id.localeCompare(b.id));
+    return sorted[0]!.id;
   }
   const nclexRn = compatible.find(
     (p) =>

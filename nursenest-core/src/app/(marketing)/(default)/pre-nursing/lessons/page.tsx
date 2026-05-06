@@ -92,46 +92,50 @@ export default async function PreNursingLessonsHubPage({ searchParams }: Props) 
         <header className="mb-6">
           <EditableText
             as="p"
-            className="text-xs font-semibold uppercase tracking-wide text-primary"
+            className="text-xs font-medium uppercase tracking-wide text-primary"
             contentKey="inline.marketing.preNursing.lessons.kicker"
             defaultText="Pre-Nursing"
             preloaded={preNursingLessonsInlinePreloaded}
           />
           <EditableHeading
             as="h1"
-            className="mt-2 text-2xl font-extrabold tracking-tight text-[var(--theme-heading-text)] sm:text-3xl"
+            className="mt-2 text-2xl font-semibold tracking-tight text-[var(--theme-heading-text)] sm:text-3xl"
             contentKey="inline.marketing.preNursing.lessons.h1"
             defaultText="Lesson Library"
             preloaded={preNursingLessonsInlinePreloaded}
           />
           <EditableText
             as="p"
-            className="mt-2 max-w-2xl text-[var(--theme-body-text)]"
+            className="mt-2 max-w-2xl text-sm font-normal leading-relaxed text-[var(--theme-body-text)] sm:text-base"
             contentKey="inline.marketing.preNursing.lessons.intro"
             defaultText="Review concepts by topic. Open any lesson to study, then move into flashcards, practice questions, and exams."
             preloaded={preNursingLessonsInlinePreloaded}
           />
-          <div className="mt-3 flex flex-wrap gap-3 text-sm">
-            <Link href="/pre-nursing" className="font-semibold text-primary hover:underline">
+          <div className="mt-3 flex flex-wrap gap-3 text-sm font-normal">
+            <Link href="/pre-nursing" className="text-primary hover:underline">
               ← Pre-Nursing overview
             </Link>
-            <Link href="/pre-nursing/study-plan" className="font-semibold text-[var(--theme-muted-text)] hover:text-primary hover:underline">
+            <Link href="/pre-nursing/study-plan" className="text-[var(--theme-muted-text)] hover:text-primary hover:underline">
               Study planning
             </Link>
           </div>
         </header>
 
-        <ul className="grid gap-4 sm:grid-cols-2">
+        <ul className="grid list-none grid-cols-1 items-stretch gap-4 p-0 sm:grid-cols-2">
           {slice.map((m) => (
-            <li key={m.slug}>
+            <li key={m.slug} className="flex min-h-[12.5rem] sm:min-h-[13.5rem]">
               <Link
                 href={`/pre-nursing/lessons/${m.slug}`}
-                className="nn-card nn-card-interactive block p-5"
+                className="nn-card nn-card-interactive group flex w-full flex-1 flex-col p-5"
                 data-testid={`pre-nursing-lesson-${m.slug}`}
               >
-                <h2 className="text-lg font-bold text-[var(--theme-heading-text)]">{dict[m.titleKey] ?? m.slug}</h2>
-                <p className="mt-2 text-sm text-[var(--theme-muted-text)]">{dict[m.subtitleKey] ?? ""}</p>
-                <p className="mt-3 text-xs font-medium text-[var(--theme-muted-text)]">
+                <h2 className="line-clamp-2 shrink-0 text-lg font-semibold text-[var(--theme-heading-text)] group-hover:text-primary">
+                  {dict[m.titleKey] ?? m.slug}
+                </h2>
+                <p className="mt-2 min-h-0 flex-1 text-sm font-normal leading-relaxed text-[var(--theme-body-text)] line-clamp-3">
+                  {dict[m.subtitleKey] ?? ""}
+                </p>
+                <p className="mt-auto border-t border-[var(--semantic-border-soft)] pt-3 text-xs font-normal text-[var(--semantic-brand)]">
                   {m.lessons} {dict["preNursing.interactiveLessons"] ?? "interactive lessons"}
                 </p>
               </Link>

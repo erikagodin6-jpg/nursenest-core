@@ -88,10 +88,10 @@ export function AnatomyLabeling({
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-semibold text-heading text-lg">{title}</h3>
-            {description && <p className="text-sm text-muted-foreground mt-1">{description}</p>}
+            {description && <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{description}</p>}
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-muted-foreground bg-card/80 px-3 py-1 rounded-full">
+            <span className="rounded-full bg-[color-mix(in_srgb,var(--semantic-surface-elevated)_88%,var(--semantic-border-soft))] px-3 py-1 text-xs text-[var(--semantic-text-secondary)]">
               {revealed.size}/{labels.length} identified
             </span>
           </div>
@@ -117,7 +117,7 @@ export function AnatomyLabeling({
                       "transition-all duration-300",
                       isRevealed
                         ? "fill-primary/80 stroke-primary"
-                        : "fill-white stroke-primary/40 hover:stroke-primary hover:fill-primary/10"
+                        : "fill-[var(--semantic-surface-elevated)] stroke-primary/40 hover:stroke-primary hover:fill-primary/10"
                     )}
                     strokeWidth={2}
                   />
@@ -138,7 +138,7 @@ export function AnatomyLabeling({
                       y={point.y + 1}
                       textAnchor="middle"
                       dominantBaseline="middle"
-                      className="fill-white text-[8px] font-bold pointer-events-none select-none"
+                      className="fill-[var(--semantic-brand-contrast)] text-[8px] font-bold pointer-events-none select-none"
                     >
                       ✓
                     </text>
@@ -171,14 +171,14 @@ export function AnatomyLabeling({
                           width={labelW}
                           height={20}
                           rx={6}
-                          className="fill-white stroke-primary/20"
+                          className="fill-[var(--semantic-surface-elevated)] stroke-primary/20"
                           strokeWidth={1}
                         />
                         <text
                           x={textX}
                           y={textY}
                           textAnchor="middle"
-                          className="fill-gray-800 text-[10px] font-medium pointer-events-none select-none"
+                          className="fill-[var(--semantic-text-primary)] text-[10px] font-medium pointer-events-none select-none"
                         >
                           {point.label}
                         </text>
@@ -283,9 +283,9 @@ export function MatchingExercise({
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-semibold text-heading text-lg">{title}</h3>
-            {description && <p className="text-sm text-muted-foreground mt-1">{description}</p>}
+            {description && <p className="mt-1 text-sm text-[var(--semantic-text-secondary)]">{description}</p>}
           </div>
-          <span className="text-xs text-muted-foreground bg-card/80 px-3 py-1 rounded-full">
+          <span className="rounded-full bg-[color-mix(in_srgb,var(--semantic-surface-elevated)_88%,var(--semantic-border-soft))] px-3 py-1 text-xs text-[var(--semantic-text-secondary)]">
             {matched.size}/{pairsWithIds.length} matched
           </span>
         </div>
@@ -293,7 +293,9 @@ export function MatchingExercise({
       <CardContent className="p-6">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">{t("components.interactiveLearning.terms")}</p>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--semantic-text-secondary)]">
+              {t("components.interactiveLearning.terms")}
+            </p>
             {pairsWithIds.map((pair) => (
               <button
                 key={pair.id}
@@ -302,7 +304,7 @@ export function MatchingExercise({
                 className={cn(
                   "w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 border",
                   matched.has(pair.id)
-                    ? "bg-primary/10 border-primary/30 text-primary line-through opacity-60"
+                    ? "border-primary/30 bg-primary/10 text-[var(--semantic-text-muted)] line-through"
                     : selectedTerm === pair.id
                     ? "bg-primary/15 border-primary shadow-sm text-primary"
                     : "bg-card border-border hover:border-primary/40 hover:bg-primary/5 text-card-foreground"
@@ -314,7 +316,9 @@ export function MatchingExercise({
             ))}
           </div>
           <div className="space-y-2">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">{t("components.interactiveLearning.definitions")}</p>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--semantic-text-secondary)]">
+              {t("components.interactiveLearning.definitions")}
+            </p>
             {shuffledDefs.map((pair) => (
               <button
                 key={pair.id}
@@ -323,7 +327,7 @@ export function MatchingExercise({
                 className={cn(
                   "w-full text-left px-4 py-3 rounded-xl text-sm transition-all duration-200 border",
                   Array.from(matched.values()).includes(pair.id)
-                    ? "bg-primary/10 border-primary/30 text-primary opacity-60"
+                    ? "border-primary/30 bg-primary/10 text-[var(--semantic-text-muted)] line-through"
                     : incorrect === pair.id
                     ? "bg-red-50 border-red-300 text-red-700 animate-shake"
                     : "bg-card border-border hover:border-primary/40 hover:bg-primary/5 text-foreground"
@@ -445,7 +449,7 @@ export function SelfCheckQuiz({
       <div className="bg-gradient-to-r from-primary/5 to-primary/10 px-6 py-4 border-b border-primary/10">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-heading">{title}</h3>
-          <span className="text-xs text-muted-foreground bg-card/80 px-3 py-1 rounded-full">
+          <span className="rounded-full bg-[color-mix(in_srgb,var(--semantic-surface-elevated)_88%,var(--semantic-border-soft))] px-3 py-1 text-xs text-[var(--semantic-text-secondary)]">
             {currentIndex + 1}/{questions.length}
           </span>
         </div>
@@ -472,19 +476,19 @@ export function SelfCheckQuiz({
                   ? "bg-emerald-50 border-emerald-300 text-emerald-800"
                   : selectedAnswer === i
                   ? "bg-red-50 border-red-300 text-red-700"
-                  : "bg-muted border-border text-muted-foreground"
+                  : "border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-text-muted)_10%,var(--semantic-surface))] text-[var(--semantic-text-secondary)]"
               )}
               data-testid={`quiz-option-${i}`}
             >
               <span className={cn(
                 "w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 border",
                 selectedAnswer === null
-                  ? "bg-muted text-muted-foreground border-border"
+                  ? "border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-text-muted)_12%,var(--semantic-surface))] text-[var(--semantic-text-secondary)]"
                   : i === current.correctIndex
                   ? "bg-emerald-100 text-emerald-700 border-emerald-300"
                   : selectedAnswer === i
                   ? "bg-red-100 text-red-700 border-red-300"
-                  : "bg-muted text-muted-foreground border-border"
+                  : "border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-text-muted)_12%,var(--semantic-surface))] text-[var(--semantic-text-secondary)]"
               )}>
                 {String.fromCharCode(65 + i)}
               </span>
@@ -707,11 +711,12 @@ export function ProgressiveReveal({
         {cards.map((card) => (
           <div
             key={card.id}
-            className="border border-primary/10 rounded-xl overflow-hidden bg-card shadow-sm hover:shadow-md transition-all"
+            className="border border-primary/10 rounded-xl overflow-hidden bg-card text-card-foreground shadow-sm transition-all hover:shadow-md"
           >
             <button
+              type="button"
               onClick={() => toggle(card.id)}
-              className="w-full flex items-center justify-between px-5 py-4 text-left group"
+              className="group flex w-full items-center justify-between px-5 py-4 text-left text-card-foreground"
               data-testid={`reveal-card-${card.id}`}
             >
               <div className="flex items-center gap-3">
@@ -808,7 +813,7 @@ export function SpotAbnormality({
                   : checked && !finding.isAbnormal && selected.has(finding.id)
                   ? "bg-red-50 border-red-300 text-red-700"
                   : checked && !finding.isAbnormal
-                  ? "bg-muted border-border text-muted-foreground"
+                  ? "border-[var(--semantic-border-soft)] bg-[color-mix(in_srgb,var(--semantic-text-muted)_10%,var(--semantic-surface))] text-[var(--semantic-text-secondary)]"
                   : selected.has(finding.id)
                   ? "bg-primary/10 border-primary/40 text-primary"
                   : "bg-card border-border hover:border-primary/30 text-foreground"
@@ -885,6 +890,8 @@ export function MicroLesson({
   );
 }
 
+type CognitiveCardKind = "concept" | "warning" | "tip" | "remember";
+
 export function CognitiveCard({
   title,
   content,
@@ -893,14 +900,24 @@ export function CognitiveCard({
 }: {
   title: string;
   content: string;
-  type?: "concept" | "warning" | "tip" | "remember";
+  type?: CognitiveCardKind;
   icon?: React.ReactNode;
 }) {
-  const styles = {
-    concept: "bg-primary/5 border-primary/15 text-primary",
-    warning: "bg-red-50 border-red-200 text-red-600",
-    tip: "bg-amber-50 border-amber-200 text-amber-600",
-    remember: "bg-emerald-50 border-emerald-200 text-emerald-600",
+  const shells: Record<CognitiveCardKind, string> = {
+    concept:
+      "border border-[color-mix(in_srgb,var(--semantic-brand)_22%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_8%,var(--semantic-surface))]",
+    warning:
+      "border border-[color-mix(in_srgb,var(--semantic-danger)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--semantic-surface))]",
+    tip: "border border-[color-mix(in_srgb,var(--semantic-warning)_28%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-warning)_9%,var(--semantic-surface))]",
+    remember:
+      "border border-[color-mix(in_srgb,var(--semantic-success)_26%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-success)_9%,var(--semantic-surface))]",
+  };
+
+  const titleTone: Record<CognitiveCardKind, string> = {
+    concept: "text-[var(--semantic-brand)]",
+    warning: "text-[var(--semantic-danger-contrast)]",
+    tip: "text-[var(--semantic-warning-contrast)]",
+    remember: "text-[var(--semantic-success-contrast)]",
   };
 
   const defaultIcons = {
@@ -913,15 +930,18 @@ export function CognitiveCard({
   const hasHtml = /<[a-z][\s\S]*>/i.test(content);
 
   return (
-    <div className={cn("p-4 rounded-xl border", styles[type])} data-testid={`cognitive-card-${type}`}>
+    <div className={cn("rounded-xl p-4", shells[type])} data-testid={`cognitive-card-${type}`}>
       <div className="flex items-start gap-3">
-        <div className="shrink-0 mt-0.5">{icon || defaultIcons[type]}</div>
-        <div>
-          <p className="text-sm font-semibold mb-1">{title}</p>
+        <div className={cn("mt-0.5 shrink-0", titleTone[type])}>{icon || defaultIcons[type]}</div>
+        <div className="min-w-0">
+          <p className={cn("mb-1 text-sm font-semibold", titleTone[type])}>{title}</p>
           {hasHtml ? (
-            <div className="text-sm opacity-80 leading-relaxed whitespace-pre-wrap [&_p]:mb-2 [&_p:last-child]:mb-0 [&_div]:mb-1" dangerouslySetInnerHTML={{ __html: content }} />
+            <div
+              className="text-sm leading-relaxed whitespace-pre-wrap text-[var(--semantic-text-secondary)] [&_div]:mb-1 [&_p]:mb-2 [&_p:last-child]:mb-0"
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
           ) : (
-            <p className="text-sm opacity-80 leading-relaxed whitespace-pre-wrap">{content}</p>
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-[var(--semantic-text-secondary)]">{content}</p>
           )}
         </div>
       </div>

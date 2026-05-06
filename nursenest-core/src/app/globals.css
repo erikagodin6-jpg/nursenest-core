@@ -827,6 +827,15 @@ html[data-theme="storm-slate"] {
 
 @layer utilities {
   /**
+   * Tailwind `text-muted` resolves to `--color-muted`, which is authored as a **muted surface**
+   * (`bg-muted`), not readable ink. Using it as a text class yields very light gray-on-white on
+   * marketing cards and lesson footers. Rewire to the muted-foreground chain (semantic-readable).
+   */
+  .text-muted {
+    color: var(--color-muted-foreground) !important;
+  }
+
+  /**
    * Solid primary fills: body copy is gray — buttons/links with only `bg-primary` otherwise
    * inherit gray-on-purple and fail WCAG. `--color-primary-foreground` is white on brand purple.
    * `!important` wins over `text-muted-foreground` / `text-foreground` on the same node.
@@ -971,6 +980,17 @@ a {
   color: var(--theme-card-foreground-readable, var(--theme-body-text));
   /* Single soft stack: hairline rim + calm ambient (tokens follow `[data-theme]` shadows) */
   box-shadow: var(--shadow-card, var(--elevation-rest));
+}
+
+/**
+ * Readable default ink when `Card` uses a custom `className` (see `components/ui/card.tsx`).
+ * Without this, `bg-card` + border utilities omit `.nn-card` and descendants inherit whatever
+ * `color` the parent set — e.g. marketing footer chrome or rare theme leaks — yielding pale text
+ * on pale cards (pre-nursing lesson stacks, quizzes, progressive reveal).
+ * Solid fills like `.bg-primary` still win via the `!important` pairing rules above.
+ */
+.nn-card-ink {
+  color: var(--theme-card-foreground-readable, var(--theme-body-text));
 }
 
 /**

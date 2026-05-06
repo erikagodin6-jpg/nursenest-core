@@ -1,6 +1,6 @@
 /**
- * Tier-scoped routing for Practice Questions (`/app/questions`), CAT start (`/app/practice-tests/cat-launch` / `start`),
- * and Flashcards (`/app/flashcards`) when `pathwayId` is present.
+ * Tier-scoped routing for Practice Questions (`/app/questions`), the practice-tests hub (`/app/practice-tests`),
+ * CAT start (`/app/practice-tests/cat-launch` / `start`), and Flashcards (`/app/flashcards`) when `pathwayId` is present.
  * Prevents silent fallbacks to another exam track when a pathway is already known from URL or profile.
  */
 
@@ -72,8 +72,8 @@ const PATHWAY_ID_PARAM = /^[a-z][a-z0-9-]{5,80}$/i;
  * Marketing auth may allow returning to these app routes when `pathwayId` is present,
  * so sign-in from a tier hub can resume the same exam track (still same-origin, path-only).
  *
- * Includes `/app/flashcards` so hub “Flashcards” deep links survive login the same way as
- * Practice Questions and CAT start.
+ * Includes `/app/flashcards` and `/app/practice-tests` so hub study tiles survive login the same way as
+ * the question bank and CAT start routes.
  */
 export function parseTierScopedAppStudyCallbackPath(raw: string | null): string | null {
   if (!raw?.trim()) return null;
@@ -82,6 +82,7 @@ export function parseTierScopedAppStudyCallbackPath(raw: string | null): string 
     if (
       u.pathname !== "/app/questions" &&
       u.pathname !== "/app/questions/session" &&
+      u.pathname !== "/app/practice-tests" &&
       u.pathname !== "/app/practice-tests/start" &&
       u.pathname !== "/app/practice-tests/cat-launch" &&
       u.pathname !== "/app/practice-exams" &&

@@ -29,6 +29,7 @@ Output rules:
 - Your output **must** begin with exactly the provided <h2> opening line (verbatim heading text).
 - Teach **clinical** content for this heading only. Do not reuse phrasing from other sections (supplied forbidden list).
 - Use **unique** examples and clinical details. Do not include meta commentary about studying, exams, or "this section".
+- **Forbidden openers** (after the required <h2> line): never start the teaching prose with "This section", "In this section", "This article", "Here we", "Learners should understand", "This connects", "Clinically relevant way", or any sentence that restates the assignment instead of teaching pathophysiology or nursing care.
 - Do not write <h2>FAQs</h2>, <h2>References</h2>, or duplicate structured FAQ content.
 - Where you cite standards or authorities, use parenthetical citations like (Organization Name, Year) so they can align with verified references.
 - No fabricated statistics, trial results, or journal citations.

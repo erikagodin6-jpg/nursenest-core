@@ -56,6 +56,12 @@ export type MobilePathwayLessonRecord = {
   readonly sections: MobilePathwayLessonSection[];
   readonly seoDescription?: string;
   readonly relatedLessonRefs?: ReadonlyArray<{ readonly slug: string; readonly titleHint?: string }>;
+  /** Present on many pathway lessons when authored — optional mirror of web record. */
+  readonly studyTakeaways?: readonly string[];
+  readonly studyCommonTraps?: readonly string[];
+  readonly memoryAnchor?: string;
+  readonly exams?: readonly string[];
+  readonly activeExamMeta?: { readonly exam?: string; readonly yieldLevel?: string };
 };
 
 export type MobilePathwayLessonDetailResponse = {

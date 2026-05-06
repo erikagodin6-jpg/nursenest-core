@@ -117,13 +117,15 @@ function assertSchema(schemaSummary: string | null): string[] {
 
 function assertFaq(body: string, faqBlock: unknown): string[] {
   const reasons: string[] = [];
-  if (!/frequently asked questions/i.test(body)) reasons.push("body_missing_faq_heading");
-  if ((body.match(/<h3\b/gi) ?? []).length < 3) reasons.push("body_faq_h3_below_3");
+  const embedsFaqH2 = /<h2\b[^>]*>\s*frequently\s+asked\s+questions/i.test(body);
   if (faqBlock == null || typeof faqBlock !== "object" || faqBlock === null) {
     reasons.push("faqBlock_missing");
   } else {
     const items = (faqBlock as { items?: unknown }).items;
     if (!Array.isArray(items) || items.length < 3) reasons.push("faqBlock_items_below_3");
+  }
+  if (embedsFaqH2) {
+    reasons.push("body_embeds_faq_duplicate_structured_faqBlock");
   }
   return reasons;
 }

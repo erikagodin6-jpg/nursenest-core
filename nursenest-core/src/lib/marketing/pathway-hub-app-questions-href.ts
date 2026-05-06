@@ -19,3 +19,10 @@ export function pathwayHubAppFlashcardsHref(pathwayId: string, topicCode?: strin
   if (topicCode?.trim()) q.set("topicCode", topicCode.trim().toLowerCase());
   return `/app/flashcards?${q.toString()}`;
 }
+
+/** Tier-scoped practice tests hub — same `pathwayId` contract as flashcards / question bank. */
+export function pathwayHubAppPracticeTestsHref(pathwayId: string): string {
+  const q = new URLSearchParams();
+  q.set("pathwayId", pathwayId);
+  return `/app/practice-tests?${q.toString()}`;
+}

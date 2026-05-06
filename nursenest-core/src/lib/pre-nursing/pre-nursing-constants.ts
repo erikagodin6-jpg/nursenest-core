@@ -1,6 +1,9 @@
 /** Paginated lesson hub for Pre-Nursing modules. */
 export const PRE_NURSING_LESSON_HUB_PAGE_SIZE = 12;
 
+/** Stable `pathwayId` query for marketing → learner practice-tests deep links (normalized to `pre-nursing-ca` for CA). */
+export const PRE_NURSING_PRACTICE_PATHWAY_QUERY_ID = "pre-nursing" as const;
+
 /** Stored in `Progress.lessonId` for completed Pre-Nursing modules. */
 export const PRE_NURSING_PROGRESS_PREFIX = "pre-nursing-module:" as const;
 

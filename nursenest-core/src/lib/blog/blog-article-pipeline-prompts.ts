@@ -6,8 +6,12 @@ import { isLongFormPathophysiologyProfile } from "@/lib/blog/blog-longform-nursi
 
 const ANTI_FILLER = `Quality bar (non-negotiable):
 - No generic filler ("in today's world", "it is important to note", "mastering this will unlock success", vague motivation).
+- **No template scaffolding or meta narration**: never write "This section connects…", "This article will…", "Here we explore…", "In this section, learners…", "This paragraph…", "exam-aligned framing without overcomplicating", or any sentence that describes the document instead of teaching the disease/topic.
+- **No cloned subsection bodies**: each <h2> must introduce genuinely different teaching (mechanism vs labs vs meds vs teaching vs traps). Do not paste the same paragraph under multiple headings with tiny edits.
 - Every major section must include concrete nursing content: assessment findings, nursing actions, rationales tied to patient safety, or exam-style decision rules.
+- **Mechanism depth (pathophysiology)**: for disease processes, spell out WHY (causal chain), HOW compensation or progression shows at the bedside, WHAT labs or meds tie to which monitoring priorities — not topic labels alone.
 - Prefer specific cues (vitals, labs, behaviors) and "if you see X, think Y" patterns over abstract advice.
+- **Structured teaching surfaces** where they help: short comparison tables, bullet red flags, "Clinical pearl" lines, lab trend interpretation, med class + monitoring pairs, one bedside vignette — use allowed HTML only.
 - Do not invent pass rates, facility policies, or statistics. If uncertain, stay descriptive and conservative.`;
 
 /** Ported from legacy `server/blog-automation.ts` JSON blog generator: reduces empty refusals on structured outputs. */
@@ -172,6 +176,7 @@ export function buildArticleBodySystemPrompt(ctx?: BlogArticleBodyPromptContext)
 ## Pathophysiology long-form body rules (this article)
 - Mirror the **outline H2 order** as <h2> sections (do not skip a planned section).
 - Target **~120–250 unique words per major H2** of substantive teaching; **never** reuse the same <p> paragraph under different H2 headings (automated quality review rejects duplicate blocks).
+- **Banned boilerplate** (instant quality failure): "This section connects…", "clinically relevant way…", "exam-aligned framing without overcomplicating…", "learners should understand that this article…", or any meta-description of the section's purpose — write only patient-relevant teaching.
 - In each major section: **mechanism → clinical picture → nursing action / monitoring** (at least one paragraph chain) with **topic-specific** facts (labs, exam findings, foot care, glucose patterns, etc. as appropriate).
 - Use **plain English first**, then precise terms; define abbreviations on first use.
 - **Safety / uncertainty**: use measured language ("often", "may", "typically") — no false certainty; no fabricated trial results or statistics.

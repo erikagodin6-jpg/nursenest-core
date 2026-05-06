@@ -45,7 +45,13 @@ function lessonPublishedWhere(): Prisma.ContentItemWhereInput {
 }
 
 /** Prisma filter for `content_items` lessons the entitlement may load. */
-export function lessonAccessWhere(entitlement: AccessScope): Prisma.ContentItemWhereInput {
+export function lessonAccessWhere(
+  entitlement: AccessScope,
+  options?: { staffDbFullCatalog?: boolean },
+): Prisma.ContentItemWhereInput {
+  if (options?.staffDbFullCatalog) {
+    return lessonPublishedWhere();
+  }
   if (!entitlement.hasAccess) return { id: { in: [] } };
   if (accessScopeIsStaffLearnerEntitlementBypass(entitlement)) {
     return lessonPublishedWhere();
@@ -144,6 +150,20 @@ export function publicMarketingFlashcardDeckWhere(): Prisma.FlashcardDeckWhereIn
   return {
     status: ContentStatus.PUBLISHED,
     visibility: { not: FlashcardDeckVisibility.HIDDEN },
+  };
+}
+
+/**
+ * Published **Pre-Nursing** preview decks for the marketing `/flashcards` hub and `/flashcards/[slug]` SEO entry.
+ * Intentionally **does not** include RN/PN/NP exam pathway decks — avoids silent mixing with NCLEX pools.
+ * Matches anonymous learner listing rules: {@link userCanListPublicPreviewDeck}.
+ */
+export function publicPreNursingMarketingFlashcardHubDeckWhere(): Prisma.FlashcardDeckWhereInput {
+  return {
+    status: ContentStatus.PUBLISHED,
+    visibility: FlashcardDeckVisibility.PUBLIC_PREVIEW,
+    tier: TierCodeEnum.PRE_NURSING,
+    cardCount: { gt: 0 },
   };
 }
 

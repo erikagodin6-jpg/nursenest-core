@@ -19,46 +19,34 @@ export function esc(s: string): string {
 
 export type PeerBlogStub = { slug: string; title: string; excerpt: string };
 
-function sectionEntropyPhrase(topic: LongTailSeoTrioTopicPlan, label: string, depth: string): string {
-  const raw = `${topic.slug}:${label}:${depth}:${topic.targetKeyword}:${topic.pillar}`;
-  const parts = raw
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim()
-    .split(/\s+/)
-    .filter((w) => w.length > 2);
-  const a = parts.slice(0, 18).join(" ");
-  const b = parts.slice(8, 26).reverse().join(" ");
-  return `${a} ${b}`.trim();
-}
-
-function editorialScaffoldTokens(topic: LongTailSeoTrioTopicPlan, label: string, depth: string, start: number): string {
-  const seed = `${topic.slug}|${label}|${depth}|${topic.pillar}|${topic.category}|${start}`;
-  const chunks = seed
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean);
-  const out: string[] = [];
-  for (let i = start; i < start + 120; i += 1) {
-    const c = chunks[i % chunks.length] ?? "term";
-    out.push(`${c}_slot${i}_${depth.replace(/\W+/g, "").slice(0, 6) || "x"}`);
-  }
-  return esc(out.join(" "));
-}
-
-function paragraphBlock(topic: LongTailSeoTrioTopicPlan, label: string, depth: string, tokenStart: number): string {
+/**
+ * One substantive HTML block per H2 — distinct framing per heading (no entropy tokens / scaffold filler).
+ */
+function paragraphBlock(topic: LongTailSeoTrioTopicPlan, label: string): string {
   const t = esc(topic.title);
   const kw = esc(topic.targetKeyword);
   const pillar = esc(topic.pillar);
-  const entropy = esc(sectionEntropyPhrase(topic, label, depth));
-  const scaffold = editorialScaffoldTokens(topic, label, depth, tokenStart);
-  return `<p><strong>${esc(label)}.</strong> This section supports learners preparing for ${pillar} exams who are mapping “${t}” to clinical judgment and safety. Keep ${kw} in view while you connect assessment data, teaching priorities, and escalation criteria. Educational only; follow scope, orders, and institutional policy.</p><p>Study anchor tokens: ${entropy}.</p><p><em>Editorial scaffold (seed metadata, not standalone clinical guidance):</em> ${scaffold}</p>`;
+  const L = esc(label);
+  if (/mechanism/i.test(label)) {
+    return `<p><strong>${L}.</strong> Start from physiology for “${t}”: what compensation or injury pattern the stem implies, then map that mechanism to the vitals, symptoms, or labs ${pillar} items expect. Keep <strong>${kw}</strong> as the anchor phrase you can defend in one sentence. Educational only; follow scope and policy.</p>`;
+  }
+  if (/prioritization|monitoring/i.test(label)) {
+    return `<p><strong>${L}.</strong> For “${t}”, rank nursing actions by immediate threat to airway, breathing, circulation, or neuro status before comfort or routine teaching. Spell out what you would reassess after each priority change and how <strong>${kw}</strong> changes your surveillance plan for ${pillar} tracks.</p>`;
+  }
+  if (/assessment|diagnostic/i.test(label)) {
+    return `<p><strong>${L}.</strong> Cluster subjective and objective data for “${t}”: quotes, trends, paired measurements, and device readings that discriminate similar presentations on ${pillar}. Tie findings back to <strong>${kw}</strong> without inventing numeric cutoffs.</p>`;
+  }
+  if (/teaching|collaboration/i.test(label)) {
+    return `<p><strong>${L}.</strong> Give discharge-ready teaching for “${t}”: warning symptoms, adherence habits, follow-up, and when to seek urgent care—worded for <strong>${kw}</strong> so it is not interchangeable with another ${pillar} topic.</p>`;
+  }
+  if (/exam trap/i.test(label)) {
+    return `<p><strong>${L}.</strong> Practice ${pillar}-style discrimination for “${t}”: identify what each option assumes about volume status, timing, or scope, then eliminate answers that require out-of-scope orders or unsafe independence. Keep distractor talk tied to <strong>${kw}</strong>.</p>`;
+  }
+  return `<p><strong>${L}.</strong> Connect “${t}” to bedside decisions for ${pillar} prep using <strong>${kw}</strong> as the study hook; emphasize assessment, teaching, and escalation language nurses can reuse on exam day. Educational only; follow scope, orders, and institutional policy.</p>`;
 }
 
-function pad(topic: LongTailSeoTrioTopicPlan, label: string, baseStart: number): string {
-  return `${paragraphBlock(topic, label, "layer-a", baseStart)}${paragraphBlock(topic, `${label} (deeper)`, "layer-b", baseStart + 200)}${paragraphBlock(topic, `${label} (application)`, "layer-c", baseStart + 400)}`;
+function pad(topic: LongTailSeoTrioTopicPlan, label: string): string {
+  return paragraphBlock(topic, label);
 }
 
 function lessonPath(topic: LongTailSeoTrioTopicPlan, slug: string): string {
@@ -325,11 +313,11 @@ export function buildLongTailSeoTrioBody(topic: LongTailSeoTrioTopicPlan, peerLi
 
   const bullets = `<h2>High-yield bullets</h2><ul><li>Trend data before single values: direction matters as much as the number.</li><li>Separate acute change from chronic baseline when two answers sound plausible.</li><li>Pair every medication teaching point with a measurable safety behavior.</li><li>Document objectively and escalate early when policy or trajectory warrants.</li><li>Return to pathway questions after each lesson block to consolidate judgment.</li></ul>`;
 
-  const mechanism = `<h2>Mechanism of action and clinical reasoning</h2>${pad(topic, "Mechanism-first orientation", 5_000)}`;
-  const nursing = `<h2>Nursing implications for safe practice</h2>${pad(topic, "Prioritization and monitoring", 15_000)}`;
-  const assessment = `<h2>Assessment cues and diagnostics</h2>${pad(topic, "Assessment and diagnostics", 25_000)}`;
-  const teaching = `<h2>Patient teaching and interprofessional collaboration</h2>${pad(topic, "Teaching and collaboration", 35_000)}`;
-  const traps = `<h2>Exam traps and discrimination practice</h2>${pad(topic, "Exam traps", 45_000)}`;
+  const mechanism = `<h2>Mechanism of action and clinical reasoning</h2>${pad(topic, "Mechanism-first orientation")}`;
+  const nursing = `<h2>Nursing implications for safe practice</h2>${pad(topic, "Prioritization and monitoring")}`;
+  const assessment = `<h2>Assessment cues and diagnostics</h2>${pad(topic, "Assessment and diagnostics")}`;
+  const teaching = `<h2>Patient teaching and interprofessional collaboration</h2>${pad(topic, "Teaching and collaboration")}`;
+  const traps = `<h2>Exam traps and discrimination practice</h2>${pad(topic, "Exam traps")}`;
   const qs = buildPracticeQuestionsHtml(topic);
   const cta = `<h2>Next step: full practice</h2><p><strong>Start full practice tests on NurseNest</strong> using your pathway question hub and CAT sessions linked above, then revisit lessons for any weak objectives.</p>`;
 

@@ -27,7 +27,7 @@ describe("marketingTierHubStudyActionHref", () => {
     assert.ok(usPn);
     assert.equal(marketingTierHubStudyActionHref(usPn, "lessons"), "/us/pn/nclex-pn/lessons");
     assert.equal(marketingTierHubStudyActionHref(usPn, "practice_questions"), "/us/pn/nclex-pn/questions");
-    assert.equal(marketingTierHubStudyActionHref(usPn, "exams"), "/us/pn/nclex-pn/cat");
+    assert.equal(marketingTierHubStudyActionHref(usPn, "exams"), "/app/practice-tests?pathwayId=us-lpn-nclex-pn");
     assert.ok(marketingTierHubStudyActionHref(usPn, "flashcards").includes("pathwayId=us-lpn-nclex-pn"));
   });
 
@@ -77,6 +77,17 @@ describe("resolveMarketingTierHubStudyActionHref", () => {
     assert.equal(
       resolveMarketingTierHubStudyActionHref(pathway, "lessons", "//evil.example/phish"),
       "/us/rn/nclex-rn/lessons",
+    );
+  });
+
+  it("preserves safe /app/practice-tests override when pathwayId matches", () => {
+    const pathway = getExamPathwayById("us-rn-nclex-rn");
+    assert.ok(pathway);
+    const ok = "/app/practice-tests?pathwayId=us-rn-nclex-rn&cat=1";
+    assert.equal(resolveMarketingTierHubStudyActionHref(pathway, "exams", ok), ok);
+    assert.equal(
+      resolveMarketingTierHubStudyActionHref(pathway, "exams", "/app/practice-tests?pathwayId=ca-rn-nclex-rn"),
+      "/app/practice-tests?pathwayId=us-rn-nclex-rn",
     );
   });
 });

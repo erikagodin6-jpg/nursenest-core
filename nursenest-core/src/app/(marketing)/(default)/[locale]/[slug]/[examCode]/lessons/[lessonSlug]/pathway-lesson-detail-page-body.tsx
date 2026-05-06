@@ -12,7 +12,7 @@ import { PathwayLessonActions } from "@/components/lessons/pathway-lesson-action
 import { computePathwayLessonLinkedLearningSignals } from "@/lib/lessons/pathway-lesson-linked-learning-assets";
 import { PathwayLessonProgressBadgeLive } from "@/components/lessons/pathway-lesson-progress-badge-live";
 import { PathwayLessonProgressTracker } from "@/components/lessons/pathway-lesson-progress-tracker";
-import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { loadMarketingPathwayLessonViewerContext } from "@/lib/lessons/marketing-pathway-lesson-viewer-context.server";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { marketingPathwayLessonsIndexPath } from "@/lib/lessons/lesson-routes";
@@ -25,8 +25,6 @@ import {
 import { resolveMarketingPathwayLessonRouteResolution } from "@/lib/lessons/pathway-lesson-route-access";
 import { normalizePathwayLessonLocale } from "@/lib/lessons/pathway-lesson-locale";
 import { loadPathwayLessonWithLegacySlugRedirect } from "@/lib/lessons/pathway-lesson-detail-redirect";
-import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
-import { prisma } from "@/lib/db";
 import { EeatContentAttribution } from "@/components/seo/eeat-content-attribution";
 import { PathwayLessonMedicalEducationJsonLd } from "@/components/seo/seo-json-ld";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
@@ -128,24 +126,11 @@ export async function PathwayLessonDetailPageBody({
     lessonResult.status === "fulfilled" ? lessonResult.value : undefined;
   const lessonLoadFailed = lessonResult.status === "rejected";
 
-  const userId = "";
+  const { userId, entitlement, staffFullLessonAccess, learnerPathResolved } =
+    await loadMarketingPathwayLessonViewerContext("(marketing).pathway-lesson-detail-page-body");
 
-  const [studySettingsRes, entRes, lpRes] = await Promise.allSettled([
-    loadStudySettings(userId),
-    resolveEntitlementForPage(userId),
-    (async (): Promise<string | null> => {
-      if (!userId || !isDatabaseUrlConfigured()) return null;
-      try {
-        const u = await prisma.user.findUnique({ where: { id: userId }, select: { learnerPath: true } });
-        return u?.learnerPath ?? null;
-      } catch {
-        return null;
-      }
-    })(),
-  ]);
+  const [studySettingsRes] = await Promise.allSettled([loadStudySettings(userId)]);
   const studySettings = studySettingsRes.status === "fulfilled" ? studySettingsRes.value : DEFAULT_STUDY_SETTINGS;
-  const entitlement = entRes.status === "fulfilled" ? entRes.value : "error";
-  const learnerPathResolved = lpRes.status === "fulfilled" ? lpRes.value : null;
   const bankEntitlement: AccessScope | null = entitlement === "error" ? null : entitlement;
   const fullQuizAccess = bankEntitlement?.hasAccess === true;
 
@@ -156,6 +141,7 @@ export async function PathwayLessonDetailPageBody({
     userId,
     entitlement,
     learnerPathResolved,
+    staffFullLessonAccess,
   });
   if (routeResolution.kind === "not_found") notFound();
 

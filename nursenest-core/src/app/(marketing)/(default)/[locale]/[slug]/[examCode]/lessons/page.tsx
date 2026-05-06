@@ -78,6 +78,7 @@ import {
 } from "@/lib/lessons/pathway-lesson-hub-pipeline-collapse-guard";
 import { LearnerStudyLiveSyncBanner } from "@/components/student/learner-study-live-sync-banner";
 import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { CAT_MIN_COMPLETE_POOL } from "@/lib/practice-tests/cat-pool";
 import {
   alliedProfessionTrackChipLabel,
@@ -608,8 +609,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
             : "Adaptive CAT unavailable",
         href: catHref,
       },
-      { label: "Flashcards", href: HUB.flashcards },
-      { label: "Practice exams", href: HUB.practiceExams },
+      { label: "Flashcards", href: pathwayHubAppFlashcardsHref(pathway.id) },
+      { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
       { label: "Exam overview", href: overviewHref },
     ];
     const canadaHref =
@@ -1087,8 +1088,8 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
           : "Adaptive CAT unavailable",
       href: catHref,
     },
-    { label: "Flashcards", href: HUB.flashcards },
-    { label: "Practice exams", href: HUB.practiceExams },
+    { label: "Flashcards", href: pathwayHubAppFlashcardsHref(pathway.id) },
+    { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
     { label: "Exam overview", href: overviewHref },
   ];
 
@@ -1514,7 +1515,7 @@ export default async function PathwayLessonsHubPage({ params, searchParams }: Pr
         relatedLinks={[
           { label: "Practice questions", href: questionsHref },
           { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },
-          { label: "Practice exams", href: HUB.practiceExams },
+          { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
           { label: "Exam overview", href: overviewHref },
         ]}
       />

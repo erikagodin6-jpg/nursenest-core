@@ -19,6 +19,8 @@ import {
   countTotalWordsInLessonSections,
   evaluatePathwayLessonStructuralGate,
   lessonQualifiesForPremiumNormalization,
+  lessonQualifiesForPremiumStructuralGate,
+  lessonSectionsAreCanonicalLegacyMarketingShape,
   lessonSectionsHaveMeaningfulClinicalContent,
   lessonSectionsQualifyAsAuthoritativeSoleSource,
   orderPremiumSections,
@@ -855,6 +857,41 @@ function sanitizeSection(raw: Partial<PathwayLessonSection>, index: number): Pat
 function sanitizeIncomingSections(sections: unknown): PathwayLessonSection[] {
   if (!Array.isArray(sections)) return [];
   return sections.map((s, i) => sanitizeSection(s as Partial<PathwayLessonSection>, i));
+}
+
+/**
+ * When `lesson-library.json` still carries the canonical legacy five-block hub row for a slug, but the bundled
+ * `catalog.json` pathway row is a substantive premium spine, prefer the bundled catalog row for merge + normalize.
+ * Keeps RN marketing/detail parity with upgraded catalog bodies without dropping lessons that exist only in the library.
+ */
+function overlayBundledCatalogPremiumOverLegacyHubDupes(pathwayId: string, merged: LessonInput[]): LessonInput[] {
+  const bucket = getCatalogData().pathways[pathwayId];
+  const fromJson = bucket?.lessons;
+  if (!fromJson?.length) return merged;
+  const catalogBySlug = new Map<string, LessonInput>();
+  for (const row of fromJson) {
+    const s = typeof row.slug === "string" ? row.slug.trim() : "";
+    if (s) catalogBySlug.set(s, row);
+  }
+  if (catalogBySlug.size === 0) return merged;
+  let changed = false;
+  const out = merged.map((row) => {
+    const s = typeof row.slug === "string" ? row.slug.trim() : "";
+    if (!s) return row;
+    const catalogRow = catalogBySlug.get(s);
+    if (!catalogRow) return row;
+    const libIncoming = sanitizeIncomingSections(row.sections);
+    const bundledIncoming = sanitizeIncomingSections(catalogRow.sections);
+    if (
+      lessonSectionsAreCanonicalLegacyMarketingShape(libIncoming) &&
+      lessonQualifiesForPremiumStructuralGate(bundledIncoming)
+    ) {
+      changed = true;
+      return catalogRow;
+    }
+    return row;
+  });
+  return changed ? out : merged;
 }
 
 function sanitizeAudienceTiers(raw: unknown): PathwayLessonAudienceTier[] | undefined {
@@ -1912,7 +1949,10 @@ function buildCatalogLessonsRawUncached(pathwayId: string): LessonInput[] {
       }
       return prependScopedGoldCatalogLessons(
         pathwayId,
-        mergeDedicatedAlliedCatalogOverlay(pathwayId, merged),
+        mergeDedicatedAlliedCatalogOverlay(
+          pathwayId,
+          overlayBundledCatalogPremiumOverLegacyHubDupes(pathwayId, merged),
+        ),
       );
     }
   }

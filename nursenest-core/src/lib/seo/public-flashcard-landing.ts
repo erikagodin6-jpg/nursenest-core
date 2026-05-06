@@ -1,16 +1,20 @@
 import { ContentStatus } from "@prisma/client";
+import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
+import preNursingStringsEn from "@/content/pre-nursing/pre-nursing-strings-en.json";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
-import { publicMarketingFlashcardDeckWhere } from "@/lib/entitlements/content-access-scope";
+import {
+  publicPreNursingMarketingFlashcardHubDeckWhere,
+} from "@/lib/entitlements/content-access-scope";
 import { logRouteDataPipeline, routeDataDiagnosticsEnabled } from "@/lib/observability/route-data-pipeline-log";
 import { truncateForPreview } from "@/lib/flashcards/flashcard-access";
 import {
   classifyPublicFlashcardDeck,
   lessonNameFromSlug,
   lessonSlugFromSourceKey,
-  PUBLIC_FLASHCARD_CATEGORIES,
 } from "@/lib/flashcards/public-flashcard-categories";
 import { formatTitleCase } from "@/lib/format/text-case";
+import { preNursingLessonDetailPath } from "@/lib/lessons/lesson-routes";
 
 export type PublicFlashcardTopicRow = { slug: string; name: string };
 /**
@@ -19,6 +23,69 @@ export type PublicFlashcardTopicRow = { slug: string; name: string };
  */
 export const PUBLIC_FLASHCARD_LANDING_DB_TIMEOUT_MS = 12_000;
 const PUBLIC_FLASHCARD_DB_TIMEOUT_MS = PUBLIC_FLASHCARD_LANDING_DB_TIMEOUT_MS;
+
+const PRE_NURSING_HUB_PATHWAY_ID = "pre-nursing" as const;
+
+function preNursingCopy(key: string): string | undefined {
+  const v = (preNursingStringsEn as Record<string, string>)[key];
+  return typeof v === "string" && v.trim() ? v.trim() : undefined;
+}
+
+function matchPreNursingRegistryModuleForLessonSlug(
+  lessonSlug: string | null | undefined,
+): (typeof PRE_NURSING_MODULE_REGISTRY)[number] | null {
+  if (!lessonSlug?.trim()) return null;
+  const s = lessonSlug.trim().toLowerCase();
+  const ordered = [...PRE_NURSING_MODULE_REGISTRY].sort((a, b) => b.slug.length - a.slug.length);
+  for (const m of ordered) {
+    if (s === m.slug || s.startsWith(`${m.slug}-`)) return m;
+  }
+  return null;
+}
+
+function buildPreNursingModuleCategorySections(decks: PublicFeaturedDeck[]): PublicFlashcardCategorySection[] {
+  const bySlug = new Map<string, PublicFeaturedDeck[]>();
+  for (const m of PRE_NURSING_MODULE_REGISTRY) {
+    bySlug.set(m.slug, []);
+  }
+  const extra: PublicFeaturedDeck[] = [];
+
+  for (const d of decks) {
+    const ls = d.lessonSource?.slug ?? null;
+    const mod = matchPreNursingRegistryModuleForLessonSlug(ls);
+    if (mod) {
+      const arr = bySlug.get(mod.slug);
+      if (arr) arr.push(d);
+      else extra.push(d);
+    } else {
+      extra.push(d);
+    }
+  }
+
+  const sections: PublicFlashcardCategorySection[] = [];
+  for (const m of PRE_NURSING_MODULE_REGISTRY) {
+    const modDecks = bySlug.get(m.slug) ?? [];
+    if (modDecks.length === 0) continue;
+    const title = preNursingCopy(m.titleKey) ?? formatTitleCase(m.slug.replace(/-/g, " "));
+    const description = preNursingCopy(m.subtitleKey) ?? "";
+    sections.push({
+      id: `${PRE_NURSING_HUB_PATHWAY_ID}:${m.slug}`,
+      title,
+      description,
+      decks: modDecks,
+    });
+  }
+  if (extra.length > 0) {
+    sections.push({
+      id: `${PRE_NURSING_HUB_PATHWAY_ID}:additional`,
+      title: formatTitleCase("Additional Pre-Nursing Decks"),
+      description:
+        "Preview decks aligned to NurseNest foundations that are not yet mapped to a single lesson module.",
+      decks: extra,
+    });
+  }
+  return sections;
+}
 
 async function withPublicFlashcardFallback<T>(run: () => Promise<T>, fallback: T, label: string): Promise<T> {
   return withDatabaseFallbackTimeout(run, fallback, PUBLIC_FLASHCARD_DB_TIMEOUT_MS, {
@@ -37,7 +104,7 @@ export type PublicFeaturedDeck = {
   categoryId: string;
   subcategoryId?: string;
   highYield: boolean;
-  lessonSource?: { slug: string; name: string };
+  lessonSource?: { slug: string; name: string; href: string };
 };
 
 export type PublicFlashcardCategorySection = {

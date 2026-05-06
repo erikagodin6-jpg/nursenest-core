@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { buildNursingTierHubContent, resolveNursingTierHubActionHref } from "@/lib/marketing/nursing-tier-hub-content";
+import {
+  buildNursingTierHubContent,
+  resolveNursingTierHubActionHref,
+  resolveNursingTierHubStudyCardHref,
+} from "@/lib/marketing/nursing-tier-hub-content";
 
 describe("buildNursingTierHubContent", () => {
   it("builds stable RN hub content with the four primary study actions", () => {
@@ -19,7 +23,7 @@ describe("buildNursingTierHubContent", () => {
         ["lessons", "Lessons", "/us/rn/nclex-rn/lessons"],
         ["flashcards", "Flashcards", "/app/flashcards?pathwayId=us-rn-nclex-rn"],
         ["practice_questions", "Practice Questions", "/us/rn/nclex-rn/questions"],
-        ["exams", "Exams", "/us/rn/nclex-rn/cat"],
+        ["exams", "Practice Exam", "/app/practice-tests?pathwayId=us-rn-nclex-rn"],
       ],
     );
   });
@@ -71,8 +75,51 @@ describe("buildNursingTierHubContent", () => {
         "/canada/rn/nclex-rn/lessons",
         "/app/flashcards?pathwayId=ca-rn-nclex-rn",
         "/canada/rn/nclex-rn/questions",
-        "/canada/rn/nclex-rn/cat",
+        "/app/practice-tests?pathwayId=ca-rn-nclex-rn",
       ],
+    );
+  });
+});
+
+describe("resolveNursingTierHubStudyCardHref", () => {
+  it("guest RN: flashcards and exams wrap with login callback; practice questions stays on marketing questions hub", () => {
+    const pathway = getExamPathwayById("us-rn-nclex-rn");
+    assert.ok(pathway);
+    const content = buildNursingTierHubContent(pathway);
+    const byId = new Map(content.actions.map((a) => [a.id, a]));
+    const flash = byId.get("flashcards")!;
+    const practice = byId.get("practice_questions")!;
+    const exams = byId.get("exams")!;
+    assert.equal(
+      resolveNursingTierHubStudyCardHref(pathway, flash, { viewerSignedIn: false }).startsWith("/login?callbackUrl="),
+      true,
+    );
+    assert.equal(
+      resolveNursingTierHubStudyCardHref(pathway, practice, { viewerSignedIn: false }),
+      "/app/practice-tests?pathwayId=us-rn-nclex-rn",
+    );
+    assert.equal(
+      resolveNursingTierHubStudyCardHref(pathway, exams, { viewerSignedIn: false }).startsWith("/login?callbackUrl="),
+      true,
+    );
+  });
+
+  it("signed-in RN: flashcards, practice tests, and exams use direct hrefs (paywall enforced server-side on /app)", () => {
+    const pathway = getExamPathwayById("us-rn-nclex-rn");
+    assert.ok(pathway);
+    const content = buildNursingTierHubContent(pathway);
+    const byId = new Map(content.actions.map((a) => [a.id, a]));
+    assert.equal(
+      resolveNursingTierHubStudyCardHref(pathway, byId.get("flashcards")!, { viewerSignedIn: true }),
+      "/app/flashcards?pathwayId=us-rn-nclex-rn",
+    );
+    assert.equal(
+      resolveNursingTierHubStudyCardHref(pathway, byId.get("practice_questions")!, { viewerSignedIn: true }),
+      "/app/practice-tests?pathwayId=us-rn-nclex-rn",
+    );
+    assert.equal(
+      resolveNursingTierHubStudyCardHref(pathway, byId.get("exams")!, { viewerSignedIn: true }),
+      "/app/practice-tests?pathwayId=us-rn-nclex-rn",
     );
   });
 });
@@ -140,7 +187,7 @@ describe("resolveNursingTierHubActionHref", () => {
   it("rejects javascript:, data:, and vbscript: for practice questions", () => {
     const pathway = getExamPathwayById("us-rn-nclex-rn");
     assert.ok(pathway);
-    const want = "/us/rn/nclex-rn/questions";
+    const want = "/app/practice-tests?pathwayId=us-rn-nclex-rn";
     for (const href of ["javascript:alert(1)", "data:text/html,<p>x</p>", "vbscript:msgbox(1)"] as const) {
       assert.equal(
         resolveNursingTierHubActionHref(pathway, {
@@ -193,7 +240,7 @@ describe("resolveNursingTierHubActionHref", () => {
         description: "x",
         href: "#",
       }),
-      "/canada/rn/nclex-rn/questions",
+      "/app/practice-tests?pathwayId=ca-rn-nclex-rn",
     );
     assert.equal(
       resolveNursingTierHubActionHref(pathway, {
@@ -202,7 +249,7 @@ describe("resolveNursingTierHubActionHref", () => {
         description: "x",
         href: "#topics",
       }),
-      "/canada/rn/nclex-rn/cat",
+      "/app/practice-tests?pathwayId=ca-rn-nclex-rn",
     );
   });
 });

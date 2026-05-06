@@ -1,4 +1,9 @@
 import {
+  blogOpenRouterChatCompletion,
+  getEffectiveBlogAiProvider,
+  getBlogAiChatModel,
+} from "@/lib/ai/blog-ai-provider";
+import {
   getBlogOpenAiApiKey,
   getOpenAiApiKey,
   getOpenAiBaseUrl,
@@ -33,11 +38,31 @@ export async function openAiChatCompletion(params: {
    */
   model?: string;
   /**
-   * When true, resolve API key with {@link getBlogOpenAiApiKey} (`BLOG_OPENAI_API_KEY` first).
+   * When true, resolve API key with {@link getBlogOpenAiApiKey} (`BLOG_OPENAI_API_KEY` first), unless
+   * `BLOG_AI_PROVIDER=openrouter` (then {@link OPENROUTER_API_KEY} via OpenRouter-compatible SDK).
    * Blog pipelines should set this; other callers use shared {@link getOpenAiApiKey}.
    */
   useBlogOpenAiApiKey?: boolean;
 }): Promise<ChatCompletionResult> {
+  if (params.useBlogOpenAiApiKey) {
+    const provider = getEffectiveBlogAiProvider();
+    if (provider === "gemini") {
+      throw new Error(
+        "BLOG_AI_PROVIDER=gemini is not supported for OpenAI-compatible blog chat; set BLOG_AI_PROVIDER=openai|openrouter or use the admin Gemini draft endpoint.",
+      );
+    }
+    if (provider === "openrouter") {
+      const model = params.model?.trim() ? params.model.trim() : getBlogAiChatModel();
+      return blogOpenRouterChatCompletion({
+        messages: params.messages,
+        temperature: params.temperature,
+        maxTokens: params.maxTokens,
+        model,
+        user: params.user,
+      });
+    }
+  }
+
   const key = params.useBlogOpenAiApiKey ? getBlogOpenAiApiKey() : getOpenAiApiKey();
   if (!key) {
     throw new Error(

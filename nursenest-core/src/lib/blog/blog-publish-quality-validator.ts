@@ -2,6 +2,7 @@ import type { Prisma } from "@prisma/client";
 import {
   BLOG_BANNED_FILLER_PHRASES,
   extractParagraphTextsFromBlogHtml,
+  maxPairwiseH2SectionJaccard,
   splitBlogBodyByH2,
   topicTokensForBlogReferenceGate,
 } from "@/lib/blog/blog-content-quality-gate";
@@ -25,12 +26,25 @@ export type BlogPublishQualityInput = {
   sourcesJson?: Prisma.JsonValue | null;
 };
 
+/** Optional relaxations for narrow seed pipelines (default: full gates). */
+export type BlogPublishQualityOptions = {
+  /**
+   * Skip APA/source line vs title token alignment. Used by deterministic long-tail seed posts that attach
+   * the same vetted national-library reference bundle across many unrelated clinical titles.
+   */
+  skipReferenceTopicAlignment?: boolean;
+};
+
 const EXTRA_PLACEHOLDER_PHRASES = [
   "this section connects the clinical question",
   "this section connects",
   "clinical question to the bedside",
   "clinical question to safe nursing action",
   "exam-aligned clinical reasoning",
+  "clinically relevant way",
+  "without overcomplicating the review",
+  "gives learners a",
+  "learners a clinically relevant",
   "topic-specific clinical content goes here",
   "replace this section",
   "placeholder paragraph",
@@ -56,6 +70,27 @@ const REQUIRED_CLINICAL_ARCS = [
 
 const CLINICAL_TOPIC_HINT =
   /\b(nclex|rex-pn|patient|client|nursing|assessment|intervention|diagnos|symptom|pathophys|medication|lab|clinical|care|disease|treatment|teaching|escalat)\b/i;
+
+/** Title tokens that should not drive title↔body drift checks (fixtures, integration rows, generic scaffolding). */
+const TITLE_DRIFT_IGNORE_TOKENS = new Set([
+  "canonical",
+  "integration",
+  "fixture",
+  "placeholder",
+  "smoke",
+  "testing",
+  "sample",
+  "example",
+  "disposable",
+  "contract",
+  "generated",
+  "publish",
+  "article",
+  "blog",
+]);
+
+const TITLE_DRIFT_SKIP_TITLE_RE =
+  /\b(integration test|contract test|smoke test|canonical publish|disposable draft|test row|fixture row)\b/i;
 
 function plainText(html: string): string {
   return html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
@@ -140,7 +175,10 @@ function topicSpecificTokenHits(text: string, topicTokens: string[]): number {
   return hits;
 }
 
-export function validateBlogPublishQuality(input: BlogPublishQualityInput): {
+export function validateBlogPublishQuality(
+  input: BlogPublishQualityInput,
+  options?: BlogPublishQualityOptions,
+): {
   ok: boolean;
   issues: BlogPublishQualityIssue[];
   blocking: BlogPublishQualityIssue[];
@@ -254,7 +292,7 @@ export function validateBlogPublishQuality(input: BlogPublishQualityInput): {
   }
 
   const refRows = [...(input.apaReferences ?? []), ...sourceTextRows(input.sourcesJson)];
-  if (refRows.length > 0 && topicTokens.length > 0) {
+  if (!options?.skipReferenceTopicAlignment && refRows.length > 0 && topicTokens.length > 0) {
     const aligned = refRows.filter((row) => topicSpecificTokenHits(row, topicTokens) > 0).length;
     if (refRows.length >= 3 && aligned === 0) {
       issues.push({
@@ -275,6 +313,68 @@ export function validateBlogPublishQuality(input: BlogPublishQualityInput): {
         severity: "block",
         message: `Clinical article is missing required topic-specific teaching arcs: ${missing.map((m) => m.label).join(", ")}.`,
         fix: "Add substantive sections for mechanism, assessment, interventions, teaching, escalation/red flags, and exam reasoning.",
+      });
+    }
+  }
+
+  if (likelyClinicalArticle(input) && sections.length >= 6) {
+    const maxJ = maxPairwiseH2SectionJaccard(body);
+    if (maxJ >= 0.48) {
+      issues.push({
+        id: "blog_duplicate_h2_section_prose",
+        severity: "block",
+        message: `Multiple H2 sections share overlapping prose (max section Jaccard ${maxJ.toFixed(2)}; limit 0.48).`,
+        fix: "Rewrite duplicated H2 bodies so each heading adds distinct signs, actions, teaching, or reasoning tied to the topic.",
+      });
+    }
+  }
+
+  const kw = (input.targetKeyword ?? "").trim().toLowerCase().replace(/\s+/g, " ");
+  if (kw.length >= 12 && wc >= 500) {
+    let phraseHits = 0;
+    let searchFrom = 0;
+    while (searchFrom <= lower.length - kw.length) {
+      const idx = lower.indexOf(kw, searchFrom);
+      if (idx < 0) break;
+      phraseHits += 1;
+      searchFrom = idx + Math.max(8, Math.floor(kw.length * 0.85));
+    }
+    const density = phraseHits / wc;
+    if (phraseHits >= 22 || density > 0.034) {
+      issues.push({
+        id: "blog_keyword_stuffing_primary_phrase",
+        severity: "block",
+        message: `Primary keyword phrase is repeated too densely in the body (${phraseHits} occurrences in ~${wc} words).`,
+        fix: "Paraphrase with clinical synonyms and remove mechanical repetition; keep one clear H1/title alignment without stuffing.",
+      });
+    }
+  }
+
+  if (likelyClinicalArticle(input) && topicTokens.length >= 5) {
+    const minTok = Math.min(4, Math.max(2, Math.ceil(topicTokens.length * 0.28)));
+    const bodyTokHits = topicTokens.filter((t) => t.length >= 4 && lower.includes(t.toLowerCase())).length;
+    if (bodyTokHits < minTok) {
+      issues.push({
+        id: "blog_title_body_topic_drift",
+        severity: "block",
+        message: "Article body uses too few substantive terms from the title or target keyword — reads off-topic or templated.",
+        fix: "Regenerate so mechanisms, meds, and assessments explicitly name the same condition, organ system, and exam focus as the title.",
+      });
+    }
+  }
+
+  if (!options?.skipReferenceTopicAlignment && refRows.length >= 2 && topicTokens.length >= 3) {
+    const offTopicCdc = refRows.filter((line) => {
+      const l = line.toLowerCase();
+      return /\bcdc\b|centers for disease control/.test(l) && topicSpecificTokenHits(line, topicTokens) === 0;
+    }).length;
+    if (offTopicCdc >= 2) {
+      issues.push({
+        id: "blog_off_topic_cdc_reference_cluster",
+        severity: "block",
+        message:
+          "Multiple CDC references do not mention the article topic — likely generic filler citations (prefer ADA/NIDDK/StatPearls/association guidelines that name the condition).",
+        fix: "Replace with topic-matched sources or add in-text alignment so CDC pages clearly connect (e.g. diabetes foot, vaccine schedule for the named infection).",
       });
     }
   }

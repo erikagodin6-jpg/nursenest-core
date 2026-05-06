@@ -132,6 +132,24 @@ const PATHWAY_READINESS_OVERRIDES: Record<string, Omit<PathwayReadinessConfig, "
     passingThreshold: 0.08,
     allowBackNavigation: false,
   },
+  "pre-nursing": {
+    engineType: "CAT",
+    mode: "mini_adaptive",
+    minQuestions: 8,
+    maxQuestions: 20,
+    timeLimitMinutes: 45,
+    passingThreshold: 0.12,
+    allowBackNavigation: false,
+  },
+  "pre-nursing-ca": {
+    engineType: "CAT",
+    mode: "mini_adaptive",
+    minQuestions: 8,
+    maxQuestions: 20,
+    timeLimitMinutes: 45,
+    passingThreshold: 0.12,
+    allowBackNavigation: false,
+  },
 };
 
 export function formatTimeLimitPhrase(minutes: number): string {

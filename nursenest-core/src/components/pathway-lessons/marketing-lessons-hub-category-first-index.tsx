@@ -43,7 +43,7 @@ import {
 import type { PathwayLessonProgressStatus } from "@/lib/lessons/pathway-lesson-progress";
 import { getLessonProgressForPathwayUser } from "@/lib/lessons/get-lesson-progress-for-pathway-user";
 import { equivalentExamHubUrlAfterRegionToggle } from "@/lib/marketing/marketing-region-equivalent-hub";
-import { HUB } from "@/lib/marketing/marketing-entry-routes";
+import { pathwayHubAppFlashcardsHref, pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
 import { cleanLessonTitleForDisplay } from "@/lib/lessons/lesson-title-presentation";
 import { lessonsPerfMark } from "@/lib/lessons/lessons-perf";
 
@@ -141,8 +141,8 @@ export async function MarketingLessonsHubCategoryFirstIndex({
           : "Adaptive CAT unavailable",
       href: catHref,
     },
-    { label: "Flashcards", href: HUB.flashcards },
-    { label: "Practice exams", href: HUB.practiceExams },
+    { label: "Flashcards", href: pathwayHubAppFlashcardsHref(pathway.id) },
+    { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
     { label: "Exam overview", href: overviewHref },
   ];
 
@@ -360,7 +360,7 @@ export async function MarketingLessonsHubCategoryFirstIndex({
         relatedLinks={[
           { label: "Practice questions", href: questionsHref },
           { label: canStartCat ? "Adaptive CAT" : "Adaptive CAT unavailable", href: catHref },
-          { label: "Practice exams", href: HUB.practiceExams },
+          { label: "Practice exams", href: pathwayHubAppPracticeTestsHref(pathway.id) },
           { label: "Exam overview", href: overviewHref },
         ]}
       />

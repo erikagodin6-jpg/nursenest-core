@@ -191,6 +191,11 @@ type StudyCardProps = {
   title: ReactNode;
   /** Link destination. For locked cards, navigation is prevented. */
   href: string;
+  /**
+   * When `false`, skips Next.js link prefetch (useful for marketing → `/app/*` hops where
+   * background RSC prefetch can contend with auth/session work).
+   */
+  prefetch?: boolean;
   /** Surface context determines base CSS class and layout pattern. */
   surface?: CardSurface;
   /** Visual emphasis level. */
@@ -224,6 +229,7 @@ type StudyCardProps = {
 function HubCard({
   title,
   href,
+  prefetch,
   variant = "default",
   description,
   meta,
@@ -237,7 +243,7 @@ function HubCard({
   ariaLabel,
 }: StudyCardProps) {
   const isLocked = variant === "locked";
-  const cardClass = `${hubCardClass(variant)} ${className}`.trim();
+  const cardClass = [hubCardClass(variant), className].filter(Boolean).join(" ").trim();
   const ctaClass = ctaVariant === "primary" ? CTA_PRIMARY : CTA_SECONDARY;
   const resolvedLabel = ariaLabel ?? (typeof title === "string" ? title : undefined);
 
@@ -299,6 +305,7 @@ function HubCard({
       className={cardClass}
       aria-label={resolvedLabel}
       onClick={onClick}
+      {...(prefetch === false ? { prefetch: false } : {})}
     >
       {inner}
     </Link>
@@ -312,6 +319,7 @@ function HubCard({
 function ListCard({
   title,
   href,
+  prefetch,
   variant = "default",
   description,
   meta,
@@ -325,7 +333,7 @@ function ListCard({
   ariaLabel,
 }: StudyCardProps) {
   const isLocked = variant === "locked";
-  const cardClass = `${listCardClass(variant)} ${className}`.trim();
+  const cardClass = [listCardClass(variant), className].filter(Boolean).join(" ").trim();
   const resolvedLabel = ariaLabel ?? (typeof title === "string" ? title : undefined);
 
   return (
@@ -357,6 +365,7 @@ function ListCard({
             href={href}
             className="text-[var(--theme-heading-text)] underline-offset-4 transition hover:text-primary hover:underline"
             onClick={onClick}
+            {...(prefetch === false ? { prefetch: false } : {})}
           >
             {title}
           </Link>
@@ -385,6 +394,7 @@ function ListCard({
               className="inline-flex min-h-10 items-center rounded-full nn-btn-primary px-4 py-2 text-sm font-semibold shadow-none"
               onClick={onClick}
               aria-label={typeof title === "string" ? `${cta}: ${title}` : cta}
+              {...(prefetch === false ? { prefetch: false } : {})}
             >
               {cta}
             </Link>
@@ -394,6 +404,7 @@ function ListCard({
               className="inline-flex min-h-10 items-center rounded-full nn-btn-secondary px-4 py-2 text-sm font-semibold"
               onClick={onClick}
               aria-label={typeof title === "string" ? `${cta}: ${title}` : cta}
+              {...(prefetch === false ? { prefetch: false } : {})}
             >
               {cta}
             </Link>
@@ -411,6 +422,7 @@ function ListCard({
 function AppCard({
   title,
   href,
+  prefetch,
   variant = "default",
   description,
   meta,
@@ -425,7 +437,7 @@ function AppCard({
 }: StudyCardProps) {
   const isLocked = variant === "locked";
   const isCompleted = variant === "completed";
-  const cardClass = `${appCardClass(variant)} ${className}`.trim();
+  const cardClass = [appCardClass(variant), className].filter(Boolean).join(" ").trim();
   const resolvedLabel = ariaLabel ?? (typeof title === "string" ? title : undefined);
 
   const progressAccent = isCompleted
@@ -459,6 +471,7 @@ function AppCard({
             href={href}
             className="hover:text-[var(--semantic-brand)] hover:underline"
             onClick={onClick}
+            {...(prefetch === false ? { prefetch: false } : {})}
           >
             {title}
           </Link>
@@ -481,6 +494,7 @@ function AppCard({
           className={`mt-3 inline-flex items-center text-sm font-semibold ${ctaVariant === "primary" ? "text-primary hover:underline" : "text-[var(--semantic-brand)] hover:underline"}`}
           onClick={onClick}
           aria-label={typeof title === "string" ? `${cta}: ${title}` : cta}
+          {...(prefetch === false ? { prefetch: false } : {})}
         >
           {cta}
         </Link>

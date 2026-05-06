@@ -1,6 +1,8 @@
 import { ExamFamily } from "@prisma/client";
+import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { getIntlRnCountrySiteMatrixRow } from "@/lib/international-rn/intl-rn-country-site-matrix";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
 import {
   marketingTierHubStudyActionHref,
   resolveMarketingTierHubStudyActionHref,
@@ -63,6 +65,26 @@ export type NursingTierHubContent = {
  */
 export function resolveNursingTierHubActionHref(pathway: ExamPathwayDefinition, action: NursingTierHubAction): string {
   return resolveMarketingTierHubStudyActionHref(pathway, action.id, action.href);
+}
+
+/**
+ * Hub `StudyCard` href: guests use `loginWithCallback` for in-app surfaces (`/app/*`); marketing
+ * lessons and question-bank hubs stay direct URLs.
+ */
+export function resolveNursingTierHubStudyCardHref(
+  pathway: ExamPathwayDefinition,
+  action: NursingTierHubAction,
+  opts: { viewerSignedIn: boolean },
+): string {
+  const base = resolveNursingTierHubActionHref(pathway, action);
+  if (action.id === "exams") {
+    if (action.disabled) return buildExamPathwayPath(pathway);
+    return opts.viewerSignedIn ? base : loginWithCallback(base);
+  }
+  if (action.id === "flashcards") {
+    return opts.viewerSignedIn ? base : loginWithCallback(base);
+  }
+  return base;
 }
 
 function normalizeDash(value: string): string {
@@ -157,10 +179,10 @@ export function buildNursingTierHubContent(pathway: ExamPathwayDefinition): Nurs
       },
       {
         id: "exams",
-        label: resolveMarketingDisplayCopy({ curatedCopy: "Exams" }),
+        label: resolveMarketingDisplayCopy({ curatedCopy: isGenericIntl ? "Exams" : "Practice Exam" }),
         description: isGenericIntl
           ? "Optional adaptive sessions (NCLEX-style pacing)."
-          : "Take exam-style sessions.",
+          : "Linear and timed practice-test sets in the app, scoped to this pathway.",
         href: marketingTierHubStudyActionHref(pathway, "exams"),
         disabled: isGenericIntl,
         disabledNote: isGenericIntl

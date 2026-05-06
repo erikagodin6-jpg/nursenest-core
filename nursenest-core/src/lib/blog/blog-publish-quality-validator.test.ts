@@ -65,6 +65,72 @@ describe("validateBlogPublishQuality", () => {
     assert.ok(result.blocking.some((i) => i.id === "blog_generic_faq_answers"));
   });
 
+  it("rejects obvious primary-keyword stuffing in long bodies", () => {
+    const phrase = "diabetic autonomic neuropathy nursing assessment";
+    /** One long paragraph so duplicate-`<p>` equality checks do not fire before density heuristics. */
+    const padded = `<p>${(phrase + " ").repeat(28).trim()}</p>`;
+    const body = `${goodBody()}\n${padded}`;
+    const result = validateBlogPublishQuality({
+      title: "Diabetic autonomic neuropathy nursing assessment for NCLEX",
+      body,
+      targetKeyword: phrase,
+      faqBlock: {
+        items: [
+          {
+            q: "Which assessment finding matters most in diabetic autonomic neuropathy?",
+            a: "Orthostatic hypotension or silent ischemia patterns can appear because autonomic nerves that regulate vessels and cardiac pain perception are impaired.",
+          },
+          {
+            q: "Why is glycemic history part of the assessment picture?",
+            a: "Chronic hyperglycemia drives the nerve injury trajectory, so A1c trends and hypoglycemia unawareness questions belong in the same assessment thread.",
+          },
+        ],
+      },
+      apaReferences: [
+        "American Diabetes Association. (2024). Standards of care in diabetes.",
+        "National Institute of Diabetes and Digestive and Kidney Diseases. (2023). Diabetic neuropathy.",
+        "National Council of State Boards of Nursing. (2023). NCLEX-RN test plan.",
+      ],
+    });
+    assert.equal(result.ok, false);
+    assert.ok(result.blocking.some((i) => i.id === "blog_keyword_stuffing_primary_phrase"));
+  });
+
+  it("rejects bodies that never substantively echo the title tokens", () => {
+    const vague = `
+      <h2>Mechanism</h2><p>Healthcare is complex and requires careful attention to many different factors that nurses must consider.</p>
+      <h2>Assessment</h2><p>Assessment should be thorough and reflect best practices across diverse clinical environments.</p>
+      <h2>Interventions</h2><p>Interventions depend on context and should always follow policy while supporting patient safety.</p>
+      <h2>Teaching</h2><p>Education should be clear and tailored to the learner without overwhelming detail.</p>
+      <h2>Exam reasoning</h2><p>Tests often reward systematic elimination and prioritization skills.</p>
+    `;
+    const result = validateBlogPublishQuality({
+      title: "Hyperkalemia ECG changes and emergency nursing priorities",
+      body: vague,
+      targetKeyword: "hyperkalemia ECG peaked T waves nursing",
+      category: "Med-Surg",
+      tags: ["hyperkalemia", "ecg", "emergency"],
+      faqBlock: {
+        items: [
+          {
+            q: "What ECG change is classically tied to hyperkalemia?",
+            a: "Peaked T waves and widened QRS complexes can progress toward sine-wave morphology as potassium rises.",
+          },
+          {
+            q: "What is the nurse's first safety priority?",
+            a: "Recognize unstable cardiac conduction, repeat the rhythm strip, and activate the provider chain for emergent therapy per orders and protocol.",
+          },
+        ],
+      },
+      apaReferences: [
+        "American Heart Association. (2022). Advanced cardiovascular life support.",
+        "National Council of State Boards of Nursing. (2023). NCLEX-RN test plan.",
+      ],
+    });
+    assert.equal(result.ok, false);
+    assert.ok(result.blocking.some((i) => i.id === "blog_title_body_topic_drift"));
+  });
+
   it("accepts a real topic-specific clinical post", () => {
     const result = validateBlogPublishQuality({
       title: "Heart failure nursing assessment and NCLEX priorities",

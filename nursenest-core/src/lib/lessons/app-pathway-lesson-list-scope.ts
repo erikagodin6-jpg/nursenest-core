@@ -1,5 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import { ContentStatus, type CountryCode, TierCode } from "@prisma/client";
+import { getStaffSession } from "@/lib/auth/staff-session";
 import { exclusiveTopicSlugsForAlliedProfession } from "@/lib/allied/allied-profession-lesson-exclusive-scope";
 import { isAlliedMarketingCorePathwayId } from "@/lib/lessons/canonical-lessons-hubs";
 import { prismaTierCodesForProfileTier } from "@/lib/entitlements/accessible-tiers";
@@ -144,6 +145,11 @@ export async function appPathwayLessonVisibleToSubscriber(
 
   const { getExamPathwayById } = await import("@/lib/exam-pathways/exam-product-registry");
   const pathway = getExamPathwayById(row.pathwayId);
+
+  const staff = await getStaffSession().catch(() => null);
+  if (staff) {
+    return Boolean(pathway);
+  }
 
   if (!pathway) {
     return false;

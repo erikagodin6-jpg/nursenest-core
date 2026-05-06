@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import { PreNursingSurfaceAnalytics } from "@/components/pre-nursing/pre-nursing-surface-analytics";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
 import { StudyCard } from "@/components/ui/study-card";
+import { auth } from "@/lib/auth";
 import { DEFAULT_MARKETING_LOCALE } from "@/lib/i18n/marketing-locale-policy";
+import { loginWithCallback } from "@/lib/marketing/marketing-entry-routes";
+import { pathwayHubAppPracticeTestsHref } from "@/lib/marketing/pathway-hub-app-questions-href";
+import { PRE_NURSING_PRACTICE_PATHWAY_QUERY_ID } from "@/lib/pre-nursing/pre-nursing-constants";
 import { marketingAlternatesSharedPage } from "@/lib/seo/marketing-alternates";
 
 export const revalidate = 86400;
@@ -29,7 +33,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function PreNursingLandingPage() {
+export default async function PreNursingLandingPage() {
+  const session = await auth();
+  const signedIn = Boolean((session?.user as { id?: string } | undefined)?.id);
+  const practiceAppPath = pathwayHubAppPracticeTestsHref(PRE_NURSING_PRACTICE_PATHWAY_QUERY_ID);
+  const practiceHref = signedIn ? practiceAppPath : loginWithCallback(practiceAppPath);
+
   return (
     <div className="nn-marketing-surface">
       <div
@@ -80,8 +89,9 @@ export default function PreNursingLandingPage() {
               <StudyCard
                 surface="hub"
                 variant="featured"
-                className="nn-exam-hub-study-card--practice"
-                href="/question-bank"
+                className="nn-exam-hub-study-card--practice nn-qa-pre-nursing-hub-practice"
+                prefetch={false}
+                href={practiceHref}
                 title="Practice"
                 description="Drill by topic or weakness."
                 cta="Practice"

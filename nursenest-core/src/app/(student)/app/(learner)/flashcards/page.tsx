@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { TierCode } from "@prisma/client";
 import { LearnerRenderTraceBanner } from "@/components/dev/learner-render-trace-banner.dynamic";
 import { FlashcardsHubClient } from "@/components/flashcards/flashcards-hub-client";
 import { FlashcardsPathwayPickSurface } from "@/components/flashcards/flashcards-pathway-pick-surface";
@@ -131,10 +130,6 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
         id: p.id,
         label: p.displayName ?? p.shortName,
       }));
-
-      if (entitlement.tier === TierCode.PRE_NURSING) {
-        pathwayOptions = [{ id: "pre-nursing", label: "Pre-Nursing" }, ...pathwayOptions];
-      }
     } catch (e) {
       safeServerLog("learner_flashcards", "pathway_bootstrap_primary_failed", {
         user_id: userId.slice(0, 8),
