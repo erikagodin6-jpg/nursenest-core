@@ -90,6 +90,7 @@ Use **1Password / DO App Platform env UI / Vercel** (whichever the org uses)—n
 |---------|-----|
 | `npm run dev` | Local development server |
 | `npm run typecheck` | `tsc --noEmit` |
+| `npm run typecheck:critical` | Faster pass: Stripe, auth, `db`, `api/subscriptions` (`tsconfig.typecheck-critical.json`) — see `reports/typecheck-stabilization-guidelines.md` |
 | `npm run build` | Full Next build (heavy; includes lesson index steps) |
 | `npm run db:generate` | Regenerate Prisma client |
 | `npm run db:status` | Prisma migrate status (when DB configured) |
@@ -178,6 +179,7 @@ Start narrow, expand only when the task touches those surfaces.
 2. `reports/do-not-break-surfaces.md` — non-negotiables.  
 3. `reports/developer-access-checklist.md` — how to get access safely.  
 4. `reports/first-week-plan.md` — suggested cadence.  
+5. `reports/typecheck-baseline-audit.md` and `reports/typecheck-stabilization-guidelines.md` — TypeScript baseline and ongoing rules.
 
 Questions should go to the **engineering lead / on-call** named in your contract—not inferred from this doc alone.
 

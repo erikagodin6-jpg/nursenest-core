@@ -37,6 +37,7 @@ import {
   Workflow,
   MessageSquare,
   ShieldCheck,
+  SquarePen,
 } from "lucide-react";
 import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import { SignOutButton } from "@/components/auth/sign-out-button";
@@ -78,6 +79,7 @@ const GROUPS: NavGroup[] = [
     items: [
       { href: "/admin/inventory", label: "Inventory drill-down", icon: Package },
       { href: "/admin/content-coverage", label: "Content coverage", icon: BarChart3 },
+      { href: "/admin/content/page-copy", label: "Page copy editor", icon: SquarePen },
       { href: "/admin/content", label: "Coverage & quality", icon: Layers },
       { href: "/admin/lessons", label: "Lessons", icon: GraduationCap },
       { href: "/admin/questions", label: "Question bank", icon: ClipboardList },

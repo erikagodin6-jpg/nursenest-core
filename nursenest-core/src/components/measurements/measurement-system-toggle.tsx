@@ -11,6 +11,7 @@ export function MeasurementSystemToggle({
   description = "Switch between metric and imperial display without duplicating lessons.",
   compact = false,
   onSystemChange,
+  onPreferenceCommitted,
 }: {
   fallbackSystem: MeasurementSystem;
   initialPreference?: MeasurementPreference | null;
@@ -18,12 +19,15 @@ export function MeasurementSystemToggle({
   description?: string;
   compact?: boolean;
   onSystemChange?: (system: MeasurementSystem) => void;
+  /** Optional server sync (e.g. PATCH profile) after localStorage + cookie are updated. */
+  onPreferenceCommitted?: (preference: MeasurementPreference) => void | Promise<void>;
 }) {
   const { preference, measurementSystem, setPreference } = useMeasurementPreference(fallbackSystem, initialPreference);
 
   function update(next: MeasurementPreference) {
     setPreference(next);
     onSystemChange?.(next === "imperial" ? "US" : "SI");
+    void onPreferenceCommitted?.(next);
   }
 
   return (

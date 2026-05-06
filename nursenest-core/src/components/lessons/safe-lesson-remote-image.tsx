@@ -10,13 +10,19 @@ export function SafeLessonRemoteImage({
   src,
   alt,
   className,
+  /** Notified right before this component unmounts due to image load failure (parent can remove chrome). */
+  onHidden,
 }: {
   src: string;
   alt: string;
   className?: string;
+  onHidden?: () => void;
 }) {
   const [visible, setVisible] = useState(true);
-  const onError = useCallback(() => setVisible(false), []);
+  const onError = useCallback(() => {
+    onHidden?.();
+    setVisible(false);
+  }, [onHidden]);
   if (!visible) return null;
   return (
     // eslint-disable-next-line @next/next/no-img-element -- CDN / catalog URLs; onError fallback

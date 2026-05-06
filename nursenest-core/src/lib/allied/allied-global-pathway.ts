@@ -1,7 +1,9 @@
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 
-export const ALLIED_GLOBAL_HUB_PATH = "/allied/allied-health" as const;
+export { ALLIED_GLOBAL_HUB_PATH, buildAlliedGlobalHubPath } from "@/lib/allied/allied-global-hub-path";
+import { buildAlliedGlobalHubPath } from "@/lib/allied/allied-global-hub-path";
+
 export const ALLIED_GLOBAL_PATHWAY_IDS = ["us-allied-core", "ca-allied-core"] as const;
 export const ALLIED_CANONICAL_PATHWAY_ID = "us-allied-core" as const;
 
@@ -21,15 +23,9 @@ export function isAlliedHealthPathway(
   return pathway.roleTrack === "allied" && pathway.examCode === "allied-health";
 }
 
-export function buildAlliedGlobalHubPath(subpath?: string): string {
-  if (!subpath) return ALLIED_GLOBAL_HUB_PATH;
-  return `${ALLIED_GLOBAL_HUB_PATH}/${subpath.replace(/^\//, "")}`;
-}
-
+/** @deprecated Prefer {@link buildAlliedGlobalHubPath} — country-prefixed allied hubs redirect globally. */
 export function buildLegacyAlliedMarketingPath(subpath?: string): string {
-  const base = "/us/allied/allied-health";
-  if (!subpath) return base;
-  return `${base}/${subpath.replace(/^\//, "")}`;
+  return buildAlliedGlobalHubPath(subpath);
 }
 
 export function getCanonicalAlliedPathway(): ExamPathwayDefinition | null {

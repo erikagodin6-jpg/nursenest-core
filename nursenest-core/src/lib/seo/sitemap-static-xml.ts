@@ -17,6 +17,8 @@
 export const SITEMAP_SINGLE_URLSET_SOFT_WARN_URLS = 45_000;
 
 import { ALLIED_PROFESSIONS } from "@/lib/allied/allied-professions-registry";
+import { ALLIED_GLOBAL_HUB_PATH } from "@/lib/allied/allied-global-hub-path";
+import { isAlliedHealthPathway } from "@/lib/allied/allied-global-pathway";
 import { alliedHealthSegmentPath, preNursingLessonDetailPath, PRE_NURSING_LESSONS_INDEX_PATH } from "@/lib/lessons/lesson-routes";
 import { PRE_NURSING_MODULE_REGISTRY } from "@/content/pre-nursing/pre-nursing-registry";
 import { getPreNursingOverlaySlugsForLocale } from "@/lib/i18n/pre-nursing-content-overlay";
@@ -159,7 +161,12 @@ export async function collectExamPathwayUrls(origin: string): Promise<string[]> 
   const o = normalizeOrigin(origin);
   const { listPublishedExamPathwaysForPublicSite } = await import("@/lib/navigation/country-exam-launch-readiness");
   const urls: string[] = [];
+  let alliedHealthGlobalEmitted = false;
   for (const p of listPublishedExamPathwaysForPublicSite()) {
+    if (isAlliedHealthPathway(p)) {
+      if (alliedHealthGlobalEmitted) continue;
+      alliedHealthGlobalEmitted = true;
+    }
     urls.push(`${o}${buildExamPathwayPath(p)}`);
     urls.push(`${o}${buildExamPathwayPath(p, "pricing")}`);
     urls.push(`${o}${buildExamPathwayPath(p, "questions")}`);
@@ -174,7 +181,7 @@ export async function collectExamPathwayUrls(origin: string): Promise<string[]> 
  */
 export function collectAlliedMarketingUrls(origin: string): string[] {
   const o = normalizeOrigin(origin);
-  const urls: string[] = [`${o}/allied-health`];
+  const urls: string[] = [`${o}${ALLIED_GLOBAL_HUB_PATH}`, `${o}/allied-health`];
   for (const p of ALLIED_PROFESSIONS) {
     urls.push(`${o}${alliedHealthSegmentPath(p.segment)}`);
   }
@@ -215,7 +222,12 @@ export function collectNewGradMarketingUrls(origin: string): string[] {
 export function collectPathwayLessonHubUrlsOnly(origin: string): string[] {
   const o = normalizeOrigin(origin);
   const urls: string[] = [`${o}/lessons`];
+  let alliedHealthGlobalEmitted = false;
   for (const p of listPublishedExamPathwaysForPublicSite()) {
+    if (isAlliedHealthPathway(p)) {
+      if (alliedHealthGlobalEmitted) continue;
+      alliedHealthGlobalEmitted = true;
+    }
     urls.push(`${o}${buildExamPathwayPath(p, "lessons")}`);
   }
   return urls;

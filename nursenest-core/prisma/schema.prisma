@@ -30,6 +30,8 @@ model User {
   updatedAt                     DateTime                    @updatedAt
   /// * When tier is ALLIED, optional short profession key (e.g. paramedic, mlt) for scoped UX and recommendations.
   alliedProfessionKey           String?                     @db.VarChar(64)
+  /// * Clinical display units: `metric` | `imperial` (optional; cookie/localStorage when unset).
+  measurementPreference         String?                     @map("measurement_preference") @db.VarChar(16)
   /// * Bumped on password change/reset so JWTs can be invalidated without per-device session rows.
   credentialVersion             Int                         @default(0)
   /// * Free Pre-Nursing: optional target readiness / school start date (UTC midnight).

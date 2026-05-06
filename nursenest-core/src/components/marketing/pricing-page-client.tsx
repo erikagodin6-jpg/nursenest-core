@@ -190,7 +190,7 @@ function PricingPlanGridSkeleton() {
       {BILLING_DURATION_ORDER.map((duration) => (
         <article
           key={duration}
-          className="relative flex min-h-[26rem] flex-col rounded-2xl border border-[var(--palette-border)] bg-card p-6 shadow-[var(--elevation-rest)] xl:min-h-[25.5rem]"
+          className="relative flex min-h-[20rem] flex-col rounded-2xl border border-[var(--palette-border)] bg-card p-6 shadow-[var(--elevation-rest)] sm:min-h-[26rem] xl:min-h-[25.5rem]"
         >
           <div className="h-7 w-28 max-w-[70%] animate-pulse rounded-md bg-[color-mix(in_srgb,var(--semantic-panel-muted)_55%,var(--semantic-border-soft))]" />
           <div className="mt-2 h-4 w-[88%] max-w-xs animate-pulse rounded-md bg-[color-mix(in_srgb,var(--semantic-panel-muted)_45%,var(--semantic-border-soft))]" />

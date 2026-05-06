@@ -1,5 +1,5 @@
 import { CANONICAL_PATHWAY_HUB } from "@/lib/marketing/canonical-pathway-hubs";
-import { ALLIED_GLOBAL_HUB_PATH } from "@/lib/allied/allied-global-pathway";
+import { ALLIED_GLOBAL_HUB_PATH } from "@/lib/allied/allied-global-hub-path";
 import type { MarketingRegionToggle } from "@/lib/marketing/marketing-entry-routes";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 

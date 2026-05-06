@@ -57,7 +57,7 @@ describe("Core route modules exist (guards dead lesson/profile/marketing entry)"
     assertPageExists("app/(student)/app/(learner)/account/layout.tsx");
     const accountIdx = join(appRoot, "app", "(student)", "app", "(learner)", "account", "page.tsx");
     const hubSrc = readFileSync(accountIdx, "utf8");
-    assert.match(hubSrc, /LearnerAccountHub/, "account landing should render LearnerAccountHub");
+    assert.match(hubSrc, /LearnerAccountCenterOverview/, "account landing should render Account Center overview");
     const profileIdx = join(appRoot, "app", "(student)", "app", "(learner)", "profile", "page.tsx");
     assert.match(readFileSync(profileIdx, "utf8"), /redirect\("\/app\/account"\)/, "profile short URL should land on account hub");
   });
@@ -84,7 +84,10 @@ describe("learner account nav — practical link set (parity with legacy /profil
       "/app/command-center",
       "/app/account",
       "/app/account/overview",
-      "/app/account/report-card",
+      "/app/account/report",
+      "/app/account/settings",
+      "/app/account/activity",
+      "/app/account/support",
       "/app/account/readiness",
       "/app/account/progress",
       "/app/account/question-bank-performance",

@@ -535,7 +535,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               <button
                 type="button"
                 onClick={() => setMobileContextOpen(true)}
-                className="nn-skip-mobile-touch-target nn-header-mobile-only-inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--nn-nav-border)] bg-transparent p-0 text-[var(--nn-nav-fg)] transition-colors hover:bg-[var(--nn-nav-hover-bg)]"
+                className="nn-header-mobile-only-inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[var(--nn-nav-border)] bg-transparent p-0 text-[var(--nn-nav-fg)] transition-colors hover:bg-[var(--nn-nav-hover-bg)]"
                 aria-label="Region and language settings"
                 aria-expanded={mobileContextOpen}
               >
@@ -544,7 +544,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               <Button
                 type="button"
                 variant="ghost"
-                className="nn-skip-mobile-touch-target h-10 w-10 shrink-0 rounded-xl border border-[var(--nn-nav-border)] p-0 text-[var(--nn-nav-fg)] hover:bg-[var(--nn-nav-hover-bg)]"
+                className="h-11 w-11 shrink-0 rounded-xl border border-[var(--nn-nav-border)] p-0 text-[var(--nn-nav-fg)] hover:bg-[var(--nn-nav-hover-bg)]"
                 aria-label={t("nav.openMenu")}
                 aria-expanded={mobileOpen}
                 onClick={() => setMobileOpen(true)}
@@ -849,7 +849,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
               <Button
                 type="button"
                 variant="ghost"
-                className="nn-skip-mobile-touch-target h-10 w-10 shrink-0 rounded-xl border border-[var(--nav-border)] p-0 text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
+                className="h-11 w-11 shrink-0 rounded-xl border border-[var(--nav-border)] p-0 text-[var(--nav-fg)] hover:bg-[var(--nav-hover)]"
                 aria-label={t("nav.closeMenu")}
                 onClick={scheduleMobileDrawerClose}
               >
@@ -858,7 +858,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
             </div>
             <div className="min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-y-contain px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-5">
               <div className="space-y-1">
-                <p className="px-2 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
+                <p className="px-2 text-xs font-medium uppercase tracking-widest text-[var(--nav-muted)] sm:text-[11px]">
                   {t("nav.marketingExplore")}
                 </p>
                 <>
@@ -935,7 +935,7 @@ export function SiteHeader({ serverHasStaffSession }: SiteHeaderProps = {}) {
                       </Link>
                     ))}
                     <div className="space-y-1 border-t border-[var(--header-border)] pt-3">
-                      <p className="px-2 text-[11px] font-medium uppercase tracking-widest text-[var(--nav-muted)]">
+                      <p className="px-2 text-xs font-medium uppercase tracking-widest text-[var(--nav-muted)] sm:text-[11px]">
                         {formatTitleCase(t("nav.marketingMore"), locale)}
                       </p>
                       {marketingMoreLinks.map((item) => (

@@ -46,7 +46,7 @@ const SECONDARY_ACTIONS: {
   { href: "/app/lessons", labelKey: "learner.profile.quickLinks.lessons", icon: BookOpen, tone: "success" },
   { href: "/app/flashcards", labelKey: "learner.profile.quickLinks.flashcards", icon: Brain, tone: "success" },
   { href: "/app/study-plan", labelKey: "learner.profile.quickLinks.studyPlanner", icon: ListTodo, tone: "info" },
-  { href: "/app/account/report-card", labelKey: "learner.account.nav.reportCard", icon: BarChart3, tone: "brand" },
+  { href: "/app/account/report", labelKey: "learner.account.nav.report", icon: BarChart3, tone: "brand" },
   { href: "/app/account/review-queue", labelKey: "learner.account.nav.reviewQueue", icon: ClipboardList, tone: "warning" },
 ];
 

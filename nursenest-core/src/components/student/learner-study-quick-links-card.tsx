@@ -30,7 +30,7 @@ const DEFAULT_STUDY_LINKS: {
   { href: "/app/lessons", labelKey: "learner.profile.quickLinks.lessons", icon: BookOpen, accent: "lessons" },
   { href: "/app/flashcards", labelKey: "learner.profile.quickLinks.flashcards", icon: Brain, accent: "flashcards" },
   { href: "/app/study-plan", labelKey: "learner.profile.quickLinks.studyPlanner", icon: ListTodo, accent: "planner" },
-  { href: "/app/account/report-card", labelKey: "learner.account.nav.reportCard", icon: BarChart3, accent: "report" },
+  { href: "/app/account/report", labelKey: "learner.account.nav.report", icon: BarChart3, accent: "report" },
   { href: "/app/account/readiness", labelKey: "learner.account.nav.readiness", icon: Target, accent: "readiness" },
   { href: "/app/account/review-queue", labelKey: "learner.account.nav.reviewQueue", icon: ClipboardList, accent: "review" },
 ];

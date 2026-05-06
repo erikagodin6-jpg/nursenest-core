@@ -1,5 +1,7 @@
-import { notFound } from "next/navigation";
+import { headers } from "next/headers";
+import { notFound, permanentRedirect } from "next/navigation";
 import { PathwayLessonProgressRefreshListener } from "@/components/lessons/pathway-lesson-progress-refresh-listener";
+import { legacyCountryAlliedHealthMarketingRedirectDestination } from "@/lib/allied/allied-global-hub-path";
 import { resolveExamPathwaySafe } from "@/lib/exam-pathways/resolve-exam-pathway-safe";
 
 /**
@@ -26,6 +28,12 @@ export default async function ExamPathwayLayout({ children, params }: Props) {
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (!pathway || pathway.status === "hidden") {
     notFound();
+  }
+
+  const requestPath = (await headers()).get("x-nn-request-pathname")?.trim() ?? pathname;
+  const legacyAlliedTarget = legacyCountryAlliedHealthMarketingRedirectDestination(requestPath);
+  if (legacyAlliedTarget) {
+    permanentRedirect(legacyAlliedTarget);
   }
   /**
    * Do not redirect “unpublished” snapshot pathways away from their marketing hub.

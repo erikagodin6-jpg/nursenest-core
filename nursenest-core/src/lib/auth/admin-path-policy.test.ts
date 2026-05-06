@@ -122,3 +122,12 @@ test("support and content staff can access internal courses admin surfaces", () 
   assert.equal(isPathAllowedForStaffTier("support", "/api/admin/internal-courses/x/status"), true);
   assert.equal(isPathAllowedForStaffTier("content", "/admin/courses"), true);
 });
+
+test("support staff can access page copy editor and marketing public content API", () => {
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/content/page-copy"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/marketing-public-content"), true);
+});
+
+test("content staff can access page copy editor (not support-only)", () => {
+  assert.equal(isPathAllowedForStaffTier("content", "/admin/content/page-copy"), true);
+});

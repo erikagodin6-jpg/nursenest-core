@@ -1,3 +1,4 @@
+import { isAlliedGlobalPathwayId } from "@/lib/allied/allied-global-pathway";
 import type { MeasurementPreference } from "@/lib/measurements/measurement-preference";
 import { resolveMeasurementSystemPreference } from "@/lib/measurements/measurement-preference";
 
@@ -27,6 +28,10 @@ export function resolveMeasurementSystemForLearnerPathway(
   preference?: MeasurementPreference | null,
 ): MeasurementSystem {
   const pid = pathwayId?.trim();
+  /** Allied pathways are global; canonical content is metric-first — do not tie units to account country. */
+  if (pid && isAlliedGlobalPathwayId(pid)) {
+    return resolveMeasurementSystemPreference("SI", preference);
+  }
   const fallback = !pid || !countryByPathwayId ? "US" : getMeasurementSystemForCountry(countryByPathwayId[pid]);
   return resolveMeasurementSystemPreference(fallback, preference);
 }

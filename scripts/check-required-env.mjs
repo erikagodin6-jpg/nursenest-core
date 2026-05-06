@@ -1,4 +1,8 @@
 #!/usr/bin/env node
+/**
+ * Minimal legacy check (DATABASE_URL, DIRECT_URL, NEXTAUTH_*).
+ * Prefer full diagnostics: `cd nursenest-core && npm run env:validate`.
+ */
 
 const REQUIRED_VARS = [
   "DATABASE_URL",

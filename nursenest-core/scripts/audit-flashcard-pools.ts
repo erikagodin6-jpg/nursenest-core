@@ -5,7 +5,7 @@
  * Audits flashcard pool data for all active pathways and reports:
  * - pathwayId / tier / exam
  * - total ExamQuestion count (all published)
- * - usable flashcard-derived count (excl. ECG/video, requires stem + correct_answer)
+ * - usable flashcard-derived count (excl. ECG/video; stem≥10 + correct_answer JSON + topic/body)
  * - count by raw topic/body_system category
  * - categories returning zero
  * - whether Flashcard table is empty
@@ -17,13 +17,31 @@
  *   npx tsx scripts/audit-flashcard-pools.ts --verbose
  */
 
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { parse as parseDotenv } from "dotenv";
 import { PrismaClient } from "@prisma/client";
+import { databaseUrlDriftAuditPublic } from "../src/lib/db/database-url-drift-audit";
 import {
+  EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL,
   EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL,
   EXAM_QUESTION_STATUS_PUBLISHED_SQL,
+  EXAM_QUESTION_TOPIC_OR_BODY_SQL,
 } from "../src/lib/questions/exam-question-bank-sql";
 
 const prisma = new PrismaClient();
+
+function loadDotenvFromPackageRoot(): void {
+  const root = process.cwd();
+  for (const name of [".env", ".env.local", ".env.production"]) {
+    const p = resolve(root, name);
+    if (!existsSync(p)) continue;
+    const parsed = parseDotenv(readFileSync(p, "utf8"));
+    for (const [k, v] of Object.entries(parsed)) {
+      if (process.env[k] === undefined) process.env[k] = v;
+    }
+  }
+}
 
 const AUDIT_PATHWAYS = [
   { pathwayId: "ca-rn-nclex-rn",   tier: "RN",     examKeys: ["NCLEX-RN", "NCLEX_RN"],           region: "CA" },
@@ -61,8 +79,8 @@ function inferReason(p: {
   totalCategoryCount: number;
 }): string {
   if (p.totalPublished === 0) return "NO_PUBLISHED_EXAM_QUESTIONS_IN_DB";
-  if (p.usableTotal === 0)    return "ALL_QUESTIONS_ECG_VIDEO_OR_MISSING_STEM_ANSWER";
-  if (p.scopedTotal === 0)    return "EXAM_KEY_OR_TIER_MISMATCH_SCOPE_FILTERS_ALL_OUT";
+  if (p.usableTotal === 0) return "ALL_QUESTIONS_ECG_VIDEO_OR_MISSING_STEM_ANSWER";
+  if (p.scopedTotal === 0) return "EXAM_KEY_OR_TIER_MISMATCH_SCOPE_FILTERS_ALL_OUT";
   if (p.zeroCategoryCount > 0 && p.zeroCategoryCount === p.totalCategoryCount) return "CATEGORY_MAPPING_ALL_FAILED";
   if (p.zeroCategoryCount > 0) return "SOME_CATEGORIES_UNRESOLVED_CHECK_TOPIC_BODY_SYSTEM";
   if (p.flashcardTableCount === 0 && p.scopedTotal > 0) return "FLASHCARD_TABLE_EMPTY_BUT_EXAM_QUESTIONS_EXIST_OK";
@@ -88,8 +106,9 @@ async function auditOne(pw: typeof AUDIT_PATHWAYS[number]): Promise<AuditResult>
   const [usableRow] = await prisma.$queryRaw<CountRow[]>`
     SELECT COUNT(*)::bigint AS n FROM exam_questions
     WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
-      AND coalesce(trim(stem), '') <> ''
-      AND correct_answer IS NOT NULL
+      AND length(trim(coalesce(stem, ''))) >= 10
+      AND ${EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL}
+      AND ${EXAM_QUESTION_TOPIC_OR_BODY_SQL}
       AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
   `;
   const usableTotal = Number(usableRow?.n ?? 0);
@@ -106,8 +125,9 @@ async function auditOne(pw: typeof AUDIT_PATHWAYS[number]): Promise<AuditResult>
     Prisma.sql`
       SELECT COUNT(*)::bigint AS n FROM exam_questions
       WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
-        AND coalesce(trim(stem), '') <> ''
-        AND correct_answer IS NOT NULL
+        AND length(trim(coalesce(stem, ''))) >= 10
+        AND ${EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL}
+        AND ${EXAM_QUESTION_TOPIC_OR_BODY_SQL}
         AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
         AND lower(coalesce(exam, '')) IN (${Prisma.join(examLower)})
     `,
@@ -152,8 +172,9 @@ async function auditOne(pw: typeof AUDIT_PATHWAYS[number]): Promise<AuditResult>
       COUNT(*)::bigint AS cnt
     FROM exam_questions
     WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
-      AND coalesce(trim(stem), '') <> ''
-      AND correct_answer IS NOT NULL
+      AND length(trim(coalesce(stem, ''))) >= 10
+      AND ${EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL}
+      AND ${EXAM_QUESTION_TOPIC_OR_BODY_SQL}
       AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
     GROUP BY 1
     ORDER BY cnt DESC
@@ -210,12 +231,44 @@ async function auditOne(pw: typeof AUDIT_PATHWAYS[number]): Promise<AuditResult>
 }
 
 async function main() {
+  loadDotenvFromPackageRoot();
   console.log("╔══════════════════════════════════════════════════════════════════════╗");
   console.log("║         NurseNest — Flashcard Pool Audit                            ║");
   console.log("╚══════════════════════════════════════════════════════════════════════╝");
   console.log(`  ${new Date().toISOString()}`);
   if (PATHWAY_FILTER) console.log(`  Filter  : ${PATHWAY_FILTER}`);
-  if (VERBOSE)        console.log(`  Verbose : ON`);
+  if (VERBOSE) console.log(`  Verbose : ON`);
+
+  const rawUrl = process.env.DATABASE_URL?.trim() ?? "";
+  if (!rawUrl) {
+    console.log("\n  DATABASE_URL is unset — Prisma CLI / this script cannot reach a database.");
+    console.log("  Set DATABASE_URL to the same value as the Next.js app (compare in hosting env UI).\n");
+    process.exit(0);
+  }
+  const audit = databaseUrlDriftAuditPublic(rawUrl);
+  if (audit) {
+    console.log("\n  Connected database target (redacted, compare to app / production):");
+    console.log(`    host       : ${audit.host}`);
+    console.log(`    port       : ${audit.port}`);
+    console.log(`    database   : ${audit.database}`);
+    console.log(`    user       : ${audit.username}`);
+    console.log(`    url fp(10) : ${audit.fingerprintPrefix10}`);
+    console.log(
+      "\n  If every pathway shows NO_PUBLISHED_EXAM_QUESTIONS_IN_DB but production should have rows,",
+    );
+    console.log("  this fingerprint almost certainly does not match the app's DATABASE_URL.\n");
+  }
+
+  const [totAll] = await prisma.$queryRaw<CountRow[]>`
+    SELECT COUNT(*)::bigint AS n FROM exam_questions
+  `;
+  const [pubAll] = await prisma.$queryRaw<CountRow[]>`
+    SELECT COUNT(*)::bigint AS n FROM exam_questions WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
+  `;
+  const [unpubAll] = await prisma.$queryRaw<CountRow[]>`
+    SELECT COUNT(*)::bigint AS n FROM exam_questions WHERE NOT (${EXAM_QUESTION_STATUS_PUBLISHED_SQL})
+  `;
+  console.log("  exam_questions: total=", fmt(totAll.n), " published=", fmt(pubAll.n), " unpublished=", fmt(unpubAll.n));
 
   const targets = PATHWAY_FILTER
     ? AUDIT_PATHWAYS.filter((p) => p.pathwayId === PATHWAY_FILTER)

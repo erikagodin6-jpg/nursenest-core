@@ -359,7 +359,7 @@ export function AnalyticsPerformanceReport({
         <Link href="/app/review" className="nn-btn-secondary inline-flex min-h-[2.5rem] items-center rounded-lg px-5 text-sm font-semibold">
           Review queue
         </Link>
-        <Link href="/app/account/report-card" className="nn-btn-secondary inline-flex min-h-[2.5rem] items-center rounded-lg px-5 text-sm font-semibold">
+        <Link href="/app/account/report" className="nn-btn-secondary inline-flex min-h-[2.5rem] items-center rounded-lg px-5 text-sm font-semibold">
           Report card
         </Link>
       </div>

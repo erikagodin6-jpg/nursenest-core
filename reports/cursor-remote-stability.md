@@ -1,92 +1,60 @@
 # Cursor Remote SSH stability (NurseNest)
 
-This repo is large. Cursor / VS Code `extensionHost` and file-watcher processes can spike CPU and RAM if the workspace root is too broad or generated trees are watched. This document matches the repo-level excludes in `.cursorignore` and `.vscode/settings.json`.
+## Why this happens
 
-## 1. Open the correct folder
+Cursor / VS Code on a remote VM runs a **Node-based server** (under `~/.cursor-server/`). The **`extensionHost`** loads extensions and language services; the **`fileWatcher`** subscribes to filesystem events across the **workspace root**. If that root is too large (for example you opened `/root` instead of the clone) or the repo contains huge generated trees (`node_modules`, `.next`, i18n shards, Playwright output, etc.), the watcher and indexer work **much harder than your app**. The VM can look "healthy" in `htop` while **editor processes** sit at **>100% CPU and >1GB RAM** — that is an **editor / indexing / watch** problem, not NurseNest production capacity.
 
-- **Always** open the clone root as the remote workspace folder, for example: `/root/nursenest-core` (or your actual clone path ending in `nursenest-core`).
-- **Do not** open `/root`, `/home/you`, or a parent directory that contains many other projects, Docker contexts, or home-folder noise. Cursor will try to watch and index everything under that root.
+## Folders that must never be fully indexed or watched
 
-Verify from a terminal in the remote:
+These are excluded via **`.cursorignore`** (Cursor / AI indexing) and **`.vscode/settings.json`** (`files.watcherExclude`, `search.exclude`, and `files.exclude` where safe):
 
-```bash
-cd /root/nursenest-core && npm run cursor:diagnose
-```
-
-If you see a warning that `process.cwd()` is `/root` or not the repo root, reconnect and **File → Open Folder…** on the repo directory only.
-
-## 2. What this repo excludes (by design)
-
-Heavy or generated paths are excluded from **Cursor indexing** (`.cursorignore`), **file watching**, **search**, and (for generated-only trees) **Explorer** via `.vscode/settings.json`:
-
-- `node_modules`, `.next`, `.turbo`, `.cache`, `.tmp`, `tmp`, `temp`
-- `coverage`, `dist`, `build` output dirs (explicit paths — not arbitrary `**/build` that could match source)
+- `node_modules`, `.next`, `.turbo`, `.cache`, `.tmp` (and common `tmp` / `temp`)
+- `coverage`, `dist`, build output dirs (`build/`, `nursenest-core/build/`, `client/build/`)
 - `playwright-report`, `test-results`, `blob-report`
-- `reports`, `logs`, `*.log`
-- `public/i18n` and `nursenest-core/public/i18n` (large compiled i18n shards)
+- `reports` (large JSON reports — still **search/watcher** excluded; keep this doc open via path or terminal if needed)
+- `public/i18n` shards (`nursenest-core/public/i18n`, etc.)
 - `generated-indexes` trees
-- `prisma/migrations` (many files; `prisma/schema.prisma` remains available for development)
-- `.prisma`, `.vercel`, `.digitalocean`
+- `.prisma`, `prisma/migrations` (many files; use `prisma/schema.prisma` for schema work)
+- `logs`, `*.log`
 
-**Not** excluded: `src`, `app`, `components`, `prisma/schema.prisma`, `package.json`, `scripts`, `tests`, and static assets under `public/` outside `i18n/`.
+**Do not** widen excludes to `src/`, `app/`, `components/`, `scripts/`, `tests/`, or `prisma/schema.prisma` — those are required for development.
 
-## 3. If Cursor freezes or CPU spikes
+## You must open only the clone root (e.g. `/root/nursenest-core`)
 
-### Kill runaway processes (remote host)
+- **Always** use **File → Open Folder** on the **repository root** (the directory that contains this file’s parent `reports/` and `nursenest-core/`).
+- **Never** use `/root` (or any parent of many projects) as the workspace folder. Cursor will attach watchers to **everything** under that path.
 
-List heavy Node / Cursor-related processes:
+## Recover when Cursor freezes or spikes CPU/RAM
 
-```bash
-ps -eo pid,pcpu,rss,args --sort=-rss | head -n 25
-```
+1. **Reload the window** first: Command Palette → **Developer: Reload Window**.
+2. From the clone root, run:
 
-Stop a specific high-CPU PID (replace `<pid>`):
+   ```bash
+   npm run cursor:recover
+   ```
 
-```bash
-kill <pid>
-```
+   This script **only SIGTERM** processes whose command line is under **`.cursor-server`** and whose type is **`extensionHost`** or **`fileWatcher`**. It does **not** kill your app `node`/`npm` servers, Prisma CLI in your repo, or other userland tools unless they incorrectly reuse those exact flags (they do not).
 
-If unresponsive:
+   It then clears **safe** caches under `~/.cursor-server/data/` (`CachedExtensionVSIXs`, `CachedData` contents only — not your git clone).
 
-```bash
-kill -9 <pid>
-```
+3. **Reconnect** if needed and confirm the opened folder is **`…/nursenest-core`**, not `/root`.
 
-On a shared dev VM, prefer killing your own `cursor-server` / `extensionHost` / `fileWatcher` children rather than unrelated services.
+4. **Inspect** before/after process lists printed by the script; follow up with:
 
-### Reload the window
+   ```bash
+   npm run cursor:diagnose
+   ```
 
-In Cursor: **Developer: Reload Window** (Command Palette). This restarts the extension host without rebooting the remote.
+## Commands
 
-### Clear Cursor remote server data (last resort)
+| Command | Purpose |
+|--------|---------|
+| `npm run cursor:diagnose` | Memory, disk, heavy dirs, top Node/Cursor processes, `.cursorignore` / VS Code exclude sanity, cwd vs `/root` warning. |
+| `npm run cursor:recover` | Kill runaway Cursor `extensionHost` / `fileWatcher` only; clear safe server caches; print top processes before/after. |
+| `npm run validate:editor-stability` | CI/local guard — fails if stability excludes or this document regress. |
+| `npm run cursor:validate-remote-config` | Same as `validate:editor-stability` (back-compat alias). |
 
-Corrupted or bloated remote server installs can be reset **on the remote machine** (you will re-download extensions):
+## Production / deploy impact
 
-1. Close Cursor / disconnect SSH.
-2. On the remote, remove the Cursor Server / VS Code Server directory for this user (exact path varies by Cursor build; common patterns include `~/.cursor-server` or under `~/.cursor/`). Follow current Cursor documentation for "clear remote server" if paths differ.
-3. Reconnect; the client will reinstall the server binary.
+These files are **editor and tooling only**. They do **not** change application runtime code, database schema, DigitalOcean build scripts, or deployed behavior.
 
-**Do not** delete your git clone or `node_modules` unless you intend to reinstall dependencies.
-
-## 4. Verify excludes after changes
-
-```bash
-npm run cursor:diagnose
-npm run cursor:validate-remote-config
-```
-
-`cursor:diagnose` prints memory, top Node-related processes, and whether `.cursorignore` / watcher + search excludes look present.
-
-`cursor:validate-remote-config` exits with a non-zero code if required patterns or settings are missing — use it in CI or before merging editor-config changes.
-
-## 5. Local artifact cleanup (optional)
-
-```bash
-npm run cursor:clean
-```
-
-Removes common local build/test output (`.next`, coverage, Playwright reports, etc.) **without** touching source, schema, migrations on disk, or tracked placeholders. See `scripts/cursor-clean.mjs`.
-
-## 6. Production / build impact
-
-These files affect **editor behavior only**. They do not change Next.js routes, DigitalOcean build scripts, database schema, or runtime code paths.

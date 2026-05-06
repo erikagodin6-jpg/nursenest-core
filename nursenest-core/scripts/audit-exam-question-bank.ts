@@ -23,8 +23,11 @@ import { buildGlobalExamContext } from "../src/lib/exam-context/exam-registry";
 import { examQuestionPoolWhereForContext } from "../src/lib/exam-context/query-scope";
 import { databaseUrlDriftAuditPublic } from "../src/lib/db/database-url-drift-audit";
 import {
+  EXAM_QUESTION_CAT_PIPELINE_ROW_SQL,
+  EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL,
   EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL,
   EXAM_QUESTION_STATUS_PUBLISHED_SQL,
+  EXAM_QUESTION_TOPIC_OR_BODY_SQL,
 } from "../src/lib/questions/exam-question-bank-sql";
 
 function loadDotenvFromPackageRoot(): void {
@@ -115,20 +118,51 @@ async function main(): Promise<void> {
     const [quarRow] = await prisma.$queryRaw<[{ n: bigint }]>`
       SELECT COUNT(*)::bigint AS n FROM exam_questions WHERE lower(trim(coalesce(status, ''))) = 'quarantined'
     `;
+    const [unpubRow] = await prisma.$queryRaw<[{ n: bigint }]>`
+      SELECT COUNT(*)::bigint AS n FROM exam_questions
+      WHERE NOT (${EXAM_QUESTION_STATUS_PUBLISHED_SQL})
+    `;
 
     const total = Number(totalRow.n);
     const publishedNorm = Number(pubNorm.n);
     const drafts = Number(draftRow.n);
     const quarantined = Number(quarRow.n);
+    const unpublished = Number(unpubRow.n);
 
     console.log("\n=== exam_questions counts ===");
     console.log(`  total rows              : ${total.toLocaleString()}`);
     console.log(`  published (norm status) : ${publishedNorm.toLocaleString()}`);
+    console.log(`  unpublished (non-pub.)  : ${unpublished.toLocaleString()}`);
     console.log(`  draft                   : ${drafts.toLocaleString()}`);
     console.log(`  quarantined             : ${quarantined.toLocaleString()}`);
 
+    const statusDist = await prisma.$queryRaw<{ st: string; c: bigint }[]>`
+      SELECT lower(trim(coalesce(status, ''))) AS st, COUNT(*)::bigint AS c
+      FROM exam_questions
+      GROUP BY 1
+      ORDER BY c DESC
+      LIMIT 15
+    `;
+    console.log("\n=== Rows by status (top 15) ===");
+    for (const r of statusDist) {
+      console.log(`  ${String(r.st || "(empty)").padEnd(20)} ${Number(r.c).toLocaleString()}`);
+    }
+
+    const seedPath = resolve(process.cwd(), "prisma/seed.ts");
+    const minimalBankPath = resolve(process.cwd(), "src/lib/exams/seed-minimal-question-bank.ts");
+    const hasRepoSeed = existsSync(seedPath) || existsSync(minimalBankPath);
+
+    if (total === 0 && hasRepoSeed) {
+      failures.push(
+        "exam_questions is empty but repo seed sources exist — run: cd nursenest-core && npx prisma db seed && npm run content:ensure:exam-bank",
+      );
+      exitCode = 1;
+    }
+
     if (total > 0 && publishedNorm === 0) {
-      failures.push("No normalized published rows — run prisma seed and/or scripts/publish-valid-draft-exam-questions.ts after fixing status casing.");
+      failures.push(
+        "No normalized published rows — run npm run content:ensure:exam-bank (publish + pathway minimums) or npx tsx scripts/publish-valid-draft-exam-questions.ts; check exam/status casing.",
+      );
       exitCode = 1;
     }
 
@@ -162,7 +196,9 @@ async function main(): Promise<void> {
       console.log("\n(study_link_pathway_id column absent — skip pathwayId breakdown.)");
     }
 
-    console.log("\n=== Core pathway pools (published + flashcard-eligible + exam/tier/region scope) ===");
+    console.log(
+      "\n=== Core pathway pools — practice / flashcard (published + region + format + stem≥10 + answer JSON + topic/body + exam/tier) ===",
+    );
     for (const { pathwayId, label } of CORE_PATHWAYS) {
       const ctx = buildGlobalExamContext(pathwayId, "en");
       if (!ctx) {
@@ -181,9 +217,9 @@ async function main(): Promise<void> {
         WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
           AND ${reg}
           AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
-          AND coalesce(trim(stem), '') <> ''
-          AND correct_answer IS NOT NULL
-          AND coalesce(trim(rationale), '') <> ''
+          AND length(trim(coalesce(stem, ''))) >= 10
+          AND ${EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL}
+          AND ${EXAM_QUESTION_TOPIC_OR_BODY_SQL}
           AND lower(coalesce(exam, '')) IN (${Prisma.join(examLower)})
           AND lower(coalesce(tier, '')) IN (${Prisma.join(tierLower)})
       `;
@@ -191,7 +227,25 @@ async function main(): Promise<void> {
       const ok = n > 0;
       console.log(`  ${pathwayId.padEnd(22)} ${label.padEnd(22)} ${n.toLocaleString().padStart(8)} ${ok ? "OK" : "EMPTY"}`);
       if (!ok) {
-        failures.push(`Pathway ${pathwayId} usable published pool is 0`);
+        failures.push(`Pathway ${pathwayId} practice/flashcard published pool is 0`);
+        exitCode = 1;
+      }
+
+      const [catRow] = await prisma.$queryRaw<[{ n: bigint }]>`
+        SELECT COUNT(*)::bigint AS n
+        FROM exam_questions
+        WHERE ${EXAM_QUESTION_CAT_PIPELINE_ROW_SQL}
+          AND ${reg}
+          AND lower(coalesce(exam, '')) IN (${Prisma.join(examLower)})
+          AND lower(coalesce(tier, '')) IN (${Prisma.join(tierLower)})
+      `;
+      const catN = Number(catRow.n);
+      const catOk = catN > 0;
+      console.log(
+        `      └ CAT-complete pool   ${catN.toLocaleString().padStart(8)} ${catOk ? "OK" : "EMPTY"}  (stem + ≥2 options + answer + rationale + non-ECG)`,
+      );
+      if (!catOk) {
+        failures.push(`Pathway ${pathwayId} CAT-complete published pool is 0 (needs stem, ≥2 options, answer, rationale, non-ECG)`);
         exitCode = 1;
       }
     }
@@ -201,11 +255,13 @@ async function main(): Promise<void> {
       FROM exam_questions
       WHERE ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
         AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
-        AND coalesce(trim(stem), '') <> ''
-        AND correct_answer IS NOT NULL
-        AND coalesce(trim(rationale), '') <> ''
+        AND length(trim(coalesce(stem, ''))) >= 10
+        AND ${EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL}
+        AND ${EXAM_QUESTION_TOPIC_OR_BODY_SQL}
     `;
-    console.log(`\nGlobal usable published (all regions/exams): ${Number(usableAll.n).toLocaleString()}`);
+    console.log(
+      `\nGlobal practice/flashcard-style published (all regions/exams, topic/body required): ${Number(usableAll.n).toLocaleString()}`,
+    );
 
     console.log("\n=== Canonical import / seed commands (when DB is empty) ===");
     console.log("  cd nursenest-core && npx prisma db seed");

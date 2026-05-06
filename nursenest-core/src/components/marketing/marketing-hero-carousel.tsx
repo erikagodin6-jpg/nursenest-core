@@ -419,7 +419,7 @@ function MarketingHeroCarouselInteractive({
           >
             <div className="bg-gradient-to-t from-[color-mix(in_srgb,var(--palette-heading)_55%,transparent)] via-[color-mix(in_srgb,var(--palette-heading)_22%,transparent)] to-transparent px-3 pb-2.5 pt-7 sm:px-4 sm:pb-3 sm:pt-9">
               {currentSlide.label ? (
-                <p className="mb-1 line-clamp-1 text-left text-[10px] font-semibold uppercase leading-tight tracking-wide text-[color-mix(in_srgb,var(--text-on-accent)_88%,transparent)] sm:text-[11px]">
+                <p className="mb-1 line-clamp-1 text-left text-xs font-semibold uppercase leading-tight tracking-wide text-[color-mix(in_srgb,var(--text-on-accent)_88%,transparent)] sm:text-[11px]">
                   {currentSlide.label}
                 </p>
               ) : null}
@@ -486,20 +486,27 @@ function MarketingHeroCarouselInteractive({
                       onClick={() => {
                         if (!failed.has(index)) setCurrent(index);
                       }}
-                      className={`rounded-full transition-all duration-[var(--brand-motion-normal)] ease-[var(--brand-motion-ease-luxury)] ${
-                        isBelowFoldSection
-                          ? index === activeIndex
-                            ? "h-1.5 w-5 bg-role-cta opacity-100"
-                            : "h-1.5 w-1.5 bg-[var(--theme-muted-text)]/28 hover:bg-[var(--theme-muted-text)]/45"
-                          : index === activeIndex
-                            ? "h-2 w-6 bg-role-cta"
-                            : "h-2 w-2 bg-[var(--theme-muted-text)]/35 hover:bg-[var(--theme-muted-text)]/55"
-                      } ${failed.has(index) ? "cursor-not-allowed opacity-40" : ""}`}
+                      className={`group inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-opacity duration-[var(--brand-motion-normal)] ease-[var(--brand-motion-ease-luxury)] ${
+                        failed.has(index) ? "cursor-not-allowed opacity-40" : ""
+                      }`}
                       aria-label={t("components.marketingHeroCarousel.goToSlide", { n: index + 1 })}
                       data-testid={
                         testIdPrefix === "hero-carousel" ? `button-carousel-dot-${index}` : `button-${testIdPrefix}-dot-${index}`
                       }
-                    />
+                    >
+                      <span
+                        className={`block rounded-full transition-all duration-[var(--brand-motion-normal)] ease-[var(--brand-motion-ease-luxury)] ${
+                          isBelowFoldSection
+                            ? index === activeIndex
+                              ? "h-1.5 w-5 bg-role-cta opacity-100"
+                              : "h-1.5 w-1.5 bg-[var(--theme-muted-text)]/28 group-hover:bg-[var(--theme-muted-text)]/45"
+                            : index === activeIndex
+                              ? "h-2 w-6 bg-role-cta"
+                              : "h-2 w-2 bg-[var(--theme-muted-text)]/35 group-hover:bg-[var(--theme-muted-text)]/55"
+                        }`}
+                        aria-hidden
+                      />
+                    </button>
                   ))}
                 </div>
               ) : null}
@@ -631,7 +638,7 @@ function MarketingHeroCarouselMobileLite({
           >
             <div className="bg-gradient-to-t from-[color-mix(in_srgb,var(--palette-heading)_55%,transparent)] via-[color-mix(in_srgb,var(--palette-heading)_22%,transparent)] to-transparent px-3 pb-2.5 pt-7 sm:px-4 sm:pb-3 sm:pt-9">
               {slide0.label ? (
-                <p className="mb-1 line-clamp-1 text-left text-[10px] font-semibold uppercase leading-tight tracking-wide text-[color-mix(in_srgb,var(--text-on-accent)_88%,transparent)] sm:text-[11px]">
+                <p className="mb-1 line-clamp-1 text-left text-xs font-semibold uppercase leading-tight tracking-wide text-[color-mix(in_srgb,var(--text-on-accent)_88%,transparent)] sm:text-[11px]">
                   {slide0.label}
                 </p>
               ) : null}

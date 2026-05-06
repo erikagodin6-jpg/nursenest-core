@@ -82,7 +82,7 @@ export function PathwayLessonDetailHeader({
       data-nn-exam-short={examName}
       data-nn-lesson-hero-centered={centered ? "true" : undefined}
       className={[
-        "relative overflow-hidden rounded-xl border px-3 py-3.5 sm:px-5 sm:py-4",
+        "relative overflow-hidden rounded-xl border px-4 py-3.5 sm:px-5 sm:py-4",
         centered
           ? "nn-lesson-detail-hero border-[color-mix(in_srgb,var(--semantic-border-soft)_85%,var(--semantic-brand)_15%)] bg-[linear-gradient(165deg,color-mix(in_srgb,var(--semantic-panel-cool)_22%,var(--theme-page-bg))_0%,color-mix(in_srgb,var(--semantic-panel-positive)_12%,var(--theme-page-bg))_48%,color-mix(in_srgb,var(--semantic-panel-warm)_10%,var(--theme-page-bg))_100%)] shadow-[0_1px_0_color-mix(in_srgb,var(--semantic-border-soft)_70%,transparent)]"
           : "rounded-lg border-[color-mix(in_srgb,var(--semantic-border-soft)_90%,var(--semantic-brand)_10%)] bg-[color-mix(in_srgb,var(--theme-page-bg)_97%,var(--semantic-panel-cool)_3%)]",
@@ -91,7 +91,7 @@ export function PathwayLessonDetailHeader({
       <nav
         aria-label="Lesson location"
         className={[
-          "flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[11px] font-medium text-[var(--theme-muted-text)] sm:text-xs",
+          "flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs font-medium text-[var(--theme-muted-text)] sm:text-xs",
           centered ? "justify-center opacity-90" : "",
         ]
           .filter(Boolean)

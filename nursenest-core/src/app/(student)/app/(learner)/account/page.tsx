@@ -1,6 +1,5 @@
-import { LearnerAccountShell } from "@/components/learner-account-ui";
 import { BreadcrumbTrail } from "@/components/seo/breadcrumb-trail";
-import { LearnerAccountHub } from "@/components/student/learner-account-hub";
+import { LearnerAccountCenterOverview } from "@/components/student/learner-account-center-overview";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { appAccountHubBreadcrumbs } from "@/lib/seo/breadcrumb-resolver";
 import type { Metadata } from "next";
@@ -11,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
     async () => {
       const { t } = await getLearnerMarketingBundle();
       return {
-        title: t("learner.account.menu.accountHub"),
+        title: t("learner.account.center.metaTitle"),
         robots: { index: false, follow: false },
       };
     },
@@ -20,11 +19,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LearnerAccountIndexPage() {
-  const { t } = await getLearnerMarketingBundle();
+  const { t, locale } = await getLearnerMarketingBundle();
   return (
-    <LearnerAccountShell className="py-2">
+    <div className="space-y-6">
       <BreadcrumbTrail items={appAccountHubBreadcrumbs()} />
-      <LearnerAccountHub t={t} />
-    </LearnerAccountShell>
+      <LearnerAccountCenterOverview t={t} locale={locale} />
+    </div>
   );
 }

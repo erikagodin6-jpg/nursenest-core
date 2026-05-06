@@ -135,6 +135,11 @@ const nextConfig = {
       /** RN blog hub canonical path is `/blog/rn/*` (lesson-derived SEO posts). */
       { source: "/nursing/rn/blog", destination: "/blog/rn", permanent: true },
       { source: "/nursing/rn/blog/:slug", destination: "/blog/rn/:slug", permanent: true },
+      /** Allied Health: single global marketing pathway (no country segment). */
+      { source: "/us/allied/allied-health", destination: "/allied/allied-health", permanent: true },
+      { source: "/us/allied/allied-health/:path*", destination: "/allied/allied-health/:path*", permanent: true },
+      { source: "/canada/allied/allied-health", destination: "/allied/allied-health", permanent: true },
+      { source: "/canada/allied/allied-health/:path*", destination: "/allied/allied-health/:path*", permanent: true },
     ];
   },
 

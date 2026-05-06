@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Cursor / VS Code remote SSH diagnostics: memory, node processes, ignore config sanity.
- * Does not touch production runtime. Safe to run locally or on a remote dev host.
+ * Cursor / VS Code remote SSH diagnostics: memory, disk, heavy dirs, node processes, config sanity.
+ * Does not touch production runtime.
  */
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
@@ -60,12 +60,69 @@ function printMemory() {
   }
 }
 
-function topNodeProcesses() {
-  console.log("\n--- Top node-related processes (by RSS) ---");
+function printDisk() {
+  console.log("\n--- Disk (repo mount) ---");
+  try {
+    const out = execFileSync("df", ["-h", repoRoot], { encoding: "utf8", maxBuffer: 1024 * 1024 });
+    console.log(out.trimEnd());
+  } catch (e) {
+    console.log(`df unavailable: ${/** @type {Error} */ (e).message}`);
+  }
+}
+
+function duSh(rel) {
+  const abs = join(repoRoot, rel);
+  if (!existsSync(abs)) return null;
+  try {
+    const out = execFileSync("du", ["-sh", abs], { encoding: "utf8", maxBuffer: 1024 * 1024 });
+    return out.split(/\s+/)[0]?.trim() ?? "?";
+  } catch {
+    return "(du failed)";
+  }
+}
+
+function printHeavyDirsAndExcludes() {
+  console.log("\n--- Heavy on-disk paths (if present) + exclude intent ---");
+  const paths = [
+    "node_modules",
+    "nursenest-core/node_modules",
+    ".next",
+    "nursenest-core/.next",
+    ".turbo",
+    "coverage",
+    "dist",
+    "nursenest-core/build",
+    "playwright-report",
+    "test-results",
+    "reports",
+    "nursenest-core/public/i18n",
+    "nursenest-core/prisma/migrations",
+  ];
+  let settingsText = "";
+  if (existsSync(vscodeSettingsPath)) {
+    try {
+      settingsText = readFileSync(vscodeSettingsPath, "utf8");
+    } catch {
+      settingsText = "";
+    }
+  }
+  for (const p of paths) {
+    const abs = join(repoRoot, p);
+    const exists = existsSync(abs);
+    const size = exists ? duSh(p) : "—";
+    const inSettings = settingsText.includes(p.replace(/\\/g, "/"));
+    console.log(`  ${exists ? "✓" : "·"} ${p.padEnd(38)} ${String(size).padStart(10)}  (substring in settings.json: ${inSettings ? "yes" : "no"})`);
+  }
+  console.log("  (Substring check is heuristic; globs may still cover these paths.)");
+}
+
+function topNodeProcesses(sortKey) {
+  const sort = sortKey === "cpu" ? "-pcpu" : "-rss";
+  console.log(`\n--- Top node-related processes (by ${sortKey === "cpu" ? "CPU%" : "RSS"}) ---`);
   try {
     const out = execFileSync(
       "ps",
-      ["-eo", "pid,pcpu,rss,args", "--sort=-rss"],
+      ["-eo", "pid,pcpu,rss,args", `--sort=${sort}`],
       { encoding: "utf8", maxBuffer: 10 * 1024 * 1024 },
     );
     const lines = out.split("\n");
@@ -73,7 +130,7 @@ function topNodeProcesses() {
     const rows = lines
       .slice(1)
       .filter((l) => /\bnode\b|cursor|code-server|vscode/i.test(l))
-      .slice(0, 12);
+      .slice(0, 14);
     console.log(header.trimEnd());
     for (const r of rows) console.log(r.trimEnd());
     if (rows.length === 0) console.log("(no matching rows — ps output may differ on this OS)");
@@ -88,7 +145,7 @@ function checkCursorIgnore() {
   console.log(ok ? `Present: ${cursorIgnorePath}` : `MISSING: ${cursorIgnorePath}`);
   if (ok) {
     const body = readFileSync(cursorIgnorePath, "utf8");
-    const must = [".next", "node_modules", ".turbo", "prisma/migrations", "i18n"];
+    const must = [".next", "node_modules", ".turbo", "prisma/migrations", "i18n", "reports", "generated-indexes"];
     for (const m of must) {
       const hit = body.includes(m);
       console.log(`  contains "${m}": ${hit ? "yes" : "NO"}`);
@@ -112,19 +169,19 @@ function checkVscodeSettings() {
   }
   const we = json["files.watcherExclude"] ?? {};
   const se = json["search.exclude"] ?? {};
-  const hasWe = Object.keys(we).length > 0;
-  const hasSe = Object.keys(se).length > 0;
-  console.log(`files.watcherExclude keys: ${hasWe ? Object.keys(we).length : 0}`);
-  console.log(`search.exclude keys: ${hasSe ? Object.keys(se).length : 0}`);
+  const fe = json["files.exclude"] ?? {};
+  console.log(`files.watcherExclude keys: ${Object.keys(we).length}`);
+  console.log(`search.exclude keys: ${Object.keys(se).length}`);
+  console.log(`files.exclude keys: ${Object.keys(fe).length}`);
   const weStr = JSON.stringify(we);
   const seStr = JSON.stringify(se);
-  for (const token of ["node_modules", ".next", "prisma/migrations", "i18n"]) {
-    console.log(`  watcher mentions "${token}": ${weStr.includes(token) ? "yes" : "no"}`);
+  for (const token of ["node_modules", ".next", "prisma/migrations", "i18n", "reports"]) {
+    console.log(`  watcher "${token}": ${weStr.includes(token) ? "yes" : "no"}`);
   }
   for (const token of ["node_modules", ".next"]) {
-    console.log(`  search mentions "${token}": ${seStr.includes(token) ? "yes" : "no"}`);
+    console.log(`  search "${token}": ${seStr.includes(token) ? "yes" : "no"}`);
   }
-  return hasWe && hasSe;
+  return Object.keys(we).length > 0 && Object.keys(se).length > 0;
 }
 
 function workspaceHints() {
@@ -140,7 +197,7 @@ function workspaceHints() {
     );
   } else if (resolvedCwd !== resolvedRoot) {
     console.warn(
-      `\n⚠️  WARNING: cwd (${resolvedCwd}) is not the repo root (${resolvedRoot}). Run this script from the repo root for accurate checks (cd into nursenest-core clone first).\n`,
+      `\n⚠️  WARNING: cwd (${resolvedCwd}) is not the repo root (${resolvedRoot}). cd into the clone before comparing paths.\n`,
     );
   } else {
     console.log("cwd matches repo root — good for npm scripts and relative tooling.");
@@ -151,13 +208,17 @@ function main() {
   console.log("Cursor / VS Code remote diagnostics");
   console.log(`Host: ${os.hostname()}  Platform: ${os.platform()} ${os.release()}`);
   printMemory();
-  topNodeProcesses();
+  printDisk();
+  printHeavyDirsAndExcludes();
+  topNodeProcesses("cpu");
+  topNodeProcesses("ram");
   checkCursorIgnore();
   checkVscodeSettings();
   workspaceHints();
   console.log("\n--- Next steps ---");
-  console.log("If excludes are missing: npm run cursor:validate-remote-config");
-  console.log("Recovery guide: reports/cursor-remote-stability.md");
+  console.log("  npm run validate:editor-stability");
+  console.log("  npm run cursor:recover        # if extensionHost/fileWatcher are runaway (then Reload Window)");
+  console.log("  reports/cursor-remote-stability.md");
   console.log("");
 }
 

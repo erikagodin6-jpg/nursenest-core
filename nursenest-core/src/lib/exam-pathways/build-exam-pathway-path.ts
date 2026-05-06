@@ -1,3 +1,5 @@
+import { buildAlliedGlobalHubPath } from "@/lib/allied/allied-global-hub-path";
+
 /**
  * Middle URL segment for `/{country}/{role}/{exam}/…` marketing hubs.
  * Canada RPN (`roleTrack: rpn`) and US/CA practical-nurse tracks (`lpn`) publish under **`pn`**
@@ -15,6 +17,9 @@ export function buildExamPathwayPath(
   p: { countrySlug: string; roleTrack: string; examCode: string },
   subpath?: string,
 ): string {
+  if (p.roleTrack === "allied" && p.examCode === "allied-health") {
+    return buildAlliedGlobalHubPath(subpath);
+  }
   const roleSlug = marketingHubRoleSegment(p);
   const base = `/${p.countrySlug}/${roleSlug}/${p.examCode}`;
   if (!subpath) return base;

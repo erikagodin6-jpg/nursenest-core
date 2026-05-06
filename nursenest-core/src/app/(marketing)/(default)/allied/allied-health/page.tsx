@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { AlliedHealthPathwayHub } from "@/components/marketing/allied-health-pathway-hub";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
+import { getOptionalPublicSession } from "@/lib/auth/optional-public-session";
 import { getCanonicalAlliedPathway, ALLIED_GLOBAL_HUB_PATH } from "@/lib/allied/allied-global-pathway";
+import { prisma } from "@/lib/db";
+import { isDatabaseUrlConfigured } from "@/lib/db/safe-database";
 import { loadAlliedPathwayHubOverview } from "@/lib/marketing/allied-pathway-hub-overview";
+import {
+  parseMeasurementPreference,
+  readMeasurementPreferenceFromCookieStore,
+  type MeasurementPreference,
+} from "@/lib/measurements/measurement-preference";
 import { safeGenerateMetadata } from "@/lib/seo/safe-marketing-metadata";
 import { absoluteUrl } from "@/lib/seo/site-origin";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
@@ -35,6 +44,33 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function GlobalAlliedHealthHubPage() {
   const pathway = getCanonicalAlliedPathway();
   if (!pathway) notFound();
+
+  let alliedInitialMeasurement: MeasurementPreference | null = null;
+  let alliedMeasurementSync = false;
+  try {
+    const fromCookie = readMeasurementPreferenceFromCookieStore(await cookies());
+    if (fromCookie) alliedInitialMeasurement = fromCookie;
+  } catch {
+    // ignore
+  }
+  try {
+    const session = await getOptionalPublicSession({
+      pathname: ALLIED_GLOBAL_HUB_PATH,
+      surface: "marketing.default.allied.global_hub",
+    });
+    const userId = (session?.user as { id?: string } | undefined)?.id ?? "";
+    if (userId && isDatabaseUrlConfigured()) {
+      alliedMeasurementSync = true;
+      const row = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { measurementPreference: true },
+      });
+      const fromDb = parseMeasurementPreference(row?.measurementPreference ?? null);
+      if (fromDb) alliedInitialMeasurement = fromDb;
+    }
+  } catch {
+    // ignore
+  }
 
   const overview = await loadAlliedPathwayHubOverview(pathway, {
     pathname: ALLIED_GLOBAL_HUB_PATH,
@@ -73,7 +109,13 @@ export default async function GlobalAlliedHealthHubPage() {
         path={ALLIED_GLOBAL_HUB_PATH}
       />
       <BreadcrumbBar crumbs={crumbs} schemaItems={schemaItems} />
-      <AlliedHealthPathwayHub pathway={pathway} hubPath={ALLIED_GLOBAL_HUB_PATH} overview={overview} />
+      <AlliedHealthPathwayHub
+        pathway={pathway}
+        hubPath={ALLIED_GLOBAL_HUB_PATH}
+        overview={overview}
+        initialMeasurementPreference={alliedInitialMeasurement}
+        syncMeasurementPreferenceToProfile={alliedMeasurementSync}
+      />
     </div>
   );
 }

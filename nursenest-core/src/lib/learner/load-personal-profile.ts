@@ -10,6 +10,7 @@ import {
   subscriptionLocksProfileRegionAndTier,
   type PathwayPickOption,
 } from "@/lib/learner/personal-profile-policy";
+import { parseMeasurementPreference, type MeasurementPreference } from "@/lib/measurements/measurement-preference";
 
 export type PersonalProfilePathwayPreview = {
   country: CountryCode;
@@ -33,6 +34,8 @@ export type PersonalProfilePayload = {
   studyCadencePreference: string | null;
   /** Daily bank question target; null means product default. */
   dailyQuestionGoal: number | null;
+  /** Clinical units preference when set (`metric` | `imperial`). */
+  measurementPreference: MeasurementPreference | null;
   regionTierLocked: boolean;
   lockReason: "subscription_plan" | null;
   pathwayOptions: PathwayPickOption[];
@@ -67,6 +70,7 @@ export async function loadPersonalProfilePayload(
         targetExamPathwayId: true,
         studyCadencePreference: true,
         dailyQuestionGoal: true,
+        measurementPreference: true,
       },
     }),
     prisma.subscription.findFirst({
@@ -106,6 +110,8 @@ export async function loadPersonalProfilePayload(
     }
   }
 
+  const measurementPreference = parseMeasurementPreference(user.measurementPreference);
+
   return {
     name: user.name,
     firstName: user.firstName,
@@ -122,6 +128,7 @@ export async function loadPersonalProfilePayload(
     targetExamPathwayId: user.targetExamPathwayId,
     studyCadencePreference: user.studyCadencePreference,
     dailyQuestionGoal: user.dailyQuestionGoal,
+    measurementPreference,
     regionTierLocked,
     lockReason: regionTierLocked ? "subscription_plan" : null,
     pathwayOptions,

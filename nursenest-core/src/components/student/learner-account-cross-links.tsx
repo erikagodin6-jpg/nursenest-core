@@ -68,7 +68,7 @@ export function LearnerAccountCrossLinks({
       }
       links.push({ href: "/app/questions", label: t("learner.account.crossLinks.progress.qbank") });
       links.push({ href: "/app/lessons", label: t("learner.account.crossLinks.progress.lessons") });
-      links.push({ href: "/app/account/report-card", label: t("learner.account.crossLinks.progress.reportCard") });
+      links.push({ href: "/app/account/report", label: t("learner.account.crossLinks.progress.reportCard") });
       break;
     }
     case "billing": {

@@ -100,7 +100,7 @@ export async function loadLearnerPathwayNavMetadata(userId: string): Promise<Lea
       const alliedId = u.country === CountryCode.CA ? "ca-allied-core" : "us-allied-core";
       pathwayId = alliedId;
       const alliedPath = getExamPathwayById(alliedId);
-      pathwayHubHref = alliedPath ? learnerPathwayHubChromeHref(alliedPath) : "/us/allied/allied-health";
+      pathwayHubHref = alliedPath ? learnerPathwayHubChromeHref(alliedPath) : "/allied/allied-health";
       pathwayContextBar = alliedPath ? formatPathwayContextBar(alliedPath) : "Allied • United States • Allied health";
       examsLabel = "CAT Exams";
     }

@@ -1462,7 +1462,7 @@ export function PracticeTestRunnerClient({
       return (
         <div className="mx-auto max-w-2xl space-y-6 px-4 py-8">
           <div className="nn-cat-question-card">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
+            <p className="text-xs font-bold uppercase tracking-widest text-[var(--semantic-text-muted)]">
               Session complete: final item
             </p>
             <h2 className="mt-1 text-lg font-bold text-[var(--semantic-text-primary)]">
@@ -2037,7 +2037,7 @@ export function PracticeTestRunnerClient({
                   <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
                     {showCatExamStrictBadge ? (
                       <span
-                        className="inline-flex items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--semantic-danger)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[var(--semantic-danger)]"
+                        className="inline-flex items-center gap-1 rounded-full border border-[color-mix(in_srgb,var(--semantic-danger)_55%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-danger)_10%,var(--semantic-surface))] px-2 py-0.5 text-xs font-bold uppercase tracking-wide text-[var(--semantic-danger)]"
                         title={tx(
                           "learner.practiceTests.run.catExamStrictHint",
                           "Exam rules: no review of prior items after submit; timed session may end automatically.",
@@ -2198,7 +2198,7 @@ export function PracticeTestRunnerClient({
                       <button
                         type="button"
                         disabled
-                        className="inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-xs font-semibold text-[var(--semantic-text-muted)] opacity-50"
+                        className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-muted)] opacity-50 sm:min-h-0 sm:px-2 sm:py-1.5"
                         title={tx(
                           "learner.practiceTests.run.catExamNoPrevious",
                           "Previous item is not available during this exam.",
@@ -2210,7 +2210,7 @@ export function PracticeTestRunnerClient({
                       <p className="m-0 text-center text-xs font-medium text-[var(--semantic-text-muted)] sm:text-sm">
                         {catExamFooterProgressLabel}
                       </p>
-                      <div className="min-w-[5.5rem] text-right">
+                      <div className="min-w-0 shrink text-right sm:min-w-[5.5rem] sm:shrink-0">
                         {catExamUiPhase === "answering" ? (
                           <button
                             type="button"
@@ -2218,7 +2218,7 @@ export function PracticeTestRunnerClient({
                             disabled={
                               examPrimaryBusy || catTimerHydrateRecovery || !hasMeaningfulAnswer(current.id)
                             }
-                            className="inline-flex items-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40"
+                            className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
                             onClick={lockCatExamAnswer}
                           >
                             {tx("learner.practiceTests.run.submit", "Submit answer")}
@@ -2237,7 +2237,7 @@ export function PracticeTestRunnerClient({
                               catExamUiPhase !== "submitted_locked" ||
                               !hasMeaningfulAnswer(current.id)
                             }
-                            className="inline-flex items-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40"
+                            className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
                             onClick={() => {
                               if (!catExamCanRequestCatAdvance(catExamUiPhaseRef.current)) return;
                               if (catAdvanceInFlightRef.current || submitInFlightRef.current) return;
@@ -2332,7 +2332,7 @@ export function PracticeTestRunnerClient({
                 {catPoolRelaxBanner}
                 <div className={`nn-cat-session min-h-0 flex-1 ${chromeClass}`}>
                   <div className="nn-question-session nn-question-session--split !px-0 sm:!px-0">
-                    <div className="nn-question-session-primary min-h-0 overflow-x-hidden overflow-y-auto">
+                    <div className="nn-question-session-primary min-h-0 overflow-x-auto overflow-y-auto">
                       <div className="min-h-0 min-w-0">
                         <QuestionCard
                           stem={current.stem ?? ""}
@@ -2577,7 +2577,7 @@ export function PracticeTestRunnerClient({
           <button
             type="button"
             disabled={controlsBusy || idx === 0}
-            className="inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] disabled:opacity-40"
+            className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] disabled:opacity-40 sm:min-h-0 sm:px-2 sm:py-1.5"
             onClick={() => void goPrev()}
           >
             <ChevronLeft className="h-4 w-4" aria-hidden />
@@ -2587,12 +2587,12 @@ export function PracticeTestRunnerClient({
             {tx("learner.practiceTests.run.question", "Question")} {idx + 1}{" "}
             {tx("learner.practiceTests.run.of", "of")} {total}
           </p>
-          <div className="min-w-[5.5rem] text-right">
+          <div className="min-w-0 shrink text-right sm:min-w-[5.5rem] sm:shrink-0">
             {idx < total - 1 ? (
               <button
                 type="button"
                 disabled={controlsBusy}
-                className="inline-flex items-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40"
+                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
                 onClick={() => void goNext()}
               >
                 {tx("learner.practiceTests.run.nextQuestionPractice", "Next Question")}
@@ -2602,7 +2602,7 @@ export function PracticeTestRunnerClient({
               <button
                 type="button"
                 disabled={controlsBusy}
-                className="inline-flex items-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40"
+                className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
                 onClick={() => void submitTest()}
               >
                 {saving
@@ -2937,7 +2937,7 @@ export function PracticeTestRunnerClient({
         <button
           type="button"
           disabled={controlsBusy || linearCatShellPresentation || !canLinearReviewPrev}
-          className="inline-flex items-center gap-1 rounded-md px-2 py-1.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] disabled:opacity-40"
+          className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-secondary)] shadow-none transition hover:bg-[color-mix(in_srgb,var(--semantic-info)_10%,var(--semantic-surface))] disabled:opacity-40 sm:min-h-0 sm:px-2 sm:py-1.5"
           title={
             linearCatShellPresentation
               ? tx(
@@ -2962,12 +2962,12 @@ export function PracticeTestRunnerClient({
             total: String(Math.max(total, 1)),
           })}
         </p>
-        <div className="min-w-[5.5rem] text-right">
+        <div className="min-w-0 shrink text-right sm:min-w-[5.5rem] sm:shrink-0">
           {!currentCommitted ? (
             <button
               type="button"
               disabled={controlsBusy || !hasMeaningfulAnswer(current.id)}
-              className="inline-flex items-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40"
+              className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
               onClick={() => void submitLinearCommit()}
             >
               {saving
@@ -2979,7 +2979,7 @@ export function PracticeTestRunnerClient({
             <button
               type="button"
               disabled={controlsBusy}
-              className="inline-flex items-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40"
+              className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
               onClick={() => void goNext()}
             >
               {linearAdvancePrimaryLabel}
@@ -2989,7 +2989,7 @@ export function PracticeTestRunnerClient({
             <button
               type="button"
               disabled={controlsBusy}
-              className="inline-flex items-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-1.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40"
+              className="inline-flex min-h-11 items-center justify-center gap-1 rounded-md border border-[color-mix(in_srgb,var(--semantic-info)_30%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_18%,var(--semantic-surface))] px-3 py-2.5 text-xs font-semibold text-[var(--semantic-text-primary)] shadow-none transition hover:opacity-95 disabled:opacity-40 sm:min-h-0 sm:py-1.5"
               onClick={() => void submitTest()}
             >
               {saving

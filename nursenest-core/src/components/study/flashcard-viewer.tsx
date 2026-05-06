@@ -51,7 +51,7 @@ type FlashcardFrontProps = {
 export function FlashcardFront({ card, onReveal }: FlashcardFrontProps) {
   return (
     <div
-      className="flex min-h-[260px] flex-col justify-between rounded-2xl px-7 py-8"
+      className="mx-auto flex min-h-[260px] w-full max-w-full min-w-0 flex-col justify-between rounded-2xl px-4 py-6 sm:px-7 sm:py-8"
       style={{
         background:
           "color-mix(in srgb, var(--surface-soft-a, var(--theme-primary)) 8%, var(--bg-card, var(--theme-card-bg)))",
@@ -63,7 +63,7 @@ export function FlashcardFront({ card, onReveal }: FlashcardFrontProps) {
       aria-label="Flashcard front"
     >
       {/* Topic label */}
-      <div className="flex items-center justify-between">
+      <div className="flex min-w-0 items-center justify-between gap-2">
         {card.topic ? (
           <span
             className="rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide"
@@ -80,7 +80,7 @@ export function FlashcardFront({ card, onReveal }: FlashcardFrontProps) {
         )}
         {card.subtopic ? (
           <span
-            className="text-[10px] font-medium uppercase tracking-wide"
+            className="min-w-0 truncate text-xs font-medium uppercase tracking-wide"
             style={{ color: "var(--theme-muted-text)" }}
           >
             {card.subtopic}
@@ -89,9 +89,9 @@ export function FlashcardFront({ card, onReveal }: FlashcardFrontProps) {
       </div>
 
       {/* Prompt */}
-      <div className="flex flex-1 items-center py-6">
+      <div className="flex min-w-0 flex-1 items-center py-6">
         <p
-          className="text-lg font-semibold leading-relaxed"
+          className="min-w-0 break-words text-balance text-lg font-semibold leading-relaxed"
           style={{ color: "var(--theme-heading-text)" }}
         >
           {card.front}
@@ -112,7 +112,7 @@ export function FlashcardFront({ card, onReveal }: FlashcardFrontProps) {
       <button
         type="button"
         onClick={onReveal}
-        className="mt-2 w-full rounded-xl py-3 text-sm font-semibold transition"
+        className="touch-manipulation mt-2 min-h-12 w-full rounded-xl py-3 text-sm font-semibold transition"
         style={{
           background:
             "color-mix(in srgb, var(--surface-soft-a, var(--theme-primary)) 20%, transparent)",
@@ -141,7 +141,7 @@ type FlashcardBackProps = {
 export function FlashcardBack({ card, onRate, submitting }: FlashcardBackProps) {
   return (
     <div
-      className="flex min-h-[260px] flex-col justify-between rounded-2xl px-7 py-8"
+      className="mx-auto flex min-h-[260px] w-full max-w-full min-w-0 flex-col justify-between rounded-2xl px-4 py-6 sm:px-7 sm:py-8"
       style={{
         background:
           "color-mix(in srgb, var(--surface-soft-b, var(--theme-primary)) 8%, var(--bg-card, var(--theme-card-bg)))",
@@ -167,16 +167,16 @@ export function FlashcardBack({ card, onRate, submitting }: FlashcardBackProps) 
       ) : null}
 
       {/* Answer */}
-      <div className="flex-1 py-5">
+      <div className="min-w-0 flex-1 py-5">
         <p
-          className="text-sm leading-relaxed"
+          className="break-words text-sm leading-relaxed"
           style={{ color: "var(--theme-heading-text)" }}
         >
           {card.back}
         </p>
         {card.explanation && card.explanation !== card.back ? (
           <p
-            className="mt-3 border-t pt-3 text-xs leading-relaxed"
+            className="mt-3 break-words border-t pt-3 text-xs leading-relaxed"
             style={{
               color: "var(--theme-muted-text)",
               borderColor: "var(--border-subtle, var(--theme-card-border))",
@@ -195,14 +195,14 @@ export function FlashcardBack({ card, onRate, submitting }: FlashcardBackProps) 
         >
           How well did you know this?
         </p>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
           {RATING_CONFIG.map((r) => (
             <button
               key={r.value}
               type="button"
               disabled={submitting}
               onClick={() => onRate(r.value)}
-              className="rounded-lg py-2 text-xs font-semibold transition disabled:opacity-50"
+              className="touch-manipulation min-h-12 rounded-lg px-2 py-2.5 text-xs font-semibold transition disabled:opacity-50 sm:min-h-11 sm:px-1 sm:py-2 sm:text-xs"
               aria-label={`Rate: ${r.label} (key ${r.key})`}
               style={{
                 background: `color-mix(in srgb, ${r.accentVar} 14%, var(--bg-card, #fff))`,
@@ -263,7 +263,7 @@ function ProgressBar({ current, total }: { current: number; total: number }) {
 function DoneScreen({ onReset, deckRef }: { onReset: () => void; deckRef?: string }) {
   return (
     <div
-      className="flex flex-col items-center gap-5 rounded-2xl px-8 py-12 text-center"
+      className="mx-auto flex w-full max-w-full min-w-0 flex-col items-center gap-5 rounded-2xl px-4 py-10 text-center sm:px-8 sm:py-12"
       style={{
         background:
           "color-mix(in srgb, var(--semantic-success, #22c55e) 8%, var(--bg-card, var(--theme-card-bg)))",
@@ -286,11 +286,11 @@ function DoneScreen({ onReset, deckRef }: { onReset: () => void; deckRef?: strin
           You reviewed all cards in this batch. Great work.
         </p>
       </div>
-      <div className="flex flex-wrap justify-center gap-3">
+      <div className="flex w-full max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:justify-center">
         <button
           type="button"
           onClick={onReset}
-          className="rounded-full px-5 py-2 text-sm font-semibold transition"
+          className="touch-manipulation min-h-12 rounded-full px-5 py-3 text-sm font-semibold transition sm:min-h-11 sm:py-2"
           style={{
             background: "var(--role-cta, var(--theme-primary))",
             color: "var(--role-cta-foreground, #fff)",
@@ -301,7 +301,7 @@ function DoneScreen({ onReset, deckRef }: { onReset: () => void; deckRef?: strin
         {deckRef ? (
           <a
             href={`/app/flashcards/${deckRef}?shuffle=1`}
-            className="rounded-full border px-5 py-2 text-sm font-semibold transition"
+            className="inline-flex min-h-12 items-center justify-center rounded-full border px-5 py-3 text-center text-sm font-semibold transition sm:min-h-11 sm:py-2"
             style={{
               borderColor: "var(--border-subtle, var(--theme-card-border))",
               color: "var(--theme-heading-text)",
@@ -462,12 +462,12 @@ export function FlashcardViewer({
   }
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex w-full max-w-full min-w-0 flex-col gap-5">
       {/* Progress */}
       <ProgressBar current={cardIndex + 1} total={totalKnown} />
 
       {/* Card (flip between front and back) */}
-      <div>
+      <div className="mx-auto w-full min-w-0 max-w-full">
         {!revealed ? (
           <FlashcardFront card={currentCard} onReveal={handleReveal} />
         ) : (

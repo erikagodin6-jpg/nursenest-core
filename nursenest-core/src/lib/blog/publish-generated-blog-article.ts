@@ -31,6 +31,12 @@ import {
 } from "@/lib/blog/blog-citation-recency";
 import type { BlogSourceRecord } from "@/lib/blog/apa7";
 import { logBlogGenerationRejected } from "@/lib/blog/blog-generation-log";
+import {
+  buildGovernanceObservabilityPayload,
+  governancePublishBlockingReasons,
+  scoreBlogArticleForGovernance,
+} from "@/lib/blog/blog-quality-score";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type PublishGeneratedBlogArticleOptions = {
   minWords?: number;
@@ -49,6 +55,11 @@ export type PublishGeneratedBlogArticleOptions = {
   publishAt?: Date;
   skipRevalidate?: boolean;
   prisma?: PrismaClient;
+  /**
+   * When true (default), applies governance composite scoring on top of existing generated publish checks.
+   * Set `false` only for narrow diagnostics or legacy automation that must mirror historical behavior.
+   */
+  blogGovernance?: boolean;
 };
 
 export type GeneratedBlogPublishEligibility = {
@@ -184,6 +195,31 @@ export async function validateGeneratedBlogPublishEligibility(
   if (!row.category?.trim()) reasons.push("Pathway/category mapping is missing.");
   if (!row.title.trim() || !row.slug.trim() || !(row.seoDescription ?? "").trim()) {
     reasons.push("Title, slug, and meta description are required.");
+  }
+
+  if (options.blogGovernance !== false) {
+    const gov = scoreBlogArticleForGovernance({
+      title: row.title,
+      bodyHtml: row.body,
+      slug: row.slug,
+      seoTitle: row.seoTitle,
+      seoDescription: row.seoDescription,
+      targetKeyword: row.targetKeyword,
+      category: row.category,
+      tags: row.tags,
+      faqBlock: row.faqBlock,
+      apaReferences: row.apaReferences,
+      sourcesJson: row.sourcesJson,
+      plannedInternalLinkRows: links.length,
+    });
+    const govReasons = governancePublishBlockingReasons(gov);
+    if (govReasons.length > 0) {
+      reasons.push(...govReasons.map((r) => (r.startsWith("[governance]") ? r : `[governance] ${r}`)));
+    }
+    safeServerLog("blog-governance", "publish_gate", {
+      outcome: govReasons.length > 0 ? "block" : "ok",
+      ...buildGovernanceObservabilityPayload({ postId, slug: row.slug, result: gov }),
+    });
   }
 
   return {

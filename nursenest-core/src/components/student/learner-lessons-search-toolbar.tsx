@@ -51,7 +51,7 @@ export function LearnerLessonsSearchToolbar({
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
         autoComplete="off"
-        className="mt-2 w-full max-w-xl rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2 text-sm text-[var(--semantic-text-primary)] placeholder:text-[var(--semantic-text-muted)]"
+        className="mt-2 min-h-11 w-full max-w-xl rounded-lg border border-[var(--semantic-border-soft)] bg-[var(--semantic-surface)] px-3 py-2.5 text-base text-[var(--semantic-text-primary)] placeholder:text-[var(--semantic-text-muted)] sm:min-h-0 sm:py-2 sm:text-sm"
       />
     </div>
   );

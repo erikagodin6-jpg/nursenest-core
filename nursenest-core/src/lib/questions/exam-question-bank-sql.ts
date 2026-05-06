@@ -44,9 +44,41 @@ export const EXAM_QUESTION_NON_ECG_TAG_SQL = Prisma.sql`NOT EXISTS (
   WHERE lower(trim(tag)) = 'ecg-video'
 )`;
 
+/** `topic` or `body_system` must be present for learner hubs / audits (non-placeholder grouping). */
+export const EXAM_QUESTION_TOPIC_OR_BODY_SQL = Prisma.sql`(
+  coalesce(trim(topic), '') <> ''
+  OR coalesce(trim(body_system), '') <> ''
+)`;
+
+/** Non-empty stem (CAT uses any non-whitespace; audits often use ≥10 elsewhere). */
+export const EXAM_QUESTION_STEM_NON_EMPTY_SQL = Prisma.sql`length(trim(coalesce(stem, ''))) > 0`;
+
+/** MCQ-style `options` JSON array with at least two entries (matches CAT completeness). */
+export const EXAM_QUESTION_OPTIONS_MIN_TWO_SQL = Prisma.sql`
+  options IS NOT NULL
+  AND jsonb_typeof(options::jsonb) = 'array'
+  AND jsonb_array_length(options::jsonb) >= 2
+`;
+
+export const EXAM_QUESTION_RATIONALE_REQUIRED_SQL = Prisma.sql`length(trim(coalesce(rationale, ''))) > 0`;
+
+/**
+ * Published row shape aligned with strict CAT `isCompleteCatQuestionRow` (subset via SQL).
+ * Compose with pathway `exam` / `tier` / `region_scope` filters in audits — do not use alone as full WHERE.
+ */
+export const EXAM_QUESTION_CAT_PIPELINE_ROW_SQL = Prisma.sql`
+  ${EXAM_QUESTION_STATUS_PUBLISHED_SQL}
+  AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
+  AND ${EXAM_QUESTION_NON_ECG_TAG_SQL}
+  AND ${EXAM_QUESTION_STEM_NON_EMPTY_SQL}
+  AND ${EXAM_QUESTION_OPTIONS_MIN_TWO_SQL}
+  AND ${EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL}
+  AND ${EXAM_QUESTION_RATIONALE_REQUIRED_SQL}
+`;
+
 /**
  * Minimal draft → published gates: stem length, answer JSON, optional rationale, non-ECG format + tag, exam allowlist.
- * Does not require topic/body taxonomy (use `examQuestionDraftPublishableStrictSql` for that).
+ * Requires topic or body_system so published rows are usable on learner surfaces.
  */
 export function examQuestionDraftPublishableMinimalSql(): Prisma.Sql {
   return Prisma.sql`
@@ -56,6 +88,7 @@ export function examQuestionDraftPublishableMinimalSql(): Prisma.Sql {
   AND ${EXAM_QUESTION_RATIONALE_IF_PRESENT_SQL}
   AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
   AND ${EXAM_QUESTION_NON_ECG_TAG_SQL}
+  AND ${EXAM_QUESTION_TOPIC_OR_BODY_SQL}
   AND exam IN (${Prisma.join([...examQuestionExamPublishAllowlist()])})
 `;
 }

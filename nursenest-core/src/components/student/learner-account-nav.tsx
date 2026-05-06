@@ -12,7 +12,7 @@ function isActive(pathname: string, href: string): boolean {
     return pathname === "/app/account/overview";
   }
   if (href === "/app/account") {
-    return pathname === "/app/account";
+    return pathname === "/app/account" || pathname === "/app/account/";
   }
   return pathname === href || pathname.startsWith(`${href}/`);
 }

@@ -309,7 +309,19 @@ async function completeControlPanelPlanFromModel(
     }
     throw new BlogControlPanelPlanError("PLAN_ZOD", "Editorial plan validation failed for an unknown reason.", null);
   }
-  return await repairMaterializedPlanSectionsOnce(plan.data, input, { openAiUser: opts?.openAiUser });
+  const extraJsonFlags: string[] = [];
+  if (jsonParse.warnings.some((w) => w.includes("pass2"))) {
+    extraJsonFlags.push("editorial_plan_json_model_repair_used");
+  }
+  if (jsonParse.warnings.some((w) => w.includes("used_first_last_brace_slice"))) {
+    extraJsonFlags.push("editorial_plan_json_brace_slice_fallback");
+  }
+  let planData = plan.data;
+  if (extraJsonFlags.length > 0) {
+    const merged = new Set([...(planData.needsReviewFlags ?? []), ...extraJsonFlags]);
+    planData = { ...planData, needsReviewFlags: [...merged].slice(0, 32) };
+  }
+  return await repairMaterializedPlanSectionsOnce(planData, input, { openAiUser: opts?.openAiUser });
 }
 
 export async function fetchControlPanelPlan(

@@ -5,6 +5,7 @@
 @import "../../styles/tokens.css";
 @import "../../styles/learner-ds.css";
 @import "./learner-surface-primitives.css";
+@import "./mobile-ux-standards.css";
 
 html,
 body {
@@ -3257,10 +3258,11 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
 
 /* Pathway lesson: editorial title scale — stronger hierarchy, comfortable long reads. */
 .nn-lesson-page-title {
-  font-size: clamp(1.5rem, 2.4vw, 2.0625rem);
+  /* Slightly larger floor on phones for clinical scan hierarchy; cap unchanged on wide viewports. */
+  font-size: clamp(1.375rem, 0.65rem + 2.8vw, 2.0625rem);
   font-weight: 600;
   letter-spacing: -0.028em;
-  line-height: 1.18;
+  line-height: 1.2;
   color: var(--theme-heading-text, var(--palette-heading));
 }
 
@@ -3270,8 +3272,8 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   max-width: min(48.75rem, 100%);
   margin-left: auto;
   margin-right: auto;
-  padding-left: clamp(0.75rem, 2vw, 1.25rem);
-  padding-right: clamp(0.75rem, 2vw, 1.25rem);
+  padding-left: clamp(1rem, 3vw, 1.25rem);
+  padding-right: clamp(1rem, 3vw, 1.25rem);
 }
 
 /* Premium embedded assessment modules (pre/post) — distinct from article prose. */
@@ -3329,7 +3331,7 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   font-size: clamp(1.125rem, 0.55vw + 1rem, 1.35rem);
   font-weight: 600;
   letter-spacing: -0.02em;
-  line-height: 1.28;
+  line-height: 1.32;
 }
 
 .nn-lesson-support-card {
@@ -3496,12 +3498,21 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
  */
 .nn-lesson-content.nn-lesson-prose,
 .nn-lesson-prose {
+  box-sizing: border-box;
+  min-width: 0;
   font-size: 0.9375rem;
   font-weight: 400;
   line-height: 1.62;
   letter-spacing: -0.006em;
   color: var(--theme-body-text, var(--semantic-text-primary, var(--palette-text)));
   max-width: min(68ch, 100%);
+}
+
+@media (max-width: 767.98px) {
+  .nn-lesson-content.nn-lesson-prose,
+  .nn-lesson-prose {
+    line-height: 1.68;
+  }
 }
 
 @media (min-width: 768px) {
@@ -3517,6 +3528,16 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   .nn-lesson-prose {
     max-width: min(82ch, 100%);
   }
+}
+
+/* Wide clinical artifacts: keep within viewport on phones (no horizontal page scroll). */
+.nn-lesson-content.nn-lesson-prose pre,
+.nn-lesson-prose pre,
+.nn-lesson-content.nn-lesson-prose table,
+.nn-lesson-prose table {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Lesson callouts — optional **Exam Tip:** / **Clinical Insight:** paragraph prefixes */
@@ -3907,7 +3928,14 @@ html[data-learner-exam-chrome="hidden"] .nn-learner-app {
   width: 100%;
   max-width: min(60rem, 100%);
   margin-inline: 0;
-  padding-inline: clamp(0.5rem, 1.2vw, 1rem);
+  /* ~16px mobile gutter (matches Tailwind px-4); widen smoothly on larger phones / tablets. */
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .nn-lesson-page--learner-app .nn-lesson-editorial-rail--main {
+    padding-inline: clamp(1rem, 2.4vw, 1.5rem);
+  }
 }
 
 .nn-lesson-page--learner-app .nn-lesson-page-header {

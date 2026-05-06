@@ -235,7 +235,7 @@ export function LearnerShellMobileBottomNav({
               surface: "learner_bottom_nav",
             });
           }}
-          className="nn-header-tier-pill nn-header-tier-pill--compact inline-flex min-h-11 max-w-[5.5rem] shrink-0 items-center justify-center truncate sm:max-w-none"
+          className="nn-header-tier-pill nn-header-tier-pill--compact inline-flex min-h-11 max-w-[min(100%,8rem)] shrink-0 items-center justify-center truncate sm:max-w-none"
           aria-label={`Open your pathway hub: ${pathwayLabel}`}
         >
           {pathwayLabel}

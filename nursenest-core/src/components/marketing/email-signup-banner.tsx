@@ -11,7 +11,7 @@ export function EmailSignupBanner() {
   const [msg, setMsg] = useState<string | null>(null);
 
   return (
-    <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-6 shadow-[var(--semantic-shadow-soft)]">
+    <div className="rounded-2xl border border-[var(--semantic-border-soft)] bg-[var(--semantic-panel-cool)] p-4 shadow-[var(--semantic-shadow-soft)] sm:p-6">
       <div className="mx-auto flex max-w-3xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="nn-marketing-h3">{t("footer.emailBannerTitle")}</h3>
@@ -29,7 +29,7 @@ export function EmailSignupBanner() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder={t("home.email.placeholder")}
-            className="min-w-[220px] rounded-full border border-[var(--theme-input-border)] bg-[var(--theme-input-bg)] px-4 py-2.5 text-sm text-[var(--theme-heading-text)] outline-none ring-primary focus:ring-2"
+            className="w-full min-w-0 rounded-full border border-[var(--theme-input-border)] bg-[var(--theme-input-bg)] px-4 py-2.5 text-sm text-[var(--theme-heading-text)] outline-none ring-primary focus:ring-2 sm:min-w-[220px] sm:w-auto"
           />
           <button type="submit" className={`${MARKETING_PRIMARY_CTA_COMPACT_CLASS} whitespace-nowrap px-6`}>
             {t("home.email.button")}

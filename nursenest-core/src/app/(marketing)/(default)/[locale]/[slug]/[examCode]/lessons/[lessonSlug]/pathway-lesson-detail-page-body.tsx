@@ -266,9 +266,9 @@ export async function PathwayLessonDetailPageBody({
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
+    <div className="mx-auto w-full max-w-6xl px-4 pt-1 pb-4 sm:px-6 sm:pt-2 sm:pb-5 lg:px-8">
       <div
-        className={`nn-lesson-page-shell px-3 py-3 sm:px-6 sm:py-5${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
+        className={`nn-lesson-page-shell px-0 py-3 sm:px-6 sm:py-5${hasLessonSequence ? " pb-20 sm:pb-5" : ""}${pathway.examFamily === ExamFamily.NP ? " nn-lesson-page-shell--np" : ""}`}
       >
         <MarketingPathwayLessonDetailViewBeacon
           pathway={pathway}
@@ -432,10 +432,10 @@ export async function PathwayLessonDetailPageBody({
         >
           <LessonRecallProvider>
             <div className="mt-5 sm:mt-6">
-              <div className="mx-auto mb-2 flex max-w-5xl justify-end px-0">
+              <div className="mb-2 flex w-full justify-end px-0">
                 <LessonRecallToggle />
               </div>
-              <article className="mx-auto grid max-w-5xl grid-cols-1 gap-5 md:grid-cols-2 md:gap-x-6 md:gap-y-5">
+              <article className="grid w-full max-w-none grid-cols-1 gap-5 md:mx-auto md:max-w-5xl md:grid-cols-2 md:gap-x-6 md:gap-y-5">
                 {displaySections.map((section) => {
                   const wide = pathwayLessonSectionPrefersWideColumn(section.kind, {
                     hasCheckpointQuestions: Boolean(section.checkpointQuestions?.length),

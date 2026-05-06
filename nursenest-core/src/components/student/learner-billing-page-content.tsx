@@ -102,7 +102,8 @@ function includesListKeys(tier: BillingPagePayload["effectiveTier"]): string[] {
   }
 }
 
-function StatusBanner({
+/** Reused on Account Center overview for the same billing-state copy as the billing page. */
+export function LearnerBillingStatusBanner({
   surface,
   pastDueGraceEndsAt,
   billingPeriodEndDisplay,
@@ -216,7 +217,7 @@ export function LearnerBillingPageContent({
         </div>
       ) : null}
 
-      <StatusBanner
+      <LearnerBillingStatusBanner
         surface={surface}
         pastDueGraceEndsAt={pastDueGraceEndsAt}
         billingPeriodEndDisplay={billingPeriodEndDisplay}

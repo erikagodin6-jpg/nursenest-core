@@ -627,13 +627,13 @@ export function PracticeTestsHubClient({
           <div className="mt-4 flex flex-wrap gap-3 text-sm">
             <Link
               href={`/app/questions/bank?pathwayId=${encodeURIComponent(pathwayLessonPractice.pathwayId)}`}
-              className="inline-flex min-h-10 items-center rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-4 font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
+              className="inline-flex min-h-11 items-center sm:min-h-10 rounded-full border border-[color-mix(in_srgb,var(--semantic-brand)_38%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--semantic-surface))] px-4 font-semibold text-[var(--semantic-brand)] underline-offset-2 hover:underline"
             >
               Open question bank (same pathway)
             </Link>
             <Link
               href={`/app/flashcards?pathwayId=${encodeURIComponent(pathwayLessonPractice.pathwayId)}`}
-              className="inline-flex min-h-10 items-center rounded-full border border-[var(--semantic-border-soft)] px-4 font-semibold text-[var(--semantic-text-primary)] underline-offset-2 hover:underline"
+              className="inline-flex min-h-11 items-center sm:min-h-10 rounded-full border border-[var(--semantic-border-soft)] px-4 font-semibold text-[var(--semantic-text-primary)] underline-offset-2 hover:underline"
             >
               Flashcards hub
             </Link>
@@ -1332,7 +1332,7 @@ export function PracticeTestsHubClient({
               {catExamStartHref && catOptions.length > 0 ? (
                 <Link
                   href={catExamStartHref}
-                  className="nn-premium-action-chip inline-flex min-h-10 items-center rounded-full border border-border px-5 py-2 text-sm font-semibold text-foreground hover:bg-muted"
+                  className="nn-premium-action-chip inline-flex min-h-11 items-center sm:min-h-10 rounded-full border border-border px-5 py-2 text-sm font-semibold text-foreground hover:bg-muted"
                   data-nn-e2e-practice-hub-cat-exam
                 >
                   CAT exam
@@ -1390,7 +1390,7 @@ export function PracticeTestsHubClient({
             <p className="mt-2">{error}</p>
             <button
               type="button"
-              className="mt-3 inline-flex min-h-10 items-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground"
+              className="mt-3 inline-flex min-h-11 items-center sm:min-h-10 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground"
               onClick={() => {
                 setLoading(true);
                 void loadList();

@@ -255,13 +255,13 @@ export function PremiumLearnerHub({
           <div className="mt-4 flex flex-wrap gap-2">
             <Link
               href="/app/flashcards"
-              className="inline-flex rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)]"
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-role-cta px-4 py-2 text-sm font-semibold text-role-cta-foreground shadow-[0_4px_14px_var(--role-cta-shadow)]"
             >
               All decks
             </Link>
             <Link
               href={weakAreaFlashcardsHref}
-              className="inline-flex rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-foreground"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-[var(--semantic-border-soft)] px-4 py-2 text-sm font-semibold text-foreground"
             >
               Study priority review
             </Link>

@@ -435,7 +435,7 @@ export function FlashcardsHubClient({
                 key={key}
                 type="button"
                 onClick={() => applyFilterPreset(key)}
-                className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                className={`min-h-11 rounded-full border px-3 py-2 text-sm font-semibold transition sm:min-h-0 sm:py-1.5 sm:text-xs ${
                   on
                     ? "border-[color-mix(in_srgb,var(--semantic-info)_45%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-info)_14%,var(--semantic-surface))] text-[var(--semantic-text-primary)]"
                     : "border-[var(--semantic-border-soft)] text-[var(--semantic-text-secondary)] hover:bg-[var(--semantic-panel-muted)]"
@@ -509,7 +509,7 @@ export function FlashcardsHubClient({
               <button
                 key={n}
                 type="button"
-                className={`rounded-full border border-[var(--semantic-border-soft)] px-3 py-1 ${
+                className={`min-h-11 rounded-full border border-[var(--semantic-border-soft)] px-3 py-2 text-sm font-medium sm:min-h-0 sm:py-1 ${
                   cardLimit === n
                     ? "border-[color-mix(in_srgb,var(--semantic-brand)_40%,var(--semantic-border-soft))] bg-[color-mix(in_srgb,var(--semantic-brand)_12%,var(--semantic-surface))]"
                     : ""

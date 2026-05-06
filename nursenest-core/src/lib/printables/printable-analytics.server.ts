@@ -3,6 +3,15 @@ import "server-only";
 import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
 
+function printableDownloadGroupAllCount(row: {
+  _count?: true | { _all?: number; id?: number; printableProductId?: number; userId?: number; pathwayId?: number; source?: number };
+}): number {
+  const c = row._count;
+  if (!c || c === true) return 0;
+  const v = (c as { _all?: number })._all;
+  return typeof v === "number" ? v : 0;
+}
+
 export async function getPrintableProductAnalytics(productId: string) {
   const [total, bySource, uniqueUserGroups, lastDownload] = await Promise.all([
     prisma.printableDownloadEvent.count({ where: { printableProductId: productId } }),
@@ -36,10 +45,9 @@ export async function getPrintableProductAnalytics(productId: string) {
   return {
     totalDownloads: total,
     uniqueUsersDownloaded: uniqueUserGroups.length,
-    downloadsBySource: Object.fromEntries(bySource.map((r) => [r.source, r._count._all])) as Record<
-      string,
-      number
-    >,
+    downloadsBySource: Object.fromEntries(
+      bySource.map((r) => [r.source, printableDownloadGroupAllCount(r)]),
+    ) as Record<string, number>,
     downloadsByDay: byDay.map((r) => ({
       day: r.day,
       downloads: Number(r.downloads),
@@ -60,15 +68,11 @@ export async function getPrintableAnalyticsSummary(where?: Prisma.PrintableDownl
       by: ["printableProductId"],
       where,
       _count: { _all: true },
-      orderBy: { _count: { _all: "desc" } },
-      take: 40,
     }),
     prisma.printableDownloadEvent.groupBy({
       by: ["pathwayId"],
       where,
       _count: { _all: true },
-      orderBy: { _count: { _all: "desc" } },
-      take: 40,
     }),
     prisma.printableDownloadEvent.groupBy({
       by: ["source"],
@@ -77,10 +81,17 @@ export async function getPrintableAnalyticsSummary(where?: Prisma.PrintableDownl
     }),
   ]);
 
+  const byProductSorted = [...byProduct]
+    .sort((a, b) => printableDownloadGroupAllCount(b) - printableDownloadGroupAllCount(a))
+    .slice(0, 40);
+  const byPathwaySorted = [...byPathway]
+    .sort((a, b) => printableDownloadGroupAllCount(b) - printableDownloadGroupAllCount(a))
+    .slice(0, 40);
+
   const productTitles =
-    byProduct.length > 0
+    byProductSorted.length > 0
       ? await prisma.printableProduct.findMany({
-          where: { id: { in: byProduct.map((r) => r.printableProductId) } },
+          where: { id: { in: byProductSorted.map((r) => r.printableProductId) } },
           select: { id: true, title: true, slug: true },
         })
       : [];
@@ -113,20 +124,19 @@ export async function getPrintableAnalyticsSummary(where?: Prisma.PrintableDownl
       day: r.day,
       downloads: Number(r.downloads),
     })),
-    mostDownloaded: byProduct.map((r) => ({
+    mostDownloaded: byProductSorted.map((r) => ({
       printableProductId: r.printableProductId,
-      downloads: r._count._all,
+      downloads: printableDownloadGroupAllCount(r),
       title: titleById.get(r.printableProductId)?.title ?? null,
       slug: titleById.get(r.printableProductId)?.slug ?? null,
     })),
-    downloadsByPathway: byPathway.map((r) => ({
+    downloadsByPathway: byPathwaySorted.map((r) => ({
       pathwayId: r.pathwayId,
-      downloads: r._count._all,
+      downloads: printableDownloadGroupAllCount(r),
     })),
-    downloadsBySource: Object.fromEntries(bySource.map((r) => [r.source, r._count._all])) as Record<
-      string,
-      number
-    >,
+    downloadsBySource: Object.fromEntries(
+      bySource.map((r) => [r.source, printableDownloadGroupAllCount(r)]),
+    ) as Record<string, number>,
   };
 }
 

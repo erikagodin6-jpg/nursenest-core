@@ -1,3 +1,7 @@
+"use client";
+
+import { useCallback, useState } from "react";
+
 /**
  * LessonClinicalImageCard — dedicated presentation component for matched lesson images.
  *
@@ -134,7 +138,10 @@ export function LessonClinicalImageCard({
   caption: captionProp,
   className = "",
 }: LessonClinicalImageCardProps) {
-  if (!url || !hasRenderableLessonImageUrl(url)) return null;
+  const [hidden, setHidden] = useState(false);
+  const onHidden = useCallback(() => setHidden(true), []);
+
+  if (!url || !hasRenderableLessonImageUrl(url) || hidden) return null;
 
   const label = resolveLabel(labelProp, source);
   const caption = resolveCaption(captionProp, lessonTitle, source);
@@ -142,7 +149,7 @@ export function LessonClinicalImageCard({
   return (
     <aside
       aria-label={label ?? "Clinical image for this lesson"}
-      className={`mx-auto mt-8 mb-2 max-w-[44rem] overflow-hidden rounded-2xl${className ? ` ${className}` : ""}`}
+      className={`mx-auto mt-8 mb-2 w-full max-w-[min(44rem,100%)] overflow-hidden rounded-2xl${className ? ` ${className}` : ""}`}
       style={{
         background: "var(--lesson-media-surface)",
         border: "1px solid var(--lesson-media-border)",
@@ -151,7 +158,7 @@ export function LessonClinicalImageCard({
       }}
     >
       {/* ── Inner padding wrapper ─────────────────────────────────────────── */}
-      <div className="p-5 sm:p-6">
+      <div className="p-4 sm:p-6">
         {/* ── Eyebrow label ──────────────────────────────────────────────── */}
         {label ? (
           <p
@@ -180,7 +187,8 @@ export function LessonClinicalImageCard({
           <SafeLessonRemoteImage
             src={url}
             alt={alt}
-            className="block max-h-[min(70vh,520px)] w-full object-contain object-center"
+            className="block h-auto max-h-[min(70vh,520px)] w-full max-w-full object-contain object-center"
+            onHidden={onHidden}
           />
         </div>
 

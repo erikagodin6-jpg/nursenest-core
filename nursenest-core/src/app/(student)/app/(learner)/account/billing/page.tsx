@@ -59,7 +59,7 @@ export default async function AccountBillingPage() {
           headline={t("learner.account.billing.title")}
           body={t("learner.account.loadFailed")}
           tone="default"
-          primaryCta={{ label: t("learner.account.nav.overview"), href: "/app/account/overview", variant: "primary" }}
+          primaryCta={{ label: t("learner.account.nav.accountHome"), href: "/app/account", variant: "primary" }}
           secondaryCtas={[{ label: t("paywall.cta.openStudyHub"), href: "/app", variant: "secondary" }]}
           visualLayout="stack"
           ctaLayout="stack"

@@ -19,7 +19,7 @@ const STUDY_LINKS: MenuItem[] = [
 ];
 
 const PERFORMANCE_LINKS: MenuItem[] = [
-  { href: "/app/account/report-card", i18nKey: "learner.userBar.link.reportCard" },
+  { href: "/app/account/report", i18nKey: "learner.userBar.link.reportCard" },
   { href: "/app/account/readiness", i18nKey: "learner.userBar.link.readiness" },
   { href: "/app/account/progress", i18nKey: "learner.userBar.link.progress" },
   { href: "/app/account/question-bank-performance", i18nKey: "learner.userBar.link.questionBankPerf" },

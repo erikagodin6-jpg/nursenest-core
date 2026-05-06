@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { BreadcrumbBar } from "@/components/seo/breadcrumb-bar";
 import { WebPageJsonLd } from "@/components/seo/seo-json-ld";
@@ -32,6 +33,11 @@ import { loadMarketingMessageShards } from "@/lib/marketing-i18n/load-marketing-
 import { InternationalRnHubSections } from "@/components/marketing/international-rn-hub-sections";
 import { intlRnRegulatorDisclaimerText, resolveIntlRnHubSectionCopy } from "@/lib/marketing/intl-rn-pathway-hub-copy";
 import { isIntlRnFoundationPathwayId } from "@/lib/navigation/country-exam-launch-readiness";
+import {
+  parseMeasurementPreference,
+  readMeasurementPreferenceFromCookieStore,
+  type MeasurementPreference,
+} from "@/lib/measurements/measurement-preference";
 
 export const dynamicParams = true;
 export const dynamic = "force-dynamic";
@@ -84,11 +90,20 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   const pathway = await resolveExamPathwaySafe(locale, slug, examCode, { pathname });
   if (!pathway) notFound();
   const isAlliedHub = pathway.roleTrack === "allied" && pathway.examCode === "allied-health";
-  /** Canada main allied URL is an occupation directory only (no inventory strip, labs, ECG category grid, or study-mode tiles). */
-  const alliedCanadaOccupationDirectoryHub = isAlliedHub && pathname === "/canada/allied/allied-health";
+
+  let alliedInitialMeasurement: MeasurementPreference | null = null;
+  let alliedMeasurementSync = false;
+  if (isAlliedHub) {
+    try {
+      const fromCookie = readMeasurementPreferenceFromCookieStore(await cookies());
+      if (fromCookie) alliedInitialMeasurement = fromCookie;
+    } catch {
+      // ignore
+    }
+  }
 
   let alliedOverview: AlliedPathwayHubOverview | null = null;
-  if (isAlliedHub && !alliedCanadaOccupationDirectoryHub) {
+  if (isAlliedHub) {
     try {
       alliedOverview = await loadAlliedPathwayHubOverview(pathway, {
         pathname,
@@ -117,14 +132,12 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
       role_track: slug,
       pathway_id: pathway.id,
       exam_slug: examCode,
-      loader_result: alliedCanadaOccupationDirectoryHub
-        ? "occupation_directory_hub_skipped_inventory"
-        : JSON.stringify({
-            lessonCount: alliedOverview?.lessonCount ?? 0,
-            questionSnapshotStatus: alliedOverview?.questionSnapshot.status ?? "none",
-            flashcardDeckCount: alliedOverview?.flashcardDeckCount ?? null,
-            moduleCardCount: alliedOverview?.moduleCards.length ?? 0,
-          }),
+      loader_result: JSON.stringify({
+        lessonCount: alliedOverview?.lessonCount ?? 0,
+        questionSnapshotStatus: alliedOverview?.questionSnapshot.status ?? "none",
+        flashcardDeckCount: alliedOverview?.flashcardDeckCount ?? null,
+        moduleCardCount: alliedOverview?.moduleCards.length ?? 0,
+      }),
     });
   }
 
@@ -136,6 +149,20 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
     const session = await getOptionalPublicSession({ pathname, surface: "marketing.exam_hub" });
     const userId = (session?.user as { id?: string } | undefined)?.id ?? "";
     viewerSignedIn = Boolean(userId);
+
+    if (isAlliedHub && userId && isDatabaseUrlConfigured()) {
+      alliedMeasurementSync = true;
+      try {
+        const row = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { measurementPreference: true },
+        });
+        const fromDb = parseMeasurementPreference(row?.measurementPreference ?? null);
+        if (fromDb) alliedInitialMeasurement = fromDb;
+      } catch {
+        // ignore
+      }
+    }
 
     if (userId && isDatabaseUrlConfigured()) {
       const entitlement = await resolveEntitlementForPage(userId);
@@ -211,7 +238,8 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
             pathway={pathway}
             hubPath={pathname}
             overview={alliedOverview}
-            occupationDirectoryHub={alliedCanadaOccupationDirectoryHub}
+            initialMeasurementPreference={alliedInitialMeasurement}
+            syncMeasurementPreferenceToProfile={alliedMeasurementSync}
           />
         ) : content ? (
           <NursingTierHubPage
