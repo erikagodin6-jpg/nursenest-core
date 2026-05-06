@@ -408,6 +408,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
         loadPublicContentOverridesForLocaleSafe(resolvedLocale),
         getStaffSessionSafe(),
       ]);
+      const siteFooter = <SiteFooter serverHasStaffSession={staffSession != null} />;
 
       return (
         <MarketingI18nProvider
@@ -430,7 +431,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                         <MarketingMainI18nShards
                           locale={resolvedLocale}
                           publicContentOverrides={publicContentOverrides}
-                          trailingChrome={<SiteFooter serverHasStaffSession={staffSession != null} />}
+                          trailingChrome={siteFooter}
                         >
                           <main className="flex min-h-0 flex-1 flex-col">
                             <MarketingDefaultMainMotionSlot serverNarrowViewportHint={serverNarrowViewportHint}>
@@ -445,7 +446,7 @@ export default async function MarketingDefaultLocaleLayout({ children }: { child
                               {children}
                             </MarketingDefaultMainMotionSlot>
                           </main>
-                          <SiteFooter serverHasStaffSession={staffSession != null} />
+                          {siteFooter}
                         </>
                       )}
                     </div>
