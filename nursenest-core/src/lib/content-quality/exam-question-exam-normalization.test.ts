@@ -87,6 +87,12 @@ test("orderExamQuestionExamRewritesForBackfill runs chained from-values before t
   );
 });
 
+test("coerceRecordedExamQuestionExamValue maps legacy snapshot strings", () => {
+  assert.equal(coerceRecordedExamQuestionExamValue("NCLEX_RN"), "NCLEX-RN");
+  assert.equal(coerceRecordedExamQuestionExamValue(null), undefined);
+  assert.equal(coerceRecordedExamQuestionExamValue(123), undefined);
+});
+
 test("isExamQuestionExamPublishAllowed accepts pathway and allied board keys", () => {
   assert.equal(isExamQuestionExamPublishAllowed("NCLEX-RN"), true);
   assert.equal(isExamQuestionExamPublishAllowed("REx-PN"), true);
