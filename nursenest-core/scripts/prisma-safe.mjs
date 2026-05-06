@@ -72,7 +72,10 @@ export function isInstallTimePrismaGenerateContext({ command, argv = process.arg
   return isGenerate && env.npm_lifecycle_event === "postinstall";
 }
 
-export function assertDatabaseUrlForBuildGenerate(env = process.env) {
+export function ensureDatabaseUrlForCodegen(env = process.env) {
+  if (!env.DATABASE_URL?.trim()) {
+    env.DATABASE_URL = INSTALL_TIME_GENERATE_DATABASE_URL;
+  }
   maskedPostgresTarget(env.DATABASE_URL?.trim(), "DATABASE_URL");
 }
 
@@ -90,9 +93,7 @@ export function loadPrismaSafeEnvForCommand(
   });
 
   if (installTimeGenerate) {
-    if (!process.env.DATABASE_URL?.trim()) {
-      process.env.DATABASE_URL = INSTALL_TIME_GENERATE_DATABASE_URL;
-    }
+    ensureDatabaseUrlForCodegen(env);
     if (!process.env.DIRECT_URL?.trim()) {
       process.env.DIRECT_URL = process.env.DATABASE_URL;
     }
@@ -100,7 +101,7 @@ export function loadPrismaSafeEnvForCommand(
   }
 
   if (buildSafeGenerate) {
-    assertDatabaseUrlForBuildGenerate(env);
+    ensureDatabaseUrlForCodegen(env);
     if (!process.env.DIRECT_URL?.trim()) {
       process.env.DIRECT_URL = process.env.DATABASE_URL;
     }

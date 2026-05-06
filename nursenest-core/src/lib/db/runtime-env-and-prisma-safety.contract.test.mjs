@@ -124,6 +124,23 @@ describe("prisma-safe build-time generate env policy", () => {
       }),
     ));
 
+  it("allows CI build Prisma codegen without runtime database env", () =>
+    withCleanDbEnv(() =>
+      withTempEnv({}, (envRoot) => {
+        process.env.NN_LOW_MEMORY_BUILD = "1";
+        const logs = [];
+        const result = loadPrismaSafeEnvForCommand("generate", {
+          envRoot,
+          logger: { log: (line) => logs.push(line) },
+          argv: ["node", "scripts/prisma-safe.mjs", "generate"],
+        });
+        assert.equal(result.buildSafeGenerate, true);
+        assert.match(process.env.DATABASE_URL, /^postgresql:\/\/prisma:prisma@127\.0\.0\.1/);
+        assert.equal(process.env.DIRECT_URL, process.env.DATABASE_URL);
+        assert.equal(logs.some((line) => line.includes("using local placeholder DATABASE_URL for code generation only.")), true);
+      }),
+    ));
+
   it("allows npm install Prisma codegen without runtime database env", () =>
     withCleanDbEnv(() =>
       withTempEnv({}, (envRoot) => {
