@@ -8,7 +8,6 @@ import { flashcardPathwayAccessOptionsFromPathwayId } from "@/lib/flashcards/fla
 import {
   applyCountsToBuilderCategories,
   builderCategoryTitleForId,
-  coalesceExamInventoryCountsOntoPathwayHubRows,
   FLASHCARD_BUILDER_UNCATEGORIZED_ID,
   resolveBuilderCategoryId,
   type BuilderCategoryOption,
@@ -33,13 +32,14 @@ import {
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { buildGlobalExamContext } from "@/lib/exam-context/exam-registry";
 import { bankExamQuestionRowToFlashcardStudySelectRow } from "@/lib/flashcards/bank-exam-question-to-flashcard-select";
-import {
-  loadExamQuestionHubInventoryForPathway,
-  loadExamQuestionRowsForFlashcardPool,
-} from "@/lib/flashcards/flashcard-exam-bank-hub-inventory";
+import { loadExamQuestionRowsForFlashcardPool } from "@/lib/flashcards/flashcard-exam-bank-hub-inventory";
 import { firstHttpsImageUrlFromExamQuestionImages } from "@/lib/study-question-pool/exam-question-image-url";
 import { getStudyQuestionPoolForPathway } from "@/lib/study-question-pool/get-study-question-pool-for-pathway";
 import { normalizePathwayIdForStudySurfaces } from "@/lib/study-question-pool/study-pathway-normalize";
+import {
+  getCanonicalExamQuestionWhere,
+  type ExamQuestionLite,
+} from "@/lib/study-question-pool/canonical-exam-question-where";
 
 export type CustomSessionStudyMode = "term_to_definition" | "definition_to_term" | "mixed";
 
@@ -484,38 +484,54 @@ export async function buildFlashcardCustomSession(
       }
     }
 
-    const useExamHub = Boolean(pathwayScopeId) && !lessonId;
-    const examHub = useExamHub
-      ? await loadExamQuestionHubInventoryForPathway(
-          entitlement,
-          pathwayScopeId,
-          examContext,
-          topicCode?.trim() || null,
-        )
-      : { total: 0, countsByBuilderId: {} as Record<string, number> };
+    // Canonical inventory query — same source as CAT exams. No raw SQL, no contentExamKeys matching.
+    const useExamForInventory =
+      Boolean(pathwayScopeId) && !lessonId && !includeCards && !needsProgress && !persistenceFiltersActive;
 
-    const useExamForHubStats =
-      useExamHub && !includeCards && !needsProgress && !persistenceFiltersActive;
+    let examInventoryRows: ExamQuestionLite[] = [];
+    if (useExamForInventory) {
+      const canonicalWhere = getCanonicalExamQuestionWhere(entitlement);
+      examInventoryRows = await prisma.examQuestion.findMany({
+        where: canonicalWhere,
+        select: { id: true, bodySystem: true, topic: true },
+        take: 8000,
+        orderBy: { id: "asc" },
+      });
+      console.log("FLASHCARD INVENTORY COUNT:", examInventoryRows.length);
+      if (examInventoryRows.length === 0) {
+        throw new Error("CRITICAL: ExamQuestion pool is empty — system misconfigured");
+      }
+    }
 
-    const examCountsCoalescedForHub = coalesceExamInventoryCountsOntoPathwayHubRows(
-      pathwayScopeId ?? pathwayId,
-      examHub.countsByBuilderId,
-    );
-    const examHubBucketsNonEmpty = Object.values(examCountsCoalescedForHub).some(
-      (n) => typeof n === "number" && Number.isFinite(n) && n > 0,
-    );
-    /** Use live exam-bank COUNT when rows exist, even if GROUP BY→taxonomy mapping yields no buckets (avoid false zero hub). */
-    const useExamHubForSummaryAndOptions = useExamForHubStats && examHub.total > 0;
+    const examTotal = examInventoryRows.length;
+    const useEffectiveTotalForSummary = useExamForInventory && examTotal > 0;
 
-    const selectedCategorySum = selectedCategories.reduce((s, id) => s + (examCountsCoalescedForHub[id] ?? 0), 0);
+    // Build category counts from the canonical inventory rows using the same
+    // resolveBuilderCategoryId logic used for DB flashcard rows.
+    const examInventoryCounts: Record<string, number> = {};
+    for (const q of examInventoryRows) {
+      const categoryId = resolveBuilderCategoryId({
+        label: q.topic?.trim() || q.bodySystem?.trim() || "General",
+        topicCode: null,
+        pathwayId: pathwayScopeId,
+        deckTitle: null,
+        front: "",
+        back: "",
+        examBodySystem: q.bodySystem,
+        examTopic: q.topic,
+      });
+      examInventoryCounts[categoryId] = (examInventoryCounts[categoryId] ?? 0) + 1;
+    }
+
+    const selectedCategorySum = selectedCategories.reduce((s, id) => s + (examInventoryCounts[id] ?? 0), 0);
     const matchingCardsForSummary = includeCards
       ? scoped.length
-      : useExamHubForSummaryAndOptions
+      : useEffectiveTotalForSummary
         ? selectedCategories.length === 0
-          ? examHub.total
-          : examHubBucketsNonEmpty && selectedCategorySum > 0
+          ? examTotal
+          : selectedCategorySum > 0
             ? selectedCategorySum
-            : examHub.total
+            : examTotal
         : scoped.length;
 
     const sessionShuffleSalt = sessionSeed?.trim() || randomUUID();
@@ -586,13 +602,9 @@ export async function buildFlashcardCustomSession(
       lessonVirtualDiagnostics,
     };
 
-    let categoryCountsForOptions = useExamHubForSummaryAndOptions ? { ...examCountsCoalescedForHub } : categoryCounts;
-    if (useExamHubForSummaryAndOptions && examHub.total > 0 && !examHubBucketsNonEmpty) {
-      categoryCountsForOptions = {
-        ...categoryCountsForOptions,
-        [FLASHCARD_BUILDER_UNCATEGORIZED_ID]: examHub.total,
-      };
-    }
+    // Use canonical inventory counts for hub display; fall back to DB flashcard counts
+    // when in a card session (includeCards or filtered mode).
+    const categoryCountsForOptions = useEffectiveTotalForSummary ? examInventoryCounts : categoryCounts;
     const categoryOptions = applyCountsToBuilderCategories(pathwayScopeId ?? pathwayId, categoryCountsForOptions);
     if (process.env.NODE_ENV === "development") {
       let cardsTaggedFromExamMeta = 0;
@@ -629,10 +641,10 @@ export async function buildFlashcardCustomSession(
         examQuestionMetaRows: examTopicMetaById.size,
         cardsLinkedToExamWithMeta: cardsTaggedFromExamMeta,
         uncategorizedCardRows,
-        ...(useExamHub
+        ...(useExamForInventory
           ? {
-              examHubTotal: examHub.total,
-              examHubBuilderBuckets: Object.keys(examHub.countsByBuilderId).length,
+              canonicalInventoryTotal: examTotal,
+              canonicalInventoryBuckets: Object.keys(examInventoryCounts).length,
             }
           : {}),
       });
