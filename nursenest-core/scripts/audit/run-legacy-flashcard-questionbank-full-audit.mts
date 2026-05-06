@@ -11,6 +11,7 @@ import { readFileSync, readdirSync, writeFileSync, mkdirSync, existsSync } from 
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { loadScriptEnv } from "../bootstrap-env.mjs";
 import { extractLegacyFlashcardExports } from "../legacy/legacy-flashcard-ts-extract.mts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -36,6 +37,7 @@ async function prismaCounts(): Promise<{
   dbError: string | null;
 }> {
   try {
+    loadScriptEnv({ prefix: "[flashcard-audit-env]" });
     if (!process.env.DATABASE_URL) {
       return { flashcardDecks: null, flashcards: 0, examQuestionsPublished: null, dbError: "DATABASE_URL not set" };
     }

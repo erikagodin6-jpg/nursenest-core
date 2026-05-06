@@ -5,7 +5,13 @@ import { parse as parseDotenv } from "dotenv";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DEFAULT_PACKAGE_ROOT = resolve(__dirname, "../..");
-const ENV_FILES = [".env", ".env.local", ".env.production"];
+const DEFAULT_REPO_ROOT = resolve(DEFAULT_PACKAGE_ROOT, "..");
+const ENV_FILES = [
+  { label: "nursenest-core/.env.local", pathFromPackageRoot: ".env.local" },
+  { label: "nursenest-core/.env", pathFromPackageRoot: ".env" },
+  { label: "repo-root/.env.local", pathFromRepoRoot: ".env.local" },
+  { label: "repo-root/.env", pathFromRepoRoot: ".env" },
+];
 
 export class RuntimeEnvError extends Error {
   constructor(code, message, details = {}) {
@@ -66,17 +72,20 @@ function collectEnvFiles(envRoot) {
   const files = [];
 
   for (const file of ENV_FILES) {
-    const filePath = resolve(envRoot, file);
+    const filePath =
+      "pathFromPackageRoot" in file
+        ? resolve(envRoot, file.pathFromPackageRoot)
+        : resolve(DEFAULT_REPO_ROOT, file.pathFromRepoRoot);
     if (!existsSync(filePath)) {
-      files.push({ file, found: false });
+      files.push({ file: file.label, found: false });
       continue;
     }
 
-    files.push({ file, found: true });
+    files.push({ file: file.label, found: true });
     const parsed = parseDotenv(readFileSync(filePath, "utf8"));
     for (const [key, value] of Object.entries(parsed)) {
       values.set(key, value);
-      sources.set(key, file);
+      sources.set(key, file.label);
     }
   }
 

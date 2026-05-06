@@ -9,33 +9,24 @@
  *   npx tsx scripts/normalize-exam-question-exam-values.ts --dry-run --json
  */
 
-import { existsSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
-import { parse as parseDotenv } from "dotenv";
-import { PrismaClient } from "@prisma/client";
+import { requireScriptDatabaseUrl } from "./bootstrap-env.mjs";
 import {
   normalizeExamQuestionExamForStorage,
   orderExamQuestionExamRewritesForBackfill,
 } from "../src/lib/content-quality/exam-question-exam-normalization";
 
-function loadDotenvFromPackageRoot(): void {
-  const root = process.cwd();
-  for (const name of [".env", ".env.local", ".env.production"]) {
-    const p = resolve(root, name);
-    if (!existsSync(p)) continue;
-    const parsed = parseDotenv(readFileSync(p, "utf8"));
-    for (const [k, v] of Object.entries(parsed)) {
-      if (process.env[k] === undefined) process.env[k] = v;
-    }
-  }
-}
-
-const prisma = new PrismaClient();
-
 type DistRow = { exam: string };
 type CountRow = { exam: string; c: bigint };
 
-async function examDistribution(): Promise<CountRow[]> {
+type PrismaClientLike = {
+  $queryRaw<T = unknown>(strings: TemplateStringsArray, ...values: unknown[]): Promise<T>;
+  examQuestion: {
+    updateMany(args: { where: { exam: string }; data: { exam: string } }): Promise<{ count: number }>;
+  };
+  $disconnect(): Promise<void>;
+};
+
+async function examDistribution(prisma: PrismaClientLike): Promise<CountRow[]> {
   return prisma.$queryRaw<CountRow[]>`
     SELECT exam, COUNT(*)::bigint AS c
     FROM exam_questions
@@ -57,83 +48,82 @@ function printDist(label: string, rows: CountRow[]): void {
 }
 
 async function main(): Promise<void> {
-  loadDotenvFromPackageRoot();
+  requireScriptDatabaseUrl({ prefix: "[normalize-exam-values]" });
   const dryRun = process.argv.includes("--dry-run");
+  const { PrismaClient } = await import("@prisma/client");
+  const prisma = new PrismaClient();
 
-  if (!process.env.DATABASE_URL?.trim()) {
-    console.log("DATABASE_URL is unset — nothing to do.");
-    process.exit(0);
-  }
+  try {
+    const before = await examDistribution(prisma);
+    printDist("BEFORE (exam → count)", before);
 
-  const before = await examDistribution();
-  printDist("BEFORE (exam → count)", before);
-
-  const distinct = await prisma.$queryRaw<DistRow[]>`
+    const distinct = await prisma.$queryRaw<DistRow[]>`
     SELECT DISTINCT exam FROM exam_questions
     WHERE exam IS NOT NULL AND trim(exam) <> ''
     ORDER BY exam
   `;
 
-  const plan: { from: string; to: string; n: bigint }[] = [];
-  for (const { exam } of distinct) {
-    const to = normalizeExamQuestionExamForStorage(exam);
-    if (!to || to === exam) continue;
-    const [{ c }] = await prisma.$queryRaw<{ c: bigint }[]>`
-      SELECT COUNT(*)::bigint AS c FROM exam_questions WHERE exam = ${exam}
-    `;
-    if (c > 0n) plan.push({ from: exam, to, n: c });
-  }
-
-  const orderedPlan = orderExamQuestionExamRewritesForBackfill(plan);
-
-  console.log(`\nPlanned rewrites (${orderedPlan.length} source values, dependency-ordered):`);
-  for (const p of orderedPlan) {
-    console.log(`  "${p.from}" → "${p.to}"  (${p.n.toString()} rows)`);
-  }
-
-  let totalUpdated = 0;
-  if (!dryRun) {
-    for (const p of orderedPlan) {
-      const r = await prisma.examQuestion.updateMany({ where: { exam: p.from }, data: { exam: p.to } });
-      totalUpdated += r.count;
+    const plan: { from: string; to: string; n: bigint }[] = [];
+    for (const { exam } of distinct) {
+      const to = normalizeExamQuestionExamForStorage(exam);
+      if (!to || to === exam) continue;
+      const [{ c }] = await prisma.$queryRaw<{ c: bigint }[]>`
+        SELECT COUNT(*)::bigint AS c FROM exam_questions WHERE exam = ${exam}
+      `;
+      if (c > 0n) plan.push({ from: exam, to, n: c });
     }
-  } else {
+
+    const orderedPlan = orderExamQuestionExamRewritesForBackfill(plan);
+
+    console.log(`\nPlanned rewrites (${orderedPlan.length} source values, dependency-ordered):`);
     for (const p of orderedPlan) {
-      totalUpdated += Number(p.n);
+      console.log(`  "${p.from}" → "${p.to}"  (${p.n.toString()} rows)`);
     }
-  }
 
-  console.log(`\n${dryRun ? "[dry-run] Would update" : "Updated"} row count: ${totalUpdated.toLocaleString()}`);
+    let totalUpdated = 0;
+    if (!dryRun) {
+      for (const p of orderedPlan) {
+        const r = await prisma.examQuestion.updateMany({ where: { exam: p.from }, data: { exam: p.to } });
+        totalUpdated += r.count;
+      }
+    } else {
+      for (const p of orderedPlan) {
+        totalUpdated += Number(p.n);
+      }
+    }
 
-  const after = dryRun ? before : await examDistribution();
-  printDist(dryRun ? "AFTER (unchanged in dry-run)" : "AFTER (exam → count)", after);
+    console.log(`\n${dryRun ? "[dry-run] Would update" : "Updated"} row count: ${totalUpdated.toLocaleString()}`);
 
-  if (process.argv.includes("--json")) {
-    const ser = (rows: CountRow[]) =>
-      rows.map((r) => ({ exam: r.exam, count: r.c.toString() }));
-    console.log(
-      JSON.stringify(
-        {
-          dryRun,
-          before: ser(before),
-          after: ser(after),
-          plan: orderedPlan.map((p) => ({ from: p.from, to: p.to, count: p.n.toString() })),
-          totalUpdatedRows: totalUpdated,
-        },
-        null,
-        2,
-      ),
-    );
-  }
+    const after = dryRun ? before : await examDistribution(prisma);
+    printDist(dryRun ? "AFTER (unchanged in dry-run)" : "AFTER (exam → count)", after);
 
-  if (dryRun) {
-    console.log("\nRe-run without --dry-run to apply updates.");
+    if (process.argv.includes("--json")) {
+      const ser = (rows: CountRow[]) =>
+        rows.map((r) => ({ exam: r.exam, count: r.c.toString() }));
+      console.log(
+        JSON.stringify(
+          {
+            dryRun,
+            before: ser(before),
+            after: ser(after),
+            plan: orderedPlan.map((p) => ({ from: p.from, to: p.to, count: p.n.toString() })),
+            totalUpdatedRows: totalUpdated,
+          },
+          null,
+          2,
+        ),
+      );
+    }
+
+    if (dryRun) {
+      console.log("\nRe-run without --dry-run to apply updates.");
+    }
+  } finally {
+    await prisma.$disconnect();
   }
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+main().catch((e) => {
+  console.error(e instanceof Error ? e.message : String(e));
+  process.exit(1);
+});
