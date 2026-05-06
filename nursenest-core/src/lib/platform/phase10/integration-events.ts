@@ -1,5 +1,6 @@
 /**
- * Phase 10 integration event taxonomy (contracts only).
+ * Phase 10 integration & webhook contracts (event taxonomy only).
+ * No outbound dispatcher here — emitters stay staff-gated or cron-gated.
  * See reports/phase-10-ecosystem-platform.md
  */
 
@@ -16,7 +17,9 @@ export type IntegrationEventDomain =
 
 export type WebhookSubscriptionContract = {
   subscriberOrgId: string;
+  /** HTTPS endpoint registered server-side after verification challenge. */
   targetUrlHostAllowlist: readonly string[];
   eventTypes: readonly IntegrationEventDomain[];
+  /** HMAC or mTLS class — implementation deferred. */
   authClass: "hmac_sha256_v1" | "mtls_client_cert_v1";
 };
