@@ -17,6 +17,10 @@ const packageRoot = resolve(__dirname, "..");
 const COMMANDS = new Set(["status", "deploy", "generate", "check-schema"]);
 const BUILD_TIME_GENERATE_MESSAGE =
   "[prisma-safe] Build-time Prisma generate detected; DIRECT_URL requirement skipped.";
+const CODEGEN_ONLY_DATABASE_URL =
+  "postgresql://prisma_codegen:prisma_codegen@127.0.0.1:65432/nn_prisma_codegen?schema=public";
+const CODEGEN_ONLY_GENERATE_MESSAGE =
+  "[prisma-safe] Prisma generate detected without runtime database env; using local codegen-only placeholder URLs.";
 
 function usage() {
   console.error(`Usage: node scripts/prisma-safe.mjs <status|deploy|generate|check-schema>
@@ -70,22 +74,35 @@ export function loadPrismaSafeEnvForCommand(
   { argv = process.argv, env = process.env, logger = console, envRoot } = {},
 ) {
   const buildSafeGenerate = isBuildSafePrismaGenerateContext({ command, argv, env });
+  const isGenerate = isPrismaGenerateCommand(command, argv);
   const telemetry = loadRuntimeEnv({
     purpose: `prisma-safe:${command}`,
-    validate: !buildSafeGenerate,
+    validate: !buildSafeGenerate && !isGenerate,
     logger,
     ...(envRoot ? { envRoot } : {}),
   });
 
+  if (isGenerate && !process.env.DATABASE_URL?.trim()) {
+    process.env.DATABASE_URL = CODEGEN_ONLY_DATABASE_URL;
+    if (!process.env.DIRECT_URL?.trim()) {
+      process.env.DIRECT_URL = CODEGEN_ONLY_DATABASE_URL;
+    }
+    logger.log(CODEGEN_ONLY_GENERATE_MESSAGE);
+    return { telemetry, buildSafeGenerate, codegenOnlyGenerate: true };
+  }
+
   if (buildSafeGenerate) {
-    assertDatabaseUrlForBuildGenerate(env);
+    assertDatabaseUrlForBuildGenerate(process.env);
     if (!process.env.DIRECT_URL?.trim()) {
       process.env.DIRECT_URL = process.env.DATABASE_URL;
     }
     logger.log(BUILD_TIME_GENERATE_MESSAGE);
+  } else if (isGenerate) {
+    maskedPostgresTarget(process.env.DATABASE_URL?.trim(), "DATABASE_URL");
+    maskedPostgresTarget(process.env.DIRECT_URL?.trim(), "DIRECT_URL");
   }
 
-  return { telemetry, buildSafeGenerate };
+  return { telemetry, buildSafeGenerate, codegenOnlyGenerate: false };
 }
 
 async function main() {

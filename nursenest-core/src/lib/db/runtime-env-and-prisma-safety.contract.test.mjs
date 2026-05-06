@@ -100,6 +100,25 @@ describe("runtime env loader", () => {
 });
 
 describe("prisma-safe build-time generate env policy", () => {
+  it("allows schema-only Prisma generate when runtime database env is absent", () =>
+    withCleanDbEnv(() =>
+      withTempEnv({}, (envRoot) => {
+        const logs = [];
+        const result = loadPrismaSafeEnvForCommand("generate", {
+          envRoot,
+          logger: { log: (line) => logs.push(line) },
+          argv: ["node", "scripts/prisma-safe.mjs", "generate"],
+        });
+        assert.equal(result.codegenOnlyGenerate, true);
+        assert.match(process.env.DATABASE_URL, /^postgresql:\/\/prisma_codegen:/);
+        assert.equal(process.env.DIRECT_URL, process.env.DATABASE_URL);
+        assert.equal(
+          logs.some((line) => line.includes("using local codegen-only placeholder URLs")),
+          true,
+        );
+      }),
+    ));
+
   it("allows DigitalOcean build Prisma generate with DATABASE_URL only", () =>
     withCleanDbEnv(() =>
       withTempEnv({}, (envRoot) => {
