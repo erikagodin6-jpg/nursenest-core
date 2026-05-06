@@ -277,6 +277,7 @@ export const CONTENT_REGISTRY_IDS = Object.keys(CONTENT_REGISTRY) as ContentRegi
 
 /** Top-level directories allowed under `src/content/`. */
 export const APPROVED_SRC_CONTENT_TOP_LEVEL_DIRS = [
+  "allied-mastery",
   "lessons",
   "pathway-lessons",
   "pre-nursing",

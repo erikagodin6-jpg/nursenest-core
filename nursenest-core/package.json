@@ -266,6 +266,8 @@
     "db:migrate:deploy:safe": "node scripts/prisma-safe.mjs deploy",
     "db:generate:safe": "node scripts/prisma-safe.mjs generate",
     "db:schema:check:safe": "node scripts/prisma-safe.mjs check-schema",
+    "env:validate": "node scripts/validate-env.mjs",
+    "prisma:health": "node scripts/check-prisma-health.mjs",
     "production:preflight": "node scripts/production-preflight.mjs",
     "test:db-env-safety": "node --test src/lib/db/runtime-env-and-prisma-safety.contract.test.mjs"
   },

@@ -35,7 +35,7 @@ function navAuditLocaleCodes(appRoot) {
   const source = fs.readFileSync(sourcePath, "utf8");
   const codes = [];
   const seen = new Set();
-  const entryPattern = /\{\s*code:\s*"([^"]+)"[\s\S]*?tier:\s*"(full|partial)"/g;
+  const entryPattern = /\{[^{}]*code:\s*"([^"]+)"[^{}]*tier:\s*"(full|partial)"[^{}]*\}/g;
   for (const match of source.matchAll(entryPattern)) {
     const code = match[1];
     if (code === "en" || seen.has(code)) continue;
