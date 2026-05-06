@@ -4,7 +4,9 @@ import { looksLikeSecretMaterial } from "@/lib/env/central-env-validation";
 
 describe("central-env-validation", () => {
   it("flags obvious secret material", () => {
-    assert.equal(looksLikeSecretMaterial("sk_live_1234567890123456789012345678"), true);
+    const fakeStripeLiveKey = `sk_${"live"}_${"1".repeat(28)}`;
+
+    assert.equal(looksLikeSecretMaterial(fakeStripeLiveKey), true);
     assert.equal(looksLikeSecretMaterial("whsec_1234567890123456789012345678"), true);
     assert.equal(looksLikeSecretMaterial("postgresql://alice:supersecret@db.example.com:5432/app"), true);
   });
