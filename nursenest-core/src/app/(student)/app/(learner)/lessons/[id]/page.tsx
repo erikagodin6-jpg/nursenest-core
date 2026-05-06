@@ -16,6 +16,10 @@ import { maskUserLabelForWatermark } from "@/lib/premium-protection/mask-user-la
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { logBlockedAccess, logEntitlementMismatch } from "@/lib/entitlements/entitlement-logging";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import {
+  accessScopeForLessonCatalogPages,
+  staffDbSessionGrantsFullLessonCatalogAccess,
+} from "@/lib/entitlements/staff-db-lesson-catalog-access";
 import { prisma } from "@/lib/db";
 import { pathwayLessonReadOmitArgs } from "@/lib/db/pathway-lesson-structural-column-runtime";
 import { pathwayLessonIdFromContentItemTags } from "@/lib/lessons/pathway-lesson-cms-link-tags";
@@ -201,11 +205,15 @@ async function LessonDetailPageInner({ params }: Props) {
   const { id } = await params;
   const session = await getProtectedRouteSession("(student).app.(learner).lessons.[id]");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const entitlement = await resolveEntitlementForPage(userId);
+  const [entitlementResult, staff] = await Promise.all([
+    resolveEntitlementForPage(userId),
+    getStaffSession().catch(() => null),
+  ]);
+  const lessonAccess = accessScopeForLessonCatalogPages(entitlementResult, staff);
   const { t, messages, fallbackMessages } = await getLearnerMarketingBundle();
   const studySettings = await loadStudySettings(userId);
 
-  if (entitlement === "error") {
+  if (lessonAccess === "error") {
     return (
       <div className="space-y-4">
         <p className="text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>
@@ -216,7 +224,7 @@ async function LessonDetailPageInner({ params }: Props) {
     );
   }
 
-  if (!entitlement.hasAccess) {
+  if (!lessonAccess.hasAccess) {
     return (
       <div className="space-y-4">
         <p className="text-sm text-muted">{t("learner.lessons.detail.subscriberRequired")}</p>
@@ -224,6 +232,8 @@ async function LessonDetailPageInner({ params }: Props) {
       </div>
     );
   }
+
+  const entitlement = lessonAccess;
 
   const flags = getServerPremiumProtectionFlags();
   const email = (session?.user as { email?: string | null })?.email ?? null;
@@ -434,7 +444,7 @@ async function LessonDetailPageInner({ params }: Props) {
 
   if (resolvedLesson.kind === "pathway_ok") {
     const record = resolvedLesson.record;
-    const staffSession = Boolean(await getStaffSession());
+    const staffSession = staffDbSessionGrantsFullLessonCatalogAccess(staff);
     safeServerLog("page_lesson_detail", "lesson_detail_source", {
       source: "pathway_lesson",
       pathwayLessonId: id,

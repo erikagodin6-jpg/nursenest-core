@@ -4,11 +4,13 @@ import { redirect } from "next/navigation";
 import { ContentStatus, TierCode } from "@prisma/client";
 import { Suspense } from "react";
 import { getProtectedRouteSession } from "@/lib/auth/protected-route-session";
+import { getStaffSession } from "@/lib/auth/staff-session";
 import { getLearnerMarketingBundle } from "@/lib/learner/learner-marketing-server";
 import { PathwayLessonPagination } from "@/components/pathway-lessons/pathway-lesson-pagination";
 import { lessonAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { getFreemiumSnapshot } from "@/lib/entitlements/freemium";
 import { resolveEntitlementForPage } from "@/lib/entitlements/resolve-entitlement-for-page";
+import { accessScopeForLessonCatalogPages } from "@/lib/entitlements/staff-db-lesson-catalog-access";
 import { maxSafeOffsetPage, parseLessonLibraryLimit } from "@/lib/api/api-pagination-limits";
 import { prisma } from "@/lib/db";
 import { withDatabaseFallbackTimeout } from "@/lib/db/safe-database";
@@ -143,13 +145,17 @@ export default async function LessonsPage({ searchParams }: Props) {
   const { t } = await getLearnerMarketingBundle();
   const session = await getProtectedRouteSession("(student).app.(learner).lessons");
   const userId = (session?.user as { id?: string })?.id ?? "";
-  const entitlement = await resolveEntitlementForPage(userId);
+  const [entitlementResult, staff] = await Promise.all([
+    resolveEntitlementForPage(userId),
+    getStaffSession().catch(() => null),
+  ]);
+  const lessonAccess = accessScopeForLessonCatalogPages(entitlementResult, staff);
 
-  if (entitlement === "error") {
+  if (lessonAccess === "error") {
     return <p className="nn-card p-6 text-sm text-muted">{t("learner.entitlement.verifyFailed")}</p>;
   }
 
-  if (!entitlement.hasAccess) {
+  if (!lessonAccess.hasAccess) {
     const snap = userId ? await getFreemiumSnapshot(userId) : null;
 
     return (
@@ -185,6 +191,8 @@ export default async function LessonsPage({ searchParams }: Props) {
       </div>
     );
   }
+
+  const entitlement = lessonAccess;
 
   lessonsPerfMark("route_start", { route: "app_lessons_hub" });
   try {
