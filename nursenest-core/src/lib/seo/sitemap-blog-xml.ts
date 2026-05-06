@@ -38,7 +38,8 @@ export async function listBlogSitemapEntriesSafe(): Promise<SitemapUrlEntry[]> {
     if (!slug) continue;
     const career = r.careerSlug?.trim().toLowerCase() ?? null;
     if (career === "rn") {
-      rnHubLastMod = !rnHubLastMod || r.updatedAt > rnHubLastMod ? r.updatedAt : rnHubLastMod;
+      const u = r.updatedAt;
+      rnHubLastMod = rnHubLastMod == null || u.getTime() > rnHubLastMod.getTime() ? u : rnHubLastMod;
     }
     const path = expectedCanonicalBlogPath(slug, r.careerSlug);
     const loc = `${origin}${path}`;

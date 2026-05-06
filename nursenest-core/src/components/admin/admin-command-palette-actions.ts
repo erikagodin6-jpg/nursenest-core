@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Database, LayoutDashboard, ListTodo, Wrench } from "lucide-react";
+import { Database, LayoutDashboard, ListTodo, Radar, Wrench } from "lucide-react";
 
 export type AdminCommandPaletteAction = {
   id: string;
@@ -20,6 +20,14 @@ export const ADMIN_COMMAND_PALETTE_ACTIONS: AdminCommandPaletteAction[] = [
     subtitle: "Command center overview",
     Icon: LayoutDashboard,
     accent: "brand",
+  },
+  {
+    id: "observability",
+    href: "/admin/observability",
+    title: "Observability hub",
+    subtitle: "Study usage, subs, content signals, learner roster",
+    Icon: Radar,
+    accent: "info",
   },
   {
     id: "content",

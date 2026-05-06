@@ -4,7 +4,13 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { TrialOnboardingFlow } from "@/components/onboarding/trial-onboarding-flow";
 
-export function OnboardingPageClient({ userId }: { userId: string }) {
+export function OnboardingPageClient({
+  userId,
+  accountCountry,
+}: {
+  userId: string;
+  accountCountry: string;
+}) {
   const router = useRouter();
 
   useEffect(() => {
@@ -34,6 +40,7 @@ export function OnboardingPageClient({ userId }: { userId: string }) {
 
       <TrialOnboardingFlow
         userId={userId}
+        accountCountry={accountCountry}
         onComplete={() => router.replace("/app/start-studying")}
       />
     </div>

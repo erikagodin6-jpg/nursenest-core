@@ -123,8 +123,7 @@ export default async function ExamPathwayOverviewPage({ params }: Props) {
   }
 
   const logAlliedHubDiag =
-    isAlliedHub &&
-    (process.env.NODE_ENV !== "production" || process.env.VITEST === "true" || process.env.NODE_ENV === "test");
+    isAlliedHub && (process.env.VITEST === "true" || process.env.NODE_ENV !== "production");
   if (logAlliedHubDiag) {
     safeServerLog("exam_pathway_hub", "allied_hub_route_diagnostic", {
       pathname,

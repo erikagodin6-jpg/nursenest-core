@@ -1,5 +1,9 @@
 import { QuestionType } from "@prisma/client";
 import { classifyContentItemLesson } from "@/lib/content-quality/classify-lesson";
+import {
+  collectEducationalPlaceholderIds,
+  hasEducationalAiDisclaimerLanguage,
+} from "@/lib/education/educational-content-placeholder-guard";
 import { classifyRationaleWordCount, totalRationaleWordCount } from "@/lib/content-quality/classify-rationale";
 import type { ContentQualityTier } from "@/lib/content-quality/standards";
 import { RATIONALE_MIN_WORDS } from "@/lib/content-quality/standards";
@@ -149,6 +153,15 @@ export function governContentItemLessonPublish(
   if (input.title.trim().length < 4) reasons.push("Title required");
   if (input.summary.trim().length < 10) reasons.push("Summary required");
   if (input.body.trim().length < 10) reasons.push("Body required");
+
+  const stubBundle = `${input.title}\n${input.summary}\n${input.body}`;
+  const stubIds = collectEducationalPlaceholderIds(stubBundle);
+  if (stubIds.length > 0) {
+    reasons.push(`Placeholder or stub language detected: ${stubIds.join(", ")}`);
+  }
+  if (hasEducationalAiDisclaimerLanguage(stubBundle)) {
+    reasons.push("AI meta-disclaimer phrasing is not allowed in published lesson copy");
+  }
 
   const content = bodyStringToContentJson(input.body);
   const q = classifyContentItemLesson(content);

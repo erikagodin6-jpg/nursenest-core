@@ -13,7 +13,6 @@ Look up current values in that file for exports:
 Do **not** duplicate the numeric table here; it drifts from code. For a quick local check:
 
 ```bash
-rg "BLOG_GOVERNANCE_|DIMENSION_WEIGHTS" nursenest-core/src/lib/blog/blog-quality-score.ts
+# From this package root (`nursenest-core/` where `package.json` lives)
+rg "BLOG_GOVERNANCE_|DIMENSION_WEIGHTS" src/lib/blog/blog-quality-score.ts
 ```
-
-(From monorepo root, adjust path if your checkout layout differs.)

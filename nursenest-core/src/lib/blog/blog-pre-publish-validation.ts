@@ -24,6 +24,10 @@ import {
   collectBlogContentQualityIssues,
 } from "@/lib/blog/blog-content-quality-gate";
 import { validateBlogPublishQuality } from "@/lib/blog/blog-publish-quality-validator";
+import {
+  collectEducationalPlaceholderIds,
+  hasEducationalAiDisclaimerLanguage,
+} from "@/lib/education/educational-content-placeholder-guard";
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -58,7 +62,8 @@ export type PrePublishCheckId =
   | "faq_content_when_required"
   | "apa_verification_gating"
   | "blog_content_quality_gate"
-  | "blog_publish_quality_gate";
+  | "blog_publish_quality_gate"
+  | "educational_stub_language";
 
 export type PrePublishSeverity = "block" | "warn";
 
@@ -401,6 +406,25 @@ export async function validateBlogPrePublish(
       severity: "block",
       message: `Article body is too short for publish (${bodyWords} words; target at least ${BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH} substantive words before going live).`,
       fix: "Expand thin sections with clinically substantive depth (not filler), or run Repair from the admin blog job queue.",
+    });
+  }
+
+  const stubScanBundle = [title, excerpt, body, metaTitle, metaDesc, row.schemaSummary ?? ""].join("\n");
+  const stubIds = collectEducationalPlaceholderIds(stubScanBundle);
+  if (stubIds.length > 0) {
+    push(issues, {
+      id: "educational_stub_language",
+      severity: "block",
+      message: `Placeholder or stub language detected (${stubIds.slice(0, 10).join(", ")}${stubIds.length > 10 ? " …" : ""}).`,
+      fix: "Remove template stubs, bracket TODOs, lorem ipsum, “content goes here”, and similar authoring markers before publishing.",
+    });
+  }
+  if (hasEducationalAiDisclaimerLanguage(stubScanBundle)) {
+    push(issues, {
+      id: "educational_stub_language",
+      severity: "block",
+      message: "Meta-disclaimer or model-role phrasing detected (e.g. “as an AI…”) — not acceptable in live clinical education copy.",
+      fix: "Rewrite in neutral clinical-educator voice; remove AI self-reference entirely.",
     });
   }
 

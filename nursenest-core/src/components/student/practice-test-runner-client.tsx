@@ -3043,7 +3043,7 @@ export function PracticeTestRunnerClient({
               <div
                 className={`nn-cat-exam-board-frame nn-cat-session flex min-h-0 flex-1 flex-col overflow-hidden ${chromeClass} nn-cat-session--exam-single`}
               >
-                <div className="nn-practice-exam-split mx-auto flex min-h-0 w-full max-w-[min(112rem,calc(100vw-1.5rem))] flex-1 flex-col gap-4 px-2 pb-1 pt-1 lg:flex-row lg:items-stretch lg:gap-5 lg:px-4 lg:pb-2">
+                <div className="nn-practice-exam-split mx-auto flex min-h-0 w-full min-w-0 max-w-full flex-1 flex-col gap-4 px-2 pb-1 pt-1 lg:flex-row lg:items-stretch lg:gap-5 lg:px-4 lg:pb-2">
                   <div className="nn-practice-exam-split__primary flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
                     {linearExamQuestionCard}
                   </div>

@@ -311,7 +311,7 @@ export function buildAlliedProfessionOverview(input: {
     publicHubVisible: input.publicHubVisible,
     learnerHubVisible: input.learnerHubVisible,
     publicHref: `/allied-health/${input.professionKey}`,
-    learnerHref: `/us/allied/allied-health/lessons?alliedProfession=${encodeURIComponent(input.professionKey)}`,
+    learnerHref: `/allied/allied-health/lessons?alliedProfession=${encodeURIComponent(input.professionKey)}`,
     adminHref: "/admin/modules/allied",
     diagnosticsHref: "/admin/modules/allied",
     warnings,

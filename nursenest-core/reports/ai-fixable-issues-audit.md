@@ -95,42 +95,42 @@
 | Tests | CAT unit/integration; paid cat E2E if configured |
 | Touches | Revenue Y, DB semantics for session |
 
-### ISSUE-007 — Stray lessons page backup
+### ISSUE-007 — Stray lessons page backup — **RESOLVED**
 
 | Field | Value |
 | --- | --- |
 | Category | SAFE_FOR_AI |
-| File | `src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/page.tsx.save` |
+| File | ~~`src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/lessons/page.tsx.save`~~ **removed** |
 | Summary | Backup file beside real `page.tsx`; confuses search and may drift. |
 | Cause | Editor/manual backup. |
 | Risk | Low |
-| Fix | Diff vs `page.tsx`; delete if redundant. |
-| Tests | `npm run typecheck` |
+| Fix | File deleted; content recoverable from git history. Recurrence guarded by `npm run test:source-hygiene`. |
+| Tests | `npm run test:source-hygiene` |
 | Touches | None |
 
-### ISSUE-008 — Duplicate blog threshold docs
+### ISSUE-008 — Duplicate blog threshold docs — **RESOLVED**
 
 | Field | Value |
 | --- | --- |
 | Category | SAFE_FOR_AI |
-| File | `docs/blog-quality-thresholds.md` and `src/lib/blog/blog-quality-score.ts` |
+| File | `docs/blog-quality-thresholds.md` (TS module unchanged) |
 | Summary | Numeric thresholds duplicated; drift risk. |
 | Cause | Human-readable doc. |
 | Risk | Low |
-| Fix | Doc points to single source of truth in TS; trim duplicate table or auto-check in CI. |
-| Tests | Optional doc drift script |
+| Fix | Doc now references only `blog-quality-score.ts` + `rg` hint; numeric table removed. |
+| Tests | N/A (docs) |
 | Touches | Governance copy only |
 
-### ISSUE-009 — Mobile doc dual paths
+### ISSUE-009 — Mobile doc dual paths — **RESOLVED**
 
 | Field | Value |
 | --- | --- |
 | Category | SAFE_FOR_AI |
-| File | `docs/mobile-ux-audit.md`, `reports/mobile-ux-audit.md` |
+| File | `docs/mobile-ux-audit.md` |
 | Summary | Two locations; editors may update wrong file. |
 | Cause | Tooling write limits on `reports/`. |
 | Risk | Low |
-| Fix | Header line: canonical edit path under `docs/`; sync to `reports/` in CI. |
+| Fix | Canonical edit path + mirror instructions added at top of `docs/mobile-ux-audit.md`. |
 | Tests | N/A |
 
 ### ISSUE-010 — ci:verify chain
@@ -226,7 +226,7 @@
 
 ## Counts (this audit)
 
-- SAFE_FOR_AI: 4  
+- SAFE_FOR_AI: 4 (**3 resolved** — ISSUE-007, ISSUE-008, ISSUE-009; ISSUE-016 open)  
 - AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW: 7  
 - DEVELOPER_ONLY: 3  
 - DO_NOT_TOUCH: 1 (plus blanket auth/paywall note)

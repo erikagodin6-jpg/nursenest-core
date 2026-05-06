@@ -52,10 +52,10 @@ test.describe("CAT entrypoint routing", () => {
   });
 
   test("allied CAT page stays pathway-scoped", async ({ page }) => {
-    const catPath = "/us/allied/allied-health/cat";
+    const catPath = "/allied/allied-health/cat";
     await page.goto(catPath, { waitUntil: "domcontentloaded" });
-    await expect(page.locator('a[href="/us/allied/allied-health/lessons"]')).toBeVisible();
-    await expect(page.locator('a[href="/us/allied/allied-health/questions"]')).toBeVisible();
+    await expect(page.locator('a[href="/allied/allied-health/lessons"]')).toBeVisible();
+    await expect(page.locator('a[href="/allied/allied-health/questions"]')).toBeVisible();
 
     const signInForCat = page.locator(`a[href*="callbackUrl=${encodeURIComponent(catPath)}"]`).first();
     if (await signInForCat.isVisible()) {

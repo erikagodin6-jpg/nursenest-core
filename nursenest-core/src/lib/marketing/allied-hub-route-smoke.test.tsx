@@ -48,7 +48,7 @@ describe("allied health pathway hub route smoke", () => {
       });
       assert.ok(resolved, `expected allied hub to resolve for ${row.country}`);
       assert.equal(resolved?.id, row.pathwayId);
-      assert.equal(buildExamPathwayPath(resolved!), `/${row.country}/allied/allied-health`);
+      assert.equal(buildExamPathwayPath(resolved!), ALLIED_GLOBAL_HUB_PATH);
     }
   });
 
@@ -93,67 +93,31 @@ describe("allied health pathway hub route smoke", () => {
     assert.doesNotMatch(html, /Go home/);
   });
 
-  it("/canada/allied/allied-health occupation directory renders profession cards", () => {
+  it("legacy country allied hubs still render full hub shell when reached (redirects normally send users to global)", () => {
     const pathway = getExamPathwayById("ca-allied-core");
     assert.ok(pathway);
-    const hubPath = "/canada/allied/allied-health";
     const html = renderToStaticMarkup(
-      <AlliedHealthPathwayHub
-        pathway={pathway!}
-        hubPath={hubPath}
-        overview={labsModuleOverview}
-        occupationDirectoryHub
-      />,
+      <AlliedHealthPathwayHub pathway={pathway!} hubPath="/canada/allied/allied-health" overview={labsModuleOverview} />,
     );
-    assert.match(html, /data-nn-allied-occupation-directory-hub="1"/);
     assert.match(html, /Choose your Allied Health track/);
-    assert.match(html, /Track prep guide/);
-    assert.match(html, /data-nn-allied-occupation-card-primary="1"/);
-    assert.match(html, /What Allied Health prep includes/);
+    assert.match(html, /Study modes/);
+    assert.match(html, /Lab values and interpretation/);
     assert.doesNotMatch(html, /Homepage content failed to load/);
   });
 
-  it("Canada occupation directory hub does not render ECG or lab module surfaces (even with overview labs)", () => {
-    const pathway = getExamPathwayById("ca-allied-core");
-    assert.ok(pathway);
-    const html = renderToStaticMarkup(
-      <AlliedHealthPathwayHub
-        pathway={pathway!}
-        hubPath="/canada/allied/allied-health"
-        overview={labsModuleOverview}
-        occupationDirectoryHub
-      />,
-    );
-    assert.doesNotMatch(html, /ECG Technician/);
-    assert.doesNotMatch(html, /allied-lesson-cats-heading/);
-    assert.doesNotMatch(html, /allied-study-modes-heading/);
-    assert.doesNotMatch(html, /Lab values and interpretation/);
-    assert.doesNotMatch(html, /Specialized modules/);
-    assert.doesNotMatch(html, /Study modes/);
-    assert.doesNotMatch(html, /Lessons by category/);
-  });
-
-  it("Canada occupation directory is not generic homepage or marketing emergency fallback markup", () => {
-    const pathway = getExamPathwayById("ca-allied-core");
-    assert.ok(pathway);
-    const html = renderToStaticMarkup(
-      <AlliedHealthPathwayHub pathway={pathway!} hubPath="/canada/allied/allied-health" overview={null} occupationDirectoryHub />,
-    );
-    assert.doesNotMatch(html, /MarketingHomeEmergencyFallback/);
-    assert.doesNotMatch(html, /HomeRestoredWithDeferredStats/);
-    assert.match(html, /data-nn-allied-pathway-hub="1"/);
-  });
-
-  it("Canada allied exam hub page wires occupation directory + skips inventory load on Canada main URL", () => {
+  it("allied exam hub + global hub pages load overview and measurement wiring (no Canada-only directory fork)", () => {
     const globalSrc = readFileSync(globalAlliedPagePath, "utf8");
     const src = readFileSync(overviewPagePath, "utf8");
+    const layoutPath = join(process.cwd(), "src/app/(marketing)/(default)/[locale]/[slug]/[examCode]/layout.tsx");
+    const layoutSrc = readFileSync(layoutPath, "utf8");
+    const nextConfig = readFileSync(join(process.cwd(), "next.config.mjs"), "utf8");
     assert.match(globalSrc, /ALLIED_GLOBAL_HUB_PATH/);
-    assert.match(globalSrc, /<AlliedHealthPathwayHub pathway=\{pathway\} hubPath=\{ALLIED_GLOBAL_HUB_PATH\} overview=\{overview\} \/>/);
+    assert.match(globalSrc, /syncMeasurementPreferenceToProfile/);
     assert.match(src, /loadAlliedPathwayHubOverview/);
-    assert.match(src, /alliedCanadaOccupationDirectoryHub/);
-    assert.match(src, /occupationDirectoryHub=\{alliedCanadaOccupationDirectoryHub\}/);
     assert.match(src, /const isAlliedHub = pathway\.roleTrack === "allied" && pathway\.examCode === "allied-health"/);
-    assert.doesNotMatch(src, /permanentRedirect\(buildAlliedGlobalHubPath\(\)\)/);
+    assert.doesNotMatch(src, /alliedCanadaOccupationDirectoryHub/);
+    assert.match(layoutSrc, /legacyCountryAlliedHealthMarketingRedirectDestination/);
+    assert.ok(nextConfig.includes("/canada/allied/allied-health"));
     assert.match(src, /allied_hub_route_diagnostic/);
   });
 

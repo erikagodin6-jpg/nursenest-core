@@ -24,9 +24,13 @@ export const EXAM_QUESTION_DRAFT_STATUS_SQL = Prisma.sql`lower(trim(coalesce(sta
 export const EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL = Prisma.sql`
   correct_answer IS NOT NULL
   AND (
-    (jsonb_typeof(correct_answer::jsonb) = 'array' AND jsonb_array_length(correct_answer::jsonb) > 0)
-    OR (jsonb_typeof(correct_answer::jsonb) = 'string' AND length(trim(correct_answer#>>'{}')) > 0)
-    OR jsonb_typeof(correct_answer::jsonb) IN ('number', 'boolean')
+    CASE jsonb_typeof(correct_answer::jsonb)
+      WHEN 'array' THEN jsonb_array_length(correct_answer::jsonb) > 0
+      WHEN 'string' THEN length(trim(correct_answer#>>'{}')) > 0
+      WHEN 'number' THEN true
+      WHEN 'boolean' THEN true
+      ELSE false
+    END
   )
 `;
 
@@ -56,8 +60,10 @@ export const EXAM_QUESTION_STEM_NON_EMPTY_SQL = Prisma.sql`length(trim(coalesce(
 /** MCQ-style `options` JSON array with at least two entries (matches CAT completeness). */
 export const EXAM_QUESTION_OPTIONS_MIN_TWO_SQL = Prisma.sql`
   options IS NOT NULL
-  AND jsonb_typeof(options::jsonb) = 'array'
-  AND jsonb_array_length(options::jsonb) >= 2
+  AND CASE jsonb_typeof(options::jsonb)
+    WHEN 'array' THEN jsonb_array_length(options::jsonb) >= 2
+    ELSE false
+  END
 `;
 
 export const EXAM_QUESTION_RATIONALE_REQUIRED_SQL = Prisma.sql`length(trim(coalesce(rationale, ''))) > 0`;

@@ -38,6 +38,7 @@ import {
   MessageSquare,
   ShieldCheck,
   SquarePen,
+  Radar,
 } from "lucide-react";
 import { isNavHrefAllowedForStaffTier } from "@/lib/auth/admin-path-policy";
 import { SignOutButton } from "@/components/auth/sign-out-button";
@@ -53,6 +54,7 @@ const GROUPS: NavGroup[] = [
     title: "Overview",
     items: [
       { href: "/admin", label: "Command center", icon: LayoutDashboard },
+      { href: "/admin/observability", label: "Observability hub", icon: Radar },
       { href: "/admin/access", label: "Access & roles", icon: Shield },
       { href: "/admin/learner-qa", label: "Learner QA view", icon: GraduationCap },
     ],

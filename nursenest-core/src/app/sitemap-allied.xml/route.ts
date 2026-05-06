@@ -1,3 +1,4 @@
+import { ALLIED_GLOBAL_HUB_PATH } from "@/lib/allied/allied-global-hub-path";
 import { buildPublicResponseEtag, requestMatchesEtag } from "@/lib/http/public-response-cache";
 import { resolveCanonicalSiteOrigin } from "@/lib/seo/canonical-site";
 import {
@@ -11,7 +12,7 @@ import { SITEMAP_XML_HEADERS } from "@/lib/seo/sitemap-xml-http";
 
 /**
  * Allied-only public urlset: canonical occupation marketing hubs on www (see {@link collectAlliedMarketingUrls}).
- * Never 503 — if filtering removes everything, falls back to `/allied-health` alone.
+ * Never 503 — if filtering removes everything, falls back to the global pathway hub plus `/allied-health`.
  */
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -21,9 +22,14 @@ export async function GET(request: Request): Promise<Response> {
   const raw: SitemapUrlEntry[] = collectAlliedMarketingUrls(origin).map((loc) => ({ loc }));
   let entries = filterPublicSitemapEntries(raw, origin);
   if (entries.length === 0) {
-    entries = filterPublicSitemapEntries([{ loc: `${origin}/allied-health` }], origin);
+    entries = filterPublicSitemapEntries(
+      [{ loc: `${origin}${ALLIED_GLOBAL_HUB_PATH}` }, { loc: `${origin}/allied-health` }],
+      origin,
+    );
   }
-  const xml = buildSitemapUrlsetFromAbsoluteUrls(entries.length > 0 ? entries : [{ loc: `${origin}/allied-health` }]);
+  const xml = buildSitemapUrlsetFromAbsoluteUrls(
+    entries.length > 0 ? entries : [{ loc: `${origin}${ALLIED_GLOBAL_HUB_PATH}` }, { loc: `${origin}/allied-health` }],
+  );
 
   const etag = buildPublicResponseEtag(xml);
   const headers = new Headers(SITEMAP_XML_HEADERS);

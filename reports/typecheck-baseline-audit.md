@@ -71,3 +71,13 @@
 - [x] No blanket `@ts-expect-error` added in this sweep  
 
 See `reports/typecheck-stabilization-guidelines.md` for ongoing rules.
+
+---
+
+## Post-sweep notes (2026-05-06 follow-up)
+
+1. **`npm run db:generate`** — If `UserSelect` (or other models) appears missing columns that exist in `schema.prisma`, regenerate the Prisma client before chasing phantom TS errors. This sweep required generate for `measurementPreference` alignment.
+
+2. **`src/lib/env/env-diagnostics.ts`** — Production profile temporarily overrides `NODE_ENV` for diagnostics. Implemented via `process.env as Record<string, string | undefined>` to satisfy read-only `ProcessEnv` typing without changing runtime behavior.
+
+3. **`npm run typecheck:critical`** — Added `tsconfig.typecheck-critical.json` + script; on this host it completed much faster than full `typecheck` while still following imports from the listed roots.

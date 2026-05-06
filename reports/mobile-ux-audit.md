@@ -1,5 +1,8 @@
 # Mobile UX audit (NurseNest)
 
+**Canonical edit path:** change this file at **`nursenest-core/docs/mobile-ux-audit.md`** only.  
+Copies under `nursenest-core/reports/` or repo root `reports/` are **mirrors** — refresh them after edits (e.g. `cp docs/mobile-ux-audit.md reports/` from package root) or wire CI to sync.
+
 Living document for **premium mobile** goals: no horizontal scroll, readable lesson prose, touch-safe chrome, stable sticky regions, and fast perceived load.
 
 ## Automated coverage

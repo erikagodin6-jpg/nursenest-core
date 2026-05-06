@@ -189,10 +189,10 @@ export function LearnerShellDesktopStudyLinks({
               }}
               className={
                 active
-                  ? "nn-marketing-body-sm max-w-full min-w-0 rounded-full border border-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--bg-card))] px-2.5 py-1.5 text-start font-medium leading-snug text-[var(--semantic-brand)] transition-colors duration-150 sm:px-3 sm:py-2"
+                  ? "nn-marketing-body-sm max-w-full min-h-10 min-w-0 touch-manipulation rounded-full border border-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--bg-card))] px-2.5 py-1.5 text-start font-medium leading-snug text-[var(--semantic-brand)] transition-colors duration-150 sm:min-h-11 sm:px-3 sm:py-2"
                   : isPrimarySurface
-                    ? "nn-marketing-body-sm max-w-full min-w-0 rounded-full px-2.5 py-1.5 text-start leading-snug transition-colors duration-150 sm:px-3 sm:py-2 nn-learner-shell-link--primary hover:text-primary"
-                    : "nn-marketing-body-sm max-w-full min-w-0 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-2.5 py-1.5 text-start font-medium leading-snug text-[var(--theme-body-text)] transition-colors duration-150 hover:bg-[var(--accent-soft)] hover:text-primary sm:px-3 sm:py-2"
+                    ? "nn-marketing-body-sm max-w-full min-h-10 min-w-0 touch-manipulation rounded-full px-2.5 py-1.5 text-start leading-snug transition-colors duration-150 sm:min-h-11 sm:px-3 sm:py-2 nn-learner-shell-link--primary hover:text-primary"
+                    : "nn-marketing-body-sm max-w-full min-h-10 min-w-0 touch-manipulation rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-2.5 py-1.5 text-start font-medium leading-snug text-[var(--theme-body-text)] transition-colors duration-150 hover:bg-[var(--accent-soft)] hover:text-primary sm:min-h-11 sm:px-3 sm:py-2"
               }
             >
               {item.label}
@@ -222,7 +222,7 @@ export function LearnerShellMobileBottomNav({
       aria-label="Learner bottom navigation"
       data-nn-learner-shell-study-nav=""
     >
-      <div className="mx-auto flex max-w-6xl flex-wrap justify-center gap-1">
+      <div className="mx-auto flex max-w-6xl flex-wrap justify-center gap-1.5 px-0.5">
         <Link
           href={pathwayHref}
           title={pathwayLabel}
@@ -235,7 +235,7 @@ export function LearnerShellMobileBottomNav({
               surface: "learner_bottom_nav",
             });
           }}
-          className="nn-header-tier-pill nn-header-tier-pill--compact inline-flex min-h-11 max-w-[min(100%,8rem)] shrink-0 items-center justify-center truncate sm:max-w-none"
+          className="nn-header-tier-pill nn-header-tier-pill--compact inline-flex min-h-12 max-w-[min(100%,10rem)] shrink-0 touch-manipulation items-center justify-center truncate px-2 sm:max-w-none"
           aria-label={`Open your pathway hub: ${pathwayLabel}`}
         >
           {pathwayLabel}
@@ -259,17 +259,17 @@ export function LearnerShellMobileBottomNav({
                 }}
                 className={
                   active
-                    ? "inline-flex min-h-11 min-w-0 max-w-[5.25rem] flex-1 items-center justify-center rounded-full border border-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--bg-card))] px-1.5 text-[11px] font-semibold leading-tight text-[var(--semantic-brand)] sm:max-w-none sm:px-2 sm:text-xs"
+                    ? "inline-flex min-h-12 min-w-0 max-w-[min(46vw,10rem)] flex-1 touch-manipulation items-center justify-center rounded-full border border-[var(--semantic-brand)] bg-[color-mix(in_srgb,var(--semantic-brand)_10%,var(--bg-card))] px-2 text-center text-xs font-semibold leading-snug text-[var(--semantic-brand)] sm:max-w-none sm:px-2.5"
                   : isPrimarySurface
-                    ? "nn-learner-shell-bottom-link--primary inline-flex min-h-11 min-w-0 max-w-[5.25rem] flex-1 items-center justify-center rounded-full px-1.5 text-[11px] leading-tight text-[var(--theme-body-text)] sm:max-w-none sm:px-2 sm:text-xs"
-                    : "inline-flex min-h-11 min-w-0 max-w-[5.25rem] flex-1 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-1.5 text-[11px] font-semibold leading-tight text-[var(--theme-body-text)] sm:max-w-none sm:px-2 sm:text-xs"
+                    ? "nn-learner-shell-bottom-link--primary inline-flex min-h-12 min-w-0 max-w-[min(46vw,10rem)] flex-1 touch-manipulation items-center justify-center rounded-full px-2 text-center text-xs leading-snug text-[var(--theme-body-text)] sm:max-w-none sm:px-2.5"
+                    : "inline-flex min-h-12 min-w-0 max-w-[min(46vw,10rem)] flex-1 touch-manipulation items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-card)] px-2 text-center text-xs font-semibold leading-snug text-[var(--theme-body-text)] sm:max-w-none sm:px-2.5"
               }
             >
               {item.label}
             </Link>
           );
         })}
-        <SignOutButton className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-full border border-[var(--semantic-danger)]/35 bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--bg-card))] px-2 text-[11px] font-semibold leading-tight text-[var(--semantic-danger)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 sm:px-2.5 sm:text-xs" />
+        <SignOutButton className="inline-flex min-h-12 shrink-0 touch-manipulation items-center justify-center rounded-full border border-[var(--semantic-danger)]/35 bg-[color-mix(in_srgb,var(--semantic-danger)_8%,var(--bg-card))] px-2.5 text-xs font-semibold leading-snug text-[var(--semantic-danger)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 sm:px-3" />
       </div>
     </nav>
   );

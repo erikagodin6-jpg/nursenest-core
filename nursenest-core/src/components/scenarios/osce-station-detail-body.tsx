@@ -88,7 +88,7 @@ export function OsceStationDetailBody({ station }: { station: OSCESkillStation }
         </section>
       ) : null}
 
-      <ScenarioRationalePanel title="Passing criteria" body={station.passingCriteria} />
+      <ScenarioRationalePanel title="Passing criteria" body={station.passingCriteria ?? ""} />
 
       {station.clinicalPearls?.length ? (
         <section className="space-y-2">
@@ -105,7 +105,11 @@ export function OsceStationDetailBody({ station }: { station: OSCESkillStation }
         <section className="space-y-4">
           <h2 className="text-lg font-semibold text-[var(--semantic-text-primary)]">Examiner questions</h2>
           {station.examinerQuestions.map((q, i) => (
-            <ScenarioRationalePanel key={i} title={q.question} body={q.answer} />
+            <ScenarioRationalePanel
+              key={i}
+              title={q.question}
+              body={[q.expectedAnswer, q.rationale].filter(Boolean).join("\n\n") || ""}
+            />
           ))}
         </section>
       ) : null}

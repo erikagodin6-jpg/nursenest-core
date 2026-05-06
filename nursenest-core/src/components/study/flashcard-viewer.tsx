@@ -227,9 +227,9 @@ export function FlashcardBack({ card, onRate, submitting }: FlashcardBackProps) 
 function ProgressBar({ current, total }: { current: number; total: number }) {
   const pct = total > 0 ? Math.min(100, Math.round((current / total) * 100)) : 0;
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex min-w-0 items-center gap-3">
       <div
-        className="relative h-1.5 flex-1 overflow-hidden rounded-full"
+        className="relative h-1.5 min-w-0 flex-1 overflow-hidden rounded-full"
         style={{
           background:
             "color-mix(in srgb, var(--theme-primary) 12%, var(--bg-page, #f9fafb))",

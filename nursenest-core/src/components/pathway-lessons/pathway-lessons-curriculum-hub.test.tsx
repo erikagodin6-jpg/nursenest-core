@@ -102,7 +102,7 @@ describe("PathwayLessonsCurriculumHub", () => {
       { pathwayId: "ca-rn-nclex-rn", base: "/canada/rn/nclex-rn/lessons" },
       { pathwayId: "ca-rpn-rex-pn", base: "/canada/pn/rex-pn/lessons" },
       { pathwayId: "us-np-fnp", base: "/us/np/fnp/lessons" },
-      { pathwayId: "ca-allied-core", base: "/canada/allied/allied-health/lessons" },
+      { pathwayId: "ca-allied-core", base: "/allied/allied-health/lessons" },
       { pathwayId: "us-rn-new-grad-transition", base: "/us/rn/new-grad-transition/lessons" },
     ];
     const lessons = [

@@ -131,3 +131,12 @@ test("support staff can access page copy editor and marketing public content API
 test("content staff can access page copy editor (not support-only)", () => {
   assert.equal(isPathAllowedForStaffTier("content", "/admin/content/page-copy"), true);
 });
+
+test("observability hub: support + content can open UI; learner roster API blocked for content", () => {
+  assert.equal(isPathAllowedForStaffTier("support", "/admin/observability"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/observability/hub"), true);
+  assert.equal(isPathAllowedForStaffTier("support", "/api/admin/observability/learners"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/admin/observability"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/api/admin/observability/hub"), true);
+  assert.equal(isPathAllowedForStaffTier("content", "/api/admin/observability/learners"), false);
+});

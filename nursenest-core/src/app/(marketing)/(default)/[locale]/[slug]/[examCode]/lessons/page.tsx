@@ -241,7 +241,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
       if (q) qs.set("q", q);
       if (page > 1) qs.set("page", String(page));
       const apRaw = typeof sp.alliedProfession === "string" ? sp.alliedProfession.trim().toLowerCase() : "";
-      let alliedProfForMeta: ReturnType<typeof getAlliedProfessionByProfessionKey> = null;
+      let alliedProfForMeta: ReturnType<typeof getAlliedProfessionByProfessionKey> = undefined;
       if (apRaw && isAlliedMarketingCorePathwayId(pathway.id)) {
         alliedProfForMeta = getAlliedProfessionByProfessionKey(apRaw);
         if (alliedProfForMeta) qs.set(ALLIED_PROFESSION_QUERY_PARAM, alliedProfForMeta.professionKey);

@@ -40,6 +40,7 @@ const SUPER_ONLY_PREFIXES = [
 const CONTENT_FORBIDDEN_PREFIXES = [
   "/admin/users",
   "/api/admin/users",
+  "/api/admin/observability/learners",
   "/admin/subscriptions",
   "/admin/analytics/subscriptions",
   "/api/admin/analytics/subscriptions",
@@ -51,6 +52,8 @@ const CONTENT_FORBIDDEN_PREFIXES = [
  */
 const SUPPORT_ALLOWED_PREFIXES = [
   "/admin/access",
+  "/admin/observability",
+  "/api/admin/observability",
   "/admin/analytics",
   "/admin/automation-logs",
   "/admin/content-bulk",

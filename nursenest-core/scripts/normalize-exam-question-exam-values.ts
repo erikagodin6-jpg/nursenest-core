@@ -4,16 +4,31 @@
  * (see `src/lib/content-quality/exam-question-exam-normalization.ts`).
  *
  * Usage (from nursenest-core/):
- *   npx tsx scripts/normalize-exam-question-exam-values.ts
  *   npx tsx scripts/normalize-exam-question-exam-values.ts --dry-run
+ *   npx tsx scripts/normalize-exam-question-exam-values.ts
  *   npx tsx scripts/normalize-exam-question-exam-values.ts --dry-run --json
  */
 
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import { parse as parseDotenv } from "dotenv";
 import { PrismaClient } from "@prisma/client";
 import {
   normalizeExamQuestionExamForStorage,
   orderExamQuestionExamRewritesForBackfill,
 } from "../src/lib/content-quality/exam-question-exam-normalization";
+
+function loadDotenvFromPackageRoot(): void {
+  const root = process.cwd();
+  for (const name of [".env", ".env.local", ".env.production"]) {
+    const p = resolve(root, name);
+    if (!existsSync(p)) continue;
+    const parsed = parseDotenv(readFileSync(p, "utf8"));
+    for (const [k, v] of Object.entries(parsed)) {
+      if (process.env[k] === undefined) process.env[k] = v;
+    }
+  }
+}
 
 const prisma = new PrismaClient();
 
@@ -42,7 +57,13 @@ function printDist(label: string, rows: CountRow[]): void {
 }
 
 async function main(): Promise<void> {
+  loadDotenvFromPackageRoot();
   const dryRun = process.argv.includes("--dry-run");
+
+  if (!process.env.DATABASE_URL?.trim()) {
+    console.log("DATABASE_URL is unset — nothing to do.");
+    process.exit(0);
+  }
 
   const before = await examDistribution();
   printDist("BEFORE (exam → count)", before);

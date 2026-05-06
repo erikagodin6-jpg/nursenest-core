@@ -183,7 +183,7 @@ test.describe("Marketing study surfaces (env-gated)", () => {
     { path: "/canada/pn/rex-pn/lessons", minLessonLinks: 12 },
     { path: "/us/rn/nclex-rn/lessons", minLessonLinks: 12 },
     { path: "/us/np/fnp/lessons", minLessonLinks: 1 },
-    { path: "/us/allied/allied-health/lessons", minLessonLinks: 1 },
+    { path: "/allied/allied-health/lessons", minLessonLinks: 1 },
     { path: "/us/rn/new-grad-transition/lessons", minLessonLinks: 1 },
   ];
 

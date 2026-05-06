@@ -10,7 +10,7 @@ function lessonHubForExam(exam: string, country: "US" | "CA" | "unspecified"): s
   const e = exam.toLowerCase();
   if (/rex-?pn/.test(e)) return "/canada/rpn/rex-pn/lessons";
   if (country === "CA" && /nclex|rn/.test(e)) return "/canada/rn/nclex-rn/lessons";
-  if (/allied/.test(e)) return "/us/allied/lessons";
+  if (/allied/.test(e)) return "/allied/allied-health/lessons";
   return "/us/rn/nclex-rn/lessons";
 }
 

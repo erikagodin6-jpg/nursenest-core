@@ -69,7 +69,7 @@ test("US Allied lesson areas use occupation categories and stable slugs", () => 
   assert.equal(imaging?.id, "radiologic-technology");
   assert.equal(
     marketingPathwayLessonsCategoryPath(pathway, imaging!.slug),
-    "/us/allied/allied-health/lessons/radiologic-technology",
+    "/allied/allied-health/lessons/radiologic-technology",
   );
 
   const counts = countPathwayMarketingHubLessonsByCategoryForPathway(pathway.id);

@@ -1,6 +1,10 @@
 import { countWordsFromHtml } from "@/lib/blog/blog-word-count";
 import { isBlogSeoPillarDepthProfile } from "@/lib/blog/blog-seo-depth-profile";
 import type { BlogPostIntent, BlogPostTemplate } from "@prisma/client";
+import {
+  collectEducationalPlaceholderIds,
+  hasEducationalAiDisclaimerLanguage,
+} from "@/lib/education/educational-content-placeholder-guard";
 
 export type BlogGenerationOutputGateMode = "draft_storage" | "publish_or_schedule";
 
@@ -21,17 +25,6 @@ export type BlogGenerationOutputGateInput = {
 export type BlogGenerationOutputGateResult =
   | { ok: true; wordCount: number; minRequired: number }
   | { ok: false; wordCount: number; minRequired: number; reasons: string[] };
-
-const PLACEHOLDER_SNIPPETS = [
-  /\blorem ipsum\b/i,
-  /\b\[insert\b/i,
-  /\btodo:\b/i,
-  /\bplaceholder\b/i,
-  /\bTBD\b/,
-  /\{\{[\s\S]*?\}\}/,
-];
-
-const AI_DISCLAIMER_SNIPPETS = [/\bas an ai\b/i, /\bas a language model\b/i, /\bi cannot\b.*\bmedical advice\b/i];
 
 function depthFromInput(input: BlogGenerationOutputGateInput): "standard" | "pillar" {
   if (input.contentDepth) return input.contentDepth;
@@ -85,18 +78,13 @@ export function evaluateBlogGenerationOutputGate(input: BlogGenerationOutputGate
     reasons.push(`body_below_depth_minimum:word_count=${wc};minimum=${minRequired};depth=${depth}`);
   }
 
-  const plain = body.replace(/<[^>]+>/g, " ").toLowerCase();
-  for (const re of PLACEHOLDER_SNIPPETS) {
-    if (re.test(plain)) {
-      reasons.push("placeholder_language_detected");
-      break;
-    }
+  const stubBundle = [title, slug, meta, seoTitle, body].join("\n");
+  const stubIds = collectEducationalPlaceholderIds(stubBundle);
+  if (stubIds.length > 0) {
+    reasons.push(`placeholder_language_detected:${stubIds.slice(0, 8).join(",")}`);
   }
-  for (const re of AI_DISCLAIMER_SNIPPETS) {
-    if (re.test(plain)) {
-      reasons.push("ai_disclaimer_language_detected");
-      break;
-    }
+  if (hasEducationalAiDisclaimerLanguage(stubBundle)) {
+    reasons.push("ai_disclaimer_language_detected");
   }
   if (hasEmptySectionSignals(body)) {
     reasons.push("empty_or_trivial_section_under_heading");

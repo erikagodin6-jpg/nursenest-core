@@ -38,7 +38,6 @@ export async function inferContinueStudyFromActivity(
         take: 12,
         select: {
           lastReviewedAt: true,
-          updatedAt: true,
           flashcard: {
             select: {
               category: { select: { slug: true, topicCode: true } },
@@ -71,7 +70,8 @@ export async function inferContinueStudyFromActivity(
     }
 
     for (const f of fcRows) {
-      const at = f.lastReviewedAt ?? f.updatedAt;
+      if (!f.lastReviewedAt) continue;
+      const at = f.lastReviewedAt;
       const cat = f.flashcard.category;
       const topicSlug = normalizeTopicSlugInput(cat.topicCode?.trim() || cat.slug || "");
       consider({

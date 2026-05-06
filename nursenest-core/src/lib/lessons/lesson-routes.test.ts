@@ -109,7 +109,7 @@ describe("buildLessonPath", () => {
         { countrySlug: "us", roleTrack: "allied", examCode: "allied-health" },
         "infection-control",
       ),
-      "/us/allied/allied-health/lessons/infection-control",
+      "/allied/allied-health/lessons/infection-control",
     );
   });
 });
@@ -141,20 +141,20 @@ describe("marketingPathwaySubpathBesideExamHub", () => {
 describe("allied occupation marketing query helpers", () => {
   it("withAlliedProfessionMarketingQuery sets alliedProfession on internal paths", () => {
     assert.equal(
-      withAlliedProfessionMarketingQuery("/us/allied/allied-health/questions", "medical-assistant"),
-      `/us/allied/allied-health/questions?${ALLIED_PROFESSION_QUERY_PARAM}=medical-assistant`,
+      withAlliedProfessionMarketingQuery("/allied/allied-health/questions", "medical-assistant"),
+      `/allied/allied-health/questions?${ALLIED_PROFESSION_QUERY_PARAM}=medical-assistant`,
     );
   });
 
   it("mergeMarketingPathQuery preserves existing params and adds q", () => {
-    const base = `/us/allied/allied-health/lessons?${ALLIED_PROFESSION_QUERY_PARAM}=psw-hca`;
+    const base = `/allied/allied-health/lessons?${ALLIED_PROFESSION_QUERY_PARAM}=psw-hca`;
     assert.equal(mergeMarketingPathQuery(base, { q: "Safety" }).includes("q=Safety"), true);
     assert.equal(mergeMarketingPathQuery(base, { q: "Safety" }).includes(`${ALLIED_PROFESSION_QUERY_PARAM}=psw-hca`), true);
   });
 
   it("alliedHealthLessonsIndexPath embeds profession key for known professions", () => {
     const href = alliedHealthLessonsIndexPath("dental-assistant");
-    assert.ok(href.includes("/us/allied/allied-health/lessons"));
+    assert.ok(href.includes("/allied/allied-health/lessons"));
     assert.ok(href.includes(`${ALLIED_PROFESSION_QUERY_PARAM}=dental-assistant`));
   });
 

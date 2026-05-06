@@ -42,6 +42,13 @@ test("canonicalExamQuestionExamForDbWrite matches normalize for family column ou
   assert.equal(canonicalExamQuestionExamForDbWrite("rex-pn"), "REx-PN");
 });
 
+test("legacy aliases: condensed and mixed-case NP exam tokens", () => {
+  assert.equal(normalizeExamQuestionExamForStorage("np-fnp"), "NP-FNP");
+  assert.equal(normalizeExamQuestionExamForStorage("NCLEXRN"), "NCLEX-RN");
+  assert.equal(normalizeExamQuestionExamForStorage("nclexpn"), "NCLEX-PN");
+  assert.equal(normalizeExamQuestionExamForStorage("rexpn"), "REx-PN");
+});
+
 test("orderExamQuestionExamRewritesForBackfill runs chained from-values before their to becomes a from", () => {
   const ordered = orderExamQuestionExamRewritesForBackfill([
     { from: "b", to: "c" },

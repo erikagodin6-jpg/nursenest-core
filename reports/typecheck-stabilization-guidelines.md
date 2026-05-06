@@ -48,13 +48,11 @@ Audience: engineers shipping learner, billing, and admin surfaces. Complements `
 ---
 
 ## Prisma typing guidance
-
-1. After **`prisma generate`**, if types drift, prefer **relation-shaped** updates over guessing scalar column names.  
-2. **`groupBy`**: confirm `orderBy` + `take`/`skip` rules for your Prisma minor version; validate with `tsc` locally.  
-3. **`_count`**: access via a small helper if Prisma union for `_count` is `true | { … }`—keeps call sites readable.  
-4. **Do not change `schema.prisma`** in a typecheck-only PR unless the task explicitly includes migrations.
-
----
+1. **After pulling schema changes:** run `npm run db:generate` before `typecheck` so `UserSelect` and other shapes match `schema.prisma`.
+2. After **`prisma generate`**, if types drift, prefer **relation-shaped** updates over guessing scalar column names.
+3. **`groupBy`**: confirm `orderBy` + `take`/`skip` rules for your Prisma minor version; validate with `tsc` locally.
+4. **`_count`**: access via a small helper if Prisma union for `_count` is `true | { … }`—keeps call sites readable.
+5. **Do not change `schema.prisma`** in a typecheck-only PR unless the task explicitly includes migrations.
 
 ## Stripe / payment safety
 

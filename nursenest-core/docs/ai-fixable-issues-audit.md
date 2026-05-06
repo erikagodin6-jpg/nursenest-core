@@ -226,7 +226,7 @@
 
 ## Counts (this audit)
 
-- SAFE_FOR_AI: 4  
+- SAFE_FOR_AI: 4 (**3 resolved** — ISSUE-007, ISSUE-008, ISSUE-009; ISSUE-016 open)  
 - AI_CAN_PREP_BUT_DEV_SHOULD_REVIEW: 7  
 - DEVELOPER_ONLY: 3  
 - DO_NOT_TOUCH: 1 (plus blanket auth/paywall note)

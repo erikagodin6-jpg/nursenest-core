@@ -24,7 +24,12 @@ test("collectAlliedMarketingUrls emits only HTTPS-ready paths (no query strings)
     assert.equal(parsed.hostname, "www.nursenest.ca");
     assert.equal(parsed.search, "");
     assert.equal(parsed.hash, "");
-    assert.ok(parsed.pathname === "/allied-health" || parsed.pathname.startsWith("/allied-health/"));
+    assert.ok(
+      parsed.pathname === "/allied-health" ||
+        parsed.pathname.startsWith("/allied-health/") ||
+        parsed.pathname === "/allied/allied-health" ||
+        parsed.pathname.startsWith("/allied/allied-health/"),
+    );
   }
 });
 
@@ -50,7 +55,10 @@ test("allied sitemap route builds valid urlset XML from filtered entries", () =>
     assert.doesNotMatch(loc, /^http:\/\//);
     assert.doesNotMatch(loc, /allied\.nursenest\.ca/i);
   }
-  assert.ok(locs.some((l) => l.includes("/allied-health/")), "expected at least one occupation hub loc");
+  assert.ok(
+    locs.some((l) => l.includes("/allied-health/") || l.includes("/allied/allied-health")),
+    "expected at least one allied marketing or pathway hub loc",
+  );
 });
 
 test("sitemap-allied.xml route handler wires collector + filter + urlset builder", () => {

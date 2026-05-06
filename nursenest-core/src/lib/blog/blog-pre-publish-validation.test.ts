@@ -165,4 +165,14 @@ describe("validateBlogPrePublish + generated draft quality", () => {
     assert.equal(res.okToPublish, false);
     assert.ok(res.blocking.some((i) => i.id === "content_nursing_implications"));
   });
+
+  it("blocks publish when placeholder language appears in the article bundle", async () => {
+    stubSlugUniqueCheck();
+    const row = baseRow({
+      body: `${longWords(BLOG_ARTICLE_TARGET_WORDS_FOR_PUBLISH + 40)}<p>Lorem ipsum dolor sit amet.</p>`,
+    });
+    const res = await validateBlogPrePublish(row, row.id, { prisma: testPrisma });
+    assert.equal(res.okToPublish, false);
+    assert.ok(res.blocking.some((i) => i.id === "educational_stub_language"));
+  });
 });

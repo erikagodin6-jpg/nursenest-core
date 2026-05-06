@@ -1,4 +1,4 @@
-import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-pathways-catalog";
+import { EXAM_PATHWAYS } from "../exam-pathways/exam-pathways-catalog";
 
 /**
  * Normalize `ExamQuestion.exam` strings for storage and pathway `exam IN (contentExamKeys)` matching.
@@ -36,6 +36,12 @@ const LEGACY_EXAM_ALIAS_BY_NORM: Readonly<Record<string, string>> = {
   "np-advanced": "NP",
   aanp: "FNP",
   "aanp-fnp": "NP-FNP",
+  /** DB / import typos that do not normalize to pathway keys via spacing alone */
+  "np-fnp": "NP-FNP",
+  nclexrn: "NCLEX-RN",
+  nclexpn: "NCLEX-PN",
+  /** Some exports used condensed tokens */
+  rexpn: "REx-PN",
 };
 
 /** Allied board / discipline codes stored on `ExamQuestion.exam` (tier is often `allied` or profession-specific). */

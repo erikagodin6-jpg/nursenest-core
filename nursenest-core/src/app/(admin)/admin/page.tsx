@@ -18,7 +18,11 @@ function AdminPageShell({ children }: { children: ReactNode }) {
       <header className="mb-8 space-y-2">
         <h1 className="text-2xl font-bold tracking-tight text-[var(--semantic-text-primary)] md:text-3xl">Admin Dashboard</h1>
         <p className="max-w-2xl text-sm text-[var(--semantic-text-secondary)]">
-          Operations, content, and platform health for authenticated staff.
+          Operations, content, and platform health for authenticated staff. Open the{" "}
+          <Link className="font-semibold text-[var(--semantic-brand)] underline" href="/admin/observability">
+            observability hub
+          </Link>{" "}
+          for study usage, subscriptions, and bounded learner roster (support/super).
         </p>
       </header>
       {children}

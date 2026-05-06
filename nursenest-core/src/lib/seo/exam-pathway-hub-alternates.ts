@@ -1,3 +1,4 @@
+import { isAlliedHealthPathway } from "@/lib/allied/allied-global-pathway";
 import { buildExamPathwayPath } from "@/lib/exam-pathways/build-exam-pathway-path";
 import { EXAM_PATHWAYS } from "@/lib/exam-pathways/exam-pathways-catalog";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
@@ -26,6 +27,11 @@ export function examPathwayRegionalHreflang(pathway: ExamPathwayDefinition): Rec
     if (pathway.countrySlug === "nigeria") out["en-NG"] = selfUrl;
     if (pathway.countrySlug === "saudi-arabia") out["ar-SA"] = selfUrl;
     return filterPublicHreflangRecord(out, "seo", "exam_pathway_hreflang_rejected");
+  }
+
+  if (isAlliedHealthPathway(pathway)) {
+    const url = absoluteUrl(buildExamPathwayPath(pathway));
+    return filterPublicHreflangRecord({ "x-default": url }, "seo", "exam_pathway_hreflang_rejected");
   }
 
   const siblings = EXAM_PATHWAYS.filter(
@@ -63,6 +69,10 @@ export async function examPathwayTopicRegionalHreflang(
   topicSegment: string,
 ): Promise<Record<string, string>> {
   const { getPathwayTopicProgrammaticRow } = await import("@/lib/seo/pathway-topic-programmatic-registry");
+  if (isAlliedHealthPathway(pathway)) {
+    const url = absoluteUrl(buildExamPathwayPath(pathway, topicSegment));
+    return filterPublicHreflangRecord({ "x-default": url }, "seo", "exam_pathway_topic_hreflang_rejected");
+  }
   const siblings = EXAM_PATHWAYS.filter(
     (p) =>
       p.roleTrack === pathway.roleTrack &&

@@ -96,29 +96,35 @@ async function loadExamRowsByIds(
   const uniq = [...new Set(ids)];
   for (let i = 0; i < uniq.length; i += PRISMA_ID_IN_CHUNK_SIZE) {
     const chunk = uniq.slice(i, i + PRISMA_ID_IN_CHUNK_SIZE);
-    const rows = await withDatabaseFallback(
-      () =>
-        prisma.examQuestion.findMany({
-          where: {
-            AND: [questionAccessWhere(entitlement), { id: { in: chunk } }, regionWhereForCountry(country)],
-          },
-          select: {
-            id: true,
-            stem: true,
-            options: true,
-            correctAnswer: true,
-            questionType: true,
-            rationale: true,
-            distractorRationales: true,
-            incorrectAnswerRationale: true,
-            correctAnswerExplanation: true,
-          },
-          take: takeForIdIn(chunk),
+    const rows = await withDatabaseFallback(async (): Promise<BankExamRowForFlashcard[]> => {
+      const raw = await prisma.examQuestion.findMany({
+        where: {
+          AND: [questionAccessWhere(entitlement), { id: { in: chunk } }, regionWhereForCountry(country)],
+        },
+        select: {
+          id: true,
+          stem: true,
+          options: true,
+          correctAnswer: true,
+          questionType: true,
+          rationale: true,
+          distractorRationales: true,
+          incorrectAnswerRationale: true,
+          correctAnswerExplanation: true,
+        },
+        take: takeForIdIn(chunk),
+      });
+      return raw.map(
+        (r): BankExamRowForFlashcard => ({
+          ...r,
+          distractorRationales: r.distractorRationales ?? null,
+          incorrectAnswerRationale: r.incorrectAnswerRationale ?? null,
+          correctAnswerExplanation: r.correctAnswerExplanation ?? null,
         }),
-      [] as BankExamRowForFlashcard[],
-    );
+      );
+    }, [] as BankExamRowForFlashcard[]);
     for (const r of rows) {
-      out.set(r.id, r as BankExamRowForFlashcard);
+      out.set(r.id, r);
     }
   }
   return out;

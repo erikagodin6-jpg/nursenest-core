@@ -4501,7 +4501,10 @@ html[data-theme="storm-slate"] .nn-lesson-article-flow .nn-lesson-section-card.n
 .nn-question-session {
   margin-left: auto;
   margin-right: auto;
-  max-width: 42rem;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: min(42rem, 100%);
+  min-width: 0;
   padding: 1.25rem 1rem 1.75rem;
 }
 
@@ -4515,7 +4518,10 @@ html[data-theme="storm-slate"] .nn-lesson-article-flow .nn-lesson-section-card.n
 .nn-question-session--split {
   margin-left: auto;
   margin-right: auto;
+  box-sizing: border-box;
+  width: 100%;
   max-width: min(112rem, 100%);
+  overflow-x: clip;
   display: grid;
   gap: 1.25rem;
   align-items: start;
@@ -4621,6 +4627,8 @@ html[data-theme="storm-slate"] .nn-lesson-article-flow .nn-lesson-section-card.n
   box-shadow: var(--semantic-shadow-soft, 0 1px 3px color-mix(in srgb, var(--semantic-text-primary) 8%, transparent));
   position: relative;
   z-index: 1;
+  min-width: 0;
+  max-width: 100%;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
@@ -7070,6 +7078,51 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   }
 }
 
+/*
+ * Narrow phones (including landscape): short-height exam compaction above must not shrink
+ * answer rows below comfortable touch targets or crush vertical spacing between choices.
+ */
+@media (max-width: 639.98px) {
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt-list,
+  .nn-cat-question-card--exam-stack .nn-cat-opt-list {
+    gap: 12px;
+  }
+
+  .nn-cat-exam-chrome .nn-cat-session.nn-cat-session--exam-single .nn-cat-opt,
+  .nn-cat-question-card--exam-stack .nn-cat-opt {
+    min-height: 3rem;
+    padding: 0.875rem 1rem;
+  }
+
+  .nn-cat-opt {
+    min-height: 3rem;
+  }
+
+  .nn-practice-opt-list {
+    gap: 12px;
+  }
+
+  .nn-practice-opt {
+    min-height: 3rem;
+    padding: 0.875rem 1rem;
+  }
+
+  .nn-practice-rationale-panel__scroll {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .nn-practice-rationale-section__body {
+    font-size: clamp(15px, 3.8vw, 16px);
+    line-height: 1.55;
+  }
+
+  .nn-cat-opt--interactive,
+  .nn-practice-opt {
+    touch-action: manipulation;
+  }
+}
+
 @media (min-width: 1024px) and (max-height: 900px) {
   .nn-practice-session {
     height: calc(100dvh - 88px);
@@ -7244,6 +7297,9 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   border: 1px solid var(--semantic-border-soft);
   background: var(--semantic-surface-elevated, var(--semantic-surface));
   padding: 32px;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
 }
 
 @media (max-width: 639px) {
@@ -7276,8 +7332,11 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
   font-weight: 400;
   letter-spacing: -0.014em;
   color: var(--semantic-text-primary);
-  max-width: 72ch;
+  max-width: min(72ch, 100%);
+  min-width: 0;
   margin-bottom: 28px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 @media (max-width: 639px) {
@@ -7312,10 +7371,11 @@ html[data-theme="deep-twilight"] .nn-exam-session.nn-cat-exam-session {
 /* Option row — 16px padding, horizontal flex */
 .nn-cat-opt {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   padding: 16px;
   width: 100%;
+  min-width: 0;
   text-align: left;
   border-radius: 0.75rem;
   border: 1px solid var(--semantic-border-soft);
@@ -7426,6 +7486,8 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   font-size: 0.9375rem;
   line-height: 1.56;
   color: var(--semantic-text-primary);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* Focus ring */
@@ -8258,7 +8320,8 @@ html[data-theme="deep-twilight"] .nn-cat-opt--incorrect {
   font-size: clamp(16px, 1.5vw, 20px);
   line-height: 1.42;
   color: var(--semantic-text-primary);
-  max-width: 65ch;
+  max-width: min(65ch, 100%);
+  min-width: 0;
   overflow-wrap: anywhere;
   word-break: break-word;
   flex-shrink: 0;
