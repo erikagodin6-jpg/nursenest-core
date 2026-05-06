@@ -10,6 +10,7 @@ import {
   examQuestionsDiscoveryWhereSql,
 } from "@/lib/questions/subscriber-discovery-aggregates";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
+import { GENERAL_STUDY_BANK_MODULE_SCOPE_SQL } from "@/lib/study-question-pool/study-question-pool-gates";
 
 /** Match discovery-style caps — only affects grouped rows, not the total COUNT(*). */
 const EXAM_HUB_GROUP_ROW_LIMIT = 320;
@@ -29,6 +30,7 @@ const FLASHCARD_USABILITY_SQL = Prisma.sql`
   AND NOT ('ecg-video' = ANY(tags))
   AND coalesce(trim(stem), '') <> ''
   AND correct_answer IS NOT NULL
+  ${GENERAL_STUDY_BANK_MODULE_SCOPE_SQL}
 `;
 
 export type ExamQuestionHubInventory = {
@@ -53,9 +55,12 @@ type GroupRow = { grp_kind: string; grp_value: string; cnt: bigint };
 function topicOrBodySystemMatchSql(topicFilter: string | null | undefined): Prisma.Sql {
   const t = topicFilter?.trim();
   if (!t || t.length > 160) return Prisma.empty;
+  const slug = t.toLowerCase().replace(/\s+/g, "-");
   return Prisma.sql` AND (
     lower(trim(coalesce(topic, ''))) = lower(${t}::text)
     OR lower(trim(coalesce(body_system, ''))) = lower(${t}::text)
+    OR lower(regexp_replace(trim(coalesce(topic, '')), '[^a-zA-Z0-9]+', '-', 'g')) = lower(${slug}::text)
+    OR lower(regexp_replace(trim(coalesce(body_system, '')), '[^a-zA-Z0-9]+', '-', 'g')) = lower(${slug}::text)
   )`;
 }
 
@@ -200,6 +205,9 @@ export async function loadExamQuestionHubInventoryForPathway(
 export type ExamQuestionFlashcardPoolRow = BankExamRowForFlashcard & {
   topic: string | null;
   bodySystem: string | null;
+  clinicalPearl?: string | null;
+  keyTakeaway?: string | null;
+  images?: Prisma.JsonValue | null;
 };
 
 /**
@@ -240,6 +248,9 @@ export async function loadExamQuestionRowsForFlashcardPool(
         q.distractor_rationales AS "distractorRationales",
         q.incorrect_answer_rationale AS "incorrectAnswerRationale",
         q.correct_answer_explanation AS "correctAnswerExplanation",
+        q.clinical_pearl AS "clinicalPearl",
+        q.key_takeaway AS "keyTakeaway",
+        q.images,
         q.topic,
         q.body_system AS "bodySystem"
       FROM exam_questions q

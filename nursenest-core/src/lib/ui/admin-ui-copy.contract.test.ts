@@ -3,7 +3,12 @@ import test from "node:test";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { formatDisplayLabel, humanizeAdminOperationalMessage, looksLikeRawI18nKey } from "./format-display-label";
+import {
+  formatDisplayLabel,
+  formatHealthStatusLabel,
+  humanizeAdminOperationalMessage,
+  looksLikeRawI18nKey,
+} from "./format-display-label";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const srcRoot = join(here, "..", "..");
@@ -23,6 +28,16 @@ test("homepage marketing sources avoid rendering dotted keys as JSX text", () =>
 test("admin dashboard shell avoids raw dotted keys in primary headings", () => {
   const adminPage = readFileSync(join(srcRoot, "app", "(admin)", "admin", "page.tsx"), "utf8");
   assert.doesNotMatch(adminPage, />\s*(?:admin|pages)\.[a-z0-9_.]+\s*</i);
+});
+
+test("admin diagnostics page formats infrastructure labels for humans", () => {
+  const diagnosticsPage = readFileSync(join(srcRoot, "app", "(admin)", "admin", "diagnostics", "page.tsx"), "utf8");
+  assert.match(diagnosticsPage, /formatHealthStatusLabel/);
+  assert.match(diagnosticsPage, /configured \? "Yes"/);
+});
+
+test("formatHealthStatusLabel matches diagnostics probe vocabulary", () => {
+  assert.equal(formatHealthStatusLabel("ok"), "OK");
 });
 
 test("looksLikeRawI18nKey guards known prefixes", () => {

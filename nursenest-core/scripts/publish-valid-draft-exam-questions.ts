@@ -1,41 +1,33 @@
 #!/usr/bin/env tsx
 /**
- * Publish `exam_questions` drafts that meet learner-bank quality gates (non-ECG, stem + answer,
- * rationale, taxonomy signal, exam allowlist). Does not touch quarantined rows or ECG/video rows.
+ * Publish `exam_questions` drafts that meet quality gates. Does not touch quarantined rows,
+ * ECG-tagged rows (`ecg-video` tag), or `question_format` values excluded from linear bank pools.
+ *
+ * Default (minimal): valid stem (≥10 chars), non-empty `correct_answer` JSON, rationale optional
+ * (when non-empty, ≥5 chars), exam allowlist, non-ECG format + no `ecg-video` tag.
+ *
+ * Strict (`--strict`): legacy gates — non-empty rationale + topic/body_system/nclex category signal.
  *
  * Usage (from nursenest-core/):
  *   npx tsx scripts/publish-valid-draft-exam-questions.ts
  *   npx tsx scripts/publish-valid-draft-exam-questions.ts --dry-run
+ *   npx tsx scripts/publish-valid-draft-exam-questions.ts --strict --dry-run
  */
 
 import { Prisma } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
-import { examQuestionExamPublishAllowlist } from "../src/lib/content-quality/exam-question-exam-normalization";
 import {
-  EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL,
+  examQuestionDraftPublishableMinimalSql,
+  examQuestionDraftPublishableStrictSql,
   EXAM_QUESTION_STATUS_PUBLISHED_SQL,
 } from "../src/lib/questions/exam-question-bank-sql";
 
 const prisma = new PrismaClient();
 
-/** Flashcard/practice-style usability: stem + answer + non-ECG formats. */
-const VALID_BANK_SQL = Prisma.sql`
-  lower(trim(coalesce(status, ''))) = 'draft'
-  AND coalesce(trim(stem), '') <> ''
-  AND correct_answer IS NOT NULL
-  AND coalesce(trim(rationale), '') <> ''
-  AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
-  AND NOT ('ecg-video' = ANY(tags))
-  AND (
-    coalesce(trim(topic), '') <> ''
-    OR coalesce(trim(body_system), '') <> ''
-    OR coalesce(trim(nclex_client_needs_category), '') <> ''
-  )
-  AND exam IN (${Prisma.join([...examQuestionExamPublishAllowlist()])})
-`;
-
 async function main(): Promise<void> {
   const dryRun = process.argv.includes("--dry-run");
+  const strict = process.argv.includes("--strict");
+  const publishWhere = strict ? examQuestionDraftPublishableStrictSql() : examQuestionDraftPublishableMinimalSql();
 
   const [totalRow] = await prisma.$queryRaw<[{ n: bigint }]>`
     SELECT COUNT(*)::bigint AS n FROM exam_questions
@@ -90,10 +82,12 @@ async function main(): Promise<void> {
   }
 
   const [eligible] = await prisma.$queryRaw<[{ n: bigint }]>`
-    SELECT COUNT(*)::bigint AS n FROM exam_questions WHERE ${VALID_BANK_SQL}
+    SELECT COUNT(*)::bigint AS n FROM exam_questions WHERE ${publishWhere}
   `;
   const nEligible = Number(eligible.n);
-  console.log(`\n=== Eligible to publish (draft + quality gates + exam allowlist) ===`);
+  console.log(
+    `\n=== Eligible to publish (${strict ? "strict" : "minimal"} gates: draft + quality + exam allowlist) ===`,
+  );
   console.log(`  Rows           : ${nEligible.toLocaleString()}`);
 
   if (dryRun) {
@@ -106,7 +100,7 @@ async function main(): Promise<void> {
     SET
       status = 'published',
       published_at = COALESCE(published_at, NOW())
-    WHERE ${VALID_BANK_SQL}
+    WHERE ${publishWhere}
   `;
 
   console.log(`\n=== Update ===`);

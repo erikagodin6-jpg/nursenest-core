@@ -163,3 +163,14 @@ Desktop.ini
 
 # Next build single-flight mutex (Next app package)
 nursenest-core/.nn-next-build-exclusive.lock
+
+# -----------------------------------------------------------------------------
+# Cursor / IDE / local tooling (large or machine-specific — never commit)
+# -----------------------------------------------------------------------------
+playwright-report/
+test-results/
+blob-report/
+**/.prisma/
+.prisma/
+.vercel/
+.digitalocean/

@@ -42,6 +42,7 @@ import {
   persistStripeSubscriptionMirrorForUser,
   resolveUserIdForOrphanStripeSubscription,
 } from "@/lib/subscriptions/stripe-subscription-reconcile";
+import { getStripeClient } from "@/lib/stripe/stripe-client";
 
 type LifecycleData = ReturnType<typeof billingLifecycleFields>;
 
@@ -258,16 +259,21 @@ async function applyCustomerSubscriptionUpsert(
     const customerIdFromFresh =
       fresh.stripeCustomerId ??
       (typeof sub.customer === "string" ? sub.customer : sub.customer && "id" in sub.customer ? sub.customer.id : null);
-    await notifyAdminPaidSubscriptionSms({
-      stripe: await getStripeClientForNotification(),
-      event: { id: "", type: stripeEventType, created: Math.floor(Date.now() / 1000) } as Stripe.Event,
-      userId: fresh.userId,
-      email: fresh.user.email ?? (await resolveStripeCustomerEmail(await getStripeClientForNotification(), customerIdFromFresh)),
-      customerId: customerIdFromFresh,
-      subscription: sub,
-      planName: fresh.planTier != null ? String(fresh.planTier) : null,
-      planTier: fresh.planTier,
-    });
+    /** Same SDK instance as the rest of webhook handling; `getStripeClient` returns null when billing is not configured. */
+    const stripeForNotify = await getStripeClient();
+    if (stripeForNotify) {
+      await notifyAdminPaidSubscriptionSms({
+        stripe: stripeForNotify,
+        event: { id: "", type: stripeEventType, created: Math.floor(Date.now() / 1000) } as Stripe.Event,
+        userId: fresh.userId,
+        email:
+          fresh.user.email ?? (await resolveStripeCustomerEmail(stripeForNotify, customerIdFromFresh)),
+        customerId: customerIdFromFresh,
+        subscription: sub,
+        planName: fresh.planTier != null ? String(fresh.planTier) : null,
+        planTier: fresh.planTier,
+      });
+    }
     return;
   }
 

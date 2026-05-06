@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   formatDisplayLabel,
+  formatHealthStatusLabel,
   formatPrismaEnumLabel,
   humanizeAdminOperationalMessage,
   looksLikeRawI18nKey,
@@ -21,6 +22,14 @@ test("formatDisplayLabel handles colon-separated status text", () => {
 test("formatPrismaEnumLabel title-cases prisma enum strings", () => {
   assert.equal(formatPrismaEnumLabel("SUCCEEDED"), "Succeeded");
   assert.equal(formatPrismaEnumLabel("FAILED"), "Failed");
+  assert.equal(formatPrismaEnumLabel("LVN_LPN"), "LPN/LVN");
+});
+
+test("formatHealthStatusLabel normalizes probe vocabulary", () => {
+  assert.equal(formatHealthStatusLabel("ok"), "OK");
+  assert.equal(formatHealthStatusLabel("fail"), "Failed");
+  assert.equal(formatHealthStatusLabel("yes"), "Yes");
+  assert.equal(formatHealthStatusLabel("degraded"), "Degraded");
 });
 
 test("humanizeAdminOperationalMessage maps known pipeline errors", () => {
@@ -29,7 +38,10 @@ test("humanizeAdminOperationalMessage maps known pipeline errors", () => {
     humanizeAdminOperationalMessage("Editorial plan JSON failed schema validation"),
     "Blog plan format could not be read",
   );
-  assert.equal(humanizeAdminOperationalMessage("NO_PUBLISHED_EXAM_QUESTIONS_IN_DB"), "No published exam questions found");
+  assert.equal(
+    humanizeAdminOperationalMessage("NO_PUBLISHED_EXAM_QUESTIONS_IN_DB"),
+    "No Published Exam Questions Found",
+  );
 });
 
 test("looksLikeRawI18nKey detects dotted keys", () => {

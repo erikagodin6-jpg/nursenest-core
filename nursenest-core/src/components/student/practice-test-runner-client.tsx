@@ -1518,7 +1518,7 @@ export function PracticeTestRunnerClient({
 
         {/* ── Confidence analytics (shown when rated questions exist) ── */}
         {confidenceTrackingEnabled && Object.keys(confidence).length > 0 ? (
-          <div className="mx-auto max-w-[900px] px-6 pb-8">
+          <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
             <div className="nn-cat-question-card">
               <h3 className="mb-5 font-semibold text-[var(--semantic-text-primary)]">
                 Confidence Analysis
@@ -1558,7 +1558,7 @@ export function PracticeTestRunnerClient({
             });
           }
           return (
-            <div className="mx-auto max-w-[900px] px-6 pb-8">
+            <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
               <div className="nn-cat-question-card">
                 <h3 className="mb-5 font-semibold text-[var(--semantic-text-primary)]">
                   Smart Review
@@ -1592,7 +1592,7 @@ export function PracticeTestRunnerClient({
           if (weakAreas.length === 0 && Object.keys(results.byTopic).length === 0) return null;
 
           return (
-            <div className="mx-auto max-w-[900px] px-6 pb-8">
+            <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
               <div className="nn-cat-question-card">
                   <StudyPlanFromResults
                   readinessScore={readinessScore}
@@ -1608,7 +1608,7 @@ export function PracticeTestRunnerClient({
             </div>
           );
         })() : (
-          <div className="mx-auto max-w-[900px] px-6 pb-8">
+          <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
             <div className="nn-cat-question-card space-y-3">
               <h3 className="font-semibold text-[var(--semantic-text-primary)]">
                 Continue your study your way
@@ -1636,7 +1636,7 @@ export function PracticeTestRunnerClient({
 
         {/* ── Coach card (CAT-specific, premium) ──────────────────── */}
         {results.catReport ? (
-          <div className="mx-auto max-w-[900px] px-6 pb-8">
+          <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
             <CatResultsCoachSection
               coach={results.catCoach}
               catExamFeedbackMode={results.catExamFeedbackMode ?? testConfig?.catExamFeedbackMode ?? null}
@@ -1647,13 +1647,13 @@ export function PracticeTestRunnerClient({
 
         {/* ── Study loop next card ─────────────────────────────────── */}
         {adaptivePlanEnabled ? (
-          <div className="mx-auto max-w-[900px] px-6 pb-6">
+          <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-6">
             <PracticeTestStudyLoopNext results={results} pathwayId={testConfig?.pathwayId ?? null} coach={results.catCoach ?? null} />
           </div>
         ) : null}
 
         {/* ── Teaching review (post-exam rationale access) ─────────── */}
-        <div className="mx-auto max-w-[900px] px-6 pb-8">
+        <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
           <div className="nn-cat-question-card space-y-3">
             <h3 className="font-semibold text-[var(--semantic-text-primary)]">
               Teaching review
@@ -1683,7 +1683,7 @@ export function PracticeTestRunnerClient({
         </div>
 
         {/* ── Study notes ─────────────────────────────────────────── */}
-        <div className="mx-auto max-w-[900px] px-6 pb-8">
+        <div className="mx-auto max-w-[900px] px-4 sm:px-6 pb-8">
           <StudyNotesPanel
             userId={userId}
             scope={LearnerNoteScope.PRACTICE_TEST}

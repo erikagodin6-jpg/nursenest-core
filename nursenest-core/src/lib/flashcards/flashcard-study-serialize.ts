@@ -27,6 +27,10 @@ export type FlashcardStudySelectRow = {
   rationaleIncorrect: Prisma.JsonValue | null;
   category: { name: string; topicCode: string | null };
   deck: { pathwayId: string | null; title?: string | null } | null;
+  /** First HTTPS image from exam bank `images` JSON — render only when present (no placeholder). */
+  clinicalImageUrl?: string | null;
+  clinicalPearl?: string | null;
+  keyTakeaway?: string | null;
 };
 
 export type FlashcardStudyApiCard = {
@@ -47,6 +51,8 @@ export type FlashcardStudyApiCard = {
   /** Resolved catalog pathway lesson (slug + title) — no duplicated bodies. */
   lessonStudyHref?: string;
   lessonStudyTitle?: string;
+  /** Exam-bank clinical image — omit from JSON when absent so clients render no image chrome. */
+  clinicalImageUrl?: string | null;
 };
 
 export { parseLessonLinkSourceKey } from "@/lib/flashcards/lesson-link-source-key";
@@ -122,8 +128,9 @@ export function serializeFlashcardForCustomSession(
     !exam && typeof card.rationaleCorrect === "string" && card.rationaleCorrect.trim().length >= 8
       ? card.rationaleCorrect.trim()
       : null;
+  const examTeachingExtra = [card.clinicalPearl?.trim(), card.keyTakeaway?.trim()].filter(Boolean).join("\n\n");
   const explanation = exam
-    ? undefined
+    ? examTeachingExtra || undefined
     : authoredRecall ??
       buildFlashcardExplanationFromSources({
         front,
@@ -134,6 +141,7 @@ export function serializeFlashcardForCustomSession(
   const link = parseLessonLinkSourceKey(card.sourceKey);
   const pid = card.deck?.pathwayId ?? opts.pathwayId;
   const lessonLink = flashcardLessonCrossLinkForDeckStudyRow(pid, card);
+  const img = card.clinicalImageUrl?.trim();
   return {
     id: card.id,
     front,
@@ -145,6 +153,7 @@ export function serializeFlashcardForCustomSession(
     pathwayId: pid,
     ...(exam ? { examMicroQuestion: exam } : {}),
     ...(explanation ? { explanation } : {}),
+    ...(img && img.startsWith("https://") ? { clinicalImageUrl: img } : {}),
     ...(link
       ? {
           lessonLinkSectionKind: link.sectionKind,

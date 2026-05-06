@@ -31,8 +31,8 @@ type Args = {
   /** Max flagged posts to run normalization / pipeline against (after scanning). */
   processLimit: number;
   /**
-   * Relaxed topic normalization + one editorial-plan schema retry (see {@link runBlogArticleGenerationPipeline}).
-   * Can also set `BLOG_REGENERATE_LEGACY_COMPAT=true`.
+   * Legacy-compatible topic gate + plan/body prompt mode (see {@link runBlogArticleGenerationPipeline}).
+   * Default **on** for polish runs; pass `--strict-topic-gate` or set `BLOG_REGENERATE_STRICT_TOPIC_GATE=true` to disable.
    */
   legacyCompatible: boolean;
 };
@@ -54,10 +54,12 @@ function parseArgs(argv: string[]): Args {
   let apply = false;
   let processLimit = 50;
   let maxScan = 3000;
-  let legacyCompatible = process.env.BLOG_REGENERATE_LEGACY_COMPAT?.trim().toLowerCase() === "true";
+  let legacyCompatible =
+    process.env.BLOG_REGENERATE_STRICT_TOPIC_GATE?.trim().toLowerCase() === "true" ? false : true;
   for (const arg of argv.slice(2)) {
     if (arg === "--apply") apply = true;
     if (arg === "--dry-run") apply = false;
+    if (arg === "--strict-topic-gate") legacyCompatible = false;
     if (arg === "--legacy-compatible") legacyCompatible = true;
     const proc = arg.match(/^--process-limit=(\d+)$/);
     if (proc) processLimit = Math.max(1, Math.min(500, Number.parseInt(proc[1]!, 10)));

@@ -10,6 +10,18 @@ const ANTI_FILLER = `Quality bar (non-negotiable):
 - Prefer specific cues (vitals, labs, behaviors) and "if you see X, think Y" patterns over abstract advice.
 - Do not invent pass rates, facility policies, or statistics. If uncertain, stay descriptive and conservative.`;
 
+/** Ported from legacy `server/blog-automation.ts` JSON blog generator: reduces empty refusals on structured outputs. */
+const LEGACY_JSON_COMPLETION_GUARDRAILS = `
+## Legacy-compatible completion discipline (batch tooling)
+- Respond with **one** JSON object only: no markdown fences, no preamble, no apology, no "I cannot" language.
+- If the topic is broad, still produce a **complete** plan: fill every required key; use conservative, education-only clinical framing.
+- Never refuse for "scope" when the brief is nursing or licensure exam prep; narrow with concrete outline sections instead.`;
+
+const LEGACY_HTML_ARTICLE_GUARDRAILS = `
+## Legacy-compatible article discipline (batch tooling)
+- Produce a **complete** long-form HTML article every time; do not stop mid-outline.
+- Never refuse, hedge with "as an AI", or ask for clarification; expand with safe, textbook-style teaching instead.`;
+
 const PEOPLE_FIRST_SEO = `People-first SEO (non-negotiable):
 - Write for nurses and students preparing for licensure exams — clarity and usefulness first; do not optimize wording purely to game rankings.
 - Never promise or imply guaranteed search rankings, "#1 on Google", or similar claims. Avoid manipulative patterns (keyword stuffing, hidden text, doorway-style repetition).
@@ -57,9 +69,15 @@ When this mode applies, the JSON must satisfy a **stricter editorial contract** 
   }
 - **Country CA**: when the brief targets Canada, foreground Canadian regulatory / practice context **where it genuinely changes** nursing implications; keep physiology universal unless evidence-based localization applies.`;
 
-export function buildStructuredPlanSystemPrompt(ctx?: { template: BlogPostTemplate; intent: BlogPostIntent }): string {
+export function buildStructuredPlanSystemPrompt(ctx?: {
+  template: BlogPostTemplate;
+  intent: BlogPostIntent;
+  /** Enables Replit-era non-refusal JSON discipline (used with legacy-compatible CLI / batch). */
+  legacyCompatible?: boolean;
+}): string {
   const longform =
     ctx && isLongFormPathophysiologyProfile(ctx) ? `\n\n${LONGFORM_PATHOPHYSIOLOGY_PLAN_ADDENDUM}` : "";
+  const legacy = ctx?.legacyCompatible === true ? `\n${LEGACY_JSON_COMPLETION_GUARDRAILS}` : "";
   return `You are a senior clinical-education editor for NurseNest (nursing licensure exam prep).
 Return a single JSON object only (no markdown fences, no commentary).
 
@@ -97,7 +115,7 @@ Optional keys (include when data is real or honestly uncertain — never fabrica
 ${ANTI_FILLER}
 
 ${PEOPLE_FIRST_SEO}
-Do not invent statistics or pass rates.${longform}`;
+Do not invent statistics or pass rates.${longform}${legacy}`;
 }
 
 export function buildStructuredPlanUserPrompt(params: {
@@ -141,6 +159,8 @@ export type BlogArticleBodyPromptContext = {
   includeClinicalPearls?: boolean;
   /** Default true: render FAQs as an H2 in HTML for standard articles (long-form pathophysiology always omits FAQ H2 in body). */
   includeFaqsInBody?: boolean;
+  /** Replit-era completion discipline for legacy-compatible batch runs. */
+  legacyCompatible?: boolean;
 };
 
 export function buildArticleBodySystemPrompt(ctx?: BlogArticleBodyPromptContext): string {
@@ -170,9 +190,10 @@ export function buildArticleBodySystemPrompt(ctx?: BlogArticleBodyPromptContext)
   const pearlRule = includePearls
     ? `- Include a short <h2>Clinical pearls</h2> section with concrete exam-day pattern recognition cues.`
     : `- Do **not** add a dedicated <h2>Clinical pearls</h2> heading; you may still weave 1–2 pearl bullets inside other sections.`;
+  const legacy = ctx?.legacyCompatible === true ? `\n${LEGACY_HTML_ARTICLE_GUARDRAILS}\n` : "";
   return `You write long-form, SEO-aware HTML for NurseNest nursing licensure exam prep.
 Output valid HTML only: <h2>, <h3>, <p>, <ul>, <li>, <strong>, <table>, <thead>, <tbody>, <tr>, <th>, <td>. No markdown. No <h1>.
-
+${legacy}
 ${ANTI_FILLER}
 
 ${PEOPLE_FIRST_SEO}

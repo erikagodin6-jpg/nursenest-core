@@ -7,6 +7,7 @@ import { validateMarketingHeroNavCriticalKeys } from "@/lib/marketing/marketing-
 import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
 import { humanizedMarketingKeyFallback } from "@/lib/marketing-i18n/marketing-message-value-policy";
 import { warnMissingMarketingMessageKeyDev } from "@/lib/marketing-i18n/marketing-missing-key-dev-warn";
+import { looksLikeRawI18nKey } from "@/lib/ui/format-display-label";
 
 type Params = Record<string, string | number | undefined>;
 
@@ -36,6 +37,12 @@ function safeFormat(
         hasCatalog: hasNonEmptyMarketingCatalog(messages, fallback),
       });
       return fb;
+    }
+    if (process.env.NODE_ENV === "development" && looksLikeRawI18nKey(resolved)) {
+      console.warn("[MarketingI18n] Resolved copy looks like a raw message key — check catalog value", {
+        key,
+        resolved: resolved.slice(0, 120),
+      });
     }
     return resolved;
   } catch (e) {
@@ -83,6 +90,7 @@ function HtmlLangSync({ locale }: { locale: string }) {
 
 function RenderedI18nKeyLeakGuard() {
   useEffect(() => {
+    if (process.env.NODE_ENV !== "development") return undefined;
     let lastLogged = "";
 
     function checkRenderedText() {
@@ -91,7 +99,7 @@ function RenderedI18nKeyLeakGuard() {
         const match = renderedText.match(RENDERED_I18N_KEY_PREFIX_PATTERN)?.[0] ?? "";
         if (match && match !== lastLogged) {
           lastLogged = match;
-          console.error("[MarketingI18n] Rendered raw i18n key", { key: match });
+          console.warn("[MarketingI18n] Rendered text matches a dotted message key pattern", { key: match });
         }
       } catch {
         // never break app rendering

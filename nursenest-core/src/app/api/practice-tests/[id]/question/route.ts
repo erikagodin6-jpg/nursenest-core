@@ -152,7 +152,12 @@ export async function GET(req: NextRequest, ctx: { params: Promise<unknown> }) {
       isCat &&
       (cfg.catPresentationMode === "exam_simulation" ||
         (cfg.catExamFeedbackMode ?? "test") === "test");
-    const teachingExposure = catStripTeaching ? ("none" as const) : ("full" as const);
+    const linearExamHideTeaching =
+      !isCat &&
+      cfg.linearDeliveryMode === "exam" &&
+      (cfg.linearRationaleVisibility ?? "end_of_exam") === "end_of_exam";
+    const teachingExposure =
+      catStripTeaching || linearExamHideTeaching ? ("none" as const) : ("full" as const);
     logCoreApiStudyDiagnostic({
       endpoint: "GET /api/practice-tests/[id]/question",
       pathwayId: cfg.pathwayId ?? null,

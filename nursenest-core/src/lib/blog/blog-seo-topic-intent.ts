@@ -532,24 +532,22 @@ export function normalizeBlogTopicIntent(
   const expanded = tryExpandVagueClinicalNursingTopic(raw, scheduleExam);
   if (expanded) return expanded;
 
-  if (options?.legacyCompatible) {
-    const relaxed = validateSpecificTopicRelaxed(raw, scheduleExam);
-    if (relaxed.ok) {
-      const base = raw.replace(/\s+/g, " ").trim();
-      const expandedLegacy = `${base}: Clinical Nursing Review — Assessment, Interventions, Client Education, Safety, and ${resolveExamLabel(scheduleExam)}`;
-      if (validateSpecificTopic(expandedLegacy, scheduleExam).ok) {
-        return {
-          accepted: true,
-          normalizedTopic: expandedLegacy,
-          clinicalDomain: "clinical nursing",
-          nclexCategory: "Management of Care",
-        };
-      }
+  /**
+   * Broad operational nursing seeds (handoffs, coordination, leadership) with schedule exam context:
+   * expand into a high-intent title that passes {@link validateSpecificTopic}. Same expansion is used for
+   * legacy-compatible batch runs and for the default admin pipeline so broad topics are not rejected
+   * after {@link tryExpandVagueClinicalNursingTopic} misses a candidate shape.
+   */
+  const relaxed = validateSpecificTopicRelaxed(raw, scheduleExam);
+  if (relaxed.ok) {
+    const base = raw.replace(/\s+/g, " ").trim();
+    const expandedLegacy = `${base}: Clinical Nursing Review — Assessment, Interventions, Client Education, Safety, and ${resolveExamLabel(scheduleExam)}`;
+    if (validateSpecificTopic(expandedLegacy, scheduleExam).ok) {
       return {
         accepted: true,
         normalizedTopic: expandedLegacy,
         clinicalDomain: "clinical nursing",
-        nclexCategory: "Exam preparation",
+        nclexCategory: "Management of Care",
       };
     }
   }

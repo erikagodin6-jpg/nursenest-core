@@ -4,6 +4,8 @@ import {
   isExamQuestionExamPublishAllowed,
   normalizeExamQuestionExamForStorage,
   normExamKeyForMatching,
+  orderExamQuestionExamRewritesForBackfill,
+  canonicalExamQuestionExamForDbWrite,
 } from "@/lib/content-quality/exam-question-exam-normalization";
 
 test("normExamKeyForMatching collapses spaces and underscores", () => {
@@ -28,6 +30,27 @@ test("normalizeExamQuestionExamForStorage prefers REx-PN casing", () => {
 test("normalizeExamQuestionExamForStorage maps underscore NCLEX enums", () => {
   assert.equal(normalizeExamQuestionExamForStorage("NCLEX_RN"), "NCLEX-RN");
   assert.equal(normalizeExamQuestionExamForStorage("NCLEX_PN"), "NCLEX-PN");
+});
+
+test("normalizeExamQuestionExamForStorage maps lowercase slug forms to pathway casing", () => {
+  assert.equal(normalizeExamQuestionExamForStorage("nclex-rn"), "NCLEX-RN");
+  assert.equal(normalizeExamQuestionExamForStorage("nclex pn"), "NCLEX-PN");
+});
+
+test("canonicalExamQuestionExamForDbWrite matches normalize for family column output", () => {
+  assert.equal(canonicalExamQuestionExamForDbWrite("NCLEX_RN"), "NCLEX-RN");
+  assert.equal(canonicalExamQuestionExamForDbWrite("rex-pn"), "REx-PN");
+});
+
+test("orderExamQuestionExamRewritesForBackfill runs chained from-values before their to becomes a from", () => {
+  const ordered = orderExamQuestionExamRewritesForBackfill([
+    { from: "b", to: "c" },
+    { from: "a", to: "b" },
+  ]);
+  assert.deepEqual(
+    ordered.map((x) => x.from),
+    ["a", "b"],
+  );
 });
 
 test("isExamQuestionExamPublishAllowed accepts pathway and allied board keys", () => {

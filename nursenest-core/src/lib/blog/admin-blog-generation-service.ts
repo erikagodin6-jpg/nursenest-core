@@ -134,10 +134,10 @@ export async function prepareAdminBlogGenerationInput(
     );
   }
 
-  const topicIntent = normalizeBlogTopicIntent(
-    args.targetKeyword?.trim() || normalized.cleanTitle,
-    args.exam,
-  );
+  const topicIntent = normalizeBlogTopicIntent(args.targetKeyword?.trim() || normalized.cleanTitle, args.exam, {
+    /** Admin/bulk: normalize broad clinical seeds; spam/off-domain gates stay active in {@link normalizeBlogTopicIntent}. */
+    legacyCompatible: true,
+  });
   const effectiveTopic = topicIntent.accepted ? topicIntent.normalizedTopic : normalized.cleanTitle;
   const seo = sanitizeAiSeoOutput({
     title: args.aiTitle ?? effectiveTopic,

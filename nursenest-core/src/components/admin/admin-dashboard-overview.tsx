@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { AdminDashboardOverview } from "@/lib/admin/load-admin-dashboard-overview";
+import { formatDisplayLabel } from "@/lib/ui/format-display-label";
 
 function fmt(n: number | null | undefined, fallback = "—"): string {
   if (n == null || Number.isNaN(n)) return fallback;
@@ -166,7 +167,8 @@ export function AdminDashboardOverview({
               <span className="text-[var(--semantic-text-muted)]">Last automation log</span>
               {data.health.lastAutomation ? (
                 <span className="text-xs leading-snug">
-                  {new Date(data.health.lastAutomation.at).toLocaleString()} — {data.health.lastAutomation.jobType}
+                  {new Date(data.health.lastAutomation.at).toLocaleString()} —{" "}
+                  {formatDisplayLabel(data.health.lastAutomation.jobType)}
                   {data.health.lastAutomation.summary ? ` · ${data.health.lastAutomation.summary}` : ""}
                 </span>
               ) : (

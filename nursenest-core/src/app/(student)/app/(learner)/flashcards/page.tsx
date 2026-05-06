@@ -90,7 +90,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
 
   if (!entitlement.hasAccess) {
     return (
-      <div className="space-y-4">
+      <div className="mx-auto max-w-3xl space-y-4 px-4 sm:px-6">
         <h1 className="text-3xl font-bold">{t("learner.flashcards.page.title")}</h1>
         <p className="text-sm text-muted-foreground">
           {t("learner.flashcards.page.subtitle.locked")}

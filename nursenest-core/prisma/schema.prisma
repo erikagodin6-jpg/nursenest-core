@@ -1345,6 +1345,7 @@ model InternalCourseModule {
 model ExamQuestion {
   id                          String    @id @default(uuid()) @db.VarChar
   tier                        String
+  /// Pathway `contentExamKeys` / publish-allowlist casing only (`canonicalExamQuestionExamForDbWrite` in app code).
   exam                        String
   questionType                String    @map("question_type")
   status                      String?   @default("draft")
@@ -2213,8 +2214,11 @@ model MarketingPublicContentOverride {
   locale          String   @default("en") @db.VarChar(32)
   surface         String   @db.VarChar(64)
   value           String   @db.Text
+  /// * Staged copy for staff review; never merged into public marketing messages until publish.
+  draftValue      String?  @map("draft_value") @db.Text
   previousValue   String?  @map("previous_value") @db.Text
   isPublished     Boolean  @default(true) @map("is_published")
+  publishedAt     DateTime? @map("published_at")
   updatedByUserId String   @map("updated_by_user_id")
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")

@@ -6,6 +6,10 @@ import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import { prisma } from "@/lib/db";
 import type { GlobalExamContext } from "@/lib/exam-context/global-exam-context";
 import { examQuestionPoolWhereForContext } from "@/lib/exam-context/query-scope";
+import {
+  GENERAL_STUDY_BANK_MODULE_SCOPE_SQL,
+  NON_ECG_GENERAL_BANK_SQL,
+} from "@/lib/study-question-pool/study-question-pool-gates";
 
 /** Match {@link DISCOVERY_TOPIC_BUCKET_CAP} in the route (SQL LIMIT — avoids unbounded groupBy in Node). */
 export const DISCOVERY_SQL_TOPIC_LIMIT = 250;
@@ -86,7 +90,36 @@ export async function loadSubscriberDiscoveryAggregates(
   examRows: DiscoveryExamRow[];
 }> {
   const w = examQuestionsDiscoveryWhereSql(entitlement);
-  const contextScope = discoveryExamContextScopeSql(examContext);
+  const { sql: primaryScope, hasScopeFilter } = discoveryExamContextScopeForFlashcardFallback(examContext);
+  const surfaceGates = Prisma.sql`${NON_ECG_GENERAL_BANK_SQL}${GENERAL_STUDY_BANK_MODULE_SCOPE_SQL}`;
+
+  const runScoped = async (
+    tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0],
+    contextScope: Prisma.Sql,
+  ) => {
+    const [totalRows, topicRows, examRows] = await Promise.all([
+      tx.$queryRaw<[{ n: bigint }]>`SELECT COUNT(*)::bigint AS n FROM exam_questions WHERE ${w}${contextScope}${surfaceGates}`,
+      tx.$queryRaw<DiscoveryAggregateRow[]>`
+          SELECT topic, COUNT(*)::bigint AS cnt
+          FROM exam_questions
+          WHERE topic IS NOT NULL AND ${w}${contextScope}${surfaceGates}
+          GROUP BY topic
+          ORDER BY cnt DESC
+          LIMIT ${DISCOVERY_SQL_TOPIC_LIMIT}
+        `,
+      tx.$queryRaw<DiscoveryExamRow[]>`
+          SELECT exam, COUNT(*)::bigint AS cnt
+          FROM exam_questions
+          WHERE ${w}${contextScope}${surfaceGates}
+          GROUP BY exam
+          ORDER BY cnt DESC
+          LIMIT ${DISCOVERY_SQL_EXAM_LIMIT}
+        `,
+    ]);
+    const rawTotal = totalRows[0]?.n;
+    const total = typeof rawTotal === "bigint" ? Number(rawTotal) : Number(rawTotal ?? 0);
+    return { total, topicRows, examRows };
+  };
 
   return prisma.$transaction(
     async (tx) => {
@@ -94,29 +127,11 @@ export async function loadSubscriberDiscoveryAggregates(
         `SET LOCAL statement_timeout = '${DISCOVERY_STATEMENT_TIMEOUT_MS}ms'`,
       );
 
-      const [totalRows, topicRows, examRows] = await Promise.all([
-        tx.$queryRaw<[{ n: bigint }]>`SELECT COUNT(*)::bigint AS n FROM exam_questions WHERE ${w}${contextScope}`,
-        tx.$queryRaw<DiscoveryAggregateRow[]>`
-          SELECT topic, COUNT(*)::bigint AS cnt
-          FROM exam_questions
-          WHERE topic IS NOT NULL AND ${w}${contextScope}
-          GROUP BY topic
-          ORDER BY cnt DESC
-          LIMIT ${DISCOVERY_SQL_TOPIC_LIMIT}
-        `,
-        tx.$queryRaw<DiscoveryExamRow[]>`
-          SELECT exam, COUNT(*)::bigint AS cnt
-          FROM exam_questions
-          WHERE ${w}${contextScope}
-          GROUP BY exam
-          ORDER BY cnt DESC
-          LIMIT ${DISCOVERY_SQL_EXAM_LIMIT}
-        `,
-      ]);
-
-      const rawTotal = totalRows[0]?.n;
-      const total = typeof rawTotal === "bigint" ? Number(rawTotal) : Number(rawTotal ?? 0);
-      return { total, topicRows, examRows };
+      let out = await runScoped(tx, primaryScope);
+      if (out.total === 0 && hasScopeFilter) {
+        out = await runScoped(tx, Prisma.empty);
+      }
+      return out;
     },
     { maxWait: 8_000, timeout: 12_000 },
   );

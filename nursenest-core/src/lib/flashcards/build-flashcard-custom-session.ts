@@ -37,6 +37,9 @@ import {
   loadExamQuestionHubInventoryForPathway,
   loadExamQuestionRowsForFlashcardPool,
 } from "@/lib/flashcards/flashcard-exam-bank-hub-inventory";
+import { firstHttpsImageUrlFromExamQuestionImages } from "@/lib/study-question-pool/exam-question-image-url";
+import { getStudyQuestionPoolForPathway } from "@/lib/study-question-pool/get-study-question-pool-for-pathway";
+import { normalizePathwayIdForStudySurfaces } from "@/lib/study-question-pool/study-pathway-normalize";
 
 export type CustomSessionStudyMode = "term_to_definition" | "definition_to_term" | "mixed";
 
@@ -173,7 +176,6 @@ export async function buildFlashcardCustomSession(
     cardLimitRaw,
   } = input;
 
-  const pathwayOpts = flashcardPathwayAccessOptionsFromPathwayId(pathwayId);
   const sourceClause = prismaWhereForSourceKind(sourceKind);
 
   const buildFlashcardWhere = (accessWhere: Prisma.FlashcardWhereInput): Prisma.FlashcardWhereInput => {
@@ -187,27 +189,34 @@ export async function buildFlashcardCustomSession(
   const queryRelaxation: FlashcardCustomSessionQueryRelaxation = "none";
 
   try {
-    const examContext = pathwayId?.trim() ? buildGlobalExamContext(pathwayId.trim(), "en") : null;
+    const canonicalPathwayId =
+      pathwayId != null && pathwayId.trim().length > 0
+        ? normalizePathwayIdForStudySurfaces(pathwayId.trim(), entitlement.country)
+        : null;
+    const examContext = canonicalPathwayId?.trim() ? buildGlobalExamContext(canonicalPathwayId.trim(), "en") : null;
+    const pathwayScopeId = canonicalPathwayId?.trim() || pathwayId?.trim() || null;
 
     const allowLessonQuestionVirtuals =
       sourceKind === "all" || sourceKind === "lesson" || sourceKind === "question";
 
+    const pathwayOptsResolved = flashcardPathwayAccessOptionsFromPathwayId(pathwayScopeId ?? pathwayId);
+
     const cards = await prisma.flashcard.findMany({
-      where: buildFlashcardWhere(flashcardAccessWhere(entitlement, pathwayOpts)),
+      where: buildFlashcardWhere(flashcardAccessWhere(entitlement, pathwayOptsResolved)),
       select: flashcardSelect,
       orderBy: { updatedAt: "desc" },
       take: 5000,
     });
 
     let lessonQuestionVirtuals: Awaited<ReturnType<typeof loadLessonLinkedFlashcardVirtuals>> = [];
-    if (pathwayId?.trim() && allowLessonQuestionVirtuals) {
+    if (pathwayScopeId && allowLessonQuestionVirtuals) {
       const existingExamQ = new Set(
         cards
           .map((c) => c.examQuestionId)
           .filter((x): x is string => typeof x === "string" && x.trim().length > 0),
       );
       lessonQuestionVirtuals = await loadLessonLinkedFlashcardVirtuals({
-        pathwayId: pathwayId.trim(),
+        pathwayId: pathwayScopeId,
         entitlement,
         existingExamQuestionIds: existingExamQ,
       });
@@ -254,7 +263,7 @@ export async function buildFlashcardCustomSession(
       const categoryId = resolveBuilderCategoryId({
         label: card.category.name,
         topicCode: card.category.topicCode,
-        pathwayId: card.deck?.pathwayId ?? pathwayId,
+        pathwayId: card.deck?.pathwayId ?? pathwayScopeId,
         deckTitle: card.deck?.title,
         front: card.front,
         back: card.back,
@@ -265,13 +274,13 @@ export async function buildFlashcardCustomSession(
       cardWithCategory.push({ ...card, builderCategoryId: categoryId });
     }
 
-    if (pathwayId?.trim() && allowLessonQuestionVirtuals) {
+    if (pathwayScopeId && allowLessonQuestionVirtuals) {
       for (const v of lessonQuestionVirtuals) {
         const qm = examTopicMetaById.get(v.examQuestionId);
         const categoryId = resolveBuilderCategoryId({
           label: v.row.category.name,
           topicCode: v.row.category.topicCode,
-          pathwayId,
+          pathwayId: pathwayScopeId,
           deckTitle: null,
           front: v.row.front,
           back: v.row.back,
@@ -294,19 +303,18 @@ export async function buildFlashcardCustomSession(
     }
 
     const augmentExamBankPool =
-      Boolean(pathwayId?.trim() && examContext && !lessonId) &&
-      (sourceKind === "all" || sourceKind === "question");
+      Boolean(pathwayScopeId && !lessonId) && (sourceKind === "all" || sourceKind === "question");
     const needsProgressEarly = weakOnly || incorrectOnly || notStudiedOnly || recentStudiedOnly;
     const persistenceFiltersEarly = starredOnly || savedOnly || notesOnly || revisitOnly;
     if (
-      pathwayId?.trim() &&
+      pathwayScopeId &&
       allowLessonQuestionVirtuals &&
       includeCards &&
       augmentExamBankPool &&
       !needsProgressEarly &&
       !persistenceFiltersEarly
     ) {
-      const pid = pathwayId.trim();
+      const pid = pathwayScopeId;
       const pool = await loadExamQuestionRowsForFlashcardPool(
         entitlement,
         pid,
@@ -327,6 +335,12 @@ export async function buildFlashcardCustomSession(
         examTopicMetaById.set(qid, { bodySystem: row.bodySystem, topic: row.topic });
         const base = bankExamQuestionRowToFlashcardStudySelectRow(row);
         if (!base) continue;
+        const clinicalImageUrl = firstHttpsImageUrlFromExamQuestionImages(row.images);
+        const bankExtras: Partial<FlashcardStudySelectRow> = {
+          clinicalPearl: row.clinicalPearl ?? null,
+          keyTakeaway: row.keyTakeaway ?? null,
+          ...(clinicalImageUrl ? { clinicalImageUrl } : {}),
+        };
         const categoryId = resolveBuilderCategoryId({
           label: row.topic?.trim() || row.bodySystem?.trim() || "General",
           topicCode: null,
@@ -339,8 +353,9 @@ export async function buildFlashcardCustomSession(
         });
         categoryCounts[categoryId] = (categoryCounts[categoryId] ?? 0) + 1;
         const syntheticId = `exam_bank:${qid}`;
+        const mergedExamCard: FlashcardStudySelectRow = { ...base, ...bankExtras };
         const synthetic: DbFlashcardRow = {
-          ...(base as unknown as DbFlashcardRow),
+          ...(mergedExamCard as unknown as DbFlashcardRow),
           id: syntheticId,
           examQuestionId: qid,
           deck: { pathwayId: pid, title: "Exam question bank" },
@@ -351,8 +366,8 @@ export async function buildFlashcardCustomSession(
     }
 
     let lessonVirtualDiagnostics: FlashcardLessonVirtualDiagnostics | null = null;
-    if (pathwayId?.trim() && allowLessonQuestionVirtuals) {
-      const pid = pathwayId.trim();
+    if (pathwayScopeId && allowLessonQuestionVirtuals) {
+      const pid = pathwayScopeId;
       const { virtuals: mergedLessonVirtuals, diagnostics: lessonInv } =
         collectMergedLessonVirtualFlashcardsForPathway(pid);
       const existingIds = new Set(cardWithCategory.map((c) => c.id));
@@ -362,7 +377,7 @@ export async function buildFlashcardCustomSession(
         const categoryId = resolveBuilderCategoryId({
           label: v.row.category.name,
           topicCode: v.row.category.topicCode,
-          pathwayId,
+          pathwayId: pathwayScopeId,
           deckTitle: null,
           front: v.row.front,
           back: v.row.back,
@@ -469,11 +484,11 @@ export async function buildFlashcardCustomSession(
       }
     }
 
-    const useExamHub = Boolean(pathwayId?.trim() && examContext) && !lessonId;
+    const useExamHub = Boolean(pathwayScopeId) && !lessonId;
     const examHub = useExamHub
       ? await loadExamQuestionHubInventoryForPathway(
           entitlement,
-          pathwayId,
+          pathwayScopeId,
           examContext,
           topicCode?.trim() || null,
         )
@@ -482,7 +497,10 @@ export async function buildFlashcardCustomSession(
     const useExamForHubStats =
       useExamHub && !includeCards && !needsProgress && !persistenceFiltersActive;
 
-    const examCountsCoalescedForHub = coalesceExamInventoryCountsOntoPathwayHubRows(pathwayId, examHub.countsByBuilderId);
+    const examCountsCoalescedForHub = coalesceExamInventoryCountsOntoPathwayHubRows(
+      pathwayScopeId ?? pathwayId,
+      examHub.countsByBuilderId,
+    );
     const examHubBucketsNonEmpty = Object.values(examCountsCoalescedForHub).some(
       (n) => typeof n === "number" && Number.isFinite(n) && n > 0,
     );
@@ -511,7 +529,7 @@ export async function buildFlashcardCustomSession(
       ? limited.map((card, index) => {
           const mixedSwap = mode === "mixed" && index % 2 === 1;
           const swap = mode === "definition_to_term" || mixedSwap;
-          const topic = builderCategoryTitleForId(pathwayId, card.builderCategoryId);
+          const topic = builderCategoryTitleForId(pathwayScopeId ?? pathwayId, card.builderCategoryId);
           const {
             builderCategoryId: _bc,
             lessonMeta,
@@ -527,7 +545,7 @@ export async function buildFlashcardCustomSession(
           const base = serializeFlashcardForCustomSession(dbRow as FlashcardStudySelectRow, {
             swapFrontBack: swap,
             topic,
-            pathwayId: card.deck?.pathwayId ?? pathwayId,
+            pathwayId: card.deck?.pathwayId ?? pathwayScopeId,
             examOptionShuffleSalt: sessionShuffleSalt,
           });
           return lessonMeta
@@ -544,7 +562,7 @@ export async function buildFlashcardCustomSession(
     const plannedCount = limited.length;
 
     const summary: FlashcardCustomSessionSummary = {
-      pathwayId,
+      pathwayId: pathwayScopeId ?? pathwayId,
       topicCode,
       lessonId,
       selectedCategories,
@@ -575,7 +593,7 @@ export async function buildFlashcardCustomSession(
         [FLASHCARD_BUILDER_UNCATEGORIZED_ID]: examHub.total,
       };
     }
-    const categoryOptions = applyCountsToBuilderCategories(pathwayId, categoryCountsForOptions);
+    const categoryOptions = applyCountsToBuilderCategories(pathwayScopeId ?? pathwayId, categoryCountsForOptions);
     if (process.env.NODE_ENV === "development") {
       let cardsTaggedFromExamMeta = 0;
       let uncategorizedCardRows = 0;
@@ -588,8 +606,22 @@ export async function buildFlashcardCustomSession(
         }
         if (c.builderCategoryId === FLASHCARD_BUILDER_UNCATEGORIZED_ID) uncategorizedCardRows += 1;
       }
+      let poolDiag: Awaited<ReturnType<typeof getStudyQuestionPoolForPathway>> | null = null;
+      if (pathwayScopeId) {
+        try {
+          poolDiag = await getStudyQuestionPoolForPathway({
+            entitlement,
+            pathwayId: pathwayScopeId,
+            country: entitlement.country,
+            mode: "flashcards",
+          });
+        } catch {
+          poolDiag = null;
+        }
+      }
       safeServerLog("flashcards", "hub_inventory_dev", {
-        pathwayId: pathwayId ?? "",
+        pathwayId: pathwayScopeId ?? pathwayId ?? "",
+        studyQuestionPool: poolDiag,
         topicRowCount: categoryOptions.length,
         workingCardCount: cardWithCategory.length,
         publishedDbFlashcards: cards.length,

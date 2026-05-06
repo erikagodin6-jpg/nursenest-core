@@ -8,7 +8,7 @@ import { readPriorReadinessScore, writePriorReadinessScore } from "@/lib/admin/r
 import { loadAdminDiagnostics } from "@/lib/admin/load-admin-diagnostics";
 import { loadCatBlueprintDiagnosticsSummary } from "@/lib/admin/load-cat-blueprint-diagnostics-summary";
 import { loadQuestionBankRemediationIntelligence } from "@/lib/questions/load-question-bank-remediation-intelligence";
-import { formatDisplayLabel } from "@/lib/ui/format-display-label";
+import { formatDisplayLabel, formatHealthStatusLabel } from "@/lib/ui/format-display-label";
 
 export const dynamic = "force-dynamic";
 
@@ -61,7 +61,7 @@ export default async function AdminDiagnosticsPage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-primary">Operations</p>
-          <h1 className="mt-1 text-2xl font-bold text-[var(--theme-heading-text)]">Diagnostics dashboard</h1>
+          <h1 className="mt-1 text-2xl font-bold text-[var(--theme-heading-text)]">Diagnostics Dashboard</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
             Prioritized actions and readiness on top; full system snapshot below (unchanged fields).
           </p>
@@ -292,11 +292,11 @@ export default async function AdminDiagnosticsPage() {
         <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
           <div>
             <dt className="text-muted-foreground">Configured</dt>
-            <dd className="font-semibold">{diagnostics.dbHealth.configured ? "yes" : "no"}</dd>
+            <dd className="font-semibold">{diagnostics.dbHealth.configured ? "Yes" : "No"}</dd>
           </div>
           <div>
             <dt className="text-muted-foreground">Status</dt>
-            <dd className="font-semibold">{diagnostics.dbHealth.status}</dd>
+            <dd className="font-semibold">{formatHealthStatusLabel(diagnostics.dbHealth.status)}</dd>
           </div>
           {diagnostics.dbHealth.latencyMs != null ? (
             <div>
@@ -324,7 +324,7 @@ export default async function AdminDiagnosticsPage() {
           <div>
             <dt className="text-muted-foreground">{diagnostics.apiHealth.liveness.path}</dt>
             <dd className="font-semibold">
-              {diagnostics.apiHealth.liveness.ok ? "ok" : "fail"}{" "}
+              {diagnostics.apiHealth.liveness.ok ? "OK" : "Failed"}{" "}
               {diagnostics.apiHealth.liveness.status != null ? `(${diagnostics.apiHealth.liveness.status})` : ""}
             </dd>
             {diagnostics.apiHealth.liveness.error ? (
@@ -334,7 +334,7 @@ export default async function AdminDiagnosticsPage() {
           <div>
             <dt className="text-muted-foreground">{diagnostics.apiHealth.readiness.path}</dt>
             <dd className="font-semibold">
-              {diagnostics.apiHealth.readiness.ok ? "ok" : "fail"}{" "}
+              {diagnostics.apiHealth.readiness.ok ? "OK" : "Failed"}{" "}
               {diagnostics.apiHealth.readiness.status != null ? `(${diagnostics.apiHealth.readiness.status})` : ""}
             </dd>
             {diagnostics.apiHealth.readiness.error ? (

@@ -1,4 +1,5 @@
 import type { CountryCode } from "@prisma/client";
+import { normalizePathwayIdForStudySurfaces } from "@/lib/study-question-pool/study-pathway-normalize";
 
 /**
  * Maps short or marketing-style `pathwayId` query values to canonical exam-pathway ids
@@ -27,5 +28,5 @@ export function normalizeLearnerFlashcardsPathwayQueryId(
     "default-allied": countryIsCa ? "ca-allied-core" : "us-allied-core",
   };
 
-  return aliases[key] ?? id;
+  return normalizePathwayIdForStudySurfaces(aliases[key] ?? id, country);
 }

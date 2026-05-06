@@ -15,11 +15,13 @@ export type FormatDisplayLabelOpts = {
 const WHOLE_STRING_LABELS: Record<string, string> = {
   NO_PUBLISHED_EXAM_QUESTIONS_IN_DB: "No Published Exam Questions Found",
   patient_safety_quality: "Patient Safety & Quality",
+  LVN_LPN: "LPN/LVN",
+  ALLIED: "Allied Health",
+  NEW_GRAD: "New Grad",
 };
 
 /** Substring / phrase replacements applied before token formatting (message-level). */
 const PHRASE_REPLACEMENTS: Array<{ match: RegExp; replace: string }> = [
-  { match: /\bNO_PUBLISHED_EXAM_QUESTIONS_IN_DB\b/g, replace: "No published exam questions found" },
   {
     match: /Editorial plan JSON failed schema validation/gi,
     replace: "Blog plan format could not be read",
@@ -233,5 +235,20 @@ export function formatPrismaEnumLabel(value: string | null | undefined): string 
   if (value == null) return "—";
   const t = String(value).trim();
   if (!t) return "—";
+  return formatDisplayLabel(t, { mode: "title" });
+}
+
+/**
+ * Short infrastructure / probe labels (DB status, HTTP probe rows).
+ */
+export function formatHealthStatusLabel(raw: string | null | undefined): string {
+  if (raw == null) return "—";
+  const t = String(raw).trim();
+  if (!t) return "—";
+  const lower = t.toLowerCase();
+  if (lower === "ok") return "OK";
+  if (lower === "fail" || lower === "failed" || lower === "error") return "Failed";
+  if (lower === "yes") return "Yes";
+  if (lower === "no") return "No";
   return formatDisplayLabel(t, { mode: "title" });
 }

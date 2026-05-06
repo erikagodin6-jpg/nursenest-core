@@ -22,6 +22,7 @@ import {
 import { buildPrioritizedLinearPickBand } from "@/lib/study/learner-study-prioritizer";
 import { practiceRecentSessionLookback, STUDY_DIVERSITY_PRACTICE_RECENT_MIN_REMAINING_DEFAULT } from "@/lib/study/study-diversity-config";
 import { logStudyDiversity } from "@/lib/study/study-diversity-log";
+import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
 
 /** Linear pool selection — CAT uses {@link createCatPracticeTestPayload} instead. */
 export type LinearPoolSelectionMode = Exclude<PracticeTestSelectionMode, "cat">;
@@ -149,6 +150,15 @@ export async function pickPracticeQuestionIds(
     questionCount: n,
     hasSalt: saltTrim && saltTrim.length >= 8 ? 1 : 0,
     prioritizedBand: bandIds.length,
+  });
+  logCoreApiStudyDiagnostic({
+    endpoint: "pickPracticeQuestionIds",
+    pathwayId: pathwayIdForRecent,
+    tier: String(entitlement.tier ?? ""),
+    selectionMode: input.selectionMode,
+    rowsFound: pool.length,
+    rowsReturned: ids.length,
+    poolAfterRecent: recentFiltered.pool.length,
   });
   return {
     ok: true,

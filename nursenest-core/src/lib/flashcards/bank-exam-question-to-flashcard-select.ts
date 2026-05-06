@@ -14,6 +14,9 @@ export type BankExamRowForFlashcard = ExamQuestionMcqRow & {
   distractorRationales?: Prisma.JsonValue | null;
   incorrectAnswerRationale?: Prisma.JsonValue | null;
   correctAnswerExplanation?: string | null;
+  clinicalPearl?: string | null;
+  keyTakeaway?: string | null;
+  images?: Prisma.JsonValue | null;
 };
 
 /**

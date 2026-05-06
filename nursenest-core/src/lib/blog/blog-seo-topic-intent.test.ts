@@ -98,6 +98,14 @@ describe("validateBlogTopicForSeoArticleGeneration", () => {
     assert.match(n.normalizedTopic, /Priority Interventions|Clinical Nursing Review/i);
   });
 
+  it("normalizes broad operational nursing seeds with schedule exam (no legacy flag)", () => {
+    const topic = "care coordination in hospitals";
+    const n = normalizeBlogTopicIntent(topic, "NCLEX-RN");
+    assert.equal(n.accepted, true);
+    const v = validateBlogTopicForSeoArticleGeneration(topic, "NCLEX-RN");
+    assert.equal(v.ok, true);
+  });
+
   it("rejects generic Understanding prefix", () => {
     const r = validateBlogTopicForSeoArticleGeneration(
       "Understanding fluid balance for nursing students in the hospital",

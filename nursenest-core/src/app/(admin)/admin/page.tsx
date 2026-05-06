@@ -108,7 +108,7 @@ async function AdminCommandCenterSection() {
       >
         Extended command center metrics are unavailable. Open{" "}
         <Link className="font-semibold underline" href="/admin/operations">
-          operations
+          Operations
         </Link>{" "}
         for tooling.
       </div>

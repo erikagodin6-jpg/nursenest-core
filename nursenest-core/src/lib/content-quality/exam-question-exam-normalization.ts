@@ -90,6 +90,16 @@ export function examQuestionExamPublishAllowlist(): ReadonlySet<string> {
 
 const PUBLISH_ALLOWLIST = examQuestionExamPublishAllowlist();
 
+/** Deterministic casing for keys that share the same norm (pathway + allied allowlist). */
+function resolveCanonicalFromPublishAllowlistByNorm(n: string): string | null {
+  let best: string | null = null;
+  for (const k of PUBLISH_ALLOWLIST) {
+    if (normExamKeyForMatching(k) !== n) continue;
+    if (best == null || k.localeCompare(best) < 0) best = k;
+  }
+  return best;
+}
+
 /**
  * Returns the canonical `exam` string to persist, or `null` if the value is empty.
  * Unknown non-empty values are returned trimmed unchanged (callers may reject on publish).
@@ -103,7 +113,37 @@ export function normalizeExamQuestionExamForStorage(raw: string | null | undefin
   if (legacy) return legacy;
   const fromPathway = NORM_TO_CANONICAL_PATHWAY.get(n);
   if (fromPathway) return fromPathway;
+  const fromAllowlist = resolveCanonicalFromPublishAllowlistByNorm(n);
+  if (fromAllowlist) return fromAllowlist;
   return trimmed;
+}
+
+/**
+ * Use for all `ExamQuestion` create/update `exam` assignments so DB values match pathway `contentExamKeys`
+ * casing (Postgres equality is case-sensitive).
+ */
+export function canonicalExamQuestionExamForDbWrite(raw: string): string {
+  const n = normalizeExamQuestionExamForStorage(raw);
+  return (n ?? raw.trim()).trim();
+}
+
+/**
+ * Order `exam` rewrite steps for a backfill so chained updates apply correctly
+ * (e.g. `a`→`b` then `b`→`c`). If a cycle is present, falls back to lexicographic `from` order.
+ */
+export function orderExamQuestionExamRewritesForBackfill<T extends { from: string; to: string }>(plan: T[]): T[] {
+  const items = [...plan];
+  const out: T[] = [];
+  while (items.length) {
+    const idx = items.findIndex((p) => !items.some((q) => q !== p && q.to === p.from));
+    if (idx === -1) {
+      items.sort((a, b) => a.from.localeCompare(b.from));
+      out.push(...items);
+      break;
+    }
+    out.push(items.splice(idx, 1)[0]!);
+  }
+  return out;
 }
 
 export function isExamQuestionExamPublishAllowed(canonicalExam: string): boolean {

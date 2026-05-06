@@ -36,6 +36,7 @@ type ApiCard = {
   lessonStudyHref?: string;
   lessonStudyTitle?: string;
   lessonSlug?: string;
+  clinicalImageUrl?: string | null;
 };
 
 type SessionSummary = {
@@ -162,6 +163,7 @@ export function FlashcardCustomStudyClient() {
           lessonTitle: title,
           practiceTopicHref,
           practiceTestsTopicHref,
+          clinicalImageUrl: c.clinicalImageUrl?.trim() || null,
         };
       }),
     [cards, practiceTopicHref, practiceTestsTopicHref],

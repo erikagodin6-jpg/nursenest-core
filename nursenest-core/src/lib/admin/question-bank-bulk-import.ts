@@ -10,6 +10,7 @@ import {
   examFamilyToExamColumn,
   tierCodeToExamDbTier,
 } from "@/lib/prisma/exam-question-maps";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 
 const tierEnum = z.enum(["RPN", "LVN_LPN", "RN", "NP", "ALLIED"]);
 const qTypeEnum = z.enum(["MCQ", "SATA", "NGN_CASE", "ORDERING", "FIB_NUMERIC"]);
@@ -206,7 +207,7 @@ export async function applyQuestionBankBulkImport(
           countryCode: data.country,
           tier: tierCodeToExamDbTier(data.tier),
           status: contentStatusToDb(ContentStatus.DRAFT),
-          exam: examFamilyToExamColumn(data.examFamily),
+          exam: canonicalExamQuestionExamForDbWrite(examFamilyToExamColumn(data.examFamily)),
           difficulty: difficultyBandToInt(data.difficulty) ?? 3,
           topic: topic ?? undefined,
           subtopic: data.systemTag,

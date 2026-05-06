@@ -34,9 +34,10 @@ describe("core API learning surfaces", () => {
     }
   });
 
-  it("practice test question route uses CAT-aware teachingExposure", () => {
+  it("practice test question route uses CAT- and linear-exam-aware teachingExposure", () => {
     const src = readFileSync(join(appRoot, "app/api/practice-tests/[id]/question/route.ts"), "utf8");
     assert.match(src, /catStripTeaching/);
+    assert.match(src, /linearExamHideTeaching/);
     assert.match(src, /teachingExposure/);
     assert.match(src, /mergeQuestionApiPayload\([\s\S]*teachingExposure/s);
   });
@@ -52,6 +53,23 @@ describe("core API learning surfaces", () => {
     const r = splitPromptLeadingImage('<img src="" alt="x">Real stem here');
     assert.equal(r.imageHtml, null);
     assert.ok(r.remainingPrompt.includes("Real stem"));
+  });
+
+  it("sitemap route serves XML via NextResponse", () => {
+    const route = readFileSync(join(appRoot, "app/sitemap.xml/route.ts"), "utf8");
+    assert.match(route, /SITEMAP_XML_HEADERS|application\/xml/);
+    assert.match(route, /urlset|sitemap/i);
+  });
+
+  it("marketing default homepage route exists", () => {
+    const page = readFileSync(join(appRoot, "app/(marketing)/(default)/page.tsx"), "utf8");
+    assert.match(page, /export default/);
+  });
+
+  it("admin blog generate-ai returns publicUrl on success rows", () => {
+    const route = readFileSync(join(appRoot, "app/api/admin/blog/generate-ai/route.ts"), "utf8");
+    assert.match(route, /publicUrl:\s*adminBlogPublicUrl/);
+    assert.match(route, /adminEditUrl/);
   });
 });
 

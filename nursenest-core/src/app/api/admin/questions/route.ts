@@ -14,6 +14,7 @@ import {
   tierCodeToExamDbTier,
 } from "@/lib/prisma/exam-question-maps";
 import { ADMIN_API_LIST_PAGE, parseBoundedPageSize, parseListPage } from "@/lib/api/api-pagination-limits";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 import { examQuestionTaxonomyFromCorpus } from "@/lib/taxonomy/content-write-taxonomy";
 
 export const dynamic = "force-dynamic";
@@ -123,7 +124,7 @@ export async function POST(req: Request) {
         tier: tierCodeToExamDbTier(data.tier),
         countryCode: data.country,
         ...(data.examFamily
-          ? { exam: examFamilyToExamColumn(data.examFamily) }
+          ? { exam: canonicalExamQuestionExamForDbWrite(examFamilyToExamColumn(data.examFamily)) }
           : {}),
       };
 
@@ -198,7 +199,7 @@ export async function POST(req: Request) {
       countryCode: data.country,
       tier: tierCodeToExamDbTier(data.tier),
       status: contentStatusToDb(data.status),
-      exam: examFamilyToExamColumn(data.examFamily),
+      exam: canonicalExamQuestionExamForDbWrite(examFamilyToExamColumn(data.examFamily)),
       difficulty: difficultyBandToInt(data.difficulty) ?? 3,
       topic: topic ?? undefined,
       subtopic: data.systemTag,

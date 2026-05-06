@@ -19,6 +19,7 @@ import {
 } from "@/lib/blog/blog-automation-engine";
 import {
   AdminBlogValidationError,
+  adminBlogPublicUrl,
   prepareAdminBlogGenerationInput,
 } from "@/lib/blog/admin-blog-generation-service";
 import { coerceAdminOptionalSlugFromRawInput } from "@/lib/blog/blog-optional-slug";
@@ -79,6 +80,8 @@ type AdminBlogGenerateRowResult =
         bodyWordCount: number;
         isFullLength: boolean;
         postStatus: string;
+        publicUrl: string;
+        adminEditUrl: string;
       };
       warnings: string[];
       localized: Array<{ locale: string; region: string; localizedSlug: string; mode: "created" | "updated" }>;
@@ -228,19 +231,21 @@ async function executeOneAdminBlogGeneration(params: {
     ok: true,
     skipped: false,
     topic,
-    post: {
-      id: saved.id,
-      slug: saved.slug,
-      title: saved.title,
-      excerpt: saved.excerpt,
-      tags: saved.tags,
-      seoTitle: saved.seoTitle,
-      seoDescription: saved.seoDescription,
-      structuredContent,
-      bodyWordCount,
-      isFullLength: bodyWordCount >= BLOG_ARTICLE_MIN_WORDS,
-      postStatus: saved.postStatus,
-    },
+      post: {
+        id: saved.id,
+        slug: saved.slug,
+        title: saved.title,
+        excerpt: saved.excerpt,
+        tags: saved.tags,
+        seoTitle: saved.seoTitle,
+        seoDescription: saved.seoDescription,
+        structuredContent,
+        bodyWordCount,
+        isFullLength: bodyWordCount >= BLOG_ARTICLE_MIN_WORDS,
+        postStatus: saved.postStatus,
+        publicUrl: adminBlogPublicUrl(saved.slug),
+        adminEditUrl: `/admin/blog?id=${encodeURIComponent(saved.id)}`,
+      },
     warnings: [
       ...result.warnings,
       ...(result.localizationErrors.length > 0

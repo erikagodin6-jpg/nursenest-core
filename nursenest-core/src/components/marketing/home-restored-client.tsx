@@ -58,7 +58,7 @@ function HomeStableMarketingPlaceholder({
         <p className="mt-4">
           <Link
             href={href}
-            className="inline-flex items-center gap-1 text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline"
+            className="inline-flex min-h-[44px] items-center gap-1 text-sm font-semibold text-[var(--semantic-brand)] underline-offset-4 hover:underline"
           >
             {linkLabel}
             <ArrowRight className="h-4 w-4" aria-hidden />

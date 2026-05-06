@@ -5,6 +5,7 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import type { NormalizedQuestionDraft } from "@/lib/content/ai-draft-validation";
 import { governExamQuestionPublish } from "@/lib/content/editorial-publish-policy";
 import { assertExamQuestionContextForPublish } from "@/lib/content-quality/exam-question-context-validation";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 import { stemHash } from "@/lib/content/stem-hash";
 import { prisma } from "@/lib/db";
 import { assertNoEcgForRpn } from "@/lib/ecg-module/ecg-module-config";
@@ -122,7 +123,7 @@ export async function POST(req: Request, ctx: Props) {
   try {
     assertExamQuestionContextForPublish({
       tier: tierCodeToExamDbTier(draft.tier),
-      exam: examFamilyToExamColumn(draft.examFamily),
+      exam: canonicalExamQuestionExamForDbWrite(examFamilyToExamColumn(draft.examFamily)),
       countryCode: draft.country,
     });
   } catch (error) {
@@ -180,7 +181,7 @@ export async function POST(req: Request, ctx: Props) {
         countryCode: draft.country,
         tier: tierCodeToExamDbTier(draft.tier),
         status: contentStatusToDb(ContentStatus.DRAFT),
-        exam: examFamilyToExamColumn(draft.examFamily),
+        exam: canonicalExamQuestionExamForDbWrite(examFamilyToExamColumn(draft.examFamily)),
         topic,
         careerType: "nursing",
         regionScope: "BOTH",

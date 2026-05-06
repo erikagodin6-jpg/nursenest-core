@@ -55,6 +55,7 @@ export function FlashcardStudyQuestionStack({
   topicLine,
   examMicroQuestion = null,
   itemKindCaption = null,
+  clinicalImageUrl = null,
   prompt,
   answer,
   explanation,
@@ -101,6 +102,17 @@ export function FlashcardStudyQuestionStack({
         {itemKindCaption ? (
           <div className="mb-3 inline-block rounded-full border bg-blue-50 px-2 py-1 text-xs text-blue-600">
             {itemKindCaption}
+          </div>
+        ) : null}
+
+        {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
+          <div className="mb-4">
+            <img
+              src={clinicalImageUrl}
+              alt=""
+              className="max-h-72 w-auto max-w-full rounded-lg border border-[var(--semantic-border-soft)] object-contain"
+              loading="lazy"
+            />
           </div>
         ) : null}
 
@@ -172,6 +184,18 @@ export function FlashcardStudyQuestionStack({
                     </div>
                   ))}
                 </div>
+              </div>
+            ) : null}
+
+            {typeof clinicalImageUrl === "string" && clinicalImageUrl.startsWith("https://") ? (
+              <div className="rounded-xl border p-4">
+                <div className="mb-1 text-xs font-semibold uppercase text-gray-500">Figure</div>
+                <img
+                  src={clinicalImageUrl}
+                  alt=""
+                  className="max-h-64 w-auto max-w-full rounded-md border border-[var(--semantic-border-soft)] object-contain"
+                  loading="lazy"
+                />
               </div>
             ) : null}
 

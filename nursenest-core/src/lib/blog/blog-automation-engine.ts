@@ -348,7 +348,12 @@ export async function generateAutomatedBlogPost(input: AutomationInput): Promise
       fixedSlug: input.fixedSlug,
       allowInsufficientCitations: true,
     },
-    { persist: true, idempotencyKey: input.generationIdempotencyKey },
+    {
+      persist: true,
+      idempotencyKey: input.generationIdempotencyKey,
+      /** Align with admin prepare: broaden safe nursing seeds; spam/off-domain gates remain in {@link normalizeBlogTopicIntent}. */
+      legacyCompatible: true,
+    },
   );
 
   if (!pipelineResult.ok) {

@@ -5,6 +5,7 @@ import { requireAdmin } from "@/lib/admin/ensure-admin";
 import { stemHash } from "@/lib/content/stem-hash";
 import { governExamQuestionPublish } from "@/lib/content/editorial-publish-policy";
 import { assertExamQuestionContextForPublish } from "@/lib/content-quality/exam-question-context-validation";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 import { prisma } from "@/lib/db";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 import {
@@ -83,7 +84,9 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
     try {
       assertExamQuestionContextForPublish({
         tier: d.tier ? tierCodeToExamDbTier(d.tier) : existing.tier,
-        exam: d.examFamily ? examFamilyToExamColumn(d.examFamily) : existing.exam,
+        exam: d.examFamily
+          ? canonicalExamQuestionExamForDbWrite(examFamilyToExamColumn(d.examFamily))
+          : canonicalExamQuestionExamForDbWrite(existing.exam),
         countryCode: d.country ?? existing.countryCode,
       });
     } catch (error) {
@@ -165,7 +168,7 @@ export async function PATCH(req: Request, ctx: { params: Promise<{ id: string }>
       countryCode: d.country,
       tier: d.tier ? tierCodeToExamDbTier(d.tier) : undefined,
       status: d.status ? nextStatusDb : undefined,
-      exam: d.examFamily ? examFamilyToExamColumn(d.examFamily) : undefined,
+      exam: d.examFamily ? canonicalExamQuestionExamForDbWrite(examFamilyToExamColumn(d.examFamily)) : undefined,
       difficulty: d.difficulty !== undefined ? difficultyBandToInt(d.difficulty) : undefined,
       topic: topic ?? undefined,
       subtopic: d.systemTag ?? undefined,

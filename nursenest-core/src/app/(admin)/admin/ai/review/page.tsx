@@ -14,7 +14,7 @@ export default async function AdminAiReviewPage() {
       </Link>
       <h1 className="mt-4 text-2xl font-bold">AI draft review queue</h1>
       <p className="mt-2 text-sm text-muted">
-        Approve or reject drafts. Promotion creates a <strong>DRAFT</strong> row in Question / Flashcard tables (not published to learners).
+        Approve or reject drafts. Promotion creates a <strong>Draft</strong> row in Question / Flashcard tables (not published to learners).
       </p>
       <div className="mt-8">
         <ReviewQueueGateway />

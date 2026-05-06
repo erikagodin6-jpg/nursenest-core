@@ -9,6 +9,7 @@ import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import { recordRouteRenderFallback } from "@/lib/observability/route-fallback-tracker";
 import { safeServerLog } from "@/lib/observability/safe-server-log";
 import { isCompleteCatQuestionRow, NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-pool";
+import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 
 const SNAPSHOT_TIMEOUT_MS = 1000;
 const REVALIDATE_SECONDS = 3600;
@@ -50,7 +51,9 @@ async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition
   return withDatabaseFallbackTimeout<PathwayQuestionBankSnapshot>(
     async (): Promise<PathwayQuestionBankSnapshot> => {
       const base = pathwayExamQuestionMarketingWhere(pathway);
-      const baseNonEcg: Prisma.ExamQuestionWhereInput = { AND: [base, NON_ECG_PRACTICE_EXAM_WHERE] };
+      const baseNonEcg: Prisma.ExamQuestionWhereInput = {
+        AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere()],
+      };
       const counts = await Promise.allSettled([
         withDatabaseFallbackTimeout(
           () => prisma.examQuestion.count({ where: baseNonEcg }),
@@ -68,6 +71,9 @@ async function computePathwayQuestionBankSnapshot(pathway: ExamPathwayDefinition
                 correctAnswer: true,
                 rationale: true,
               },
+              /** Bounded scan for completeness filter — hub uses this as a conservative CAT-ready signal, not a full bank census. */
+              take: 4000,
+              orderBy: { id: "asc" },
             }),
           [],
           SNAPSHOT_TIMEOUT_MS,

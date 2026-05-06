@@ -17,6 +17,8 @@ import { difficultyWhere } from "@/lib/practice-tests/practice-pool-shared";
 import type { PickQuestionsInput } from "@/lib/practice-tests/pick-question-ids";
 import { seededIndexInRange, shuffleSeeded } from "@/lib/practice-tests/session-seeded-random";
 import { ECG_QUESTION_FORMAT } from "@/lib/ecg-module/ecg-module-config";
+import { logCoreApiStudyDiagnostic } from "@/lib/observability/core-api-diagnostics";
+import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 
 const MAX_POOL = 4000;
 export const CAT_MIN_COMPLETE_POOL = 30;
@@ -247,14 +249,18 @@ export async function fetchCatPracticePool(
   }
 
   const secondaryStrict = await buildSecondaryFilterParts(userId, entitlement, input, false);
-  const whereStrict: Prisma.ExamQuestionWhereInput = { AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, ...secondaryStrict] };
+  const whereStrict: Prisma.ExamQuestionWhereInput = {
+    AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere(), ...secondaryStrict],
+  };
   let completeRows = await queryShuffledCompletePool(whereStrict, input);
   const strictCount = completeRows.length;
   let usedRelaxedFilters = false;
 
   if (strictness === "soft" && completeRows.length < CAT_SOFT_MIN_COMPLETE_ROWS) {
     const secondaryRelaxed = await buildSecondaryFilterParts(userId, entitlement, input, true);
-    const whereRelaxed: Prisma.ExamQuestionWhereInput = { AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, ...secondaryRelaxed] };
+    const whereRelaxed: Prisma.ExamQuestionWhereInput = {
+      AND: [base, NON_ECG_PRACTICE_EXAM_WHERE, generalStudyBankModuleSurfaceWhere(), ...secondaryRelaxed],
+    };
     completeRows = await queryShuffledCompletePool(whereRelaxed, input);
     usedRelaxedFilters = true;
   }
@@ -264,6 +270,31 @@ export async function fetchCatPracticePool(
     usedRelaxedFilters,
     finalCompleteRowCount: completeRows.length,
   };
+
+  logCoreApiStudyDiagnostic({
+    endpoint: "fetchCatPracticePool",
+    pathwayId: pathwayIdTrim || null,
+    tier: String(entitlement.tier ?? ""),
+    country: String(entitlement.country ?? ""),
+    hasAccess: entitlement.hasAccess,
+    examKeys: pathway ? [...pathway.contentExamKeys].join(",") : "",
+    selectionMode: input.selectionMode,
+    selectionStrictness: strictness,
+    rowsFoundStrict: strictCount,
+    rowsReturned: completeRows.length,
+    usedRelaxedFilters,
+    reasonIfZero:
+      completeRows.length === 0
+        ? pathwayIdTrim && !pathway
+          ? "unknown_pathway_id"
+          : pathway && !subscriptionCoversPathwayBase(entitlement, pathway)
+            ? "pathway_not_covered_by_entitlement"
+            : strictness !== "soft" &&
+                (input.selectionMode === "missed" || input.selectionMode === "starred")
+              ? "empty_missed_or_starred_ids"
+              : "no_complete_non_ecg_rows_for_filters"
+        : undefined,
+  });
 
   return {
     pool: completeRows.map((r) => ({

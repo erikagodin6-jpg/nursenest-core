@@ -89,6 +89,8 @@ import {
   blogIntentForQualityGate,
   collectBlogContentQualityIssues,
 } from "@/lib/blog/blog-content-quality-gate";
+import { parseEditorialPlanJsonFromModel } from "@/lib/blog/blog-editorial-plan-json-repair";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 
 export type ControlPanelGenerateInput = {
   topic: string;
@@ -151,14 +153,14 @@ export class BlogControlPanelPlanError extends Error {
   }
 }
 
+/** Section regen + any caller that expects a thrown `SyntaxError` on unusable model JSON. */
 function extractJsonObject(raw: string): unknown {
-  let t = raw.trim();
-  const fence = /^```(?:json)?\s*([\s\S]*?)```$/m.exec(t);
-  if (fence) t = fence[1].trim();
-  const start = t.indexOf("{");
-  const end = t.lastIndexOf("}");
-  if (start >= 0 && end > start) t = t.slice(start, end + 1);
-  return JSON.parse(t) as unknown;
+  const r = parseEditorialPlanJsonFromModel(raw);
+  if (!r.ok) throw new SyntaxError(r.error);
+  for (const w of r.warnings) {
+    safeServerLog("blog-editorial-plan-json", "parse_warning", { warning: w });
+  }
+  return r.value;
 }
 
 export function sanitizeControlPanelGeneratedSlugInput(s: string, exam: string, topic: string): string {
@@ -198,19 +200,51 @@ export function appendRequiredStudyLinksBlock(params: {
 export type FetchControlPanelPlanOptions = {
   openAiUser?: string;
   /**
-   * When true, a single follow-up completion is attempted if the first plan fails JSON/Zod/normalize coercion.
-   * Used with legacy-compatible batch generators (see `runBlogArticleGenerationPipeline` options).
+   * When true, up to **two** follow-up completions run after a failed plan (three attempts total) for
+   * JSON / Zod / normalize coercion failures. Used with legacy-compatible batch generators.
    */
   enablePlanSchemaRetry?: boolean;
+  /** Appends Replit-era "complete JSON / no refusal" guardrails to the plan system prompt. */
+  legacyCompatiblePlanner?: boolean;
   /** Appended to the user prompt (schema repair pass). */
   planRepairHint?: string;
+  /**
+   * After retries exhaust on recoverable plan errors, build a deterministic minimal plan so the
+   * pipeline can still draft body + DB row (tagged for review). **Default: true** — set `false` only
+   * when callers must hard-fail without an outline fallback.
+   */
+  allowMinimalPlanFallback?: boolean;
 };
+
+function planSchemaRecoverable(e: unknown): boolean {
+  return (
+    BlogControlPanelPlanError.is(e) &&
+    (e.code === "PLAN_ZOD" || e.code === "PLAN_NORMALIZE" || e.code === "PLAN_INVALID_JSON")
+  );
+}
+
+function buildPlanSchemaRepairHint(e: unknown, attemptIndex: number): string {
+  const detail =
+    BlogControlPanelPlanError.is(e) && typeof e.details === "object" && e.details != null
+      ? JSON.stringify(e.details).slice(0, 1200)
+      : "";
+  const msg = BlogControlPanelPlanError.is(e) ? e.message : e instanceof Error ? e.message : String(e);
+  const code = BlogControlPanelPlanError.is(e) ? e.code : "UNKNOWN";
+  if (attemptIndex <= 1) {
+    return `The previous editorial plan was rejected (${code}). ${msg.slice(0, 700)} ${detail}\nRegenerate ONE JSON object only (no markdown fences) that fully satisfies the schema: required arrays populated, outline sections materialized, FAQs present, and slug/meta fields within stated length limits.`;
+  }
+  return `Final repair pass. Failure: ${code} — ${msg.slice(0, 500)} ${detail}\nReturn ONE compact JSON object only. If meta fields are over limits, shorten them. Ensure: faqs.length>=4; outline.length>=4 with each.h2 non-empty; imagePlacements.length>=1 with promptIdea.length>=20; suggestedInternalLessons.length>=1; internalAnchorOpportunities.length>=4; keyTakeaways.length 3-5; breadcrumbs start with Home / Blog.`;
+}
 
 async function completeControlPanelPlanFromModel(
   input: ControlPanelGenerateInput,
   opts?: FetchControlPanelPlanOptions,
 ): Promise<BlogControlPanelPlan> {
-  const system = buildStructuredPlanSystemPrompt({ template: input.template, intent: input.intent });
+  const system = buildStructuredPlanSystemPrompt({
+    template: input.template,
+    intent: input.intent,
+    legacyCompatible: opts?.legacyCompatiblePlanner === true,
+  });
   let user = `${buildStructuredPlanUserPrompt({
     topic: input.topic,
     exam: input.exam,
@@ -240,17 +274,24 @@ async function completeControlPanelPlanFromModel(
     user: opts?.openAiUser,
   });
 
-  let parsed: unknown;
-  try {
-    parsed = extractJsonObject(res.content);
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
+  const jsonParse = parseEditorialPlanJsonFromModel(res.content);
+  if (!jsonParse.ok) {
+    const hints = jsonParse.warnings.join(" | ").slice(0, 800);
+    safeServerLog("blog-editorial-plan-json", "editorial_plan_parse_failed", {
+      error: jsonParse.error,
+      warnings: jsonParse.warnings,
+      preview: res.content.slice(0, 900),
+    });
     throw new BlogControlPanelPlanError(
       "PLAN_INVALID_JSON",
-      `Model returned invalid JSON for the editorial plan: ${msg}`,
-      { preview: res.content.slice(0, 1600) },
+      `Model returned invalid JSON for the editorial plan: ${jsonParse.error}`,
+      { preview: res.content.slice(0, 1600), jsonWarnings: jsonParse.warnings, parseHint: hints },
     );
   }
+  for (const w of jsonParse.warnings) {
+    safeServerLog("blog-editorial-plan-json", "parse_warning", { warning: w });
+  }
+  const parsed = jsonParse.value;
 
   const plan = safeParseBlogControlPanelPlan(parsed, { title: input.topic });
   if (!plan.success) {
@@ -275,25 +316,56 @@ export async function fetchControlPanelPlan(
   input: ControlPanelGenerateInput,
   opts?: FetchControlPanelPlanOptions,
 ): Promise<BlogControlPanelPlan> {
-  try {
-    return await completeControlPanelPlanFromModel(input, opts);
-  } catch (e) {
-    if (!opts?.enablePlanSchemaRetry || opts.planRepairHint) {
-      throw e;
+  const maxAttempts = opts?.enablePlanSchemaRetry ? 3 : 1;
+  let lastError: unknown = new BlogControlPanelPlanError("PLAN_ZOD", "Plan generation did not run", null);
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      const planRepairHint = attempt === 0 ? undefined : buildPlanSchemaRepairHint(lastError, attempt);
+      return await completeControlPanelPlanFromModel(input, {
+        openAiUser:
+          attempt === 0
+            ? opts?.openAiUser
+            : `${opts?.openAiUser ?? "blog"}:plan-schema-retry-${attempt}`.slice(0, 120),
+        planRepairHint,
+        legacyCompatiblePlanner: opts?.legacyCompatiblePlanner,
+      });
+    } catch (e) {
+      lastError = e;
+      const recoverable = planSchemaRecoverable(e);
+      if (!recoverable) throw e;
+      if (attempt === maxAttempts - 1) break;
     }
-    if (!BlogControlPanelPlanError.is(e)) throw e;
-    if (e.code !== "PLAN_ZOD" && e.code !== "PLAN_NORMALIZE" && e.code !== "PLAN_INVALID_JSON") {
-      throw e;
-    }
-    const detail =
-      typeof e.details === "object" && e.details != null ? JSON.stringify(e.details).slice(0, 1200) : "";
-    const hint = `The previous editorial plan was rejected (${e.code}). ${e.message.slice(0, 700)} ${detail}\nRegenerate ONE JSON object only (no markdown fences) that fully satisfies the schema: required arrays populated, outline sections materialized, FAQs present, and slug/meta fields within stated length limits.`;
-    return await completeControlPanelPlanFromModel(input, {
-      openAiUser: `${opts.openAiUser ?? "blog"}:plan-schema-retry`.slice(0, 120),
-      enablePlanSchemaRetry: false,
-      planRepairHint: hint,
-    });
   }
+  const useOutlineFallback = opts?.allowMinimalPlanFallback !== false;
+  if (useOutlineFallback && planSchemaRecoverable(lastError)) {
+    try {
+      const { buildReliableFallbackBlogControlPanelPlan } = await import("@/lib/blog/blog-control-panel-plan-fallback");
+      const slugBase = sanitizeControlPanelGeneratedSlugInput("reliable-fallback-plan", input.exam, input.topic);
+      let fallback = buildReliableFallbackBlogControlPanelPlan({
+        topic: input.topic,
+        exam: input.exam,
+        country: input.country,
+        recommendedSlug: slugBase,
+      });
+      const extra = new Set<string>([...(fallback.needsReviewFlags ?? [])]);
+      extra.add("editorial_outline_fallback_used");
+      if (BlogControlPanelPlanError.is(lastError)) {
+        if (lastError.code === "PLAN_INVALID_JSON") extra.add("editorial_plan_raw_json_unparseable");
+        if (lastError.code === "PLAN_ZOD" || lastError.code === "PLAN_NORMALIZE") {
+          extra.add("editorial_plan_schema_repaired_via_outline_fallback");
+        }
+      }
+      fallback = { ...fallback, needsReviewFlags: [...extra].slice(0, 32) };
+      safeServerLog("blog-editorial-plan-json", "outline_fallback_used", {
+        topic: input.topic.slice(0, 160),
+        lastError: BlogControlPanelPlanError.is(lastError) ? lastError.code : "unknown",
+      });
+      return await repairMaterializedPlanSectionsOnce(fallback, input, { openAiUser: opts?.openAiUser });
+    } catch (fe) {
+      console.error("[blog-plan] outline fallback failed", fe);
+    }
+  }
+  throw lastError;
 }
 
 export async function fetchControlPanelBodyHtml(params: {
@@ -311,6 +383,8 @@ export async function fetchControlPanelBodyHtml(params: {
   openAiUser?: string;
   includeClinicalPearls?: boolean;
   includeFaqsInBody?: boolean;
+  /** Replit-era completion guardrails for legacy-compatible batch runs (non–long-form templates). */
+  legacyCompatibleBody?: boolean;
 }): Promise<string> {
   if (isLongFormPathophysiologyProfile({ template: params.template, intent: params.intent })) {
     return fetchControlPanelBodyHtmlSectionIsolated(params);
@@ -322,6 +396,7 @@ export async function fetchControlPanelBodyHtml(params: {
     intent: params.intent,
     includeClinicalPearls: params.includeClinicalPearls,
     includeFaqsInBody: params.includeFaqsInBody,
+    legacyCompatible: params.legacyCompatibleBody === true,
   });
   const user = buildArticleBodyUserPrompt({
     plan: params.plan,
@@ -389,7 +464,7 @@ export type ControlPanelPersistResult =
       prePublish?: PrePublishValidationResult;
       /** Present when `PRE_PUBLISH_BLOCKED`: draft row was committed; publish step skipped. */
       post?: { id: string; slug: string; title: string; postStatus: BlogPostStatus; updatedAt: Date };
-      /** Present when `QUALITY_GATE`: draft saved as NEEDS_REVIEW for admin repair. */
+      /** Present on some failure paths when a partial draft exists. */
       plan?: BlogControlPanelPlan;
       warnings?: string[];
     };
@@ -594,7 +669,8 @@ export async function persistControlPanelDraft(
   });
   const contentQualityBlocking = contentQualityIssues.filter((i) => i.severity === "block");
   const qualityGateFailed = contentQualityBlocking.length > 0;
-  const postStatusForCreate = qualityGateFailed ? BlogPostStatus.NEEDS_REVIEW : BlogPostStatus.DRAFT;
+  /** Imperfect AI output stays **DRAFT** with warnings (no silent publish); editors or `publishGeneratedBlogArticle` promote. */
+  const postStatusForCreate = BlogPostStatus.DRAFT;
   const workflowStatusForCreate = qualityGateFailed
     ? BlogWorkflowStatus.NEEDS_MEDICAL_REVIEW
     : workflowStatusBase;
@@ -758,7 +834,7 @@ export async function persistControlPanelDraft(
         throw new Error("persist_missing_row_after_commit");
       }
       return out;
-    });
+    }, { timeout: 25_000, maxWait: 15_000 });
 
     const warnings = [
       ...sourceCheck.warnings,
@@ -779,20 +855,10 @@ export async function persistControlPanelDraft(
     ];
 
     if (qualityGateFailed) {
-      return {
-        ok: false,
-        code: "QUALITY_GATE",
-        error: `Draft failed quality review: repeated filler content detected. ${contentQualityBlocking.map((b) => b.message).join("; ")}`.slice(
-          0,
-          2000,
-        ),
-        post,
-        plan,
-        warnings: [
-          ...warnings,
-          ...contentQualityIssues.map((i) => `${i.severity}:${i.id} — ${i.message}`),
-        ],
-      };
+      warnings.push(
+        `content_quality: ${contentQualityBlocking.length} blocking issue(s) — draft saved; repair in CMS before publish`,
+        ...contentQualityIssues.map((i) => `${i.severity}:${i.id} — ${i.message}`),
+      );
     }
 
     if (input.publishImmediately) {
@@ -812,34 +878,37 @@ export async function persistControlPanelDraft(
         if (!outputGate.ok) {
           const reason = outputGate.reasons.join("; ");
           logBlogGenerationRejected(post.slug, reason);
-          return {
-            ok: false,
-            code: "OUTPUT_GATE",
-            error: `Generated output failed publication safety checks: ${reason}`.slice(0, 2000),
-            post,
-            plan,
-            warnings: [...warnings, ...outputGate.reasons.map((r) => `output_gate:${r}`)],
-          };
+          warnings.push(`output_gate:publish_deferred (${reason})`);
+        } else {
+          await persistHooks?.onPersistStage?.("publishing");
+          const contentDepth = isBlogSeoPillarDepthProfile({ template: input.template, intent: input.intent })
+            ? "pillar"
+            : "standard";
+          await publishGeneratedBlogArticle({
+            id: post.id,
+          }, {
+            publishAt: publishedNow,
+            context: "control_panel_immediate",
+            minWords: input.minPublishWords,
+            contentDepth,
+            minReferences: input.minPublishReferences,
+            requireApaReferences: true,
+            requireInternalLinks: true,
+            validateInternalLinks: input.validateInternalLinksBeforePublish !== false,
+            paywallSafeLinks: input.paywallSafeLinksBeforePublish !== false,
+            requireClinicalSectionDepth: input.requireClinicalSectionDepthOnPublish !== false,
+            publishOnlyIfValid: input.publishOnlyIfValid !== false,
+          });
+          const published = await prisma.blogPost.findUnique({
+            where: { id: post.id },
+            select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
+          });
+          if (!published) {
+            return { ok: false, error: "Post missing after immediate publish update" };
+          }
+          await persistHooks?.onPersistStage?.("published");
+          return { ok: true, skipped: false, post: published, plan, warnings };
         }
-        await persistHooks?.onPersistStage?.("publishing");
-        const contentDepth = isBlogSeoPillarDepthProfile({ template: input.template, intent: input.intent })
-          ? "pillar"
-          : "standard";
-        await publishGeneratedBlogArticle({
-          id: post.id,
-        }, {
-          publishAt: publishedNow,
-          context: "control_panel_immediate",
-          minWords: input.minPublishWords,
-          contentDepth,
-          minReferences: input.minPublishReferences,
-          requireApaReferences: true,
-          requireInternalLinks: true,
-          validateInternalLinks: input.validateInternalLinksBeforePublish !== false,
-          paywallSafeLinks: input.paywallSafeLinksBeforePublish !== false,
-          requireClinicalSectionDepth: input.requireClinicalSectionDepthOnPublish !== false,
-          publishOnlyIfValid: input.publishOnlyIfValid !== false,
-        });
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
         if (msg.includes("publishBlogPostCanonical: pre-publish") || msg.includes("publishGeneratedBlogArticle: publish blocked")) {
@@ -858,15 +927,6 @@ export async function persistControlPanelDraft(
         }
         return { ok: false, error: msg, post };
       }
-      const published = await prisma.blogPost.findUnique({
-        where: { id: post.id },
-        select: { id: true, slug: true, title: true, postStatus: true, updatedAt: true },
-      });
-      if (!published) {
-        return { ok: false, error: "Post missing after immediate publish update" };
-      }
-      await persistHooks?.onPersistStage?.("published");
-      return { ok: true, skipped: false, post: published, plan, warnings };
     }
 
     return { ok: true, skipped: false, post, plan, warnings };

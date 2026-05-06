@@ -36,6 +36,8 @@ export type ActiveStudyCard = {
   practiceTopicHref?: string | null;
   /** Practice-tests hub for the same pathway + catalog topic slug (never cross-tier). */
   practiceTestsTopicHref?: string | null;
+  /** HTTPS clinical image from exam bank — omit when absent (no placeholder chrome). */
+  clinicalImageUrl?: string | null;
 };
 
 export type ActiveStudyHeader = {
@@ -223,6 +225,7 @@ export function ActiveStudySession({
         sessionModeLabel={header.modeLabel}
         topicLine={current.topic}
         examMicroQuestion={current.examMicroQuestion}
+        clinicalImageUrl={current.clinicalImageUrl?.trim() || null}
         prompt={resolveMeasurementTokens(current.prompt, measurementSystem)}
         answer={resolveMeasurementTokens(current.answer, measurementSystem)}
         explanation={resolveMeasurementTokens(current.explanation ?? current.examMicroQuestion?.rationaleCorrect ?? "", measurementSystem)}

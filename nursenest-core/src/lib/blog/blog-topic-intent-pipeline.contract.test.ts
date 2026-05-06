@@ -17,5 +17,8 @@ test("blog generation entrypoints normalize broad topics before plan-stage rejec
   assert.match(simpleDraft, /normalizedTopic:\s*effectiveTopic/);
 
   assert.match(pipeline, /legacyCompatible/);
-  assert.match(pipeline, /enablePlanSchemaRetry:\s*options\.legacyCompatible === true/);
+  assert.match(pipeline, /reliableMode/);
+  assert.match(pipeline, /enablePlanSchemaRetry:\s*true/);
+  assert.match(pipeline, /legacyCompatiblePlanner:\s*legacyLike/);
+  assert.match(pipeline, /allowMinimalPlanFallback:\s*options\.reliableMode === true/);
 });

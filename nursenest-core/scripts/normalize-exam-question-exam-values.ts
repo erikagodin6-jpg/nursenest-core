@@ -6,10 +6,14 @@
  * Usage (from nursenest-core/):
  *   npx tsx scripts/normalize-exam-question-exam-values.ts
  *   npx tsx scripts/normalize-exam-question-exam-values.ts --dry-run
+ *   npx tsx scripts/normalize-exam-question-exam-values.ts --dry-run --json
  */
 
 import { PrismaClient } from "@prisma/client";
-import { normalizeExamQuestionExamForStorage } from "../src/lib/content-quality/exam-question-exam-normalization";
+import {
+  normalizeExamQuestionExamForStorage,
+  orderExamQuestionExamRewritesForBackfill,
+} from "../src/lib/content-quality/exam-question-exam-normalization";
 
 const prisma = new PrismaClient();
 
@@ -59,21 +63,21 @@ async function main(): Promise<void> {
     if (c > 0n) plan.push({ from: exam, to, n: c });
   }
 
-  plan.sort((a, b) => (a.from < b.from ? -1 : 1));
+  const orderedPlan = orderExamQuestionExamRewritesForBackfill(plan);
 
-  console.log(`\nPlanned rewrites (${plan.length} source values):`);
-  for (const p of plan) {
+  console.log(`\nPlanned rewrites (${orderedPlan.length} source values, dependency-ordered):`);
+  for (const p of orderedPlan) {
     console.log(`  "${p.from}" → "${p.to}"  (${p.n.toString()} rows)`);
   }
 
   let totalUpdated = 0;
   if (!dryRun) {
-    for (const p of plan) {
+    for (const p of orderedPlan) {
       const r = await prisma.examQuestion.updateMany({ where: { exam: p.from }, data: { exam: p.to } });
       totalUpdated += r.count;
     }
   } else {
-    for (const p of plan) {
+    for (const p of orderedPlan) {
       totalUpdated += Number(p.n);
     }
   }
@@ -82,6 +86,24 @@ async function main(): Promise<void> {
 
   const after = dryRun ? before : await examDistribution();
   printDist(dryRun ? "AFTER (unchanged in dry-run)" : "AFTER (exam → count)", after);
+
+  if (process.argv.includes("--json")) {
+    const ser = (rows: CountRow[]) =>
+      rows.map((r) => ({ exam: r.exam, count: r.c.toString() }));
+    console.log(
+      JSON.stringify(
+        {
+          dryRun,
+          before: ser(before),
+          after: ser(after),
+          plan: orderedPlan.map((p) => ({ from: p.from, to: p.to, count: p.n.toString() })),
+          totalUpdatedRows: totalUpdated,
+        },
+        null,
+        2,
+      ),
+    );
+  }
 
   if (dryRun) {
     console.log("\nRe-run without --dry-run to apply updates.");

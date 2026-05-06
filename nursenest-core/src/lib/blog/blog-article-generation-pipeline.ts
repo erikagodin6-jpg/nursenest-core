@@ -138,10 +138,22 @@ export type RunBlogArticlePipelineOptions = {
    */
   substantiveWordMinOverride?: number;
   /**
-   * Relaxes {@link normalizeBlogTopicIntent} for broad-but-safe nursing topics and enables one editorial-plan
-   * schema/JSON retry (see {@link fetchControlPanelPlan}). Intended for CLI/batch tooling — keep default strict for admin UI.
+   * Relaxes {@link normalizeBlogTopicIntent} only where it still differs from the default path; enables
+   * Replit-style plan/body prompt addenda and {@link fetchControlPanelPlan} `legacyCompatiblePlanner`.
+   * Editorial-plan JSON/Zod repair uses up to three attempts when {@link fetchControlPanelPlan} has
+   * `enablePlanSchemaRetry` (on for all pipeline runs).
    */
   legacyCompatible?: boolean;
+  /**
+   * CLI / automation: same relaxations as {@link legacyCompatible} plus deterministic plan fallback after
+   * recoverable plan failures ({@link fetchControlPanelPlan} `allowMinimalPlanFallback`).
+   */
+  reliableMode?: boolean;
+  /**
+   * When false, malformed editorial-plan JSON / Zod failures do **not** fall back to the deterministic outline.
+   * Default true.
+   */
+  planOutlineFallbackOnJsonFailure?: boolean;
 };
 
 const MIN_BODY_CHARS = BLOG_ARTICLE_MIN_BODY_CHARS;
@@ -171,8 +183,9 @@ export async function runBlogArticleGenerationPipeline(
   input: ControlPanelGenerateInput,
   options: RunBlogArticlePipelineOptions = {},
 ): Promise<BlogArticlePipelineResult> {
+  const legacyLike = options.legacyCompatible === true || options.reliableMode === true;
   const topicIntent = normalizeBlogTopicIntent(input.topic, input.exam, {
-    legacyCompatible: options.legacyCompatible === true,
+    legacyCompatible: legacyLike,
   });
   if (!topicIntent.accepted) {
     return {
@@ -226,7 +239,11 @@ export async function runBlogArticleGenerationPipeline(
         } else {
           plan = await fetchControlPanelPlan(effectiveInput, {
             openAiUser: openAiUserTag(idem, "plan", repairPassesUsed),
-            enablePlanSchemaRetry: options.legacyCompatible === true,
+            /** Up to three completions on invalid JSON / Zod / normalize (safety blocks unchanged). */
+            enablePlanSchemaRetry: true,
+            legacyCompatiblePlanner: legacyLike,
+            /** Default: deterministic nursing outline if model JSON is unusable (see `allowMinimalPlanFallback`). */
+            allowMinimalPlanFallback: options.planOutlineFallbackOnJsonFailure !== false,
           });
         }
       } catch (e) {
@@ -336,6 +353,7 @@ export async function runBlogArticleGenerationPipeline(
         openAiUser: openAiUserTag(idem, "body", repairPassesUsed),
         includeClinicalPearls: effectiveInput.includeClinicalPearlsInBody,
         includeFaqsInBody: effectiveInput.includeFaqsInBody,
+        legacyCompatibleBody: legacyLike,
       });
     }
   } catch (e) {
@@ -475,21 +493,6 @@ export async function runBlogArticleGenerationPipeline(
             repairPassesUsed,
           };
         }
-        if (persistResult.code === "QUALITY_GATE" || persistResult.code === "OUTPUT_GATE") {
-          return {
-            ok: false,
-            stage: "persist",
-            error: persistResult.error,
-            plan,
-            bodyHtml,
-            code: persistResult.code,
-            details: {
-              draftPost: persistResult.post ?? null,
-              qualityWarnings: persistResult.warnings ?? [],
-            },
-            repairPassesUsed,
-          };
-        }
         if (persistResult.code === "SEO_DUPLICATE_BLOCKED") {
           const cl = classifyBlogPipelineFailureForRepair({
             stage: "persist",
@@ -554,6 +557,7 @@ export async function runBlogArticleGenerationPipeline(
               openAiUser: openAiUserTag(idem, "body-after-seo", repairPassesUsed),
               includeClinicalPearls: effectiveInput.includeClinicalPearlsInBody,
               includeFaqsInBody: effectiveInput.includeFaqsInBody,
+              legacyCompatibleBody: legacyLike,
             });
           } catch (e) {
             const msg = e instanceof Error ? e.message : String(e);
