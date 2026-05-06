@@ -90,7 +90,7 @@ export function OsceStationDetailBody({ station }: { station: OSCESkillStation }
         </section>
       ) : null}
 
-      <ScenarioRationalePanel title="Passing criteria" body={station.passingCriteria} />
+      {station.passingCriteria ? <ScenarioRationalePanel title="Passing criteria" body={station.passingCriteria} /> : null}
 
       {station.clinicalPearls?.length ? (
         <section className="space-y-2">
