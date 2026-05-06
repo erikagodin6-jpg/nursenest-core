@@ -23,7 +23,14 @@ const VALID_DATABASE_URL = "postgresql://user:secret@example-do-user-1.db.ondigi
 const VALID_DIRECT_URL = "postgresql://direct:secret@example-do-user-1.db.ondigitalocean.com:25060/defaultdb?sslmode=require";
 
 function withCleanDbEnv(fn) {
-  const keys = ["DATABASE_URL", "DIRECT_URL", "DATABASE_DIRECT_URL", "NN_APP_PLATFORM_BUILD", "NN_LOW_MEMORY_BUILD"];
+  const keys = [
+    "DATABASE_URL",
+    "DIRECT_URL",
+    "DATABASE_DIRECT_URL",
+    "NN_APP_PLATFORM_BUILD",
+    "NN_LOW_MEMORY_BUILD",
+    "npm_lifecycle_event",
+  ];
   const previous = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
   for (const key of keys) delete process.env[key];
   try {
@@ -113,7 +120,36 @@ describe("prisma-safe build-time generate env policy", () => {
         });
         assert.equal(result.buildSafeGenerate, true);
         assert.equal(process.env.DIRECT_URL, process.env.DATABASE_URL);
-        assert.equal(logs.some((line) => line.includes("Build-time Prisma generate detected; DIRECT_URL requirement skipped.")), true);
+        assert.equal(
+          logs.some((line) =>
+            line.includes("Build-time Prisma generate detected; database env validation skipped for client codegen."),
+          ),
+          true,
+        );
+      }),
+    ));
+
+  it("allows CI build Prisma generate during install without database env", () =>
+    withCleanDbEnv(() =>
+      withTempEnv({}, (envRoot) => {
+        process.env.NN_LOW_MEMORY_BUILD = "1";
+        process.env.npm_lifecycle_event = "postinstall";
+        const logs = [];
+        const result = loadPrismaSafeEnvForCommand("generate", {
+          envRoot,
+          logger: { log: (line) => logs.push(line) },
+          argv: ["node", "scripts/prisma-safe.mjs", "generate"],
+        });
+        assert.equal(result.buildSafeGenerate, true);
+        assert.equal(result.installSafeGenerate, true);
+        assert.match(process.env.DATABASE_URL, /^postgresql:\/\/prisma:prisma@127\.0\.0\.1:5432\/prisma_codegen/);
+        assert.equal(process.env.DIRECT_URL, process.env.DATABASE_URL);
+        assert.equal(
+          logs.some((line) =>
+            line.includes("Build-time Prisma generate detected; database env validation skipped for client codegen."),
+          ),
+          true,
+        );
       }),
     ));
 
