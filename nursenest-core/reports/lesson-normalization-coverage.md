@@ -1,6 +1,6 @@
 # Lesson Normalization Coverage
 
-Generated at: 2026-05-03T17:06:20.229Z
+Generated at: 2026-05-06T11:40:10.464Z
 
 ## Pathway Coverage
 
@@ -13,8 +13,8 @@ Generated at: 2026-05-03T17:06:20.229Z
 - Raw to renderable ratio: 15/15 (100%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
-- Public URL pattern: /canada/allied/allied-health/lessons/{lessonSlug}
-- Sample public lesson path: /canada/allied/allied-health/lessons/allied-clinical-documentation
+- Public URL pattern: /allied/allied-health/lessons/{lessonSlug}
+- Sample public lesson path: /allied/allied-health/lessons/allied-clinical-documentation
 - Force publish mode: off
 
 Force-published lessons: None
@@ -97,8 +97,8 @@ Exclusions:
 - Raw to renderable ratio: 15/15 (100%)
 - Unexpected exclusions: 0 (0.0% of raw)
 - Passes exclusion quality gate (≤20% unexpected): yes
-- Public URL pattern: /us/allied/allied-health/lessons/{lessonSlug}
-- Sample public lesson path: /us/allied/allied-health/lessons/allied-clinical-documentation
+- Public URL pattern: /allied/allied-health/lessons/{lessonSlug}
+- Sample public lesson path: /allied/allied-health/lessons/allied-clinical-documentation
 - Force publish mode: off
 
 Force-published lessons: None
@@ -198,7 +198,7 @@ Exclusions:
 ### `mlt`
 
 - Label: Medical laboratory exam prep
-- Route: /us/allied/allied-health/lessons?alliedProfession=mlt
+- Route: /allied/allied-health/lessons?alliedProfession=mlt
 - Status: mapped
 - topicSlugsIn: lab-values, infection-control, medical-terminology, clinical-documentation
 - Mapped lesson count: 4
@@ -208,7 +208,7 @@ Exclusions:
 ### `paramedic`
 
 - Label: Paramedic certification exam prep
-- Route: /us/allied/allied-health/lessons?alliedProfession=paramedic
+- Route: /allied/allied-health/lessons?alliedProfession=paramedic
 - Status: mapped
 - topicSlugsIn: patient-assessment, vital-signs, emergency-response, patient-communication, clinical-documentation
 - Mapped lesson count: 5
@@ -218,7 +218,7 @@ Exclusions:
 ### `ota`
 
 - Label: Occupational therapy assistant exam prep
-- Route: /us/allied/allied-health/lessons?alliedProfession=ota
+- Route: /allied/allied-health/lessons?alliedProfession=ota
 - Status: mapped
 - topicSlugsIn: patient-assessment, patient-communication, clinical-documentation, human-anatomy, human-physiology
 - Mapped lesson count: 5
@@ -228,7 +228,7 @@ Exclusions:
 ### `pta`
 
 - Label: Physical therapist assistant exam prep
-- Route: /us/allied/allied-health/lessons?alliedProfession=pta
+- Route: /allied/allied-health/lessons?alliedProfession=pta
 - Status: mapped
 - topicSlugsIn: patient-assessment, human-anatomy, human-physiology, vital-signs, patient-communication
 - Mapped lesson count: 5
@@ -238,7 +238,7 @@ Exclusions:
 ### `social-work`
 
 - Label: Social work exam prep
-- Route: /us/allied/allied-health/lessons?alliedProfession=social-work
+- Route: /allied/allied-health/lessons?alliedProfession=social-work
 - Status: mapped
 - topicSlugsIn: patient-communication, clinical-documentation, healthcare-teamwork, medical-ethics
 - Mapped lesson count: 4
@@ -248,7 +248,7 @@ Exclusions:
 ### `mental-health-addictions`
 
 - Label: Mental health and addictions worker exam prep
-- Route: /us/allied/allied-health/lessons?alliedProfession=mental-health-addictions
+- Route: /allied/allied-health/lessons?alliedProfession=mental-health-addictions
 - Status: mapped
 - topicSlugsIn: patient-communication, clinical-documentation, healthcare-teamwork, medical-ethics
 - Mapped lesson count: 4
@@ -258,7 +258,7 @@ Exclusions:
 ### `psw-hca`
 
 - Label: PSW, HCA, and CCA exam prep
-- Route: /us/allied/allied-health/lessons?alliedProfession=psw-hca
+- Route: /allied/allied-health/lessons?alliedProfession=psw-hca
 - Status: mapped
 - topicSlugsIn: patient-assessment, vital-signs, patient-communication, infection-control, healthcare-teamwork
 - Mapped lesson count: 5
@@ -268,7 +268,7 @@ Exclusions:
 ### `respiratory`
 
 - Label: Respiratory therapy (RRT) exam prep
-- Route: /us/allied/allied-health/lessons?alliedProfession=respiratory
+- Route: /allied/allied-health/lessons?alliedProfession=respiratory
 - Status: mapped
 - topicSlugsIn: patient-assessment, vital-signs, emergency-response, infection-control, human-physiology
 - Mapped lesson count: 5
@@ -278,7 +278,7 @@ Exclusions:
 ### `imaging`
 
 - Label: Medical imaging exam prep
-- Route: /us/allied/allied-health/lessons?alliedProfession=imaging
+- Route: /allied/allied-health/lessons?alliedProfession=imaging
 - Status: mapped
 - topicSlugsIn: imaging-basics, patient-assessment, vital-signs, medical-terminology
 - Mapped lesson count: 4
@@ -288,7 +288,7 @@ Exclusions:
 ### `pharmacy-tech`
 
 - Label: Pharmacy technician exam prep
-- Route: /us/allied/allied-health/lessons?alliedProfession=pharmacy-tech
+- Route: /allied/allied-health/lessons?alliedProfession=pharmacy-tech
 - Status: mapped
 - topicSlugsIn: medication-safety, pharmacology-basics, medical-terminology, clinical-documentation
 - Mapped lesson count: 4

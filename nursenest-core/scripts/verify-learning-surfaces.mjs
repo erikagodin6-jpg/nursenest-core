@@ -36,7 +36,7 @@ try {
   );
   mustInclude(
     "src/lib/flashcards/build-flashcard-custom-session.ts",
-    "loadExamQuestionHubInventoryForPathway",
+    "loadFlashcardsExamInventoryForPathway",
     "Flashcards hub inventory uses exam bank aggregates",
   );
   mustInclude("src/app/api/flashcards/custom-session/route.ts", "pathwayId is required", "Flashcards API requires pathwayId");

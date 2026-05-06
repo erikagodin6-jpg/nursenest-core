@@ -23,6 +23,7 @@ import type {
   FlashcardCustomSessionSummary,
   FlashcardLessonVirtualDiagnostics,
 } from "@/lib/flashcards/flashcard-custom-session-response";
+import type { FlashcardsPoolInventoryDiagnostics } from "@/lib/flashcards/flashcards-hub-types";
 import {
   filterCardsByProgressFlags,
   parseCustomSessionSourceKind,
@@ -37,7 +38,10 @@ import { firstHttpsImageUrlFromExamQuestionImages } from "@/lib/study-question-p
 import { getStudyQuestionPoolForPathway } from "@/lib/study-question-pool/get-study-question-pool-for-pathway";
 import { normalizePathwayIdForStudySurfaces } from "@/lib/study-question-pool/study-pathway-normalize";
 import { getExamPathwayById } from "@/lib/exam-pathways/exam-product-registry";
-import { loadFlashcardsExamInventoryForPathway } from "@/lib/flashcards/load-flashcards-exam-inventory.server";
+import {
+  loadFlashcardsExamInventoryForPathway,
+  resolveAccessScopeForPathwayExamQuestionPool,
+} from "@/lib/flashcards/load-flashcards-exam-inventory.server";
 
 export type CustomSessionStudyMode = "term_to_definition" | "definition_to_term" | "mixed";
 
@@ -313,13 +317,20 @@ export async function buildFlashcardCustomSession(
       !persistenceFiltersEarly
     ) {
       const pid = pathwayScopeId;
-      const pool = await loadExamQuestionRowsForFlashcardPool(
-        entitlement,
-        pid,
-        examContext,
-        topicCode?.trim() || null,
-        Math.max(limit * 40, 600),
-      );
+      const pathwayForBank = getExamPathwayById(pid);
+      const poolScopeForBank =
+        pathwayForBank != null
+          ? await resolveAccessScopeForPathwayExamQuestionPool(userId, entitlement, pathwayForBank)
+          : null;
+      const pool =
+        pathwayForBank != null && poolScopeForBank != null
+          ? await loadExamQuestionRowsForFlashcardPool(
+              poolScopeForBank,
+              pathwayForBank,
+              topicCode?.trim() || null,
+              Math.max(limit * 40, 600),
+            )
+          : [];
       const takenExam = new Set(
         cardWithCategory
           .map((c) => c.examQuestionId)
@@ -482,12 +493,13 @@ export async function buildFlashcardCustomSession(
       }
     }
 
-    // Canonical inventory query — same source as CAT exams. No raw SQL, no contentExamKeys matching.
+    // Canonical inventory query — raw SQL with normalized exam keys (audit / discovery parity).
     const useExamForInventory =
       Boolean(pathwayScopeId) && !lessonId && !includeCards && !needsProgress && !persistenceFiltersActive;
 
     const examInventoryCounts: Record<string, number> = {};
     let examTotal = 0;
+    let poolInventoryDiagnostics: FlashcardsPoolInventoryDiagnostics | null = null;
 
     if (useExamForInventory && pathwayScopeId) {
       const pathway = getExamPathwayById(pathwayScopeId);
@@ -496,8 +508,7 @@ export async function buildFlashcardCustomSession(
         if (inv.ok) {
           examTotal = inv.total;
           Object.assign(examInventoryCounts, inv.countsByBuilderId);
-        } else if (inv.code === "CRITICAL_EMPTY_POOL") {
-          throw new Error(inv.message);
+          poolInventoryDiagnostics = inv.diagnostics;
         }
       }
     }
@@ -581,6 +592,7 @@ export async function buildFlashcardCustomSession(
       queryRelaxation,
       sessionShuffleSalt,
       lessonVirtualDiagnostics,
+      poolInventoryDiagnostics,
     };
 
     // Use canonical inventory counts for hub display; fall back to DB flashcard counts

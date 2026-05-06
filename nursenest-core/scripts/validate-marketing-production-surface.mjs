@@ -39,6 +39,7 @@ const REQUIRED_PAGE_KEYS = [
   "pages.home.hero.scanItem4",
   "pages.home.carouselHandoff.kicker",
   "pages.home.carouselHandoff.lead",
+  "pages.home.carouselHandoff.fallbackCta",
   "pages.home.howItWorks.kicker",
   "pages.home.howItWorks.title",
   "pages.home.howItWorks.subtitle",

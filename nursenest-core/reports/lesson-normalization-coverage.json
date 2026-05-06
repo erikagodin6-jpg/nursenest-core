@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-05-03T17:06:20.229Z",
+  "generatedAt": "2026-05-06T11:40:10.464Z",
   "pathways": [
     {
       "pathwayId": "ca-allied-core",
       "publicLessonsPath": null,
-      "publicUrlPattern": "/canada/allied/allied-health/lessons/{lessonSlug}",
+      "publicUrlPattern": "/allied/allied-health/lessons/{lessonSlug}",
       "rawCount": 15,
       "normalizedCount": 15,
       "renderableCount": 15,
@@ -15,7 +15,7 @@
       "topExclusionReasons": [],
       "exclusions": [],
       "unexpectedExclusionCount": 0,
-      "sampleRenderableLessonPath": "/canada/allied/allied-health/lessons/allied-clinical-documentation",
+      "sampleRenderableLessonPath": "/allied/allied-health/lessons/allied-clinical-documentation",
       "forcePublishEnabled": false,
       "forcePublishedLessons": []
     },
@@ -76,7 +76,7 @@
     {
       "pathwayId": "us-allied-core",
       "publicLessonsPath": null,
-      "publicUrlPattern": "/us/allied/allied-health/lessons/{lessonSlug}",
+      "publicUrlPattern": "/allied/allied-health/lessons/{lessonSlug}",
       "rawCount": 15,
       "normalizedCount": 15,
       "renderableCount": 15,
@@ -87,7 +87,7 @@
       "topExclusionReasons": [],
       "exclusions": [],
       "unexpectedExclusionCount": 0,
-      "sampleRenderableLessonPath": "/us/allied/allied-health/lessons/allied-clinical-documentation",
+      "sampleRenderableLessonPath": "/allied/allied-health/lessons/allied-clinical-documentation",
       "forcePublishEnabled": false,
       "forcePublishedLessons": []
     },
@@ -183,7 +183,7 @@
     {
       "professionKey": "mlt",
       "label": "Medical laboratory exam prep",
-      "route": "/us/allied/allied-health/lessons?alliedProfession=mlt",
+      "route": "/allied/allied-health/lessons?alliedProfession=mlt",
       "topicSlugsIn": [
         "lab-values",
         "infection-control",
@@ -203,7 +203,7 @@
     {
       "professionKey": "paramedic",
       "label": "Paramedic certification exam prep",
-      "route": "/us/allied/allied-health/lessons?alliedProfession=paramedic",
+      "route": "/allied/allied-health/lessons?alliedProfession=paramedic",
       "topicSlugsIn": [
         "patient-assessment",
         "vital-signs",
@@ -225,7 +225,7 @@
     {
       "professionKey": "ota",
       "label": "Occupational therapy assistant exam prep",
-      "route": "/us/allied/allied-health/lessons?alliedProfession=ota",
+      "route": "/allied/allied-health/lessons?alliedProfession=ota",
       "topicSlugsIn": [
         "patient-assessment",
         "patient-communication",
@@ -247,7 +247,7 @@
     {
       "professionKey": "pta",
       "label": "Physical therapist assistant exam prep",
-      "route": "/us/allied/allied-health/lessons?alliedProfession=pta",
+      "route": "/allied/allied-health/lessons?alliedProfession=pta",
       "topicSlugsIn": [
         "patient-assessment",
         "human-anatomy",
@@ -269,7 +269,7 @@
     {
       "professionKey": "social-work",
       "label": "Social work exam prep",
-      "route": "/us/allied/allied-health/lessons?alliedProfession=social-work",
+      "route": "/allied/allied-health/lessons?alliedProfession=social-work",
       "topicSlugsIn": [
         "patient-communication",
         "clinical-documentation",
@@ -289,7 +289,7 @@
     {
       "professionKey": "mental-health-addictions",
       "label": "Mental health and addictions worker exam prep",
-      "route": "/us/allied/allied-health/lessons?alliedProfession=mental-health-addictions",
+      "route": "/allied/allied-health/lessons?alliedProfession=mental-health-addictions",
       "topicSlugsIn": [
         "patient-communication",
         "clinical-documentation",
@@ -309,7 +309,7 @@
     {
       "professionKey": "psw-hca",
       "label": "PSW, HCA, and CCA exam prep",
-      "route": "/us/allied/allied-health/lessons?alliedProfession=psw-hca",
+      "route": "/allied/allied-health/lessons?alliedProfession=psw-hca",
       "topicSlugsIn": [
         "patient-assessment",
         "vital-signs",
@@ -331,7 +331,7 @@
     {
       "professionKey": "respiratory",
       "label": "Respiratory therapy (RRT) exam prep",
-      "route": "/us/allied/allied-health/lessons?alliedProfession=respiratory",
+      "route": "/allied/allied-health/lessons?alliedProfession=respiratory",
       "topicSlugsIn": [
         "patient-assessment",
         "vital-signs",
@@ -353,7 +353,7 @@
     {
       "professionKey": "imaging",
       "label": "Medical imaging exam prep",
-      "route": "/us/allied/allied-health/lessons?alliedProfession=imaging",
+      "route": "/allied/allied-health/lessons?alliedProfession=imaging",
       "topicSlugsIn": [
         "imaging-basics",
         "patient-assessment",
@@ -373,7 +373,7 @@
     {
       "professionKey": "pharmacy-tech",
       "label": "Pharmacy technician exam prep",
-      "route": "/us/allied/allied-health/lessons?alliedProfession=pharmacy-tech",
+      "route": "/allied/allied-health/lessons?alliedProfession=pharmacy-tech",
       "topicSlugsIn": [
         "medication-safety",
         "pharmacology-basics",

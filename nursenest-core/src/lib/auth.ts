@@ -20,24 +20,14 @@ import {
   type SessionSubscriptionStatus,
 } from "@/lib/entitlements/get-user-access";
 import { getTrustedClientIp } from "@/lib/http/client-ip";
+import { reportAuthSecretStartupStatus } from "@/lib/auth/auth-secret";
 import { safeServerLog, safeServerLogCritical } from "@/lib/observability/safe-server-log";
 import { recordCredentialsLoginFailure } from "@/lib/observability/production-signal-metrics";
 import { Prisma } from "@prisma/client";
 
 if (process.env.NODE_ENV === "production") {
-  const hasSecret = Boolean(
-    (process.env.AUTH_SECRET && process.env.AUTH_SECRET.trim().length > 0) ||
-      (process.env.NEXTAUTH_SECRET && process.env.NEXTAUTH_SECRET.trim().length > 0),
-  );
-
-  if (!hasSecret) {
-    safeServerLogCritical(
-      "auth",
-      "missing_auth_secret",
-      { surface: "startup" },
-      new Error("AUTH_SECRET (or NEXTAUTH_SECRET) must be set in production for JWT signing"),
-    );
-  }
+  /** Deduped per process; build vs runtime branches live in {@link reportAuthSecretStartupStatus}. */
+  reportAuthSecretStartupStatus("startup");
 
   const nextAuthUrl = process.env.NEXTAUTH_URL?.trim();
   if (nextAuthUrl) {

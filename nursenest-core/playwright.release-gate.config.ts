@@ -43,7 +43,7 @@ const paidAuthEnabled = hasPaidTestCredentials();
 
 /** Paid specs that must pass before production promote (order preserved with workers=1). */
 const releaseBlockingPaidMatch =
-  /tests\/e2e\/(paid-user\/(paid-user-00-fast-sanity|paid-user-entitlements|paid-user-api-health|paid-user-cat-smoke)\.spec\.ts|release\/release-account-billing-smoke\.spec\.ts)$/;
+  /tests\/e2e\/(paid-user\/(paid-user-00-fast-sanity|paid-user-entitlements|paid-user-api-health|paid-user-cat-smoke|phase-1-paid-learner-workflows)\.spec\.ts|release\/release-account-billing-smoke\.spec\.ts)$/;
 
 /**
  * Same visibility rule as `playwright.config.ts`: `setup-paid-auth` and the paid slice always
@@ -98,6 +98,11 @@ export default defineConfig({
       name: "release-health",
       testMatch:
         /tests\/e2e\/release\/(release-health-apis|healthz-liveness-burst)\.spec\.ts$/,
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "release-phase-1-guest",
+      testMatch: /tests\/e2e\/release\/phase-1-release-qa-guest\.spec\.ts$/,
       use: { ...devices["Desktop Chrome"] },
     },
     ...releasePaidProjects,

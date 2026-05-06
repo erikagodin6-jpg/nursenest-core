@@ -126,13 +126,12 @@ function ratioString(rawCount: number, renderableCount: number): string {
 function strictMarketingRenderableSlugs(pathwayId: string, normalized: PathwayLessonRecord[]): Set<string> {
   const prev = process.env.NN_FORCE_PUBLISH_VALID_RAW_LESSONS;
   delete process.env.NN_FORCE_PUBLISH_VALID_RAW_LESSONS;
-  resetCatalogLessonsRawMergeCacheForTests();
   try {
+    /** No global cache reset: {@link sortAndFilterLessonsForPathwayContext} only reads env + the passed rows. */
     return new Set(sortAndFilterLessonsForPathwayContext(pathwayId, [...normalized]).map((l) => l.slug.trim()));
   } finally {
     if (prev === undefined) delete process.env.NN_FORCE_PUBLISH_VALID_RAW_LESSONS;
     else process.env.NN_FORCE_PUBLISH_VALID_RAW_LESSONS = prev;
-    resetCatalogLessonsRawMergeCacheForTests();
   }
 }
 

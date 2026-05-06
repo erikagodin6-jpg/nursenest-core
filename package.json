@@ -58,6 +58,8 @@
     "blog:audit-quality": "npm --prefix nursenest-core run blog:audit-quality --",
     "blog:audit-published-quality": "npm --prefix nursenest-core run blog:audit-published-quality --",
     "test:e2e:mobile": "npm --prefix nursenest-core run test:e2e:mobile --",
+    "test:e2e:release": "npm --prefix nursenest-core run test:e2e:release --",
+    "qa:release-gate": "npm --prefix nursenest-core run qa:release-gate --",
     "db:push": "drizzle-kit push",
     "backup:full": "tsx backup-system/backup-full.ts",
     "backup:db": "tsx backup-system/backup-db.ts",

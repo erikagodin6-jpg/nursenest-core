@@ -15,6 +15,7 @@ import {
   type LearnerStudyDefaultsV1,
 } from "@/lib/student/learner-study-defaults";
 import { LearnerEmailEngagementPrefs } from "@/components/student/learner-email-engagement-prefs";
+import { LearnerResetProgressSection } from "@/components/student/learner-reset-progress-section";
 
 export function LearnerStudySettingsHub({
   userId,
@@ -408,6 +409,8 @@ export function LearnerStudySettingsHub({
         </div>
         <p className="p-5 text-sm text-muted-foreground">{t("learner.studySettings.notificationsBody")}</p>
       </section>
+
+      <LearnerResetProgressSection t={t} />
 
       <section className="overflow-hidden rounded-2xl border border-border/60 bg-muted/10">
         <div className="border-b border-border/60 px-5 py-4">

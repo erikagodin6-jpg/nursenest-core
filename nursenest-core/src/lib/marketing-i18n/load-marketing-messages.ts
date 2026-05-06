@@ -3,6 +3,7 @@ import "server-only";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
+import { MARKETING_PUBLIC_I18N_SHARD_FILENAMES } from "@/lib/i18n/marketing-public-shard-filenames";
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
 import { normalizeMarketingMessagesRecord } from "@/lib/marketing-i18n/safe-marketing-messages";
 
@@ -58,14 +59,52 @@ function readJsonFileSafe(file: string): Record<string, unknown> {
   }
 }
 
+/**
+ * Next.js ships `public/i18n/{locale}/*.json` domain shards (see `merge-marketing-i18n.ts`).
+ * When no legacy monolith `{locale}.json` exists, merge shards in stable policy order.
+ */
+function loadPublicShardTreeMerged(resolvedI18nRoot: string, locale: string): Record<string, unknown> | null {
+  const shardDir = path.resolve(resolvedI18nRoot, locale);
+  if (!KNOWN_I18N_ROOTS.some((root) => isWithinAllowedRoot(shardDir, path.resolve(root)))) {
+    return null;
+  }
+  if (!existsSync(shardDir)) return null;
+
+  const merged: Record<string, unknown> = {};
+  for (const name of MARKETING_PUBLIC_I18N_SHARD_FILENAMES) {
+    const fp = path.join(shardDir, `${name}.json`);
+    if (!existsSync(fp)) continue;
+    const part = readJsonFileSafe(fp);
+    for (const [k, v] of Object.entries(part)) {
+      if (k in merged) {
+        throw new Error(`[loadMarketingMessages] duplicate i18n key "${k}" under ${fp}`);
+      }
+      merged[k] = v;
+    }
+  }
+  return Object.keys(merged).length > 0 ? merged : null;
+}
+
 function loadLocaleBundle(dir: string, locale: string): MarketingMessages {
   try {
     if (!MARKETING_LOCALE_RE.test(locale)) return {};
     const resolvedDir = path.resolve(dir);
     if (!KNOWN_I18N_ROOTS.includes(resolvedDir)) return {};
-    const file = path.resolve(resolvedDir, `${locale}.json`);
-    if (!isWithinAllowedRoot(file, resolvedDir)) return {};
-    return normalizeMarketingMessagesRecord(readJsonFileSafe(file));
+
+    const legacyFile = path.resolve(resolvedDir, `${locale}.json`);
+    if (existsSync(legacyFile) && isWithinAllowedRoot(legacyFile, resolvedDir)) {
+      const monolith = readJsonFileSafe(legacyFile);
+      if (Object.keys(monolith).length > 0) {
+        return normalizeMarketingMessagesRecord(monolith);
+      }
+    }
+
+    const fromShards = loadPublicShardTreeMerged(resolvedDir, locale);
+    if (fromShards) {
+      return normalizeMarketingMessagesRecord(fromShards);
+    }
+
+    return {};
   } catch {
     return {};
   }

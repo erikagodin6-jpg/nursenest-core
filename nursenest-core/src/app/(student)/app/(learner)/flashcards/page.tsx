@@ -235,6 +235,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
           categoryOptions: inv.categoryOptions,
           matchingTotal: inv.total,
           lessonVirtualDiagnostics: pathwayLessonFlashDiagnostics,
+          poolDiagnostics: inv.diagnostics,
         };
       } else {
         /** Pathway skeleton matches lessons hub even when inventory query fails — avoids empty hub + false client errors. */
@@ -282,6 +283,7 @@ export default async function FlashcardsPage({ searchParams }: PageProps) {
           pathwayBootstrapSource={pathwayBootstrapSource}
           catHref={catHref}
           initialHub={initialHub}
+          initialPoolDiagnostics={initialHub?.poolDiagnostics ?? null}
           lessonsHubHref={`/app/lessons?pathwayId=${encodeURIComponent(scopedPathwayId)}`}
           alliedProfessionKey={alliedKeyForFlashcards || null}
           hubTopicSlug={hubTopicFromQuery}

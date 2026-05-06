@@ -3,35 +3,84 @@
  * Publish `exam_questions` drafts that meet quality gates. Does not touch quarantined rows,
  * ECG-tagged rows (`ecg-video` tag), or `question_format` values excluded from linear bank pools.
  *
- * Default (minimal): valid stem (≥10 chars), non-empty `correct_answer` JSON, rationale optional
- * (when non-empty, ≥5 chars), exam allowlist, non-ECG format + no `ecg-video` tag.
- *
- * Strict (`--strict`): legacy gates — non-empty rationale + topic/body_system/nclex category signal.
+ * Modes:
+ * - Default (minimal): stem ≥10 chars, JSON `correct_answer` present, rationale optional (when present ≥5 chars),
+ *   topic OR body_system, exam allowlist, non-ECG format + no `ecg-video` tag.
+ * - `--require-rationale`: minimal gates + non-empty rationale (still ≥5 chars when trimming whitespace).
+ * - `--strict`: rationale required + taxonomy signal (topic OR body_system OR nclex category), stem non-empty,
+ *   `correct_answer IS NOT NULL`, same ECG/format/exam rules.
  *
  * Usage (from nursenest-core/):
- *   npx tsx scripts/publish-valid-draft-exam-questions.ts
  *   npx tsx scripts/publish-valid-draft-exam-questions.ts --dry-run
- *   npx tsx scripts/publish-valid-draft-exam-questions.ts --strict --dry-run
+ *   npx tsx scripts/publish-valid-draft-exam-questions.ts --dry-run --json
+ *   npx tsx scripts/publish-valid-draft-exam-questions.ts --strict --dry-run --json
+ *   npx tsx scripts/publish-valid-draft-exam-questions.ts --require-rationale --dry-run
+ *   npx tsx scripts/publish-valid-draft-exam-questions.ts
  */
 
-import { Prisma } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 import {
   examKeyNormsForPathwayPool,
   examQuestionExamNormInSql,
 } from "../src/lib/content-quality/exam-question-exam-normalization";
 import {
-  examQuestionDraftPublishableMinimalSql,
-  examQuestionDraftPublishableStrictSql,
+  EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL,
   EXAM_QUESTION_STATUS_PUBLISHED_SQL,
 } from "../src/lib/questions/exam-question-bank-sql";
+import {
+  buildDraftPublishDryRunJson,
+  fetchDraftPublishAggregateRow,
+  fetchDraftPublishPrimaryIneligibleReasons,
+} from "../src/lib/questions/exam-question-draft-publish-metrics";
+import {
+  draftPublishWhereSql,
+  parseDraftPublishCli,
+} from "../src/lib/questions/exam-question-draft-publish";
 
 const prisma = new PrismaClient();
 
+function printLearnerSurfaceWarning(mode: string, emptyRationaleEligible: number): void {
+  if (mode !== "minimal" || emptyRationaleEligible <= 0) return;
+  console.log("\n" + "=".repeat(72));
+  console.log("LEARNER-SURFACE QUALITY WARNING (minimal mode)");
+  console.log("=".repeat(72));
+  console.log(
+    `This dry-run would publish ${emptyRationaleEligible.toLocaleString()} draft row(s) with an EMPTY rationale.`,
+  );
+  console.log(
+    "That can be acceptable for bank normalization / admin inventory, but those rows are NOT suitable for",
+  );
+  console.log(
+    "surfaces that expect teaching rationale quality (e.g. CAT study mode and per-item practice rationales use",
+  );
+  console.log(
+    "`isCompleteCatQuestionRow`, which requires a non-empty rationale — empty rows are filtered out of the",
+  );
+  console.log(
+    "adaptive pool after fetch). Flashcard exam-bank rows still get a generic fallback line when rationale is",
+  );
+  console.log("short; prefer `--require-rationale` or `--strict` before promoting to learner-heavy flows.");
+  console.log("=".repeat(72) + "\n");
+}
+
 async function main(): Promise<void> {
-  const dryRun = process.argv.includes("--dry-run");
-  const strict = process.argv.includes("--strict");
-  const publishWhere = strict ? examQuestionDraftPublishableStrictSql() : examQuestionDraftPublishableMinimalSql();
+  let cli;
+  try {
+    cli = parseDraftPublishCli(process.argv);
+  } catch (e) {
+    console.error(e instanceof Error ? e.message : e);
+    process.exit(1);
+    return;
+  }
+
+  const { dryRun, mode, json } = cli;
+  const publishWhere = draftPublishWhereSql(mode);
+
+  if (json && dryRun) {
+    const payload = await buildDraftPublishDryRunJson(prisma, mode);
+    console.log(JSON.stringify(payload));
+    return;
+  }
 
   const [totalRow] = await prisma.$queryRaw<[{ n: bigint }]>`
     SELECT COUNT(*)::bigint AS n FROM exam_questions
@@ -85,14 +134,70 @@ async function main(): Promise<void> {
     console.log("\n=== By study_link_pathway_id (skipped: column absent in this DB) ===");
   }
 
-  const [eligible] = await prisma.$queryRaw<[{ n: bigint }]>`
-    SELECT COUNT(*)::bigint AS n FROM exam_questions WHERE ${publishWhere}
-  `;
-  const nEligible = Number(eligible.n);
+  const agg = await fetchDraftPublishAggregateRow(prisma);
+  const td = Number(agg.total_drafts);
+  const minEl = Number(agg.minimal_eligible);
+  const minReqEl = Number(agg.minimal_require_rationale_eligible);
+  const stEl = Number(agg.strict_eligible);
+  const emptyRat = Number(agg.minimal_eligible_empty_rationale);
+  const shortRat = Number(agg.minimal_eligible_short_rationale_5_49);
+
+  const activeEligible =
+    mode === "strict" ? stEl : mode === "minimal_require_rationale" ? minReqEl : minEl;
+
+  console.log("\n=== Draft publish dry-run (all modes compared) ===");
+  console.log(`  Total draft rows                          : ${td.toLocaleString()}`);
+  console.log(`  Eligible — minimal (default gates)        : ${minEl.toLocaleString()}`);
+  console.log(`  Eligible — minimal + --require-rationale   : ${minReqEl.toLocaleString()}`);
+  console.log(`  Eligible — --strict                        : ${stEl.toLocaleString()}`);
+  console.log("\n--- Active mode ---");
+  console.log(`  Mode                                      : ${mode}`);
+  console.log(`  Eligible to publish (this run)            : ${activeEligible.toLocaleString()}`);
+
+  console.log("\n--- Draft diagnostics (any mode; may overlap across rows) ---");
+  console.log(`  Drafts with stem < 10 chars (minimal gate): ${Number(agg.draft_short_stem_lt10).toLocaleString()}`);
   console.log(
-    `\n=== Eligible to publish (${strict ? "strict" : "minimal"} gates: draft + quality + exam allowlist) ===`,
+    `  Drafts excluded ECG/video (format or tag) : ${Number(agg.draft_ecg_or_video_format_or_tag).toLocaleString()}`,
   );
-  console.log(`  Rows           : ${nEligible.toLocaleString()}`);
+  console.log(`  Drafts with invalid exam (not allowlist)  : ${Number(agg.draft_invalid_exam).toLocaleString()}`);
+  console.log(
+    `  Drafts missing/invalid correct_answer JSON: ${Number(agg.draft_missing_or_invalid_correct_answer).toLocaleString()}`,
+  );
+  console.log(
+    `  Drafts rationale 1–4 chars (placeholder): ${Number(agg.draft_rationale_too_short_when_present_1_4).toLocaleString()}`,
+  );
+  console.log(
+    `  Drafts missing topic AND body_system      : ${Number(agg.draft_missing_topic_or_body).toLocaleString()}`,
+  );
+
+  console.log("\n--- Minimal-eligible quality signals ---");
+  console.log(`  Eligible (minimal) with empty rationale   : ${emptyRat.toLocaleString()}`);
+  console.log(`  Eligible (minimal) with rationale 5–49 ch : ${shortRat.toLocaleString()}  (short/minimal teaching text)`);
+
+  const primary = await fetchDraftPublishPrimaryIneligibleReasons(prisma, mode);
+  const ineligible = td - activeEligible;
+  console.log(`\n--- Ineligible for active mode (primary reason, non-overlapping) — ${ineligible.toLocaleString()} rows ---`);
+  const keys = Object.keys(primary).sort();
+  if (keys.length === 0) {
+    console.log("  (none — all drafts match active gates or there are zero drafts)");
+  } else {
+    for (const k of keys) {
+      console.log(`  ${k.padEnd(42)} ${Number(primary[k]).toLocaleString()}`);
+    }
+  }
+
+  printLearnerSurfaceWarning(mode, emptyRat);
+
+  if (mode === "minimal_require_rationale") {
+    console.log(
+      "\nNote: --require-rationale uses minimal gates plus non-empty rationale (safer middle tier than bare minimal).\n",
+    );
+  }
+
+  console.log(
+    `\n=== Eligible to publish (${mode} gates: draft + quality + exam allowlist + ECG exclusions) ===`,
+  );
+  console.log(`  Rows           : ${activeEligible.toLocaleString()}`);
 
   if (dryRun) {
     console.log("\n[dry-run] No UPDATE executed. Re-run without --dry-run to publish.");

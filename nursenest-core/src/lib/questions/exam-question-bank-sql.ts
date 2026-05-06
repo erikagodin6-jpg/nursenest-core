@@ -100,6 +100,24 @@ export function examQuestionDraftPublishableMinimalSql(): Prisma.Sql {
 }
 
 /**
+ * Same as {@link examQuestionDraftPublishableMinimalSql} but requires a non-empty rationale
+ * (still enforces ≥5 chars when rationale is present — redundant with non-empty, but keeps one codepath).
+ */
+export function examQuestionDraftPublishableMinimalRequireRationaleSql(): Prisma.Sql {
+  return Prisma.sql`
+  ${EXAM_QUESTION_DRAFT_STATUS_SQL}
+  AND length(trim(stem)) >= 10
+  AND ${EXAM_QUESTION_CORRECT_ANSWER_PRESENT_SQL}
+  AND ${EXAM_QUESTION_RATIONALE_REQUIRED_SQL}
+  AND ${EXAM_QUESTION_RATIONALE_IF_PRESENT_SQL}
+  AND ${EXAM_QUESTION_FLASHCARD_ELIGIBLE_FORMAT_SQL}
+  AND ${EXAM_QUESTION_NON_ECG_TAG_SQL}
+  AND ${EXAM_QUESTION_TOPIC_OR_BODY_SQL}
+  AND exam IN (${Prisma.join([...examQuestionExamPublishAllowlist()])})
+`;
+}
+
+/**
  * Stricter draft → published gates (legacy script): rationale + taxonomy signal + same ECG/format/exam rules.
  */
 export function examQuestionDraftPublishableStrictSql(): Prisma.Sql {

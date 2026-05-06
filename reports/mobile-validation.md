@@ -119,3 +119,65 @@
 - **Automated device validation:** **Not executed** in this session.  
 - **Static assessment of requested surfaces:** **MINOR ISSUE** overall (see table); individual requested areas are **PASS** or **MINOR** as above.  
 - **Silent ignores:** None — limitations and intentional tradeoffs are listed explicitly.
+
+---
+
+## Playwright mobile E2E — automated run (2026-05-05)
+
+**Command:**
+
+```bash
+cd /root/nursenest-core && npm run test:e2e:mobile
+```
+
+(`nursenest-core` runs `pretest:e2e:mobile` → `npm run i18n:compile` from repo root, then `npx playwright test -c playwright.mobile.config.ts`.)
+
+### Result summary
+
+| Outcome | Count |
+|--------|------:|
+| Passed | 12 |
+| Skipped | 6 |
+| Failed | 0 |
+
+**Exit code:** 0
+
+### Per-test (latest run)
+
+| Project | Test | Result |
+|---------|------|--------|
+| mobile-pixel | Free learner — dashboard + paywall | skip — no `QA_FREE_EMAIL` + `QA_FREE_PASSWORD` |
+| mobile-pixel | Free learner — Flashcards nav | skip — same |
+| mobile-pixel | Marketing — `/signup` bounded width | pass |
+| mobile-pixel | Marketing — `/us/rn/nclex-rn` | pass |
+| mobile-pixel | Marketing — `/us/rn/nclex-rn/lessons` | pass |
+| mobile-pixel | Hamburger open/close | pass |
+| mobile-pixel | `/blog` (slow SSR) | skip — `E2E_MOBILE_INCLUDE_BLOG=1` not set |
+| mobile-pixel | Homepage + bounded width | pass |
+| mobile-pixel | `/pricing` main + bounded width | pass |
+| mobile-iphone | (same free learner tests) | skip — same |
+| mobile-iphone | (same marketing + regression) | pass |
+| mobile-iphone | `/blog` | skip — opt-in |
+
+### Route-level diagnosis
+
+| Route | Status | Root cause / fix |
+|-------|--------|------------------|
+| `/signup` | pass | Marketing i18n must load merged **public shards** (not only monolithic JSON); missing keys caused 500s. Added `pages.pricing.narrative.newgrad.*` and `footer.regionalHubLinks` in `tools/i18n/marketing/marketing-en.json` + `i18n:compile` so `/pricing` RSC and footer do not throw for `NEW_GRAD` tier. |
+| `/pricing` | pass | Same; strict `getRequiredPublicMetadataLine` for `pages.pricing.narrative.newgrad.subhead` required newgrad narrative block. |
+| `/blog` | skip | Opt-in only when `E2E_MOBILE_INCLUDE_BLOG=1`. |
+| Dev server / ERR_CONNECTION_REFUSED | pass | `webServer.timeout` 300s; `mobile-iphone` depends on `mobile-pixel`; `workers: 1`. |
+
+### Layout health
+
+Overflow checks use **`scrollWidth` / `clientWidth`** (`assertMobileHorizontalLayoutHealth`); no reliance on `overflow-x: hidden` as the pass criterion for E2E.
+
+### Artifacts
+
+- Failure traces/screenshots: `nursenest-core/test-results/` (only on failure; clean run produced none).
+- Agent full log: Cursor session output for `npm run test:e2e:mobile` (~3m).
+
+### Remaining console noise (non-blocking)
+
+`next dev` logs may still show missing **home hero carousel** keys (`components.homeHeroCarousel.slide03.label`, `slide09.label`, `pages.home.carouselHandoff.fallbackCta`) — separate i18n/content follow-up; mobile suite does not assert them.
+

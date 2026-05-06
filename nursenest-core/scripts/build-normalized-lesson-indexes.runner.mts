@@ -10,12 +10,14 @@ import { LESSON_CATEGORIES } from "@/lib/lessons/lesson-taxonomy";
 import { countMarketingHubLessonsByDisplayCategoryForPathway } from "@/lib/lessons/marketing-lessons-hub-category";
 import {
   getCatalogLessonsRaw,
-  getCatalogPathwayLessonDisplayTitleForSlug,
+  getCatalogPathwayLessonsSync,
+  getLessonCatalogMemoizationStats,
   getLessonSummariesIndex,
   getMarketingHubEffectiveCatalogSlugSet,
   listCatalogPathwayIdsWithLessonsSync,
   resetCatalogLessonsRawMergeCacheForTests,
 } from "@/lib/lessons/pathway-lesson-catalog-sync";
+import { safeServerLog } from "@/lib/observability/safe-server-log";
 import {
   buildLessonNormalizationCoverageReport,
   lessonNormalizationCoverageJsonPath,
@@ -42,6 +44,7 @@ async function main(): Promise<void> {
 
   const ids = listCatalogPathwayIdsWithLessonsSync();
   const generatedAt = new Date().toISOString();
+  const buildStarted = performance.now();
 
   for (const pathwayId of ids) {
     const safe = pathwayId.trim();
@@ -49,12 +52,14 @@ async function main(): Promise<void> {
       console.error(`[build:lesson-indexes] skip invalid pathway id: ${pathwayId}`);
       continue;
     }
+    const pathwayStarted = performance.now();
     const rawCount = getCatalogLessonsRaw(safe).length;
     const summaries = getLessonSummariesIndex(safe);
+    const lessonsBySlug = new Map(getCatalogPathwayLessonsSync(safe).map((l) => [l.slug.trim(), l]));
     const slugToDisplayTitle: Record<string, string> = {};
     for (const row of summaries) {
-      const t = getCatalogPathwayLessonDisplayTitleForSlug(safe, row.slug);
-      slugToDisplayTitle[row.slug] = (t ?? row.title).trim();
+      const lesson = lessonsBySlug.get(row.slug.trim());
+      slugToDisplayTitle[row.slug] = (lesson?.title ?? row.title).trim();
     }
     const effSet = getMarketingHubEffectiveCatalogSlugSet(safe);
     const marketingEffectiveSlugsLowercase = [...effSet].map((s) => s.toLowerCase()).sort((a, b) => a.localeCompare(b));
@@ -77,8 +82,26 @@ async function main(): Promise<void> {
     };
 
     fs.writeFileSync(path.join(outDir, `${safe}.json`), `${JSON.stringify(payload, null, 2)}\n`, "utf8");
-    console.info(`[build:lesson-indexes] wrote ${safe}.json lessons=${summaries.length} raw=${rawCount}`);
+    const pathwayMs = Math.round(performance.now() - pathwayStarted);
+    console.info(
+      `[build:lesson-indexes] wrote ${safe}.json lessons=${summaries.length} raw=${rawCount} pathwayMs=${pathwayMs}`,
+    );
   }
+  const memo = getLessonCatalogMemoizationStats();
+  safeServerLog("lesson_indexes", "lesson_index_generation_memoization", {
+    pathwayCount: ids.length,
+    totalMs: Math.round(performance.now() - buildStarted),
+    mergedRawHits: memo.mergedRawCatalogHits,
+    mergedRawMisses: memo.mergedRawCatalogMisses,
+    pathwayNormHits: memo.pathwayNormalizeHits,
+    pathwayNormMisses: memo.pathwayNormalizeMisses,
+    effectiveHubHits: memo.effectiveHubHits,
+    effectiveHubMisses: memo.effectiveHubMisses,
+    marketingSlugHits: memo.marketingSlugSetHits,
+    marketingSlugMisses: memo.marketingSlugSetMisses,
+    summaryHits: memo.summaryIndexHits,
+    summaryMisses: memo.summaryIndexMisses,
+  });
   const coverage = buildLessonNormalizationCoverageReport();
   writeLessonNormalizationCoverageReports(coverage);
   const collapsed = coverage.pathways.filter((pathway) => pathway.rawCount > 0 && pathway.renderableCount === 0);

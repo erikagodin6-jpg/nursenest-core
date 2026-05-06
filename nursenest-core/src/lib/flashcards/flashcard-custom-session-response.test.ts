@@ -3,7 +3,32 @@ import assert from "node:assert/strict";
 import {
   flashcardBodySystemsUiOutcomeFromParsed,
   parseFlashcardCustomSessionResponse,
+  parseFlashcardInventoryResponse,
 } from "@/lib/flashcards/flashcard-custom-session-response";
+
+test("parseFlashcardInventoryResponse: maps diagnostics onto summary.poolInventoryDiagnostics", () => {
+  const r = parseFlashcardInventoryResponse(true, {
+    success: true,
+    total: 9110,
+    categoryOptions: [{ id: "cardiovascular", title: "CV", count: 100 }],
+    categories: [],
+    diagnostics: {
+      pathwayId: "us-rn-nclex-rn",
+      examQuestionSqlPoolCount: 9110,
+      dedicatedFlashcardRowCount: 0,
+      tier: "RN",
+      country: "US",
+      poolSource: "flashcard_learner_exam_norm_sql_v1",
+      legacyCanonicalPrismaPoolCount: 0,
+    },
+  });
+  assert.equal(r.ok, true);
+  if (!r.ok) return;
+  assert.equal(r.summary?.matchingCards, 9110);
+  assert.equal(r.summary?.poolInventoryDiagnostics?.examQuestionSqlPoolCount, 9110);
+  assert.equal(r.summary?.poolInventoryDiagnostics?.dedicatedFlashcardRowCount, 0);
+  assert.equal(r.summary?.poolInventoryDiagnostics?.pathwayId, "us-rn-nclex-rn");
+});
 
 test("parseFlashcardCustomSessionResponse: preserves queryRelaxation on summary", () => {
   const r = parseFlashcardCustomSessionResponse(true, {

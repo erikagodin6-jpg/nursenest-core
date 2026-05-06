@@ -606,6 +606,27 @@ const lessonSummariesIndexByPathway = new Map<string, PathwayLessonSummaryIndexR
  */
 const trustedGeneratedLessonIndexByPathway = new Map<string, PathwayLessonGeneratedIndexFileV1 | null>();
 
+/** In-process memoization counters for lesson catalog tooling (reset with {@link resetCatalogLessonsRawMergeCacheForTests}). */
+const lessonCatalogMemoStats = {
+  mergedRawCatalogHits: 0,
+  mergedRawCatalogMisses: 0,
+  pathwayNormalizeHits: 0,
+  pathwayNormalizeMisses: 0,
+  effectiveHubHits: 0,
+  effectiveHubMisses: 0,
+  marketingSlugSetHits: 0,
+  marketingSlugSetMisses: 0,
+  summaryIndexHits: 0,
+  summaryIndexMisses: 0,
+};
+
+export type LessonCatalogMemoizationStats = typeof lessonCatalogMemoStats;
+
+/** Snapshot of catalog memoization (lesson index build, audits). */
+export function getLessonCatalogMemoizationStats(): LessonCatalogMemoizationStats {
+  return { ...lessonCatalogMemoStats };
+}
+
 /** Test-only: clear merged catalog slice cache and derived normalized indexes. */
 export function resetCatalogLessonsRawMergeCacheForTests(): void {
   catalogDataCache = null;
@@ -642,6 +663,16 @@ export function resetCatalogLessonsRawMergeCacheForTests(): void {
   trustedGeneratedLessonIndexByPathway.clear();
   clearGeneratedPathwayLessonIndexCacheForTests();
   lessonLibraryCache = undefined;
+  lessonCatalogMemoStats.mergedRawCatalogHits = 0;
+  lessonCatalogMemoStats.mergedRawCatalogMisses = 0;
+  lessonCatalogMemoStats.pathwayNormalizeHits = 0;
+  lessonCatalogMemoStats.pathwayNormalizeMisses = 0;
+  lessonCatalogMemoStats.effectiveHubHits = 0;
+  lessonCatalogMemoStats.effectiveHubMisses = 0;
+  lessonCatalogMemoStats.marketingSlugSetHits = 0;
+  lessonCatalogMemoStats.marketingSlugSetMisses = 0;
+  lessonCatalogMemoStats.summaryIndexHits = 0;
+  lessonCatalogMemoStats.summaryIndexMisses = 0;
 }
 
 /**
@@ -679,7 +710,11 @@ function tryTrustedGeneratedLessonIndex(pathwayId: string): PathwayLessonGenerat
 
 function ensurePathwayCatalogIndexes(pathwayId: string): void {
   const key = pathwayId.trim();
-  if (pathwayNormalizedCatalogRows.has(key)) return;
+  if (pathwayNormalizedCatalogRows.has(key)) {
+    lessonCatalogMemoStats.pathwayNormalizeHits++;
+    return;
+  }
+  lessonCatalogMemoStats.pathwayNormalizeMisses++;
   lessonsPerfMark("catalog_build_start", { scope: "normalized_pathway_catalog", pathwayId: key });
   const rawList = getCatalogLessonsRaw(key);
   const normRows: PathwayLessonRecord[] = [];
@@ -1887,7 +1922,11 @@ function buildCatalogLessonsRawUncached(pathwayId: string): LessonInput[] {
 export function getCatalogLessonsRaw(pathwayId: string): LessonInput[] {
   const key = pathwayId.trim();
   const hit = catalogLessonsRawByPathwayIdCache.get(key);
-  if (hit) return hit;
+  if (hit) {
+    lessonCatalogMemoStats.mergedRawCatalogHits++;
+    return hit;
+  }
+  lessonCatalogMemoStats.mergedRawCatalogMisses++;
   lessonsPerfMark("catalog_build_start", { scope: "merged_catalog_lessons_raw", pathwayId: key });
   const built = buildCatalogLessonsRawUncached(key);
   catalogLessonsRawByPathwayIdCache.set(key, built);
@@ -1914,7 +1953,11 @@ export function getCatalogPathwayLessonsSync(pathwayId: string): PathwayLessonRe
 export function getEffectiveCatalogLessonsForPathwaySync(pathwayId: string): PathwayLessonRecord[] {
   const key = pathwayId.trim();
   const hit = effectiveHubCatalogLessonsByPathway.get(key);
-  if (hit) return hit;
+  if (hit) {
+    lessonCatalogMemoStats.effectiveHubHits++;
+    return hit;
+  }
+  lessonCatalogMemoStats.effectiveHubMisses++;
   ensurePathwayCatalogIndexes(key);
   const normalized = pathwayNormalizedCatalogRows.get(key) ?? [];
   const built = sortAndFilterLessonsForPathwayContext(key, normalized).map(stripPathwayLessonToHubListShape);
@@ -1928,7 +1971,11 @@ export function getEffectiveCatalogLessonsForPathwaySync(pathwayId: string): Pat
 export function getMarketingHubEffectiveCatalogSlugSet(pathwayId: string): Set<string> {
   const key = pathwayId.trim();
   const hit = marketingEffectiveCatalogSlugSetByPathway.get(key);
-  if (hit) return hit;
+  if (hit) {
+    lessonCatalogMemoStats.marketingSlugSetHits++;
+    return hit;
+  }
+  lessonCatalogMemoStats.marketingSlugSetMisses++;
   const trusted = tryTrustedGeneratedLessonIndex(key);
   if (trusted) {
     const s = new Set(
@@ -1950,7 +1997,11 @@ export function getMarketingHubEffectiveCatalogSlugSet(pathwayId: string): Set<s
 export function getLessonSummariesIndex(pathwayId: string): PathwayLessonSummaryIndexRow[] {
   const key = pathwayId.trim();
   const memo = lessonSummariesIndexByPathway.get(key);
-  if (memo) return memo;
+  if (memo) {
+    lessonCatalogMemoStats.summaryIndexHits++;
+    return memo;
+  }
+  lessonCatalogMemoStats.summaryIndexMisses++;
   const trusted = tryTrustedGeneratedLessonIndex(key);
   if (trusted) {
     const rows: PathwayLessonSummaryIndexRow[] = trusted.summaries.map((r) => ({

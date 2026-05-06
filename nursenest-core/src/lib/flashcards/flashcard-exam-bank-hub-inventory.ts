@@ -4,6 +4,8 @@ import type { GlobalExamContext } from "@/lib/exam-context/global-exam-context";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
 import type { BankExamRowForFlashcard } from "@/lib/flashcards/bank-exam-question-to-flashcard-select";
 import { resolveBuilderCategoryId } from "@/lib/flashcards/flashcard-builder-taxonomy";
+import { flashcardLearnerExamPoolWhereSql } from "@/lib/flashcards/flashcard-learner-exam-pool-sql";
+import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
 import {
   DISCOVERY_STATEMENT_TIMEOUT_MS,
   discoveryExamContextScopeForFlashcardFallback,
@@ -211,33 +213,27 @@ export type ExamQuestionFlashcardPoolRow = BankExamRowForFlashcard & {
 };
 
 /**
- * Loads a bounded slice of subscriber-scoped exam questions for the same pathway + entitlement scope
- * as {@link loadExamQuestionHubInventoryForPathway}, for flashcard sessions that must mirror the bank pool.
- *
- * ECG / video / media questions are always excluded. Falls back to no-exam-scope when the scoped query
- * returns 0 rows (same fallback logic as hub inventory).
+ * Loads a bounded slice of exam questions for learner flashcard sessions using the same
+ * {@link flashcardLearnerExamPoolWhereSql} stack as {@link loadFlashcardsExamInventoryForPathway}
+ * (normalized exam keys, study_link_pathway_id OR, NP specialty gates, non-ECG flashcard quality gates).
+ * Does **not** widen the pool by dropping exam scope — inventory and session rows stay aligned.
  */
 export async function loadExamQuestionRowsForFlashcardPool(
-  entitlement: AccessScope,
-  pathwayId: string | null | undefined,
-  examContext: GlobalExamContext | null,
+  poolScope: AccessScope,
+  pathway: ExamPathwayDefinition,
   topicFilter: string | null = null,
   take: number,
 ): Promise<ExamQuestionFlashcardPoolRow[]> {
-  const pid = pathwayId?.trim();
-  if (!pid || !entitlement.hasAccess) return [];
+  if (!poolScope.hasAccess) return [];
 
-  const w = examQuestionsDiscoveryWhereSql(entitlement);
   const topicScope = topicOrBodySystemMatchSql(topicFilter);
   const cap = Math.min(Math.max(Math.floor(take), 1), EXAM_FLASHCARD_SESSION_POOL_CAP);
+  const whereSql = flashcardLearnerExamPoolWhereSql(poolScope, pathway);
 
-  const { sql: contextScope, hasScopeFilter } = discoveryExamContextScopeForFlashcardFallback(examContext);
-
-  const queryPool = async (
-    tx: Parameters<Parameters<typeof prisma.$transaction>[0]>[0],
-    scope: Prisma.Sql,
-  ) =>
-    tx.$queryRaw<ExamQuestionFlashcardPoolRow[]>`
+  const rows = await prisma.$transaction(
+    async (tx) => {
+      await tx.$executeRawUnsafe(`SET LOCAL statement_timeout = '${DISCOVERY_STATEMENT_TIMEOUT_MS}ms'`);
+      return tx.$queryRaw<ExamQuestionFlashcardPoolRow[]>`
       SELECT
         q.id,
         q.stem,
@@ -254,21 +250,10 @@ export async function loadExamQuestionRowsForFlashcardPool(
         q.topic,
         q.body_system AS "bodySystem"
       FROM exam_questions q
-      WHERE ${w}${scope}${topicScope}${FLASHCARD_USABILITY_SQL}
+      WHERE ${whereSql}${topicScope}
       ORDER BY q.id
       LIMIT ${cap}
     `;
-
-  const rows = await prisma.$transaction(
-    async (tx) => {
-      await tx.$executeRawUnsafe(`SET LOCAL statement_timeout = '${DISCOVERY_STATEMENT_TIMEOUT_MS}ms'`);
-      const result = await queryPool(tx, contextScope);
-
-      // Fallback: retry without exam scope if scoped query returned nothing
-      if (result.length === 0 && hasScopeFilter) {
-        return queryPool(tx, Prisma.empty);
-      }
-      return result;
     },
     { maxWait: 8_000, timeout: 12_000 },
   );

@@ -79,23 +79,6 @@ export async function GET(req: NextRequest) {
             { status: 403, headers },
           );
         }
-        if (inv.code === "CRITICAL_EMPTY_POOL") {
-          safeServerLog("flashcards", "inventory_critical_empty_pool", {
-            pathwayId: pathway.id,
-            userIdPrefix: gate.userId.slice(0, 8),
-          });
-          return NextResponse.json(
-            {
-              success: false,
-              code: inv.code,
-              message: inv.message,
-              categories: [],
-              total: 0,
-              categoryOptions: [],
-            },
-            { status: 500, headers },
-          );
-        }
         return NextResponse.json(
           { success: false, code: inv.code, message: inv.message, categories: [], total: 0, categoryOptions: [] },
           { status: 500, headers },
@@ -110,6 +93,7 @@ export async function GET(req: NextRequest) {
           total: inv.total,
           categoryOptions: inv.categoryOptions,
           categories,
+          diagnostics: inv.diagnostics,
         },
         { headers },
       );

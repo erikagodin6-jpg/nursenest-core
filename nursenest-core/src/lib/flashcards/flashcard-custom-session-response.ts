@@ -1,4 +1,5 @@
 import type { BuilderCategoryOption } from "@/lib/flashcards/flashcard-builder-taxonomy";
+import type { FlashcardsPoolInventoryDiagnostics } from "@/lib/flashcards/flashcards-hub-types";
 
 export type FlashcardCustomSessionQueryRelaxation = "none" | "dropped_pathway_scope" | "dropped_country_match";
 
@@ -40,6 +41,8 @@ export type FlashcardCustomSessionSummary = {
   /** Opaque per-response salt used for MCQ option shuffle (and echoed for client debugging). */
   sessionShuffleSalt?: string;
   lessonVirtualDiagnostics?: FlashcardLessonVirtualDiagnostics | null;
+  /** From `/api/flashcards/inventory` — exam bank vs Flashcard table transparency. */
+  poolInventoryDiagnostics?: FlashcardsPoolInventoryDiagnostics | null;
 };
 
 export type ParsedCustomSessionSuccess = {
@@ -61,6 +64,38 @@ export function flashcardBodySystemsUiOutcomeFromParsed(
 ): FlashcardBodySystemsUiOutcome {
   if (!parsed.ok) return "error";
   return parsed.categoryOptions.length > 0 ? "populated" : "empty";
+}
+
+function parsePoolInventoryDiagnostics(raw: unknown): FlashcardsPoolInventoryDiagnostics | null {
+  if (!raw || typeof raw !== "object") return null;
+  const d = raw as Record<string, unknown>;
+  const pathwayId = typeof d.pathwayId === "string" ? d.pathwayId.trim() : "";
+  if (!pathwayId) return null;
+  const examN = d.examQuestionSqlPoolCount;
+  const examQuestionSqlPoolCount =
+    typeof examN === "number" && Number.isFinite(examN) ? Math.max(0, Math.floor(examN)) : 0;
+  const leg = d.legacyCanonicalPrismaPoolCount;
+  const legacyCanonicalPrismaPoolCount =
+    leg === null || leg === undefined
+      ? null
+      : typeof leg === "number" && Number.isFinite(leg)
+        ? Math.max(0, Math.floor(leg))
+        : null;
+  const ded = d.dedicatedFlashcardRowCount;
+  const dedicatedFlashcardRowCount =
+    typeof ded === "number" && Number.isFinite(ded) ? Math.max(0, Math.floor(ded)) : 0;
+  const poolSource = d.poolSource === "flashcard_learner_exam_norm_sql_v1" ? d.poolSource : "flashcard_learner_exam_norm_sql_v1";
+  const zeroHint = typeof d.zeroHint === "string" ? d.zeroHint : undefined;
+  return {
+    pathwayId,
+    examQuestionSqlPoolCount,
+    legacyCanonicalPrismaPoolCount,
+    dedicatedFlashcardRowCount,
+    tier: typeof d.tier === "string" ? d.tier : null,
+    country: typeof d.country === "string" ? d.country : null,
+    poolSource,
+    ...(zeroHint ? { zeroHint } : {}),
+  };
 }
 
 function parseLessonVirtualDiagnostics(
@@ -188,6 +223,7 @@ export function parseFlashcardCustomSessionResponse(
           : undefined,
       sessionShuffleSalt: typeof s.sessionShuffleSalt === "string" ? s.sessionShuffleSalt : undefined,
       lessonVirtualDiagnostics: parseLessonVirtualDiagnostics(s.lessonVirtualDiagnostics),
+      poolInventoryDiagnostics: parsePoolInventoryDiagnostics(s.poolInventoryDiagnostics),
     };
   }
 
@@ -265,6 +301,8 @@ export function parseFlashcardInventoryResponse(
       ? Math.max(0, Math.floor(rawTotal))
       : categoryOptions.reduce((s, c) => s + c.count, 0);
 
+  const poolInventoryDiagnostics = parsePoolInventoryDiagnostics(o.diagnostics);
+
   const summary: FlashcardCustomSessionSummary = {
     pathwayId: null,
     topicCode: null,
@@ -283,6 +321,7 @@ export function parseFlashcardInventoryResponse(
     notStudiedOnly: false,
     cardLimit: "20",
     lessonVirtualDiagnostics: undefined,
+    poolInventoryDiagnostics,
   };
 
   return { ok: true, summary, categoryOptions };

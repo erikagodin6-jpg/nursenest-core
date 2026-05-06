@@ -286,16 +286,17 @@ export function FlashcardsHubClient({
       }
       const opts = parsed.categoryOptions;
       setBuilderCategories(opts);
+      const invSummary = parsed.summary;
       const invRoot = json as Record<string, unknown>;
       const totalFromBody =
         typeof invRoot.total === "number" && Number.isFinite(invRoot.total)
           ? Math.max(0, Math.floor(invRoot.total))
           : undefined;
       const totalFromSummary =
-        parsed.summary != null &&
-        typeof parsed.summary.matchingCards === "number" &&
-        Number.isFinite(parsed.summary.matchingCards)
-          ? parsed.summary.matchingCards
+        invSummary != null &&
+        typeof invSummary.matchingCards === "number" &&
+        Number.isFinite(invSummary.matchingCards)
+          ? invSummary.matchingCards
           : undefined;
       const total = totalFromSummary ?? totalFromBody;
       if (typeof total !== "number" || !Number.isFinite(total)) {
@@ -328,7 +329,7 @@ export function FlashcardsHubClient({
               return sum > 0 ? sum : total;
             })();
       setMatchingCards(match);
-      setPoolDiagnostics(parsed.summary?.poolInventoryDiagnostics ?? null);
+      setPoolDiagnostics(invSummary?.poolInventoryDiagnostics ?? null);
       if (process.env.NODE_ENV === "development") {
         const totalCards = opts.reduce((n, c) => n + (typeof c.count === "number" ? c.count : 0), 0);
         console.debug("[flashcards-hub] inventory", {

@@ -14,6 +14,11 @@ import {
   answerOneCatExamItem,
   clickBeginExamAfterPracticeHubStart,
 } from "../helpers/cat-practice-exam-flow";
+import {
+  clickLinearPracticeNextItemIfPresent,
+  startLinearPracticeTestFromHub,
+  submitFirstLinearPracticeAnswerAndExpectRationale,
+} from "../helpers/linear-practice-exam-flow";
 import { learnerShellStudyNavigation } from "../helpers/learner-shell-locators";
 import { learnerCatHubUrl, learnerPracticeTestsUrl } from "../helpers/tier-product-matrix";
 import {
@@ -89,7 +94,7 @@ test.describe("Mobile — learner study interactions", () => {
     await assertMobileHorizontalLayoutHealth(page, "flashcard session (revealed + ratings)");
   });
 
-  test("linear practice — one MCQ, check answer, rationale panel, bounded width", async ({ page }) => {
+  test("linear practice — CAT-style runner stem, submit answer, rationale, bounded width", async ({ page }) => {
     test.setTimeout(240_000);
     await page.goto(learnerPracticeTestsUrl(pathwayId), { waitUntil: "domcontentloaded" });
     expectNotLoginUrl(page);
@@ -103,36 +108,14 @@ test.describe("Mobile — learner study interactions", () => {
       page.getByText("NN_RENDER_TRACE: practice exams live route (/app/practice-tests)"),
     ).toBeVisible({ timeout: 30_000 });
 
-    const builder = main.locator("[data-nn-e2e-practice-exams-builder]");
-    await expect(builder).toBeVisible({ timeout: 60_000 });
-    await main.locator("[data-nn-qa-practice-hub-start-test]").click();
-    const begin = page.locator('[data-testid="button-exam-customize-begin"]');
-    await expect(begin).toBeVisible({ timeout: 45_000 });
-    await begin.click();
-    await page.waitForURL(/\/app\/practice-tests\/[a-zA-Z0-9_-]+/, { timeout: 120_000 });
+    await startLinearPracticeTestFromHub(page, pathwayId);
 
-    await expect(page.locator(".nn-question-stem").first()).toBeVisible({ timeout: 120_000 });
+    await expect(page.locator(".nn-cat-question-stem").first()).toBeVisible({ timeout: 120_000 });
     await assertMobileHorizontalLayoutHealth(page, "linear practice (stem visible)");
-    const list = page.locator(".nn-qopt-list").first();
-    await expect(list).toBeVisible({ timeout: 60_000 });
-    const mcBtn = list.locator("button").first();
-    const sataBox = list.locator('input[type="checkbox"]').first();
-    if ((await mcBtn.count()) > 0) {
-      await mcBtn.click();
-    } else if ((await sataBox.count()) > 0) {
-      await sataBox.click();
-    } else {
-      throw new Error(`No practice options for pathwayId=${pathwayId}`);
-    }
-    const check = page.getByRole("button", { name: /^Check answer$/i });
-    if (await check.isVisible().catch(() => false)) {
-      await check.click();
-      const rationale = page.locator(
-        "aside.nn-question-session-rationale .nn-rationale-prose, aside.nn-question-session-rationale .nn-question-rationale-card__body",
-      );
-      await expect(rationale.first()).toBeVisible({ timeout: 45_000 });
-      await assertMobileHorizontalLayoutHealth(page, "linear practice (after rationale)");
-    }
+    await submitFirstLinearPracticeAnswerAndExpectRationale(page);
+    await assertMobileHorizontalLayoutHealth(page, "linear practice (after rationale)");
+    await clickLinearPracticeNextItemIfPresent(page);
+    await assertMobileHorizontalLayoutHealth(page, "linear practice (after optional next)");
   });
 
   test("CAT exam mode — stem + options, submit one item, bounded width", async ({ page }) => {

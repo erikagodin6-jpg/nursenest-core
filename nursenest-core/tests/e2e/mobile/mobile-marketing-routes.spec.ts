@@ -20,15 +20,13 @@ if (!usRn) throw new Error("us-rn-nclex-rn missing from LESSON_FLOW_PATHWAY_QA")
 const ROUTES = ["/signup", usRn.hubPath, usRn.lessonsPath] as const;
 
 test.describe("Mobile — marketing route grid", () => {
-  test.describe.configure({ mode: "serial" });
-
   test.beforeEach(async ({ page }) => {
     await setGlobalRegionCookie(page, "us", baseURL);
   });
 
   for (const route of ROUTES) {
     test(`bounded width: ${route}`, async ({ page }) => {
-      const res = await page.goto(route, { waitUntil: "domcontentloaded" });
+      const res = await page.goto(route, { waitUntil: "domcontentloaded", timeout: 120_000 });
       expect(res?.ok(), `${route} HTTP ${res?.status()}`).toBeTruthy();
       await dismissMarketingScrims(page);
       await expect(page.locator(MARKETING_PUBLIC_SELECTOR).first()).toBeVisible({ timeout: 60_000 });
@@ -38,13 +36,16 @@ test.describe("Mobile — marketing route grid", () => {
   }
 
   test("hamburger open/close keeps document width", async ({ page }) => {
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.goto("/", { waitUntil: "domcontentloaded", timeout: 120_000 });
     await dismissMarketingScrims(page);
     await expect(page.locator(MARKETING_PUBLIC_SELECTOR).first()).toBeVisible({ timeout: 60_000 });
-    await page.getByRole("button", { name: /^Open menu$/ }).click();
-    await expect(page.getByRole("button", { name: /^Close menu$/ }).last()).toBeVisible({ timeout: 15_000 });
+    const openBtn = page.getByRole("button", { name: /open menu/i });
+    await expect(openBtn).toBeVisible({ timeout: 30_000 });
+    await openBtn.click();
+    const closeBtn = page.getByRole("button", { name: /close menu/i }).last();
+    await expect(closeBtn).toBeVisible({ timeout: 25_000 });
     await assertMobileHorizontalLayoutHealth(page, "menu-open");
-    await page.getByRole("button", { name: /^Close menu$/ }).last().click();
+    await closeBtn.click();
   });
 });
 

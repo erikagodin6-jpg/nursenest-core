@@ -58,7 +58,9 @@ const publicProjects = [
     testMatch: publicMobileMatch,
   },
   {
+    /** Runs after Pixel so a single `next dev` webServer is less likely to be wedged mid-suite. */
     name: "mobile-iphone",
+    dependencies: ["mobile-pixel" as const],
     use: { ...devices["iPhone 14"] },
     testMatch: publicMobileMatch,
   },

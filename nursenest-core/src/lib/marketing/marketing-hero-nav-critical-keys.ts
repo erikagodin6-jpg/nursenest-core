@@ -3,16 +3,24 @@
  * Used by CI validation and layout integrity checks — not a sitewide i18n audit.
  */
 import type { MarketingMessages } from "@/lib/marketing-i18n-core";
-import { HOME_HERO_SCREENSHOT_COUNT, homeHeroSlideCaptionKey, homeHeroSlideTitleKey } from "@/config/home-hero-carousel";
+import {
+  HOME_HERO_SCREENSHOT_COUNT,
+  homeHeroSlideCaptionKey,
+  homeHeroSlideLabelKey,
+  homeHeroSlideTitleKey,
+} from "@/config/home-hero-carousel";
 
-/** Keys for `components.homeHeroCarousel.slideNN.{title,caption}` (all slides1…N). */
+/** Keys for `components.homeHeroCarousel.slideNN.{label,title,caption}` (all slides1…N). */
 export function marketingHeroCarouselCriticalKeys(): string[] {
   const keys: string[] = [];
   for (let i = 1; i <= HOME_HERO_SCREENSHOT_COUNT; i++) {
-    keys.push(homeHeroSlideTitleKey(i), homeHeroSlideCaptionKey(i));
+    keys.push(homeHeroSlideLabelKey(i), homeHeroSlideTitleKey(i), homeHeroSlideCaptionKey(i));
   }
   return keys;
 }
+
+/** Homepage carousel → pathway handoff strip (RSC + client `safeHomepageMarketingT`). */
+export const MARKETING_HOME_CAROUSEL_HANDOFF_KEYS = ["pages.home.carouselHandoff.fallbackCta"] as const;
 
 /** Pathway pill strip under the header ({@link MarketingSiteSubNav}). */
 export const MARKETING_NAV_SUB_STRIP_KEYS = [
@@ -80,6 +88,7 @@ export const MARKETING_FOOTER_CRITICAL_KEYS = [
 
 export const MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS = {
   heroCarousel: marketingHeroCarouselCriticalKeys(),
+  homeCarouselHandoff: [...MARKETING_HOME_CAROUSEL_HANDOFF_KEYS],
   navSubStrip: [...MARKETING_NAV_SUB_STRIP_KEYS],
   navHeaderChrome: [...MARKETING_NAV_HEADER_CHROME_KEYS],
   navAuth: [...MARKETING_NAV_AUTH_KEYS],
@@ -90,6 +99,7 @@ export const MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS = {
 export const MARKETING_HERO_NAV_CRITICAL_KEYS: readonly string[] = Array.from(
   new Set([
     ...MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS.heroCarousel,
+    ...MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS.homeCarouselHandoff,
     ...MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS.navSubStrip,
     ...MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS.navHeaderChrome,
     ...MARKETING_HERO_NAV_CRITICAL_KEY_GROUPS.navAuth,
