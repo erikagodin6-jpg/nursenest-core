@@ -17,6 +17,10 @@ const packageRoot = resolve(__dirname, "..");
 const COMMANDS = new Set(["status", "deploy", "generate", "check-schema"]);
 const BUILD_TIME_GENERATE_MESSAGE =
   "[prisma-safe] Build-time Prisma generate detected; DIRECT_URL requirement skipped.";
+const INSTALL_TIME_GENERATE_MESSAGE =
+  "[prisma-safe] Install-time Prisma generate detected; using local placeholder DATABASE_URL for code generation only.";
+const INSTALL_TIME_GENERATE_DATABASE_URL =
+  "postgresql://prisma:prisma@127.0.0.1:5432/nursenest_prisma_codegen?schema=public";
 
 function usage() {
   console.error(`Usage: node scripts/prisma-safe.mjs <status|deploy|generate|check-schema>
@@ -61,6 +65,13 @@ export function isBuildSafePrismaGenerateContext({ command, argv = process.argv,
   return isBuildGenerate;
 }
 
+export function isInstallTimePrismaGenerateContext({ command, argv = process.argv, env = process.env } = {}) {
+  void command;
+  const commandString = argv.join(" ");
+  const isGenerate = commandString.includes("generate");
+  return isGenerate && env.npm_lifecycle_event === "postinstall";
+}
+
 export function assertDatabaseUrlForBuildGenerate(env = process.env) {
   maskedPostgresTarget(env.DATABASE_URL?.trim(), "DATABASE_URL");
 }
@@ -69,13 +80,24 @@ export function loadPrismaSafeEnvForCommand(
   command,
   { argv = process.argv, env = process.env, logger = console, envRoot } = {},
 ) {
-  const buildSafeGenerate = isBuildSafePrismaGenerateContext({ command, argv, env });
+  const installTimeGenerate = isInstallTimePrismaGenerateContext({ command, argv, env });
+  const buildSafeGenerate = !installTimeGenerate && isBuildSafePrismaGenerateContext({ command, argv, env });
   const telemetry = loadRuntimeEnv({
     purpose: `prisma-safe:${command}`,
-    validate: !buildSafeGenerate,
+    validate: !(buildSafeGenerate || installTimeGenerate),
     logger,
     ...(envRoot ? { envRoot } : {}),
   });
+
+  if (installTimeGenerate) {
+    if (!process.env.DATABASE_URL?.trim()) {
+      process.env.DATABASE_URL = INSTALL_TIME_GENERATE_DATABASE_URL;
+    }
+    if (!process.env.DIRECT_URL?.trim()) {
+      process.env.DIRECT_URL = process.env.DATABASE_URL;
+    }
+    logger.log(INSTALL_TIME_GENERATE_MESSAGE);
+  }
 
   if (buildSafeGenerate) {
     assertDatabaseUrlForBuildGenerate(env);
@@ -85,7 +107,7 @@ export function loadPrismaSafeEnvForCommand(
     logger.log(BUILD_TIME_GENERATE_MESSAGE);
   }
 
-  return { telemetry, buildSafeGenerate };
+  return { telemetry, buildSafeGenerate, installTimeGenerate };
 }
 
 async function main() {
