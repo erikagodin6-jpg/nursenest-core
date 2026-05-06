@@ -4,6 +4,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
+import { loadScriptEnv } from "./bootstrap-env.mjs";
 import { loadRuntimeEnv, isRuntimeEnvError, maskedPostgresTarget } from "./lib/load-runtime-env.mjs";
 import {
   assertRequiredColumnsFromDatabaseUrl,
@@ -70,6 +71,13 @@ export function loadPrismaSafeEnvForCommand(
   { argv = process.argv, env = process.env, logger = console, envRoot } = {},
 ) {
   const buildSafeGenerate = isBuildSafePrismaGenerateContext({ command, argv, env });
+  loadScriptEnv({
+    requireDatabaseUrl: !buildSafeGenerate,
+    prefix: `[prisma-safe:${command}:env]`,
+  });
+  if (!env.DIRECT_URL?.trim() && env.DATABASE_URL?.trim()) {
+    env.DIRECT_URL = env.DATABASE_URL;
+  }
   const telemetry = loadRuntimeEnv({
     purpose: `prisma-safe:${command}`,
     validate: !buildSafeGenerate,

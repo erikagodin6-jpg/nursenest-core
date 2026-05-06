@@ -1,4 +1,5 @@
 import type { ContentStatus, ExamFamily, QuestionType, TierCode } from "@prisma/client";
+import { canonicalExamQuestionExamForDbWrite } from "@/lib/content-quality/exam-question-exam-normalization";
 import { contentStatusToDb } from "@/lib/prisma/content-status";
 
 export function tierCodeToExamDbTier(tier: TierCode): string {
@@ -25,25 +26,7 @@ export function tierCodeToContentItemTier(tier: TierCode): string {
 
 export function examFamilyToExamColumn(family: ExamFamily | string | undefined): string {
   if (!family || family === "GENERIC") return "NCLEX-RN";
-  const f = String(family);
-  switch (f) {
-    case "NCLEX_RN":
-    case "NCLEX-RN":
-      return "NCLEX-RN";
-    case "NCLEX_PN":
-    case "NCLEX-PN":
-      return "NCLEX-PN";
-    case "REX_PN":
-    case "REX-PN":
-    case "REx-PN":
-      return "REx-PN";
-    case "NP":
-      return "NP";
-    case "ALLIED":
-      return "ALLIED";
-    default:
-      return f;
-  }
+  return canonicalExamQuestionExamForDbWrite(String(family));
 }
 
 /** Map free-form `exam_questions.question_type` strings to Prisma enum for validation. */

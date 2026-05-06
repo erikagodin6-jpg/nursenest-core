@@ -3,6 +3,7 @@
  */
 import type { PrismaClient } from "@prisma/client";
 
+import { canonicalExamQuestionExamForDbWrite } from "../../src/lib/content-quality/exam-question-exam-normalization";
 import { examQuestionNaturalKey } from "../../src/lib/content-pipeline/stable-ids";
 
 export type ExamQuestionScopeFields = {
@@ -39,7 +40,7 @@ export async function loadExistingScopedKeys(
       where: {
         OR: slice.map((k) => ({
           stemHash: k.stemHash,
-          exam: k.exam,
+          exam: canonicalExamQuestionExamForDbWrite(k.exam),
           tier: k.tier,
           countryCode: k.countryCode,
         })),

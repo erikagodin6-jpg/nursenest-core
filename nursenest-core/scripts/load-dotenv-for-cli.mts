@@ -17,6 +17,7 @@ import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 import { config } from "dotenv";
+import { loadScriptEnv } from "./bootstrap-env.mjs";
 import {
   dbEnvPresence,
   envFileDeclaresKeySync,
@@ -27,6 +28,7 @@ const PREFIX = "[qa-cli-env]";
 
 const cwd = process.cwd();
 const packageRoot = resolve(fileURLToPath(new URL(".", import.meta.url)), "..");
+loadScriptEnv({ prefix: "[qa-cli-env-bootstrap]" });
 const envLocalPath = resolve(packageRoot, ".env.local");
 const envPlaywrightPath = resolve(packageRoot, ".env.playwright.local");
 const envPath = resolve(packageRoot, ".env");

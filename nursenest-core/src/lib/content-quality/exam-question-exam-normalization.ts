@@ -125,9 +125,13 @@ export function expandedExamKeysForPathwayPool(keys: readonly string[]): string[
   for (const k of keys) {
     const t = k.trim();
     if (t) out.add(t);
+    const underscore = t.replace(/-/g, "_");
+    if (underscore !== t) out.add(underscore);
   }
   for (const alt of PUBLISH_ALLOWLIST) {
     if (keyNorms.has(normExamKeyForMatching(alt))) out.add(alt);
+    const underscore = alt.replace(/-/g, "_");
+    if (underscore !== alt && keyNorms.has(normExamKeyForMatching(underscore))) out.add(underscore);
   }
   return [...out];
 }

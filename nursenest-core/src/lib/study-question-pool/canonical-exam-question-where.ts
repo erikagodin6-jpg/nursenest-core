@@ -1,11 +1,9 @@
-import "server-only";
-
 import type { Prisma } from "@prisma/client";
 import type { AccessScope } from "@/lib/entitlements/resolve-entitlement";
-import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import type { ExamPathwayDefinition } from "@/lib/exam-pathways/types";
+import { questionAccessWhere } from "@/lib/entitlements/content-access-scope";
 import { questionAccessWhereWithPathway } from "@/lib/exam-pathways/pathway-content-scope";
-import { NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/cat-pool";
+import { NON_ECG_PRACTICE_EXAM_WHERE } from "@/lib/practice-tests/non-ecg-practice-exam-where";
 import { generalStudyBankModuleSurfaceWhere } from "@/lib/study-question-pool/study-question-pool-gates";
 
 /**
@@ -41,9 +39,7 @@ export function getCanonicalExamQuestionWhere(
 }
 
 /**
- * Pathway-scoped canonical pool — same AND stack as {@link fetchCatPracticePool} base
- * (`questionAccessWhereWithPathway` + non-ECG + general study-bank surface), so flashcard
- * inventory counts align with CAT / adaptive practice for the same `pathwayId`.
+ * Pathway-scoped canonical pool — same AND stack as CAT / adaptive practice for the pathway.
  */
 export function getCanonicalExamQuestionWhereForPathway(
   entitlement: AccessScope,

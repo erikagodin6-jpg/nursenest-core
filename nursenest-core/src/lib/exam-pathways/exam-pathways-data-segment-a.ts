@@ -15,7 +15,7 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
     displayName: "REx-PN (Canada RPN)",
     shortName: "REx-PN",
     stripeTier: TierCode.RPN,
-    contentExamKeys: ["NCLEX-PN", "REx-PN", "REX-PN"],
+    contentExamKeys: ["REx-PN"],
     seoTitle: "REx-PN practice questions for Canada | NurseNest",
     seoDescription:
       "Practice REx-PN questions with realistic items, rationales, and adaptive tests. Built for Canadian nurses.",
@@ -34,7 +34,7 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
     displayName: "NCLEX-RN (Canada)",
     shortName: "NCLEX-RN",
     stripeTier: TierCode.RN,
-    contentExamKeys: ["NCLEX-RN", "NCLEX_RN"],
+    contentExamKeys: ["NCLEX-RN"],
     seoTitle: "NCLEX-RN practice questions for Canada | NurseNest",
     seoDescription:
       "Practice NCLEX-RN questions with rationales and adaptive tests. Built for Canadian nurses.",
@@ -75,7 +75,7 @@ export const EXAM_PATHWAYS_SEGMENT_A: ExamPathwayDefinition[] = [
     displayName: "NCLEX-PN (US LPN / LVN)",
     shortName: "NCLEX-PN",
     stripeTier: TierCode.LVN_LPN,
-    contentExamKeys: ["NCLEX-PN", "NCLEX_PN"],
+    contentExamKeys: ["NCLEX-PN"],
     seoTitle: "NCLEX-PN Exam Prep | US LPN / LVN | NurseNest",
     seoDescription:
       "US practical/vocational nursing: NCLEX-PN practice, safety-first rationales, and timed mocks scoped for LVN/LPN candidates.",

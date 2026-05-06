@@ -11,27 +11,12 @@
  * Prefer `scripts/repair-exam-question-exam-keys.ts` for default-dry-run UX (`--apply` to write).
  */
 
-import { existsSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
-import { parse as parseDotenv } from "dotenv";
-import { PrismaClient } from "@prisma/client";
+import { requireScriptDatabaseUrl } from "./bootstrap-env.mjs";
 import { runExamQuestionExamValueRepair } from "../src/lib/content-quality/run-exam-question-exam-value-repair";
 
-const prisma = new PrismaClient();
+type CountRow = { exam: string; c: bigint };
 
-function loadDotenvFromPackageRoot(): void {
-  const root = process.cwd();
-  for (const name of [".env", ".env.local", ".env.production"]) {
-    const p = resolve(root, name);
-    if (!existsSync(p)) continue;
-    const parsed = parseDotenv(readFileSync(p, "utf8"));
-    for (const [k, v] of Object.entries(parsed)) {
-      if (process.env[k] === undefined) process.env[k] = v;
-    }
-  }
-}
-
-function printDist(label: string, rows: { exam: string; c: bigint }[]): void {
+function printDist(label: string, rows: CountRow[]): void {
   console.log(`\n${label}`);
   console.log("-".repeat(56));
   let total = 0;
@@ -44,56 +29,55 @@ function printDist(label: string, rows: { exam: string; c: bigint }[]): void {
 }
 
 async function main(): Promise<void> {
-  loadDotenvFromPackageRoot();
+  requireScriptDatabaseUrl({ prefix: "[normalize-exam-values]" });
   const dryRun = process.argv.includes("--dry-run");
+  const { PrismaClient } = await import("@prisma/client");
+  const prisma = new PrismaClient();
 
-  if (!process.env.DATABASE_URL?.trim()) {
-    console.log("DATABASE_URL is unset — nothing to do.");
-    process.exit(0);
-  }
+  try {
+    const { plan, totalRowsTouched, before, after } = await runExamQuestionExamValueRepair({
+      prisma,
+      execute: !dryRun,
+    });
 
-  const { plan, totalRowsTouched, before, after } = await runExamQuestionExamValueRepair({
-    prisma,
-    execute: !dryRun,
-  });
+    printDist("BEFORE (exam → count)", before);
 
-  printDist("BEFORE (exam → count)", before);
+    console.log(`\nPlanned rewrites (${plan.length} source values, dependency-ordered):`);
+    for (const p of plan) {
+      console.log(`  "${p.from}" → "${p.to}"  (${p.n.toString()} rows)`);
+    }
 
-  console.log(`\nPlanned rewrites (${plan.length} source values, dependency-ordered):`);
-  for (const p of plan) {
-    console.log(`  "${p.from}" → "${p.to}"  (${p.n.toString()} rows)`);
-  }
+    console.log(`\n${dryRun ? "[dry-run] Would update" : "Updated"} row count: ${totalRowsTouched.toLocaleString()}`);
 
-  console.log(`\n${dryRun ? "[dry-run] Would update" : "Updated"} row count: ${totalRowsTouched.toLocaleString()}`);
+    printDist(dryRun ? "AFTER (unchanged in dry-run)" : "AFTER (exam → count)", after);
 
-  printDist(dryRun ? "AFTER (unchanged in dry-run)" : "AFTER (exam → count)", after);
+    if (process.argv.includes("--json")) {
+      const ser = (rows: CountRow[]) =>
+        rows.map((r) => ({ exam: r.exam, count: r.c.toString() }));
+      console.log(
+        JSON.stringify(
+          {
+            dryRun,
+            before: ser(before),
+            after: ser(after),
+            plan: plan.map((p) => ({ from: p.from, to: p.to, count: p.n.toString() })),
+            totalUpdatedRows: totalRowsTouched,
+          },
+          null,
+          2,
+        ),
+      );
+    }
 
-  if (process.argv.includes("--json")) {
-    const ser = (rows: { exam: string; c: bigint }[]) =>
-      rows.map((r) => ({ exam: r.exam, count: r.c.toString() }));
-    console.log(
-      JSON.stringify(
-        {
-          dryRun,
-          before: ser(before),
-          after: ser(after),
-          plan: plan.map((p) => ({ from: p.from, to: p.to, count: p.n.toString() })),
-          totalUpdatedRows: totalRowsTouched,
-        },
-        null,
-        2,
-      ),
-    );
-  }
-
-  if (dryRun) {
-    console.log("\nRe-run without --dry-run to apply updates.");
+    if (dryRun) {
+      console.log("\nRe-run without --dry-run to apply updates.");
+    }
+  } finally {
+    await prisma.$disconnect();
   }
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(() => prisma.$disconnect());
+main().catch((e) => {
+  console.error(e instanceof Error ? e.message : String(e));
+  process.exit(1);
+});
